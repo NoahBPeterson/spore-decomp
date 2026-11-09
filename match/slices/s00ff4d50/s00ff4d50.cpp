@@ -626,13 +626,13 @@ int __cdecl FUN_00ff5930(void* param_1) {
                 void* ufo = ((CStarManager*)starMgr2)->FUN_00baf700();
 
                 if (FUN_00c6fe50(param_1) != 0)
-                    return FUN_0102b010(ufo, g_67b69e3, g_67b69f1);
+                    return FUN_0102b010(ufo, ((char*)0x067b69e3), ((char*)0x067b69f1));
 
                 CTerraforming* terra = (CTerraforming*)FUN_00b3d430(param_1);
                 if (terra->IsEnabled() != 0)
-                    return FUN_0102b010(ufo, g_67b69d8, g_67b69eb);
+                    return FUN_0102b010(ufo, ((char*)0x067b69d8), ((char*)0x067b69eb));
 
-                return FUN_0102b010(ufo, g_67b69c4, g_67b69d0);
+                return FUN_0102b010(ufo, ((char*)0x067b69c4), ((char*)0x067b69d0));
             }
         }
     }

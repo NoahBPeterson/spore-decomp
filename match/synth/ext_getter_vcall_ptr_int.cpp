@@ -488,13 +488,11 @@ void FUN_00992590() {
 }
 
 // @ 0x00b7c710
-extern char g_04518450[];
 void FUN_00b7c710() {
-    ExtGetVObjP()->v25(g_04518450, 1);
+    ExtGetVObjP()->v25(((char*)0x04518450), 1);
 }
 
 // @ 0x00cf74d0
-extern char g_0406d0d8[];
 void FUN_00cf74d0() {
-    ExtGetVObjP()->v25(g_0406d0d8, 0);
+    ExtGetVObjP()->v25(((char*)0x0406d0d8), 0);
 }

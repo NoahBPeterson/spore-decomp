@@ -366,7 +366,7 @@ u32 __thiscall City::OverwriteNounsFromNounManager(u32 id)
 {
     const char* name;
     switch (id) {
-    case 0x1a55e4d: name = NounNameA; break;
+    case 0x1a55e4d: name = ((const char*)0x01a56aba); break;
     case 0xecade42: name = NounNameB; break;
     default:        name = NounNameC; break;
     }

@@ -253,7 +253,7 @@ void cTerrainCameraController::LoadZoomProgram(void* handle)
     char* s = (char*)this;
     *(void**)(s + 0x308) = handle;
     if (handle != 0) {
-        LoadArithmeticaFileImpl(handle, (void*)&DAT_024a4f5a, (void*)&DAT_0167bc78);
+        LoadArithmeticaFileImpl(handle, (void*)((const char*)0x024a4f5a), (void*)&DAT_0167bc78);
         ((cTerrainCameraCtlZoom*)s)->ReloadZoomProgram();
     }
 }

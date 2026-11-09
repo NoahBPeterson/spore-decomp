@@ -30,6 +30,51 @@ def operands(va, code):
 
 def g(a): return "g_%08x" % a
 
+
+def _image_end():
+    return pe.OPTIONAL_HEADER.ImageBase + max(x.VirtualAddress + max(x.Misc_VirtualSize, x.SizeOfRawData) for x in pe.sections)
+
+
+def constify(src, A):
+    """A value that operands() takes for an address (8 hex digits, >= 0x400000) but that lies outside the image is a
+    plain constant: the retail code holds it with no relocation.  Templates declare every A value as a global
+    (`extern const wchar_t g_01a80d26[];`, or several in one `extern char g_a[], g_b[];`), so the compiled code carried a
+    relocation where retail has fixed bytes, and only the loose relocation mask accepted it (tools/ci/fingerprint.py
+    fails it).  Drop such declarators and write the constant, typed as declared: `g_01a80d26` -> `((const wchar_t*)0x01a80d26)`."""
+    end = _image_end()
+    decl = re.compile(r"extern\s+((?:const\s+)?[A-Za-z_][\w:]*(?:\s+const)?)\s+([^;()]*?);[ \t]*\n?")
+    for a in sorted(set(A)):
+        if a < end:
+            continue
+        name, ty = g(a), None
+        # every declaration of the name goes (a whole generated file repeats it per instance), then every use
+        while True:
+            for m in decl.finditer(src):
+                parts = [x.strip() for x in m.group(2).split(",")]
+                hit = [x for x in parts if re.fullmatch(r"(\*\s*)*%s\s*(\[\s*\])?" % name, x)]
+                if hit:
+                    break
+            else:
+                break
+            ty = ty or m.group(1).strip() + "".join("*" for _ in range(hit[0].count("*")))
+            rest = [x for x in parts if x not in hit]
+            src = src[:m.start()] + (("extern %s %s;\n" % (m.group(1).strip(), ", ".join(rest))) if rest else "") + src[m.end():]
+        if ty:
+            src = re.sub(r"&\s*\b%s\b|\b%s\b" % (name, name), "((%s*)0x%08x)" % (ty, a), src)
+    return src
+
+
+def constify_existing(name):
+    """constify() on an already generated match/synth/<name>.cpp (for a template whose pattern is no longer in
+    work/patterns.json, so it cannot be regenerated)"""
+    path = os.path.join(ROOT, "match/synth/%s.cpp" % name)
+    src = open(path).read()
+    A = [int(h, 16) for h in re.findall(r"\bg_([0-9a-f]{8})\b", src)]
+    out = constify(src, A)
+    open(path, "w").write(out)
+    print("%s: %s" % (name, "rewritten" if out != src else "unchanged"))
+
+
 TEMPLATES = {}
 def template(name, pattern, flags, prelude, emit):
     TEMPLATES[name] = dict(pattern=pattern, flags=flags, prelude=prelude, emit=emit)
@@ -57,6 +102,7 @@ def run(name, limit, vas=None):
         code = bounds(va, starts)
         A, N = operands(va, code)
         src, sym = t["emit"](va, A, N)
+        src = constify(src, A)
         if sym in syms.values() or src in seen_defs:
             continue  # same global initialized twice can't be expressed in one TU; leave for agents
         seen_defs.add(src)
@@ -94,6 +140,9 @@ def run(name, limit, vas=None):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("name"); ap.add_argument("--limit", type=int, default=100000)
+    ap.add_argument("--constify-existing", action="store_true", help="only rewrite the generated file's out-of-image constants")
     a = ap.parse_args()
+    if a.constify_existing:
+        constify_existing(a.name); sys.exit(0)
     for n in (TEMPLATES if a.name == "all" else [a.name]):
         run(n, a.limit)

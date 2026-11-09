@@ -243,14 +243,14 @@ bool __cdecl BakeSpritesLoadAndBuild(void* p1, uint32_t resA, uint32_t resB, uin
     GetSettings()->Set_f0((uint16_t)bakeFlags);
     settingsMgr->Get_ac(resourceKey);
     if (spriteMode == 0) {
-        creator->Build(bakeFlags, resourceKey, p1, p5, p6, p7, &g_Table2458018, p4, spriteMode, secondKey, keyZ, p8);
+        creator->Build(bakeFlags, resourceKey, p1, p5, p6, p7, ((int*)0x02458018), p4, spriteMode, secondKey, keyZ, p8);
     } else if (spriteMode == 1) {
         settingsMgr->Get_b8(secondKey);
-        creator->Build(bakeFlags, resourceKey, p1, p5, p6, p7, &g_Table2458018, p4, spriteMode, secondKey, keyZ, p8);
+        creator->Build(bakeFlags, resourceKey, p1, p5, p6, p7, ((int*)0x02458018), p4, spriteMode, secondKey, keyZ, p8);
     } else if (spriteMode == 2) {
         settingsMgr->Get_b8(secondKey);
         settingsMgr->Get_b4(keyZ);
-        creator->Build(bakeFlags, resourceKey, p1, p5, p6, p7, &g_Table2458018, p4, spriteMode, secondKey, keyZ, p8);
+        creator->Build(bakeFlags, resourceKey, p1, p5, p6, p7, ((int*)0x02458018), p4, spriteMode, secondKey, keyZ, p8);
     }
     return true;
 }

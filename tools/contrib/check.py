@@ -24,6 +24,11 @@ from coff import Coff       # noqa: E402
 IMAGE = os.path.join(ROOT, "work", "SporeApp.analysis.bin")
 
 
+def G_manifests():
+    import gate
+    return gate.all_manifests()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("va")
@@ -44,13 +49,18 @@ def main():
         print("COMPILE FAILED (%s, flags %s)\n%s" % (os.path.relpath(src, ROOT), " ".join(flags), (log or "").strip()[-3000:]))
         return 1
     sym, why = S.find_symbol(Coff(obj), ident, va, src, orig_size=fp["size"])
+    secs, syms = F.parse_coff(obj)
+    if sym is None:
+        # no marker: the symbol a manifest row names (the pull-request check finds functions the same way)
+        import run_all as R
+        named = [r[1] for r in R.read_rows(G_manifests(), "") if r[2] == va]
+        sym = next((R.resolve(syms, n) for n in named if R.resolve(syms, n)), None) or sym
     if isinstance(sym, list):
         print("the marker matches several functions: %s" % ", ".join(sym))
         return 1
     if sym is None:
         print("no compiled function found for the marker: %s" % why)
         return 1
-    secs, syms = F.parse_coff(obj)
     data, rel = F.extract(secs, syms, sym)
     verdict = F.check(fp, data, rel)
     asm = asm_audit.transcribed(src).get("%08x" % va)

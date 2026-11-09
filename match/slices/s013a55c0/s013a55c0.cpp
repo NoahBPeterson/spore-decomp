@@ -365,7 +365,7 @@ void FUN_013a6f80(void)
     AttrRec rec;
 
     rec.mpName     = "planetKey";
-    rec.mpField    = (void*)&g_5b83971;
+    rec.mpField    = (void*)((char*)0x05b83971);
     rec.mZero18    = 0;
     rec.mZero1c    = 0;
     rec.mpFn20     = (void*)&g_692ca0;
@@ -379,7 +379,7 @@ void FUN_013a6f80(void)
     g_t15b8140[0] = rec;
 
     rec.mpName     = "lifetime";
-    rec.mpField    = (void*)&g_5b83972;
+    rec.mpField    = (void*)((char*)0x05b83972);
     rec.mZero18    = 0;
     rec.mZero1c    = 0;
     rec.mpFn20     = (void*)&g_692ca0;
@@ -393,7 +393,7 @@ void FUN_013a6f80(void)
     g_t15b8140[1] = rec;
 
     rec.mpName     = "spiceBought";
-    rec.mpField    = (void*)&g_5b83973;
+    rec.mpField    = (void*)((char*)0x05b83973);
     rec.mZero18    = 0;
     rec.mZero1c    = 0;
     rec.mpFn20     = (void*)&g_692ca0;
@@ -407,7 +407,7 @@ void FUN_013a6f80(void)
     g_t15b8140[2] = rec;
 
     rec.mpName     = "mbDirty";
-    rec.mpField    = (void*)&g_60b5062;
+    rec.mpField    = (void*)((char*)0x060b5062);
     rec.mZero18    = 0;
     rec.mZero1c    = 0;
     rec.mpFn20     = (void*)&g_692ca0;
@@ -421,7 +421,7 @@ void FUN_013a6f80(void)
     g_t15b8140[3] = rec;
 
     rec.mpName     = "mSpiceID";
-    rec.mpField    = (void*)&g_5b83974;
+    rec.mpField    = (void*)((char*)0x05b83974);
     rec.mZero18    = 0;
     rec.mZero1c    = 0;
     rec.mpFn20     = (void*)&g_692ca0;
@@ -435,7 +435,7 @@ void FUN_013a6f80(void)
     g_t15b8140[4] = rec;
 
     rec.mpName     = "mSpiceCost";
-    rec.mpField    = (void*)&g_5b83975;
+    rec.mpField    = (void*)((char*)0x05b83975);
     rec.mZero18    = 0;
     rec.mZero1c    = 0;
     rec.mpFn20     = (void*)&g_692ca0;
@@ -449,7 +449,7 @@ void FUN_013a6f80(void)
     g_t15b8140[5] = rec;
 
     rec.mpName     = "mNPCInventory";
-    rec.mpField    = (void*)&g_5b83976;
+    rec.mpField    = (void*)((char*)0x05b83976);
     rec.mZero18    = 0;
     rec.mZero1c    = 0;
     rec.mpFn20     = (void*)&g_692ca0;
@@ -463,7 +463,7 @@ void FUN_013a6f80(void)
     g_t15b8140[6] = rec;
 
     rec.mpName     = "mNPCInventoryAges";
-    rec.mpField    = (void*)&g_5b83977;
+    rec.mpField    = (void*)((char*)0x05b83977);
     rec.mZero18    = 0;
     rec.mZero1c    = 0;
     rec.mpFn20     = (void*)&g_692ca0;
@@ -486,7 +486,7 @@ void FUN_013a72b0(void)
     AttrRec rec;
 
     rec.mpName     = "mRareMap";
-    rec.mpField    = (void*)&g_3d840ef;
+    rec.mpField    = (void*)((char*)0x03d840ef);
     rec.mZero18    = 0;
     rec.mZero1c    = 0;
     rec.mpFn20     = (void*)&g_692ca0;
@@ -500,7 +500,7 @@ void FUN_013a72b0(void)
     g_t15b8360[0] = rec;
 
     rec.mpName     = "mNPCStore";
-    rec.mpField    = (void*)&g_5b82ced;
+    rec.mpField    = (void*)((char*)0x05b82ced);
     rec.mZero18    = 0;
     rec.mZero1c    = 0;
     rec.mpFn20     = (void*)&g_692ca0;
@@ -514,7 +514,7 @@ void FUN_013a72b0(void)
     g_t15b8360[1] = rec;
 
     rec.mpName     = "mNewlyAvailableCommodities";
-    rec.mpField    = (void*)&g_5f76c77;
+    rec.mpField    = (void*)((char*)0x05f76c77);
     rec.mZero18    = 0;
     rec.mZero1c    = 0;
     rec.mpFn20     = (void*)&g_692ca0;

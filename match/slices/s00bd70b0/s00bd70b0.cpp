@@ -643,7 +643,7 @@ void __fastcall FUN_00bd7ed0(char* this_)
 void* __stdcall FUN_00bd7ef0(int param_1)
 {
     switch (param_1) {
-    case 0x1a55e4d: return &DAT_01a56aba;
+    case 0x1a55e4d: return ((char*)0x01a56aba);
     case 0xecade42: return &DAT_018ea2cc;
     default:        return &DAT_018eb106;
     }

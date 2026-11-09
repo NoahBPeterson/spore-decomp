@@ -556,11 +556,11 @@ void cLoco::FormatName(cString* out)
 // @ 0x00c9e5d0
 void TryCivModeTutorial()
 {
-    if (!ConfigManager()->Slot30((uint32_t)&kPropIdCivTutorial))
+    if (!ConfigManager()->Slot30((uint32_t)((const uint8_t*)0x04ea96cb)))
         return;
     cCivModeStrategy* pStrategy = CivModeStrategyGet();
-    if (pStrategy->HasCivTutorialOccurred((uint32_t)&kCivTutSeen))
-        pStrategy->DoNext((uint32_t)&kCivTutNext, 1);
+    if (pStrategy->HasCivTutorialOccurred((uint32_t)((const uint8_t*)0x064e6678)))
+        pStrategy->DoNext((uint32_t)((const uint8_t*)0x064e6679), 1);
 }
 
 // @ 0x00c9e610

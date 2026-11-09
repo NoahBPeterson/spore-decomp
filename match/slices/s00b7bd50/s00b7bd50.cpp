@@ -94,7 +94,7 @@ void __cdecl cSPPieMenu_HideUTFMenu(char bPlaySound) {
         }
         if (bPlaySound) {
             void* gm = SP_GameInputManager();
-            Vv2(gm, 0x64, (int)&g_PieMenuFontRes, 1);
+            Vv2(gm, 0x64, (int)((int*)0x04518450), 1);
         }
     }
     g_PieMenuState = 0;

@@ -46,6 +46,19 @@ def locate(va):
                 d = os.path.basename(os.path.dirname(f))
                 return f, (stem if S.module_dir(stem) else "%s/%s" % (d, stem))
             return f, rel.split(os.sep)[2]
+    # no marker: a manifest row still names the function's source (0x00475c60 has a row but no marker)
+    import run_all as R
+    for m in R.manifests() + sorted(glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"), recursive=True)):
+        for src, _sym, rva, _fl in R.read_rows([m], ""):
+            if rva == va:
+                # the object from the source path, not the manifest's directory (match/clones.txt lists slices too)
+                f = os.path.normpath(os.path.join(ROOT, "match", src))
+                rel = os.path.relpath(f, ROOT).split(os.sep)
+                if rel[:2] == ["match", "slices"]:
+                    return f, rel[2]
+                if rel[:2] == ["src", "game"]:
+                    stem = os.path.splitext(rel[-1])[0]
+                    return f, (stem if S.module_dir(stem) else "%s/%s" % (rel[-2], stem))
     return None, None
 
 

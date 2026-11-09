@@ -7,82 +7,82 @@ struct Out { u32 d; };
 void __cdecl helper(int, Out*, int, int);
 
 // @ 0x00b26bb0
-extern char g_01a80d26[], g_01568a8c[];
+extern char g_01568a8c[];
 void __fastcall FUN_00b26bb0(char* self, int, P* p) {
     Out o; Big b;
     int r = p->p8()->q6(); helper(r, &o, 1, 0);
-    b.init(self - 8, g_01568a8c, g_01a80d26);
+    b.init(self - 8, g_01568a8c, ((char*)0x01a80d26));
     b.fin(p);
 }
 
 // @ 0x00b6f5e0
-extern char g_01a80d26[], g_0156b198[];
+extern char g_0156b198[];
 void __fastcall FUN_00b6f5e0(char* self, int, P* p) {
     Out o; Big b;
     int r = p->p8()->q6(); helper(r, &o, 1, 0);
-    b.init(self - 8, g_0156b198, g_01a80d26);
+    b.init(self - 8, g_0156b198, ((char*)0x01a80d26));
     b.fin(p);
 }
 
 // @ 0x00ba26e0
-extern char g_01a80d26[], g_0156c370[];
+extern char g_0156c370[];
 void __fastcall FUN_00ba26e0(char* self, int, P* p) {
     Out o; Big b;
     int r = p->p8()->q6(); helper(r, &o, 1, 0);
-    b.init(self - 4, g_0156c370, g_01a80d26);
+    b.init(self - 4, g_0156c370, ((char*)0x01a80d26));
     b.fin(p);
 }
 
 // @ 0x00c83c00
-extern char g_01a80d26[], g_01579d78[];
+extern char g_01579d78[];
 void __fastcall FUN_00c83c00(char* self, int, P* p) {
     Out o; Big b;
     int r = p->p8()->q6(); helper(r, &o, 1, 0);
-    b.init(self - 8, g_01579d78, g_01a80d26);
+    b.init(self - 8, g_01579d78, ((char*)0x01a80d26));
     b.fin(p);
 }
 
 // @ 0x00d4aef0
-extern char g_01a80d26[], g_01583b00[];
+extern char g_01583b00[];
 void __fastcall FUN_00d4aef0(char* self, int, P* p) {
     Out o; Big b;
     int r = p->p8()->q6(); helper(r, &o, 1, 0);
-    b.init(self - 8, g_01583b00, g_01a80d26);
+    b.init(self - 8, g_01583b00, ((char*)0x01a80d26));
     b.fin(p);
 }
 
 // @ 0x00d52d10
-extern char g_01a80d26[], g_01583d30[];
+extern char g_01583d30[];
 void __fastcall FUN_00d52d10(char* self, int, P* p) {
     Out o; Big b;
     int r = p->p8()->q6(); helper(r, &o, 1, 0);
-    b.init(self - 8, g_01583d30, g_01a80d26);
+    b.init(self - 8, g_01583d30, ((char*)0x01a80d26));
     b.fin(p);
 }
 
 // @ 0x00febc00
-extern char g_01a80d26[], g_015b4b90[];
+extern char g_015b4b90[];
 void __fastcall FUN_00febc00(char* self, int, P* p) {
     Out o; Big b;
     int r = p->p8()->q6(); helper(r, &o, 1, 0);
-    b.init(self - 8, g_015b4b90, g_01a80d26);
+    b.init(self - 8, g_015b4b90, ((char*)0x01a80d26));
     b.fin(p);
 }
 
 // @ 0x00ffbed0
-extern char g_01a80d26[], g_015b6378[];
+extern char g_015b6378[];
 void __fastcall FUN_00ffbed0(char* self, int, P* p) {
     Out o; Big b;
     int r = p->p8()->q6(); helper(r, &o, 1, 0);
-    b.init(self - 8, g_015b6378, g_01a80d26);
+    b.init(self - 8, g_015b6378, ((char*)0x01a80d26));
     b.fin(p);
 }
 
 // @ 0x01015ea0
-extern char g_01a80d26[], g_015b6d4c[];
+extern char g_015b6d4c[];
 void __fastcall FUN_01015ea0(char* self, int, P* p) {
     Out o; Big b;
     int r = p->p8()->q6(); helper(r, &o, 1, 0);
-    b.init(self - 8, g_015b6d4c, g_01a80d26);
+    b.init(self - 8, g_015b6d4c, ((char*)0x01a80d26));
     b.fin(p);
 }

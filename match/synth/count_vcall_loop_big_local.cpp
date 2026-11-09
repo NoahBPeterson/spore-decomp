@@ -12,7 +12,6 @@ struct Vec_00ac8820 { Elem_00ac8820* b; Elem_00ac8820* e; };
 struct Obj_00ac8820 { Obj_00ac8820(const void*, const void*, const void*); void f(Self_00ac8820*); unsigned int pad[645]; };
 extern "C" __declspec(noalias) void ext_00ac8820(void*, void*, int, int);
 extern char g_015660f0;
-extern char g_01a80d26;
 void FUN_00ac8820(Self_00ac8820* self, Vec_00ac8820* v) {
   int n = v->e - v->b;
   Mid_00ac8820* m = self->v8();
@@ -20,7 +19,7 @@ void FUN_00ac8820(Self_00ac8820* self, Vec_00ac8820* v) {
   void* r = m->m6();
   ext_00ac8820(r, &k, 1, 0);
   for (Elem_00ac8820* p = v->b, *e = v->e; p != e; ++p) {
-    Obj_00ac8820 o(p, &g_015660f0, &g_01a80d26);
+    Obj_00ac8820 o(p, &g_015660f0, ((char*)0x01a80d26));
     o.f(self);
   }
   self->v7();
@@ -39,7 +38,6 @@ struct Vec_00ae3930 { Elem_00ae3930* b; Elem_00ae3930* e; };
 struct Obj_00ae3930 { Obj_00ae3930(const void*, const void*, const void*); void f(Self_00ae3930*); unsigned int pad[645]; };
 extern "C" __declspec(noalias) void ext_00ae3930(void*, void*, int, int);
 extern char g_015665f0;
-extern char g_01a80d26;
 void FUN_00ae3930(Self_00ae3930* self, Vec_00ae3930* v) {
   int n = v->e - v->b;
   Mid_00ae3930* m = self->v8();
@@ -47,7 +45,7 @@ void FUN_00ae3930(Self_00ae3930* self, Vec_00ae3930* v) {
   void* r = m->m6();
   ext_00ae3930(r, &k, 1, 0);
   for (Elem_00ae3930* p = v->b, *e = v->e; p != e; ++p) {
-    Obj_00ae3930 o(p, &g_015665f0, &g_01a80d26);
+    Obj_00ae3930 o(p, &g_015665f0, ((char*)0x01a80d26));
     o.f(self);
   }
   self->v7();
@@ -66,7 +64,6 @@ struct Vec_00c006a0 { Elem_00c006a0* b; Elem_00c006a0* e; };
 struct Obj_00c006a0 { Obj_00c006a0(const void*, const void*, const void*); void f(Self_00c006a0*); unsigned int pad[645]; };
 extern "C" __declspec(noalias) void ext_00c006a0(void*, void*, int, int);
 extern char g_01570f10;
-extern char g_01a80d26;
 void FUN_00c006a0(Self_00c006a0* self, Vec_00c006a0* v) {
   int n = v->e - v->b;
   Mid_00c006a0* m = self->v8();
@@ -74,7 +71,7 @@ void FUN_00c006a0(Self_00c006a0* self, Vec_00c006a0* v) {
   void* r = m->m6();
   ext_00c006a0(r, &k, 1, 0);
   for (Elem_00c006a0* p = v->b, *e = v->e; p != e; ++p) {
-    Obj_00c006a0 o(p, &g_01570f10, &g_01a80d26);
+    Obj_00c006a0 o(p, &g_01570f10, ((char*)0x01a80d26));
     o.f(self);
   }
   self->v7();
@@ -93,7 +90,6 @@ struct Vec_00ca0710 { Elem_00ca0710* b; Elem_00ca0710* e; };
 struct Obj_00ca0710 { Obj_00ca0710(const void*, const void*, const void*); void f(Self_00ca0710*); unsigned int pad[645]; };
 extern "C" __declspec(noalias) void ext_00ca0710(void*, void*, int, int);
 extern char g_0157c920;
-extern char g_01a80d26;
 void FUN_00ca0710(Self_00ca0710* self, Vec_00ca0710* v) {
   int n = v->e - v->b;
   Mid_00ca0710* m = self->v8();
@@ -101,7 +97,7 @@ void FUN_00ca0710(Self_00ca0710* self, Vec_00ca0710* v) {
   void* r = m->m6();
   ext_00ca0710(r, &k, 1, 0);
   for (Elem_00ca0710* p = v->b, *e = v->e; p != e; ++p) {
-    Obj_00ca0710 o(p, &g_0157c920, &g_01a80d26);
+    Obj_00ca0710 o(p, &g_0157c920, ((char*)0x01a80d26));
     o.f(self);
   }
   self->v7();
@@ -120,7 +116,6 @@ struct Vec_00f268f0 { Elem_00f268f0* b; Elem_00f268f0* e; };
 struct Obj_00f268f0 { Obj_00f268f0(const void*, const void*, const void*); void f(Self_00f268f0*); unsigned int pad[645]; };
 extern "C" __declspec(noalias) void ext_00f268f0(void*, void*, int, int);
 extern char g_015adae0;
-extern char g_01a80d26;
 void FUN_00f268f0(Self_00f268f0* self, Vec_00f268f0* v) {
   int n = v->e - v->b;
   Mid_00f268f0* m = self->v8();
@@ -128,7 +123,7 @@ void FUN_00f268f0(Self_00f268f0* self, Vec_00f268f0* v) {
   void* r = m->m6();
   ext_00f268f0(r, &k, 1, 0);
   for (Elem_00f268f0* p = v->b, *e = v->e; p != e; ++p) {
-    Obj_00f268f0 o(p, &g_015adae0, &g_01a80d26);
+    Obj_00f268f0 o(p, &g_015adae0, ((char*)0x01a80d26));
     o.f(self);
   }
   self->v7();
@@ -147,7 +142,6 @@ struct Vec_00f26d30 { Elem_00f26d30* b; Elem_00f26d30* e; };
 struct Obj_00f26d30 { Obj_00f26d30(const void*, const void*, const void*); void f(Self_00f26d30*); unsigned int pad[645]; };
 extern "C" __declspec(noalias) void ext_00f26d30(void*, void*, int, int);
 extern char g_015aee68;
-extern char g_01a80d26;
 void FUN_00f26d30(Self_00f26d30* self, Vec_00f26d30* v) {
   int n = v->e - v->b;
   Mid_00f26d30* m = self->v8();
@@ -155,7 +149,7 @@ void FUN_00f26d30(Self_00f26d30* self, Vec_00f26d30* v) {
   void* r = m->m6();
   ext_00f26d30(r, &k, 1, 0);
   for (Elem_00f26d30* p = v->b, *e = v->e; p != e; ++p) {
-    Obj_00f26d30 o(p, &g_015aee68, &g_01a80d26);
+    Obj_00f26d30 o(p, &g_015aee68, ((char*)0x01a80d26));
     o.f(self);
   }
   self->v7();
@@ -174,7 +168,6 @@ struct Vec_00f26e10 { Elem_00f26e10* b; Elem_00f26e10* e; };
 struct Obj_00f26e10 { Obj_00f26e10(const void*, const void*, const void*); void f(Self_00f26e10*); unsigned int pad[645]; };
 extern "C" __declspec(noalias) void ext_00f26e10(void*, void*, int, int);
 extern char g_015ae5f0;
-extern char g_01a80d26;
 void FUN_00f26e10(Self_00f26e10* self, Vec_00f26e10* v) {
   int n = v->e - v->b;
   Mid_00f26e10* m = self->v8();
@@ -182,7 +175,7 @@ void FUN_00f26e10(Self_00f26e10* self, Vec_00f26e10* v) {
   void* r = m->m6();
   ext_00f26e10(r, &k, 1, 0);
   for (Elem_00f26e10* p = v->b, *e = v->e; p != e; ++p) {
-    Obj_00f26e10 o(p, &g_015ae5f0, &g_01a80d26);
+    Obj_00f26e10 o(p, &g_015ae5f0, ((char*)0x01a80d26));
     o.f(self);
   }
   self->v7();
@@ -201,7 +194,6 @@ struct Vec_00f27290 { Elem_00f27290* b; Elem_00f27290* e; };
 struct Obj_00f27290 { Obj_00f27290(const void*, const void*, const void*); void f(Self_00f27290*); unsigned int pad[645]; };
 extern "C" __declspec(noalias) void ext_00f27290(void*, void*, int, int);
 extern char g_015ae888;
-extern char g_01a80d26;
 void FUN_00f27290(Self_00f27290* self, Vec_00f27290* v) {
   int n = v->e - v->b;
   Mid_00f27290* m = self->v8();
@@ -209,7 +201,7 @@ void FUN_00f27290(Self_00f27290* self, Vec_00f27290* v) {
   void* r = m->m6();
   ext_00f27290(r, &k, 1, 0);
   for (Elem_00f27290* p = v->b, *e = v->e; p != e; ++p) {
-    Obj_00f27290 o(p, &g_015ae888, &g_01a80d26);
+    Obj_00f27290 o(p, &g_015ae888, ((char*)0x01a80d26));
     o.f(self);
   }
   self->v7();
@@ -228,7 +220,6 @@ struct Vec_00ff1010 { Elem_00ff1010* b; Elem_00ff1010* e; };
 struct Obj_00ff1010 { Obj_00ff1010(const void*, const void*, const void*); void f(Self_00ff1010*); unsigned int pad[645]; };
 extern "C" __declspec(noalias) void ext_00ff1010(void*, void*, int, int);
 extern char g_015b52b0;
-extern char g_01a80d26;
 void FUN_00ff1010(Self_00ff1010* self, Vec_00ff1010* v) {
   int n = v->e - v->b;
   Mid_00ff1010* m = self->v8();
@@ -236,7 +227,7 @@ void FUN_00ff1010(Self_00ff1010* self, Vec_00ff1010* v) {
   void* r = m->m6();
   ext_00ff1010(r, &k, 1, 0);
   for (Elem_00ff1010* p = v->b, *e = v->e; p != e; ++p) {
-    Obj_00ff1010 o(p, &g_015b52b0, &g_01a80d26);
+    Obj_00ff1010 o(p, &g_015b52b0, ((char*)0x01a80d26));
     o.f(self);
   }
   self->v7();
@@ -255,7 +246,6 @@ struct Vec_0100e810 { Elem_0100e810* b; Elem_0100e810* e; };
 struct Obj_0100e810 { Obj_0100e810(const void*, const void*, const void*); void f(Self_0100e810*); unsigned int pad[645]; };
 extern "C" __declspec(noalias) void ext_0100e810(void*, void*, int, int);
 extern char g_015b6990;
-extern char g_01a80d26;
 void FUN_0100e810(Self_0100e810* self, Vec_0100e810* v) {
   int n = v->e - v->b;
   Mid_0100e810* m = self->v8();
@@ -263,7 +253,7 @@ void FUN_0100e810(Self_0100e810* self, Vec_0100e810* v) {
   void* r = m->m6();
   ext_0100e810(r, &k, 1, 0);
   for (Elem_0100e810* p = v->b, *e = v->e; p != e; ++p) {
-    Obj_0100e810 o(p, &g_015b6990, &g_01a80d26);
+    Obj_0100e810 o(p, &g_015b6990, ((char*)0x01a80d26));
     o.f(self);
   }
   self->v7();
