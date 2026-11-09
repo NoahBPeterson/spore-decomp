@@ -1,10 +1,11 @@
 #!/bin/sh
-# Run the Visual C++ Toolkit 2003 compiler (cl 13.10.3052) under wine, for code built with
+# Run the Visual C++ Toolkit 2003 1.01 compiler (cl 13.10.3077) under wine, for code built with
 # VC .NET 2003 (Havok: the dev PDB's S_COMPILE records say 13.10.3077).
-# Toolchain: work/toolchain/vc71tk (bin/include/lib from VCToolkitSetup.exe's MSI, extracted
-# without running the installer). Shares the VS2008 wine prefix; see cl.sh for the keep-alive.
+# Toolchain: work/toolchain/vc71tk (bin/include/lib of a silent install of VCToolkitSetup.exe 1.01,
+# SHA-1 50dc6cca..., docs/matching.md). Toolkit 1.0's 13.10.3052 is in work/toolchain/vc71tk_3052
+# (CL71_TC=). Shares the VS2008 wine prefix; see cl.sh for the keep-alive.
 root=$(cd "$(dirname "$0")/../.." && pwd)
-tc="$root/work/toolchain/vc71tk"
+tc="${CL71_TC:-$root/work/toolchain/vc71tk}"   # CL71_TC: another toolkit install (bin/include/lib), for compiler A/B tests
 winpath() { printf 'Z:%s' "$1" | tr '/' '\\'; }
 export WINEPREFIX="${CL_WINEPREFIX:-$root/work/toolchain/wineprefix}" WINEDEBUG=-all
 export INCLUDE="$(winpath "$root/match/include/vc71");$(winpath "$tc/include");$(winpath "$root/work/toolchain/vc9sp1/WinSDK/Include")"

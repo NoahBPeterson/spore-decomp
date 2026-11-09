@@ -26,7 +26,7 @@ middleware, each built by its own compiler:
 | Code | Compiler | How we compile it | Marker |
 |---|---|---|---|
 | Spore game code + EA framework (UTFSpore) | **VS2008 SP1, cl 15.00.30729.01** (RTM 15.00.21022.08 still open) | default `tools/matching/cl.sh` | **[15]** |
-| Havok 3.1.0 (all 469 objects) | **VC .NET 2003, cl 13.10.3077** | `/vc71` → `cl71.sh` (surrogate 13.10.3052) | **[13]** |
+| Havok 3.1.0 (all 469 objects) | **VC .NET 2003, cl 13.10.3077** | `/vc71` → `cl71.sh` (13.10.3077, Toolkit 1.01) | **[13]** |
 | RenderWare 4 core libraries | **VC .NET 2003, cl 13.10** | `/vc71` | **[13]** |
 | RenderWare 4 core **additionally** | **`/GL` + `/LTCG`** (link-time codegen) | not reproducible single-object | **[LTCG]** |
 | Other code inside the RenderWare address range (NegateRows, LpcSynthesize, RW audio) | VS2008 SP1 | default | **[15]** |
@@ -809,8 +809,8 @@ source. Flag matrices almost never explain a residual in game code.
   manifest's `9.0.21022.8` CRT binding is SP1's default too. Every function so
   far matches with SP1. Test residual mismatches against VS2008 RTM
   (15.00.21022.08).
-- Havok was built with **cl 13.10.3077**; we match with **13.10.3052** (Visual
-  C++ Toolkit 2003).
+- Havok was built with **cl 13.10.3077**, and we match with that build (Visual
+  C++ Toolkit 2003 1.01; until 2026-11-09 Toolkit 1.0's 13.10.3052, which matched the same rows).
 - VC7.1 has no `/fp:` switch.
 - **`SPGonzago/SPCellGame.obj` is a `/GS-` TU.** `00e66280` carries a
   ~0x800-byte escaping stack buffer and **no `__security_cookie`** prologue, so

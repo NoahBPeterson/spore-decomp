@@ -24,7 +24,7 @@ single most important thing to know before chasing a near-miss: a few bytes off 
 | Code | Compiler | How we compile it |
 |---|---|---|
 | Spore game code + EA framework (UTFSpore) | VS2008 SP1, cl 15.00.30729.01 | default (`cl.sh`) |
-| **Havok 3.1.0** (all 469 objects) | **VC .NET 2003, cl 13.10.3077** | `/vc71` (we match with 13.10.3052) |
+| **Havok 3.1.0** (all 469 objects) | **VC .NET 2003, cl 13.10.3077** | `/vc71` (cl 13.10.3077, Toolkit 1.01) |
 | **RenderWare 4 core libraries** | **VC .NET 2003, cl 13.10** | `/vc71` |
 | Other code inside the RenderWare address range (NegateRows, LpcSynthesize, …) | VS2008 SP1 | default |
 | RenderWare 4 core **additionally** | **/GL + /LTCG** (link-time codegen) | not reproducible single-object |
@@ -35,10 +35,13 @@ Evidence and rules of thumb are below.
   cl 13.10.3077 for all 469 Havok objects. Integer code often matches with VS2008, but x87 code
   never does (instruction selection differs, e.g. `fld st(i); fmul [m]` vs `fld [m]; fmul st(i)`).
   Add the pseudo-flag **`/vc71`** to a manifest line's flags (or `chk.py --flags`) and `cl.sh`
-  hands the compile to `tools/matching/cl71.sh`: cl **13.10.3052** from the Visual C++ Toolkit
-  2003 (`VCToolkitSetup.exe`, SHA-1 `956c81c3106b97042c4126b23c81885c4b5211f4`; bin/include/lib
-  extracted from its embedded MSI without running the installer into `work/toolchain/vc71tk/`).
-  3052 is a slightly earlier build than 3077; so far it has matched. VC7.1 has no `/fp:` switch
+  hands the compile to `tools/matching/cl71.sh`: cl **13.10.3077**, Havok's own build, from the Visual
+  C++ Toolkit 2003 1.01 (`VCToolkitSetup.exe`, SHA-1 `50dc6cca1503f08a41d56816f3f1abcaf347b0bd`,
+  https://archive.org/download/20260623_202606/VCToolkitSetup.exe; bin/include/lib of a silent
+  install under wine, `/s /v"/qn TARGETDIR=C:\vc71tk"`, in `work/toolchain/vc71tk/`). Until
+  2026-11-09 we used Toolkit 1.0's 13.10.3052 (SHA-1 `956c81c3...b5211f4`, no public source left;
+  kept in `work/toolchain/vc71tk_3052/`, select with `CL71_TC=`): all 949 `/vc71` rows of 177
+  manifests stay byte-exact under 3077, and the headers of the two kits are identical. VC7.1 has no `/fp:` switch
   (it warns and ignores it); its default is what Havok used.
 - **RenderWare 4's core libraries are VC .NET 2003 too** (rw_HashString, Shader, Device/D3D9
   adapter code, ArenaManager): those match only with `/vc71`. Code elsewhere in the RenderWare
