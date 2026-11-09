@@ -1,0 +1,46 @@
+# Rehearsal of the contribution gate on a GitHub runner: build both compilers from Microsoft's public installers,
+# check them against tools/ci/toolchain.sha256, then compile a sample of byte-exact manifests and check every row
+# against its retail fingerprint (tools/ci/gate.py).  No retail binary on the runner.
+name: gate-test
+
+on:
+  push:
+    branches: [ci/gate-test]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install wine (32-bit), msitools, Python packages
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends wine wine32:i386 msitools xvfb >/dev/null
+          wine --version
+          python3 -m pip install --quiet --break-system-packages pefile capstone
+
+      - name: Cache installers
+        uses: actions/cache@v4
+        with:
+          path: work/toolchain/downloads
+          key: msvc-installers-7800d037-50dc6cca
+
+      - name: Build and verify the toolchains
+        run: sh tools/ci/setup_toolchain.sh
+
+      - name: Gate the sample manifests
+        run: python3 tools/ci/gate.py $(cat tools/ci/sample_manifests.txt) --fingerprints tools/ci/fingerprints_sample.jsonl --jobs 4 --json gate.json
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-results
+          path: gate.json
