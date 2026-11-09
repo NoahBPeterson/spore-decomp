@@ -2,7 +2,7 @@
 # all 79,168 rows).  gate.py reports them without failing a pull request.  Remove a VA once it passes; never add
 # one to let a pull request through.
 
-# needs files git does not track (work/third_party jpeg-6a, libpng, openssl; work/ext EABase/EASTL/EAText/EAWebKit): CI cannot compile these sources yet (503)
+# needs files git does not track (work/third_party jpeg-6a, libpng, openssl; work/ext EABase/EASTL/EAText/EAWebKit): CI cannot compile these sources yet (501)
 00850930
 00850b30
 00850d40
@@ -259,8 +259,6 @@
 008975c0
 00897600
 00897640
-00a620b0
-00a620e0
 00b38260
 00b38d00
 0117e620

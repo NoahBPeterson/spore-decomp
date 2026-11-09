@@ -195,9 +195,19 @@ def choose_flags(sid, va, override=None):
     """_choose_flags, plus /Isrc/game/include for a migrated module (src/game/...) when no /I is given: its sources
     include the generated headers by that path, and manifest rows always name it."""
     flags, how = _choose_flags(sid, va, override)
-    if not os.path.isdir(os.path.join(ROOT, "match", "slices", sid)) and module_dir(sid) \
-            and not any(f.startswith("/I") for f in flags):
-        flags = list(flags) + ["/Isrc/game/include"]
+    module = not os.path.isdir(os.path.join(ROOT, "match", "slices", sid)) and module_dir(sid)
+    if module and how.startswith("reason"):
+        # a note written before the function was migrated can name the other compiler (/vc71 for a slice of its own);
+        # the whole module file is compiled, so a note never switches compilers away from what every row uses
+        fams = {"/vc71" in (r[3] or []) for r in manifest_rows(sid) if r[3]}
+        if len(fams) == 1 and ("/vc71" in flags) not in fams:
+            fl = {tuple(r[3]) for r in manifest_rows(sid) if r[3]}
+            allf = [tuple(r[3]) for r in manifest_rows(sid) if r[3]]
+            flags, how = list(max(fl, key=lambda f: (allf.count(f), f))), "this file's manifest; the note names the other compiler (/vc71 or not): if the function needs that one, move it to a file compiled with it"
+    if not any(f.startswith("/I") and f.rstrip("/\\").endswith("game/include") for f in flags):
+        src = source_path(sid)
+        if module or (src and os.path.exists(src) and re.search(r'(?m)^\s*#\s*include\s*"game/', open(src, errors="replace").read())):
+            flags = list(flags) + ["/Isrc/game/include"]
     return flags, how
 
 

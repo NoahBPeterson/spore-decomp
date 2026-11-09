@@ -113,6 +113,25 @@ def ndiff(diff):
     return int(m.group(1)) or None if m else None
 
 
+def blocked():
+    """{va: reason} from tools/contrib/blocked.txt (tools/contrib/sweep_tasks.py --write-blocked)"""
+    out, path = {}, os.path.join(ROOT, "tools", "contrib", "blocked.txt")
+    if os.path.exists(path):
+        for l in open(path, encoding="utf-8"):
+            if l.strip() and not l.startswith("#"):
+                va, _, why = l.partition(" ")
+                out[int(va, 16)] = why.strip()
+    return out
+
+
+def marked():
+    """every va with a `// @ 0x...` marker in some source"""
+    pat, out = re.compile(r"(?mi)^//\s*@\s*0x0*([0-9a-f]+)\b"), set()
+    for f in sources():
+        out.update(int(m.group(1), 16) for m in pat.finditer(open(f, errors="replace").read()))
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("va", nargs="?")
@@ -121,7 +140,9 @@ def main():
     ap.add_argument("--by", choices=("diff", "size"), default="diff")
     a = ap.parse_args()
     if a.list:
-        rows = open_work(a.max_size)
+        skip, have = blocked(), marked()
+        # left out: no source to edit (no marker), or a source that does not compile on a clean clone (blocked.txt)
+        rows = [r for r in open_work(a.max_size) if r[1] in have and r[1] not in skip]
         big = 1 << 30
         rows.sort(key=(lambda r: (ndiff(r[2]) if ndiff(r[2]) is not None else big, r[0], r[1])) if a.by == "diff"
                   else (lambda r: (r[0], r[1])))
@@ -144,6 +165,9 @@ def main():
         print("source     none yet: no file has a `// @ 0x%08x` marker. Write it in the object's source file" % va)
         return 0
     st, note = status(ident, va)
+    if va in blocked():
+        print("blocked    its source does not compile on a clean clone yet (%s); this needs a maintainer, pick another"
+              % blocked()[va])
     flags, how = S.choose_flags(ident, va)
     print("source     %s   (object %s)" % (os.path.relpath(src, ROOT), ident))
     print("status     %s%s" % (st, "\n           " + note[:300] if note else ""))

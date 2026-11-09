@@ -1,0 +1,95 @@
+# Functions task.py --list leaves out: their source does not compile on a clean clone with the flags
+# check.py would use (tools/contrib/sweep_tasks.py --write-blocked).  Fixing one is maintainer work.
+006da360  match/slices/s006da360/s006da360.cpp: error C2084: function 'float BakeSubSS(float,float)' already has a body
+006da690  match/slices/s006da360/s006da360.cpp: error C2084: function 'float BakeSubSS(float,float)' already has a body
+006da9c0  match/slices/s006da360/s006da360.cpp: error C2084: function 'float BakeSubSS(float,float)' already has a body
+006dacf0  match/slices/s006da360/s006da360.cpp: error C2084: function 'float BakeSubSS(float,float)' already has a body
+00858190  match/slices/s00858190/s00858190.cpp: fatal error C1083: Cannot open include file: '../../../work/third_party/src/jpeg-6a/jinclude.h': No such file or directory
+00858410  match/slices/s00858190/s00858190.cpp: fatal error C1083: Cannot open include file: '../../../work/third_party/src/jpeg-6a/jinclude.h': No such file or directory
+008587c0  match/slices/s00858190/s00858190.cpp: fatal error C1083: Cannot open include file: '../../../work/third_party/src/jpeg-6a/jinclude.h': No such file or directory
+00880170  match/slices/s00880170/s00880170.cpp: fatal error C1083: Cannot open include file: 'EASTL/fixed_string.h': No such file or directory
+008804d0  match/slices/s00880170/s00880170.cpp: fatal error C1083: Cannot open include file: 'EASTL/fixed_string.h': No such file or directory
+008813e0  match/slices/s00880910/s00880910.cpp: fatal error C1083: Cannot open include file: 'EASTL/fixed_string.h': No such file or directory
+00881720  match/slices/s00880910/s00880910.cpp: fatal error C1083: Cannot open include file: 'EASTL/fixed_string.h': No such file or directory
+00882b30  match/slices/s00882b30/s00882b30.cpp: fatal error C1083: Cannot open include file: 'EASTL/fixed_string.h': No such file or directory
+00886000  match/slices/s00885ad0/s00885ad0.cpp: fatal error C1083: Cannot open include file: 'EABase/EABase.h': No such file or directory
+00886100  match/slices/s00885ad0/s00885ad0.cpp: fatal error C1083: Cannot open include file: 'EABase/EABase.h': No such file or directory
+00887f80  match/slices/s00887530/s00887530.cpp: fatal error C1083: Cannot open include file: 'EABase/EABase.h': No such file or directory
+00888800  match/slices/s008884b0/s008884b0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextBreak.cpp': No such file or directory
+00888a50  match/slices/s008884b0/s008884b0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextBreak.cpp': No such file or directory
+008891f0  match/slices/s008884b0/s008884b0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextBreak.cpp': No such file or directory
+008894a0  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+00889610  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+008897a0  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+00889880  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+00889900  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+008899b0  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+00889b40  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+00889c10  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+00889c80  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+00889d90  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+00889f10  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+00889fc0  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+0088a000  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+0088a0f0  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+0088a240  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+0088a2b0  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+0088a2c0  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+0088a330  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+0088a420  match/slices/s008894a0/s008894a0.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextCache.cpp': No such file or directory
+00894440  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+00894700  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+00894810  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+00894970  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+00894c50  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+00894ca0  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+00894e80  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+00895040  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+008950f0  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+00895370  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+00895450  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+008954c0  match/slices/s00894440/s00894440.cpp: fatal error C1083: Cannot open include file: '../../../work/ext/EAWebKitSupportPackages/EATextEAWebKit/local/source/EATextStyle.cpp': No such file or directory
+008957b0  match/slices/s00895630/s00895630.cpp: fatal error C1083: Cannot open include file: 'EAText/internal/EALexer.h': No such file or directory
+00895810  match/slices/s00895630/s00895630.cpp: fatal error C1083: Cannot open include file: 'EAText/internal/EALexer.h': No such file or directory
+00895e30  match/slices/s00895630/s00895630.cpp: fatal error C1083: Cannot open include file: 'EAText/internal/EALexer.h': No such file or directory
+00896210  match/slices/s00895630/s00895630.cpp: fatal error C1083: Cannot open include file: 'EAText/internal/EALexer.h': No such file or directory
+008966f0  match/slices/s00895630/s00895630.cpp: fatal error C1083: Cannot open include file: 'EAText/internal/EALexer.h': No such file or directory
+00896d60  match/slices/s00896800/s00896800.cpp: fatal error C1083: Cannot open include file: 'EAText/internal/EALexer.h': No such file or directory
+00897350  match/slices/s00896800/s00896800.cpp: fatal error C1083: Cannot open include file: 'EAText/internal/EALexer.h': No such file or directory
+00897460  match/slices/s00896800/s00896800.cpp: fatal error C1083: Cannot open include file: 'EAText/internal/EALexer.h': No such file or directory
+00897530  match/slices/s00896800/s00896800.cpp: fatal error C1083: Cannot open include file: 'EAText/internal/EALexer.h': No such file or directory
+00897620  match/slices/s00896800/s00896800.cpp: fatal error C1083: Cannot open include file: 'EAText/internal/EALexer.h': No such file or directory
+00896900  match/slices/s00896800/s00896800.cpp: fatal error C1083: Cannot open include file: 'EAText/internal/EALexer.h': No such file or directory
+00b38190  match/slices/s00b38190/s00b38190.cpp: fatal error C1083: Cannot open include file: 'EASTL/map.h': No such file or directory
+00b38690  match/slices/s00b38190/s00b38190.cpp: fatal error C1083: Cannot open include file: 'EASTL/map.h': No such file or directory
+011a0ff0  match/slices/s011a09c0/s011a09c0.cpp: fatal error C1083: Cannot open include file: '../../../work/third_party/build/openssl-0.9.8g-d2110920/ssl/ssl_locl.h': No such file or directory
+010a32c0  src/game/Havok/_at_010a0000.cpp: fatal error C1001: An internal error has occurred in the compiler.
+010a3780  src/game/Havok/_at_010a0000.cpp: fatal error C1001: An internal error has occurred in the compiler.
+010a3810  src/game/Havok/_at_010a0000.cpp: fatal error C1001: An internal error has occurred in the compiler.
+010a3920  src/game/Havok/_at_010a0000.cpp: fatal error C1001: An internal error has occurred in the compiler.
+010a39f0  src/game/Havok/_at_010a0000.cpp: fatal error C1001: An internal error has occurred in the compiler.
+010a3a90  src/game/Havok/_at_010a0000.cpp: fatal error C1001: An internal error has occurred in the compiler.
+010a3c40  src/game/Havok/_at_010a0000.cpp: fatal error C1001: An internal error has occurred in the compiler.
+010a3c90  src/game/Havok/_at_010a0000.cpp: fatal error C1001: An internal error has occurred in the compiler.
+011187d0  src/game/Havok/_at_01110000.cpp: error C4234: nonstandard extension used : '__thiscall' keyword reserved for future use
+01111d90  src/game/Havok/_at_01110000.cpp: error C4234: nonstandard extension used : '__thiscall' keyword reserved for future use
+011120a0  src/game/Havok/_at_01110000.cpp: error C4234: nonstandard extension used : '__thiscall' keyword reserved for future use
+01112600  src/game/Havok/_at_01110000.cpp: error C4234: nonstandard extension used : '__thiscall' keyword reserved for future use
+01118340  src/game/Havok/_at_01110000.cpp: error C4234: nonstandard extension used : '__thiscall' keyword reserved for future use
+0111ffc0  src/game/Havok/_at_01110000.cpp: error C4234: nonstandard extension used : '__thiscall' keyword reserved for future use
+008d4920  src/game/UTFSpore_Win32/TriggerConfig.cpp: error C2065: 'reader' : undeclared identifier
+008d4a10  src/game/UTFSpore_Win32/TriggerConfig.cpp: error C2065: 'reader' : undeclared identifier
+008d4b90  src/game/UTFSpore_Win32/TriggerConfig.cpp: error C2065: 'reader' : undeclared identifier
+008d4ef0  src/game/UTFSpore_Win32/TriggerConfig.cpp: error C2065: 'reader' : undeclared identifier
+008d5180  src/game/UTFSpore_Win32/TriggerConfig.cpp: error C2065: 'reader' : undeclared identifier
+008d5340  src/game/UTFSpore_Win32/TriggerConfig.cpp: error C2065: 'reader' : undeclared identifier
+008c7c40  src/game/UTFSpore_Win32/t2ksc.cpp: cpp(306) : error C2059: syntax error : ')'
+008c8220  src/game/UTFSpore_Win32/t2ksc.cpp: cpp(306) : error C2059: syntax error : ')'
+008c83b0  src/game/UTFSpore_Win32/t2ksc.cpp: cpp(306) : error C2059: syntax error : ')'
+008c8600  src/game/UTFSpore_Win32/t2ksc.cpp: cpp(306) : error C2059: syntax error : ')'
+008c8720  src/game/UTFSpore_Win32/t2ksc.cpp: cpp(306) : error C2059: syntax error : ')'
+008caba0  src/game/UTFSpore_Win32/t2kstrk1.cpp: error C2059: syntax error : '}'
+008cae30  src/game/UTFSpore_Win32/t2kstrk1.cpp: error C2059: syntax error : '}'
+008cb070  src/game/UTFSpore_Win32/t2kstrk1.cpp: error C2059: syntax error : '}'
+008cb450  src/game/UTFSpore_Win32/t2kstrk1.cpp: error C2059: syntax error : '}'
+008cb5e0  src/game/UTFSpore_Win32/t2kstrk1.cpp: error C2059: syntax error : '}'
