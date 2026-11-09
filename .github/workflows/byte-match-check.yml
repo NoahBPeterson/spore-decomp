@@ -1,7 +1,7 @@
 # Rehearsal of the contribution gate on a GitHub runner: build both compilers from Microsoft's public installers,
 # check them against tools/ci/toolchain.sha256, then compile a sample of byte-exact manifests and check every row
 # against its retail fingerprint (tools/ci/gate.py).  No retail binary on the runner.
-name: gate-test
+name: Byte-match check (CI rehearsal)
 
 on:
   push:
@@ -12,7 +12,8 @@ permissions:
   contents: read
 
 jobs:
-  gate:
+  byte-match:
+    name: Compile with MSVC and compare against retail fingerprints
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
@@ -45,12 +46,12 @@ jobs:
         timeout-minutes: 20
         run: sh tools/ci/setup_toolchain.sh
 
-      - name: Gate the sample manifests
+      - name: Compile the sample manifests and check each function's bytes
         run: python3 tools/ci/gate.py $(cat tools/ci/sample_manifests.txt) --fingerprints tools/ci/fingerprints_sample.jsonl --jobs 4 --json gate.json
 
       - name: Upload results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gate-results
+          name: byte-match-results
           path: gate.json
