@@ -4872,14 +4872,11 @@ void PlayMode::TickFull(int ms)
 }
 
 // @ 0x00ef3930
-void __stdcall FUN_00ef3930(int *param_1)
+void __stdcall FUN_00ef3930(int *__restrict param_1)
 {
-    int uVar1;
-
-    uVar1 = DAT_015acd3c;
     param_1[0] = 0x68715e28;
     param_1[1] = 0x0510a95b;
-    param_1[2] = uVar1;
+    param_1[2] = DAT_015acd3c;
 }
 
 // @ 0x00ef40d0

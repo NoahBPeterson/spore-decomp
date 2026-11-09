@@ -87,7 +87,6 @@
 00bfd9f0 439 GetNounID: complete; the noun-id lookup and the scaled noun list walk reproduce the original, but the walk's pointer reloads and the SceneryTable access order are scheduled differently, leaving 474 differing bytes. difftest verdict not re-run for this row. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bfdc50 222 Push: complete; appends the two nouns to the scenery slot (cursor bump, capacity check, both stores), difference is the reload scheduling around the slot pointer. difftest verdict not re-run for this row. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bfddc0 114 EnsureTimer: complete; the timer lazily created and registered on first use, difference is the call-setup register assignment. difftest verdict not re-run for this row. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00bfdf00 2 GetScaledFloat: complete, 2 differing bytes only (one register choice in the scalar load). difftest verdict not re-run for this row. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bfdf80 18 GetNoun: complete, 21 differing bytes from the accessor's load/add pairing. difftest verdict not re-run for this row. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bfdff0 105 GetProgress: complete; the phase progress blend reproduces the original but the x87 staging of the ratio differs, 102 vs 152 B. difftest verdict not re-run for this row. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00bfe0c0 24 HasNoun: complete, 26 differing bytes from the compare/branch layout. difftest verdict not re-run for this row. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
