@@ -8,7 +8,8 @@ its retail fingerprint (tools/ci/fingerprint.py): MATCH, or why not.  No game fi
 work/SporeApp.analysis.bin (made from your own copy of the game by tools/contrib/make_image.py) it also prints an
 instruction diff of your build against the original.
 
-On MATCH it prints the manifest line to add (and the nonmatching.txt line to remove) in your pull request.
+On MATCH it records the result: it adds the function's manifest.txt line and removes its nonmatching.txt /
+partial.txt line, so the files are ready for your pull request.  --dry-run only prints what it would change.
 """
 import argparse, os, subprocess, sys
 
@@ -33,6 +34,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("va")
     ap.add_argument("--flags", help="override the flags (space-separated)")
+    ap.add_argument("--dry-run", action="store_true", help="on MATCH, print the bookkeeping changes instead of making them")
     a = ap.parse_args()
     va = int(a.va, 16)
     fp = T.fingerprints().get(va)
@@ -80,11 +82,41 @@ def main():
         print("(already a manifest row: nothing to add)")
         return 0
     rel_src = os.path.relpath(src, os.path.join(ROOT, "match")).replace(os.sep, "/")
-    d = os.path.relpath(S.slice_dir(ident), ROOT)
-    print("\nadd to %s/manifest.txt:\n  %s  %s  %08x  %s" % (d, rel_src, sym, va, " ".join(flags)))
-    print("and remove the 0x%08x line from %s/nonmatching.txt (or partial.txt) if it is there" % (va, d))
+    d = S.slice_dir(ident)
+    line = "%s  %s  %08x  %s" % (rel_src, sym, va, " ".join(flags))
+    manifest = os.path.join(d, "manifest.txt")
+    if not os.path.exists(manifest):
+        import glob
+        hits = glob.glob(os.path.join(ROOT, "src", "**", ident + ".manifest.txt"), recursive=True)
+        manifest = hits[0] if len(hits) == 1 else manifest
+    if a.dry_run:
+        print("\nwould add to %s:\n  %s" % (os.path.relpath(manifest, ROOT), line))
+        print("and remove the %08x line from %s/nonmatching.txt or partial.txt" % (va, os.path.relpath(d, ROOT)))
+        return 0
+    text = open(manifest).read() if os.path.exists(manifest) else ""
+    with open(manifest, "a") as f:
+        f.write(("" if not text or text.endswith("\n") else "\n") + line + "\n")
+    print("\nrecorded: added to %s:\n  %s" % (os.path.relpath(manifest, ROOT), line))
+    for name in ("nonmatching.txt", "partial.txt"):
+        path = os.path.join(d, name)
+        if not os.path.exists(path):
+            continue
+        lines = open(path, encoding="utf-8", errors="replace").readlines()
+        keep = [l for l in lines if not _is_row(l, va)]
+        if len(keep) != len(lines):
+            open(path, "w", encoding="utf-8").writelines(keep)
+            print("removed its line from %s" % os.path.relpath(path, ROOT))
     return 0
 
+
+def _is_row(line, va):
+    p = line.split(None, 1)
+    if not p or line.lstrip().startswith("#"):
+        return False
+    try:
+        return int(p[0], 16) == va
+    except ValueError:
+        return False
 
 if __name__ == "__main__":
     sys.exit(main())

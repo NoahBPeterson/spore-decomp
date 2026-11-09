@@ -43,11 +43,14 @@ locally (below) before you open the pull request.
    see the function is taken.
 4. **Write, build, compare.** Edit the source, then `.venv/bin/python tools/contrib/check.py 0x00529690`. It prints
    `MATCH`, the compiler errors, or what differs (with the image from setup step 4, an instruction diff).
-5. **On MATCH**, `check.py` prints the `manifest.txt` line to add. Add it, remove the function's line from
-   `nonmatching.txt` (or `partial.txt`), and mark the pull request ready. Fill in the template, including the model or
-   tool that wrote the code.
+5. **On MATCH**, `check.py` records it for you: it adds the function's `manifest.txt` line and removes its
+   `nonmatching.txt` (or `partial.txt`) line. Mark the pull request ready and fill in the template, including the
+   model or tool that wrote the code. (`--dry-run` prints those changes instead of making them.)
 6. **Stuck?** Leave the function better than you found it: update its `nonmatching.txt` note with what you tried and
    what still differs, and open the pull request anyway. Notes are how the next person (or agent) starts ahead.
+
+Keep experiments (test files, notes, listings) in `work/scratch/`: `work/` is ignored by git, so nothing there ends
+up in your pull request by accident.
 
 ## Everything else is fair game
 

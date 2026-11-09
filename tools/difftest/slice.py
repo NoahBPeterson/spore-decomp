@@ -192,6 +192,16 @@ def flags_from_source(src):
 
 
 def choose_flags(sid, va, override=None):
+    """_choose_flags, plus /Isrc/game/include for a migrated module (src/game/...) when no /I is given: its sources
+    include the generated headers by that path, and manifest rows always name it."""
+    flags, how = _choose_flags(sid, va, override)
+    if not os.path.isdir(os.path.join(ROOT, "match", "slices", sid)) and module_dir(sid) \
+            and not any(f.startswith("/I") for f in flags):
+        flags = list(flags) + ["/Isrc/game/include"]
+    return flags, how
+
+
+def _choose_flags(sid, va, override=None):
     """(flags, provenance), first found wins:
     1. --flags (override);
     2. an explicit 'flags /O2 ...' note in this VA's nonmatching reason ("reason");
