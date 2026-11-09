@@ -42,12 +42,18 @@ locally (below) before you open the pull request.
 3. **Say you are on it.** Open a draft pull request early, titled with the address (`0x00529690: ...`), so others can
    see the function is taken.
 4. **Write, build, compare.** Edit the source, then `.venv/bin/python tools/contrib/check.py 0x00529690`. It prints
-   `MATCH`, the compiler errors, or what differs (with the image from setup step 4, an instruction diff).
+   `MATCH`, the compiler errors, or what differs. Without the image (step 4 is optional) it can only say *how* the
+   bytes differ: the size, or a call/global sitting at the wrong offset. That still separates most wrong spellings.
+   When one function resists, put 10-30 renamed spellings in a scratch file under `work/` and rank them in one compile:
+   `.venv/bin/python tools/contrib/variants.py work/scratch_0x00529690.cpp 0x00529690 --flags "<flags from step 2>"`.
+   It groups them into codegen families, so "same size, address at the wrong offset" tells you the instruction
+   schedule is close before any byte diff exists. The winner still goes into the real source and through `check.py`.
 5. **On MATCH**, `check.py` records it for you: it adds the function's `manifest.txt` line and removes its
    `nonmatching.txt` (or `partial.txt`) line. Mark the pull request ready and fill in the template, including the
    model or tool that wrote the code. (`--dry-run` prints those changes instead of making them.)
-6. **Stuck?** Leave the function better than you found it: update its `nonmatching.txt` note with what you tried and
-   what still differs, and open the pull request anyway. Notes are how the next person (or agent) starts ahead.
+6. **Stuck?** Six to eight named levers from `docs/codegen.md` is a full attempt. Then leave the function better than
+   you found it: restore the best compiling source, update its `nonmatching.txt` note with every spelling you tried
+   and what still differs, and open the pull request anyway. Notes are how the next person (or agent) starts ahead.
 
 Keep experiments (test files, notes, listings) in `work/scratch/`: `work/` is ignored by git, so nothing there ends
 up in your pull request by accident.

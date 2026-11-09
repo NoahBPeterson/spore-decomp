@@ -70,7 +70,10 @@ Evidence and rules of thumb are below.
 ## Workflow
 1. `tools/matching/disasm.py work/SporeApp.analysis.bin <va>` prints the original instructions.
 2. Write candidate spellings into a scratch file, then run
-   `tools/matching/try_variants.py <scratch.cpp> <va>`, which ranks every function by diff bytes.
+   `tools/matching/try_variants.py <scratch.cpp> <va>`, which ranks every function by diff bytes. Without a retail
+   image (the contributor kit's setup), `tools/contrib/variants.py <scratch.cpp> <va> --flags "<flags>"` does the same
+   ranking against the fingerprints: MATCH, wrong size, address at the wrong offset, or bytes differ (see its
+   docstring for what that resolution can and cannot tell you).
 3. Move the winner into `match/<subsystem>/*.cpp`, add it to `match/manifest.txt`, and run
    `tools/matching/run_all.py`. That recompiles and re-verifies the whole set, so it stays green.
 4. `tools/matching/cmpobj.py` is the verifier. It masks relocations on our side (COFF
@@ -133,6 +136,9 @@ Tools (from repo root):
   (the session scratchpad is shared between concurrent agents and gets clobbered).
 - `.venv/bin/python tools/matching/try_variants.py <scratch.cpp> <va>`: rank candidate spellings
   (use `work/match/scratch_<id>_N.cpp` files; every function symbol in the file is compared)
+- `.venv/bin/python tools/contrib/variants.py <scratch.cpp> <va> [--flags "..."]`: the same ranking without a retail
+  copy (fingerprint verdicts grouped by codegen family: no byte counts, but "address at the wrong offset" separates
+  schedules).
 - `.venv/bin/python tools/matching/cmpobj.py work/SporeApp.analysis.bin <obj> <symbol> <va>`
 - `.venv/bin/python tools/matching/run_all.py --manifest match/slices/<id>/manifest.txt` (final check)
 - `.venv/bin/python tools/pdb_type.py <ClassName> [--exact]`: the class/struct/enum layout from the 2008
