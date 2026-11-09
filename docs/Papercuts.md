@@ -1192,3 +1192,14 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   (ret 8) — GetCurrentGameMode and the getter take no stack args and never clean, so the pushes survive. Reading it as
   nested calls produces the wrong source shape (and an extra callee-saved register). Fix idea: when a callee is a
   0-stack-arg thunk (`ret`/tail-jmp) note that the pending `push`es belong to a later call. Time lost: ~25 min.
+- [contrib/no-image, 2026-11-09] tooling — **a contributor with no game copy gets no diff, only a verdict.**
+  check.py without work/SporeApp.analysis.bin prints `MATCH` / `size N, retail M` / `relocation at offset …` /
+  `bytes differ`; there is no differing-byte count or instruction diff, so a 1-byte near-miss (0x00f21760, eight
+  spellings) is a blind search and every wrong spelling reads the same. The strongest free signal is the stray
+  relocation offset, which split 26 spellings of 0x00ef3930 into 3 load-position families and found the winner
+  (`__restrict`) in one compile. Fix idea: done — `tools/contrib/variants.py` compiles 10-30 renamed spellings per
+  compile and groups them by fingerprint-observable family; its docstring states the resolution ceiling and points at
+  `try_variants.py` when an image exists. Remaining gap: no byte-count ranking without the image, so a diff away from
+  every address cannot be steered. Time lost: ~2 h across cw1 candidates; setup_toolchain.sh cold was ~7 min on macOS
+  (118 MB VC9 + VC71 downloads, msiextract, wineboot, 3,350 hashed files) — run it before reading code.
+  AGENTS.md step 4/6 and docs/matching.md now describe the workflow.
