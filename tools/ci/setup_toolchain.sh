@@ -4,7 +4,8 @@
 # (32-bit), msiextract (msitools), curl, sha1sum/shasum, sha256sum/shasum.
 #   VC9 SP1, cl 15.00.30729.01: VCForPython27.msi from Microsoft's original URL via the Wayback Machine, extracted
 #     with msiextract (no installer runs)
-#   VC 2003 Toolkit 1.01, cl 13.10.3077: VCToolkitSetup.exe from archive.org, silent install under wine
+#   VC 2003 Toolkit 1.01, cl 13.10.3077: VCToolkitSetup.exe from archive.org; its MSI unpacked by is_unpack.py, extracted
+#     with msiextract (no installer runs)
 # Downloads are cached in $TOOLCHAIN_CACHE (default work/toolchain/downloads).
 set -eu
 root=$(cd "$(dirname "$0")/../.." && pwd)
@@ -47,21 +48,16 @@ if [ ! -d "$WINEPREFIX/drive_c" ]; then
 fi
 if [ ! -f "$tc/vc71tk/bin/cl.exe" ]; then
   fetch "$VC71_URL" "$VC71_SHA1" "$dl/VCToolkitSetup_1.01.exe"
-  # InstallShield launcher: /s silent, /v passes the rest to msiexec (/L*v: its log).  It installs under Program
-  # Files whatever TARGETDIR says, so take bin/include/lib from wherever cl.exe lands
-  log="$WINEPREFIX/drive_c/vc71_install.log"
-  timeout 600 wine "$dl/VCToolkitSetup_1.01.exe" /s /v"/qn /L*v C:\\vc71_install.log TARGETDIR=C:\\vc71tk" </dev/null || \
-    echo "installer exit $? (124 = timed out)" >&2
-  timeout 120 wineserver -w || true
-  cl=$(find "$WINEPREFIX/drive_c" -ipath '*Visual C++ Toolkit 2003/bin/cl.exe' | head -1)
-  if [ -z "$cl" ]; then
-    echo "VC 2003 Toolkit install produced no cl.exe; msiexec log tail:" >&2
-    [ -f "$log" ] && iconv -f UTF-16LE -t UTF-8 "$log" 2>/dev/null | tail -40 >&2 || echo "(no log: msiexec never started)" >&2
-    exit 1
-  fi
-  kit=$(dirname "$(dirname "$cl")")
+  # the InstallShield 7 launcher would not run under the runner's wine (exit 109 before msiexec started, run
+  # 42658111691): unpack its MSI without running it (tools/ci/is_unpack.py) and extract that, like VC9
+  x=$(mktemp -d)
+  python3 "$root/tools/ci/is_unpack.py" "$dl/VCToolkitSetup_1.01.exe" "$x/is" >/dev/null
+  msiextract -C "$x/msi" "$x/is/Microsoft Visual C++ Toolkit 2003.msi" >/dev/null
+  kit="$x/msi/Program Files/Microsoft Visual C++ Toolkit 2003"
+  [ -f "$kit/bin/cl.exe" ] || { echo "VC 2003 Toolkit MSI held no bin/cl.exe" >&2; exit 1; }
   rm -rf "$tc/vc71tk"; mkdir -p "$tc/vc71tk"
   cp -R "$kit/bin" "$kit/include" "$kit/lib" "$tc/vc71tk/"
+  rm -rf "$x"
 fi
 
 cd "$tc"
