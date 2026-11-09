@@ -1292,13 +1292,13 @@ void sendgame_anything(int self, int sym, int b, int argc, int* argv)
     Sys2* sys = (Sys2*)EA::Audio::GetSystemAT();
     if (!sys) return;
     DbgCtx* d = (DbgCtx*)sys->Slot1ac();
-    d->M_102e0(DAT_040fdf2f);
+    d->M_102e0(((char*)0x040fdf2f));
     if (DAT_0167589c == *(int*)(self + 0x28)) {
-        d->M_103b0(DAT_040fdfd9, sym);
+        d->M_103b0(((char*)0x040fdfd9), sym);
     } else {
-        d->M_103b0(DAT_040fdfd9, *(int*)(self + 0x28));
+        d->M_103b0(((char*)0x040fdfd9), *(int*)(self + 0x28));
         if (DAT_016758c4 != sym && DAT_01675894 != sym && DAT_016758ac != sym) {
-            d->M_103b0(DAT_040fe010, sym);
+            d->M_103b0(((char*)0x040fe010), sym);
         }
     }
     if (argc > 0) {
@@ -1306,9 +1306,9 @@ void sendgame_anything(int self, int sym, int b, int argc, int* argv)
         int n = argc;
         do {
             if (it[-1] == 1)
-                d->M_10390(DAT_040fdffb, *(float*)it);
+                d->M_10390(((char*)0x040fdffb), *(float*)it);
             else
-                d->M_103b0(DAT_040fe010, *it);
+                d->M_103b0(((char*)0x040fe010), *it);
             it += 3;
         } while (--n != 0);
     }

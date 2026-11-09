@@ -122,9 +122,9 @@ def main():
         for v in lost:
             print("DROPPED %08x: byte-exact on the base branch, no manifest lists it now" % v)
     if a.json:
-        json.dump(out, open(a.json, "w"), indent=1)
+        json.dump(out, open(a.json, "w", encoding="utf-8"), indent=1)
     if a.summary:
-        with open(a.summary, "w") as f:
+        with open(a.summary, "w", encoding="utf-8") as f:
             f.write("### Byte-match check\n\n%s **%d / %d** functions match the retail fingerprints"
                     " (%d manifests; %d known failures)\n\n" % ("✅" if not fails and not lost else "❌", ok, len(rows),
                                                                len(a.manifests), nknown))
