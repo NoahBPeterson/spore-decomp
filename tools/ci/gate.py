@@ -16,7 +16,7 @@ usage: gate.py MANIFEST... [--fingerprints tools/ci/fingerprints.jsonl.gz] [--kn
                [--json out.json] [--summary out.md]
 exit 0 iff every row passes (or is known) and nothing in --keep went missing
 """
-import argparse, glob, gzip, json, os, sys
+import argparse, glob, gzip, json, os, re, sys
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -25,6 +25,37 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import run_all as R             # noqa: E402
 import asm_audit                # noqa: E402
 import fingerprint as F         # noqa: E402
+
+
+# compiler options a manifest row may use (every option the manifests used on 2026-11-09).  Anything else is refused
+# before compiling: cl's /B1 /B2 load a compiler pass from a DLL path, @file reads more options, /Fo /Fe /Fp write files
+FLAG_OK = re.compile(r"^(/MD|/MT|/Gy|/TP|/TC|/O1|/O2|/Od|/Oi|/Oy-?|/Ob[0-2]|/EHsc|/EHs-|/GS-|/GR-|/arch[:=](SSE2?|IA32)"
+                     r"|/fp[:=](fast|precise|strict)|/vc71|/vmg|/vmv|/nologo|/c|/wd\d{4}"
+                     r"|[/-]D[A-Za-z_]\w*(=[\w.]*)?)$")
+
+
+def inside(path, *dirs):
+    rp = os.path.realpath(path)
+    return any(rp == os.path.realpath(d) or rp.startswith(os.path.realpath(d) + os.sep) for d in dirs)
+
+
+def row_problem(src, flags):
+    """why a manifest row may not be compiled, or None"""
+    if not inside(os.path.join(ROOT, "match", src), os.path.join(ROOT, "match"), os.path.join(ROOT, "src", "game")):
+        return "source %s is outside match/ and src/game/" % src
+    fl = list(flags)
+    for i, f in enumerate(fl):
+        if f == "-I" or f == "match/include" and i and fl[i - 1] == "-I":
+            continue
+        if f.startswith("/I"):
+            p = f[2:]
+            if not p or p.startswith(("/", "\\")) or ":" in p or ".." in p.replace("\\", "/").split("/") or \
+                    not inside(os.path.join(ROOT, p), ROOT):
+                return "include path %s is not a relative path inside the repo" % f
+            continue
+        if not FLAG_OK.match(f):
+            return "compiler option %s is not allowed" % f
+    return None
 
 
 def main():
@@ -47,7 +78,8 @@ def main():
     os.makedirs(R.OBJ_DIR, exist_ok=True)
 
     rows = R.read_rows([os.path.abspath(m) for m in a.manifests], "")
-    keys = sorted({(r[0], r[3]) for r in rows})
+    refused = {(r[0], r[3]): row_problem(r[0], r[3]) for r in rows}
+    keys = sorted(k for k, why in refused.items() if not why)
     objs = {}
     with ThreadPoolExecutor(a.jobs) as ex:
         for key, obj, log in ex.map(R.compile_one, keys):
@@ -57,7 +89,9 @@ def main():
     coffs, out, ok = {}, [], 0
     for src, sym, va, flags in rows:
         obj = objs.get((src, flags))
-        if obj is None:
+        if refused[(src, flags)]:
+            st = "refused: " + refused[(src, flags)]
+        elif obj is None:
             st = "compile failed"
         elif va not in fps:
             st = "no fingerprint for this address"
