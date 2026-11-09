@@ -6668,8 +6668,7 @@ float cCommunity_s00bf_d9f0::GetScaledFloat()
 {
   char* o = (char*)this;
   float f = *(float*)(o + 0x5c);
-  void** vt = *(void***)o;
-  return ((float(__thiscall*)(void*))vt[0x34 / 4])(o) * f;
+  return ((float(__thiscall*)(void*))(*(void***)o)[0x34 / 4])(o) * f;
 }
 
 // @ 0x00bfdf20
