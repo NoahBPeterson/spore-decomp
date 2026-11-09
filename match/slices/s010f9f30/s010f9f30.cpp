@@ -595,3 +595,4 @@ hk3AxisSweep::~hk3AxisSweep()
 	g_hkMemoryInstance->deallocate(m_markers);
 	// m_axis[2..0].m_endPoints and m_nodes are destroyed implicitly after the body
 }
+// byte-match check test: comment-only change, expected to pass
