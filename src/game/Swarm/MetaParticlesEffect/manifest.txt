@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/Swarm/MetaParticlesEffect.cpp  ?init_1679034@@YAXXZ  0130fcc0  /O2 /MD /Gy /EHsc /TP

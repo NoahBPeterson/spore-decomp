@@ -1,7 +1,10 @@
 # source  symbol  va  flags
+../src/game/cmn/_at_01140000.cpp  ?F_01140030@@YAHHH@Z  01140030  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/_at_01140000.cpp  ?F_011400a0@@YAHHH@Z  011400a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/cmn/_at_01140000.cpp  ?F_01140290@@YAMPAX@Z  01140290  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/cmn/_at_01140000.cpp  ?SetState@SndDecoder@@QAEXPAF@Z  01140380  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/cmn/_at_01140000.cpp  ?Dtor@SndDecoder@@QAEPAXE@Z  011404f0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/_at_01140000.cpp  ?F_011405e0@@YAHHH@Z  011405e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/cmn/_at_01140000.cpp  ?F_01140760@@YAHXZ  01140760  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/cmn/_at_01140000.cpp  ?CombFilterReset@core@audio@rw@@YAPAVCombFilter@123@PAV4123@@Z  0114dca0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/cmn/_at_01140000.cpp  ?SetGains@CombFilter@core@audio@rw@@QAEXMMMM@Z  0114dcb0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

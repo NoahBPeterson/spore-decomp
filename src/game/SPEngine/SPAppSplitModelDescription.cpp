@@ -10,6 +10,7 @@
 #include "EA/ArgScript/cError.h"
 #include "EA/ArgScript/cIParser.h"
 #include <string.h>
+#include <intrin.h>
 
 // ---- items of slice s007df780 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cSPVector3_s007d_f780 { float x, y, z; };
@@ -218,7 +219,7 @@ bool ReadInt32(IStream_s007e_06b0* s, int32_t* p, unsigned n, int endian);     /
 }
 namespace EA {
 namespace Swarm {
-struct cDescription_s007e_06b0 {
+struct __declspec(novtable) cDescription_s007e_06b0 {
     virtual void d0();
     virtual void d1();
     int mRefCount;      // +0x4
@@ -245,9 +246,18 @@ struct cSafeDynamicKernelStorage_s007e_06b0 {
     cSafeDynamicKernelStorage_s007e_06b0& operator=(const cSafeDynamicKernelStorage_s007e_06b0& o); // 0x007e05e0
     void Read(EA::IO::IStream_s007e_06b0* stream);                        // 0x007e06b0
 };
-struct cSplitModelKernelDescription : EA::Swarm::cDescription_s007e_06b0 {
+struct __declspec(novtable) cSplitModelKernelDescription : EA::Swarm::cDescription_s007e_06b0 {
     cSafeDynamicKernelStorage_s007e_06b0 mData;   // +0x8
-    cSplitModelKernelDescription() { mRefCount = 0; mData.mKernelData = 0; mData.mKernelDataVariation = 0; mData.mKernelType = -1; }
+    cSplitModelKernelDescription()
+    {
+        mRefCount = 0;
+        _ReadWriteBarrier();
+        *(const uint32_t**)this = (const uint32_t*)0x01453948;   // vtable (retail stores it after mRefCount)
+        _ReadWriteBarrier();
+        mData.mKernelData = 0;
+        mData.mKernelDataVariation = 0;
+        mData.mKernelType = 0xffffffff;
+    }
 };
 struct KernelState {
     void* vtbl;                                  // +0x0

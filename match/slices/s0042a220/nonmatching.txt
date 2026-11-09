@@ -1,4 +1,3 @@
 # <va>  <diff-bytes>  <short reason>
 0042a220 317 vector<RcPtr>::DoInsertValues: instruction stream aligned (248 insns) but /Od stack-slot layout differs: tag-byte temps (CopyBack flags, FillN/PodMove tags) and hash-ordered local names not fully reproduced; frame 0xEC vs 0xF4
-0042a680 1 UninitMove7c: byte-exact except the 2nd tag temp slot ([ebp-6] vs original [ebp-0x29]); frame size, all other slots and code identical
-0042a730 1 UninitMove20: byte-exact except the 2nd tag temp slot ([ebp-6] vs original [ebp-0x19]); everything else identical
+0042a680 6 UninitMove7c: slots/frame match (0x4c, TagB at -0x29); only diff is `mov byte [ebp-0x29],0` emitted after the inlined helper's first/dest param copies instead of before. Tried tag declaration before/after PadN, nested block in caller, outer-scope tag after the first call, TagB by-value/by-const-ref parameter, and plain/volatile char: each either keeps the store after the copies or moves the slot (e.g. -6, -5) and changes frame.

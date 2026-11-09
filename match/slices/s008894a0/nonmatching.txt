@@ -14,7 +14,7 @@
 0088a000 174 upstream EAWebKit EAText source; retail allocator/template config differs
 0088a0f0 282 upstream EAWebKit EAText source; retail allocator/template config differs
 0088a240 7 upstream EAWebKit EAText source; retail allocator/template config differs (7 bytes)
-0088a2b0 2 upstream EAWebKit EAText source; retail allocator/template config differs (2 bytes)
+0088a2b0 2 upstream EAWebKit EAText source (GlyphCache::SetAllocator). Currently COMPILE-BLOCKED: the slice includes work/ext/.../EATextCache.cpp, which needs /Iwork/ext/EAWebKitSupportPackages/EATextEAWebKit/local/include, not on cl.sh's include path and not expressible through a slice flag comment. Out of scope per AGENTS (EAWebKit is rebuilt from published sources); retail allocator/template configuration differs by 2 bytes.
 0088a2c0 18 upstream EAWebKit EAText source; retail allocator/template config differs
 0088a330 175 upstream EAWebKit EAText source; retail allocator/template config differs
 0088a420 81 upstream EAWebKit EAText source; retail allocator/template config differs

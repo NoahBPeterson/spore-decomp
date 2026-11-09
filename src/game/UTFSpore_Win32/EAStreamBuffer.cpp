@@ -127,10 +127,10 @@ size_type StreamBuffer::GetSize() const
 {
     if (mpStream != 0) {
         size_type size = mpStream->GetSize();
-        if (size == (size_type)-1)
-            return size;
-        if (mnWriteBufferUsed != 0 && size < mnPositionExternal)
-            return mnPositionExternal;
+        if (size != (size_type)-1) {
+            if (mnWriteBufferUsed != 0 && size < mnPositionExternal)
+                return mnPositionExternal;
+        }
         return size;
     }
     return (size_type)-1;

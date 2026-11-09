@@ -449,7 +449,7 @@ unsigned int GetMaxDependentPriority_s0069_07e0(cJobData_s0069_07e0* job) {
     }
     return maxPri;
 }
-void cJobManager_s0069_07e0::ScheduleJob(cJobData_s0069_07e0*) {}
+
 // ---- items of slice s006907e0 end
 
 // ---- items of slice s00691680 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -794,7 +794,8 @@ extern "C" int FUN_68F570(Outer570* p)
     void (*fn)(void*) = *(void (**)(void*))((char*)p->mInner + 0x1e0);
     if (fn)
         fn(p);
-    ((Inner570*)p->mInner)->v7(p, 0, 0);
+    Inner570* in = (Inner570*)p->mInner;
+    in->v7(p, 0, 0);
     return 0;
 }
 
@@ -1295,7 +1296,9 @@ void cJobManager::ScheduleJob(cJobData* job)
         FailJob(job);
         return;
     }
-    if (aff == 0xffffffff) {
+    unsigned int nAff = ~aff;
+    if (nAff == 0) {
+        // all affinities: ready conditions 3c and 44 wake directly
         InsertJobByPriority(&mJobs[3], job);
         IntrusiveList* pCond = &mJobReadyCondition;
         if (pCond->mpPrev != pCond) {
@@ -1312,14 +1315,13 @@ void cJobManager::ScheduleJob(cJobData* job)
         }
         pCond = &mJobReadyOrSyncCondition;
         if (pCond->mpPrev != pCond) {
-            IntrusiveList* n = pCond->mpNext;
-            if (n->mpPrev != n) {
-                IntrusiveList* nx = n->mpNext;
-                IntrusiveList* pv = n->mpPrev;
-                nx->mpPrev = pv;
-                pv->mpNext = nx;
-                n->mpNext = n;
-                n->mpPrev = n;
+            unsigned int n = (unsigned int)pCond->mpNext;
+            if (*(unsigned int*)(n + 4) != n) {
+                IntrusiveList* nx = (IntrusiveList*)*(unsigned int*)n;
+                nx->mpPrev = (IntrusiveList*)*(unsigned int*)(n + 4);
+                (*(IntrusiveList**)(n + 4))->mpNext = nx;
+                *(unsigned int*)n = n;
+                *(unsigned int*)(n + 4) = n;
                 ((JobWaitNode*)n)->mSemaphore.Post();
             }
         }

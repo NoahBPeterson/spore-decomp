@@ -14,4 +14,3 @@
 00dc3c20 349 attack formation placement: normalise/count and loop body scheduling differ; equiv FAIL (5/5 mismatch, execution fault) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00dc3f10 182 nearest-UFO pick: inner duplicate scan and register/spill layout differ; equiv UNSUPPORTED (unresolved GetGameDataVector ref) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00dc40a0 501 nonmatching: city-needs target pick; 633 vs 753 bytes. The original copies the noun vector into a stack buffer and sorts it (FUN_00b93c60 + FUN_00829110) before scanning; the copy/sort stage is not reconstructed. difftest FAIL 5/5 (execution fault at 00c38b80); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
-00dc4ae0 3 stim Play test (31 B): bt->mStimA.Play(0x8000,0) != 0. Residual: the scheduler places `add ecx,8` / `lea ecx,[eax+8]` differently relative to the two argument pushes (3 bytes). difftest PASS (253/400 valid, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

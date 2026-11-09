@@ -3,7 +3,7 @@
 00dfc600  65  cl lowered the pointer loop to a magic-multiply trip count
 00dfcc40  64  complete equivalent; early-out tests the sign bit of this+0 like retail, then frees this+0x210 and runs the +0x2c vector cleanup/FreeRawBlock; difftest PASS (251 valid, 100% coverage); remaining byte diff is vector-base reload/register schedule (size 76/78)
 00dfd300  114 nested 0x238-record destructor loop; register allocation differs
-00dfca50  2  complete; original keeps the byte copy mOwner in bl (source base reg) vs cl; /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (no object symbol match)
+00dfca50  2  complete; only the byte copy of mOwner differs: retail uses bl, cl emits cl (same [ebx+0x14] source and [ebp+0x14] dest); refs, pointer locals, u8 local and direct o.mVec spelling all give cl; /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest UNSUPPORTED (no object symbol match)
 00dfc6f0  887  complete cSPUILayout::Init for "GGENewScenariov3": wstring assign, 0x812160 layout bind, stopwatch init, client-rect centering + 4 unrolled panel-entry appends (size 919/849); difftest UNSUPPORTED (0/400 inputs valid: original faults without a live UI/App/window environment)
 00dfcb00  260  complete eastl::vector<0x44> assign (grow / mid uninit-copy / tail destroy paths), retail symbol is operator= (renamed assignFrom so the marker binds) (size 256/305); difftest WEAK (181 valid, no mismatch, 49.6% coverage)
 00dfcce0  319  complete BigRec copy ctor (3 self-allocating inline vector<0x44>s, CString@0x448, wstrings@0x45c/0x474, Tail4cc@0x4cc, scalar tail) (size 377/342); difftest UNSUPPORTED (0/400 inputs valid: original faults on the uninstantiable sub-objects)

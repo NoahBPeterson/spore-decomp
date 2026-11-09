@@ -301,7 +301,7 @@ struct cSimulatorUniverse : SimUniverseBase, SimUniverseSecond {
     char* mp12c;                                              // +0x12c
 
     void SetPropertyRef(void* def);                           // 0x0100e6e0
-    bool FindEmbassyEntry(char* pUniverse, cStarRecordRef* pRef);   // 0x0100e730
+    bool FindEmbassyEntry(cStarRecordRef* pRef, char* pUniverse);   // 0x0100e730
     bool RemoveRaid(int param1, int pNoun, int pEmpire);      // 0x0100e780
 };
 extern cSimulatorUniverse* gSimUniverse;                      // 0x016dc798
@@ -777,7 +777,9 @@ struct cArrayCopyDst {
 uint32_t cBioElemSort::SortBanners()
 {
     uint32_t banner = ((cStarObject*)SP::StarManager(mField184))->FUN_00ba6440();
-    return ((cStarObject*)SP::StarManager(banner))->FUN_00ba6d80();
+    uint32_t result = ((cStarObject*)SP::StarManager(banner))->FUN_00ba6d80();
+    _ReadWriteBarrier();
+    return result;
 }
 
 // @ 0x0100d410
@@ -1121,13 +1123,15 @@ void cSimulatorUniverse::SetPropertyRef(void* def)
 }
 
 // @ 0x0100e730
-bool cSimulatorUniverse::FindEmbassyEntry(char* pUniverse, cStarRecordRef* pRef)
+bool cSimulatorUniverse::FindEmbassyEntry(cStarRecordRef* pRef, char* pUniverse)
 {
+    cStarRecordRef* ref = pRef;
+    char* uni = pUniverse;
     char* p = mp128;
     char* end = mp12c;
     while (p != end) {
-        if (*(int*)(p + 4) == pRef->GetCommContext() &&
-            *(unsigned*)p == *(unsigned*)(pUniverse + 0x84))
+        if (*(int*)(p + 4) == ref->GetCommContext() &&
+            *(unsigned*)p == *(unsigned*)(uni + 0x84))
             return true;
         p += 0x28;
     }

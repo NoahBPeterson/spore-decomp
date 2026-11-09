@@ -285,8 +285,8 @@ void AudioObj::F_d00()
 
 // @ 0x01138f70
 namespace rw { namespace audio { namespace core {
-void __cdecl FUN_01138f70(void)
-{ g_p15bbb20 = (void*)0x15bbb38; }
+void* __cdecl FUN_01138f70(void)
+{ return g_p15bbb20 = (void*)0x15bbb38; }
 }}}  // namespace rw::audio::core
 
 // @ 0x01138f90
@@ -708,10 +708,10 @@ bool FUN_0113aaf0(uint8_t* p)
 }
 
 // @ 0x0113abb0
-void FUN_0113abb0()
+void* FUN_0113abb0()
 {
     void* p = g_015bc468;
-    g_015bc450 = p;
+    return *(void**)&g_015bc450 = p;
 }
 
 // @ 0x0113abd0

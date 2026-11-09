@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/cmn/spktplay.cpp.cpp  ?F_0113f750@@YAHH@Z  0113f750  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

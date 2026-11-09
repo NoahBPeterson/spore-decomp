@@ -27,7 +27,7 @@ struct WinXHTML {
   void SetFormControlDrawable(uint32_t id, Drawable* p);
   void SetScrollbarDrawable(int which, void* p);
 };
-struct cXHTMLControlAppearance {
+struct __declspec(novtable) cXHTMLControlAppearance {
   virtual void v0();          // +0x00
   uint32_t mPad4;             // +0x04
   ControlDrawable* mpBegin;   // +0x08
@@ -219,7 +219,11 @@ bool cXHTMLControlAppearance::CreateHitMaskFromResource(int* p1, int* p2, void**
 
 // @ 0x00621ee0
 cXHTMLControlAppearance::cXHTMLControlAppearance()
-: mPad4(0), mpBegin(0), mpEnd(0), mpCap(0), mpScroll1(0), mpScroll2(0) {}
+{
+  mPad4 = 0;
+  *(const uint32_t**)this = (const uint32_t*)0x013FD3FC;
+  mpBegin = 0; mpEnd = 0; mpCap = 0; mpScroll1 = 0; mpScroll2 = 0;
+}
 
 // @ 0x00621f00
 // The VA is the ??_G deleting destructor: retail inlines the destructor body into it, sets the

@@ -308,6 +308,7 @@ struct C_6b04a0 { void*   f(void** out, char* pos, unsigned* key, char flag); };
 struct C_6b0670 { void*   f(void* out, unsigned* key, int extra); };
 struct C_6b0720 { void*   f(void* out, void* src); };
 void __fastcall FUN_006afe80(char*);
+// @ 0x006afe80
 void __fastcall FUN_006afe80(char* self)
 {
     struct Req { int f0; int f1; int f2; };
@@ -641,9 +642,6 @@ void CAfe40::f(LN* node)
     *(char*)((char*)this + 0x15) = 1;
 }
 
-// @ 0x006afe80
-void FUN_006afe80()
-{ dummy_extern(); }
 #pragma code_seg()
 
 // @ 0x006aff70

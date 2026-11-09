@@ -1071,7 +1071,10 @@ void __thiscall cPlayerInventory_s00ff_4d50::LoadToolData()
 bool __thiscall cPlayerInventory_s00ff_4d50::Read(IStream* s)
 {
     int id;
-    mUnlockableTools.erase(mUnlockableTools.mpBegin, mUnlockableTools.mpEnd);
+    ToolVector* tools = &mUnlockableTools;
+    cRefCounted* first = tools->mpBegin;
+    cRefCounted* last = tools->mpEnd;
+    tools->erase(first, last);
 
     void* stream = StreamWriter(s);
     void* value = WriterValue(stream);

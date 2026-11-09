@@ -3,3 +3,6 @@
 ../src/game/SPGonzago/SPCivComm.cpp  ?SetField10@cCivRefTable@@QAEPAVcCivilization_s00cf_e160@SP@@PAV23@@Z  00cfe790  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCivComm.cpp  ?SetEntry@cCivRefTable@@QAEPAVcCivilization_s00cf_e160@SP@@HPAV23@@Z  00cfe7a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCivComm.cpp  ?FUN_00cfe9c0@@YAXPAVcCivilization_s00cf_e160@SP@@PAPAV12@1@Z  00cfe9c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCivComm.cpp  ?FUN_00cfeac0@@YAXXZ  00cfeac0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCivComm.cpp  ?FUN_00cfea20@@YAXXZ  00cfea20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCivComm.cpp  ??0cSummarizer@@QAE@XZ  00cfec10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

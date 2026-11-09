@@ -3921,8 +3921,8 @@ u8 __cdecl FUN_00cb6310(void* a1, u8 a2)
 // @ 0x00cb63c0
 void __cdecl FUN_00cb63c0(void* a1)
 {
-    void* p = *(void**)((u8*)a1 + 0x64);
-    FUN_00cb6310(p, 1);
+    void** pp = (void**)((u8*)a1 + 0x64);
+    FUN_00cb6310(*pp, 1);
 }
 
 // @ 0x00cb63e0
@@ -4334,10 +4334,12 @@ void ArtilleryProjectile::ctor()
     ((void(__thiscall*)(void*)) FUN_00b18660)(this);
     ((void(__thiscall*)(void*)) FUN_00c43860)(&mpVtLoco);
 
+    float zero = 0.0f;
     mpVt4 = (void*)g_vft_145dca8;
-    mTargetOffset[0] = 0.0f;
-    mTargetOffset[1] = 0.0f;
-    mTargetOffset[2] = 0.0f;
+    _ReadWriteBarrier();
+    mTargetOffset[0] = zero;
+    mTargetOffset[1] = zero;
+    mTargetOffset[2] = zero;
     mFlag = 0;
     mpVt0 = (void*)g_vft_1475470;
     mpVt1 = (void*)g_vft_147545c;
@@ -4472,24 +4474,140 @@ void __cdecl FUN_00cb76f0()
 {
 }
 
+void* g_vft_1475650[2];             // 0x01475650  cFlakProjectile vtable 0
+void* g_vft_147563c[2];             // 0x0147563c  cFlakProjectile vtable 1
+void* g_vft_1475540[2];             // 0x01475540  cFlakProjectile locomotion vtable
+void* g_vft_1475538[2];             // 0x01475538  cFlakProjectile vtable 3
+void* g_vft_1475510[2];             // 0x01475510  cFlakProjectile vtable 4
+void* g_vft_1475174[2];             // 0x01475174  cVerticalRocketLocomotion vtable
+void* g_vft_1475184[2];             // 0x01475184  cStraightLineLocomotion vtable
+void __fastcall FUN_00bc3130(void* timer);       // 0x00bc3130  SP::cSPTimer::Restart
+
+struct FlakProjectile {
+    void*    mpVt0;                      // +0x000
+    void*    mpVt1;                      // +0x004
+    char     _p008[0x34 - 0x08];
+    void*    mpVtLoco;                   // +0x034
+    char     _p038[0x108 - 0x38];
+    void*    mpVt3;                      // +0x108
+    char     _p10c[0x1fc - 0x10c];
+    void*    mp1fc;                      // +0x1fc
+    void*    mp200;                      // +0x200
+    void*    mp204;                      // +0x204
+    char     _p208[0x224 - 0x208];
+    uint32_t m224;                       // +0x224
+    char     _p228[0x504 - 0x228];
+    void*    mpVt4;                      // +0x504
+    float    mTargetOffset[3];           // +0x508
+    char     mFlag514;                   // +0x514
+    char     _p515[3];
+    void*    mp518;                      // +0x518
+    float    m51c;                       // +0x51c
+    void*    mp520;                      // +0x520
+    void*    mp524;                      // +0x524
+    void*    mp528;                      // +0x528
+    char     _p52c[0x544 - 0x52c];
+    uint32_t m544;                       // +0x544
+    char     mTimer[0x1c];               // +0x548
+
+    FlakProjectile* ctor();
+    FlakProjectile* _virtual_dtor(unsigned char flags);
+    void           SetVerticalRocket(const uint32_t* src, float value);
+    void           SetStraightLine(const uint32_t* src, char flag);
+};
+
 // @ 0x00cb79f0
-void __cdecl cFlakProjectileCtor()
+FlakProjectile* FlakProjectile::ctor()
 {
+    ((void(__thiscall*)(void*)) FUN_00b18660)(this);
+    ((void(__thiscall*)(void*)) FUN_00c43860)((char*)this + 0x34);
+
+    mpVt4 = (void*)g_vft_145dca8;
+    mTargetOffset[0] = 0.0f;
+    mTargetOffset[1] = 0.0f;
+    mTargetOffset[2] = 0.0f;
+    mFlag514 = 0;
+    mpVt0 = (void*)g_vft_1475650;
+    mpVt1 = (void*)g_vft_147563c;
+    mpVtLoco = (void*)g_vft_1475540;
+    mpVt3 = (void*)g_vft_1475538;
+    mpVt4 = (void*)g_vft_1475510;
+    mp518 = 0;
+    m51c = 0.0f;
+    return this;
 }
 
 // @ 0x00cb7b50
-void __cdecl virtual_dtor()
+FlakProjectile* FlakProjectile::_virtual_dtor(unsigned char flags)
 {
+    if (mp518 != 0)
+        ((void(__thiscall*)(void*)) (*(void***)mp518)[8 / 4])(mp518);
+
+    mpVt4 = (void*)g_vft_145dca8;
+    ((Loco*)((char*)this + 0x34))->Destroy();
+    ((void(__thiscall*)(void*)) FUN_00b184c0)(this);
+
+    if ((flags & 1) != 0)
+        FUN_00f47380(this);
+
+    return this;
 }
 
 // @ 0x00cb7ba0
-void __cdecl FUN_00cb7ba0()
+void FlakProjectile::SetVerticalRocket(const uint32_t* src, float value)
 {
+    m224 = 5;
+
+    BallisticLocomotion* o = (BallisticLocomotion*)
+        FUN_00f473a0(0x10, "Simulator/cVerticalRocketLocomotion", 0, 0, 0, 0);
+    if (o != 0) {
+        o->mpVt8 = (void*)g_vft_13ec458;
+        _ReadWriteBarrier();
+        o->m0c   = 0;
+        o->mpVt0 = (void*)g_vft_1475174;
+        o->mpVt8 = (void*)g_vft_1475114;
+    } else {
+        o = 0;
+    }
+
+    ((void(__thiscall*)(void*, void*)) FUN_00c421b0)((char*)this + 0x34, o);
+
+    mp1fc = (void*)src[0];
+    mp200 = (void*)src[1];
+    mp204 = (void*)src[2];
+    m51c  = value;
 }
 
 // @ 0x00cb7c20
-void __cdecl FUN_00cb7c20()
+void FlakProjectile::SetStraightLine(const uint32_t* src, char flag)
 {
+    m224 = (flag == 0) + 4;
+
+    BallisticLocomotion* o = (BallisticLocomotion*)
+        FUN_00f473a0(0x10, "Simulator/cStraightLineLocomotion", 0, 0, 0, 0);
+    if (o != 0) {
+        o->mpVt8 = (void*)g_vft_13ec458;
+        _ReadWriteBarrier();
+        o->m0c   = 0;
+        o->mpVt0 = (void*)g_vft_1475184;
+        o->mpVt8 = (void*)g_vft_1475114;
+    } else {
+        o = 0;
+    }
+
+    ((void(__thiscall*)(void*, void*)) FUN_00c421b0)((char*)this + 0x34, o);
+
+    mp1fc = (void*)src[0];
+    mp200 = (void*)src[1];
+    mp204 = (void*)src[2];
+    m544  = 0;
+    FUN_00bc3130((char*)this + 0x548);
+
+    void** v = (void**)
+        ((void*(__thiscall*)(void*)) (*(void***)((char*)this + 0x34))[0x2c / 4])((char*)this + 0x34);
+    mp520 = v[0];
+    mp524 = v[1];
+    mp528 = v[2];
 }
 
 // @ 0x00cb7ce0

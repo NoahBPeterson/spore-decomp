@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 01021180 60 median-of-three comparator: complete; the comparison call order and register reselection differ. flags /O2 /MD /Gy /TP /arch:SSE
-01021200 2 game-mode redirect: complete, equivalence WEAK (400 valid, no mismatch, 58.3% coverage); the singleton vtable slot 0xc is loaded into eax instead of the original's edx. flags /O2 /MD /Gy /TP /arch:SSE
+01021200 2 game-mode redirect: complete, equivalence WEAK (400 valid, no mismatch, 58.3% coverage); after caching the virtual slot in a local, the tail sequence is still `mov eax,[edx+0xc]; call eax; ret 8` instead of retail's `mov edx,[edx+0xc]; jmp edx` (the __thiscall callee load is otherwise identical), and the singleton vtable slot 0xc is loaded into eax instead of edx. flags /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 01021370 22 GetPlayerHomePlanet: complete; FUN_01021260 is now __declspec(noinline) so the original real GetActivePlanet call (and its edx clobber) is reproduced (equiv PASS 238 valid, 100% coverage); flags /O2 /MD /Gy /TP /arch:SSE
 010213b0 28 universe-mode 2 hook: complete, equivalence PASSes (400 valid, 76.2% coverage); the FUN_00c8b360 result is fetched/released through a different temp schedule. flags /O2 /MD /Gy /TP /arch:SSE
 01021960 33 set-universe-context hook: complete; the cached-context compare and the FUN_00c8b360 tail differ. flags /O2 /MD /Gy /TP /arch:SSE

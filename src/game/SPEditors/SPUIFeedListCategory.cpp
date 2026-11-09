@@ -890,39 +890,34 @@ void cSPUIFeedListCategory_s0066_4c90::Dtor()
 }
 
 
+struct AlphabeticalFeedSort {
+    bool operator()(const AutoRefCountT& a, const AutoRefCountT& b) const {
+        FeedItem* x = a.mpObject;
+        FeedItem* y = b.mpObject;
+        if (x && y) {
+            if (x->mGroup == y->mGroup)
+                return x->mName && y->mName && _wcsicmp(x->mName, y->mName) < 0;
+            return x->mGroup < y->mGroup;
+        }
+        return false;
+    }
+};
+__declspec(noinline) void swapT(AutoRefCountT& a, AutoRefCountT& b) {
+    AutoRefCountT t(a);
+    a = b;
+    b = t;
+}
 // @ 0x00664f30
-int* PartitionByFeed(int* first, int* last, int* key)
+AutoRefCountT* PartitionByFeed(AutoRefCountT* first, AutoRefCountT* last,
+                               AutoRefCountT pivotValue, AlphabeticalFeedSort& compare)
 {
-    int* lo = first;
-    do {
-        while (lo < last) {
-            int* v = (int*)*lo;
-            if (!v || !key) break;
-            int* kv = (int*)0;
-            (void)kv;
-            if (v[0x31] != *(int*)((char*)key + 0xc4)) { break; }
-            const wchar_t* sa = (const wchar_t*)v[6];
-            const wchar_t* sb = (const wchar_t*)key[6];
-            if (!sa || !sb) break;
-            if (_wcsicmp(sa, sb) < 0) { ++lo; break; }
-            break;
-        }
-        while (last > lo) {
-            int* v = (int*)*(last - 1);
-            if (!key || !v) break;
-            if (key[0x31] != *(int*)((char*)v + 0xc4)) { break; }
-            const wchar_t* sa = (const wchar_t*)key[6];
-            const wchar_t* sb = (const wchar_t*)v[6];
-            if (!sa || !sb) break;
-            if (_wcsicmp(sa, sb) < 0) { --last; continue; }
-            break;
-        }
-        if (lo >= last) break;
-        FUN_00b2af00(lo, last - 1);
-        ++lo;
-    } while (true);
-    if (key) (*(FnP)Vslot(key, 4))(key);
-    return lo;
+    for (;; ++first) {
+        while (compare(*first, pivotValue)) ++first;
+        --last;
+        while (compare(pivotValue, *last)) --last;
+        if (first >= last) return first;
+        swapT(*first, *last);
+    }
 }
 
 

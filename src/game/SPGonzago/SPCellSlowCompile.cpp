@@ -99,13 +99,13 @@ namespace SP {
 void* __cdecl FUN_0067cb30(uint32_t variantId, void* pAsset, int32_t low, int32_t high);
 }
 namespace SP {
-void* __cdecl FUN_0067cac0(void* pAsset, ...);
+void* __cdecl FUN_0067cac0();
 }
 namespace SP {
 struct cAssetVariantUpdater {
     void UpdateAssetVariant(uint32_t variantId, void* pAsset, int32_t low, int32_t high);
-    void UpdateVariantForAsset();
-    void ClearVariant();
+    void UpdateVariantForAsset(void* pAsset);            // 0x0067c830
+    void ClearVariant(void* pAsset, int value);          // 0x0067c8c0
     void SetVariantFlag(int value);
 };
 }
@@ -194,7 +194,7 @@ virtual void c28();
 virtual void c2c();
 virtual void c30();
 virtual void c34();
-    virtual void SetFloatProperty(uint32_t id);         // +0x38 (index 14)
+    virtual void SetFloatProperty(uint32_t id, uint32_t value); // +0x38 (index 14)
 };
 }
 namespace SP {
@@ -507,7 +507,7 @@ void FUN_00e828c0()
 bool FUN_00e82900(int a, int b)
 {
     int* p = (int*)GameInputManager();
-    return ((IVtbl17*)p)->m(a, b) != 0;
+    return ((IVtbl17*)p)->m(a, b);
 }
 
 // @ 0x00e82920
@@ -570,13 +570,10 @@ void __cdecl FUN_00e82a10(uint32_t worldId, bool visible)
 namespace SP {
 void __cdecl FUN_00e82be0(void* pAsset, bool enabled)
 {
-    if (enabled) {
-        cAssetVariantUpdater* pUpdater = (cAssetVariantUpdater*)FUN_0067cac0(pAsset);
-        pUpdater->UpdateVariantForAsset();
-    } else {
-        cAssetVariantUpdater* pUpdater = (cAssetVariantUpdater*)FUN_0067cac0(pAsset, 0);
-        pUpdater->ClearVariant();
-    }
+    if (enabled)
+        ((cAssetVariantUpdater*)FUN_0067cac0())->UpdateVariantForAsset(pAsset);
+    else
+        ((cAssetVariantUpdater*)FUN_0067cac0())->ClearVariant(pAsset, 0);
 }
 }  // namespace SP
 
@@ -638,7 +635,7 @@ uint8_t __cdecl FUN_00e82cd0()
 namespace SP {
 void __cdecl FUN_00e82cf0(uint32_t a, uint32_t b, uint32_t c)
 {
-    Achievements::GetController(a, b, c)->Flush(a, b, c);
+    Achievements::GetController()->Flush(a, b, c);
 }
 }  // namespace SP
 
@@ -678,7 +675,7 @@ namespace SP {
 void __cdecl FUN_00e82de0(uint32_t a, uint32_t b)
 {
     cController* pController = (cController*)FUN_00b3d4f0();
-    pController->SetFloatProperty(a);
+    pController->SetFloatProperty(a, b);
 }
 }  // namespace SP
 
@@ -708,11 +705,12 @@ void __cdecl FUN_00e83040(cEditorState* pState, int mode)
 
 // @ 0x00e831a0
 namespace SP {
+void __cdecl FUN_00e82e00(cEditorState* pState, cEditorState* pOther, int mode);
+void __cdecl FUN_00e83040(cEditorState* pState, int mode);
 void __cdecl FUN_00e831a0(tLayoutKey* pKey, uint32_t id, uint32_t group)
 {
-    pKey->mId = id;
-    pKey->mGroup = group;
-    pKey->mName = 0;
+    ((void (__cdecl*)(uint32_t, uint32_t, uint32_t))FUN_00e82e00)(pKey->mId, pKey->mGroup, group);
+    ((void (__cdecl*)(uint32_t, uint32_t))FUN_00e83040)(pKey->mName, id);
 }
 }  // namespace SP
 
@@ -737,19 +735,41 @@ uint32_t __cdecl FUN_00e831d0(int mode)
 namespace SP {
 void __cdecl FUN_00e83350(cVec3* pOut, cLayoutOwner* pOwner)
 {
-    cLayoutData* pLayout = pOwner->mpLayout;
-    *pOut = pLayout->mPosition;
+    cVec3* pDst = pOut;
+    cVec3* pSrc = &pOwner->mpLayout->mPosition;
+    pDst->mX = pSrc->mX;
+    pDst->mY = pSrc->mY;
+    pDst->mZ = pSrc->mZ;
 }
 }  // namespace SP
 
 // @ 0x00e83380
 namespace SP {
-uint32_t __cdecl FUN_00e83380(cEditorWorld* pWorld, int mode, float* pOut)
+struct cLayoutEntry {
+    uint32_t mId;                                       // +0x00
+    uint32_t mPad04;                                    // +0x04
+    float    mA;                                        // +0x08
+    uint32_t mPad0C;                                    // +0x0c
+    float    mB;                                        // +0x10
+};
+struct cLayoutEntryList {
+    uint8_t       mPad000[0xa0];                        // +0x000
+    int32_t       mCount;                               // +0x0a0
+    cLayoutEntry  mItems[1];                            // +0x0a4
+};
+bool __cdecl FUN_00e83380(cLayoutOwner* pOwner, uint32_t mode, float* pOut)
 {
-    if (!pWorld)
-        return 0;
-    *pOut = (float)mode;
-    return pWorld->mbVisible;
+    cLayoutEntryList* pList = (cLayoutEntryList*)pOwner->mpLayout->mpEntries;
+    int32_t count = pList->mCount;
+    cLayoutEntry* pItem = pList->mItems;
+    for (int32_t i = 0; i < count; i++, pItem++) {
+        if (pItem->mId == mode) {
+            *pOut = pItem->mA / (pItem->mB + 1e-8);
+            return true;
+        }
+    }
+    *pOut = 0.0f;
+    return false;
 }
 }  // namespace SP
 
@@ -1299,13 +1319,75 @@ cLayoutName* __thiscall cLayoutName::FUN_00e84850(tNameSource* pSource)
 }
 
 // @ 0x00e848c0
-void __cdecl FUN_00e848c0()
+i32 FUN_00e84490(u32 param_1, u32 param_2);              // 0x00e84490
+void* __cdecl FUN_00675250();                            // 0x00675250
+namespace SP {
+struct cLayoutSlide {
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3();
+    virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
+    virtual void* GetName(uint32_t* pKey, void** ppOut);   // +0x20
+};
+struct tLayoutSlideList {
+    uint8_t          pad000[4];                          // +0x00
+    cLayoutSlide**   mpItems;                            // +0x04
+    int32_t          mSize;                              // +0x08
+    int32_t          mField0C;                           // +0x0c
+    void** __thiscall Lookup(uint32_t* pKey, void* pOut);    // 0x00a23ef0
+    void   __thiscall Push(uint32_t* pKey, void* pOut, uint32_t value); // 0x006758a0
+};
+struct cSlideListOwner {
+    void* __thiscall GetList();                          // 0x00675370
+};
+struct SlideKey_s00e8_48c0 {
+    uint8_t mbFirst;                                     // +0x00
+    uint8_t mPad01[0xb];                                 // +0x01
+};
+}
+struct cSlideController {
+    void __thiscall Activate(uint32_t id);               // 0x00676710
+};
+void __cdecl FUN_00e848c0(uint32_t arg)
 {
+    SP::tLayoutSlideList* pList =
+        (SP::tLayoutSlideList*)((SP::cSlideListOwner*)FUN_00675250())->GetList();
+    SP::cLayoutSlide* pSlide = pList->mpItems[pList->mSize];
+    SP::SlideKey_s00e8_48c0 key;
+    void** pEntry = pList->Lookup((uint32_t*)&key, &arg);
+    if (*pEntry != (void*)pSlide)
+        return;
+    key.mbFirst = 0;
+    pList->Push((uint32_t*)&key, &arg, *(uint32_t*)&key);
+    uint32_t limit = pList->mField0C;
+    uint32_t found = (uint32_t)FUN_00e84490(0x345fbd9f, 0x5bef305);
+    if (limit <= found)
+        return;
+    ((cSlideController*)FUN_00675250())->Activate(0x345fbd9f);
 }
 
 // @ 0x00e84940
-void __cdecl DoNukeSubtree()
+struct NukeNode {
+    NukeNode* m0;       // +0x00
+    NukeNode* m4;       // +0x04
+    char pad8[8];       // +0x08
+    char* m10;          // +0x10
+    char pad14[4];      // +0x14
+    char* m18;          // +0x18
+};
+struct NukeTree {
+    void Nuke(NukeNode* n);
+};
+void NukeTree::Nuke(NukeNode* n)
 {
+    while (n != 0) {
+        Nuke(n->m0);
+        char* p = n->m10;
+        char* end = n->m18;
+        NukeNode* next = n->m4;
+        if (end - p > 1 && p != 0)
+            FUN_00f47380(p);
+        FUN_00f47380(n);
+        n = next;
+    }
 }
 
 // @ 0x00e84a20

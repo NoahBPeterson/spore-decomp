@@ -1,2 +1,3 @@
 # byte-exact functions for slice s01142a20
 slices/s01142a20/s01142a20.cpp  FUN_01142a50  01142a50  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01142a20/s01142a20.cpp  _FUN_011432a0  011432a0  /O2 /MD /Gy /TP /arch:SSE

@@ -523,7 +523,7 @@ struct cGameDataNV {
     cGameDataNV();   // 0x00b18660
 };
 struct VGOBase : cGameDataNV {
-    VGOBase() { vp0 = vtbl_cVehicleGroupOrder; vp1 = vtbl_cVehicleGroupOrder_1; }
+    VGOBase() {}
 };
 struct cVehicleGroupOrder : VGOBase {
     VGOTree tree;       // +0x34
@@ -2765,6 +2765,9 @@ void __thiscall SPVecP::swap(SPVecP& x)
 // @ 0x00b22100
 cVehicleGroupOrder::cVehicleGroupOrder()
 {
+    *(void* volatile*)&vp0 = vtbl_cVehicleGroupOrder;
+    *(void* volatile*)&vp1 = vtbl_cVehicleGroupOrder_1;
+    _ReadWriteBarrier();
     arc64 = 0;
     f7c = 0; f80 = 0; f84 = 0;
 }
@@ -3041,15 +3044,17 @@ void cEAString::FUN_00b230b0(uint32_t nSize)
 cMilitaryAttackCityOrder::cMilitaryAttackCityOrder()
 {
     BaseCtor();
+    void* pNull = 0;
+    _ReadWriteBarrier();
     mpVtable00 = &g_vtableMACOrderPrimary;
     mpVtable04 = &g_vtableMACOrderSecondary;
-    mp094 = 0;
-    mVec09c.mpBegin = 0;
-    mVec09c.mpEnd = 0;
-    mVec09c.mpEndAlloc = 0;
-    mVec0b0.mpBegin = 0;
-    mVec0b0.mpEnd = 0;
-    mVec0b0.mpEndAlloc = 0;
+    mp094 = pNull;
+    mVec09c.mpBegin = pNull;
+    mVec09c.mpEnd = pNull;
+    mVec09c.mpEndAlloc = pNull;
+    mVec0b0.mpBegin = pNull;
+    mVec0b0.mpEnd = pNull;
+    mVec0b0.mpEndAlloc = pNull;
 }
 
 // @ 0x00b23260

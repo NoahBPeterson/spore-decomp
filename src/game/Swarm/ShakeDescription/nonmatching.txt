@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-00abda70 1 random range lerp: only the final fcomi/jb sense differs (fcomi st(1) vs the original double-compare sequence, 1 byte); equiv UNSUPPORTED (unresolved RandomDoubleUniform ref) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00abda70 1 random range lerp: complete; only the fp compare/selection sequence differs at the first bound (VC8 saves the `l` double to a stack slot and compares `fcomi st(1)`; VC9 keeps floats in the qword slots and compares `fcomi st(2)`). Equivalence-checked (UNSUPPORTED: unresolved RandomDoubleUniform ref). Types tried: int/float/double l,h,v; l+(h-l)*r vs (h-l)*r+l vs l+((h-l)*r) vs h+(l-h)*r (float and double operands); all leave the retail 168-byte shape unreachable from VC9.
 00abdbb0 806 effect sample/emit: curve sampling, floor, table lerp and attenuation scheduling all differ; equiv FAIL (5/5 mismatch, first call arg) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00abe2f0 45 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid, fake-call faults); constructor field-store order

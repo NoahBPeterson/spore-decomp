@@ -28,7 +28,6 @@
 00707a50 242 Vec32::DoInsertValue: complete eastl DoInsertValue; 32-byte element copy/realloc schedule diverges
 00707b70 348 Vec4::InsertValuesAt: complete eastl DoInsertValues(position,n,value); fill/copy scheduling diverges
 00707d10 285 Vec8::DoInsertValues: complete reconstruction; helper split and register schedule diverge
-00707ed0 4 SlotVecC4::DestroyEntry: complete; two independent loads scheduled in opposite order
 00707f40 1 Deque38::PopDestroy: complete; signed `>>31 & 1` emits sar where original emits shr
 00707fd0 306 VecSHO::operator=: complete eastl DoAssignFromIterator; 0x24-stride divide and helper args diverge; equiv WEAK (526 valid, 44.3% cov)
 00708340 103 VecCell::assign: complete eastl DoAssignFromIterator; register schedule of begin/size and the extra tag arg differ
@@ -39,7 +38,7 @@
 00708e60 34 Vec16::resize: complete; frame and copy_impl argument / mpEnd arithmetic schedule diverge
 007094c0 1363 cLightingWorld::ApplyConfig: complete (config ambient/dir-light/sun packing, light-list copy, effect ref, env/local sample refresh, message); call sequence identical (18 calls), regalloc/spill schedule differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00709c40 63 cLightingManager init: complete field/vtable initialisation; store order and vptr sequence reordered by cl
-0070a1f0 1 spstl::simple_deque<...>::ClearImpl: complete; element tag test compiles to `sar` where original emits `shr`
+0070a1f0 1 spstl::simple_deque<...>::ClearImpl: complete (115 bytes, correct shr/cl,1 tag test with tag/top locals + _ReadWriteBarrier); only cl register tie-break differs: original uses edx for the tag temp and eax/ecx for the Destroy tail (push ecx then load g_pAlloc), ours uses ecx for the tag and edx/eax for the tail (load g_pAlloc then push), so the global relocation lands at offset 77 instead of 78 and the loop-condition load is ecx vs edx. Tried inline/mask/sign/volatile forms, declaration reordering, for-loop, local mpEnd/arg/alloc, branch inversion, loop-condition swap: all keep the ecx-first colouring.
 0070a560 33 cLightingWorld::SetLightingState: complete; zero-register materialisation and store ordering differ
 0070a5b0 1647 cLightingWorld::Update complete (SH lighting update; same call order and size 2189); Vec3 scale/loop register allocation and min() slot order differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 0070ae70 71 cLightingManager::RemoveLightingWorld: complete eastl rbtree erase(key); iterator kept in eax instead of esi and spill/restore schedule differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

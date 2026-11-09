@@ -533,12 +533,12 @@ hkWorldOperationQueue::hkWorldOperationQueue(void* ctx)
 hkWorldOperationQueue::~hkWorldOperationQueue()
 {
     DeleteCriticalSection(&m_criticalSection);
-    if (!((int)m_delayCapacityFlags < 0)) {
+    if ((m_delayCapacityFlags & 0x80000000) == 0) {
         hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
         mem->deallocateChunk(m_delayedOps,
             ((m_delayCapacityFlags & 0x3fffffff) * 5) * 4, 0x14);
     }
-    if (!((int)m_opsCapacityFlags < 0)) {
+    if ((m_opsCapacityFlags & 0x80000000) == 0) {
         hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
         mem->deallocateChunk(m_ops,
             ((m_opsCapacityFlags & 0x3fffffff) * 5) * 4, 0x14);

@@ -19,7 +19,6 @@
 00c0bb20
 00c0be70 6 cached-handle predicate: complete; bool return materialisation (setne/xor eax vs xor al)
 00c0c200 43 game-mode water render callback: complete; call/arg setup differs
-00c0c2d0 2 cCreatureBase::IsDefaultSpecies: complete; return materialisation
 00c0c440 8 copy range of 0x24 records: complete; float field copied via fld/fstp in original
 00c0c4b0 218 quaternion half-angle swap: complete; x87/SSE mixing and expression order
 00c0c5b0 32 water reflection helper: complete; branch/arg shape differs
@@ -40,7 +39,6 @@
 00c0e420 42 FAIL         animation-check via guid; complete; equiv execution fault
 00c0e480 52 UNSUPPORTED  cSPCreatureBase::GetTime; complete; 0 valid inputs (import decode_pointer)
 00c0e4f0 27 WEAK         creature radius/scale lookup; complete
-00c0e660 4 PASS         vector size (+0x6d4); complete
 00c0eae0 189 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) creature steering; the rotation / validity helpers and the transform push are modelled with unresolved services, so the blend block collapses; equiv UNSUPPORTED (unresolved steering helpers)
 00c0ed60 174 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) set creature target; the political-id and relation calls are unresolved and the animation check is inlined differently; equiv UNSUPPORTED (unresolved combatant services)
 00c0ee70 29 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) target as creature; the interface query slot differs from retail so the null path is longer; equiv FAIL (first mismatch execution)

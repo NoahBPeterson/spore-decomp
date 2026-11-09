@@ -533,15 +533,11 @@ float IsPartyModeReady(cEditorGameObject* p)
 // @ 0x00d7a440
 float CanStartEditorAction(cEditorGameObject* p, uint32_t a, uint32_t b, uint32_t flags)
 {
-    if (p->mField1004 != 0 && p->mField101c == 0)
-        goto test_arg;
-    if ((p->mFlagsB58 & 0x10000) == 0)
-        goto return_zero;
-test_arg:
-    if (flags & 0x10000)
-        goto return_zero;
-    return 1.0f;
-return_zero:
+    if ((p->mField1004 != 0 && p->mField101c == 0) || (p->mFlagsB58 & 0x10000) != 0)
+    {
+        if ((flags & 0x10000) == 0)
+            return 1.0f;
+    }
     return 0.0f;
 }
 

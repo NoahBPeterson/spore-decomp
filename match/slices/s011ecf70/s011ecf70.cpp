@@ -478,6 +478,9 @@ rw::core::thread::Semaphore* rw::core::thread::Semaphore::ctor0(int a2, char a3)
 // --- rw::graphics::EmbeddedState --------------------------------------------
 namespace rw { namespace graphics {
 
+struct __declspec(align(16)) Vec4 { float x, y, z, w; };
+struct __declspec(align(16)) Mat4 { Vec4 r[4]; };
+
 class EmbeddedState { public:
     char  pad00[8];
     uint  m_softStateDirty;   // +0x08
@@ -488,7 +491,7 @@ class EmbeddedState { public:
     void  SetMaterialColor(const void* src);         // 0x011eda00
     void* GetMaterialColor();                        // 0x011eda90
     void  GetDeviceState(uint key, uint value);      // 0x011edab0
-    void  D3D9SetTransform(const float* m, int slot);// 0x011edc10
+    void  D3D9SetTransform(const float* m, int slot, int unused);// 0x011edc10
     uint  SetVertexDescriptor();                     // 0x011edcd0
     int   D3D9GetShaderData(short key);              // 0x011edcf0
 };
@@ -778,20 +781,20 @@ void rw::graphics::EmbeddedState::GetDeviceState(uint key, uint value)
 // 0x011edc10: rw::graphics::EmbeddedState::D3D9SetTransform
 // ---------------------------------------------------------------------------
 // @ 0x011edc10
-void rw::graphics::EmbeddedState::D3D9SetTransform(const float* m, int slot)
+void rw::graphics::EmbeddedState::D3D9SetTransform(const float* m, int slot, int unused)
 {
     uint flags = m_softStateDirty;
-    float* p = (float*)alignedBase();
+    Mat4* p = (Mat4*)alignedBase();
     m_softStateDirty = (flags & 0x8fffffffu) | ((uint)slot << 28);
     if (flags & 2) {
         *(void**)p = (void*)m;
         return;
     }
+    *p = *(const Mat4*)m;
     for (int i = 0; i < 4; i++) {
-        p[i * 4 + 0] = m[i * 4 + 0];
-        p[i * 4 + 1] = m[i * 4 + 1];
-        p[i * 4 + 2] = m[i * 4 + 2];
-        p[i * 4 + 3] = (i == 3) ? 1.0f : 0.0f;
+        Vec4 v = p->r[i];
+        v.w = (i == 3) ? 1.0f : 0.0f;
+        p->r[i] = v;
     }
 }
 
@@ -817,37 +820,31 @@ uint rw::graphics::EmbeddedState::SetVertexDescriptor()
 // @ 0x011edcf0
 int rw::graphics::EmbeddedState::D3D9GetShaderData(short key)
 {
-    uint uVar1 = m_softStateDirty;
-    int iVar2 = 0;
-    short* psVar3 = (short*)(((uint)this + 0x2b) & 0xfffffff0u);
-    if (uVar1 & 1) {
-        if (uVar1 & 2)
-            psVar3 = psVar3 + 2;
+    uint flags = m_softStateDirty;
+    ushort* p = (ushort*)(((uint)this + 0x2b) & 0xfffffff0u);
+    if (flags & 1) {
+        if (flags & 2)
+            p = (ushort*)((char*)p + 4);
         else
-            psVar3 = psVar3 + 0x20;
+            p = (ushort*)((char*)p + 0x40);
     }
-    if (uVar1 & 0x100000) {
-        psVar3 = psVar3 + ((ushort)psVar3[6] + 2) * 6;
-    }
-    short sVar5 = *psVar3;
-    if (sVar5 != 0) {
-        for (;;) {
-            int* piVar4 = (int*)(psVar3 + 4);
-            if (key == sVar5) {
-                if ((ushort)psVar3[2] != 0)
-                    return (int)piVar4 + (ushort)psVar3[1];
-                return *piVar4;
-            }
-            if (psVar3[2] == 0)
-                psVar3 = psVar3 + 6;
-            else
-                psVar3 = (short*)((int)piVar4 + (uint)(ushort)psVar3[1] + (uint)(ushort)psVar3[2]);
-            sVar5 = *psVar3;
-            if (sVar5 == 0)
-                return iVar2;
+    if (flags & 0x100000)
+        p += (p[6] + 2) * 6;
+    short s = (short)*p;
+    int result = 0;
+    while (s != 0) {
+        if (key == s) {
+            if (p[2] != 0)
+                return (int)((char*)p + 8) + p[1];
+            return *(int*)((char*)p + 8);
         }
+        if (p[2] == 0)
+            p += 6;
+        else
+            p = (ushort*)((char*)p + 8 + p[1] + p[2]);
+        s = (short)*p;
     }
-    return iVar2;
+    return result;
 }
 
 // ---------------------------------------------------------------------------

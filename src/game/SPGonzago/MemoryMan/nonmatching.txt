@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-005fe8e0 2 cSPUIChoiceDialog::HandleUIMessage: complete; case 2/5 "return true" jumps to a different (equivalent) return block flags: /O2 /MD /Gy /TP /GS- /fp:fast
+005fe8e0 2 cSPUIChoiceDialog::HandleUIMessage: complete; only the two short `je` displacements for case 2/5 differ: cl tail-merges their `return true` with the case-1 return block (0x4f) instead of the shared end block (0x87). Case order variants (2/5 first, big case first) just move the merge to the big case's Cancel return (0x74); break+single end `return true` forces an extra default false block (157/161 bytes).
 00900900 79 wstring->stack-allocator append: complete; signed allocator-space check + return value; difftest PASS flags: /O2 /MD /Gy /EHsc /TP
 00900990 128 XmlReader ctor: complete; cl interleaves member construction / adds an EH frame vs the original flags: /O2 /MD /Gy /EHsc /TP
 00900b70 122 XmlTextReader dtor: complete; cl inline-expands the base dtor + EH frame vs the original's plain tail call; difftest PASS flags: /O2 /MD /Gy /EHsc /TP

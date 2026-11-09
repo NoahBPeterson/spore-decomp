@@ -1383,9 +1383,34 @@ bool BuildSkinVertices(int* self, int)
 }
 
 // @ 0x009520a0
-void XformQuad(void* self, float a, float b, float c, float d)
+struct XformQuad {
+    void* mVt;      // +0x00 (0x1440448)
+    int   mF4;      // +0x04
+    int   mOwner;   // +0x08
+    int   mFc;      // +0x0c
+    char  mFlag;    // +0x10
+    char  mPad[3];  // +0x11
+    float mF14;     // +0x14
+    float mF18;     // +0x18
+    float mF1c;     // +0x1c
+    float mF20;     // +0x20
+
+    XformQuad* Init(void* owner);
+};
+XformQuad* XformQuad::Init(void* owner)
 {
-    ((void(__thiscall*)(void*, float, float, float, float))((void**)*(void**)self)[0x38 / 4])(self, a, b, c, d);
+    XformQuad* self = this;
+    self->mVt = (void*)0x1440448;
+    int zero = (int)(size_t)owner & 0;
+    self->mF4 = zero;
+    self->mOwner = (int)(size_t)owner;
+    self->mFc = -1;
+    self->mFlag = (char)zero;
+    self->mF14 = 0.0f;
+    self->mF18 = 0.0f;
+    self->mF1c = 0.0f;
+    self->mF20 = 0.0f;
+    return self;
 }
 
 // @ 0x00952100

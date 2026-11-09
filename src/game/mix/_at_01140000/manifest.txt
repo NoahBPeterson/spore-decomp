@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/mix/_at_01140000.cpp  _FUN_01142690  01142690 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

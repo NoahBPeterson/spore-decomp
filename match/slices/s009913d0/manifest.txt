@@ -7,3 +7,4 @@ slices/s009913d0/s009913d0.cpp  ??1TreeNode@UTFWinControls@EA@@QAE@XZ  00991410 
 slices/s009913d0/s009913d0.cpp  ?TreeNode_Expand@@YIXPAVTreeNode@UTFWinControls@EA@@@Z  009916f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009913d0/s009913d0.cpp  ?TreeNode_Collapse@@YIXPAVTreeNode@UTFWinControls@EA@@@Z  00991700  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009913d0/s009913d0.cpp  ?OnMouseDown@WinTreeView@UTFWinControls@EA@@QAE_NHHHH@Z  009918b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009913d0/s009913d0.cpp  ?OnTick@WinTreeView@UTFWinControls@EA@@QAE_NXZ  00991400  /O2 /MD /Gy /TP /arch:SSE /fp:fast

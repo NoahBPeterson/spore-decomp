@@ -856,8 +856,8 @@ cTribeGameBehaviorParty* cTribeGameBehaviorParty::Destroy(U8 flag)
     *reinterpret_cast<void**>(static_cast<VT*>(this)) = &gVTable147BF60;
     mpVTable2 = &gVTable147BF4C;
     ((FnAFBAD0*)&mCircle9C)->f();                 // destroy the action circle
-    RBNodeBase* pRoot = mAgentTree.mAnchor.mpParent;
-    mAgentTree.DoNukeSubtree(pRoot);
+    RBTree& tree = mAgentTree;
+    tree.DoNukeSubtree(tree.mAnchor.mpParent);
     ((FnD79FD0*)this)->f();
     if ((flag & 1) != 0) {
         FUN_00F47380(this);

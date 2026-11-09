@@ -473,11 +473,11 @@ void SpaceObj::f388b0(int v)
     int self = (int)this;
     *(int*)(self + 0x1c) = v;
     if (*(int*)(self + 0x18)) {
-        TWString16 strText;
-        strText.InitEmpty();
-        WStrFormat(&strText, (const wchar_t*)0x013F08B8, v);
-        CallSlot1i(*(void**)(self + 0x18), 0x80, (int)strText.mpBegin);
-        strText.Release();
+        struct { TWString16 text; int reserved; } buf;
+        buf.text.InitEmpty();
+        WStrFormat(&buf.text, (const wchar_t*)0x013F08B8, v);
+        CallSlot1i(*(void**)(self + 0x18), 0x80, (int)buf.text.mpBegin);
+        buf.text.Release();
     }
 }
 
@@ -809,7 +809,8 @@ void __fastcall FUN_00f39080(BigAssetView* p)
     CallSlot1i(p, 0x1c, 0);
     for (void** ppChild = p->mChildren.mpBegin; ppChild != p->mChildren.mpEnd; ++ppChild)
         CallSlot0(*ppChild, 0x20);
-    p->mChildren.erase(p->mChildren.mpBegin, p->mChildren.mpEnd);
+    cAutoRefVec& children = p->mChildren;
+    children.erase(children.mpBegin, children.mpEnd);
 
     if (p->mpServer != 0) {
         void* pHandler = p->mpServer;

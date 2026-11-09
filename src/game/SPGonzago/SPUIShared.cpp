@@ -9,6 +9,7 @@
 #include "SP/cViewer.h"
 #include "SP/cSPAssetData.h"
 #include "SP/cSPUIAssetView.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl operator_new(uint32_t nSize, const char* pTag, int nA, int nB, const char* pFile, int nLine); // 0x00f473a0
@@ -533,6 +534,7 @@ void cSPUIRelationshipStrip::FUN_00e2ef80(float fAmount)
 void cRelationshipPanel::FUN_00e2f160()
 {
     mpVtable = (uint32_t)g_stripDtorVtable;
+    _ReadWriteBarrier();
     if (mp18 != 0)
         mp18->v04();
     if (mp14 != 0)

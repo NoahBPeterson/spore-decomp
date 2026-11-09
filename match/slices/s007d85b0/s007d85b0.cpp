@@ -141,8 +141,9 @@ cAppModeInfo* cAppModeInfo::operator=(const cAppModeInfo& x) {
         ModeInfoRelease(d);
     }
     mID = x.mID;
-    if (&x.mName != &mName)
-        mName.assign(x.mName.mpBegin, x.mName.mpEnd);
+    const Str16& n = x.mName;
+    if (&n != &mName)
+        mName.assign(n.mpBegin, n.mpEnd);
     return this;
 }
 

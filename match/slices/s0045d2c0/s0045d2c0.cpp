@@ -53,12 +53,14 @@ struct RawVec8 {
 void RawVec8::dealloc()
 {
     if (begin != 0) {
-        unsigned int n12 = (unsigned int)(((cap - begin) >> 3) << 3);
-        char* n21 = begin;
-        if (*(int*)(n21 - 4) != 0) {
-            void* t38 = n21;
-            EaDeallocate(t38);
+        struct { unsigned int n12; char* n21; char* t38; } l;
+        l.n12 = (unsigned int)(((cap - begin) >> 3) << 3);
+        l.n21 = begin;
+        if (*(int*)(l.n21 - 4) != 0) {
+            l.t38 = l.n21;
+            EaDeallocate(l.t38);
         }
+        (void)l.n12;
     }
     return;
 }
@@ -74,12 +76,14 @@ struct RawVec64 {
 void RawVec64::dealloc()
 {
     if (begin != 0) {
-        unsigned int n12 = (unsigned int)(((cap - begin) >> 6) << 6);
-        char* n21 = begin;
-        if (*(int*)(n21 - 4) != 0) {
-            void* t38 = n21;
-            EaDeallocate(t38);
+        struct { unsigned int n12; char* n21; char* t38; } l;
+        l.n12 = (unsigned int)(((cap - begin) >> 6) << 6);
+        l.n21 = begin;
+        if (*(int*)(l.n21 - 4) != 0) {
+            l.t38 = l.n21;
+            EaDeallocate(l.t38);
         }
+        (void)l.n12;
     }
     return;
 }

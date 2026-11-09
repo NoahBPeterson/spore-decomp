@@ -445,12 +445,12 @@ extern "C" void  f_004e1bf0(void* p);
 PaletteItemUIOneClickPaint* PaletteItemUIOneClickPaint::Ctor()
 {
     ((PaletteItemUIBase*)this)->BaseCtor();
-    *(void* volatile*)((char*)this + 0x20) = (void*)g_vtbl_PICTSel;
+    *(void* volatile*)((char*)this + 0x20) = (void*)0x013eb384u;
     int zero = 0;
-    *(void* volatile*)((char*)this + 0x00) = (void*)g_vtbl_OneClickPaint0;
-    *(void* volatile*)((char*)this + 0x0c) = (void*)g_vtbl_OneClickPaint1;
-    *(void* volatile*)((char*)this + 0x10) = (void*)g_vtbl_OneClickPaint2;
-    *(void* volatile*)((char*)this + 0x20) = (void*)g_vtbl_OneClickPaint3;
+    *(void* volatile*)((char*)this + 0x00) = (void*)0x0148bb3cu;
+    *(void* volatile*)((char*)this + 0x0c) = (void*)0x0148bb20u;
+    *(void* volatile*)((char*)this + 0x10) = (void*)0x0148bb10u;
+    *(void* volatile*)((char*)this + 0x20) = (void*)0x0148bb00u;
     *(volatile int*)((char*)this + 0x24) = zero;
     *(volatile int*)((char*)this + 0x28) = zero;
     *(volatile int*)((char*)this + 0x2c) = zero;

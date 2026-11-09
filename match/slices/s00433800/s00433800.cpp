@@ -20,6 +20,8 @@ extern const float kDefaultDelay;               // 01488874 (0.1f)
 extern const float kOne;                        // 01485720
 extern const float kStatFillValue;              // 015D1E9C
 
+template <int N> inline void PadN() { uint32_t s[N]; }
+
 // Transform-update message: flags select which parts are valid.
 struct XformMsg {
     uint16_t flags;
@@ -38,7 +40,7 @@ struct XformMsg {
 XformMsg::XformMsg()
     : flags(0), count(0), pos(g_DefaultPos), scale(kOne), rot(g_IdentityMatrix)
 {
-    uint32_t u0, u1, u2, u3, u4, u5, u6, u7, u8, u9, u10;   // unused locals present in the original frame
+    PadN<11>();   // unused locals present in the original frame
 }
 
 struct Handle {

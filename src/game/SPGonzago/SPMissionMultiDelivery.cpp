@@ -247,6 +247,9 @@ namespace SP {
 struct IEmpty {};
 }
 namespace SP {
+template <class T> const T& min_ref(const T& a, const T& b) { return b < a ? b : a; }
+}
+namespace SP {
 struct cProperty_s00c5_62b0;
 }
 namespace SP {
@@ -539,7 +542,9 @@ public:
     void*        mpHandlerVtbl;                        // +0x034
     uint8_t      pad038[0x44];
     uint32_t     mElapsedTime;                         // +0x07c milliseconds
-    uint8_t      pad080[0x1c];
+    uint8_t      pad080[0x0c];
+    int32_t      mPoliticalID_8c;                      // +0x08c
+    uint8_t      pad090[0x0c];
     cPlanet_s00c5_62b0*     mpActivePlanet;                       // +0x09c
     uint8_t      pad0a0[0x94];
     tU32Vector   mEventIDList;                         // +0x134
@@ -563,6 +568,8 @@ public:
     void   TriggerUIUpdate();                          // 0x00c47d80
     void   HandleMessage(uint32_t message, void* data);  // 0x00c4a6b0
     void   GetText(uint32_t textID, WString* pOut);    // 0x00c487d0
+    void   FUN_00c48d40(WString* pOut);                // 0x00c48d40
+    bool   FUN_00c455b0(int a, int b);                 // 0x00c455b0
     void   FUN_00c45cf0(cPlanet_s00c5_62b0* pPlanet);             // 0x00c45cf0
     bool   FUN_00c45d80(void* pStarRecord);            // 0x00c45d80
     void   FUN_00c466d0();                             // 0x00c466d0
@@ -681,6 +688,13 @@ struct tBuyerInfo {
 };
 }
 namespace SP {
+union FloatBits {
+    float    f;
+    uint32_t u;
+};
+struct Float3 {
+    FloatBits x, y, z;
+};
 struct tItemInfo_s00c5_7570 {
     cMissionTarget* mpTarget;                            // +0x00
     float           mField4;                             // +0x04
@@ -689,6 +703,7 @@ struct tItemInfo_s00c5_7570 {
     bool            mField10;                            // +0x10
 
     tItemInfo_s00c5_7570* operator=(const tItemInfo_s00c5_7570& src);
+    tItemInfo_s00c5_7570* FUN_00c57720(const tItemInfo_s00c5_7570& src);
     tItemInfo_s00c5_7570* FUN_00c57a80(cMissionTarget* pTarget, bool flag, float f1, float f2, float f3);
 };
 }
@@ -705,6 +720,27 @@ struct cItemRange {
 };
 }
 namespace SP {
+struct cPickupRange {
+    tPickupInfo*  mpBegin;                                 // +0x00
+    tPickupInfo*  mpEnd;                                   // +0x04
+};
+}
+namespace SP {
+bool __cdecl EA_WriteUint32(void* pStream, const void* pValue, int32_t count, int32_t flag); // 0x0093aa70
+}
+namespace SP {
+IArchiver& __cdecl operator<<(IArchiver& archiver, const tItemInfo_s00c5_7570& item);             // 0x00c56e60
+IArchiver& __cdecl operator<<(IArchiver& archiver, const tPickupInfo& item);                      // 0x00c56e00
+inline uint32_t EA_STLSequenceCount(const cItemRange* pRange)
+{
+    return (uint32_t)((char*)pRange->mpEnd - (char*)pRange->mpBegin) / 12;
+}
+inline uint32_t EA_STLSequenceCount(const cPickupRange* pRange)
+{
+    return (uint32_t)((char*)pRange->mpEnd - (char*)pRange->mpBegin) / 20;
+}
+}
+namespace SP {
 class cString_s006b_47a0 {
 public:
     const wchar_t* GetText();                            // 0x006b55c0
@@ -713,8 +749,8 @@ public:
 namespace SP {
 class cSPMissionMultiDelivery_s00c5_7570 {
 public:
-    void  GetDynamicResponseID();  // 0x00c57d00 (SP::cSPMissionMultiDelivery::GetDynamicResponseID)
-    void  OnDelivery();  // 0x00c57ef0 (SP::cSPMissionMultiDelivery::OnDelivery)
+    int32_t GetDynamicResponseID(int arg1, int arg2);  // 0x00c57d00 (SP::cSPMissionMultiDelivery::GetDynamicResponseID)
+    int32_t OnDelivery(int arg1, void* pPlanet);  // 0x00c57ef0 (SP::cSPMissionMultiDelivery::OnDelivery)
     void  GetFetchItemName(eastl::wstring* pOut);  // 0x00c58260 (SP::cSPMissionMultiDelivery::GetFetchItemName)
     void  FUN_00c575e0();
     void  FUN_00c576d0();
@@ -725,11 +761,11 @@ public:
     void  FUN_00c57a10();
     void  FUN_00c57a80();
     void  FUN_00c57ad0();
-    void  FUN_00c57e50();
-    void  FUN_00c582a0();
-    void  FUN_00c58310();
-    void  FUN_00c58360();
-    void  FUN_00c58530();
+    bool  FUN_00c57e50(int arg1, int arg2);
+    void  FUN_00c582a0(WString* out);
+    void  FUN_00c58310(void* value);
+    void  FUN_00c58360(void* value);
+    void* FUN_00c58530(int32_t flags);
     void  FUN_00c58600();
 
     uint8_t             pad000[0x23c];                   // +0x000 .. +0x23b
@@ -1035,27 +1071,6 @@ bool cSPMissionMultiDelivery_s00c5_62b0::IsItemPickedUpInPlanet()
 }
 }  // namespace SP
 
-// @ 0x00c571d0
-namespace SP {
-bool cSPMissionMultiDelivery_s00c5_62b0::DeliverItemsToBuyer(void* pPlanet, int32_t count, int32_t* pDelivered)
-{
-    int32_t numItems = (int32_t)((char*)mpRunnerItemsEnd - (char*)mpRunnerItems) / 12;
-    for (int32_t i = 0; i < numItems; ++i) {
-        tItemInfo* pItem = &mpRunnerItems[i];
-        if ((void*)pItem->mpPlanet.mpObject == pPlanet) {
-            int32_t remaining = pItem->mRequested - pItem->mDelivered;
-            int32_t carried = count < remaining ? count : remaining;
-            pItem->mDelivered += carried;
-            if (pDelivered)
-                *pDelivered = carried;
-            if (pItem->mDelivered >= pItem->mRequested)
-                return true;
-        }
-    }
-    return false;
-}
-}  // namespace SP
-
 // @ 0x00c57270
 namespace SP {
 bool cSPMissionMultiDelivery_s00c5_62b0::DeliveredToAllBuyers()
@@ -1156,16 +1171,28 @@ void cSPMissionMultiDelivery_s00c5_62b0::SetItemPropertyList()
 }  // namespace SP
 
 // @ 0x00c57570
-void __cdecl WriteSTLSequence_tItemInfo(void* pWriter, SP::cItemRange* pRange)
+namespace SP {
+void __cdecl WriteSTLSequence_tItemInfo(IArchiver* pArchiver, cItemRange* pRange)
 {
-    (void)pWriter;
-    (void)pRange;
+    uint32_t count = EA_STLSequenceCount(pRange);
+    EA_WriteUint32(pArchiver->GetWriter()->GetStream(), &count, 1, 0);
+    tItemInfo_s00c5_7570* pEnd = pRange->mpEnd;
+    for (tItemInfo_s00c5_7570* p = pRange->mpBegin; p != pEnd; ++p)
+        operator<<(*pArchiver, *p);
+    pArchiver->EndRead();
 }
+}  // namespace SP
 
 // @ 0x00c575e0
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c575e0()
+void __cdecl WriteSTLSequence_tPickupInfo(IArchiver* pArchiver, cPickupRange* pRange)
 {
+    uint32_t count = EA_STLSequenceCount(pRange);
+    EA_WriteUint32(pArchiver->GetWriter()->GetStream(), &count, 1, 0);
+    tPickupInfo* pEnd = pRange->mpEnd;
+    for (tPickupInfo* p = pRange->mpBegin; p != pEnd; ++p)
+        operator<<(*pArchiver, *p);
+    pArchiver->EndRead();
 }
 }  // namespace SP
 
@@ -1205,56 +1232,153 @@ tBuyerInfo* __thiscall tBuyerInfo::operator=(const tBuyerInfo& src)
 
 // @ 0x00c57720
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c57720()
+tItemInfo_s00c5_7570* __thiscall tItemInfo_s00c5_7570::FUN_00c57720(const tItemInfo_s00c5_7570& src)
 {
+    cMissionTarget* pOld = mpTarget;
+    cMissionTarget* pNew = src.mpTarget;
+    if (pNew != pOld) {
+        if (pNew)
+            pNew->NotifyAssigned();
+        mpTarget = pNew;
+        if (pOld)
+            pOld->ReleaseTarget();
+    }
+    // Retail bit-copies the three floats; a raw word copy keeps the codegen identical.
+    uint32_t* pDst = (uint32_t*)&mField4;
+    const uint32_t* pSrc = (const uint32_t*)&src.mField4;
+    pDst[0] = pSrc[0];
+    pDst[1] = pSrc[1];
+    pDst[2] = pSrc[2];
+    mField10 = src.mField10;
+    return this;
 }
 }  // namespace SP
 
 // @ 0x00c57780
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c57780()
+tBuyerInfo* __cdecl copy_forward_buyer(tBuyerInfo* pFirst, tBuyerInfo* pLast, tBuyerInfo* pDest)
 {
+    for (; pFirst != pLast; ++pFirst, ++pDest) {
+        if (pDest) {
+            pDest->mpTarget = pFirst->mpTarget;
+            if (pDest->mpTarget)
+                pDest->mpTarget->NotifyAssigned();
+            pDest->mField4 = pFirst->mField4;
+            pDest->mField8 = pFirst->mField8;
+        }
+    }
+    return pDest;
 }
 }  // namespace SP
 
 // @ 0x00c57810
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c57810()
+tItemInfo_s00c5_7570* __cdecl copy_forward_item(tItemInfo_s00c5_7570* pFirst, tItemInfo_s00c5_7570* pLast, tItemInfo_s00c5_7570* pDest)
 {
+    for (; pFirst != pLast; ++pFirst, ++pDest) {
+        if (pDest) {
+            pDest->mpTarget = pFirst->mpTarget;
+            if (pDest->mpTarget)
+                pDest->mpTarget->NotifyAssigned();
+            pDest->mField4 = pFirst->mField4;
+            pDest->mField8 = pFirst->mField8;
+            pDest->mFieldC = pFirst->mFieldC;
+            pDest->mField10 = pFirst->mField10;
+        }
+    }
+    return pDest;
 }
 }  // namespace SP
 
 // @ 0x00c578c0
 namespace SP {
-void __cdecl copy_impl_buyer(tBuyerInfo* pDest, tBuyerInfo* pFirst, tBuyerInfo* pLast)
+tBuyerInfo* __cdecl copy_impl_buyer(tBuyerInfo* pFirst, tBuyerInfo* pLast, tBuyerInfo* pDest)
 {
-    (void)pDest;
-    (void)pFirst;
-    (void)pLast;
+    for (; pFirst != pLast; ++pFirst, ++pDest) {
+        cMissionTarget* pNew = pFirst->mpTarget;
+        cMissionTarget* pOld = pDest->mpTarget;
+        if (pNew != pOld) {
+            if (pNew)
+                pNew->NotifyAssigned();
+            pDest->mpTarget = pNew;
+            if (pOld)
+                pOld->ReleaseTarget();
+        }
+        pDest->mField4 = pFirst->mField4;
+        pDest->mField8 = pFirst->mField8;
+    }
+    return pDest;
 }
 }  // namespace SP
 
 // @ 0x00c57930
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c57930()
+tBuyerInfo* __cdecl copy_backward_buyer(tBuyerInfo* pFirst, tBuyerInfo* pLast, tBuyerInfo* pDest)
 {
+    while (pLast != pFirst) {
+        --pLast;
+        --pDest;
+        cMissionTarget* pNew = pLast->mpTarget;
+        cMissionTarget* pOld = pDest->mpTarget;
+        if (pNew != pOld) {
+            if (pNew)
+                pNew->NotifyAssigned();
+            pDest->mpTarget = pNew;
+            if (pOld)
+                pOld->ReleaseTarget();
+        }
+        pDest->mField4 = pLast->mField4;
+        pDest->mField8 = pLast->mField8;
+    }
+    return pDest;
 }
 }  // namespace SP
 
 // @ 0x00c579a0
 namespace SP {
-void __cdecl copy_impl_item(tItemInfo_s00c5_7570* pDest, tItemInfo_s00c5_7570* pFirst, tItemInfo_s00c5_7570* pLast)
+tItemInfo_s00c5_7570* __cdecl copy_impl_item(tItemInfo_s00c5_7570* pFirst, tItemInfo_s00c5_7570* pLast, tItemInfo_s00c5_7570* pDest)
 {
-    (void)pDest;
-    (void)pFirst;
-    (void)pLast;
+    for (; pFirst != pLast; ++pFirst, ++pDest) {
+        cMissionTarget* pNew = pFirst->mpTarget;
+        cMissionTarget* pOld = pDest->mpTarget;
+        if (pNew != pOld) {
+            if (pNew)
+                pNew->NotifyAssigned();
+            pDest->mpTarget = pNew;
+            if (pOld)
+                pOld->ReleaseTarget();
+        }
+        ((Float3*)&pDest->mField4)->x.u = ((const Float3*)&pFirst->mField4)->x.u;
+        ((Float3*)&pDest->mField4)->y.u = ((const Float3*)&pFirst->mField4)->y.u;
+        ((Float3*)&pDest->mField4)->z.u = ((const Float3*)&pFirst->mField4)->z.u;
+        pDest->mField10 = pFirst->mField10;
+    }
+    return pDest;
 }
 }  // namespace SP
 
 // @ 0x00c57a10
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c57a10()
+tItemInfo_s00c5_7570* __cdecl copy_backward_item(tItemInfo_s00c5_7570* pFirst, tItemInfo_s00c5_7570* pLast, tItemInfo_s00c5_7570* pDest)
 {
+    while (pLast != pFirst) {
+        --pLast;
+        --pDest;
+        cMissionTarget* pNew = pLast->mpTarget;
+        cMissionTarget* pOld = pDest->mpTarget;
+        if (pNew != pOld) {
+            if (pNew)
+                pNew->NotifyAssigned();
+            pDest->mpTarget = pNew;
+            if (pOld)
+                pOld->ReleaseTarget();
+        }
+        ((Float3*)&pDest->mField4)->x.u = ((const Float3*)&pLast->mField4)->x.u;
+        ((Float3*)&pDest->mField4)->y.u = ((const Float3*)&pLast->mField4)->y.u;
+        ((Float3*)&pDest->mField4)->z.u = ((const Float3*)&pLast->mField4)->z.u;
+        pDest->mField10 = pLast->mField10;
+    }
+    return pDest;
 }
 }  // namespace SP
 
@@ -1284,22 +1408,144 @@ void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c57ad0()
 
 // @ 0x00c57d00
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::GetDynamicResponseID()
+struct IRefBase : IEmpty {
+    virtual void AddRef();                              // slot 0
+    virtual void Release();                             // slot +4
+};
+struct IRefFound : VPad<46, IRefBase> {
+    virtual void ReleaseFound();                        // slot 0xc0
+};
+struct IHandleManager {
+    void* Get(int id);                                  // 0x00ba6dc0
+    void  Find(void* key, void** out);                  // 0x00bb59b0
+};
+IHandleManager* __cdecl FUN_00b3d2a0();                  // 0x00b3d2a0
+}
+namespace SP {
+struct IStateVtbl : VPad<24, IEmpty> {
+    virtual int32_t FUN_60();                           // slot 0x60
+};
+struct IGameHelper : VPad<24, IEmpty> {
+    virtual void*   FUN_60(int id);                     // slot 0x60
+    virtual int32_t FUN_64(int a, void* b);             // slot 0x64
+};
+struct IGameHelper1 : VPad<5, IGameHelper> {
+    virtual void FUN_7c(int id, void** pOut, int delivered);   // slot 0x7c
+};
+struct IGameManager {
+    IGameHelper* GetHelper();                           // 0x00a1ad60
+};
+IGameManager* __cdecl FUN_01002bd0();                   // 0x01002bd0
+}
+namespace SP {
+int32_t __thiscall cSPMissionMultiDelivery_s00c5_7570::GetDynamicResponseID(int arg1, int arg2)
 {
+    cSPMissionMultiDelivery_s00c5_62b0* self = (cSPMissionMultiDelivery_s00c5_62b0*)this;
+    if (((IStateVtbl*)self)->FUN_60() == 3 && self->mDeliveryState == 0) {
+        IRefBase* pAcquired = 0;
+        IRefBase* q = (IRefBase*)FUN_00b3d2a0()->Get(arg2);
+        if (q) {
+            q->AddRef();
+            pAcquired = q;
+        }
+
+        IRefFound* pFound = 0;
+        FUN_00b3d2a0()->Find(pAcquired, (void**)&pFound);
+
+        if (pAcquired == *(IRefBase**)((char*)self->mpActivePlanet + 0x13c) &&
+            arg1 == (int)self->mPoliticalID_8c) {
+            if (pFound)
+                pFound->ReleaseFound();
+            if (pAcquired)
+                pAcquired->Release();
+            return (int32_t)0xb6a7851e;
+        }
+
+        if (self->IsInBuyerPlanetList(pFound)) {
+            int32_t id = FUN_01002bd0()->GetHelper()->FUN_64(5, &self->mpItemDefinition);
+            if (id != -1) {
+                if (pFound)
+                    pFound->ReleaseFound();
+                if (pAcquired)
+                    pAcquired->Release();
+                return (int32_t)0xfebcbe81;
+            }
+            if (pFound)
+                pFound->ReleaseFound();
+            if (pAcquired)
+                pAcquired->Release();
+            return (int32_t)0x2219b1c7;
+        }
+
+        if (pFound)
+            pFound->ReleaseFound();
+        if (pAcquired)
+            pAcquired->Release();
+    }
+    return -1;
 }
 }  // namespace SP
 
 // @ 0x00c57e50
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c57e50()
+bool __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c57e50(int arg1, int arg2)
 {
+    cSPMissionMultiDelivery_s00c5_62b0* self = (cSPMissionMultiDelivery_s00c5_62b0*)this;
+    if (self->FUN_00c455b0(arg1, arg2))
+        return true;
+
+    IRefBase* pAcquired = 0;
+    IRefBase* q = (IRefBase*)FUN_00b3d2a0()->Get(arg2);
+    if (q) {
+        q->AddRef();
+        pAcquired = q;
+    }
+
+    IRefFound* pFound = 0;
+    FUN_00b3d2a0()->Find(pAcquired, (void**)&pFound);
+    bool result = self->IsInBuyerPlanetList(pFound) && self->mDeliveryState == 0;
+    if (pFound)
+        pFound->ReleaseFound();
+    if (pAcquired)
+        pAcquired->Release();
+    return result;
 }
 }  // namespace SP
 
 // @ 0x00c57ef0
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::OnDelivery()
+struct IRefObj : VPad<2, IEmpty> {
+    virtual void Release();                             // slot +8
+};
+}
+namespace SP {
+int32_t __thiscall cSPMissionMultiDelivery_s00c5_7570::OnDelivery(int arg1, void* pPlanet)
 {
+    cSPMissionMultiDelivery_s00c5_62b0* self = (cSPMissionMultiDelivery_s00c5_62b0*)this;
+    if (!pPlanet)
+        return -1;
+
+    int32_t result = (int32_t)0x147a1bb6;
+    int32_t id = FUN_01002bd0()->GetHelper()->FUN_64(5, &self->mpItemDefinition);
+    if (id != -1) {
+        void* pObj = FUN_01002bd0()->GetHelper()->FUN_60(id);
+        if (pObj) {
+            int32_t delivered = 0;
+            bool ok = self->DeliverItemsToBuyer(pPlanet, *(int32_t*)((char*)pObj + 0x10), &delivered);
+            self->TriggerUIUpdate();
+            void* pItem = 0;
+            ((IGameHelper1*)FUN_01002bd0()->GetHelper())->FUN_7c(id, &pItem, delivered);
+            if (ok) {
+                result = (int32_t)0x95ed4de1;
+                if (self->DeliveredToAllBuyers() && self->mDeliveryState != 1)
+                    self->ReturnForRewards();
+            }
+            if (pItem)
+                ((IRefObj*)pItem)->Release();
+        }
+    }
+    (void)arg1;
+    return result;
 }
 }  // namespace SP
 
@@ -1337,9 +1583,31 @@ bool __cdecl FUN_00c580b0(void* pContext, cItemRange* pRange)
 
 // @ 0x00c58170
 namespace SP {
-void __fastcall cMissionMultiDeliveryCtor(void* this_, int unused)
+void __fastcall cString_ctor(void* self);   // 0x006b5060
+}
+namespace SP {
+cSPMissionMultiDelivery_s00c5_62b0* __fastcall cMissionMultiDeliveryCtor(cSPMissionMultiDelivery_s00c5_62b0* this_, int unused)
 {
-    (void)this_;
+    this_->ConstructBase();
+    *(void**)this_ = (void*)0x146f198;
+    *(void**)((char*)this_ + 0x04) = (void*)0x146f184;
+    *(void**)((char*)this_ + 0x34) = (void*)0x146f174;
+    this_->mDeliveryState = 0;
+    this_->mpRunnerItems = 0;
+    this_->mpRunnerItemsEnd = 0;
+    this_->mpRunnerItemsCapacity = 0;
+    this_->mpBuyerItems = 0;
+    this_->mpBuyerItemsEnd = 0;
+    this_->mpBuyerItemsCapacity = 0;
+    *(void**)((char*)this_ + 0x21c) = 0;
+    *(void**)((char*)this_ + 0x220) = 0;
+    *(void**)((char*)this_ + 0x224) = 0;
+    this_->mpItemDefinition = *(void**)0x16919c4;
+    this_->mItemCount = *(int32_t*)0x16919c8;
+    this_->mItemsDelivered = *(int32_t*)0x16919cc;
+    cString_ctor((char*)this_ + 0x23c);
+    (void)unused;
+    return this_;
 }
 }  // namespace SP
 
@@ -1358,29 +1626,87 @@ void __thiscall cSPMissionMultiDelivery_s00c5_7570::GetFetchItemName(eastl::wstr
 
 // @ 0x00c582a0
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c582a0()
+void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c582a0(WString* out)
 {
+    WString* pOut = out;
+    cSPMissionMultiDelivery_s00c5_62b0* self = (cSPMissionMultiDelivery_s00c5_62b0*)this;
+    if (self->mUIShortDescription.mpBegin == self->mUIShortDescription.mpEnd &&
+        self->mDeliveryState == 0 &&
+        self->IsItemPickedUpInPlanet()) {
+        self->GetText(0x40a0575, pOut);
+        if (pOut != &self->mUIShortDescription)
+            self->mUIShortDescription.assign(pOut->mpBegin, pOut->mpEnd);
+    } else {
+        self->FUN_00c48d40(pOut);
+    }
 }
 }  // namespace SP
 
 // @ 0x00c58310
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c58310()
+struct cListNode_s00c5_7570 {
+    cListNode_s00c5_7570* mpNext;                       // +0x00
+    cListNode_s00c5_7570* mpPrev;                       // +0x04
+    void*                 mpValue;                      // +0x08
+};
+}
+namespace SP {
+void* __cdecl EAAllocate(unsigned int size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
+}
+namespace SP {
+void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c58310(void* value)
 {
+    cListNode_s00c5_7570* head = *(cListNode_s00c5_7570**)this;
+    cListNode_s00c5_7570* node = (cListNode_s00c5_7570*)EAAllocate(0xc, (const char*)0x13f09b4, 0, 0, (const char*)0x13ebb38, 0xd1);
+    if (&node->mpValue)
+        node->mpValue = *(void**)value;
+    node->mpNext = head;
+    node->mpPrev = head->mpPrev;
+    head->mpPrev->mpNext = node;
+    head->mpPrev = node;
 }
 }  // namespace SP
 
 // @ 0x00c58360
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c58360()
+void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c58360(void* value)
 {
+    cListNode_s00c5_7570* head = (cListNode_s00c5_7570*)this;
+    cListNode_s00c5_7570* node = (cListNode_s00c5_7570*)EAAllocate(0xc, (const char*)0x13f09b4, 0, 0, (const char*)0x13ebb38, 0xd1);
+    if (&node->mpValue)
+        node->mpValue = *(void**)value;
+    node->mpNext = head;
+    node->mpPrev = head->mpPrev;
+    head->mpPrev->mpNext = node;
+    head->mpPrev = node;
 }
 }  // namespace SP
 
 // @ 0x00c58530
 namespace SP {
-void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c58530()
+void __fastcall cString_dtor_s00c5_7570(void* self);          // 0x006b5240
+void __fastcall cVector_dtor_0208(void* self);                // 0x00c58130
+void __fastcall cVector_dtor_01f4(void* self);                // 0x00c580f0
+void __fastcall cMissionBase_dtor(void* self);                // 0x00c47680
+}
+namespace SP {
+void* __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c58530(int32_t flags)
 {
+    cString_dtor_s00c5_7570((char*)this + 0x23c);
+
+    int32_t* pArray = *(int32_t**)((char*)this + 0x21c);
+    if (pArray != 0) {
+        if (pArray[-1] != 0)
+            FreeArray(pArray);
+    }
+
+    cVector_dtor_0208((char*)this + 0x208);
+    cVector_dtor_01f4((char*)this + 0x1f4);
+    cMissionBase_dtor(this);
+
+    if (flags & 1)
+        FreeArray(this);
+    return this;
 }
 }  // namespace SP
 
@@ -1521,3 +1847,24 @@ u8 cMissionMultiStep::FUN_00c59b50()
     }
     return 1;
 }
+
+// @ 0x00c571d0
+namespace SP {
+bool cSPMissionMultiDelivery_s00c5_62b0::DeliverItemsToBuyer(void* pPlanet, int32_t count, int32_t* pDelivered)
+{
+    int32_t numItems = (int32_t)((char*)mpRunnerItemsEnd - (char*)mpRunnerItems) / 12;
+    for (int32_t i = 0; i < numItems; ++i) {
+        tItemInfo* pItem = &mpRunnerItems[i];
+        if ((void*)pItem->mpPlanet.mpObject == pPlanet) {
+            int32_t remaining = pItem->mRequested - pItem->mDelivered;
+            int32_t carried = min_ref(remaining, count);
+            pItem->mDelivered += carried;
+            if (pDelivered)
+                *pDelivered = carried;
+            if (pItem->mDelivered >= pItem->mRequested)
+                return true;
+        }
+    }
+    return false;
+}
+}  // namespace SP

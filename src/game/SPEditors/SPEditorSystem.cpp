@@ -105,8 +105,7 @@ template <class T> struct RefCountTemplate_s005d_61b0 {
     virtual ~RefCountTemplate_s005d_61b0() {}
     int AddRef() { return ++mRefCount; }
     int Release() {
-        const T rc = mRefCount - 1;
-        mRefCount = rc;
+        const T rc = (*(volatile T*)&mRefCount += -1);
         if (rc == 0) {
             mRefCount = 1;
             delete this;

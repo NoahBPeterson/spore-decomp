@@ -57,6 +57,7 @@
 ../src/game/SPGonzago/_at_00c60000.cpp  ?FUN_00c6f3d0@@YIPAXPAX0@Z  00c6f3d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?FUN_00c6f500@@YIEPAX00@Z  00c6f500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?Cast@SimOrnament@@QAEPAXI@Z  00c6f6e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?IsPlayerOwnedOrnament@SimSpatial@@QAE_NXZ  00c6f7b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?Destroy@SimOrnament@@QAEXXZ  00c6fac0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ??0SimCursorAttachment@@QAE@XZ  00c6fcd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?Cast@SimCursorAttachment@@QAEPAXI@Z  00c6fd20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

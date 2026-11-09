@@ -636,7 +636,7 @@ wchar_t* Holder::AppendWStr(const wchar_t* s, int len)
     unsigned nbytes = (unsigned)len * 2;
     char* p = (char*)RawAlloc(&sa, (nbytes + 9) & ~7u);
     FUN_011e0744(p, s, nbytes);
-    *(wchar16*)(nbytes + (char*)p) = 0;
+    ((wchar16*)p)[len] = 0;
     return (wchar_t*)p;
 }
 

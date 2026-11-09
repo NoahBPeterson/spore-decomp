@@ -9,3 +9,4 @@
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?TryCreateMission@BiosphereCollapseEvent@@QAEHPAUIPlanetMission@@H@Z  0100e690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?PickWeightedIndex@@YAHPAUIntVector@@@Z  0100e970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FUN_01010720@@YGXHH@Z  01010720  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?SortBanners@cBioElemSort@@QAEIXZ  00b8de30  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

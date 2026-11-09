@@ -571,10 +571,10 @@ void __fastcall FUN_00633f90(void* self) {
   char* s = (char*)self;
   int tag = 0;
   switch (*(int*)(s + 0xe74)) {
-    case 0: tag = 0x447a553; ((PMB*)s)->DeleteOne(); break;
-    case 1: tag = 0x4479851; ((PMB*)s)->DeleteAll(); break;
-    case 2: tag = 0x447a54c; ((PMB*)s)->MoveOne(); break;
-    case 3: tag = 0x4479848; ((PMB*)s)->MoveAll(); break;
+    case 0: tag = 0x447a54c; ((PMB*)s)->DeleteOne(); break;
+    case 1: tag = 0x4479848; ((PMB*)s)->DeleteAll(); break;
+    case 2: tag = 0x447a553; ((PMB*)s)->MoveOne(); break;
+    case 3: tag = 0x4479851; ((PMB*)s)->MoveAll(); break;
   }
   int c = ((PMB*)s)->PhotoCountChanged();
   *(int*)(s + 0xea4) = c;

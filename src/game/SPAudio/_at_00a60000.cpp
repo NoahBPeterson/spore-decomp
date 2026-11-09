@@ -130,7 +130,7 @@ namespace Eapd {
 uint      GetRandomSeed();                                            // 0x00a5eca0
 }
 namespace Eapd {
-void* vinlet_new(int argc, t_atom* argv);                             // 0x00a613c0
+void* vinlet_new(void* a1, void* a2, int argc, t_atom* argv);          // 0x00a613c0
 }
 namespace Eapd {
 void* menu_new(int argc, t_atom* argv);                               // 0x00a618c0
@@ -864,9 +864,9 @@ void function_outrange(char* x, float a, float b)
 
 // @ 0x00a613c0
 namespace Eapd {
-void* vinlet_new(int argc, t_atom* argv)
+void* vinlet_new(void* a1, void* a2, int argc, t_atom* argv)
 {
-    t_symbol s;
+    (void)a1; (void)a2;
     TX* x = (TX*)pd_new(gpInletClass);
     if (x != 0) {
         void* cur = canvas_getcurrent();
@@ -874,6 +874,7 @@ void* vinlet_new(int argc, t_atom* argv)
         *(void**)((char*)x + 0x2c) = canvas_addinlet((t_glist*)cur, x, gEmptySymbol);
         void* out = outlet_new(x, gEmptySymbol);
         if (argc != 0) {
+            t_symbol s;
             atom_vectorgensym(&s, argc, argv);
             inlet_setempty((t_inlet*)*(void**)((char*)x + 0x2c), s);
             outlet_setempty((t_outlet*)out, s);

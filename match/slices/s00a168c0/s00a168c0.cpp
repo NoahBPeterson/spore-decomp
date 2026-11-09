@@ -875,12 +875,13 @@ struct PRespC : PR_Prim, PR_RC {
 // @ 0x00a173f0
 PRespC::PRespC(int arg)
 {
-    float d = g_prDefault;
+    int   source = arg;
+    float value = g_prDefault;
     mbDirty = true;
     mModify = 0;
-    mValue = d;
+    mValue = value;
     mb384 = false;
-    m388 = arg;
+    m388 = source;
     mCurve.SetResponseCurveData(g_prData2, 2);
 }
 // --- equivalence checker address annotations

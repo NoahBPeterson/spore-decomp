@@ -896,10 +896,10 @@ void MergeKeys(VecKeyPair* vec, int n, const int* keys)
         } while (i < nExisting);
     }
     for (; j < n; ++j) {
-        KeyPair v;
-        v.mKey = (short)keys[j];
-        v.mVal = (short)-1;
-        vec->push_back(v);
+        KeyPair v2;
+        v2.mKey = (short)keys[j];
+        v2.mVal = (short)-1;
+        vec->push_back(v2);
     }
 }
 

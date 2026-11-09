@@ -831,7 +831,7 @@ void cEditorRes::SetAnalysis(const AnalysisVector* other, bool renumber)
 
     if (renumber) {
         int n = (int)(vec->mpEnd - vec->mpBegin);
-        for (unsigned i = 0; (int)i < n; i++)
-            vec->mpBegin[i].mIndex = (int)i;
+        for (int i = 0; i < n; i++)
+            vec->mpBegin[i].mIndex = i;
     }
 }

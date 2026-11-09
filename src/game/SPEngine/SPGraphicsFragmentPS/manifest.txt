@@ -8,6 +8,7 @@
 ../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?do_fill28@@YAXPAUFragDecl@@0ABU1@@Z  006fabd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?do_copy28@@YAPAUFragDecl@@PAU1@00@Z  006fac30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?do_copy_backward28@@YAPAUFragDecl@@PAU1@00@Z  006faca0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ??0PixelFrag@@QAE@XZ  006fafe0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentPS.cpp  _LoadAndSelectPS  006fb860  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentPS.cpp  _DispatchCB  006fb8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentPS.cpp  _UnregisterShaders  006fb920  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include

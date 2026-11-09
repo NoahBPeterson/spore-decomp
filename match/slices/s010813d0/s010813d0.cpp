@@ -208,7 +208,7 @@ void hkMatrix3::add(const hkMatrix3& m)
 	m_el[5] = m.m_el[5] + m_el[5];
 	m_el[6] = m.m_el[6] + m_el[6];
 	m_el[7] = m.m_el[7] + m_el[7];
-	m_el[8] = m_el[8] + m.m_el[8];
+	m_el[8] = m.m_el[8] + m_el[8];
 	m_el[9] = m.m_el[9] + m_el[9];
 	m_el[10] = m.m_el[10] + m_el[10];
 	m_el[11] = m.m_el[11] + m_el[11];

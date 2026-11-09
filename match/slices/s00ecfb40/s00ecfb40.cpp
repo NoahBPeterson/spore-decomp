@@ -500,7 +500,7 @@ void cEditorPage::Update(int delta)
 
     if (mFlag3c) {
         if (!mFlag3d) {
-            mTimeCounter = 0;
+            mPercent = 0.0f;
             mFlag3d = 1;
         }
     }
@@ -590,12 +590,12 @@ void* cEditorPage::AsInterface(int id)
 // @ 0x00ed02c0
 cEditorPage::cEditorPage()
 {
-    *(void* volatile*)((char*)this + 4) = &g_vtbl_IMsgHandler;
-    *(void* volatile*)((char*)this + 8) = &g_vtbl_RefCount;
+    *(void* volatile*)((char*)this + 4) = (void*)0x013eb394u;
+    *(void* volatile*)((char*)this + 8) = (void*)0x013ec458u;
     mUnk0c = 0;
-    mpVtbl0 = &g_vtbl_EditorPage0;
-    mpVtbl1 = &g_vtbl_EditorPage1;
-    mpVtbl2 = &g_vtbl_EditorPage2;
+    mpVtbl0 = (void**)0x014898e0u;
+    mpVtbl1 = (void**)0x014898d8u;
+    mpVtbl2 = (void**)0x014898c8u;
     mpLayout = 0;
     mpWinMeter = 0;
     mpWinFrame = 0;

@@ -8,6 +8,5 @@
 00623730  24   cSPHoverTitle ctor: complete; store scheduling (movss hoisted)
 006237d0  64   change notifier (NotifyAll with modification-count check): complete; scheduling
 00623830  336  cSPHoverTitle::Layout (position tooltip near the cursor): complete; SSE operand order of (w + pad + x) and SPPoint arg copies
-00623af0  9    ~cSPHoverTitle: complete; trailing base-vptr stores order
 00623be0  60   cXHTMLWin ctor: complete; store scheduling around the base ctor
 00623c90  566  cXHTMLWin::SetFormControlValue (select/option handling): complete; list end iterator kept as a null-checked value in the original

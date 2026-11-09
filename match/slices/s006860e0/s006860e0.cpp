@@ -78,8 +78,8 @@ Elem* CopyElems(Elem* first, Elem* last, Elem* dst) {
     if (first != last) {
         do {
             *dst = *first;
-            ++first;
             ++dst;
+            ++first;
         } while (first != last);
         return dst;
     }

@@ -218,6 +218,7 @@ public:
 class hkThreadMemory
 {
 public:
+	void* allocateChunk(int numBytes, int memClass);                // 0x0107daa0
 	void deallocateChunk(void* data, int numBytes, int alignment);   // 0x0107db10
 };
 template <class T> class hkArray
@@ -2285,11 +2286,31 @@ void hkLinearParametricCurve::getBinormal(float t, hkVector4_s0109_5320& out)
 }
 
 // @ 0x01095960
-void hkLinearParametricCurve::getPointsToDraw(void* out)
+void hkLinearParametricCurve::getPointsToDraw(void* outp)
 {
-    // Appends the two endpoints of the interesting sub-range to the caller's
-    // array through its virtual append interface.
-    (void)out;
+    int n = mPointCount;
+    hkArray<hkVector4_s0109_5320>& out = *(hkArray<hkVector4_s0109_5320>*)outp;
+    if (out.getCapacity() < n) {
+        if ((out.m_capacityAndFlags & hkArray<hkVector4_s0109_5320>::DONT_DEALLOCATE_FLAG) == 0) {
+            hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_threadMemoryTls);
+            mem->deallocateChunk(out.m_data, out.getCapacity() * (int)sizeof(hkVector4_s0109_5320), 0x14);
+        }
+        hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_threadMemoryTls);
+        out.m_data = (hkVector4_s0109_5320*)mem->allocateChunk(n * (int)sizeof(hkVector4_s0109_5320), 0x14);
+        out.m_capacityAndFlags = (out.m_capacityAndFlags & 0x40000000) | n;
+    }
+    out.m_size = n;
+    hkVector4_s0109_5320* src = mpPoints;
+    hkVector4_s0109_5320* dst = out.m_data;
+    int i = 0;
+    for (; i + 3 < n; i += 4) {
+        dst[i] = src[i];
+        dst[i + 1] = src[i + 1];
+        dst[i + 2] = src[i + 2];
+        dst[i + 3] = src[i + 3];
+    }
+    for (; i < n; ++i)
+        dst[i] = src[i];
 }
 
 // @ 0x01095b60
@@ -2550,7 +2571,7 @@ hkBool_s0109_60e0 hkHingeLimitsData::isValid() const
 		result.m_bool = 0;
 		return result;
 	}
-	if (!(hkAbsF(hkAbsF(m_basisB.m_perp2FreeAxis.x * m_basisB.m_axle.x +
+	if (!(hkAbsF(hkAbsF((*(volatile float*)&m_basisB.m_axle.x) * m_basisB.m_perp2FreeAxis.x +
 	                     (m_basisB.m_perp2FreeAxis.y * m_basisB.m_axle.y +
 	                      m_basisB.m_perp2FreeAxis.z * m_basisB.m_axle.z))) < 1e-05f))
 	{

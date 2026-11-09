@@ -425,8 +425,8 @@ double Sound::GetDoubleC8() {
 // @ 0x00A1AE50
 double Sound::AttnHelper() {
     typedef double (__thiscall* AttnFn)(void*, float, float, float, float, float);
-    double a = ((AttnFn)VtOf(this)[0xa8 / 4])(this, mf48, mf50, mf54, mf58, mf98);
-    return a * mf5c;
+    void** vt = VtOf(this);
+    return ((AttnFn)vt[0xa8 / 4])(this, mf48, mf50, mf54, mf58, mf98) * mf5c;
 }
 
 // =====================================================================================

@@ -15,6 +15,7 @@ extern const float kColorScale;                      // 0x1465434 = 255.0f
 extern int g_16881e8;                                 // 0x16881e8
 extern int g_ResourceNodesDirty;                      // 0x16881ec
 #include <xmmintrin.h>
+#include <intrin.h>
 #include "SP/cGameNounManager.h"
 #include "cSPUILayout.h"
 #include "SP/cSPUINewProgressBar.h"
@@ -4245,10 +4246,11 @@ void HeapSort(SortEntry* begin, SortEntry* end, int cmp)
 // @ 0x00d3b4e0
 void* cContentValidationSummarizer::ScalarDeletingDestructor(unsigned int flags)
 {
-    mpVtbl = &vtbl_cContentValidationSummarizer_0147abec;
+    *(void* volatile*)this = (void*)0x0147abec;
+    _ReadWriteBarrier();
     if (mpArray != 0 && mpArray[-1] != 0)
         operator_delete_array(mpArray);
-    mpVtbl = &vtbl_cContentValidationSummarizer_013ec458;
+    *(void* volatile*)this = (void*)0x013ec458;
     if (flags & 1)
         operator_delete_array(this);
     return this;

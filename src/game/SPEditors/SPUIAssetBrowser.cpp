@@ -2019,8 +2019,8 @@ void SP::cSPUIAssetBrowser::PreloadTextures()
         AT(TexturePreload*, 0x218) = tp;
         if (old) old->Release();
     }
-    for (ResourceKey* k = keys; k < keys + 8; ++k)
-        AT(TexturePreload*, 0x218)->PreloadTextureList(k);
+    for (int i = 0; i < 8; ++i)
+        AT(TexturePreload*, 0x218)->PreloadTextureList(&keys[i]);
 }
 
 // @ 0x00645160

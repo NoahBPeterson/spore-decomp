@@ -1225,7 +1225,8 @@ bool FUN_00d90b20(cSPCreatureCitizen_s00d9_0640* p, void* a2, void* a3, uint32_t
     pOut->m18 = 0;
     if (p->mf5E0 <= 1.5258789e-05f) {
         FUN_00b3d310(&p->mLoco)->FUN_00b45410();
-        p->Flag8c();
+        cSPCreatureCitizen_s00d9_0640* q = p;
+        q->Flag8c();
         pOut->mf0C = 10.0f;
         pOut->mf14 = 1.5f;
         pOut->m18 = 0;
@@ -2051,8 +2052,7 @@ void FUN_00d9b610(Creature* self, int a, int b, int c2, int d, void* p)
     self->FUN_00c14750(!r);
     int x = *(int*)((char*)p + 0x18);
     int y = *(int*)((char*)p + 0x1c);
-    int z = x | y;
-    if (z != 0) {
+    if ((x | y) != 0) {
         self->mpBehaviorTreeData->mStimuli.ClearAll(x, y);
     }
     (void)a;(void)b;(void)c2;(void)d;

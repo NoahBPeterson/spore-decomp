@@ -1793,8 +1793,13 @@ struct IRefCount_s00bc_a040 {
     virtual void Release();                     // vtbl+0x04
     virtual void vtbl08();                      // vtbl+0x08
     virtual void* QueryInterface(unsigned id);  // vtbl+0x0c
+    virtual void vtbl10();                      // vtbl+0x10
+    virtual void vtbl14();                      // vtbl+0x14
+    virtual void vtbl18();                      // vtbl+0x18
     virtual void vtbl1c(void* a);               // vtbl+0x1c
-    virtual void vtbl20();
+    virtual void vtbl20();                      // vtbl+0x20
+    virtual void vtbl24();                      // vtbl+0x24
+    virtual void vtbl28();                      // vtbl+0x28
     virtual int  vtbl2c();                      // vtbl+0x2c
 };
 struct IVtbl2c {
@@ -3167,7 +3172,10 @@ void ElemVec::resize(unsigned n)
 {
     if (n > size()) {
         Elem98_s00bc_4730 tmp;
-        tmp.init();
+        tmp.mpBegin = tmp.mBuffer;
+        tmp.mpEnd = tmp.mBuffer;
+        tmp.mpCapacity = tmp.mBuffer + 8;
+        tmp.mAllocator[2] = 0;
         insert(mpEnd, n - size(), &tmp);
         freeBuf(tmp.mpBegin);
     } else {
@@ -4546,9 +4554,9 @@ void __cdecl Grid_FlushPending(char flag, unsigned a2, char* obj, unsigned a4, d
     }
     *(unsigned*)(obj + 0x55) = 0;
     if (flag) {
-        unsigned tmp = *(unsigned*)(obj + 0x4d);
-        *(unsigned*)(obj + 0x4d) = *(unsigned*)(obj + 0x51);
-        *(unsigned*)(obj + 0x51) = tmp;
+        unsigned tmp = *(unsigned*)(obj + 0x51);
+        *(unsigned*)(obj + 0x51) = *(unsigned*)(obj + 0x4d);
+        *(unsigned*)(obj + 0x4d) = tmp;
         *(unsigned*)(obj + 0x55) = a2;
         return;
     }

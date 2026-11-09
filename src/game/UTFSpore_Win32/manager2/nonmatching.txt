@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00957d40 4 WindowMgr::PostAPC: complete (APC record {tag 0x74d2e9, a, b}, call slot 0x18); fixed 2026-10-12: tag at +8 of the record (was +0x10; the "off by 8" was the bug, hybrid crash 0x959bd7); difftest PASS
 00957dd0 116 Fn00957dd0: complete (window proc: walk window tree, resolve target, dispatch); regalloc/jump layout differ; difftest PASS (394 valid, 100.0% coverage)
 00957e90 50 Fn00957e90: complete (set/clear slot idx if stored==arg-4, notify slot 0x58); regalloc differ; difftest PASS (322 valid, 72.2% coverage)
 00958070 62 Fn00958070: complete (mark node flags from point); regalloc/order differ; difftest WEAK (272 valid, 21.1% coverage)
@@ -7,8 +6,6 @@
 00958640 98 DumpDisplayList: complete (splice pending nodes, reset display list, recycle nodes); regalloc/order differ; difftest WEAK (309 valid, 20.0% coverage)
 00958780 30 WindowMgr::DebugDumpDisplayList: complete (lock +0x28, pending-flag guard, lock +0x70, DumpDisplayList); bool test idiom + tail-call differ; difftest WEAK (238 valid, 50.0% coverage)
 009587d0 27 Fn009587d0: complete (unlink node, fix intrusive list at this+0x20 else this+0x18); regalloc differ; difftest WEAK (303 valid, 58.1% coverage)
-00958860 1 Fn00958860: complete (guard flags&0x40, insert node, mark successors 0x80); 1 byte differs (js vs jl on sign test); difftest PASS (394 valid, 100.0% coverage)
-009588c0 1 Fn009588c0: complete (guard flags&0x20, insert node, mark successors 0x80); 1 byte differs (js vs jl on sign test); difftest PASS (394 valid, 100.0% coverage)
 00958cf0 521 WindowMgr ctor complete; member-init list order/hoisting (lea before GetAlloc call) differs; difftest PASS (fix: Mutex/Typesetter ctor annotations moved onto the ctor declarations) flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 00958fa0 123 SendModifiedMsg complete; the original's dispatch window and msg.dst are the SECOND stack argument (mov ebp,[esp+0x30]; ebp = w-4, msg.dst = ebp+4) while msg.src is the first, so the model's parameter names are swapped to IWin* src, IWin* w, Msg* m. Remaining diff is register/scheduling allocation (this kept in eax vs edx; msg.dst store inside the branch vs sunk after the hook load). equiv: replay clean; sweeps UNSUPPORTED (0/800 seed 1, 0/400 seed 7 valid: generated this/hook state faults the original) flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 009594b0 152 PopFocus complete; original reloads cur member (no CSE) and different branch layout flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

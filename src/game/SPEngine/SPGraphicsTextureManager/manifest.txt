@@ -12,3 +12,4 @@
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?GetE@RefHolder@@QAEIXZ  008332d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?CreateNode@TexTable@@QAEPAUTexNode@@PBX@Z  008337d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?Dtor@TexMgr@@QAEXXZ  00833a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?Clear@TexTable@@QAEXPAPAUTexNode@@I@Z  00833a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

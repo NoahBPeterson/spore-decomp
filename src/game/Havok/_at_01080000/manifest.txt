@@ -47,3 +47,5 @@
 ../src/game/Havok/_at_01080000.cpp  ?getRuntimeInfo@hkStiffSpringConstraintData@@UBEXVhkBool_s0108_eb30@@AAURuntimeInfo@@@Z  0108f8d0  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
 ../src/game/Havok/_at_01080000.cpp  ?isValid@hkStiffSpringConstraintData@@UBE?AVhkBool_s0108_eb30@@XZ  0108f900  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
 ../src/game/Havok/_at_01080000.cpp  ?getRuntimeInfo@hkStiffSpringChainData@@UBEXVhkBool_s0108_eb30@@AAURuntimeInfo@@@Z  0108fae0  /vc71 /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/Havok/_at_01080000.cpp  ??1hkWorldObject_s0108_2350@@UAE@XZ  01082770  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01080000.cpp  ?deletingDtor@hkNullContactMgrFactory@@QAEPAXI@Z  01082cf0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

@@ -470,7 +470,7 @@ void cTerrainSphere::RenderAtmosphere(uint32_t a, uint32_t b)
         int off = 0;
         uint32_t cnt = n;
         do {
-            char* e = (char*)mpQuad3Begin + off;
+            char* e = (char*)mpQuad3Begin; e += off;
             ((tq2)(void*)&FUN_00fb6cd0x)(*(void**)e, mpViewer, a, b);
             off += 0x10;
         } while (--cnt);

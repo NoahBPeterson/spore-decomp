@@ -2303,6 +2303,7 @@ cUITimedTooltip::cUITimedTooltip()
 // @ 0x00e364d0
 cUITimedTooltip::~cUITimedTooltip()
 {
+    _ReadWriteBarrier();
     if (m_pWindow != nullptr)
         m_pWindow->Release1();
     if (m_pLayout != nullptr)

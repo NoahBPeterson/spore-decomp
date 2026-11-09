@@ -1,6 +1,5 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
 007d85b0  n/a  SP::cApp::ApplyAppMode; complete (leave old mode, set index, send 2 app-mode messages, enter new mode), MessageBasicRC/EH schedule differs
-007d8830  2    cAppModeInfo::operator=; complete, only the string assign's source-end load uses [ebp+0xc] instead of [eax+4]; equiv: PASS (455 valid inputs, 100% coverage)
 007d8ab0  n/a  `anonymous namespace'::cAppModeCheat::Execute; complete (find-by-name, list flag, current-mode print + no-such-mode throw), vtable/EH schedule differs
 007d8c30  70   SP::cApp::SetAppMode(unsigned); complete linear search + ApplyAppMode, count caching picks esi instead of original edx
 007d8d40  n/a  SP::cApp::~cApp; complete (vtables, viewer release, mAppModes vector dtor, base vtable restore), EH prologue/vtable store order differs

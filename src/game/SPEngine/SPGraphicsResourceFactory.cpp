@@ -2169,8 +2169,8 @@ Ctor764760* Ctor764760::Init(uint32_t v)
 {
     InitBlk(&blk0);
     InitBlk(&blk1);
-    p74 = p78 = 0;
     p70 = v;
+    memset(&p74, 0, 8);
     return this;
 }
 
@@ -2208,8 +2208,9 @@ bool Loader::Complete(char* a)
         GetAsyncMgr()->RequestComplete(r1c, 0);
         return false;
     }
-    GetAsyncMgr()->RequestComplete(r1c, p14);
     void* q = p14;
+    GetAsyncMgr()->RequestComplete(r1c, q);
+    q = p14;
     return FUN_6ae2f0(a, q);
 }
 

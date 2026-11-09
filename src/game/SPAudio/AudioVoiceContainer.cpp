@@ -660,7 +660,8 @@ bool VoiceContainer_s00a3_3ee0::Disconnect()
                 if (((rw::audio::core::PlugInConfig_s00a3_3ee0*)((char*)mChain.mpBegin + off))->plugInHandle->guid == kGuidSend) {
                     uint32_t id = *(uint32_t*)(k + (int)mpSendBegin);
                     k += 4;
-                    ok &= DisconnectFromSubmix(id, mppPlugins[i]);
+                    rw::audio::core::PlugIn_s00a3_3ee0* plug = mppPlugins[i];
+                    ok &= DisconnectFromSubmix(id, plug);
                 }
                 off += 0xc;
                 ++i;

@@ -20,7 +20,6 @@
 00fe4d60 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 283 bytes - badge manager helper not reconstructed.
 00fe4e80 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 283 bytes - badge manager helper not reconstructed.
 00fe4fa0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1167 bytes - cSPBadgeManager constructor not reconstructed.
-00fe5430 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 149 bytes - badge manager helper not reconstructed.
 00fe5520 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 144 bytes - GetBadgeImageKey not reconstructed.
 00fe55b0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1133 bytes - TestRequirement not reconstructed.
 00fe5a20 1528 UnlockBadge: complete (all paths, calls and vtable slots checked in order against the original; 91 calls each); badge stays in memory vs ebp in the original, so register allocation and block layout differ (size 2056 vs 2032). equiv.py: UNSUPPORTED (0/400 valid inputs). flags: /O2 /MD /Gy /TP

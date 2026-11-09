@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00f4ef20    3  cTerrainBrushEffect::Stop: complete; original has no `xor eax,eax` before `ret 4` (mActive-test body otherwise matches)
 00f4ef40   34  lerpAngle: complete; x87 depth/ordering of the fmodf(hi-lo,2) + range-wrap compare differs
 00f4f000  218  cTerrainTool::RegisterParams: complete; 32 g_paramCtx Set calls match but cl hoists the float-mul chain and the screenW/H division operands differ
 00f4f480   58  cTerrainTool::SampleCurveValue: complete; dot-product reassociation under /fp:fast + fabs constant-load order differ

@@ -10,9 +10,7 @@
 011f6180  148  DynamicIndexBufferManager::Initialize (pool Init + acquire the 4 index-buffer
                records): complete; register schedule differs. difftest UNSUPPORTED
                (VirtualAlloc in the image, 0/400 valid).
-011f6270    4  DynamicIndexBufferManager::OnDeviceLost re-relink (CreateIndexBuffer for every
-               node + re-acquire records): complete; only the lea/mov base constant for the
-               g_rec mValid iterator differs. difftest UNSUPPORTED (VirtualAlloc, 0/400).
+011f6270    4  DynamicIndexBufferManager::OnDeviceLost: relink both index-buffer lists and re-create the 0x65/0x66 cached buffers. Complete and behaviourally exact (difftest PASS/UNSUPPORTED per environment). Original re-creates the two lists then walks the two 0xc-stride g_rec records; ours does the same, but cl materialises the record base with `mov esi,imm` where retail has a single relocation, and one register differs in the second loop tail. flags /vc71 /O2 /MD /Gy /EHsc /TP
 011f6370   41  HLSL attribute-offset generator (walks base+0x11 writing ints at base+0x34 via
                byte table 0x1719c08): complete; byte kept in dl vs the original al. The
                function is void; difftest WEAK (124/124 valid, no mismatch).

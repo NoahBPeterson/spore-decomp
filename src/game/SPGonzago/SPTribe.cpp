@@ -691,7 +691,9 @@ virtual void v09c();
 
     uint8_t         pad004[0x11c];                       // +0x004 .. +0x11f
     cPositionSource mPosition;                           // +0x120
-    uint8_t         pad124[0x214];                       // +0x124 .. +0x337
+    uint8_t         pad124[0x210];                       // +0x124 .. +0x333
+    bool            mb334;                               // +0x334
+    uint8_t         pad335[3];                           // +0x335 .. +0x337
     int32_t         mPointerCount;                       // +0x338
     bool            mPointersDirty;                      // +0x33c
     uint8_t         pad33d[3];                           // +0x33d .. +0x33f
@@ -702,7 +704,7 @@ virtual void v09c();
     uint8_t         pad36c[0x1664];                      // +0x36c .. +0x19cf
     cNounRef*       mpAttachedNoun;                      // +0x19d0
 
-    void  UpdateRoboTribeness(float amount);  // 0x00c8fbb0 (SP::cTribe::UpdateRoboTribeness)
+    void  UpdateRoboTribeness();  // 0x00c8fbb0 (SP::cTribe::UpdateRoboTribeness)
     tVec3* GetCenter(tVec3* pOut);  // 0x00c8fcc0 (SP::cTribe::GetCenter)
     tVec3* GetPoliticalCenter(tVec3* pOut);  // 0x00c8fcf0 (SP::cTribe::GetPoliticalCenter)
     void* GetChieftain();  // 0x00c8fd30 (SP::cTribe::GetChieftain)
@@ -1506,7 +1508,7 @@ public:
     void FUN_00c92bd0(int** p);             // push-like
 };
 struct V4 { uint32_t v0, v1, v2, v3; };
-extern "C" void __cdecl FUN_00c908a0(void* local, V4 a, V4 b, V4 c);
+extern "C" cPointerBlockIter* __cdecl FUN_00c908a0(void* local, V4 a, V4 b, V4 c);
 class Thing {
 public:
     uint32_t f00, f04, f08, f0c, f10, f14, f18, f1c, f20, f24; // 0x00..0x27
@@ -4325,8 +4327,21 @@ cPointerVector* cPointerVector::Init(int32_t nCount, int32_t nUnused)
 }
 
 // @ 0x00c8ed90
-cPointerBlockIter* FUN_00c8ed90(cPointerBlockIter* pOut, void** pCurrent, void* pA3, void** pEnd, void** ppBlock, void** pStop, void* pA7, void* pA8, void* pA9, void** pBlockCur, void** pBlockBegin, void** pBlockEnd, void** pBlockIt)
+cPointerBlockIter* FUN_00c8ed90(cPointerBlockIter* pOut, V4 a, V4 b, V4 c, void* pExtra)
 {
+    (void)pExtra;
+    void** pCurrent = (void**)a.v0;
+    void*  pA3 = (void*)a.v1;
+    void** pEnd = (void**)a.v2;
+    void** ppBlock = (void**)a.v3;
+    void** pStop = (void**)b.v0;
+    void*  pA7 = (void*)b.v1;
+    void*  pA8 = (void*)b.v2;
+    void*  pA9 = (void*)b.v3;
+    void** pBlockCur = (void**)c.v0;
+    void** pBlockBegin = (void**)c.v1;
+    void** pBlockEnd = (void**)c.v2;
+    void** pBlockIt = (void**)c.v3;
     pOut->mpBegin = pBlockBegin;
     pOut->mpCur = pBlockCur;
     pOut->mpEnd = pBlockEnd;
@@ -4775,9 +4790,24 @@ void cTribe::FUN_00c8fb50()
 
 // @ 0x00c8fbb0
 namespace SP {
-void __thiscall cTribe_s00c8_fbb0::UpdateRoboTribeness(float amount)
+void __thiscall cTribe_s00c8_fbb0::UpdateRoboTribeness()
 {
-    (void)amount;
+    if (mb334)
+        return;
+    if ((uint32_t)FUN_00b5b800() + (-0x01654c01) <= 1)
+        return;
+
+    int32_t count;
+    if (mb334 && !mPointersDirty) {
+        count = mPointerCount;
+    } else {
+        cPointerVector_s00c8_fbb0* pList = GetPointerList();
+        count = (int32_t)(pList->mpEnd - pList->mpBegin) >> 2;
+    }
+    while (mpPointerStackBegin != mpPointerStackEnd)
+        ClearPointer(*(mpPointerStackEnd - 1));
+    mPointerCount = count;
+    mb334 = 1;
 }
 }  // namespace SP
 
@@ -4893,12 +4923,13 @@ void __fastcall FUN_00c905c0(cTribe_s00c8_fbb0* this_, int unused)
 }  // namespace SP
 
 // @ 0x00c908a0
-namespace SP {
-void __fastcall FUN_00c908a0(cTribe_s00c8_fbb0* this_, int unused)
+cPointerBlockIter* FUN_00c908a0(void* local, V4 a, V4 b, V4 c)
 {
-    (void)this_;
+    void* extra = local;
+    cPointerBlockIter* p = (cPointerBlockIter*)local;
+    FUN_00c8ed90(p, a, b, c, extra);
+    return p;
 }
-}  // namespace SP
 
 // @ 0x00c90920
 namespace SP {
@@ -5993,8 +6024,11 @@ cFishingHotSpot* findHotSpot(u32 key)
 {
   HotSpotRow* end = g_HotSpotEnd;
   HotSpotRow* it = HotSpotLowerBound(g_HotSpotBegin, end, &key, g_HotSpotLess);
-  if (it != end && key >= it->mKey && it != &it[1])
-    return &it->mSpot;
+  if (it != end && key >= it->mKey) {
+    HotSpotRow* stop = &it[1];
+    if (it != stop)
+      return &it->mSpot;
+  }
   return 0;
 }
 

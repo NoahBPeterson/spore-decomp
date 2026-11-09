@@ -7,7 +7,6 @@
 00c70b50 34  cPlanet::IsHomePlanet: complete (GetAvatar/StarManager/GetEmpireByID/GetHomePlanet). Byte diff 34. difftest WEAK 389 valid / 51.9% coverage.
 00c70d70 96  cPlanet::PlantSpeciesToTypeIndex: complete. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest PASS 348/100%.
 00c70e20 318  cPlanet::DistanceToAvatar: complete (3 sqrt modes + release). x87 codegen: the original uses fld/fmul/fsqrt, so this function must be built without /arch:SSE2. flags /O2 /MD /Gy /EHsc /TP /arch:IA32 /fp:fast. Byte diff 318 with IA32. difftest WEAK 376 valid / 59.3% coverage (clean under IA32; the SSE2 build instead clobbers xmm0).
-00c70fb0 4  cPlanet::RefreshTerraforming: complete (global TerraformingManager + F670 call). Only a jmp-vs-call tail difference. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest UNSUPPORTED (F670 unmapped).
 00c71040 99  cPlanet::FindByAccessFlags: complete (scan b8dec0 objects, compare GetAccessFlags). difftest PASS 362/100%.
 00c710c0 10  vector count (mp160-mp15C>>2): complete. Original keeps an extra `add ecx,0x15c`. difftest PASS 400/100%.
 00c71120 10  vector count (mp174-mp170>>2): complete. Same extra-lea difference. difftest PASS 400/100%.

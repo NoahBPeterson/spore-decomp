@@ -12,3 +12,4 @@
 ../src/game/SPEditors/_at_005a0000.cpp  ?SetEnabled@cHandleish@@QAEX_N@Z  005a8a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_005a0000.cpp  ??0cSPEditorHandleSpine_s005a_7d00@SP@@QAE@XZ  005a8ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_005a0000.cpp  ?UpdateModelTransforms@cSPEditorRigblockModel@SP@@QAEXXZ  005a8d20  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005a0000.cpp  ?ZoomBy@Cam@@QAEXM@Z  005a2200  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

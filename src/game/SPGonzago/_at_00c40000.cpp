@@ -17,6 +17,7 @@
 #include "SP/cGameNounManager.h"
 #include "SP/cSpeciesProfile.h"
 #include "SP/cTribe.h"
+#include <intrin.h>
 
 // ---- items of slice s00c4a850 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct ResourceKey {
@@ -723,7 +724,7 @@ void cSPMissionBiosphere::GetPropertyInstance(void* key, int* out)
 }
 
 // @ 0x00c4dbf0
-void __fastcall FUN_00c4dbf0(void* ecx_this, void* edx)
+void* __fastcall FUN_00c4dbf0(void* ecx_this, void* edx)
 {
     ((SP::ThisStubs*)ecx_this)->A();
     int zero = 0;
@@ -734,9 +735,11 @@ void __fastcall FUN_00c4dbf0(void* ecx_this, void* edx)
     *(void**)ecx_this = (void*)0x146dd58;
     *(void**)((char*)ecx_this + 4) = (void*)0x146dd44;
     *(void**)((char*)ecx_this + 0x34) = (void*)0x146dd34;
-    *(int*)((char*)ecx_this + 0x200) = zero;
-    *(int*)((char*)ecx_this + 0x204) = zero;
-    *(int*)((char*)ecx_this + 0x208) = zero;
+    _ReadWriteBarrier();
+    *(void**)((char*)ecx_this + 0x200) = (void*)zero;
+    *(void**)((char*)ecx_this + 0x204) = (void*)0;
+    *(void**)((char*)ecx_this + 0x208) = (void*)0;
+    return ecx_this;
 }
 
 // @ 0x00c4dca0

@@ -10,7 +10,7 @@
 00968c10 27 GetValue /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 317/317
 00968c50 106 SetCurrentSelection /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 369/369
 00968da0 396 complete (((int*)this)[i+5] renderable dispatch + DrawStdButton/UV-quad paths) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (312 valid, 18.3% cov); size 548 vs 600, structural: MSVC vectorized the switch into a jump table the decompiler cannot reproduce from plain C
-00969000 4 complete (ComboBoxDrawable ctor; only base-vptr store interleaving differs) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (400 valid, 100% cov); residual 4 bytes are store-scheduling (docs §15/§16)
+00969000 4 complete (ComboBoxDrawable ctor; only base-vptr store interleaving differs) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (400 valid, 100% cov); residual 4 bytes are store-scheduling (docs §15/§16). 2026-11: with the polymorphic bases the compiler injects a vftable *symbol* store (relocation) for +4, which the fingerprint rejects; the class is now laid out as a plain 7-int struct, stores use literal addresses, and barriers keep both ResourceAsync stores. What remains: VC9 CSEs the two identical literals into one `mov edx,imm` + two register stores (48 B) where retail has two `mov [mem],imm` (51 B).
 00969060 15 complete (BasicFactory_ComboBoxDrawable::CreateInstance) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (unresolved ?g_szComboBoxDrawable@@3QBDB); size 74 vs 94
 009690c0 475 complete (WinComboBox::OnRebuild) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid; _decode_pointer + read faults on fabricated ctx); size 573 vs 666
 00969360 249 complete (WinComboBox::FindValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (309 valid, 94.3% cov); size 261 vs 239, structural loop-shape mismatch in the specialized string compare
@@ -19,5 +19,4 @@
 00969650 283 complete (WinComboBox::CalcSize) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (223 valid, 26.4% cov); size 436 vs 526, LayoutParagraph result plumbing simplified
 00969870 59 complete (WinComboBox::SetValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (230 valid, 89.3% cov); register/expression scheduling only
 00969920 41 complete (WinComboBox::RemoveValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (285 valid, 100% cov); signed/unsigned compare + branch polarity only
-00969950 4 complete (WinComboBox::AddValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (252 valid, 100% cov); residual 4 bytes are stack-frame size (0x10 vs 0xc), not source-controllable
 009699d0 88 complete (WinComboBox::InsertValue) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (232 valid, 88.9% cov); frame size + signed-vs-unsigned compare

@@ -11,7 +11,7 @@
 0095df60 138 Mat3 x vec3 transform: original builds Vec4 row temporaries on stack (spill/reload schedule); now returns the destination pointer (arg0) that the original leaves in eax; equiv PASS (400 valid, 100% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0095e810 71 Mat4::SetScaleTranslate: original copies Vec3 via movss, mine uses fld/fstp flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0095e890 296 Mat4::Translate: original uses Vec4 temp (w*vec4(x,y,z,0)) store pattern flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-0095ea30 4 Mat4::Scale: operand order of the first mulss pairs flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+0095ea30 4 Mat4::Scale: only m[1]/m[2] differ -- retail loads `s[1]`/`s[2]` into xmm0 then `mulss` with `m[1]`/`m[2]`; cl loads the destination (`m[1]`/`m[2]`) first even when the source is written `s[k] * m[k]` (commutative operand canonicalization). m[0] and all later entries already match. flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0095eb00 213 Mat4::RotateX: original loads all column values to locals before fsin/fcos flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0095ec30 222 Mat4::RotateY: same local-spill pattern flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0095ed60 190 FIXED: /fp:fast gives inline x87 fsin/fcos; a volatile pad forces a 0x24 frame so the compiler does not reuse the saved ecx slot for a float spill; default PASS (400 valid, 100% coverage), replay first-difference None; size 210 vs 222 flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

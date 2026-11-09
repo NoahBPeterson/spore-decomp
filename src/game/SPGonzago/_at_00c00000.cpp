@@ -6,6 +6,7 @@
 #include "SP/cSPCreatureBase.h"
 #include "SP/cVarListSerializer.h"
 #include <math.h>
+#include <intrin.h>
 #include "SP/cPlanetModel.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -982,7 +983,9 @@ void __fastcall FUN_00c061b0(void* self)
 // @ 0x00c06340
 void CB::RankForward(int param_2)
 {
-    (*(void(__thiscall**)(CB*, int))((*(void***)this)[0x3c / 4]))(this, param_2);
+    typedef void (__thiscall* Fn)(CB*, int);
+    volatile Fn fn = (Fn)(*(void***)this)[0x3c / 4];
+    fn(this, param_2);
 }
 
 // @ 0x00c0de30

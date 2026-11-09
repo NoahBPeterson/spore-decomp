@@ -442,8 +442,7 @@ bool Cam::OnMouseUp(int a, float x, float y, int b)
 // @ 0x005a2200
 void Cam::ZoomBy(float factor)
 {
-    float one = kOne_1485720;
-    float f = (factor + one) * m38;
+    float f = (factor + 1.0f) * m38;
     m38 = f;
     float t = m5c;
     if (f > t)

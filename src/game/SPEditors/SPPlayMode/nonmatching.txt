@@ -1,14 +1,13 @@
 # va  diff-bytes  reason
 00628ca0 128 cAppModeEditorBase::SendButtonEventToBabies; complete, original keeps the vector base pointer in esi and recomputes element addresses
 00628f10 142 SetMomToFaceBaby: complete; V3 temp/stack layout differs (orig frame 0x48, mine 0x3c)
-00629220 2 SetAllBabySitUp: complete; only [edi+eax] vs [eax+edi] address operand order
+00629220 2 SetAllBabySitUp: complete; only the two stores' SIB base/index order differs ([edi+eax] retail vs [eax+edi] mine). Tried writes via b->state/b->timer (133B, worse), Baby& ref (133B, 27), i[mpBegin], signed int index (137B); all keep the swapped SIB.
 006292b0 18 SetAllOtherBabiesToIdle: complete; ebx/edi register swap for id vs vector ptr
 006294e0 113 SetBabyCelebrationAnim: complete; orig keeps float result slot on stack and recomputes end-begin
-00629590 4 SwitchToCrouchAnim: complete; locals order (mom/baby V3 slot order, z-first sum)
-006296e0 4 ForceBabiesToIdle: complete; [ecx+edi] address operand order
+006296e0 4 ForceBabiesToIdle: complete; [ecx+edi] address operand order (mpBegin as base in retail); tried (char*)b+off, which also encodes the offset first
 00629960 85 UpdateBabyButtonEventState: complete; reg alloc/evaluation order of mgr vs id
-00629a90 4 BabiesReachedTargetAngle: complete; id lives in eax not esi
-00629b30 4 SetAllBabyRotateSpeeds: complete; id lives in eax not esi
+00629a90 4 BabiesReachedTargetAngle: complete; IDAt result in eax (retail) vs esi (mine). Tried while->for, inlining the IDAt call into the argument expression, and an IDAt body without the local `Baby* b`; all still use esi.
+00629b30 4 SetAllBabyRotateSpeeds: complete; IDAt result in eax (retail) vs esi (mine); same IDAt experiments as 00629a90.
 0062a360 101 HasActivePath: complete; ss/vector loop and the float/byte flag tests are scheduled differently; equiv: FAIL (5/5 mismatched, now a member; source layout differs: reads this+0x3610 vs orig this+0x7c)
 0062a7f0 88 OnMouseDown: complete; virtual slot-6 dispatch loop over the 4 sub-modes differs; equiv: FAIL (5/5 mismatched at first call; now a member)
 0062ab80 42 SetAllBabySitState: complete; loop shape and the SetBabySitState thunk call differ; equiv: FAIL (5/5 mismatched; now a member)

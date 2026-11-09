@@ -24,6 +24,7 @@
 ../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?copy@SP@@YAPAUPageUIEntry_s005c_2d30@1@PAU21@00@Z  005c3610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?copy_backward@SP@@YAPAUPageUIEntry_s005c_2d30@1@PAU21@00@Z  005c3680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?HandleMessage@cSPPaletteCategoryUI_s005c_2d30@SP@@QAE_NIPAX@Z  005c36f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?OnPageChanged@cSPPaletteCategoryUI_s005c_2d30@SP@@QAEXHH@Z  005c3a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?SetPageIndex@cSPPaletteCategoryUI_s005c_2d30@SP@@QAE_NH@Z  005c3bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?CyclePage@cSPPaletteCategoryUI_s005c_2d30@SP@@QAE_NH@Z  005c3c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ??0cSPPaletteCategoryUI_s005c_3cb0@SP@@QAE@XZ  005c3e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

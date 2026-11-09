@@ -51,7 +51,8 @@ class RefCountTemplate { public:
     int mnRefCount;
     int Release()
     {
-        int n = mnRefCount - 1;
+        int n = mnRefCount;
+        n += -1;
         mnRefCount = n;
         if (n == 0) {
             mnRefCount = 1;

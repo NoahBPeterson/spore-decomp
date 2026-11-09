@@ -258,7 +258,7 @@ class MissionStub {
 public:
     void  SetSerializer();
     char  FUN_00c2e4b0();
-    int   FUN_00c2e4f0(int param);
+    char  FUN_00c2e4f0(int param);
     void  FUN_00c2e780();
     void  FUN_00c2e820();
     void  FUN_00c2e980();
@@ -319,13 +319,12 @@ void MissionStub::SetSerializer()
 }
 
 // @ 0x00c2e4f0
-int MissionStub::FUN_00c2e4f0(int param)
+char MissionStub::FUN_00c2e4f0(int param)
 {
     char* self = (char*)this;
-    void** vt = *(void***)self;
-    int r = ((int(__fastcall*)(void*))vt[0xc0 / 4])(self);
+    int r = ((int (__thiscall*)(void*))((*(void***)self)[0xc0 / 4]))(self);
     if (r != 0)
-        return SP_GetPropertyAsKey(r, (int)0xff60c676, param);
+        return (char)SP_GetPropertyAsKey(r, (int)0xff60c676, param);
     return 0;
 }
 
@@ -410,7 +409,8 @@ unsigned char MissionStub::FUN_00c2e6c0(int param_2)
 void MissionStub::FUN_00c2e780()
 {
     char* p = (char*)this + 0x80;
-    FUN_004df550_s00c2_e420(FUN_00401090(p));
+    ((ThiscallStub*)FUN_00401090(p))->FUN_004df550();
+    _ReadWriteBarrier();
 }
 
 // @ 0x00c2e7b0

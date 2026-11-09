@@ -181,7 +181,7 @@ struct cSpatialObject {
     virtual void Vdc(void* out);                                   // +0xdc
     PV(38)
     virtual void Ve4(const Vector3& v, float f);                   // +0xe4
-    PV(3b)
+    virtual void Ve8(const Vector3* p);                            // +0xe8
     virtual void Vec();                                            // +0xec
 };
 struct cGameData {
@@ -489,6 +489,11 @@ static inline void* CallVArgP(void* obj, int slot, int arg)
 {
   return ((FnVP)(*(VTable**)obj)->p[slot / 4])(obj, arg);
 }
+typedef void (__thiscall* FnVFP)(void*, const void*, float);
+static void CallVFloatArg(void* obj, int slot, const void* p, float f)
+{
+  ((FnVFP)(*(VTable**)obj)->p[slot / 4])(obj, p, f);
+}
 struct Vector24 {
   uint8_t   mPad00[0x24];
   uint32_t* mpBegin;          // +0x24
@@ -520,6 +525,7 @@ struct Brain {
 struct NounManagerObj {
   void RemoveNoun(uint32_t noun);       // 0x00b225d0
 };
+extern "C" void FUN_00ca71d0();         // Brain* GetBrain(this)
 struct BehaviorObj {
   uint8_t   mPad00[0x10];     // +0x000
   uint32_t* mpNouns;          // +0x010
@@ -556,7 +562,7 @@ struct BehaviorObj {
   uint8_t   mPadB5c[0x20];    // +0xb5c
   void*     mpObjB7c;         // +0xb7c
 
-  Brain* GetBrain();                            // 0x00ca71d0
+  Brain* GetBrain() { return ((Brain* (__thiscall*)(BehaviorObj*))(void*)FUN_00ca71d0)(this); }  // 0x00ca71d0
   void*  GetNearby();                           // 0x00c9fee0
   void   FUN_00cacbe0();                        // 0x00cacbe0
   void   RemoveNouns();                         // 0x00dcc2c0
@@ -605,6 +611,7 @@ void*  FUN_00dcc440(BehaviorObj* self, int specialty, void* exclude); // 0x00dcc
 uint8_t FUN_00dcc0a0(BehaviorObj* self, StateCtx* ctx, float dt); // 0x00dcc0a0
 void   FUN_00dcc610(BehaviorObj* self);                 // 0x00dcc610
 uint8_t StandardVehicleMoveTick(BehaviorObj* self);     // anonymous namespace
+extern "C" float DAT_013f1164;                          // 0x013f1164  move-point height constant
 // ---- items of slice s00dcb8e0 end
 
 // ---- items of slice s00dcc830 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -650,6 +657,12 @@ public:
 
     // Body of the vehicle-group-order base destructor (0x00b22180).
     void DestroyBase();
+};
+}
+namespace SP {
+class cVehicleTree_s00dc_b8e0 {
+public:
+    void MoveToPointOrder_Activate();
 };
 }
 namespace SP {
@@ -2611,9 +2624,9 @@ void* FUN_00dc4ed0(float* pMin, float* pRange, Obj* self, Obj* other)
 char FUN_00dc4f90(Obj* self)
 {
     Obj* t = ((AnimCtx*)self->Ca71d0())->mpTarget;
-    if (t) {
+    if (t != 0) {
         Obj* target = (Obj*)((VfnPI)t->mpVtbl->mSlots[kVt0C])(t, 0x13f94d4);
-        if (target) {
+        if (target != 0) {
             Obj* ctx = self ? (Obj*)&self->mSub508 : 0;
             if (IsValidFireTarget(ctx, target)) {
                 if (((VfnB)self->mSub34.mpVtbl->mSlots[kVt50])(&self->mSub34)) {
@@ -3974,7 +3987,7 @@ void BehaviorObj::AddFeedback(void* event)
 }
 
 // @ 0x00dcc440
-void* FUN_00dcc440(BehaviorObj* self, int specialty, void* exclude)
+__declspec(noinline) void* FUN_00dcc440(BehaviorObj* self, int specialty, void* exclude)
 {
   if (self->mpObj508 == 0)
     return 0;
@@ -4114,32 +4127,179 @@ void __thiscall cVehicleTree::TradeWithCityOrder_Tick()
 }  // namespace SP
 
 // @ 0x00dcce90
+extern "C" void* FUN_00bc96a0();   // 0x00bc96a0 PlayIdleAnimation
 namespace SP {
-void __thiscall cVehicleTree::OfferToBuyCityOrder_Activate()
+struct Out_s00dcce90 {
+    uint32_t mf0;      // +0x00
+    float    mf4;      // +0x04
+    float    mf8;      // +0x08
+    uint32_t mf0c;     // +0x0c
+};
+bool __cdecl FUN_00dcce90(BehaviorObj* self, Out_s00dcce90* out)
 {
+    if (out) {
+        out->mf0 = 0;
+        out->mf4 = 0.0f;
+        out->mf8 = 0.0f;
+    }
+    ::cSpatialObject* sp = (::cSpatialObject*)((char*)self + 0x34);
+    Brain* brain = self->GetBrain();
+    void* m = 0;
+    if (brain->mpObj0)
+        m = ((void* (__thiscall*)(void*, uint32_t))(*(void***)brain->mpObj0)[0x0c / 4])(
+            brain->mpObj0, 0x403df5f);
+    if (m) {
+            int mine = ((int (__thiscall*)(BehaviorObj*))(*(void***)self)[0x4c / 4])(self);
+            int theirs = ((int (__thiscall*)(void*))(*(void***)m)[0x4c / 4])(m);
+            if (theirs != mine) {
+                if (((int (__thiscall*)(void*))(*(void***)m)[0x4c / 4])(m) != -1) {
+                    void* msub = (char*)m + 0x34;
+                    const Vector3* pos = ((const Vector3* (__thiscall*)(void*, float, float))
+                        (*(void***)msub)[0x2c / 4])(msub, DAT_01473c70, DAT_013eecd8);
+                    sp->Ve8(pos);
+                    const Vector3* pos2 = ((const Vector3* (__thiscall*)(void*, float, float))
+                        (*(void***)msub)[0x2c / 4])(msub, DAT_01473c70, DAT_013eecd8);
+                    ((void (__thiscall*)(BehaviorObj*, Vector3))(void*)FUN_00c9fb40)(self, *pos2);
+                    void* r = ((void* (__thiscall*)(void*, int, int))FUN_00bc96a0)(
+                        (char*)self->mpObjAf0 + 8, 0x800, 0);
+                    out->mf0c = *((uint32_t*)r + 3);
+                    out->mf0 = 0;
+                    ((void (__cdecl*)(BehaviorObj*))FUN_00dcc610)(self);
+                    return true;
+                }
+            }
+    }
+    ((void (__thiscall*)(BehaviorObj*, const char*))FUN_00ca7250)(self, "(35) BC: bad mineral");
+    ((void (__thiscall*)(BehaviorObj*))FUN_00caa900)(self);
+    return false;
 }
 }  // namespace SP
 
 // @ 0x00dccfd0
 namespace SP {
-void __thiscall cVehicleTree::MoveToPointOrder_Activate()
+bool __cdecl MoveToPointOrder_Activate(BehaviorObj* self)
 {
+    Brain* brain = ((Brain* (__thiscall*)(BehaviorObj*))(void*)FUN_00ca71d0)(self);
+    Vector3* pos = (Vector3*)((char*)brain + 0x04);
+    if (brain->mMode10 == 6) {
+        ((void (__cdecl*)(Vector3, float, float))FUN_00c9fb40)(*pos, 0.0f, DAT_013f1164);
+        ((::cSpatialObject*)((char*)self + 0x34))->Ve4(*pos, 1.0f);
+        ((void (__thiscall*)(BehaviorObj*))(void*)FUN_00dcc610)(self);
+        return true;
+    } else {
+        ((void (__thiscall*)(BehaviorObj*, const char*))FUN_00ca7250)(self, "(6) move: no orders");
+        ((void (__thiscall*)(BehaviorObj*))FUN_00caa900)(self);
+        return false;
+    }
 }
 }  // namespace SP
 
 // @ 0x00dcd050
 namespace SP {
-void __fastcall FUN_00dcd050(void* this_, int unused)
+struct Out_s00dcd050 {
+    void* mp0;      // +0x00
+    void* mp4;      // +0x04
+    void* mp8;      // +0x08
+    float mf0c;     // +0x0c
+};
+bool __cdecl FUN_00dcd050(BehaviorObj* self, int, int, int, int, Out_s00dcd050* out)
 {
-    (void)this_;
+    if (out) {
+        out->mp0 = 0;
+        out->mp4 = 0;
+        out->mp8 = 0;
+        out->mf0c = 0.0f;
+    }
+
+    Brain* brain = self->GetBrain();
+    void* t = 0;
+    if (brain->mpObj0)
+        t = ((void* (__thiscall*)(void*, uint32_t))VF(brain->mpObj0, 0x0c))(brain->mpObj0, 0x403df5f);
+    void* old4 = out->mp4;
+    if (t != old4) {
+        if (t)
+            ((void (__thiscall*)(void*))VF(t, 0))(t);
+        out->mp4 = t;
+        if (old4)
+            ((void (__thiscall*)(void*))VF(old4, 4))(old4);
+    }
+
+    brain = self->GetBrain();
+    void* t2;
+    if (brain->mpObj0)
+        t2 = ((void* (__thiscall*)(void*, uint32_t))VF(brain->mpObj0, 0x0c))(brain->mpObj0, 0xee02c7);
+    else
+        t2 = 0;
+    void* old8 = out->mp8;
+    if (t2 != old8) {
+        if (t2)
+            ((void (__thiscall*)(void*))VF(t2, 0))(t2);
+        out->mp8 = t2;
+        if (old8)
+            ((void (__thiscall*)(void*))VF(old8, 4))(old8);
+    }
+
+    void* io = out->mp8;
+    void* sub;
+    if (io) {
+        sub = (char*)io + 0x34;
+    } else {
+        void* q = out->mp4;
+        if (q) {
+            int id = ((int (__thiscall*)(void*))VF(q, 0x4c))(q);
+            if (id != -1) {
+                if (((int (__thiscall*)(void*))VF(self, 0x4c))(self) != id)
+                    return false;
+            }
+        }
+        void* r = out->mp4;
+        sub = r ? (char*)r + 0x34 : 0;
+    }
+
+    void* oldB7c = self->mpObjB7c;
+    if (sub != oldB7c) {
+        if (sub)
+            ((void (__thiscall*)(void*))VF(sub, 0xbc))(sub);
+        self->mpObjB7c = sub;
+        if (oldB7c)
+            ((void (__thiscall*)(void*))VF(oldB7c, 0xc0))(oldB7c);
+    }
+
+    FUN_00dcc610(self);
+    return true;
 }
 }  // namespace SP
 
 // @ 0x00dcd180
+extern "C" void* FUN_00b25f40();                 // NounManager query, thiscall, no args
+extern "C" void  FUN_00435ed0(uint32_t, void*);
 namespace SP {
-void __fastcall FUN_00dcd180(void* this_, int unused)
+bool __cdecl FUN_00dcd180(BehaviorObj* self, int, int, int, int, float* out)
 {
-    (void)this_;
+    if (out)
+        *out = 0.0f;
+
+    void* sub = &self->mpObj508;
+    void* v = ((void* (__thiscall*)(void*))VF(sub, 0x10))(sub);
+    void* nm = ((void* (__stdcall*)(void*))FUN_00b3d300)(v);
+    void* r = ((void* (__thiscall*)(void*))FUN_00b25f40)(nm);
+    if (r) {
+        void* city = ((void* (__cdecl*)(BehaviorObj*, int, void*))FUN_00dcc440)(self, -1, 0);
+        if (city) {
+            ((void* (__cdecl*)(BehaviorObj*, void*))FUN_00dc5050)(self, city);
+            void* loco = (char*)self + 0x34;
+            if (((char (__thiscall*)(void*))VF(loco, 0x58))(loco)) {
+                void* obj = (void*)EA_Audio_GetSystemAT();
+                if (obj) {
+                    void* x = ((void* (__thiscall*)(void*))VF(obj, 0x20))(obj);
+                    FUN_00435ed0(0x67fa83cd, x);
+                } else {
+                    FUN_00435ed0(0x67fa83cd, (void*)0);
+                }
+            }
+        }
+    }
+    return true;
 }
 }  // namespace SP
 
@@ -4163,8 +4323,9 @@ void* __thiscall cVehicleTicker::GetGroupOrder()
 namespace SP {
 cCulturalConvertCityOrder_s00dc_c830::~cCulturalConvertCityOrder_s00dc_c830()
 {
-    mpVtbl0 = &gCulturalConvertCityOrderVtbl0;
-    mpVtbl1 = &gCulturalConvertCityOrderVtbl1;
+    mpVtbl0 = (cOrderVTable0*)0x0145efe8;
+    mpVtbl1 = (cOrderVTable1*)0x0145efd8;
+    _ReadWriteBarrier();
     if (mpFieldA4)
         mpFieldA4->Release();
     if (mpFieldA0)

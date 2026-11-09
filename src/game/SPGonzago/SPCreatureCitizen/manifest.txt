@@ -29,6 +29,7 @@
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c26730@cOrderData@@QAEPAV1@PBV1@@Z  00c26730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?CreateLocomotionStrategy@cCreatureCitizen@@QAEXXZ  00c26c10  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?RebuildCitizenOrderListDefault@@YAXXZ  00c26c80  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?SetCreatureName@cCreatureCitizen@@QAEXPBD@Z  00c278a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?funcC4h@cCreatureBase_s00c2_78e0@@QAEXXZ  00c27b70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00da7fc0@@YA_NPAUCreature@@HHHHPAUS24@@HM@Z  00da7fc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00da80f0@@YA_NPAUCreature@@0@Z  00da80f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

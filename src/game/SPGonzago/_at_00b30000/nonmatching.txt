@@ -8,7 +8,6 @@
 00b36280 13 complete; dest/first load order differs flags: /O2 /MD /Gy /TP /arch:SSE
 00b36360 53 Map erase helper; RbtreeErase/operator_delete sequence and register allocation differ (mine 73 vs 77). equiv: FAIL (5/5 mismatched, execution) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 00b36440 72 Map insert helper; EASTL RBTreeInsert ArgError/alloc-slot handling and register allocation differ (mine 106 vs 121). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
-00b365a0 4 Reverse copy range; only encoding tie (add reg,-8 vs sub reg,8), logic byte-identical. flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 00b36610 106 Swap two RefPairs; original allocates a stack frame for the saved float and schedules calls differently (mine 115 vs 124). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 00b36690 221 cGalaxyGameEntryImpl::SetGameToEnter; large message-dispatch with MessageBasicRC layout and push order differ (mine 265 vs 391). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 00b36820 94 Planet placement distance; complex float/quaternion math with custom register convention (mine 128 vs 909). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

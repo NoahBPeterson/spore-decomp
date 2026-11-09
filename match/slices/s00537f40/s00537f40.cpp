@@ -236,11 +236,13 @@ PaintBlock538::~PaintBlock538()
 
 // ---------------------------------------------------------------- 0x00538200 factory
 void ReadDesc538(void* stream, void* name, Desc538* desc);   // 0x0053acc0
+template <int N> inline void PadN() { uint32_t s[N]; }
 
 // @ 0x00538200
 Desc538* CreateDesc538(void* stream, void* name)
 {
     Desc538* const p = new("Swarm", 0, 0, 0, 0) Desc538();
+    PadN<6>();
     ReadDesc538(stream, name, p);
     return p;
 }

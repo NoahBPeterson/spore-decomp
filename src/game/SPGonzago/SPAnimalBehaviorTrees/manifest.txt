@@ -68,3 +68,4 @@
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d8a660@@YA_NPAUCitizen_s00d8_a2a0@@@Z  00d8a660  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d8ac30@@YAXPAUCitizen_s00d8_a2a0@@PAX111PAUStateBundle@@@Z  00d8ac30  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d8b1a0@@YAXPAUCitizen_s00d8_a2a0@@PAX111PAUStateBundle@@@Z  00d8b1a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bef0@@YA_NPAVcSPCreatureBase@@IIIIPAVtAnimCtx@@@Z  00d7bef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

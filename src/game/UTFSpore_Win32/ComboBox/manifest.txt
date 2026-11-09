@@ -17,3 +17,4 @@
 ../src/game/UTFSpore_Win32/ComboBox.cpp  ?GetDrawable@WCB@@QAEPAXXZ  00968210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/ComboBox.cpp  ?PickComponent@WC@@QAEHMM@Z  00968350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/ComboBox.cpp  ?RemoveAllValues@WinComboBox@@QAEXXZ  00969a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?AddValue@WinComboBox@@QAEXPB_W@Z  00969950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

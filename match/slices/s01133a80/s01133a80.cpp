@@ -141,7 +141,11 @@ bool Collection::FUN_01133ad0(int add)
 // ---------------------------------------------------------------------------
 int __fastcall FUN_01133b60(int p)
 {
-	if (*(int*)(p + 0x10) != 0)
+	// The field is read twice (original: `cmp [mem],0` then a reload for the return).
+	// A plain read is folded to `mov eax,[mem]; ret` by cl 13.10 and cl 15; the volatile
+	// first read keeps the separate compare.
+	int v = *(volatile int*)(p + 0x10);
+	if (v != 0)
 		return *(int*)(p + 0x10);
 	return 0;
 }

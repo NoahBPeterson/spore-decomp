@@ -9,7 +9,7 @@
 00a67e80 41 TaskList::Destroy: complete; allocator dtor + vtable store scheduling differ; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest UNSUPPORTED (harness UcError)
 00a67f60 135 Hashtable::RehashTo: complete; bucket rehash loop + register allocation differ; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE; difftest FAIL (5/14 valid)
 00a681e0  11  singleton teardown; local allocator-guard reg allocation (esi vs ecx reload), EH frame [equiv: WEAK 31.8% cov] flags: /O2 /MD /Gy /EHsc /TP /GS-
-00a683b0 1 CallbackManager dtor; EH state index (n dtor under state 2, original 0) [equiv: UNSUPPORTED unresolved dtor refs] flags: /O2 /MD /Gy /EHsc /TP /GS-
+00a683b0 1 CallbackManager dtor; EH state index (n dtor under state 2, original 0) [equiv: UNSUPPORTED unresolved dtor refs] flags: /O2 /MD /Gy /EHsc /TP /GS-. Tried a function-try-block ctor/dtor body (`try {} catch(...) { throw; }`): grows the function to 99 bytes (extra filter/handler refs) instead of dropping the state store. The other member dtors here are nothrow; the single `mov [esp+0x10],2` before the +0x4c list dtor is the only difference.
 00a68430 137 hash table erase; iterator return NRVO and it.node/it.bucket register split (size 151 vs 168) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: UNSUPPORTED 0/400 valid, fault(read)/pool-limit]
 00a68890 140 Eapd System::Init; boolean and-chain and nested cleanup branch shape (size 245 vs 248) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: UNSUPPORTED 0/400 valid, fault(write)/pool-limit]
 00a68cb0 102 CreateSingleton ctor; EH state numbering off by one and member-init scheduling (size 268 vs 277) [flags /O2 /MD /Gy /EHsc /TP /GS-] [equiv: PASS]

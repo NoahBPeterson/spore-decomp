@@ -6,3 +6,5 @@ slices/s00f38330/s00f38330.cpp  ?FUN_00f38850@@YIXPAUSetiPanel@@@Z  00f38850  /O
 slices/s00f38330/s00f38330.cpp  ?f38b60@SpaceObj@@QAEXH@Z      00f38b60  /O2 /MD /Gy /TP
 slices/s00f38330/s00f38330.cpp  ?f38b90@SpaceObj@@QAEXH@Z      00f38b90  /O2 /MD /Gy /TP
 slices/s00f38330/s00f38330.cpp  ?FUN_00f39110@@YAPAUCString@@PAU1@@Z  00f39110  /O2 /MD /Gy /TP
+slices/s00f38330/s00f38330.cpp  ?f388b0@SpaceObj@@QAEXH@Z  00f388b0  /O2 /MD /Gy /TP
+slices/s00f38330/s00f38330.cpp  ?FUN_00f39080@@YIXPAUBigAssetView@@@Z  00f39080  /O2 /MD /Gy /TP

@@ -78,6 +78,7 @@
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?SetSelectedBlock@cEditorBase@@QAEXPAUBlock@@I@Z  0057e790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?BakerInit@cEditorBase@@QAEXXZ  0057ebf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?Init@cUnkEd80@@QAEPAXPAX0@Z  0057ed80  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ??0CheatObject2@@QAE@XZ  0057a6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?EraseAfter@cVec16@@QAEPAXPAX@Z  0057edf0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?FUN_00585830@cAppModeEditorBase_s0058_5330@@QAEXHH@Z  00585830  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?FUN_00585860@cAppModeEditorBase_s0058_5330@@QAEXHH@Z  00585860  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include

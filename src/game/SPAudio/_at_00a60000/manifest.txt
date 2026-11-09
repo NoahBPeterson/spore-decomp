@@ -28,3 +28,4 @@
 ../src/game/SPAudio/_at_00a60000.cpp  ?Free@EapdSystemOverflow@@QAEXPAX@Z  00a66930  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/_at_00a60000.cpp  ?EapdHashString@@YAIPBD@Z  00a66970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/_at_00a60000.cpp  ?HashCall@SymbolManager@@QAEII@Z  00a669b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+  ../src/game/SPAudio/_at_00a60000.cpp  ?vinlet_new@Eapd@@YAPAXPAX0HPAUt_atom@1@@Z  00a613c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

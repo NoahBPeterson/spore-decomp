@@ -15,6 +15,5 @@
 00ff4b10 15 FUN_00ff4b10(cInvItem*): complete and nearly byte-exact; retail homes the temporary AutoRef in esi and sinks its reload (`mov esi,[esp+0xc]`) into the else branch so the null check jumps straight to the epilogue, we reload into ecx at the shared join (115 vs 117 bytes). [equiv PASS: 310 valid inputs, 100.0% coverage]
 00ff4b90 316 cSPPlayerInventory::UseToolSet: complete; the tool-set build loop inlines CreateToolFromToolID plus the vector push and retail keeps several pointers live differently (412 vs 439 bytes). [equiv WEAK: 399 valid inputs, 17.0% coverage]
 00ff4d50 194 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
-00ff50f0 4 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00ff5190 45 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 01399700 98 equiv PASS (400 valid, 100.0% cov); not byte-exact (700 vs 703: one store rescheduled, 3 B short). flags /O2 /MD /Gy /TP /arch:SSE

@@ -4323,9 +4323,9 @@ long double FUN_00af9dd0(float param_1, int param_2)
 // @ 0x00af9e20
 long double FUN_00af9e20(float param_1, int param_2)
 {
-  param_2 = param_2 - 1;
   float step = param_1 * 2.0f;
   float f = step;
+  param_2 = param_2 - 1;
   int i = 2;
   while (0 < param_2) {
     f = f + step;

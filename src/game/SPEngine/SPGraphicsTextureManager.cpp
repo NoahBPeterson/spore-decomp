@@ -2290,8 +2290,8 @@ void TexTable::Clear(TexNode** buckets, uint32_t count)
         TexNode* node = buckets[i];
         while (node != 0) {
             TexNode* cur = node;
-            void* v = *(void**)((char*)cur + 0xc);
             node = node->next;
+            void* v = *(void**)((char*)cur + 0xc);
             if (v)
                 ((VFv)VT(v)[4 / 4])(v);
             void* alloc = *(void**)((char*)this + 0x1c);

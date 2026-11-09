@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00c3f850 42 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) hit sphere cast; the spatial base fallback call is unresolved; equiv UNSUPPORTED (unresolved cast helper) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-00c3f890 1 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable load model; retail inlines the base load test, the modelled call is out of line; equiv UNSUPPORTED (unresolved base load) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00c3f8b0 66 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) set model state; the model variant switch goes through a virtual call instead of the retail inlined table; equiv FAIL (first mismatch execution) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00c3f9b0 54 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable constructor; the vtable and default member stores are ordered differently from retail; equiv FAIL (first mismatch memory .data @0167be2c) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00c3fa70 37 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable destructor; the member free helpers are unresolved and the releases are not in retail order; equiv UNSUPPORTED (unresolved teardown helpers) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

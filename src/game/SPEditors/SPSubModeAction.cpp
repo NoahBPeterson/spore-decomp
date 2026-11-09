@@ -628,7 +628,8 @@ void SP::cSPPlayModeSubModeAction_s0063_7f80::SetWalkAnimation(cAnimatingCreatur
     if (creature->mpSub) creature->mpSub->FUN_00a006f0(tmp);
     creature->FUN_00a04ad0(mCurrIdleAnimState);
     uint32_t idleAnim = 0x4485a08;
-    if (!(mCurrIdleAnimState - 2)) idleAnim = 0x4485a0f;
+    if (mCurrIdleAnimState - 2 == 0)
+        idleAnim = 0x4485a0f;
     mAnim->PlayAnimation(id, idleAnim, 1, 2, 0);
 }
 

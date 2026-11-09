@@ -1,5 +1,8 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/_at_00d00000.cpp  ?cSoundLoopObjectCtor@SP@@YIPAXPAXH@Z  00d06e70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d00000.cpp  ?FUN_00d06eb0@cCountedSlot@SP@@QAEPAV12@PAVcRefCounted@2@@Z  00d06eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d00000.cpp  ?FUN_00d070b0@cCountedSlot@SP@@QAEPAXI@Z  00d070b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d00000.cpp  ?FUN_00d07590@cCountedSlot2@SP@@QAEPAXI@Z  00d07590  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d00000.cpp  ?Destroy@C103@@QAEPAXE@Z  00d07890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00d00000.cpp  ?GetFlag@C103@@QAEHH@Z  00d07d00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00d00000.cpp  ?SetFlag@C103@@QAEXHH@Z  00d07d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

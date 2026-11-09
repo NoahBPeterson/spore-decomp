@@ -300,10 +300,9 @@ struct BabyVec {
   int ssize() const { return (int)(mpEnd - mpBegin); }
   uint32_t IDAt(uint32_t i) {
     uint32_t n = size();
-    Baby* b = mpBegin;
     if (n == 0) return 0xffffffff;
-    if (i < n) return b[i].id;
-    return b[0].id;
+    if (i < n) return mpBegin[i].id;
+    return mpBegin[0].id;
   }
   Baby* begin() { return mpBegin; }
   Baby* end() { return mpEnd; }
@@ -1096,7 +1095,7 @@ void cSPPlayMode::SetAllBabySitUp()
   BabyVec& v = e->babies;
   uint32_t n = v.size();
   for (uint32_t i = 0; i < n; i++) {
-    Baby* b = &v[i];
+    Baby* b = v.mpBegin + i;
     if (b->state >= 3 && b->state == 4) mAnimator.Play(b->id, 0x4079859, 0, 1, 0);
     v[i].state = 0;
     v[i].timer = 0.0f;
@@ -1219,9 +1218,9 @@ bool cSPPlayMode::FUN_00629590()
       CreatureMgr* mgr = mEditor->mgr;
       mgr->GetCreaturePosition(mEditor->momId, &momPos);
       mgr->GetCreaturePosition(baby, &babyPos);
-      float dz = momPos.z - babyPos.z;
-      float dy = momPos.y - babyPos.y;
       float dx = momPos.x - babyPos.x;
+      float dy = momPos.y - babyPos.y;
+      float dz = momPos.z - babyPos.z;
       if (gTwo <= dz * dz + dy * dy + dx * dx) {
         SetMomToFaceBaby(baby);
         mCrouchBaby = baby;
@@ -1343,12 +1342,8 @@ void cSPPlayMode::FUN_00629960(int dt)
 bool cSPPlayMode::BabiesReachedTargetAngle()
 {
   CreatureMgr* mgr = mEditor->mgr;
-  uint8_t i = 0;
-  while (i < mNumBabies) {
-    uint32_t idx = i;
-    uint32_t id = mEditor->babies.IDAt(idx);
-    if (mgr->GetCreatureStructure(id)->angle != mMomCrouchChangeTime) return false;
-    i++;
+  for (uint8_t i = 0; i < mNumBabies; i++) {
+    if (mgr->GetCreatureStructure(mEditor->babies.IDAt(i))->angle != mMomCrouchChangeTime) return false;
   }
   return true;
 }

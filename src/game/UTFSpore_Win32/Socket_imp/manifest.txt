@@ -3,6 +3,7 @@
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Bind@Socket@@QAE_NPBX@Z  0094d410  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Fn0094d470@Socket@@QAE_NH@Z  0094d470  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Fn0094d4b0@Socket@@QAE_NXZ  0094d4b0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?SetStyle@Socket@Sockets@EA@@UAE_NHHH@Z  0094d500  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?SetAddressRaw@Socket@@QAE_NPBX@Z  0094d520  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?SetPeerAddressRaw@Socket@@QAE_NPBX@Z  0094d5a0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?GetNonBlocking@Socket@@QAE_NPAE@Z  0094db50  /O2 /MD /Gy /TP /GS- /Isrc/game/include

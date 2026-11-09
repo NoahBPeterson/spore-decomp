@@ -313,6 +313,16 @@ extern "C" float g_1471064;        // 0x01471064
 extern "C" float g_146da50;        // 0x0146da50
 extern "C" float g_13ef580;        // 0x013ef580
 extern "C" float g_13f9428;        // 0x013f9428  (0.001f)
+extern "C" float g_13f1f04;        // 0x013f1f04  default biosphere value
+extern "C" float g_14853bc;        // 0x014853bc  default biosphere value
+extern "C" void* __cdecl FUN_0107bcb0();
+extern "C" double ceil(double);
+extern "C" float g_13ec5b4;                                // 0x013ec5b4
+struct cBiosphereValueSource {                           // the object stored at mission+0x180
+    float FUN_00c06330();                                // 0x00c06330
+    float FUN_00fd9440();                                // 0x00fd9440
+    float FUN_00c48ea0();                                // 0x00c48ea0
+};
 typedef unsigned int u32;
 typedef unsigned char u8;
 struct IEmpty {};
@@ -332,6 +342,7 @@ struct cProperty_s00c4_cb90 {
     u8    pad00[0x12];
     short mType;                                                 // +0x12
     int*  GetUInt();                                             // 0x0041ea00
+    float* GetFloat();                                           // 0x0041ea70
 };
 struct IMission0 : VPad<27, IEmpty> {
     virtual void StartCompletedFeedbackTimer();                  // 0x06c
@@ -360,10 +371,15 @@ struct IMessageServer : VPad<5, IEmpty> {
 struct IPlantSpecies : VPad<6, IEmpty> {
     virtual void* FUN_v18();                                     // 0x18
 };
-struct cSPTimer {                                            // 0x30 bytes
-    u8        pad00[0x30];
+struct IMissionParam : VPad<23, IEmpty> {
+    virtual void* GetComponent(u32 key);                         // vtable +0x5c
+};
+struct cSPTimer {                                            // 0x20 bytes
+    u8        pad00[0x20];
     void      Restart();                                     // 0x00bc3130
     long long GetElapsedTime();                              // 0x00bc3190
+    void      FUN_00b63890();                                // 0x00b63890 (constructor)
+    void      FUN_00b638b0();                                // 0x00b638b0 (destructor)
 };
 struct cHerd;
 struct cHerdPtrVector {
@@ -371,6 +387,7 @@ struct cHerdPtrVector {
     cHerd** mpEnd;                                           // +0x04
     cHerd** mpCapacity;                                      // +0x08
     void    Erase(cHerd** first, cHerd** last);              // 0x00e25bd0
+    void    FUN_00ae6970();                                  // 0x00ae6970 (destructor)
 };
 struct cLocomotive : VPad<11, IEmpty> {
     virtual const Vec3* GetPosition();                       // 0x2c
@@ -388,6 +405,7 @@ class cCreatureBase {
 
     int   GetEmpireID();                                     // 0x00c03180
     void* GetSpeciesProfile();                               // 0x00c0bbd0
+    void* FUN_00c17350(int eff, int one);                    // 0x00c17350
     int   GetDamageState();                                  // 0x008e7f80
     void* GetHerd();                                         // 0x00c04590
 };
@@ -438,7 +456,7 @@ struct cPlanetEco {                                          // object stored at
     u8     padC4[0xd0 - 0xc4];
     Vec3*  mpVecB_d0;                                        // +0xd0
     Vec3*  mpVecBEnd_d4;                                     // +0xd4
-    void   SetBiostabilizer(void* key);                      // 0x00b8e040
+    bool   SetBiostabilizer(void* key);                      // 0x00b8e040
 };
 class cSimPlanetLowLOD {
   public:
@@ -470,19 +488,21 @@ class cSPMission_s00c4_cb90 : public IMission6 {
 
     cPlanet_s00c4_cb90* GetTargetPlanet();                              // 0x00970b30
     int      Update(int delta);                              // 0x00c478b0
-    void     UpdateEventLog(int a, int b);                   // 0x00c4c4b0
+    void     UpdateEventLog(int a, int b);                    // 0x00c4c4b0
     void     ValidateProgressEvent();                        // 0x00c44f20
     void     TriggerUIUpdate();                              // 0x00c47d80
     void     UnkC690(void* p);                               // 0x00c4c690
     void     UnkC790(void* p);                               // 0x00c4c790
     void     UnkC610(int v);                                 // 0x00c4c610
+    void     FUN_00c48d40(void* p);                          // 0x00c48d40
+    int      FUN_00c4bd60(void* pArg);                       // 0x00c4bd60
     void     UnkC2e4e0();                                    // 0x00c2e4e0
     void     UnkC471c0();                                    // 0x00c471c0
     void     UnkC472e0();                                    // 0x00c472e0
     void     UnkC46b80();                                    // 0x00c46b80
     void     UnkC44b80();                                    // 0x00c44b80
     void     UnkC44bd0();                                    // 0x00c44bd0
-    int      GetDiseaseEffectID();                           // 0x00c4bd60
+    int      GetDiseaseEffectID();                           // 0x00c4bd60 (see FUN_00c4bd60)
 };
 class cSPMissionBiosphere_s00c4_cb90 : public cSPMission_s00c4_cb90 {
   public:
@@ -498,6 +518,8 @@ class cSPMissionBiosphere_s00c4_cb90 : public cSPMission_s00c4_cb90 {
     int            mCount_210;                               // +0x210
     u8             pad214[0x218 - 0x214];                    // +0x214
     cSPTimer       mTimer_218;                               // +0x218
+    cHerdPtrVector mVector_238;                              // +0x238
+    u8             pad244[0x248 - 0x244];                    // +0x244
     cHerdPtrVector mHerds_248;                               // +0x248
 
     char FindClosestDiseasedAnimal(void* outHerd, Vec3* outPos);   // 0x00c4cb90 (ret 8)
@@ -509,6 +531,10 @@ class cSPMissionBiosphere_s00c4_cb90 : public cSPMission_s00c4_cb90 {
     void TriggerHerbivoreBonus();                                  // 0x00c4da10
     void BeginHerbivorePhase();                                    // 0x00c4db40
     void GetPropertyInstance(void* key, int* out);                 // 0x00c4db90 (ret 8)
+    bool FUN_00c491c0(u32 eventID, void* pParam);                  // 0x00c491c0 (ret 8)
+    void FUN_00c5ed90(int state);                                  // 0x00c5ed90
+    void FUN_00c48e90();                                           // 0x00c48e90 (base constructor)
+    void FUN_00c47680();                                           // 0x00c47680 (base destructor)
 };
 // ---- items of slice s00c4cb90 end
 
@@ -610,20 +636,30 @@ void __fastcall FUN_00c4bd30(cSPMissionBase_s00c4_bc00* this_, int unused, tUSho
 }  // namespace SP
 
 // @ 0x00c4bea0
-namespace SP {
-void __fastcall FUN_00c4bea0(cSPMissionBase_s00c4_bc00* this_, int unused)
+extern "C" float __cdecl FUN_00c4bea0(void* pProp, void* pEco)
 {
-    (void)this_;
+    float value = g_13f1f04;
+    if (pProp && ((cPropertyList_s00c4_cb90*)pProp)->GetProperty(0x44978e6, (cProperty_s00c4_cb90**)&pProp)) {
+        if (((cProperty_s00c4_cb90*)pProp)->mType == 0xd)
+            value = *((cProperty_s00c4_cb90*)pProp)->GetFloat();
+    }
+    if (((cPlanetEco*)pEco)->SetBiostabilizer(g_168f8f8))
+        value = ((cBiosphereValueSource*)FUN_0107bcb0())->FUN_00c06330() * value;
+    return value;
 }
-}  // namespace SP
 
 // @ 0x00c4bf10
-namespace SP {
-void __fastcall FUN_00c4bf10(cSPMissionBase_s00c4_bc00* this_, int unused)
+extern "C" float __cdecl FUN_00c4bf10(void* pProp, void* pEco)
 {
-    (void)this_;
+    float value = g_14853bc;
+    if (pProp && ((cPropertyList_s00c4_cb90*)pProp)->GetProperty(0x449793e, (cProperty_s00c4_cb90**)&pProp)) {
+        if (((cProperty_s00c4_cb90*)pProp)->mType == 0xd)
+            value = *((cProperty_s00c4_cb90*)pProp)->GetFloat();
+    }
+    if (((cPlanetEco*)pEco)->SetBiostabilizer(g_168f8f8))
+        value = ((cBiosphereValueSource*)FUN_0107bcb0())->FUN_00fd9440() * value;
+    return value;
 }
-}  // namespace SP
 
 // @ 0x00c4bf80
 namespace SP {
@@ -634,10 +670,33 @@ int __thiscall cSPMissionBiosphere::GetPlanetCount()
 }  // namespace SP
 
 // @ 0x00c4c090
-namespace SP {
-void __fastcall FUN_00c4c090(cSPMissionBase_s00c4_bc00* this_, int unused)
+extern "C" float __cdecl FUN_00c4bea0(void* pProp, void* pEco);
+extern "C" float __cdecl FUN_00c4bf10(void* pProp, void* pEco);
+namespace SP
 {
-    (void)this_;
+// Body recovered: switch (mState_1f0) { case 0: v = FUN_00c4bea0(prop, planet->eco) * g_13ec5b4;
+// case 1: v = FUN_00c4bf10(prop, planet->eco) * g_13ec5b4; default: return 0; }
+// then ceil(v) as (int)v (+1 when (float)v < v).  Not byte-exact: the original computes
+// `(int)(float)ceil(...)` through the real CRT ceil (xmm/push mxcsr) whereas /arch:SSE has no
+// sse4 and cl expands ceil() to the x87 fld/fcompi sequence, changing both the tail bytes and the
+// stack frame (16 vs 8 bytes).  These functions are compiled with the manifest(majority) flags
+// `/arch:SSE`, while a `/arch:SSE2` build of the same source reproduces the retail sequence
+// exactly, so this row is a flags artefact as much as a source one.
+int __fastcall FUN_00c4c090(cSPMissionBiosphere_s00c4_cb90* this_, int unused)
+{
+    float f;
+    if (this_->mState_1f0 == 0)
+        f = FUN_00c4bea0(this_->mpPropList_180, this_->GetTargetPlanet()->mpEco_13c) * g_13ec5b4;
+    else if (this_->mState_1f0 == 1)
+        f = FUN_00c4bf10(this_->mpPropList_180, this_->GetTargetPlanet()->mpEco_13c) * g_13ec5b4;
+    else
+        return 0;
+    float result = f;
+    float* pSlot = &result;
+    int32_t value = (int32_t)*pSlot;
+    if (*pSlot < (float)value)
+        ++value;
+    return value;
 }
 }  // namespace SP
 
@@ -651,25 +710,67 @@ void __fastcall FUN_00c4c130(cSPMissionBase_s00c4_bc00* this_, int unused)
 
 // @ 0x00c4c2f0
 namespace SP {
-void __fastcall cMissionBiosphere_ctor(void* this_, int unused)
+cSPMissionBiosphere_s00c4_cb90* __fastcall cMissionBiosphere_ctor(cSPMissionBiosphere_s00c4_cb90* this_, int unused)
 {
-    (void)this_; (void)unused;
+    this_->FUN_00c48e90();
+    this_->mEventID_1f4 = 1;
+    this_->mCount_200 = 1;
+    *(u32*)this_ = 0x146da78;
+    *(u32*)((char*)this_ + 0x04) = 0x146da64;
+    *(u32*)((char*)this_ + 0x34) = 0x146da54;
+    this_->mState_1f0 = 0;
+    this_->mThreshold_1f8 = 0;
+    this_->mThreshold_1fc = 0;
+    this_->mCount_204 = 5;
+    this_->mCount_208 = 0;
+    this_->mCount_20c = 5;
+    this_->mCount_210 = 0;
+    this_->mTimer_218.FUN_00b63890();
+    this_->mVector_238.mpBegin = (::cHerd**)0x1667bac;
+    this_->mVector_238.mpEnd = (::cHerd**)0x1667bac;
+    this_->mVector_238.mpCapacity = (::cHerd**)0x1667bae;
+    this_->mHerds_248.mpBegin = 0;
+    this_->mHerds_248.mpEnd = 0;
+    this_->mHerds_248.mpCapacity = 0;
+    return this_;
 }
 }  // namespace SP
 
 // @ 0x00c4c3f0
-namespace SP {
-void __fastcall FUN_00c4c3f0(cSPMissionBase_s00c4_bc00* this_, int unused)
+extern "C" void* __cdecl FUN_010212a0();               // the planet the player is looking at
+struct cMissionParam {
+    void FUN_00c57cb60(void* pVector);                   // 0x00c57cb60
+};
+namespace SP
 {
-    (void)this_;
+void __fastcall FUN_00c4c3f0(cSPMissionBiosphere_s00c4_cb90* this_, int unused, void* pParam)
+{
+    cPlanetEco* pEco = this_->GetTargetPlanet()->mpEco_13c;
+    if (FUN_010212a0() == (void*)pEco && (unsigned)this_->mState_1f0 <= 1) {
+        cHerdPtrVector* pVector = &this_->mVector_238;
+        if (pVector->mpBegin != pVector->mpEnd) {
+            ((cMissionParam*)pParam)->FUN_00c57cb60(pVector);
+            return;
+        }
+    }
+    this_->FUN_00c48d40(pParam);
 }
 }  // namespace SP
 
 // @ 0x00c4c450
 namespace SP {
-void __fastcall FUN_00c4c450(cSPMissionBase_s00c4_bc00* this_, int unused)
+void* __fastcall FUN_00c4c450(cSPMissionBiosphere_s00c4_cb90* this_, int unused, unsigned flags)
 {
-    (void)this_;
+    this_->mHerds_248.FUN_00ae6970();
+    int bytes = (int)((char*)this_->mVector_238.mpCapacity - (char*)this_->mVector_238.mpBegin);
+    bytes &= ~1;
+    if (bytes > 2 && this_->mVector_238.mpBegin != 0)
+        FUN_00f47380(this_->mVector_238.mpBegin);
+    this_->mTimer_218.FUN_00b638b0();
+    this_->FUN_00c47680();
+    if (flags & 1)
+        FUN_00f47380(this_);
+    return this_;
 }
 }  // namespace SP
 
@@ -681,18 +782,60 @@ void __thiscall cSPMissionBiosphere::UpdateEventLog()
 }  // namespace SP
 
 // @ 0x00c4c610
-namespace SP {
-void __fastcall FUN_00c4c610(cSPMissionBase_s00c4_bc00* this_, int unused)
+extern "C" void* __stdcall FUN_010666a0(int n);
+struct cGameNounSet {
+    void FUN_0106ab20();                                 // 0x0106ab20
+};
+namespace SP
 {
-    (void)this_;
+void __fastcall FUN_00c4c610(cSPMissionBiosphere_s00c4_cb90* this_, int unused, bool flag)
+{
+    ((cGameNounSet*)FUN_010666a0(3))->FUN_0106ab20();
+    if (this_->mState_1f0 == 0) {
+        int32_t count = this_->mCount_204 - this_->mCount_208;
+        if (this_->mpTargetSpecies_16c != 0 && count > 0) {
+            int32_t political = this_->mPoliticalID_24;
+            FUN_00feff80(this_->mpTargetSpecies_16c, count, 1, 2, political,
+                         this_->GetDiseaseEffectID(), &this_->mHerds_248);
+            if (flag)
+                this_->UpdateEventLog(2, 0xd19969f6);
+        }
+    }
+    this_->TriggerUIUpdate();
 }
 }  // namespace SP
 
 // @ 0x00c4c690
 namespace SP {
-void __fastcall FUN_00c4c690(cSPMissionBase_s00c4_bc00* this_, int unused)
+void __fastcall FUN_00c4c690(cSPMissionBiosphere_s00c4_cb90* this_, int unused, void* pParam)
 {
-    (void)this_;
+    if (FUN_01021260() != this_->GetTargetPlanet() || pParam == 0)
+        return;
+    cCreatureBase* pCreature =
+        (cCreatureBase*)((IMissionParam*)pParam)->GetComponent(0xd0036e08);
+    if (!pCreature)
+        return;
+    if (pCreature->GetSpeciesProfile() != this_->mpTargetSpecies_16c)
+        return;
+    if (pCreature->mbFlag_b62) {
+        pCreature->FUN_00c17350(this_->GetDiseaseEffectID(), 0);
+        if (this_->mCount_210 >= this_->mCount_20c)
+            return;
+        ++this_->mCount_208;
+        if (this_->mCount_208 >= this_->mCount_204 && this_->mState_1f0 == 0)
+            this_->FUN_00c5ed90(2);
+        this_->UpdateEventLog(2, 0xd19969f6);
+        return;
+    }
+    int cur = ++this_->mCount_210;
+    int max = this_->mCount_20c;
+    int remaining = max - cur - 1;
+    if ((unsigned)remaining <= 2) {
+        this_->UpdateEventLog(0, 0xbf13693a);
+        return;
+    }
+    if (cur < max)
+        this_->UpdateEventLog(0, 0xed4727a9);
 }
 }  // namespace SP
 
@@ -705,10 +848,32 @@ void __fastcall FUN_00c4c790(cSPMissionBase_s00c4_bc00* this_, int unused)
 }  // namespace SP
 
 // @ 0x00c4c850
+extern "C" void* __cdecl WStr_Format(void* dst, const void* fmt, ...);  // 0x0041e050
 namespace SP {
-void __fastcall FUN_00c4c850(cSPMissionBase_s00c4_bc00* this_, int unused)
+bool __fastcall FUN_00c4c850(cSPMissionBiosphere_s00c4_cb90* this_, int unused,
+                             u32 eventID, void* pParam)
 {
-    (void)this_;
+    if (eventID == 0x3f80b6b3) {
+        WStr_Format(pParam, (const void*)0x13f01bc, this_->mCount_204);
+        return true;
+    }
+    if (eventID == 0xcd3e21a2) {
+        WStr_Format(pParam, (const void*)0x13f01bc, this_->mCount_208);
+        return true;
+    }
+    if (eventID == 0xc1a31746) {
+        WStr_Format(pParam, (const void*)0x13f01bc, this_->mCount_204 - this_->mCount_208);
+        return true;
+    }
+    if (eventID == 0xd34ef208) {
+        WStr_Format(pParam, (const void*)0x13f01bc, this_->mCount_210);
+        return true;
+    }
+    if (eventID == 0xbd31ee03) {
+        WStr_Format(pParam, (const void*)0x13f01bc, this_->mCount_20c - this_->mCount_210);
+        return true;
+    }
+    return this_->FUN_00c491c0(eventID, pParam);
 }
 }  // namespace SP
 

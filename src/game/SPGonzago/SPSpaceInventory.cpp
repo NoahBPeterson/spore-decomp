@@ -821,7 +821,8 @@ ResourceKey cSpaceInventoryItem::GetImageID()
     key.mInstanceID = 0;
     key.mTypeID = 0;
     key.mGroupID = 0;
-    if (SP_GetPropertyAsKey(mpPropList.mPtr, 0x3068d95c, &key))
+    cPropertyList* pList = mpPropList.mPtr;
+    if (SP_GetPropertyAsKey(pList, 0x3068d95c, &key))
         key.mTypeID = 0x2f7d0004;
     return key;
 }
@@ -843,7 +844,8 @@ ResourceKey cSpaceInventoryItem::GetPanelID()
         key = kCargoPanelID;
         return key;
     }
-    if (SP_GetPropertyAsKey(mpPropList.mPtr, 0xa6a37fc4, &key)) {
+    cPropertyList* pList = mpPropList.mPtr;
+    if (SP_GetPropertyAsKey(pList, 0xa6a37fc4, &key)) {
         key.mTypeID = 0xb1b104;
         key.mGroupID = 0x5f4d5e7;
     }

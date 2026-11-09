@@ -10,7 +10,19 @@
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?SetItemPropertyList@cSPMissionMultiDelivery_s00c5_62b0@SP@@QAEXXZ  00c57520  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ??4tItemInfo_s00c5_7570@SP@@QAEPAU01@ABU01@@Z  00c57690  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ??4tBuyerInfo@SP@@QAEPAU01@ABU01@@Z  00c576d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?FUN_00c57720@tItemInfo_s00c5_7570@SP@@QAEPAU12@ABU12@@Z  00c57720  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?copy_forward_buyer@SP@@YAPAUtBuyerInfo@1@PAU21@00@Z  00c57780  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?copy_impl_buyer@SP@@YAPAUtBuyerInfo@1@PAU21@00@Z  00c578c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?copy_backward_buyer@SP@@YAPAUtBuyerInfo@1@PAU21@00@Z  00c57930  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?copy_impl_item@SP@@YAPAUtItemInfo_s00c5_7570@1@PAU21@00@Z  00c579a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?copy_backward_item@SP@@YAPAUtItemInfo_s00c5_7570@1@PAU21@00@Z  00c57a10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?FUN_00c58070@SP@@YA_NPAXPAUcBuyerRange@1@@Z  00c58070  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?FUN_00c580b0@SP@@YA_NPAXPAUcItemRange@1@@Z  00c580b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?GetFetchItemName@cSPMissionMultiDelivery_s00c5_7570@SP@@QAEXPAVwstring@eastl@@@Z  00c58260  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?GetTagString@cSPMissionMultiDelivery_s00c5_8920@@QAEEIPAUcWString@@@Z  00c58ad0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?cMissionMultiDeliveryCtor@SP@@YIPAVcSPMissionMultiDelivery_s00c5_62b0@1@PAV21@H@Z  00c58170  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?FUN_00c58310@cSPMissionMultiDelivery_s00c5_7570@SP@@QAEXPAX@Z  00c58310  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?FUN_00c58360@cSPMissionMultiDelivery_s00c5_7570@SP@@QAEXPAX@Z  00c58360  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?FUN_00c58530@cSPMissionMultiDelivery_s00c5_7570@SP@@QAEPAXH@Z  00c58530  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?FUN_00c57e50@cSPMissionMultiDelivery_s00c5_7570@SP@@QAE_NHH@Z  00c57e50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?GetDynamicResponseID@cSPMissionMultiDelivery_s00c5_7570@SP@@QAEHHH@Z  00c57d00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

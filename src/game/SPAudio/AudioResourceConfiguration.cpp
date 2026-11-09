@@ -345,9 +345,8 @@ bool RC::GetPropertyAsKeyInstance(u32 key, u32* out)
 {
     Variant const* v;
     if (GetProperty(key, v) && v->mTypeId == 0x20) {
-        const void* src = (v->mFlags & 0x30) ? v->p : (const void*)v;
-        u32 value = *(const u32*)src;
-        *out = value;
+        const u32* src = (v->mFlags & 0x30) ? (const u32*)v->p : (const u32*)v;
+        *out = *src;
         return true;
     }
     return false;

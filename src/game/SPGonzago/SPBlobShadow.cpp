@@ -378,10 +378,15 @@ template FixedVector<0x100>::FixedVector(uint32_t)
 // @ 0x0041d140
 RangeOwner& RangeOwner::Assign(const RangeOwner& o)
 {
-    uint32_t unused[4];   // dead locals of the original (frame size only)
+    uint32_t tmp[4];   // dead
     if (this != &o) {
         Destroy(mpFirst, mpLast);
-        Copy(o.mpFirst, o.mpLast);
+        void* f = o.mpLast;
+        void* l = o.mpFirst;
+        ConstructTag t;
+        char c;
+        char e;
+        Construct(l, f, t);
     }
     return *this;
 }
@@ -596,7 +601,8 @@ RcHolderRef* RcHolderRef::Assign(RcHolder* n)
     if (n != p) {
         RcHolder* old = p;
         if (n) {
-            n->rc.AddRef();
+            DefaultRefCounted* next = &n->rc;
+            next->AddRef();
         }
         p = n;
         if (old)

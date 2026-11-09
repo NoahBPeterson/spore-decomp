@@ -3523,7 +3523,8 @@ Node* cSpawnTable::AllocNode(const NodeSource* src)
     if (node)
     {
         const NodeSource* s = src;
-        node->mKey = s->mKey;
+        NodeKey key = s->mKey;
+        node->mKey = key;
         ChildVector& children = node->mChildren;
         children.mpBegin = children.mInline;
         children.mpEnd = children.mInline;

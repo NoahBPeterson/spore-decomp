@@ -2,6 +2,7 @@
 ../src/game/SPGonzago/SPUIShared.cpp  ?Init@cSPUIRelationshipStrip@@QAEXPAVtIWindow@@@Z  00e2ec60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2ed40@cSPUIRelationshipStrip@@QAEXXZ  00e2ed40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2ef80@cSPUIRelationshipStrip@@QAEXM@Z  00e2ef80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f160@cRelationshipPanel@@QAEXXZ  00e2f160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f1c0@cRelationshipPanel@@QAEXXZ  00e2f1c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f250@cRelationshipPanel@@QAEXXZ  00e2f250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f2b0@@YA_NPAVtIWindow@@PAUtVisitMsg@@@Z  00e2f2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

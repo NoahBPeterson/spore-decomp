@@ -3,6 +3,7 @@
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no EH, no stack cookies on wchar buffers).
 #include "types.h"
 #include <math.h>
+#include <intrin.h>
 
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);   // 0x00f473a0
 void  operator delete(void* p);                                             // 0x00f47380
@@ -305,8 +306,6 @@ public:
 
 extern const wchar_t kVerbTitleSeparator[];                                 // 0x013f639c
 // The two vtables MSVC writes into the animation object (cSPUIWindowAnimation / cSPUIAnimTarget).
-extern char g_animTargetVtbl[];                                             // 0x013f6400
-extern char g_animTargetVtbl2[];                                            // 0x013f63fc
 
 // ---------------------------------------------------------------------------------------------
 class cEditorPanelBase0 {
@@ -504,8 +503,9 @@ cSPUIWindowAnimation::~cSPUIWindowAnimation()
 // @ 0x0059a230
 void* cSPUIWindowAnimation::ScalarDelete(unsigned int flags)
 {
-    *(void**)this = (void*)g_animTargetVtbl;
-    *(void**)((char*)this + 8) = (void*)g_animTargetVtbl2;
+    *(void**)this = (void*)0x013F6400;
+    *(void**)((char*)this + 8) = (void*)0x013F63FC;
+    _ReadWriteBarrier();
     if (mTarget.mpWindow)
         mTarget.mpWindow->Release();
     if (flags & 1)

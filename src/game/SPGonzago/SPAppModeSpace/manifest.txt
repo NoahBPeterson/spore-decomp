@@ -9,3 +9,8 @@
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?Shutdown@cAppModeSpace_s00fd_dba0@@QAE_NXZ  00fde180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fdf9f0@cAppModeSpace_s00fd_f9f0@SP@@QAEXXZ  00fdf9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fe0e10@cAppModeSpace_s00fe_0570__g7@@QAEXXZ  00fe0e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda480@cAppModeSpace@SP@@QAEXXZ  00fda480  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda2e0@cAppModeSpace@SP@@QAE_NPAX@Z  00fda2e0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?Deactivate@cAppModeSpace@SP@@QAEXXZ  00fda390  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda9f0@cAppModeSpace@SP@@QAEXXZ  00fda9f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda940@cAppModeSpace@SP@@QAEXXZ  00fda940  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

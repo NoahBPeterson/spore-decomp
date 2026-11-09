@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include <math.h>
 #include "SP/cHierGrid.h"
 #include "SP/cGrid.h"
@@ -537,7 +538,9 @@ ListNode** __stdcall list_insert_before(ListNode** out, ListIterator position, v
     node->pPrev = position.mpNode->pPrev;
     position.mpNode->pPrev->pNext = node;
     ListNode** r = out;
-    position.mpNode->pPrev = node;
+    _ReadWriteBarrier();
+    ListNode* pos = position.mpNode;
+    pos->pPrev = node;
     *r = node;
     return r;
 }

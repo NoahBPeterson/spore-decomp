@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-006b4400 3 complete dtor; base vptr store order (+0 then +4) is reversed vs original (+4 then +0); difftest PASS flags: /O2 /MD /Gy /EHsc /TP /GS-
+006b4400 3 complete dtor; base vptr store order (+0 then +4) is reversed vs original (+4 then +0); difftest PASS flags: /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 006b4490 302 complete; svc kept in register (edi) instead of stack slot [esp+0x1c], stream this spilled; difftest PASS flags: /O2 /MD /Gy /EHsc /TP /GS-
 006b4730 6 local-static init of the job holder: placement-new form still emits an operator-new call instead of a bare ctor call flags: /O2 /MD /Gy /EHsc /TP /GS-
 006b48d0 127 complete; async-save request ctor (MI: primary+secondary vptr, inlined GraphicsFactoryAsyncRequest at +0x20) - cl schedules the two vptr stores / nested-ctor EH state differently. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: UNSUPPORTED]

@@ -683,6 +683,7 @@ cSpaceTuningInit* __thiscall cSpaceTuningInit::FUN_01040730()
 {
     float one = _HK_REAL_ONE;
     m24 = DAT_014853bc;
+    _ReadWriteBarrier();
     m2c = DAT_01473c70;
     m00 = 0;
     m04 = 0;

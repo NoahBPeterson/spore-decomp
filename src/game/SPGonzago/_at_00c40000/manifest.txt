@@ -7,6 +7,7 @@
 ../src/game/SPGonzago/_at_00c40000.cpp  ?TriggerHerbivoreBonus@cSPMissionBiosphere@@QAEXXZ  00c4da10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00c40000.cpp  ?BeginHerbivorePhase@cSPMissionBiosphere@@QAEXXZ  00c4db40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00c40000.cpp  ?GetPropertyInstance@cSPMissionBiosphere@@QAEXPAXPAH@Z  00c4db90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00c40000.cpp  ?FUN_00c4dbf0@@YIPAXPAX0@Z  00c4dbf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c40000.cpp  ?FUN_00c4dca0@@YIPAXPAX0E@Z  00c4dca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c40000.cpp  ?FUN_00c4dce0@@YIDPAX0@Z  00c4dce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c40000.cpp  ?FUN_00c4def0@@YIPAXPAX0@Z  00c4def0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

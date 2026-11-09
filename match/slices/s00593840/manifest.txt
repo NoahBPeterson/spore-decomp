@@ -23,3 +23,6 @@ slices/s00593840/s00593840.cpp  ?IsItemUnlocked@cCollectableItems@SP@@QAE_N_K@Z 
 slices/s00593840/s00593840.cpp  ?IsItemNew@cCollectableItems@SP@@QAE_N_K@Z  00595190  /O2 /MD /Gy /TP /GS-
 slices/s00593840/s00593840.cpp  ?IsKnownItem@cCollectableItems@SP@@QAE_N_K@Z  005951f0  /O2 /MD /Gy /TP /GS-
 slices/s00593840/s00593840.cpp  ?ReadItemList@SP@@YAXPAVISerializer@1@AAV?$list@UItemId@@@eastl@@@Z  00594c70  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?DoAllocateNode@?$hashtable@UcStaticItemInfo@@Vfixed_hashtable_allocator@eastl@@I@eastl@@QAEPAU?$hash_node@UcStaticItemInfo@@@2@ABUcStaticItemInfo@@@Z  005948d0  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?DoAllocateNode@?$hashtable@UcItemSetRow@@Vfixed_hashtable_allocator@eastl@@I@eastl@@QAEPAU?$hash_node@UcItemSetRow@@@2@ABUcItemSetRow@@@Z  00594920  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?DoAllocateNode@?$hashtable@UcItemSmall@@Vfixed_hashtable_allocator@eastl@@I@eastl@@QAEPAU?$hash_node@UcItemSmall@@@2@ABUcItemSmall@@@Z  00594980  /O2 /MD /Gy /TP /GS-

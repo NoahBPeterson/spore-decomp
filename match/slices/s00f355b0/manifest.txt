@@ -1,3 +1,4 @@
 # source symbol va flags
 slices/s00f355b0/s00f355b0.cpp  ?FUN_00f359f0@cEditor@@QAEXABUKey@@PAUcSPTransform@@@Z  00f359f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00f355b0/s00f355b0.cpp  ?FUN_00f36380@cEditor@@QAEXXZ  00f36380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00f355b0/s00f355b0.cpp  ?FUN_00f35be0@cEditor@@QAEXI@Z  00f35be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -1339,10 +1339,10 @@ RefPair* RefPair_CopyConstruct(RefPair* first, RefPair* last, RefPair* out)
 RefPair* RefPair_CopyConstructBackward(RefPair* first, RefPair* last, RefPair* out)
 {
     while (last != first) {
-        RefHandle* nv = (last - 1)->ptr;
-        RefHandle* ov = (out - 1)->ptr;
         --last;
         --out;
+        RefHandle* nv = last->ptr;
+        RefHandle* ov = out->ptr;
         if (nv != ov) {
             if (nv) ++nv->refCount;
             out->ptr = nv;

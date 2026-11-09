@@ -9,3 +9,4 @@
 ../src/game/SPEditors/SPXHTMLWin.cpp  ??1cXHTMLWin@Pollen@SP@@UAE@XZ  00623280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPXHTMLWin.cpp  ?Load@cSPHoverTitle@Pollen@SP@@QAEXXZ  006239c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPXHTMLWin.cpp  ?OnKeyDown@cXHTMLWin@Pollen@SP@@QAE_NHHH@Z  00623ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPXHTMLWin.cpp  ??1cSPHoverTitle@Pollen@SP@@UAE@XZ  00623af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

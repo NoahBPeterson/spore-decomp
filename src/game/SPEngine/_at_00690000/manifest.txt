@@ -1,6 +1,7 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/_at_00690000.cpp  ?ReadDouble@@YANPBD@Z  00692700  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00690000.cpp  ?IsReady@cSerializerStatus@@QBE_NXZ  00692800  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00690000.cpp  ?Dispatch@cSerializerDispatcher@@QAEEPAX0@Z  00692820  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00690000.cpp  @FUN_00695c30@4  00695c30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/_at_00690000.cpp  ?ZeroLocalInputState@@YIPAXPAX@Z  00697960  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00690000.cpp  ?clr090@ClrTriple@@QAEXXZ  0069d090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

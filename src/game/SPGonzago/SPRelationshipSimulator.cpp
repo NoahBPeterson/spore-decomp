@@ -429,15 +429,16 @@ struct RefCountHeader { int mCount; };                   // mCount at -4 from th
 namespace SP {
 class cRelationshipManager_s00d0_58a0 {
 public:
-    int  RecordEvent(int event);                                       // 0x00d05d90
+    float RecordEvent(uint32_t event, uint32_t a1, uint32_t a2, uint32_t a3, float a4); // 0x00d05d90
     void RecordEvent(int a1, int a2, int a3, float weight);            // 0x00d06240
     void RecordFoughtEnemyEvent();  // 0x00d06270 (SP::cRelationshipManager::RecordFoughtEnemyEvent)
     int  CalculateRelationshipAbsolute();  // 0x00d05a20 (SP::cRelationshipManager::CalculateRelationshipAbsolute)
     void FUN_00d058a0();
     void FUN_00d06030();
     void FUN_00d06400();
-    void FUN_00d064b0();
+    __declspec(noinline) void FUN_00d064b0(void* p, uint32_t a1, uint32_t a2, float a3);
     void FUN_00d065a0();
+    __declspec(noinline) void FUN_00d068c0(uint32_t a1, uint32_t a2, float a3);
 };
 }
 // ---- items of slice s00d058a0 end
@@ -1105,8 +1106,46 @@ void __thiscall cRelationshipManager_s00d0_58a0::FUN_00d06400()
 
 // @ 0x00d064b0
 namespace SP {
-void __thiscall cRelationshipManager_s00d0_58a0::FUN_00d064b0()
+struct cRelPair {
+    uint32_t mFirst;    // +0x10
+    uint32_t mSecond;   // +0x14
+};
+struct Node0 {
+    uint8_t pad000[0x10];
+    cRelPair mKey;      // +0x10
+};
+struct TreeRoot {
+    uint8_t pad000[0x04];
+    Node0*  mpHead;     // +0x04  (tree header: parent/left/right/node)
+};
+struct cTerrainEditor2 { void GetCurrentTerrainSphere(); };
+extern cTerrainEditor2* NounManager_d064b0();          // 0x00b3d300
+extern void FUN_00f67d90(void* terrain);               // 0x00f67d90
+extern uint32_t GetPlayerEmpireID_d064b0();            // 0x01021090
+extern bool  FUN_00ba6650(uint32_t id);                // 0x00ba6650
+extern bool  FUN_00c7a890(uint32_t id);                // 0x00c7a890
+extern uint32_t FUN_00d01ab0(uint32_t a, uint32_t b);  // 0x00d01ab0
+
+void __thiscall cRelationshipManager_s00d0_58a0::FUN_00d064b0(void* p, uint32_t a1, uint32_t a2, float a3)
 {
+    void* terrain = NounManager_d064b0();
+    ((cTerrainEditor2*)terrain)->GetCurrentTerrainSphere();
+    uint32_t player = GetPlayerEmpireID_d064b0();
+    TreeRoot* root = (TreeRoot*)p;
+    Node0* node = root->mpHead;
+    Node0* end  = (Node0*)((char*)p + 4);
+    if (node == end)
+        return;
+    do {
+        if (node->mKey.mFirst == a1 && FUN_00ba6650(node->mKey.mSecond) &&
+            (a1 != player || FUN_00c7a890(node->mKey.mSecond))) {
+            RecordEvent(FUN_00d01ab0(a1, node->mKey.mSecond), a1, node->mKey.mSecond, a2, a3);
+        } else if (node->mKey.mSecond == a1 && FUN_00ba6650(node->mKey.mFirst) &&
+                   (a1 != player || FUN_00c7a890(node->mKey.mFirst))) {
+            RecordEvent(FUN_00d01ab0(node->mKey.mFirst, a1), node->mKey.mFirst, a1, a2, a3);
+        }
+        node = (Node0*)RBTreeIncrement(node);
+    } while (node != end);
 }
 }  // namespace SP
 
@@ -1127,9 +1166,13 @@ void __fastcall FUN_00d06710(void* this_, int unused)
 
 // @ 0x00d068c0
 namespace SP {
-void __fastcall FUN_00d068c0(void* this_, int unused)
+void __thiscall cRelationshipManager_s00d0_58a0::FUN_00d068c0(uint32_t a1, uint32_t a2, float a3)
 {
-    (void)this_;
+    FUN_00d064b0((char*)this + 0x24, a1, a2, a3);
+    char* p = *(char**)((char*)this + 0x9c);
+    char* pEnd = *(char**)((char*)this + 0xa0);
+    for (; p != pEnd; p += 0x20)
+        FUN_00d064b0(p + 4, a1, a2, a3);
 }
 }  // namespace SP
 

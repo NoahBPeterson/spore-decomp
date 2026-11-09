@@ -8,6 +8,7 @@
 #include "SP/cPlanetModel.h"
 #include "SP/cSPTimer.h"
 #include <math.h>
+#include <intrin.h>
 #include <stdlib.h>
 #include "SP/cGameData.h"
 #include "SP/cSpatialObject.h"
@@ -2404,6 +2405,7 @@ void* SP::cCivilization_s00be_eb70::GetSpeciesProfile()
 {
     cSpeciesKey* key = reinterpret_cast<cSpeciesKey*>(mSpeciesKey);
     const void* profile = key->Lookup(key)->GetProfile();
+    _ReadWriteBarrier();
     return (void*)profile;
 }
 

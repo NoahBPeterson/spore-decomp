@@ -310,7 +310,9 @@ bool __stdcall AudioFuncA8(int a, int b, int c, int d, int e)
 void AudioFuncB4()
 {
     AudioSystem* s = GetSystemAT();
-    s->CallB4();
+    typedef void (__thiscall* Fn)(void*);
+    Fn fn = *(Fn*)((char*)*(void**)s + 0xb4);
+    fn(s);
 }
 
 // @ 0x00a460d0

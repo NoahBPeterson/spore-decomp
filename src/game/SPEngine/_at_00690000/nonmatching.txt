@@ -1,4 +1,3 @@
 # va  diff-bytes  reason
-00692820 1 complete; dispatch callback: byte-identical except the return-zero instruction (orig `xor al,al` vs ours `xor eax,eax`); FAIL-KEPT because the `QAEI` (unsigned int) symbol forces a full-width zero, and `xor al,al` cannot be emitted for an unsigned-int free-standing return without changing the return type; equiv FAIL (return value eax upper bits differ, 5/65 inputs) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00692850 19 complete; lazy resolve near-miss; equiv WEAK (52.6% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
 0069b910  5589  OBB-vs-OBB 6-axis separating-axis test over two transformed boxes; complete behaviour, but the original is fully unrolled /O2 /arch:SSE /fp:fast scalar float code (6012 B vs 5589 B and a different register schedule) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

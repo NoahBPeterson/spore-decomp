@@ -290,7 +290,9 @@ void __cdecl FUN_00e70a90(int* cell, int a2, int a3, int a4)
 {
     if (*(char*)((char*)cell + 0x17f) != 0)
         return;
-    cTimedHandles* obj = (cTimedHandles*)((cObjectPool*)((char*)GetCellGameAddr() + 0x1c))->Get(cell[0]);
+    int id = cell[0];
+    cObjectPool* cells = (cObjectPool*)((char*)GetCellGameAddr() + 0x1c);
+    cTimedHandles* obj = (cTimedHandles*)cells->Get(id);
     float t = FUN_00e6d200(obj, 0, a3, *(int*)((char*)obj + 0x1b0));
     FUN_00e51ee0(0xb, t, cell[0], 0, a2, -1, a3, 0, 0.0f, 0.0f, a4, 0, 0, 0, 0, 0);
     FUN_00e57b50(cell[0], a2, a3, a4);
@@ -305,9 +307,10 @@ void __cdecl FUN_00e70b20(int* cell, int* other, int a3, int a4, int a5)
         return;
     if (FUN_00e57460(cell, other))
         return;
+    int id = cell[0];
     char* base = GetCellGameAddr();
     cObjectPool* cells = (cObjectPool*)(base + 0x1c);
-    cTimedHandles* obj = (cTimedHandles*)cells->Get(cell[0]);
+    cTimedHandles* obj = (cTimedHandles*)cells->Get(id);
     float t = FUN_00e6d200(obj, 0, a5, *(int*)((char*)obj + 0x1b0));
     FUN_00e51ee0(9, t, cell[0], other[0], a3, -1, a5, 0, 0.0f, 0.0f, a4, 0, 0, 0, 0, 0);
     FUN_00e57a60(cell[0], other[0], a3, a5, a4);

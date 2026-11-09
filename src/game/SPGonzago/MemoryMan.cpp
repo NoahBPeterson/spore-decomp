@@ -735,17 +735,11 @@ void cSPUIChoiceDialog::Accept()
   Close();
 }
 
-// @ 0x005fe8e0
+// @ 0x005fe8e0  cSPUIChoiceDialog::HandleUIMessage
 bool cSPUIChoiceDialog::HandleUIMessage(IWindow_s005f_e1d0* pWindow, const EA::UTFWin::Message_s005f_e1d0& message)
 {
   if (mpLayout) {
     switch (message.eventType) {
-      case 1:
-        if (!(message.param14 & 0x47)) {
-          if (message.param10 == 0xd) Accept();
-          if (message.param10 == 0x1b) Cancel();
-        }
-        return true;
       case 0x287259f6:
         if (message.param0C == 0x61c282f) {
           Cancel();
@@ -755,6 +749,12 @@ bool cSPUIChoiceDialog::HandleUIMessage(IWindow_s005f_e1d0* pWindow, const EA::U
         return true;
       case 2:
       case 5:
+        return true;
+      case 1:
+        if (!(message.param14 & 0x47)) {
+          if (message.param10 == 0xd) Accept();
+          if (message.param10 == 0x1b) Cancel();
+        }
         return true;
     }
   }

@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00f96840  2  vtable tail-call forwarder: fn-ptr register differs (target mov edx,[eax+0x84]; jmp edx vs ours eax)
+00f96840  2  vtable tail-call forwarder: fn-ptr register differs (target mov edx,[eax+0x84]; jmp edx vs ours eax). Tried typed __thiscall fn-pointer local, void** vt[0x21] indexing, direct call (already), and writing the 0x814 store before the load: that load DOES land in edx (matching), but the store then precedes the load instead of following it. Load-first always reclaims eax; store-first picks edx. Not reachable in one source shape.
 00f96920  238  colour sample (9 args): inline-asm cvtss2si (correct rounding) but frame/reg-alloc differs from target's spill; equiv PASS
 00f96b40  11  InitializeStaticRTTTextures: scheduling of mov [0x16c9e68],eax relative to push 0x100; equiv WEAK
 00f96d80  85  insertion sort (guarded): 116 B vs 104 B, one register spill (v3); reg-alloc differs

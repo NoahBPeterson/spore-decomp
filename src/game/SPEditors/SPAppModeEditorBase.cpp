@@ -8836,8 +8836,7 @@ int SP::cAppModeEditorBase_s0057_5270::GetSomething2()
         void* p = Field<void>(this, 0x1c0);
         if (p != 0 && Value<char>(p, 0x35) != 0)
             return Value<int>(p, 0x40);
-        int r = Field<VObj>(this, 0x8c)->slot1();
-        return r;
+        return Field<VObj>(this, 0x8c)->slot1();
     }
     return v;
 }
@@ -9561,8 +9560,10 @@ CheatObject2::CheatObject2()
 {
     vt0 = vtbl_13f585c;
     *(void**)&b = vtbl_13f5858;
-    s0c = g_01667bac;
-    s10 = g_01667bac;
+    _ReadWriteBarrier();
+    char* g = g_01667bac;
+    s0c = g;
+    s10 = g;
     s14 = g_01667bae;
 }
 
@@ -11238,9 +11239,65 @@ void FUN_00583900()
 void FUN_00583c50()
 {}
 
+// ---- animation-capture frame ordering (layout from the disassembly) --------------------------
+template <class T>
+struct SPVector_s0058_4070 {
+    T* mpBegin;                 // +0x00
+    T* mpEnd;                   // +0x04
+    T* mpCapacity;              // +0x08
+    char mAllocator[8];         // +0x0c
+
+    T* erase(T* first, T* last)
+    {
+        FUN_011e0744(first, last, (unsigned)((char*)mpEnd - (char*)last));
+        mpEnd -= last - first;
+        return first;
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+    __forceinline void push_back(const T& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new ((void*)mpEnd++) T(value);
+        else
+            DoInsertValueI(mpEnd, value);
+    }
+    void DoInsertValueI(T* position, const T& value);
+};
+
+class cAppModeEditorBase_s0058_4070 {
+public:
+    char pad000[0x3f0];
+    uint32_t mCaptureFrame;                     // +0x3f0
+    uint32_t mCaptureBase;                      // +0x3f4
+    uint32_t mCaptureSaved;                     // +0x3f8
+    uint32_t mCaptureTotal;                     // +0x3fc
+    uint32_t mCaptureGroup;                     // +0x400
+    uint32_t mCaptureStride;                    // +0x404
+    SPVector_s0058_4070<uint32_t> mFrameOrder;  // +0x408
+    SPVector_s0058_4070<uint32_t> mPendingFrames; // +0x41c
+
+    void FUN_00584070();
+};
+
 // @ 0x00584070
-void FUN_00584070()
-{}
+void cAppModeEditorBase_s0058_4070::FUN_00584070()
+{
+    mCaptureFrame = 0;
+    mCaptureSaved = 0;
+    int n = SP::sAppProperties_s0058_be50->GetIntProperty(0x5893ee8);
+    mCaptureTotal = n * n;
+    mCaptureGroup = 0;
+    mCaptureStride = 1;
+    mFrameOrder.clear();
+    mPendingFrames.clear();
+    mCaptureBase = 0;
+    for (uint32_t i = 0; i < mCaptureTotal; ++i) {
+        if (mFrameOrder.mpEnd < mFrameOrder.mpCapacity)
+            ::new ((void*)mFrameOrder.mpEnd++) uint32_t(i);
+        else
+            mFrameOrder.DoInsertValueI(mFrameOrder.mpEnd, i);
+    }
+}
 
 // @ 0x00584160
 void cIntVec::Resize(uint32_t n)

@@ -566,7 +566,7 @@ bool FUN_01029a60(Planet* p, bool b)
 // @ 0x01029af0
 int cSPSpaceCombatTuning_s0102_97e0::GetAirRaidSirenTimeMS()
 {
-    float v = 0.0f;
+    volatile float v = 0.0f;
     cPropertyList* pl = mPropList;
     if (pl) {
         Prop* p;

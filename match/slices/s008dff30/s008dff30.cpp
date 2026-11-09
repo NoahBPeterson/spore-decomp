@@ -640,7 +640,7 @@ void HashTable::DoFreeNodes18(void** pBucketArray, uint32 nCount)
     for (uint32 i = 0; i < nCount; ++i) {
         char* p = (char*)pBucketArray[i];
         while (p) {
-            char* pNode = p;
+            char* const pNode = p;
             void* pBegin = *(void**)(pNode + 4);
             uint32 nEnd = *(uint32*)(pNode + 0xc);
             p = *(char**)(pNode + 0x14);
@@ -661,7 +661,7 @@ void HashTable::DoFreeNodes20(void** pBucketArray, uint32 nCount)
     for (uint32 i = 0; i < nCount; ++i) {
         char* p = (char*)pBucketArray[i];
         while (p) {
-            char* pNode = p;
+            char* const pNode = p;
             void* pBegin = *(void**)(pNode + 0xc);
             uint32 nEnd = *(uint32*)(pNode + 0x14);
             p = *(char**)(pNode + 0x1c);

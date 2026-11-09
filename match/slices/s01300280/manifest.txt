@@ -16,3 +16,7 @@ slices/s01300280/s01300280_od.cpp  ?init_154f4dc@@YAXXZ  01300950  /Od /Ob1 /MD 
 slices/s01300280/s01300280_od.cpp  ?init_154f714@@YAXXZ  01300a70  /Od /Ob1 /MD /Gy /TP /arch:SSE
 slices/s01300280/s01300280_od.cpp  ?init_154f94c@@YAXXZ  01300b20  /Od /Ob1 /MD /Gy /TP /arch:SSE
 slices/s01300280/s01300280_od.cpp  ?init_154fbe4@@YAXXZ  01300c50  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s01300280/s01300280.cpp  ?init_1678f3c@@YAXXZ  0130fce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_1679394@@YAXXZ  013107d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_1679564@@YAXXZ  01310bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_167946c@@YAXXZ  01310be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

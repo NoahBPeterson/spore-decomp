@@ -134,13 +134,29 @@ struct cPropertyManager2 {
     void* mFactoryVt;           // +0x24 area
     bool CreateResource(int* info, int a, int b, int* out);
 };
+struct FbMap {
+    void** FindSlot(void* a, void* b);      // 0x00e5c780
+};
+struct FbOwner {                            // embedded at FeedbackCmd+0x3c
+    virtual bool  s0(); virtual bool  s1(); virtual bool  s2(); virtual bool  s3();
+    virtual bool  s4(); virtual void  s5(); virtual bool  s6();
+    virtual bool  s7(int key);              // +0x1c
+    virtual void* s8(); virtual void* s9();
+    virtual void* s10(int key);             // +0x28
+};
 struct FeedbackCmd {
     uint8_t pad0[0x1c];
     uint8_t mActive;        // +0x1c
     uint8_t pad1[3];
-    uint8_t mMap[0x20];     // +0x20  (rbtree)
-    void*   mEnd;           // +0x40 ... approx
+    uint8_t mMap[0x1c];     // +0x20  (rbtree)
+    FbOwner mOwner;         // +0x3c
+    void* Get(int key);     // 0x006a3d50
+    bool  Test(int key);    // 0x006a3f00
 };
+extern void* g_fb_default;      // 0x016029b0
+struct FbInitFlag { unsigned inited : 1; unsigned unused : 31; };
+extern FbInitFlag g_fbInit;     // 0x016029c4
+extern "C" void FUN_011e07ef(void* fn);   // 0x011e07ef
 static const char kAllocPath[] =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 struct Vec38 {
@@ -1554,13 +1570,24 @@ void cAppPropsCommand::OnEndParse(int b)
 }
 
 // @ 0x006a3d50
-void* FUN_006a3d50(FeedbackCmd* self)
+void* FeedbackCmd::Get(int key)
 {
-    if (!self->mActive)
-        return ((void* (__thiscall*)(void*))((void**)*(void**)((char*)self + 0x3c))[0x28 / 4])((char*)self + 0x3c);
-    // rbtree find + atexit fallback
-    extern void* g_feedbackFallback;
-    return g_feedbackFallback;
+    if (mActive) {
+        void* it;
+        void** slot = ((FbMap*)((char*)this + 0x20))->FindSlot(&it, &key);
+        char* found = (char*)*slot;
+        if (found != (char*)this + 0x24)
+            return found + 0x14;
+        if (!g_fbInit.inited) {
+            g_fbInit.inited = 1;
+            *(uint16_t*)0x16029c0 = 0;
+            *(uint16_t*)0x16029c2 = 0;
+            FUN_011e07ef((void*)0x13bed20);
+        }
+        return &g_fb_default;
+    } else {
+        return mOwner.s10(key);
+    }
 }
 
 // @ 0x006a3dd0
@@ -3623,3 +3650,4 @@ char cPropertyManager_s006a_a3f0::ReadResource(void* obj, int* res)
     }
     return 0;
 }
+

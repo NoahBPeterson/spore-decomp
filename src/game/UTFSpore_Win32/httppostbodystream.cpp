@@ -641,8 +641,11 @@ long EA::Internet::HTTPFormURLEncodedPostBodyStream::GetPosition(EA::IO::Positio
             return mnPosition;
         if (origin == 1)
             return 0;
-        if (origin == 2)
-            r = mnPosition - (int)msData.mpEnd + (int)msData.mpBegin;
+        if (origin == 2) {
+            r = mnPosition - (int)msData.mpEnd;
+            _ReadWriteBarrier();
+            r += (int)msData.mpBegin;
+        }
     }
     return r;
 }
@@ -676,7 +679,9 @@ unsigned int EA::Internet::HTTPFormURLEncodedPostBodyStream::GetAvailable() cons
         return -1;
     if (mnState != 0)
         return -1;
-    return (msData.mpEnd - mnPosition) - msData.mpBegin;
+    unsigned int n = (unsigned int)((int)msData.mpEnd - mnPosition);
+    _ReadWriteBarrier();
+    return n - (unsigned int)msData.mpBegin;
 }
 
 // @ 0x00946920

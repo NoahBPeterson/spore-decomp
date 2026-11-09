@@ -11,7 +11,7 @@
 00574b40 202 ScoreCreatureForZCorp: frame 0x30 vs 0x2c (inlined property-float helper locals not packed like original); bbox max-extent scheduling differs
 00574da0 24 SetupThumbnailModelWorld: vptr cached in edi for both lighting-world vcalls in original; ours reloads it
 00574f30 30 UpdateModelSounds: original loads vptr before pushing args for GetPropertyList/GetProperty vcalls (scheduling only)
-00575e50 3 complete; only a vtable-call register swap (original edx=vtable/eax=fn, ours eax/edx)
+00575e50 3 complete; only a vtable tail-call register swap (original edx=vtable/eax=fn/jmp eax, ours eax/edx/jmp edx). Tried a named VObj* local, the bare vcall cast, and separate vt/fn locals (the last shrinks to 45B); all keep eax=vtable.
 005767f0 104 WriteBoolVector: original packs count/bool locals into the dead param slot and tail-calls EndBlock; ours allocates a frame slot
 00576880 71 ReadIntArray6: original packs the count local into the dead param slot; ours allocates a frame slot
 00576a10 120 uninitialized_copy (snapshot): original strength-reduces with a +0x14 base pointer; element copy-ctor form not recovered
@@ -25,7 +25,6 @@
 00579a90 63 complete eastl wstring RangeInitialize; s/this live in different saved registers (ebp vs esi)
 00579e20 1769 complete member release cascade; macro-expanded helpers differ in reg alloc/ordering from original  ; difftest WEAK (--repairs 64: 904 valid of 2000, no mismatch, coverage 55.8%; mapped the cEditorResource/PaintSystem/cContentValidationSummarizer vtables)
 0057a610 26 complete AddTorsoToEffectsMask(Vector3 by value as x,y,z floats, int); original loads all three floats before storing  ; difftest PASS (fix: the copied vec3 is the by-value argument, not an uninitialized local)
-0057a6d0 3 complete ctor; only mov ecx,<addr> scheduling differs  ; difftest PASS (marker moved onto the ctor; RefObj base vtable mapped via novtable + explicit store)
 0057a710 367 complete SendBehaviorMessage; this/msg register roles swapped vs original  ; difftest PASS at --inputs 1000 (fixes: 0x5942e0 callee was mis-annotated as 0xae6970; vtable+0xc call double-dereferenced; AddRef is a virtual call after new, not in the ctor)
 0057a960 73 complete GetMask (returns Bits128 by value); original builds in a stack temp (sub esp,0x10)  ; difftest PASS (mapped g_mf* globals: split decls so each // 0x annotation applies)
 0057a9e0 102 complete GetDefaultMask (returns Bits128 by value); original keeps the zero stores  ; difftest PASS (mapped g_d4*/g_mf* globals)

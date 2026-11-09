@@ -348,7 +348,9 @@ void PickingContext::PlaceFloat(FloatEntry* entry)
     mpFloatTailB80 = entry;
     while (*head) {
         FloatEntry* e = *head;
-        if (mY548 + mExtra55c >= e->mMaxY)
+        float y = mExtra55c;
+        y += mY548;
+        if (y >= e->mMaxY)
             *head = e->mpNext;
         else
             head = &e->mpNext;

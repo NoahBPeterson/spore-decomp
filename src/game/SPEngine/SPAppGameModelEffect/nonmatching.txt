@@ -9,7 +9,7 @@
 007d53a0 116 Elem40 range copy: field/matrix/refcount copies present; loop unrolling and register allocation differ flags: /O2 /MD /Gy /EHsc /TP /GS-
 007d5520 99 transform backward copy: cSPTransform::operator= + refcount assign present; the inline AutoRefCount codegen differs flags: /O2 /MD /Gy /EHsc /TP /GS-
 007d56f0 716 cGameModelEffect::SetTransforms: complete; first rotation copy via Matrix3::Assign, later copies inlined through a temp; register allocation (source/rigid/this in edi/ebp/ebx, loop counters in arg slots) differs; needs /fp:fast for SSE mulss; difftest PASS after fixing the loop/final cTransform copies, which called Matrix3::Assign (an extra call the original inlines) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
-007d5dc0 2 cGameModelEffect::Unload: complete; only the [edi+eax+0x3c] vs [eax+edi+0x3c] addressing order differs; difftest PASS flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+007d5dc0 2 cGameModelEffect::Unload: complete; only the [edi+eax+0x3c] vs [eax+edi+0x3c] addressing order differs; tried commutative subscript, signed/unsigned index - cl canonicalises the base/index choice; difftest PASS built: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 007d6320 43 eastl::vector<cElement0x78>::vector(const vector&): complete; this/arg register swap flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 007d6620 286 eastl::vector<cSplitController>::DoInsertValue: complete; original has an EH frame around the placement copy flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 007d72e0 530 eastl::vector<cSplitInstanceList>::DoInsertValues; complete grow + in-place insert paths, call/inlining schedule differs flags: /O2 /MD /Gy /EHsc /TP /GS-

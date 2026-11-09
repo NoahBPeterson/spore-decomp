@@ -1200,8 +1200,8 @@ void Mat4::Scale(const float* s)
 {
     if (flags == 0) flags = 1;
     m[0] = s[0] * m[0];
-    m[1] = m[1] * s[1];
-    m[2] = m[2] * s[2];
+    m[1] = s[1] * m[1];
+    m[2] = s[2] * m[2];
     m[4] = m[4] * s[0];
     m[5] = m[5] * s[1];
     m[6] = m[6] * s[2];

@@ -9,6 +9,7 @@
 ../src/game/SPGonzago/SPBlobShadow.cpp  ??0?$FixedVector@$0EA@@@QAE@XZ  0041cfe0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ??0?$FixedVector@$0BAA@@@QAE@XZ  0041d050  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ??0?$FixedVector@$0BAA@@@QAE@I@Z  0041d0c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPBlobShadow.cpp  ?Assign@RangeOwner@@QAEAAU1@ABU1@@Z  0041d140  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ??0FlagObject@@QAE@PAX@Z  0041d1a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ??0?$FixedBuffer@$0CAA@@@QAE@XZ  0041d360  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ??0?$FixedBuffer@$0KA@@@QAE@XZ  0041d3c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
@@ -27,6 +28,7 @@
 ../src/game/SPGonzago/SPBlobShadow.cpp  ?Assign@ThreadedRef@@QAEPAU1@PAUThreadedObject@@@Z  0041d8b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ?Reset@RcRef@@QAEPAU1@XZ  0041d900  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ?Reset@ExtRef@@QAEPAU1@XZ  0041d940  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBlobShadow.cpp  ?Assign@RcHolderRef@@QAEPAU1@PAURcHolder@@@Z  0041d980  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ?Reset@RcHolderRef@@QAEPAU1@XZ  0041d9f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ?Reset@OwnPtrV2@@QAEPAU1@XZ  0041da30  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBlobShadow.cpp  ?Init@FixedVec1536@@QAEXXZ  0041da70  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -8,3 +8,4 @@ slices/s00e56820/s00e56820.cpp  ?FUN_00e56e50@@YAIHHHHM@Z  00e56e50  /O2 /MD /Gy
 slices/s00e56820/s00e56820.cpp  ?FUN_00e56f20@@YA_NH@Z  00e56f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e56820/s00e56820.cpp  ?FUN_00e571f0@@YA_NHH@Z  00e571f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e56820/s00e56820.cpp  ?FUN_00e57260@@YAXPAHHM@Z  00e57260  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e56820/s00e56820.cpp  ?FUN_00e56870@@YAXXZ  00e56870  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -2620,7 +2620,10 @@ void SlotVecC4::DestroyEntry(uint32_t idx)
     void* p = *(void**)((char*)slot + 0x2c);
     if (p && p != *(void**)((char*)slot + 0x3c))
         EastlFree(p);
-    *slot = (mField1c & 0x3fffffff) | (*slot & 0xc0000000) | 0x80000000;
+    uint32_t bits = mField1c;
+    _ReadWriteBarrier();
+    uint32_t old = *slot;
+    *slot = (old & 0xc0000000) | (bits & 0x3fffffff) | 0x80000000;
     mField1c = idx;
     if (mField18 == idx)
         mField18 = Next(idx);
@@ -2630,7 +2633,10 @@ void SlotVecC4::DestroyEntry(uint32_t idx)
 void Deque38::PopDestroy()
 {
     Elem38* elem = (Elem38*)(*(int*)((char*)mpData - 4) + mIndex14 * 0x38);
-    if (((elem->mTag >> 31) & 1) == 0) {
+    unsigned tag = elem->mTag;
+    unsigned top = tag >> 31;
+    _ReadWriteBarrier();
+    if ((top & 1) == 0) {
         elem->mList.~IntrusiveList();
         if (elem->mp18 && ((int*)elem->mp18)[-1] != 0)
             EastlFree(elem->mp18);
@@ -3088,7 +3094,10 @@ void ClearDeque::ClearImpl(int)
 {
     while (mpBegin != mpEnd) {
         char* e = (char*)(mField14 * 0xc4 + *(int*)((char*)mpEnd - 4));
-        if (((*(int*)e >> 31) & 1) == 0) {
+        unsigned tag = *(int*)e;
+        unsigned top = tag >> 31;
+        _ReadWriteBarrier();
+        if ((top & 1) == 0) {
             void* x = *(void**)(e + 0x2c);
             if (x && x != *(void**)(e + 0x3c))
                 EastlFree(x);

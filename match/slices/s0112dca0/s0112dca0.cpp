@@ -443,7 +443,7 @@ void StreamPool::QueueRelease()
 double __fastcall Voice_GetDecayProgress(int p)
 {
     int s = *(int*)(p + 0x10);
-    return (double)*(float*)(p + 0x28) / (double)*(float*)(s + 0xc0);
+    return (double)(*(float*)(p + 0x28) / *(float*)(s + 0xc0));
 }
 
 // @ 0x0112e450 -- Voice::StartDecay: enter state 1 and latch the decay countdown.

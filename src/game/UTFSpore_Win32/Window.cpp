@@ -57,8 +57,8 @@ struct Window {
     bool    Test30Slot48(int v);
     bool    Test30Slot54(int v);
     bool    AllDescendants(char param);
-    bool    AllDescendantsAll(char param);
-    int     FindChild(int arg);
+    int     AllDescendantsAll(bool param);
+    void    FindChild();
     int     WalkChildren(int* iface);
     void    SetA8(int v);
     void    Set1D4(int v);
@@ -428,41 +428,40 @@ bool Window::AllDescendants(char param)
 }
 
 // @ 0x0095fc00
-bool Window::AllDescendantsAll(char param)
+int Window::AllDescendantsAll(bool param)
 {
     unsigned mask = ((param != 0) - 1) & 2 | 1;
     int node = m38;
     while (node != 0) {
         unsigned r = (*(unsigned(__thiscall**)(int))((char*)*(void**)(node + 4) + 0x28))(node + 4);
         if ((r & mask) == mask)
-            return true;
+            return node;
         node = *(int*)(node + 0x38);
     }
-    return false;
+    return 0;
 }
 
 // @ 0x0095fc50
-int Window::FindChild(int arg)
+void Window::FindChild()
 {
     int edi = m34;
-    if (edi == 0)
-        return 0;
-    for (int i = 0; i < 2; i++) {
-        int r = (*(int(__thiscall**)(int, int))((char*)*(void**)edi + 0x48))(edi, i);
-        if (r == 0)
-            break;
-        r -= 4;
-        if (r == 0)
-            break;
-        int node = r;
-        while (node != 0 && node != (int)this)
-            node = *(int*)(node + 0x38);
-        if (node == 0)
-            break;
-        (void)arg;
-        return node + 4;
+    if (edi != 0) {
+        for (unsigned i = 0; i < 0xa; i++) {
+            Window* r = (Window*)(*(int(__thiscall**)(int, unsigned))((char*)*(void**)edi + 0x48))(edi, i);
+            if (r == 0)
+                continue;
+            r = (Window*)((int*)r - 1);
+            if (r == 0)
+                continue;
+            while (r != 0 && r != this)
+                r = *(Window**)((char*)r + 0x38);
+            if (r == 0)
+                continue;
+            int d = AllDescendantsAll(i == 1);
+            int x = d ? d + 4 : 0;
+            (*(void(__thiscall**)(int, unsigned, int))((char*)*(void**)edi + 0x4c))(edi, i, x);
+        }
     }
-    return 0;
 }
 
 // @ 0x0095fcc0
@@ -935,8 +934,6 @@ bool Win::ScreenToWindow(float x, float y, float* out)
 // @ 0x00961260
 void Win::GetId(void** out)
 {
-    if (!out)
-        return;
     *out = m38;
 }
 
@@ -1454,7 +1451,7 @@ bool EA::UTFWin::Window::Shutdown()
     do {
       char* v = *(char**)(self + 0x40);
       char* adj;
-      if (v) { v -= 8; adj = v ? v + 4 : 0; }
+      if (v) { v = v + -8; adj = v ? v + 4 : 0; }
       else adj = 0;
       ((VtblE0*)*(void**)base)->fn(base, (int)(size_t)adj);
     } while (lst[1] != (int)lst);

@@ -15,6 +15,8 @@
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?SetPropList@cSpaceInventoryItem@@QAEXPAVcPropertyList@@@Z  00c877f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?Duplicate@cSpaceInventoryItem@@UAEXPAPAV1@@Z  00c87880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ??1cSpaceInventory_s00c8_7be0@@UAE@XZ  00c87be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceInventory.cpp  ?GetImageID@cSpaceInventoryItem@@UAE?AUResourceKey@@XZ  00c87170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceInventory.cpp  ?GetPanelID@cSpaceInventoryItem@@UAE?AUResourceKey@@XZ  00c871d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?RemoveItem@cSpaceInventory_s00c8_7be0@@UAE_NPAVcSpaceInventoryItem_s00c8_7be0@@@Z  00c87d80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?Read@cSpaceInventory_s00c8_7be0@@QAE_NPAX@Z  00c883d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?UpdateTuning@cSPSpaceInventoryItem_s0104_bcc0@SP@@SAXIPAI@Z  0104c120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

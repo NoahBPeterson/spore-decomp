@@ -49,9 +49,9 @@ ForceGrid* ForceGrid::Init(float cost)
     if (v >= 2)
         mpEval = (EvalFn)&ForceGrid::FUN_004f90a0;
     else if (v == 1)
-        mpEval = &ForceGrid::FUN_004f9180;
+        mpEval = (EvalFn)&ForceGrid::FUN_004f9180;
     else
-        mpEval = &ForceGrid::FUN_004f8d80;
+        mpEval = (EvalFn)&ForceGrid::FUN_004f8d80;
     g_bForceGridInit = 1;
     count = 2;
     mpGridBlock = (Vector3*)FUN_004f8750(count * 4 * 4, 0);

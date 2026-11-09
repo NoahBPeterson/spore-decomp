@@ -1297,7 +1297,7 @@ void FUN_008d3b70(int param_1, int param_2, int param_3, int param_4, unsigned p
 // @ 0x008d3c60
 TSI* TSI::FUN_008d3c60(VAlloc* alloc)
 {
-    mVtbl = &PTR_FUN_01435990;
+    mVtbl = (void**)0x1435990;
     mKeys.begin = 0;
     mKeys.end = 0;
     mKeys.cap = 0;

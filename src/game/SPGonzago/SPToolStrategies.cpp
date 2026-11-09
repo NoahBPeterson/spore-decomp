@@ -182,11 +182,12 @@ public:
 
     // 0x00e14a30-style helpers replicated for this cluster.
     bool ActivateTool(int nToolId);                     // 0x00e537e0
-    bool CanUseToolAtLocation(int nToolId, int nTarget);  // 0x00e53980
+    char CanUseToolAtLocation(int nToolId, int nTarget, int a3);  // 0x00e53980
     void UpdatePassive();                                // 0x00e53bb0
     bool StopTool();                                     // 0x00e53650
     Vec3* FindTestTerrainLocation(Vec3* pOut, int nTarget);  // 0x00e53be0
     int SetErrorEvent(int nEventType, bool bPost);       // 0x00e527f0
+    void AttachToolEffect(const void* pData, int arg2);  // 0x01053d50
 };
 class cSPDefaultBeamTool : public cSPToolStrategy {
 public:
@@ -211,7 +212,7 @@ public:
 };
 class cSPGetOutOfUFOToolStrategy : public cSPToolStrategy {
 public:
-    bool CanUseToolAtLocation(int nToolId, int nTarget);  // 0x00e540b0
+    bool CanUseToolAtLocation(int nToolId, int nTarget, int a3);  // 0x00e540b0
     bool ActivateTool(int nToolId);                       // 0x00e540d0
 };
 void AppendScanResult(void* pList, int* pOut);              // 0x01052880
@@ -221,7 +222,6 @@ int ScanSpecies(cPlanet* pPlanet);                          // 0x01053240
 int ScanTribe(cPlanet* pPlanet);                            // 0x01053320
 int ScanColony(cSPSimulatorSpaceGame* pGame);               // 0x010533d0
 int ScanAllSpecies(cPlanet* pPlanet);                       // 0x010534c0
-void AttachToolEffect(const void* pData);                   // 0x01053d50
 void AddToolCharge(int nAmount);
 int gSpaceToolFlags[8];
 class IQueryable {
@@ -2572,8 +2572,9 @@ bool cSPToolStrategy::ActivateTool(int nToolId)
 }
 
 // @ 0x01053980
-bool cSPToolStrategy::CanUseToolAtLocation(int nToolId, int nTarget)
+char cSPToolStrategy::CanUseToolAtLocation(int nToolId, int nTarget, int a3)
 {
+    (void)a3;
     bool bResult = CanUseToolAt(nToolId, nTarget, 0);
 
     if (SpaceGameGet() == nullptr)
@@ -2676,13 +2677,24 @@ Vec3* cSPToolStrategy::FindTestTerrainLocation(Vec3* pOut, int nTarget)
 }
 
 // @ 0x01053d50
-void AttachToolEffect(const void* pData)
+struct ToolEffectA { int m00, m04, m08, m0c; };
+struct ToolEffectB {
+    int m00, m04; int mPad08[10];
+    void Init(int arg2, ToolEffectA* pA);   // 0x00ad79d0
+    void Destroy();                         // 0x00ad7ad0
+};
+struct ToolEffectObj { void Apply(); };    // 0x00ae09b0
+void* __stdcall FUN_00b3d4d0(int key, void* pValue, int flag);          // 0x00b3d4d0
+
+void cSPToolStrategy::AttachToolEffect(const void* pData, int arg2)
 {
-    (void)pData;
-    uint8_t local40[16];
-    uint8_t local30[48];
-    local40[0] = 0;
-    local30[0] = 0;
+    ToolEffectA a;
+    ToolEffectB b;
+    b.Init(arg2, &a);
+    void* pEffect = FUN_00b3d4d0(0x5dce504a, &b, 0);
+    ((ToolEffectObj*)pEffect)->Apply();
+    OnUseResult((int)pData, arg2);
+    b.Destroy();
 }
 
 // @ 0x01053db0
@@ -2800,13 +2812,13 @@ bool cSPScanToolStrategy::UseTool(int nToolId, int nTarget)
 {
     if (mpEffectRef != nullptr)
         return true;
-    return CanUseToolAtLocation(nToolId, nTarget);
+    return CanUseToolAtLocation(nToolId, nTarget, 0);
 }
 
 // @ 0x010540b0
-bool cSPGetOutOfUFOToolStrategy::CanUseToolAtLocation(int nToolId, int nTarget)
+bool cSPGetOutOfUFOToolStrategy::CanUseToolAtLocation(int nToolId, int nTarget, int a3)
 {
-    return cSPToolStrategy::CanUseToolAtLocation(nToolId, nTarget);
+    return cSPToolStrategy::CanUseToolAtLocation(nToolId, nTarget, a3);
 }
 
 // @ 0x010540d0

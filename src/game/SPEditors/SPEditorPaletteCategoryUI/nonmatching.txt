@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 005c2a30 53 GetChunkIndexForPackID: register allocation (orig keeps index on stack, this in ebp; reloads packs[i] via address)
 005c31c0 158 UpdatePreviewSwatch: orig defers the AddBoundingBox arg pop into the final add esp,0x28 and uses or [mem],8; mine pops immediately (8-byte shift)
-005c3a50 2 OnPageChanged: message mID store scheduled after the base vptr store (orig stores the id first)
 005c3cb0 111 SetSelectedPack: orig materialises the size()>0 test as seta al / test al,al / je (3 bytes longer); every later branch shifts [equiv: WEAK]
 005c4210 83 GetWindowsWithMatchingID: register roles swapped (window/out in edi/ebx) and child address-taken slot is cached in esi with reload after Grow; mine forgoes the reload [equiv: WEAK]
 005c4500 652 PopulateExpansionPackPane: complete (hide/show pane, pack buttons, tooltips); button creation split into a helper and the two near-identical loops merged; difftest WEAK (10% coverage: the pane is only built when image singletons such as 0x15fd918 allow it; after mapping operator new/delete to 0xf473a0/0xf47380 and cSPUILayout::cSPUILayout to 0x810000 via symbols/slices/s005c4500.txt, overriding a PDB-guess name at 0xdd1ca0)

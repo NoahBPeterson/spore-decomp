@@ -664,8 +664,8 @@ void* cFactoryMixMode_s00ea_8f90::scalar_deleting_destructor(unsigned char flags
     char* e = (char*) mpVecEnd;
     if ((int) (e - b) > 1 && b != 0)
         operator_delete(b);
-    void* root = mTree.mpRoot;
-    mTree.DoNukeSubtree(root);
+    MixModeRbtree* tree = &mTree;
+    tree->DoNukeSubtree(tree->mpRoot);
     mMutex.Dtor();
     mVtbl = (void*) 0x13effb8;
     if (flags & 1)

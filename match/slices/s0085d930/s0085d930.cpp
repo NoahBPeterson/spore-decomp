@@ -3,6 +3,8 @@
 // Frozen batch gold5.  32-bit x86, MSVC 2008 SP1, flags /O2 /MD /Gy /TP
 // /arch:SSE /fp:fast (default /GS on).
 
+#include <intrin.h>
+
 typedef unsigned int  uint;
 typedef unsigned char byte;
 typedef unsigned short wchar16;
@@ -19,10 +21,12 @@ void __cdecl FUN_0085e5c0(int param_1) {
     int* puVar1 = (int*)ALLOCATOR(param_1)(param_1, 1, 0x40);
     *(int*)(param_1 + 0x5bc) = (int)puVar1;
     puVar1[0] = (int)FUN_0085e2d0;
-    puVar1[0xb] = 0;
-    puVar1[0xc] = 0;
-    puVar1[0xd] = 0;
-    puVar1[0xe] = 0;
+    _ReadWriteBarrier();
+    int zero = 0;
+    puVar1[0xb] = zero;
+    puVar1[0xc] = zero;
+    puVar1[0xd] = zero;
+    puVar1[0xe] = zero;
     int iVar3 = 0;
     int iVar6 = (int)ALLOCATOR(param_1)(param_1, 1, *(int*)(param_1 + 0x20) << 8);
     *(int*)(param_1 + 0xa0) = iVar6;

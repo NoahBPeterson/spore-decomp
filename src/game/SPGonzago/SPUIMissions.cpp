@@ -13,6 +13,7 @@
 #include "cSPUIAnimator.h"
 #include "EA/LimitStopwatch.h"
 #include "SP/cIGonzagoSubsystem.h"
+#include <intrin.h>
 #include "SP/cSPUIFeedList.h"
 
 // ---- items of slice s00e14a30 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -4399,7 +4400,7 @@ bool cUIMissionCardPanel_s00e1_7c10::RemoveMissionCard(void *mission)
         ((void (__thiscall *)(void *))(*(void ***)sub)[0x1c / 4])(sub);
         void **next = it + 1;
         if (next < m_vec2c) {
-            FUN_006782c0(it, m_vec2c, next);
+            FUN_006782c0(next, m_vec2c, it);
         }
         m_vec2c = m_vec2c - 1;
         void *tail = *m_vec2c;
@@ -5143,6 +5144,7 @@ namespace SP {
 void FUN_00e1cb80(void* p1, void* p2, void* p3)
 {
     FUN_00e1c8b0(p1, p2, p3);
+    _ReadWriteBarrier();
 }
 }  // namespace SP
 

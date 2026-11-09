@@ -407,9 +407,9 @@ bool Socket::Fn0094d4b0()
 // @ 0x0094d500
 bool EA::Sockets::Socket::SetStyle(int a, int b, int c)
 {
-    *(int*)((char*)this + 0x48) = c;
-    *(int*)((char*)this + 0x44) = b;
     *(int*)((char*)this + 0x40) = a;
+    *(int*)((char*)this + 0x44) = b;
+    *(int*)((char*)this + 0x48) = c;
     return true;
 }
 

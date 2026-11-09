@@ -101,6 +101,7 @@ char f9e80(int a, int* p);   // free callback
 
 // ---- items of slice s00fd9f70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma warning(disable : 4100)
+class cSPSpaceGameState;
 namespace SP {
 class cGonzagoSubsystem_s00fd_9f70 {
 public:
@@ -117,18 +118,25 @@ public:
     void ShutdownGonzagoSubsystem();
     void SetPlanetTimeOnFirstEntry();
     void Write();
+    void* FUN_01046fc0(void* arg);                       // 0x01046fc0
     void FUN_00fda1f0();
-    void FUN_00fda2e0();
+    bool FUN_00fda2e0(void* v);
     void FUN_00fda480();
     void FUN_00fda5e0();
     void FUN_00fda750();
     void FUN_00fda940();
     void FUN_00fda9f0();
-    void FUN_00fdab40();
+    bool FUN_00fdab40(void* arg);
     void FUN_00fdabf0();
-
-    uint8_t             pad000[0x180];                   // +0x000 .. +0x17f
+    uint8_t             pad000[0x158];                   // +0x000 .. +0x157
+    bool                mFlag158;                        // +0x158
+    uint8_t             pad159[0x3];                     // +0x159 .. +0x15b
+    cSPSpaceGameState*  mpSpaceState;                    // +0x15c
+    void*               mpObj160;                        // +0x160
+    uint8_t             pad164[0x180 - 0x164];           // +0x164 .. +0x17f
     cGonzagoSubsystem_s00fd_9f70*  mpGonzagoSubsystem;              // +0x180
+    uint8_t             pad184[0x9];                     // +0x184 .. +0x18c
+    bool                mFlag18d;                        // +0x18d
 };
 }
 // ---- items of slice s00fd9f70 end
@@ -142,6 +150,8 @@ extern float   DAT_015b402c;                 // 0x015b402c
 extern float   DAT_015b4030;                 // 0x015b4030
 extern float   DAT_01486110;                 // 0x01486110  (5.0f)
 extern float   DAT_0145c464;                 // 0x0145c464  (0.4166666f)
+extern float   DAT_01471064;                 // 0x01471064
+extern char     DAT_013f09b4[];              // 0x013f09b4  "Simulator"
 extern void*   DAT_015fd928;                 // 0x015fd928  (cTestSystem singleton)
 extern void*   DAT_015fd918;                 // 0x015fd918  (app property list)
 extern void*   DAT_016d9938;                 // 0x016d9938
@@ -301,6 +311,11 @@ void* FUN_00b3d350(void* a, void* b);                          // 0x00b3d350
 struct cSelf
 {
     // ecx = this only
+    bool      FUN_00b5ca60();        // 0x00b5ca60
+    bool      FUN_00c37170();        // 0x00c37170
+    void      FUN_01050bb0();        // 0x01050bb0
+    bool      FUN_01046f30();        // 0x01046f30
+    bool      FUN_01017300(void* arg); // 0x01017300
     int       FUN_00bb9ae0();        // 0x00bb9ae0
     bool      FUN_00bb9fb0();        // 0x00bb9fb0
     void      FUN_00bb9b30();        // 0x00bb9b30
@@ -358,6 +373,7 @@ struct cSelf
     void  FUN_00c3aa40(void* a, void* b);            // 0x00c3aa40
     void  FUN_00c3daa0(float f);                     // 0x00c3daa0
     void  FUN_00bc2f00(float f);                     // 0x00bc2f00
+    void  FUN_00bc2f00(float f, void* p);            // 0x00bc2f00 (2 stack args)
     void  FUN_00ff5ee0(void* a, void* b);            // 0x00ff5ee0
     void  FUN_00b32250(int id);                      // 0x00b32250
     bool  FUN_006a25a0(int id);                      // 0x006a25a0
@@ -379,6 +395,11 @@ public:
 class cSPSpaceGameState                           // object at cAppModeSpace +0x15c
 {
 public:
+    void FUN_0100a960();                           // 0x0100a960
+    void FUN_01009470(int a, void* b, int c);      // 0x01009470
+    void FUN_010039c0(void* a);                    // 0x010039c0
+    void FUN_01003620();                           // 0x01003620
+    void FUN_01002be0();                           // 0x01002be0
     uint32_t pad00[5];                             // +0x00
     void*    mpEffect;                             // +0x14
     uint32_t pad18[(0x50 - 0x18) / 4];
@@ -902,6 +923,7 @@ struct cSelf_s00fd_cd40
     void  FUN_00c3aa40(void* a, void* b);            // 0x00c3aa40
     void  FUN_00c3daa0(float f);                     // 0x00c3daa0
     void  FUN_00bc2f00(float f);                     // 0x00bc2f00
+    void  FUN_00bc2f00(float f, void* p);            // 0x00bc2f00 (2 stack args)
     void  FUN_00ff5ee0(void* a, void* b);            // 0x00ff5ee0
     void  FUN_00b32250(int id);                      // 0x00b32250
     bool  FUN_006a25a0(int id);                      // 0x006a25a0
@@ -3734,6 +3756,7 @@ void __thiscall cAppModeSpace::OnMouseUp()
 }  // namespace SP
 
 // @ 0x00fda1f0
+void* __cdecl FUN_00b3d250();                        // 0x00b3d250 (input manager)
 namespace SP {
 void __thiscall cAppModeSpace::FUN_00fda1f0()
 {
@@ -3741,23 +3764,102 @@ void __thiscall cAppModeSpace::FUN_00fda1f0()
 }  // namespace SP
 
 // @ 0x00fda2e0
+void* __cdecl FUN_00b3d230();                        // 0x00b3d230
+void* __stdcall FUN_00b3d390(void* a, void* b, int c); // 0x00b3d390
 namespace SP {
-void __thiscall cAppModeSpace::FUN_00fda2e0()
+bool __thiscall cAppModeSpace::FUN_00fda2e0(void* v)
 {
+    if (((cSPSpaceGameState*)mpSpaceState)->mpEffect == 0)
+        return false;
+    if (((cNounMgr*)FUN_00b3d380())->mFlags48 & 1)
+        return false;
+    if (((cSelf*)FUN_00b3d230())->FUN_00b5ca60())
+        return true;
+    if (!((cSelf*)((cSelf*)FUN_00ffbe50())->FUN_00a1ad60())->FUN_00c37170())
+        return true;
+
+    void* tool = ((cSelf*)mpSpaceState)->FUN_00a1ad60();
+    tool = ((cSelf*)tool)->FUN_00ff3f00();
+    if (tool != 0) {
+        if (((cSelf*)tool)->FUN_0104f930() != 0) {
+            ((uint32_t*)tool)[0x170 / 4] = 0;
+            ((cSelf*)FUN_00b3d390(tool, v, 1))->FUN_01050bb0();
+            mFlag18d = true;
+            ((cSPSpaceGameState*)mpSpaceState)->FUN_01002be0();
+        }
+    }
+    return true;
 }
 }  // namespace SP
 
 // @ 0x00fda390
+void* __cdecl FUN_00b3d450();                       // 0x00b3d450
+void* __cdecl FUN_00b3d470();                       // 0x00b3d470 (entry manager)
+void  __fastcall FUN_00b6c280(void* pObject);       // 0x00b6c280
+void  __fastcall FUN_00c2e4e0(void* pObject);       // 0x00c2e4e0
+void  __fastcall FUN_00bc3110(void* pTimer);        // 0x00bc3110 (stopwatch stop)
+extern void* DAT_015b7328;                          // 0x015b7328
+extern void* DAT_015b732c;                          // 0x015b732c
+extern void* DAT_015b7334;                          // 0x015b7334
+extern void* DAT_015b7338;                          // 0x015b7338
+extern void* DAT_015b733c;                          // 0x015b733c
+extern void* DAT_015b7340;                          // 0x015b7340
+extern void* DAT_015b7344;                          // 0x015b7344
+extern void* DAT_015b7348;                          // 0x015b7348
+extern void* DAT_015b734c;                          // 0x015b734c
+void* __cdecl FUN_0067de20();                       // 0x0067de20  cheat manager
+struct V1cArg : B06 { virtual void Push(void* p) = 0; };   // +0x1c (1 arg)
 namespace SP {
 void __thiscall cAppModeSpace::Deactivate()
 {
+    FUN_00b6c280(this);
+    FUN_00c2e4e0(FUN_00b3d450());
+
+    void** ppA = (void**)((char*)FUN_00b3d470() + 0xa4);
+    ((V0ci*)*ppA)->Reset(2);
+    void** ppB = (void**)((char*)FUN_00b3d470() + 0x94);
+    ((V0ci*)*ppB)->Reset(2);
+
+    ((V50x*)FUN_0067dd50())->X50(0x17);
+
+    void* pCheat = FUN_0067de20();
+    ((V1cArg*)pCheat)->Push(DAT_015b7328);
+    ((V1cArg*)pCheat)->Push(DAT_015b733c);
+    ((V1cArg*)pCheat)->Push(DAT_015b7340);
+    ((V1cArg*)pCheat)->Push(DAT_015b7344);
+    ((V1cArg*)pCheat)->Push(DAT_015b7334);
+    ((V1cArg*)pCheat)->Push(DAT_015b7338);
+    ((V1cArg*)pCheat)->Push(DAT_015b7348);
+    ((V1cArg*)pCheat)->Push(DAT_015b734c);
+
+    FUN_00bc3110((char*)this + 0xa8);
 }
 }  // namespace SP
 
 // @ 0x00fda480
+extern "C" void* __cdecl operator_new(unsigned int nSize, const char* pTag, int nA, int nB, const char* pFile, int nLine); // 0x00f473a0
+void* __fastcall FUN_00feacd0(void* pObject);       // 0x00feacd0 (ctor)
+void  __fastcall FUN_00b6f4c0(void* pObject);       // 0x00b6f4c0
+void  __cdecl    FUN_00c86640();                    // 0x00c86640
 namespace SP {
 void __thiscall cAppModeSpace::FUN_00fda480()
 {
+    void* pMem = operator_new(0xa28, DAT_013f09b4, 0, 0, 0, 0);
+    cGonzagoSubsystem_s00fd_9f70* pNew;
+    if (pMem != 0)
+        pNew = (cGonzagoSubsystem_s00fd_9f70*)FUN_00feacd0(pMem);
+    else
+        pNew = 0;
+    cGonzagoSubsystem_s00fd_9f70* pOld = mpGonzagoSubsystem;
+    if (pNew != pOld) {
+        if (pNew != 0)
+            pNew->v04();
+        mpGonzagoSubsystem = pNew;
+        if (pOld != 0)
+            pOld->Release();
+    }
+    FUN_00b6f4c0(mpGonzagoSubsystem);
+    FUN_00c86640();
 }
 }  // namespace SP
 
@@ -3776,9 +3878,30 @@ void __thiscall cAppModeSpace::ShutdownGonzagoSubsystem()
 }  // namespace SP
 
 // @ 0x00fda530
+extern char  DAT_016dd440;                              // 0x016dd440
+extern char  DAT_016dd3ff;                              // 0x016dd3ff
+extern float DAT_01471064;                              // 0x01471064
 namespace SP {
 void __thiscall cAppModeSpace::SetPlanetTimeOnFirstEntry()
 {
+    void* modeMgr = ((V38*)((V50*)FUN_0067dd10())->GetModeManager())->Get14();
+    if (modeMgr == 0)
+        return;
+    void* view = ((V0c*)modeMgr)->Query(0x303154cd);
+    if (view == 0)
+        return;
+    if (!DAT_016dd440) {
+        if (!DAT_016dd3ff)
+            return;
+    } else {
+        if (!DAT_016dd3ff && cSPLivingUniverse::GetActivePlanet_s00fd_eac0()->IsHomePlanet())
+            return;
+    }
+    cPlayerInventory* pInv = (cPlayerInventory*)((cSelf*)FUN_00ffbe50())->FUN_00a1ad60();
+    V2cp* pBody = (V2cp*)&pInv->mBody;
+    float f = ((cBC30*)FUN_00bc30b0())->m24;
+    void* pos = pBody->GetPosition();
+    ((cSelf*)FUN_00bc30b0())->FUN_00bc2f00(f * DAT_01471064, pos);
 }
 }  // namespace SP
 
@@ -3797,9 +3920,40 @@ void __thiscall cAppModeSpace::FUN_00fda750()
 }  // namespace SP
 
 // @ 0x00fda940
+void* __cdecl FUN_01002bd0();                        // 0x01002bd0
+void* __fastcall FUN_0102f710(void* pObject);        // 0x0102f710 (ctor)
+struct V0c0 : B02 { virtual void v0c(); };           // +0x0c (no args)
 namespace SP {
 void __thiscall cAppModeSpace::FUN_00fda940()
 {
+    mFlag158 = true;
+
+    cSPSpaceGameState* pNew = (cSPSpaceGameState*)FUN_01002bd0();
+    cSPSpaceGameState* pOld = mpSpaceState;
+    if (pNew != pOld) {
+        if (pNew != 0)
+            ((V04*)pNew)->Destroy();
+        mpSpaceState = pNew;
+        if (pOld != 0)
+            ((V08*)pOld)->Unlink();
+    }
+
+    if (mpObj160 == 0) {
+        void* pMem = operator_new(0x168, DAT_013f09b4, 0, 0, 0, 0);
+        void* pNew2;
+        if (pMem != 0)
+            pNew2 = FUN_0102f710(pMem);
+        else
+            pNew2 = 0;
+        void* pOld2 = mpObj160;
+        if (pNew2 != pOld2) {
+            if (pNew2 != 0)
+                ((V08*)pNew2)->Unlink();
+            mpObj160 = pNew2;
+            if (pOld2 != 0)
+                ((V0c0*)pOld2)->v0c();
+        }
+    }
 }
 }  // namespace SP
 
@@ -3807,6 +3961,28 @@ void __thiscall cAppModeSpace::FUN_00fda940()
 namespace SP {
 void __thiscall cAppModeSpace::FUN_00fda9f0()
 {
+    if (mpSpaceState != 0) {
+        switch (FUN_01021080()) {
+        case -1:
+            return;
+        case 0:
+            ((cSPSpaceGameState*)mpSpaceState)->FUN_0100a960();
+            break;
+        case 1:
+            ((cSPSpaceGameState*)mpSpaceState)->FUN_01009470(0, 0, 1);
+            {
+                cSPSpaceGameState* ss = (cSPSpaceGameState*)mpSpaceState;
+                ss->FUN_010039c0(FUN_01021230());
+            }
+            break;
+        case 2:
+            ((cSPSpaceGameState*)mpSpaceState)->FUN_01009470(0, 0, 1);
+            ((cSPSpaceGameState*)mpSpaceState)->FUN_01003620();
+            break;
+        }
+    }
+    FUN_01021960(-1);
+    FUN_010219b0(0, 0);
 }
 }  // namespace SP
 
@@ -3818,9 +3994,43 @@ void __thiscall cAppModeSpace::Write()
 }  // namespace SP
 
 // @ 0x00fdab40
-namespace SP {
-void __thiscall cAppModeSpace::FUN_00fdab40()
+struct S4_s00fd_ab40   { uint32_t a; };
+struct S8_s00fd_ab40   { S4_s00fd_ab40 a, b; };
+struct S10_s00fd_ab40  { S8_s00fd_ab40 a, b; };
+struct S20_s00fd_ab40  { S10_s00fd_ab40 a, b; };
+struct S40_s00fd_ab40  { S20_s00fd_ab40 a, b; };
+struct S80_s00fd_ab40  { S40_s00fd_ab40 a, b; };
+struct S100_s00fd_ab40 { S80_s00fd_ab40 a, b; };
+struct S200_s00fd_ab40 { S100_s00fd_ab40 a, b; };
+struct S400_s00fd_ab40 { S200_s00fd_ab40 a, b; };
+struct S800_s00fd_ab40 { S400_s00fd_ab40 a, b; };
+struct Sa00_s00fd_ab40 { S800_s00fd_ab40 a; S200_s00fd_ab40 b; };
+struct Sa14_s00fd_ab40 { Sa00_s00fd_ab40 a; S10_s00fd_ab40 b; S4_s00fd_ab40 c; };
+struct V40q_s00fd_ab40 : B15 { virtual void* Get40(void* a); };  // +0x40 (1 arg -> ptr)
+class cBigFrame_s00fd_ab40
 {
+public:
+    cBigFrame_s00fd_ab40(void* a, void* b, void* c);  // 0x00692f90 (ctor)
+    bool Test(void* arg);                             // 0x00693e10
+    Sa14_s00fd_ab40 body;
+};
+namespace SP {
+bool __thiscall cAppModeSpace::FUN_00fdab40(void* arg)
+{
+    void* p = FUN_01046fc0(arg);
+    bool b = ((cSelf*)p)->FUN_01046f30();
+
+    void* modeMgr = ((V50*)FUN_0067dd10())->GetModeManager();
+    void* q = ((V40q_s00fd_ab40*)modeMgr)->Get40((void*)0x1103192);
+    if (q != 0) {
+        void* r = ((V0c*)q)->Query(0x303154cc);
+        if (r != 0)
+            b = b & ((cSelf*)r)->FUN_01017300(arg);
+    }
+
+    cBigFrame_s00fd_ab40 frame((char*)this - 8, (void*)0x15b4148, (void*)0x1a80d26);
+    bool ok = frame.Test(arg);
+    return ok && b;
 }
 }  // namespace SP
 
@@ -4158,7 +4368,6 @@ void cAppModeSpace_s00fd_ade0::TransitionFromCivToSpace(int a, int b)
         float sq = sqrtf((fVec[0] * fVec[0]) + (fVec[1] * fVec[1]) + (fVec[2] * fVec[2]));
         ((cSelf*)inv)->FUN_00c3daa0(sq + DAT_01486110);
         ((cSelf*)buf2)->FUN_00ad7ad0();
-        ((cSelf*)buf1)->FUN_00ad7ad0();
     }
 
     if (DAT_015fd928 != 0) {
@@ -6640,3 +6849,7 @@ bool __cdecl TransitionFromSolarToGalaxy()
         return true;
     return false;
 }
+
+
+
+

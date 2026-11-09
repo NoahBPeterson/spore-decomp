@@ -762,10 +762,11 @@ void rw::movie::MovieEncoder_Avi_s00fc_a300::EndEncoding()
         while (b != 0) {
             if (b->data != 0) {
                 for (uint32_t i = 0; i < b->count; ++i) {
-                    mBufferedWriter.Write32(b->data[i].dwChunkId);
-                    mBufferedWriter.Write32(b->data[i].dwFlags);
-                    mBufferedWriter.Write32(b->data[i].dwOffset);
-                    mBufferedWriter.Write32(b->data[i].dwSize);
+                    char* base = (char*)(i * 16);
+                    mBufferedWriter.Write32(*(uint32_t*)(base + (uint32_t)b->data + 0));
+                    mBufferedWriter.Write32(*(uint32_t*)(base + (uint32_t)b->data + 4));
+                    mBufferedWriter.Write32(*(uint32_t*)(base + (uint32_t)b->data + 8));
+                    mBufferedWriter.Write32(*(uint32_t*)(base + (uint32_t)b->data + 12));
                 }
             }
             b = b->next;

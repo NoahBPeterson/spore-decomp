@@ -15,6 +15,7 @@
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02c40@@YAXXZ  00e02c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02c60@@YGXPAUElem24@@0@Z  00e02c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02cc0@@YAPAUElem24@@PAU1@00@Z  00e02cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02d30@@YAPAUElem24@@PAU1@00@Z  00e02d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02da0@@YAPAUElem24@@PAU1@00@Z  00e02da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e02e80@UIThing@@QAEXXZ  00e02e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?OnMessage@CivPauseUI@@QAE_NHH@Z  00e03a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -166,8 +166,10 @@ class fixed_hashtable_allocator { public:
         Link* pLink = mpHead;
         if (pLink)
             mpHead = pLink->mpNext;
-        else
-            pLink = (Link*)operator new[](mnNodeSize, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1);
+        else {
+            size_t nSize = mnNodeSize;
+            pLink = (Link*)operator new[](nSize, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1);
+        }
         return pLink;
     }
     void deallocate(void* p)

@@ -1,6 +1,4 @@
 # va  diff-bytes  reason
-01140030 2 F_01140030 (apply lowpass to a play) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (15.0% coverage). Only the global byte test is mov/test vs cmp.
-011400a0 2 F_011400a0 (apply highpass to a play) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (15.0% coverage). Only the global byte test is mov/test vs cmp.
 01140110 105 F_01140110 (scan for a 4-byte tag, special-case "data") complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (397 valid, 82.2% coverage)
 01140190 183 F_01140190 (SND 10-byte extended float -> double) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (400 valid, 100% coverage). Original uses fild (signed) for mid+2^31 and lo+2^31; source casts through int to match.
 011402f0 118 SndDecoder::DecodeS16 complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (367 valid, 100% coverage)
@@ -8,7 +6,6 @@
 01140460 104 SndDecoder::DecodeSwap complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (374 valid, 100% coverage)
 01140530 37 SndDecoder::Setup complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (400 valid, 100% coverage)
 01140560 111 SndDecoder::DecodeMul complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (375 valid, 100% coverage)
-011405e0 2 F_011405e0 (filteradd over a play) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (15.0% coverage). Only the global byte test is mov/test vs cmp.
 01140650 106 F_01140650 (apply per-channel mix gains) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (213 valid, 61.1% coverage)
 011406e0 84 F_011406e0 (reset/alternate voice gain table) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (183 valid, 83.3% coverage)
 01140780 49 F_01140780 (apply global state to the renderer) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (40.0% coverage)

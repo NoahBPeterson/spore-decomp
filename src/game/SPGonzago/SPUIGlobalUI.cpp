@@ -305,7 +305,8 @@ static void SpaceUniverseTransition() {
         ((cAppModeSpace*)FUN_00fd9c60(0))->TransitionFromPlanetToSolar();
     }
 }
-struct Ctl { char pad[8]; void* f08; };
+struct SPUILayout2;
+struct Ctl { char pad[8]; SPUILayout2* f08; };
 struct GlobalOpts2 {
     char pad[0x5c];
     Ctl* p5c;
@@ -1371,10 +1372,8 @@ void cSPUIGlobalOptions::Update()
 // @ 0x00e01ce0
 void* GlobalOpts2::FindWin(void* id)
 {
-    if (p5c->f08 != 0) {
-        return ((SPUILayout2*)p5c->f08)->FindWindowByID(id, 1);
-    }
-    return 0;
+    SPUILayout2* pLayout = p5c->f08;
+    return pLayout ? pLayout->FindWindowByID(id, 1) : 0;
 }
 
 // @ 0x00e01d00
@@ -1931,8 +1930,8 @@ Elem24* FUN_00e02d30(Elem24* src, Elem24* srcEnd, Elem24* dst)
                 ds1->assign((const wchar16*)ss1->begin, (const wchar16*)ss1->end);
             if (ss2 != ds2)
                 ds2->assign((const wchar16*)ss2->begin, (const wchar16*)ss2->end);
-            src += 1;
             dst += 1;
+            src += 1;
         } while (src != srcEnd);
     }
     return dst;

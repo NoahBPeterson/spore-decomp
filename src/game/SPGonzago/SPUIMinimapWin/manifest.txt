@@ -16,6 +16,7 @@
 ../src/game/SPGonzago/SPUIMinimapWin.cpp  ?Destroy@cTerrainRenderer@@QAEPAXE@Z  00e0c7d0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FindEvent@cMinimapOverlay@@QAEPAUAutoRefCountEvent@@I@Z  00e0df30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMinimapWin.cpp  ?lower_bound_DataInfo@@YAPAUDataInfo@@PAU1@0PAI@Z  00e0e9f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0f100@cSPUIMinimapWin_s00e0_f050@@QAEXMMII@Z  00e0f100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0f1a0@cIconTree@@QAEXPAPAUcIconNode@@PAU2@@Z  00e0f1a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMinimapWin.cpp  ?insert@VecRec14@@QAEPAUcRec14_s00e1_00e0__g7@@PAU2@PBU2@@Z  00e10c10  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMinimapWin.cpp  ?insert@cDataArray@@QAE?AUcInsertResult@@ABUcDataInfo@@@Z  00e118b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

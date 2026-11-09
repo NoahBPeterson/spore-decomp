@@ -127,7 +127,7 @@ public:
     cCityMusicLargeAssetView_s00ea_1900();
     ~cCityMusicLargeAssetView_s00ea_1900();
     void Hide();  // 0x00ea1b00 (cCityMusicLargeAssetView::Hide)
-    void Update();
+    void Update(int);
     void InitLayout();  // 0x00ea1ee0 (cCityMusicLargeAssetView::InitLayout)
     bool Show(IWindow* pParent, cSPAssetData* pData);  // 0x00ea1f90 (cCityMusicLargeAssetView::Show)
     void BindWindows();
@@ -145,6 +145,7 @@ public:
     uint8_t mIsVisible;                     // 0x34
     uint8_t mPad35[0x03];                   // 0x35
     cCityMusicViewer* mpViewer;             // 0x38
+    cCityMusicViewer* mpViewer3c;           // 0x3c (second viewer object, see ctor)
 };
 void* operator_new(size_t nSize, const char* pName, int a, int b, int c, int d);
 void* operator_new(size_t nSize, const char* pName, int a);
@@ -185,6 +186,7 @@ cCityMusicLargeAssetView_s00ea_1900::cCityMusicLargeAssetView_s00ea_1900()
     mpAssetData = nullptr;
     mIsVisible = 0;
     mpViewer = nullptr;
+    mpViewer3c = nullptr;
 
     cPlayerCityMusic* pMusic = nullptr;
     void* pMemory = (void*)(intptr_t)operator_new(0x220, "Audio", 0, 0, 0, 0);
@@ -261,9 +263,9 @@ void cCityMusicLargeAssetView_s00ea_1900::Hide()
 }
 
 // @ 0x00ea1b40
-void cCityMusicLargeAssetView_s00ea_1900::Update()
+void cCityMusicLargeAssetView_s00ea_1900::Update(int)
 {
-    mpViewer->Shutdown();
+    mpViewer3c->Shutdown();
 }
 
 // @ 0x00ea1b50

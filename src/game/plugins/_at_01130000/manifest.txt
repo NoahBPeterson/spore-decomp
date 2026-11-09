@@ -1,4 +1,6 @@
 # source  symbol  va  flags
+../src/game/plugins/_at_01130000.cpp  ?F_d00@AudioObj@core@audio@rw@@QAEXXZ  01138d00 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/plugins/_at_01130000.cpp  ?FUN_01138f70@core@audio@rw@@YAPAXXZ  01138f70  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/plugins/_at_01130000.cpp  ?FUN_01138f90@core@audio@rw@@YAHPAX@Z  01138f90  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/plugins/_at_01130000.cpp  ?FUN_01138fb0@core@audio@rw@@YAHPAX@Z  01138fb0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/plugins/_at_01130000.cpp  ?FUN_01138fd0@core@audio@rw@@YA_NPAX@Z  01138fd0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
@@ -9,6 +11,7 @@
 ../src/game/plugins/_at_01130000.cpp  ?F_820@AudioObj@core@audio@rw@@QAEXHPAH@Z  01139820  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/plugins/_at_01130000.cpp  ?FUN_0113a770@core@audio@rw@@YAHPAX@Z  0113a770  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/plugins/_at_01130000.cpp  ?FUN_0113aae0@@YAIPAE@Z  0113aae0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/plugins/_at_01130000.cpp  ?FUN_0113abb0@@YAPAXXZ  0113abb0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/plugins/_at_01130000.cpp  ?FUN_0113ac20@@YAIPAE@Z  0113ac20  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/plugins/_at_01130000.cpp  ?FUN_0113ac40@@YA_NPAE@Z  0113ac40  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/plugins/_at_01130000.cpp  ?FUN_0113ae30@Ctx@@QAEXXZ  0113ae30  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

@@ -319,12 +319,11 @@ bool __stdcall FUN_00e5ca60(float* p) {
 }
 
 // @ 0x00e5cac0
-// 5-byte `this`-return accessor (`mov eax,ecx; ret 4`).  The second stack
-// argument is ignored; the object pointer is returned.  The earlier
-// `__stdcall FUN_00e5cac0(void*, int)` spelling in this file was not the
-// function (the callers are `__fastcall` with the object in ecx), so replace it
-// with the real accessor definition.
-void* __fastcall FUN_00e5cac0(void* self) {
+// 5-byte `this`-return accessor (`mov eax,ecx; ret 4`): the object arrives in
+// ecx and one stack argument is popped.  A third __fastcall parameter is the
+// only way to make cl emit `ret 4` while returning ecx; both extra arguments
+// are ignored.
+void* __fastcall FUN_00e5cac0(void* self, int, int) {
   return self;
 }
 

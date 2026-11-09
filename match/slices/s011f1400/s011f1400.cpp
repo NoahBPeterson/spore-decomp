@@ -305,7 +305,7 @@ void GlobalState::D3D9RasterDispatch(void)
   do {
     const u32* caps = DevCapsManager::GetD3DCAPS9();
     u32 maxStage = Device::D3D9GetMaxSamplerStage(caps[0xcc / 4]);
-    if (maxStage <= stage)
+    if (stage >= maxStage)
       return;
     if ((bits & 1u) != 0)
       ActiveState::SetTexture(stage, m_raster[stage]);
@@ -313,7 +313,6 @@ void GlobalState::D3D9RasterDispatch(void)
     ++stage;
   } while (stage < 0x11u);
 }
-
 
 // ===================================================================================
 //  rw::graphics::GlobalState::D3D9PaletteDispatch -- 0x011f1900

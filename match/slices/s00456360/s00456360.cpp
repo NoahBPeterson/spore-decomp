@@ -206,12 +206,16 @@ struct RangeOwner {
 struct RangeSub { char* mpBegin; char* mpEnd; void Body(); };   // FUN_0045daf0, thiscall on this+0x14
 void* RangeOwner::DeletingDtor(uint32_t flags)
 {
-    RangeOwner* self = this;
-    for (char* p = self->mpBegin; p < self->mpEnd; p += 8) {}
-    ((RangeSub*)&self->mpBegin)->Body();
+    // The original flattening reserves three dead pointer slots between the
+    // range pointer and the iterator; keep the same frame layout.
+    struct { RangeSub* sub; char* slot0; char* slot1; char* slot2; char* p; } l;
+    l.sub = (RangeSub*)((char*)this + 0x14);
+    l.p = l.sub->mpBegin;
+    for (; l.p < l.sub->mpEnd; l.p += 8) {}
+    l.sub->Body();
     if (flags & 1)
-        EASTL_Free(self);
-    return self;
+        EASTL_Free(this);
+    return this;
 }
 
 // @ 0x456d60  (vector<Elem32>::DoInsertValue: insert one element at pos)
@@ -253,6 +257,8 @@ Elem32* ElemVector::DoInsertValue(Elem32* pos, const Elem32* val)
     return pos;
 }
 
+inline void padfn4() { uint32_t pad[4]; }
+
 // @ 0x457030  (Elem32 copy-construct helper, this = dest, arg = src)
 struct Elem32Copy {
     int32_t key;
@@ -263,6 +269,7 @@ Elem32Copy* Elem32Copy::construct(const Elem32* src)
 {
     key = src->key;
     sub.CopyFrom(&src->sub);
+    padfn4();
     return this;
 }
 

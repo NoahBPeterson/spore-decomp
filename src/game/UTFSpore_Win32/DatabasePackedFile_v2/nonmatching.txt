@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-006bc310 4 complete; conditional hole-table selection branch layout differs
+006bc310 4 complete; conditional hole-table selection branch layout differs. Tried: inverted condition, if/else swap, if/else-if chain, pointer-select variable, and both goto placements (table0/table1 as fall-through). cl15 always outlines table0 (lea [esi+0x550], jmp) and falls through table1; retail outlines table1 (lea [esi+0x578]) and falls through table0. Same 4-byte residual whichever spelling. flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 006bc4d0 237 complete; Open() stream/access-flag logic; register + frame differences
 006bc6f0 59 complete; scoped-lock EH epilogue layout differs
 006bc7a0 169 complete; header-record read + field conversion; buffer/store schedule differs

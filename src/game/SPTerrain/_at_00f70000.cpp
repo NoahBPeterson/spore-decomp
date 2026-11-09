@@ -3127,7 +3127,7 @@ void SwarmSystem::Spawn(cParticle_s00f7_9bb0* particle)
     float age = particle->mBase.mAge;
     float life = particle->mBase.mLife;
     if (mEffect218 == 0 ||
-        ((age < life) &&
+        ((!(life <= age)) &&
          !TestBit((uint32_t)mDesc24->mFlags, 27))) {
         particle->mpNext = gFreeParticleList;
         gFreeParticleList = particle;

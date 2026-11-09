@@ -457,10 +457,8 @@ void* __fastcall Viewer_Init(ViewerLayout* self)
     UI_AssetDiscovery_View_ctor(self);
 
     uint32_t zero = 0;
-    self->mpVtable0 = g_vtable0;
-    self->mpVtable1 = g_vtable1;
-    _ReadWriteBarrier();
-
+    self->mpVtable0 = (void**)0x01488728u;
+    self->mpVtable1 = (void**)0x01488718u;
     self->m108 = zero;
     self->m10c = zero;
     self->m110 = zero;

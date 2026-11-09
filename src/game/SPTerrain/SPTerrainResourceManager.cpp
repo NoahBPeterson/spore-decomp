@@ -266,6 +266,7 @@ int cTerrainResourceManager::GetCount(int idx)
 // @ 0x00f93420
 cTerrainResourceManager::~cTerrainResourceManager()
 {
+    _ReadWriteBarrier();
     void* p = m64;
     if (p != 0) {
         void* sub = (char*)p + 4;

@@ -52,6 +52,7 @@ struct cEmpire {
 };
 struct cStarManager {
     cEmpire* GetEmpireByID();        // 0x00ba9370
+    void SetPlanetRef(u32 planetId, void** out);  // 0x00bb59b0
 };
 struct cUFO {
     int   ComputeCost(u32 starID);   // 0x00ffc4e0
@@ -226,12 +227,20 @@ virtual void o060();
 virtual void o064();
 virtual void o068();
     virtual void OnMissionCompleted();                  // +0x6c
+    PV(28) PV(29) PV(30) PV(31) PV(32) PV(33) PV(34) PV(35)
+    PV(36) PV(37) PV(38) PV(39) PV(40) PV(41) PV(42) PV(43)
+    PV(44) PV(45) PV(46) PV(47)
+    virtual void ReleaseObject();                       // +0xc0
 };
 }
 namespace SP {
 class ISpeciesExport {
 public:
+    virtual void* v0(int a, void* b);                  // +0x00
     virtual void* Export(int flags, const void* pPayload);  // 0x00c59fd0
+};
+struct cSpeciesExportImpl {
+    void v0(int a, void* b);                           // 0x00c59f90 (non-virtual)
 };
 }
 namespace SP {
@@ -277,6 +286,8 @@ class cSPMissionManager {
 public:
     bool FUN_00febf80();                                // 0x00febf80
     bool IsCompletedFeedbackActive();                   // 0x00febe50
+    void Event();                                       // 0x00fecbb0
+    void FUN_00febde0(uint32_t a, void* b);             // 0x00febde0
 };
 }
 namespace SP {
@@ -310,6 +321,30 @@ virtual void m060();
 virtual void m064();
 virtual void m068();
     virtual void OnMissionCompleted();                  // +0x6c
+    PV(28) PV(29) PV(30) PV(31) PV(32)
+    virtual void v84();                                 // +0x84
+    PV(34) PV(35) PV(36) PV(37) PV(38) PV(39) PV(40)
+    virtual uint32_t vA4();                             // +0xa4
+    PV(42) PV(43)
+    virtual void* vB0();                                // +0xb0
+    PV(45) PV(46) PV(47) PV(48)
+    PV(49) PV(50) PV(51) PV(52) PV(53) PV(54) PV(55) PV(56)
+    virtual void* vE4();                                // +0xe4
+    virtual void* vE8();                                // +0xe8
+    PV(59) PV(60) PV(61)
+    virtual bool vF8();                                 // +0xf8
+    virtual bool vFC();                                 // +0xfc
+    PV(64) PV(65) PV(66)
+    virtual void* v10C();                               // +0x10c
+    PV(68) PV(69) PV(70) PV(71) PV(72) PV(73) PV(74)
+    virtual bool v12C();                                // +0x12c
+    virtual bool v130();                                // +0x130
+    PV(77) PV(78) PV(79) PV(80) PV(81) PV(82) PV(83) PV(84)
+    PV(85) PV(86) PV(87) PV(88) PV(89) PV(90) PV(91) PV(92)
+    PV(93) PV(94) PV(95) PV(96) PV(97) PV(98) PV(99) PV(100)
+    PV(101)
+    virtual void v198(bool a);                          // +0x198
+    virtual void v19C();                                // +0x19c
 
     uint8_t      pad004[0x34];                          // +0x004 .. +0x037 (after the vfptr)
     cSPTimer_s00c4_6ab0     mFeedbackTimer;                        // +0x038
@@ -320,19 +355,33 @@ virtual void m068();
     uint8_t      pad0a0[0x60];                          // +0x0a0 .. +0x0ff
     void*        mpPlanetVisual;                        // +0x100
     uint8_t      pad104[0x2c];                          // +0x104 .. +0x12f
-    uint32_t     mFlags;                                // +0x130
+    union {
+        uint32_t     mFlags;                            // +0x130
+        struct {
+            uint32_t mBit0 : 1;
+            uint32_t mBit1 : 1;
+            uint32_t mBit2 : 1;
+            uint32_t mBit3 : 1;
+            uint32_t mBitRest : 28;
+        };
+    };
     uint8_t      pad134[0x48];                          // +0x134 .. +0x17b
     cSPMission_s00c4_6ab0*  mpMissionManager;                      // +0x17c
     void*        mpMissionKey;                          // +0x180
-    uint8_t      pad184[0x380];                         // +0x184 .. +0x503
+    uint8_t      pad184[0x64];                          // +0x184 .. +0x1e7
+    ISpaceObject* mpPlanet1E8;                          // +0x1e8
+    uint8_t      pad1ec[0x318];                         // +0x1ec .. +0x503
     cSpeciesData mSpecies;                              // +0x504
 
     ~cSPMission_s00c4_6ab0();
+    void* GetOwnerEmpire();                             // 0x00c451e0
+    float FUN_00c459c0();                               // 0x00c459c0
+    void UpdateHints(uint32_t param);                   // 0x00c45f90
     void FUN_00c46ab0();
     void FUN_00c46b80();
     void GiveOnAcceptItems();  // 0x00c46e20 (SP::cSPMission::GiveOnAcceptItems)
     uint32_t GetConversationFileID();  // 0x00c47040 (SP::cSPMission::GetConversationFileID)
-    void FUN_00c470a0();
+    bool FUN_00c470a0();
     void SetMissionID(uint32_t missionId);  // 0x00c470f0 (SP::cSPMission::SetMissionID)
     void FUN_00c47140(uint32_t planetId);
     void FUN_00c47180(uint32_t planetId);
@@ -343,7 +392,7 @@ virtual void m068();
     void ExportPlanet(uint32_t targetType, void* pOut);  // 0x00c47350 (SP::cSPMission::ExportPlanet)
     void ExportSpecies(uint32_t itemType, uint32_t flags);  // 0x00c473f0 (SP::cSPMission::ExportSpecies)
     void StartCompletedFeedbackTimer();  // 0x00c47440 (SP::cSPMission::StartCompletedFeedbackTimer)
-    void FUN_00c474b0();
+    void* FUN_00c474b0(uint32_t nType);
     void FUN_00c47610();
     void Update(int deltaMs);  // 0x00c478b0 (SP::cSPMission::Update)
 };
@@ -1847,6 +1896,9 @@ extern "C" extern u32 g_zeroSpeciesKey[3];   // 0x0168e844
 struct cStarMap {
     void RemoveVisual(u32 handle, u32 flag);             // 0x01045a60
     void* Lookup(u32 a, u32 b);                          // 0x01045120
+    void* CreatePlanetRecordVisual(void* star, void* planet, void* extra, bool a, bool b); // 0x01045910
+    void  FUN_01044d70(void* visual, u32 flag);         // 0x01044d70
+    void  FilterHelperRebuildAll();                      // 0x01048ce0
 };
 struct cSPUIEventLog_s00c4_5860 {
     void RemoveEvent(u32 id, u32 flag);                  // 0x00dd6d10
@@ -1898,7 +1950,7 @@ struct cTerraformingManager {
 };
 cTerraformingManager* __stdcall TerraformingManager(void* planet);  // 0x00b3d430
 struct cRelationshipManager {
-    void RecordEvent(u32 a, u32 b, u32 ev, f32 v);       // 0x00d06240
+    float RecordEvent(u32 a, u32 b, u32 ev, f32 v);      // 0x00d06240
     f32 RelGetRelation(u32 a, u32 b, u32 c);             // 0x00d00a10
 };
 cRelationshipManager* __cdecl RelationshipManager();     // 0x00b3d2c0
@@ -2845,10 +2897,40 @@ void cSPMission_s00c4_5860::OnFail()
     (*(void(__thiscall**)(void*))((char*)*(void**)this + 0x84))(this);
 }
 
+namespace SP {
+::cStarManager* __cdecl GetStarManagerNoArg();           // 0x00b3d2a0 (no-arg getter)
+u8 __cdecl GetPropertyAsKey16(void* props, u32 key, void* out); // 0x006a1250
+::cStarMap* __cdecl GetStarMapNoArg();                   // 0x01046fc0 (no-arg singleton)
+cSPMissionManager* __cdecl GetMissionManagerNoArg();     // 0x00feb9f0 (no-arg getter)
+struct cSPUILayout16 { void Add(); };                    // 0x00dd27c0
+void* __cdecl cSPUILayoutCtor16();                       // 0x00dd1ca0
+}
+
 // @ 0x00c46ab0
 namespace SP {
 void __thiscall cSPMission_s00c4_6ab0::FUN_00c46ab0()
 {
+    cEntity* owner = (cEntity*)GetOwnerEmpire();
+    if (owner != 0 && owner != (cEntity*)GetPlayerEmpire()) {
+        float value = (float)fabs(FUN_00c459c0());
+        u32 empireId = owner->mEmpireID;
+        RelationshipManager()->RecordEvent(empireId, GetPlayerEmpireID(), 0x526e51e, value);
+        empireId = owner->mEmpireID;
+        RelationshipManager()->RelGetRelation(empireId, GetPlayerEmpireID(), 0);
+        ((cSPUILayout16*)cSPUILayoutCtor16())->Add();
+    }
+    SP::IntVector* vec = (SP::IntVector*)((SimGame*)::SpaceGameGet())->f5180(7);
+    vec->resize(8);
+    *(u32*)(vec->mData + 0x1c) = mMissionId;
+    u32 shifted = mFlags >> 3;
+    _ReadWriteBarrier();
+    if ((shifted & 1) != 0) {
+        cSPMissionManager* mm = GetMissionManager((void*)(uintptr_t)mMissionId);
+        mm->Event();
+    }
+    if ((mFlags & 1) != 0)
+        UpdateHints(0);
+    return v84();
 }
 }  // namespace SP
 
@@ -2868,14 +2950,39 @@ void SP::cSPMission::GiveOnAcceptItems()
 namespace SP {
 uint32_t __thiscall cSPMission_s00c4_6ab0::GetConversationFileID()
 {
+    cSPMission_s00c4_6ab0* mgr = mpMissionManager;
+    if (mgr != 0)
+        return mgr->vA4();
+    void* props = mpMissionKey;
+    if (props != 0) {
+        Key12 key;
+        key.a = 0;
+        key.b = 0;
+        key.c = 0;
+        if (GetPropertyAsKey16(props, 0x7c9601b0, &key) != 0)
+            return key.a;
+    }
     return 0xffffffff;
 }
 }  // namespace SP
 
 // @ 0x00c470a0
 namespace SP {
-void __thiscall cSPMission_s00c4_6ab0::FUN_00c470a0()
+bool __thiscall cSPMission_s00c4_6ab0::FUN_00c470a0()
 {
+    u32 shifted = mFlags >> 1;
+    _ReadWriteBarrier();
+    if ((shifted & 1) != 0) {
+        if (!v12C())
+            return false;
+    }
+    shifted = mFlags >> 2;
+    _ReadWriteBarrier();
+    if ((shifted & 1) != 0) {
+        if (!v130())
+            return false;
+    }
+    return true;
 }
 }  // namespace SP
 
@@ -2891,7 +2998,12 @@ void __thiscall cSPMission_s00c4_6ab0::SetMissionID(uint32_t missionId)
 namespace SP {
 void __thiscall cSPMission_s00c4_6ab0::FUN_00c47140(uint32_t planetId)
 {
-    (void)planetId;
+    ISpaceObject* old = mpPlanet;
+    if (old != 0) {
+        mpPlanet = 0;
+        old->ReleaseObject();
+    }
+    GetStarManagerNoArg()->SetPlanetRef(planetId, (void**)&mpPlanet);
 }
 }  // namespace SP
 
@@ -2899,7 +3011,12 @@ void __thiscall cSPMission_s00c4_6ab0::FUN_00c47140(uint32_t planetId)
 namespace SP {
 void __thiscall cSPMission_s00c4_6ab0::FUN_00c47180(uint32_t planetId)
 {
-    (void)planetId;
+    ISpaceObject* old = mpPlanet1E8;
+    if (old != 0) {
+        mpPlanet1E8 = 0;
+        old->ReleaseObject();
+    }
+    GetStarManagerNoArg()->SetPlanetRef(planetId, (void**)&mpPlanet1E8);
 }
 }  // namespace SP
 
@@ -2907,6 +3024,13 @@ void __thiscall cSPMission_s00c4_6ab0::FUN_00c47180(uint32_t planetId)
 namespace SP {
 void __thiscall cSPMission_s00c4_6ab0::FUN_00c471c0()
 {
+    bool flag = vF8() || vFC();
+    u32 shifted = mFlags >> 1;
+    if ((shifted & 1) != 0 && !flag)
+        v19C();
+    else
+        v198(flag);
+    GetStarMapNoArg()->FilterHelperRebuildAll();
 }
 }  // namespace SP
 
@@ -2914,6 +3038,14 @@ void __thiscall cSPMission_s00c4_6ab0::FUN_00c471c0()
 namespace SP {
 void __thiscall cSPMission_s00c4_6ab0::FUN_00c47240()
 {
+    if (mpPlanet == 0)
+        return;
+    void* a = vE4();
+    ::cStarRecord* star = ((::cPlanet*)mpPlanet)->mpStarRecord13c;
+    void* visual = GetStarMapNoArg()->CreatePlanetRecordVisual(star, a, vE8(), true, true);
+    mpPlanetVisual = visual;
+    GetStarMapNoArg()->FUN_01044d70(visual, (u32)a == 0x70930c64);
+    FUN_00c471c0();
 }
 }  // namespace SP
 
@@ -2922,7 +3054,9 @@ namespace SP {
 bool __thiscall cSPMission_s00c4_6ab0::FUN_00c472c0()
 {
     cSPMission_s00c4_6ab0* pOwner = mpMissionManager ? mpMissionManager : this;
-    return GetMissionManager(pOwner)->FUN_00febf80();
+    bool result = GetMissionManager(pOwner)->FUN_00febf80();
+    _ReadWriteBarrier();
+    return result;
 }
 }  // namespace SP
 
@@ -2930,15 +3064,39 @@ bool __thiscall cSPMission_s00c4_6ab0::FUN_00c472c0()
 namespace SP {
 void __thiscall cSPMission_s00c4_6ab0::FUN_00c472e0()
 {
+    cSPMission_s00c4_6ab0* mgr = mpMissionManager ? mpMissionManager : this;
+    ::cStarRecord* star = ((::cPlanet*)mpPlanet)->mpStarRecord13c;
+    cEntity* owner = (cEntity*)GetOwnerEmpire();
+    u32 empireId = owner->mEmpireID;
+    CommManager()->Add(empireId, (u32)star->GetCommContext(),
+                       vA4(), (u32)v10C(), (u32)mgr, 0, 0);
 }
 }  // namespace SP
 
 // @ 0x00c47350
 void SP::cSPMission::ExportPlanet(SP::cPlanet * targetType, unsigned int pOut)
 {
-    uint32_t targetType_v = (uint32_t)targetType;
-    (void)targetType_v;
-    (void)pOut;
+    ::cPlanet* planet = (::cPlanet*)targetType;
+    if (pOut == 0x779436ff) {
+        GetMissionManagerNoArg()->FUN_00febde0(0, (void*)planet->mpStarRecord13c->GetCommContext());
+        return;
+    }
+    if (pOut == 0x779436fe) {
+        GetMissionManagerNoArg()->FUN_00febde0(1, (void*)planet->mpStarRecord13c->GetCommContext());
+        return;
+    }
+    if (pOut == 0x93e59364) {
+        cSPMission_s00c4_6ab0* self = (cSPMission_s00c4_6ab0*)this;
+        cSPMission_s00c4_6ab0* mgr = self->mpMissionManager;
+        if (mgr != 0) {
+            ISpeciesExport* exp = (ISpeciesExport*)mgr->QueryInterface(0x422227c);
+            if (exp != 0) {
+                void* ctx = (void*)planet->mpStarRecord13c->GetCommContext();
+                SP::cSpeciesExportImpl* impl = (SP::cSpeciesExportImpl*)exp;
+                impl->v0(0, ctx);
+            }
+        }
+    }
 }
 
 // @ 0x00c473f0
@@ -2985,14 +3143,100 @@ void __thiscall cSPMission_s00c4_6ab0::StartCompletedFeedbackTimer()
 
 // @ 0x00c474b0
 namespace SP {
-void __thiscall cSPMission_s00c4_6ab0::FUN_00c474b0()
+namespace {
+struct cStarSysH474b0 { void* GetSolarSystem(); };       // 0x00c8b770
+struct cPlanetH474b0  { int   Count(); };                // 0x00c70fb0
+struct cMgrH474b0     { void* FUN_00febdc0(); };         // 0x00febdc0
+struct cObjH474b0     { void* FUN_00ba6dc0(); };         // 0x00ba6dc0
+struct cExpH474b0     { void* FUN_00c59fb0(int); };      // 0x00c59fb0
+void* __cdecl   GetPlayerHomePlanet474b0();              // 0x01021370
+void* __cdecl   GetActivePlanet474b0();                  // 0x01021260
+void* __cdecl   FUN_01021230_474b0();                    // 0x01021230
+void* __cdecl   FUN_00aed3f0_474b0(void*);               // 0x00aed3f0
+void* __stdcall FUN_00b3d2a0_474b0(void*);               // 0x00b3d2a0
+void* __stdcall GetMissionManager474b0(void*);           // 0x00feb9f0
+}
+void* __thiscall cSPMission_s00c4_6ab0::FUN_00c474b0(uint32_t nType)
 {
+    cSPMission_s00c4_6ab0* self = this;
+    void* volatile result = 0;
+    if (nType == 0x8e718b32) {
+        void* r = GetPlayerHomePlanet474b0();
+        return r;
+    }
+    if (nType == 0xa8169426) {
+        GetActivePlanet474b0();
+        void* star = FUN_01021230_474b0();
+        if (star == 0)
+            return 0;
+        void* solar = ((cStarSysH474b0*)star)->GetSolarSystem();
+        if (solar == 0)
+            return 0;
+        int i = 0;
+        int count = (int)(*(u32*)((char*)solar + 0x14) - *(u32*)((char*)solar + 0x10)) >> 2;
+        if (count < 1)
+            return 0;
+        while (i < count) {
+            void* planet = (*(void***)((char*)solar + 0x10))[i];
+            if (planet != 0) {
+                void* rec = *(void**)((char*)planet + 0x13c);
+                if (rec != GetPlayerHomePlanet474b0()) {
+                    if (((cPlanetH474b0*)planet)->Count() > 0)
+                        return rec;
+                }
+            }
+            i++;
+        }
+        return 0;
+    }
+    if (nType == 0x779436ff) {
+        result = ((cMgrH474b0*)GetMissionManager474b0(0))->FUN_00febdc0();
+        goto tail;
+    }
+    if (nType == 0x779436fe) {
+        result = ((cMgrH474b0*)GetMissionManager474b0((void*)1))->FUN_00febdc0();
+        goto tail;
+    }
+    if (nType == 0xac595460) {
+        cSPMission_s00c4_6ab0* mgr = self->mpMissionManager;
+        if (mgr == 0)
+            return 0;
+        return *(void**)((char*)mgr->mpPlanet1E8 + 0x13c);
+    }
+    if (nType == 0x93e59364) {
+        cSPMission_s00c4_6ab0* mgr = self->mpMissionManager;
+        if (mgr == 0)
+            return 0;
+        void* x = FUN_00aed3f0_474b0(mgr);
+        if (x == 0)
+            return 0;
+        result = ((cExpH474b0*)x)->FUN_00c59fb0(0);
+        goto tail;
+    }
+    return result;
+tail:
+    if (result != 0) {
+        void* sm = FUN_00b3d2a0_474b0(result);
+        result = ((cObjH474b0*)sm)->FUN_00ba6dc0();
+    }
+    return result;
 }
 }  // namespace SP
 
 // @ 0x00c47610
 void SP::cSPMission::GetAnimalSpeciesFromType(unsigned int a1, EA::ResourceMan::Key & a2)
 {
+    if (a1 != 0xd4923304)
+        return;
+    cSPMission_s00c4_6ab0* mgr = *(cSPMission_s00c4_6ab0**)((char*)this + 0x17c);
+    if (mgr == 0)
+        return;
+    void* obj = mgr->vB0();
+    if (obj == 0)
+        return;
+    ((u32*)&a2)[0] = *(u32*)((char*)obj + 0x504);
+    ((u32*)&a2)[1] = *(u32*)((char*)obj + 0x508);
+    ((u32*)&a2)[2] = *(u32*)((char*)obj + 0x50c);
 }
 
 // @ 0x00c478b0

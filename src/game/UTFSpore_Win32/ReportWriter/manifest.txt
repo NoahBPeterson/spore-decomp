@@ -4,6 +4,7 @@
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?CloseReport@ReportWriter@Debug@EA@@UAE_NXZ  0091ea20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?BeginSection@ReportWriter@Debug@EA@@UAE_NPBD@Z  0091ea50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?EndSection@ReportWriter@Debug@EA@@UAE_NPBD@Z  0091ea80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteFormatted@ReportWriter@Debug@EA@@UAA_NPBDZZ  0091ead0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteBlankLine@ReportWriter@Debug@EA@@UAE_NXZ  0091ebf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?Write@ReportWriter@Debug@EA@@UAE_NPBDI@Z  0091ec00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ReportWriter.cpp  ?GetPosition@ReportWriter@Debug@EA@@UAEIXZ  0091ec60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

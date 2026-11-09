@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/manager2.cpp  ?PostAPC@W@@QAEXHPAX@Z  00957d40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?d90@W@@QAEXPAX@Z  00957d90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?db0@W@@QAEPADH@Z  00957db0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?e70@W@@QAEPADH@Z  00957e70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
@@ -10,6 +11,8 @@
 ../src/game/UTFSpore_Win32/manager2.cpp  ?Fn00958110@@YIXPAX@Z  00958110  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?x500@W@@QAEDPAXH@Z  00958500  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?m820@W@@QAEXPAD@Z  00958820  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/manager2.cpp  ?m860@W@@QAEXPAD@Z  00958860  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/manager2.cpp  ?m8c0@W@@QAEXPAD@Z  009588c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?HitTest@WM@@QAEPAUWin@@PAU2@PAUV2@@ABU3@1@Z  00958a70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?MarkTree@WM@@QAEXPAUWin@@@Z  00958b60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/manager2.cpp  ?DestroyDisplayList@WM@@QAEXPAUNode@@@Z  00958bb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

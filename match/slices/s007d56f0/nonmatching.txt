@@ -7,7 +7,7 @@
 007d5e60  ~70  cGameModelEffect::FindGameModel: complete; stack layout of the fixed vector / key copy differs
 007d6030  ~120 eastl::vector<cAnimationInfo>::DoInsertValues: complete (callee helpers declared extern); register allocation around the generic_iterator helper calls differs; difftest WEAK (no mismatch, 42% coverage) after fixing the in-place branch to call 0x898b80 with its real shape (hidden generic_iterator return pointer + 4 args) instead of the 3-arg 0xa11310
 007d6320  ~35  eastl::vector<cElement0x78>::vector(const vector&): complete; this/arg register swap
-007d6500  2    cMapResB dtor (compiler-generated): complete; only the `add eax,-1` vs `sub eax,1` refcount idiom differs; difftest PASS (fix: base dtor now resets the GmeEditorResBase vptr, map and ref are members)
+007d6500  2    cMapResB dtor (compiler-generated): complete; only `add eax,-1` vs `sub eax,1` (ReleaseRef inlined). Tried `*r + 0xFFFFFFFF`, `n += -1`, an unsigned add cast, and `-1 + *r`; cl 15.00 always canonicalises the -1 addend to `sub eax,1`. difftest PASS; the encoding is compiler-selected. (base dtor resets the GmeEditorResBase vptr; map and ref are members)
 007d6620  ~130 eastl::vector<cSplitController>::DoInsertValue: complete; original has an EH frame around the placement copy
 007d5aa0  56   uninitialized_copy of the 0x78-byte records: per-element field copy + cSplitInstance ctor present; original keeps `first` in its stack slot, no callee-saved regs
 007d61f0  27   allocate(n*0x78) + uninitialized_copy: both parts present; the 5-argument helper call and register assignment differ

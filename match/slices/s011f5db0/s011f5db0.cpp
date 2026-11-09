@@ -372,22 +372,20 @@ void FUN_011f6270(void)
     }
     g_cur65 = 0;
     IBRec* rec = &g_rec[0];
-    for (int i = 0; i < 0x18; i += 0xc) {
-        if (FUN_011f5fa0(rec->mSize, 0x65, &rec->pResource, 0) < 0)
+    for (unsigned i = 0; i < 0x18; i += 0xc) {        if (FUN_011f5fa0(rec->mSize, 0x65, &rec->pResource, 0) < 0)
             break;
         rec->mValid = 0;
         ++rec;
     }
     g_cur66 = 0;
     rec = &g_rec[2];
-    for (int i = 0; i < 0x18; i += 0xc) {
+    for (unsigned i = 0; i < 0x18; i += 0xc) {
         if (FUN_011f5fa0(rec->mSize, 0x66, &rec->pResource, 0) < 0)
-            return;
+            break;
         rec->mValid = 0;
         ++rec;
     }
 }
-
 // ===========================================================================
 // @ 0x011f6370
 // ===========================================================================

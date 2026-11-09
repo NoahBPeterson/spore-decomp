@@ -3,7 +3,6 @@
 006f3d00  14  ctor: identical instruction set but cl hoists xor ecx,0 / or edx,-1 above the vptr store, so the vptr store position differs.
 006f3d50  97  dtor: behavior complete (release mRenderer, free the two vectors) but the original carries an /EHsc EH frame + state store that a pointer-only class does not generate.
 006f3df0  128  AddToRenderer: behavior complete; the mRenderer assignment/release and the 64-bit mModelInstance/mModelGroup store are scheduled differently.
-006f3f20  3  Setup178: only the vptr/vfn register choice for the mRenderer168 vcall differs (edx/eax swapped).
 006f4020  32  Tick154: x87 compare emits fld1/fcompi/ja instead of the original fld1/fxch/fcompi/jb (same relation).
 006f4190  63  GetRange: loop/found-path structure close; the not-found (-1,-1) store and the unsigned loop compare still differ.
 006f41e0  105  RenderRange: complete; two-slot negative sentinel scan, model lookup, 0xffff index rejection, viewer Copy, raster array + index*8, SetRaster, SetClearColor(0x1619530), Clear(7), return viewer. Equivalence FAILs only on memory .data 016f91a4: a generated viewport-cache callee stores the low 16 bits of its caller return address (orig 0x4238 from 6f4238, ours 0x5b from our relocated address); the same value is copied into pool memory. Call trace/args/registers/return match; harness noise (same observable as s006f54a0), not a source difference.

@@ -9,4 +9,4 @@
 00a168c0 39 sys_gui scalar deleting dtor: complete; original omits the EH state=-1 store after member dtor; difftest PASS (written as named member SysGui::ScalarDeletingDtor; ours adds a /GS cookie to the EH frame)
 00a16920 160 VuMeter init: complete; zero register hoisted across call to 0xa161c0 in original (interprocedural xmm use)
 00a16d00 85 FIXED: volatile re-reads of mpEnd/mpBegin and moving the m68 store last keep edx untouched (the original never writes edx); default PASS (400 valid, 100% coverage), replay and hybrid AudioPrimitiveAggregate.cpp first-difference None; size 146 vs 145
-00a173f0 4 PResp ctor: complete; load order of arg vs float const; difftest PASS (globals annotated, vtables mapped in symbols/slices)
+00a173f0 12 PResp ctor: complete; closest form (arg/float loaded into locals first) still emits movss before mov eax, all direct-statement orderings reorder the stores instead; difftest PASS (globals annotated, vtables mapped in symbols/slices); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

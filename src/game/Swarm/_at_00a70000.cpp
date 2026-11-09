@@ -817,9 +817,9 @@ void __cdecl cMapInfo_ResetGrid(void* a, uint32_t* b)
 namespace EA { namespace Swarm {
 void cMapInfo_SortRect2(float* out, const float* b, const float* a)
 {
-    const float* p2 = (a[2] <= b[2]) ? a + 2 : b + 2;
-    const float* p1 = (a[1] <= b[1]) ? a + 1 : b + 1;
-    const float* p0 = (a[0] <= b[0]) ? a : b;
+    const float* p2 = (a[2] < b[2]) ? a + 2 : b + 2;
+    const float* p1 = (a[1] < b[1]) ? a + 1 : b + 1;
+    const float* p0 = (a[0] < b[0]) ? a : b;
     out[0] = *p0;
     out[1] = *p1;
     out[2] = *p2;
@@ -830,14 +830,14 @@ void cMapInfo_SortRect2(float* out, const float* b, const float* a)
 namespace EA { namespace Swarm {
 void cMapInfo_SortRect3(float* out, const float* b, const float* a)
 {
-    const float* p3 = (a[3] <= b[3]) ? a + 3 : b + 3;
-    const float* p2 = (a[2] <= b[2]) ? a + 2 : b + 2;
-    const float* p1 = (a[1] <= b[1]) ? a + 1 : b + 1;
-    const float* p0 = (a[0] <= b[0]) ? a : b;
-    out[0] = *p0;
-    out[1] = *p1;
-    out[2] = *p2;
-    out[3] = *p3;
+    const float* p3 = (a[3] < b[3]) ? a + 3 : b + 3;
+    const float* p2 = (a[2] < b[2]) ? a + 2 : b + 2;
+    const float* p1 = (a[1] < b[1]) ? a + 1 : b + 1;
+    const float* p0 = (a[0] < b[0]) ? a : b;
+    *out = p0[0];
+    out[1] = p1[0];
+    out[2] = p2[0];
+    out[3] = p3[0];
 }
 }}  // namespace EA::Swarm
 
@@ -845,10 +845,10 @@ void cMapInfo_SortRect3(float* out, const float* b, const float* a)
 namespace EA { namespace Swarm {
 void cMapInfo_SortRect3R(float* out, const float* b, const float* a)
 {
-    const float* p3 = (b[3] > a[3]) ? b + 3 : a + 3;
-    const float* p2 = (b[2] > a[2]) ? b + 2 : a + 2;
-    const float* p1 = (b[1] > a[1]) ? b + 1 : a + 1;
-    const float* p0 = (b[0] > a[0]) ? b : a;
+    const float* p3 = (a[3] > b[3]) ? a + 3 : b + 3;
+    const float* p2 = (a[2] > b[2]) ? a + 2 : b + 2;
+    const float* p1 = (a[1] > b[1]) ? a + 1 : b + 1;
+    const float* p0 = (a[0] > b[0]) ? a : b;
     out[0] = *p0;
     out[1] = *p1;
     out[2] = *p2;

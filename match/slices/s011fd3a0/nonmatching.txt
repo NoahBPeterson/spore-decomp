@@ -32,8 +32,6 @@
                 slot than the original's ebx
 011fda60  179  Ctl::Alloc: complete; the stride/align computation is exact, the slot-linking loop
                 and the `(baseOff+3)&~3` rounding use different registers
-011fdb30    1  ControllerFixup: complete; a single register-choice byte differs (the trailing
-                rw::core::arena::IdToObject call site)
 011fdba0   26  Ctl::SetFrame: complete; the memcpy inlining and the -1.0f path order differ
 011fdc00   33  Ctl::Advance: complete; the float clamp `if (t > m_len) m_len = 0` compares
                 against a register copy of 0.0f instead of fs:[0]

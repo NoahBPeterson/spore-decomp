@@ -9,6 +9,7 @@
 #include "SP/cPropertyList.h"
 #include "SP/cPropertyManager.h"
 #include "SP/cSPPlanetaryArtifact.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl memmove_nd(void* dst, const void* src, uint32_t n);                     // 0x11e0744 (static CRT memmove)
@@ -587,7 +588,7 @@ extern "C" void   FUN_00811ad0(void *layout, int f);        // 0x00811ad0 cSPUIL
 extern "C" bool   FUN_00810070(void *layout);               // 0x00810070 cSPUILayout::IsVisible
 extern "C" void  *FUN_00921580(void *node);                 // 0x00921580 RBTreeIncrement
 extern "C" bool   FUN_008120d0(void *layout, void *key, bool b, int c); // 0x008120d0 cSPUILayout::Init
-extern "C" void  *FUN_008105b0(void *layout, int id, bool b); // 0x008105b0 FindWindowByID
+extern "C" void* FUN_008105b0(); // 0x008105b0 FindWindowByID
 extern "C" void   FUN_00810570(void *o);                     // 0x00810570
 extern "C" void  *FUN_00810000(void *o);                     // 0x00810000 cConnectionDialog ctor
 typedef unsigned int   u32;
@@ -700,6 +701,34 @@ public:
     void FUN_006628d0();                                 // 0x006628d0
     void FUN_00663350(void* pWin);                       // 0x00663350
 };
+void __fastcall FUN_00e0a640(void* sub);             // 0x00e0a640
+void __fastcall FUN_00e0a390(void* sub);             // 0x00e0a390
+void __fastcall FUN_00e0a400(void* sub);             // 0x00e0a400
+extern "C" void FUN_00e186d0(); // 0x00e186d0 OnNotify
+void __fastcall FUN_00e18bb0(void* win);             // 0x00e18bb0 Construct
+void __fastcall FUN_00e18980(void* win);             // 0x00e18980 DestroyMembers
+void __fastcall FUN_00e18a30(void* win);             // 0x00e18a30 ShutdownA
+void __cdecl    FUN_00571db0(void* h, uint32_t a, uint32_t b, uint32_t c, uint32_t d); // 0x00571db0
+extern "C" bool FUN_00e0a4c0(); // 0x00e0a4c0
+extern "C" void FUN_00663860(); // 0x00663860 feed AddWindow
+void* __cdecl   FUN_00f473a0(int size, const char* name, int a, int b, int c, int d); // operator_new
+extern "C" void* FUN_00e36650(); // 0x00e36650
+#pragma pack(push, 1)
+struct Vec3_s0107 {
+    uint32_t x, y, z;
+    Vec3_s0107() {}
+    Vec3_s0107(const Vec3_s0107& o) : x(o.x), y(o.y), z(o.z) {}
+};
+#pragma pack(pop)
+void  __cdecl    FUN_00e36b30(); // 0x00e36b30
+extern "C" void  FUN_00662920();                     // 0x00662920
+extern "C" void  FUN_006b54b0();                     // 0x006b54b0 cString::Load
+void  __fastcall FUN_006b54c0(void* str);            // 0x006b54c0 cString::c_str
+void  __fastcall FUN_006b54d0(void* str);            // 0x006b54d0 cString ctor
+void  __fastcall FUN_006b5060(void* str);            // 0x006b5060 cString ctor
+extern "C" void* FUN_00663040();                     // 0x00663040 cSPUIFeedList ctor
+void  __fastcall FUN_00e364d0(void* tooltip);        // 0x00e364d0 cUITimedTooltip ctor
+void  __fastcall FUN_00e36480(void* tooltip);        // 0x00e36480 cUITimedTooltip ctor
 class cToolSub {
 public:
     void FUN_00e0a5c0();                                 // 0x00e0a5c0
@@ -710,21 +739,39 @@ class cUITimedTooltip {
 public:
     void UpdateTimeoutA();                               // 0x00e36540
     void Shutdown();                                     // 0x00e36500
+    void* Init();                                        // 0x00e36550
 
     uint8_t mPayload[0x8c];                              // +0x00 .. +0x8b
 };
 class cToolWindow : public UTFWin::InteractiveWinProc {
 public:
+    void FUN_0107ac20();
+    void FUN_0107ac90(int a1, int a2, int a3, int a4);
     void FUN_0107adf0();
     void FUN_0107ae40(void* pWin);
+    cToolWindow* FUN_0107ae70();
+    void FUN_0107af00();
     void ShutdownCard();                                 // 0x00e18810
 
-    uint8_t          pad004[0x3c];                       // +0x004 .. +0x03f
+    uint8_t          pad004[0x14];                       // +0x004 .. +0x017
+    void*            mpLayout;                           // +0x018
+    uint8_t          pad01c[0x24];                       // +0x01c .. +0x03f
     bool             mFlag40;                            // +0x040
     uint8_t          pad041[3];                          // +0x041 .. +0x043
     cToolSub         mSub44;                             // +0x044 .. +0x0b7
     cUITimedTooltip  mTooltip;                           // +0x0b8 .. +0x143
     FeedList*        mpFeedList;                         // +0x144
+    uint8_t          pad148[0x8c];                       // +0x148 .. +0x1d3 (cString, f_lineY, handle block)
+
+    float   LineY() { return *(float*)((char*)this + 0x118); }
+    void*   Layout() { return mpLayout; }
+    void*   Handler() { return *(void**)((char*)this + 0x130); }
+    void    SetHandler(void* h) { *(void**)((char*)this + 0x130) = h; }
+    uint32_t HandlerArg(int n) { return *(uint32_t*)((char*)this + 0x130 + n * 4); }
+    void    SetLineY(float v) { *(float*)((char*)this + 0x118) = v; }
+    void*   CStr() { return (char*)this + 0x11c; }
+    void*   Sub() { return (char*)this + 0x44; }
+    void*   Tooltip() { return (char*)this + 0xb8; }
 };
 // ---- items of slice s0107a510 end
 
@@ -947,13 +994,55 @@ void cUIMissionCardPanel::SetVisibleSlot(int v)
 }
 
 // @ 0x0107ac20
-void __cdecl FUN_0107ac20()
+void cToolWindow::FUN_0107ac20()
 {
+    if (!mFlag40)
+        return;
+    void* h = Handler();
+    if (h != 0) {
+        SetHandler(0);
+        FUN_00571db0(h, HandlerArg(1), HandlerArg(2), HandlerArg(3), HandlerArg(4));
+    }
+    ((void (__thiscall *)(void *, int))FUN_00662920)(mpFeedList, 0);
+    FUN_00e0a640(Sub());
+    mFlag40 = false;
+    FUN_00e18a30(this);
 }
 
 // @ 0x0107ac90
-void __cdecl FUN_0107ac90()
+void cToolWindow::FUN_0107ac90(int a1, int a2, int a3, int a4)
 {
+    ((void (__thiscall *)(void *, int, int, int, int))FUN_00e186d0)(this, a1, a2, a3, a4);
+    mFlag40 = false;
+    uint32_t key[3] = { 0, 0, 0 };
+    ((bool (__thiscall *)(void *, void *, uint32_t *))FUN_00e0a4c0)(Sub(),
+        ((void *(__thiscall *)(void *, int, bool))FUN_008105b0)(Layout(), 0x5f00928, true), key);
+    void* tooltip = Tooltip();
+    ((void (__thiscall *)(void *, Vec3_s0107, uint32_t, int, int))FUN_00e36b30)(
+        tooltip, *(Vec3_s0107*)0x015b9768, 0x5fd4ce0, 200, 0xfa);
+    void* obj = ((void *(__thiscall *)(void *, uint32_t, bool))FUN_00e36650)(tooltip, 0x51a37b8, true);
+    float* r = (float*)((void*(__thiscall*)(void*)) (*(void***)obj)[0x38 / 4])(obj);
+    SetLineY(r[2] - r[0]);
+    ((void (__thiscall *)(void *, uint32_t, uint32_t, int))FUN_006b54b0)(CStr(), 0x2db6dad3, 0x65672cb, 0);
+    void* mem = FUN_00f473a0(0x6c, "UI/cSPUIFeedList", 0, 0, 0, 0);
+    FeedList* created;
+    if (mem != 0)
+        created = (FeedList*)((void *(__thiscall *)(void *))FUN_00663040)(mem);
+    else
+        created = 0;
+    void* old = mpFeedList;
+    if (created != (FeedList*)old) {
+        if (created != 0)
+            ((void(__thiscall*)(void*)) (*(void***)created)[0 / 4])(created);
+        mpFeedList = created;
+        if (old != 0)
+            ((void(__thiscall*)(void*)) (*(void***)old)[4 / 4])(old);
+    }
+    FeedList* feed = mpFeedList;
+    ((void (__thiscall *)(void *, void *, uint32_t, uint32_t, uint32_t))FUN_00663860)(
+        feed, ((void *(__thiscall *)(void *, int, bool))FUN_008105b0)(Layout(), 0x5f00660, true),
+        0x1caa6cd5, 0, 0);
+    ((void (__thiscall *)(void *, int))FUN_00662920)(mpFeedList, 0);
 }
 
 // @ 0x0107adf0
@@ -983,24 +1072,186 @@ void __thiscall cToolWindow::FUN_0107ae40(void* pWin)
 }
 
 // @ 0x0107ae70
-void __cdecl FUN_0107ae70()
+cToolWindow* cToolWindow::FUN_0107ae70()
 {
+    FUN_00e18bb0(this);
+    *(void**)this = (void*)0x0149c67c;
+    *((void**)this + 2) = (void*)0x0149c660;
+    *((void**)this + 3) = (void*)0x0149c658;
+    mFlag40 = false;
+    FUN_00e0a390(Sub());
+    FUN_00e36480(Tooltip());
+    FUN_006b5060(CStr());
+    *((void**)this + 0x4c) = 0;
+    *((void**)this + 0x4d) = 0;
+    *((void**)this + 0x4e) = 0;
+    *((void**)this + 0x4f) = 0;
+    *((void**)this + 0x50) = 0;
+    *((void**)this + 0x51) = 0;
+    *((void**)this + 0x52) = 0;
+    return this;
 }
 
 // @ 0x0107af00
-void __cdecl FUN_0107af00()
+void cToolWindow::FUN_0107af00()
 {
+    *(void**)this = (void*)0x0149c67c;
+    *((void**)this + 2) = (void*)0x0149c660;
+    *((void**)this + 3) = (void*)0x0149c658;
+    _ReadWriteBarrier();
+    void* p = *((void**)this + 0x52);
+    if (p != 0)
+        ((void(__thiscall*)(void*)) (*(void***)p)[4 / 4])(p);
+    p = *((void**)this + 0x51);
+    if (p != 0)
+        ((void(__thiscall*)(void*)) (*(void***)p)[4 / 4])(p);
+    void* h = Handler();
+    if (h != 0) {
+        SetHandler(0);
+        FUN_00571db0(h, HandlerArg(1), HandlerArg(2), HandlerArg(3), HandlerArg(4));
+    }
+    FUN_006b54c0(CStr());
+    FUN_00e364d0(Tooltip());
+    FUN_00e0a400(Sub());
+    FUN_00e18980(this);
 }
 
+struct ListNode_s0107_afa0 {
+    ListNode_s0107_afa0* mpNext;   // +0x00
+    ListNode_s0107_afa0* mpPrev;   // +0x04
+    uint32_t mnId;                 // +0x08
+};
+struct Elem_s0107_afa0 {
+    uint8_t mnPad00[0xa0];         // +0x000
+    void* mpVtA0;                  // +0x0a0
+    uint8_t mnPadA4[0xd8];         // +0x0a4
+    uint32_t mn17c;                // +0x17c
+};
+struct Widget_s0107_afa0 {
+    uint8_t mnPad00[0x14];         // +0x000
+    uint32_t mn14;                 // +0x014
+    uint8_t mnPad18[0x1c];         // +0x018
+    ListNode_s0107_afa0 mHead;     // +0x034
+    uint8_t mnPad3c[0x108];        // +0x03c
+    void* mp144;                   // +0x144
+    void* mp148;                   // +0x148
+    void FUN_0107afa0();
+};
+extern "C" void* FUN_00662a20();    // 0x00662a20
+extern "C" uint32_t FUN_00664600(); // 0x00664600
+extern "C" void* FUN_00664610();    // 0x00664610
+extern "C" void  FUN_00666630();    // 0x00666630
+extern "C" void  FUN_00662c10();    // 0x00662c10
+extern "C" void* FUN_00b3d3f0();    // 0x00b3d3f0 NounManager
+extern "C" void  FUN_00e30e20();    // 0x00e30e20
 // @ 0x0107afa0
-void __cdecl FUN_0107afa0()
+void __thiscall Widget_s0107_afa0::FUN_0107afa0()
 {
+    void* src = ((void* (__thiscall*)(void*, int))FUN_00662a20)(mp144, 0);
+    if (src == 0)
+        return;
+    uint32_t n = ((uint32_t (__thiscall*)(void*))FUN_00664600)(src);
+    for (uint32_t i = 0; i < n; ++i) {
+        Elem_s0107_afa0* e = ((Elem_s0107_afa0* (__thiscall*)(void*, uint32_t))FUN_00664610)(src, i);
+        int count = 0;
+        void* arr = 0;
+        bool changed = false;
+        ((void (__thiscall*)(void*, int*, void**))FUN_00666630)(src, &count, &arr);
+        for (int j = 0; j < count; ++j) {
+            int id = *((int*)((char*)arr + j * 12));
+            ListNode_s0107_afa0* head = &mHead;
+            ListNode_s0107_afa0* node = head->mpNext;
+            while (node != head) {
+                if (node->mnId == (uint32_t)id)
+                    break;
+                node = node->mpNext;
+            }
+            if (node != head) {
+                uint32_t v = e->mn17c;
+                changed = true;
+                cNounManager* mgr = (cNounManager*)FUN_00b3d3f0();
+                ((void (__thiscall*)(void*, uint32_t, uint32_t, uint32_t, int, int))FUN_00e30e20)(
+                    mgr->mpSelection, (uint32_t)id, v, 0xf45f7d78, 0, 0);
+            }
+        }
+        void* old = mp148;
+        if (mp148 == 0 && src != old) {
+            if (src != 0)
+                ((void (__thiscall*)(void*))(*(void***)src)[0 / 4])(src);
+            mp148 = src;
+            if (old != 0)
+                ((void (__thiscall*)(void*))(*(void***)old)[4 / 4])(old);
+        }
+        if (changed) {
+            ((void (__thiscall*)(void*, uint32_t))(*(void***)e->mpVtA0)[0x50 / 4])(e->mpVtA0, e->mn17c);
+            uint32_t v = e->mn17c;
+            cNounManager* mgr = (cNounManager*)FUN_00b3d3f0();
+            ((void (__thiscall*)(void*, uint32_t, uint32_t, uint32_t, int, int))FUN_00e30e20)(
+                mgr->mpSelection, v, mn14, 0x2c765c39, 0, 0);
+        }
+    }
+    ((void (__thiscall*)(void*, void*))FUN_00662c10)(mp144, mp148);
 }
 
+extern "C" void*  FUN_01002bd0();   // 0x01002bd0 SpaceGameGet
+extern "C" void*  FUN_00a1ad60();   // 0x00a1ad60 GetPlayerInventory
+extern "C" uint32_t FUN_00b3d3d0(); // 0x00b3d3d0
+extern "C" bool   FUN_00ff3d10();   // 0x00ff3d10
+extern "C" bool   FUN_0104cbc0();   // 0x0104cbc0
+extern "C" uint32_t FUN_00a02d30(); // 0x00a02d30
+extern "C" bool   FUN_0103bef0();   // 0x0103bef0
+extern "C" void   FUN_00407190();   // 0x00407190
+namespace SP {
+struct Key_s0107_b120 {
+    int a;
+    int b;
+    int c;
+    Key_s0107_b120() {}
+    Key_s0107_b120(const Key_s0107_b120& o) : a(o.a), b(o.b), c(o.c) {}
+};
 // @ 0x0107b120
-void __thiscall SP::cSPUITools::GetToolAvailability()
+bool __cdecl FUN_0107b120(void* pTool, uint32_t* pnTool, uint32_t* pnAvailability)
 {
+    void* game = FUN_01002bd0();
+    void* inv = ((void* (__thiscall*)(void*))FUN_00a1ad60)(game);
+    uint32_t player = FUN_00b3d3d0();
+    if (pTool == 0 || inv == 0 || player == 0)
+        return false;
+
+    *pnAvailability = 0xffffffff;
+    typedef void* (__thiscall* Vt68_s0107)(void*, void*);
+    Vt68_s0107 fn = (Vt68_s0107)(*(void***)inv)[0x68 / 4];
+    Key_s0107_b120 key;
+    key.a = *((int*)pTool + 2);
+    key.b = 0;
+    key.c = 0;
+    void* obj = fn(inv, &key);
+    if (obj != 0) {
+        *pnTool = 3;
+        if (!((bool (__thiscall*)(void*))FUN_0104cbc0)(obj))
+            goto done_s0107_b120;
+        *pnAvailability = ((uint32_t (__thiscall*)(void*))FUN_00a02d30)(obj);
+        return true;
+    }
+    if (((bool (__thiscall*)(void*, void*))FUN_00ff3d10)(inv, &key)) {
+        *pnTool = 3;
+        return true;
+    }
+    if (((bool (__thiscall*)(void*, uint32_t))(*(void***)pTool)[0x1c / 4])(pTool, 0x588ba0e)) {
+        bool flag;
+        ((void (__cdecl*)(void*, uint32_t, bool*))FUN_00407190)(pTool, 0x588ba0e, &flag);
+        if (flag) {
+            *pnTool = 0;
+            return true;
+        }
+    } else {
+        bool r = ((bool (__thiscall*)(uint32_t, Key_s0107_b120))FUN_0103bef0)(player, key);
+        *pnTool = (r ? 1u : 0u) + 1u;
+    }
+done_s0107_b120:
+    return true;
 }
+}  // namespace SP
 
 // @ 0x0107b260
 bool cSPUITools_s0107_b260::PopulateSelected(cUIObject* pObject)

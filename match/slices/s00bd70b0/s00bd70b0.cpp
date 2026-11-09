@@ -626,6 +626,7 @@ void __fastcall FUN_00bd7ea0(char* this_)
     void* civ = FUN_00b25fb0(FUN_00b3d300p());
     void* r = FUN_00b3d480p2((int)this_, (int)civ);
     FUN_00ac8d00p(r);
+    _ReadWriteBarrier();
 }
 
 // ===========================================================================

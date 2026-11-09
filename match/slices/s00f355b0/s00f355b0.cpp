@@ -384,7 +384,8 @@ void cEditor::FUN_00f35be0(u32 value)
     var = value;
     props->SetProperty(0x2a907b7, &var);
     if (var.m_flags & 4) var.Destruct(false);
-    if (m_keys.count() != m_ints.count())
+    u32 nk = m_keys.count();
+    if (m_ints.count() != nk)
         m_ints.resize(m_keys.count(), value);
 }
 

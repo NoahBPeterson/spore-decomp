@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-006860e0  3    complete: eastl copy of 0x28-byte elements; only the loop-tail add ordering differs
 006861d0  92   complete: hashtable find+refcount-decrement+erase; register/reloc scheduling differs; equiv: WEAK (2000 valid, no mismatch, 45.7% coverage — erase path unreachable by generated inputs)
 00686250  31   complete: fetch global element wstring; end-of-string buffered (push esi) and compare operand order differ
 00686320  62   complete: SP::cPropertyList dtor; retail mModCount is a refcounted object, member order/scheduling differ; equiv: PASS (1401 valid, 100% coverage)

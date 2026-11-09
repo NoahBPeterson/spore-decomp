@@ -1064,8 +1064,9 @@ void EA::XHTML::Layout::TextStyleHashtable::DoRehash(unsigned int nNewBucketCoun
 EA::XHTML::Layout::InlineItem::InlineItem(EA::XHTML::Layout::Page_s008e_b250* pPage, void* pElement, int type)
 : EA::XHTML::Layout::ContainerItem(pPage, type)
 {
-    mChildItems.mpNext = &mChildItems;
-    mChildItems.mpPrev = &mChildItems;
+    eastl::intrusive_list_node_s008e_b250* pAnchor = &mChildItems;
+    pAnchor->mpPrev = pAnchor;
+    pAnchor->mpNext = pAnchor;
     mStyleRules = 0;
     mnRuleCount = 0;
     mPlacement = 0;
@@ -1094,8 +1095,9 @@ EA::XHTML::Layout::TableCell::TableCell(EA::XHTML::Layout::Page_s008e_b250* pPag
 EA::XHTML::Layout::TableGroup::TableGroup(EA::XHTML::Layout::Page_s008e_b250* pPage, void* pElement, int type)
 : EA::XHTML::Layout::ContainerItem(pPage, 9)
 {
-    mChildItems.mpNext = &mChildItems;
-    mChildItems.mpPrev = &mChildItems;
+    eastl::intrusive_list_node_s008e_b250* pAnchor = &mChildItems;
+    pAnchor->mpPrev = pAnchor;
+    pAnchor->mpNext = pAnchor;
     mStyleRules = 0;
     mnRuleCount = 0;
     mPlacement = 0;

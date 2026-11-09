@@ -1040,7 +1040,9 @@ bool cPlanetModel_s00b8_d190::FUN_00b8d8a0(uint32_t a, bool refresh, uint32_t c)
 // @ 0x00b8d8f0
 uint32_t cPlanetModel_s00b8_d190::FUN_00b8d8f0()
 {
-    return ((cStarObject*)SP::StarManager(mField184))->FUN_00ba6440();
+    uint32_t result = ((cStarObject*)SP::StarManager(mField184))->FUN_00ba6440();
+    _ReadWriteBarrier();
+    return result;
 }
 
 // @ 0x00b8d910

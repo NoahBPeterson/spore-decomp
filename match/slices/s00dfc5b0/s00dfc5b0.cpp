@@ -192,7 +192,7 @@ void EffectVec::EraseRange(void* firstP, void* lastP) {
 }
 
 // ===========================================================================
-//  0x00dfca50  Entry38::operator=
+//  0x00dfca50  Entry38
 // ===========================================================================
 // @ 0x00dfca50
 Entry38& Entry38::operator=(const Entry38& o) {
@@ -200,10 +200,10 @@ Entry38& Entry38::operator=(const Entry38& o) {
     m0c = o.m0c;
     m10 = o.m10;
     m14 = o.m14;
-    Vec38* s = (Vec38*)&o.mVec;
-    Vec38* d = (Vec38*)&mVec;
-    d->operator=(*s);
-    d->mOwner = s->mOwner;
+    Vec38& s = *(Vec38*)&o.mVec;
+    Vec38& d = *(Vec38*)&mVec;
+    d.operator=(s);
+    d.mOwner = s.mOwner;
     void* src = o.mp30;
     void* cur = mp30;
     if (src != cur) {

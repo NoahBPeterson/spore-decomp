@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00a613c0 2 size 151 vs 151, only 2 diff bytes at 0xa61411 and 0xa6141c. The two differing bytes are the [esp+0x30]/[esp+0x18] vs [esp+0x38]/[esp+0x20] frame offsets used to reload argc/argv after the pd calls; the instruction stream is otherwise identical. Equivalence UNSUPPORTED (pd globals unpopulated).
 00a618c0 166 size 249 vs 247, 168 diff. Equivalence FAIL (5/5 mismatch on execution). Single-tail rewrite improved it (offset table handling and the atom copy loop still differ). Not byte-exact.
 00a619e0 153 size 219 vs 230, 164 diff. Equivalence FAIL (first mismatch eax). The original leaves only al set on its "return 1" paths (stale upper bits, same pattern as slice 32's AdvanceCounter) and shares one epilogue; ours zero-extends. Not byte-exact.
 00a61c20 383 size 575 vs 549, 409 diff. Equivalence WEAK (330 valid inputs, 31.5% coverage vs the 60% bar). Large init routine; control flow differs.

@@ -12,6 +12,7 @@
 ../src/game/SPGonzago/_at_00e30000.cpp  ?RefreshRecord@cAssetView@@QAEXI@Z  00e34da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e30000.cpp  ?SetTool@cToolButton@@QAE_NII@Z  00e34eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e30000.cpp  ?ShowRelationship@cAssetView@@QAEXHH_N@Z  00e35290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ??1cUITimedTooltip@@UAE@XZ  00e364d0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e30000.cpp  ?Shutdown@cUITimedTooltip@@QAEXXZ  00e36500  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e30000.cpp  ?Hide@cUITimedTooltip@@QAEXXZ  00e36620  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e30000.cpp  ?ResetState@cUITimedTooltip@@QAEXXZ  00e36de0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

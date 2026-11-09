@@ -23,7 +23,6 @@
 010d6e00 576 hkSphereTriangleAgent::staticGetClosestPoints; complete (rebuilds the triangle cache with setupClosestPointTriangleCache then queries); size 716 vs 907; same schedule difference; equiv PASS 216 valid inputs, 89.7% coverage flags: /vc71 /O2 /MD /Gy /TP
 010d7190 205 hkSphereTriangleAgent::getPenetrations; complete (sphere centre into the triangle's local frame by basis rows, closestPointTriangle against the shape's local vertices, addCdBodyPair when distance < rA+rB); size 351 vs 353; remaining diff is register allocation (esi/edi/ebx) and the monitor slot; equiv PASS 250 valid inputs, 77.8% coverage flags: /vc71 /O2 /MD /Gy /TP
 010d7300 257 hkSphereTriangleAgent::staticGetPenetrations; complete (cache rebuilt each call); size 386 vs 360; same schedule difference; equiv PASS 248 valid inputs, 78.5% coverage flags: /vc71 /O2 /MD /Gy /TP
-010dce00 2 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010dce40 217 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010dd180 33 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010dd1d0 41 havok-equivalent; default PASS 329/100%, replay PASS flags: /vc71 /O2 /MD /Gy /TP
@@ -35,11 +34,9 @@
 010dd7b0 405 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010dda70 225 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010ddc30 247 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
-010dde90 2 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010df100 36 destroy: reset vptr to 0x013ef094 after the array deallocation and before the optional flags&1 deallocation (the store was missing; replay originally left 3f82063e at [this]); difftest PASS 222 valid inputs / 60.0% coverage; remaining diff is vc71 x87/register scheduling (size 82 vs 86). flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010df160 234 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010df280 58 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
-010df3d0 4 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010df440 200 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010df500 40 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010df5d0 63 havok-equivalent; difftest PASS (1200 inputs, 100% cov) flags: /vc71 /O2 /MD /Gy /EHsc /TP

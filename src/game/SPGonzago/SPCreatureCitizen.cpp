@@ -1089,7 +1089,7 @@ public:
     cGonzagoTempText(const char* pText);        // 0x00b46d90
 
     char* mpText;                               // 0x000
-    uint8_t mPad004[0x6c];                      // 0x004
+    uint8_t mPad004[0x70];                      // 0x004
 };
 class cTextAllocation {
 public:
@@ -4062,7 +4062,7 @@ void FUN_00da7c50(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i
         p->GetTribe()->FindSpot(s->mField0c, s->mField08);
     if (p->mByte_b5e == 0) {
         p->mObjC0.V_ec();
-        u8 b = (p->mObjC0.V_f8() == 0);
+        bool b = (p->mObjC0.V_f8() == 0);
         p->FUN_00c14750(b);
     }
 }
@@ -4071,7 +4071,7 @@ void FUN_00da7c50(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i
 void FUN_00da7dc0(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, IdleBlock* s)
 {
     p->d0c0(6, 0);
-    u8 b = (p->mObjC0.V_f8() == 0);
+    bool b = (p->mObjC0.V_f8() == 0);
     p->FUN_00c14750(b);
     if (s->mField04 != -1) {
         cTribe* t = s->mpCreature14->GetTribe();

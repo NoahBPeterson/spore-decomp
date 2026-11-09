@@ -13,7 +13,6 @@
 011412b0  183  SNDI_patchtohdr: parse the SNDI tag stream into header/buffers/timestretch arrays; complete; difftest PASS 86.8% cov. flags /vc71 /O2 /MD /Gy /TP
 011416b0   48  unregister callback leaf; complete; difftest WEAK 21.4% cov. flags /vc71 /O2 /MD /Gy /TP
 01141710   18  invoke registered callbacks leaf; complete; difftest WEAK 21.4% cov. flags /vc71 /O2 /MD /Gy /TP
-01141740   2   enable-check + handle lookup then thiscall dispatch; complete; difftest WEAK 22.2% cov; single global byte test lowers as mov/test instead of cmp [mem],0 (/LTCG). flags /vc71 /O2 /MD /Gy /TP
 01141780  372  decode-filter pull: fill output from decoder rings, memcpy/codec read, ring wrap; complete; difftest PASS 75.0% cov. flags /vc71 /O2 /MD /Gy /TP
 01141920   57  decode-filter release: refcount, free codec and decoder; complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP
 01141990  141  SFILTER_unpackealayer3pinit: allocate/shared decoder node + install filter fns; complete; difftest UNSUPPORTED 0 valid inputs (object-heavy: needs live System singleton + decoder). flags /vc71 /O2 /MD /Gy /TP

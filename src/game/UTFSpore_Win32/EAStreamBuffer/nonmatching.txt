@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0093ae80 1 complete: StreamBuffer::GetSize, one branch lands on a different ret flags: /O2 /MD /Gy /TP
 0093af00 75 complete: FlushWriteBuffer, register allocation differs flags: /O2 /MD /Gy /TP
 0093af60 124 complete: SetBufferSizes, allocator call/loop scheduling differs flags: /O2 /MD /Gy /TP
 0093b0a0 127 complete: StreamBuffer::SetPosition, GetSize slot and branch layout differ flags: /O2 /MD /Gy /TP

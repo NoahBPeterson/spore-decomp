@@ -16,3 +16,4 @@
 ../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c501e0@@YIDPAX0H0@Z  00c501e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c50460@@YIXPAX0@Z  00c50460  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c505a0@@YIXPAX0@Z  00c505a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPMissionEradicate.cpp  ?Update@cSPMissionEradicate_s00c4_ef00@@QAEHH@Z  00c4f750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

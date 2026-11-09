@@ -3,6 +3,7 @@
 ../src/game/SPEditors/SPEditorSpine.cpp  ?IncRef@cRefCounted@@QAEXH@Z  005cdbb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorSpine.cpp  ?DecRef@cRefCounted@@QAEXH@Z  005cdbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorSpine.cpp  ?CreateAxialConstraintData@@YAPAVhkGenericConstraintData@@H@Z  005ce0c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?ReleaseE8@cSpineHelper@SP@@QAEXXZ  005ce250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorSpine.cpp  ?SetEnabled@cSpineHelper@SP@@QAEXH@Z  005ce210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorSpine.cpp  ?GetHandle@cSpineHelper@SP@@QAEPAXH@Z  005ce270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorSpine.cpp  ?CopyE20@@YA?AUE20Iter@SP@@U12@00@Z  005cf7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

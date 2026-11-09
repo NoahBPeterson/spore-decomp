@@ -5,3 +5,4 @@ slices/s01102fc0/s01102fc0.cpp  ?hkFun_01103300@@YGXPBVhkVector4@@IIIPAV1@@Z  01
 slices/s01102fc0/s01102fc0.cpp  ?copyFrom@hkBytes48@@QAEPAU1@PBU1@@Z  01103af0  /vc71 /O2 /MD /Gy /TP
 slices/s01102fc0/s01102fc0.cpp  ?destroy@hkReferencedObjectWithPtr@@QAEPAU1@I@Z  01103560  /vc71 /O2 /MD /Gy /TP
 slices/s01102fc0/s01102fc0.cpp  ?init@hkMoppSettingsPartB@@QAEPAU1@H@Z  01103830  /vc71 /O2 /MD /Gy /TP
+slices/s01102fc0/s01102fc0.cpp  ?InitReferencedObjectWithPtr@@YIXPAUhkReferencedObjectWithPtr@@@Z  01103360  /vc71 /O2 /MD /Gy /TP

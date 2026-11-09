@@ -200,10 +200,9 @@ void* cputime_new()
         t_symbol* f = gensym(&local1, "float");
         outlet_new(x, f->s_name, f->s_thing);
 
+        t_symbol* b2 = gensym(&local1, "bang2");
         t_symbol local2;
-        t_symbol local3;
-        t_symbol* b2 = gensym(&local2, "bang2");
-        t_symbol* bang = gensym(&local3, "bang");
+        t_symbol* bang = gensym(&local2, "bang");
         inlet_new(x, x, bang->s_name, bang->s_thing, b2->s_name, b2->s_thing);
 
         *(int*)((char*)x + 0x38) = 0;

@@ -38,14 +38,20 @@
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00deec00@Wrapper@SP@@QAEXMMM@Z  00deec00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00deed00@Record@@QAE_NI@Z  00deed00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00def020@Wrapper@SP@@QAEXXZ  00def020  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00def690@cGalaxyGameEntryUIStateMachine_s00de_f400@SP@@QAEXXZ  00def690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00def750@cGalaxyGameEntryUIStateMachine_s00de_f400@SP@@QAEXII@Z  00def750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?MakeRandomName@cGalaxyGameEntryUIStateMachine_s00de_f400@SP@@QAEXXZ  00defc80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df0980@cGalaxyGameEntryUIStateMachine_s00df_0280@SP@@QAEXXZ  00df0980  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df0a40@cGalaxyGameEntryMode@@QAEXI@Z  00df0a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?PickRandomBuilding@cGalaxyGameEntryUIStateMachine_s00df_1e70@SP@@QAEXXZ  00df2d60  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?TestEditorToGame@Impl@@QAEXPAH@Z  00df2e20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df3a70@@YIXPAUHolder@@@Z  00df3a70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df5ef0@@YA_NXZ  00df5ef0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df5f10@@YAXXZ  00df5f10  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df82d0@@YIXPAUDtor_s00df_82d0@@@Z  00df82d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df68c0@WinA@@QAE_NIPAX@Z  00df68c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df9650@GGUI@@QAEXXZ  00df9650  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00df9770@GGUI@@QAEXXZ  00df9770  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?e00560@@YGXH@Z  00e00560  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?init_16a0dc4@@YAXXZ  0136bfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?PickRandomAssets@StateMachine@@QAEXD@Z  00df3ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -6,7 +6,6 @@
 008eddb0  120  PickingContext::RefreshMargins: complete; the `max(margin, v)` idiom compiles to a different branch/cmov shape than the original's temp+fld/fstp form (116 vs 130)
 008ede40   85  PickingContext::SetContextRect: complete; cl uses movss for the float copies where the original uses fld/fstp (95 vs 99)
 008edeb0  144  PickingContext::SetContextRectRelative: complete; same movss vs fld/fstp divergence plus operand-order changes (134 vs 172)
-008edf60    2  PickingContext::PlaceFloat: complete; only the `mY548 + mExtra55c` add order is reversed by /fp:fast reassociation
 008edfc0   45  PickingContext::lower_bound: complete; cl restructures the eastl lower_bound half/count arithmetic (76 vs 77)
 008ee010  507  PickingContext::Flush: complete; the scroll/flush loop, float-margin walk and lower_bound result use the right fields, but cl hoists the x87 sqrt-free float chain and lays the loop out differently (588 vs 557)
 008ee240  153  PickingContext::PickingContext (from rect): complete; the base-ctor call and all field inits match, but cl orders the zero fills differently (177 vs 175)

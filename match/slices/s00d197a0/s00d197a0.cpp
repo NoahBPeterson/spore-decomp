@@ -707,15 +707,10 @@ void quick_sort_impl(It first, It last, Size kRecursionCount, Compare compare)
 
 inline int Log2(int n)
 {
-    int m = n;
-    n = 0;
-    _ReadWriteBarrier();
     int i = 0;
-    if (m != 0) {
-        do {
-            m >>= 1;
-            ++i;
-        } while (m != 0);
+    while (n != 0) {
+        n >>= 1;
+        ++i;
     }
     return i;
 }

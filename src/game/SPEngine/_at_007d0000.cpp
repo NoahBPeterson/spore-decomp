@@ -988,8 +988,8 @@ struct cDescCtx {
 // @ 0x007d01f0
 void* Ser1F0(IStream* s, char* p)
 {
-    uint16_t v16 = *(uint16_t*)p;
     float vf;
+    uint16_t v16 = *(uint16_t*)p;
     WriteUint16(s, v16, 1, 0);
     vf = *(float*)(p + 0x10);
     WriteFloat32(s, vf, 1, 0);

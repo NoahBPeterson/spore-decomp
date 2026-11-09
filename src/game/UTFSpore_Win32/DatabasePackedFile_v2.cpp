@@ -494,10 +494,10 @@ bool DatabasePackedFile::FUN_006bc2d0(uint64* out, uint32 a, uint32 b)
 bool DatabasePackedFile::FUN_006bc310(uint32 p2, uint32 p3, uint32 p4, uint32 p5, char p6)
 {
     if ((p2 | p3) != 0 && (p4 | p5) != 0) {
-        if ((field_544 & 0x10) != 0 && p6 == 0)
-            mHoleTable1.FUN_006bfda0(p2, p3, p4, p5);
-        else
+        if ((field_544 & 0x10) == 0 || p6 != 0)
             mHoleTable0.FUN_006bfda0(p2, p3, p4, p5);
+        else
+            mHoleTable1.FUN_006bfda0(p2, p3, p4, p5);
         field_5a0 = true;
     }
     return true;

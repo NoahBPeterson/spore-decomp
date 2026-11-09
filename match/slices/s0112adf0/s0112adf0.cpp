@@ -648,7 +648,9 @@ void hkFinishLoadedObjectRegistry::merge(const hkFinishLoadedObjectRegistry& fro
 // @ 0x0112bbd0
 const hkClass* hkVtableClassRegistry::getClassFromVirtualInstance(const void* obj) const
 {
-    return (const hkClass*)m_map.getWithDefault(*(const hkUlong32*)obj, 0);
+    hkUlong32 key = *(const hkUlong32*)obj;
+    const hkClass* c = (const hkClass*)m_map.getWithDefault(key, 0);
+    return c;
 }
 
 // @ 0x0112bbf0

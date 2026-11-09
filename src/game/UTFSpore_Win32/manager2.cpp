@@ -82,7 +82,7 @@ struct VS6 {
     virtual void  a3(); virtual void  a4(); virtual void  a5();
     virtual char  f(void*, void*);
 };
-struct APCData { char lead[8]; int tag; int p2; void* p3; };
+struct APCData { char lead[8]; int tag; int p2; void* p3; void* tail[2]; };
 struct W {
     void     PostAPC(int a, void* b);            // 0x00957D40
     void     d90(void* a);                       // 0x00957D90
@@ -1115,7 +1115,7 @@ void W::m860(char* node)
         char* iVar2 = *(char**)(node + 0x38);
         U8(node, 0x30) = U8(node, 0x30) | 0x40;
         for (; iVar2 != 0; iVar2 = *(char**)(iVar2 + 0x38)) {
-            if (I8(iVar2, 0x30) < 0) break;
+            if ((U8(iVar2, 0x30) & 0x80) == 0x80) break;
             U8(iVar2, 0x30) = U8(iVar2, 0x30) | 0x80;
         }
     }
@@ -1138,7 +1138,7 @@ void W::m8c0(char* node)
         char* iVar2 = *(char**)(node + 0x38);
         U8(node, 0x30) = U8(node, 0x30) | 0x20;
         for (; iVar2 != 0; iVar2 = *(char**)(iVar2 + 0x38)) {
-            if (I8(iVar2, 0x30) < 0) break;
+            if ((U8(iVar2, 0x30) & 0x80) == 0x80) break;
             U8(iVar2, 0x30) = U8(iVar2, 0x30) | 0x80;
         }
     }

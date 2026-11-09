@@ -452,10 +452,9 @@ void MapFile::ListClear()
         return;
     do {
         u8* cur = n;
-        u8* c = *(u8**)(cur + 0x10);
+        n = *(u8**)cur;
         u8* a = *(u8**)(cur + 8);
-        u8* nxt = *(u8**)cur;
-        n = nxt;
+        u8* c = *(u8**)(cur + 0x10);
         if ((int)(c - a) > 1 && a != 0)
             OpDelete(a);
         OpDelete(cur);

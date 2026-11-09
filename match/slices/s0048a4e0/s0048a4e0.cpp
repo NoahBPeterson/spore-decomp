@@ -199,7 +199,8 @@ void cSPEditorLimbStructure::SetUIState(int state)
 void cSPEditorLimbStructure::SetUIState(cSPEditorLimbJoint* joint, int state)
 {
     if (joint) {
-        if (joint->mJointBlock->GetUIState() != state) {
+        int ui = joint->mJointBlock->GetUIState();
+        if (ui != state) {
             vector<AutoRefCount<cSPEditorBlock> > blocks;
             GetSymmetricBlocks(joint->mJointBlock, blocks);
             EditorUtils::SetSymmetricBlocksUIState(joint->mJointBlock, blocks, true);

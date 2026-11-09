@@ -79,6 +79,8 @@ struct ListAnchor
 {
     void* mpNext;   // 0x00
     void* mpPrev;   // 0x04
+
+    void DoClear();   // 0x0060c4a0 (thiscall)
 };
 }
 }
@@ -577,6 +579,8 @@ namespace Allocator {
 class ICoreAllocator_s008d_62f0
 {
 public:
+    virtual void  v00() = 0;
+    virtual void  v04() = 0;
     virtual void* Allocate(unsigned int nSize, const char* pName, unsigned int nFlags); // vtbl +0x08
     virtual void  Free(void* p, unsigned int nSize);                                    // vtbl +0x0c
     static ICoreAllocator_s008d_62f0* GetDefaultAllocator();   // 0x00925cb0
@@ -662,7 +666,23 @@ struct DDFRecordListData_s008d_62f0
     uint32_t   mnValue10;     // +0x10
     uint32_t   mnValue14;     // +0x14
     ListAnchor mRecords;      // +0x18  list<AutoRefCount<DDFRecord>>
+    DDFRecordListData_s008d_62f0* Construct(const DDFRecordListData_s008d_62f0* pSrc);  // 0x008d6970
 };  // 0x20
+// rbtree value_type: pair<const Key, DDFRecordListData> as retail lays it out (+0x10 aligned).
+struct KeyPair_s008d_62f0
+{
+    Key_s008d_62f0                mKey;     // +0x00
+    uint32_t                      mnPad;    // +0x0c
+    DDFRecordListData_s008d_62f0  mValue;   // +0x10
+
+    void Construct(const KeyPair_s008d_62f0& src)
+    {
+        mKey = src.mKey;
+        mValue.Construct(&src.mValue);
+    }
+    // The rbtree builds the key/value pair's first three words in place before running the value copy.
+    void ConstructKey(const KeyPair_s008d_62f0& src) { mKey = src.mKey; }
+};
 }
 }
 namespace EA {
@@ -679,6 +699,20 @@ struct RBNode_s008d_62f0
 }
 namespace EA {
 namespace ResourceMan {
+// rbtree iterator: a class (not a bare pointer) so the compiler returns it through a hidden out-parameter,
+// exactly as the retail erase wrapper does.
+struct RBNodeIter_s008d_62f0
+{
+    RBNode_s008d_62f0* mpNode;
+    RBNodeIter_s008d_62f0() : mpNode(0) {}
+    explicit RBNodeIter_s008d_62f0(RBNode_s008d_62f0* p) : mpNode(p) {}
+    RBNodeIter_s008d_62f0(const RBNodeIter_s008d_62f0& o) : mpNode(o.mpNode) {}
+    RBNodeIter_s008d_62f0& operator=(const RBNodeIter_s008d_62f0& o) { mpNode = o.mpNode; return *this; }
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
 struct RBTree_s008d_62f0
 {
     void*   mpAllocator;  // +0x00
@@ -689,6 +723,11 @@ struct RBTree_s008d_62f0
     uint32_t mnCount;     // +0x14
     void*   mpAllocIface; // +0x18 ICoreAllocator*
     uint32_t mnAllocName; // +0x1c
+
+    void DoInsertValueImpl(RBNode_s008d_62f0** ppOutNode, RBNode_s008d_62f0* pPosition,
+                           const void* pKey, bool bLeft);   // 0x008d6e20
+    RBNodeIter_s008d_62f0 Erase(RBNodeIter_s008d_62f0 it);              // 0x008d6d20
+    RBNodeIter_s008d_62f0 EraseIterator(RBNodeIter_s008d_62f0 it);      // 0x008d7200
 };
 }
 }
@@ -742,10 +781,22 @@ inline const Key_s008d_62f0* NodeKey(RBNode_s008d_62f0* pNode) { return reinterp
 }
 namespace EA {
 namespace ResourceMan {
+inline bool KeyLess_s008d_62f0(const Key_s008d_62f0& a, const Key_s008d_62f0& b)
+{
+    if (a.mnTypeID != b.mnTypeID)
+        return a.mnTypeID < b.mnTypeID;
+    if (a.mnInstanceID != b.mnInstanceID)
+        return a.mnInstanceID < b.mnInstanceID;
+    return a.mnGroupID < b.mnGroupID;
+}
+}
+}
+namespace EA {
+namespace ResourceMan {
 inline void FreeString16(String16_s008d_62f0* pStr)
 {
-    uint32_t nBytes = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(pStr->mpCapacity) -
-                                            reinterpret_cast<uintptr_t>(pStr->mpBegin));
+    int nBytes = static_cast<int>(reinterpret_cast<uintptr_t>(pStr->mpCapacity) -
+                                  reinterpret_cast<uintptr_t>(pStr->mpBegin));
     nBytes &= 0xfffffffeu;
     if (nBytes > 2 && pStr->mpBegin != 0)
         EAOperatorDelete(const_cast<wchar_t*>(pStr->mpBegin));
@@ -794,12 +845,7 @@ void ExtTreeDoInsertValueImpl(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0* pPosi
 }
 namespace EA {
 namespace ResourceMan {
-void KeyTreeDoInsertValueImpl(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0* pPosition, const void* pKey, bool bLeft);      // 0x008d6e20
-}
-}
-namespace EA {
-namespace ResourceMan {
-RBNode_s008d_62f0* KeyTreeErase(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0* pNode);                      // 0x008d6d20
+
 }
 }
 namespace EA {
@@ -908,11 +954,7 @@ struct HoleSet_s008d_62f0
 };
 }
 }
-namespace EA {
-namespace ResourceMan {
-DDFRecordListData_s008d_62f0* DDFRecordListDataConstruct(DDFRecordListData_s008d_62f0* pThis, const DDFRecordListData_s008d_62f0* pSrc);
-}
-}
+
 // ---- items of slice s008d62f0 end
 
 // @ 0x008d5da0
@@ -1234,24 +1276,24 @@ bool HoleSetInsertRemove(HoleSet_s008d_62f0* pThis, void* pEntry, bool bAdd)
 
 // @ 0x008d6970
 namespace EA { namespace ResourceMan {
-DDFRecordListData_s008d_62f0* DDFRecordListDataConstruct(DDFRecordListData_s008d_62f0* pThis, const DDFRecordListData_s008d_62f0* pSrc)
+DDFRecordListData_s008d_62f0* DDFRecordListData_s008d_62f0::Construct(const DDFRecordListData_s008d_62f0* pSrc)
 {
-    pThis->mName.mpBegin    = 0;
-    pThis->mName.mpEnd      = 0;
-    pThis->mName.mpCapacity = 0;
+    mName.mpBegin    = 0;
+    mName.mpEnd      = 0;
+    mName.mpCapacity = 0;
 
     ptrdiff_t nChars = pSrc->mName.mpEnd - pSrc->mName.mpBegin;
-    WStrAllocateSelf(&pThis->mName, static_cast<unsigned int>(nChars + 1));
+    WStrAllocateSelf(&mName, static_cast<unsigned int>(nChars + 1));
 
-    wchar_t* pDst = const_cast<wchar_t*>(pThis->mName.mpBegin);
+    wchar_t* pDst = const_cast<wchar_t*>(mName.mpBegin);
     memcpy(pDst, pSrc->mName.mpBegin, static_cast<size_t>(nChars) * sizeof(wchar_t));
     pDst[nChars] = 0;
-    pThis->mName.mpEnd = pDst + nChars;
+    mName.mpEnd = pDst + nChars;
 
-    pThis->mnValue10 = pSrc->mnValue10;
-    pThis->mnValue14 = pSrc->mnValue14;
+    mnValue10 = pSrc->mnValue10;
+    mnValue14 = pSrc->mnValue14;
 
-    ListAnchor* pList = &pThis->mRecords;
+    ListAnchor* pList = &mRecords;
     pList->mpNext = pList;
     pList->mpPrev = pList;
     ListRefAppend(pList,
@@ -1259,7 +1301,7 @@ DDFRecordListData_s008d_62f0* DDFRecordListDataConstruct(DDFRecordListData_s008d
                   reinterpret_cast<ListRefNode*>(const_cast<ListAnchor*>(&pSrc->mRecords)),
                   false);
 
-    return pThis;
+    return this;
 }
 }}  // namespace EA::ResourceMan
 
@@ -1313,15 +1355,16 @@ void ExtTreeDoNukeSubtree(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0* pNode)
 
 // @ 0x008d6d20
 namespace EA { namespace ResourceMan {
-RBNode_s008d_62f0* KeyTreeErase(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0* pNode)
+RBNodeIter_s008d_62f0 RBTree_s008d_62f0::Erase(RBNodeIter_s008d_62f0 it)
 {
-    --pTree->mnCount;
-    RBNode_s008d_62f0* pNext = reinterpret_cast<RBNode_s008d_62f0*>(RBTreeIncrement(pNode));
-    RBTreeErase(pNode, Anchor(pTree));
-    ListBaseDoClear(&NodeValue_s008d_62f0(pNode)->mRecords);
+    RBNode_s008d_62f0* pNode = it.mpNode;
+    --mnCount;
+    it.mpNode = reinterpret_cast<RBNode_s008d_62f0*>(RBTreeIncrement(pNode));
+    RBTreeErase(pNode, Anchor(this));
+    NodeValue_s008d_62f0(pNode)->mRecords.DoClear();
     FreeString16(&NodeValue_s008d_62f0(pNode)->mName);
-    FreeTreeNode(pTree, pNode, 0x48);
-    return pNext;
+    FreeTreeNode(this, pNode, 0x48);
+    return it;
 }
 }}  // namespace EA::ResourceMan
 
@@ -1354,13 +1397,33 @@ void KeyTreeDoNukeSubtree(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0* pNode)
 }}  // namespace EA::ResourceMan
 
 // @ 0x008d6e20
+// Reconstructed from the retail listing.  The shape is complete; the remaining residue is cl 15's choice of
+// esi/edi for this/new-node (retail: esi=this, edi=node) and the scheduling of the insertion-side store.
 namespace EA { namespace ResourceMan {
-void KeyTreeDoInsertValueImpl(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0* pPosition, const void* pKey, bool bLeft)
+void RBTree_s008d_62f0::DoInsertValueImpl(RBNode_s008d_62f0** ppOutNode, RBNode_s008d_62f0* pPosition,
+                                          const void* pKey, bool bLeft)
 {
-    (void)bLeft;
-    (void)pPosition;
-    (void)pKey;
-    (void)pTree;
+    int nSide;
+    if (!bLeft && pPosition != Anchor(this))
+    {
+        const KeyPair_s008d_62f0* pNew = reinterpret_cast<const KeyPair_s008d_62f0*>(pKey);
+        nSide = 1;
+        if (KeyLess_s008d_62f0(pNew->mKey, *NodeKey(pPosition)))
+            nSide = 0;
+    }
+    else
+    {
+        nSide = 0;
+    }
+
+    RBNode_s008d_62f0* pNode = AllocTreeNode(this, 0x48);
+    if (pNode != 0)
+        reinterpret_cast<KeyPair_s008d_62f0*>(reinterpret_cast<uint8_t*>(pNode) + 0x10)->Construct(
+            *reinterpret_cast<const KeyPair_s008d_62f0*>(pKey));
+
+    RBTreeInsert(pNode, pPosition, Anchor(this), nSide);
+    ++mnCount;
+    *ppOutNode = pNode;
 }
 }}  // namespace EA::ResourceMan
 
@@ -1484,9 +1547,9 @@ bool DatabaseDirectoryFiles_s008d_62f0::ReadExtensionToTypeMapFile()
 
 // @ 0x008d7200
 namespace EA { namespace ResourceMan {
-RBNode_s008d_62f0* RecordMapEraseIterator(RBTree_s008d_62f0* pTree, RBNode_s008d_62f0* pNode)
+RBNodeIter_s008d_62f0 RBTree_s008d_62f0::EraseIterator(RBNodeIter_s008d_62f0 it)
 {
-    return KeyTreeErase(pTree, pNode);
+    return Erase(it);
 }
 }}  // namespace EA::ResourceMan
 

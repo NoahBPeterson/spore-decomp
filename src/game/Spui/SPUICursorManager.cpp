@@ -296,11 +296,11 @@ bool C_801950::Run(int a)
 // @ 0x00801980
 void C_801980::Set(bool v)
 {
+  int a;
   m44 = (uint8_t)v;
   if (m50) {
     if (v) {
-      int a;
-      ((void (__thiscall*)(void*, int*, int*))VFN(this, 0x34))(this, (int*)&v, &a);
+      ((void (__thiscall*)(void*, int*, int*))VFN(this, 0x34))(this, &a, (int*)&v);
       ((void (__thiscall*)(void*, float, float))VFN(m50, 0x64))(m50, (float)a, (float)*(int*)&v);
     } else {
       f_8027e0(this);
@@ -500,9 +500,7 @@ void __fastcall Sub_801fd0(void* self)
   if (p) p->Release();
   p = *(RCObj**)((char*)self + 0x48);
   if (p) p->Release();
-  void* root = *(void**)((char*)self + 0x18);
-  MapBase* map = (MapBase*)((char*)self + 0xc);
-  map->NukeSubtree(root);
+  ((MapBase*)((char*)self + 0xc))->NukeSubtree(*(void**)((char*)self + 0x18));
   *(void**)((char*)self + 8) = (void*)dc_c;
   *(void**)self = (void*)dc_d;
 }

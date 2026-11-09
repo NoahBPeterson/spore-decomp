@@ -13,3 +13,5 @@
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPArtilleryWeaponStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cCropCirclesToolStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bde0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPGenesisDeviceToolStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bf50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?AttachToolEffect@cSPToolStrategy@@QAEXPBXH@Z  01053d50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?CanUseToolAtLocation@cSPGetOutOfUFOToolStrategy@@QAE_NHHH@Z  010540b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

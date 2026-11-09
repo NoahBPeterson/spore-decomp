@@ -468,8 +468,9 @@ int SimCivObject_CountCities(SimCivObject* self) {
 
 // @ 0x00c70470
 int SimCivObject_GetPercentMaybe(SimCivObject* self) {
-    unsigned n = (unsigned)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c) >> 2;
-    if (n < 2 && n != 0)
+    int d = (int)((char*)self->mpCivEnd_160 - (char*)self->mpCivBegin_15c);
+    unsigned n = (unsigned)(d >> 2);
+    if (n <= 1 && n != 0)
         return ((CityData*)self->mpCivBegin_15c[0])->GetPercent();
     return 0;
 }

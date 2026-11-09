@@ -3,6 +3,7 @@
 // cell filtering. Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "types.h"
 #include <math.h>
+#include <intrin.h>
 
 // ---- globals ----
 extern "C" char  gspCellGame_16b3c04[];   // holds SP::cCellGame*
@@ -113,8 +114,10 @@ void FUN_00e56870(void) {
   *(int*)(e + 0x78) = 0;
   *(int*)(e + 0x04) = 0;
   *(char*)(e + 0x08) = 0;
+  Pool* gp = &GridPool();
+  _ReadWriteBarrier();
   g_16b3c10 = (void*)id;
-  GridPool().Get(id);
+  gp->Get(id);
 }
 
 // @ 0x00e56950

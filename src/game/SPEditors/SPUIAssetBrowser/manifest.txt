@@ -23,3 +23,4 @@
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?reserve@Vec14@@QAEXI@Z  00646fc0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?InsertSorted@GridVec@@QAEPAUEntry14@@PAU2@ABU2@@Z  00648c60  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetBrowser.cpp  ?ShowSporeGuide@cSPUIAssetBrowser_s0064_acd0@@QAEXXZ  0064b6a0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?PreloadTextures@cSPUIAssetBrowser@SP@@QAEXXZ  00645010  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

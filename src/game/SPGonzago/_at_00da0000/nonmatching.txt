@@ -9,8 +9,8 @@
 00da7cc0 136 IdleBlock::PickNewActivity (the slice's only __thiscall): complete behaviour and control flow reconstructed (RandomUint32Uniform branches, creature query chain, PlayAnimation, timer constant select); cl's schedule/layout of the random-call blocks differs and the body is 7 bytes longer flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00da7f40 2 creature idle-block play step: complete behaviour; same bool zero-extension register choice (`movzx ecx,al` vs `movzx eax,al`) and cl emits a tail-merge `jmp` where the original falls through to the shared epilogue flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00da8630 1 flags: /O2 /MD /Gy /TP /arch:SSE
-00da8a40 1 flags: /O2 /MD /Gy /TP /arch:SSE
-00da8c40 1 flags: /O2 /MD /Gy /TP /arch:SSE
-00da8e20 1 flags: /O2 /MD /Gy /TP /arch:SSE
+00da8a40 1 creature helper: reads creature+0xc0 subobject vt[0x48] (flag test), returns 0 when 0 and arg&0x300, otherwise calls FUN_0xc0b780 and builds a transform/rotation (448 bytes? note: 438-byte retail). not reconstructed. flags: /O2 /MD /Gy /TP /arch:SSE
+00da8c40 1 creature helper: reads creature+0xc0 vt[0x2c] (position) then several further vtable calls, 471 bytes. not reconstructed. flags: /O2 /MD /Gy /TP /arch:SSE
+00da8e20 1 creature helper: FUN_0xc22f50(self) -> object, FUN_0xc97020(obj) -> vector begin/end, iterates and calls FUN_0xb3d350; 248 bytes. not reconstructed. flags: /O2 /MD /Gy /TP /arch:SSE
 00da8f20 153 flags: /O2 /MD /Gy /TP /arch:SSE
 00da8fe0 27 flags: /O2 /MD /Gy /TP /arch:SSE

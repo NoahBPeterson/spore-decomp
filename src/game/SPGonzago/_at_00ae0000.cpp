@@ -219,6 +219,18 @@ public:
     void Construct();                                             // 0x00AF9B50
     void Destroy();                                               // 0x00AF9CA0
     void FUN_00af8a10(int a, float f);                            // 0x00AF8A10
+    void AddId(unsigned int id);                                  // 0x00AF9AC0
+    void RemoveId(unsigned int id);                               // 0x00AF9B00
+};
+}
+namespace SP {
+// Debug-behaviour entry points live on the cEntityListener embedded at +0x80.
+class cDebugBehaviorThunk {
+public:
+    uint8_t mPad00[0x80];
+    cEntityListener mListener;                                    // +0x80
+    void Init(unsigned int id);
+    void Shutdown(unsigned int id);
 };
 }
 namespace SP {
@@ -318,15 +330,15 @@ public:
 // ---- items of slice s00aef610 end
 
 // @ 0x00aef2c0
-void DEBUG_BEHAVIOR_Init()
+void SP::cDebugBehaviorThunk::Init(unsigned int id)
 {
-    DebugBehaviorInit();
+    mListener.AddId(id);
 }
 
 // @ 0x00aef2d0
-void DEBUG_BEHAVIOR_Shutdown()
+void SP::cDebugBehaviorThunk::Shutdown(unsigned int id)
 {
-    DebugBehaviorShutdown();
+    mListener.RemoveId(id);
 }
 
 // @ 0x00aef2e0

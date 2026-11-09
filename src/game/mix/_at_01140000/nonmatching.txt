@@ -1,4 +1,3 @@
 # s01141a90: complete, behavior-equivalent source that is not byte-exact.
 01141dd0  269  mono/stereo-decode filter pull; complete; difftest PASS 82.9% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01141f20   57  mono/stereo-decode filter release (byte refcount at decoder+0x19); complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-01142690    2  mixer subsystem shutdown (frees voice array + busses); complete; difftest WEAK 45.0% cov; the single global byte test lowers as mov/test instead of cmp [mem],0 (/LTCG). flags /vc71 /O2 /MD /Gy /TP /arch:SSE

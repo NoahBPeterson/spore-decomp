@@ -18,6 +18,7 @@
 ../src/game/SPEditors/SPPlayMode.cpp  ?FUN_006291d0@cSPPlayMode@@QAEII@Z  006291d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPPlayMode.cpp  ?SetBabySpawned@cSPPlayMode@@QAEXIE@Z  00629380  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPPlayMode.cpp  ?SetBabySocialCallState@cSPPlayMode@@QAEXIIM@Z  006293d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?FUN_00629590@cSPPlayMode@@QAE_NXZ  00629590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPPlayMode.cpp  ?FUN_006298b0@cSPPlayMode@@QAEXI@Z  006298b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPPlayMode.cpp  ?FUN_00629bd0@cSPPlayMode@@QAEMPAUCreatureStruct@@@Z  00629bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPPlayMode.cpp  ?FUN_00629d90@@YGXHH@Z  00629d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

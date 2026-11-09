@@ -869,10 +869,10 @@ remove:
 namespace EA { namespace Audio { namespace Eapd {
 int obj_noutlets(t_object* x)
 {
+    t_outlet* o = x->te_outlet;
     int n = 0;
-    t_outlet* o;
 
-    for (o = x->te_outlet; o; o = o->o_next)
+    for (; o; o = o->o_next)
         n++;
     return n;
 }

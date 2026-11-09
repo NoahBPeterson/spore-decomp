@@ -1,6 +1,6 @@
 # <va>  <diff-bytes>  <reason>
 007d05b0 7 RBTreeW::Insert; only the load of `out` vs `inc [this+0x14]` is scheduled in the other order [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
-007d1010 4 cGameModelDescription ctor; only the 1.0f load is hoisted above `mov eax,ecx` flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
+007d1010 4 cGameModelDescription ctor: only the 1.0f load (mSize) is hoisted above `mov eax,ecx` in the original; reordering the source assignments, and const-vs-non-const declaration of g_1485720, do not move it. built: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 007d1140 56 S1140 copy ctor; vector copy uses operator= rather than reserve+DoInsertValue [equiv: UNSUPPORTED (SVec::operator= callee unresolved; original calls 0x4aa350 reserve)] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 007d1570 657 cGroupGameModelCommand::Execute; SEH EH-frame/state machine + string16 temp lifetimes differ [equiv: UNSUPPORTED - 1 unresolved reference(s): ??0EAError@@QAE@PBD@Z] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 007d18c0 22 GameModelEffect ctor; placement-new null check and vtable/f34 store order differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2

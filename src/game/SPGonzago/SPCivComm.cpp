@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "SP/cCivilization.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cGonzagoSubsystem.h"
@@ -82,19 +83,24 @@ public:
     SP::cCivilization_s00cf_e160*  mpField10;                           // +0x010
     SP::cCivilization_s00cf_e160*  mpEntries[1];                        // +0x014
 };
-class cSummarizerBase {
+class __declspec(novtable) cSummarizerBase {
 public:
     virtual void v000();                                 // +0x00
 };
-class ContentValidationSummarizer {
+class __declspec(novtable) ContentValidationSummarizer {
 public:
+    ContentValidationSummarizer() {
+        *(void**)this = (void*)0x13ec458;
+        _ReadWriteBarrier();
+        mBase04 = 0;
+    }
     virtual void v000();                                 // +0x00
+    int32_t  mBase04;                                    // +0x04
 };
-class cSummarizer : public cSummarizerBase, public ContentValidationSummarizer {
+class __declspec(novtable) cSummarizer : public cSummarizerBase, public ContentValidationSummarizer {
 public:
     cSummarizer();
 
-    int32_t  mField08;                                   // +0x08
     int32_t  mField0C;                                   // +0x0c
     int32_t  mField10;                                   // +0x10
     int32_t  mField14;                                   // +0x14
@@ -104,17 +110,17 @@ public:
     float    mField24;                                   // +0x24
     int32_t  mField28;                                   // +0x28
 };
-class cGonzagoSubsystem_s00cf_e160 {
+class __declspec(novtable) cGonzagoSubsystem_s00cf_e160 {
 public:
     cGonzagoSubsystem_s00cf_e160();                                 // 0x00b5b960
     virtual void v000();                                 // +0x00
 };
-class cSecondBase {
+class __declspec(novtable) cSecondBase {
 public:
     virtual void v000();                                 // +0x00
     uint8_t mPayload[0x14];                              // +0x04 .. +0x17
 };
-class cGonzagoChild : public cGonzagoSubsystem_s00cf_e160, public cSecondBase {
+class __declspec(novtable) cGonzagoChild : public cGonzagoSubsystem_s00cf_e160, public cSecondBase {
 public:
     cGonzagoChild();
 
@@ -168,8 +174,9 @@ struct cCity_s00cf_eeb0 : cGameData_s00cf_eeb0 {
     cCivilization_s00cf_eeb0* GetCivilization();                       // 0x00bd9bf0
     void* SetPlayerRelation(uint32_t empire);               // 0x00bdf9e0
     void ChangeAllegiance(uint32_t empire, int kind, int a, int b);   // 0x00be9cb0
+    int FUN_00bf0f40();                                     // 0x00bf0f40
 };
-struct cCivProfile { char pad[0x504]; char mProfile504[1]; };
+struct cCivProfile { char pad[0x504]; void* mProfile504; };
 struct cCivilization_s00cf_eeb0 : cGameData_s00cf_eeb0 {
     uint32_t pad04[0xf];
     uint32_t mPoliticalID;                                  // +0x40
@@ -188,15 +195,19 @@ struct cCivilization_s00cf_eeb0 : cGameData_s00cf_eeb0 {
     void CancelPurchase();                                  // 0x00bef5f0
     cCivProfile* GetProfile();                              // 0x00bef950
     void AcceptPeace();                                     // 0x00bf07c0
+    int FUN_00bf0f40();                                     // 0x00bf0f40
+    int IsAtWarWith(cGameData_s00cf_eeb0* other);           // 0x00bf0110
 };
 struct cGameNounManager_s00cf_eeb0 {
     cCivilization_s00cf_eeb0* GetPlayerCivilization();                 // 0x00b25fb0
     uint32_t GetPlayerEmpireOrMinus1();                     // 0x00b1f9d0
     struct CityVector { cCity_s00cf_eeb0** mpBegin; cCity_s00cf_eeb0** mpEnd; uint32_t pad[2]; }& GetCities();   // 0x00ace2c0
+    void* FUN_00b21340(int a, int b, int c, int d, int e);  // 0x00b21340
 };
 cGameNounManager_s00cf_eeb0* NounManager();                            // 0x00b3d300
 struct cRelationshipManager_s00cf_eeb0 {
     float RecordEvent(uint32_t politicalID, uint32_t causePoliticalID, uint32_t eventID, float scale);   // 0x00d06240
+    int GetAttitude(int ownerA, int ownerB, int mode);      // 0x00d00a70
 };
 cRelationshipManager_s00cf_eeb0* RelationshipManager();                // 0x00b3d2c0
 struct cStarRecordRef { void* GetCommContext(); };          // 0x00ce6950 (returns [this+0x184])
@@ -319,8 +330,33 @@ SP::cCivilization_s00cf_e160* __thiscall cCivRefTable::SetEntry(int32_t index, S
 }
 
 // @ 0x00cfe820
-void __cdecl GetTributeAmount()
+namespace SP {
+int GetTributeAmount(cCivilization_s00cf_eeb0* civ, cCity_s00cf_eeb0* city)
 {
+    int amount = (civ->GetPoliticalID() + 2) * 0x320;
+    cRelationshipManager_s00cf_eeb0* rel = RelationshipManager();
+    int attitude = rel->GetAttitude(civ->GetPoliticalID(), city->GetPoliticalID(), 1);
+    switch (attitude) {
+    case 1: amount += 0x190; break;
+    case 2: amount += 0x320; break;
+    case 3: amount += 0x4b0; break;
+    case 4: amount += 0x640; break;
+    }
+    if (civ->GetProfile()->mProfile504 != 0) {
+        if (!civ->IsAtWarWith((cGameData_s00cf_eeb0*)civ->GetProfile()->mProfile504))
+            amount += 0x640;
+    }
+    if ((unsigned)civ->FUN_00bf0f40() - 2 < 2) {
+        switch ((unsigned)city->FUN_00bf0f40() - 1) {
+        case 0: amount += 0x320; break;
+        case 2: amount += 0x640; break;
+        }
+    } else {
+        if (civ->FUN_00bf0f40() == 0)
+            amount += 0x190;
+    }
+    return amount;
+}
 }
 
 // @ 0x00cfe930
@@ -353,26 +389,133 @@ void __cdecl FUN_00cfe9c0(SP::cCivilization_s00cf_e160* pObject, SP::cCivilizati
 }
 
 // @ 0x00cfea20
+struct CommTextObj;
+struct CommTextRoot {
+    virtual void r00();
+    virtual void r04();
+    virtual void r08();
+    virtual void r0c();
+    virtual void r10();
+    virtual void r14();
+    virtual void r18();
+    virtual void r1c();
+    virtual CommTextObj* r20();                          // +0x20
+};
+struct CommTextObj {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c(void* p);                           // +0x1c
+    virtual void v20(void* p);                           // +0x20
+};
+CommTextRoot* FUN_0067de40();
+extern void* g_169d3c8;
+struct CommSingletonBase {
+    CommSingletonBase();                                 // 0x00b32470
+    virtual void v00();                                  // +0x00
+    virtual void AddRef();                               // +0x04
+    virtual void Release();                              // +0x08
+};
+struct CommSingleton : CommSingletonBase {
+    uint32_t pad04[2];                                   // +0x04
+    uint32_t m0c;                                        // +0x0c
+    uint32_t m10;                                        // +0x10
+    uint32_t m14;                                        // +0x14
+    uint32_t m18;                                        // +0x18
+    uint32_t m1c;                                        // +0x1c
+    uint32_t m20;                                        // +0x20
+    uint32_t m24;                                        // +0x24
+    uint32_t m28;                                        // +0x28
+    CommSingleton()
+    {
+        m0c = 0;
+        m10 = 0;
+        m28 = 0;
+        m14 = 0;
+        m18 = 0;
+        m1c = 0;
+        m20 = 0;
+        m24 = 0;
+    }
+};
+void* __cdecl CommAlloc(unsigned, const char*, int, int, int, int);
+inline void* operator new(unsigned n, const char* name, int a, int b, int c, int d)
+{
+    return CommAlloc(n, name, a, b, c, d);
+}
 void __cdecl FUN_00cfea20()
 {
+    if (g_169d3c8 != 0)
+        return;
+    CommSingleton* obj = new ((const char*)0x1478b8c, 0, 0, 0, 0) CommSingleton;
+    CommSingleton* old = (CommSingleton*)g_169d3c8;
+    if (obj != old) {
+        if (obj != 0)
+            obj->AddRef();
+        g_169d3c8 = obj;
+        if (old != 0)
+            old->Release();
+    }
+    FUN_0067de40()->r20()->v1c(g_169d3c8);
 }
 
 // @ 0x00cfeac0
+struct CommRefObj {
+    virtual void q00();
+    virtual void q04();
+    virtual void q08();                                  // +0x08
+};
 void __cdecl FUN_00cfeac0()
 {
+    if (g_169d3c8 == 0)
+        return;
+    CommTextObj* o = FUN_0067de40()->r20();
+    o->v20(g_169d3c8);
+    void* old = g_169d3c8;
+    if (old != 0) {
+        g_169d3c8 = 0;
+        ((CommRefObj*)old)->q08();
+    }
 }
 
 // @ 0x00cfeb40
-void __cdecl FUN_00cfeb40()
+struct CommStreamSource {
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3();
+    virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
+    virtual void* s8();                                 // +0x20
+};
+struct CommStreamObj {
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3();
+    virtual void d4(); virtual void d5(); virtual void* s6();   // +0x18
+};
+struct CommSerializer { void* __thiscall call(void* a, void* b, void* c); };  // 0x00692f90
+struct CommSerializeCall { void* __thiscall call(void* a); };                 // 0x00692900
+void* __cdecl CommWriteUint32(void* a, void* b, int c, int d);                // 0x0093aa70
+void __fastcall FUN_00cfeb40(void* this_, int unused, void* p)
 {
+    CommStreamSource* o = (CommStreamSource*)p;
+    CommStreamObj* a = (CommStreamObj*)o->s8();
+    uint32_t tag = 0x447341f;
+    void* b = a->s6();
+    uint8_t prop[0xa14];
+    CommWriteUint32(b, &tag, 1, 0);
+    ((CommSerializer*)prop)->call(this_, (void*)0x1581d40, (void*)0x1a80d26);
+    ((CommSerializeCall*)prop)->call(p);
 }
 
 // @ 0x00cfec10
 __thiscall cSummarizer::cSummarizer()
 {
-    mField08 = 0;
+    char* self = (char*)this;
+    *(void**)self = (void*)0x1478bbc;
+    *(void**)(self + 4) = (void*)0x1478bac;
     mField0C = 0;
     mField10 = 0;
+    _ReadWriteBarrier();
     mField14 = -1;
     mField18 = -1;
     mField1C = gField169d388;
@@ -384,14 +527,36 @@ __thiscall cSummarizer::cSummarizer()
 // @ 0x00cfecc0
 __thiscall cGonzagoChild::cGonzagoChild()
 {
+    *(void**)this = (void*)0x1478c10;
+    *(void**)((char*)this + 4) = (void*)0x1478c08;
+    _ReadWriteBarrier();
     mField1C = 0;
     mField20 = 0;
     mField24 = 0;
 }
 
 // @ 0x00cfee00
-void __cdecl FindTargetCity()
+namespace SP {
+cCity_s00cf_eeb0* FindTargetCity(int kind, cGameData_s00cf_eeb0* source)
 {
+    int count = 0;
+    int i = 0;
+    struct CityVec { int pad0; cCity_s00cf_eeb0** mpBegin; cCity_s00cf_eeb0** mpEnd; };
+    CityVec* v = (CityVec*)NounManager()->FUN_00b21340(0x00cd7d10, 0x00d3d420, 0x00acdff0, 0x00b1e500, 0x018c43e8);
+    cCity_s00cf_eeb0**& begin = v->mpBegin;
+    int n = (int)((char*)v->mpEnd - (char*)begin) >> 2;
+    for (; i < n; i++) {
+        cCity_s00cf_eeb0* city = begin[i];
+        if (city->GetCivilization() == (cCivilization_s00cf_eeb0*)source)
+            continue;
+        if (city->GetCivilization() == NounManager()->GetPlayerCivilization())
+            continue;
+        if (kind == count)
+            return city;
+        count++;
+    }
+    return 0;
+}
 }
 
 // @ 0x00cfeeb0
@@ -464,8 +629,8 @@ void DoCivCommAction(const int& action, cGameData_s00cf_eeb0* source, cCity_s00c
                 amount /= 3;
             RelationshipManager()->RecordEvent(civ->GetPoliticalID(), NounManager()->GetPlayerEmpireOrMinus1(), kRelationshipEventGift, (float)(amount / 100));
             uint32_t civID = civ->mPoliticalID;
-            PostCivEvent(0x9140a2e7, NounManager()->GetPlayerCivilization()->GetProfile()->mProfile504,
-                         civ->GetProfile()->mProfile504, ResourceKey(),
+            PostCivEvent(0x9140a2e7, (char*)NounManager()->GetPlayerCivilization()->GetProfile()->mProfile504,
+                         (char*)civ->GetProfile()->mProfile504, ResourceKey(),
                          NounManager()->GetPlayerCivilization()->mPoliticalID, civID, amount);
         }
         ShowReply(source, city, 0xd297847d);

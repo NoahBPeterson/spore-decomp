@@ -191,7 +191,7 @@ extern "C" void* __cdecl SP_0067cac0();                    // 0x0067cac0 (0 args
 extern "C" int   __cdecl FUN_00d004b0();                   // 0x00d004b0
 extern "C" int   __cdecl FUN_00cf6e30();                   // 0x00cf6e30 (no arg)
 extern "C" void* __cdecl FUN_00b18e00(void*);              // 0x00b18e00
-extern "C" void* __stdcall FUN_00b3d4f0_1(int);            // 0x00b3d4f0 (1 arg, callee-cleans)
+extern "C" void* __cdecl FUN_00b3d4f0_1();                 // 0x00b3d4f0 (no arg)
 extern "C" int   __cdecl SP_01021230();                    // 0x01021230
 extern "C" void  __cdecl FUN_00ba1c60(void*);              // 0x00ba1c60
 extern "C" void  __cdecl FUN_00b6c280();                   // 0x00b6c280
@@ -464,7 +464,7 @@ struct UIHints {
     void __thiscall Apply();                      // 0x0067aaf0
 };
 struct SubObj_s00cf_9ba0 {
-    int  __thiscall Rel();                        // 0x00e2f270
+    int  __thiscall Rel(int);                     // 0x00e2f270
 };
 struct GameInput {
 virtual void v00();
@@ -1584,8 +1584,7 @@ void __cdecl FUN_00cfa360()
         ((Strat*)*(void**)0x0169d2c8)->CheckEvents();
         return;
     }
-    void* sm = FUN_00b3d4f0_1(0);
-    ((SubObj_s00cf_9ba0*)sm)->Rel();
+    ((SubObj_s00cf_9ba0*)FUN_00b3d4f0_1())->Rel(0);
 }
 
 // @ 0x00cfa3b0
@@ -1831,7 +1830,7 @@ void Strat::DoNext(int id, char rerun)
         ((UIHints*)SP_0067cac0())->Show2(0x178f5417, 1);
         GTM* gtm = (GTM*)SP_GameTimeManager();
         gtm->DecPauseGate(0x64beb65);
-        ((SubObj_s00cf_9ba0*)FUN_00b3d4f0_1(0))->Rel();
+        ((SubObj_s00cf_9ba0*)FUN_00b3d4f0_1())->Rel(0);
         break;
     }
     default:

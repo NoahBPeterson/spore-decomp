@@ -1,4 +1,5 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPTribeGameBehaviorParty.cpp  ?FUN_00d78e20@@YAXPAPAX0UComparator@@@Z  00d78e20  /nologo /c /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeGameBehaviorParty.cpp  ?CanJoin@cTribeGameBehaviorParty@@QAEDPAXI@Z  00d78e90  /nologo /c /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeGameBehaviorParty.cpp  ?Destroy@cTribeGameBehaviorParty@@QAEPAU1@E@Z  00d791f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeGameBehaviorParty.cpp  ?Destroy@cEditorGameObject@SP@@QAEXXZ  00d79fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

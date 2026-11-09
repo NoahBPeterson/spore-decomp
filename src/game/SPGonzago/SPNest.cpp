@@ -1535,8 +1535,42 @@ u8 __cdecl FUN_00c6c4e0(void** serializer, int name, void** list)
 }
 
 // @ 0x00c6c630
-void __cdecl FUN_00c6c630()
+u8 __cdecl FUN_00c6c630(void** serializer, int name, void** list)
 {
+    struct WStr { wchar_t* begin; wchar_t* end; wchar_t* cap; };
+    u8 ok = 1;
+    WStr N;
+    if (list[0] != list[1]) {
+        int flags;
+        if (name != 0) {
+            FUN_0093c5a0(&N, name, -1);
+            flags = 1;
+        } else {
+            N.begin = 0; N.end = 0; N.cap = 0;
+            FUN_00579a90(&N, 0);
+            flags = 2;
+        }
+        WStr C;
+        FUN_0056e2d0(&C, &N);
+        if ((flags & 2) && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
+            FUN_00f47380(N.begin);
+        if ((flags & 1) && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
+            FUN_00f47380(N.begin);
+
+        (*(void(__thiscall**)(void**, wchar_t*))(*(char**)serializer))
+            (serializer, (C.begin == C.end) ? (wchar_t*)0x13f58ac : C.begin);
+
+        char* end = (char*)list[1];
+        for (char* it = (char*)list[0]; it != end; it += 4) {
+            if (ok)
+                ok = ok != 0;
+        }
+        (*(void(__thiscall**)(void**, wchar_t*))(*(char**)serializer + 4))
+            (serializer, (C.begin == C.end) ? (wchar_t*)0x13f58ac : C.begin);
+        if (((char*)C.cap - (char*)C.begin & ~1) > 2 && C.begin)
+            FUN_00f47380(C.begin);
+    }
+    return ok;
 }
 
 // @ 0x00c6c760
@@ -1554,9 +1588,47 @@ void __cdecl FUN_00c6cbf0()
 {
 }
 
+extern "C" void __cdecl ReadInt32_00c6ce30(void* io, void* dst, int count, int ver); // 0x0093a780
+extern "C" void* __cdecl memmove(void* dst, const void* src, unsigned n);
+struct IntVec_s00c6_ce30 {
+    int* begin;
+    int* end;
+    int* cap;
+    void Reserve(uint32_t n);                       // 0x00d01790
+    void InsertSlow(int* pos, const int* value);    // 0x00b96600
+};
+
 // @ 0x00c6ce30
-void __cdecl FUN_00c6ce30()
+void __cdecl FUN_00c6ce30(void* stream, IntVec_s00c6_ce30* vec)
 {
+    int* last = vec->end;
+    int* first = vec->begin;
+    memmove(first, last, 0);
+    vec->end -= (last - first);
+
+    uint32_t count = 0;
+    void* a = (*(void*(__thiscall**)(void*))(*(char**)stream + 0x20))(stream);
+    void* b = (*(void*(__thiscall**)(void*))(*(char**)a + 0x18))(a);
+    ReadInt32_00c6ce30(b, &count, 1, 0);
+    vec->Reserve(count);
+
+    uint32_t i = 0;
+    if (count != 0) {
+        do {
+            void* c = (*(void*(__thiscall**)(void*))(*(char**)stream + 0x20))(stream);
+            void* d = (*(void*(__thiscall**)(void*))(*(char**)c + 0x18))(c);
+            int value = 0;
+            ReadInt32_00c6ce30(d, &value, 1, 0);
+            if (vec->end < vec->cap) {
+                *vec->end++ = value;
+            } else {
+                vec->InsertSlow(vec->end, &value);
+            }
+            ++i;
+        } while (i < count);
+    }
+
+    (*(void(__thiscall**)(void*))(*(char**)stream + 0x1c))(stream);
 }
 
 // @ 0x00c6cf10

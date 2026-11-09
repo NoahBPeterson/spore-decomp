@@ -14,5 +14,5 @@
 010dfe10 140 havok-equivalent
 010dff10 167 havok-equivalent
 010e0020 72 havok-equivalent
-010e0200 3 havok-equivalent
+010e0200 3 havok-equivalent; residual: retail inits flip.earlyOut then stores vptr at [esp+0x10] before the call, cl emits `mov [esp+0x10],0` before the m_earlyOut byte store. Tried explicit flip.addCdBodyPair call (expands, 76B) and reverting; cannot reorder the implicit ctor stores. NOTE the class flattening is wrong (hkSymmetricAgentFlipBodyCollector is a plain class with m_original, not derived from hkCdBodyPairCollector) but fixing it needs a header edit that also changes the other getPenetrations overrides.
 010e0240 12 havok-equivalent

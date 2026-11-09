@@ -5,3 +5,9 @@
 ../src/game/SPGonzago/SPMissionBiosphere.cpp  ?GetCountB@cSPMissionMultiDelivery@@QAEHXZ  00c4bbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionBiosphere.cpp  ?FUN_00c4bd00@SP@@YIXPAVcSPMissionBase_s00c4_bc00@1@H@Z  00c4bd00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionBiosphere.cpp  ?FUN_00c4bd30@SP@@YIXPAVcSPMissionBase_s00c4_bc00@1@HPAUtUShortVector@1@@Z  00c4bd30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  _FUN_00c4bea0  00c4bea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  _FUN_00c4bf10  00c4bf10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  ?FUN_00c4c3f0@SP@@YIXPAVcSPMissionBiosphere_s00c4_cb90@@HPAX@Z  00c4c3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  ?FUN_00c4c610@SP@@YIXPAVcSPMissionBiosphere_s00c4_cb90@@H_N@Z  00c4c610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  ?FUN_00c4c850@SP@@YI_NPAVcSPMissionBiosphere_s00c4_cb90@@HIPAX@Z  00c4c850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  ?FUN_00c4c450@SP@@YIPAXPAVcSPMissionBiosphere_s00c4_cb90@@HI@Z  00c4c450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

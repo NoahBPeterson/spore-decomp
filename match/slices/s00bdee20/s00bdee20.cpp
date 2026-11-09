@@ -371,7 +371,6 @@ void* __stdcall FUN_00bde910(void* pos, void* value);            // DoInsertValu
 // @ 0x00bdf3e0
 void BubbleVec::push_back()
 {
-    uint32_t tmp[5];
     char* end = mpEnd;
     if (end < mpCapacity) {
         mpEnd = end + 0x14;
@@ -381,9 +380,10 @@ void BubbleVec::push_back()
         }
         return;
     }
-    *(float*)(tmp + 3) = 0.0f;
-    tmp[4] = 0;
-    FUN_00bde910(end, (void*)&tmp[0]);
+    struct { uint32_t pad[3]; float f; uint32_t u; } tmp;
+    tmp.f = 0.0f;
+    tmp.u = 0;
+    FUN_00bde910(end, &tmp);
 }
 
 // ===========================================================================

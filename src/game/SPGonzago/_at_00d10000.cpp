@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "EA/ArgScript/cArgumentSpec.h"
 #include "EA/ArgScript/cArguments.h"
 #include "SP/cGameNounManager.h"
@@ -646,6 +647,7 @@ void* __fastcall FUN_00d1e140(E207Obj* self, void* edx, unsigned int flags)
 {
     (void)edx;
     self->mpVtbl = (void*)&gVtableE207;
+    _ReadWriteBarrier();
     void* p2 = self->mpB;
     if (p2) ((IRefS*)p2)->Slot4();
     void* p1 = self->mpA;

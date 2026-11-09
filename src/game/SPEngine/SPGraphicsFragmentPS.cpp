@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -842,6 +843,7 @@ void Vec28::InsertGrow(const void* first, const void* last)
 PixelFrag::PixelFrag()
 : mf00(0) {
   mf0c = (uint32_t)g_emptyStrCap;
+  _ReadWriteBarrier();
   char* e = g_emptyStr;
   mf08 = mf04 = (uint32_t)e;
   mf18 = mf14 = (uint32_t)e;

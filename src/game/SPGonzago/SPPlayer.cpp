@@ -19,6 +19,7 @@
 #include <math.h>
 #include <string.h>
 #include <new>
+#include <intrin.h>
 #include "SP/cEmbassyData.h"
 #include "SP/cSpacePlayerWarData.h"
 #include "SP/cSPTimer.h"
@@ -2422,6 +2423,7 @@ bool __cdecl FixupWarData(void* pCtx, cWarMap& map)
 cWarRec* __thiscall cWarRec::CopyFrom(const cWarRec& src)
 {
     mInt00 = src.mInt00;
+    _ReadWriteBarrier();
     mTimer.mpVftblBase = (U32)&g_vtblTimerBase;
     mTimer.mRefCount = 0;
     mTimer.mElapsed = src.mTimer.mElapsed;
@@ -2437,6 +2439,7 @@ cSpacePlayerWarData* __thiscall cSpacePlayerWarData::ctor(const cSpacePlayerWarD
 {
     mpVftbl00 = (U32)&g_vtblWarData;
     mEnemyEmpireID = src.mEnemyEmpireID;
+    _ReadWriteBarrier();
     mTimer.mpVftblBase = (U32)&g_vtblTimerBase;
     mTimer.mRefCount = 0;
     mTimer.mElapsed = src.mTimer.mElapsed;

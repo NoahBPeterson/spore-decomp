@@ -1203,7 +1203,7 @@ class cInterfaceState {
 public:
     cInterfaceState(cDispatchObject* pTarget);
     ~cInterfaceState();
-    bool ResetDefaults();
+    bool ResetDefaults(int unused);
     void PushMatrix(uint32_t nKey);
     void UpdateTransition(unsigned int nElapsed, uint32_t nFlags);
     void UpdateFade(float fDelta);
@@ -2630,8 +2630,9 @@ cInterfaceState::~cInterfaceState()
 }
 
 // @ 0x00ddfaf0
-bool cInterfaceState::ResetDefaults()
+bool cInterfaceState::ResetDefaults(int unused)
 {
+    (void)unused;
     Vec3_s00dd_f990 position;
     position.mX = 0.0f;
     position.mY = 0.0f;

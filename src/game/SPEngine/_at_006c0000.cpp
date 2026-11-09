@@ -419,10 +419,9 @@ void AnimationBakeDriver(BakeContext* ctx, BakeFrameCtl* ctl, const float* xf)
 // @ 0x006c2690
 void UnpackColor(u32 packed, float* out)
 {
-    float k = 0.0078740157f;
-    out[0] = (float)(packed & 0xff) * k - 1.0f;
-    out[1] = (float)((packed >> 8) & 0xff) * k - 1.0f;
-    out[2] = (float)((packed >> 16) & 0xff) * k - 1.0f;
+    out[0] = (float)(packed & 0xff) * (1.0f / 127.0f) - 1.0f;
+    out[1] = (float)((packed >> 8) & 0xff) * (1.0f / 127.0f) - 1.0f;
+    out[2] = (float)((packed >> 16) & 0xff) * (1.0f / 127.0f) - 1.0f;
 }
 
 // @ 0x006c26f0

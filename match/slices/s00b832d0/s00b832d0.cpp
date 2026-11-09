@@ -279,7 +279,8 @@ void HashTableB::Insert(const HashNode* src)
         node = (HashNode*)fl;
         freeList = *(void**)fl;
     } else {
-        node = (HashNode*)operator_new(nodeSize, "Simulator", 0, 0,
+        int sz = nodeSize;
+        node = (HashNode*)operator_new(sz, "Simulator", 0, 0,
                     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
                     0xd1);
     }

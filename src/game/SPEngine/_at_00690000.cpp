@@ -29,7 +29,7 @@ struct cSerializerDispatcher {
     void* mpGetContext;     // +0x20
     char mPad24[0x14];
     void* mpCallback;       // +0x38
-    unsigned int Dispatch(void* a, void* b);
+    unsigned char Dispatch(void* a, void* b);
 };
 struct cSerializerLazy {
     char mPad00[8];
@@ -137,11 +137,11 @@ bool cSerializerStatus::IsReady() const
 { return mCount != 0 && mReady != 0; }
 
 // @ 0x00692820
-unsigned int cSerializerDispatcher::Dispatch(void* a, void* b)
+unsigned char cSerializerDispatcher::Dispatch(void* a, void* b)
 {
     if (mpCallback != 0 && mpGetContext != 0) {
         void* ctx = ((void*(*)(void*))mpGetContext)(this);
-        return ((unsigned int(*)(void*,void*,void*))mpCallback)(a, b, ctx);
+        return (unsigned char)((unsigned int(*)(void*,void*,void*))mpCallback)(a, b, ctx);
     }
     return 0;
 }

@@ -15,3 +15,4 @@
 ../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8ff60@S@@QAEXXZ  00b8ff60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8ff90@S@@QAEPAXXZ  00b8ff90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8ffd0@S@@QAEPAXD@Z  00b8ffd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8d8f0@cPlanetModel_s00b8_d190@@QAEIXZ  00b8d8f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

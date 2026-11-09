@@ -336,6 +336,7 @@ class WinTreeView : public CustomWindowBase { public:
     void SetBorders(EA::UTFWin::RectF* r);                      // 0x009917f0
     void ClearSelection();                                      // 0x00991860
     bool OnMouseDown(int, int, int, int);                       // 0x009918b0
+    bool OnTick();                                              // 0x00991400
     void SetScrollbarDrawable(int which, void* p);              // 0x00991930
     void SetScrollbarEnabled(int which, int v);                 // 0x00991990
     ~WinTreeView();                                             // 0x00991df0
@@ -402,9 +403,9 @@ int WinTreeView::GetSelection(int which)
 }
 
 // @ 0x00991400
-bool WinTreeView_OnTick(WinTreeView* self)
+bool WinTreeView::OnTick()
 {
-    self->Refresh();
+    Refresh();
     return true;
 }
 

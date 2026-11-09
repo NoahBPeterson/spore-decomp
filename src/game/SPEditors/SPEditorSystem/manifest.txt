@@ -3,6 +3,7 @@
 ../src/game/SPEditors/SPEditorSystem.cpp  ?HandleMessage@cEditorSystem_s005d_61b0@SP@@UAE_NIPAX@Z  005d6510  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorSystem.cpp  ?Update@cEditorSystem_s005d_61b0@SP@@QAEXH@Z  005d65d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorSystem.cpp  ??0cEditorSystem_s005d_61b0@SP@@QAE@XZ  005d67f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSystem.cpp  ??1cEditorSystem_s005d_61b0@SP@@UAE@XZ  005d6850  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorSystem.cpp  ?DoFindNode@?$hashtable_s005d_61b0@PB_WPB_W@eastl@@QBEPAU?$hash_node_s005d_61b0@U?$pair_s005d_61b0@QB_WPB_W@eastl@@@2@PAU32@ABQB_WI@Z  005d6a90  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorSystem.cpp  ??0hkDefaultError@@QAE@P6AXPBDPAX@Z1@Z  005d6ae0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorSystem.cpp  ?setEnabled@hkDefaultError@@UAEXHUhkBool_s005d_61b0@@@Z  005d6b20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

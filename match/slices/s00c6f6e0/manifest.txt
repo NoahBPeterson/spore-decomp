@@ -23,3 +23,4 @@ slices/s00c6f6e0/s00c6f6e0.cpp  ?GetRotationAxis@SimPlanet@@QBEPAXXZ  00c70930  
 slices/s00c6f6e0/s00c6f6e0.cpp  ?SetRotationAxis@SimPlanet@@QAEXPAUVec3@@@Z  00c70950  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00c6f6e0/s00c6f6e0.cpp  ?GetRotationPeriod@SimPlanet@@QBEMXZ  00c70980  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00c6f6e0/s00c6f6e0.cpp  ?SetRotationPeriod@SimPlanet@@QAEXM@Z  00c709b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c6f6e0/s00c6f6e0.cpp  ?SimCivObject_GetPercentMaybe@@YAHPAUSimCivObject@@@Z  00c70470  /O2 /MD /Gy /EHsc /TP /arch:SSE

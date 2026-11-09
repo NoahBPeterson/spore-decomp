@@ -50,6 +50,7 @@ class Mob
     void  SerializeRecord(void* rec);     // 0x00c50ba0
     int   GetClosestDiseasedAnimalInner(void* a, void* out); // 0x00c4bdc0
     int   GetUIntField();                 // 0x008e7f80
+    int   FUN_00c50eb0();                 // 0x00c50eb0
 };
 class Win
 {
@@ -362,13 +363,12 @@ void __cdecl FUN_00c50e70(Rec20f* s, Rec20f* srcEnd, Rec20f* d)
 }
 
 // @ 0x00c50eb0
-int __fastcall FUN_00c50eb0(void* ecx_this, void* edx)
+int Mob::FUN_00c50eb0()
 {
-    (void)edx;
-    void* key;
-    if (ldb(ecx_this, 0x1f4) != 0) {
+    if (ldb(this, 0x1f4) != 0) {
+        void* key;
         int result = 0;
-        void* prop = (void*)ld32(ecx_this, 0x180);
+        void* prop = (void*)ld32(this, 0x180);
         if (prop) {
             if ((*(char (__thiscall**)(void*, int, void**))((char*)vtbl(prop) + 0x24))(prop, 0x5d6796fd, &key)) {
                 if (*(short*)((char*)key + 0x12) == 10)
@@ -377,7 +377,7 @@ int __fastcall FUN_00c50eb0(void* ecx_this, void* edx)
         }
         return result;
     }
-    return ((Mob*)ecx_this)->UnkC2b0();
+    return UnkC2b0();
 }
 
 // @ 0x00c5bd00

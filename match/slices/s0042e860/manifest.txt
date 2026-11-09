@@ -13,3 +13,5 @@ slices/s0042e860/s0042e860.cpp  ?MakeHeap@@  0042edd0  /Od /Ob1 /MD /Gy /TP /arc
 slices/s0042e860/s0042e860.cpp  ?AdjustHeap@@  0042ee60  /Od /Ob1 /MD /Gy /TP /arch:SSE
 slices/s0042e860/s0042e860.cpp  ?UninitializedFillFloat@@  0042efc0  /Od /Ob1 /MD /Gy /TP /arch:SSE
 slices/s0042e860/s0042e860.cpp  ?UninitializedFillHeapRec@@  0042f100  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?UninitializedCopyElem48@@YAPAPAUElem48@@PAPAU1@PAU1@11@Z  0042f020  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?UninitializedFillElem48@@YAXPAUElem48@@I0@Z  0042f0a0  /Od /Ob1 /MD /Gy /TP /arch:SSE

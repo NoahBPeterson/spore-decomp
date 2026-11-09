@@ -5,6 +5,10 @@
 #include "game/types.h"
 #include <string.h>
 #include <malloc.h>
+#define _WIN32_WCE 1
+#include <xmmintrin.h>
+#include <mmintrin.h>
+#include <intrin.h>
 #include "rw/audio/core/System.h"
 
 // ---- items of slice s01145d10 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -184,6 +188,7 @@ CMpegLayer3Base_s0114_6ca0::~CMpegLayer3Base_s0114_6ca0()
 {
     float* old = *(float* volatile*)&mpPrevBlockX4;
     *(void* volatile*)&vftable = (void*)0x14cc180;
+    _ReadWriteBarrier();
     if (old)
         g_audioSystem->Free(old, 0);
 }
@@ -195,6 +200,7 @@ void* CMpegLayer3Base_s0114_6ca0::ScalarDeletingDtor(unsigned int flags)
 {
     float* old = *(float* volatile*)&mpPrevBlockX4;
     *(void* volatile*)&vftable = (void*)0x14cc180;
+    _ReadWriteBarrier();
     if (old)
         g_audioSystem->Free(old, 0);
     this->CMpegBase::~CMpegBase();

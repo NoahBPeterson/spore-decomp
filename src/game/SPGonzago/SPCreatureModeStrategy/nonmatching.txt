@@ -9,7 +9,6 @@
 00d3a960 163 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 00d3b3c0 38 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 00d3b480 85 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
-00d3b4e0 2 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 00d3b520 39 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 00d3b5d0 64 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 00d3b620 86 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
@@ -41,7 +40,7 @@
 00d46c30 796 1 unresolved reference (?FUN_00d67dd0); EvaluateTrigger; 808-byte diff (988 vs 1000 bytes) from missing eastl::string16 scratch teardown, x87 vs SSE clamp and stack layout flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d47020 246 5/64 valid inputs; TrigVec::Assign; difftest cannot model the unresolved Grow/DestroyRange callees (fake faults where the original succeeds); 275-byte diff (283 vs 312 bytes) from parameter and callee-saved register ordering flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d472a0 29 5/60 valid inputs; TrigVec push_back-default; difftest unresolved FUN_00d47160 fake faults where the original succeeds; 30-byte diff from ecx/edx choice, esi allocation and mid-function epilogue placement flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00d473e0 2 158 valid inputs, 100.0% coverage; BigC pool allocation; 2-byte diff (copy-ctor argument loaded into edx instead of ecx) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d473e0 2 158 valid inputs, 100.0% coverage; BigC pool allocation; 2-byte diff (copy-ctor argument loaded into edx instead of ecx) options: /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 00d47510 268 5/6 valid inputs; trigger map lookup/insert; difftest unresolved Insert/DestroyRange callees fault where the original succeeds; 301-byte diff (321 vs 288 bytes) from the SrcTrig/BigC stack objects and /GS cookie flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d47630 491 GetTrigger: complete behaviour (owner-key lookup through the trigger hash 0x00d46b70, linear scan of the 0x2c-stride records for kind 0xa07dde8f or eventType, then SP::NounManager 0x00b3d300 + owner vtable slot 0x20 on mpObj_28 + 0x00b21000 + GetPropertyAsUint32Array 0x006a0840, hash-entry insert 0x00d47510 with AutoRefCount owner assign, then per-id property-manager slot 0x2c filter, 0x00d472a0 slot append, AutoRefCount ref assign, ReadTrigger 0x00d46730 and kind mask, returning the last matching slot); the inlined hash-map/sp_vector/AutoRefCount template bodies and register allocation differ (545 vs 529). equiv WEAK (223/400 valid, 29.3% coverage, 53/181 insns) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00d47ea0 311 creature-mode collectable roll: complete control flow (0x00d38f40 prelude, 0x00598470 pool ctor, 0x00597f00 source init, two RandomDouble 0x009360d0 rolls against the two f32 thresholds, four 0x00d3bfa0 attempts filtered (1,1) / (0,2-or-1) / (0,2) / (0,2,-1), 0x005976d0 commit on success, then 0x00597b30 + node-pool free-list teardown); the 0x888-byte stack object layout, the 64-bit attempt-result handling and the argument/stack ordering differ (387 vs 353). equiv UNSUPPORTED (0/400 valid, fault(read)=301, fault(write)=51, fault(pool-limit)=25) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

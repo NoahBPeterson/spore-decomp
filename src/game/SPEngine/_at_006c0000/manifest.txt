@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/_at_006c0000.cpp  ?StateFromGlobal@@YAHPAI@Z  006c1c30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/_at_006c0000.cpp  ?UnpackColor@@YAXIPAM@Z  006c2690  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_006c0000.cpp  ?Assign@KeyPack@@QAEXPBI000@Z  006c2740  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/_at_006c0000.cpp  ?CopyFrom@Rec16@@QAEPAU1@PBU1@@Z  006c2ad0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/_at_006c0000.cpp  ?ScaleMatrixReversed@@YAPAMPAMPBMM@Z  006c2cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -291,7 +291,9 @@ bool cRenderInstanceSet::CopyTo174(void* src) {
 // @ 0x006f3f20
 cViewer* cRenderInstanceSet::Setup178(void* src) {
     mViewer178->Copy(src, 0, 0);
-    void* r = (*(void* (__thiscall**)(void*))(Vt(mRenderer168) + 29))(mRenderer168);
+    typedef void* (__thiscall* RendererFn)(void*);
+    RendererFn f = *(RendererFn*)(Vt(mRenderer168) + 29);
+    void* r = f(mRenderer168);
     if (((*(unsigned char*)r) & 0) == 0) {
         if (((*(unsigned char*)((char*)r + 4)) & 1) == 0) {
             void* o = FUN_0067dd60();

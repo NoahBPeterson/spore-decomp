@@ -31,3 +31,4 @@
 ../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dda380@Swarm@@QAEHXZ  00dda380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dda920@ObjA@@QAEPAV1@XZ  00dda920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00dd0000.cpp  ?FUN_00dda9a0@ObjA@@QAEXXZ  00dda9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00dd0000.cpp  ?ResetDefaults@cInterfaceState@@QAE_NH@Z  00ddfaf0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

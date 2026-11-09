@@ -207,8 +207,8 @@ struct hkReferencedObjectWithPtr {                     // vtable 0x013ef094
 // original leaves eax untouched, while MSVC emits `mov eax, ecx` for a constructor.
 void __fastcall InitReferencedObjectWithPtr(hkReferencedObjectWithPtr* self)
 {
-    self->m_vptr = vtbl_13ef094;
     self->m_ptr = 0;
+    self->m_vptr = vtbl_13ef094;
 }
 // @ 0x01103560  destructor (flags & 1: hkMemory::deallocateChunk(this, memSize, 0x25))
 hkReferencedObjectWithPtr* hkReferencedObjectWithPtr::destroy(unsigned flags)

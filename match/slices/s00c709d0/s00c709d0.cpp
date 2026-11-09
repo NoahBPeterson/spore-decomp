@@ -2,6 +2,7 @@
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast.
 #include "types.h"
 #include <math.h>
+#include <intrin.h>
 
 inline float MaxF(float a, float b) { __asm { movss xmm0, a
                                              maxss xmm0, b
@@ -438,7 +439,9 @@ float __cdecl FUN_00c70e20(PlanetData* pd, int mode)
 // @ 0x00c70fb0
 void VPlanet::FUN_00c70fb0()
 {
-    ((TerraformingMgr*)TerraformingManager_00b3d430(mpPlanet))->F670();
+    PlanetData* pd = mpPlanet;
+    ((TerraformingMgr*)TerraformingManager_00b3d430(pd))->F670();
+    _ReadWriteBarrier();
 }
 
 // @ 0x00c70fd0

@@ -12,3 +12,9 @@
 ../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82d10@SP@@YAXI@Z  00e82d10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82d30@SP@@YAXXZ  00e82d30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e84470@@YAXXZ  00e84470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?Nuke@NukeTree@@QAEXPAUNukeNode@@@Z  00e84940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82cf0@SP@@YAXIII@Z  00e82cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include /EHsc
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82de0@SP@@YAXII@Z  00e82de0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include /EHsc
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82900@@YA_NHH@Z  00e82900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include /EHsc
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82be0@SP@@YAXPAX_N@Z  00e82be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include /EHsc
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e848c0@@YAXI@Z  00e848c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include /EHsc

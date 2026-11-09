@@ -10,6 +10,7 @@
 #include "SP/cSpatialObject.h"
 #include "SP/cVarListSerializer.h"
 #pragma warning(disable: 4100)
+#include <intrin.h>
 
 // ---- items of slice s00c59540 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char  u8;
@@ -199,6 +200,29 @@ void MissionVectorErase(void* pBegin, void* pEnd);
 void ReleaseStepListContents();
 void ReleaseRewardList();
 void ShutdownMissionStepState();
+extern u32 g_vtbl_0146f400;      // 0x0146f400  cMissionMultiStep vtable (+0x00)
+extern u32 g_vtbl_0146f3f0;      // 0x0146f3f0  cMissionMultiStep interface vtable (+0x04)
+extern u32 g_vtbl_0146f3e0;      // 0x0146f3e0  cMissionMultiStep interface vtable (+0x34)
+struct VectorDtorStub { void Destroy(); };   // 0x00ae6970  vector<T*>::~vector
+struct MissionDtorStub { void Destroy(); };  // 0x00c47680  cSPMission::~cSPMission
+void __cdecl operator_delete(void* p);   // 0x00f47380
+// non-deleting destructor of the full multiple-inheritance object layout: three vptrs (0x00/0x04/0x34),
+// the three list members at 0x1f0/0x208/0x21c.
+struct cMissionMultiStep_dtor {
+    u32   mVtbl00;              // +0x00
+    u32   mVtbl04;              // +0x04
+    u8    pad08[0x2c];          // +0x08
+    u32   mVtbl34;              // +0x34
+    u8    pad38[0x1b8];         // +0x38
+    void** mpStepsBegin;        // +0x1f0
+    void** mpStepsEnd;          // +0x1f4
+    void** mpStepsCap;          // +0x1f8
+    u8    pad1fc[0x0c];         // +0x1fc
+    void* mpRewardPtr;          // +0x208
+    u8    pad20c[0x10];         // +0x20c
+    void* mpSchedulePtr;        // +0x21c
+    void Destroy();
+};
 // ---- items of slice s00c5a580 end
 
 // @ 0x00c59d90
@@ -316,7 +340,7 @@ f32 cMissionMultiStep::FUN_00c5a050()
     f32 sum = 0.0f;
     for (i32 i = 0; i < n; i++) {
         void* m = SubAt(i);
-        sum = sum + (*(f32(__thiscall**)(void*))((char*)vtbl(m) + 0xf0))(m);
+        sum = sum + (*(f32(__thiscall**)(void*))((char*)(*(void***)m) + 0xf0))(m);
     }
     return sum;
 }
@@ -455,7 +479,7 @@ u8 cMissionMultiStep::FUN_00c5a520(u32 a)
     for (i32 i = 0; i <= mCurrSub; i++) {
         void* m = ((void**)mSubBegin)[i];
         if (m != 0) {
-            u8 ok = (*(u8(__thiscall**)(void*, u32))((char*)vtbl(m) + 0xf4))(m, a);
+            u8 ok = (*(u8(__thiscall**)(void*, u32))((char*)(*(void***)m) + 0xf4))(m, a);
             if (ok) {
                 return 1;
             }
@@ -503,11 +527,20 @@ void cMissionMultiStep_s00c5_a580::OnAccept()
 }
 
 // @ 0x00c5a7d0
-void cMissionMultiStep_s00c5_a580::DestroyStepLists()
+void cMissionMultiStep_dtor::Destroy()
 {
-    ReleaseStepListContents();
-    ReleaseRewardList();
-    ReleaseMissionList(this);
+    mVtbl00 = (u32)&g_vtbl_0146f400;
+    mVtbl04 = (u32)&g_vtbl_0146f3f0;
+    mVtbl34 = (u32)&g_vtbl_0146f3e0;
+    _ReadWriteBarrier();
+    if (mpSchedulePtr != 0 && *(i32*)((u8*)mpSchedulePtr - 4) != 0) {
+        operator_delete(mpSchedulePtr);
+    }
+    if (mpRewardPtr != 0 && *(i32*)((u8*)mpRewardPtr - 4) != 0) {
+        operator_delete(mpRewardPtr);
+    }
+    ((VectorDtorStub*)((u8*)this + 0x1f0))->Destroy();
+    ((MissionDtorStub*)this)->Destroy();
 }
 
 // @ 0x00c5a990

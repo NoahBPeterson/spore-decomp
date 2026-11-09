@@ -8,3 +8,4 @@
 ../src/game/SPAudio/AudioVoiceContainer.cpp  ?DtorTail@VoiceContainer_s00a3_3ee0@Audio@EA@@QAEXXZ  00a34620  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioVoiceContainer.cpp  ?ConnectToSubmix@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NIPAUPlugIn_s00a3_3ee0@core@audio@rw@@@Z  00a34b50  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioVoiceContainer.cpp  ?Reconnect@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NXZ  00a34c90  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioVoiceContainer.cpp  ?Disconnect@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NXZ  00a34890  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

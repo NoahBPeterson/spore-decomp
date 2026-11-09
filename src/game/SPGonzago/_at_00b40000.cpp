@@ -2013,7 +2013,7 @@ struct World70 {
     float  ac;                  // +0xac
 };
 extern uint  __cdecl  FUN_00b3d700(uint a, uint b);
-extern void  __fastcall FUN_00b41e20(void* ht, int edx, void* arr, uint n);
+struct HashClearTarget_s00b4_b41e20 { void Clear(void* arr, uint n); };  // 0x00B41E20
 extern uint  __cdecl  FUN_00bbb110(void* o);                   // StarGridCount
 extern void  __cdecl  FUN_00b4b910(uint mode);
 // ---- items of slice s00b4b590 end
@@ -5470,7 +5470,7 @@ void __fastcall FUN_00b4b7b0(void* self)
     {
         char* h = s + 0x47c;
         void* p4 = *(void**)(h + 4);
-        FUN_00b41e20(h, (int)p4, p4, *(uint*)(h + 8));
+        ((HashClearTarget_s00b4_b41e20*)h)->Clear(p4, *(uint*)(h + 8));
         *(uint*)(h + 0xc) = 0;
     }
 }

@@ -691,13 +691,16 @@ BasicString16* BasicString16::sprintf_va_list(const wchar_t* fmt, char* args)
 void StrWriter::Free()
 {
     if (mBegin != 0) {
-        int n40 = (int)((char*)mCapacity - (char*)mBegin) >> 2 << 2;
-        int* len = mBegin;
-        if (len != mInline) {
-            int* v33 = len;
-            EASTL_allocator_deallocate(v33);
+        int* p;
+        int* begin;
+        int tmp;
+        tmp = (int)((char*)mCapacity - (char*)mBegin) >> 2 << 2;
+        begin = mBegin;
+        if (begin != mInline) {
+            p = begin;
+            EASTL_allocator_deallocate(p);
         }
-        (void)n40;
+        (void)tmp;
     }
 }
 

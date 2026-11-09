@@ -40,9 +40,10 @@ inline Elem7c* UninitCopy7c(Elem7c* first, Elem7c* last, Elem7c* dest, const Tag
     for (; first != last; ++first, ++dest) { new (dest) Elem7c(*first); }
     return dest;
 }
-inline void DestroyRange7c(Elem7c* first, Elem7c* last, Elem7c* dest, const TagB&)
+inline void DestroyRange7c(Elem7c* first, Elem7c* last, Elem7c* dest)
 {
     PadN<5>();
+    TagB tag;
     for (; first != last; ++first, ++dest) first->~Elem7c();
 }
 
@@ -50,8 +51,7 @@ inline void DestroyRange7c(Elem7c* first, Elem7c* last, Elem7c* dest, const TagB
 Elem7c* UninitMove7c(Elem7c* first, Elem7c* last, Elem7c* dest)
 {
     Elem7c* ret = UninitCopy7c(first, last, dest, TagA());
-    PadN<1>();
-    DestroyRange7c(first, last, dest, TagB());
+    DestroyRange7c(first, last, dest);
     return ret;
 }
 
@@ -62,8 +62,10 @@ inline Elem20* UninitCopy20(Elem20* first, Elem20* last, Elem20* dest, const Tag
     return dest;
 }
 
-inline void DestroyRange20Tag(Elem20* first, Elem20* last, Elem20* dest, const TagB&)
+inline void DestroyRange20Tag(Elem20* first, Elem20* last, Elem20* dest)
 {
+    TagB tag;
+    PadN<1>();
     DestroyRange20(first, last, dest);
 }
 
@@ -71,8 +73,7 @@ inline void DestroyRange20Tag(Elem20* first, Elem20* last, Elem20* dest, const T
 Elem20* UninitMove20(Elem20* first, Elem20* last, Elem20* dest)
 {
     Elem20* ret = UninitCopy20(first, last, dest, TagA());
-    PadN<2>();
-    DestroyRange20Tag(first, last, dest, TagB());
+    DestroyRange20Tag(first, last, dest);
     return ret;
 }
 

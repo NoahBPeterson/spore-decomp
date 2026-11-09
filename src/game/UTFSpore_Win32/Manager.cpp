@@ -789,11 +789,13 @@ bool EA::ResourceMan::Manager_s008d_e020::GetLoadedResource(int a, int b)
 // @ 0x008de2d0
 bool EA::ResourceMan::Manager_s008d_e020::IsDatabaseRegistered(int a, void** pOut)
 {
-    EA::ResourceMan::DbNode* n = ((EA::ResourceMan::DbList*)mDatabaseList)->mpHead;
+    EA::ResourceMan::DbList* list = (EA::ResourceMan::DbList*)mDatabaseList;
+    EA::ResourceMan::DbNode* n = list->mpHead;
     for (;;) {
         if (!n) return false;
         if ((int)n->mpObject == a) {
-            if (pOut) *pOut = n->mpValue;
+            void* v = n->mpValue;
+            if (pOut) *pOut = v;
             return true;
         }
         n = n->mpNext;

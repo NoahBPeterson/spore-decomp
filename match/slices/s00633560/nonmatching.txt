@@ -6,7 +6,6 @@
 00633ac0  495  SP::cSPPlayModePhotoBrowser::ShowThumbnailAsync: complete; job-object init/job-context scheduling, size 578 vs 509; difftest UNSUPPORTED (0/400 valid)
 00633cc0  364  SP::cSPPlayModePhotoBrowser::ShowImageThumbnail: complete; unrolled 5-slot loop + id table rebuild, size 400 vs 465; difftest WEAK (199/400 valid, 25.2% cov)
 00633ea0  235  SP::cSPPlayModePhotoBrowser::UpdateViewerImage: complete; AutoRef temp + tail-jmp release shape, size 254 vs 230; difftest WEAK (205/400 valid, 17.7% cov)
-00633f90    4  SP::cSPPlayModePhotoBrowser::HandleMode: complete; switch jump-table encoding/padding; difftest UNSUPPORTED (0/400 valid)
 00634030   51  SP::cSPPlayModePhotoBrowser::ClearPhotoList: complete; rbtree reset store order + DeletePhoto loop shape, size 138 vs 137; difftest UNSUPPORTED (0/400 valid)
 00634140  435  SP::cSPPlayModePhotoBrowser::Activate: complete; branch layout + odd retail push-ebx stack quirk in AddPhoto path, size 558 vs 570; difftest WEAK (398/400 valid, 25.3% cov)
 00634380   21  SP::cSPPlayModePhotoBrowser::SetSelectedPhoto: complete; this/map register allocation (esi/edi swap); difftest UNSUPPORTED (0/400 valid)

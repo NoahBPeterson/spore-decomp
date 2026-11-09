@@ -4792,8 +4792,9 @@ float __cdecl FUN_00d7ae80(CB* cb, int, int, uint, void* st, char* out)
   CB* m = (CB*)FUN_00d999d0((void*)BS(cb)->Play(0, 8));
   if (m != 0) {
     if (st != 0) ((Stimuli*)st)->GetAny();
+    void* p = &m->mStim5a8;
     *out = 1;
-    *(void**)((char*)st + 4) = m->GetStim5a8();
+    *(void**)((char*)st + 4) = p;
     return 1.0f;
   }
   return 0.0f;
@@ -5059,11 +5060,11 @@ bool __cdecl FUN_00d7b6a0(cSPCreatureBase* pCreature, uint32_t, uint32_t, uint32
 // @ 0x00d7b710
 bool __cdecl FUN_00d7b710(cSPCreatureBase* pCreature, uint32_t, uint32_t, uint32_t, uint32_t, tAnimCtx* pCtx)
 {
-    int32_t nEvent;
     switch (pCtx->mn00)
     {
     case 0:
         {
+            int32_t nEvent;
             if (pCreature->WaitForAnimEventOrEnd(0xbfa50b5a, &nEvent, -1, pCtx->mn04, 1))
             {
                 pCreature->FUN_00c1d460(0x4f26350b, 0x4f26350b);
@@ -5328,7 +5329,7 @@ bool __cdecl FUN_00d7bef0(cSPCreatureBase* pCreature, uint32_t, uint32_t, uint32
     if (pStim != 0)
     {
         float fElapsed = (float)g_nGameTime;
-        if (pStim->mf08 <= 10.0f - fElapsed * 0.001f)
+        if (!(pStim->mf08 < 10.0f - fElapsed * 0.001f))
             return true;
     }
     pCtx->mn00 = pCreature->InterruptAnimation(0x2481df9, -1, 0);

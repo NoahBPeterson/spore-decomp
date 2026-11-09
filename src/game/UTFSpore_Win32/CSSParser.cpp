@@ -2096,7 +2096,7 @@ bool CharStream_s008f_2660::MatchAscii(const char* s)
         wchar_t* p = mpPos;
         do {
             unsigned short ch = (p < end) ? (unsigned short)*p : 0;
-            if ((int)(signed char)c != (int)ch)
+            if (c != ch)
                 return false;
             c = s[i + 1];
             ++i;

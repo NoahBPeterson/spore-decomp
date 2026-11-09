@@ -233,7 +233,7 @@ void* cHitSphere::Cast(void* pType)
 // @ 0x00c3f890
 bool cInteractableObject::LoadModelChecked(void* pModel)
 {
-    return cSpatialObject::LoadModel(pModel);
+    return cSpatialObject::LoadModel(pModel) ? true : false;
 }
 
 // @ 0x00c3f8b0

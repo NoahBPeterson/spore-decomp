@@ -2,7 +2,6 @@
 00801450 38 local-slot-order-mismatch (complete)
 008016e0 327 member-float/SSE-shape (complete)
 008017f0 190 member-vtable-sequence (complete)
-00801980 2 arg-home-slot-reuse (complete)
 00801ac0 119 factory-create vtable sequence (complete)
 00801c80 43 rbtree DoCreateNode string/value copy (complete)
 00801d80 5 SaveCursorToFile complete (temp file, FileStream open/write/close, load cursor, remove, free); data/vtable load order differs [equiv: WEAK (12% coverage)]

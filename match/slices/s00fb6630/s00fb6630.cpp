@@ -237,8 +237,8 @@ int cTerrainSphereQuad::DispatchA(int viewer, DispatchStats* stats, int)
 
     if (sCachedIndex != 0 || mFace != sCachedFace)
     {
-        sCachedFace = mFace;
         sCachedIndex = 0;
+        sCachedFace = mFace;
         void* mgr = GetTerrainManager();
         void* slot = *(void**)((char*)mgr + 0x5c);
         if (slot)
@@ -382,8 +382,8 @@ int cTerrainSphereQuad::DispatchC(int viewer, DispatchStats* stats, int)
 
     if (sCachedIndex != 5 || mFace != sCachedFace)
     {
-        sCachedFace = mFace;
         sCachedIndex = 5;
+        sCachedFace = mFace;
         void* mgr = GetTerrainManager();
         void* slot = *(void**)((char*)mgr + 0x70);
         if (slot)
@@ -420,8 +420,8 @@ int cTerrainSphereQuad::DispatchD(int viewer, DispatchStats* stats, int)
 
     if (sCachedIndex != 1 || mFace != sCachedFace)
     {
-        sCachedFace = mFace;
         sCachedIndex = 1;
+        sCachedFace = mFace;
         void* mgr = GetTerrainManager();
         void* slot = *(void**)((char*)mgr + 0x60);
         if (slot)

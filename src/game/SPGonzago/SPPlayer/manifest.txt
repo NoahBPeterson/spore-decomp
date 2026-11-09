@@ -26,3 +26,5 @@
 ../src/game/SPGonzago/SPPlayer.cpp  ?ResetWarDataWithPlayer@cPlayer_s00c7_b120@SP@@QAEXH@Z  00c7be30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?FUN_01351ae0@@YAXXZ  01351ae0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?FUN_01351e60@@YAXXZ  01351e60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?CopyFrom@cWarRec@@QAEPAU1@ABU1@@Z  00c76f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?ctor@cSpacePlayerWarData@@QAEPAU1@ABU1@@Z  00c76f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

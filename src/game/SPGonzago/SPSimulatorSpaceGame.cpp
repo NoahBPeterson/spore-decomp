@@ -1714,13 +1714,22 @@ void cSPSimulatorSpaceGame::ChangeCameraByOffset(float a, float b)
 }
 
 // @ 0x01004bb0
+struct PosseSlotIface {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18();
+    virtual int  GetKey();
+};
 void* SimGame::f4bb0(int key)
 {
     int** it = *(int***)(raw + 0x78);
     if (it != *(int***)(raw + 0x7c)) {
         do {
             int* p = *it;
-            if (((int(__thiscall*)(void*))VTP(p)[0x4c / 4])(p) == key && p[0x1c5] == 3)
+            int r = ((PosseSlotIface*)p)->GetKey();
+            if (r == key && p[0x1c5] == 3)
                 return p;
             ++it;
         } while (it != *(int***)(raw + 0x7c));
@@ -1751,7 +1760,8 @@ char SimGame::f4c30()
         do {
             int* p = *it;
             if (p[0x1c5] == 8) {
-                if (((int(__thiscall*)(void*))VTP(p)[0x4c / 4])(p) == target) return 1;
+                int r = ((PosseSlotIface*)p)->GetKey();
+                if (r == target) return 1;
             }
             ++it;
         } while (it != *(int***)(raw + 0x7c));

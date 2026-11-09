@@ -219,8 +219,8 @@ PathT* __stdcall FUN_0062cb20(const Vec3* pos, float speed, char type, float rea
   o->mSpeed = speed;
   o->mType = type;
   o->mReached = reached;
-  o->mCount = 0;
   o->mPriority = 0;
+  o->mCount = 0;
   o->mRoom = 0;
   return o;
 }

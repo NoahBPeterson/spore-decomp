@@ -2,6 +2,8 @@
 ../src/game/SPGonzago/SPAppData.cpp  ?Matrix3FromEulerXYZ@SP@@YAPAUMatrix33_s005f_4310@1@PAU21@PBX@Z  005f4e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAppData.cpp  ??0cTypeDef_s00e4_9a40@SP@@QAE@PBDPAUcFieldDef_s00e4_9a40@@IIIIPAX222@Z  00e4a7d0  /O2 /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4a860@cRefHolder@@QAEPAXH@Z  00e4a860  /O2 /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4a910@@YA_NH@Z  00e4a910  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4a960@@YA_NH@Z  00e4a960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4a9f0@@YAPAXPB_W@Z  00e4a9f0  /O2 /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAppData.cpp  ?Load@cLoadHook@@QAE_NPAXPAUIIdentifiable@@II@Z  00e4b030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAppData.cpp  ?FUN_00e4b6c0@@YAPAUcResManager@@PAX0@Z  00e4b6c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

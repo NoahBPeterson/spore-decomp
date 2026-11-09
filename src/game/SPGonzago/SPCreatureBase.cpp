@@ -61,7 +61,7 @@ struct C {
   int  __thiscall FindIndex(int key);
   void __thiscall CallFind13();
   void __thiscall CallFind27();
-  void __thiscall IsDefaultSpecies_();
+  bool __thiscall IsDefaultSpecies_();
   C*   __thiscall CopyRec(void* src);
   C*   __thiscall QuatHalf(float a);
   int  __thiscall RelationIndex(int idx, char b);
@@ -3617,11 +3617,10 @@ void __thiscall C::C200(float f)
 }
 
 // @ 0x00c0c2d0
-void __thiscall C::IsDefaultSpecies_()
+bool __thiscall C::IsDefaultSpecies_()
 {
-  FUN_00401090();
-  void* p = FUN_004df420();
-  *(void**)((char*)this + 0); // no-op to keep this used
+  cSpeciesManager* mgr = (cSpeciesManager*)FUN_00401090();
+  return mgr->GetAvatarProfile() == *(cSpeciesProfile_s00c2_2010**)((char*)this + 0xb20);
 }
 
 // @ 0x00c0c310
@@ -4036,7 +4035,9 @@ void __thiscall CCM::e640(int param_2)
 int __thiscall CCM::e660()
 {
     char* b = *(char**)((char*)this + 0xb20);
-    return (*(int*)(b + 0x6d8) - *(int*)(b + 0x6d4)) >> 2;
+    struct IntVec { int* mpBegin; int* mpEnd; };
+    IntVec* v = (IntVec*)(b + 0x6d4);
+    return (int)(v->mpEnd - v->mpBegin);
 }
 
 // @ 0x00c0e680

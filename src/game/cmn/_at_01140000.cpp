@@ -582,7 +582,7 @@ class ReverbIR1 { public:
 // @ 0x01140030
 int F_01140030(int a, int val)
 {
-    if (g_16e7c1c == 0) return -10;
+    if (*(unsigned char*)0x16e7c1c == 0) return -10;
     int handle = Sub_1141150(a);
     if (handle >= 0) {
         int local = -1;
@@ -598,7 +598,7 @@ int F_01140030(int a, int val)
 // @ 0x011400a0
 int F_011400a0(int a, int val)
 {
-    if (g_16e7c1c == 0) return -10;
+    if (*(unsigned char*)0x16e7c1c == 0) return -10;
     int handle = Sub_1141150(a);
     if (handle >= 0) {
         int local = -1;
@@ -788,7 +788,7 @@ void SndDecoder::DecodeMul(int srcs, int n)
 // @ 0x011405e0
 int F_011405e0(int a, int val)
 {
-    if (g_16e7c1c == 0) return -10;
+    if (*(unsigned char*)0x16e7c1c == 0) return -10;
     int handle = Sub_1141150(a);
     if (handle >= 0) {
         int local = -1;

@@ -1,1 +1,2 @@
 slices/s0109a8d0/s0109a8d0.cpp  ?removeReference@hkRefBase@@QAEXXZ  0109ae60  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s0109a8d0/s0109a8d0.cpp  ??1hkWorldOperationQueue@@QAE@XZ  0109b420  /vc71 /O2 /MD /Gy /EHsc /TP

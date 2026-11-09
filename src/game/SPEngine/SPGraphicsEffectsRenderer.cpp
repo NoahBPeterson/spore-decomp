@@ -3398,9 +3398,9 @@ int f94a0(int p1, int p2, int p3)
         do {
             void* r = *(void**)(p1 + 0x28);
             if (r != 0) {
-                unsigned n = *(unsigned*)((char*)r + 4);
-                n += 0xffffffffu;
-                *(unsigned*)((char*)r + 4) = n;
+                int n = *(int*)((char*)r + 4);
+                n += -1;
+                *(int*)((char*)r + 4) = n;
                 if (n == 0) {
                     *(int*)((char*)r + 4) = 1;
                     _ReadWriteBarrier();
@@ -3503,8 +3503,8 @@ C9A30::~C9A30()
         f_f47380(a);
     int* p = m4;
     if (p != 0) {
-        unsigned n = (unsigned)p[1] + 0xffffffffu;
-        p[1] = (int)n;
+        int n = p[1] + -1;
+        p[1] = n;
         if (n == 0) {
             p[1] = 1;
             _ReadWriteBarrier();

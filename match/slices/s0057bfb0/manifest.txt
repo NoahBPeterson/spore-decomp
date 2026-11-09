@@ -12,3 +12,4 @@ slices/s0057bfb0/s0057bfb0.cpp  ?SetLocalState@cAppModeEditorBase@SP@@QAEXPAVcSP
 slices/s0057bfb0/s0057bfb0.cpp  ?SetTrayState@cAppModeEditorBase@SP@@QAEXH_N@Z  0057c530  /O2 /MD /Gy /TP /GS-
 slices/s0057bfb0/s0057bfb0.cpp  ?reserve@?$sp_byte_vector@D@SP@@QAEXI@Z  0057cc60  /O2 /MD /Gy /TP /GS-
 slices/s0057bfb0/s0057bfb0.cpp  ?SetResourceName@SP@@YAXPAUcResourceTable@1@HPB_W@Z  0057cd40  /O2 /MD /Gy /TP /GS-
+slices/s0057bfb0/s0057bfb0.cpp  ?ScalarDelete@cEditorNamedResource@SP@@QAEPAXI@Z  0057ccf0  /O2 /MD /Gy /TP /GS-

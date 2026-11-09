@@ -2031,7 +2031,8 @@ void cSPMissionManager_s00fe_c590::FUN_00fece20()
         mpProp7c->Release();
     if (mpProp78 != 0)
         mpProp78->Release();
-    mFeedbackMap.NukeSubtree(mFeedbackMap.mpRoot);
+    cRbtreeUint& feedback = mFeedbackMap;
+    feedback.NukeSubtree(feedback.mpRoot);
     mRecVec48.FUN_00fecc40(mRecVec48.mpBegin, mRecVec48.mpEnd);
     if (mRecVec48.mpBegin != 0 && *((int32_t*)mRecVec48.mpBegin - 1) != 0)
         operator_delete_array(mRecVec48.mpBegin);
@@ -2506,20 +2507,22 @@ void cSPMissionManager_s00fe_d430::InitForGame()
             speciesIDs.DoInsertKey(slot, kZeroKey);
         }
     }
-    SPVector<AutoRefCount>& tracked = mTrackedMissions;
+    SPVector<void*>& tracked = *(SPVector<void*>*)&mTrackedMissions;
     for (int i = 3; i != 0; --i)
     {
-        AutoRefCount zero;
-        AutoRefCount* slot = tracked.mpEnd;
+        void* zero = 0;
+        void** slot = tracked.mpEnd;
         if (slot < tracked.mpCapacity)
         {
             tracked.mpEnd = slot + 1;
             if (slot)
-                slot->mpObject = 0;
+                *slot = 0;
         }
         else
         {
             tracked.DoInsertPtr(slot, zero);
+            if (zero)
+                ((RefCounted*)zero)->Release();
         }
     }
 }

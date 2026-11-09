@@ -6,3 +6,4 @@ slices/s00433800/s00433800.cpp  ?ReleaseHandle@FadeController@@QAEXXZ  00433aa0 
 slices/s00433800/s00433800.cpp  ?IsActive@FadeController@@QAEEXZ  004340c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00433800/s00433800.cpp  ?IsPlaying@FadeController@@QAEEXZ  00434100  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00433800/s00433800.cpp  ?Stop@FadeController@@QAEXXZ  00434120  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00433800/s00433800.cpp  ??0XformMsg@@QAE@XZ  00434040  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

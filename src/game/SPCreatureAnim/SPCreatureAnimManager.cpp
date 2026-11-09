@@ -3601,6 +3601,7 @@ bool qb_enable(anim_qb* qb, int animID)
 // @ 0x00a01c10
 anim_qb::anim_qb()
 {
+    // retail interleaves the first two zero stores between the 4th `push` and the call
     anim_query* p = queries;
     for (int i = 15; i >= 0; --i) {
         anim_query& q = *p;

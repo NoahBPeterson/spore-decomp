@@ -400,7 +400,7 @@ void EA::ArgScript::cSetCCommand_s0084_6280::ExecuteBody(cArguments_s0084_6280* 
     const char** pArg = pArgs->MainArguments(2);
     float v[4];
     mParser->EvalColor(v, pArg[1]);
-    char buf[0x20];
+    char buf[0x58];
     Snprintf8(buf, 0x20, "%f,%f,%f,%f", v[0], v[1], v[2], v[3]);
     mFullParser->SetVariableNoSubstitution(pArg[0], buf);
 }
@@ -416,7 +416,7 @@ void EA::ArgScript::cSetV2Command_s0084_6280::ExecuteBody(cArguments_s0084_6280*
     mParser->EvalV2(v, pArg[1]);
     double d0 = v[0];
     double d1 = v[1];
-    char buf[0x20];
+    char buf[0x2c];
     Snprintf8(buf, 0x20, "%f,%f", d0, d1);
     mFullParser->SetVariableNoSubstitution(pArg[0], buf);
 }
@@ -430,7 +430,7 @@ void EA::ArgScript::cSetV3Command_s0084_6280::ExecuteBody(cArguments_s0084_6280*
     const char** pArg = pArgs->MainArguments(2);
     float v[3];
     mParser->EvalV3(v, pArg[1]);
-    char buf[0x20];
+    char buf[0x44];
     Snprintf8(buf, 0x20, "%f,%f,%f", v[0], v[1], v[2]);
     mFullParser->SetVariableNoSubstitution(pArg[0], buf);
 }
@@ -444,7 +444,7 @@ void EA::ArgScript::cSetV4Command_s0084_6280::ExecuteBody(cArguments_s0084_6280*
     const char** pArg = pArgs->MainArguments(2);
     float v[4];
     mParser->EvalV4(v, pArg[1]);
-    char buf[0x20];
+    char buf[0x58];
     Snprintf8(buf, 0x20, "%f,%f,%f,%f", v[0], v[1], v[2], v[3]);
     mFullParser->SetVariableNoSubstitution(pArg[0], buf);
 }

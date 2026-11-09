@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 005ce060 50 AddVertebraBody: cl schedules `push 1` before loading mpWorld into ecx; original loads ecx first
-005ce250 4 ReleaseE8: uses eax + pop ecx; original uses ecx + add esp,4
 005ce2a0 61 NormalizeVector2: original splits sqrt (x87) from reciprocal (SSE divss); cl fuses 1/sqrt into fdivrp
 005ce680 243 CalcVertebraPhysicsBoundingBox: original has an aligned frame (and esp,-16) and differs in SSE scheduling of the center/offset terms
 005ce9b0 1609 complete belt-of-circles arc walker (kinds 0/1/2, tangent search); not byte-exact: x87/SSE mix scheduling differs

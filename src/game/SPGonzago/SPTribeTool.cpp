@@ -1272,8 +1272,8 @@ void DestroyTribeToolData()
             pTool->mText.~cString_s00c9_de50();
             DefaultRefCounted* pAbility = pTool->mAbility.mpObject;
             if (pAbility) {
-                unsigned refs = pAbility->mnRefCount;
-                refs += -1;
+                int refs = pAbility->mnRefCount;
+                --refs;
                 pAbility->mnRefCount = refs;
                 if (refs == 0) {
                     pAbility->mnRefCount = 1;

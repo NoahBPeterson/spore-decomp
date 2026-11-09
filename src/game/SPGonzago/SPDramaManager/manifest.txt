@@ -16,6 +16,8 @@
 ../src/game/SPGonzago/SPDramaManager.cpp  ?GetActiveEventTuning@cSPDramaManager_s00d4_bc60@SP@@QAEPAXI@Z  00d4cb50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?PostLoadEvent@cDramaEventInstanceData_s00d4_bc60@SP@@QAEXPAX@Z  00d4d180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?insert_00d4d9b0@RefVec@@QAEPAXPAURefPair@@PBU2@@Z  00d4d9b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?TickInactiveEvent@cTribeFoodRaidEvent_s00d4_e4a0@SP@@QAEXM@Z  00d4f260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?ShouldDeactivate@cMeteorStrikeEvent_s00d4_f2e0@SP@@QAEHXZ  00d4fea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?PostLoad@cMeteorStrikeEvent_s00d4_f2e0@SP@@QAEXI@Z  00d4fef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?ShutdownEvent@cMeteorStrikeEvent_s00d5_0380@SP@@QAEXXZ  00d50960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?TickEvent@cMeteorStrikeEvent_s00d5_0380@SP@@QAEXM@Z  00d509c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

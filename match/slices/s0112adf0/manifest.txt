@@ -9,3 +9,4 @@ slices/s0112adf0/s0112adf0.cpp  ?registerList@hkClassNameRegistry@@UAEXPBQBVhkCl
 slices/s0112adf0/s0112adf0.cpp  ?registerClass@hkClassNameRegistry@@UAEXPBVhkClass@@PBD@Z  0112baa0  /vc71 /O2 /MD /Gy /TP
 slices/s0112adf0/s0112adf0.cpp  ??1hkDefaultBuiltinTypeRegistry@@UAE@XZ  0112bd80  /vc71 /O2 /MD /Gy /TP
 slices/s0112adf0/s0112adf0.cpp  ?hkDefaultBuiltinTypeRegistry_create@@YAPAUhkDefaultBuiltinTypeRegistry@@XZ  0112bdf0  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?getClassFromVirtualInstance@hkVtableClassRegistry@@UBEPBVhkClass@@PBX@Z  0112bbd0  /vc71 /O2 /MD /Gy /TP

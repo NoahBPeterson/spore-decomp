@@ -580,13 +580,13 @@ cSPUILoyaltyMeter::cSPUILoyaltyMeter(uint32_t nDelay, int32_t nRootID, uint32_t 
 // @ 0x00e06ac0
 cSPUILoyaltyMeter::~cSPUILoyaltyMeter()
 {
-    if (m_pLinkA != nullptr) {
-        ILink* pLinkA = m_pLinkA;
+    ILink* pLinkA = m_pLinkA;
+    if (pLinkA != nullptr) {
         m_pLinkA = nullptr;
         pLinkA->Release();
     }
-    if (m_pLinkB != nullptr) {
-        ILink* pLinkB = m_pLinkB;
+    ILink* pLinkB = m_pLinkB;
+    if (pLinkB != nullptr) {
         m_pLinkB = nullptr;
         pLinkB->Release();
     }

@@ -17,7 +17,7 @@
 006900b0 28 complete, not byte-exact: wrapper call shape near-miss (FreeJobUnderLock args)
 00690120 17 complete, not byte-exact: Release refcount decrement shape differs (renders "WEAK": 44.8% original coverage, no mismatch)
 006903c0 212 complete, not byte-exact: Shutdown drains mJobs[0..8] (extra release, dependency list clears, deallocate), then mFreeLinks, then mFreeWaitNodes with the Semaphore dtor; differs only in loop/register shapes.
-00690540 3 complete, not byte-exact: ScheduleJob signalling shape near-miss
+00690540 3 complete, not byte-exact: ScheduleJob signalling shape. The `aff==0xffffffff` test is reached as `mov ecx,eax; not ecx; test ecx,ecx; jne` in retail, so written as `unsigned int nAff=~aff; if(nAff==0)`. Residual (242 vs 236 bytes): InsertJobByPriority call emits `lea eax,[esi+0x64]; push eax; call` (retail `push ebx; lea edx,[esi+0x64]; push edx; mov ecx,esi; call` - the `this` must be in ecx), list-relink stores ordered edx+4 before ecx (retail ecx then edx+4), the `~aff` block orders stores swapped, and the ready-list branch emits an inline priority-scan loop where retail calls IsAffinityInUse-like helper 0x68f450 then 0x68fff0. Some diffs are the cross-TU InsertJobByPriority thiscall convention. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 00690630 378 complete, not byte-exact: FailJobDependents walks the dependent chain and splits into strong (FailJob) / weak-free (mFreeLinks + conditional ScheduleJob) / weak-kept, then moves kept nodes back and clears the local list; differs in register allocation and the possibly-null link idiom.
 006907e0 102 complete; QueueJobUnderLock EH/register near-miss
 006908a0 104 complete; PromoteJobPriorityUnderLock register near-miss

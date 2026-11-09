@@ -1988,8 +1988,7 @@ float FUN_00dc4ab0(void* a0, void* a1, void* a2, uint32_t a3)
 // @ 0x00dc4ae0
 char FUN_00dc4ae0(Obj* self)
 {
-    BehaviorTree* bt = (BehaviorTree*)self->mpBehaviorTree;
-    return bt->mStimA.Play(0x8000, 0) != 0;
+    return ((BehaviorTreeStim*)((char*)self->mpBehaviorTree + 8))->Play(0x8000, 0) != 0;
 }
 
 // @ 0x00dc4b00

@@ -1140,6 +1140,8 @@ class hkCdPointCollector_s010d_cd40 { public:
     virtual void hkCdPointCollector_v0();
     virtual void addCdPoint(const hkCdPoint_s010d_cd40& point);
     float m_earlyOutDistance;                  // +4
+    hkCdPointCollector_s010d_cd40() {}
+    hkCdPointCollector_s010d_cd40(float d) { m_earlyOutDistance = d; }
 };
 class hkCdBodyPairCollector_s010d_cd40 { public:
     virtual void hkCdBodyPairCollector_v0();
@@ -1228,7 +1230,7 @@ struct hkPredGskfAgent : hkGskfAgent {
 };
 class hkSymmetricAgentFlipCollector : public hkCdPointCollector_s010d_cd40 { public:            // vtable 0x014a43a4
     hkCdPointCollector_s010d_cd40& m_original;                                     // +8
-    hkSymmetricAgentFlipCollector(hkCdPointCollector_s010d_cd40& c) : m_original(c) { m_earlyOutDistance = HK_REAL_MAX; }
+    hkSymmetricAgentFlipCollector(hkCdPointCollector_s010d_cd40& c) : hkCdPointCollector_s010d_cd40(HK_REAL_MAX), m_original(c) {}
     virtual void addCdPoint(const hkCdPoint_s010d_cd40& point);
 };
 class hkSymmetricAgentFlipBodyCollector : public hkCdBodyPairCollector_s010d_cd40 { public:     // vtable 0x014a43b4
@@ -1440,6 +1442,8 @@ struct hkProcessCollisionOutput_s010d_f100 {
 };
 class hkCollisionAgent_s010d_f100 : public hkReferencedObject_s010d_f100 { public:
     hkContactMgr* m_contactMgr;                // +8
+    hkCollisionAgent_s010d_f100() {}
+    hkCollisionAgent_s010d_f100(hkContactMgr* mgr) { m_contactMgr = mgr; m_referenceCount = 1; }
     virtual void ag1();
     virtual void getPenetrations(const hkCdBody_s010d_f100&, const hkCdBody_s010d_f100&, const hkCollisionInput_s010d_f100&, hkCdBodyPairCollector_s010d_f100&);   // +8
     virtual void getClosestPoints(const hkCdBody_s010d_f100&, const hkCdBody_s010d_f100&, const hkCollisionInput_s010d_f100&, hkCdPointCollector_s010d_f100&);     // +0xc
@@ -3140,9 +3144,8 @@ void __cdecl hkPhantomAgent::staticGetPenetrations(const hkCdBody_s010d_f100& bo
 
 // @ 0x010df3d0
 hkPhantomAgent::hkPhantomAgent(const hkCdBody_s010d_f100& A, const hkCdBody_s010d_f100& B, hkContactMgr* mgr)
+    : hkCollisionAgent_s010d_f100(mgr)
 {
-    m_contactMgr = mgr;
-    m_referenceCount = 1;
     m_rootA = hkCdBody_getRoot(&A);
     m_rootB = hkCdBody_getRoot(&B);
     m_shapeTypeA = A.m_shape->getType();

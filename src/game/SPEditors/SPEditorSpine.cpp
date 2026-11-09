@@ -11,6 +11,7 @@
 #include "SP/cSPEditorVertebraInfo.h"
 #include "SP/cSPEditorHandleSpine.h"
 #include <xmmintrin.h>
+#include <intrin.h>
 #include "SP/cEditorsTokenTranslator.h"
 #include "SP/cStringTokenTranslator.h"
 
@@ -1456,7 +1457,9 @@ void SP::cSpineHelper::SetEnabled(int enabled)
 // @ 0x005ce250
 void SP::cSpineHelper::ReleaseE8()
 {
-  FUN_004a5970(mFieldE8);
+  void* block = *(void* volatile*)&mFieldE8;
+  ::FUN_004a5970(block);
+  _ReadWriteBarrier();
 }
 
 // @ 0x005ce270

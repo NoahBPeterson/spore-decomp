@@ -31,3 +31,4 @@
 ../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00befc00@@YAPAXPAX0@Z  00befc00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00be0000.cpp  ?SimSingletonAccessor_00befd30@@YAPAXXZ  00befd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00be0000.cpp  ?FUN_00beff90@CStub@@QAEEPAMH@Z  00beff90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?GetSpeciesProfile@cCivilization_s00be_eb70@SP@@QAEPAXXZ  00bef950  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

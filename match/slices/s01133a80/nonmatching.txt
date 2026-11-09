@@ -1,6 +1,5 @@
 01133a80 65 complete Collection::FUN_01133a80: unlink a used node, prepend to the free list, mSize--; /GL register allocation differs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 92.9% cov.
 01133ad0 124 complete Collection::AddCapacity: Alloc a node block (count*0xc+8), link it, seed `count` free nodes, mCapacity += count; object-heavy, no valid inputs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid (fault(fetch)).
-01133b60 3 complete FUN_01133b60: return *(int*)(this+0x10) or 0; VC7.1 folds the double memory read; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov.
 01133b70 44 complete FUN_01133b70: free every node block via System::Free, zero all fields; /GL scheduling differs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 234/400 valid 41.5% cov.
 01133bd0 78 complete Collection::FUN_01133bd0: take a node from the free list (AddCapacity if empty) and push it on the used list; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 344/400 81.8% cov.
 01133c30 61 complete Collection::FUN_01133c30: release the node behind a pointer slot to the free list; /GL differs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 393/400 93.5% cov.

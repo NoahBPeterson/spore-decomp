@@ -652,7 +652,7 @@ void __cdecl ControllerFixup(void* self, void* arena, u32 delta, u32 n)
         if (*(u32*)s == 0)
             return;
         *(u32*)s += delta;
-        if (n != 0)
+        if (n > 0)
         {
             u32 off = 8;
             do

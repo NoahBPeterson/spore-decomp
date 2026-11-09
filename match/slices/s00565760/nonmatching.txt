@@ -1,1 +1,2 @@
-00565f50  2  flags /Od /Ob1 /MD /Gy /TP; complete; two const-bool byte slots swapped (-0xd/-0xe); equiv: WEAK (92.4% coverage)
+# <va>  <diff-bytes>  <reason>
+00565f50  2  vector2<uint32_t>::reserve: only the two one-byte trivial-destructor flag stores are swapped (-0xd/-0xe). Breaking the flag out into a local struct or renaming it does not move it; the inlined-helper bool lands in the slot below the enclosing-scope one in this /Od build.

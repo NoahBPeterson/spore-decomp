@@ -24,6 +24,7 @@
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?ScenarioDestroy@@YGXPAURefPair@@0@Z  00d3b320  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?DoNukeSubtree@RbtreeMap@@QAEXPAVRbtNode@@@Z  00d3b370  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?HeapMake@@YAXPAUSortEntry@@0H@Z  00d3b430  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?ScalarDeletingDestructor@cContentValidationSummarizer@@QAEPAXI@Z  00d3b4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?FUN_00d3b970@@YAXPAUcSPVector3_s00d3_b920@@IPBU1@@Z  00d3b970  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?Deactivate@cCreatureModeStrategy_s00d3_b920@@QAEXXZ  00d3c380  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureModeStrategy.cpp  ?Shutdown@cStrategyFields@@QAE_NXZ  00d3cd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

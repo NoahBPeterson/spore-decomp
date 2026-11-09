@@ -340,8 +340,8 @@ void UpdateFootsteps(void* manager, creature_instance_data* creature)
     nSPCreatureAnim::footstep_event_list* events = creature->mAnimData.get_events();
     int total = (int)(events->mpEnd - events->mpBegin);
     if (total != 0) {
-        int remaining = total;
         int index = 0;
+        int remaining = total;
         do {
             dynamics_foot* foot = &events->mpBegin[index];
             creature_body_instance_data* body = &creature->mpBodies[foot->mBodyIdx];

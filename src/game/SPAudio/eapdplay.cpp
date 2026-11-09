@@ -950,8 +950,10 @@ namespace EA { namespace Audio { namespace Eapd {
 void play_start(t_play* x, float time)
 {
     x->play.Start(time);
-    if (!x->pUpdateCallback)
-        x->pUpdateCallback = ((PlayUpdateManager*)Play_GetUpdateManager())->AddCallback(x, (void*)play_update);
+    if (!x->pUpdateCallback) {
+        PlayUpdateManager* mgr = (PlayUpdateManager*)Play_GetUpdateManager();
+        x->pUpdateCallback = mgr->AddCallback(x, (void*)play_update);
+    }
 }
 }}}  // namespace EA::Audio::Eapd
 

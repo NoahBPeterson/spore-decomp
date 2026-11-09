@@ -251,6 +251,7 @@ public:
     uint32_t FUN_00fe4230(uint32_t nBadge) const;
     int      FUN_00fe42a0() const;
     bool     FUN_00fe43c0(uint32_t nBadge, uint32_t nIndex) const;
+    bool     FUN_00fe43c0(void* pCard, uint32_t nBadge) const;
     const wchar_t* FUN_00fe45f0(uint32_t nBadge, bool bIgnoreStatus) const;
     bool     FUN_00fe46a0(uint32_t nBadge) const;
     void     GetBadgeName(uint32_t nBadge, eastlWString& strOut) const;
@@ -296,15 +297,30 @@ class cBadgePropertyMap {
 public:
     cBadgeObject** FUN_00dd85c0(Property** ppValue);     // 0x00dd85c0
 };
+struct tEventNode {
+    tRBNode  mBase;                     // +0x00
+    uint32_t mKey;                      // +0x10
+    uint32_t mValue;                    // +0x14
+};
+struct tEventTree {
+    uint32_t   mBase00;                 // +0x00
+    tRBNode    mAnchor;                 // +0x04
+    uint32_t   mnSize;                  // +0x14
+    tEventNode** find(tEventNode** ppOut, const uint32_t* pKey); // 0x00e39fb0
+    uint32_t*    operator[](const uint32_t* pKey);               // 0x00de7630
+};
 namespace SP {
 class cSPBadgeManager_s00fe_4be0 {
 public:
+    void     FUN_00fe5430(uint32_t nBadge, int nCount);  // 0x00fe5430
     uint32_t FUN_00fe54d0(Property* pProperty);
     void     GetBadgeImageKey();  // 0x00fe5520 (SP::cSPBadgeManager::GetBadgeImageKey)
     void     TestRequirement();  // 0x00fe55b0 (SP::cSPBadgeManager::TestRequirement)
 
     uint8_t             pad000[0x10];                    // +0x00 .. +0x0f
     cBadgePropertyMap   mBadgeMap;                       // +0x10
+    uint8_t             pad14[0xa4 - 0x11];              // +0x11 .. +0xa3
+    void*               mpCurrentCard;                   // +0xa4
 };  // namespace SP
 }
 // ---- items of slice s00fe4be0 end
@@ -1020,9 +1036,34 @@ void __fastcall cSPBadgeManagerCtor(void* this_, int unused)
 }
 
 // @ 0x00fe5430
-void __cdecl FUN_00fe5430()
+void* __fastcall FUN_00e39fb0(void* pTree, void* unused, uint32_t* ppOut, const uint32_t* pKey); // 0x00e39fb0 (map lower_bound)
+uint32_t* __fastcall FUN_00de7630(void* pTree, void* unused, const uint32_t* pKey);             // 0x00de7630 (map operator[])
+void* __cdecl    FUN_00883860();                                      // 0x00883860 (message server)
+struct cSelf {
+    void FUN_01017270(int a, int b, int c);              // 0x01017270
+    void FUN_00e17470(void* pArg);                       // 0x00e17470
+};
+struct V14Obj {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(int a, int b, int c);   // +0x14
+};
+namespace SP {
+void __thiscall cSPBadgeManager_s00fe_4be0::FUN_00fe5430(uint32_t nBadge, int nCount)
 {
+    tEventNode* pFound;
+    if (*((tEventTree*)((char*)this + 0x64))->find(&pFound, &nBadge) ==
+            (tEventNode*)&((tEventTree*)((char*)this + 0x64))->mAnchor)
+        ((tEventTree*)((char*)this + 0x64))->operator[](&nBadge)[0] = (uint32_t)nCount;
+    else
+        ((tEventTree*)((char*)this + 0x64))->operator[](&nBadge)[0] += (uint32_t)nCount;
+    ((V14Obj*)FUN_00883860())->v14(0x38cf2fb, 0, 0);
+    cUIMissionCardPanel* pUI = FUN_00b3d400();
+    if (mpCurrentCard != 0 && pUI != 0) {
+        if (((cSPBadgeManager*)this)->FUN_00fe43c0(mpCurrentCard, nBadge))
+            pUI->RemoveBadgeCard(mpCurrentCard);
+    }
 }
+}  // namespace SP
 
 // @ 0x00fe54d0
 namespace SP {

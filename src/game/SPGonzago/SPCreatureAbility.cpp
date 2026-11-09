@@ -42,6 +42,11 @@ struct IVtbl {
     PV4 PV2 PV                                   // 0xb8..0xd0
     virtual char  SlotD4();                      // 0xd4
 };
+typedef int (__cdecl *Slot8Vfn)(int);
+struct VtblTable { void* mSlots[0x100]; };
+struct IVtblSlot8 {
+    VtblTable* mpVtbl;                        // 0x00
+};
 struct NounMgr {
     void* GetPlayerTribe();                      // 0x00bfc5f0
     void* GetAvatar();                           // 0x00b1fdb0
@@ -367,7 +372,7 @@ int __cdecl FUN_00d1e4b0(TuningObj* param_1, cCreature* param_2, IVtbl* param_3)
 {
     if (gByte1582df5 != 1) {
         Loco* loco = param_2 ? &param_2->mLoco : 0;
-        int sel = param_3->Slot8(1);
+        int sel = ((Slot8Vfn)((IVtblSlot8*)param_3)->mpVtbl->mSlots[2])(1);
         float v = FUN_00d99ac0(loco, sel);
         bool flag = ((param_2->mFlagsB58 >> 9) & 1u) != 0;
         float bound = param_1->GetBound(flag);

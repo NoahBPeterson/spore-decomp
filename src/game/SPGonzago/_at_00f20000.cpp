@@ -1519,7 +1519,7 @@ void __cdecl FUN_00f21760(V0c* self, int arg2)
         Noun* n = (Noun*)self->q(0x3a25119);
         if (n) {
             int* p = (int*)((char*)n + 0x130);
-            if (p && p[1] && p[1] == 0xa)
+            if (p && p[1] && p[1] - 0xa == 0)
                 sub_f211f0(p, arg2);
         }
     }
@@ -2010,8 +2010,7 @@ void FUN_00f243c0(int* ev, float dt)
 void FUN_00f24ae0(int* ev, int target, float dt)
 {
     if (dt != 0.0f) {
-        unsigned int uVar2 = (uint)((int(__thiscall*)(void*, float, void*))*(void**)(*ev + 4))(ev, dt, (void*)0x00f24a90);
-        char cVar1 = FUN_00f20350((void*)uVar2);
+        char cVar1 = FUN_00f20350((IVObj*)((void* (__thiscall*)(void*))*(void**)(*ev + 4))(ev), dt, (void (*)(UIEntry*))0x00f24a90);
         if (cVar1 != 0)
             return;
     }

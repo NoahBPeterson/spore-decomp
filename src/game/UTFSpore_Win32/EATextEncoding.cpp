@@ -91,12 +91,9 @@ namespace EA { namespace Text {
 int Strlen32(const int* p)
 {
     int n = -1;
-    int v;
     do {
-        v = *p;
         n++;
-        p++;
-    } while (v != 0);
+    } while (*p++ != 0);
     return n;
 }
 }}  // namespace EA::Text

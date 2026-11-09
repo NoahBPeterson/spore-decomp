@@ -3,7 +3,6 @@
 00926650  56   FixedAllocatorBase::AddCore: complete; the `while (nSize==0)` gets cl's loop-inversion (test at bottom) vs original top-test/jmp
 00926960  174  FreePool::BinInsert (small/large bin insert): complete; small-bin path and bin-map bit set match, the large-bin walk and bit-set schedule differ [equiv: PASS 384 valid, 100% cov]
 00926a60  69   block free callback (Pool::FreeBlock): fixed double-deref of the block's callback pointer; indirect-callback arg schedule differs [equiv: PASS 459 valid, 82.8% cov, seed 3]
-00926ab0  2    Pool::Contains: complete; comparison encoded as `cmp edx,esi;ja` instead of `cmp esi,edx;jb`
 00926af0  303  FreePool::SplitChunk (aligned block split + unsorted relink): complete; original keeps `this` in a `push ecx`/`pop ecx` spill slot, ours keeps it in ecx, so ours leaves ecx=span|1 at exit [equiv: FAIL 5/5 - ecx register clobber only, memory+return match]
 00926c20  396  FreePool::NewSegment (VirtualAlloc arena -> segment node): complete; VirtualAlloc-only function, equivalence harness cannot model the import [equiv: UNSUPPORTED, 0/400 inputs valid]
 00926db0  350  FreePool::Trim (release wholly-committed segment tails): complete; VirtualFree-heavy function, harness cannot model the import [equiv: UNSUPPORTED, 0/400 valid]

@@ -6,7 +6,6 @@
 01082600 51 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 01082660 51 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010826e0 61 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
-01082770 2 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 01082800 112 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 01082890 28 complete; pad10 corrected to 8 floats so the velocity vectors and damp factors land at +0x30/+0x40/+0x50; 1/damping is rounded to float through a volatile store like the original's fst [esp+8]; equiv PASS (400/400 valid, 100% coverage) flags: /vc71 /O2 /MD /Gy /TP
 01082910 132 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
@@ -14,7 +13,6 @@
 01082a90 52 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 01082b90 64 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 01082bf0 54 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
-01082cf0 4 complete; scalar deleting destructor installs the original vtables at +0/+8 and frees through g_hkMemory::deallocateObject(this, memSize, 4), returning this; equiv PASS (400/400 valid, 100% coverage) flags: /vc71 /O2 /MD /Gy /TP
 01082df0 133 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 01082ee0 143 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 01083110 108 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP

@@ -19,6 +19,7 @@
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?copyFrom@W68c0@@QAEPAU1@PBU1@@Z  007068c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?CreateEnvLightSample@cLightingWorld@@QAEXPAUEnvEntry@@PBUcSPVector3_s0070_70d0@@I@Z  007074e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?DestroyAll@SlotDeque@@QAEXH@Z  007075e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?DestroyEntry@SlotVecC4@@QAEXI@Z  00707ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?CopyVec4@@YAPAUVector4@@PAU1@00@Z  00707660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?DoNukeSubtree@Rbtree@@QAEXPAUNukeNode@@0@Z  00707690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?CopyBackVec4@@YAPAUVector4@@PAU1@00@Z  007076f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -223,6 +223,7 @@ int* FUN_01021180(int* a, int* b, int* c, int (*cmp)(int, int))
 // @ 0x01021200
 void __stdcall FUN_01021200(int a, int b)
 {
+    (void)a; (void)b;
     void* gm = FUN_00b5b800();
     if (gm != &DAT_01654c04) {
         gm = FUN_00b5b800();
@@ -230,8 +231,8 @@ void __stdcall FUN_01021200(int a, int b)
     }
     void* s = DAT_016dda8c;
     void* o = *(void**)((char*)s + 0xc);
-    ((void(__thiscall*)(void*))VTP(o)[0xc / 4])(o);
-    (void)a; (void)b;
+    void* fn = VTP(o)[0xc / 4];
+    ((void(__thiscall*)(void*))fn)(o);
 }
 
 // @ 0x01021240

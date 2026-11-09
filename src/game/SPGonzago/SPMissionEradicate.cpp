@@ -730,13 +730,13 @@ int cSPMissionEradicate_s00c4_ef00::Update(int dt)
   if (r == 3 && mState == 0) {
     if (mMissionID != 0x509cc23f) {
       ValidateHerds();
-      return r;
-    }
-    void* p = mp17c;
-    if (p) {
-      void* q = ((void*(__thiscall*)(void*, uint))VT(p, 0xc))(p, 0x422227d);
-      if (q)
-        FUN_00c55ca0(q);
+    } else {
+      void* p = mp17c;
+      if (p) {
+        void* q = ((void*(__thiscall*)(void*, uint))VT(p, 0xc))(p, 0x422227d);
+        if (q)
+          FUN_00c55ca0(q);
+      }
     }
   }
   return r;

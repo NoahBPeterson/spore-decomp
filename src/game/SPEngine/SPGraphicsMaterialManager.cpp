@@ -2125,7 +2125,7 @@ void __stdcall HashChainDtorA(void** buckets, unsigned n)
             HashNodeA* p = node;
             RC3c_s0070_efa0* ref = p->mpRef;
             node = p->mpNext;
-            if (ref != 0)
+            if (p->mpRef != 0)
                 ref->Release();
             EFree(p);
         }
@@ -2168,7 +2168,7 @@ void __stdcall HashChainDtorB(void** buckets, unsigned n)
             HashNodeB* p = node;
             RC3b_s0070_efa0* ref = p->mpRef;
             node = p->mpNext;
-            if (ref != 0)
+            if (p->mpRef != 0)
                 ref->Release();
             EFree(p);
         }
@@ -2569,9 +2569,39 @@ int32_t MaterialManagerBig::ReadMaterials(Stream* stream, int32_t count, uint32_
 }
 
 // @ 0x00711b80
-void SP::cMaterialManager::UnregisterArenaContents(SP::cArenaResource * arena)
+void MaterialManagerBig::UnregisterArenaContents(void* arenaArg)
 {
-    (void)arena;
+    MutexGuard guard(&mMutex);
+    ArenaHolder* arena = (ArenaHolder*)arenaArg;
+    MatIter it;
+    it.mpBucket = (uint32_t**)mpBucketArray;
+    it.mpNode = *it.mpBucket;
+    if (it.mpNode == 0) {
+        ++it.mpBucket;
+        while (*it.mpBucket == 0)
+            ++it.mpBucket;
+        it.mpNode = *it.mpBucket;
+    }
+    _ReadWriteBarrier();
+    MatIter end;
+    end.mpBucket = (uint32_t**)mpBucketArray + mnBucketCount;
+    end.mpNode = *end.mpBucket;
+    while (it.mpNode != end.mpNode) {
+        if (it.mpNode[0x20 / 4] == (uint32_t)arena) {
+            ((FixedClear*)(it.mpNode + 1))->clear();
+            it.mpNode[8 / 4] = mInvalidState;
+        }
+        it.increment();
+    }
+    int32_t cnt = arena->mpArena->GetNumExportedObjects();
+    for (int32_t i = 0; i < cnt; ++i) {
+        ExportDesc desc(i);
+        arena->mpArena->GetExportedObjectByIndex(i, &desc);
+        if (desc.type == 0x2000B) {
+            uint32_t key = (uint32_t)desc.object;
+            ((VMHash*)((char*)this + 0x194))->erase(key);
+        }
+    }
 }
 
 // @ 0x00711d10

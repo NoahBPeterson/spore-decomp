@@ -701,7 +701,10 @@ unsigned char WriteBlob32(void* writer, BlobRange* range)
     int size = (int)((char*)range->mpEnd - (char*)range->mpBegin);
     int tmp = size;
     if (!EA_IO_WriteUint32(writer, &tmp, 1, 0)) return 0;
-    if (size != 0) return (unsigned char)EA_IO_WriteBytes(writer, range->mpBegin, size);
+    if (size != 0) {
+        char* begin = (char*)range->mpBegin;
+        return (unsigned char)EA_IO_WriteBytes(writer, begin, size);
+    }
     return 1;
 }
 
@@ -711,7 +714,10 @@ unsigned char WriteBlob16(void* writer, BlobRange* range)
     int size = (int)((char*)range->mpEnd - (char*)range->mpBegin) >> 1;
     int tmp = size;
     if (!EA_IO_WriteUint32(writer, &tmp, 1, 0)) return 0;
-    if (size != 0) return (unsigned char)EA_IO_WriteUint16(writer, range->mpBegin, size, 1);
+    if (size != 0) {
+        char* begin = (char*)range->mpBegin;
+        return (unsigned char)EA_IO_WriteUint16(writer, begin, size, 1);
+    }
     return 1;
 }
 

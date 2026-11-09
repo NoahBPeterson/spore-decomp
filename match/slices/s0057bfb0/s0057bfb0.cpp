@@ -743,12 +743,24 @@ public:
     virtual int AddRef();
     virtual int Release();
     virtual ~cEditorNamedResource();
+    void* ScalarDelete(unsigned int flags);
 };
 
-// NM 0x0057ccf0: base vptr stores emitted in order +0,+4 (original +4,+0)
-// @ 0x0057ccf0 ??_GcEditorNamedResource
-cEditorNamedResource::~cEditorNamedResource()
+// NM 0x0057ccf0: compiler-generated scalar deleting destructor (??_G)
+// @ 0x0057ccf0
+void* cEditorNamedResource::ScalarDelete(unsigned int flags)
 {
+    *(void**)((char*)this + 4) = (void*)0x013EF094;
+    *(void**)this = (void*)0x013EB938;
+    _ReadWriteBarrier();
+    if ((mName.mpCapacity - mName.mpBegin) > 1) {
+        wchar_t* p = mName.mpBegin;
+        if (p)
+            operator delete[](p);
+    }
+    if (flags & 1)
+        operator delete(this);
+    return this;
 }
 
 struct cResourceSlot {

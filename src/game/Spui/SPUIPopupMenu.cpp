@@ -26,6 +26,13 @@ extern void cSPUILayout_Dtor(void*);   // 0x00811fe0 (equiv t3)
 extern "C" unsigned wcslen(const wchar_t*);
 #pragma intrinsic(wcslen)
 #define VTSLOT(p, off) ((*(void***)(p))[(off) / 4])
+struct IWindowHead {
+    virtual int AddRef();
+    virtual int Release();
+    virtual void Destroy();
+    virtual void* AsInterface(int id);
+    virtual IWindowHead* GetParent();
+};
 struct LimitStopwatch { void SetTimeLimit(int, int); };
 class cSPUIPopupMenuItemWin { public:
   char pad00[0x888];
@@ -436,8 +443,7 @@ void PopupWinDetach::OnDetach()
 void cSPUIPopupMenuWin::AddMenuItem2(cSPUIPopupMenuItemWin* item, bool attach)
 {
   void* iself = (char*)item + 4;
-  void* vt = *(void**)iself;
-  void* r = ((void* (__thiscall*)(void*))((void**)vt)[0x10 / 4])(iself);
+  IWindowHead* r = ((IWindowHead*)iself)->GetParent();
   if (r != 0) {
     void* rvt = *(void**)r;
     ((void (__thiscall*)(void*, void*))((void**)rvt)[0xdc / 4])(r, iself);

@@ -2,6 +2,7 @@
 // SharedLibraryRegistry (UTF dynamic library management).
 // Module flags: /O2 /MD /Gy /EHsc /TP /GS-
 #include "types.h"
+#include <intrin.h>
 
 extern "C" unsigned __int64 __rdtsc(void);
 #pragma intrinsic(__rdtsc)

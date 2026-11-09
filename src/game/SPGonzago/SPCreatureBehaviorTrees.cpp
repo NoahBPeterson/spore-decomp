@@ -2919,8 +2919,8 @@ void Fd9f6f0(int* first, int* mid, int* last, Vector3 vec)
         char* a0 = *first ? (char*)*first + 0xc0 : 0;
         char* ap = *p ? (char*)*p + 0xc0 : 0;
         if (((KeyCmp*)(void*)&vec)->Compare(ap, a0)) {
-            int f = *first;
             int v = *p;
+            int f = *first;
             *p = f;
             Fd9da80(first, 0, (int)((char*)mid - (char*)first) >> 2, 0, v, vec);
         }

@@ -355,12 +355,15 @@ struct Elem48 {
     Elem48(const Elem48&);  // 0x0042CBF0
 };
 
+inline void padfn4() { uint32_t pad[4]; }
+
 // @ 0x0042F020
 Elem48** __cdecl UninitializedCopyElem48(Elem48** out, Elem48* first, Elem48* last, Elem48* dest)
 {
     Elem48* cur = dest;
     for (; NotEqual(first, last); ++first, ++cur)
         PLACE_NEW(cur) Elem48(Deref(first));
+    padfn4();
     *out = cur;
     return out;
 }
@@ -371,6 +374,7 @@ void __cdecl UninitializedFillElem48(Elem48* first, unsigned int n, Elem48* valu
     Elem48* p = first;
     for (; n > 0; --n, ++p)
         PLACE_NEW(p) Elem48(*value);
+    padfn4();
 }
 
 // @ 0x0042F100

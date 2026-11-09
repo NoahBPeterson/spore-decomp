@@ -1230,16 +1230,22 @@ public:
 // ---- items of slice s00ded5a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern uint32_t gWindowIdTable[11];          // 0x0147e4f0
 struct IWindow_s00de_d5a0;
-struct cString {
+class cString_s00df_00b0 {
+public:
+    cString_s00df_00b0();                                                       // 0x006b5060
+    cString_s00df_00b0(uint32_t nTable, uint32_t nKey, const wchar_t* pText);   // 0x006b5770
+    ~cString_s00df_00b0();                                                      // 0x006b5240
+    cString_s00df_00b0& operator=(const cString_s00df_00b0& rOther);            // 0x006b5430
+    bool Load(uint32_t nTable, uint32_t nKey, const wchar_t* pText);            // 0x006b54b0
+    const wchar_t* c_str() const;                                               // 0x006b55c0
+public:
     uint32_t mTable;
     uint32_t mKey;
     uint32_t mText;
-    cString();                                                       // 0x006b5060
-    cString(uint32_t nTable, uint32_t nKey, const wchar_t* pText);   // 0x006b5770
-    ~cString();                                                      // 0x006b5240
-    bool Load(uint32_t nTable, uint32_t nKey, const wchar_t* pText); // 0x006b54b0
-    const wchar_t* GetText() const;                                  // 0x006b55c0
 };
+namespace SP {
+const wchar_t* f00df_c_str(cString_s00df_00b0& s);   // 0x006b55c0
+}
 struct IWindow_s00de_d5a0 {
     virtual void v00();                // 0x000
     virtual void v04();                // 0x004
@@ -1399,6 +1405,8 @@ struct cGalaxyGameEntryMode {
     cRefObject* mpObject00;                             // +0x00
     cRefObject* mpObject04;                             // +0x04
     cGalaxyGameEntryUIStateMachine_s00de_d5a0* mpStateMachine;     // +0x08
+    void FUN_00e00760(uint32_t a);                      // 0x00e00760
+    void FUN_00df0a40(uint32_t arg);                    // 0x00df0a40
     void RefreshNotifyAttackToggle();                   // 0x00dee360
     void ReleaseOwned();                                // 0x00dee3d0
 };
@@ -1455,6 +1463,7 @@ struct PanelIDs {                     // kGUI_PanelIDs target (pointer at 0x016a
     byte     mFlag;                   // +0x1f5
 
     void FUN_00de5d00(void* a, void* b, void* c, void* d, void* e, void* f, void* g);
+    void FUN_00de53d0(uint32_t a);                    // 0x00de53d0
 };
 struct GridObj {                      // the editor grid object (at GalaxyUI + 0x628)
     char      pad_00[0x20];
@@ -1601,17 +1610,18 @@ public:
     cHashIterator FUN_00def5f0(const wchar_t** ppKey);
 };
 }
+struct NameString_s00df_fc80;
 namespace SP {
 class cGalaxyGameEntryUIStateMachine_s00de_f400 {
 public:
-    void FUN_00def400();
+    __declspec(noinline) bool FUN_00def400(u32 nText);
     void FUN_00def690();
     void FUN_00def750(uint32_t id, uint32_t value);
     void FUN_00def7c0();
-    void UpdateNavigationControls();  // 0x00def8c0 (SP::cGalaxyGameEntryUIStateMachine::UpdateNavigationControls)
-    void FUN_00defc00();
+    __declspec(noinline) void UpdateNavigationControls();  // 0x00def8c0 (SP::cGalaxyGameEntryUIStateMachine::UpdateNavigationControls)
+    NameString_s00df_fc80 FUN_00defc00();
     void MakeRandomName();  // 0x00defc80 (SP::cGalaxyGameEntryUIStateMachine::MakeRandomName)
-    void SetStateSummaryText();  // 0x00defd10 (SP::cGalaxyGameEntryUIStateMachine::SetStateSummaryText)
+    void SetStateSummaryText(int32_t nField, uint32_t nKey, const wchar_t* pText); // 0x00defd10
     void SelectTheme();  // 0x00defdd0 (SP::cGalaxyGameEntryUIStateMachine::SelectTheme)
     void FillComboBoxes();  // 0x00df00b0 (SP::cGalaxyGameEntryUIStateMachine::FillComboBoxes)
     void UpdateSpecialitySummaryText();  // 0x00df0190 (SP::cGalaxyGameEntryUIStateMachine::UpdateSpecialitySummaryText)
@@ -2209,6 +2219,9 @@ struct SPUILayout_s00df_9650 {
     char pad[0x18];
     void      Shutdown(unsigned);                  // 0x00811ad0  __thiscall
     IWindow_s00df_9650*  FindWindowByID(unsigned id, int flag); // 0x008105b0  __thiscall
+};
+struct LocaleLookup_s00de_f400 {                       // 0x00ad3da0
+    unsigned* Find(unsigned* pKey);
 };
 struct GlobalUI {
     void SetVisibility(int v);                     // 0x00e01350  __thiscall
@@ -3746,9 +3759,9 @@ void cGalaxyGameEntryUIStateMachine_s00de_d5a0::PickStarForEditorToGameFlow(uint
     if (pText) {
         uint32_t nTable = bToggled ? ids.mId3 : 0x2b7a0311;
         uint32_t nKey = bToggled ? ids.mId0 : ids.mId2;
-        cString text(nTable, nKey, 0);
-        pText->v80(text.GetText());
-        text.~cString();
+        cString_s00df_00b0 text(nTable, nKey, 0);
+        pText->v80(text.c_str());
+        text.~cString_s00df_00b0();
     }
 }
 
@@ -4138,8 +4151,9 @@ void SP::Wrapper::FUN_00def020()
 }
 
 // @ 0x00def400
-void __thiscall SP::cGalaxyGameEntryUIStateMachine_s00de_f400::FUN_00def400()
+__declspec(noinline) bool __thiscall SP::cGalaxyGameEntryUIStateMachine_s00de_f400::FUN_00def400(u32 nText)
 {
+    return *(const wchar_t*)nText != 0;
 }
 
 // @ 0x00def5f0
@@ -4177,8 +4191,41 @@ eastl::cHashIterator __thiscall eastl::cHashTable::FUN_00def5f0(const wchar_t** 
 
 // @ 0x00def690
 namespace SP {
+struct HashTable_s00de_f400 {
+    char      pad000[4];                 // +0x00
+    void**    mpBuckets;                 // +0x04
+    uint32_t  mnCount;                   // +0x08
+    uint32_t  mnZero;                    // +0x0c
+    void DoFreeNodes(void** pBuckets, uint32_t nCount);
+};
 void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::FUN_00def690()
 {
+    char* self = (char*)this;
+
+    void* p = *(void**)(self + 0x74);
+    if (p != 0 && *(int*)((char*)p - 4) != 0)
+        op_del_array(p);
+    p = *(void**)(self + 0x60);
+    if (p != 0 && *(int*)((char*)p - 4) != 0)
+        op_del_array(p);
+
+    HashTable_s00de_f400* h = (HashTable_s00de_f400*)(self + 0x40);
+    h->DoFreeNodes(h->mpBuckets, h->mnCount);
+    h->mnZero = 0;
+    if (h->mnCount > 1)
+        op_del_array(h->mpBuckets);
+
+    h = (HashTable_s00de_f400*)(self + 0x20);
+    h->DoFreeNodes(h->mpBuckets, h->mnCount);
+    h->mnZero = 0;
+    if (h->mnCount > 1)
+        op_del_array(h->mpBuckets);
+
+    h = (HashTable_s00de_f400*)self;
+    h->DoFreeNodes(h->mpBuckets, h->mnCount);
+    h->mnZero = 0;
+    if (h->mnCount > 1)
+        op_del_array(h->mpBuckets);
 }
 }  // namespace SP
 
@@ -4186,8 +4233,19 @@ void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::FUN_00def690()
 namespace SP {
 void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::FUN_00def750(uint32_t id, uint32_t value)
 {
-    (void)id;
-    (void)value;
+    int idx = *(int*)(*(int*)((char*)this + 0x628) + 0xa8);
+    char* pBase = (char*)this + 0x84 + idx * 0xc0;
+    uint32_t key = id;
+    LocaleLookup_s00de_f400* pLookup = (LocaleLookup_s00de_f400*)(pBase + 0x40);
+    uint32_t* pId = pLookup->Find(&key);
+    uint32_t found = *pId;
+    IWindow_s00df_9650* w =
+        ((SPUILayout_s00df_9650*)((char*)this + 0x28))->FindWindowByID(found, 1);
+    if (w != 0) {
+        void* pArg = (void*)value;
+        w->Slot80(pArg);
+        w->Slot7C(1, 1);
+    }
 }
 }  // namespace SP
 
@@ -4200,15 +4258,52 @@ void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::FUN_00def7c0()
 
 // @ 0x00def8c0
 namespace SP {
-void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::UpdateNavigationControls()
+__declspec(noinline) void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::UpdateNavigationControls()
 {
+    (void)*(volatile int*)this;
 }
 }  // namespace SP
 
+extern "C" void* __stdcall FUN_004010a0(void* out, u32 key);      // 0x004010a0
+extern "C" void* __fastcall FUN_005ecf80(void* key);              // 0x005ecf80
+
+struct NameString_s00df_fc80 {
+    u32 mpBegin;
+    u32 mpEnd;
+    u32 mpCap;
+    u32 mnPadC;
+    NameString_s00df_fc80& operator=(const NameString_s00df_fc80& other)
+    {
+        if (&other != this)
+            ((EaString16*)this)->Assign(other.mpBegin, other.mpEnd);
+        return *this;
+    }
+    ~NameString_s00df_fc80()
+    {
+        if ((s32)((mpCap - mpBegin) & 0xfffffffe) > 2 && mpBegin != 0)
+            op_del_array((void*)mpBegin);
+    }
+};
+
 // @ 0x00defc00
 namespace SP {
-void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::FUN_00defc00()
+NameString_s00df_fc80 __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::FUN_00defc00()
 {
+    NameString_s00df_fc80 out;
+    out.mpBegin = 0x1667bac;
+    out.mpEnd = 0x1667bac;
+    out.mpCap = 0x1667bae;
+    u32 text;
+    do {
+        WString16 key;
+        EaString16* found = (EaString16*)FUN_005ecf80(FUN_004010a0(&key.mpBegin, 0x7e1310a));
+        if (found != (EaString16*)&out)
+            ((EaString16*)&out)->Assign(found->mpBegin, found->mpEnd);
+        if ((s32)((key.mpCap - key.mpBegin) & 0xfffffffe) > 2 && key.mpBegin != 0)
+            op_del_array((void*)key.mpBegin);
+    text = out.mpBegin;
+    } while (FUN_00def400(text));
+    return out;
 }
 }  // namespace SP
 
@@ -4216,13 +4311,29 @@ void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::FUN_00defc00()
 namespace SP {
 void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::MakeRandomName()
 {
+    char* self = (char*)this;
+    if (*(void**)(self + 0x628) != 0) {
+        *(NameString_s00df_fc80*)*(void**)(self + 0x628) = FUN_00defc00();
+
+        IWindow_s00df_9650* w = ((SPUILayout_s00df_9650*)(self + 0x28))
+                                    ->FindWindowByID(0x5400fa5, 1);
+        if (w != 0) {
+            IWindow_s00df_9650* o = (IWindow_s00df_9650*)w->Slot0C(0xcf428691);
+            if (o != 0)
+                o->Slot60((void*)(*(NameString_s00df_fc80**)(self + 0x628))->mpBegin, 0);
+        }
+    }
 }
 }  // namespace SP
 
 // @ 0x00defd10
 namespace SP {
-void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::SetStateSummaryText()
+void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::SetStateSummaryText(
+    int32_t nField, uint32_t nKey, const wchar_t* pText)
 {
+    (void)nField;
+    (void)nKey;
+    (void)pText;
 }
 }  // namespace SP
 
@@ -4237,6 +4348,27 @@ void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::SelectTheme()
 namespace SP {
 void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::FillComboBoxes()
 {
+    cString_s00df_00b0 text;
+    int nKind = *(int*)(*(int*)((char*)this + 0x628) + 0xa0);
+    if (nKind == 0) {
+        cString_s00df_00b0 temp(0x2b7a0311, 0x5b08772, 0);
+        text = temp;
+        SP::f00df_c_str(temp);
+    } else if (nKind == 1) {
+        cString_s00df_00b0 temp(0x2b7a0311, 0x5b08773, 0);
+        text = temp;
+        SP::f00df_c_str(temp);
+    } else if (nKind == 2) {
+        cString_s00df_00b0 temp(0x2b7a0311, 0x5b08774, 0);
+        text = temp;
+        SP::f00df_c_str(temp);
+    }
+
+    int idx = *(int*)(*(int*)((char*)this + 0x628));
+    (void)idx;
+    int idxp = *(int*)((char*)this + 0x628);
+    if (idxp != 0 && *(int*)(idxp + 0xa8) != 6)
+        SetStateSummaryText(5, 0x5b08775, text.c_str());
 }
 }  // namespace SP
 
@@ -4271,8 +4403,22 @@ void __cdecl FUN_00df09a0()
 }
 
 // @ 0x00df0a40
-void __cdecl FUN_00df0a40()
+void __thiscall cGalaxyGameEntryMode::FUN_00df0a40(uint32_t arg)
 {
+    FUN_00e00760(arg);
+    cGalaxyGameEntryUIStateMachine_s00de_d5a0* sm = mpStateMachine;
+    if (sm->mFlowState != 0) {
+        IWindow_s00de_d5a0* w = sm->mLayout.FindWindowByID(0x5384881, 1);
+        w->v7C(1, 1);
+        ((SP::cGalaxyGameEntryUIStateMachine_s00de_f400*)sm)->UpdateNavigationControls();
+        gkGUI_PanelIDs->FUN_00de53d0(1);
+    }
+    IWindow_s00de_d5a0* w2 = ((cSPUILayout_s00de_d5a0*)((char*)gkGUI_PanelIDs + 0x144))
+                                 ->FindWindowByID(0x615a5ff, 1);
+    if (w2 != 0)
+        w2->v7C(1, 0);
+    ((GlobalUI*)*(void**)((char*)gkGUI_PanelIDs + 0x184))->SetVisibility(0);
+    RefreshNotifyAttackToggle();
 }
 
 // @ 0x00df1e70
@@ -4523,21 +4669,24 @@ void StateMachine::PickRandomAssets(char flag)
         return;
 
     IWindow_s00df_2d80* w = this->mLayout.FindWindowByID(0x59461b1, 1);
-    if (w == 0 || (((char)(w->Slot2C() >> 2)) & 1) == 0) {
+    u8 bit = w != 0 ? (u8)((w->Slot2C() >> 2) & 1) : 0;
+    if (w == 0 || bit == 0) {
         IWindow_s00df_2d80* w2 = this->mLayout.FindWindowByID(0x54045ce, 1);
         if ((w2->Slot28() & 1) != 0 && (flag != 0 || this->mEntry->m4c.a == 0))
             this->PickRandomCreature();
     }
 
     w = this->mLayout.FindWindowByID(0x59461b0, 1);
-    if (w == 0 || (((char)(w->Slot2C() >> 2)) & 1) == 0) {
+    u8 bit2 = w != 0 ? (u8)((w->Slot2C() >> 2) & 1) : 0;
+    if (w == 0 || bit2 == 0) {
         IWindow_s00df_2d80* w2 = this->mLayout.FindWindowByID(0x54045e3, 1);
         if ((w2->Slot28() & 1) != 0 && (flag != 0 || this->mEntry->m64.a == 0))
             this->PickRandomVehicle();
     }
 
     w = this->mLayout.FindWindowByID(0x59461b2, 1);
-    if (w == 0 || (((char)(w->Slot2C() >> 2)) & 1) == 0) {
+    u8 bit3 = w != 0 ? (u8)((w->Slot2C() >> 2) & 1) : 0;
+    if (w == 0 || bit3 == 0) {
         IWindow_s00df_2d80* w2 = this->mLayout.FindWindowByID(0x5404617, 1);
         if ((w2->Slot28() & 1) != 0 && (flag != 0 || this->mEntry->m70.a == 0))
             this->PickRandomByMode(0x5404617, 0x99e92f05, &this->mEntry->m70);
@@ -4701,8 +4850,38 @@ void __cdecl GetSavedGames()
 }
 
 // @ 0x00df82d0
-void __cdecl FUN_00df82d0()
+struct Dtor_s00df_82d0 {
+    char                mPad00[0x18];
+    void*               mpTracerVtbl18;                 // +0x18
+    char                mPad1c[4];
+    cGalaxyGameEntryMode mode20;                        // +0x20
+    char                mPad2c[8];
+    void*               mpObject34;                     // +0x34
+    void*               mpBegin38;                      // +0x38
+    char                mPad3c[4];
+    void*               mpEnd40;                        // +0x40
+    char                mPad44[4];
+    void*               mpCap48;                        // +0x48
+    char                mPad4c[0x40];
+    void*               mpObject8c;                     // +0x8c
+};
+void __fastcall FUN_00df82d0(Dtor_s00df_82d0* self)
 {
+    if (self->mpObject8c != 0)
+        (*(void(__thiscall**)(void*))((char*)*(void**)self->mpObject8c + 8))(self->mpObject8c);
+
+    char* begin = (char*)self->mpBegin38;
+    char* end = (char*)self->mpEnd40;
+    if ((int)((unsigned)(end - begin) & ~1u) > 2 && begin != 0 && begin != (char*)self->mpCap48)
+        op_del_array(begin);
+
+    if (self->mpObject34 != 0)
+        (*(void(__thiscall**)(void*))((char*)*(void**)self->mpObject34 + 4))(self->mpObject34);
+
+    self->mode20.ReleaseOwned();
+    *(void* volatile*)((char*)self + 0x18) = (void*)0x13eb938;
+    _ReadWriteBarrier();
+    ((cSPUILayout_s00df_5670*)self)->dtor();
 }
 
 // @ 0x00df8330

@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "EA/Stopwatch.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -295,7 +296,11 @@ struct CbdPart1 : ResAsyncBase {
 };
 struct CbdPart2 : ResAsyncBase {
 };
-struct ComboBoxDrawable : ResAsyncBase, CbdPart1, CbdPart2 {
+struct ComboBoxDrawable {
+    int m00;
+    int m04;
+    int m08;
+    int m0c;
     int m10;
     int m14;
     int m18;
@@ -945,12 +950,14 @@ bool CreateRenderables(void* self, void* param_2, unsigned* param_3)
 // @ 0x00969000
 ComboBoxDrawable::ComboBoxDrawable()
 {
-    *(void**)((char*)this + 4) = (void*)g_vtbl_ResourceAsync;
+    *(volatile uint32_t*)((char*)this + 4) = 0x13fa72c;
+    _ReadWriteBarrier();
     m08 = 0;
-    *(void**)((char*)this + 0xc) = (void*)g_vtbl_ResourceAsync;
-    *(void**)((char*)this + 0) = g_vtbl_ComboBoxDrawable0;
-    *(void**)((char*)this + 4) = g_vtbl_ComboBoxDrawable1;
-    *(void**)((char*)this + 0xc) = g_vtbl_ComboBoxDrawable2;
+    *(uint32_t*)((char*)this + 0xc) = 0x13fa72c;
+    _ReadWriteBarrier();
+    *(uint32_t*)((char*)this + 0) = 0x14416a0;
+    *(uint32_t*)((char*)this + 4) = 0x1441688;
+    *(uint32_t*)((char*)this + 0xc) = 0x1441670;
     m10 = 0;
     m14 = 0;
     m18 = 0;
@@ -1229,8 +1236,7 @@ bool WinComboBox::RemoveValue(unsigned idx)
 void WinComboBox::AddValue(const wchar_t* s)
 {
     char* self = (char*)this;
-    int pad = 0; (void)pad;
-    struct { void* a; void* b; void* c; } tmp;
+    struct { void* a; void* b; void* c; void* d; } tmp;
     tmp.a = 0; tmp.b = 0; tmp.c = 0;
     ((WString*)&tmp)->RangeInitialize(s);
 
@@ -1243,7 +1249,7 @@ void WinComboBox::AddValue(const wchar_t* s)
     } else {
         vec->DoInsertValue(end, &tmp);
     }
-    if (((int)((char*)tmp.c - (char*)tmp.a) & 0xfffffffe) > 2 && tmp.a)
+    if (((int)((char*)tmp.c - (char*)tmp.a) & -2) > 2 && tmp.a)
         f_operator_delete(tmp.a);
 }
 

@@ -40,7 +40,7 @@
 00a25090 6 complete; only xchg register choice (ecx/edx) differs
 00a25190 194 complete; tmp AutoRefCount now in its own slot like the original (switch on id), but the original caches tmp.p in esi through the release while ours reloads it, and the shared operator new pushes are spelled with a zero register; difftest PASS after fixing the tmp slot (ours reused the dead param slot for tmp, so AutoRefCount::operator= got a this pointer outside our frame)
 00a252b0 1368 complete (EA::Audio::System::Init); frame 4 bytes short, loop rotation/alignment and null test on handler differ
-00a25980 4 complete; eax/edx choice for string begin vs &out; difftest PASS (after annotating operator_delete__ and g_pfnString)
+00a25980 4 complete; the body is instruction-for-instruction correct once compiled with /GS- (without it cl adds a stack cookie the retail function lacks, +12 bytes). Remaining: cl puts the string begin in edx and &out in eax; retail the reverse (eax/edx swap). Tried naming the Str16 temp, naming the string begin, an explicit StrOut* local, and pointer-typed StringFn args: cl keeps its allocation. difftest PASS (after annotating operator_delete__ and g_pfnString). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00a25aa0 4 complete; ebx/ebp swap for args a and c
 00a25bd0 8 complete; two iterator temps do not share one slot
 00a26e10 176 complete; original returns the InsertRes* (out) in eax at every ret, now returned too; DoInsertKey node order / register allocation differs; difftest WEAK under flags /O2 /MD /Gy /EHsc /TP /GS- (207 valid, 88.2% coverage, no mismatch)

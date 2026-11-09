@@ -486,7 +486,8 @@ int __stdcall CheckFlagA(void* pObj)
 // @ 0x0067e190
 int __stdcall CheckFlagB(void* pObj)
 {
-  if (((uint8_t*)*((void**)pObj + 3))[8] & 1) {
+  void* pFlag = *((void**)pObj + 3);
+  if (((uint8_t*)pFlag)[8] & 1) {
     if (!FlagCheckB(pObj)) return 0;
   }
   return 1;

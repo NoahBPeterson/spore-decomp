@@ -19,6 +19,7 @@ extern float       g_kEpsilon;     // 0x0146bb74
 #include "SP/cPropertyList.h"
 #include "SP/cSPGameDataUFO.h"
 #include <string.h>
+#include <intrin.h>
 #include "cSPVector3.h"
 #include "SP/cGonzagoTimer.h"
 #include "SP/cStarManager.h"
@@ -2534,6 +2535,7 @@ PaintSystemExt::PaintSystemExt()
 // @ 0x00c38c90
 PaintSystemExt::~PaintSystemExt()
 {
+    _ReadWriteBarrier();
     if (mp04 != 0) {
         LookupObj* t = mp04;
         mp04 = 0;

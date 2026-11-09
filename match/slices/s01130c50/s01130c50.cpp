@@ -473,12 +473,12 @@ int Mp3Player_getState(Mp3Player* self, int* out)
 // @ 0x011315f0
 int Mp3Player_getProgress(Mp3Player* self, float* out)
 {
-    unsigned short rate = self->mSampleRate;
-    if (rate == 0) {
+    unsigned rate = self->mSampleRate;
+    if ((unsigned short)rate == 0) {
         *out = 0.0f;
         return 0;
     }
-    *out = (float)self->mBytes / (float)rate;
+    *out = (float)self->mBytes / (float)(unsigned short)rate;
     return 0;
 }
 

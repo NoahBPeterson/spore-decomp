@@ -227,7 +227,7 @@ bool EA::Debug::ReportWriter::WriteFormatted(char const * fmt, ...)
     va_list ap;
     va_start(ap, fmt);
     int n = _vsnprintf(mBuffer, 0x400, fmt, ap);
-    if ((unsigned)(n - 1) < 0x3ff)
+    if ((unsigned)(n - 1) <= 0x3fe)
         return Write(mBuffer, n);
     return false;
 }

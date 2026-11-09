@@ -183,7 +183,7 @@ public:
     virtual void Initialize(void*, void*, void*);   // +0x00
     virtual void Dispose();                         // +0x04
     virtual void Start(int hardStart);              // +0x08
-    virtual int  Stop(int hardStop);                // +0x0c
+    virtual void Stop(int hardStop);                // +0x0c
     virtual int  IsRunning();                       // +0x10
     virtual void ApplyEffect(float, float, void*);  // +0x14
 
@@ -207,7 +207,7 @@ extern cParamCtx g_paramCtx;    // 0x016c90d8
 // ============================ bodies ============================
 
 // @ 0x00f4ef20
-int cTerrainBrushEffect::Stop(int hardStop)
+void cTerrainBrushEffect::Stop(int hardStop)
 {
     if (mActive) {
         cTerrainBrushDescription* d = mDesc;
@@ -216,7 +216,6 @@ int cTerrainBrushEffect::Stop(int hardStop)
             Sub_f4d9c0();
     }
     (void)hardStop;
-    return 0;
 }
 
 // @ 0x00f4ef40

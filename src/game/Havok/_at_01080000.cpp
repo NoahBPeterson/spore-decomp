@@ -52,8 +52,9 @@ class hkArray { public:
         m_size = m_size + 1;
     }
     void quickFree() {
-        if (m_capacityAndFlags >= 0)
-            getThreadMemory()->deallocateChunk(m_data, (m_capacityAndFlags & HK_ARRAY_FLAG_MASK) * (int)sizeof(T), 0x14);
+        if (m_capacityAndFlags & HK_ARRAY_DONT_DEALLOCATE)
+            return;
+        getThreadMemory()->deallocateChunk(m_data, (m_capacityAndFlags & HK_ARRAY_FLAG_MASK) * (int)sizeof(T), 0x14);
     }
     int indexOf(const T& t) const {
         int i = 0;
@@ -2389,8 +2390,8 @@ void* hkNullContactMgrFactory::deletingDtor(unsigned flags)
 {
     // The scalar deleting destructor first installs the two original vtables (this object and
     // the embedded null contact manager at +8), then frees through g_hkMemory when bit 0 is set.
-    *(void**)this = (void*)0x013ef094u;
     *(void**)&m_nullContactMgr_slot = (void*)0x013ef094u;
+    *(void**)this = (void*)0x013ef094u;
     if (flags & 1)
         hkNullContactMgrFactory::operator delete(this);
     return this;

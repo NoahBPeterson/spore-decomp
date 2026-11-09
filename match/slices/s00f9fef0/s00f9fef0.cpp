@@ -110,7 +110,8 @@ bool TerrainSphereLike::CopyFaceA(int face, const float* rect)
     TexInst* t = mFacesA[face];
     if (!(t->mFlags & 1))
         FUN_0067dd60()->Release(t);
-    bool ok = CopyImageRectToSurface((void*)t->mpData, (int)other, face, rect) != 0;
+    void* data = (void*)t->mpData;
+    bool ok = CopyImageRectToSurface(data, (int)other, face, rect) != 0;
     return ok;
 }
 
@@ -125,7 +126,8 @@ bool TerrainSphereLike::CopyFaceB(int face, const float* rect)
     TexInst* t = mFacesB[face];
     if (!(t->mFlags & 1))
         FUN_0067dd60()->Release(t);
-    bool ok = FUN_00f9f360((void*)t->mpData, (int)other, face, rect) != 0;
+    void* data = (void*)t->mpData;
+    bool ok = FUN_00f9f360(data, (int)other, face, rect) != 0;
     return ok;
 }
 
@@ -140,7 +142,8 @@ bool TerrainSphereLike::CopyFaceC(int face, const float* rect)
     TexInst* t = mFacesC[face];
     if (!(t->mFlags & 1))
         FUN_0067dd60()->Release(t);
-    bool ok = FUN_00f9f4c0((void*)t->mpData, (int)other, face, rect) != 0;
+    void* data = (void*)t->mpData;
+    bool ok = FUN_00f9f4c0(data, (int)other, face, rect) != 0;
     return ok;
 }
 
@@ -181,9 +184,7 @@ void DirtyFlag::SetFlag(bool which)
 // @ 0x00fa0e40
 char* DirtyFlag::OrFlag(unsigned char bits)
 {
-    int off = mBackOffset;
-    char* base = (char*)this;
-    char* p = base - off + 0x369;
+    char* p = (char*)this - mBackOffset + 0x369;
     *p |= bits;
     return p;
 }

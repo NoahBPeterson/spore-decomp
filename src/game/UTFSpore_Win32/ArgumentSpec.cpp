@@ -703,8 +703,8 @@ Ent* CopyEntsFwd(Ent* first, Ent* last, Ent* dst)
             dst->field14 = first->field14;
             dst->field18 = first->field18;
             dst->field1c = first->field1c;
-            first += 1;
             dst += 1;
+            first += 1;
         } while (first != last);
     }
     return dst;
@@ -713,16 +713,16 @@ Ent* CopyEntsFwd(Ent* first, Ent* last, Ent* dst)
 // @ 0x00838f80
 Ent* CopyEntsBwd(Ent* first, Ent* last, Ent* dst)
 {
-    if (first != last) {
+    if (last != first) {
         do {
-            first -= 1;
+            last -= 1;
             dst -= 1;
-            dst->field0 = first->field0;
-            if (&first->name != &dst->name) dst->name.Assign(first->name.mpBegin, first->name.mpEnd);
-            dst->field14 = first->field14;
-            dst->field18 = first->field18;
-            dst->field1c = first->field1c;
-        } while (first != last);
+            dst->field0 = last->field0;
+            if (&last->name != &dst->name) dst->name.Assign(last->name.mpBegin, last->name.mpEnd);
+            dst->field14 = last->field14;
+            dst->field18 = last->field18;
+            dst->field1c = last->field1c;
+        } while (last != first);
     }
     return dst;
 }
@@ -745,14 +745,14 @@ Ent2* CopyEnts2Fwd(Ent2* first, Ent2* last, Ent2* dst)
 // @ 0x00839040
 Ent2* CopyEnts2Bwd(Ent2* first, Ent2* last, Ent2* dst)
 {
-    if (first != last) {
+    if (last != first) {
         do {
-            first -= 1;
+            last -= 1;
             dst -= 1;
-            if (first != dst) dst->name.Assign(first->name.mpBegin, first->name.mpEnd);
-            dst->field10 = first->field10;
-            dst->field14 = first->field14;
-        } while (first != last);
+            if (last != dst) dst->name.Assign(last->name.mpBegin, last->name.mpEnd);
+            dst->field10 = last->field10;
+            dst->field14 = last->field14;
+        } while (last != first);
     }
     return dst;
 }

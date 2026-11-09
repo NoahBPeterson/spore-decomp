@@ -17,4 +17,5 @@
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_0102adf0@@YA_NPAUObj4c@@@Z  0102adf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_0102ae60@@YA_NPAUObj4c@@@Z  0102ae60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?FUN_0102b140@Owner01402@@QAEPAXE@Z  0102b140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?GetAirRaidSirenTimeMS@cSPSpaceCombatTuning_s0102_97e0@@QAEHXZ  01029af0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceCombatUtilities.cpp  ?Init@cSPSpaceCombatTuning@SP@@QAEXXZ  0102b190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

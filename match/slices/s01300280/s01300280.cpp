@@ -1,5 +1,6 @@
 // Slice s01300280, /O2 part -- library/Windows init, float-derived globals and
 // zero-fill routines.  /O2 /arch:SSE.
+#include <intrin.h>
 typedef unsigned int uint32_t;
 typedef unsigned short uint16_t;
 typedef unsigned char uint8_t;
@@ -170,32 +171,53 @@ void init_1676bfc()
 }
 
 // @ 0x0130fcc0
-struct TwoInts { int a, b; void init(int x, int y) { a = x; b = y; } };
+struct TwoInts { int a, b; };
+
 void init_1679034()
 {
-    ((TwoInts*)0x1679034)->init(0x2903000, 0);
+    TwoInts t;
+    t.b = 0;
+    _ReadWriteBarrier();
+    t.a = 0x2903000;
+    *(TwoInts*)0x1679034 = t;
 }
 
 // @ 0x0130fce0
 void init_1678f3c()
 {
-    ((TwoInts*)0x1678f3c)->init(0xe0, 0);
+    TwoInts t;
+    t.b = 0;
+    _ReadWriteBarrier();
+    t.a = 0xe0;
+    *(TwoInts*)0x1678f3c = t;
 }
 
 // @ 0x013107d0
 void init_1679394()
 {
-    ((TwoInts*)0x1679394)->init(0x803000, 0);
+    TwoInts t;
+    t.b = 0;
+    _ReadWriteBarrier();
+    t.a = 0x803000;
+    *(TwoInts*)0x1679394 = t;
 }
 
 // @ 0x01310bc0
 void init_1679564()
 {
-    ((TwoInts*)0x1679564)->init(0x803000, 0);
+    TwoInts t;
+    t.b = 0;
+    _ReadWriteBarrier();
+    t.a = 0x803000;
+    *(TwoInts*)0x1679564 = t;
 }
 
 // @ 0x01310be0
 void init_167946c()
 {
-    ((TwoInts*)0x167946c)->init(0xe0, 0);
+    TwoInts t;
+    t.b = 0;
+    _ReadWriteBarrier();
+    t.a = 0xe0;
+    *(TwoInts*)0x167946c = t;
 }

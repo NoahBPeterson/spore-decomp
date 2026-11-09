@@ -18,7 +18,7 @@
 011eb790  113  complete backward 4-slot field accumulator (value + high-water per slot) [equiv PASS: 397/400 valid, 100.0% coverage]
 011eb830  242  complete arena allocation driver (per-slot chain walk, alignment sizing, allocator callback at +0x2c or +0x30/+0x34) [equiv PASS: 5/7 valid, 100% of reachable path; the two discards are fake-arity on the emulated indirect call]
 011eb980   72  complete handle-table build from {size, style} pairs via the global allocator callback; __stdcall with the 3rd (unused) stack argument to match `ret 0xc` [equiv PASS: 400/400 valid, 100.0% coverage]
-011eb9f0    4  complete handle release loop (4 indirect frees through g_rwFreeFn); __stdcall to match `ret 4` [equiv FAIL: the emulator records no call argument for the indirect free through the unset global]
+011eb9f0    4  complete handle release loop (4 indirect frees through g_rwFreeFn); __stdcall to match `ret 4` [equiv FAIL: the emulator records no call argument for the indirect free through the unset global]. cl 15 hoists `inc esi` between `call` and `add esp,4` (retail: call, add esp,4, inc esi). Tried for/while/do-while, i++/++i, and a pointer walk; the scheduler always fills the call latency with the increment. flags /O2 /MD /Gy /EHsc /TP
 011eba20   41  complete rw::core::stdc::StringnCopy (bounded copy; n==0 and the n==-1 no-terminator cases) [equiv PASS: 400/400 valid, 100.0% coverage]
 011eba60   26  complete file read + 64-bit offset add with carry [equiv UNSUPPORTED: import ReadFile not stubbable]
 011ebaa0   26  complete file write + 64-bit offset add with carry [equiv UNSUPPORTED: import WriteFile not stubbable]

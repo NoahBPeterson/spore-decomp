@@ -410,8 +410,8 @@ cCitySimulator::~cCitySimulator()
     UnregisterSingleton(this);
     if (g_sim_singleton == this)
         g_sim_singleton = 0;
-    mpVtbl = vtbl_refcount;
     mpVtbl2 = vtbl_resbase;
+    mpVtbl = vtbl_refcount;
 }
 
 // @ 0x00ae6bd0

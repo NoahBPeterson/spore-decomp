@@ -578,6 +578,7 @@ LocFmt* LocFmt::Assign(const LocFmt* src)
 // @ 0x0087e130
 bool Locale_FindByLcid(const LocInfo* info, LocBuf* out)
 {
+    int (__cdecl* pIsWctype)(wchar_t, unsigned) = iswctype_s0087_d6d0;
     for (const wchar_t** pp = g_localeEnUS; *pp; ++pp) {
         wchar_t buf2[0x20];
         wchar_t buf[0x80];
@@ -585,7 +586,7 @@ bool Locale_FindByLcid(const LocInfo* info, LocBuf* out)
         unsigned v = (unsigned)wcstol(buf, 0, 0x10);
         if (v == *(const uint16_t*)((const char*)info + 4)) {
             int n = LocFieldToken(0, *pp, buf2, 0x20, L'^');
-            if (n > 0 && iswctype_s0087_d6d0(buf2[0], 0x103) != 0) {
+            if (n > 0 && pIsWctype(buf2[0], 0x103) != 0) {
                 wchar_t* p = out->mpBegin;
                 if (p != buf2) {
                     if (p != out->mpEnd) { *p = 0; out->mpEnd = out->mpBegin; }

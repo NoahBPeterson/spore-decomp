@@ -6140,7 +6140,9 @@ void FUN_00e67510(int world, int* ppEffect, int a3, int a4, int a5, int a6, char
 // @ 0x00e675f0
 void FUN_00e675f0(void)
 {
-    char* c = (char*)((Pool_s00e6_6980*)(gspCellGame_s00e6_6980 + 0x1c))->GetSafe(I(gspCellGame_s00e6_6980, 0x411c));
+    int h = I(gspCellGame_s00e6_6980, 0x411c);
+    Pool_s00e6_6980* p = (Pool_s00e6_6980*)(gspCellGame_s00e6_6980 + 0x1c);
+    char* c = (char*)p->GetSafe(h);
     if (c != 0)
         FUN_00e671c0(c);
 }
@@ -6981,7 +6983,8 @@ void FUN_00e6b370(void* cell)
     if (I(game, 0x51d4) == I(cell, 0)) {
         cCellGameFields* g = (cCellGameFields*)game;
         int avatar = g->mAvatarCellIndex;
-        void* target = ((Registry*)(gspCellGame_s00e6_b370 + 0x1c))->GetSafe(avatar);
+        Registry* cells = (Registry*)(gspCellGame_s00e6_b370 + 0x1c);
+        void* target = cells->GetSafe(avatar);
         if (target != 0) {
             *(Vector3*)((char*)cell + 0x12c) = *(Vector3*)((char*)target + 0x4c);
             return;
@@ -8445,7 +8448,9 @@ void FUN_00e732d0(int* param_1, int* param_2, int param_3, int param_4, int para
     if (*(char*)((char*)param_1 + 0x113) == 1) return;
     if (*(char*)((char*)param_1 + 0x17f) != 0) return;
 
-    void* e = gspCellGame_s00e7_2430->mCells.Get(*param_1);
+    int id = *param_1;
+    ObjectPool_s00e7_2430* cells = (ObjectPool_s00e7_2430*)((char*)gspCellGame_s00e7_2430 + 0x1c);
+    void* e = cells->Get(id);
     float f = FUN_00e6d200((cCell*)e, 0, 0x1c, *(int*)((char*)e + 0x1b0));
     FUN_00e51ee0(0x26, f, *param_1, *param_2, param_3, param_4, 0, 0, 0, 0,
                  (float*)param_5, 0, 0, 0, 0, 0);

@@ -30,7 +30,7 @@ extern "C" int   g_16e8080;       // 0x16e8080  post-slice callback
 extern "C" int   g_16e8178;       // 0x16e8178  stretch fn
 extern "C" int   g_16e817c;       // 0x16e817c
 extern "C" int   g_16f1700;       // 0x16f1700
-extern "C" int   g_16e7c1c;       // 0x16e7c1c  callbacks-enabled flag
+extern "C" bool  g_16e7c1c;       // 0x16e7c1c  callbacks-enabled flag
 extern "C" uint8_t g_16e7c23;     // 0x16e7c23
 extern "C" void* g_sndvoices;     // 0x16e7c78  voice record array (0x84)
 extern "C" uint8_t g_15bffe0[];   // 0x15bffe0

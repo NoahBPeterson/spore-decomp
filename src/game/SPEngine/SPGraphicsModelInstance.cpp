@@ -1926,11 +1926,12 @@ namespace SP {
 void cModelInstance_s0073_afb0::SetBoneTable(int a, void* b)
 {
     cAnimGroupInfo_s0073_afb0* p = mGroupBegin;
+    void* t = b;
     if (p != mGroupEnd && (int)p->mBoneCount < a)
         mFieldC = (int)p->mBoneCount;
     else
         mFieldC = a;
-    mField10 = b;
+    mField10 = t;
     mCounter += 1;
 }
 }  // namespace SP

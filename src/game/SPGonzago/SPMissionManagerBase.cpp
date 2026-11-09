@@ -685,7 +685,8 @@ void __thiscall MMgr::ClearCard(void* p)
 {
     if (p == *(void**)((char*)this + 0x68)) {
         if (FUN_00b3d400()) {
-            ((CardPanel*)FUN_00b3d400())->RemoveMissionCard(*(void**)((char*)this + 0x68));
+            void* card = *(void**)((char*)this + 0x68);
+            ((CardPanel*)FUN_00b3d400())->RemoveMissionCard(card);
         }
         IRefLite* c = *(IRefLite**)((char*)this + 0x68);
         if (c) {

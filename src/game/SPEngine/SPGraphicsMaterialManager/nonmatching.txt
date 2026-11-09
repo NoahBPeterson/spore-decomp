@@ -26,8 +26,6 @@
 0070f8c0 176 SP::cMaterialManager::HasMaterial; map/mutex register shape differs
 0070fa60 33 vector::erase (RC3c); register assignment differs
 0070fab0 33 vector::erase (RC3b); register assignment differs
-0070fd00 4 hash bucket-chain destructor; swap of two movs only
-0070ff50 4 hash bucket-chain destructor; swap of two movs only
 007101f0 123 hash_map<uint32_t,T>::operator[]; equiv FAIL (5/5 inputs mismatched: ours faults at a bad address, guessed helper roles); EH frame/locals and insert-return shape not reproduced
 007102b0 123 hash_map<uint32_t,T>::operator[] second instantiation; equiv FAIL (5/5 inputs mismatched: ours faults, guessed helper roles); same shape mismatch
 007106d0 114 vector::assign(first,last); helper roles (ReallocRef/copy/move) guessed, slot order off

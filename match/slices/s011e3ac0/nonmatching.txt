@@ -1,5 +1,5 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-011e3c50  4   Arena::RefixStart wrapper: epilogue uses pop ecx instead of add esp,4
+011e3c50  4   Arena::RefixStart wrapper: epilogue uses pop ecx instead of add esp,4. Tried cl 15/cl 13.10, /EHsc, /Oy-, `return FUN(a);`, call through a typed function pointer: both compilers always turn the 4-byte cdecl cleanup into pop ecx (the retail add esp,4 has no frame and is the /GL LTCG peephole).
 011e3e10  14  arena iterator lookup: 8-byte local frame fixed the callee overrun (the callee reads the dword past the result) and f is reloaded for the end pointer; only the base/elem register choice differs [equiv: WEAK 102 valid, 100% coverage, no mismatch]
 011e3ed0  48  arena insert helper: call/register schedule differs
 011e4540  71  rw_HashUInt: expression/register schedule differs

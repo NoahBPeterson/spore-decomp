@@ -2,8 +2,6 @@
 00692880 80 complete; Init serializer-record layout near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
 00692900 371 complete; Serialize: tmp/ok stack-slot assignment and store scheduling differ (bool flag wants the dead param slot); equiv: UNSUPPORTED (0/400 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00692d20 57 complete; unguarded insertion sort: induction-variable choice (src derived from dst + constant offset) differs; equiv: WEAK (19% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
-00692e00 2 complete; WriteBlob32 one-register near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
-00692e50 2 complete; WriteBlob16 one-register near-miss; equiv FAIL (eax&0xffff return value) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00692ee0 24 complete; registry resolve walk near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
 00692f20 28 complete; registry release walk near-miss; equiv WEAK (25% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
 006930b0 16 complete; ParseFloat stack-slot reuse near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-

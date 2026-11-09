@@ -16,3 +16,4 @@
 ../src/game/Spui/_at_00800000.cpp  ?dtor@cSPUIInfoLineTray@@QAEXXZ  0080cdd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/_at_00800000.cpp  ?Add@cSPUIInfoLineTray@@QAEXPBX@Z  0080ce20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
 ../src/game/Spui/_at_00800000.cpp  ?ScalarDeletingDtor@cSPUIInfoLineTray@@QAEPAXE@Z  0080ceb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?DeletingDtor@WinRecOps@@QAEPAUWinRec@@I@Z  0080b3b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

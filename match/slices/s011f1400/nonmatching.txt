@@ -13,9 +13,6 @@
                rwgD3D9BitShiftTable, compare m_renderState[] against m_renderStateShadow[] and
                SetRenderState on differences): complete; difftest WEAK (200/200 valid, no
                mismatch, 47.9% coverage).  Loop/register schedule differs.
-011f18b0    2  D3D9RasterDispatch (per stage up to D3D9GetMaxSamplerStage, SetTexture for the
-               stages set in rwg_D3D9RasterToUpdate): complete; difftest WEAK (200/200 valid, no
-               mismatch, 57.7% coverage).  Only the loop entry / register choice differs (2 bytes).
 011f1900   39  D3D9PaletteDispatch (SetPaletteEntries/SetCurrentTexturePalette when m_palette
                differs from m_paletteShadow): complete; difftest WEAK (200/200 valid, no mismatch,
                25.0% coverage).  vtbl-call form and register schedule differ.

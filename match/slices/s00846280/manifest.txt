@@ -1,2 +1,6 @@
 slices/s00846280/s00846280.cpp  ?ExecuteBody@cSetCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  00846680  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00846280/s00846280.cpp  ?ExecuteBody@cSetFCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  00846810  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00846280/s00846280.cpp  ?ExecuteBody@cSetCCommand_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  00846870  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00846280/s00846280.cpp  ?ExecuteBody@cSetV2Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  008468f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00846280/s00846280.cpp  ?ExecuteBody@cSetV3Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  00846960  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00846280/s00846280.cpp  ?ExecuteBody@cSetV4Command_s0084_6280@ArgScript@EA@@QAEXPAUcArguments_s0084_6280@23@@Z  008469d0  /O2 /MD /Gy /EHsc /TP /GS-

@@ -5,3 +5,4 @@
 ../src/game/SPGonzago/SPMissionExplore.cpp  ?FUN_00c50b10@@YAPAXPAVIOutStream@@PAD@Z  00c50b10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPMissionExplore.cpp  ?FUN_00c50dd0@@YIXPAX00@Z  00c50dd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPMissionExplore.cpp  ?FUN_00c5bd00@@YIPAXPAUcRaidPlunderEvent@@PAXI@Z  00c5bd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionExplore.cpp  ?FUN_00c50eb0@Mob@@QAEHXZ  00c50eb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

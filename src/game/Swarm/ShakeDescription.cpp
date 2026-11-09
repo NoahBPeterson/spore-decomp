@@ -195,22 +195,22 @@ void __cdecl FUN_00abd9c0(int* stream, int unused, char* out)
 // @ 0x00abda70
 float* __cdecl FUN_00abda70(float* out, int unused, float* lo, float* hi)
 {
-    double l = *lo;
-    double h = *hi;
+    float l = *lo;
+    float h = *hi;
     double r = g_random_16778dc.RandomDoubleUniform();
-    double v = l + (h - l) * r;
+    double v = (double)l + ((double)h - (double)l) * r;
     if (v >= h)
         v = h;
     else if (v < l)
         v = l;
     out[0] = (float)v;
 
-    double h2;
-    double l2;
+    float h2;
+    float l2;
     l2 = lo[1];
     h2 = hi[1];
     r = g_random_16778dc.RandomDoubleUniform();
-    v = l2 + (h2 - l2) * r;
+    v = (double)l2 + ((double)h2 - (double)l2) * r;
     if (v >= h2)
         v = h2;
     else if (v < l2)
@@ -218,7 +218,6 @@ float* __cdecl FUN_00abda70(float* out, int unused, float* lo, float* hi)
     out[1] = (float)v;
     return out;
 }
-
 // @ 0x00abdb20
 void Eff::FUN_00abdb20(int unused)
 {

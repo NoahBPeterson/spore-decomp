@@ -15,3 +15,4 @@ slices/s00599c40/s00599c40.cpp  ?IsFiniteVector@@YAHABUVector3@@@Z  0059ab70  /O
 slices/s00599c40/s00599c40.cpp  ?WrapAngle@@YAMM@Z  0059ac00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00599c40/s00599c40.cpp  ?SetTarget@cSmoothedVector@@QAEXABUVector3@@_N@Z  0059ac60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00599c40/s00599c40.cpp  ?IsID@cIDHolder@@QBE_NI@Z  0059ac90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?ScalarDelete@cSPUIWindowAnimation@@QAEPAXI@Z  0059a230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

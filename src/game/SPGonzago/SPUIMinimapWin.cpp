@@ -811,7 +811,7 @@ public:
 class cSPUIMinimapWin_s00e0_f050 {
 public:
     void FUN_00e0f050();
-    void FUN_00e0f100(float a1, float a2, float a3, float a4);
+    void FUN_00e0f100(float a1, float a2, uint32_t a3, uint32_t a4);
     void FUN_00e0f1a0();
     void draw_civilization_borders();  // 0x00e0f2c0 (cSPUIMinimapWin::draw_civilization_borders)
     ~cSPUIMinimapWin_s00e0_f050();
@@ -3215,9 +3215,15 @@ void __thiscall cSPUIMinimapWin_s00e0_f050::FUN_00e0f050()
 }
 
 // @ 0x00e0f100
-void __thiscall cSPUIMinimapWin_s00e0_f050::FUN_00e0f100(float a1, float a2, float a3, float a4)
+void __thiscall cSPUIMinimapWin_s00e0_f050::FUN_00e0f100(float a1, float a2, uint32_t a3, uint32_t a4)
 {
-    (void)a1; (void)a2; (void)a3; (void)a4;
+    cMinimapOverlay* self = (cMinimapOverlay*)this;
+    Vec2 uv;
+    Vec3 pos;
+    uv.x = ((MinimapWin_s00e0_d100*)this)->RemapX(a1, a2);
+    uv.y = a2;
+    self->ProjectEvent(&uv, &pos);
+    self->RefreshEffects(&pos, a3, a4, 0);
 }
 
 // @ 0x00e0f1a0

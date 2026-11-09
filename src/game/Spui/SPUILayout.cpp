@@ -41,6 +41,30 @@ typedef void  (__thiscall *VF1v)(void*, void*);
 typedef void* (__thiscall *VF2)(void*, void*, void*);
 typedef void  (__thiscall *VF2v)(void*, void*, void*);
 static inline void** VT(void* o) { return *(void***)o; }
+// The first five slots of the EA::UTFWin::IWindow vtable, declared so the compiler emits a real virtual call
+// (target in edx) rather than a hand-rolled indirect call (target in eax).
+struct IWindowHead {
+    virtual int AddRef();
+    virtual int Release();
+    virtual void Destroy();
+    virtual void* AsInterface(int id);
+    virtual IWindowHead* GetParent();
+    virtual void* GetManager();
+    virtual unsigned int GetInstanceId();
+    virtual unsigned int GetId();
+    virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11(); virtual void s12();
+    virtual void s13(); virtual void s14(); virtual void s15(); virtual void s16(); virtual void s17();
+    virtual void s18(); virtual void s19(); virtual void s20(); virtual void s21(); virtual void s22();
+    virtual void s23(); virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27();
+    virtual void s28(); virtual void s29(); virtual void s30(); virtual void s31(); virtual void s32();
+    virtual void s33(); virtual void s34(); virtual void s35(); virtual void s36(); virtual void s37();
+    virtual void s38(); virtual void s39(); virtual void s40(); virtual void s41(); virtual void s42();
+    virtual void s43(); virtual void s44(); virtual void s45(); virtual void s46(); virtual void s47();
+    virtual void s48(); virtual void s49(); virtual void s50(); virtual void s51(); virtual void s52();
+    virtual void s53(); virtual void s54(); virtual void s55(); virtual void s56(); virtual void s57();
+    virtual void s58(); virtual void s59();
+    virtual IWindowHead* GetChild(unsigned int, bool);
+};
 extern void* __cdecl operator_new(u32, void*, int, int, const char*, int); // 0xf473a0
 extern u32   __cdecl eastl_RBTreeIncrement(void*);// 0x921580
 extern u8  g_b164cf58;
@@ -524,10 +548,11 @@ void cSPUILayoutObjectCollection::detach_parent()
     void** p = *(void***)(s + 0x64);
     while (p != *(void***)(s + 0x68)) {
         void* o = *p++;
-        void* q = ((void*(__thiscall*)(void*, void*))VT(o)[0xc / 4])(o, (void*)0xeeee8218);
+        IWindowHead* io = (IWindowHead*)o;
+        IWindowHead* q = (IWindowHead*)io->AsInterface(0xeeee8218);
         if (!q) continue;
-        if (((VF0)VT(q)[0x10 / 4])(q)) {
-            void* r = ((VF0)VT(q)[0x10 / 4])(q);
+        if (q->GetParent()) {
+            void* r = q->GetParent();
             ((VF1v)VT(r)[0xdc / 4])(r, q);
         }
     }
@@ -555,15 +580,15 @@ void* __thiscall cSPUILayoutObjectCollection_s0080_f7c0::FindWindowByID(i32 id, 
 {
     u8* s = (u8*)this;
     void** p = *(void***)(s + 0x64);
-    void** e = *(void***)(s + 0x68);
-    while (p != e) {
+    while (p != *(void***)(s + 0x68)) {
         void* o = *p++;
-        void* q = ((void*(__thiscall*)(void*, void*))VT(o)[0xc / 4])(o, (void*)0xeeee8218);
+        IWindowHead* io = (IWindowHead*)o;
+        void* q = io->AsInterface(0xeeee8218);
         if (!q) continue;
-        i32 got = (i32)(size_t)((VF0)VT(q)[0x1c / 4])(q);
+        i32 got = (i32)((IWindowHead*)q)->GetId();
         if (got == id) return q;
         if (recurse) {
-            void* r = ((VF2)VT(q)[0xf0 / 4])(q, (void*)(size_t)id, (void*)1);
+            void* r = (void*)((IWindowHead*)q)->GetChild((unsigned int)id, true);
             if (r) return r;
         }
     }
@@ -1140,8 +1165,8 @@ void cSPUILayoutObjectCollection::attach_parent()
     void** p = *(void***)(s + 0x64);
     while (p != *(void***)(s + 0x68)) {
         void* o = *p++;
-        void* (__thiscall *fn)(void*, void*) = (void*(__thiscall*)(void*, void*))VT(o)[0xc / 4];
-        void* q = fn(o, (void*)0xeeee8218);
+        IWindowHead* io = (IWindowHead*)o;
+        void* q = io->AsInterface(0xeeee8218);
         if (q) {
             void* parent = *(void**)(s + 0x88);
             ((void(__thiscall*)(void*, void*))VT(parent)[0xd8 / 4])(parent, q);

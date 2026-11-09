@@ -3,5 +3,6 @@
 ../src/game/cmn/_at_01130000.cpp  ?FUN_01132fb0@@YAHHHHHHH@Z  01132fb0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/cmn/_at_01130000.cpp  ?FUN_011330e0@@YA_NXZ  011330e0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/cmn/_at_01130000.cpp  ?FUN_01133250@@YAXXZ  01133250  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/cmn/_at_01130000.cpp  ?FUN_011339d0@@YAHHH@Z  011339d0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/cmn/_at_01130000.cpp  ?FUN_01133a60@@YGPAHAAPAH@Z  01133a60  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/cmn/_at_01130000.cpp  ?F_0113f1c0@@YAHH@Z  0113f1c0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

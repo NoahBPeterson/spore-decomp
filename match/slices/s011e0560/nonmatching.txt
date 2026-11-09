@@ -8,7 +8,7 @@
 011e2240  n/a  copy4: complete; struct-copy codegen diff
 011e2270  n/a  callSubref: complete; load scheduling diff
 011e22c0  n/a  ArenaTypeRegGetType: complete
-011e2300   2   Arena::IdToObject: complete; manifest accessor is a thiscall member, table/chunk register choice
+011e2300   2   Arena::IdToObject: complete; manifest accessor is a thiscall member, table/chunk register choice. Tried chunk as void*/void**/char*/struct-entry pointer, inlined and nested expressions, single reassigned local, hi/lo temps before/after the table load, and declaration reordering: cl 15 always loads table[id>>22] into edx and the final value into eax, where retail reuses eax for the chunk (mov eax,[eax+edx*4]). /vc71 cannot build this file (C4234 __thiscall). flags /O2 /MD /Gy /EHsc /TP
 011e2330   86  Arena::DestructNext: complete; cdecl (no stack args), registry Find is a thiscall member
 011e23b0  n/a  AlignInfo4::Advance4: complete; loop vs unrolled cmov diff
 011e2470  n/a  grow: complete; dead-store shape diff

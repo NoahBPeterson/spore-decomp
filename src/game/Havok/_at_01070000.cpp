@@ -497,9 +497,9 @@ template<> void hkPointerMapBase<unsigned __int64>::remove(Dummy* d)
 // @ 0x0107e540
 template<class KEY> KEY hkPointerMapBase<KEY>::getWithDefault(KEY k, KEY def) const
 {
-    if (get(k, &k) != HK_SUCCESS)
-        k = def;
-    return k;
+    if (get(k, &k) == HK_SUCCESS)
+        return k;
+    return def;
 }
 
 // @ 0x0107e560

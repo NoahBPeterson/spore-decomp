@@ -9,6 +9,5 @@
 011313b0 35 complete; LTCG register scheduling around FUN_0113fdd0; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (381/400, 100% coverage)
 01131460 81 complete; LTCG + intrusive-list unlink; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (178 valid, 97.0% coverage, no mismatch)
 01131540 53 complete; LTCG register scheduling around FUN_0113ff00; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 100% coverage)
-011315f0 2 complete; only diff is `movzx eax` vs `mov ax` for the 16-bit sample-rate load; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 100% coverage)
 01131630 22 complete; leaf but /O2 schedules the compares differently; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 100% coverage)
 01131730 931 complete; LTCG + inlined parser/packet loop; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (233/400, 67.3% coverage)

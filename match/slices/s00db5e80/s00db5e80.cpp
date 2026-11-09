@@ -495,10 +495,11 @@ void __fastcall FUN_00db6db0(void* self_)
 
     {
         char* s  = self + 0x54;
-        void* a1 = *(void**)(self + 0x58);
-        void* a2 = *(void**)(self + 0x5c);
+        ObjV* so = (ObjV*)s;
+        void* a1 = *(void**)((char*)so + 4);
+        void* a2 = *(void**)((char*)so + 8);
         void* p;
-        ((ObjV*)s)->FUN_005941f0(a1, a2);
+        so->FUN_005941f0(a1, a2);
         p = *(void**)(s + 0x04);
         *(u32*)(s + 0x0c) = 0;
         if (*(u32*)(s + 0x08) > 1 && p != *(void**)(s + 0x30))

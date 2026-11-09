@@ -43,3 +43,10 @@
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49180@SPObject@@QAEXPAUWStr@@@Z  00c49180  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ??0cMissionAdventure@Simulator@@QAE@XZ  00c4af60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ??0cMissionBalance@Simulator@@QAE@XZ  00c4b570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c472c0@cSPMission_s00c4_6ab0@SP@@QAE_NXZ  00c472c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?GetConversationFileID@cSPMission_s00c4_6ab0@SP@@QAEIXZ  00c47040  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c47140@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  00c47140  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c47180@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  00c47180  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c472e0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c472e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?ExportPlanet@cSPMission@SP@@QAEXPAVcPlanet@2@I@Z  00c47350  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?GetAnimalSpeciesFromType@cSPMission@SP@@QAEXIAAVKey@ResourceMan@EA@@@Z  00c47610  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

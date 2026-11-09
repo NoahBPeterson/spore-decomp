@@ -575,6 +575,7 @@ float ScreenAspectRatio(float param_1)
 void __stdcall GetDisplayName(int param_1)
 {
     D3D9AdapterInfo_GetAdapterString(param_1);
+    _ReadWriteBarrier();
 }
 
 // @ 0x0075daa0

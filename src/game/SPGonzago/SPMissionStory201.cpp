@@ -43,7 +43,7 @@ struct cGameNounManager_s00c5_e260 {
   void* GetPlayerTribe();          // 0x00bfc5f0
 };
 struct TribeObj {
-  void FUN_00fe5430();             // 0x00fe5430
+  void FUN_00fe5430(int a, int b); // 0x00fe5430
 };
 struct SomeVec {
   void*    mpField0;      // +0x00
@@ -211,8 +211,10 @@ struct cBioElemSort {
 struct cStarManager {
     void GetOrActivatePlanet(void* id, cPlanet** out);   // 0x00bb59b0
 };
+class cSPMission_s00c6_02b0;
 struct cMissionMgr {
-    void FUN_00feba80();   // 0x00feba80
+    void FUN_00feba80(int c);   // 0x00feba80
+    void FUN_00febf20(cSPMission_s00c6_02b0* pMission); // 0x00febf20
 };
 struct cSub { int _; };
 struct cNoun {
@@ -235,7 +237,7 @@ void* StarManager();       // 0x00b3d2a0
 void* NounManager();       // 0x00b3d300
 void* GetCurrentGameMode();// 0x00b5b800
 void* GetUniverseContext();// 0x01021080
-cMissionMgr* __stdcall GetMissionManager(int id);   // 0x00feb9f0
+cMissionMgr* __stdcall GetMissionManager();         // 0x00feb9f0
 void  TryGetUIntProperty(void* obj, unsigned id, unsigned* out);  // 0x00410370
 struct cSPMission {
     char pad_00[0x180];
@@ -413,9 +415,6 @@ struct cStarRecordRef {
     void* mpCommContext;            // +0x184
     void* GetCommContext();         // 0x00ce6950
 };
-struct cMissionManager {
-    void FUN_00febf20(cSPMission_s00c6_02b0* pMission);    // 0x00febf20
-};
 struct cMessage {
     uint32_t pad00[2];
     uint32_t mParam8;               // +0x08
@@ -518,7 +517,6 @@ cGameNounManager_s00c6_02b0* __cdecl NounManager_s00c6_02b0();                //
 cTriggerManager* __cdecl GetTriggerMgr();               // 0x00b3d4d0
 void* __cdecl CommManager();                            // 0x00b3d4a0
 cAudioSystem* __cdecl EA_GetSystemAT();                 // 0x00a206f0
-cMissionManager* __cdecl GetMissionManager();           // 0x00feb9f0
 void* __cdecl GetUFOSimulator();                        // 0x00ffbe50
 float* __cdecl FUN_0046d660(float** ppOut, const float* pValue);  // 0x0046d660
 void __cdecl SP_KillSetiEffects(uint32_t id, void* pHandle);    // 0x00435ed0
@@ -678,9 +676,7 @@ int Mission::FUN_00c5f150()
 void FUN_00c5f190()
 {
   FUN_00c47a10();
-  cGameNounManager_s00c5_e260* m = (cGameNounManager_s00c5_e260*)SP::SpaceGameGet(0x11, 1);
-  TribeObj* t = (TribeObj*)m->GetPlayerTribe();
-  t->FUN_00fe5430();
+  ((TribeObj*)((cGameNounManager_s00c5_e260*)SP::SpaceGameGet())->GetPlayerTribe())->FUN_00fe5430(0x11, 1);
 }
 
 // @ 0x00c5f1b0
@@ -847,7 +843,7 @@ void cSPMissionStory201::FUN_00c5f5f0()
         s = ((cBioElemSort*)0)->SortBanners();
     s->FUN_00bb9b00(0x40000, 0);
     s->FUN_00bb9c30();
-    GetMissionManager(1)->FUN_00feba80();
+    GetMissionManager()->FUN_00feba80(1);
 }
 
 // @ 0x00c5f640

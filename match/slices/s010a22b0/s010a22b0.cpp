@@ -152,7 +152,7 @@ class hkArray
 
     ~hkArray()
     {
-        if (m_capacity >= 0)
+        if ((m_capacity & 0x80000000) == 0)
             hkThreadMemory::getInstance()->deallocateChunk(m_data, ((unsigned)m_capacity & 0x3fffffffu) * sizeof(T), 0x14);
     }
     T& operator[](int i) { return m_data[i]; }

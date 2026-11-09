@@ -821,18 +821,18 @@ bool FUN_00e4a910(int32_t type)
     if (type <= 0xc)
         return false;
     const cFieldDef_s00e4_9a40* field = ((const SP::cTypeDef_s00e4_9a40*)type)->mpFields;
-    if (field->mf08 == -1)
-        return false;
-    uint32_t offset = 0;
-    do {
-        int32_t child = field->mChild;
-        if (child == 3)
-            return true;
-        if (FUN_00e4a910(child) == true)
-            return true;
-        offset += sizeof(cFieldDef_s00e4_9a40);
-        field = (const cFieldDef_s00e4_9a40*)((const char*)((const SP::cTypeDef_s00e4_9a40*)type)->mpFields + offset);
-    } while (field->mf08 != -1);
+    if (field->mf08 != -1) {
+        int offset = 0;
+        do {
+            int32_t child = field->mChild;
+            if (child == 3)
+                return true;
+            if (FUN_00e4a910(child) == true)
+                return true;
+            offset += sizeof(cFieldDef_s00e4_9a40);
+            field = (const cFieldDef_s00e4_9a40*)((const char*)((const SP::cTypeDef_s00e4_9a40*)type)->mpFields + offset);
+        } while (field->mf08 != -1);
+    }
     return false;
 }
 
@@ -842,18 +842,18 @@ bool FUN_00e4a960(int32_t type)
     if (type <= 0xc)
         return false;
     const cFieldDef_s00e4_9a40* field = ((const SP::cTypeDef_s00e4_9a40*)type)->mpFields;
-    if (field->mf08 == -1)
-        return false;
-    uint32_t offset = 0;
-    do {
-        int32_t child = field->mChild;
-        if (child == 3 || field->mf14 == 4)
-            return true;
-        if (FUN_00e4a960(child) == true)
-            return true;
-        offset += sizeof(cFieldDef_s00e4_9a40);
-        field = (const cFieldDef_s00e4_9a40*)((const char*)((const SP::cTypeDef_s00e4_9a40*)type)->mpFields + offset);
-    } while (field->mf08 != -1);
+    if (field->mf08 != -1) {
+        int offset = 0;
+        do {
+            int32_t child = field->mChild;
+            if (child == 3 || field->mf14 == 4)
+                return true;
+            if (FUN_00e4a960(child) == true)
+                return true;
+            offset += sizeof(cFieldDef_s00e4_9a40);
+            field = (const cFieldDef_s00e4_9a40*)((const char*)((const SP::cTypeDef_s00e4_9a40*)type)->mpFields + offset);
+        } while (field->mf08 != -1);
+    }
     return false;
 }
 

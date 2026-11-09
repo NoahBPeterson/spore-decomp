@@ -638,7 +638,7 @@ XML_ParserCreate_MM(const XML_Char *encodingName,
     /* implicit context only set for root parser, since child
        parsers (i.e. external entity parsers) will inherit it
     */
-    if (!FA_setContext(g_xmlNamespace, parser)) {
+    if (!FA_setContext(&g_xmlNamespace[0], parser)) {
       XML_ParserFree(parser);
       return NULL;
     }

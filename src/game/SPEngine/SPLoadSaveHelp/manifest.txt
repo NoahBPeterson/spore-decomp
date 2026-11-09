@@ -46,3 +46,5 @@
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00695040  00695040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00695080  00695080  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Execute@cVarListSerializer_s0069_5140@SP@@QAEHPAUFieldReport@@@Z  00695770  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?WriteBlob32@@YAEPAXPAUBlobRange@@@Z  00692e00  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?WriteBlob16@@YAEPAXPAUBlobRange@@@Z  00692e50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

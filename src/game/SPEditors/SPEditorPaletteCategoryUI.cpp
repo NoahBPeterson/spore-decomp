@@ -21,6 +21,7 @@ extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* EASTL_memmove(void* dst, const void* src, unsigned int n);  // 0x011e0744 (static memmove)
 #include <new>
 #include <string.h>
+#include <intrin.h>
 #include "cSPColorRGB.h"
 #include "SP/cSPPaletteItem.h"
 #include "cSPUILayout.h"
@@ -728,28 +729,18 @@ class IMessageRC_s005c_2d30 {
 }
 namespace EA {
 namespace Messaging {
-class BehaviorMessage : public IMessageRC_s005c_2d30 {
- public:
-  BehaviorMessage(uint32_t id) {
-    mID = id;
-    _InterlockedExchange(&mRefCount, 0);
-  }
-  long mRefCount;    // +0x4
-  Data_s005c_2d30 mData[5];     // +0x8
-  uint32_t mID;      // +0x30
-  uint32_t pad34;
+struct MessageBasicRC5 {
+  void* mpVtbl;                  // +0x0
+  long mRefCount;                // +0x4
+  Data_s005c_2d30 mData[5];      // +0x8
+  uint32_t mID;                  // +0x30
+  uint32_t pad34;                // +0x34
+  uint32_t mResult;              // +0x38
+  uint32_t pad3c;                // +0x3c
+  void Destruct();               // SlotMessage::Destruct (0x00421cf0)
 };
-}
-}
-namespace EA {
-namespace Messaging {
-class MessageBasicRC5 : public BehaviorMessage {
- public:
-  MessageBasicRC5(uint32_t id) : BehaviorMessage(id), mResult(0) {}
-  ~MessageBasicRC5();  // SlotMessage::Destruct (0x00421cf0)
-  virtual int AddRef();
-  uint32_t mResult;  // +0x38
-};
+extern char vtbl_MsgBase_s005c_2d30[];   // program-order vptr of the message bases
+extern char vtbl_MsgRC5_s005c_2d30[];    // final MessageBasicRC5 vptr
 }
 }
 namespace EA {
@@ -2418,11 +2409,17 @@ void cSPPaletteCategoryUI_s005c_2d30::OnPageChanged(int oldIndex, int newIndex)
   mCurrentPageIndex = newIndex;
   if (GetPageUI(newIndex)->GetPackID() != mCurrentPackID)
     SetSelectedPack(GetPageUI(mCurrentPageIndex)->GetPackID());
-  EA::Messaging::MessageBasicRC5 msg(0x8292e7f);
+  EA::Messaging::MessageBasicRC5 msg;
+  msg.mID = 0x8292e7f;
+  msg.mpVtbl = EA::Messaging::vtbl_MsgBase_s005c_2d30;
+  _InterlockedExchange(&msg.mRefCount, 0);
+  msg.mpVtbl = EA::Messaging::vtbl_MsgRC5_s005c_2d30;
+  msg.mResult = 0;
   msg.mData[0].mUint32 = (uint32_t)this;
   msg.mData[1].mUint32 = newIndex;
   msg.mData[2].mUint32 = oldIndex;
-  MessageServer()->MessageSend(msg.mID, &msg, 0);
+  MessageServer()->MessageSend(msg.mID, (EA::Messaging::IMessageRC_s005c_2d30*)&msg, 0);
+  msg.Destruct();
 }
 }  // namespace SP
 

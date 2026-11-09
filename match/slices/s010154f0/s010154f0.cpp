@@ -140,6 +140,7 @@ struct cGonzagoSimulator : GonzagoA, GonzagoB {
 };
 inline cGonzagoSimulator::~cGonzagoSimulator() {}
 
+
 struct cSimulatorUniverse : cGonzagoSimulator {
     PropListPtr mTuning;           // +0x10
     int m14;                       // +0x14

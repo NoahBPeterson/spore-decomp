@@ -16,6 +16,7 @@ extern char dv_a[], dv_b[];
 void* __stdcall f_9512c0();
 void* __cdecl f_9512d0(unsigned size, int align, const char* name, void* alloc);
 void  __cdecl f_951330(void* p);              // MultiHeapObject::operator delete
+extern void __cdecl operator_delete__(void* p);   // 0x00f47380
 void  __fastcall f_800060_base(void* p);
 struct IFactoryObj {
   virtual void v0();
@@ -518,6 +519,7 @@ struct WinRec {
     WinRec* __thiscall Make(const void* src, void* win);  // 0x80af20
     WinRec* __thiscall CopyFrom(const WinRec* src);       // 0x80af90
 };
+struct WinRecOps { WinRec* __thiscall DeletingDtor(unsigned int flags); };
 struct SubVec {
     WinRec* begin;      // +0x00
     WinRec* end;        // +0x04
@@ -975,8 +977,21 @@ RecC* copyFwd(void* unused, RecC* begin, RecC* end, RecC* dst)
 }
 
 // @ 0x0080b3b0
-void FUN_0080b3b0()
-{ /* deleting destructor of a 0x34 record; not reconstructed */ }
+WinRec* WinRecOps::DeletingDtor(unsigned int flags)
+{
+    WinRec* self = (WinRec*)this;
+    self->vtbl = (void**)0x1417cac;
+    _ReadWriteBarrier();
+    WinRef* w = self->win;
+    if (w) {
+        self->win = 0;
+        w->Release();
+    }
+    if (self->win) self->win->Release();
+    if ((flags & 1) != 0)
+        operator_delete__(self);
+    return self;
+}
 
 // @ 0x0080b400
 bool AtlasState::Validate()

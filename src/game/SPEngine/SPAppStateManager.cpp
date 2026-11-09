@@ -18,6 +18,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <intrin.h>
 #include <math.h>
 
 // ---- items of slice s006a7e40 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -487,29 +488,56 @@ struct cCommandBase_s007e_4260 : cICommand_s007e_4260 {
 }
 void SetMessageString8(void* msg, int a, const char* s);   // 0x00618bd0
 void* cAppStateManager_AddAction(void* self, EA::ArgScript::cArguments_s007e_4260* args, void* msg); // 0x007e40d0
-struct BehaviorMessageBase {
+struct __declspec(novtable) BehaviorMessageBase {
 virtual void b0();
 virtual void b1();
 virtual void b2();
 virtual void b3();
-    int mRefCount;          // +0x4
-};
-struct BehaviorMessage : BehaviorMessageBase {
-    virtual void b4();      // gives the derived level its own vtable
-    char pad08[0x28];
+    int  mRefCount;         // +0x04
+    int  field08;           // +0x08
+    int  field0c;           // +0x0c
+    int  field10;           // +0x10 (int / bool / float depending on the command)
+    int  pad14;             // +0x14
+    int  field18;           // +0x18
+    int  pad1c;             // +0x1c
+    int  field20;           // +0x20
+    int  pad24;             // +0x24
+    int  pad28;             // +0x28
+    int  pad2c;             // +0x2c
     int  field30;           // +0x30 message id
     int  field34;           // +0x34
+    BehaviorMessageBase()
+    {
+        field30 = 0;
+        _ReadWriteBarrier();
+        *(const uint32_t**)this = (const uint32_t*)0x013eb90c;   // base vtable
+        _ReadWriteBarrier();
+        _InterlockedExchange((volatile long*)&mRefCount, 0);
+    }
+};
+struct __declspec(novtable) BehaviorMessage : BehaviorMessageBase {
+    virtual void b4();      // gives the derived level its own vtable
     int  field38;           // +0x38
-    BehaviorMessage() : field30(0), field38(0) { _InterlockedExchange((volatile long*)&mRefCount, 0); }
+    char pad3c[4];          // +0x3c keeps the object at 0x40 bytes
+    BehaviorMessage()
+    {
+        field38 = 0;
+        _ReadWriteBarrier();
+        *(const uint32_t**)this = (const uint32_t*)0x013eb844;   // derived vtable
+    }
 };
 static inline BehaviorMessage* NewBehaviorMessage(int msgid) {
-    BehaviorMessage* m = new ("App", 0, 0, 0, 0) BehaviorMessage();
+    BehaviorMessage* m = new ("App", 0, 0, (const char*)0, 0) BehaviorMessage();
     m->field30 = msgid;
     return m;
 }
 struct cAppStateCmd : EA::ArgScript::cCommandBase_s007e_4260 {
     void* mpState;   // +0xc
 };
+#define VSLOT(type, p, off)  (*(type*)((char*)*(void***)(p) + (off)))
+typedef int   (__thiscall *PFnPropInt)(void*, const char*);
+typedef bool  (__thiscall *PFnPropBool)(void*, const char*);
+typedef float (__thiscall *PFnPropFloat)(void*, const char*);
 // ---- items of slice s007e4260 end
 
 // ---- items of slice s007e5220 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1166,16 +1194,39 @@ void FUN_007e4970(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args
 }
 
 // @ 0x007e49f0
-void FUN_007e49f0(void* a, void* b)
-{ (void)a; (void)b; }
+void __fastcall FUN_007e49f0(cAppStateCmd* self, void* dummy, EA::ArgScript::cArguments_s007e_4260* args)
+{
+    (void)dummy;
+    const char** av = args->MainArguments(2);
+    BehaviorMessage* m = NewBehaviorMessage(0x280151c);
+    m->field08 = VSLOT(PFnPropInt, self->mParser, 0xa0)(self->mParser, av[0]);
+    m->field10 = VSLOT(PFnPropBool, self->mParser, 0x94)(self->mParser, av[1]);
+    ((cAppState*)self->mpState)->AddAction((EA::ArgScript::cArguments_s007e_32c0*)args, (RefObj*)m);
+}
 
 // @ 0x007e4a80
-void FUN_007e4a80(void* a, void* b)
-{ (void)a; (void)b; }
+void __fastcall FUN_007e4a80(cAppStateCmd* self, void* dummy, EA::ArgScript::cArguments_s007e_4260* args)
+{
+    (void)dummy;
+    const char** av = args->MainArguments(2);
+    BehaviorMessage* m = NewBehaviorMessage(0x280151d);
+    m->field08 = VSLOT(PFnPropInt, self->mParser, 0xa0)(self->mParser, av[0]);
+    const char** av2 = args->MainArguments(1);
+    m->field10 = VSLOT(PFnPropInt, self->mParser, 0x9c)(self->mParser, av2[0]);
+    ((cAppState*)self->mpState)->AddAction((EA::ArgScript::cArguments_s007e_32c0*)args, (RefObj*)m);
+}
 
 // @ 0x007e4b20
-void FUN_007e4b20(void* a, void* b)
-{ (void)a; (void)b; }
+void __fastcall FUN_007e4b20(cAppStateCmd* self, void* dummy, EA::ArgScript::cArguments_s007e_4260* args)
+{
+    (void)dummy;
+    const char** av = args->MainArguments(2);
+    BehaviorMessage* m = NewBehaviorMessage(0x280151e);
+    m->field08 = VSLOT(PFnPropInt, self->mParser, 0xa0)(self->mParser, av[0]);
+    const char** av2 = args->MainArguments(1);
+    *(float*)&m->field10 = VSLOT(PFnPropFloat, self->mParser, 0x98)(self->mParser, av2[0]);
+    ((cAppState*)self->mpState)->AddAction((EA::ArgScript::cArguments_s007e_32c0*)args, (RefObj*)m);
+}
 
 // @ 0x007e4bc0
 void FUN_007e4bc0(void* a)

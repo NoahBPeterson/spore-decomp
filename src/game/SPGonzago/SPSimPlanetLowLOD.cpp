@@ -2029,11 +2029,49 @@ __declspec(noinline) void __thiscall SP::cSimPlanetLowLOD_s00c8_29e0::FUN_00c82d
 // @ 0x00c82ea0
 void __thiscall SP::cSimPlanetLowLOD_s00c8_29e0::FUN_00c82ea0()
 {
+    if ((*(u32*)(*(int*)(*(int*)((char*)this + 0x4c) + 0x13c) + 0x2c) & 0x800) == 0) {
+        char* cell = (char*)this + 0x50;
+        int inner = 0, mid = 0, outer = 0;
+        do {
+            do {
+                do {
+                    if (cell == 0) return;
+                    ((void(__thiscall*)(void*, void*))FUN_00c82900)(this, cell);
+                    ++inner; cell += 0x54;
+                } while (inner < 4);
+                ++mid; inner = 0;
+            } while (mid < 4);
+            ++outer; mid = 0;
+        } while (outer < 6);
+    }
 }
 
 // @ 0x00c82f00
+struct cPlanetModelG { ResourceKey* GetPlanetKey(); };
 void __thiscall SP::cSimPlanetLowLOD_s00c8_29e0::FUN_00c82f00()
 {
+    if (*(u8*)((char*)this + 0x2058) != 0)
+        return;
+    if (SP::GetUniverseContext() != 0)
+        return;
+    if ((void*)mpPlanet != (void*)GetActivePlanet_s00c8_30f0())
+        return;
+
+    cPlanetModelG* model = (cPlanetModelG*)SP_PlanetModel();
+    ResourceKey* key = model->GetPlanetKey();
+    ResourceKey* cur = ((cPlanet_s00c8_30f0*)mpPlanet)->FUN_00c713e0();
+    if (cur->groupID != key->groupID)
+        return;
+    model = (cPlanetModelG*)SP_PlanetModel();
+    key = model->GetPlanetKey();
+    cur = ((cPlanet_s00c8_30f0*)mpPlanet)->FUN_00c713e0();
+    if (cur->instanceID != key->instanceID)
+        return;
+
+    *(u8*)((char*)this + 0x2058) = 1;
+    FUN_00c7f060(this);
+    ((void(__fastcall*)(void*))FUN_00c82870)(this);
+    FUN_00c82ea0();
 }
 
 // @ 0x00c82f80

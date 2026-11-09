@@ -180,13 +180,12 @@ PairBlock* __thiscall PairBlock::Assign(const PairBlock* s)
 // @ 0x00f30980
 PairBlock* __cdecl RangeDestroyTo(PairBlock* first, PairBlock* last, PairBlock* dst)
 {
-    if (first == last) return dst;
-    do {
+    while (first != last) {
         Release(first->p1);
         Release(first->p0);
         first = (PairBlock*)((char*)first + PairBlock::STRIDE);
         dst = (PairBlock*)((char*)dst + PairBlock::STRIDE);
-    } while (first != last);
+    }
     return dst;
 }
 
@@ -194,9 +193,7 @@ PairBlock* __cdecl RangeDestroyTo(PairBlock* first, PairBlock* last, PairBlock* 
 // @ 0x00f30a10
 PairBlock* __cdecl RangeMoveDestroy(PairBlock* first, PairBlock* last, PairBlock* dst)
 {
-    if (last == first) return dst;
-    PairBlock* out = dst;
-    do {
+    while (last != first) {
         --last;
         --dst;
         if (last->p0 != dst->p0) {
@@ -212,9 +209,8 @@ PairBlock* __cdecl RangeMoveDestroy(PairBlock* first, PairBlock* last, PairBlock
             Release(old);
         }
         dst->payload = last->payload;
-        out = dst;
-    } while (last != first);
-    return out;
+    }
+    return dst;
 }
 
 // ---------------------------------------------------------------------------
@@ -233,8 +229,7 @@ PairBlock* __thiscall PairBlock::Construct(const PairBlock* s)
 // @ 0x00f30b60
 PairBlock* __cdecl RangeConstruct(PairBlock* first, PairBlock* last, PairBlock* dst)
 {
-    if (first == last) return dst;
-    do {
+    while (first != last) {
         if (dst) {
             dst->p0 = first->p0;
             AddRef(dst->p0);
@@ -244,7 +239,7 @@ PairBlock* __cdecl RangeConstruct(PairBlock* first, PairBlock* last, PairBlock* 
         }
         first = (PairBlock*)((char*)first + PairBlock::STRIDE);
         dst = (PairBlock*)((char*)dst + PairBlock::STRIDE);
-    } while (first != last);
+    }
     return dst;
 }
 

@@ -6,3 +6,6 @@
 ../src/game/SPGonzago/SPMissionMultiStep.cpp  ?FUN_00c5a260@cMissionMultiStep@@QAEXPAX@Z  00c5a260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiStep.cpp  ?FUN_00c5a390@cMissionMultiStep@@QAEXPAX@Z  00c5a390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiStep.cpp  ?FUN_00c5a4c0@cMissionMultiStep@@QAEXPAX@Z  00c5a4c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiStep.cpp  ?FUN_00c5a050@cMissionMultiStep@@QAEMXZ  00c5a050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiStep.cpp  ?FUN_00c5a520@cMissionMultiStep@@QAEEI@Z  00c5a520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiStep.cpp  ?Destroy@cMissionMultiStep_dtor@@QAEXXZ  00c5a7d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include "SP/cGonzagoTimer.h"
+#include <intrin.h>
 
 namespace SP { class cSpatialObjectView; }
 
@@ -1741,7 +1742,8 @@ cCityFeedbackView_s00e8_7cf0::cCityFeedbackView_s00e8_7cf0()
 // @ 0x00e88ae0
 cCityFeedbackView_s00e8_7cf0::~cCityFeedbackView_s00e8_7cf0()
 {
-    mpVtbl = cCityFeedbackView_vtbl;
+    *(void* volatile*)&mpVtbl = (void*)0x14862c4;
+    _ReadWriteBarrier();
     if (mp0c) {
         IRefCounted* p = mp0c;
         mp0c = 0;

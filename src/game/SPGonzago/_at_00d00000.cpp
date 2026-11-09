@@ -41,6 +41,19 @@ public:
     void FUN_00d06c30(int first, int value);
 };
 }
+namespace SP {
+extern cSlotVTable gSlotVtbl2B;                           // 0x014790a0
+}
+namespace SP {
+class cCountedSlot2 {
+public:
+    void* volatile          mpVtbl;                      // +0x00
+    cRefCounted*            mpField4;                    // +0x04
+    cRefCounted* volatile   mpField8;                    // +0x08
+
+    void*         FUN_00d07590(uint32_t flags);
+};
+}
 // ---- items of slice s00d06710 end
 
 // ---- items of slice s00d07770 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -157,17 +170,48 @@ struct Obj84D0 {
 
 // @ 0x00d06d80
 namespace SP {
-void __fastcall FUN_00d06d80(void* this_, int unused)
+struct PObj20 {
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3();
+    virtual void d4(); virtual void d5(); virtual void d6(); virtual void d7();
+    virtual void* s8();
+};
+struct AObj18 {
+    virtual void d0(); virtual void d1(); virtual void d2(); virtual void d3();
+    virtual void d4(); virtual void d5(); virtual void* s6();
+};
+struct Fn692f90 { void* __thiscall call(void* a, void* b, void* c); };  // 0x00692f90
+struct Fn692900 { void* __thiscall call(void* a); };                    // 0x00692900
+void* __cdecl FUN_0093aa70(void* a, void* b, int c, int d);  // 0x0093aa70
+void __fastcall FUN_00d06d80(void* this_, int unused, void* p)
 {
-    (void)this_;
+    PObj20* o = (PObj20*)p;
+    AObj18* a = (AObj18*)o->s8();
+    uint32_t tag = 0x903c3ea3;
+    void* b = a->s6();
+    uint8_t prop[0xa14];
+    FUN_0093aa70(b, &tag, 1, 0);
+    ((Fn692f90*)prop)->call(this_, (void*)0x15820f8, (void*)0x1a80d26);
+    ((Fn692900*)prop)->call(p);
 }
 }  // namespace SP
 
 // @ 0x00d06e70
 namespace SP {
-void __fastcall cSoundLoopObjectCtor(void* this_, int unused)
+void __fastcall ctor_cGameData(void* this_);            // 0x00b18660
+void __fastcall ctor_cSpatialObject(void* this_);       // 0x00c89630
+extern void* g_vtable_1478ed8;                          // 0x01478ed8
+extern void* g_vtable_1478fb0;                          // 0x01478fb0
+extern void* g_vtable_1478f9c;                          // 0x01478f9c
+void* __fastcall cSoundLoopObjectCtor(void* this_, int unused)
 {
-    (void)this_;
+    ctor_cGameData(this_);
+    void* spatial = (char*)this_ + 0x34;
+    ctor_cSpatialObject(spatial);
+    *(void**)spatial = &g_vtable_1478ed8;
+    *(void**)this_ = &g_vtable_1478fb0;
+    *(void**)((char*)this_ + 4) = &g_vtable_1478f9c;
+    *(uint32_t*)((char*)this_ + 0x108) = 0;
+    return this_;
 }
 }  // namespace SP
 
@@ -203,10 +247,12 @@ namespace SP {
 void* __thiscall cCountedSlot::FUN_00d070b0(uint32_t flags)
 {
     mpVtbl = &gSlotVtbl;
-    if (mpField8)
-        mpField8->Release();
-    if (mpField4)
-        mpField4->Destroy();
+    cRefCounted* p8 = mpField8;
+    if (p8)
+        p8->Release();
+    cRefCounted* p4 = mpField4;
+    if (p4)
+        p4->Destroy();
     if (flags & 1)
         operator_delete_array(this);
     return this;
@@ -223,9 +269,18 @@ void __fastcall FUN_00d07470(void* this_, int unused)
 
 // @ 0x00d07590
 namespace SP {
-void __fastcall FUN_00d07590(void* this_, int unused)
+void* __thiscall cCountedSlot2::FUN_00d07590(uint32_t flags)
 {
-    (void)this_;
+    mpVtbl = &gSlotVtbl2B;
+    cRefCounted* p8 = mpField8;
+    if (p8)
+        p8->Release();
+    cRefCounted* p4 = mpField4;
+    if (p4)
+        p4->Destroy();
+    if (flags & 1)
+        operator_delete_array(this);
+    return this;
 }
 }  // namespace SP
 

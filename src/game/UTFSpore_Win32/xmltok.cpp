@@ -2565,7 +2565,7 @@ static int unknown_encodingIndex(const char *name)
   if (name == 0)
     return 6;
   for (i = 0; i < 6; ++i)
-    if (streqci((const char *)encodingNames[i], name))
+    if (streqci(name, (const char *)encodingNames[i]))
       return i;
   return -1;
 }

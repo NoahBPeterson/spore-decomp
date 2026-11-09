@@ -67,7 +67,7 @@ extern "C" void __cdecl FUN_006ddee0();              // 0x006ddee0
 extern "C" void __cdecl FUN_006ddef0(void*);         // 0x006ddef0
 extern "C" int  __fastcall FUN_00cee370(void*);      // 0x00cee370 (this in ecx)
 extern "C" void* __fastcall FUN_00cee330(void*);     // 0x00cee330 (this in ecx)
-extern "C" void* __cdecl NounManager();              // 0x00b3d300 (static getter, no args)
+extern "C" void* __stdcall NounManager(void* noun);   // 0x00b3d300 (manager for a noun)
 
 // thiscall glue: a member declaration reproduces the exact ABI (this in ecx, args on the stack).
 struct Cee650 {
@@ -86,8 +86,8 @@ struct C36510 {
     void* Ctor();                          // 0x00c36510
 };
 struct NounMgr {
-    void* CreateNoun(void*);               // 0x00b20c60
-    void  RemoveNoun(void*);               // 0x00b225d0
+    void* CreateNoun();                    // 0x00b20c60
+    void  RemoveNoun();                    // 0x00b225d0
 };
 // Generic vtable dispatcher for `(**(code **)(*obj + off))(args)` call sites.
 struct VObj {
@@ -516,10 +516,10 @@ cleanup:
 // @ 0x00ac7790
 void* __stdcall createNoun_7790(void* self, float f, void* p)
 {
-    if (FUN_00cee370(self) >= *(int*)((char*)self + 0x1c))
+    if (*(int*)((char*)self + 0x1c) <= FUN_00cee370(self))
         return 0;
-    void* mgr = NounManager();
-    void* noun = ((NounMgr*)mgr)->CreateNoun((void*)0x18c431c);
+    void* mgr = NounManager((void*)0x18c431c);
+    void* noun = ((NounMgr*)mgr)->CreateNoun();
     ((C35b20*)noun)->Call(p, f);
     ((Cee820*)self)->Call(noun);
     ((VObj*)self)->m02(noun);
@@ -580,8 +580,8 @@ void cGroundEditorRes::removeNoun()
     void* o = p1c;
     if (o == 0)
         return;
-    void* mgr = NounManager();
-    ((NounMgr*)mgr)->RemoveNoun(o);
+    void* mgr = NounManager(o);
+    ((NounMgr*)mgr)->RemoveNoun();
     void* c = p1c;
     if (c == 0)
         return;
@@ -615,8 +615,8 @@ void __stdcall cleanup_79e0(void* self, uint a2)
         ((VObj*)q)->m03(self);
         ((Cee650*)q)->Call(self);
     }
-    void* mgr = NounManager();
-    ((NounMgr*)mgr)->RemoveNoun(self);
+    void* mgr = NounManager(self);
+    ((NounMgr*)mgr)->RemoveNoun();
     if (q)
         ((VObj*)q)->m07();
 }
@@ -636,8 +636,8 @@ void __stdcall drainNouns_7a40(void* self)
         ((VObj*)self)->m03(noun);
         ((Cee650*)self)->Call(noun);
         ((VObj*)noun)->m17();
-        void* mgr = NounManager();
-        ((NounMgr*)mgr)->RemoveNoun(noun);
+        void* mgr = NounManager(noun);
+        ((NounMgr*)mgr)->RemoveNoun();
         ((VObj*)noun)->m01();
         n = FUN_00cee370(self);
     }

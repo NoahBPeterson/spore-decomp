@@ -454,10 +454,7 @@ void IWinScrollbar::SetValue(int v, char notify) {
         m.to = v;
         fn(iwv, &m);
     }
-    void* w2 = (char*)this - 0x20c;
-    void** vt = *(void***)w2;
-    void (__thiscall *fn)(void*, int) = (void(__thiscall*)(void*, int))vt[0x94 / 4];
-    fn(w2, 1);
+    VSLOT(void(__thiscall*)(void*, int), win(), 0x94)(win(), 1);
 }
 
 // @ 0x981130

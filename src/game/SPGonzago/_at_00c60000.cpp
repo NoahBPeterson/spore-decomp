@@ -4243,7 +4243,7 @@ bool SimSpatial::IsPlayerOwnedOrnament()
     SimOrnament* p = (SimOrnament*)((uchar*)this - 0x70);
     void* pMgr = FUN_00b3d300();
     int id = ((int (__thiscall*)(void*))FUN_00b1f9d0)(pMgr);
-    int mine = ((int (__thiscall*)(SimOrnament*))vc(p, 0x4c))(p);
+    int mine = ((int (__thiscall*)(SimOrnament*))((void**)*(void**)p)[0x4c / 4])(p);
     return mine == id;
 }
 

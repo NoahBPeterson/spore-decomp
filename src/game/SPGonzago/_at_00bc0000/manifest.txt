@@ -13,6 +13,7 @@
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?resetAll@Reg_s00bc_4730@@QAEXXZ  00bc4d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?destroy@PropVecA@@QAEXXZ  00bc5210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?destroy@PropVecB@@QAEXXZ  00bc5300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?resize@ElemVec@@QAEXI@Z  00bc5340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?Assign@Sub@@QAEAAU1@ABU1@@Z  00bc6360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?ClearBuckets@HashMap@@QAEXPAPAXI@Z  00bc6eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?ClearMap@SimClass@@QAEXXZ  00bc6f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -51,3 +52,4 @@
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?SetState@cAnimalTrap@@QAEXH@Z  00bcb960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?Destroy@cAnimalTrap@@QAIXXZ  00bcba80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?ScalarDeletingDtor@cAnimalTrap@@QAEPAU1@I@Z  00bcbc30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bca7e0@@YA_NPAXPAPAX@Z  00bca7e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

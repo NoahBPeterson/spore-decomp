@@ -638,6 +638,7 @@ struct ITextWin {
 namespace SP {
 namespace Pollen {
 struct HoverBaseA {
+  virtual ~HoverBaseA() {}
   virtual void ha0();
 };
 }

@@ -219,7 +219,7 @@ bool Pool::Contains(unsigned p)
 {
     if ((*(uint32*)(p + 4) & 0x7ffffff8) < 0x10) {
         void* b = Find(p);
-        if (b != 0 && (unsigned)(*(int*)((char*)b + 4) + (int)b - 0x10) <= p)
+        if (b != 0 && p >= (unsigned)(*(int*)((char*)b + 4) + (int)b - 0x10))
             return true;
     }
     return false;

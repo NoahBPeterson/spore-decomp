@@ -26,6 +26,7 @@ inline void dealloc_wrap(void* p) { EASTL_allocator_deallocate(p); }
 inline void padfn11() { uint32_t pad[11]; }
 inline void padfn3() { uint32_t pad[3]; }
 inline void padfn13() { uint32_t pad[13]; }
+inline void padfn5() { uint32_t pad[5]; }
 
 // Fixed-buffer allocator state living inside a fixed_vector.
 struct FixedAlloc {
@@ -288,6 +289,7 @@ extern void __cdecl UninitCopyIntrusivePtrs(IntrusivePtr** out, PtrIter f, PtrIt
 IntrusivePtr* UninitializedCopyIntrusivePtrs(const IntrusivePtr* f, const IntrusivePtr* l, IntrusivePtr* d) {
     IntrusivePtr* r;
     tagq t;
+    padfn5();
     UninitCopyIntrusivePtrs(&r, PtrIter(f), PtrIter(l), PtrIter(d), t);
     return r;
 }

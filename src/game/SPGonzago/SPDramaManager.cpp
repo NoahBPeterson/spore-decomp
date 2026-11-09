@@ -743,6 +743,21 @@ public:
 namespace SP {
 class cMeteorStrikeEvent_s00d4_e4a0 {
 public:
+    u8    pad000[0x74];
+    u8    m_b74;
+    u8    m_pad75[3];
+    i32   m_meteorCount[2][2];
+    float m_f88[2];
+    float m_f90[2];
+    u32   m_u98[2];
+    float m_rangeA0[2];
+    u32   m_padA8[2];
+    float m_timerB0[2];
+    float m_fB8;
+    float m_fBC;
+    float m_fC0;
+    float m_fC4;
+    struct Meteors { int* mpBegin; int* mpEnd; int* mpCap; } m_meteors[2];
     void Clear();  // 0x00d4e950 (SP::cMeteorStrikeEvent::Clear)
 };
 }
@@ -751,7 +766,7 @@ class cTribeFoodRaidEvent_s00d4_e4a0 {
 public:
     void TriggerEvent();  // 0x00d4ee20 (SP::cTribeFoodRaidEvent::TriggerEvent)
     void ShouldActivate();  // 0x00d4f0a0 (SP::cTribeFoodRaidEvent::ShouldActivate)
-    void TickInactiveEvent();  // 0x00d4f260 (SP::cTribeFoodRaidEvent::TickInactiveEvent)
+    void TickInactiveEvent(float dt);  // 0x00d4f260 (SP::cTribeFoodRaidEvent::TickInactiveEvent)
 };
 }
 // ---- items of slice s00d4e4a0 end
@@ -1182,7 +1197,7 @@ struct cMeteorStrikeEvent_s00d4_f2e0 : cDramaEventInstanceData_s00d4_f2e0 {
     Meteors_s00d4_f2e0        m_meteors[2];        // +0xc8, +0x2e0
 
     cMeteorStrikeEvent_s00d4_f2e0();                // 0x00d4fcf0
-    bool ShouldDeactivate();             // 0x00d4fea0
+    int  ShouldDeactivate();             // 0x00d4fea0
     void PostLoad(u32 unused);           // 0x00d4fef0
     bool ShouldActivate();               // 0x00d4ff50
     bool Write(void* stream);            // 0x00d50260
@@ -2808,14 +2823,83 @@ __declspec(noinline) void __thiscall SP::cDramaSlotHolder::FUN_00d4e8e0(SP::cDra
 }
 
 // @ 0x00d4e950
+extern "C" float* __cdecl FUN_00d4e830(float* out, float* end, float* begin);  // 0x0042f530
+namespace SP {
+typedef void (__thiscall *MeteorSlot0Fn)(void* self);
+typedef bool (__thiscall *MeteorSlot4Fn)(void* self);
+typedef void (__thiscall *MeteorSlot3Fn)(void* self, int arg);
+typedef void (__thiscall *MeteorSlot1Fn)(void* self);
+}
 void __thiscall SP::cMeteorStrikeEvent_s00d4_e4a0::Clear()
 {
-}
+    u32* z = (u32*)&m_meteorCount[0][0];
+    for (int i = 0; i < 16; ++i) z[i] = 0;
+    m_fB8 = 0;
+    m_fBC = 0;
+    m_fC0 = 0;
+    m_fC4 = 0;
+    m_b74 = 0;
 
+    int n = 2;
+    Meteors* v = m_meteors;
+    do {
+        int count = v->mpEnd - v->mpBegin;
+        for (int i = 0; i < count; ++i) {
+            void* elem = (void*)v->mpBegin[i];
+            if (elem != 0) {
+                ((MeteorSlot0Fn)(*(void***)elem)[0])(elem);
+            }
+            if (((MeteorSlot4Fn)(*(void***)elem)[4])(elem)) {
+                ((MeteorSlot3Fn)(*(void***)elem)[3])(elem, 0);
+            }
+            ((MeteorSlot1Fn)(*(void***)elem)[1])(elem);
+        }
+        int* newEnd = (int*)FUN_00d4e830((float*)&v->mpEnd, (float*)&v->mpEnd, (float*)&v->mpBegin);
+        int* oldEnd = v->mpEnd;
+        for (int* it = newEnd; it != oldEnd; ++it) {
+            void* elem = (void*)*it;
+            if (elem != 0) {
+                ((MeteorSlot1Fn)(*(void***)elem)[1])(elem);
+            }
+        }
+        v->mpEnd = v->mpEnd - (v->mpEnd - v->mpBegin);
+        ++v;
+    } while (--n != 0);
+}
 // @ 0x00d4ea90
-void __fastcall cDramaManagerCtor(void* this_, int unused)
+extern "C" void __fastcall FUN_00b5b6c0(void* self);   // 0x00b5b6c0 base constructor
+extern "C" void __fastcall FUN_00b63890(void* self);   // 0x00b63890 cGonzagoTimer constructor
+extern "C" void __fastcall FUN_00bc30f0(void* self);   // 0x00bc30f0 timer sub-init
+void* __fastcall cDramaManagerCtor(void* this_, int unused)
 {
-    (void)this_;
+    (void)unused;
+    char* base = (char*)this_;
+    FUN_00b5b6c0(this_);
+    *(void**)(base + 0x00) = (void*)gVtbl_cSPDramaManager0;
+    *(void**)(base + 0x08) = (void*)gVtbl_cSPDramaManager8;
+    *(u8*)(base + 0x10) = 0;
+    *(void**)(base + 0x14) = 0;
+    FUN_00b63890(base + 0x18);
+    *(void**)(base + 0x38) = 0;
+    *(float*)(base + 0x3c) = 0.0f;
+    *(void**)(base + 0x40) = 0;
+    *(void**)(base + 0x44) = 0;
+    *(float*)(base + 0x48) = 0.0f;
+    *(void**)(base + 0x4c) = 0;
+    void** tree = (void**)(base + 0x54);
+    tree[1] = 0;
+    tree[2] = 0;
+    tree[3] = 0;
+    tree[0] = tree;
+    *(void***)(base + 0x58) = tree;
+    *(void**)(base + 0x5c) = 0;
+    *(u8*)(base + 0x60) = 0;
+    *(void**)(base + 0x64) = 0;
+    *(void**)(base + 0x6c) = 0;
+    gspDramaManagerInstance = (u32)this_;
+    FUN_00bc30f0(base + 0x18);
+    _ReadWriteBarrier();
+    return this_;
 }
 
 // @ 0x00d4eb30
@@ -2858,8 +2942,27 @@ void __thiscall SP::cTribeFoodRaidEvent_s00d4_e4a0::ShouldActivate()
 }
 
 // @ 0x00d4f260
-void __thiscall SP::cTribeFoodRaidEvent_s00d4_e4a0::TickInactiveEvent()
+struct RaidMap { float* Index(float* key); };   // 0x00564a10
+struct NounMgrA4 { void* GetPlayerTribe(); };   // 0x00bfc5f0
+extern "C" void* __cdecl FUN_00b3d300();                             // 0x00b3d300
+typedef int (__thiscall *TribeSlotA4Fn)(void* self);
+void __thiscall SP::cTribeFoodRaidEvent_s00d4_e4a0::TickInactiveEvent(float dt)
 {
+    RaidMap* map = (RaidMap*)((char*)this + 0x44);
+    union { u32 u; float f; } value;
+    value.u = 0;
+    u32* slot = (u32*)map->Index(&value.f);
+    value.u = *slot;
+
+    void* tribe = ((NounMgrA4*)FUN_00b3d300())->GetPlayerTribe();
+    if (tribe != 0 && ((TribeSlotA4Fn)(*(void***)tribe)[0xa4 / 4])(tribe) > 0)
+        value.f = value.f + dt;
+    else
+        value.f = 0;
+
+    *(u32*)&dt = 0;
+    u32* out = (u32*)map->Index(&dt);
+    *out = value.u;
 }
 
 // @ 0x00d4fb20
@@ -2960,7 +3063,7 @@ SP::cMeteorStrikeEvent_s00d4_f2e0::cMeteorStrikeEvent_s00d4_f2e0()
 }
 
 // @ 0x00d4fea0
-bool SP::cMeteorStrikeEvent_s00d4_f2e0::ShouldDeactivate()
+int SP::cMeteorStrikeEvent_s00d4_f2e0::ShouldDeactivate()
 {
     if (0.0f > m_f2c) goto ret1;
     if (m_meteorCount[0][0] != m_meteorCount[0][1]) goto ret0;

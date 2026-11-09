@@ -10,6 +10,7 @@
 ../src/game/SPAudio/eapdobject.cpp  ?outlet_symbol@Eapd@Audio@EA@@YAXPAUt_outlet@123@Ut_symbol@123@@Z  00a49df0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdobject.cpp  ?outlet_list@Eapd@Audio@EA@@YAXPAUt_outlet@123@Ut_symbol@123@HPAUt_atom@123@@Z  00a49e40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdobject.cpp  ?outlet_anything@Eapd@Audio@EA@@YAXPAUt_outlet@123@Ut_symbol@123@HPAUt_atom@123@@Z  00a49eb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdobject.cpp  ?obj_noutlets@Eapd@Audio@EA@@YAHPAUt_object@123@@Z  00a4a0b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdobject.cpp  ?obj_ninlets@Eapd@Audio@EA@@YAHPAUt_object@123@@Z  00a4a0d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdobject.cpp  ?FUN_00a4a100@Eapd@Audio@EA@@YAPAXPAUt_object@123@PAPAUt_outlet@123@H@Z  00a4a100  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdobject.cpp  ?FUN_00a4a130@Eapd@Audio@EA@@YAPAUt_outconnect@123@PAU4123@PAPAUt_object@123@PAPAUt_inlet@123@PAH@Z  00a4a130  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -7,7 +7,6 @@
 00623660 114 cXHTMLWin::SubmitForm: complete; register assignment (edi/ebx) and click-struct slot flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00623730 18 cSPHoverTitle ctor: complete; store scheduling (movss hoisted) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00623830 326 cSPHoverTitle::Layout (position tooltip near the cursor): complete; SSE operand order of (w + pad + x) and SPPoint arg copies flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00623af0 3 ~cSPHoverTitle: complete; trailing base-vptr stores order flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00623be0 58 cXHTMLWin ctor: complete; store scheduling around the base ctor flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00623c90 530 cXHTMLWin::SetFormControlValue (select/option handling): complete; list end iterator kept as a null-checked value in the original flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00623f90 7 popup timer OnMessage; complete, only the fstp/mov al scheduling in the 0x51a1a2e path differs
