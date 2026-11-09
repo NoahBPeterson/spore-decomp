@@ -37,6 +37,9 @@ if [ ! -x "$tc/vc9sp1/VC/bin/cl.exe" ] && [ ! -f "$tc/vc9sp1/VC/bin/cl.exe" ]; t
 fi
 
 export WINEPREFIX="$tc/wineprefix" WINEDEBUG=-all
+# no wine-mono / wine-gecko: on first start wine offers to install them in a dialog, which waits forever on a headless
+# runner (run 42656472534: wineboot timed out after 5 minutes); cl.exe needs neither
+export WINEDLLOVERRIDES="mscoree,mshtml="
 # every wine call gets a time limit (the first CI run hung 30 minutes, silently, in the installer under wine 9.0)
 if [ ! -d "$WINEPREFIX/drive_c" ]; then
   timeout 300 wineboot -i </dev/null || { echo "wineboot failed or timed out" >&2; exit 1; }
