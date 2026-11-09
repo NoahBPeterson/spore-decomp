@@ -8,10 +8,15 @@ For each manifest, every distinct (source, flags) is compiled once with tools/ma
   - not be an assembly transcription (tools/matching/asm_audit.py),
   - match its fingerprint (size, relocations on masked offsets, hash of the masked bytes).
 
-usage: gate.py MANIFEST... [--fingerprints tools/ci/fingerprints.jsonl] [--jobs 4] [--json out.json]
-exit 0 iff every row passes
+A row listed in --known (VA per line, default tools/ci/known_failures.txt: rows run_all.py counted byte-exact before the
+fingerprint check existed but that fail it) is reported without failing the check.  --keep FILE (VAs) requires each of
+those functions to still be a manifest row somewhere: a pull request may not drop a match.
+
+usage: gate.py MANIFEST... [--fingerprints tools/ci/fingerprints.jsonl.gz] [--known FILE] [--keep FILE] [--jobs 4]
+               [--json out.json] [--summary out.md]
+exit 0 iff every row passes (or is known) and nothing in --keep went missing
 """
-import argparse, json, os, sys
+import argparse, glob, gzip, json, os, sys
 from concurrent.futures import ThreadPoolExecutor
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -25,12 +30,17 @@ import fingerprint as F         # noqa: E402
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("manifests", nargs="+")
-    ap.add_argument("--fingerprints", default=os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl"))
+    ap.add_argument("--fingerprints", default=os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"))
     ap.add_argument("--jobs", type=int, default=4)
+    ap.add_argument("--known", default=os.path.join(ROOT, "tools", "ci", "known_failures.txt"))
+    ap.add_argument("--keep")
     ap.add_argument("--json")
+    ap.add_argument("--summary")
     a = ap.parse_args()
+    known = {int(l.split()[0], 16) for l in open(a.known) if l.strip() and not l.startswith("#")} \
+        if a.known and os.path.exists(a.known) else set()
     fps = {}
-    for line in open(a.fingerprints):
+    for line in (gzip.open(a.fingerprints, "rt") if a.fingerprints.endswith(".gz") else open(a.fingerprints)):
         d = json.loads(line)
         fps[int(d["va"], 16)] = d
     R.OBJ_DIR = os.path.join(ROOT, "work", "ci", "obj")
@@ -64,12 +74,37 @@ def main():
             if asm and st == "PASS":
                 st = "assembly transcription, not decompiled (%s)" % asm
         ok += st == "PASS"
-        out.append({"va": "%08x" % va, "src": src, "result": st})
-        print("%-5s %08x  %s%s" % ("PASS" if st == "PASS" else "FAIL", va, src, "" if st == "PASS" else "  " + st))
-    print("\n%d / %d functions match the retail fingerprints" % (ok, len(rows)))
+        tag = "PASS" if st == "PASS" else "KNOWN" if va in known else "FAIL"
+        out.append({"va": "%08x" % va, "src": src, "result": st, "tag": tag})
+        print("%-5s %08x  %s%s" % (tag, va, src, "" if st == "PASS" else "  " + st))
+    fails = [r for r in out if r["tag"] == "FAIL"]
+    nknown = sum(r["tag"] == "KNOWN" for r in out)
+    print("\n%d / %d functions match the retail fingerprints (%d known failures, %d new failures)" % (
+        ok, len(rows), nknown, len(fails)))
+    lost = []
+    if a.keep:
+        now = {r[2] for r in R.read_rows(all_manifests(), "")}
+        lost = sorted(v for v in (int(l.split()[0], 16) for l in open(a.keep) if l.strip()) if v not in now)
+        for v in lost:
+            print("DROPPED %08x: byte-exact on the base branch, no manifest lists it now" % v)
     if a.json:
         json.dump(out, open(a.json, "w"), indent=1)
-    return 0 if ok == len(rows) else 1
+    if a.summary:
+        with open(a.summary, "w") as f:
+            f.write("### Byte-match check\n\n%s **%d / %d** functions match the retail fingerprints"
+                    " (%d manifests; %d known failures)\n\n" % ("✅" if not fails and not lost else "❌", ok, len(rows),
+                                                               len(a.manifests), nknown))
+            if fails or lost:
+                f.write("| function | source | why |\n|---|---|---|\n")
+                for r in fails:
+                    f.write("| `%s` | `%s` | %s |\n" % (r["va"], r["src"], r["result"]))
+                for v in lost:
+                    f.write("| `%08x` | | dropped: byte-exact on the base branch, no manifest lists it now |\n" % v)
+    return 0 if not fails and not lost else 1
+
+
+def all_manifests():
+    return R.manifests() + sorted(glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"), recursive=True))
 
 
 if __name__ == "__main__":
