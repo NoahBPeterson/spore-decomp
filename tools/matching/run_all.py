@@ -25,11 +25,36 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 IMAGE = os.path.join(ROOT, "work", "SporeApp.analysis.bin")
 OUT = os.path.join(ROOT, "work", "match")
 DEFAULT_FLAGS = ["/O2", "/MD", "/Gy", "/EHsc", "/TP"]
-INCLUDE = "/I" + "Z:" + os.path.join(ROOT, "match", "include").replace("/", "\\")
+
+
+NATIVE = os.name == "nt"   # on Windows cl runs directly (cl_native), as tools/difftest/slice.py does
 
 
 def winpath(p):
-    return "Z:" + p.replace("/", "\\")
+    return os.path.abspath(p) if NATIVE else "Z:" + p.replace("/", "\\")
+
+
+INCLUDE = "/I" + winpath(os.path.join(ROOT, "match", "include"))
+
+
+def cl_native(args):
+    """cl.sh / cl71.sh without wine: the same compilers and include/lib paths, run directly (Windows)."""
+    tc = os.path.join(ROOT, "work", "toolchain")
+    env = dict(os.environ)
+    if "/vc71" in args:
+        args = [a for a in args if a != "/vc71"]
+        b = os.path.join(tc, "vc71tk")
+        env["INCLUDE"] = ";".join([os.path.join(ROOT, "match", "include", "vc71"), os.path.join(b, "include"),
+                                   os.path.join(tc, "vc9sp1", "WinSDK", "Include")])
+        env["LIB"] = os.path.join(b, "lib")
+        exe = os.path.join(b, "bin", "cl.exe")
+    else:
+        b = os.path.join(tc, "vc9sp1")
+        env["INCLUDE"] = ";".join([os.path.join(b, "VC", "include"), os.path.join(b, "WinSDK", "Include")])
+        env["LIB"] = ";".join([os.path.join(b, "VC", "lib"), os.path.join(b, "WinSDK", "Lib")])
+        exe = os.path.join(b, "VC", "bin", "cl.exe")
+    env["PATH"] = os.path.dirname(exe) + os.pathsep + env.get("PATH", "")
+    return subprocess.run([exe, *args], capture_output=True, text=True, env=env)
 
 
 def resolve_flags(flags):
@@ -82,9 +107,9 @@ def read_rows(paths, filt):
 def compile_one(key):
     src, flags = key
     obj = obj_path(src, list(flags))
-    r = subprocess.run([os.path.join(ROOT, "tools", "matching", "cl.sh"), "/nologo", "/c", *resolve_flags(flags), INCLUDE,
-                        "/Fo" + winpath(obj), winpath(os.path.join(ROOT, "match", src))],
-                       capture_output=True, text=True)
+    args = ["/nologo", "/c", *resolve_flags(flags), INCLUDE, "/Fo" + winpath(obj), winpath(os.path.join(ROOT, "match", src))]
+    r = cl_native(args) if NATIVE else subprocess.run([os.path.join(ROOT, "tools", "matching", "cl.sh"), *args],
+                                                      capture_output=True, text=True)
     return key, (obj if r.returncode == 0 else None), (r.stdout + r.stderr)[-2000:]
 
 

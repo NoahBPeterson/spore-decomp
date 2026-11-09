@@ -1,0 +1,121 @@
+# Byte-match check for pull requests: does the contributed C++ compile to exactly the retail game's bytes?
+#
+# Runs main's workflow and tools on the pull request's files (pull_request_target), so a pull request cannot change
+# what checks it: tools/ci/pr_files.py takes only src/game/, match/slices/ and match/include/ from the pull request and
+# fails on anything else.  The contributed code is only compiled, never run; the token is read-only and the job has
+# no secrets.  No game file is on the runner: functions are compared with retail fingerprints
+# (tools/ci/fingerprints.jsonl.gz, tools/ci/fingerprint.py).
+#
+# Passes when every manifest the pull request can affect (tools/ci/affected.py) matches its fingerprints, apart from
+# tools/ci/known_failures.txt, and no function that matched on main has been dropped from the manifests.
+name: Byte-match check
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  merge_group:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: pull request number to check
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: byte-match-${{ github.event.pull_request.number || github.event.merge_group.head_sha || inputs.pr }}
+  cancel-in-progress: true
+
+jobs:
+  byte-match:
+    name: Compile with MSVC and compare against retail fingerprints
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Check out the base branch (tools and workflow come from here)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.merge_group.base_sha || github.event.pull_request.base.sha || github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Fetch the pull request's commits
+        id: refs
+        env:
+          PR: ${{ github.event.pull_request.number || inputs.pr }}
+          MG_HEAD: ${{ github.event.merge_group.head_sha }}
+        run: |
+          if [ -n "$MG_HEAD" ]; then
+            git fetch -q origin "$MG_HEAD"
+            echo "head=$MG_HEAD" >> "$GITHUB_OUTPUT"
+          else
+            git fetch -q origin "+refs/pull/$PR/head:refs/remotes/pr/head"
+            echo "head=refs/remotes/pr/head" >> "$GITHUB_OUTPUT"
+          fi
+          echo "base=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Install wine (WineHQ stable, 32-bit), msitools, Python packages
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo mkdir -pm755 /etc/apt/keyrings
+          sudo wget -qO /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+          sudo wget -qNP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --install-recommends winehq-stable msitools xvfb >/dev/null
+          python3 -m pip install --quiet --break-system-packages pefile capstone
+
+      - name: List the functions that match on the base branch
+        run: |
+          python3 - <<'EOF' > "$RUNNER_TEMP/keep.txt"
+          import sys; sys.path[:0] = ["tools/ci", "tools/matching"]
+          import gate, run_all
+          print("\n".join(sorted({"%08x" % r[2] for r in run_all.read_rows(gate.all_manifests(), "")})))
+          EOF
+          wc -l < "$RUNNER_TEMP/keep.txt"
+
+      - name: Take the pull request's contribution files
+        run: python3 tools/ci/pr_files.py "${{ steps.refs.outputs.base }}" "${{ steps.refs.outputs.head }}" --changed-out "$RUNNER_TEMP/changed.txt"
+
+      - name: Find the manifests the change can affect
+        id: affected
+        run: |
+          python3 tools/ci/affected.py --from-file "$RUNNER_TEMP/changed.txt" > "$RUNNER_TEMP/manifests.txt"
+          echo "count=$(wc -l < "$RUNNER_TEMP/manifests.txt")" >> "$GITHUB_OUTPUT"
+          cat "$RUNNER_TEMP/manifests.txt"
+
+      - name: Start a virtual display for wine
+        if: steps.affected.outputs.count != '0'
+        run: |
+          Xvfb :99 -screen 0 1024x768x16 >/dev/null 2>&1 &
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
+
+      - name: Cache installers
+        if: steps.affected.outputs.count != '0'
+        uses: actions/cache@v4
+        with:
+          path: work/toolchain/downloads
+          key: msvc-installers-7800d037-50dc6cca
+
+      - name: Build and verify the toolchains
+        if: steps.affected.outputs.count != '0'
+        timeout-minutes: 20
+        run: sh tools/ci/setup_toolchain.sh
+
+      - name: Compile the affected manifests and check each function's bytes
+        if: steps.affected.outputs.count != '0'
+        run: |
+          python3 tools/ci/gate.py $(cat "$RUNNER_TEMP/manifests.txt") --keep "$RUNNER_TEMP/keep.txt" \
+            --jobs 4 --json byte-match.json --summary "$GITHUB_STEP_SUMMARY"
+
+      - name: Nothing to compile
+        if: steps.affected.outputs.count == '0'
+        run: echo "No manifest is affected by this change." | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload results
+        if: always() && steps.affected.outputs.count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: byte-match-results
+          path: byte-match.json
+          if-no-files-found: ignore
