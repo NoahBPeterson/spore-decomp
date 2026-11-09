@@ -1,4 +1,3 @@
-0082bfa0 105 complete translation; EASTL fixed-allocator allocate call not reproduced exactly [equiv: PASS]
 0082cc60 65  complete translation; vector(n) zero-fill schedule differs [equiv: PASS]
 0082ccb0 62  complete translation; push_back(NULL) grow path not identical [equiv: PASS]
 0082b9c0 1496  SerializeHelperProcessTokens2: 1496-byte token serializer (jump table over 19 token types, per-type vtable reads) not reconstructed [equiv: UNSUPPORTED, skeleton has no behaviour to compare]

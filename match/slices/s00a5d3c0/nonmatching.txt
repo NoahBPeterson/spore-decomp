@@ -9,7 +9,6 @@
 00a5d840 153 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; same 64-bit elapsed-time arithmetic, outlet fan-out is scheduled differently (size 197 vs 183); replay rejects on the GetCurrentProcess import
 00a5d900 4 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; only the frame size differs (0x18 vs 0x10: three gensym scratch slots instead of reusing two); pd_new/outlet_new/inlet_new unresolved
 00a5d990 54 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; the two byte flags are kept in stack slots instead of bl/al (size 129 vs 120); class_new/class_addbang unresolved
-00a5da10 11 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; returns `mov eax,1` where the original emits `mov al,1` (size 76 vs 73); class_new unresolved
 00a5da60 11 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; same instruction set, only the two float stores are scheduled after the argument pushes; pd_new/floatinlet_new/outlet_new unresolved
 00a5dae0 176 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; outlet-count register (eax vs ecx) and the early load of the hung note are scheduled differently (size 194 vs 226); outlet_float/clock_free/freebytes unresolved
 00a5dbd0 166 /O2 /MD /Gy /TP /arch:SSE2 UNSUPPORTED - complete; same flow, the two outlet loops and the tick allocation block are scheduled differently (size 253 vs 278); outlet_float/getbytes/clock_new/clock_delay unresolved

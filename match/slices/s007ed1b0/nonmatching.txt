@@ -1,6 +1,5 @@
 # va diff reason
 007ed1b0 310 EA::Swarm::ScaleCurve - vector insert shift loop schedule differs; equiv WEAK (33 valid < 200, 92.4% cov, 0 mismatches): modeled as Vec3Vec::ScaleCurve (__thiscall member with ret 8; MSVC rejects __thiscall on a free function, C3865), the insert branch calls ScaleCurve(mpEnd, value), and the allocator paths pass the full __FILE__ path literal c:\BuildAgent\max-spore001-spore\CMBuild\SporeEP1_RL\Core\UTFKernel\EASTL\include\EASTL/allocator.h (0x13ebb38), not "allocator.h"
-007ed3e0 12 vector<Vector3>::push_back - push/insert branch shape differs; equiv PASS (273 valid, 100% cov)
 007ed740 101 effect description copy - inlined vector assignment differs
 007ed7c0 311 effect clone - wstring/vector ctor inlining differs
 007ed920 83 read vector<Vector3> - resize + loop differs

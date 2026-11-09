@@ -1,13 +1,10 @@
 # va  diff-bytes  reason
 00836740 34 ResFinder::FindByExt (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; exact 263 B size): complete extension-map walk (wcsrchr, suffix length check, ConvertToString8, hashtable Begin/iterate/strstr, cleanup); residual: `this` allocated to esi vs retail edi, suffix loop zero-extends into dx instead of retail's `mov dx`, dot+1 not hoisted into esi (`sub ecx,eax; sub ecx,2` vs `lea esi,[ecx+2]; sub ecx,esi`), node/bucket load order; equiv UNSUPPORTED (0/400 valid, all fault).
-00836850 56 BoolVec::Init - complete copy-with-null-terminator; returns this like the retail (BoolVec* return type); equiv: PASS (401 valid, 100% coverage) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00836910 78 RawFixed::Assign - complete range-assign (DoInsertValue + append/shrink-tail); register scheduling differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00836a30 69 RawFixed::SubstrInto - complete substr into a 256-wide SSO buffer (calls WideFixedBuf::append 0x42f9d0); equiv: PASS 100% cov flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00836a90 86 RawFixed::Swap - complete; uses copy-then-assign tail; register allocation and temp shape differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00836d50 725 cDataURI::init - complete; scheme/charset parsing implemented, codec resets and buffer setup schedule differently; equiv: WEAK 197 valid, 23.5% cov flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00837020 2 RawFixed::Reserve - complete allocate-and-grow; register allocation / temp construction differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 008371e0 8 cDataURI::cDataURI - complete; the second SSO capacity lea is scheduled one slot early flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00837270 109 RawFixed::AppendN - complete append(count,char) with memset fill, returns this; equiv: PASS 61.5% cov flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00837310 42 RawFixed::Resize - complete; register assignment (edi vs esi for this) differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00837360 735 cSPUIXHTMLDataURIHandler::PackDataIntoURIString - complete; percent/base64 encoder implemented, SSO/temp shape differs; equiv: WEAK 287 valid, 12.9% cov flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00837820 1070 cDataURI::GetStream (complete: empty-value guard, percent decode incl. utf16 4-digit form, memory-stream alloc/Construct/SetOption, base64 decode path, wide/byte chunk writes, refcount + cleanup); original keeps this in ebp and needs no /GS cookie while cl 2008 emits __security_cookie for the 0x200-byte wide buffer; inlined FixedString init/cleanup scheduling differs [equiv: WEAK 244 valid, 56.7% coverage] flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

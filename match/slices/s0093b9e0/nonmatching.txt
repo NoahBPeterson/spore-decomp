@@ -5,7 +5,6 @@
 0093c0c0  99   complete: MemoryStream position arithmetic, branch layout differs
 0093c150  219  complete: MemoryStream resize-on-write; equiv PASS (explicit round-to-nearest reproduces retail's x87 fistp)
 0093c210  62   complete: scalar deleting dtor, refcount schedule differs
-0093c320  68   complete: MemoryStream clear; equiv FAIL-KEPT register ecx (a non-null path writes ecx where the original leaves the entry value)
 0093c370  61   complete: MemoryStream SetSize, branch layout differs
 0093c6f0  12   complete: fputs-to-stderr wrapper, call setup differs
 0093c710  4    complete: Strlen32 do/while, loop register order differs

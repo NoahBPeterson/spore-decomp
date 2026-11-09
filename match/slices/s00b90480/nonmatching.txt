@@ -1,7 +1,6 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
 00b90480   143  FUN_00b90480 (GetRandomPlants): complete; editor species manager/EASTL vector glue scheduling differs; equiv: PASS (400 valid, 80% cov)
 00b90560   254  FUN_00b90560: complete; mission plant-profile list build; inlined stack-string and vector growth differ
-00b906a0    57  FUN_00b906a0: complete; clamped random in [a,b]; x87 double promotion scheduling differs; equiv: PASS (400 valid, 100% cov)
 00b90750    75  FUN_00b90750: complete; cell->pointer (stride 0xc); address arithmetic register choice differs; equiv: PASS (394 valid, 100% cov)
 00b907a0    74  FUN_00b907a0: complete; cell->flags dword; address arithmetic register choice differs; equiv: PASS (477 valid, 100% cov)
 00b907f0    68  FUN_00b907f0: complete; cell visibility classify; threshold compare written `fVar4 > T` so comiss uses xmm0,mem and no longer clobbers xmm1; SSE/bitfield RMW scheduling differs; equiv: WEAK (186 valid <200, 100% cov, no mismatch)

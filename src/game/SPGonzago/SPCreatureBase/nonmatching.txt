@@ -20,7 +20,6 @@
 00c0be70 6 cached-handle predicate: complete; bool return materialisation (setne/xor eax vs xor al)
 00c0c200 43 game-mode water render callback: complete; call/arg setup differs
 00c0c2d0 2 cCreatureBase::IsDefaultSpecies: complete; return materialisation
-00c0c3e0 74 copy 0x24 record + AddRef: complete; register/schedule
 00c0c440 8 copy range of 0x24 records: complete; float field copied via fld/fstp in original
 00c0c4b0 218 quaternion half-angle swap: complete; x87/SSE mixing and expression order
 00c0c5b0 32 water reflection helper: complete; branch/arg shape differs
@@ -37,7 +36,6 @@
 00c0e0c0 72 FAIL         current animation guid compare; complete; equiv call-depth fault (vtable callee)
 00c0e120 8 UNSUPPORTED  slot array membership at +0xf4c; complete; 0 valid inputs (read fault)
 00c0e370 39 FAIL         GetCurrentAnimationGUID (alt); complete; equiv execution fault (vtable callee)
-00c0e3a0 20 FAIL         get current time/float slot via vtable; complete; equiv execution fault
 00c0e3d0 48 FAIL         animation flag via guid; complete; equiv execution fault
 00c0e420 42 FAIL         animation-check via guid; complete; equiv execution fault
 00c0e480 52 UNSUPPORTED  cSPCreatureBase::GetTime; complete; 0 valid inputs (import decode_pointer)
@@ -65,7 +63,6 @@
 00c0fa10 94 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find slot by combatant with index out; the compare and out-parameter order differ from retail; equiv FAIL (first mismatch eax)
 00c0fa70 102 FAIL         find animation entry by mask bit; complete; equiv eax mismatch
 00c0fba0 87 UNSUPPORTED  serialize vector via IO stream; complete; 0 valid inputs (read fault/fake-arity)
-00c0fc10 41 FAIL         dispatch element callback to +0x20 object; complete; equiv eax&0xffff mismatch
 00c0fc40 124 UNSUPPORTED  uniquify pointer array (release dups); complete; 0 valid inputs (read fault)
 00c0fcf0 172 UNSUPPORTED  read bit array via IO stream; complete; 0 valid inputs (read fault/fake-arity)
 00c0fda0 123 UNSUPPORTED  write bit array via IO stream; complete; 0 valid inputs (read fault/fake-arity)

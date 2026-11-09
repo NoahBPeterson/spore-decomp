@@ -1,4 +1,3 @@
-0075ee90  50  complete; cLayerInfoExtra copy (AddRef slot 0 + 4 fields), register/schedule differs; equiv: PASS (1172 inputs, 100% cov) after Elem member fix
 0075eed0  160  complete; SP::CopyElemRange uninitialized-copy loop over 0x14-byte elements (AddRef slot 0 then 4 field copies, skipped when dst==0); complete, 94B vs 166B -- the original's per-iteration SEH/EH-state frame (ehstate 0 -> construct -> -1) is not reproduced; equiv: WEAK (101 valid inputs, 36.4% cov)
 0075ef80  160  complete; construct a range into an array whose write cursor is *pDst (SP::cLayerInfoExtra addref-copy); complete, 96B vs 165B -- SEH frame not reproduced; equiv: UNSUPPORTED (0/400 valid inputs; the original faults reading captured state)
 0075f430  95  complete; EASTL copy_backward with release/AddRef on element 0, layout differs

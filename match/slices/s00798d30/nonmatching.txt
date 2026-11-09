@@ -7,7 +7,6 @@
 007993a0 10 complete cSplitInstance constructor; first three zero-stores scheduled differently
 007994d0 306 complete equivalence FAIL-KEPT dead eax residue (orig leaves dest ptr in eax)
 00799640 308 complete equivalence PASS; switch/normalize buffer layout now contiguous
-00799840 58 complete EASTL vector allocator; call-arg order/register use differs
 007998a0 145 complete equivalence PASS; plane-intersection (float10/x87) evaluation order differs
 007999a0 320 complete equivalence FAIL-KEPT 1/400 inputs 1-ULP x87 st0 difference
 00799b50 163 complete equivalence FAIL-KEPT st0 NaN sign (positive vs negative QNaN) on 5/65 inputs

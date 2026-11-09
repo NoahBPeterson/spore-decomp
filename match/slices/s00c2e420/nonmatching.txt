@@ -5,7 +5,6 @@
 00c2e780  8   complete: two-step accessor chain, call setup differs
 00c2e820  8   complete: two-step accessor chain, call setup differs
 00c2e980  13  complete: NotifyEvent float push, register scheduling differs
-00c2e9b0  22  complete: timer/state float getter; IsRunning is a thiscall on this+0x38 (ecx=this+0x38, no stack arg), declared as an annotated SP_cSPTimer member; equiv PASS: 1176 valid, 100% coverage
 00c2e9e0  37  complete: state change + timer restart, scheduling differs
 00c2ec30  52  complete: property getter (vtbl[0xc0] -> vtbl[0x24](key 0x63ff8cc5) -> type tag 0x12==10 -> Property::GetUInt), call layout/scheduling differs; difftest UNSUPPORTED (0/400 valid: original faults reading)
 00c2ec80  61  complete: property getter (vtbl[0xc0] -> vtbl[0x24](key 0x5d6796fd) -> type tag 0x12==10 -> Property::GetUInt), call layout/scheduling differs; difftest UNSUPPORTED (0/400 valid: original faults reading)

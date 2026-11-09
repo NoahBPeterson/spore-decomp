@@ -11,4 +11,3 @@
 00623af0  9    ~cSPHoverTitle: complete; trailing base-vptr stores order
 00623be0  60   cXHTMLWin ctor: complete; store scheduling around the base ctor
 00623c90  566  cXHTMLWin::SetFormControlValue (select/option handling): complete; list end iterator kept as a null-checked value in the original
-00623ef0  67   cXHTMLWin::OnKeyDown plus (in the same VA range, separate function at 0x623f40) CreateXHTMLWin: complete; the 145-byte original range contains two functions, so it can never match as one symbol

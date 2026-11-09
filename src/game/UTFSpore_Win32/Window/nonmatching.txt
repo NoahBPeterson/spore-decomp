@@ -5,21 +5,16 @@
 0095fad0 44 Window::IsAncestorOf: complete; ancestor walk register schedule differs
 0095fb20 39 Window::Test30Slot48: complete; this-adjust mask differs
 0095fb60 39 Window::Test30Slot54: complete; this-adjust mask differs
-0095fc00 3 Window::AllDescendantsAll: complete; bool return uses al instead of eax
 0095fd60 26 Window::SetA8: complete; event arg block order differs
-0095fdc0 22 Window::Set1D4: complete; this-4 arguments differ
 0095fe40 33 Window::SetArea: complete; float compare/set order differs
 0095fec0 54 Window::ResizeBy: complete; area composition order differs
 0095ff20 35 Window::MoveBy: complete; +0x60 call and SSE add schedule differ
 0095ff70 54 Window::GrowBy: complete; +0x6c call and SSE add schedule differ
 0095ffd0 35 Window::MoveBy2: complete; +0x6c call and SSE add schedule differ
-00960020 63 Window::SetA4: complete; tail-call to FUN_009580b0 not formed
 00960050 65 Window::Set1E4: complete; refcount swap and vtable +0x90 call differ
 009600a0 29 Window::OnPaint2: complete; flag test order differs
-009600d0 10 Window::CallSlot: complete; trivial call wrapper tail shape differs
 00960280 3 Window::ClearChildren: complete; node==8 test uses cmp instead of add -8
 009602c0 31 Window::Dispatch14: complete; this-adjust and vtable +0x14 args differ
-009602f0 20 Window::Dispatch: complete; tail-call not formed
 00960be0 600 geometry rect accumulation: frame size and SSE schedule differ (706 vs 830 bytes); equiv: FAIL (now testable via member Geom; output rect differs)
 00960f20 169 SetUserData: vcall/IID schedule and bit clear order differ
 00960fe0 330 TestHit: float compare and event-block layout differ (misassigned to SerUpdate slot)

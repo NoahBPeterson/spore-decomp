@@ -33,9 +33,10 @@ locally (below) before you open the pull request.
 
 ## The loop
 
-1. **Pick a function.** `.venv/bin/python tools/contrib/task.py --list --max-size 128` lists functions that already
-   have complete C++ source whose bytes still differ, smallest first, with the note left by whoever worked on it last.
-   Small functions are the place to start.
+1. **Pick a function.** `.venv/bin/python tools/contrib/task.py --list --max-size 256` lists functions that already
+   have complete C++ source whose bytes still differ, **closest to a match first** (fewest differing bytes, then
+   smallest), with the note left by whoever worked on it last. Hundreds are only 1 to 4 bytes off: start there.
+   (`--by size` sorts smallest first instead.)
 2. **Read its context.** `.venv/bin/python tools/contrib/task.py 0x00529690` prints its source file, status, compiler
    flags, retail size, includes and current source.
 3. **Say you are on it.** Open a draft pull request early, titled with the address (`0x00529690: ...`), so others can

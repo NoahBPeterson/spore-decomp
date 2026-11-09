@@ -4,7 +4,6 @@
 00b5df90   84  cGonzagoMode constructor; base-vtable store order differs
 00b5cfe0  273  cGonzagoMode mode enter/exit; GameTime update, camera edge/move, per-layer v[0x38] tick loop; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (207 valid, 39.3% coverage; no mismatch).
 00b5d130  104  minimap update; GameTime arg, base v[0x34] tick, Minimap render, per-layer v[0x3c] loop, model tick; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest PASS (202 valid, 77.6% coverage).
-00b5d220  144  eastl hashtable rehash; new bucket table, per-bucket node relink, old-bucket recycle/free, count/store update; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (98 valid, 84.4% coverage; no mismatch).
 00b5d2c0  244  "bgColor" option handling; MainArguments + OptionArguments, section v[0xb4] colour read, EAVariant Construct + app-props v[0x14] + Destruct; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (147 valid, 71.2% coverage; no mismatch).
 00b5d430  181  ban-mode scene setup; mode-list v[0x10] probe, modifier-key bail-out, terrain cursor v[0x38] + surface orientation v[0x3c]; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest UNSUPPORTED (0/400 inputs valid: import GetSystemMetrics).
 00b5d540  309  mode-strategy availability check; per-layer v[0x24] probe then creature/tribe/civ/FUN_fd9c60/edit-selection strategies; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest UNSUPPORTED (0/400 inputs valid: fault(read)).

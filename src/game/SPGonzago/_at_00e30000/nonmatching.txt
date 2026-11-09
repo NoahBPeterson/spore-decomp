@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00e30010 97 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) push card; the deque growth helper and the block allocation are unresolved; equiv UNSUPPORTED (unresolved deque helpers) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00e300f0 189 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) manager shutdown; the message posts, the card releases and the animator update are unresolved so the deque loop is simplified; equiv UNSUPPORTED (unresolved message and teardown helpers) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00e30230 871 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) manager update; the six animation stages are modelled but the animator, window and timing helpers are unresolved so the state machine collapses; equiv UNSUPPORTED (unresolved animation services) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00e30680 128 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) manager reset; the card release loop is modelled but the reset helper and free are unresolved; equiv UNSUPPORTED (unresolved teardown helpers) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

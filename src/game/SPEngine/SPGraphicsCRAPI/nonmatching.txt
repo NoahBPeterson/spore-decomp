@@ -8,7 +8,6 @@
 006e1be0 79 fill a 3D byte region; triple loop translated, loop rotation differs
 006e1c50 129 WUINTERNAL::AllocWuData; both galloc buffers, zeroing and the four contiguous moment pointers reproduced, schedule differs
 006e1d10 34 WU_open; 0x10 context alloc + AllocWuData + tag/version stores translated, store order/schedule differs
-006e1d50 57 WU_read; descriptor validation, dimension stores and Hist3d call translated, register schedule differs
 006e1db0 858 WU_close; moment pass, box-cut loop, best-score scan and palette/image output all translated, helper/register schedule differs
 006e20f0  428  CRAPI_diffuseerror; all three channel error branches (clamp/negative) and the scan loop translated, schedule differs
 006e22d0 646 CRAPI_getcolour; both distance tables, the channel-expansion hint paths, 0x1fff cache probe and nearest loop translated, schedule differs

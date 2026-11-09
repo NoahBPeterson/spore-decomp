@@ -1,6 +1,5 @@
 00a52ff0  434  Group::Init: not emitted as a symbol of similar size (inlined / different COMDAT split); logic modeled from the card ; difftest UNSUPPORTED (0/400 valid inputs; all 400 discard as fault(read) - the Eapd Group layout the harness would have to synthesise is not modelled; 0/168 insns covered)
 00a53210  14  Init@FixedPool: imul scheduled before the mnNodeSize store (2-instruction scheduler swap) ; difftest WEAK (249 valid, 33% cov)
-00a53310  61  artists_play_setname: bIsDynamic-guarded name/groupid update; not chosen as best-size symbol ; difftest PASS (400 valid, 100% cov)
 00a53360  232  FixedHashtableAllocator::InitBuckets: x87 bucket-count computation; no symbol of similar size emitted ; difftest UNSUPPORTED (0/400 valid inputs; discards fake-arity=192, fault(write)=182, fault(pool-limit)=23; 0/91 insns covered)
 00a535e0  51  ParamTable::AllocNode: branch polarity and register selection still differ ; difftest FAIL (empty-pool path)
 00a53640  58  ParamIter::ParamIter: vftable store ordering/reduced regalloc still differs ; difftest PASS (327 valid, 100% cov)

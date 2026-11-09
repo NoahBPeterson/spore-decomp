@@ -4,7 +4,6 @@
 0111cd10 0 havok-equivalent
 0111cdb0 0 havok-equivalent
 0111ce00 0 havok-equivalent
-0111ced0 0 FIXED needsExtraProperty: split into separate `return hkBool(true)` branches so cl branches and stores 0/1 instead of `setg cl` (which clobbered the this pointer); byte-exact MATCH (41 B, 0 diff), moved to manifest.txt; equiv PASS 400/400 valid, 100% coverage
 0111cf00 0 havok-equivalent
 0111d060 0 havok-equivalent
 0111d140 0 havok-equivalent

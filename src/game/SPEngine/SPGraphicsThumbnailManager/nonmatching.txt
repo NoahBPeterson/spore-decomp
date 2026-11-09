@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 007b2890 16 destructor: original has an EH frame (vptr-restore protection); our body compiles without it
-007b2900 16 destructor: original has an EH frame (vptr-restore protection); our body compiles without it
 007b3a70 2695 complete behavioural reconstruction (every call/path/output slot) of the 3966-byte FP layer draw; exact register allocation and FP evaluation order of the four make-quad blocks not reproduced
 007b55f0 744 FitViewerToBounds: complete (camera pull-back loop vs frustum, 5000 iterations); scheduling/frame layout differ; difftest PASS after fixes: viewProj copied as a 64-byte struct (rep movsd) instead of a float loop (fld/fstp quiets SNaNs), length sum order x,y,z restored, and r computed before the centre so the frame is 0x1bc like the original (a callee with an aligned frame copies an unwritten Inverse result, so the frame size mod 16 showed up as a FAIL)
 007b5ad0 344 PostRenderJob: complete (job + message objects, EH smart ptrs); vtable-load order and a null-check differ

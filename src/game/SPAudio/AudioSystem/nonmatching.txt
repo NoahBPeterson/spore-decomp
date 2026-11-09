@@ -14,8 +14,6 @@
 00a21590 52 complete; EA::Audio::VoiceContainer::Disconnect (SEH frame + import calls); equiv FAIL
 00a21630 59 complete; voice message handler (thiscall + EH frame, vtable factory); equiv UNSUPPORTED (fake-arity: 0/1200 valid inputs); now a thiscall stub-class member
 00a21710 748 complete; EA::Audio::System::HandleMessage (large vtable dispatch + EH + message-hash constants); equiv FAIL
-00a21b20 85 complete; voice command forwarder (calls connect); equiv FAIL
-00a21b90 42 complete; 4-arg voice command forwarder (calls connect4); equiv FAIL
 00a21c00 46 complete; eastl vector<T>::~vector; equiv WEAK (76.3% coverage); now a thiscall stub-class member
 00a21c70 9 complete; list-node -> payload; returns the out pointer in eax (caller-visible ABI; return type void -> void**); equiv PASS (400 valid, 100% coverage)
 00a21c90 9 complete; list-node -> payload; returns the out pointer in eax (caller-visible ABI; return type void -> void**); equiv PASS (400 valid, 100% coverage)
@@ -25,7 +23,6 @@
 00a21f60 64 complete; ref-counted allocation; reconstruction calls a faulting callee on synthetic inputs; equiv FAIL
 00a22060 123 complete; voice hash-bucket rehash (node next at +0x1e4); equiv WEAK (46.9% coverage); now a thiscall stub-class member
 00a22110 117 complete; hash-bucket rehash (node next at +0x24); equiv FAIL; now a thiscall stub-class member
-00a22220 124 HTable28::Rehash: complete; original re-reads this->buckets each iteration, mine hoists
 00a22370 123 HTable20::Rehash: complete; same bucket-array reload difference
 00a22410 51 SList::merge (intrusive_list<Sound>): complete; this spilled to stack and iterator temps built in place in original
 00a227a0 13 DrvBA22 ctor (RefBaseA22 + [0x80]=arg): complete; store scheduling differs (arg store before vtable store); difftest PASS (ctor made out-of-line thiscall, vtables mapped in symbols/slices/s00a22220.txt)

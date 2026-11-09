@@ -7,7 +7,6 @@
 00797a20 5746 complete Ghidra transcription of FUN_00797a20; hand-scheduled SSE spherical-harmonic kernel (emits 6587 bytes vs 4873); equiv WEAK (767 valid inputs, 3.3% coverage) flags: /O2 /MD /Gy /EHsc /TP
 00798d30 122 complete equivalence PASS; SSE identity rebuild / call dispatch schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00799320 75 complete equivalence FAIL-KEPT dead eax residue (orig leaves dest ptr in eax, ours leaves source) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00799840 52 complete EASTL vector allocator; call-arg order/register use differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 007998a0 75 complete equivalence PASS; plane-intersection (float10/x87) evaluation order differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 007999a0 292 complete equivalence FAIL-KEPT 1/400 inputs 1-ULP x87 st0 difference flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00799b50 163 complete equivalence FAIL-KEPT st0 NaN sign (positive vs negative QNaN) on 5/65 inputs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

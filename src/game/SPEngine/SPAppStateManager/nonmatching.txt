@@ -10,7 +10,6 @@
 007e2ce0 355 cTransitionCommand instance dispatch; vtable/loop codegen differs; equiv: WEAK (40% coverage, member fix)
 007e2fb0 70 cTransitionListCommand::Execute; int parse (v39) register schedule differs
 007e3030 89 cAppStateManager::StateIDFromName; hashtable find call/inline differs
-007e30a0 37 hashtable lookup + FUN_007e2ce0; find call schedule differs; equiv: FAIL (fake-arity/callee, member fix)
 007e3160 173 eastl::vector<cActionMessage>::operator=; branch layout differs; equiv: FAIL (member fix)
 007e3d90 46 vector<cActionMessage>::push_back; EH frame / grow branch schedule differs
 007e40d0 99 cAppStateManager::AddAction; AutoRef temp + push_back call schedule differs; equiv: FAIL (write fault in push_back path, member fix)

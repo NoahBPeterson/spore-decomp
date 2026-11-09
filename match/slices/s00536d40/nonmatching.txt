@@ -1,4 +1,3 @@
-005370b0  97   vector<16-byte>::resize(n, v): pass the caller's `v` straight to DoInsert (the retail symbol is ?resize@Vec16@@QAEXIABUElem16@@@Z, i.e. resize(uint, const Elem16&)); grow when count < n, else erase(begin+n,end). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv PASS (289 valid, 100% cov; the old source invented an uninitialized local instead of taking the third argument)
 00537240  77   uninitialized_copy<20-byte>: generic_iterator temp slots missing
 00537c10  96   Big50 factory: operator new(0x50,"Swarm",0,0,0,0) then call the Big50 ctor; the old struct was empty so sizeof was 1, now a 0x50-byte body makes the allocation size right (the /Od SEH frame still differs). flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv PASS (292 valid, 97.4% cov)
 00537d90  26   Host::Init: local cSPTransform construction schedule differs

@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00926020  30  ZoneObject::operator_new: virtual allocate call shape differs
 00926060  15  ZoneObject::operator_delete: virtual deallocate call shape differs
 00925bf0  16  allocator virtual call wrapper: argument/scheduling differs
 00925da0  23  allocator virtual call wrapper: argument/scheduling differs; equiv PASS (member, ecx)

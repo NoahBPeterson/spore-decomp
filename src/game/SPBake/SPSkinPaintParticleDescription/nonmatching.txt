@@ -24,10 +24,7 @@
 0053a930 574 WriteEvalList complete; three array writes
 0053acc0 238 ReadParticleDescription complete; field-by-field IStream read (vtable ReadBytes +0x30)
 0053aea0 302 WriteParticleDescription complete; symmetric write (vtable WriteBytes +0x38)
-0053b1c0 16 PaintCompat ctor variant complete (base ctor + vtable stores); explicit vtable stores differ; equiv FAIL vtable constant 13f4b30 vs orig 13f2424 and base ctor call 83c800 missing (now thiscall member); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0053b1f0 11 PaintCompat::PaintCompat ctor complete; equiv FAIL vtable constant 13f4b30 vs orig 13f2424 and base ctor call 83c800 missing (now thiscall member); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0053b210 404 eastl::vector<Entry16>::operator= complete; implemented as byte-stride assign (POD elements); equiv UNSUPPORTED unresolved operator new[](size_t) (orig uses 6-arg EA new[] 0xf473a0; ours a different impl); now thiscall member; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0053b520 254 eastl::vector<Entry16>::resize complete; equiv UNSUPPORTED unresolved operator new[](size_t); orig is a thin wrapper over insert/erase; now thiscall member; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0053b5a0 390 eastl::vector<Entry20>::operator= complete; equiv UNSUPPORTED unresolved operator new[](size_t); now thiscall member; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0053b8a0 224 eastl::vector<Entry20>::resize complete; equiv UNSUPPORTED unresolved operator new[](size_t); orig is a thin wrapper over insert/erase; now thiscall member; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0053b930 303 RegisterPaintEvalCommands<...> complete; 0x13 PaintVariable objects + modifier + compareNormal/comparePosition flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

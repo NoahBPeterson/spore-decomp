@@ -20,7 +20,6 @@
 008d6830  111  reconstruction (eastl::rbtree<string,pair<const string,uint>>::DoInsertValueImpl); flags as above; difftest UNSUPPORTED (original reads ecx at entry; our declaration passes nothing there -- LTCG register ABI)
 008d68c0  142  reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::DoInsertValue? / record-map helper); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
 008d6970  110  reconstruction (DatabaseDirectoryFiles::GetRecordCount); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
-008d69f0   295  reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::DoInsertValue); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
 008d6b20  141  reconstruction (DatabaseDirectoryFiles::GetKeyList); flags as above; difftest UNSUPPORTED (0/400 valid inputs: mutex import + pool limit)
 008d6be0   71  reconstruction (eastl::rbtree<string,pair<const string,uint>>::DoNukeSubtree); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
 008d6c40  173  reconstruction (DatabaseDirectoryFiles::AddExtensionMapping? overload); flags as above; difftest FAIL (5/190 valid inputs mismatched: execution)

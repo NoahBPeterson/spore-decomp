@@ -6,9 +6,6 @@
 00840d50  67   complete: ParseRangedFloat; x87 range compare + throw frame differ
 00840dc0  44   complete: ParseRangedInt; range compare + throw frame differ
 00840e10  169  complete: ParseRangedVector3; aligned frame + SSE range compare differ
-00841220  68   complete: parser event dispatch (vtable slot 0x38); try/catch EH frame differs
-00841290  68   complete: parser event dispatch (vtable slot 0x3c); try/catch EH frame differs
-00841300  68   complete: parser event dispatch (vtable slot 0x40); try/catch EH frame differs
 00840250  162  complete: cFileParser dtor; SEH frame and hash_map/spec-vector teardown schedule differ
 00840340  198  complete: ClearFilePaths; node walk/hash free and spec-vector clear codegen differs
 00840420  562  complete: AddFilePath; spec insert and watcher-map/watcher setup differ from inlined retail path

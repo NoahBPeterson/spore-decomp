@@ -14,7 +14,6 @@
 
 00a61610  voutlet_new       size 162 vs 154, 95 diff. Same early-return restructure as vinlet_new but the inlet_new call has different stack-arg shapes. UNSUPPORTED (pd globals).
 
-00a616b0  voutlet_bang      size 16 vs 93. Our 16 bytes (mov eax,[esp+4]; mov ecx,[eax+0x2c]; mov [esp+4],ecx; jmp outlet_bang) match the original's first 16 bytes exactly; the slice extent is 93 bytes because it swallows the following 0x00a616c0 float variant, which /Gy keeps out of our COMDAT, so the extent can never match. Equivalence PASS (236 valid, 100% coverage).
 
 00a617c0  voutlet_setup     size 196 vs 221, 67 diff. Same setne-per-call pattern as vinlet_setup. UNSUPPORTED (pd globals).
 

@@ -7,7 +7,8 @@ Prints where the function lives (its source file and object), its status (byte-e
 partial, or no source yet), the compiler flags it is checked with, its retail size, the headers its file includes, the
 current source of the function, and what to do next.  Needs only the repo: no game files.
 
-  --list [--max-size N]   open work: functions with source that is not byte-exact yet, smallest first
+  --list [--max-size N] [--by size]   open work: functions with source that is not byte-exact yet, fewest differing
+                                      bytes first (the closest to a match), then smallest; --by size: smallest first
 """
 import argparse, glob, gzip, json, os, re, sys
 
@@ -74,14 +75,29 @@ def body(src, va):
 
 
 def open_work(max_size):
+    import run_all as R
+    done = {r[2] for r in R.read_rows(R.manifests() + sorted(glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"),
+                                                                  recursive=True)), "")}
     rows = []
     for f in glob.glob(os.path.join(ROOT, "match", "slices", "*", "nonmatching.txt")) + \
             glob.glob(os.path.join(ROOT, "src", "game", "**", "nonmatching.txt"), recursive=True):
         for va, diff, reason in S.read_rows(f):
             fp = fingerprints().get(va)
-            if fp and fp["size"] <= max_size:
+            if fp and fp["size"] <= max_size and va not in done:
                 rows.append((fp["size"], va, diff, os.path.relpath(os.path.dirname(f), ROOT), reason))
-    return sorted(rows)
+    # a function listed by both its slice and its migrated module: show it once, at the src/game copy (task.locate's choice)
+    best = {}
+    for r in rows:
+        if r[1] not in best or r[3].startswith("src" + os.sep):
+            best[r[1]] = r
+    return list(best.values())
+
+
+def ndiff(diff):
+    """the differing-byte count of a nonmatching row ('12', '~12', '12?'), or None; 0 is a placeholder (305 rows
+    such as 'havok-equivalent' were never measured), so it counts as unknown"""
+    m = re.match(r"\D*(\d+)", str(diff or ""))
+    return int(m.group(1)) or None if m else None
 
 
 def main():
@@ -89,12 +105,19 @@ def main():
     ap.add_argument("va", nargs="?")
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--max-size", type=int, default=256)
+    ap.add_argument("--by", choices=("diff", "size"), default="diff")
     a = ap.parse_args()
     if a.list:
         rows = open_work(a.max_size)
-        print("%d functions with complete source that is not byte-exact yet, up to %d bytes:" % (len(rows), a.max_size))
+        big = 1 << 30
+        rows.sort(key=(lambda r: (ndiff(r[2]) if ndiff(r[2]) is not None else big, r[0], r[1])) if a.by == "diff"
+                  else (lambda r: (r[0], r[1])))
+        print("%d functions with complete source that is not byte-exact yet, up to %d bytes, %s:" % (
+            len(rows), a.max_size, "closest to a match first" if a.by == "diff" else "smallest first"))
+        print("  %-10s  %6s  %6s  %s" % ("function", "differ", "size", "where / last note"))
         for size, va, diff, where, reason in rows:
-            print("  0x%08x  %5d bytes  %4s differ  %s  %s" % (va, size, diff or "?", where, (reason or "")[:70]))
+            n = ndiff(diff)
+            print("  0x%08x  %6s  %6d  %s  %s" % (va, n if n is not None else "?", size, where, (reason or "")[:70]))
         return 0
     if not a.va:
         ap.error("give a function address, or --list")

@@ -4,6 +4,5 @@
 00546800  117  complete; fixed thiscall push_back - /Od vector insert schedule differs
 00546880  122  complete; /Od vector erase schedule differs
 00546930  290  complete; fixed vector_map::operator[] (0x14 compare byte, thiscall insert/destroy) - schedule differs
-00546a60  151  complete; fixed thiscall push_back 0x10 - schedule differs
 00546b70  164  complete; fixed thiscall push_back 0x118 - schedule differs
 00546c20  851  complete; /Od frame slot layout differs (name-hashed slots); equiv PASS (400 inputs, 94.6% cov)

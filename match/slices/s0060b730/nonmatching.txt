@@ -1,4 +1,3 @@
-0060b730  9    cInsertDiscDialog ctor: complete; original delays the [this+8]=0 store until after the member-layout lea (store scheduling only)
 0060bae0  27   InsertDisc::Show: complete; stack-message ctor stores (+0x30 before vptr) and one push ebp/eax register choice differ
 0060c110  23   WriteToStream: complete; original reuses esi for the vtable pointer and has no jmp over the loop alignment pad
 0060c4e0  25   basic_string::append(const char*): complete; original keeps this in ecx (loop char in dl), cl is chosen here | equiv: PASS (906 valid, 100% cov) after symbol fix; byte diff is register-only

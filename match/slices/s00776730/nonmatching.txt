@@ -4,7 +4,6 @@
 00776e60 176 complete cShaderPreviewB::Draw; register allocation differs; difftest WEAK (20% coverage: random viewers rarely pass Update)
 00776f40 226 complete cShaderPreviewA::Init; EH state for new/ctor differs; difftest PASS (after annotating operator_new 0xf473a0 and cViewer ctor 0x7c3f70)
 00777060 150 complete cShaderPreviewA::Shutdown; vector clear idiom differs; difftest PASS (after annotating ~cViewer 0x7c4000 and operator_delete__ 0xf47380)
-00777130 131 complete cShaderPreviewB::Init; the vec4 copy now uses integer moves (retail uses four dword movs) so xmm0 is left untouched like the original; equiv: PASS (1178 valid inputs at 1200)
 007771f0 79 complete cShaderPreviewB::Shutdown; clear idiom schedule differs
 00777290 232 complete cShaderBase::LoadTexture; refcount inline/EH shape differs
 007773c0 418 complete cShaderPreviewA::SetSlot; branch layout and EH differ; difftest WEAK (54% coverage)

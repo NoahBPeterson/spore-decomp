@@ -10,7 +10,6 @@
 0050c6c0 1576 complete: Skin::Append (merge another skinning mesh; /Od /Ob1 /MD /Gy /TP); inline temporaries of the range-insert helpers and frame layout not reproduced (size 0.88x) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
 0050d4e0 294 eastl::vector<float,sp_vector_allocator>::operator=: complete reimplementation; EASTL internals/schedule differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
 0050d750 498 Vec8::operator= (pair<int,int> stride-8): complete; target frame 0xa4 vs 0x4c (inlined copy/uninitialized_copy scratch holes); equiv: WEAK (symbol now resolved via symbols/slices/s0050d750.txt; ~33-44% cov) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0050da10 4 Vec8::resize(n): complete; inline-arg temporaries (n-size, end) land at [ebp-0x24]/[ebp-0x28] vs [ebp-0x10]/[ebp-0xc] flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0050dea0 539 Vec12::operator= (stride 0xc): complete; target frame larger (inlined copy/uninitialized_copy scratch holes); equiv: WEAK (symbol now resolved via symbols/slices/s0050d750.txt; ~33-44% cov) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0050e290 40 Vec100::~Vec100: complete; outer/inner loop locals and 6 scratch holes in different /Od slots flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0050ebe0 154 SortCmp: complete sort driver (quick_sort + insertion sorts); callee slots differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE

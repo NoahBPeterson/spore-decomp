@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 006c12e0 45 vector<0x38> destructor-iterator helper; CRT helper call shape differs flags: /O2 /MD /Gy /EHsc /TP
 006c13f0 344 eastl vector<0x38>::insert; complete, size 388 vs 369. Reallocation path reconstructed (double-capacity growth, allocator tag EASTL/allocator.h:0xd1, sub_f25ea0 copy + tail). The original reads ECX at entry, so the stand-in signature is not register-ABI compatible: equiv UNSUPPORTED (custom/LTCG register ABI). flags: /O2 /MD /Gy /EHsc /TP
-006c1570 216 eastl vector<4>::insert; complete, size 250 vs 268. Same double-capacity growth path with sub_11e0744 copy. Original reads ECX at entry: equiv UNSUPPORTED (custom/LTCG register ABI). flags: /O2 /MD /Gy /EHsc /TP
 006c1680 149 arena skin-sink collection; complete, size 193 vs 1110. Object-vector build (0x38-stride arena entries seeded by sub_11e0b85) plus FUN_006c24b0 merge; equiv UNSUPPORTED (only 0/400 inputs valid: import _decode_pointer + faults). flags: /O2 /MD /Gy /EHsc /TP
 006c1ae0 204 SP::cAnimationBaker::GetBakedAnimations; complete, size 236 vs 333. Bit-field gate on the +0x10 pool handle, manager lookup, arena collection and caching-type set; equiv UNSUPPORTED (2 unresolved references: EAGetManager, IDGenerator). flags: /O2 /MD /Gy /EHsc /TP

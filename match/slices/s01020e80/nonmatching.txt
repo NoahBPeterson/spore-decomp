@@ -8,7 +8,6 @@
 01020fc0   66  camera ctor tail: complete; the MessageServer registration block
                and the +4 subobject setup differ. flags /O2 /MD /Gy /TP /arch:SSE;
                difftest UNSUPPORTED (now member fn; 0/1200 valid inputs, read faults)
-01021020   70  camera property init: complete; the PropertyManager vtable 0x2c
                call and the AutoRefCount release schedule differ.
                flags /O2 /MD /Gy /TP /arch:SSE;
                difftest UNSUPPORTED (now member fn; 0/1200 valid inputs, read faults)

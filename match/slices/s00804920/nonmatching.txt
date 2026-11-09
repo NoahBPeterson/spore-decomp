@@ -12,6 +12,5 @@
 008052c0  19  AttrF10 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 293 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
 00805310  148 CreditsTabInit; layout ctor/init call reconstruction, register scheduling; equiv UNSUPPORTED: 5 unresolved reference(s): ?LayoutCtor@@YAXPAD@Z, ?LayoutInit@@YA_NPADHHH@Z, ?LayoutDtor@@
 00805400  6   FreeCoreBlock; originally push/call/pop ecx, compiler emitted add esp,4; equiv PASS: 659 valid inputs, 100.0% coverage (all insns)
-00805490  13  CallVt8 thunk; vtable-slot load shape; equiv PASS: 1198 valid inputs, 100.0% coverage (all insns)
 008054b0  17  FixedFree; __thiscall (allocator `this` in ECX, chunk pointer + flags on the stack, ret 8), fallback deallocate tail-jumps slot +0xc of the global allocator; equiv PASS: 270 valid inputs, 62.5% coverage  symbol ?FixedFree@FixedAlloc@@QAEXPAXH@Z
 008054f0  10  InitAlloc; global store/arg order; equiv UNSUPPORTED: our code stores the address of its own copy of an object/vtable/constant where the origina

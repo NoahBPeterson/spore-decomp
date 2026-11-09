@@ -1,9 +1,7 @@
 # va  diff-bytes  equiv-verdict  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00c0fa70  102  PASS         find animation entry by mask bit; complete; equiv PASS (400/600 inputs); not byte-exact
 00c0fae0   17  PASS         clear animation binding + release; complete; equiv PASS
-00c0fb40    0  PASS         release animation binding handle; complete; byte-exact (in manifest.txt)
 00c0fba0   89  UNSUPPORTED  serialize vector via IO stream; complete; 0 valid inputs (read fault/fake-arity)
-00c0fc10    0  PASS         dispatch element callback to +0x20 object; complete; byte-exact (in manifest.txt)
 00c0fc40  128  UNSUPPORTED  uniquify pointer array (release dups); complete; 0 valid inputs (read fault)
 00c0fcf0  151  UNSUPPORTED  read bit array via IO stream; complete; 0 valid inputs (read fault/fake-arity)
 00c0fda0  126  UNSUPPORTED  write bit array via IO stream; complete; 0 valid inputs (read fault/fake-arity)

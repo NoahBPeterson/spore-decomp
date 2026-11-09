@@ -4,6 +4,4 @@
 006612b0 240 map find-or-insert - complete, rbtree shape not byte-exact; equiv PASS (315 valid, 91.9% cov): node layout is {left@0, right@4, key@0x10, 0x20-byte value@0x14}; the insert path is AssignChecked(tmp,key,&zeroSrc) then the thiscall insert 0x00660ca0(map,&key,found,tmp,(uint32)key&0xffffff00) which writes the node back through arg0, then releases tmp.mp0 and src.mp0
 00661390 278 vector<E34>::operator= - complete, three-branch assign not byte-exact
 006614d0 243 vector<E34>::insert - complete, reallocation path not byte-exact
-00661670 112 vector<E34>::push_back default - complete, temp cleanup inlining differs; equiv PASS (282 valid, 79.2% cov): 0x006614d0 is __thiscall(vec,pos,value); after it returns the temp's e and c string buffers are released (deallocate if *(int*)(p-4) != 0), and the scalar 0x34 temp avoids the /GS cookie that would clobber ecx
-00661700 57 vector<E34> range assign + destroy - complete, helper call order differs; equiv PASS (350 valid, 100% cov): 0x00646d70 is __thiscall(vec,u,end) and end is recomputed as end - (end-begin)/0x34*0x34
 00661a10 218 cSPUIFeedFilter::HasAnyAsset - complete, lower_bound result compare folded and loop counter/this register allocation differ; equiv WEAK (55.8% coverage)

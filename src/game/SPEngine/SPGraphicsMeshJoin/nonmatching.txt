@@ -23,7 +23,6 @@
 00721bb0 73 ChartHash::FindI: complete; register allocation differs
 00721c30 181 ChartHash::InsertI: complete; grow/alloc sequence differs
 007221c0 246 cMeshClusterer::CollapseEdges: complete; heap/offset schedule differs
-00722c60 2 VecAny::Push8: complete; only the temp register for the out-of-line append call differs (edx vs ecx)
 00723140 1094 complete MeshBuild::Build vertex-remap loop; register/scheduling and EH differences; difftest WEAK (7.9% coverage: FindElement on random meshes rarely finds the element; after mapping kEastlAllocFile 0x13ebb38 and operator_delete__ 0xf47380)
 00723680 102 complete IntVecObj(n) ctor; base-class ctor chain / EH state not reproduced; difftest PASS
 00723930 212 complete ChartRec copy ctor; EH prolog/state stores missing

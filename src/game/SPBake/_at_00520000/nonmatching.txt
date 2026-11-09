@@ -14,7 +14,6 @@
 0052a030 623 HSV->RGB; complete; scratch output plus (float*)&param_3+1 input reproduces the original Vector3_Scale call; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; equiv WEAK (400 valid, 59.3% coverage, no mismatch), replay PASS
 0052a400 664 nSPSkinner::CreatePlaceholderTextures; complete but /Od layout differs flags: /Od /MD /Gy /EHsc /TP
 0052a700 1512 LoadSkinnerMesh; complete; /Od layout/helper inlining differs; equiv: WEAK (268 valid, 0 mismatched, 19.7% cov — deeper path behind a faked external call) flags: /Od /MD /Gy /EHsc /TP
-0052ae30 65 vector<pair<int,float>>::resize; complete; /Od frame differs; equiv: PASS (278 valid, 100% cov) flags: /Od /MD /Gy /EHsc /TP
 0052aeb0 342 SkinBoneWeights; complete but /Od layout differs flags: /Od /MD /Gy /EHsc /TP
 0052b060 188 AccumBoneWeight; complete; /Od layout differs; equiv: PASS (394 valid, 100% cov) flags: /Od /MD /Gy /EHsc /TP
 0052b170 120 NormalizeBoneWeights; complete; /Od layout differs (this slot -0x14 vs -0x10); equiv: PASS (310 valid, 100% cov) flags: /Od /MD /Gy /EHsc /TP

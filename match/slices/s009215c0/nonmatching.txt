@@ -6,7 +6,6 @@
 00921d80  79   SetCurrentThreadPriority: loop/codegen shape differs (original falls through vs my return)
 00921e60  372  condition init: uses ConditionParameters + canonical SemaphoreParameters/Mutex init; equiv: PASS; not byte-exact (SemaphoreParameters ctor inlined, /GS cookie)
 00921f00  347  Condition ctor: member-init list reproduces the xchg/zero/Semaphore/Semaphore/Mutex order; equiv: WEAK (CreateSemaphoreA imports discarded); /GS+EH prologue retail lacks
-00921f80  239  Condition::Wait: atomic/waiter bookkeeping matches algorithm 8a; equiv: PASS
 00922050  316  Condition::Signal: algorithm 8a broadcast/normal paths; equiv: PASS
 009221b0  122  Mutex::Lock: timeout/TryEnterCriticalSection loop shape differs
 009222a0  69   Mutex::Mutex: member zero-init ordering differs

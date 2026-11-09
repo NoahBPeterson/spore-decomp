@@ -16,10 +16,7 @@
 00576880 71 ReadIntArray6: original packs the count local into the dead param slot; ours allocates a frame slot
 00576a10 120 uninitialized_copy (snapshot): original strength-reduces with a +0x14 base pointer; element copy-ctor form not recovered
 00576c50 905 Shutdown: register allocation differs (ours keeps constant 1 in ebp; original spills ebx around owner-free calls); same calls/order
-00577130 124 complete: 3 sound events; original loads param to ecx before test, cl folds ours to cmp mem (shifts all branch offsets)
-005771f0 122 complete: same as 00577130, without counter increment
 005772b0 20 complete: manual double-deref vtable slots 0x16c/0x170; register/const-folding differs
-005774f0 18 complete: forwards param to a member at +0xf8 then DoSomeOther(0,-1); param lives in edi not ebx
 00577520 50 complete: block-state update; original uses shr/test vs our bit-test, and a different entry register
 00577650 702 complete SaveSomething (save model/thumbnail/metadata + vehicle part summaries); register allocation (this/mgr/model/key regs) and stack-slot layout differ from original, meta pointer spilled [equiv: WEAK]
 00577b20 18 complete HasAnyResource (cdecl free function, was mis-declared as member): loop keeps begin/index in different registers (esi/edx vs edi/esi) [equiv: WEAK]

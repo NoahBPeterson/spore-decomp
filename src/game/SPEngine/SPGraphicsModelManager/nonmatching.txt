@@ -10,11 +10,7 @@
 007446e0 95 GetModelResourceIDs: control-flow/register schedule differs (dead field_c temp); difftest UNSUPPORTED (unresolved ref ResHolder::Get)
 00744870 49 AnimAction: stack-slot layout and bool handling differ
 00744be0 4 SetDynamicDraw: arg register-role assignment (ebx/ebp) swapped
-00744cf0 109 SetSomeFloat: property-find/vtable path and float staging differ [equiv: FAIL (5/16 mismatch)]
 00744d80 111 SetEffectEnabled: effect-list traversal and vtable slot selection differ [equiv: WEAK (81% cov)]
-00744e10 98 ForEachEffectA: effect-list look-ahead iteration/register schedule differs [equiv: FAIL (eax&0xffff)]
-00744e90 98 ForEachEffectB: effect-list look-ahead iteration/register schedule differs [equiv: FAIL (eax&0xffff)]
-00744f10 93 ForEachEffectC: effect-list look-ahead iteration/register schedule differs [equiv: FAIL (eax&0xffff)]
 00745010 26 CheckFlag: field loaded via cmp instead of mov+test [equiv: UNSUPPORTED (0/1200 valid inputs)]
 00745050 29 SelectMesh: branch block ordering of the 0x9c/0xac selection differs [equiv: UNSUPPORTED (0/1200 valid inputs)]
 00745140 210 FillColor: switch jump-table/block layout differs [equiv: WEAK (92.6% cov)]

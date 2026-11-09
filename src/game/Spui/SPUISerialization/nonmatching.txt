@@ -6,7 +6,6 @@
 0082b7f0 68 complete translation; allocator fast-path register allocation differs
 0082b920 66 complete translation; nested allocator subobject register allocation differs
 0082b970 56 complete translation; nested allocator subobject register allocation differs
-0082bfa0 42 complete translation; EASTL fixed-allocator allocate call not reproduced exactly
 0082cc60 102 complete translation; vector(n) zero-fill schedule differs
 0082ccb0 26 complete translation; push_back(NULL) grow path not identical
 0082cd30 1652 ProcessStream: complete (header, bindings, hit masks, objects, property blocks, trailer); frame layout/register allocation and exit-path merging differ

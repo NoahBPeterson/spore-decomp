@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 0068f570  3    complete: notify callback + virtual teardown call; only the vtable/function register choice (eax/edx) differs
-0068f5a0  6    complete: indirect call through *b slot 0; vtable/base registers and stack balance differ
 0068f670 117 complete, not byte-exact: ready-list bit-scan register/scheduling near-miss (renders "WEAK": 44.8% original coverage, no mismatch)
 0068f700 133 complete, not byte-exact: GetFreeWaitNode list pop + alloc near-miss
 0068f7c0 236 complete, not byte-exact: FreeJobUnderLock — see below
@@ -25,7 +24,6 @@
 00690930 83 complete; SetJobPriorityUnderLock register near-miss
 006909b0 14 complete; Queue two-step manager load near-miss
 00690b50 62 complete; CheckDependentPriority near-miss
-00690c90 194 eastl vector DoInsertValue (waiting list 2): complete; register allocation differs (original spills nNewSize to [esp+0x10] and keeps pNewData in ebp) [equiv: WEAK 61.8% coverage, no mismatch]
 00691260 149 complete; AddJobDependency (deps/dependents list splice) near-miss
 00691380 27 complete; AddDependency wrapper shape near-miss
 006913c0 28 complete; AddWeakDependency wrapper shape near-miss

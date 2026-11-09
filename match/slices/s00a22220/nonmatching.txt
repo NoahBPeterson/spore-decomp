@@ -1,4 +1,3 @@
-00a22220  131  HTable28::Rehash: complete; original re-reads this->buckets each iteration, mine hoists
 00a22370  131  HTable20::Rehash: complete; same bucket-array reload difference
 00a22410  63  SList::merge (intrusive_list<Sound>): complete; this spilled to stack and iterator temps built in place in original
 00a227a0  13  DrvBA22 ctor (RefBaseA22 + [0x80]=arg): complete; store scheduling differs (arg store before vtable store); difftest PASS (ctor made out-of-line thiscall, vtables mapped in symbols/slices/s00a22220.txt)

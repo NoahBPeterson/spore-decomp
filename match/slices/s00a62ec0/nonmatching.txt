@@ -1,6 +1,5 @@
 # va  diff  reason
 00a62ec0   53  custom-register ABI: `iface` arrives in edi, sym/sym2/p4/p5 on the stack; cannot be expressed in plain C++ without naked asm [equiv UNSUPPORTED 0/400 valid, fault(read)]
-00a62f30   60  tail-jump (`call 0xa62ec0; add esp,0x14; pop edi; ret`) into the edi-ABI entry; same custom register ABI [equiv PASS 377 valid, 100.0% cov]
 00a62f80   29  local creator: custom edi-ABI tail-call into x_input_new after InstanceCreate; only reloc/reg-allocation differs [equiv UNSUPPORTED 0/400 valid, fault(read)]
 00a62fc0   29  local creator (bang): custom edi-ABI tail-call into x_input_new; register allocation differs [equiv UNSUPPORTED 0/400 valid, fault(read)]
 00a63000   33  global creator: custom edi-ABI tail-call into x_input_new after InputCreate; arg load order differs [equiv UNSUPPORTED 0/400 valid, fault(read)]

@@ -7,7 +7,6 @@
 00e2fda0  129  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) card clone; the placement new is unresolved and the ref-count adds are reordered; equiv FAIL (first mismatch execution)
 00e2fe10  121  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) manager init; the three message subscriptions and the animator allocation are unresolved; equiv UNSUPPORTED (unresolved message services)
 00e2feb0  148  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) asset message handler; the card cursor walk is modelled with untyped index steps and the frame apply call is unresolved; equiv FAIL (first mismatch eax)
-00e30010  113  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) push card; the deque growth helper and the block allocation are unresolved; equiv UNSUPPORTED (unresolved deque helpers)
 00e300f0  254  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) manager shutdown; the message posts, the card releases and the animator update are unresolved so the deque loop is simplified; equiv UNSUPPORTED (unresolved message and teardown helpers)
 00e30230  871  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) manager update; the six animation stages are modelled but the animator, window and timing helpers are unresolved so the state machine collapses; equiv UNSUPPORTED (unresolved animation services)
 00e30680  154  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) manager reset; the card release loop is modelled but the reset helper and free are unresolved; equiv UNSUPPORTED (unresolved teardown helpers)

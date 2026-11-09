@@ -3,8 +3,6 @@
 006a38c0 20 OnRegister: cl threads both branches to one shared tail call; original duplicates the tail jmp; equiv: UNSUPPORTED (orig-abi-broken, 0/1200 valid)
 006a38f0 20 OnRegister: same shared-tail shape as 006a38c0; equiv: UNSUPPORTED (orig-abi-broken, 0/1200 valid)
 006a39d0 26 GetAt: same CSE/register-assignment difference as Count; equiv: PASS
-006a4100 32 CopyVec12: loop idiom (dec/ja vs sub/jne) and zero-register assignment differ; equiv: PASS
-006a4380 15 basic_string::assign(const char*): inlined strlen loop shape differs; equiv: FAIL (execution mismatch; ours resolved to assign(p,p+n) callee conflict)
 006a44d0 75 vector<0x208> ctor: cl peels/vectorises the rep-movsd fill loop; equiv: FAIL (fill differs)
 006a4580 8 vector<0xc> ctor: only dec/ja vs sub/jne encoding of the fill loop differs; equiv: PASS
 006a4600 75 vector<8> ctor: cl vectorises the 2-float fill loop; equiv: FAIL (fill differs)

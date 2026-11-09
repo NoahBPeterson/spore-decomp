@@ -10,4 +10,3 @@
 00ccbc00  118  Hashtable::FUN_00ccbc00 (/O2 /MD /Gy /EHsc /TP): Find/InsertNode out-iterator modelling matches callable shape but callee chain diverges; equiv FAIL (fault read at eip 00ccad5f inside callee 0ccad10 from InsertNode; 83% coverage)
 00ccbd10  720  cTDS::FUN_00ccbd10 (/O2 /MD /Gy /EHsc /TP): body largely mis-modelled (640 vs 860, extra /GS cookie) and one 4-byte stack arg missing; equiv FAIL (arity: esp after return orig +0x1c vs ours +0x18; 6.5% coverage)
 00ccc070  154  EffectTree::FindOrInsert (/O2 /MD /Gy /EHsc /TP): lower_bound + insert semantics reproduced; compiler slot-reuse of the key arg produces a residual stack-frame difference (171 vs 168); equiv PASS (298 valid inputs, 100% coverage)
-00ccc120  83  EffectTree::InsertHint2 (/O2 /MD /Gy /EHsc /TP): register allocation differs (102 vs 99); equiv PASS (270 valid inputs, 100% coverage)

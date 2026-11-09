@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-005cd870 105 cInterp::Interp: original clamps with inline-asm Min/Max (maxss/minss with stack spills); C++ ternaries give comiss branches
 005ce060 50 AddVertebraBody: cl schedules `push 1` before loading mpWorld into ecx; original loads ecx first
 005ce250 4 ReleaseE8: uses eax + pop ecx; original uses ecx + add esp,4
 005ce2a0 61 NormalizeVector2: original splits sqrt (x87) from reciprocal (SSE divss); cl fuses 1/sqrt into fdivrp

@@ -4,7 +4,6 @@
                 (189/400 valid, 80.3% coverage; no mismatch). Differs only by
                 the MSVC SEH prologue + try-scope frame (handler 0x120f188) and the readonly vtable/name
                 relocations emitted as absolute constants instead of relocations.
-00781c30  -   MOVED TO manifest.txt: byte-exact as ?Construct@E36@@QAEPAU1@PAXUE36Part@@@Z.
 00781d60  n/a  cShadowWorld ctor: COMPLETE for the whole 1088-byte path (vtable/pointer/flag prologue, member
                 inits, memset of +0x44, ??_L on +0xf4/+0x10c, the 16x -1 fill, float/constant matrix, then the
                 2x2 refcount release loop). MSVC's EH state tracking cannot be reproduced without a full

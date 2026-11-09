@@ -1,7 +1,6 @@
 # va diff-bytes reason (flags /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
 00420390 9 HashSet::Build: extra 4-byte frame slot and by-value Key16 arg copy scheduled after sub esp (orig computes lea of source first) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
 004207e0 28 PtrVector::reserve: two inline-local bools land in different frame slots; rest of the schedule matches flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
-00420920 9 ThreadedRefVector dtor: right size and code, but end/p frame slots sit 12 bytes lower than original flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
 00420c70 86 FieldSet hashtable unique insert: logic and slot layout right, but eq-arg temp slots swapped and iterator copy order (bucket then node) differs flags: /Od /Ob1 /MD /Gy /EHsc /TP /GS-
 004210f0 4 int-keyed map operator[]: only the first/last temp slots (-0x18/-0x1c) are swapped; equiv PASS (850 valid, 100% cov) flags: /Od /Ob1 /MD /Gy /EHsc /TP /GS-
 00421290 75 vector<24-byte> operator=: instruction stream identical, but the stack slots of the inlined DoCopy bools/temp byte are laid out differently flags: /Od /Ob1 /MD /Gy /EHsc /TP /GS-

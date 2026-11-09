@@ -12,7 +12,6 @@
 00b209f0 66 string ctor from (alloc,string): complete; difftest PASS (207 valid, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b20aa0 181 string append-format (Vsnprintf8 growth loop): complete; difftest UNSUPPORTED (re-verified: original reads ecx at entry; varargs member cannot be __thiscall in MSVC, custom ABI, left as is); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b20b90 59 string ctor from string: complete; difftest WEAK (163 valid, no mismatch, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b20c00 42 string ctor with allocator copy: complete; difftest WEAK (180 valid, no mismatch, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b21da0 149 intrusive-list segment swap; MSVC keeps the anchor addresses in edx/esi and reorders the +4/+8/+0xc swap/store sequence (original reloads each field through [ecx+..]/[eax+..]), 165 vs 184 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00b21e60 324 complete; codegen differs (see source) ; difftest WEAK (117/400 valid, 33% coverage; callees mapped) flags: /O2 /MD /Gy /TP /arch:SSE
 00b22060 85 complete; codegen differs (see source) ; difftest WEAK (167/400 valid, 62% coverage; callees mapped) flags: /O2 /MD /Gy /TP /arch:SSE

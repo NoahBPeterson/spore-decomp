@@ -2,7 +2,6 @@
 00804f80 17 Help2 (4-arg window helper); x87 float-arg materialisation order differs; equiv PASS: 1199 valid inputs, 100.0% coverage (all insns)
 00804fc0 70 SetWindowAlpha; float rounding uses fnstcw/fldcw/fistp qword helper (not reproduced without asm); equiv UNSUPPORTED: 2 unresolved reference(s): ?H5c@IWnd@@QAEXH@Z, ?H90@IWnd@@QAEXXZ
 00805040 29 GetAlpha; unsigned int->float uses x87 fild (module without /arch:SSE) + float multiply; equiv WEAK: 1199 valid inputs (need 200), 93.8% coverage (need 100%% (all insns))
-00805080 19 GetElapsedSeconds; tail-call to 0x00813070 not reproduced (frame/arg setup); equiv FAIL: 5/5 valid inputs mismatched
 008050b0 58 WalkAll linked-interface walk; register/loop shape differs; equiv FAIL: 5/13 valid inputs mismatched
 008050f0 44 WalkFind; same linked-interface walk shape differs; equiv FAIL: 5/75 valid inputs mismatched
 00805150 24 Contains; vtable access via VSlot address form vs direct slot load; equiv PASS: 771 valid inputs, 100.0% coverage (all insns)
@@ -29,7 +28,6 @@
 00806c60 14 complete; only parameter register assignment (esi/edi) swapped
 00806ca0 56 complete; SSE scheduling differs
 00806de0 72 complete; loop/register differences
-00806ee0 24 complete; register/scheduling differences
 00807430 89 complete; float clamp scheduling differs
 008074a0 184 complete; control-flow/register differences
 00807590 63 complete; loop/register differences

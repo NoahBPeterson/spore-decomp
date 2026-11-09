@@ -3,7 +3,6 @@
 0076dc70  111  cRTTManager::GetRectSizes: rect + w/h deltas complete; register schedule differs
 0076dcf0  94   cRTTManager::GetAB: mA/mB copy complete; ABI fixed (4-arg ret 0x10) [equiv: PASS]
 0076de20  80   UninitCopyPageRecords: full copy loop complete; returns out (ABI fixed) [equiv: PASS]
-0076de80  33   CopyPageRecords: memberwise 0x1d-record copy loop complete; first/dest register roles differ
 0076e040  222  cRTTManager::GetScaledRect: 1/mA,1/mB scaling of sub-rect complete; SSE schedule differs
 0076db40  97   cRTTManager::GetTextureHandle: lazy raster resolve (0067dd60 -> vtbl[0x34] Resolve, return raster) complete; register ABI differs (i in esi vs original edi, count in eax vs esi)
 0076ddb0  103  cRTTManager::FindPage: linear search on (mRefCount==0, mA, mB, mC) complete; register rotation differs (count esi vs eax, iterator eax vs ecx)
