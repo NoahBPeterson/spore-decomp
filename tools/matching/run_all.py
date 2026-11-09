@@ -12,7 +12,11 @@ work/run_all_m/<key>.lock, work/run_all_m/<key>.json, key = hash of the manifest
 manifests never wait for each other (fix pass 6 F26: mig7 agents waited 20-40 minutes on the shared lock).
 Exit 0 iff every listed function matches.
 """
-import re, argparse, bisect, fcntl, glob, hashlib, json, os, subprocess, sys
+import re, argparse, bisect, glob, hashlib, json, os, subprocess, sys
+try:
+    import fcntl          # the run lock (main); Windows has none, and tools/ci/gate.py only imports this module
+except ImportError:
+    fcntl = None
 from concurrent.futures import ThreadPoolExecutor
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -170,7 +174,8 @@ def main():
         res_path = os.path.join(ROOT, "work", "run_all_m", key + ".json")
     lock = open(lock_path, "w")
     try:
-        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        if fcntl:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
         print("waiting for another run_all.py to finish (%s)" % os.path.relpath(lock_path, ROOT), flush=True)
         fcntl.flock(lock, fcntl.LOCK_EX)
