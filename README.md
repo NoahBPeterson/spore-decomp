@@ -1,15 +1,22 @@
 # spore-decomp
 
-A clean-room-style behavioral reimplementation of Spore's `SporeApp.exe`, built for
-portability. Every reimplemented function is annotated with the original address it
-mirrors (`@ 0x00XXXXXX`) and verified against the original code by differential tests.
+Rebuilding Spore's `SporeApp.exe` (2008, PC) as readable C++ that compiles to **exactly** the retail machine code,
+one function at a time, with the original compilers (Visual C++ 2008 SP1, and the Visual C++ Toolkit 2003 for Havok
+and RenderWare). Every function is annotated with the original address it rebuilds (`// @ 0x00XXXXXX`).
+
+- **Help out:** [`AGENTS.md`](AGENTS.md) — setup, the work loop, and the rules (for people and AI agents alike).
+- **Progress:** [`PROGRESS.md`](PROGRESS.md) — byte-exact functions and bytes, updated on every merge.
+- Every pull request is checked byte for byte against retail fingerprints (no game files involved).
 
 **This repository contains no game code or data.** The binary-derived analysis
 artifacts live in `work/` (git-ignored), are produced locally from your own copy of the
 game, and must not be distributed.
 
 ## Layout
-- `src/` — portable C++17 reimplementation (currently `resource/`: DBPF, RefPack, name hash)
+- `src/game/` — the rebuilt game: one source file per original object file, plus generated class headers in `src/game/include/`
+- `match/slices/` — functions still being decompiled or not yet moved into `src/game/`
+- `tools/contrib/` — the contributor tools (`task.py`, `check.py`, `make_image.py`); `tools/ci/` — the pull-request check
+- `src/resource/` — portable C++17 reimplementation of the file formats (DBPF, RefPack, name hash)
 - `tests/` — unit tests, plus corpus tests over your installed `Data/` when `SPORE_DATA` is set
 - `tools/steamstub_analysis_image.py` — makes a non-runnable, decrypted analysis image
 - `tools/ghidra/` — PyGhidra scripts (discovery, naming, decompile, xrefs)
