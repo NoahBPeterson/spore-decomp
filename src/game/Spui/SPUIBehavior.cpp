@@ -1204,7 +1204,7 @@ bool f_7fa780(C53* self, P2* p2, P3* p3)
     if (old) old->Release();
     Creator* src = (Creator*)*c;
     if (src) {
-      created = src->Create((int)g_tag_7fa780);
+      created = src->Create((int)((char*)0x024b5c98));
       if (created) created->AddRef();
     }
     *it = created;
