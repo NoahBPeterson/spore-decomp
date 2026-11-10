@@ -2,8 +2,6 @@
 010f4850
 010f4ab0
 010f4c60
-010f4e10
-010f4e70
+010f4e70  8  hk3AxisSweep::shiftBroadPhase; correct logic, 207 vs 217 bytes; residue: (a) `mov eax,[ebp+0xc]` (effectiveDelta) is hoisted into the offsetLow block by cl, (b) retailer keeps the three reciprocals as three live x87 values and stores them in reverse (fstp [esp+0x28], fxch, then the three fadd/fstp), while any source we write makes cl interleave each divide with its add, (c) the final `mov edx,[esi+0x1c]; mov [esi+0x2c],edx` lands earlier; (d) `fld [0x1485720]` prints as `[0]` (unresolved extern). Tried: plain `a/b + c` (keeps each divide adjacent), an `hkVector4 invScale` local (adds a 16-byte spill slot: frame 0x2c vs retail), the local plus `_ReadWriteBarrier()` before it (frame stays 0x2c, reciprocals group, 229 bytes, still interleaved adds), a barrier after the local (frame 0x3c), scalar locals, `hkOne` vs a 1.0f literal, reversed order of the three axes, and reordered effectiveDelta stores; same residue each time.
 010f4f50
-010f50f0
 010f5150

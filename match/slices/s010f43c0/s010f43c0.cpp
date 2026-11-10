@@ -19,11 +19,16 @@
 #include <math.h>
 #include <intrin.h>
 
+#pragma intrinsic(_ReadWriteBarrier)
+extern "C" void _ReadWriteBarrier(void);
+
 typedef uint32_t hkUint32;
 typedef uint16_t hkUint16;
 typedef unsigned long hkUlong;
 typedef float hkReal;
 typedef hkUint16 BpInt;
+
+extern const float hkOne;   // 0x01485720  (_HK_REAL_ONE, Havok's 1.0f)
 
 // ---------------------------------------------------------------------------------------------
 // monitor stream timers (inlined TLS appends; record = { name, rdtsc, pad })
@@ -588,10 +593,10 @@ void hk3AxisSweep::updateNodesAfterDelete(hkBpNode* nodes, int numNodes, hkBpNod
 // monotone binary search over the x endpoints (0x010f4e10)
 // ---------------------------------------------------------------------------------------------
 // @ 0x010f4e10
-void __cdecl FUN_010f4e10(unsigned short* begin, unsigned short* end, unsigned short value)
+unsigned short* __stdcall FUN_010f4e10(unsigned short* begin, unsigned short* end, unsigned short value)
 {
+    unsigned int diff = (unsigned int)((char*)end - (char*)begin);
     unsigned short* p = begin;
-    unsigned int diff = (unsigned int)((char*)end - (char*)p);
     while ((int)(diff & 0xfffffffc) > 0x40)
     {
         unsigned short* mid = p + ((int)diff >> 3) * 2;
@@ -607,6 +612,7 @@ void __cdecl FUN_010f4e10(unsigned short* begin, unsigned short* end, unsigned s
     }
     while (*p < value)
         p += 2;
+    return p;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -630,9 +636,10 @@ void hk3AxisSweep::shiftBroadPhase(const hkVector4& delta, hkVector4& effectiveD
     m_offsetLow.z += shift.z;
     m_offsetLow.w += shift.w;
 
-    m_offsetHigh.x = 1.0f / m_scale.x + m_offsetLow.x;
-    m_offsetHigh.y = 1.0f / m_scale.y + m_offsetLow.y;
-    m_offsetHigh.z = 1.0f / m_scale.z + m_offsetLow.z;
+    _ReadWriteBarrier();
+    m_offsetHigh.x = hkOne / m_scale.x + m_offsetLow.x;
+    m_offsetHigh.y = hkOne / m_scale.y + m_offsetLow.y;
+    m_offsetHigh.z = hkOne / m_scale.z + m_offsetLow.z;
     m_offsetHigh.w = m_offsetLow.w;
 
     effectiveDelta.x = -shift.x;
@@ -722,9 +729,8 @@ void hk3AxisSweep::hkBpAxis::remove(int minPosition, int maxPosition)
         p++;
     }
 
-    const int newSize = m_endPoints.m_size - 2;
-    hkBpEndPoint* end2 = m_endPoints.m_data + newSize;
-    m_endPoints.m_size = newSize;
+    hkBpEndPoint* end2 = m_endPoints.m_data + (m_endPoints.m_size - 2);
+    m_endPoints.m_size -= 2;
     while (p < end2)
     {
         *p = p[2];

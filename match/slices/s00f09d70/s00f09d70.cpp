@@ -435,14 +435,14 @@ int FUN_00f0a5a0(int param_1)
 // 0x00f0a640
 // ---------------------------------------------------------------------------
 // @ 0x00f0a640
-bool FUN_00f0a640(int param_1)
+char FUN_00f0a640(int param_1)
 {
     if (((CGameDataFns*)param_1)->GetRec() != 0) {
         int v = FUN_00f0a5a0(param_1);
         if (v != -1)
-            return v / 1000 - 1 <= GD78()->mFieldB8;
+            return (char)(v / 1000 - 1 <= GD78()->mFieldB8);
     }
-    return false;
+    return 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -454,11 +454,9 @@ extern int FUN_00f1b360();   // placeholder
 // @ 0x00f0a690
 bool FUN_00f0a690(void* p)
 {
-    void* mgr = *(void**)(g_pMagic + 0x78);
-    if (((Mgr18*)mgr)->FUN_00f1b360(p))
+    if (((Mgr18*)GD78())->FUN_00f1b360(p))
         return true;
-    char r = (char)FUN_00f0a640((int)p);
-    return r != 0;
+    return (bool)FUN_00f0a640((int)p);
 }
 
 // ---------------------------------------------------------------------------
