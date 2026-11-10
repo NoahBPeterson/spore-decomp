@@ -28,3 +28,4 @@
 ../src/game/SPGonzago/SPPlayer.cpp  ?FUN_01351e60@@YAXXZ  01351e60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?CopyFrom@cWarRec@@QAEPAU1@ABU1@@Z  00c76f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?ctor@cSpacePlayerWarData@@QAEPAU1@ABU1@@Z  00c76f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?FUN_00c754e0@@YGXPAUcGameNounManager@@@Z  00c754e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

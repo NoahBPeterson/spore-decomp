@@ -38,7 +38,7 @@ struct cStarManager {                              // returned by SP::StarManage
 struct cEmpire {
     void  SetValue(i32 v);                         // 0x00c322f0
 };
-void* __cdecl FUN_00b3d2a0(void* avatar);          // 0x00b3d2a0 (SP::StarManager)
+void* __stdcall FUN_00b3d2a0(void*);                // 0x00b3d2a0 (SP::StarManager; one stack arg, caller pops)
 struct cDepthCounter {
     u8   mPad0000[0x124c];
     i32  mDepth;                                   // 0x124c
@@ -2066,9 +2066,9 @@ void __stdcall FUN_00c754e0(cGameNounManager* self)
     if (self->GetKind() == 5) {
         void* avatar = self->GetAvatar();
         cStarManager* stars = (cStarManager*)FUN_00b3d2a0(avatar);
-        void* empire = stars->GetEmpireByID();
+        cEmpire* empire = (cEmpire*)stars->GetEmpireByID();
         if (empire)
-            ((cEmpire*)empire)->SetValue(0);
+            empire->SetValue(0);
     }
 }
 

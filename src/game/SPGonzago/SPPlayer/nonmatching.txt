@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00ba2f90 64 PlayerPlanetData ctor: complete; field clear/store order flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c754e0
 00c75e70 75 WriteSTLSequenceT<vector<pair<U32,cGonzagoTimer>>>: writes the element count, then per element the key and cGonzagoTimer::Write, and ends the item.  Complete reconstruction, size-exact (152); the original keeps the count in esi and stores it inside the stream chain, ours computes it in eax and spills it earlier.  equiv UNSUPPORTED: 0/400 valid (the stubbed GetStreamHolder chain faults). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c75f10 226 WriteSTLMapT<map<U32,cEmbassyData>>: writes map.mnSize, then for each rbtree node the key (+0x10), an EndItem, the value's +0x18 word, its +0x14 word and a closing EndItem.  Complete reconstruction (252 vs 246 bytes); ours spills the map parameter into an extra frame slot the original keeps in ebx.  equiv UNSUPPORTED: 0/400 valid (stub fault). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c76010 74 WriteSTLMapT<vector_map<EA::ResourceMan::Key,bool>>: count via the 0xb0 stride (0x2e8ba2e9 / sar 5), then per element the key plus the value object's Write at vtable slot 0, each wrapped in EndItem.  Size-exact (175); the count/store scheduling differs.  equiv UNSUPPORTED: 0/400 valid. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

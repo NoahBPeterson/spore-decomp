@@ -1,2 +1,8 @@
 slices/s011eaf70/s011eaf70.cpp  ?FUN_011eb060@@YAXPAH@Z  011eb060  /O2 /MD /Gy /EHsc /TP
 slices/s011eaf70/s011eaf70.cpp  ?rw_ArenaTypeRegistry_Open@@YAPAIHH@Z  011eb0e0  /O2 /MD /Gy /EHsc /TP
+slices/s011eaf70/s011eaf70.cpp  ?rw_fs_DeleteFile@@YG_NPBD@Z  011ebbf0  /O2 /MD /Gy /EHsc /TP
+slices/s011eaf70/s011eaf70.cpp  ?rw_fs_RemoveDirectory@@YG_NPBD@Z  011ebd10  /O2 /MD /Gy /EHsc /TP
+slices/s011eaf70/s011eaf70.cpp  ?rw_fs_CreateDirectory@@YG_NPBD@Z  011ebcf0  /O2 /MD /Gy /EHsc /TP
+slices/s011eaf70/s011eaf70.cpp  ?rw_fs_MoveFile@@YG_NPBD0@Z  011ebc10  /O2 /MD /Gy /EHsc /TP
+slices/s011eaf70/s011eaf70.cpp  ?FUN_011ebb70@@YG_KPAI@Z  011ebb70  /O2 /MD /Gy /EHsc /TP
+slices/s011eaf70/s011eaf70.cpp  ?Fixup@StaticAtomMembers@@QAEXH@Z  011eb040  /O2 /MD /Gy /EHsc /TP

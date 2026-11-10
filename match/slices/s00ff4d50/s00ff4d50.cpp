@@ -276,24 +276,24 @@ void __cdecl FUN_00ff5330(int param_1, int* param_2, int* param_3,
         param_1--;
         switch (param_1) {
         case 0:  (*param_2)++; break;
-        case 3:  (*param_5)++; break;
-        case 12: (*param_5)++; break;
-        case 18: (*param_5)++; break;
         case 1:  (*param_6)++; break;
-        case 4:  (*param_6)++; break;
-        case 6:  (*param_6)++; break;
-        case 8:  (*param_6)++; break;
-        case 10: (*param_6)++; break;
-        case 13: (*param_6)++; break;
-        case 15: (*param_6)++; break;
-        case 17: (*param_6)++; break;
-        case 9:  (*param_4)++; break;
-        case 14: (*param_4)++; break;
         case 2:  (*param_3)++; break;
+        case 3:  (*param_5)++; break;
+        case 4:  (*param_6)++; break;
         case 5:  (*param_3)++; break;
+        case 6:  (*param_6)++; break;
         case 7:  (*param_3)++; break;
+        case 8:  (*param_6)++; break;
+        case 9:  (*param_4)++; break;
+        case 10: (*param_6)++; break;
         case 11: (*param_3)++; break;
+        case 12: (*param_5)++; break;
+        case 13: (*param_6)++; break;
+        case 14: (*param_4)++; break;
+        case 15: (*param_6)++; break;
         case 16: (*param_3)++; break;
+        case 17: (*param_6)++; break;
+        case 18: (*param_5)++; break;
         case 19: (*param_3)++; break;
         case 20: (*param_3)++; break;
         }
@@ -311,6 +311,7 @@ int __cdecl FUN_00ff53f0(int param_1) {
 
 // ---------------------------------------------------------------- 0x00ff5410
 struct CFileCountHolder {
+    int mValue;                      // +0x00
     int __thiscall GetFileCount();   // 0x008e7f80
 };
 
@@ -335,12 +336,12 @@ struct CTribe {
 void __cdecl FUN_00ff5410(CTribe* param_1, int* param_2, int* param_3,
                           int* param_4, int* param_5, int* param_6) {
     int** members = (int**)param_1->GetMembers();
-    int n = (int)(members[1] - members[0]) >> 2;
+    int n = (int)(members[1] - members[0]);
     for (int i = 0; i < n; ++i) {
         CNoun120* m = (CNoun120*)((int*)members[0])[i];
         if (m->mFileCount120.GetFileCount() == 2)
             continue;
-        switch (((FnVp0i)((VObj*)m)->vt[0x38 / 4])(m)) {
+        switch (((FnVp0i)((VObj*)((int*)members[0])[i])->vt[0x38 / 4])((void*)((int*)members[0])[i])) {
         case 0xff10521:
             (*param_2)++;
             break;
@@ -356,10 +357,10 @@ void __cdecl FUN_00ff5410(CTribe* param_1, int* param_2, int* param_3,
         }
     }
 
-    int n2 = (int)(param_1->mAgentsEnd - param_1->mAgents) >> 2;
-    for (int i = 0; i < n2; ++i) {
-        CNoun120* m = param_1->mAgents[i];
-        if (m->mFileCount588.GetFileCount() != 2)
+    int n2 = (int)(param_1->mAgentsEnd - param_1->mAgents);
+    for (int j = 0; j < n2; ++j) {
+        CNoun120* a = param_1->mAgents[j];
+        if (a->mFileCount588.GetFileCount() != 2)
             (*param_5)++;
     }
 }

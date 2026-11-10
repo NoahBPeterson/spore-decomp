@@ -1,8 +1,12 @@
-# RenderWare 4 core slice s011eaf70 - complete, not byte-exact (equivalence-only by policy).
+# RenderWare 4 core slice s011eaf70 - the remaining rows are complete, not byte-exact (the rest of the
+# file is equivalence-only by policy; the six rows matched below were matched byte-exactly).
 # Flags /O2 /MD /Gy /EHsc /TP (same set as the neighbouring RW4 slice s011ebf70).
+# Rows 011eb040, 011ebb70, 011ebbf0, 011ebc10, 011ebcf0 and 011ebd10 were matched byte-exactly
+# (moved to manifest.txt): __stdcall exports (ret 4/8), __declspec(dllimport) on the Win32 imports
+# to get `call dword ptr [IAT]`, StaticAtomMembers::Fixup as a __thiscall member (the FUN_011eb060
+# raw-pointer reload shape) and a 64-bit return for GetFileSize.
 # va  diff-bytes  reason
 011eaf70  181  complete arena accumulate-all (walk block list, FUN_011eabe0 reserve, FUN_011eaf10 per-resource fixup, 8-dword descriptor through vtable[1]); register scheduling and the descriptor frame differ [equiv UNSUPPORTED: 0/400 valid, faults on unmodelled arena structures]
-011eb040   21  complete rw::core::atom::StaticAtomTable::Fixup (four pointer rebases); cl folds the repeated loads [equiv UNSUPPORTED: original reads ecx at entry, custom/LTCG register ABI]
 011eb0a0   33  complete rw::core::arena::rw_ArenaTypeRegistry::Find (0x14-stride record scan); loop shape differs [equiv UNSUPPORTED: ecx receiver, LTCG register ABI]
 011eb110   36  complete rw_ArenaTypeRegistry::Add (record fill with the three static callback addresses); operand order differs [equiv UNSUPPORTED: ecx receiver, LTCG register ABI]
 011eb180   49  complete dual 4-slot sub-table teardown dispatching vtable[2]; branch layout differs [equiv UNSUPPORTED: ecx receiver, LTCG register ABI]
@@ -23,13 +27,8 @@
 011eba60   26  complete file read + 64-bit offset add with carry [equiv UNSUPPORTED: import ReadFile not stubbable]
 011ebaa0   26  complete file write + 64-bit offset add with carry [equiv UNSUPPORTED: import WriteFile not stubbable]
 011ebae0  113  complete seek with cached 64-bit position and the SetFilePointer(-1)/GetLastError failure path [equiv UNSUPPORTED: 2 unresolved references (SetFilePointer, GetLastError)]
-011ebb70    8  complete file-size query [equiv UNSUPPORTED: import GetFileSize not stubbable]
 011ebb90   60  complete truncate-to-length with position save/restore and the cached offset update [equiv UNSUPPORTED: 2 unresolved references (SetFilePointer, SetEndOfFile)]
-011ebbf0    9  complete rw_fs_DeleteFile [equiv UNSUPPORTED: import DeleteFileA not stubbable]
-011ebc10   10  complete rw_fs_MoveFile [equiv UNSUPPORTED: import MoveFileA not stubbable]
 011ebc30  168  complete FindNextFileA result copy (times, sizes, name, attribute flags 1/0x10) [equiv UNSUPPORTED: import FindNextFileA not stubbable]
-011ebcf0   10  complete rw_fs_CreateDirectory [equiv UNSUPPORTED: import CreateDirectoryA not stubbable]
-011ebd10    9  complete rw_fs_RemoveDirectory [equiv UNSUPPORTED: import RemoveDirectoryA not stubbable]
 011ebd30   32  complete drive-letter enumeration into the global list [equiv UNSUPPORTED: import GetLogicalDrives not stubbable]
 011ebd80   37  complete file-handle close + driver-record release through the filesystem allocator [equiv UNSUPPORTED: import CloseHandle not stubbable]
 011ebdc0   41  complete find-handle close + record release [equiv UNSUPPORTED: import FindClose not stubbable]
