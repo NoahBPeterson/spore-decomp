@@ -407,7 +407,7 @@ void hkSymmetricAgentFlipCastCollector::addCdPoint(const hkCdPoint& point)
 void hkSymmetricAgentFlipBodyCollector::addCdBodyPair(const hkCdBody& a, const hkCdBody& b)
 {
 	m_collector->addCdBodyPair(b, a);
-	m_earlyOut = m_collector->m_earlyOut;
+	m_earlyOut = (hkBool)m_collector->m_earlyOut;
 }
 
 // ---- hkIterativeLinearCastAgent::staticLinearCast -----------------------------------------------------------------

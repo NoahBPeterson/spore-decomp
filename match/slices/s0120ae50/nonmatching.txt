@@ -10,7 +10,6 @@
 # gate run reports the ORIGINAL faulting on all 400 generated inputs: the funclet
 # runs on a caller frame the input generator cannot synthesise.
 0120b890  42  complete hkUnaryAction ctor; base-vtable/field store scheduling differs
-0120b8f0  20  complete hkUnaryAction dtor; base-vptr restore shape differs
 0120b960  77  complete hkBinaryAction ctor; reference-add branch shape differs
 0120b9c0  42  complete hkBinaryAction dtor
 0120b0a0  254  complete _hkMatrix6SetMul (260 B); x87 2x2 block MAC; frame/prologue and esi/edi loop-pointer allocation differ
