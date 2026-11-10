@@ -16,3 +16,4 @@ _off.cod
 
 # compiled objects (our own builds; they embed local absolute paths)
 *.obj
+_site/

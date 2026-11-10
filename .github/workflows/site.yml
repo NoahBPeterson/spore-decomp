@@ -1,0 +1,49 @@
+# Build the public progress site (tools/site/build.py) and publish it with GitHub Pages after every change to main.
+# Byte-exact counts only, no function names or code (see the builder's docstring). Pages must be set to
+# "Source: GitHub Actions" in the repository settings.
+name: Progress site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build the site
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0            # the history chart is recomputed from git
+          persist-credentials: false
+      - name: List merged pull requests (for contributor credit)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr list --repo "$GITHUB_REPOSITORY" --state merged --limit 1000 --json number,author,mergedAt,mergeCommit,body > "$RUNNER_TEMP/prs.json"
+      - name: Build
+        run: python3 tools/site/build.py --out _site --prs "$RUNNER_TEMP/prs.json" --repo "$GITHUB_REPOSITORY"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Publish to GitHub Pages
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
