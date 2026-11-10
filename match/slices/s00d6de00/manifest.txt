@@ -1,0 +1,1 @@
+slices/s00d6de00/s00d6de00.cpp  ?FUN_00d6de00@@YA_NPAVcSPCreatureBase@@@Z  00d6de00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
