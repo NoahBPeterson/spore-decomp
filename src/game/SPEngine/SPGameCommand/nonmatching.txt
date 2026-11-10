@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00689810 73 derived destructor: base dtor inlining + vptr store order; equiv: UNSUPPORTED (our code stores address of its own vtable; map that symbol)
-00689b00 1 setter: compiler reuses one epilogue instead of duplicating it
+00689b00 7 early je shares the epilogue by skipping pop edi (size 57 vs 64). Retail places a second pop esi / mov al,1 / pop ebx / ret 4 after it. AddRef/Release plus a volatile reload of mpCommandDispatcher keep both compares and ebx/esi/edi. A plain reload drops the first compare (size 52). goto and an inverted if stay at 57 bytes.
 00689dc0 159 recursive rbtree walk: loop/register layout
 00689ee0 162 cCommandInfo copy ctor: member init order right, but cl homes source/dest in different regs and uses push ecx instead of sub esp,8
 0068a040 99 find-by-name loop: begin iteration + case-insensitive compare correct, but loop/compare scheduling and register use differ; equiv: FAIL (5/15 valid inputs mismatched at import call #0 tolower)

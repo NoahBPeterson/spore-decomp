@@ -723,13 +723,13 @@ bool SP::cCommandServer::SetCommandDispatcher(SP::cICommandDispatcher * p)
 {
     if (mpCommandDispatcher.mpObject == p)
         return true;
-    void* old = *(void* volatile*)((char*)this + 0x20);
+    SP::cICommandDispatcher* old = *(SP::cICommandDispatcher* volatile*)&mpCommandDispatcher.mpObject;
     if (p != old) {
         if (p != 0)
-            ((void(__thiscall*)(void*))(*(void***)p)[0])(p);
+            p->AddRef();
         mpCommandDispatcher.mpObject = p;
         if (old != 0)
-            ((void(__thiscall*)(void*))(*(void***)old)[1])(old);
+            old->Release();
     }
     return true;
 }

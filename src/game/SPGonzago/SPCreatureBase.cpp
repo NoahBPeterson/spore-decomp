@@ -3262,7 +3262,8 @@ void* __cdecl FUN_00c0b380(CB* self, TuningObj* tuning)
 // @ 0x00c0b410
 bool __cdecl FUN_00c0b410()
 {
-  return g_169e288 >= GRAND->RandomDoubleUniform();
+  float threshold = g_169e288;
+  return threshold >= GRAND->RandomDoubleUniform();
 }
 
 // @ 0x00c0b440
