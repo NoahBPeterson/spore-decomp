@@ -3,6 +3,20 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "EA/Text/Font.h"
+#include "EA/Text/FontDescription.h"
+
+namespace EA {
+namespace Text {
+class PolygonFont : public Font {
+ public:
+  virtual bool GetFontDescription(FontDescription& fontDescription);    // slot 11
+
+  uint32_t mUnknown048;                                        // 0x048
+  FontDescription mFontDescription;                            // 0x04c
+};
+}  // namespace Text
+}  // namespace EA
 
 // ---- items of slice s0071f410 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Vertex3D {
@@ -18,4 +32,11 @@ void CopyVertex3D(Vertex3D* first, Vertex3D* last, Vertex3D* dest)
         ++first;
         ++dest;
     }
+}
+
+// @ 0x008924d0
+bool EA::Text::PolygonFont::GetFontDescription(FontDescription& fontDescription)
+{
+    fontDescription = mFontDescription;
+    return true;
 }
