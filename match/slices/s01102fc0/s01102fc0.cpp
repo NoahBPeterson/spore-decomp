@@ -225,11 +225,14 @@ hkReferencedObjectWithPtr* hkReferencedObjectWithPtr::destroy(unsigned flags)
 // MOPP compiler settings
 // ---------------------------------------------------------------------------------------------------
 struct hkMoppSettingsPartA {                          // 20 bytes, at settings+4
-    float m_f0; int32_t m_i1; int32_t m_i2; int32_t m_i3; int32_t m_i4;
+    union {
+        struct { float m_f0; int32_t m_i1; int32_t m_i2; int32_t m_i3; int32_t m_i4; };
+        uint32_t m_w[5];
+    };
     __declspec(noinline) hkMoppSettingsPartA* init(int preset);   // 0x011037e0 (returns this in eax)
 };
 struct hkMoppSettingsPartB {                          // 24 bytes, at settings+0x18
-    float m_f[5]; float m_f5;
+    union { struct { float m_f[5]; float m_f5; }; uint32_t m_w[6]; };
     __declspec(noinline) hkMoppSettingsPartB* init(int preset);   // 0x01103830 (returns this in eax)
 };
 struct hkMoppSettings {
@@ -250,14 +253,12 @@ struct hkMoppSettings {
 // @ 0x01103590
 void hkMoppSettings::setA(const uint32_t* a)
 {
-    uint32_t* d = (uint32_t*)&m_a;
-    d[0] = a[0]; d[1] = a[1]; d[2] = a[2]; d[3] = a[3]; d[4] = a[4];
+    m_a = *(const hkMoppSettingsPartA*)a;
 }
 // @ 0x011035c0
 void hkMoppSettings::setB(const uint32_t* b)
 {
-    uint32_t* d = (uint32_t*)&m_b;
-    d[0] = b[0]; d[1] = b[1]; d[2] = b[2]; d[3] = b[3]; d[4] = b[4]; d[5] = b[5];
+    m_b = *(const hkMoppSettingsPartB*)b;
 }
 // @ 0x011037a0
 void hkMoppSettings::setC(const uint32_t* c)

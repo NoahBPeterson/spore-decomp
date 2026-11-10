@@ -47,7 +47,6 @@ struct t_gobj {
     t_class* g_pd;    // +0
     t_gobj*  g_next;  // +4
     char pad[0x24 - 8];
-    void*    o_save;  // +0x24
 };
 struct t_object : t_gobj {
 };
@@ -224,8 +223,7 @@ void* canvas_findtext(int* out, void* x)
 // @ 0x00a4a600
 void glist_getname(t_symbol* out, t_glist* g)
 {
-    out[0].s_name = *(void**)((char*)g + 0x64);
-    out[0].s_thing = *(void**)((char*)g + 0x68);
+    *out = *(t_symbol*)((char*)g + 0x64);
 }
 
 // @ 0x00a4a620
@@ -233,13 +231,9 @@ int glist_getindex(t_glist* g, void* which)
 {
     int n = 0;
     t_gobj* o = *(t_gobj**)((char*)g + 0x28);
-    if (o == 0)
-        return n;
-    while (o != which) {
+    while (o != 0 && o != which) {
         o = o->g_next;
         ++n;
-        if (o == 0)
-            break;
     }
     return n;
 }
@@ -269,8 +263,9 @@ int canvas_loadbanghandler(t_glist* g)
     t_glist* c = *(t_glist**)((char*)g + 0xc);
     if ((*(unsigned char*)((char*)c + 0x78) & 8) == 0) {
         canvas_loadbang(c);
-        *(int*)((char*)c + 0x80) = 0;
-        return 0;
+        int r = 0;
+        *(void**)((char*)c + 0x80) = (void*)r;
+        return r;
     }
     return 1;
 }

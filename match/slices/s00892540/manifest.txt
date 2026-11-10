@@ -1,0 +1,1 @@
+slices/s00892540/s00892540.cpp  ?SetAllocator@PolygonFont_00892540@@QAEXPAX@Z  00892540  /O2 /MD /Gy /EHsc /TP /arch:SSE

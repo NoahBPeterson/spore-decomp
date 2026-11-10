@@ -135,9 +135,8 @@ UI::TimelineSporepediaCardData* UI_TimelineSporepediaCardData_ctor(UI::TimelineS
 void __fastcall UI_TimelineSporepediaCardData_sendMessage(void* self, int /*unused*/, uint32_t /*unused2*/)
 {
     int* srv = (int*)SP_MessageServer();
-    int* vt  = (int*)*srv;
-    typedef void (*Fn)(void*, unsigned int, unsigned int, unsigned int);
-    ((Fn)vt[0x14 / 4])(srv, 0xcc0bf725, *(unsigned int*)((char*)self + 0x80), 0);
+    typedef void (__thiscall *Fn)(void*, unsigned int, unsigned int, unsigned int);
+    ((Fn)(*(void***)srv)[0x14 / 4])(srv, 0xcc0bf725, *(unsigned int*)((char*)self + 0x80), 0);
 }
 
 // =====================================================================================================
@@ -194,14 +193,18 @@ static inline bool less_rec(const Rec& a, const Rec& b)
     return a.value < b.value || (a.value == b.value && a.key < b.key);
 }
 
+// compare_pair: equal_pair predicate over the 8-byte {key, value} record
+static inline bool equal_rec(const Rec& a, const Rec& b)
+{
+    return a.key == b.key && a.value == b.value;
+}
+
 // @ 0x00ec4430  -- find(first,last,val): returns matching record pointer or last
 Rec* FUN_00ec4430(Rec* first, Rec* last, const Rec* val)
 {
-    const uint32_t k = val->key;
-    const uint32_t v = val->value;
     while (first != last)
     {
-        if (first->key == k && first->value == v)
+        if (first->key == val->key && first->value == val->value)
             return first;
         ++first;
     }
@@ -621,13 +624,19 @@ void FUN_00ec4de0(Rec* first, Rec* middle, Rec* last)
 }
 
 // @ 0x00ec4e50
-void* FUN_00ec4e50(void* self, char* pos)
+struct Vec_00ec4e50 {
+    char  pad_000[4];
+    char* mpEnd;        // +0x04
+    void* FUN(char* pos);
+};
+
+void* Vec_00ec4e50::FUN(char* pos)
 {
+    char* end = mpEnd;
     char* src = pos + 8;
-    char* end = *(char**)((char*)self + 4);
     if (src < end)
         FUN_00ec4e50_move(pos, src, (unsigned int)(end - src));
-    *(char**)((char*)self + 4) = end - 8;
+    mpEnd -= 8;
     return pos;
 }
 

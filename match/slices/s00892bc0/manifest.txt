@@ -1,0 +1,1 @@
+slices/s00892bc0/s00892bc0.cpp  ?GetGlyphMetrics@PolygonFont_00892bc0@@QAE_NGPAUGlyphMetrics_00892bc0@@@Z  00892bc0  /O2 /MD /Gy /EHsc /TP /GS- /GR- /arch:SSE
