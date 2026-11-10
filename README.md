@@ -5,7 +5,8 @@ one function at a time, with the original compilers (Visual C++ 2008 SP1, and th
 and RenderWare). Every function is annotated with the original address it rebuilds (`// @ 0x00XXXXXX`).
 
 - **Progress:** [noahbpeterson.github.io/spore-decomp](https://noahbpeterson.github.io/spore-decomp/) (charts, modules,
-  contributors), or [`PROGRESS.md`](PROGRESS.md) in the repository.
+  contributors), and the full tables in
+  [`PROGRESS.md`](https://noahbpeterson.github.io/spore-decomp/PROGRESS.md), both rebuilt after every change.
 - **Contribute:** below, then [`AGENTS.md`](AGENTS.md) for the full loop and the rules (written for people and AI
   agents alike).
 
