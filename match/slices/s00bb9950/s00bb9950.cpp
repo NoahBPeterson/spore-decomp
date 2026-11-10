@@ -47,6 +47,7 @@ struct String16 {         // eastl::basic_string<wchar_t>, 0x10 bytes
     uint32_t mpEnd;
     uint32_t mpCapacity;
     uint32_t mAllocator;
+    bool empty() const { return mpBegin == mpEnd; }
 };
 
 struct Key {              // EA::ResourceMan::Key, 0xc bytes
@@ -470,7 +471,7 @@ bool cPlanetRecord::HasPlanetObjectFlag_09Tech2()
 // ===========================================================================
 String16* cStarRecord::EnsureName()
 {
-    if (mName.mpBegin == mName.mpEnd)
+    if (mName.empty())
         SP_GenerateNewStarName(this);
     return &mName;
 }
