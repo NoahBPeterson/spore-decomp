@@ -2,5 +2,5 @@
 00ec28f0
 00ec2a70
 00ec2ce0
-00ec2e30
+00ec2e30 209/213: pickup-object teardown; getter at +0xb4c is re-loaded for each of PlayAnim/StopAnim (a hoisted `void* h` gives an extra live temp) and `FUN_00c14750` then StopAnim's helper call. Still differs: retail re-tests the owned pointer before the +0xb8 vcall (`test ecx,ecx; je`) because the first loop iteration inlines the refcount release (`*(q+0x108)=0; call [ecx+4]`) and re-tests the auto-ref getter's result, while our source tests a local (one `test` less) and the release vcall through VFN needs its 0 argument (V0) to avoid an extra `push 0`; retail's tail is `jmp edx` (no retained value) against our `call edx; ret`. Flags /O2 /MD /Gy /TP /arch:SSE (the module's other rows use /vc71, which turns the virtual calls into `call [eax+N]`).
 00ec2f30
