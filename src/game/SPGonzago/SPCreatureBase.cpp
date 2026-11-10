@@ -3184,9 +3184,13 @@ int* __cdecl FUN_00c0b100(int* stream, char* data)
 // @ 0x00c0b190
 bool __cdecl FUN_00c0b190(CB* self, int* info)
 {
-  if (self == 0) return false;
-  if (((self->mGeneralFlags >> 9) & 1) != 0 && info[2] == 0x3d) return false;
-  return info[0x120 / 4] != -1;
+  if (self != 0) {
+    if ((((unsigned char)(self->mGeneralFlags >> 9)) & 1) == 0 || info[2] != 0x3d) {
+      if (info[0x120 / 4] != -1)
+        return true;
+    }
+  }
+  return false;
 }
 
 // @ 0x00c0b1c0

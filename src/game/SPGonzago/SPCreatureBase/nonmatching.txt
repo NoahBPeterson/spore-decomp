@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00c0b030
 00c0b100
-00c0b190  ~  in progress: behavior is complete; current code folds the bit extraction into `test [m], 0x200` and normalizes the final comparison with `setne`, while retail uses `load; shr; test` and explicit true/false tails.
 00c0b220
 00c0b270
 00c0b2f0
