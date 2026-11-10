@@ -53,6 +53,7 @@ void  FUN_011ea8f0(void* dst, int n);                         // 0x011ea8f0
 void  startnextrequest(void* s, u32 arg);                    // 0x011e6870
 u32   parsechunks(void* s);                                  // 0x011e6d70
 void  readcallback(void* s);                                 // 0x011e6fc0
+extern "C" __declspec(noinline) void readcallback_impl(void* s);  // 0x011e6fc0 (not inlined into the thunk)
 void  restartstream(void* s, u32 arg);                       // 0x011e7100
 
 // ===========================================================================
@@ -325,14 +326,14 @@ void* FUN_011e6d20(u32 sz)
 // @ 0x011e70f0
 void FUN_011e70f0(void* self)
 {
-    readcallback(*(void**)((char*)self + 0x14));
+    readcallback_impl(*((void**)self + 5));
 }
 
 // ===========================================================================
 // 0x011e6fc0 -- readcallback: account for just-read bytes, parse, schedule next
 // ===========================================================================
 // @ 0x011e6fc0
-void readcallback(void* s)
+__declspec(noinline) void readcallback(void* s)
 {
     void* impl = (void*)ld32(s, 0x90);
     u8 flag;

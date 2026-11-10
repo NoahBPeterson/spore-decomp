@@ -7,7 +7,6 @@
 00f962b0   74  cTerrainOverlay scalar deleting dtor: complete (equivalence PASS); cl orders the dtor/vtbl-store/vfree sequence differently
 00f96310   92  cTerrainOverlay::Start: complete (equivalence PASS); the flag/latch writes match, cl reorders the branch blocks
 00f96390  129  DrawTerrainGrid: complete; the grid-emit loop matches but cl reorders the vertex stores
-00f964b0  102  ReleaseRef: complete but unresolved `InterlockedExchangeAdd` at link time (equivalence UNSUPPORTED)
-00f964f0  118  cDynCast::Cast: complete; the type-id walk matches, cl orders the return-path compares differently
+00f964b0  102  ReleaseRef / __fastcall: retail inlines the intrinsic as `or esi,-1; lock xadd [edx],esi; dec esi; jne` (the counter counts the last reference as +1, so the test is on the xadd result, not on old-1), stores the reset 1 with `xchg [eax],1` and returns the pre-decrement old value from esi. Ours (39 vs 36 bytes) keeps old in esi and a separate `lea [eax+4]` temp; `_InterlockedExchangeAdd` from <intrin.h> works (a hand declaration with #pragma intrinsic does not), but the `dec`/`jne` and the `mov edx,1; xchg` store only appear if the 1 store is an xchg intrinsic and the return keeps the decremented value. Tried an `_InterlockedExchange((long)self+4, 1)` for the reset (gives the `xchg` but drops the `mov edx,1` and the frame, 40 bytes) and `if (old != 1) return old;` (41 bytes, reorders the guard). Equivalence UNSUPPORTED (executes unresolved externals).
 00f96520   95  cTerrainSphere::RemoveFromEffectsSystem: complete but the harness faults (read=400) on the fully-unrolled 5/22/3-call sequence (equivalence UNSUPPORTED)
 00f967d0  151  cGridTool::GetExtents: complete; the three extent clamps match, cl reassociates the min/max selection
