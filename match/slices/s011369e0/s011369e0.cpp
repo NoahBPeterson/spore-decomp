@@ -9,6 +9,12 @@
 // ---------------------------------------------------------------------------
 extern int* g_timerListHead;   // 0x016e6288
 extern int* g_timerListTail;   // 0x016e628c
+struct TimerNode                    // list node embedded at owner+0x2c
+{
+	TimerNode* next;                // +0x00
+	TimerNode* prev;                // +0x04
+};
+extern TimerNode* g_timerNodes;     // 0x016e6288 as a typed list head
 
 class Sys
 {
@@ -144,11 +150,11 @@ uint32_t __cdecl FUN_011369e0(int param_1, int param_2)
 // ---------------------------------------------------------------------------
 bool __cdecl FUN_01136b10(int param_1)
 {
-	int u = (param_1 + 0x47) & ~7;
-	*(int*)(param_1 + 0x3c) = 0;
-	*(int*)(param_1 + 0x38) = 0;
-	*(int*)(param_1 + 0x34) = u;
 	int r = 0;
+	int u = (param_1 + 0x47) & ~7;
+	*(int*)(param_1 + 0x3c) = r;
+	*(int*)(param_1 + 0x38) = r;
+	*(int*)(param_1 + 0x34) = u;
 	if (u != 0)
 		r = FUN_01148e80(u);
 	*(int*)(param_1 + 0x34) = r;
@@ -273,6 +279,7 @@ bool __cdecl FUN_01136cc0(int param_1, uint8_t param_2)
 // ---------------------------------------------------------------------------
 void __cdecl FUN_01136de0(int param_1)
 {
+	extern bool __cdecl FUN_01136cc0(int param_1, uint8_t param_2);
 	FUN_01136cc0(param_1, 2);
 }
 
@@ -426,7 +433,8 @@ void __fastcall FUN_01137130(int param_1)
 // ---------------------------------------------------------------------------
 int __cdecl FUN_01137150(int param_1)
 {
-	return (uint32_t)*(uint8_t*)(param_1 + 8) * 0x1c + 0x80;
+	struct Rec { int a[7]; };
+	return (int)&((Rec*)0)[*(uint8_t*)(param_1 + 8)] + 0x80;
 }
 
 // ---------------------------------------------------------------------------
@@ -526,11 +534,11 @@ bool __cdecl FUN_01137170(int* param_1, float* param_2)
 // ---------------------------------------------------------------------------
 int* __cdecl FUN_011373c0(void)
 {
-	int* p = g_timerListHead;
+	TimerNode* p = g_timerNodes;
 	if (p == 0)
 		return 0;
 	int* r = (int*)((char*)p - 0x2c);
-	g_timerListHead = (int*)*p;
+	g_timerNodes = p->next;
 	return r;
 }
 
@@ -690,9 +698,10 @@ bool __cdecl FUN_01137590(int* param_1, int* param_2)
 // ---------------------------------------------------------------------------
 // @ 0x011376a0
 // ---------------------------------------------------------------------------
-int __stdcall FUN_011376a0(uint8_t param_1)
+char __stdcall FUN_011376a0(uint8_t param_1)
 {
-	if (param_1 != 4 && param_1 != 0)
+	int v = param_1;
+	if (v != 4 && v != 0)
 		return 1;
 	return 0;
 }

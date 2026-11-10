@@ -21,8 +21,9 @@
 //   0x00f967d0  GetGridExtents(int*,int*,int*)            ret 0xc
 
 #include "types.h"
+#include <intrin.h>
 
-long InterlockedExchangeAdd(long volatile* dest, long incr);
+#pragma intrinsic(_InterlockedExchangeAdd)
 
 namespace SP {
 
@@ -610,11 +611,11 @@ char cTerrainOverlay::ClearSlot()
     return 1;
 }
 // @ 0x00f964b0
-int ReleaseRef(int* self)
+int __fastcall ReleaseRef(int* self)
 {
     int* p = (int*)((char*)self + 4);
     int old;
-    old = InterlockedExchangeAdd((long volatile*)p, -1);
+    old = _InterlockedExchangeAdd((long volatile*)p, -1);
     if (old - 1 == 0) {
         *(int*)((char*)self + 4) = 1;
         Sub_f47380(self);
@@ -627,11 +628,11 @@ void* cDynCast::Cast(unsigned id)
 {
     if (id == 0x479dcb2)
         return (char*)this - 0x10;
-    if (id != 0x2269ed1 && id != 0xee3f516e)
-        return 0;
-    if (!this)
-        return 0;
-    return this;
+    if (id == 0x2269ed1 || id == 0xee3f516e) {
+        if (this != 0)
+            return this;
+    }
+    return 0;
 }
 
 // @ 0x00f96520

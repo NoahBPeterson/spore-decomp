@@ -1,14 +1,14 @@
 011fab10 52 complete: transposed projection constant setter; original uses call [ecx+N] (toolset difference), ours mov eax,[ecx+N]; call eax
-011fab60 35 complete: projection constant setter; same indirect-call form + load scheduling difference
+011fab60 35 complete: projection constant setter; same indirect-call form + load scheduling difference. This whole group (011fab10-011faf60) is the cl 13.10 virtual-call shape (`call dword ptr [ecx+N]`), so it needs a `/vc71`-built file; /vc71 cannot be tried from here because the slice also holds the /arch:SSE intrinsic functions the 13.10 headers do not provide.
 011fab90 100 complete: light-position constant (movaps + zero-vector path); call form + first-light scan scheduling
 011fac30 118 complete: light-colour constant (w=0); call form + scan scheduling
 011face0 94 complete: light-direction constant; call form + scan scheduling
 011fad70 131 complete: light range constant (z lane, FLT_MAX default); call form + scan scheduling
 011fae40 68 complete: world-matrix row 3 (64-byte matrix copy as 4 movaps rows, passes &copy.r[3]); call form + load scheduling differ; difftest PASS after copying the Mat4 row by row (no rep movsd / esi-edi saves)
 011faea0 68 complete: world-matrix rows 2-3 (64-byte matrix copy as 4 movaps rows, passes &copy.r[2]); call form + load scheduling differ; difftest PASS after fixing the Mat4 copy (rep movsd saved/restored esi/edi around the stdcall device call; the checker's fake-arity guess stops at the je before the call so it popped 0 args and the pops read wrong slots; the original never touches esp after the call)
-011faf00 29 complete: material colour constant setter; call form difference
-011faf30 29 complete: ambient colour constant setter; call form difference
-011faf60 29 complete: time constant setter; call form difference
+011faf00 29 complete: material colour constant setter; retail is `call dword ptr [ecx+0x178]` / `[ecx+0x1b4]` (memory-indirect), ours `mov eax,[ecx+N]; call eax`; it also keeps the count and the data pointer as pushed immediates around the `test`/`je`, so the Jcc lands on the second call. A single-expression virtual call, a typed device call, the void-return form of the two slots and a raw `(*(fn*)(vt+N))()` cast all keep the load in eax under this slice's flags (/O2 /MD /Gy /EHsc /TP).
+011faf30 29 complete: ambient colour constant setter; same call-form difference as 011faf00.
+011faf60 29 complete: time constant setter; same call-form difference as 011faf00.
 011faf90 100 complete: point-size constant (viewport width * sqrt2); call form + float temp copies
 011fb030 111 complete: elapsed-time-seconds constant (QPC); call form + temp vector copies; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS after declaring QueryPerformance* as dllimport and copying the constant as one __m128 (so the device-call pushes are hoisted above the je, as in the original; the checker otherwise guessed different fake-call arities)
 011fb0f0 125 complete: elapsed-time-modulo constant (allrem) + temp vector copies; the device setters are __stdcall (this is the first stack argument), so retail leaves the register index in ECX and the generated-callee observation includes it, hence one call site per vtable slot through a __fastcall prototype with (ECX=reg, EDX=vtable) and (device, reg, data, count) on the stack; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (1597/1600 valid, 100% coverage)

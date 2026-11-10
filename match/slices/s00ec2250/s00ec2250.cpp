@@ -8,6 +8,7 @@
 #define V0(p, off)      ((void(__thiscall*)(void*))VFN(p, off))(p)
 #define VP0(p, off)     ((void*(__thiscall*)(void*))VFN(p, off))(p)
 #define VC1(p, off, a)  ((char(__thiscall*)(void*, int))VFN(p, off))(p, (int)(a))
+#define VP1(p, off, a)  ((int(__thiscall*)(void*, int))VFN(p, off))(p, (int)(a))
 
 struct Vec3 { float x, y, z; };
 
@@ -314,19 +315,19 @@ char FUN_00ec2ce0(void* c, int a2, int a3, int a4, int a5, PickupState* t)
 // @ 0x00ec2e30
 void FUN_00ec2e30(void* c, int a2, int a3, int a4, int a5, PickupState* t)
 {
-    void* h = *(void**)((char*)c + 0xb4c);
-    void* anim = PlayAnim((char*)h + 8, 0, 0x40000);
+    void* anim = PlayAnim((char*)*(int*)((char*)c + 0xb4c) + 8, 0, 0x40000);
     if (anim != 0 && *(int*)((char*)anim + 0xc) == 4) {
         if (FUN_00d998d0(anim, 0x1186577) == t->anim)
-            StopAnim((char*)h + 8, anim);
+            StopAnim((char*)*(int*)((char*)c + 0xb4c) + 8, anim);
     }
-    if (t->anim != 0 && FUN_00c0f8f0(c, t->anim) == -1) {
-        int q = (int)((void*(__thiscall*)(void*, int))VFN(t->anim, 0xb8))(t->anim, 0x398420d);
+    if (t->anim != 0 && FUN_00c0f8f0(c, t->anim) == -1 && t->anim != 0) {
+        int q = (int)VP1(t->anim, 0xb8, 0x398420d);
         if (q != 0 && *(int*)(q + 0x108) == (int)c) {
-            void* linked = *(void**)(q + 0x108);
-            *(int*)(q + 0x108) = 0;
-            if (linked != 0)
-                ((void(__thiscall*)(void*))VFN(linked, 4))(linked);
+            int linked = *(int*)(q + 0x108);
+            if (linked != 0) {
+                *(int*)(q + 0x108) = 0;
+                V0((void*)linked, 4);
+            }
         }
     }
     if (t->anim != 0) {
@@ -336,7 +337,7 @@ void FUN_00ec2e30(void* c, int a2, int a3, int a4, int a5, PickupState* t)
     }
     FUN_00c14750(c, 0);
     if (t->anim != 0)
-        ReleaseAutoRef(t->anim);
+        return (void)((void(__thiscall*)(void*))VFN(t->anim, 0xc0))(t->anim);
 }
 
 // ---------------------------------------------------------------- 0x00ec2f10
