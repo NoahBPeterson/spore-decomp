@@ -677,10 +677,13 @@ static int8 ReadNibbleLo(int dummy, NibSrcTC* s)
         s->cur = p + 1;
         return (int8)v;
     }
-    uint8 b0 = *s->cur;
-    uint8* p = s->cur + 1;
-    s->cur = p;
-    int b1 = *p;
+    // Retail keeps the low byte in CL: it loads it without extending (`mov cl,[eax]`), shifts it
+    // there and only then widens CL; the high nibble stays in EAX (`shr eax,4`).
+    uint8* p = s->cur;
+    uint8 b0 = *p;
+    uint8 b1;
+    s->cur = ++p;
+    b1 = *p;
     b0 <<= 4;
     return (int8)((b1 >> 4) + b0);
 }

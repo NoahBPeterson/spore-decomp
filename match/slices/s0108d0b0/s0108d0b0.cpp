@@ -546,6 +546,9 @@ void hkSimpleConstraintContactMgr::processContact(const hkCollidable& a, const h
 // @ 0x0108d850
 hkSimpleConstraintContactMgr::Factory::Factory(hkWorld* world)
 {
+    // Retail: `mov word [eax+6],1; mov dword [eax],<vptr>; mov [eax+8],ecx` -- the vptr store
+    // comes after the reference count, so something between them keeps cl from writing it at
+    // the head of the constructor (see nonmatching.txt).
     m_referenceCount = 1;
     m_world = world;
 }

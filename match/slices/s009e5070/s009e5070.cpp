@@ -355,8 +355,8 @@ Gcmdst::Gcmdst()
     char tmp;                    // stack temp whose address is handed to the ctor
     count = 0;
     v.b = 0;
-    v.cap = 0;
     v.e = 0;
+    v.cap = 0;
     arr.count = 0;
     arr.v.Construct(0, (const Entry*)&tmp);
     ResetDefault();
