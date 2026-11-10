@@ -2,7 +2,6 @@
 0113a8b0  333  complete; flags /vc71 /O2 /MD /Gy /TP; difftest UNSUPPORTED (0/400 valid: the ReverbIR1 handler is reached only through a job-record function pointer -> fake-arity/fault)
 0113aa50  51  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (325 valid, 100% cov); /LTCG keeps the command-write cursor live in a different register than a single-object compile
 0113aaf0  58  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400/400 valid, 100% cov, 0 mismatches). The original stores the 1.0f/-1.0f constants with `movss` into xmm0/xmm1, so the single-object x87 build parked 0x3f800000 in edx and violated the untouched-register contract; /arch:SSE reproduces the movss form. Residual 58-byte diff is /LTCG register choice
-0113abb0  1  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100% cov); the original materialises the address in eax then stores, we emit a single memory-immediate store
 0113abd0  69  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100% cov); float compare/convert use SSE in the original (ucomiss/cvttss2si), single-object /O2 emits x87 fucompp + a helper call
 0113ac60  68  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (312 valid, 100% cov); /LTCG register allocation
 0113ad10  22  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100% cov); cl folds the 6-iteration do/while into a countdown (dec/jne) instead of the original's sub/jns

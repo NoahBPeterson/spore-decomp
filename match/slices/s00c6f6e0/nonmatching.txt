@@ -1,7 +1,6 @@
 # Slice s00c6f6e0 -- non-exact functions that still pass equivalence.
 #  00c6f7b0  ?IsPlayerOwnedOrnament@SimSpatial@@QAE_NXZ  (2-byte diff: vtable
 #            slot loaded into eax vs retail edx; behaviour identical)
-00c6f7b0 2 vtable-slot load uses eax, retail uses edx; equivalence PASS (394 inputs, 100%)
 00c6f770 19 /O2 /MD /Gy /EHsc /TP /arch:SSE UNSUPPORTED SimOrnament style/model setter (writes +0x228/+0x22c, vtable slot 0x48). All 400 inputs discarded as fake-arity (the virtual scene-node setter cannot be modelled by the harness); source is complete and compiles.
 00c6f7f0 96 /O2 /MD /Gy /EHsc /TP /arch:SSE UNSUPPORTED SimOrnament ctor: base sub-object ctors (GameDataBase/SpatialBase/CombatantBase/IntTargetBase) plus the vtable stores and field zeroing. 4 unresolved references (?ctor@GameDataBase@@QAEXXZ and the three siblings) - the base ctor symbols are not in the image, so the harness cannot load the case.
 00c6f990 153 /O2 /MD /Gy /EHsc /TP /arch:SSE UNSUPPORTED SimOrnament::Write: cVarListSerializer on the stack, class id 0x175cdc9, delegated GameData/Spatial writes. 0/400 valid inputs (fault-read) - the serializer local trips the GS cookie / unmapped memory in the harness.

@@ -2,7 +2,6 @@
 # Format: <va> <diff> <reason>
 00a75020  241  MapToCell: codegen differs. Original uses the inlined floorf idiom (cvtss2si + ucomiss + cmovb) and spills u/v to the stack; ours uses cvttss2si + comiss/jbe/dec and produces a 160-byte body vs 241. Semantically correct. [equiv PASS 389 valid, 100% cov]
 00a75120   29  Normalize: instruction set identical, scheduling/register order differs (mpPixels40 += m4c placed earlier than the original's post-subss add). [equiv WEAK 352 valid, 20% cov]
-00a753b0    3  cMapInfo_SortRect2: only branch-opcode polarity (jae/jb vs ja/jbe) after comiss; arg load order matches. [equiv FAIL 2/400 (memory-pool artifact)]
 00a75410   10  cMapInfo_SortRect3: branch-opcode polarity on the selection chain. [equiv FAIL 1/400 (memory-pool artifact)]
 00a75480    8  cMapInfo_SortRect3R: branch-opcode polarity + arg load order. [equiv FAIL 3/400 (memory-pool artifact)]
 00a754f0   38  UnpackColor: original converts int->float via x87 (fild/fstp) from per-channel int temps; ours uses cvtsi2ss from the masked uint32. [equiv PASS 320 valid, 96.7% cov]

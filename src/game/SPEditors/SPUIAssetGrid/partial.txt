@@ -1,6 +1,4 @@
 # va  diff-bytes  reason (incomplete/approximate)
-00648aa0  66    outline only: ClearAssetViews (stubbed)
-00648bb0  164   outline only: eastl::make_heap (stubbed)
 0064fa20  544   outline only: cSPUIAssetGrid::UpdateScrolling (stubbed)
 0064fc40  188   outline only: grid helper (stubbed)
 0064fd00  224   outline only: grid helper (stubbed)

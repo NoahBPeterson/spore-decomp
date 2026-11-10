@@ -5,4 +5,3 @@
 00e67100 161 complete: gate wrapper - the original takes cell A on the stack and cell B in a register (not ordinary cdecl); the GetSafe pair + flag-gated forwarding cannot be reproduced byte-for-byte
 00e671c0 238 complete: SP::sBomb_Start - operator_new ring-buffer init plus the FUN_00e65840 / FUN_00e61b90 custom-ABI call shapes differ
 00e67330 272 complete: sAddSoundEvent - the extent-bounds predicate, the SoundMap lower_bound/insertAt path and the FUN_00e4ce40 ref-count pairing schedule differently
-00e675f0 5 complete: GetSafe(player) + sBomb_Start; the first argument is loaded to ecx instead of edx (compiler coin-flip; 5 source variants all reproduce the swap)

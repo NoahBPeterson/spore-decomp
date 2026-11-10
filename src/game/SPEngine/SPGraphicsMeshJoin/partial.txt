@@ -2,7 +2,6 @@
 00720070  n/a  helper called by the Obj15 copy/ctor helpers: skeleton only
 007200f0  n/a  helper: skeleton only
 00721340  0  ChartSolve (UV/normal solve): skeleton only, 1152-byte jump-table body omitted
-00721980  50  TwoVtbl deleting dtor: vtable store values omitted
 00721d80  169  CopyChart68: only flat 0x50 prefix copied, inner vectors omitted
 00722010  143  InitChartHash: only first 3 fields initialised
 007220c0  224  FreeChartThing: only one member freed, EH unwinding omitted
@@ -11,7 +10,6 @@
 00722580  0  insert n elements of 0x18: stub
 00722770  0  insert n elements of 0x28: stub
 00722990  0  AllocConstruct38: allocation only, element construct call omitted
-007229f0  0  CopyChartRecord: flat prefix copy only, inner vector omit
 00722b20  0  FindOrInsertF: stub
 00722ba0  0  SwapVecIfOwned: simplified (no copy-on-alloc path)
 00722ca0  0  ConstructIntVec: EH frame + deferred assign omitted

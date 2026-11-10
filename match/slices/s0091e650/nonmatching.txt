@@ -4,7 +4,6 @@
 0091e810  136  ExceptionHandler ctor: fixed-vector inline storage / DoInsertValue clear schedule differ
 0091e8d0  107  ExceptionHandler dtor: platform-handler teardown / list walk schedule differ
 0091ea90  33   WriteSubstr: branch block layout differs
-0091ead0  37   WriteFormattedV: va_list slot / comparison shape differs
 0091eb20  84   WritePair: r13 arg schedule / block layout differs
 0091eba0  22   WriteFormatted: comparison block layout (ja vs jbe) differs
 0091ee80  113  GetAddressLocationString: buffer/slot layout differs

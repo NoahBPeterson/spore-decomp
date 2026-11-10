@@ -5,14 +5,12 @@
 01082600 60 havok-equivalent
 01082660 78 havok-equivalent
 010826e0 79 havok-equivalent
-01082770 103 havok-equivalent
 01082800 129 havok-equivalent
 01082890 31 complete; pad10 corrected to 8 floats so the velocity vectors and damp factors land at +0x30/+0x40/+0x50; 1/damping is rounded to float through a volatile store like the original's fst [esp+8]; equiv PASS (400/400 valid, 100% coverage)
 01082990 43 havok-equivalent
 01082a90 149 havok-equivalent
 01082b90 59 havok-equivalent
 01082bf0 99 havok-equivalent
-01082cf0 4 complete; scalar deleting destructor installs the original vtables at +0/+8 and frees through g_hkMemory::deallocateObject(this, memSize, 4), returning this; equiv PASS (400/400 valid, 100% coverage)
 01082df0 182 havok-equivalent
 01082ee0 0 havok-equivalent
 01083110 0 havok-equivalent

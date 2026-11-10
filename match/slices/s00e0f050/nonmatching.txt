@@ -1,5 +1,4 @@
 00e0f050 166 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 166 bytes - minimap icon add helper not reconstructed.
-00e0f100 93 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 93 bytes - minimap draw helper: four float arguments copied through x87 fld/fstp with one SSE movss, which /fp:fast does not regenerate.
 00e0f2c0 1349 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1349 bytes - draw_civilization_borders not reconstructed.
 00e0f810 334 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 334 bytes - cSPUIMinimapWin destructor not reconstructed.
 00e0f9c0 391 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 390 bytes - RemoveIcon not reconstructed.

@@ -1,10 +1,7 @@
 # all functions complete (see nonmatching.txt)
-00a23360  -   System::GetPosDist approximated (difftest FAIL: x87 st0 differs); distance formula order/precision not reproduced
 00a233b0  -   System::MuteAll approximated (difftest FAIL: execution); submix mute/unmute flow not reproduced
 00a24210  -   RBTree::Assign stub (difftest UNSUPPORTED: symbol not found); body not implemented
 00a243e0  130 EraseNode: approximated bucket splicing; difftest FAIL
-00a24480  120 resource-device free-list release approximated; difftest FAIL (memory pool divergence)
-00a245e0  50  RB_AllocNode approximated; difftest FAIL (esp/stack divergence)
 00a2d940  64   EH constructor frame (fs:[0] handler + object ctor) not reproduced
 00a2d9d0  59   EH destructor frame + operator_delete path approximated
 00a2da30  -    PickRandomKey: 525-byte EASTL hashtable iteration + EH body skipped

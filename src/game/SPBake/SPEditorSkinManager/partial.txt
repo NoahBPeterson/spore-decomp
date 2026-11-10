@@ -3,4 +3,3 @@
 004c3070  0  partial: create_ui_raster skeleton flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 004c38e0  0  partial: cSPEditorSkinManager::Update top-level flow only (UpdateTorso call, mModel check, UpdatePaintedSkin tail); missing asm 0x4c3912..0x4c4270 (block loop, mLimbSkins find/insert, complete-skin update, cleanup loops)
 004c4290  0  partial: UpdatePaintedSkin skeleton
-004c60e0  0  partial: vector resize helper skeleton (not in this pass) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

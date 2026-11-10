@@ -23,8 +23,6 @@
 008d6b20  141  reconstruction (DatabaseDirectoryFiles::GetKeyList); flags as above; difftest UNSUPPORTED (0/400 valid inputs: mutex import + pool limit)
 008d6be0   71  reconstruction (eastl::rbtree<string,pair<const string,uint>>::DoNukeSubtree); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
 008d6c40  173  reconstruction (DatabaseDirectoryFiles::AddExtensionMapping? overload); flags as above; difftest FAIL (5/190 valid inputs mismatched: execution)
-008d6d20   81  reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::erase); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
 008d6d90  118  reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::DoNukeSubtree); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
 008d6e20  140  reconstruction (eastl::rbtree<Key,pair<const Key,DDFRecordListData>>::DoInsertValueImpl); flags as above; difftest UNSUPPORTED (original reads ecx at entry; LTCG register ABI)
 008d6ed0  653  reconstruction (DatabaseDirectoryFiles::ReadExtensionToTypeMapFile); flags as above; difftest WEAK (299 valid inputs, 4.9% coverage) -- equivalent on the covered paths
-008d7200   23  reconstruction (eastl::map<Key,DDFRecordListData>::erase wrapper); flags as above; difftest UNSUPPORTED (0/400 valid inputs: the wrapper thread-local/iterator path faults on read); retail uses an LTCG hidden out-parameter slot (push ecx / mov [eax],edx) that the 2-arg reconstruction cannot express

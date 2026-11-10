@@ -6,6 +6,5 @@
 00f92ff0 347 diff; complete; terrain-rect Set; clamp compiles to branchy comiss/movaps, orig uses SSE xorps/maxss/minss off stack slots, and round uses cvttss2si+branch vs orig cvtss2si+ucomiss+cmovb (size 216 vs 379); equiv FAIL (5/5 mismatch: ours writes xmm5 which the original never writes)
 00f931f0 237 diff; complete; resource-manager GetVector; virtual call + TerraBlend arg/scheduling differ (size 274 vs 247); equiv UNSUPPORTED (unresolved ?v0@CObj@@ ?v1@CObj@@)
 00f932f0 200 diff; complete; resource-manager Create; cTerrainStateMgr placement-new + vcall schedule differ (size 230 vs 248); equiv UNSUPPORTED (unresolved ?v0@CObj@@)
-00f93420 2 diff; complete; resource-manager dtor; loop rotation jmp+lea ecx,[ecx] now matches; only vptr-store scheduling differs (orig stores [edi]/[edi+4] immediately after mov edi,ecx; mine reads [edi+0x64] first) (size 95 vs 95); equiv PASS (228 valid, 100.0% coverage)
 00f93490 175 diff; complete; resource-manager GetPlanet; vcall + Create arg schedule differ (size 215 vs 208); equiv UNSUPPORTED (unresolved ?v0@CObj@@ ?v1@CObj@@)
 00f93560 534 diff; complete (stub-faithful); resource-manager Get; original is a 550-byte eastl-vector path, mine is a 123-byte outline; equiv UNSUPPORTED (unresolved ?v1@CObj@@)

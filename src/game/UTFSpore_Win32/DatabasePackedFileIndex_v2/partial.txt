@@ -4,14 +4,7 @@
 006be8d0  0  partial: hashtable rehash skeleton
 006be980  0  partial: heap sift-down skeleton
 006beb60  0  partial: PFIndexModifiable::Write serialization omitted
-006bede0  0  partial: CheckFilesInRange skeleton
-006beeb0  0  partial: CheckFilesInSizeRange skeleton
-006bef70  0  partial: PFHoleTable rbtree insert/erase skeleton
 006bf030  0  partial: rbtree/hash helper skeleton
-006bf140  0  partial: rbtree/hash helper skeleton
-006bf1e0  0  partial: rbtree/hash helper skeleton
-006bf240  0  partial: rbtree/hash helper skeleton
-006bf2c0  0  partial: rbtree DoInsertValue skeleton
 006bf370  0  partial: PFIndexModifiable constructor skeleton
 006bf430  0  partial: hash_map destructor skeleton
 006bf4e0  0  partial: GetFileInfo skeleton
