@@ -1,15 +1,1 @@
-00a586d0
-00a587a0
-00a58950
-00a589e0
-00a58a70
-00a58b00
-00a58ba0
-00a58cf0
-00a58ec0
-00a58fa0
-00a59150
-00a591c0
-00a592f0
-00a593e0
-00a59630
+00a586d0  207  Eapd::CollRecv::erase(Atom) (thiscall, 12-byte Atom by value, ret 0xc): build a CollNode key (prev=next=0, keyType/keyA/keyB = the three Atom words), mTable.Lookup(&pair,&key) (0xa57a20), if the node is not the sentinel unlink it (next->prev = prev; prev->next = next; key prev/next = 0), --mPool.mCount (mPool at this+0x120, so +0x148), return its data block to the fixed pool (0x13c..0x140 range, mFree at +0x144) or mPool.mAlloc.Free (vtable +0xc), then mTable.EraseNode(node, pair.bucket, &pair) (0xa583e0, pair passes in two stack slots). Complete; FixedPool moved its table so mTable lands at +0x150 and the Atom is copied word by word (key is kept unmodified - reordering the copy was reverted). Remaining: frame 0x28 vs 0x20. Retail overlaps both the dead by-value Atom argument home slots (esp+0x20..0x2b) and the `Pair` with the CollNode key: the Lookup temporary is 24 bytes that start before esp+0x10, so cl reused the incoming-argument area, and it pushes edi only after Lookup. With this source (key initialized before the call, as retail's mov [esp+0x24],0 / mov [esp+0x20],0 before the call show) cl keeps key in its own 24 bytes and pushes edi with the first callee-saved pair. Our 199 vs 207. Levers tried: Pair first / CollNode first, k2 built from key vs (CollNode*)&key cast, local index numbers; the /O2 register choices otherwise track retail (esi=this, ebx=table, edi=node).

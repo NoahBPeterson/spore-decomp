@@ -138,7 +138,7 @@ int hkStdioStreamWriter::write(const void* buf, int nbytes)
 // @ 0x0107e910
 void hkStdioStreamWriter::close()
 {
-	if (m_file && m_ownsFile)
+	if ((unsigned)m_file > 0 && m_ownsFile)
 		fclose(m_file);
 	m_file = 0;
 }
@@ -618,11 +618,5 @@ void hkString::memCpy(void* dst, const void* src, int n)
 // @ 0x0107f470
 void hkString::memSet(void* dst, int c, int n)
 {
-	hkUint32* d = (hkUint32*)dst;
-	hkUint8 b = (hkUint8)c;
-	for (hkUint32 w = (hkUint32)n >> 2; w != 0; --w)
-		*d++ = ((hkUint32)b << 24) | ((hkUint32)b << 16) | ((hkUint32)b << 8) | b;
-	unsigned char* db = (unsigned char*)d;
-	for (hkUint32 r = (hkUint32)n & 3; r != 0; --r)
-		*db++ = b;
+	memset(dst, c, n);
 }
