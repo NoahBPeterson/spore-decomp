@@ -1,5 +1,7 @@
 // Decompiled source for bfs3 slice 43: Havok hkGskBaseAgent / Gskf collision
 // agents.  Large entry points are approximated (see partial.txt).
+// This TU is Havok code: rows that need cl 13.10 carry /vc71 in the manifest.
+#pragma warning(disable:4234)
 #include "types.h"
 
 #define VFN(p, slot) (((void**)*(void**)p)[(slot)/4])
@@ -186,11 +188,12 @@ struct hkGskQuery {
 // @ 0x010ed230  (helper: Release(1) if non-null; ecx = object)
 struct IReleasable {
     virtual void Release1(int) = 0;
+    void Helper();
 };
-void __fastcall FUN_010ed230(IReleasable* p)
+void IReleasable::Helper()
 {
-    if (p != 0)
-        p->Release1(1);
+    if (this != 0)
+        Release1(1);
 }
 
 // @ 0x010ed240

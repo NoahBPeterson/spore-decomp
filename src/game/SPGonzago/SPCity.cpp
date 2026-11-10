@@ -2735,15 +2735,19 @@ Vector3* cCity_s00bd_91e0::GetCenter(Vector3* pOut)
 u8 CStub::FUN_00bdb880(int spec)
 {
     switch (spec) {
-    case 2:
-        return m590->m298 >= 3;
+    case 2: {
+        bool b = m590->m298 >= 3;
+        return b;
+    }
     case 1:
         if ((m32c != g_168bd70 || m330 != g_168bd74 || m334 != g_168bd78) &&
             m590->m298 >= 2)
             return 1;
         return 0;
-    case 0:
-        return m590->m298 >= 1;
+    case 0: {
+        bool b = m590->m298 >= 1;
+        return b;
+    }
     }
     return 0;
 }

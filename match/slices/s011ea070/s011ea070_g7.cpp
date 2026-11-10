@@ -2,6 +2,7 @@
 // support routines.  The slice id is shared with the older Vsnprintf work in
 // s011ea070.cpp; that file and its 011ea070 nonmatching row are left untouched.
 //
+#pragma warning(disable:4234)
 // gold7 functions:
 //   011ea770  vsnprintf-style variadic trampoline (engine at 011e9a10)
 //   011ea790  _vsnprintf-style trampoline (Vsnprintf at 011ea070)
@@ -364,12 +365,12 @@ void ArrayOwner::Init(void* alloc) {
 int ArrayOwner::Sum16() {
   uint32_t n = mCount;
   int sum = 0;
-  if (n != 0) {
+  if (n > 0) {
     Elem** p = mArray;
     do {
       H16* h = (H16*)(*p)->mData;
-      uint32_t d = 0;
-      d = (uint16_t)(h->m10 - h->m12);
+      uint32_t d = (uint16_t)h->m10;
+      d = (uint16_t)(d - h->m12);
       sum += d;
       ++p;
     } while (--n);
@@ -384,7 +385,7 @@ int ArrayOwner::Sum16() {
 int ArrayOwner::Sum32() {
   uint32_t n = mCount;
   int sum = 0;
-  if (n != 0) {
+  if (n > 0) {
     Elem** p = mArray;
     do {
       H32* h = (H32*)(*p)->mData;

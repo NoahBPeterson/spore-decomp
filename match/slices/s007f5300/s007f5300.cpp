@@ -186,7 +186,9 @@ bool Obj::M5460(int v)
 int Obj::M5490()
 {
     float x = *(float*)((char*)this + 8) * g_c1000;
-    return (int)x;
+    float y;
+    *(volatile float*)&y = x;
+    return (int)y;
 }
 
 // @ 0x007F54B0
