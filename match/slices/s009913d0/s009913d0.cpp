@@ -624,7 +624,8 @@ void WinTreeView::SetScrollbarDrawable(int which, void* p)
 // @ 0x00991990
 void WinTreeView::SetScrollbarEnabled(int which, int v)
 {
-    mScrollbars[which].mEnabled = v;
+    ScrollbarState* sb = &mScrollbars[which];
+    sb->mEnabled = v;
     CreateScrollbar(1);
     CreateScrollbar(0);
 }
