@@ -442,8 +442,8 @@ void FUN_011f77d0(void)
 // ===========================================================================
 void FUN_011f7800(void)
 {
-    void* p = g_1711ef0;
-    if (p != 0 && g_vertexShader != p) {
+    if (g_1711ef0 != 0 && g_vertexShader != g_1711ef0) {
+        void* p = g_1711ef0;
         (*(PFN_SetVertexShader)VSlot(g_d3d9Device, 0x170))(g_d3d9Device, p);
         g_vertexShader = p;
     }

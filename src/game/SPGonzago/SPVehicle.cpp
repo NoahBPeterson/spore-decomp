@@ -20,6 +20,9 @@ extern char   g_1654c10, g_1654c04;                    // 0x01654c10 / 0x01654c0
 extern void*  g_1474a70[];                             // 0x01474a70 table
 extern void*  g_1474a5c[];                             // 0x01474a5c table
 #include <math.h>
+#include <xmmintrin.h>
+
+extern float g_negmask;                                 // 0x013eb8b0 (0x80000000 sign mask)
 
 // ---- items of slice s00c9ef20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   u32;
@@ -54,6 +57,36 @@ struct EffStub {
 struct VStub {
     void FUN_00c3f160(void* a, float f);                    // 0x00c3f160 ret 8
 };
+// Placeholder for the polymorphic interface whose slot 0x50 is queried by
+// FUN_00c9f750; only the slot index matters for code generation.
+struct IVehicleIface {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual u8   v50();
+};
+// Placeholder for the resource interface used by FUN_00c9fee0 (slots 0x2c,
+// 0xb8 and 0xc0); again only the slot indices matter for code generation.
+struct IResIface {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28();
+    virtual u8   v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
+    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
+    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
+    virtual void vb0(); virtual void vb4();
+    virtual void* vb8(int id);
+    virtual void vbc();
+    virtual void vc0();
+};
 struct TimerStub {
     u8   IsRunning();                                       // 0x00feba90
     u64  GetElapsedTime();                                  // 0x00bc3190
@@ -61,7 +94,7 @@ struct TimerStub {
 };
 struct CStub {
     // ---- 00c9ef20
-    u8 FUN_00c9ef20();
+    int FUN_00c9ef20();
     // ---- 00c9ef60
     void FUN_00c9ef60(u32 ms);
     // ---- 00c9f1c0  (free __fastcall, declared later)
@@ -122,11 +155,11 @@ struct CStub {
 // ---- items of slice s00c9ef20 end
 
 // @ 0x00c9ef20
-u8 CStub::FUN_00c9ef20()
+int CStub::FUN_00c9ef20()
 {
     if (((TimerStub*)((char*)this + 0xcd8))->IsRunning()) {
         u64 t = ((TimerStub*)((char*)this + 0xcd8))->GetElapsedTime();
-        if ((u32)(t >> 32) == 0 && (u32)t < *(u32*)((char*)this + 0xcf8))
+        if (t < (u64)*(u32*)((char*)this + 0xcf8))
             return 1;
     }
     return 0;
@@ -138,7 +171,7 @@ void CStub::FUN_00c9ef60(u32 ms)
     if (((TimerStub*)((char*)this + 0xcd8))->IsRunning()) {
         u32 prev = *(u32*)((char*)this + 0xcf8);
         u64 t = ((TimerStub*)((char*)this + 0xcd8))->GetElapsedTime();
-        if ((u32)(t >> 32) == 0 && (u32)t < prev) {
+        if (t < (u64)prev) {
             *(u32*)((char*)this + 0xcf8) = prev + ms;
             return;
         }
@@ -150,21 +183,21 @@ void CStub::FUN_00c9ef60(u32 ms)
 // @ 0x00c9f0a0
 void* __cdecl FUN_00c9f0a0(void** src, void** end, void** dst)
 {
-    if (src == end)
-        return dst;
-    do {
-        if (dst != 0) {
-            void* p = *src;
-            *dst = p;
-            if (p != 0)
-                (**(void(__thiscall**)(void*))(vpt(p) + 4))(p);
-            dst[1] = src[1];
-            dst[2] = src[2];
-            *(char*)((char*)dst + 0xc) = *(char*)((char*)src + 0xc);
-        }
-        src += 4;
-        dst += 4;
-    } while (src != end);
+    if (src != end) {
+        do {
+            if (dst != 0) {
+                void* p = *src;
+                *dst = p;
+                if (p != 0)
+                    (**(void(__thiscall**)(void*))(vpt(p) + 4))(p);
+                dst[1] = src[1];
+                dst[2] = src[2];
+                *(char*)((char*)dst + 0xc) = *(char*)((char*)src + 0xc);
+            }
+            src += 4;
+            dst += 4;
+        } while (src != end);
+    }
     return dst;
 }
 
@@ -205,8 +238,7 @@ u8 CStub::FUN_00c9f490(void* a, void* b)
 void CStub::FUN_00c9f750(char on)
 {
     if (on != 0) {
-        u8(__thiscall * pf)(void*) = *(u8(__thiscall**)(void*))(vpt(this) + 0x50);
-        if (!pf(this) && GetCurrentGameMode() == &g_1654c04) {
+        if (!((IVehicleIface*)this)->v50() && GetCurrentGameMode() == &g_1654c04) {
             int m = (int)FUN_00cf74c0();
             if (*(char*)(m + 0x148) != 0) {
                 if (!((CivMgrStub*)FUN_00cf74c0())->FUN_00cf7830((void*)0x64e6678))
@@ -351,14 +383,15 @@ void CStub::FUN_00c9fd40(void* p)
     int e = *(int*)((char*)this + 0xccc);
     if (e == 0)
         return;
-    float x = *(float*)p;
-    float y = *(float*)((char*)p + 4);
-    float z = *(float*)((char*)p + 8);
-    float w = *(float*)((char*)p + 0xc);
-    *(u32*)(e + 0x10) = *(u32*)&y;
-    *(u32*)(e + 0x14) = *(u32*)&x ^ 0x80000000u;
-    *(u32*)(e + 0x18) = *(u32*)&w;
-    *(u32*)(e + 0x1c) = *(u32*)&z ^ 0x80000000u;
+    float v[4];
+    v[0] = *(float*)((char*)p + 4);
+    v[1] = -*(float*)p;
+    v[2] = *(float*)((char*)p + 0xc);
+    v[3] = -*(float*)((char*)p + 8);
+    *(u32*)(e + 0x10) = *(u32*)&v[0];
+    *(u32*)(e + 0x14) = *(u32*)&v[1];
+    *(u32*)(e + 0x18) = *(u32*)&v[2];
+    *(u32*)(e + 0x1c) = *(u32*)&v[3];
 }
 
 // @ 0x00c9fdc0
@@ -414,17 +447,16 @@ u8 CStub::FUN_00c9fe40(void* p)
 // @ 0x00c9fee0
 void* CStub::FUN_00c9fee0()
 {
-    void* p = *(void**)((char*)this + 0xb7c);
-    if (p != 0) {
-        void* q = *(void**)((char*)this + 0xb7c);
-        if (q == 0)
-            return 0;
-        void* r = (**(void*(__thiscall**)(void*, int))(vpt(q) + 0xb8))(q, 0x17f243b);
-        if (r != 0 && (**(u8(__thiscall**)(void*))(vpt(r) + 0x2c))(r)) {
-            void* s = *(void**)((char*)this + 0xb7c);
-            *(void**)((char*)this + 0xb7c) = 0;
-            if (s != 0)
-                (**(void(__thiscall**)(void*))(vpt(s) + 0xc0))(s);
+    if (*(void**)((char*)this + 0xb7c) != 0) {
+        IResIface* q = (IResIface*)*(void**)((char*)this + 0xb7c);
+        if (q != 0) {
+            void* r = q->vb8(0x17f243b);
+            if (r != 0 && ((IResIface*)r)->v2c()) {
+                IResIface* s = (IResIface*)*(void**)((char*)this + 0xb7c);
+                *(void**)((char*)this + 0xb7c) = 0;
+                if (s != 0)
+                    s->vc0();
+            }
         }
     }
     return *(void**)((char*)this + 0xb7c);
