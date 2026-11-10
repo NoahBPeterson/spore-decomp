@@ -790,10 +790,8 @@ def plot_history(path):
             ax.spines[s].set_visible(False)
         ax.spines["bottom"].set_color(GRID)
         ax.tick_params(colors=MUTED, labelsize=9, length=0)
-        ax.xaxis.set_major_locator(mdates.DayLocator())
-        ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %d"))
-        ax.tick_params(axis="x", labelrotation=45)   # one label per day overlaps when horizontal
-        plt.setp(ax.get_xticklabels(), ha="right", rotation_mode="anchor")
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator(minticks=4, maxticks=8))   # a label per day overlapped
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %-d"))
         ax.margins(x=0.08)
     axes[0].legend(loc="center right", bbox_to_anchor=(1.0, 0.42), frameon=False, fontsize=9, labelcolor=INK)
     # Every game function, 100%: byte-exact at the bottom, equivalent (PASS) above it, then the other verdicts of the
@@ -847,8 +845,8 @@ def plot_history(path):
             ax.spines[sp_].set_visible(False)
         ax.spines["bottom"].set_color(GRID)
         ax.tick_params(colors=MUTED, labelsize=9, length=0)
-        ax.tick_params(axis="x", labelrotation=45)
-        plt.setp(ax.get_xticklabels(), ha="right", rotation_mode="anchor")
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator(minticks=4, maxticks=8))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %-d"))
         if col:
             plt.setp(ax.get_yticklabels(), visible=False)
     if order:
