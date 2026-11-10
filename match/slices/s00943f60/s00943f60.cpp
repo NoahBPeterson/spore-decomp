@@ -827,7 +827,8 @@ bool HTTPHeaders::RemoveHeaderEntryWorker(const char* pField, int nWhich) {
 // @ 0x00944ac0  EA::Internet::HTTPHeaders::RemoveHeaderEntry (ret 8)
 // ---------------------------------------------------------------------------
 bool HTTPHeaders::RemoveHeaderEntry(int field, int nWhich) {
-    return RemoveHeaderEntryWorker((const char*)HeaderFieldToFieldString(field), nWhich);
+    const char* name = (const char*)HeaderFieldToFieldString(field);
+    return RemoveHeaderEntryWorker(name, nWhich);
 }
 
 // ---------------------------------------------------------------------------
