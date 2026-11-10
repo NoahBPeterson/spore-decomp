@@ -39,8 +39,7 @@
                 byte2==0) is 3 compares in both, registers differ
 011fdc70  169  Ctl::Init: complete; the Alloc call, the align round-up of the key table and the
                 ten field stores use different registers than the prebuilt object
-011fdd40   15  ControllerCreate: complete; the null-handle early-out and the Init tail-call
-                become call+ret
+# 011fdd40 and 011fe0d0 are now byte-exact (manifest.txt).
 011fdd70  389  ControllerEvaluate: complete (largest function in the slice); both track loops,
                 the clamped/unclamped branch, the two indirect emitters (s+0x2c KeyOf-style
                 and s+0x38 keyfit) and the (u8)(ctrl+0x1c)&1 flags computation differ.
@@ -52,10 +51,13 @@
 011fdff0   29  Ctl::Bind: complete; the null check of FUN_011ffa40's result and the two stores
                 differ in registers
 011fe030    8  ControllerGetTable: complete; the original has a redundant
-                `xor edx,edx; test eax,eax; jne; mov eax,edx` idiom (a no-op); cl deletes it
-                and emits `mov eax,[ecx+0x1c]; ret`.  Semantically identical.
+                `xor edx,edx; test eax,eax; jne; mov eax,edx` idiom (a no-op); cl 13.10 deletes
+                it and emits `mov eax,[ecx+0x1c]; ret`.  Semantically identical.  Levers tried for
+                the 8 bytes: `void* q = 0; if (p == NULL) p = q;`, `if (p == NULL) return 0;`,
+                returning `q` after `q = p; if (q == NULL) q = NULL;` - the liveness that keeps
+                edx alive (the `mov eax,edx` fallthrough) never re-appears at /O2; it is the
+                `/GL` cross-function allocation noted at the top of this file.
 011fe050   99  Ctl::InitSimple: complete; same shape as 011fdc70 with the 0x015d0968 vtable
-011fe0d0   15  ControllerCreateSimple: complete; null-handle early-out + InitSimple call+ret
 011fe100  112  Ctl::BuildKeys: complete; the indirect emitter (s+0x30) call site, the
                 v = k[0] / out[1] = v + r split and the track loop differ
 011fe180  237  Ctl::Advance2: complete; the dt integration, the while(r > len) wrap, the

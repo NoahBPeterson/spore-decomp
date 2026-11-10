@@ -10,7 +10,7 @@
 01214320  42  complete EH cleanup funclet; not reproducible from standalone C++; difftest UNSUPPORTED (0/400 valid, fault(read))
 01214420  74  complete EH funclet (??_M vector dtor iterator); compiler-generated; difftest UNSUPPORTED
 012144d0  20  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED (0/400 valid, fault(read))
-01214580  17  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED (0/400 valid, fault(read))
+01214580  17  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED (0/400 valid, fault(read)); retail is two bare `lea ecx,[ebp+8]/[ebp+4]; jmp 0x576620` thunks (8 B each) followed by the FuncInfo record (`mov eax,0x150247c; jmp 0x11e090c`) - the record bytes are fingerprint-compared even though cl only emits them for the owning function
 012145c0  26  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01214650  48  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01214850 178  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
@@ -37,7 +37,7 @@
 01215530 146  complete EH cleanup funclet (10x delete ArgScript); compiler-generated; difftest UNSUPPORTED
 01215680  71  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01215710  30  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
-01215770  12  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215770  12  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED; retail: `mov ecx,[ebp+4]; add ecx,0xc; jmp 0x7c8490` (8 B) + FuncInfo 0x15036b4 record; the 12 differing bytes are the trailing `mov eax,<FuncInfo>; jmp __CxxFrameHandler3` pair that cl only emits for the owning function
 01215790  34  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 012158f0  43  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01215950  68  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
