@@ -635,7 +635,8 @@ float cSPPlayMode::SetMomCelebrationAnim(bool* pOut)
 // @ 0x00628830
 float cSPPlayMode::SetMomCrouchAnimation()
 {
-    return mAnimation.PlayAnim(mpState->mCreatureId, 0x433585e, 0, 1, 0);
+    unsigned id = mpState->mCreatureId;
+    return mAnimation.PlayAnim(id, 0x433585e, 0, 1, 0);
 }
 
 // @ 0x00628860
@@ -647,9 +648,8 @@ float cSPPlayMode::SetBabyCrouchAnimation(unsigned creatureId)
 // @ 0x006288a0
 void cSPPlayMode::SetAllBabyPhotoModes(bool b)
 {
-    unsigned char v = b;
-    *(unsigned short*)&mBabyPhotoMode[0] = (unsigned short)((unsigned short)(v << 8) | (unsigned short)v);
-    mBabyPhotoMode[2] = v;
+    for (int i = 0; i < 3; ++i)
+        mBabyPhotoMode[i] = b;
 }
 
 // @ 0x006288f0
