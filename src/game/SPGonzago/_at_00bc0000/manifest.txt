@@ -53,3 +53,4 @@
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?Destroy@cAnimalTrap@@QAIXXZ  00bcba80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?ScalarDeletingDtor@cAnimalTrap@@QAEPAU1@I@Z  00bcbc30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bca7e0@@YA_NPAXPAPAX@Z  00bca7e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?FirstPending@cAgentOrderManager@@QAEPAUcAgentOrder@@XZ  00bca2c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
