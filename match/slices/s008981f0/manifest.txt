@@ -1,0 +1,1 @@
+slices/s008981f0/s008981f0.cpp  ?SetDefaultTextStyle@Typesetter981f0@@QAEXPBUTextStyle981f0@@@Z  008981f0  /O2 /MD /Gy /EHsc /TP

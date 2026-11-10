@@ -612,7 +612,7 @@ bool FUN_0113cab0(uint8_t* p)
 void Ctx::FUN_0113cb20()
 {
     ((Ctx*)((char*)this + 0x5c))->D770();
-    if (B(this, 0xb0) != 0)
+    if (*(int*)((char*)this + 0xb0) != 0)
         ((Ctx*)g_sys)->RemoveTimer((char*)this + 0x98);
 }
 
