@@ -796,8 +796,9 @@ int cSPMissionFetch::UpdateDuration()
         if (planet != 0) {
             planet = GetTargetPlanet();
             cPlanetCounts* counts = planet->mpCounts13c;
-            int cells = (counts->mC0 - counts->mBc) / 12;
-            cells += (counts->mD4 - counts->mD0) / 12;
+            int a = (counts->mC0 - counts->mBc) / 12;
+            int b = (counts->mD4 - counts->mD0) / 12;
+            int cells = a + b;
             mField80 *= cells;
         }
         value = mField80;
