@@ -6,6 +6,7 @@
 #include "EA/Text/AnalysisInfo.h"
 #include "EA/Text/Font.h"
 #include "EA/Text/FontServer.h"
+#include "EA/Text/FontType.h"
 #include "EA/Text/LayoutSettings.h"
 #include "EA/Text/TextStyle.h"
 
@@ -13,9 +14,12 @@
 namespace EA {
 namespace Text {
 struct OutlineFont {
-    uint8_t mData[0x164];                 // +0x000
+    uint8_t mData[0x10];                  // +0x000
+    void*   mp010;                        // +0x010  null until a face is loaded
+    uint8_t mData014[0x150];              // +0x014
     bool    mbOption1;                    // +0x164
     void SetOption(int option, int value);   // 0x00890fa0
+    FontType GetFontType();                  // 0x00891190
 };
 }
 }
@@ -26,4 +30,10 @@ void EA::Text::OutlineFont::SetOption(int option, int value)
 {
     if (option == 1)
         mbOption1 = (value != 0);
+}
+
+// @ 0x00891190
+EA::Text::FontType EA::Text::OutlineFont::GetFontType()
+{
+    return mp010 ? kFontTypeOutline : kFontTypeUnknown;
 }
