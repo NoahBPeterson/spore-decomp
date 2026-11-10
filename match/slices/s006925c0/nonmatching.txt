@@ -1,6 +1,6 @@
 006925c0  64   complete; Run scoped-lock/helper near-miss
 00692640  61   complete; WaitForJob scoped-lock/helper near-miss
-006926b0  18   complete; cJob::Wait two-step manager load near-miss
+006926b0  18   complete cJob::Wait (29 vs 33): retail's null path re-loads ecx as an *int* (`xor eax,eax; xor ecx,ecx; mov ecx,[ecx+0x30]`) before pushing eax, i.e. the manager field looks up through a null `cJobData*`; ours leaves eax/ecx as cl folds it (`lea eax,[ecx-8]; mov ecx,[eax+0x30]`). Tried a trailing `return;` (identical) and `_ReadWriteBarrier()` after the call (collapses both paths into one call/jmp, 21 bytes).
 00692820  36   complete; dispatch callback: byte-identical except the return-zero instruction (orig `xor al,al` vs ours `xor eax,eax`); FAIL-KEPT because the `QAEI` (unsigned int) symbol forces a full-width zero, and `xor al,al` cannot be emitted for an unsigned-int free-standing return without changing the return type; equiv FAIL (return value eax upper bits differ, 5/65 inputs)
 00692850  33   complete; lazy resolve near-miss; equiv WEAK (52.6% cov)
 00692880  90   complete; Init serializer-record layout near-miss

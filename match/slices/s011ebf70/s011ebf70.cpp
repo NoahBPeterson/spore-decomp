@@ -391,9 +391,10 @@ int Mutex::Lock(unsigned int* timeout)
 // @ 0x011ec230
 int Mutex::Unlock()
 {
-    int n = mnLockCount - 1;
+    int  n = mnLockCount - 1;
+    char intra = mbIntraProcess;
     mnLockCount = n;
-    if (mbIntraProcess)
+    if (intra)
         LeaveCriticalSection(this);
     else
         ReleaseMutex(mData0);
