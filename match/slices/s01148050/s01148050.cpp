@@ -737,9 +737,14 @@ void HELPER_CEALayer3DecF::ResetDecoders()
 
 // @ 0x01148e80
 HELPER_CEALayer3DecF::HELPER_CEALayer3DecF()
-    : mInputData(0), mMaxSamples(0), mNumChannels(0), mppResidueArrays(0),
-      mResidueArrayInstances(0), pDecoderInstanceArray(0), decoderInstanceCount(0)
 {
+    mInputData = 0;
+    mMaxSamples = 0;
+    mNumChannels = 0;
+    mppResidueArrays = 0;
+    mResidueArrayInstances = 0;
+    pDecoderInstanceArray = 0;
+    decoderInstanceCount = 0;
     ResetDecoders();
     mppResidueArrays = 0;
 }

@@ -92,10 +92,10 @@ struct CCityGrow {
     void __thiscall FUN_00be3850();      // 0x00be3850
     void* __thiscall FUN_00bd7ef0(int v);// 0x00bd7ef0
     int  __thiscall FUN_00bdb590(void* a, int b); // 0x00bdb590
+    bool __thiscall FUN_00bdb470(int v); // 0x00bdb470
     int** __thiscall GetMembers();       // 0x00c8e810
 };
-int __cdecl FUN_00bdb470(int v);   // 0x00bdb470
-void* __cdecl FUN_00b3d480(void* city, int flag);   // 0x00b3d480
+void* __stdcall FUN_00b3d480(void* city, int flag);   // 0x00b3d480
 struct CAc8cd0 { void* __thiscall FUN_00ac8cd0(); }; // 0x00ac8cd0
 struct CNounManagerB {
     int* __thiscall GetGameDataVector(void* a, void* b, void* c, void* d, void* e); // 0x00b21340
@@ -189,11 +189,11 @@ void __thiscall cColonySimulator::DoGrowthSim(void* city)
     int r = SP_DetermineCityGrowth((CCityGrow*)city, &code);
     CCityGrow* c = (CCityGrow*)city;
 
-    if (r >= 1) {
+    if (r > 0) {
         if (code == 0x436f315) {
-            if (FUN_00bdb470(0x436f315) == 0)
+            if (!c->FUN_00bdb470(code))
                 c->FUN_00be3850();
-        } else if (FUN_00bdb470(code) == 0) {
+        } else if (!c->FUN_00bdb470(code)) {
             void* a = c->FUN_00bd7ef0(code);
             if (c->FUN_00bdb590(a, 0) != 0)
                 c->FUN_00be7370(code);
