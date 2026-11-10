@@ -45,7 +45,7 @@ extern "C" void* __cdecl FUN_00b72210(void* self, int id);    // thunk, this=ecx
 extern "C" void* __cdecl FUN_00b72160_thunk(void* self);
 extern "C" int   __cdecl FUN_00e5c4f0_naked_guard();
 extern "C" int   __cdecl FUN_00e57340(void* p);
-extern "C" float __cdecl FUN_00e4fac0(void* p);
+extern "C" void  __cdecl FUN_00e4fac0(void* p);
 extern int gCfg_16b3c04b;
 extern "C" void* __cdecl FUN_00b721d0(void* self, int id);    // thunk, this=ecx
 extern "C" void __cdecl EA_IO_ReadInt32(void* stream, void* out, int n, int b);  // 0x93a780
@@ -149,23 +149,29 @@ void FUN_00e5c4d0(void* obj) {
 
 // @ 0x00e5c4f0
 int __stdcall FUN_00e5c4f0() {
-  char* cg = (char*)gCellGame_16b3c04;
-  int n = *(int*)(cg + 0x5164);
-  FUN_00e4fac0(*(char**)(cg + 0x5190) + 0x34);
-  return n;
+  FUN_00e4fac0(*(char**)((char*)gCellGame_16b3c04 + 0x5190) + 0x34);
+  return *(int*)((char*)gCellGame_16b3c04 + 0x5164);
 }
+// (retail also keeps a dead copy of +0x5164 in edi across the call)
 
 // @ 0x00e5c520
 int FUN_00e5c520() { return *(int*)(*(int*)((char*)gCellGame_16b3c04 + 0x5190) + 0x74); }
 
 // @ 0x00e5c530
+struct CellAbilityF {
+  char pad0[0x1c];
+  int f1c;
+  int f20;
+  int f24;
+  int f28;
+};
+
 float __fastcall FUN_00e5c530(void* self) {
   (void)self;
-  char* d = (char*)*(int*)((char*)gCellGame_16b3c04 + 0x5190);
-  int a = *(int*)(d + 0x28) - *(int*)(d + 0x20) + *(int*)(d + 0x1c);
-  int b = *(int*)(d + 0x24) + *(int*)(d + 0x20);
-  float r = FUN_00e511e0(b, a);
-  return r;
+  CellAbilityF* d = (CellAbilityF*)*(int*)((char*)gCellGame_16b3c04 + 0x5190);
+  int a = d->f1c + (d->f28 - d->f20);
+  int b = d->f24 + d->f20;
+  return FUN_00e511e0(b, a);
 }
 
 // @ 0x00e5c560

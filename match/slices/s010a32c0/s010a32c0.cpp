@@ -530,8 +530,8 @@ postSimulate:
 // @ 0x010a3760
 hkEntityEntityBroadPhaseListener::hkEntityEntityBroadPhaseListener(hkWorld* world)
 {
-    m_objectQualityType = 1;
     m_world = world;
+    m_objectQualityType = 1;
 }
 
 // @ 0x010a3780
@@ -858,12 +858,10 @@ void hkConstraintData::getConstraintInfo(hkConstraintInfo& info) const
 void hkMassChangerConstraintData::getConstraintInfo(hkConstraintInfo& info) const
 {
     hkConstraintData::getConstraintInfo(info);
-    const hkConstraintInfo& src = info;
-    const int sizeOfSchemas = src.m_sizeOfSchemas + 0x20;
-    const int sizeOfJacobians = src.m_sizeOfJacobians + 0x40;
-    hkConstraintInfo& dst = info;
-    dst.m_sizeOfSchemas = sizeOfSchemas;
-    dst.m_sizeOfJacobians = sizeOfJacobians;
+    int sizeOfSchemas = info.m_sizeOfSchemas + 0x20;
+    int sizeOfJacobians = info.m_sizeOfJacobians + 0x40;
+    info.m_sizeOfSchemas = sizeOfSchemas;
+    info.m_sizeOfJacobians = sizeOfJacobians;
 }
 
 // hkMassChangerConstraintData::toiCollisionResponseBeginCallback -- scale each body's transform by its mass.
