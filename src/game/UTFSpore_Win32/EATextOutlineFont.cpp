@@ -15,7 +15,7 @@ namespace EA {
 namespace Text {
 struct OutlineFont {
     uint8_t mData[0x10];                  // +0x000
-    void*   mp010;                        // +0x010  null until a face is loaded
+    EA::IO::IStream* mpStream;            // +0x010
     uint8_t mData014[0x150];              // +0x014
     bool    mbOption1;                    // +0x164
     void SetOption(int option, int value);   // 0x00890fa0
@@ -35,5 +35,5 @@ void EA::Text::OutlineFont::SetOption(int option, int value)
 // @ 0x00891190
 EA::Text::FontType EA::Text::OutlineFont::GetFontType()
 {
-    return mp010 ? kFontTypeOutline : kFontTypeUnknown;
+    return mpStream ? kFontTypeOutline : kFontTypeUnknown;
 }
