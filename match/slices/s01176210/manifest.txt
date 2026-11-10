@@ -12,3 +12,4 @@ slices/s01176210/s01176210.cpp  ?BIO_ctrl@@YAJPAUbio_st@@HJPAX@Z  01177260  /O2 
 slices/s01176210/s01176210.cpp  ?BIO_callback_ctrl@@YAJPAUbio_st@@HPAP6AJ0HPBDHJJ@Z@Z  011772f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s01176210/s01176210.cpp  ?BIO_new@@YAPAUbio_st@@PAUbio_method_st@@@Z  01177470  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s01176210/s01176210.cpp  ?mem_write@@YAHPAUbio_st@@PBDH@Z  01177680  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s01176210/s01176210.cpp  ?cb_write_str@@YAHPAUbio_st@@PBD@Z  01177940  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

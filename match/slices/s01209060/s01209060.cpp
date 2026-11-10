@@ -506,10 +506,11 @@ int hkStringMapBase::findKey(const char* key) const
 // hkStringMapBase::getWithDefault
 unsigned hkStringMapBase::getWithDefault(const char* key, unsigned def) const
 {
+    unsigned result = def;
     int i = findKey(key);
-    if (i > m_mask)
-        return def;
-    return (unsigned)m_table[i + m_mask * 2 + 2];
+    if (i <= m_mask)
+        result = (unsigned)m_table[i + m_mask * 2 + 2];
+    return result;
 }
 
 // @ 0x01209a70

@@ -5,6 +5,9 @@ typedef unsigned char uchar;
 typedef unsigned int uint;
 typedef unsigned long ulong;
 
+extern "C" unsigned int __cdecl strlen(const char*);
+#pragma intrinsic(strlen)
+
 // ---------------------------------------------------------------- block codec
 struct CBlockCtx {
     int     n;      // 0x00
@@ -535,13 +538,7 @@ bio_st* __cdecl BIO_new_mem_buf(void* buf, int len)
 // @ 0x01177940
 int __cdecl cb_write_str(bio_st* b, const char* str)
 {
-    const char* p = str;
-    const char* q = p + 1;
-    uchar c;
-    do {
-        c = *p++;
-    } while (c);
-    return mem_write(b, str, (int)(p - q));
+    return mem_write(b, str, (int)strlen(str));
 }
 
 // @ 0x01177680
