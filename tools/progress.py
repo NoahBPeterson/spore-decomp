@@ -756,12 +756,11 @@ def plot_history(path):
     axes.append(fig.add_subplot(gs[0, 1], sharey=axes[0], sharex=axes[0]))
     plt.setp(axes[1].get_yticklabels(), visible=False)
     TC_LINE = {"pass": "#009E73"}   # the PASS colour of the evidence bands
-    GREEN = "#7a7a7a"   # migrated: grey here, so the PASS line keeps the green
     panels = (("Share of functions", "exact", "comp", "mig"), ("Share of code size", "exact_sz", "comp_sz", "mig_sz"))
-    for ax, (title, ke, _kc, km) in zip(axes, panels):
+    for ax, (title, ke, _kc, _km) in zip(axes, panels):
         # No "compilable" line: before the first equivalence sweep it counted every compiling function as done
         # (up to 97%), which the sweep's verdicts then disproved.
-        for key, color, label in ((ke, BLUE, "Byte-exact"), (km, GREEN, "Migrated into src/game module TUs")):
+        for key, color, label in ((ke, BLUE, "Byte-exact"),):
             xs = [t for t, p in pts if p.get(key) is not None]
             ys = [p[key] for t, p in pts if p.get(key) is not None]
             if not xs:
@@ -879,9 +878,9 @@ def plot_history(path):
         bx.set_title("By module, now (same colours as above)", loc="left", fontsize=11, color=INK)
     fig.suptitle("Spore decompilation progress (game functions; third-party libraries excluded)",
                  x=0.01, ha="left", fontsize=12, color=INK)
-    fig.text(0.01, 0.01, "One point per committed docs/STATUS.md, one per day of --plot runs (latest run that day), plus now.\nEquivalent = complete compilable source, "
-             "not yet byte-identical. Size shares only exist in later snapshots; the migrated line starts with Phase B "
-             "(Oct 2026).\nEvidence bands: verdicts of the merged equivalence harness (tools/difftest/verdicts.py, first "
+    fig.text(0.01, 0.01, "One point per committed docs/STATUS.md, one per day of --plot runs (latest run that day), plus now.\nEquivalent = test PASS: complete "
+             "source, not byte-identical, that behaved identically on every branch. Size shares only exist in later "
+             "snapshots.\nEvidence bands: verdicts of the merged equivalence harness (tools/difftest/verdicts.py, first "
              "sweep 2026-10-29); a FAIL is a mismatch, so not equivalent. Days before it count as not tested.",
              fontsize=8, color=MUTED)
     from matplotlib.patches import Patch
