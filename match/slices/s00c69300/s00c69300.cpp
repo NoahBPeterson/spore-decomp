@@ -27,7 +27,7 @@ struct cVec3 {
 };
 
 u32 __stdcall SP_PlanetModel(u32 a, u32 b, u32 c);            // 0x00b3d350
-void* GetCurrentGameMode();                                   // 0x00b5b800
+u32 GetCurrentGameMode();                                     // 0x00b5b800
 cCreatureModeStrategy* __stdcall GetCreatureModeStrategy(u32 key);  // 0x00d38840
 
 // vtable slot 0x2c dispatch (no arguments, returns bool in al)
@@ -130,10 +130,12 @@ void cHerd::SetTarget(const cVec3* v)
 // where it depends on the creature tutorial having been seen already.
 bool cHerd::ShouldActivate()
 {
-    if (mState15c != 9)
-        return true;
-    if (GetCurrentGameMode() != (void*)0x01654c01)
+    if (mState15c == 9) {
+        if (GetCurrentGameMode() == 0x01654c01u) {
+            cCreatureModeStrategy* strategy = GetCreatureModeStrategy(0x7aee5ee7);
+            return strategy->HasCreatureTutorialOccurred() == false;
+        }
         return false;
-    cCreatureModeStrategy* strategy = GetCreatureModeStrategy(0x7aee5ee7);
-    return strategy->HasCreatureTutorialOccurred() == false;
+    }
+    return true;
 }
