@@ -1,7 +1,6 @@
 007f5300  192  complete; byte-copy loop and vtable call schedule differ
 007f53d0  41  complete; this/vtable call register allocation differs
 007f5410  40  complete; tail AsInterface cast shape differs
-007f5490  15  complete; original spills the float to the stack before cvttss2si
 007f54e0  175  complete; stopwatch/timer register allocation differs
 007f55b0  54  complete; bool-to-int flag store/load differs
 007f5710  50  complete; percent->index math and tail call schedule differ

@@ -8,3 +8,4 @@ slices/s00fcb210/s00fcb210.cpp	?SetRenderCallback@MovieRenderer@movie@rw@@QAEXPA
 slices/s00fcb210/s00fcb210.cpp	?Stop@MovieRenderer@movie@rw@@QAEXXZ	00fcc060	/O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00fcb210/s00fcb210.cpp	?Destroy@MovieTimer@movie@rw@@QAEXXZ	00fcc100	/O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00fcb210/s00fcb210.cpp	?GetNode@SList@rw@@QBEPAXI@Z	00fcc220	/O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fcb210/s00fcb210.cpp  ?Update@MovieTimer@movie@rw@@QAEXXZ  00fcc150  /O2 /MD /Gy /TP /arch:SSE /fp:fast
