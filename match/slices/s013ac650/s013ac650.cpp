@@ -212,6 +212,7 @@ void FUN_013b5da0() { g_016f1840 = FUN_01170140(); }
 extern int g_016f2974, g_016f2978;
 extern void FUN_011eaa50();
 extern void FUN_011eaaa0();
+
 // @ 0x013B5DB0
 void FUN_013b5db0() {
     int n = g_016f2974;
