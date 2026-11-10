@@ -5516,6 +5516,7 @@ cAgentOrder* cAgentOrderManager::FirstPending()
 {
     char* head = (char*)this + 0x60c;
     if (*(char**)head != head) {
+        _ReadWriteBarrier();
         return (cAgentOrder*)(*(char**)head + 8);
     }
     return 0;
