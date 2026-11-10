@@ -7,14 +7,14 @@ extern "C" void* __cdecl FUN_00921580(void* node);
 // ===========================================================================
 // @ 0x00d011e0  __cdecl: destroy tree from root until sentinel
 // ===========================================================================
-extern "C" int __cdecl Fd011e0(int unused, void* t)
+extern "C" bool __cdecl Fd011e0(int unused, void* t)
 {
     char* base = (char*)t;
     void* node = *(void**)(base + 8);
     void* sentinel = base + 4;
     while (node != sentinel)
         node = FUN_00921580(node);
-    return 1;
+    return true;
 }
 
 // ===========================================================================
