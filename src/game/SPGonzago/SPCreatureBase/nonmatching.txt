@@ -1,21 +1,17 @@
 # va  diff-bytes  reason
 00c0b030
 00c0b100
-00c0b190
 00c0b220
 00c0b270
 00c0b2f0
 00c0b380
-00c0b410
 00c0b440
 00c0b510
 00c0b570
-00c0b710
+00c0b710 26 int store of g_1687a30*1000.0f: retail is the classic inline `_ftol` (`and esp,-8; movss [esp+4]; fld [esp+4]; fistp qword [esp+8]; mov eax,[esp+8]`) i.e. a float->__int64 conversion inlined; cl15 emits a `call _ftol2` for `(__int64)f` / `(int)(__int64)(double)f` and `cvttss2si` for `(int)f`, `(int)(double)f`; the inline fistp-qword form is the VC7.1 `_ftol` expansion, so this function needs the /vc71 compiler (cannot switch compiler per-file in a migrated module)
 00c0b7c0
 00c0b810
-00c0b860
-00c0b8a0
-00c0b9d0
+00c0b9d0 13 clamp hunger to [g_1687a04,g_1687a00] then store +0xbbc; retail is `movss xmm0,[v]; maxss xmm0,[lo]; minss xmm0,[hi]; movss [v],xmm0; movss xmm0,[v]` in a plain 0x10 frame, but cl15's _mm_max_ss/_mm_min_ss shapes always insert xorps on the _mm_set_ss/_mm_load_ss operands and an `and esp,-16` aligned frame (with or without __m128 locals, _mm_store_ss, _mm_cvtss_f32, named v); plain __max/__min, std::min/std::max and ternary/if clamps lower to comiss branches instead of maxss/minss
 00c0bb20
 00c0be70 6 cached-handle predicate: complete; bool return materialisation (setne/xor eax vs xor al)
 00c0c200 43 game-mode water render callback: complete; call/arg setup differs

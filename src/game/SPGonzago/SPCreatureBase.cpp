@@ -13,6 +13,7 @@ extern float  gF_150c8b8, gF_150c8b4, gF_150c8cc, gF_1485720, gF_146a32c, gF_146
 extern void*  g_16c7aa4;
 extern int    g_15716d8[];
 #include <math.h>
+#include <xmmintrin.h>
 #include "SP/cSPCreatureBase.h"
 #include "SP/cSPTimer.h"
 #include "SP/cCombatant.h"
@@ -3185,8 +3186,10 @@ int* __cdecl FUN_00c0b100(int* stream, char* data)
 bool __cdecl FUN_00c0b190(CB* self, int* info)
 {
   if (self == 0) return false;
-  if (((self->mGeneralFlags >> 9) & 1) != 0 && info[2] == 0x3d) return false;
-  return info[0x120 / 4] != -1;
+  unsigned int flags = self->mGeneralFlags;
+  bool bit = ((flags >> 9) & 1) != 0;
+  if (!(bit && info[2] == 0x3d) && info[0x120 / 4] != -1) return true;
+  return false;
 }
 
 // @ 0x00c0b1c0
@@ -3262,7 +3265,8 @@ void* __cdecl FUN_00c0b380(CB* self, TuningObj* tuning)
 // @ 0x00c0b410
 bool __cdecl FUN_00c0b410()
 {
-  return g_169e288 >= GRAND->RandomDoubleUniform();
+  float threshold = g_169e288;
+  return threshold >= GRAND->RandomDoubleUniform();
 }
 
 // @ 0x00c0b440
@@ -3351,7 +3355,7 @@ int __thiscall CB::Query(unsigned int id)
 // @ 0x00c0b710
 void __fastcall FUN_00c0b710(CB* self)
 {
-  self->m_b8c = (int)(g_1687a30 * 1000.0f);
+  self->m_b8c = (int)(long)(g_1687a30 * 1000.0f);
 }
 
 // @ 0x00c0b780
@@ -3394,9 +3398,11 @@ bool __thiscall CB::CheckTargetC(void* argp)
   CB* self = this;
   unsigned int arg = (unsigned int)(size_t)argp;
   int base = FUN_00b3d4c0(self);
-  if (base == 0) return false;
-  int r = ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg);
-  return r == 2 || r == 5;
+  if (base != 0) {
+    int r = ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg);
+    return r == 2 || r == 5;
+  }
+  return false;
 }
 
 // @ 0x00c0b8a0
@@ -3405,8 +3411,10 @@ bool __thiscall CB::CheckTargetD(void* argp)
   CB* self = this;
   unsigned int arg = (unsigned int)(size_t)argp;
   int base = FUN_00b3d4c0(self);
-  if (base == 0) return false;
-  return ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg) == 1;
+  if (base != 0) {
+    return ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg) == 1;
+  }
+  return false;
 }
 
 // @ 0x00c0b8e0
@@ -3449,7 +3457,9 @@ void __thiscall Simulator::cCreatureBase::func90h()
 // @ 0x00c0b9d0
 void __thiscall CB::ClampHunger(float value)
 {
-  value = std::min(std::max(value, g_1687a04), g_1687a00);
+  // The original stages the clamped value in a stack temporary between each step.
+  _mm_store_ss(&value, _mm_max_ss(_mm_load_ss(&value), _mm_load_ss(&g_1687a04)));
+  _mm_store_ss(&value, _mm_min_ss(_mm_load_ss(&value), _mm_load_ss(&g_1687a00)));
   this->m_bBC = value;
 }
 
