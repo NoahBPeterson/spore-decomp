@@ -185,7 +185,7 @@ virtual void r64();
 };
 typedef void* (*Vfn1)(void*);
 typedef void* (*Vfn2)(void*, void*);
-typedef void* (__stdcall *VfnS2)(void*, void*);
+typedef void* (__thiscall *VfnS2)(void*, void*);
 struct Tool { char pad[0x114]; void* mStrategy; };
 struct CTarget { bool IsValid(); };            // 0x0104cd80, thiscall, ret bool
 struct cLocomotionBase {
@@ -3377,8 +3377,10 @@ int f00cb5330_write(cGameData_s00cb_44b0* self, cOutStream* stream)
 // @ 0x00cb5420
 void* cLocomotionObj14::GetToolStrategy()
 {
-    void* p = *(void**)((char*)this + 0x14);
-    void* s = *(void**)&((Tool*)p)->mStrategy;
+    char* p = *(char**)((char*)this + 0x14);
+    p += 0x114;
+    _ReadWriteBarrier();
+    void* s = *(void**)p;
     if (s)
         return (*(VfnS2*)(*(int*)s + 0xb8))(s, (void*)0x013f94d4);
     return 0;

@@ -22,7 +22,6 @@
 00cb5140
 00cb52c0
 00cb5330
-00cb5420  ~  in progress: logic complete; current output folds +0x114 into the load and allocates the virtual call through ECX/EDX instead of retail EDX/EAX.
 00cb5450
 00cb54a0
 00cb5580
