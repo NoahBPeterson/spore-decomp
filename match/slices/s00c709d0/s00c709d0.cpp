@@ -325,7 +325,8 @@ void VPlanet::FUN_00c70aa0(float f)
 bool VPlanet::FUN_00c70b20(int a, int b)
 {
     if (a == 0) return false;
-    return FUN_00c70150_00(mpPlanet, a, b);
+    PlanetData* pd = mpPlanet;
+    return FUN_00c70150_00(pd, a, b);
 }
 
 // @ 0x00c70b50
@@ -467,13 +468,15 @@ PlanetData* VPlanet::FUN_00c71040(int a)
 // @ 0x00c710c0
 int VPlanet::FUN_00c710c0()
 {
-    return (int)(mpPlanet->mp160 - mpPlanet->mp15C) >> 2;
+    IntVec& v = *(IntVec*)&mpPlanet->mp15C;
+    return (int)(v.end - v.begin);
 }
 
 // @ 0x00c71120
 int VPlanet::FUN_00c71120()
 {
-    return (int)(mpPlanet->mp174 - mpPlanet->mp170) >> 2;
+    IntVec& v = *(IntVec*)&mpPlanet->mp170;
+    return (int)(v.end - v.begin);
 }
 
 // @ 0x00c71160  SP::RemoveArtifact
@@ -556,7 +559,7 @@ bool VPlanet::FUN_00c71400(int i)
 {
     if ((unsigned)i < 5) {
         uint32_t bit = 1u << (i & 0x1f);
-        return (mField1BC & bit) != 0;
+        return (mField1BC & bit) ? true : false;
     }
     return false;
 }

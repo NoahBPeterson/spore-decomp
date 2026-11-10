@@ -548,7 +548,8 @@ float IsD51660BitClear()
     if (result == 0)
         goto return_zero;
     uint32_t shifted = result->mFlags6c >> 1;
-    if (shifted & 1)
+    shifted &= 1;
+    if (shifted != 0)
         goto return_zero;
     return 1.0f;
 return_zero:
@@ -580,7 +581,13 @@ float IsLookupBFlagSet(cEditorGameObject* p)
 // @ 0x00d7a530
 float IsEditorActionAvailableValue(cEditorGameObject* p)
 {
-    return p->IsEditorActionAvailable() ? 1.0f : 0.0f;
+    float v;
+    bool avail = p->IsEditorActionAvailable();
+    if (avail)
+        v = 1.0f;
+    else
+        v = 0.0f;
+    return v;
 }
 
 // @ 0x00d7a560
