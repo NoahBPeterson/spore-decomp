@@ -987,7 +987,7 @@ struct cCreatureBase {
   char padb74[0xb80 - 0xb74];
   float m_b80;                              // +0xb80
   char padb84[0xb88 - 0xb84];
-  int m_b88;                                // +0xb88
+  int mStrengthRating;                      // +0xb88
   int m_b8c;                                // +0xb8c
 
   char padb90[0xbb8 - 0xb90];
@@ -1045,6 +1045,7 @@ struct cCreatureBase {
   bool CheckTargetB(void*);
   bool CheckTargetC(void*);
   bool CheckTargetD(void*);
+  int  GetStrengthRating() const;
   int  TimerDelta(cCreatureBase*);
   void ClampHunger(float);
   void SetHunger(float);
@@ -3410,11 +3411,17 @@ bool __thiscall CB::CheckTargetD(void* argp)
   return ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg) == 1;
 }
 
+// @ 0x00c0b8d0
+int Simulator::cCreatureBase::GetStrengthRating() const
+{
+  return mStrengthRating;
+}
+
 // @ 0x00c0b8e0
 int __thiscall CB::TimerDelta(CB* other)
 {
   CB* self = this;
-  return self->m_b88 - other->m_b88;
+  return self->mStrengthRating - other->mStrengthRating;
 }
 
 // @ 0x00c0b910
