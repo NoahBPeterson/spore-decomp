@@ -14,3 +14,4 @@
 ../src/game/SPGonzago/_at_00470000.cpp  ?initFromVec@StreamDesc@@QAEPAU1@PBUIndexVec@@PAUIRefObj@@H@Z  004755a0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00470000.cpp  ?push_backA@Vec8@@QAEXPAI@Z  00475670  /Od /Ob1 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00470000.cpp  ?push_backB@Vec8@@QAEXPAI@Z  00475800  /Od /Ob1 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00470000.cpp  ?push_back@FixedVecInt@@QAEXABH@Z  00475130  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
