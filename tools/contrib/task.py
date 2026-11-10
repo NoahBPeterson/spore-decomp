@@ -7,10 +7,16 @@ Prints where the function lives (its source file and object), its status (byte-e
 partial, or no source yet), the compiler flags it is checked with, its retail size, the headers its file includes, the
 current source of the function, and what to do next.  Needs only the repo: no game files.
 
-  --list [--max-size N] [--by size]   open work: functions with source that is not byte-exact yet, fewest differing
-                                      bytes first (the closest to a match), then smallest; --by size: smallest first
+  --list [--max-size N] [--by tries|diff|size]
+      open work: functions with source that is not byte-exact yet. Default order: fewest tries first (quick wins
+      nobody has fought with yet), then smallest, then fewest differing bytes. --by diff: fewest differing bytes
+      first; --by size: smallest first.
+
+"Tries" is how many times the function's nonmatching.txt note has been written or rewritten, counted from git history
+(each failed attempt updates the note). It is an estimate: bulk tooling edits count too. A shallow clone has no
+history, so tries are unknown and the list falls back to size order.
 """
-import argparse, glob, gzip, json, os, re, sys
+import argparse, collections, glob, gzip, json, os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path[:0] = [os.path.join(ROOT, "tools", "difftest"), os.path.join(ROOT, "tools", "matching"),
@@ -106,6 +112,43 @@ def open_work(max_size):
     return list(best.values())
 
 
+def tries():
+    """{va: times its nonmatching.txt note was written or rewritten} from git history, cached per commit in work/;
+    None when the history is not available (shallow clone, no git)"""
+    def g(*a):
+        return subprocess.run(["git", *a], cwd=ROOT, capture_output=True, text=True)
+    head = g("rev-parse", "HEAD").stdout.strip()
+    if not head or g("rev-parse", "--is-shallow-repository").stdout.strip() == "true":
+        return None
+    cache = os.path.join(ROOT, "work", "task_tries.json")
+    try:
+        c = json.load(open(cache))
+        if c.get("head") == head:
+            return {int(k, 16): v for k, v in c["tries"].items()}
+    except (OSError, ValueError):
+        pass
+    log = g("log", "--format=tformat:C", "-p", "--unified=0", "--no-renames", "--",
+            "match/slices/*/nonmatching.txt", "src/game/**/nonmatching.txt", "src/game/*/*/nonmatching.txt").stdout
+    out, minus, plus = collections.Counter(), {}, {}
+    row = re.compile(r"([+-])([0-9a-fA-F]{8})\s+\S*\s*(.*)")
+    for line in log.splitlines() + ["C"]:
+        if line == "C":
+            for va, txt in plus.items():
+                if minus.get(va) != txt:        # a new note, or its text changed (a move with the same text is not a try)
+                    out[va] += 1
+            minus, plus = {}, {}
+            continue
+        m = row.match(line)
+        if m and not line.startswith(("+++", "---")):
+            (plus if m.group(1) == "+" else minus)[int(m.group(2), 16)] = m.group(3).strip()
+    try:
+        os.makedirs(os.path.dirname(cache), exist_ok=True)
+        json.dump({"head": head, "tries": {"%08x" % k: v for k, v in out.items()}}, open(cache, "w"))
+    except OSError:
+        pass
+    return dict(out)
+
+
 def ndiff(diff):
     """the differing-byte count of a nonmatching row ('12', '~12', '12?'), or None; 0 is a placeholder (305 rows
     such as 'havok-equivalent' were never measured), so it counts as unknown"""
@@ -137,21 +180,29 @@ def main():
     ap.add_argument("va", nargs="?")
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--max-size", type=int, default=256)
-    ap.add_argument("--by", choices=("diff", "size"), default="diff")
+    ap.add_argument("--by", choices=("tries", "diff", "size"), default="tries")
     a = ap.parse_args()
     if a.list:
         skip, have = blocked(), marked()
         # left out: no source to edit (no marker), or a source that does not compile on a clean clone (blocked.txt)
         rows = [r for r in open_work(a.max_size) if r[1] in have and r[1] not in skip]
         big = 1 << 30
-        rows.sort(key=(lambda r: (ndiff(r[2]) if ndiff(r[2]) is not None else big, r[0], r[1])) if a.by == "diff"
-                  else (lambda r: (r[0], r[1])))
-        print("%d functions with complete source that is not byte-exact yet, up to %d bytes, %s:" % (
-            len(rows), a.max_size, "closest to a match first" if a.by == "diff" else "smallest first"))
-        print("  %-10s  %6s  %6s  %s" % ("function", "differ", "size", "where / last note"))
+        nd = lambda r: ndiff(r[2]) if ndiff(r[2]) is not None else big
+        tr = tries() if a.by == "tries" else None
+        if a.by == "tries" and tr is None:
+            print("(no git history here, e.g. a shallow clone: tries unknown, so smallest first)")
+        t = lambda r: tr.get(r[1], 1) if tr else 0
+        key = {"tries": lambda r: (t(r), r[0], nd(r), r[1]), "diff": lambda r: (nd(r), r[0], r[1]),
+               "size": lambda r: (r[0], r[1])}[a.by]
+        rows.sort(key=key)
+        order = {"tries": "fewest tries first, then smallest", "diff": "fewest differing bytes first",
+                 "size": "smallest first"}[a.by]
+        print("%d functions with complete source that is not byte-exact yet, up to %d bytes, %s:" % (len(rows), a.max_size, order))
+        print("  %-10s  %5s  %6s  %6s  %s" % ("function", "tries", "differ", "size", "where / last note"))
         for size, va, diff, where, reason in rows:
             n = ndiff(diff)
-            print("  0x%08x  %6s  %6d  %s  %s" % (va, n if n is not None else "?", size, where, (reason or "")[:70]))
+            print("  0x%08x  %5s  %6s  %6d  %s  %s" % (va, tr.get(va, 1) if tr else "?", n if n is not None else "?", size, where,
+                                                      (reason or "")[:70]))
         return 0
     if not a.va:
         ap.error("give a function address, or --list")
