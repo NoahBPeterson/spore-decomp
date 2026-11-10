@@ -2,8 +2,6 @@
 00ea4520 240 not reconstructed in this pass (cCityMusicViewer helper); not byte-exact; size 0 vs 240; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ea4610 1010 not reconstructed in this pass (SP::Audio::cCityMusicViewer::Redraw); not byte-exact; size 0 vs 1010; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ea4a10 202 not reconstructed in this pass (cCityMusicViewer helper); not byte-exact; size 0 vs 202; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ea4af0 75 not reconstructed in this pass (SP::Audio::cCityMusicViewer::SetMusic); not byte-exact; size 0 vs 75; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ea4b40 133 not reconstructed in this pass (cCityMusicViewer helper); not byte-exact; size 0 vs 133; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ea4bd0 221 not reconstructed in this pass (SP::Audio::cCityMusicViewer::~cCityMusicViewer); not byte-exact; size 0 vs 221; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ea4cb0 418 not reconstructed in this pass (cCityMusicViewer helper); not byte-exact; size 0 vs 418; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ea4e60 114 not reconstructed in this pass (cCityMusicViewer helper); not byte-exact; size 0 vs 114; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
