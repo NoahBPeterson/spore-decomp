@@ -157,6 +157,7 @@ void cJobManager::WaitForJob(void* job) {
 void cJob::Wait() {
     cJobData* p = static_cast<cJobData*>(this);
     p->mpManager->WaitForJob(p);
+    return;
 }
 
 // ===========================================================================
