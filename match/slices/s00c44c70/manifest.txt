@@ -1,0 +1,2 @@
+slices/s00c44c70/s00c44c70.cpp  ?GetState@cSPMission@@QBEHXZ  00c44c70  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00c44c70/s00c44c70.cpp  ?IsActive@cSPMission@@QBE_NXZ  00c44c80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
