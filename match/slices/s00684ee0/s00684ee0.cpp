@@ -133,7 +133,7 @@ void FUN_00685540() {
   if (i <= g_0152b348) {
     int off = 0;
     do {
-      *(unsigned char*)(off + (char*)g_015fea00) = 0;
+      *(unsigned char*)((char*)g_015fea00 + off) = 0;
       ++i;
       off += 0x28;
     } while (i <= g_0152b348);
@@ -169,11 +169,11 @@ bool FUN_00685710(int param1, void** param2) {
 void __fastcall FUN_00685980(void* pList) {
   char* node = *(char**)pList;
   while (node != pList) {
-    char* next = *(char**)node;
+    char* cur = node;
+    node = *(char**)node;
     void* alloc = *(void**)((char*)pList + 8);
     typedef void (__thiscall *Fn)(void*, char*, int);
-    (*(Fn*)((char*)*(void**)alloc + 0xc))(alloc, node, 0xc);
-    node = next;
+    (*(Fn*)((char*)*(void**)alloc + 0xc))(alloc, cur, 0xc);
   }
 }
 

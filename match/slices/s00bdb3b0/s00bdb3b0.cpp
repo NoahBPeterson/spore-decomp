@@ -261,20 +261,22 @@ void CStub::FUN_00bdb3b0(int a, int b)
     m648 = 1;
     m640 = a;
     m644 = b;
-    if (SP_GetCurrentGameMode() == &g_1654c04) {
+    if (SP_GetCurrentGameMode() == (void*)0x1654c04) {
         CivStub* civ = m590;
-        if (b == 0 ||
-            (**(u8(__thiscall**)(void*))(vpt((void*)(b + 0x34)) + 0x58))(*(void**)(b + 0x34)) == 0) {
+        if (b != 0 &&
+            (**(u8(__thiscall**)(void*))(vpt((void*)(b + 0x34)) + 0x58))((char*)b + 0x34) != 0) {
+            if (a == 0 && civ != 0) {
+                void* pl = ((NounMgrStub*)nounMgr())->FUN_00b25fb0();
+                if (civ != pl)
+                    civ->FUN_00bef830();
+            }
+        } else {
             if ((**(u8(__thiscall**)(void*))(vpt(m120) + 0x58))((char*)this + 0x120) != 0) {
-                void* p = (**(void*(__thiscall**)(void*))(vpt((void*)(b + 0x508)) + 0x10))(*(void**)(b + 0x508));
+                void* p = (**(void*(__thiscall**)(void*))(vpt((void*)(b + 0x508)) + 0x10))((char*)b + 0x508);
                 void* r = ((NounMgrStub*)nounMgr())->FUN_00b25f40((int)p);
                 if (a == 0 && r != 0)
                     ((CivStub*)r)->FUN_00bef830();
             }
-        } else if (a == 0 && civ != 0) {
-            void* pl = ((NounMgrStub*)nounMgr())->FUN_00b25fb0();
-            if (civ != pl)
-                civ->FUN_00bef830();
         }
     }
 }
@@ -430,20 +432,12 @@ int CStub::FUN_00bdb590(int* key, int* out)
 void CStub::FUN_00bdb7f0(int obj, int kind)
 {
     int model;
-    if (kind < 0xff10522) {
-        if (kind == 0x1a55e4d) {
-            model = 0x72c49181;
-            goto have;
-        }
-        if (kind == 0xecade42) {
-            model = 0x47c10953;
-            goto have;
-        }
-    } else if (kind == 0x1007ae63) {
-        model = 0x99e92f05;
-        goto have;
+    switch (kind) {
+    case 0x1a55e4d: model = 0x72c49181; break;
+    case 0xecade42: model = 0x47c10953; break;
+    case 0x1007ae63: model = 0x99e92f05; break;
+    default: model = 0x4e3f7777; break;
     }
-    model = 0x4e3f7777;
 have:
     CivStub* civ = m590;
     if (civ != 0) {
