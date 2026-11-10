@@ -5,7 +5,6 @@
 0112b390 102 havok-equivalent
 0112b460 46 havok-equivalent
 0112b570 50 havok-equivalent
-0112b600 12 havok-equivalent
 0112b620 63 havok-equivalent
 0112b680 33 havok-equivalent
 0112b6c0 85 havok-equivalent

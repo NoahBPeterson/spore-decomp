@@ -7,3 +7,4 @@ slices/s011ea070/s011ea070_g7.cpp  ?RegisterHooksB@@YAXXZ  011eaaa0  /O2 /MD /Gy
 slices/s011ea070/s011ea070_g7.cpp  ?UnregisterHooksB@@YAXXZ  011eaad0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s011ea070/s011ea070_g7.cpp  ?Init@ArrayOwner@@QAEXPAX@Z  011eaaf0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s011ea070/s011ea070_g7.cpp  ?RelocateHolder@@YAPAXPAHPAX@Z  011eaf50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s011ea070/s011ea070_g7.cpp  ?Sum32@ArrayOwner@@QAEHXZ  011eab40  /vc71 /O2 /MD /Gy /EHsc /TP /GS-

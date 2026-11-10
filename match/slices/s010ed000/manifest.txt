@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-slices/s010ed000/s010ed000.cpp  ?invalidateTim@hkGskBaseAgent@@QAEXAAUhkCollisionInput@@@Z  010ed240
-slices/s010ed000/s010ed000.cpp  ?warpTime@hkGskBaseAgent@@QAEXMHAAUhkCollisionInput@@@Z      010ed260
+slices/s010ed000/s010ed000.cpp  ?invalidateTim@hkGskBaseAgent@@QAEXAAUhkCollisionInput@@@Z  010ed240  /O2 /MD /Gy /EHsc /TP
+slices/s010ed000/s010ed000.cpp  ?warpTime@hkGskBaseAgent@@QAEXMHAAUhkCollisionInput@@@Z      010ed260  /O2 /MD /Gy /EHsc /TP
+slices/s010ed000/s010ed000.cpp  ?Helper@IReleasable@@QAEXXZ  010ed230  /vc71 /O2 /MD /Gy /TP

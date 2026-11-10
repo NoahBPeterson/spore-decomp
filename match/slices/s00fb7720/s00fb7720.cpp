@@ -34,7 +34,7 @@ struct TCVec2 { void Add(void* a, void* b, void* c, void* d); }; // 0x00fb6fb0
 struct TC1Self { void Append(void* p); void Release(); void Set2(void* arg); };
 extern void* operator_delete(void*);                       // 0x00f47380
 extern void  eastl_vector_insert(void*, void*, void*, int); // 0x011e0744
-extern void  FUN_00fb79b0_impl(uint8_t*);                  // defined below (thiscall)
+struct QuadVecStub { void Free(); };                        // 0x00fb79b0 (thiscall), defined below
 extern void  operator_new_arr(void*, int, int);            // 0x011e073e
 extern void  FUN_00ff03c0(float);                          // 0x00ff03c0
 extern void  SP_cTerrainSphere_Relevel(void*, int, int);   // 0x00fa43e0
@@ -160,8 +160,9 @@ void __stdcall FreeQuadRange(uint8_t* first, uint8_t* last)
 // ===========================================================================
 // @ 0x00fb79b0  free every element of the pointer vector and truncate it
 // ===========================================================================
-void FUN_00fb79b0_impl(uint8_t* self)
+void QuadVecStub::Free()
 {
+    uint8_t* self = (uint8_t*)this;
     int* v = (int*)self;
     int  n = (v[3] - v[2]) >> 2;
     for (int i = 0; i < n; ++i) {
@@ -189,14 +190,14 @@ void __fastcall QuadReleaseVec(int** self)
 {
     if (self[0] != 0) {
         void* o = (void*)self[0];
-        ((void (*)(void*))*(void**)(*(int*)o + 0xc))(o);
+        ((void (__thiscall*)(void*))*(void**)(*(int*)o + 0xc))(o);
         int* o2 = self[0];
         if (o2 != 0) {
             self[0] = 0;
-            ((void (*)(int*))*(void**)(*o2 + 4))(o2);
+            ((void (__thiscall*)(int*))*(void**)(*o2 + 4))(o2);
         }
     }
-    FUN_00fb79b0_impl((uint8_t*)(self + 1));
+    ((QuadVecStub*)(self + 1))->Free();
 }
 
 // ===========================================================================
