@@ -49,3 +49,4 @@
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c20210@cCreatureFactory@@QAEXPAX0@Z  00c20210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c22210@cSPCreatureBase_s00c2_2010@@QAEXH@Z  00c22210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b410@@YA_NXZ  00c0b410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?GetStrengthRating@cCreatureBase@Simulator@@QBEHXZ  00c0b8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
