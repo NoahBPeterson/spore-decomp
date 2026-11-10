@@ -12,10 +12,11 @@
 // with /GL+/LTCG, so the calling functions cannot be byte-exact single-object; they are
 // written complete and behaviourally equivalent.  The leaf helpers may still match.
 //
-// Flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast (as the neighbouring volume slices).
+// Flags: /O2 /MD /Gy /TP /arch:SSE2 /GS- /fp:fast (as the neighbouring volume slices).
 
 #include <xmmintrin.h>
 #include <math.h>
+#include <intrin.h>
 
 typedef unsigned int uint32_t;
 
@@ -56,6 +57,13 @@ union Vec4Access {
     __m128 v;
     float f[4];
 };
+
+// 16-byte aligned vector: a whole copy is a single movaps.
+struct __declspec(align(16)) Vec4 {
+    union { __m128 m; struct { float x, y, z, w; }; };
+};
+
+extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int n);
 static __forceinline float Get(__m128 v, int i)
 {
     Vec4Access a;
@@ -125,7 +133,7 @@ public:
 // the relocation stubs the volume tables use when a volume is copied/resolved
 void* rwcRelocateReturnSecond(void* a, void* b);                            // 0x011eb0d0
 int   rwcRelocateReturnOne(void* a, void* b);                              // 0x012057f0
-void  rwcRelocateNoOp();                                                   // 0x011fb220
+void  rwcRelocateNoOp(void* a, void* b);                                   // 0x011fb220
 
 // 0x01206cd0
 int rwcSphereLineSegIntersect(CastFraction* t, const __m128* from, const __m128* dir,
@@ -135,10 +143,10 @@ int rwcSphereLineSegIntersect(CastFraction* t, const __m128* from, const __m128*
 // SphereVolumeInstance callbacks (installed at instance+0x90/0x94/0x98)
 
 // @ 0x01206b20
-void SphereVolumeInstance_GetBBox(const __m128* src, const void* a, const void* b, void* out)
+void SphereVolumeInstance_GetBBox(const void* src, const void* a, const void* b, void* out)
 {
     (void)a; (void)b;
-    _mm_store_ps((float*)((char*)out + 0x120), _mm_load_ps((const float*)src));
+    ((Vec4*)((char*)out + 0x120))->m = ((const Vec4*)src)->m;
     *(uint32_t*)((char*)out + 0x130) = 0;    // feature type
     *(uint32_t*)out = 0;                     // result
 }
@@ -314,14 +322,19 @@ int rwcVolumeInstanceInitialize(void* a, void* b)
 // @ 0x01207110
 void rwcVolumeRelocateFixupNoOp(void* a, void* b)
 {
-    *(int*)a += (int)a - (int)b;
-    rwcRelocateNoOp();
+    int v = *(int*)a;
+    v += (int)a - (int)b;
+    *(int*)a = v;
+    rwcRelocateNoOp((char*)a + 0x10, b);
 }
 
 // @ 0x01207140
 int rwcVolumeRelocateFixupReturnOne(void* a, void* b)
 {
-    *(int*)a += (int)a - *(int*)((char*)b + 0x7c);
+    int* p = (int*)a;
+    int base = (int)a - *(int*)((char*)b + 0x7c);
+    int v = *p + base;
+    *p = v;
     rwcRelocateReturnOne((char*)a + 0x10, b);
     return 1;
 }
@@ -434,6 +447,6 @@ int SphereVolume::GetMaximumFeature(const void* a, const void* b, void* out)
 {
     (void)a; (void)b;
     *(uint32_t*)((char*)out + 0x130) = 0;
-    _mm_store_ps((float*)((char*)out + 0x120), _mm_load_ps((const float*)&mTransform.r3));
+    ((Vec4*)((char*)out + 0x120))->m = ((const Vec4*)&mTransform.r3)->m;
     return 1;
 }

@@ -549,7 +549,7 @@ hkMemoryStreamReader::~hkMemoryStreamReader()
 class hkPlainReferencedObject : public hkReferencedObject
 {
 public:
-	hkPlainReferencedObject() {}
+	hkPlainReferencedObject() { m_referenceCount = 1; }
 };
 
 // @ 0x01080290
@@ -596,9 +596,13 @@ hkBool hkClass::isSuperClass(const hkClass& k) const
 // @ 0x01080330
 int hkClass::getNumMembers() const
 {
+	const hkClass* p = m_parent;
 	int n = m_numDeclaredMembers;
-	for (const hkClass* p = m_parent; p != 0; p = p->m_parent)
+	while (p != 0)
+	{
 		n += p->m_numDeclaredMembers;
+		p = p->m_parent;
+	}
 	return n;
 }
 

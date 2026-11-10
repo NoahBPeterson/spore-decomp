@@ -6,7 +6,6 @@
 00e50cb0  107  wrap angle + sign: complete; loop shape/register schedule differs
 00e50d50  369  zoom adjust both axes: complete; min/max operand order and helper-argument slots differ
 00e50ed0   9  ease curve: complete; only xmm register naming differs
-00e50f30   16  mode check: complete; compare order/branch differs
 00e50f60   99  zoom step clamp: complete; broadcast constant and max/min order differ
 00e51060   94  zoom add clamp: complete; helper argument slot and (float)(int) handling differ
 00e510f0  124  interaction-state selector: complete (all calls/branches); return-value folding differs
@@ -19,4 +18,3 @@
 00e51650   40  emit one-field marker: complete; schedule differs
 00e516c0   15  current source level delta: complete; table-index loop schedule differs
 00e51720  106  normalized level fraction: complete; x87 multiplication schedule differs; equiv PASS
-00e517d0    8  count increment: complete; cl folds x+1 into inc rather than lea+store
