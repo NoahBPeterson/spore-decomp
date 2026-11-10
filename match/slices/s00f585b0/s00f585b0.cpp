@@ -218,19 +218,13 @@ void cSwarmField::Release()
 
     if (m_230 >= 0) {
         void* sys = m_sys;
-        void* v = *(void**)sys;
-        void* (__thiscall* f)(void*) = *(void* (__thiscall**)(void*))((char*)v + 0x20);
-        void* r = f(sys);
-        void* rv = *(void**)r;
-        (*(void (__thiscall**)(void*, int))((char*)rv + 0x30))(r, m_230);
+        void* r = (*(void* (__thiscall**)(void*))((char*)*(void**)sys + 0x20))(sys);
+        (*(void (__thiscall**)(void*, int))((char*)*(void**)r + 0x30))(r, m_230);
     }
     if (m_234 >= 0) {
         void* sys = m_sys;
-        void* v = *(void**)sys;
-        void* (__thiscall* f)(void*) = *(void* (__thiscall**)(void*))((char*)v + 0x20);
-        void* r = f(sys);
-        void* rv = *(void**)r;
-        (*(void (__thiscall**)(void*, int))((char*)rv + 0x1c))(r, m_234);
+        void* r = (*(void* (__thiscall**)(void*))((char*)*(void**)sys + 0x20))(sys);
+        (*(void (__thiscall**)(void*, int))((char*)*(void**)r + 0x1c))(r, m_234);
     }
 
     if (m_1b0 != 0) {
@@ -351,25 +345,27 @@ reset:
 void cSwarmField::SetObject(void* obj)
 {
     cSwarmField* n = obj ? (cSwarmField*)((char*)obj - 8) : 0;
-    cSwarmField* old = m_228;
+    char* n0 = (char*)n;
+    char* old = (char*)m_228;
 
-    if (n == old) {
-        *(byte*)((char*)old + 0x234) = 1;
+    if (n0 != old) {
+        if (n0 != 0) {
+            void* vt = *(void**)(n0 + 8);
+            (*(void (__thiscall**)(void*))((char*)vt + 0x34))(n0 + 8);
+        }
+        m_228 = n;
+        if (old != 0) {
+            void* vt = *(void**)(old + 8);
+            (*(void (__thiscall**)(void*))((char*)vt + 0x38))(old + 8);
+            *((byte*)(char*)m_228 + 0x234) = 1;
+            return;
+        }
+        *((byte*)n0 + 0x234) = 1;
         return;
     }
-    if (n != 0) {
-        void* vt = *(void**)((char*)n + 8);
-        (*(void (__thiscall**)(void*))((char*)vt + 0x34))((char*)n + 8);
-    }
-    m_228 = n;
-    if (old != 0) {
-        void* vt = *(void**)((char*)old + 8);
-        (*(void (__thiscall**)(void*))((char*)vt + 0x38))((char*)old + 8);
-        *(byte*)((char*)m_228 + 0x234) = 1;
-        return;
-    }
-    *(byte*)((char*)n + 0x234) = 1;
+    *((byte*)old + 0x234) = 1;
 }
+
 
 // @ 0x00f58a60
 void cSwarmField::Update(void* p, void* arg)

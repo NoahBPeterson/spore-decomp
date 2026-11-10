@@ -1,7 +1,6 @@
-00f58640
-00f58740
+00f58640 238 ?FUN_00f58640@@YAXPAXM00@Z: retail keeps the six 0.5f centre computations in the double xmm3 register (`movss xmm3,[0x1471064]` then `mulss xmmN,xmm3`), i.e. the source used a `const double`-ish/double constant or a non-inlined helper; cl15 folds our float literal to memory operands and folds `d*sx` differently (xmm allocation differs throughout); logic itself verified equal. flags=/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00f58820
-00f589e0
+00f589e0 111 ?SetObject@cSwarmField@@QAEXPAX@Z: body now matches (incl. the vt+0x34/+0x38 calls and the m_228 reload); only the three tail blocks put the `mov byte ptr [x+0x234],1` store BEFORE the pops where retail hoists `mov ecx,esi`/`mov edx,edi`/`mov eax,[ebx+0x228]` first (33 vs 37 bytes). Tried: if/else nesting, early returns, a shared `t` tail, char* instead of class ptr - cl15 always sinks the store past the epilogue. flags=/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00f58a60
 00f58b70
 00f58ed0

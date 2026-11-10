@@ -748,6 +748,8 @@ int cSPPaletteCategory::CountPagesInCategory(uint32_t category) {
 
 // @ 0x005C1D40
 bool cSPPaletteCategory::HasItem(cSPPaletteItem* item) {
-  return find(mItemsBegin, mItemsEnd, item) != mItemsEnd;
+  cSPPaletteItem** first = mItemsBegin;
+  cSPPaletteItem** last  = mItemsEnd;
+  return find(first, last, item) != last;
 }
 }  // namespace SP

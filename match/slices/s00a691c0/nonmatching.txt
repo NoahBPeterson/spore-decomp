@@ -4,7 +4,6 @@
 00a69380   83  Ctx::ForEachRegB: complete; same shape as ForEachRegA, loop/register allocation differs; flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (46.5% cov)
 00a693f0   15  RefVec::DestroyRange: complete; original does mov/add reg,-1/store + reordered refcount=1 store; scheduling differs; flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (36% cov)
 00a69490   41  UninitCopyRef: complete; original reuses ecx for *first then reloads parameter slot; flags /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/110 inputs valid)
-00a695a0   15  FillRef: complete; loop uses dec/test/ja and arg load order differs from ours; flags /O2 /MD /Gy /EHsc /TP; difftest PASS (342 valid, 100% cov)
 00a69630 1078  Ctx::Serialize: complete; now declared `bool` (original sets al=1 before ret 4; pointer-only callers so caller-deps UNKNOWN); large serializer (two tables 0x01675ec0/0x01675a00), register/flow shape differs; flags /O2 /MD /Gy /EHsc /TP; difftest WEAK after fix (207 valid, 36.2% cov)
 00a69b20  163  StrRec::Ctor: complete; compiler merged the two EString constructions differently (ours 144 vs orig 187 bytes); flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (100% cov)
 00a69c80  103  Hashtable::find_as: complete; FNV-1a hash + DoFindNode equality call, register scheduling differs; flags /O2 /MD /Gy /EHsc /TP; difftest PASS (220 valid, 100% cov)
