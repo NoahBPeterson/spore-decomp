@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00ddf990  158  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interface state constructor; retail installs three subobject vtables and reference-counts the target object while the model keeps a plain member block; equiv UNSUPPORTED (unresolved interface globals)
 00ddfaa0   67  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interface state destructor; retail rewrites the three vtables of the multiple inheritance chain before conditionally freeing itself; equiv UNSUPPORTED (unresolved notifier global)
-00ddfaf0    3  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) reset defaults; the two vector copies and the vtable pointer store match retail, only the trailing alignment padding differs; equiv UNSUPPORTED (unresolved camera globals)
 00ddfb50  107  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) push matrix; retail builds the matrix from six globals and notifies through the global vtable which stays unresolved; equiv UNSUPPORTED (unresolved interface globals)
 00ddfbe0  547  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) transition update; the notifier, audio system and camera setters are unresolved so the two ramps reduce to plain arithmetic; equiv UNSUPPORTED (unresolved camera services)
 00ddfef0  395  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) fade update; the message server posts and the interpolation helper are unresolved so the message arms collapse to the state tests; equiv UNSUPPORTED (unresolved message services)

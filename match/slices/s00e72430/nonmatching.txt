@@ -10,4 +10,3 @@
 00e72fb0  8  ability-record writer (tag 0x28): complete; only the add-ecx-offset vs push-arg order at two thiscall sites differs
 00e730d0  14  ability dispatch by element type: complete; only the global-load/arg-load scheduling order at the two GetChecked sites differs
 00e73140  234  area-cast ability: complete; pool call-site ordering and register allocation differ
-00e732d0  90  special-ability driver: complete; argument register allocation differs

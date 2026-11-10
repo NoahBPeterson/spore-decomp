@@ -5,5 +5,4 @@
 0087dc40  120  short-name prefix match; inline compare loop shape differs
 0087deb0  382  Locale_FormatGrouped: the recorded FAIL was our own UNMAPPED read at offset 0x10 -- the prologue did `mov 0x44(%edx),%eax; cmpw $0x2d,(%eax)`, i.e. it took the digit string from LocField+0x44, but retail reads begin/end from +0x00/+0x04 (`mov (%edx),%ebp` / `mov 0x4(%edx),%eax` at 0x87debf/0x87deb4) and only then uses flags@+0x34, type@+0x38, width@+0x3c. The two functions really do use different pairs of the same 0x4c-byte record, so LocField now carries both: viewBegin/viewEnd at +0x00/+0x04 (read by this formatter) and begin/end at +0x44/+0x48 (filled by Locale_ParseFormat). Verdict: PASS -- 247 valid inputs, 70.4% coverage (was FAIL 5/24). Residual: instruction scheduling inside the padding loop differs, so it is not byte-exact (421 bytes vs 428).
 0087e0d0  76  formatter buffer init (two fixed buffers); register scheduling differs
-0087e130  2  LCID locale lookup; two CRT IAT loads emitted in swapped registers
 0087e230  361  lowercased Australian locale match; frame 8 bytes larger, regalloc + branch shapes differ [equiv: UNSUPPORTED]

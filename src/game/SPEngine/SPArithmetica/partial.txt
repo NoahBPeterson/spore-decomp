@@ -6,5 +6,4 @@
 007f1f60 0 vector resize - shrink/fill paths skeleton only
 007f1fe0 0 vector<16-byte> assign - uninitialized_copy path skeleton only
 007f20d0 0 token lookup / run emit - hashtable find + vector assign + FUN_007f2a70, skeleton only
-007f21d0 0 cArithmeticaProgram::Copy - per-member vector copy skeleton only
 007f2240 0 LoadArithmeticaFile - resource load with EH skeleton only

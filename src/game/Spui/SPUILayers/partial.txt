@@ -11,7 +11,6 @@
 0080f730  -   approximate: builder body stubbed
 0080f7c0  269  approximate: removed-object push / winproc teardown paths simplified
 0080f920  58  approximate: DrawLayer message path + layer loop shapes not faithful
-0080f9d0  41  approximate: AddBoundingBox/RemoveObject call convention guessed
 0080fa20  120  approximate: Shutdown teardown order / member offsets approximate
 0080fac0  95  approximate: transform init + model vector push after callback omitted
 0080fc50  279  approximate: AddModel refcount/DoInsertValue schedule not reproduced

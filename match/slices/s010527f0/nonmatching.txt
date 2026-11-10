@@ -16,7 +16,6 @@
 01053980  524  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) use-location validity; space-game inventory, item direction and event-log calls are unresolved so the target/range checks collapse; equiv UNSUPPORTED (unresolved accessors)
 01053bb0  54  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) passive update; the use-tool-stop path is modelled as a plain release, missing the manager call; equiv FAIL (first mismatch execution)
 01053be0  328  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) test terrain location search; planet-model direction and random-surface helpers are unresolved; equiv UNSUPPORTED (unresolved PlanetModel helpers)
-01053d50  82  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) effect attach helper; the value-copy helpers around the virtual call were dropped; equiv UNSUPPORTED (original reads ecx at entry)
 01053db0  71  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) beam tool stop; the effect-release helpers are unresolved, so only the refcount sequence remains; equiv UNSUPPORTED (unresolved AddToolCharge)
 01053e00  189  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) beam update; the projectile target query and position accessors are unresolved; equiv UNSUPPORTED (unresolved position accessors)
 01053ee0  52  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) AoE tool stop; the area-stop call is dropped, leaving only the release; equiv FAIL (first mismatch esp)
@@ -24,5 +23,4 @@
 01053fb0  106  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) scan tool activation; the terrain-sphere refresh is modelled as a species lookup through an unresolved noun manager; equiv UNSUPPORTED (unresolved NounManager)
 01053ff0  123  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) scan tool stop; space-game accessors and the charge reset are unresolved; equiv UNSUPPORTED (unresolved AddToolCharge)
 01054080  38  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) scan tool use; the effect test plus the validity call fold into a tail-jump; equiv UNSUPPORTED (unresolved accessors)
-010540b0  24  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) out-of-UFO validity; the forwarding call is folded into a tail-jump, losing the argument reshuffle; equiv UNSUPPORTED (unresolved accessors)
 010540d0  127  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) out-of-UFO activation; the strategy activation is inlined instead of called out of line and the event-log tail call is lost; equiv FAIL (first mismatch fake call)

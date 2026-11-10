@@ -20,7 +20,6 @@
 0107e240  130  hkPointerMapBase<unsigned __int64>::findKey
 0107e2d0  417  hkPointerMapBase<unsigned __int64>::remove(Dummy*) ; equiv PASS (207 valid, 100% cov, no mismatch); cluster-shift deletion with unsigned 64-bit indices and lib_crt::allmul (428B vs 456B)
 0107e4a0  113  hkPointerMapBase<unsigned __int64>::resizeTable
-0107e540  3  hkPointerMapBase<unsigned long>::getWithDefault
 0107e560  14  hkPointerMapBase<unsigned long>::remove(KEY) -> hkResult
 0107e5b0  19  grow-to helper (tail-calls resizeTable, K)
 0107e5d0  19  grow-to helper (tail-calls resizeTable, _K) ; equiv UNSUPPORTED: 0/1200 valid inputs (fault/fake-arity); marker added

@@ -11,5 +11,4 @@
 011335a0 172 complete FUN_011335a0: stream byte-length query (FUN_0113f720 length, samplerate scaling, fallback FUN_011e6bf0 capped at 4000000); flags /vc71 /O2 /MD /Gy /TP; equiv WEAK 400/400 valid 18.8% cov.
 01133660 71 complete FUN_01133660: Channel::Set(float) - store volume, unlink active channel from g_voiceList; original uses a custom LTCG register ABI (val in xmm0, this in edx); flags /vc71 /O2 /MD /Gy /TP; equiv UNSUPPORTED original reads edx at entry.
 011336b0 679 complete FUN_011336b0: per-channel / all-channel volume set plus track propagation through the g_chanMap table and FUN_0113fec0; flags /vc71 /O2 /MD /Gy /TP; equiv WEAK 400/400 valid 1.7% cov.
-011339d0 7 complete FUN_011339d0: clamp n to 0x4000, store to +0xf0, FUN_0113fba0(handle,n); 2003 compares the g_sysInit byte directly, VC7.1 loads first; flags /vc71 /O2 /MD /Gy /TP; equiv WEAK 400/400 valid 16.7% cov (run --no-fake-calls: generated callbacks otherwise crash the harness in the original).
 01133a20 48 complete FUN_01133a20: FUN_01133450/FUN_01141270(id), store (int)(short)v at +0x20, FUN_01133460; flags /vc71 /O2 /MD /Gy /TP; equiv WEAK 400/400 valid 33.3% cov.

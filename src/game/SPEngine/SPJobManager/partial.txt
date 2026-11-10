@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 0068f350  204  try-lock two jobs + create JobLock: body omitted
 0068f4e0  91   mutex/semaphore member ctor helper: only field zeroing present
-0068f5d0  46   list drain / semaphore post: body approximated
 0068f600  109  semaphore-list container ctor: mutex/semaphore init omitted
 006909e0  242  partial; eastl prof hashtable DoInsertValue left as skeleton
 00690b80  269  partial; eastl vector insert (waiting list 1) left as skeleton
@@ -10,4 +9,3 @@
 006910a0  436  partial; FailNonRunnableJobs left as stub
 00691400  250  partial; eastl fixed_hash_set constructor left as stub
 00691500  188  partial; waiting-list fill left as stub
-006915c0  182  partial; waiting-list drain left as stub

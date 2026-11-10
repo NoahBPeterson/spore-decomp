@@ -13,7 +13,6 @@
 00c3f560  23  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) delegate lower bound; retail folds the compare into a cmov-style select, the modelled branch keeps two exits; equiv FAIL (first mismatch eax)
 00c3f6f0  69  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) solar hit sphere constructor; the nested hit-sphere constructor plus key zeroing order differ; equiv FAIL (first mismatch memory .data @0167be2c)
 00c3f850  44  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) hit sphere cast; the spatial base fallback call is unresolved; equiv UNSUPPORTED (unresolved cast helper)
-00c3f890  14  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable load model; retail inlines the base load test, the modelled call is out of line; equiv UNSUPPORTED (unresolved base load)
 00c3f8b0  104  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) set model state; the model variant switch goes through a virtual call instead of the retail inlined table; equiv FAIL (first mismatch execution)
 00c3f920  63  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable get fields; the three serializer instances are unresolved so the sums are folded; equiv UNSUPPORTED (unresolved field serializer)
 00c3f9b0  78  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) interactable constructor; the vtable and default member stores are ordered differently from retail; equiv FAIL (first mismatch memory .data @0167be2c)

@@ -36,7 +36,6 @@
 #                reconstruction (76 vs 79); the original interleaves the two
 #                sentinel/tail stores, ours emits one extra register move.  equiv
 #                UNSUPPORTED: 2 unresolved references (both vtable stubs are external).
-00d791f0    4  Destroy(unsigned char): release the party block's agent tree by nuke-
 #                walking the subtree, resetting the size and re-seeding the sentinel,
 #                then return `this`.  Complete reconstruction (71 vs 71, same size);
 #                the only difference is the last pair of instructions -- the original
