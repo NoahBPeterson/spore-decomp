@@ -425,6 +425,12 @@ guide needs the most adaptation.** CRITICAL context from
 >
 > Is it safe? Where the original keeps the value unrounded (the instruction shape shows it), `double` is what
 > the original computed. Confirm behaviour with the equivalence harness as usual.
+>
+> **Check the compiler first.** Spore's first test (2026-11-10, `0x010aa050`, `hkReplacePreviousRhs`): the
+> operand-order difference came from compiling Havok code with cl 15. Under `/vc71` the existing `float`
+> source and three `double` spellings all matched; under cl 15 none did. A sweep of the slices behind
+> `src/game/Havok/` with `/vc71` then matched 8 of 545 open rows (#120). So: confirm the row's flags carry
+> `/vc71` before reaching for `double`.
 
 - `fld st(i); fmul [m]` (keeps a just-computed value on the stack and multiplies
   by memory) is the cl 13.10 shape **for a `float` scalar**; with a `double` scalar the same compiler emits
