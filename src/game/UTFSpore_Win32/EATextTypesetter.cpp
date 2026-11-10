@@ -529,8 +529,10 @@ struct Typesetter_s0089_d3b0 {
 
     Typesetter_s0089_d3b0(void* allocator);                                            // 0x0089d820
     void Reset(int);                                                        // 0x0089cdf0
+    TextStyle_s0089_d3b0* AddTextStyle(const TextStyle_s0089_d3b0* pTextStyle);       // 0x0089b140
     void AddTextRun(const wchar_t* text, uint32_t len);                     // 0x0089b1e0
     void AddParagraphBreak();                                               // 0x0089b300
+    void AddStyleChange(const TextStyle_s0089_d3b0* pTextStyle);           // 0x0089b360
     void NextLine(int);                                                     // 0x0089c5d0
     void SubstituteEllipsis();                                              // 0x0089cf80
     void AdjustWhitespaceEmbedding();                                       // 0x0089b7e0
@@ -574,6 +576,12 @@ Quad16* copy_705250(const Quad16* first, const Quad16* last, Quad16* result)
     for (; first != last; ++first, ++result)
         *result = *first;
     return result;
+}
+
+// @ 0x0089b360
+void EA::Text::Typesetter_s0089_d3b0::AddStyleChange(const TextStyle_s0089_d3b0* pTextStyle)
+{
+    mpCurrentTextStyle = AddTextStyle(pTextStyle);
 }
 
 // @ 0x0089b520
