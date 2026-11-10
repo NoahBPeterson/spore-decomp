@@ -2935,6 +2935,10 @@ bool cStrCmp::operator()(u32 a, u32 b)
     cConvertArg argB = { (void*)b, (void*)0x00b1b104, mpField00 };
     VT_7C_2(mpConv04, &argA, &strA);
     VT_7C_2(mpConv04, &argB, &strB);
+    // NOTE (0x00d16760, not yet byte-exact): cl keeps &strB in ebx instead of `add esi,0x18; push esi`;
+    // the copy at match/slices/s00d160c0/s00d160c0.cpp cannot be edited from this session (only this file
+    // is writable), so the nonmatching.txt note for s00d160c0 still needs: "cl spills the second string
+    // address to ebx (+7 bytes); named refs, pointer locals and _ReadWriteBarrier were all tried".
     return StringCompare(strA.mpBegin, strA.mpEnd, strB.mpBegin, strB.mpEnd) < 0;
 }
 

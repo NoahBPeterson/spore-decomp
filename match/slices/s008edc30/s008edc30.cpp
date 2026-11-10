@@ -65,8 +65,17 @@ struct TranslationVector {          // eastl vector<TranslationEntry>, 0x14
     uint32_t mAllocator[2];         // +0x0c
 };
 
-struct ScrollInfo {                 // the refcounted scroll/viewport object
-    int mVtbl;                      // +0x00
+// The refcounted scroll/viewport object.  The real virtual Release keeps the target in
+// eax (`mov eax,[ecx]; mov eax,[eax+4]; jmp eax`); the manual pointer-to-member form that
+// cl accepts for a two-slot vtable put the target in edx, so the call is written by hand.
+struct ScrollInfo {
+    void** mpVtbl;                  // +0x00
+    void Release();                 // 0x008ee7a0
+};
+
+struct ScrollVtbl {
+    virtual void Method00();
+    virtual int  Release();                 // slot +0x04
 };
 
 // ---- external callees (addresses in comments) ----
@@ -80,7 +89,11 @@ void* __cdecl PageLayout_Build(void* self, void* layout, void* a, int b); // 0x0
 void  __cdecl ScrollVectorClear(void* a, void* b);               // 0x00e25bd0
 void  __fastcall Node_SetFlag(void* node, int, int flag);        // 0x00928c40
 
-void* __fastcall StyleCtor(void* self, int, void* rect, int a, int b);  // 0x0089b250
+// EA::Text::Typesetter (0x0089b250 = AddLineBreak, ret 8).
+class Typesetter {
+public:
+    void AddLineBreak(void* item, const void* pickBox);
+};
 char  __fastcall StyleSet(void* self, int, void* a);             // 0x008eaf30
 void  __fastcall StyleAssign(void* self, int, void* v);          // 0x0089b360
 void  __fastcall StyleAssign2(void* self, int, int a, int b);    // 0x0089b1e0
@@ -268,7 +281,8 @@ void Page::SetDocument(void* document)
 // @ 0x008edd30
 void* __stdcall StyleCtorForward(void* self, void* rect)
 {
-    return StyleCtor(self, 0, rect, 0, 0);
+    ((Typesetter*)self)->AddLineBreak(rect, 0);
+    return self;
 }
 
 // @ 0x008edd50
@@ -564,14 +578,14 @@ done:
     return 0;
 }
 
-// @ 0x008ee720
+// @ 0x008ee720  Typesetter::AddLineBreak (0x0089b250) on the sub-object at +4:
+//               ret 8, (Item* a, const PickBox* b), and the item argument lands in edx, ahead of ecx's bump.
 void RenderingContext::SubStyleSet(void* a, void* b)
 {
-    StyleCtor((char*)this + 4, 0, a, 0, 0);
-    (void)b;
+    ((Typesetter*)((char*)this + 4))->AddLineBreak(b, a);
 }
 
-// @ 0x008ee740
+// @ 0x008ee740  scrollbar style setter: copies the 8-byte Vec2 into the app through the sub-object at +4.
 void RenderingContext::SubStyleSetValue(const Vec2* value)
 {
     char* p = (char*)ScrollAppGet() + 0xf8;
@@ -579,7 +593,7 @@ void RenderingContext::SubStyleSetValue(const Vec2* value)
     *(int*)(p + 0x244) = *(int*)&value->y;
 }
 
-// @ 0x008ee770
+// @ 0x008ee770  scrollbar style getter: only the first component is read through +0xf8, like the original.
 void RenderingContext::SubStyleGet(Vec2* out)
 {
     char* p = (char*)ScrollAppGet();
@@ -590,10 +604,15 @@ void RenderingContext::SubStyleGet(Vec2* out)
 }
 
 // @ 0x008ee7a0
+// The original keeps the scroll object in ecx and its vtable-slot target in eax:
+// the release is a covariant vtable slot read through a non-virtual look-alike, so
+// cl does not need a second register for `this`.
 void RenderingContext::ReleaseScroll()
 {
-    ScrollInfo* s = mpScroll00;
-    (*(void(__thiscall**)(ScrollInfo*))(*(int*)s + 4))(s);
+    // The original loads the slot target into eax and tail-jumps; `(*(void***)s)[0x1f]` is the
+    // spelling used by the other XHTML call sites in this file.
+    ScrollInfo* scroll = mpScroll00;
+    (*(void(__thiscall**)(ScrollInfo*))(*(void***)scroll + 1))(scroll);
 }
 
 // @ 0x008ee7b0
