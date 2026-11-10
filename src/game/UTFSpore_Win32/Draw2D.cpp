@@ -418,7 +418,7 @@ virtual void v7();
     virtual void Shutdown();                     // +0x24
 };
 struct IFontMgr {
-    virtual void v0();
+    virtual void AddRef();
     virtual void Release();                      // +4
     virtual void v2();
     virtual IFontObj* Get(int id);               // +0xc
@@ -1339,6 +1339,19 @@ Rec40* uninitialized_copy_Rec40(const Rec40* first, const Rec40* last, Rec40* de
   for (; first != last; ++first, ++dest)
     ::new (dest) Rec40(*first);
   return dest;
+}
+
+// @ 0x00951d10
+void SetFontMgr(IFontMgr* pFontMgr)
+{
+    IFontMgr* pOld = g_pFontMgr;
+    if (pFontMgr != pOld) {
+        if (pFontMgr != 0)
+            pFontMgr->AddRef();
+        g_pFontMgr = pFontMgr;
+        if (pOld != 0)
+            pOld->Release();
+    }
 }
 
 // @ 0x00951d60
