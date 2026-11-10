@@ -6,3 +6,4 @@ slices/s0120ae50/s0120ae50.cpp  _hkMatrix6SetTranspose  0120b1b0  /vc71 /O2 /MD 
 slices/s0120ae50/s0120ae50.cpp  ?f_0120bb70@@YAXPAIIIZZ  0120bb70  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s0120ae50/s0120ae50.cpp  ?f_0120bbf0@@YAXIIIPBDPAX@Z  0120bbf0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s0120ae50/s0120ae50.cpp  ?removeFromWorld@hkUnaryAction@@QAEXPAVhkAction@@@Z  0120b8d0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s0120ae50/s0120ae50.cpp  ??1hkUnaryAction@@UAE@XZ  0120b8f0  /vc71 /O2 /MD /Gy /EHsc /TP
