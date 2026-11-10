@@ -745,7 +745,7 @@ def plot_history(path):
     pts.append((now, live))
     pts.sort(key=lambda t: t[0])
 
-    BLUE, ORANGE, GREEN = "#2a78d6", "#eb6834", "#2e9e5b"   # dataviz reference palette, slots 1-3
+    BLUE = "#2a78d6"   # dataviz reference palette, slot 1
     INK, MUTED, GRID = "#1f2328", "#59636e", "#e6e8eb"
     order = sorted(mods, key=lambda m: (m.startswith("("), -mods[m]["n"]))   # modules by size, then the "(no module: ...)" rows
     H = 10.3 + (0.6 + 0.3 * len(order) if order else 0)
@@ -758,9 +758,10 @@ def plot_history(path):
     TC_LINE = {"pass": "#009E73"}   # the PASS colour of the evidence bands
     GREEN = "#7a7a7a"   # migrated: grey here, so the PASS line keeps the green
     panels = (("Share of functions", "exact", "comp", "mig"), ("Share of code size", "exact_sz", "comp_sz", "mig_sz"))
-    for ax, (title, ke, kc, km) in zip(axes, panels):
-        for key, color, label in ((kc, ORANGE, "Compilable (byte-exact + compiles, not exact)"), (ke, BLUE, "Byte-exact"),
-                                  (km, GREEN, "Migrated into src/game module TUs")):
+    for ax, (title, ke, _kc, km) in zip(axes, panels):
+        # No "compilable" line: before the first equivalence sweep it counted every compiling function as done
+        # (up to 97%), which the sweep's verdicts then disproved.
+        for key, color, label in ((ke, BLUE, "Byte-exact"), (km, GREEN, "Migrated into src/game module TUs")):
             xs = [t for t, p in pts if p.get(key) is not None]
             ys = [p[key] for t, p in pts if p.get(key) is not None]
             if not xs:
@@ -768,17 +769,17 @@ def plot_history(path):
             ax.plot(xs, ys, color=color, lw=2, marker="o", ms=4, label=label, solid_capstyle="round")
             ax.annotate("%.1f%%" % ys[-1], (xs[-1], ys[-1]), xytext=(6, 0), textcoords="offset points",
                         va="center", fontsize=9, color=INK)
-        # Spliced in from the first equivalence sweep on (points that carry verdicts): the compilable line, counting
-        # only what is shown correct -- byte-exact + test PASS; WEAK, FAIL, untestable and untested drop out. It
-        # branches down from the compilable line at the last point before verdicts existed; byte-exact is untouched.
+        # From the first equivalence sweep on (points that carry verdicts): what is shown correct, byte-exact + test
+        # PASS; WEAK, FAIL, untestable and untested do not count. It branches up out of the byte-exact line at the last
+        # point before verdicts existed.
         sfx = ke[len("exact"):]
         vx = [(t, p) for t, p in pts if p.get(ke) is not None and (p.get("v") or {}).get("pass" + sfx) is not None]
         if vx:
-            prior = [(t, p) for t, p in pts if t < vx[0][0] and p.get(kc) is not None][-1:]
+            prior = [(t, p) for t, p in pts if t < vx[0][0] and p.get(ke) is not None][-1:]
             xs = [t for t, _p in prior] + [t for t, _p in vx]
-            ys = [p[kc] for _t, p in prior] + [p[ke] + p["v"]["pass" + sfx] for _t, p in vx]
+            ys = [p[ke] for _t, p in prior] + [p[ke] + p["v"]["pass" + sfx] for _t, p in vx]
             ax.plot(xs, ys, color=TC_LINE["pass"], lw=2, ls="--", marker="o", ms=4,
-                    markevery=list(range(len(prior), len(xs))), label="Compilable, counting only test PASS")
+                    markevery=list(range(len(prior), len(xs))), label="Byte-exact + equivalent (test PASS)")
             ax.annotate("%.1f%%" % ys[-1], (xs[-1], ys[-1]), xytext=(6, 0), textcoords="offset points",
                         va="center", fontsize=9, color=TC_LINE["pass"])
         ax.set_title(title, loc="left", fontsize=11, color=INK)
