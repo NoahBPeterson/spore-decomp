@@ -4,7 +4,8 @@ Rebuilding Spore's `SporeApp.exe` (2008, PC) as readable C++ that compiles to **
 one function at a time, with the original compilers (Visual C++ 2008 SP1, and the Visual C++ Toolkit 2003 for Havok
 and RenderWare). Every function is annotated with the original address it rebuilds (`// @ 0x00XXXXXX`).
 
-- **Progress:** [`PROGRESS.md`](PROGRESS.md): byte-exact functions and bytes, updated on every merge.
+- **Progress:** [noahbpeterson.github.io/spore-decomp](https://noahbpeterson.github.io/spore-decomp/) (charts, modules,
+  contributors), or [`PROGRESS.md`](PROGRESS.md) in the repository.
 - **Contribute:** below, then [`AGENTS.md`](AGENTS.md) for the full loop and the rules (written for people and AI
   agents alike).
 
