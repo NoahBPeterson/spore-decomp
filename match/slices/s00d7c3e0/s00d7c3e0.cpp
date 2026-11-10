@@ -40,8 +40,8 @@ public:
     void ClearAll(int32_t nA, int32_t nFlags);  // 0x00bc98f0
     void* Play(int32_t nA, int32_t nFlags);     // 0x00bc96a0
 
-    uint8_t mPad000[0x1c0];                     // 0x000
-    uint32_t mnField1C0;                        // 0x1c0
+    uint8_t mPad000[0x1c4];                     // 0x000
+    uint32_t mnField1C4;                        // 0x1c4 (tree + 0x1cc)
 };
 
 class cBehaviorTree {
@@ -502,7 +502,9 @@ void FUN_00d7c770(cCreatureBase* pCreature)
 bool FUN_00d7c7b0(cCreatureBase* pCreature, int32_t nArg2, int32_t nArg3, int32_t nArg4,
                   int32_t nArg5, uint32_t* phAnim)
 {
-    return !pCreature->AnimationFinished(*phAnim);
+    if (pCreature->AnimationFinished(*phAnim))
+        return false;
+    return true;
 }
 
 // ---------------------------------------------------------------------------
@@ -661,7 +663,7 @@ void FUN_00d7ca90(cCreatureBase* pCreature)
 // @ 0x00d7cb20
 int32_t FUN_00d7cb20(cCreatureBase* pCreature)
 {
-    if ((pCreature->mpBehaviorTree->mStimuli.mnField1C0 & 4) != 0)
+    if ((pCreature->mpBehaviorTree->mStimuli.mnField1C4 & 4) != 0)
         return 1;
     return 0;
 }

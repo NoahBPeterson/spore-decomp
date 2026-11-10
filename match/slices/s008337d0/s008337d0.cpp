@@ -254,8 +254,9 @@ cSPUITextWin::cSPUITextWin()
 // @ 0x00834140
 void VWrap::M(int a)
 {
-    void* mgr = g_mgr164f0e0;
-    int v = *(int*)((char*)mgr + 0x10);
+    // volatile pins the manager field-load before the vtable dispatch, so cl keeps the
+    // field in eax and the function pointer in edx as the original does.
+    int v = *(volatile int*)((char*)g_mgr164f0e0 + 0x10);
     ((void (__thiscall*)(void*, int, int))VT(this)[0x8c / 4])(this, a, v);
 }
 

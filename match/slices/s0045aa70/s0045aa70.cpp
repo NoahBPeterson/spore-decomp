@@ -23,8 +23,8 @@ struct XformMsg {           // 0x38 bytes; ctor @0x434040
     uint16_t flags;         // |4 = has position, |2 = has matrix
     int16_t  count;
     float    pos[3];
-    uint32_t pad0[2];
-    uint32_t mat[9];
+    float    scale;         // +0x10
+    uint32_t mat[9];        // +0x14
     XformMsg();
 };
 
@@ -185,8 +185,7 @@ IEffect* cContentValidationSummarizer::Play(int key, int mode, void* msg, int ke
 // @ 0x45ae10
 void cContentValidationSummarizer::Play0(int key, int mode)
 {
-    XformMsg m;
-    Play(key, mode, &m, 0);
+    Play(key, mode, &XformMsg(), 0);
 }
 
 // @ 0x45ae40
