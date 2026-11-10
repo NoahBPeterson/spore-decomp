@@ -211,14 +211,14 @@ void FUN_00865340(struct jpeg_decompress_struct* cinfo)
     cinfo->actual_number_of_colors = cq->sv_actual;
     mode = cinfo->dither_mode;
 
-    if (mode == 0) {
+    switch (mode) {
+    case 0:
         if (cinfo->out_color_components == 3)
             cq->color_quantize = (void (*)(void*, u8**, u8**, int))FUN_00864e60;
         else
             cq->color_quantize = (void (*)(void*, u8**, u8**, int))FUN_00864db0;
         return;
-    }
-    if (mode == 1) {
+    case 1:
         if (cinfo->out_color_components == 3)
             cq->color_quantize = (void (*)(void*, u8**, u8**, int))FUN_00865020;
         else
@@ -229,8 +229,7 @@ void FUN_00865340(struct jpeg_decompress_struct* cinfo)
         if (cq->odither[0] == 0)
             FUN_00864d60(cinfo);
         return;
-    }
-    if (mode == 2) {
+    case 2:
         cq->color_quantize = (void (*)(void*, u8**, u8**, int))FUN_00865150;
         cq->direction = 0;
         if (cq->fserrors[0] == NULL)
@@ -241,14 +240,14 @@ void FUN_00865340(struct jpeg_decompress_struct* cinfo)
             int i = 0;
             if (cinfo->out_color_components > 0) {
                 do {
-                    FUN_008668f0(p[i], size);
+                    FUN_008668f0(*p, size);
+                    p++;
                     i++;
                 } while (i < cinfo->out_color_components);
             }
         }
         return;
     }
-
     cinfo->err->msg_code = 0x2f;
     (*cinfo->err->error_exit)(cinfo);
 }
