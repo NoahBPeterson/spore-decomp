@@ -535,8 +535,8 @@ void hkIterativeLinearCastAgent::linearCast(const hkCdBody& bodyA, const hkCdBod
 // @ 0x010ec4a0
 void hkBoxBoxManifold::removePoint(int index)
 {
-    m_isComplete = false;
-    m_contactPoints[index] = m_contactPoints[m_numPoints - 1];
+    *(volatile unsigned char*)&m_isComplete = 0;
+    m_contactPoints[index] = m_contactPoints[*(volatile hkUchar*)&m_numPoints - 1];
     --m_numPoints;
 }
 

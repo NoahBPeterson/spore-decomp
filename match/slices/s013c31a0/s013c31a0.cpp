@@ -354,18 +354,27 @@ void f_013c9e00() {
 // @ 0x013C9F40
 void f_013c9f40() {
     VR* p = (VR*)g_16d714c;
-    if (p && --p->count == 0) {
-        p->count = 1;
-        p->Rel(1);
+    if (p) {
+        volatile int* c = &p->count;
+        int n = *c;
+        n--;
+        *c = n;
+        if (n == 0) {
+            *c = 1;
+            p->Rel(1);
+        }
     }
 }
 
 // @ 0x013C9F70
 void f_013c9f70() {
     VR* p = (VR*)g_16d7150;
-    if (p && --p->count == 0) {
-        p->count = 1;
-        p->Rel(1);
+    if (p) {
+        int n = (p->count += -1);
+        if (n == 0) {
+            p->count = 1;
+            p->Rel(1);
+        }
     }
 }
 

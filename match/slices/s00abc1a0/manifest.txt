@@ -7,3 +7,4 @@ slices/s00abc1a0/s00abc1a0.cpp  ?Destroy@AList@@QAEPAXI@Z  00abcc20  /O2 /MD /Gy
 slices/s00abc1a0/s00abc1a0.cpp  ?Func_abce60@@YAXPAUElem0C@@I0@Z  00abce60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00abc1a0/s00abc1a0.cpp  ?Destroy@B90@@QAEPAXI@Z  00abce90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00abc1a0/s00abc1a0.cpp  ?resize@Vec0C@@QAEXI@Z  00abd0f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00abc1a0/s00abc1a0.cpp  ?Func_abced0@@YAPAXPAX00@Z  00abced0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

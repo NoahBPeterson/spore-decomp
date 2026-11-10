@@ -664,10 +664,14 @@ void* B90::Destroy(uint flags)
 // @ 0x00abced0
 void* Func_abced0(void* first, void* last, void* dst)
 {
-    E3* f = (E3*)last;
-    E3* d = (E3*)dst;
-    while (f != (E3*)first)
-        *--d = *--f;
+    // Walk the two void* parameters in place: separate E3* locals let cl 15 merge the
+    // two decrementing pointers into one induction variable with a d-f bias, which the
+    // retail loop does not do (it keeps last in ecx and dst in eax, both `sub ...,0xc`).
+    while (last != first) {
+        last = (char*)last - sizeof(E3);
+        dst = (char*)dst - sizeof(E3);
+        *(E3*)dst = *(E3*)last;
+    }
     return dst;
 }
 

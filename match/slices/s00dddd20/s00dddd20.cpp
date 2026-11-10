@@ -447,11 +447,14 @@ void CamCtl_ResetGlobals() {
 }
 
 // @ 0x00dde590
-void __stdcall CamCtl_Release(void* x) {
-    if (g_16a10c8 != 0) {
-        (*(void(__thiscall**)(void*))*(void**)((char*)g_16a10c8 + 0))((void*)0);
-    }
-    (void)x;
+struct CamCtlObserver {   // the object behind camctl.listener (0x16a10c8)
+    virtual void  vt0();
+    virtual CamCtlObserver* vt1();   // release
+};
+
+void __stdcall CamCtl_Release(void* p) {
+    if (p != 0)
+        ((CamCtlObserver*)p)->vt1();
 }
 
 // @ 0x00dde5b0
