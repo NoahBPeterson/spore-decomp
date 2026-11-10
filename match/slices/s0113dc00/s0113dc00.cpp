@@ -558,8 +558,7 @@ int AiffWriter_StopHandler(void* event)
 // @ 0x0113ebb0
 void AiffWriter::ReleaseEvent()
 {
-    int ev[8];
-    memset(ev, 0, sizeof(ev));
+    int ev[2];
     ev[1] = (int)this;
     AiffWriter_StopHandler(ev);
     if (*(void**)((char*)this + 0x40) != 0) {

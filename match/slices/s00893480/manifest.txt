@@ -1,0 +1,1 @@
+slices/s00893480/s00893480.cpp  ?resize@GlyphVec@@QAEXI@Z  00893480  /O2 /MD /Gy /TP /arch:SSE /GS-

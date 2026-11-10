@@ -360,9 +360,9 @@ char* __cdecl ReadLine94(char* buf)
 // @ 0x0094EFB0
 int __cdecl Fn0094efb0(BIO94* p, char* buf, int maxLen)
 {
-    SLInner* s = p->obj;
     __asm {
-        mov ebx, s
+        mov eax, p
+        mov ebx, dword ptr [eax + 0x20]
         mov eax, maxLen
         push buf
         call ReadLine94

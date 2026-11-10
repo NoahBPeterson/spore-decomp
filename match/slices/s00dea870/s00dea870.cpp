@@ -712,13 +712,20 @@ void* __fastcall FUN_00deb670(void* self)
 // 0x00deb6a0  cGalaxyGameEntry destructor (deleting). this in ecx, uint8 flags, ret 4.
 // =============================================================================================
 // @ 0x00deb6a0
-void* __fastcall FUN_00deb6a0(void* self, uint8_t flags)
+extern int g_vtbl_GalaxyGameEntryDeb;   // 0x0147dba8
+
+struct cGalaxyGameEntryDeb {
+    void** mpVtbl;                      // 0x00
+    void* DestroyDeb(unsigned int flags);  // 0x00deb6a0
+};
+
+void* cGalaxyGameEntryDeb::DestroyDeb(unsigned int flags)
 {
     *(void**)0x16a1484 = 0;
-    *(uint32_t*)self = 0x147dba8;
+    *(int**)this = &g_vtbl_GalaxyGameEntryDeb;
     if (flags & 1)
-        FUN_00f47380(self);
-    return self;
+        FUN_00f47380(this);
+    return this;
 }
 
 // =============================================================================================

@@ -757,13 +757,15 @@ void CreatureBase::OnStartSwimming()
         mbSelfPowered = 1;
 }
 
+extern "C" cContentValidationSummarizer* __cdecl GetContentValidationSummarizerExternal(void);   // 0x00c14350
+
 // ===========================================================================
 // @ 0x00c14e50
 // ===========================================================================
 void CreatureBase::NotifySummarizer()
 {
     FUN_b3d310();
-    void* c = (void*)GetContentValidationSummarizer();
+    void* c = (void*)GetContentValidationSummarizerExternal();
     ((cSpatialObject*)((char*)this + 0xc0))->FUN_c421b0(c);
 }
 

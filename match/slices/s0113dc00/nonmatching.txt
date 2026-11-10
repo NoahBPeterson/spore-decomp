@@ -12,5 +12,4 @@
 0113e840  19  AiffWriter_CreateInstance complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (378 valid, 100% coverage)
 0113e890  122  AiffWriter_StartHandler (write AIFF placeholder header, arm timer) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (312 valid, 43.6% coverage)
 0113e940  487  AiffWriter_StopHandler (rewrite AIFF header, fclose, remove timer) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (192 valid, 7.0% coverage; fseek import discards many inputs)
-0113ebb0  36  AiffWriter::ReleaseEvent (stop + free buffer) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (263 valid, 100% coverage)
 0113ebe0  77  AiffWriter::PostCommand (queue start/stop command) complete, leaf. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (301 valid, 100% coverage)
