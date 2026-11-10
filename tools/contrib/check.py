@@ -45,7 +45,7 @@ def main():
     if not src:
         print("no source file has a `// @ 0x%08x` marker yet" % va)
         return 2
-    flags, how = S.choose_flags(ident, va, a.flags.split() if a.flags else None)
+    flags, how = S.choose_flags(ident, va, a.flags or None)
     obj, log = S.compile_obj(src, flags)
     if not obj:
         print("COMPILE FAILED (%s, flags %s)\n%s" % (os.path.relpath(src, ROOT), " ".join(flags), (log or "").strip()[-3000:]))
