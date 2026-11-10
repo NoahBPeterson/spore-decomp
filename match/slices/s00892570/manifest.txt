@@ -1,0 +1,1 @@
+slices/s00892570/s00892570.cpp  ?ReadStream@PolygonFont_00892570@@QAE_NPAXI@Z  00892570  /O2 /MD /Gy /EHsc /TP /arch:SSE

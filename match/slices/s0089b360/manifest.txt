@@ -1,0 +1,1 @@
+slices/s0089b360/s0089b360.cpp  ?Set3bc@FrameDrawable_0089b360@@QAEXPAX@Z  0089b360  /O2 /MD /Gy /EHsc /TP /arch:SSE

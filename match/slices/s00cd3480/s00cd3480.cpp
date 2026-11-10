@@ -185,7 +185,7 @@ struct TM {
     void F_cd4180(int a, float f1, float f2, int b);
     void F_cd41d0(float f1, float f2, int a);
     void F_cd4220(int a, float f1, float f2, int b);
-    void F_cd43c0(int a);
+    void F_cd43c0(void* a);
     bool F_cd4490();
     unsigned int F_cd4460(int a);
     unsigned int F_cd44a0();
@@ -352,12 +352,10 @@ void TM::F_cd4220(int a, float f1, float f2, int b)
 }
 
 // @ 0x00cd43c0
-void TM::F_cd43c0(int a)
+void TM::F_cd43c0(void* a)
 {
-    void* o = ((void*(__thiscall*)(void*, int))(*(void***)this)[0x6c / 4])(this, a);
-    ((C9630*)o)->M();
-    (void)o;
-    (void)a;
+    C9630* o = ((C9630*(__thiscall*)(void*, void*))(*(void***)this)[0x6c / 4])(this, a);
+    o->M();
 }
 
 // @ 0x00cd4460
