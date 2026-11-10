@@ -1,12 +1,2 @@
-00da8630
-00da8960
-00da8a40
-00da8c40
-00da8e20
-00da8f20
-00da8fe0
-00da9020
-00da9160
-00da9220
-00da9390
-00da94c0
+# va  diff-bytes  reason
+00da8960 ? FUN_00da8960 (creature stimulus -> animal link): same length and control flow aside from one field store; retail writes `dword ptr [edi+4] = lea eax,[esi+0x5a8]` where our source `*(int*)((char*)s + 0x5a8)` folds into `add esi,0x5a8; mov [edi+4],esi` (esi holds the animal). Spelling it as `(int*)s + 0x16a` (a 32-bit multiply) and through a separate local both kept the add form. Calling the offset a 32-bit field would need the later `[esi+0x5a8]` initialisation retail emits nowhere, so the field type is unconfirmed. Flags /O2 /MD /Gy /TP /arch:SSE.

@@ -196,6 +196,8 @@ void init_15d98f0()
     *(float*)0x15d98f0 = (float)log(t);
 }
 
+#pragma float_control(precise, off)
+
 // @ 0x0124aab0
 void init_15d9834()
 {
@@ -361,10 +363,7 @@ void init_15e2d08()
 {
     int n = 8;
     char* p = (char*)0x15e2d08;
-    for (;;) {
-        n--;
-        if (n < 0)
-            break;
+    while (--n >= 0) {
         p += 4;
     }
 }
@@ -374,10 +373,7 @@ void init_15e2a38()
 {
     int n = 6;
     char* p = (char*)0x15e2a38;
-    for (;;) {
-        n--;
-        if (n < 0)
-            break;
+    while (--n >= 0) {
         vector_constructor_iterator(p + 0x10, 4, 4, &FUN_00402ab0);
         p += 0x20;
     }
