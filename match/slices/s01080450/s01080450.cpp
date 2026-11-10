@@ -166,7 +166,8 @@ hkResult hkBufferedStreamReader::setMark(int markLimit)
 {
 	m_markPos = m_current;
 	m_markLimit = markLimit;
-	return m_bufSize < markLimit ? HK_FAILURE : HK_SUCCESS;
+	// The original evaluates `markLimit > m_bufSize` (setg, return in eax).
+	return markLimit > m_bufSize ? HK_FAILURE : HK_SUCCESS;
 }
 
 // @ 0x010807b0
@@ -489,9 +490,14 @@ int hkClassMember::getAlignment() const
 hkBool hkMath::equal(float a, float b, float eps)
 {
 	// X87-PRECISION: (a - b) stays unrounded in an 80-bit register before fabs and the compare with eps.
+	// The original picks the hkBool byte in a register from each branch (mov cl,1 / xor cl,cl) and stores it.
+	// The original assigns the result hkBool in both branches (mov cl,1 / xor cl,cl) and copies it out.
+	hkBool result = hkBool(false);
 	if (fabsf(a - b) < eps)
-		return true;
-	return false;
+		result = hkBool(true);
+	else
+		result = hkBool(false);
+	return result;
 }
 
 // Havok's hkVector4 is 16-byte aligned (the caller's frame does `and esp,-16`); this stand-in carries the

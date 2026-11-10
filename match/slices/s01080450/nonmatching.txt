@@ -4,7 +4,6 @@
 01080650 77 havok-equivalent
 010806e0 42 havok-equivalent
 01080730 34 havok-equivalent
-01080790 23 havok-equivalent
 01080830 68 havok-equivalent
 01080890 54 havok-equivalent
 010808f0 75 havok-equivalent
@@ -15,7 +14,6 @@
 01080c30 66 havok-equivalent
 01080ce0 112 havok-equivalent
 01080db0 88 havok-equivalent
-01080e40 29 havok-equivalent
 01080ef0 461 setMul: volatile destination reads force the real x87 translation adds and the float rounding at the destination (and keep &A in eax); equiv PASS 400/100%
 010810f0 446 havok-equivalent
 010812b0 46 havok-equivalent
