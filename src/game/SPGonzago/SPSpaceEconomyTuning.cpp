@@ -95,7 +95,7 @@ int cSPSpaceEconomyTuning::GetHomeWorldBuildingMultiplier()
     Prop* prop;
     if (pl && pl->GetProperty(0x4ab4745, (void**)&prop) && prop->type == 9)
         return *prop->GetInt();
-    return 0;
+    return *(volatile int*)&prop;
 }
 
 // @ 0x0102fbf0
