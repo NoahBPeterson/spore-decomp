@@ -6,7 +6,6 @@
 0107e820 45 havok-equivalent
 0107e890 5 havok-equivalent
 0107e8d0 41 havok-equivalent
-0107e910 18 havok-equivalent
 0107e9a0 24 havok-equivalent ; equiv PASS (993 valid inputs)
 0107ea10 113 havok-equivalent
 0107eb20 117 havok-equivalent
@@ -22,4 +21,3 @@
 0107f0c0 341 havok-equivalent
 0107f250 40 havok-equivalent
 0107f3d0 51 havok-equivalent
-0107f470 33 havok-equivalent
