@@ -3283,16 +3283,24 @@ int f00cb4d40(int self, int a, int b, int c, int d, int e)
     return 0;
 }
 
+struct ToolOwner00cb5050;
+struct ToolTimer00cb5050 {
+    float GetValue();
+};
+struct ToolOwner00cb5050 {
+    void** mpVtable;
+    u8 mPad004[0x4e4 - 4];
+    ToolTimer00cb5050* mpTimer;
+    float Update();
+};
+
 // @ 0x00cb5050
-void f00cb5050(int self)
+float ToolOwner00cb5050::Update()
 {
-    void* p = *(void**)(self + 0x4e4);
-    float v = FUN_0104be60(p);
-    if (v > 0.0f) {
-        FUN_0104be60(*(void**)(self + 0x4e4));
-        return;
-    }
-    (*(void(**)(int))(*(int*)self + 0xc8))(self);
+    float v = mpTimer->GetValue();
+    if (v > 0.0f)
+        return mpTimer->GetValue();
+    return ((float (__thiscall*)(void*))mpVtable[0xc8 / 4])(this);
 }
 
 // @ 0x00cb5090

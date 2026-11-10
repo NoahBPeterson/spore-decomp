@@ -32,3 +32,4 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?_virtual_dtor@FlakProjectile@@QAEPAU1@E@Z  00cb7b50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?SetVerticalRocket@FlakProjectile@@QAEXPBIM@Z  00cb7ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?SetStraightLine@FlakProjectile@@QAEXPBID@Z  00cb7c20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Update@ToolOwner00cb5050@@QAEMXZ  00cb5050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
