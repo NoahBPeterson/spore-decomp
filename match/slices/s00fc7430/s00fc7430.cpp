@@ -486,13 +486,10 @@ bool FUN_00fc81b0(uint32_t** src, uint32_t* remaining, Blob10* dst)
 // 0x00fc8330 -- test the high word of the first dword against a global
 // ===========================================================================
 // @ 0x00fc8330
-uint16_t FUN_00fc8330(uint32_t* p)
+uint8_t FUN_00fc8330(uint32_t* p)
 {
-  uint32_t v = *(volatile uint32_t*)p;
-  uint16_t hi = (uint16_t)(v >> 16);
-  hi = (uint16_t)((hi & 0xff00) |
-                  (hi == *(uint16_t*)0x15b17e8));
-  return hi;
+  uint16_t hi = (uint16_t)(*(volatile uint32_t*)p >> 16);
+  return (hi == *(uint16_t*)0x15b17e8) ? 1 : 0;
 }
 
 // ===========================================================================

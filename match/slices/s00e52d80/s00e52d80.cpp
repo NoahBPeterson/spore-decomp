@@ -207,7 +207,7 @@ int cSlotOwner17::F_00e53210() { int* self = (int*)this;
 
 // @ 0x00e53250
 void FUN_00e53250(int idx) {
-  char* o = (char*)(*(int*)(g_16b3c04 + 0x5190)) + (idx + 8) * 0x10;
+  char* o = (char*)(*(int*)((char*)CellGame17() + 0x5190)) + (idx + 8) * 0x10;
   *(int*)o = 1;
   *(int*)(o + 4) = 0;
   *(int*)(o + 8) = 0;
@@ -322,7 +322,8 @@ void FUN_00e538b0(char flag) {
 
 // @ 0x00e53920
 void FUN_00e53920() {
-  if (g_16b3c04[0x515c] & 1) FUN_00e53660(1, 0);
+  cCellGame17* pGame = CellGame17();
+  if (((char*)pGame)[0x515c] & 1) FUN_00e53660(1, 0);
   else FUN_00e53660(1, 1);
 }
 

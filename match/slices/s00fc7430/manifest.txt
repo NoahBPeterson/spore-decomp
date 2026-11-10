@@ -26,3 +26,4 @@ slices/s00fc7430/s00fc7430.cpp  ?SetBuffer@BufferedWriter@movie@rw@@QAEXPAXH@Z  
 slices/s00fc7430/s00fc7430.cpp  ?Flush@Writer@@QAEXXZ  00fc83b0  /O2 /MD /Gy /TP /arch:SSE
 slices/s00fc7430/s00fc7430.cpp  ?UpdateEffects@WeatherMgr@@QAEXH@Z  00fc7b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc8300@@YA_NPAI@Z  00fc8300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00fc7430/s00fc7430.cpp  ?FUN_00fc8330@@YAEPAI@Z  00fc8330  /O2 /MD /Gy /TP /arch:SSE
