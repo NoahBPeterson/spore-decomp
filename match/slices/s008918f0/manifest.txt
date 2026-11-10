@@ -1,0 +1,1 @@
+slices/s008918f0/s008918f0.cpp  ?RefreshGlyphCache@OutlineFont@Text@EA@@QAEXH@Z  008918f0  /O2 /MD /Gy /EHsc /TP
