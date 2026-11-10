@@ -327,7 +327,7 @@ needs: the loop, the rules, and where the known compiler tricks are written down
 <li>Only <code>src/game/</code>, <code>match/slices/</code> and <code>match/include/</code> change in a contribution.</li>
 <li>Real C++: no inline assembly, no raw bytes, no constants disguised as addresses of made-up globals.</li>
 <li>Never commit game files or anything derived from them.</li>
-<li>Stuck? Leave a better note than you found and move on.</li></ul>""" % {"repo": E(repo), "name": E(repo.split("/")[-1])}
+<li>Stuck? Update the function's line in the <code>nonmatching.txt</code> beside its source (the path <code>task.py</code> prints) with what you tried and what still differs, and open a pull request with that: the next person starts from your note.</li></ul>""" % {"repo": E(repo), "name": E(repo.split("/")[-1])}
 
     how = """<h1>How it works</h1>
 <h2>What "byte-exact" means</h2><p>Spore's executable was built in 2008 with Visual C++ 2008 SP1 (and the Visual
