@@ -6,8 +6,6 @@
 00c43860 907 not reconstructed in this pass (large locomotive helper); not byte-exact; size 0 vs 907; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c43c10 166 not reconstructed in this pass (locomotive helper); not byte-exact; size 0 vs 166; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c43cc0 277 not reconstructed in this pass (eastl::vector<tForceData>::operator=); not byte-exact; size 0 vs 277; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c43de0 92 not reconstructed in this pass (locomotive helper); not byte-exact; size 0 vs 92; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c43e40 218 not reconstructed in this pass (locomotive helper); not byte-exact; size 0 vs 218; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c43f20 100 not reconstructed in this pass (locomotive helper); not byte-exact; size 0 vs 100; equiv: not run (no definition); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c43f90 74 reconstructed as cLocomotiveObject::Shutdown (release +0x4cc via vtable slot 1, erase +0x278 vector, reset +0xd4 subobject, tail-call 0x00c8b2e0); not byte-exact: the vector erase argument order and subobject/tail-call framing differ - 78 vs 74 bytes; equiv: not run (0x00c8b2e0 unresolved); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c43fe0 85 reconstructed as cLocomotiveObject::InsertUnique (linear scan of the +0x490 uint vector, append if capacity remains, else DoInsertKey4 at 0x00b96600); not byte-exact: the capacity compare and append path reorder - 95 vs 85 bytes; equiv: not run (no definition for DoInsertKey4); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
