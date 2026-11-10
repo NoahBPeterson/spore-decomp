@@ -22,7 +22,7 @@ locally (below) before you open the pull request.
 
 1. Python 3.10+:
    `python3 -m venv .venv && .venv/bin/pip install pefile capstone pycryptodome`
-2. Wine (any recent version; on Windows the compilers run directly) and `msitools` (`msiextract`).
+2. Wine (any recent version) and `msitools` (`msiextract`), on macOS or Linux. On Windows, use WSL.
 3. The compilers, from Microsoft's own installers (about 120 MB, nothing is installed, every file is hash-checked):
    `sh tools/ci/setup_toolchain.sh`
    This gives Visual C++ 2008 SP1 (cl 15.00.30729.01) for most of the game and the Visual C++ Toolkit 2003 1.01
