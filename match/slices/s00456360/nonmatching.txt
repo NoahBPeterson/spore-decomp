@@ -5,7 +5,7 @@
 004566e0  -1  complete behaviorally; EASTL inline layers flattened
 00456d60  -1  complete behaviorally; inlined copy loops flattened
 004571d0  -1  complete, not tried
-00457250  -1  complete, not tried
+00457250  4  empty destroy loop must advance BOTH first and dst (Elem32 stride 0x20); with that, size 78/82 under slice flags. Retail frame is sub esp,0x30 + mov byte [ebp-0x25],0 after the copy call (EH-ish gap, not SEH fs:[0]). Tried: dst-first vs first-first iter decl order; /EHsc; local Guard dtor / try-catch (full SEH, too big); char mark after call (/GS- gives size 82 but mark at -1 not -0x25); unused[N] pads (/GS- can hit sub esp,0x30 and matching q/p slots, but r stays at -0x28 not -4). Next: force r at [ebp-4] while keeping mark at [ebp-0x25] and q/p at -0x30/-0x2c, without extra inits.
 004572b0  -1  complete, not tried
 00457450  75  complete; retail leaves the last written element in eax (the void source left one-past), so the helper now returns Triple* last; chk diff 75; difftest PASS (427 valid, 97.2% coverage)
 004574c0  -1  complete, not tried
