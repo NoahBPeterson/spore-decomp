@@ -371,10 +371,10 @@ struct cTimerBarHost {
 // @ 0x00d2ba60
 cTimerBarHost* cTimerBarHost::Initialize()
 {
-    mVisible = 1;
     mpRef = 0;
-    mTimerA.ResetTimer();
-    mTimerB.ResetTimer();
+    mVisible = 1;
+    this->mTimerA.ResetTimer();
+    this->mTimerB.ResetTimer();
     return this;
 }
 

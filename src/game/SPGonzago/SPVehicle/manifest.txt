@@ -1,3 +1,7 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00c9fb10@CStub@@QAEHPAX@Z  00c9fb10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00c9ff40@CStub@@QAEXHPAM0@Z  00c9ff40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00c9ef20@CStub@@QAEHXZ  00c9ef20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00c9ef60@CStub@@QAEXI@Z  00c9ef60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00c9f0a0@@YAPAXPAPAX00@Z  00c9f0a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00c9f750@CStub@@QAEXD@Z  00c9f750  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

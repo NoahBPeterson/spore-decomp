@@ -314,10 +314,14 @@ int IWinGrid::PauseRecalculations(bool bPause)
 // ===========================================================================
 // 0x970740 IWinGrid::ScrollPagesVertically
 // ===========================================================================
+// The grid pages by four cells: the original rewrites the stack argument in
+// place (`mov [esp+4],edx`) before the tail jump, which is what cl makes of an
+// inline member call whose argument is the mutated parameter.
 // @ 0x00970740
 void IWinGrid::ScrollPagesVertically(int nPages)
 {
-    ScrollCellsVertically(nPages * 4);
+    nPages *= 4;
+    ScrollCellsVertically(nPages);
 }
 
 // ===========================================================================

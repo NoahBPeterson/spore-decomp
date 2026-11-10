@@ -293,13 +293,12 @@ void fnt_JROT(fnt_Ctx* ctx)
 {
     int32* t = ctx->stackTop - 1;
     if (t[0] != 0) {
-        int32 offset = t[-1] - 1;
-        t = t - 1;
-        ctx->ip = ctx->ip + offset;
-        ctx->stackTop = t;
-        return;
+        t = (int32*)((int32)t - 4);
+        ctx->ip = ctx->ip + (t[0] - 1);
     }
-    t = t - 1;
+    else {
+        t = (int32*)((int32)t - 4);
+    }
     ctx->stackTop = t;
 }
 
@@ -308,13 +307,12 @@ void fnt_JROF(fnt_Ctx* ctx)
 {
     int32* t = ctx->stackTop - 1;
     if (t[0] != 0) {
-        t = t - 1;
-        ctx->stackTop = t;
-        return;
+        t = (int32*)((int32)t - 4);
     }
-    int32 offset = t[-1] - 1;
-    t = t - 1;
-    ctx->ip = ctx->ip + offset;
+    else {
+        t = (int32*)((int32)t - 4);
+        ctx->ip = ctx->ip + (t[0] - 1);
+    }
     ctx->stackTop = t;
 }
 

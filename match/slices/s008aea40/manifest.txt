@@ -6,3 +6,5 @@ slices/s008aea40/s008aea40.cpp  ?fnt_ClearPointFlags@@YAXPAUfnt_Ctx@@@Z 008af360
 slices/s008aea40/s008aea40.cpp  ?fnt_SetRp0@@YAXPAUfnt_Ctx@@@Z        008af390  /O2 /MD /Gy /TP
 slices/s008aea40/s008aea40.cpp  ?fnt_SetRp1@@YAXPAUfnt_Ctx@@@Z        008af3b0  /O2 /MD /Gy /TP
 slices/s008aea40/s008aea40.cpp  ?fnt_InitInterp@@YAXPAUfnt_Ctx@@@Z    008af5e0  /O2 /MD /Gy /TP
+slices/s008aea40/s008aea40.cpp  ?fnt_JROT@@YAXPAUfnt_Ctx@@@Z  008aec90  /O2 /MD /Gy /TP
+slices/s008aea40/s008aea40.cpp  ?fnt_JROF@@YAXPAUfnt_Ctx@@@Z  008aecc0  /O2 /MD /Gy /TP
