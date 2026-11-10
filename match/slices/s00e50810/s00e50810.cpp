@@ -267,8 +267,11 @@ float FUN_00e50ed0(float a) {
 char FUN_00e50f30() {
   char* r = (char*)FUN_00b3d4d0();
   int v = *(int*)(r + 0x2c);
-  if (v == 1 || v == 2) return 1;
-  return *(char*)((char*)gState_16b3c0c + 0x936) != 0;
+  char result = (v == 1 || v == 2) ? 1 : 0;
+  if (result)
+    return result;
+  // retail reads the flag as a byte compared with zero (cmp byte [..],0 / setne al)
+  return *(uint8_t*)((char*)gState_16b3c0c + 0x936) != 0;
 }
 
 // @ 0x00e50f60
