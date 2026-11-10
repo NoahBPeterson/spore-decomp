@@ -81,7 +81,8 @@ void* __cdecl FUN_00a61c20(void* mem, uint32 which);       // 0x00a61c20
 
 // --------------------------------------------------------------- class layouts
 struct FxAccum {                       // wrapper for the 0x00936090 thiscall setter
-    void Set(float v);                  // 0x00936090
+    void Set(float v);                  // 0x00936090 (seed/time path)
+    void SetBits(int bits);             // 0x00936090 (stores the raw dword)
 };
 
 struct FXElem {                         // 0x0c
