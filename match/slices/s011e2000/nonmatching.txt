@@ -1,0 +1,1 @@
+011e2000  4  AddRef: need mov eax,[g]; mov ecx,[g]; inc ecx; test eax; mov [g],ecx; jne; call. volatile reload gets 2nd load+inc; store still before test. tried /O1,/O2,/Od,barrier,branch-split,fastcall. sibling Release matched with /O1 as (g-1) form.

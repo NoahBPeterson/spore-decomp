@@ -1,0 +1,1 @@
+00e528f0  ~  retail id in eax; idx/[esp+4] float/[esp+8]; Get then movss [row+0xc+idx*4]. same eax-first ABI wall as 00e528d0.

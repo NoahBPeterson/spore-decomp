@@ -1,0 +1,1 @@
+00e528d0  4  retail id live-in eax (push eax; Get at g+0x54; store val at row+4). cdecl loads id from stack. no eax-first ABI without naked/asm. readable 2-arg form left.

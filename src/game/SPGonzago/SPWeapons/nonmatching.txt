@@ -22,7 +22,7 @@
 00cb5140
 00cb52c0
 00cb5330
-00cb5420
+00cb5420  3  GetToolStrategy: need add eax,0x114; mov eax,[eax] then thiscall vcall slot 0xb8. cl folds to [eax+0x114] and keeps s in ecx. thiscall cast OK; tried unsigned add, volatile addr, barrier.
 00cb5450
 00cb54a0
 00cb5580

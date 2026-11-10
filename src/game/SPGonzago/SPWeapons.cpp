@@ -3377,10 +3377,11 @@ int f00cb5330_write(cGameData_s00cb_44b0* self, cOutStream* stream)
 // @ 0x00cb5420
 void* cLocomotionObj14::GetToolStrategy()
 {
-    void* p = *(void**)((char*)this + 0x14);
-    void* s = *(void**)&((Tool*)p)->mStrategy;
+    unsigned p = *(unsigned*)((char*)this + 0x14);
+    p += 0x114;
+    void* s = *(void**)p;
     if (s)
-        return (*(VfnS2*)(*(int*)s + 0xb8))(s, (void*)0x013f94d4);
+        return ((void* (__thiscall*)(void*, void*))(*(void**)((char*)*(void**)s + 0xb8)))(s, (void*)0x013f94d4);
     return 0;
 }
 

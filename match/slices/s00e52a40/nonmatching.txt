@@ -1,0 +1,1 @@
+00e52a40  52  complete: clamp(a+b, 0, 0x13) via stack locals; retail uses js on sum then cmp [ptr],13 and may reload via [eax]. Ours diverges on lea/cmp order. Tried ternary pointer select.
