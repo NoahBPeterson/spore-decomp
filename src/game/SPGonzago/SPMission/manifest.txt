@@ -50,3 +50,4 @@
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c472e0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c472e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?ExportPlanet@cSPMission@SP@@QAEXPAVcPlanet@2@I@Z  00c47350  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?GetAnimalSpeciesFromType@cSPMission@SP@@QAEXIAAVKey@ResourceMan@EA@@@Z  00c47610  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?UnregisterIds_c44bd0@GameObj@@QAEXXZ  00c44bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
