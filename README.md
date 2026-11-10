@@ -26,7 +26,7 @@ python3 -m venv .venv && .venv/bin/pip install pefile capstone pycryptodome
 sh tools/ci/setup_toolchain.sh             # the original compilers, from Microsoft's installers, hash-checked
 .venv/bin/python tools/contrib/make_image.py "<Spore>/SporeBin/SporeApp.exe"   # must print IMAGE OK
 
-.venv/bin/python tools/contrib/task.py --list          # fewest tries first, then smallest
+.venv/bin/python tools/contrib/task.py --list          # fewest tries first, your own order; claimed ones hidden
 .venv/bin/python tools/contrib/task.py 0x00ee9260      # one function: its file, flags, note and source
 .venv/bin/python tools/contrib/check.py 0x00ee9260     # MATCH, or an instruction diff against the original
 ```

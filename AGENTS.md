@@ -35,15 +35,22 @@ locally (below) before you open the pull request.
 ## The loop
 
 1. **Pick a function.** `.venv/bin/python tools/contrib/task.py --list --max-size 256` lists functions that already
-   have complete C++ source whose bytes still differ, **fewest tries first, then smallest**: quick wins nobody has
-   fought with yet come first. "Tries" counts how often the function's note was rewritten (from git history), so a
-   function that has beaten several people sinks. Each row shows the note left by whoever worked on it last.
-   (`--by diff` sorts by fewest differing bytes instead; `--by size` smallest first.) Functions nobody has started
-   (0 tries, "no source yet") come first: `task.py <address>` names the new file to create for them.
+   have complete C++ source whose bytes still differ, **fewest tries first, then smaller size bands first**: quick
+   wins nobody has fought with yet come first. "Tries" counts how often the function's note was rewritten (from git
+   history), so a function that has beaten several people sinks. Within a size band the order is **your own**, a
+   shuffle seeded by your git name and email (or `--seed`), so people starting at the same time pick different
+   functions. Functions already in an open pull request are hidden (see step 3). Each row shows the note left by
+   whoever worked on it last. (`--by diff` sorts by fewest differing bytes instead; `--by size` smallest first.)
+   Functions nobody has started (0 tries, "no source yet") come first: `task.py <address>` names the new file to
+   create for them.
 2. **Read its context.** `.venv/bin/python tools/contrib/task.py 0x00529690` prints its source file, status, compiler
    flags, retail size, includes and current source.
-3. **Say you are on it.** Open a draft pull request early, titled with the address (`0x00529690: ...`), so others can
-   see the function is taken.
+3. **Say you are on it.** Open a draft pull request early, titled with the address (`0x00529690: ...`). That is your
+   claim: within minutes the function is listed in
+   [`claims.txt`](https://raw.githubusercontent.com/NoahBPeterson/spore-decomp/claims/claims.txt) and drops out of
+   everybody else's `task.py --list`, and `task.py <address>` warns anyone who looks it up. A claim lasts while the
+   pull request is open; one with no update for 7 days is stale and shows again. Before starting, check that
+   `task.py <address>` does not report someone else's claim.
 4. **Write, build, compare.** Edit the source, then `.venv/bin/python tools/contrib/check.py 0x00529690`. It prints
    `MATCH`, the compiler errors, or an instruction diff against the original. Before inventing source shapes, look
    up the difference in `docs/codegen.md`: most residual diffs are a known lever (`__restrict`, a single-expression

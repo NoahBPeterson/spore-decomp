@@ -315,11 +315,12 @@ python3 -m venv .venv && .venv/bin/pip install pefile capstone pycryptodome
 sh tools/ci/setup_toolchain.sh        # the original compilers, from Microsoft's installers, hash-checked
 .venv/bin/python tools/contrib/make_image.py "&lt;Spore&gt;/SporeBin/SporeApp.exe"   # must print IMAGE OK
 
-.venv/bin/python tools/contrib/task.py --list        # fewest tries first, then smallest
+.venv/bin/python tools/contrib/task.py --list        # fewest tries first, your own order; claimed ones hidden
 .venv/bin/python tools/contrib/task.py 0x00ee9260    # one function: file, flags, note, source
 .venv/bin/python tools/contrib/check.py 0x00ee9260   # MATCH, or an instruction diff</code></pre>
-<p>On <code>MATCH</code>, <code>check.py</code> updates the bookkeeping files itself. Open a pull request using the
-template; the Byte-match check runs on it automatically.</p>
+<p>Open a draft pull request early, titled with the function's address: that claims it, and it drops out of
+everyone else's list within minutes. On <code>MATCH</code>, <code>check.py</code> updates the bookkeeping files itself;
+mark the pull request ready, using the template. The Byte-match check runs on it automatically.</p>
 <h2>Using an AI agent?</h2><p>Point it at the repository and tell it to read
 <a href="https://github.com/%(repo)s/blob/main/AGENTS.md"><code>AGENTS.md</code></a> first. It has everything an agent
 needs: the loop, the rules, and where the known compiler tricks are written down.</p>
