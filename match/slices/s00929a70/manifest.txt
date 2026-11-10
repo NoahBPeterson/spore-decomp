@@ -10,3 +10,6 @@ slices/s00929a70/s00929a70.cpp  ?SetProcessor@Callback@CallbackSystem@EA@@QAE_NH
 slices/s00929a70/s00929a70.cpp  ?Release@RefHolder@@QAEHXZ  0092a860  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00929a70/s00929a70.cpp  ??0Clipboard@0EA@@QAE@XZ  0092a880  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00929a70/s00929a70.cpp  ?GetClipboardData@Clipboard@1EA@@QAE_NIPAPAVIData@12@@Z  0092a8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ?Cancel@Callback@CallbackSystem@EA@@QAE_NXZ  00929c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ?CallbackCancel@CallbackSystem@EA@@YAXPAUCallback@12@@Z  00929d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ??1Callback@CallbackSystem@EA@@UAE@XZ  00929d50  /O2 /MD /Gy /TP /arch:SSE /fp:fast

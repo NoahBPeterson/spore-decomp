@@ -229,12 +229,13 @@ bool CallbackProcessor::Remove(Callback* cb)
     return true;
 }
 
-// 0x929c60
+// @ 0x00929c60
 bool Callback::Cancel()
 {
     if (mbActive) {
         ProcFor(mProc)->Remove(this);
         mbActive = false;
+        _ReadWriteBarrier();
         SetObj(0);
     }
     return true;
@@ -261,13 +262,13 @@ bool Shutdown()
     return true;
 }
 
-// 0x929d10
+// @ 0x00929d10
 void CallbackCancel(Callback* cb)
 {
     cb->Cancel();
 }
 
-// 0x929d50
+// @ 0x00929d50
 Callback::~Callback()
 {
     Cancel();
