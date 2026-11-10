@@ -1,0 +1,2 @@
+# slice s0129e3a0 -- functions still not byte-exact (one line per address)
+0129e3a0 84 complete; retail builds the 16 identity floats of the 4x4 at 0x015f3ca0 in a stack temporary (sub esp,0x40; temp at esp+8; 16x movss; rep movsd) and copies it with rep movsd; plain stores into the globals (kept, the sibling 0x0129e890 form) fold to 16 direct movss [global],xmm (35B); `Matrix4 g = Matrix4().SetIdentity()` elides the temporary (16B). /arch:SSE is right (xmm constant synthesis)

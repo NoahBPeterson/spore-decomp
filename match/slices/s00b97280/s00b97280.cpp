@@ -344,6 +344,23 @@ extern Global16Record* g_168890c;    // 0x0168890c  vector begin
 extern Global16Record* g_1688910;    // 0x0168910   vector end
 extern unsigned char   g_1688920;    // 0x0168920   range-compare flag
 
+struct Global16Table {
+    Global16Record* mpBegin;    // +0x00
+    Global16Record* mpEnd;      // +0x04
+    void Clear() {
+        Global16Record* begin = mpBegin;
+        Global16Record* end = mpEnd;
+        ClearRange16(end, end, begin);
+        Global16Record* pEnd = end;
+        int elements = (int)(end - begin) >> 4;
+        elements = -elements;
+        pEnd = pEnd + (elements << 4);
+        mpEnd = pEnd;
+    }
+};
+// layout check: the pair of globals at 0x0168890c/0x01688910 is one 8-byte header
+typedef char Global16TableSizeCheck[sizeof(Global16Table) == 8 ? 1 : -1];
+
 // 0x00401090: cdecl, no arguments; returns the global at 0x15d0c24
 void* __cdecl GetGlobal15D0C24();                           // 0x00401090
 // 0x004e0050: thiscall with 2 stack arguments (pops them), object in ecx
@@ -400,12 +417,13 @@ void EraseGlobal16(void* a, void* b, void* c, unsigned int matchValue)
 // @ 0x00b976f0
 void ClearGlobal16()
 {
-    char* begin = *reinterpret_cast<char**>(0x0168890c);
-    char* end = *reinterpret_cast<char**>(0x01688910);
+    // Retail clears the range [begin, end) into itself and then rewinds end to begin.
+    char* begin = *(char**)0x0168890c;
+    char* end = *(char**)0x01688910;
     ClearRange16(end, end, begin);
     int elements = (int)(end - begin) >> 4;
     elements = -elements;
-    *reinterpret_cast<char**>(0x01688910) = end + (elements << 4);
+    *(char**)0x01688910 += elements << 4;
 }
 
 // @ 0x00b97720

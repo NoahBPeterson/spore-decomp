@@ -455,7 +455,7 @@ void hkWorldCinfo::setBroadPhaseWorldSize(float size)
 hkWorldCinfo::hkWorldCinfo(hkFinishLoadedObjectFlag)
 {
     // (finish-loaded constructor: only the reference count and vtable are reset)
-    if (m_contactRestingVelocity == 0.0f)
+    if (0.0f == m_contactRestingVelocity)
         m_contactRestingVelocity = HK_REAL_MAX;
 }
 void finishLoadedObject_hkWorldCinfo(void* p)
@@ -482,9 +482,10 @@ void hkRigidMotion::setMass(float m)
 float hkRigidMotion::getMass() const
 {
     // X87-PRECISION: the asm returns the quotient in ST(0) without rounding to float.
-    if (m_massInv == 0.0f)
+    float inv = m_massInv;
+    if (inv == 0.0f)
         return 0.0f;
-    return 1.0f / m_massInv;
+    return 1.0f / inv;
 }
 
 // @ 0x01088310

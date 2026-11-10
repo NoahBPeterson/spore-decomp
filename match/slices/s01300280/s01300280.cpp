@@ -87,12 +87,12 @@ void init_166c098()
 }
 
 // @ 0x01302200
+extern "C" __declspec(align(16)) float g_upVector[4];   // 0x0166c350, (0,0,1,0)
+
 void init_166c350()
 {
-    *(float*)0x166c350 = 0.0f;
-    *(float*)0x166c354 = 0.0f;
-    *(float*)0x166c358 = 1.0f;
-    *(float*)0x166c35c = 0.0f;
+    __m128 v = _mm_set_ps(0.0f, 1.0f, 0.0f, 0.0f);
+    *(__m128*)g_upVector = v;
 }
 
 // @ 0x01302e90

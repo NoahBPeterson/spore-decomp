@@ -16,6 +16,7 @@
 #include <string.h>
 #include <math.h>
 #include <new>
+#include <intrin.h>
 
 typedef unsigned int  uint;
 typedef unsigned char uchar;
@@ -565,6 +566,9 @@ void cGroundEditorRes::ensureContainer()
 // @ 0x00ac7980
 void cGroundEditorRes::destroyContainer()
 {
+    if (p1c == 0)
+        return;
+    _ReadWriteBarrier();
     void* o = p1c;
     if (o == 0)
         return;
@@ -595,9 +599,9 @@ void cGroundEditorRes::removeNoun()
 void* cGroundEditorRes::getContainer()
 {
     void* o = p1c;
-    if (o == 0)
-        return 0;
-    return (char*)o + 0x34;
+    if (o != 0)
+        return (char*)o + 0x34;
+    return 0;
 }
 
 // ================================================================================================
