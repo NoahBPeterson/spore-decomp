@@ -134,6 +134,7 @@ bool cHerd::ShouldActivate()
         return true;
     if (GetCurrentGameMode() != (void*)0x01654c01)
         return false;
+
     cCreatureModeStrategy* strategy = GetCreatureModeStrategy(0x7aee5ee7);
-    return strategy->HasCreatureTutorialOccurred() == false;
+    return !strategy->HasCreatureTutorialOccurred();
 }

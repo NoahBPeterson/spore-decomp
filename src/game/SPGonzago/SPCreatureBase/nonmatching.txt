@@ -10,7 +10,7 @@
 00c0b440
 00c0b510
 00c0b570
-00c0b710
+00c0b710  ~  complete: round-to-nearest float*1000 conversion. Retail inlines EA FloatToInt64 as fld/fistp qword with an aligned frame; plain int is cvttss2si, __int64 calls _ftol2, and _mm_cvtsd_si32 gives the right rounding/frame but a double spill plus cvtsd2si. Exact remaining shape requires the inline-asm helper forbidden by AGENTS.md. Tried int, __int64, unsigned/int64 forms, aligned local, SSE intrinsic, and declaration splits.
 00c0b7c0
 00c0b810
 00c0b860

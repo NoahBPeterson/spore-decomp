@@ -28,6 +28,7 @@ extern int    g_15716d8[];
 #include "SP/cInteractionTarget.h"
 #define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
 #include <new>
+#include <emmintrin.h>
 #include "EA/Random/RandomLinearCongruential.h"
 #include "SP/cAnimatingCreature.h"
 #include "SP/cInteractionAgent.h"
@@ -3351,7 +3352,8 @@ int __thiscall CB::Query(unsigned int id)
 // @ 0x00c0b710
 void __fastcall FUN_00c0b710(CB* self)
 {
-  self->m_b8c = (int)(g_1687a30 * 1000.0f);
+  double value = (double)(g_1687a30 * 1000.0f);
+  self->m_b8c = _mm_cvtsd_si32(_mm_set_sd(value));
 }
 
 // @ 0x00c0b780

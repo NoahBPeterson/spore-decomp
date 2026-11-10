@@ -1,1 +1,1 @@
-00c6a030
+00c6a030  ~  complete logic; retail keeps separate true/false tails after cmp/jne chains, while this compiler consistently folds or reorders them. Tried early returns, inverted/nested conditions, explicit goto tails, result locals (initialized and uninitialized), a validMode local, ==0/==false/! forms, and reordered source. Remaining mismatch is branch layout only.
