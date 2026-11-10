@@ -1,6 +1,6 @@
 // Flags: /O2 /MD /Gy /TP /GS-
 #include "types.h"
-#include "SP/eMissionState.h"
+#include "../../../src/game/include/SP/eMissionState.h"
 
 namespace SP {
 
