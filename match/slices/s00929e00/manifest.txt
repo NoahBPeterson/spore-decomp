@@ -1,0 +1,1 @@
+slices/s00929e00/s00929e00.cpp  ??0Callback@@QAE@XZ  00929e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
