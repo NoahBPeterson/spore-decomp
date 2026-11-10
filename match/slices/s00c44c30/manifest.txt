@@ -1,0 +1,1 @@
+slices/s00c44c30/s00c44c30.cpp  ?Get@Obj00c44c30@@QAEHXZ  00c44c30  /O2 /MD /Gy /EHsc /TP

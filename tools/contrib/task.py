@@ -112,6 +112,30 @@ def open_work(max_size):
     return list(best.values())
 
 
+def never_tried(max_size):
+    """functions nobody has started: no manifest row, no nonmatching/partial line, not open-source library code
+    (symbols/lib_names.txt). Same row shape as open_work."""
+    import run_all as R
+    done = {r[2] for r in R.read_rows(R.manifests() + sorted(glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"),
+                                                                  recursive=True)), "")}
+    noted = set()
+    for f in glob.glob(os.path.join(ROOT, "match", "slices", "*", "*.txt")) + \
+            glob.glob(os.path.join(ROOT, "src", "game", "**", "*.txt"), recursive=True):
+        if f.endswith(("nonmatching.txt", "partial.txt")):
+            noted |= {r[0] for r in S.read_rows(f)}
+    lib = set()
+    for l in open(os.path.join(ROOT, "symbols", "lib_names.txt")):
+        p = l.split("#", 1)[0].split()
+        if p:
+            lib.add(int(p[0], 16))
+    return [(fp["size"], va, "", "", "") for va, fp in fingerprints().items()
+            if fp["size"] <= max_size and va not in done and va not in noted and va not in lib]
+
+
+def new_source_path(va):
+    return "match/slices/s%08x/s%08x.cpp" % (va, va)
+
+
 def tries():
     """{va: times its nonmatching.txt note was written or rewritten} from git history, cached per commit in work/;
     None when the history is not available (shallow clone, no git)"""
@@ -184,24 +208,30 @@ def main():
     a = ap.parse_args()
     if a.list:
         skip, have = blocked(), marked()
-        # left out: no source to edit (no marker), or a source that does not compile on a clean clone (blocked.txt)
-        rows = [r for r in open_work(a.max_size) if r[1] in have and r[1] not in skip]
+        # left out: sources that do not compile on a clean clone (blocked.txt). Functions with no source yet are listed
+        # too (0 tries when nobody has started them); task.py <va> says where to write them.
+        work = open_work(a.max_size)
+        seen = {r[1] for r in work}
+        rows = [r for r in work + [r for r in never_tried(a.max_size) if r[1] not in seen] if r[1] not in skip]
         big = 1 << 30
         nd = lambda r: ndiff(r[2]) if ndiff(r[2]) is not None else big
         tr = tries() if a.by == "tries" else None
         if a.by == "tries" and tr is None:
             print("(no git history here, e.g. a shallow clone: tries unknown, so smallest first)")
-        t = lambda r: tr.get(r[1], 1) if tr else 0
+        t = lambda r: tr.get(r[1], 0) if tr else 0
         key = {"tries": lambda r: (t(r), r[0], nd(r), r[1]), "diff": lambda r: (nd(r), r[0], r[1]),
                "size": lambda r: (r[0], r[1])}[a.by]
         rows.sort(key=key)
         order = {"tries": "fewest tries first, then smallest", "diff": "fewest differing bytes first",
                  "size": "smallest first"}[a.by]
-        print("%d functions with complete source that is not byte-exact yet, up to %d bytes, %s:" % (len(rows), a.max_size, order))
+        print("%d functions to work on, up to %d bytes, %s (source not byte-exact yet, or no source yet):"
+              % (len(rows), a.max_size, order))
         print("  %-10s  %5s  %6s  %6s  %s" % ("function", "tries", "differ", "size", "where / last note"))
         for size, va, diff, where, reason in rows:
             n = ndiff(diff)
-            print("  0x%08x  %5s  %6s  %6d  %s  %s" % (va, tr.get(va, 1) if tr else "?", n if n is not None else "?", size, where,
+            if va not in have:
+                where, reason = "no source yet", "write it in " + new_source_path(va) + (" (" + reason + ")" if reason else "")
+            print("  0x%08x  %5s  %6s  %6d  %s  %s" % (va, tr.get(va, 0) if tr else "?", n if n is not None else "-", size, where,
                                                       (reason or "")[:70]))
         return 0
     if not a.va:
@@ -213,7 +243,13 @@ def main():
     print("retail     %s" % ("%d bytes (fingerprint: %d bytes are addresses, not compared)" %
                              (fp["size"], sum(n for _s, n in fp["mask"])) if fp else "no fingerprint: not a known function start"))
     if not src:
-        print("source     none yet: no file has a `// @ 0x%08x` marker. Write it in the object's source file" % va)
+        p = new_source_path(va)
+        print("source     none yet: no file has a `// @ 0x%08x` marker.\n"
+              "next: create %s with the function, starting with the line `// @ 0x%08x`\n"
+              "      (#include \"game/types.h\" and the class headers under src/game/include/ give you the types),\n"
+              "      then: .venv/bin/python tools/contrib/check.py 0x%08x\n"
+              "      With the analysis image, tools/matching/disasm.py work/SporeApp.analysis.bin 0x%08x prints the original."
+              % (va, p, va, va, va))
         return 0
     st, note = status(ident, va)
     if va in blocked():

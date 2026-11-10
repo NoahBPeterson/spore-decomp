@@ -38,7 +38,8 @@ locally (below) before you open the pull request.
    have complete C++ source whose bytes still differ, **fewest tries first, then smallest**: quick wins nobody has
    fought with yet come first. "Tries" counts how often the function's note was rewritten (from git history), so a
    function that has beaten several people sinks. Each row shows the note left by whoever worked on it last.
-   (`--by diff` sorts by fewest differing bytes instead; `--by size` smallest first.)
+   (`--by diff` sorts by fewest differing bytes instead; `--by size` smallest first.) Functions nobody has started
+   (0 tries, "no source yet") come first: `task.py <address>` names the new file to create for them.
 2. **Read its context.** `.venv/bin/python tools/contrib/task.py 0x00529690` prints its source file, status, compiler
    flags, retail size, includes and current source.
 3. **Say you are on it.** Open a draft pull request early, titled with the address (`0x00529690: ...`), so others can
