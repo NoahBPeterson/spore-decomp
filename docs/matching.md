@@ -33,7 +33,9 @@ Evidence and rules of thumb are below.
 
 - **Havok was built with VC .NET 2003, not VS2008.** The dev PDB's S_COMPILE records give
   cl 13.10.3077 for all 469 Havok objects. Integer code often matches with VS2008, but x87 code
-  never does (instruction selection differs, e.g. `fld st(i); fmul [m]` vs `fld [m]; fmul st(i)`).
+  never does (instruction selection differs, e.g. constant-pool loads where cl 15 emits `fldz`/`fld1`). Operand
+  order is **not** a compiler signature: cl 13.10 emits `fld [m]; fmul st(i)` too when the scalar is a `double`
+  (`docs/codegen.md` 9.1, "THE DOUBLE-SCALAR LEVER").
   Add the pseudo-flag **`/vc71`** to a manifest line's flags (or `chk.py --flags`) and `cl.sh`
   hands the compile to `tools/matching/cl71.sh`: cl **13.10.3077**, Havok's own build, from the Visual
   C++ Toolkit 2003 1.01 (`VCToolkitSetup.exe`, SHA-1 `50dc6cca1503f08a41d56816f3f1abcaf347b0bd`,
