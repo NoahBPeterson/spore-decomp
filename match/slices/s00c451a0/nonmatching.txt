@@ -1,0 +1,1 @@
+00c451a0  56  complete: vector contains at +0x1d0/+0x1d4. Retail does mov eax,[end]; sub eax,[begin] (memory); xor edx,edx index; then reloads begin into ecx. Ours keeps begin in edx and indexes with ecx. Tried: end-first locals, raw byte offsets, do/while vs for, signed/unsigned. Next: find a lever that keeps size as sub-from-memory and uses edx as index.

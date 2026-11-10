@@ -1,0 +1,1 @@
+00e5afc0  42  complete: compare Obj+0 / +0xfc against g_16b3c04 fields +0x411c and [+0x5190]+0x10. Size 41-45 vs 42; retail keeps Obj* in eax and Mgr* in ecx across both cmps (sete al). Ours swaps those registers. Tried: locals, uchar return, reload order. Next: lever that loads [esp+4] into eax before the global into ecx.
