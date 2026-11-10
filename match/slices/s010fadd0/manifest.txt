@@ -1,2 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s010fadd0/s010fadd0.cpp  _hkAgentNnMachine_UpdateShapeCollectionFilter  010fb9c0  /O2 /MD /Gy /TP /vc71
+slices/s010fadd0/s010fadd0.cpp  ?hkPairTableFindPeer@@YAPAXPAUhkPairTable@@0@Z  010fbb30  /vc71 /O2 /MD /Gy /TP
