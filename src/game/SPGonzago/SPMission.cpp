@@ -149,6 +149,7 @@ public:
   PV(65) PV(66) PV(67) PV(68) PV(69) PV(70) PV(71) PV(72) PV(73) PV(74)
   PV(75) PV(76) PV(77) PV(78) PV(79) PV(80) PV(81) PV(82)
   virtual void v83(uint32_t id);
+  virtual void v84(uint32_t id);
 
   bool FUN_00b18590(void* stream);
   bool FUN_00b18600(void* stream);
@@ -157,6 +158,7 @@ public:
   bool Write_c44ad0(void* stream);
   void Serialize_c44b40(void* stream);
   void RegisterIds_c44b80();
+  void UnregisterIds_c44bd0();
   void ForwardToResource_c44c40(void* p);
   int CallV48_c44c60(int a);
   bool CallV42_c44c90();
@@ -2087,6 +2089,15 @@ void GameObj::RegisterIds_c44b80()
   v83(0x248975f);
   v83(0x2489760);
   v83(0x4249453);
+}
+
+// @ 0x00c44bd0
+void GameObj::UnregisterIds_c44bd0()
+{
+  v84(0x35ec3de);
+  v84(0x248975f);
+  v84(0x2489760);
+  v84(0x4249453);
 }
 
 // @ 0x00c44c40

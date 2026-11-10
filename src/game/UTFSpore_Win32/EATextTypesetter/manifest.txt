@@ -3,3 +3,4 @@
 ../src/game/UTFSpore_Win32/EATextTypesetter.cpp  ?resize@FixedRunVec@Text@EA@@QAEXI@Z  0089be20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EATextTypesetter.cpp  ??1Typesetter_s0089_b520@Text@EA@@QAE@XZ  0089c540  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EATextTypesetter.cpp  ?LayoutLine@Typesetter_s0089_d3b0@Text@EA@@QAEHPB_WIMMPBUTextStyle_s0089_d3b0@23@@Z  0089db20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EATextTypesetter.cpp  ?AddStyleChange@Typesetter_s0089_d3b0@Text@EA@@QAEXPBUTextStyle_s0089_d3b0@23@@Z  0089b360  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
