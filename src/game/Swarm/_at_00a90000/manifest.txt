@@ -17,3 +17,4 @@
 ../src/game/Swarm/_at_00a90000.cpp  ?Advance@cTimedState@@QAEXM@Z  00a9ae00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a90000.cpp  ?Destroy@cField@@QAEXXZ  00a9b1d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/_at_00a90000.cpp  ?FUN_00a9ef80@Emitter@@QAEXPAUParticle_s00a9_ef80@@@Z  00a9ef80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/_at_00a90000.cpp  ?FUN_00a9af40@@YANPBM@Z  00a9af40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
