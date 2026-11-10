@@ -718,10 +718,10 @@ float cSPGameDataUFO::GetMaxSpeedForAltitude()
 // @ 0x00c38990
 bool cSPGameDataUFO::TestFlag(U32 flag)
 {
-    // the original tests the upper bound twice; keep both guards
     if (flag <= 10) {
-        if (flag < 10)
-            return (mFlags7dc & (1u << (flag & 0x1f))) ? true : false;
+        if (flag >= 10)
+            return false;
+        return (mFlags7dc & (1u << (flag & 0x1f))) ? true : false;
     }
     return false;
 }

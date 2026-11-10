@@ -99,7 +99,6 @@
 #                PlanetDistanceScale(mNextPosition) times mf6b8.  Size-exact; ours clobbers edx, which the
 #                original keeps live across the inlined PlanetDistanceScale call.
 #                equiv FAIL: edx clobber observed on one input.
-00c38990  30   TestFlag(U32): inlined bit test - flag <= 10 guards, flag < 10 indexes mFlags7dc with
 #                1 << (flag & 0x1f).  Complete reconstruction (38 vs 40 bytes); the original emits a
 #                redundant second `ja` bound guard that our nested form folds away.
 #                equiv PASS: 400/400 inputs valid, 100% coverage.
