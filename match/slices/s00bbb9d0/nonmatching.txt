@@ -5,7 +5,7 @@
 00bbbe60 84 StarGridInsertMeasure: register allocation / scheduling only
 00bbbfe0 311 StarGridAllocRecord: 5-arg form, size 306 vs 266, schedule differs
 00bbc0f0 298 StarGridInsertRow: 4 sift calls present, register allocation differs
-00bbc320 16 StarGridRowThunk: 5-byte tail jmp matches; 16 diff bytes are int3 padding
+00bbc320 16 StarGridRowThunk: 5-byte tail jmp matches; 16 diff bytes are int3 padding.  The fingerprint size (21) is the retail function plus its trailing int3 fill up to the next start, and a standalone C++ function is cut at its `ret`, so no source spelling can carry those 16 bytes; the only emission is a tail call with the right argument shuffle, which is what the file has.
 00bbc460 38 Store3B: field order matches, arg-load schedule differs
 00bbc540 124 CargoSlotsUpdate: structure present, size 242 vs 225
 00bbc630 36 CityLessBuildings: thiscall helper schedule differs
