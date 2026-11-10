@@ -532,20 +532,33 @@ bool __cdecl TryGetUIntProperty(void* plist, unsigned id, unsigned* out); // 004
 void __cdecl SetNumberStringD(double v, wchar_t* buf, unsigned cap, int flags);  // 00881ea0
 void __cdecl SetNumberStringI(__int64 v, wchar_t* buf, unsigned cap);             // 00881ae0
 
+extern void* vtbl_01460460;                                      // 0x01460460
 struct cTokenTranslator : cTranslatorBase {
     IRef* mpPropList;                                            // +8
     virtual ~cTokenTranslator();
     virtual bool Lookup(const wchar_t* tok, void* outStr);       // slot 0x10 (approx.)
     bool Translate(const wchar_t* tok, WStr* out);
+    void* FUN_00b324b0(unsigned int flags);
 };
 
-// @ 0x00b32490  (0x00b324b0 is the compiler-generated scalar deleting destructor of this class)
+// @ 0x00b32490
 cTokenTranslator::~cTokenTranslator()
 {
     if (mpPropList)
         mpPropList->Release();
 }
-void ForceTokenTranslatorDtor(cTokenTranslator* p) { delete p; }
+// @ 0x00b324b0
+void* cTokenTranslator::FUN_00b324b0(unsigned int flags)
+{
+    *(void**)this = &vtbl_01460460;
+    _ReadWriteBarrier();
+    if (mpPropList)
+        mpPropList->Release();
+    cTranslatorBase::~cTranslatorBase();
+    if (flags & 1)
+        operator_delete__(this);
+    return this;
+}
 
 // @ 0x00b324f0
 bool cTokenTranslator::Translate(const wchar_t* tok, WStr* out)
