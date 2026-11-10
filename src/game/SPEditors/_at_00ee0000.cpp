@@ -5873,8 +5873,7 @@ void C40::Update()
         case 1:
             {
                 OBJ14* p = mObj14.mpObject;
-                Obj10* q = p->mp10;
-                if (q) q->Fn6bd0();
+                if (p->mp10) p->mp10->Fn6bd0();
             }
             break;
         case 2:
