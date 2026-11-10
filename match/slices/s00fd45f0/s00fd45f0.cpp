@@ -380,21 +380,21 @@ void FUN_00fd4cb0(void* param_1, int* param_2, int param_3)
 void FUN_00fd4e50(const unsigned int* tree, unsigned short* out)
 {
     int i;
-    int k;
+    unsigned int v;
 
     for (i = 0; i < 64; i++) {
-        unsigned int v = 0;
         unsigned int s = 0;
-        int n = 6;
 
+        v &= 0xffffff00;
+        int n = 6;
         do {
             n--;
             s++;
             v = (v >> 1) & 0x7f;
-            if (((i >> n) & 1) == 0)
-                v = tree[v * 3 + 0];
-            else
+            if (((i >> n) & 1) != 0)
                 v = tree[v * 3 + 1];
+            else
+                v = tree[v * 3 + 0];
         } while ((v & 1) == 0 && n > 0);
 
         out[i] = (unsigned short)(((((v >> 1) & 0x7f) | (s << 11)) * 2) | (v & 1));

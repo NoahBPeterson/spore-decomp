@@ -1,2 +1,4 @@
 slices/s010f43c0/s010f43c0.cpp  ?FUN_010f5310@hk3AxisSweep@@QBEHXZ  010f5310  /O2 /MD /Gy /TP /vc71
 slices/s010f43c0/s010f43c0.cpp  ?getAabbCacheSize@hk3AxisSweep@@QBEHXZ  010f5320  /O2 /MD /Gy /TP /vc71
+slices/s010f43c0/s010f43c0.cpp  ?FUN_010f4e10@@YGPAGPAG0G@Z  010f4e10  /O2 /MD /Gy /TP /vc71
+slices/s010f43c0/s010f43c0.cpp  ?remove@hkBpAxis@hk3AxisSweep@@QAEXHH@Z  010f50f0  /O2 /MD /Gy /TP /vc71

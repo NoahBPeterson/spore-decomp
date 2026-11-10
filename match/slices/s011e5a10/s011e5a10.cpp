@@ -70,7 +70,7 @@ void  ArenaPathHolder_Split(const char* path);               // 0x011e5900
 u32   FUN_011e58f0(void);                                    // global filesys context accessor
 void* FUN_011e8770(void);                                    // async open
 u64   AsyncOp_GetSize(void* op);                             // 0x011ea7c0
-void  __fastcall FUN_011e8a40(void* self, int, void* a, void* cb, void* b, void* c); // 0x011e8a40
+struct AsyncOpTarget { void Open(void* a, void* cb, void* b, void* c, void* d); }; // 0x011e8a40
 u32   FUN_011e8bd0(void* a, void* b);                        // 0x011e8bd0
 char* FUN_011e8c60(const char* s, int c);                    // 0x011e8c60  strchr
 void  StringCopy(void* dst, const void* src);                // 0x011e8b20
@@ -618,27 +618,28 @@ void __fastcall StreamImpl_cancelRequest(void* self, int, void* node, u32 reason
 // ===========================================================================
 // 0x011e64a0 -- populate a request descriptor (fixed window/defaults).
 // ===========================================================================
-struct RequestDesc { void init(u32 a, u32 b); };
+struct RequestDesc { u32 m0, m4, m8, mc; RequestDesc* init(u32 a, u32 b); };
 // @ 0x011e64a0
-void RequestDesc::init(u32 a, u32 b)
+RequestDesc* RequestDesc::init(u32 a, u32 b)
 {
-    st32(this, 0, a);
-    st32(this, 4, b);
-    st32(this, 8, 2);
-    st32(this, 0xc, 0x400);
+    m0 = a;
+    m4 = b;
+    m8 = 2;
+    mc = 0x400;
+    return this;
 }
 
 // ===========================================================================
 // 0x011e64c0 -- zero an intrusive list head.
 // ===========================================================================
 // @ 0x011e64c0
-void __fastcall ListHead_clear(void* self)
+void* __fastcall ListHead_clear(void* self)
 {
-    u32* p = (u32*)self;
-    p[0] = 0;
-    p[1] = 0;
-    p[2] = 0;
-    p[3] = 0;
+    ((u32*)self)[0] = 0;
+    ((u32*)self)[1] = 0;
+    ((u32*)self)[2] = 0;
+    ((u32*)self)[3] = 0;
+    return self;
 }
 
 // ===========================================================================
@@ -842,6 +843,6 @@ void opencallback(void* ctx)
 void openstream(void* ctx)
 {
     void* impl = (void*)ld32((char*)ctx, 0x14);
-    FUN_011e8a40((char*)impl + 0x1b0, 0, (char*)impl + 0xa4, (void*)opencallback, impl,
+    ((AsyncOpTarget*)((char*)impl + 0x1b0))->Open((char*)impl + 0xa4, 0, (void*)opencallback, impl,
                  (void*)(size_t)ld32(impl, 0x70));
 }

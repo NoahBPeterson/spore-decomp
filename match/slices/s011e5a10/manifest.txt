@@ -5,3 +5,6 @@ slices/s011e5a10/s011e5a10.cpp  ?filesys_create@@YAPAXPAX@Z  011e5cd0  /vc71 /O2
 slices/s011e5a10/s011e5a10.cpp  ?DeviceDriver_ctor@@YIPAXPAXHPBD@Z  011e5d80  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s011e5a10/s011e5a10.cpp  ?StreamImpl_resetLock@@YIXPAX@Z  011e64d0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s011e5a10/s011e5a10.cpp  ?StreamImpl_validateSize@@YAIIIIIIIPAI@Z  011e65e0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e5a10/s011e5a10.cpp  ?openstream@@YAXPAX@Z  011e6840  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e5a10/s011e5a10.cpp  ?ListHead_clear@@YIPAXPAX@Z  011e64c0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e5a10/s011e5a10.cpp  ?init@RequestDesc@@QAEPAU1@II@Z  011e64a0  /vc71 /O2 /MD /Gy /EHsc /TP
