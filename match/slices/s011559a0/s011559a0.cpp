@@ -292,8 +292,9 @@ void FUN_01156310(int param_1, float* param_2) {
 // @ 0x01156380
 void FUN_01156380(void) {
     Sub_1133450();
-    if (A32(0x16f16d0) != 0)
-        Sys16_Free(Ap(0x16e61a8), 0, Ap(0x16f16d0), 0);
+    void* p = Ap(0x16f16d0);
+    if (p != 0)
+        Sys16_Free(Ap(0x16e61a8), 0, p, 0);
     A32(0x16f16d0) = 0;
     Sub_1133460();
 }

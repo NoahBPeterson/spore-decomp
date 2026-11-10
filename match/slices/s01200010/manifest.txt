@@ -3,3 +3,7 @@ slices/s01200010/s01200010.cpp  ?SetFloatValue@@YAHPAMM@Z  01200830  /O2 /MD /Gy
 slices/s01200010/s01200010.cpp  ?CopyDword@@YAXPAIPBI@Z  01200850  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s01200010/s01200010.cpp  ?RebaseDeltaFrom@@YAXPAH0@Z  01200fd0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s01200010/s01200010.cpp  ?RebaseDeltaFromBase@@YAHPAHPAUArenaCtx@@@Z  01200ff0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s01200010/s01200010_vc71.cpp  ?CopyVec4@@YAHPAU__m128@@PBU1@@Z  01200860  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01200010/s01200010_vc71.cpp  ?CopyVec4Void@@YAXPAU__m128@@PBU1@@Z  01200880  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01200010/s01200010_vc71.cpp  ?Rebase3@@YAXPAURel3@@PAX@Z  012008b0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01200010/s01200010_vc71.cpp  ?RebaseTranslated@@YAXPAH0@Z  01201070  /vc71 /O2 /MD /Gy /TP /arch:SSE

@@ -265,24 +265,6 @@ void CopyDword(unsigned int* dst, const unsigned int* src)
 	*dst = *src;
 }
 
-struct __declspec(align(16)) AlignedVec4
-{
-	float x, y, z, w;
-};
-
-// @ 0x01200860
-int CopyVec4(__m128* dst, const __m128* src)
-{
-	*dst = *src;
-	return 1;
-}
-
-// @ 0x01200880
-void CopyVec4Void(__m128* dst, const __m128* src)
-{
-	*dst = *src;
-}
-
 // @ 0x01200890
 void Unbase3(Rel3* p, Base20Ctx* ctx)
 {
@@ -290,15 +272,6 @@ void Unbase3(Rel3* p, Base20Ctx* ctx)
 	p->mV2 -= d;
 	p->mV0 -= d;
 	p->mV1 -= d;
-}
-
-// @ 0x012008b0
-void Rebase3(Rel3* p, void* from)
-{
-	int d = (int)p - (int)from;
-	p->mV2 += d;
-	p->mV0 += d;
-	p->mV1 += d;
 }
 
 // @ 0x012008d0
@@ -393,13 +366,6 @@ void RebaseToBase20(int* p, Base20Ctx* ctx)
 {
 	int d = (int)ctx->mpBase - (int)p;
 	*p = *p + d;
-}
-
-// @ 0x01201070
-void RebaseTranslated(int* p, int* from)
-{
-	int d = (int)p - (int)from;
-	*p += d;
 }
 
 // @ 0x01200940
