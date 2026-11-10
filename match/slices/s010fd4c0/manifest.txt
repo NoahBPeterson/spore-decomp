@@ -1,2 +1,4 @@
 slices/s010fd4c0/s010fd4c0.cpp  _hkBoxBoxAgent3_removePoint  010fdae0  /O2 /MD /Gy /TP
 slices/s010fd4c0/s010fd4c0.cpp  _hkBoxBoxAgent3_create  010fdb50  /O2 /MD /Gy /TP
+slices/s010fd4c0/s010fd4c0.cpp  _hkBoxBoxAgent3_commitPotential  010fdb20  /vc71 /O2 /MD /Gy /TP
+slices/s010fd4c0/s010fd4c0.cpp  _hkPredGskCylinderAgent3_create  010fdf30  /vc71 /O2 /MD /Gy /TP

@@ -1,0 +1,2 @@
+
+slices/s0111d560/s0111d560.cpp  ?FUN_0111d8e0@MoppCompiler@@QAEXHHHHH@Z  0111d8e0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
