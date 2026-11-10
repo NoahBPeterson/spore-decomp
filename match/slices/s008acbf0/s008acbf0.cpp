@@ -137,8 +137,11 @@ void fnt_WFV(TTExecCtx* c)
     c->mSingleY = *(short*)c->mStack;
     c->mStack -= 1;
     c->mSingleX = *(short*)c->mStack;
-    TTExecCtx* r = fnt_CallComputeAndCheck(c);
-    r->mMoveFn = (int (*)(TTExecCtx*, TTZone*, int, int))fnt_MovePoint;
+    __asm {
+        mov eax, c
+        call fnt_ComputeAndCheck_PF_Proj
+    }
+    c->mMoveFn = (int (*)(TTExecCtx*, TTZone*, int, int))fnt_MovePoint;
 }
 
 // @ 0x008acc60

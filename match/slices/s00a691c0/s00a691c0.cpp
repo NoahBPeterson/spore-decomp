@@ -218,14 +218,16 @@ void __cdecl UninitCopyRef(void** result, RefObject** first, RefObject** last, R
 // @ 0x00a695a0
 void __cdecl FillRef(RefObject** dest, unsigned n, RefObject** src)
 {
-    for (; n > 0; --n) {
-        if (dest) {
+    RefObject** d = dest;
+    while (n > 0) {
+        if (d) {
             RefObject* o = *src;
-            *dest = o;
+            *d = o;
             if (o)
                 ++o->mnRefCount;
         }
-        ++dest;
+        --n;
+        ++d;
     }
 }
 
