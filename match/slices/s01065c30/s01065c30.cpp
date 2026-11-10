@@ -74,7 +74,11 @@ void* ConfigManager();                                   // 0x0067dd30
 void* SpaceGameGet();                                    // 0x01002bd0
 void* GetUFOSimulator();                                 // 0x00ffbe50
 void* App();                                             // 0x0067dd10
-void* GameTimeManager(uint id);                          // 0x00b3d380
+void* __stdcall GameTimeManager(uint id);               // 0x00b3d380
+struct SpGameTime {                                     // 0x4bf38a9 singleton
+    void IncPauseGate();                                // 0x00b32220
+    void DecPauseGate();                                // 0x00b32250
+};
 void* StarManager();                                     // 0x00b3d2a0
 void* NounManager();                                     // 0x00b3d300
 void* GetPlayerEmpire();                                 // 0x01021300
@@ -389,17 +393,18 @@ struct T6120 {
     void* f(uint id);
 };
 void* T6120::f(uint id) {
+    void* r = 0;
     Win* w = ((GlobalUI*)mGlobal)->FindWindowByID(id);
-    if (w) return FUN_01077b40(w);
-    return 0;
+    if (w) r = FUN_01077b40(w);
+    return r;
 }
 
 // ===========================================================================
 // @ 0x01066150
 // ===========================================================================
 int __stdcall FUN_01066150(int x) {
-    if ((uint)(x + 0x50000000) > 0xf) return 0;
-    return x + 0x10;
+    if ((uint)(x + 0x50000000) <= 0xf) return x + 0x10;
+    return 0;
 }
 
 // ===========================================================================
@@ -581,9 +586,9 @@ CmdCtor* CmdCtor::init(int a, int b) {
 // ===========================================================================
 // @ 0x010665f0
 // ===========================================================================
-void FUN_010665f0() {
-    void* m = GameTimeManager(0x4bf38a9);
-    ((Winc*)m)->v10();
+void __stdcall FUN_010665f0(int unused) {
+    (void)unused;
+    ((SpGameTime*)GameTimeManager(0x4bf38a9))->IncPauseGate();
 }
 
 // ===========================================================================
@@ -596,7 +601,7 @@ struct T6610 {
 };
 void T6610::set(int a, int b) {
     (void)a;
-    (void)GameTimeManager(0x4bf38a9);
+    ((SpGameTime*)GameTimeManager(0x4bf38a9))->DecPauseGate();
     mField = b;
 }
 
