@@ -16,7 +16,7 @@ extern "C" {
     __declspec(dllimport) long __stdcall InterlockedDecrement(long*);
     __declspec(dllimport) int  __stdcall RevokeDragDrop(HWND);
     __declspec(dllimport) int  __stdcall CoLockObjectExternal(void*, int, int);
-    __declspec(dllimport) void __stdcall OleUninitialize(void);
+    __declspec(dllimport) int  __stdcall OleUninitialize(void);
     __declspec(dllimport) int  __stdcall OleInitialize(void*);
     __declspec(dllimport) unsigned __stdcall DragQueryFileW(void* hdrop, unsigned iFile, wchar_t* buf, unsigned cch);
 }
@@ -71,7 +71,8 @@ void* DBPF::AsInterface(uint32_t id)
 {
     if (id == 0x6492c5f) return (char*)this - 4;
     if (id != 0xee3f516e) return 0;
-    return (void*)((uint32_t)(-((int)((char*)this - 4 != 0))) & (uint32_t)this);
+    DBPF* pSelf = (DBPF*)((char*)this - 4);
+    return pSelf != 0 ? this : 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -91,12 +92,12 @@ int __stdcall FUN_006bba40(void* p)
 // ---------------------------------------------------------------------------
 // @ 0x006bbb10  tear down drag/drop
 // ---------------------------------------------------------------------------
-void __stdcall FUN_006bbb10(HWND hwnd, IUnknownStub* p)
+int __cdecl FUN_006bbb10(HWND hwnd, IUnknownStub* p)
 {
     RevokeDragDrop(hwnd);
     CoLockObjectExternal(p, 0, 1);
     ((void(__stdcall*)(IUnknownStub*))p->vtbl[2])(p);
-    OleUninitialize();
+    return OleUninitialize();
 }
 
 // ---------------------------------------------------------------------------

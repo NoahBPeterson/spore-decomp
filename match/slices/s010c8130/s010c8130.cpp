@@ -570,7 +570,7 @@ uint32_t hkListShape::getNextKey(uint32_t oldKey) const
 {
     const hkListShape* self = this;
     int32_t key = (int32_t)oldKey + 1;
-    if (self->m_numChildren <= key)
+    if (key >= self->m_numChildren)
         key = -1;
     return (uint32_t)key;
 }
