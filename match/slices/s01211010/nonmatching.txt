@@ -8,6 +8,13 @@
 # flags /O2 /MD /Gy /EHsc /TP /GS-. difftest: UNSUPPORTED "only 0/400 inputs valid
 # (fault(read)=400)" — the funclet runs on a caller frame the input generator cannot synthesise,
 # so the ORIGINAL faults on every generated input (same as the neighbouring slice s01214320).
+#
+# 2026-11-10 re-check of the eight assigned rows (012114d0, 01211540, 012116a0, 012119b0,
+# 01211d60, 01212660): each compiles (15-32 bytes) but retail's 26-44 bytes are the
+# compiler's own `lea ecx,[ebp-N]; jmp dtor` / operator_delete__ thunk + ret prologue, which
+# cl only emits while compiling the owning function with /EHsc.  A standalone spelling of the
+# same cleanup gets a normal frame (push ebp; sub esp) or folds to `jmp <ext>`, and the trailing
+# `ret`/int3 tail cannot be reproduced.  No lever left outside the owning function's source.
 # va  diff-bytes  reason
 01211010 607  complete EH cleanup funclet chain (eastl::VectorBase dtors + SetSerializer); compiler-generated; difftest UNSUPPORTED (0/400 valid, fault(read))
 01211270 206  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
