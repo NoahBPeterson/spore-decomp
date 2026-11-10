@@ -701,6 +701,7 @@ struct PodObj { void* Copy(void* o); };
 struct NetObj {
     void* Ctor();
     void* DelDtor(unsigned int flags);
+    uint32_t GetEventFlags() const;
     void  FUN_00e00db0(float dt);
     char  FUN_00e00e90(uint32_t msg, void* arg);
     uint8_t pad00[0x10];
@@ -710,7 +711,7 @@ struct NetObj {
     float   f1c;         // +0x1c
     float   f20;         // +0x20
     float   f24;         // +0x24
-    uint8_t f28;         // +0x28
+    uint8_t mbActive;    // +0x28
     uint8_t pad29[3];
     void*   p2c;         // +0x2c
     void*   p30;         // +0x30
@@ -883,12 +884,9 @@ char FUN_00e00d20_impl()
 }
 
 // @ 0x00e00d90
-uint32_t __fastcall FUN_00e00d90_impl(int self)
+uint32_t NetObj::GetEventFlags() const
 {
-    // The binary's `movzx/neg/sbb` is a "byte != 0" test; reading the byte through a bool*
-    // is undefined for values other than 0/1, so test the raw byte instead.
-    uint8_t b = *(uint8_t*)(self + 0x28);
-    return ((uint32_t)-(int)(b != 0) & 2) | 0x410;
+    return (mbActive ? 2 : 0) | 0x410;
 }
 
 // @ 0x00e00db0
@@ -896,10 +894,10 @@ void NetObj::FUN_00e00db0(float dt)
 {
     float t = FUN_00805080();
     if (dt > 0.0f) {
-        if (f28 == 0) {
+        if (mbActive == 0) {
             f20 = t;
             f24 = t + dt;
-            f28 = 1;
+            mbActive = 1;
             ((VFnVV)VSLOT(p2c, 0x104))(p2c, this);
         } else {
             f24 = f20 + dt;
@@ -911,7 +909,7 @@ void NetObj::FUN_00e00db0(float dt)
     FUN_00808230(p30, &f10);
     if (f20 > f24) {
         if (cos(f1c) > 0.98f) {
-            f28 = 0;
+            mbActive = 0;
             ((VFnVV)VSLOT(p2c, 0x104))(p2c, this);
         }
     }

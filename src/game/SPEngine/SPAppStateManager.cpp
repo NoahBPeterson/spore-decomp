@@ -800,6 +800,22 @@ bool cModeManager::FUN_007e20a0(const wchar_t* path, ICommandLine* cmd, bool fla
   return true;
 }
 
+namespace {
+class cDescriptionCommand : public EA::ArgScript::cCommandBase {
+ public:
+  virtual void Execute(EA::ArgScript::cArguments* args);
+
+  SP::cAppStateManager* mpManager;                             // 0x00c
+};
+}  // namespace
+
+// @ 0x007e2640
+void cDescriptionCommand::Execute(EA::ArgScript::cArguments* args)
+{
+  const char* description = args->MainArguments(1)[0];
+  mpManager->mCurrentActions.mDescription.assign(description, description + strlen(description));
+}
+
 // @ 0x007e29d0
 void* HashTable3::insert(void* pOut, const HKey* key, void* hint)
 {

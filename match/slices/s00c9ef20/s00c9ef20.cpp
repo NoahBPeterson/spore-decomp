@@ -103,7 +103,8 @@ struct CStub {
     u8 FUN_00c9ef20();
     // ---- 00c9ef60
     void FUN_00c9ef60(u32 ms);
-    // ---- 00c9f1c0  (free __fastcall, declared later)
+    // ---- 00c9f1c0
+    void* FUN_00c9f1c0();
     // ---- 00c9f1e0
     void* FUN_00c9f1e0();
     // ---- 00c9f250
@@ -240,12 +241,12 @@ void CStub::FUN_00c9ef60(u32 ms)
 }
 
 // ===========================================================================
-// @ 0x00c9f1c0  (free function, __fastcall)
+// @ 0x00c9f1c0
 // ===========================================================================
-void __fastcall FUN_00c9f1c0(void* self)
+void* CStub::FUN_00c9f1c0()
 {
     void* f = *(void**)((char*)g_16c7aa4 + 0x74);
-    ((FieldStub*)f)->FUN_00f3f950(self);
+    return ((FieldStub*)f)->FUN_00f3f950(this);
 }
 
 // ===========================================================================

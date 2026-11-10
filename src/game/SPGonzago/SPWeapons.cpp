@@ -185,8 +185,12 @@ virtual void r64();
 };
 typedef void* (*Vfn1)(void*);
 typedef void* (*Vfn2)(void*, void*);
-typedef void* (__stdcall *VfnS2)(void*, void*);
-struct Tool { char pad[0x114]; void* mStrategy; };
+struct IObj_s00cc_0700;
+struct Tool {                                  // cSPSpaceToolData
+    char pad[0x114];
+    EA::AutoRefCount<IObj_s00cc_0700> mpToolOwner;  // +0x114
+    bool IsValid();                            // 0x0104cd80
+};
 struct CTarget { bool IsValid(); };            // 0x0104cd80, thiscall, ret bool
 struct cLocomotionBase {
     char pad[0x30];
@@ -195,7 +199,7 @@ struct cLocomotionBase {
 };
 struct cLocomotionObj14 {
     char pad[0x14];
-    void* mTarget;                           // +0x14
+    Tool* mpTool;                            // +0x14
     bool HasLiveTarget14();                  // 0x00cb4ca0
     void* GetToolStrategy();                 // 0x00cb5420
 };
@@ -3257,7 +3261,7 @@ void f00cb4bd0(int self, RefCounted* obj)
 // @ 0x00cb4ca0
 bool cLocomotionObj14::HasLiveTarget14()
 {
-    if (mTarget && ((CTarget*)mTarget)->IsValid())
+    if (mpTool && mpTool->IsValid())
         return true;
     return false;
 }
@@ -3377,10 +3381,9 @@ int f00cb5330_write(cGameData_s00cb_44b0* self, cOutStream* stream)
 // @ 0x00cb5420
 void* cLocomotionObj14::GetToolStrategy()
 {
-    void* p = *(void**)((char*)this + 0x14);
-    void* s = *(void**)&((Tool*)p)->mStrategy;
-    if (s)
-        return (*(VfnS2*)(*(int*)s + 0xb8))(s, (void*)0x013f94d4);
+    const EA::AutoRefCount<IObj_s00cc_0700>& owner = mpTool->mpToolOwner;
+    if (owner)
+        return owner->Cast(&g_013f94d4);
     return 0;
 }
 

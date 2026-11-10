@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00887510/s00887510.cpp  ??Y?$basic_string@_WVallocator@eastl@@@eastl@@QAEAAV01@_W@Z  00887510  /O2 /MD /GS- /GR- /TP /arch:SSE
