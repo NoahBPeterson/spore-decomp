@@ -70,10 +70,15 @@ float hkMath::acos(float x)
 // @ 0x01081520
 void hkMatrix3::transpose()
 {
-	float t;
-	t = m_el[4]; m_el[4] = m_el[1]; m_el[1] = t;
-	t = m_el[8]; m_el[8] = m_el[2]; m_el[2] = t;
-	t = m_el[9]; m_el[9] = m_el[6]; m_el[6] = t;
+	// x87: each off-diagonal pair is loaded before the diagonal slot is overwritten
+	// the diagonal slot is written with a plain dword move, the off-diagonal through x87
+	// x87: the off-diagonal float is loaded first, the diagonal one moves through an integer register
+	float t1;
+	t1 = m_el[4];
+	*(uint32_t*)&m_el[4] = m_el[1];
+	m_el[1] = t1;
+	float t2 = m_el[8]; *(uint32_t*)&m_el[8] = *(const uint32_t*)&m_el[2]; m_el[2] = t2;
+	float t3 = m_el[9]; *(uint32_t*)&m_el[9] = *(const uint32_t*)&m_el[6]; m_el[6] = t3;
 }
 
 // @ 0x01081550

@@ -7,7 +7,6 @@
 00edf4c0  39   callee-saved register allocation across the two helper calls (behavior complete)
 00edfbf0  139  the helper calls were cdecl with the object pushed; 0xf27670/0xf253e0 and 0xed39a0 are thiscall (ECX = the object; 0xed39a0 = the 0x16c7aa4+0x14 manager's +0x14 record body), plus register allocation / block order (behavior complete)
 00edfce0  13   manager reload vs cached-register ordering (behavior complete)
-00edfde0  18   three bit tests folded to one mask test (behavior complete)
 00edfe10  66   base-vtable store order of the MI constructor (behavior complete)
 00edf090  255  palette-selection dispatch: two-stage window lookup, 4-case text-id table through 0xedcec0, and the 0x8ed27e7a text update; complete, diff 255 is the jump-table shape plus vcall scheduling; equiv PASS 235 valid, 69.6% coverage (flags /O2 /MD /Gy /EHsc /TP /fp:fast)
 00edf510  287  palette-item/swatch construction: 0x54 palette item + key Init, 0x6c swatch, 0x34 palette info with the custom +8 refcount release, secondary-vtable callback, row-height property; complete, diff 287 is register allocation / vcall scheduling; equiv WEAK 371 valid, 6.3% coverage (flagged /O2 /MD /Gy /EHsc /TP /fp:fast)

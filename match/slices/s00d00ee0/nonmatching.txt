@@ -1,6 +1,5 @@
 00d00f80 64  Complete map::find (lower_bound + verify); now returns the out-pointer in eax as the original does (both exit paths hand [esp+0xc] back); residual is register allocation/shrink-wrap of esi/edi/ebx. equiv PASS 383 valid inputs 100% coverage
 00d00ff0 190 Complete map<pair,VarList> writer; residual is call-argument scheduling and register assignment
-00d011e0 9 Complete tree-destruction loop (calls 0x921580 until sentinel); residual is loop-codegen scheduling.
 00d01110 168 Complete map<uint,float> writer; residual is call-argument scheduling and register assignment
 00d01410  76  Complete relationship lookup; original keeps the null result in edi across NormalizePair; difftest FAIL is a checker artifact: the find out-pointer is a dead parameter slot on both sides (original reuses a's slot, ours t's), so only the pointer value differs; same calls, result and memory
 00d01470 120 Complete feedback-strength lookup; residual is stack-slot/size difference at the tail
