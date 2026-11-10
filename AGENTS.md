@@ -4,8 +4,8 @@ This project rebuilds Spore's `SporeApp.exe` (the 2008 PC game) as readable C++ 
 machine code as the shipped game. A function counts when its compiled bytes are identical to the retail function's.
 "Almost" counts as zero.
 
-This guide is for people and for AI agents. Everything here runs from the repo; no game files are needed until you
-want instruction-level diffs.
+This guide is for people and for AI agents. You need your own copy of Spore (Steam) for the instruction
+diffs that show what still differs; everything else runs from the repo.
 
 ## How a match is checked
 
@@ -27,7 +27,8 @@ locally (below) before you open the pull request.
    `sh tools/ci/setup_toolchain.sh`
    This gives Visual C++ 2008 SP1 (cl 15.00.30729.01) for most of the game and the Visual C++ Toolkit 2003 1.01
    (cl 13.10.3077) for Havok and RenderWare code (rows with the `/vc71` flag).
-4. Optional, for instruction diffs: your own copy of Spore (Steam). Build the analysis image from it:
+4. Your own copy of Spore (Steam). Build the analysis image from it, so `check.py` can show an instruction diff
+   (without it you only learn that bytes differ, not which):
    `.venv/bin/python tools/contrib/make_image.py "<Spore>/SporeBin/SporeApp.exe"` (must print `IMAGE OK`).
    The image is game code. It stays in `work/`, which git ignores. Never commit, upload or share it.
 
@@ -42,11 +43,15 @@ locally (below) before you open the pull request.
 3. **Say you are on it.** Open a draft pull request early, titled with the address (`0x00529690: ...`), so others can
    see the function is taken.
 4. **Write, build, compare.** Edit the source, then `.venv/bin/python tools/contrib/check.py 0x00529690`. It prints
-   `MATCH`, the compiler errors, or what differs (with the image from setup step 4, an instruction diff).
+   `MATCH`, the compiler errors, or an instruction diff against the original. Before inventing source shapes, look
+   up the difference in `docs/codegen.md`: most residual diffs are a known lever (`__restrict`, a single-expression
+   virtual call, `_ReadWriteBarrier()`, declaration order, ...).
 5. **On MATCH**, `check.py` records it for you: it adds the function's `manifest.txt` line and removes its
    `nonmatching.txt` (or `partial.txt`) line. Mark the pull request ready and fill in the template, including the
-   model or tool that wrote the code. (`--dry-run` prints those changes instead of making them.)
-6. **Stuck?** Leave the function better than you found it: update its `nonmatching.txt` note with what you tried and
+   model or tool that wrote the code. (`--dry-run` prints those changes instead of making them.) Once a pull request
+   is marked ready, do not add commits to it; put new work in a new pull request.
+6. **Stuck?** After six to eight levers from `docs/codegen.md` without a match, stop and move on. Leave the function
+   better than you found it: update its `nonmatching.txt` note with what you tried and
    what still differs, and open the pull request anyway. Notes are how the next person (or agent) starts ahead.
 
 Keep experiments (test files, notes, listings) in `work/scratch/`: `work/` is ignored by git, so nothing there ends
