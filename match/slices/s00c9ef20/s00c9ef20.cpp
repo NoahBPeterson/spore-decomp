@@ -244,8 +244,8 @@ void CStub::FUN_00c9ef60(u32 ms)
 // ===========================================================================
 void __fastcall FUN_00c9f1c0(void* self)
 {
-    void* f = *(void**)((char*)g_16c7aa4 + 0x74);
-    ((FieldStub*)f)->FUN_00f3f950(self);
+    FieldStub* f = *(FieldStub* volatile*)((char*)g_16c7aa4 + 0x74);
+    f->FUN_00f3f950(self);
 }
 
 // ===========================================================================

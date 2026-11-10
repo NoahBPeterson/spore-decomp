@@ -4,3 +4,4 @@ slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9f6c0@CStub@@QAEXXZ  00c9f6c0  /O2 /MD /
 slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9fa30@CStub@@QAEXPAX@Z  00c9fa30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9fb10@CStub@@QAEHPAX@Z  00c9fb10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9ff40@CStub@@QAEXHPAM0@Z  00c9ff40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9f1c0@@YIXPAX@Z  00c9f1c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
