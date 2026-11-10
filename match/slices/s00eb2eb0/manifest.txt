@@ -4,3 +4,4 @@ slices/s00eb2eb0/s00eb2eb0.cpp  ?SetQuad@CTerrainCam@@QAEXIIII@Z  00eb30d0  /O2 
 slices/s00eb2eb0/s00eb2eb0.cpp  ?SetTri@CTerrainCam@@QAEXIII@Z  00eb3160  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00eb2eb0/s00eb2eb0.cpp  ?ZeroVectors@CTerrainCam@@QAEXXZ  00eb3190  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00eb2eb0/s00eb2eb0.cpp  ?DistSq@@YGMUVec3f@@0@Z  00eb3220  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00eb2eb0/s00eb2eb0.cpp  ?SetTime@CTerrainCam@@QAEXM@Z  00eb31d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

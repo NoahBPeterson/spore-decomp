@@ -25,9 +25,10 @@ struct Vec16 {
 
 void* Vec16::Get(uint32 i)
 {
-    if (i < (uint32)((int)((char*)mpEnd - (char*)mpBegin) >> 4))
+    if (i < (uint32)(mpEnd - mpBegin))
         return mpBegin[i].v;
-    return 0;
+    else
+        return 0;
 }
 
 // ===========================================================================

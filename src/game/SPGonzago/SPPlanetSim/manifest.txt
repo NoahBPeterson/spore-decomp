@@ -31,3 +31,4 @@
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?FUN_01397ff0@@YAXXZ  01397ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?FUN_01398270@@YAXXZ  01398270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?FUN_01398420@@YAXXZ  01398420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?EraseValue@cCivData@@QAEXH@Z  00ff1ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

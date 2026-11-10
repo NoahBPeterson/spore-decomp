@@ -1,6 +1,6 @@
 00688dd0  51  post-message helper: new-expression/EH scheduling differs
 00688e50  51  post-message helper: new-expression/EH scheduling differs
-00688ed0  28  indexed accessor: count expression register allocation / operand order
+00688ed0  28  indexed accessor (32 closure: `ret 4`, so it is a fastcall-curried thunk taking only the index): retail computes (cap-begin)>>4 into edx and only then loads begin into ecx from [ecx+4]; cl 15 always materialises begin first and keeps the count in ecx, so this slot is never edx. Tried: member call on `this`, array-index vs char-ptr difference vs /16, int vs uint32 count, if/else vs early return, hoisting begin/end into locals, `<<4` vs `*16`. If the real owner object (the +4 field) differs, cl may pick edx itself.
 00688f00  66  wide-string concat ctor: EASTL append/EH schedule
 00689510  41  x87 control-word write: block layout (mode==3 branch placement); equiv: PASS (1200 inputs, 100% coverage)
 00689590  5  x87 control-word read: missing movzx zero-extension; equiv: PASS (1200 inputs, 100% coverage)
