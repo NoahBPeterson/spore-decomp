@@ -34,6 +34,17 @@ def fingerprints():
     return _fps
 
 
+def fingerprint(va):
+    """One function's fingerprint without decoding all 90,000 (check.py and task.py <va> call this once per run)."""
+    if _fps is not None:
+        return _fps.get(va)
+    key = '{"va":"%08x"' % va
+    for line in gzip.open(FP, "rt"):
+        if line.startswith(key):
+            return json.loads(line)
+    return None
+
+
 def sources():
     out = []
     for d in (os.path.join(ROOT, "src", "game"), os.path.join(ROOT, "match", "slices")):
@@ -237,7 +248,7 @@ def main():
     if not a.va:
         ap.error("give a function address, or --list")
     va = int(a.va, 16)
-    fp = fingerprints().get(va)
+    fp = fingerprint(va)
     src, ident = locate(va)
     print("function   0x%08x" % va)
     print("retail     %s" % ("%d bytes (fingerprint: %d bytes are addresses, not compared)" %

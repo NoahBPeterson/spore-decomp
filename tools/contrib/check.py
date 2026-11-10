@@ -37,7 +37,7 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="on MATCH, print the bookkeeping changes instead of making them")
     a = ap.parse_args()
     va = int(a.va, 16)
-    fp = T.fingerprints().get(va)
+    fp = T.fingerprint(va)
     if not fp:
         print("0x%08x has no fingerprint: not a known function start" % va)
         return 2

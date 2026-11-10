@@ -527,22 +527,41 @@ def slice_symbol_name(sid, va):
 
 SID_RE = re.compile(r"^s[0-9a-f]{8}$")
 _STUB_SUFFIX = re.compile(r"_s[0-9a-f]{4}_[0-9a-f]{4}")
-_landed_syms = None
+_landed_syms = None   # every address -> name, built when a second address is asked for (batch tools)
+_landed_one = {}      # the first address asked for, found without parsing every file (check.py: one per run)
+
+
+def _landed_lines(text):
+    for line in text.splitlines():
+        p = line.split("#", 1)[0].strip().split(None, 1)
+        if len(p) >= 2 and p[1].startswith("?"):
+            try:
+                yield int(p[0], 16), p[1].strip()
+            except ValueError:
+                pass
 
 
 def landed_symbol_name(va):
-    """The decorated name some symbols/slices/s*.txt records for va (only names that are decorated: '?...')."""
+    """The decorated name some symbols/slices/s*.txt records for va (only names that are decorated: '?...');
+    the first file in sorted order wins."""
     global _landed_syms
+    paths = lambda: sorted(glob.glob(os.path.join(ROOT, "symbols", "slices", "s*.txt")))
+    if _landed_syms is None and (not _landed_one or va in _landed_one):
+        if va not in _landed_one:
+            _landed_one[va], key = None, "%x" % va
+            for path in paths():
+                text = open(path, encoding="utf-8", errors="replace").read()
+                if key in text.lower():
+                    hit = next((n for v, n in _landed_lines(text) if v == va), None)
+                    if hit:
+                        _landed_one[va] = hit
+                        break
+        return _landed_one[va]
     if _landed_syms is None:
         _landed_syms = {}
-        for path in sorted(glob.glob(os.path.join(ROOT, "symbols", "slices", "s*.txt"))):
-            for line in open(path, encoding="utf-8", errors="replace"):
-                p = line.split("#", 1)[0].strip().split(None, 1)
-                if len(p) >= 2 and p[1].startswith("?"):
-                    try:
-                        _landed_syms.setdefault(int(p[0], 16), p[1].strip())
-                    except ValueError:
-                        pass
+        for path in paths():
+            for v, n in _landed_lines(open(path, encoding="utf-8", errors="replace").read()):
+                _landed_syms.setdefault(v, n)
     return _landed_syms.get(va)
 
 
