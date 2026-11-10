@@ -68,6 +68,7 @@ void hkBvShape::castRayWithCollector(const hkShapeRayCastInput& input, const hkC
 class hkShapeCollection;
 class hkMoppCode;
 
+
 class hkMoppFitToleranceRequirements : public hkReferencedObject    // vtable 0x014A4248 (slot 0 = 0x010DD550, slot 1 empty)
 {
 public:
@@ -101,7 +102,7 @@ hkMoppFitToleranceRequirements::hkMoppFitToleranceRequirements()
 // @ 0x010cbed0
 void hkMoppFitToleranceRequirements::getAbsoluteFitToleranceOfAxisAlignedTriangles(hkVector4& out) const
 {
-	// raw dword copies in the binary (no x87 load/store), so use a bit copy
+	// raw dword copies in the binary (no x87 load/store)
 	memcpy(&out, &m_absoluteFitToleranceOfAxisAlignedTriangles, sizeof(hkVector4));
 }
 
@@ -256,7 +257,13 @@ static inline void hkWorldRayCastOutput_copy(hkWorldRayCastOutput* dst, const hk
 	dst->m_rootCollidable = src->m_rootCollidable;
 }
 
-struct hkWorldRayCastOutputLess { };    // empty comparator object passed by value (compares m_hitFraction)
+// Comparator object passed by value (compares m_hitFraction); its constructor
+// clears the ascending flag, which is why the caller materialises a zero byte.
+struct hkWorldRayCastOutputLess
+{
+	hkBool m_ascending;
+	hkWorldRayCastOutputLess() : m_ascending(false) {}
+};
 
 // @ 0x010cc020  (hkAlgorithm::quickSortRecursive specialised on m_hitFraction)
 static void quickSortRecursive(hkWorldRayCastOutput* pArr, int d, int h, hkWorldRayCastOutputLess less)
@@ -290,11 +297,9 @@ static void quickSortRecursive(hkWorldRayCastOutput* pArr, int d, int h, hkWorld
 // @ 0x010cc160
 void hkAllRayHitCollector::sortHits()
 {
+	hkWorldRayCastOutputLess less;      // constructed before the test, as in the binary
 	if (m_hits.m_size > 1)
-	{
-		hkWorldRayCastOutputLess less;
 		quickSortRecursive(m_hits.m_data, 0, m_hits.m_size - 1, less);
-	}
 }
 
 // ---------------------------------------------------------------------------------------------------------

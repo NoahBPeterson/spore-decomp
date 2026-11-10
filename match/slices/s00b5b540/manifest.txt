@@ -19,3 +19,7 @@ slices/s00b5b540/s00b5b540.cpp  ?FUN_00b5b5d0_adjust@AdjustThunk_00b5b5d0@@QAEPA
 slices/s00b5b540/s00b5b540.cpp  ?f@S5be60@@QAEDPAX@Z  00b5be60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00b5b540/s00b5b540.cpp  ?f@S5cd90@@QAEXH@Z  00b5cd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00b5b540/s00b5b540.cpp  ?Update@cGonzagoSimulatorFrame@@QAEXI@Z  00b5ce70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b5b540/s00b5b540.cpp  ?FUN_00b5ca60@@YIDPAH@Z  00b5ca60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cba0  00b5cba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cbc0  00b5cbc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  ??0cGonzagoSimulator@SP@@QAE@XZ  00b5b6c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
