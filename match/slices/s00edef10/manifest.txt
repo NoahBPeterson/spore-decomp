@@ -7,3 +7,4 @@ slices/s00edef10/s00edef10.cpp  ?f00edfd70@@YA_NHIHPAI@Z   00edfd70  /O2 /MD /Gy
 slices/s00edef10/s00edef10.cpp  ?f00edfda0@@YA_NPAH0@Z     00edfda0  /O2 /MD /Gy /EHsc /TP /fp:fast
 slices/s00edef10/s00edef10.cpp  ?FEA0@Ed@@QAE_NPAM0@Z      00edfea0  /O2 /MD /Gy /EHsc /TP /fp:fast
 slices/s00edef10/s00edef10.cpp  ?f00edfec0@@YIXH@Z         00edfec0  /O2 /MD /Gy /EHsc /TP /fp:fast
+slices/s00edef10/s00edef10.cpp  ?f00edfde0@@YIIH@Z  00edfde0  /O2 /MD /Gy /EHsc /TP /fp:fast

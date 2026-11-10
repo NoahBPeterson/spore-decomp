@@ -334,15 +334,12 @@ void __fastcall ClearBakedAnimManager(nSPCreatureAnim::baked_anim_manager* self)
 // @ 0x009ABCE0  (destructor: Clear + member destructors, reverse declaration order)
 void __fastcall DestroyBakedAnimManager(nSPCreatureAnim::baked_anim_manager* self) {
   ClearBakedAnimManager(self);
-  if (self->mLastUpdatedKey.mSpecies) {
-    void* p = self->mLastUpdatedKey.mSpecies;
-    self->mLastUpdatedKey.mSpecies = 0;
-    FUN_009c26a0(p);
-  }
-  ((MgrHelper*)&self->mSpeciesInstances)
-      ->NukeSpeciesTree(self->mSpeciesInstances.mAnchor.mpNodeParent);
-  ((MgrHelper*)&self->mBakedAnimCache)
+  if (self->mLastUpdatedKey.mSpecies)
+    FUN_009c26a0(self->mLastUpdatedKey.mSpecies);
+  ((MgrHelper*)((char*)self + 4))
       ->NukeBakedTree(self->mBakedAnimCache.mAnchor.mpNodeParent);
+  ((MgrHelper*)((char*)self + 0x20))
+      ->NukeSpeciesTree(self->mSpeciesInstances.mAnchor.mpNodeParent);
 }
 
 // ---------------------------------------------------------------------------------------------

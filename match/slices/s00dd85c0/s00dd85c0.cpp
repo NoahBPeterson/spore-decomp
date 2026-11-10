@@ -663,10 +663,11 @@ void __stdcall FUN_00dd9040(cSPUIThrobber* pTarget)
 // @ 0x00dd9050
 bool __stdcall FUN_00dd9050(cSPUIThrobber* pTarget, int unused)
 {
-    if (pTarget->mPosition.y >= g_013f561c)
-        return true;
-    pTarget->mbFinished = 0;
-    return false;
+    if (g_013f561c > pTarget->mPosition.y) {
+        pTarget->mbFinished = 0;
+        return false;
+    }
+    return true;
 }
 
 // @ 0x00dd8ea0

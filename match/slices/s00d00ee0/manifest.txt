@@ -10,3 +10,4 @@ slices/s00d00ee0/s00d00ee0.cpp  A1b80@RelBook  00d01b80  /O2 /MD /Gy /TP /arch:S
 slices/s00d00ee0/s00d00ee0.cpp  A1db0@RelBook  00d01db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00d00ee0/s00d00ee0.cpp  A1e30@RelBook  00d01e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00d00ee0/s00d00ee0.cpp  A1f20@RelBook  00d01f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  _Fd011e0  00d011e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

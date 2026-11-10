@@ -203,6 +203,12 @@ struct cLocomotionObj14 {
     bool HasLiveTarget14();                  // 0x00cb4ca0
     void* GetToolStrategy();                 // 0x00cb5420
 };
+struct cLocomotionObj518 {
+    char pad[0x34];
+    char mSub[0x4e4];                        // +0x34 embedded object with its own vptr
+    void* mpTool;                            // +0x518
+    void GetPositions(Vector3* a, Vector3* b);   // 0x00cb5450
+};
 struct cLocomotionObjDC {
     char pad[0xdc];
     void* mTarget;                           // +0xdc
@@ -335,6 +341,7 @@ virtual Vector3* GetPosition();
 };
 float FUN_0104cda0(void* p);                                                 // 0x0104cda0
 float FUN_0104be60(void* p);                                                 // 0x0104be60
+struct C_0104be60 { char pad[0x1dc]; float field; float Get(); };            // 0x0104be60
 // ---- items of slice s00cb44b0 end
 
 // ---- items of slice s00cb5620 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1539,8 +1546,18 @@ public:
 extern "C" cGameNounManager* __cdecl NounManager();    // 0x00b3d300
 class cSpaceDefenseMissileLocomotion {
 public:
-    uint32_t mPad00[0x12];                                  // +0x00..+0x47 (size 0x48)
-    cSpaceDefenseMissileLocomotion* Construct(float a, float b, int v);   // 0x00cb54a0
+    Vtbl* volatile    mpVtbl;        // +0x00
+    uint32_t m04;                    // +0x04
+    Vtbl* volatile    mpVtbl8;       // +0x08
+    uint32_t volatile m0c;           // +0x0c
+    float    volatile mSpeed;        // +0x10
+    float    volatile mTurnRate;     // +0x14
+    void*    volatile mpTarget;      // +0x18
+    uint32_t m1c;                    // +0x1c
+    cGonzagoTimer mTimer;            // +0x20 (size 0x20)
+    float    m40;                    // +0x40
+    uint32_t m44;                    // +0x44
+    cSpaceDefenseMissileLocomotion* Construct(float a, float b, void* target);   // 0x00cb54a0
 };
 class cGameDataBase {
 public:
@@ -3154,25 +3171,42 @@ void f00cb4950(int self, RefCounted* a, uint v1, uint v2, uint v3, RefCounted* b
     }
 }
 
+// The sub-object at +0x34 is the projectile's SP::cLocomotiveObject (its vptr is set by ctor 0x00cb6ed0);
+// +0x2c, +0x524 and +0x534 are refcounted interface pointers, released in that order before it is shut down.
+struct cLocomotiveMember_s00cb_49e0 {
+    char pad[0x4f0];
+    void Shutdown();                                                 // 0x00c43f90
+};
+struct cProjectileOwner_s00cb_49e0 {
+    char pad[0x2c];
+    RefCounted* mpLoco;                                              // +0x2c
+    char pad30[4];
+    cLocomotiveMember_s00cb_49e0 mLoco;                              // +0x34
+    RefCounted* mpOwner;                                             // +0x524
+    char pad528[0xc];
+    RefCounted* mpTool;                                              // +0x534
+    void Shutdown();                                                 // 0x00cb49e0
+};
+
 // @ 0x00cb49e0
-void f00cb49e0(int self)
+void cProjectileOwner_s00cb_49e0::Shutdown()
 {
-    RefCounted* p = *(RefCounted**)(self + 0x524);
+    RefCounted* p = mpOwner;
     if (p) {
-        *(void**)(self + 0x524) = 0;
+        mpOwner = 0;
         p->r64();
     }
-    RefCounted* q = *(RefCounted**)(self + 0x534);
+    RefCounted* q = mpTool;
     if (q) {
-        *(void**)(self + 0x534) = 0;
+        mpTool = 0;
         q->r08();
     }
-    RefCounted* r = *(RefCounted**)(self + 0x2c);
+    RefCounted* r = mpLoco;
     if (r) {
-        *(void**)(self + 0x2c) = 0;
+        mpLoco = 0;
         r->r04();
     }
-    cLocomotiveObject_Shutdown((cLocomotiveObject_s00cb_44b0*)(self + 0x34));
+    mLoco.Shutdown();
 }
 
 // @ 0x00cb4a40
@@ -3184,28 +3218,19 @@ bool cLocomotionBase::HasLiveTarget()
 }
 
 // @ 0x00cb4a70
-void f00cb4a70(int self)
+void Simulator::cPathFollowingLocomotion_s00cb_a050::PathUpdated()
 {
-    if (*(uint*)(self + 0x40) != 0x6a93cd4e)
+    if (m40 != 0x6a93cd4e)
         return;
-    int i = 0;
-    if (*(int*)(self + 0x24) < 0)
-        return;
-    float* p = *(float**)(self + 0x10);
-    do {
-        float z = p[2], y = p[1], x = p[0];
-        float len = x * x + y * y + z * z;
-        // sqrt via SSE
-        float sq = 0.0f;
-        __asm { sqrtss xmm0, len }
-        __asm { movss sq, xmm0 }
-        if (*(float*)(self + 0x44) < sq)
-            *(float*)(self + 0x44) = sq;
-        if (*(float*)(self + 0x48) > sq)
-            *(float*)(self + 0x48) = sq;
-        i++;
-        p += 3;
-    } while (i <= *(int*)(self + 0x24));
+    for (int i = 0; i <= mDistanceFromLastPoint; i++) {
+        float sq = (float)sqrt((double)(mPath.mpBegin[i].x * mPath.mpBegin[i].x
+                                        + mPath.mpBegin[i].y * mPath.mpBegin[i].y
+                                        + mPath.mpBegin[i].z * mPath.mpBegin[i].z));
+        if (mLowestAltitude < sq)
+            mLowestAltitude = sq;
+        if (mLastSpeed > sq)
+            mLastSpeed = sq;
+    }
 }
 
 // @ 0x00cb4ae0
@@ -3288,15 +3313,11 @@ int f00cb4d40(int self, int a, int b, int c, int d, int e)
 }
 
 // @ 0x00cb5050
-void f00cb5050(int self)
+float __fastcall f00cb5050(int self)
 {
-    void* p = *(void**)(self + 0x4e4);
-    float v = FUN_0104be60(p);
-    if (v > 0.0f) {
-        FUN_0104be60(*(void**)(self + 0x4e4));
-        return;
-    }
-    (*(void(**)(int))(*(int*)self + 0xc8))(self);
+    if (((C_0104be60*)*(void**)(self + 0x4e4))->Get() > 0.0f)
+        return ((C_0104be60*)*(void**)(self + 0x4e4))->Get();
+    return ((float (__fastcall*)(void*))VT(self)[0xc8 / 4])((void*)self);
 }
 
 // @ 0x00cb5090
@@ -3388,22 +3409,33 @@ void* cLocomotionObj14::GetToolStrategy()
 }
 
 // @ 0x00cb5450
-void f00cb5450(int self, Vector3* a, Vector3* b)
+void cLocomotionObj518::GetPositions(Vector3* a, Vector3* b)
 {
-    Vector3* p1 = (Vector3*)(*(void*(**)(int))(**(int**)(*(int*)(self + 0x518) + 0x114) + 0x2c))(
-                       *(int*)(self + 0x518));
-    a->x = p1->x; a->y = p1->y; a->z = p1->z;
-    Vector3* p2 = (Vector3*)(*(void*(**)(int))(*(int*)(self + 0x34) + 0x2c))(self + 0x34);
-    b->x = p2->x; b->y = p2->y; b->z = p2->z;
+    void* tool = *(void**)(*(int*)((char*)this + 0x518) + 0x114);
+    Vector3* p1 = (Vector3*)((void* (__thiscall*)(void*))VT(tool)[0x2c / 4])(tool);
+    *a = *p1;
+    Vector3* p2 = (Vector3*)((void* (__thiscall*)(void*))VT((char*)this + 0x34)[0x2c / 4])((char*)this + 0x34);
+    *b = *p2;
 }
 
 // @ 0x00cb54a0
-void* f00cb54a0(int self, float maxSpeed, float turnRate, void* target)
+cSpaceDefenseMissileLocomotion* cSpaceDefenseMissileLocomotion::Construct(float maxSpeed,
+                                                                         float turnRate,
+                                                                         void* target)
 {
-    (void)target;
-    *(float*)(self + 0x10) = maxSpeed;
-    *(float*)(self + 0x14) = turnRate;
-    return (void*)self;
+    mpVtbl8 = (Vtbl*)0x13ec458;
+    m0c = 0;
+    mSpeed = maxSpeed;
+    mpVtbl = (Vtbl*)0x14751a4;
+    mpVtbl8 = (Vtbl*)0x1475194;
+    mTurnRate = turnRate;
+    mpTarget = target;
+    if (target != 0)
+        ((void (__thiscall*)(void*))VT(target)[0xbc / 4])(target);
+    mTimer.Construct();
+    m40 = 0.0f;
+    mTimer.Restart();
+    return this;
 }
 
 // @ 0x00cb5560
@@ -4786,7 +4818,7 @@ void cSpaceDefenseMissile::FUN_00cb8760(const Vector3* pos, IVtblObject* target)
         locomotion = ((cSpaceDefenseMissileLocomotion*)mem)->Construct(
             tool->FUN_0104be50(),
             tool->FUN_00c41d40(),
-            (int)((VfnP)target->mpVtbl->mSlots[kVt08])(target));
+            (void*)((VfnP)target->mpVtbl->mSlots[kVt08])(target));
     }
     mLoco.FUN_00c421b0(locomotion);
     mProjSuper.mTargetPosX = pos->x;
