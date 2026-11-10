@@ -14,7 +14,6 @@
 00a62080 47 fx_array_resize_and_set: argument evaluation order of the two self->count/capacity stores differs ; equiv FAIL 5/5 valid inputs (import call divergence)
 00a62120 364 fx_array_max_abs: x87 fabs 4-way unroll and max-select raise/keep scheduling diverges (orig 323 bytes vs 361 emitted) ; equiv FAIL 5/5 valid inputs (x87 depth)
 00a62270 353 fx_array_sum_pos: SSE positive-sum unroll plus fx_normalize()/rate scaling and recursion-guard tail diverge ; equiv FAIL 5/5 valid inputs (x87 depth)
-00a623f0 16 fx_set_accum: original forwards the float from its incoming stack slot; ours round-trips through the x87 stack (thiscall ecx preserve push) ; equiv PASS 334 valid inputs, 100% coverage
 00a62410 315 fx_register_sequence: reflected-class registration (EapdRegisterClass/EapdIntern/EapdAddMethod) prologue and return-code folding differ ; equiv UNSUPPORTED 1 unresolved ref FUN_00a62050
 00a625f0 112 fx_notify_value: index clamp plus element-value load and recursion-guard walk schedule diverge ; equiv UNSUPPORTED 0/400 valid (fault read)
 00a62690 45 fx_dump: 2-instruction divergence in the two global loads vs the EapdDumpTable argument tail ; equiv UNSUPPORTED 0/400 valid (fault read)

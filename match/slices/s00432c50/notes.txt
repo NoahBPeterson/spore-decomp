@@ -1,0 +1,5 @@
+scratch: with two pointer locals + `this` (3 dwords), the first-assigned pointer always gets
+[ebp-8] and the second [ebp-4]; the original wants its yAxis pointer at [ebp-4]. Declaration order
+makes no difference and swapping rowA/rowB did not move them. A `const float* src = &a0` local
+instead grows the frame to 4 dwords and turns the copies into fld/fstp, so no. Open: a pointer
+whose *last* use is the yAxis row (reverse order, zAxis first) or a different name pair.

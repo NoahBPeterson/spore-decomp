@@ -2,7 +2,7 @@
 0108d1c0 605 havok-equivalent
 0108d420 299 havok-equivalent
 0108d590 700 havok-equivalent
-0108d850 24 havok-equivalent
+0108d850 4 /vc71: hkSimpleConstraintContactMgr::Factory ctor. Retail: mov eax,ecx; mov ecx,[esp+4]; mov word [eax+6],1; mov dword [eax],<vptr>; mov [eax+8],ecx (the vptr store sits AFTER the reference count). Ours completes the call but puts the vptr store first (mov [eax],0 recognised as the vtable relocation). Tried: m_referenceCount then m_world (base), an explicit vptr store at the end (stays first), m_memSizeAndFlags self-copy, a volatile this copy (frame grows). difftest = equivalent otherwise
 0108d900 155 havok-equivalent
 0108d9a0 142 havok-equivalent
 0108db50 82 havok-equivalent

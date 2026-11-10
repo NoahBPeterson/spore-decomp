@@ -1,6 +1,7 @@
 // Slice s0092abb0: EA::Clipboard (SetClipboardData, Win32 clipboard window) and
 // EA::CommandLine (argument/switch lookup, insert, current app path).
 #include "types.h"
+#include <intrin.h>
 
 typedef unsigned int size_t;
 
@@ -421,6 +422,10 @@ bool Clipboard::FUN_0092b140() {
 
 // @ 0x0092b1b0
 WString* CommandLine::at(unsigned i) {
+    // Retail folds the count into edx (`mov edx,[ecx+8]; sub edx,[ecx+4]; sar edx,4`) and takes
+    // the size from a parameter, so the index's register can be reused for the base reload.
+    // Retail fetches `end` first (`mov edx,[ecx+8]; sub edx,[ecx+4]; sar edx,4`) and reloads the
+    // base for the element address: keep the array pointers plain member reads.
     int n = (int)(mpEnd - mpBegin);
     if (i < (unsigned)n)
         return (WString*)((char*)mpBegin + (i << 4));

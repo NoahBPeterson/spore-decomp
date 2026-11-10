@@ -1,0 +1,12 @@
+0x009368F0 SharedLibraryRegistry ctor. Retail (35 bytes):
+  push esi / mov esi,ecx / xor eax,eax / mov [esi],<vtable>
+  push 1 / push eax / lea ecx,[esi+0x20] / mov [esi+8],eax / mov [esi+0xc],eax / mov [esi+0x10],eax
+  call Mutex::Construct / mov eax,esi / pop esi / ret
+One zeroed EAX is reused for the two mutex args and the three vector stores, so the vtable store
+is a constant (not eax) and is scheduled after `xor eax,eax` and before the pushes.
+Tried and still 4 bytes off (/O2, /EHsc): plain member writes + mMutex.Construct(0,1) (vtable
+store lands after `lea ecx`, nulled through the relocation); a named `this`-vptr store first;
+an extra m04 = 0 followed by everything else = 0 (cl then emits a zeroed 64-bit table index sub
+tables, i.e. [esi] and [esi+4], and the vtable store disappears); splitting the virtuals into a
+base class; pack(4).  The store of a fixed vtable before `xor eax,eax` and the register
+allocation of the pushes are what still differ.

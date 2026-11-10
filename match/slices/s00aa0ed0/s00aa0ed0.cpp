@@ -312,14 +312,16 @@ void* cModelDescription::Destroy(unsigned int flags)
 }
 
 // @ 0x00aa1cc0
+// Retail: the float count is (end - begin) >> 2 from the 4-byte pointers, the byte count is
+// the pointer difference itself, and the new end is memmove's result + (bytes >> 2).  The
+// remaining 0x14-byte-vector fields are copied one by one (two byte stores at +0x24/+0x25).
 cAnimationCurve* cAnimationCurve::CopyFrom(const cAnimationCurve& src)
 {
     mLengthRange.x = src.mLengthRange.x;
     mLengthRange.y = src.mLengthRange.y;
-    int n = (int)(src.mCurve.mpEnd - src.mCurve.mpBegin);
-    mCurve.Allocate(n, src.mCurve.mAllocator);
-    unsigned int bytes = (unsigned int)((char*)src.mCurve.mpEnd - (char*)src.mCurve.mpBegin);
-    mCurve.mpEnd = (float*)memmove(mCurve.mpBegin, src.mCurve.mpBegin, bytes) + n;
+    mCurve.Allocate((int)(src.mCurve.mpEnd - src.mCurve.mpBegin), src.mCurve.mAllocator);
+    int nBytes = (int)((char*)src.mCurve.mpEnd - (char*)src.mCurve.mpBegin);
+    mCurve.mpEnd = (float*)memmove(mCurve.mpBegin, src.mCurve.mpBegin, (unsigned int)nBytes) + (nBytes >> 2);
     mCurveVary = src.mCurveVary;
     mSpeedScale = src.mSpeedScale;
     mChannel = src.mChannel;

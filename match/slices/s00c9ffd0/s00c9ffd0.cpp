@@ -48,7 +48,7 @@ struct IDummy {
 };
 
 extern "C" {
-    void  __stdcall FUN_00c9ff40(float, float*, float*);     // 0x00c9ff40
+    void  __stdcall FUN_00c9ff40(int, float*, float*);     // 0x00c9ff40
     void* __cdecl FUN_00eed0b0(void*, float*, float*);       // 0x00eed0b0 PropertyPairRead
     void* __cdecl SP_GetCurrentGameMode();                   // 0x00b5b800
     void* __cdecl SP_PlanetModel();                          // 0x00b3d350
@@ -148,8 +148,10 @@ struct RefOps {
 // @ 0x00c9ffd0
 float __fastcall FUN_00c9ffd0(float param_1)
 {
-    float local_4;
-    FUN_00c9ff40(param_1, &param_1, &local_4);
+    // The helper takes the float's bits as its first argument and two out slots (only the first
+    // is read back, as the float result).
+    int local_4;
+    FUN_00c9ff40(*(int*)&param_1, &param_1, (float*)&local_4);
     return param_1;
 }
 

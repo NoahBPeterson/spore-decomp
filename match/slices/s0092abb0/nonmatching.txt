@@ -2,7 +2,7 @@
 0092afb0  181  Win32Clipboard ctor: WNDCLASS layout + RegisterClass/CreateWindow schedule differs
 0092b0b0  49   Clipboard platform-enable: alloc/ctor schedule differs; difftest WEAK (1198 valid, 44.0% coverage)
 0092b140  21   EnsurePlatform: complete; only remaining diff is `xor eax,eax; mov [esi+8],eax` vs our `mov [esi+8],0` on the failed-alloc path; difftest WEAK (315 valid inputs, 56.4% coverage, no mismatch)
-0092b1b0  36   CommandLine::at: register allocation (mpBegin kept live) differs
+0092b1b0  7   CommandLine::at. Retail: mov edx,[ecx+8]; sub edx,[ecx+4]; mov eax,[esp+4]; sar edx,4; cmp eax,edx; jae; shl eax,4; add eax,[ecx+4]; ret 4 / lea eax,[ecx+0x28]; ret 4. Ours either keeps mpBegin in edx from the count (mov edx,[ecx+4]; ... push esi; mov esi,[ecx+8]; sub esi,edx) or, with _ReadWriteBarrier/_ReadWriteBarrier before the test, gets everything but the `sar edx,4` / `mov eax,[esp+4]` order. The index register is the free one in retail, so the source must make the index the live value across the subtraction (a size-from-parameter or a pointer-to-index form keeps the pointer)
 0092b1d0  33   CommandLine ctor: vtable/field-init order differs
 0092b690  55   CommandLineB ctor: vtable-last field-init order differs
 0092b5f0  106  GetCurrentAppPath: cached GetModuleFileNameW call/loop schedule differs
