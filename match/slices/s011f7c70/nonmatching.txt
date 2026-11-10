@@ -8,7 +8,6 @@
 011f8120   38  Device::ShowRaster: complete; vcall form differs
 011f8160   69  Device::ResetVertexShader: complete; vcall form differs
 011f81d0   53  Device::RestoreVertexShader: complete; vcall form differs
-011f8270   20  Device::D3D9GetDesktopDisplayMode: complete; register assignment differs
 011f82a0   78  Device::D3D9CreateDevice: complete; vcall form / 6-arg schedule differ
 011f8340  151  Device::GetDefaultParameters: complete; returns `this` in eax (Device* return type) with the 15-dword copy and switch constants in the original order; only the rep movsd/switch register layout differs [equiv PASS 400 valid, 100% cov]
 011f8400  139  Device::D3D9GetMaxSamplerStage: complete; DevCapsManager/DocMessage argument
