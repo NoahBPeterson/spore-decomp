@@ -300,7 +300,7 @@ RefObj** copy_ref_forward(RefObj** first, RefObj** last, RefObj** dst)
 Elem32* uninitialized_move_Elem32(Elem32* first, Elem32* last, Elem32* dst)
 {
     Elem32* r = uninitialized_copy_Elem32(first, last, dst);
-    for (Elem32* p = first; p != last; ++p) {}
+    for (Elem32 *q = dst, *p = first; p != last; ++p, ++q) {}
     return r;
 }
 
