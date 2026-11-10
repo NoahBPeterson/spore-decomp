@@ -369,6 +369,8 @@ CFFClass* _tsi_NewCFFClass(InputStream* in, tsiMemObject* mem, int fontNum,
     return t;
 }
 
+// The two wrappers below forward a register ABI: the source is the stack-based
+// call, the outcome differs (see nonmatching.txt).
 // @ 0x008bf270
 void FUN_008bf270(tsiMemObject* mem, InputStream* in, int fontNum,
                   unsigned long pos)

@@ -195,13 +195,14 @@ void __stdcall rw_something_2180(int unused, void* arg)
 
 // @ 0x011e21b0
 struct ArenaManager { void* vftable; };
-void* __fastcall rw_FindTypeReg(int type)
+typedef void** (__thiscall *ArenaManagerGetFn)(ArenaManager*);
+void* rw_FindTypeReg(int type)
 {
     ArenaManager mgr;
     mgr.vftable = &PTR_FUN_0140a578;
-    void** data = (void**)((void*(__cdecl*)(ArenaManager*))FUN_0140a57c)(&mgr);
+    void** data = (void**)((ArenaManagerGetFn)((void**)mgr.vftable)[1])(&mgr);
     mgr.vftable = &PTR_FUN_0140a578;
-    return rw_ArenaTypeRegistry_Find(*data, type);
+    return ((ArenaTypeRegistryApi*)data[0])->FUN_011eb0a0(type);
 }
 
 // @ 0x011e21e0
