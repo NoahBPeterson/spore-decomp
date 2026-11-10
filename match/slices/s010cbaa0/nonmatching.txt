@@ -1,12 +1,11 @@
 010cbb80 0 havok-equivalent
 010cbc60 0 havok-equivalent
 010cbd40 0 havok-equivalent
-010cbed0 0 havok-equivalent
+010cbed0 4 hkMoppFitToleranceRequirements::getAbsoluteFitToleranceOfAxisAlignedTriangles: complete (memcpy of the m_absoluteFitToleranceOfAxisAlignedTriangles hkVector4 at +0x10); not byte-exact (36 vs 32: retail's 16-byte copy uses the VC7.1 *library* memcpy helper's shape - push esi / esi transfer / edx walking the destination / pop esi - while an inlined memcpy uses edx only and `add ecx,0x10`; levers tried: memcpy, struct assignment, dword loops, a user hkVector4::operator=, a shared helper)
 010cbf00 0 havok-equivalent
 010cbf50 0 havok-equivalent
 010cbfb0 0 havok-equivalent
 010cc020 0 havok-equivalent
-010cc160 0 havok-equivalent
 010cc190 0 havok-equivalent
 010cc2c0 0 havok-equivalent
 010cc410 0 havok-equivalent

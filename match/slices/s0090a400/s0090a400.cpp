@@ -7,9 +7,13 @@
 #include "../s00908c00/s00908c00.h"
 
 // The XML namespace binding the original build keeps in .rdata at 0x0143ac78 (implicitContext).
-// Declared extern so the address is materialised with `mov reg, offset` (5 bytes) as in the
-// original, rather than folded into a direct load of the array's first dword.
-extern const XML_Char g_xmlNamespace[];
+// expat defines it in this translation unit; keeping the definition here (rather than an extern
+// reference) reproduces the original's argument-setup schedule at the setContext call sites.
+static const XML_Char g_nsValue[] = {
+  'x', 'm', 'l', '=', 'h', 't', 't', 'p', ':', '/', '/', 'w', 'w', 'w', '.',
+  'w', '3', '.', 'o', 'r', 'g', '/', 'X', 'M', 'L', '/', '1', '9', '9', '8',
+  '/', 'n', 'a', 'm', 'e', 's', 'p', 'a', 'c', 'e', '\0'
+};
 
 // ---- prolog state handlers that live outside this slice ----
 // internalSubset (0x90c240) is defined by slice s0090c240; externalSubset1 (0x90c3d0) and the
@@ -19,8 +23,10 @@ int PTRCALL internalSubset(PROLOG_STATE *state, int tok, const char *ptr,
                            const char *end, const ENCODING *enc);
 int PTRCALL externalSubset1(PROLOG_STATE *state, int tok, const char *ptr,
                             const char *end, const ENCODING *enc);
+// The terminal `error` handler belongs to the neighbouring xmlrole.c build; declare it with its
+// original address so the references from this slice resolve to it rather than to a constant.
 int PTRCALL prologError(PROLOG_STATE *state, int tok, const char *ptr,
-                        const char *end, const ENCODING *enc);
+                        const char *end, const ENCODING *enc);   // 0x00e31100
 
 // xmlrole.c's setTopLevel():
 //   ((state)->handler = ((state)->documentEntity ? internalSubset : externalSubset1))
@@ -44,7 +50,7 @@ FA_initializeEncoding(XML_Parser parser)
 }
 
 __declspec(noinline) static XML_Bool
-FA_setContext(const XML_Char *context, XML_Parser parser)
+FA_setContext(XML_Parser parser, const XML_Char *context)
 {
   return setContext(parser, context);
 }
@@ -350,7 +356,7 @@ XML_ParserReset(XML_Parser parser, const XML_Char *encodingName)
   poolClear(&temp2Pool);
   parserInit(parser, encodingName);
   dtdReset(_dtd, &parser->m_mem);
-  return FA_setContext(g_xmlNamespace, parser);
+  return FA_setContext(parser, g_nsValue);
 }
 
 // ============================================================================
@@ -600,7 +606,7 @@ XML_ExternalEntityParserCreate(XML_Parser oldParser,
   if (context) {
 #endif /* XML_DTD */
     if (!dtdCopy(_dtd, oldDtd, &parser->m_mem)
-      || !FA_setContext(context, parser)) {
+      || !FA_setContext(parser, context)) {
       XML_ParserFree(parser);
       return NULL;
     }
@@ -638,7 +644,7 @@ XML_ParserCreate_MM(const XML_Char *encodingName,
     /* implicit context only set for root parser, since child
        parsers (i.e. external entity parsers) will inherit it
     */
-    if (!FA_setContext(&g_xmlNamespace[0], parser)) {
+    if (!FA_setContext(parser, g_nsValue)) {
       XML_ParserFree(parser);
       return NULL;
     }
