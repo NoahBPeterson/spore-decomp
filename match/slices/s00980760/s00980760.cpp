@@ -615,8 +615,8 @@ void IWinSB2::InvalidateLayoutNoArgs() {
 
 // @ 0x9816e0
 int WinScrollbar::IsActive() {
-    if (sb.refresh != 0) return 1;
-    if ((*(int*)((char*)this + 0x248) | *(int*)((char*)this + 0x24c)) != 0) return 1;
+    if (sb.refresh != 0 || *(int64_t*)((char*)this + 0x248) != 0)
+        return 1;
     return 0;
 }
 

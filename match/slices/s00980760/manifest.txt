@@ -12,3 +12,4 @@ slices/s00980760/s00980760.cpp  ?SetPageOverlap@IWinScrollbar@UTFWinControls@EA@
 slices/s00980760/s00980760.cpp  ?InvalidateLayoutNoArgs@IWinSB2@UTFWinControls@EA@@QAEXXZ  009816c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00980760/s00980760.cpp  ?GetNaturalSize@ScrollbarDrawable@UTFWinControls@EA@@QAE_NPAMHH@Z  00981800  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00980760/s00980760.cpp  ?SetComponentImage@IScrollbarDrawable@UTFWinControls@EA@@QAEXIPAUImage@@@Z  00981860  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?IsActive@WinScrollbar@UTFWinControls@EA@@QAEHXZ  009816e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

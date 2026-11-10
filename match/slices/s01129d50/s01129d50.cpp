@@ -111,7 +111,8 @@ protected:
     hkCollisionFilter() {}
 };
 
-class hkFinishLoadedObjectFlag { public: int m_finishing; };
+// The flag packs "finishing" into a byte; its default constructor sets it.
+class hkFinishLoadedObjectFlag { public: int m_finishing; hkFinishLoadedObjectFlag() : m_finishing(1) {} };
 
 class hkDisableEntityCollisionFilter : public hkCollisionFilter, public hkEntityListener
 {
@@ -294,11 +295,9 @@ hkDisableEntityCollisionFilter::hkDisableEntityCollisionFilter(hkFinishLoadedObj
 // object pointer in EAX but the hook is called as a void function).
 void finishLoadedObject_hkDisableEntityCollisionFilter(void* p)
 {
+    hkFinishLoadedObjectFlag flag;
     if (p != 0)
-    {
-        hkFinishLoadedObjectFlag flag; flag.m_finishing = 1;
         new (p) hkDisableEntityCollisionFilter(flag);
-    }
 }
 
 // @ 0x01129e30
