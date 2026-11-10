@@ -58,7 +58,9 @@ locally (below) before you open the pull request.
 5. **On MATCH**, `check.py` records it for you: it adds the function's `manifest.txt` line and removes its
    `nonmatching.txt` (or `partial.txt`) line. Mark the pull request ready and fill in the template, including the
    model or tool that wrote the code. (`--dry-run` prints those changes instead of making them.) Once a pull request
-   is marked ready, do not add commits to it; put new work in a new pull request.
+   is marked ready, do not add commits to it; put new work in a new pull request. If a `manifest.txt` or
+   `nonmatching.txt` line conflicts with `main` after another merge, rebase onto `main` and resolve it; never leave a
+   matched function's note behind to dodge the conflict.
 6. **Stuck?** After six to eight levers from `docs/codegen.md` without a match, stop and move on. Leave the function
    better than you found it: update its `nonmatching.txt` note with what you tried and
    what still differs, and open the pull request anyway. Notes are how the next person (or agent) starts ahead.
