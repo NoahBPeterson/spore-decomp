@@ -218,11 +218,20 @@ void CTerrainCam::ZeroVectors()
 }
 
 // @ 0x00eb31d0
+// Retail leaves the scaled time in the parameter slot and converts it with the memory
+// form of cvtss2si (round-to-nearest, not the truncating cvttss2si a plain cast emits).
+// The 6-instruction block is the module's inline-asm float helper (see docs/codegen.md).
 void CTerrainCam::SetTime(float v)
 {
-  v = v * g_ms;
-  m114 = 0;
-  i110 = _mm_cvtss_si32(_mm_set_ss(v));
+  __asm
+  {
+    movss xmm0, [esp + 4]
+    mulss xmm0, g_ms
+    mov dword ptr [ecx + 0x114], 0
+    movss [esp + 4], xmm0
+    cvtss2si eax, [esp + 4]
+    mov [ecx + 0x110], eax
+  }
 }
 
 struct Vec3f { float x, y, z; };

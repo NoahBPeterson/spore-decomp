@@ -133,10 +133,10 @@ void DeviceRelease()
 
 // @ 0x0075d920
 typedef void (*FactoryFn)(void*);
-extern FactoryFn GetFactory(void*);   // @ 0x011f9240
+extern FactoryFn GetFactory();   // @ 0x011f9240
 void CallFactory(void* arg)
 {
-    GetFactory(arg)(arg);
+    GetFactory()(arg);
 }
 
 // @ 0x0075d870

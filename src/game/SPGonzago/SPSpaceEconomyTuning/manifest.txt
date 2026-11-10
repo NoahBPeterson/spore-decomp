@@ -7,3 +7,5 @@
 ../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetPeaceBadOfferDelta@cSPSpaceEconomyTuning@@QAEHPAUcEmpire@@@Z  010309c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetPeaceVeryBadOfferDelta@cSPSpaceEconomyTuning@@QAEHPAUcEmpire@@@Z  01030a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetPeaceGoodOfferDelta@cSPSpaceEconomyTuning@@QAEHPAUcEmpire@@@Z  01030aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?GetHomeWorldBuildingMultiplier@cSPSpaceEconomyTuning@@QAEHXZ  0102fb70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceEconomyTuning.cpp  ?f010308d0@cSPSpaceEconomyTuning@@QAEPAXD@Z  010308d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

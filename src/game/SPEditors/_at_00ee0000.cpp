@@ -1254,7 +1254,7 @@ extern "C" void   FUN_00f321a0(void* ctx, float* v);                            
 extern "C" void   FUN_00f321f0(void* ctx, float* v);                                     // 0xf321f0
 extern "C" void   FUN_00f32100(void* ctx, float* v);                                     // 0xf32100
 extern "C" void   FUN_00eea910(void* ctx, void* p, float a, float b, float c);           // 0xeea910
-extern "C" void   __fastcall FUN_005a6db0(void* self, int, void* p);                     // 0x5a6db0 Update
+struct cPicker { void Update(void* p); };                                                // 0x5a6db0 Update
 extern "C" void   __fastcall FUN_005a4200(void* self, int, int a);                       // 0x5a4200
 extern "C" void   __fastcall FUN_005a4e20(void* self, int, const void* color);           // 0x5a4e20
 extern "C" void   __fastcall FUN_00b5f950(void* self, int, void* p);                     // 0xb5f950 AutoRefCount assign
@@ -4850,13 +4850,11 @@ u32 __fastcall FUN_00ee68b0(Pane* this_, int, void* param)
 void __fastcall FUN_00ee6b10(Pane* this_, int, void* p)
 {
     void* ctl = this_->mp1c;
-    if (ctl != 0) {
-        void* vt = *(void**)ctl;
-        (*(void(__thiscall**)(void*, void*, int))((char*)vt + 0x18))(ctl, p, 1);
-    }
-    void* pick = this_->mp20;
+    if (ctl != 0)
+        (*(void(__thiscall**)(void*, void*, int))((char*)*(void**)ctl + 0x18))(ctl, p, 1);
+    cPicker* pick = (cPicker*)this_->mp20;
     if (pick != 0)
-        FUN_005a6db0(pick, 0, p);
+        pick->Update(p);
 }
 
 // @ 0x00ee6bd0
