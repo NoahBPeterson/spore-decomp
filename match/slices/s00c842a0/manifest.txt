@@ -1,0 +1,1 @@
+slices/s00c842a0/s00c842a0.cpp  ?GetStarRotationRate@@YAMH@Z  00c842a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
