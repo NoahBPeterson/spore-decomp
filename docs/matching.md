@@ -203,6 +203,10 @@ Writing matchable source:
 - Budget your effort: up to ~6 variant rounds per function. If it won't match, keep the best
   behaviorally-correct version (it must compile) and list it in nonmatching.txt.
 
+**No inline assembly without approval (2026-11-11).** The pull-request check fails any added `__asm` / `_emit` /
+`naked` line unless a maintainer sets the `asm-approved` label (contributors ask with an `asm-override: <why>` line
+in the pull request body). The older rule below still applies to what is already in the repo.
+
 **No assembly transcription.** A function written as `__declspec(naked)` + `__asm`, with `_emit` bytes, or
 generated from the disassembly by a script is not decompiled and never counts as byte-exact; record it in
 partial.txt. Only a few `__asm` statements inside C++ where the original used an asm helper (fnstcw/fldcw,

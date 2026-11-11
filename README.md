@@ -37,9 +37,9 @@ few) per pull request, using the template.
 
 **If you are an AI agent:** read [`AGENTS.md`](AGENTS.md) first and follow it. The short version:
 - Only `src/game/`, `match/slices/` and `match/include/` may change. Never commit anything from `work/`.
-- No assembly transcriptions (`__declspec(naked)`, `_emit`, raw bytes, functions written in `__asm`), and no
-  constants written as addresses of invented globals: the check rejects all of these. A short `__asm` helper (at most
-  8 instructions) is allowed where the original used one; see `docs/matching.md`.
+- No inline assembly (`__asm`, `_emit`, `__declspec(naked)`, raw bytes) and no constants written as addresses of
+  invented globals: the check rejects these. A maintainer can approve a short helper when you ask for it with an
+  `asm-override: <why>` line in the pull request body (AGENTS.md, Rules).
 - Before trying new source shapes, look up the difference in [`docs/codegen.md`](docs/codegen.md). After six to eight
   levers without a match, move on. Code changes are merged only when they add a new byte-exact function; what you
   tried can go in as a notes-only pull request (the function's `nonmatching.txt` line).

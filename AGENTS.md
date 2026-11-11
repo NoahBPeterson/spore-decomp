@@ -86,10 +86,12 @@ into the generator's inputs so they are not lost.
 ## Rules
 
 - Write real, readable C++ that compiles to the original bytes, with the class and member names the headers give you.
-- No assembly transcriptions: no `__declspec(naked)`, `_emit` or raw bytes, and no function written in `__asm`; the
-  check rejects them. The one exception: a short `__asm` block (at most 8 instructions) where the original used an
-  asm helper, such as `fnstcw`/`fldcw`, `fistp` or `cvtss2si` conversions and the `maxss`/`minss` clamp
-  (`docs/matching.md`, "No assembly transcription"). Say so in the pull request.
+- **No inline assembly** without a maintainer's approval: no `__asm` / `_asm`, `_emit`, `__declspec(naked)` or raw
+  bytes. The check fails any pull request that adds such a line. If you are sure a short helper is the only faithful
+  spelling (for example retail inlines `fld; fistp` where C++ calls `_ftol2`), add a line
+  `asm-override: <why the original needs it, which function>` to the pull request body. A maintainer looks at it and
+  either approves it (the `asm-approved` label, which reruns the check) or asks for C++. Without that label the
+  check stays red.
 - Do not write a constant as the address of a made-up global (`&g_Table2458018` for `0x2458018`): the check sees the
   relocation and fails it.
 - Only `src/game/`, `match/slices/` and `match/include/` can change in a contribution. Changes to `tools/`, `.github/`

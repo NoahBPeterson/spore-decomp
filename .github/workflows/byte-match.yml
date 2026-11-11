@@ -13,7 +13,7 @@ name: Byte-match check
 
 on:
   pull_request_target:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, labeled, unlabeled]
   merge_group:
   workflow_dispatch:
     inputs:
@@ -136,6 +136,27 @@ jobs:
               print("what you tried can go in as a notes-only pull request (AGENTS.md, step 6).")
               sys.exit(1)
           EOF2
+
+      # No inline assembly without a maintainer's approval (2026-11-11): any `__asm` / `_emit` / `naked` line the pull
+      # request adds fails the check unless a maintainer has put the `asm-approved` label on it (contributors cannot set
+      # labels). Contributors ask for it with an `asm-override: <why>` line in the pull request body (AGENTS.md).
+      - name: No inline assembly unless a maintainer approved it
+        if: always() && steps.refs.outcome == 'success'
+        env:
+          APPROVED: ${{ contains(github.event.pull_request.labels.*.name, 'asm-approved') }}
+        run: |
+          if python3 tools/ci/asm_check.py "${{ steps.refs.outputs.base }}" "${{ steps.refs.outputs.head }}" > "$RUNNER_TEMP/asm.txt"; then
+            echo "No inline assembly added." | tee -a "$GITHUB_STEP_SUMMARY"
+          elif [ "$APPROVED" = "true" ]; then
+            { echo "Inline assembly added, approved by a maintainer (asm-approved):"; sed 's/^/    /' "$RUNNER_TEMP/asm.txt"; } | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            { echo "This pull request adds inline assembly, which is not merged without a maintainer's approval:"
+              sed 's/^/    /' "$RUNNER_TEMP/asm.txt"
+              echo "Write it as C++. If a short helper really is the only faithful spelling, add a line"
+              echo "'asm-override: <why the original needs it>' to the pull request body and a maintainer will decide"
+              echo "(AGENTS.md, Rules)."; } | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
 
       - name: Upload results
         if: always() && steps.affected.outputs.count != '0'
