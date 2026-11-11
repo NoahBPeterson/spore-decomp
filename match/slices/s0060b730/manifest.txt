@@ -19,3 +19,4 @@ slices/s0060b730/s0060b730.cpp  ?AddFormDataXML@HTTPMultipartRelatedPostBodyStre
 slices/s0060b730/s0060b730.cpp  ?WriteEndBoundary@HTTPMultipartRelatedPostBodyStream@Internet@EA@@UAE_NXZ  0060c360  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s0060b730/s0060b730.cpp  ?Read@HTTPMultipartRelatedPostBodyStream@Internet@EA@@UAEIPAXI@Z  0060c3f0  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s0060b730/s0060b730.cpp  ??1HTTPMultipartRelatedPostBodyStream@Internet@EA@@UAE@XZ  0060c660  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060b730/s0060b730.cpp  ?GetContentTypeString@HTTPMultipartRelatedPostBodyStream@Internet@EA@@UAE_NAAU?$basic_string@DVallocator@eastl@@@eastl@@@Z  0060c730  /O2 /MD /Gy /TP /arch:SSE /GS-

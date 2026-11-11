@@ -783,7 +783,7 @@ bool HTTPMultipartRelatedPostBodyStream::SetBoundary(const char* pBoundary) {
 bool HTTPMultipartRelatedPostBodyStream::GetContentTypeString(string8& sContentType) {
   sContentType.assign("multipart/related; boundary=", "multipart/related; boundary=" + 28);
   const char* const pBoundary = GetBoundary();
-  sContentType.append(pBoundary, pBoundary + InlineStrlen(pBoundary));
+  sContentType.append(pBoundary, pBoundary + strlen(pBoundary));
   return true;
 }
 
