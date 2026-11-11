@@ -3,3 +3,4 @@ slices/s00dddd20/s00dddd20.cpp  ?CamCtl_ResetPitch@@YGDHH@Z  00dde4b0  /O2 /MD /
 slices/s00dddd20/s00dddd20.cpp  ?CamCtl_SetGlobals@@YGDMMH@Z  00dde510  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00dddd20/s00dddd20.cpp  ?CamCtl_ResetGlobals@@YAXXZ  00dde570  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00dddd20/s00dddd20.cpp  ?CamCtl_SetFlag@@YGXE@Z  00dde5b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00dddd20/s00dddd20.cpp  ?CamCtl_Release@@YGXPAX@Z  00dde590  /O2 /MD /Gy /EHsc /TP /arch:SSE
