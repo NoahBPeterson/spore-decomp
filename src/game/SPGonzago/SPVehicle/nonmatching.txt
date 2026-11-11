@@ -2,7 +2,7 @@
 00c9ef20
 00c9ef60
 00c9f0a0
-00c9f490
+00c9f490 same size. first object's calls and both distances match; `d2 > d1 ? 1 : 0` gives the two full-width epilogues. Left: second position call keeps its slot in edx; kind checks load the vtable into eax.
 00c9f750
 00c9f7c0
 00c9fa70
