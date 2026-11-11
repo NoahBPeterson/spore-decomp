@@ -612,9 +612,9 @@ __declspec(noinline) hkBool hkVector4::isOk3() const
 	do
 	{
 		// The original round-trips each component through fld/fstp before looking at the bits.
-		hkUint32 bits;
-		memcpy(&bits, &v[i], sizeof(bits));
-		if ((bits & 0x7f800000) == 0x7f800000)
+		union { float value; hkUint32 bits; } component;
+		component.value = v[i];
+		if ((component.bits & 0x7f800000) == 0x7f800000)
 			return false;
 		i++;
 	} while (i < 3);
