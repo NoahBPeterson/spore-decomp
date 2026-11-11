@@ -2,3 +2,4 @@ slices/s013cb260/s013cb260.cpp  ?f_013cb290@@YAXXZ  013cb290
 slices/s013cb260/s013cb260.cpp  ?f_013cb620@@YAXXZ  013cb620
 slices/s013cb260/s013cb260.cpp  ?f_013cb300@@YAXXZ  013cb300  /O1 /MD /Gy /EHsc /TP
 slices/s013cb260/s013cb260.cpp  ?f_013cb320@@YAXXZ  013cb320  /O1 /MD /Gy /EHsc /TP
+slices/s013cb260/s013cb260.cpp  ?f_013cb780@@YAXXZ  013cb780  /vc71 /O2 /MD /Gy /EHsc /TP

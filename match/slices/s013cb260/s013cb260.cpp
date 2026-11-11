@@ -80,9 +80,9 @@ void f_013cb620() {
     DeleteCriticalSection(g_16f4e98);
 }
 
-// @ 0x013CB780
 struct S8 { int a; unsigned char b; char pad[3]; };
 
+// @ 0x013CB780
 void f_013cb780() {
     S8* p = (S8*)g_15d07c0;
     unsigned n = 2;
