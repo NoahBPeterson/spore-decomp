@@ -5,6 +5,8 @@
 // Compile flags: /vc71 /O2 /MD /Gy /EHsc /TP (Havok was built with VC .NET 2003).
 #include "types.h"
 #include <stddef.h>
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 typedef float hkReal;
 typedef uint16_t hkContactPointId;
@@ -308,7 +310,8 @@ struct HkHeightFieldArray {
 void HkHeightFieldArray::Destroy()
 {
     mpVptr = g_hkHeightFieldBvTreeVtbl;
-    if (mCapacity < 0)
+    _ReadWriteBarrier();
+    if (((unsigned int)mCapacity & 0x80000000u) != 0)
     {
         mpVptr = g_hkArrayBaseVtbl;
         return;
