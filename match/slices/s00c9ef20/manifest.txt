@@ -5,3 +5,6 @@ slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9fa30@CStub@@QAEXPAX@Z  00c9fa30  /O2 /M
 slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9fb10@CStub@@QAEHPAX@Z  00c9fb10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9ff40@CStub@@QAEXHPAM0@Z  00c9ff40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9f1c0@CStub@@QAEPAXXZ  00c9f1c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9f2d0@CStub@@QAEXH@Z  00c9f2d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9f3d0@CStub@@QAEPAXXZ  00c9f3d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9f410@CStub@@QAEEXZ  00c9f410  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
