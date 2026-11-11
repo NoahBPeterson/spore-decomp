@@ -49,3 +49,4 @@
 ../src/game/SPEditors/_at_00ee0000.cpp  ?f00eeda20@@YAXPBXPAH@Z  00eeda20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?Update@C40@@QAEXXZ  00ee9260  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?FUN_00ee6b10@@YIXPAUPane@@HPAX@Z  00ee6b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?FUN_00ee7850@@YAPAHPAH@Z  00ee7850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
