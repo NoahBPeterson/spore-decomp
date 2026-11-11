@@ -1,1 +1,2 @@
-slices/s00e8d0e0/s00e8d0e0.cpp  ?SetFlag@cGameTerrainCursorView@@QAEXD@Z  00e8d740  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00e8d0e0/s00e8d0e0.cpp  ?SetFlag@cGameTerrainCursorView@@QAEXD@Z  00e8d740  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include /GR-
+slices/s00e8d0e0/s00e8d0e0.cpp  ??0cGameTerrainCursorView@SP@@QAE@XZ  00e8d770  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include /GR-
