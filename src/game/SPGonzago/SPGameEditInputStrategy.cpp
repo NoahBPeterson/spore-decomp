@@ -2926,16 +2926,21 @@ u32 SP::cGameEditInputStrategy_s00d1_5440::GetGameplayMarkerTypeFromUI()
     return 0;
 }
 
+// Closest attempt. `p += 0x18` is retail's `add esi, 0x18`. The two stack
+// stores `mov [esp+0x10], eax` and `mov [esp+0x14], edx` are still swapped.
 // @ 0x00d16760
 bool cStrCmp::operator()(u32 a, u32 b)
 {
-    cWString& strA = mStr08;
-    cWString& strB = mStr18;
-    cConvertArg argA = { (void*)a, (void*)0x00b1b104, mpField00 };
-    cConvertArg argB = { (void*)b, (void*)0x00b1b104, mpField00 };
-    VT_7C_2(mpConv04, &argA, &strA);
-    VT_7C_2(mpConv04, &argB, &strB);
-    return StringCompare(strA.mpBegin, strA.mpEnd, strB.mpBegin, strB.mpEnd) < 0;
+    char* p = (char*)this;
+    cWString* strA = (cWString*)(p + 8);
+    cConvertArg argA = { (void*)a, (void*)0x00b1b104, *(void**)p };
+    cConvertArg argB = { (void*)b, (void*)0x00b1b104, *(void**)p };
+    VT_7C_2(*(void**)(p + 4), &argA, strA);
+    void* conv = *(void**)(p + 4);
+    p += 0x18;
+    VT_7C_2(conv, &argB, (cWString*)p);
+    return StringCompare(strA->mpBegin, strA->mpEnd,
+                         ((cWString*)p)->mpBegin, ((cWString*)p)->mpEnd) < 0;
 }
 
 // @ 0x00d167e0
