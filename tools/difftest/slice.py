@@ -434,6 +434,18 @@ def _def_name_after(lines, i):
     tpl = False
 
     def name_of(head):
+        # an explicit specialization names its template arguments: `template <> void RotateSH<Vector4>(` -> RotateSH
+        head = head.rstrip()
+        while head.endswith(">"):
+            depth_, k = 0, len(head) - 1
+            while k >= 0:
+                depth_ += {">": 1, "<": -1}.get(head[k], 0)
+                if depth_ == 0:
+                    break
+                k -= 1
+            if k <= 0:
+                break
+            head = head[:k].rstrip()
         m = re.search(r"((?:[A-Za-z_]\w*\s*::\s*)*~?(?:operator\s*\S+|[A-Za-z_]\w*))\s*$", head)
         return re.sub(r"\s+", "", m.group(1)) if m else None
 
