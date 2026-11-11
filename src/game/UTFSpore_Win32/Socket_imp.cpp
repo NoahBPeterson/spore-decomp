@@ -169,7 +169,7 @@ struct ISocket {
     virtual void v22();
     virtual void v23();
     virtual void v24();
-    virtual bool v25();                                        // IsWaitingDataAvailable
+    virtual bool IsWaitingDataAvailable(unsigned int timeout); // slot 25, 0x0094d690
 
     unsigned mSocketId;   // +0x04
 
@@ -201,7 +201,6 @@ struct ISocket {
     bool Close();                                               // 0x0094E4A0
     bool Connect(bool* ok, void* stream);                       // 0x0094E4B0
     unsigned WaitForWrite();                                    // 0x0094E560
-    bool IsWaitingDataAvailableSub();                           // 0x0094E5E0
     bool AcceptPeer(void* pSocket, bool& ok);                   // 0x0094E5F0
     bool Accept(unsigned* sockId, Address* addr, bool* ok);     // 0x0094E650
     bool DoAccepted(unsigned const& id, Address const& addr, int cs,
@@ -341,6 +340,26 @@ virtual void t11();
 struct StreamSocketBase : SocketBase, IStrBase {
     int mConnectStatus;                  // 0x84
     StreamSocketBase();                  // 0x0094E9A0
+};
+// The connection-availability entry receives IStreamSocket at +0x80 and
+// forwards through the Socket interface at +8, preserving its timeout.
+struct SocketReadinessBase_s0094dbc0 : RefCountBase, ISocket {
+    Address mAddress;
+    Address mPeerAddress;
+    int mnAddressFamily;
+    int mnType;
+    int mnProtocol;
+    Error mLastError;
+    void* mpUserData;
+    unsigned char mbInitialized;
+    unsigned char mbBound;
+    unsigned char mbSaveSocket;
+    unsigned char mbNonBlocking;
+};
+struct StreamSocketReadiness_s0094dbc0 : SocketReadinessBase_s0094dbc0,
+    EA::Sockets::IStreamSocket {
+    EA::Sockets::ConnectStatus mConnectStatus;
+    virtual bool IsConnectionAvailable(unsigned int timeout);
 };
 // ---- items of slice s0094dbc0 end
 
@@ -939,9 +958,9 @@ unsigned ISocket::WaitForWrite()
 }
 
 // @ 0x0094e5e0
-bool ISocket::IsWaitingDataAvailableSub()
+bool StreamSocketReadiness_s0094dbc0::IsConnectionAvailable(unsigned int timeout)
 {
-    return ((ISocket*)((char*)this - 0x78))->v25();
+    return IsWaitingDataAvailable(timeout);
 }
 
 // @ 0x0094e5f0
