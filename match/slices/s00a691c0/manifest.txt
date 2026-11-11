@@ -2,3 +2,4 @@
 slices/s00a691c0/s00a691c0.cpp  ?assign_rec@StrRec@@QAEPAU1@PBU1@@Z  00a69c20  /O2 /MD /Gy /EHsc /TP
 slices/s00a691c0/s00a691c0.cpp  ?DestroySlotRange2@@YGXPAURefVecSlot@@0@Z  00a6a0e0  /O2 /MD /Gy /EHsc /TP
 slices/s00a691c0/s00a691c0.cpp  ?FillRef@@YAXPAPAURefObject@@I0@Z  00a695a0  /O2 /MD /Gy /EHsc /TP
+slices/s00a691c0/s00a691c0.cpp  ?DestroyRange@RefVec@@QAEXPAPAURefObject@@0@Z  00a693f0  /O2 /MD /Gy /EHsc /TP
