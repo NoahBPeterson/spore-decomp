@@ -2,7 +2,6 @@
 00c0b030 28 complete; frame now exact (sub esp,8, size 204): double v keeps the 8-byte frame slot, and a 4-byte union {float f; bool b;} u colors the float and both bool bytes into retail's second temp slot (union-of-all-four was worse: it forced every temp into the frame qword; param-slot alias (&stream) worse: it makes stream memory-resident and reloads it). Remaining 28 bytes = pure load scheduling in blocks 1-2: retail hoists inner's vptr load (mov edx,[eax]) ABOVE the value load (fld qword / movss) and defers the temp store to just before the slot-6 call; ours does value-load+store first (bool blocks 3-4 already byte-identical incl. the ebx byte caching). Neutral: all local renames (v/u/inner/s), value-init moved after the s-vcall (worse, 49). Next: find the spelling that splits the s-expression so the vptr load schedules early -- maybe declare the vcall target as a named local fn-ptr? or a volatile read of inner's vtable?
 00c0b100
 00c0bb20
-00c0be70 6 cached-handle predicate: complete; bool return materialisation (setne/xor eax vs xor al)
 00c0c200 43 game-mode water render callback: complete; call/arg setup differs
 00c0c440 8 copy range of 0x24 records: complete; float field copied via fld/fstp in original
 00c0c4b0 218 quaternion half-angle swap: complete; x87/SSE mixing and expression order

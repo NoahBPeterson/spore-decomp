@@ -45,6 +45,7 @@
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c141b0@@YAPAXPAUIStream@@PAH@Z  00c141b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?GetBodyPartIndex@cSPCreatureBase_s00c1_7350@@QAEIII@Z  00c17580  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?CreateBodyEffect@cSPCreatureBase_s00c1_7350@@QAEIIII@Z  00c17c80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0be70@@YA_NH@Z  00c0be70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?reserve@Vector003c@@QAEXI@Z  00c199e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c20210@cCreatureFactory@@QAEXPAX0@Z  00c20210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c22210@cSPCreatureBase_s00c2_2010@@QAEXH@Z  00c22210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
