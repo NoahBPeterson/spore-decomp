@@ -207,6 +207,7 @@ public:
 	virtual void linearCast(const hkCdBody& a, const hkCdBody& b, const hkLinearCastCollisionInput& input,
 	                        hkCdPointCollector& castCollector, hkCdPointCollector* startCollector);
 	virtual void processCollision(const hkCdBody& a, const hkCdBody& b, const hkProcessCollisionInput& input, hkProcessCollisionOutput& output);
+	virtual void updateShapeCollectionFilter(const hkCdBody& a, const hkCdBody& b, const hkCollisionInput& input);
 };
 
 // Template member definitions (explicitly instantiated in the slices that own the binary's instances).
@@ -261,6 +262,12 @@ void hkSymmetricAgent<AGENT>::processCollision(const hkCdBody& bodyA, const hkCd
 		output.m_toiContact.m_separatingNormal.y = -output.m_toiContact.m_separatingNormal.y;
 		output.m_toiContact.m_separatingNormal.z = -output.m_toiContact.m_separatingNormal.z;
 	}
+}
+
+template <typename AGENT>
+void hkSymmetricAgent<AGENT>::updateShapeCollectionFilter(const hkCdBody& bodyA, const hkCdBody& bodyB, const hkCollisionInput& input)
+{
+	AGENT::updateShapeCollectionFilter(bodyB, bodyA, input);
 }
 
 // ---- multi sphere / bounding volume ------------------------------------------------------------------------

@@ -35,6 +35,7 @@ class hkReferencedObject
 public:
     hkReferencedObject() { m_referenceCount = 1; }
     virtual ~hkReferencedObject() {}
+    virtual void calcStatistics(class hkStatisticsCollector*) const; // 0x0052e650 (slot 1)
     void addReference() { if (m_memSizeAndFlags != 0) m_referenceCount++; }
     void removeReference()
     {
@@ -64,9 +65,9 @@ class hkMemory
 public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void* allocateChunk(int nbytes, int cls);
-    virtual void v5();
-    virtual void* onRowEmpty(int row, int cls);
     virtual void deallocateChunk(void* p, int nbytes, int cls);
+    virtual void* onRowEmpty(int row, int cls);
+    virtual void v7();
     virtual void v8();
 
     int m_numUsedChunks;                            // +0x04 (the sticky "out of memory" flag)
@@ -394,16 +395,26 @@ class hkCollisionDispatcher                    // hkReferencedObject; only the t
     int calculateCombinedCollisionQuality(int qualityB);   // 0x010cd600
 };
 
-// The broad-phase handle's owner: ownerOffset at handle+5 selects the hkEntity inside the collidable.
-class hkEntityEntityBroadPhaseListener
+// Broad-phase listeners retain the referenced-object header at +4/+6.
+class hkBroadPhaseListener : public hkReferencedObject
+{
+public:
+    virtual void addCollisionPair(const hkBroadPhasePair& pair) = 0;
+    virtual void removeCollisionPair(const hkBroadPhasePair& pair) = 0;
+};
+
+class hkEntityEntityBroadPhaseListener : public hkBroadPhaseListener
 {
 public:
     hkEntityEntityBroadPhaseListener(hkWorld* world);
+    enum { HK_MEMORY_CLASS_BROAD_PHASE = 30 };
+    static void operator delete(void* p)
+    {
+        hkMemory::s_instance->deallocateChunk(p, ((hkReferencedObject*)p)->m_memSizeAndFlags, HK_MEMORY_CLASS_BROAD_PHASE);
+    }
     virtual void addCollisionPair(const hkBroadPhasePair& pair);
     virtual void removeCollisionPair(const hkBroadPhasePair& pair);
 
-    uint16_t m_pad04;                   // +4
-    uint16_t m_objectQualityType;       // +6
     hkWorld* m_world;                   // +8
 };
 
@@ -531,7 +542,6 @@ postSimulate:
 hkEntityEntityBroadPhaseListener::hkEntityEntityBroadPhaseListener(hkWorld* world)
 {
     m_world = world;
-    m_objectQualityType = 1;
 }
 
 // @ 0x010a3780

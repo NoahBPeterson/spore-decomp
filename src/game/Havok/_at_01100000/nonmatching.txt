@@ -4,7 +4,6 @@
 01102010 3788 complete queryRay; x87 scheduling/branch layout of 4KB recursive MOPP walker not matched flags: /O2 /MD /Gy /EHsc /TP
 01102fc0 230 hkBool is a class (returned via a hidden pointer), so the signature/symbol now matches; the container is loaded only after the n>0 check [equiv: PASS 332 valid inputs, 100.0% coverage] flags: /vc71 /O2 /MD /Gy /TP
 01103140 231 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
-01103330 4 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 01103670 251 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 01103850 162 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 01103a10 115 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP

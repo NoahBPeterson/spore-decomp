@@ -1,5 +1,4 @@
 010a32c0 0 havok-equivalent; equiv UNSUPPORTED (unresolved refs: hkMemoryWatchdog_getMaxAllowedMemory/getUsedMemory annotation-implausible, hkWorld_integrateIslandsAtPsi)
-010a3760 0 (residual) havok-equivalent; equiv FAIL: leaves edx where original clobbers it (imm16 store vs reg + empty-vtable vptr store); fields at +6/+8 correct; order word/ptr/world and vc71 flags both tried
 010a3780 0 havok-equivalent; equiv UNSUPPORTED: unresolved ref calculateCombinedCollisionQuality [annotation-implausible 010cd600]
 010a3810 0 havok-equivalent; equiv FAIL 5/14: eax
 010a38c0 0 havok-equivalent; equiv PASS 283 valid inputs 100% coverage (chk 85/94 bytes = regalloc / x87 spill only)

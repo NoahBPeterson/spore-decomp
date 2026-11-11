@@ -1,6 +1,7 @@
 // Slice s008337d0 -- texture-instance hashtable nodes + UTFWin cSPUITextWin + UI::TextZoomName.
 // Region flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 #include "types.h"
+#include "../../../src/game/include/EA/COM/InterfaceId.h"
 
 typedef void*  (__thiscall *VFi)(void*);
 typedef void   (__thiscall *VFv)(void*);
@@ -78,8 +79,8 @@ extern "C" void  FUN_0088332d0(void);  // GetHeight
 extern "C" void* FUN_00f473a0(void);   // EASTL allocator allocate
 extern "C" void* FUN_00883860(void);   // GetServer
 extern "C" void* FUN_0067dd60(void);
-extern "C" void  FUN_008052f0(void);
-extern "C" void  FUN_00805300(void);
+extern "C" void  FUN_008052f0(void* window); // 0x008052f0
+extern "C" void  FUN_00805300(void* window); // 0x00805300
 
 // ---------------------------------------------------------------- texture node table
 struct TexNode {
@@ -320,24 +321,33 @@ void __cdecl FUN_008344d0(int a1, uint32_t* a2, int a3, int a4, float a5)
     ((void (__thiscall*)(void*))FUN_00834220)(self);
 }
 
+// Declaration-only prefix of the retail IWinProc interface (AsInterface is slot 3).
+namespace EA { namespace UTFWin {
+class IWinProc {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    virtual ~IWinProc();
+    virtual void* AsInterface(EA::COM::InterfaceId id);
+};
+} }
+
 // @ 0x00834560
-typedef void* (__thiscall *FUN34560_Fn)(void*, int);
 bool __cdecl FUN_00834560(void* p, void* unused, int mode)
 {
     (void)unused;
     void* r;
     if (p != 0) {
-        FUN34560_Fn f = (FUN34560_Fn)VT(p)[0xc / 4];
-        r = f(p, (int)0xeeee8218);
+        r = ((EA::UTFWin::IWinProc*)p)->AsInterface((EA::COM::InterfaceId)0xeeee8218);
     } else {
         r = 0;
     }
     if (mode == 0) {
-        ((void (__cdecl*)(void*))FUN_008052f0)(r);
+        FUN_008052f0(r);
         return true;
     }
     if (mode == 1) {
-        ((void (__cdecl*)(void*))FUN_00805300)(r);
+        FUN_00805300(r);
     }
     return true;
 }

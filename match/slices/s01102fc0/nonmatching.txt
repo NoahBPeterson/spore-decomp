@@ -1,6 +1,5 @@
 01102fc0 338 hkBool is a class (returned via a hidden pointer), so the signature/symbol now matches; the container is loaded only after the n>0 check [equiv: PASS 332 valid inputs, 100.0% coverage]
 01103140 281 havok-equivalent
-01103330 25 havok-equivalent
 01103370 252 min/max are set before the n<=0 early-out and the container is loaded only inside the loop (fixes the negative-n fault) [equiv: WEAK 277 valid inputs, 23.9% coverage]
 01103470 214 min/max are set before the n<=0 early-out and the container is loaded only inside the loop (fixes the negative-n fault) [equiv: WEAK 288 valid inputs, 25.0% coverage]
 01103610 80  inits are called through opaque indirect calls so `this` stays in esi and edx is never written; call/register schedule differs [equiv: PASS 389 valid inputs, 100.0% coverage]

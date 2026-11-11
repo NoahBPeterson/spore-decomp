@@ -4036,8 +4036,9 @@ u8 __cdecl FUN_00cb63c0(void* a1)
 // @ 0x00cb63e0
 void __cdecl FUN_00cb63e0(void* a1)
 {
-    void* p = *(void**)((u8*)a1 + 0x64);
-    FUN_00cb6310(p, 0);
+    void* object = ((WeaponPredicateContext*)a1)->mpObject64;
+    _ReadWriteBarrier();
+    FUN_00cb6310(object, 0);
 }
 
 // @ 0x00cb6400

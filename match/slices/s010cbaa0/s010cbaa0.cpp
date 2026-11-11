@@ -73,7 +73,7 @@ class hkMoppFitToleranceRequirements : public hkReferencedObject    // vtable 0x
 {
 public:
 	hkMoppFitToleranceRequirements();
-	void getAbsoluteFitToleranceOfAxisAlignedTriangles(hkVector4& out) const;
+	hkVector4 getAbsoluteFitToleranceOfAxisAlignedTriangles() const;
 	float getRelativeFitToleranceOfInternalNodes() const { return m_relativeFitToleranceOfInternalNodes; }   // 0x00C06330
 	float getAbsoluteFitToleranceOfInternalNodes() const { return m_absoluteFitToleranceOfInternalNodes; }   // 0x00FD9440
 	float getAbsoluteFitToleranceOfTriangles() const { return m_absoluteFitToleranceOfTriangles; }           // 0x00E28A00
@@ -100,10 +100,9 @@ hkMoppFitToleranceRequirements::hkMoppFitToleranceRequirements()
 }
 
 // @ 0x010cbed0
-void hkMoppFitToleranceRequirements::getAbsoluteFitToleranceOfAxisAlignedTriangles(hkVector4& out) const
+hkVector4 hkMoppFitToleranceRequirements::getAbsoluteFitToleranceOfAxisAlignedTriangles() const
 {
-	// raw dword copies in the binary (no x87 load/store)
-	memcpy(&out, &m_absoluteFitToleranceOfAxisAlignedTriangles, sizeof(hkVector4));
+	return m_absoluteFitToleranceOfAxisAlignedTriangles;
 }
 
 // The MOPP compiler objects used by buildCode live in code outside this slice (0x01103xxx). Their roles are
@@ -179,7 +178,7 @@ hkMoppCode* hkMoppUtility::buildCode(const hkShapeCollection* shapeCollection, c
 	params.m_absoluteFitToleranceOfInternalNodes = mfr.getAbsoluteFitToleranceOfInternalNodes();
 	params.m_absoluteFitToleranceOfTriangles = mfr.getAbsoluteFitToleranceOfTriangles();
 	hkVector4 axisAligned;
-	mfr.getAbsoluteFitToleranceOfAxisAlignedTriangles(axisAligned);
+	axisAligned = mfr.getAbsoluteFitToleranceOfAxisAlignedTriangles();
 	params.m_absoluteFitToleranceOfAxisAlignedTriangles = axisAligned;
 	compiler.setAssemblerParams(params);
 

@@ -9,3 +9,4 @@ slices/s00ac6b90/s00ac6b90.cpp  ?drainNouns_7a40@@YGXPAX@Z  00ac7a40  /O2 /MD /G
 slices/s00ac6b90/s00ac6b90.cpp  ?removeNoun@cGroundEditorRes@@QAEXXZ  00ac79a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ac6b90/s00ac6b90.cpp  ?getContainer@cGroundEditorRes@@QAEPAXXZ  00ac79d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ac6b90/s00ac6b90.cpp  ?destroyContainer@cGroundEditorRes@@QAEXXZ  00ac7980  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac6b90/s00ac6b90.cpp  ?sdtor@cGroundLayer@@QAEPAXI@Z  00ac6e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
