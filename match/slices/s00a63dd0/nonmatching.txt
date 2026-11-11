@@ -7,7 +7,6 @@
 00a64470 57  AssetSlot::Ctor: 57 diff; compiler reorders the constant-field stores; source order and register (ecx=this) match. Store-scheduling artifact. difftest: PASS.
 00a64560 51  EapdAssetManager::FreeAll: 51 diff; list unlink+free loop matches; MSVC hoists the [cur+4] load ahead of the [cur] load. difftest: UNSUPPORTED (0/400 valid; synthetic list head is unmapped => fault(write)).
 00a645c0 201 EapdAssetManager::RearrangeLists: 201 diff; two circular-list splice loops; original has a longer inlined form. difftest: UNSUPPORTED (0/400 valid; write/fetch faults).
-00a649b0 9   EapdAssetManager::GetTwoWords: 9 diff; original keeps p in ecx and reads [p+0x64] first; MSVC reassigns p to eax in ours. Register-allocation artifact. difftest: PASS.
 00a64ad0 142 ObjectHashMap::Resize: 142 diff; rehash loop reconstruction diverges from the original's inlined chain relink. difftest: UNSUPPORTED (0/400 valid; import:memset unresolved).
 00a64b70 79  ObjectHashMap::Dtor: 79 diff; original is an SEH-framed destructor; ours is unframed. Body already calls DisposeArray + allocator freeth. difftest: PASS.
 00a64be0 89  ObjectHashMap::Erase: 89 diff; bucket-chain unlink+free matches semantically; original uses a different register/loop decomposition. difftest: PASS.

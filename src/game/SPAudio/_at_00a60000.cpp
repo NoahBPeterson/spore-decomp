@@ -469,6 +469,11 @@ struct AssetSlot {
 namespace EA {
 namespace Audio {
 namespace Eapd {
+struct CanvasWordPair {
+    uint32_t pad00[0x64 / 4];
+    void* mpWord64;  // +0x64
+    void* mpWord68;  // +0x68
+};
 struct EapdAssetManager_s00a6_3dd0 {
     void*       mpVtbl00;     // +0x00
     void*       mpAllocVtbl;  // +0x04
@@ -491,7 +496,8 @@ struct EapdAssetManager_s00a6_3dd0 {
     void*       mpSent48;     // +0x48
     void*       mpSent4c;     // +0x4c
     void*       mpSent50;     // +0x50
-    uint8_t     mField54[0x74 - 0x54];
+    uint32_t    pad54[(0x70 - 0x54) / 4];
+    CanvasWordPair* mpCanvas70;  // +0x70
 
     bool        Load(const char* data, unsigned size, PgSymbol* out);          // 0x00a63dd0
     __declspec(noinline) void ReleaseEntryNode(AssetEntry* node);              // 0x00a64280
@@ -509,7 +515,7 @@ struct EapdAssetManager_s00a6_3dd0 {
     bool        MakeFloatHandler(float f);                                     // 0x00a648a0
     bool        MakeSymbolHandler(const char* s);                              // 0x00a648f0
     bool        MakeListHandler(void);                                         // 0x00a64950
-    void*       GetTwoWords(void* out);                                        // 0x00a649b0
+    void*       GetTwoWords(void* __restrict out);                                        // 0x00a649b0
     void*       RealizeDollar(void* out);                                      // 0x00a649d0
     void        DisposeArray(void** arr, unsigned n);                          // 0x00a64a50
     void        MakeFloatHandler2(uint8_t v);                                  // 0x00a64aa0
@@ -1894,13 +1900,10 @@ int SendSymbolList(void* atom)
 
 // @ 0x00a649b0
 namespace EA { namespace Audio { namespace Eapd {
-void* EapdAssetManager_s00a6_3dd0::GetTwoWords(void* out)
+void* EapdAssetManager_s00a6_3dd0::GetTwoWords(void* __restrict out)
 {
-    char* p = *(char**)((char*)this + 0x70);
-    void* a = *(void**)(p + 0x64);
-    void* b = *(void**)(p + 0x68);
-    *(void**)out = a;
-    *(void**)((char*)out + 4) = b;
+    ((void**)out)[0] = mpCanvas70->mpWord64;
+    ((void**)out)[1] = mpCanvas70->mpWord68;
     return out;
 }
 }}}  // namespace EA::Audio::Eapd
