@@ -1,7 +1,6 @@
 00e91ce0  313  equiv FAIL (5/5 valid, execution); GetRingAnimationPercentage body/transform staging not reproduced. flags /O2 /MD /Gy /TP /arch:SSE
 00e91e40  1386  equiv WEAK (286 valid, 6.5% cov); HandleSimulationUpdate under-built (1021 vs 1386) - full transform-message / effect-color / pow-pop logic not reproduced. flags /O2 /MD /Gy /TP /arch:SSE
 00e923b0  619  equiv FAIL (5/5 valid, fake call #0); cRotationRingView::MakeView staged-dispatch differs. flags /O2 /MD /Gy /TP /arch:SSE
-00e92620  50  equiv FAIL (5/71 valid, execution); SetIsInWorld: and al,1 vs and eax,1 bitfield + branch staging differ. flags /O2 /MD /Gy /TP /arch:SSE
 00e926d0  106  equiv UNSUPPORTED (0/400 valid); SetModel_926d0 float-temp spill + duplicated epilogue differ; orig faults on random inputs. flags /O2 /MD /Gy /TP /arch:SSE
 00e92740  463  equiv WEAK (209 valid, 20.6% cov); MakeView_740 member/enumeration staging differs. flags /O2 /MD /Gy /TP /arch:SSE
 00e92910  153  equiv FAIL (5/41 valid, fake call #4); Init: generated callee differs (fake-call). flags /O2 /MD /Gy /TP /arch:SSE
