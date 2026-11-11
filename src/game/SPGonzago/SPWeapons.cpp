@@ -19,6 +19,7 @@ extern char g_157ddb8;   // [0x0157ddb8]
 extern char g_157e358;   // [0x0157e358]
 extern char g_157e578;   // [0x0157e578]
 extern char g_157e758;   // [0x0157e758]
+extern char g_157e888;   // [0x0157e888]
 #include <math.h>
 #include "SP/cCommunity.h"
 #include "SP/cDefaultAoEArea.h"
@@ -81,6 +82,12 @@ static inline void* StreamWriter(IStream* s) {
 }
 static inline void* WriterValue(void* w) {
     return ((FnVp0)((VObj*)w)->vt[0x18 / 4])(w);
+}
+// Writes one class-id word through the writer: the value is a by-value parameter
+// whose address is passed on (EA::IO::WriteUint32 takes a pointer), matching the
+// retail homing of the id into its stack slot (0x00cb44b0 family).
+static inline void WriteSigId(void* writer, uint32_t classId) {
+    EA_IO_WriteUint32(writer, &classId, 1, 0);
 }
 struct cSPSpaceToolData {
     char pad00[0x150];
@@ -3102,19 +3109,22 @@ void CResourceProjectileW2::Write(IStream* s)
     ser.Serialize(s);
 }
 
+struct CICBMProjectile {
+    cGameData         mGameData;   // +0x00 (Write at 0x00b18590)
+    cLocomotiveObject mLoco;       // +0x34 (Write at 0x00c448a0)
+    void __thiscall Write(IStream* s);
+};
+
 // @ 0x00cb44b0
-int f00cb44b0_write(cGameData_s00cb_44b0* self, cOutStream* stream)
+void CICBMProjectile::Write(IStream* s)
 {
-    void* w  = ((GetStreamObj*)stream)->GetStream();          // vtable +0x20
-    void* wr = ((GetStreamObj*)w)->GetStream();               // vtable +0x18
-    uint sig = 0x49cec5c;
-    EA_IO_WriteUint32(wr, &sig, 1, 0);
-    self->Write(stream);
-    cLocomotiveObject_Write((cLocomotiveObject_s00cb_44b0*)((char*)self + 0x34), stream);
-    char ser[12];
-    cVarListSerializer_ctor(ser, self, (void*)0x0157e888, 0x1a80d26);
-    cVarListSerializer_Serialize(ser, stream);
-    return 0;
+    void* w = StreamWriter(s);                     // vtable +0x20
+    void** it = *(void***)w;                       // w's vtable
+    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x49cec5c);   // cICBM class id
+    mGameData.Write(s);
+    mLoco.Write(s);
+    cVarListSerializer ser(this, &g_157e888, 0x1a80d26);
+    ser.Serialize(s);
 }
 
 // @ 0x00cb4670
