@@ -740,13 +740,11 @@ void* cSpaceInventoryItem::Cast(uint32_t typeID)
 bool cSpaceInventoryItem::IsCargoType()
 {
     switch (mItemType) {
-    case kItemNone:
-        return false;
-    case kItemPlant:
-    case kItemTool:
-    case kItemTradingObject:
-    case kItemMultiDeliveryObject:
-    case kItemSentient:
+    case SP::kItemCargoFlora:
+    case SP::kItemCargoFauna:
+    case SP::kItemCommodity:
+    case SP::kItemCargoItem:
+    case SP::kItemCargoSentient:
         return true;
     default:
         return false;

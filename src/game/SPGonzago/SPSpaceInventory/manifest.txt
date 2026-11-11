@@ -21,3 +21,4 @@
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?Read@cSpaceInventory_s00c8_7be0@@QAE_NPAX@Z  00c883d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?UpdateTuning@cSPSpaceInventoryItem_s0104_bcc0@SP@@SAXIPAI@Z  0104c120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?FUN_01353800@@YAXXZ  01353800  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceInventory.cpp  ?IsCargoType@cSpaceInventoryItem@@UAE_NXZ  00c86f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
