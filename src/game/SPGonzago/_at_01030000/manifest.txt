@@ -2,6 +2,8 @@
 ../src/game/SPGonzago/_at_01030000.cpp  ?FUN_01034680@@YAHPAUView@@@Z  01034680  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_01030000.cpp  ?FUN_010346b0@@YGXMMM@Z  010346b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_01030000.cpp  ?FUN_010347a0@BigThing@@QAEPAXE@Z  010347a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_01030000.cpp  ?FUN_010347e0@Behavior@@QAEXXZ  010347e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_01030000.cpp  ?FUN_01034810@Behavior@@QAEXXZ  01034810  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_01030000.cpp  ?FUN_01034840@Behavior@@QAEXXZ  01034840  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_01030000.cpp  ?FUN_01034880@Behavior@@QAEXXZ  01034880  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_01030000.cpp  ?SP_CaptureImposterModel@@YAXPAX@Z  01037a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
