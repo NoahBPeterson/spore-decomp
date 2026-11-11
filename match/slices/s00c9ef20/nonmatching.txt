@@ -1,11 +1,9 @@
 00c9f130
-00c9f1e0
 00c9f250
 00c9f490
 00c9f5c0
 00c9f650 note: 104 vs 104 bytes, only the load/store order of the last three statements differs. Retail loads float-by-float ([eax+0xc4] then [eax+0xc8] then [eax+0xcc]) and re-materialises `mov eax,[esp+4]` in the default arm; cl 15 loads all three sources first (fld/fld/movss xmm). Arms reordered, named-locals, user ctor/copy-ctor/operator= vector type, Vec3& parameter, `_ReadWriteBarrier()` and repeated-expression forms all tried: the gap is cl's scheduler choosing to keep eax live across `fstp`, not source shape.
 00c9f7c0
-00c9fa70
 00c9fb40
 00c9fc60
 00c9fd40
