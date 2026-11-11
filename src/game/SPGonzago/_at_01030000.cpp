@@ -415,7 +415,10 @@ void Behavior::FUN_010347e0()
 {
     AppView* app = SP_App();
     ObjA0* obj = mObjA0;
-    obj->pv33(G_STR_15B79B8, app->pv20());
+    char* slot = *(char**)obj;
+    slot += 0x84;
+    uint32_t value = app->pv20();
+    ((void (__thiscall*)(ObjA0*, void*, uint32_t))*(void**)slot)(obj, G_STR_15B79B8, value);
 }
 
 // @ 0x01034810
@@ -423,7 +426,10 @@ void Behavior::FUN_01034810()
 {
     AppView* app = SP_App();
     ObjA0* obj = mObjA0;
-    obj->pv33(G_STR_15B7844, app->pv20());
+    char* slot = *(char**)obj;
+    slot += 0x84;
+    uint32_t value = app->pv20();
+    ((void (__thiscall*)(ObjA0*, void*, uint32_t))*(void**)slot)(obj, G_STR_15B7844, value);
 }
 
 // @ 0x01034840
