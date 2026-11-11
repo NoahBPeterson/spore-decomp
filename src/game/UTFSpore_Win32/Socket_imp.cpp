@@ -87,6 +87,7 @@ struct TimeVal { long tv_sec; long tv_usec; };
 struct FdSet  { unsigned fd_count; unsigned fd_array[64]; };
 extern "C" __declspec(dllimport) int __stdcall ioctlsocket(unsigned s, long cmd, unsigned long* argp);  // wsock32
 extern "C" __declspec(dllimport) int __stdcall select(int nfds, void* rd, void* wr, void* ex, void* to);
+extern "C" int __stdcall WSAFDIsSet(unsigned s, void* set);  // 0x0112c53c
 extern "C" __declspec(dllimport) int __stdcall getsockopt(unsigned s, int level, int optname, char* optval, int* optlen);
 extern "C" __declspec(dllimport) unsigned __stdcall socket(int af, int type, int protocol);  // wsock32
 // ---- items of slice s0094cac0 end
@@ -531,23 +532,25 @@ int EA::Sockets::Socket::IsReadableAndOrWritable(EA::Sockets::IOType mode, unsig
     FdSet rd;
     rd.fd_count = 0;
     if (mode & 1) {
-        rd.fd_count = 1;
         rd.fd_array[0] = *(unsigned*)((char*)this + 4);
+        rd.fd_count = 1;
     }
     FdSet wr;
     wr.fd_count = 0;
     if (mode & 2) {
-        wr.fd_count = 1;
         wr.fd_array[0] = *(unsigned*)((char*)this + 4);
+        wr.fd_count = 1;
     }
-    int r = select(1, (mode & 1) ? &rd : 0, (mode & 2) ? &wr : 0, 0, ptv);
+    int r = select(0, (mode & 1) ? &rd : 0, (mode & 2) ? &wr : 0, 0, ptv);
     if (r == -1) {
         REPORT_ERROR(this);
         return 0x80;
     }
-    unsigned result = 0;
-    if (select(1, &rd, 0, 0, ptv) != 0) result |= 1;
-    if (select(1, 0, &wr, 0, ptv) != 0) result |= 2;
+    int result = 0;
+    if (WSAFDIsSet(*(unsigned*)((char*)this + 4), &rd) != 0)
+        result = 1;
+    if (WSAFDIsSet(*(unsigned*)((char*)this + 4), &wr) != 0)
+        result |= 2;
     return result;
 }
 

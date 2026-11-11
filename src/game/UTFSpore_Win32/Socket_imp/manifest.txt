@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Destroy2@Socket@@QAEXXZ  0094d300  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?IsReadableAndOrWritable@Socket@Sockets@EA@@UAEHW4IOType@23@I@Z  0094d7d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Bind@Socket@@QAE_NPBX@Z  0094d410  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Fn0094d470@Socket@@QAE_NH@Z  0094d470  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Fn0094d4b0@Socket@@QAE_NXZ  0094d4b0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
