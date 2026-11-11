@@ -16,3 +16,4 @@
 ../src/game/SPEditors/_at_005e0000.cpp  ?enableCollisionsBetween@SPSpineCollisionFilter@SP@@QAEXHH@Z  005eff70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_005e0000.cpp  ?disableCollisionsUsingBitfield@SPSpineCollisionFilter@SP@@QAEXII@Z  005effa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_005e0000.cpp  ??0SPSpineCollisionFilter@SP@@QAE@XZ  005effe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005e0000.cpp  ?GetAreaPair@cSPPaletteItemRollover_s005e_cf80@SP@@QAEPAHPAH@Z  005ed340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1011,7 +1011,10 @@ namespace SP {
 class cSPPaletteItemRollover_s005e_cf80 {
  public:
   char pad00[0x0c];
-  char mLayout[0x78 - 0x0c];    // +0x0c  embedded cSPUILayout object
+  uint32_t pad0c[4];
+  int mField1c;                 // +0x1c
+  int mField20;                 // +0x20
+  uint32_t pad24[(0x78 - 0x24) / 4];
   void* mWinPrice;              // +0x78
   void* mWinVerbIcons;          // +0x7c
   void* mWinAbilityLines;       // +0x80
@@ -1038,7 +1041,7 @@ class cSPPaletteItemRollover_s005e_cf80 {
   void* ScalarDeletingDtor(unsigned int flags);
 
   void AddBox(int arg);
-  void GetAreaPair(int* out);
+  int* GetAreaPair(int* out);
   void ResetRollover();
   uint8_t Init();  // 0x005ed420 (SP::cSPPaletteItemRollover::Init)
   void Destroy();
@@ -1946,13 +1949,11 @@ void cSPPaletteItemRollover_s005e_cf80::AddBox(int arg)
 
 // @ 0x005ed340
 namespace SP {
-void cSPPaletteItemRollover_s005e_cf80::GetAreaPair(int* out)
+int* cSPPaletteItemRollover_s005e_cf80::GetAreaPair(int* __restrict out)
 {
-  struct IntPair {
-    int a;
-    int b;
-  };
-  *(IntPair*)out = *(IntPair*)((char*)this + 0x1c);
+  out[0] = mField1c;
+  out[1] = mField20;
+  return out;
 }
 }  // namespace SP
 
