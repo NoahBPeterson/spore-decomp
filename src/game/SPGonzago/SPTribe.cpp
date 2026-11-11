@@ -4065,11 +4065,15 @@ void __fastcall F8e680(void* pSelf, int, int nArg)
     ((SlotVoid2)pVt[0x9c / 4])(pSelf, nArg, 1);
 }
 
+// retail inlined the CRT __ftol2_sse helper (`fstp dword; cvttss2si`), which truncates the
+// same way a plain (int) cast does; spell the conversion with the asm helper so it stays inline.
+inline int TruncToInt_c8e6d0(float f) { __asm cvttss2si eax, f }
+
 // @ 0x00c8e6d0
 int __fastcall F8e6d0(void* pSelf)
 {
     float f = ((const Cee380*)((char*)pSelf + 0x20c))->Get();
-    return (int)f;
+    return TruncToInt_c8e6d0(f);
 }
 
 // @ 0x00c8e720

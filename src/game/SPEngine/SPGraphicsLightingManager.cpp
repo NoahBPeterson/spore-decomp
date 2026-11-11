@@ -1606,9 +1606,13 @@ int FUN_00705660(float* a, float* b, float param)
 {
     if (param == 0.0f)
         return -1;
-    int u1 = RoundToInt_705660(((a[0] - b[0]) / (b[3] - b[0])) * 16.0f);
-    int u2 = RoundToInt_705660(((a[1] - b[1]) / (b[4] - b[1])) * 16.0f);
-    int u3 = RoundToInt_705660(((a[2] - b[2]) / (b[5] - b[2])) * 4.0f);
+    struct R3 { float x, y, z; };
+    R3 rr = { (a[0] - b[0]) / (b[3] - b[0]),
+              (a[1] - b[1]) / (b[4] - b[1]),
+              (a[2] - b[2]) / (b[5] - b[2]) };
+    int u1 = RoundToInt_705660(rr.x * 16.0f);
+    int u2 = RoundToInt_705660(rr.y * 16.0f);
+    int u3 = RoundToInt_705660(rr.z * 4.0f);
     if ((((u2 | u1) & 0xfffffff3) | u3) & 0xfffffffc)
         return -1;
     return (u3 * 16 + u2) * 16 + u1;
