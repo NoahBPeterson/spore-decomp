@@ -1,5 +1,4 @@
 # source  symbol  va  flags
-../src/game/SPGonzago/SPWeapons.cpp  ?Set@ProjRefs@@QAEXPAURefCounted@@III0@Z  00cb4950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?SP_PathPrefsForTool@@YAHPAUcSPSpaceToolData@@@Z  00cb36e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?Cast@CObj3760@@QAEPAXH@Z  00cb3760  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?Read@CArtilleryProjectileR@@QAE_NPAUIStream@@@Z  00cb3850  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -8,6 +7,7 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?Cast@CObj3e20@@QAEPAXH@Z  00cb3e20  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?HasLiveTarget@cLocomotionBase@@QAE_NXZ  00cb4a40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?HasLiveTarget14@cLocomotionObj14@@QAE_NXZ  00cb4ca0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Set@ProjRefs@@QAEXPAURefCounted@@III0@Z  00cb4950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?HasLiveTargetDC@cLocomotionObjDC@@QAE_NXZ  00cb5560  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5620@cCommunity@@QAEXI@Z  00cb5620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5670@cGameData_s00cb_5620@@QAEXXZ  00cb5670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
