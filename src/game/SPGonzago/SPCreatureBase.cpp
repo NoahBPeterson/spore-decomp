@@ -3389,9 +3389,11 @@ bool __thiscall CB::CheckTargetB(void* argp)
   CB* self = this;
   unsigned int arg = (unsigned int)(size_t)argp;
   int base = FUN_00b3d4c0(self);
-  if (base == 0) return false;
-  int r = ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg);
-  return r == 2 || r == 5 || r == 3 || r == 4;
+  if (base != 0) {
+    int r = ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg);
+    return r == 2 || r == 5 || r == 3 || r == 4;
+  }
+  return false;
 }
 
 // @ 0x00c0b860
@@ -3400,9 +3402,11 @@ bool __thiscall CB::CheckTargetC(void* argp)
   CB* self = this;
   unsigned int arg = (unsigned int)(size_t)argp;
   int base = FUN_00b3d4c0(self);
-  if (base == 0) return false;
-  int r = ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg);
-  return r == 2 || r == 5;
+  if (base != 0) {
+    int r = ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg);
+    return r == 2 || r == 5;
+  }
+  return false;
 }
 
 // @ 0x00c0b8a0
@@ -3411,8 +3415,9 @@ bool __thiscall CB::CheckTargetD(void* argp)
   CB* self = this;
   unsigned int arg = (unsigned int)(size_t)argp;
   int base = FUN_00b3d4c0(self);
-  if (base == 0) return false;
-  return ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg) == 1;
+  if (base != 0)
+    return ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg) == 1;
+  return false;
 }
 
 // @ 0x00c0b8d0
