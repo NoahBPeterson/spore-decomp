@@ -12,67 +12,34 @@
 #include <string.h>
 
 // ---- items of slice s00f7d9d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-#define NM_ALIGN16 __declspec(align(16))
-NM_ALIGN16 static const uint32_t kLow16Mask[4]   = { 0xffff, 0xffff, 0xffff, 0xffff };                  // 0x01490640
-NM_ALIGN16 static const uint32_t kHigh16Mask[4]  = { 0xffff0000, 0xffff0000, 0xffff0000, 0xffff0000 };  // 0x0148ff60
-NM_ALIGN16 static const uint32_t kByte0Mask[4]   = { 0xff, 0xff, 0xff, 0xff };                          // 0x0148ffe0
-NM_ALIGN16 static const uint32_t kByte1Mask[4]   = { 0xff00, 0xff00, 0xff00, 0xff00 };                  // 0x0148ff80
-NM_ALIGN16 static const float kOne[4]        = { 1.0f, 1.0f, 1.0f, 1.0f };                              // 0x0148fff0
-NM_ALIGN16 static const float kHalf[4]       = { 0.5f, 0.5f, 0.5f, 0.5f };                              // 0x0148ffa0
-NM_ALIGN16 static const float kTwoPow23[4]   = { 8388608.0f, 8388608.0f, 8388608.0f, 8388608.0f };      // 0x0148ff50
-NM_ALIGN16 static const float kEpsilon[4]    = { 0.001f, 0.001f, 0.001f, 0.001f };                      // 0x0148ff90
-NM_ALIGN16 static const float kByte0Scale[4] = { 255.0f / 8388608.0f, 255.0f / 8388608.0f,
+// The constants are vector-typed objects: the original uses them directly as memory operands.
+union NmMask { uint32_t u[4]; __m128 v; };
+union NmFloat4 { float f[4]; __m128 v; };
+static const NmMask kLow16Mask   = { 0xffff, 0xffff, 0xffff, 0xffff };                  // 0x01490640
+static const NmMask kHigh16Mask  = { 0xffff0000, 0xffff0000, 0xffff0000, 0xffff0000 };  // 0x0148ff60
+static const NmMask kByte0Mask   = { 0xff, 0xff, 0xff, 0xff };                          // 0x0148ffe0
+static const NmMask kByte1Mask   = { 0xff00, 0xff00, 0xff00, 0xff00 };                  // 0x0148ff80
+static const NmFloat4 kOne        = { 1.0f, 1.0f, 1.0f, 1.0f };                              // 0x0148fff0
+static const NmFloat4 kHalf       = { 0.5f, 0.5f, 0.5f, 0.5f };                              // 0x0148ffa0
+static const NmFloat4 kTwoPow23   = { 8388608.0f, 8388608.0f, 8388608.0f, 8388608.0f };      // 0x0148ff50
+static const NmFloat4 kEpsilon    = { 0.001f, 0.001f, 0.001f, 0.001f };                      // 0x0148ff90
+static const NmFloat4 kByte0Scale = { 255.0f / 8388608.0f, 255.0f / 8388608.0f,
                                                  255.0f / 8388608.0f, 255.0f / 8388608.0f };            // 0x01490000
-NM_ALIGN16 static const float kByte1Scale[4] = { 255.0f / 32768.0f, 255.0f / 32768.0f,
+static const NmFloat4 kByte1Scale = { 255.0f / 32768.0f, 255.0f / 32768.0f,
                                                  255.0f / 32768.0f, 255.0f / 32768.0f };                // 0x0148ff70
-NM_ALIGN16 static const float kOneTexel[4]   = { 1.0f / 256, 1.0f / 256, 1.0f / 256, 1.0f / 256 };      // 0x0148ffc0
-NM_ALIGN16 static const float kTwoTexels[4]  = { 1.0f / 128, 1.0f / 128, 1.0f / 128, 1.0f / 128 };      // 0x0148ffb0
-NM_ALIGN16 static const float kFourTexels[4] = { 1.0f / 64, 1.0f / 64, 1.0f / 64, 1.0f / 64 };          // 0x0148ffd0
-NM_ALIGN16 static const float kTexelRamp[4]  = { 0.0f, 1.0f / 256, 2.0f / 256, 3.0f / 256 };            // 0x01490010
+static const NmFloat4 kOneTexel   = { 1.0f / 256, 1.0f / 256, 1.0f / 256, 1.0f / 256 };      // 0x0148ffc0
+static const NmFloat4 kTwoTexels  = { 1.0f / 128, 1.0f / 128, 1.0f / 128, 1.0f / 128 };      // 0x0148ffb0
+static const NmFloat4 kFourTexels = { 1.0f / 64, 1.0f / 64, 1.0f / 64, 1.0f / 64 };          // 0x0148ffd0
+static const NmFloat4 kTexelRamp  = { 0.0f, 1.0f / 256, 2.0f / 256, 3.0f / 256 };            // 0x01490010
 static const float kHeightUnit = 3.0518044e-05f;   // 0x01435840 (0x38000080, ~1/32767.5)
 static const int kRowPitch = 512;   // texels (and heights) per row
-static __forceinline __m128 Load(const float* p) { return _mm_load_ps(p); }
-static __forceinline __m128 Load(const uint32_t* p) { return _mm_load_ps((const float*)p); }
+static __forceinline const __m128& Load(const NmFloat4& k) { return k.v; }
+static __forceinline const __m128& Load(const NmMask& k) { return k.v; }
 static __forceinline __m128 HeightsToFloat(__m128 raw)
 {
     __m128 one = Load(kOne);
     return _mm_mul_ps(_mm_sub_ps(_mm_or_ps(_mm_and_ps(raw, Load(kLow16Mask)), one), one),
                       Load(kTwoPow23));
-}
-struct HeightRow8
-{
-    __m128 lo;
-    __m128 hi;
-};
-static __forceinline void LoadHeights8(const uint16_t* p, HeightRow8& out)
-{
-    __m128 evens = HeightsToFloat(_mm_load_ps((const float*)p));        // columns 0, 2, 4, 6
-    __m128 odds  = HeightsToFloat(_mm_loadu_ps((const float*)(p + 1))); // columns 1, 3, 5, 7
-    __m128 t = _mm_shuffle_ps(evens, odds, 0x44);
-    out.lo = _mm_shuffle_ps(t, t, 0xd8);
-    t = _mm_shuffle_ps(evens, odds, 0xee);
-    out.hi = _mm_shuffle_ps(t, t, 0xd8);
-}
-struct HeightBlock
-{
-    HeightRow8 row[4];
-};
-static __forceinline void LoadBlock(const uint16_t* p, HeightBlock& b)
-{
-    LoadHeights8(p, b.row[0]);
-    LoadHeights8(p + kRowPitch, b.row[1]);
-    LoadHeights8(p + 2 * kRowPitch, b.row[2]);
-    LoadHeights8(p + 3 * kRowPitch, b.row[3]);
-}
-static __forceinline __m128 ShiftInLeft(__m128 prev, __m128 cur)
-{
-    __m128 t = _mm_shuffle_ps(prev, cur, _MM_SHUFFLE(0, 0, 3, 3));
-    return _mm_shuffle_ps(t, cur, _MM_SHUFFLE(2, 1, 2, 0));
-}
-static __forceinline __m128 ShiftInRight(__m128 cur, __m128 next)
-{
-    __m128 t = _mm_shuffle_ps(cur, next, _MM_SHUFFLE(0, 0, 3, 3));
-    return _mm_shuffle_ps(cur, t, _MM_SHUFFLE(2, 0, 2, 1));
 }
 struct NormalMapConsts
 {
@@ -108,25 +75,49 @@ static __forceinline float FaceCoord(int n)
     return ((float)n + 0.5f) * (1.0f / 256) - 1.0f;
 }
 static __forceinline __m128 PackChannel(const __m128& inv, const __m128& n, const __m128& scale,
-                                         const float* byteScale)
+                                         const NmFloat4& byteScale)
 {
     return _mm_add_ps(_mm_mul_ps(_mm_add_ps(_mm_mul_ps(_mm_mul_ps(inv, n), scale), Load(kHalf)),
                                  Load(byteScale)), Load(kOne));
 }
-template <int kAxis>
-static __forceinline void ShadeQuad(uint32_t* out, const __m128& h, const __m128& left,
-                                    const __m128& right, const __m128& up, const __m128& down,
-                                    const __m128& u, const __m128& v, const NormalMapConsts& c)
+// The map is processed as quads of 4 columns x 4 rows; the horizontal gradient goes through a transpose.
+static __forceinline void LoadRows(const uint16_t* p, __m128& h0lo, __m128& h0hi, __m128& h1lo, __m128& h1hi,
+                                   __m128& h2lo, __m128& h2hi, __m128& h3lo, __m128& h3hi)
 {
-    __m128 gradU = _mm_sub_ps(left, right);
-    __m128 gradV = _mm_sub_ps(up, down);
-
-    // Point on the unit sphere: (u, v, 1) / |(u, v, 1)|, at radius base + h * scale.
+    __m128 e0 = HeightsToFloat(_mm_load_ps((const float*)p));
+    __m128 o0 = HeightsToFloat(_mm_loadu_ps((const float*)(p + 1)));
+    __m128 e1 = HeightsToFloat(_mm_load_ps((const float*)(p + kRowPitch)));
+    __m128 o1 = HeightsToFloat(_mm_loadu_ps((const float*)(p + kRowPitch + 1)));
+    __m128 e2 = HeightsToFloat(_mm_load_ps((const float*)(p + 2 * kRowPitch)));
+    __m128 o2 = HeightsToFloat(_mm_loadu_ps((const float*)(p + 2 * kRowPitch + 1)));
+    __m128 e3 = HeightsToFloat(_mm_load_ps((const float*)(p + 3 * kRowPitch)));
+    __m128 o3 = HeightsToFloat(_mm_loadu_ps((const float*)(p + 3 * kRowPitch + 1)));
+    h0lo = _mm_shuffle_ps(e0, o0, 0x44);
+    h0hi = _mm_shuffle_ps(e0, o0, 0xee);
+    h1lo = _mm_shuffle_ps(e1, o1, 0x44);
+    h1hi = _mm_shuffle_ps(e1, o1, 0xee);
+    h2lo = _mm_shuffle_ps(e2, o2, 0x44);
+    h2hi = _mm_shuffle_ps(e2, o2, 0xee);
+    h3lo = _mm_shuffle_ps(e3, o3, 0x44);
+    h3hi = _mm_shuffle_ps(e3, o3, 0xee);
+    h0lo = _mm_shuffle_ps(h0lo, h0lo, 0xd8);
+    h0hi = _mm_shuffle_ps(h0hi, h0hi, 0xd8);
+    h1lo = _mm_shuffle_ps(h1lo, h1lo, 0xd8);
+    h1hi = _mm_shuffle_ps(h1hi, h1hi, 0xd8);
+    h2lo = _mm_shuffle_ps(h2lo, h2lo, 0xd8);
+    h2hi = _mm_shuffle_ps(h2hi, h2hi, 0xd8);
+    h3lo = _mm_shuffle_ps(h3lo, h3lo, 0xd8);
+    h3hi = _mm_shuffle_ps(h3hi, h3hi, 0xd8);
+}
+template <int kAxis>
+static __forceinline void ShadeRow(uint32_t* out, const __m128& radius, const __m128& gradU, const __m128& gradV,
+                                   const __m128& u, const __m128& v, const NormalMapConsts& c)
+{
+    // Point on the unit sphere: (u, v, 1) / |(u, v, 1)|, at the given radius.
     __m128 invLen = _mm_rsqrt_ps(_mm_add_ps(_mm_add_ps(_mm_mul_ps(v, v), _mm_mul_ps(u, u)), Load(kOne)));
-    __m128 invRadius = _mm_rcp_ps(_mm_mul_ps(invLen,
-                                             _mm_add_ps(_mm_mul_ps(h, c.heightScale), c.heightBase)));
-    __m128 dU = _mm_mul_ps(invRadius, gradU);
+    __m128 invRadius = _mm_rcp_ps(_mm_mul_ps(invLen, radius));
     __m128 dV = _mm_mul_ps(invRadius, gradV);
+    __m128 dU = _mm_mul_ps(invRadius, gradU);
 
     __m128 nV = _mm_add_ps(_mm_mul_ps(invLen, v), dV);
     __m128 nU = _mm_add_ps(_mm_mul_ps(invLen, u), dU);
@@ -165,22 +156,45 @@ static __forceinline void ShadeQuad(uint32_t* out, const __m128& h, const __m128
     _mm_store_ps((float*)out, _mm_or_ps(_mm_and_ps(shifted, Load(kHigh16Mask)), low));
 }
 template <int kAxis>
-static __forceinline void ShadeQuadPair(uint32_t* out, const __m128& h1, const __m128& left1,
-                                        const __m128& right1, const __m128& h2, const __m128& left2,
-                                        const __m128& right2, const __m128& up0, const __m128& mid1,
-                                        const __m128& mid2, const __m128& down3,
-                                        __m128& u, __m128& v, const NormalMapConsts& c)
+static __forceinline void ShadeRows(uint32_t*& rows, int column, const __m128& radius1, const __m128& radius2,
+                                    const __m128& gradU1, const __m128& gradU2,
+                                    const __m128& gradV1, const __m128& gradV2,
+                                    __m128& u, __m128& v, const NormalMapConsts& c)
 {
-    ShadeQuad<kAxis>(out, h1, left1, right1, up0, mid2, u, v, c);
+    ShadeRow<kAxis>(rows + column, radius1, gradU1, gradV1, u, v, c);
     v = _mm_add_ps(Load(kOneTexel), v);
-    ShadeQuad<kAxis>(out + kRowPitch, h2, left2, right2, mid1, down3, u, v, c);
+    rows += kRowPitch;
+    ShadeRow<kAxis>(rows + column, radius2, gradU2, gradV2, u, v, c);
     v = _mm_sub_ps(v, Load(kOneTexel));
+    rows -= kRowPitch;
     u = _mm_add_ps(Load(kFourTexels), u);
 }
-static __forceinline __m128 Scaled(__m128 h, const NormalMapConsts& c)
-{
-    return _mm_mul_ps(h, c.gradientScale);
-}
+// Declares the quad P: radius of rows 1 and 2, vertical gradient of rows 1 and 2, scaled heights by column.
+#define PREP_QUAD(P, h0, h1, h2, h3)                                                \
+    __m128 P##Radius1 = _mm_add_ps(_mm_mul_ps(h1, c.heightScale), c.heightBase);    \
+    __m128 P##Radius2 = _mm_add_ps(_mm_mul_ps(h2, c.heightScale), c.heightBase);    \
+    __m128 P##0 = _mm_mul_ps(h0, c.gradientScale);                                  \
+    __m128 P##1 = _mm_mul_ps(h1, c.gradientScale);                                  \
+    __m128 P##2 = _mm_mul_ps(h2, c.gradientScale);                                  \
+    __m128 P##3 = _mm_mul_ps(h3, c.gradientScale);                                  \
+    __m128 P##GradV1 = _mm_sub_ps(P##0, P##2);                                      \
+    __m128 P##GradV2 = _mm_sub_ps(P##1, P##3);                                      \
+    _MM_TRANSPOSE4_PS(P##0, P##1, P##2, P##3)
+
+// Shades rows 1 and 2 of the current quad (columns col0..col3, the column `prev` left of it), then makes
+// quad N current. N##0 is the column right of the current quad.
+#define SHADE_QUAD(column, radius1, radius2, N)                                        \
+    {                                                                               \
+        __m128 d0 = _mm_sub_ps(prev, col1);                                         \
+        __m128 d1 = _mm_sub_ps(col0, col2);                                         \
+        __m128 d2 = _mm_sub_ps(col1, col3);                                         \
+        __m128 d3 = _mm_sub_ps(col2, N##0);                                         \
+        _MM_TRANSPOSE4_PS(d0, d1, d2, d3);                                          \
+        ShadeRows<kAxis>(dstRows, column, radius1, radius2, d1, d2, gradV1, gradV2, u, v, c); \
+    }                                                                               \
+    prev = col3;                                                                    \
+    col0 = N##0; col1 = N##1; col2 = N##2; col3 = N##3;                             \
+    gradV1 = N##GradV1; gradV2 = N##GradV2
 template <int kAxis>
 static __forceinline void NormalMapLeft(uint32_t* dst, const uint16_t* src, int x0, int x1, int y0,
                                         int y1, float radius, float heightRange, float slopeRange,
@@ -192,62 +206,36 @@ static __forceinline void NormalMapLeft(uint32_t* dst, const uint16_t* src, int 
     int endBlock = (x1 + 7) / 8;
     float u0 = FaceCoord(firstBlock * 8);
     __m128 v = _mm_set1_ps(FaceCoord(y0 - 1));
-    const uint16_t* srcRows = src + (y0 - 1) * kRowPitch;
+    const uint16_t* srcRows = src + (y0 - 1) * kRowPitch + firstBlock * 8;
     uint32_t* dstRows = dst + y0 * kRowPitch;
 
     for (int pair = (y0 - 1) / 2; pair <= (y1 - 1) / 2; ++pair)
     {
-        HeightBlock cur;
-        LoadBlock(srcRows + firstBlock * 8, cur);
+        __m128 h0lo, h0hi, h1lo, h1hi, h2lo, h2hi, h3lo, h3hi;
+        const uint16_t* p = srcRows;
+        LoadRows(p, h0lo, h0hi, h1lo, h1hi, h2lo, h2hi, h3lo, h3hi);
+        __m128 radius1, radius2, gradV1, gradV2, col0, col1, col2, col3;
+        {
+            PREP_QUAD(n, h0lo, h1lo, h2lo, h3lo);
+            radius1 = nRadius1; radius2 = nRadius2; gradV1 = nGradV1; gradV2 = nGradV2;
+            col0 = n0; col1 = n1; col2 = n2; col3 = n3;
+        }
+        __m128 prev = c.zero;
         __m128 u = _mm_add_ps(_mm_set1_ps(u0), Load(kTexelRamp));
-        __m128 prev1 = c.zero;  // lane 3: scaled height of the column left of the block
-        __m128 prev2 = c.zero;
         for (int block = firstBlock; block < endBlock; ++block)
         {
-            HeightBlock next;
-            LoadBlock(srcRows + (block + 1) * 8, next);
-            uint32_t* out = dstRows + block * 8;
-
-            __m128 s0lo = Scaled(cur.row[0].lo, c), s0hi = Scaled(cur.row[0].hi, c);
-            __m128 s1lo = Scaled(cur.row[1].lo, c), s1hi = Scaled(cur.row[1].hi, c);
-            __m128 s2lo = Scaled(cur.row[2].lo, c), s2hi = Scaled(cur.row[2].hi, c);
-            __m128 s3lo = Scaled(cur.row[3].lo, c), s3hi = Scaled(cur.row[3].hi, c);
-            __m128 n1lo = Scaled(next.row[1].lo, c), n2lo = Scaled(next.row[2].lo, c);
-
-            ShadeQuadPair<kAxis>(out, cur.row[1].lo, ShiftInLeft(prev1, s1lo), ShiftInRight(s1lo, s1hi),
-                                 cur.row[2].lo, ShiftInLeft(prev2, s2lo), ShiftInRight(s2lo, s2hi),
-                                 s0lo, s1lo, s2lo, s3lo, u, v, c);
-            ShadeQuadPair<kAxis>(out + 4, cur.row[1].hi, ShiftInLeft(s1lo, s1hi), ShiftInRight(s1hi, n1lo),
-                                 cur.row[2].hi, ShiftInLeft(s2lo, s2hi), ShiftInRight(s2hi, n2lo),
-                                 s0hi, s1hi, s2hi, s3hi, u, v, c);
-            prev1 = s1hi;
-            prev2 = s2hi;
-            cur = next;
+            PREP_QUAD(b, h0hi, h1hi, h2hi, h3hi);
+            SHADE_QUAD(block * 8, radius1, radius2, b);
+            p += 8;
+            LoadRows(p, h0lo, h0hi, h1lo, h1hi, h2lo, h2hi, h3lo, h3hi);
+            PREP_QUAD(n, h0lo, h1lo, h2lo, h3lo);
+            SHADE_QUAD(block * 8 + 4, bRadius1, bRadius2, n);
+            radius1 = nRadius1; radius2 = nRadius2;
         }
         v = _mm_add_ps(Load(kTwoTexels), v);
         srcRows += 2 * kRowPitch;
         dstRows += 2 * kRowPitch;
     }
-}
-template <int kAxis>
-static __forceinline void ShadeOffsetBlock(uint32_t* out, const HeightBlock& cur, const HeightBlock& next,
-                                           __m128& u, __m128& v, const NormalMapConsts& c)
-{
-    __m128 s0hi = Scaled(cur.row[0].hi, c);
-    __m128 s1lo = Scaled(cur.row[1].lo, c), s1hi = Scaled(cur.row[1].hi, c);
-    __m128 s2lo = Scaled(cur.row[2].lo, c), s2hi = Scaled(cur.row[2].hi, c);
-    __m128 s3hi = Scaled(cur.row[3].hi, c);
-    __m128 n0lo = Scaled(next.row[0].lo, c);
-    __m128 n1lo = Scaled(next.row[1].lo, c), n1hi = Scaled(next.row[1].hi, c);
-    __m128 n2lo = Scaled(next.row[2].lo, c), n2hi = Scaled(next.row[2].hi, c);
-    __m128 n3lo = Scaled(next.row[3].lo, c);
-
-    ShadeQuadPair<kAxis>(out, cur.row[1].hi, ShiftInLeft(s1lo, s1hi), ShiftInRight(s1hi, n1lo),
-                         cur.row[2].hi, ShiftInLeft(s2lo, s2hi), ShiftInRight(s2hi, n2lo),
-                         s0hi, s1hi, s2hi, s3hi, u, v, c);
-    ShadeQuadPair<kAxis>(out + 4, next.row[1].lo, ShiftInLeft(s1hi, n1lo), ShiftInRight(n1lo, n1hi),
-                         next.row[2].lo, ShiftInLeft(s2hi, n2lo), ShiftInRight(n2lo, n2hi),
-                         n0lo, n1lo, n2lo, n3lo, u, v, c);
 }
 template <int kAxis>
 static __forceinline void NormalMapInterior(uint32_t* dst, const uint16_t* src, int x0, int x1, int y0,
@@ -260,20 +248,32 @@ static __forceinline void NormalMapInterior(uint32_t* dst, const uint16_t* src, 
     int endBlock = (x1 + 7) / 8;
     float u0 = FaceCoord(firstBlock * 8 + 4);
     __m128 v = _mm_set1_ps(FaceCoord(y0 - 1));
-    const uint16_t* srcRows = src + (y0 - 1) * kRowPitch;
+    const uint16_t* srcRows = src + (y0 - 1) * kRowPitch + firstBlock * 8;
     uint32_t* dstRows = dst + y0 * kRowPitch + 4;
 
     for (int pair = (y0 - 1) / 2; pair < (y1 - 1) / 2; ++pair)
     {
-        HeightBlock cur;
-        LoadBlock(srcRows + firstBlock * 8, cur);
+        __m128 h0lo, h0hi, h1lo, h1hi, h2lo, h2hi, h3lo, h3hi;
+        const uint16_t* p = srcRows;
+        LoadRows(p, h0lo, h0hi, h1lo, h1hi, h2lo, h2hi, h3lo, h3hi);
+        _MM_TRANSPOSE4_PS(h0lo, h1lo, h2lo, h3lo);
+        __m128 prev = _mm_mul_ps(h3lo, c.gradientScale);
+        __m128 radius1, radius2, gradV1, gradV2, col0, col1, col2, col3;
+        {
+            PREP_QUAD(b, h0hi, h1hi, h2hi, h3hi);
+            radius1 = bRadius1; radius2 = bRadius2; gradV1 = bGradV1; gradV2 = bGradV2;
+            col0 = b0; col1 = b1; col2 = b2; col3 = b3;
+        }
         __m128 u = _mm_add_ps(_mm_set1_ps(u0), Load(kTexelRamp));
         for (int block = firstBlock; block < endBlock; ++block)
         {
-            HeightBlock next;
-            LoadBlock(srcRows + (block + 1) * 8, next);
-            ShadeOffsetBlock<kAxis>(dstRows + block * 8, cur, next, u, v, c);
-            cur = next;
+            p += 8;
+            LoadRows(p, h0lo, h0hi, h1lo, h1hi, h2lo, h2hi, h3lo, h3hi);
+            PREP_QUAD(n, h0lo, h1lo, h2lo, h3lo);
+            SHADE_QUAD(block * 8, radius1, radius2, n);
+            PREP_QUAD(b, h0hi, h1hi, h2hi, h3hi);
+            SHADE_QUAD(block * 8 + 4, nRadius1, nRadius2, b);
+            radius1 = bRadius1; radius2 = bRadius2;
         }
         v = _mm_add_ps(Load(kTwoTexels), v);
         srcRows += 2 * kRowPitch;
@@ -296,28 +296,50 @@ static __forceinline void NormalMapRight(uint32_t* dst, const uint16_t* src, int
 
     for (int pair = (y0 - 1) / 2; pair < (y1 - 1) / 2; ++pair)
     {
-        HeightBlock cur;
-        LoadBlock(srcRows + firstBlock * 8, cur);
+        __m128 h0lo, h0hi, h1lo, h1hi, h2lo, h2hi, h3lo, h3hi;
+        LoadRows(srcRows + firstBlock * 8, h0lo, h0hi, h1lo, h1hi, h2lo, h2hi, h3lo, h3hi);
+        _MM_TRANSPOSE4_PS(h0lo, h1lo, h2lo, h3lo);
+        __m128 prev = _mm_mul_ps(h3lo, c.gradientScale);
+        __m128 radius1, radius2, gradV1, gradV2, col0, col1, col2, col3;
+        {
+            PREP_QUAD(b, h0hi, h1hi, h2hi, h3hi);
+            radius1 = bRadius1; radius2 = bRadius2; gradV1 = bGradV1; gradV2 = bGradV2;
+            col0 = b0; col1 = b1; col2 = b2; col3 = b3;
+        }
         __m128 u = _mm_add_ps(_mm_set1_ps(u0), Load(kTexelRamp));
         for (int block = firstBlock; block < lastBlock; ++block)
         {
-            HeightBlock next;
-            LoadBlock(srcRows + (block + 1) * 8, next);
-            ShadeOffsetBlock<kAxis>(dstRows + block * 8, cur, next, u, v, c);
-            cur = next;
+            LoadRows(srcRows + (block + 1) * 8, h0lo, h0hi, h1lo, h1hi, h2lo, h2hi, h3lo, h3hi);
+            PREP_QUAD(n, h0lo, h1lo, h2lo, h3lo);
+            SHADE_QUAD(block * 8, radius1, radius2, n);
+            PREP_QUAD(b, h0hi, h1hi, h2hi, h3hi);
+            SHADE_QUAD(block * 8 + 4, nRadius1, nRadius2, b);
+            radius1 = bRadius1; radius2 = bRadius2;
         }
 
-        HeightRow8 edge1, edge2;
-        LoadHeights8(srcRows + kRowPitch + lastBlock * 8 + 8, edge1);
-        LoadHeights8(srcRows + 2 * kRowPitch + lastBlock * 8 + 8, edge2);
-        __m128 s0hi = Scaled(cur.row[0].hi, c);
-        __m128 s1lo = Scaled(cur.row[1].lo, c), s1hi = Scaled(cur.row[1].hi, c);
-        __m128 s2lo = Scaled(cur.row[2].lo, c), s2hi = Scaled(cur.row[2].hi, c);
-        __m128 s3hi = Scaled(cur.row[3].hi, c);
-        ShadeQuadPair<kAxis>(dstRows + lastBlock * 8, cur.row[1].hi, ShiftInLeft(s1lo, s1hi),
-                             ShiftInRight(s1hi, Scaled(edge1.lo, c)),
-                             cur.row[2].hi, ShiftInLeft(s2lo, s2hi), ShiftInRight(s2hi, Scaled(edge2.lo, c)),
-                             s0hi, s1hi, s2hi, s3hi, u, v, c);
+        // The last quad: only the first four columns of the block past the end are read.
+        const uint16_t* p = srcRows + (lastBlock + 1) * 8;
+        __m128 e0 = _mm_shuffle_ps(HeightsToFloat(_mm_load_ps((const float*)p)),
+                                   HeightsToFloat(_mm_loadu_ps((const float*)(p + 1))), 0x44);
+        __m128 e1 = _mm_shuffle_ps(HeightsToFloat(_mm_load_ps((const float*)(p + kRowPitch))),
+                                   HeightsToFloat(_mm_loadu_ps((const float*)(p + kRowPitch + 1))), 0x44);
+        __m128 e2 = _mm_shuffle_ps(HeightsToFloat(_mm_load_ps((const float*)(p + 2 * kRowPitch))),
+                                   HeightsToFloat(_mm_loadu_ps((const float*)(p + 2 * kRowPitch + 1))), 0x44);
+        __m128 e3 = _mm_shuffle_ps(HeightsToFloat(_mm_load_ps((const float*)(p + 3 * kRowPitch))),
+                                   HeightsToFloat(_mm_loadu_ps((const float*)(p + 3 * kRowPitch + 1))), 0x44);
+        e0 = _mm_mul_ps(_mm_shuffle_ps(e0, e0, 0xd8), c.gradientScale);
+        e1 = _mm_mul_ps(_mm_shuffle_ps(e1, e1, 0xd8), c.gradientScale);
+        e2 = _mm_mul_ps(_mm_shuffle_ps(e2, e2, 0xd8), c.gradientScale);
+        e3 = _mm_mul_ps(_mm_shuffle_ps(e3, e3, 0xd8), c.gradientScale);
+        _MM_TRANSPOSE4_PS(e0, e1, e2, e3);
+        {
+            __m128 d0 = _mm_sub_ps(prev, col1);
+            __m128 d1 = _mm_sub_ps(col0, col2);
+            __m128 d2 = _mm_sub_ps(col1, col3);
+            __m128 d3 = _mm_sub_ps(col2, e0);
+            _MM_TRANSPOSE4_PS(d0, d1, d2, d3);
+            ShadeRows<kAxis>(dstRows, lastBlock * 8, radius1, radius2, d1, d2, gradV1, gradV2, u, v, c);
+        }
 
         v = _mm_add_ps(Load(kTwoTexels), v);
         srcRows += 2 * kRowPitch;
