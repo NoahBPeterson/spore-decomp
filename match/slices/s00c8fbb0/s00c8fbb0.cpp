@@ -175,7 +175,7 @@ void __thiscall cTribe::PromoteChieftain(uint32_t civId)
     (void)civId;
 }
 
-// @ 0xc8fe20 cTribe::GetClosestWater
+// 0xc8fe20 cTribe::GetClosestWater (attempt lives in SPTribe.cpp)
 void __thiscall cTribe::GetClosestWater(tVec3* pOut)
 {
     (void)pOut;
