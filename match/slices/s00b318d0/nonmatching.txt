@@ -6,5 +6,4 @@
 00b31fa0 198 complete; old pause bits kept in a stack slot in original, bitset byte ops
 00b32190 100 complete; push_back temp slots (two locals) and gate field store order
 00b323f0 40 complete; four RegisterPauseGate calls (see 00b32190), differs only by wrong best-symbol pairing
-00b32490 2 complete; vptr store scheduled after the [this+8] load; tried loading mpPropList into a local first and a guard form, the store still sinks past the load
 00b324f0 876 complete; token translator (^p / prop_file / tuning_float / tuning_int / br); wstring helpers are local stubs

@@ -558,6 +558,7 @@ struct cTokenTranslator : cTranslatorBase {
 // @ 0x00b32490
 cTokenTranslator::~cTokenTranslator()
 {
+    _ReadWriteBarrier();
     if (mpPropList)
         mpPropList->Release();
 }
