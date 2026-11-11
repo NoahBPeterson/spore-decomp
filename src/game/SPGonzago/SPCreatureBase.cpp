@@ -3529,7 +3529,9 @@ char* __fastcall FUN_00c0bc00(CB* self)
 // @ 0x00c0be70
 bool __cdecl FUN_00c0be70(int x)
 {
-  return x == 0x25b3bc0 || x == 0x772ff58 || x == 0x7995fdc || x == 0x7982fb2 || x == 0x7b5063e;
+  if (x == 0x25b3bc0 || x == 0x772ff58 || x == 0x7995fdc || x == 0x7982fb2 || x == 0x7b5063e)
+    return true;
+  return false;
 }
 
 // @ 0x00c0bee0

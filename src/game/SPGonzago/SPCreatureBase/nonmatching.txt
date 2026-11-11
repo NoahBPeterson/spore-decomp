@@ -16,7 +16,6 @@
 00c0b8a0
 00c0b9d0
 00c0bb20
-00c0be70 6 cached-handle predicate: complete; bool return materialisation (setne/xor eax vs xor al)
 00c0c200 43 game-mode water render callback: complete; call/arg setup differs
 00c0c440 8 copy range of 0x24 records: complete; float field copied via fld/fstp in original
 00c0c4b0 218 quaternion half-angle swap: complete; x87/SSE mixing and expression order

@@ -194,8 +194,10 @@ bool __cdecl FUN_00c0be70(int x) {
 }
 // @ 0x00c0bea0
 bool __cdecl FUN_00c0bea0(int x) {
-  return x == 0x5261d56 || x == 0x5261d78 || x == 0x692e5bf || x == 0x5485a4c ||
-         x == 0x77300f2 || x == 0x77300fb || x == 0x77300ff;
+  if (x == 0x5261d56 || x == 0x5261d78 || x == 0x692e5bf || x == 0x5485a4c ||
+      x == 0x77300f2 || x == 0x77300fb || x == 0x77300ff)
+    return true;
+  return false;
 }
 // @ 0x00c0c010
 float __thiscall C::GetA() {
