@@ -10,3 +10,4 @@ slices/s00b318d0/s00b318d0.cpp  ?SetTimeFlowSetting@cGameTimeManager@@QAEXH@Z  0
 slices/s00b318d0/s00b318d0.cpp  ?NextStateEnum@@YAHH@Z  00b32890  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00b318d0/s00b318d0.cpp  ?FUN_00b324b0@cTokenTranslator@@QAEPAXI@Z  00b324b0  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00b318d0/s00b318d0.cpp  ?UpdateTimeAtStartOfFrame@cGameTimeManager@@QAEXXZ  00b31a90  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?SetTimeFlowRate@cGameTimeManager@@QAEXM@Z  00b322c0  /O2 /MD /Gy /TP /arch:SSE /GS-
