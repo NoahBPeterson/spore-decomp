@@ -3134,23 +3134,38 @@ int f00cb46f0_calc_firing_vel(float p1, float p2, float p3, float p4, float p5, 
     return 0;
 }
 
+struct ProjRefs {
+    char pad[0x524];
+    RefCounted* mpOwner; // +0x524, AddRef +0x60 / Release +0x64
+    uint m528;
+    uint m52c;
+    uint m530;
+    RefCounted* mpTool;  // +0x534, AddRef +4 / Release +8
+    void Set(RefCounted* tool, uint v1, uint v2, uint v3, RefCounted* owner);
+};
+
 // @ 0x00cb4950
-void f00cb4950(int self, RefCounted* a, uint v1, uint v2, uint v3, RefCounted* b)
+void ProjRefs::Set(RefCounted* tool, uint v1, uint v2, uint v3, RefCounted* owner)
 {
-    *(uint*)(self + 0x528) = v1;
-    *(uint*)(self + 0x52c) = v2;
-    *(uint*)(self + 0x530) = v3;
-    RefCounted* old = *(RefCounted**)(self + 0x524);
-    if (a != old) {
-        if (a) ((RefCounted*)a)->r60();
-        *(RefCounted**)(self + 0x524) = a;
-        if (old) old->r64();
+    char* p = (char*)this + 0x528;
+    *(uint*)p = v1;
+    *(uint*)(p + 4) = v2;
+    *(uint*)(p + 8) = v3;
+    RefCounted* old = mpOwner;
+    if (owner != old) {
+        if (owner)
+            owner->r60();
+        mpOwner = owner;
+        if (old)
+            old->r64();
     }
-    RefCounted* old2 = *(RefCounted**)(self + 0x534);
-    if (b != old2) {
-        if (b) b->r04();
-        *(RefCounted**)(self + 0x534) = b;
-        if (old2) old2->r08();
+    RefCounted* old2 = mpTool;
+    if (tool != old2) {
+        if (tool)
+            tool->r04();
+        mpTool = tool;
+        if (old2)
+            old2->r08();
     }
 }
 
