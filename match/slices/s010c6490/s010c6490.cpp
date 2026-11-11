@@ -47,6 +47,7 @@ extern hkMemory* g_hkMemory;   // 0x016e4178
 
 template <typename T> class hkArray
 { public:
+    hkArray() : m_data(0), m_size(0), m_capacityAndFlags((int)0x80000000) {}
     T* m_data;
     int m_size;
     int m_capacityAndFlags;
@@ -79,7 +80,7 @@ class hkCdBody
 // A real vptr (the class is polymorphic) + 4 bytes of bookkeeping = 0x8, then m_userData at +0x8.
 class hkReferencedObject { public: virtual void vptrAnchor(); hkUint16 m_memSizeAndFlags; hkUint16 m_referenceCount; };  // 0x8
 class hkShape : public hkReferencedObject { public: int m_userData; };                                              // 0xc
-class hkShapeCollection : public hkShape { public: hkUchar m_disableWelding; };                                     // 0x10
+class hkShapeCollection : public hkShape { public: hkShapeCollection(); /* 0x010e7fd0 */ hkUchar m_disableWelding; };                                     // 0x10
 
 struct hkShapeRayCastInput
 {
@@ -138,6 +139,7 @@ struct hkSimpleMeshShapeTriangle { int m_a, m_b, m_c; };
 // A 12-byte array header specialised for the vector array (the templated form gets 16 bytes).
 struct hkVertexArray
 {
+    hkVertexArray() : m_data(0), m_size(0), m_capacityAndFlags((int)0x80000000) {}
     hkVector4* m_data;   // +0x0
     int m_size;          // +0x4
     int m_capacityAndFlags;   // +0x8
@@ -327,15 +329,7 @@ void hkSimpleMeshShape::calcStatistics(hkStatisticsCollector* c) const
 }
 
 // @ 0x010c6890
-extern "C" void hkShapeCollectionCtor_(void* self);   // 0x010e7fd0
-hkSimpleMeshShape::hkSimpleMeshShape(float radius)
-{
-    hkShapeCollectionCtor_(this);
-    m_vertices.m_data = 0; m_vertices.m_size = 0; m_vertices.m_capacityAndFlags = (int)0x80000000;
-    m_triangles.m_data = 0; m_triangles.m_size = 0; m_triangles.m_capacityAndFlags = (int)0x80000000;
-    m_materialIndices.m_data = 0; m_materialIndices.m_size = 0; m_materialIndices.m_capacityAndFlags = (int)0x80000000;
-    m_radius = radius;
-}
+hkSimpleMeshShape::hkSimpleMeshShape(float radius) : hkShapeCollection(), m_radius(radius) {}
 
 // @ 0x010c6900
 hkSimpleMeshShape::~hkSimpleMeshShape()
