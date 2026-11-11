@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00c9cee0 82 equiv=FAIL(fake-arity on fallback call)  AsInterface comparison tree recreated (0x13f94d4/0xe89adf71/0x116d858/0x102a041a + fallbacks); signed compare ordering and null guards differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-00c9cf70 10 equiv=PASS 100% cov  IsNotType10 (mField14 != 10); MSVC emits an extra xor eax,eax before setne al (newer compiler bool zero-extension) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c9cfd0 62 equiv=UNSUPPORTED 0/400 (fake-arity: float tail-call)  SpawnToolIcon recreated (tribe-tool table lookup, 1.0f - combatant value, int multiply by mField38, 0.001 scale); tail-call and float arg convention differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c9d030 36 equiv=WEAK 45.5% cov  ReleaseToolIcon recreated (PlanetModel +0x24 lookup, vtable +0x58 release with flag 1); null-check layout differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c9d160 47 equiv=WEAK 39.3% cov  GetTimeSinceCreation recreated (cSPTimer at +0x200, u64 elapsed * 0.001, FLT_MAX when stopped); x87 u64->float sign decomposition scheduled differently flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

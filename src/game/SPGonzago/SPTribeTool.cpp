@@ -812,7 +812,8 @@ void* cTribeTool_s00c9_c1b0::AsInterface(void* pIID)
 // @ 0x00c9cf70
 bool cTribeToolData::IsNotType10()
 {
-    return mField14 != 10;
+    bool found = mField14 != 10;
+    return found;
 }
 
 // @ 0x00c9cf90
