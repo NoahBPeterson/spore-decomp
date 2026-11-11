@@ -1,2 +1,1 @@
 # all functions in this slice have a complete behavioral implementation; nothing partial
-00ceec50  0  byte-exact only with inline assembly in the body (symbol ?FUN_00ceec50@@YGHPAX@Z, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

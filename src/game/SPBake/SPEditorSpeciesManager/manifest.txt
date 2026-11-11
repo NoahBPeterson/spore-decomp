@@ -38,3 +38,4 @@
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ?HasEditorPropertyList@@YAHABVKey_s005b_eaf0@ResourceMan@EA@@@Z  005bf0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetEditorPropertyList@@YAHABVKey_s005b_eaf0@ResourceMan@EA@@AAPAVPropertyList_s005b_eaf0@App@@@Z  005bf0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ?LoadCollectableItems@@YA_NPAVPropertyList_s005b_eaf0@App@@PAPAVcCollectableItems@Simulator@@@Z  005bf1e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?ReadAbilityData@SP@@YA_NPAUcCreatureAbility_s004d_92b0@@PAUPropertyList_s004d_92b0@@@Z  004d92b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "SP/cTotemPole.h"
 #include <math.h>
 #include "SP/cTribe.h"
@@ -4067,13 +4068,14 @@ void __fastcall F8e680(void* pSelf, int, int nArg)
 
 // retail inlined the CRT __ftol2_sse helper (`fstp dword; cvttss2si`), which truncates the
 // same way a plain (int) cast does; spell the conversion with the asm helper so it stays inline.
-inline int TruncToInt_c8e6d0(float f) { __asm cvttss2si eax, f }
+// TruncToInt_c8e6d0: the vetted SseTruncToInt in sse_helpers.h
+
 
 // @ 0x00c8e6d0
 int __fastcall F8e6d0(void* pSelf)
 {
     float f = ((const Cee380*)((char*)pSelf + 0x20c))->Get();
-    return TruncToInt_c8e6d0(f);
+    return SseTruncToInt(f);
 }
 
 // @ 0x00c8e720

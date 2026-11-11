@@ -1,5 +1,6 @@
 // Slice s0052d460: cSPSkinPaintClearCommand::Execute and small IO/string helpers.
 #include "types.h"
+#include "sse_helpers.h"
 #include <stdarg.h>
 
 template <int N> inline void ScratchSlots() { uint32_t slots[N]; }
@@ -21,27 +22,10 @@ extern float g_SPPi;   // 0x015e0350
 extern float g_SPHairAngleDefault;   // 0x015e0574
 
 // SSE clamp helpers (the original is written with maxss/minss in inline asm).
-inline float Clamp(float value, float minValue, float maxValue)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        minss xmm0, maxValue
-        movss value, xmm0
-    }
-    return value;
-}
-inline float Clamp01(float value)
-{
-    float one = 1.0f;
-    __asm {
-        xorps xmm0, xmm0
-        maxss xmm0, value
-        minss xmm0, one
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
+
+// Clamp01: the vetted SseClamp01 in sse_helpers.h
+
 
 namespace rw { namespace math { namespace fpu {
 template <class T, int N> class Vector3Template
@@ -225,24 +209,24 @@ void cSPSkinPaintClearCommand::Execute(EA::ArgScript::cArguments& args)
     {
         desc->mBitFlags |= (1 << cSPSkinPaintClearDescription::kFlagSpec) | (1 << cSPSkinPaintClearDescription::kFlagBump) | (1 << cSPSkinPaintClearDescription::kFlagExponent);
         desc->mSpecBump = mParser->ParseVector3(optArgs[0]);
-        desc->mSpecBump[1] = Clamp(desc->mSpecBump[1] * 255.0f, 1.0f, 60.0f) / 60.0f;
+        desc->mSpecBump[1] = SseClamp(desc->mSpecBump[1] * 255.0f, 1.0f, 60.0f) / 60.0f;
     }
     if ((optArgs = args.OptionArguments("spec", 1)) != 0)
     {
         desc->mBitFlags |= 1 << cSPSkinPaintClearDescription::kFlagSpec;
-        desc->mSpecBump[0] = Clamp01(mParser->ParseFloat(optArgs[0]));
+        desc->mSpecBump[0] = SseClamp01(mParser->ParseFloat(optArgs[0]));
         hasSpec = true;
     }
     if ((optArgs = args.OptionArguments("bump", 1)) != 0)
     {
         desc->mBitFlags |= 1 << cSPSkinPaintClearDescription::kFlagBump;
-        desc->mSpecBump[2] = Clamp01(mParser->ParseFloat(optArgs[0]));
+        desc->mSpecBump[2] = SseClamp01(mParser->ParseFloat(optArgs[0]));
         hasBump = true;
     }
     if ((optArgs = args.OptionArguments("specExp", 1)) != 0 || (optArgs = args.OptionArguments("exponent", 1)) != 0)
     {
         desc->mBitFlags |= 1 << cSPSkinPaintClearDescription::kFlagExponent;
-        desc->mSpecBump[1] = Clamp(mParser->ParseFloat(optArgs[0]), 1.0f, 60.0f) / 60.0f;
+        desc->mSpecBump[1] = SseClamp(mParser->ParseFloat(optArgs[0]), 1.0f, 60.0f) / 60.0f;
     }
     if ((optArgs = args.OptionArguments("gloss", 1)) != 0)
     {

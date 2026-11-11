@@ -3,6 +3,7 @@
 // Retail cAppModeEditorBase layout differs from the 2008 PDB past +0x1c, so most members are
 // placed by the offsets the disassembly uses; PDB names are kept where the use agrees.
 #include "types.h"
+#include "sse_helpers.h"
 
 struct Vector3 {
     float x, y, z;
@@ -381,18 +382,8 @@ void* cAppModeEditorBase::GetCurrentCameraContext()
 
 #pragma warning(disable:4035)
 // EA math FloorToInt: hand-written SSE asm (round, then step down if the rounded value is above f).
-__forceinline int FloorToInt(float f)
-{
-    __asm {
-        movss    xmm0, f
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov      ecx, eax
-        sub      ecx, 1
-        ucomiss  xmm0, xmm1
-        cmovb    eax, ecx
-    }
-}
+// FloorToInt: the vetted SseFloorToInt in sse_helpers.h
+
 
 // @ 0x005745c0
 float cAppModeEditorBase::GetBudgetFraction()
@@ -429,7 +420,7 @@ float cAppModeEditorBase::GetBudgetFraction()
             if (mPaintLimit != -1)
                 mBudget->SetRemaining(3, mPaintLimit - colors);
             if (isCreature && mCostLimit > 0.0f)
-                mBudget->SetRemaining(4, FloorToInt(mCostLimit - cost));
+                mBudget->SetRemaining(4, SseFloorToInt(mCostLimit - cost));
             if (mBoneLimit != -1)
                 mBudget->SetRemaining(5, mBoneLimit - bones);
         }

@@ -3,6 +3,7 @@
 // object (propulsion, electric, charging, poison and other part effects).
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (cell TU; no /EHsc: locals with dtors get no EH frame)
 #include "types.h"
+#include "sse_helpers.h"
 typedef uint16_t uint16;
 typedef uint32_t uint32;
 typedef uint64_t uint64;
@@ -22,27 +23,11 @@ struct Vector3 {
 };
 
 // x87/SSE helpers from the original headers: clamp with maxss/minss on memory operands.
-inline float Clamp(float value, float lo, float hi)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, lo
-        minss xmm0, hi
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
 
-inline float Saturate(float value, float hi)
-{
-    __asm {
-        xorps xmm0, xmm0
-        maxss xmm0, value
-        minss xmm0, hi
-        movss value, xmm0
-    }
-    return value;
-}
+
+// Saturate: the vetted SseSaturate in sse_helpers.h
+
 
 // ---------------------------------------------------------------- resources / effects
 struct ResourceKey {
@@ -385,7 +370,7 @@ void sUpdateGfx()
     float health;
     float zoomed;
     if (avatar) {
-        float speed = Saturate((float)sqrt(avatar->mVelocity.x * avatar->mVelocity.x +
+        float speed = SseSaturate((float)sqrt(avatar->mVelocity.x * avatar->mVelocity.x +
                                            avatar->mVelocity.y * avatar->mVelocity.y +
                                            avatar->mVelocity.z * avatar->mVelocity.z) * 0.125f, 1.0f);
         gspCellGfx->mSpeedParamSampling[gspCellGfx->mCurrentSample++] = speed;
@@ -394,7 +379,7 @@ void sUpdateGfx()
         for (int i = 0; i < 4; i++)
             sum += gspCellGfx->mSpeedParamSampling[i];
         avgSpeed = sum * 0.25f;
-        SetAudioParameter(gspCellGfx->mAudioHandle, 0xf03e3ddf, Clamp((avatar->mTransform.mScale - 0.5f) * 0.6666667f, 0.0f, 1.0f));
+        SetAudioParameter(gspCellGfx->mAudioHandle, 0xf03e3ddf, SseClamp((avatar->mTransform.mScale - 0.5f) * 0.6666667f, 0.0f, 1.0f));
 
         IMessageServer* server = EA::Messaging::GetServer();
         if (server) {
@@ -428,10 +413,10 @@ void sUpdateGfx()
             SetGlobalAudioParameter(0xf83dae6e, 0.0f);
         else
             SetGlobalAudioParameter(0xf83dae6e,
-                Saturate((float)gspCellGame->mpSerializableData->mLevel * 0.001f, 1.0f) + 1.0f);
+                SseSaturate((float)gspCellGame->mpSerializableData->mLevel * 0.001f, 1.0f) + 1.0f);
     }
 
-    SetGlobalAudioParameter(0x07632190, Saturate(fluidSpeed * 0.1f, 1.0f));
+    SetGlobalAudioParameter(0x07632190, SseSaturate(fluidSpeed * 0.1f, 1.0f));
     SetGlobalAudioParameter(0xb0b3caf6, health);
     SetGlobalAudioParameter(0xa807ac16, zoomed);
     SetGlobalAudioParameter(0xe6a63e05, avgSpeed);

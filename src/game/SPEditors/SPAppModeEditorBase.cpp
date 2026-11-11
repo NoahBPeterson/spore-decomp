@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "sse_helpers.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern uint32_t g_renderStateDirty;   // rw::graphics::GlobalState::m_renderStateDirty[0]
@@ -1290,18 +1291,8 @@ IAudioSystem* GetSystemAT_s0057_44b0();                                         
 }
 }
 void Start3dSoundByName(uint32_t soundId, uint32_t instanceId, float x, float y, float z);   // 0x00571f80
-__forceinline int FloorToInt(float f)
-{
-    __asm {
-        movss    xmm0, f
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov      ecx, eax
-        sub      ecx, 1
-        ucomiss  xmm0, xmm1
-        cmovb    eax, ecx
-    }
-}
+// FloorToInt: the vetted SseFloorToInt in sse_helpers.h
+
 struct cDefaultLayerHandler {
     virtual void Handle();
 };
@@ -5609,7 +5600,8 @@ public:
 
 // ---- items of slice s0058be50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern const float kInvalidAbilityValue;   // @ 0x150cea8
-__forceinline int RoundToInt(float f) { __asm cvtss2si eax, f }
+// RoundToInt: the vetted SseRoundToInt in sse_helpers.h
+
 #define PV_s0058_be50(n) virtual void _v##n();
 struct Vector3_s0058_be50 {
     float x, y, z;
@@ -8446,7 +8438,7 @@ float SP::cAppModeEditorBase_s0057_44b0::GetBudgetFraction()
             if (mPaintLimit != -1)
                 mBudget->SetRemaining(3, mPaintLimit - colors);
             if (isCreature && mCostLimit > 0.0f)
-                mBudget->SetRemaining(4, FloorToInt(mCostLimit - cost));
+                mBudget->SetRemaining(4, SseFloorToInt(mCostLimit - cost));
             if (mBoneLimit != -1)
                 mBudget->SetRemaining(5, mBoneLimit - bones);
         }
@@ -12341,7 +12333,7 @@ void cAppModeEditorBase_s0058_be50::HandleSimulationUpdate(float delta1, float d
     }
 
     float deltaMS = delta2 * 1000.0f;
-    int deltaTime = RoundToInt(delta2 * 1000.0f);
+    int deltaTime = SseRoundToInt(delta2 * 1000.0f);
 
     cSPEditorSkinManager_s0058_be50::cSkin* skin;
     if (!(mpAnimCreatureManager && mpSkinManager && (skin = mpSkinManager->GetSkin(1)) != 0)) {

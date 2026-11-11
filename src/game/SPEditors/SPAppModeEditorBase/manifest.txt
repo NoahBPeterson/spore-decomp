@@ -83,3 +83,4 @@
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?FUN_00585860@cAppModeEditorBase_s0058_5330@@QAEXHH@Z  00585860  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?InitializeUndoList@cAppModeEditorBase_s0058_5d40@SP@@QAEXXZ  00586690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?Deactivate@cAppModeEditorBase_s0058_7a20@SP@@QAEXXZ  00587a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?GetBudgetFraction@cAppModeEditorBase_s0057_44b0@SP@@QAEMXZ  005745c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

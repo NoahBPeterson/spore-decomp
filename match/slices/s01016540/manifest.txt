@@ -12,3 +12,4 @@ slices/s01016540/s01016540.cpp  ?FUN_01017240@@YAMXZ  01017240  /O2 /MD /Gy /EHs
 slices/s01016540/s01016540.cpp  ?FUN_01017260@cSPCameraControllerSolarSystem@@QAEIXZ  01017260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 slices/s01016540/s01016540.cpp  ?FUN_01017270@cSPCameraControllerSolarSystem@@QAEXD@Z  01017270  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 slices/s01016540/s01016540.cpp  ?FUN_01017390@@YAXXZ  01017390  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s01016540/s01016540.cpp  ?FUN_01017410@cSPCameraControllerSolarSystem@@QAEMH@Z  01017410  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

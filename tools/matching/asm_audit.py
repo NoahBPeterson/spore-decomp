@@ -75,9 +75,11 @@ def why(body, review=False):
 
 # Since 2026-11-11 a function that uses inline assembly at all does not count as byte-exact: neither an `__asm` block
 # in its own body nor a call to a function of the same file whose body has one (the copy-pasted Clamp/RoundToInt/
-# FloorToInt helpers; 43 such functions were demoted to partial.txt that day). VETTED names helpers that are reviewed
-# once and shared from match/include (none yet); a call to one of them is allowed.
-VETTED = set()
+# FloorToInt helpers; 43 such functions were demoted to partial.txt that day). VETTED names the reviewed helpers in
+# match/include/sse_helpers.h: a call to one is allowed, and a file may not define one of these names itself (its own
+# definition would be an unreviewed copy, so it stays an asm helper here).
+VETTED = {"SseRoundToInt", "SseTruncToInt", "SseFloorToInt", "SseCeilToInt", "SseClamp", "SseMax", "SseMaxZero",
+          "SseSaturate", "SseClamp01"}
 _ASM = re.compile(r"\b__?asm\b|\b__?emit\b|__declspec\s*\(\s*naked\s*\)")
 _KW = {"if", "for", "while", "switch", "return", "sizeof", "catch", "do", "else"}
 
@@ -108,7 +110,7 @@ def _asm_functions(code, marked=()):
             i += 1
         if _ASM.search(code[s:i]):
             out.add(m.group(1))
-    return out - VETTED
+    return out
 
 
 def transcribed(src, review=False):

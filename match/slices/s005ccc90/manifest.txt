@@ -3,3 +3,4 @@ slices/s005ccc90/s005ccc90.cpp  ?TimeObjValue@@YAMPAVcTimeObj@@@Z  005cd910  /O2
 slices/s005ccc90/s005ccc90.cpp  ?IncRef@cRefCounted@@QAEXH@Z  005cdbb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005ccc90/s005ccc90.cpp  ?DecRef@cRefCounted@@QAEXH@Z  005cdbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005ccc90/s005ccc90.cpp  ?RemoveVertebraFromWorld@cSPEditorSpine@SP@@QAEXPAH@Z  005cdae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ccc90/s005ccc90.cpp  ?Interp@cInterp@@QAEXMMPAM0@Z  005cd870  /O2 /MD /Gy /TP /arch:SSE /fp:fast

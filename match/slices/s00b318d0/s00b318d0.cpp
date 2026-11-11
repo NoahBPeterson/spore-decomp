@@ -2,6 +2,7 @@
 // command, a token translator and a few helpers.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE.
 #include "types.h"
+#include "sse_helpers.h"
 #include <xmmintrin.h>
 #include <intrin.h>
 #include <new>
@@ -227,18 +228,8 @@ void cGameTimeManager::Serialize(void* stream)
 }
 
 #pragma warning(disable:4035)
-__forceinline int CeilToInt(float f)
-{
-    __asm {
-        movss    xmm0, f
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov      ecx, eax
-        add      ecx, 1
-        ucomiss  xmm1, xmm0
-        cmovb    eax, ecx
-    }
-}
+// CeilToInt: the vetted SseCeilToInt in sse_helpers.h
+
 
 // @ 0x00b31c60
 unsigned cGameTimeManager::CeilScaledTime(unsigned v)
@@ -249,7 +240,7 @@ unsigned cGameTimeManager::CeilScaledTime(unsigned v)
     const unsigned* p = v >= lim ? &lim : &v;
     v = *p;
     float f = (float)v * mTimeFlowRate;
-    return CeilToInt(f);
+    return SseCeilToInt(f);
 }
 
 // @ 0x00b31ea0

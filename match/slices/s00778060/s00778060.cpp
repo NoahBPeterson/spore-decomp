@@ -1,6 +1,7 @@
 // Slice s00778060: rw::graphics shader-constant setters and the shader-data state stack.
 // Region 0x778060-0x778fd0. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
+#include "sse_helpers.h"
 
 // ---- D3D9 device (IDirect3DDevice9) ------------------------------------------------------
 extern void* g_pDevice;  // 0x16f89d0  rw::graphics::ActiveState::m_d3d9Device
@@ -31,18 +32,8 @@ extern unsigned int g_shDirty[];        // 0x16f89f8
 extern unsigned int g_softStateUpdated; // 0x16f9110
 
 #pragma warning(disable:4035)
-__forceinline int FloorToInt(float f)
-{
-    __asm {
-        movss    xmm0, f
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov      ecx, eax
-        sub      ecx, 1
-        ucomiss  xmm0, xmm1
-        cmovb    eax, ecx
-    }
-}
+// FloorToInt: the vetted SseFloorToInt in sse_helpers.h
+
 
 // @ 0x00778060  Matrix4 invert; flags bit2 = copy through, (flags&3)==3 = affine special case
 float* FUN_00778060(float* out, const float* m, unsigned flags) {
@@ -152,7 +143,7 @@ void FUN_00778cc0(unsigned reg, unsigned p2, int isVS) {
     ShConstB* p = g_shConstB;
     if (p) {
         float f = p->v;
-        int i = FloorToInt(f);
+        int i = SseFloorToInt(f);
         float a = (float)(unsigned)p->i;
         float b = p->v;
         float v[4];

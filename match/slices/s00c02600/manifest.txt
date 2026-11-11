@@ -23,3 +23,4 @@ slices/s00c02600/s00c02600.cpp  ?Test_00c034d0@cPred@@QAEHPAUFruitRec@@@Z  00c03
 slices/s00c02600/s00c02600.cpp  ?FUN_00c03520@@YGHPAUObjB@@@Z  00c03520  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00c02600/s00c02600.cpp  ?FUN_00c03570@CreatureBase@@QAEPAUVec3v@@PAU2@PAD@Z  00c03570  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00c02600/s00c02600.cpp  ?FUN_00c035b0@CreatureBase@@QAEXH@Z  00c035b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c02710@@YAHM@Z  00c02710  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

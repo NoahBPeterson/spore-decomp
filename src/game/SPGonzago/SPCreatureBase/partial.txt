@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
 00c0b710  0  byte-exact only with inline assembly in the body (symbol ?FUN_00c0b710@@YIXPAUcCreatureBase@Simulator@@@Z, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++
-00c0b9d0  0  byte-exact only with inline-assembly helper ClampF (symbol ?ClampHunger@cCreatureBase@Simulator@@QAEXM@Z, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++
