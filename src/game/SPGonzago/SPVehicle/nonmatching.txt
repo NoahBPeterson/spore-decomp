@@ -9,6 +9,6 @@
 00c9fb40
 00c9fc60
 00c9fd40
-00c9fdc0
+00c9fdc0 118 vs 121. Call target stays in edx and the empty-path compare matches. Last element reloads into ecx and x is [ecx-0x3c]; cl folds `p -= 1`, so y/z stay at [ecx-0x38]/[ecx-0x34] instead of `sub ecx,0x3c` then [ecx+4]/[ecx+8].
 00c9fe40
 00c9fee0
