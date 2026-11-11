@@ -4777,12 +4777,16 @@ int FUN_00b6e2b0(int value)
     return old;
 }
 
+// Closest attempt, same size. The id store now sits inside the second
+// virtual call, one instruction early: before `mov ecx, eax` instead of
+// after `mov eax, [edx+0x18]`.
 // @ 0x00b6e2d0
 void cSimulatorUIStore::Save(IStreamHost* owner)
 {
     IStreamObj* streamObj = owner->V8();
+    void** vt = *(void***)streamObj;
     uint32_t id = 0x5593a1a;
-    void* stream = streamObj->V6();
+    void* stream = ((void* (__thiscall*)(void*))vt[6])(streamObj);
     EA::IO::WriteUint32(stream, &id, 1, 0);
     cVarListSerializer_s00b6_d3c0 ser;
     ser.Init(this, &g_dataset0156b0d8, 0x1a80d26);
