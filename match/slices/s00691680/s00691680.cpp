@@ -284,8 +284,8 @@ void cJobManager::FlushWaiting() {
 // @ 0x00692400  cJob::Cancel
 // ===========================================================================
 bool cJob::Cancel(bool wait) {
-    cJobData* self = static_cast<cJobData*>(this);
-    return self->GetManager()->CancelJob(self, wait);
+    return static_cast<cJobData*>(this)->GetManager()->CancelJob(
+        static_cast<cJobData*>(this), wait);
 }
 
 // ===========================================================================

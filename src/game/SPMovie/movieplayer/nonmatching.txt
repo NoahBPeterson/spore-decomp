@@ -10,7 +10,6 @@
 00fcb860 153 242	FAIL (call #0 arg differs; 0x00c2e4e0 teardown offset) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00fcb920 415 661	FAIL (ecx clobber on entry) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00fcbd30 208 224	FAIL (float -inf vs +inf at +0x2c; iface slots) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00fcbec0 3 3	PASS (100% cov; only eax/edx reg pick for virtual call) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00fcbf10 53 53	PASS (100% cov; block-layout only) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00fcbf50 53 53	PASS (100% cov; block-layout only) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00fcbf90 53 53	PASS (100% cov; block-layout only) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

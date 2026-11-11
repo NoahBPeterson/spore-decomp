@@ -5,6 +5,9 @@
 #include "game/types.h"
 #include "SP/cString.h"
 #include "cSPUILayoutManager.h"
+#include "cSPUILayout.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl EA_Allocate(uint32_t size, const char* name, int a, int b,
@@ -306,11 +309,11 @@ static void SpaceUniverseTransition() {
     }
 }
 struct SPUILayout2;
-struct Ctl { char pad[8]; SPUILayout2* f08; };
+struct Ctl { uint32_t pad00[2]; cSPUILayout* mpLayout; };
 struct GlobalOpts2 {
-    char pad[0x5c];
-    Ctl* p5c;
-    void* FindWin(void* id);
+    uint32_t pad00[0x5c / 4];
+    Ctl* mpGlobalUI;
+    EA::UTFWin::IWindow* FindWin(uint32_t id);
 };
 struct PlanetInfo { uint8_t pad00[0x18]; void* mName; };  // planet object name at +0x18
 struct PlanetName { void* mName; };                        // cPlanet::GetName result
@@ -1368,10 +1371,12 @@ void cSPUIGlobalOptions::Update()
 }
 
 // @ 0x00e01ce0
-void* GlobalOpts2::FindWin(void* id)
+EA::UTFWin::IWindow* GlobalOpts2::FindWin(uint32_t id)
 {
-    SPUILayout2* pLayout = p5c->f08;
-    return pLayout ? pLayout->FindWindowByID(id, 1) : 0;
+    Ctl* ui = mpGlobalUI;
+    _ReadWriteBarrier();
+    cSPUILayout* layout = ui->mpLayout;
+    return layout ? layout->FindWindowByID(id, true) : 0;
 }
 
 // @ 0x00e01d00

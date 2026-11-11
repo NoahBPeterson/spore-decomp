@@ -1529,9 +1529,14 @@ void rw::movie::MovieRenderer_s00fc_b210::PauseVideo()
 {
     if (mVideoState - 1 <= 1u)
     {
-        rw::movie::IAudioRenderer* ar = mAudioRenderer;
-        if (ar != 0)
-            ar->v24();
+        IAudioRenderer* audio = mAudioRenderer;
+        if (audio != 0)
+        {
+            typedef void (__thiscall* PauseFunction)(IAudioRenderer*);
+            PauseFunction* table = *(PauseFunction**)audio;
+            _ReadWriteBarrier();
+            table[9](audio);
+        }
         mVideoState = 3;
     }
 }

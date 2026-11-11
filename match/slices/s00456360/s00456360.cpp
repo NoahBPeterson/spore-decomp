@@ -296,11 +296,35 @@ RefObj** copy_ref_forward(RefObj** first, RefObj** last, RefObj** dst)
     return dst;
 }
 
+// The retail /Od wrapper retains eight unused inline-frame dwords.
+// Preserve that reservation before the move-commit layer.
+template<int Count> inline void ReserveElem32MoveFrame()
+{
+    uint32_t slots[Count];
+}
+
+struct Elem32MoveTag {
+    bool mTrivialMove;
+    Elem32MoveTag() : mTrivialMove(false) {}
+};
+
+inline void CommitElem32MoveImpl(Elem32* first, Elem32* last, Elem32* dst, Elem32MoveTag)
+{
+    for (; first != last; ++first, ++dst)
+        first->~Elem32();
+}
+
+inline void CommitElem32Move(Elem32* first, Elem32* last, Elem32* dst)
+{
+    CommitElem32MoveImpl(first, last, dst, Elem32MoveTag());
+}
+
 // @ 0x457250
 Elem32* uninitialized_move_Elem32(Elem32* first, Elem32* last, Elem32* dst)
 {
     Elem32* r = uninitialized_copy_Elem32(first, last, dst);
-    for (Elem32* p = first; p != last; ++p) {}
+    ReserveElem32MoveFrame<8>();
+    CommitElem32Move(first, last, dst);
     return r;
 }
 

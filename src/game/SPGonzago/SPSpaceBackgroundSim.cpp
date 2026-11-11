@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include "SP/cCivData.h"
+#include "SP/cGonzagoSubsystem.h"
 #include "SP/cSPGameDataUFO.h"
 #include "SP/cSimPlanetLowLOD.h"
 #include "SP/cSolarSystem.h"
@@ -16,17 +17,13 @@
 // unnamed retail callees and globals (address in the comment)
 extern void* DAT_016dda8c;                 // gspBackgroundSimManager singleton
 extern float DAT_013f9428, DAT_01485720, DAT_013ec4b8;
-extern void* DAT_01654c04;
-extern void* DAT_01654c02;
 
 // ---- items of slice s01020e80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   u32;
 extern void* DAT_016dda8c;                 // gspBackgroundSimManager singleton
 extern float DAT_013f9428, DAT_01485720, DAT_013ec4b8;
-extern void* DAT_01654c04;
-extern void* DAT_01654c02;
 void* __cdecl FUN_00ffbe50();                        // GetUFOSimulator
-void* __cdecl FUN_00b5b800();                        // GetCurrentGameMode
+SP::eGameMode __cdecl FUN_00b5b800();                        // GetCurrentGameMode
 void* __cdecl FUN_00f473a0(int, const char*, int, int, int, int);
 struct Ext {
     void* FUN_0101fb40();
@@ -220,19 +217,26 @@ int* FUN_01021180(int* a, int* b, int* c, int (*cmp)(int, int))
     return b;
 }
 
+namespace SP {
+// The cSPLivingUniverse subsystem tick hook; its receiver is unused.
+class cSPLivingUniverse : public cGonzagoSubsystem {
+public:
+    virtual void PostUpdateTick(unsigned int nTick, unsigned int nDelta);
+};
+}
+
 // @ 0x01021200
-void __stdcall FUN_01021200(int a, int b)
+void SP::cSPLivingUniverse::PostUpdateTick(unsigned int nTick, unsigned int nDelta)
 {
-    (void)a; (void)b;
-    void* gm = FUN_00b5b800();
-    if (gm != &DAT_01654c04) {
+    SP::eGameMode gm = FUN_00b5b800();
+    if (gm != SP::kCivMode) {
         gm = FUN_00b5b800();
-        if (gm != &DAT_01654c02) return;
+        if (gm != SP::kTribeMode) return;
     }
-    void* s = DAT_016dda8c;
-    void* o = *(void**)((char*)s + 0xc);
-    void* fn = VTP(o)[0xc / 4];
-    ((void(__thiscall*)(void*))fn)(o);
+    cDispatchObject* object = ((cSPBackgroundSimManager*)DAT_016dda8c)->mpCommObject;
+    typedef void (__thiscall* TickFunction)(cDispatchObject*, unsigned int, unsigned int);
+    TickFunction tick = (TickFunction)object->mpTable->mpSlots[3];
+    tick(object, nTick, nDelta);
 }
 
 // @ 0x01021240
