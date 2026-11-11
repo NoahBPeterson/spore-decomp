@@ -1392,9 +1392,10 @@ tItemInfo_s00c5_7570* __thiscall tItemInfo_s00c5_7570::FUN_00c57a80(cMissionTarg
         mpTarget = pTarget;
     }
     mField10 = flag;
-    mField4 = f1;
-    mField8 = f2;
-    mFieldC = f3;
+    volatile Float3* pFields = (Float3*)&mField4;
+    pFields->x.u = ((const FloatBits*)&f1)->u;
+    pFields->y.u = ((const FloatBits*)&f2)->u;
+    pFields->z.u = ((const FloatBits*)&f3)->u;
     return this;
 }
 }  // namespace SP
@@ -1628,16 +1629,16 @@ void __thiscall cSPMissionMultiDelivery_s00c5_7570::GetFetchItemName(eastl::wstr
 namespace SP {
 void __thiscall cSPMissionMultiDelivery_s00c5_7570::FUN_00c582a0(WString* out)
 {
-    WString* pOut = out;
     cSPMissionMultiDelivery_s00c5_62b0* self = (cSPMissionMultiDelivery_s00c5_62b0*)this;
-    if (self->mUIShortDescription.mpBegin == self->mUIShortDescription.mpEnd &&
+    WString& description = self->mUIShortDescription;
+    if (description.mpBegin == description.mpEnd &&
         self->mDeliveryState == 0 &&
         self->IsItemPickedUpInPlanet()) {
-        self->GetText(0x40a0575, pOut);
-        if (pOut != &self->mUIShortDescription)
-            self->mUIShortDescription.assign(pOut->mpBegin, pOut->mpEnd);
+        self->GetText(0x40a0575, out);
+        if (out != &description)
+            description.assign(out->mpBegin, out->mpEnd);
     } else {
-        self->FUN_00c48d40(pOut);
+        self->FUN_00c48d40(out);
     }
 }
 }  // namespace SP
