@@ -1,5 +1,2 @@
 # va  diff-bytes  reason
-0059a470  0  byte-exact only with inline-assembly helper CeilToInt (symbol ?UpdateTimeText@cEditorBudgetPanel@SP@@QAEXXZ, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++
-0059a770  0  byte-exact only with inline-assembly helper FMaxZero (symbol ?HandleMessage@cEditorBudgetPanel@SP@@UAE_NIPAX@Z, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++
-0059a980  0  byte-exact only with inline-assembly helper CeilToInt, RoundToInt (symbol ?SetCreature@cEditorBudgetPanel@SP@@QAEXIPAUcCreatureData@2@I@Z, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++
 0059ab50  0  byte-exact only with inline assembly in the body (symbol ?Clamp@@YAMMMM@Z, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

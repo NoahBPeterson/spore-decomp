@@ -8,6 +8,7 @@
 //   00fbe4f0  cTerrainStateMgr::~cTerrainStateMgr
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
+#include "sse_helpers.h"
 #include <math.h>
 #include <string.h>
 
@@ -17,17 +18,8 @@ extern "C" long __cdecl _InterlockedDecrement(volatile long*);
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedIncrement, _InterlockedDecrement)
 
 // ---- SSE clamp helper (the original's inline EA math, maxss/minss) ----------
-inline float Clamp01(float v)
-{
-    float hi = 1.0f;
-    __asm {
-        xorps xmm0, xmm0
-        maxss xmm0, v
-        minss xmm0, hi
-        movss v, xmm0
-    }
-    return v;
-}
+// Clamp01: the vetted SseClamp01 in sse_helpers.h
+
 
 // ---- callees ---------------------------------------------------------------
 float __cdecl FUN_00fc2040(float, float);              // 0xfc2040
@@ -207,8 +199,8 @@ struct cTerrainStateMgr {
 // @ 0x00fbddb0
 void cTerrainStateMgr::SetTerraformValues(float a, float b, bool c)
 {
-    float ca = Clamp01(a);
-    float cb = Clamp01(b);
+    float ca = SseClamp01(a);
+    float cb = SseClamp01(b);
     float v = (1.0f - ca) - m624;
     if (fabsf(m02c - v) > 0.001f) {
         m02c = v;

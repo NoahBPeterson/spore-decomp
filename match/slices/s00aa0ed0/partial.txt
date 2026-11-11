@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-00aa14f0  0  byte-exact only with inline-assembly helper CeilToInt (symbol ?EmitBurst@cMetaParticlesEffect@@QAEXM@Z, flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

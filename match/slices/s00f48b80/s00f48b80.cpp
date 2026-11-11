@@ -20,6 +20,7 @@
 // serializer's description offsets.
 
 #include "types.h"
+#include "sse_helpers.h"
 
 typedef unsigned char      uint8;
 typedef unsigned short     uint16;
@@ -160,16 +161,8 @@ struct cBrushCommandDesc {
 };
 
 // SSE clamp helper (the original's inline maxss/minss).
-static __forceinline float ClampF(float x, float lo, float hi)
-{
-    __asm {
-        movss xmm0, x
-        maxss xmm0, lo
-        minss xmm0, hi
-        movss x, xmm0
-    }
-    return x;
-}
+// ClampF: the vetted SseClamp in sse_helpers.h
+
 
 // ------------------------------------------------------------ command object
 struct cBrushCommand {
@@ -400,10 +393,10 @@ void cBrushCommand::Texture(cArguments* args)
         mDesc->mDesc.mLevelRangeValue1 = 0.0f;
         if (count > 1) {
             if (mDesc->mDesc.mDrawMode == 3) {
-                mDesc->mDesc.mLevelValue = ClampF(mParser->ParseFloat(d[1]), -2.0f, 1.0f);
+                mDesc->mDesc.mLevelValue = SseClamp(mParser->ParseFloat(d[1]), -2.0f, 1.0f);
             } else {
-                mDesc->mDesc.mLevelRangeValue1 = ClampF(mParser->ParseFloat(d[1]), -1.0f, 1.0f);
-                mDesc->mDesc.mLevelRangeValue2 = ClampF(mParser->ParseFloat(d[2]), -1.0f, 1.0f);
+                mDesc->mDesc.mLevelRangeValue1 = SseClamp(mParser->ParseFloat(d[1]), -1.0f, 1.0f);
+                mDesc->mDesc.mLevelRangeValue2 = SseClamp(mParser->ParseFloat(d[2]), -1.0f, 1.0f);
             }
         }
     }

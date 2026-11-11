@@ -1,6 +1,7 @@
 // Slice s0077d800: EASTL vector helpers and shader-constant registration tables.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
+#include "sse_helpers.h"
 
 // ---- EASTL-ish container helpers ---------------------------------------------------------
 struct Float4_77d800 { float x, y, z, w; };
@@ -41,17 +42,8 @@ struct CamThing {
 };
 
 #pragma warning(disable:4035)
-static __forceinline int FloorToInt(float f) {
-    __asm {
-        movss    xmm0, f
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov      ecx, eax
-        sub      ecx, 1
-        ucomiss  xmm0, xmm1
-        cmovb    eax, ecx
-    }
-}
+// FloorToInt: the vetted SseFloorToInt in sse_helpers.h
+
 
 // @ 0x0077d970
 int Vec8Thing::FUN_0077d970(unsigned val) {
@@ -92,7 +84,7 @@ float __cdecl FUN_0077eef0(int n, float* arr, float t) {
     if (n == 1)
         return arr[0];
     t = (float)(n - 1) * t;
-    int i = FloorToInt(t);
+    int i = SseFloorToInt(t);
     double r = arr[i];
     t = t - (float)i;
     if (t > 0.0f)

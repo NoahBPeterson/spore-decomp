@@ -3,6 +3,7 @@
 // the rest are complete, behaviour-equivalent source (nonmatching.txt).  32-bit only.
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
 #include "types.h"
+#include "sse_helpers.h"
 
 namespace rw { namespace audio { namespace core {
 
@@ -407,13 +408,11 @@ int Mp3Player_start(Mp3Player* self)
 // push eax). A C result variable would make cl spill it and reload into another register (edx),
 // which the original never writes, so this variant deliberately leaves the value in the return
 // register (the asm writes eax; no C return is needed).
-static inline int RwFloat2IntInEax(float f)
-{
-    __asm { cvtss2si eax, f }
-}
+// RwFloat2IntInEax: the vetted SseRoundToInt in sse_helpers.h
+
 int Mp3Player_setStart(void* fmt, Mp3Player* self)
 {
-    FUN_0113fba0(self->mStartHandle, RwFloat2IntInEax(*(float*)((unsigned char*)fmt + 4) * 4096.0f));
+    FUN_0113fba0(self->mStartHandle, SseRoundToInt(*(float*)((unsigned char*)fmt + 4) * 4096.0f));
     self->mState = 0;
     return 0;
 }

@@ -2,6 +2,7 @@
 // plus the two free helpers that walk its 0x6c-stride element arrays.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 #include "types.h"
+#include "sse_helpers.h"
 #include <math.h>
 
 #define PV(n) virtual void v##n();
@@ -103,18 +104,8 @@ extern int32_t g_1488414[];                      // 0x01488414  global property 
 // EA's floating-point helper: truncating float->int on an SSE1-only target
 // (cl would otherwise emit a __ftol2_sse call).  asm block of 7 instructions.
 #pragma warning(disable : 4035)
-__forceinline int FloorToInt(float f)
-{
-    __asm {
-        movss    xmm0, f
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov      ecx, eax
-        sub      ecx, 1
-        ucomiss  xmm0, xmm1
-        cmovb    eax, ecx
-    }
-}
+// FloorToInt: the vetted SseFloorToInt in sse_helpers.h
+
 
 // the 0x38-byte object at cPlayerCityMusic+0x160 (a stopwatch that is also used as
 // a direct property list)
@@ -549,7 +540,7 @@ long double SP::Audio::cPlayerCityMusic::FUN_00ead040()
     long double e = (long double)t;
     e = e * sw->m14;
     float f = (float)e;
-    int i = FloorToInt(f);
+    int i = SseFloorToInt(f);
     return e - (long double)i;
 }
 

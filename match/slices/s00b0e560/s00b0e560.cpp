@@ -8,6 +8,7 @@
 // complete but not byte-exact (the spstl container templates are not reproduced).
 
 #include "s00b0e560.h"
+#include "sse_helpers.h"
 #include "types.h"
 #include <math.h>
 
@@ -119,20 +120,12 @@ void InputHost::FUN_00b0f240(float* out0, float* out1, float* out2)
 // Hermite smoothstep: clamp x into [lo,hi], normalise, then t*t*(3 - 2t).
 // The Clamp step is the module's SSE __asm helper (maxss/minss), as used by the
 // /arch:SSE math code in this binary.
-static __forceinline float ClampSSE(float x, float lo, float hi)
-{
-    __asm {
-        movss xmm0, x;
-        maxss xmm0, lo;
-        minss xmm0, hi;
-        movss x, xmm0;
-    }
-    return x;
-}
+// ClampSSE: the vetted SseClamp in sse_helpers.h
+
 
 float FUN_00b0f060(float lo, float hi, float x)
 {
-    float v = ClampSSE(x, lo, hi);
+    float v = SseClamp(x, lo, hi);
     float t = (v - lo) / (hi - lo);
     return t * t * (3.0f - 2.0f * t);
 }

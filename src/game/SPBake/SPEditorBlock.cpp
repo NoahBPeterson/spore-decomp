@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "EA/Audio/FactoryBinarySampleData.h"
 #include "SP/cSPEditorBlock.h"
 #include "SP/cMWModel.h"
@@ -1186,16 +1187,8 @@ struct cSPEditorBlock_s0043_e3f0 {
     cSPBoundingBox_s0043_e3f0 GetBBox(bool a, bool b, bool c);   // SP::cSPEditorBlock::GetBBox 0x44ae00
 };
 }
-inline float Clamp(float x, float lo, float hi)
-{
-    __asm {
-        movss xmm0, x
-        maxss xmm0, lo
-        minss xmm0, hi
-        movss x, xmm0
-    }
-    return x;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
+
 // ---- items of slice s0043e3f0 end
 
 // ---- items of slice s0043f3a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1319,16 +1312,8 @@ struct bitset_s0044_0110 {
 };
 }
 namespace SP {
-__forceinline float Clamp_s0044_0110(float value, float minValue, float maxValue)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        minss xmm0, maxValue
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp_s0044_0110: the vetted SseClamp in sse_helpers.h
+
 }
 namespace SP {
 inline float InverseLerp(float value, float lo, float hi) { return (value - lo) / (hi - lo); }
@@ -5719,7 +5704,7 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43e3f0(float dt, uint32_t index)
             if (off != 0.0f) phase = asinf(-off / amp);
             float v1 = sinf(mField448 * c + phase) * amp + off;
             float v0 = sinf(0.0f * c + phase) * amp + off;
-            float v = Clamp(mField44c + v1, 0.0f, 1.0f);
+            float v = SseClamp(mField44c + v1, 0.0f, 1.0f);
             F_43c450(handle, v, &mField44c, true);
             F_449ce0();
         }
@@ -6098,7 +6083,7 @@ void cSPEditorBlock_s0044_0110::SetUniformScale(float scale, bool b, bool force)
 {
     if (mUniformScale != scale || force) {
         float oldScale = mUniformScale;
-        scale = Clamp_s0044_0110(scale, mMinUniformScale, mMaxUniformScale);
+        scale = SseClamp(scale, mMinUniformScale, mMaxUniformScale);
         mUniformScale = scale;
         if (mpModel) {
             if (mBooleanAttributes.test(7) && mVertebraAnimID) {

@@ -9,3 +9,4 @@ slices/s00eac530/s00eac530.cpp  ?FUN_00eacfb0@@YAPAUElem6c@@PAU1@00@Z  00eacfb0 
 slices/s00eac530/s00eac530.cpp  ?Pause@cPlayerCityMusic@Audio@SP@@QAEXE@Z  00eacff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00eac530/s00eac530.cpp  ?FUN_00ead090@cPlayerCityMusic@Audio@SP@@QAEXHM@Z  00ead090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00eac530/s00eac530.cpp  ?SetNoteDuration@cPlayerCityMusic@Audio@SP@@QAEXHM@Z  00ead0c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00eac530/s00eac530.cpp  ?FUN_00ead040@cPlayerCityMusic@Audio@SP@@QAEOXZ  00ead040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

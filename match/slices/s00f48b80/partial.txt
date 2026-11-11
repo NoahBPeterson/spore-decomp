@@ -1,3 +1,2 @@
 # incomplete functions in this slice (source does not yet compile / is missing)
 # (none -- every function in this slice is complete)
-00f493d0  0  byte-exact only with inline-assembly helper ClampF (symbol ?Texture@cBrushCommand@@QAEXPAUcArguments@@@Z, flags /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-01131420  0  byte-exact only with inline-assembly helper RwFloat2IntInEax (symbol ?Mp3Player_setStart@core@audio@rw@@YAHPAXPAUMp3Player@123@@Z, flags /vc71 /O2 /MD /Gy /TP /arch:SSE); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

@@ -205,7 +205,10 @@ Writing matchable source:
 
 **No inline assembly without approval (2026-11-11).** The pull-request check fails any added `__asm` / `_emit` /
 `naked` line unless a maintainer sets the `asm-approved` label (contributors ask with an `asm-override: <why>` line
-in the pull request body). The older rule below still applies to what is already in the repo.
+in the pull request body). The reviewed float helpers in `match/include/sse_helpers.h` (round, truncate, floor, ceil,
+clamp, max, and the x87 `fld; fistp qword` rounding `X87RoundToInt64`) are the exception: call them, never copy them. A function whose only assembly comes from that header counts;
+any other inline assembly, in its body or in a same-file helper, makes it not count (`asm_audit.py`; 43 functions were
+demoted for this on 2026-11-11 and 30 came back through the shared helpers). The older rule below still applies.
 
 **No assembly transcription.** A function written as `__declspec(naked)` + `__asm`, with `_emit` bytes, or
 generated from the disassembly by a script is not decompiled and never counts as byte-exact; record it in

@@ -7,6 +7,7 @@
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
+#include "sse_helpers.h"
 
 struct Sec {
     void** vtable;    // +0x00
@@ -18,10 +19,8 @@ struct Sec {
 };
 
 #pragma warning(disable:4035)
-static __forceinline int TruncToInt(float f)
-{
-    __asm { cvttss2si eax, f }
-}
+// TruncToInt: the vetted SseTruncToInt in sse_helpers.h
+
 
 // @ 0x00804640
-int Sec::Get0x1c() { return TruncToInt(mDuration); }
+int Sec::Get0x1c() { return SseTruncToInt(mDuration); }

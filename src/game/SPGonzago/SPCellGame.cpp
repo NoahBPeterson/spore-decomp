@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "sse_helpers.h"
 #include <math.h>
 #include "cSPUILayout.h"
 #include "SP/cIApp.h"
@@ -127,7 +128,8 @@ struct cCellStats {
     int     nearestIdx;         // 0x128c
 };
 extern Vec3 g_16b3c28;
-__forceinline int RoundToInt(float f) { __asm cvtss2si eax, f }
+// RoundToInt: the vetted SseRoundToInt in sse_helpers.h
+
 static inline const int& MinI(const int& a, const int& b) { return (b < a) ? b : a; }
 static inline const float& MaxF(const float& a, const float& b) { return (a < b) ? b : a; }
 // ---- items of slice s00e52060 end
@@ -374,7 +376,8 @@ namespace SP {
 float sGetBoxSizeMultiplier2(int level, int unused);            // 0x00e51ff0, cdecl, float in st0
 }
 namespace SP {
-__forceinline int RoundToInt_s00e5_a430(float f) { __asm cvtss2si eax, f }
+// RoundToInt_s00e5_a430: the vetted SseRoundToInt in sse_helpers.h
+
 }
 namespace SP {
 __forceinline uint32_t WrapTexCoord(int v) {
@@ -1504,18 +1507,8 @@ int FUN_00e6cbd0(int handle, int a2, unsigned a3, char* outA, char* outB);
 // ---- items of slice s00e6cbd0 end
 
 // ---- items of slice s00e6db70 begin (TODO(rewrite): local stubs, replace by canonical classes)
-__forceinline int FloorToInt(float f)
-{
-    __asm {
-        movss    xmm0, f
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov      ecx, eax
-        sub      ecx, 1
-        ucomiss  xmm0, xmm1
-        cmovb    eax, ecx
-    }
-}
+// FloorToInt: the vetted SseFloorToInt in sse_helpers.h
+
 struct Vector2 {
     float x, y;
     Vector2() {}
@@ -1978,26 +1971,10 @@ struct Vector3_s00e7_3f60 {
     Vector3_s00e7_3f60 operator+(const Vector3_s00e7_3f60& b) const { return Vector3_s00e7_3f60(x + b.x, y + b.y, z + b.z); }
     Vector3_s00e7_3f60 operator*(float f) const { return Vector3_s00e7_3f60(x * f, y * f, z * f); }
 };
-inline float Clamp(float value, float lo, float hi)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, lo
-        minss xmm0, hi
-        movss value, xmm0
-    }
-    return value;
-}
-inline float Saturate(float value, float hi)
-{
-    __asm {
-        xorps xmm0, xmm0
-        maxss xmm0, value
-        minss xmm0, hi
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
+
+// Saturate: the vetted SseSaturate in sse_helpers.h
+
 struct ResourceKey_s00e7_3f60 {
     uint32 instanceID;   // +0x0
     uint32 typeID;       // +0x4
@@ -3394,7 +3371,7 @@ static void FUN_00e52060(cCellStats* self, int count, const cPart* parts, bool s
     self->val1264 = 0.0f;
     self->val1268 = FUN_00e837c0(0x03ab589e, (float)self->counts[6]);
     float v = FUN_00e837c0(0xaee2835e, (float)self->counts[6]);
-    self->val126c = RoundToInt(v);
+    self->val126c = SseRoundToInt(v);
     self->val1270 = FUN_00e837c0(0x92baae19, (float)self->counts[5]);
 }
 #pragma auto_inline(on)
@@ -5030,9 +5007,9 @@ void sLevelGetTextureCoord(int level, float* pos, uint32_t* out0, uint32_t* out1
     volatile float size = (kLevelSize[level] / gspCellGame_s00e5_a430->mLevelScale) * (sGetBoxSizeMultiplier2(level, 0) * 0.85f);
     volatile float inv = 1.0f / size;
     volatile float p0 = pos[0] * inv;
-    *out0 = WrapTexCoord(RoundToInt_s00e5_a430(p0 * 128.0f));
+    *out0 = WrapTexCoord(SseRoundToInt(p0 * 128.0f));
     volatile float p1 = pos[1] * inv;
-    *out1 = WrapTexCoord(RoundToInt_s00e5_a430(p1 * 128.0f));
+    *out1 = WrapTexCoord(SseRoundToInt(p1 * 128.0f));
     if ((int)*out0 < 1) *out0 = *out0 + 0x80;
     if ((int)*out1 < 1) *out1 = *out1 + 0x80;
 }
@@ -7711,8 +7688,8 @@ void CellRecenterWorld(const Vector3_s00e6_db70& newCenter, float scale)
          pTile = (cBackgroundTile*)gspCellGame_s00e6_db70->mTiles.Next(&index)) {
         float tileScale = 1.0f / ((kLevelSize_s00e6_db70[pTile->mLevel] / gspCellGame_s00e6_db70->mCellSize) *
             (GetLevelScale(pTile->mLevel - GetCellStage(gspCellGame_s00e6_db70->mpLevelInfo->mStage)->mLevel) * 0.85f));
-        pTile->mX -= FloorToInt(tileScale * center.x);
-        pTile->mY -= FloorToInt(center.y * tileScale);
+        pTile->mX -= SseFloorToInt(tileScale * center.x);
+        pTile->mY -= SseFloorToInt(center.y * tileScale);
 
         if (pTile->mpShape) {
             int level = pTile->mLevel;
@@ -8472,7 +8449,7 @@ void sUpdateGfx()
     float health;
     float zoomed;
     if (avatar) {
-        float speed = Saturate((float)sqrt(avatar->mVelocity.x * avatar->mVelocity.x +
+        float speed = SseSaturate((float)sqrt(avatar->mVelocity.x * avatar->mVelocity.x +
                                            avatar->mVelocity.y * avatar->mVelocity.y +
                                            avatar->mVelocity.z * avatar->mVelocity.z) * 0.125f, 1.0f);
         gspCellGfx_s00e7_3f60->mSpeedParamSampling[gspCellGfx_s00e7_3f60->mCurrentSample++] = speed;
@@ -8481,7 +8458,7 @@ void sUpdateGfx()
         for (int i = 0; i < 4; i++)
             sum += gspCellGfx_s00e7_3f60->mSpeedParamSampling[i];
         avgSpeed = sum * 0.25f;
-        SetAudioParameter(gspCellGfx_s00e7_3f60->mAudioHandle, 0xf03e3ddf, Clamp((avatar->mTransform.mScale - 0.5f) * 0.6666667f, 0.0f, 1.0f));
+        SetAudioParameter(gspCellGfx_s00e7_3f60->mAudioHandle, 0xf03e3ddf, SseClamp((avatar->mTransform.mScale - 0.5f) * 0.6666667f, 0.0f, 1.0f));
 
         IMessageServer* server = EA::Messaging::GetServer();
         if (server) {
@@ -8515,10 +8492,10 @@ void sUpdateGfx()
             SetGlobalAudioParameter(0xf83dae6e, 0.0f);
         else
             SetGlobalAudioParameter(0xf83dae6e,
-                Saturate((float)gspCellGame_s00e7_3f60->mpSerializableData->mLevel * 0.001f, 1.0f) + 1.0f);
+                SseSaturate((float)gspCellGame_s00e7_3f60->mpSerializableData->mLevel * 0.001f, 1.0f) + 1.0f);
     }
 
-    SetGlobalAudioParameter(0x07632190, Saturate(fluidSpeed * 0.1f, 1.0f));
+    SetGlobalAudioParameter(0x07632190, SseSaturate(fluidSpeed * 0.1f, 1.0f));
     SetGlobalAudioParameter(0xb0b3caf6, health);
     SetGlobalAudioParameter(0xa807ac16, zoomed);
     SetGlobalAudioParameter(0xe6a63e05, avgSpeed);

@@ -84,3 +84,4 @@
 ../src/game/SPBake/SPEditorBlock.cpp  ?Reset188@Block2@@QAEXXZ  00451ed0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?FUN_00451fe0@cSPEditorBlock_s0045_1ef0@@QAEXXZ  00451fe0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?FUN_00452040@cSPEditorBlock_s0045_1ef0@@QAEXXZ  00452040  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?SetUniformScale@cSPEditorBlock_s0044_0110@SP@@QAEXM_N0@Z  00440520  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

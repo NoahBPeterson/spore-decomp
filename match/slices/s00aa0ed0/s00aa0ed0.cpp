@@ -1,3 +1,4 @@
+#include "sse_helpers.h"
 // Slice s00aa0ed0 -- EA::Swarm::cMetaParticlesEffect emission/update core and the
 // cModelDescription animation-curve helpers (Swarm/MetaParticlesEffect.obj).
 //
@@ -7,30 +8,10 @@
 typedef unsigned int uint32_t;
 
 #pragma warning(disable:4035)
-static __forceinline int CeilToInt(float x)
-{
-    __asm {
-        movss xmm0, x
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov ecx, eax
-        add ecx, 1
-        ucomiss xmm1, xmm0
-        cmovb eax, ecx
-    }
-}
-static __forceinline int FloorToInt(float x)
-{
-    __asm {
-        movss xmm0, x
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov ecx, eax
-        sub ecx, 1
-        ucomiss xmm0, xmm1
-        cmovb eax, ecx
-    }
-}
+// CeilToInt: the vetted SseCeilToInt in sse_helpers.h
+
+// FloorToInt: the vetted SseFloorToInt in sse_helpers.h
+
 
 // ------------------------------------------------------------------ external helpers
 extern "C" void* __cdecl memmove(void*, const void*, unsigned int);  // 0x011e0744
@@ -370,7 +351,7 @@ void cMetaParticlesEffect::EmitBurst(float dt)
         return;
 
     float rate = mDesc->mRateCurve.mpBegin[0];
-    int n = CeilToInt(rate) - mParticleCount;
+    int n = SseCeilToInt(rate) - mParticleCount;
 
     while (n > 0) {
         SpawnOne(dt);
@@ -387,7 +368,7 @@ void cMetaParticlesEffect::EmitRate(float dt)
         return;
 
     float rate = mCurrentEmitScale * mDesc->mRateCurve.mpBegin[0];
-    int count = CeilToInt(rate);
+    int count = SseCeilToInt(rate);
 
     if ((double)mCurrentCycle <= mParticleSystemTime) {
         for (;;) {
@@ -501,7 +482,7 @@ void cMetaParticlesEffect::EmitDefault(float dt)
 
         float acc = (curve * step) * emitScale + mParticlesToGenerate;
         mParticlesToGenerate = acc;
-        int n = FloorToInt(acc);
+        int n = SseFloorToInt(acc);
         mParticlesToGenerate = acc - (float)n;
 
         float age = dt;

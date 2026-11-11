@@ -6,6 +6,7 @@
 // <new> through <memory>/<xmemory> (C2084).  Same hand guard as SPGraphicsModelManager.cpp (rewrite.py placement_new_guard).
 #define __PLACEMENT_NEW_INLINE
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "SP/cCreatureLocomotion.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -257,19 +258,11 @@ inline Quaternion AxisAngle(const Vector3& axis, float angle)
     float c = cosf(h);
     return Quaternion(axis.x * s, axis.y * s, axis.z * s, c);
 }
-__forceinline float Clamp(float value, float minValue, float maxValue)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        minss xmm0, maxValue
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
+
 inline float SmoothStep(float v)
 {
-    v = Clamp(v, 0.0f, 1.0f);
+    v = SseClamp(v, 0.0f, 1.0f);
     return (3.0f - v * 2.0f) * v * v;
 }
 inline Vector3 NormalizeSafe(const Vector3& v)
@@ -3378,10 +3371,7 @@ void __fastcall FUN_00c0b710(CB* self)
   // cast would go through __ftol2, which truncates, so the conversion is written out.
   float ms = g_1687a30 * 1000.0f;
   __declspec(align(8)) long long t;
-  __asm {
-    fld dword ptr [ms]
-    fistp qword ptr [t]
-  }
+  t = X87RoundToInt64(ms);
   self->m_b8c = (int)t;
 }
 
@@ -3487,15 +3477,13 @@ void __thiscall Simulator::cCreatureBase::func90h()
 
 // EA's SSE min/max __asm helpers (maxss/minss), as in the original module
 // (see match/slices/s00c02600 and s00533dc0: MinF/MaxF/clamp helpers are __asm there too).
-static inline float ClampF(float x, float lo, float hi) { __asm { movss xmm0, x
-                                                                  maxss xmm0, lo
-                                                                  minss xmm0, hi
-                                                                  movss x, xmm0 } return x; }
+// ClampF: the vetted SseClamp in sse_helpers.h
+
 
 // @ 0x00c0b9d0
 void __thiscall CB::ClampHunger(float value)
 {
-  value = ClampF(value, g_1687a04, g_1687a00);
+  value = SseClamp(value, g_1687a04, g_1687a00);
   this->m_bBC = value;
 }
 

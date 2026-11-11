@@ -1,12 +1,14 @@
 // slice s007a7d50  --  SP::cTextRenderer (retail layout).
 // Reconstructed C++ (MSVC x86, cl 15.00 /O2 /MD /Gy /EHsc /TP).
 #include "types.h"
+#include "sse_helpers.h"
 
 // retail inlined the CRT ftol helper (`_ftol2_sse`), which converts with the SSE1 rounding
 // `cvtss2si` instead of the truncating `cvttss2si` cl emits for a plain cast; round the same way.
 // The product must reach the helper as an expression so the spill lands beside the convert.
-inline int RoundToInt(float f) { __asm cvtss2si eax, f }
-static __forceinline int Scale255(float v) { return RoundToInt(v * 255.0f); }
+// RoundToInt: the vetted SseRoundToInt in sse_helpers.h
+
+static __forceinline int Scale255(float v) { return SseRoundToInt(v * 255.0f); }
 
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
                                           unsigned debugFlags, const char* file, int line); // 0x00f473a0
@@ -131,7 +133,7 @@ void cTextRenderer::SetStyle(int style)
 void cTextRenderer::SetStyleScale(float f)
 {
     ((unsigned char*)&this->mTextStyle->mColor)[3] = 0;
-    this->mTextStyle->mColor |= RoundToInt(f * 255.0f) << 0x18;
+    this->mTextStyle->mColor |= SseRoundToInt(f * 255.0f) << 0x18;
 }
 
 // @ 0x007a8310

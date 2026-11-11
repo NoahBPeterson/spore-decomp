@@ -6,6 +6,7 @@
 // copied into the combat-effect vectors, two animation-id lists pushed into vectors, two resource
 // keys, the range pair (SetRangeMin), and finally the hint name picked from the ability type.
 #include "types.h"
+#include "sse_helpers.h"
 #pragma pack(push, 4)
 
 // ---- properties -----------------------------------------------------------
@@ -103,15 +104,8 @@ inline float GetFloatValue(PropertyList* pList, uint32_t id, float defaultValue)
 }
 
 // SSE max (the module's asm helper).
-__forceinline float Max(float value, float minValue)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        movss value, xmm0
-    }
-    return value;
-}
+// Max: the vetted SseMax in sse_helpers.h
+
 
 // ---- containers -----------------------------------------------------------
 
@@ -255,7 +249,7 @@ bool ReadAbilityData(cCreatureAbility* ability, PropertyList* propList)
     GetFloat(propList, 0x75e0100, ability->mReactionDuration);
 
     ability->mRefresh = GetFloatValue(propList, 0x1b8346e, 5.0f);
-    ability->mRefresh = Max(ability->mRefresh, 0.1f);
+    ability->mRefresh = SseMax(ability->mRefresh, 0.1f);
     ability->mDuration = GetFloatValue(propList, 0x1c6c623, 0.0f);
     ability->mRecharge = GetFloatValue(propList, 0x5417d08, 0.0f);
 

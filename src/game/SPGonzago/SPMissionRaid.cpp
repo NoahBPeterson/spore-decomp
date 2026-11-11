@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "SP/cCivData.h"
 #include "SP/cEmpire.h"
 #include "SP/cGameData.h"
@@ -376,7 +377,8 @@ struct cRandomGlobal_c5 { float RandomDouble(); };
 extern cRandomGlobal_c5 g_cRandomGlobal;            // 0x01601760
 // retail inlined the CRT __ftol2_sse helper (`fstp dword; cvtss2si` = round-to-nearest);
 // a plain (s32) cast truncates with cvttss2si, which the equivalence gate also fails.
-static inline int RoundToInt_c5c310(float f) { __asm cvtss2si eax, f }
+// RoundToInt_c5c310: the vetted SseRoundToInt in sse_helpers.h
+
 struct SPVecU32 {
   u32* begin; u32* end; u32* cap;
   void DoInsertValue(u32* pos, const u32* val);      // 0x004558a0
@@ -1412,7 +1414,7 @@ void __cdecl FUN_00c5c310(ElemVec* vec, s32* p2, s32* p3, s32* p4, s32 lo, s32 h
       for (i = 0; i < *p2; ++i) {
         float fbuf[1];
         fbuf[0] = g_cRandomGlobal.RandomDouble() * (float)(hi - lo) + (float)lo;
-        s32 n = RoundToInt_c5c310(fbuf[0]);
+        s32 n = SseRoundToInt(fbuf[0]);
         if (n > 5)
           n = 5;
         if (n > 0) {

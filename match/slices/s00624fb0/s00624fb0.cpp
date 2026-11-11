@@ -1,5 +1,6 @@
 // slice s00624fb0: cCreatureCameraBase mouse input, message handling, camera data init/update
 #include <new>
+#include "sse_helpers.h"
 #include <string.h>
 #include <math.h>
 #include "types.h"
@@ -10,16 +11,8 @@
 #define PV2 PV PV
 #define PV4 PV2 PV2
 
-__forceinline float Clamp(float value, float minValue, float maxValue)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        minss xmm0, maxValue
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
+
 
 struct cSPVector3 {
     float x, y, z;
@@ -210,8 +203,8 @@ bool cCreatureCameraBase::OnMouseMove(float x, float y, int state)
     if ((mMouseRightButton || mMouseMiddleButton) && !mMouseLeftButton) {
         float dx = x - oldX;
         float dy = y - oldY;
-        float yaw = -(mMouseSensitivityX * Clamp(dx, -20.0f, 20.0f));
-        float pitch = mMouseSensitivityY * Clamp(dy, -20.0f, 20.0f);
+        float yaw = -(mMouseSensitivityX * SseClamp(dx, -20.0f, 20.0f));
+        float pitch = mMouseSensitivityY * SseClamp(dy, -20.0f, 20.0f);
         if (yaw < 0.0f)
             mCameraState = 1;
         else if (yaw > 0.0f)
@@ -225,7 +218,7 @@ bool cCreatureCameraBase::OnMouseMove(float x, float y, int state)
         mCameraData.desiredPlayerTheta += yaw;
         if (dy < 0.0f && mCameraData.bPenetrating && mCameraData.nonPenetratingPhi > 0.0f)
             pitch = 0.0f;
-        mCameraData.desiredPlayerPitch = Clamp(mCameraData.desiredPlayerPitch + pitch, mMinCameraPhi, mMaxCameraPhi);
+        mCameraData.desiredPlayerPitch = SseClamp(mCameraData.desiredPlayerPitch + pitch, mMinCameraPhi, mMaxCameraPhi);
         MessageServer()->PostMessage(0x52f180, 0x1c, 0);
     }
     return false;
@@ -355,7 +348,7 @@ template <class T> const T& max_(const T& a, const T& b) { return (a < b) ? b : 
 void cCreatureCameraBase::SetCurrentCamera(float theta, float phi, float dist)
 {
     mCameraData.currentPlayerTheta = theta;
-    mCameraData.currentPlayerPitch = Clamp(phi, mMinCameraPhi, mMaxCameraPhi);
+    mCameraData.currentPlayerPitch = SseClamp(phi, mMinCameraPhi, mMaxCameraPhi);
     float d = max_(0.1f, dist);
     mTransformNeedsUpdating = true;
     mCameraData.currentPlayerDistance = d;
@@ -395,7 +388,7 @@ void cCreatureCameraDepends::UpdateOffsets(float dt)
     if (mAnimCreature) {
         FUN_006280d0(mAnimCreature->mPos, 0);
     }
-    float t = Clamp(dt, 0.01f, 0.15f);
+    float t = SseClamp(dt, 0.01f, 0.15f);
     mActualCameraPositionOffset.x = mActualCameraPositionOffset.x + (mTargetCameraPositionOffset.x - mActualCameraPositionOffset.x) * t * 10.0f;
     mActualCameraPositionOffset.y = (mTargetCameraPositionOffset.y - mActualCameraPositionOffset.y) * t * 10.0f + mActualCameraPositionOffset.y;
     mActualCameraPositionOffset.z = (mTargetCameraPositionOffset.z - mActualCameraPositionOffset.z) * t * 10.0f + mActualCameraPositionOffset.z;
@@ -441,7 +434,7 @@ void cCreatureCameraBase::UpdateAvatarLookAt()
     float ay = mDepends.mAvatar.mPosition.y + kAvatarUp.y * e;
     float az = mDepends.mAvatar.mPosition.z + kAvatarUp.z * e;
     float t = (mCameraData.currentPlayerDistance - mMinCameraDistance) / (mMaxCameraDistance - mMinCameraDistance);
-    t = Clamp(t, 0.0f, 1.0f);
+    t = SseClamp(t, 0.0f, 1.0f);
     cSPVector3 lookAt;
     lookAt.x = ((mDepends.mAvatar.mPosition.x + kAvatarUp.x * d) - ax) * t + ax;
     lookAt.y = ((mDepends.mAvatar.mPosition.y + kAvatarUp.y * d) - ay) * t + ay;

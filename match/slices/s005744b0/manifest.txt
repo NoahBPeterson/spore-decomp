@@ -10,3 +10,4 @@ slices/s005744b0/s005744b0.cpp  ?SwitchToPlayModeCamera@cAppModeEditorBase@SP@@Q
 slices/s005744b0/s005744b0.cpp  ?CanPublish@cAppModeEditorBase@SP@@QAEHXZ 00574d60    /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005744b0/s005744b0.cpp  ?ExitEditorUI@cAppModeEditorBase@SP@@QAEXXZ 00575120    /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005744b0/s005744b0.cpp  ?SetupGameViewLayers@cAppModeEditorBase@SP@@SAXXZ 005751b0    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?GetBudgetFraction@cAppModeEditorBase@SP@@QAEMXZ 005745c0    /O2 /MD /Gy /TP /arch:SSE /fp:fast

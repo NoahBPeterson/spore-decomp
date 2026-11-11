@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-004d92b0  0  byte-exact only with inline-assembly helper Max (symbol ?ReadAbilityData@SP@@YA_NPAUcCreatureAbility@@PAUPropertyList@@@Z, flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

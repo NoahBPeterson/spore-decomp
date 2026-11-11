@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-005cd870  0  byte-exact only with inline-assembly helper Clamp (symbol ?Interp@cInterp@@QAEXMMPAM0@Z, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

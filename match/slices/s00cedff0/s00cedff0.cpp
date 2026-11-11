@@ -1,3 +1,4 @@
+#include "sse_helpers.h"
 // Slice s00cedff0 -- Spore city-game cheat commands, bundle/container helpers and
 // city-game formula math.
 //
@@ -725,7 +726,7 @@ void __stdcall FUN_00ceec10(u32 a1, float a2, float a3, float a4, u32 a5, u32 a6
 int __stdcall FUN_00ceec50(void *unused)
 {
     (void)unused;
-    __asm { cvtss2si eax, dword ptr [g_169cc58] }
+    return SseRoundToInt(g_169cc58);
 }
 
 namespace SP {

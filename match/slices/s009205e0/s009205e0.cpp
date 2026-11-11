@@ -1,6 +1,7 @@
 // Slice s009205e0: EA::Audio::Eapd symbol/group hash tables, wchar_t path helpers,
 // eastl fixed_pool / RBTreeIncrement and a couple of float range mappers.
 #include "types.h"
+#include "sse_helpers.h"
 
 typedef unsigned int size_t;
 
@@ -9,19 +10,10 @@ typedef unsigned long DWORD;
 
 #pragma warning(disable:4035)
 // EA math helper: hand-written SSE asm (cvtss2si is round-to-nearest, then bump).
-__forceinline int CeilToInt(float f)
-{
-    __asm {
-        movss    xmm0, f
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov      ecx, eax
-        add      ecx, 1
-        ucomiss  xmm1, xmm0
-        cmovb    eax, ecx
-    }
-}
-__forceinline int TruncToInt(float f) { __asm cvttss2si eax, f }
+// CeilToInt: the vetted SseCeilToInt in sse_helpers.h
+
+// TruncToInt: the vetted SseTruncToInt in sse_helpers.h
+
 
 extern "C" __declspec(dllimport) void __stdcall OutputDebugStringA(const char*);
 extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, size_t);
@@ -317,7 +309,7 @@ int RangeMapper::Round1(unsigned key) {
     unsigned v = *r;
     float f = (float)v;
     float x = f * scale;
-    limit = CeilToInt(x);
+    limit = SseCeilToInt(x);
     return (int)v;
 }
 
@@ -325,12 +317,12 @@ int RangeMapper::Round1(unsigned key) {
 int RangeMapper::Round2(int key) {
     float f = (float)(unsigned)key;
     float t = f / scale;
-    int q = TruncToInt(t);
+    int q = SseTruncToInt(t);
     unsigned* r = LowerBound(g_boundLo, g_boundHi, (unsigned*)&q);
     unsigned v = *r;
     float g = (float)v;
     float x = g * scale;
-    limit = CeilToInt(x);
+    limit = SseCeilToInt(x);
     return (int)v;
 }
 
@@ -345,17 +337,17 @@ void RangeMapper::Map(unsigned char* out, int a, int b, int c) {
         float q = f / scale;
         float g = (float)(unsigned)a;
         if (q <= g) {
-            limit = CeilToInt(g * scale);
+            limit = SseCeilToInt(g * scale);
         } else {
             float t = growth * g;
             float sel = t;
             if (sel < q)
                 sel = q;
-            unsigned key = (unsigned)TruncToInt(sel);
+            unsigned key = (unsigned)SseTruncToInt(sel);
             unsigned* r = LowerBound(g_boundLo, g_boundHi, &key);
             unsigned v = *r;
             float h = (float)v;
-            limit = CeilToInt(h * scale);
+            limit = SseCeilToInt(h * scale);
             out[0] = 1;
             *(int*)(out + 4) = (int)v;
             return;

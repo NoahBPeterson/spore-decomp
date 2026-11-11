@@ -15,3 +15,4 @@ slices/s00cedff0/s00cedff0.cpp  ?FUN_00ceeb80@@YGMMMM@Z                         
 slices/s00cedff0/s00cedff0.cpp  ?FUN_00ceec10@@YGXIMMMIII@Z                                 00ceec10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00cedff0/s00cedff0.cpp  ?LoadFormulas@nCityGameFormulas@SP@@YAXXZ                   00ceec60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00cedff0/s00cedff0.cpp  ?FUN_00ceefd0@@YGXMPAM0@Z                                   00ceefd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00cedff0/s00cedff0.cpp  ?FUN_00ceec50@@YGHPAX@Z                                     00ceec50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

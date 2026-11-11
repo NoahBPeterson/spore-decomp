@@ -2,3 +2,4 @@
 slices/s00fbddb0/s00fbddb0.cpp  ?RefreshTerraformValues@cTerrainStateMgr@@ 00fbdee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00fbddb0/s00fbddb0.cpp  ?Reset@CoreState@@ 00fbe050  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00fbddb0/s00fbddb0.cpp  ??0PlanarDef@@QAE@ABU0@@Z 00fbe390  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00fbddb0/s00fbddb0.cpp  ?SetTerraformValues@cTerrainStateMgr@@ 00fbddb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

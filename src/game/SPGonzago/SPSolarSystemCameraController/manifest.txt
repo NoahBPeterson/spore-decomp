@@ -20,3 +20,4 @@
 ../src/game/SPGonzago/SPSolarSystemCameraController.cpp  ?FUN_0101ec40@S@@QAEXPAX0@Z  0101ec40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSolarSystemCameraController.cpp  ?f20e80@Cam@@QAEDHPAH@Z  01020e80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSolarSystemCameraController.cpp  ?f21020@Cam@@QAEXXZ  01021020  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSolarSystemCameraController.cpp  ?FUN_01017410@cSPCameraControllerSolarSystem@@QAEMH@Z  01017410  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
