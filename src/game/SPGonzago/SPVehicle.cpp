@@ -35,7 +35,7 @@ void* __cdecl   GetCurrentGameMode();                  // 0x00b5b800
 void* __cdecl   FUN_00cf74c0();                        // 0x00cf74c0 returns manager
 void* __stdcall FUN_00ff0430(void* p);                 // 0x00ff0430 ret 4
 void* __cdecl   FUN_00c9e5d0();                        // 0x00c9e5d0
-void* __stdcall FUN_00c9efc0(void* a);                 // 0x00c9efc0 ret 4
+void* FUN_00c9efc0();                                  // 0x00c9efc0 no-arg cdecl getter (Vector24 singleton)
 struct PlanetStub {
     float* FUN_00b81630(float* out, float* src);            // 0x00b81630
     float* DirectionToSurfacePosition(float* out, float* dir); // 0x00b815a0
@@ -49,7 +49,10 @@ struct CivMgrStub {
 };
 struct SimSingletonStub {
     void* FUN_00dc7d70();                                   // 0x00dc7d70 ctor
-    void  FUN_00dcc300(void* a);                            // 0x00dcc300 ret 4
+};
+// ?PushUnique@Vector24@@QAEXI@Z at 0x00dcc300: thiscall, one u32 stack arg, ret 4.
+struct Vector24Stub {
+    void PushUnique(u32 id);
 };
 struct EffStub {
     void* FUN_00bc97f0(int a, int b, float c, int d);       // 0x00bc97f0 ret 0x10
@@ -300,24 +303,22 @@ void CStub::FUN_00c9f7c0()
 void CStub::SetStance(u32 stance, char b)
 {
     *(u32*)((char*)this + 0xb24) = stance;
-    u32* f = (u32*)((char*)*(void**)((char*)this + 0xaf0) + 0x5fc);
-    *f &= 0xfffffcff;
-    if (*(u32*)((char*)this + 0xb24) == 0) {
-        *f |= 0x100;
+    *(u32*)((char*)*(void**)((char*)this + 0xaf0) + 0x5fc) &= 0xfffffcff;
+    switch (*(u32*)((char*)this + 0xb24)) {
+    case 1:
+        *(u32*)((char*)*(void**)((char*)this + 0xaf0) + 0x5fc) |= 0x200;
         if (b == 0) {
-            int i = *(int*)((char*)this + 0xb20);
-            void* a = FUN_00c9efc0(g_1474a5c[i]);
-            ((SimSingletonStub*)g_1699ab8)->FUN_00dcc300(a);
+            ((Vector24Stub*)FUN_00c9efc0())->PushUnique((u32)g_1474a70[*(int*)((char*)this + 0xb20)]);
             return;
         }
-    } else if (*(u32*)((char*)this + 0xb24) == 1) {
-        *f |= 0x200;
+        break;
+    case 0:
+        *(u32*)((char*)*(void**)((char*)this + 0xaf0) + 0x5fc) |= 0x100;
         if (b == 0) {
-            int i = *(int*)((char*)this + 0xb20);
-            void* a = FUN_00c9efc0(g_1474a70[i]);
-            ((SimSingletonStub*)g_1699ab8)->FUN_00dcc300(a);
+            ((Vector24Stub*)FUN_00c9efc0())->PushUnique((u32)g_1474a5c[*(int*)((char*)this + 0xb20)]);
             return;
         }
+        break;
     }
 }
 
