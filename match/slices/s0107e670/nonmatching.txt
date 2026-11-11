@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 0107e670 103 havok-equivalent
 0107e700 23 havok-equivalent
-0107e7a0 6 havok-equivalent ; equiv PASS (1200 valid inputs)
 0107e7e0 21 havok-equivalent ; equiv PASS (790 valid inputs, 86.4% coverage)
 0107e820 45 havok-equivalent
 0107e890 5 havok-equivalent
