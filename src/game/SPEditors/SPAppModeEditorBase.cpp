@@ -7499,7 +7499,6 @@ public:
     void  StopSomething();                        // 0x5757b0
     bool  TestCondition(uint32_t);                // 0x575810
     void  GetSomething1(int);                     // 0x575e20
-    int   GetSomething2();                        // 0x575e50
     bool  SomeBool(char);                         // 0x575eb0
     void  SetupCameraUI();                        // 0x575f20
     void  ToggleCameraMode();                     // 0x575f70
@@ -8820,17 +8819,41 @@ void SP::cAppModeEditorBase_s0057_5270::GetSomething1(int arg)
     }
 }
 
+// The getter is the cISPEditorNameProvider override at full object +0xc.
+// These views keep its retail fields relative to the complete editor object.
+namespace SP {
+struct EditorNameLaunchView_s00575e50 {
+    unsigned char pad0[0x35];
+    bool mUseAlternateName;
+    unsigned char pad36[0x40 - 0x36];
+    eastl::string16 mAlternateName;
+};
+class cAppModeEditorNameView_s00575e50
+    : public cIAppMode, public cILayer, public cIHintProcessor,
+      public cISPEditorNameProvider, public EA::Messaging::IHandlerRC,
+      public EA::RefCountVTemplate<int> {
+public:
+    uint32_t pad1c[(0x98 - 0x1c) / 4];
+    EA::AutoRefCount<cSPEditorModel> mEditorSaveModel;
+    uint32_t pad9c[(0x1cc - 0x9c) / 4];
+    EA::AutoRefCount<EditorNameLaunchView_s00575e50> mLaunchData;
+    uint32_t pad1d0[(0x1dc - 0x1d0) / 4];
+    eastl::string16 mOriginalName;
+
+    virtual const wchar_t* GetName() const;
+};
+}
+
 // @ 0x00575e50
-int SP::cAppModeEditorBase_s0057_5270::GetSomething2()
+const wchar_t* SP::cAppModeEditorNameView_s00575e50::GetName() const
 {
-    int v = Value<int>(this, 0x1d0);
-    if (v == Value<int>(this, 0x1d4)) {
-        void* p = Field<void>(this, 0x1c0);
-        if (p != 0 && Value<char>(p, 0x35) != 0)
-            return Value<int>(p, 0x40);
-        return Field<VObj>(this, 0x8c)->slot1();
+    if (mOriginalName.empty()) {
+        const EditorNameLaunchView_s00575e50* launch = mLaunchData;
+        if (launch && launch->mUseAlternateName)
+            return launch->mAlternateName.c_str();
+        return mEditorSaveModel->GetName();
     }
-    return v;
+    return mOriginalName.c_str();
 }
 
 // @ 0x005767f0
