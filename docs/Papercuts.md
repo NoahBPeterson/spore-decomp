@@ -1192,3 +1192,25 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   (ret 8) — GetCurrentGameMode and the getter take no stack args and never clean, so the pushes survive. Reading it as
   nested calls produces the wrong source shape (and an extra callee-saved register). Fix idea: when a callee is a
   0-stack-arg thunk (`ret`/tail-jmp) note that the pending `push`es belong to a later call. Time lost: ~25 min.
+- [s00c0acd0 + s00b318d0, 2026-11-10 session] codegen — **resolution of the open s00b318d0 `(__int64)float`
+  entry: the inline `fistp qword` is reachable from source.** A C cast emits `_ftol2` (truncating) where
+  retail inlines `fld; fistp qword` (round-half-to-even, matches s009ab620's RestartTimer note). Three
+  coordinated pieces, all required: (1) the conversion as a 2-instruction `__asm { fld dword ptr [f];
+  fistp qword ptr [d] }` block; (2) `__declspec(align(8))` on the int64 local, which is what produces the
+  `push ebp; mov ebp,esp; and esp,-8` realigned frame; (3) if the function already has a qword temp (e.g.
+  an int64 return value stored for `fild`), make it ONE variable reused - raw value in, converted value
+  out - so the `fistp` lands in the `fild`'s slot instead of a fresh one (frame `sub esp,0xc` like retail;
+  two named int64s give 0x14 and never match). Banked 0x00c0b710 and 0x00b31a90 byte-exact; 00b31ae0
+  went 97 -> 32 (remaining diff is RestartIfRunning block layout, see its note).
+  Fix idea: fold into codegen.md 9.x next to the double-scalar lever; ~10 more open rows grep-able via
+  `grep -li ftol match/slices/*/nonmatching.txt`.
+- [s00c0acd0, 2026-11-10 session] codegen — three smaller levers, each banked byte-exact:
+  (1) a float clamp is ONE 3-arg `ClampF(x,lo,hi)` `__asm` helper (movss/maxss/minss/movss, s00c02600
+  style) - spelling it as two min/max helper calls bounces the value through the slot twice and never
+  matches (0x00c0b9d0); (2) reading a table-indexed call argument into a local (`unsigned entry =
+  table[i];`) hoists the table load AND sibling zero-stores ahead of the argument pushes, and a throwaway
+  `(unsigned)(x - base) > N` range test keeps the `lea` from clobbering the index register so the SIB
+  folds `- base*4` (0x00c0b220/b270/b2f0); (3) switch cases that assign a shared result variable and
+  `break` repeat the tiny `fld/pop/ret` epilogue per case like retail, while per-case `return` does not
+  (0x00c0b380, 0x00c0b440); initial `1.0f` came from the named `_HK_REAL_ONE` global, not a literal.
+  Fix idea: candidates for codegen.md 15/16 wave lists.
