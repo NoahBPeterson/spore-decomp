@@ -878,9 +878,9 @@ bool Sound_s00a1_a590::ClearFlag1()
 // @ 0x00a1ad20
 void Sound_s00a1_a590::SetInstanceId(uint32_t id)
 {
-    uint32_t flags = mFlagsCE4;
     mInstanceId = id;
-    mFlagsCE4 = flags | 2u;
+    _ReadWriteBarrier();
+    mFlagsCE4 |= 2u;
 }
 
 // @ 0x00a1ad40
