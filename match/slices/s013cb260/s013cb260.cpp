@@ -20,7 +20,8 @@ extern int g_16f2978;
 extern int* g_16f4998;
 extern char g_16f4e18[];
 extern char g_16f4e98[];
-extern char g_15d07c0[];
+struct S8 { int a; unsigned char b; char pad[3]; };
+extern S8 g_015d07b0[2]; // index-format records; one-past end is 0x015d07c0
 extern char g_170a6b9[];
 extern char g_170a79c[];
 
@@ -80,11 +81,9 @@ void f_013cb620() {
     DeleteCriticalSection(g_16f4e98);
 }
 
-struct S8 { int a; unsigned char b; char pad[3]; };
-
 // @ 0x013CB780
 void f_013cb780() {
-    S8* p = (S8*)g_15d07c0;
+    S8* p = g_015d07b0 + 2;
     unsigned n = 2;
     do {
         p--;
