@@ -50,13 +50,6 @@
                 call to ControllerLayout is a direct call (original tail-jmps)
 011fdff0   29  Ctl::Bind: complete; the null check of FUN_011ffa40's result and the two stores
                 differ in registers
-011fe030    8  ControllerGetTable: complete; the original has a redundant
-                `xor edx,edx; test eax,eax; jne; mov eax,edx` idiom (a no-op); cl 13.10 deletes
-                it and emits `mov eax,[ecx+0x1c]; ret`.  Semantically identical.  Levers tried for
-                the 8 bytes: `void* q = 0; if (p == NULL) p = q;`, `if (p == NULL) return 0;`,
-                returning `q` after `q = p; if (q == NULL) q = NULL;` - the liveness that keeps
-                edx alive (the `mov eax,edx` fallthrough) never re-appears at /O2; it is the
-                `/GL` cross-function allocation noted at the top of this file.
 011fe050   99  Ctl::InitSimple: complete; same shape as 011fdc70 with the 0x015d0968 vtable
 011fe100  112  Ctl::BuildKeys: complete; the indirect emitter (s+0x30) call site, the
                 v = k[0] / out[1] = v + r split and the track loop differ

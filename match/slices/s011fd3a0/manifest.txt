@@ -16,3 +16,4 @@ slices/s011fd3a0/s011fd3a0.cpp  ?ControllerRebuild@@YIXPAX@Z  011fe040  /vc71 /O
 slices/s011fd3a0/s011fd3a0.cpp  ?ControllerFixup@@YAXPAX0II@Z  011fdb30  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s011fd3a0/s011fd3a0.cpp  ?ControllerCreate@@YAPAXPAPAXIII@Z  011fdd40  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s011fd3a0/s011fd3a0.cpp  ?ControllerCreateSimple@@YAPAXPAPAXIII@Z  011fe0d0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fd3a0/s011fd3a0.cpp  ?ControllerGetTable@@YIPAXPAX@Z  011fe030  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
