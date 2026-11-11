@@ -1,5 +1,6 @@
 # va  diff-bytes  reason
 00c86f40 6 nonmatching: cSpaceInventoryItem::IsCargoType; 47 vs 43 bytes. Return value differs. difftest FAIL 5/8 (eax&0xff: orig 1, ours 0); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00c871b0 5 cSpaceInventoryItem::GetImageColors: complete; property-list argument temp in eax instead of ecx flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00c872e0 32 nonmatching: cSpaceInventory::IndexOfNthItem; 61-byte target, 32 diff. Complete source. difftest WEAK (346 valid, 50% coverage; below 60% gate); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00c87390 21 cSpaceInventory::GetItemByCargoSlot: complete; loop end computed from begin first, original loads the end pointer before the begin pointer flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00c87420 33 nonmatching: cSpaceInventory::GetCargoSlotsCount; 37 vs 38 bytes. difftest WEAK (350 valid, 41.2% coverage); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.

@@ -1,4 +1,5 @@
 00c87170 2   cSpaceInventoryItem::GetImageID: complete; cl picks eax for the property-list argument temp where the original reuses ecx
+00c871b0 5   cSpaceInventoryItem::GetImageColors: complete; property-list argument temp in eax instead of ecx
 00c87390 21  cSpaceInventory::GetItemByCargoSlot: complete; loop end computed from begin first, original loads the end pointer before the begin pointer
 00c874a0 60  cSpaceInventory::CargoSlotIsFree: complete; loop/register scheduling differs
 00c86aa0 400 nonmatching: cSolarSystem::ActivatePtolemaicHitSpheres; 324 vs 449 bytes. Complete source but only 17.5% covered. difftest WEAK (200 valid, 17.5% coverage of 160 insns); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
