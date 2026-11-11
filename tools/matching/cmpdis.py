@@ -18,7 +18,16 @@ if len(c) != 1:
 si, off = syms[c[0]]
 mine = secs[si]["data"][off:]
 pe = pefile.PE(os.path.join(ROOT, "work/SporeApp.analysis.bin"), fast_load=True)
-orig = pe.get_data(va - pe.OPTIONAL_HEADER.ImageBase, len(mine) + 64)
+# the retail function's own size (its fingerprint) when known: reading len(mine) bytes made a build longer than the
+# original run on into the next retail functions, which looked like extra code (0x007864c0, 2026-11-11)
+try:
+    sys.path.insert(0, os.path.join(ROOT, "tools", "contrib"))
+    import task
+    _fp = task.fingerprint(va)
+except Exception:
+    _fp = None
+orig_len = _fp["size"] if _fp else len(mine) + 64
+orig = pe.get_data(va - pe.OPTIONAL_HEADER.ImageBase, orig_len)
 md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
 
 def norm(code, base, limit):
@@ -37,6 +46,6 @@ def norm(code, base, limit):
             break
     return out
 
-a = norm(orig, va, len(mine)); b = norm(mine, 0, len(mine))
+a = norm(orig, va, orig_len if _fp else len(mine)); b = norm(mine, 0, len(mine))
 d = list(difflib.unified_diff(a, b, "original", "mine", lineterm="", n=2))
 print("\n".join(d) if d else "instruction streams identical (after normalization)")
