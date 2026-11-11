@@ -1,5 +1,4 @@
 # <va> <diff-bytes> <reason>
-0103a480 175 complete SP::cSPSpaceTrading::CreateCommodityFromID (new + ctor, PropertyManager unregister, vtable SetItemID, item type/count/cost, SetPropertyList, AddRef); cost conversion rounds via (int)(cost+0.5) because cl15 calls __ftol2_sse where the original inlines fld/fistp; size 199 vs 192; flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (replay, first difference None)
 0103a540 201 complete commodity-scan (vector at +0x34, PropertyManager unregister, rare-property test); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
 0103a760 96 complete index-of-key in the 0x24-stride table; magic-division register allocation differs; size 106 vs 104; flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (replay, first difference None)
 0103a930 172 complete sListHasRare (scan 0xc-stride list, GetPropertyAsKey, compare 0x7ecbe6f5); flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (249 valid, 35.8% coverage)

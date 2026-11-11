@@ -2224,7 +2224,12 @@ void __stdcall FUN_0103a480(void** out, int* id, int count, float cost)
     ((V14*)inst)->v14(id);
     inst->mType = 4;
     inst->mItemCount = count;
-    inst->mCost = (int)(cost + 0.5);   // rounds like the original's x87 fistp
+    __declspec(align(8)) long long rounded;
+    __asm {
+        fld dword ptr [cost]
+        fistp qword ptr [rounded]
+    }
+    inst->mCost = (int)rounded;
     inst->SetPropertyList_00c877f0(local);
     ((VItemRef*)inst)->AddRef();
     *out = inst;
