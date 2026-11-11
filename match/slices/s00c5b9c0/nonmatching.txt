@@ -6,5 +6,4 @@
 00c5bd40 PASS size exact (246); only scheduler placement of `lea edi,[esi+0x34]` and `mov cl,1` differs, all stores and calls identical
 00c5bf80 WEAK only 86/400 valid inputs; 348 vs 353 bytes: fast path uses different induction registers (vec in ebp) and the grow path block order is inverted
 00c5c0f0 FAIL 5/54 valid inputs mismatch; 326 vs 328 bytes: turret budget float arithmetic (x87/SSE mix) and the erase loop shape differ
-00c5c310 FAIL 5/135 valid inputs mismatch; 239 vs 247 bytes: float->int conversion uses __ftol2 instead of fstp+cvtss2si, and first-loop id keeps i+4 in a caller-saved register
 00c5c470 UNSUPPORTED size 1030 vs 997: OnAccept constructs cStarRef/planet/event-log sequence; difftest 0/400 valid inputs (unmapped reads)

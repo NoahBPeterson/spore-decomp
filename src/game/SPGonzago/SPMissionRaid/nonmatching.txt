@@ -17,7 +17,6 @@
 00c5bab0 159 size 233 vs 202, 190 bytes differ: HandlerFail body reordered (child-loop structure and EventLog argument setup); difftest 0/400 valid inputs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c5bf80 237 only 86/400 valid inputs; 348 vs 353 bytes: fast path uses different induction registers (vec in ebp) and the grow path block order is inverted flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c5c0f0 227 5/54 valid inputs mismatch; 326 vs 328 bytes: turret budget float arithmetic (x87/SSE mix) and the erase loop shape differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c5c310 203 5/135 valid inputs mismatch; 239 vs 247 bytes: float->int conversion uses __ftol2 instead of fstp+cvtss2si, and first-loop id keeps i+4 in a caller-saved register flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c5c470 710 size 1030 vs 997: OnAccept constructs cStarRef/planet/event-log sequence; difftest 0/400 valid inputs (unmapped reads) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c5c860 1329 complete (55/55 calls in order, size 1953 vs 1928); register allocation and /arch:SSE scheduling differ, frame 0x50 vs 0x54; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c5d640 716 complete __cdecl reconstruction (size 840 vs 969; builds three kind-filtered object vectors 4/2/5, emits 0x20-byte records with the kind-4 index field, then releases the vectors); retail has /arch:SSE float scheduling and a different frame (0x50) that shorten it; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

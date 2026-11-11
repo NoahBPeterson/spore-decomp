@@ -371,7 +371,12 @@ void* __cdecl FUN_00fe3b10(cPlanet* p);              // 0x00fe3b10
 Vec3_s00c5_b9c0* __cdecl FUN_00c75770();                        // 0x00c75770
 s32   __cdecl FUN_00c70420(void* p);                 // 0x00c70420
 void  __cdecl WStr_Format(void* out, const u16* fmt, u32 v); // 0x0041e050
-float __cdecl RandomDoubleUniform();                 // 0x009360d0
+// cRandomGlobal::RandomDouble (0x009360d0) is a thiscall member on the global at 0x01601760.
+struct cRandomGlobal_c5 { float RandomDouble(); };
+extern cRandomGlobal_c5 g_cRandomGlobal;            // 0x01601760
+// retail inlined the CRT __ftol2_sse helper (`fstp dword; cvtss2si` = round-to-nearest);
+// a plain (s32) cast truncates with cvttss2si, which the equivalence gate also fails.
+static inline int RoundToInt_c5c310(float f) { __asm cvtss2si eax, f }
 struct SPVecU32 {
   u32* begin; u32* end; u32* cap;
   void DoInsertValue(u32* pos, const u32* val);      // 0x004558a0
@@ -1395,9 +1400,10 @@ void __cdecl FUN_00c5c310(ElemVec* vec, s32* p2, s32* p3, s32* p4, s32 lo, s32 h
 
     {
       s32 i;
-      for (i = 0; i < *p2; ++i) {
+      s32 idv;
+      for (i = 0, idv = i + 4; i < *p2; ++i) {
         vec->PushDefault();
-        vec->end[-1].id = i + 4;
+        vec->end[-1].id = idv;
       }
     }
 
@@ -1405,8 +1411,8 @@ void __cdecl FUN_00c5c310(ElemVec* vec, s32* p2, s32* p3, s32* p4, s32 lo, s32 h
       s32 i;
       for (i = 0; i < *p2; ++i) {
         float fbuf[1];
-        fbuf[0] = RandomDoubleUniform() * (float)(hi - lo) + (float)lo;
-        s32 n = (s32)fbuf[0];
+        fbuf[0] = g_cRandomGlobal.RandomDouble() * (float)(hi - lo) + (float)lo;
+        s32 n = RoundToInt_c5c310(fbuf[0]);
         if (n > 5)
           n = 5;
         if (n > 0) {
@@ -1531,7 +1537,7 @@ void __fastcall FUN_00c5c470(cRaidEvent* self, void* dummy)
       }
       {
         float ratio = (float)cnt / (float)(FUN_00c70420(pl) + cnt);
-        if (ratio >= RandomDoubleUniform())
+        if (ratio >= g_cRandomGlobal.RandomDouble())
           self->b214 = 1;
       }
     }
