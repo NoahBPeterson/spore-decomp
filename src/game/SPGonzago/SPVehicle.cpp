@@ -361,27 +361,37 @@ void CStub::FUN_00c9fd40(void* p)
     *(u32*)(e + 0x1c) = *(u32*)&z ^ 0x80000000u;
 }
 
+// Closest attempt, 118 vs 121. The virtual call now keeps its target in edx,
+// and the empty-path compare matches. The last element is reloaded into ecx
+// and x is read at [ecx-0x3c]. cl still folds `p -= 1` away, so y and z stay
+// at [ecx-0x38] and [ecx-0x34] instead of retail's `sub ecx, 0x3c` then [ecx+4]
+// and [ecx+8].
+struct Rec3C_s00c9_fdc0 {
+    float x, y, z;
+    char pad[0x30];
+};
+
 // @ 0x00c9fdc0
 float* CStub::FUN_00c9fdc0(float* out)
 {
     if (*(int*)((char*)this + 0x284) == 0) {
-        void* sub = (char*)this + 0x34;
-        float* p = (float*)(**(void*(__thiscall**)(void*))(vpt(sub) + 0x2c))(sub);
+        float* p = ((float*(__thiscall*)(void*))((void**)*(void***)((char*)this + 0x34))[11])((char*)this + 0x34);
         out[0] = p[0];
         out[1] = p[1];
         out[2] = p[2];
         return out;
     }
-    if (*(int*)((char*)this + 0x228) == *(int*)((char*)this + 0x22c)) {
+    if (*(volatile int*)((char*)this + 0x228) == *(int*)((char*)this + 0x22c)) {
         out[0] = *(float*)((char*)this + 0x23c);
         out[1] = *(float*)((char*)this + 0x240);
         out[2] = *(float*)((char*)this + 0x244);
         return out;
     }
-    int p = *(int*)((char*)this + 0x22c);
-    out[0] = *(float*)(p - 0x3c);
-    out[1] = *(float*)(p - 0x38);
-    out[2] = *(float*)(p - 0x34);
+    Rec3C_s00c9_fdc0* p = *(Rec3C_s00c9_fdc0* volatile*)((char*)this + 0x22c);
+    out[0] = (p - 1)->x;
+    p -= 1;
+    out[1] = p->y;
+    out[2] = p->z;
     return out;
 }
 
