@@ -29,7 +29,7 @@ extern void*       PTR_vtbl_RefBaseA22;   // 0x013eb90c ??_7RefBaseA22@@6B@
 extern void*       PTR_vtbl_BehaviorMsg;  // 0x013eb844 (derived vtable)
 
 // ------------------------------------------------------------------ external helpers
-void* EAAllocate(u32 size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
+void* EAAllocate(u32 size, const char* name, int a, int b, int file, int line); // 0x00f473a0
 void  operator delete(void* p);
 
 void* SP_MessageServer(void);     // 0x0067dcc0
@@ -64,6 +64,10 @@ struct CArgs {                                   // EA::ArgScript::cArguments
     char   HasFlag(const char* name);                        // 0x008380b0
 };
 
+struct AppState {                               // cAppState at 0x007e4190 (thiscall, ret 0xc)
+    void* AddMessage(void* ca, void* msg, int b);            // 0x007e4190
+};
+
 struct SPUILayout {                              // cSPUILayout
     char SetVisibility(char v);                             // 0x00810590
 };
@@ -90,6 +94,33 @@ typedef int  (__thiscall *VFnIII)(void*, int, int, int);
 // ------------------------------------------------------------------ functions
 
 // @ 0x00ad8b10
+// ---- behavior-message construction (shape from match/synth/post_behavior_message_id.cpp)
+inline void* operator new(unsigned, void* p) { return p; }
+extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
+#pragma intrinsic(_InterlockedExchange)
+
+struct BehaviorMsgFields {                       // base-most data part
+    long  rc;                                    // +0x04 refcount
+    int   kind;                                  // +0x08 speech kind (0..4)
+    int   pad_to_id[9];                          // +0x0c .. +0x2f
+    unsigned id;                                 // +0x30 behavior id
+    int   p;                                     // +0x34
+    BehaviorMsgFields() : id(0) {}
+};
+struct BehaviorMsgBase : BehaviorMsgFields {     // vtable 0x013eb90c ("RefBaseA22")
+    virtual void v0();
+    virtual void AddRef();                       // slot +4
+    virtual void Release();                      // slot +8
+    BehaviorMsgBase() { _InterlockedExchange(&rc, 0); }
+};
+struct BehaviorMsg : BehaviorMsgBase {           // vtable 0x013eb844
+    int f38;                                     // +0x38
+    BehaviorMsg() : f38(0) {}
+    virtual void v0();
+    virtual void AddRef();
+    virtual void Release();
+};
+
 // ------------------------------------------------------------------ thiscall shims
 struct Self {
     void FUN_00ad8b10(char a, int b);
@@ -431,7 +462,7 @@ void Self::FUN_00ad9090(void* out, void* key, u32 unused)
 
     u32 bucket = *(u32*)key % *(u32*)(s + 8);
 
-    char* node = (char*)EAAllocate(0xc, DAT_013f09b4, 0, 0, DAT_013ebb38, 0xd1);
+    char* node = (char*)EAAllocate(0xc, DAT_013f09b4, 0, 0, (int)DAT_013ebb38, 0xd1);
     if (node != 0) {
         *(u32*)(node + 0) = *(u32*)key;
         void* p = *(void**)((char*)key + 4);
@@ -492,7 +523,7 @@ char* Self::FUN_00ad9200(void* out, void* key, u32 unused)
 
     u32 bucket = *(u32*)key % *(u32*)(s + 8);
 
-    char* node = (char*)EAAllocate(0x10, DAT_013f09b4, 0, 0, DAT_013ebb38, 0xd1);
+    char* node = (char*)EAAllocate(0x10, DAT_013f09b4, 0, 0, (int)DAT_013ebb38, 0xd1);
     if (node != 0) {
         *(u32*)(node + 0) = *(u32*)key;
         *(u32*)(node + 4) = *(u32*)((char*)key + 4);
@@ -543,7 +574,7 @@ void Self::FUN_00ad9370(void* out, void* key)
     char local[4];
     FUN_00921440(local, *(int*)(s + 8), *(int*)(s + 0xc), 1);
 
-    char* node = (char*)EAAllocate(0x14, DAT_013f09b4, 0, 0, DAT_013ebb38, 0xd1);
+    char* node = (char*)EAAllocate(0x14, DAT_013f09b4, 0, 0, (int)DAT_013ebb38, 0xd1);
     if (node != 0) {
         *(u32*)(node + 0) = *(u32*)key;
         *(u32*)(node + 4) = *(u32*)((char*)key + 4);
@@ -642,30 +673,22 @@ void Self::FUN_00ad95c0(CArgs* ca)
 {
     void* self = this;
     char* s = (char*)self;
-    char* msg = (char*)EAAllocate(0x40, DAT_013f09b4, 0, 0, DAT_013ebb38, 0xd1);
-    if (msg != 0) {
-        *(u32*)(msg + 0x30) = 0;
-        *(void**)(msg + 0x00) = (void*)&PTR_vtbl_RefBaseA22;
-        *(int*)(msg + 4) = 0;
-        *(void**)(msg + 0x00) = (void*)&PTR_vtbl_BehaviorMsg;
-        *(u32*)(msg + 0x38) = 0;
-        (*(VFn0*)((char*)*(void**)msg + 4))(msg);
+    void* mem = EAAllocate(0x40, DAT_013f09b4, 0, 0, 0, 0);
+    BehaviorMsg* msg = mem ? new(mem) BehaviorMsg : 0;
+    if (msg) msg->AddRef();
+    if (ca->HasFlag(DAT_013f5f24)) {
+        msg->id = 0x4448cb4;
+    } else if (ca->HasFlag(DAT_013f5f28)) {
+        msg->id = 0x4448b7a;
     }
-    {
-        int n = 0;
-        if (ca->HasFlag(DAT_013f5f24)) {
-            *(u32*)(msg + 0x30) = 0x4448cb4;
-        } else if (ca->HasFlag(DAT_013f5f28)) {
-            *(u32*)(msg + 0x30) = 0x4448b7a;
-        }
-        if (ca->HasFlag(DAT_0145b690))      n = 1;
-        else if (ca->HasFlag(DAT_0145b688)) n = 2;
-        else if (ca->HasFlag(DAT_0145b680)) n = 3;
-        else if (ca->HasFlag(DAT_0145b678)) n = 4;
-        *(int*)(msg + 8) = n;
-    }
-    FUN_007e4190(*(void**)(s + 0xc), msg, 0);
-    (*(VFn0*)((char*)*(void**)msg + 8))(msg);
+    int n = 0;
+    if (ca->HasFlag(DAT_0145b690))      n = 1;
+    else if (ca->HasFlag(DAT_0145b688)) n = 2;
+    else if (ca->HasFlag(DAT_0145b680)) n = 3;
+    else if (ca->HasFlag(DAT_0145b678)) n = 4;
+    msg->kind = n;
+    ((AppState*)*(void**)(s + 0xc))->AddMessage(ca, msg, 0);
+    msg->Release();
 }
 
 // @ 0x00ad97c0  "cinematic/off" behavior message builder
@@ -697,7 +720,7 @@ void Self::FUN_00ad9860(CArgs* ca)
 {
     void* self = this;
     char* s = (char*)self;
-    char* msg = (char*)EAAllocate(0x40, DAT_013f09b4, 0, 0, DAT_013ebb38, 0xd1);
+    char* msg = (char*)EAAllocate(0x40, DAT_013f09b4, 0, 0, 0, 0);
     if (msg != 0) {
         *(u32*)(msg + 0x30) = 0;
         *(void**)(msg + 0x00) = (void*)&PTR_vtbl_RefBaseA22;
