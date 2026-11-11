@@ -18,9 +18,9 @@ struct cSPUILayout_s0080_2a30 {
 };
 struct Dbg {
   char data[0x50];
-  __declspec(noinline) void Show(int show);   // 0x00802a30
+  __declspec(noinline) void Show(bool show);  // 0x00802a30
   __declspec(noinline) bool IsEnabled();      // 0x00802b20
-  void OnShow(int a, int b);                  // 0x00802fd0
+  void OnShow(bool a, int b);                 // 0x00802fd0
   void OnToggle(int a);                       // 0x00802ff0
 };
 struct C_802b80 { char data[0x50]; void f(); };
@@ -40,7 +40,7 @@ void __cdecl DebugConsole_Output(void* self, char* a, char* b)
 }
 
 // @ 0x00802a30
-void Dbg::Show(int show)
+void Dbg::Show(bool show)
 {
   char* p = (char*)this;
   void* w = ((cSPUILayout_s0080_2a30*)(p + 0x10))->FindWindowByID(0x14a4606, 1);
@@ -132,7 +132,7 @@ void DbgOut::Forward(const char* a)
 }
 
 // @ 0x00802fd0
-void Dbg::OnShow(int a, int b)
+void Dbg::OnShow(bool a, int b)
 {
   if (b == 1)
     this->Show(a);
@@ -142,7 +142,6 @@ void Dbg::OnShow(int a, int b)
 void Dbg::OnToggle(int a)
 {
   if (a == 1) {
-    bool b = (this->IsEnabled() == 0);
-    this->Show(b);
+    Show(!IsEnabled());
   }
 }

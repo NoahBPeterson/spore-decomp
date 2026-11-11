@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/Spui/SPUIDebugConsole.cpp  ?Forward@DbgOut@@QAEXPBD@Z  00802fb0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
-../src/game/Spui/SPUIDebugConsole.cpp  ?OnShow@Dbg@@QAEXHH@Z  00802fd0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUIDebugConsole.cpp  ?OnShow@Dbg@@QAEX_NH@Z  00802fd0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUIDebugConsole.cpp  ?OnToggle@Dbg@@QAEXH@Z  00802ff0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
