@@ -33,10 +33,12 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     steps:
+      # the base branch's current tip, not pull_request.base.sha: that stays at the commit the pull request was opened
+      # (or last pushed) against, so a rerun after main moved would test against an old main with old tools
       - name: Check out the base branch (tools and workflow come from here)
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.merge_group.base_sha || github.event.pull_request.base.sha || github.event.repository.default_branch }}
+          ref: ${{ github.event.merge_group.base_sha || github.event.pull_request.base.ref || github.event.repository.default_branch }}
           fetch-depth: 0
           persist-credentials: false
 
