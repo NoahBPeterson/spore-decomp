@@ -393,7 +393,11 @@ struct EnvEntry {
     int mPad1cc;                           // +0x1cc
     uint32_t mCelStrength;                 // +0x1d0
 };
-struct IntrusiveList { ~IntrusiveList(); };
+struct IntrusiveList {
+    void* mpNext;
+    void* mpPrev;
+    ~IntrusiveList();
+};
 struct Elem38 {
     int mTag;               // +0x00
     void* mp4;              // +0x04
@@ -402,6 +406,7 @@ struct Elem38 {
     char pad1c[0x14];
     IntrusiveList mList;    // +0x30
 };
+typedef char LightingDequeElementSize[(sizeof(Elem38) == 0x38) ? 1 : -1];
 struct Deque38 {
     char pad0[4];
     void* mpData;           // +0x04
@@ -2636,11 +2641,9 @@ void SlotVecC4::DestroyEntry(uint32_t idx)
 // @ 0x00707f40
 void Deque38::PopDestroy()
 {
-    Elem38* elem = (Elem38*)(*(int*)((char*)mpData - 4) + mIndex14 * 0x38);
-    unsigned tag = elem->mTag;
-    unsigned top = tag >> 31;
-    _ReadWriteBarrier();
-    if ((top & 1) == 0) {
+    Elem38* elem = ((Elem38**)mpData)[-1] + mIndex14;
+    unsigned char ownershipBit = (unsigned char)((unsigned)elem->mTag >> 31);
+    if ((ownershipBit & 1) == 0) {
         elem->mList.~IntrusiveList();
         if (elem->mp18 && ((int*)elem->mp18)[-1] != 0)
             EastlFree(elem->mp18);
