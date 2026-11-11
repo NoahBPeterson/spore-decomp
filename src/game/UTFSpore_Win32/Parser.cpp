@@ -953,7 +953,11 @@ struct cMetaCommandBase_s0084_2620 : cICommand_s0084_2620 {
     int mRefCount;          // +0x08
 
     cMetaCommandBase_s0084_2620();                                       // 0x0083c840
-    virtual ~cMetaCommandBase_s0084_2620();                              // 0x0083c7c0
+    virtual void OnEndParse(bool bEnd) = 0;                             // +0x18
+    virtual void* scalarDeletingDtor(unsigned flags);                   // +0x1c, 0x0083c860
+    ~cMetaCommandBase_s0084_2620();                                      // 0x0083c7c0
+    virtual int AddRef();                                               // 0x0083f5d0
+    virtual int Release();                                              // 0x0083c7d0
 };
 }
 }
@@ -1185,8 +1189,12 @@ struct If_s0084_2620 : EA::ArgScript::cMetaCommandBase_s0084_2620 {
 
     If_s0084_2620();                                         // 0x00842ac0
     ~If_s0084_2620();                                        // 0x00842b70
-    virtual void Execute(cArguments_s0084_2620* pArgs);
-    virtual void OnEndParse(bool bEnd);                      // 0x00842b50
+    virtual void Execute(cArguments_s0084_2620* pArgs);       // 0x00844780
+    virtual const char* Description(int helpType) const;     // 0x00842b40
+    virtual void OnRegister(void* parser, EA::ArgScript::cState_s0084_2620* state); // 0x00841410
+    virtual void OnEndBlock(bool bEnd);                     // 0x00843ff0
+    virtual void OnEndParse(bool bEnd);                     // 0x00842b50
+    virtual void* scalarDeletingDtor(unsigned flags);        // 0x00842bf0
 };
 
 // ---- eastl::pair<string8 const, string8> ----
@@ -1772,8 +1780,9 @@ If_s0084_2620::If_s0084_2620()
 // @ 0x00842b50
 void If_s0084_2620::OnEndParse(bool bEnd)
 {
-    if (mVec1.mpEnd != mVec1.mpBegin) {
-        mVec1.mpEnd -= 1;
+    if (mVec1.mpBegin != mVec1.mpEnd) {
+        char* volatile& firstEnd = mVec1.mpEnd;
+        firstEnd -= 1;
         mVec2.mpEnd -= 1;
     }
 }

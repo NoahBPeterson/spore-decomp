@@ -36,3 +36,4 @@
 ../src/game/UTFSpore_Win32/Parser.cpp  ?Command@cParser_s0084_2620@ArgScript@EA@@UBEPAXPBD@Z  00842c10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ??1MacroPair@@QAE@XZ  00844680  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Parser.cpp  ?DoFreeNodes@StrHashtable@@QAEXPAPAUStrNode@@I@Z  00844700  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?OnEndParse@If_s0084_2620@?A0x703b9496@@UAEX_N@Z  00842b50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
