@@ -3206,14 +3206,16 @@ bool __cdecl FUN_00c0b1c0(unsigned int arg, unsigned int* out, unsigned int prop
 }
 
 // @ 0x00c0b220
-bool __stdcall FUN_00c0b220(unsigned int arg, unsigned int* out)
+bool __cdecl FUN_00c0b220(unsigned int arg, unsigned int* out)
 {
   int mode = SP_GetCurrentGameMode_s00c0_acd0();
-  if (mode < 0x1654c00) return false;
-  if (mode >= 0x1654c07 && mode != 0x1654c10) return false;
-  int index = mode - 0x1654c00;
-  if (mode == 0x1654c10) index = 6;
-  return FUN_00c0b1c0(arg, out, ((int*)g_168d900)[index]);
+  if ((mode >= 0x1654c00 && mode < 0x1654c07) || mode == 0x1654c10) {
+    int index = mode - 0x1654c00;
+    if (mode == 0x1654c10) index = 6;
+    unsigned int entry = ((unsigned int*)g_168d900)[index];
+    return FUN_00c0b1c0(arg, out, entry);
+  }
+  return false;
 }
 
 // @ 0x00c0b270
@@ -3291,27 +3293,29 @@ float __cdecl FUN_00c0b440(unsigned int which)
 void __cdecl SP_AddSetAnimationTargetModifierA(CB* self, void* target, void* owner, void* extra)
 {
   if (target == 0) return;
+  float weight = g_146a32c;
   int local[8];
   local[0] = (int)target;
   local[1] = 0;
   local[2] = (int)extra;
   local[3] = ++self->mAnimTargetCounter;
-  self->mpOrders->Activate(3, 0, self, g_146a32c, local, owner);
+  self->mpOrders->Activate(3, 0, self, weight, local, owner);
 }
 
 // @ 0x00c0b570
 void __cdecl SP_AddSetAnimationTargetModifierB(CB* self, void* target, float* position)
 {
   if (target == 0) return;
+  float weight = g_146a32c;
   int local[8];
   local[0] = (int)target;
   local[1] = 0;
   local[2] = -1;
   local[3] = ++self->mAnimTargetCounter;
-  ((float*)&local[4])[0] = position[0];
-  ((float*)&local[4])[1] = position[1];
-  ((float*)&local[4])[2] = position[2];
-  self->mpOrders->Activate(3, 0, self, g_146a32c, local, 0);
+  ((uint32_t*)&local[4])[0] = ((uint32_t*)position)[0];
+  ((uint32_t*)&local[4])[1] = ((uint32_t*)position)[1];
+  ((uint32_t*)&local[4])[2] = ((uint32_t*)position)[2];
+  self->mpOrders->Activate(3, 0, self, weight, local, 0);
 }
 
 // @ 0x00c0b5e0
@@ -3357,7 +3361,15 @@ int __thiscall CB::Query(unsigned int id)
 // @ 0x00c0b710
 void __fastcall FUN_00c0b710(CB* self)
 {
-  self->m_b8c = (int)(g_1687a30 * 1000.0f);
+  // The millisecond count is rounded (fistp, round-half-to-even) to an int64; a C
+  // cast would go through __ftol2, which truncates, so the conversion is written out.
+  float ms = g_1687a30 * 1000.0f;
+  __declspec(align(8)) long long t;
+  __asm {
+    fld dword ptr [ms]
+    fistp qword ptr [t]
+  }
+  self->m_b8c = (int)t;
 }
 
 // @ 0x00c0b780
@@ -3376,11 +3388,8 @@ bool __fastcall FUN_00c0b7a0(CB* self)
 bool __thiscall CB::CheckTargetA(void* target)
 {
   CB* self = this;
-  if (self->mpSpecies->m60c > 0 && ((F_c35d20*)target)->f())
-    return true;
-  if (self->mpSpecies->m608 > 0 && ((F_c35d40*)target)->f())
-    return true;
-  return false;
+  return (self->mpSpecies->m60c > 0 && ((F_c35d20*)target)->f())
+      || (self->mpSpecies->m608 > 0 && ((F_c35d40*)target)->f());
 }
 
 // @ 0x00c0b810
@@ -3463,10 +3472,17 @@ void __thiscall Simulator::cCreatureBase::func90h()
   this->m_bBC = g_1687a00;
 }
 
+// EA's SSE min/max __asm helpers (maxss/minss), as in the original module
+// (see match/slices/s00c02600 and s00533dc0: MinF/MaxF/clamp helpers are __asm there too).
+static inline float ClampF(float x, float lo, float hi) { __asm { movss xmm0, x
+                                                                  maxss xmm0, lo
+                                                                  minss xmm0, hi
+                                                                  movss x, xmm0 } return x; }
+
 // @ 0x00c0b9d0
 void __thiscall CB::ClampHunger(float value)
 {
-  value = std::min(std::max(value, g_1687a04), g_1687a00);
+  value = ClampF(value, g_1687a04, g_1687a00);
   this->m_bBC = value;
 }
 
