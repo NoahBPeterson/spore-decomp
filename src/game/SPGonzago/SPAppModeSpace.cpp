@@ -119,7 +119,7 @@ public:
     void SetPlanetTimeOnFirstEntry();
     void Write();
     void* FUN_01046fc0(void* arg);                       // 0x01046fc0
-    void FUN_00fda1f0();
+    bool FUN_00fda1f0(float x, float y, int button);
     bool FUN_00fda2e0(void* v);
     void FUN_00fda480();
     void FUN_00fda5e0();
@@ -315,6 +315,7 @@ struct cSelf
     bool      FUN_00c37170();        // 0x00c37170
     void      FUN_01050bb0();        // 0x01050bb0
     bool      FUN_01046f30();        // 0x01046f30
+    void      FUN_01003c60(float x, float y); // 0x01003c60
     bool      FUN_01017300(void* arg); // 0x01017300
     int       FUN_00bb9ae0();        // 0x00bb9ae0
     bool      FUN_00bb9fb0();        // 0x00bb9fb0
@@ -3757,9 +3758,31 @@ void __thiscall cAppModeSpace::OnMouseUp()
 
 // @ 0x00fda1f0
 void* __cdecl FUN_00b3d250();                        // 0x00b3d250 (input manager)
+struct MouseInputState { void OnMouseDown(float x, float y, int button); };  // 0x00697b20
+struct V5cMouse : B22 { virtual bool OnMouseMove(float x, float y, int button) = 0; };
 namespace SP {
-void __thiscall cAppModeSpace::FUN_00fda1f0()
+bool __thiscall cAppModeSpace::FUN_00fda1f0(float x, float y, int button)
 {
+    float oldX = *(float*)((char*)this + 0xf4);
+    float oldY = *(float*)((char*)this + 0xf8);
+    ((MouseInputState*)((char*)this + 0xc8))->OnMouseDown(x, y, button);
+    bool result = ((V5cMouse*)FUN_00b3d250())->OnMouseMove(x, y, button);
+
+    int context = FUN_01021080();
+    if (context != 0) {
+        if ((unsigned int)(context - 1) > 1)
+            goto done;
+        if (!*(bool*)((char*)this + 0xed) && !*(bool*)((char*)this + 0xee))
+            goto done;
+    } else {
+        if (!((V18b*)FUN_00b3d250())->Probe(0xcdcdcdcd))
+            goto done;
+    }
+    ((cSelf*)mpSpaceState)->FUN_01003c60(oldX - x, oldY - y);
+
+done:
+    *(bool*)((char*)this + 0x130) = true;
+    return result;
 }
 }  // namespace SP
 
