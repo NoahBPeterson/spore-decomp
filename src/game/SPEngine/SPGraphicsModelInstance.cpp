@@ -235,15 +235,14 @@ struct cMaterial_s0073_afb0 {
 };
 }
 namespace SP {
+
 class cModelInstance_s0073_afb0 {
 public:
     char pad0[8];                   // +0x00
     unsigned mFlags8;               // +0x08 (bit 0x20: multi-blender mode)
-    int mFieldC;                    // +0x0c
-    void* mField10;                 // +0x10
-    cAnimGroupInfo_s0073_afb0* mGroupBegin;    // +0x14
-    cAnimGroupInfo_s0073_afb0* mGroupEnd;      // +0x18
-    char pad1c[0x28 - 0x1c];
+    int mNumExternalBones;          // +0x0c
+    const cMDBoneTransform* mExternalBoneTable; // +0x10
+    eastl::vector<cAnimGroupInfo_s0073_afb0, eastl::sp_vector_allocator> mAnimGroups;
     cMaterial_s0073_afb0* mMaterials;          // +0x28
     cMaterial_s0073_afb0* mMaterialsEnd;       // +0x2c
     int mField30;                   // +0x30 (address forwarded to a virtual call)
@@ -276,7 +275,7 @@ public:
     bool GetAnimationRange(int key, int grp, float* pMin, float* pMax);  // 0x0073b6d0 (SP::cModelInstance::GetAnimationRange)
     void Notify(struct cNotifyOther* other);
     int GetNumBones();  // @ 0x0073B7E0 (SP::cModelInstance::GetNumBones)
-    void SetBoneTable(int a, void* b);  // @ 0x0073B800 (SP::cModelInstance::SetBoneTable)
+    void SetBoneTable(int numBones, const cMDBoneTransform* boneTable);  // @ 0x0073B800 (SP::cModelInstance::SetBoneTable)
     cMaterial_s0073_afb0* SetBoneCallback(int boneIndex, void* a2, void* a3, void* a4);  // @ 0x0073B840 (SP::cModelInstance::SetBoneCallback)
     void SetDynamicDraw(void* p, bool flag);  // @ 0x0073B8E0 (SP::cModelInstance::SetDynamicDraw)
 };
@@ -1765,9 +1764,9 @@ void cModelInstance_s0073_afb0::Animate(float dt)
 namespace SP {
 void cModelInstance_s0073_afb0::MoveToTime(int key, int grp, float t)
 {
-    if (grp >= 0 && grp < (int)(mGroupEnd - mGroupBegin) && mBlendBegin != mBlendEnd
+    if (grp >= 0 && grp < (int)(mAnimGroups.mpEnd - mAnimGroups.mpBegin) && mBlendBegin != mBlendEnd
         && !(fabsf(t) > 10000.0f) && IsFinite(t)) {
-        cAnimGroupInfo_s0073_afb0* g = &mGroupBegin[grp];
+        cAnimGroupInfo_s0073_afb0* g = &mAnimGroups.mpBegin[grp];
         int last = g->mAnimCount + g->mAnimOffset;
         int first = g->mAnimOffset;
         int b0 = g->mBindingIdx;
@@ -1853,8 +1852,8 @@ void cModelInstance_s0073_afb0::MoveToTime(int key, int grp, float t)
 namespace SP {
 void cModelInstance_s0073_afb0::SetWeight(int key, int grp, float w)
 {
-    if (grp >= 0 && grp < (int)(mGroupEnd - mGroupBegin) && mEntryBegin != mEntryEnd && (mFlags8 & 0x20)) {
-        cAnimGroupInfo_s0073_afb0* g = &mGroupBegin[grp];
+    if (grp >= 0 && grp < (int)(mAnimGroups.mpEnd - mAnimGroups.mpBegin) && mEntryBegin != mEntryEnd && (mFlags8 & 0x20)) {
+        cAnimGroupInfo_s0073_afb0* g = &mAnimGroups.mpBegin[grp];
         int last = g->mAnimCount + g->mAnimOffset;
         int first = g->mAnimOffset;
         int b0 = g->mBindingIdx;
@@ -1892,8 +1891,8 @@ void cModelInstance_s0073_afb0::SetWeight(int key, int grp, float w)
 namespace SP {
 bool cModelInstance_s0073_afb0::GetAnimationRange(int key, int grp, float* pMin, float* pMax)
 {
-    if (grp >= 0 && grp < (int)(mGroupEnd - mGroupBegin)) {
-        cAnimGroupInfo_s0073_afb0* g = mGroupBegin + grp;
+    if (grp >= 0 && grp < (int)(mAnimGroups.mpEnd - mAnimGroups.mpBegin)) {
+        cAnimGroupInfo_s0073_afb0* g = mAnimGroups.mpBegin + grp;
         int first = g->mAnimOffset;
         int last = g->mAnimCount + first;
         float mx = 0.0f;
@@ -1915,23 +1914,21 @@ bool cModelInstance_s0073_afb0::GetAnimationRange(int key, int grp, float* pMin,
 namespace SP {
 int cModelInstance_s0073_afb0::GetNumBones()
 {
-    if (mGroupBegin == mGroupEnd)
+    if (mAnimGroups.mpBegin == mAnimGroups.mpEnd)
         return 0;
-    return (int)mGroupEnd[-1].mBoneCount + (int)mGroupEnd[-1].mBoneOffset;
+    return (int)mAnimGroups.mpEnd[-1].mBoneCount + (int)mAnimGroups.mpEnd[-1].mBoneOffset;
 }
 }  // namespace SP
 
 // @ 0x0073b800
 namespace SP {
-void cModelInstance_s0073_afb0::SetBoneTable(int a, void* b)
+void cModelInstance_s0073_afb0::SetBoneTable(int numBones, const cMDBoneTransform* boneTable)
 {
-    cAnimGroupInfo_s0073_afb0* p = mGroupBegin;
-    void* t = b;
-    if (p != mGroupEnd && (int)p->mBoneCount < a)
-        mFieldC = (int)p->mBoneCount;
+    if (!mAnimGroups.empty() && (int)mAnimGroups[0].mBoneCount < numBones)
+        mNumExternalBones = (int)mAnimGroups[0].mBoneCount;
     else
-        mFieldC = a;
-    mField10 = t;
+        mNumExternalBones = numBones;
+    mExternalBoneTable = boneTable;
     mCounter += 1;
 }
 }  // namespace SP
@@ -1944,9 +1941,9 @@ cMaterial_s0073_afb0* cModelInstance_s0073_afb0::SetBoneCallback(int boneIndex, 
 {
     unsigned ret = (unsigned)boneIndex;
     if (boneIndex == -1) {
-        if (mGroupBegin == mGroupEnd)
+        if (mAnimGroups.mpBegin == mAnimGroups.mpEnd)
             return (cMaterial_s0073_afb0*)ret;
-        cAnimGroupInfo_s0073_afb0* p = mGroupBegin;
+        cAnimGroupInfo_s0073_afb0* p = mAnimGroups.mpBegin;
         do {
             int idx = (unsigned char)p->mBindingIdx;
             ret = (ret & 0xFFFFFF00u) | (unsigned)idx;   // mov al, byte ptr [edx]
@@ -1958,16 +1955,16 @@ cMaterial_s0073_afb0* cModelInstance_s0073_afb0::SetBoneCallback(int boneIndex, 
                 ret = (unsigned)m;
             }
             p = (cAnimGroupInfo_s0073_afb0*)((char*)p + 8);
-        } while (p != mGroupEnd);
+        } while (p != mAnimGroups.mpEnd);
         return (cMaterial_s0073_afb0*)ret;
     }
     if (boneIndex < 0)
         return (cMaterial_s0073_afb0*)ret;
-    if (boneIndex >= (int)(mGroupEnd - mGroupBegin))
+    if (boneIndex >= (int)(mAnimGroups.mpEnd - mAnimGroups.mpBegin))
         return (cMaterial_s0073_afb0*)ret;
-    int idx = (unsigned char)mGroupBegin[boneIndex].mBindingIdx;
+    int idx = (unsigned char)mAnimGroups.mpBegin[boneIndex].mBindingIdx;
     if ((signed char)idx < 0) {
-        unsigned gp = (unsigned)(void*)&mGroupBegin[boneIndex];
+        unsigned gp = (unsigned)(void*)&mAnimGroups.mpBegin[boneIndex];
         unsigned v = (gp & ~0xFFu) | (unsigned)(unsigned char)idx;
         return (cMaterial_s0073_afb0*)v;
     }
