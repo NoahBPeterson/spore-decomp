@@ -116,7 +116,12 @@ extern float k_16341f4;
 namespace rw {
 namespace math {
 namespace vpu {
-struct __declspec(align(16)) Vector4_s0078_64c0 { float x, y, z, w; };
+struct __declspec(align(16)) Vector4_s0078_64c0 {
+    __m128 mV;
+    Vector4_s0078_64c0() {}
+    __forceinline Vector4_s0078_64c0(const Vector4_s0078_64c0& o) : mV(o.mV) {}
+    __forceinline Vector4_s0078_64c0& operator=(const Vector4_s0078_64c0& o) { mV = o.mV; return *this; }
+};
 }
 }
 }
@@ -898,33 +903,35 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     double df80;
 
     // ---- band 0 ----
-    out[0] = in[0];
+    *out++ = *in;
 
     // ---- band 1: the rotation itself, rows/columns in SH (y, z, x) order ----
-    if (order <= 1)
+    if (order < 2)
         return;
+    in += 1;
     R1[0][0] = m[4]; R1[0][1] = m[7]; R1[0][2] = m[1];
     R1[1][0] = m[5]; R1[1][1] = m[8]; R1[1][2] = m[2];
     R1[2][0] = m[3]; R1[2][1] = m[6]; R1[2][2] = m[0];
-    out[1] = MulRow3(&in[1], R1[0]);
-    out[2] = MulRow3(&in[1], R1[1]);
-    out[3] = MulRow3(&in[1], R1[2]);
+    *out++ = MulRow3(in, R1[0]);
+    *out++ = MulRow3(in, R1[1]);
+    *out++ = MulRow3(in, R1[2]);
 
     // ---- band 2: explicit quadratic forms in R1 ----
-    if (order <= 2)
+    if (order < 3)
         return;
+    in += 3;
     R2[0][0] = ((R1[2][0] * R1[0][2] + R1[2][2] * R1[0][0]) * 2.0f) * k_16340dc;
     R2[0][1] = R1[2][0] * R1[0][1] + R1[2][1] * R1[0][0];
     R2[0][2] = ((R1[2][1] * R1[0][1]) * 2.0f) * k_1634104;
     R2[0][3] = R1[2][1] * R1[0][2] + R1[2][2] * R1[0][1];
     R2[0][4] = ((R1[2][2] * R1[0][2] - R1[2][0] * R1[0][0]) * 2.0f) * k_16340dc;
-    out[4] = WeightedSum(5, &in[4], R2[0]);
+    *out++ = WeightedSum(5, in, R2[0]);
     R2[1][0] = ((R1[1][0] * R1[0][2] + R1[1][2] * R1[0][0]) * 2.0f) * k_16340dc;
     R2[1][1] = R1[1][0] * R1[0][1] + R1[1][1] * R1[0][0];
     R2[1][2] = ((R1[1][1] * R1[0][1]) * 2.0f) * k_1634104;
     R2[1][3] = R1[1][1] * R1[0][2] + R1[1][2] * R1[0][1];
     R2[1][4] = ((R1[1][2] * R1[0][2] - R1[1][0] * R1[0][0]) * 2.0f) * k_16340dc;
-    out[5] = WeightedSum(5, &in[4], R2[1]);
+    *out++ = WeightedSum(5, in, R2[1]);
     f1174 = (R1[2][2] * R1[2][0]) * 2.0f;
     f1154 = (R1[0][2] * R1[0][0]) * 2.0f;
     R2[2][0] = ((R1[1][2] * R1[1][0]) * 2.0f) * k_16340b0 -
@@ -944,24 +951,25 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1140 = R1[0][2] * R1[0][2] - R1[0][0] * R1[0][0];
     R2[2][4] = (R1[1][2] * R1[1][2] - R1[1][0] * R1[1][0]) * k_16340b0 -
                 (f1140 + f1158) * k_163407c;
-    out[6] = WeightedSum(5, &in[4], R2[2]);
+    *out++ = WeightedSum(5, in, R2[2]);
     R2[3][0] = ((R1[2][0] * R1[1][2] + R1[2][2] * R1[1][0]) * 2.0f) * k_16340dc;
     R2[3][1] = R1[2][0] * R1[1][1] + R1[2][1] * R1[1][0];
     R2[3][2] = ((R1[2][1] * R1[1][1]) * 2.0f) * k_1634104;
     R2[3][3] = R1[2][1] * R1[1][2] + R1[2][2] * R1[1][1];
     R2[3][4] = ((R1[2][2] * R1[1][2] - R1[2][0] * R1[1][0]) * 2.0f) * k_16340dc;
-    out[7] = WeightedSum(5, &in[4], R2[3]);
+    *out++ = WeightedSum(5, in, R2[3]);
     R2[4][4] = k_16340dc;
     R2[4][0] = (f1174 - f1154) * R2[4][4];
     R2[4][1] = f116c - f1168;
     R2[4][2] = (f1178 - f114c) * k_1634104;
     R2[4][3] = f1180 - f1170;
     R2[4][4] = (f1158 - f1140) * R2[4][4];
-    out[8] = WeightedSum(5, &in[4], R2[4]);
+    *out++ = WeightedSum(5, in, R2[4]);
 
     // ---- band 3: R3 from R1 x R2 ----
-    if (order <= 3)
+    if (order < 4)
         return;
+    in += 5;
     f1154 = R2[4][0] * R1[0][2] + R2[4][4] * R1[0][0];
     f1174 = R2[0][0] * R1[2][2] + R2[0][4] * R1[2][0];
     R3[0][0] = (f1174 + f1154) * k_16340dc;
@@ -983,7 +991,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f113c = R2[0][4] * R1[2][2] - R2[0][0] * R1[2][0];
     f1148 = R2[4][4] * R1[0][2] - R2[4][0] * R1[0][0];
     R3[0][6] = (f113c + f1148) * k_16340dc;
-    out[9] = WeightedSum(7, &in[9], R3[0]);
+    *out++ = WeightedSum(7, in, R3[0]);
     R3[1][0] = (((R2[1][0] * R1[2][2] + R2[1][4] * R1[2][0]) +
                  (R2[3][0] * R1[0][2] + R2[3][4] * R1[0][0])) +
                 (R2[0][0] * R1[1][2] + R2[0][4] * R1[1][0])) * k_1634084;
@@ -998,7 +1006,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R3[1][6] = (((R2[1][4] * R1[2][2] - R2[1][0] * R1[2][0]) +
                  (R2[3][4] * R1[0][2] - R2[3][0] * R1[0][0])) +
                 (R2[0][4] * R1[1][2] - R2[0][0] * R1[1][0])) * k_1634084;
-    out[10] = WeightedSum(7, &in[9], R3[1]);
+    *out++ = WeightedSum(7, in, R3[1]);
     fVar7 = R2[2][0] * k_1634120;
     R3[2][1] = ((R2[1][0] * k_16341ec) * R1[1][1] - (f116c - f1168) * k_1634114) +
                 fVar7 * R1[0][1];
@@ -1021,7 +1029,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R3[2][5] = ((R2[1][4] * k_16341ec) * R1[1][1] - (f117c - f1150) * k_1634114) +
                 f1178 * R1[0][1];
     f1174 = fVar7;
-    out[11] = WeightedSum(7, &in[9], R3[2]);
+    *out++ = WeightedSum(7, in, R3[2]);
     fVar9 = R2[2][0] * k_1634080;
     f114c = R2[3][0] * R1[2][2] + R2[3][4] * R1[2][0];
     f1180 = R2[1][0] * R1[0][2] + R2[1][4] * R1[0][0];
@@ -1049,7 +1057,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f10e8 = (R2[1][4] * R1[0][2] - R2[1][0] * R1[0][0]);
     R3[3][6] = (R2[2][4] * R1[1][2] - R2[2][0] * R1[1][0]) * k_1634098 -
                 (f10e8 + f10d0) * k_1634114;
-    out[12] = WeightedSum(7, &in[9], R3[3]);
+    *out++ = WeightedSum(7, in, R3[3]);
     f1114 = R2[4][0] * R1[2][2] + R2[4][4] * R1[2][0];
     f112c = R2[0][4] * R1[0][0] + R2[0][0] * R1[0][2];
     f10b8 = R2[0][0] * R1[0][1];
@@ -1081,7 +1089,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R3[4][6] = ((R2[3][4] * R1[1][2] - R2[3][0] * R1[1][0]) * k_16340ac +
                 (R2[2][4] * R1[2][2] - R2[2][0] * R1[2][0]) * k_1634054) -
                 (f1178 + f1144) * sqrt(1.0 / 60.0);
-    out[13] = WeightedSum(7, &in[9], R3[4]);
+    *out++ = WeightedSum(7, in, R3[4]);
     R3[5][6] = k_1634084;
     R3[5][0] = ((R2[4][0] * R1[1][2] + R2[4][4] * R1[1][0]) + (f114c - f1180))
                 * R3[5][6];
@@ -1092,7 +1100,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R3[5][5] = (f10b0 - f10c0) + R2[4][4] * R1[1][1];
     R3[5][6] = ((R2[4][4] * R1[1][2] - R2[4][0] * R1[1][0]) +
                 (f10d0 - f10e8)) * R3[5][6];
-    out[14] = WeightedSum(7, &in[9], R3[5]);
+    *out++ = WeightedSum(7, in, R3[5]);
     R3[6][4] = k_16340e8;
     R3[6][6] = k_16340dc;
     R3[6][5] = k_16340b4;
@@ -1103,11 +1111,12 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R3[6][4] = (f116c - f10d8) * R3[6][4];
     R3[6][5] = (f1168 - f1100) * R3[6][5];
     R3[6][6] = (f1144 - f1178) * R3[6][6];
-    out[15] = WeightedSum(7, &in[9], R3[6]);
+    *out++ = WeightedSum(7, in, R3[6]);
 
     // ---- band 4: R4 from R1 x R3 ----
-    if (order <= 4)
+    if (order < 5)
         return;
+    in += 7;
     f10d8 = R3[0][6] * R1[2][0] + R3[0][0] * R1[2][2];
     f1090 = R3[6][0] * R1[0][2] + R3[6][6] * R1[0][0];
     f10b0 = R3[0][3] * R1[2][1];
@@ -1135,7 +1144,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1178 = R3[6][6] * R1[0][1];
     f1168 = R3[0][6] * R1[2][1];
     R4[0][7] = (f1168 + f1178) * sqrt(2.0);
-    out[16] = WeightedSum(9, &in[16], R4[0]);
+    *out++ = WeightedSum(9, in, R4[0]);
     f117c = R3[5][0] * R1[0][1];
     f1170 = R3[1][6] * R1[2][0] + R3[1][0] * R1[2][2];
     f1158 = R3[5][6] * R1[0][0] + R3[5][0] * R1[0][2];
@@ -1169,7 +1178,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1184 = (R3[5][6] * R1[0][2] - R3[5][0] * R1[0][0]);
     R4[1][8] = (R3[0][6] * R1[1][2] - R3[0][0] * R1[1][0]) * sqrt(1.0 / 8.0) +
                 (f1184 + f115c) * sqrt(3.0 / 16.0);
-    out[17] = WeightedSum(9, &in[16], R4[1]);
+    *out++ = WeightedSum(9, in, R4[1]);
     R4[2][0] = (((R3[2][6] * R1[2][0] + R1[2][2] * R3[2][0]) +
                  (R3[4][0] * R1[0][2] + R3[4][6] * R1[0][0])) * sqrt(15.0 / 112.0) -
                 (f10d8 - f1090) * sqrt(1.0 / 112.0)) +
@@ -1199,7 +1208,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
                 (((R3[2][6] * R1[2][2] - R3[2][0] * R1[2][0]) +
                  (R3[4][6] * R1[0][2] - R3[4][0] * R1[0][0])) * sqrt(15.0 / 112.0) -
                 (f114c - f1180) * sqrt(1.0 / 112.0));
-    out[18] = WeightedSum(9, &in[16], R4[2]);
+    *out++ = WeightedSum(9, in, R4[2]);
     R4[3][0] = (R3[3][6] * R1[0][0] + R1[0][2] * R3[3][0]) * sqrt(5.0 / 28.0) +
                 ((R3[2][6] * R1[1][0] + R1[1][2] * R3[2][0]) * sqrt(15.0 / 56.0) -
                 (f1170 - f1158) * sqrt(3.0 / 112.0));
@@ -1232,7 +1241,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R4[3][8] = ((R3[2][6] * R1[1][2] - R3[2][0] * R1[1][0]) * sqrt(15.0 / 56.0) -
                 (f115c - f1184) * sqrt(3.0 / 112.0)) +
                 (R3[3][6] * R1[0][2] - R3[3][0] * R1[0][0]) * sqrt(5.0 / 28.0);
-    out[19] = WeightedSum(9, &in[16], R4[3]);
+    *out++ = WeightedSum(9, in, R4[3]);
     f115c = R3[4][0] * R1[2][2] + R3[4][6] * R1[2][0];
     f1164 = R3[2][6] * R1[0][0] + R3[2][0] * R1[0][2];
     R4[4][0] = (R1[1][0] * R3[3][6] + R1[1][2] * R3[3][0]) * sqrt(2.0 / 7.0) -
@@ -1268,7 +1277,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1174 = R3[2][6] * R1[0][2] - R3[2][0] * R1[0][0];
     R4[4][8] = (R3[3][6] * R1[1][2] - R3[3][0] * R1[1][0]) * sqrt(2.0 / 7.0) -
                 (f1174 + f1188) * sqrt(3.0 / 28.0);
-    out[20] = WeightedSum(9, &in[16], R4[4]);
+    *out++ = WeightedSum(9, in, R4[4]);
     f1154 = R3[5][0] * R1[2][2] + R3[5][6] * R1[2][0];
     f116c = R3[1][6] * R1[0][0] + R1[0][2] * R3[1][0];
     R4[5][0] = (R3[3][6] * R1[2][0] + R3[3][0] * R1[2][2]) * sqrt(5.0 / 28.0) +
@@ -1313,7 +1322,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
                 ((R3[4][6] * R1[1][2] - R3[4][0] * R1[1][0]) * sqrt(15.0 / 56.0) -
                 (f113c + f1150) * sqrt(3.0 / 112.0));
     f1088 = R3[5][5] * R1[2][1];
-    out[21] = WeightedSum(9, &in[16], R4[5]);
+    *out++ = WeightedSum(9, in, R4[5]);
     f1130 = R1[0][2] * R3[0][0] + R3[0][6] * R1[0][0];
     f1134 = R3[6][6] * R1[2][0] + R1[2][2] * R3[6][0];
     f1160 = (R3[0][3] * R1[0][1]);
@@ -1358,7 +1367,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
                 ((f1188 - f1174) * sqrt(15.0 / 112.0) -
                 (f10b0 + f1080) * sqrt(1.0 / 112.0));
     f10c8 = R3[6][3] * R1[2][1];
-    out[22] = WeightedSum(9, &in[16], R4[6]);
+    *out++ = WeightedSum(9, in, R4[6]);
     R4[7][1] = (f1168 - f1178) * k_16340b4 + R3[6][0] * R1[1][1];
     R4[7][4] = (f10d8 - f1158) * k_163409c +
                 (R3[6][3] * k_16341dc) * R1[1][1];
@@ -1375,7 +1384,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
                 (f1088 - f117c) * k_16340fc;
     R4[7][8] = (f1150 - f113c) * sqrt(3.0 / 16.0) +
                 sqrt(1.0 / 8.0) * (R3[6][6] * R1[1][2] - R3[6][0] * R1[1][0]);
-    out[23] = WeightedSum(9, &in[16], R4[7]);
+    *out++ = WeightedSum(9, in, R4[7]);
     R4[8][8] = k_16340dc;
     R4[8][1] = (f115c - f1164) * sqrt(2.0);
     R4[8][0] = (f1134 - f1130) * R4[8][8];
@@ -1386,11 +1395,12 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R4[8][6] = (f10e8 - f112c) * sqrt(7.0 / 6.0);
     R4[8][7] = (f10d0 - f10c0) * sqrt(2.0);
     R4[8][8] = (f10b0 - f1080) * R4[8][8];
-    out[24] = WeightedSum(9, &in[16], R4[8]);
+    *out++ = WeightedSum(9, in, R4[8]);
 
     // ---- band 5: R5 from R1 x R4 ----
-    if (order <= 5)
+    if (order < 6)
         return;
+    in += 9;
     f1134 = R4[8][0] * R1[0][2] + R4[8][8] * R1[0][0];
     f1130 = R4[0][0] * R1[2][2] + R4[0][8] * R1[2][0];
     R5[0][0] = (f1130 + f1134) * k_16340dc;
@@ -1424,7 +1434,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f10b0 = R4[8][8] * R1[0][1];
     f10c0 = R4[0][8] * R1[2][1];
     R5[0][9] = (f10c0 + f10b0) * sqrt(5.0 / 2.0);
-    out[25] = WeightedSum(11, &in[25], R5[0]);
+    *out++ = WeightedSum(11, in, R5[0]);
     f1154 = R4[7][8] * R1[0][0] + R4[7][0] * R1[0][2];
     f1174 = R4[1][8] * R1[2][0] + R4[1][0] * R1[2][2];
     f116c = R4[1][0] * R1[2][1];
@@ -1464,7 +1474,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R5[1][9] = (f1128 + f111c) * sqrt(2.0) + R4[0][8] * R1[1][1];
     R5[1][10] = (R4[0][8] * R1[1][2] - R4[0][0] * R1[1][0]) * k_1634114 +
                 (f1124 + f1138) * k_1634054;
-    out[26] = WeightedSum(11, &in[25], R5[1]);
+    *out++ = WeightedSum(11, in, R5[1]);
     f1078 = R4[2][8] * R1[2][0] + R1[2][2] * R4[2][0];
     f1110 = (R4[6][8] * R1[0][0] + R4[6][0] * R1[0][2]);
     R5[2][0] = ((f1110 + f1078) * sqrt(7.0 / 45.0) -
@@ -1520,7 +1530,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
                 (f1080 - f1188) * sqrt(1.0 / 180.0));
     f10b8 = R4[2][7] * R1[2][1];
     f1098 = R4[6][7] * R1[0][1];
-    out[27] = WeightedSum(11, &in[25], R5[2]);
+    *out++ = WeightedSum(11, in, R5[2]);
     R5[3][0] = (R4[2][8] * R1[1][0] + R1[1][2] * R4[2][0]) * sqrt(7.0 / 30.0) +
                 (((R4[5][8] * R1[0][0] + R1[0][2] * R4[5][0]) +
                  (R4[3][8] * R1[2][0] + R1[2][2] * R4[3][0])) * sqrt(7.0 / 60.0) -
@@ -1556,7 +1566,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
                 (((R4[5][8] * R1[0][2] - R4[5][0] * R1[0][0]) +
                  (R4[3][8] * R1[2][2] - R4[3][0] * R1[2][0])) * sqrt(7.0 / 60.0) -
                 (f1124 - f1138) * sqrt(1.0 / 60.0));
-    out[28] = WeightedSum(11, &in[25], R5[3]);
+    *out++ = WeightedSum(11, in, R5[3]);
     R5[4][0] = ((R4[4][8] * R1[0][0] + R1[0][2] * R4[4][0]) * k_1634084 +
                 (R4[3][8] * R1[1][0] + R1[1][2] * R4[3][0]) * k_16340ac) -
                 (f1078 - f1110) * sqrt(1.0 / 30.0);
@@ -1595,7 +1605,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R5[4][10] = ((R4[4][8] * R1[0][2] - R4[4][0] * R1[0][0]) * k_1634084 +
                 (R4[3][8] * R1[1][2] - R4[3][0] * R1[1][0]) * k_16340ac) -
                 (f10c0 - f10b0) * sqrt(1.0 / 30.0);
-    out[29] = WeightedSum(11, &in[25], R5[4]);
+    *out++ = WeightedSum(11, in, R5[4]);
     f1120 = R4[3][8] * R1[0][0] + R1[0][2] * R4[3][0];
     f111c = R4[5][8] * R1[2][0] + R4[5][0] * R1[2][2];
     R5[5][0] = (R4[4][8] * R1[1][0] + R1[1][2] * R4[4][0]) * sqrt(5.0 / 18.0) -
@@ -1640,7 +1650,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1098 = R4[5][8] * R1[2][2] - R4[5][0] * R1[2][0];
     R5[5][10] = (R4[4][8] * R1[1][2] - R4[4][0] * R1[1][0]) * sqrt(5.0 / 18.0) -
                 (f1098 + f10e8) * sqrt(1.0 / 9.0);
-    out[30] = WeightedSum(11, &in[25], R5[5]);
+    *out++ = WeightedSum(11, in, R5[5]);
     f10c0 = R4[2][8] * R1[0][0] + R1[0][2] * R4[2][0];
     f10d0 = R4[6][0] * R1[2][2] + R4[6][8] * R1[2][0];
     R5[6][0] = ((R4[5][8] * R1[1][0] + R4[5][0] * R1[1][2]) * k_16340ac +
@@ -1691,7 +1701,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R5[6][10] = ((R4[5][8] * R1[1][2] - R4[5][0] * R1[1][0]) * k_16340ac +
                 (R4[4][8] * R1[2][2] - R4[4][0] * R1[2][0]) * k_1634084) -
                 (f1180 + f1170) * sqrt(1.0 / 30.0);
-    out[31] = WeightedSum(11, &in[25], R5[6]);
+    *out++ = WeightedSum(11, in, R5[6]);
     f1158 = R1[2][2] * R4[7][0] + R4[7][8] * R1[2][0];
     f1140 = R1[0][2] * R4[1][0] + R1[0][0] * R4[1][8];
     R5[7][0] = (R4[6][8] * R1[1][0] + R1[1][2] * R4[6][0]) * sqrt(7.0 / 30.0) +
@@ -1747,7 +1757,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R5[7][10] = (R4[6][8] * R1[1][2] - R4[6][0] * R1[1][0]) * sqrt(7.0 / 30.0) +
                 ((f1098 - f10e8) * sqrt(7.0 / 60.0) -
                 (f10b8 + f1088) * sqrt(1.0 / 60.0));
-    out[32] = WeightedSum(11, &in[25], R5[7]);
+    *out++ = WeightedSum(11, in, R5[7]);
     f1098 = R4[8][8] * R1[2][0] + R1[2][2] * R4[8][0];
     f10e8 = (R4[0][8] * R1[0][0] + R1[0][2] * R4[0][0]);
     R5[8][0] = (R1[1][2] * R4[7][0] + R4[7][8] * R1[1][0]) * sqrt(8.0 / 45.0) +
@@ -1803,7 +1813,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1124 = R4[8][7] * R1[2][1];
     f1080 = R4[0][1] * R1[0][1];
     f10b0 = R4[8][1] * R1[2][1];
-    out[33] = WeightedSum(11, &in[25], R5[8]);
+    *out++ = WeightedSum(11, in, R5[8]);
     R5[9][1] = (f111c - f1120) * sqrt(2.0) + R4[8][0] * R1[1][1];
     R5[9][0] = (R4[8][0] * R1[1][2] + R4[8][8] * R1[1][0]) * k_1634114 +
                 (f1158 - f1140) * k_1634054;
@@ -1824,7 +1834,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
                 (R4[8][7] * R1[1][1]) * sqrt(9.0 / 16.0);
     R5[9][9] = (f10d8 - f1090) * sqrt(2.0) +
                 R4[8][8] * R1[1][1];
-    out[34] = WeightedSum(11, &in[25], R5[9]);
+    *out++ = WeightedSum(11, in, R5[9]);
     R5[10][10] = k_16340dc;
     R5[10][1] = (f10d0 - f10c0) * sqrt(5.0 / 2.0);
     R5[10][0] = (f1098 - f10e8) * R5[10][10];
@@ -1837,11 +1847,12 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R5[10][10] = (f1128 - f114c) * R5[10][10];
     R5[10][8] = (f1124 - f1168) * sqrt(45.0 / 32.0);
     R5[10][9] = (f1178 - f117c) * sqrt(5.0 / 2.0);
-    out[35] = WeightedSum(11, &in[25], R5[10]);
+    *out++ = WeightedSum(11, in, R5[10]);
 
     // ---- band 6: R6 from R1 x R5 ----
-    if (order <= 6)
+    if (order < 7)
         return;
+    in += 11;
     f1138 = (R5[10][10] * R1[0][0] + R5[10][0] * R1[0][2]);
     f1078 = R5[0][10] * R1[2][0] + R5[0][0] * R1[2][2];
     R6[0][0] = (f1078 + f1138) * k_16340dc;
@@ -1881,7 +1892,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1098 = R5[0][10] * R1[2][1];
     f10e8 = (R5[10][10] * R1[0][1]);
     R6[0][11] = (f10e8 + f1098) * sqrt(3.0);
-    out[36] = WeightedSum(13, &in[36], R6[0]);
+    *out++ = WeightedSum(13, in, R6[0]);
     f1080 = R1[0][2] * R5[9][0] + R5[9][10] * R1[0][0];
     f10b0 = R5[1][10] * R1[2][0] + R5[1][0] * R1[2][2];
     R6[1][0] = (R1[1][2] * R5[0][0] + R1[1][0] * R5[0][10]) * k_163407c +
@@ -1933,7 +1944,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f10f4 = R5[1][10] * R1[2][2] - R5[1][0] * R1[2][0];
     R6[1][12] = (f10f4 + f1104) * sqrt(5.0 / 24.0) +
                 (R5[0][10] * R1[1][2] - R5[0][0] * R1[1][0]) * k_163407c;
-    out[37] = WeightedSum(13, &in[36], R6[1]);
+    *out++ = WeightedSum(13, in, R6[1]);
     f10f8 = R1[2][2] * R5[2][0] + R5[2][10] * R1[2][0];
     f1118 = (R5[8][0] * R1[0][2] + R5[8][10] * R1[0][0]);
     R6[2][0] = ((f1118 + f10f8) * sqrt(15.0 / 88.0) -
@@ -1998,7 +2009,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R6[2][12] = (R5[1][10] * R1[1][2] - R5[1][0] * R1[1][0]) * sqrt(5.0 / 33.0) +
                 ((f10e8 + f1098) * sqrt(15.0 / 88.0) -
                 (f10d0 - f10c0) * sqrt(1.0 / 264.0));
-    out[38] = WeightedSum(13, &in[36], R6[2]);
+    *out++ = WeightedSum(13, in, R6[2]);
     f1110 = (R1[2][2] * R5[3][0] + R5[3][10] * R1[2][0]);
     f10d0 = R1[0][2] * R5[7][0] + R5[7][10] * R1[0][0];
     R6[3][0] = ((f10d0 + f1110) * sqrt(3.0 / 22.0) -
@@ -2062,7 +2073,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1154 = R5[7][2] * R1[0][1];
     f1148 = R5[7][8] * R1[0][1];
     f113c = R5[3][8] * R1[2][1];
-    out[39] = WeightedSum(13, &in[36], R6[3]);
+    *out++ = WeightedSum(13, in, R6[3]);
     R6[4][0] = (((R5[6][10] * R1[0][0] + R1[0][2] * R5[6][0]) +
                  (R1[2][2] * R5[4][0] + R5[4][10] * R1[2][0])) * sqrt(7.0 / 66.0) -
                 (f10f8 - f1118) * sqrt(1.0 / 44.0)) +
@@ -2103,7 +2114,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
                 (((R5[4][10] * R1[2][2] - R5[4][0] * R1[2][0]) +
                  (R5[6][10] * R1[0][2] - R5[6][0] * R1[0][0])) * sqrt(7.0 / 66.0) -
                 (f1098 - f10e8) * sqrt(1.0 / 44.0));
-    out[40] = WeightedSum(13, &in[36], R6[4]);
+    *out++ = WeightedSum(13, in, R6[4]);
     R6[5][0] = (R1[1][2] * R5[4][0] + R5[4][10] * R1[1][0]) * sqrt(35.0 / 132.0) +
                 ((R1[0][2] * R5[5][0] + R5[5][10] * R1[0][0]) * sqrt(7.0 / 44.0) -
                 (f1110 - f10d0) * sqrt(5.0 / 132.0));
@@ -2150,7 +2161,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R6[5][12] = ((R5[5][10] * R1[0][2] - R5[5][0] * R1[0][0]) * sqrt(7.0 / 44.0) -
                 (f1058 - f1050) * sqrt(5.0 / 132.0)) +
                 (R5[4][10] * R1[1][2] - R5[4][0] * R1[1][0]) * sqrt(35.0 / 132.0);
-    out[41] = WeightedSum(13, &in[36], R6[5]);
+    *out++ = WeightedSum(13, in, R6[5]);
     f1058 = R5[6][10] * R1[2][0] + R1[2][2] * R5[6][0];
     f1050 = R1[0][2] * R5[4][0] + R5[4][10] * R1[0][0];
     R6[6][0] = (R1[1][2] * R5[5][0] + R5[5][10] * R1[1][0]) * sqrt(3.0 / 11.0) -
@@ -2203,7 +2214,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f10d8 = R5[4][10] * R1[0][2] - R5[4][0] * R1[0][0];
     R6[6][12] = (R5[5][10] * R1[1][2] - R5[5][0] * R1[1][0]) * sqrt(3.0 / 11.0) -
                 (f10d8 + f1100) * sqrt(5.0 / 44.0);
-    out[42] = WeightedSum(13, &in[36], R6[6]);
+    *out++ = WeightedSum(13, in, R6[6]);
     f1088 = R1[0][2] * R5[3][0] + R5[3][10] * R1[0][0];
     f1090 = R5[7][10] * R1[2][0] + R5[7][0] * R1[2][2];
     R6[7][0] = (R5[5][0] * R1[2][2] + R5[5][10] * R1[2][0]) * sqrt(7.0 / 44.0) +
@@ -2267,7 +2278,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R6[7][12] = (R1[2][2] * R5[5][10] - R5[5][0] * R1[2][0]) * sqrt(7.0 / 44.0) +
                 ((R5[6][10] * R1[1][2] - R5[6][0] * R1[1][0]) * sqrt(35.0 / 132.0) -
                 (f116c + f1168) * sqrt(5.0 / 132.0));
-    out[43] = WeightedSum(13, &in[36], R6[7]);
+    *out++ = WeightedSum(13, in, R6[7]);
     f1178 = R1[2][2] * R5[8][0] + R5[8][10] * R1[2][0];
     f114c = R1[0][2] * R5[2][0] + R1[0][0] * R5[2][10];
     R6[8][0] = (R1[1][2] * R5[7][0] + R5[7][10] * R1[1][0]) * sqrt(8.0 / 33.0) +
@@ -2333,7 +2344,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1138 = (R5[8][3] * R1[2][1]);
     f1134 = R5[8][7] * R1[2][1];
     f1124 = R5[2][3] * R1[0][1];
-    out[44] = WeightedSum(13, &in[36], R6[8]);
+    *out++ = WeightedSum(13, in, R6[8]);
     f1100 = (R1[2][2] * R5[9][0] + R1[2][0] * R5[9][10]);
     fVar8 = f112c - f10e8;
     f10d8 = R5[1][10] * R1[0][0] + R1[0][2] * R5[1][0];
@@ -2400,7 +2411,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1010 = R5[1][9] * R1[0][1];
     f1098 = R5[9][2] * R1[2][1];
     f1080 = R5[1][8] * R1[0][1];
-    out[45] = WeightedSum(13, &in[36], R6[9]);
+    *out++ = WeightedSum(13, in, R6[9]);
     f116c = R1[2][2] * R5[10][0] + R5[10][10] * R1[2][0];
     f1168 = R1[0][2] * R5[0][0] + R5[0][10] * R1[0][0];
     R6[10][0] = (R1[1][2] * R5[9][0] + R5[9][10] * R1[1][0]) * sqrt(5.0 / 33.0) +
@@ -2464,7 +2475,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R6[10][12] = (R5[9][10] * R1[1][2] - R5[9][0] * R1[1][0]) * sqrt(5.0 / 33.0) +
                 ((f10a0 - f10c8) * sqrt(15.0 / 88.0) -
                 (f10e0 + f10f0) * sqrt(1.0 / 264.0));
-    out[46] = WeightedSum(13, &in[36], R6[10]);
+    *out++ = WeightedSum(13, in, R6[10]);
     R6[11][0] = (R1[1][2] * R5[10][0] + R1[1][0] * R5[10][10]) * k_163407c +
                 (f1100 - f10d8) * sqrt(5.0 / 24.0);
     R6[11][1] = (f1090 - f1088) * sqrt(5.0 / 2.0) +
@@ -2491,7 +2502,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
                 R5[10][10] * R1[1][1];
     R6[11][12] = (f1174 - f1154) * sqrt(5.0 / 24.0) +
                 (R5[10][10] * R1[1][2] - R5[10][0] * R1[1][0]) * k_163407c;
-    out[47] = WeightedSum(13, &in[36], R6[11]);
+    *out++ = WeightedSum(13, in, R6[11]);
     R6[12][12] = k_16340dc;
     R6[12][1] = (f1178 - f114c) * sqrt(3.0);
     R6[12][0] = (f116c - f1168) * R6[12][12];
@@ -2506,11 +2517,12 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R6[12][9] = (f1134 - f117c) * sqrt(11.0 / 9.0);
     R6[12][10] = (f1158 - f1184) * sqrt(33.0 / 20.0);
     R6[12][11] = (f115c - f1164) * sqrt(3.0);
-    out[48] = WeightedSum(13, &in[36], R6[12]);
+    *out++ = WeightedSum(13, in, R6[12]);
 
     // ---- band 7: R7 from R1 x R6 ----
-    if (order <= 7)
+    if (order < 8)
         return;
+    in += 13;
     f1048 = (R6[0][12] * R1[2][0] + R6[0][0] * R1[2][2]);
     f1010 = R6[12][0] * R1[0][2] + R6[12][12] * R1[0][0];
     R7[0][0] = (f1010 + f1048) * k_16340dc;
@@ -2556,7 +2568,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1100 = (R6[12][12] * R1[0][2] - R6[12][0] * R1[0][0]);
     f10c8 = R6[0][12] * R1[2][2] - R6[0][0] * R1[2][0];
     R7[0][14] = (f1100 + f10c8) * k_16340dc;
-    out[49] = WeightedSum(15, &in[49], R7[0]);
+    *out++ = WeightedSum(15, in, R7[0]);
     f1090 = R1[0][2] * R6[11][0] + R6[11][12] * R1[0][0];
     f10d8 = R1[2][2] * R6[1][0] + R6[1][12] * R1[2][0];
     R7[1][0] = (f10d8 + f1090) * sqrt(3.0 / 14.0) +
@@ -2619,7 +2631,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     ff98 = R6[1][12] * R1[2][1];
     ffe0 = fVar9;
     ffb8 = fVar8;
-    out[50] = WeightedSum(15, &in[49], R7[1]);
+    *out++ = WeightedSum(15, in, R7[1]);
     fVar9 = R1[0][2] * R6[10][0] + R6[10][12] * R1[0][0];
     fVar4 = R1[2][2] * R6[2][0] + R6[2][12] * R1[2][0];
     R7[2][0] = ((fVar4 + fVar9) * sqrt(33.0 / 182.0) -
@@ -2699,7 +2711,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
                 (f10c8 - f1100) * sqrt(1.0 / 364.0));
     f1040 = fVar9;
     f1000 = fVar4;
-    out[51] = WeightedSum(15, &in[49], R7[2]);
+    *out++ = WeightedSum(15, in, R7[2]);
     fVar9 = R6[3][12] * R1[2][0] + R1[2][2] * R6[3][0];
     f10a8 = fVar9;
     fVar8 = R1[0][2] * R6[9][0] + R6[9][12] * R1[0][0];
@@ -2776,7 +2788,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R7[3][14] = (R6[2][12] * R1[1][2] - R6[2][0] * R1[1][0]) * sqrt(33.0 / 182.0) +
                 ((ff98 + ffa0) * sqrt(55.0 / 364.0) -
                 (ffb8 - ffe0) * sqrt(3.0 / 364.0));
-    out[52] = WeightedSum(15, &in[49], R7[3]);
+    *out++ = WeightedSum(15, in, R7[3]);
     fVar9 = R1[2][2] * R6[4][0] + R6[4][12] * R1[2][0];
     ffe0 = fVar9;
     ffb8 = R1[0][2] * R6[8][0] + R6[8][12] * R1[0][0];
@@ -2855,7 +2867,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R7[4][14] = (R6[3][12] * R1[1][2] - R6[3][0] * R1[1][0]) * sqrt(20.0 / 91.0) +
                 ((f1164 + f115c) * sqrt(45.0 / 364.0) -
                 (f10f0 - f10e0) * sqrt(3.0 / 182.0));
-    out[53] = WeightedSum(15, &in[49], R7[4]);
+    *out++ = WeightedSum(15, in, R7[4]);
     R7[5][0] = (((R6[7][12] * R1[0][0] + R1[0][2] * R6[7][0]) +
                  (R1[2][2] * R6[5][0] + R6[5][12] * R1[2][0])) * sqrt(9.0 / 91.0) -
                 (f10a8 - f10a0) * sqrt(5.0 / 182.0)) +
@@ -2903,7 +2915,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
                 (((R6[7][12] * R1[0][2] - R6[7][0] * R1[0][0]) +
                  (R6[5][12] * R1[2][2] - R6[5][0] * R1[2][0])) * sqrt(9.0 / 91.0) -
                 (ffa0 - ff98) * sqrt(5.0 / 182.0));
-    out[54] = WeightedSum(15, &in[49], R7[5]);
+    *out++ = WeightedSum(15, in, R7[5]);
     R7[6][0] = (R1[1][2] * R6[5][0] + R6[5][12] * R1[1][0]) * sqrt(24.0 / 91.0) +
                 ((R1[0][2] * R6[6][0] + R6[6][12] * R1[0][0]) * sqrt(2.0 / 13.0) -
                 (ffe0 - ffb8) * sqrt(15.0 / 364.0));
@@ -2962,7 +2974,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R7[6][14] = ((R6[6][12] * R1[0][2] - R6[6][0] * R1[0][0]) * sqrt(2.0 / 13.0) -
                 (f115c - f1164) * sqrt(15.0 / 364.0)) +
                 (R6[5][12] * R1[1][2] - R6[5][0] * R1[1][0]) * sqrt(24.0 / 91.0);
-    out[55] = WeightedSum(15, &in[49], R7[6]);
+    *out++ = WeightedSum(15, in, R7[6]);
     f1078 = 0x3fe09a9ec0000000;
     fVar9 = R6[7][12] * R1[2][0] + R6[7][0] * R1[2][2];
     fVar8 = R1[0][2] * R6[5][0] + R1[0][0] * R6[5][12];
@@ -3026,7 +3038,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1000 = fVar8;
     ffe0 = R6[7][0] * R1[2][1];
     f1040 = fVar9;
-    out[56] = WeightedSum(15, &in[49], R7[7]);
+    *out++ = WeightedSum(15, in, R7[7]);
     fVar9 = R6[8][12] * R1[2][0] + R6[8][0] * R1[2][2];
     f1138 = (R1[0][2] * R6[4][0] + R6[4][12] * R1[0][0]);
     R7[8][0] = (R6[7][12] * R1[1][0] + R1[1][2] * R6[7][0]) * sqrt(24.0 / 91.0) +
@@ -3105,7 +3117,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1088 = R6[4][12] * R1[0][1];
     f10b8 = fVar8;
     f1098 = fVar7;
-    out[57] = WeightedSum(15, &in[49], R7[8]);
+    *out++ = WeightedSum(15, in, R7[8]);
     fVar9 = R1[0][0] * R6[3][12] + R1[0][2] * R6[3][0];
     fVar8 = R1[2][2] * R6[9][0] + R6[9][12] * R1[2][0];
     R7[9][0] = (R1[1][2] * R6[8][0] + R6[8][12] * R1[1][0]) * sqrt(45.0 / 182.0) +
@@ -3183,7 +3195,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     f1080 = R6[3][2] * R1[0][1];
     fff8 = R6[3][3] * R1[0][1];
     f1018 = R6[3][4] * R1[0][1];
-    out[58] = WeightedSum(15, &in[49], R7[9]);
+    *out++ = WeightedSum(15, in, R7[9]);
     f1060 = R1[2][2] * R6[10][0] + R6[10][12] * R1[2][0];
     f1110 = (R1[0][2] * R6[2][0] + R1[0][0] * R6[2][12]);
     R7[10][0] = (R1[1][2] * R6[9][0] + R6[9][12] * R1[1][0]) * sqrt(20.0 / 91.0) +
@@ -3262,7 +3274,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R7[10][14] = (R6[9][12] * R1[1][2] - R6[9][0] * R1[1][0]) * sqrt(20.0 / 91.0) +
                 ((f10b8 - f1098) * sqrt(45.0 / 364.0) -
                 (fVar8 + fVar9) * sqrt(3.0 / 182.0));
-    out[59] = WeightedSum(15, &in[49], R7[10]);
+    *out++ = WeightedSum(15, in, R7[10]);
     fVar9 = R1[2][2] * R6[11][0] + R6[11][12] * R1[2][0];
     f10b8 = fVar9;
     fVar8 = R1[0][2] * R6[1][0] + R6[1][12] * R1[0][0];
@@ -3341,7 +3353,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R7[11][14] = (R6[10][12] * R1[1][2] - R6[10][0] * R1[1][0]) * sqrt(33.0 / 182.0) +
                 ((f1050 - f1068) * sqrt(55.0 / 364.0) -
                 (f1150 + fVar9) * sqrt(3.0 / 364.0));
-    out[60] = WeightedSum(15, &in[49], R7[11]);
+    *out++ = WeightedSum(15, in, R7[11]);
     fVar9 = R1[0][2] * R6[0][0] + R6[0][12] * R1[0][0];
     f1068 = fVar9;
     fVar8 = R6[12][12] * R1[2][0] + R1[2][2] * R6[12][0];
@@ -3421,7 +3433,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R7[12][14] = (R6[11][12] * R1[1][2] - R6[11][0] * R1[1][0]) * sqrt(12.0 / 91.0) +
                 ((f1090 - f1088) * sqrt(33.0 / 182.0) -
                 (fVar8 + fVar9) * sqrt(1.0 / 364.0));
-    out[61] = WeightedSum(15, &in[49], R7[12]);
+    *out++ = WeightedSum(15, in, R7[12]);
     R7[13][0] = (f10b8 - f1098) * sqrt(3.0 / 14.0) +
                 (R1[1][0] * R6[12][12] + R1[1][2] * R6[12][0]) * sqrt(1.0 / 14.0);
     R7[13][1] = (f10e8 - f10d0) * sqrt(3.0) +
@@ -3451,7 +3463,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R7[13][13] = (f10f4 - f117c) * sqrt(3.0) + R6[12][12] * R1[1][1];
     R7[13][14] = (f1058 - f1150) * sqrt(3.0 / 14.0) +
                 (R6[12][12] * R1[1][2] - R6[12][0] * R1[1][0]) * sqrt(1.0 / 14.0);
-    out[62] = WeightedSum(15, &in[49], R7[13]);
+    *out++ = WeightedSum(15, in, R7[13]);
     R7[14][1] = (f1060 - f1110) * sqrt(7.0 / 2.0);
     R7[14][0] = (f1050 - f1068) * k_16340dc;
     R7[14][2] = (f1078 - f1138) * sqrt(91.0 / 48.0);
@@ -3467,7 +3479,7 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     R7[14][11] = (f10e0 - f1174) * sqrt(91.0 / 66.0);
     R7[14][12] = (f10a8 - f10a0) * sqrt(91.0 / 48.0);
     R7[14][13] = (f10c8 - f1188) * sqrt(7.0 / 2.0);
-    out[63] = WeightedSum(15, &in[49], R7[14]);
+    *out++ = WeightedSum(15, in, R7[14]);
 }
 }  // namespace SP
 
