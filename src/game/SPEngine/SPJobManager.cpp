@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 #include "SP/cJob.h"
 #include "SP/JobCondition.h"
 #include "SP/JobDependencyNode.h"
@@ -36,17 +37,6 @@ struct JobLock {
 struct HObj { void Close(); };
 struct ClsF4A0 { uint32_t f0; uint32_t f4; HObj h; void Reset(); };
 struct ClsF540 { uint32_t f0, f4; Mutex m; int count; void Acquire(); void Release(); };
-struct Inner570 {
-virtual void v0();
-virtual void v1();
-virtual void v2();
-virtual void v3();
-virtual void v4();
-virtual void v5();
-virtual void v6();
-    virtual void v7(void*, int, int);       // slot 7 (0x1c)
-};
-struct Outer570 { uint32_t pad[10]; Inner570* mInner; };  // inner ptr at +0x28
 struct VObj { virtual void v0(); virtual void v1(); };
 struct ClsF5B0 { VObj* m; void Set(VObj* p); };
 struct ListNode { ListNode* next; ListNode* prev; uint32_t pad[2]; };
@@ -789,13 +779,18 @@ void ClsF540::Release()
 }
 
 // @ 0x0068f570
-extern "C" int FUN_68F570(Outer570* p)
+int SP::cJobManager::ThreadRun(void* data)
 {
-    void (*fn)(void*) = *(void (**)(void*))((char*)p->mInner + 0x1e0);
-    if (fn)
-        fn(p);
-    Inner570* in = (Inner570*)p->mInner;
-    in->v7(p, 0, 0);
+    SP::cJobThread* thread = (SP::cJobThread*)data;
+    typedef void (__cdecl* InitThreadFunction)(SP::cJobThread*);
+    InitThreadFunction initialize = (InitThreadFunction)thread->mpJobManager->mInitThreadFunc;
+    if (initialize)
+        initialize(thread);
+    SP::cJobManager* manager = thread->mpJobManager;
+    typedef bool (__thiscall* RunFunction)(SP::cJobManager*, SP::cJobThread*, EA::LimitStopwatch*, bool);
+    RunFunction* table = *(RunFunction**)manager;
+    _ReadWriteBarrier();
+    table[7](manager, thread, 0, false);
     return 0;
 }
 

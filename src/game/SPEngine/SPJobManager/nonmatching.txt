@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0068f570  3    complete: notify callback + virtual teardown call; only the vtable/function register choice (eax/edx) differs
 0068f670 117 complete, not byte-exact: ready-list bit-scan register/scheduling near-miss (renders "WEAK": 44.8% original coverage, no mismatch)
 0068f700 133 complete, not byte-exact: GetFreeWaitNode list pop + alloc near-miss
 0068f7c0 236 complete, not byte-exact: FreeJobUnderLock — see below
