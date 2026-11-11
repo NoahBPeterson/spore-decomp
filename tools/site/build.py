@@ -196,7 +196,7 @@ ol li,ul li{margin:6px 0}
 
 def page(title, here, body, meta):
     nav = "".join('<a href="%s"%s>%s</a>' % (f, ' aria-current="page"' if f == here else "", n)
-                  for f, n in (("index.html", "Progress"), ("join.html", "Join"), ("how.html", "How it works")))
+                  for f, n in (("index.html", "Progress"), ("map.html", "Map"), ("join.html", "Join"), ("how.html", "How it works")))
     return """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>%s</title><meta name="description" content="Rebuilding Spore's SporeApp.exe as C++ that compiles to exactly the retail machine code.">
 <style>%s</style></head><body>
@@ -268,7 +268,8 @@ def build(out, prs_path, repo):
              'is checked against retail fingerprints by the pull-request check; nothing is counted on trust.</p>')
     if len(hist) >= 2:
         b.append('<h2>Over time</h2><div class="panel">%s</div><p class="note">Byte-exact share at the end of each day '
-                 '(solid: bytes, dashed: functions).</p>' % line_chart(hist, tf, tb))
+                 '(solid: bytes, dashed: functions). The drop on Nov 9 is the pull-request fingerprint check arriving: '
+                 '1,093 earlier matches that fail it from a clean checkout were set aside.</p>' % line_chart(hist, tf, tb))
     b.append('<h2>By function size</h2><div class="panel scroll"><table><tr><th>size</th><th>functions done</th><th>of</th>'
              '<th>bytes done</th><th>share</th></tr>')
     for lo, hi in BANDS:
@@ -347,9 +348,13 @@ instruction diffs; nothing derived from it is ever committed. The open-source li
 OpenSSL, and EA's published EASTL and EAWebKit) are rebuilt from their published sources rather than decompiled.</p>
 <p>Source, tools and every rule: <a href="https://github.com/%s">github.com/%s</a>.</p>""" % (E(repo), E(repo))
 
+    import addrmap                       # imports this module; deferred to avoid a cycle
+    map_page = addrmap.map_body()[0]
+    b.insert(3, '<p class="note">See every function on the <a href="map.html">map of the program</a>, and watch it fill in.</p>')
+
     os.makedirs(out, exist_ok=True)
-    for name, title, body in (("index.html", "spore-decomp: progress", "".join(b)), ("join.html", "spore-decomp: join", join),
-                              ("how.html", "spore-decomp: how it works", how)):
+    for name, title, body in (("index.html", "spore-decomp: progress", "".join(b)), ("map.html", "spore-decomp: map", map_page),
+                              ("join.html", "spore-decomp: join", join), ("how.html", "spore-decomp: how it works", how)):
         open(os.path.join(out, name), "w", encoding="utf-8").write(page(title, name, body, meta))
     open(os.path.join(out, ".nojekyll"), "w").close()
     print("%s: %d/%d functions, %.1f%% of bytes, %d history points, %d modules, %d merged PRs"
