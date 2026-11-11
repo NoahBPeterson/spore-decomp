@@ -14,3 +14,4 @@ slices/s006414e0/s006414e0.cpp  ?FUN_00641fa0@cTimelineSporepediaCardData@@QAE_N
 slices/s006414e0/s006414e0.cpp  ?FUN_00641fd0@cTimelineSporepediaCardData@@QAEPAUIRefCounted@@XZ  00641fd0  /O2 /MD /Gy /TP
 slices/s006414e0/s006414e0.cpp  ??0cTimelineSporepediaCardData@@QAE@XZ  00642100  /O2 /MD /Gy /TP
 slices/s006414e0/s006414e0.cpp  ??1cTimelineSporepediaCardData@@QAE@XZ  00642190  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?GetKey@cSPAssetDataOTDB@@QAEPAUResourceKey@@PAU2@@Z  006414e0  /O2 /MD /Gy /TP

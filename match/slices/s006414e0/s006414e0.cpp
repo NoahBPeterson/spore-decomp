@@ -30,10 +30,12 @@ struct cSPAssetDataOTDB : cSPAssetData {
 // @ 0x006414e0
 ResourceKey* cSPAssetDataOTDB::GetKey(ResourceKey* out)
 {
-    out->instanceID = mKeyInstance;
-    out->groupID = mKeyGroup;
-    out->typeID = 0x2f7d0004;
-    return out;
+    // The caller supplies a separate key result; read its destination before the source fields.
+    ResourceKey* __restrict result = *(ResourceKey* volatile*)&out;
+    result->instanceID = mKeyInstance;
+    result->groupID = mKeyGroup;
+    result->typeID = 0x2f7d0004;
+    return result;
 }
 
 // @ 0x00641780
