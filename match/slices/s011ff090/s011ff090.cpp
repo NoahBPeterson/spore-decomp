@@ -396,9 +396,8 @@ void* FindState(int id)
 // @ 0x011ffa70
 u32 FormatSize8(u32 fmt, const FormatDesc* d)
 {
-    u32 r;
-    if (d->mStride1_4 < 4) r = (u8)(fmt >> 8) << 3;
-    else r = 0;
+    u32 r = 0;
+    if (d->mStride1_4 < 4) r = ((fmt >> 8) & 0xff) * 8;
     return r;
 }
 
