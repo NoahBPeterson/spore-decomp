@@ -17,7 +17,6 @@
 00c7fab0 674 3 unresolved references (?GetBullseyeTimeScale@TuneC etc.); cSimPlanetLowLOD::StepBullseyePhysics; x87 pow-based damping and remaining TerraBlend clamp; member-modeled thiscall tuning getters not defined for link (703 diff; 823 vs 794 bytes)
 00c7fdd0 167 1 unresolved reference (?Dtor@GonzagoC); cSimPlanetLowLOD destructor; MSVC hoists the rbtree node load ([self+0x20ac]) above the three vtable stores where the original keeps lea ecx,[self+0x20a0] live across them (170 diff; 234 vs 231 bytes)
 00c7ff90 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 346 bytes - Simulator::cSimPlanetLowLOD constructor not reconstructed.
-00c80110 7 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 104 bytes - key-table find-or-insert: the eastl hash find/Insert call shapes and the value slot at +0xc are known, but the InsertRes scratch layout (key copy, zero dword and zero byte reusing the dead argument slot) could not be reproduced from a legal source shape.
 00c80180 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1067 bytes - low-LOD planet helper not reconstructed.
 00c805b0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 201 bytes - low-LOD planet helper not reconstructed.
 00c80680 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 246 bytes - low-LOD planet helper not reconstructed.

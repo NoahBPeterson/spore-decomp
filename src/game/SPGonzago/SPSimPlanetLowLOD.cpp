@@ -81,6 +81,14 @@ struct tSpeciesKey {
     uint32_t mField0;                                    // +0x00
     uint32_t mField4;                                    // +0x04
     uint32_t mField8;                                    // +0x08
+
+    tSpeciesKey& operator=(const tSpeciesKey& other)
+    {
+        mField0 = other.mField0;
+        mField4 = other.mField4;
+        mField8 = other.mField8;
+        return *this;
+    }
 };
 class cSpeciesList {
 public:
@@ -107,9 +115,32 @@ public:
 };
 extern cPlantSpeciesManager* __cdecl           FUN_00b3d420();   // 0x00b3d420
 extern cTerrainDistributeInfo_s00c7_ff90* __cdecl         FUN_00b3d3b0();   // 0x00b3d3b0
+struct SpeciesKeyNode {
+    tSpeciesKey key;
+    int32_t value;
+    SpeciesKeyNode* next;
+};
+struct SpeciesKeyInsertResult {
+    SpeciesKeyNode* node;
+    SpeciesKeyNode** bucket;
+    bool inserted;
+};
+struct SpeciesKeyPair {
+    tSpeciesKey key;
+    int32_t value;
+};
+struct SpeciesKeyInsertTag {
+    bool value;
+};
 namespace SP {
 class cSpeciesKeyTable {
 public:
+    uint32_t pad0;
+    SpeciesKeyNode** mpBuckets;
+    uint32_t mnBuckets;
+
+    SpeciesKeyInsertResult* Find(SpeciesKeyInsertResult* out, const tSpeciesKey* pKey); // 0x00833840
+    SpeciesKeyInsertResult* Insert(SpeciesKeyInsertResult* out, const SpeciesKeyPair* pPair, SpeciesKeyInsertTag tag); // 0x00a26e10
     __declspec(noinline) int32_t* FUN_00c80110(tSpeciesKey* pKey); // 0x00c80110
 };
 }
@@ -1633,7 +1664,16 @@ void __fastcall cSimPlanetLowLODCtorSTUB(void* this_, int unused)
 // @ 0x00c80110
 __declspec(noinline) int32_t* __thiscall SP::cSpeciesKeyTable::FUN_00c80110(tSpeciesKey* pKey)
 {
-    return (int32_t*)pKey;
+    SpeciesKeyInsertResult result;
+    Find(&result, pKey);
+    if (result.node == mpBuckets[mnBuckets]) {
+        SpeciesKeyPair pair;
+        pair.key = *pKey;
+        pair.value = 0;
+        SpeciesKeyInsertTag tag = {};
+        Insert(&result, &pair, tag);
+    }
+    return &result.node->value;
 }
 
 // @ 0x00c80180
