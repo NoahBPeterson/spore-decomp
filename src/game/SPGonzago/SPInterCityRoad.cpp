@@ -230,12 +230,16 @@ bool __stdcall FUN_00c40d20(void* unused)
     return true;
 }
 
+// Closest attempt, same size. The tag store now sits inside the second
+// virtual call, one instruction early: before `mov ecx, eax` instead of
+// after `mov eax, [edx+0x18]`.
 // @ 0x00c40d40
 bool cInterCityRoad::WriteRoad(void* stream)
 {
     StreamSub* sub = ((StreamObj*)stream)->GetSub();
+    void** vt = *(void***)sub;
     u32 tag = 0x2bca14b;
-    void* io = sub->GetIO();
+    void* io = ((void* (__thiscall*)(void*))vt[6])(sub);
     EA_IO_WriteUint32(io, &tag, 1, 0);
     bool ok;
     if (cGameData::Write(stream) && mSpatial.Write(stream))
