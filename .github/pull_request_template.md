@@ -16,4 +16,4 @@
 
 - [ ] `tools/contrib/check.py` prints MATCH for each matched function
 - [ ] each matched function has a `manifest.txt` line, and its `nonmatching.txt` / `partial.txt` line is removed
-- [ ] no inline assembly, `naked`, `_emit` or raw bytes; no game files, image or disassembly committed
+- [ ] no assembly transcription (`naked`, `_emit`, raw bytes; `__asm` only as a short helper the original used, at most 8 instructions); no game files, image or disassembly committed

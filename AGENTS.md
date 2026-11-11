@@ -83,7 +83,10 @@ into the generator's inputs so they are not lost.
 ## Rules
 
 - Write real, readable C++ that compiles to the original bytes, with the class and member names the headers give you.
-- No inline assembly, `__declspec(naked)`, `_emit` or raw bytes: the check rejects assembly transcriptions.
+- No assembly transcriptions: no `__declspec(naked)`, `_emit` or raw bytes, and no function written in `__asm`; the
+  check rejects them. The one exception: a short `__asm` block (at most 8 instructions) where the original used an
+  asm helper, such as `fnstcw`/`fldcw`, `fistp` or `cvtss2si` conversions and the `maxss`/`minss` clamp
+  (`docs/matching.md`, "No assembly transcription"). Say so in the pull request.
 - Do not write a constant as the address of a made-up global (`&g_Table2458018` for `0x2458018`): the check sees the
   relocation and fails it.
 - Only `src/game/`, `match/slices/` and `match/include/` can change in a contribution. Changes to `tools/`, `.github/`
