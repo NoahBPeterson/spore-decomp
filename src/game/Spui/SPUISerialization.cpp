@@ -104,11 +104,18 @@ struct RBTree {
   int mCount;   // +0x14
   void Insert(void* node, void* parent, void* where, int flag);
 };
+extern "C" char DATA_13ef094[];  // 0x013ef094
+extern "C" char DATA_141a380[];  // 0x0141a380
+extern "C" char DATA_141a37c[];  // 0x0141a37c
 struct RLEHitMask {
-  char pad0[0x14];
+  void* mpVtbl00;     // +0x00
+  void* mpVtbl04;     // +0x04
+  int mRefCount08;   // +0x08
+  uint32_t pad0c[2];  // +0x0c
   int m14;            // +0x14
   int m18;            // +0x18
   int m1c;            // +0x1c
+  uint32_t pad20[2];  // +0x20, native allocation is 0x28 bytes
   RLEHitMask();
 };
 // ---- items of slice s0082b9c0 end
@@ -570,7 +577,15 @@ void RBTree::Insert(void* node, void* parent, void* where, int flag)
 
 // @ 0x0082c190
 RLEHitMask::RLEHitMask()
-: m14(0), m18(0), m1c(0) {
+{
+  // Preserve the secondary base vtable before installing the derived tables.
+  *(void* volatile*)&mpVtbl04 = DATA_13ef094;
+  mRefCount08 = 0;
+  mpVtbl00 = DATA_141a380;
+  mpVtbl04 = DATA_141a37c;
+  m14 = 0;
+  m18 = 0;
+  m1c = 0;
 }
 
 
