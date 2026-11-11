@@ -36,7 +36,7 @@ public:
 class hkCdBodyPairCollector
 {
 public:
-	virtual ~hkCdBodyPairCollector() {}                     // 0
+	virtual void* scalarDeletingDtor(unsigned int flags);  // 0, inherited deleting slot at 0x010CDCA0
 	virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b) = 0;   // 1
 	hkBool m_earlyOut;                                     // +4
 	hkCdBodyPairCollector() : m_earlyOut(false) {}
@@ -79,7 +79,7 @@ public:
 class hkSymmetricAgentFlipBodyCollector : public hkCdBodyPairCollector    // 0x014A43B4
 {
 public:
-	explicit hkSymmetricAgentFlipBodyCollector(hkCdBodyPairCollector& original) : m_original(original) { m_earlyOut = hkBool(false); }
+	explicit hkSymmetricAgentFlipBodyCollector(hkCdBodyPairCollector& original) : m_original(original) {}
 	virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);   // 0x010EBC50
 	hkCdBodyPairCollector& m_original;                         // +8
 };

@@ -68,6 +68,7 @@ void* FUN_0092aa20;                          // unused
 
 typedef long LRESULT_DEF;
 
+extern wchar_t g_empty1600[1]; // 0x01667bac
 // ---------------------------------------------------------------- strings
 // EA::eastl::basic_string<wchar_t> - 0x10 bytes.  All its methods are __thiscall
 // members, so they are declared (not defined) here and resolved by address.
@@ -76,7 +77,7 @@ struct WString {
     wchar_t* mpEnd;      // +4
     wchar_t* mpCapacity; // +8
     void* mAlloc;        // +0xc
-    WString() { mpBegin = mpEnd = (wchar_t*)0x1667bac; mpCapacity = (wchar_t*)0x1667bae; }
+    WString() : mpBegin(g_empty1600), mpEnd(g_empty1600), mpCapacity(g_empty1600 + 1) {}
     void assign(const wchar_t* first, const wchar_t* last);   // 0x423650
     void append(const wchar_t* first, const wchar_t* last);   // 0x429580
     void push_back(wchar_t c);                                // 0x4f6510
@@ -99,6 +100,8 @@ struct WStringVector {
     WString* mpBegin;    // +0
     WString* mpEnd;      // +4
     WString* mpCapacity; // +8
+    unsigned mAllocator[2]; // +0xc, sp_vector_allocator storage
+    WStringVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
     WString* Erase(WString* pos);                     // 0x92b700
     WString* insert(WString* pos, const WString& v);  // 0x92b750
 };
@@ -158,12 +161,8 @@ extern void* g_SPMemPool;          // 0x16c8b44  process mem-pool object (this o
 
 // ---------------------------------------------------------------- CommandLine
 struct CommandLine {
-    virtual void c0();   // +0 vtable
-    WString* mpBegin;    // +4
-    WString* mpEnd;      // +8
-    WString* mpCapacity; // +0xc
-    void* pad10;
-    void* pad14;
+    virtual ~CommandLine(); // slot 0; destructor body at 0x005d7450
+    WStringVector mStringArray; // +4, 0x14 bytes including allocator
     WString msCommandLine; // +0x18
     WString msOther;       // +0x28
     CommandLine();         // @ 0092b1d0
@@ -426,36 +425,26 @@ WString* CommandLine::at(unsigned i) {
     // the size from a parameter, so the index's register can be reused for the base reload.
     // Retail fetches `end` first (`mov edx,[ecx+8]; sub edx,[ecx+4]; sar edx,4`) and reloads the
     // base for the element address: keep the array pointers plain member reads.
-    int n = (int)(mpEnd - mpBegin);
+    int n = (int)(mStringArray.mpEnd - mStringArray.mpBegin);
     if (i < (unsigned)n)
-        return (WString*)((char*)mpBegin + (i << 4));
+        return (WString*)((char*)mStringArray.mpBegin + (i << 4));
     return (WString*)((char*)this + 0x28);
 }
 
 // @ 0x0092b1d0
-CommandLine::CommandLine() {
-    mpBegin = 0;
-    mpEnd = 0;
-    mpCapacity = 0;
-    msCommandLine.mpBegin = (wchar_t*)0x1667bac;
-    msCommandLine.mpEnd = (wchar_t*)0x1667bac;
-    msCommandLine.mpCapacity = (wchar_t*)0x1667bae;
-    msOther.mpBegin = (wchar_t*)0x1667bac;
-    msOther.mpEnd = (wchar_t*)0x1667bac;
-    msOther.mpCapacity = (wchar_t*)0x1667bae;
-}
+CommandLine::CommandLine() : mStringArray() {}
 
 // @ 0x0092b690
 CommandLineB::CommandLineB() {
-    mpBegin = 0;
-    mpEnd = 0;
-    mpCapacity = 0;
-    msCommandLine.mpBegin = (wchar_t*)0x1667bac;
-    msCommandLine.mpEnd = (wchar_t*)0x1667bac;
-    msCommandLine.mpCapacity = (wchar_t*)0x1667bae;
-    msOther.mpBegin = (wchar_t*)0x1667bac;
-    msOther.mpEnd = (wchar_t*)0x1667bac;
-    msOther.mpCapacity = (wchar_t*)0x1667bae;
+    mStringArray.mpBegin = 0;
+    mStringArray.mpEnd = 0;
+    mStringArray.mpCapacity = 0;
+    msCommandLine.mpBegin = g_empty1600;
+    msCommandLine.mpEnd = g_empty1600;
+    msCommandLine.mpCapacity = g_empty1600 + 1;
+    msOther.mpBegin = g_empty1600;
+    msOther.mpEnd = g_empty1600;
+    msOther.mpCapacity = g_empty1600 + 1;
 }
 
 // @ 0x0092b700
@@ -473,14 +462,14 @@ WString* WStringVector::Erase(WString* pos) {
 
 // @ 0x0092b7b0
 void CommandLine::InsertArgument(const wchar_t* arg, unsigned index) {
-    int n = (int)((char*)mpEnd - (char*)mpBegin) >> 4;
+    int n = (int)((char*)mStringArray.mpEnd - (char*)mStringArray.mpBegin) >> 4;
     index = index > (unsigned)n ? (unsigned)n : index;
     WString tmp;
     tmp.mpBegin = 0;
     tmp.mpEnd = 0;
     tmp.mpCapacity = 0;
     ((WStringRaw*)&tmp)->RangeInitialize(arg);
-    WString* at = (WString*)((char*)mpBegin + (index << 4));
+    WString* at = (WString*)((char*)mStringArray.mpBegin + (index << 4));
     ((WStringVector*)((char*)this + 4))->insert(at, tmp);
     if (msCommandLine.mpBegin != msCommandLine.mpEnd) {
         *msCommandLine.mpBegin = 0;
@@ -522,10 +511,10 @@ unsigned CommandLine::FindArgument(const wchar_t* arg, bool exact, bool sub, WSt
     unsigned result = 0xffffffff;
     if (start < 0)
         start = 0;
-    unsigned count = (unsigned)((char*)mpEnd - (char*)mpBegin) >> 4;
+    unsigned count = (unsigned)((char*)mStringArray.mpEnd - (char*)mStringArray.mpBegin) >> 4;
     if ((unsigned)start < count) {
         for (; (unsigned)start < count; ++start) {
-            WString* cur = (WString*)((char*)mpBegin + (start << 4));
+            WString* cur = (WString*)((char*)mStringArray.mpBegin + (start << 4));
             bool hit;
             if (sub) {
                 if (exact)
@@ -551,7 +540,7 @@ unsigned CommandLine::FindArgument(const wchar_t* arg, bool exact, bool sub, WSt
                 out->mpEnd = out->mpBegin;
             }
         } else {
-            WString* src = (WString*)((char*)mpBegin + (result << 4));
+            WString* src = (WString*)((char*)mStringArray.mpBegin + (result << 4));
             out->assign(src->mpBegin, src->mpEnd);
         }
     }
@@ -578,8 +567,8 @@ unsigned CommandLine::FindSwitch(const wchar_t* sw, bool exact, WString* out, un
     const wchar_t* base = sw + 1;
     while (*p++) ;
     int len = (int)(p - base);
-    unsigned count = (unsigned)(mpEnd - mpBegin);
-    if (len != 0 && start < (unsigned)(mpEnd - mpBegin)) {
+    unsigned count = (unsigned)(mStringArray.mpEnd - mStringArray.mpBegin);
+    if (len != 0 && start < (unsigned)(mStringArray.mpEnd - mStringArray.mpBegin)) {
         StrSearchFn search;
         if (exact)
             search = (StrSearchFn)wcsstr;
@@ -589,7 +578,7 @@ unsigned CommandLine::FindSwitch(const wchar_t* sw, bool exact, WString* out, un
             unsigned i = start;
             int off = start << 4;
             do {
-                WString* cur = (WString*)((char*)mpBegin + off);
+                WString* cur = (WString*)((char*)mStringArray.mpBegin + off);
                 const wchar_t* s = cur->mpBegin;
                 if ((unsigned)(cur->mpEnd - s) >= 2) {
                     int j = 0;

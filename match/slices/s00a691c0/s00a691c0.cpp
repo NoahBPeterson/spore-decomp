@@ -2,6 +2,9 @@
 // EASTL ref-counted-container helpers.
 // flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
+#include <intrin.h>
+
+#pragma intrinsic(_ReadWriteBarrier)
 
 void* __cdecl operator_new(size_t, const char*, int, int, const char*, int); // 0x00f473a0
 void  __cdecl operator_delete__(void*);                                      // 0x00f47380
@@ -184,10 +187,10 @@ void RefVec::DestroyRange(RefObject** first, RefObject** last)
     for (; first < last; ++first) {
         RefObject* o = *first;
         if (o) {
-            int rc = o->mnRefCount + -1;
-            o->mnRefCount = rc;
+            int rc = (*(volatile int*)&o->mnRefCount += -1);
             if (rc == 0) {
                 o->mnRefCount = 1;
+                _ReadWriteBarrier();
                 o->Destroy(1);
             }
         }

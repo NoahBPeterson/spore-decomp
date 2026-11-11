@@ -175,7 +175,7 @@ public:
     void* InterruptAnimation(int32_t nId, int32_t nA, int32_t nB);   // 0x00c12310
     void* PlayAnimation(int32_t nId, int32_t nA, int32_t nB);        // 0x00c12190
     void Hover(int32_t nA);                     // 0x00c13a30
-    void FUN_00c14750(int32_t nA);              // 0x00c14750
+    void UpdateLocomotion(bool bForceAnimation);              // 0x00c14750
     void FUN_00c17350(uint32_t nBitsA, int32_t nB);   // 0x00c17350
     void FUN_00c1d460(uint32_t nBitsA, uint32_t nBitsB);   // 0x00c1d460
     void MoveToPointAtSpeed(int32_t nMode, float* pPoint);           // 0x00c1c1d0
@@ -457,7 +457,7 @@ void FUN_00d7c6b0(cCreatureBase* pCreature)
     pCreature->Hover(0);
 
     if (pCreature->mbFieldB5E == 0) {
-        pCreature->FUN_00c14750(0);
+        pCreature->UpdateLocomotion(0);
         pCreature->SetAnimState(nullptr, 0, 0);
     }
 }
@@ -514,7 +514,7 @@ bool FUN_00d7c7b0(cCreatureBase* pCreature, int32_t nArg2, int32_t nArg3, int32_
 void FUN_00d7c7d0(cCreatureBase* pCreature)
 {
     if (pCreature->mbFieldB5E == 0) {
-        pCreature->FUN_00c14750(1);
+        pCreature->UpdateLocomotion(1);
         pCreature->SetAnimState(nullptr, 0, 0);
     }
 }
@@ -585,7 +585,7 @@ bool FUN_00d7c8f0(cCreatureBase* pCreature)
 void FUN_00d7c960(cCreatureBase* pCreature)
 {
     pCreature->SetAnimState(nullptr, 0, 0);
-    pCreature->FUN_00c14750(1);
+    pCreature->UpdateLocomotion(1);
     pCreature->AbortAnimation(-1);
     pCreature->SetFocusTarget(&g_vCharmedFocus);
     pCreature->FUN_00c0d950(0);
@@ -633,7 +633,7 @@ void FUN_00d7ca60(cCreatureBase* pCreature)
 {
     pCreature->SetAnimState(nullptr, 0, 0);
     pCreature->FUN_00c0b370(-1);
-    pCreature->FUN_00c14750(1);
+    pCreature->UpdateLocomotion(1);
 }
 
 // ---------------------------------------------------------------------------
@@ -675,7 +675,7 @@ int32_t FUN_00d7cb20(cCreatureBase* pCreature)
 void FUN_00d7cb50(cCreatureBase* pCreature)
 {
     if (pCreature->mbFieldB5E == 0)
-        pCreature->FUN_00c14750(pCreature->mLocomotive.IsMoving() == false);
+        pCreature->UpdateLocomotion(pCreature->mLocomotive.IsMoving() == false);
 }
 
 // ---------------------------------------------------------------------------
@@ -880,7 +880,7 @@ void FUN_00d7cef0(cCreatureBase* pCreature)
         return;
     }
 
-    pCreature->FUN_00c14750(0);
+    pCreature->UpdateLocomotion(0);
 }
 
 // ---------------------------------------------------------------------------

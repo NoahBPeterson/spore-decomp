@@ -122,6 +122,12 @@ hkMultiSphereAgent::hkMultiSphereAgent(const hkCdBody& bodyA, const hkCdBody& bo
 	}
 }
 
+// The multi-sphere filter update is the shared empty ret-12 method at 0x00a6ca00.
+// Keeping its body visible also folds the symmetric wrapper to that empty method.
+void hkMultiSphereAgent::updateShapeCollectionFilter(const hkCdBody&, const hkCdBody&, const hkCollisionInput&)
+{
+}
+
 // @ 0x010e68d0
 hkCollisionAgent* hkMultiSphereAgent::createListAAgent(const hkCdBody& a, const hkCdBody& b, const hkCollisionInput& input, hkContactMgr* mgr)
 {

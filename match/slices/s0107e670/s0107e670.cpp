@@ -37,9 +37,8 @@ hkStreamReader* hkDefaultStreambufFactory::openReader(const char* name)
 }
 
 // @ 0x0107e700
-hkStdioStreamReader::hkStdioStreamReader(const char* name) : m_ok(false)
+hkStdioStreamReader::hkStdioStreamReader(const char* name) : m_ok(true)
 {
-	m_ok = true;
 	m_file = fopen(name, "rb");
 	m_ok = (m_file != 0);
 }
@@ -135,7 +134,7 @@ int hkStdioStreamWriter::write(const void* buf, int nbytes)
 }
 
 // @ 0x0107e910
-void hkStdioStreamWriter::close()
+__declspec(noinline) void hkStdioStreamWriter::close()
 {
 	if ((unsigned)m_file > 0 && m_ownsFile)
 		fclose(m_file);

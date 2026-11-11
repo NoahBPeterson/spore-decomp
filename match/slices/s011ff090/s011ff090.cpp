@@ -444,7 +444,9 @@ void DecodeRun(void* base, u32 sel, FormatCallbacks* d)
 u32 SelectMaxStride(u32 sel, u32 /*unused*/, const FormatDesc* d)
 {
     u32 r = 0;
-    if ((sel & 0xff00) != 0) r = d->mStride1_4;
+    union { u32 value; u8 counts[4]; } selected;
+    selected.value = sel;
+    if (selected.counts[1] != 0) r = d->mStride1_4;
     if ((sel & 0xff) != 0) {
         if (r <= d->mStride2_8) r = d->mStride2_8;
     }

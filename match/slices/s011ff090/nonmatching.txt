@@ -10,7 +10,6 @@
 011ff680   871  BlendQuatArray2 (169 vs 871 bytes): complete behavioural reconstruction of the packed-quat blend; /GL+/LTCG caller -- slerp/nlerp body is a called helper here, register allocation differs (equiv PASS)
 011ffb60   935  BlendKeyframeQuatArray (214 vs 935 bytes): complete behavioural reconstruction of the keyframe blend; /GL+/LTCG caller -- slerp/nlerp body is a called helper here, register allocation differs (equiv PASS)
 011ffa90    74  DecodeRun (47 vs 74 bytes): behaviourally exact run decoder; code shape differs (equiv WEAK, coverage-limited)
-011ffae0    31  SelectMaxStride (32 vs 31 bytes): behaviourally exact leaf; instruction selection differs (equiv PASS)
 011ffb00    81  FormatSizeAligned (83 vs 81 bytes): behaviourally exact leaf; instruction selection differs (equiv PASS)
 011fff30    66  DecodeRun3 (67 vs 66 bytes): behaviourally exact run decoder; code shape differs (equiv WEAK, coverage-limited)
 011fff80    41  SelectMaxStride16 (42 vs 41 bytes): behaviourally exact leaf; instruction selection differs (equiv PASS)

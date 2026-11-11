@@ -15,6 +15,9 @@
 
 #include "types.h"
 #include <stddef.h>
+#include <intrin.h>
+
+#pragma intrinsic(_ReadWriteBarrier)
 
 #pragma warning(disable: 4100)
 
@@ -119,7 +122,7 @@ public:
     String16* EnsureName();                                    // 0xbb9de0
     void SetFlags(uint32_t mask, bool on);                     // 0xbb9b00
     void SetNoMonolith();                                      // 0xbb9b30  (clear 0x4000, set 0x2000)
-    bool HasRare();                                            // 0xbb9c90
+    int HasRare();                                             // 0xbb9c90 (full EAX result)
     void SetBlownUp(bool on);                                  // 0xbb9c40  (bit 0x40)
     bool UpdateSETI();                                         // 0xbb9eb0
     bool HasMonolith();                                        // 0xbb9fb0
@@ -406,13 +409,17 @@ void cStarRecord::SetBlownUp(bool on)
 // ===========================================================================
 // @ 0x00bb9c90
 // ===========================================================================
-bool cStarRecord::HasRare()
+int cStarRecord::HasRare()
 {
-    if (mPlanetCount == 0) {
-        if (FUN_00c8b520(mType) && ((mFlags >> 6) & 1) == 0)
-            return false;
+    if (mPlanetCount <= 0) {
+        if (FUN_00c8b520(mType)) {
+            uint32_t flags = mFlags >> 6;
+            _ReadWriteBarrier();
+            if ((flags & 1) == 0)
+                return 0;
+        }
     }
-    return true;
+    return 1;
 }
 
 // ===========================================================================

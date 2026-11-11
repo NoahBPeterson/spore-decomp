@@ -4,7 +4,6 @@
 010e17e0 0 havok-equivalent
 010e19f0 0 havok-equivalent
 010e1a50 0 havok-equivalent
-010e1aa0 0 havok-equivalent
 010e1ae0 0 havok-equivalent
 010e1c70 0 havok-equivalent
 010e1db0 0 havok-equivalent
