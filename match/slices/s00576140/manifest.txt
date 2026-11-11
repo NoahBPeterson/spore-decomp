@@ -14,3 +14,4 @@ slices/s00576140/s00576140.cpp  ?RotationMatrix@@YA?AUMatrix3@@ABUVector3@@M@Z  
 slices/s00576140/s00576140.cpp  ??0BoundingBox@@QAE@XZ  00576b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00576140/s00576140.cpp  ?ParseLine@cEditorBudgetCheat@?A0xc021b765@@QAEXABVcArguments@ArgScript@EA@@@Z  00576bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00576140/s00576140.cpp  ?Execute@cEditorAddDNACheat@?A0xc021b765@@QAEXABVcArguments@ArgScript@EA@@@Z  00576c10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ?Reset@cRefCountedModelPtr@@QAEAAU1@XZ  005766b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -51,9 +51,7 @@ class RefCountTemplate { public:
     int mnRefCount;
     int Release()
     {
-        int n = mnRefCount;
-        n += -1;
-        mnRefCount = n;
+        int n = (*(volatile int*)&mnRefCount += -1);
         if (n == 0) {
             mnRefCount = 1;
             delete this;
