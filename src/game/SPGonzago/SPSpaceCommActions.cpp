@@ -74,7 +74,7 @@ void* GetPlayerHomePlanet();
 void* GetActivePlanet();
 void* GetPlayerEmpire();
 void* GetSpaceRelationshipTuning();
-void* GetLayout(uint32_t nId);
+void* __stdcall GetLayout(uint32_t nId);
 void* MissionResultLookup(void* pA, void* pB);
 char CheckMissionAllowed(void* pOwner, void* pMission);
 char TestAchievement(uint32_t nId, int nA);
@@ -90,7 +90,7 @@ void ApplyRelationshipChange(void* pA, uint32_t nId, uint32_t nValue);
 void* CreateWantedMission(void* pPlanet, void* pKey);
 void* SetMissionResult(void* pA, void* pB);
 void* GetSpiceManager();
-void* GetRewardReceiver(uint32_t nId);
+void* __stdcall GetRewardReceiver(uint32_t nId);
 void* GetMissionStepHandler();
 void* GetMissionManager();
 void SetSpeakerText(void* pText);
@@ -663,7 +663,8 @@ void CreateNewRaid(void* pPlanet, cMissionData* pMission)
 void ResumeSpaceGame()
 {
     cSpaceGame* pGame = (cSpaceGame*)SpaceGameGet();
-    StopStory(pGame->mpSubObject);
+    cSpaceGameSub** ppSub = &pGame->mpSubObject;
+    (*ppSub)->StopStory();
 }
 
 // @ 0x0102cd40
@@ -674,9 +675,11 @@ void CloseCommScreenToSpace()
     ((cRewardReceiver*)GetRewardReceiver(0x2710))->Apply();
 
     cSpaceGame* pGame = (cSpaceGame*)SpaceGameGet();
-    pGame->mpSubObject->StopStory();
+    cSpaceGameSub** ppSub = &pGame->mpSubObject;
+    (*ppSub)->StopStory();
     pGame = (cSpaceGame*)SpaceGameGet();
-    pGame->mpSubObject->PauseStory();
+    ppSub = &pGame->mpSubObject;
+    (*ppSub)->PauseStory();
 }
 
 // @ 0x0102cd90
