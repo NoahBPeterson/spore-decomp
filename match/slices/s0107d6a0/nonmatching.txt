@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 0107d740  64  hkThreadMemory::releaseCachedMemory ; equiv PASS (317 valid, 100% cov, no mismatch); /Os size fold emits the original memory-indirect call [edx+0x1c] (55B vs 69B)
-0107d790  18  hkThreadMemory::removeReference
 0107daa0  89  hkThreadMemory::allocateChunk
 0107db10  70  hkThreadMemory::deallocateChunk
 0107db90  47  hkThreadMemory::onStackUnderflow
