@@ -46,11 +46,8 @@ struct rbtree_node_base {
     rbtree_node_base* mpNodeRight;
     rbtree_node_base* mpNodeLeft;
     rbtree_node_base* mpNodeParent;
-    union {
-        uint32_t mColorWord;
-        char mColor;
-    };
-    rbtree_node_base() : mpNodeRight(0), mpNodeLeft(0), mpNodeParent(0), mColorWord(0) {}
+    char mColor;
+
 };
 rbtree_node_base* RBTreeIncrement(const rbtree_node_base* pNode);              // 0x921580
 void RBTreeErase(rbtree_node_base* pNode, rbtree_node_base* pNodeAnchor);     // 0x921880
@@ -274,7 +271,7 @@ struct TradeRouteMap {
     uint32_t mnSize;                 // +0x14
     uint32_t mAllocator;             // +0x18
 
-    TradeRouteMap()
+    TradeRouteMap() : mAnchor(), mnSize(0)
     {
         mAnchor.mpNodeRight = (eastl::rbtree_node_base*)&mAnchor;
         mAnchor.mpNodeLeft = (eastl::rbtree_node_base*)&mAnchor;
@@ -315,11 +312,15 @@ struct TradeRouteMap {
     }
 };
 
+namespace SP { class cIObjectDatabaseOStream; class cIObjectDatabaseIStream; }
+
 struct cSpaceTradeRouteManager {
     cSpaceTradeRouteManager();
     virtual ~cSpaceTradeRouteManager()
     {
     }
+    virtual bool Write(SP::cIObjectDatabaseOStream& stream) const;
+    virtual bool Read(SP::cIObjectDatabaseIStream& stream);
     TradeRouteMap mTradeRoutes;      // +0x04
     uint32_t mLastStarID;            // +0x20
 
