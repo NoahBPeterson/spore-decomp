@@ -147,12 +147,12 @@ int hkBufferedStreamReader::skip(int nbytes)
 // @ 0x01080730
 hkBool hkBufferedStreamReader::isOk() const
 {
-	if (m_current == m_end)
-	{
-		if (!m_stream->isOk())
-			return false;
-	}
-	return true;
+	hkBool result;
+	if (m_current == m_end && !m_stream->isOk())
+		result = false;
+	else
+		result = true;
+	return result;
 }
 
 // @ 0x01080770
