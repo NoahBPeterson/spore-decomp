@@ -6,3 +6,4 @@ slices/s00abe110/s00abe110.cpp  ?SetTransform@TransformThing@@QAEXPAXPBUShapeTra
 slices/s00abe110/s00abe110.cpp  ?begin@SlotVector@@QAE?AUSlotIter@@XZ  00abeaf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00abe110/s00abe110.cpp  ?destroyTargets@SlotVector@@QAEXH@Z  00abec00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00abe110/s00abe110.cpp  ?destroyAgents@SlotVector@@QAEXH@Z  00abec70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00abe110/s00abe110.cpp  ?CollectSoundResourceReferences@@YAHPAXPBUSoundResourceDescriptionView@@PAUEffectResourceReference@@H@Z  00abe440  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

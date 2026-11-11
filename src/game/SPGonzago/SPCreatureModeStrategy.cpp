@@ -4973,9 +4973,8 @@ void SP::cCreatureModeStrategy_s00d3_c970::SignalCreatureEvent(uint32_t eventId)
 // @ 0x00d3d420
 void Fn_00d3d420(cLogHolder* p)
 {
-    void** pEnd = p->mList.mpEnd;
-    void** pBegin = p->mList.mpBegin;
-    p->mList.erase(pBegin, pEnd);
+    cLogVec& list = p->mList;
+    list.erase(list.mpBegin, list.mpEnd);
 }
 
 // @ 0x00d3d4c0

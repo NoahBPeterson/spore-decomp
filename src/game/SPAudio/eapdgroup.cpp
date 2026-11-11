@@ -14,9 +14,9 @@ struct t_symbol { const char* s_name; int s_thing; };   // 8 bytes
 extern t_symbol gEmptySymbol;       // 0x167589c
 extern int   gEmptyA;               // 0x16758a0
 extern void* gVtblA52b40;                           // 0x1403934
-struct AnyObj { void* vtbl; void* p4; int p8;
+struct AnyObj { void* vtbl; void* p4; const char* mpDefaultName;
   int  __thiscall Call6(int a, int b);
-  void __thiscall Call4(int a);
+  void* __thiscall Call4(unsigned size);
   void __thiscall CallC(int a);
 };
 struct IdxVec { const char* begin; const char* end; char* cap; void __thiscall Get(t_symbol* out, unsigned idx); };
@@ -42,12 +42,12 @@ int __thiscall AnyObj::Call6(int a, int b)
 }
 
 // @ 0x00a52b70
-void __thiscall AnyObj::Call4(int a)
+void* __thiscall AnyObj::Call4(unsigned size)
 {
   void* vt = vtbl;
-  void (__thiscall *fn)(int, int) =
-      *(void(__thiscall**)(int, int))((char*)vt + 4);
-  fn(a, p8);
+  void* (__thiscall *fn)(AnyObj*, unsigned, const char*) =
+      *(void*(__thiscall**)(AnyObj*, unsigned, const char*))((char*)vt + 4);
+  return fn(this, size, mpDefaultName);
 }
 
 // @ 0x00a52b90

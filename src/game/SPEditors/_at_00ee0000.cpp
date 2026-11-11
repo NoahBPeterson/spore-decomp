@@ -5125,8 +5125,10 @@ int __cdecl FUN_00ee7810(u32 id)
 int* __cdecl FUN_00ee7850(int* p)
 {
     while (p != 0) {
-        int n = (*(int(__thiscall**)(int*))((char*)*(void**)p + 0x1c))(p);
-        if (!(8 < (u32)n + 0xf8d3d7e0u))
+        u32 n = (*(u32(__thiscall**)(int*))((char*)*(void**)p + 0x1c))(p);
+        _ReadWriteBarrier();
+        n += 0xf8d3d7e0u;  // Index in the nine palette-slot IDs starting at 0x072c2820.
+        if (n <= 8)
             break;
         p = (int*)(*(void*(__thiscall**)(int*))((char*)*(void**)p + 0x10))(p);
     }

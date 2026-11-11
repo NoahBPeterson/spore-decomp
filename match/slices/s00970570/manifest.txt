@@ -37,3 +37,4 @@ slices/s00970570/s00970570.cpp  ?SerUpdate@WinGrid@UTFWinControls@EA@@UAEXXZ  00
 slices/s00970570/s00970570.cpp  ?DoMessage@WinGrid@UTFWinControls@EA@@UAE_NPAH@Z  00970d70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s00970570/s00970570.cpp  ?GetGridArea@IWinGrid@UTFWinControls@EA@@UAE_NPAURectF@23@@Z  00970de0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s00970570/s00970570.cpp  ?GetCellArea@IWinGrid@UTFWinControls@EA@@QAE_NPAURectF@23@@Z  00970e50  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00970570/s00970570.cpp  ?ScrollPagesHorizontally@IWinGrid@UTFWinControls@EA@@UAE_NH@Z  00970760  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

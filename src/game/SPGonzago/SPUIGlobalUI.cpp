@@ -2290,10 +2290,11 @@ void BanContent::OnToggle(char on)
 {
     this->mTokens.mbHold = on;
     if (on != 0 && this->mTokens.mbActive == 0) {
-        BanEntry* p = this->mTokens.mList.mpBegin;
-        if (p != this->mTokens.mList.mpEnd) {
+        BanVec& list = this->mTokens.mList;
+        BanEntry* p = list.mpBegin;
+        if (p != list.mpEnd) {
             this->SetText(p->miId, p->mName.mpBegin, p->mText.mpBegin);
-            this->mTokens.mList.EraseLast(this->mTokens.mList.mpBegin);
+            list.EraseLast(list.mpBegin);
         }
     }
 }
