@@ -62,8 +62,10 @@ locally (below) before you open the pull request.
    `nonmatching.txt` line conflicts with `main` after another merge, rebase onto `main` and resolve it; never leave a
    matched function's note behind to dodge the conflict.
 6. **Stuck?** After six to eight levers from `docs/codegen.md` without a match, stop and move on. Leave the function
-   better than you found it: update its `nonmatching.txt` note with what you tried and
-   what still differs, and open the pull request anyway. Notes are how the next person (or agent) starts ahead.
+   better than you found it: **keep your closest attempt in the source file** (it need not match, only compile), update
+   its `nonmatching.txt` note with what you tried and what still differs, and open the pull request anyway. A note
+   about a build that is not in the repo cannot be checked or continued, so a pull request that only changes notes is
+   not merged. Notes are how the next person (or agent) starts ahead.
 
 Keep experiments (test files, notes, listings) in `work/scratch/`: `work/` is ignored by git, so nothing there ends
 up in your pull request by accident.
