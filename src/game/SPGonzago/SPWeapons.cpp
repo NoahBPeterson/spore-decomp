@@ -3299,6 +3299,8 @@ void f00cb5050(int self)
     (*(void(**)(int))(*(int*)self + 0xc8))(self);
 }
 
+// Closest attempt for 0x00cb5090. Same size as retail. The y store
+// `mov [esi+4], ecx` still lands before the z spill; retail spills z first.
 struct StraightLoco {
     virtual void v00();
     virtual void v04();
