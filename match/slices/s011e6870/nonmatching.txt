@@ -9,7 +9,6 @@
 011e6aa0  105  Stream::QueueMem: complete (getfreerequest, field init, queuerequest, lock, startnextrequest). Eq FAIL (executes unresolved externals).
 011e6b50  124  Stream::GetChunk: complete (lock, size accounting, free-list walk). Eq FAIL (executes unresolved externals).
 011e6c00   15  lookup request by id, returns +0x130. Eq PASS (100% coverage).
-011e6c40    2  accessor impl->(+0x68): complete; retail keeps the intermediate in ecx (`mov ecx,[ecx+4]; mov eax,[ecx+0x68]`), cl 13.10 and cl 15 both reload into eax. Tried struct member, reference local, explicit pointer local.
 011e6c80   12  lookup request by id, returns +4 or 0. Eq PASS (85% coverage).
 011e6cd0   87  set priority threshold + AsyncOp::SetPriority wake. Eq UNSUPPORTED (needs `this` in ecx; harness ABI).
 011e6d20   67  StreamImpl allocator shim. Eq UNSUPPORTED (harness fake-arity).

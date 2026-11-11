@@ -222,10 +222,27 @@ u32 __fastcall FUN_011e6c00(void* self, int, u32 id)
 // ===========================================================================
 // 0x011e6c40 -- accessor: impl->(+0x68)
 // ===========================================================================
+// Prefix views: neighboring request scheduling stores states 0, 1 and 2 in
+// the implementation's state word at +0x68.
+struct StreamStatePrefix {
+    u32 pad00[0x68 / 4];
+    u32 mRequestState;
+};
+struct StreamPrefix {
+    u32 mHeader;
+    StreamStatePrefix* mpImplementation;
+    u32 GetRequestState() const;
+};
+
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x011e6c40
-u32 __fastcall FUN_011e6c40(void* self, int)
+u32 StreamPrefix::GetRequestState() const
 {
-    return *(u32*)(*(char**)((char*)self + 4) + 0x68);
+    StreamStatePrefix* implementation = mpImplementation;
+    _ReadWriteBarrier();
+    return implementation->mRequestState;
 }
 
 // ===========================================================================
