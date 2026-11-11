@@ -517,7 +517,7 @@ public:
 extern "C" double __cdecl sqrt(double x);
 #pragma intrinsic(sqrt)
 int   FUN_00cb6570(void*, void*, float, void*, void*, void*, void*, void*); // 0x00cb6570 cdecl
-void  FUN_00cb64c0();                        // 0x00cb64c0 default callback
+u8 FUN_00cb64c0(void*);                        // 0x00cb64c0 default callback
 void  FUN_00cb64e0();                        // 0x00cb64e0 alt callback
 u8 FUN_00cb63c0(void*);                        // 0x00cb63c0 default callback
 void  FUN_00cb63e0();                        // 0x00cb63e0 alt callback
@@ -4077,10 +4077,10 @@ u8 __cdecl FUN_00cb6400(void* a1, u8 a2)
 }
 
 // @ 0x00cb64c0
-void __cdecl FUN_00cb64c0(void* a1)
+u8 __cdecl FUN_00cb64c0(void* a1)
 {
-    void* p = *(void**)((u8*)a1 + 0x64);
-    FUN_00cb6400(p, 1);
+    void* object = ((WeaponPredicateContext*)a1)->mpObject64;
+    return FUN_00cb6400(object, 1);
 }
 
 // @ 0x00cb64e0
@@ -4249,7 +4249,7 @@ int __cdecl FUN_00cb6570(void* p1v, void* p2v, float fDist, void* pHitSlot, void
 void __cdecl FUN_00cb6960(void* a0, void* a1, float a2, void* a3, void* a4, CtxObj* a5, void* a6, char a7)
 {
     char  old = 0;
-    void* fp  = (void*)(void (__cdecl*)(void*))FUN_00cb64c0;
+    void* fp  = (void*)(u8 (__cdecl*)(void*))FUN_00cb64c0;
 
     if (a5 != 0) {
         old = a5->mState;

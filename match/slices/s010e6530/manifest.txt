@@ -6,3 +6,4 @@ slices/s010e6530/s010e6530.cpp  ?commitPotential@hkBvAgent@@UAEXG@Z  010e6bc0  /
 slices/s010e6530/s010e6530.cpp  ?createZombie@hkBvAgent@@UAEXG@Z  010e6be0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s010e6530/s010e6530.cpp  ?createListAAgent@hkMultiSphereAgent@@SAPAVhkCollisionAgent@@ABVhkCdBody@@0ABUhkCollisionInput@@PAVhkContactMgr@@@Z  010e68d0  /vc71 /O2 /MD /Gy /TP
 slices/s010e6530/s010e6530.cpp  ?createBvShapeAgent@hkBvAgent@@SAPAVhkCollisionAgent@@ABVhkCdBody@@0ABUhkCollisionInput@@PAVhkContactMgr@@@Z  010e6cb0  /vc71 /O2 /MD /Gy /TP
+slices/s010e6530/s010e6530.cpp  ?getClosestPoints@?$hkSymmetricAgent@VhkMultiSphereAgent@@@@UAEXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdPointCollector@@@Z  010e6810  /vc71 /O2 /MD /Gy /EHsc /TP

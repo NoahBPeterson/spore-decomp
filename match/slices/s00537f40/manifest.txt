@@ -4,3 +4,4 @@ slices/s00537f40/s00537f40.cpp  ?OnRegister@cSPSkinPaintParticleEffectBlockComma
 slices/s00537f40/s00537f40.cpp  ?PreTransformBy@cTransform@Swarm@EA@@QAEXABU123@@Z  00537f40  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00537f40/s00537f40.cpp  ??0Desc538@@QAE@XZ  00538260  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00537f40/s00537f40.cpp  ?CreateDesc538@@YAPAUDesc538@@PAX0@Z  00538200  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00537f40/s00537f40.cpp  ?Release@Host5383c0@@QAEHXZ  005383c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

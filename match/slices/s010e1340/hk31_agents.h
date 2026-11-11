@@ -28,7 +28,8 @@ struct hkCdPoint { hkContactPoint m_contact; const hkCdBody* m_cdBodyA; const hk
 class hkCdPointCollector
 {
 public:
-	virtual ~hkCdPointCollector() {}                       // 0
+	hkCdPointCollector() : m_earlyOutDistance(hkRealMax()) {}
+	virtual void* scalarDeletingDtor(unsigned int flags);  // 0, 0x010CDCA0
 	virtual void addCdPoint(const hkCdPoint& point) = 0;   // 1
 	float m_earlyOutDistance;                              // +4
 };
@@ -62,7 +63,7 @@ struct hkLinearCastCollisionInput : hkCollisionInput
 class hkSymmetricAgentFlipCollector : public hkCdPointCollector        // vtable 0x014A43A4
 {
 public:
-	explicit hkSymmetricAgentFlipCollector(hkCdPointCollector& original) : m_original(original) { m_earlyOutDistance = hkRealMax(); }
+	explicit hkSymmetricAgentFlipCollector(hkCdPointCollector& original) : m_original(original) {}
 	virtual void addCdPoint(const hkCdPoint& point);           // 0x010EBBB0
 	hkCdPointCollector& m_original;                            // +8
 };

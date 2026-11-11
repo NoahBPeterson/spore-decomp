@@ -41,6 +41,8 @@ void Wrapper538420(void* a, void* b)
     Wrapper538420Impl(b, a);
 }
 
+template <int N> inline void PadN() { uint32_t s[N]; }
+
 // ---------------------------------------------------------------- refcount adjustors
 struct RefCountBase {
     virtual int AddRef();
@@ -69,6 +71,7 @@ struct Host5383c0 {
 // @ 0x005383c0
 int Host5383c0::Release()
 {
+    PadN<3>();  // Preserve the reserved frame of the inlined adjustor.
     return ((RefCountPrimary*)((char*)this - 8))->Release();
 }
 
@@ -236,7 +239,6 @@ PaintBlock538::~PaintBlock538()
 
 // ---------------------------------------------------------------- 0x00538200 factory
 void ReadDesc538(void* stream, void* name, Desc538* desc);   // 0x0053acc0
-template <int N> inline void PadN() { uint32_t s[N]; }
 
 // @ 0x00538200
 Desc538* CreateDesc538(void* stream, void* name)

@@ -499,9 +499,9 @@ unsigned ExceptionHandlerWin32_s0091_e650::ExceptionFilter(void* ep)
 // @ 0x0091e750
 extern "C" unsigned __stdcall ExceptionFilterThunk(void* ep)
 {
-    if (g_pExceptionHandler == 0)
-        return 0;
-    return g_pExceptionHandler->ExceptionFilter(ep);
+    if (g_pExceptionHandler != 0)
+        return g_pExceptionHandler->ExceptionFilter(ep);
+    return 0;
 }
 
 // @ 0x0091e770
