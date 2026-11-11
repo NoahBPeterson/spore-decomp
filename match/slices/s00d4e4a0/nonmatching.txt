@@ -1,5 +1,5 @@
 00d4e4a0 1080 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1080 bytes - drama manager helper not reconstructed.
-00d4e8e0 111 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 111 bytes - drama slot-holder clear helper not reconstructed.
+00d4e8e0 111 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. sorted 8-byte erase. lower_bound 0xd01260, unsigned key compare, then an always-true it != it+1 (lea ecx,[eax+8]; cmp eax, ecx; jne). On a hit, copy 0xa35070 of [it+1, end) onto it, end -= 8, Release slot +4 of the trailing object, return 1; else 0. ret 4. Reloading mpEnd after the call is 111 bytes but this stays in esi and the key in edi, so both calls move. Keeping end in a register (retail: ebx=key, esi=end, edi=this) lets cl delete the mov eax,end / cmp eax,end and the function is 102.
 00d4e950 320 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 320 bytes - cMeteorStrikeEvent::Clear not reconstructed.
 00d4ea90 116 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 116 bytes - Simulator::cDramaManager constructor not reconstructed.
 00d4eb30 170 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 170 bytes - drama slot-holder lock helper not reconstructed.
