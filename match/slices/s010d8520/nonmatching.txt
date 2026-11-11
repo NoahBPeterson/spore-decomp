@@ -1,6 +1,5 @@
 010d8520 538 havok +vc71; equiv PASS 274 valid 86.3% cov
 010d88c0 25 havok +vc71; equiv PASS 292 valid 78.6% cov
-010d8a00 1 havok +vc71; residual: factory ctor-inline reads mgr from two words deeper ([esp+0x10] vs our [esp+4]) and stores m_contactMgrId at [eax+8] before the vtable @[eax], exactly the 4-byte frame slack registerAgent has above. Tried: plain ctor, post-assign fields, extra locals, hkAgentFuncs18 frame widening in registerAgent (also flips 010d92a0 to a 0x18 frame, going 0x14->0x18, wrong direction). This is the Havok-internal lazy-inline shape, not reachable from source; equiv FAIL ecx/arg-slot
 010d8a30 432 havok +vc71; equiv FAIL contact-point float: orig bfec2631 vs ours 00002631 (distance term)
 010d8c80 380 havok +vc71; equiv PASS 397 valid 83.6% cov
 010d8e90 378 havok +vc71; equiv PASS 396 valid 83.6% cov

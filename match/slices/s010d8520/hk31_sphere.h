@@ -67,7 +67,7 @@ void HK_CALL hkIterativeLinearCastAgent_staticLinearCast(const hkCdBody& a, cons
 class hkSphereSphereAgent : public hkCollisionAgent          // vtable 0x014a4850, size 0x10
 {
 public:
-	static hkSphereSphereAgent* HK_CALL create(hkContactMgr* mgr);                                 // 0x010d8a00
+	static hkSphereSphereAgent* HK_CALL create(const hkCdBody& a, const hkCdBody& b, const hkCollisionInput& input, hkContactMgr* mgr);   // 0x010d8a00
 	virtual void getPenetrations(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkCdBodyPairCollector&);   // 0x010d90a0
 	virtual void getClosestPoints(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkCdPointCollector&);      // 0x010d8c80
 	virtual void linearCast(const hkCdBody&, const hkCdBody&, const hkLinearCastCollisionInput&, hkCdPointCollector&, hkCdPointCollector*);
