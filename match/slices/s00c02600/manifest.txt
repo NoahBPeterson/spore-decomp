@@ -1,7 +1,6 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00c02600/s00c02600.cpp  ?SP_IsValidNeighbourEntry@@YGHPAX@Z  00c02600  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00c02600/s00c02600.cpp  ?FUN_00c02650@@YGHPAX@Z  00c02650  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
-slices/s00c02600/s00c02600.cpp  ?FUN_00c02710@@YAHM@Z  00c02710  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00c02600/s00c02600.cpp  ?FUN_00c02790@@YAHPAX@Z  00c02790  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00c02600/s00c02600.cpp  ?FUN_00c028b0@@YAHPAHD@Z  00c028b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s00c02600/s00c02600.cpp  ?GetCurrentBrainLevel_00c02900@CreatureBase@@QAEHXZ  00c02900  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

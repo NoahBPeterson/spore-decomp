@@ -16,7 +16,6 @@
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ?SetBounds@TuningObj@@QAEXMM@Z  004d3da0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetScale@SpeciesDB@@QAEMXZ  004d46b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetVariantA@SpeciesProfile@@QAEHPAX@Z  004d8ee0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPBake/SPEditorSpeciesManager.cpp  ?ReadAbilityData@SP@@YA_NPAUcCreatureAbility_s004d_92b0@@PAUPropertyList_s004d_92b0@@@Z  004d92b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetUiName@cSpeciesProfile_s004d_a330@@QAEXPAUWString@@@Z  004da330  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ??0cSpeciesArchetype_s004d_a440@SP@@QAE@XZ  004da440  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ?Init@Connector@@QAEXPAXHHI@Z  004db620  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

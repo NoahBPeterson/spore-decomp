@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ead040  0  byte-exact only with inline-assembly helper FloorToInt (symbol ?FUN_00ead040@cPlayerCityMusic@Audio@SP@@QAEOXZ, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

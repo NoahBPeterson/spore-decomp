@@ -4,7 +4,6 @@ slices/s00572580/s00572580.cpp  ?RandomSigned@@YAMM@Z  00572a60  /O2 /MD /Gy /EH
 slices/s00572580/s00572580.cpp  ?GetComplexityFraction@@YAMABUBlockPtrVector@@@Z  00572b30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00572580/s00572580.cpp  ?EditorGroundHeight@@YAMPAUcEditorGround@@ABUVector2@@@Z  00572f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00572580/s00572580.cpp  ?At@UintArray@@QAEPAIH@Z  00572580  /O2 /MD /Gy /EHsc /TP
-slices/s00572580/s00572580.cpp  ?Self@UintArray@@QAEPAU1@XZ  00572590  /O2 /MD /Gy /EHsc /TP
 slices/s00572580/s00572580.cpp  ??0AtomicRefPtr@@QAE@PAUAtomicRefCounted@@@Z  005725b0  /O2 /MD /Gy /EHsc /TP
 slices/s00572580/s00572580.cpp  ??0ObjectPtr@@QAE@ABU0@@Z  005725d0  /O2 /MD /Gy /EHsc /TP
 slices/s00572580/s00572580.cpp  ??4?$RectT@M@EA@@QAEAAV01@ABV01@@Z  00572600  /O2 /MD /Gy /EHsc /TP
@@ -28,3 +27,4 @@ slices/s00572580/s00572580.cpp  ?HideCreature@cEditor@@QAEXXZ  00573330  /O2 /MD
 slices/s00572580/s00572580.cpp  ?ShowCreature@cEditor@@QAEXXZ  00573390  /O2 /MD /Gy /EHsc /TP
 slices/s00572580/s00572580.cpp  ?UpdateCursor@cEditor@@QAEXXZ  005733d0  /O2 /MD /Gy /EHsc /TP
 slices/s00572580/s00572580.cpp  ?SetSymmetryMode@cEditor@@QAEXH@Z  00573480  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?Self@UintArray@@QAEPAU1@XZ  00572590  /O2 /MD /Gy /EHsc /TP

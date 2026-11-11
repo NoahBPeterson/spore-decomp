@@ -7,7 +7,6 @@
 ../src/game/SPBake/SPEditorBlock.cpp  ?F9a0@cSPEditorBlock_s0043_a460@SP@@QAEXEE@Z  0043a9a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F_43bbc0@cSPEditorBlock_s0043_bbc0@SP@@QAE_NH@Z  0043bbc0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F_43bc40@cSPEditorBlock_s0043_bbc0@SP@@QAEXM@Z  0043bc40  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
-../src/game/SPBake/SPEditorBlock.cpp  ?F_43bc70@cSPEditorBlock_s0043_bbc0@SP@@QAE_NMM@Z  0043bc70  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F_43bcf0@cSPEditorBlock_s0043_bbc0@SP@@QAE_NMM@Z  0043bcf0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F_43bd50@cSPEditorBlock_s0043_bbc0@SP@@QAEXUcSPVector3_s0043_bbc0@@M@Z  0043bd50  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F_43bf20@cSPEditorBlock_s0043_bbc0@SP@@QAE_NI@Z  0043bf20  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
@@ -44,7 +43,6 @@
 ../src/game/SPBake/SPEditorBlock.cpp  ?F_43ecb0@cSPEditorBlock_s0043_e3f0@SP@@QAE_NXZ  0043ecb0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?Add@cSPBoundingBox_s0043_e3f0@@QAEXABU1@@Z  0043f050  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?GetCorner@cSPBoundingBox_s0043_e3f0@@QBE?AUcSPVector3_s0043_e3f0@@I@Z  0043f290  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
-../src/game/SPBake/SPEditorBlock.cpp  ?SetUniformScale@cSPEditorBlock_s0044_0110@SP@@QAEXM_N0@Z  00440520  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F40b90@cSPEditorBlock_s0044_0110@SP@@QAEPAUVec3@2@PAU32@@Z  00440b90  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F40e00@cSPEditorBlock_s0044_0110@SP@@QAEXPAU12@@Z  00440e00  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?F41080@cSPEditorBlock_s0044_1080@SP@@QAEXXZ  00441080  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

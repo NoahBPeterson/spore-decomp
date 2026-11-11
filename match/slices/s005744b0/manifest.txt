@@ -2,7 +2,6 @@
 slices/s005744b0/s005744b0.cpp  ?ShowBudgetWindows@cAppModeEditorBase@SP@@QAEXH@Z 005744b0    /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005744b0/s005744b0.cpp  ?GetLaunchSelectedIndex@cAppModeEditorBase@SP@@QAEHXZ 00574570    /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005744b0/s005744b0.cpp  ?GetCurrentCameraContext@cAppModeEditorBase@SP@@QAEPAXXZ 00574590    /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s005744b0/s005744b0.cpp  ?GetBudgetFraction@cAppModeEditorBase@SP@@QAEMXZ 005745c0    /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005744b0/s005744b0.cpp  ?PurchaseBlock@cAppModeEditorBase@SP@@QAEXPAVcSPEditorBlock@2@@Z 00574850    /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005744b0/s005744b0.cpp  ?GetRandomBackground@cAppModeEditorBase@SP@@QAE?AUResourceKey@@XZ 00574900    /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005744b0/s005744b0.cpp  ?GetNextBackground@cAppModeEditorBase@SP@@QAE?AUResourceKey@@XZ 00574990    /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e73f60  0  byte-exact only with inline-assembly helper Clamp, Saturate (symbol ?sUpdateGfx@SP@@YAXXZ, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

@@ -47,4 +47,3 @@
 ../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c9b6d0@@YAXPAVcTribe_s00c9_afb0@SP@@@Z  00c9b6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?HandleEvent@cTribe_s00c9_afb0@SP@@QAEXPAX@Z  00c9bd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?OnExtentsChanged@cSpatialObject_s00c9_afb0@@QAEXPAXM@Z  00c9be50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPTribe.cpp  ?F8e6d0@@YIHPAX@Z  00c8e6d0  /O2 /MD /Gy /TP /Isrc/game/include

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005745c0  0  byte-exact only with inline-assembly helper FloorToInt (symbol ?GetBudgetFraction@cAppModeEditorBase@SP@@QAEMXZ, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

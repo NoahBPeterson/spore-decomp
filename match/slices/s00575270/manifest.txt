@@ -3,7 +3,7 @@ slices/s00575270/s00575270.cpp  ?DoSomePaletteThing@cAppModeEditorBase@SP@@QAEXX
 slices/s00575270/s00575270.cpp  ?StopSomething@cAppModeEditorBase@SP@@QAEXXZ      005757b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00575270/s00575270.cpp  ?GetSomething1@cAppModeEditorBase@SP@@QAEXH@Z     00575e20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00575270/s00575270.cpp  ?SomeBool@cAppModeEditorBase@SP@@QAE_ND@Z         00575eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-slices/s00575270/s00575270.cpp  ?SetupCameraUI@cAppModeEditorBase@SP@@QAEXXZ     00575f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00575270/s00575270.cpp  ?TestCondition@cAppModeEditorBase@SP@@QAE_NI@Z  00575810  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00575270/s00575270.cpp  ?ResetEconomy@cAppModeEditorBase@SP@@QAEXXZ  005754c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00575270/s00575270.cpp  ?ToggleCameraMode@cAppModeEditorBase@SP@@QAEXXZ  00575f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00575270/s00575270.cpp  ?SetupCameraUI@cAppModeEditorBase@SP@@QAEXXZ     00575f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

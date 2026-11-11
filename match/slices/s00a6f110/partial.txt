@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a6fe20  0  byte-exact only with inline-assembly helper Clamp, FloorInt (symbol ?Advance@cSmoothTrail@@QAEXMH@Z, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

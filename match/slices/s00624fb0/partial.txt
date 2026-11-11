@@ -1,0 +1,1 @@
+00625010  0  byte-exact only with inline-assembly helper Clamp (symbol ?OnMouseMove@cCreatureCameraBase@SP@@QAE_NMMH@Z, flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

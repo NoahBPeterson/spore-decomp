@@ -20,4 +20,3 @@ slices/s0043bbc0/s0043bbc0.cpp  ?F_43c450@cSPEditorBlock@SP@@QAE_NPAVcSPEditorHa
 slices/s0043bbc0/s0043bbc0.cpp  ?F_43c510@cSPEditorBlock@SP@@QAE_NXZ  0043c510  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 slices/s0043bbc0/s0043bbc0.cpp  ?F_43c710@cSPEditorBlock@SP@@QAEXXZ  0043c710  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 slices/s0043bbc0/s0043bbc0.cpp  ?F_43ca10@cSPEditorBlock@SP@@QAE_NXZ  0043ca10  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
-slices/s0043bbc0/s0043bbc0.cpp  ?F_43bc70@cSPEditorBlock@SP@@QAE_NMM@Z  0043bc70  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy

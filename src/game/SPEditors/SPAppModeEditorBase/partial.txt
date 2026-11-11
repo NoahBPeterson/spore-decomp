@@ -27,3 +27,4 @@
 0058ba60 - PARTIAL: OnMouseMoveUpdate 998B; skeleton only
 0058cee0 - PARTIAL: LoadModel 722B; skeleton only
 0058d1c0 - PARTIAL: NewModel 613B; skeleton only
+005745c0  0  byte-exact only with inline-assembly helper FloorToInt (symbol ?GetBudgetFraction@cAppModeEditorBase_s0057_44b0@SP@@QAEMXZ, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

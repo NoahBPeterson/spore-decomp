@@ -8,3 +8,4 @@
 004dc950 323-byte /Od cSpeciesSummarizer::ExtractParameters skeleton (EASTL FunctionalMatch containers)
 004dcaa0 1082-byte /Od species-manager map teardown skeleton (two EASTL hashtables + intrusive list)
 004dcee0 374-byte /Od cSPEditorSpeciesManager::HandleMessage skeleton (EASTL hash_map find/operator[])
+004d92b0  0  byte-exact only with inline-assembly helper Max (symbol ?ReadAbilityData@SP@@YA_NPAUcCreatureAbility_s004d_92b0@@PAUPropertyList_s004d_92b0@@@Z, flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++
