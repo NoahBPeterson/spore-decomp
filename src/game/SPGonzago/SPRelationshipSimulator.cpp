@@ -436,6 +436,7 @@ public:
     void FUN_00d058a0();
     void FUN_00d06030();
     void FUN_00d06400();
+    uint32_t FUN_00d01ab0(uint32_t a, uint32_t b);      // 0x00d01ab0
     __declspec(noinline) void FUN_00d064b0(void* p, uint32_t a1, uint32_t a2, float a3);
     void FUN_00d065a0();
     __declspec(noinline) void FUN_00d068c0(uint32_t a1, uint32_t a2, float a3);
@@ -1111,41 +1112,45 @@ struct cRelPair {
     uint32_t mSecond;   // +0x14
 };
 struct Node0 {
-    uint8_t pad000[0x10];
+    RBNode mNode;       // +0x00
     cRelPair mKey;      // +0x10
 };
 struct TreeRoot {
-    uint8_t pad000[0x04];
-    Node0*  mpHead;     // +0x04  (tree header: parent/left/right/node)
+    uint32_t mAllocator;
+    RBNode mAnchor;     // +0x04
 };
-struct cTerrainEditor2 { void GetCurrentTerrainSphere(); };
+struct cTerrainSphere2 {
+    bool GetFlag5(uint32_t id);                         // 0x00c7a890
+};
+struct cTerrainEditor2 { cTerrainSphere2* GetCurrentTerrainSphere(); };
 extern cTerrainEditor2* NounManager_d064b0();          // 0x00b3d300
-extern void FUN_00f67d90(void* terrain);               // 0x00f67d90
 extern uint32_t GetPlayerEmpireID_d064b0();            // 0x01021090
 extern bool  FUN_00ba6650(uint32_t id);                // 0x00ba6650
-extern bool  FUN_00c7a890(uint32_t id);                // 0x00c7a890
-extern uint32_t FUN_00d01ab0(uint32_t a, uint32_t b);  // 0x00d01ab0
 
 void __thiscall cRelationshipManager_s00d0_58a0::FUN_00d064b0(void* p, uint32_t a1, uint32_t a2, float a3)
 {
-    void* terrain = NounManager_d064b0();
-    ((cTerrainEditor2*)terrain)->GetCurrentTerrainSphere();
+    cTerrainEditor2* nounManager = NounManager_d064b0();
+    cTerrainSphere2* terrainSphere = nounManager->GetCurrentTerrainSphere();
     uint32_t player = GetPlayerEmpireID_d064b0();
     TreeRoot* root = (TreeRoot*)p;
-    Node0* node = root->mpHead;
-    Node0* end  = (Node0*)((char*)p + 4);
-    if (node == end)
+    Node0* node = (Node0*)root->mAnchor.left;
+    p = &root->mAnchor;
+    if (node == p)
         return;
     do {
-        if (node->mKey.mFirst == a1 && FUN_00ba6650(node->mKey.mSecond) &&
-            (a1 != player || FUN_00c7a890(node->mKey.mSecond))) {
-            RecordEvent(FUN_00d01ab0(a1, node->mKey.mSecond), a1, node->mKey.mSecond, a2, a3);
-        } else if (node->mKey.mSecond == a1 && FUN_00ba6650(node->mKey.mFirst) &&
-                   (a1 != player || FUN_00c7a890(node->mKey.mFirst))) {
-            RecordEvent(FUN_00d01ab0(node->mKey.mFirst, a1), node->mKey.mFirst, a1, a2, a3);
+        if (node->mKey.mFirst == a1 && FUN_00ba6650(node->mKey.mSecond)) {
+            if (a1 != player || terrainSphere->GetFlag5(node->mKey.mSecond)) {
+                RecordEvent(FUN_00d01ab0(a1, node->mKey.mSecond),
+                            a1, node->mKey.mSecond, a2, a3);
+            }
+        } else if (node->mKey.mSecond == a1 && FUN_00ba6650(node->mKey.mFirst)) {
+            if (a1 != player || terrainSphere->GetFlag5(node->mKey.mFirst)) {
+                RecordEvent(FUN_00d01ab0(node->mKey.mFirst, a1),
+                            node->mKey.mFirst, a1, a2, a3);
+            }
         }
         node = (Node0*)RBTreeIncrement(node);
-    } while (node != end);
+    } while (node != p);
 }
 }  // namespace SP
 

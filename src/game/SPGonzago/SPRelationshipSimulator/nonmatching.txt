@@ -20,7 +20,6 @@
 00d06030 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 517 bytes - relationship helper not reconstructed.
 00d06270 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 394 bytes - RecordFoughtEnemyEvent not reconstructed.
 00d06400 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 175 bytes - relationship helper not reconstructed.
-00d064b0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 234 bytes - relationship-event broadcast reconstructed: NounManager()->GetCurrentTerrainSphere(), player id, then walks the map header at +0x04/+0x08 comparing each node's (id at +0x10, id at +0x14) pair against the incoming empire id, filters with FUN_00ba6650 and (for the player empire) FUN_00c7a890, and calls FUN_00d01ab0 then the 5-argument RecordEvent at 0x00d05d90. Now 231 vs 234 bytes: retail allocates `sub esp,8` and keeps a dead copy of the GetCurrentTerrainSphere result at [esp+0xc] (two stack locals); cl keeps only the player id and uses `push ecx`, so every frame offset is one slot off. The call/compare/loop bodies otherwise match. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00d065a0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 354 bytes - relationship helper not reconstructed.
 00d06710 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 419 bytes - helper not reconstructed.
 00d06920 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 289 bytes - cRelationshipManager::StartAlliance not reconstructed.
