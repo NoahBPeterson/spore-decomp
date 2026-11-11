@@ -12,6 +12,8 @@
 #include "SP/cShaderBase.h"
 #include "SP/cTextureInstance.h"
 #include "SP/cViewer.h"
+#include "SP/cILayer.h"
+#include "EA/RefCountTemplate.h"
 #include <math.h>
 
 // ---- items of slice s0076fdc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1224,7 +1226,13 @@ struct KindObj {
 // ---- items of slice s0077c8b0 end
 
 // ---- items of slice s0077f020 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct F020 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(int); };
+// The shadow-effects adapter preserves the ordinary layer call and forces
+// the shadow rendering flags. The adapter stores a nonowning layer pointer.
+struct ShadowEffectsLayer_s0077f020 : SP::cILayer, EA::RefCountTemplate<int> {
+    SP::cILayer* mLayer; // +0x0c
+    virtual void DrawLayer(unsigned int, unsigned int,
+        SP::cViewer const* const* const, SP::cRenderStats*);
+};
 // ---- items of slice s0077f020 end
 
 // @ 0x00770010
@@ -3252,7 +3260,8 @@ void* __cdecl FUN_0077d710(DescObj* desc)
 }
 
 // @ 0x0077f020
-void __fastcall FUN_0077f020(int p)
+void ShadowEffectsLayer_s0077f020::DrawLayer(unsigned int layer, unsigned int flags,
+    SP::cViewer const* const* const viewers, SP::cRenderStats* stats)
 {
-    ((F020*)(*(void**)(p + 0xc)))->v3(0x12);
+    mLayer->DrawLayer(layer, 0x12, viewers, stats);
 }

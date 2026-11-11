@@ -45,3 +45,4 @@
 ../src/game/SPEngine/_at_00770000.cpp  ?FUN_0077d130@@YIPAMPAM@Z  0077d130  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_00770000.cpp  ?FUN_0077d1d0@@YIPAUCtorObj@@PAU1@@Z  0077d1d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_00770000.cpp  ?FUN_0077d6c0@@YGPAXIPBX0@Z  0077d6c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?DrawLayer@ShadowEffectsLayer_s0077f020@@UAEXIIQBQBVcViewer@SP@@PAUcRenderStats@3@@Z  0077f020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
