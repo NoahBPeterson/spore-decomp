@@ -2941,6 +2941,15 @@ bool cStrCmp::operator()(u32 a, u32 b)
     VT_7C_2(conv, &argB, (cWString*)p);
     return StringCompare(strA->mpBegin, strA->mpEnd,
                          ((cWString*)p)->mpBegin, ((cWString*)p)->mpEnd) < 0;
+    {
+    cWString& strA = mStr08;
+    cWString& strB = mStr18;
+    cConvertArg argA = { (void*)a, (void*)0x00b1b104, mpField00 };
+    cConvertArg argB = { (void*)b, (void*)0x00b1b104, mpField00 };
+    VT_7C_2(mpConv04, &argA, &strA);
+    VT_7C_2(mpConv04, &argB, &strB);
+    return StringCompare(strA.mpBegin, strA.mpEnd, strB.mpBegin, strB.mpEnd) < 0;
+    }
 }
 
 // @ 0x00d167e0
