@@ -4,6 +4,5 @@
 005f40b0  -  cSPSwatch::UpdateBakingTransform: approximate; paint-theme/bounding-box branch order guessed
 005f5080  -  unnamed 1375-byte cSPSwatch update routine: skeleton only
 005f55e0  -  cSPSwatch::RotateModel: skeleton only (775-byte rotation/animation body omitted)
-005f5930  -  vector<cSPTransform_> clear/shrink: skeleton only
 005f5b40  -  cSPSwatch::LoadModel: skeleton only (687-byte load/bake body omitted)
 00eceab0  1293  PARTIAL: SP::cSPEditorDevUI::LoadLayout only partially reconstructed (63-byte approximation of a 1293-byte function; heavy inlined container/property-map code) flags: /O2 /MD /Gy /EHsc /TP

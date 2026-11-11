@@ -1,5 +1,5 @@
 01172e10
 01173130
 01173460
-01173730
+01173730  0  x87 not unrolled (retail pushes ebp frame, shl count, poisons ebx) so the /arch:SSE module flags are wrong; with /Oy- the 2003 compiler unrolls this loop instead (168 bytes vs 57); tried for(i<n), i=n..0, n--, [n], pointer countdown
 01173770

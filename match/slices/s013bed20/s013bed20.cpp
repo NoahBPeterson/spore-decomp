@@ -10,7 +10,8 @@
 
 // ---- imports (declared; relocations are masked) ----
 extern "C" __declspec(dllimport) void __stdcall DeleteCriticalSection(void*);
-extern "C" __declspec(dllimport) int __stdcall FreeLibrary(void*);
+typedef void* HMODULE;
+extern "C" __declspec(dllimport) int __stdcall FreeLibrary(HMODULE);
 extern "C" __declspec(dllimport) int __stdcall WSACleanup(void);
 extern "C" __declspec(dllimport) void* __cdecl memset(void*, int, unsigned int);
 
@@ -174,7 +175,7 @@ void f_013bf600() { ((Method*)g_162a386)->M(); }
 // @ 0x013C0100
 void f_013c0100() {
     if (g_1638280) {
-        FreeLibrary(g_1638280);
+        FreeLibrary((HMODULE)g_1638280);
         g_1638280 = 0;
         memset(g_1638254, 0, 0x2c);
     }
@@ -192,8 +193,9 @@ void f_013c0250() {
     if (p) ((V4*)p)->d();
 }
 
-// @ 0x013C0300
-void f_013c0300() {
+// @ 0x013C0300 (/Od: reloads the global for `this` after the null test)
+// Reached through an __stdcall thunk (0x00935a70): argument cleanup is the callee's.
+void __stdcall f_013c0300() {
     if (g_164b410) ((V4*)g_164b410)->b();
 }
 
@@ -328,6 +330,9 @@ void f_013c0e90() {
 }
 
 // @ 0x013C0F40
+// Both accessors of g_1668f1c must stay dllimport: a non-dllimport global makes a direct call site read the
+// module's own import slot through the load-config protection table (`call [__imp_ ... ]` becomes
+// `call [0x13cc0e4]`, an absolute address the fingerprint will not accept).
 void f_013c0f40() { FreeLibrary(g_1668f1c); }
 
 // @ 0x013C0FC0

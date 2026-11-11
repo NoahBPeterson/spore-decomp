@@ -2,3 +2,4 @@
 slices/s011f7c70/s011f7c70.cpp  ?FUN_011f7f10@@YAXXZ  011f7f10  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s011f7c70/s011f7c70.cpp  ?FUN_011f7fa0@@YAXXZ  011f7fa0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s011f7c70/s011f7c70.cpp  ?FUN_011f8310@@YAIH@Z  011f8310  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f7c70/s011f7c70.cpp  ?FUN_011f8270@@YA?AUDisplayMode@@XZ  011f8270  /vc71 /O2 /MD /Gy /EHsc /TP

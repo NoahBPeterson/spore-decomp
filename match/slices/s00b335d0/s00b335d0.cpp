@@ -4,6 +4,8 @@
 // No dev-PDB symbols exist for this module; names are FUN_<va>.
 #include "types.h"
 #include <string.h>
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 typedef unsigned char  u8;
 typedef unsigned int   u32;
@@ -86,7 +88,9 @@ void __cdecl FUN_00b33c30(double value, int a, int b)
 void __fastcall FUN_00b33c70(char* p)
 {
     typedef void (__thiscall* Fn)(void*);
-    ((Fn)(*(void**)(*(char**)(p - 8) + 0x10)))(p - 8);
+    Fn fn = *(Fn*)(*(char**)(p - 8) + 0x10);
+    _ReadWriteBarrier();
+    fn(p - 8);
 }
 
 // @ 0x00b33ca0
@@ -99,22 +103,16 @@ void StateObj::FUN_00b33ca0(int a, int b, int c)
 void StateObj::FUN_00b33d00()
 {
     if (mState != (void*)0x1654c00) {
-        typedef void (__thiscall* Fn)(void*);
-        char* vt = *(char**)this;
-        void* fn = *(void**)(vt + 0x14);
         mState = (void*)0x1654c08;
-        ((Fn)fn)(this);
+        s05();
     }
 }
 
 // @ 0x00b33d20
 void StateObj::FUN_00b33d20()
 {
-    typedef void (__thiscall* Fn)(void*);
-    char* vt = *(char**)this;
-    void* fn = *(void**)(vt + 0x18);
     mState = (void*)0x1654c00;
-    ((Fn)fn)(this);
+    s06();
 }
 
 // @ 0x00b33d40

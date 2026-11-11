@@ -1173,7 +1173,7 @@ struct cField {
     void*           m_198;          // 0x198
     void*           m_19c;          // 0x19c
     char            m_pad1a0[0x248 - 0x1a0];
-    void*           m_248;          // 0x248
+    cField*         m_248;          // 0x248
     byte            m_24c;          // 0x24c
 
     void Destroy();
@@ -3514,11 +3514,11 @@ void cTimedState::Advance(float dt)
 // @ 0x00a9ae50
 void __cdecl FUN_00a9ae50(const float* m, float* v)
 {
-    float x = v[0];
-    float y = v[1];
-    float z = v[2];
+    const float x = v[0];
+    const float y = v[1];
+    const float z = v[2];
 
-    float w = 1.0f / (((m[3] * x + m[7] * y) + m[11] * z) + m[15]);
+    const float w = 1.0f / (((m[3] * x + m[7] * y) + m[11] * z) + m[15]);
 
     v[0] = w * (((m[4] * y + m[8] * z) + m[0] * x) + m[12]);
     v[1] = w * (((m[1] * x + m[5] * y) + m[9] * z) + m[13]);
@@ -3528,19 +3528,16 @@ void __cdecl FUN_00a9ae50(const float* m, float* v)
 // @ 0x00a9af40
 double __cdecl FUN_00a9af40(const float* p)
 {
-    float b = (float)(fabs((double)p[1]) + 1.0e-10);
+    float b = (float)fabs((double)p[1]) + 1.0e-10f;
     float a = (float)fabs((double)p[0]);
     float r = (b - a) / (a + b);
     float angle = (0.9817f - (r * r) * 0.1963f) * r;
 
-    if (p[0] < 0.0f)
-        angle = DAT_01565424 * 3.0f - angle;
-    else
+    if (p[0] >= 0.0f)
         angle = DAT_01565424 + angle;
-    if (p[1] < 0.0f)
-        angle = -angle;
-
-    return (1.0 / DAT_01678ffc) * angle;
+    else
+        angle = DAT_01565424 * 3.0f - angle;
+    return (1.0 / DAT_01678ffc) * (p[1] >= 0.0f ? angle : -angle);
 }
 
 // @ 0x00a9aff0
@@ -3577,17 +3574,18 @@ void __cdecl FUN_00a9b120(const void* a1, const float* a2, const float* a3, floa
     float vx = a2[0];
     float vy = a2[1];
     float vz = a2[2];
-
     float num = a3[1] * vx - a3[0] * vy;
-    float len = (float)sqrt((double)(vy * vy + (vx * vx + vz * vz)));
+    float len = (float)sqrt((double)vx * vx + (double)vy * vy + (double)vz * vz);
     if (len > 0.0f)
         num = num / len;
 
     char* o = (char*)a5;
-    float f = *(float*)(o + 0x44) -
-              (*(float*)((char*)a1 + 0x27c) * *(float*)(o + 0x44)) * a4;
+    float f = *(float*)(o + 0x44);
+    float g = a4;
+    f = f - (*(float*)((char*)a1 + 0x27c) * f) * g;
     *(float*)(o + 0x44) = f;
-    *(float*)(o + 0x44) = f - (*(float*)((char*)a1 + 0x278) * num) * a4;
+    f = f - (*(float*)((char*)a1 + 0x278) * num) * g;
+    *(float*)(o + 0x44) = f;
 }
 
 // @ 0x00a9b1d0
@@ -3703,8 +3701,7 @@ reset:
 // @ 0x00a9b410
 void cField::SetObject(cField* n)
 {
-    cField* old = (cField*)m_248;
-
+    cField* old = m_248;
     if (n != old) {
         if (n != 0) {
             void* vt = *(void**)n;
@@ -3714,13 +3711,13 @@ void cField::SetObject(cField* n)
         if (old != 0) {
             void* vt = *(void**)old;
             (*(void (__thiscall**)(void*))((char*)vt + 0x38))(old);
-            *(byte*)((char*)m_248 + 0x24c) = 1;
+            m_248->m_24c = 1;
             return;
         }
-        *(byte*)((char*)n + 0x24c) = 1;
+        n->m_24c = 1;
         return;
     }
-    *(byte*)((char*)old + 0x24c) = 1;
+    old->m_24c = 1;
 }
 
 // @ 0x00a9c710

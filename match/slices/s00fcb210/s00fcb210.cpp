@@ -17,7 +17,6 @@ namespace rw { namespace core { namespace timer {
 
 class Stopwatch
 { public:
-    void*   vftable;     // +0x00
     void*   mCallback;   // +0x04
     int32_t mUnits;      // +0x08
     int32_t pad_0c;
@@ -717,7 +716,7 @@ float MovieTimer::Elapsed()
     if (mCallback != 0)
     {
         float f = mCallback->v3();
-        if (0.0f < f)
+        if (0.0f <= f)
             return f;
     }
     return rw::core::timer::Stopwatch_ElapsedF(mStopwatch);

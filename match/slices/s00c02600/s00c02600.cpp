@@ -2,6 +2,7 @@
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast (SSE scalar moves; MinF/MaxF/round helpers are __asm).
 // Retail layout differs from the 2008 PDB; offsets below come from the disassembly.
 #include "types.h"
+#include "sse_helpers.h"
 #include <math.h>
 
 // ---------------------------------------------------------------- forward decls
@@ -21,10 +22,10 @@ extern float g_01687a00, g_01687a0c, g_01687a10;
 extern float g_01687a20, g_01687a24, g_01687a34, g_01687a38;
 
 // ---------------------------------------------------------------- asm helpers
-inline int RoundToInt(float f) { __asm cvtss2si eax, f }
-inline float MaxF(float a, float b) { __asm { movss xmm0, a
-                                             maxss xmm0, b
-                                             movss a, xmm0 } return a; }
+// RoundToInt: the vetted SseRoundToInt in sse_helpers.h
+
+// MaxF: the vetted SseMax in sse_helpers.h
+
 inline float MinF(float a, float b) { __asm { movss xmm0, a
                                              minss xmm0, b
                                              movss a, xmm0 } return a; }
@@ -286,7 +287,7 @@ int __cdecl FUN_00c02710(float f)
     if (p != 0) {
         local = (f - (*(float*)((char*)p + 0x5b0) + *(float*)((char*)p + 0x56c)) * 0.1f) * 0.1f + 5.0f;
     }
-    int r = RoundToInt(local);
+    int r = SseRoundToInt(local);
     if (r < 0) return 0;
     if (r > 10) r = 10;
     return r;
@@ -417,7 +418,7 @@ void CreatureBase::FUN_00c02b10(float f)
     float v = f;
     if (((unsigned char)(mGeneralFlags >> 9)) & 1) {
         float t = 0.25f * f;
-        t = MaxF(t, 1.0f);
+        t = SseMax(t, 1.0f);
         v = MinF(t, 5.0f);
     }
     f_00c0bf10(0x1000, 0, 0x1000, 0, v, 0, 0x4000000, 0, 0, 0, 0);

@@ -28,7 +28,8 @@ struct hkCdPoint { hkContactPoint m_contact; const hkCdBody* m_cdBodyA; const hk
 class hkCdPointCollector
 {
 public:
-	virtual ~hkCdPointCollector() {}                       // 0
+	hkCdPointCollector() : m_earlyOutDistance(hkRealMax()) {}
+	virtual void* scalarDeletingDtor(unsigned int flags);  // 0, 0x010CDCA0
 	virtual void addCdPoint(const hkCdPoint& point) = 0;   // 1
 	float m_earlyOutDistance;                              // +4
 };
@@ -62,7 +63,7 @@ struct hkLinearCastCollisionInput : hkCollisionInput
 class hkSymmetricAgentFlipCollector : public hkCdPointCollector        // vtable 0x014A43A4
 {
 public:
-	explicit hkSymmetricAgentFlipCollector(hkCdPointCollector& original) : m_original(original) { m_earlyOutDistance = hkRealMax(); }
+	explicit hkSymmetricAgentFlipCollector(hkCdPointCollector& original) : m_original(original) {}
 	virtual void addCdPoint(const hkCdPoint& point);           // 0x010EBBB0
 	hkCdPointCollector& m_original;                            // +8
 };
@@ -207,6 +208,7 @@ public:
 	virtual void linearCast(const hkCdBody& a, const hkCdBody& b, const hkLinearCastCollisionInput& input,
 	                        hkCdPointCollector& castCollector, hkCdPointCollector* startCollector);
 	virtual void processCollision(const hkCdBody& a, const hkCdBody& b, const hkProcessCollisionInput& input, hkProcessCollisionOutput& output);
+	virtual void updateShapeCollectionFilter(const hkCdBody& a, const hkCdBody& b, const hkCollisionInput& input);
 };
 
 // Template member definitions (explicitly instantiated in the slices that own the binary's instances).
@@ -261,6 +263,12 @@ void hkSymmetricAgent<AGENT>::processCollision(const hkCdBody& bodyA, const hkCd
 		output.m_toiContact.m_separatingNormal.y = -output.m_toiContact.m_separatingNormal.y;
 		output.m_toiContact.m_separatingNormal.z = -output.m_toiContact.m_separatingNormal.z;
 	}
+}
+
+template <typename AGENT>
+void hkSymmetricAgent<AGENT>::updateShapeCollectionFilter(const hkCdBody& bodyA, const hkCdBody& bodyB, const hkCollisionInput& input)
+{
+	AGENT::updateShapeCollectionFilter(bodyB, bodyA, input);
 }
 
 // ---- multi sphere / bounding volume ------------------------------------------------------------------------

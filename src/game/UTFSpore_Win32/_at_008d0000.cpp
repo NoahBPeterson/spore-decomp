@@ -1297,16 +1297,18 @@ void FUN_008d3b70(int param_1, int param_2, int param_3, int param_4, unsigned p
 // @ 0x008d3c60
 TSI* TSI::FUN_008d3c60(VAlloc* alloc)
 {
+    VAlloc* savedAlloc = *(VAlloc* volatile*)&alloc;
     mVtbl = (void**)0x1435990;
+    _ReadWriteBarrier();
     mKeys.begin = 0;
     mKeys.end = 0;
     mKeys.cap = 0;
-    mKeys.alloc = alloc;
+    mKeys.alloc = savedAlloc;
     mKeys.name = 0;
     mRects.begin = 0;
     mRects.end = 0;
     mRects.cap = 0;
-    mRects.alloc = alloc;
+    mRects.alloc = savedAlloc;
     mRects.name = 0;
     mDirty = 0;
     return this;

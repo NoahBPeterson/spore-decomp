@@ -22,7 +22,6 @@
                argument setup differ equiv: UNSUPPORTED (0/1200 valid inputs).
 00f212c0   61  greater-than-threshold test: complete x87 float form; scheduling of the sum/threshold differs flags /O2 /MD /Gy /TP /arch:SSE /fp:fast equiv: PASS.
 00f21310  162  marker placement probe: complete; nested vcall order and x87 compare differ equiv: UNSUPPORTED (0/1200 valid inputs).
-00f21760    1  tail-refresh gate: complete; only cmp vs sub for the ==10 compare differs equiv: WEAK (89.5% coverage).
 00f217a0   17  reset event property: complete; only register allocation differs (ours key->eax/field->edx, original key->ecx/field->eax) equiv: FAIL (register-only: ours clobbers edx, LTCG ABI artefact).
 00f217c0  115  find event marker by property: complete; shrink-wrapped register save order and loop alignment differ equiv: PASS.
 00f20de0  212  terrain marker position sample: complete; equivalence UNSUPPORTED (0/200 valid, fault(read)=191) because the retail object arrives only through the context vtable; retail keeps the radius in xmm0 across the sub_59aed0 call by spilling it into its own argument slot (movss [esp+0x28]), samples the orientation at world+0x1f4, and folds radius*qv into k204*(...) with SSE; our /arch:SSE rebuild spills to a named local and evaluates the same product chain with x87 plus a different store order.

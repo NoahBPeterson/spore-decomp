@@ -40,8 +40,11 @@ manifests, `chk.py` and `difftest` pick it per line. `tools/matching/chk.py
 --flags` and a manifest row's flags both accept it.
 
 **Two x87 smell tests** (from `matching.md` and Papercuts):
-- `fld st(i); fmul [m]` (a just-computed value reused) is **cl 13.10** output;
-  cl 15 emits `fld [m]; fmul st(i)`. Havok x87 code never matches under cl 15.
+- `fld st(i); fmul [m]` (a just-computed value reused) is cl 13.10 output **for a `float` scalar**. The
+  reverse, `fld [m]; fmul st(i)`, is **also cl 13.10 output when the scalar is a `double`** (section 9.1,
+  "THE DOUBLE-SCALAR LEVER"), so this shape does **not** tell the compilers apart: try `double` before
+  suspecting the compiler. Which compiler built a function comes from the dev PDB (all 469 Havok objects are
+  cl 13.10.3077: use `/vc71`), not from operand order.
 - `sqrt` compiling to a `_CIsqrt` **call** means you are on cl 13.10 without
   `/fp:fast`; the original may inline `fsqrt`. If a Havok function FAILs on a
   first import, you forgot `/vc71` (or `/fp:fast`).
@@ -403,11 +406,37 @@ guide needs the most adaptation.** CRITICAL context from
   (stock Ghidra groups associative; patched Ghidra is NaN-exact — see the two
   patches in `floating_point.md`).
 
-### 9.1 x87 operand shape is version-specific **[13] vs [15]**
+### 9.1 x87 operand shape **[13]** (Havok, `/vc71`)
+
+> **THE DOUBLE-SCALAR LEVER: try this first on any x87 operand-order or spill difference.**
+> When a float expression is scaled by a value, **declaring that value (or casting one operand) `double`**
+> changes cl 13.10's x87 shape:
+> - **Operand orientation flips to memory-first:** `fld [m]; fmul st(n)` instead of `fld st(n); fmul [m]`.
+> - **The value stays unrounded on the x87 stack** instead of being rounded through a float slot.
+> - **Bound to a `const float&` parameter, a `double` gets a float temporary per use** (`fst dword [esp]`,
+>   reload): the "rounded copy beside the register value" pattern.
+>
+> Found in the Mount & Blade decompilation (same cl 13.10, `/O2`, x87; its `docs/codegen.md` §9.2), where on
+> 2026-11-10 it made five functions byte-exact in one afternoon on rows where every `float` spelling had failed:
+> `double s = sin(angle)` (a 2x2 rotation with inline `Vec2` operators taking `const float&`), a scale factor
+> `double t`, `v[i].y * (double)s[1]`, and `double t = 1.0f - x`. Not yet confirmed on a Spore function: earlier
+> versions of this guide called `fld [m]; fmul st(i)` a cl 15 signature, so **Havok rows whose notes blame
+> "the cl 15 shape" or "never matches under 13.10" deserve one more try with `double` scalars.**
+>
+> Is it safe? Where the original keeps the value unrounded (the instruction shape shows it), `double` is what
+> the original computed. Confirm behaviour with the equivalence harness as usual.
+>
+> **Check the compiler first.** Spore's first test (2026-11-10, `0x010aa050`, `hkReplacePreviousRhs`): the
+> operand-order difference came from compiling Havok code with cl 15. Under `/vc71` the existing `float`
+> source and three `double` spellings all matched; under cl 15 none did. A sweep of the slices behind
+> `src/game/Havok/` with `/vc71` then matched 8 of 545 open rows (#120). So: confirm the row's flags carry
+> `/vc71` before reaching for `double`.
 
 - `fld st(i); fmul [m]` (keeps a just-computed value on the stack and multiplies
-  by memory) is **cl 13.10**; cl 15 emits `fld [m]; fmul st(i)`. Havok x87 code
-  never matches cl 15.
+  by memory) is the cl 13.10 shape **for a `float` scalar**; with a `double` scalar the same compiler emits
+  `fld [m]; fmul st(n)` (the lever above). cl 15 differs in other ways (Papercut s010f3460: Havok's older cl
+  loads 0.0f/1.0f from the constant pool where cl 15 emits `fldz`/`fld1`), so Havok x87 code is still built
+  with `/vc71`.
 - `fstp [local]` then reload is **VC7.1** output; where the original does that,
   your source must keep the value in a **memory-resident struct field**
   (`hkVector4` local), because a `const float` scalar stays unrounded on the x87

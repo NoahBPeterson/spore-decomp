@@ -8,7 +8,6 @@
 007466e0  52 hull-bounds refresh helper approximated (bounding-sphere math)
 007467f0 290 query helper approximated (virtual-slot protocol guessed)
 007469b0 232 cModelWorld::SetWorldBounds approximated (hiergrid math/rounding)
-00746cc0  18 rbtree::find passthrough stubbed
 00746cf0 154 cModelManager::DebugPick approximated (pick protocol guessed)
 00746e50 222 load-entry constructor incomplete
 007471f0  70 cLoadingModel::cLoadingModel incomplete (member offsets)
@@ -20,7 +19,6 @@
 0074b390  -  partial: eastl::partial_sort<cOccluder*> (254B template) stubbed.
 0074c020  -  partial: vector::insert element 0x18B (334B) stubbed.
 00750180  -  partial: helper (386B) stubbed.
-00750310  -  partial: destructor helper (131B EH) stubbed.
 007503a0  -  partial: SP::cModelWorld::~cModelWorld (415B) stubbed.
 007505a0  -  partial: SP::cModelWorld::PreloadModels (479B) stubbed.
 00751560  1475  heavily inlined /O2 job/refcount/EH code; skeleton only

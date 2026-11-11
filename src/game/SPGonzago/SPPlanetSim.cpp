@@ -2244,16 +2244,17 @@ void cCivData::EraseCity(int index)
 // @ 0x00ff1ff0
 void cCivData::EraseValue(int value)
 {
-    int* first = mpValues28;
     int* last = mpValuesEnd2c;
+    int* first = mpValues28;
     while (first != last && *first != value)
         ++first;
-    if (first != last) {
+    if (first != mpValuesEnd2c) {
         if (value != 0)
             operator_delete_array((void*)value);
-        if (first + 1 < last)
-            memcpy_fn(first, first + 1, (unsigned int)((char*)last - (char*)(first + 1)));
-        mpValuesEnd2c = last - 1;
+        int* next = first + 1;
+        if (next < mpValuesEnd2c)
+            memcpy_fn(first, next, (unsigned int)((char*)mpValuesEnd2c - (char*)next));
+        --mpValuesEnd2c;
     }
 }
 

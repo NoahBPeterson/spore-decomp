@@ -1,0 +1,1 @@
+slices/s00d6de50/s00d6de50.cpp  ?FUN_00d6de50@@YA_NPAUCreature@@@Z  00d6de50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

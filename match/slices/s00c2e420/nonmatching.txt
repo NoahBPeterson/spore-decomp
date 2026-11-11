@@ -1,8 +1,6 @@
 # va  diff-bytes  reason
 00c2e420  98  complete: mission Read (cGameData::Read + a cVarListSerializer pass over 0x01572560 with tag 0x01a80d26), one thiscall frame + return differs; difftest UNSUPPORTED (0/400 valid: original faults reading)
 00c2e4b0  20  complete: state change + two vtable calls, scheduling differs
-00c2e4f0  3   complete: vtable accessor + GetPropertyAsKey, one byte/frame differs
-00c2e780  8   complete: two-step accessor chain, call setup differs
 00c2e820  8   complete: two-step accessor chain, call setup differs
 00c2e980  13  complete: NotifyEvent float push, register scheduling differs
 00c2e9e0  37  complete: state change + timer restart, scheduling differs

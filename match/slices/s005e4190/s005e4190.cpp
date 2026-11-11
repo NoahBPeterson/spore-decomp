@@ -497,11 +497,28 @@ void cIconVerbHelper::SetIndex(int v) {
     return Slot7(v + 0x31);
 }
 
+// retail inlined the CRT __ftol2 helper's body (fnstcw / movzx / or 0xc00 / fldcw / fistp
+// qword / fldcw-restore) and its instructions interleave with the wstring-constructor
+// stores, so spell the same truncating conversion as separate __asm statements.
+static __forceinline int Ftoll2Inline(float f) {
+    short savedCw;
+    union { unsigned chop; __int64 q; } u;
+    __asm fld f;
+    __asm fnstcw savedCw;
+    __asm movzx eax, word ptr savedCw;
+    __asm or eax, 0xc00;
+    __asm mov u.chop, eax;
+    __asm fldcw word ptr u.chop;
+    __asm fistp qword ptr u.q;
+    __asm fldcw savedCw;
+    return (int)u.q;
+}
+
 // @ 0x005e4c90
 void cSPEditorVerbIcon::UpdateLevelDisplay(float value) {
   if (mWinHighlight) {
     eastl::wstring text;
-    WStr_Format(&text, reinterpret_cast<const wchar_t*>(0x13f01bc), (int)value);
+    WStr_Format(&text, reinterpret_cast<const wchar_t*>(0x13f01bc), Ftoll2Inline(value));
     mWinHighlight->SetText(text.mpBegin);
   }
 }

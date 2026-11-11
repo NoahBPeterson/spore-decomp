@@ -3,7 +3,6 @@
 00bb9c90  20   complete: HasRare flag test; equiv PASS, branch layout differs
 00bb9d40  58   complete: planet-object flag scan; equiv PASS, loop register allocation differs
 00bb9d90  55   complete: planet-object flag/artifact scan; equiv PASS, loop register allocation differs
-00bb9de0   7   complete: name-ensure; equiv PASS, instruction scheduling differs
 00bb9eb0 166   complete: UpdateSETI monolith/species-key update; equiv WEAK, property-chain codegen differs
 00bb9fb0  44   complete: HasMonolith flag/UpdateSETI ternaries; equiv PASS, codegen differs
 00bb9ff0 223   complete: ProtectFromBio property/flag decision tree; equiv WEAK, property-chain codegen differs

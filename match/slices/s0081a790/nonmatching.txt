@@ -5,7 +5,6 @@
 0081b000  145  ctor cSPUIPopupMenuWin: 12 pointer + float + flag initialisers, vptr stores
 0081b100  283  dtor cSPUIPopupMenuWin: AutoRefCount release order / base dtor not exact [equiv: UNSUPPORTED, 0/1200 valid inputs (faults + fake-arity)]
 0081b510  224  OnDetach: interface query + member releases, register scheduling differs
-0081b650  2  AddMenuItem: first vtable call loads slot into eax instead of edx
 0081b6a0  159  AddMenuItem(layout): cSPUILayout local frame + Init/FindWindowByID not exact
 0081b240  289  cSPUIPopupMenuWin::MeasureItemHeight: complete; stack slot order of locals differs from original, and and-esp,-64 frame forced with an align(64) dummy [equiv: WEAK 398 valid, 46% coverage]
 0081a790  397  cSPUIPieMenu::get_unused_item: deque growth (PieItemFull ctor 0x818820 / copy-ctor 0x818650 / dtor 0x819880, ItemVec::DoInsertValue 0x81a510, cSPUIPieMenuItem::Init 0x8198f0) + unused-slot scan; chk diff 397 (size 433 vs 419); equiv WEAK 316/400 valid (44.1% cov, need 60%)

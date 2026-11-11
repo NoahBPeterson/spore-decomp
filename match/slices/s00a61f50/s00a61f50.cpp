@@ -126,7 +126,9 @@ float __cdecl fx_array_sum_pos(FXTableBase* self)
 // @ 0x00a623f0
 void __cdecl fx_set_accum(FXTableBase* self, float v)
 {
-    ((FxAccum*)&self->accum)->Set(v);       // 0x00936090, thiscall
+    // The setter's own argument is the raw float bits (retail passes the float dword through
+    // without any fp conversion).
+    ((FxAccum*)&self->accum)->SetBits(*(const int*)&v);   // 0x00936090, thiscall
 }
 
 // @ 0x00a62410

@@ -17,3 +17,5 @@ slices/s0090a400/s0090a400.cpp  ?declClose@@YAHPAUprolog_state@@HPBD1PBUencoding
 slices/s0090a400/s0090a400.cpp  ?entity6@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090b1c0
 slices/s0090a400/s0090a400.cpp  ?notation3@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090b250
 slices/s0090a400/s0090a400.cpp  ?notation4@@YAHPAUprolog_state@@HPBD1PBUencoding@@@Z  0090b2a0
+slices/s0090a400/s0090a400.cpp  _XML_ParserCreate_MM  0090aed0  /O2 /MD /Gy /EHsc /TP
+slices/s0090a400/s0090a400.cpp  _XML_ParserCreate  0090af20  /O2 /MD /Gy /EHsc /TP

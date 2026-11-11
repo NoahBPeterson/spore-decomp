@@ -740,13 +740,11 @@ void* cSpaceInventoryItem::Cast(uint32_t typeID)
 bool cSpaceInventoryItem::IsCargoType()
 {
     switch (mItemType) {
-    case kItemNone:
-        return false;
-    case kItemPlant:
-    case kItemTool:
-    case kItemTradingObject:
-    case kItemMultiDeliveryObject:
-    case kItemSentient:
+    case SP::kItemCargoFlora:
+    case SP::kItemCargoFauna:
+    case SP::kItemCommodity:
+    case SP::kItemCargoItem:
+    case SP::kItemCargoSentient:
         return true;
     default:
         return false;
@@ -830,7 +828,8 @@ ResourceKey cSpaceInventoryItem::GetImageID()
 // @ 0x00c871b0
 bool cSpaceInventoryItem::GetImageColors(uint32_t& dstCount, void** pDst)
 {
-    return SP_GetPropertyAsUint32Array(mpPropList.mPtr, 0xadc0291e, dstCount, pDst);
+    void* pList = mpPropList.mPtr;
+    return SP_GetPropertyAsUint32Array(pList, 0xadc0291e, dstCount, pDst);
 }
 
 // @ 0x00c871d0

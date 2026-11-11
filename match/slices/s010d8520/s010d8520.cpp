@@ -131,7 +131,8 @@ void hkSphereSphereAgent::cleanup()
 }
 
 // @ 0x010d8a00
-hkSphereSphereAgent* HK_CALL hkSphereSphereAgent::create(hkContactMgr* mgr)
+hkSphereSphereAgent* HK_CALL hkSphereSphereAgent::create(const hkCdBody&, const hkCdBody&,
+                                                        const hkCollisionInput&, hkContactMgr* mgr)
 {
 	return new hkSphereSphereAgent(mgr);
 }

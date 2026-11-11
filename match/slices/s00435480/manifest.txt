@@ -1,5 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-slices/s00435480/s00435480.cpp  ?StartIfUnset@Timer@@QAEXXZ  00435480  /Od /Ob1 /MD /Gy /TP
 slices/s00435480/s00435480.cpp  ?ScalarDelete@Summ@@QAEPAU1@I@Z  004354e0  /Od /Ob1 /MD /Gy /TP
 slices/s00435480/s00435480.cpp  ?CastInterface@Base1@@QAEPAXI@Z  004359b0  /Od /Ob1 /MD /Gy /TP
 slices/s00435480/s00435480.cpp  ?LookupRecord@Summ@@QAEII@Z  00435b60  /Od /Ob1 /MD /Gy /TP

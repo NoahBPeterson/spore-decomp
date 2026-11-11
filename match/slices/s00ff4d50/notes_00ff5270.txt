@@ -1,0 +1,9 @@
+No source yet in this slice for 0x00ff5270; writing it as a draft non-member needs the flags
+profile /O2 /MD /Gy /EHsc /TP /arch:SSE (no /GS-): retail's float test is SSE
+(`movss xmm0,[esp+0x10]; ucomiss xmm0,[0x1485378]; lahf; test ah,0x44; jnp`) while /GS- gives
+the x87 fldz/fucom compare, and the tail call pushes the float as `fstp [esp]` after the two
+pushes (`push f; push ecx; fstp [esp]; push ecx` = arg2, then arg1 from a register) which the
+floating inline FUN_00ff51f0(r, f2, f3) call does not produce.
+Do NOT re-mark it in s00ff4d50.cpp: that slice compiles with /GS- and the mixed-object case
+fails the fingerprint (the object-level profile differs), so the tuned body has to live in its
+own file with the /GS-on flags and the 0x00ff5270 marker only.

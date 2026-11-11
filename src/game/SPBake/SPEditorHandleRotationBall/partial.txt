@@ -1,3 +1,1 @@
 # va  diff-bytes  reason
-00483140  517   CalculateBallOffset: bounding-box/distance math only sketched
-00483350  315   Init: base init + offset/flag writes present; bitset path approximate

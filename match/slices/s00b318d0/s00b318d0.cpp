@@ -2,9 +2,11 @@
 // command, a token translator and a few helpers.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE.
 #include "types.h"
+#include "sse_helpers.h"
 #include <xmmintrin.h>
 #include <intrin.h>
 #include <new>
+#pragma intrinsic(_ReadWriteBarrier)
 typedef unsigned int u32;
 
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(__int64*);
@@ -41,18 +43,21 @@ struct Stopwatch {
             }
         }
     }
-    __forceinline void RestartIfRunning()
+    // Returns the new total elapsed time (always 0), one return per arm; the
+    // QueryPerformanceCounter scratch is the caller's dead cycles slot.
+    __forceinline int RestartIfRunning(__int64* scratch)
     {
-        if (mnStartTime == 0) {
-            mnStartTime = 0;
-        } else if (mnUnits == 1) {
-            mnStartTime = __rdtsc();
-        } else {
-            __int64 t;
-            QueryPerformanceCounter(&t);
-            mnStartTime = t;
+        if (mnStartTime != 0) {
+            if (mnUnits == 1) {
+                mnStartTime = __rdtsc();
+                return 0;
+            }
+            QueryPerformanceCounter(scratch);
+            mnStartTime = (unsigned __int64)*scratch;
+            return 0;
         }
-        mnTotalElapsedTime = 0;
+        mnStartTime = 0;
+        return 0;
     }
     __forceinline void Restart()
     {
@@ -192,34 +197,37 @@ struct cGameTimeManager : cGonzagoSubsystem {
 // @ 0x00b31a90
 void cGameTimeManager::UpdateTimeAtStartOfFrame()
 {
-    float f = (float)sBaseTimer.GetElapsedTimeFloat() * sBaseTimer.mfCoeff * mTimeFlowRate;
-    __int64 d = (__int64)f;
+    // d holds the raw cycle count first, then the rounded millisecond count;
+    // the fistp is round-half-to-even, a C cast would go through __ftol2
+    // (truncating), so the conversion is written out.
+    __declspec(align(8)) __int64 d = sBaseTimer.GetElapsedTimeFloat();
+    float f = (float)d * sBaseTimer.mfCoeff * mTimeFlowRate;
+    d = X87RoundToInt64(f);
     mTimeAtStartOfFrame = mBaseTimeElapsed + d;
 }
 
 // @ 0x00b31ae0
 void cGameTimeManager::Serialize(void* stream)
 {
-    float f = (float)sBaseTimer.GetElapsedTimeFloat() * sBaseTimer.mfCoeff * mTimeFlowRate;
-    mBaseTimeElapsed += (__int64)f;
-    sBaseTimer.RestartIfRunning();
+    // d holds the raw cycle count first, then the rounded count (fistp is
+    // round-half-to-even; a C cast would go through __ftol2, truncating).
+    __declspec(align(8)) __int64 d = sBaseTimer.GetElapsedTimeFloat();
+    float f = (float)d * sBaseTimer.mfCoeff * mTimeFlowRate;
+    __asm {
+        fld dword ptr [f]
+        fistp qword ptr [d]
+    }
+    mBaseTimeElapsed += d;
+    // RestartIfRunning inlined, reusing d as the QueryPerformanceCounter temp
+    // (retail's QPC temp colours onto the dead cycles slot at [esp+8]).
+    sBaseTimer.mnTotalElapsedTime = (unsigned __int64)sBaseTimer.RestartIfRunning(&d);
     cVarListSerializer ser(this, (const void*)0x01569130, 0x01a80d26);
     ser.Serialize(stream);
 }
 
 #pragma warning(disable:4035)
-__forceinline int CeilToInt(float f)
-{
-    __asm {
-        movss    xmm0, f
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov      ecx, eax
-        add      ecx, 1
-        ucomiss  xmm1, xmm0
-        cmovb    eax, ecx
-    }
-}
+// CeilToInt: the vetted SseCeilToInt in sse_helpers.h
+
 
 // @ 0x00b31c60
 unsigned cGameTimeManager::CeilScaledTime(unsigned v)
@@ -230,7 +238,7 @@ unsigned cGameTimeManager::CeilScaledTime(unsigned v)
     const unsigned* p = v >= lim ? &lim : &v;
     v = *p;
     float f = (float)v * mTimeFlowRate;
-    return CeilToInt(f);
+    return SseCeilToInt(f);
 }
 
 // @ 0x00b31ea0
@@ -350,11 +358,17 @@ bool cGameTimeManager::TogglePauseGate(unsigned id)
 // @ 0x00b322c0
 void cGameTimeManager::SetTimeFlowRate(float rate)
 {
-    bool wasPaused = (mCachedPauseState & 1) != 0;
+    // Preserve the full cached-state read before extracting the saved pause flag.
+    unsigned pauseState = mCachedPauseState;
+    _ReadWriteBarrier();
+    bool wasPaused = (pauseState & 1) != 0;
     if (wasPaused)
         TogglePauseGate(0x04bf38a8);
-    float f = (float)sBaseTimer.GetElapsedTimeFloat() * sBaseTimer.mfCoeff * mTimeFlowRate;
-    mBaseTimeElapsed += (__int64)f;
+    // Reuse the elapsed-time slot for the rounded count, as in the frame update.
+    __declspec(align(8)) __int64 d = sBaseTimer.GetElapsedTimeFloat();
+    float f = (float)d * sBaseTimer.mfCoeff * mTimeFlowRate;
+    d = X87RoundToInt64(f);
+    mBaseTimeElapsed += d;
     sBaseTimer.Restart();
     mTimeFlowRate = rate;
     AppSystemObj* app = SP_AppSystem();
@@ -532,20 +546,34 @@ bool __cdecl TryGetUIntProperty(void* plist, unsigned id, unsigned* out); // 004
 void __cdecl SetNumberStringD(double v, wchar_t* buf, unsigned cap, int flags);  // 00881ea0
 void __cdecl SetNumberStringI(__int64 v, wchar_t* buf, unsigned cap);             // 00881ae0
 
+extern void* vtbl_01460460;                                      // 0x01460460
 struct cTokenTranslator : cTranslatorBase {
     IRef* mpPropList;                                            // +8
     virtual ~cTokenTranslator();
     virtual bool Lookup(const wchar_t* tok, void* outStr);       // slot 0x10 (approx.)
     bool Translate(const wchar_t* tok, WStr* out);
+    void* FUN_00b324b0(unsigned int flags);
 };
 
-// @ 0x00b32490  (0x00b324b0 is the compiler-generated scalar deleting destructor of this class)
+// @ 0x00b32490
 cTokenTranslator::~cTokenTranslator()
 {
+    _ReadWriteBarrier();
     if (mpPropList)
         mpPropList->Release();
 }
-void ForceTokenTranslatorDtor(cTokenTranslator* p) { delete p; }
+// @ 0x00b324b0
+void* cTokenTranslator::FUN_00b324b0(unsigned int flags)
+{
+    *(void**)this = &vtbl_01460460;
+    _ReadWriteBarrier();
+    if (mpPropList)
+        mpPropList->Release();
+    cTranslatorBase::~cTranslatorBase();
+    if (flags & 1)
+        operator_delete__(this);
+    return this;
+}
 
 // @ 0x00b324f0
 bool cTokenTranslator::Translate(const wchar_t* tok, WStr* out)

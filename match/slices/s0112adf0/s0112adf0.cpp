@@ -169,7 +169,7 @@ struct hkPointerMultiMap {
     hkPointerMapBase          m_map;     // +0xc
     void destruct();   // 0x0112b050, this in ECX
     ~hkPointerMultiMap() { m_map.~hkPointerMapBase(); m_items.quickFree(0x14); }
-    void insert(hkUlong32 key, void** const& value) {
+    void insert(hkUlong32 key, void** value) {
         hkUlong32 head = m_map.getWithDefault(key, 0xffffffff);
         hkPointerMapItem it; it.pointer = value; it.next = (int)head;
         m_items.pushBack(it);
@@ -495,8 +495,7 @@ void hkPackfileObjectUpdateTracker::replaceObject(void* oldObject, void* newObje
 // @ 0x0112b600
 void hkPackfileObjectUpdateTracker::objectPointedBy(void* object, void* fromWhere)
 {
-    void** w = (void**)fromWhere;
-    m_pointersTo.insert((hkUlong32)(uintptr_t)object, w);
+    m_pointersTo.insert((hkUlong32)(uintptr_t)object, &fromWhere);
 }
 
 // @ 0x0112b620

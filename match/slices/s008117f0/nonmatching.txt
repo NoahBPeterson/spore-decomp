@@ -1,4 +1,3 @@
-00811b30  2   complete; QI vcall target loaded into eax instead of edx
 00811f20  46  complete; manager ctor field-store order/schedule differs
 00811f80  14  complete; scalar deleting dtor teardown order differs
 008120d0  128 complete; InitB acquire/store schedule + tail call differs

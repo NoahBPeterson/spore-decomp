@@ -384,7 +384,7 @@ class hkSymmetricAgentFlipBodyCollector : public hkCdBodyPairCollector { public:
 // @ 0x010ebbb0
 void hkSymmetricAgentFlipCollector::addCdPoint(const hkCdPoint& point)
 {
-	hkCdPoint flipped;
+	__declspec(align(16)) hkCdPoint flipped;
 	flipped.m_cdBodyA = point.m_cdBodyB;
 	flipped.m_cdBodyB = point.m_cdBodyA;
 	flipped.m_contact.setFlipped(point.m_contact);
@@ -407,7 +407,7 @@ void hkSymmetricAgentFlipCastCollector::addCdPoint(const hkCdPoint& point)
 void hkSymmetricAgentFlipBodyCollector::addCdBodyPair(const hkCdBody& a, const hkCdBody& b)
 {
 	m_collector->addCdBodyPair(b, a);
-	m_earlyOut = m_collector->m_earlyOut;
+	m_earlyOut = (hkBool)m_collector->m_earlyOut;
 }
 
 // ---- hkIterativeLinearCastAgent::staticLinearCast -----------------------------------------------------------------

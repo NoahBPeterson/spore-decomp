@@ -14,3 +14,4 @@
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?Deactivate@cAppModeSpace@SP@@QAEXXZ  00fda390  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda9f0@cAppModeSpace@SP@@QAEXXZ  00fda9f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPAppModeSpace.cpp  ?FUN_00fda940@cAppModeSpace@SP@@QAEXXZ  00fda940  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPAppModeSpace.cpp  ?PlanetOnMouseDown@cAppModeSpace_s00fd_bd60@@QAEXXZ  00fdc9e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

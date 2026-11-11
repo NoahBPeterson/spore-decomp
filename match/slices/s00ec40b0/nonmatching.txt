@@ -1,9 +1,8 @@
 00ec40b0  297  complete source; equiv UNSUPPORTED 0/400 valid (write-protect faults: allocator/messaging table) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec41e0   62  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall base ctor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ec42f0   25  complete source; equiv UNSUPPORTED 0/400 valid (fake-arity at vtable dispatch) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4330   70  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4380   96  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ec4430   36  complete source; equiv PASS 387 valid 100% coverage (regalloc/hoist order) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec4430   36  complete source; equiv PASS 387 valid 100% coverage (regalloc/hoist order) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. Tried: key/value found in locals, nested if vs &&, an inline equal_rec helper (basic and with key/value locals), a copy of `last` - retail tests first!=last with both in registers before pushing (and returns last from the shared epilogue), cl always folds the compare into the loop and emits 42 bytes; none moved the empty-range test
 00ec44a0   64  complete source; equiv UNSUPPORTED 0/400 valid (budget: long insertion-sort runs on soup data) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4500   82  complete source; equiv WEAK 43 valid (need 200) 25% coverage flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4570   95  complete source; equiv PASS 400 valid 100% coverage (EASTL median-of-three, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
@@ -21,7 +20,6 @@
 00ec4d30   19  complete source; equiv PASS 386 valid 100% coverage (upper_bound, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4d70   71  complete source; equiv PASS 364 valid 100% coverage (partition, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4de0   88  complete source; equiv PASS 351 valid 100% coverage (partial_sort, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ec4e50   43  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4e80  179  complete source; equiv PASS 394 valid 100% coverage (introsort loop; calls tolerated as inline diffs) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4f00   56  complete source; equiv WEAK 129 valid (need 200) 83% coverage flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4f70  320  complete source; equiv not completed (per-function run exceeded 600s on the object-heavy path) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

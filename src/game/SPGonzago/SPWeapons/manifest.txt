@@ -1,4 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPWeapons.cpp  ?f00cb4cc0@@YGXPAUVector3@@@Z  00cb4cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Construct@cSpaceDefenseMissileLocomotion@@QAEPAV1@MMPAX@Z  00cb54a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?SP_PathPrefsForTool@@YAHPAUcSPSpaceToolData@@@Z  00cb36e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?Cast@CObj3760@@QAEPAXH@Z  00cb3760  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?Read@CArtilleryProjectileR@@QAE_NPAUIStream@@@Z  00cb3850  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -7,7 +9,9 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?Cast@CObj3e20@@QAEPAXH@Z  00cb3e20  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?HasLiveTarget@cLocomotionBase@@QAE_NXZ  00cb4a40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?HasLiveTarget14@cLocomotionObj14@@QAE_NXZ  00cb4ca0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Set@ProjRefs@@QAEXPAURefCounted@@III0@Z  00cb4950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?HasLiveTargetDC@cLocomotionObjDC@@QAE_NXZ  00cb5560  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?GetPositions@cLocomotionObj518@@QAEXPAUVector3@@0@Z  00cb5450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5620@cCommunity@@QAEXI@Z  00cb5620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5670@cGameData_s00cb_5620@@QAEXXZ  00cb5670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb56f0@cGameData_s00cb_5620@@QAEXPAXHMM@Z  00cb56f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -33,3 +37,10 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?SetVerticalRocket@FlakProjectile@@QAEXPBIM@Z  00cb7ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?SetStraightLine@FlakProjectile@@QAEXPBID@Z  00cb7c20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?GetToolStrategy@cLocomotionObj14@@QAEPAXXZ  00cb5420  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?f00cb5050@@YIMH@Z  00cb5050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Shutdown@cProjectileOwner_s00cb_49e0@@QAEXXZ  00cb49e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?PathUpdated@cPathFollowingLocomotion_s00cb_a050@Simulator@@QAEXXZ  00cb4a70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb63c0@@YAEPAX@Z  00cb63c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb63e0@@YAXPAX@Z  00cb63e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb64c0@@YAEPAX@Z  00cb64c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb64e0@@YAXPAX@Z  00cb64e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

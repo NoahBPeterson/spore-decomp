@@ -97,7 +97,7 @@ typedef void (__cdecl *KeyEmitter)(void* dest, const void* keys, u32 offset, flo
 class Interpolator
 {
 public:
-    static u32* GetResourceDescriptor(u32* out, u32 size, u32 desc, int hasData); // 0x011fe550
+    static u32* GetResourceDescriptor(u32* out, u32 desc, u32 size, int hasData); // 0x011fe550
     static int  Fixup(Interpolator* self, FrameTable* table);                     // 0x011fe680
 
     int   AdvanceBack(float delta);     // 0x011fe2c0 rewind by delta frames
@@ -267,7 +267,7 @@ void Interpolator::SetPlaybackRate(float rate)
 
 // 011fe550 -- the resource descriptor of a keyframe block: {size, alignment} pairs.
 // @ 0x011fe550
-u32* Interpolator::GetResourceDescriptor(u32* out, u32 size, u32 desc, int hasData)
+u32* Interpolator::GetResourceDescriptor(u32* out, u32 desc, u32 size, int hasData)
 {
     u32 align = ((desc & 0xff) != 0) ? 0x10 : 4;
     u32 stride = (((desc >> 16 & 0xff) + (desc & 0xff) * 4 + (desc >> 8 & 0xff)) * 4 + 4
@@ -306,6 +306,8 @@ int Interpolator::Seek(float frame)
         Advance2(d);
     return 1;
 }
+
+extern "C" u32* GetResourceDescriptor_V(u32* out, u32 size, u32 desc, int hasData); // 0x011fe550
 
 // 011fe650 -- the byte size this interpolator's keyframe block needs.
 // @ 0x011fe650

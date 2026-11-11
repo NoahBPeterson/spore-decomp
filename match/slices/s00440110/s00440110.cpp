@@ -1,5 +1,6 @@
 // SP::cSPEditorBlock — scale/transform plumbing (unoptimized /Od /Ob1 /arch:SSE).
 #include "types.h"
+#include "sse_helpers.h"
 
 namespace SP {
 
@@ -69,16 +70,8 @@ struct AutoRefCount {
 };
 
 // SSE clamp helper of the editor module (maxss/minss against the memory params)
-__forceinline float Clamp(float value, float minValue, float maxValue)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        minss xmm0, maxValue
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
+
 
 // Fraction of value between lo and hi.
 inline float InverseLerp(float value, float lo, float hi) { return (value - lo) / (hi - lo); }
@@ -420,7 +413,7 @@ void cSPEditorBlock::SetUniformScale(float scale, bool b, bool force)
 {
     if (mUniformScale != scale || force) {
         float oldScale = mUniformScale;
-        scale = Clamp(scale, mMinUniformScale, mMaxUniformScale);
+        scale = SseClamp(scale, mMinUniformScale, mMaxUniformScale);
         mUniformScale = scale;
         if (mpModel) {
             if (mBooleanAttributes.test(7) && mVertebraAnimID) {

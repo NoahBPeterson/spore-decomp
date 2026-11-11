@@ -58,14 +58,6 @@ void ZoneObject_delete(void* p) {
     }
 }
 
-// @ 0x00925BF0
-void FUN_00925bf0(unsigned a1, unsigned a2, int a3) {
-    void* obj = *(void**)(a3 + 4);
-    void** vt = *(void***)obj;
-    int r = ((int (__thiscall*)(void*, unsigned, int, int))vt[2])(obj, a1, 0, 0);
-    unsigned* out = (unsigned*)a2;
-    if (out) *out = (r != 0) ? a1 : 0;
-}
 // @ 0x00925C20
 void FUN_00925c20(unsigned a1, int a2) {
     void* obj = *(void**)(a2 + 4);
@@ -93,10 +85,21 @@ extern void FUN_00925d60();
 struct HashHolder { void FUN_00925e60() { *(void**)this = (void*)0x0143e104; FUN_00925d60(); } };
 void FUN_00925e60_hash(HashHolder* h) { h->FUN_00925e60(); }
 
+struct CriticalSectionState {
+    CRITICAL_SECTION mCriticalSection;
+    int mRecursionCount;
+};
+
 // @ 0x00926100
 void* FUN_00926100(void* p) {
-    if (p) { *(void**)((char*)p + 0x18) = 0; InitializeCriticalSectionAndSpinCount((CRITICAL_SECTION*)p, 10); return p; }
-    return 0;
+    void* result = 0;
+    if (p) {
+        CriticalSectionState* state = (CriticalSectionState*)p;
+        state->mRecursionCount = 0;
+        InitializeCriticalSectionAndSpinCount(&state->mCriticalSection, 10);
+        result = p;
+    }
+    return result;
 }
 // @ 0x00926120
 int FUN_00926120(void* p) {
@@ -690,7 +693,16 @@ C26190* C26190::Init(unsigned size, unsigned bucketCount, char caseSensitive, ch
         mpAlloc = (void* (*)(unsigned))&FUN_00926160;
         mpFree = &FUN_00f47410;
     }
-    mpLock = FUN_00926100(mCS);
+    // Keep this inline initialization in its native caller form.
+    void* lock = mCS;
+    if (lock) {
+        CriticalSectionState* state = (CriticalSectionState*)lock;
+        state->mRecursionCount = 0;
+        InitializeCriticalSectionAndSpinCount(&state->mCriticalSection, 10);
+    } else {
+        lock = 0;
+    }
+    mpLock = lock;
     void* nodes = mpAlloc(mBlockSize);
     mpNodes = nodes;
     mpNode0 = nodes;

@@ -11,6 +11,7 @@
 //  * 0x00a6fee0  cEmitter::Forward         -- temporarily set flag bits around a vcall
 //  * 0x00a6ff20  cSmoothTrail::Reset
 #include "types.h"
+#include "sse_helpers.h"
 #include <string.h>
 
 typedef unsigned int u32;
@@ -268,42 +269,24 @@ struct cSmoothTrail {
 
 // SSE clamp: the retail copy keeps the value in xmm0 and clamps it against the
 // memory-homed bounds, so it is written as a short asm block.
-__forceinline float Clamp(float value, float lo, float hi)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, lo
-        minss xmm0, hi
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
+
 
 // Truncating float->int of the retail copy: convert with the current SSE
 // rounding mode, then step down when the rounded value overshoots.
-__forceinline int FloorInt(float v)
-{
-    __asm {
-        movss   xmm0, v
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov     ecx, eax
-        sub     ecx, 1
-        ucomiss xmm0, xmm1
-        cmovb   eax, ecx
-    }
-}
+// FloorInt: the vetted SseFloorToInt in sse_helpers.h
+
 
 // @ 0x00a6fe20
 void cSmoothTrail::Advance(float delta, int count)
 {
     float v = *(float*)((char*)mSource + 0x60) + delta;
-    v = Clamp(v, 1.0f, (float)count - 1e-06f);
+    v = SseClamp(v, 1.0f, (float)count - 1e-06f);
     if (v != mCurrent) {
         mPrevIndex = mIndex;
         mCurrent = v;
         float t = v;
-        mIndex = FloorInt(t);
+        mIndex = SseFloorToInt(t);
     }
 }
 

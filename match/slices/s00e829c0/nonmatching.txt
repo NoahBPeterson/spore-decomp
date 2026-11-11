@@ -1,10 +1,7 @@
 00e82a10 464 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 451 bytes - large world fade/layout routine; body not reconstructed (source has a reduced equivalent), so code differs throughout.
-00e82be0 45 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 25 bytes - variant-context lookup in the false branch is not tail-called by MSVC and the pushed arg block is not hoisted identically.
 00e82c10 82 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 155 bytes - retail passes the four already-pushed arguments straight through to the second call (reusing the caller's stack args); C++ cannot express calling two different functions with one argument block.
 00e82c80 53 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 48 bytes - struct field layout of cEditorState guessed; retail copies a different field set/different widths.
-00e82cf0 28 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 17 bytes - controller lookup + flush forward; MSVC schedules the three argument pushes differently than retail.
 00e82d50 71 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 119 bytes - placement-push helper with two by-value 12-byte vectors; argument evaluation/stack block order differs.
-00e82de0 25 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 10 bytes - virtual property setter forward; virtual slot index/argument convention differs.
 00e82e00 561 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 560 bytes - large state-copy routine; body not reconstructed (reduced equivalent), code differs throughout.
 00e83040 339 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 339 bytes - large mode transition routine; body not reconstructed.
 00e831a0 41 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 38 bytes - layout key store; retail writes a different field set.

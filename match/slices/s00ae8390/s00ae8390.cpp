@@ -70,8 +70,13 @@ void  FUN_00dd4260(void* obj, const void* desc);  // SP::cSPUICommScreen::Init
 struct ThAnim2  { void FUN_00a05270(); };                       // SP::cAnimatingCreature::Release
 struct ThModels2{ void FUN_0080dfc0(); int FUN_0080df80(); };   // dtor / Release
 struct ThViewer { void FUN_007c4b50(float); };                  // cViewer::FUN_007c4b50
-struct ThLayout2 { void FUN_00dd2780(); };                      // layout step at 0xdd2780
-struct ThCtor   { void* FUN_00dd1ca0(const void* d); void* FUN_00dd1ca0b(int a, int b); };  // 0xdd1ca0
+namespace SP {
+class cSPUICommScreen { public:
+  void FUN_00dd2780(int kind, int count);                      // 0x00dd2780, thiscall ret 8
+};
+}
+SP::cSPUICommScreen* GetCommScreen();                          // 0x00dd1ca0, cdecl singleton getter
+struct ThCtor   { void* FUN_00dd1ca0(const void* d); };          // 0xdd1ca0
 struct ThSerial { void FUN_00692f90(void* p1, void* p2, u32 p3); int FUN_00692900(void* stream); };  // cVarListSerializer
 struct ThInit   { void FUN_00dd4260(); };                       // 0xdd4260 Init
 
@@ -107,8 +112,7 @@ void Host::FUN_00ae9000(int a) {
 }
 // @ 0x00ae9150
 void Host::FUN_00ae9150(int a, int b) {
-  void* lay = ((ThCtor*)(void*)this)->FUN_00dd1ca0b(a, b);
-  ((ThLayout2*)(void*)lay)->FUN_00dd2780();
+  GetCommScreen()->FUN_00dd2780(a, b);
 }
 // @ 0x00ae9040
 int Host::FUN_00ae9040(int a, int b, u32* out1, u32* out2) {

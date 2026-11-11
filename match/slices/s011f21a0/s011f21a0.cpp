@@ -10,6 +10,7 @@ typedef unsigned char      u8;
 typedef unsigned short     u16;
 typedef unsigned int       u32;
 typedef int                i32;
+typedef unsigned long      Register;
 
 // ---------------------------------------------------------------------------
 // rw::graphics device / dispatch entry points (all cdecl, args on the stack).
@@ -160,9 +161,9 @@ int GlobalState_D3D9Start(void)
 // @ 0x011f2bc0
 void __fastcall GlobalState_D3D9SetActiveVertexDescriptor(VertexDescriptor* pDesc)
 {
-    if (g_vertexDescriptorActive == pDesc->mpD3DDecl)
-        return;
     void* pDecl = pDesc->mpD3DDecl;
+    if (g_vertexDescriptorActive == pDecl)
+        return;
     void* pDevice = g_d3d9Device;
     if ((*(i32(__stdcall**)(void*, void*))((char*)*(void**)pDevice + 0x15c))(pDevice, pDecl) >= 0)
         g_vertexDescriptorActive = pDecl;
@@ -185,17 +186,13 @@ void GlobalState_D3D9ClearActiveVertexDescriptor(void)
 u32 VertexDescriptor::FindElement(u32 type)
 {
     u32 nCount = mu16Count;
-    if (nCount != 0) {
-        VDElement* pElem = &mElements[0];
-        u32 i = 0;
-        do {
-            if (type == pElem->mBits)
-                return i;
-            ++i;
-            ++pElem;
-        } while (i < nCount);
+    for (u32 i = 0; ; ) {
+        if (i >= nCount)
+            return 0xffffffff;
+        if (type == mElements[i].mBits)
+            return i;
+        ++i;
     }
-    return 0xffffffff;
 }
 
 // ===========================================================================

@@ -6,3 +6,4 @@ slices/s00943f60/s00943f60.cpp  ?AddHeaderEntryV@HTTPHeaders@Internet@EA@@QAE_NP
 slices/s00943f60/s00943f60.cpp  ?AddHeaderEntryFieldV@HTTPHeaders@Internet@EA@@QAE_NHPBD@Z  00944db0  /O2 /MD /Gy /EHsc /TP
 slices/s00943f60/s00943f60.cpp  ?Destroy@HTTPClientEx@Internet@EA@@QAEXXZ  00944570  /O2 /MD /Gy /EHsc /TP
 slices/s00943f60/s00943f60.cpp  ?Destroy@UTFHTTPRequest@Internet@EA@@QAEXXZ  00944380  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00943f60/s00943f60.cpp  ?RemoveHeaderEntry@HTTPHeaders@Internet@EA@@QAE_NHH@Z  00944ac0  /O2 /MD /Gy /EHsc /TP /GS-

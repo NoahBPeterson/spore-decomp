@@ -39,8 +39,8 @@ class hkArray
 class hkEntity
 { public:
     virtual ~hkEntity();
-    void addReference();      // 0x01082590
-    void removeReference();   // 0x0109ae60
+    void addReference();                // 0x01082590
+    void removeReference() throw();     // 0x0109ae60
 };
 
 class hkReferencedObject
@@ -106,7 +106,7 @@ hkUnaryAction::~hkUnaryAction()
 {
     if (m_entity)
     {
-        hkWorldObject_removeReference(m_entity);
+        m_entity->removeReference();
         m_entity = 0;
     }
 }

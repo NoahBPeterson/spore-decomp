@@ -73,6 +73,7 @@ struct FixedPool {
     void*       mEnd;           // +0x20
     void*       mFree;          // +0x24
     unsigned    mCount;         // +0x28
+    unsigned    mPad2c;         // +0x2c
 
     bool Init(unsigned size, int count, void* a, void* b);  // 0xa53210 thiscall ret 0x10
     void Destroy();                                         // 0xa531b0
@@ -172,8 +173,10 @@ NOINLINE void CollRecv::FUN_00a586d0(Atom key)
     t->Lookup(&p, &k2);
     if (p.node != t->mBuckets[t->mBucketCount]) {
         CollNode* n = p.node;
-        n->prev->next = n->next;
-        n->next->prev = n->prev;
+        CollNode* next = n->next;
+        CollNode* prev = n->prev;
+        next->prev = prev;
+        prev->next = next;
         n->prev = 0;
         n->next = 0;
         void* data = n->data;

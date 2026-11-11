@@ -105,6 +105,7 @@ class sp_vector {
   int mAllocator[2];
   sp_vector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
   ~sp_vector();
+  int size() const { return (int)(mpEnd - mpBegin); }
 };
 }  // namespace eastl
 
@@ -185,9 +186,9 @@ void cSPPaletteUI::UpdateCategories(int deltaTime) {
 
 // @ 0x005CA9C0
 int cSPPaletteUI::FindCategoryIndex() {
-  int count = (int)(mCategories.mpEnd - mCategories.mpBegin);
+  int count = mCategories.size();
   for (int i = 0; i < count; i++) {
-    if (mSelectedCategory == mCategories.mpBegin[i])
+    if (mCategories.mpBegin[i] == mSelectedCategory)
       return i;
   }
   return -1;

@@ -20,3 +20,4 @@ slices/s01300280/s01300280.cpp  ?init_1678f3c@@YAXXZ  0130fce0  /O2 /MD /Gy /EHs
 slices/s01300280/s01300280.cpp  ?init_1679394@@YAXXZ  013107d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s01300280/s01300280.cpp  ?init_1679564@@YAXXZ  01310bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s01300280/s01300280.cpp  ?init_167946c@@YAXXZ  01310be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_166c350@@YAXXZ  01302200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

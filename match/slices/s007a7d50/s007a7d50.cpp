@@ -1,16 +1,14 @@
 // slice s007a7d50  --  SP::cTextRenderer (retail layout).
 // Reconstructed C++ (MSVC x86, cl 15.00 /O2 /MD /Gy /EHsc /TP).
 #include "types.h"
-#include <xmmintrin.h>
+#include "sse_helpers.h"
 
 // retail inlined the CRT ftol helper (`_ftol2_sse`), which converts with the SSE1 rounding
 // `cvtss2si` instead of the truncating `cvttss2si` cl emits for a plain cast; round the same way.
-static const float kScale255 = 255.0f;
-static __forceinline int Scale255(const float* p)
-{
-    __m128 v = _mm_mul_ss(_mm_load_ss(p), _mm_load_ss(&kScale255));
-    return _mm_cvtss_si32(v);
-}
+// The product must reach the helper as an expression so the spill lands beside the convert.
+// RoundToInt: the vetted SseRoundToInt in sse_helpers.h
+
+static __forceinline int Scale255(float v) { return SseRoundToInt(v * 255.0f); }
 
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
                                           unsigned debugFlags, const char* file, int line); // 0x00f473a0
@@ -134,11 +132,8 @@ void cTextRenderer::SetStyle(int style)
 // @ 0x007a82d0
 void cTextRenderer::SetStyleScale(float f)
 {
-    volatile float t = f * kScale255;
-    unsigned int alpha = (unsigned int)_mm_cvtss_si32(_mm_load_ss((const float*)&t)) << 0x18;
-    TextStyleStub* s = this->mTextStyle;
-    ((unsigned char*)&s->mColor)[3] = 0;
-    s->mColor |= alpha;
+    ((unsigned char*)&this->mTextStyle->mColor)[3] = 0;
+    this->mTextStyle->mColor |= SseRoundToInt(f * 255.0f) << 0x18;
 }
 
 // @ 0x007a8310
@@ -246,9 +241,9 @@ void cTextRenderer::SetFontSize(float size)
 void cTextRenderer::SetColor(const float* rgb)
 {
     this->mTextStyle->mColor &= 0xff000000;
-    this->mTextStyle->mColor |= Scale255(rgb + 0) << 0x10;
-    this->mTextStyle->mColor |= Scale255(rgb + 1) << 0x08;
-    this->mTextStyle->mColor |= Scale255(rgb + 2);
+    this->mTextStyle->mColor |= Scale255(rgb[0]) << 0x10;
+    this->mTextStyle->mColor |= Scale255(rgb[1]) << 0x08;
+    this->mTextStyle->mColor |= Scale255(rgb[2]);
 }
 
 // @ 0x007a8660

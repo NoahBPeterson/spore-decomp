@@ -729,13 +729,17 @@ struct FreeOwner {
     char pad[0x14];
     void (__cdecl *mpFree)(void*);   // +0x14
 };
+// The two arguments arrive in registers (eax = head, ebx = owner): the /LTCG custom
+// register ABI (docs/codegen.md 11.4).  Modelled with a fastcall pair so cl 15 sees
+// eax/ebx as parameter registers.
 static void FreeNodeList(ListNode* n, FreeOwner* o)
 {
-    while (n != 0) {
-        ListNode* nx = n->next;
-        o->mpFree(n->data);
-        o->mpFree(n);
-        n = nx;
+    ListNode* cur = n;
+    while (cur != 0) {
+        n = cur->next;
+        o->mpFree(cur->data);
+        o->mpFree(cur);
+        cur = n;
     }
 }
 // Stand-in for the original caller (0x905676..), so cl keeps the register convention of the static helper.

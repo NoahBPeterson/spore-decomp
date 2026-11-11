@@ -1,0 +1,1 @@
+slices/s00c01310/s00c01310.cpp  ?FUN_00c01310@Vec20@@QAEXXZ  00c01310  /O2 /MD /Gy /TP

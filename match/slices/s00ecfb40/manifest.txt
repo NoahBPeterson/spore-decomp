@@ -10,3 +10,7 @@ slices/s00ecfb40/s00ecfb40.cpp  ?Load@cSmallRef@@QAEIHPAUcSettingsBlock@@@Z  0x0
 slices/s00ecfb40/s00ecfb40.cpp  ?AsInterface@cEditorPage@@QAEPAXH@Z  0x00ed0260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00ecfb40/s00ecfb40.cpp  ??0cMeterChild@@QAE@XZ  0x00ed0ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00ecfb40/s00ecfb40.cpp  ?Destroy@cMeterChild@@QAEXXZ  0x00ed0b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?GetValue@cEconomyValues@@QAEHH@Z  00ecfe30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?Destroy@cEditorPage@@QAEXXZ  00ed0340  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?Shutdown@cEditorPage@@QAEXXZ  00ed0660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ecfb40/s00ecfb40.cpp  ?HandleMessage@cEditorPage@@QAEEHPAPAX@Z  00ed01a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

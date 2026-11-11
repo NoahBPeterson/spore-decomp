@@ -986,12 +986,17 @@ struct cSPSimulatorPlayerUFO_s00ff_c230 {
 }
 // ---- items of slice s00ffc230 end
 
+// Closest attempt, same size. The tag store now sits inside the second
+// virtual call, one instruction early: before `mov ecx, eax` instead of
+// after `mov eax, [edx+0x18]`.
 // @ 0x00ffbe60
 bool cSPSimulatorPlayerUFO::Write(cOutStream* pStream)
 {
     tVarListFrame frame;
+    void* a = pStream->v20();
+    void** vt = *(void***)a;
     frame.mnValue = 0x02f011e8;
-    tIStream* pSink = pStream->v20()->v18();
+    tIStream* pSink = ((tIStream* (__thiscall*)(void*))vt[6])(a);
     EA_IO_WriteUint32(pSink, &frame.mnValue, 1, 0);
     frame.mSerializer.Construct((void*)((char*)this - 8), g_varListUFO, 0x1a80d26);
     return frame.mSerializer.Serialize(pStream);

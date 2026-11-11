@@ -7,16 +7,24 @@ Prints where the function lives (its source file and object), its status (byte-e
 partial, or no source yet), the compiler flags it is checked with, its retail size, the headers its file includes, the
 current source of the function, and what to do next.  Needs only the repo: no game files.
 
-  --list [--max-size N] [--by tries|diff|size]
-      open work: functions with source that is not byte-exact yet. Default order: fewest tries first (quick wins
-      nobody has fought with yet), then smallest, then fewest differing bytes. --by diff: fewest differing bytes
-      first; --by size: smallest first.
+  --list [--max-size N] [--by tries|diff|size] [--seed TEXT] [--show-claimed]
+      open work: functions with source that is not byte-exact yet, or no source yet. Default order: fewest tries
+      first (quick wins nobody has fought with yet), then by size band (up to 16, 32, 64, 128, 256... bytes), and
+      within a band in an order of your own: a shuffle seeded by your git identity (or --seed), so contributors
+      starting at the same time do not all pick the same functions. --by diff: fewest differing bytes first;
+      --by size: smallest first.
+      Functions in an open pull request are hidden (claims.txt, below); --show-claimed lists them, marked.
+
+Claims: https://raw.githubusercontent.com/NoahBPeterson/spore-decomp/claims/claims.txt lists every function an open
+pull request works on (refreshed when a pull request changes, and every 30 minutes). Open a draft pull request early,
+titled with the address, and your function drops out of everybody else's list. A claim with no update for 7 days is
+stale and shows again.
 
 "Tries" is how many times the function's nonmatching.txt note has been written or rewritten, counted from git history
 (each failed attempt updates the note). It is an estimate: bulk tooling edits count too. A shallow clone has no
 history, so tries are unknown and the list falls back to size order.
 """
-import argparse, collections, glob, gzip, json, os, re, subprocess, sys
+import argparse, collections, datetime, glob, gzip, hashlib, json, os, re, subprocess, sys, time, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path[:0] = [os.path.join(ROOT, "tools", "difftest"), os.path.join(ROOT, "tools", "matching"),
@@ -202,6 +210,61 @@ def blocked():
     return out
 
 
+CLAIMS_URL = "https://raw.githubusercontent.com/NoahBPeterson/spore-decomp/claims/claims.txt"
+STALE_DAYS = 7
+
+
+def claims():
+    """va -> [(pr number, author, last update 'YYYY-MM-DD'), ...] from claims.txt (oldest pull request first);
+    cached 10 minutes in work/claims.txt.  None when claims.txt could not be read at all (offline, no cached copy);
+    {} when it was read and nobody claims anything (the caller used to report that as "could not be read")."""
+    cache = os.path.join(ROOT, "work", "claims.txt")
+    text = None
+    if not (os.path.exists(cache) and time.time() - os.path.getmtime(cache) < 600):
+        for attempt in (1, 2):
+            try:
+                with urllib.request.urlopen(CLAIMS_URL, timeout=10 * attempt) as r:
+                    text = r.read().decode("utf-8", "replace")
+                os.makedirs(os.path.dirname(cache), exist_ok=True)
+                open(cache, "w", encoding="utf-8").write(text)
+                break
+            except Exception:
+                text = None
+    if text is None and os.path.exists(cache):
+        text = open(cache, encoding="utf-8").read()
+    if text is None:
+        return None
+    out = {}
+    for line in text.splitlines():
+        p = line.split()
+        if len(p) >= 4 and p[0].startswith("0x") and p[1].startswith("#"):
+            out.setdefault(int(p[0], 16), []).append((int(p[1][1:]), p[2], p[3]))
+    return {va: sorted(c) for va, c in out.items()}
+
+
+def stale(claim):
+    """claim: one (pr, author, date), or a function's list of them (stale only when all are)"""
+    if isinstance(claim, list):
+        return all(stale(c) for c in claim)
+    try:
+        return (datetime.date.today() - datetime.date.fromisoformat(claim[2])).days > STALE_DAYS
+    except ValueError:
+        return False
+
+
+def my_seed():
+    """Your own list order: git identity (name + email), else the host name."""
+    g = lambda k: subprocess.run(["git", "-C", ROOT, "config", k], capture_output=True, text=True).stdout.strip()
+    return (g("user.name") + "|" + g("user.email")).strip("|") or os.environ.get("COMPUTERNAME") or os.uname().nodename
+
+
+def size_band(size):
+    b = 16
+    while size > b:
+        b *= 2
+    return b
+
+
 def marked():
     """every va with a `// @ 0x...` marker in some source"""
     pat, out = re.compile(r"(?mi)^//\s*@\s*0x0*([0-9a-f]+)\b"), set()
@@ -216,6 +279,8 @@ def main():
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--max-size", type=int, default=256)
     ap.add_argument("--by", choices=("tries", "diff", "size"), default="tries")
+    ap.add_argument("--seed", help="your own shuffle within each band (default: your git name and email)")
+    ap.add_argument("--show-claimed", action="store_true", help="also list functions in open pull requests")
     a = ap.parse_args()
     if a.list:
         skip, have = blocked(), marked()
@@ -230,18 +295,32 @@ def main():
         if a.by == "tries" and tr is None:
             print("(no git history here, e.g. a shallow clone: tries unknown, so smallest first)")
         t = lambda r: tr.get(r[1], 0) if tr else 0
-        key = {"tries": lambda r: (t(r), r[0], nd(r), r[1]), "diff": lambda r: (nd(r), r[0], r[1]),
+        seed = a.seed if a.seed is not None else my_seed()
+        mine = lambda va: hashlib.sha1(("%s|%08x" % (seed, va)).encode()).hexdigest()
+        key = {"tries": lambda r: (t(r), size_band(r[0]), mine(r[1])), "diff": lambda r: (nd(r), r[0], r[1]),
                "size": lambda r: (r[0], r[1])}[a.by]
         rows.sort(key=key)
-        order = {"tries": "fewest tries first, then smallest", "diff": "fewest differing bytes first",
-                 "size": "smallest first"}[a.by]
+        cl = claims()
+        live = {va for va, c in (cl or {}).items() if not stale(c)}
+        hidden = sum(1 for r in rows if r[1] in live)
+        if not a.show_claimed:
+            rows = [r for r in rows if r[1] not in live]
+        order = {"tries": "fewest tries first, then by size band, in your own order within a band",
+                 "diff": "fewest differing bytes first", "size": "smallest first"}[a.by]
         print("%d functions to work on, up to %d bytes, %s (source not byte-exact yet, or no source yet):"
               % (len(rows), a.max_size, order))
+        if cl is None:
+            print("(claims.txt could not be read: functions in open pull requests are not hidden)")
+        elif hidden and not a.show_claimed:
+            print("(%d more are in open pull requests and hidden; --show-claimed lists them)" % hidden)
         print("  %-10s  %5s  %6s  %6s  %s" % ("function", "tries", "differ", "size", "where / last note"))
         for size, va, diff, where, reason in rows:
             n = ndiff(diff)
             if va not in have:
                 where, reason = "no source yet", "write it in " + new_source_path(va) + (" (" + reason + ")" if reason else "")
+            c = cl.get(va)
+            if c:
+                where = "%s %s  %s" % ("stale claim" if stale(c) else "in", ", ".join("#%d (%s)" % (x[0], x[1]) for x in c), where)
             print("  0x%08x  %5s  %6s  %6d  %s  %s" % (va, tr.get(va, 0) if tr else "?", n if n is not None else "-", size, where,
                                                       (reason or "")[:70]))
         return 0
@@ -251,6 +330,10 @@ def main():
     fp = fingerprint(va)
     src, ident = locate(va)
     print("function   0x%08x" % va)
+    for c in (claims() or {}).get(va, []):
+        print("claimed    %s #%d by %s (last update %s)%s" % (
+            "STALE claim:" if stale(c) else "already in open pull request", c[0], c[1], c[2],
+            "" if stale(c) else ": unless that is yours, pick another function"))
     print("retail     %s" % ("%d bytes (fingerprint: %d bytes are addresses, not compared)" %
                              (fp["size"], sum(n for _s, n in fp["mask"])) if fp else "no fingerprint: not a known function start"))
     if not src:

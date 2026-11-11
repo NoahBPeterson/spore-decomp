@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "SP/cSPTimer.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cVarListSerializer.h"
@@ -37,16 +38,8 @@ struct Property {
     float* GetFloat();                  // 0x0041ea70 ret 4
 };
 static inline char* vpt(void* o) { return *(char**)o; }
-static __forceinline float Clamp(float value, float minValue, float maxValue)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        minss xmm0, maxValue
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
+
 struct Blk64 { u32 w[16]; };
 struct cVarListSerializer {
     u32  mData[0xa14 / 4];
@@ -1535,7 +1528,7 @@ float cSPCameraControllerSolarSystem::FUN_01017410(int a)
             f3 = *out->GetFloat();
     }
     float r = FUN_01041cd0(f0, f1, *(float*)&a);
-    r = Clamp(r, 0.0f, 1.0f);
+    r = SseClamp(r, 0.0f, 1.0f);
     return ((f3 - f2) * r + f2) * g_13ebca0;
 }
 

@@ -1,5 +1,3 @@
-slices/s00688dd0/s00688dd0.cpp  ?FPUSetPrecision@@YAXH@Z                      006894d0  /O2 /MD /Gy /EHsc /TP
-slices/s00688dd0/s00688dd0.cpp  ?FPUMaskFlags@@YAXI@Z                         00689560  /O2 /MD /Gy /EHsc /TP
 slices/s00688dd0/s00688dd0.cpp  ?ValidateParameter@CmdParamSetValidate@@       006895f0  /O2 /MD /Gy /EHsc /TP
 slices/s00688dd0/s00688dd0.cpp  ?RegisterCommands@CommandServer@@             006896a0  /O2 /MD /Gy /EHsc /TP
 slices/s00688dd0/s00688dd0.cpp  ?UnregisterCommands@CommandServer@@           006896f0  /O2 /MD /Gy /EHsc /TP

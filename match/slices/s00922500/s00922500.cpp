@@ -460,9 +460,8 @@ void EA::Thread::Thread::SetIdealProcessor(int proc)
 // @ 0x00922d10
 void __fastcall FUN_00922d10(void*** p)
 {
-    void* d = *p;
-    if (d != 0 && *(void**)d != 0)
-        QueueUserAPC((PAPCFUNC)0x010829f0, (HANDLE)*(void**)d, 0);
+    if (*p != 0 && **p != 0)
+        QueueUserAPC((PAPCFUNC)0x010829f0, (HANDLE)**p, 0);
 }
 
 // ---------------------------------------------------------------------------
@@ -486,8 +485,8 @@ void FUN_00922da0(void* p)
 // @ 0x00922e10
 void __fastcall FUN_00922e10(void** p)
 {
-    void* d = *p;
-    if (d != 0 && _InterlockedExchangeAdd((volatile long*)((char*)d + 0x20), -1) == 1)
+    EA::Thread::EAThreadDynamicData* d = (EA::Thread::EAThreadDynamicData*)*p;
+    if (d != 0 && _InterlockedDecrement(&d->mnRefCount) == 0)
         FUN_00922da0(d);
 }
 

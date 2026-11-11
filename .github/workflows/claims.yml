@@ -1,0 +1,48 @@
+# Publish claims.txt (tools/site/claims.py): the functions every open pull request works on, one per line, on the
+# `claims` branch. tools/contrib/task.py reads it to hide functions somebody is already working on.
+# pull_request_target runs in this repository's context, so it also sees pull requests from forks; it never checks out
+# or runs pull-request code (the claims come from the GitHub API).
+name: Claims
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, closed, ready_for_review, converted_to_draft]
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: claims
+  cancel-in-progress: true
+
+jobs:
+  claims:
+    name: Publish claims.txt
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          sparse-checkout: tools/site/claims.py
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - name: List the functions in open pull requests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/site/claims.py --repo "$GITHUB_REPOSITORY" --out "$RUNNER_TEMP/claims.txt"
+      - name: Publish to the claims branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd "$RUNNER_TEMP"
+          rm -rf pub && mkdir pub && cd pub
+          git init -q -b claims
+          cp ../claims.txt .
+          git add claims.txt
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "claims.txt: functions in open pull requests"
+          git push -q --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" claims

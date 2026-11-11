@@ -654,8 +654,8 @@ void SASDesc::f96e0(int param_2)
 {
     int param_1 = (int)this;
     *(int*)(param_1 + 8) = param_2;
-    if (param_2 != 0) {
-        *(uint32_t*)(param_1 + 4) = *(uint32_t*)(param_2 + 0x14);
+    if (param_2) {
+        *(int*)(param_1 + 4) = *(int*)((char*)param_2 + 0x14);
     }
     *(uint32_t*)(param_1 + 0xc) = method(*(int*)(param_1 + 4));
 }

@@ -6,6 +6,8 @@
 #include "s0108fb10.h"
 #include <math.h>
 #include <intrin.h>
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 // global constants referenced by the math (the ones used by the stabilised motions are declared in the header)
 extern "C" const float g_hkZero_01485378;       // 0x01485378  = 0.0f
@@ -38,8 +40,8 @@ void hkStiffSpringChainData_ctor(hkStiffSpringChainData* self)
 void* hkStiffSpringChainData::scalarDeletingDtor(unsigned int flags)
 {
 	*(volatile const void* volatile*)this = (const volatile void*)0x014a195c;   // vtable first
-	__asm { }
-	if (m_atoms.m_capacityAndFlags >= 0)                             // chunk NOT owned by us
+	_ReadWriteBarrier();
+	if ((m_atoms.m_capacityAndFlags & 0x80000000u) == 0)            // owned buffer
 	{
 		hkThreadMemory* tm = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
 		tm->deallocateChunk((void*)m_atoms.m_data,

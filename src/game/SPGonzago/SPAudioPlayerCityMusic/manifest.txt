@@ -7,7 +7,6 @@
 ../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00eacf70@cPlayerCityMusic@Audio@SP@@QAEXE@Z  00eacf70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00eacfb0@@YAPAUElem6c@@PAU1@00@Z  00eacfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?Pause@cPlayerCityMusic@Audio@SP@@QAEXE@Z  00eacff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00ead040@cPlayerCityMusic@Audio@SP@@QAEOXZ  00ead040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00ead090@cPlayerCityMusic@Audio@SP@@QAEXHM@Z  00ead090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?SetNoteDuration@cPlayerCityMusic@Audio@SP@@QAEXHM@Z  00ead0c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00ead660@cMusicVec@@QAEXXZ  00ead660  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -22,3 +21,4 @@
 ../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00eade60@cIntVec@@QAEXI@Z  00eade60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?ScalarDeletingDtor@ResMusic@@QAEPAU1@E@Z  00eaf2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?do_fill_Music@@YAXPAUResMusic@@0PBU1@@Z  00eaf350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?FUN_00ead040@cPlayerCityMusic@Audio@SP@@QAEOXZ  00ead040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

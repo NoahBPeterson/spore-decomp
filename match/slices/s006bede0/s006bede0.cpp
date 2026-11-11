@@ -695,7 +695,9 @@ void HoleTree::DoInsertValueHint(uint32* outIter, HoleNode* hintNode, const Hole
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006bfc20  rbtree insert wrapper (returns the out-iter)
+// @ 0x006bfc20  rbtree insert wrapper (returns the out-iter).  Retail is
+// __thiscall `ret 0xc` (ecx = tree) that pushes a `bool` stack local before the
+// out pointer; this is the earlier 29-byte model, kept for reference.
 // ---------------------------------------------------------------------------
 void* FUN_006bfc20(HoleTree* tree, uint32* outIter, HoleNode* hintNode, const HoleValue* value)
 {

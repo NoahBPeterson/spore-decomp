@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?Cast@cSpaceInventoryItem@@UAEPAXI@Z  00c86f10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceInventory.cpp  ?GetImageColors@cSpaceInventoryItem@@UAE_NAAIPAPAX@Z  00c871b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?GetItemCount@cSpaceInventoryItem@@UAE_NAAI@Z  00c86f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?func40h@cSpaceInventoryItem@@UAE_NXZ  00c86fa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?GetTool@cSpaceInventory@@UAEPAVcSpaceInventoryItem@@ABUResourceKey@@@Z  00c86ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -21,3 +22,4 @@
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?Read@cSpaceInventory_s00c8_7be0@@QAE_NPAX@Z  00c883d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?UpdateTuning@cSPSpaceInventoryItem_s0104_bcc0@SP@@SAXIPAI@Z  0104c120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?FUN_01353800@@YAXXZ  01353800  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceInventory.cpp  ?IsCargoType@cSpaceInventoryItem@@UAE_NXZ  00c86f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

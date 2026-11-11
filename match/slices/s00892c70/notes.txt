@@ -1,0 +1,22 @@
+Work in progress on 0x00892c70 (EnterCriticalSection -> hash map find -> virtual +0x34 -> leave).
+
+What is known (from the disassembly):
+  this+0x28  critical section; entered through the IAT slot 0x013cc2d8, left through 0x013cc2dc.
+  this+0x150 map: +0x04 buckets, +0x08 bucket count; find is the __thiscall at 0x00892970
+             returning a 8-byte {entry, bucket-slot} pair by value.
+  vtable slot +0x34 is the virtual called with (item, section).
+  then  this+0x104 = (int)(double)this+0x110,  this+0x120 = entry+4,  this+0x124 = 0x20,
+        this+0x108 = &this+0x104,  and the first result ALSO lands in this+0x12c's count slot
+        (the compiler commoned the two conversions through one register, `mov [eax],ecx`).
+The stack shape (frame 0x18: [esp+0x10] fp cw, [esp+0x14] int64, [esp+0x18] the result pointer
+returned by the find call in eax) says the source is a non-member:
+  bool __stdcall Add(item*, section*)   (or any function that gets its second argument in a
+  register/stack the same way) whose result pair is copied by `mov eax,[esp+0x18]; mov [eax],..`.
+A member function puts the pair in the caller-reserved slot at [esp+8]/[esp+0xc], which does not
+match. Writing it as __stdcall in a .cpp slice does not reproduce that convention (cl ignores
+__stdcall on non-C-linkage functions), so the prologue/returns still differ.
+Checked this way (each NO MATCH, closest 186 vs 233 bytes): free function void* self arg, member
+of a 2-virtual class, member of a 37-virtual class with pad(4) (splits the 64-bit table flag),
+fp->int conversion in only one store (the pair of conversions merges), and int64 locals.
+Remaining lever: get the __stdcall/`this`-in-ecx passing right so the result pair is homeless, or
+declare the function in an `extern "C"` block (not tried: it changes only decoration).

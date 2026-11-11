@@ -6,6 +6,8 @@ verifies every row it touches against the retail fingerprints).  Totals are over
 fingerprint (tools/ci/fingerprints.jsonl.gz).  No names, no equivalence results.
 
 usage: progress.py [--out PROGRESS.md]
+The site workflow (.github/workflows/site.yml) publishes it at https://noahbpeterson.github.io/spore-decomp/PROGRESS.md
+after every change to main; it is no longer committed.
 """
 import argparse, datetime, glob, gzip, json, os, subprocess, sys
 

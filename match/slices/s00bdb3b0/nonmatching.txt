@@ -1,7 +1,7 @@
-00bdb3b0
+00bdb3b0  4  store m648/m640=a/m644=b, game-mode check via SP_GetCurrentGameMode()==0x1654c04, then b!=0 && vt[0x58]((char*)b+0x34) ? (a==0 && civ && civ!=nounMgr())->FUN_00bef830 : (this vt[0x58] && nounMgr()->FUN_00b25f40(b vt[0x10])->FUN_00bef830 when a==0). Shape complete (189 vs 185). Left: cl picks ebp/ebx for a instead of retail's ebp for a/ebx for civ (retail pushes ebp first then esi/edi, ebx only inside the branch): our prologue is push ebx; push esi; push edi and we load the vfunc into eax instead of edx. Same for the store order (retail m640 before m644). Tried reordering the stores and casting the literal.
 00bdb470
 00bdb590
-00bdb7f0
+00bdb7f0  5  model-id select then kAnim-holder call. Tried if/else-if chains with <, <=, >, >= forms, switch with 3 cases (cl emits sub/neg/sbb/and bit test), and explicit ==-split; two issues remain: (a) cl folds the switch into a single index and uses ebx instead of edi for the model (retail uses edi); (b) retail hoists `push edi`+`mov ebp,[esi+0x34]` before the second FUN_00bf9770 call while ours computes after. Retail shape is cmp/jg+je then two ordered cmps with je.
 00bdb880
 00bdb960
 00bdbaa0

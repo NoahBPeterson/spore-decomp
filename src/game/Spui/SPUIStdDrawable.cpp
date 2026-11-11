@@ -362,7 +362,9 @@ void *Drawable_s0083_0c00::GetImageInfo(int index)
 // @ 0x00830c60
 int DSub::GetFieldC(int index)
 {
-    return *(int *)((char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index) + 0xc);
+    char* p = (char*)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index);
+    p += 0xc;
+    return *(int *)p;
 }
 
 // @ 0x00830c80
@@ -390,7 +392,9 @@ void DSub::GetPair30(float *out, int index)
 // @ 0x00830cf0
 int DSub::GetField10(int index)
 {
-    return *(int *)((char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index) + 0x10);
+    char* p = (char*)((Drawable_s0083_0c00 *)this)->GetImageInfo(index);
+    p += 0x10;
+    return *(int *)p;
 }
 
 // @ 0x00830d10

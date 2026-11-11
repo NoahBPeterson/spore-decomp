@@ -82,8 +82,10 @@ ushort MapShaderHandle(void* arena, ushort h);                    // 0x011f42c0
 char* rw::core::stdc::ConvertU32ToA(char* buf, int value)
 {
     if (value > 0) {
-        char* p = ConvertU32ToA(buf, value / 10);
-        *p = (char)(value % 10) + '0';
+        int q = value / 10;
+        int r = value % 10;
+        char* p = ConvertU32ToA(buf, q);
+        *p = (char)r + '0';
         return p + 1;
     }
     return buf;
@@ -274,12 +276,12 @@ char* rw::core::stdc::ConvertU32ToStr(uint value, char* buf, int asHex)
 ushort* rw::core::stdc::CopyAtoW(ushort* dst, const char* src)
 {
     ushort* start = dst;
-    byte bVar1 = (byte)*src;
-    while (bVar1 != 0) {
+    byte c = (byte)*src;
+    for (; c != 0; c = (byte)*src) {
         src++;
-        *dst = (ushort)((uint)bVar1 & 0xff);
+        uint v = (uint)c & 0xff;
+        *dst = (ushort)v;
         dst++;
-        bVar1 = (byte)*src;
     }
     *dst = 0;
     return start;
@@ -680,7 +682,7 @@ void rw::graphics::EmbeddedState::SetMaterialColor(const void* src)
 // @ 0x011eda90
 void* rw::graphics::EmbeddedState::GetMaterialColor()
 {
-    byte b = *(byte*)((char*)this + 8);
+    byte b = (byte)m_softStateDirty;
     char* p = (char*)alignedBase();
     if (b & 2)
         p = *(char**)p;

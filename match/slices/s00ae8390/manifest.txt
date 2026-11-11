@@ -1,3 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-# No byte-exact matches in slice s00ae8390; every function is a behavioural
-# reconstruction, see nonmatching.txt.
+slices/s00ae8390/s00ae8390.cpp  ?FUN_00ae9150@Host@@QAEXHH@Z  00ae9150  /O2 /MD /Gy /EHsc /TP

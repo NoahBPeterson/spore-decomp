@@ -1,0 +1,1 @@
+slices/s008985b0/s008985b0.cpp  ?GetMaxFontMetrics@@YAXPAUFontSet@@PAM1@Z  008985b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

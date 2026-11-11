@@ -1,0 +1,1 @@
+slices/s00897830/s00897830.cpp  ?SetGlyphLayoutInfo@Typesetter@Text@EA@@QAEXAAUGlyphLayoutInfo@23@MABUGlyphMetrics@23@@Z  00897830  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

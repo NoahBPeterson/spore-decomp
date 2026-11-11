@@ -6,6 +6,7 @@
 // C++); the small control-flow helpers can and do match.
 #include "types.h"
 #include <emmintrin.h>
+#include <intrin.h>
 
 typedef unsigned char  u8;
 typedef unsigned short u16;
@@ -248,7 +249,9 @@ void FUN_00fd0390(u32* out)
 {
     // The retail body snapshots rdtsc after a cpuid serialisation; the value itself is the only
     // observable and depends on the machine, so the equivalent C is a timestamp read.
-    *out = 0;
+    int regs[4];
+    __cpuid(regs, 0);
+    *out = (u32)__rdtsc();
 }
 
 // @ 0x00fd03c0

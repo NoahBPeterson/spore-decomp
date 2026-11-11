@@ -6,6 +6,7 @@
 // touches +0x50..+0x68, past the PDB's size 0x50), so the extra members are
 // declared explicitly at their retail offsets.
 #include <new>
+#include "sse_helpers.h"
 #include <math.h>
 #include "types.h"
 
@@ -130,16 +131,8 @@ float TimeObjValue(cTimeObj* obj) {
 // cInterp::Interp clamps through SSE maxss/minss (the ternary form makes cl emit comiss branches
 // and keeps mFloat90 in xmm3, a register the original never writes).  Same idiom as the other
 // editor slices' Clamp helper.
-inline float Clamp(float x, float lo, float hi)
-{
-  __asm {
-    movss xmm0, x
-    maxss xmm0, lo
-    minss xmm0, hi
-    movss x, xmm0
-  }
-  return x;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
+
 
 class cInterp {
  public:
@@ -156,7 +149,7 @@ class cInterp {
 void cInterp::Interp(float a, float b, float* out1, float* out2) {
   float t = ((a + b) * 0.5f) / mFloat98;
   // SSE scalar clamp: maxss(t, 0) then minss(., 1), NaN yields the constant (same as the binary).
-  t = Clamp(t, 0.0f, 1.0f);
+  t = SseClamp(t, 0.0f, 1.0f);
   t = (mFloat94 - mFloat90) * (1.0f - t) + mFloat90;
   *out1 = mFloat88 * t;
   *out2 = mFloat8c * t;

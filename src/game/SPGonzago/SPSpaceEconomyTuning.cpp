@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "SP/cEmpire.h"
 #include "SP/cGameData.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern float g_1;        // 0x01485720
@@ -54,7 +55,7 @@ struct VtableDtor2 {
     virtual void e00();
     virtual void e04();
 };
-void           operator_delete_(void* p);              // 0x00f47380
+void  __cdecl operator_delete__(void* p);              // 0x00f47380
 struct cSPSpaceEconomyTuning {
     char pad0[8];
     cPropertyList* mPropList;                             // +8
@@ -68,6 +69,7 @@ struct cSPSpaceEconomyTuning {
     int   GetPeaceBadOfferDelta(cEmpire* e);              // 0x010309c0
     int   GetPeaceVeryBadOfferDelta(cEmpire* e);          // 0x01030a30
     int   GetPeaceGoodOfferDelta(cEmpire* e);             // 0x01030aa0
+    void* f010308d0(char flags);                          // 0x010308d0
     float f0102f8c0(int index);                           // 0x0102f8c0
 };
 void  GetTurretAndBuildingCounts(float place, int* turrets, int* buildings);   // 0x00c70380
@@ -92,10 +94,13 @@ int cSPSpaceEconomyTuning::GetTradeCaptureOfferPrice(int index)
 int cSPSpaceEconomyTuning::GetHomeWorldBuildingMultiplier()
 {
     cPropertyList* pl = mPropList;
-    Prop* prop;
-    if (pl && pl->GetProperty(0x4ab4745, (void**)&prop) && prop->type == 9)
-        return *prop->GetInt();
-    return 0;
+    Prop* volatile prop;
+    if (pl && pl->GetProperty(0x4ab4745, (void**)&prop)) {
+        Prop* p = prop;
+        if (p->type == 9)
+            return *p->GetInt();
+    }
+    return (int)prop;
 }
 
 // @ 0x0102fbf0
@@ -201,25 +206,27 @@ float f010307a0(void* props, uint idA, uint idB)
 }
 
 // @ 0x010308d0
-void* f010308d0(int* self, char flags)
+void* cSPSpaceEconomyTuning::f010308d0(char flags)
 {
+    void* self = this;
     *(void**)self = (void*)0x14996d4;
-    int* p = (int*)self[2];
+    _ReadWriteBarrier();
+    int* p = (int*)((int*)self)[2];
     if (p) {
-        self[2] = 0;
+        ((int*)self)[2] = 0;
         ((VtableDtor2*)p)->e04();
     }
-    int* q = (int*)self[3];
+    int* q = (int*)((int*)self)[3];
     if (q != 0) {
         if (*(int*)((char*)q - 4) != 0)
-            operator_delete_(q);
+            operator_delete__(q);
     }
-    int* r = (int*)self[2];
+    int* r = (int*)((int*)self)[2];
     if (r)
         ((VtableDtor2*)r)->e04();
     *(void**)self = (void*)0x1416f14;
     if (flags & 1)
-        operator_delete_(self);
+        operator_delete__(self);
     return self;
 }
 

@@ -1,0 +1,1 @@
+slices/s00891870/s00891870.cpp  ?SetRenderer@Font_00891870@@QAEXHMMHHH@Z  00891870  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

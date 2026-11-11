@@ -19,7 +19,7 @@
 
 011ed230  stdc::ConvertU32ToStr     size 61 vs 63, 6 diff. Equivalence FAIL (eax): the original keeps `buf` in esi (callee-saved) across the hex helper call and returns it; ours is allocated edx and returned from edx, which is only accidentally correct because our own hex helper happens not to clobber edx.
 
-011ed270  stdc::CopyAtoW            size 41 vs 46, 34 diff. Equivalence PASS (400 valid, 100% coverage). The original widens the byte to a full 32-bit value (`movzx ecx,cl; and ecx,0xff`) and stores via `mov [edx],cx`; MSVC folds ours to a 16-bit `movzx ecx,cl`. Semantically identical.
+011ed270  stdc::CopyAtoW            size 41 vs 46, 34 diff. Equivalence PASS (400 valid, 100% coverage). The original widens the byte to a full 32-bit value (`movzx ecx,cl; and ecx,0xff`) and stores via `mov [edx],cx`; MSVC folds ours to a 16-bit `movzx ecx,cl`; also tried for/while/do-while with byte/char/int loop variables, an explicit `uint v = c & 0xff` temporary and an `if` first-iteration guard: cl always emits `movzx cx,cl` and folds the trailing NUL store to `xor ecx,ecx; mov [edx],cx`. Semantically identical. Retail's order is `test cl,cl; mov eax,edx; je` (the result register is set between the test and the branch) and its final store is `mov word ptr [edx],0` after popping esi, which cl will not form.
 
 011ed2a0  stdc::Memset32            size 122 vs 127, 116 diff. Equivalence PASS (364 valid, 100% coverage). The original loads the three args in order eax/edx/ecx and keeps the loop counter in ecx; MSVC loads them in reverse and uses esi, and folds the first `n-0x20` test differently. Semantically identical.
 
@@ -41,7 +41,6 @@
 
 011eda00  EmbeddedState::SetMaterialColor  size equal, 2 diff. Equivalence PASS (400 valid, 100% coverage). Both functions are byte-identical except bytes 0x40/0x41: the original loads the element size with `mov dx,[ecx+4]` (then `test dx,dx; jbe`), MSVC emits `movzx edx,word [ecx+4]`. The `jbe` forces the source to be `unsigned short sz; if (sz > 0)`, which we use, but MSVC still widens the load.
 
-011eda90  EmbeddedState::GetMaterialColor  size 15 vs 17, 16 diff. Equivalence PASS (400 valid, 100% coverage). The original reads the flag byte into dl (`mov dl,[ecx+8]; test dl,2`); MSVC folds ours into `test byte ptr [ecx+8],2`, costing the 2-byte difference.
 
 011edab0  EmbeddedState::GetDeviceState  size 340 vs 349, 156 diff. Equivalence PASS (288 valid, 95.8% coverage). Same word-vs-movzx nibble handling as SetMaterialColor/CleanupShaders, plus branch-orientation diffs.
 

@@ -18,6 +18,5 @@
 00c0e480   71  UNSUPPORTED  cSPCreatureBase::GetTime; complete; 0 valid inputs (import decode_pointer)
 00c0e4f0   27  WEAK         creature radius/scale lookup; complete
 00c0e580   12  UNSUPPORTED  forward vector or entity position; complete; unresolved stub F_a048a0
-00c0e660   10  PASS         vector size (+0x6d4); complete
 00c0e6a0  476  UNSUPPORTED  cSPCreatureBase::GetSocialGoal; complete; unresolved stub F_d00a70
 00c0e8d0  431  UNSUPPORTED  relation/can-attack predicate; complete; 2 unresolved stub callees

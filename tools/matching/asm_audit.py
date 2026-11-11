@@ -73,16 +73,73 @@ def why(body, review=False):
     return None
 
 
+# Since 2026-11-11 a function that uses inline assembly at all does not count as byte-exact: neither an `__asm` block
+# in its own body nor a call to a function of the same file whose body has one (the copy-pasted Clamp/RoundToInt/
+# FloorToInt helpers; 43 such functions were demoted to partial.txt that day). VETTED names the reviewed helpers in
+# match/include/sse_helpers.h: a call to one is allowed, and a file may not define one of these names itself (its own
+# definition would be an unreviewed copy, so it stays an asm helper here).
+VETTED = {"SseRoundToInt", "SseTruncToInt", "SseFloorToInt", "SseCeilToInt", "SseClamp", "SseMax", "SseMaxZero",
+          "SseSaturate", "SseClamp01", "X87RoundToInt64"}
+_ASM = re.compile(r"\b__?asm\b|\b__?emit\b|__declspec\s*\(\s*naked\s*\)")
+_KW = {"if", "for", "while", "switch", "return", "sizeof", "catch", "do", "else"}
+
+
+def _own_body(text):
+    """(head, body) of the first definition in text: up to its first '{', then the balanced braces."""
+    h = text.find("{")
+    if h < 0:
+        return text, ""
+    i, d = h + 1, 1
+    while i < len(text) and d:
+        d += {"{": 1, "}": -1}.get(text[i], 0)
+        i += 1
+    return text[:h], text[h:i]
+
+
+def _asm_functions(code, marked=()):
+    """Names of the functions in code (comments stripped) whose body contains inline assembly, apart from functions in
+    `marked` (defined right after a `// @` marker: separately decompiled functions, which a caller reaches through a
+    call, so their assembly is not in the caller's bytes)."""
+    out = set()
+    for m in re.finditer(r"\b(\w+)\s*\([^;{}()]*(?:\([^()]*\)[^;{}()]*)*\)\s*(?:const\s*)?\{", code):
+        if m.group(1) in _KW or m.group(1) in marked:
+            continue
+        i, d, s = m.end(), 1, m.end()
+        while i < len(code) and d:
+            d += {"{": 1, "}": -1}.get(code[i], 0)
+            i += 1
+        if _ASM.search(code[s:i]):
+            out.add(m.group(1))
+    return out
+
+
 def transcribed(src, review=False):
-    """{va (8 hex): reason} for the transcribed functions of one source file (cached per path)."""
+    """{va (8 hex): reason} for the functions of one source file that do not count because of assembly (cached per
+    path): transcriptions (why()), and since 2026-11-11 any use of inline assembly in the function's own body or
+    through a same-file helper."""
     src = os.path.abspath(src)
     key = (src, review)
     if key not in _cache:
         out = {}
         if os.path.isfile(src):   # some src/game "<obj>.cpp" names are directories of a split object
-            parts = _MARK.split(open(src, errors="ignore").read())
+            text = open(src, errors="ignore").read()
+            parts = _MARK.split(text)
+            marked = set()
+            for i in range(1, len(parts), 2):
+                d = re.search(r"(\w+)\s*\(", _own_body(_strip_comments(parts[i + 1]))[0])
+                if d:
+                    marked.add(d.group(1))
+            helpers = _asm_functions(_strip_comments(text), marked)
             for i in range(1, len(parts), 2):
                 r = why(parts[i + 1], review)
+                if not r:
+                    head, body = _own_body(_strip_comments(parts[i + 1]))
+                    if _ASM.search(head) or _ASM.search(body):
+                        r = "inline assembly"
+                    else:
+                        used = sorted(h for h in helpers if re.search(r"\b%s\s*\(" % re.escape(h), body))
+                        if used:
+                            r = "inline-assembly helper %s" % ", ".join(used)
                 if r:
                     out[parts[i].lower().zfill(8)] = r
         _cache[key] = out

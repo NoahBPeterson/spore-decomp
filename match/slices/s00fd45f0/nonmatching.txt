@@ -1,5 +1,4 @@
 00fd45f0
-00fd4780
+00fd4780  6  complete: `return FUN_00fd45f0(d) != 0;` body reproduced (call, test eax, return 0/1); retail loads the argument from ESI, not from the stack: FUN_00fd45f0 takes `d` in ESI (LTCG custom register ABI, the argument is never on the stack in this caller). Tried: plain cdecl call, preloading locals, reversing the test. Not expressible in C++ without a register-ABI shim; see docs/codegen.md 11.4.
 00fd4ad0
 00fd4cb0
-00fd4e50

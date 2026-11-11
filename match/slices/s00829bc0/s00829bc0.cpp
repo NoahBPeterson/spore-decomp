@@ -249,7 +249,13 @@ void Cursor::Next() {
   if (!p) return;
   uint32_t e = p->e, f = p->f;
   mpNode = p->pNext;
-  if (e > mLo && e < mHi) { mB = e; mB = f; mA = e; return; }
+  if (e > mLo && e < mHi) {
+    // Preserve the intermediate boundary update before replacing it.
+    *(volatile uint32_t*)&mB = e;
+    mB = f;
+    mA = e;
+    return;
+  }
   Other(e);
   mB = f;
 }

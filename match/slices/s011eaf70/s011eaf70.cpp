@@ -43,22 +43,22 @@ void* FUN_012057f0(void*);                                  // 0x012057f0  arena
 void  FUN_011e0846(void);                                   // 0x011e0846  lib_crt::ftol2
 
 // import thunks (resolved through the binary's IAT)
-void* __stdcall GlobalAlloc(unsigned int, unsigned int);
-unsigned long __stdcall GetLogicalDrives(void);
-int   __stdcall CloseHandle(void*);
-int   __stdcall FindClose(void*);
-int   __stdcall FindNextFileA(void*, void*);
-int   __stdcall SetEndOfFile(void*);
-unsigned long __stdcall SetFilePointer(void*, long, int*, unsigned long);
-unsigned long __stdcall GetFileSize(void*, unsigned long*);
-unsigned long __stdcall GetLastError(void);
-int   __stdcall ReadFile(void*, void*, unsigned long, unsigned long*, void*);
-int   __stdcall WriteFile(void*, const void*, unsigned long, unsigned long*, void*);
-int   __stdcall DeleteFileA(const char*);
-int   __stdcall MoveFileA(const char*, const char*);
-int   __stdcall CreateDirectoryA(const char*, void*);
-int   __stdcall RemoveDirectoryA(const char*);
-void* __stdcall CreateFileA(const char*, unsigned long, unsigned long, void*, unsigned long, unsigned long, void*);
+__declspec(dllimport) void* __stdcall GlobalAlloc(unsigned int, unsigned int);
+__declspec(dllimport) unsigned long __stdcall GetLogicalDrives(void);
+__declspec(dllimport) int   __stdcall CloseHandle(void*);
+__declspec(dllimport) int   __stdcall FindClose(void*);
+__declspec(dllimport) int   __stdcall FindNextFileA(void*, void*);
+__declspec(dllimport) int   __stdcall SetEndOfFile(void*);
+__declspec(dllimport) unsigned long __stdcall SetFilePointer(void*, long, int*, unsigned long);
+__declspec(dllimport) unsigned long __stdcall GetFileSize(void*, unsigned long*);
+__declspec(dllimport) unsigned long __stdcall GetLastError(void);
+__declspec(dllimport) int   __stdcall ReadFile(void*, void*, unsigned long, unsigned long*, void*);
+__declspec(dllimport) int   __stdcall WriteFile(void*, const void*, unsigned long, unsigned long*, void*);
+__declspec(dllimport) int   __stdcall DeleteFileA(const char*);
+__declspec(dllimport) int   __stdcall MoveFileA(const char*, const char*);
+__declspec(dllimport) int   __stdcall CreateDirectoryA(const char*, void*);
+__declspec(dllimport) int   __stdcall RemoveDirectoryA(const char*);
+__declspec(dllimport) void* __stdcall CreateFileA(const char*, unsigned long, unsigned long, void*, unsigned long, unsigned long, void*);
 }
 
 // data
@@ -109,6 +109,7 @@ struct StaticAtomMembers
 	int  m_atomNameTail;       // +0x04
 	int  m_stringIndex;        // +0x08
 	int  m_idArray;            // +0x0c
+	void __thiscall Fixup(int unused);
 };
 // rw::core::filesys stream: HANDLE + read/write offset, 0x10 bytes.
 struct StreamImpl
@@ -185,14 +186,15 @@ void FUN_011eaf70(void* alloc, int* blockList, int* fieldTable, unsigned int* ou
 // pointers by `this`.
 // ---------------------------------------------------------------------------------------------------------
 // @ 0x11eb040
-void StaticAtomTable_Fixup(StaticAtomMembers* self)
+void __thiscall StaticAtomMembers::Fixup(int unused)
 {
-	int  tbl = self->m_atomNames + (int)self;
-	self->m_atomNames = tbl;
-	*(int*)(tbl + 0) = *(int*)(tbl + 0) + (int)self;
-	self->m_atomNameTail = self->m_atomNameTail + (int)self;
-	self->m_stringIndex  = self->m_stringIndex + (int)self;
-	self->m_idArray      = self->m_idArray + (int)self;
+	int* p = (int*)this;
+	int* q = (int*)(*p + (int)p);
+	*p = (int)q;
+	*q = *q + (int)p;
+	*(int*)(*p + 4)   = *(int*)(*p + 4) + (int)p;
+	*(int*)(*p + 8)   = *(int*)(*p + 8) + (int)p;
+	*(int*)(*p + 0xc) = *(int*)(*p + 0xc) + (int)p;
 }
 
 // ---------------------------------------------------------------------------------------------------------
@@ -863,9 +865,10 @@ void FUN_011ebae0(unsigned int* stream, int posLo, int posHi, int origin)
 // 011ebb70: query the file size.
 // ---------------------------------------------------------------------------------------------------------
 // @ 0x11ebb70
-void FUN_011ebb70(unsigned int* stream)
+unsigned long long __stdcall FUN_011ebb70(unsigned int* stream)
 {
-	GetFileSize((void*)stream[0], 0);
+	void* handle = (void*)stream[0];
+	return GetFileSize(handle, 0);
 }
 
 // ---------------------------------------------------------------------------------------------------------
@@ -888,13 +891,13 @@ char FUN_011ebb90(unsigned int* stream, long length)
 // 011ebbf0 / 011ebc10 / 011ebcf0 / 011ebd10: file-system wrappers.
 // ---------------------------------------------------------------------------------------------------------
 // @ 0x11ebbf0
-bool rw_fs_DeleteFile(const char* path)
+bool __stdcall rw_fs_DeleteFile(const char* path)
 {
 	return DeleteFileA(path) == 1;
 }
 
 // @ 0x11ebc10
-bool rw_fs_MoveFile(const char* from, const char* to)
+bool __stdcall rw_fs_MoveFile(const char* from, const char* to)
 {
 	return MoveFileA(from, to) == 1;
 }
@@ -932,13 +935,13 @@ char FUN_011ebc30(void** findHandle, FileFindData* out)
 }
 
 // @ 0x11ebcf0
-bool rw_fs_CreateDirectory(const char* path)
+bool __stdcall rw_fs_CreateDirectory(const char* path)
 {
 	return CreateDirectoryA(path, 0) == 1;
 }
 
 // @ 0x11ebd10
-bool rw_fs_RemoveDirectory(const char* path)
+bool __stdcall rw_fs_RemoveDirectory(const char* path)
 {
 	return RemoveDirectoryA(path) == 1;
 }

@@ -1,0 +1,1 @@
+../src/game/Havok/MoppScratchSize.cpp  ?getScratchSize@hkMoppSettings@@QBEHPAUhkMoppSource@@@Z  011035f0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

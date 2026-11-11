@@ -2,6 +2,7 @@
 // bar panel (animated bars driven by a cSPUIAnimator), and small float / vector helpers.
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no EH, no stack cookies on wchar buffers).
 #include "types.h"
+#include "sse_helpers.h"
 #include <math.h>
 #include <intrin.h>
 
@@ -13,19 +14,10 @@ inline void operator delete(void*, const char*, int, unsigned, const char*, int)
 
 #pragma warning(disable:4035)
 // EA math helpers: hand-written SSE asm.
-__forceinline int CeilToInt(float f)
-{
-    __asm {
-        movss    xmm0, f
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov      ecx, eax
-        add      ecx, 1
-        ucomiss  xmm1, xmm0
-        cmovb    eax, ecx
-    }
-}
-__forceinline int RoundToInt(float f) { __asm cvtss2si eax, f }
+// CeilToInt: the vetted SseCeilToInt in sse_helpers.h
+
+// RoundToInt: the vetted SseRoundToInt in sse_helpers.h
+
 __forceinline float FMin(float a, float b)
 {
     __asm {
@@ -35,15 +27,8 @@ __forceinline float FMin(float a, float b)
     }
     return a;
 }
-__forceinline float FMaxZero(float a)
-{
-    __asm {
-        xorps xmm0, xmm0
-        maxss xmm0, a
-        movss a, xmm0
-    }
-    return a;
-}
+// FMaxZero: the vetted SseMaxZero in sse_helpers.h
+
 
 
 struct Vector2 { float x, y; };
@@ -557,7 +542,7 @@ void cEditorBudgetPanel::UpdateTimeText()
         IWindowComponent* text = (IWindowComponent*)window->GetComponent(0xf15f4bd);
         if (text) {
             wchar_t buffer[64];
-            EA::Locale::SetNumberString(CeilToInt(mTime), buffer, 64);
+            EA::Locale::SetNumberString(SseCeilToInt(mTime), buffer, 64);
             text->GetWindow()->SetCaption(buffer);
         }
     }
@@ -616,7 +601,7 @@ bool cEditorBudgetPanel::HandleMessage(uint32_t messageID, void* message)
             cCreatureStats* stats = (cCreatureStats*)window->GetComponent(0x4ac90b5);
             if (stats && stats->mbValid && stats->mpCost) {
                 float value = mValue - stats->mpCost->mCost;
-                mValue = FMaxZero(value);
+                mValue = SseMaxZero(value);
                 mbReset = true;
             }
         }
@@ -653,16 +638,16 @@ void cEditorBudgetPanel::SetCreature(uint32_t timeMs, cCreatureData* data, uint3
 {
     if (data) {
         float time = GetCreatureTime(id) + data->mBaseTime;
-        mMaxTime = (float)CeilToInt(time);
+        mMaxTime = (float)SseCeilToInt(time);
         mMaxValue = data->mCost;
         mFillRate = data->mComplexity;
         mTimeExtraRate = data->mTimeRate;
-        mCostLevel = RoundToInt(mMaxValue * 0.00036363635f);
+        mCostLevel = SseRoundToInt(mMaxValue * 0.00036363635f);
         if (mCostLevel >= 4)
             mCostLevel = 3;
         else if (mCostLevel < 1)
             mCostLevel = 1;
-        mComplexityLevel = RoundToInt(mFillRate / kMaxComplexity * 4.0f);
+        mComplexityLevel = SseRoundToInt(mFillRate / kMaxComplexity * 4.0f);
         if (mComplexityLevel >= 4)
             mComplexityLevel = 3;
         else if (mComplexityLevel < 1)

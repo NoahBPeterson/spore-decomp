@@ -2451,28 +2451,45 @@ void* cRec28CopyB::Copy(const cRec28* src)
     return dst;
 }
 
+// The 0x10-byte refcounted sub-record at +0x04 of a 0x14-byte record.  Its
+// assignment retains the two interface pointers.
+struct cRecSubCopy {
+    void* mp00;                         // +0x00
+    u8    mb04;                         // +0x04
+    u8    mPad05[3];                    // +0x05
+    void* mp08;                         // +0x08
+    void* mp0c;                         // +0x0c
+
+    cRecSubCopy& operator=(const cRecSubCopy& o)
+    {
+        mp00 = o.mp00;
+        mb04 = o.mb04;
+        mp08 = o.mp08;
+        if (mp08 != 0)
+            VT_00_0(mp08);
+        mp0c = o.mp0c;
+        if (mp0c != 0)
+            VT_00_0(mp0c);
+        return *this;
+    }
+};
+
+struct cRec14CopyB {
+    u32        mField00;                // +0x00
+    cRecSubCopy mSub;                   // +0x04
+};
+
 // @ 0x00e0c710
 void* __cdecl CopyRecRange(void* first, void* last, void* dst)
 {
     if (first != last) {
-        char* q = (char*)first + 0x0c;
-        char* e = (char*)dst + 0x0c;
         do {
             if (dst != 0) {
-                *(u32*)((char*)dst + 0x00) = *(u32*)((char*)first + 0x00);
-                *(u32*)((char*)dst + 0x04) = *(u32*)((char*)first + 0x04);
-                *(u8*)((char*)dst + 0x08) = *(u8*)((char*)first + 0x08);
-                *(u32*)(e) = *(u32*)(q);
-                if (*(void**)(e) != 0)
-                    VT_00_0(*(void**)(e));
-                *(u32*)(e + 0x04) = *(u32*)(q + 0x04);
-                if (*(void**)(e + 0x04) != 0)
-                    VT_00_0(*(void**)(e + 0x04));
+                ((cRec14CopyB*)dst)->mField00 = ((const cRec14CopyB*)first)->mField00;
+                ((cRec14CopyB*)dst)->mSub = ((const cRec14CopyB*)first)->mSub;
             }
             first = (char*)first + 0x14;
             dst = (char*)dst + 0x14;
-            q += 0x14;
-            e += 0x14;
         } while (first != last);
     }
     return dst;

@@ -501,12 +501,17 @@ void FixedVecInt::reserve(uint n)
 }
 
 // @ 0x00475130
+struct IntCopy { int x; };
 void FixedVecInt::push_back(const int& v)
 {
+    int* p;
+    int* snap;
     if (mpEnd < mpCapacity) {
-        int* p = mpEnd;
-        mpEnd = p + 1;
-        if (p) *p = v;
+        snap = mpEnd;
+        mpEnd += 1;
+        p = snap;
+        // Struct assignment loads the source first. A scalar `*p = v` loads the destination first.
+        p ? (*(IntCopy*)p = *(IntCopy*)&v, p) : 0;
     } else {
         DoInsertValue(mpEnd, v);
     }

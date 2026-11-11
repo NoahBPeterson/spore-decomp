@@ -5,7 +5,8 @@ one function at a time, with the original compilers (Visual C++ 2008 SP1, and th
 and RenderWare). Every function is annotated with the original address it rebuilds (`// @ 0x00XXXXXX`).
 
 - **Progress:** [noahbpeterson.github.io/spore-decomp](https://noahbpeterson.github.io/spore-decomp/) (charts, modules,
-  contributors), or [`PROGRESS.md`](PROGRESS.md) in the repository.
+  contributors), and the full tables in
+  [`PROGRESS.md`](https://noahbpeterson.github.io/spore-decomp/PROGRESS.md), both rebuilt after every change.
 - **Contribute:** below, then [`AGENTS.md`](AGENTS.md) for the full loop and the rules (written for people and AI
   agents alike).
 
@@ -26,7 +27,7 @@ python3 -m venv .venv && .venv/bin/pip install pefile capstone pycryptodome
 sh tools/ci/setup_toolchain.sh             # the original compilers, from Microsoft's installers, hash-checked
 .venv/bin/python tools/contrib/make_image.py "<Spore>/SporeBin/SporeApp.exe"   # must print IMAGE OK
 
-.venv/bin/python tools/contrib/task.py --list          # fewest tries first, then smallest
+.venv/bin/python tools/contrib/task.py --list          # fewest tries first, your own order; claimed ones hidden
 .venv/bin/python tools/contrib/task.py 0x00ee9260      # one function: its file, flags, note and source
 .venv/bin/python tools/contrib/check.py 0x00ee9260     # MATCH, or an instruction diff against the original
 ```
@@ -36,10 +37,12 @@ few) per pull request, using the template.
 
 **If you are an AI agent:** read [`AGENTS.md`](AGENTS.md) first and follow it. The short version:
 - Only `src/game/`, `match/slices/` and `match/include/` may change. Never commit anything from `work/`.
-- No inline assembly, `__declspec(naked)` or raw bytes, and no constants written as addresses of invented globals:
-  the check rejects all of these.
+- No inline assembly (`__asm`, `_emit`, `__declspec(naked)`, raw bytes) and no constants written as addresses of
+  invented globals: the check rejects these. A maintainer can approve a short helper when you ask for it with an
+  `asm-override: <why>` line in the pull request body (AGENTS.md, Rules).
 - Before trying new source shapes, look up the difference in [`docs/codegen.md`](docs/codegen.md). After six to eight
-  levers without a match, update the function's `nonmatching.txt` note with what you tried, and move on.
+  levers without a match, move on. Code changes are merged only when they add a new byte-exact function; what you
+  tried can go in as a notes-only pull request (the function's `nonmatching.txt` line).
 - Once a pull request is marked ready, do not add commits to it; put new work in a new pull request.
 
 Every pull request runs the **Byte-match check**. It compiles every function your change can affect and compares

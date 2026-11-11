@@ -274,7 +274,8 @@ struct TreeViewExtra {
     void CalculateVisibleArea();                                // 0x0098fbe0
 };
 
-class WinTreeView : public CustomWindowBase { public:
+// Window storage preceding the secondary tree-view interface at +0x20c.
+class TreeViewWindowBase : public CustomWindowBase { public:
     IWindow mWindow;                                            // +0x4
     unsigned int pad0[0x20];                                    // +0x8 .. 0x88
     float mLocalX0;                                             // +0x88
@@ -286,9 +287,24 @@ class WinTreeView : public CustomWindowBase { public:
     float mLineOff1;                                            // +0x1dc
     IDrawable* mpBackground;                                    // +0x1e0
     unsigned int pad2[0xa];                                     // +0x1e4 .. 0x20c
-    // The real IWindow subobject (the one the +0x20c vtable dispatches on);
-    // only its vptr lives here, everything else is reached through base+0x20c.
-    IWindow mWindow2;                                           // +0x20c
+};
+
+// Retail 0x01445cb8 is the secondary tree-view interface table. Its slot 31
+// dispatches SetScrollbarEnabled with this pointing at the +0x20c subobject.
+struct IWinTreeView {
+    virtual void t0(); virtual void t1(); virtual void t2(); virtual void t3();
+    virtual void t4(); virtual void t5(); virtual void t6(); virtual void t7();
+    virtual void t8(); virtual void t9(); virtual void t10(); virtual void t11();
+    virtual void t12(); virtual void t13(); virtual void t14(); virtual void t15();
+    virtual void t16(); virtual void t17(); virtual void t18(); virtual void t19();
+    virtual void t20(); virtual void t21(); virtual void t22(); virtual void t23();
+    virtual void t24(); virtual void t25(); virtual void t26(); virtual void t27();
+    virtual void t28(); virtual void t29(); virtual void t30();
+    virtual void SetScrollbarEnabled(int which, int v);          // +0x7c
+    virtual void t32();
+};
+
+class WinTreeView : public TreeViewWindowBase, public IWinTreeView { public:
     bool mInited;                                               // +0x210
     unsigned char pad3[3];
     TreeNode mNodes;                                            // +0x214
@@ -338,9 +354,12 @@ class WinTreeView : public CustomWindowBase { public:
     bool OnMouseDown(int, int, int, int);                       // 0x009918b0
     bool OnTick();                                              // 0x00991400
     void SetScrollbarDrawable(int which, void* p);              // 0x00991930
-    void SetScrollbarEnabled(int which, int v);                 // 0x00991990
+    virtual void SetScrollbarEnabled(int which, int v);         // 0x00991990
     ~WinTreeView();                                             // 0x00991df0
 };
+
+typedef char TreeViewWindowBaseSizeCheck[(sizeof(TreeViewWindowBase) == 0x20c) ? 1 : -1];
+typedef char TreeViewScrollbarOffsetCheck[(offsetof(WinTreeView, mScrollbars) == 0x2f4) ? 1 : -1];
 
 class BasicFactory_TreeNode { public:
     void* CreateInstance(void* unused, void* alloc);            // 0x009919e0
@@ -596,11 +615,11 @@ bool WinTreeView::OnMouseDown(int, int, int, int)
             return false;
         }
         if ((node->mFlags & 1) == 0) {
-            mWindow2.w21();
+            static_cast<IWinTreeView*>(this)->t21();
             mPickNode->SetFlag(1, true);
         }
     } else {
-        mWindow2.w21();
+        static_cast<IWinTreeView*>(this)->t21();
     }
     return false;
 }
@@ -624,7 +643,8 @@ void WinTreeView::SetScrollbarDrawable(int which, void* p)
 // @ 0x00991990
 void WinTreeView::SetScrollbarEnabled(int which, int v)
 {
-    mScrollbars[which].mEnabled = v;
+    ScrollbarState* sb = &mScrollbars[which];
+    sb->mEnabled = v;
     CreateScrollbar(1);
     CreateScrollbar(0);
 }

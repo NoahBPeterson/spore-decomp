@@ -6,6 +6,7 @@
 // <new> through <memory>/<xmemory> (C2084).  Same hand guard as SPGraphicsModelManager.cpp (rewrite.py placement_new_guard).
 #define __PLACEMENT_NEW_INLINE
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "SP/cCreatureLocomotion.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -257,19 +258,11 @@ inline Quaternion AxisAngle(const Vector3& axis, float angle)
     float c = cosf(h);
     return Quaternion(axis.x * s, axis.y * s, axis.z * s, c);
 }
-__forceinline float Clamp(float value, float minValue, float maxValue)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        minss xmm0, maxValue
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
+
 inline float SmoothStep(float v)
 {
-    v = Clamp(v, 0.0f, 1.0f);
+    v = SseClamp(v, 0.0f, 1.0f);
     return (3.0f - v * 2.0f) * v * v;
 }
 inline Vector3 NormalizeSafe(const Vector3& v)
@@ -987,7 +980,7 @@ struct cCreatureBase {
   char padb74[0xb80 - 0xb74];
   float m_b80;                              // +0xb80
   char padb84[0xb88 - 0xb84];
-  int m_b88;                                // +0xb88
+  int mStrengthRating;                      // +0xb88
   int m_b8c;                                // +0xb8c
 
   char padb90[0xbb8 - 0xb90];
@@ -1045,6 +1038,7 @@ struct cCreatureBase {
   bool CheckTargetB(void*);
   bool CheckTargetC(void*);
   bool CheckTargetD(void*);
+  int  GetStrengthRating() const;
   int  TimerDelta(cCreatureBase*);
   void ClampHunger(float);
   void SetHunger(float);
@@ -1055,6 +1049,8 @@ struct cCreatureBase {
 typedef Simulator::cCreatureBase CB;
 typedef Simulator::SpeciesData_s00c0_acd0 SpeciesData_s00c0_acd0;
 struct TuningObj {
+  uint32_t pad0[2];                        // +0 (GetAt is a member; data starts at +8)
+  int m8;                                  // +8 (switch selects the animation set)
   void* __thiscall GetAt(unsigned int);
 };
 struct F_abf740 { int __thiscall f(unsigned int); };
@@ -3138,25 +3134,30 @@ bool __fastcall FUN_00c0b000(CB* self)
 // @ 0x00c0b030
 int* __cdecl FUN_00c0b030(int* stream, char* data)
 {
-  void* inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  uint64 v = *(uint64*)(data + 8);
-  void* s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
+  // retail keeps the double temp in the 8-byte frame slot; the float and bool temps
+  // share one 4-byte temp (float and bool bytes at the same address).
+  void* inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  double v = *(double*)(data + 8);
+  void* s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
   WriteUint64(s, &v, 1, 0);
 
-  inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  float u = *(float*)(data + 4);
-  s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
-  WriteUint32(s, &u, 1, 0);
+  inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  union { float f; bool b; } u;
+  u.f = *(float*)(data + 4);
+  s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
+  WriteUint32(s, &u.f, 1, 0);
 
-  inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
-  bool b = *data != 0;
-  StreamWriteBool(s, &b, 1);
+  inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  char b0 = *data;                 // kept across the vcall (ebx in the retail build)
+  s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
+  u.b = b0 != 0;
+  StreamWriteBool(s, &u.b, 1);
 
-  inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
-  b = data[1] != 0;
-  StreamWriteBool(s, &b, 1);
+  inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  char b1 = data[1];                // kept across the vcall (ebx in the retail build)
+  s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
+  u.b = b1 != 0;
+  StreamWriteBool(s, &u.b, 1);
   return stream;
 }
 
@@ -3184,9 +3185,13 @@ int* __cdecl FUN_00c0b100(int* stream, char* data)
 // @ 0x00c0b190
 bool __cdecl FUN_00c0b190(CB* self, int* info)
 {
-  if (self == 0) return false;
-  if (((self->mGeneralFlags >> 9) & 1) != 0 && info[2] == 0x3d) return false;
-  return info[0x120 / 4] != -1;
+  if (self != 0) {
+    if ((((unsigned char)(self->mGeneralFlags >> 9)) & 1) == 0 || info[2] != 0x3d) {
+      if (info[0x120 / 4] != -1)
+        return true;
+    }
+  }
+  return false;
 }
 
 // @ 0x00c0b1c0
@@ -3201,25 +3206,27 @@ bool __cdecl FUN_00c0b1c0(unsigned int arg, unsigned int* out, unsigned int prop
 }
 
 // @ 0x00c0b220
-bool __stdcall FUN_00c0b220(unsigned int arg, unsigned int* out)
+bool __cdecl FUN_00c0b220(unsigned int arg, unsigned int* out)
 {
   int mode = SP_GetCurrentGameMode_s00c0_acd0();
-  if (mode < 0x1654c00) return false;
-  if (mode >= 0x1654c07 && mode != 0x1654c10) return false;
-  int index = mode - 0x1654c00;
-  if (mode == 0x1654c10) index = 6;
-  return FUN_00c0b1c0(arg, out, ((int*)g_168d900)[index]);
+  if ((mode >= 0x1654c00 && mode < 0x1654c07) || mode == 0x1654c10) {
+    int index = mode - 0x1654c00;
+    if (mode == 0x1654c10) index = 6;
+    unsigned int entry = ((unsigned int*)g_168d900)[index];
+    return FUN_00c0b1c0(arg, out, entry);
+  }
+  return false;
 }
 
 // @ 0x00c0b270
 bool __stdcall FUN_00c0b270(unsigned int arg, unsigned int* out)
 {
   int mode = SP_GetCurrentGameMode_s00c0_acd0();
-  unsigned int index = (unsigned int)(mode - 0x1654c00);
-  if (index > 6) return false;
+  if ((unsigned int)(mode - 0x1654c00) > 6) return false;
   int count = 0;
   int* data = 0;
-  if (!SP_GetPropertyAsUint32Array(((int*)g_168d900)[index], arg, &count, &data) ||
+  unsigned int entry = ((unsigned int*)g_168d900)[mode - 0x1654c00];
+  if (!SP_GetPropertyAsUint32Array(entry, arg, &count, &data) ||
       count <= 0)
     return false;
   *out = GRAND->RandomUint32Uniform((unsigned int)count);
@@ -3230,11 +3237,11 @@ bool __stdcall FUN_00c0b270(unsigned int arg, unsigned int* out)
 bool __stdcall FUN_00c0b2f0(unsigned int arg, unsigned int index, unsigned int* out)
 {
   int mode = SP_GetCurrentGameMode_s00c0_acd0();
-  unsigned int idx = (unsigned int)(mode - 0x1654c00);
-  if (idx > 6) return false;
+  if ((unsigned int)(mode - 0x1654c00) > 6) return false;
   int count = 0;
   int* data = 0;
-  if (!SP_GetPropertyAsUint32Array(((int*)g_168d900)[idx], arg, &count, &data) ||
+  unsigned int entry = ((unsigned int*)g_168d900)[mode - 0x1654c00];
+  if (!SP_GetPropertyAsUint32Array(entry, arg, &count, &data) ||
       count <= 0 || index >= (unsigned int)count)
     return false;
   *out = data[index];
@@ -3245,14 +3252,20 @@ bool __stdcall FUN_00c0b2f0(unsigned int arg, unsigned int index, unsigned int* 
 void* __cdecl FUN_00c0b380(CB* self, TuningObj* tuning)
 {
   void* result = tuning->GetAt(0);
-  switch (*(int*)((char*)tuning + 8)) {
-  case 0x1e: return (void*)0x4bc047d;
-  case 0x1f: return (void*)0x4bc0481;
-  case 0x20: return (void*)0x5b6db0a;
+  switch (tuning->m8) {
+  case 0x1e:
+    result = (void*)0x4bc047d;
+    break;
+  case 0x1f:
+    result = (void*)0x4bc0481;
+    break;
+  case 0x20:
+    result = (void*)0x5b6db0a;
+    break;
   case 0x21:
     result = (void*)0x4bc0485;
-    if (*(float*)((char*)self->mpSpecies + 0x58c) > 0.0f &&
-        GRAND->RandomUint32Uniform(100) < 0x32)
+    if (self->mpSpecies->mAge > 0.0f &&
+        (int)GRAND->RandomUint32Uniform(100) < 0x32)
       result = (void*)0x4c074c7;
     break;
   }
@@ -3269,14 +3282,14 @@ bool __cdecl FUN_00c0b410()
 // @ 0x00c0b440
 float __cdecl FUN_00c0b440(unsigned int which)
 {
-  float value = 1.0f;
-  switch (which & ((int)which < 0 ? 0xffffffffu : 0u)) {
-  case 0: return g_150c8e4;
-  case 1: return g_150c8e8;
-  case 2: return g_150c8ec;
-  case 3: return g_150c8f0;
-  case 4: return g_150c8f4;
-  case 5: return g_150c8f8;
+  float value = gOne1485720;                       // _HK_REAL_ONE
+  switch ((int)which < 0 ? 0 : (int)which) {
+  case 0: value = g_150c8e4; break;
+  case 1: value = g_150c8e8; break;
+  case 2: value = g_150c8ec; break;
+  case 3: value = g_150c8f0; break;
+  case 4: value = g_150c8f4; break;
+  case 5: value = g_150c8f8; break;
   case 6: value = g_150c8fc; break;
   }
   return value;
@@ -3286,27 +3299,29 @@ float __cdecl FUN_00c0b440(unsigned int which)
 void __cdecl SP_AddSetAnimationTargetModifierA(CB* self, void* target, void* owner, void* extra)
 {
   if (target == 0) return;
+  float weight = g_146a32c;
   int local[8];
   local[0] = (int)target;
   local[1] = 0;
   local[2] = (int)extra;
   local[3] = ++self->mAnimTargetCounter;
-  self->mpOrders->Activate(3, 0, self, g_146a32c, local, owner);
+  self->mpOrders->Activate(3, 0, self, weight, local, owner);
 }
 
 // @ 0x00c0b570
 void __cdecl SP_AddSetAnimationTargetModifierB(CB* self, void* target, float* position)
 {
   if (target == 0) return;
+  float weight = g_146a32c;
   int local[8];
   local[0] = (int)target;
   local[1] = 0;
   local[2] = -1;
   local[3] = ++self->mAnimTargetCounter;
-  ((float*)&local[4])[0] = position[0];
-  ((float*)&local[4])[1] = position[1];
-  ((float*)&local[4])[2] = position[2];
-  self->mpOrders->Activate(3, 0, self, g_146a32c, local, 0);
+  ((uint32_t*)&local[4])[0] = ((uint32_t*)position)[0];
+  ((uint32_t*)&local[4])[1] = ((uint32_t*)position)[1];
+  ((uint32_t*)&local[4])[2] = ((uint32_t*)position)[2];
+  self->mpOrders->Activate(3, 0, self, weight, local, 0);
 }
 
 // @ 0x00c0b5e0
@@ -3352,7 +3367,12 @@ int __thiscall CB::Query(unsigned int id)
 // @ 0x00c0b710
 void __fastcall FUN_00c0b710(CB* self)
 {
-  self->m_b8c = (int)(g_1687a30 * 1000.0f);
+  // The millisecond count is rounded (fistp, round-half-to-even) to an int64; a C
+  // cast would go through __ftol2, which truncates, so the conversion is written out.
+  float ms = g_1687a30 * 1000.0f;
+  __declspec(align(8)) long long t;
+  t = X87RoundToInt64(ms);
+  self->m_b8c = (int)t;
 }
 
 // @ 0x00c0b780
@@ -3371,11 +3391,8 @@ bool __fastcall FUN_00c0b7a0(CB* self)
 bool __thiscall CB::CheckTargetA(void* target)
 {
   CB* self = this;
-  if (self->mpSpecies->m60c > 0 && ((F_c35d20*)target)->f())
-    return true;
-  if (self->mpSpecies->m608 > 0 && ((F_c35d40*)target)->f())
-    return true;
-  return false;
+  return (self->mpSpecies->m60c > 0 && ((F_c35d20*)target)->f())
+      || (self->mpSpecies->m608 > 0 && ((F_c35d40*)target)->f());
 }
 
 // @ 0x00c0b810
@@ -3384,9 +3401,11 @@ bool __thiscall CB::CheckTargetB(void* argp)
   CB* self = this;
   unsigned int arg = (unsigned int)(size_t)argp;
   int base = FUN_00b3d4c0(self);
-  if (base == 0) return false;
-  int r = ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg);
-  return r == 2 || r == 5 || r == 3 || r == 4;
+  if (base != 0) {
+    int r = ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg);
+    return r == 2 || r == 5 || r == 3 || r == 4;
+  }
+  return false;
 }
 
 // @ 0x00c0b860
@@ -3395,9 +3414,11 @@ bool __thiscall CB::CheckTargetC(void* argp)
   CB* self = this;
   unsigned int arg = (unsigned int)(size_t)argp;
   int base = FUN_00b3d4c0(self);
-  if (base == 0) return false;
-  int r = ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg);
-  return r == 2 || r == 5;
+  if (base != 0) {
+    int r = ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg);
+    return r == 2 || r == 5;
+  }
+  return false;
 }
 
 // @ 0x00c0b8a0
@@ -3406,15 +3427,22 @@ bool __thiscall CB::CheckTargetD(void* argp)
   CB* self = this;
   unsigned int arg = (unsigned int)(size_t)argp;
   int base = FUN_00b3d4c0(self);
-  if (base == 0) return false;
-  return ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg) == 1;
+  if (base != 0)
+    return ((F_ba3f90*)base)->f((char*)self + 0xb28, self, arg) == 1;
+  return false;
+}
+
+// @ 0x00c0b8d0
+int Simulator::cCreatureBase::GetStrengthRating() const
+{
+  return mStrengthRating;
 }
 
 // @ 0x00c0b8e0
 int __thiscall CB::TimerDelta(CB* other)
 {
   CB* self = this;
-  return self->m_b88 - other->m_b88;
+  return self->mStrengthRating - other->mStrengthRating;
 }
 
 // @ 0x00c0b910
@@ -3447,10 +3475,15 @@ void __thiscall Simulator::cCreatureBase::func90h()
   this->m_bBC = g_1687a00;
 }
 
+// EA's SSE min/max __asm helpers (maxss/minss), as in the original module
+// (see match/slices/s00c02600 and s00533dc0: MinF/MaxF/clamp helpers are __asm there too).
+// ClampF: the vetted SseClamp in sse_helpers.h
+
+
 // @ 0x00c0b9d0
 void __thiscall CB::ClampHunger(float value)
 {
-  value = std::min(std::max(value, g_1687a04), g_1687a00);
+  value = SseClamp(value, g_1687a04, g_1687a00);
   this->m_bBC = value;
 }
 
@@ -3529,7 +3562,9 @@ char* __fastcall FUN_00c0bc00(CB* self)
 // @ 0x00c0be70
 bool __cdecl FUN_00c0be70(int x)
 {
-  return x == 0x25b3bc0 || x == 0x772ff58 || x == 0x7995fdc || x == 0x7982fb2 || x == 0x7b5063e;
+  if (x == 0x25b3bc0 || x == 0x772ff58 || x == 0x7995fdc || x == 0x7982fb2 || x == 0x7b5063e)
+    return true;
+  return false;
 }
 
 // @ 0x00c0bee0

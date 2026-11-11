@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 01129d50 0 havok-equivalent
-01129e10 0 havok-equivalent
 01129e30 0 havok-equivalent
 01129f40 0 havok-equivalent
 01129fc0 0 havok-equivalent

@@ -1,3 +1,4 @@
+#include "sse_helpers.h"
 // match/slices/s01016540/s01016540.cpp
 // Slice s01016540 -- cSPSimulatorWalkAround cluster + cSPCameraControllerSolarSystem Write/Read.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
@@ -100,16 +101,8 @@ struct AvatarHandle {
 static inline char* vpt(void* o) { return *(char**)o; }
 
 // SSE clamp helper; cl reproduces the original's inline maxss/minss sequence.
-static __forceinline float Clamp(float value, float minValue, float maxValue)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        minss xmm0, maxValue
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp: the vetted SseClamp in sse_helpers.h
+
 
 struct Blk64 { u32 w[16]; };
 
@@ -531,7 +524,7 @@ float cSPCameraControllerSolarSystem::FUN_01017410(int a)
             f3 = *out->GetFloat();
     }
     float r = FUN_01041cd0(f0, f1, *(float*)&a);
-    r = Clamp(r, 0.0f, 1.0f);
+    r = SseClamp(r, 0.0f, 1.0f);
     return ((f3 - f2) * r + f2) * g_13ebca0;
 }
 

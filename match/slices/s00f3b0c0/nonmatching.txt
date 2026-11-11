@@ -1,4 +1,3 @@
-00f3b290  16  complete reconstruction; cl allocates the body differently (jump layout)
 00f3b590  69  complete reconstruction; random-range clamp restored; equiv PASS (400 valid)
 00f3b710  188  complete reconstruction; list/destructor loop register allocation differs
 00f3b990  37  complete reconstruction; NounManager/RemoveNoun argument setup differs

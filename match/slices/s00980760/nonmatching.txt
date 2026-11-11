@@ -8,6 +8,5 @@
 00981430  93  OnMouseUp: complete; stack-temp and vptr-load scheduling differ; difftest PASS
 009814c0  22  OnFocusChange: complete; 0xff immediate vs register reuse and vptr-load order differ; difftest PASS
 00981500  343 WinScrollbar::OnTick: complete; timer/selection switch matches the disassembly (fast path does double-precision elapsed*scale then SSE arrow multiply); equiv UNSUPPORTED (0/400 valid: fake-arity=399, fault(read)=1)
-009816e0  14  IsActive: complete; original ORs the two timer dwords with jne to a shared block, ours folds to a branchless bool; difftest PASS
 00981700  92  SetRefreshFlag: complete; register allocation (this in edi vs esi) and bool-materialisation differ; difftest PASS
 00981770  36  SetRefresh: complete; original holds the IWindow vptr in edi across the IsActive call, ours reloads; difftest WEAK

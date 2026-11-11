@@ -29,9 +29,10 @@ extern "C" uint32_t g_tick;         // 0x16e7c24
 // 0x16e7c1e : number of registered callbacks (signed char)
 extern "C" int8_t g_cbCount;        // 0x16e7c1e
 // 0x16e7c1c : callbacks-enabled flag
-extern "C" bool g_cbEnabled;        // 0x16e7c1c
+extern "C" int8_t g_cbEnabled;      // 0x16e7c1c (signed byte; see the note in nonmatching.txt)
 // 0x16e7c40 : callback table (function pointers)
-extern "C" int32_t g_callbacks[];   // 0x16e7c40
+typedef void (*CbFn)();
+extern "C" CbFn g_callbacks[];      // 0x16e7c40
 // 0x16e7bfb : voice-alloc mode selector byte
 extern "C" uint8_t g_voiceMode;     // 0x16e7bfb
 // 0x16e7c74 : short lookup table
@@ -682,7 +683,7 @@ extern "C" void SNDI_patchtohdr(int arg0, const char* hdr, void* p4, void* p100,
 extern "C" void FUN_01141690(int32_t p)
 {
     int idx = g_cbCount;
-    g_callbacks[idx] = p;
+    g_callbacks[idx] = (CbFn)p;
     _ReadWriteBarrier();
     g_cbCount = g_cbCount + 1;
 }
@@ -696,7 +697,7 @@ extern "C" void FUN_011416b0(int32_t p)
     int i = 0;
     int8_t c = g_cbCount;
     if (c > 0) {
-        while (g_callbacks[i] != p) {
+        while ((int32_t)g_callbacks[i] != p) {
             i++;
             if (c <= i)
                 return;
@@ -718,15 +719,16 @@ extern "C" void FUN_011416b0(int32_t p)
 // @ 0x01141710
 extern "C" void FUN_01141710(void)
 {
-    if (g_cbEnabled != 0) {
-        int i = 0;
-        if (g_cbCount > 0) {
-            do {
-                ((void (*)())g_callbacks[i])();
-                i++;
-            } while (i < g_cbCount);
-        }
-    }
+    if (g_cbEnabled == 0)
+        return;
+    int i = 0;
+    if (g_cbCount <= 0)
+        return;
+    do {
+        CbFn fn = g_callbacks[i];
+        fn();
+        i++;
+    } while (i < g_cbCount);
 }
 
 // ===========================================================================

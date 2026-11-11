@@ -12,10 +12,9 @@
 008ee2f0  223  PickingContext::PickingContext (copy): complete; the copy ctor body matches but cl reorders the field copies (268 vs 177)
 008ee400  133  PickingContext::PickTextItem: complete; the vector append + style assigns match, cl reorders the push/assign sequence (156 vs 158)
 008ee4a0  534  PickingContext::FlushAll: complete; the multi-pass flush loop matches, cl lays out the two return paths differently (645 vs 626)
-008ee720   18  RenderingContext::SubStyleSet (this+4): complete; cl omits the original's dead `add ecx,4` subobject step (22 vs 25)
-008ee740   32  RenderingContext::SubStyleSetValue (this+4): complete; same dead `add ecx,4` step and +0xf8 folding as 008edd80
-008ee770   30  RenderingContext::SubStyleGet (this+4): complete; same dead `add ecx,4` step and +0xf8 folding
-008ee7a0    2  RenderingContext::ReleaseScroll: complete and same 9-byte size; cl loads the vtbl slot into edx instead of eax
+008ee720   18  RenderingContext::SubStyleSet (this+4): Typesetter::AddLineBreak member call now gives the `mov eax,[esp+8]/mov edx,[esp+4]` pair, but cl still drops the dead leading arguments (0,0) and elides the trailing `ret 8` (21 vs 25); ret-immediate rewriting is not steerable from source
+008ee740   32  RenderingContext::SubStyleSetValue (this+4): complete; cl cannot be made to evaluate the unused `this+4` argument (the original's `add ecx,4` before ScrollAppGet) and elides `ret 4`
+008ee770   30  RenderingContext::SubStyleGet (this+4): complete; same missing `add ecx,4`; the original also does `add eax,0xf8` and a separate `[eax+0x244]` reload that cl folds to `[eax+0x33c]`
 008ee7b0    8  RenderingContext::ScrollViewport: complete and correct; cl just assigns the base-pair additions to the other xmm register
 008ee810  161  RenderingContext::RenderingContext (from rects): complete; base ctor + field inits match, cl orders the fills differently (177 vs 173)
 008ee8c0  176  RenderingContext::RenderingContext (copy): complete; field copy order differs (197 vs 195)

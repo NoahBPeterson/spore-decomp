@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00957a60  31  Fn00957a60: complete (lazy-init global table 0x154edf0, guard flag 0x166b138); changed the guard access to a local `unsigned* g` pointer so the guarded initialization's argument registers match the original (a->eax, b->ecx, edx untouched); guard test/RMW still uses immediate vs eax [equiv: PASS 400 valid/100.0% cov, PASS 2000 valid/100.0% --inputs 2000; replay None]
-00957d40  3  WindowMgr::PostAPC: complete (APC record {tag 0x74d2e9, a, b}, call slot 0x18); fixed 2026-10-12: tag at +8 of the record (was +0x10; the "off by 8" was the bug, hybrid crash 0x959bd7); difftest PASS
 00957dd0  118  Fn00957dd0: complete (window proc: walk window tree, resolve target, dispatch); regalloc/jump layout differ; difftest PASS (394 valid, 100.0% coverage)
 00957e90  41  Fn00957e90: complete (set/clear slot idx if stored==arg-4, notify slot 0x58); regalloc differ; difftest PASS (322 valid, 72.2% coverage)
 00958070  53  Fn00958070: complete (mark node flags from point); regalloc/order differ; difftest WEAK (272 valid, 21.1% coverage)
@@ -8,8 +7,6 @@
 00958640  98  DumpDisplayList: complete (splice pending nodes, reset display list, recycle nodes); regalloc/order differ; difftest WEAK (309 valid, 20.0% coverage)
 00958780  31  WindowMgr::DebugDumpDisplayList: complete (lock +0x28, pending-flag guard, lock +0x70, DumpDisplayList); bool test idiom + tail-call differ; difftest WEAK (238 valid, 50.0% coverage)
 009587d0  30  Fn009587d0: complete (unlink node, fix intrusive list at this+0x20 else this+0x18); regalloc differ; difftest WEAK (303 valid, 58.1% coverage)
-00958860  1  Fn00958860: complete (guard flags&0x40, insert node, mark successors 0x80); 1 byte differs (js vs jl on sign test); difftest PASS (394 valid, 100.0% coverage)
-009588c0  1  Fn009588c0: complete (guard flags&0x20, insert node, mark successors 0x80); 1 byte differs (js vs jl on sign test); difftest PASS (394 valid, 100.0% coverage)
 00957b00  48  GetGlobalImageTable: complete (lazy-init singleton ctor path); regalloc/schedule differ; difftest UNSUPPORTED (lazy ctor path imports _decode_pointer, 400/400 inputs discarded)
 00957bb0  92  ImageTable::Add: complete (grow + insert); schedule differs; difftest UNSUPPORTED (unresolved reference ?DoInsertValue@SimpleVec@@QAEXPAIABI@Z)
 00958570  35  Fn00958570 (intrusive list merge/splice): complete; regalloc/order differ; difftest UNSUPPORTED (all 400 inputs fault: fault(write)/fault(read)/pool-limit)

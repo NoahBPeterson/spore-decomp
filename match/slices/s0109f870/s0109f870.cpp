@@ -7,6 +7,9 @@
 // a field (the Havok 6.x headers were used only as a naming hint, never for layout).
 #include "../s010cbaa0/hk31_b005.h"
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 typedef uint16_t hkUint16;
 typedef uint8_t hkUint8;
 
@@ -565,6 +568,7 @@ void hkWorldOperationUtil::internalDeactivateIsland(hkWorld* world, hkSimulation
 void hkWorldOperationUtil::markIslandInactive(hkWorld* world, hkSimulationIsland* island)
 {
 	island->m_activeMark = 0;
+	_ReadWriteBarrier();
 	if (island->m_dirtyListIndex == 0xffff)
 		putIslandOnDirtyList(world, island);
 }

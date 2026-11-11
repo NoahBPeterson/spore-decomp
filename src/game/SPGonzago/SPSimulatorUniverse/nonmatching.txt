@@ -26,7 +26,6 @@
 01014a80 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 804 bytes - AdjustAwareness not reconstructed.
 01014db0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 126 bytes - eastl::quick_sort<tGrobShockData*> instantiation not reconstructed.
 01014e30 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 762 bytes - OnTick not reconstructed.
-01015130 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 112 bytes - simulator universe helper not reconstructed.
 010151a0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 171 bytes - simulator universe helper not reconstructed.
 01015250 5 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 322 bytes - vector insert-value slow path not reconstructed.
 010153a0 85 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 93 bytes - pair-vector insert: element stride 0x18, the (position - mpBegin) index, the append/DoInsertValue split and the placement construct call are all reproduced, but MSVC keeps mpBegin in a register and never caches this in esi (retail: this=esi, position=ebx, index=edi; mine: this=edi, position=ebp, index=esi, plus an extra ebp push).

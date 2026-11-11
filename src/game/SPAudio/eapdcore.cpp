@@ -213,7 +213,7 @@ void pd_free(t_gobj* o)
 
 // @ 0x00a49450
 namespace EA { namespace Audio { namespace Eapd {
-bool sys_register_loader(void* a, void* b)
+int sys_register_loader(void* a, void* b)
 {
     t_sysstack* s = s_stack;
     s->s_sym_a = (t_symbol*)a;
@@ -221,10 +221,10 @@ bool sys_register_loader(void* a, void* b)
     t_sysstack* r = s->s_next;
     while (r) {
         if (r->s_sym_a == (t_symbol*)a)
-            return true;
+            return 1;
         r = r->s_next;
     }
-    return false;
+    return 0;
 }
 }}}  // namespace EA::Audio::Eapd
 

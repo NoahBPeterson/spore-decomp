@@ -12,3 +12,4 @@ slices/s00ac7ab0/s00ac7ab0.cpp  ?FUN_00ac8930@@YGXPAD0@Z  00ac8930  /O2 /MD /Gy 
 slices/s00ac7ab0/s00ac7ab0.cpp  ?assign@RefPtr@@QAEPAU1@PAPAX@Z  00ac8980  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ac7ab0/s00ac7ab0.cpp  ?FUN_00ac89e0@@YAPAPAXPAPAX00@Z  00ac89e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ac7ab0/s00ac7ab0.cpp  ?FUN_00ac8cd0@CVis@@QAEXHH@Z  00ac8cd0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ac7ab0/s00ac7ab0.cpp  ?scalarDtor@GonzagoSub@@QAEPAXE@Z  00ac7fe0  /O2 /MD /Gy /EHsc /TP /arch:SSE

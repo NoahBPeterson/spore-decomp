@@ -10,9 +10,5 @@
 00cb6090  280  repeated item lookups materialize eax + add eax,imm; large function
 00cb61d0  274  repeated item lookups materialize eax + add eax,imm; large function
 00cb6310  116  callee-saved push/epilogue layout and branch layout diverge
-00cb63c0  2  thunk loads pointer into ecx; original uses eax (allocator choice, not source-forceable)
-00cb63e0  2  thunk loads pointer into ecx; original uses eax (allocator choice, not source-forceable)
 00cb6400  148  callee-saved push/epilogue layout and branch layout diverge
-00cb64c0  2  thunk loads pointer into ecx; original uses eax (allocator choice, not source-forceable)
-00cb64e0  2  thunk loads pointer into ecx; original uses eax (allocator choice, not source-forceable)
 00cb6500  142  compiler re-pushes args for second call; original reuses stack args

@@ -4,7 +4,6 @@
 00f0a440  340  progress UI update; approximate. flags /O2 /MD /Gy /TP; difftest WEAK
 00f0a5a0  118  tutorial slot advance; control flow reproduced. flags /O2 /MD /Gy /TP; difftest WEAK
 00f0a640  59   tutorial time check; codegen differs. flags /O2 /MD /Gy /TP; difftest PASS
-00f0a690  15   bool OR helper; only bool materialisation differs. flags /O2 /MD /Gy /TP; difftest PASS
 00f0a6c0  109  set current tutorial; approximate. flags /O2 /MD /Gy /TP; difftest WEAK
 00f0a750  95   tutorial activate; approximate. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
 00f0a7e0  173  compare tutorial records; approximate. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (ecx at entry: false positive, original is cdecl and only does nop lea ecx,[ecx]; left as is)

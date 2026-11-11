@@ -28,3 +28,5 @@ slices/s00925770/s00925770.cpp  ?FUN_00926160@Trace@EA@@YAXI@Z  00926160
 slices/s00925770/s00925770.cpp  ?Find@C26190@Trace@EA@@QAEPAXI@Z  00926300
 slices/s00925770/s00925770.cpp  ?Init@C26190@Trace@EA@@QAEPAU123@IIDDD@Z  00926350
 slices/s00925770/s00925770.cpp  ?F@C25f30@Trace@EA@@QAEPAU123@HHH@Z  00925f30
+slices/s00925770/s00925770.cpp  ?FUN_00926100@Trace@EA@@YAPAXPAX@Z  00926100  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00925770/s00925770_context.cpp  ?allocate2@ContextCoreAllocator@Allocator@EA@@SAPAXIPAIPAX@Z  00925bf0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

@@ -4,3 +4,4 @@
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?FUN_00c5bea0@@YIPAXPAUcRaidEvent@@PAXI@Z  00c5bea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?FUN_00c5c240@@YIXPAUElemVec@@PAX@Z  00c5c240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionRaid.cpp  ?FUN_00c5c410@@YIEPAUcRaidEvent@@PAXI1@Z  00c5c410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionRaid.cpp  ?FUN_00c5c310@@YAXPAUElemVec@@PAH11HH@Z  00c5c310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

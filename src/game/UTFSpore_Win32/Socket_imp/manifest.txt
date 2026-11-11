@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Destroy2@Socket@@QAEXXZ  0094d300  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?IsReadableAndOrWritable@Socket@Sockets@EA@@UAEHW4IOType@23@I@Z  0094d7d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Bind@Socket@@QAE_NPBX@Z  0094d410  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Fn0094d470@Socket@@QAE_NH@Z  0094d470  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Fn0094d4b0@Socket@@QAE_NXZ  0094d4b0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
@@ -38,8 +39,11 @@
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?GetPeerAddress@ISocket@@QAE_NAAUAddress@@@Z  0094e740  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?Destroy@Socket_s0094_dbc0@@QAEXXZ  0094e770  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?GetAddress2@ISocket@@QAE_NPAUAddress@@PAI@Z  0094e7b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?GetWaitingDataSize@Socket@Sockets@EA@@UAEHI@Z  0094d5c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?DestroyScalar@Socket_s0094_dbc0@@QAEPAXI@Z  0094e8d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ??0DatagramSocketBase@@QAE@XZ  0094e920  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?WriteToPeer@ISocket@@QAEHPBXHH@Z  0094e960  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ??0StreamSocketBase@@QAE@XZ  0094e9a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?RefCount_AddRef_M4@@YIHPAH@Z  0094ea80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?IsWaitingDataAvailable@Socket@Sockets@EA@@UAE_NI@Z  0094d690  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?IsWritable@Socket@Sockets@EA@@UAE_NI@Z  0094d730  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

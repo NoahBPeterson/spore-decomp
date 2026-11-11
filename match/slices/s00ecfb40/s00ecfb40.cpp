@@ -3,6 +3,8 @@
 // with several vtable bases; the stubs below reproduce only the member offsets and
 // vtable slots that these functions touch (retail offsets are noted per field).
 
+#include <intrin.h>
+
 typedef unsigned int uint32_t;
 
 // ---------------------------------------------------------------- call thunks
@@ -76,6 +78,20 @@ struct cString {
     void Load(unsigned int table, unsigned int id, int a);              // 0x006b54b0
     const wchar_t* GetText();                                           // 0x006b55c0
     void Destroy();                                                     // 0x006b5240
+};
+
+// cDualString: two 0x14-byte cStrings plus three trailing fields (ctor 0x005a7810).
+struct DualStr {
+    unsigned int m0, m4, m8, mc, m10;       // 0x14
+    void Destroy();                         // 0x006b5240
+};
+struct cDualString {
+    DualStr first;                          // 0x00
+    DualStr second;                         // 0x14
+    unsigned int m28;                       // 0x28
+    void* m2c;                              // 0x2c
+    unsigned char m30;                      // 0x30
+    void Construct();                       // 0x005a7810
 };
 
 struct cWString {
@@ -195,12 +211,26 @@ struct cSettingsBlock {
     unsigned int mFlags;                    // 0x2c
 };
 
+// EA reference-counted base shared by the editor page payloads.
+struct cRefCounted {
+    void** mpVtbl;                          // 0x00
+    int mRefCount;                          // 0x04
+    void** mpVtbl8;                         // 0x08
+    // returns whether the object was destroyed; the store is not a dead store
+    bool Release() { return (mRefCount -= 1) == 0 && (mRefCount = 1, true); }
+};
+
 // 0x00ed02c0 .. 0x00ed0750: editor page with three vtable bases and the rollover child.
-struct cEditorPage {
-    void** mpVtbl0;                         // 0x00
-    void** mpVtbl1;                         // 0x04
-    void** mpVtbl2;                         // 0x08
-    int mUnk0c;                             // 0x0c
+// one of the editor page's COM bases: the vtables at +0x04/+0x08 and an int at +0x0c
+struct cIface0c {
+    cIface0c() : mUnk0c(0) {}
+    void** mpVtbl0;
+    void** mpVtbl1;
+    void** mpVtbl2;
+    int mUnk0c;
+};
+
+struct cEditorPage : public cIface0c {
     void* mpLayout;                         // 0x10
     void* mpWinMeter;                       // 0x14
     void* mpWinFrame;                       // 0x18
@@ -258,25 +288,31 @@ void cVerbTrayPage::Refresh(int)
         if (mpRenderTarget)
             ((Fn2)(*(void***)mpRenderTarget)[0x7c / 4])(mpRenderTarget, 1, 0);
         mActive = 0;
-    } else {
-        int* desc = *(int**)((char*)mpDescription + 0x118);
-        if (desc && ((desc[1] >> 0xe) & 1) && ((desc[1] >> 0x12) & 1) == 0) {
-            visible = false;
-            ((cTrayBase*)((char*)this - 0x24))->Rebind();
-        } else {
-            visible = true;
-            if (mpRenderTarget) {
-                float t = GetElapsedSeconds();
-                float v[4];
-                v[0] = 0.0f;
-                v[1] = 0.0f;
-                v[2] = 1.0f;
-                v[3] = -(t + t);
-                SP_ApplyVector(mpRenderTarget, v);
-            }
-        }
+        goto tail;
     }
 
+    {
+        int* desc = *(int**)((char*)mpDescription + 0x118);
+        if (!(desc && ((desc[1] >> 0xe) & 1) && ((desc[1] >> 0x12) & 1) == 0))
+            goto show;
+        visible = false;
+        ((cTrayBase*)((char*)this - 0x24))->Rebind();
+        goto tail;
+    }
+
+show:
+    visible = true;
+    if (mpRenderTarget) {
+        float t = GetElapsedSeconds();
+        float v[4];
+        v[0] = 0.0f;
+        v[1] = 0.0f;
+        v[2] = 1.0f;
+        v[3] = -(t + t);
+        SP_ApplyVector(mpRenderTarget, v);
+    }
+
+tail:
     if (mpLayout) {
         unsigned int ids[3];
         ids[0] = 0x73d54a0;
@@ -382,19 +418,22 @@ void cPageControls::OnChanged()
 // @ 0x00ecfe30
 int cEconomyValues::GetValue(int index)
 {
+    int result = 0;
     switch (index) {
     case 0:
     case 1:
     case 2:
     case 3:
-        return ((int*)((char*)this + 8))[index];
+        result = ((int*)((char*)this + 8))[index];
+        break;
     case 4:
     case 5:
     case 6:
     case 7:
-        return ((int*)((char*)this + 0xc))[index];
+        result = ((int*)((char*)this + 0xc))[index];
+        break;
     }
-    return 0;
+    return result;
 }
 
 // @ 0x00ecfe70
@@ -543,16 +582,15 @@ void cEditorPage::Update(int delta)
 // @ 0x00ed01a0
 unsigned char cEditorPage::HandleMessage(int msg, void** data)
 {
-    if (((Fn0B)(*(void***)mpWinSlider)[0x28 / 4])(mpWinSlider) & 1) {
-        if (msg == 0x522f9cd) {
+    if (((Fn0B)(*(void***)mpWinFrame)[0x28 / 4])(mpWinFrame) & 1) {
+        switch (msg) {
+        case 0x522f9cd: {
             if (*data) {
                 void* res = ((Fn1P)(*(void***)(*data))[0xc / 4])(*data, (void*)0x31e56741);
-                if (res && mpData) {
-                    cWString textA;
-                    cWString textB;
-                    textA.Construct();
-                    textB.Construct();
-                    int r = ((Fn2I)(*(void***)mpData)[0x10 / 4])(mpData, (char*)res + 0x4c, 0);
+                if (res && mpWinSlider) {
+                    cDualString text;
+                    text.Construct();
+                    int r = ((Fn2I)(*(void***)mpWinSlider)[0x10 / 4])(mpWinSlider, (char*)res + 0x4c, 0);
                     unsigned char* flags = (unsigned char*)((char*)this + 0x38);
                     if (r == 3) {
                         flags[0] = 1;
@@ -560,20 +598,21 @@ unsigned char cEditorPage::HandleMessage(int msg, void** data)
                     } else {
                         flags[0] = 0;
                     }
-                    textB.Destroy();
-                    textA.Destroy();
+                    text.second.Destroy();
+                    text.first.Destroy();
                 }
             }
             return 1;
         }
-        if (msg == 0x522f9ce) {
+        case 0x522f9ce:
             *(unsigned char*)((char*)this + 0x38) = 0;
             return 1;
-        }
-        if (msg == 0x78c406b) {
+        case 0x78c406b: {
             unsigned char* flags = (unsigned char*)((char*)this + 0x38);
             flags[1] = 1;
             flags[2] = 1;
+            break;
+        }
         }
     }
     return 0;
@@ -592,10 +631,12 @@ cEditorPage::cEditorPage()
 {
     *(void* volatile*)((char*)this + 4) = (void*)0x013eb394u;
     *(void* volatile*)((char*)this + 8) = (void*)0x013ec458u;
+    _ReadWriteBarrier();
     mUnk0c = 0;
-    mpVtbl0 = (void**)0x014898e0u;
-    mpVtbl1 = (void**)0x014898d8u;
-    mpVtbl2 = (void**)0x014898c8u;
+    cEditorPage* self = this;
+    self->mpVtbl0 = (void**)0x014898e0u;
+    self->mpVtbl1 = (void**)0x014898d8u;
+    self->mpVtbl2 = (void**)0x014898c8u;
     mpLayout = 0;
     mpWinMeter = 0;
     mpWinFrame = 0;
@@ -617,9 +658,10 @@ cEditorPage::cEditorPage()
 // @ 0x00ed0340
 void cEditorPage::Destroy()
 {
-    mpVtbl0 = &g_vtbl_EditorPage0;
-    mpVtbl1 = &g_vtbl_EditorPage1;
-    mpVtbl2 = &g_vtbl_EditorPage2;
+    mpVtbl0 = (void**)0x014898e0u;
+    mpVtbl1 = (void**)0x014898d8u;
+    mpVtbl2 = (void**)0x014898c8u;
+    _ReadWriteBarrier();
     if (mpServer) {
         void* server = mpServer;
         mpServer = 0;
@@ -628,11 +670,12 @@ void cEditorPage::Destroy()
     if (mpRollover)
         ((Fn0)(*(void***)mpRollover)[4 / 4])(mpRollover);
     if (mpData) {
-        int* ref = (int*)mpData;
-        ref[1] += -1;
-        if (ref[1] == 0) {
-            ref[1] = 1;
-            ((Fn1)(*(void***)ref)[0 / 4])(ref, 1);
+        cRefCounted* p = (cRefCounted*)mpData;
+        int count = (*(volatile int*)&p->mRefCount += -1);
+        if (count == 0) {
+            p->mRefCount = 1;
+            _ReadWriteBarrier();
+            ((Fn1)(*(void***)p)[0 / 4])(p, 1);
         }
     }
     if (mpWinSlider)
@@ -643,9 +686,9 @@ void cEditorPage::Destroy()
         ((Fn0)(*(void***)mpWinMeter)[4 / 4])(mpWinMeter);
     if (mpLayout)
         ((Fn0)(*(void***)mpLayout)[8 / 4])(mpLayout);
-    mpVtbl2 = &g_vtbl_RefCount;
-    mpVtbl1 = &g_vtbl_IMsgHandler;
-    mpVtbl0 = &g_vtbl_gmeEditorResBase;
+    mpVtbl2 = (void**)0x013ec458u;
+    mpVtbl1 = (void**)0x013eb394u;
+    mpVtbl0 = (void**)0x013eb938u;
 }
 
 // @ 0x00ed0400
@@ -772,24 +815,28 @@ void cEditorPage::Shutdown()
     }
     if (mpLayout) {
         ((cSPUILayout*)mpLayout)->Shutdown(1);
-        void* p = mpLayout;
-        mpLayout = 0;
-        ((Fn0)(*(void***)p)[8 / 4])(p);
+        if (mpLayout) {
+            void* p = mpLayout;
+            mpLayout = 0;
+            ((Fn0)(*(void***)p)[8 / 4])(p);
+        }
     }
     if (mpRollover) {
         ((Fn0)(*(void***)mpRollover)[0x24 / 4])(mpRollover);
-        void* p = mpRollover;
-        mpRollover = 0;
-        ((Fn0)(*(void***)p)[4 / 4])(p);
+        if (mpRollover) {
+            void* p = mpRollover;
+            mpRollover = 0;
+            ((Fn0)(*(void***)p)[4 / 4])(p);
+        }
     }
     if (mpData) {
-        int* ref = (int*)mpData;
+        cRefCounted* p = (cRefCounted*)mpData;
         mpData = 0;
-        int count = ref[1] - 1;
-        ref[1] = count;
+        int count = --*(volatile int*)&p->mRefCount;
         if (count == 0) {
-            ref[1] = 1;
-            ((Fn1)(*(void***)ref)[0 / 4])(ref, 1);
+            p->mRefCount = 1;
+            _ReadWriteBarrier();
+            ((Fn1)(*(void***)p)[0 / 4])(p, 1);
         }
     }
 }

@@ -4,6 +4,7 @@
 
 #define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "EA/Audio/ConfigurationAggregate.h"
 #include "SP/FunctionalMatch/DeclareParam.h"
 #include "EA/ResourceMan/Manager.h"
@@ -731,15 +732,8 @@ inline float GetFloatValue(PropertyList_s004d_92b0* pList, uint32_t id, float de
         bValue = defaultValue;
     return bValue;
 }
-__forceinline float Max(float value, float minValue)
-{
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        movss value, xmm0
-    }
-    return value;
-}
+// Max: the vetted SseMax in sse_helpers.h
+
 template <class T>
 struct AutoRefCount {
     T* mpObject;
@@ -2832,7 +2826,7 @@ bool ReadAbilityData(cCreatureAbility_s004d_92b0* ability, PropertyList_s004d_92
     GetFloat(propList, 0x75e0100, ability->mReactionDuration);
 
     ability->mRefresh = GetFloatValue(propList, 0x1b8346e, 5.0f);
-    ability->mRefresh = Max(ability->mRefresh, 0.1f);
+    ability->mRefresh = SseMax(ability->mRefresh, 0.1f);
     ability->mDuration = GetFloatValue(propList, 0x1c6c623, 0.0f);
     ability->mRecharge = GetFloatValue(propList, 0x5417d08, 0.0f);
 

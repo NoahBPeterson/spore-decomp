@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "EA/Stopwatch.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -41,18 +42,8 @@ SysAT* GetSystemAT();                            // 0x00a206f0 (cdecl)
 void   SetGlobalProperty(int, float);            // 0x005ca880 (cdecl)
 void   PauseSound(void*, int);                   // 0x00a37290 (cdecl)
 extern int32_t g_1488414[];                      // 0x01488414  global property id table
-__forceinline int FloorToInt(float f)
-{
-    __asm {
-        movss    xmm0, f
-        cvtss2si eax, xmm0
-        cvtsi2ss xmm1, eax
-        mov      ecx, eax
-        sub      ecx, 1
-        ucomiss  xmm0, xmm1
-        cmovb    eax, ecx
-    }
-}
+// FloorToInt: the vetted SseFloorToInt in sse_helpers.h
+
 struct Stopwatch160 {
     uint32_t m0;                                 // +0x00  (abs +0x160)
     uint32_t m4;                                 // +0x04  (abs +0x164)
@@ -1288,7 +1279,7 @@ long double SP::Audio::cPlayerCityMusic::FUN_00ead040()
     long double e = (long double)t;
     e = e * sw->m14;
     float f = (float)e;
-    int i = FloorToInt(f);
+    int i = SseFloorToInt(f);
     return e - (long double)i;
 }
 

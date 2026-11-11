@@ -1,4 +1,4 @@
-011f4220 25 complete: __cdecl Release wrapper; same dec-vs-sub difference plus one register choice
+011f4220 25 complete: __cdecl Release wrapper; identical except the call operand: retail `call 0x11fa050` (rel32 to a sibling in the same image), ours `call UnregisterShader` which the object leaves as a *self*-relative reloc that cmpdis reports as `<+0x13>`. The manifest already binds UnregisterShader to 0x11fa050, so this is a diff-tool display artifact (dec-vs-sub resolved). Needs a maintainer look at cmpdis's `<ext>` detection for /vc71 objects.
 011f4440 135 complete: Shader ctor; the original stores the raw low 16 bits of vsMin/vsMax/psMin/psMax (the 32-bit shr/mov dh/dl sequence is just a 16-bit truncation, not a byte swap); cl emits 125 vs 165 B and shortens the field stores; equiv PASS 400 valid inputs, 100.0% coverage
 011f44f0 167 complete: Shader::CheckShaderVersionSupport; cl keeps D3DCAPS9 in eax (no push ebp) and allocates the ternaries differently
 011f4630 1716 complete: default shader-table registration; 44 fixed entries written with explicit field stores, not the original's scheduled per-entry sequence

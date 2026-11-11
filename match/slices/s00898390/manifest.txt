@@ -1,0 +1,1 @@
+slices/s00898390/s00898390.cpp  ?get@S898390@@QAEMH@Z  00898390  /O2 /MD /Gy /EHsc /TP /arch:IA32 /fp:fast

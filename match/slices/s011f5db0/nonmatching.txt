@@ -20,8 +20,12 @@
                complete; the repeated inlined strcmp/memcmp scans schedule differently.
                difftest WEAK (191/191 valid, no mismatch, 77.7% coverage).
 011f68f0   15  Restore pixel shader (device SetPixelShader vtbl+0x1ac when the saved shader
-               differs): complete; cl sinks the esi prologue past the early returns, the
-               original pushes later. difftest WEAK (400/400 valid, no mismatch).
+               differs): complete. Retail keeps the saved shader in eax (with an esi mirror
+               for the later store: push esi; mov esi,eax between the cmp and the je), reloads
+               the device global into ecx only after that test and stores the esi copy; ours
+               reloads the saved-shader global after the call (mov eax,[g]; mov [g],eax), so
+               no esi mirror is needed, and loads the device before the je. difftest WEAK
+               (400/400 valid, no mismatch).
 011f69a0  668  rwg_D3D9GeneratePixelShader (builds the HLSL source, picks ps_x_y, calls
                D3DXCompileShader and installs the shader): complete; the effect-def table
                walk and 10-arg compile call schedule differ. difftest UNSUPPORTED

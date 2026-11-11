@@ -8,3 +8,4 @@
 ../src/game/SPEngine/SPJobManager.cpp  ?AddRef@cJob@@QAEHXZ  0068f950  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ??0cJobManager@@QAE@XZ  00690210  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?Init@cJobManager@@QAE_NIH@Z  00690330  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?ThreadRun@cJobManager@SP@@SAHPAX@Z  0068f570  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

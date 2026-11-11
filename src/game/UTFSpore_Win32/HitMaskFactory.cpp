@@ -57,8 +57,14 @@ struct Obj33 {
 // ---- items of slice s00996f10 end
 
 // ---- items of slice s00997f50 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct Obj34 {
-    char pad[0x40];
+struct Obj34 { // HitMaskResource: retail factory allocates 0x3c bytes.
+    void* mpPrimaryVtbl00;
+    void* mpRefCountVtbl04;
+    unsigned mReserved08[3];
+    unsigned short* mpRunData14;
+    unsigned mReserved18[4];
+    void* mpResourceVtbl28;
+    unsigned mReserved2c[4];
     void* ctor();          // 0x997f50
     void* ScalarDtor(unsigned flags);  // 0x998000
 };
@@ -339,16 +345,16 @@ void* Obj34::ctor()
 // @ 0x00998000
 void* Obj34::ScalarDtor(unsigned flags)
 {
-    char* a = (char*)this;
-    *(void**)(a + 0x28) = (void*)0x13eb938;
-    int p = *(int*)(a + 0x14);
-    if (p != 0 && *(int*)(p - 4) != 0)
-        FUN_00f47380((void*)p);
-    *(void**)(a + 4) = (void*)0x13ef094;
-    *(void**)(a + 0) = (void*)0x13eb938;
+    mpResourceVtbl28 = (void*)0x13eb938;
+    _ReadWriteBarrier();
+    unsigned short* runs = mpRunData14;
+    if (runs != 0 && ((const int*)runs)[-1] != 0)
+        FUN_00f47380(runs);
+    mpRefCountVtbl04 = (void*)0x13ef094;
+    mpPrimaryVtbl00 = (void*)0x13eb938;
     if (flags & 1)
-        FUN_00f47380(a);
-    return a;
+        FUN_00f47380(this);
+    return this;
 }
 
 // @ 0x00998050

@@ -1,0 +1,98 @@
+# Fills the caches the byte-match check restores: the WineHQ .deb files and the extracted compilers + wine prefix.
+# pull_request_target runs may read caches but not write them ("token has no writable scopes"), so this runs on main:
+# on demand, weekly (GitHub drops a cache unused for 7 days), and when the setup scripts change. Keys must match
+# byte-match.yml.
+name: Warm the byte-match caches
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 4 * * 1"
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/byte-match.yml
+      - .github/workflows/warm-caches.yml
+      - tools/ci/setup_toolchain.sh
+      - tools/ci/toolchain.sha256
+      - tools/ci/is_unpack.py
+
+permissions:
+  contents: read
+
+concurrency:
+  group: warm-caches
+  cancel-in-progress: false
+
+jobs:
+  warm:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Restore the cached wine packages
+        id: aptcache
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/apt-archives
+          key: apt-noble-winehq-v1
+
+      - name: Install wine (as byte-match.yml does)
+        run: |
+          mkdir -p ~/apt-archives/partial
+          sudo dpkg --add-architecture i386
+          sudo mkdir -pm755 /etc/apt/keyrings
+          sudo wget -qO /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+          sudo wget -qNP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --install-recommends \
+            -o Dir::Cache::Archives="$HOME/apt-archives" winehq-stable msitools xvfb >/dev/null
+          sudo rm -rf ~/apt-archives/partial ~/apt-archives/lock
+          sudo chown -R "$(id -u):$(id -g)" ~/apt-archives
+          echo "WINE_VERSION=$(wine --version)" >> "$GITHUB_ENV"
+          du -sh ~/apt-archives
+
+      - name: Save the wine packages
+        if: steps.aptcache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/apt-archives
+          key: apt-noble-winehq-v1
+
+      - name: Restore the installers
+        uses: actions/cache@v4
+        with:
+          path: work/toolchain/downloads
+          key: msvc-installers-7800d037-50dc6cca
+
+      - name: Restore the extracted toolchains and wine prefix
+        id: tccache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            work/toolchain/vc9sp1
+            work/toolchain/vc71tk
+            work/toolchain/wineprefix
+          key: toolchains-${{ env.WINE_VERSION }}-${{ hashFiles('tools/ci/toolchain.sha256', 'tools/ci/setup_toolchain.sh', 'tools/ci/is_unpack.py') }}
+
+      - name: Start a virtual display for wine
+        run: |
+          Xvfb :99 -screen 0 1024x768x16 >/dev/null 2>&1 &
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
+
+      - name: Build and verify the toolchains
+        timeout-minutes: 20
+        run: sh tools/ci/setup_toolchain.sh
+
+      - name: Save the extracted toolchains and wine prefix
+        if: steps.tccache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            work/toolchain/vc9sp1
+            work/toolchain/vc71tk
+            work/toolchain/wineprefix
+          key: toolchains-${{ env.WINE_VERSION }}-${{ hashFiles('tools/ci/toolchain.sha256', 'tools/ci/setup_toolchain.sh', 'tools/ci/is_unpack.py') }}

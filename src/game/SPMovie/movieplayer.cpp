@@ -10,6 +10,7 @@ extern "C" char  FUN_011ea7d0(const char* path);
 extern "C" unsigned long long FUN_011ea850(const char* path);
 #include <intrin.h>
 #pragma intrinsic(__rdtsc)
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---- items of slice s00fca300 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace rw {
@@ -1511,8 +1512,14 @@ void rw::movie::MovieRenderer_s00fc_b210::PlayVideo()
 {
     if (mVideoState - 1 == 0)
     {
-        if (mAudioRenderer != 0)
-            mAudioRenderer->v20();
+        IAudioRenderer* audio = mAudioRenderer;
+        if (audio != 0)
+        {
+            typedef void (__thiscall* PlayFunction)(IAudioRenderer*);
+            PlayFunction* table = *(PlayFunction**)audio;
+            _ReadWriteBarrier();
+            table[8](audio);
+        }
         mVideoState = 2;
     }
 }

@@ -1,6 +1,6 @@
 0080cf00  34  complete; inlined base-ctor store to +4 is deduplicated by cl, original keeps both; returns this in eax; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv PASS (400 valid, 100% cov)
 0080d5c0  11  complete; null-arm store address folded to absolute instead of kept in eax
-0080d5f0   7  complete; null arm missing the redundant xor eax,eax
+0080d5f0   7  complete; null arm missing the redundant xor eax,eax (retail: xor eax,eax; mov eax,0x60; ret). Tried: q=0 init, q+0x60, p+0x60, q?q:0x60, q?0x60:0, two zero locals, ternary with p, comma/assignment forms, goto, switch; cl always drops the dead xor or changes the true-path shape. Likely a source-level dead store cl 15.00 keeps only in the original TU context.
 0080d620  23  complete; virtual call shapes (slot 0x4c/0x8c/0x90) and register use differ
 0080cf80  -  complete; all six message paths; frame and float temp layout differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 0080c5d0  548  complete; both tray passes (clamp/measure and position/emit) with layout lookup and window slot calls; loop temp layout and register allocation differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv FAIL (5/5 valid mismatched, xmm1 clobber)

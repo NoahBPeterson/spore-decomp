@@ -16,6 +16,7 @@
 #include <string.h>
 #include <math.h>
 #include <new>
+#include <intrin.h>
 
 typedef unsigned int  uint;
 typedef unsigned char uchar;
@@ -275,6 +276,7 @@ void* cGroundLayer::sdtor(uint flags)
     vt0 = VT_1459f50;
     vt4 = VT_1459f4c;
     vt1c = VT_1459f3c;
+    _ReadWriteBarrier();
     cSPTransform* v = vec.mpBegin;
     if (v && *(int*)((char*)v - 4) != 0)
         EA_FREE(v);
@@ -565,6 +567,9 @@ void cGroundEditorRes::ensureContainer()
 // @ 0x00ac7980
 void cGroundEditorRes::destroyContainer()
 {
+    if (p1c == 0)
+        return;
+    _ReadWriteBarrier();
     void* o = p1c;
     if (o == 0)
         return;
@@ -595,9 +600,9 @@ void cGroundEditorRes::removeNoun()
 void* cGroundEditorRes::getContainer()
 {
     void* o = p1c;
-    if (o == 0)
-        return 0;
-    return (char*)o + 0x34;
+    if (o != 0)
+        return (char*)o + 0x34;
+    return 0;
 }
 
 // ================================================================================================

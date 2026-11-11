@@ -19,6 +19,7 @@ extern "C" double MixSinPoly(float x);                                        //
 static const float PI = 3.1415927410125732f;
 static const float PI_4 = 0.7853981852531433f;
 
+// compile with /vc71 /O2 /MD /Gy /EHsc /TP /GS-
 // ---------------------------------------------------------------- 0x01172e10
 struct cPolySynth {
     char pad000[0x2c];
@@ -31,7 +32,7 @@ struct cPolySynth {
 // @ 0x01172e10
 void cPolySynth::Window(int band, float* out, const float* in)
 {
-    unsigned char b = (unsigned char)((mPhase[band] - 1) & 0xf);
+    unsigned char b = (unsigned char)((mPhase[band] - 1) & 0xf);   // tune2
     mPhase[band] = b;
     const int e = b & 1;
     const int o = e ^ 1;
@@ -217,11 +218,12 @@ void SetWindow(cSynthWindow* p, int type)
 }
 
 // ---------------------------------------------------------------- 0x01173730
+// Flags: /vc71 /O2 /MD /Gy /EHsc /TP /GS-
 // @ 0x01173730
 void OnePole(float* state, int n, const float* in, float* out)
 {
     float y = state[0] * state[1];
-    for (int i = 0; i < n; i++) {
+    for (int i = n; i-- > 0; ) {
         y = state[2] * in[i] + y;
         out[i] = y;
     }

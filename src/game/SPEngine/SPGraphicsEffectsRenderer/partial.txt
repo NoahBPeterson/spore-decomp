@@ -4,7 +4,6 @@
 006ec4a0  269  eastl::vector<bool> DoInsertValue; body omitted
 006ec840  82  vector<AutoRefCount>::erase + release tail; body stubbed
 006ec8a0  422  vector<AutoRefCount<visual effect>>::DoInsertValue; body omitted
-006ecaa0  151  vector<AutoRefCount>::~vector; body omitted
 006ecb40  505  vector<AutoRefCount>::DoInsertValues; body omitted
 006ed070  300  eastl::vector<AutoRefCount<Resource>>::DoInsertValue; body omitted
 006efa90  -  skeleton: cEffectsRendererSystem shutdown (vector<bool> contractions + atomic refcount release) not reconstructed.

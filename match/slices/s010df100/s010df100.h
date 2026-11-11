@@ -104,12 +104,14 @@ struct hkLinearCastCollisionInput : hkCollisionInput {
 };
 struct hkCdPoint { hkContactPoint m_contact; const hkCdBody* m_cdBodyA; const hkCdBody* m_cdBodyB; };
 class hkCdPointCollector { public:
-    virtual void v0();
+    hkCdPointCollector() : m_earlyOutDistance(HK_REAL_MAX) {}
+    virtual void* scalarDeletingDtor(unsigned int flags); // 0x010cdca0
     virtual void addCdPoint(const hkCdPoint& point);
     float m_earlyOutDistance;                  // +4
 };
 class hkCdBodyPairCollector { public:
-    virtual void v0();
+    hkCdBodyPairCollector() : m_earlyOut(0) {}
+    virtual void* scalarDeletingDtor(unsigned int flags);              // slot 0, 0x010cdca0
     virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);       // slot 1 (+4)
     hkBool m_earlyOut;                         // +4
 };

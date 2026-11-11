@@ -3410,7 +3410,7 @@ extern "C" void  FUN_0052a400(int a, unsigned int b, unsigned int c, int d, int 
 extern "C" void  FUN_00473300(void* p);               // 0x473300
 extern "C" void  WString_FreeBuffer(void* p);         // 0x4237d0
 extern "C" void  Counted_Release(void* p);            // 0x40f360
-extern "C" void* LowerBound12(void* start, void* end, const void* key, int flag); // 0x422430
+extern "C" void* LowerBound12(void* start, void* end, const void* key, unsigned char flag); // 0x422430
 extern char g_table_150c050;
 extern int  g_count_13ec430;
 struct TableEntry {
@@ -3783,11 +3783,13 @@ C461400* C461400::Ctor()
 // @ 0x004614b0
 void Holder::Dtor()
 {
-    if (p44 != 0) {
-        p44->Release();
+    IRefObj** a = &p44;
+    if (*a != 0) {
+        (*a)->Release();
     }
-    if (p3c != 0) {
-        ((CountedObject*)p3c)->Release();
+    void** b = &p3c;
+    if (*b != 0) {
+        ((CountedObject*)*b)->Release();
     }
     ((SubObject*)sub)->Destroy();
     ((WStringBuffer*)str)->Free();
@@ -3805,7 +3807,9 @@ const char* LookupName(int key)
 {
     TableEntry* start = (TableEntry*)&g_table_150c050;
     TableEntry* end = (TableEntry*)((char*)&g_table_150c050 + g_count_13ec430 * 0xc);
-    TableEntry* it = (TableEntry*)LowerBound12(start, end, &key, 0);
+    char zero = 0;
+    char copy = zero;
+    TableEntry* it = (TableEntry*)LowerBound12(start, end, &key, (unsigned char)copy);
     TableEntry* found = end;
     if (it != end && !((unsigned)key < it->key)) {
         found = it;
@@ -3827,15 +3831,15 @@ void UseName(int key)
 // @ 0x004615e0
 void RegisterCreatureModels(int a, unsigned int flags, int c, int d, int e)
 {
-    Bits x;
-    x.raw = flags;
-    x.f.mid = 0x29;
-    x.f.lo = 1;
     Bits y;
     y.raw = flags;
     y.f.mid = 0x29;
     y.f.lo = 0;
-    FUN_0052a400(a, y.raw, x.raw, c, d, e);
+    Bits x;
+    x.raw = flags;
+    x.f.mid = 0x29;
+    x.f.lo = 1;
+    FUN_0052a400(a, x.raw, y.raw, c, d, e);
     return;
 }
 

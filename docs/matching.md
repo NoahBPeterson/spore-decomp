@@ -33,7 +33,9 @@ Evidence and rules of thumb are below.
 
 - **Havok was built with VC .NET 2003, not VS2008.** The dev PDB's S_COMPILE records give
   cl 13.10.3077 for all 469 Havok objects. Integer code often matches with VS2008, but x87 code
-  never does (instruction selection differs, e.g. `fld st(i); fmul [m]` vs `fld [m]; fmul st(i)`).
+  never does (instruction selection differs, e.g. constant-pool loads where cl 15 emits `fldz`/`fld1`). Operand
+  order is **not** a compiler signature: cl 13.10 emits `fld [m]; fmul st(i)` too when the scalar is a `double`
+  (`docs/codegen.md` 9.1, "THE DOUBLE-SCALAR LEVER").
   Add the pseudo-flag **`/vc71`** to a manifest line's flags (or `chk.py --flags`) and `cl.sh`
   hands the compile to `tools/matching/cl71.sh`: cl **13.10.3077**, Havok's own build, from the Visual
   C++ Toolkit 2003 1.01 (`VCToolkitSetup.exe`, SHA-1 `50dc6cca1503f08a41d56816f3f1abcaf347b0bd`,
@@ -200,6 +202,13 @@ Writing matchable source:
   and evaluation order of conditions.
 - Budget your effort: up to ~6 variant rounds per function. If it won't match, keep the best
   behaviorally-correct version (it must compile) and list it in nonmatching.txt.
+
+**No inline assembly without approval (2026-11-11).** The pull-request check fails any added `__asm` / `_emit` /
+`naked` line unless a maintainer sets the `asm-approved` label (contributors ask with an `asm-override: <why>` line
+in the pull request body). The reviewed float helpers in `match/include/sse_helpers.h` (round, truncate, floor, ceil,
+clamp, max, and the x87 `fld; fistp qword` rounding `X87RoundToInt64`) are the exception: call them, never copy them. A function whose only assembly comes from that header counts;
+any other inline assembly, in its body or in a same-file helper, makes it not count (`asm_audit.py`; 43 functions were
+demoted for this on 2026-11-11 and 30 came back through the shared helpers). The older rule below still applies.
 
 **No assembly transcription.** A function written as `__declspec(naked)` + `__asm`, with `_emit` bytes, or
 generated from the disassembly by a script is not decompiled and never counts as byte-exact; record it in

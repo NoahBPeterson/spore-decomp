@@ -315,19 +315,20 @@ python3 -m venv .venv && .venv/bin/pip install pefile capstone pycryptodome
 sh tools/ci/setup_toolchain.sh        # the original compilers, from Microsoft's installers, hash-checked
 .venv/bin/python tools/contrib/make_image.py "&lt;Spore&gt;/SporeBin/SporeApp.exe"   # must print IMAGE OK
 
-.venv/bin/python tools/contrib/task.py --list        # fewest tries first, then smallest
+.venv/bin/python tools/contrib/task.py --list        # fewest tries first, your own order; claimed ones hidden
 .venv/bin/python tools/contrib/task.py 0x00ee9260    # one function: file, flags, note, source
 .venv/bin/python tools/contrib/check.py 0x00ee9260   # MATCH, or an instruction diff</code></pre>
-<p>On <code>MATCH</code>, <code>check.py</code> updates the bookkeeping files itself. Open a pull request using the
-template; the Byte-match check runs on it automatically.</p>
+<p>Open a draft pull request early, titled with the function's address: that claims it, and it drops out of
+everyone else's list within minutes. On <code>MATCH</code>, <code>check.py</code> updates the bookkeeping files itself;
+mark the pull request ready, using the template. The Byte-match check runs on it automatically.</p>
 <h2>Using an AI agent?</h2><p>Point it at the repository and tell it to read
 <a href="https://github.com/%(repo)s/blob/main/AGENTS.md"><code>AGENTS.md</code></a> first. It has everything an agent
 needs: the loop, the rules, and where the known compiler tricks are written down.</p>
 <h2>The rules, briefly</h2><ul>
 <li>Only <code>src/game/</code>, <code>match/slices/</code> and <code>match/include/</code> change in a contribution.</li>
-<li>Real C++: no inline assembly, no raw bytes, no constants disguised as addresses of made-up globals.</li>
+<li>Real C++: no inline assembly or raw bytes (a maintainer can approve a short helper if you ask with an <code>asm-override:</code> line in the pull request), no constants disguised as addresses of made-up globals.</li>
 <li>Never commit game files or anything derived from them.</li>
-<li>Stuck? Update the function's line in the <code>nonmatching.txt</code> beside its source (the path <code>task.py</code> prints) with what you tried and what still differs, and open a pull request with that: the next person starts from your note.</li></ul>""" % {"repo": E(repo), "name": E(repo.split("/")[-1])}
+<li>Stuck? Move on to another function. Code changes are merged only when they add a new byte-exact function; what you tried can go in as a notes-only pull request (the function's line in the <code>nonmatching.txt</code> beside its source).</li></ul>""" % {"repo": E(repo), "name": E(repo.split("/")[-1])}
 
     how = """<h1>How it works</h1>
 <h2>What "byte-exact" means</h2><p>Spore's executable was built in 2008 with Visual C++ 2008 SP1 (and the Visual

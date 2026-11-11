@@ -362,10 +362,13 @@ char* __fastcall ResCtor30(char* self) {
     FixedPoolBase* poolA = (FixedPoolBase*)(self + 8);
     tmp.mpHead = 0;
     tmp.init(self + 0x1c, 0x18, 0xc, 4, 0);
-    void* head = tmp.mpHead;
-    *(int*)self = 0;
-    *(int*)(self + 4) = 0;
-    poolA->mpHead = 0;
+    char* head = (char*)tmp.mpHead;
+    tmp.mpBegin = self + 0x1c;
+    tmp.mpEnd = self + 0x1c + 0x18;
+    tmp.mNum = 0xc;
+    poolA->mpHead = tmp.mpHead;
+    *(void**)self = head;
+    *(void**)(self + 4) = head;
     poolA->init(head, 0x18, 0xc, 4, 0);
     poolA->mpBegin = head;
     poolA->mpEnd = (char*)head + 0x18;
@@ -388,8 +391,8 @@ VigInfo0* __fastcall FUN_00ad5ec0(VigInfo0* p) {
     *(void**)(self + 0x10) = self + 0x28;
     *(void**)(self + 0x14) = self + 0x28;
     *(int*)(self + 0x24) = 0;
-    *(void**)(self + 0x18) = (char*)*(void**)(self + 0x10) + 8;
-    ResCtor30((char*)*(void**)(self + 0x18));
+    *(void**)(self + 0x18) = self + 0x30;
+    ResCtor30(self + 0x30);
     *(int*)(self + 0x78) = 0;
     *(int*)(self + 0x7c) = 3;
     return p;

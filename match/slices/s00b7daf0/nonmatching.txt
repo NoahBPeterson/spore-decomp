@@ -2,7 +2,7 @@
 00b7e500   56  cPlanetModel::GetRadiusX2: complete; float local materialisation (xmm store + x87 fadd) and default-arm constant form
 00b7e840   389 SP::cPlanetModel::GetAverageRadius: complete; equivalence FAIL is register-only -- eax and all memory match, but retail leaves ecx = this and edx = the tile index while cl reuses ecx for mContinentMap and accumulates the index in eax (volatile index / early member load / 64-bit return nudges all repicked ecx)
 00b7e1d0   63  cPlanetModel::ClearContinentBits: complete; loop unrolling of the two masking loops (constant trip count)
-00b7e6c0   10  list reset + FUN_007a4420: complete; global `this` (ecx) load ordered after the argument pushes
+00b7e6c0   10  list reset + FUN_007a4420: complete; global `this` (ecx) load ordered after the argument pushes. Retried: retail loads ecx from 0x015ddc84 AFTER the four `push`es (`mov ecx,[0x15ddc84]; push 0x400; push 4; push 3; push 0; call`), while cl materialises the global address before the pushes (either pushing 0 so it comes from the import thunk, or `mov ecx,0` for a local thiscall helper). Also tried a `S15ddc84& list = g_15ddc84;` reference, a cdecl call taking the object as its first argument, and reordering the earlier virtual release before the reset; none gives the late ecx load
 00b7e680    46  float->s16 quantiser: complete; x87 fistp round-to-nearest helper replaces the SSE cvt; equiv PASS (400 valid, 100% cov, 0 mismatches); instruction encoding/register scheduling differ
 00b7e150   65  union-find path-compress (FindSet): complete; register/schedule differences in the while loop
 00b7e6f0   111 union-find Union: complete; find-loop register assignment differs from the original

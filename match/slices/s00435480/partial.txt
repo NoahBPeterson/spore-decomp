@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00435480  0  byte-exact only with inline assembly in the body (symbol ?StartIfUnset@Timer@@QAEXXZ, flags /Od /Ob1 /MD /Gy /TP); demoted 2026-11-11: counts again once its asm is a vetted match/include helper or plain C++

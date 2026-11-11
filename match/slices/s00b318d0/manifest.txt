@@ -8,3 +8,7 @@ slices/s00b318d0/s00b318d0.cpp  ?DecPauseGate@cGameTimeManager@@QAEHI@Z  00b3225
 slices/s00b318d0/s00b318d0.cpp  ?TogglePauseGate@cGameTimeManager@@QAE_NI@Z  00b32280  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00b318d0/s00b318d0.cpp  ?SetTimeFlowSetting@cGameTimeManager@@QAEXH@Z  00b32450  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00b318d0/s00b318d0.cpp  ?NextStateEnum@@YAHH@Z  00b32890  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?FUN_00b324b0@cTokenTranslator@@QAEPAXI@Z  00b324b0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?UpdateTimeAtStartOfFrame@cGameTimeManager@@QAEXXZ  00b31a90  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?SetTimeFlowRate@cGameTimeManager@@QAEXM@Z  00b322c0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ??1cTokenTranslator@@UAE@XZ  00b32490  /O2 /MD /Gy /TP /arch:SSE /GS-

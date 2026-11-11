@@ -4,6 +4,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <xmmintrin.h>
+#include <stddef.h>
 
 // ---- addresses used as literals in the original (relocations masked when matching) ----
 #define DAT_015b117c (*(int*)(0x015b117c))
@@ -49,6 +50,45 @@ namespace SP {
 
 class cTerrainSphere
 { public:
+    // Retail primary-interface dispatch; unknown slots retain local placeholders.
+    virtual void terrainSlot0();
+    virtual void terrainSlot1();
+    virtual void terrainSlot2();
+    virtual void terrainSlot3();
+    virtual void terrainSlot4();
+    virtual void terrainSlot5();
+    virtual void terrainSlot6();
+    virtual void terrainSlot7();
+    virtual void terrainSlot8();
+    virtual void terrainSlot9();
+    virtual void terrainSlot10();
+    virtual void terrainSlot11();
+    virtual void terrainSlot12();
+    virtual void terrainSlot13();
+    virtual void terrainSlot14();
+    virtual void terrainSlot15();
+    virtual void terrainSlot16();
+    virtual void terrainSlot17();
+    virtual void terrainSlot18();
+    virtual void terrainSlot19();
+    virtual void terrainSlot20();
+    virtual void terrainSlot21();
+    virtual void terrainSlot22();
+    virtual void terrainSlot23();
+    virtual void ClearRelevels();
+    virtual void terrainSlot25();
+    virtual void terrainSlot26();
+    virtual void terrainSlot27();
+    virtual void ClearPlayerModifications();
+    virtual void terrainSlot29();
+    virtual void terrainSlot30();
+    virtual void terrainSlot31();
+    virtual void terrainSlot32();
+    virtual void terrainSlot33();  // slot 33, native 0x00f9b7f0
+    uint32_t mPad04[0x810 / 4];
+    int mModificationCount_814;
+    // Preserve the neighboring retail constructor view through its last member at +0xa4c.
+    uint32_t mPad818[(0xa50 - 0x818) / 4];
     void  m00f96840();
     int   m00f96870();
     int   m00f968b0(char* other);
@@ -72,15 +112,15 @@ class cTerrainSphere
 }  // namespace SP
 
 using SP::cTerrainSphere;
+typedef char TerrainModificationCounterOffsetCheck[(offsetof(cTerrainSphere, mModificationCount_814) == 0x814) ? 1 : -1];
 
 // @ 0x00f96840
 void cTerrainSphere::m00f96840()
 {
-    (*(void (__thiscall**)(void*))(*(int*)this + 0x70))(this);
-    (*(void (__thiscall**)(void*))(*(int*)this + 0x60))(this);
-    void* f = *(void**)(*(int*)this + 0x84);
-    *(int*)((char*)this + 0x814) = 0;
-    ((void (__thiscall*)(void*))f)(this);
+    ClearPlayerModifications();
+    ClearRelevels();
+    mModificationCount_814 = 0;
+    terrainSlot33();
 }
 
 // @ 0x00f96870

@@ -1,4 +1,4 @@
-0068c6d0  28  SetKeyKind: member-load scheduling (key loaded before the two byte loads)
+0068c6d0  28  SetKeyKind: complete; same instructions, different order. Retail builds the low half first (`movzx ecx,[esp+8]; movzx edx,[esp+0xc]; mov eax,[esp+4]; shl ecx,8; or ecx,edx`) and only then loads `key->mGroup`; cl 15 hoists `mov eax,[key]` and the `mGroup` load to the top and interleaves. Tried loading mGroup first into a local, OR-into-field form, `(g & 0xffff0000) | v`, and an explicit `v = 0; v |= lo; v |= hi << 8;` chain.
 
 0068c770  6   GetExplicitIdStartW: p=last hoisted before the first==last test
 0068c820  149  GetExplicitIdStartA (narrow): isdigit/isxdigit must be called with the byte zero-extended (unsigned char), not sign-extended [equiv: PASS 367 valid, 73.0% cov]

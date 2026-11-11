@@ -14,6 +14,7 @@
 // begins at +0x20, cRuntimeCreatureResource::mBlocks at +0x98 with 0x8c-byte blocks, and the
 // baked mesh keeps a per-triangle block code array at +0x190 (bits 16-31 / 8-15 = node).
 #include "types.h"
+#include "sse_helpers.h"
 
 // ---------------------------------------------------------------- math
 struct Vector2 {
@@ -65,33 +66,15 @@ Vector3 Normalize(const Vector3T& v);                      // 0x00436ce0
 template <int N> inline void ScratchSlots() { uint32_t slots[N]; }
 
 // minss/maxss helpers of the /arch:SSE module.
-inline float Clamp01(float value)
-{
-    float maxValue = 1.0f;
-    __asm {
-        xorps xmm0, xmm0
-        maxss xmm0, value
-        minss xmm0, maxValue
-        movss value, xmm0
-    }
-    return value;
-}
+// Clamp01: the vetted SseClamp01 in sse_helpers.h
 
-inline float Max(float a, float b)
-{
-    __asm {
-        movss xmm0, a
-        maxss xmm0, b
-        movss a, xmm0
-    }
-    return a;
-}
+
+// Max: the vetted SseMax in sse_helpers.h
+
 
 #pragma warning(disable : 4035)   // result returned in eax
-inline int FloatToInt(float f)
-{
-    __asm cvtss2si eax, f
-}
+// FloatToInt: the vetted SseRoundToInt in sse_helpers.h
+
 
 // ---------------------------------------------------------------- skinner types
 struct cMeshPosition {          // 0xc
@@ -245,11 +228,11 @@ void cPaintSystem::ProcessHit(cPaintParticle* p, float* const vars)
     mSwarmSeed = p->mSeed ^ 0x5a81f049;
     Vector3 hitPoint = mpBakedMesh->GetPosition(p->mPos);
     Vector3 norm = mpBakedMesh->GetNormal(p->mPos);
-    float frac = Clamp01((float)p->mTicksSpent / (float)p->mTicksTotal);
+    float frac = SseClamp01((float)p->mTicksSpent / (float)p->mTicksTotal);
     cPaintParams values(0);
     pDescription->Sample(frac, p, hitPoint, norm, vars, values);
-    p->mDistToHit = Max(vars[3], 1e-4f);
-    p->mKillSwitch = FloatToInt(vars[4]);
+    p->mDistToHit = SseMax(vars[3], 1e-4f);
+    p->mKillSwitch = SseRoundToInt(vars[4]);
     if (p->mKillSwitch > 0)
         return;
 

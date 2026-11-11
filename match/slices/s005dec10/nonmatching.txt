@@ -1,5 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /GS-)
-005dfb40  3  SP::cSPEditorUI::DoSaveAndExit: complete; original emits `and al,1` before popping esi, cl emits `test al,1` after; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)
+005dfb40  3  SP::cSPEditorUI::DoSaveAndExit: complete; original emits `and al,1` before popping esi, cl emits `test al,1` after. A named `unsigned char` with `&= 1` compiles to the same `pop esi; test al,1`. difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)
 005dec10  424  SP::cSPEditorUI::DoFinalCommand: complete; original is LTCG-style (callee ecx kept live), cl reloads/reorders; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)
 005dee70  188  cSPEditorUI IHandler message handler: complete; original passes ecx=this-8 into callee without re-lea (LTCG register reuse)
 005def30  1213  SP::cSPEditorUI::DoDialogEnd: complete; original switch is a hand-ordered binary search tree; volatile self keeps incoming ECX live like retail; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)

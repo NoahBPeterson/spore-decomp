@@ -8,3 +8,4 @@ slices/s00ff4d50/s00ff4d50.cpp  ?FUN_00ff5b30@@YGXPAX@Z  00ff5b30  /O2 /Ob1 /MD 
 slices/s00ff4d50/s00ff4d50.cpp  ?FUN_00ff5b50@@YAXXZ  00ff5b50  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00ff4d50/s00ff4d50.cpp  ?FUN_00ff5ba0@@YAXPAH0@Z  00ff5ba0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00ff4d50/s00ff4d50.cpp  ?FUN_00ff5be0@@YAXPAH0@Z  00ff5be0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00ff4d50/s00ff4d50.cpp  ?FUN_00ff5410@@YAXPAUCTribe@@PAH1111@Z  00ff5410  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-

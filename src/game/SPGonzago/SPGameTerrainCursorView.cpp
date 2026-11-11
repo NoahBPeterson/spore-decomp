@@ -142,7 +142,8 @@ void cGameTerrainCursorView::SetFlag(char bSet)
 char cGameTerrainCursorView::GetFlag()
 {
     char cFlags = (uint8_t)mpObject->mFlagByte;
-    return (char)(cFlags & 1);
+    cFlags &= 1;
+    return cFlags;
 }
 
 // @ 0x00e8d880

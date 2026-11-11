@@ -2,7 +2,6 @@
 0108d1c0 605 havok-equivalent
 0108d420 299 havok-equivalent
 0108d590 700 havok-equivalent
-0108d850 24 havok-equivalent
 0108d900 155 havok-equivalent
 0108d9a0 142 havok-equivalent
 0108db50 82 havok-equivalent

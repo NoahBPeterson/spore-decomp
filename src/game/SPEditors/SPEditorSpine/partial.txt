@@ -11,7 +11,6 @@
 005d07f0  1264  cSPEditorSpine::Update not reconstructed (skeleton)
 005d0ea0  909   cSPEditorSpine constructor not reconstructed (skeleton)
 005d12c0  294  cSPEditorSpine::RecordBlockCoordinates not reconstructed (skeleton)
-005d14a0  142  limb-vector teardown not reconstructed (skeleton)
 005d1530  207  limb reconstruction not reconstructed (skeleton)
 005d1640  315  helper not reconstructed (skeleton)
 005d1780  605  helper not reconstructed (skeleton)

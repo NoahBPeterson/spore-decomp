@@ -45,7 +45,7 @@ def main():
     if not src:
         print("no source file has a `// @ 0x%08x` marker yet" % va)
         return 2
-    flags, how = S.choose_flags(ident, va, a.flags.split() if a.flags else None)
+    flags, how = S.choose_flags(ident, va, a.flags or None)
     obj, log = S.compile_obj(src, flags)
     if not obj:
         print("COMPILE FAILED (%s, flags %s)\n%s" % (os.path.relpath(src, ROOT), " ".join(flags), (log or "").strip()[-3000:]))
@@ -91,22 +91,36 @@ def main():
         manifest = hits[0] if len(hits) == 1 else manifest
     if a.dry_run:
         print("\nwould add to %s:\n  %s" % (os.path.relpath(manifest, ROOT), line))
-        print("and remove the %08x line from %s/nonmatching.txt or partial.txt" % (va, os.path.relpath(d, ROOT)))
+        for path in note_files(va):
+            print("and remove the %08x line from %s" % (va, os.path.relpath(path, ROOT)))
         return 0
     text = open(manifest).read() if os.path.exists(manifest) else ""
     with open(manifest, "a") as f:
         f.write(("" if not text or text.endswith("\n") else "\n") + line + "\n")
     print("\nrecorded: added to %s:\n  %s" % (os.path.relpath(manifest, ROOT), line))
-    for name in ("nonmatching.txt", "partial.txt"):
-        path = os.path.join(d, name)
-        if not os.path.exists(path):
-            continue
+    # every note for this function, not only the one beside the source: a migrated function's original slice keeps
+    # its own nonmatching.txt line otherwise (217 stale notes on 2026-11-10)
+    for path in note_files(va):
         lines = open(path, encoding="utf-8", errors="replace").readlines()
         keep = [l for l in lines if not _is_row(l, va)]
         if len(keep) != len(lines):
             open(path, "w", encoding="utf-8").writelines(keep)
             print("removed its line from %s" % os.path.relpath(path, ROOT))
     return 0
+
+
+def note_files(va):
+    """Every nonmatching.txt / partial.txt (slices and src/game) with a line for va."""
+    import glob
+    out, key = [], "%08x" % va
+    for path in sorted(glob.glob(os.path.join(ROOT, "match", "slices", "*", "*.txt")) +
+                       glob.glob(os.path.join(ROOT, "src", "game", "**", "*.txt"), recursive=True)):
+        if os.path.basename(path) not in ("nonmatching.txt", "partial.txt"):
+            continue
+        text = open(path, encoding="utf-8", errors="replace").read()
+        if key in text.lower() and any(_is_row(l, va) for l in text.splitlines()):
+            out.append(path)
+    return out
 
 
 def _is_row(line, va):

@@ -42,6 +42,20 @@ extern "C" void FUN_01021090();
 extern "C" void FUN_01045a60();
 extern "C" void FUN_01046fc0();
 
+// --- real C++ reconstructions of the two assigned functions -----------------
+extern void* g_167acf4;                 // 0x0167acf4  global service object
+
+struct ServiceObj
+{
+    void* m00;                          // +0x00  vtable
+    void* m04;                          // +0x04
+    void* m08;                          // +0x08  owned sub-object
+
+    void* Destroy(int flags);           // 0x00aed550 (ret 4)
+};
+
+void FreeService(void* p);              // 0x00926060
+
 // @ 0x00aecf90  (184 bytes)
 __declspec(naked) void FUN_00aecf90()
 {
@@ -1308,48 +1322,14 @@ __declspec(naked) void FUN_00aed2c0()
 }
 
 // @ 0x00aed3d0  (30 bytes)
-__declspec(naked) void FUN_00aed3d0()
+void FUN_00aed3d0()
 {
-    __asm {
-        _emit 0x8B
-        _emit 0x0D
-        _emit 0xF4
-        _emit 0xAC
-        _emit 0x67
-        _emit 0x01
-        // mov ecx, dword ptr [0x167acf4]
-        _emit 0x85
-        _emit 0xC9
-        // test ecx, ecx
-        _emit 0x74
-        _emit 0x13
-        // je 0xaed3ed
-        _emit 0x8B
-        _emit 0x01
-        // mov eax, dword ptr [ecx]
-        _emit 0x8B
-        _emit 0x50
-        _emit 0x2C
-        // mov edx, dword ptr [eax + 0x2c]
-        _emit 0x6A
-        _emit 0x01
-        // push 1
-        _emit 0xFF
-        _emit 0xD2
-        // call edx
-        _emit 0xC7
-        _emit 0x05
-        _emit 0xF4
-        _emit 0xAC
-        _emit 0x67
-        _emit 0x01
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        _emit 0x00
-        // mov dword ptr [0x167acf4], 0
-        _emit 0xC3
-        // ret 
+    void** p = (void**)g_167acf4;
+    if (p != 0)
+    {
+        void** vtbl = (void**)*p;
+        ((void (__thiscall*)(void*, int))vtbl[0x2c / 4])(p, 1);
+        g_167acf4 = 0;
     }
 }
 
@@ -1426,68 +1406,15 @@ __declspec(naked) void FUN_00aed4d0()
     }
 }
 
-// @ 0x00aed550  (45 bytes)
-__declspec(naked) void FUN_00aed550()
+// @ 0x00aed550  (45 bytes)  scalar deleting destructor (ret 4, this in ECX)
+void* ServiceObj::Destroy(int flags)
 {
-    __asm {
-        _emit 0x56
-        // push esi
-        _emit 0x8B
-        _emit 0xF1
-        // mov esi, ecx
-        _emit 0x8B
-        _emit 0x4E
-        _emit 0x08
-        // mov ecx, dword ptr [esi + 8]
-        _emit 0x85
-        _emit 0xC9
-        // test ecx, ecx
-        _emit 0x74
-        _emit 0x07
-        // je 0xaed561
-        _emit 0x8B
-        _emit 0x01
-        // mov eax, dword ptr [ecx]
-        _emit 0x8B
-        _emit 0x50
-        _emit 0x04
-        // mov edx, dword ptr [eax + 4]
-        _emit 0xFF
-        _emit 0xD2
-        // call edx
-        _emit 0xF6
-        _emit 0x44
-        _emit 0x24
-        _emit 0x08
-        _emit 0x01
-        // test byte ptr [esp + 8], 1
-        _emit 0xC7
-        _emit 0x06
-        _emit 0xB8
-        _emit 0xFF
-        _emit 0x3E
-        _emit 0x01
-        // mov dword ptr [esi], 0x13effb8
-        _emit 0x74
-        _emit 0x09
-        // je 0xaed577
-        _emit 0x56
-        // push esi
-        call FUN_00926060
-        _emit 0x83
-        _emit 0xC4
-        _emit 0x04
-        // add esp, 4
-        _emit 0x8B
-        _emit 0xC6
-        // mov eax, esi
-        _emit 0x5E
-        // pop esi
-        _emit 0xC2
-        _emit 0x04
-        _emit 0x00
-        // ret 4
-    }
+    if (m08 != 0)
+        ((void (__thiscall*)(void*))((void**)*(void**)m08)[1])(m08);
+    *(void**)this = (void*)0x013effb8;      // base vtable
+    if (flags & 1)
+        FreeService(this);
+    return this;
 }
 
 // @ 0x00aed580  (379 bytes)

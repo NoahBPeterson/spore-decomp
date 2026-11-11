@@ -2,6 +2,8 @@
 // Slice s00c9ef20 -- Simulator / cVehicle / cLocomotiveObject cluster.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 #include <math.h>
+#include <intrin.h>
+#include <new>
 
 typedef unsigned int   u32;
 typedef signed   int   i32;
@@ -92,6 +94,44 @@ struct VStub {
     void FUN_00c3f160(void* a, float f);                    // 0x00c3f160 ret 8
 };
 
+// Stub for objects reached through `this` that the original calls virtually.
+// Slots are 4 bytes apart: v04 is vtable +0x04, v2c is +0x2c, v4c is +0x4c, v5c is +0x5c.
+struct VObjStub {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual u8   v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual int  v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual void v58();
+    virtual int  v5c(int a);
+};
+
+// 12-byte vector with an explicit operator= (fld/fstp copies, the first arm of
+// 0x00c9f650) and an explicit SetFrom (movss copies, the second arm: cl cannot
+// fold the component swaps because the operator= may alias the source).
+struct Vec3 {
+    float x, y, z;
+    Vec3& operator=(const Vec3& o) { x = o.x; y = o.y; z = o.z; return *this; }
+    void SetFrom(const Vec3& o) { x = o.x; y = o.y; z = o.z; }
+};
+
 struct TimerStub {
     u8   IsRunning();                                       // 0x00feba90
     u64  GetElapsedTime();                                  // 0x00bc3190
@@ -124,7 +164,7 @@ struct CStub {
     // ---- 00c9f5c0
     void FUN_00c9f5c0();
     // ---- 00c9f650
-    float* FUN_00c9f650(float* out);
+    float* FUN_00c9f650(Vec3& out);
     // ---- 00c9f6c0
     void FUN_00c9f6c0();
     // ---- 00c9f750
@@ -144,7 +184,7 @@ struct CStub {
     // ---- 00c9fd40
     void FUN_00c9fd40(void* p);
     // ---- 00c9fdc0
-    float* FUN_00c9fdc0(float* out);
+    float* FUN_00c9fdc0(Vec3& out);
     // ---- 00c9fe40
     u8 FUN_00c9fe40(void* p);
     // ---- 00c9fee0
@@ -240,6 +280,12 @@ void CStub::FUN_00c9ef60(u32 ms)
     ((TimerStub*)((char*)this + 0xcd8))->Restart();
 }
 
+struct GStub {
+    char pad[0x74];
+    FieldStub* f;
+    FieldStub* GetField() { return f; }
+};
+
 // ===========================================================================
 // @ 0x00c9f1c0
 // ===========================================================================
@@ -258,16 +304,16 @@ void* CStub::FUN_00c9f1e0()
         if (GetCurrentGameMode() != &g_1654c10) {
             int r;
             if (*(void**)((char*)this + 0x48) != 0) {
-                void* c = *(void**)((char*)this + 0x48);
+                VObjStub* c = *(VObjStub**)((char*)this + 0x48);
                 if (c == 0)
                     return *(void**)((char*)this + 0x658);
-                r = (**(int(__thiscall**)(void*, int))(vpt(c) + 0x5c))(c, 0x137e8e0);
+                r = c->v5c(0x137e8e0);
             } else {
                 if (*(void**)((char*)this + 0x44) == 0)
                     return *(void**)((char*)this + 0x658);
                 r = (int)FUN_00befb60((char*)this + 0x44);
             }
-            if (r != 0 && *(int*)(r + 0xb1c) == 2)
+            if (r != 0 && *(int*)((char*)r + 0xb1c) == 2)
                 return *(void**)((char*)this + 0x65c);
         }
     }
@@ -275,29 +321,28 @@ void* CStub::FUN_00c9f1e0()
 }
 
 // ===========================================================================
+// Closest attempt. Same size as retail: the counted loop, the alignment
+// nop and the reloaded element all match. this stays in ebx and the count
+// in edi; retail keeps this in edi and the count in ebx, which also swaps
+// the SIB order. That register choice is not source-controllable.
 // @ 0x00c9f250
-// ===========================================================================
 int CStub::FUN_00c9f250()
 {
-    int n = (*(int*)((char*)this + 0xc68) - *(int*)((char*)this + 0xc64)) >> 4;
+    char* self = (char*)this;
+    int n = (*(int*)(self + 0xc68) - *(int*)(self + 0xc64)) >> 4;
     if (n > 0) {
         int off = 0;
         int cnt = n;
         do {
-            void* e = *(void**)(*(int*)((char*)this + 0xc64) + off);
-            if (((RefStub*)e)->FUN_0104bd50()) {
-                void* r = FUN_00b3d390(e);
-                ((RefStub*)r)->FUN_0104fa90();
-            }
+            if ((*(RefStub**)(*(int*)(self + 0xc64) + off))->FUN_0104bd50())
+                ((RefStub*)FUN_00b3d390(*(void**)(*(int*)(self + 0xc64) + off)))->FUN_0104fa90();
             off += 0x10;
             --cnt;
         } while (cnt != 0);
     }
-    void* p = *(void**)((char*)this + 0xb60);
-    if (p != 0 && ((RefStub*)p)->FUN_0104bd50()) {
-        void* r = FUN_00b3d390(*(void**)((char*)this + 0xb60));
-        ((RefStub*)r)->FUN_0104fa90();
-    }
+    if (*(RefStub**)(self + 0xb60) != 0 &&
+        (*(RefStub**)(self + 0xb60))->FUN_0104bd50())
+        ((RefStub*)FUN_00b3d390(*(void**)(self + 0xb60)))->FUN_0104fa90();
     return n;
 }
 
@@ -307,11 +352,11 @@ int CStub::FUN_00c9f250()
 void CStub::FUN_00c9f2d0(int a)
 {
     *(int*)((char*)this + 0xc80) -= a;
-    if (*(int*)((char*)this + 0xc80) < 1) {
+    if (!(*(int*)((char*)this + 0xc80) > 0)) {
         if (*(int*)((char*)this + 0xb20) != 1) {
             int r = FUN_00c9f250();
             ++*(int*)((char*)this + 0xc78);
-            if (r <= *(int*)((char*)this + 0xc78))
+            if (*(int*)((char*)this + 0xc78) >= r)
                 *(int*)((char*)this + 0xc78) = 0;
         }
         *(int*)((char*)this + 0xc80) = *(int*)((char*)this + 0xc7c);
@@ -354,15 +399,15 @@ float CStub::FUN_00c9f380()
 // ===========================================================================
 void* CStub::FUN_00c9f3d0()
 {
-    void* p = *(void**)((char*)this + 0xb5c);
-    if (p == 0)
-        return 0;
-    if ((**(u8(__thiscall**)(void*))(vpt(p) + 0x2c))(p)) {
-        void* q = *(void**)((char*)this + 0xb5c);
-        if (q == 0)
-            return 0;
-        *(void**)((char*)this + 0xb5c) = 0;
-        (**(void(__thiscall**)(void*))(vpt(q) + 4))(q);
+    VObjStub* p = *(VObjStub**)((char*)this + 0xb5c);
+    if (p != 0) {
+        if (p->v2c()) {
+            VObjStub* q = *(VObjStub**)((char*)this + 0xb5c);
+            if (q != 0) {
+                *(void**)((char*)this + 0xb5c) = 0;
+                q->v04();
+            }
+        }
     }
     return *(void**)((char*)this + 0xb5c);
 }
@@ -372,25 +417,23 @@ void* CStub::FUN_00c9f3d0()
 // ===========================================================================
 u8 CStub::FUN_00c9f410()
 {
-    void* p = *(void**)((char*)this + 0xb5c);
-    if (p != 0 && (**(u8(__thiscall**)(void*))(vpt(p) + 0x2c))(p)) {
-        void* q = *(void**)((char*)this + 0xb5c);
+    VObjStub* p = *(VObjStub**)((char*)this + 0xb5c);
+    if (p != 0 && p->v2c()) {
+        VObjStub* q = *(VObjStub**)((char*)this + 0xb5c);
         if (q != 0) {
             *(void**)((char*)this + 0xb5c) = 0;
-            (**(void(__thiscall**)(void*))(vpt(q) + 4))(q);
+            q->v04();
         }
     }
-    void* r = *(void**)((char*)this + 0xb5c);
-    if (r == 0)
-        return 0;
-    int a = (**(int(__thiscall**)(void*))(vpt(r) + 0x4c))(r);
-    int b = (**(int(__thiscall**)(void*))(vpt(this) + 0x4c))(this);
-    if (a != b)
-        return 0;
-    if (((XStub*)r)->FUN_00c004c0(0))
-        return 1;
-    if (((XStub*)r)->FUN_00c004c0(1))
-        return 1;
+    VObjStub* r = *(VObjStub**)((char*)this + 0xb5c);
+    if (r != 0) {
+        int a = r->v4c();
+        int b = ((VObjStub*)this)->v4c();
+        if (a == b) {
+            if (((XStub*)r)->FUN_00c004c0(0) || ((XStub*)r)->FUN_00c004c0(1))
+                return 1;
+        }
+    }
     return 0;
 }
 
@@ -452,22 +495,21 @@ void CStub::FUN_00c9f5c0()
 // ===========================================================================
 // @ 0x00c9f650
 // ===========================================================================
-float* CStub::FUN_00c9f650(float* out)
+float* CStub::FUN_00c9f650(Vec3& out)
 {
-    int id = (**(int(__thiscall**)(void*))(vpt(this) + 0x4c))(this);
+    int id = ((VObjStub*)this)->v4c();
     void* nm = SP_NounManager(id);
     int e = ((NounStub*)nm)->FUN_00b25f40();
-    float* o = out;
     if (e != 0) {
-        o[0] = *(float*)(e + 0xc4);
-        o[1] = *(float*)(e + 0xc8);
-        o[2] = *(float*)(e + 0xcc);
-        return o;
+        out.x = *(float*)(e + 0xc4);
+        out.y = *(float*)(e + 0xc8);
+        out.z = *(float*)(e + 0xcc);
+        return (float*)&out;
     }
-    o[0] = g_1699b08;
-    o[1] = g_1699b0c;
-    o[2] = g_1699b10;
-    return o;
+    out.x = g_1699b08;
+    out.y = g_1699b0c;
+    out.z = g_1699b10;
+    return (float*)&out;
 }
 
 // ===========================================================================
@@ -683,27 +725,26 @@ void CStub::FUN_00c9fd40(void* p)
 // ===========================================================================
 // @ 0x00c9fdc0
 // ===========================================================================
-float* CStub::FUN_00c9fdc0(float* out)
+float* CStub::FUN_00c9fdc0(Vec3& out)
 {
     if (*(int*)((char*)this + 0x284) == 0) {
-        void* sub = (char*)this + 0x34;
-        float* p = (float*)(**(void*(__thiscall**)(void*))(vpt(sub) + 0x2c))(sub);
-        out[0] = p[0];
-        out[1] = p[1];
-        out[2] = p[2];
-        return out;
+        char* sub = (char*)this + 0x34;
+        Vec3* p = (Vec3*)(**(void*(__thiscall***)(char*))(vpt(sub) + 0x2c))(sub);
+        out = *p;
+        return (float*)&out;
     }
-    if (*(int*)((char*)this + 0x228) == *(int*)((char*)this + 0x22c)) {
-        out[0] = *(float*)((char*)this + 0x23c);
-        out[1] = *(float*)((char*)this + 0x240);
-        out[2] = *(float*)((char*)this + 0x244);
-        return out;
+    bool empty = *(unsigned int*)((char*)this + 0x228) == *(unsigned int*)((char*)this + 0x22c);
+    if (empty) {
+        out.x = *(float*)((char*)this + 0x23c);
+        out.y = *(float*)((char*)this + 0x240);
+        out.z = *(float*)((char*)this + 0x244);
+        return (float*)&out;
     }
     int p = *(int*)((char*)this + 0x22c);
-    out[0] = *(float*)(p - 0x3c);
-    out[1] = *(float*)(p - 0x38);
-    out[2] = *(float*)(p - 0x34);
-    return out;
+    out.x = *(float*)(p - 0x3c);
+    out.y = *(float*)(p - 0x38);
+    out.z = *(float*)(p - 0x34);
+    return (float*)&out;
 }
 
 // ===========================================================================

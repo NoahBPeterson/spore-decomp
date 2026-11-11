@@ -420,10 +420,15 @@ uint32_t __cdecl FUN_01041c50(int a, void* obj, int flag)
     return result;
 }
 
+extern const float g_1499ce8;   // 0x01499ce8  1.52587890625e-05f
+
+// The retail module runs fast math (no fnstcw/fldcw guard around the divide).
+#pragma float_control(precise, off)
+
 // @ 0x01041cd0
 float __cdecl FUN_01041cd0(float a, float b, float c)
 {
-    return (c - a) / ((b - a) + 1.52587890625e-05f);
+    return (c - a) / ((b - a) + g_1499ce8);
 }
 
 struct SimplePropertyList {
@@ -443,6 +448,10 @@ void __cdecl FUN_01041d10()
     g_spAppProperties->GetDescription(0x23ba1fc);
 }
 
+// The original ends with a second relocated `add eax, X` (an addend of 0 straight after the
+// two constants at 0x1499cf4/0x1499cf8).  Adding a zero-valued term here (a const global, a
+// via-pointer store) is folded away, and a runtime second term turns the mask chain into
+// neg/neg (the old `!= 0` spelling was the only shape that produced the bare `sbb`).
 // @ 0x01041d30
 int __cdecl FUN_01041d30(MinimapSource* src)
 {

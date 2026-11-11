@@ -1,9 +1,7 @@
 # va  diff-bytes  reason
 00830c00  80  Drawable::GetImageInfo: register allocation (this/def swap) and branch layout differ; equiv WEAK: 1200 valid inputs (need 200), 89.5% coverage (need 100%% (all insns))
-00830c60  7   DSub::GetFieldC: cl folds (+0xc) into the load instead of add-then-load; equiv PASS: 1007 valid inputs, 100.0% coverage (all insns)
 00830c90  16  Drawable::GetPair28: pair copy returns out via eax; equiv PASS: 393 valid inputs, 100.0% coverage (all insns)
 00830cc0  16  Drawable::GetPair30: pair copy returns out via eax; equiv PASS: 394 valid inputs, 100.0% coverage (all insns)
-00830cf0  7   Drawable::GetField10: same address-fold difference; equiv PASS: 344 valid inputs, 100.0% coverage (all insns)
 00830d30  16  Drawable::GetPair38: pair copy returns out via eax; equiv PASS: 396 valid inputs, 100.0% coverage (all insns)
 00830d60  16  Drawable::GetPair40: pair copy returns out via eax; equiv PASS: 393 valid inputs, 100.0% coverage (all insns)
 008310a0  191 ImageInfo2::CopyFrom: refcount + rep movsd block schedule differs; equiv PASS: 377 valid inputs, 100.0% coverage (all insns)

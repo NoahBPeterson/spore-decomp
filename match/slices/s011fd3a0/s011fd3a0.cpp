@@ -752,9 +752,9 @@ int Ctl::Init(u32 size, u32 desc, u32 hasData)
 void* __cdecl ControllerCreate(void** handle, u32 size, u32 desc, u32 hasData)
 {
     void* h = *handle;
-    if (h == NULL)
-        return NULL;
-    return (void*)((Ctl*)h)->Init(size, desc, hasData);
+    if (h != NULL)
+        return (void*)((Ctl*)h)->Init(size, desc, hasData);
+    return NULL;
 }
 
 // 011fdd70 -- walk all tracks and emit keys for the current frame
@@ -882,10 +882,10 @@ bool Ctl::Bind(void* handle)
 // @ 0x011fe030
 void* __fastcall ControllerGetTable(void* self)
 {
-    u32 zero = 0;
     void* p = *(void**)((u8*)self + 0x1c);
+    void* q = NULL;
     if (p == NULL)
-        p = (void*)zero;
+        p = q;
     return p;
 }
 
@@ -930,9 +930,9 @@ int Ctl::InitSimple(u32 size, u32 desc, u32 hasData)
 void* __cdecl ControllerCreateSimple(void** handle, u32 size, u32 desc, u32 hasData)
 {
     void* h = *handle;
-    if (h == NULL)
-        return NULL;
-    return (void*)((Ctl*)h)->InitSimple(size, desc, hasData);
+    if (h != NULL)
+        return (void*)((Ctl*)h)->InitSimple(size, desc, hasData);
+    return NULL;
 }
 
 // 011fe100 -- evaluate the current frame into the key table

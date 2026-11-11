@@ -34,7 +34,7 @@ void   __cdecl FUN_011e07ef(void* fn);                       // atexit
 extern uint8 g_arenaMgrVtbl[];      // 0x0140a578  ("@ l" literal / ArenaManager vtable)
 extern uint8 g_arenaMgrData[];      // 0x0140a57c
 extern uint32 g_atomInitFlag;       // 0x016f4b00
-extern uint32 g_atomInitFlag2;      // 0x016f4b08
+extern uint32 g_atomInitFlag2;      // 0x016f4b04
 extern void*  g_atomListHead;       // 0x016f4af4
 extern uint8  g_atomHeadStorage[];  // 0x016f4afc
 extern uint8* g_streamListHead;     // 0x016f4b0c
@@ -93,7 +93,8 @@ typedef uint32 (__thiscall* ArenaMgrDataFn)(void*);
 struct VtblHolder { void SetVtbl(); };
 
 // 0x016f4afc subsingleton: Init() returns `this` unchanged.
-struct AtomSingleton { void* Init(); };
+struct AtomSingleton;              // declared-only here so callers get a plain thiscall to 0x011e5870
+void* __cdecl FUN_011e5870(AtomSingleton* self);
 
 // ------------------------------------------------------------------ slab helpers
 // @ 0x011e4a20
@@ -114,9 +115,13 @@ void* __cdecl rw_ArenaSectionTypes_Initialize(void** out, uint32 n)
 }
 
 // @ 0x011e4aa0
-void __cdecl rw_section_types_advance(void* section, void* ctx)
+struct rwSerCtx { char pad[0x20]; uint32 align; char pad2[4]; uint32 size; };
+
+void __cdecl rw_section_types_advance(void* section, rwSerCtx* ctx)
 {
+    volatile uint32 align = 4;
     *(uint32*)((char*)ctx + 0x28) += *(uint32*)((char*)section + 4) * 4 + 0xc;
+    (void)align;
 }
 
 // @ 0x011e4ad0
@@ -158,9 +163,11 @@ void* __cdecl rw_ArenaSectionExternalArenas_Initialize(void** out, uint32 n)
 }
 
 // @ 0x011e4bb0
-void __cdecl rw_section_ext_advance(void* section, void* ctx)
+void __cdecl rw_section_ext_advance(void* section, rwSerCtx* ctx)
 {
+    volatile uint32 align = 4;
     *(uint32*)((char*)ctx + 0x28) += *(uint32*)((char*)section + 4) * 8 + 0xc;
+    (void)align;
 }
 
 // @ 0x011e4be0
@@ -248,9 +255,12 @@ struct AtomsSection {
 // @ 0x011e4db0
 void AtomsSection::SetAtomTable(void* table, Arena* arena)
 {
+    if (table == 0) {
+        atomTable = 0;
+        return;
+    }
     atomTable = table;
-    if (table != 0)
-        atomTable = (void*)(uint32)arena->ObjectToId(table);
+    atomTable = (void*)(uint32)arena->ObjectToId(table);
 }
 
 // @ 0x011e4dd0
@@ -657,8 +667,9 @@ void __cdecl rw_register_section_writers(void)
 
 // ------------------------------------------------------------------ atom singleton
 // @ 0x011e5870
-void* AtomSingleton::Init()
+void* __cdecl FUN_011e5870(AtomSingleton* self)
 {
+    (void)self;
     if ((g_atomInitFlag & 1) == 0) {
         g_atomInitFlag |= 1;
         ((VtblHolder*)g_atomHeadStorage)->SetVtbl();
@@ -666,7 +677,7 @@ void* AtomSingleton::Init()
     }
     if (g_atomListHead == 0)
         g_atomListHead = g_atomHeadStorage;
-    return this;
+    return self;
 }
 
 // @ 0x011e58c0
@@ -674,7 +685,7 @@ void* __cdecl rw_atom_singleton_get(void)
 {
     if ((g_atomInitFlag2 & 1) == 0) {
         g_atomInitFlag2 |= 1;
-        ((AtomSingleton*)((char*)&g_atomInitFlag2 - 4))->Init();
+        FUN_011e5870((AtomSingleton*)&g_atomInitFlag2);
     }
     return g_atomListHead;
 }

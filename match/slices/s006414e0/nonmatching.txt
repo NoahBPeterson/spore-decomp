@@ -1,4 +1,3 @@
-006414e0  10  cSPAssetDataOTDB::GetKey: complete; same stores, but the original loads the out pointer first and interleaves the two member loads differently
 00641500  29  GetThumbnailBackdrop (28-entry type switch): complete; case tree identical, only the vtable load (GetAssetType) is hoisted above the three key stores in the original
 00641bf0  28  FUN_00641bf0: complete; original stores the 0 into the out AutoRef before loading the vtable, mine after the push
 00641cd0  148  FUN_00641cd0: complete; original keeps a dead store of key.typeID before overwriting it and uses different registers for the vtable loads

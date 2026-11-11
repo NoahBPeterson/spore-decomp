@@ -1,5 +1,4 @@
 00967d80 186 OnModalWindowEnd /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fake-arity/fault-read, 0/400 valid)
-00967e80 9 SetAlignment /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fake-arity, 0/400 valid)
 00967f00 53 GetNaturalSize /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest PASS 400/400
 009680f0 214 WinComboBox_TransformComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest UNSUPPORTED (fault-read, 0/400 valid)
 00968230 103 RenderComponent /O2 /MD /Gy /TP /arch:SSE /fp:fast difftest FAIL (5/328; RenderContext_Begin2D ecx ABI not reproducible)

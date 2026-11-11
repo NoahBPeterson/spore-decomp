@@ -2,6 +2,6 @@
 00540f20  6    complete; first member store operand order differs
 00541030  932  complete; /Od vector<0xc>::insert grow/shift schedule differs
 00541450  60   complete; /Od uninitialized_copy loop shape differs (extra pair temps)
-00541630  21   complete; bool local init store differs (mov al vs byte 0)
+00541630  21   complete; original initialises its byte local with `xor eax,eax; mov [ebp-1],al` (leaving eax busy, which is why the argument temps come out in ecx/edx). Ours always emits `mov byte [ebp-1],0`, so the push temps land in eax/ecx. Tried: bool=0/false, (bool)0, (bool)(int)0, (char)0, (unsigned char)0, '\0', 0L, 0u, (void*)0, bool(), {0}, 0&&a, (bool)(0&&a), a user bool-member ctor (inlined and not), __forceinline ctor. Only `volatile bool = 0` put the argument temps in ecx/edx (matching) but added a reload of the volatile local, so it is not the spelling. Same known ceiling as cSpeciesProfile 0x4d3dd0 (docs/Papercuts.md 379.5). difftest not run.
 00541680  496  complete; /Od wide-string date/time parse schedule differs
 005418c0  197  complete; /Od prefix-table parse schedule differs

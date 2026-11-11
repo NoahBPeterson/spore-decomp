@@ -88,7 +88,10 @@ typedef int (__cdecl *StretchFn2)(int, float, float*, float*);
 // @ 0x01142a20
 extern "C" void FUN_01142a20(int a, int b, float f)
 {
-    *(float*)((char*)g_16e8174 + 0x1c + (a * 0x17 + b) * 4) = f;
+    // Retail hoists both global loads: the first pointer before the argument setup (`mov
+    // edx,[0x16e8174]`), the second for the flag store, so the flag's index stays in EAX/ECX
+    // and the column add reads its argument from memory.
+    *((float*)((char*)g_16e8174 + 0x1c) + a * 0x17 + b) = f;
     *((char*)g_16e8174 + a * 0x5c + 1) = 1;
 }
 
@@ -369,8 +372,11 @@ extern "C" void FUN_011433b0(int index)
 // @ 0x01143430
 extern "C" void FUN_01143430(uint8_t a, int b, uint16_t c, int* d, int e, int f)
 {
-    d[0] = f;
+    // Retail keeps the tail bytes in CX/DL (`mov cx,[esp+0xc]`, `xor edx,edx`, `mov dl,[esp+4]`)
+    // and zeroes the pad word with DX, so the byte/short/word writes come first and the two
+    // dwords last.
     *(uint16_t*)((char*)d + 0xc) = 0;
+    d[0] = f;
     *(uint16_t*)((char*)d + 0xe) = c;
     *((uint8_t*)d + 0x10) = a;
     d[1] = e;

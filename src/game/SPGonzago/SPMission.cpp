@@ -347,6 +347,7 @@ virtual void m068();
     PV(101)
     virtual void v198(bool a);                          // +0x198
     virtual void v19C();                                // +0x19c
+    virtual void UpdateStarMapEffects(bool fullAlpha);  // +0x1a0, 0x00c45e10
 
     uint8_t      pad004[0x34];                          // +0x004 .. +0x037 (after the vfptr)
     cSPTimer_s00c4_6ab0     mFeedbackTimer;                        // +0x038
@@ -370,12 +371,15 @@ virtual void m068();
     uint8_t      pad134[0x48];                          // +0x134 .. +0x17b
     cSPMission_s00c4_6ab0*  mpMissionManager;                      // +0x17c
     void*        mpMissionKey;                          // +0x180
-    uint8_t      pad184[0x64];                          // +0x184 .. +0x1e7
+    uint8_t      pad184[0x8];                           // +0x184 .. +0x18b
+    bool         mVisibleInStarmap;                     // +0x18c
+    uint8_t      pad18d[0x5b];                          // +0x18d .. +0x1e7
     ISpaceObject* mpPlanet1E8;                          // +0x1e8
     uint8_t      pad1ec[0x318];                         // +0x1ec .. +0x503
     cSpeciesData mSpecies;                              // +0x504
 
     ~cSPMission_s00c4_6ab0();
+    void SetVisibleInStarmap(bool visible);             // 0x00c44ed0
     void* GetOwnerEmpire();                             // 0x00c451e0
     float FUN_00c459c0();                               // 0x00c459c0
     void UpdateHints(uint32_t param);                   // 0x00c45f90
@@ -2160,6 +2164,17 @@ float __stdcall GetFactor_c44d00(Thing* t, const bool* mode)
   return m ? 0.1f : 1.0f;
 }
 
+// @ 0x00c44ed0
+namespace SP {
+void __thiscall cSPMission_s00c4_6ab0::SetVisibleInStarmap(bool visible)
+{
+    if (mVisibleInStarmap && !visible) {
+        UpdateStarMapEffects(true);
+    }
+    mVisibleInStarmap = visible;
+}
+}
+
 // @ 0x00c45250
 void cSPMission::SetEmpire(cEmpire* p)
 {
@@ -2982,15 +2997,17 @@ namespace SP {
 bool __thiscall cSPMission_s00c4_6ab0::FUN_00c470a0()
 {
     u32 shifted = mFlags >> 1;
-    _ReadWriteBarrier();
-    if ((shifted & 1) != 0) {
-        if (!v12C())
+    bool requiresFirstCheck = (shifted & 1) != 0;
+    if (requiresFirstCheck) {
+        bool accepted = v12C();
+        if (!accepted)
             return false;
     }
     shifted = mFlags >> 2;
-    _ReadWriteBarrier();
-    if ((shifted & 1) != 0) {
-        if (!v130())
+    bool requiresSecondCheck = (shifted & 1) != 0;
+    if (requiresSecondCheck) {
+        bool accepted = v130();
+        if (!accepted)
             return false;
     }
     return true;
@@ -3055,7 +3072,10 @@ void __thiscall cSPMission_s00c4_6ab0::FUN_00c47240()
     ::cStarRecord* star = ((::cPlanet*)mpPlanet)->mpStarRecord13c;
     void* visual = GetStarMapNoArg()->CreatePlanetRecordVisual(star, a, vE8(), true, true);
     mpPlanetVisual = visual;
-    GetStarMapNoArg()->FUN_01044d70(visual, (u32)a == 0x70930c64);
+    if ((u32)a == 0x70930c64)
+        GetStarMapNoArg()->FUN_01044d70(visual, 1);
+    else
+        GetStarMapNoArg()->FUN_01044d70(visual, 0);
     FUN_00c471c0();
 }
 }  // namespace SP

@@ -12,7 +12,6 @@
 00d03fd0 166 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 166 bytes - relationship helper body not reconstructed.
 00d040a0 302 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 302 bytes - relationship helper body not reconstructed.
 00d041d0 54 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 50 bytes - element-wise subtree release copy; retail places the equal-range return after the loop, MSVC hoists it before.
-00d04210 126 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 126 bytes - message-listener registration body not reconstructed.
 00d04290 144 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 144 bytes - relationship helper body not reconstructed.
 00d04320 834 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 834 bytes - cRelationshipManager::CalculateRelationshipCityProximity body not reconstructed.
 00d04670 216 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 216 bytes - relationship helper body not reconstructed.

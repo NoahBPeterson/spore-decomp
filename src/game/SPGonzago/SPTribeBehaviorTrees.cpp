@@ -647,7 +647,14 @@ struct PlayObj {
     void  ClearAll(int a, int flags);                 // 0x00bc98f0 (thiscall)
 };
 void* GetAny(void* stimuli);                          // 0x00d997e0 (thiscall on stimuli)
-struct Stimuli { void GetAny(); };                    // 0x00d997e0 thiscall
+struct Stimuli
+{
+    char  pad00[8];
+    void* mp08;                  // +0x08
+    char  pad0c[0x18 - 0x0c];
+    int   mi18;                  // +0x18
+    void  GetAny();              // 0x00d997e0 thiscall
+};
 // ---- items of slice s00da8630 end
 
 // ---- items of slice s00da9600 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1038,7 +1045,9 @@ struct CTool
     void**   mpVtbl;             // +0x00
     char     pad04[0x30];
     CTool34  m34;                // +0x34
-    char     pad38[0x12c - 0x38];
+    char     pad38[0xbc - 0x38];
+    void*    mpBcu;              // +0xbc
+    char     padC0[0x12c - 0xc0];
     int      m12c;               // +0x12c
     char     pad130[0x21c - 0x130];
     int      m21c;               // +0x21c
@@ -1140,6 +1149,8 @@ struct CTribe
     CTool*    mp260;             // +0x260
     char      pad264[0x100];
 
+    void* V_Ac() { return ((Fn_p)VT(this, 0xac))(this); }
+
     int   FUN_00c97ca0(int id, Citizen_s00da_bdf0* c);
     int   FUN_00c97c40(int id, Citizen_s00da_bdf0* c);
     void  FUN_00c97d40(int id, Citizen_s00da_bdf0* c);
@@ -1226,6 +1237,15 @@ struct C05Result
     byte  mb5e;                  // +0xb5e
     char  padB5f[0xb84 - 0xb5f];
     float mfB84;                 // +0xb84
+};
+
+// vtable-only view of an interface object (slot +0x0c returns a C05Result).
+struct C05Iface
+{
+    virtual void  a00();
+    virtual void  a04();
+    virtual void  a08();
+    virtual C05Result* a0c(int id);
 };
 struct St630
 {
@@ -3851,9 +3871,34 @@ bool FUN_00da7970(Creature* p, i32, i32, i32, i32, Out9* out)
 }
 
 // @ 0x00da9160
-void InitNearHutForReaction(int self)
+static float g_1581224;   // squared search radius
+static float g_1581220;   // result timer
+
+
+float10 InitNearHutForReaction(Citizen_s00da_bdf0* self, Stimuli* stimuli, char* out)
 {
-    (void)self;
+    CTool* tool = (CTool*)self->GetTribe()->V_Ac();
+    if (tool == 0)
+        return (float10)0;
+
+    Vec3_s00da_bdf0* a = (Vec3_s00da_bdf0*)((Fn_p)VT((char*)self + 0xc0, 0x2c))((char*)self + 0xc0);
+    Vec3_s00da_bdf0* b = (Vec3_s00da_bdf0*)((Fn_p)VT((char*)tool + 0x34, 0x2c))((char*)tool + 0x34);
+
+    float dx = b->x - a->x;
+    float dy = b->y - a->y;
+    float dz = b->z - a->z;
+    float d = (dz * dz + dx * dx) + dy * dy;
+
+    if (d > g_1581224 * g_1581224)
+    {
+        if (stimuli)
+            stimuli->GetAny();
+        stimuli->mp08 = tool;
+        stimuli->mi18 = (int)g_1581220;
+        *out = 1;
+        return (float10)1;
+    }
+    return (float10)0;
 }
 
 // @ 0x00da9220
@@ -5131,19 +5176,16 @@ void C580::FUN_00dac580()
 // @ 0x00dac5d0
 bool FUN_00dac5d0(C5d0Obj* p)
 {
-    if (p->mp64 != 0 && (p->mp90 == 0 || p->mp90->m08 != 0x2e81370))
-    {
-        _ReadWriteBarrier();
-        if (p->mp64 != 0)
-        {
-            C05Result* r =
-                (C05Result*)((C05Vt*)p->mp64)->a0c(0xd0036e08);
-            if (r != 0 && r->mb5e != 0 && r->mfB84 > 0.0f)
-                return 1;
-        }
-        return 0;
-    }
-    return 0;
+    if (p->mp64 == 0 || (p->mp90 != 0 && p->mp90->m08 == 0x2e81370))
+        return false;
+    _ReadWriteBarrier();
+
+    C05Iface* iface = (C05Iface*)p->mp64;
+    C05Result* r = 0;
+    return iface != 0
+        && (r = iface->a0c(0xd0036e08)) != 0
+        && r->mb5e != 0
+        && r->mfB84 > g_1485378;
 }
 
 // @ 0x00dac630
@@ -5156,23 +5198,24 @@ bool FUN_00dac630(Citizen_s00da_bdf0* self, int a2, int a3, int a4, int a5, St63
 
     CTribe* t = self->GetTribe();
     CTool*  o = (CTool*)((Fn_ac)VT(t, 0xac))(t);
-    CTool34* p = &o->m34;
+    CTool34& q = o->m34;
+    CTool34* qp = &q;
 
-    float sp = ((Fn_f)VT(p, 0x74))(p);
+    float sp = ((Fn_f)VT(qp, 0x74))(qp);
 
     float tmp[3];
-    Vec3_s00da_bdf0* dir = (Vec3_s00da_bdf0*)((Fn_p1)VT(p, 0x5c))(p, tmp);
+    Vec3_s00da_bdf0* dir = (Vec3_s00da_bdf0*)((Fn_p1)VT(qp, 0x5c))(qp, tmp);
 
-    float dx = dir->x * sp;
-    float dy = dir->y * sp;
-    float dz = dir->z * sp;
+    float sx = dir->x * sp;
+    float sy = dir->y * sp;
+    float sz = dir->z * sp;
 
-    Vec3_s00da_bdf0* pos = (Vec3_s00da_bdf0*)((Fn_p)VT(p, 0x2c))(p);
+    Vec3_s00da_bdf0* pos = (Vec3_s00da_bdf0*)((Fn_p)VT(qp, 0x2c))(qp);
 
     Vec3_s00da_bdf0 dst;
-    dst.x = pos->x + dx;
-    dst.y = pos->y + dy;
-    dst.z = pos->z + dz;
+    dst.x = pos->x + sx;
+    dst.y = pos->y + sy;
+    dst.z = pos->z + sz;
 
     float f1 = ((Fn_f)VT(t, 0x60))(t);
     float f2 = ((Fn_f1)VT(t, 0x60))(t, f1);

@@ -536,28 +536,30 @@ void vp6_add_rows_8(unsigned char* a, unsigned char* dst, short* add, int stride
 extern "C" __declspec(dllimport) void* __cdecl malloc(size_t);
 extern "C" __declspec(dllimport) void  __cdecl free(void*);
 
-void* g_vp6Allocator;
-
-struct vp6_alloc_vtbl {
-    void* (__stdcall *fn2)(unsigned int, const char*, int);
-    void  (__stdcall *fn3)(void*, int);
+// The registered allocator is a polymorphic object: vtable slots 2 and 3 are the alloc/free
+// hooks, called virtually (`this` in ECX, which is why the original keeps the global in ECX).
+class vp6_alloc_vtbl {
+public:
+    virtual void* fn0();
+    virtual void* fn1();
+    virtual void* fn2(unsigned int size, const char* tag, int flag);
+    virtual void  fn3(void* p, int flag);
 };
+extern vp6_alloc_vtbl* g_vp6Allocator;
 
 // @ 0x00fd2980
 void* vp6_alloc(unsigned int size)
 {
-    vp6_alloc_vtbl* a = (vp6_alloc_vtbl*)g_vp6Allocator;
-    if (a != 0)
-        return a->fn2(size, "VP6", 1);
+    if (g_vp6Allocator != 0)
+        return g_vp6Allocator->fn2(size, "VP6", 1);
     return malloc(size);
 }
 
 // @ 0x00fd29b0
 void vp6_free(void* p)
 {
-    vp6_alloc_vtbl* a = (vp6_alloc_vtbl*)g_vp6Allocator;
-    if (a != 0) {
-        a->fn3(p, 0);
+    if (g_vp6Allocator != 0) {
+        g_vp6Allocator->fn3(p, 0);
         return;
     }
     free(p);

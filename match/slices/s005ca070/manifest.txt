@@ -2,3 +2,4 @@
 slices/s005ca070/s005ca070.cpp  ?SetGlobalProperty@@YAXHM@Z  005ca880  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005ca070/s005ca070.cpp  ?IsPaintByNumber@cSPPaletteUI@@QAE_NXZ  005ca920  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005ca070/s005ca070.cpp  ?UpdateCategories@cSPPaletteUI@@QAEXH@Z  005ca980  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ca070/s005ca070.cpp  ?FindCategoryIndex@cSPPaletteUI@@QAEHXZ  005ca9c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

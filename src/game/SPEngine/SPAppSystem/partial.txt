@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-007e6210  580  Loads cShaderDataGameInfo / effect properties from AppProperties; not reconstructed (many property-id/vf+0x24 reads)
 007e70b0  414  cAppSystem::HandleMessage (message dispatch with ResourceMan wait loop) not reconstructed
 007e7380  673  cAppSystem::Configure not reconstructed
 007e7630  631  cAppSystem::cAppSystem constructor not reconstructed

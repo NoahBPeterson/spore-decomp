@@ -1,10 +1,7 @@
 00ff4d50
-00ff50f0
 00ff5190
 00ff5270
-00ff5330
-00ff5410
+00ff5330  ~24  complete counter switch (21 cases, 5 outputs). Bodies now match; residual is case-block layout: retail emits five shared `inc [reg]` blocks ordered param_6,param_3,param_2,param_5,param_4, ours emits one per case in case order (param_2 first) plus an unreachable sixth block after the ret; also the zeroing stores come out in a different order than the retail eax/edx/edi/ecx/ebx sequence. Case order, switch order and the zeroing order were varied without changing either.
 00ff5510
-00ff5720
 00ff5a90
 00ff5c50

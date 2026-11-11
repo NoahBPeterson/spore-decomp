@@ -1,4 +1,4 @@
-00ae2e20 5 FUN_00ae2e20: register allocation only, retail keeps the compare scratch in edx/ecx swapped relative to MSVC; equiv FAIL
+00ae2e20 5 FUN_00ae2e20: register allocation only, retail keeps the compare scratch in edx/ecx swapped relative to MSVC; equiv FAIL. Tried: direct `FUN(a,b,1) <= 1` (26 bytes: setle al, no zeroing), a named int result, `1 >= FUN(...)`, `(FUN(...) - 1) <= 0` (adds dec), if/else returning true/false (26 bytes), returning int c != 0 (39 bytes, extra setne), a local copy of `a` (no effect). cl always picks ecx for the `a` reload; retail picked edx and zeroed ecx for the bool's mov al,cl
 00ae2e40 18 FUN_00ae2e40: triple-writer; spill order of the third field vs the vtable load differs from retail (schedule); equiv UNSUPPORTED
 00ae2f70 644 Sim::Gating: per-frame gating reconstructed functionally but approximate; retail uses LTCG/systemic scheduling; equiv WEAK
 00ae34b0 261 Sim::ReseedTimers: retail keeps `this` in ebp (vs edi) and a different stack-slot layout; algorithm faithful (PASS on equivalence); equiv PASS

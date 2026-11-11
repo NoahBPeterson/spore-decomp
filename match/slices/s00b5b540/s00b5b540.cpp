@@ -96,7 +96,7 @@ void FUN_00b5b6f0(int v)
 }
 
 // @ 0x00b5ca60
-bool __fastcall FUN_00b5ca60(int* p)
+char __fastcall FUN_00b5ca60(int* p)
 {
     return *(int*)((char*)p + 0x30) > 0;
 }
@@ -120,16 +120,16 @@ bool FUN_00b5cb80(int a, int* p)
 // @ 0x00b5cba0
 bool FUN_00b5cba0(int a, int* p)
 {
-    void* sub = (char*)(void*)*p + 8;
-    ((void(__thiscall*)(void*, int))g_vfn(sub, 0x14))(sub, a);
+    void* obj = (void*)*p;
+    ((void(__thiscall*)(void*, int))g_vfn((char*)obj + 8, 0x14))((char*)obj + 8, a);
     return true;
 }
 
 // @ 0x00b5cbc0
 bool FUN_00b5cbc0(int a, int* p)
 {
-    void* sub = (char*)(void*)*p + 8;
-    ((void(__thiscall*)(void*, int))g_vfn(sub, 0x10))(sub, a);
+    void* obj = (void*)*p;
+    ((void(__thiscall*)(void*, int))g_vfn((char*)obj + 8, 0x10))((char*)obj + 8, a);
     return true;
 }
 
@@ -297,18 +297,42 @@ void* AdjustThunk_00b5b5d0::FUN_00b5b5d0_adjust(unsigned id)
     return 0;
 }
 
-// @ 0x00b5b6c0
-void* cGonzagoSimulator_ctor(void* p)
+// SP::cGonzagoSimulator — two polymorphic bases: the refcount base (primary
+// vtable at +0, refcount at +4) and SP::cISerializableObject (secondary vtable
+// at +8); three bools live at +0xc..+0xe.
+namespace SP {
+
+struct RefCountVBase
 {
-    *(int*)((char*)p + 4) = (int)&g_vt0dummy;
-    *(int*)((char*)p + 8) = 0x1444434;
-    *(int*)((char*)p) = 0x146155c;
-    *(int*)((char*)p + 8) = (int)&g_vt1dummy;
-    *(char*)((char*)p + 0xc) = 0;
-    *(char*)((char*)p + 0xd) = 0;
-    *(char*)((char*)p + 0xe) = 0;
-    return p;
+    virtual void OnTick();
+    RefCountVBase() : mRefCount(0) {}
+    int mRefCount;              // +0x04
+};
+
+struct ISerializableObject
+{
+    virtual void AsInterface();
+};
+
+class cGonzagoSimulator : public RefCountVBase, public ISerializableObject
+{
+public:
+    bool mbPaused;              // +0x0c
+    bool mbTickPaused;          // +0x0d
+    bool mbUnregisterPending;   // +0x0e
+
+    cGonzagoSimulator();        // 0x00b5b6c0
+};
+
+// @ 0x00b5b6c0
+cGonzagoSimulator::cGonzagoSimulator()
+{
+    mbPaused = false;
+    mbTickPaused = false;
+    mbUnregisterPending = false;
 }
+
+}  // namespace SP
 
 // ---------------------------------------------------------------------------
 // Global eastl vector<int> at 0x01686a18 (begin/end/capacity at a18/a1c/a20;

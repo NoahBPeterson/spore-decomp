@@ -486,14 +486,10 @@ float IsSub58FlagSet(cEditorGameObject* p)
 // @ 0x00d7a360
 float CanUseEditorAction(cEditorGameObject* p)
 {
-    if (kEditorDistanceLimit < p->mField5e0)
-        goto return_zero;
-    if (p->mpB4C->mField1d8 == 0x3845d9d)
-        goto return_zero;
-    if (p->mFlags110 & 0x100)
-        goto return_zero;
-    return 1.0f;
-return_zero:
+    if (kEditorDistanceLimit >= p->mField5e0 &&
+        p->mpB4C->mField1d8 != 0x3845d9d &&
+        (p->mFlags110 & 0x100) == 0)
+        return 1.0f;
     return 0.0f;
 }
 
@@ -548,7 +544,8 @@ float IsD51660BitClear()
     if (result == 0)
         goto return_zero;
     uint32_t shifted = result->mFlags6c >> 1;
-    if (shifted & 1)
+    shifted &= 1;
+    if (shifted != 0)
         goto return_zero;
     return 1.0f;
 return_zero:
@@ -580,7 +577,13 @@ float IsLookupBFlagSet(cEditorGameObject* p)
 // @ 0x00d7a530
 float IsEditorActionAvailableValue(cEditorGameObject* p)
 {
-    return p->IsEditorActionAvailable() ? 1.0f : 0.0f;
+    float v;
+    bool avail = p->IsEditorActionAvailable();
+    if (avail)
+        v = 1.0f;
+    else
+        v = 0.0f;
+    return v;
 }
 
 // @ 0x00d7a560

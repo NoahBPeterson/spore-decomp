@@ -52,7 +52,7 @@ void __cdecl FUN_00d4e4a0()
 {
 }
 
-// @ 0xd4e8e0 SP::cDramaSlotHolder::FUN_00d4e8e0
+// 0xd4e8e0 SP::cDramaSlotHolder::FUN_00d4e8e0 (attempt lives in SPDramaManager.cpp)
 __declspec(noinline) void __thiscall cDramaSlotHolder::FUN_00d4e8e0(cDramaRefObj*** ppOutSlot)
 {
     *ppOutSlot = 0;

@@ -1,4 +1,4 @@
-// Slice s006bfda0 — EA::ResourceMan PFHoleTable / PFRecordRead / PFRecordWrite
+// Slice s006bfda0 — EA::ResourceMan PFHoleTable / PFRecordRead / PFRecordWrite 
 // (retail layout). Module flags: /O2 /MD /Gy /EHsc /TP
 //
 // The 2008 dev PDB's PFRecordRead/PFRecordWrite are 8..0x10 bytes smaller than
@@ -440,10 +440,11 @@ u32 StreamSub::GetSize(int type)
 u32 StreamSub::GetRemaining()
 {
     PFRecordRead* owner = (PFRecordRead*)((char*)this - 0x20);
+    u8 flags = mStreamFlags;
     if (owner->mnAccessFlags != 0) {
-        u8 flags = mStreamFlags;
         if ((flags & 2) == 0)
             return mnSize - mnPosition;
+        // virtual MemoryStream::GetRemaining(&mStreamMemory)
         return ((u32(__thiscall*)(void*))(*(void***)&mStreamMemory)[0x2c / 4])(&mStreamMemory);
     }
     return 0;
@@ -595,11 +596,9 @@ void PFRecordRead::LoadOnDemand()
 // ---------------------------------------------------------------------------
 bool PFRecordRead::AddRef()
 {
-    volatile long* p = (volatile long*)&stream.mnOpenCount;
-    int old = _InterlockedExchangeAdd(p, 0);
-    if (old == 0)
+    if (_InterlockedExchangeAdd((volatile long*)&stream.mnOpenCount, 0) == 0)
         return false;
-    _InterlockedExchangeAdd(p, 1);
+    _InterlockedExchangeAdd((volatile long*)&stream.mnOpenCount, 1);
     return true;
 }
 

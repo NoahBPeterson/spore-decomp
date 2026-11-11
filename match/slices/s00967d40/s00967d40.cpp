@@ -222,8 +222,9 @@ uint32_t WCB::GetColor(uint32_t index)
 // @ 0x00967e80
 void WCB::SetAlignment(uint32_t value)
 {
+    void** vtbl = *(void***)Real(this);
     Real(this)->i240 = (int32_t)value;
-    ((IWnd*)Real(this))->SetAlignment(1);
+    ((void (__thiscall*)(void*, int))vtbl[0x8c / 4])(Real(this), 1);
 }extern float g_kOneQuarter;                                   // 0x013eb8a0
 
 // @ 0x00967f00

@@ -7,7 +7,5 @@
 010eb820 0 havok-equivalent
 010ebab0 0 havok-equivalent
 010ebb30 0 havok-equivalent
-010ebbb0 0 havok-equivalent
 010ebc00 0 havok-equivalent
-010ebc50 0 havok-equivalent
 010ebc80 0 havok-equivalent

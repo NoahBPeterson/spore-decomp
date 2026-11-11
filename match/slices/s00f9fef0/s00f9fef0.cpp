@@ -207,6 +207,7 @@ struct AutoRefLike {
     volatile long mnRef;       // +0x04 (so +0x14 in JobHolder)
 
     int Release();
+    int ReleaseObject();
 };
 
 struct JobHolder {
@@ -216,17 +217,22 @@ struct JobHolder {
     int Release();             // 0x00fa0f10
 };
 
+int AutoRefLike::Release()
+{
+    AutoRefLike& self = *this;
+    long v = _InterlockedDecrement(&self.mnRef);
+    if (v == 0) {
+        _InterlockedExchange(&self.mnRef, 1);
+        if (&self)
+            self.mpObject->v08(1);
+    }
+    return v;
+}
+
 // @ 0x00fa0f10
 int JobHolder::Release()
 {
-    VtblHolder* p = mObj.mpObject;
-    long v = _InterlockedDecrement(&mObj.mnRef);
-    if (v == 0) {
-        _InterlockedExchange(&mObj.mnRef, 1);
-        if (p)
-            p->v08(1);
-    }
-    return v;
+    return (mObj).Release();
 }
 
 // ---- quaternion / vector helpers -------------------------------------------

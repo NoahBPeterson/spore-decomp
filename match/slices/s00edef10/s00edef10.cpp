@@ -282,14 +282,29 @@ bool __cdecl f00edfd70(int p1, u32 p2, int p3, u32* p4)
     return r;
 }
 
+// The dword of state bits at +0x224 of the creature/game object.
+union FlagWord {
+    unsigned mBits;
+    struct {
+        unsigned mB0 : 1;
+        unsigned mB1 : 1;
+        unsigned mB2 : 1;
+        unsigned mB3 : 1;
+        unsigned mB4 : 1;
+    };
+};
+
 // ============================================================ 0x00edfde0
 // @ 0x00edfde0
-bool __fastcall f00edfde0(int self)
+unsigned __fastcall f00edfde0(int self)
 {
     u32 v = *(u32*)(self + 0x224);
-    if (((v >> 4) & 1) != 0 || ((v >> 1) & 1) != 0 || ((v >> 2) & 1) != 0)
-        return true;
-    return false;
+    bool a = ((v >> 4) & 1) != 0;
+    bool b = ((v >> 1) & 1) != 0;
+    bool c = ((v >> 2) & 1) != 0;
+    if (a || b || c)
+        return 1;
+    return 0;
 }
 
 // ============================================================ 0x00edfea0

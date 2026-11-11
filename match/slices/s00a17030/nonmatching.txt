@@ -1,0 +1,4 @@
+# s00a17030 - Dispatch(bool): call EA::Audio::GetSystemAT (0x00a206f0) then
+# this -> vtable[0x19c/4] / vtable[0x1a0/4] depending on the flag.
+# va  diff-bytes  reason
+00a17030  11  complete but not byte-exact. The original loads the vtable word into edx and leaves the receiver in eax (`cmp byte [esp+8],0; mov edx,[eax]; push esi; mov ecx,eax; je L; mov eax,[edx+0x19c]; call eax; ...`), i.e. the flag branch is examined before the vtable is loaded. cl 15 here loads the vtable into ecx first (`mov ecx,eax; mov eax,[ecx]`), then dereferences through eax. Tried: one virtual call per branch, a vtable pointer local before the branch, a vtable pointer local inside each branch, a fn-pointer local, `if (!flag)` with the branches swapped (only flips je/jne), a volatile vtable load, a slot local + single call (adds a push edi and sete), an explicit `obj` local. Flags /O2 /MD /Gy /EHsc /TP (a /Ob1 /GS- set was also tried with no change in this function's body).

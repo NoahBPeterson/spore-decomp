@@ -16,3 +16,4 @@
 ../src/game/SPMovie/movieplayer.cpp  ?ResumeVideo@MovieRenderer_s00fc_b210@movie@rw@@QAEXXZ  00fcbef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPMovie/movieplayer.cpp  ?SetRenderCallback@MovieRenderer_s00fc_b210@movie@rw@@QAEXPAX0@Z  00fcc010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPMovie/movieplayer.cpp  ?Stop@MovieRenderer_s00fc_b210@movie@rw@@QAEXXZ  00fcc060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?PlayVideo@MovieRenderer_s00fc_b210@movie@rw@@QAEXXZ  00fcbe90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

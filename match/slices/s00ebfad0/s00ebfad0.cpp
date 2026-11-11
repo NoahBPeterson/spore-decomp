@@ -380,8 +380,13 @@ char FUN_00ec0010(int obj, int a, int b, int c, int d, DeciderState* st)
 // @ 0x00ec00e0
 char FUN_00ec00e0(int noun, int a, int b, int c, int d, float* acc, int e, float dt)
 {
-    if ((*acc += dt) > *g_p3)
+    float value = *acc + dt;
+    if (value > *g_p3) {
+        *acc = value;
         EXT(FUN_00b3d300()).v1(noun);
+    } else {
+        *acc = value;
+    }
     return 1;
 }
 

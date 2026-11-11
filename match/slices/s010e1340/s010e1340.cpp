@@ -73,11 +73,14 @@ hkCollisionAgent* hkBvTreeAgent::createShapeBvAgent(const hkCdBody& a, const hkC
 	return new hkBvTreeAgent(mgr);
 }
 
+template <typename T>
+static inline T* hkArrayEnd(hkArray<T>& array) { return array.m_data + array.m_size; }
+
 // @ 0x010e1d30
 void hkBvTreeAgent::cleanup()
 {
 	hkBvAgentEntryInfo* entry = m_collisionPartners.m_data;
-	hkBvAgentEntryInfo* end = entry + m_collisionPartners.m_size;
+	hkBvAgentEntryInfo* end = hkArrayEnd(m_collisionPartners);
 	for (; entry != end; ++entry)
 	{
 		if (entry->m_collisionAgent)

@@ -4874,9 +4874,8 @@ void cAppModeSpace_s00fd_bd60::TransitionToEntry()
 // @ 0x00fdc9e0
 void cAppModeSpace_s00fd_bd60::PlanetOnMouseDown()
 {
-    ShutdownSpaceGame();
-    PlanetModel();
-    RefreshPlanetUI();
+    ((SP::cAppModeSpace*)this)->FUN_00fda9f0();
+    PlanetModel_s00fd_dba0()->Refresh();
     ShutdownSPG();
 }
 

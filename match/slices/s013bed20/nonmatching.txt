@@ -2,15 +2,15 @@
 013c0da0  26  complete behaviourally-equivalent singleton-cleanup source; cl chooses a different register/shrink-wrap schedule (value kept in esi, test in eax) than the original
 013c0de0  26  complete behaviourally-equivalent singleton-cleanup source; register/shrink-wrap schedule differs
 013c1060  26  complete behaviourally-equivalent singleton-cleanup source; register/shrink-wrap schedule differs
-013bf600  19  body is complete and byte-identical up to the function ret (mov ecx,imm; jmp dtor); Ghidra bounds extend over a following unlisted int3+ret thunk, so the listed VA cannot be matched from one C++ function
-013c0300  18  body complete (virtual tail call); Ghidra bounds extend over a following unlisted /Od constructor prologue
-013c08e0  12  body complete; bounds extend over an unlisted int3 + jmp-thunk (tail-merged by Ghidra)
+013bf600  19  body is byte-identical (mov ecx,imm; jmp dtor); the name points 10 bytes into a 0x20 region whose bytes 0x0a..0x0e are int3 and 0x0f is a bare `ret`, so no compilable function exists at this VA; the region is probably one /Gy function with junk padding (needs a split in tools/, not source)
+013c0300  18  body matches instruction-for-instruction (virtual tail call, /Od); only difference is evaluation order of the two reloads of g_164b410 (`mov ecx,[g]` before `mov eax,[g]`); __stdcall (thunk at 0x935a70) and a named local were both tried
+013c08e0  12  body matches instruction-for-instruction; cdecl_free is not dllimport so cl reaches operator delete through a direct rel32 while the original goes through the import slot
 013c0ce0  26  body complete (refcount release + delete); bounds extend over an unlisted int3 + ret thunk
 013c0e90  24  body complete (allocator teardown); bounds extend over an unlisted int3 + ret thunk
-013c0f40  6   body complete (FreeLibrary); bounds extend over an unlisted int3 + jmp-thunk
+013c0f40  6   body is byte-identical (mov eax,[g]; push eax; call __imp_FreeLibrary; ret); relayout impossible: the name points 12 bytes into a 0x20 region whose bytes 0x0c..0x0f are int3 and 0x10 is a jmp thunk (thunk void f(), __stdcall and a HMODULE typedef were tried)
 013c0fc0  13  body complete (WSACleanup); bounds extend over a following unlisted FreeLibrary function
 013c1b90  8   body complete; bounds extend over an unlisted int3 + ret thunk
 013c1e00  8   body complete; bounds extend over an unlisted int3 + ret thunk
-013c1ea0  14  body complete; bounds extend over an unlisted int3 + ret thunk
+013c1ea0  14  body matches instruction-for-instruction (mov eax,[g_1567e38]; push eax; mov ecx,imm; call 0x9a9600; ret); the relayout cannot come from source: the name points 17 bytes into a 0x20 region padded with int3 and the 0x9a9600 callee would have to be modelled as a __thiscall member
 013c21d0  24  body complete; bounds extend over an unlisted int3 + ret thunk
 013c3020  42  body complete; bounds extend over an unlisted int3 + ret thunk

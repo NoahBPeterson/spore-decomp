@@ -68,9 +68,7 @@ typedef void   (__thiscall *FnVF2)(void*, float, float);
 // ---- 0x00678ed0 : (a == b) ------------------------------------------
 // @ 0x00678ed0
 bool __fastcall FUN_00678ed0(char* p) {
-    int v = *(int*)(p + 0x18);
-    bool r = (v == *(int*)(p + 0x28));
-    return r;
+    return *(int*)(p + 0x18) == *(int*)(p + 0x28);
 }
 
 // ---- 0x00678f70 : release sub-objects + string, then base dtor -------

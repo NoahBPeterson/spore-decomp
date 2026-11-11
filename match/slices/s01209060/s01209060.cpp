@@ -136,6 +136,12 @@ private:
 // ---------------------------------------------------------------------------
 // hkStringMapBase -- open-addressed hash table, values at [i + 2*mask + 2].
 // ---------------------------------------------------------------------------
+class hkBool {
+public:
+    hkBool(bool value) : m_bool(value) {}
+    char m_bool;
+};
+
 class hkStringMapBase {
 public:
     hkStringMapBase();
@@ -145,7 +151,7 @@ public:
     int         getNext(int i) const;
     unsigned    getValue(int i) const;
     const char* getName(int i) const;
-    void        isValid(bool* out, int i) const;
+    hkBool      isValid(int i) const;
 
     void        insert(const char* key, unsigned value);
     int         findKey(const char* key) const;
@@ -441,9 +447,9 @@ int hkStringMapBase::getNext(int i) const
 
 // @ 0x012098f0
 // Reports whether slot index i is inside the table (used by iterators).
-void hkStringMapBase::isValid(bool* out, int i) const
+hkBool hkStringMapBase::isValid(int i) const
 {
-    *out = (i <= m_mask);
+    return hkBool(i <= m_mask);
 }
 
 // @ 0x01209910
@@ -506,10 +512,11 @@ int hkStringMapBase::findKey(const char* key) const
 // hkStringMapBase::getWithDefault
 unsigned hkStringMapBase::getWithDefault(const char* key, unsigned def) const
 {
+    unsigned result = def;
     int i = findKey(key);
-    if (i > m_mask)
-        return def;
-    return (unsigned)m_table[i + m_mask * 2 + 2];
+    if (i <= m_mask)
+        result = (unsigned)m_table[i + m_mask * 2 + 2];
+    return result;
 }
 
 // @ 0x01209a70

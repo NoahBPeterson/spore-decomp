@@ -4,7 +4,6 @@
 006a3c30  147  cPropertyListCommand::OnEndParse: stubbed body
 006a3d50  6  feedback-event find: real body; 125 vs 119. Only gap is the false path: retail sibling-calls `mOwner.s10(key)` (`pop esi; add esp,4; mov edx,[edx+0x28]; jmp edx`) while cl 15.00 emits `push key; call edx; pop esi; pop ecx; ret 4` (SCO refused once a stack temp's address is passed to FindSlot). Two zero-store bytes also scheduled around the `push` differently.
 006a3dd0  -  property apply helper: stubbed body
-006a3f00  48  feedback-event test: stub (rbtree path omitted)
 006a3f40  73  string-range ctor: approximate (RangeInitialize/DoInsertValue call shapes wrong)
 006a4190  142  EvalString+FNV hash helper: stub
 006a4240  111  hashtable lookup: stub returning false
@@ -16,7 +15,6 @@
 006a5a90  204  batch message handler: approximate
 006a5b80  178  batch message handler: approximate
 006a5c50  206  hashtable DoInsertValue: stubbed body
-006a5f70  80  name lookup: approximate (raw offsets, call shapes wrong)
 006a5fd0  180  name lookup with temp string: approximate
 006a60b0  227  property lookup/apply: approximate
 006a61c0  87  map insert: approximate

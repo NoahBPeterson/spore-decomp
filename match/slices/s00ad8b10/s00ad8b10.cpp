@@ -3,6 +3,7 @@
 //
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
+#include <intrin.h>
 
 typedef unsigned int   u32;
 typedef unsigned short u16;
@@ -43,6 +44,7 @@ bool  FUN_00685520(int a);                    // 0x00685520  world flag test
 void  FUN_00921440(void* out, int n, int cap, int one);  // 0x00921440
 void  FUN_00ea97d0(int n);                    // 0x00ea97d0
 void  FUN_00b3f1b0(int n);                    // 0x00b3f1b0
+void  FUN_00ad8020(int n);                    // 0x00ad8020 rehash
 void  FUN_00b3f4c0();                         // (placeholder, unused)
 u32   FUN_00ad7200(const char* s);            // 0x00ad7200 type hash
 void* FUN_00ad81b0(void* a, void* b, void* c, void* d); // 0x00ad81b0 remove_copy_if
@@ -51,7 +53,7 @@ void* FUN_007e4190(void* args, void* msg, int b);       // 0x007e4190 cAppState:
 
 void  SPUIHelpers_BeginModal(void* a, int b, int c);    // 0x008099a0
 void  SPUIHelpers_EndModal(void* a, int b, int c);      // 0x00809c50
-void  SP_cSPUISpace_KillSetiEffects(u32 id, void* a);   // 0x00435ed0
+void  SP_cSPUISpace_KillSetiEffects(u32 id, u32 a);     // 0x00435ed0
 void  FUN_00832d50(void* a, float f, int b, int c, int d); // 0x00832d50 cSPUISubtitles::Set
 
 // ------------------------------------------------------------------ thiscall helper types
@@ -70,6 +72,15 @@ struct Viewer {                                  // SP::cViewer
     char Copy(void* src, char b, void* c);                  // 0x007c50b0
 };
 
+struct Grower {                                  // hash growth policy at +0x10
+    char Grow(void* out, int buckets, int count, int one);  // 0x00921440
+};
+
+struct GrowResult {                              // {changed, new bucket count}
+    char changed;
+    int  cap;
+};
+
 typedef void (__thiscall *VFn0)(void*);
 typedef u32  (__thiscall *VFnU)(void*);
 typedef void (__thiscall *VFnII)(void*, int, int);
@@ -86,9 +97,11 @@ struct Self {
     void FUN_00ad8f20(void* name);
     void FUN_00ad8f90();
     void* FUN_00ad9010(void* other);
-    void FUN_00ad9090(void* out, void* key);
+    void FUN_00ad9090(void* out, void* key, u32 unused);
     void FUN_00ad9160();
-    char* FUN_00ad9200(void* out, void* key);
+    void FUN_00ad8020(int n);
+    void FUN_00b3f1b0(int n);
+    char* FUN_00ad9200(void* out, void* key, u32 unused);
     void FUN_00ad9370(void* out, void* key);
     char FUN_00ad94c0(int key);
     char FUN_00ad9520(int a, char* msg);
@@ -394,8 +407,8 @@ void* Self::FUN_00ad9010(void* other)
     *(float*)(s + 0x24) = *(float*)(o + 0x24);
     *(float*)(s + 0x28) = *(float*)(o + 0x28);
     void* a = *(void**)(o + 0x2c);
-    void* b = *(void**)(s + 0x2c);
-    if (a != b) {
+    void* b;
+    if (a != (b = *(void**)(s + 0x2c))) {
         if (a != 0) (*(VFn0*)((char*)*(void**)a + 0xbc))(a);
         *(void**)(s + 0x2c) = a;
         if (b != 0) (*(VFn0*)((char*)*(void**)b + 0xc0))(b);
@@ -404,16 +417,16 @@ void* Self::FUN_00ad9010(void* other)
 }
 
 // @ 0x00ad9090  SpHash find-or-insert helper (0xc-byte nodes, refcounted +4)
-void Self::FUN_00ad9090(void* out, void* key)
+void Self::FUN_00ad9090(void* out, void* key, u32 unused)
 {
     void* self = this;
     char* s = (char*)self;
-    char local[4];
-    int  cap;
+    (void)unused;
+    GrowResult g;
 
-    FUN_00921440(local, *(int*)(s + 8), *(int*)(s + 0xc), 1);
-    if (local[0] != 0) {
-        FUN_00b3f1b0(cap);
+    ((Grower*)(s + 0x10))->Grow(&g, *(int*)(s + 8), *(int*)(s + 0xc), 1);
+    if (g.changed != 0) {
+        ((Self*)s)->FUN_00b3f1b0(g.cap);
     }
 
     u32 bucket = *(u32*)key % *(u32*)(s + 8);
@@ -423,30 +436,27 @@ void Self::FUN_00ad9090(void* out, void* key)
         *(u32*)(node + 0) = *(u32*)key;
         void* p = *(void**)((char*)key + 4);
         *(void**)(node + 4) = p;
-        if (p != 0) (*(VFn0)*(void**)p)(p);
+        if (p != 0) (*(VFn0*)*(void**)p)(p);
     }
     *(u32*)(node + 8) = 0;
 
-    u32   idx  = bucket * 4;
     char* base = *(char**)(s + 4);
+    u32   idx  = bucket * 4;
     char* head = *(char**)(base + idx);
     char* cur  = head;
-    if (cur != 0) {
-        while (*(u32*)cur != *(u32*)key) {
-            cur = *(char**)(cur + 8);
-            if (cur == 0) goto notfound;
-        }
-        *(u32*)(node + 8) = *(u32*)(cur + 8);
-        *(char**)(cur + 8) = node;
-        goto done;
-    }
+    while (cur != 0 && *(u32*)key != *(u32*)cur)
+        cur = *(char**)(cur + 8);
+    if (cur == 0) goto notfound;
+    *(u32*)(node + 8) = *(u32*)(cur + 8);
+    *(char**)(cur + 8) = node;
+    goto done;
 notfound:
     *(u32*)(node + 8) = (u32)(size_t)head;
-    *(char**)(base + idx) = node;
+    *(char**)(*(char**)(s + 4) + idx) = node;
 done:
     ++*(u32*)(s + 0xc);
     *(char**)out = node;
-    *(char**)((char*)out + 4) = base + idx;
+    *(char**)((char*)out + 4) = *(char**)(s + 4) + idx;
 }
 
 // @ 0x00ad9160  SpHash destroy: release each bucket node, then free the array
@@ -469,16 +479,15 @@ void Self::FUN_00ad9160()
 }
 
 // @ 0x00ad9200  SpHash insert helper (0x10-byte nodes, POD payload)
-char* Self::FUN_00ad9200(void* out, void* key)
+char* Self::FUN_00ad9200(void* out, void* key, u32 unused)
 {
-    void* self = this;
-    char* s = (char*)self;
-    char local[4];
-    int  cap;
+    char* s = (char*)this;
+    (void)unused;
+    GrowResult g;
 
-    FUN_00921440(local, *(int*)(s + 8), *(int*)(s + 0xc), 1);
-    if (local[0] != 0) {
-        FUN_00b3f1b0(cap);
+    ((Grower*)(s + 0x10))->Grow(&g, *(int*)(s + 8), *(int*)(s + 0xc), 1);
+    if (g.changed != 0) {
+        ((Self*)s)->FUN_00ad8020(g.cap);
     }
 
     u32 bucket = *(u32*)key % *(u32*)(s + 8);
@@ -491,26 +500,23 @@ char* Self::FUN_00ad9200(void* out, void* key)
     }
     *(u32*)(node + 0xc) = 0;
 
-    u32   idx  = bucket * 4;
     char* base = *(char**)(s + 4);
+    u32   idx  = bucket * 4;
     char* head = *(char**)(base + idx);
     char* cur  = head;
-    if (cur != 0) {
-        while (*(u32*)cur != *(u32*)key) {
-            cur = *(char**)(cur + 0xc);
-            if (cur == 0) goto notfound;
-        }
-        *(u32*)(node + 0xc) = *(u32*)(cur + 0xc);
-        *(char**)(cur + 0xc) = node;
-        goto done;
-    }
+    while (cur != 0 && *(u32*)key != *(u32*)cur)
+        cur = *(char**)(cur + 0xc);
+    if (cur == 0) goto notfound;
+    *(u32*)(node + 0xc) = *(u32*)(cur + 0xc);
+    *(char**)(cur + 0xc) = node;
+    goto done;
 notfound:
     *(u32*)(node + 0xc) = (u32)(size_t)head;
-    *(char**)(base + idx) = node;
+    *(char**)(*(char**)(s + 4) + idx) = node;
 done:
     ++*(u32*)(s + 0xc);
     *(char**)out = node;
-    *(char**)((char*)out + 4) = base + idx;
+    *(char**)((char*)out + 4) = *(char**)(s + 4) + idx;
     return (char*)out;
 }
 
@@ -580,23 +586,26 @@ void* FUN_00ad9470(void** first, void** last, char (*pred)(void*))
 // @ 0x00ad94c0  SpHash lookup by key at node+0x30
 char Self::FUN_00ad94c0(int key)
 {
-    void* self = this;
-    char* s = (char*)self;
+    char* s = (char*)this;
     u32* blk = *(u32**)(s + 0x14);
     u32  e = *blk;
     if (e == 0) {
-        do { ++blk; e = *blk; } while (e == 0);
-    }
-    for (;;) {
-        if (e == *(u32*)(*(int*)(s + 0x14) + *(int*)(s + 0x18) * 4)) return 0;
-        if (*(int*)((size_t)e + 0x30) == key) break;
-        e = *(u32*)((size_t)e + 0x34);
-        while (e == 0) {
-            ++blk;
-            e = *blk;
+        ++blk;
+        if (*blk == 0) {
+            do { ++blk; } while (*blk == 0);
         }
+        e = *blk;
     }
-    return 1;
+    u32 end = *(u32*)(*(int*)(s + 0x14) + *(int*)(s + 0x18) * 4);
+    if (e == end) return 0;
+    for (;;) {
+        if (*(int*)((size_t)e + 0x30) == key) return 1;
+        e = *(u32*)((size_t)e + 0x34);
+        if (e == 0) {
+            do { ++blk; e = *blk; } while (e == 0);
+        }
+        if (e == end) return 0;
+    }
 }
 
 // @ 0x00ad9520  behavior-message handler for trigger/UI state transitions
@@ -609,10 +618,8 @@ char Self::FUN_00ad9520(int a, char* msg)
         if (id != 0x445c99d && id != 0x62ef353) return 0;
         if (*(int*)(msg + 8) == 0x287259f6) {
             void* au = EA_Audio_GetSystemAT();
-            if (au != 0) {
-                (*(VFn0*)((char*)*(void**)au + 0x20))(au);
-            }
-            SP_cSPUISpace_KillSetiEffects(0xdb42c11a, 0);
+            SP_cSPUISpace_KillSetiEffects(0xdb42c11a,
+                au != 0 ? (*(VFnU*)((char*)*(void**)au + 0x20))(au) : 0);
             void* ms = SP_MessageServer();
             (*(VFnIII*)((char*)*(void**)ms + 0x14))(ms, 0x445f729, 0, 0);
         }
@@ -666,11 +673,11 @@ void Self::FUN_00ad97c0(CArgs* ca)
 {
     void* self = this;
     char* s = (char*)self;
-    char* msg = (char*)EAAllocate(0x40, DAT_013f09b4, 0, 0, DAT_013ebb38, 0xd1);
+    char* msg = (char*)EAAllocate(0x40, DAT_013f09b4, 0, 0, 0, 0);
     if (msg != 0) {
         *(u32*)(msg + 0x30) = 0;
         *(void**)(msg + 0x00) = (void*)&PTR_vtbl_RefBaseA22;
-        *(int*)(msg + 4) = 0;
+        _InterlockedExchange((long*)(msg + 4), 0);
         *(u32*)(msg + 0x38) = 0;
         *(void**)(msg + 0x00) = (void*)&PTR_vtbl_BehaviorMsg;
         (*(VFn0*)((char*)*(void**)msg + 4))(msg);

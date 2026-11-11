@@ -68,7 +68,7 @@ extern unsigned gF524c;                             // 0x13f4fd0
 extern void* gVtblA52b40;                           // 0x1403934
 
 // Helper objects used only by this slice's thiscall helpers.
-struct CM_Hash { char pad[0x18]; int v18; int v1c; void* __thiscall GetPair(void* out); };
+struct CM_Hash { char pad[0x18]; int v18; int v1c; void* __thiscall GetPair(void* __restrict out); };
 struct GroupObj { void* p0; int i1; int i2; int i3; };       // +0x18/+0x1c view
 struct AnyObj { void* vtbl; void* p4; int p8;
   int  __thiscall Call6(int a, int b);
@@ -358,7 +358,7 @@ unsigned char __cdecl a_control_setup()
 }
 
 // @ 0x00a529c0
-void* __thiscall CM_Hash::GetPair(void* out)
+void* __thiscall CM_Hash::GetPair(void* __restrict out)
 {
   int a = v18;
   *(int*)out = a;

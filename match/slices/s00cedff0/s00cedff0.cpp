@@ -1,3 +1,4 @@
+#include "sse_helpers.h"
 // Slice s00cedff0 -- Spore city-game cheat commands, bundle/container helpers and
 // city-game formula math.
 //
@@ -160,6 +161,9 @@ struct VecObj {
     u32    m_field00;
     void **mpBegin;   // +0x04
     void **mpEnd;     // +0x08
+
+    bool empty() const { return mpBegin == mpEnd; }
+    int count() const { return (int)(mpEnd - mpBegin); }
 };
 
 struct Vec3 {
@@ -357,26 +361,27 @@ void __fastcall FUN_00cee2c0(BundleObj *o, void *edx, void *obj, u32 a, float b,
 }
 
 // @ 0x00cee330
+// The element is an object whose first word is the value (`mov ecx,eax; mov eax,[ecx]`).
 void *__fastcall FUN_00cee330(VecObj *v, void *edx)
 {
     (void)edx;
-    if (v->mpBegin != v->mpEnd)
-        return *v->mpBegin;
-    return 0;
+    if (v->mpBegin == v->mpEnd)
+        return 0;
+    return *v->mpBegin;
 }
 
 // @ 0x00cee340
 void *__fastcall FUN_00cee340(VecObj *v, void *edx)
 {
-    int n;
     u32 i;
     (void)edx;
 
-    if (v->mpBegin == v->mpEnd)
-        return 0;
-    n = (int)(v->mpEnd - v->mpBegin);
-    i = ((u32(__thiscall *)(void *, u32))FUN_00a68fb0)(&g_sMathRandom, (u32)n);
-    return v->mpBegin[i];
+    if (v->mpBegin != v->mpEnd) {
+        i = ((u32(__thiscall *)(void *, u32))FUN_00a68fb0)
+                (&g_sMathRandom, (u32)(((u8 *)v->mpEnd - (u8 *)v->mpBegin) >> 2));
+        return v->mpBegin[i];
+    }
+    return 0;
 }
 
 // @ 0x00cee380
@@ -721,7 +726,7 @@ void __stdcall FUN_00ceec10(u32 a1, float a2, float a3, float a4, u32 a5, u32 a6
 int __stdcall FUN_00ceec50(void *unused)
 {
     (void)unused;
-    __asm { cvtss2si eax, dword ptr [g_169cc58] }
+    return SseRoundToInt(g_169cc58);
 }
 
 namespace SP {

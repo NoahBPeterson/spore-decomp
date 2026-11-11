@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPSimulatorColony.cpp  ?scalarDeletingDtor@cColonySimulator@@QAEPAXD@Z  00ff5810  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorColony.cpp  ?OnTick@cColonySimulator@@QAEXHHH@Z  00ff5840  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorColony.cpp  ?DoGrowthSim@cColonySimulator@@QAEXPAX@Z  00ff5720  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

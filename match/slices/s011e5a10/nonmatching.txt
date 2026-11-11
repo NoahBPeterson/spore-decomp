@@ -17,12 +17,9 @@
 011e62b0  116  StreamImpl_startWorker: complete (start the AsyncOp, create the worker thread via the refcounted context, sleep until the started flag is set). Eq UNSUPPORTED (fake-arity + _beginthreadex import + read faults).
 011e6340  263  StreamImpl_queueRequest: complete (priority insert under the lock, start the worker if idle, signal the condvar). Eq FAIL (harness "execution" mismatch).
 011e6450   47  StreamImpl_cancelRequest: complete (unlink the request under the lock and requeue it with the given reason). Eq FAIL (harness "execution" mismatch).
-011e64a0   26  RequestDesc::init: complete (store a, b, constant 2, constant 0x400). Eq FAIL (first mismatch eax, a code-pointer register; all stored values agree).
-011e64c0   15  ListHead_clear: complete (zero the four dwords of an intrusive list head). Eq FAIL (first mismatch eax; only the zero-register choice differs).
 011e64f0  179  StreamImpl_ctorFull: complete (name strncpy, flag-guarded critical section, 16-slot request table, optional extra insert). Eq UNSUPPORTED (writes past the harness-provided object -> fault).
 011e6600  128  rw::core::filesys::decbufferusage: complete (release bytes from the async window, walk the pending list, wake the waiter). Eq UNSUPPORTED (reads fields the harness cannot supply -> fault(read)).
 011e6660   56  rw::core::filesys::getfreerequest: complete (pop a free request, stamp a fresh id into its low byte). Eq UNSUPPORTED (unresolved reference ?g_requestIdCounter).
 011e66d0   70  rw::core::filesys::queuerequest: complete (push the request onto the pending list under the lock, mark it queued). Eq UNSUPPORTED (writes past the harness-provided object -> fault(write)).
 011e6730  115  rw::core::filesys::freerequest: complete (unlink a pending request from both list directions, push it onto the free list). Eq UNSUPPORTED (needs the request in eax: custom/LTCG register ABI).
 011e67a0  106  opencallback: complete (install the AsyncOp size, restart the stream, or free the request and schedule the next one). Eq FAIL (harness "execution" mismatch).
-011e6840   12  openstream: complete (issue the async open for impl+0x70 via FUN_011e8a40). Eq UNSUPPORTED (writes past the harness object -> fault(write)).
