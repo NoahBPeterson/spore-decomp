@@ -727,7 +727,7 @@ bool Canvas_s0084_7200::Shutdown()
 }
 
 // @ 0x00848100
-void Canvas_s0084_7200::GetMinClientArea(unsigned* out)
+void Canvas_s0084_7200::GetMinClientArea(unsigned* __restrict out)
 {
     out[0] = mnMinWidth;
     out[1] = mnMinHeight;
