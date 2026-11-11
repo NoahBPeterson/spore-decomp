@@ -186,7 +186,6 @@ struct AnalysisVector;
 struct cEditorRes {
     void  dtor();                     // 0x00b37440
     cEditorRes* ctor();               // 0x00b379f0
-    void  SetAnalysis(const AnalysisVector* other, bool renumber); // 0x00b38140
 };
 
 // vtable slot addresses baked into the original image
@@ -820,18 +819,4 @@ void cEditorLayer::SpawnEffect(uint key, const void* ap, const void* bp, int idA
 
     if (ref)
         ref->Release();
-}
-
-// @ 0x00b38140
-void cEditorRes::SetAnalysis(const AnalysisVector* other, bool renumber)
-{
-    char* base = (char*)this;
-    AnalysisVector* vec = (AnalysisVector*)(base + 0xac);
-    vec->assign(*other);
-
-    if (renumber) {
-        int n = (int)(vec->mpEnd - vec->mpBegin);
-        for (int i = 0; i < n; i++)
-            vec->mpBegin[i].mIndex = i;
-    }
 }
