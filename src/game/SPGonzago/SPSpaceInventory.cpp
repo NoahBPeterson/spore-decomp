@@ -830,7 +830,8 @@ ResourceKey cSpaceInventoryItem::GetImageID()
 // @ 0x00c871b0
 bool cSpaceInventoryItem::GetImageColors(uint32_t& dstCount, void** pDst)
 {
-    return SP_GetPropertyAsUint32Array(mpPropList.mPtr, 0xadc0291e, dstCount, pDst);
+    void* pList = mpPropList.mPtr;
+    return SP_GetPropertyAsUint32Array(pList, 0xadc0291e, dstCount, pDst);
 }
 
 // @ 0x00c871d0
