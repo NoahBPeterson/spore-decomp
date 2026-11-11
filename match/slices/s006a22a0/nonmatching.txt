@@ -17,7 +17,6 @@
 006a3070  11   SP::cPropertyList::GetPropertyIDs - complete; vector resize to the map size, then an indexed key copy [equiv: PASS]
 006a30c0  123  SP::cDirectPropertyList::SetProperty - complete
 006a3180  283  SP::cDirectPropertyList::GetPropertyIDs - complete; vector argument is an eastl::vector<unsigned int> (empty-copy shrink, per-property appends, grow/trim to oldN+mapN, map keys at the tail) [equiv: PASS]
-006a2a40  2  complete; eax vs ecx for the SetParent arg load [equiv: WEAK]
 006a25a0  136  SP::cDirectPropertyList::GetDescription - complete; inlined lower_bound + string-Variant accessor (hashtable find 0x6a19b0, Destruct 0x93db80); register allocation and block layout differ [equiv: PASS]
 006a2660  129  SP::cDirectPropertyList::GetIntProperty - complete; inlined lower_bound + VariantT<int> conversion (0x60d990); register allocation differs [equiv: WEAK]
 006a2710  139  SP::cDirectPropertyList::GetFloatProperty - complete; inlined lower_bound + VariantT<float> conversion (0x6a1a10); register allocation differs [equiv: WEAK]
