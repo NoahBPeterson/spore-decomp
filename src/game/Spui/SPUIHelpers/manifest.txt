@@ -1,6 +1,9 @@
 # source  symbol  va  flags
 ../src/game/Spui/SPUIHelpers.cpp  ?UpdateMouseFocus@@YAXH@Z  00804f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?WinB0@@YAXXZ  00805180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?AttrP1c@@YAPAXPAH@Z  00805260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?AttrF0c@@YAMPAH@Z  00805290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?AttrF10@@YAMPAH@Z  008052c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?IsSomething@@YAHXZ  008053b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?AllocCoreBlock@@YAPAXH@Z  008053e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?CallVt8@VThunk8@@QAEXHHHHH@Z  00805490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -8,9 +8,6 @@
 008051b0 50 FindByKey; original passes the receiver in EDI (static-helper register convention); equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
 00805200 20 AttrF14 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 318 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
 00805230 20 AttrF18 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 319 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
-00805260 19 AttrP1c getter; wrong calling convention of the FindByKey helper; equiv WEAK: 275 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
-00805290 20 AttrF0c getter; wrong calling convention of the FindByKey helper; equiv WEAK: 292 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
-008052c0 20 AttrF10 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 293 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
 00805310 167 CreditsTabInit; layout ctor/init call reconstruction, register scheduling; equiv UNSUPPORTED: 5 unresolved reference(s): ?LayoutCtor@@YAXPAD@Z, ?LayoutInit@@YA_NPADHHH@Z, ?LayoutDtor@@
 00805400 4 FreeCoreBlock; originally push/call/pop ecx, compiler emitted add esp,4; equiv PASS: 659 valid inputs, 100.0% coverage (all insns)
 008054b0 31 FixedFree; chunk-head list update scheduling; equiv FAIL: 5/5 valid inputs mismatched
