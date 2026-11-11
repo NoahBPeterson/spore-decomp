@@ -486,14 +486,10 @@ float IsSub58FlagSet(cEditorGameObject* p)
 // @ 0x00d7a360
 float CanUseEditorAction(cEditorGameObject* p)
 {
-    if (kEditorDistanceLimit < p->mField5e0)
-        goto return_zero;
-    if (p->mpB4C->mField1d8 == 0x3845d9d)
-        goto return_zero;
-    if (p->mFlags110 & 0x100)
-        goto return_zero;
-    return 1.0f;
-return_zero:
+    if (kEditorDistanceLimit >= p->mField5e0 &&
+        p->mpB4C->mField1d8 != 0x3845d9d &&
+        (p->mFlags110 & 0x100) == 0)
+        return 1.0f;
     return 0.0f;
 }
 
