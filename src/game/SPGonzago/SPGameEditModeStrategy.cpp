@@ -150,7 +150,7 @@ struct cGameEditModeStrategy {
     void FUN_00d1c010();                                      // 0x00d1c010
     void FUN_00d1c0a0(f32 a, f32 b, int c);                   // 0x00d1c0a0
     void FUN_00d1c0d0(int a, f32 b, f32 c, int d);            // 0x00d1c0d0
-    void OnKeyUp();                                           // 0x00d1c090
+    bool OnKeyUp(unsigned key, unsigned state);                                           // 0x00d1c090
     u8   Init(int unused);                                    // 0x00d1c100
     u8   FUN_00d1c2e0(int key, int state);                    // 0x00d1c2e0
     u8   FUN_00d1c400(int a, f32 b, f32 c, int d);            // 0x00d1c400
@@ -612,14 +612,14 @@ struct InputManagerVt_s00d1_c090 {
     virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
     virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
     virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
-    virtual void v50();
+    virtual bool OnKeyUp(unsigned key, unsigned state);
 };
 
 // @ 0x00d1c090
-void SP::cGameEditModeStrategy::OnKeyUp()
+bool SP::cGameEditModeStrategy::OnKeyUp(unsigned key, unsigned state)
 {
     InputManagerVt_s00d1_c090* m = (InputManagerVt_s00d1_c090*)GameInputManager();
-    m->v50();
+    return m->OnKeyUp(key, state);
 }
 
 // @ 0x00d1c0a0
