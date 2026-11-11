@@ -17,5 +17,4 @@
 010c8da0 122 havok-equivalent
 010c8e40 111 havok-equivalent
 010c8ee0 202 havok-equivalent
-010c9030 31 havok-equivalent
 010c9050 73 havok-equivalent; equiv PASS 400/400 (85.7% coverage); replay PASS; not byte-exact (68 bytes differ: size 90 vs 73; nearest-rounding threshold + volatile x/rounded locals replace x87 fistp so ecx/xmm stay untouched)

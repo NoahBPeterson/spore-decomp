@@ -657,10 +657,16 @@ void hkFastMeshShape_constructFinishLoaded(hkFastMeshShape* self)
 hkFastMeshShape::hkFastMeshShape(int finishLoadedFlag) : hkMeshShape(1) {}
 
 // ---- hkCylinderShape / misc -------------------------------------------------------------
+// Only the virtuals used here; the cylinder's geometry is in slice s010c90a0.
+class hkCylinderShape { public:
+    virtual ~hkCylinderShape();
+    virtual void calcStatistics(hkStatisticsCollector* c) const;
+};
+
 // @ 0x010c9030
-void hkCylinderShape_calcStatistics(const void* self, hkStatisticsCollector* c)
+void hkCylinderShape::calcStatistics(hkStatisticsCollector* c) const
 {
-    c->beginObject("Cylinder", 1, self);
+    c->beginObject("Cylinder", 1, this);
     c->endObject();
 }
 
