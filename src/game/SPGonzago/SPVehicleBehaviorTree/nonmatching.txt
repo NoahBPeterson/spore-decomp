@@ -41,8 +41,6 @@
 00dcc750 134 trade-order activation partially reconstructed; 211 vs 216 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00dcc830 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1626 bytes - VehicleTree::TradeWithCityOrder_Tick not reconstructed.
 00dcce90 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 312 bytes - VehicleTree::OfferToBuyCityOrder_Activate not reconstructed.
-00dccfd0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 123 bytes - VehicleTree::MoveToPointOrder_Activate not reconstructed.
-00dcd180 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 152 bytes - vehicle order helper, complete reconstruction: zero *out, sub = self+0x508 vtable[0x10], nm = F_00b3d300(sub) then F_00b25f40(nm); when non-null, city = F_00dcc440(self,-1,0); when non-null drive F_00dc5050(self,city), and if (self+0x34)->vtable[0x58]() then Audio::GetSystemAT()->vtable[0x20]() is passed to F_00435ed0(0x67fa83cd, x) (null path passes 0); always returns 1. Residual: 151 vs 152 bytes - retail materialises the null argument with `xor eax,eax; push eax`, our cl folds it to `push 0` (the same known-zero fold seen at 0xdcc5c0); every instruction and branch otherwise matches.
 00dcd220 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 522 bytes - vehicle order helper not reconstructed.
 00dcd430 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 248 bytes - cVehicleTicker::GetGroupOrder not reconstructed.
 00dcd590 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 336 bytes - vehicle order helper not reconstructed.

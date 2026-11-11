@@ -30,3 +30,5 @@
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?VehicleTree_AttackCityOrder_Activate@@YA_NPAVcVehicle_s00dd_0230@@IIIIPAPAVcMilitaryAttackCityOrder@@@Z  00dd0230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ??1cCulturalConvertCityOrder_s00dc_c830@SP@@QAE@XZ  00dcd530  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dcd050@SP@@YA_NPAUBehaviorObj@@HHHHPAUOut_s00dcd050@1@@Z  00dcd050  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?MoveToPointOrder_Activate@SP@@YA_NPAUBehaviorObj@@@Z  00dccfd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dcd180@SP@@YA_NPAUBehaviorObj@@HHHHPAM@Z  00dcd180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
