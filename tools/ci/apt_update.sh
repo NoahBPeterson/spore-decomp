@@ -4,7 +4,9 @@
 # GitHub's Ubuntu runners fetch from azure.archive.ubuntu.com through mirror+file:/etc/apt/apt-mirrors.txt. When that
 # name does not resolve, apt-get update only warns ("Failed to fetch ... Temporary failure resolving") and exits 0,
 # and the install then fails with "held broken packages" because the i386 indexes are missing (2026-11-11, PR #170).
-# This retries once, then points apt at archive.ubuntu.com and tries again.
+# This points apt at archive.ubuntu.com and tries once more.  Exit 0: indexes are fresh, install normally.
+# Exit 1: no Ubuntu mirror is reachable (on 2026-11-11 archive.ubuntu.com did not resolve either); the caller can
+# fall back to tools/ci/install_cached_debs.sh.
 set -u
 log=$(mktemp)
 
@@ -16,11 +18,8 @@ update() {
 }
 
 update && exit 0
-echo "apt-get update could not reach a mirror; retrying in 20 s"
-sleep 20
-update && exit 0
 
-echo "switching the Ubuntu mirror to archive.ubuntu.com"
+echo "apt-get update could not reach the runner's mirror; switching to archive.ubuntu.com"
 if [ -f /etc/apt/apt-mirrors.txt ]; then
     printf 'http://archive.ubuntu.com/ubuntu/\n' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null
 fi

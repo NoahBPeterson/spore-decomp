@@ -74,9 +74,12 @@ jobs:
           sudo mkdir -pm755 /etc/apt/keyrings
           sudo wget -qO /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
           sudo wget -qNP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
-          sh tools/ci/apt_update.sh
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
-            -o Dir::Cache::Archives="$HOME/apt-archives" winehq-stable msitools xvfb >/dev/null
+          if sh tools/ci/apt_update.sh; then
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
+              -o Dir::Cache::Archives="$HOME/apt-archives" winehq-stable msitools xvfb >/dev/null
+          else
+            sh tools/ci/install_cached_debs.sh "$HOME/apt-archives"
+          fi
           sudo chmod -R a+rX ~/apt-archives
           python3 -m pip install --quiet --break-system-packages pefile capstone
           echo "WINE_VERSION=$(wine --version)" >> "$GITHUB_ENV"
