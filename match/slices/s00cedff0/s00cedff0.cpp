@@ -1,4 +1,5 @@
 #include "sse_helpers.h"
+#include "s00cedff0_bundle.h"
 // Slice s00cedff0 -- Spore city-game cheat commands, bundle/container helpers and
 // city-game formula math.
 //
@@ -6,7 +7,7 @@
 // modelled locally with role-named members and explicit padding for untouched gaps):
 //   cCommandSetVehicleWeapons  vtable @0x00, parser @0x04 (parser's vtable @0x00)
 //   cCityGameCheatManager      empty marker object @0x00
-//   cGameBundleContainer       vtable @0x00 only (AsISpatialObject dispatch)
+//   cGameBundleContainer       17-slot vtable, 20-byte vector @0x04, owner @0x18
 //   VecObj                     vector begin @0x04, end @0x08 (used by the anonymous
 //                              bundle-list helpers)
 //   VecObj18                   vtable @0x00, vector @0x04/@0x08/@0x0c, owner @0x18
@@ -323,18 +324,11 @@ float __fastcall FUN_00cee290(Obj290 *o, void *edx)
     return (float)((float)o->m_field1c * o->m_field20);
 }
 
-namespace SP {
-struct cGameBundleContainer {
-    void **m_vtbl00;
-    void *AsISpatialObject();
-};
-}
-
 // @ 0x00cee2a0
-void *SP::cGameBundleContainer::AsISpatialObject()
+SP::cSpatialObject *SP::cGameBundleContainer::AsISpatialObject()
 {
     if (this)
-        return ((void *(__thiscall *)(void *, void *))m_vtbl00[0x14 / 4])(this, (void *)0x1186577);
+        return (cSpatialObject*)AsInterface((EA::COM::InterfaceId)0x1186577);
     return 0;
 }
 
@@ -525,16 +519,11 @@ void __fastcall FUN_00cee650(VecObj *v, void *edx, void *value)
 }
 
 // @ 0x00cee7a0
-void __fastcall FUN_00cee7a0(VecObj18 *o, void *edx)
+SP::cGameBundleContainer::~cGameBundleContainer()
 {
-    (void)edx;
-    o->m_vtbl00 = (void **)0x1478220;
-    if (o->m_vec.mpBegin != o->m_vec.mpEnd)
-        ((void(__thiscall *)(Vec3 *, void **, void **))FUN_00e25bd0)
-                (&o->m_vec, o->m_vec.mpBegin, o->m_vec.mpEnd);
-    if (o->m_owner18)
-        ((void(__thiscall *)(void *))(*(void ***)o->m_owner18)[1])(o->m_owner18);
-    ((void(__thiscall *)(Vec3 *))FUN_00ae6970)(&o->m_vec);
+    BundleList& list = mBundleList;
+    if (!mBundleList.empty())
+        list.erase(list.begin(), list.end());
 }
 
 // @ 0x00cee7e0

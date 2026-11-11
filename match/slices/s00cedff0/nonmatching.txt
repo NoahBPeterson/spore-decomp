@@ -12,7 +12,6 @@
 00cee4a0  nearest-object search over vector (squared distance); float expression reassociation/register allocation differs
 00cee540  nearest/far-object search with occupancy +0x120 and threshold +0x134; expression order differs
 00cee650  remove-value from vector -- addref value, linear scan, copy_impl tail, release popped element; loop layout and epilogue duplication differ
-00cee7a0  bundle-vector destructor -- reset vtable, erase vector, release owner, destroy vector; cl hoists begin/end loads above the vtable store and swaps edi/esi roles
 00cee820  bundle-vector push -- addref value, grow-or-insert via DoInsertPtr, release temp; parameter register allocation differs
 00cee890  bundle-vector deleting destructor -- same as 00cee7a0 plus operator_delete_array; cl hoists begin/end loads and swaps registers
 00cee920  clamp helper for city-game probability -- x87 bd7d00*0.01-0.5 then SSE combine/clamp; register allocation and branch layout differ
