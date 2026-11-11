@@ -29,6 +29,8 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 
 #include "types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 namespace EA {
 namespace XHTML {
@@ -604,15 +606,13 @@ void RenderingContext::SubStyleGet(Vec2* out)
 }
 
 // @ 0x008ee7a0
-// The original keeps the scroll object in ecx and its vtable-slot target in eax:
-// the release is a covariant vtable slot read through a non-virtual look-alike, so
-// cl does not need a second register for `this`.
 void RenderingContext::ReleaseScroll()
 {
-    // The original loads the slot target into eax and tail-jumps; `(*(void***)s)[0x1f]` is the
-    // spelling used by the other XHTML call sites in this file.
     ScrollInfo* scroll = mpScroll00;
-    (*(void(__thiscall**)(ScrollInfo*))(*(void***)scroll + 1))(scroll);
+    typedef void (__thiscall* ReleaseFunction)(ScrollInfo*);
+    ReleaseFunction release = (ReleaseFunction)scroll->mpVtbl[1];
+    _ReadWriteBarrier();
+    release(scroll);
 }
 
 // @ 0x008ee7b0

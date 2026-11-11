@@ -1251,7 +1251,7 @@ void WinB0()
 }
 
 // @ 0x008051b0
-int* FindByKey(int* self, int key)
+static int* FindByKey(int* self, int key)
 {
     int* n = (int*)((void*(__thiscall*)(void*, int))VFn(self, 0x10c))(self, 0);
     while (n != 0) {

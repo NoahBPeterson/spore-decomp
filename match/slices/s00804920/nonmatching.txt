@@ -5,8 +5,6 @@
 008050f0  40  WalkFind; the original re-invokes slot +0x10 up to three times per step and tail-jumps slot +0x1c on a hit; equiv PASS: 208 valid inputs, 77.5% coverage
 00805150  26  Contains; vtable access via VSlot address form vs direct slot load; equiv PASS: 771 valid inputs, 100.0% coverage (all insns)
 008051b0  52  FindByKey; original passes the receiver in EDI (static-helper register convention); equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
-00805200  19  AttrF14 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 318 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
-00805230  19  AttrF18 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 319 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
 00805260  21  AttrP1c getter; wrong calling convention of the FindByKey helper; equiv WEAK: 275 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
 00805290  19  AttrF0c getter; wrong calling convention of the FindByKey helper; equiv WEAK: 292 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
 008052c0  19  AttrF10 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 293 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))

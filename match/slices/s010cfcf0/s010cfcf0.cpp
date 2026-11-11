@@ -8,6 +8,7 @@
 // Flags: /vc71 /O2 /MD /Gy /EHsc /TP
 #include "types.h"
 #include <intrin.h>
+#include <new>
 #pragma intrinsic(__rdtsc)
 
 #define VTFN(obj, slot) (*(void***)(obj))[slot]
@@ -248,6 +249,11 @@ struct hkMultiRayConvexAgentBase
 };
 class hkMultiRayConvexAgent
 {
+protected:
+    hkMultiRayConvexAgent(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                         const hkCollisionInput& input, hkContactMgr* mgr); // 0x010cf850
+    friend void* __cdecl FUN_010cff30(const hkCdBody& bodyA, const hkCdBody& bodyB,
+                                      const hkCollisionInput& input, hkContactMgr* mgr);
 public:
     virtual void processCollision(const hkCdBody& bodyA, const hkCdBody& bodyB,
                                   const hkProcessCollisionInput& input,
@@ -262,8 +268,6 @@ struct hkAgentWrapper
 };
 void __fastcall FUN_010cf8d0(void* self, const hkCdBody& bodyA, const hkCdBody& bodyB,
                             const hkProcessCollisionInput& input, hkProcessCollisionOutput& output);
-void __fastcall FUN_010cf850(void* self, const hkCdBody& bodyA, const hkCdBody& bodyB,
-                            const hkCollisionInput& input, hkContactMgr* mgr);
 void __cdecl FUN_01105d80(const hkVector4* triangle, void* cache);
 void __cdecl FUN_010cecf0(hkContactPoint* point, const hkContactPoint* src);
 void __fastcall FUN_0107db10(void* threadMemory, void* data, int size);
@@ -397,7 +401,7 @@ void* __cdecl FUN_010cff30(const hkCdBody& bodyA, const hkCdBody& bodyB,
     void* mem = ((hkMemory*)g_hkMemoryInstance)->allocate(0x20, 0x1c);
     hkAgent44* node = (hkAgent44*)mem;
     node->m_size = 0x20;
-    FUN_010cf850(node, bodyB, bodyA, input, mgr);
+    new (mem) hkMultiRayConvexAgent(bodyB, bodyA, input, mgr);
     node->m_vtable = (void*)0x014a44bc;
     return node;
 }

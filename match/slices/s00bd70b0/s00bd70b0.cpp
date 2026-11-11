@@ -428,10 +428,8 @@ int __fastcall FUN_00bd7a80(int param_1)
 // ===========================================================================
 void __fastcall FUN_00bd7ab0(int param_1)
 {
-    char* adj = (char*)param_1 - 0x38;
-    int* o = *(int**)adj;
-    int* r = (int*)((Fn_i_v)*(void**)((char*)o + 0x30))(adj);
-    ((Fn_x_v)*(void**)(*r + 0x4c))(r);
+    int* r = (int*)((Fn_p_v)(*(void***)((char*)param_1 - 0x38))[0x30 / 4])((char*)param_1 - 0x38);
+    ((Fn_x_v)(*(void***)r)[0x4c / 4])(r);
 }
 
 // ===========================================================================
