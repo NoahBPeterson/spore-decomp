@@ -168,6 +168,10 @@ void* __cdecl FUN_00c9f0a0(void** src, void** end, void** dst)
     return dst;
 }
 
+// Closest attempt, same size as retail. The first object's calls and both
+// distances match, and `d2 > d1 ? 1 : 0` gives the two full-width epilogues.
+// Left: the second position call keeps its slot in edx, and each kind check
+// loads the vtable into eax instead of edx.
 // @ 0x00c9f490
 u8 CStub::FUN_00c9f490(void* a, void* b)
 {
@@ -176,18 +180,18 @@ u8 CStub::FUN_00c9f490(void* a, void* b)
     if (b == 0)
         return 1;
     float* self = (float*)this;
-    void* o1 = (**(void*(__thiscall**)(void*))(vpt(a) + 8))(a);
+    void* o1 = ((void*(__thiscall*)(void*))((void**)*(void***)a)[2])(a);
     float* p1 = (float*)(**(void*(__thiscall**)(void*))(vpt(o1) + 0x2c))(o1);
     float dx1 = self[0] - p1[0];
     float dy1 = self[1] - p1[1];
     float dz1 = self[2] - p1[2];
-    float d1 = sqrtf(dz1 * dz1 + (dy1 * dy1 + dx1 * dx1));
-    void* o2 = (**(void*(__thiscall**)(void*))(vpt(b) + 8))(b);
+    float d1 = sqrtf(dx1 * dx1 + dy1 * dy1 + dz1 * dz1);
+    void* o2 = ((void*(__thiscall*)(void*))((void**)*(void***)b)[2])(b);
     float* p2 = (float*)(**(void*(__thiscall**)(void*))(vpt(o2) + 0x2c))(o2);
     float dx2 = self[0] - p2[0];
     float dy2 = self[1] - p2[1];
     float dz2 = self[2] - p2[2];
-    float d2 = sqrtf(dz2 * dz2 + (dy2 * dy2 + dx2 * dx2));
+    float d2 = sqrtf(dx2 * dx2 + dy2 * dy2 + dz2 * dz2);
     if (d1 < self[3]) {
         if ((**(int(__thiscall**)(void*, int))(vpt(a) + 0x5c))(a, 0x436f315) != 0 ||
             (**(int(__thiscall**)(void*, int))(vpt(a) + 0x5c))(a, 0x137e8e0) != 0)
@@ -198,7 +202,7 @@ u8 CStub::FUN_00c9f490(void* a, void* b)
             (**(int(__thiscall**)(void*, int))(vpt(b) + 0x5c))(b, 0x137e8e0) != 0)
             d2 = 0.0f;
     }
-    return d2 > d1;
+    return d2 > d1 ? 1 : 0;
 }
 
 // @ 0x00c9f750
