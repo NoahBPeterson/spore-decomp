@@ -3,7 +3,7 @@
 00c9f0a0
 00c9f130
 00c9f1e0
-00c9f250
+00c9f250 same size. Reloading the element each call matches the counted loop, the alignment nop and the direct ecx load. this stays in ebx and the count in edi; retail uses edi for this and ebx for the count, which also swaps the SIB order. Not source-controllable (codegen.md, callee-saved this/loop register).
 00c9f2d0
 00c9f3d0
 00c9f410
