@@ -18,6 +18,7 @@
 #include "SP/cGameNounManager.h"
 #include "SP/cSpeciesProfile.h"
 #include "SP/cTribe.h"
+#include <intrin.h>
 
 // ---- items of slice s00c4a850 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct ResourceKey {
@@ -729,6 +730,7 @@ cSPMissionBiosphere_s00c4_cb90* __fastcall cMissionBiosphere_ctor(cSPMissionBios
     this_->mVector_238.mpBegin = (::cHerd**)0x1667bac;
     this_->mVector_238.mpEnd = (::cHerd**)0x1667bac;
     this_->mVector_238.mpCapacity = (::cHerd**)0x1667bae;
+    _ReadWriteBarrier();
     this_->mHerds_248.mpBegin = 0;
     this_->mHerds_248.mpEnd = 0;
     this_->mHerds_248.mpCapacity = 0;
