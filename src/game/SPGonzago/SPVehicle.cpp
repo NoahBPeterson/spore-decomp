@@ -428,30 +428,34 @@ float* CStub::FUN_00c9fdc0(float* out)
     return out;
 }
 
+// Closest attempt, 128 vs 152. A switch on 0/1/2 reproduces retail's
+// `sub eax, 0; je; sub eax, 1; je; sub eax, 1` chain. this stays in edi
+// and the continent index in ebx; retail keeps this in ebx.
 // @ 0x00c9fe40
 u8 CStub::FUN_00c9fe40(void* p)
 {
-    int pm = (int)SP_PlanetModel0();
-    if (pm == 0)
+    PlanetStub* planet = (PlanetStub*)SP_PlanetModel0();
+    if (planet == 0)
         return 0;
-    void* sub = (char*)this + 0x34;
-    float* pos = (float*)(**(void*(__thiscall**)(void*))(vpt(sub) + 0x2c))(sub);
-    PlanetStub* planet = (PlanetStub*)pm;
+    float* pos = ((float*(__thiscall*)(void*))((void**)*(void***)((char*)this + 0x34))[11])((char*)this + 0x34);
     int c1 = planet->GetContinent(pos);
-    int kind = *(int*)((char*)this + 0xb1c);
-    if (kind == 0) {
-        if (*(char*)(c1 + *(int*)(pm + 0x64)) == 0)
-            return 1;
-    } else if (kind == 1) {
-        if (*(char*)(c1 + *(int*)(pm + 0x64)) != 0)
-            return 1;
-    } else {
+    char* table = (char*)*(int*)((char*)planet + 0x64);
+    switch (*(int*)((char*)this + 0xb1c)) {
+    case 1:
+        if (table[c1] == 0)
+            break;
+        return 1;
+    case 0:
+        if (table[c1] != 0)
+            break;
+        return 1;
+    case 2:
+        return 0;
+    default:
         return 0;
     }
-    void* sub2 = (char*)p + 0x34;
-    float* pos2 = (float*)(**(void*(__thiscall**)(void*))(vpt(sub2) + 0x2c))(sub2);
-    int c2 = planet->GetContinent(pos2);
-    return c1 == c2;
+    float* pos2 = ((float*(__thiscall*)(void*))((void**)*(void***)((char*)p + 0x34))[11])((char*)p + 0x34);
+    return c1 == planet->GetContinent(pos2);
 }
 
 // @ 0x00c9fee0
