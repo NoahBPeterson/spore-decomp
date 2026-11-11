@@ -86,8 +86,55 @@ struct ResponseCurve {
 // ---- EA::Audio::Sound ------------------------------------------------------------------
 // Opaque over its full extent; only the offsets touched by this slice are named, everything
 // else is explicit padding.
-struct Sound {
-    uint8_t  pad000[0x3c];
+// Native Sound dispatch: gain attenuation occupies vtable slot 42 (+0xa8).
+struct SoundAttenuation {
+    virtual void Slot00();
+    virtual void Slot01();
+    virtual void Slot02();
+    virtual void Slot03();
+    virtual void Slot04();
+    virtual void Slot05();
+    virtual void Slot06();
+    virtual void Slot07();
+    virtual void Slot08();
+    virtual void Slot09();
+    virtual void Slot10();
+    virtual void Slot11();
+    virtual void Slot12();
+    virtual void Slot13();
+    virtual void Slot14();
+    virtual void Slot15();
+    virtual void Slot16();
+    virtual void Slot17();
+    virtual void Slot18();
+    virtual void Slot19();
+    virtual void Slot20();
+    virtual void Slot21();
+    virtual void Slot22();
+    virtual void Slot23();
+    virtual void Slot24();
+    virtual void Slot25();
+    virtual void Slot26();
+    virtual void Slot27();
+    virtual void Slot28();
+    virtual void Slot29();
+    virtual void Slot30();
+    virtual void Slot31();
+    virtual void Slot32();
+    virtual void Slot33();
+    virtual void Slot34();
+    virtual void Slot35();
+    virtual void Slot36();
+    virtual void Slot37();
+    virtual void Slot38();
+    virtual void Slot39();
+    virtual void Slot40();
+    virtual void Slot41();
+    virtual double Attenuate(float, float, float, float, float);
+};
+
+struct Sound : SoundAttenuation {
+    uint8_t  pad004[0x38];
     uint32_t mInstanceId;          // +0x03c
     uint8_t  pad040[0x08];
     float    mf48;                 // +0x048
@@ -424,9 +471,7 @@ double Sound::GetDoubleC8() {
 // =====================================================================================
 // @ 0x00A1AE50
 double Sound::AttnHelper() {
-    typedef double (__thiscall* AttnFn)(void*, float, float, float, float, float);
-    void** vt = VtOf(this);
-    return ((AttnFn)vt[0xa8 / 4])(this, mf48, mf50, mf54, mf58, mf98) * mf5c;
+    return Attenuate(mf48, mf50, mf54, mf58, mf98) * mf5c;
 }
 
 // =====================================================================================

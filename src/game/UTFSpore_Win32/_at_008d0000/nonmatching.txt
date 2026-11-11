@@ -5,7 +5,6 @@
 008d38d0 338 FUN_008d38d0(a,b,c): median-of-three comparator on 16-byte glyph keys (sort helper); same results, regalloc/branch layout differ. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (400 valid, 98.3% coverage)
 008d3a10 166 FUN_008d3a10(...): sift-up insert into heap of 16-byte keys; regalloc/branch layout differ. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (233 valid, 79.7% coverage)
 008d3b70 250 FUN_008d3b70(...): sift-down heap rebuild over 16-byte key records; same results, regalloc/branch layout differ. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (232 valid, 74.7% coverage)
-008d3c60 2 FUN_008d3c60(obj,alloc): glyph-run container ctor (vtable + two empty vectors + allocator); vtable-store order/regalloc differ. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (400 valid, 100.0% coverage)
 008d3ca0 16 FUN_008d3ca0(obj): glyph-run container dtor, frees two pools via allocator vtable; layout differs. flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (277 valid, 55.8% coverage)
 008d3d30 110 FUN_008d3d30(obj,key,container): lookup rect entry then require every non-zero key in container runs; regalloc differs. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (255 valid, 100.0% coverage)
 008d3dc0 131 FUN_008d3dc0(obj,key,pOut,a4,a5): walk list calling per-node vtable slot4; ecx-receiver member, regalloc differs. flags /O2 /MD /Gy /EHsc /TP; difftest PASS (375 valid, 100.0% coverage)
