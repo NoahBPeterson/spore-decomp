@@ -15,6 +15,8 @@ extern "C" const char* __cdecl Tokenize(const char* s, const char** end, const c
 extern "C" bool __cdecl WildcardMatch(const char*, const char*, int);   // EA::Text::WildcardMatch
 extern "C" void __cdecl Output(void*, const char*, ...);                // 0x00841000 EA::ArgScript::Output
 #include <intrin.h>
+#include "EA/Trace/LogRecord.h"
+#include "EA/Trace/TraceHelper.h"
 #include "EA/IO/IStream.h"
 #pragma intrinsic(memcpy)
 
@@ -211,7 +213,6 @@ extern "C" void __cdecl FUN_00690b80(void*, void*);
 
 extern "C" void __cdecl eaFree(void* p);
 extern bool __stdcall FlagCheckA(void* pObj);
-extern bool __stdcall FlagCheckB(void* pObj);
 #pragma intrinsic(_InterlockedExchange)
 #pragma intrinsic(_InterlockedExchangeAdd)
 #pragma intrinsic(_InterlockedDecrement)
@@ -460,11 +461,13 @@ class ConsoleDispatch {
 class LogReporter {
  public:
   LogReporter(int nGroup);
+  bool FilterEnabled2(const EA::Trace::LogRecord& record); // 0x00923740
   uint8_t pad[0x24 - 0x4];
 };
 class CheatReporter : public LogReporter {
  public:
   CheatReporter(int nGroup, EA::IU01* pTarget);
+  int CheckFlagB(const EA::Trace::LogRecord& record);
 
   EA::Arc01 mTarget;  // +0x24
 };
@@ -484,11 +487,10 @@ int __stdcall CheckFlagA(void* pObj)
 }
 
 // @ 0x0067e190
-int __stdcall CheckFlagB(void* pObj)
+int CheatReporter::CheckFlagB(const EA::Trace::LogRecord& record)
 {
-  void* pFlag = *((void**)pObj + 3);
-  if (((uint8_t*)pFlag)[8] & 1) {
-    if (!FlagCheckB(pObj)) return 0;
+  if (record.mTraceHelper->mOutputType & 1) {
+    if (!FilterEnabled2(record)) return 0;
   }
   return 1;
 }

@@ -14,3 +14,4 @@
 ../src/game/SPEngine/SPCheatManager.cpp  ?push_back@Cmd_f640@@QAEXPAPAX@Z  0067f640  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPCheatManager.cpp  ?NukeSub@StrTree@@QAEXPAUNode@@@Z  0067f670  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPCheatManager.cpp  ??1CheatMgr@@UAE@XZ  0067f910  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?CheckFlagB@CheatReporter@@QAEHABVLogRecord@Trace@EA@@@Z  0067e190  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
