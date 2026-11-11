@@ -237,7 +237,8 @@ extern float    g_fIdleHold;    // 0x01582e9c idle hold time handed to the behav
 extern uint32_t g_nGameTime;    // 0x01582e24 game clock, milliseconds
 void* __cdecl GetAnimalFromStimulus(void* pStimulus);           // 0x00d99980
 void* __cdecl WatchMemoryBlock(void* pStimulus);                // 0x00d999d0
-void* __stdcall FUN_00d539d0(void* pCreature);                  // 0x00d539d0 (cPosseSimulator::Instance)
+class cPosseSimulator;
+cPosseSimulator* __cdecl FUN_00d539d0();                       // 0x00d539d0 (cPosseSimulator::Instance)
 struct Vector3 {
     float x;                    // +0x00
     float y;                    // +0x04
@@ -402,7 +403,7 @@ public:
 cPlanetModel* __cdecl PlanetModel(Vector3* pOut, Vector3* pIn); // 0x00b3d350
 class cPosseSimulator {
 public:
-    void RemovePosseSlot();                                     // 0x00d53330
+    void RemovePosseSlot(cSPCreatureBase* pCreature);             // 0x00d53330
 };
 class cSPCreatureBase {
 public:
@@ -5265,7 +5266,7 @@ bool __cdecl FUN_00d7bd40(cSPCreatureBase* pCreature, uint32_t, uint32_t, uint32
 void __cdecl FUN_00d7bda0(cSPCreatureBase* pCreature)
 {
     pCreature->FUN_00c14750(true);
-    return ((cPosseSimulator*)FUN_00d539d0(pCreature))->RemovePosseSlot();
+    FUN_00d539d0()->RemovePosseSlot(pCreature);
 }
 
 // @ 0x00d7bdc0
