@@ -25,27 +25,47 @@ batch = sys.argv[1]
 _recs = json.load(open(os.path.join(ROOT, "work/batches", batch + ".json")))
 ids = [s["id"] for s in _recs]
 IDS = "(?:" + "|".join(map(re.escape, ids)) + ")"
+FSROOT = ROOT
+if os.name == "nt":
+    # Windows (the laptop wave, 2026-11-10): opencode's shell is Git Bash, which spells the repo /d/spore_wave, and
+    # its file tools report D:\\spore_wave\\... Policy paths use the Git Bash form; norm() maps the others onto it.
+    ROOT = "/" + FSROOT[0].lower() + FSROOT[2:].replace("\\", "/")
+
+
+def norm(p):
+    if os.name == "nt":
+        p = p.replace("\\", "/")
+        if re.match(r"^[A-Za-z]:/", p):
+            p = "/" + p[0].lower() + p[2:]
+    return p
+
+
+def rel(p):
+    p = norm(p)
+    return p[len(ROOT) + 1:] if p.startswith(ROOT + "/") else p
 # Migration batches (docs/migration-runbook.md s8a): entries carry "module" = "<dir>/<obj stem>". Sessions may
 # then write the module TU and its bookkeeping, the renames/report files of their slices and a scratch dir, and
 # run tools/migrate/rewrite.py; slices and generated headers stay read-only (the slice paths are NOT allowed).
 MODULES = sorted({s["module"] for s in _recs if s.get("module")})
 if MODULES:
     MODS = "(?:" + "|".join(map(re.escape, MODULES)) + ")"
-    ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:src/game/%s(?:\.cpp|/[^/]+)|symbols/slices/%s\.txt|work/match/.*|"
+    # Contributor waves mix module files and slices in one batch (cw2): a slice entry's own folder is allowed too
+    ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:src/game/%s(?:\.cpp|/[^/]+)|symbols/slices/%s\.txt|work/match/.*|work/scratch/.*|"
+                              r"match/slices/%s/[^/]+|"
                               r"work/migrate/(?:renames_%s\.json|rewrite_%s[^/]*\.json|report_%s(?:_\w+)?\.md|scratch_%s(?:/.*)?))$"
-                              % (re.escape(ROOT), MODS, IDS, IDS, IDS, IDS, IDS))
+                              % (re.escape(ROOT), MODS, IDS, IDS, IDS, IDS, IDS, IDS))
     MIGRATE_TOOL = r"tools/migrate/rewrite\.py|"
 else:
     # rework batches with equivalence FAILs (claim.py "fail_src"): the migrated src/game copy of each FAIL function
     # is the hybrid build's, so its session may edit that one unit (part1, 2026-10-24)
     FAILSRC = sorted({f for s in _recs for f in s.get("fail_src", {}).values()})
     EXTRA = "|" + "|".join(map(re.escape, FAILSRC)) if FAILSRC else ""
-    ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:match/slices/%s/[^/]+|symbols/slices/%s\.txt|work/match/.*%s)$"
+    ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:match/slices/%s/[^/]+|symbols/slices/%s\.txt|work/match/.*|work/scratch/.*%s)$"
                               % (re.escape(ROOT), IDS, IDS, EXTRA))
     MIGRATE_TOOL = ""
 PY_TOOLS = re.compile(r"^(?:\.venv/bin/python3?\s+)?(?:" + MIGRATE_TOOL + r"tools/matching/(?:slice_info|claim|card|chk|cmpdis|try_variants|run_all|od_names|"
                       r"disasm|pattern_info|cmpobj|patterns|libmatch|asm_audit)\.py|tools/pdb_type\.py|"
-                      r"tools/difftest/(?:equiv|batch|slice)\.py)(?:\s|$)")
+                      r"tools/difftest/(?:equiv|batch|slice)\.py|tools/contrib/(?:task|check)\.py)(?:\s|$)")
 SAFE_CMD = re.compile(r"^(?:rg|ls|cat|head|tail|wc|sort|uniq|cut|tr|echo|printf|true|false|test|\[|pwd|file|xxd|od|"
                       r"c\+\+filt|diff|cmp|basename|dirname|seq|grep|sed|nl|column|date|which|ps|pgrep|pidof|awk|stat|du|find|strings|hexdump|md5|shasum|realpath|readlink|(?:llvm-)?nm|(?:[A-Za-z0-9_]+-w64-mingw32-)?objdump|lsof|sleep|set|export|read|shift|cd|:|local|break|continue)(?:\s|$)")
 DENY_CMD = re.compile(r"^(?:sudo|git|curl|wget|pip3?|uv|brew|npm|npx|ssh|scp|rsync|ghidra|pyghidra|analyzeHeadless|"
@@ -60,7 +80,7 @@ def svc():
 
 
 URL, AUTH = svc()
-LOC = "location%5Bdirectory%5D=" + urllib.parse.quote(ROOT)
+LOC = "location%5Bdirectory%5D=" + urllib.parse.quote(FSROOT)
 
 
 def call(method, path, body=None):
@@ -155,19 +175,20 @@ def paths_in(seg):
 
 
 def ok_path(p):
-    p = p.strip("'\"")
+    p = norm(p.strip("'\""))
     if MODULES:
         if "$" in p:
             pre = p.split("$", 1)[0]
-            return pre.startswith(("work/match/", "symbols/slices/", "work/migrate/scratch_"))
+            return pre.startswith(("work/match/", "work/scratch/", "symbols/slices/", "work/migrate/scratch_"))
         return (bool(ALLOWED_PATH.match(p))
-                or bool(re.match(r"^(?:%s/)?(?:src/game/%s|work/migrate|symbols/slices|work/match)/?$" % (re.escape(ROOT), MODS), p)))
+                or bool(re.match(r"^(?:%s/)?(?:src/game/%s|match/slices/%s|match/slices|work/migrate|symbols/slices|work/match|work/scratch)/?$"
+                                 % (re.escape(ROOT), MODS, IDS), p)))
     if "$" in p:  # a shell variable (e.g. a loop's $id) in the path: judge by the literal prefix before it
         pre = p.split("$", 1)[0]
-        return (pre.startswith(("match/slices/", "work/match/", "symbols/slices/"))
-                or bool(re.match(r"^(?:%s/)?(?:match/slices|symbols/slices|work/match)/?$" % re.escape(ROOT), pre)))
+        return (pre.startswith(("match/slices/", "work/match/", "work/scratch/", "symbols/slices/"))
+                or bool(re.match(r"^(?:%s/)?(?:match/slices|symbols/slices|work/match|work/scratch)/?$" % re.escape(ROOT), pre)))
     return (bool(ALLOWED_PATH.match(p)) or bool(re.match(r"^(?:%s/)?match/slices/%s/?$" % (re.escape(ROOT), IDS), p))
-            or bool(re.match(r"^(?:%s/)?(?:match/slices|symbols/slices|work/match)/?$" % re.escape(ROOT), p)))  # existing parent dirs (mkdir -p)
+            or bool(re.match(r"^(?:%s/)?(?:match/slices|symbols/slices|work/match|work/scratch)/?$" % re.escape(ROOT), p)))  # existing parent dirs (mkdir -p)
 
 
 import ast
@@ -235,9 +256,23 @@ SECRETY = re.compile(r"(?:^|[\s;|&(])(?:env|printenv|set\s*$|export\s+-p|declare
                      r"\.(?:ssh|aws|config|local)/|Secrets|auth\.json|service\.json|\.opencode/|\.\./\.\.", re.I)
 
 
+WIN_DRIVE = re.compile(r"(?i)(?:^|[\s='\"(<>|;&,])(/[a-z]/|[a-z]:[\\/]+)(\S*)")
+
+
+def win_outside(text):
+    """Windows: a drive path (/c/..., C:\\..., D:/...) that is not the repo."""
+    if os.name != "nt":
+        return False
+    for m in WIN_DRIVE.finditer(text):
+        drive = m.group(1).strip("/\\:").lower()
+        if not (drive == ROOT[1] and re.match(r"(?i)%s(?:[\\/'\"]|$)" % re.escape(ROOT[3:]), m.group(2))):
+            return True
+    return False
+
+
 def outside_repo(text):
     """True if the text references a path outside the repo, the home dir, env vars or credential files."""
-    return bool(OUTSIDE.search(text) or SECRETY.search(text))
+    return bool(OUTSIDE.search(text) or SECRETY.search(text) or win_outside(text))
 
 
 def decide_manual(r):
@@ -268,11 +303,15 @@ def decide(r):
     if act in ("task", "subagent"):
         return "reject", "subagent spawning is forbidden; do the work yourself in this session"
     if act in ("read", "glob", "grep", "list", "lsp", "todowrite", "todoread", "skill"):
+        if any(SECRETY.search(norm(p)) or win_outside(p) for p in res):
+            return "reject", "the harness configuration, credentials and paths outside the repo are off limits"
         return "once", "read-only/agent tool"
     if act in ("edit", "write", "patch", "apply_patch"):
-        bad = [p for p in res if not ok_path(os.path.relpath(p, ROOT) if os.path.isabs(p) else p)]
+        bad = [p for p in res if not ok_path(rel(p))]
         return ("once", "edit inside batch slice paths") if not bad else ("reject", "edit outside allowed paths: %s" % bad[:3])
     if act in ("shell", "bash"):
+        if outside_repo("\n".join(res)):
+            return "reject", "references a path outside the repo, the home directory, env vars or credentials"
         # opencode sometimes passes a whole compound command as one resource: judge every simple command in it,
         # not just the first word (a `cd ... && python - <<'PY' ... PY` line hid a write to `>工作`, 2026-10-20)
         for seg in [s for r in res for s in split_shell(r)]:
@@ -300,8 +339,8 @@ def decide(r):
                     or re.match(r"^(?:[A-Za-z_][A-Za-z0-9_]*=(?:'[^']*'|\"(?:[^\"\\]|\\.)*\"|[^\s;|&<>]*)\s*)+$", s)):
                 continue
             m = re.match(r"^\.venv/bin/python3? (work/match/scratch_%s\S*\.py)(?:\s|$)" % IDS, s)
-            if m and os.path.exists(os.path.join(ROOT, m.group(1))):
-                if safe_python(open(os.path.join(ROOT, m.group(1))).read()):
+            if m and os.path.exists(os.path.join(FSROOT, m.group(1))):
+                if safe_python(open(os.path.join(FSROOT, m.group(1))).read()):
                     continue
                 return "hold", "scratch script with side effects or unknown imports: %s" % m.group(1)
             code = inline_python(s)

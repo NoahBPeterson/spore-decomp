@@ -55,7 +55,10 @@ BATCH = json.load(open(W("work/batches", G["batch"] + ".json")))
 QUEUE = bool(G.get("queue"))
 NK = int(G["workers"]) if QUEUE else len(G["ranges"])   # ranges, or queue workers
 sys.path.insert(0, W("tools/matching"))
-import claim  # noqa: E402
+try:
+    import claim  # noqa: E402  (queue groups only; it needs fcntl, so not on Windows)
+except ImportError:
+    claim = None
 
 
 _DB = os.path.expanduser("~/.local/share/opencode/opencode.db")
@@ -107,8 +110,11 @@ def prompt_for(k):
     # Migration batches (docs/migration-runbook.md s8a): entries carry "module" = "<dir>/<obj stem>";
     # a range holds entries of one module.
     module = BATCH[a].get("module", "")
+    # {VAS}: the range's functions spelled out, one "0x<va>" per line (contributor waves, AGENTS.md: the session is
+    # told its functions the way a maintainer would assign them, not a batch range to look up)
+    vas = "\n".join("0x%s" % v for i in range(a, b + 1) for v in BATCH[i]["vas"])
     return (PROMPT.replace("{BATCH}", G["batch"]).replace("{A}", str(a)).replace("{B}", str(b)).replace("{N}", str(n))
-            .replace("{MODULE}", module).replace("{OBJ}", module.rsplit("/", 1)[-1]))
+            .replace("{MODULE}", module).replace("{OBJ}", module.rsplit("/", 1)[-1]).replace("{VAS}", vas))
 
 
 def fixlog_vas():
@@ -291,8 +297,11 @@ elif cmd == "relaunch":  # replace workers' sessions with fresh ones (no transcr
 
 elif cmd == "unhang":
     lim = int(args[0]) if args else 600
+    live = api("GET", "/api/session/active").get("data", {})
     for k, sid in SESS.items():
-        if requests_for(sid):
+        # a finished (idle) session also has no recent writes: only a running turn can hang (cw2, 2026-11-10:
+        # finished sessions r21/r26/r30 were re-prompted to "continue" after their final reports)
+        if sid not in live or requests_for(sid):
             continue
         m = api("GET", "/api/session/%s/message?limit=2" % sid).get("data", [])
         a = [x for x in m if x.get("type") == "assistant" or x.get("role") == "assistant"]
