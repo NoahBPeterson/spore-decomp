@@ -3,3 +3,4 @@ slices/s010df100/s010df100.cpp  ?getPenetrations@hkPhantomAgent@@UAEXABVhkCdBody
 slices/s010df100/s010df100.cpp  ?staticGetPenetrations@hkPhantomAgent@@SAXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdBodyPairCollector@@@Z  010df3b0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s010df100/s010df100.cpp  ?cleanup@hkTransformAgent@@UAEXXZ  010df560  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s010df100/s010df100.cpp  ?processCollision@hkSymmetricAgent_hkTransformAgent@@UAEXABVhkCdBody@@0ABUhkProcessCollisionInput@@AAUhkProcessCollisionOutput@@@Z  010e0280  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s010df100/s010df100.cpp  ?getClosestPoints@hkSymmetricAgent_hkTransformAgent@@UAEXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdPointCollector@@@Z  010e0240  /vc71 /O2 /MD /Gy /EHsc /TP

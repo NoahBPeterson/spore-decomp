@@ -7,7 +7,7 @@
 // ---------------------------------------------------------------------------------------------------
 class hkSymmetricAgentFlipCollector : public hkCdPointCollector { public:            // vtable 0x014a43a4
     hkCdPointCollector& m_original;                                     // +8
-    hkSymmetricAgentFlipCollector(hkCdPointCollector& c) : m_original(c) { m_earlyOutDistance = HK_REAL_MAX; }
+    hkSymmetricAgentFlipCollector(hkCdPointCollector& c) : m_original(c) {}
     virtual void addCdPoint(const hkCdPoint& point);
 };
 class hkSymmetricAgentFlipBodyCollector : public hkCdBodyPairCollector { public:     // vtable 0x014a43b4

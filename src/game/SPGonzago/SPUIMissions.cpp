@@ -937,7 +937,7 @@ public:
     uint32_t     mn04;              // +0x04
     cSPUILayout_s00e2_e6e0* mp08;              // +0x08 the strip layout
 
-    void FUN_00e2ec40();                                            // 0x00e2ec40
+    cSPUIRelationshipStrip();                                            // 0x00e2ec40
     void Init(tIWindow* pParent);                                   // 0x00e2ec60
     void FUN_00e2ed40();                                            // 0x00e2ed40
     void FUN_00e2ed70(int32_t nState);                              // 0x00e2ed70
@@ -5711,7 +5711,7 @@ char* __cdecl FUN_00e2eba0(cSimNoun* pNoun)
 }
 
 // @ 0x00e2ec40
-void cSPUIRelationshipStrip::FUN_00e2ec40()
+cSPUIRelationshipStrip::cSPUIRelationshipStrip()
 {
     mn04 = 0;
     mpVtable = (uint32_t)g_stripVtable;

@@ -387,6 +387,8 @@ public:
 class hkFeatureContactPoint
 {
 public:
+    __forceinline void resetContactPointId() { m_contactPointId = 0; }
+
     hkUchar  m_featureIdA;                // +0x0
     hkUchar  m_featureIdB;                // +0x1
     hkUint16 m_contactPointId;            // +0x2
@@ -400,7 +402,7 @@ public:
     int    addPoint(const hkCdBody& bodyA, const hkCdBody& bodyB,
                     hkFeatureContactPoint& fcp);                                // 0x010ec540
     void   removePoint(int index);                                              // 0x010ec4a0
-    hkBoxBoxManifold* init();                                                   // 0x010ec500 (retail leaves this in eax)
+    hkBoxBoxManifold* init();                                                   // 0x010ec500
 
     hkFeatureContactPoint m_contactPoints[8];   // +0x00 (8 * 4 bytes)
     hkUchar m_faceVertexFeatureCount;           // +0x20
@@ -555,20 +557,20 @@ hkBool hkBoxBoxManifold::findInManifold(const hkFeatureContactPoint& cp)
 // @ 0x010ec500
 hkBoxBoxManifold* hkBoxBoxManifold::init()
 {
-    hkBoxBoxManifold* const self = this;
-    const int zero = 0;
-    self->m_contactPoints[0].m_contactPointId = zero;
-    self->m_contactPoints[1].m_contactPointId = zero;
-    self->m_contactPoints[2].m_contactPointId = zero;
-    self->m_contactPoints[3].m_contactPointId = zero;
-    self->m_contactPoints[4].m_contactPointId = zero;
-    self->m_contactPoints[5].m_contactPointId = zero;
-    self->m_contactPoints[6].m_contactPointId = zero;
-    self->m_contactPoints[7].m_contactPointId = zero;
-    self->m_numPoints = 0;
-    self->m_faceVertexFeatureCount = 0;
-    self->m_isComplete = false;
-    return self;
+    // The fixed-size reset is unrolled, preserving each inline point initializer.
+    hkFeatureContactPoint* point = m_contactPoints;
+    point->resetContactPointId(); ++point;
+    point->resetContactPointId(); ++point;
+    point->resetContactPointId(); ++point;
+    point->resetContactPointId(); ++point;
+    point->resetContactPointId(); ++point;
+    point->resetContactPointId(); ++point;
+    point->resetContactPointId(); ++point;
+    point->resetContactPointId(); ++point;
+    m_numPoints = 0;
+    m_faceVertexFeatureCount = 0;
+    m_isComplete = false;
+    return this;
 }
 
 // @ 0x010ec540

@@ -30,7 +30,17 @@ class hkThreadMemory { public:
 // ---------------------------------------------------------------------------
 // math
 // ---------------------------------------------------------------------------
-struct HK_ALIGN16 hkVector4 { float x, y, z, w; };
+struct HK_ALIGN16 hkVector4
+{
+    float x, y, z, w;
+    __forceinline void set(const hkVector4& v)
+    {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+        w = v.w;
+    }
+};
 
 class hkAabb { public: hkVector4 m_min; hkVector4 m_max; };
 class hkTransform { public: hkVector4 m_rot[3]; hkVector4 m_trans; };
@@ -140,7 +150,7 @@ class hkCapsuleShape : public hkConvexShape { public:
     hkCapsuleShape(const hkVector4& a, const hkVector4& b, float radius);
     void getSupportingVertex(const hkVector4& dir, hkCdVertex& out) const;
     void getFirstVertex(hkVector4& out) const;
-    const hkSphere* getCollisionSpheres(hkSphere* buffer) const;
+    virtual const hkSphere* getCollisionSpheres(hkSphere* buffer) const;
     void calcStatistics(hkStatisticsCollector* c) const;
 };
 
@@ -614,8 +624,8 @@ void hkCapsuleShape::getFirstVertex(hkVector4& out) const
 // @ 0x010c2850  hkCapsuleShape::getCollisionSpheres
 const hkSphere* hkCapsuleShape::getCollisionSpheres(hkSphere* buffer) const
 {
-    buffer[0].m_pos = m_vertexA;
-    buffer[1].m_pos = m_vertexB;
+    buffer[0].m_pos.set(m_vertexA);
+    buffer[1].m_pos.set(m_vertexB);
     return buffer;
 }
 // --- equivalence checker address annotations

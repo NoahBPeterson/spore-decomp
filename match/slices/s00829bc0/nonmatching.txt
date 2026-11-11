@@ -2,7 +2,6 @@
 00829f30 185 complete logic; the matrix-pointer argument (ecx) mapping is uncertain
 0082a450 133 complete translation; AutoRef release sequence codegen differs
 0082aa20 23  complete translation; callee schedule differs when the callee body is visible in the TU
-0082aa70 23  complete translation; original keeps a dead store to +0x10 that cl eliminates
 0082aac0 23  complete translation; original keeps a dead store to +0x10 that cl eliminates
 0082ab00 11  complete translation; parameter register allocation differs (a in ecx vs eax)
 0082ab40 134 complete translation; retail's TableLookup is __stdcall (callee pops both args, ret 8), so the source now declares it __stdcall: saved replay identical, fresh gate PASS 397/400 valid, 100%. The inlined wide-string compare schedule still differs (chk diff 134; 131 orig vs 136 ours).

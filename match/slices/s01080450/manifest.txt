@@ -17,3 +17,4 @@ slices/s01080450/s01080450.cpp  ?getCstyleArraySize@hkClassMember@@QBEHXZ  01080
 slices/s01080450/s01080450.cpp  ?setInverse@hkTransform@@QAEXABV1@@Z  01080e70  /vc71 /O2 /MD /Gy /TP
 slices/s01080450/s01080450.cpp  ?setMark@hkBufferedStreamReader@@UAE?AW4hkResult@@H@Z  01080790  /vc71 /O2 /MD /Gy /TP
 slices/s01080450/s01080450.cpp  ?equal@hkMath@@YA?AVhkBool@@MMM@Z  01080e40  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?isOk3@hkVector4@@QBE?AVhkBool@@XZ  010812b0  /vc71 /O2 /MD /Gy /TP

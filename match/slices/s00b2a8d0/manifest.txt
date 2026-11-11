@@ -5,3 +5,4 @@ slices/s00b2a8d0/s00b2a8d0.cpp  ??4cAbilityRecord@@QAEAAU0@ABU0@@Z  00b2b040  /O
 slices/s00b2a8d0/s00b2a8d0.cpp  ??4cTypeInfo@@QAEAAU0@ABU0@@Z  00b2b150  /O2 /MD /Gy /EHsc /TP
 slices/s00b2a8d0/s00b2a8d0.cpp  ?CopyConstructRange@@YAPAUcAbilityRecord@@PBU1@0PAU1@@Z  00b2b7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b2a8d0/s00b2a8d0.cpp  ?AssignRange@@YAPAUcAbilityRecord@@PAU1@00@Z  00b2b830  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b2a8d0/s00b2a8d0.cpp  ??1cTerrainDistributeInfo@SP@@UAE@XZ  00b2afb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

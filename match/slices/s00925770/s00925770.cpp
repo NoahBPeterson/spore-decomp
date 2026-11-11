@@ -58,14 +58,6 @@ void ZoneObject_delete(void* p) {
     }
 }
 
-// @ 0x00925BF0
-void FUN_00925bf0(unsigned a1, unsigned a2, int a3) {
-    void* obj = *(void**)(a3 + 4);
-    void** vt = *(void***)obj;
-    int r = ((int (__thiscall*)(void*, unsigned, int, int))vt[2])(obj, a1, 0, 0);
-    unsigned* out = (unsigned*)a2;
-    if (out) *out = (r != 0) ? a1 : 0;
-}
 // @ 0x00925C20
 void FUN_00925c20(unsigned a1, int a2) {
     void* obj = *(void**)(a2 + 4);
