@@ -41,18 +41,21 @@ struct Stopwatch {
             }
         }
     }
-    __forceinline void RestartIfRunning()
+    // Returns the new total elapsed time (always 0), one return per arm; the
+    // QueryPerformanceCounter scratch is the caller's dead cycles slot.
+    __forceinline int RestartIfRunning(__int64* scratch)
     {
-        if (mnStartTime == 0) {
-            mnStartTime = 0;
-        } else if (mnUnits == 1) {
-            mnStartTime = __rdtsc();
-        } else {
-            __int64 t;
-            QueryPerformanceCounter(&t);
-            mnStartTime = t;
+        if (mnStartTime != 0) {
+            if (mnUnits == 1) {
+                mnStartTime = __rdtsc();
+                return 0;
+            }
+            QueryPerformanceCounter(scratch);
+            mnStartTime = (unsigned __int64)*scratch;
+            return 0;
         }
-        mnTotalElapsedTime = 0;
+        mnStartTime = 0;
+        return 0;
     }
     __forceinline void Restart()
     {
@@ -216,7 +219,9 @@ void cGameTimeManager::Serialize(void* stream)
         fistp qword ptr [d]
     }
     mBaseTimeElapsed += d;
-    sBaseTimer.RestartIfRunning();
+    // RestartIfRunning inlined, reusing d as the QueryPerformanceCounter temp
+    // (retail's QPC temp colours onto the dead cycles slot at [esp+8]).
+    sBaseTimer.mnTotalElapsedTime = (unsigned __int64)sBaseTimer.RestartIfRunning(&d);
     cVarListSerializer ser(this, (const void*)0x01569130, 0x01a80d26);
     ser.Serialize(stream);
 }
