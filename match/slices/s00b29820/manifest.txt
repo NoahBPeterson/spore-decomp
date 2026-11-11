@@ -6,3 +6,4 @@ slices/s00b29820/s00b29820.cpp  ??_GSgElement24@@UAEPAXI@Z  00b2a4b0  /O2 /MD /G
 slices/s00b29820/s00b29820.cpp  ??0SgEntry@@QAE@IIIPAUSgRefObj@@@Z  00b2a620  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b29820/s00b29820.cpp  ??1SgEntry@@QAE@XZ  00b2a650  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b29820/s00b29820.cpp  ?FUN_00b2a6f0@@YGXPAUSgEntry@@@Z  00b2a6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b29820/s00b29820.cpp  ??0SgElement24@@QAE@ABU0@@Z  00b2a460  /O2 /MD /Gy /TP /arch:SSE /fp:fast

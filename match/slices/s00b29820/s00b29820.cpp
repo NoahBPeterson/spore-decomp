@@ -635,7 +635,8 @@ SgElement24* FUN_00b2a400(SgElement24* first, SgElement24* last, SgElement24* ds
 // @ 0x00b2a460
 SgElement24::SgElement24(const SgElement24& o)
 {
-    m20 = 0;
+    // Keep the initial member store after the compiler-generated vtable store.
+    *(volatile int*)&m20 = 0;
     *this = o;
 }
 

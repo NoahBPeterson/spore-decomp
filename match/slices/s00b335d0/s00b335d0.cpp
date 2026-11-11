@@ -103,22 +103,16 @@ void StateObj::FUN_00b33ca0(int a, int b, int c)
 void StateObj::FUN_00b33d00()
 {
     if (mState != (void*)0x1654c00) {
-        typedef void (__thiscall* Fn)(void*);
-        char* vt = *(char**)this;
-        void* fn = *(void**)(vt + 0x14);
         mState = (void*)0x1654c08;
-        ((Fn)fn)(this);
+        s05();
     }
 }
 
 // @ 0x00b33d20
 void StateObj::FUN_00b33d20()
 {
-    typedef void (__thiscall* Fn)(void*);
-    char* vt = *(char**)this;
-    void* fn = *(void**)(vt + 0x18);
     mState = (void*)0x1654c00;
-    ((Fn)fn)(this);
+    s06();
 }
 
 // @ 0x00b33d40

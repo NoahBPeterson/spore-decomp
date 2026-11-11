@@ -682,7 +682,7 @@ void rw::graphics::EmbeddedState::SetMaterialColor(const void* src)
 // @ 0x011eda90
 void* rw::graphics::EmbeddedState::GetMaterialColor()
 {
-    byte b = *(byte*)((char*)this + 8);
+    byte b = (byte)m_softStateDirty;
     char* p = (char*)alignedBase();
     if (b & 2)
         p = *(char**)p;
