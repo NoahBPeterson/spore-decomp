@@ -666,30 +666,33 @@ void cGalaxyGameEntryUIStateMachine::TearDownUI()
 // ---------------------------------------------------------------------------
 // 0x00dee320 : construct the global notify-attack listener
 // ---------------------------------------------------------------------------
-struct cNotifyAttackListener {
-    void* mpVTable;                      // +0x00 (0x0147e618)
-    uint32_t mField04;                   // +0x04
+struct cNotifyAttackListenerBase {
+    void* mpVTable;                      // +0x00
+    uint8_t mFlag04;                     // +0x04, cleared by base constructor
+    uint8_t mPad05[3];
+    cNotifyAttackListenerBase();         // 0x00e00630
+};
+struct cNotifyAttackListener : cNotifyAttackListenerBase {
     uint32_t mField08;                   // +0x08
     uint32_t mField0C;                   // +0x0c
     uint8_t mField10;                    // +0x10
-    uint8_t mPad11[3];                   // +0x11
+    uint8_t mPad11[3];
     uint32_t mField14;                   // +0x14
     cNotifyAttackListener();             // 0x00dee320
 };
 
 extern cNotifyAttackListener* gNotifyListener;   // 0x016a1570
-void __fastcall FUN_00e00630(cNotifyAttackListener* pThis);   // 0x00e00630
 
 // @ 0x00dee320
 cNotifyAttackListener::cNotifyAttackListener()
+    : cNotifyAttackListenerBase()
 {
-    FUN_00e00630(this);
-    *(void* volatile*)&mpVTable = (void*)0x147e618;
+    mpVTable = (void*)0x147e618;
     *(uint32_t volatile*)&mField14 = 0;
-    *(uint32_t volatile*)&mField08 = 0;
-    *(cNotifyAttackListener* volatile*)&gNotifyListener = this;
-    *(uint32_t volatile*)&mField0C = 0;
-    *(uint8_t volatile*)&mField10 = 0;
+    mField08 = 0;
+    gNotifyListener = this;
+    mField0C = 0;
+    mField10 = 0;
 }
 
 // ---------------------------------------------------------------------------
