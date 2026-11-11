@@ -1,4 +1,6 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPWeapons.cpp  ?f00cb4cc0@@YGXPAUVector3@@@Z  00cb4cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Construct@cSpaceDefenseMissileLocomotion@@QAEPAV1@MMPAX@Z  00cb54a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?SP_PathPrefsForTool@@YAHPAUcSPSpaceToolData@@@Z  00cb36e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?Cast@CObj3760@@QAEPAXH@Z  00cb3760  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?Read@CArtilleryProjectileR@@QAE_NPAUIStream@@@Z  00cb3850  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
