@@ -45,7 +45,10 @@ no match). You can run the same check locally (below) before you open the pull r
    Functions nobody has started (0 tries, "no source yet") come first: `task.py <address>` names the new file to
    create for them.
 2. **Read its context.** `.venv/bin/python tools/contrib/task.py 0x00529690` prints its source file, status, compiler
-   flags, retail size, includes and current source.
+   flags, retail size, includes and current source. For a function that others have tried, it also prints every
+   earlier version of its note (what each person tried and how many bytes differed) and links any closed pull
+   request for it: an attempt that was not merged still has its source there, so start from the closest one
+   instead of from scratch.
 3. **Say you are on it.** Open a draft pull request early, titled with the address (`0x00529690: ...`). That is your
    claim: within minutes the function is listed in
    [`claims.txt`](https://raw.githubusercontent.com/NoahBPeterson/spore-decomp/claims/claims.txt) and drops out of
@@ -66,7 +69,15 @@ no match). You can run the same check locally (below) before you open the pull r
    **Code changes are merged only when they add at least one new byte-exact function**; the check fails any other. A
    closer attempt that still differs stays on your machine. What you learned is welcome as a **notes-only** pull request:
    update the function's `nonmatching.txt` line with what you tried, what worked and what still differs, and change
-   nothing else. Close your draft for the function (that releases the claim).
+   nothing else. Close your draft for the function (that releases the claim); its source stays readable in the closed
+   pull request, and `task.py <address>` points the next person to it.
+   **Start the note with one word for why it still differs**, then a colon, so that functions stuck on the same
+   cause can be counted and solved together (a cause that many share becomes a lever in `docs/codegen.md`):
+   `regalloc:` a value is in a different register; `schedule:` the same instructions in a different order;
+   `frame:` stack slots or frame size differ; `inline:` something is inlined (or not) differently;
+   `layout:` a class, member offset or type in the headers looks wrong; `data:` the size, flags or fingerprint
+   the check uses look wrong (open an issue too); `other:` none of these. `task.py --list --category regalloc`
+   lists one group.
 
 Keep experiments (test files, notes, listings) in `work/scratch/`: `work/` is ignored by git, so nothing there ends
 up in your pull request by accident.

@@ -20,6 +20,12 @@ pull request works on (refreshed when a pull request changes, and every 30 minut
 titled with the address, and your function drops out of everybody else's list. A claim with no update for 7 days is
 stale and shows again.
 
+For a function that is not byte-exact yet, task.py <va> also prints every earlier version of its note from git history
+and the closed, unmerged pull requests titled with its address (one public GitHub search, cached a day in work/).
+
+--category WORD (with --list): only functions whose note starts with that word and a colon (regalloc, schedule, frame,
+inline, layout, data, other: why the function still differs, see AGENTS.md step 6).
+
 "Tries" is how many times the function's nonmatching.txt note has been written or rewritten, counted from git history
 (each failed attempt updates the note). It is an estimate: bulk tooling edits count too. A shallow clone has no
 history, so tries are unknown and the list falls back to size order.
@@ -192,6 +198,66 @@ def tries():
     return dict(out)
 
 
+NOTE_PATHS = ("match/slices/*/nonmatching.txt", "match/slices/*/partial.txt",
+              "src/game/**/nonmatching.txt", "src/game/**/partial.txt")
+# The first word of a note, when it is one of these followed by a colon, says why the function still differs (AGENTS.md).
+CATEGORIES = ("regalloc", "schedule", "frame", "inline", "layout", "data", "other")
+
+
+def history(va):
+    """Every version of the function's nonmatching.txt / partial.txt note, oldest first:
+    [(date, short commit, pull request number or None, differing bytes, note text)].  A move with unchanged text
+    (a migration) is listed once.  [] without git history (shallow clone)."""
+    r = subprocess.run(["git", "log", "-i", "-G", "^%08x" % va, "--reverse", "--date=short",
+                        "--format=tformat:C %h %ad %s", "-p", "--unified=0", "--no-renames", "--", *NOTE_PATHS],
+                       cwd=ROOT, capture_output=True, text=True)
+    out, head = [], None
+    row = re.compile(r"\+%08x\s+(\S*)\s*(.*)" % va, re.I)
+    for line in r.stdout.splitlines():
+        if line.startswith("C "):
+            head = line.split(" ", 3)
+            continue
+        m = row.match(line)
+        if m and head and not (out and out[-1][3:] == (m.group(1), m.group(2).strip())):
+            pr = re.search(r"\(#(\d+)\)\s*$", head[3] if len(head) > 3 else "")
+            out.append((head[2], head[1], int(pr.group(1)) if pr else None, m.group(1), m.group(2).strip()))
+    return out
+
+
+def closed_attempts(va):
+    """Closed, unmerged pull requests titled with the address: [(number, author, closed 'YYYY-MM-DD', title)].
+    Their source was not merged (code merges only with a byte-exact function), so this is where the closest earlier
+    attempt can be read.  Asks GitHub's public search once, cached a day in work/; [] when offline."""
+    cache = os.path.join(ROOT, "work", "task_closed_%08x.json" % va)
+    if os.path.exists(cache) and time.time() - os.path.getmtime(cache) < 86400:
+        try:
+            return [tuple(x) for x in json.load(open(cache))]
+        except (OSError, ValueError):
+            pass
+    url = ("https://api.github.com/search/issues?per_page=20&q=repo:NoahBPeterson/spore-decomp+is:pr+is:closed"
+           "+is:unmerged+in:title+0x%08x" % va)
+    try:
+        req = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json", "User-Agent": "task.py"})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            items = json.load(r).get("items", [])
+    except Exception:
+        return []
+    out = [(i["number"], i["user"]["login"], (i.get("closed_at") or "")[:10], i["title"]) for i in items
+           if ("%08x" % va) in i["title"].lower()]
+    out.sort()
+    try:
+        os.makedirs(os.path.dirname(cache), exist_ok=True)
+        json.dump(out, open(cache, "w"))
+    except OSError:
+        pass
+    return out
+
+
+def category(reason):
+    m = re.match(r"\s*([a-z]+):", reason or "")
+    return m.group(1) if m and m.group(1) in CATEGORIES else None
+
+
 def ndiff(diff):
     """the differing-byte count of a nonmatching row ('12', '~12', '12?'), or None; 0 is a placeholder (305 rows
     such as 'havok-equivalent' were never measured), so it counts as unknown"""
@@ -281,6 +347,7 @@ def main():
     ap.add_argument("--by", choices=("tries", "diff", "size"), default="tries")
     ap.add_argument("--seed", help="your own shuffle within each band (default: your git name and email)")
     ap.add_argument("--show-claimed", action="store_true", help="also list functions in open pull requests")
+    ap.add_argument("--category", choices=CATEGORIES, help="with --list: only notes that start with this word")
     a = ap.parse_args()
     if a.list:
         skip, have = blocked(), marked()
@@ -289,6 +356,8 @@ def main():
         work = open_work(a.max_size)
         seen = {r[1] for r in work}
         rows = [r for r in work + [r for r in never_tried(a.max_size) if r[1] not in seen] if r[1] not in skip]
+        if a.category:
+            rows = [r for r in rows if category(r[4]) == a.category]
         big = 1 << 30
         nd = lambda r: ndiff(r[2]) if ndiff(r[2]) is not None else big
         tr = tries() if a.by == "tries" else None
@@ -353,6 +422,18 @@ def main():
     print("source     %s   (object %s)" % (os.path.relpath(src, ROOT), ident))
     print("status     %s%s" % (st, "\n           " + note[:300] if note else ""))
     print("flags      %s   (from %s)" % (" ".join(flags), how))
+    if st != "byte-exact":
+        hist = history(va)
+        if len(hist) > 1:
+            print("earlier notes (oldest first; the last is the current one):")
+            for date, sha, pr, diff, text in hist:
+                print("  %s %-9s %4s  %s" % (date, "#%d" % pr if pr else sha, diff if ndiff(diff) else "-", text[:600]))
+        att = closed_attempts(va)
+        if att:
+            print("closed attempts (not merged; their source is the closest earlier try, read it before starting over):")
+            for num, who, when, title in att:
+                print("  #%d by %s, closed %s: %s\n      https://github.com/NoahBPeterson/spore-decomp/pull/%d/files"
+                      % (num, who, when, title[:90], num))
     incs = re.findall(r'(?m)^\s*#\s*include\s*([<"][^">]+[">])', open(src, errors="replace").read())
     print("includes   %s" % (" ".join(incs) or "none"))
     print("\n----- current source -----\n%s\n--------------------------\n" % body(src, va))
