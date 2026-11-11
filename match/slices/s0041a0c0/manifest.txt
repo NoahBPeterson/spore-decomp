@@ -1,1 +1,2 @@
-slices/s0041a0c0/s0041a0c0.cpp  Destroy@D  0041a9f0  /Od /Ob1 /MD /Gy /TP /GS-
+slices/s0041a0c0/s0041a0c0.cpp  ?Destroy@D@@UAEPAXI@Z  0041a9f0  /Od /Ob1 /MD /Gy /TP /GS-
+slices/s0041a0c0/s0041a0c0.cpp  ??0D@@QAE@XZ  0041a980  /Od /Ob1 /MD /Gy /TP /GS-

@@ -2,26 +2,30 @@
 // Editor / creature-ability "bake sprites" support. Built /Od /Ob1 /MD /Gy /TP /GS- (no EH).
 extern "C" long _InterlockedExchange(long volatile*, long);
 #pragma intrinsic(_InterlockedExchange)
-void __fastcall MemberInit(void* m);   // 0x0041d3c0
+void* __fastcall MemberInit(void* m);   // 0x0041d3c0
 void __fastcall MemberDtor(void* m);   // 0x004b5440
 void __cdecl Dealloc(void*);           // 0x00f47380 EASTL_allocator_deallocate
 extern void* vtEditorResource[];       // 0x013eb938
 extern void* vtAbility[];              // 0x013ef094
 
-struct P { virtual void p0(); };
-struct A : P { virtual void p0(); };
+struct P { virtual int AddRef() = 0; virtual int Release() = 0; virtual void* Destroy(unsigned flags); /* 0x00517400 */ };
+struct A : P {};
 struct RefCount { long rc; RefCount() { _InterlockedExchange(&rc, 0); } };
-struct Ability { virtual void a0(); RefCount rc; };
+struct Ability { virtual void* Destroy(unsigned flags); /* 0x0041d780 */ RefCount rc; };
 // Editor bake-sprites ability object (0xc4 bytes), allocated under the tag "Editor".
 struct D : A, Ability {
     char member[0xb8];
     D();
-    D* Destroy(unsigned flags);
+    virtual int AddRef();   // 0x00461290
+    virtual int Release();  // 0x00472970
+    virtual void* Destroy(unsigned flags);
+    virtual int Handle(void* argument);  // 0x00561150
 };
+template<int N> inline void ReserveFrame(){ uint32_t frame[N]; }
 // @ 0x0041a980
-D::D() { uint32_t t; (void)t; MemberInit(member); }
+D::D() { ReserveFrame<1>(); MemberInit(member); }
 // @ 0x0041a9f0
-D* D::Destroy(unsigned flags) {
+void* D::Destroy(unsigned flags) {
     uint32_t t[5]; (void)t;
     MemberDtor(member);
     *(void***)((char*)this + 4) = vtAbility;
