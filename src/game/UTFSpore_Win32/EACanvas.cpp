@@ -232,7 +232,7 @@ virtual void v14();
     void SetSystemCursorPosition(unsigned short x, unsigned short y);  // 0x00847f10 (Canvas::SetSystemCursorPosition)
     void SetSystemCursorShape(LPARAM shape);  // 0x00847f40 (Canvas::SetSystemCursorShape)
     bool Shutdown();  // 0x00848020 (Canvas::Shutdown)
-    void GetMinClientArea(unsigned* out);  // 0x00848100 (Canvas::GetMinClientArea)
+    unsigned* GetMinClientArea(unsigned* out);  // 0x00848100 (Canvas::GetMinClientArea)
     void SetMinClientArea(unsigned w, unsigned h);  // 0x00848120 (Canvas::SetMinClientArea)
     void GetClientArea(long* out);  // 0x00848190 (Canvas::GetClientArea)
 };
@@ -727,10 +727,11 @@ bool Canvas_s0084_7200::Shutdown()
 }
 
 // @ 0x00848100
-void Canvas_s0084_7200::GetMinClientArea(unsigned* __restrict out)
+unsigned* Canvas_s0084_7200::GetMinClientArea(unsigned* __restrict out)
 {
     out[0] = mnMinWidth;
     out[1] = mnMinHeight;
+    return out;
 }
 
 // @ 0x00848120
