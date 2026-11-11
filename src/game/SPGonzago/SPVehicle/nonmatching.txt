@@ -10,5 +10,5 @@
 00c9fc60
 00c9fd40
 00c9fdc0
-00c9fe40 128 vs 152. switch(0/1/2) emits retail's three `sub eax` steps. this stays in edi and the continent index in ebx; retail keeps this in ebx.
+00c9fe40
 00c9fee0
