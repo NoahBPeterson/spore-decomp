@@ -487,8 +487,8 @@ bool EA::Sockets::Socket::IsWaitingDataAvailable(unsigned int timeout)
         ptv = &tv;
     }
     FdSet rd;
-    rd.fd_count = 1;
     rd.fd_array[0] = *(unsigned*)((char*)this + 4);
+    rd.fd_count = 1;
     int r = select(1, &rd, 0, 0, ptv);
     if (r == -1) {
         REPORT_ERROR(this);
@@ -508,8 +508,8 @@ bool EA::Sockets::Socket::IsWritable(unsigned int timeout)
         ptv = &tv;
     }
     FdSet wr;
-    wr.fd_count = 1;
     wr.fd_array[0] = *(unsigned*)((char*)this + 4);
+    wr.fd_count = 1;
     int r = select(1, 0, &wr, 0, ptv);
     if (r == -1) {
         REPORT_ERROR(this);

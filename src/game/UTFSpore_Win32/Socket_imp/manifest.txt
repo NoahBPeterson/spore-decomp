@@ -43,3 +43,5 @@
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?WriteToPeer@ISocket@@QAEHPBXHH@Z  0094e960  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ??0StreamSocketBase@@QAE@XZ  0094e9a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Socket_imp.cpp  ?RefCount_AddRef_M4@@YIHPAH@Z  0094ea80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?IsWaitingDataAvailable@Socket@Sockets@EA@@UAE_NI@Z  0094d690  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Socket_imp.cpp  ?IsWritable@Socket@Sockets@EA@@UAE_NI@Z  0094d730  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
