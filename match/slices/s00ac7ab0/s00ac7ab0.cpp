@@ -2,6 +2,8 @@
 // adapters, Gonzago/tribe subsystem bits.  (no PDB names)
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 typedef unsigned int   uint32;
 typedef unsigned short uint16;
@@ -308,20 +310,25 @@ void COrder::FUN_00ac7f80()
 }
 
 // ===========================================================================
-// @ 0x00ac7fe0
 // ===========================================================================
 struct GonzagoSub {
-    virtual void g00(); virtual void g04(); virtual void g08(); virtual void g0c();
+    virtual int AddRef(); virtual int Release(); virtual void g08(); virtual void g0c();
     virtual void g10(); virtual void g14(); virtual void g18(); virtual void g1c();
+    void* mpRefCountVtbl;  // +0x04
+    uint32 pad08[(0x1c - 0x08) / 4];
+    GonzagoSub* mpObject1c;  // +0x1c
     void* scalarDtor(byte flags);
 };
 extern "C" void SP_cGonzagoSubsystem_dtor(void* p);       // 0xb5b9a0
+// @ 0x00ac7fe0
 void* GonzagoSub::scalarDtor(byte flags)
 {
     *(void**)this = (void*)0x1459fc8;
-    *((void**)this + 1) = (void*)0x1459fc0;
-    GonzagoSub* p = *(GonzagoSub**)((char*)this + 0x1c);
-    if (p) p->g04();
+    mpRefCountVtbl = (void*)0x1459fc0;
+    _ReadWriteBarrier();
+    GonzagoSub* p = mpObject1c;
+    if (p) p->Release();
+    // The base destructor takes only the receiver in ECX.
     (*((void (__thiscall*)(void*))SP_cGonzagoSubsystem_dtor))(this);
     if (flags & 1) operator_delete(this);
     return this;
