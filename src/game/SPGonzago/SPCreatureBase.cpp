@@ -3141,27 +3141,30 @@ bool __fastcall FUN_00c0b000(CB* self)
 // @ 0x00c0b030
 int* __cdecl FUN_00c0b030(int* stream, char* data)
 {
+  // retail keeps the double temp in the 8-byte frame slot; the float and bool temps
+  // share one 4-byte temp (float and bool bytes at the same address).
   void* inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
   double v = *(double*)(data + 8);
   void* s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
   WriteUint64(s, &v, 1, 0);
 
   inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  float u = *(float*)(data + 4);
+  union { float f; bool b; } u;
+  u.f = *(float*)(data + 4);
   s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
-  WriteUint32(s, &u, 1, 0);
+  WriteUint32(s, &u.f, 1, 0);
 
   inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
   char b0 = *data;                 // kept across the vcall (ebx in the retail build)
   s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
-  bool b = b0 != 0;
-  StreamWriteBool(s, &b, 1);
+  u.b = b0 != 0;
+  StreamWriteBool(s, &u.b, 1);
 
   inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
   char b1 = data[1];                // kept across the vcall (ebx in the retail build)
   s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
-  b = b1 != 0;
-  StreamWriteBool(s, &b, 1);
+  u.b = b1 != 0;
+  StreamWriteBool(s, &u.b, 1);
   return stream;
 }
 
