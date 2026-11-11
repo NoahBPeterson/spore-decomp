@@ -1,6 +1,5 @@
 010e6530 0 havok-equivalent
 010e67d0 0 havok-equivalent
-010e6810 0 havok-equivalent
 010e6850 0 havok-equivalent
 010e6910 0 havok-equivalent
 010e6a30 0 havok-equivalent
