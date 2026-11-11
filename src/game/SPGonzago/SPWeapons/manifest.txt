@@ -43,3 +43,4 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb63c0@@YAEPAX@Z  00cb63c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb63e0@@YAXPAX@Z  00cb63e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb64c0@@YAEPAX@Z  00cb64c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb64e0@@YAXPAX@Z  00cb64e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

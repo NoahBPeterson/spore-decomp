@@ -13,3 +13,4 @@ slices/s01065c30/s01065c30.cpp  ?f@T6120@@QAEPAXI@Z  01066120  /O2 /MD /Gy /TP /
 slices/s01065c30/s01065c30.cpp  ?FUN_01066150@@YGHH@Z  01066150  /O2 /MD /Gy /TP /arch:SSE
 slices/s01065c30/s01065c30.cpp  ?FUN_010665f0@@YGXH@Z  010665f0  /O2 /MD /Gy /TP /arch:SSE
 slices/s01065c30/s01065c30.cpp  ?set@T6610@@QAEXHH@Z  01066610  /O2 /MD /Gy /TP /arch:SSE
+slices/s01065c30/s01065c30.cpp  ?init@CmdCtor@@QAEPAU1@PAUSPUISpace@@I@Z  010665c0  /O2 /MD /Gy /TP

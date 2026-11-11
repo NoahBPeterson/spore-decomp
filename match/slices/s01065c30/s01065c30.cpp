@@ -559,27 +559,29 @@ bool CmdDeleteCargo::Run() {
 }
 
 // ===========================================================================
-// @ 0x010665c0
+// Command-state initializer.
 // ===========================================================================
 struct CmdCtor {
-    void* mVtbl;      // +0x00
-    int   m04;        // +0x04
-    volatile int   m08;        // +0x08
-    volatile int   m0c;        // +0x0c
-    volatile int   m10;        // +0x10
-    volatile int   m14;        // +0x14
-    volatile int   m18;        // +0x18
-    CmdCtor* init(int a, int b);
+    void* mVtbl;                    // +0x00
+    int m04;                        // +0x04, untouched by this initializer
+    IRefCounted* mpItem08;           // +0x08
+    uint mDialogResult0c;            // +0x0c, pending dialog/button result
+    uint mWindowID10;                // +0x10
+    SPUISpace* mpSpace14;            // +0x14
+    int mState18;                    // +0x18
+    CmdCtor* init(SPUISpace* space, uint windowID);
 };
-CmdCtor* CmdCtor::init(int a, int b) {
+// @ 0x010665c0
+CmdCtor* CmdCtor::init(SPUISpace* space, uint windowID) {
     int zero = 0;
     CmdCtor* p = this;
     p->mVtbl = (void*)0x149c1f0;
-    p->m08 = zero;
-    p->m14 = a;
-    p->m10 = b;
-    p->m0c = 0x1510d07;
-    p->m18 = zero;
+    p->mpItem08 = 0;
+    // Retain the native store order without qualifying the other fields.
+    *(SPUISpace* volatile*)&p->mpSpace14 = space;
+    p->mWindowID10 = windowID;
+    p->mDialogResult0c = 0x1510d07;
+    p->mState18 = zero;
     return p;
 }
 
