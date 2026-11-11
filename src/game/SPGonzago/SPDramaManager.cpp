@@ -728,7 +728,7 @@ namespace SP {
 class cDramaSlotHolder {
 public:
     cDramaRefObj** FUN_00d4eb30(cDramaRefObj*** ppOutSlot); // 0x00d4eb30
-    void           FUN_00d4e8e0(cDramaRefObj*** ppOutSlot); // 0x00d4e8e0
+    int            FUN_00d4e8e0(cDramaRefObj*** ppOutSlot); // 0x00d4e8e0
 };
 }
 namespace SP {
@@ -2816,10 +2816,39 @@ void __cdecl FUN_00d4e4a0()
 {
 }
 
+struct SlotNode {
+    unsigned key;
+    SP::cDramaRefObj* obj;
+};
+struct SlotView {
+    SlotNode* mpBegin;
+    SlotNode* mpEnd;
+    char pad[0x14 - 8];
+    unsigned char mSorted;
+};
+SlotNode* __cdecl SlotLower(SlotNode* begin, SlotNode* end, unsigned* key, int sorted); // 0x00d01260
+void __cdecl SlotMove(SlotNode* src, SlotNode* end, SlotNode* dest); // 0x00a35070
+
 // @ 0x00d4e8e0
-__declspec(noinline) void __thiscall SP::cDramaSlotHolder::FUN_00d4e8e0(SP::cDramaRefObj*** ppOutSlot)
+// Closest attempt, 111 bytes, the retail size. Reloading mpEnd keeps the second compare
+// but leaves this in esi and the key in edi, so both calls sit at the wrong offsets.
+int __thiscall SP::cDramaSlotHolder::FUN_00d4e8e0(SP::cDramaRefObj*** ppOutSlot)
 {
-    *ppOutSlot = 0;
+    SlotView* self = (SlotView*)this;
+    unsigned* key = (unsigned*)ppOutSlot;
+    SlotNode* it = SlotLower(self->mpBegin, self->mpEnd, key, self->mSorted);
+    SlotNode* next = (SlotNode*)((char*)it + sizeof(SlotNode));
+    if (it == self->mpEnd || *key < it->key || it == next)
+        it = self->mpEnd;
+    if (it == self->mpEnd)
+        return 0;
+    if (it + 1 < self->mpEnd)
+        SlotMove(it + 1, self->mpEnd, it);
+    self->mpEnd -= 1;
+    SP::cDramaRefObj* p = self->mpEnd->obj;
+    if (p)
+        p->Release();
+    return 1;
 }
 
 // @ 0x00d4e950
