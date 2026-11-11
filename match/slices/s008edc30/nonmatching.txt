@@ -15,7 +15,6 @@
 008ee720   18  RenderingContext::SubStyleSet (this+4): Typesetter::AddLineBreak member call now gives the `mov eax,[esp+8]/mov edx,[esp+4]` pair, but cl still drops the dead leading arguments (0,0) and elides the trailing `ret 8` (21 vs 25); ret-immediate rewriting is not steerable from source
 008ee740   32  RenderingContext::SubStyleSetValue (this+4): complete; cl cannot be made to evaluate the unused `this+4` argument (the original's `add ecx,4` before ScrollAppGet) and elides `ret 4`
 008ee770   30  RenderingContext::SubStyleGet (this+4): complete; same missing `add ecx,4`; the original also does `add eax,0xf8` and a separate `[eax+0x244]` reload that cl folds to `[eax+0x33c]`
-008ee7a0    2  RenderingContext::ReleaseScroll: complete and same 9-byte size; cl loads the vtable-slot target into edx instead of eax (`mov eax,[eax+4]; jmp eax`). Tried: a real virtual call through a stand-in vtable class (void/int/1-arg), member-pointer fetch, a plain function-pointer local from vtbl[1], a cdecl two-register chain, named locals and single-expression casts -- always edx
 008ee7b0    8  RenderingContext::ScrollViewport: complete and correct; cl just assigns the base-pair additions to the other xmm register
 008ee810  161  RenderingContext::RenderingContext (from rects): complete; base ctor + field inits match, cl orders the fills differently (177 vs 173)
 008ee8c0  176  RenderingContext::RenderingContext (copy): complete; field copy order differs (197 vs 195)
