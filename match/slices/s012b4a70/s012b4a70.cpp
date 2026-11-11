@@ -37,6 +37,11 @@ struct Matrix3 {
 
 // ---- globals referenced by name ---------------------------------------------
 extern float DAT_01485720;                  // 0x01485720  common "1.0" scale
+struct DefaultVector3_s012b4a70 {
+    float x, y, z;
+    DefaultVector3_s012b4a70* Self();         // 0x00572590, returns this
+};
+extern DefaultVector3_s012b4a70 g_DefaultVector_0164b298; // 0x0164b298
 extern float DAT_014853e0;                  // 0x014853e0  reciprocal scale
 extern float DAT_01471064;                  // 0x01471064
 
@@ -456,12 +461,12 @@ void __cdecl SetColor_3()
 // @ 0x012f6270
 void __cdecl SetColor_4()
 {
-    ((UintArray*)0x0164b298)->Self();
+    g_DefaultVector_0164b298.Self();
     float zero4 = 0.0f;
-    *(float*)0x0164b298 = zero4;
+    g_DefaultVector_0164b298.x = zero4;
     float one4 = DAT_01485720;
-    *(float*)0x0164b29c = one4;
-    *(float*)0x0164b2a0 = zero4;
+    g_DefaultVector_0164b298.y = one4;
+    g_DefaultVector_0164b298.z = zero4;
 }
 
 // @ 0x012f62a0
