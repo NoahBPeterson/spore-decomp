@@ -275,29 +275,28 @@ void* CStub::FUN_00c9f1e0()
 }
 
 // ===========================================================================
+// Closest attempt. Same size as retail: the counted loop, the alignment
+// nop and the reloaded element all match. this stays in ebx and the count
+// in edi; retail keeps this in edi and the count in ebx, which also swaps
+// the SIB order. That register choice is not source-controllable.
 // @ 0x00c9f250
-// ===========================================================================
 int CStub::FUN_00c9f250()
 {
-    int n = (*(int*)((char*)this + 0xc68) - *(int*)((char*)this + 0xc64)) >> 4;
+    char* self = (char*)this;
+    int n = (*(int*)(self + 0xc68) - *(int*)(self + 0xc64)) >> 4;
     if (n > 0) {
         int off = 0;
         int cnt = n;
         do {
-            void* e = *(void**)(*(int*)((char*)this + 0xc64) + off);
-            if (((RefStub*)e)->FUN_0104bd50()) {
-                void* r = FUN_00b3d390(e);
-                ((RefStub*)r)->FUN_0104fa90();
-            }
+            if ((*(RefStub**)(*(int*)(self + 0xc64) + off))->FUN_0104bd50())
+                ((RefStub*)FUN_00b3d390(*(void**)(*(int*)(self + 0xc64) + off)))->FUN_0104fa90();
             off += 0x10;
             --cnt;
         } while (cnt != 0);
     }
-    void* p = *(void**)((char*)this + 0xb60);
-    if (p != 0 && ((RefStub*)p)->FUN_0104bd50()) {
-        void* r = FUN_00b3d390(*(void**)((char*)this + 0xb60));
-        ((RefStub*)r)->FUN_0104fa90();
-    }
+    if (*(RefStub**)(self + 0xb60) != 0 &&
+        (*(RefStub**)(self + 0xb60))->FUN_0104bd50())
+        ((RefStub*)FUN_00b3d390(*(void**)(self + 0xb60)))->FUN_0104fa90();
     return n;
 }
 
