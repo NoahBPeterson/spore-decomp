@@ -3039,8 +3039,8 @@ void MinimapWin::build_edge_offsets()
 void __stdcall e0e9a0(u32 begin, u32 end)
 {
     if (begin < end) {
-        u32 n = ((end - begin) - 1) / 0x14 + 1;
         char* e = (char*)begin + 0xc;
+        u32 n = ((end - begin) - 1) / 0x14 + 1;
         do {
             void* p1 = *(void**)(e + 4);
             if (p1) Release(p1);
@@ -3266,24 +3266,22 @@ cSPUIMinimapWin_s00e0_f050::~cSPUIMinimapWin_s00e0_f050()
 {
 }
 
-// @ 0x00e0f9c0
-bool __thiscall cSPUIMinimapWin_s00e0_f050::RemoveIcon(uint32_t iconId, int first, int flags)
-{
-    (void)iconId;
-    (void)first;
-    (void)flags;
-    return true;
-}
-
 // @ 0x00e0fb50
 bool __thiscall cSPUIMinimapWin_s00e0_f050::RemoveAllIcons()
 {
     bool ok = true;
     while (mIconCount > 0) {
-        if (ok)
-            ok = RemoveIcon(mpFirstIcon->mIconId, 1, 0);
-        else
-            ok = false;
+        if (!ok)
+            goto failed;
+        const uint32_t* iconId = &mpFirstIcon->mIconId;
+        if (RemoveIcon(*iconId, 1, 0))
+            goto succeeded;
+        goto failed;
+succeeded:
+        ok = true;
+        continue;
+failed:
+        ok = false;
     }
     return ok;
 }
