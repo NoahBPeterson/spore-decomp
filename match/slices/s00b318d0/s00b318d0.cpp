@@ -6,6 +6,7 @@
 #include <xmmintrin.h>
 #include <intrin.h>
 #include <new>
+#pragma intrinsic(_ReadWriteBarrier)
 typedef unsigned int u32;
 
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(__int64*);
@@ -357,11 +358,17 @@ bool cGameTimeManager::TogglePauseGate(unsigned id)
 // @ 0x00b322c0
 void cGameTimeManager::SetTimeFlowRate(float rate)
 {
-    bool wasPaused = (mCachedPauseState & 1) != 0;
+    // Preserve the full cached-state read before extracting the saved pause flag.
+    unsigned pauseState = mCachedPauseState;
+    _ReadWriteBarrier();
+    bool wasPaused = (pauseState & 1) != 0;
     if (wasPaused)
         TogglePauseGate(0x04bf38a8);
-    float f = (float)sBaseTimer.GetElapsedTimeFloat() * sBaseTimer.mfCoeff * mTimeFlowRate;
-    mBaseTimeElapsed += (__int64)f;
+    // Reuse the elapsed-time slot for the rounded count, as in the frame update.
+    __declspec(align(8)) __int64 d = sBaseTimer.GetElapsedTimeFloat();
+    float f = (float)d * sBaseTimer.mfCoeff * mTimeFlowRate;
+    d = X87RoundToInt64(f);
+    mBaseTimeElapsed += d;
     sBaseTimer.Restart();
     mTimeFlowRate = rate;
     AppSystemObj* app = SP_AppSystem();
