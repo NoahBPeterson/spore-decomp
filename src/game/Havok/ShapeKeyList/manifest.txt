@@ -1,0 +1,2 @@
+# source symbol va flags
+../src/game/Havok/ShapeKeyList.cpp  ??0hkShapeKeyList@@QAE@PAUhkShapeContainer@@@Z  01103330  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

@@ -70,6 +70,7 @@ class hkCdPointCollector
 };
 class hkCdBodyPairCollector
 { public:
+	hkCdBodyPairCollector() : m_earlyOut(0) {}
 	virtual void v0();
 	virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);   // slot 1 (+4)
 	char m_earlyOut;                           // +4
@@ -99,7 +100,7 @@ class hkSymmetricAgentFlipCollector : public hkCdPointCollector { public:
 };
 class hkSymmetricAgentFlipBodyCollector : public hkCdBodyPairCollector { public:
 	hkCdBodyPairCollector& m_original;                                    // +8
-	hkSymmetricAgentFlipBodyCollector(hkCdBodyPairCollector& c) : m_original(c) { m_earlyOut = 0; }
+	hkSymmetricAgentFlipBodyCollector(hkCdBodyPairCollector& c) : m_original(c) {}
 	virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);      // 0x010EBC50
 };
 class hkSymmetricAgentFlipCastCollector : public hkCdPointCollector { public:

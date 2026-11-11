@@ -4,3 +4,4 @@ slices/s010a32c0/s010a32c0.cpp  ?getRuntimeInfo@hkSimpleContactConstraintData@@U
 slices/s010a32c0/s010a32c0.cpp  ?hkWorldAgentUtil_invalidateTimOfEntity@@YAXPAUhkEntityPerEntityView@@PAUhkAgentNnEntry@@@Z  010a3890  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
 slices/s010a32c0/s010a32c0.cpp  ?getConstraintInfo@hkMassChangerConstraintData@@UBEXAAUhkConstraintInfo@@@Z  010a3c10  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
 slices/s010a32c0/s010a32c0.cpp  ?getConstraintInfo@hkConstraintData@@UBEXAAUhkConstraintInfo@@@Z  010a3e70  /vc71 /O2 /MD /Gy /TP /GS- /fp:fast
+slices/s010a32c0/s010a32c0.cpp  ??0hkEntityEntityBroadPhaseListener@@QAE@PAVhkWorld@@@Z  010a3760  /vc71 /O2 /MD /Gy /TP /GS-

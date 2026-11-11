@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00ac6b90  47  complete; cGroundLayer ctor (cGonzagoSubsystem base + three vtables + floats + empty embedded vector); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% cov)
-00ac6e20  2  complete; cGroundLayer scalar deleting destructor (vtable-store vs load scheduling tie-break); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (265 valid, 100% cov)
 00ac7680  167  complete; addInterpolated (sqrtf distance + two alpha ramps + push_back/operator=); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (393 valid, 98.4% cov)
 00ac7910  59  complete; ensureContainer (EASTL alloc 0x60/"Simulator" + cGameBundleGroundContainer ctor + vtable swap + vt[10](0)); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (381 valid, 89.1% cov)
 00ac7080  62  complete; clearVec (erase-all; reproduces the divide-by-0x3c negative-count magic); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% cov)

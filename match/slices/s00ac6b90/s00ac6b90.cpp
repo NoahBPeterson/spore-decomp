@@ -276,6 +276,7 @@ void* cGroundLayer::sdtor(uint flags)
     vt0 = VT_1459f50;
     vt4 = VT_1459f4c;
     vt1c = VT_1459f3c;
+    _ReadWriteBarrier();
     cSPTransform* v = vec.mpBegin;
     if (v && *(int*)((char*)v - 4) != 0)
         EA_FREE(v);

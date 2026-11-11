@@ -384,7 +384,7 @@ class hkSymmetricAgentFlipBodyCollector : public hkCdBodyPairCollector { public:
 // @ 0x010ebbb0
 void hkSymmetricAgentFlipCollector::addCdPoint(const hkCdPoint& point)
 {
-	hkCdPoint flipped;
+	__declspec(align(16)) hkCdPoint flipped;
 	flipped.m_cdBodyA = point.m_cdBodyB;
 	flipped.m_cdBodyB = point.m_cdBodyA;
 	flipped.m_contact.setFlipped(point.m_contact);

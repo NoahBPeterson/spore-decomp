@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "ShapeKeyList.h"
 #include <math.h>
 #include <emmintrin.h>
 #include <stddef.h>
@@ -254,11 +255,7 @@ class hkMotionState { public:                                                   
     hkSweptTransform m_sweptTransform;                                       // +0x40
 };
 struct hkSweptTransformUtil { static void lerp2(const hkSweptTransform& swept, float t, hkTransform_s0110_2fc0& out); };
-class hkReferencedObject_s0110_2fc0 { public:
-    virtual void* hkReferencedObject_deletingDtor(unsigned int flags);
-    uint16_t m_memSizeAndFlags;
-    int16_t  m_referenceCount;
-};
+
 class hkMemory { public:
     virtual void* allocate(int nbytes, int memClass);                        // slot 0
     virtual void  deallocate(void* p);                                       // slot 1
@@ -320,21 +317,7 @@ struct hkMoppLongRayVirtualMachine_s0110_2fc0 {
     void   queryRay(const hkVector4_s0110_2fc0* zeroVec, const uint8_t* moppData, const float* fromTo);   // FUN_01102010 (thiscall) 0x01102010
 };
 static const float HK_MOPP_RANGE_SCALE = 1.52587890625e-05f;
-struct hkShapeContainer {
-    // vtable slots used here (hkShapeContainer in the 3.1 shape collection): 7 getNumChildShapes, 8 getFirstKey,
-    // 9 getNextKey, 10 getChildShape
-virtual void c0();
-virtual void c1();
-virtual void c2();
-virtual void c3();
-virtual void c4();
-virtual void c5();
-virtual void c6();
-    virtual int  getNumChildShapes() const;                                      // +0x1c
-    virtual uint32_t getFirstKey() const;                                        // +0x20
-    virtual uint32_t getNextKey(uint32_t oldKey) const;                          // +0x24
-    virtual const struct hkProjShape* getChildShape(uint32_t key, void* buffer512) const;   // +0x28
-};
+
 struct hkProjShape {
 virtual void p0();
 virtual void p1();
@@ -342,12 +325,7 @@ virtual void p2();
 virtual void p3();
     virtual float getMaximumProjection(const hkVector4_s0110_2fc0& direction) const;        // +0x10
 };
-struct hkShapeKeyList : hkReferencedObject_s0110_2fc0 {                                     // vtable 0x014a5dec
-    hkShapeContainer* m_container;                                               // +8
-    int m_numKeys;                                                               // +0xc
-    hkShapeKeyList(hkShapeContainer* container);
-    void fillKeys(uint8_t* out /* stride 0x10 {key, 0, ...} */) const;
-};
+
 #include "MoppSettings.h"
 static void __cdecl MoppCallInitA(hkMoppSettings* self, int preset)
 {
@@ -1755,14 +1733,6 @@ void hkMoppLongRayVirtualMachine_s0110_2fc0::queryLongRay(const hkShapeCollectio
     m_rayInput = input;
     m_hit.m_bool = 0;
     queryRay((const hkVector4_s0110_2fc0*)zeroBits, code->m_data, fromTo);
-}
-
-// @ 0x01103330
-hkShapeKeyList::hkShapeKeyList(hkShapeContainer* container)
-{
-    m_referenceCount = 1;
-    m_container = container;
-    m_numKeys = container->getNumChildShapes();
 }
 
 // @ 0x01103670
