@@ -8,3 +8,4 @@
 ../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?ResetPlayerProgressOnTradeRoute@cSpaceTradeRouteManager@@QAEXIIM@Z  01037eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?GetNumberOfPlayerTradeRoutes@cSpaceTradeRouteManager@@QAEHXZ  01037f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?erase@cTradeRouteTree@@QAEXPAUcRBNodeBase@@@Z  010380b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?Read@cTradeRouteData@@QAE_NPAVcStreamHandle@@@Z  01037b50  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

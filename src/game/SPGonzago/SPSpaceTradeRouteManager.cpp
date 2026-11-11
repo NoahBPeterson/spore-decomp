@@ -193,7 +193,8 @@ bool cTradeRouteData::Read(cStreamHandle* pStream)
     uint32_t nVersion;
     EA_IO_ReadInt32(pRaw, &nVersion, 1, 0);
     cVarListSerializer serializer(this, &gTradeRouteSerializerList, 0x1a80d26);
-    return serializer.SerializeIn(pStream);
+    bool ok = serializer.SerializeIn(pStream) != 0;
+    return ok;
 }
 
 // @ 0x01037bc0
