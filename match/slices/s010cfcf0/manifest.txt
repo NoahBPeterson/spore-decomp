@@ -4,3 +4,4 @@ slices/s010cfcf0/s010cfcf0.cpp  ?FUN_010cfd30@hkAgentWrapper@@QAEXPAX000@Z  010c
 slices/s010cfcf0/s010cfcf0.cpp  ?FUN_010cfdb0@hkAgentWrapper@@QAEPAXE@Z  010cfdb0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s010cfcf0/s010cfcf0.cpp  ?FUN_010d0000@@YIXPAVhkMultiSphereTriangleAgent@@@Z  010d0000  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s010cfcf0/s010cfcf0.cpp  ?FUN_010d0040@hkContactPoint@@QAEXABVhkVector4@@M@Z  010d0040  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s010cfcf0/s010cfcf0.cpp  ?FUN_010cff30@@YAPAXABVhkCdBody@@0ABUhkCollisionInput@@PAVhkContactMgr@@@Z  010cff30  /vc71 /O2 /MD /Gy /TP
