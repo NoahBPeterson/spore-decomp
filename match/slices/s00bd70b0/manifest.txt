@@ -12,3 +12,4 @@ slices/s00bd70b0/s00bd70b0.cpp  ?FUN_00bd7f30@@YIXH@Z  00bd7f30  /O2 /MD /Gy /TP
 slices/s00bd70b0/s00bd70b0.cpp  FUN_00bd7f70  00bd7f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bd70b0/s00bd70b0.cpp  ?FUN_00bd8110@@YAXXZ  00bd8110  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bd70b0/s00bd70b0.cpp  ?FUN_00bd7ea0@@YIXPAD@Z  00bd7ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bd70b0/s00bd70b0.cpp  ?FUN_00bd7ab0@@YIXH@Z  00bd7ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

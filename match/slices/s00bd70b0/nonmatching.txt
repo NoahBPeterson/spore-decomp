@@ -6,7 +6,6 @@
 00bd7640 21  FUN_00bd7640: complete (cheat-message switch over 0x1f40..0x1f4d; two virtual interface queries at +0x120, dispatch to FUN_00bd69d0/6940/7110/68c0, toggle DAT_0168bcf4, forward to FUN_00bd7160). Diff is the jump-table/block layout. difftest WEAK (375 valid, 41.1% coverage).
 00bd7900 67  FUN_00bd7900: complete (reads Sim fields, forwards into trigger/audio). Difftest UNSUPPORTED (0/400 valid: needs a real Sim object; harness faults on read).
 00bd7a10 14  Sim::FUN_00bd7a10: complete (allocate/return scratch object). Only register-allocation mismatch: original holds param_2 in edi and this in esi, mine swaps them. difftest PASS (400 valid, 100.0% coverage).
-00bd7ab0 2   FUN_00bd7ab0: complete (this-adjusting virtual tail thunk: o=*(this-0x38); r=o->m30(this-0x38); tail-call r->vtbl[0x4c/4]). Sole diff is edx vs eax for the function pointer. Tried naming the function pointer, loading it as void*, separate assignment, named final pointer, and recomputing adj; cl always picks eax for the indirect call, original uses edx. Looks like a cl15 register-allocation tie not reachable from expression shape.
 00bd7ca0 45  Sim::FUN_00bd7ca0: complete. Register allocation / block-order mismatch. difftest PASS (400 valid, 100.0% coverage).
 00bd7d10 40  Sim::FUN_00bd7d10: complete. Register allocation / block-order mismatch. difftest PASS (400 valid, 100.0% coverage).
 00bd7d90 88  FUN_00bd7d90: complete (SP_cSPTimer_Restart wrapper). difftest UNSUPPORTED (1 unresolved ref SP_cSPTimer_Restart).
