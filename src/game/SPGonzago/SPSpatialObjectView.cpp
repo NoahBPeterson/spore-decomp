@@ -288,12 +288,13 @@ void cSpatialObjectView::SetIsInWorld(bool b)
     void* p = (void*)VC0(void*, this, 0x2c);
     if (p == 0)
         return;
-    typedef void (__thiscall* Fn)(void*, int);
-    Fn fn = (Fn)VF(p, 0x16c);
-    if (b)
-        fn(p, 1);
-    else
-        fn(p, 0);
+    if (b) {
+        void** slot0 = *(void***)*(void**)p;
+        ((void (__stdcall*)(void*, int))slot0[0x16c / 4])(p, 1);
+    } else {
+        void** slot0 = *(void***)*(void**)p;
+        ((void (__stdcall*)(void*, int))slot0[0x16c / 4])(p, 0);
+    }
 }
 
 // @ 0x00e92660
