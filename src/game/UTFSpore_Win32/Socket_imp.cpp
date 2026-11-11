@@ -447,7 +447,6 @@ bool Socket::SetPeerAddressRaw(const void* a)
 int EA::Sockets::Socket::GetWaitingDataSize(unsigned int timeout)
 {
     unsigned long avail = 0xffffffffu;
-    unsigned h = *(unsigned*)((char*)this + 4);
 
     if (timeout != 0) {
         TimeVal tv;
@@ -458,8 +457,9 @@ int EA::Sockets::Socket::GetWaitingDataSize(unsigned int timeout)
             ptv = &tv;
         }
         FdSet rd;
-        rd.fd_count = 1;
+        unsigned h = *(unsigned*)((char*)this + 4);
         rd.fd_array[0] = h;
+        rd.fd_count = 1;
         int r = select(1, &rd, 0, 0, ptv);
         if (r == -1) {
             REPORT_ERROR(this);
@@ -468,7 +468,7 @@ int EA::Sockets::Socket::GetWaitingDataSize(unsigned int timeout)
         if (r == 0)
             return 0;
     }
-    if (ioctlsocket(h, 0x4004667f, &avail) != 0) {
+    if (ioctlsocket(*(unsigned*)((char*)this + 4), 0x4004667f, &avail) != 0) {
         avail = 0;
         REPORT_ERROR(this);
         return -1;
