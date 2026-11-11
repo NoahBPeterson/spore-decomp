@@ -84,8 +84,9 @@ class IWinGrid { public:
     PV(20); PV(21); PV(22); PV(23); PV(24); PV(25); PV(26); PV(27);
     PV(28); PV(29);
     virtual void ScrollCellsVertically(int nCells);               // +0x078  slot 30
-    virtual void ScrollCellsHorizontally(int nCells);             // +0x07c  slot 31
-    PV(32); PV(33);
+    virtual bool ScrollCellsHorizontally(int nCells);             // +0x07c  slot 31
+    PV(32);
+    virtual bool ScrollPagesHorizontally(int nPages);              // +0x084  slot 33
     virtual void ScrollToColumn(int col);                         // +0x088  slot 34
     virtual void ScrollToRow(int row);                            // +0x08c  slot 35
     PV(36); PV(37); PV(38); PV(39); PV(40); PV(41); PV(42); PV(43); PV(44);
@@ -157,7 +158,6 @@ class IWinGrid { public:
     void  SetOutlineUse(int iUse, int iColor);
     int   PauseRecalculations(bool bPause);
     void  ScrollPagesVertically(int nPages);
-    void  ScrollPagesHorizontally(int nPages);
     void  ScrollToCell(int col, int row);
     bool  GetSelectionRules(int* pRule, int* pMaxCount);
     bool  SetSelectionRules(int rule, int maxCount);
@@ -328,9 +328,9 @@ void IWinGrid::ScrollPagesVertically(int nPages)
 // 0x970760 IWinGrid::ScrollPagesHorizontally
 // ===========================================================================
 // @ 0x00970760
-void IWinGrid::ScrollPagesHorizontally(int nPages)
+bool IWinGrid::ScrollPagesHorizontally(int nPages)
 {
-    ScrollCellsHorizontally(nPages * 4);
+    return ScrollCellsHorizontally(nPages * 4);
 }
 
 // ===========================================================================
