@@ -83,7 +83,13 @@ public:
 };
 
 class hkStatisticsCollector;
-class hkReferencedObject
+class hkBaseObject
+{
+public:
+	virtual ~hkBaseObject() {} // one-slot primary base
+};
+
+class hkReferencedObject : public hkBaseObject
 {
 public:
 	virtual ~hkReferencedObject() {}                                     // 0
