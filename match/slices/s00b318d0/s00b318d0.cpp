@@ -192,16 +192,30 @@ struct cGameTimeManager : cGonzagoSubsystem {
 // @ 0x00b31a90
 void cGameTimeManager::UpdateTimeAtStartOfFrame()
 {
-    float f = (float)sBaseTimer.GetElapsedTimeFloat() * sBaseTimer.mfCoeff * mTimeFlowRate;
-    __int64 d = (__int64)f;
+    // d holds the raw cycle count first, then the rounded millisecond count;
+    // the fistp is round-half-to-even, a C cast would go through __ftol2
+    // (truncating), so the conversion is written out.
+    __declspec(align(8)) __int64 d = sBaseTimer.GetElapsedTimeFloat();
+    float f = (float)d * sBaseTimer.mfCoeff * mTimeFlowRate;
+    __asm {
+        fld dword ptr [f]
+        fistp qword ptr [d]
+    }
     mTimeAtStartOfFrame = mBaseTimeElapsed + d;
 }
 
 // @ 0x00b31ae0
 void cGameTimeManager::Serialize(void* stream)
 {
-    float f = (float)sBaseTimer.GetElapsedTimeFloat() * sBaseTimer.mfCoeff * mTimeFlowRate;
-    mBaseTimeElapsed += (__int64)f;
+    // d holds the raw cycle count first, then the rounded count (fistp is
+    // round-half-to-even; a C cast would go through __ftol2, truncating).
+    __declspec(align(8)) __int64 d = sBaseTimer.GetElapsedTimeFloat();
+    float f = (float)d * sBaseTimer.mfCoeff * mTimeFlowRate;
+    __asm {
+        fld dword ptr [f]
+        fistp qword ptr [d]
+    }
+    mBaseTimeElapsed += d;
     sBaseTimer.RestartIfRunning();
     cVarListSerializer ser(this, (const void*)0x01569130, 0x01a80d26);
     ser.Serialize(stream);
