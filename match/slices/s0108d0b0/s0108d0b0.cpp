@@ -100,6 +100,7 @@ class hkContactPointProperties { public:             // 0x14 bytes
 HK_OFFSET_CHECK(chk_props_size, sizeof(hkContactPointProperties) == 0x14);
 
 class hkReferencedObject { public:
+    hkReferencedObject() : m_referenceCount(1) {}
     virtual ~hkReferencedObject() {}
     uint16_t m_memSizeAndFlags;               // +4
     uint16_t m_referenceCount;                // +6
@@ -346,7 +347,8 @@ struct hkSimpleConstraintContactMgr : hkReferencedObject {
     struct Factory : hkReferencedObject {
         hkWorld* m_world;                           // +8
         Factory(hkWorld* world);
-        hkSimpleConstraintContactMgr* createContactMgr(const hkCollidable& a, const hkCollidable& b,
+        virtual void calcStatistics(hkStatisticsCollector* collector) const;
+        virtual hkSimpleConstraintContactMgr* createContactMgr(const hkCollidable& a, const hkCollidable& b,
                                                        const void* input);
     };
 };
@@ -546,10 +548,6 @@ void hkSimpleConstraintContactMgr::processContact(const hkCollidable& a, const h
 // @ 0x0108d850
 hkSimpleConstraintContactMgr::Factory::Factory(hkWorld* world)
 {
-    // Retail: `mov word [eax+6],1; mov dword [eax],<vptr>; mov [eax+8],ecx` -- the vptr store
-    // comes after the reference count, so something between them keeps cl from writing it at
-    // the head of the constructor (see nonmatching.txt).
-    m_referenceCount = 1;
     m_world = world;
 }
 

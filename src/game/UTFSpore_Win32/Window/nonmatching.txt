@@ -19,7 +19,6 @@
 00960f20 169 SetUserData: vcall/IID schedule and bit clear order differ
 00960fe0 330 TestHit: float compare and event-block layout differ (misassigned to SerUpdate slot)
 00961150 211 ScreenToWindow: manager scan / transform schedule differs
-00961260 3 GetId: register order (ecx/eax) around the store differs
 00961280 103 ListRemove: splice helper argument setup and this-adjust differ
 00961300 122 ListInsert: list relink register schedule differs
 009613a0 24 Find60: loop read/increment order differs

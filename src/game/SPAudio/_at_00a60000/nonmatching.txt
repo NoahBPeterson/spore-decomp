@@ -21,7 +21,6 @@
 00a64470 57 AssetSlot::Ctor: 57 diff; compiler reorders the constant-field stores; source order and register (ecx=this) match. Store-scheduling artifact. difftest: PASS.
 00a64560 49 EapdAssetManager::FreeAll: 51 diff; list unlink+free loop matches; MSVC hoists the [cur+4] load ahead of the [cur] load. difftest: UNSUPPORTED (0/400 valid; synthetic list head is unmapped => fault(write)).
 00a645c0 157 EapdAssetManager::RearrangeLists: 201 diff; two circular-list splice loops; original has a longer inlined form. difftest: UNSUPPORTED (0/400 valid; write/fetch faults).
-00a649b0 9 EapdAssetManager::GetTwoWords: 9 diff; original keeps p in ecx and reads [p+0x64] first; MSVC reassigns p to eax in ours. Register-allocation artifact. difftest: PASS.
 00a65f90 27 InstanceManager::Init: pool/map init driver; call arguments re-evaluated early so the three `lea ecx` receivers are not adjacent to their calls ; difftest UNSUPPORTED (0/400 valid inputs; fake-arity faults)
 00a65fe0 96 InstanceManager::FlushAll: bucket-walk release loop; register/iterator caching differs, not selected as best-size symbol ; difftest WEAK (248 valid, 42% cov)
 00a66070 79 InstanceManager::InsertParam: EASTL find-then-insert; key/value locals and sret slot ordering differ ; difftest FAIL (execution)

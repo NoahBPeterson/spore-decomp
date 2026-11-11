@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 0107d740 50 hkThreadMemory::releaseCachedMemory ; equiv PASS (317 valid, 100% cov, no mismatch); /Os size fold emits the original memory-indirect call [edx+0x1c] (55B vs 69B) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
-0107d790 15 hkThreadMemory::removeReference flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 0107d7e0 436 hkThreadMemory constructor (size->class table build): rewritten as a real thiscall ctor with the hkMemory vtable call, maxRows = ok ? stackSize : 0, the two 17-entry row arrays cleared in place, and both class tables (0x00..0x200 per size, 0x400..0x2000 stride 0x400) built with the debugbreak/-1 guard. Equivalence UNSUPPORTED (0/400 valid inputs; fake-arity=399, fault=1). Remaining diff is cl15 vs retail codegen: cl15 loads the no-arg vtable call into edx instead of `call [eax+0x20]`, sign-extends the bool return (`movzx`+`neg eax` vs `neg al`), folds stackSize into `and eax,[esp+0x10]`, emits `sub ecx,1` instead of `dec ecx`, and pads both loop heads with alignment nops (668 vs 653 bytes). flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 0107daa0 92 hkThreadMemory::allocateChunk flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 0107db10 69 hkThreadMemory::deallocateChunk flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
