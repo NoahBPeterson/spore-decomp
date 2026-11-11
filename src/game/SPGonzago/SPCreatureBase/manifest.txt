@@ -51,3 +51,6 @@
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b190@@YA_NPAUcCreatureBase@Simulator@@PAH@Z  00c0b190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b410@@YA_NXZ  00c0b410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?GetStrengthRating@cCreatureBase@Simulator@@QBEHXZ  00c0b8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?CheckTargetD@cCreatureBase@Simulator@@QAE_NPAX@Z  00c0b8a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?CheckTargetC@cCreatureBase@Simulator@@QAE_NPAX@Z  00c0b860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?CheckTargetB@cCreatureBase@Simulator@@QAE_NPAX@Z  00c0b810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
