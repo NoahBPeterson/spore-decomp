@@ -12,7 +12,7 @@ class hkSymmetricAgentFlipCollector : public hkCdPointCollector { public:       
 };
 class hkSymmetricAgentFlipBodyCollector : public hkCdBodyPairCollector { public:     // vtable 0x014a43b4
     hkCdBodyPairCollector& m_original;                                  // +8
-    hkSymmetricAgentFlipBodyCollector(hkCdBodyPairCollector& c) : m_original(c) { m_earlyOut = 0; }
+    hkSymmetricAgentFlipBodyCollector(hkCdBodyPairCollector& c) : m_original(c) {}
     virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);
 };
 class hkSymmetricAgentFlipCastCollector : public hkCdPointCollector { public:        // vtable 0x014a43ac

@@ -110,7 +110,8 @@ class hkCdPointCollector { public:
     float m_earlyOutDistance;                  // +4
 };
 class hkCdBodyPairCollector { public:
-    virtual void v0();
+    hkCdBodyPairCollector() : m_earlyOut(0) {}
+    virtual void* scalarDeletingDtor(unsigned int flags);              // slot 0, 0x010cdca0
     virtual void addCdBodyPair(const hkCdBody& a, const hkCdBody& b);       // slot 1 (+4)
     hkBool m_earlyOut;                         // +4
 };
