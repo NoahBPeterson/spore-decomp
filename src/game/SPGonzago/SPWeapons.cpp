@@ -3345,19 +3345,46 @@ float __fastcall f00cb5050(int self)
     return ((float (__fastcall*)(void*))VT(self)[0xc8 / 4])((void*)self);
 }
 
+// Closest attempt for 0x00cb5090. Same size as retail. The y store
+// `mov [esi+4], ecx` still lands before the z spill; retail spills z first.
+struct StraightLoco {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual Vector3* GetPosition();              // +0x2c
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void SetOrientation(Quaternion* q);  // +0x3c
+    Vector3* GetVelocity();                      // 0x00d20610
+};
+
+extern Vector3 gStraightDir; // 0x0169a9e8
+
 // @ 0x00cb5090
-void f00cb5090(Vector3* self, float unused)
+void __stdcall f00cb5090(Vector3* self)
 {
-    cLocomotiveObject_s00cb_44b0* obj = *(cLocomotiveObject_s00cb_44b0**)((char*)self + 0x14);
-    obj->GetPosition();                                       // vtable +0x2c
-    Vector3* vel = cLocomotiveObject_GetVelocity(obj);
-    self->x = vel->x; self->y = vel->y; self->z = vel->z;
+    StraightLoco* obj = *(StraightLoco**)((char*)self + 0x14);
+    obj->GetPosition();
+    Vector3* vel = (*(StraightLoco**)((char*)self + 0x14))->GetVelocity();
+    Vector3 v;
+    v.x = vel->x;
+    v.y = vel->y;
+    v.z = vel->z;
+    *self = v;
     float len = self->x * self->x + self->y * self->y + self->z * self->z;
     if (len > g_1em3) {
-        Vector3 v; v.x = self->x; v.y = self->y; v.z = self->z;
         Quaternion q;
-        QuaternionFromDirections(&q, (const Vector3*)0x0169a9e8, &v);
-        obj->SetOrientation(&q);
+        (*(StraightLoco**)((char*)self + 0x14))->SetOrientation(
+            QuaternionFromDirections_s00cb_7e50(&q, &gStraightDir, &v));
     }
 }
 
