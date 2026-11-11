@@ -13,20 +13,6 @@ extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(uint32_t index);
 #include <new>
 
 // ---- items of slice s010ef580 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct hkChunk
-{
-    void*    mpVtable;      // +0x00
-    uint32_t mPad04;
-    uint32_t mPad08;
-    uint32_t mPad0c;
-    uint32_t mPad10;
-    uint32_t mPad14;
-    uint32_t mPad18;
-    uint32_t mPad1c;
-    void*    mpData;        // +0x20
-    uint32_t mPad24;
-    int      mSize;         // +0x28
-};
 class hkThreadMemory
 {
 public:
@@ -1929,18 +1915,7 @@ static __forceinline void getPoints_s010f_f9e0(const hkAgent3ProcessInput_s010f_
 }
 // ---- items of slice s010ff9e0 end
 
-// @ 0x010f0120
-void __fastcall hkChunkDestructor(hkChunk* self)
-{
-    self->mpVtable = (void*)0x14a59b4;
-    _ReadWriteBarrier();
-    int size = *(volatile int*)&self->mSize;
-    if (size >= 0) {
-        hkThreadMemory* memory = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
-        memory->deallocateChunk(self->mpData, (uint32_t)self->mSize & 0x3fffffff, 0x14);
-    }
-    self->mpVtable = (void*)0x13ef094;
-}
+// hkMoppCode::~hkMoppCode is in _at_010f0000_cleanup.cpp (VC7.1 companion).
 
 // @ 0x010f01d0
 void __fastcall hkConvexPieceStreamDataDestructor(hkConvexPieceStreamData* self)
