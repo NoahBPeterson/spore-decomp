@@ -3026,24 +3026,22 @@ u32* Median3(u32* a, u32* b, u32* c, cStrCmp comp)
         if (comp(*b, *c)) {
             cStrCmp_Destroy(&comp);
             return b;
-        }
-        if (comp(*a, *c)) {
+        } else if (comp(*a, *c)) {
             cStrCmp_Destroy(&comp);
             return c;
-        }
-        cStrCmp_Destroy(&comp);
-        return a;
-    } else {
-        if (comp(*a, *c)) {
+        } else {
             cStrCmp_Destroy(&comp);
             return a;
         }
-        if (!comp(*b, *c)) {
-            cStrCmp_Destroy(&comp);
-            return b;
-        }
+    } else if (comp(*a, *c)) {
+        cStrCmp_Destroy(&comp);
+        return a;
+    } else if (comp(*b, *c)) {
         cStrCmp_Destroy(&comp);
         return c;
+    } else {
+        cStrCmp_Destroy(&comp);
+        return b;
     }
 }
 
