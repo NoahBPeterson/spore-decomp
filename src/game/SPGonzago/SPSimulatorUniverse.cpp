@@ -502,12 +502,16 @@ struct cGonzagoTimer_s0101_37b0 {
   u32   mD_14;                           // 0x14
   u8    mFlag_18;                        // 0x18
   u32   mE_1c;                           // 0x1c
+  cGonzagoTimer_s0101_37b0();                       // 0x00b63890
   ~cGonzagoTimer_s0101_37b0();                      // 0x00b638b0
+  void Restart();                                   // 0x00bc3130
 };
 struct tGrobShockData_s0101_37b0 {
   u32           mId_00;                  // 0x00
   u32           mField_04;               // 0x04
   cGonzagoTimer_s0101_37b0 mTimer_08;               // 0x08
+  tGrobShockData_s0101_37b0() : mId_00(0), mField_04(0) {}
+  tGrobShockData_s0101_37b0(const tGrobShockData_s0101_37b0&); // 0x01010870
 };
 typedef bool (__cdecl* ShockCompare)(const tGrobShockData_s0101_37b0&, const tGrobShockData_s0101_37b0&);
 struct ShockVec {                        // eastl::vector<tGrobShockData>
@@ -737,12 +741,14 @@ public:
     void AdjustAwareness();  // 0x01014a80 (SP::cSimulatorUniverse::AdjustAwareness)
     void FUN_01015130();
     void OnTick();  // 0x01014e30 (SP::cSimulatorUniverse::OnTick)
+    void StartGrobShock(cStarRecordRef* pRecord, ::cEmpire* pEmpire); // 0x010151a0
 
     uint8_t            pad000[0x11c];                    // +0x000 .. +0x11b
     uint32_t           mShockThreshold;                  // +0x11c
     uint8_t            pad120[8];                        // +0x120 .. +0x127
     tGrobShockData_s0101_46c0*    mGrobShockBegin;                  // +0x128
     tGrobShockData_s0101_46c0*    mGrobShockEnd;                    // +0x12c
+    tGrobShockData_s0101_46c0*    mGrobShockCapacity;               // +0x130
 };
 }
 // ---- items of slice s010146c0 end
@@ -2027,9 +2033,9 @@ void __thiscall cSimulatorUniverse_s0101_46c0::AdjustAwareness()
 
 // @ 0x01014db0
 namespace SP {
-void __cdecl quick_sort_grob_shock()
-{
-}
+void __cdecl quick_sort_grob_shock(tGrobShockData_s0101_37b0* first,
+                                   tGrobShockData_s0101_37b0* last,
+                                   ShockCompare compare);
 }  // namespace SP
 
 // @ 0x01014e30
@@ -2108,9 +2114,32 @@ void __thiscall cSimulatorUniverse_s0101_46c0::FUN_01015130()
 }  // namespace SP
 
 // @ 0x010151a0
-void __cdecl FUN_010151a0()
+namespace SP {
+void __thiscall cSimulatorUniverse_s0101_46c0::StartGrobShock(cStarRecordRef* pRecord, ::cEmpire* pEmpire)
 {
+    if (!pEmpire)
+        return;
+
+    tGrobShockData_s0101_37b0 value;
+    value.mId_00 = pEmpire->mId_84;
+    value.mField_04 = pRecord->GetCommContext();
+    value.mTimer_08.Restart();
+
+    ShockVec& shocks = *(ShockVec*)&mGrobShockBegin;
+    if (shocks.mpEnd < shocks.mpCap) {
+        tGrobShockData_s0101_37b0* pSlot = shocks.mpEnd;
+        shocks.mpEnd = pSlot + 1;
+        if (pSlot)
+            ::new(pSlot) tGrobShockData_s0101_37b0(value);
+    } else {
+        shocks.DoInsertValue(shocks.mpEnd, value);
+    }
+
+    quick_sort_grob_shock((tGrobShockData_s0101_37b0*)mGrobShockBegin,
+                          (tGrobShockData_s0101_37b0*)mGrobShockEnd,
+                          (ShockCompare)sCompareGrobShockData);
 }
+}  // namespace SP
 
 // @ 0x01015250
 SP::tUniversePair* __thiscall SP::cUniversePairVector::DoInsertValue(SP::tUniversePair* pPosition, const SP::tUniversePair& value)
