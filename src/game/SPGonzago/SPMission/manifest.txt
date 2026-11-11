@@ -53,3 +53,4 @@
 ../src/game/SPGonzago/SPMission.cpp  ?GetAnimalSpeciesFromType@cSPMission@SP@@QAEXIAAVKey@ResourceMan@EA@@@Z  00c47610  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?UnregisterIds_c44bd0@GameObj@@QAEXXZ  00c44bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?SetVisibleInStarmap@cSPMission_s00c4_6ab0@SP@@QAEX_N@Z  00c44ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c470a0@cSPMission_s00c4_6ab0@SP@@QAE_NXZ  00c470a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

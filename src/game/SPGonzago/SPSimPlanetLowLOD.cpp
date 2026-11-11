@@ -2029,20 +2029,27 @@ __declspec(noinline) void __thiscall SP::cSimPlanetLowLOD_s00c8_29e0::FUN_00c82d
 // @ 0x00c82ea0
 void __thiscall SP::cSimPlanetLowLOD_s00c8_29e0::FUN_00c82ea0()
 {
-    if ((*(u32*)(*(int*)(*(int*)((char*)this + 0x4c) + 0x13c) + 0x2c) & 0x800) == 0) {
-        char* cell = (char*)this + 0x50;
-        int inner = 0, mid = 0, outer = 0;
+    cSimPlanetLowLOD_s00c8_30f0* self = (cSimPlanetLowLOD_s00c8_30f0*)this;
+    if ((self->mpPlanet->mpPlanetRecord->mFlags & 0x800) == 0) {
+        char* cell = (char*)self->pad050;
+        int face = 0, column = 0, row = 0;
         do {
-            do {
-                do {
-                    if (cell == 0) return;
-                    ((void(__thiscall*)(void*, void*))FUN_00c82900)(this, cell);
-                    ++inner; cell += 0x54;
-                } while (inner < 4);
-                ++mid; inner = 0;
-            } while (mid < 4);
-            ++outer; mid = 0;
-        } while (outer < 6);
+            if (cell == 0)
+                return;
+            ((void(__thiscall*)(void*, void*))FUN_00c82900)(this, cell);
+            ++column;
+            cell += 0x54;
+            if (column >= 4) {
+                ++row;
+                column = 0;
+                if (row >= 4) {
+                    ++face;
+                    row = 0;
+                    if (face >= 6)
+                        break;
+                }
+            }
+        } while (true);
     }
 }
 

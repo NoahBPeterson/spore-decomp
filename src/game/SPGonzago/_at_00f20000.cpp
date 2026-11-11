@@ -226,7 +226,8 @@ void* __cdecl   sub_ac8fa0(void* p, int key, int def);
 void  __cdecl   sub_c6f770(int a, int b, int c);
 void  __cdecl   sub_f20620(int* a, int* b, void* c, float d);
 void  __cdecl   sub_f20350(void* p);
-void  __cdecl   sub_f211f0(int* self, int arg2);
+struct RefreshState;
+void  __cdecl   sub_f211f0(RefreshState* self); // 0x00f211f0
 void* __cdecl   sub_rbtinc(void* n);
 void  __cdecl   sub_c889c0(int e, int b);
 void* __cdecl   sub_6bb640();
@@ -369,9 +370,13 @@ struct PropData {
     uint8_t flag0;                   // +0xe60
     uint8_t flag1;                   // +0xe61
 };
+struct RefreshState {
+    void* mpVtable;
+    uint32_t mState;
+};
 struct Noun {
-    char pad0[0x134];
-    int  sub;                        // +0x134
+    uint32_t pad0[0x130 / 4];
+    RefreshState mRefreshState;       // +0x130
 };
 struct Property {
     void*   pData;                   // +0x00
@@ -1513,14 +1518,21 @@ void __cdecl FUN_00f213f0(void* arg1, int* arg2)
 }
 
 // @ 0x00f21760
-void __cdecl FUN_00f21760(V0c* self, int arg2)
+void __cdecl FUN_00f21760(V0c* self)
 {
     if (self) {
         Noun* n = (Noun*)self->q(0x3a25119);
         if (n) {
-            int* p = (int*)((char*)n + 0x130);
-            if (p && p[1] && p[1] - 0xa == 0)
-                sub_f211f0(p, arg2);
+            RefreshState* p = &n->mRefreshState;
+            if (p) {
+                uint32_t state = p->mState;
+                if (state) {
+                    state -= 0xa;
+                    if (state == 0)
+                        // The zero offset keeps the decrement live in the retail tail-call form.
+                        sub_f211f0(p + state);
+                }
+            }
         }
     }
 }

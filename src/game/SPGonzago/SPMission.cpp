@@ -2997,15 +2997,17 @@ namespace SP {
 bool __thiscall cSPMission_s00c4_6ab0::FUN_00c470a0()
 {
     u32 shifted = mFlags >> 1;
-    _ReadWriteBarrier();
-    if ((shifted & 1) != 0) {
-        if (!v12C())
+    bool requiresFirstCheck = (shifted & 1) != 0;
+    if (requiresFirstCheck) {
+        bool accepted = v12C();
+        if (!accepted)
             return false;
     }
     shifted = mFlags >> 2;
-    _ReadWriteBarrier();
-    if ((shifted & 1) != 0) {
-        if (!v130())
+    bool requiresSecondCheck = (shifted & 1) != 0;
+    if (requiresSecondCheck) {
+        bool accepted = v130();
+        if (!accepted)
             return false;
     }
     return true;
