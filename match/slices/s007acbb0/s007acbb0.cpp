@@ -78,7 +78,9 @@ void FUN_007acfa0(uint32_t* dest, int destStride, uint32_t* src, int srcStride, 
     uint32_t* s2 = (uint32_t*)((char*)src + srcStride);
     int step = srcStride * 2;
     do {
-        *d = (*s2 | *src) - (((*s2 ^ *src) >> 1) & 0x7f7f7f7f);
+        uint32_t a = *src;
+        uint32_t b = *s2;
+        *d = (b | a) - (((b ^ a) >> 1) & 0x7f7f7f7f);
         d = (uint32_t*)((char*)d + destStride);
         src = (uint32_t*)((char*)src + step);
         s2 = (uint32_t*)((char*)s2 + step);
