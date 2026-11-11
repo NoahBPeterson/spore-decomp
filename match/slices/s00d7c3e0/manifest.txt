@@ -24,3 +24,4 @@ slices/s00d7c3e0/s00d7c3e0.cpp  ?FUN_00d7d160@@YA_NPAVcCreatureBase@@@Z  00d7d16
 slices/s00d7c3e0/s00d7c3e0.cpp  ?FUN_00d7d220@@YAXPAVcCreatureBase@@PAX@Z  00d7d220  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00d7c3e0/s00d7c3e0.cpp  ?FUN_00d7d2c0@@YAXPAVcCreatureBase@@PAX@Z  00d7d2c0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00d7c3e0/s00d7c3e0.cpp  ?FUN_00d7c7b0@@YA_NPAVcCreatureBase@@HHHHPAI@Z  00d7c7b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00d7c3e0/s00d7c3e0.cpp  ?FUN_00d7cb50@@YAXPAVcCreatureBase@@@Z  00d7cb50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
