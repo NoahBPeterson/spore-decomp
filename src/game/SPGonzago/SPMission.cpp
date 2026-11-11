@@ -3055,7 +3055,10 @@ void __thiscall cSPMission_s00c4_6ab0::FUN_00c47240()
     ::cStarRecord* star = ((::cPlanet*)mpPlanet)->mpStarRecord13c;
     void* visual = GetStarMapNoArg()->CreatePlanetRecordVisual(star, a, vE8(), true, true);
     mpPlanetVisual = visual;
-    GetStarMapNoArg()->FUN_01044d70(visual, (u32)a == 0x70930c64);
+    if ((u32)a == 0x70930c64)
+        GetStarMapNoArg()->FUN_01044d70(visual, 1);
+    else
+        GetStarMapNoArg()->FUN_01044d70(visual, 0);
     FUN_00c471c0();
 }
 }  // namespace SP
