@@ -28,3 +28,4 @@
 ../src/game/SPGonzago/_at_00af0000.cpp  ?FUN_00afedf0@@YIXPAX00@Z  00afedf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00af0000.cpp  ?SmearBits@@YAII@Z  00aff160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00af0000.cpp  ?FUN_00af9e20@@YAOMH@Z  00af9e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00af0000.cpp  ?Clear@tSlot@cActionCircle_s00af_9aa0@SP@@QAEXXZ  00afa0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
