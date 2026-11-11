@@ -13,3 +13,4 @@
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?PropTableInit_d420@@YAXXZ  0139d420  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f4bb0@SimGame@@QAEPAXH@Z  01004bb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f4c30@SimGame@@QAEDXZ  01004c30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f53a0@@YA_NXZ  010053a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
