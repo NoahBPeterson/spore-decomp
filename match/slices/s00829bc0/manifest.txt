@@ -4,3 +4,4 @@ slices/s00829bc0/s00829bc0.cpp  ??0cSPUIRotateEffect_@@QAE@XZ  00829dd0  /O2 /MD
 slices/s00829bc0/s00829bc0.cpp  ?GetScrollOffset@SFV@@QAEMXZ  0082a4e0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 slices/s00829bc0/s00829bc0.cpp  ?Set@Cursor@@QAEXI@Z  0082aa50  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 slices/s00829bc0/s00829bc0.cpp  ?Destroy@SFV@@QAEXXZ  0082a0d0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s00829bc0/s00829bc0.cpp  ?Next@Cursor@@QAEXXZ  0082aa70  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
