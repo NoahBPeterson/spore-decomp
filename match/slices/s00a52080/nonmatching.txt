@@ -19,7 +19,6 @@
 00a52840 77 non-byte-exact; control class "anything" handler; two vtable dispatch arms; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv WEAK (400 valid inputs, 35.6% coverage)
 00a528b0 31 non-byte-exact; control "set" method wrapper; argc check + tail call to 0xa52840; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv FAIL (5/153 valid; call #0 depth-1 mismatch)
 00a528e0 103 non-byte-exact; control class-registration setup; class_new arg order and method-add ordering differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))
-00a529c0 5 non-byte-exact; pair getter [this+0x18]/[this+0x1c]; original interleaves load/store/load/store, compiler here reorders the two loads ahead of the stores; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv PASS (400 valid inputs, 100% coverage)
 00a529e0 136 non-byte-exact; group_new; pd_new/outlet_new and arg shuffle order differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))
 00a52ab0 20 non-byte-exact; groupsize_new; global load hoisting vs original's load order; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))
 00a52af0 69 non-byte-exact; __fastcall member reset; MSVC EH prologue (fs:[0] SEH frame) in original not reproduced by a plain assignment body; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv FAIL (5/5 valid; memory pool @4001000c)
