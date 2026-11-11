@@ -1,8 +1,5 @@
 00c57570 110 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 110 bytes - WriteSTLSequence<tItemInfo> instantiation not reconstructed.
 00c575e0 174 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 174 bytes - multi-delivery helper not reconstructed.
 00c57810 100 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 100 bytes - multi-delivery helper not reconstructed.
-00c57a80 67 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 58 bytes - tItemInfo payload initialiser: field order and the ref-counted target handoff match, but retail bit-copies the three floats with dword moves (inline 12-byte copy) while /fp:fast emits movss (size 79 vs 67).
 00c57ad0 546 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 546 bytes - multi-delivery helper not reconstructed.
-00c57ef0 247 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 247 bytes - OnDelivery not reconstructed.
-00c582a0 101 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 101 bytes - multi-delivery helper not reconstructed.
 00c58600 365 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 365 bytes - multi-delivery helper not reconstructed.
