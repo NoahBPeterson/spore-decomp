@@ -366,16 +366,66 @@ void* InsertRange(void* pDest, void* pIter, void* pFirst, void* pLast)
     return pDest;
 }
 
-// @ 0x00b2afb0
-void DestroyAbilityObject(char* pThis)
+// Terrain-distribution owner.  These inline base destructors restore the
+// IRefCount and RefCountTemplate tables after the record array is destroyed.
+namespace EA {
+namespace COM {
+class IRefCount {
+public:
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual ~IRefCount() {}
+};
+class IUnknown32 : public IRefCount {
+public:
+    virtual void* AsInterface(uint32_t interfaceId) = 0;
+    virtual ~IUnknown32() {}
+};
+}
+template <typename Counter> class RefCountTemplate {
+public:
+    virtual ~RefCountTemplate() {}
+    Counter mRefCount;
+    RefCountTemplate() : mRefCount(0) {}
+};
+}
+
+namespace SP {
+struct cTerrainDistributeInfo : EA::COM::IUnknown32, EA::RefCountTemplate<int> {
+    struct cTypeInfo {
+        AutoRef mProps;                                     // +0x00
+        float mMinEmitMap;                                  // +0x04
+        float mMaxEmitMap;                                  // +0x08
+        float mSpriteScale;                                 // +0x0c
+        uint64_t mResourceIDs[5];                           // +0x10
+        uint32_t mPad38;                                 // +0x38
+
+        cTypeInfo() : mMinEmitMap(0.1f), mMaxEmitMap(3.402823466e+38f),
+                      mSpriteScale(1.0f), mPad38(0)
+        {
+            for (int i = 0; i < 5; ++i)
+                mResourceIDs[i] = 0;
+        }
+    };
+
+    virtual int AddRef();
+    virtual int Release();
+    virtual void* AsInterface(uint32_t interfaceId);
+    uint32_t mPad0c;                                        // +0x0c
+    cTypeInfo mTypeInfo[9];                                 // +0x10 .. +0x24f
+
+    uint16_t* mTypeMapData;                                // +0x250
+    int mTypeMapSize;                                       // +0x254
+    int mTypeMapModCount;                                   // +0x258
+
+    cTerrainDistributeInfo();
+};
+
+// Emitting the constructor also emits the implicit virtual destructor.
+cTerrainDistributeInfo::cTerrainDistributeInfo()
+    : mTypeMapData(0), mTypeMapSize(0), mTypeMapModCount(0)
 {
-    char* pSlot = pThis + 0x250;
-    for (int32_t i = 8; i >= 0; --i) {
-        pSlot -= 0x40;
-        IRefCounted* pObj = *(IRefCounted**)pSlot;
-        if (pObj)
-            pObj->Release();
-    }
+}
 }
 
 // @ 0x00b2aff0
@@ -631,3 +681,6 @@ cAbilityRecord* AssignRange(cAbilityRecord* pSrcBegin, cAbilityRecord* pSrcEnd,
     }
     return pDest;
 }
+
+// @ 0x00b2afb0 SP::cTerrainDistributeInfo::~cTerrainDistributeInfo
+// Compiler-generated SP::cTerrainDistributeInfo destructor.
