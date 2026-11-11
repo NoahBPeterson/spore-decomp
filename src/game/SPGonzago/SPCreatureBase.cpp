@@ -3371,10 +3371,7 @@ void __fastcall FUN_00c0b710(CB* self)
   // cast would go through __ftol2, which truncates, so the conversion is written out.
   float ms = g_1687a30 * 1000.0f;
   __declspec(align(8)) long long t;
-  __asm {
-    fld dword ptr [ms]
-    fistp qword ptr [t]
-  }
+  t = X87RoundToInt64(ms);
   self->m_b8c = (int)t;
 }
 

@@ -63,3 +63,4 @@
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b380@@YAPAXPAUcCreatureBase@Simulator@@PAUTuningObj@@@Z  00c0b380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b440@@YAMI@Z  00c0b440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?ClampHunger@cCreatureBase@Simulator@@QAEXM@Z  00c0b9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b710@@YIXPAUcCreatureBase@Simulator@@@Z  00c0b710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

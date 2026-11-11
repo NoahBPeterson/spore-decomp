@@ -114,4 +114,16 @@ __forceinline float SseClamp01(float x)
     return x;
 }
 
+// round to nearest into 64 bits on the x87 stack (fld; fistp qword), what retail does where a C cast of a float to
+// __int64 would call _ftol2 (truncating)
+__forceinline __int64 X87RoundToInt64(float f)
+{
+    __declspec(align(8)) __int64 r;
+    __asm {
+        fld   dword ptr [f]
+        fistp qword ptr [r]
+    }
+    return r;
+}
+
 #endif  // MATCH_SSE_HELPERS_H

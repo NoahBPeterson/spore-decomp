@@ -79,7 +79,7 @@ def why(body, review=False):
 # match/include/sse_helpers.h: a call to one is allowed, and a file may not define one of these names itself (its own
 # definition would be an unreviewed copy, so it stays an asm helper here).
 VETTED = {"SseRoundToInt", "SseTruncToInt", "SseFloorToInt", "SseCeilToInt", "SseClamp", "SseMax", "SseMaxZero",
-          "SseSaturate", "SseClamp01"}
+          "SseSaturate", "SseClamp01", "X87RoundToInt64"}
 _ASM = re.compile(r"\b__?asm\b|\b__?emit\b|__declspec\s*\(\s*naked\s*\)")
 _KW = {"if", "for", "while", "switch", "return", "sizeof", "catch", "do", "else"}
 

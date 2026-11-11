@@ -89,7 +89,7 @@ into the generator's inputs so they are not lost.
 - **No inline assembly** without a maintainer's approval: no `__asm` / `_asm`, `_emit`, `__declspec(naked)` or raw
   bytes. The check fails any pull request that adds such a line. The exception is the reviewed float helpers in
   `match/include/sse_helpers.h` (`SseRoundToInt`, `SseTruncToInt`, `SseFloorToInt`, `SseCeilToInt`, `SseClamp`,
-  `SseMax`, `SseMaxZero`, `SseSaturate`, `SseClamp01`): `#include "sse_helpers.h"` and call them. A function that
+  `SseMax`, `SseMaxZero`, `SseSaturate`, `SseClamp01`, and the x87 64-bit rounding `X87RoundToInt64`): `#include "sse_helpers.h"` and call them. A function that
   uses only those counts as byte-exact; do not write your own copies. If you are sure a short helper is the only faithful
   spelling (for example retail inlines `fld; fistp` where C++ calls `_ftol2`), add a line
   `asm-override: <why the original needs it, which function>` to the pull request body. A maintainer looks at it and

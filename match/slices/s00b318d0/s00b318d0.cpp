@@ -201,10 +201,7 @@ void cGameTimeManager::UpdateTimeAtStartOfFrame()
     // (truncating), so the conversion is written out.
     __declspec(align(8)) __int64 d = sBaseTimer.GetElapsedTimeFloat();
     float f = (float)d * sBaseTimer.mfCoeff * mTimeFlowRate;
-    __asm {
-        fld dword ptr [f]
-        fistp qword ptr [d]
-    }
+    d = X87RoundToInt64(f);
     mTimeAtStartOfFrame = mBaseTimeElapsed + d;
 }
 
