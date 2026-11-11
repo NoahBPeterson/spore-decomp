@@ -1,6 +1,6 @@
 00c8fbb0 148 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 148 bytes - cTribe::UpdateRoboTribeness not reconstructed.
 00c8fd50 204 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 204 bytes - cTribe::PromoteChieftain not reconstructed.
-00c8fe20 164 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 164 bytes - cTribe::GetClosestWater not reconstructed.
+00c8fe20 162 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. 162 bytes, 2 under retail 164. Flag +0x300, then slot +0x2c on the object at +0x120 with (float 0x158125c, &pos +0x304, 1.0f, 1, 5). PlanetModel 0xb3d350 then Check 0xb88770 pops that result. On success the same slot is called with no args and the x87 length is stored at +0x310; else xorps 0. /arch:SSE2 turns the length into sqrtss (199). this in esi reloads y/z from [esi+disp32] (168). The position pointer in esi is 162: success returns mov eax, esi instead of lea eax,[esi+0x304], and the product stack is fld st(1) where retail is fld st(2)/fmulp st(3).
 00c8fef0 1385 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1385 bytes - cTribe::InitDomesticatedAnimalsHerd not reconstructed.
 00c904b0 237 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 237 bytes - tool scan over the terrain sphere cell (GetToolOfType, x87 scaling) not reconstructed.
 00c905c0 560 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 560 bytes - tribe helper not reconstructed.

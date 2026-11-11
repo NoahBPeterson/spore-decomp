@@ -709,7 +709,7 @@ virtual void v09c();
     tVec3* GetPoliticalCenter(tVec3* pOut);  // 0x00c8fcf0 (SP::cTribe::GetPoliticalCenter)
     void* GetChieftain();  // 0x00c8fd30 (SP::cTribe::GetChieftain)
     void  PromoteChieftain(uint32_t civId);  // 0x00c8fd50 (SP::cTribe::PromoteChieftain)
-    void  GetClosestWater(tVec3* pOut);  // 0x00c8fe20 (SP::cTribe::GetClosestWater)
+    tVec3* GetClosestWater();  // 0x00c8fe20 (SP::cTribe::GetClosestWater)
     void  InitDomesticatedAnimalsHerd(uint32_t speciesId);  // 0x00c8fef0 (SP::cTribe::InitDomesticatedAnimalsHerd)
     void  FUN_00c8fc50(bool flag);
     void  FUN_00c90470();
@@ -4867,11 +4867,56 @@ void* __thiscall cTribe_s00c8_fbb0::GetChieftain()
 }
 }  // namespace SP
 
+#include <math.h>
+struct WaterVec { float x, y, z; };
+struct WaterSub {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v10();
+    virtual int Query(float a, WaterVec* out, float b, int c, int d); // slot +0x2c
+};
+struct WaterFace { bool Check(int x); }; // 0x00b88770, pops its one argument
+WaterFace* WaterPlanet();                // 0x00b3d350
+extern float gWaterScale;                // 0x0158125c
+struct WaterView {
+    char pad0[0x120];
+    WaterSub mSub;
+    char pad124[0x300 - 0x124];
+    char mFlag;
+    char pad301[3];
+    WaterVec mPos;
+    float mDist;
+};
 // @ 0x00c8fe20
 namespace SP {
-void __thiscall cTribe_s00c8_fbb0::GetClosestWater(tVec3* pOut)
+// Closest attempt, 162 bytes against 164 under /arch:SSE. SSE2 turns the length into sqrtss.
+tVec3* __thiscall cTribe_s00c8_fbb0::GetClosestWater()
 {
-    (void)pOut;
+    WaterView* self = (WaterView*)this;
+    if (!self->mFlag) {
+        self->mFlag = 1;
+        WaterVec* out = &self->mPos;
+        WaterSub* s = &self->mSub;
+        int r = s->Query(gWaterScale, out, 1.f, 1, 5);
+        if (WaterPlanet()->Check(r)) {
+            WaterVec* p = ((WaterVec*(__thiscall*)(WaterSub*))(*(void***)s)[11])(s);
+            float dx = out->x - p->x;
+            float dy = out->y - p->y;
+            float dz = out->z - p->z;
+            self->mDist = sqrtf(dx * dx + dy * dy + dz * dz);
+            return (tVec3*)out;
+        }
+        self->mDist = 0.f;
+    }
+    return (tVec3*)&self->mPos;
 }
 }  // namespace SP
 
