@@ -11,5 +11,4 @@
 00c06070   197  intrusive pool AllocChunk: complete; equiv FAIL (5/5 mismatch, execution); allocate/append schedule and allocator args differ
 00c06000    44  cLocomotionStrategy_Template singleton accessor: complete; equiv PASS (343 valid inputs, 78.1% coverage); vtable store order and null-path scheduling differ
 00c061b0   268  ~cCreatureAnimal (vtable/wall teardown): complete; equiv UNSUPPORTED (0/400 valid inputs, fault(read)/VirtualFree); cGonzagoTimer dtor call shape differs
-00c06340     5  vtable slot 0x3c forwarder: complete; equiv FAIL (5/5 mismatch, execution); cl tail-calls (jmp) instead of call+ret 4
 00c06500    66  Simulator::cCreatureBase::CreateLocomotionStrategy: complete; equiv UNSUPPORTED (2 unresolved callees); flag test (test imm vs shr) and m[8] compare differ

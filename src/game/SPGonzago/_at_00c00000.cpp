@@ -229,7 +229,6 @@ struct CB {
     char func5d40(int param_2);                 // 0x00c05d40
     void func6500();                            // 0x00c06500
     float GetRankThunk(int param_2);            // 0x00c06320
-    void  RankForward(int param_2);             // 0x00c06340
 };
 struct NodePool {
     uint32_t*  mpBlocksBegin;    // 0x00
@@ -981,11 +980,9 @@ void __fastcall FUN_00c061b0(void* self)
 }
 
 // @ 0x00c06340
-void CB::RankForward(int param_2)
+float SP::cGameBundleContainer::GetBundleCapacity(unsigned int) const
 {
-    typedef void (__thiscall* Fn)(CB*, int);
-    volatile Fn fn = (Fn)(*(void***)this)[0x3c / 4];
-    fn(this, param_2);
+    return GetBundleCapacity();
 }
 
 // @ 0x00c0de30
