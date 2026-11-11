@@ -9,3 +9,4 @@
 ../src/game/UTFSpore_Win32/ExceptionHandler.cpp  ?WriteExceptionReportInternal@ExceptionHandlerWin32@@QAEXPAUReportWriter@@@Z  0091e4b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/ExceptionHandler.cpp  ?SetBuildDescription@ExceptionHandler_s0091_e650@@QAEXPBD@Z  0091e650  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/ExceptionHandler.cpp  ??0ReportWriter_s0091_e650@@QAE@XZ  0091e970  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ExceptionHandler.cpp  _ExceptionFilterThunk@4  0091e750  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
