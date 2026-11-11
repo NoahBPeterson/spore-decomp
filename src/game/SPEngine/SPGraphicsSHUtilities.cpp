@@ -887,9 +887,11 @@ template <> void RotateSH<Vector4_s0078_64c0>(const float* m, int order, const V
     float R2[5][5];
     float R3[7][7];
     float R4[9][9];
-    float R5[11][11];
     float R6[13][13];
-    float R7[15][15];
+    union {                 // band 7's matrix reuses band 5's storage (R5 is dead once R6 is built)
+        float R5[11][11];
+        float R7[15][15];
+    };
     float f1000, f1010, f1018, f1040, f1048, f1050, f1058, f1060, f1068, f106c;
     float f1078, f1080, f1088, f1090, f1098, f10a0, f10a8, f10b0, f10b8, f10c0;
     float f10c8, f10d0, f10d8, f10e0, f10e8, f10f0, f10f4, f10f8, f1100, f1104;
