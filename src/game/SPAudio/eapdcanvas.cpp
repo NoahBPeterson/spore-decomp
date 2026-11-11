@@ -345,27 +345,6 @@ void canvas_updatewindowlist()
 }
 }  // namespace EA::Audio::Eapd
 
-// @ 0x00a4a3c0
-namespace EA { namespace Audio { namespace Eapd {
-void __fastcall FUN_00a4a3c0(int unused, t_glist* x)
-{
-    t_glist* g;
-    t_glist* p;
-
-    if (x == gpCanvasList) {
-        gpCanvasList = x->gl_nextwin;
-        return;
-    }
-    p = gpCanvasList;
-    g = p->gl_nextwin;
-    while (g != x) {
-        p = g;
-        g = p->gl_nextwin;
-    }
-    p->gl_nextwin = x->gl_nextwin;
-}
-}}}  // namespace EA::Audio::Eapd
-
 // @ 0x00a4a3f0
 namespace EA { namespace Audio { namespace Eapd {
 void FUN_00a4a3f0(t_symbol s)

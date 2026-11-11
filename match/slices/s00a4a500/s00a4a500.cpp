@@ -66,7 +66,8 @@ struct t_glist {
     void*    gl_editor;       // +0x60   t_editor* (0 when not editing)
     void*    gl_name_a;       // +0x64   first word of the name t_symbol
     void*    gl_name_b;       // +0x68   second word of the name t_symbol
-    char pad7[0x74 - 0x6c];
+    char pad6c[4];
+    t_glist* gl_nextwin;     // +0x70   next root canvas
     void*    gl_symtag;       // +0x74   t_symbol* of the canvas (parent-chain target)
     unsigned gl_flags;        // +0x78
     char pad8[0x80 - 0x7c];
@@ -107,6 +108,7 @@ struct t_linetraverser {
 
 // ---------------------------------------------------------------- globals (masked relocs)
 extern t_symbol gEmptySymbol;    // 0x167589c  ("empty" name word; used as rename sentinel)
+extern t_glist* gpCanvasList;    // 0x1675464
 extern t_glist* gpEditingCanvas; // 0x1675470
 extern t_glist* gpFocusCanvas;   // 0x1675484
 extern t_symbol gLoadbangSym;    // 0x1675488/a  ("loadbang")
@@ -137,7 +139,6 @@ void  pd_pushsym(void* x, ...);                                                 
 void  pd_popsym(void* x, ...);                                                       // 0xa49500
 void  canvas_resortinlets(t_glist* g);                                               // 0xa4d4d0
 void  canvas_resortoutlets(t_glist* g);                                              // 0xa4d6a0
-void  canvas_removewindow(t_glist* g);                                               // 0xa4a3c0
 void  canvas_noundo(t_glist* g);                                                     // 0xa4c7e0
 void  canvas_setgraph(t_glist* g, int n);                                            // 0xa4ca40
 void  gfxstub_deleteforkey(t_glist* g);                                              // 0xa4c170
@@ -451,6 +452,19 @@ void* canvas_gettext(t_glist* g)
     return *(void**)((char*)g + 0x6c);
 }
 
+// @ 0x00a4a3c0
+__declspec(noinline) static void canvas_takeofflist(t_glist* x)
+{
+    if (x == gpCanvasList) {
+        gpCanvasList = x->gl_nextwin;
+    } else {
+        t_glist* p;
+        for (p = gpCanvasList; p->gl_nextwin != x; p = p->gl_nextwin)
+            ;
+        p->gl_nextwin = x->gl_nextwin;
+    }
+}
+
 // @ 0x00a4abb0
 void canvas_free(t_glist* g)
 {
@@ -489,7 +503,7 @@ void canvas_free(t_glist* g)
     }
     gfxstub_deleteforkey(g);
     if (*(void**)((char*)g + 0x2c) == 0)
-        canvas_removewindow(g);
+        canvas_takeofflist(g);
 }
 
 // @ 0x00a4ad10
