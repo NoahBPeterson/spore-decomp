@@ -1,5 +1,4 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
-01021200    2  game-mode redirect: complete, equivalence WEAK (400 valid, no
                mismatch, 58.3% coverage); the singleton vtable slot 0xc is
                loaded into eax instead of the original's edx. flags /O2 /MD /Gy /TP /arch:SSE
 010213b0   27  universe-mode 2 hook: complete, equivalence PASSes (400 valid,
