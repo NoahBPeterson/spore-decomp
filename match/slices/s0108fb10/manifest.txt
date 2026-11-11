@@ -3,3 +3,4 @@ slices/s0108fb10/s0108fb10.cpp  ?clone@hkStabilizedSphereMotionEx@@UBEPAVhkMotio
 slices/s0108fb10/s0108fb10.cpp  ??0hkStabilizedBoxMotion@@QAE@ABUhkVector4@@0@Z  01090370  /vc71 /O2 /MD /Gy /TP
 slices/s0108fb10/s0108fb10.cpp  ?clone@hkStabilizedBoxMotionEx@@UBEPAVhkMotion@@XZ  01090390  /vc71 /O2 /MD /Gy /TP
 slices/s0108fb10/s0108fb10.cpp  ?clone@hkSpringDamperConstraintMotorEx@@UBEPAVhkConstraintMotor@@XZ  010908c0  /vc71 /O2 /MD /Gy /TP
+slices/s0108fb10/s0108fb10.cpp  ?scalarDeletingDtor@hkStiffSpringChainData@@QAEPAXI@Z  0108fb40  /vc71 /O2 /MD /Gy /TP
