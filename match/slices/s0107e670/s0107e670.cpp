@@ -134,7 +134,7 @@ int hkStdioStreamWriter::write(const void* buf, int nbytes)
 }
 
 // @ 0x0107e910
-void hkStdioStreamWriter::close()
+__declspec(noinline) void hkStdioStreamWriter::close()
 {
 	if ((unsigned)m_file > 0 && m_ownsFile)
 		fclose(m_file);
