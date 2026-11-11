@@ -695,7 +695,7 @@ public:
 };
 class cCreatureModeStrategy_s00d3_77f0 {
 public:
-    void OnMouseWheel();                                   // 0x00d38890
+    void OnFocusChange(bool hasFocus);                     // 0x00d38890, shared mode-interface slot 8
     void OnMouseMove(int a, float b, float c, int d);      // 0x00d388a0
     void OnMouseButton(int a, float b, float c, int d);    // 0x00d388d0
 };
@@ -969,7 +969,7 @@ public:
     virtual void v15();
     virtual void v16();
     virtual void v17();
-    virtual void v18();
+    virtual void OnFocusChange(bool hasFocus);       // vtable +0x48
     virtual void v19();
     virtual void v20();
     virtual void v21();
@@ -1107,7 +1107,7 @@ public:
     virtual void v15();
     virtual void v16();
     virtual bool IsKeyHandled(int key, int state);   // vtable +0x44
-    virtual void v18();
+    virtual void OnFocusChange(bool hasFocus);       // vtable +0x48
     virtual int  HandleKey(int key, int state);      // vtable +0x4c
 };
 cGameInputManager* GameInputManager();            // 0x00b3d250
@@ -1535,7 +1535,7 @@ public:
     virtual void v0c();
     virtual void v10();
     virtual void v14();
-    virtual void v18();
+    virtual void OnFocusChange(bool hasFocus);       // vtable +0x48
     virtual void v1c();
     virtual void v20();
     virtual bool GetProperty(uint32_t id, Property*& result);    // 0x24
@@ -2636,7 +2636,7 @@ public:
     virtual cUnlockOwner* GetChild(unsigned int id);    // +0x0c
     virtual void v10();                                 // +0x10
     virtual void v14();                                 // +0x14
-    virtual void v18();                                 // +0x18
+    virtual void OnFocusChange(bool hasFocus);       // vtable +0x48                                 // +0x18
     virtual void v1c();                                 // +0x1c
     virtual void v20();                                 // +0x20
     virtual void v24();                                 // +0x24
@@ -3606,10 +3606,9 @@ bool cCreatureLevelUpScenario::HasBrainUpgrade()
 }
 
 // @ 0x00d38890
-void cCreatureModeStrategy_s00d3_77f0::OnMouseWheel()
+void cCreatureModeStrategy_s00d3_77f0::OnFocusChange(bool hasFocus)
 {
-    void* m = X_GameInputManager();
-    ((FnV0)VTBL(m)[0x48 / 4])(m);
+    ((cGameInputManager*)X_GameInputManager())->OnFocusChange(hasFocus);
 }
 
 // @ 0x00d388a0
