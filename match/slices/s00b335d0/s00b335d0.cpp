@@ -4,6 +4,8 @@
 // No dev-PDB symbols exist for this module; names are FUN_<va>.
 #include "types.h"
 #include <string.h>
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 typedef unsigned char  u8;
 typedef unsigned int   u32;
@@ -86,7 +88,9 @@ void __cdecl FUN_00b33c30(double value, int a, int b)
 void __fastcall FUN_00b33c70(char* p)
 {
     typedef void (__thiscall* Fn)(void*);
-    ((Fn)(*(void**)(*(char**)(p - 8) + 0x10)))(p - 8);
+    Fn fn = *(Fn*)(*(char**)(p - 8) + 0x10);
+    _ReadWriteBarrier();
+    fn(p - 8);
 }
 
 // @ 0x00b33ca0
