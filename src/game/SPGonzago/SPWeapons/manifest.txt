@@ -40,3 +40,4 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?f00cb5050@@YIMH@Z  00cb5050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?Shutdown@cProjectileOwner_s00cb_49e0@@QAEXXZ  00cb49e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?PathUpdated@cPathFollowingLocomotion_s00cb_a050@Simulator@@QAEXXZ  00cb4a70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb63c0@@YAEPAX@Z  00cb63c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
