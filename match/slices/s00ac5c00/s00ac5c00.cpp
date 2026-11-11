@@ -2,6 +2,8 @@
 // (run/findPath/findPathFast), the shadow-manager property helpers and the request queueing /
 // one-step search driver (addRequest, step).
 #include "types.h"
+#include "SP/cGonzagoSubsystem.h"
+#include "SP/cILayer.h"
 #include <math.h>
 
 // ---------------------------------------------------------------------------
@@ -14,9 +16,6 @@ typedef unsigned int  u32;
 struct Vec3 { float x, y, z; };
 static inline u32 FloatToBits(float f) { return *(u32*)&f; }
 static inline float BitsToFloat(u32 b) { float f; *(u32*)&f = b; return f; }
-
-extern "C" void _ReadWriteBarrier(void);
-#pragma intrinsic(_ReadWriteBarrier)
 
 struct LargeInteger { int low; int high; };
 
@@ -80,9 +79,8 @@ struct CAStar {
                     void* a6, Request7* a7, int flag, void* a9); // 0xac65d0
 };
 
-struct ShadowMgr {
-    char  pad[0x1c];
-    void* field1c;                  // +0x1c
+// Ground-layer view: the subsystem base is 0x1c bytes; cILayer follows at +0x1c.
+struct ShadowMgr : SP::cGonzagoSubsystem, SP::cILayer {
     u8    flag;                     // +0x20
     char  pad20[3];
     void* material;                 // +0x24
@@ -298,19 +296,18 @@ void CAStar::findPathFast(void* a1, void* a2, void* a3, void* a4, void* a5,
 }
 
 // @ 0x00ac6a50
-// Attach a material and register the light slot.
+// Initialize the ground-layer subsystem and register its cILayer view.
 void ShadowMgr::setMaterial()
 {
     ShadowMgr* self = this;
     int* piVar1 = (int*)SP_MaterialManager();
-    typedef u32 (__thiscall* Fn1)(int*, u32);
-    u32 uVar2 = (*(Fn1*)(*piVar1 + 0x28))(piVar1, 0x605e24f5u);
-    *(u32*)((char*)self + 0x24) = uVar2;
-    self = (ShadowMgr*)((char*)self + 0x1c);
-    _ReadWriteBarrier();
+    typedef void* (__thiscall* Fn1)(int*, u32);
+    void* material = (*(Fn1*)(*piVar1 + 0x28))(piVar1, 0x605e24f5u);
+    self->material = material;
+    SP::cILayer* layer = static_cast<SP::cILayer*>(this);
     piVar1 = (int*)FUN_0067dd50();
-    typedef void (__thiscall* Fn2)(int*, void*, int, int);
-    (*(Fn2*)(*piVar1 + 0x4c))(piVar1, self, 0xb, 0);
+    typedef void (__thiscall* Fn2)(int*, SP::cILayer*, u32, u32);
+    (*(Fn2*)(*piVar1 + 0x4c))(piVar1, layer, 0xb, 0);
 }
 
 // @ 0x00ac6aa0
