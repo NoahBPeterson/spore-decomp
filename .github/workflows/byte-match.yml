@@ -58,15 +58,27 @@ jobs:
           fi
           echo "base=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
+      # The downloaded .deb files are cached between runs (bump the key to refresh them); apt still unpacks and
+      # configures, but skips the ~300 MB of downloads. Packages a newer WineHQ release adds are downloaded as usual.
+      - name: Cache the wine packages
+        uses: actions/cache@v4
+        with:
+          path: ~/apt-archives
+          key: apt-noble-winehq-v1
+
       - name: Install wine (WineHQ stable, 32-bit), msitools, Python packages
         run: |
+          mkdir -p ~/apt-archives/partial
           sudo dpkg --add-architecture i386
           sudo mkdir -pm755 /etc/apt/keyrings
           sudo wget -qO /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
           sudo wget -qNP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
           sudo apt-get update -qq
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --install-recommends winehq-stable msitools xvfb >/dev/null
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --install-recommends \
+            -o Dir::Cache::Archives="$HOME/apt-archives" winehq-stable msitools xvfb >/dev/null
+          sudo chmod -R a+rX ~/apt-archives
           python3 -m pip install --quiet --break-system-packages pefile capstone
+          echo "WINE_VERSION=$(wine --version)" >> "$GITHUB_ENV"
 
       - name: List the functions that match on the base branch
         run: |
@@ -99,6 +111,18 @@ jobs:
         with:
           path: work/toolchain/downloads
           key: msvc-installers-7800d037-50dc6cca
+
+      # The extracted compilers and the wine prefix: setup_toolchain.sh skips what exists and still checks every file's
+      # SHA-256 against tools/ci/toolchain.sha256. A wine prefix belongs to one wine version, so that is in the key.
+      - name: Cache the extracted toolchains and wine prefix
+        if: steps.affected.outputs.count != '0'
+        uses: actions/cache@v4
+        with:
+          path: |
+            work/toolchain/vc9sp1
+            work/toolchain/vc71tk
+            work/toolchain/wineprefix
+          key: toolchains-${{ env.WINE_VERSION }}-${{ hashFiles('tools/ci/toolchain.sha256', 'tools/ci/setup_toolchain.sh', 'tools/ci/is_unpack.py') }}
 
       - name: Build and verify the toolchains
         if: steps.affected.outputs.count != '0'
