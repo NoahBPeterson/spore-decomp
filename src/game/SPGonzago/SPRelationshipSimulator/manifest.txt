@@ -11,3 +11,5 @@
 ../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_013621a0@@YAXXZ  013621a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_00d068c0@cRelationshipManager_s00d0_58a0@SP@@QAEXIIM@Z  00d068c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_00d064b0@cRelationshipManager_s00d0_58a0@SP@@QAEXPAXIIM@Z  00d064b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_00d01f50@@YIEPAUcRelationshipManager@@PAXPAUcEmpire@@2@Z  00d01f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_00d01ff0@@YIEPAUcRelationshipManager@@PAXPAUcEmpire@@2@Z  00d01ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

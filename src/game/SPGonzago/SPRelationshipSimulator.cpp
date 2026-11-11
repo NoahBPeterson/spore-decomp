@@ -642,7 +642,9 @@ u8 __fastcall FUN_00d01f50(cRelationshipManager* self, void* dummy, cEmpire* a, 
   }
   if (p2 == 0)
     p2 = player;
-  u32 x = self->FUN_00d01ab0(p1->f84, p2->f84, p1->f84, p2->f84);
+  u32 id1 = p1->f84;
+  u32 id2 = p2->f84;
+  u32 x = self->FUN_00d01ab0(id1, id2, id1, id2);
   cRelObj* y = (cRelObj*)self->FUN_00d01410(x);
   if (y != 0)
     return (u8)y->bit0;
@@ -674,7 +676,9 @@ u8 __fastcall FUN_00d01ff0(cRelationshipManager* self, void* dummy, cEmpire* a, 
   }
   if (p2 == 0)
     p2 = player;
-  u32 x = self->FUN_00d01ab0(p1->f84, p2->f84, p1->f84, p2->f84);
+  u32 id1 = p1->f84;
+  u32 id2 = p2->f84;
+  u32 x = self->FUN_00d01ab0(id1, id2, id1, id2);
   cRelObj32* y = (cRelObj32*)self->FUN_00d01410(x);
   if (y != 0) {
     u8 v = (u8)(y->f04 >> 1);
