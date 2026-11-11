@@ -10,6 +10,3 @@
 010052d0   45  id-in-vector test: complete, equivalence PASSes (333 valid, 100%
                coverage); the /0x14 magic division and loop reloads differ.
                flags /O2 /MD /Gy /TP /arch:SSE
-010053a0   17  wormhole-key test: complete, equivalence PASSes (398 valid, 100%
-               coverage); `setne al` vs the original's direct setne (a bool
-               temp). flags /O2 /MD /Gy /TP /arch:SSE

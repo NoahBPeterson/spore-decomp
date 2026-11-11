@@ -1953,7 +1953,10 @@ bool f53a0()
 {
     void* s = DAT_016dc0fc;
     void* o = *(void**)((char*)s + 0x40);
-    return ((char(__thiscall*)(void*, u32))VTP(o)[0x74 / 4])(o, (u32)(uintptr_t)&DAT_016dc1e0) != 0;
+    void** vt = *(void***)o;
+    char (__thiscall* fn)(void*, u32) = (char (__thiscall*)(void*, u32))vt[0x74 / 4];
+    bool found = fn(o, (u32)(uintptr_t)&DAT_016dc1e0) != 0;
+    return found;
 }
 
 // @ 0x010053c0
