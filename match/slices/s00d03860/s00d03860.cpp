@@ -273,10 +273,55 @@ tRelEntry* __cdecl FUN_00d041d0(tRelEntry* pFirst, tRelEntry* pLast, tRelEntry* 
     return pOut;
 }
 
+struct RelFace {
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual void v5();
+    virtual void v6();
+    virtual void v7();
+    virtual void v8();
+    virtual void Method(void* listener, int id); // slot +0x24
+};
+RelFace* RelGetFace(); // 0x00883860
+extern int gRelIds[]; // 0x01478d7c
+struct RelView {
+    char pad0[8];
+    char mAt8; // +0x08, the listener passed to each id
+    char pad9[0x20 - 9];
+    char mFlag; // +0x20
+    char pad21[0x88 - 0x21];
+    RelFace* mpFace; // +0x88
+    void* mpListener;
+    int* mpIds;
+    int mCount;
+    int mZero;
+    void After(); // 0x00d03f60
+    void Tail();  // 0x00d03c40
+};
+
 // @ 0xd04210 FUN_00d04210
-void __fastcall FUN_00d04210(cRelationshipManager* this_, int unused)
+void __thiscall cRelationshipManager::FUN_00d04210()
 {
-    (void)this_;
+    RelView* self = (RelView*)this;
+    if (self->mFlag)
+        return;
+    self->mFlag = 1;
+    void* listener = &self->mAt8;
+    RelFace* face = RelGetFace();
+    self->mpFace = face;
+    self->mpListener = listener;
+    self->mpIds = gRelIds;
+    self->mCount = 4;
+    self->mZero = 0;
+    if (face && listener) {
+        for (unsigned i = 0; i < 4; ++i)
+            face->Method(listener, gRelIds[i]);
+    }
+    self->After();
+    self->Tail();
 }
 
 // @ 0xd04290 FUN_00d04290
