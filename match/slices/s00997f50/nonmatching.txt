@@ -1,6 +1,5 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
 00997f50  52   HitMaskResource::HitMaskResource: ctor returns `this` in eax (caller reads it); vtable/zero-init store scheduling differs
-00998000  5    HitMaskResource scalar deleting dtor: member load hoisted before the vtable store
 00998050  -    HitMaskFactory::CreateResource: vcall/arg-block schedule differs
 00998200  34   Release: lock/dec and refcount branch layout differ
 00998770  126  RWTextureFactory::CreateResource: ctor inline and vcall schedule differs; difftest FAIL is a checker artifact: the only difference is a free-list link written by the game allocator (0x92701f) when Release frees the object; allocator state carries over from the first-run side, and swapping run order moves the difference to the original (identical instruction trace otherwise)
