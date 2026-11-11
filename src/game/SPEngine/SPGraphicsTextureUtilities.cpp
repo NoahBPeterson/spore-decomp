@@ -657,7 +657,7 @@ virtual void v13(void*);
               virtual void v16(); };
 struct IMsg { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
               virtual void v4(); virtual void v5(); virtual void v6(void*,void*,int,int); };
-struct AutoVec { void* b; void* e; void* c; AutoVec() { b=0; e=0; c=0; } ~AutoVec() throw(); };
+struct AutoVec { void* b; void* e; void* c; AutoVec() { b=0; e=0; c=0; } ~AutoVec() throw(); /* 0x00a23920 */ };
 struct IEditorResource { virtual int AddRef(); virtual int Release(); };
 struct IRefCounted { virtual int AddRef(); virtual int Release(); int mRef; }; // +0x8
 struct Elem { char pad[0x28]; unsigned char* data; };           // pixel element at +0x28
@@ -752,11 +752,22 @@ public:
     RcPtr_s007a_f8b0<IUnknown32> mMessage;       // +0x24
     DxtJobData();                     // 0x007AE9F0
 };
-class C0130 : public IEditorResource, public IRefCounted {
+// This refcounted vector destroys its interface bases before the vector base.
+// The primary polymorphic base is placed at +0, the counter base at +4, and
+// the nonpolymorphic vector base at +0xc, despite its first declaration order.
+// Native IRefCount has two pure reference-count operations and a destructor.
+struct ImageVectorRefCount {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual ~ImageVectorRefCount() {}
+};
+// Destructor-only abstract view; no concrete instances or derived tables are emitted.
+class C0130 : public AutoVec, public ImageVectorRefCount,
+              public EA::RefCountTemplate<EA::Thread::AtomicInt<int> > {
 public:
-    AutoVec mVec;
     virtual ~C0130();
 };
+typedef char C0130_size_must_be_0x18[sizeof(C0130) == 0x18 ? 1 : -1];
 struct DObj : IEditorResource, IRefCounted { };
 class C0160 : public IEditorResource, public IRefCounted {
 public:
