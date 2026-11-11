@@ -75,7 +75,7 @@ jobs:
           sudo wget -qO /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
           sudo wget -qNP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
           sudo apt-get update -qq
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --install-recommends \
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
             -o Dir::Cache::Archives="$HOME/apt-archives" winehq-stable msitools xvfb >/dev/null
           sudo chmod -R a+rX ~/apt-archives
           python3 -m pip install --quiet --break-system-packages pefile capstone
