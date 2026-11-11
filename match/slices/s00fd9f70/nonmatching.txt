@@ -1,5 +1,4 @@
 00fd9f70 628 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 628 bytes - cAppModeSpace::OnMouseUp not reconstructed.
-00fda1f0 228 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 228 bytes - space-mode helper not reconstructed.
 00fda530 172 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 172 bytes - cAppModeSpace::SetPlanetTimeOnFirstEntry not reconstructed.
 00fda5e0 360 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 360 bytes - space-mode helper not reconstructed.
 00fda750 489 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 489 bytes - space-mode helper not reconstructed.
