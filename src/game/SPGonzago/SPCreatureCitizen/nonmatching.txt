@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 00c0de60 56 UNSUPPORTED  SetGraspedEffectOffsets; complete; unresolved stub F_b3050 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c22560 157 switch case blocks laid out inline vs trailing + local init/call-arg setup reordered (344 vs 268)
-00c228c0 15 write-tag store scheduled before vs after the GetStream call (110 vs 110)
+00c228c0 15 naming the vtable puts the tag store inside the GetStream call, one instruction early (before `mov ecx, eax` instead of after `mov eax, [edx+0x18]`) (110 vs 110)
 00c22a80 34 x87 fxch + inverted compare + loco vtable temp/arg register choice (92 vs 90)
 00c22ae0 236 large multi-branch codegen not byte-reproducible (340 vs 337)
 00c22e30 106 stimuli-owner base register ecx vs esi + early-return block placement (153 vs 161)

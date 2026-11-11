@@ -1711,13 +1711,17 @@ void cSPCreatureBase::FUN_00c22870()
     pAgent->ia30((void*)FUN_00cee330(pAgent));
 }
 
+// Closest attempt, same size. The tag store now sits inside the second
+// virtual call, one instruction early: before `mov ecx, eax` instead of
+// after `mov eax, [edx+0x18]`.
 // @ 0x00c228c0
 void cSPCreatureBase::FUN_00c228c0Write(void* pStream)
 {
     cOutStream* pOuter = (cOutStream*)pStream;
     cSerTarget* pTarget = (cSerTarget*)pOuter->GetSerializationTarget();
+    void** vt = *(void***)pTarget;
     uint32_t nTag = 0x4f176642;
-    void* pS = pTarget->GetStream();
+    void* pS = ((void* (__thiscall*)(void*))vt[6])(pTarget);
     EA::IO::WriteUint32(pS, &nTag, 1, 0);
     this->FUN_00c0bc20Write(pStream);
     cVarListSerializer ser(this, (void*)0x015721f0, 0x1a80d26);
