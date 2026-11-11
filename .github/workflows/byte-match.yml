@@ -60,8 +60,9 @@ jobs:
 
       # The downloaded .deb files are cached between runs (bump the key to refresh them); apt still unpacks and
       # configures, but skips the ~300 MB of downloads. Packages a newer WineHQ release adds are downloaded as usual.
-      - name: Cache the wine packages
-        uses: actions/cache@v4
+      - name: Restore the cached wine packages
+        id: aptcache
+        uses: actions/cache/restore@v4
         with:
           path: ~/apt-archives
           key: apt-noble-winehq-v1
@@ -79,6 +80,14 @@ jobs:
           sudo chmod -R a+rX ~/apt-archives
           python3 -m pip install --quiet --break-system-packages pefile capstone
           echo "WINE_VERSION=$(wine --version)" >> "$GITHUB_ENV"
+
+      # saved right away, not at the end of the job: a run that fails a later step (most pull-request runs) still fills it
+      - name: Save the wine packages
+        if: steps.aptcache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/apt-archives
+          key: apt-noble-winehq-v1
 
       - name: List the functions that match on the base branch
         run: |
@@ -114,9 +123,10 @@ jobs:
 
       # The extracted compilers and the wine prefix: setup_toolchain.sh skips what exists and still checks every file's
       # SHA-256 against tools/ci/toolchain.sha256. A wine prefix belongs to one wine version, so that is in the key.
-      - name: Cache the extracted toolchains and wine prefix
+      - name: Restore the extracted toolchains and wine prefix
+        id: tccache
         if: steps.affected.outputs.count != '0'
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: |
             work/toolchain/vc9sp1
@@ -128,6 +138,17 @@ jobs:
         if: steps.affected.outputs.count != '0'
         timeout-minutes: 20
         run: sh tools/ci/setup_toolchain.sh
+
+      # saved before anything from the pull request is compiled, so the cache holds only what main's scripts built
+      - name: Save the extracted toolchains and wine prefix
+        if: steps.affected.outputs.count != '0' && steps.tccache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            work/toolchain/vc9sp1
+            work/toolchain/vc71tk
+            work/toolchain/wineprefix
+          key: toolchains-${{ env.WINE_VERSION }}-${{ hashFiles('tools/ci/toolchain.sha256', 'tools/ci/setup_toolchain.sh', 'tools/ci/is_unpack.py') }}
 
       - name: Compile the affected manifests and check each function's bytes
         if: steps.affected.outputs.count != '0'
