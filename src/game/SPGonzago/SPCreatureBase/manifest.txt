@@ -60,3 +60,7 @@
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b220@@YA_NIPAI@Z  00c0b220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?SP_AddSetAnimationTargetModifierA@@YAXPAUcCreatureBase@Simulator@@PAX11@Z  00c0b510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?SP_AddSetAnimationTargetModifierB@@YAXPAUcCreatureBase@Simulator@@PAXPAM@Z  00c0b570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b270@@YG_NIPAI@Z  00c0b270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b2f0@@YG_NIIPAI@Z  00c0b2f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b380@@YAPAXPAUcCreatureBase@Simulator@@PAUTuningObj@@@Z  00c0b380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b440@@YAMI@Z  00c0b440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
