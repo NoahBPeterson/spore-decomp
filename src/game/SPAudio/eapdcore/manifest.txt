@@ -5,3 +5,4 @@
 ../src/game/SPAudio/eapdcore.cpp  ?pd_bang@Eapd@Audio@EA@@YAXPAPAV_class@123@@Z  00a49560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdcore.cpp  ?outlet_float@Eapd@Audio@EA@@YAXPAV_outlet@123@M@Z  00a49570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdcore.cpp  ?pd_symbol@Eapd@Audio@EA@@YAXPAUt_gobj@123@Ut_symbol@123@@Z  00a49590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdcore.cpp  ?sys_register_loader@Eapd@Audio@EA@@YAHPAX0@Z  00a49450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
