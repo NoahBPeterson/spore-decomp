@@ -55,3 +55,4 @@
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?e00560@@YGXH@Z  00e00560  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?init_16a0dc4@@YAXXZ  0136bfb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?PickRandomAssets@StateMachine@@QAEXD@Z  00df3ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?SetStateSummaryText@cGalaxyGameEntryUIStateMachine_s00de_f400@SP@@QAEXHIPB_W@Z  00defd10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

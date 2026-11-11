@@ -4326,14 +4326,30 @@ void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::MakeRandomName()
 }
 }  // namespace SP
 
+struct SummaryTextServices {
+    PV8
+    virtual SummaryTextServices* Slot20();
+    PV2
+    virtual void Slot2C(const wchar_t* pText, NameString_s00df_fc80* pOut);
+    PV
+    virtual void Slot34(const wchar_t* pText, int32_t nFlags);
+};
+extern "C" SummaryTextServices* __cdecl FUN_0067de40();
+
 // @ 0x00defd10
 namespace SP {
 void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::SetStateSummaryText(
     int32_t nField, uint32_t nKey, const wchar_t* pText)
 {
-    (void)nField;
-    (void)nKey;
-    (void)pText;
+    cString text(0x2b7a0311, nKey, 0);
+    FUN_0067de40()->Slot20()->Slot34(pText, 0);
+
+    NameString_s00df_fc80 detokenized;
+    detokenized.mpBegin = 0x1667bac;
+    detokenized.mpEnd = 0x1667bac;
+    detokenized.mpCap = 0x1667bae;
+    FUN_0067de40()->Slot20()->Slot2C(text.c_str(), &detokenized);
+    FUN_00def750(nField, detokenized.mpBegin);
 }
 }  // namespace SP
 
