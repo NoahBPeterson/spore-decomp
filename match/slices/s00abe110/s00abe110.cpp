@@ -2,6 +2,7 @@
 // Retail layout models reconstructed from the retail image (see work/match/scratch_s00abe110_cards.txt).
 
 #include <math.h>
+#include "../../../src/game/include/tFXResourceType.h"
 
 typedef unsigned int u32;
 typedef unsigned char u8;
@@ -581,21 +582,35 @@ bool cAbility::SetParam(int id, const float* value, void* unused) {
   return true;
 }
 
+// Read-only prefix view: the sound description reader fills one UInt64 at +0x10.
+// No complete sound-description declaration is available in the generated headers.
+#pragma pack(push, 4)
+struct SoundResourceDescriptionView {
+  u32 mHeader[4];
+  unsigned __int64 mResourceID; // +0x10
+};
+
+// Resource enumeration records have stride 0x10; the final word is untouched.
+struct EffectResourceReference {
+  unsigned __int64 mResourceID; // +0x00
+  tFXResourceType mType;        // +0x08
+  u32 mReserved;               // +0x0c
+};
+#pragma pack(pop)
+
 // @ 0x00abe440
-u32 __cdecl ScoreEffect(void* unused, AbilityConfig* cfg, u32* out, int count) {
-  u32 a = cfg->mField10;
-  u32 b = cfg->mField14;
-  u32 r = 0;
-  if ((b & a) != 0xffffffff) {
-    r = 1;
-    if (count > 0) {
-      out[0] = a;
-      out[1] = b;
-      out[2] = 3;
+int __cdecl CollectSoundResourceReferences(void* context, const SoundResourceDescriptionView* description, EffectResourceReference* out, int capacity) {
+  int result = 0;
+  unsigned __int64 resourceID = description->mResourceID;
+  if (resourceID != 0xffffffffffffffffui64) {
+    result = 1;
+    if (capacity > 0) {
+      out->mResourceID = resourceID;
+      out->mType = kFXSoundResource;
     }
   }
-  (void)unused;
-  return r;
+  (void)context;
+  return result;
 }
 
 // @ 0x00abe480
