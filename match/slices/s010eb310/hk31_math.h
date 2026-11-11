@@ -41,11 +41,12 @@ class hkMemory
 	static hkMemory* s_instance;
 };
 
+class hkStatisticsCollector;
 class hkReferencedObject
 {
 public:
 	virtual ~hkReferencedObject() {}   // 0
-	virtual void slot1() {}            // 1 (0x0052E650, empty)
+	virtual void calcStatistics(hkStatisticsCollector*) const {}  // 1 (0x0052E650, empty)
 	hkInt16 m_memSizeAndFlags;         // +4
 	hkInt16 m_referenceCount;          // +6
 protected:
@@ -222,6 +223,7 @@ class hkArray
 	T* m_data;
 	int m_size;
 	int m_capacityAndFlags;
+	hkArray() : m_data(0), m_size(0), m_capacityAndFlags(DONT_DEALLOCATE_FLAG) {}
 	void pushBack(const T& t)
 	{
 		if (m_size == (int)((unsigned)m_capacityAndFlags & CAPACITY_MASK))

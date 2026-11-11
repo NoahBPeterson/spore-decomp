@@ -56,6 +56,8 @@ class hkStatisticsCollector
 };
 
 class hkFinishLoadedObjectFlag { public: int m_finishing; };   // passed by value (one stack dword)
+namespace hkWorldOperation { enum Result { POSTPONED, DONE }; }
+enum hkPhantomType { HK_PHANTOM_AABB, HK_PHANTOM_SIMPLE_SHAPE, HK_PHANTOM_CACHING_SHAPE };
 
 class hkWorldObject : public hkReferencedObject { public:  // size 0x58
 
@@ -67,6 +69,8 @@ class hkWorldObject : public hkReferencedObject { public:  // size 0x58
 	hkArray<int> m_properties;              // +0x4c
 	hkWorldObject(hkFinishLoadedObjectFlag f);          // 0x010826E0 (the "hkWorldObject_finishLoaded" function, thiscall)
 	hkWorldObject() {}
+	virtual hkWorldOperation::Result setShape(hkShape* shape) = 0;  // 2
+	virtual hkMotionState* getMotionState() = 0;                  // 3
 	void copyProperties(const hkWorldObject* other);   // 0x01087CA0
 };
 class hkPhantom : public hkWorldObject { public:  // size 0x70
@@ -80,6 +84,14 @@ class hkPhantom : public hkWorldObject { public:  // size 0x70
 		m_phantomListeners.m_data = 0; m_phantomListeners.m_size = 0; m_phantomListeners.m_capacityAndFlags = (int)0x80000000;
 	}
 	virtual ~hkPhantom();                                                           // 0x0108E550
+	virtual hkPhantomType getType() const = 0;                                      // 4
+	virtual void calcAabb(hkAabb& out) = 0;                                         // 5
+	virtual void addOverlappingCollidable(hkCollidable* c) = 0;                     // 6
+	virtual hkBool isOverlappingCollidableAdded(hkCollidable* c) = 0;               // 7
+	virtual void removeOverlappingCollidable(hkCollidable* c) = 0;                  // 8
+	virtual hkPhantom* clone() const = 0;                                          // 9
+	virtual void updateShapeCollectionFilter() = 0;                               // 10
+	virtual void deallocateInternalArrays();                                       // 11
 	hkCollidableAccept fireCollidableAdded(const hkCollidable* c);                  // 0x0108C0B0
 	void fireCollidableRemoved(const hkCollidable* c, hkBool collidableRemoved);    // 0x0108C100
 	void updateBroadPhase(const hkAabb& aabb);                                      // 0x0108E680
@@ -90,6 +102,9 @@ class hkShapePhantom : public hkPhantom { public:  // size 0x120
 	hkMotionState m_motionState;            // +0x70
 	hkShapePhantom(const hkShape* shape, const hkTransform& transform);   // 0x0108DD40
 	__forceinline hkShapePhantom(hkFinishLoadedObjectFlag f) : hkPhantom(f) {}
+	virtual hkWorldOperation::Result setShape(hkShape* shape);             // 2, 0x0108dc50
+	virtual hkMotionState* getMotionState() { return &m_motionState; }    // 3, 0x0108db30
+	virtual void calcAabb(hkAabb& out);                                   // 5, 0x0108dc20
 	virtual void deallocateInternalArrays();                              // 0x0108DB40 (base implementation)
 };
 struct hkLinearCastInput
@@ -126,7 +141,7 @@ class hkWorld : public hkReferencedObject { public:
 };
 
 // ---- hkSimpleShapePhantom ---------------------------------------------------------------------------------------
-class hkSimpleShapePhantom : public hkShapePhantom { public:  // size 0x130
+class __declspec(align(16)) hkSimpleShapePhantom : public hkShapePhantom { public:  // size 0x130
 
 	struct hkCollisionDetail { hkCollidable* m_collidable; };
 	hkArray<hkCollisionDetail> m_collisionDetails;   // +0x120
@@ -137,11 +152,13 @@ class hkSimpleShapePhantom : public hkShapePhantom { public:  // size 0x130
 		m_collisionDetails.m_data = 0; m_collisionDetails.m_size = 0; m_collisionDetails.m_capacityAndFlags = (int)0x80000000;
 	}
 	virtual ~hkSimpleShapePhantom();                                                         // 0x0108C790 / scalar deleting 0x0108C9D0
+	virtual hkPhantomType getType() const { return HK_PHANTOM_SIMPLE_SHAPE; }                  // 4, 0x01154720
 	virtual void calcStatistics(hkStatisticsCollector* c) const;                              // 0x0108C670
 	virtual void addOverlappingCollidable(hkCollidable* c);                                   // 0x0108C620
 	virtual hkBool isOverlappingCollidableAdded(hkCollidable* c);                             // 0x0108C550
 	virtual void removeOverlappingCollidable(hkCollidable* c);                                // 0x0108C590
 	virtual hkSimpleShapePhantom* clone() const;                                              // 0x0108C7E0 (name guessed from the copy logic)
+	virtual void updateShapeCollectionFilter() {}                                             // 10, 0x00c2e4e0
 	virtual void deallocateInternalArrays();                                                  // 0x0108C950
 	virtual void setPositionAndLinearCast(const hkVector4& position, const hkLinearCastInput& input,
 	                                      hkCdPointCollector& castCollector, hkCdPointCollector* startCollector);   // 0x0108C140
@@ -162,6 +179,8 @@ class hkSimpleShapePhantom : public hkShapePhantom { public:  // size 0x130
 		hkMemory::s_instance->deallocateChunk(p, (uint16_t)((hkReferencedObject*)p)->m_memSizeAndFlags, HK_MEMORY_CLASS_PHANTOM_T);
 	}
 };
+
+typedef char hkSimpleShapePhantomSize[(sizeof(hkSimpleShapePhantom) == 0x130) ? 1 : -1];
 
 // @ 0x0108c140
 void hkSimpleShapePhantom::setPositionAndLinearCast(const hkVector4& position, const hkLinearCastInput& input,
@@ -357,9 +376,6 @@ void hkSimpleShapePhantom::finishLoadedObject(void* p, int finishing)
 hkSimpleShapePhantom::hkSimpleShapePhantom(const hkShape* shape, const hkTransform& transform, hkUint32 collisionFilterInfo)
 	: hkShapePhantom(shape, transform)
 {
-	m_collisionDetails.m_data = 0;
-	m_collisionDetails.m_size = 0;
-	m_collisionDetails.m_capacityAndFlags = (int)0x80000000;
 	m_collidable.m_broadPhaseHandle.m_collisionFilterInfo = collisionFilterInfo;
 }
 
