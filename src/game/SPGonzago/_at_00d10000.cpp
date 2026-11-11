@@ -337,12 +337,17 @@ void* cRotationBall::Cast(int tag)
     return FUN_00b18460(tag);
 }
 
+// Closest attempt, 120 vs 121. The tag store now sits inside the second
+// virtual call, one instruction early: before `mov ecx, eax` instead of
+// after `mov eax, [edx+0x18]`. The empty-model path still pushes an
+// immediate 0; retail does `xor eax, eax; push eax` before the slot load.
 // @ 0x00d1d540
 char cRotationBall::Write(void* stream)
 {
     void* impl = (*(VFnR)VSLOT(stream, 0x20))(stream);
+    void** vt = *(void***)impl;
     uint tag = 0x7292112;
-    void* iface = (*(VFnR)VSLOT(impl, 0x18))(impl);
+    void* iface = ((void* (__thiscall*)(void*))vt[6])(impl);
     WriteUint32(iface, &tag, 1, 0);
     ((cGameData*)this)->Write(stream);
     cGameModel* m = mpModel_108;
