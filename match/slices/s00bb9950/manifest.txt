@@ -7,3 +7,4 @@ slices/s00bb9950/s00bb9950.cpp  ?NeedsBioProtect@cPlanetRecord@@QAEHXZ  00bba100
 slices/s00bb9950/s00bb9950.cpp  ?Dtor@cStarRecord@@QAEXXZ  00bba220  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bb9950/s00bb9950.cpp  ?GetPlanetRecord@cStarRecord@@QAEPAXH@Z  00bbaa60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bb9950/s00bb9950.cpp  ?EnsureName@cStarRecord@@QAEPAUString16@@XZ  00bb9de0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bb9950/s00bb9950.cpp  ?HasRare@cStarRecord@@QAEHXZ  00bb9c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
