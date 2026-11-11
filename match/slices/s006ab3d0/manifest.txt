@@ -6,3 +6,4 @@ slices/s006ab3d0/s006ab3d0.cpp  ?FUN_006abeb0@@YAXPAX@Z  006abeb0
 slices/s006ab3d0/s006ab3d0.cpp  ?FUN_006ab6c0@@YA_NPAXPB_W1PAI@Z  006ab6c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s006ab3d0/s006ab3d0.cpp  ?FUN_006ab840@@YA_NPAXPB_W1PAUWString@@@Z  006ab840  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s006ab3d0/s006ab3d0.cpp  ?FreeBuckets@HashTable@@QAEXPAPAUHashNode@@I@Z  006ac5d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006ab3d0/s006ab3d0.cpp  ?FUN_006abe00@@YIXPAPAX@Z  006abe00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

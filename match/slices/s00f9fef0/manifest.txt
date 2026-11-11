@@ -5,3 +5,4 @@ slices/s00f9fef0/s00f9fef0.cpp  ?TestFlag@DirtyFlag@@QAE_NE@Z  00fa0e60  /O2 /MD
 slices/s00f9fef0/s00f9fef0.cpp  ?CopyFaceA@TerrainSphereLike@@QAE_NHPBM@Z  00fa0010  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00f9fef0/s00f9fef0.cpp  ?CopyFaceB@TerrainSphereLike@@QAE_NHPBM@Z  00fa0070  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00f9fef0/s00f9fef0.cpp  ?CopyFaceC@TerrainSphereLike@@QAE_NHPBM@Z  00fa00d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f9fef0/s00f9fef0.cpp  ?Dirty@DirtyFlag@@QAEXE@Z  00fa0e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast

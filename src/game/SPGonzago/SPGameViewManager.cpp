@@ -600,3 +600,17 @@ void Owner::OnRemove(Listed* e)
         delete n;
     }
 }
+
+#include "SPGameViewManager_pick.h"
+
+// @ 0x00b38140
+void Simulator::cGameViewManager::SetPickPriorities(const PickPriorityVector* other, bool renumber)
+{
+    PickPriorityVector* vec = &mPickPriorities;
+    *vec = *other;
+    if (renumber) {
+        int n = (int)(vec->mpEnd - vec->mpBegin);
+        for (int i = 0; i < n; i++)
+            mPickPriorities.mpBegin[i].mPriority = i;
+    }
+}

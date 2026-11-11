@@ -80,11 +80,48 @@ struct VariantPair {
   unsigned int first;
   EA::Variant second;
 };
-
 namespace eastl {
+// EASTL's map comparator owns the key comparator as a class subobject.
+template <class A, class B, class R> struct binary_function {
+  typedef A first_argument_type;
+  typedef B second_argument_type;
+  typedef R result_type;
+};
+template <class T> struct less : binary_function<T, T, bool> {
+  bool operator()(const T& a, const T& b) const { return a < b; }
+};
+template <class Key, class Value, class Compare>
+class map_value_compare : public binary_function<Value, Value, bool> {
+public:
+  Compare c;
+  map_value_compare(const Compare& x) : c(x) {}
+  bool operator()(const Value& a, const Value& b) const { return c(a.first, b.first); }
+  bool operator()(const Value& a, const Key& b) const { return c(a.first, b); }
+  bool operator()(const Key& a, const Value& b) const { return c(a, b.first); }
+  bool operator()(const Key& a, const Key& b) const { return c(a, b); }
+};
+typedef map_value_compare<unsigned int, VariantPair, less<unsigned int> > PropertyValueCompare;
+
 VariantPair* lower_bound(VariantPair* first, VariantPair* last,
-                         const unsigned int* key, unsigned char comp);  // 0x00612db0 (0x18-stride instance)
-}
+                         const unsigned int* key, PropertyValueCompare comp);  // 0x00612db0 (0x18-stride instance)
+
+class pvector {
+public:
+  VariantPair* mpBegin;
+  VariantPair* mpEnd;
+  VariantPair* mpCapacity;
+  unsigned int mAllocA;      // +0x0c
+  unsigned int mAllocB;      // +0x10
+  unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }
+  unsigned int capacity() const { return (unsigned int)(mpCapacity - mpBegin); }
+  pvector& operator=(const pvector& x);
+  void resize(unsigned int n);
+  VariantPair* erase(VariantPair* first, VariantPair* last);
+  VariantPair* insert(VariantPair* position, const VariantPair& value);
+  void DoInsertValue(VariantPair* position, const VariantPair& value);
+  void DoInsertValues(VariantPair* position, unsigned int n, const VariantPair& value);
+};
+}  // namespace eastl
 
 namespace SP {
 
@@ -105,14 +142,19 @@ public:
 };
 
 // eastl::vector_map<unsigned int,EA::Variant,...>; comparator lives at +0x14.
-struct VariantMap {
-  VariantPair* mpBegin;      // +0x00
-  VariantPair* mpEnd;        // +0x04
-  VariantPair* mpCapacity;   // +0x08
-  unsigned int mAllocA;      // +0x0c
-  unsigned int mAllocB;      // +0x10
-  unsigned char mCompare;    // +0x14
-  VariantMap() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+struct VariantMap : public eastl::pvector {
+  typedef eastl::PropertyValueCompare value_compare;
+  value_compare mCompare;    // +0x14
+  VariantMap() : mCompare(eastl::less<unsigned int>()) {
+    mpBegin = 0;
+    mpEnd = 0;
+    mpCapacity = 0;
+  }
+  VariantMap& operator=(const VariantMap& x) {
+    eastl::pvector::operator=(x);
+    mCompare = value_compare(x.mCompare);
+    return *this;
+  }
   unsigned int erase(const unsigned int& key);
   VariantPair* insert(VariantPair* out, const VariantPair& value);
   VariantPair* InsertOrGet(const unsigned int& key, const EA::Variant& value);
@@ -173,20 +215,3 @@ public:
 };
 
 }  // namespace SP
-
-namespace eastl {
-class pvector {
-public:
-  VariantPair* mpBegin;
-  VariantPair* mpEnd;
-  VariantPair* mpCapacity;
-  unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }
-  unsigned int capacity() const { return (unsigned int)(mpCapacity - mpBegin); }
-  pvector& operator=(const pvector& x);
-  void resize(unsigned int n);
-  VariantPair* erase(VariantPair* first, VariantPair* last);
-  VariantPair* insert(VariantPair* position, const VariantPair& value);
-  void DoInsertValue(VariantPair* position, const VariantPair& value);
-  void DoInsertValues(VariantPair* position, unsigned int n, const VariantPair& value);
-};
-}  // namespace eastl

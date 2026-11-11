@@ -310,12 +310,8 @@ void SP::VariantMap::ClearMapOnly() {
 // @ 0x006A2A40
 void SP::cPropertyList::Copy(cPropertyList* src) {
   if (this == src) return;
-  VariantMap* s = &src->mPropertyMap;
-  VariantMap* d = &mPropertyMap;
-  cPropertyList* me = this;
-  *(eastl::pvector*)d = *(const eastl::pvector*)s;
-  d->mCompare = s->mCompare;
-  me->SetParent(me->mParent);
+  mPropertyMap = src->mPropertyMap;
+  SetParent(mParent);
 }
 
 // @ 0x006A2AD0

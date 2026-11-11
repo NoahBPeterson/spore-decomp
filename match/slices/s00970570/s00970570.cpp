@@ -83,9 +83,10 @@ class IWinGrid { public:
     PV(12); PV(13); PV(14); PV(15); PV(16); PV(17); PV(18); PV(19);
     PV(20); PV(21); PV(22); PV(23); PV(24); PV(25); PV(26); PV(27);
     PV(28); PV(29);
-    virtual void ScrollCellsVertically(int nCells);               // +0x078  slot 30
+    virtual bool ScrollCellsVertically(int nCells);               // +0x078  slot 30
     virtual void ScrollCellsHorizontally(int nCells);             // +0x07c  slot 31
-    PV(32); PV(33);
+    virtual bool ScrollPagesVertically(int nPages);                // +0x080  slot 32
+    PV(33);
     virtual void ScrollToColumn(int col);                         // +0x088  slot 34
     virtual void ScrollToRow(int row);                            // +0x08c  slot 35
     PV(36); PV(37); PV(38); PV(39); PV(40); PV(41); PV(42); PV(43); PV(44);
@@ -156,7 +157,6 @@ class IWinGrid { public:
     bool  GetCellGutters(float* a, float* b, float* c, float* d);
     void  SetOutlineUse(int iUse, int iColor);
     int   PauseRecalculations(bool bPause);
-    void  ScrollPagesVertically(int nPages);
     void  ScrollPagesHorizontally(int nPages);
     void  ScrollToCell(int col, int row);
     bool  GetSelectionRules(int* pRule, int* pMaxCount);
@@ -314,14 +314,11 @@ int IWinGrid::PauseRecalculations(bool bPause)
 // ===========================================================================
 // 0x970740 IWinGrid::ScrollPagesVertically
 // ===========================================================================
-// The grid pages by four cells: the original rewrites the stack argument in
-// place (`mov [esp+4],edx`) before the tail jump, which is what cl makes of an
-// inline member call whose argument is the mutated parameter.
+// Preserve the grid operation's boolean result while paging by four cells.
 // @ 0x00970740
-void IWinGrid::ScrollPagesVertically(int nPages)
+bool IWinGrid::ScrollPagesVertically(int nPages)
 {
-    nPages *= 4;
-    ScrollCellsVertically(nPages);
+    return ScrollCellsVertically(nPages * 4);
 }
 
 // ===========================================================================

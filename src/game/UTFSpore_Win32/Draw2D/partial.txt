@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
 00951e10  n/a  partial; 646-byte skin-vertex transform loop skeleton
-009520a0  n/a  partial; XformQuad::Init constructor implemented from the vftable/field stores in the retail bytes. Values and store order match; only residual is cl hoisting `xor ecx,ecx` above the vtable immediate store (retail stores the vtable first). Tried `_ReadWriteBarrier()` after the vtable store: it fixes the vt/xor order but moves the `xorps`/`mov edx` prologue and `mov eax,ecx` to different positions.

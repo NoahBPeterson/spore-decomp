@@ -114,9 +114,8 @@ hkStreamWriter* hkDefaultStreambufFactory::openWriter(const char* name)
 }
 
 // @ 0x0107e890
-hkStdioStreamWriter::hkStdioStreamWriter(const char* name)
+hkStdioStreamWriter::hkStdioStreamWriter(const char* name) : m_ownsFile(true)
 {
-	m_ownsFile = true;
 	// The original leaves m_file uninitialised when name is null (quirk kept).
 	if (name)
 		m_file = fopen(name, "wb");

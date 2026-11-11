@@ -1395,35 +1395,39 @@ bool BuildSkinVertices(int* self, int)
     return true;
 }
 
-// @ 0x009520a0
-struct XformQuad {
-    void* mVt;      // +0x00 (0x1440448)
-    int   mF4;      // +0x04
-    int   mOwner;   // +0x08
-    int   mFc;      // +0x0c
-    char  mFlag;    // +0x10
-    char  mPad[3];  // +0x11
-    float mF14;     // +0x14
-    float mF18;     // +0x18
-    float mF1c;     // +0x1c
-    float mF20;     // +0x20
-
-    XformQuad* Init(void* owner);
-};
-XformQuad* XformQuad::Init(void* owner)
+// Draw2D's constructor writes the primary interface and its clipping state.
+// This view preserves the native layout without constructing a second interface table.
+template <typename T>
+inline void InitializeDrawClipRect(EA::RectT<T>& rect, T left, T top, T right, T bottom)
 {
-    XformQuad* self = this;
-    self->mVt = (void*)0x1440448;
-    int zero = (int)(size_t)owner & 0;
-    self->mF4 = zero;
-    self->mOwner = (int)(size_t)owner;
-    self->mFc = -1;
-    self->mFlag = (char)zero;
-    self->mF14 = 0.0f;
-    self->mF18 = 0.0f;
-    self->mF1c = 0.0f;
-    self->mF20 = 0.0f;
-    return self;
+    rect.mLeft = left;
+    rect.mTop = top;
+    rect.mRight = right;
+    rect.mBottom = bottom;
+}
+
+struct Draw2DConstructionView {
+    void* mpVtable;                                      // +0x00
+    EA::UTFWin::Renderable2DBuilder* mpRenderable;       // +0x04
+    EA::UTFWin::IWindowMgr* mpWindowMgr;                 // +0x08
+    unsigned mColor;                                    // +0x0c
+    bool mbClip;                                        // +0x10
+    EA::RectT<float> mClipRect;                         // +0x14
+
+    Draw2DConstructionView* Init(EA::UTFWin::IWindowMgr* owner);
+};
+typedef char Draw2DConstructionSizeCheck[(sizeof(Draw2DConstructionView) == 0x24) ? 1 : -1];
+
+// @ 0x009520a0
+Draw2DConstructionView* Draw2DConstructionView::Init(EA::UTFWin::IWindowMgr* owner)
+{
+    mpVtable = (void*)0x01440448;
+    mpRenderable = 0;
+    mpWindowMgr = owner;
+    mColor = 0xffffffff;
+    mbClip = false;
+    InitializeDrawClipRect(mClipRect, 0.0f, 0.0f, 0.0f, 0.0f);
+    return this;
 }
 
 // @ 0x00952100

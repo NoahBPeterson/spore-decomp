@@ -51,7 +51,7 @@ void __fastcall FUN_006ab800(WString* self, int /*edx unused*/, WString* src, in
 }
 
 // ===========================================================================
-// atomics / refcount
+// scoped reader/writer lock cleanup
 // ===========================================================================
 
 // @ 0x006abdf0
@@ -65,7 +65,7 @@ void __fastcall FUN_006abe00(void** self)
 {
     int* p = (int*)*self;
     _InterlockedExchangeAdd((volatile long*)p, -1);
-    _InterlockedExchangeAdd((volatile long*)(p + 2), 1);
+    _InterlockedIncrement((volatile long*)(p + 2)); // Advance the served writer ticket.
 }
 
 // @ 0x006abee0

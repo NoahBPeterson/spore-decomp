@@ -14,10 +14,34 @@ typedef unsigned int uint32_t;
 
 
 // ------------------------------------------------------------------ external helpers
-extern "C" void* __cdecl memmove(void*, const void*, unsigned int);  // 0x011e0744
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);  // 0x011e0744
+// The trivial float-range copy still returns an iterator object, as in EASTL's
+// uninitialized_copy_ptr adapter. Its lifetime differs from a bare pointer return.
+template<class P>
+struct CurveIterator {
+    P mCurrent;
+    explicit CurveIterator(P p) : mCurrent(p) {}
+    P base() const { return mCurrent; }
+};
+
+template<class T>
+__forceinline CurveIterator<T*> CopyCurveSamples(CurveIterator<const T*> first,
+                                                CurveIterator<const T*> last,
+                                                CurveIterator<T*> result)
+{
+    typedef char FourByteSample[sizeof(T) == sizeof(float) ? 1 : -1];
+    const int byteCount = (int)((const char*)last.base() - (const char*)first.base());
+    return CurveIterator<T*>((T*)memcpy(result.base(), first.base(), (unsigned)byteCount)
+                             + (byteCount >> 2));
+}
+
 void __cdecl operator_delete(void*);                                 // 0x00f47380
 
-struct Vector2 { float x, y; };
+struct Vector2 {
+    float x, y;
+    Vector2() {}
+    Vector2(const Vector2& v) : x(v.x), y(v.y) {}
+};
 struct Vector3 { float x, y, z; };
 
 struct cGlobalParams {
@@ -33,13 +57,26 @@ struct cEffectParams {
 };
 
 // The retail eastl vector is 0x14 bytes (the allocator is 8 bytes wide).
-template <class T>
-struct sp_vector {
-    T* mpBegin;                    // 0x00
-    T* mpEnd;                      // 0x04
-    T* mpCapacity;                 // 0x08
-    int mAllocator[2];             // 0x0c
-    void Allocate(int n, const int* alloc);                       // 0x004aa350
+template<class T>
+struct CurveVectorBase {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    int mAllocator[2];
+    CurveVectorBase() {}
+    CurveVectorBase(int n, const int* allocator);                // 0x004aa350
+};
+
+template<class T>
+struct sp_vector : CurveVectorBase<T> {
+    sp_vector() {}
+    __forceinline sp_vector(const sp_vector& src)
+        : CurveVectorBase<T>((int)(src.mpEnd - src.mpBegin), src.mAllocator)
+    {
+        this->mpEnd = CopyCurveSamples<T>(CurveIterator<const T*>(src.mpBegin),
+                                         CurveIterator<const T*>(src.mpEnd),
+                                         CurveIterator<T*>(this->mpBegin)).base();
+    }
     sp_vector<T>& operator=(const sp_vector<T>&);                 // 0x0050d4e0
 };
 
@@ -60,7 +97,7 @@ struct cAnimationCurve {                                       // size 0x28
     char mChannel;                     // 0x24
     char mMode;                        // 0x25
     char pad26[2];
-    cAnimationCurve* CopyFrom(const cAnimationCurve&);            // 0x00aa1cc0
+    cAnimationCurve(const cAnimationCurve&);                     // 0x00aa1cc0
     cAnimationCurve& operator=(const cAnimationCurve& src)
     {
         mLengthRange = src.mLengthRange;
@@ -293,21 +330,11 @@ void* cModelDescription::Destroy(unsigned int flags)
 }
 
 // @ 0x00aa1cc0
-// Retail: the float count is (end - begin) >> 2 from the 4-byte pointers, the byte count is
-// the pointer difference itself, and the new end is memmove's result + (bytes >> 2).  The
-// remaining 0x14-byte-vector fields are copied one by one (two byte stores at +0x24/+0x25).
-cAnimationCurve* cAnimationCurve::CopyFrom(const cAnimationCurve& src)
+cAnimationCurve::cAnimationCurve(const cAnimationCurve& src)
+    : mLengthRange(src.mLengthRange), mCurve(src.mCurve),
+      mCurveVary(src.mCurveVary), mSpeedScale(src.mSpeedScale),
+      mChannel(src.mChannel), mMode(src.mMode)
 {
-    mLengthRange.x = src.mLengthRange.x;
-    mLengthRange.y = src.mLengthRange.y;
-    mCurve.Allocate((int)(src.mCurve.mpEnd - src.mCurve.mpBegin), src.mCurve.mAllocator);
-    int nBytes = (int)((char*)src.mCurve.mpEnd - (char*)src.mCurve.mpBegin);
-    mCurve.mpEnd = (float*)memmove(mCurve.mpBegin, src.mCurve.mpBegin, (unsigned int)nBytes) + (nBytes >> 2);
-    mCurveVary = src.mCurveVary;
-    mSpeedScale = src.mSpeedScale;
-    mChannel = src.mChannel;
-    mMode = src.mMode;
-    return this;
 }
 
 // @ 0x00aa1db0

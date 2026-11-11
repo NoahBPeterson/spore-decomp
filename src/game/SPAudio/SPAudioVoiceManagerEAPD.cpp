@@ -136,7 +136,7 @@ virtual void v41();
     virtual char CallA8(int a, int b, int c, int d);          // +0xa8
     virtual char CallAC(int a, int b, float c, int d);        // +0xac
     virtual void v44();
-    virtual void CallB4();                                    // +0xb4
+    virtual bool IsVoicePlaying(unsigned voiceId);              // +0xb4
     virtual int  GetHandle();                                  // +0xb8 (46)
 virtual void v47();
 virtual void v48();
@@ -246,6 +246,7 @@ public:
 extern double gMaxAge;   // 0x013f1298
 class SPAudioVoiceManagerEAPD : public IVoiceManager, public RefCountT {
 public:
+    bool IsVoicePlaying(unsigned voiceId);                    // native primary-interface slot 8
     VMHash mInstanceToGroup;                               // +0xc
     SPAudioVoiceManagerEAPD();                             // ctor at 0x00a465b0
     virtual ~SPAudioVoiceManagerEAPD() throw() {}          // scalar deleting dtor: 0x00a46620
@@ -307,12 +308,9 @@ bool __stdcall AudioFuncA8(int a, int b, int c, int d, int e)
 }
 
 // @ 0x00a460b0
-void AudioFuncB4()
+bool SPAudioVoiceManagerEAPD::IsVoicePlaying(unsigned voiceId)
 {
-    AudioSystem* s = GetSystemAT();
-    typedef void (__thiscall* Fn)(void*);
-    Fn fn = *(Fn*)((char*)*(void**)s + 0xb4);
-    fn(s);
+    return GetSystemAT()->IsVoicePlaying(voiceId);
 }
 
 // @ 0x00a460d0

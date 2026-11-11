@@ -93,7 +93,7 @@ void hkBvTreeAgent::cleanup()
 void hkBvTreeAgent::invalidateTim(hkCollisionInput& input)
 {
 	hkBvAgentEntryInfo* entry = m_collisionPartners.m_data;
-	hkBvAgentEntryInfo* end = entry + m_collisionPartners.m_size;
+	hkBvAgentEntryInfo* end = hkArrayEnd(m_collisionPartners);
 	for (; entry != end; ++entry)
 	{
 		if (entry->m_collisionAgent)

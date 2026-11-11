@@ -3,7 +3,6 @@
 01080540 129 havok-equivalent
 01080650 77 havok-equivalent
 010806e0 42 havok-equivalent
-01080730 34 havok-equivalent
 01080830 68 havok-equivalent
 01080890 54 havok-equivalent
 010808f0 75 havok-equivalent

@@ -10,3 +10,4 @@ slices/s00a4a500/s00a4a500.cpp  ?glist_istoplevel@Eapd@Audio@EA@@YAHPAUt_glist@1
 slices/s00a4a500/s00a4a500.cpp  ?canvas_gettext@Eapd@Audio@EA@@YAPAXPAUt_glist@123@@Z  00a4ab90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00a4a500/s00a4a500.cpp  ?canvas_isopen@Eapd@Audio@EA@@YAHPAUt_glist@123@@Z  00a4ad50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00a4a500/s00a4a500.cpp  ?glist_getindex@Eapd@Audio@EA@@YAHPAUt_glist@123@PAX@Z  00a4a620  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a4a500/s00a4a500.cpp  ?canvas_takeofflist@Eapd@Audio@EA@@YAXPAUt_glist@123@@Z  00a4a3c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

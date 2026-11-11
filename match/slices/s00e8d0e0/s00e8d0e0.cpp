@@ -1,3 +1,6 @@
+#include "game/types.h"
+#include "s00e8d0e0.h"
+
 // Recovered from SporeApp.exe (retail).
 // Batch gold6 / worker 43 / slice s00e8d0e0.
 //
@@ -479,12 +482,8 @@ char cGameTerrainCursorView::GetFlag()
 // 0x00e8d770  cGameTerrainCursorView::cGameTerrainCursorView
 // ---------------------------------------------------------------------------
 // @ 0x00e8d770
-cGameTerrainCursorView::cGameTerrainCursorView()
+SP::cGameTerrainCursorView::cGameTerrainCursorView()
 {
-    mpVftable = &gVtableTerrainCursor;
-    mpAnimated = nullptr;
-    mpObject = nullptr;
-    mpFrame = nullptr;
 }
 
 // ---------------------------------------------------------------------------

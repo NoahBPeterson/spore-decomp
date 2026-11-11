@@ -466,15 +466,34 @@ namespace G7
         Obj*  pObj;         // +0x8
     };
 
-    // A list base is itself a node (the sentinel); its value slot is unused.
-    struct List
-    {
-        Node* pNext;        // +0x0  sentinel next
-        Node* pPrev;        // +0x4  sentinel prev
-        Obj*  pUnused;      // +0x8  sentinel value slot
-
+    // Native list: an eight-byte embedded anchor and four bytes of allocator storage.
+    struct ListNodeBase {
+        Node* pNext;
+        Node* pPrev;
+    };
+    struct ListAllocator {
+        u32 mStorage;                       // preserved; this constructor does not initialize it
+        ListAllocator(const char*) {}
+    };
+    struct ListBase {
+        union {
+            ListNodeBase mNode;
+            struct { Node* pNext; Node* pPrev; };
+        };
+        ListAllocator mAllocator;
+        ListBase() : mNode(), mAllocator("EASTL/list") { DoInit(); }
+        __forceinline void DoInit() {
+            mNode.pNext = (Node*)&mNode;
+            mNode.pPrev = (Node*)&mNode;
+        }
+    };
+    struct List : public ListBase {
+        List() : ListBase() {}
         void DoClear();                             // 0x0060c4a0
-        __forceinline void Init() { pNext = (Node*)this; pPrev = (Node*)this; }
+        __forceinline void Init() {
+            mNode = ListNodeBase();
+            DoInit();
+        }
     };
 
     // First parameter of FUN_00ba1fa0: version/build pair at +0xc/+0x10.
@@ -510,6 +529,10 @@ namespace G7
         void AddKey(Obj* key);                                    // 0x00ba22e0
         void CommitPending(void* a, void* b, char flag);          // 0x00ba2400 (ret 0xc)
     };
+
+    typedef char ListSizeCheck[(sizeof(List) == 0xc) ? 1 : -1];
+    typedef char AnchorSizeCheck[(sizeof(ListNodeBase) == 8) ? 1 : -1];
+    typedef char OwnerSizeCheck[(sizeof(Owner) == 0x44) ? 1 : -1];
 
     struct SimCtx
     {

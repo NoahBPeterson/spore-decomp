@@ -44,7 +44,7 @@ namespace EA {
 namespace Clipboard {
 class IData { public:
     virtual void slot0() = 0;
-    virtual void AddRef() = 0;
+    virtual int AddRef() = 0;
     virtual void Release() = 0;
 };
 }
@@ -58,7 +58,7 @@ class DataText16 : public IData { public:
     unsigned char mData[2];// +0x10
     DataText16(const wchar_t* s, int len);                      // 0x92aae0
     virtual void slot0();
-    virtual void AddRef();
+    virtual int AddRef();
     virtual void Release();
 };
 }
@@ -390,14 +390,10 @@ namespace EA { namespace Clipboard {
 DataText16* CreateTextData(const wchar_t* s, int len)
 {
     void* m = g_pMemPool->LockedAlloc(len * 2 + 0x1a, 0, 0, 0, 0, 0);
-    if (m) {
-        DataText16* d = new (m) DataText16(s, len);
-        if (d) {
-            ((IData*)d)->AddRef();
-        }
-        return d;
-    }
-    return 0;
+    DataText16* d = m ? new (m) DataText16(s, len) : 0;
+    if (d)
+        d->AddRef();
+    return d;
 }
 }}  // namespace EA::Clipboard
 

@@ -24,6 +24,7 @@ enum hkResult { HK_SUCCESS = 0, HK_FAILURE = 1 };
 class hkBool
 {
 public:
+	hkBool() {}
 	hkBool(bool b) : m_bool(b ? 1 : 0) {}
 	operator bool() const { return m_bool != 0; }
 private:
@@ -81,11 +82,12 @@ public:
 	hkMemoryStatistics m_stats;      // 0x10..0x2b
 };
 
+class hkStatisticsCollector;
 class hkReferencedObject
 {
 public:
 	virtual ~hkReferencedObject() {}                                     // 0
-	virtual void slot1() {}                                              // 1 (0x0052E650, empty)
+	virtual void calcStatistics(hkStatisticsCollector*) const {}           // 1 (0x0052E650, empty, ret4)
 
 	// HK_DECLARE_CLASS_ALLOCATOR with the stream memory class, as the binary allocates these objects.
 	static void* operator new(size_t nbytes)
@@ -193,7 +195,7 @@ public:
 	void close();                                                 // 0x0107E910
 
 	FILE* m_file;                                                 // 0x08
-	bool m_ownsFile;                                              // 0x0c
+	hkBool m_ownsFile;                                            // 0x0c
 	void* scalar_deleting_dtor(unsigned char flags);              // 0x0107E9A0
 };
 

@@ -39,6 +39,7 @@ extern char vtbl_5a2300_b;
 #include "SP/cSPEditorLimbJoint.h"
 #include "cSPMatrix3.h"
 #include "cSPVector3.h"
+#include "SP/cSPEditorTuning.h"
 #include <intrin.h>
 #pragma intrinsic(fabs)
 
@@ -164,15 +165,13 @@ namespace COM {
  };
 }
 }
-struct Vector3 { float x, y, z; };
 struct S36 { int v[9]; };
 class cCopy9 {
 public:
     S36 m;
     cCopy9* Assign(const S36& s);
 };
-struct TuningData { char pad[0x60]; Vector3 mValue; };
-TuningData* EditorTuning();  // 0x00401070
+namespace SP { cSPEditorTuning* EditorTuning(); } // 0x00401070
 class cHandleish {
 public:
     PV(0) PV(1) PV(2) PV(3) PV(4)
@@ -531,14 +530,14 @@ cCopy9* cCopy9::Assign(const S36& s)
     return this;
 }
 
-// @ 0x005a8900
-Vector3* __stdcall GetEditorTuningValue(Vector3* out)
+inline const EA::ResourceMan::Key& SP::cSPEditorTuning::GetSpineHandleTuningKey()
 {
-    TuningData* t = EditorTuning();
-    *(int*)&out->x = *(int*)&t->mValue.x;
-    *(int*)&out->y = *(int*)&t->mValue.y;
-    *(int*)&out->z = *(int*)&t->mValue.z;
-    return out;
+    return mSpineHandleTuningKey;
+}
+// @ 0x005a8900
+EA::ResourceMan::Key SP::cSPEditorHandle::GetPropListKey()
+{
+    return SP::EditorTuning()->GetSpineHandleTuningKey();
 }
 
 // @ 0x005a8a60
