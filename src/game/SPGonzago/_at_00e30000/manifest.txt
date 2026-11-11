@@ -16,3 +16,4 @@
 ../src/game/SPGonzago/_at_00e30000.cpp  ?Shutdown@cUITimedTooltip@@QAEXXZ  00e36500  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e30000.cpp  ?Hide@cUITimedTooltip@@QAEXXZ  00e36620  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e30000.cpp  ?ResetState@cUITimedTooltip@@QAEXXZ  00e36de0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?FindWindow@cUITimedTooltip@@QAEPAXI_N@Z  00e36650  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

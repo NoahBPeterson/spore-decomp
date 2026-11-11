@@ -2374,9 +2374,10 @@ void cUITimedTooltip::Hide()
 // @ 0x00e36650
 void* cUITimedTooltip::FindWindow(uint32_t nId, bool bFlag)
 {
-    if (m_pLayout == nullptr)
-        return nullptr;
-    return m_pLayout->FindWindowByID(nId, bFlag);
+    void* result = nullptr;
+    if (m_pLayout != nullptr)
+        result = m_pLayout->FindWindowByID(nId, bFlag);
+    return result;
 }
 
 // @ 0x00e36670
