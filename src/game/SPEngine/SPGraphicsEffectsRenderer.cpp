@@ -1161,7 +1161,17 @@ struct S5 {
     // 0x6e9d50
     void m9d50(void* out);
 };
-int f94a0(int p1, int p2, int p3);
+struct EffectRecordReference {
+    void** mpTable;
+    int mnRefCount;
+};
+struct EffectReleaseRecord {
+    uint32_t pad00[0x28 / 4];
+    EffectRecordReference* mpReference;
+    uint32_t pad2c[(0x70 - 0x2c) / 4];
+};
+EffectReleaseRecord* f94a0(EffectReleaseRecord* first, EffectReleaseRecord* last,
+                         EffectReleaseRecord* destination);
 struct RefObj_s006e_8f90 {
     char pad[8];
     volatile long ref;
@@ -3392,26 +3402,26 @@ void S5::m9330(void* src)
 }
 
 // @ 0x006e94a0
-int f94a0(int p1, int p2, int p3)
+EffectReleaseRecord* f94a0(EffectReleaseRecord* first, EffectReleaseRecord* last,
+                         EffectReleaseRecord* destination)
 {
-    if (p1 != p2) {
+    if (first != last) {
         do {
-            void* r = *(void**)(p1 + 0x28);
-            if (r != 0) {
-                int n = *(int*)((char*)r + 4);
-                n += -1;
-                *(int*)((char*)r + 4) = n;
-                if (n == 0) {
-                    *(int*)((char*)r + 4) = 1;
+            EffectRecordReference* reference = first->mpReference;
+            if (reference != 0) {
+                int count = (*(volatile int*)&reference->mnRefCount += -1);
+                if (count == 0) {
+                    reference->mnRefCount = 1;
                     _ReadWriteBarrier();
-                    ((void(__thiscall*)(void*, int))VFN(r, 0))(r, 1);
+                    typedef void* (__thiscall* DeleteFunction)(EffectRecordReference*, unsigned);
+                    ((DeleteFunction)reference->mpTable[0])(reference, 1);
                 }
             }
-            p1 += 0x70;
-            p3 += 0x70;
-        } while (p1 != p2);
+            ++first;
+            ++destination;
+        } while (first != last);
     }
-    return p3;
+    return destination;
 }
 
 // @ 0x006e9530
