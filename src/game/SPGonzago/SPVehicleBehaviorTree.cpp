@@ -4180,14 +4180,13 @@ namespace SP {
 bool __cdecl MoveToPointOrder_Activate(BehaviorObj* self)
 {
     Brain* brain = ((Brain* (__thiscall*)(BehaviorObj*))(void*)FUN_00ca71d0)(self);
-    Vector3* pos = (Vector3*)((char*)brain + 0x04);
     if (brain->mMode10 == 6) {
-        ((void (__cdecl*)(Vector3, float, float))FUN_00c9fb40)(*pos, 0.0f, DAT_013f1164);
-        ((::cSpatialObject*)((char*)self + 0x34))->Ve4(*pos, 1.0f);
-        ((void (__thiscall*)(BehaviorObj*))(void*)FUN_00dcc610)(self);
+        ((void (__thiscall*)(BehaviorObj*, Vector3, float, float))FUN_00c9fb40)(self, *(Vector3*)((char*)brain + 0x04), 0.0f, *(float*)0x013f1164);
+        ((::cSpatialObject*)((char*)self + 0x34))->Ve4(*(Vector3*)((char*)brain + 0x04), 1.0f);
+        FUN_00dcc610(self);
         return true;
     } else {
-        ((void (__thiscall*)(BehaviorObj*, const char*))FUN_00ca7250)(self, "(6) move: no orders");
+        ((void (__thiscall*)(BehaviorObj*, const char*))FUN_00ca7250)(self, "(42) MTP: bad orders");
         ((void (__thiscall*)(BehaviorObj*))FUN_00caa900)(self);
         return false;
     }
@@ -4290,12 +4289,7 @@ bool __cdecl FUN_00dcd180(BehaviorObj* self, int, int, int, int, float* out)
             void* loco = (char*)self + 0x34;
             if (((char (__thiscall*)(void*))VF(loco, 0x58))(loco)) {
                 void* obj = (void*)EA_Audio_GetSystemAT();
-                if (obj) {
-                    void* x = ((void* (__thiscall*)(void*))VF(obj, 0x20))(obj);
-                    FUN_00435ed0(0x67fa83cd, x);
-                } else {
-                    FUN_00435ed0(0x67fa83cd, (void*)0);
-                }
+                FUN_00435ed0(0x67fa83cd, obj ? ((void* (__thiscall*)(void*))VF(obj, 0x20))(obj) : 0);
             }
         }
     }
