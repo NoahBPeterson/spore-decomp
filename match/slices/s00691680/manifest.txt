@@ -1,1 +1,2 @@
 # no byte-exact matches in this slice yet
+slices/s00691680/s00691680.cpp  ?Cancel@cJob@@QAE_N_N@Z  00692400  /O2 /MD /Gy /EHsc /TP
