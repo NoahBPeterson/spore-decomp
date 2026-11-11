@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-0137ea50  ?  claimed MATCH but the byte-match gate disagrees (2026-11-10): compile failed
