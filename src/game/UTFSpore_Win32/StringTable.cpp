@@ -7,7 +7,6 @@
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  operator_delete(void*) throw();   // 0x00f47380
-extern void FUN_00620230(void*);
 #include <intrin.h>
 #include <string.h>
 #include <new>
@@ -17,7 +16,6 @@ extern void FUN_00620230(void*);
 void* __cdecl operator new(size_t, const char*, int, int, int, int);
 typedef unsigned int uint;
 extern "C" void  operator_delete(void*) throw();   // 0x00f47380
-extern void FUN_00620230(void*);
 struct Key { uint mInstance; uint mType; uint mGroup; };
 struct ResourceBase {
   virtual ~ResourceBase();
@@ -40,9 +38,14 @@ struct StringTable : ResourceBase, IntrusiveNode {
   __declspec(noinline) StringTable();
   ~StringTable();                                   // out of line at 0xa16a20
 };
-struct IntrusiveListHead { void* mpNext; void* mpPrev; };
+struct IntrusiveListHead {
+  void* mpNext;
+  void* mpPrev;
+  void Destroy(); // 0x00620230
+};
 struct UIStringMan {
-  virtual ~UIStringMan();
+  void** mpVtbl;
+  UIStringMan* ScalarDtor(unsigned flags);
   int    mField04;         // +0x04
   void*  mpArg;            // +0x08
   IntrusiveListHead mList; // +0x0c
@@ -98,15 +101,22 @@ StringTable::StringTable()
 // @ 0x00999820
 UIStringMan::UIStringMan(void* arg)
 : mpArg(arg), mField04(0) {
-  mList.mpPrev = &mList;
-  mList.mpNext = &mList;
+  mpVtbl = (void**)0x01446b40;
+  IntrusiveListHead& head = mList;
+  head.mpPrev = &head;
+  head.mpNext = &head;
 }
 
 // @ 0x00999850
-UIStringMan::~UIStringMan()
+UIStringMan* UIStringMan::ScalarDtor(unsigned flags)
 {
+  mpVtbl = (void**)0x01446b40;
   ClearList();
-  FUN_00620230(&mList);
+  mList.Destroy();
+  mpVtbl = (void**)0x013ef094;
+  if (flags & 1)
+    operator_delete(this);
+  return this;
 }
 
 // @ 0x00999890
