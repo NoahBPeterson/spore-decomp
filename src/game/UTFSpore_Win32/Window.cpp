@@ -152,6 +152,13 @@ struct Node {
     void*    field8;    // +0x08
     unsigned fieldc;    // +0x0c
 };
+namespace EA { namespace UTFWin {
+class WindowIterator {
+public:
+    explicit WindowIterator(Node* node) : mpNode(node) {}
+    Node* mpNode;
+};
+}}
 struct IUnk {
     virtual void AddRef();                              // +0x00
     virtual void Release();                             // +0x04
@@ -201,7 +208,7 @@ struct Win {
     void  SetUserData(IUnk* p);
     bool  TestHit(float x, float y);
     bool  ScreenToWindow(float x, float y, float* out);
-    void  GetId(void** out);
+    EA::UTFWin::WindowIterator ChildBegin();
     void  GetIdAddr(void** out);
     void  ListRemove(void* iface);
     void  ListInsert(void* iface);
@@ -932,9 +939,9 @@ bool Win::ScreenToWindow(float x, float y, float* out)
 }
 
 // @ 0x00961260
-void Win::GetId(void** out)
+EA::UTFWin::WindowIterator Win::ChildBegin()
 {
-    *out = m38;
+    return EA::UTFWin::WindowIterator((Node*)m38);
 }
 
 // @ 0x00961270
