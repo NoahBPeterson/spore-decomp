@@ -1944,14 +1944,18 @@ void cCityData_s00fe_ff80::SetKey(const cInt3* pKey)
 }
 }  // namespace SP
 
+// Closest attempt, same size. The word store now matches retail: after
+// the vtable load and before `mov ecx, eax`. The slot stays in edx
+// (`call edx`); retail loads it into eax.
 // @ 0x00ff0450
 namespace SP {
 void cCityData_s00fe_ff80::Write(cOutStream* pStream)
 {
     for (int i = 0; i < 14; ++i) {
         cStreamWriter* pWriter = pStream->GetWriter();
+        void** vt = *(void***)pWriter;
         uint32_t nWord = mName[i];
-        EA::IO::IStream_s00fe_ff80* pPos = pWriter->GetStream();
+        EA::IO::IStream_s00fe_ff80* pPos = ((EA::IO::IStream_s00fe_ff80* (__thiscall*)(void*))vt[6])(pWriter);
         EA::IO::WriteUint16(pPos, &nWord, 1, 0);
     }
     cVarListSerializer_s00fe_ff80 serializer(this, gCityVarList, 0x1a80d26);
