@@ -35,3 +35,4 @@
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ??0FixedVecInt1@@QAE@HABH@Z  00472990  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?Init72a00@@YIPAUS62@@PAU1@@Z  00472a00  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?resize@?$vector_s0047_2b80@UAutoRefCount_s0047_2b80@@$03@@QAEXI@Z  00473270  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ?Dtor@Holder@@QAEXXZ  004614b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include

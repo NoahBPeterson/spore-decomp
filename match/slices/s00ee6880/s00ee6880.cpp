@@ -6,6 +6,8 @@
 // Layout notes: retail offsets come from the disassembly; stub classes carry only what is read.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 #include <math.h>
 
 typedef unsigned char u8;
@@ -112,6 +114,11 @@ struct IMsgHandler      { virtual void m00(); virtual ~IMsgHandler(); };       /
 struct GmeEditorResBase { virtual void g00(); virtual ~GmeEditorResBase(); };  // vptr @ +4
 struct RefCountBlob     { virtual void r00(); virtual ~RefCountBlob(); };      // vptr @ +8
 struct PadBase          { u32 m0c; PadBase() : m0c(0) {} };                    // +0x0c
+// Base destructors are trivial: their entire body is the base-vptr store,
+// which the compiler inlines into Pane::~Pane (native: three inline exit stores).
+IMsgHandler::~IMsgHandler() {}
+GmeEditorResBase::~GmeEditorResBase() {}
+RefCountBlob::~RefCountBlob() {}
 
 struct Pane : IMsgHandler, GmeEditorResBase, RefCountBlob, PadBase {
     Pane();
@@ -341,6 +348,7 @@ Pane::Pane() : mb10(0), mp14(0), mp18(0), mp1c(0), mp20(0), mp24(0), mp28(0),
 // @ 0x00ee6ef0
 Pane::~Pane()
 {
+    _ReadWriteBarrier();  // keep the compiler-generated vptr stores ahead of the mp28 load
     if (mp28 != 0) {
         void* h = mp28;
         mp28 = 0;

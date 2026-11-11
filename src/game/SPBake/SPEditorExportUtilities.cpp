@@ -3783,9 +3783,11 @@ C461400* C461400::Ctor()
 // @ 0x004614b0
 void Holder::Dtor()
 {
-    IRefObj** a = &p44;
-    if (*a != 0) {
-        (*a)->Release();
+    int h1; int h2;
+    (void)h1; (void)h2;
+    IRefObj** aq = &p44;
+    if (*aq != 0) {
+        (*aq)->Release();
     }
     void** b = &p3c;
     if (*b != 0) {
@@ -3793,6 +3795,7 @@ void Holder::Dtor()
     }
     ((SubObject*)sub)->Destroy();
     ((WStringBuffer*)str)->Free();
+    ScratchSlots_s0047_1b50<11>();
     return;
 }
 

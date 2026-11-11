@@ -882,11 +882,11 @@ bool Ctl::Bind(void* handle)
 // @ 0x011fe030
 void* __fastcall ControllerGetTable(void* self)
 {
+    void* r = NULL;
     void* p = *(void**)((u8*)self + 0x1c);
-    void* q = NULL;
-    if (p == NULL)
-        p = q;
-    return p;
+    if (p != NULL)
+        r = p;
+    return r;
 }
 
 // 011fe040 -- refresh the remap for the current controller handle

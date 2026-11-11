@@ -302,19 +302,21 @@ void* CStub::FUN_00c9f1e0()
 {
     if (*(int*)((char*)this + 0x614) != 2 && *(int*)((char*)this + 0x618) == 0) {
         if (GetCurrentGameMode() != &g_1654c10) {
-            int r;
             if (*(void**)((char*)this + 0x48) != 0) {
+                _ReadWriteBarrier();
                 VObjStub* c = *(VObjStub**)((char*)this + 0x48);
                 if (c == 0)
                     return *(void**)((char*)this + 0x658);
-                r = c->v5c(0x137e8e0);
+                int r = c->v5c(0x137e8e0);
+                if (r != 0 && *(int*)((char*)r + 0xb1c) == 2)
+                    return *(void**)((char*)this + 0x65c);
             } else {
                 if (*(void**)((char*)this + 0x44) == 0)
                     return *(void**)((char*)this + 0x658);
-                r = (int)FUN_00befb60((char*)this + 0x44);
+                int r = (int)FUN_00befb60((char*)this + 0x44);
+                if (r != 0 && *(int*)((char*)r + 0xb1c) == 2)
+                    return *(void**)((char*)this + 0x65c);
             }
-            if (r != 0 && *(int*)((char*)r + 0xb1c) == 2)
-                return *(void**)((char*)this + 0x65c);
         }
     }
     return *(void**)((char*)this + 0x658);

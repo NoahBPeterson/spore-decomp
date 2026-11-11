@@ -26,10 +26,11 @@ struct CObjBD9BF0 { void* __thiscall GetCivilization(); }; // 0x00bd9bf0
 // ---- items of slice s00ff4d50 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
-void __cdecl FUN_00ff51f0(void* param_1, float param_2, float param_3);  // 0x00ff51f0 (stays in the slice: not this object's)
+struct Vector3;
+void __cdecl FUN_00ff51f0(void* param_1, float param_2, const Vector3& param_3);  // 0x00ff51f0 (stays in the slice: not this object's)
 
 // @ 0x00ff5270
-void __cdecl SP_DoCommunityReaction(int* param_1, float param_2, float param_3)
+void __cdecl SP_DoCommunityReaction(int* param_1, float param_2, const Vector3& param_3)
 {
     CNounManagerA* mgr = (CNounManagerA*)FUN_00b3d300();
     int empire = mgr->GetPlayerEmpireOrMinus1();

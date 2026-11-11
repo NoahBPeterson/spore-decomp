@@ -15,3 +15,4 @@
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Copy@cGameEditInputStrategy_s00d1_8df0__b@SP@@QAEXXZ  00d19460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?PopulateLoadPlanetDialogGrid@cGameEditInputStrategy_s00d1_8df0__b@SP@@QAEXXZ  00d194c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?partial_sort@eastl@@YAXPAI00UcPropertyListNameSort_s00d1_8df0__b@SP@@@Z  00d19610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameEditInputStrategy.cpp  ?Median3@@YAPAIPAI00UcStrCmp@@@Z  00d16d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
