@@ -49,7 +49,10 @@ struct Callee {
     void* p(int);   // 0x0095bc10 (equiv t3)
     int64_t i64();   // 0x0093a3a0 (equiv t3)
 };
-struct WT { bool Initialize(); bool Dispose(); void Shutdown(); };
+struct WT {
+    bool Initialize();
+    bool Shutdown();   // 0x00961e80 EA::UTFWin::Window::Shutdown
+};
 struct CastStub { void* Cast(int); };
 struct VecCallee { void resize(int); };
 
@@ -72,6 +75,28 @@ extern const float g_c100;
 extern const float g_c001p;
 extern const float g_c01;
 extern const float g_c1f;
+
+// Local views of the animated-icon references and embedded frame sequencer.
+struct FrameSequenceControl {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual void v3(); virtual void v4();
+    virtual bool ClearSequence();   // slot 5, 0x00804610: SetSequence(0)
+    uint32_t pad04[(0x58 - 4) / 4];
+};
+struct FrameSequencerView {
+    void* mpPrimaryTable;
+    int mnRefCount;
+    FrameSequenceControl mControl;   // +8
+};
+struct IconReference { virtual int AddRef(); virtual int Release(); };
+struct IconShutdownView {
+    uint32_t pad00[0x22c / 4];
+    bool mbSequenceActive;
+    char pad22d[0x248 - 0x22d];
+    IconReference* mpIcon;
+    uint32_t pad24c[(0x268 - 0x24c) / 4];
+    FrameSequencerView mSequencer;
+};
 
 // --------------------------------------------------------------------------
 struct Obj {
@@ -329,17 +354,16 @@ void Obj::M58E0()
 // @ 0x007F5990
 bool Obj::M5990()
 {
-    void* p = *(void**)((char*)this + 0x248);
-    if (p) {
-        *(void**)((char*)this + 0x248) = 0;
-        ((FV0)VTOBJ(p)[4 / 4])(p);
+    IconShutdownView* view = (IconShutdownView*)this;
+    IconReference* icon = view->mpIcon;
+    if (icon) {
+        view->mpIcon = 0;
+        icon->Release();
     }
-    if (*(char*)((char*)this + 0x22c) != 0) {
-        void* q = (char*)this + 0x270;
-        void* f = VTOBJ(q)[0x14 / 4];
-        *(char*)((char*)this + 0x22c) = 0;
-        ((void(__thiscall*)(void*))f)(q);
-        return ((WT*)this)->Dispose();
+    if (view->mbSequenceActive) {
+        view->mbSequenceActive = 0;
+        view->mSequencer.mControl.ClearSequence();
+        return ((WT*)this)->Shutdown();
     }
     return true;
 }
