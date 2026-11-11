@@ -11,7 +11,9 @@ import pefile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 src, va = sys.argv[1], int(sys.argv[2], 16)
-flags = sys.argv[3:] or ["/O2", "/MD", "/Gy", "/EHsc", "/TP"]
+# flags as separate words or as one quoted string ("/O2 /MD ..."): a quoted string used to reach cl as one garbage flag
+# and the compile went on with defaults (Papercuts, 2026-11-11)
+flags = [f for a in sys.argv[3:] for f in a.split()] or ["/O2", "/MD", "/Gy", "/EHsc", "/TP"]
 os.makedirs(os.path.join(ROOT, "work", "match", "variants"), exist_ok=True)
 obj = os.path.join(ROOT, "work", "match", "variants",
                    os.path.abspath(src).replace(ROOT, "").strip("/").replace("/", "_") + ".obj")

@@ -216,22 +216,26 @@ STALE_DAYS = 7
 
 def claims():
     """va -> [(pr number, author, last update 'YYYY-MM-DD'), ...] from claims.txt (oldest pull request first);
-    cached 10 minutes in work/claims.txt.
-    Offline: the cached copy, or nothing."""
+    cached 10 minutes in work/claims.txt.  None when claims.txt could not be read at all (offline, no cached copy);
+    {} when it was read and nobody claims anything (the caller used to report that as "could not be read")."""
     cache = os.path.join(ROOT, "work", "claims.txt")
     text = None
     if not (os.path.exists(cache) and time.time() - os.path.getmtime(cache) < 600):
-        try:
-            with urllib.request.urlopen(CLAIMS_URL, timeout=10) as r:
-                text = r.read().decode("utf-8", "replace")
-            os.makedirs(os.path.dirname(cache), exist_ok=True)
-            open(cache, "w", encoding="utf-8").write(text)
-        except Exception:
-            text = None
+        for attempt in (1, 2):
+            try:
+                with urllib.request.urlopen(CLAIMS_URL, timeout=10 * attempt) as r:
+                    text = r.read().decode("utf-8", "replace")
+                os.makedirs(os.path.dirname(cache), exist_ok=True)
+                open(cache, "w", encoding="utf-8").write(text)
+                break
+            except Exception:
+                text = None
     if text is None and os.path.exists(cache):
         text = open(cache, encoding="utf-8").read()
+    if text is None:
+        return None
     out = {}
-    for line in (text or "").splitlines():
+    for line in text.splitlines():
         p = line.split()
         if len(p) >= 4 and p[0].startswith("0x") and p[1].startswith("#"):
             out.setdefault(int(p[0], 16), []).append((int(p[1][1:]), p[2], p[3]))
@@ -297,7 +301,7 @@ def main():
                "size": lambda r: (r[0], r[1])}[a.by]
         rows.sort(key=key)
         cl = claims()
-        live = {va for va, c in cl.items() if not stale(c)}
+        live = {va for va, c in (cl or {}).items() if not stale(c)}
         hidden = sum(1 for r in rows if r[1] in live)
         if not a.show_claimed:
             rows = [r for r in rows if r[1] not in live]
@@ -305,7 +309,7 @@ def main():
                  "diff": "fewest differing bytes first", "size": "smallest first"}[a.by]
         print("%d functions to work on, up to %d bytes, %s (source not byte-exact yet, or no source yet):"
               % (len(rows), a.max_size, order))
-        if not cl:
+        if cl is None:
             print("(claims.txt could not be read: functions in open pull requests are not hidden)")
         elif hidden and not a.show_claimed:
             print("(%d more are in open pull requests and hidden; --show-claimed lists them)" % hidden)
@@ -326,7 +330,7 @@ def main():
     fp = fingerprint(va)
     src, ident = locate(va)
     print("function   0x%08x" % va)
-    for c in claims().get(va, []):
+    for c in (claims() or {}).get(va, []):
         print("claimed    %s #%d by %s (last update %s)%s" % (
             "STALE claim:" if stale(c) else "already in open pull request", c[0], c[1], c[2],
             "" if stale(c) else ": unless that is yours, pick another function"))
