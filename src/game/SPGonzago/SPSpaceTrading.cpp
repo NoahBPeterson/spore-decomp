@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "sse_helpers.h"
 #include "EA/ResourceMan/Key.h"
 #include "SP/cEmpire.h"
 #include "SP/cGameNounManager.h"
@@ -2224,12 +2225,7 @@ void __stdcall FUN_0103a480(void** out, int* id, int count, float cost)
     ((V14*)inst)->v14(id);
     inst->mType = 4;
     inst->mItemCount = count;
-    __declspec(align(8)) long long rounded;
-    __asm {
-        fld dword ptr [cost]
-        fistp qword ptr [rounded]
-    }
-    inst->mCost = (int)rounded;
+    inst->mCost = (int)X87RoundToInt64(cost);
     inst->SetPropertyList_00c877f0(local);
     ((VItemRef*)inst)->AddRef();
     *out = inst;
