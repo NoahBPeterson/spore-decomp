@@ -16,7 +16,8 @@ and a SHA-256 of the rest. Fingerprints contain no code and no names; the check 
 
 The check passes when every affected function matches its fingerprint (apart from the long-standing ones in
 `tools/ci/known_failures.txt`), no function that matched before has been dropped, and **at least one function is
-byte-exact that was not before**. You can run the same check locally (below) before you open the pull request.
+byte-exact that was not before** (a pull request that changes only `nonmatching.txt` / `partial.txt` notes needs
+no match). You can run the same check locally (below) before you open the pull request.
 
 ## Setup (once)
 
@@ -62,10 +63,10 @@ byte-exact that was not before**. You can run the same check locally (below) bef
    `nonmatching.txt` line conflicts with `main` after another merge, rebase onto `main` and resolve it; never leave a
    matched function's note behind to dodge the conflict.
 6. **Stuck?** After six to eight levers from `docs/codegen.md` without a match, stop and move on to another function.
-   **Only pull requests that add at least one new byte-exact function are merged**; the check fails any other. A pull
-   request that matches something may also carry closer attempts and better notes for other functions. A stuck
-   function on its own is not a pull request: close your draft (it releases the claim), and keep the attempt and what
-   you learned locally until it matches or rides along with one that does.
+   **Code changes are merged only when they add at least one new byte-exact function**; the check fails any other. A
+   closer attempt that still differs stays on your machine. What you learned is welcome as a **notes-only** pull request:
+   update the function's `nonmatching.txt` line with what you tried, what worked and what still differs, and change
+   nothing else. Close your draft for the function (that releases the claim).
 
 Keep experiments (test files, notes, listings) in `work/scratch/`: `work/` is ignored by git, so nothing there ends
 up in your pull request by accident.
