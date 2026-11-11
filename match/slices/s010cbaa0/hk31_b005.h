@@ -165,7 +165,7 @@ public:
 	static void* operator new(size_t nbytes)
 	{
 		void* p = hkMemory::s_instance->allocateChunk((int)nbytes, HK_MEMORY_CLASS_COLLIDE);
-		((hkReferencedObject*)p)->m_memSizeAndFlags = (hkInt16)nbytes;
+		((hkReferencedObject*)p)->m_memSizeAndFlags = (unsigned short)nbytes;
 		return p;
 	}
 	static void operator delete(void* p)
@@ -187,7 +187,7 @@ public:
 		}
 	}
 
-	hkInt16 m_memSizeAndFlags;  // 0x04
+	unsigned short m_memSizeAndFlags;  // 0x04
 	hkInt16 m_referenceCount;   // 0x06
 
 protected:
