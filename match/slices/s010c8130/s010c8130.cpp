@@ -279,6 +279,11 @@ HK_OFFSET_CHECK(chk_subpart_size, sizeof(hkMeshShapeSubpart) == 0x30 || sizeof(v
 struct hkMeshMaterial;
 extern uint32_t hkMeshShape_defaultMaterial;   // 0x016e42d0 (shared zero material / dummy index byte)
 
+class hkFinishLoadedObjectFlag { public:
+    int m_finishing;
+    hkFinishLoadedObjectFlag(int finishing) : m_finishing(finishing) {}
+};
+
 class hkMeshShape : public hkShape { public:
     uint32_t  m_pad0c;                     // +0x0c
     hkVector4 m_scaling;                   // +0x10
@@ -287,7 +292,7 @@ class hkMeshShape : public hkShape { public:
     float     m_radius;                    // +0x30
     uint8_t   m_pad34[0x3c - 0x34];
 
-    hkMeshShape(int finishLoadedFlag);
+    hkMeshShape(hkFinishLoadedObjectFlag finishLoadedFlag); // 0x010c8bc0
     virtual uint32_t getFirstKey() const;
     virtual uint32_t getNextKey(uint32_t oldKey) const;
     virtual const hkShape* getChildShape(uint32_t key, char (&buffer)[512]) const;
@@ -505,10 +510,10 @@ void hkMeshShape::calcStatistics(hkStatisticsCollector* c) const
 }
 
 // @ 0x010c8bc0  hkMeshShape(hkFinishLoadedObjectFlag): vptr 0x014a3fe4
-hkMeshShape::hkMeshShape(int finishLoadedFlag)
+hkMeshShape::hkMeshShape(hkFinishLoadedObjectFlag finishLoadedFlag)
 {
     m_referenceCount = 1;
-    if (finishLoadedFlag != 0) {
+    if (finishLoadedFlag.m_finishing != 0) {
         // upgrade serialized subparts: material index stride type 0 (invalid) becomes 1
         for (int i = 0; i < m_subparts.m_size; ++i) {
             if (m_subparts.m_data[i].m_materialIndexStridingType == 0)
@@ -520,8 +525,9 @@ hkMeshShape::hkMeshShape(int finishLoadedFlag)
 // @ 0x010c8c10  null-guarded finish-loaded constructor wrapper (cdecl, takes the object)
 void hkMeshShape_constructFinishLoaded(hkMeshShape* self)
 {
+    hkFinishLoadedObjectFlag finishing(1);
     if (self != 0)
-        new (self) hkMeshShape(1);
+        new (self) hkMeshShape(finishing);
 }
 
 // ---- hkListShape ------------------------------------------------------------------------
