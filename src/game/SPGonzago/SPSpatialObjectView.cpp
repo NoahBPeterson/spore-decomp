@@ -587,8 +587,11 @@ cSpatialObjectView* MakeView_92b50(void* gamedata)
 unsigned char cSpatialObjectView::GetIsInWorld()
 {
     void* p = (void*)VC0(void*, this, 0x2c);
-    if (p != 0)
-        return (*(uint32_t*)((char*)p + 4) >> 0xf) & 1;
+    if (p != 0) {
+        unsigned char b = (*(uint32_t*)((char*)p + 4) >> 0xf);
+        b &= 1;
+        return b;
+    }
     return 0;
 }
 
@@ -598,7 +601,9 @@ unsigned char cSpatialObjectView::GetIsVisible()
     void* p = (void*)VC0(void*, this, 0x2c);
     if (p == 0)
         return 0;
-    return *(uint8_t*)((char*)p + 4) & 1;
+    unsigned char b = *(unsigned char*)((char*)p + 4);
+    b &= 1;
+    return b;
 }
 
 // @ 0x00e932a0
