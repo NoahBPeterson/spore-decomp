@@ -1056,6 +1056,8 @@ struct cCreatureBase {
 typedef Simulator::cCreatureBase CB;
 typedef Simulator::SpeciesData_s00c0_acd0 SpeciesData_s00c0_acd0;
 struct TuningObj {
+  uint32_t pad0[2];                        // +0 (GetAt is a member; data starts at +8)
+  int m8;                                  // +8 (switch selects the animation set)
   void* __thiscall GetAt(unsigned int);
 };
 struct F_abf740 { int __thiscall f(unsigned int); };
@@ -3139,24 +3141,26 @@ bool __fastcall FUN_00c0b000(CB* self)
 // @ 0x00c0b030
 int* __cdecl FUN_00c0b030(int* stream, char* data)
 {
-  void* inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  uint64 v = *(uint64*)(data + 8);
-  void* s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
+  void* inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  double v = *(double*)(data + 8);
+  void* s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
   WriteUint64(s, &v, 1, 0);
 
-  inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
   float u = *(float*)(data + 4);
-  s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
+  s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
   WriteUint32(s, &u, 1, 0);
 
-  inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
-  bool b = *data != 0;
+  inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  char b0 = *data;                 // kept across the vcall (ebx in the retail build)
+  s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
+  bool b = b0 != 0;
   StreamWriteBool(s, &b, 1);
 
-  inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
-  b = data[1] != 0;
+  inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  char b1 = data[1];                // kept across the vcall (ebx in the retail build)
+  s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
+  b = b1 != 0;
   StreamWriteBool(s, &b, 1);
   return stream;
 }
@@ -3222,11 +3226,11 @@ bool __cdecl FUN_00c0b220(unsigned int arg, unsigned int* out)
 bool __stdcall FUN_00c0b270(unsigned int arg, unsigned int* out)
 {
   int mode = SP_GetCurrentGameMode_s00c0_acd0();
-  unsigned int index = (unsigned int)(mode - 0x1654c00);
-  if (index > 6) return false;
+  if ((unsigned int)(mode - 0x1654c00) > 6) return false;
   int count = 0;
   int* data = 0;
-  if (!SP_GetPropertyAsUint32Array(((int*)g_168d900)[index], arg, &count, &data) ||
+  unsigned int entry = ((unsigned int*)g_168d900)[mode - 0x1654c00];
+  if (!SP_GetPropertyAsUint32Array(entry, arg, &count, &data) ||
       count <= 0)
     return false;
   *out = GRAND->RandomUint32Uniform((unsigned int)count);
@@ -3237,11 +3241,11 @@ bool __stdcall FUN_00c0b270(unsigned int arg, unsigned int* out)
 bool __stdcall FUN_00c0b2f0(unsigned int arg, unsigned int index, unsigned int* out)
 {
   int mode = SP_GetCurrentGameMode_s00c0_acd0();
-  unsigned int idx = (unsigned int)(mode - 0x1654c00);
-  if (idx > 6) return false;
+  if ((unsigned int)(mode - 0x1654c00) > 6) return false;
   int count = 0;
   int* data = 0;
-  if (!SP_GetPropertyAsUint32Array(((int*)g_168d900)[idx], arg, &count, &data) ||
+  unsigned int entry = ((unsigned int*)g_168d900)[mode - 0x1654c00];
+  if (!SP_GetPropertyAsUint32Array(entry, arg, &count, &data) ||
       count <= 0 || index >= (unsigned int)count)
     return false;
   *out = data[index];
@@ -3252,14 +3256,20 @@ bool __stdcall FUN_00c0b2f0(unsigned int arg, unsigned int index, unsigned int* 
 void* __cdecl FUN_00c0b380(CB* self, TuningObj* tuning)
 {
   void* result = tuning->GetAt(0);
-  switch (*(int*)((char*)tuning + 8)) {
-  case 0x1e: return (void*)0x4bc047d;
-  case 0x1f: return (void*)0x4bc0481;
-  case 0x20: return (void*)0x5b6db0a;
+  switch (tuning->m8) {
+  case 0x1e:
+    result = (void*)0x4bc047d;
+    break;
+  case 0x1f:
+    result = (void*)0x4bc0481;
+    break;
+  case 0x20:
+    result = (void*)0x5b6db0a;
+    break;
   case 0x21:
     result = (void*)0x4bc0485;
-    if (*(float*)((char*)self->mpSpecies + 0x58c) > 0.0f &&
-        GRAND->RandomUint32Uniform(100) < 0x32)
+    if (self->mpSpecies->mAge > 0.0f &&
+        (int)GRAND->RandomUint32Uniform(100) < 0x32)
       result = (void*)0x4c074c7;
     break;
   }
@@ -3276,14 +3286,14 @@ bool __cdecl FUN_00c0b410()
 // @ 0x00c0b440
 float __cdecl FUN_00c0b440(unsigned int which)
 {
-  float value = 1.0f;
-  switch (which & ((int)which < 0 ? 0xffffffffu : 0u)) {
-  case 0: return g_150c8e4;
-  case 1: return g_150c8e8;
-  case 2: return g_150c8ec;
-  case 3: return g_150c8f0;
-  case 4: return g_150c8f4;
-  case 5: return g_150c8f8;
+  float value = gOne1485720;                       // _HK_REAL_ONE
+  switch ((int)which < 0 ? 0 : (int)which) {
+  case 0: value = g_150c8e4; break;
+  case 1: value = g_150c8e8; break;
+  case 2: value = g_150c8ec; break;
+  case 3: value = g_150c8f0; break;
+  case 4: value = g_150c8f4; break;
+  case 5: value = g_150c8f8; break;
   case 6: value = g_150c8fc; break;
   }
   return value;
