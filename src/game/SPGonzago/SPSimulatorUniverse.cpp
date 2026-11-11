@@ -2040,9 +2040,70 @@ void __thiscall cSimulatorUniverse_s0101_46c0::OnTick()
 }  // namespace SP
 
 // @ 0x01015130
+struct UniFace;
+struct UniNode {
+    UniNode* mpNext;
+    UniNode* mpPrev;
+};
+struct UniSub {
+    char pad[4];
+    UniNode mNode;
+    int mCount;
+    char mFlag;
+    char mPad11[3];
+    int mExtra;
+    void DoNuke(int n); // 0x009a9600
+};
+struct UniPair {
+    void* mpA;
+    void* mpB;
+    void Both(void* a, void* b); // 0x01013ec0
+};
+struct UniFace {
+    virtual void v00();
+    virtual void v01();
+    virtual void v02();
+    virtual void v03();
+    virtual void v04();
+    virtual void v05();
+    virtual void v06();
+    virtual void v07();
+    virtual void v08();
+    virtual void v09();
+    virtual void v0a();
+    virtual void v0b();
+    virtual void v0c();
+    virtual void v0d();
+    virtual void v0e();
+    virtual void v0f();
+    virtual void v10();
+    virtual void v11();
+    virtual void v12();
+    virtual void v13();
+    virtual void v14();
+    virtual void Method(void* self); // slot +0x54
+};
+UniFace* UniGetFace(); // 0x00b3d330
 namespace SP {
 void __thiscall cSimulatorUniverse_s0101_46c0::FUN_01015130()
 {
+    UniGetFace()->Method(this);
+    UniSub* s = (UniSub*)((char*)this + 0x18);
+    s->DoNuke(s->mCount);
+    UniPair* p = (UniPair*)((char*)this + 0x128);
+    s->mNode.mpNext = &s->mNode;
+    s->mNode.mpPrev = &s->mNode;
+    s->mCount = 0;
+    s->mFlag = 0;
+    s->mExtra = 0;
+    p->Both(p->mpA, p->mpB);
+    UniSub* t = (UniSub*)((char*)this + 0x198);
+    t->DoNuke(t->mCount);
+    t->mNode.mpNext = &t->mNode;
+    t->mNode.mpPrev = &t->mNode;
+    t->mCount = 0;
+    t->mFlag = 0;
+    t->mExtra = 0;
 }
 }  // namespace SP
 
