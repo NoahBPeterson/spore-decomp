@@ -147,22 +147,22 @@ bool TerrainSphereLike::CopyFaceC(int face, const float* rect)
     return ok;
 }
 
-// ---- the padding-backed dirty-flag bytes.  Offset +0x368 is reached as
-//      `this + *(this+0x36c) + 0x368`; +0x369 as `this - *(this+0x36c) + 0x369`.
+// ---- Retail cTerrainSphere dirty-bit view: current and next-generation buffers.
+// The canonical dirty-bit array/index live at +0x368/+0x36c in this retail object.
 struct DirtyFlag {
     char pad000[0x368];
-    char pad368[2];
+    unsigned char mDirtyBits[2];
     char pad36a[2];
-    int  mBackOffset;            // +0x36c
+    int  miDirty;                // +0x36c, current buffer index
     char pad370[0x6d8 - 0x370];
     char mBuffer[0x80];          // +0x6d8
 
-    char& Flag0() { return *(char*)(mBackOffset + (char*)this + 0x368); }
-    char& Flag1() { return *(char*)((char*)this - mBackOffset + 0x369); }
+    char& Flag0() { return *(char*)(miDirty + (char*)this + 0x368); }
+    char& Flag1() { return *(char*)((char*)this - miDirty + 0x369); }
 
     void InitBuffer();           // 0x00fa0dc0
     void SetFlag(bool which);    // 0x00fa0e10
-    char* OrFlag(unsigned char bits);  // 0x00fa0e40
+    void Dirty(unsigned char bits);    // 0x00fa0e40
     bool TestFlag(unsigned char bits); // 0x00fa0e60
 };
 
@@ -182,11 +182,9 @@ void DirtyFlag::SetFlag(bool which)
 }
 
 // @ 0x00fa0e40
-char* DirtyFlag::OrFlag(unsigned char bits)
+void DirtyFlag::Dirty(unsigned char bits)
 {
-    char* p = (char*)this - mBackOffset + 0x369;
-    *p |= bits;
-    return p;
+    mDirtyBits[1 - miDirty] |= bits;
 }
 
 // @ 0x00fa0e60
