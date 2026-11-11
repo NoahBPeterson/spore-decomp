@@ -11,6 +11,7 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?HasLiveTarget14@cLocomotionObj14@@QAE_NXZ  00cb4ca0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?Set@ProjRefs@@QAEXPAURefCounted@@III0@Z  00cb4950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?HasLiveTargetDC@cLocomotionObjDC@@QAE_NXZ  00cb5560  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?GetPositions@cLocomotionObj518@@QAEXPAUVector3@@0@Z  00cb5450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5620@cCommunity@@QAEXI@Z  00cb5620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb5670@cGameData_s00cb_5620@@QAEXXZ  00cb5670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb56f0@cGameData_s00cb_5620@@QAEXPAXHMM@Z  00cb56f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
