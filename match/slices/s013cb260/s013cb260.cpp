@@ -13,7 +13,7 @@ struct MethodI { void M(int); };
 extern void __cdecl cdecl_f11eaa80();
 extern void __cdecl cdecl_f11eaad0();
 
-extern int g_16e42b4;   // TLS slot array (last element)
+extern unsigned long g_016e42a0[5]; // TLS slots; one-past end is 0x016e42b4
 extern int g_16e42b8;
 extern int g_16f2974;
 extern int g_16f2978;
@@ -27,7 +27,7 @@ extern char g_170a79c[];
 // @ 0x013CB260
 void f_013cb260() {
     TlsFreeFn pf = TlsFree;
-    int* p = &g_16e42b4;
+    unsigned long* p = g_016e42a0 + 5;
     unsigned n = 5;
     do {
         p--;

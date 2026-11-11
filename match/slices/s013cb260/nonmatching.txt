@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-013cb260  2  complete (TLS free of the five slots below 0x16e42b4 via the 0x13cc1a4 import); body identical except /O2 emits `sub edi,1` where the original has `dec edi` (needs /O1, but the slice file also holds /O1-matched rows 013cb300/013cb320 that /O2 would change); do-while vs while(--n) tried
 013cb370  n/a  complete reconstruction of the compiler-generated array reset (store -1/0, memmove down 2 dwords, zero live count); not byte-exact and bounds span an unlisted int3 + ret thunk
 013cb7d0  n/a  body complete (mov ecx,imm; jmp dtor thunk); bounds extend over an unlisted int3 + ret thunk
 013cb850  n/a  body complete (mov ecx,imm; jmp dtor thunk); bounds extend over an unlisted int3 + ret thunk
