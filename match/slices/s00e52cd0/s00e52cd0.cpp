@@ -1,4 +1,4 @@
-// Slice s00e52cd0: SP cell-game tutorial hint predicate (cell-game mode stream gspCellGame).
+// Slice s00e52cd0: SP cell-game tutorial hint predicate.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "game/types.h"
 
@@ -6,6 +6,13 @@
 class cObjectPool
 {
  public:
+  char* mpData;
+  int mFreeHead;
+  uint32_t mNextHandle;
+  int mUsed;
+  int mHighWater;
+  int mStride;
+  int mCapacity;
   void* Get(unsigned int handle);       // 0x00b721d0
 };
 
@@ -19,11 +26,12 @@ struct cCellHintManager
   bool  mbActive;                       // +0x69
 };
 
-// The cell game. Its object pool is the base sub-object at +0x1c, so the (this = game + 0x1c) pool
-// lookup at the end receives the game itself.
-struct cCellGame : cObjectPool
+// Prefix view of the cell game: the cell object pool starts at +0x1c.
+struct cCellGame
 {
-  char pad5190[0x5190 - sizeof(cObjectPool)];
+  uint32_t pad0[7];
+  cObjectPool mCells;
+  uint32_t pad38[(0x5190 - 0x38) / 4];
   cCellHintManager* mpHints;            // +0x5190
   char pad51cc[0x51cc - 0x5194];
   float mfHintElapsed;                  // +0x51cc: time since the last hint
@@ -31,17 +39,17 @@ struct cCellGame : cObjectPool
   int   mnHintId;                       // +0x51d4: pool handle of the pending hint
 };
 
-// The cell game's mode stream: a handler-vtable object whose slot 12 (+0x30) looks an object up.
-class cCellStream
+// Local interface view: the retail config-manager GetOption is slot 12 (+0x30).
+class cIConfigManager
 {
  public:
   virtual void  v0(); virtual void  v1(); virtual void  v2(); virtual void  v3();
   virtual void  v4(); virtual void  v5(); virtual void  v6(); virtual void  v7();
   virtual void  v8(); virtual void  v9(); virtual void v10(); virtual void v11();
-  virtual void* GetObject(unsigned int handle);   // +0x30
+  virtual unsigned int GetOption(unsigned int id);   // +0x30, 0x007c7c40
 };
 
-cCellStream* GetCellStream();           // 0x0067dd30
+cIConfigManager* ConfigManager();           // 0x0067dd30
 
 // The cell game's simulation world (0x016b3c0c).
 struct cCellWorld
@@ -52,31 +60,30 @@ struct cCellWorld
 
 // 0x00e52c70: has the level-grown hint sequence run out?
 bool IsHintSequenceSpent();
-// 0x00e51430: level -> time (cube-root table row interpolation); EDX is the level.
+// 0x00e51430: level -> time (cube-root table row interpolation); ECX is the level.
 int __fastcall GetLevelTime(int level);
 
 extern cCellGame*  gspCellGame;         // 0x016b3c04: the live cell game
 extern cCellWorld* gspCellWorld;        // 0x016b3c0c
-float kMaxHintElapsed;                  // 0x01485378: seconds a hint may stay pending
+extern const float kMaxHintElapsed;                  // 0x01485378: seconds a hint may stay pending
 
 // @ 0x00e52cd0
 bool IsTutorialHintDue()
 {
-  cCellHintManager* hints = gspCellGame->mpHints;
-  int level = hints->mnLevel;
-  if (level == 1000)
-    return false;
-  if ((unsigned)GetCellStream()->GetObject(0x04ea96cb) <= 0)
-    return false;
-  if (gspCellGame->mfHintElapsed > kMaxHintElapsed)
-    return false;
-  if (!hints->mbActive)
-    return false;
-  if (GetLevelTime(level) - hints->mnLevelEnd < 15)
-    return false;
-  if (IsHintSequenceSpent())
-    return false;
-  if (gspCellWorld->mbHintBlocked)
-    return false;
-  return gspCellGame->Get(gspCellGame->mnHintId) == 0;
+  if (gspCellGame->mpHints->mnLevel == 1000 ||
+      ConfigManager()->GetOption(0x04ea96cb) <= 0 ||
+      gspCellGame->mfHintElapsed > kMaxHintElapsed ||
+      !gspCellGame->mpHints->mbActive ||
+      GetLevelTime(gspCellGame->mpHints->mnLevel) - gspCellGame->mpHints->mnLevelEnd < 15 ||
+      IsHintSequenceSpent() ||
+      gspCellWorld->mbHintBlocked)
+    goto notDue;
+
+  {
+    cObjectPool& cells = gspCellGame->mCells;
+    if (cells.Get(gspCellGame->mnHintId) == 0)
+      return true;
+  }
+notDue:
+  return false;
 }
