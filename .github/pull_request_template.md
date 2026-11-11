@@ -16,5 +16,5 @@
 
 - [ ] `tools/contrib/check.py` prints MATCH for each matched function
 - [ ] each matched function has a `manifest.txt` line, and its `nonmatching.txt` / `partial.txt` line is removed
-- [ ] each improved (unmatched) function's closest attempt is in its source file, not only described in its note
+- [ ] this pull request adds at least one new byte-exact function (the check fails otherwise)
 - [ ] no assembly transcription (`naked`, `_emit`, raw bytes; `__asm` only as a short helper the original used, at most 8 instructions); no game files, image or disassembly committed

@@ -7,7 +7,8 @@
 # (tools/ci/fingerprints.jsonl.gz, tools/ci/fingerprint.py).
 #
 # Passes when every manifest the pull request can affect (tools/ci/affected.py) matches its fingerprints, apart from
-# tools/ci/known_failures.txt, and no function that matched on main has been dropped from the manifests.
+# tools/ci/known_failures.txt, no function that matched on main has been dropped from the manifests, and at least one
+# function is byte-exact that was not on main.
 name: Byte-match check
 
 on:
@@ -113,6 +114,23 @@ jobs:
       - name: Nothing to compile
         if: steps.affected.outputs.count == '0'
         run: echo "No manifest is affected by this change." | tee -a "$GITHUB_STEP_SUMMARY"
+
+      # Only pull requests that add a byte-exact function are merged (2026-11-11): an attempt that does not match yet,
+      # or a pull request that only edits notes, passes every other step without any measurable progress.
+      - name: Require at least one new byte-exact function
+        run: |
+          python3 - "$RUNNER_TEMP/keep.txt" byte-match.json <<'EOF2' | tee -a "$GITHUB_STEP_SUMMARY"
+          import json, os, sys
+          keep = {l.split()[0].lower() for l in open(sys.argv[1]) if l.strip()}
+          rows = json.load(open(sys.argv[2])) if os.path.exists(sys.argv[2]) else []
+          new = sorted({r["va"] for r in rows if r["tag"] == "PASS" and r["va"] not in keep})
+          if not new:
+              print("This pull request adds no new byte-exact function: no manifest row that passes here and was not")
+              print("already byte-exact on main. Only pull requests that add a match are merged; keep attempts that do")
+              print("not match yet (and their notes) for a pull request that does (AGENTS.md, step 6).")
+              sys.exit(1)
+          print("New byte-exact functions: " + ", ".join("`0x%s`" % v for v in new))
+          EOF2
 
       - name: Upload results
         if: always() && steps.affected.outputs.count != '0'

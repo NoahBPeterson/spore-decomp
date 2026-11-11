@@ -41,8 +41,8 @@ few) per pull request, using the template.
   constants written as addresses of invented globals: the check rejects all of these. A short `__asm` helper (at most
   8 instructions) is allowed where the original used one; see `docs/matching.md`.
 - Before trying new source shapes, look up the difference in [`docs/codegen.md`](docs/codegen.md). After six to eight
-  levers without a match, keep your closest attempt in the source file, update the function's `nonmatching.txt` note
-  with what you tried, and move on. A pull request that only changes notes is not merged.
+  levers without a match, move on. Only pull requests that add at least one new byte-exact function are merged; closer
+  attempts and better notes can ride along with one that does.
 - Once a pull request is marked ready, do not add commits to it; put new work in a new pull request.
 
 Every pull request runs the **Byte-match check**. It compiles every function your change can affect and compares
