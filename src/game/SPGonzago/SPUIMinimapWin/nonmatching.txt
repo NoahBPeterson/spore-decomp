@@ -20,14 +20,12 @@
 00e0e0e0 168 GetInverseOffset: complete; only ecx/edx register swap in the 12-byte position copy
 00e0e1a0 1369 Update: complete (texture setup, palette refresh, scroll state machine); float->int conversions use x87 for colours, register/frame layout differ; difftest WEAK (10% coverage: early returns on global state; RefSlot/ResObj declarations split so 0xb5f950/0x7f54d0 annotations resolve)
 00e0e840 288 build_edge_offsets: complete; loop counter/register shape and this-spill differ
-00e0e9a0 31 begin pointer kept in esi instead of eax before the magic division
 00e0ea40 91 member assignment register allocation (ebx/edi/ebp) differs; difftest PASS (renamed operator= to RefHolder::Assign so the checker finds the symbol)
 00e0eab0 344 Init: complete (cursor, resources, layout, handlers, camera child); AddRef/Release eax/edx register order differs
 00e0f050 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 166 bytes - minimap icon add helper not reconstructed.
 00e0f2c0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1349 bytes - draw_civilization_borders not reconstructed.
 00e0f810 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 334 bytes - cSPUIMinimapWin destructor not reconstructed.
 00e0f9c0 4 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 390 bytes - RemoveIcon not reconstructed.
-00e0fb50 24 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 62 bytes - RemoveAllIcons: the loop, the icon-count guard and the ok/RemoveIcon short-circuit are reconstructed, but MSVC 2008 normalises the short-circuit with setne instead of retail's branchy mov al,1 / xor al,al (size 26 vs 64).
 00e0fb90 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 248 bytes - icon-tree mass erase by flag mask not reconstructed.
 00e0fc90 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 709 bytes - CRG_Minimap constructor not reconstructed.
 00e0ff80 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 213 bytes - minimap helper not reconstructed.
