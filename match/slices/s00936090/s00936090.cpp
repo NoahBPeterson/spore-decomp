@@ -342,6 +342,7 @@ bool SharedLibrary::ExecuteCmd(const char* name, void* a, int b, int c, int d) {
 namespace EA {
 
 struct ObjectVector {
+    ObjectVector() : mpBegin(0), mpEnd(0), mpCap(0) {}
     void* mpBegin;   // +0x00
     void* mpEnd;     // +0x04
     void* mpCap;     // +0x08
@@ -355,19 +356,6 @@ extern void* gpRegistryMutexName;   // 0x0143e98c
 
 class SharedLibraryRegistry {
 public:
-    virtual void v0();                            // +0x00
-    virtual int  AddRef();                        // +0x04
-    virtual int  Release();                       // +0x08
-    virtual void v10();                           // +0x0c
-    virtual void v11();                           // +0x10
-    virtual void RemoveLibrary2(void*, int);      // +0x14
-    virtual void Shutdown2(int);                  // +0x18
-    virtual void v1c();                           // +0x1c
-    virtual void v20();                           // +0x20
-    virtual void* GetDefaultLibrary();            // +0x24
-    virtual void v28();                           // +0x28
-    virtual void v2c();                           // +0x2c
-
     int     m04;                    // +0x04
     ObjectVector mSharedLibraries;  // +0x08
     int     m14;                    // +0x14
@@ -375,29 +363,25 @@ public:
     int     m1c;                    // +0x1c
     Thread::Mutex mMutex;           // +0x20
 
-    SharedLibraryRegistry();                       // 0x009368F0
-    ~SharedLibraryRegistry();                      // 0x00936740
-    void* scalar_deleting_destructor(uint8_t f);   // 0x00936920
-    bool RemoveAllLibraries(int flag);             // 0x009364F0
-    int  ExecuteCommandAll(void* a, void* b, void* c, void* d, void* e); // 0x00936550
-    void* GetFirst();                              // 0x009365D0
-    bool RemoveLibrary(SharedLibrary* lib, char flag);  // 0x00936760
-    int  GetLibraries(void** out, unsigned int n); // 0x00936820
-    bool Init(uint32_t a, SharedLibrary* b);       // 0x00936D50
-    bool Shutdown();                               // 0x00936E10
-    SharedLibrary* LoadPath(const wchar_t* path, char flag);   // 0x00936E50
-    bool AddLibraryRef(SharedLibrary* lib);        // 0x00937010
+    SharedLibraryRegistry();                         // 0x009368f0
+    virtual ~SharedLibraryRegistry();               // slot0, body0x00936740; deleting0x00936920
+    virtual bool Init(uint32_t a, SharedLibrary* b); // slot1, 0x00936d50
+    virtual bool Shutdown();                        // slot2, 0x00936e10
+    virtual bool AddLibraryRef(SharedLibrary* lib);  // slot3, 0x00937010
+    virtual SharedLibrary* LoadPath(const wchar_t* path, char flag); // slot4, 0x00936e50
+    virtual bool RemoveLibrary(SharedLibrary* lib, char flag); // slot5, 0x00936760
+    virtual bool RemoveAllLibraries(int flag);      // slot6, 0x009364f0
+    virtual int GetLibraries(void** out, unsigned int n); // slot7, 0x00936820
+    virtual int ExecuteCommandAll(void* a, void* b, void* c, void* d, void* e); // slot8, 0x00936550
+    virtual void* GetFirst();                       // slot9, 0x009365d0
+    void* scalar_deleting_destructor(uint8_t f);     // existing explicit view
+
 };
 
 }  // namespace EA
 
 // @ 0x009368F0
-EA::SharedLibraryRegistry::SharedLibraryRegistry() {
-    mSharedLibraries.mpBegin = 0;
-    mSharedLibraries.mpEnd = 0;
-    mSharedLibraries.mpCap = 0;
-    mMutex.Construct(0, 1);
-}
+EA::SharedLibraryRegistry::SharedLibraryRegistry() { mMutex.Construct(0,1); }
 
 // @ 0x00936740
 EA::SharedLibraryRegistry::~SharedLibraryRegistry() {
@@ -407,8 +391,7 @@ EA::SharedLibraryRegistry::~SharedLibraryRegistry() {
 
 // @ 0x00936920
 void* EA::SharedLibraryRegistry::scalar_deleting_destructor(uint8_t f) {
-    mMutex.Destroy();
-    mSharedLibraries.Destruct();
+    this->~SharedLibraryRegistry();
     if (f & 1)
         FreeMem(this);
     return this;
@@ -422,7 +405,7 @@ bool EA::SharedLibraryRegistry::RemoveAllLibraries(int flag) {
     if (begin != end) {
         while (((char*)end - (char*)begin) >> 2 > 1) {
             void* lib = begin[1];
-            RemoveLibrary2(lib, flag);
+            RemoveLibrary((SharedLibrary*)lib, (char)flag);
             begin = (void**)mSharedLibraries.mpBegin;
             end = (void**)mSharedLibraries.mpEnd;
         }
@@ -452,7 +435,7 @@ void* EA::SharedLibraryRegistry::GetFirst() {
 
 // @ 0x00936760
 bool EA::SharedLibraryRegistry::RemoveLibrary(SharedLibrary* lib, char flag) {
-    if (lib != 0 && GetDefaultLibrary() == lib)
+    if (lib != 0 && GetFirst() == lib)
         return false;
     mMutex.Lock(&gpRegistryMutexName);
     SharedLibrary** begin = (SharedLibrary**)mSharedLibraries.mpBegin;
@@ -705,7 +688,7 @@ bool EA::SharedLibraryRegistry::Init(uint32_t a, SharedLibrary* b) {
 
 // @ 0x00936E10
 bool EA::SharedLibraryRegistry::Shutdown() {
-    Shutdown2(1);
+    RemoveAllLibraries(1);
     mMutex.Lock(&gpRegistryMutexName);
     mSharedLibraries.erase(mSharedLibraries.mpBegin, mSharedLibraries.mpEnd);
     mMutex.Unlock();
