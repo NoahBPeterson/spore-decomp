@@ -218,7 +218,11 @@ class hkBvTreeShape : public hkShape { public:
 // vtable 0x014A5258: collects the closest hit of castRayWithCollector into the caller's output (addRayHit elsewhere).
 struct hkSingleShapeRayCastCollector : hkRayHitCollector
 {
-	char m_hit;                                // +8
+	hkSingleShapeRayCastCollector(hkShapeRayCastOutput& output) : m_hit(false), m_output(&output)
+	{
+		m_earlyOutHitFraction = output.m_hitFraction;
+	}
+	hkBool m_hit;                                // +8
 	hkShapeRayCastOutput* m_output;            // +0xc
 	virtual void addRayHit(const hkCdBody& cdBody, const hkShapeRayCastOutput& hitInfo);
 };
@@ -562,12 +566,9 @@ void hkBvTreeShape::calcStatistics(hkStatisticsCollector* c) const
 // @ 0x010e8680
 hkBool hkSampledHeightFieldShape::castRay(const hkShapeRayCastInput& input, hkShapeRayCastOutput& output) const
 {
-	hkSingleShapeRayCastCollector collector;
-	collector.m_earlyOutHitFraction = output.m_hitFraction;
-	collector.m_hit = 0;
-	collector.m_output = &output;
+	hkSingleShapeRayCastCollector collector(output);
 	castRayWithCollector(input, *(const hkCdBody*)0, collector);   // cdBody argument is a null reference in the binary
-	return hkBool(collector.m_hit != 0);
+	return collector.m_hit;
 }
 // --- equivalence checker address annotations
     extern unsigned long g_hkMonitorStreamCurrentTls; // 0x016e42a4
