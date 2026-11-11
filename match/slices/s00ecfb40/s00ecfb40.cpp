@@ -220,17 +220,36 @@ struct cRefCounted {
     bool Release() { return (mRefCount -= 1) == 0 && (mRefCount = 1, true); }
 };
 
-// 0x00ed02c0 .. 0x00ed0750: editor page with three vtable bases and the rollover child.
-// one of the editor page's COM bases: the vtables at +0x04/+0x08 and an int at +0x0c
-struct cIface0c {
-    cIface0c() : mUnk0c(0) {}
-    void** mpVtbl0;
-    void** mpVtbl1;
-    void** mpVtbl2;
+// Editor page: primary refcount interface, message handler at +4, and reference counter at +8.
+// Native interfaces at +0, +4 and +8.  These match EA::COM::IRefCount,
+// EA::Messaging::IHandler and EA::RefCountVTemplate<int>, respectively.
+struct cPageRefCountInterface {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual ~cPageRefCountInterface() throw() {}
+};
+struct cPageMessageHandler {
+    cPageMessageHandler() {}
+    virtual ~cPageMessageHandler() throw() {}
+    virtual unsigned char HandleMessage(int, void**) = 0;
+};
+struct cPageRefCount {
+    cPageRefCount() : mUnk0c(0) {}
+    virtual ~cPageRefCount() throw() {}
+    virtual int AddRef() { int count=mUnk0c+1; mUnk0c=count; return count; }
+    virtual int Release() {
+        int count = mUnk0c - 1; mUnk0c = count;
+        if (count == 0) { mUnk0c = 1; delete this; return 0; }
+        return count;
+    }
+    virtual int GetRefCount() const { return mUnk0c; }
     int mUnk0c;
 };
 
-struct cEditorPage : public cIface0c {
+struct cEditorPage : public cPageRefCountInterface, public cPageMessageHandler, public cPageRefCount {
+    virtual int AddRef() { return cPageRefCount::AddRef(); }
+    virtual int Release() { return cPageRefCount::Release(); }
+    virtual ~cEditorPage() throw();
     void* mpLayout;                         // 0x10
     void* mpWinMeter;                       // 0x14
     void* mpWinFrame;                       // 0x18
@@ -250,14 +269,15 @@ struct cEditorPage : public cIface0c {
     int mMsgCount;                          // 0x50
     int mMsgUser;                           // 0x54
     cEditorPage();                          // 0x00ed02c0
-    void Destroy();                         // 0x00ed0340
     void Update(int delta);                 // 0x00ed0030
-    unsigned char HandleMessage(int msg, void** data); // 0x00ed01a0
+    virtual unsigned char HandleMessage(int msg, void** data); // 0x00ed01a0
     void* AsInterface(int id);              // 0x00ed0260
     void Init(void* parent, void* source);  // 0x00ed0400
     void Shutdown();                        // 0x00ed0660
     unsigned char HandleEvent(int id, void* ev); // 0x00ed0750
 };
+
+typedef char EditorPageSizeCheck[(sizeof(cEditorPage) == 0x58) ? 1 : -1];
 
 // 0x00ed0ab0/0x00ed0b00.
 struct cMeterChild {
@@ -582,16 +602,16 @@ void cEditorPage::Update(int delta)
 // @ 0x00ed01a0
 unsigned char cEditorPage::HandleMessage(int msg, void** data)
 {
-    if (((Fn0B)(*(void***)mpWinFrame)[0x28 / 4])(mpWinFrame) & 1) {
+    if (((Fn0B)(*(void***)mpWinSlider)[0x28 / 4])(mpWinSlider) & 1) {
         switch (msg) {
         case 0x522f9cd: {
             if (*data) {
                 void* res = ((Fn1P)(*(void***)(*data))[0xc / 4])(*data, (void*)0x31e56741);
-                if (res && mpWinSlider) {
+                if (res && mpData) {
                     cDualString text;
                     text.Construct();
-                    int r = ((Fn2I)(*(void***)mpWinSlider)[0x10 / 4])(mpWinSlider, (char*)res + 0x4c, 0);
-                    unsigned char* flags = (unsigned char*)((char*)this + 0x38);
+                    int r = ((Fn2I)(*(void***)mpData)[0x10 / 4])(mpData, (char*)res + 0x4c, 0);
+                    unsigned char* flags = (unsigned char*)((char*)this + 0x3c);
                     if (r == 3) {
                         flags[0] = 1;
                         flags[2] = 0;
@@ -605,10 +625,10 @@ unsigned char cEditorPage::HandleMessage(int msg, void** data)
             return 1;
         }
         case 0x522f9ce:
-            *(unsigned char*)((char*)this + 0x38) = 0;
+            *(unsigned char*)((char*)this + 0x3c) = 0;
             return 1;
         case 0x78c406b: {
-            unsigned char* flags = (unsigned char*)((char*)this + 0x38);
+            unsigned char* flags = (unsigned char*)((char*)this + 0x3c);
             flags[1] = 1;
             flags[2] = 1;
             break;
@@ -629,14 +649,6 @@ void* cEditorPage::AsInterface(int id)
 // @ 0x00ed02c0
 cEditorPage::cEditorPage()
 {
-    *(void* volatile*)((char*)this + 4) = (void*)0x013eb394u;
-    *(void* volatile*)((char*)this + 8) = (void*)0x013ec458u;
-    _ReadWriteBarrier();
-    mUnk0c = 0;
-    cEditorPage* self = this;
-    self->mpVtbl0 = (void**)0x014898e0u;
-    self->mpVtbl1 = (void**)0x014898d8u;
-    self->mpVtbl2 = (void**)0x014898c8u;
     mpLayout = 0;
     mpWinMeter = 0;
     mpWinFrame = 0;
@@ -656,11 +668,8 @@ cEditorPage::cEditorPage()
 }
 
 // @ 0x00ed0340
-void cEditorPage::Destroy()
+cEditorPage::~cEditorPage() throw()
 {
-    mpVtbl0 = (void**)0x014898e0u;
-    mpVtbl1 = (void**)0x014898d8u;
-    mpVtbl2 = (void**)0x014898c8u;
     _ReadWriteBarrier();
     if (mpServer) {
         void* server = mpServer;
@@ -686,9 +695,6 @@ void cEditorPage::Destroy()
         ((Fn0)(*(void***)mpWinMeter)[4 / 4])(mpWinMeter);
     if (mpLayout)
         ((Fn0)(*(void***)mpLayout)[8 / 4])(mpLayout);
-    mpVtbl2 = (void**)0x013ec458u;
-    mpVtbl1 = (void**)0x013eb394u;
-    mpVtbl0 = (void**)0x013eb938u;
 }
 
 // @ 0x00ed0400
