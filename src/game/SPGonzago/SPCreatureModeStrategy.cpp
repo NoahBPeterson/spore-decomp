@@ -969,7 +969,7 @@ public:
     virtual void v15();
     virtual void v16();
     virtual void v17();
-    virtual void OnFocusChange(bool hasFocus);       // vtable +0x48
+    virtual void v18();
     virtual void v19();
     virtual void v20();
     virtual void v21();
@@ -1535,7 +1535,7 @@ public:
     virtual void v0c();
     virtual void v10();
     virtual void v14();
-    virtual void OnFocusChange(bool hasFocus);       // vtable +0x48
+    virtual void v18();
     virtual void v1c();
     virtual void v20();
     virtual bool GetProperty(uint32_t id, Property*& result);    // 0x24
@@ -2636,7 +2636,7 @@ public:
     virtual cUnlockOwner* GetChild(unsigned int id);    // +0x0c
     virtual void v10();                                 // +0x10
     virtual void v14();                                 // +0x14
-    virtual void OnFocusChange(bool hasFocus);       // vtable +0x48                                 // +0x18
+    virtual void v18();                                 // +0x18
     virtual void v1c();                                 // +0x1c
     virtual void v20();                                 // +0x20
     virtual void v24();                                 // +0x24
