@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsSHUtilities.cpp -- migrated from slice(s) s00795ec0, s00794e80, s00794610, s007864c0, s00785500, s00784560, s00784420, s00783590 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsSHUtilities.cpp -- migrated from slice(s) s00795ec0, s00794e80, s00794610, s007864c0, s00785500, s00784560, s00784420, s00783590 by tools/migrate/rewrite.py 
 // Object file: SPEngine/SPGraphicsSHUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
