@@ -174,18 +174,28 @@ struct GTable {
     HIter find(const unsigned& key);       // 0x00685f30 thiscall sret ret 8
     HIter erase(HIter it);                 // va 0xa68430 thiscall sret ret 0xc
 };
-class IntrusiveListBase  { public: ~IntrusiveListBase() throw(); };   // 0x00620230
-class IntrusiveListBase2 { public: ~IntrusiveListBase2(); };          // 0x00620230
-class FixedPoolT { public: char pad[0x30]; ~FixedPoolT() throw(); };  // 0x00a531b0
+class IntrusiveListBase  { public: void* mpNext; void* mpPrev; ~IntrusiveListBase() throw(); };   // 0x00620230
+class IntrusiveListBase2 { public: void* mpNext; void* mpPrev; ~IntrusiveListBase2() throw(); };          // 0x00620230
+class FixedPoolT { public: char pad[0x30]; ~FixedPoolT(); };  // 0x00a531b0
 class IInternalAllocator {
 public:
-    virtual ~IInternalAllocator() throw() {}   // vtable 0x1403934
+    virtual ~IInternalAllocator() throw() {}   // vtable 0x1403934, slot 0
+    virtual void* AllocateNamed(unsigned bytes, const char* name) = 0; // slot 1
+    virtual void* Allocate(unsigned bytes) = 0;                       // slot 2
+    virtual void Free(void* memory) = 0;                             // slot 3
 };
 class AllocatorT : public IInternalAllocator {
 public:
     int pad4, pad8;
+    virtual void* AllocateNamed(unsigned bytes, const char* name); // 0x00a52b40
+    virtual void* Allocate(unsigned bytes);                       // 0x00a52b70
+    virtual void Free(void* memory);                              // 0x00a52b90
 };
 class FixedAllocator : public FixedPoolT, public IInternalAllocator {
+public:
+    virtual void* AllocateNamed(unsigned bytes, const char* name); // 0x00a657f0
+    virtual void* Allocate(unsigned bytes);                       // 0x00a64400
+    virtual void Free(void* memory);                              // 0x00a65800
 };
 class CallbackManager {
 public:
@@ -193,10 +203,14 @@ public:
     FixedAllocator     mFixedAllocator;    // +0x0c
     void*              mpCallbackPool;     // +0x40
     IntrusiveListBase  mCurrentCallbacks;  // +0x44
-    char               padl[8 - 1];
     IntrusiveListBase2 mNextCallbacks;     // +0x4c
     ~CallbackManager();                    // va 0xa683b0
 };
+typedef char CallbackCurrentListSize[(sizeof(IntrusiveListBase) == 8) ? 1 : -1];
+typedef char CallbackNextListSize[(sizeof(IntrusiveListBase2) == 8) ? 1 : -1];
+typedef char CallbackManagerSize[(sizeof(CallbackManager) == 0x54) ? 1 : -1];
+typedef char CallbackCurrentListOffset[(offsetof(CallbackManager, mCurrentCallbacks) == 0x44) ? 1 : -1];
+typedef char CallbackNextListOffset[(offsetof(CallbackManager, mNextCallbacks) == 0x4c) ? 1 : -1];
 class AllocA {
 public:
     AllocA(int d) : mpVtbl(g_vtbl_1454fac), mData(d), mpName(g_vtbl_145581c) {}
@@ -293,6 +307,9 @@ public:
 class AllocatorS : public IInternalAllocator {
 public:
     int pad4, pad8;
+    virtual void* AllocateNamed(unsigned bytes, const char* name); // 0x00a52b40
+    virtual void* Allocate(unsigned bytes);                       // 0x00a52b70
+    virtual void Free(void* memory);                              // 0x00a52b90
 };
 class __declspec(novtable) EapdSystemFull : public ISystemS {
 public:

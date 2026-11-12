@@ -34,3 +34,4 @@
 ../src/game/SPAudio/eapdsystem.cpp  ??0FixedInputManagerS@@QAE@XZ  00a68bf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ??1EapdSystemFull@@UAE@XZ  00a68dd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPAudio/eapdsystem.cpp  ?ScalarDtor@EapdSystem@@QAEPAXH@Z  00a68e80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/eapdsystem.cpp  ??1CallbackManager@@QAE@XZ  00a683b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include /GR-
