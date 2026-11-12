@@ -6,3 +6,4 @@
 ../src/game/SPGonzago/SPTribeHut.cpp  ??1cTribeHut@@UAE@XZ  00c9c120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeHut.cpp  ?FUN_00c9c2c0@@YGXPAUcByteBuffer@@@Z  00c9c2c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeHut.cpp  ?FUN_01356230@@YAXXZ  01356230  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeHut.cpp  ?SetOwnerIface@cTribeTool@@QAEXPAX@Z  00c9c250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

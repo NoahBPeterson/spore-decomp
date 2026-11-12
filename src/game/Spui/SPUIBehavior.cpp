@@ -4,6 +4,8 @@
 
 #include "game/types.h"
 #include "cSPUIBehaviorEventBase.h"
+#include "EA/UTFWin/SerInfo.h"
+#include "EA/UTFWin/SerTypeInfo.h"
 #include "cSPUIBehaviorValueInterpolator.h"
 #include <cstddef>
 #include <math.h>
@@ -196,7 +198,10 @@ virtual void v4();
 struct C_7faa30 : VSer { void f(SerItem* p); };
 struct C_7fb250 : VSer { void f(SerItem* p); };
 struct C_7fb2e0 : VSer { void f(SerItem* p); };
-struct C_7fb440 : VSer { void f(SerItem* p); };
+extern EA::UTFWin::SerTypeInfo gBehaviorEventSerTypeInfo; // 0x01415598
+typedef char BehaviorEventSerInfoSize[sizeof(EA::UTFWin::SerInfo) == 0x10 ? 1 : -1];
+typedef char BehaviorEventSerTypeSize[sizeof(EA::UTFWin::SerTypeInfo) == 0x20 ? 1 : -1];
+typedef char BehaviorEventOwnerSize[sizeof(cSPUIBehaviorEventBase) == 0x7c ? 1 : -1];
 struct C_7faa70 { char pad[4]; void Base(); void Dtor(); };
 struct C_7fb000 { char pad[4]; void Base(); void Dtor(); };
 struct C_7fb290 { char pad[4]; void Base(); void Dtor(); };
@@ -1439,12 +1444,12 @@ bool C_7fb3b0::f(unsigned char b)
 }
 
 // @ 0x007fb440
-void C_7fb440::f(SerItem* p)
+void cSPUIBehaviorEventBase::GetSerializationInfo(EA::UTFWin::SerInfo& info)
 {
-  p->type = (void*)0x01415598;   // .rdata serialization class descriptor
-  p->base = (char*)this - 4;
-  p->count = 1;
-  p->extra = vf();
+  info.mpType = &gBehaviorEventSerTypeInfo;
+  info.mpBase = this;
+  info.mCount = 1;
+  info.mClassId = GetClassId();
 }
 
 // @ 0x007fb480

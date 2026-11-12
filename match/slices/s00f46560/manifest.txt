@@ -10,3 +10,4 @@ slices/s00f46560/s00f46560.cpp  ?FUN_00f46a40@cOnlineTab@@QAE_NXZ  00f46a40
 slices/s00f46560/s00f46560.cpp  ?FUN_00f46c00@cOnlineTab@@QAEXXZ  00f46c00
 slices/s00f46560/s00f46560.cpp  ?FUN_00f47040@cScreen@@QAE_NXZ  00f47040
 slices/s00f46560/s00f46560.cpp  ?FUN_00f47120@cScreen@@QAEXXZ  00f47120
+slices/s00f46560/s00f46560.cpp  ?FUN_00f47080@cScreen@@QAEXH@Z  00f47080  /O2 /MD /Gy /EHsc /TP

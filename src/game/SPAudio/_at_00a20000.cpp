@@ -9,10 +9,10 @@
 #include "EA/Audio/Sound.h"
 
 // unnamed retail callees and globals (address in the comment)
-extern "C" unsigned int _controlfp(unsigned int, unsigned int);
+extern "C" __declspec(dllimport) unsigned int _controlfp(unsigned int, unsigned int);
 
 // ---- items of slice s00a20060 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" unsigned int _controlfp(unsigned int, unsigned int);
+extern "C" __declspec(dllimport) unsigned int _controlfp(unsigned int, unsigned int);
 // ---- items of slice s00a20060 end
 
 // @ 0x00a206c0

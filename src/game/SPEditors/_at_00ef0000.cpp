@@ -4951,20 +4951,23 @@ void* __fastcall FUN_00ef4440(cLayerKeyProvider* self, void* dummy, int id)
 }
 
 // @ 0x00ef4490
-void __fastcall FUN_00ef4490(cLayerKeyProvider* self, void* dummy, ResKey* out)
+ResKey* __fastcall FUN_00ef4490(cLayerKeyProvider* self, void* dummy, ResKey* out)
 {
     uint type = self->mKeyInstance;
     if ((type == 0xdb5cad8b) || (type == 0x28c176eb) || (type == 0x15677bf)) {
+        ResKey* result = *(ResKey* volatile*)&out;
         ResKey key;
         key.mId = self->mKeyB.mId;
         key.mType = 0x2f7d0004;
         key.mSub = DAT_015acdf4;
-        *out = key;
+        *result = key;
+        return result;
     } else {
         ResKey key = *(const ResKey*)&self->m04;
         key.mType = 0x2f7d0004;
         key.mSub = 0x65928944;
         *out = key;
+        return out;
     }
 }
 

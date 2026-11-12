@@ -74,3 +74,4 @@
 ../src/game/SPEditors/_at_00ef0000.cpp  ?f_eff280@UI_s00ef_ee60@@QAEXPAX@Z  00eff280  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?f_eff760@@YAXPAXD@Z  00eff760  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef3930@@YGXPIAH@Z  00ef3930  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef4490@@YIPAUResKey@@PAUcLayerKeyProvider@@PAXPAU1@@Z  00ef4490  /O2 /MD /Gy /TP /Isrc/game/include

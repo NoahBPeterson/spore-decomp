@@ -1,4 +1,3 @@
-00a206c0  6  SetFp: complete, short-branch/tail schedule differs
 00a20a40  98  SetSlot: complete, vcall/property-commit schedule differs
 00a20060  1320  Sound::ConfigureSound: complete (all config keys, groups, bitvec, fx); register allocation/stack layout differs, needs /GS-
 00a207d0  169  System::Shutdown: complete; guard mutex kept in separate reg (ebx) in original, loop shapes differ, needs /GS-

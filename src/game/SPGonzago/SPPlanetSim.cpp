@@ -3,6 +3,8 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 #include "SP/cVarListSerializer.h"
 #include "SP/cCityData.h"
 #include "SP/cBuildingData.h"
@@ -1655,7 +1657,9 @@ int fn27fc0(int begin, int end, uint* key)
 // @ 0x00f280b0
 Zeroed* Zeroed::fn280b0()
 {
-  f00 = 0.0f; f04 = 0.0f; f08 = 0.0f; f0c = 0.0f;
+  f00 = 0.0f;
+  _ReadWriteBarrier();
+  f04 = 0.0f; f08 = 0.0f; f0c = 0.0f;
   f10 = 0.0f; f14 = 0.0f; f18 = 0.0f;
   i1c = 0; i20 = 0; i24 = 0; i30 = 0;
   return this;

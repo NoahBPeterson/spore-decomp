@@ -1,5 +1,4 @@
 007a9130  110  find-and-erase by key (member of TextureListOwner, thiscall): register/layout schedule differs; equiv: WEAK 362 valid, 44% cov
-007a9420  6  GetKeyFromTexture: returns the out buffer; base-pointer register/lea shape differs; equiv: PASS 205 valid, 92.9% cov
 007a9450  5    GetResourceForTexture: null path folds to absolute [0x24]; equiv: PASS 400 valid, 62.5% cov
 007a9470  48  CreateTexture: IDGenerator + vtable forwarding schedule; fixed 2026-10-12: generator call now goes through its vtable slot 1 (was the object field at +4)
 007a9620  78  CleanupJob: no EH frame (31 vs 87 B) and virtual-release shape differs; equiv: PASS 366 valid, 100% cov (release is a normal call, _ReadWriteBarrier blocks TCO)

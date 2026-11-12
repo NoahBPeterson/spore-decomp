@@ -9,3 +9,4 @@
 ../src/game/SPGonzago/SPTribeTool.cpp  ?GetCastID@cTribeTool@@QAEXH@Z  00c9d9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeTool.cpp  ?FormatName@cLoco@@QAEXPAUcString_s00c9_de50@@@Z  00c9e5a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeTool.cpp  ?IsNotType10@cTribeToolData@@QAE_NXZ  00c9cf70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeTool.cpp  ?DestroyTribeToolData@@YAXXZ  00c9e530  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

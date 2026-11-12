@@ -514,6 +514,72 @@ char MsgProc::Handler(int a1, int a2) {
 // =====================================================================
 // cXHTMLFrameSet-derived screen (frame-set at +0xc, window at +0x70)
 // =====================================================================
+// IWindow lookup contract: slot 60 is GetChild(unsigned int, bool).
+// Earlier virtuals are opaque in this view; no instances or vtables are emitted.
+struct WindowLookup {
+        virtual void unused0() = 0;
+        virtual void unused1() = 0;
+        virtual void unused2() = 0;
+        virtual void unused3() = 0;
+        virtual void unused4() = 0;
+        virtual void unused5() = 0;
+        virtual void unused6() = 0;
+        virtual void unused7() = 0;
+        virtual void unused8() = 0;
+        virtual void unused9() = 0;
+        virtual void unused10() = 0;
+        virtual void unused11() = 0;
+        virtual void unused12() = 0;
+        virtual void unused13() = 0;
+        virtual void unused14() = 0;
+        virtual void unused15() = 0;
+        virtual void unused16() = 0;
+        virtual void unused17() = 0;
+        virtual void unused18() = 0;
+        virtual void unused19() = 0;
+        virtual void unused20() = 0;
+        virtual void unused21() = 0;
+        virtual void unused22() = 0;
+        virtual void unused23() = 0;
+        virtual void unused24() = 0;
+        virtual void unused25() = 0;
+        virtual void unused26() = 0;
+        virtual void unused27() = 0;
+        virtual void unused28() = 0;
+        virtual void unused29() = 0;
+        virtual void unused30() = 0;
+        virtual void unused31() = 0;
+        virtual void unused32() = 0;
+        virtual void unused33() = 0;
+        virtual void unused34() = 0;
+        virtual void unused35() = 0;
+        virtual void unused36() = 0;
+        virtual void unused37() = 0;
+        virtual void unused38() = 0;
+        virtual void unused39() = 0;
+        virtual void unused40() = 0;
+        virtual void unused41() = 0;
+        virtual void unused42() = 0;
+        virtual void unused43() = 0;
+        virtual void unused44() = 0;
+        virtual void unused45() = 0;
+        virtual void unused46() = 0;
+        virtual void unused47() = 0;
+        virtual void unused48() = 0;
+        virtual void unused49() = 0;
+        virtual void unused50() = 0;
+        virtual void unused51() = 0;
+        virtual void unused52() = 0;
+        virtual void unused53() = 0;
+        virtual void unused54() = 0;
+        virtual void unused55() = 0;
+        virtual void unused56() = 0;
+        virtual void unused57() = 0;
+        virtual void unused58() = 0;
+        virtual void unused59() = 0;
+        virtual WindowLookup* GetChild(unsigned int, bool) = 0;
+    };
+
 struct cScreen {
     unsigned char mPad00[0xc];
     unsigned char mFrameSet[0x64];  // +0x0c  embedded cXHTMLFrameSet
@@ -631,13 +697,13 @@ bool cScreen::FUN_00f47040() {
 // @ 0x00F47080
 void cScreen::FUN_00f47080(int a2) {
     void* r;
-    r = (*(FnRetP2)Vslot(mpWindow70, 0xf0))(mpWindow70, (int)0x7ccce38, 1);
+    r = ((WindowLookup*)mpWindow70)->GetChild(0x7ccce38, true);
     if (r) (*(FnP2i)Vslot(r, 0x7c))(r, 1, a2);
-    r = (*(FnRetP2)Vslot(mpWindow70, 0xf0))(mpWindow70, (int)0x7ccce30, 1);
+    r = ((WindowLookup*)mpWindow70)->GetChild(0x7ccce30, true);
     if (r) (*(FnP2i)Vslot(r, 0x7c))(r, 1, a2);
-    r = (*(FnRetP2)Vslot(mpWindow70, 0xf0))(mpWindow70, (int)0x7da34f8, 1);
+    r = ((WindowLookup*)mpWindow70)->GetChild(0x7da34f8, true);
     if (r) (*(FnP2i)Vslot(r, 0x7c))(r, 1, a2);
-    r = (*(FnRetP2)Vslot(mpWindow70, 0xf0))(mpWindow70, (int)0x561dd60, 1);
+    r = ((WindowLookup*)mpWindow70)->GetChild(0x561dd60, true);
     if (r) (*(FnP2i)Vslot(r, 0x7c))(r, 1, a2);
 }
 

@@ -38,7 +38,6 @@ struct cTextureManager {
 
     void GetTexture(int a, int b, int c);        // 007a93c0
     void HasTexture(int a, int b);               // 007a93f0
-    int* GetKeyFromTexture(int* out, int tex);   // 007a9420
     void* GetResourceForTexture(void* tex);      // 007a9450
     void CreateTexture();                        // 007a9470
     void CreateTextureEx(int a,int b,int c,int d,int e,unsigned int flags,int f,int g); // 007a94f0
@@ -774,13 +773,11 @@ void cTextureManager::HasTexture(int a, int b)
 }
 
 // @ 0x007a9420
-int* cTextureManager::GetKeyFromTexture(int* out, int tex)
+EA::ResourceMan::Key SP::cTextureManager::GetKeyFromTexture(SP::cTextureInstance const* tex)
 {
-    int base = tex ? tex - 8 : 0;
-    out[0] = *(int*)(base + 0x18);
-    out[1] = *(int*)(base + 0x1c);
-    out[2] = *(int*)(base + 0x20);
-    return out;
+    SP::cTextureInstanceInternal const* texture = tex
+        ? static_cast<SP::cTextureInstanceInternal const*>(tex) : 0;
+    return texture->mKey;
 }
 
 // @ 0x007a9450
