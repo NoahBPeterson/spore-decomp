@@ -1,4 +1,3 @@
-00d7a620 30 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: float return temp goes to a pushed slot instead of the dead parameter slot; equiv PASS
 00d7a700 109 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: cl shrink-wraps the esi push and folds the two return-true blocks into setne; equiv PASS
 00d7a850 74 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation around the FUN_00ac80d0 chain; equiv WEAK (27% coverage)
 00d7a920 246 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: distance-call temp slots and register allocation differ; equiv FAIL reg-only ecx (untouched by the original, 5 valid inputs)
