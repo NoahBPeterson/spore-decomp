@@ -376,7 +376,7 @@ void                FUN_007c4900(Vector3*, Vector3*);     // 0x007c4900
 class cPlanetModel { public:
     void DirectionToSurface(Vector3* out, const Vector3* dir);        // 0x00b815a0
 };
-cPlanetModel*       PlanetModel_00b3d350(void*, const Vector3*);      // 0x00b3d350
+cPlanetModel*       PlanetModel_00b3d350();      // 0x00b3d350
 void                FUN_00fe5430(void*, int);             // 0x00fe5430
 void                FUN_00c8f470(void*, void*, int, int, float, int);  // 0x00c8f470 (cTribe::SetStimuli)
 int  FUN_00bd7f60();                                      // 0x00bd7f60
@@ -884,7 +884,7 @@ struct PosTree {
   u32      mFlags_08;                    // 0x08
   PosNode* mpRoot_0c;                    // 0x0c
 
-  void InsertPos(PosNode** out, const s32* key);   // 0x00d0a630
+  PosNode** InsertPos(PosNode** out, const s32* key);   // 0x00d0a630
 };
 struct cString {
   u32 mD[4];
@@ -4630,18 +4630,17 @@ uint32_t cCommunityEditor_s00d0_91c0::GetCameraZoomProgramID()
 // @ 0x00d09960
 const Vector3* cCommunityEditor_s00d0_91c0::GetCommunityCenter()
 {
-    if (!mpCommunity) return &g_Vector3Zero;
-    if (SP_GetCurrentGameMode() == kGameModeSpace && mpCommunity) {
-        cCommunity* comm = mpCommunity;
-        cCity_s00d0_91c0* city = comm ? (cCity_s00d0_91c0*)comm->Cast(TYPE_cCity) : 0;
-        if (city) {
-            if (city->GetCityHall()) {
-                cSpatialObject* sp = (cSpatialObject*)((char*)city->GetCityHall() + 0x34);
-                return sp->GetPosition();
+    if (mpCommunity) {
+        if (SP_GetCurrentGameMode() == kGameModeSpace && mpCommunity) {
+            cCommunity* comm = mpCommunity;
+            cCity_s00d0_91c0* city = comm ? (cCity_s00d0_91c0*)comm->Cast(TYPE_cCity) : 0;
+            if (city && city->GetCityHall()) {
+                return ((cSpatialObject*)((char*)city->GetCityHall() + 0x34))->GetPosition();
             }
         }
+        return mpCommunity->GetPosition();
     }
-    return mpCommunity->GetPosition();
+    return &g_Vector3Zero;
 }
 
 // @ 0x00d099c0
@@ -4755,7 +4754,7 @@ Vector3* cCommunityEditor_s00d0_91c0::SnapPointToPlanetIfNecessary(Vector3* out,
         out->x = x; out->y = y; out->z = z;
         return out;
     }
-    PlanetModel_00b3d350(out, (Vector3*)&x)->DirectionToSurface(out, (Vector3*)&x);
+    PlanetModel_00b3d350()->DirectionToSurface(out, (Vector3*)&x);
     return out;
 }
 
@@ -4775,6 +4774,7 @@ void cCommunityEditor_s00d0_91c0::SetManipulatedObject(cSpatialObject* obj)
     if (obj) obj->mFlag72 = 1;
 
     mSnapPoint = g_Vector3Zero;
+    _ReadWriteBarrier();
     cCommunity* comm = mpCommunity;
 
     if (comm) {
@@ -4987,13 +4987,13 @@ void cCommunityEditor_s00d0_a160::HidePlacementCursor()
 }
 
 // @ 0x00d0a630
-void PosTree::InsertPos(PosNode** out, const s32* key)
+PosNode** PosTree::InsertPos(PosNode** out, const s32* key)
 {
   PosNode* node = this->mpRoot_0c;
   PosNode* best = (PosNode*)&this->mpSentinel_04;
   while (node != 0) {
     if (key[0] > node->mKey0_10 ||
-        (key[0] == node->mKey0_10 && node->mKey1_14 < key[1])) {
+        (!(key[0] < node->mKey0_10) && node->mKey1_14 < key[1])) {
       node = node->mpLeft_00;
     } else {
       best = node;
@@ -5001,6 +5001,7 @@ void PosTree::InsertPos(PosNode** out, const s32* key)
     }
   }
   *out = best;
+  return out;
 }
 
 // @ 0x00d0a670
@@ -5355,9 +5356,12 @@ void cCommunityEditor_s00d0_b090::SetDefaultCamera(bool b)
 // @ 0x00d0b4d0
 bool cCommunityEditor_s00d0_b090::IsPositionInsideCommunityBounds(V3 pos)
 {
-    V3 center = *GetCommunityCenter();
+    const V3* pCenter = GetCommunityCenter();
+    V3 center; center.x = pCenter->x; center.y = pCenter->y; center.z = pCenter->z;
     float dist = PlanetModel()->DistanceBetweenPoints(&pos, &center);
-    return dist <= GetMaxCameraAnchorDistanceFromCommunityCenter();
+    float limit = GetMaxCameraAnchorDistanceFromCommunityCenter();
+    if (dist > limit) return false;
+    return true;
 }
 
 // @ 0x00d0b540
@@ -5481,7 +5485,7 @@ void cCommunityEditor_s00d0_b090::SetSelectedObject(cSpatialObject_s00d0_b090* o
 {
     mpSelectedObject = o;
     if (o) {
-        cSpatialObject_s00d0_b090* anchor = (cSpatialObject_s00d0_b090*)o->Cast(0xe89adf71);
+        cSpatialObject_s00d0_b090* anchor = (cSpatialObject_s00d0_b090*)((void*(__thiscall*)(void*,uint32_t))((*(void***)o)[46]))(o, 0xe89adf71);
         if (anchor) {
             if (((bool(__thiscall*)(void*))((*(void***)anchor)[5]))(anchor)) {
                 FUN_00d0b010(true);
@@ -5524,7 +5528,7 @@ uint32_t* cIntPairTree::lower_bound(int* key, void** out)
 }
 
 // @ 0x00d0bdd0
-void __cdecl PostEditorBehaviorMessage1(uint32_t a, uint32_t msgID)
+void __stdcall PostEditorBehaviorMessage1(uint32_t a, uint32_t msgID)
 {
     if (msgID == (uint32_t)-0xf || msgID == 0x1511161) {
         cEditorBehaviorMessage1* msg = new ("App", 0, 0, 0, 0) cEditorBehaviorMessage1();
@@ -5536,7 +5540,7 @@ void __cdecl PostEditorBehaviorMessage1(uint32_t a, uint32_t msgID)
 }
 
 // @ 0x00d0be60
-void __cdecl PostEditorBehaviorMessage2(uint32_t a, uint32_t msgID)
+void __stdcall PostEditorBehaviorMessage2(uint32_t a, uint32_t msgID)
 {
     if (msgID == (uint32_t)-0xf || msgID == 0x1511161) {
         cEditorBehaviorMessage2* msg = new ("App", 0, 0, 0, 0) cEditorBehaviorMessage2();
@@ -5548,7 +5552,7 @@ void __cdecl PostEditorBehaviorMessage2(uint32_t a, uint32_t msgID)
 }
 
 // @ 0x00d0bef0
-void __cdecl PostEditorBehaviorMessage3(uint32_t a, uint32_t msgID)
+void __stdcall PostEditorBehaviorMessage3(uint32_t a, uint32_t msgID)
 {
     if (msgID == (uint32_t)-0xf || msgID == 0x1511161) {
         cEditorBehaviorMessage3* msg = new ("App", 0, 0, 0, 0) cEditorBehaviorMessage3();

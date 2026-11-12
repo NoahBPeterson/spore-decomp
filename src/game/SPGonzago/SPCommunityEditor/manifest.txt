@@ -20,3 +20,12 @@
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d0c8e0@cListOwner@SP@@QAEXPAUtListChild@2@@Z  00d0c8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?HandleSwatchRolloverOn@cCommunityEditor_s00d0_def0@SP@@QAEXPAVcSwatch_s00d0_def0@2@@Z  00d0e0c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?RefreshTooltip@cCommunityEditor_s00d0_a160@@QAEXXZ  00d0a390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?PostEditorBehaviorMessage1@@YGXII@Z  00d0bdd0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?PostEditorBehaviorMessage2@@YGXII@Z  00d0be60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?PostEditorBehaviorMessage3@@YGXII@Z  00d0bef0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?InsertPos@PosTree@@QAEPAPAUPosNode@@PAPAU2@PBH@Z  00d0a630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?SetManipulatedObject@cCommunityEditor_s00d0_91c0@@QAEXPAVcSpatialObject@@@Z  00d09f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?SnapPointToPlanetIfNecessary@cCommunityEditor_s00d0_91c0@@QAEPAUVector3@@PAU2@MMMPAVcSpatialObject@@@Z  00d09f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?SetSelectedObject@cCommunityEditor_s00d0_b090@@QAEXPAVcSpatialObject_s00d0_b090@@@Z  00d0bcf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?IsPositionInsideCommunityBounds@cCommunityEditor_s00d0_b090@@QAE_NUV3@@@Z  00d0b4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?GetCommunityCenter@cCommunityEditor_s00d0_91c0@@QAEPBUVector3@@XZ  00d09960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
