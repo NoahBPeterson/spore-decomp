@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPAudioNPCCityMusic.cpp  ?ClearPosition@cNPCCityMusic@Audio@SP@@QAEXXZ  00eab390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAudioNPCCityMusic.cpp  ?SetVector@cNPCCityMusic@Audio@SP@@QAEXPBUVector3@23@@Z  00eab3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioNPCCityMusic.cpp  ??0cNPCCityMusic@Audio@SP@@QAE@XZ  00eab4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
