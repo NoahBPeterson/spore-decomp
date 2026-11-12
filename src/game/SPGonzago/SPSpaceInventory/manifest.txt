@@ -26,3 +26,4 @@
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?GetCargoSlotsCount@cSpaceInventory@@UAEIXZ  00c87420  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?IndexOfNthItem@cSpaceInventory@@UAEHW4SpaceInventoryItemType@@I@Z  00c872e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?GetItemByCargoSlot@cSpaceInventory@@UAEPAVcSpaceInventoryItem@@PAV2@@Z  00c87390  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceInventory.cpp  ??0cSpaceInventory@@QAE@XZ  00c87b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

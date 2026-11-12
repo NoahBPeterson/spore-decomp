@@ -1128,7 +1128,7 @@ bool cSpaceInventoryItem::Read(void* pStream)
 // @ 0x00c87b20
 cSpaceInventory::cSpaceInventory()
 {
-    mInventoryItems.mpBegin = 0;
+    *(void* volatile*)&mInventoryItems.mpBegin = 0;
     mInventoryItems.mpEnd = 0;
     mInventoryItems.mpCapacity = 0;
     mMaxItemCountPerItem = -1;
