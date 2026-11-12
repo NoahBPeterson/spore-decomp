@@ -9401,18 +9401,27 @@ ScenarioTutorialLifetime* ScenarioTutorialLifetime::Delete(unsigned flags)
     if (flags & 1) operator_delete(this);
     return this;
 }
+// Retail editor-state pointer fields read by the accessors below.
+struct EditorStateAccessorView {
+    uint32_t pad0;
+    void* mpState_4;
+    void* mpState_8;
+    void* mpState_c;
+    uint32_t pad10[0x58 / 4];
+    void* mpState_68;
+};
 // @ 0x00efc510
 void* GetEditorState_00efc510()
-{ return *(void**)((char*)g_016c7b88_s00ef_dee0 + 0x68); }
+{ return ((EditorStateAccessorView*)g_016c7b88_s00ef_dee0)->mpState_68; }
 // @ 0x00efe5a0
 void* GetEditorState_00efe5a0()
-{ return *(void**)((char*)g_016c7b88_s00ef_dee0 + 4); }
+{ return ((EditorStateAccessorView*)g_016c7b88_s00ef_dee0)->mpState_4; }
 // @ 0x00efe5b0
 void* GetEditorState_00efe5b0()
-{ return *(void**)((char*)g_016c7b88_s00ef_dee0 + 8); }
+{ return ((EditorStateAccessorView*)g_016c7b88_s00ef_dee0)->mpState_8; }
 // @ 0x00efe5c0
 void* GetEditorState_00efe5c0()
-{ return *(void**)((char*)g_016c7b88_s00ef_dee0 + 0xc); }
+{ return ((EditorStateAccessorView*)g_016c7b88_s00ef_dee0)->mpState_c; }
 struct LargeAssetFlagView {
     char pad[0x9d]; bool flag;
     bool GetFlag();
