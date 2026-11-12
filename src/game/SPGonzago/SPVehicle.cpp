@@ -20,6 +20,7 @@ extern char   g_1654c10, g_1654c04;                    // 0x01654c10 / 0x01654c0
 extern void*  g_1474a70[];                             // 0x01474a70 table
 extern void*  g_1474a5c[];                             // 0x01474a5c table
 #include <math.h>
+#include <intrin.h>
 #include <xmmintrin.h>
 #include "sse_helpers.h"
 
@@ -475,6 +476,7 @@ u8 CStub::FUN_00c9fe40(void* p)
 void* CStub::FUN_00c9fee0()
 {
     if (*(void**)((char*)this + 0xb7c) != 0) {
+        _ReadWriteBarrier();
         IResIface* q = (IResIface*)*(void**)((char*)this + 0xb7c);
         if (q != 0) {
             void* r = q->vb8(0x17f243b);
