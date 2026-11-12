@@ -8,7 +8,6 @@
 00960180  83  Window::ScreenToLocal: complete (calls vtable +0xc8 and copies or zeroes the out pair); equiv UNSUPPORTED 0/400 (fake-arity=396: the float args reach the call as fld/fstp [esp]); original is (float* out, float x, float y)
 009601e0  59  Window::GetChild: complete; equiv WEAK (192 valid, 68.0% cov); returns out in eax, vtable +0xd0 result deref and branch layout differ
 00960230  58  Window::RemoveChild: complete; equiv PASS (273 valid, 93.9% cov); detach path and vtable +0xdc/+0x1c/+4 call order differ
-00960280  3   Window::ClearChildren: complete; node==8 test uses cmp instead of add -8
 009602c0  48  Window::Dispatch14: complete; this-adjust (`neg/sbb/and` -> self or 0) and the manager vtable +0x14 call (4 args: mgr/*p/self/p, ecx=mgr) - [equiv: WEAK, 821 valid inputs, 23.8% cov (5/21), no mismatch; only the mgr==0 arm is reachable, everything past the call is discarded as fake-arity because the call-site return address is not resolvable for the fake-call arity probe]
 00960310  135  Window::OnPaint: complete; equiv PASS (246 valid, 100.0% cov); render-context calls and SSE area computation schedule differ
 00960410  227  Window::DoMessage: complete; equiv WEAK (397 valid, 21.1% cov); message-arm dispatch (0xd/0x16/0x14) and stack temps differ

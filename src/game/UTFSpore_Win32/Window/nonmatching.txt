@@ -13,7 +13,6 @@
 0095ffd0 35 Window::MoveBy2: complete; +0x6c call and SSE add schedule differ
 00960050 65 Window::Set1E4: complete; refcount swap and vtable +0x90 call differ
 009600a0 29 Window::OnPaint2: complete; flag test order differs
-00960280 3 Window::ClearChildren: complete; the original tests the tagged child by `add eax,-8; je` then `add eax,4`, while cl folds `node==0 || node==8` into `cmp eax,8; je` plus `add eax,-4` (different but equivalent; cl15 peephole, not source-controllable from the canonical condition)
 009602c0 31 Window::Dispatch14: complete; this-adjust and vtable +0x14 args differ
 00960be0 600 geometry rect accumulation: frame size and SSE schedule differ (706 vs 830 bytes); equiv: FAIL (now testable via member Geom; output rect differs)
 00960f20 169 SetUserData: vcall/IID schedule and bit clear order differ
