@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPAudio/_at_00a20000.cpp  ?SetFp@@YIXPBI@Z  00a206c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

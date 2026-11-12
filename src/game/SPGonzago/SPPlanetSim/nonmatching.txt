@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00f278b0 50 complete; predicate branch/block ordering differs (control-flow equivalent)
 00f278f0 119 complete; 0x44-stride loop register allocation + inline wcslen differ flags: /O2 /MD /Gy /TP /arch:SSE
-00f280b0 6 complete; only the `xor ecx,ecx` zero-register scheduling differs flags: /O2 /MD /Gy /TP /arch:SSE
 00f28680 139 complete; serialize wrapper around FUN_00f26770 (L"cScenarioGoal"); size 188 vs 256; equiv FAIL (eax upper bits, byte return)
 00f28780 139 complete; serialize wrapper around FUN_00f26810 (L"cScenarioClassAct"); size 188 vs 256; equiv FAIL (eax upper bits, byte return)
 00f28880 223 complete; cString group writer (BeginGroup/SetValue/EndGroup); size 272 vs 327; equiv FAIL (eax upper bits)
