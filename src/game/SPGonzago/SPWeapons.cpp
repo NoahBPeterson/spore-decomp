@@ -3468,25 +3468,53 @@ bool cLocomotionObjDC::HasLiveTargetDC()
     return false;
 }
 
+struct SimSlots5580 {                    // subobject view at +0x518
+    void ReleaseSlots();                 // 0x00bfc720 ?ReleaseSlots@Sim@@QAEXXZ
+};
+struct cGameData_s00cb_5580 {            // view of the 0x00cb5580 class (teardown)
+    char pad0[0x2c];
+    RefCounted* mpOwner2c;               // +0x2c
+    char pad30[0x34 - 0x30];
+    Simulator::cLocomotiveObject_s00cb_b020 mLoco;   // +0x34 (Shutdown / SetLocomotion)
+    char pad504[0x518 - 0x504];
+    SimSlots5580 mSlots;                 // +0x518 (ReleaseSlots)
+    char pad51c[0x5e0 - 0x51c];
+    RefCounted* mp5e0;                   // +0x5e0
+    RefCounted* mp5e4;                   // +0x5e4
+    char pad5e8[0x608 - 0x5e8];
+    void* mpNoun608;                     // +0x608
+    void Teardown5580();                 // 0x00cb5580
+};
+
 // @ 0x00cb5580
-void f00cb5580(int self)
+void cGameData_s00cb_5580::Teardown5580()
 {
-    RefCounted* p = *(RefCounted**)(self + 0x5e0);
-    if (p) {
-        *(void**)(self + 0x5e0) = 0;
+    RefCounted* p = mp5e0;
+    if (p != 0) {
+        mp5e0 = 0;
         p->r08();
     }
-    RefCounted* q = *(RefCounted**)(self + 0x5e4);
-    if (q) {
-        *(void**)(self + 0x5e4) = 0;
+    RefCounted* q = mp5e4;
+    if (q != 0) {
+        mp5e4 = 0;
         q->r64();
     }
-    RefCounted* r = *(RefCounted**)(self + 0x2c);
-    if (r) {
-        *(void**)(self + 0x2c) = 0;
+    RefCounted* r = mpOwner2c;
+    if (r != 0) {
+        mpOwner2c = 0;
         r->r04();
     }
-    cLocomotiveObject_Shutdown((cLocomotiveObject_s00cb_44b0*)(self + 0x34));
+    mSlots.ReleaseSlots();
+    mLoco.m_c43f90();
+    mLoco.m_c421b0(0);
+    if (mpNoun608 != 0) {
+        ((Obj_s00cb_a050*)SP_NounManager())->m_b225d0(mpNoun608);
+        RefCounted* n = (RefCounted*)mpNoun608;
+        if (n != 0) {
+            mpNoun608 = 0;
+            n->r04();
+        }
+    }
 }
 
 // @ 0x00cb5620
