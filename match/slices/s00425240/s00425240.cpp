@@ -91,6 +91,7 @@ struct Deque {
     uint32_t ptrArraySize; // +4
     DequeIter itBegin;   // +8
     DequeIter itEnd;     // +0x18
+    uint32_t mOpaque28;  // trailing storage; native array stride is 0x2c
 
     Deque(unsigned n, const int& a);
     bool empty() const;
@@ -135,15 +136,20 @@ bool Deque::empty() const { return itBegin.cur == itEnd.cur; }
 // @ 0x00425450
 unsigned Deque::size() const { return itEnd - itBegin; }
 
+template<int N> inline void ReserveDequeInlineFrame()
+{
+    uint32_t slots[N];
+}
+
 // @ 0x004254c0
-// Not byte-exact (3 bytes): original frame has 0x24 bytes of unused locals below the new-temp.
+// Preserve the unused inline-frame storage of this unoptimized wrapper.
 void Deque::push_front(const Elem& v)
 {
     if (itBegin.cur != itBegin.begin)
         ::new (--itBegin.cur) Elem(v);
     else
         DoPushFront(v);
-    uint32_t pad[9];
+    ReserveDequeInlineFrame<9>();
 }
 
 // @ 0x00425530

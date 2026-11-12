@@ -181,7 +181,6 @@ inline void DeleteElemConditional(void* p, int flags)
         EASTL_allocator_deallocate(p);
 }
 
-// @ 0x0050f070
 struct VecBase {
     Elem100* mpBegin;
     Elem100* mpEnd;
@@ -194,12 +193,15 @@ struct VecBase {
 // @ 0x0050f070
 VecBase::~VecBase()
 {
+    int q;
+    Elem100* n;
+    void* p;
     if (mpBegin) {
-        int q = (int)((char*)mpCapacity - (char*)mpBegin) / (int)sizeof(Elem100) * (int)sizeof(Elem100);
+        q = (int)((char*)mpCapacity - (char*)mpBegin) / (int)sizeof(Elem100) * (int)sizeof(Elem100);
         (void)q;
-        Elem100* n = mpBegin;
+        n = mpBegin;
         if (n != mFixed) {
-            void* p = n;
+            p = n;
             EASTL_allocator_deallocate(p);
         }
     }
