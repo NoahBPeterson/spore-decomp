@@ -19,3 +19,4 @@
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?AssignFrom@CopyValue@@QAEPAU1@PBU1@@Z  00d0a670  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?FUN_00d0c8e0@cListOwner@SP@@QAEXPAUtListChild@2@@Z  00d0c8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCommunityEditor.cpp  ?HandleSwatchRolloverOn@cCommunityEditor_s00d0_def0@SP@@QAEXPAVcSwatch_s00d0_def0@2@@Z  00d0e0c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCommunityEditor.cpp  ?RefreshTooltip@cCommunityEditor_s00d0_a160@@QAEXXZ  00d0a390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
