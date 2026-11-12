@@ -2,17 +2,27 @@
 // Cell-game creature-pickup / box-distance UI helpers. Optimised:
 // /O2 /MD /Gy /TP /arch:SSE /fp:fast.  Guard = 0x743b50/0xe82130.
 #include "types.h"
+#include <stddef.h>
 
 struct cGuard19 { void* p; cGuard19(); ~cGuard19(); };
 
+// Bounded retail prefix used by the cell-game pickup predicate.
+// The complete candidate owner class is not yet recovered.
+struct PickupCandidatePrefix {
+    uint32_t mUnknown[0xfc / 4];
+    int mPickupState_fc;
+};
+typedef char PickupCandidateStateOffset[(offsetof(PickupCandidatePrefix, mPickupState_fc) == 0xfc) ? 1 : -1];
+typedef char PickupCandidatePrefixSize[(sizeof(PickupCandidatePrefix) == 0x100) ? 1 : -1];
+
 extern "C" {
-  int       __cdecl FUN_00e57340(int p);
+  int       __cdecl FUN_00e57340(PickupCandidatePrefix* p);
   char      __cdecl FUN_00e4ff10(char* p);
   int       __cdecl FUN_00e4fca0();
   int       __cdecl FUN_00e530e0();
   int       __cdecl FUN_00e5c9d0();
   char      __cdecl FUN_00e5cd00();
-  bool      __cdecl FUN_00e5d580(int p);
+  bool      __cdecl FUN_00e5d580(PickupCandidatePrefix* p);
   int       __cdecl FUN_00e87260(int id, void* a, int b, void* out, int n, int f);
   void      __cdecl FUN_00e53660(int a, int b);
   void      __cdecl FUN_00e539c0();
@@ -117,10 +127,13 @@ bool FUN_00e5d410(int id, float* p, float r) {
 }
 
 // @ 0x00e5d580
-bool FUN_00e5d580(int p) {
-  if (*(int*)(p + 0xfc) != 0 && FUN_00e57340(p) == 3)
-    return FUN_00e4ff10((char*)p) != 0;
-  return false;
+bool FUN_00e5d580(PickupCandidatePrefix* p) {
+  if (p->mPickupState_fc == 0)
+    return false;
+  if (FUN_00e57340(p) != 3)
+    return false;
+  bool allowed = FUN_00e4ff10((char*)p) != 0;
+  return allowed;
 }
 
 // @ 0x00e5daa0
@@ -226,7 +239,7 @@ void FUN_00e5d5b0(float dt) {
     float dz = *(float*)(c + 0x54) - *(float*)(target + 0x54);
     float dist = dx * dx + dy * dy + dz * dz;
     if (dist > b * b) continue;
-    if (!FUN_00e5d580((int)c)) continue;
+    if (!FUN_00e5d580(reinterpret_cast<PickupCandidatePrefix*>(c))) continue;
     g_16b3c04[0x51c0] = 1;
     char* s = (char*)(*(int*)(g_16b3c04 + 0x5190) + 0xb0);
     *(int*)s = 1; *(int*)(s + 4) = 0; *(int*)(s + 8) = 0; *(float*)(s + 0xc) = 0.0f;

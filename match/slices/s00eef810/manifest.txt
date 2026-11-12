@@ -6,3 +6,4 @@ slices/s00eef810/s00eef810.cpp  ?CheckAll@CUpdater@@QAE_NXZ  00ef02a0  /O2 /MD /
 slices/s00eef810/s00eef810.cpp  ?Destroy@CEditor@@QAEXXZ  00ef0400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00eef810/s00eef810.cpp  ?OnMouseDown@CEditor@@QAE_NIMMI@Z  00ef0670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00eef810/s00eef810.cpp  ?OnMouseUp@CEditor@@QAE_NIMMI@Z  00ef0730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00eef810/s00eef810.cpp  ?Enable@CToolState@@QAEXXZ  00eeff40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

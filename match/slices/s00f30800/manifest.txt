@@ -3,3 +3,4 @@ slices/s00f30800/s00f30800.cpp  ?DestroyRange@ImpactList@@QAEXPAUPairBlock@@0@Z 
 slices/s00f30800/s00f30800.cpp  ?Construct@PairBlock@@QAEPAU1@PBU1@@Z  00f30b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00f30800/s00f30800.cpp  ?RangeDestroyTo@@YAPAUPairBlock@@PAU1@00@Z  00f30980  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00f30800/s00f30800.cpp  ?RangeConstruct@@YAPAUPairBlock@@PAU1@00@Z  00f30b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00f30800/s00f30800.cpp  ?Assign@PairBlock@@QAEPAU1@PBU1@@Z  00f30910  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

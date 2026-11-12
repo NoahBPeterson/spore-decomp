@@ -16,7 +16,7 @@ struct IEffect {            // effect instance (vtbl slots used by this slice)
     virtual void v14();
     virtual void SetTransform(void* msg);   // 0x18
     virtual void v1c(); virtual void v20(); virtual void v24(); virtual void v28();
-    virtual void v2c(); virtual void v30();
+    virtual void v2c(); virtual void SetIsHidden(bool hidden); // slot 12, +0x30
 };
 
 struct XformMsg {           // 0x38 bytes; ctor @0x434040
@@ -262,7 +262,7 @@ void cContentValidationSummarizer::SetXformFrom(int key, char* src)
 void cContentValidationSummarizer::SetEnabled(int key, bool b)
 {
     IEffect* e = Find(key);
-    if (e) ((void(__thiscall*)(IEffect*, int))(*(void***)e)[0x30 / 4])(e, !b);
+    if (e) e->SetIsHidden(!b);
 }
 
 // @ 0x45b150

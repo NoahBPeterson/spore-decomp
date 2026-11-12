@@ -14,3 +14,4 @@
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f4bb0@SimGame@@QAEPAXH@Z  01004bb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f4c30@SimGame@@QAEDXZ  01004c30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?f53a0@@YA_NXZ  010053a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorSpaceGame.cpp  ?EraseFront@cObjectList@@QAEPAXPAE@Z  01009ab0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
