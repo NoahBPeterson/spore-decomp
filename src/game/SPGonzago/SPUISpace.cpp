@@ -892,6 +892,13 @@ struct Engine {
     void  FUN_00e01350();                          // placeholder holder, unused
 };
 struct Node { Node* mNext; Node* mPrev; void* mData; };
+struct NodeIterator {
+    Node* mpNode;
+    NodeIterator(const NodeIterator& other) : mpNode(other.mpNode) {}
+    bool operator!=(const NodeIterator& other) const { return mpNode != other.mpNode; }
+    NodeIterator& operator++() { mpNode = mpNode->mNext; return *this; }
+    void*& operator*() const { return mpNode->mData; }
+};
 struct Hashtable {
     uint32_t mPad00;        // +0x00
     int*     mpBuckets;     // +0x04
@@ -2688,25 +2695,26 @@ Blk28& Blk28::operator=(const Blk28& src)
 // @ 0x01068610
 Blk28* FUN_01068610(Blk28* begin, Blk28* end, Blk28* dst)
 {
-    if (begin == end) return dst;
-    do {
-        if (dst != 0) {
-            RefObj* r = begin->mpRef;
-            dst->mpRef = r;
-            if (r != 0) r->AddRef();
-            dst->m04 = begin->m04;
-            dst->m08 = begin->m08;
-            dst->m0c = begin->m0c;
-            dst->m10 = begin->m10;
-            dst->m14 = begin->m14;
-            dst->m18 = begin->m18;
-            dst->m1c = begin->m1c;
-            dst->m20 = begin->m20;
-            dst->m24 = begin->m24;
-        }
-        begin = begin + 1;
-        dst = dst + 1;
-    } while (begin != end);
+    if (begin != end) {
+        do {
+            if (dst != 0) {
+                RefObj* r = begin->mpRef;
+                dst->mpRef = r;
+                if (r != 0) r->AddRef();
+                dst->m04 = begin->m04;
+                dst->m08 = begin->m08;
+                dst->m0c = begin->m0c;
+                dst->m10 = begin->m10;
+                dst->m14 = begin->m14;
+                dst->m18 = begin->m18;
+                dst->m1c = begin->m1c;
+                dst->m20 = begin->m20;
+                dst->m24 = begin->m24;
+            }
+            begin = begin + 1;
+            dst = dst + 1;
+        } while (begin != end);
+    }
     return dst;
 }
 
@@ -3592,22 +3600,23 @@ void cSPUISpace_s0106_ada0::FUN_0106b630()
 // @ 0x0106b7e0
 char __stdcall FUN_0106b7e0(void* self, void* icon)
 {
-    if (self == 0)
-        return 0;
-    void* w = ((VFn_p)VSLOT(self, 0xa8))(self);
-    if (w == 0)
-        return 0;
-    void* h = ((VFn_pi)VSLOT(w, 0x0c))(w, 0xef3c47cf);
-    if (h == 0)
-        return 0;
-    void* img = 0;
-    FUN_00806230(icon, &img, 0, -1, -1);
-    if (img == 0)
-        return 0;
-    ((VFn_vp)VSLOT(h, 0x14))(h, img);
-    if (img != 0)
-        ((VFn_v)VSLOT(img, 4))(img);
-    return 1;
+    if (self != 0) {
+        void* w = ((VFn_p)VSLOT(self, 0xa8))(self);
+        if (w != 0) {
+            void* h = ((VFn_pi)VSLOT(w, 0x0c))(w, 0xef3c47cf);
+            if (h != 0) {
+                void* img = 0;
+                FUN_00806230(icon, &img, 0, -1, -1);
+                if (img != 0) {
+                    ((VFn_vp)VSLOT(h, 0x14))(h, img);
+                    if (img != 0)
+                        ((VFn_v)VSLOT(img, 4))(img);
+                    return 1;
+                }
+            }
+        }
+    }
+    return 0;
 }
 
 // @ 0x0106b860
@@ -3656,13 +3665,14 @@ int FUN_0106b860(void* res)
 }
 
 // @ 0x0106b950
-void __stdcall FUN_0106b950(Node* head, Node* begin, Node* end, int unused)
+void __stdcall FUN_0106b950(Node* head, NodeIterator begin, NodeIterator end, int unused)
 {
     (void)unused;
-    for (; begin != end; begin = begin->mNext) {
+    for (; begin != end; ++begin) {
+        void*& value = *begin;
         Node* n = (Node*)FUN_00f473a0(0xc, "Simulator", 0, 0, (void*)0x13ebb38, 0xd1);
         if (&n->mData != 0)
-            n->mData = begin->mData;
+            n->mData = value;
         n->mNext = head;
         n->mPrev = head->mPrev;
         head->mPrev->mNext = n;
@@ -3757,8 +3767,10 @@ void cSPUISpace_s0106_da70::OnContextDeactivate()
 
 // @ 0x0106e2d0
 cSPUISpace_s0106_da70::cSPUISpace_s0106_da70()
-: mf150(1.0f), mf154(2.0f)
 {
+    *(volatile float*)&mf150 = 1.0f;
+    *(volatile float*)&mf154 = 2.0f;
+    _ReadWriteBarrier();
     mToolStrategies.mnElements = 0;
     m158 = 0;
     mToolStrategies.mnBuckets = 1;
@@ -3812,16 +3824,11 @@ void cSPUISpace_s0106_da70::FUN_0106e5e0()
 {
     uint32_t count = (uint32_t)(mpIdsEnd - mpIdsBegin);
     uint32_t next = 0;
-    uint32_t i;
-
-    if (count != 0) {
+    _ReadBarrier();
+    for (uint32_t i = 0; i < count; ++i) {
         const uint32_t* pIds = mpIdsBegin;
-        uint32_t pivot = m23c;
-
-        for (i = 0; i < count; ++i) {
-            if (pIds[i] == pivot)
-                next = pIds[(i + 1) % count];
-        }
+        if (pIds[i] == m23c)
+            next = pIds[(i + 1) % count];
     }
     ToggleToolUI(next);
 }
@@ -3831,16 +3838,11 @@ void cSPUISpace_s0106_da70::FUN_0106e630()
 {
     uint32_t count = (uint32_t)(mpIdsEnd - mpIdsBegin);
     uint32_t next = 0;
-    uint32_t i;
-
-    if (count != 0) {
+    _ReadBarrier();
+    for (uint32_t i = 0; i < count; ++i) {
         const uint32_t* pIds = mpIdsBegin;
-        uint32_t pivot = m23c;
-
-        for (i = 0; i < count; ++i) {
-            if (pIds[i] == pivot)
-                next = pIds[(count - 1 + i) % count];
-        }
+        if (pIds[i] == m23c)
+            next = pIds[(count - 1 + i) % count];
     }
     ToggleToolUI(next);
 }

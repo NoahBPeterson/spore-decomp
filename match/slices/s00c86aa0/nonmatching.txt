@@ -9,4 +9,3 @@
 00c87770 224 nonmatching: cSpaceInventoryItem destructor; 203 vs 128 bytes; teardown order differs. difftest UNSUPPORTED (unresolved ??1ItemRefCount@@UAE@XZ); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00c878d0 177 nonmatching: CreateMultiDeliveryObject; 185 vs 208 bytes. difftest FAIL 5/5 (memory pool @40020000); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00c879a0 280 nonmatching: cSpaceInventoryItem::Read; 368 vs 348 bytes; switch/deserialisation paths not fully reconstructed. difftest UNSUPPORTED (0/400 valid; fault(read)=392, fake-arity=8); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
-00c87b20 7 nonmatching: cSpaceInventory constructor; 43-byte target, vptr stores scheduled after field stores. difftest UNSUPPORTED (local vtable address vs image symbol); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.

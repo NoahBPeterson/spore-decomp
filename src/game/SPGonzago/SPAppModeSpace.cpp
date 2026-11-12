@@ -2552,9 +2552,9 @@ struct cPlanetRecord_s00fd_eac0 {
     cCivData_s00fd_eac0* GetOwnerCiv();                    // 0x00b8de30
 };
 struct ITransitionTarget {
-    void Enter();                               // 0x010727e0
+    void Enter(int a, int b);                    // 0x010727e0
 };
-ITransitionTarget* GetTransitionTarget(int a, int b);   // 0x010666a0
+ITransitionTarget* GetTransitionTarget();   // 0x010666a0
 struct cBioProtector { const ResourceKey* GetKey(); };   // 0x00bb9b80
 struct cStarRecordRef {
     uint32_t GetCommContext();                  // 0x00ce6950
@@ -5862,9 +5862,7 @@ void cAppModeSpace_s00fd_eac0::OnPlanetRecordReady()
     cSPLivingUniverse::GetActivePlanet_s00fd_eac0();
     cPlanetRecord_s00fd_eac0* record = cSPLivingUniverse::GetActivePlanetRecord();
     if (record->GetTransitionData()) {
-        ITransitionTarget* target = GetTransitionTarget(0, 0);
-        void (ITransitionTarget::*enter)() = &ITransitionTarget::Enter;
-        (target->*enter)();
+        GetTransitionTarget()->Enter(0, 0);
     } else {
         TransitionFromSolarToPlanet();
     }
