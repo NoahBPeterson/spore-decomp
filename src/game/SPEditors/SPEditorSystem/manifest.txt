@@ -21,3 +21,4 @@
 ../src/game/SPEditors/SPEditorSystem.cpp  ??1cSPUIXHTMLFileResourceHandler@@UAE@XZ  005d7350  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorSystem.cpp  ?GetProtocolName@cSPUIXHTMLUTFResourceHandler@@UAEPB_WH@Z  005d73d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorSystem.cpp  ??1cXHTMLLocalizedStrings@@UAE@XZ  005d7450  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSystem.cpp  ?Shutdown@cEditorSystem_s005d_61b0@SP@@QAE_NXZ  005d61b0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

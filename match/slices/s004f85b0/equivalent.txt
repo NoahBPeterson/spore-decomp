@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s004f85b0/s004f85b0.cpp  ?Init@ForceGrid@@QAEPAU1@M@Z  004f85b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

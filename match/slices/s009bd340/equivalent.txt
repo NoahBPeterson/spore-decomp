@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s009bd340/s009bd340.cpp  ?ResetBodies@nSPCreatureAnim@@YAXPAUcreature_instance_data@1@@Z  009bd340  /O2 /MD /Gy /TP /arch:SSE /fp:fast

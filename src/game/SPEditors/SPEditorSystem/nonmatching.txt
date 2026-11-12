@@ -1,4 +1,3 @@
 # va  diff-bytes  reason
-005d61b0 6 cEditorSystem::Shutdown: cSPSwatchManager inline Release emits sub/flags instead of dec + cmp eax,ebx
 005d7270 30 fixed_string<wchar_t,97>(const string16&): store scheduling of the capacity lea
 005d72b0 18 cSPUIXHTMLFileResourceHandler ctor: same fixed_string capacity scheduling

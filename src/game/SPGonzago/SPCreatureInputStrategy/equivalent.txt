@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCreatureInputStrategy.cpp  ?UpdateInput@cCreatureModeInputStrategy_s00d3_2330@SP@@QAEXPAVcGameInputManager_s00d3_2330@2@I@Z  00d32df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
