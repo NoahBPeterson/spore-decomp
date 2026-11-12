@@ -8,3 +8,4 @@ slices/s00456360/s00456360.cpp  ?lower_bound_Elem32@@YAPAUElem32@@PAU1@0PBH@Z  0
 slices/s00456360/s00456360.cpp  ?Vec3_InvLength@@YAMPBUVec3@@@Z  004565f0  /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00456360/s00456360.cpp  ?Vec3_Scale@@YAPAUVec3@@PAU1@PBU1@M@Z  00456650  /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00456360/s00456360.cpp  ?copy_ref_forward@@YAPAPAURefObj@@PAPAU1@00@Z  004571d0  /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE
+slices/s00456360/s00456360.cpp  ?copy_ref_backward@@YAPAPAURefObj@@PAPAU1@00@Z  004574c0  /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE

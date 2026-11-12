@@ -376,11 +376,12 @@ Triple* uninitialized_fill_n_Triple(Triple* dst, int n, const Triple* v)
 // @ 0x4574c0  (copy_backward of RefObj* with AddRef/Release)
 RefObj** copy_ref_backward(RefObj** first, RefObj** last, RefObj** dst)
 {
+    RefObj* old;
     while (last != first) {
         --last; --dst;
         RefObj* p = *last;
         if (p != *dst) {
-            RefObj* old = *dst;
+            old = *dst;
             if (p) p->AddRef();
             *dst = p;
             if (old) old->Release();
