@@ -227,13 +227,46 @@ bool FUN_00e53280() {
   return true;
 }
 
+// Bounded retail views: pool init establishes 0x398-byte cell records.
+struct AvatarRecordRestrictedView {
+    unsigned mPoolIndex;
+    unsigned mUnknown04[(0x178-4)/4];
+    unsigned char mUnknown178[3];
+    unsigned char mMarked17b;
+    unsigned char mMarked17c;
+    unsigned char mUnknown17d[0x398-0x17d];
+};
+struct CellPoolRestrictedView {
+    char* mpData;
+    int mFreeHead;
+    unsigned mNextHandle;
+    int mUsed;
+    int mHighWater;
+    int mStride;
+    int mCapacity;
+    AvatarRecordRestrictedView* Get(unsigned id); // 0x00b721d0
+};
+struct CellGameRestrictedView {
+    unsigned mPrefix[7];
+    CellPoolRestrictedView mCells;
+    unsigned mMiddle[(0x411c-0x38)/4];
+    unsigned mAvatarCellIndex;
+};
+
 // @ 0x00e532e0
 bool FUN_00e532e0(char* flag, float dt) {
-  cCellGame17* game = CellGame17();
-  void* o = game->mSub_1c.Fn_b721d0(game->mField_411c);
+  AvatarRecordRestrictedView* o;
+  {
+    CellGameRestrictedView* game = (CellGameRestrictedView*)CellGame17();
+    const unsigned key = game->mAvatarCellIndex;
+    // Only the native read-only lookup uses this pool within this scope.
+    // Its records are allocated separately from the game and pool headers.
+    CellPoolRestrictedView* __restrict cells = &game->mCells;
+    o = cells->Get(key);
+  }
   if (o) {
-    *(char*)((char*)o + 0x17c) = 1;
-    *(char*)((char*)o + 0x17b) = 1;
+    o->mMarked17c = 1;
+    o->mMarked17b = 1;
   }
   if (*flag == 0 && dt > 1.0f) {
     FUN_00e7ce10(0x32, 1);
