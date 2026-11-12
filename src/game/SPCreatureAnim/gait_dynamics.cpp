@@ -803,7 +803,7 @@ static inline float Sign1(float v) { return v < 0.0f ? -1.0f : 1.0f; }
 // ---- items of slice s005af200 end
 
 // ---- items of slice s005ae870 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void* FUN_005ae5d0(void* dst, void* first, void* last);  // 0x005ae5d0  copy 0x3c-stride records
+void* FUN_005ae5d0(void* first, void* last, void* destination);  // 0x005ae5d0, copy 0x3c-stride records
 struct HighlightVec {
     int  mBegin;   // +0  pointer to first 0x3c-stride record
     int  mEnd;     // +4  pointer past the last record
@@ -2072,10 +2072,11 @@ void HighlightVec::Clear()
 {
     int first = mBegin;
     int last  = mEnd;
-    FUN_005ae5d0((void*)last, (void*)last, (void*)first);   // FUN_005ae5d0(dst, first, last)
+    FUN_005ae5d0((void*)last, (void*)last, (void*)first);   // Copy the empty tail range to begin.
     int size = (int)((char*)last - (char*)first);
-    int count = size / 0x3c;
-    mEnd += count * 0x3c;}
+    int count = size / -0x3c;
+    mEnd += count * 0x3c;
+}
 
 // @ 0x005af200
 namespace SP {
