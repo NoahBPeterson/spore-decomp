@@ -7,3 +7,4 @@
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00c9f750@CStub@@QAEXD@Z  00c9f750  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?SetStance@CStub@@QAEXID@Z  00c9fa70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00c9fc60@CStub@@QAEXPAX@Z  00c9fc60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00c9fe40@CStub@@QAEEPAX@Z  00c9fe40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -435,9 +435,12 @@ float* CStub::FUN_00c9fdc0(float* out)
     return out;
 }
 
-// Closest attempt, 128 vs 152. A switch on 0/1/2 reproduces retail's
-// `sub eax, 0; je; sub eax, 1; je; sub eax, 1` chain. this stays in edi
-// and the continent index in ebx; retail keeps this in ebx.
+// Same-continent check gated by the mode at this+0xb1c. The continent table
+// at planet+0x64 is re-read inside each case (no hoisted local), each case
+// tail spells its own copy of the p position vcall, and the final compare is
+// a `? 1 : 0` ternary: that one result temporary is what rotates the
+// allocator onto retail's registers (this in ebx, continent index in edi,
+// two vcall copies with swapped scratch pairs).
 // @ 0x00c9fe40
 u8 CStub::FUN_00c9fe40(void* p)
 {
@@ -446,23 +449,26 @@ u8 CStub::FUN_00c9fe40(void* p)
         return 0;
     float* pos = ((float*(__thiscall*)(void*))((void**)*(void***)((char*)this + 0x34))[11])((char*)this + 0x34);
     int c1 = planet->GetContinent(pos);
-    char* table = (char*)*(int*)((char*)planet + 0x64);
     switch (*(int*)((char*)this + 0xb1c)) {
     case 1:
-        if (table[c1] == 0)
-            break;
-        return 1;
+        if (*(char*)(*(int*)((char*)planet + 0x64) + c1) != 0)
+            return 1;
+        {
+            float* pos2 = ((float*(__thiscall*)(void*))((void**)*(void***)((char*)p + 0x34))[11])((char*)p + 0x34);
+            return c1 == planet->GetContinent(pos2) ? 1 : 0;
+        }
     case 0:
-        if (table[c1] != 0)
-            break;
-        return 1;
+        if (*(char*)(*(int*)((char*)planet + 0x64) + c1) == 0) {
+            return 1;
+        } else {
+            float* pos2 = ((float*(__thiscall*)(void*))((void**)*(void***)((char*)p + 0x34))[11])((char*)p + 0x34);
+            return c1 == planet->GetContinent(pos2) ? 1 : 0;
+        }
     case 2:
         return 0;
     default:
         return 0;
     }
-    float* pos2 = ((float*(__thiscall*)(void*))((void**)*(void***)((char*)p + 0x34))[11])((char*)p + 0x34);
-    return c1 == planet->GetContinent(pos2);
 }
 
 // @ 0x00c9fee0
