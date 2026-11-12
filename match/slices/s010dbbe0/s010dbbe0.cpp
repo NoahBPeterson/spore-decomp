@@ -324,7 +324,8 @@ void HkHeightFieldArray::Destroy()
 void* HkHeightFieldArray::DestroyDeleting(unsigned int flags)
 {
     mpVptr = g_hkHeightFieldBvTreeVtbl;
-    if (mCapacity >= 0)
+    _ReadWriteBarrier();
+    if (((unsigned int)mCapacity & 0x80000000u) == 0)
         hkThreadMemoryGet()->deallocateChunk(mpData, (mCapacity & 0x3fffffff) << 1, 0x14);
     mpVptr = g_hkArrayBaseVtbl;
     if (flags & 1)
