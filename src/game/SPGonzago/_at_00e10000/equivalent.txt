@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00e10000.cpp  ?Activate@cTradeUI@@QAEXXZ  00e1dae0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

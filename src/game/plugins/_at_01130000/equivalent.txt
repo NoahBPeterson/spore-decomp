@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/plugins/_at_01130000.cpp  ?F_660@AudioObj@core@audio@rw@@QAEXHPAH@Z  01139660  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

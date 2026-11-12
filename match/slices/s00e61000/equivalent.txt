@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00e61000/s00e61000.cpp  ??0BigMode@@QAE@XZ  00e61aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE

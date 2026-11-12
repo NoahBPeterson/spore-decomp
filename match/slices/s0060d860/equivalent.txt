@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0060d860/s0060d860.cpp  ??0QueueEntry@@QAE@PBIPBUQueueSource@@@Z  0060d9f0  /O2 /MD /Gy /TP /arch:SSE /GS-

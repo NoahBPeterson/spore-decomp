@@ -12,3 +12,4 @@
 ../src/game/UTFSpore_Win32/Window.cpp  ?f@S962530@@QAEXHH@Z  00962530  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Window.cpp  ?ChildBegin@Win@@QAE?AVWindowIterator@UTFWin@EA@@XZ  00961260  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Window.cpp  ?ClearChildren@Window_s0095_ff20@@QAEXXZ  00960280  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?RecomputeFlags@Win@@QAEXXZ  009613e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

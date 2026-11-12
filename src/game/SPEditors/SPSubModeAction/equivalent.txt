@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPSubModeAction.cpp  ?SetWalkAnimation@cSPPlayModeSubModeAction_s0063_7f80@SP@@QAEXPAVcAnimatingCreature_s0063_7f80@@I@Z  006388e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

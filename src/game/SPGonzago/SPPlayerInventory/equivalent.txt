@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPPlayerInventory.cpp  ?ctor@cPlayerInventory_s00ff_4d50@@QAEPAU1@XZ  00ff5190  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

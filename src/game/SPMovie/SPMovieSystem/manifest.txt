@@ -8,3 +8,4 @@
 ../src/game/SPMovie/SPMovieSystem.cpp  ?FUN_00fd7730@@YAXHPAUIWindowCtl@@@Z  00fd7730  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/SPMovieSystem.cpp  ?GetSomething@cMovieSystem@@QAEPAXXZ  00fd7a90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/SPMovieSystem.cpp  ?Construct@cMovieLetterbox@@QAEPAU1@XZ  00fd7ab0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPMovie/SPMovieSystem.cpp  ?OnMovieMsg@cMovieSystem@@QAEDHH@Z  00fd74f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

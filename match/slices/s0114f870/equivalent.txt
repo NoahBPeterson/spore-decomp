@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0114f870/s0114f870.cpp  ?FFD0@cLightFilter@@QAEXPAMMM@Z  0114ffd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

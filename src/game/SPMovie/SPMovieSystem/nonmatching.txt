@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00fd74f0 93 message-driven movie play/stop; class/offset uncertainty
 00fd75a0 126 frame-count vs elapsed-time check; register/rounding
 00fd7660 161 RecordFrames loop
 00fd7750 110 cMovieLetterbox::Init refcount assignment + layout Init

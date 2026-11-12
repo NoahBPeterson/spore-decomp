@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/_at_00600000.cpp  ??0cDBCheckDialog@UI@@QAE@XZ  0060b150  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

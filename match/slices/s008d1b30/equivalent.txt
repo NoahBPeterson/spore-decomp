@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s008d1b30/s008d1b30.cpp  ?EnumDevices@InputMan@Input@EA@@QAEIPAXI@Z  008d21a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/_at_00810000.cpp  ?PostMouseEdgeMsg@@YAXPAX@Z  00812c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,2 +1,4 @@
 # source  symbol  va  flags
 ../src/game/ealayer31/mpegl3base.cpp.cpp  ?ScalarDeletingDtor@CMpegLayer3Base_s0114_6ca0@core@audio@rw@@QAEPAXI@Z  01146d70 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/ealayer31/mpegl3base.cpp.cpp  ??1CMpegLayer3Base_s0114_6ca0@core@audio@rw@@QAE@XZ  01146cf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/ealayer31/mpegl3base.cpp.cpp  ??0CMpegLayer3Base_s0114_6ca0@core@audio@rw@@QAE@XZ  01146ca0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

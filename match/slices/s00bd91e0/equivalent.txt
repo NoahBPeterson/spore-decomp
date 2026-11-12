@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00bd91e0/s00bd91e0.cpp  ?PrintBuildingCount@cCity@@QAEXM@Z  00bd9440  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00ae4fd0/s00ae4fd0.cpp  ??0SimSingleton@@QAE@XZ  00ae5c30  /O2 /MD /Gy /EHsc /TP

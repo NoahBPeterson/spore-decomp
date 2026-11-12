@@ -4,7 +4,6 @@
 007ee480 111 write cVolumeDescription - virtual write calls differ
 007ee540 227 SP::cVolumeDescription::cVolumeDescription - field/vtable store schedule differs
 007ee630 111 SP::VolumeRead - read helper shapes differ
-007ee6d0 40 SixFloats::Assign (six-float element copy) - returns this in eax (original fld/fstp, ours integer/loop); flags /O2 /MD /Gy /EHsc /TP; equiv PASS (400 valid, 100% cov)
 007ee700 35 VolumeAlpha command - member MainArguments now called thiscall (ecx=args, one stack arg) and the converter is the +4 object (vtable+0x98); only frame/reg allocation differs [equiv PASS (334 valid, 100% cov); src hybrid PASS]
 007ee730 69 VolumeColor command - vector-conv vcall differs [equiv UNSUPPORTED: 0/1200 valid inputs (_CxxThrowException)]
 007ee780 35 VolumeSliceSpacing command - member MainArguments now called thiscall (ecx=args, one stack arg) and the converter is the +4 object (vtable+0x98); only frame/reg allocation differs [equiv PASS (323 valid, 100% cov)]

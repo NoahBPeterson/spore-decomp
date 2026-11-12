@@ -7,8 +7,6 @@
 00dde2b0  94  camera-controller field store ordering differs
 00dde350  100  x87 divide/compare and message dispatch differ difftest PASS after asm rewrite (400 valid, 100% cov).
 00dde400  103  camera key compare tree and float mul ordering differ difftest PASS after asm rewrite (400 valid, 100% cov).
-00dde4c0  36  float store ordering differs difftest PASS after ecx fix (1200 valid, 100% cov).
-00dde4f0  10  reset store ordering differs difftest PASS after ecx fix (1200 valid, 100% cov).
 00dde540  32  cvtss2si zoom expression differs difftest PASS after asm rewrite (400 valid, 100% cov).
 00dde590  11  release of the global listener 0x16a10c8: retail loads the slot into ecx once (blocked: any C reference to a global emits `mov eax,[abs]`/`mov ecx,[abs]`, the slot read elided and re-read), loads vtable[1] into eax and tail-jumps with no edx. Current body: `if (p) p->vt1();` -> size/flow match, but edx holds the callee and it is a `call edx`; a free-function local (incl. an extern __stdcall helper) always yields call, and a callee declared with a first edx arg gets the arg spilled to the stack before a jmp. Tried: raw thiscall/fastcall casts, void wrapper, __stdcall helper with a struct return (return 0 in eax).
 00dde7f0  41  x87 easing helper ordering differs difftest PASS after asm rewrite (400 valid, 100% cov).

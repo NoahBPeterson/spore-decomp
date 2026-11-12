@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s009b3e40/s009b3e40.cpp  ?FillBoneXforms@@YAXPAUbone_xform@nSPCreatureAnim@@0PBU12@@Z  009b4490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009b3e40/s009b3e40.cpp  ?CopyBoneXformsBackward@@YAPAUbone_xform@nSPCreatureAnim@@PAU12@00@Z  009b4ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

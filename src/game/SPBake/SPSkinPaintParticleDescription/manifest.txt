@@ -1,3 +1,5 @@
 # source  symbol  va  flags
 ../src/game/SPBake/SPSkinPaintParticleDescription.cpp  ?normalized@@YAPAUcSPVector3_s0053_8e90@@PAU1@ABU1@@Z  00539440  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinPaintParticleDescription.cpp  ?AutoRefCountAssign@AutoRefSlot@@QAEPAU1@PAX@Z  0053b160  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinPaintParticleDescription.cpp  ??4EvalList@@QAEAAU0@ABU0@@Z  0053a420  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinPaintParticleDescription.cpp  ??4BrushDesc_s0053_9d70@@QAEAAU0@ABU0@@Z  0053a2b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

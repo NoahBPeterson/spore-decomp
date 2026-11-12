@@ -8,3 +8,5 @@ slices/s00b90480/s00b90480.cpp  ?FUN_00b909f0@@YAXPAH0P6ADHH@Z@Z  00b909f0  /O2 
 slices/s00b90480/s00b90480.cpp  ?FUN_00b90c50@@YAXH@Z      00b90c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00b90480/s00b90480.cpp  ?FUN_00b906f0@@YAXIPAH00@Z  00b906f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00b90480/s00b90480.cpp  ?FUN_00b908c0@@YAXXZ  00b908c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b90480/s00b90480.cpp  ?F@Cell90750@@QAEHHHH@Z  00b90750  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b90480/s00b90480.cpp  ?F@Cell907A0@@QAEIHHH@Z  00b907a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPUIGlobalUICiv.cpp  ?UpdateButtonState@cSPUIGlobalUICiv_s00e0_43c0@@QAEXH@Z  00e04960  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

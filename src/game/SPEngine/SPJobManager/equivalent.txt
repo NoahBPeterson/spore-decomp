@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPJobManager.cpp  ?FlushWaiting@cJobManager_s0069_1680@@QAEXXZ  006920f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?AddWaitingJob@cJobManager_s0069_1680@@QAEXH@Z  00692080  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

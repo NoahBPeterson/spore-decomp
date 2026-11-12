@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01146ca0/s01146ca0.cpp  ?AllocateHybrid@CMpegLayer3Base@core@audio@rw@@QAEHH@Z  01146d20  /vc71 /O2 /MD /Gy /TP /arch:SSE

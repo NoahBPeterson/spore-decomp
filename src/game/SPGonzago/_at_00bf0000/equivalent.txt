@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00bf0000.cpp  ?StarMapInit@@YIPAUStarTree@@PAU1@@Z  00bf2c60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00bf0000.cpp  ?SetDefinitionID@GameData_s00bf_cc80@@QAEXXZ  00bfd800  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bf0000.cpp  ?Deactivate@cCommunity_s00bf_d9f0@@QAEXXZ  00bfe4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

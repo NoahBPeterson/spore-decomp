@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Havok/_at_01080000.cpp  ?setAngularLimitW@hkGenericConstraintData_s0108_98f0@@IBEXAAPAHAAPAVhkVector4_s0108_98f0@@ABVhkGenericConstraintDataScheme_s0108_98f0@@AAVhkGenericConstraintDataParameters@@ABVhkConstraintQueryIn@@AAVhkConstraintQueryOut_s0108_98f0@@@Z  01089c60  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

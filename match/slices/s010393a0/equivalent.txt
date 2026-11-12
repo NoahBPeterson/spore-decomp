@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s010393a0/s010393a0.cpp  ?FindStoreItem@cSPSpaceTrading@SP@@QAEPAUcSpaceInventoryItem@@PAU3@@Z  01039c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast

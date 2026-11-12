@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00fa6480/s00fa6480.cpp  ?ClearRelevels@cTerrainSphere@@QAEXXZ  00fa6ec0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00fa6480/s00fa6480.cpp  ?ClearPlayerModifications@cTerrainSphere@@QAEXXZ  00fa73c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

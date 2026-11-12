@@ -20,3 +20,6 @@ slices/s0107e670/s0107e670.cpp  ?memSet@hkString@@SAXPAXHH@Z  0107f470  /vc71 /O
 slices/s0107e670/s0107e670.cpp  ?isOk@hkStdioStreamReader@@UBE?AVhkBool@@XZ  0107e7a0  /vc71 /O2 /MD /Gy /TP
 slices/s0107e670/s0107e670.cpp  ??0hkStdioStreamWriter@@QAE@PBD@Z  0107e890  /vc71 /O2 /MD /Gy /TP
 slices/s0107e670/s0107e670.cpp  ??0hkStdioStreamReader@@QAE@PBD@Z  0107e700  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?scalar_deleting_dtor@hkStdioStreamWriter@@QAEPAXE@Z  0107e9a0  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?write@hkStdioStreamWriter@@UAEHPBXH@Z  0107e8d0  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?scalar_deleting_dtor@hkStdioStreamReader@@QAEPAXE@Z  0107e7e0  /vc71 /O2 /MD /Gy /TP

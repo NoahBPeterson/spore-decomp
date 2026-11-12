@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s009d63e0/s009d63e0.cpp  ?DoInsertValue@VecSA@@QAEXPAUSA@@ABU2@@Z  009d7000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPEditorSpine.cpp  ??1cPathSegmentList@@QAE@XZ  005d59c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

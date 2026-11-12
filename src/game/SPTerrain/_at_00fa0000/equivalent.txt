@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPTerrain/_at_00fa0000.cpp  ?SetupTerrainMesh@SP@@YGXPAVVertexBuffer_s00fa_e800@graphics@rw@@PAVIndexBuffer_s00fa_e800@34@II@Z  00faef10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

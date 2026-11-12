@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPSolarSystemCameraController.cpp  ?bad0@UFO@@QAEXHH@Z  0101bad0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPBehaviorTreeHelpers.cpp  ?ClearStimulus@Stimuli@@QAEXPAUStimulus@@@Z  00bc9770  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

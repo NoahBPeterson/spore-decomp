@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/StringTable.cpp  ?f@S99890@@QAE_NPAI@Z  00999890  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

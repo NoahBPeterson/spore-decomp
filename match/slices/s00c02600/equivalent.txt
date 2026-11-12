@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00c02600/s00c02600.cpp  ?FUN_00c03010@CreatureBase@@QAEDXZ  00c03010  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

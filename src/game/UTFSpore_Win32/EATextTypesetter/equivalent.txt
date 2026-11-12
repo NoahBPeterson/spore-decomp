@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/EATextTypesetter.cpp  ?GlyphLayoutInfoVec_resize@@YIXPAU?$ResizableVec@UGlyphLayoutInfo_s0089_b520@Text@EA@@@@HI@Z  0089bdb0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

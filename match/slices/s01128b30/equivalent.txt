@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01128b30/s01128b30.cpp  ?isCollisionEnabled@hkDisableEntityCollisionFilter@@QBE?AVhkBool@@ABVhkCollidable@@0@Z  01129c70  /O2 /MD /Gy /TP

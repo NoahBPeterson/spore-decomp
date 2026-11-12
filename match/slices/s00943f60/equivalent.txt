@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00943f60/s00943f60.cpp  ?AddHeaderEntryField@HTTPHeaders@Internet@EA@@QAE_NHPAPBD@Z  00944d50  /O2 /MD /Gy /EHsc /TP /GS-

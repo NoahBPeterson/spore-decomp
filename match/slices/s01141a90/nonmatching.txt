@@ -5,7 +5,6 @@
 01141bc0   58  looped-decode filter release (int refcount at decoder+0x10); complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01141c30  223  SFILTER_unpackealayer3linit (looped mono/stereo decoder init via g_16e8064); complete; difftest WEAK 22.1% cov (object-heavy). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01141dd0  269  mono/stereo-decode filter pull; complete; difftest PASS 82.9% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-01141f20   57  mono/stereo-decode filter release (byte refcount at decoder+0x19); complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01141f90  229  SFILTER_unpackealayer3init (mono/stereo decoder init via g_16e8068); complete; difftest WEAK 28.3% cov (object-heavy). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01142470  279  mixer instance tick: codec pull + per-channel/per-bus ramp mixing; complete; difftest WEAK 58.3% cov (object-heavy, 398/399 inputs need fake calls). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01142740  278  MIX_playinit: allocate + init decoder/time-stretch mixer instance chain; complete; difftest WEAK 55.9% cov (object-heavy). flags /vc71 /O2 /MD /Gy /TP /arch:SSE

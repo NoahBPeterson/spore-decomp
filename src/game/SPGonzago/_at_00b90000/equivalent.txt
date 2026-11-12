@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00b90000.cpp  ?AllocNode@cSpawnTable@@QAEPAVNode@@PBUNodeSource@@@Z  00b98270  /O2 /MD /Gy /TP /GS- /Isrc/game/include

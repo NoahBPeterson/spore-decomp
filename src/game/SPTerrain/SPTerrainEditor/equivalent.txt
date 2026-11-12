@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPTerrain/SPTerrainEditor.cpp  ?DoInsertValue@?$vector_s00f4_baa0@UcRibbonBrushPoly@SP@@Usp_vector_allocator_s00f4_baa0@eastl@@@eastl@@QAEXPAUcRibbonBrushPoly@SP@@ABU34@@Z  00f4c180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPGameNounManager.cpp  ??0cListenerBase@@QAE@XZ  00b232b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/_at_00680000.cpp  ??4ObjA@@QAEAAU0@ABU0@@Z  00681c40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?CopyBackwardA@@YAPAUObjA@@PAU1@00@Z  00681e80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

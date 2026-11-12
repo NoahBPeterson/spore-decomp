@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0111ffc0/s0111ffc0.cpp  ?randomVector@hkConvexPenetrationUtil@@SAXHMMAAVhkVector4@@@Z  01120eb0  /vc71 /O2 /MD /Gy /TP

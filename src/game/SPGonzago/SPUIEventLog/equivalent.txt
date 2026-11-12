@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPUIEventLog.cpp  ?RemoveEvent@cSPUIEventLog_s00dd_6a70@@QAEXID@Z  00dd6d10  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

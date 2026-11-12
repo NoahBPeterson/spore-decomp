@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01067e70@cSPUISpace_s0106_78e0@@QAEXPAXPAUKey@@@Z  01067e70  /O2 /MD /Gy /TP /Isrc/game/include

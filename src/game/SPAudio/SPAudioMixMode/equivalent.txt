@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Ctor1@Prim@@QAEPAU1@XZ  00ea5830  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioMixMode.cpp  ?Ctor2@Prim@@QAEPAU1@XZ  00ea59b0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include

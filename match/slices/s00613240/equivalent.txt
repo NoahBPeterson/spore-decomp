@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00613240/s00613240.cpp  ?Shutdown@cListenerSet@@QAEXXZ  00613a10  /O2 /MD /Gy /TP /GS-

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s011b1520/s011b1520.cpp  ?ec_ex_data_set_data@@YAHPAPAXPAX111@Z  011b1f80  /vc71 /O2 /MD /Gy /TP

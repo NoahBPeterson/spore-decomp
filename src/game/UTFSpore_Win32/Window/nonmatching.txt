@@ -21,7 +21,6 @@
 00961280 103 ListRemove: splice helper argument setup and this-adjust differ
 00961300 122 ListInsert: list relink register schedule differs
 009613a0 24 Find60: loop read/increment order differs
-009613e0 94 RecomputeFlags: list offset/register schedule differs
 009614a0 336 SerUpdate: transform copy and vcall schedule differ
 00961680 71 CloneNode: allocator vcall and field-copy order differ
 009616f0 38 serialization table build: list walk and store order differ

@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/AudioVoiceContainer.cpp  ?DisconnectFromMasteringVoice@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NPAUPlugIn_s00a3_3ee0@core@audio@rw@@@Z  00a34530  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioVoiceContainer.cpp  ?ConnectToMasteringVoice@VoiceContainer_s00a3_3ee0@Audio@EA@@QAE_NPAUPlugIn_s00a3_3ee0@core@audio@rw@@@Z  00a34440  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

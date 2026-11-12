@@ -9,3 +9,4 @@ slices/s011369e0/s011369e0.cpp  ?FUN_01137130@@YIXH@Z  01137130  /vc71 /O2 /MD /
 slices/s011369e0/s011369e0.cpp  ?FUN_01137420@DecoderThunk@@QAEXHH@Z  01137420  /vc71 /O2 /MD /Gy /TP /arch:SSE
 slices/s011369e0/s011369e0.cpp  ?FUN_011374e0@@YIHH@Z  011374e0  /vc71 /O2 /MD /Gy /TP /arch:SSE
 slices/s011369e0/s011369e0.cpp  ?FUN_011376a0@@YGDE@Z  011376a0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s011369e0/s011369e0.cpp  ?FUN_011378a0@DecoderThunk@@QAEHE@Z  011378a0  /vc71 /O2 /MD /Gy /TP /arch:SSE

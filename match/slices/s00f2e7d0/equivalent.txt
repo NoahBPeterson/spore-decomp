@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00f2e7d0/s00f2e7d0.cpp  ?PushConst@V238@@QAEXXZ  00f2eb30  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

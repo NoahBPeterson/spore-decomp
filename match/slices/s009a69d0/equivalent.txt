@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s009a69d0/s009a69d0.cpp  ?UpdateFootsteps@@YAXPAXPAUcreature_instance_data@nSPCreatureAnim@@@Z  009a6cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

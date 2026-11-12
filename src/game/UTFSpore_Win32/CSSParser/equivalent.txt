@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?Fn8f38b0@CharStream@@QAEPAXPAG@Z  008f38b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?MatchAscii@CharStream_s008f_2660@Style@XHTML@EA@@QAE_NPBD@Z  008f3480  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?ParsePropertyByID@CSSParser_s008f_85e0@Style@XHTML@EA@@SA_NHPAGPAVStackAllocator_s008f_85e0@Allocator@4@PAVPropertyList_s008f_85e0@234@W4Units@234@PAX@Z  008f8cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

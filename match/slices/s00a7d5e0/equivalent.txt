@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00a7d5e0/s00a7d5e0.cpp  ?RotateVector@cSPTransform@@QAEXPAUVector3@@@Z  00a7d6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

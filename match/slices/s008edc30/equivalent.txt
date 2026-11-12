@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s008edc30/s008edc30.cpp  ?ScrollViewport@RenderingContext@Layout@XHTML@EA@@QAEXMMMM@Z  008ee7b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

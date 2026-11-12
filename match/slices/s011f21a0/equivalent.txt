@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s011f21a0/s011f21a0.cpp  ?FindElement@VertexDescriptor@@QAEII@Z  011f2e40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

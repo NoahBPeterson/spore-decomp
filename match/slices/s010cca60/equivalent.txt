@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s010cca60/s010cca60.cpp  ?registerAgent3@hkCollisionDispatcher@@QAEHAAUAgent3Funcs@@HH@Z  010cd4c0  /vc71 /O2 /MD /Gy /TP

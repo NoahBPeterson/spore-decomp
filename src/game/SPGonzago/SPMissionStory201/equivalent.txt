@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5edb0@Mission@@QAEXXZ  00c5edb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPMissionStory201.cpp  ?FUN_00c5ee40@Mission@@QAEXXZ  00c5ee40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

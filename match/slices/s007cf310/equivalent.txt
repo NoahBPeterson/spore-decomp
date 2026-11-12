@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s007cf310/s007cf310.cpp  ?tryInsert@MapW@@QAEPAXPAX0@Z  007cfb40  /O2 /MD /Gy /EHsc /TP /arch:SSE2

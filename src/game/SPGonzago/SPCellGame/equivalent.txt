@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e72360@@YAXPAH0HHHH@Z  00e72360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e72fb0@@YAXPAHH@Z  00e72fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e72e70@@YAXPAHH@Z  00e72e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPHTTPPostBodyStream.cpp  ??0HTTPMultipartRelatedPostBodyStream_s0060_b730@Internet@EA@@QAE@XZ  0060c510  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

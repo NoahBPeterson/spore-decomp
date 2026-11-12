@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?CopyRecRange@@YAPAXPAX00@Z  00e0c710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

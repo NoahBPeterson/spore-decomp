@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00bcb0b0/s00bcb0b0.cpp  ?SetSelection@cVarListEditor@@QAEXPAUSelItem@@HHPAX@Z  00bcb480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00b0c190/s00b0c190.cpp  ?NextRun@cKeySlotList@@QBEHI@Z  00b0ceb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

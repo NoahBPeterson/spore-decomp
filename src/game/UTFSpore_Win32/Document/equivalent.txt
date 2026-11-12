@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/Document.cpp  ?HandleEvent@Form@@QAEXPAXH@Z  008e5210  /O2 /MD /Gy /TP /GS- /Isrc/game/include
