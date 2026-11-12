@@ -9344,3 +9344,78 @@ void __cdecl f_eff760(void* obj, char flag)
         return;
     f_eff6c0(obj, flag);
 }
+
+// Remaining small editor lifetime and state accessors.
+struct EditorLifetime {
+    void Destroy(); // 0x00ef0400
+    EditorLifetime* Delete(unsigned flags);
+};
+// @ 0x00ef19d0
+EditorLifetime* EditorLifetime::Delete(unsigned flags)
+{
+    Destroy();
+    if (flags & 1) operator_delete(this);
+    return this;
+}
+struct EditorPanelLifetime {
+    void Destroy(); // 0x00ef3bf0
+    EditorPanelLifetime* Delete(unsigned flags);
+};
+// @ 0x00ef3e20
+EditorPanelLifetime* EditorPanelLifetime::Delete(unsigned flags)
+{
+    Destroy();
+    if (flags & 1) operator_delete(this);
+    return this;
+}
+struct LargeAssetLifetime {
+    void Destroy(); // 0x00ef61b0
+    LargeAssetLifetime* Delete(unsigned flags);
+};
+// @ 0x00ef6630
+LargeAssetLifetime* LargeAssetLifetime::Delete(unsigned flags)
+{
+    Destroy();
+    if (flags & 1) operator_delete(this);
+    return this;
+}
+struct ScenarioPanelLifetime {
+    void Destroy(); // 0x00ef7950
+    ScenarioPanelLifetime* Delete(unsigned flags);
+};
+// @ 0x00ef8530
+ScenarioPanelLifetime* ScenarioPanelLifetime::Delete(unsigned flags)
+{
+    Destroy();
+    if (flags & 1) operator_delete(this);
+    return this;
+}
+struct ScenarioTutorialLifetime {
+    void Destroy(); // 0x00ef9180
+    ScenarioTutorialLifetime* Delete(unsigned flags);
+};
+// @ 0x00ef9ad0
+ScenarioTutorialLifetime* ScenarioTutorialLifetime::Delete(unsigned flags)
+{
+    Destroy();
+    if (flags & 1) operator_delete(this);
+    return this;
+}
+// @ 0x00efc510
+void* GetEditorState_00efc510()
+{ return *(void**)((char*)g_016c7b88_s00ef_dee0 + 0x68); }
+// @ 0x00efe5a0
+void* GetEditorState_00efe5a0()
+{ return *(void**)((char*)g_016c7b88_s00ef_dee0 + 4); }
+// @ 0x00efe5b0
+void* GetEditorState_00efe5b0()
+{ return *(void**)((char*)g_016c7b88_s00ef_dee0 + 8); }
+// @ 0x00efe5c0
+void* GetEditorState_00efe5c0()
+{ return *(void**)((char*)g_016c7b88_s00ef_dee0 + 0xc); }
+struct LargeAssetFlagView {
+    char pad[0x9d]; bool flag;
+    bool GetFlag();
+};
+// @ 0x00ef6410
+bool LargeAssetFlagView::GetFlag() { return flag; }
