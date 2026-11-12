@@ -12,5 +12,4 @@
 00f47480  19  complete behaviourally-equivalent shared-allocator allocation; store/call scheduling and stack-cleanup shape differ
 00f46560  73   /O2 /MD /Gy /EHsc /TP  SP::cSPUIAssetComments message handler; complete (ours 161B, orig 167B); equiv UNSUPPORTED (0/400 valid, original faults on every generated input)
 00f46cf0  28   /O2 /MD /Gy /EHsc /TP  cOnlineTab URL/name builder; complete (ours 113B, orig 109B); equiv UNSUPPORTED (0/400 valid, original faults on every generated input)
-00f47080  2    /O2 /MD /Gy /EHsc /TP  cScreen::SetVisible; complete (ours 157B, orig 157B). Only the FIRST block differs: retail `mov eax,[ecx]; mov edx,[eax+0xf0]; call edx`, ours `mov eax,[ecx]; mov eax,[eax+0xf0]; call eax`; blocks 2-4 match (edx=vtable, eax=fn). Tried FnRetP2 local, initialized declaration, direct call: still eax. Register tie-break. equiv UNSUPPORTED (0/400 valid, original faults on every generated input)
 00f47170  181  /O2 /MD /Gy /EHsc /TP  cScreen::Refresh; complete (ours 514B, orig 523B) register/scheduling shapes differ; equiv UNSUPPORTED (0/400 valid, original faults on every generated input)

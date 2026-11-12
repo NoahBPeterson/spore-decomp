@@ -1000,8 +1000,7 @@ void cTribeTool::SetOwnerIface(void* p)
             ((IRefCounted*)old)->Release();
     }
     if (mpNoun != 0) {
-        uint32_t key = ((cTribeTool*)mpNoun)->GetOwnerKey();
-        SetOwnerKey(key);
+        SetOwnerKey(((cTribeTool*)mpNoun)->GetOwnerKey());
     }
 }
 

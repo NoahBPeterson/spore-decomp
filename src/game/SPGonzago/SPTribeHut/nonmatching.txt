@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00c9bf30 11 complete; only callee-saved register naming differs (`this` in esi vs retail edi, `&mSub` in edi vs retail esi) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c9c1b0 94 equiv=FAIL(fake-calls: releases/calls into stubbed vtables)  RemoveOwner: noun release, combatant detach, noun-manager remove, owner-interface release, spatial teardown; newer MSVC schedules vtable/refcount release differently flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-00c9c250 5 equiv=PASS 100% cov  SetOwnerIface logic identical; original hoists the this-vtable load ahead of the GetOwnerKey call, newer compiler schedules it after flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c9c2e0 26 equiv=WEAK 33.3% cov  HasToolNoun recreated; vtable +0x5c noun lookup and +0x58 type query not byte-identical (extra null-check folding) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c9c310 19 equiv=UNSUPPORTED 0/400 (stream vtable faults)  Serialize_Write recreated (version 0xee02c7, game-data/spatial/combatant write, var-list serialize); differs in 4-byte frame size, version-store scheduling, key push folded to 0 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c9c3c0 113 equiv=UNSUPPORTED 0/400 (stream vtable faults)  Serialize_Read recreated; boolean goto layout and 4-byte frame size differ, plus spatial ref32/ref38 tail scheduling flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
