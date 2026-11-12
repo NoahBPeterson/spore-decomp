@@ -338,10 +338,11 @@ struct cAimOwner {
     u8    mPad000[0x118];
     void* mpAim;          // 0x118
 };
+struct ToolTargetObj;
 struct cToolData {
     u8    mPad000[0x114];
-    void* mpItem114;      // 0x114
-    void* mpItem118;      // 0x118
+    EA::AutoRefCount<ToolTargetObj> mpItem114;      // 0x114
+    EA::AutoRefCount<ToolTargetObj> mpItem118;      // 0x118
 };
 struct cCombatantObj {
     u8    mPad000[0x08];
@@ -3854,21 +3855,24 @@ u8 cDefaultAoEArea::FUN_00cb5fe0()
 u32 cDefaultAoEArea::FUN_00cb6020()
 {
     cToolData* tool = (cToolData*)mpToolData;
-    void* p = tool->mpItem114;
-    u32 v = 0;
-    if (p != 0)
-        v = ((u32 (__thiscall*)(void*, u32))VT(p)[0xb8 / 4])(p, 0x137e8e0);
+    const EA::AutoRefCount<ToolTargetObj>& item = tool->mpItem114;
+    u32 v;
+    if (item != 0) {
+        v = ((u32 (__thiscall*)(void*, u32))VT((void*)item)[0xb8 / 4])((void*)item, 0x137e8e0);
+    } else {
+        v = 0;
+    }
     u32 x = *(u32*)((u8*)v + 0xb1c);
-    return 0x99736761 + ((x != 2) ? 0x749c5cb3 : 0);
+    return (x != 2) ? 0x99736761u + 0x749c5cb3u : 0x99736761u;
 }
 
 // @ 0x00cb6060
 u32 cDefaultAoEArea::FUN_00cb6060()
 {
     cToolData* tool = (cToolData*)mpToolData;
-    void* p = tool->mpItem114;
-    if (p != 0)
-        ((u32 (__thiscall*)(void*, u32))VT(p)[0xb8 / 4])(p, 0x137e8e0);
+    const EA::AutoRefCount<ToolTargetObj>& item = tool->mpItem114;
+    if (item != 0)
+        ((u32 (__thiscall*)(void*, u32))VT((void*)item)[0xb8 / 4])((void*)item, 0x137e8e0);
     return 0xfb2bdb16;
 }
 
