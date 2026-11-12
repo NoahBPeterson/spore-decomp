@@ -412,11 +412,23 @@ void LayoutCache::Erase(const char* name)
     mMutex.Unlock();
 }
 
+// Retail ISocket subobject prefix. The generated Socket hierarchy has different
+// slot/field offsets here; keep the native receiver at this interface boundary.
+class SocketBindingView_s0094_d2f0 {
+public:
+    virtual void V0(); virtual void V1(); virtual void V2(); virtual void V3();
+    virtual void V4(); virtual void V5(); virtual void V6(); virtual void V7();
+    virtual void V8(); virtual void V9();
+    virtual bool Bind();
+    virtual bool BindAddress(const EA::Sockets::Address&);
+    unsigned mSocketId;                         // interface +0x04
+    EA::Sockets::Address mAddress;               // interface +0x08
+};
+
 // @ 0x0094d2f0
-void __fastcall Fn0094d2f0(void** self)
+bool SocketBindingView_s0094_d2f0::Bind()
 {
-    void (__thiscall* f)(void*) = *(void(__thiscall**)(void*))((char*)*self + 0x2c);
-    f(self + 2);
+    return BindAddress(mAddress);
 }
 
 // @ 0x0094d310
