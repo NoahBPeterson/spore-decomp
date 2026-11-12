@@ -20,7 +20,6 @@
 00a528b0 31 non-byte-exact; control "set" method wrapper; argc check + tail call to 0xa52840; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv FAIL (5/153 valid; call #0 depth-1 mismatch)
 00a528e0 103 non-byte-exact; control class-registration setup; class_new arg order and method-add ordering differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))
 00a529e0 136 non-byte-exact; group_new; pd_new/outlet_new and arg shuffle order differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))
-00a52ab0 20 non-byte-exact; groupsize_new; global load hoisting vs original's load order; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fault(read))
 00a52af0 69 non-byte-exact; __fastcall member reset; MSVC EH prologue (fs:[0] SEH frame) in original not reproduced by a plain assignment body; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv FAIL (5/5 valid; memory pool @4001000c)
 00a52b40 34 non-byte-exact; wrapper calling vtbl+8 with (a,b,1); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv WEAK (266 valid inputs, 28.6% coverage)
 00a52b70 13 non-byte-exact; wrapper calling vtbl+4 with (a,[this+8]); hoisted member load order differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include; equiv UNSUPPORTED (0/400 valid: fake-arity)
