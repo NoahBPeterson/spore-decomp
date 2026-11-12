@@ -14,3 +14,4 @@ slices/s00983790/s00983790.cpp  ?OnRebuild@WinSlider@UTFWinControls@EA@@QAE_NH@Z
 slices/s00983790/s00983790.cpp  ?RenderComponent@WinSlider@UTFWinControls@EA@@QAEXHI@Z  00984340  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00983790/s00983790.cpp  ?PickComponent@WinSlider@UTFWinControls@EA@@UAEHMM@Z  00984410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00983790/s00983790.cpp  ?OnFocusChange@WinSlider@UTFWinControls@EA@@QAE_NHPAX@Z  00983f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ??0ScrollbarDrawableView@ScrollbarConstruction@UTFWinControls@EA@@QAE@XZ  009838a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GR-
