@@ -98,6 +98,57 @@ struct IconShutdownView {
     FrameSequencerView mSequencer;
 };
 
+// Local storage view of the animated icon geometry and refresh interface.
+struct AnimatedIconGeometryView {
+    virtual void Reserved0();
+    virtual void Reserved1();
+    virtual void Reserved2();
+    virtual void Reserved3();
+    virtual void Reserved4();
+    virtual void Reserved5();
+    virtual void Reserved6();
+    virtual void Reserved7();
+    virtual void Reserved8();
+    virtual void Reserved9();
+    virtual void Reserved10();
+    virtual void Reserved11();
+    virtual void Reserved12();
+    virtual void Reserved13();
+    virtual void Reserved14();
+    virtual void Reserved15();
+    virtual void Reserved16();
+    virtual void Reserved17();
+    virtual void Reserved18();
+    virtual void Reserved19();
+    virtual void Reserved20();
+    virtual void Reserved21();
+    virtual void Reserved22();
+    virtual void Reserved23();
+    virtual void Reserved24();
+    virtual void Reserved25();
+    virtual void Reserved26();
+    virtual void Reserved27();
+    virtual void Reserved28();
+    virtual void Reserved29();
+    virtual void Reserved30();
+    virtual void Reserved31();
+    virtual void Reserved32();
+    virtual void Reserved33();
+    virtual void Reserved34();
+    virtual void Reserved35();
+    virtual void Reserved36();
+    virtual void Reserved37();
+    virtual void RefreshGeometry(); // slot 38, 0x007f5d00
+    uint32_t pad004[(0x230 - 4) / 4];
+    int mnFrameCount;
+    int mnFrameWidth;
+    int mnFrameHeight;
+    int mnColumns;
+    int mnRows;
+    uint32_t pad244;
+    IconReference* mpIcon;
+};
+
 // --------------------------------------------------------------------------
 struct Obj {
     void  M5300(void* p);
@@ -373,20 +424,21 @@ bool Obj::M59E0(void* obj, int a2, int a3, int a4)
 {
     if (obj == 0)
         return false;
-    void* old = *(void**)((char*)this + 0x248);
-    if (obj != old) {
-        ((FV0)VTOBJ(obj)[0])(obj);
-        *(void**)((char*)this + 0x248) = obj;
+    AnimatedIconGeometryView* view = (AnimatedIconGeometryView*)this;
+    IconReference* icon = (IconReference*)obj;
+    IconReference* old = view->mpIcon;
+    if (icon != old) {
+        icon->AddRef();
+        view->mpIcon = icon;
         if (old)
-            ((FV0)VTOBJ(old)[4 / 4])(old);
+            old->Release();
     }
-    *(int*)((char*)this + 0x240) = a3;
-    *(int*)((char*)this + 0x23c) = a2;
-    *(int*)((char*)this + 0x230) = a4;
-    void* f = VTOBJ(this)[0x98 / 4];
-    *(int*)((char*)this + 0x234) = 0;
-    *(int*)((char*)this + 0x238) = 0;
-    ((void(__thiscall*)(void*))f)(this);
+    view->mnRows = a3;
+    view->mnColumns = a2;
+    view->mnFrameCount = a4;
+    view->mnFrameWidth = 0;
+    view->mnFrameHeight = 0;
+    view->RefreshGeometry();
     return true;
 }
 

@@ -1,0 +1,2 @@
+slices/s0045aa70/s0045aa70.cpp  ?SetXform@cContentValidationSummarizer@@QAEXHPAX@Z  0045b040  /Od /MD /Gy /EHsc /TP
+slices/s0045aa70/s0045aa70.cpp  ?Start@cContentValidationSummarizer@@QAEXH@Z  0045afc0  /Od /MD /Gy /EHsc /TP

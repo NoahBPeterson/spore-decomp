@@ -2,6 +2,7 @@
 // Object file: SPAudio/SPAudioEmitterEAPD.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "EA/Audio/IPrimitive.h"
 #include "EA/Audio/ResponseCurve.h"
@@ -232,14 +233,16 @@ u32 cEmitterEAPD::SetPropertyInternal(int a, float f)
 bool EmitterSub::SetPropertyEx(int a, int b, int c)
 {
     EapdSystem* e = EapdGetSingletonPtr();
-    if (e == 0)
+    if (e != 0) {
+        if (!((bool (__thiscall*)(void*, u32, int, int))((*(void***)e)[0x34 / 4]))(
+                e, mKey18, a, b)) {
+            AudioSystem* s = GetSystemAT();
+            ((bool (__thiscall*)(void*, u32, int, int, int))((*(void***)s)[0xa8 / 4]))(
+                s, mGroupId, a, b, c);
+        }
         return true;
-    if (!((bool (__thiscall*)(void*, u32, int, int))((*(void***)e)[0x34 / 4]))(
-            e, mKey18, a, b)) {
-        AudioSystem* s = GetSystemAT();
-        ((void (__thiscall*)(void*, u32, int, int, int))((*(void***)s)[0xa8 / 4]))(
-            s, mGroupId, a, b, c);
     }
+    _ReadWriteBarrier();
     return true;
 }
 

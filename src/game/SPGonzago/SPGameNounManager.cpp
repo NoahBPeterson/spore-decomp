@@ -1200,8 +1200,6 @@ void* __cdecl operator new(uint32_t nSize, const char* pName, int32_t nA, int32_
 void* __cdecl operator new(uint32_t nSize, void* pWhere);                           // placement new
 void  __cdecl operator_delete(void* pBlock);                                        // 0x00f47380
 void* __cdecl SP_memcpy(void* pDst, const void* pSrc, uint32_t nSize);              // 0x011e0744
-uint8_t g_vtableMACOrderPrimary;        // 0x0145ef78 Simulator::cMilitaryAttackCityOrder
-uint8_t g_vtableMACOrderSecondary;      // 0x0145ef64 Simulator::cMilitaryAttackCityOrder
 uint8_t g_vtableConvertOrderPrimary;    // 0x0145efe8 Simulator::cCulturalConvertCityOrder
 uint8_t g_vtableConvertOrderSecondary;  // 0x0145efd8 Simulator::cCulturalConvertCityOrder
 uint8_t g_vtableListenerA;              // 0x013eb384 cListenerBase
@@ -1505,8 +1503,8 @@ class cCulturalConvertCityOrder;
 class cMilitaryAttackCityOrder;
 class cMilitaryAttackCityOrder {
 public:
-    void* volatile mpVtable00;                  // +0x000
-    void* volatile mpVtable04;                  // +0x004
+    void* mpVtable00;                  // +0x000
+    void* mpVtable04;                  // +0x004
     uint32_t      mPad008[0x23];                // +0x008 .. +0x093
     void* volatile mp094;                       // +0x094
     uint32_t      mPad098;                      // +0x098
@@ -3043,11 +3041,16 @@ void cEAString::FUN_00b230b0(uint32_t nSize)
 // @ 0x00b231b0
 cMilitaryAttackCityOrder::cMilitaryAttackCityOrder()
 {
+    typedef char VerifyOrderSize[(sizeof(cMilitaryAttackCityOrder) == 0xbc) ? 1 : -1];
+    typedef char VerifyReferenceOffset[(offsetof(cMilitaryAttackCityOrder, mp094) == 0x94) ? 1 : -1];
+    typedef char VerifyFirstVectorOffset[(offsetof(cMilitaryAttackCityOrder, mVec09c) == 0x9c) ? 1 : -1];
+    typedef char VerifySecondVectorOffset[(offsetof(cMilitaryAttackCityOrder, mVec0b0) == 0xb0) ? 1 : -1];
+    typedef char VerifyVectorSize[(sizeof(cOrderVector) == 0x0c) ? 1 : -1];
+
     BaseCtor();
     void* pNull = 0;
-    _ReadWriteBarrier();
-    mpVtable00 = &g_vtableMACOrderPrimary;
-    mpVtable04 = &g_vtableMACOrderSecondary;
+    mpVtable00 = (void*)0x0145ef78;
+    mpVtable04 = (void*)0x0145ef64;
     mp094 = pNull;
     mVec09c.mpBegin = pNull;
     mVec09c.mpEnd = pNull;

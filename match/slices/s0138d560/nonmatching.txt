@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 01390c90  14  init_16c9b8c: complete; constant folded to memory store instead of register
 01390cb0  14  init_16c9b94: complete; constant folded to memory store instead of register
-01391bc0  2  init_16d6d30: complete; atexit argument push scheduled late
 01391c20  2  init_16d6d70: complete; atexit argument push scheduled late
 013921c0  760  init_16d6fa8: complete; 72-float basis-matrix block of +1/sqrt(2), -1/sqrt(2), +0 and -0; explicit immediate stores (547 vs 941 B) leave eax untouched; equiv PASS 400 valid inputs, 100.0% coverage
 0138d560  812  init_15afd38: complete; 9 property-descriptor records at 0x15afd38..0x15aff18 (0x3c stride, {name VA, hash, size, 3 uninitialised dwords, 0,0, 7 fn ptrs}); our .rdata template + 9-iteration copy loop replaces the original's per-record stack temporary + rep movsd (158 vs 884 B); only memory difference is the three uninitialised +0x0c..+0x14 dwords (original leaves 0xcc stack garbage, ours writes 0); equiv FAIL (5/5 inputs, padding dwords only)

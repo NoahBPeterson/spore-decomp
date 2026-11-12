@@ -708,7 +708,7 @@ extern "C" void FUN_00e186d0(); // 0x00e186d0 OnNotify
 void __fastcall FUN_00e18bb0(void* win);             // 0x00e18bb0 Construct
 void __fastcall FUN_00e18980(void* win);             // 0x00e18980 DestroyMembers
 void __fastcall FUN_00e18a30(void* win);             // 0x00e18a30 ShutdownA
-void __cdecl    FUN_00571db0(void* h, uint32_t a, uint32_t b, uint32_t c, uint32_t d); // 0x00571db0
+bool __cdecl    FUN_00571db0(void* h, uint32_t a, uint32_t b, uint32_t c, uint32_t d); // 0x00571db0
 extern "C" bool FUN_00e0a4c0(); // 0x00e0a4c0
 extern "C" void FUN_00663860(); // 0x00663860 feed AddWindow
 void* __cdecl   FUN_00f473a0(int size, const char* name, int a, int b, int c, int d); // operator_new
@@ -741,7 +741,15 @@ public:
     void Shutdown();                                     // 0x00e36500
     void* Init();                                        // 0x00e36550
 
-    uint8_t mPayload[0x8c];                              // +0x00 .. +0x8b
+    uint8_t mPayload[0x64];                              // +0x00 .. +0x63 (bounded local storage view)
+};
+// Five-word handler registration stored after the tooltip and string.
+struct ToolHandlerState {
+    void* mpHandler;
+    uint32_t mHandlerArg1;
+    uint32_t mHandlerArg2;
+    uint32_t mHandlerArg3;
+    uint32_t mHandlerArg4;
 };
 class cToolWindow : public UTFWin::InteractiveWinProc {
 public:
@@ -759,7 +767,9 @@ public:
     bool             mFlag40;                            // +0x040
     uint8_t          pad041[3];                          // +0x041 .. +0x043
     cToolSub         mSub44;                             // +0x044 .. +0x0b7
-    cUITimedTooltip  mTooltip;                           // +0x0b8 .. +0x143
+    cUITimedTooltip  mTooltip;                           // +0x0b8 .. +0x11b
+    uint32_t         mStringStorage[5];                  // +0x11c .. +0x12f
+    ToolHandlerState mHandler;                           // +0x130 .. +0x143
     FeedList*        mpFeedList;                         // +0x144
     uint8_t          pad148[0x8c];                       // +0x148 .. +0x1d3 (cString, f_lineY, handle block)
 
@@ -998,10 +1008,12 @@ void cToolWindow::FUN_0107ac20()
 {
     if (!mFlag40)
         return;
-    void* h = Handler();
+    ToolHandlerState* state = &mHandler;
+    void* h = state->mpHandler;
     if (h != 0) {
-        SetHandler(0);
-        FUN_00571db0(h, HandlerArg(1), HandlerArg(2), HandlerArg(3), HandlerArg(4));
+        state->mpHandler = 0;
+        FUN_00571db0(h, state->mHandlerArg1, state->mHandlerArg2,
+                    state->mHandlerArg3, state->mHandlerArg4);
     }
     ((void (__thiscall *)(void *, int))FUN_00662920)(mpFeedList, 0);
     FUN_00e0a640(Sub());

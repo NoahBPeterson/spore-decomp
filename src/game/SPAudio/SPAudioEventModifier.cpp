@@ -531,7 +531,7 @@ namespace Audio {
 struct IEventModifier_s00a3_9ce0 {
     virtual ~IEventModifier_s00a3_9ce0() {}
     virtual bool Init() = 0;
-    virtual void pad2() = 0;
+    virtual bool Shutdown() = 0;
     virtual void ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* dst, int capacity) = 0;
     virtual bool ReadTuningValues(const ResourceKey* key) = 0;
 };
@@ -546,7 +546,7 @@ struct cEventModifierPrimitive_s00a3_9ce0 : RefCountBase, IEventModifier_s00a3_9
     cEventModifierPrimitive_s00a3_9ce0(const char* name)
         : mKey(FNV1_String8(name, 0x811c9dc5, 1), 0x2b9f662, 0x21407ee), mConfiguration() {}
     virtual bool Init();                                    // 0xa3a4b0
-    virtual void pad2();
+    virtual bool Shutdown() { return true; } // folded native 0x00b1fbf0
     virtual void ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* dst, int capacity);
     virtual bool ReadTuningValues(const ResourceKey* key);  // 0xa3a610
     virtual int AddRef();
@@ -1037,8 +1037,7 @@ namespace SP { namespace Audio {
 void cEventModifierPrimitiveAlias::ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* name, int capacity)
 {
     AudioSystem_s00a3_9ce0* sys = GetSystemAT_s00a3_9ce0();
-    a = (int)sys->HashName(name);   // the original reuses a dead argument slot for the key
-    RbIter it = mMap.find((uint32_t&)a);
+    RbIter it = mMap.find(sys->HashName(name));
     if (it.mpNode != mMap.anchor()) {
         const char* s = ((StrNode*)it.mpNode)->mValue.mpBegin;
         char* d = name;

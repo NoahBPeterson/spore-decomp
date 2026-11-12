@@ -6,3 +6,4 @@
 ../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?GetProperty@cEmitterEAPD@@QAE_NHPAM@Z  00a37930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?SetProperty@EmitterSub@@QAE_NHMH@Z  00a37960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?SetPropertyInternal@cEmitterEAPD@@QAEIHM@Z  00a379d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?SetPropertyEx@EmitterSub@@QAE_NHHH@Z  00a37a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

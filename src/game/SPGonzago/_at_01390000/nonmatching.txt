@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 01390c90 12 init_16c9b8c: complete; constant folded to memory store instead of register flags: /O2 /MD /Gy /EHsc /TP
 01390cb0 13 init_16c9b94: complete; constant folded to memory store instead of register flags: /O2 /MD /Gy /EHsc /TP
-01391bc0 2 init_16d6d30: complete; atexit argument push scheduled late flags: /O2 /MD /Gy /EHsc /TP
 01391c20 2 init_16d6d70: complete; atexit argument push scheduled late flags: /O2 /MD /Gy /EHsc /TP
 013921c0 366 init_16d6fa8: complete; 72-float basis-matrix block of +1/sqrt(2), -1/sqrt(2), +0 and -0; explicit immediate stores (547 vs 941 B) leave eax untouched; equiv PASS 400 valid inputs, 100.0% coverage flags: /O2 /MD /Gy /EHsc /TP
 0139bde0 204 equiv PASS (400 valid, 100.0% cov); not byte-exact (380 vs 502: SSE register reuse of precomputed in*k subtrahends differs). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
