@@ -55,8 +55,10 @@ no match). You can run the same check locally (below) before you open the pull r
    claim: within minutes the function is listed in
    [`claims.txt`](https://raw.githubusercontent.com/NoahBPeterson/spore-decomp/claims/claims.txt) and drops out of
    everybody else's `task.py --list`, and `task.py <address>` warns anyone who looks it up. A claim lasts while the
-   pull request is open; one with no update for 7 days is stale and shows again. Before starting, check that
-   `task.py <address>` does not report someone else's claim.
+   pull request is open; one with no update for 7 days is stale and shows again. **Before starting each function**
+   (every one in a batch, and each replacement), run `task.py <address>`: it checks claims live, including draft pull
+   requests opened minutes ago, and says whose they are. If someone else has it, pick another function unless they
+   agree to hand it over. A local queue or reservation is not a claim; only an open pull request is.
 4. **Write, build, compare.** Edit the source, then `.venv/bin/python tools/contrib/check.py 0x00529690`. It prints
    `MATCH`, the compiler errors, or an instruction diff against the original. Before inventing source shapes, look
    up the difference in `docs/codegen.md`: most residual diffs are a known lever (`__restrict`, a single-expression

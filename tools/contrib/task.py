@@ -18,7 +18,8 @@ current source of the function, and what to do next.  Needs only the repo: no ga
 Claims: https://raw.githubusercontent.com/NoahBPeterson/spore-decomp/claims/claims.txt lists every function an open
 pull request works on (refreshed when a pull request changes, and every 30 minutes). Open a draft pull request early,
 titled with the address, and your function drops out of everybody else's list. A claim with no update for 7 days is
-stale and shows again.
+stale and shows again. task.py <va> checks live: it fetches claims.txt fresh and asks GitHub for open pull requests
+(drafts too) that name the address, so a claim made minutes ago still shows.
 
 For a function that is not byte-exact yet, task.py <va> also prints every earlier version of its note from git history
 and the closed, unmerged pull requests titled with its address (one public GitHub search, cached a day in work/).
@@ -303,13 +304,13 @@ CLAIMS_URL = "https://raw.githubusercontent.com/NoahBPeterson/spore-decomp/claim
 STALE_DAYS = 7
 
 
-def claims():
+def claims(max_age=600):
     """va -> [(pr number, author, last update 'YYYY-MM-DD'), ...] from claims.txt (oldest pull request first);
-    cached 10 minutes in work/claims.txt.  None when claims.txt could not be read at all (offline, no cached copy);
-    {} when it was read and nobody claims anything (the caller used to report that as "could not be read")."""
+    cached max_age seconds in work/claims.txt (0: always fetch).  None when claims.txt could not be read at all
+    (offline, no cached copy); {} when it was read and nobody claims anything."""
     cache = os.path.join(ROOT, "work", "claims.txt")
     text = None
-    if not (os.path.exists(cache) and time.time() - os.path.getmtime(cache) < 600):
+    if not (os.path.exists(cache) and time.time() - os.path.getmtime(cache) < max_age):
         for attempt in (1, 2):
             try:
                 with urllib.request.urlopen(CLAIMS_URL, timeout=10 * attempt) as r:
@@ -329,6 +330,22 @@ def claims():
         if len(p) >= 4 and p[0].startswith("0x") and p[1].startswith("#"):
             out.setdefault(int(p[0], 16), []).append((int(p[1][1:]), p[2], p[3]))
     return {va: sorted(c) for va, c in out.items()}
+
+
+def open_prs(va):
+    """Open pull requests (drafts too) that name the address in their title or body, asked live from GitHub's public
+    search: [(number, author, last update 'YYYY-MM-DD', title)]. This covers a pull request opened in the last few
+    minutes, before claims.txt lists it. None when GitHub could not be asked (offline, rate limit)."""
+    url = ("https://api.github.com/search/issues?per_page=30&q=repo:NoahBPeterson/spore-decomp+is:pr+is:open"
+           "+0x%08x+OR+%08x" % (va, va))
+    try:
+        req = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json", "User-Agent": "task.py"})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            items = json.load(r).get("items", [])
+    except Exception:
+        return None
+    return sorted((i["number"], i["user"]["login"], (i.get("updated_at") or "")[:10], i["title"]) for i in items
+                  if ("%08x" % va) in (i["title"] + " " + (i.get("body") or "")).lower())
 
 
 def stale(claim):
@@ -430,10 +447,20 @@ def main():
     fp = fingerprint(va)
     src, ident = locate(va)
     print("function   0x%08x" % va)
-    for c in (claims() or {}).get(va, []):
+    # live claim check: a fresh claims.txt (pull requests that change the function) plus GitHub's search for open pull
+    # requests naming the address (catches a draft opened minutes ago, before claims.txt lists it)
+    cl, prs = claims(max_age=0), open_prs(va)
+    listed = (cl or {}).get(va, [])
+    for c in listed:
         print("claimed    %s #%d by %s (last update %s)%s" % (
             "STALE claim:" if stale(c) else "already in open pull request", c[0], c[1], c[2],
             "" if stale(c) else ": unless that is yours, pick another function"))
+    for n, who, upd, title in prs or []:
+        if n not in {c[0] for c in listed}:
+            print("claimed    open pull request #%d by %s names this address (last update %s): unless that is yours, "
+                  "pick another function\n           %s" % (n, who, upd, title[:100]))
+    if cl is None and prs is None:
+        print("claimed    COULD NOT CHECK (offline?): look for this address in the open pull requests before starting")
     print("retail     %s" % ("%d bytes (fingerprint: %d bytes are addresses, not compared)" %
                              (fp["size"], sum(n for _s, n in fp["mask"])) if fp else "no fingerprint: not a known function start"))
     if not src:
