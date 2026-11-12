@@ -21,6 +21,7 @@ extern void*  g_1474a70[];                             // 0x01474a70 table
 extern void*  g_1474a5c[];                             // 0x01474a5c table
 #include <math.h>
 #include <xmmintrin.h>
+#include "sse_helpers.h"
 
 extern float g_negmask;                                 // 0x013eb8b0 (0x80000000 sign mask)
 
@@ -33,7 +34,6 @@ void* __stdcall SP_PlanetModel(int a);                 // 0x00b3d350 ret 4
 void* __stdcall SP_PlanetModel0();                     // 0x00b3d350 no-arg
 void* __cdecl   GetCurrentGameMode();                  // 0x00b5b800
 void* __cdecl   FUN_00cf74c0();                        // 0x00cf74c0 returns manager
-void* __stdcall FUN_00ff0430(void* p);                 // 0x00ff0430 ret 4
 void* __cdecl   FUN_00c9e5d0();                        // 0x00c9e5d0
 void* FUN_00c9efc0();                                  // 0x00c9efc0 no-arg cdecl getter (Vector24 singleton)
 struct PlanetStub {
@@ -94,6 +94,7 @@ struct TimerStub {
     u8   IsRunning();                                       // 0x00feba90
     u64  GetElapsedTime();                                  // 0x00bc3190
     void Restart();                                         // 0x00bc3130
+    void FUN_00ff0430(void* p);                             // 0x00ff0430 ret 4
 };
 struct CStub {
     // ---- 00c9ef20
@@ -361,17 +362,18 @@ void CStub::FUN_00c9fb40(float a, int b, int c, float d, float e)
 void CStub::FUN_00c9fc60(void* p)
 {
     FUN_00c88670(p);
-    if (*(int*)((char*)this + 0xcd8) != 0)
-        FUN_00ff0430(p);
+    TimerStub* timer = *(TimerStub**)((char*)this + 0xcd8);
+    if (timer != 0)
+        timer->FUN_00ff0430(p);
     if (*(int*)((char*)this + 0xcc8) != 0) {
         float* vel = FUN_00d20610();
+        float lo = g_1485720;
+        float hi = g_1485548;
         float spd = sqrtf(vel[0] * vel[0] + vel[1] * vel[1] + vel[2] * vel[2]) * g_1474a84;
-        if (spd <= g_1485720)
-            spd = g_1485720;
-        if (spd >= g_1485548)
-            spd = g_1485548;
-        float m = (**(float(__thiscall**)(void*))(vpt(this) + 0x70))(this);
-        ((VStub*)*(void**)((char*)this + 0xcc8))->FUN_00c3f160(p, m * spd);
+        spd = SseClamp(spd, lo, hi);
+        volatile float factor = spd;
+        float m = ((float(__thiscall*)(void*))((void**)*(void***)this)[0x70 / 4])(this);
+        ((VStub*)*(void**)((char*)this + 0xcc8))->FUN_00c3f160(p, m * factor);
     }
     int q = *(int*)((char*)this + 0xccc);
     if (q != 0) {
