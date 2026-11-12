@@ -2326,7 +2326,7 @@ struct GlobalObj_s00ee_b770 {
 extern GlobalObj_s00ee_b770* g_16c7aa4_s00ee_b770;
 struct Manager_s00ee_b770 {
     int   FUN_00f3be30();
-    void* FUN_00f3d780(int a);
+    void* FUN_00f3d780(void* a);
     void* FUN_00f3bcb0();
     void* FUN_00f3e8a0(int key);
 };
@@ -7005,10 +7005,10 @@ bool __cdecl f_00eebfc0(int param_1, int* param_2)
 }
 
 // @ 0x00eec0d0
-void __cdecl f_00eec0d0(int p)
+void* __cdecl f_00eec0d0(void* p)
 {
     Manager_s00ee_b770* m = g_16c7aa4_s00ee_b770->f74;
-    m->FUN_00f3d780(p);
+    return m->FUN_00f3d780(p);
 }
 
 // @ 0x00eec0f0
@@ -7116,7 +7116,7 @@ Vec3i __cdecl f_00eec3d0(int* in)
 // @ 0x00eec440
 void __cdecl f_00eec440(int* param_1)
 {
-    void* a = g_16c7aa4_s00ee_b770->f74->FUN_00f3d780((int)param_1);
+    void* a = g_16c7aa4_s00ee_b770->f74->FUN_00f3d780(param_1);
     if (a == 0)
         return;
     PhysObj* obj = (PhysObj*)a;

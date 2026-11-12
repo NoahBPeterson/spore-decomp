@@ -4383,7 +4383,10 @@ void SP::cActionCircle_s00af_9aa0::tSlot::Clear()
 {
   mOccupied = false;
   mReservingId = 0;
-  mpReservingNoun = (cGameData_s00af_9aa0*)0;
+  _ReadWriteBarrier();
+  cGameData_s00af_9aa0* old = mpReservingNoun.mpObject;
+  mpReservingNoun.mpObject = 0;
+  if (old) old->Release();
 }
 
 // @ 0x00afa0c0

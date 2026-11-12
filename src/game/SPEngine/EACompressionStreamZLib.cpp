@@ -5,6 +5,8 @@
 #include "game/types.h"
 #include "EA/IO/IStream.h"
 #include "EA/Internet/HTTPMultipartFormDataPostBodyStream.h"
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---- items of slice s0067c450 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct z_stream_s {
@@ -504,6 +506,7 @@ int EA::IO::StreamDecompressionZLib_s0067_d550::ReadData(void* pData, uint32_t n
 bool EA::IO::StreamDecompressionZLib_s0067_d550::Close()
 {
   mbOpen = false;
+  _ReadWriteBarrier();
   IStream_s0067_d550* p = mInputStream.mpObject;
   if (p) {
     mInputStream.mpObject = 0;

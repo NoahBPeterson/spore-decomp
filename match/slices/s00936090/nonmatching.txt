@@ -12,7 +12,6 @@
 009366d0  43  SharedLibrary::Unregister: complete; pair erase tail moves differ
 00936760  156  SharedLibraryRegistry::RemoveLibrary: complete; eastl refcount swap and pair erase schedule differ
 00936820  163  SharedLibraryRegistry::GetLibraries: complete; AddRef/Release swap loop and mutex scoping differ
-009368f0  4  SharedLibraryRegistry ctor: complete; retail stores the vtable right after `xor eax,eax`, shuffles the pushes and clears +0x08..+0x10 through that one zero register, cl schedules the vptr store after the Construct argument setup. Tried a named vptr store, an extra m04 = 0 (turns into a 64-bit zeroed store over [esi]/[esi+4] and drops the vptr store), a virtual base split and pack(4); see notes_9368f0.txt
 00936920  28  SharedLibraryRegistry scalar deleting dtor: complete; vtable store / mutex dtor ordering differs
 00936b70  71  SharedLibrary::Unload: complete; eastl pair-vector erase schedule differs
 00936c00  99  SharedLibrary::Register: complete. The grow path was calling a 1-arg push_back_impl while the retail helper 0x009a0c50 is __thiscall with 2 stack args (position, value) over 8-byte elements and `ret 8` -- the unbalanced stack corrupted the caller frame. It now builds a local {fn, user} pair and calls insert_pair(mHandlerEnd, &pair) -- equiv PASS 280 valid inputs, 100% coverage

@@ -18,3 +18,4 @@
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?PreloadTextureList@TexPreload@@QAEXPAX@Z  007b1de0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?f@W1e70@@QAEXPAX0@Z  007b1e70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?PreloadTextureList@TexPreload@@QAEXPAUPropKey@@@Z  007b1e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??1C0130@@UAE@XZ  007b0130  /O2 /MD /Gy /EHsc /TP /GS- /GR- /Isrc/game/include

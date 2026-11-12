@@ -20,6 +20,7 @@
 #include "EA/Sockets/Address.h"
 #include "EA/Sockets/Error.h"
 #include "EA/Thread/Mutex.h"
+#include "EA/Sockets/NameLookup.h"
 #include "EA/Sockets/Socket.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -199,26 +200,30 @@ struct CacheNode {
     unsigned   deadline;  // +0x24
 };
 struct MutexLike {
+    EAMutexData mData;
     void Lock(unsigned id);                         // 0x9221b0
     void Unlock();                                  // 0x922270
     MutexLike(const void* name, bool recursive);    // 0x9222a0
     ~MutexLike();                                   // 0x922130
 };
+// NameLookup owns its cache tree before its mutex. The tree cleanup helper
+// is kept inline so destruction retains the member's receiver boundary.
+struct NameLookupCacheMap_s0094cac0 : eastl::map<eastl::basic_string<char, eastl::allocator>,
+    EA::Sockets::NameLookup::CacheEntry> {
+    void DoNukeSubtree(node_type* node);  // 0x00e84940
+    __forceinline ~NameLookupCacheMap_s0094cac0() {
+        DoNukeSubtree((node_type*)mAnchor.mpNodeParent);
+    }
+};
 struct LayoutCache {
     int        m0;               // +0x00
     unsigned   mDefaultTimeout;  // +0x04
     unsigned   mSetTimeout;      // +0x08
-    unsigned   mC0c;             // +0x0c
-    void*      m10;              // +0x10
-    void*      m14;              // +0x14
-    unsigned   mCount;           // +0x18
-    unsigned char b1c;           // +0x1c
-    unsigned   m20;              // +0x20
-    unsigned   m24;              // +0x24
+    NameLookupCacheMap_s0094cac0 mCacheEntryMap; // +0x0c, 0x1c bytes
     MutexLike  mMutex;           // +0x28
 
     void  FindInsert(void** out, void* key, unsigned value, unsigned timeout);     // 0x0094ce40
-    void  Dtor();                                                                  // 0x0094cf40
+    ~LayoutCache();                                                               // 0x0094cf40
     bool  SetEntry(const char* name, unsigned value, unsigned timeout);            // 0x0094cf60
     CacheNode* Find(const char* name);                                             // 0x0094d0e0
     void* Ctor();                                                                  // 0x0094d230
@@ -226,7 +231,6 @@ struct LayoutCache {
 };
 void  __cdecl RBTree1_eraseSys(void** out, void* node);      // 0x00812310
 void  __cdecl MapStrFind_Find(void** out, void* key);        // 0x00b20930
-struct NukeHelper { void __thiscall Do(void* node); };          // 0x00e84940
 void  __cdecl eastl_DoInsertValue(void* dst, const char* src, unsigned n);  // 0x011e0744
 void* __cdecl operator_new(unsigned size);                   // 0x00f473a0
 struct Owner {                   // the owning Socket seen from -8
@@ -377,11 +381,8 @@ bool Sockets_IPIsValid(const char* cp)
 }
 
 // @ 0x0094cf40
-void LayoutCache::Dtor()
+LayoutCache::~LayoutCache()
 {
-    mMutex.~MutexLike();
-    NukeHelper* h = (NukeHelper*)((char*)this + 0xc);
-    h->Do(*(void**)((char*)this + 0x18));
 }
 
 // @ 0x0094d270

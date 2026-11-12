@@ -66,7 +66,6 @@
 00eeb580 376 View::SetPoints: eastl vector growth and insertion scheduling still differs (size 427 vs 487) after fixing the Entry ctor return value and making the vtable/vector calls thiscall; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (400 valid, 15.8% cov, no mismatch)
 00eeb770 364 complete; refcounted-list removal; register/indirect-call scheduling differs; equiv=WEAK (213 valid, 36.6% cov) flags: /O2 /MD /Gy /TP /arch:SSE2
 00eeb920 286 complete; copies list into float/Vector3 vectors (truncating erase semantics); equiv=WEAK (165 valid, 53.3% cov) flags: /O2 /MD /Gy /TP /arch:SSE2
-00eec0d0 8 complete; global-load vs arg-load scheduling differs (register assignment) flags: /O2 /MD /Gy /TP /arch:SSE2
 00eec0f0 290 complete; surface position/radius (x87); x87/SSE scheduling differs; equiv=PASS (236 valid, 82.6% cov) flags: /O2 /MD /Gy /TP /arch:SSE2
 00eec2b0 113 complete; scaled surface direction; float scheduling differs; equiv=PASS (217 valid, 100% cov) flags: /O2 /MD /Gy /TP /arch:SSE2
 00eec3d0 6 complete; three-dword sret copy store order differs flags: /O2 /MD /Gy /TP /arch:SSE2

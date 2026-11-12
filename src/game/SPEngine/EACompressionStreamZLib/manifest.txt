@@ -12,3 +12,4 @@
 ../src/game/SPEngine/EACompressionStreamZLib.cpp  ?GetPosition@StreamDecompressionZLib@IO@EA@@QBEIH@Z  0067d530  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/EACompressionStreamZLib.cpp  ?WriteData@StreamCompressionZLib_s0067_d550@IO@EA@@QAE_NPBXI@Z  0067d680  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/EACompressionStreamZLib.cpp  ?Close@StreamCompressionZLib_s0067_d550@IO@EA@@UAE_NXZ  0067d720  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/EACompressionStreamZLib.cpp  ?Close@StreamDecompressionZLib_s0067_d550@IO@EA@@UAE_NXZ  0067da10  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
