@@ -709,7 +709,7 @@ struct FHT {
     int      pad;
     FNode**  mBuckets;
     unsigned mBucketCount;
-    GIter    find(const unsigned& key);   // 0x00645ed0 (pair<uint,float>)
+    GIter*   find(GIter* out, const unsigned& key);   // 0x00645ed0 (pair<uint,float>)
     FNode*   end() { return mBuckets[mBucketCount]; }
 };
 struct NNode { unsigned key; FHT inner; };
@@ -717,7 +717,7 @@ struct NHT {
     int      pad;
     NNode**  mBuckets;
     unsigned mBucketCount;
-    GIter    find(const unsigned& key);   // 0x00a23b00
+    GIter*   find(GIter* out, const unsigned& key);   // 0x00a23b00
     NNode*   end() { return mBuckets[mBucketCount]; }
 };
 struct SubNode { unsigned key; char val[0x20]; SubNode* next; };
@@ -1271,6 +1271,8 @@ struct HT4 {  // table at +0x404 (unsigned -> int)
     void** mpBuckets;
     unsigned mnBuckets;
     HIter find(const unsigned& key);        // 0x00645ed0
+    HIter* findInto(HIter* out, const unsigned& key); // explicit result buffer, 0x00645ed0
+    HIter* eraseInto(HIter* out, HIter it); // explicit result buffer, 0x00b51640
     HIter Op(const unsigned* id);           // 0x00a274d0
     HIter erase(HIter it);                  // 0x00b51640
     void* End() { return mpBuckets[mnBuckets]; }
@@ -2288,6 +2290,7 @@ static inline void ReleaseCounted(CountedRes* r)
         int n = (r->mnRefCount += -1);
         if (n == 0) {
             r->mnRefCount = 1;
+            _ReadWriteBarrier();
             r->Destroy(1);
         }
     }
@@ -2736,11 +2739,7 @@ bool Sys::Route4(u32 id, void* a, void* b, void* c)
 // @ 0x00a20a40
 void Sys::SetSlot(int idx, void* a, void* b)
 {
-    u32* dst = (u32*)((char*)this + 0x15b6c0 + idx * 0xc);
-    const u32* src = (const u32*)a;
-    dst[0] = src[0];
-    dst[1] = src[1];
-    dst[2] = src[2];
+    ((V3*)((char*)this + 0x15b6c0))[idx] = *(const V3*)a;
     ((void (__thiscall*)(void*, int))((*(void***)this)[0x38 / 4]))(this, 0x3992099);
     ((void (__thiscall*)(void*, int, int))((*(void***)this)[0x40 / 4]))(this, 0x490d2eb, idx);
     ((void (__thiscall*)(void*, int, void*))((*(void***)this)[0x50 / 4]))(this, 0x3abafae, a);
@@ -2998,22 +2997,27 @@ void __fastcall release_00a21260(void* self)
 {
     int* rc = *(int**)((char*)self + 4);
     if (rc == 0) return;
-    int n = rc[1] - 1;
-    rc[1] = n;
+    int n = (*(volatile int*)&rc[1] += -1);
     if (n == 0) {
         rc[1] = 1;
+        _ReadWriteBarrier();
         void* vt = *(void**)rc;
         ((void (__thiscall*)(void*, int))((void**)vt)[0])(rc, 1);
     }
 }
+
+// Stand-in for the intrusive-list payload: its link base starts at +0x10.
+// A base-to-derived cast preserves null while recovering the payload pointer.
+struct AudioListPrefix { char payload[16]; };
+struct AudioListLink { void* next; };
+struct AudioListPayload : AudioListPrefix, AudioListLink {};
 
 // @ 0x00a21290
 void** __fastcall resetHead_00a21290(void** self)
 {
     char* v = (char*)*self;
     v = *(char**)(v + 0x10);
-    if (v != 0) { *self = v - 0x10; return self; }
-    *self = 0;
+    *self = static_cast<AudioListPayload*>((AudioListLink*)v);
     return self;
 }
 
@@ -3300,16 +3304,14 @@ void VoiceVec_00a21c00::Destroy()
 void** __fastcall nodeToPayload_00a21c70(void* self, void* dummy, void** out)
 {
     void* v = *(void**)self;
-    if (v != 0) *out = (char*)v - 0x10;
-    else *out = 0;
+    *out = static_cast<AudioListPayload*>((AudioListLink*)v);
     return out;
 }
 
 // @ 0x00a21c90
 void** __fastcall nodeToPayload_00a21c90(void* self, void* dummy, void** out)
 {
-    if (self != 0) *out = (char*)self - 0x10;
-    else *out = 0;
+    *out = static_cast<AudioListPayload*>((AudioListLink*)self);
     return out;
 }
 
@@ -4138,8 +4140,8 @@ ProfileTimer::ProfileTimer(void* acc)
     } else {
         long long c;
         QueryPerformanceCounter(&c);
-        *(unsigned int*)&sw.mnStartTime = (unsigned int)c;
-        *(unsigned int*)((char*)&sw.mnStartTime + 4) = (unsigned int)(c >> 32);
+        *(unsigned int*)&sw.mnStartTime = ((unsigned int*)&c)[0];
+        *(unsigned int*)((char*)&sw.mnStartTime + 4) = ((unsigned int*)&c)[1];
     }
     *(unsigned int*)&sw.mnTotalElapsedTime = 0;
     *(unsigned int*)((char*)&sw.mnTotalElapsedTime + 4) = 0;
@@ -4148,7 +4150,11 @@ ProfileTimer::ProfileTimer(void* acc)
 // @ 0x00a24900
 void ProfileTimer::Accumulate()
 {
-    *(float*)mpAccumulator = (float)sw.GetElapsedTimeFloat() * sw.mfCyclesToUnitsCoefficient + *(float*)mpAccumulator;
+    long long elapsed = sw.GetElapsedTimeFloat();
+    float time = (float)elapsed * sw.mfCyclesToUnitsCoefficient;
+    _ReadWriteBarrier();
+    float* accumulator = (float*)mpAccumulator;
+    *accumulator += time;
 }
 
 // @ 0x00a24930
@@ -4342,12 +4348,13 @@ void AudioSys::UpdateOutput()
 // @ 0x00a25bd0
 bool AudioSys::GetFloat(unsigned k1, unsigned k2, float* out)
 {
-    GIter it = mNested.find(k1);
+    GIter it;
+    mNested.find(&it, k1);
     NNode* node = (NNode*)it.node;
     if (node != mNested.end()) {
-        GIter jt = node->inner.find(k2);
-        if ((FNode*)jt.node != node->inner.end()) {
-            *out = ((FNode*)jt.node)->val;
+        node->inner.find(&it, k2);
+        if ((FNode*)it.node != node->inner.end()) {
+            *out = ((FNode*)it.node)->val;
             return true;
         }
     }
@@ -5708,10 +5715,11 @@ bool MgrBase::RemoveEntry(void* obj)
     AT(HT1b, this, 0x1277b4).Remove(&k);
     k = o->GetId();
     HT4* m = &AT(HT4, this, 0x404);
-    HIter it = m->find(k);
+    HIter it;
+    m->findInto(&it, k);
     if (it.node == m->End())
         return false;
-    it = m->erase(it);
+    m->eraseInto(&it, it);
     return true;
 }
 
@@ -6440,4 +6448,10 @@ System_s00a3_2f20::System_s00a3_2f20()
     posB[0] = g_vec3[0]; posB[1] = g_vec3[1]; posB[2] = g_vec3[2];
     for (int i = 0; i < 9; ++i) { mat0[i] = (i % 4 == 0) ? 1.0f : 0.0f; }
     for (int i = 0; i < 9; ++i) { mat1[i] = (i % 4 == 0) ? 1.0f : 0.0f; }
+}
+
+// @ 0x00a21070
+int __stdcall audioResult_00a21070(void* unused)
+{
+    return 5;
 }
