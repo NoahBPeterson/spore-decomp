@@ -19,7 +19,6 @@
                fault on read before reaching the body).
 00ae9b90   6  SpaceTool::Select: complete; only branch layout and the count computation
                differ.  Equiv WEAK 26.8% coverage.
-00ae9c10  27  SpaceTool::Has: complete.  Equiv PASS, 100% coverage.
 00ae9c90  27  FUN_00ae9c90: complete.  Equiv UNSUPPORTED (all inputs fault on read).
 00ae9d40  81  Entry::Differs: complete.  Equiv PASS, 62.9% coverage, no mismatch.
 00ae9e60  47  write_vec: complete.  Equiv UNSUPPORTED (stream/vector inputs fault).

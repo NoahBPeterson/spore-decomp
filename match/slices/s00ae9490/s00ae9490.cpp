@@ -557,7 +557,8 @@ bool SpaceTool::Has(int a, int b)
 {
     if (b == -1)
         return false;
-    if (*(int*)((char*)this + 0x28) - *(int*)((char*)this + 0x24) >> 2 == 0)
+    unsigned size = (unsigned)(mpVecEnd - mpVecBegin);
+    if (size <= 0)
         return false;
     return FindBestByPlanet(a, b, 0) != 0;
 }

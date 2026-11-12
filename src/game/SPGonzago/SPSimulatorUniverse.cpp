@@ -1131,15 +1131,17 @@ void cSimulatorUniverse::SetPropertyRef(void* def)
 // @ 0x0100e730
 bool cSimulatorUniverse::FindEmbassyEntry(cStarRecordRef* pRef, char* pUniverse)
 {
-    cStarRecordRef* ref = pRef;
-    char* uni = pUniverse;
     char* p = mp128;
     char* end = mp12c;
-    while (p != end) {
-        if (*(int*)(p + 4) == ref->GetCommContext() &&
-            *(unsigned*)p == *(unsigned*)(uni + 0x84))
-            return true;
-        p += 0x28;
+    if (p != end) {
+        char* uni = *(char* volatile*)&pUniverse;
+        cStarRecordRef* ref = pRef;
+        do {
+            if (*(int*)(p + 4) == ref->GetCommContext() &&
+                *(unsigned*)p == *(unsigned*)(uni + 0x84))
+                return true;
+            p += 0x28;
+        } while (p != end);
     }
     return false;
 }

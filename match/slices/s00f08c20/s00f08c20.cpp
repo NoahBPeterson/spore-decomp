@@ -405,8 +405,8 @@ void HashTbl::clearBuckets(IWin** buckets, uint n)
         IWin** e = (IWin**)buckets[i];
         while (e) {
             IWin** cur = e;
-            IWin* r = cur[0];
             e = (IWin**)cur[2];
+            IWin* r = cur[0];
             if (r)
                 r->IRelease();
             OperatorDelete(cur);

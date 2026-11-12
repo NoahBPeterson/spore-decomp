@@ -1594,10 +1594,11 @@ void FUN_00805bb0(void* obj, float cx, float cy, float w, float h, int p6, int p
 Vec4* SPUIHelpers_GetMainWindowArea(Vec4* out)
 {
     WMgr_s0080_5940* wm = (WMgr_s0080_5940*)SP_WindowManager();
-    char* p = (char*)wm->s1();
-    p = p ? (char*)((char*)p - 4) : (char*)0;
-    char* q = p + 4;
-    Vec4* a = (Vec4*)((W*)q)->v34();
+    // Window's IWindow interface follows its primary serialization interface.
+    struct MainWindowView : EA::COM::IUnknown32, W {};
+    W* windowInterface = (W*)wm->s1();
+    MainWindowView* window = static_cast<MainWindowView*>(windowInterface);
+    Vec4* a = (Vec4*)window->v34();
     out->x = a->x;
     out->y = a->y;
     out->z = a->z;

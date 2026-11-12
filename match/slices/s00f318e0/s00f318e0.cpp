@@ -443,7 +443,9 @@ float __fastcall FUN_00f31ff0(P2* p)
 {
     X34* x = (X34*)FUN_00b18e00(p->key);
     Sub2* s = (Sub2*)p->s;
-    return (s->f64 - s->f60) * (x->v34() - 3.0f) + s->f60;
+    float low = s->f60;
+    double scale = x->v34() - 3.0f;
+    return (s->f64 - low) * scale + low;
 }
 
 // @ 0x00F32030

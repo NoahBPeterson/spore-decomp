@@ -306,7 +306,7 @@ unsigned* SP::cSPMissionManager::AsInterface(unsigned id)
     case 0x179c807u:
     case 0xee3f516eu: {
         cSPMissionManager* p = (cSPMissionManager*)((char*)this - 8);
-        return (unsigned*)((size_t)this & -(size_t)(p != 0));
+        return p ? (unsigned*)this : 0;
     }
     default:
         return 0;

@@ -82,7 +82,7 @@ struct cSim {
     void  FUN_00f3bd90(int idx, char val);
     bool  FUN_00f3bde0(int idx);
     int   FUN_00f3be30();
-    int   FUN_00f3be60(int idx);
+    __declspec(noinline) int FUN_00f3be60(int idx);
     int   FUN_00f3bec0(int idx);
     int   FUN_00f3bf00(int a, int b);
     int   FUN_00f3bf70();
@@ -393,11 +393,11 @@ int cSim::FUN_00f3be60(int idx) {
 // @ 0x00f3bec0
 // ---------------------------------------------------------------------------
 int cSim::FUN_00f3bec0(int idx) {
-    int iVar1 = FUN_00f3be60(idx);
-    if (iVar1 != 0) {
-        return (*(int*)(iVar1 + 0x88) - *(int*)(iVar1 + 0x84)) / 0x188;
-    }
-    return 0;
+    int result = 0;
+    int item = FUN_00f3be60(idx);
+    if (item != 0)
+        result = (*(int*)(item + 0x88) - *(int*)(item + 0x84)) / 0x188;
+    return result;
 }
 
 // ---------------------------------------------------------------------------

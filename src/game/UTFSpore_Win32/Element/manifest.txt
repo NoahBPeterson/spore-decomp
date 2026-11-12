@@ -1,2 +1,3 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/Element.cpp  ?ScalarDeletingDtor@Element@@QAEPAXE@Z  008e4450  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Element.cpp  ?GetAttrValue@Element@@QAEPAGPBG@Z  008e45b0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast /Isrc/game/include

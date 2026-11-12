@@ -661,13 +661,9 @@ void Window_s0095_ff20::ClearChildren()
 {
     int* head = (int*)((char*)this + 0x38);
     while (head[1] != (int)head) {
-        int node = *head;
-        int v;
-        if (node == 0 || node == 8)
-            v = 0;
-        else
-            v = node - 4;
-        (*(void(__thiscall**)(Window_s0095_ff20*, int))((char*)*(void**)this + 0xe0))(this, v);
+        EA::UTFWin::WindowNode* node = (EA::UTFWin::WindowNode*)*head;
+        EA::UTFWin::IWindow* child = static_cast<EA::UTFWin::Window*>(node);
+        (*(void(__thiscall**)(Window_s0095_ff20*, EA::UTFWin::IWindow*))((char*)*(void**)this + 0xe0))(this, child);
     }
 }
 
