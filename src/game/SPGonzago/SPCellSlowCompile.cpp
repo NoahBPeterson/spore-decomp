@@ -15,7 +15,7 @@ void  Start3dSoundByName(int a, int b, int c, int d, int e);   // 0x00571f80
 void  KillSetiEffects();                     // 0x00435ed0
 void* GameInputManager();                 // 0x00b3d250
 void* NounManager();                      // 0x00b3d300
-int   GetCurrentTerrainSphere(void* ed);  // 0x00f67d90
+int   __fastcall GetCurrentTerrainSphere(void* ed);  // 0x00f67d90
 int*  FUN_0067dd00();                     // 0x0067dd00
 int*  FUN_006eea10();                     // 0x006eea10
 int*  FUN_00401010();                     // 0x00401010
@@ -498,10 +498,14 @@ char FUN_00e82770(int param_1)
     return (-(c != 0) & 10U) + 1;
 }
 
+struct CellController { void Run(); }; // 0x00b1e410
+
 // @ 0x00e828c0
 void FUN_00e828c0()
 {
-    FUN_00b1e410(FUN_00b3d320(&gFieldL_01654c01));
+    extern int __stdcall LookupController(const void*); // 0x00b3d320
+    ((CellController*)LookupController((const void*)0x01654c01))->Run();
+    _ReadWriteBarrier();
 }
 
 // @ 0x00e82900
@@ -536,15 +540,17 @@ int FUN_00e82970()
     if (iVar2 == 0)
         return 1;
     ed = (int*)NounManager();
-    GetCurrentTerrainSphere(ed);
-    return FUN_00c75420();
+    extern int __fastcall TerrainActive(int); // 0x00c75420
+    return TerrainActive(GetCurrentTerrainSphere(ed));
 }
 
 // @ 0x00e829a0
-void FUN_00e829a0()
+void FUN_00e829a0(int species)
 {
-    int* pcVar1 = (int*)FUN_00401090(&pcVar1);
-    SetAvatarSpecies(pcVar1);
+    extern int* __stdcall SpeciesManager(int*); // 0x00401090
+    extern void __fastcall SetSpecies(int*); // 0x004df310
+    SetSpecies(SpeciesManager(&species));
+    _ReadWriteBarrier();
 }
 
 // @ 0x00e829c0
@@ -607,12 +613,23 @@ void __cdecl FUN_00e82c70()
 namespace SP {
 void __cdecl FUN_00e82c80(cEditorState* pState, uint32_t* pMode, uint8_t* pFlag, uint32_t* pTarget, tLayoutKey* pPosition)
 {
-    *pMode = pState->mMode;
-    *pFlag = pState->mbFlag;
-    *pTarget = pState->mTarget;
-    pPosition->mId = pState->mPosition.mId;
-    pPosition->mGroup = pState->mPosition.mGroup;
-    pPosition->mName = pState->mPosition.mName;
+    struct ExportState {
+        char pad00[0xc];
+        uint32_t mode;
+        char pad10[8];
+        tLayoutKey position;
+        char pad28[0xc];
+        uint32_t target;
+        char pad38[0xc];
+        uint8_t flag;
+    };
+    ExportState* state = (ExportState*)pState;
+    *pMode = state->mode;
+    *pFlag = state->flag;
+    *pTarget = state->target;
+    pPosition->mId = state->position.mId;
+    pPosition->mGroup = state->position.mGroup;
+    pPosition->mName = state->position.mName;
 }
 }  // namespace SP
 

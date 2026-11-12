@@ -2,7 +2,4 @@
 004e1780 89-byte /Od Constraint-vector destroy-loop skeleton flags: /Od /Ob1 /MD /Gy /TP
 00e82520  183  PARTIAL: RGB packing from 4 custom xmm-register float args (custom register ABI); body is a stub. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e82770  298  PARTIAL: type id dispatch (11 hash comparisons + return codes); the FUN_00401010 vtable call and return-code packing differ (difftest FAIL execution). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e828c0  8  PARTIAL: single FUN_00b3d320/FUN_00b1e410 call pair; calling conventions approximated (difftest FAIL execution). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e82920  66  PARTIAL: terrain sphere position; NounManager/GetCurrentTerrainSphere call shapes differ (difftest FAIL memory). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e82970  23  PARTIAL: terrain sphere active check; call shapes differ (difftest FAIL eax). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e829a0  9  PARTIAL: avatar species setter; FUN_00401090 argument/return shape approximated (difftest UNSUPPORTED). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -2,7 +2,6 @@
 00e82620 49 complete SP::PatchSoundStart; RefCountTemplate::Release + Audio system vtable shapes differ. difftest PASS. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e82a10 28 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 451 bytes - large world fade/layout routine; body not reconstructed (source has a reduced equivalent), so code differs throughout. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00e82c10 106 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 155 bytes - retail passes the four already-pushed arguments straight through to the second call (reusing the caller's stack args); C++ cannot express calling two different functions with one argument block. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
-00e82c80 47 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 48 bytes - struct field layout of cEditorState guessed; retail copies a different field set/different widths. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00e82d50 87 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 119 bytes - placement-push helper with two by-value 12-byte vectors; argument evaluation/stack block order differs. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00e82e00 40 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 560 bytes - large state-copy routine; body not reconstructed (reduced equivalent), code differs throughout. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00e83040 23 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 339 bytes - large mode transition routine; body not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

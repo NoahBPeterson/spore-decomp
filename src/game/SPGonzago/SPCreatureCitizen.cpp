@@ -1,3 +1,4 @@
+#include <intrin.h>
 // src/game/SPGonzago/SPCreatureCitizen.cpp -- migrated from slice(s) s00c278e0, s00c24e80, s00c0ddb0, s01335f70, s00da7780, s00c267e0, s00c25a50, s00c23f80, s00c22fc0, s00c22010 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPCreatureCitizen.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -2039,12 +2040,11 @@ void* cCreatureBase::GetActiveTool()
 bool cSPCreatureCitizen::IsLeader()
 {
     cToolOwner* pTool = (cToolOwner*)mpActiveTool;
-    if (pTool == nullptr) {
+    if (pTool == nullptr)
         pTool = (cToolOwner*)mpPendingTool;
-        if (pTool == nullptr)
-            return false;
-    }
-    return pTool->GetOwnerCreature() == this;
+    if (pTool != nullptr)
+        return pTool->GetOwnerCreature() == this;
+    return false;
 }
 
 // @ 0x00c23300
@@ -3340,8 +3340,11 @@ i32_s00c2_5a50 cSPCreatureCitizen_s00c2_5a50::FUN_00c26120()
     cCommunity* pComm = (cCommunity*)mpOwnerCity_1010;
     if (pComm == 0)
         pComm = (cCommunity*)mpOwnerTribe_1014;
-    if (pComm != 0 && pComm->GetLeader() == this)
-        return 0x11;
+    if (pComm != 0) {
+        bool isLeader = pComm->GetLeader() == this;
+        _ReadWriteBarrier();
+        if (isLeader) return 0x11;
+    }
     return 0;
 }
 
@@ -3775,6 +3778,7 @@ void cCreatureCitizen::Destroy()
     mpVtbl5a8 = (void*)0x146ab10;
     mpVtbl670 = (void*)0x146aaf8;
 
+    _ReadWriteBarrier();
     if (mpRequest != nullptr)
         mpRequest->Release();
     mStarRecords.Destroy();
@@ -4135,6 +4139,7 @@ void FUN_00da8050(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i
     p->FUN_00c14750(1);
     Mgr310* m = FUN_00b3d310(&p->mObjC0);
     m->FUN_00b453a0();
+    _ReadWriteBarrier();
 }
 
 // @ 0x00da80f0
