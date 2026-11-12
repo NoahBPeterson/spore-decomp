@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "EA/COM/IFactory.h"
 #include "sse_helpers.h"
 #include <math.h>
 #include "cSPUILayout.h"
@@ -3432,6 +3433,7 @@ class cCellMode { public:
     char pad0[9];
     char f9, fa;
     int Activate();
+    void HandleSimulationUpdate(float, float);
 };
 int cCellMode::Activate()
 {
@@ -11108,4 +11110,23 @@ void FUN_0137edc0(void)
     gCellGameBackgroundExtents.min = mn;
     Vec3_s0137_d820 mx; mx.x = gFMin; mx.y = gFMin; mx.z = gFMin;
     gCellGameBackgroundExtents.max = mx;
+}
+
+namespace SP {
+class cCOMFactory_SimulatorCellSaveGame : public EA::COM::IFactory {
+public:
+    virtual const char* GetClassNameById(EA::COM::ClassId);
+};
+// @ 0x00e4f650
+const char* cCOMFactory_SimulatorCellSaveGame::GetClassNameById(EA::COM::ClassId)
+{
+    return "CellSaveGame";
+}
+}
+
+extern void CellSimulationUpdate(float, float); // 0x00e806b0
+// @ 0x00e80980
+void SP::cCellMode::HandleSimulationUpdate(float realDelta, float simulationDelta)
+{
+    CellSimulationUpdate(realDelta, simulationDelta);
 }

@@ -3,7 +3,6 @@
 00e5c410  50  creature-kind predicate: complete; register/branch schedule differs
 00e5c460  59  creature-height predicate: complete; x87/SSE and branch schedule differs
 00e5c4f0  23  cell quota + refresh: complete; original loads member into edi before the call (dead) and re-reads the global for the return; ours reloads the global for the return only (cl drops the dead edi load); tried return-local, reference, comma
-00e5c530  22  source-level interpolation: complete; retail keeps (A-B)+C and re-reads +0x20, cl folds to (A+C)-B and CSEs +0x20; tried split temps, +=, volatile, typed struct, unsigned
 00e5c5d0  104  read up to 13 ints: complete; the min(13,count) select and loop schedule differ
 00e5c660  53  write 13 ints: complete; schedule differs
 00e5c6e0  104  read up to 6 var-list slots: complete; cVarListSerializer buffer/args approximated

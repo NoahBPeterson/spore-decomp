@@ -1,6 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs are chk.py best-symbol estimates)
 00e50810  145  cell extents setup: all stores/calls present; the FUN_00e4ce40 out-struct local is under-sized and float ordering differs
-00e50940  31  cell mode init: complete (state resets + two flags); scheduling/registers differ
 00e50a10  191  slide/clamp step: complete branch structure; x87 vs SSE scheduling differs; equiv FAIL ecx (original preserves ecx via push/pop, nothing we write); register ecx
 00e50b80  159  keep-list insert (linear search + memmove): complete but written as a straight loop rather than the unrolled search
 00e50cb0  107  wrap angle + sign: complete; loop shape/register schedule differs

@@ -27,7 +27,7 @@ extern "C" {
   void*     __cdecl SP_MessageServer(); // 0x0067dcc0
   void*     __cdecl SP_CheatManager();
   void*     __cdecl FUN_0067dd20();
-  void*     __cdecl FUN_0067de90(int);
+  void*     __stdcall FUN_0067de90(int);
   void      __cdecl FUN_007ebce0(void*);
   void      __cdecl SPUI_GetMainWindowArea(void*);
   float     __cdecl FUN_01041cd0(float, float, float);
@@ -420,18 +420,20 @@ int FUN_00e500a0(char* self, int mode) {
   return 0;
 }
 
+extern "C" void CellConfirmDialog(void*, void*); // 0x00e82db0
+struct QuitDialog { void Close(); }; // 0x007ebce0
 // @ 0x00e501a0
 void SP_sOnQuitDesktopButtonClick() {
   void* t = FUN_0067de90(-1);
-  FUN_007ebce0(t);
-  if (g_16b3c04[0x51da] == 0) { FUN_00809db0((void*)0x15a83e8, (void*)0x15a83d0); return; }
+  ((QuitDialog*)t)->Close();
+  if ((*(char**)g_16b3c04)[0x51da] == 0) { CellConfirmDialog((void*)0x15a83e8, (void*)0x15a83d0); return; }
   void* cm = SP_CheatManager();
   (*(void(__thiscall**)(void*, const char*))((char*)Vt(cm) + 0x20))(cm, "quit");
 }
 
 // @ 0x00e501f0
 void FUN_00e501f0() {
-  if (g_16b3c04[0x51da] == 0) { FUN_00809db0((void*)0x15a83f4, (void*)0x15a83d0); return; }
+  if ((*(char**)g_16b3c04)[0x51da] == 0) { CellConfirmDialog((void*)0x15a83f4, (void*)0x15a83d0); return; }
   void* cm = FUN_0067dd20();
   (*(void(__thiscall**)(void*))((char*)Vt(cm) + 0x40))(cm);
 }
