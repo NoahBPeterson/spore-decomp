@@ -5,3 +5,4 @@ slices/s010cbaa0/s010cbaa0.cpp  ??1hkTypedBroadPhaseDispatcher@@QAE@XZ  010cc3f0
 slices/s010cbaa0/s010cbaa0.cpp  ??0hkTypedBroadPhaseDispatcher@@QAE@XZ  010cc4c0  /vc71 /O2 /MD /Gy /TP
 slices/s010cbaa0/s010cbaa0.cpp  ?sortHits@hkAllRayHitCollector@@QAEXXZ  010cc160  /vc71 /O2 /MD /Gy /TP
 slices/s010cbaa0/s010cbaa0.cpp  ?getAbsoluteFitToleranceOfAxisAlignedTriangles@hkMoppFitToleranceRequirements@@QBE?AUhkVector4@@XZ  010cbed0  /vc71 /O2 /MD /Gy /TP
+slices/s010cbaa0/s010cbaa0.cpp  ?removePairs@hkTypedBroadPhaseDispatcher@@QBEXPAUhkTypedBroadPhaseHandlePair@@H@Z  010cc480  /vc71 /O2 /MD /Gy /TP
