@@ -242,21 +242,20 @@ RcVector& RcVector::operator=(const RcVector& x)
     return *this;
 }
 
-// @ 0x0042DCC0
-// Wrapper around the 0x0042EC30 uninitialized-copy implementation (tag type passed uninitialized).
-// Not byte-exact: frame has one more dword / the tag byte lands at a different slot.
-struct UTag { char c; };
-void __cdecl UninitCopyImpl(RcEntry** out, RcEntry* a, RcEntry* b, RcEntry* c, UTag t);   // 0x0042EC30
+// Empty type-trait tag selecting the nontrivial uninitialized-copy implementation.
+struct UTag {};
+RcEntry** __cdecl UninitCopyImpl(RcEntry** out, RcEntry* a, RcEntry* b, RcEntry* c, UTag t);   // 0x0042EC30
 
+// @ 0x0042DCC0
 RcEntry* __cdecl UninitCopyEntries(RcEntry* first, RcEntry* last, RcEntry* dest)
 {
     RcEntry* pRet;
-    UTag t;
+    UTag copyTag;
     UTag u;
     RcEntry* c2 = dest;
     RcEntry* bb = last;
     RcEntry* a2 = first;
-    UninitCopyImpl(&pRet, a2, bb, c2, t);
+    UninitCopyImpl(&pRet, a2, bb, c2, copyTag);
     PadN<6>();
     return pRet;
 }
