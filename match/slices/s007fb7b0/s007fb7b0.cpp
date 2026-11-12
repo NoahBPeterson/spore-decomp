@@ -214,21 +214,6 @@ void* C_7fbbc0::Ctor() {
   return this;
 }
 
-// @ 0x007fbed0
-extern char bed0_vt[];
-struct SerItem { void* type; void* base; unsigned count; void* extra; };
-struct VSer {
-  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
-  virtual void* vf();
-};
-struct C_7fbed0 : VSer { void f(SerItem* p); };
-void C_7fbed0::f(SerItem* p) {
-  p->type = (void*)bed0_vt;
-  p->base = (char*)this - 4;
-  p->count = 1;
-  p->extra = vf();
-}
-
 // @ 0x007fb7b0
 void f_7fb7b0(IWorldHost* param) {
   delete GetEv7f93();

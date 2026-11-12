@@ -509,32 +509,15 @@ struct Ev_s007f_c880 {
     bool mbActive;                  // +0x4c (Cont+0x5c)
     char pad2[0x1b];                // +0x4d .. +0x67
     void* handle;                   // +0x68 (AutoRefCount window)
-    unsigned BaseHandle(void* msg, void* arg);   // @ 0x007fc4b0
+    bool BaseHandle(int msg, void* arg);         // 0x007fc4b0
     bool HandleBase(int msg, void* arg);          // @ 0x007fcf00
     bool Dispatch(int msg, void* arg);            // @ 0x007fc880
     void** SlotB(int i);                          // 0x007f93b0
     void** SlotC(int i);                          // 0x007f93c0
     void** SlotD(int i);                          // 0x007f93d0
 };
-struct Server {
-    virtual void s0();
-    virtual void s1();
-    virtual void s2();
-    virtual void s3();
-    virtual void s4();
-    virtual void s5();
-    virtual void s6();
-    virtual void s7();
-    virtual void s8();
-    virtual void s9();
-    virtual void s10();
-    virtual void s11();
-    virtual void s12();
-    virtual void s13();
-    virtual void s14();
-    virtual void s15();
-};
-Server* GetServer();                                  // @ 0x00883860
+EA::Messaging::Server* GetServer();                    // 0x00883860
+
 void  f_571d10(void* p, int n);                       // deallocate
 void* f_42dee0(void* alloc, int n, int align, int flag); // allocate
 void* f_8ac360(int n, void* p);                       // allocate raw
@@ -1886,10 +1869,9 @@ void* Vec8::Insert(void* pos, void* value)
 // @ 0x007fcf00
 bool Ev_s007f_c880::HandleBase(int msg, void* arg)
 {
-    BaseHandle((void*)msg, arg);
+    BaseHandle(msg, arg);
     if (msg == 0xc) {
-        Server* from = GetServer();
-        VCallV(from, 0x38);
+        GetServer()->ProcessQueue();
     }
     return false;
 }

@@ -10,3 +10,4 @@ slices/s00425240/s00425240.cpp  ?clear@Deque  004256e0  /Od /Ob1 /MD /Gy /EHsc /
 slices/s00425240/s00425240.cpp  ??0Deque  00425860  /Od /Ob1 /MD /Gy /EHsc /TP
 slices/s00425240/s00425240.cpp  ??0SegIter  004258b0  /Od /Ob1 /MD /Gy /EHsc /TP
 slices/s00425240/s00425240.cpp  ?Normalize@SegIter  004258f0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425240/s00425240.cpp  ?Free@PtrVector@@QAEXXZ  00425990  /Od /Ob1 /MD /Gy /EHsc /TP

@@ -1,6 +1,5 @@
 # va diff reason
 007fbbc0 8 initialiser — complete; local-name slot assignment for the two sub-object pointers and the 4-iteration slot loop differs
-007fbed0 6 SerItem bind — complete; `(char*)this - 4` base forces a different vcall schedule (same as 007fb440)
 007fbf40 205 cSPUIBehaviorEventBase ctor — complete (sub-object ctor, 7 vtable stores, string ctor, two 4-slot clear loops); the eastl string tag temporary and helper frames differ
 007fc200 13 cSPUIBehaviorEventBase dtor — complete; the inlined Release/RemoveAll/FreeBuffer helpers leave four extra reserved frame slots in the original
 007fc2a0 10 UI::BehaviorMessage ctor — complete; one reserved frame slot (inlined base ctor) missing

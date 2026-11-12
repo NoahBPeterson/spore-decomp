@@ -283,12 +283,14 @@ IntrusivePtr* CopyIntrusivePtrs(const IntrusivePtr* first, const IntrusivePtr* l
 }
 
 struct PtrIter { const IntrusivePtr* p; inline PtrIter(const IntrusivePtr* q) : p(q) {} };
-extern void __cdecl UninitCopyIntrusivePtrs(IntrusivePtr** out, PtrIter f, PtrIter l, PtrIter d, tagq);  // 0x0042e860
+// The copy trait converts to the implementation tag by value.
+struct IntrusivePtrCopyTrait : tagq {};
+extern IntrusivePtr** __cdecl UninitCopyIntrusivePtrs(IntrusivePtr** out, PtrIter f, PtrIter l, PtrIter d, tagq);  // 0x0042e860
 
 // @ 0x0042d520
 IntrusivePtr* UninitializedCopyIntrusivePtrs(const IntrusivePtr* f, const IntrusivePtr* l, IntrusivePtr* d) {
     IntrusivePtr* r;
-    tagq t;
+    IntrusivePtrCopyTrait t;
     padfn5();
     UninitCopyIntrusivePtrs(&r, PtrIter(f), PtrIter(l), PtrIter(d), t);
     return r;

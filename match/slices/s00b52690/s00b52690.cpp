@@ -17,6 +17,8 @@
 
 extern "C" double __cdecl sqrt(double);
 #pragma intrinsic(sqrt)
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 typedef uint8_t u8;
 typedef uint16_t u16;
@@ -338,8 +340,9 @@ sync:
 // eastl hashtables: bucket array at +4, bucket count at +8 (the end iterator is buckets[count]).
 // ===================================================================================================
 struct HNode {
-    HNode* mpNext;          // +0x00
+    u32    mKey;            // +0x00
     u32    mValue;          // +0x04
+    HNode* mpNext;          // +0x08
 };
 
 struct HIter {              // 8-byte iterator used by the u32 -> T tables
@@ -358,7 +361,7 @@ struct HashTable {
     u32     mf0;            // +0x00
     HNode** mpBuckets;      // +0x04
     u32     mnBucket;       // +0x08
-    void   find(HIter* out, const u32* key);              // 0x00645ed0
+    HIter* find(HIter* out, const u32* key);              // 0x00645ed0 (explicit hidden result)
     HIter* find2(HIter* out, const u32* key);             // 0x00b41b30
     void   erase(HIter* out, HIter it);                   // 0x00b51640
     int    GetValue14c8(u32 key);                         // 0x00b532f0
@@ -411,9 +414,11 @@ void* GetTableValue(void* key)
     HIter it;
     u32 k = (u32)key;
     t->find(&it, &k);
+    HNode* node = it.mpNode;
+    _ReadWriteBarrier();
     HNode* end = t->mpBuckets[t->mnBucket];
-    if (it.mpNode != end)
-        return (void*)it.mpNode->mValue;
+    if (node != end)
+        return (void*)node->mValue;
     return 0;
 }
 

@@ -17,3 +17,4 @@
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?CopyEntsBwd@@YAPAUEnt@@PAU1@00@Z  00838f80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?CopyEnts2Bwd@@YAPAUEnt2@@PAU1@00@Z  00839040  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?CopyEntsFwd@@YAPAUEnt@@PAU1@00@Z  00838f20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/ArgumentSpec.cpp  ?StrEqualI2@@YA_NPAPBDPBD@Z  008387a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

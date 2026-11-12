@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-008387a0 5 StrEqualI2 - complete _stricmp(*p,b)==0 wrapper; only register naming (eax/ecx/edx) differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 008387c0 144 cArgumentSpec::ArgTypeFromName - complete; only name/this register swap (ebx/edi); equiv: WEAK (53% cov, no mismatch, /EHsc /GS-)
 008389f0 68 RawStr::RawStr(const RawStr&,pos,n) - complete substr ctor; register allocation/lea folding differs
 00838a60 65 RawStr::Find - complete substring find; call arg setup / register choice differs

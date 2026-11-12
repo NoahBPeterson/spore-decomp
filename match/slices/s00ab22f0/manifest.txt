@@ -4,3 +4,4 @@ slices/s00ab22f0/s00ab22f0.cpp  ?Destroy@Big@@QAEXXZ  00ab2950  /O2 /MD /Gy /EHs
 slices/s00ab22f0/s00ab22f0.cpp  ?Enable@Ribbon@@QAEXH@Z  00ab3060  /O2 /MD /Gy /EHsc /TP
 slices/s00ab22f0/s00ab22f0.cpp  ?Disable@Ribbon@@QAEXH@Z  00ab3090  /O2 /MD /Gy /EHsc /TP
 slices/s00ab22f0/s00ab22f0.cpp  ?SetValue@Ribbon@@QAEXH@Z  00ab30d0  /O2 /MD /Gy /EHsc /TP
+slices/s00ab22f0/s00ab22f0.cpp  ?FUN_00ab2910@@YAHXZ  00ab2910  /O2 /MD /Gy /EHsc /TP

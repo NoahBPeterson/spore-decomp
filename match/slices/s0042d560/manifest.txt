@@ -10,3 +10,4 @@ slices/s0042d560/s0042d560.cpp  ?DoReallocPtrArray@Deque30@@QAEXIH@Z  0042d7d0  
 slices/s0042d560/s0042d560.cpp  ??4RcVector@@QAEAAU0@ABU0@@Z  0042d990  /Od /Ob1 /MD /Gy /EHsc /TP
 slices/s0042d560/s0042d560.cpp  ?LowerBound@@YAPAUKeyPair@@PAU1@0ABU1@@Z  0042dd00  /Od /Ob1 /MD /Gy /EHsc /TP
 slices/s0042d560/s0042d560.cpp  ?PartialSort@@YAXPAUElem12@@00UCompare@@@Z  0042dd80  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042d560/s0042d560.cpp  ?UninitCopyEntries@@YAPAURcEntry@@PAU1@00@Z  0042dcc0  /Od /Ob1 /MD /Gy /EHsc /TP
