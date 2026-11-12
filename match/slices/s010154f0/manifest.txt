@@ -3,3 +3,4 @@ slices/s010154f0/s010154f0.cpp  ?SetRescueDelay@cSPSimulatorWalkAround@@QAEXM@Z 
 slices/s010154f0/s010154f0.cpp  ??0cSPSimulatorWalkAround@@QAE@XZ  010164d0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
 slices/s010154f0/s010154f0.cpp  ?AsInterface@cSPMissionManager@SP@@QAEPAII@Z  01015e00  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
 slices/s010154f0/s010154f0.cpp  ?ResetState@cSPSimulatorWalkAround@@QAEXXZ  01015f50  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
+slices/s010154f0/s010154f0.cpp  ?FindPlantValue@cSPSimulatorWalkAround@@QAEHH@Z  01015fa0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
