@@ -1,2 +1,5 @@
 # source  symbol  va  flags
 ../src/game/SPAudio/eapdatom.cpp  ?atom_getfloat@@YAMPAUAtom@@@Z  00a46760  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/eapdatom.cpp  ?atom_getint@@YAHPAUAtom@@@Z  00a46770  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdatom.cpp  ?atom_getfloat_at@@YAMHHPAUAtom@@@Z  00a468f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdatom.cpp  ?atom_getint_at@@YAHHHPAUAtom@@@Z  00a46920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
