@@ -603,7 +603,8 @@ void SP::cGameEditModeStrategy::FUN_00d1c010()
     if (disp != 0)
         ((VFnVi)disp->mpVftable[0])(disp, 1);
     mpDisplayStrategy = 0;
-    ((cGameTimeManager*)GameTimeManager())->DecPauseGate(0x4bf38a7);
+    cGameTimeManager* time = (cGameTimeManager*)GameTimeManager();
+    time->DecPauseGate(0x4bf38a7);
 }
 
 struct InputManagerVt_s00d1_c090 {
@@ -683,9 +684,10 @@ SP::cGameEditModeStrategy::~cGameEditModeStrategy()
     mBase.mpVftable4 = (void**)&vtbl_1479eb8;
     g_sInstance = 0;
     mSelectableMembers.dtorRaw();
-    if (mpServer != 0) {
-        EA_Messaging_RemoveHandler(mpServer, mpHandler, mpIdArray, mnIdArrayCount, mnPriority);
+    void* server = mpServer;
+    if (server != 0) {
         mpServer = 0;
+        EA_Messaging_RemoveHandler(server, mpHandler, mpIdArray, mnIdArrayCount, mnPriority);
     }
     mBase.dtorRaw();
     mpVftable4 = (void**)&vtbl_13eb394;
@@ -783,9 +785,10 @@ void SP::cGameEditModeStrategyGz::FUN_00d1c560(int guard, int mode)
 u8 SP::cGameEditModeStrategy::Shutdown()
 {
     mSelectableMembers.erase(mSelectableMembers.mpBegin, mSelectableMembers.mpEnd);
-    if (mpServer != 0) {
-        EA_Messaging_RemoveHandler(mpServer, mpHandler, mpIdArray, mnIdArrayCount, mnPriority);
+    void* server = mpServer;
+    if (server != 0) {
         mpServer = 0;
+        EA_Messaging_RemoveHandler(server, mpHandler, mpIdArray, mnIdArrayCount, mnPriority);
     }
     return 1;
 }
