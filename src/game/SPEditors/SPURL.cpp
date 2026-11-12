@@ -103,13 +103,22 @@ unsigned* FUN_00549dc0(unsigned* param_1, int param_2, unsigned* param_3)
     return param_1;
 }
 
+// 5-dword-stride iterator over the URL entry map (entry = key + String8 = 0x14 bytes).
+// The free-function operator records are load-bearing: they reproduce the retail temp
+// allocation in GetURL, where lea ecx,[eax+0x14] reuses the just-dead key temp's register.
+struct URLEntryIt {
+  uint32_t* p;
+};
+inline bool operator!=(URLEntryIt a, URLEntryIt b) { return a.p != b.p; }
+inline URLEntryIt operator+(URLEntryIt a, int) { URLEntryIt r = { a.p + 5 }; return r; }
+
 // @ 0x006214c0
 bool GetURL(uint32_t key, String8* out)
 {
-  uint32_t* end = gMapBEnd;
-  uint32_t* r = eastl_lower_bound(gMapB, end, &key, (int)gMapBCmp);
-  if (r != end && key >= *r && r != r + 5) {
-    if (out != 0) WStr_Format(out, gURLFormat, *(String8*)(r + 1));
+  URLEntryIt end = { gMapBEnd };
+  URLEntryIt r = { eastl_lower_bound(gMapB, end.p, &key, (int)gMapBCmp) };
+  if (r != end && key >= *r.p && r != r + 1) {
+    if (out != 0) WStr_Format(out, gURLFormat, *(String8*)(r.p + 1));
     return true;
   }
   return false;
