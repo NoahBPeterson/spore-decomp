@@ -286,13 +286,31 @@ void CPlanet::FUN_00c71da0(float f)
     }
 }
 
+// Descriptive declaration-only view of the embedded empire-ID interface at +0xd4.
+// Its slot is confirmed from the retail call; no complete class identity is asserted.
+struct PlanetEmpireIDView_s00c7_1e30 {
+    virtual void p00(); virtual void p04(); virtual void p08(); virtual void p0c();
+    virtual void p10(); virtual void p14(); virtual void p18(); virtual void p1c();
+    virtual void p20(); virtual void p24(); virtual void p28(); virtual void p2c();
+    virtual void p30(); virtual void p34(); virtual void p38(); virtual void p3c();
+    virtual void p40(); virtual void p44(); virtual void p48();
+    virtual uint32_t GetEmpireID() const; // slot 19, +0x4c
+};
+namespace SP {
+class cEmpire;
+class cStarManager {
+public:
+    cEmpire* GetEmpireByID(unsigned int empireID) const; // 0x00ba9370
+};
+}
+SP::cStarManager* GetPlanetStarManager_s00c7_1e30(); // 0x00b3d2a0
+
 // @ 0x00c71e30
 void* CPlanet::FUN_00c71e30()
 {
     if (mpPlanet != 0 && mpPlanet->fn_00b8dab0() == 5) {
-        void* e = ((HasSlots*)mpGDvptr)->h4c();
-        void* sm = StarManager_00b3d2a0(e);
-        return cStarManager_GetEmpireByID_00ba9370(sm);
+        return GetPlanetStarManager_s00c7_1e30()->GetEmpireByID(
+            reinterpret_cast<PlanetEmpireIDView_s00c7_1e30*>(&mpGDvptr)->GetEmpireID());
     }
     return 0;
 }

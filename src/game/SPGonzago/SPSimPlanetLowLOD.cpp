@@ -752,10 +752,13 @@ public:
     cSPTimer_s00c8_30f0 mCollapseTimer;             // +0x1ff0
     bool     mbFinishPending;            // +0x2030
     bool     mb2031;                     // +0x2031
-    uint8_t  pad2032[0x20a0 - 0x2032];
+    uint8_t  pad2032[0x2058 - 0x2032];
+    uint8_t  mbPlanetKeyLoaded_2058;     // +0x2058
+    uint8_t  pad2059[0x20a0 - 0x2059];
     ExtinctionMap mExtinctionMap;        // +0x20a0
 
     void FUN_00c7f060();                 // 0x00c7f060
+    void FUN_00c82870();                 // 0x00c82870
     bool FUN_00c7ee50();                 // 0x00c7ee50
     void FUN_00c7fab0(int arg);          // 0x00c7fab0
 
@@ -2093,31 +2096,29 @@ void __thiscall SP::cSimPlanetLowLOD_s00c8_29e0::FUN_00c82ea0()
     }
 }
 
+struct cPlanetModelG { const ResourceKey& GetPlanetKey(); }; // 0x00b7e380
 // @ 0x00c82f00
-struct cPlanetModelG { ResourceKey* GetPlanetKey(); };
 void __thiscall SP::cSimPlanetLowLOD_s00c8_29e0::FUN_00c82f00()
 {
-    if (*(u8*)((char*)this + 0x2058) != 0)
+    cSimPlanetLowLOD_s00c8_30f0* self = (cSimPlanetLowLOD_s00c8_30f0*)this;
+    if (self->mbPlanetKeyLoaded_2058 != 0)
         return;
     if (SP::GetUniverseContext() != 0)
         return;
     if ((void*)mpPlanet != (void*)GetActivePlanet_s00c8_30f0())
         return;
 
-    cPlanetModelG* model = (cPlanetModelG*)SP_PlanetModel();
-    ResourceKey* key = model->GetPlanetKey();
-    ResourceKey* cur = ((cPlanet_s00c8_30f0*)mpPlanet)->FUN_00c713e0();
-    if (cur->groupID != key->groupID)
+    if (((cPlanet_s00c8_30f0*)mpPlanet)->FUN_00c713e0()->groupID != ((cPlanetModelG*)SP_PlanetModel())->GetPlanetKey().groupID)
         return;
-    model = (cPlanetModelG*)SP_PlanetModel();
-    key = model->GetPlanetKey();
-    cur = ((cPlanet_s00c8_30f0*)mpPlanet)->FUN_00c713e0();
+    cPlanetModelG* model = (cPlanetModelG*)SP_PlanetModel();
+    const ResourceKey* key = &model->GetPlanetKey();
+    ResourceKey* cur = ((cPlanet_s00c8_30f0*)mpPlanet)->FUN_00c713e0();
     if (cur->instanceID != key->instanceID)
         return;
 
-    *(u8*)((char*)this + 0x2058) = 1;
-    FUN_00c7f060(this);
-    ((void(__fastcall*)(void*))FUN_00c82870)(this);
+    self->mbPlanetKeyLoaded_2058 = 1;
+    self->FUN_00c7f060();
+    self->FUN_00c82870();
     FUN_00c82ea0();
 }
 
