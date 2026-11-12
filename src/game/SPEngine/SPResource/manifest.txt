@@ -14,3 +14,4 @@
 ../src/game/SPEngine/SPResource.cpp  ?Destroy@cLRUCache@@QAEXPAPAXI@Z  006ad910  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResource.cpp  ?FUN_006adc60@@YAXHH@Z  006adc60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResource.cpp  ?AddRegistrationCallback@SP@@YAXIPAX@Z  006adfe0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResource.cpp  ?SetCachingType@@YA_NHPAX@Z  006ac040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
