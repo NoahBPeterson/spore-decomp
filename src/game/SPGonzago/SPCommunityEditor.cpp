@@ -4911,13 +4911,15 @@ void cCommunityEditor_s00d0_a160::RefreshTooltip()
   if ((uint32_t)SP_GetCurrentGameMode() != 0x1654c04 &&
       (uint32_t)SP_GetCurrentGameMode() != 0x1654c05)
     return;
-  u32 pad_00;
-  cString s;
-  s.Ctor();
-  s.Load(0xc0152a6d, 0x65f79f0, 0);
-  ((BudgetObj*)mpBudget_6c)->SetText(s.GetText());
-  s.Dtor();
-  (void)pad_00;
+  struct TooltipLocals {
+    cString mStr_00;
+    u32 mPad_10;
+  };
+  TooltipLocals locals;
+  locals.mStr_00.Ctor();
+  locals.mStr_00.Load(0xc0152a6d, 0x65f79f0, 0);
+  ((BudgetObj*)mpBudget_6c)->SetText(locals.mStr_00.GetText());
+  locals.mStr_00.Dtor();
 }
 
 // @ 0x00d0a3f0
