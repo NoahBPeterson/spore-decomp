@@ -297,6 +297,16 @@ class cBadgePropertyMap {
 public:
     cBadgeObject** FUN_00dd85c0(Property** ppValue);     // 0x00dd85c0
 };
+struct ResourceKey {
+    uint32_t instanceID;
+    uint32_t typeID;
+    uint32_t groupID;
+};
+class cBadgeCounterMap {
+public:
+    uint32_t* operator[](const uint32_t* pKey);          // 0x00badea0
+};
+bool __cdecl GetPropertyAsKey(cBadgeObject* pObject, uint32_t nId, ResourceKey* pOut); // 0x006a1250
 struct tEventNode {
     tRBNode  mBase;                     // +0x00
     uint32_t mKey;                      // +0x10
@@ -314,12 +324,14 @@ class cSPBadgeManager_s00fe_4be0 {
 public:
     void     FUN_00fe5430(uint32_t nBadge, int nCount);  // 0x00fe5430
     uint32_t FUN_00fe54d0(Property* pProperty);
-    void     GetBadgeImageKey();  // 0x00fe5520 (SP::cSPBadgeManager::GetBadgeImageKey)
+    ResourceKey* GetBadgeImageKey(ResourceKey* pOut, uint32_t nBadge); // 0x00fe5520
     void     TestRequirement();  // 0x00fe55b0 (SP::cSPBadgeManager::TestRequirement)
 
     uint8_t             pad000[0x10];                    // +0x00 .. +0x0f
     cBadgePropertyMap   mBadgeMap;                       // +0x10
-    uint8_t             pad14[0xa4 - 0x11];              // +0x11 .. +0xa3
+    uint8_t             pad11[0x2c - 0x11];              // +0x11 .. +0x2b
+    cBadgeCounterMap    mStatus;                         // +0x2c
+    uint8_t             pad2d[0xa4 - 0x2d];              // +0x2d .. +0xa3
     void*               mpCurrentCard;                   // +0xa4
 };  // namespace SP
 }
@@ -341,9 +353,6 @@ extern "C" void SetNumberString(int v, int pad, wchar_t* buf, int len);       //
 extern "C" void WStr_Format(void* str, const wchar_t* fmt, ...);              // 0x41e050
 extern "C" void AppendFormatted(void* str, const wchar_t* fmt, ...);          // 0x4e0850
 typedef uint32_t uint32;
-struct ResourceKey {
-    uint32 instanceID, typeID, groupID;
-};
 extern ResourceKey kNullKey;   // 0x016d9fb4
 struct Property_s00fe_5a20 {
     char pad0[8];
@@ -1079,8 +1088,26 @@ uint32_t __thiscall cSPBadgeManager_s00fe_4be0::FUN_00fe54d0(Property* pProperty
 
 // @ 0x00fe5520
 namespace SP {
-void __thiscall cSPBadgeManager_s00fe_4be0::GetBadgeImageKey()
+ResourceKey* __thiscall cSPBadgeManager_s00fe_4be0::GetBadgeImageKey(ResourceKey* pOut, uint32_t nBadge)
 {
+    pOut->instanceID = 0;
+    pOut->typeID = 0;
+    pOut->groupID = 0;
+
+    switch (*mStatus[&nBadge]) {
+    case 0:
+    case 1:
+        GetPropertyAsKey(*mBadgeMap.FUN_00dd85c0((Property**)&nBadge), 0x02cb228a, pOut);
+        break;
+    case 2:
+    case 3:
+    case 4:
+        GetPropertyAsKey(*mBadgeMap.FUN_00dd85c0((Property**)&nBadge), 0x02cb2286, pOut);
+        break;
+    }
+    if (pOut->typeID == 0x0252408e)
+        pOut->typeID = 0x2f7d0004;
+    return pOut;
 }
 }  // namespace SP
 

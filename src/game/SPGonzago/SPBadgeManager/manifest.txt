@@ -9,3 +9,4 @@
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe49a0@cSPBadgeManager@@QBEXIAAVeastlWString@@@Z  00fe49a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe54d0@cSPBadgeManager_s00fe_4be0@SP@@QAEIPAVProperty@@@Z  00fe54d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe5430@cSPBadgeManager_s00fe_4be0@SP@@QAEXIH@Z  00fe5430  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?GetBadgeImageKey@cSPBadgeManager_s00fe_4be0@SP@@QAEPAUResourceKey@@PAU3@I@Z  00fe5520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
