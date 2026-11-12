@@ -299,10 +299,11 @@ struct RefObj {
 // @ 0x4571d0  (copy range of RefObj* forward, with AddRef/Release)
 RefObj** copy_ref_forward(RefObj** first, RefObj** last, RefObj** dst)
 {
+    RefObj* old;
     for (; first != last; ++dst, ++first) {
         RefObj* src = *first;
         if (src != *dst) {
-            RefObj* old = *dst;
+            old = *dst;
             if (src) src->AddRef();
             *dst = src;
             if (old) old->Release();
