@@ -21,8 +21,6 @@
 00cb5d80 114 shared failure epilogue, addss operand order, integer vs x87 orientation copy
 00cb5e10 342 large complex function; register allocation and scheduling diverge throughout
 00cb5fe0 34 pointer load folds to [eax+0x118]; original materializes eax + add eax,imm
-00cb6020 48 pointer load folds to [eax+0x114]; original materializes eax + add eax,imm
-00cb6060 30 pointer load folds to [eax+0x114]; original materializes eax + add eax,imm
 00cb6090 238 repeated item lookups materialize eax + add eax,imm; large function
 00cb61d0 214 repeated item lookups materialize eax + add eax,imm; large function
 00cb6310 112 callee-saved push/epilogue layout and branch layout diverge
