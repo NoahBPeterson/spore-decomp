@@ -5,3 +5,4 @@ slices/s00599040/s00599040.cpp  ?FUN_00599530@cSpaceInventory@SP@@QAEXXZ  005995
 slices/s00599040/s00599040.cpp  ?FUN_00599560@cSpaceInventory@SP@@QAEXXZ  00599560  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00599040/s00599040.cpp  ?FUN_00599be0@cSpaceInventory@SP@@QAEXH@Z  00599be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00599040/s00599040.cpp  ?FUN_00599c10@cSpaceInventory@SP@@QAEXH@Z  00599c10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00599040/s00599040.cpp  ??0TraitSuperPowerRollover_s005994d0@SP@@QAE@XZ  005994d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

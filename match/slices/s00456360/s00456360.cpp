@@ -4,6 +4,7 @@
 #include "types.h"
 #include <string.h>
 #include <math.h>
+#include <new>
 
 // Allocator / helper externs (callees are masked relocations).
 void* EASTL_Allocate(void* alloc, uint32_t size, uint32_t align, uint32_t flags); // FUN_0042dee0
@@ -14,9 +15,15 @@ struct SubObj {
     char d[28];
     void CopyFrom(const SubObj* src);      // @ 0x00440ff0 (this = dst, arg = src)
 };
-struct SubObj2 {                           // payload in the rbtree node at +0x14
-    char d[92];
-    void CopyFrom(const SubObj2* src);     // @ 0x00455cf0
+// Fixed eight-slot vector at node+0x14; the complete value is 0x5c bytes.
+struct NodeValueVector {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    uint32_t mAllocator[2];
+    void* mpOverflow;
+    struct Pair { uint32_t key, value; } mFixed[8];
+    NodeValueVector* ConstructFrom(const NodeValueVector& source); // 0x00455cf0
 };
 
 struct Elem32 {
@@ -298,7 +305,7 @@ RefObj** copy_ref_forward(RefObj** first, RefObj** last, RefObj** dst)
 
 // The retail /Od wrapper retains eight unused inline-frame dwords.
 // Preserve that reservation before the move-commit layer.
-template<int Count> inline void ReserveElem32MoveFrame()
+template<int Count> inline void ReserveContainerInlineFrame()
 {
     uint32_t slots[Count];
 }
@@ -323,29 +330,29 @@ inline void CommitElem32Move(Elem32* first, Elem32* last, Elem32* dst)
 Elem32* uninitialized_move_Elem32(Elem32* first, Elem32* last, Elem32* dst)
 {
     Elem32* r = uninitialized_copy_Elem32(first, last, dst);
-    ReserveElem32MoveFrame<8>();
+    ReserveContainerInlineFrame<8>();
     CommitElem32Move(first, last, dst);
     return r;
 }
 
-// @ 0x4572b0  (rbtree node allocate + construct value at +0x10)
+// Rbtree node value constructed at +0x10.
 struct NodeValue {
     uint32_t key;
-    SubObj2  sub;
+    NodeValueVector sub;
+    NodeValue(const NodeValue& other) : key(other.key) { sub.ConstructFrom(other.sub); }
 };
 struct NodeAlloc {
     char pad[0x18];
     uint32_t alloc[1];
     char* DoCreateNode(const NodeValue* v);
 };
+// @ 0x004572b0
 char* NodeAlloc::DoCreateNode(const NodeValue* v)
 {
+    // Retail retains one unused dword from its inlined allocation layer.
+    ReserveContainerInlineFrame<1>();
     char* node = (char*)EASTL_Allocate(alloc, 0x6c, 4, 0);
-    NodeValue* val = (NodeValue*)(node + 0x10);
-    if (val) {
-        val->key = v->key;
-        val->sub.CopyFrom(&v->sub);
-    }
+    new (node + 0x10) NodeValue(*v);
     return node;
 }
 
