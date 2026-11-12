@@ -1,4 +1,3 @@
-00ebb820  10  complete element-run destructor; the two intrusive-pointer Release sites keep the pointer in EAX vs the original ECX. difftest WEAK (no mismatch, 33% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ebb860  42  complete copy/relocate destructor loop; loop preamble and pointer registers differ. difftest WEAK (no mismatch, 29% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ebbb40  177 complete random 2D unit vector; x87 clamp/comparison scheduling differs. difftest UNSUPPORTED (gMathRandom unresolved). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ebbc10  67  complete 0x50-byte node copy-assign (__thiscall, dst in ECX) modelled as WpStub::asg. The vtable release/destroy calls are now real virtual calls (IRefObj), so the fake-call `this` (ECX) matches. difftest PASS (372 valid, 100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

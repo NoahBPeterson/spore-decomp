@@ -697,9 +697,7 @@ struct Float3 {
 };
 struct tItemInfo_s00c5_7570 {
     cMissionTarget* mpTarget;                            // +0x00
-    float           mField4;                             // +0x04
-    float           mField8;                             // +0x08
-    float           mFieldC;                             // +0x0c
+    Float3          mFields;                             // +0x04 (three floats through +0x0f)
     bool            mField10;                            // +0x10
 
     tItemInfo_s00c5_7570* operator=(const tItemInfo_s00c5_7570& src);
@@ -1203,9 +1201,9 @@ tItemInfo_s00c5_7570* __thiscall tItemInfo_s00c5_7570::operator=(const tItemInfo
     mpTarget = src.mpTarget;
     if (mpTarget)
         mpTarget->NotifyAssigned();
-    mField4 = src.mField4;
-    mField8 = src.mField8;
-    mFieldC = src.mFieldC;
+    mFields.x.f = src.mFields.x.f;
+    mFields.y.f = src.mFields.y.f;
+    mFields.z.f = src.mFields.z.f;
     mField10 = src.mField10;
     return this;
 }
@@ -1244,8 +1242,8 @@ tItemInfo_s00c5_7570* __thiscall tItemInfo_s00c5_7570::FUN_00c57720(const tItemI
             pOld->ReleaseTarget();
     }
     // Retail bit-copies the three floats; a raw word copy keeps the codegen identical.
-    uint32_t* pDst = (uint32_t*)&mField4;
-    const uint32_t* pSrc = (const uint32_t*)&src.mField4;
+    uint32_t* pDst = (uint32_t*)&mFields.x.f;
+    const uint32_t* pSrc = (const uint32_t*)&src.mFields.x.f;
     pDst[0] = pSrc[0];
     pDst[1] = pSrc[1];
     pDst[2] = pSrc[2];
@@ -1280,9 +1278,11 @@ tItemInfo_s00c5_7570* __cdecl copy_forward_item(tItemInfo_s00c5_7570* pFirst, tI
             pDest->mpTarget = pFirst->mpTarget;
             if (pDest->mpTarget)
                 pDest->mpTarget->NotifyAssigned();
-            pDest->mField4 = pFirst->mField4;
-            pDest->mField8 = pFirst->mField8;
-            pDest->mFieldC = pFirst->mFieldC;
+            Float3& destination = pDest->mFields;
+            const Float3& source = pFirst->mFields;
+            destination.x.f = source.x.f;
+            destination.y.f = source.y.f;
+            destination.z.f = source.z.f;
             pDest->mField10 = pFirst->mField10;
         }
     }
@@ -1348,9 +1348,9 @@ tItemInfo_s00c5_7570* __cdecl copy_impl_item(tItemInfo_s00c5_7570* pFirst, tItem
             if (pOld)
                 pOld->ReleaseTarget();
         }
-        ((Float3*)&pDest->mField4)->x.u = ((const Float3*)&pFirst->mField4)->x.u;
-        ((Float3*)&pDest->mField4)->y.u = ((const Float3*)&pFirst->mField4)->y.u;
-        ((Float3*)&pDest->mField4)->z.u = ((const Float3*)&pFirst->mField4)->z.u;
+        ((Float3*)&pDest->mFields.x.f)->x.u = ((const Float3*)&pFirst->mFields.x.f)->x.u;
+        ((Float3*)&pDest->mFields.x.f)->y.u = ((const Float3*)&pFirst->mFields.x.f)->y.u;
+        ((Float3*)&pDest->mFields.x.f)->z.u = ((const Float3*)&pFirst->mFields.x.f)->z.u;
         pDest->mField10 = pFirst->mField10;
     }
     return pDest;
@@ -1373,9 +1373,9 @@ tItemInfo_s00c5_7570* __cdecl copy_backward_item(tItemInfo_s00c5_7570* pFirst, t
             if (pOld)
                 pOld->ReleaseTarget();
         }
-        ((Float3*)&pDest->mField4)->x.u = ((const Float3*)&pLast->mField4)->x.u;
-        ((Float3*)&pDest->mField4)->y.u = ((const Float3*)&pLast->mField4)->y.u;
-        ((Float3*)&pDest->mField4)->z.u = ((const Float3*)&pLast->mField4)->z.u;
+        ((Float3*)&pDest->mFields.x.f)->x.u = ((const Float3*)&pLast->mFields.x.f)->x.u;
+        ((Float3*)&pDest->mFields.x.f)->y.u = ((const Float3*)&pLast->mFields.x.f)->y.u;
+        ((Float3*)&pDest->mFields.x.f)->z.u = ((const Float3*)&pLast->mFields.x.f)->z.u;
         pDest->mField10 = pLast->mField10;
     }
     return pDest;
@@ -1392,7 +1392,7 @@ tItemInfo_s00c5_7570* __thiscall tItemInfo_s00c5_7570::FUN_00c57a80(cMissionTarg
         mpTarget = pTarget;
     }
     mField10 = flag;
-    volatile Float3* pFields = (Float3*)&mField4;
+    volatile Float3* pFields = (Float3*)&mFields.x.f;
     pFields->x.u = ((const FloatBits*)&f1)->u;
     pFields->y.u = ((const FloatBits*)&f2)->u;
     pFields->z.u = ((const FloatBits*)&f3)->u;
