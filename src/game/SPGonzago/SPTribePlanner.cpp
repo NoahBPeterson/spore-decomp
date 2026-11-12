@@ -377,6 +377,7 @@ struct cAgentOrderManager {
     char mPad[0x1cc];
     unsigned mFlags1CC;                             // +0x1cc
 };
+#pragma pack(push, 1)
 struct cAgentOrder {
     int mType;                                      // +0x00
     char mPad0[0x24];
@@ -386,6 +387,7 @@ struct cAgentOrder {
     Variant_s00ce_1390 mParam;                                 // +0x39
     Variant_s00ce_1390 mOption;                                // +0x4d
 };
+#pragma pack(pop)
 struct WorkerList_s00ce_1390 {
     cCreature** mpBegin;                            // +0x00
     cCreature** mpEnd;                              // +0x04
@@ -1698,17 +1700,21 @@ bool PLANNER_STEALING_FOOD_Activate(cTribePlannerContext* ctx, int, int, int, in
                             pTribe->AsGetId()->GetId(), target->AsGetId()->GetId(), 1);
                         if (RelationshipManager()->d00780(score) >= 2) return false;
                     }
-                    int four = 4;
-                    plan->mState = four;
-                    Variant_s00ce_1390* pOpt = &order->mOption;
-                    pOpt->SetInt(&four);
-                    st->mTimer = 0.0f;
-                    WorkerIter it(&plan->mWorkers);
-                    for (; it.mCur != it.mEnd; it.Advance()) {
-                        (*it.mCur)->GiveOrder(8, target, 0);
+                    {
+                        WorkerFilter filter;
+                        plan->mState = 4;
+                        int four = 4;
+                        order->mOption.SetInt(&four);
+                        st->mTimer = 0.0f;
+                        WorkerIter it;
+                        it.Init(&plan->mWorkers, &filter);
+                        while (it.mCur != it.mEnd) {
+                            (*it.mCur)->GiveOrder(8, target, 0);
+                            it.Advance();
+                        }
+                        EventLog()->PostFeedbackEvent(0xb87901de, 0x182cd6ce, 0, 0, 1, 0);
+                        return true;
                     }
-                    EventLog()->PostFeedbackEvent(0xb87901de, 0x182cd6ce, 0, 0, 1, 0);
-                    return true;
                 }
             }
         }
