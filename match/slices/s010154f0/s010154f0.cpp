@@ -5,6 +5,9 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).  Property reads follow the cCityGameTuning::Init pattern (s00cef050).
 #include "types.h"
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 typedef unsigned int size_t;
 inline void* operator new(size_t, void* p) { return p; }
 inline void operator delete(void*, void*) {}
@@ -321,6 +324,13 @@ struct ITicker { virtual void t00(); virtual void t01(); virtual void t02(); vir
     virtual void t19(); virtual void t20(void* owner); };                 // slot 0x50
 
 struct IRefCounted { virtual void r00(); virtual void r01(); };           // slots 0x00 / 0x04
+// Prefix view only: the complete strategy type is not recovered here.
+struct WalkStrategyRefView { void** mpVtbl; };
+struct WalkStrategyResetView {
+    uint32_t mOpaque00[15];
+    WalkStrategyRefView mRef3c;
+};
+
 struct IStrategyPart { virtual void s00(); virtual void s01(); virtual void s02(); };
 struct IStrategyHolder { unsigned char pad00[0x3c]; IStrategyPart* mpPart; };
 struct IRefBut34 {
@@ -438,16 +448,17 @@ void cSPSimulatorWalkAround::ResetState()
 {
     ((ITicker*)SP::SimTicker())->t20(this);
     mIsWalkingAround = 0;
+    _ReadWriteBarrier();
     if (mWalkAroundAvatar.mpObject) {
         void* a = mWalkAroundAvatar.mpObject;
         mWalkAroundAvatar.mpObject = 0;
-        (*(void (__thiscall**)(void*))(*(char**)a + 4))(a);
+        ((IRefCounted*)a)->r01();
     }
     if (mWalkAroundStrategy.mpObject) {
-        void* s = mWalkAroundStrategy.mpObject;
-        unsigned char* p = (unsigned char*)s + 0x3c;
+        WalkStrategyResetView* strategy = (WalkStrategyResetView*)mWalkAroundStrategy.mpObject;
+        WalkStrategyRefView* part = &strategy->mRef3c;
         mWalkAroundStrategy.mpObject = 0;
-        (*(void (__thiscall**)(void*))(*(char**)p + 8))(p);
+        ((void (__thiscall*)(WalkStrategyRefView*))part->mpVtbl[2])(part);
     }
     mBeamingState = 0;
     m44 = 0;
