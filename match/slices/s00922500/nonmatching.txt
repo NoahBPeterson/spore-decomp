@@ -12,7 +12,6 @@
 00922c40  0    SetThreadIdealProcessor: complete; now member (ecx); equiv WEAK (737 valid, 12.7% coverage, GetSystemInfo import discards); processor-count atomic/div schedule differs
 00922da0  66   thread-data release/free: complete; void return now preserves the callee/CloseHandle eax, range check + atomic clear schedule differs; equiv WEAK (187 valid, 42.1% cov)
 00923310  43   release helper: complete; eax=*p preserved on the no-call path, xadd-flags schedule differs; equiv PASS (290 valid, 81.8% cov)
-00923330  29   release+delete helper: complete; same xadd-flags issue
 009233f0  12   ILogFilter::IsFiltered tail-call thunk: complete; register order differs
 00922500 83   Thread ctor: complete; member-zero stores after Mutex/Event ctors + frame/temp block differs (97 vs 101); flags /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (import:CreateSemaphoreA)
 00922940 103  WaitForEnd: complete; schedule differs (191 vs 199); flags /O2 /MD /Gy /EHsc /TP /GS-; difftest WEAK (259 valid, 44.3% cov)
