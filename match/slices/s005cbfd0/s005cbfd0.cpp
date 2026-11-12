@@ -209,9 +209,8 @@ extern char    vtbl_013f8708[];
 extern char    vtbl_013f7a10[];
 extern char    vtbl_013f86ec[];
 extern char    vtbl_013f8798[];
-// eastl::gEmptyString16 halves: 0x01667bac (begin/end) and 0x01667bae (cap).
-extern wchar_t g_01667bac[];
-extern wchar_t g_01667bae[];
+// The shared two-character empty-string buffer: begin/end at +0, capacity at +2.
+extern wchar_t g_01667bac[2];
 
 // --- cSPEditorSellBackDetachedRollover (0x005cc120) ------------------------------------------
 class cSPEditorSellBackDetachedRollover {
@@ -398,10 +397,16 @@ void cSPEditorSellBackRollover::Show(const wchar_t* text, int price, bool bVisib
 // eastl::basic_string<wchar_t> sub-object: four words (begin, end, cap, allocator).
 class cEAWString16 {
  public:
+  __forceinline void InitializeEmpty() {
+    mpBegin = g_01667bac; mpEnd = g_01667bac; mpCap = g_01667bac + 1;
+  }
   void* mpBegin;                     // +0x00
   void* mpEnd;                       // +0x04
   void* mpCap;                       // +0x08
   void* mpAllocator;                 // +0x0c
+  __forceinline void Initialize(const wchar_t* s) {
+    mpBegin = 0; mpEnd = 0; mpCap = 0; range_initialize(s);
+  }
   void range_initialize(const wchar_t* s);   // 0x00579a90
 };
 
@@ -418,17 +423,15 @@ class cSPEditorShoppingTokenTranslator : public cStringTokenTranslator {
   ~cSPEditorShoppingTokenTranslator();         // 0x005ccc00
 };
 
+typedef char EAWString16Size[(sizeof(cEAWString16) == 0x10) ? 1 : -1];
+typedef char ShoppingTokenTranslatorSize[(sizeof(cSPEditorShoppingTokenTranslator) == 0x78) ? 1 : -1];
+
 // @ 0x005CCBB0
 cSPEditorShoppingTokenTranslator::cSPEditorShoppingTokenTranslator() {
   mpVftable = vtbl_013f8798;
-  mStr1.mpBegin = 0; mStr1.mpEnd = 0; mStr1.mpCap = 0;
-  mStr1.range_initialize(L"UnsetName");
-  mStr2.mpBegin = g_01667bac;
-  mStr2.mpEnd = g_01667bac;
-  mStr2.mpCap = g_01667bae;
-  mStr3.mpBegin = g_01667bac;
-  mStr3.mpEnd = g_01667bac;
-  mStr3.mpCap = g_01667bae;
+  mStr1.Initialize(L"UnsetName");
+  mStr2.InitializeEmpty();
+  mStr3.InitializeEmpty();
 }
 
 // @ 0x005CCC00

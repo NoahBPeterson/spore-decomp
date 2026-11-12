@@ -5,3 +5,4 @@ slices/s005cbfd0/s005cbfd0.cpp  ?IsWinVisible@cDetachedRollover@@QAE_NXZ  005cc1
 slices/s005cbfd0/s005cbfd0.cpp  ?Init@cSellBackRollover@@QAE_NG@Z  005cc5a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cbfd0/s005cbfd0.cpp  ?HideWin@cSellBackRollover@@QAEXXZ  005cc690  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005cbfd0/s005cbfd0.cpp  ?IsWinVisible@cSellBackRollover@@QAE_NXZ  005cc6c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005cbfd0/s005cbfd0.cpp  ??0cSPEditorShoppingTokenTranslator@@QAE@XZ  005ccbb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
