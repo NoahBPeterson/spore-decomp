@@ -39,3 +39,8 @@
 ../src/game/SPGonzago/SPPlanet.cpp  ?SetSpeciesAsScanned@PlanetCls_s00c7_3cb0@@QAEDPAX@Z  00c73ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?IsSpeciesScanned@PlanetCls_s00c7_3cb0@@QAEDPAX@Z  00c73f10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?InitPlantAttributes@Simulator@@YAXXZ  01317720  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?SpatialEntryResetRange@@YGXPAUcSpatialEntry@@0@Z  00b006f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?reset@SimObj@@QAEXXZ  00b05800  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?WriteTreeClumps@@YA_NPAUTreeClumpArchive@@PAUcTreeClumpVector@@@Z  00b00520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00c73310@PlanetCls@@QAEXXZ  00c73310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00c73330@PlanetCls@@QAEXXZ  00c73330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

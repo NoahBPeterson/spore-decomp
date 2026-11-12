@@ -288,6 +288,9 @@ struct cTreeClumpVector {
     int* mpCapacity;             // 0x08
 };
 void DestroyTreeClumpData(cTreeClumpData* pClump, const void* pType, const wchar_t* pName);
+struct TreeClumpArchive { bool AddChild(void* data, const void* type, const wchar_t* name); };
+extern const char gTreeClumpType; // 0x01567428
+extern const wchar_t gTreeClumpName[]; // 0x0145c4b0
 void operator_delete__(void* pMemory);
 // ---- items of slice s00b00520 end
 
@@ -1869,15 +1872,14 @@ bool ReadItemList(cSerializeMgr* pMgr, const cSerializeItemList* pList)
 }
 
 // @ 0x00b00520
-int TreeClumpArrayDestroyAll(int bUnused, cTreeClumpVector* pVector)
+bool WriteTreeClumps(TreeClumpArchive* archive, cTreeClumpVector* pVector)
 {
-    (void)bUnused;
-    cTreeClumpData* pEnd = (cTreeClumpData*)pVector->mpEnd;
-    for (cTreeClumpData* pCur = (cTreeClumpData*)pVector->mpBegin; pCur != pEnd;
-         pCur = (cTreeClumpData*)((uint8_t*)pCur + sizeof(cTreeClumpData))) {
-        DestroyTreeClumpData(pCur, &pVector->mpCapacity, L"cTreeClumpData");
+    cTreeClumpData* end = (cTreeClumpData*)pVector->mpEnd;
+    for (cTreeClumpData* cur = (cTreeClumpData*)pVector->mpBegin; cur != end; ++cur) {
+        if (cur->mBody != 0)
+            archive->AddChild(cur->mBody, &gTreeClumpType, gTreeClumpName);
     }
-    return 1;
+    return true;
 }
 
 // @ 0x00b00560
@@ -1893,12 +1895,13 @@ void TreeClumpArrayFree(cTreeClumpVector* pVector)
 }
 
 // @ 0x00b006f0
-void SpatialEntryResetRange(cSpatialEntry* pFirst, cSpatialEntry* pLast)
+void __stdcall SpatialEntryResetRange(cSpatialEntry* pFirst, cSpatialEntry* pLast)
 {
     for (; pFirst < pLast; ++pFirst) {
         pFirst->mpVtbl = 0;
         pFirst->mField08 = 0;
         pFirst->mField0c = 0;
+        _ReadWriteBarrier();
 
         IEntryRef* pRef0 = pFirst->mpRef0;
         if (pRef0 != nullptr) {
@@ -1911,6 +1914,7 @@ void SpatialEntryResetRange(cSpatialEntry* pFirst, cSpatialEntry* pLast)
             pRef1->Reset();
         }
         pFirst->mField18 = 0;
+        _ReadWriteBarrier();
         if (pFirst->mpRef1 != nullptr)
             pFirst->mpRef1->Reset();
         if (pFirst->mpRef0 != nullptr)
@@ -3057,6 +3061,7 @@ void SimObj::reset()
     this->mSel_15c = 0xffffffff;
     this->mIdx_160 = 0xffffffff;
     this->mF_168 = 0;
+    _ReadWriteBarrier();
     {
         int* sub = (int*)this->mpSub_108;
         if (sub) {
@@ -3306,19 +3311,15 @@ void PlanetCls::FUN_00c732c0(int* key)
 // @ 0x00c73310
 void PlanetCls::FUN_00c73310()
 {
-    char* p = *(char**)((char*)this + 0x13c);
-    void* e = *(void**)(p + 0xc0);
-    void* b = *(void**)(p + 0xbc);
-    ((EaVec3*)(p + 0xbc))->erase(b, e);
+    EaVec3* v = (EaVec3*)(*(char**)((char*)this + 0x13c) + 0xbc);
+    v->erase(v->begin, v->end);
 }
 
 // @ 0x00c73330
 void PlanetCls::FUN_00c73330()
 {
-    char* p = *(char**)((char*)this + 0x13c);
-    void* e = *(void**)(p + 0xd4);
-    void* b = *(void**)(p + 0xd0);
-    ((EaVec3*)(p + 0xd0))->erase(b, e);
+    EaVec3* v = (EaVec3*)(*(char**)((char*)this + 0x13c) + 0xd0);
+    v->erase(v->begin, v->end);
 }
 
 // @ 0x00c73350

@@ -453,7 +453,7 @@ struct RBTreeThing {
     void*   sentinel;   // +0x004
     void*   root;       // +0x008
 
-    MapItr  find(const unsigned int& key);   // 0x00e5c780
+    MapItr* find(MapItr* out, const unsigned int& key);   // 0x00e5c780
 };
 struct KeyNode {
     char pad[0x1c];
@@ -2936,8 +2936,11 @@ OutKey3* cGalaxyGameEntryImpl_s00de_5040::FUN_00de56f0(OutKey3& pOut, KeyNode* k
     mRb38.Find((void*)&key, (void**)key);
     if (key != (KeyNode*)&mRb38.sentinel) {
         pOut.a = key->v1c;
-        pOut.b = key->v20;
-        pOut.c = key->v24;
+        int mid = key->v20;
+        int last = key->v24;
+        _ReadWriteBarrier();
+        pOut.b = mid;
+        pOut.c = last;
         return &pOut;
     }
     pOut.a = 0;
@@ -2978,8 +2981,11 @@ bool cGalaxyGameEntryImpl_s00de_5040::FUN_00de5cb0(unsigned int a)
     cAchievements* c = FUN_00675250(a);
     if (c->FUN_00675e80())
         return true;
-    MapItr it = mRbTree.find(a);
-    return it.node != (void*)&mRbTree.sentinel;
+    MapItr it;
+    MapItr* out = mRbTree.find(&it, a);
+    void* found = out->node;
+    _ReadWriteBarrier();
+    return found != (void*)&mRbTree.sentinel;
 }
 
 // @ 0x00de5ee0

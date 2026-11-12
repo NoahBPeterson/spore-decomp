@@ -1,7 +1,4 @@
 # va  diff-bytes  reason
-00c872e0 32 nonmatching: cSpaceInventory::IndexOfNthItem; 61-byte target, 32 diff. Complete source. difftest WEAK (346 valid, 50% coverage; below 60% gate); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
-00c87390 21 cSpaceInventory::GetItemByCargoSlot: complete; loop end computed from begin first, original loads the end pointer before the begin pointer flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00c87420 33 nonmatching: cSpaceInventory::GetCargoSlotsCount; 37 vs 38 bytes. difftest WEAK (350 valid, 41.2% coverage); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00c874a0 55 cSpaceInventory::CargoSlotIsFree: complete; loop/register scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00c874f0 113 nonmatching: cSpaceInventory::Write; 156 vs 138 bytes. difftest UNSUPPORTED (0/400 valid; fault(read)=399); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00c87580 123 nonmatching: cSpaceInventoryItem::Write; 157 vs 110 bytes; serializer argument setup not reconstructed. difftest UNSUPPORTED (0/400 valid; fault(read)=400); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.

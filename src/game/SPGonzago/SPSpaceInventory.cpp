@@ -1,3 +1,4 @@
+#include <intrin.h>
 // src/game/SPGonzago/SPSpaceInventory.cpp -- migrated from slice(s) s0104bcc0, s00c87be0, s00c86aa0, s01351ae0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPSpaceInventory.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -306,6 +307,7 @@ struct RawPtrVec {
     void**      mpEnd;
     void**      mpCapacity;
     struct Alloc { char* mpName; uint32_t mFlags; } mAllocator;
+    __forceinline int size() const { return (int)(mpEnd - mpBegin); }
     void erase(void** pFirst, void** pLast);   // 0x00e25bd0
 };
 struct cProperty {
@@ -869,7 +871,7 @@ int cSpaceInventory::IndexOf(SpaceInventoryItemType type, const ResourceKey& id)
 // @ 0x00c872e0
 int cSpaceInventory::IndexOfNthItem(SpaceInventoryItemType type, uint32_t nth)
 {
-    int count = (int)(mInventoryItems.mpEnd - mInventoryItems.mpBegin);
+    int count = mInventoryItems.size();
     for (int i = 0; i < count; i++) {
         cSpaceInventoryItem* pItem = (cSpaceInventoryItem*)mInventoryItems.mpBegin[i];
         if (pItem->mItemType == type) {
@@ -900,7 +902,7 @@ bool cSpaceInventory::HasItem(SpaceInventoryItemType type, const ResourceKey& id
 cSpaceInventoryItem* cSpaceInventory::GetItemByCargoSlot(cSpaceInventoryItem* pSlot)
 {
     if (pSlot != 0) {
-        int count = (int)(mInventoryItems.mpEnd - mInventoryItems.mpBegin);
+        int count = mInventoryItems.size();
         for (int i = 0; i < count; i++) {
             cSpaceInventoryItem* pItem = (cSpaceInventoryItem*)mInventoryItems.mpBegin[i];
             if (pItem->mpCargoSlot.mPtr == pSlot)
@@ -928,6 +930,7 @@ uint32_t cSpaceInventory::GetCargoSlotsCount()
 {
     uint32_t slots = 0;
     int count = (int)(mInventoryItems.mpEnd - mInventoryItems.mpBegin);
+    _ReadWriteBarrier();
     for (int i = 0; i < count; i++) {
         cSpaceInventoryItem* pItem = (cSpaceInventoryItem*)mInventoryItems.mpBegin[i];
         if (pItem->mItemType == kItemCargoSlot)

@@ -23,3 +23,6 @@
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?UpdateTuning@cSPSpaceInventoryItem_s0104_bcc0@SP@@SAXIPAI@Z  0104c120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?FUN_01353800@@YAXXZ  01353800  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceInventory.cpp  ?IsCargoType@cSpaceInventoryItem@@UAE_NXZ  00c86f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceInventory.cpp  ?GetCargoSlotsCount@cSpaceInventory@@UAEIXZ  00c87420  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceInventory.cpp  ?IndexOfNthItem@cSpaceInventory@@UAEHW4SpaceInventoryItemType@@I@Z  00c872e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSpaceInventory.cpp  ?GetItemByCargoSlot@cSpaceInventory@@UAEPAVcSpaceInventoryItem@@PAV2@@Z  00c87390  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
