@@ -4713,15 +4713,14 @@ void cAppModeSpace_s00fd_bd60::StopEditorPlay()
 }
 
 // @ 0x00fdc4b0
-int* UnlinkListNode(int* pOut, int** ppNode)
+ListIter KeyList::erase(ListIter it)
 {
-    int* pNode = *ppNode;
-    int* pNext = *(int**)((uint8_t*)pNode + 4);
-    *(int*)pNext[1] = *pNext;
-    *(int*)(*pNext + 4) = pNext[1];
-    operator_delete__(pNext);
-    *pOut = (int)(intptr_t)pNode;
-    return pOut;
+    it.mpNode = it.mpNode->mpNext;
+    ListNode* node = it.mpNode->mpPrev;
+    node->mpPrev->mpNext = node->mpNext;
+    node->mpNext->mpPrev = node->mpPrev;
+    operator_delete__(node);
+    return it;
 }
 
 // @ 0x00fdc520
