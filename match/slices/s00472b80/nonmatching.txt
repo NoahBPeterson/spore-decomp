@@ -1,6 +1,5 @@
 00472b80 859 complete source; flags /Od /Ob1 /MD /Gy /TP /Oi. The extra /Oi is required: retail lowers float sqrt to the x87 _CIsqrt import, while /Od without /Oi inlines sqrt and produces a different import trace. Equiv PASS 600 valid, 100% coverage; residual diff is the /Od temp/slot and branch store order. flags /Od /Ob1 /MD /Gy /TP /Oi
 00472f50 84 complete source; inlined strlen intrinsic loop shape / local order differ; equiv PASS (1115 inputs)
-00473140 96 complete source; char copy-ctor inline uninitialized_copy scratch-slot frame differs; equiv WEAK (456 valid, 78% cov)
 00473300 11 complete source; vector<Elem29c> dtor, only /Od frame holes differ; equiv WEAK (771 valid, 49% cov)
 00473370 177 complete source; vector<Elem29c>::resize, extra /Od frame holes from inlined temp dtor; equiv WEAK (793 valid, 95% cov)
 00473500 27 complete source; vector<Pod12>::operator=, branch-2 CopyRef local slot layout differs; equiv WEAK (339 valid, 37% cov)
