@@ -205,29 +205,33 @@ cPlayerInventory* __thiscall cPlayerInventory::ctor() {
 }
 
 // ---------------------------------------------------------------- 0x00ff51f0
-void __stdcall FUN_01062e70(int type, float value, float fallback); // 0x01062e70
+struct Vector3;
+struct CReactionTarget {
+    void __thiscall FUN_01062e70(int type, const Vector3& value, float fallback); // 0x01062e70
+};
 
 // @ 0x00ff51f0
-void __cdecl FUN_00ff51f0(void* param_1, float param_2, float param_3) {
+void __cdecl FUN_00ff51f0(void* param_1, float param_2, const Vector3& param_3) {
     if (param_1 == 0)
         return;
+    CReactionTarget* target = (CReactionTarget*)param_1;
     if (param_2 > 1.0f) {
-        FUN_01062e70(0, param_3, -1.0f);
+        target->FUN_01062e70(0, param_3, -1.0f);
         return;
     }
     if (param_2 > 0.0f) {
-        FUN_01062e70(1, param_3, -1.0f);
+        target->FUN_01062e70(1, param_3, -1.0f);
         return;
     }
     if (param_2 == 0.0f) {
-        FUN_01062e70(2, param_3, -1.0f);
+        target->FUN_01062e70(2, param_3, -1.0f);
         return;
     }
     if (param_2 > -1.0f) {
-        FUN_01062e70(3, param_3, -1.0f);
+        target->FUN_01062e70(3, param_3, -1.0f);
         return;
     }
-    FUN_01062e70(4, param_3, -1.0f);
+    target->FUN_01062e70(4, param_3, -1.0f);
 }
 
 // ---------------------------------------------------------------- 0x00ff5270
@@ -241,7 +245,7 @@ struct CObjC8e7e0 { void* __thiscall AsReference(); };   // 0x00c8e7e0
 struct CObjBD9BF0 { void* __thiscall GetCivilization(); }; // 0x00bd9bf0
 
 // @ 0x00ff5270
-void __cdecl SP_DoCommunityReaction(int* param_1, float param_2, float param_3) {
+void __cdecl SP_DoCommunityReaction(int* param_1, float param_2, const Vector3& param_3) {
     CNounManagerA* mgr = (CNounManagerA*)FUN_00b3d300();
     int empire = mgr->GetPlayerEmpireOrMinus1();
     if (((FnVp0i)((VObj*)param_1)->vt[0x4c / 4])(param_1) == empire)
