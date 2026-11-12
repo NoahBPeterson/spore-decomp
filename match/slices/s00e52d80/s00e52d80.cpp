@@ -39,7 +39,7 @@ extern "C" {
   void*    __cdecl EA_Messaging_GetServer();   // 0x883860
   void     __cdecl FUN_00e82690(int, float);
   void     __cdecl SP_PatchSoundStart(const char*, int);
-  void     __cdecl FUN_00e3c6f0(int, int);
+  void     __cdecl FUN_00e3c6f0(bool, int);
   void     __cdecl SetTooltipText(void* w, const wchar_t* text);   // 0x00806de0
 }
 
@@ -56,7 +56,7 @@ struct cSPUILayout17 {
   void  SetVisibility(int v);               // 0x810590
 };
 struct cAlloc17 { cSPUILayout17* GetAllocator(); };   // 0x7f54d0
-struct cMgr94 { void f(); };                          // 0xe28a00 (float ignored)
+struct cMgr94 { float f(); };                          // 0xe28a00 (float ignored)
 struct cCellSub54 { void* Get(); void* Add(void*); }; // 0xb72160 / 0xb72210
 
 // ---- cell-game singletons: 0x16b3c04 / 0x16b3c0c / 0x16b3c08 hold POINTERS ----
@@ -360,25 +360,28 @@ void FUN_00e53920() {
   else FUN_00e53660(1, 1);
 }
 
+struct CellModeScreen { void Close(); }; // 0x00e19010
 // @ 0x00e53950
 void FUN_00e53950(char flag) {
   if (flag) {
-    ((cMgr94*)(*(int*)(g_16b3c0c + 0x94)))->f();
-    FUN_00e3c6f0(*(int*)(g_16b3c04 + 0x5158) == 5, 0);
-    (*(cSPUILayout17**)(g_16b3c0c + 0x90))->SetVisibility(0);
-    void* o = FUN_00b3d3f0(0);
-    FUN_00e19010(o);
+    ((cMgr94*)(*(int*)(*(char**)g_16b3c0c + 0x94)))->f();
+    bool isTransition = *(int*)(*(char**)g_16b3c04 + 0x5158) == 5;
+    FUN_00e3c6f0(isTransition, 0);
+    (*(cSPUILayout17**)(*(char**)g_16b3c0c + 0x90))->SetVisibility(0);
+    void* o = FUN_00b3d3f0_get();
+    ((CellModeScreen*)o)->Close();
     FUN_00e53660(2, 1);
   }
 }
 
 // @ 0x00e539c0
 void FUN_00e539c0() {
-  ((cMgr94*)(*(int*)(g_16b3c0c + 0x94)))->f();
-  FUN_00e3c6f0(*(int*)(g_16b3c04 + 0x5158) == 5, 0);
-  (*(cSPUILayout17**)(g_16b3c0c + 0x90))->SetVisibility(0);
-  void* o = FUN_00b3d3f0(0);
-  FUN_00e19010(o);
+  ((cMgr94*)(*(int*)(*(char**)g_16b3c0c + 0x94)))->f();
+  bool isTransition = *(int*)(*(char**)g_16b3c04 + 0x5158) == 5;
+  FUN_00e3c6f0(isTransition, 0);
+  (*(cSPUILayout17**)(*(char**)g_16b3c0c + 0x90))->SetVisibility(0);
+  void* o = FUN_00b3d3f0_get();
+  ((CellModeScreen*)o)->Close();
   FUN_00e53660(2, 1);
 }
 
@@ -449,15 +452,16 @@ void FUN_00e53b40() {
   FUN_00e569b0();
 }
 
+extern "C" void* GetCellScreen(); // 0x00b3d4d0
+struct CellModal { void Close(); }; // 0x00ad7dc0
 // @ 0x00e53c20
 void FUN_00e53c20() {
-  void* o = FUN_00b3d4d0(0);
-  FUN_00ad7dc0(o);
-  g_16b3c0c[0xe4] = 0;
-  g_16b3c04[0x51dc] = 0;
+  ((CellModal*)GetCellScreen())->Close();
+  (*(char**)g_16b3c0c)[0xe4] = 0;
+  (*(char**)g_16b3c04)[0x51dc] = 0;
   void* cm = SP_ConfigManager();
   int r = (*(int(__thiscall**)(void*, int))((char*)Vt(cm) + 0x30))(cm, 0x4ea96cb);
-  if (r > 0) FUN_00e53b40();
+  if ((unsigned)r > 0) FUN_00e53b40();
 }
 
 // @ 0x00e52d80

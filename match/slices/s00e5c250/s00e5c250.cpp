@@ -1,3 +1,4 @@
+#include <intrin.h>
 // Slice s00e5c250 (batch bfs0, slice 34). Region 0xe5c250-0xe5ce81.
 // Cell-game creature-key random selection, save/load glue, predicate helpers, rb-tree find,
 // struct copy and a fluid-particle ray cast. Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
@@ -169,8 +170,12 @@ struct CellAbilityF {
 float __fastcall FUN_00e5c530(void* self) {
   (void)self;
   CellAbilityF* d = (CellAbilityF*)*(int*)((char*)gCellGame_16b3c04 + 0x5190);
-  int a = d->f1c + (d->f28 - d->f20);
-  int b = d->f24 + d->f20;
+  int a = d->f28 - d->f20;
+  _ReadWriteBarrier();
+  int b = d->f24;
+  _ReadWriteBarrier();
+  a += d->f1c;
+  b += d->f20;
   return FUN_00e511e0(b, a);
 }
 

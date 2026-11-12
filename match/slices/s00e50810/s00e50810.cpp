@@ -100,11 +100,12 @@ void FUN_00e50810(float* p) {
 
 struct ScreenStub { void setModal(int); };   // 0xad7e40
 
+extern "C" void* __stdcall GetCellScreen(int); // 0x00b3d4d0
+struct CellScreen { void ClearModal(); }; // 0x00ad7e40
 // @ 0x00e50940
 void FUN_00e50940(int a, uint8_t b) {
   (void)a;
-  void* r = FUN_00b3d4d0();
-  ((ScreenStub*)r)->setModal(0);
+  ((CellScreen*)GetCellScreen(0))->ClearModal();
   *(uint8_t*)((char*)gState_16b3c0c + 0x936) = 0;
   *(uint32_t*)((char*)gState_16b3c0c + 0xe0) = 0;
   *(uint8_t*)((char*)gCellGame_16b3c04 + 0x51d8) = 1;

@@ -12,7 +12,7 @@ extern "C" {
   void   __cdecl FUN_00e53b40();
   void   __cdecl FUN_00e539c0();
   void   __cdecl FUN_00e4fca0();
-  void*  __cdecl FUN_0067de90(int a);
+  void*  __stdcall FUN_0067de90(int a);
   void   __cdecl FUN_007ebce0(void* a);
   void*  __cdecl SP_MessageServer();
   void   __cdecl SP_PatchSoundStart(const char* s, int b);
@@ -188,10 +188,11 @@ bool FUN_00e53d50(float a, float b) {
   return true;
 }
 
+struct SaveDialog { void Close(); }; // 0x007ebce0
 // @ 0x00e53f20
 void SP_sOnButtonSaveClick() {
   void* t = FUN_0067de90(-1);
-  FUN_007ebce0(t);
+  ((SaveDialog*)t)->Close();
   SP_PatchSoundStart("ui_global_save", 0);
   void* ms = SP_MessageServer();
   (*(void(__thiscall**)(void*, int, int, int))((char*)Vt(ms) + 0x14))(ms, 0x1cd20f0, 0, 0);

@@ -5,3 +5,4 @@ slices/s00e5c250/s00e5c250.cpp  ?FUN_00e5c7d0@@YIPAUElem2c@@PAU1@HPBU1@@Z  00e5c
 slices/s00e5c250/s00e5c250.cpp  ?FUN_00e5ca60@@YG_NPAM@Z  00e5ca60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e5c250/s00e5c250.cpp  ?FUN_00e5cac0@@YIPAXPAXHH@Z  00e5cac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e5c250/s00e5c250.cpp  ?FUN_00e5c560@@YAXXZ  00e5c560  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e5c250/s00e5c250.cpp  ?FUN_00e5c530@@YIMPAX@Z  00e5c530  /O2 /MD /Gy /TP /arch:SSE /fp:fast

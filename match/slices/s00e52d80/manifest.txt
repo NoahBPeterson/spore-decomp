@@ -5,3 +5,6 @@ slices/s00e52d80/s00e52d80.cpp  ?F_00e531c0@cSlotOwner17@@QAE_NXZ  00e531c0  /O2
 slices/s00e52d80/s00e52d80.cpp  ?FUN_00e53b00@@YAXM@Z  00e53b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e52d80/s00e52d80.cpp  ?FUN_00e53920@@YAXXZ  00e53920  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e52d80/s00e52d80.cpp  ?FUN_00e532e0@@YA_NPADM@Z  00e532e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e52d80/s00e52d80.cpp  ?FUN_00e53c20@@YAXXZ  00e53c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e52d80/s00e52d80.cpp  ?FUN_00e539c0@@YAXXZ  00e539c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e52d80/s00e52d80.cpp  ?FUN_00e53950@@YAXD@Z  00e53950  /O2 /MD /Gy /TP /arch:SSE /fp:fast
