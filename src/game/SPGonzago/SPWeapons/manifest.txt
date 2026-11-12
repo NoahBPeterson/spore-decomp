@@ -45,3 +45,4 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb64c0@@YAEPAX@Z  00cb64c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb64e0@@YAXPAX@Z  00cb64e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?Write@CICBMProjectile@@QAEXPAUIStream@@@Z  00cb44b0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?f00cb4670_ballistic_execute@@YGXPAUVector3@@@Z  00cb4670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

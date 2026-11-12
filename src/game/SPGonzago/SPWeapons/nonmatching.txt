@@ -7,7 +7,6 @@
 00cb3f80  386  spin-blend barycentric helper with three divide-by-denominator terms (each `1.0f/den` computed inline via BARYDEN so cl keeps a real `divss` per term instead of hoisting the reciprocal). All six outputs computed and stored in the original order/semantics; the difference is scheduling: cl hoists out3's first combine `(f9*f1 - f7*f2)` ahead of out1's, and uses a 0x10 frame instead of 0x14 (one fewer temp float slot); the three `divss` and the sign-mask `xorps` on out2 are all present. Size 429 vs 459. | difftest: PASS - 400 valid inputs, 100.0% coverage (102/102), 0 mismatches flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00cb41c0 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00cb4350 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-00cb4670
 00cb46f0
 00cb4ae0
 00cb4bd0
