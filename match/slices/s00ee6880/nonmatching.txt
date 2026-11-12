@@ -11,11 +11,7 @@
 #   00ee7240  FAIL        5/6 valid mismatched; first: eax
 #   00ee7810  PASS        400/400 valid, 100.0% coverage
 #   00ee7850  PASS        247/247 valid, 100.0% coverage
-00ee6880
 00ee68b0
-00ee6bd0
-00ee6f90
 00ee70e0
 00ee7240
-00ee7810
 00ee7850

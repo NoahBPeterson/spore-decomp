@@ -4752,14 +4752,12 @@ bool SP::cScenarioEditModeBehaviorUI::HandleUIMessage(IWindow_s00ee_4390* window
 // @ 0x00ee6880
 u32 __fastcall FUN_00ee6880(u32 this_, int, u32 id)
 {
-    u32 r;
-    if (id == 0xb68dce27)
-        r = this_ - 4;
-    else if (id == 0xee3f516e || id == 0x2f009dd0)
-        r = (this_ != 4) ? this_ : 0;
-    else
-        r = 0;
-    return r;
+    if (id != 0xb68dce27) {
+        if (id == 0xee3f516e || id == 0x2f009dd0)
+            return (this_ - 4) ? this_ : 0;
+        return 0;
+    }
+    return this_ - 4;
 }
 
 // @ 0x00ee68b0
@@ -4857,58 +4855,111 @@ void __fastcall FUN_00ee6b10(Pane* this_, int, void* p)
         pick->Update(p);
 }
 
+struct PaletteCtx {
+    float* PaintColorA(float* out);      // 0xf32330
+    float* PaintColorB(float* out);      // 0xf32390
+    float* PaintColorC(float* out);      // 0xf32360
+    float* PaintColorD(float* out);      // 0xf32300
+    void*  NounId();                     // 0xf0d3e0
+    void*  NounFor(void* id);            // 0xf31e40
+};
+struct PaintPointSink { void SetPoints(void* p); };   // 0xeeb580
+
 // @ 0x00ee6bd0
 void __fastcall FUN_00ee6bd0(Pane* this_)
 {
-    if (*(void**)((char*)DAT_016c7aa4 + 0x18) == 0)
+    float rgb[3];
+    float tmp[3];
+    void* r;
+    void* w;
+    void* lay;
+    PaletteCtx* ctx = (PaletteCtx*)*(void**)((char*)DAT_016c7aa4 + 0x18);
+    if (ctx == 0)
         return;
 
-    void* ctx = *(void**)((char*)DAT_016c7aa4 + 0x18);
-    static const u32 kIds[4] = { 0x7e078b0, 0x7e078b1, 0x7e078b2, 0x7e078b3 };
 
-    for (int i = 0; i < 4; i++) {
-        float rgb[3];
-        float tmp[3];
-        void* r;
-        if (i == 0)      r = FUN_00f32330(tmp);
-        else if (i == 1) r = FUN_00f32390(tmp);
-        else if (i == 2) r = FUN_00f32360(tmp);
-        else             r = FUN_00f32300(tmp);
-        rgb[0] = ((float*)r)[0];
-        rgb[1] = ((float*)r)[1];
-        rgb[2] = ((float*)r)[2];
-        u32 c = FUN_00458a40(rgb);
-        void* w = CALL_CSPUILAYOUT_FindWindowByID(this_->mp18, kIds[i], 0, 1);
-        if (w != 0)
-            (*(void(__thiscall**)(void*, u32))(*((void**)((char*)w + 0x5c))))(w, c);
-    }
+    r = ctx->PaintColorA(tmp);
+    lay = this_->mp18;
+    rgb[0] = ((float*)r)[0];
+    rgb[1] = ((float*)r)[1];
+    rgb[2] = ((float*)r)[2];
+    u32 c0 = FUN_00458a40(rgb);
+    w = ((XLayout*)lay)->FindWindowByID(0x7e078b0, 1);
+    if (w != 0)
+        ((void(__thiscall*)(void*, u32))(*(void***)w)[0x17])(w, c0);
 
-    if (this_->mp24 != 0) {
-        void* p = this_->mp24;
+    r = ctx->PaintColorB(tmp);
+    lay = this_->mp18;
+    rgb[0] = ((float*)r)[0];
+    rgb[1] = ((float*)r)[1];
+    rgb[2] = ((float*)r)[2];
+    u32 c1 = FUN_00458a40(rgb);
+    w = ((XLayout*)lay)->FindWindowByID(0x7e078b1, 1);
+    if (w != 0)
+        ((void(__thiscall*)(void*, u32))(*(void***)w)[0x17])(w, c1);
+
+    r = ctx->PaintColorC(tmp);
+    lay = this_->mp18;
+    rgb[0] = ((float*)r)[0];
+    rgb[1] = ((float*)r)[1];
+    rgb[2] = ((float*)r)[2];
+    u32 c2 = FUN_00458a40(rgb);
+    w = ((XLayout*)lay)->FindWindowByID(0x7e078b2, 1);
+    if (w != 0)
+        ((void(__thiscall*)(void*, u32))(*(void***)w)[0x17])(w, c2);
+
+    r = ctx->PaintColorD(tmp);
+    lay = this_->mp18;
+    rgb[0] = ((float*)r)[0];
+    rgb[1] = ((float*)r)[1];
+    rgb[2] = ((float*)r)[2];
+    u32 c3 = FUN_00458a40(rgb);
+    w = ((XLayout*)lay)->FindWindowByID(0x7e078b3, 1);
+    if (w != 0)
+        ((void(__thiscall*)(void*, u32))(*(void***)w)[0x17])(w, c3);
+
+    void* p = this_->mp24;
+    if (p != 0) {
         this_->mp24 = 0;
-        vcall_void(p, 4);
+        ((void(__thiscall*)(void*))(*(void***)p)[1])(p);
     }
 
-    static const u32 kCtl[4] = { 0x7e07cc0, 0x7e07cc1, 0x7e07cc2, 0x7e07cc3 };
-    for (int i = 0; i < 4; i++) {
-        void* w = CALL_CSPUILAYOUT_FindWindowByID(this_->mp18, kCtl[i], 0, 1);
-        if (w != 0) {
-            void* o = (*(void*(__thiscall**)(void*, u32))(*((void**)((char*)w + 0xc))))(w, 0x8ed27e7a);
-            if (o != 0)
-                (*(void(__thiscall**)(void*, int, int))(*((void**)((char*)o + 0x28))))(o, 4, 0);
-        }
+    w = ((XLayout*)this_->mp18)->FindWindowByID(0x7e07cc0, 1);
+    if (w != 0) {
+        void* o = ((void*(__thiscall*)(void*, u32))(*(void***)w)[3])(w, 0x8ed27e7a);
+        if (o != 0)
+            ((void(__thiscall*)(void*, int, int))(*(void***)o)[0xa])(o, 4, 0);
+    }
+    w = ((XLayout*)this_->mp18)->FindWindowByID(0x7e07cc1, 1);
+    if (w != 0) {
+        void* o = ((void*(__thiscall*)(void*, u32))(*(void***)w)[3])(w, 0x8ed27e7a);
+        if (o != 0)
+            ((void(__thiscall*)(void*, int, int))(*(void***)o)[0xa])(o, 4, 0);
+    }
+    w = ((XLayout*)this_->mp18)->FindWindowByID(0x7e07cc2, 1);
+    if (w != 0) {
+        void* o = ((void*(__thiscall*)(void*, u32))(*(void***)w)[3])(w, 0x8ed27e7a);
+        if (o != 0)
+            ((void(__thiscall*)(void*, int, int))(*(void***)o)[0xa])(o, 4, 0);
+    }
+    w = ((XLayout*)this_->mp18)->FindWindowByID(0x7e07cc3, 1);
+    if (w != 0) {
+        void* o = ((void*(__thiscall*)(void*, u32))(*(void***)w)[3])(w, 0x8ed27e7a);
+        if (o != 0)
+            ((void(__thiscall*)(void*, int, int))(*(void***)o)[0xa])(o, 4, 0);
     }
 
     if (this_->mp20 != 0) {
-        void* w = CALL_CSPUILAYOUT_FindWindowByID(this_->mp18, 0xd68f3fd2, 0, 1);
+        w = ((XLayout*)this_->mp18)->FindWindowByID(0xd68f3fd2, 1);
         if (w != 0)
-            (*(void(__thiscall**)(void*, int, int))(*((void**)((char*)w + 0x7c))))(w, 1, 0);
+            ((void(__thiscall*)(void*, int, int))(*(void***)w)[0x1f])(w, 1, 0);
     }
 
-    if (this_->mp1c != 0) {
-        void* a = FUN_00f0d3e0(ctx);
-        void* b = FUN_00f31e40(ctx, a);
-        FUN_00eeb580(this_->mp1c, b);
+    void* ctl = this_->mp1c;
+    if (ctl != 0) {
+        void* a = ctx->NounId();
+        void* b = ctx->NounFor(a);
+        ((PaintPointSink*)ctl)->SetPoints(b);
     }
 }
 
@@ -4926,17 +4977,62 @@ void __fastcall FUN_00ee6f90(Pane* this_, int, char b)
         FUN_00ee6bd0(this_);
 
     if (this_->mp18 != 0) {
-        static const u32 kIds[6] = { 0x9694210d, 0x7defcdf, 0x7e07cc0, 0x7e07cc1, 0x7e07cc2, 0x7e07cc3 };
-        for (int i = 0; i < 6; i++) {
-            void* w = CALL_CSPUILAYOUT_FindWindowByID(this_->mp18, kIds[i], 0, 1);
-            if (w != 0) {
-                int slot = b ? 0x104 : 0x108;
-                (*(void(__thiscall**)(void*, void*))(*((void**)((char*)w + slot))))(w, (char*)this_ + 4);
-            }
+        void* w;
+        w = ((XLayout*)this_->mp18)->FindWindowByID(0x9694210d, 1);
+        if (w != 0) {
+            void* a = (char*)this_ + 4;
+            if (b)
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x41])(w, a);
+            else
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x42])(w, a);
+        }
+        w = ((XLayout*)this_->mp18)->FindWindowByID(0x7defcdf, 1);
+        if (w != 0) {
+            void* a = (char*)this_ + 4;
+            if (b)
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x41])(w, a);
+            else
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x42])(w, a);
+        }
+        w = ((XLayout*)this_->mp18)->FindWindowByID(0x7e07cc0, 1);
+        if (w != 0) {
+            void* a = (char*)this_ + 4;
+            if (b)
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x41])(w, a);
+            else
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x42])(w, a);
+        }
+        w = ((XLayout*)this_->mp18)->FindWindowByID(0x7e07cc1, 1);
+        if (w != 0) {
+            void* a = (char*)this_ + 4;
+            if (b)
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x41])(w, a);
+            else
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x42])(w, a);
+        }
+        w = ((XLayout*)this_->mp18)->FindWindowByID(0x7e07cc2, 1);
+        if (w != 0) {
+            void* a = (char*)this_ + 4;
+            if (b)
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x41])(w, a);
+            else
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x42])(w, a);
+        }
+        w = ((XLayout*)this_->mp18)->FindWindowByID(0x7e07cc3, 1);
+        if (w != 0) {
+            void* a = (char*)this_ + 4;
+            if (b)
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x41])(w, a);
+            else
+                ((void(__thiscall*)(void*, void*))(*(void***)w)[0x42])(w, a);
         }
     }
-    if (this_->mp1c != 0)
-        (*(void(__thiscall**)(void*, char))(*((void**)((char*)this_->mp1c + 0x1c))))(this_->mp1c, b);
+    if (this_->mp1c != 0) {
+        void* ctl = this_->mp1c;
+        void** vt = *(void***)ctl;
+        void (__thiscall* fn)(void*, char) = (void(__thiscall*)(void*, char))vt[7];
+        fn(ctl, b);
+    }
 }
 
 // @ 0x00ee70e0
@@ -5114,11 +5210,12 @@ u32 __fastcall FUN_00ee7240(Pane* this_, int, u32 code, void* param)
 // @ 0x00ee7810
 int __cdecl FUN_00ee7810(u32 id)
 {
-    if (id == 0x29c388a)
-        return (int)0xb8669ec9;
-    if (id == 0x3a8be428)
+    if (id != 0x29c388a) {
+        if (id != 0x3a8be428)
+            return id != 0x6d60a1cc ? 0x37148141 : 0xbcd73e89;
         return 0x37148141;
-    return (id != 0x6d60a1cc ? (int)0x7a3d42b8 : 0) + (int)0xbcd73e89;
+    }
+    return 0xb8669ec9;
 }
 
 // @ 0x00ee7850

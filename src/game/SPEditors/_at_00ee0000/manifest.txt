@@ -51,3 +51,7 @@
 ../src/game/SPEditors/_at_00ee0000.cpp  ?FUN_00ee6b10@@YIXPAUPane@@HPAX@Z  00ee6b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?f_00eec0d0@@YAPAXPAX@Z  00eec0d0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?OnAssetChanged@View@@QAEXPAX@Z  00eea860  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?FUN_00ee6880@@YIIIHI@Z  00ee6880  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?FUN_00ee7810@@YAHI@Z  00ee7810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?FUN_00ee6f90@@YIXPAUPane@@HD@Z  00ee6f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?FUN_00ee6bd0@@YIXPAUPane@@@Z  00ee6bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
