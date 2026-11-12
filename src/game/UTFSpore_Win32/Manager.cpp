@@ -790,6 +790,7 @@ bool EA::ResourceMan::Manager_s008d_e020::GetLoadedResource(int a, int b)
 bool EA::ResourceMan::Manager_s008d_e020::IsDatabaseRegistered(int a, void** pOut)
 {
     EA::ResourceMan::DbList* list = (EA::ResourceMan::DbList*)mDatabaseList;
+    _ReadWriteBarrier();
     EA::ResourceMan::DbNode* n = list->mpHead;
     for (;;) {
         if (!n) return false;

@@ -2,7 +2,6 @@
 008de020  89  swizzle of 64-bit value; shift/pack instruction schedule differs
 008de0c0  172 EA::ResourceMan::ReadKey; wcstoul/StrtoU6416 parse branch layout differs
 008de280  18  Manager::GetLoadedResource compressor-vector scan; register allocation differs (equiv PASS)
-008de2d0  4   Manager::IsDatabaseRegistered database-list scan. Source matches retail instruction-for-instruction (same `mov ecx,[ecx+0x2c]` list fetch, same `cmp [eax+4],param` scan, same `test pOut` + store `[eax+8]`). The only residual is cl15 holding `n->mpValue` in edx where retail holds it in eax before `mov al,1` (the value feeds only the `pOut` store, so both leave the same node matched, same value stored, same bool). equiv replay: first difference is `edx (untouched by the original)` - an LTCG caller-live-value artifact, not a behavioral mismatch. Not forced within budget (4-byte diff).
 008de310  68  Manager::FindDatabase database scan + virtual call; codegen differs (equiv WEAK)
 008de360  60  Manager::Fn8de360 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
 008de3b0  50  Manager::Fn8de3b0 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
