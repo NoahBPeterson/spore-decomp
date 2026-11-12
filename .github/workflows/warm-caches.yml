@@ -1,4 +1,5 @@
-# Fills the caches the byte-match check restores: the WineHQ .deb files and the extracted compilers + wine prefix.
+# Fills the caches the byte-match check restores: the WineHQ .deb files, the extracted compilers + wine prefix, and the
+# open-source library downloads (tools/ci/setup_oss.sh).
 # pull_request_target runs may read caches but not write them ("token has no writable scopes"), so this runs on main:
 # on demand, weekly (GitHub drops a cache unused for 7 days), and when the setup scripts change. Keys must match
 # byte-match.yml.
@@ -16,6 +17,7 @@ on:
       - tools/ci/setup_toolchain.sh
       - tools/ci/toolchain.sha256
       - tools/ci/is_unpack.py
+      - tools/ci/setup_oss.sh
 
 permissions:
   contents: read
@@ -86,6 +88,24 @@ jobs:
       - name: Build and verify the toolchains
         timeout-minutes: 20
         run: sh tools/ci/setup_toolchain.sh
+
+      - name: Restore the open-source library downloads
+        id: osscache
+        uses: actions/cache/restore@v4
+        with:
+          path: work/toolchain/downloads/oss
+          key: oss-sources-v1
+
+      - name: Download and verify the open-source library sources
+        timeout-minutes: 10
+        run: sh tools/ci/setup_oss.sh
+
+      - name: Save the open-source library downloads
+        if: steps.osscache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: work/toolchain/downloads/oss
+          key: oss-sources-v1
 
       - name: Save the extracted toolchains and wine prefix
         if: steps.tccache.outputs.cache-hit != 'true'

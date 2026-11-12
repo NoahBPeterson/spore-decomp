@@ -25,6 +25,7 @@ You need Python 3.10+, Wine and `msitools` (macOS or Linux; on Windows, use WSL)
 ```sh
 python3 -m venv .venv && .venv/bin/pip install pefile capstone pycryptodome
 sh tools/ci/setup_toolchain.sh             # the original compilers, from Microsoft's installers, hash-checked
+sh tools/ci/setup_oss.sh                   # the open-source libraries some functions compile from, hash-checked
 .venv/bin/python tools/contrib/make_image.py "<Spore>/SporeBin/SporeApp.exe"   # must print IMAGE OK
 
 .venv/bin/python tools/contrib/task.py --list          # fewest tries first, your own order; claimed ones hidden

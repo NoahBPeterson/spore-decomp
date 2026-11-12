@@ -31,6 +31,29 @@ source is redistributed in this repository**. If you intend to vendor them in-tr
 retain EA's copyright and license notice — that license is BSD-style, which is
 compatible with combining it with GPL-2.0 code, but it is not itself GPL.
 
+### Fetching them: `tools/ci/setup_oss.sh`
+`sh tools/ci/setup_oss.sh` (also run by the Byte-match check) downloads the official releases into
+`work/toolchain/downloads/oss`, checks their SHA-256, and unpacks them where the manifest rows expect them:
+
+| Archive | SHA-256 | Unpacked to |
+|---|---|---|
+| https://www.ijg.org/files/jpegsrc.v6a.tar.gz | `0e963fdd29d5049f61f3dc137bdc9437473a0ad505dbcfc8925f0fcad46c5929` | `work/third_party/src/jpeg-6a` |
+| https://www.openssl.org/source/old/0.9.x/openssl-0.9.8g.tar.gz | `0e26886845de95716c9f1b9b75c0e06e9d4075d2bdc9e11504eaa5f7ee901cf0` | `work/third_party/src/openssl-0.9.8g` |
+| https://zlib.net/fossils/zlib-1.2.3.tar.gz | `1795c7d067a43174113fdf03447532f373e1c6c57c08d61d9e4e9be5e244b05e` | `work/third_party/src/zlib-1.2.3` |
+| https://downloads.sourceforge.net/project/libpng/libpng12/older-releases/1.2.25/libpng-1.2.25.tar.gz | `295ba7b7744efe93fb4c34d4973cc1099055d9c379a1e9397209857e80611e18` | `work/third_party/src/libpng-1.2.25` |
+| https://gpl.ea.com/EAWebKit-1.21.00.darkspore.zip (EA's GPL page for Darkspore; EAWebKit 1.21.00) | `a2f8ac0b7d2938d386389aec0a7b12d0c6eaffc2778ad90c88b87d04a60d1c77` | `work/ext/EAWebKitSupportPackages` |
+
+It then recreates what the rows compile against, from the pristine sources and a few small files of our own under
+`tools/ci/oss/` (no upstream source is committed):
+- `work/third_party/build/jpeg-6a-inc/jconfig.h`: our `third_party/jpeg-6a/jconfig.h` (jconfig.vc; 6a ships none).
+- `work/third_party/build/openssl-0.9.8g-d2110920`: `perl Configure VC-WIN32` with the options in
+  `third_party/manifest.json`, `BN_LLONG` undefined, `make links` (`tools/third_party/build_faithful.py`).
+- `EATextOpenType.cpp` patched with `tools/ci/oss/EATextOpenType.patch` (byte swaps through `_byteswap_ushort` /
+  `_byteswap_ulong`, as the retail build compiled them; the file's CRLF line ends become LF).
+- `work/match/scratch_*_inc`, the include directories manifest rows name as `/Iscratch_*_inc`: the EAWebKit links
+  below, our minimal EAThread headers (`tools/ci/oss/eathread/`), and copies of the configured OpenSSL headers (some
+  with `OPENSSL_EXPORT_VAR_AS_FUNCTION` undefined, as the retail build had it).
+
 A few game slices that call into EAText/EAIO/EA::Locale (s00880170, s00885ad0, s0088b250) compile
 against the same EAWebKit headers through local include links; `tools/third_party/eawebkit_include_links.sh`
 recreates them under `work/match/scratch_*_inc` once the support packages are unpacked in `work/ext/`.

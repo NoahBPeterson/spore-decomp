@@ -136,6 +136,19 @@ jobs:
         timeout-minutes: 20
         run: sh tools/ci/setup_toolchain.sh
 
+      # jpeg-6a, libpng, zlib, OpenSSL 0.9.8g and EA's EAWebKit 1.21 support packages (~19 MB, from warm-caches.yml):
+      # rows matched against upstream library code compile them from work/ (git-ignored; THIRD_PARTY.md)
+      - name: Restore the open-source library downloads
+        if: steps.affected.outputs.count != '0'
+        uses: actions/cache/restore@v4
+        with:
+          path: work/toolchain/downloads/oss
+          key: oss-sources-v1
+
+      - name: Unpack and configure the open-source library sources
+        if: steps.affected.outputs.count != '0'
+        timeout-minutes: 10
+        run: sh tools/ci/setup_oss.sh
 
       - name: Compile the affected manifests and check each function's bytes
         if: steps.affected.outputs.count != '0'

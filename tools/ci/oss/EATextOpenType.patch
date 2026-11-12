@@ -1,0 +1,31 @@
+Our change to EA's EAWebKit 1.21.00 support packages (EAText, BSD 3-clause, copyright Electronic Arts): the retail
+build byte-swaps OpenType big-endian fields with the _byteswap_ushort/_byteswap_ulong intrinsics.  Applied by
+tools/ci/setup_oss.sh after converting the file's CRLF line ends to LF.
+
+--- a/EAWebKitSupportPackages/EATextEAWebKit/local/source/internal/EATextOpenType.cpp
++++ b/EAWebKitSupportPackages/EATextEAWebKit/local/source/internal/EATextOpenType.cpp
+@@ -69,10 +69,11 @@
+ };
+ 
+ 
++#include <stdlib.h>
+ static inline uint16_t OTFFromBigEndianUint16(uint16_t n16)
+ {
+     #if defined(EA_SYSTEM_LITTLE_ENDIAN)
+-        n16 = (uint16_t) ((n16 >> 8) | (n16 << 8));
++        n16 = _byteswap_ushort(n16);
+     #endif
+ 
+     return n16;
+@@ -82,10 +83,7 @@
+ static inline uint32_t OTFFromBigEndianUint32(uint32_t n32)
+ {
+     #if defined(EA_SYSTEM_LITTLE_ENDIAN)
+-        n32 = ((n32 >> 24)               |
+-              ((n32 << 24) & 0xff000000) |
+-              ((n32 <<  8) & 0x00ff0000) |
+-              ((n32 >>  8) & 0x0000ff00)); 
++            n32 = _byteswap_ulong(n32);
+     #endif
+ 
+     return n32;

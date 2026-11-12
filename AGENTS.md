@@ -27,7 +27,9 @@ no match). You can run the same check locally (below) before you open the pull r
 3. The compilers, from Microsoft's own installers (about 120 MB, nothing is installed, every file is hash-checked):
    `sh tools/ci/setup_toolchain.sh`
    This gives Visual C++ 2008 SP1 (cl 15.00.30729.01) for most of the game and the Visual C++ Toolkit 2003 1.01
-   (cl 13.10.3077) for Havok and RenderWare code (rows with the `/vc71` flag).
+   (cl 13.10.3077) for Havok and RenderWare code (rows with the `/vc71` flag). Then
+   `sh tools/ci/setup_oss.sh` fetches the open-source libraries some functions are compiled from (libjpeg, libpng,
+   zlib, OpenSSL, EA's EAWebKit packages; about 19 MB, hash-checked) into `work/`.
 4. Your own copy of Spore (Steam). Build the analysis image from it, so `check.py` can show an instruction diff
    (without it you only learn that bytes differ, not which):
    `.venv/bin/python tools/contrib/make_image.py "<Spore>/SporeBin/SporeApp.exe"` (must print `IMAGE OK`).
