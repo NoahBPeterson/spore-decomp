@@ -70,13 +70,16 @@ def main():
     ap.add_argument("--record", action="store_true")
     ap.add_argument("--limit", type=int)
     ap.add_argument("--shard", help="I/N: only every N-th candidate starting at I (split a sweep across machines)")
+    ap.add_argument("--vas", help="check exactly these functions (a file with one hex address per line, e.g. a list "
+                                  "split across machines) instead of computing the candidates")
     ap.add_argument("--out", default=os.path.join(ROOT, "work", "equiv_sweep.jsonl"))
     a = ap.parse_args()
     layers = [x if x == "rename" or x.endswith("_layer") else x + "_layer" for x in a.layers.split(",")]
     seen = set()
     if os.path.exists(a.out):
         seen = {json.loads(l)["va"] for l in open(a.out) if l.strip()}
-    todo = [v for v in candidates(a.max_size) if "%08x" % v not in seen]
+    pool = [int(l.split()[0], 16) for l in open(a.vas) if l.strip()] if a.vas else candidates(a.max_size)
+    todo = [v for v in pool if "%08x" % v not in seen]
     if a.shard:
         i, n = map(int, a.shard.split("/"))
         todo = todo[i::n]
