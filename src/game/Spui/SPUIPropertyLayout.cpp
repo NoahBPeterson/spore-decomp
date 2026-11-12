@@ -706,3 +706,23 @@ bool cEntryMap::Set(unsigned key, const Variant_s0082_8c30* value, unsigned flag
   }
   return true;
 }
+
+// @ 0x00c6a960
+int cSPUIPropertyLayout::AddRef()
+{
+    volatile int& count = mRefCount;
+    const int next = count + 1;
+    count = next;
+    return next;
+}
+
+// @ 0x008280d0
+void* cSPUIPropertyLayout::AsInterface(EA::COM::InterfaceId id)
+{
+    void* result = this;
+    if ((unsigned int)id == 0xae9cb0fa)
+        return result;
+    if ((unsigned int)id == 0xee3f516e)
+        return result;
+    return (unsigned int)id == 0x2f009dd0 ? result : 0;
+}

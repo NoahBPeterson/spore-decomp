@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <new>
 #include "cSPUILayout.h"
 #include "cSPUILayoutManager.h"
 #include "cSPUIPropertyLayout.h"
@@ -106,6 +107,7 @@ class cSPUIPropertyLayout_s0060_4890 : public EA::UTFWin::IWinProc_s0060_4890, p
  public:
   cSPUIPropertyLayout_s0060_4890();                              // 0x8286d0
   bool Init();                                        // 0x828250
+  void DestroyBase();                                 // 0x828670 (cSPUIPropertyLayout destructor)
   void Shutdown();                                    // 0x828be0
   void SetLayoutName(const wchar_t* name, uint32_t group);  // 0x827fc0
   void SetCargoKey(uint32_t a, uint32_t b);           // 0x827fa0
@@ -117,6 +119,7 @@ class cSPUIPropertyLayout_s0060_4890 : public EA::UTFWin::IWinProc_s0060_4890, p
 };
 class cSPVerbIconRollover_s0060_4890 : public cSPUIPropertyLayout_s0060_4890 {
  public:
+  cSPVerbIconRollover_s0060_4890* ScalarDeletingDestructor(unsigned int flags);
   cSPVerbIconRollover_s0060_4890();
   explicit cSPVerbIconRollover_s0060_4890(uint32_t a);
   void Shutdown();  // 0x00605270 (cSPVerbIconRollover::Shutdown)
@@ -197,4 +200,13 @@ void SP_cSPVerbIconRollover_Layout(int self)
   (void)w3;
   (void)w4;
   icon->SetArea(area);
+}
+
+// @ 0x00605320
+cSPVerbIconRollover_s0060_4890* cSPVerbIconRollover_s0060_4890::ScalarDeletingDestructor(unsigned int flags)
+{
+    DestroyBase();
+    if (flags & 1)
+        operator delete(this);
+    return this;
 }

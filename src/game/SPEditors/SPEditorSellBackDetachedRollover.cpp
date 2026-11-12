@@ -126,3 +126,10 @@ void cSellBackRolloverCtor(void* a)
 {
   (void)a;
 }
+
+// @ 0x005cc0d0
+bool SP::cSPEditorSellBackDetachedRollover::Shutdown()
+{
+    mNeedToInit = true;
+    return cSPUIPropertyLayout::Shutdown();
+}

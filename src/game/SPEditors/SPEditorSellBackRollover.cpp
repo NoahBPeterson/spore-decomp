@@ -47,6 +47,8 @@ class cSPUILayout_s005c_bfd0 {
 };
 class cSellBackRollover {
  public:
+  void DestroyBase();  // 0x008011f0 (cSPUICursorAttachmentLayout destructor)
+  cSellBackRollover* ScalarDeletingDestructor(unsigned int flags);
   bool BaseInit();  // 0x00828250
   bool Init(unsigned short value);   // 0x005cc5a0
   void HideWin();                    // 0x005cc690
@@ -109,4 +111,20 @@ void SP::cSPEditorSellBackRollover::Show(wchar_t const * a, int b, bool a3)
     int a_v = (int)a;
   (void)a_v;
   (void)b;
+}
+
+// @ 0x005cc680
+bool SP::cSPEditorSellBackRollover::Shutdown()
+{
+    mNeedToInit = true;
+    return cSPUIPropertyLayout::Shutdown();
+}
+
+// @ 0x005cc730
+cSellBackRollover* cSellBackRollover::ScalarDeletingDestructor(unsigned int flags)
+{
+    DestroyBase();
+    if (flags & 1)
+        operator delete(this);
+    return this;
 }
