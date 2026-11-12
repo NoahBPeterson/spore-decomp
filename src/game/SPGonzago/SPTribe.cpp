@@ -6076,7 +6076,7 @@ cFishingHotSpot* findHotSpot(u32 key)
   HotSpotRow* end = g_HotSpotEnd;
   HotSpotRow* it = HotSpotLowerBound(g_HotSpotBegin, end, &key, g_HotSpotLess);
   if (it != end && key >= it->mKey) {
-    HotSpotRow* stop = &it[1];
+    HotSpotRow* __restrict stop = &it[1];
     if (it != stop)
       return &it->mSpot;
   }
