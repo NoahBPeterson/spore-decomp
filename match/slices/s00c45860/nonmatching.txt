@@ -1,8 +1,6 @@
 00c45860 191 GetRewardRelation: byte-diff vs retail (equivalent)
 00c45a10 157 CalculateDuration: byte-diff vs retail (equivalent)
-00c45c60 42 ReadPickClosestStar: byte-diff vs retail (equivalent)
 00c45ca0 11 GetMessageVector: byte-diff vs retail; equiv UNSUPPORTED (original faults read on 400/400 generated inputs)
-00c45d30 6 SetOwnerEmpire: byte-diff vs retail (equivalent)
 00c45e10 200 UpdateStarMapEffects: byte-diff vs retail (equivalent)
 00c45f90 245 UpdateHints: byte-diff vs retail (equivalent)
 00c460f0 40 CanShowOnMap: byte-diff vs retail (equivalent)
