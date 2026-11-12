@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "SP/cSPPlayModeAnimation.h"
 #include "SP/cSPPlayModeUI.h"
 #include "SP/cString.h"
@@ -286,6 +287,7 @@ int cSPPlayModeAnimation::GetAnimCount()
   uint32_t i = 0;
   if (mAnimPanelInfo.size() > 0) {
     AnimPanelInfo** p = mAnimPanelInfo.mpBegin;
+    _ReadWriteBarrier();
     do {
       i++;
       count += (int)(*p)->mAnimLoadInfo.size();
