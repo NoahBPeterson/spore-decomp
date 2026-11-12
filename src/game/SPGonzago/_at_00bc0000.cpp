@@ -5210,12 +5210,14 @@ State1c* State1c::Reset()
 // @ 0x00bc9c90
 void State1c::ReleaseObjects()
 {
-	for (int i = 8; i-- > 0; )
-	{
-		IRefCounted* p = rec[i].object;
-		if (p)
-			p->Release();
-	}
+    Rec1c* current = rec + 8;
+    int remaining = 7;
+    do {
+        --current;
+        IRefCounted* object = current->object;
+        if (object)
+            object->Release();
+    } while (--remaining >= 0);
 }
 
 // @ 0x00bc9cc0
@@ -5356,15 +5358,17 @@ State44* State44::Reset(uint32_t v)
 // @ 0x00bc9fa0
 void State44::ReleaseAll()
 {
-	for (int i = 8; i-- > 0; )
-	{
-		IRefCounted* p = rec[i].ptr20;
-		if (p)
-			p->Release();
-		p = rec[i].ptr1c;
-		if (p)
-			p->Release();
-	}
+    Rec44* current = rec + 8;
+    int remaining = 7;
+    do {
+        --current;
+        IRefCounted* object = current->ptr20;
+        if (object)
+            object->Release();
+        object = current->ptr1c;
+        if (object)
+            object->Release();
+    } while (--remaining >= 0);
 }
 
 // @ 0x00bc9fe0

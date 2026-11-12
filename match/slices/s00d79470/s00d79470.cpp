@@ -307,6 +307,7 @@ void Start3dSoundByName(uint32_t soundID, uint32_t handle, float x, float y, flo
 // ---------------------------------------------------------------------------------------
 // Adjacent editor/game-state predicates (0x00d79fd0..0x00d7a5be).
 // ---------------------------------------------------------------------------------------
+extern float kEditorOne;                            // 0x01485720
 extern float kEditorDistanceLimit;                  // 0x0147c034
 
 class cSub58 {
@@ -321,8 +322,7 @@ class cObjectManager {
 public:
     // Retail has eight 0x38-byte stimuli, followed by the two mask words.
     uint32_t mStimuliStorage[0x1c0 / 4];
-    uint32_t mMaskLow;                               // +0x1c0
-    uint32_t mMaskHigh;                              // +0x1c4
+    unsigned __int64 mMask;                          // +0x1c0
     void* Get(uint32_t mask, uint32_t zero);         // 0x00bc96a0
     void* GetZeroFirst(uint32_t zero, uint32_t mask); // 0x00bc96a0
     void Remove(uint32_t mask, uint32_t zero);       // 0x00bc98f0
@@ -498,7 +498,9 @@ float CanUseEditorAction(cEditorGameObject* p)
 // @ 0x00d7a3a0
 float IsC04590FlagSet(cEditorGameObject* p)
 {
-    return LookupC04590Fast(p)->mFlag190 ? 1.0f : 0.0f;
+    // Reuse the by-value argument slot for the scalar return value.
+    *(float*)&p = LookupC04590Fast(p)->mFlag190 ? kEditorOne : 0.0f;
+    return *(float*)&p;
 }
 
 // @ 0x00d7a3e0
@@ -557,9 +559,8 @@ return_zero:
 // @ 0x00d7a490
 float IsEditorObjectBitClear(cEditorGameObject* p)
 {
-    if ((p->mpB4C->mManager.mMaskHigh & 0x100) != 0)
-        return 0.0f;
-    return 1.0f;
+    float value = (p->mpB4C->mManager.mMask & (0x100ui64 << 32)) == 0 ? kEditorOne : 0.0f;
+    return value;
 }
 
 // @ 0x00d7a4d0
@@ -579,13 +580,9 @@ float IsLookupBFlagSet(cEditorGameObject* p)
 // @ 0x00d7a530
 float IsEditorActionAvailableValue(cEditorGameObject* p)
 {
-    float v;
-    bool avail = p->IsEditorActionAvailable();
-    if (avail)
-        v = 1.0f;
-    else
-        v = 0.0f;
-    return v;
+    // Reuse the by-value argument slot for the scalar return value.
+    *(float*)&p = IsEditorActionAvailableFast(p) ? kEditorOne : 0.0f;
+    return *(float*)&p;
 }
 
 // @ 0x00d7a560

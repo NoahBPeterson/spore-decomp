@@ -7,4 +7,3 @@
 00d93670  219  large complex function; register allocation and scheduling diverge throughout
 00d93880  1135  large complex function; register allocation and scheduling diverge throughout
 00d93df0  330  slice size window spans an unclaimed adjacent function; 48-byte body cannot fill 377-byte window
-00d93f70  54  original keeps sub in esi and folds m220 to memory operands; local CSE uses a register

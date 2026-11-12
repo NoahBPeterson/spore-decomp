@@ -100,7 +100,7 @@ public:
     uint8_t  mPad000[8];                                // +0x00
     nSPBehaviorTree::behavior_stimuli_s00d9_0640 mStimuli;         // +0x08
     uint8_t  mPadStim[0x1c8 - 9];                       // +0x09 .. +0x1c7
-    uint32_t mn1C8;                                     // +0x1c8
+    uint64_t mn1C8;                                     // +0x1c8
 };
 class cLocomotiveObject_s00d9_0640 {
 public:
@@ -1289,18 +1289,20 @@ bool FUN_00d90d70(cSPCreatureCitizen_s00d9_0640* p, void* a2, void* a3, uint8_t 
     switch (*pState) {
     case 0:
         if (!p->mLoco.IsNearGoal())
-            return true;
+            goto done;
         *pState = 1;
         goto play;
     case 1:
         if (!p->AnimationFinished(0))
-            return true;
+            goto done;
         goto play;
     default:
-        return true;
+        goto done;
     }
 play:
     p->PlayAnimation(0x2481de3, 1, -1);
+done:
+    _ReadWriteBarrier();
     return true;
 }
 }  // namespace SP
@@ -1640,9 +1642,9 @@ bool AlienGreeting_Activate(cSPCreatureCitizen_s00d9_0640* p)
 namespace SP {
 unsigned char FUN_00d91510(cSPCreatureCitizen_s00d9_0640* p)
 {
-    uint32_t u = p->mpB4C->mn1C8 & 0x800;
+    uint64_t u = p->mpB4C->mn1C8 & 0x800;
     if (u != 0)
-        return (unsigned char)u;
+        return 0;
     return 1;
 }
 }  // namespace SP
@@ -2455,6 +2457,7 @@ void __cdecl FUN_00d93f70(cObj* a1, void* a2, void* a3, void* a4, void* a5, u32*
         cSub* sub = a1->mFB8;
         s32 count = (s32)(sub->m224 - sub->m220) / 100;
         if (count > idx) {
+            _ReadWriteBarrier();
             void* circle = (void*)(sub->m220 + idx * 100);
             MOPS(circle)->FUN_00afae50(a1);
         }
