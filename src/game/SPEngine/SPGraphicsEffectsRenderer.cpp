@@ -2685,6 +2685,7 @@ void Host3::Method7da0()
         p[1] = p[1] - 1;
         if (n == 0) {
             p[1] = 1;
+            _ReadWriteBarrier();
             typedef void(__thiscall* Fn)(void*, int);
             Fn fn = (Fn)((void**)*p)[0];
             fn(p, 1);

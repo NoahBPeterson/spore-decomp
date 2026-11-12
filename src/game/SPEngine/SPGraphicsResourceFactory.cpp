@@ -650,7 +650,7 @@ struct AsyncReqA {
     bool Start(JobRefL* out);
 };
 namespace EA {
-struct AtomicInt_s0076_4df0 { long mValue; long operator++(int) { volatile long* r = &mValue; return _InterlockedExchangeAdd(r, 1); } };
+struct AtomicInt_s0076_4df0 { long mValue; long operator++(int) { volatile long* r = &mValue; _ReadWriteBarrier(); return _InterlockedExchangeAdd(r, 1); } };
 }
 namespace EA {
 class RefCountTemplate_s0076_4df0 { public:
@@ -679,6 +679,7 @@ struct cJobLock_s0076_4df0 : EA::RefCountTemplate_s0076_4df0 {          // size 
     cJobLock_s0076_4df0();                                   // 0x0068eff0
 };
 void* operator new(size_t, const char*, int, int, int, int);
+void operator delete(void*, const char*, int, int, int, int);
 struct GrfCtor : EA::ResourceMan::Factory_s0076_4df0 {
     EA::AutoRefCountX<cJobLock_s0076_4df0> mPrestreamMemoryBufferLock;   // +8
     GrfCtor();
@@ -759,7 +760,7 @@ virtual void pF();
     int mRef;                 // +0x4
     int k8, kc, k10, k14;     // +0x8..+0x14
     int x18;                  // +0x18
-    BaseP() { (void)_InterlockedExchange((volatile long*)&mRef, 0); k8 = 0; kc = 0; k10 = 0; k14 = 0; x18 = 0; }
+    BaseP() { (void)_InterlockedExchange((volatile long*)&mRef, 0); k8 = 0; kc = 0; k10 = 0; k14 = 0; }
 };
 struct SecP {
 virtual void s0();
@@ -1073,6 +1074,7 @@ struct PaintObj {
     char mVec1[0x24];         // +0x78
     void Destroy();           // 0x765ac0
 };
+struct PaintReaderFactory { bool ReadPaintStuff(PaintObj*, void*, void*); }; // 0x00766fa0
 struct F67270 {
     char pad0[0xc];
     int mC;                   // +0xc
@@ -1081,7 +1083,7 @@ struct F67270 {
     char pad18[0x10];
     void* m28;                // +0x28
     char m2c[8];              // +0x2c
-    void Method(int, int);
+    void Method(int);
 };
 struct VBig2 {
     char* b;
@@ -1681,6 +1683,7 @@ int __fastcall Release763250(void* self)
     } else if (n == 3) {
         char* slot = (char*)p + 0x14;
         if (*(void**)slot != 0) {
+            _ReadWriteBarrier();
             void* cb = *(void**)slot;
             void* fn = *(void**)*(void**)cb;
             ((void(__thiscall*)(void*, void*))fn)(cb, p);
@@ -2121,8 +2124,11 @@ unsigned char __stdcall FUN_764430(WStream* s, RecSrc* o)
         s->Write(&r->f70, 4);
         P74* q = r->p74;
         if (q) {
-            T3 t = q->v;
-            s->Write(&t, 0xc);
+            volatile V3u t;
+            t.x = ((volatile T3*)&q->v)->x;
+            t.y = ((volatile T3*)&q->v)->y;
+            t.z = ((volatile T3*)&q->v)->z;
+            s->Write((const void*)&t, 0xc);
         } else {
             T3 u(0xffffffff, 0xffffffff, 0xffffffff);
             s->Write(&u, 0xc);
@@ -2161,7 +2167,12 @@ static __forceinline void* PoolAlloc(uint32_t n)
 // @ 0x007646a0
 void Loader::Wrap6a0(int)
 {
-    ((Ctx63620*)pC)->Load(p2c, p28, p14);
+    void* resource = p14;
+    Ctx63620* factory = (Ctx63620*)pC;
+    _ReadWriteBarrier();
+    Stm* stream = p28;
+    _ReadWriteBarrier();
+    factory->Load(p2c, stream, resource);
 }
 
 // @ 0x00764760
@@ -2338,7 +2349,12 @@ bool __stdcall FUN_764f60(GameMeshes* g, IStream_* s)
 // @ 0x007650d0
 void Loader29::WrapA50(int)
 {
-    ((Ctx764a50*)pC)->ReadArena(p2c, p28, p14);
+    void* resource = p14;
+    Ctx764a50* factory = (Ctx764a50*)pC;
+    _ReadWriteBarrier();
+    void* stream = p28;
+    _ReadWriteBarrier();
+    factory->ReadArena(p2c, stream, resource);
 }
 
 // @ 0x007650f0
@@ -2381,7 +2397,9 @@ bool AsyncReqA::Start(JobRefL* out)
     if (id18 != 0x2f4e681c)
         return false;
     state = 1;
+    _ReadWriteBarrier();
     f44 = 0;
+    _ReadWriteBarrier();
     if (obj->Info()->f4 != 0x2f7d0004)
         return false;
     f2c = 4;
@@ -2586,7 +2604,7 @@ void* IResEd::Delete(unsigned flags)
 
 // @ 0x00765fe0
 ResB::ResB()
-: a20(0), a24(0), a28(0), a2c(0) {}
+: a24(0), a28(0), a2c(0) { a20 = 0; x18 = 0; }
 
 // @ 0x00766030
 void* __fastcall AsInterfaceFC(void* self, int, int type)
@@ -3030,10 +3048,14 @@ bool PaintHolder::FUN_00767170(void* a, void* b, void* c)
 }
 
 // @ 0x00767270
-void F67270::Method(int, int unused)
+void F67270::Method(int)
 {
-    (void)unused;
-    ReadPaintStuff((PaintObj*)m2c, m28, (void*)m14);
+    void* resource = (void*)m14;
+    PaintReaderFactory* factory = (PaintReaderFactory*)mC;
+    _ReadWriteBarrier();
+    void* stream = m28;
+    _ReadWriteBarrier();
+    factory->ReadPaintStuff((PaintObj*)m2c, stream, resource);
 }
 
 // @ 0x00767290
