@@ -44,9 +44,8 @@ struct GmeRefCount {                                       // RefCountTemplate<i
     int mnRefCount;                                   // +4
 };
 inline void ReleaseRef(GmeRefCount* p) {                   // inline RefCountTemplate::Release
-    volatile int* r = &p->mnRefCount;
-    int n = *r + -1;
-    *r = n;
+    int n = p->mnRefCount - 1;
+    p->mnRefCount = p->mnRefCount - 1;
     if (n == 0) { p->mnRefCount = 1; delete p; }
 }
 template<class T> struct AutoRef {
@@ -521,12 +520,20 @@ struct cMapResA : cMapResABase, RbMap {               // 0x7d6380 ctor / 0x7d63e
 cMapResA* MakeMapResA(void* mem, const RbMap& m) { return new (mem) cMapResA(m); }
 // @ 0x007d63e0  scalar deleting destructor of cMapResA (vtable emitted by the ctor above)
 
-struct GmeEditorResBase { virtual ~GmeEditorResBase() {} };
+// EA::COM::IRefCount: two pure reference methods precede the deleting destructor.
+struct GmeEditorResBase {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual ~GmeEditorResBase() {}
+};
 struct cMapResB : GmeEditorResBase, GmeRefCount {                  // 0x7d6440 ctor / 0x7d6500 dtor (map at +0x0c)
     RbMap mMap;                                       // +0x0c
     float mVec[3];                                    // +0x28
     AutoRef<GmeRefCount> mpRef;                            // +0x34
     cMapResB(const RbMap& m, const float* v, GmeRefCount* r);
+    virtual int AddRef();                              // 0x00c6a960
+    virtual int Release();                             // 0x007b86e0
+    virtual void* AsInterface(unsigned id);             // 0x007d64d0
 };
 // @ 0x007d6440
 cMapResB::cMapResB(const RbMap& m, const float* v, GmeRefCount* r) : mMap(m) {
