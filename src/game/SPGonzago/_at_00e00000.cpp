@@ -3,6 +3,8 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 #include "SP/cGrid.h"
 #include "SP/cSPCreatureBase.h"
 #include "cSPUILayout.h"
@@ -383,7 +385,8 @@ void* cGrid::Init()
 // @ 0x00e0a400
 void cGrid::Destroy()
 {
-    *(void* volatile*)&mField00 = (void*)0x0147f604;
+    mField00 = (void*)0x0147f604;
+    _ReadWriteBarrier();
     if (mHandler != 0) {
         void* handler = mHandler;
         mHandler = 0;
