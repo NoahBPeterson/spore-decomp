@@ -61,7 +61,6 @@
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da6d10@@YAMPAUcSPCreatureCitizen@@@Z  00da6d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FinishTribeSpot@@YAXPAUCreature@@IIIIPAUTribeSpotState@@@Z  00da7c50  /O2 /MD /Gy /TP /Isrc/game/include /arch:SSE /fp:fast /GS-
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?ReleaseTribeReservation@@YAXPAUCreature@@IIIIPAUTribeReservationState@@@Z  00da7dc0  /O2 /MD /Gy /TP /Isrc/game/include /arch:SSE /fp:fast /GS-
-../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FinishTribeAction@@YAXPAUCreature@@@Z  00da7f40  /O2 /MD /Gy /TP /Isrc/game/include /arch:SSE /fp:fast /GS-
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?TribeMemberStateFraction@@YAMPAUCreature@@H@Z  00da83b0  /O2 /MD /Gy /TP /Isrc/game/include /arch:SSE /fp:fast /GS-
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da6aa0@@YAMPAUcSPCreatureCitizen@@IIEPAUbehavior_stimuli@@PAE@Z  00da6aa0  /O2 /MD /Gy /TP /Isrc/game/include /arch:SSE /fp:fast /GS-
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da6fe0@@YAMPAUcSPCreatureCitizen@@IIEPAUbehavior_stimuli@@PAE@Z  00da6fe0  /O2 /MD /Gy /TP /Isrc/game/include /arch:SSE /fp:fast /GS-

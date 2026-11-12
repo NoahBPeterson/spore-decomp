@@ -8048,16 +8048,6 @@ show_attack:
     return false;
 }
 
-// @ 0x00da7f40
-void FinishTribeAction(Creature* pCreature)
-{
-    if (!pCreature->mByte_b5e) {
-        pCreature->d0c0(6, 0);
-        pCreature->V_84(0, 0, 0);
-        pCreature->SetActionLocked(!pCreature->mObjC0.V_f8());
-        pCreature->ForceOrdersUpdate();
-    }
-}
 
 struct TribeReservationState {
     u32 mState;
