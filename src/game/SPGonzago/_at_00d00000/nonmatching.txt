@@ -5,7 +5,6 @@
 00d07770 225 equivalence UNSUPPORTED (only 0/400 inputs valid) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00d078d0 210 nonmatching: C103::CreateLayout; 344 vs 354 bytes. difftest FAIL 5/5 (first memory pool @424e00f0: 40464200 vs 04044210); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00d07bb0 112 nonmatching: C103::GetValue; 224 vs 228 bytes. difftest FAIL 5/221 (fake-arity: no call site before 4b8f0080); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00d07ca0 60 equivalence WEAK flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00d07e40 759 nonmatching: C103::CanAffordEmpire; 871 vs 935 bytes. difftest FAIL 5/5 (execution fault at 006a12a8); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00d081f0 139 equivalence WEAK flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00d082a0 451 equivalence UNSUPPORTED (only 0/400 inputs valid) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

@@ -10,3 +10,4 @@
 ../src/game/SPGonzago/_at_00d00000.cpp  ?GetTribeValue@C103@@QAEHH@Z  00d07d70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00d00000.cpp  ?SetTribeValue@C103@@QAEXHH@Z  00d07e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00d00000.cpp  ?FUN_00d06d80@SP@@YI_NPAXH0@Z  00d06d80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00d00000.cpp  ?SetValue@C103@@QAEXHH@Z  00d07ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

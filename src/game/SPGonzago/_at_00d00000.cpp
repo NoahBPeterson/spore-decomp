@@ -421,17 +421,15 @@ int C103::GetValue(int which)
 // @ 0x00d07ca0
 void C103::SetValue(int which, int amount)
 {
-    char* p = (char*)this;
-    if (which != 0) return;
-    if (amount > 0) {
-        Ext* civ = (Ext*)((Ext*)*(void**)(p + 8))->Civ();
-        civ->AddCivicRadius((float)amount, 0);
-        ((Ext*)this)->SendChanged();
-        return;
+    if (which == 0) {
+        if (amount > 0) {
+            ((Ext*)((Ext*)*(void**)((char*)this + 8))->Civ())->AddCivicRadius((float)amount, 0);
+            ((Ext*)this)->SendChanged();
+        } else {
+            ((Ext*)((Ext*)*(void**)((char*)this + 8))->Civ())->SpendMoney((float)-amount);
+            ((Ext*)this)->SendChanged();
+        }
     }
-    Ext* civ = (Ext*)((Ext*)*(void**)(p + 8))->Civ();
-    civ->SpendMoney((float)(-amount));
-    ((Ext*)this)->SendChanged();
 }
 
 // @ 0x00d07d00
