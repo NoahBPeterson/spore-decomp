@@ -1,11 +1,8 @@
 # va  diff-bytes  reason
 00a0f810 18 AudioBlockAlloc: complete; the original is `void` but hands `out` back in eax (it reloads out into eax after the call and keeps it there through the four zero-init stores and the final mPtr store), so this wrapper is declared to return the block pointer with `return out;` (same pattern as the slice-65 constructors that return `this`); that also avoids the extra `in[0]` load into edx; equiv WEAK 74/400 valid (22/22 insns covered, 0 mismatches; the remaining inputs fault inside the real cSPMemPool)
 00a207d0 207 System::Shutdown: complete; guard mutex kept in separate reg (ebx) in original, loop shapes differ, needs /GS-
-00a20a40 93 SetSlot: complete, vcall/property-commit schedule differs
 00a20be0 170 worker drain (Flush): complete; scoped-lock register/ordering differs; difftest WEAK (32% coverage: early return on global g_166d9fc == 0 in the image)
 00a20eb0 248 emitter ordering predicate Less2: complete; tail-block placement and flag-bool materialization differ
-00a21260 10 complete; AutoRefCount::Release; cl emits `sub eax,1` (orig `add eax,-1`) and hoists the vptr load above the refcount store; equiv PASS
-00a21290 7 complete; intrusive-list head reset to prev(-0x10)/null; returns the incoming prev node in eax (caller-visible ABI; return type void -> void**); equiv PASS (400 valid, 100% coverage)
 00a212b0 75 complete; eastl list splice (relink nodes); register/clone-layout differences; equiv FAIL
 00a21310 89 complete; eastl list erase; register/layout differences; equiv FAIL
 00a21390 52 complete; EA::Audio::Submix::DisconnectFromSubmix (thiscall + EH frame); equiv FAIL; now a thiscall stub-class member
@@ -15,8 +12,6 @@
 00a21630 59 complete; voice message handler (thiscall + EH frame, vtable factory); equiv UNSUPPORTED (fake-arity: 0/1200 valid inputs); now a thiscall stub-class member
 00a21710 748 complete; EA::Audio::System::HandleMessage (large vtable dispatch + EH + message-hash constants); equiv FAIL
 00a21c00 46 complete; eastl vector<T>::~vector; equiv WEAK (76.3% coverage); now a thiscall stub-class member
-00a21c70 9 complete; list-node -> payload; returns the out pointer in eax (caller-visible ABI; return type void -> void**); equiv PASS (400 valid, 100% coverage)
-00a21c90 9 complete; list-node -> payload; returns the out pointer in eax (caller-visible ABI; return type void -> void**); equiv PASS (400 valid, 100% coverage)
 00a21cb0 58 complete; eastl list insert helper; register/layout differences; equiv FAIL
 00a21dc0 84 complete; eastl rbtree find; equiv FAIL; now a thiscall stub-class member
 00a21eb0 120 complete; voice hash-bucket rehash (node next at +0x10); equiv FAIL; now a thiscall stub-class member
@@ -35,16 +30,12 @@
 00a24750 81 PHTable::EraseNode variant: difftest UNSUPPORTED (0/400 valid, write faults); complete implementation
 00a247f0 25 EA::Audio::ResourceDeviceDriver::ResourceDeviceDriver: difftest PASS (400 valid inputs, 100.0% coverage); equivalent, non-exact codegen
 00a24850 32 ParseResman: difftest UNSUPPORTED (0/400 valid, read faults); complete implementation
-00a248a0 35 ProfileTimer::ProfileTimer(void*): difftest PASS (400 valid inputs, 85.2% coverage); equivalent, non-exact
-00a24900 19 ProfileTimer::Accumulate: difftest PASS (400 valid inputs, 100.0% coverage); equivalent, non-exact
 00a25090 6 complete; only xchg register choice (ecx/edx) differs
 00a25190 194 complete; tmp AutoRefCount now in its own slot like the original (switch on id), but the original caches tmp.p in esi through the release while ours reloads it, and the shared operator new pushes are spelled with a zero register; difftest PASS after fixing the tmp slot (ours reused the dead param slot for tmp, so AutoRefCount::operator= got a this pointer outside our frame)
 00a252b0 1368 complete (EA::Audio::System::Init); frame 4 bytes short, loop rotation/alignment and null test on handler differ
 00a25980 4 complete; the body is instruction-for-instruction correct once compiled with /GS- (without it cl adds a stack cookie the retail function lacks, +12 bytes). Remaining: cl puts the string begin in edx and &out in eax; retail the reverse (eax/edx swap). Tried naming the Str16 temp, naming the string begin, an explicit StrOut* local, and pointer-typed StringFn args: cl keeps its allocation. difftest PASS (after annotating operator_delete__ and g_pfnString). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00a25aa0 4 complete; ebx/ebp swap for args a and c
-00a25bd0 8 complete; two iterator temps do not share one slot
 00a26e10 176 complete; original returns the InsertRes* (out) in eax at every ret, now returned too; DoInsertKey node order / register allocation differs; difftest WEAK under flags /O2 /MD /Gy /EHsc /TP /GS- (207 valid, 88.2% coverage, no mismatch)
-00a26f30 13 complete; refcount store (rc=1) scheduled after vtable load
 00a27010 79 complete; original has EH frame (node alloc unwind) not reproduced
 00a27170 131 complete; EH state/AutoRefCount temps not reproduced
 00a27340 112 complete; hashtable iterator by-value arg plumbing differs; difftest WEAK after making it a thiscall member StyleMgr::Remove (original takes this in ecx, ret 4); coverage 48% because the found path needs the real hashtable find to hit
@@ -73,7 +64,6 @@
 00a2e420 57 complete; pool node alloc, EH/pool order differs
 00a2e650 1433 complete effect-creation routine; frame/register allocation and EH state layout differ (structure aligned)
 00a2edd0 88 complete hashtable find+erase wrapper; temp/iterator slot reuse and callee-saved regs differ
-00a2eed0 9 complete hashtable remove wrapper; iterator temp slot reuse (frame 8 vs 0x10)
 00a2ef60 388 complete stopwatch-timed table rebuild; locals/regs and EH layout differ; difftest WEAK (19% coverage: ObjectError() returns global 0x1667aa0, null in the image, so the body is unreachable)
 00a2f1a0 13 eastl::map operator[] assignment/store scheduling differs; difftest PASS (mapped MapUU::operator[] to 0x00a2e060, removed stray "@" markers in class decl)
 00a2f5d0 86 complete pool node alloc+construct; EH object frame (placement-new temp) differs

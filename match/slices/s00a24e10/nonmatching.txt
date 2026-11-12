@@ -4,4 +4,3 @@
 00a252b0  1378  complete (EA::Audio::System::Init); frame 4 bytes short, loop rotation/alignment and null test on handler differ
 00a25980  4  complete; eax/edx choice for string begin vs &out; difftest PASS (after annotating operator_delete__ and g_pfnString)
 00a25aa0  4  complete; ebx/ebp swap for args a and c
-00a25bd0  8  complete; two iterator temps do not share one slot
