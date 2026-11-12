@@ -1,7 +1,5 @@
 # va  diff-bytes  reason
-00b00520 24 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) clump array destroy loop; the per-element describe call is unresolved so the element address arithmetic is simplified; equiv FAIL (first mismatch eax)
 00b00560 42 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) clump array free; the virtual clear call and operator_delete__ are unresolved; equiv UNSUPPORTED (unresolved operator_delete__)
-00b006f0 16 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) spatial entry reset; the two reference checks are reordered by the compiler and retail pops its arguments (ret 8) so a cdecl model cannot match; equiv FAIL (first mismatch esp)
 00b00820 13 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) distance insertion sort over positioned objects; only SSE register allocation and the compare polarity differ from retail; equiv UNSUPPORTED (only 0/40 inputs valid)
 00b008f0 231 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) range distance insertion sort; retail walks the range from *pFirst with a single backward scan, the modelled nested loop is larger; equiv UNSUPPORTED (only 0/40 inputs valid)
 00b009b0 15 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) distance insertion sort over nodes; only SSE register allocation and the compare polarity differ from retail; equiv UNSUPPORTED (only 0/40 inputs valid)
@@ -35,14 +33,11 @@
 00b05410 111 FUN_00b05410: introsort driver over int pointers. Ours differs in the pivot-index arithmetic and the recursion/tail-jump layout; equiv WEAK 385 valid inputs (need 200), 46.0% coverage (need 60%)
 00b054a0 233 FUN_00b054a0: introsort driver over float-keyed records. The descend call (00b04670 sort_and_visit) receives the pivot trio in a different argument order; equiv FAIL 5/47 valid inputs mismatched; first: call #0 (depth 1) argument order
 00b055c0 233 FUN_00b055c0: introsort driver over float-keyed records (variant). Same pivot argument-order divergence as 00b054a0 (descend into 00b047b0); equiv FAIL 5/81 valid inputs mismatched; first: call #0 (depth 1) argument order
-00b05800 33 SimObj::reset: release the species map and clear the constant fields. Ours hoists the mpSub_108 load above the constant stores (mov ecx,[esi+0x108]); equiv UNSUPPORTED 2 unresolved references (?Init@Sub130@@QAEXXZ, ?Finish@SelfOps@@QAEXXZ)
 00b0a040 93 Mgr::SerializeMgr(int): full serializer guard. cVarListSerializer(0x1a80d26, 0x1567428) then Serialize(arg); on success mFlagsA @0x1ba188 &= ~2, mFlagsB @0x1ba18c = 0x1388 (5000), FUN_00b091d0(this-4), FUN_00b06cd0(this-4). Complete; cl computes this-4 into eax for each use whereas orig keeps it in edi. difftest UNSUPPORTED (unresolved externals).
 00c72c60 69 cPlanet::AddDebugInfo: structure correct, strlen/sprintf arg schedule and 2-byte size differ
 00c72d70 74 map find + node compare: whole body close, key compare polarity and register roles differ
 00c72e10 415 rebuild vehicle/city data: size 534 vs 910, eastl inlines collapsed differently
 00c731a0 183 build 0x2c vector entry: size 211 vs 174, aggregate copy schedule differs
-00c73310 8 erase vector @0xbc: identical 8 instructions, p kept in eax instead of ecx
-00c73330 8 erase vector @0xd0: identical 8 instructions, p kept in eax instead of ecx
 00c733b0 279 cSpatialObject::Reset: sequence present, size 369 vs 354, inline dtor scheduling differs
 00c73520 89 collect civ cities: correct now, stack slots and out-in-edi vs esi differ
 00c735e0 124 lower_bound lookup: structure present, size 137 vs 131, doubles as an insert probe

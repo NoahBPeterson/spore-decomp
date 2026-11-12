@@ -1,7 +1,5 @@
 # va  diff-bytes  reason
-00b00520  33  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) clump array destroy loop; the per-element describe call is unresolved so the element address arithmetic is simplified; equiv FAIL (first mismatch eax)
 00b00560  42  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) clump array free; the virtual clear call and operator_delete__ are unresolved; equiv UNSUPPORTED (unresolved operator_delete__)
-00b006f0  18  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) spatial entry reset; the two reference checks are reordered by the compiler and retail pops its arguments (ret 8) so a cdecl model cannot match; equiv FAIL (first mismatch esp)
 00b00820  13  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) distance insertion sort over positioned objects; only SSE register allocation and the compare polarity differ from retail; equiv UNSUPPORTED (only 0/40 inputs valid)
 00b008f0  309  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) range distance insertion sort; retail walks the range from *pFirst with a single backward scan, the modelled nested loop is larger; equiv UNSUPPORTED (only 0/40 inputs valid)
 00b009b0  15  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) distance insertion sort over nodes; only SSE register allocation and the compare polarity differ from retail; equiv UNSUPPORTED (only 0/40 inputs valid)
