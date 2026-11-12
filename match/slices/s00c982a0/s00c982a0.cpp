@@ -1,3 +1,4 @@
+#include <intrin.h>
 // Slice s00c982a0: SP::cTribe::UpdateToolPosition (0x00c987b0, 2445 bytes).
 // Signature from the asm: __thiscall, one stack int (tool type), ret 4, no return value.
 //
@@ -406,6 +407,7 @@ void SP::cTribe::FindSpot(int spot, int index)
     int key = spot;
     cActionCircle* circle = mActionCircleMap.FindOrAdd(&key);
     if (index >= 0 && index < (int)(circle->mpSlotsEnd - circle->mpSlotsBegin)) {
+        _ReadWriteBarrier();
         cActionSlot* slot = circle->mpSlotsBegin + index;
         if (slot)
             slot->Clear();

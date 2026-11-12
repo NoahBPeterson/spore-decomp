@@ -448,21 +448,31 @@ cTribeFoodMat::~cTribeFoodMat()
 {
 }
 
+// Retail hut interface offsets are 0x000, 0x034, 0x108 and 0x120.
+struct TribeHutInterfaceView {
+    cGameData_s00c9_afb0 mGameData;
+    cSpatialObject_s00c9_afb0 mSpatialObject;
+    cInteractionTarget_s00c9_afb0 mInteractionTarget;
+    cCombatant_s00c9_afb0 mCombatant;
+};
+
 // @ 0x00c9bdf0
 void* cTribeHut_s00c9_afb0::Cast(int type)
 {
-    if (type == 0x00ee02c7)
-        return this;
-    void* r = cGameData_s00c9_afb0::Cast(type);
-    if (r)
-        return r;
-    r = ((cCombatant_s00c9_afb0*)((char*)this + 0x120))->Cast(type);
-    if (r)
-        return r;
-    r = ((cInteractionTarget_s00c9_afb0*)((char*)this + 0x108))->Cast(type);
-    if (r)
-        return r;
-    return ((cSpatialObject_s00c9_afb0*)((char*)this + 0x34))->Cast(type);
+    TribeHutInterfaceView* hut = reinterpret_cast<TribeHutInterfaceView*>(this);
+    if (type != 0x00ee02c7) {
+        void* r = hut->mGameData.Cast(type);
+        if (r)
+            return r;
+        r = hut->mCombatant.Cast(type);
+        if (r)
+            return r;
+        r = hut->mInteractionTarget.Cast(type);
+        if (r)
+            return r;
+        return hut->mSpatialObject.Cast(type);
+    }
+    return this;
 }
 
 // @ 0x00c9cec0
