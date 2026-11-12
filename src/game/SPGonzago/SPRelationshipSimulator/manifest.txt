@@ -14,3 +14,13 @@
 ../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_00d01f50@@YIEPAUcRelationshipManager@@PAXPAUcEmpire@@2@Z  00d01f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_00d01ff0@@YIEPAUcRelationshipManager@@PAXPAUcEmpire@@2@Z  00d01ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?StartPeace@cRelationshipManager@SP@@QAEXPAVcEmpire@2@0@Z  00d038e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?GetFlag8@RelBook@@QAE_NII@Z  00d038a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?RecordEvent@cRelationshipManager@SP@@QAEMIIW4eRelationshipEvents@2@M@Z  00d06240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FUN_00d041d0@SP@@YAPAUtRelEntry@1@PAU21@00@Z  00d041d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?Capture@RelationshipSnapshotManager@@QAEXPBU1@@Z  00d056c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?FindRelFeedback@RelBook@@QAEMPAURelTree@@III@Z  00d01470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?ClearEvents@RelBook@@QAEXII@Z  00d05830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?Create@RelationshipNodeFactory@@QAEPAXPBURelationshipNodePayload@@@Z  00d03e90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?Insert@RelationshipInsertionTree@@QAE?AUIter@@PAURBNode@@PBURelationshipNodePayload@@_N@Z  00d03ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?GetRel@RelBook@@QAEMIIH@Z  00d00a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?GetRelLevel@RelBook@@QAEHIIH@Z  00d00a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

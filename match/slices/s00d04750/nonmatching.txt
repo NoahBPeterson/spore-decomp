@@ -10,6 +10,4 @@
 00d05240 249 vector insert/grow helper; element move/copy and growth path layout differ (equiv UNSUPPORTED)
 00d053e0 271 manager reset (map/vector/bit-vector clears, global class-tree reset); inlined resets and pointer arithmetic differ (equiv PASS, 100% coverage)
 00d055d0 199 map find-or-append; inlined lower_bound and element insert differ (equiv PASS)
-00d056c0 81 embassy lookup (active planet record -> comm context -> nested map); same calls, 111 vs 105 bytes (equiv WEAK, 100% coverage)
 00d05730 169 map insert path; same call sequence, tail/register layout differs (equiv WEAK)
-00d05830 135 map erase/reset; extra inlined clear path, 134 vs 107 bytes (equiv PASS, 100% coverage)
