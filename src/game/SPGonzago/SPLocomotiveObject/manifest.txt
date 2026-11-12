@@ -2,3 +2,7 @@
 ../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c420f0@@YAMPAUcRandomGlobal@@MM@Z  00c420f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c42310@@YAHPAUIdLookupSource@@@Z  00c42310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c423c0@@YIPAHPAUcRoadTail@@@Z  00c423c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c421f0@@YIPAHPAUcRoad@@@Z  00c421f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?FUN_00c41ed0@@YIHPAUcRoad@@MM@Z  00c41ed0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?Shutdown@cLocomotiveObject_s00c4_32e0@SP@@QAEXXZ  00c43f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPLocomotiveObject.cpp  ?RemoveInt@cRoad@@QAEXH@Z  00c42140  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -32,3 +32,9 @@
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dcd050@SP@@YA_NPAUBehaviorObj@@HHHHPAUOut_s00dcd050@1@@Z  00dcd050  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?MoveToPointOrder_Activate@SP@@YA_NPAUBehaviorObj@@@Z  00dccfd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dcd180@SP@@YA_NPAUBehaviorObj@@HHHHPAM@Z  00dcd180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  _SP_FindClosestVehicleWrap  00dc7780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Match2E9@KeyLookup@@QAEPAXH@Z  00dc4c20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Match3DF@KeyLookup@@QAEPAXH@Z  00dc4c40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dcc5c0@@YAXPAUBehaviorObj@@@Z  00dcc5c0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?FUN_00dcc610@@YAXPAUBehaviorObj@@@Z  00dcc610  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ??0cVehicleTicker_s00dc_77d0@@QAE@XZ  00dc7d70  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

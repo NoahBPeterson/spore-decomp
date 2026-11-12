@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "SP/cLocomotiveObject.h"
 #include <math.h>
+#include <intrin.h>
 
 // ---- items of slice s00c432e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
@@ -43,7 +44,7 @@ struct cLocomotiveObject_s00c4_32e0 {
     void InsertUnique(uint32_t value);
 };
 }
-extern "C" void FUN_00c8b2e0();                             // 0x00c8b2e0
+extern "C" void __fastcall FUN_00c8b2e0(void*);                             // 0x00c8b2e0
 // ---- items of slice s00c432e0 end
 
 // ---- items of slice s00c41360 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -116,6 +117,7 @@ virtual void v68();
 struct cRandomGlobal { float RandomDouble(); };        // 0x009360d0 (thiscall)
 struct cRoad
 {
+    void RemoveInt(int value);
     char    pad04[0x118 - 0x04];    // +0x04 (after vptr)
     bool    mbFlag118;              // +0x118
     cCity*  mpCity1;                // +0x11c
@@ -341,19 +343,14 @@ void __cdecl EffectCallback0(void* a);                 // 0x00d9a9c0
 // @ 0x00c41ed0
 int __fastcall FUN_00c41ed0(cRoad* this_, float a, float b)
 {
-    int r;
-    if (b * b >= a)
-        r = 1;
-    else if (this_->mF260 > g_HkRealZero)
-    {
-        if (this_->mF254 * this_->mF254 < a)
-            r = 0;
-        else
-            r = 1;
+    if (!(b * b >= a)) {
+        if (this_->mF260 > g_HkRealZero) {
+            if (this_->mF254 * this_->mF254 >= a)
+                return 1;
+        }
+        return 0;
     }
-    else
-        r = 0;
-    return r;
+    return 1;
 }
 
 // @ 0x00c420f0
@@ -366,22 +363,23 @@ float __cdecl FUN_00c420f0(cRandomGlobal* r, float a, float b)
 }
 
 // @ 0x00c42140
-void __fastcall FUN_00c42140(cRoad* this_, int value)
+void cRoad::RemoveInt(int value)
 {
-    int n = (int)(this_->mpIntEnd494 - this_->mpIntBegin490);
-    if (n == 0)
-        return;
-    int* p = this_->mpIntBegin490;
     unsigned i = 0;
-    while (value != *p)
-    {
+    unsigned n = (unsigned)(mpIntEnd494 - mpIntBegin490);
+    if (n <= 0) return;
+    int* p = *(int* volatile*)&mpIntBegin490;
+    do {
+        if (value == *p) goto found;
+        _ReadWriteBarrier();
         ++i;
         ++p;
-        if ((unsigned)(this_->mpIntEnd494 - this_->mpIntBegin490) <= i)
-            return;
-    }
-    this_->mpIntBegin490[i] = this_->mpIntBegin490[n - 1];
-    this_->mpIntEnd494 -= 1;
+    } while (i < (unsigned)(mpIntEnd494 - mpIntBegin490));
+    return;
+found:
+    _ReadWriteBarrier();
+    mpIntBegin490[i] = mpIntBegin490[mpIntEnd494 - mpIntBegin490 - 1];
+    mpIntEnd494 -= 1;
 }
 
 // @ 0x00c421f0
@@ -390,6 +388,7 @@ int* __fastcall FUN_00c421f0(cRoad* this_)
     void* b = this_->mBegin1f4;
     if (b == this_->mEnd1f8)
         return (int*)&this_->mV208;
+    _ReadWriteBarrier();
     return (int*)((uint32_t)this_->mEnd1f8 - 0x3c);
 }
 
@@ -473,13 +472,14 @@ int* __fastcall FUN_00c423c0(cRoadTail* t)
 namespace SP {
 void cLocomotiveObject_s00c4_32e0::Shutdown()
 {
-    if (mpField4cc) {
+    void* previous = mpField4cc;
+    if (previous) {
         mpField4cc = 0;
-        ((void (__thiscall*)(void*))((void**)*(void**)mpField4cc)[0x04 / 4])(mpField4cc);
+        ((void (__thiscall*)(void*))((void**)*(void**)previous)[0x04 / 4])(previous);
     }
     mNeighbors.erase(mNeighbors.mpBegin, mNeighbors.mpEnd);
     mSubD4.Reset();
-    ((void (__thiscall*)(cLocomotiveObject_s00c4_32e0*))FUN_00c8b2e0)(this);
+    FUN_00c8b2e0(this);
 }
 }  // namespace SP
 

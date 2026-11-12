@@ -6,6 +6,4 @@
 00dcc300 58 vector base not hoisted into ecx (no add ecx,0x24); loop adds nop/jmp; 69 vs 71 bytes
 00dcc350 218 feedback-event set/vector logic abbreviated; 113 vs 225 bytes
 00dcc440 370 city-selection scan abbreviated (world/noun state opaque); 33 vs 374 bytes
-00dcc5c0 9 ticker construction null branch omits explicit xor eax,eax/jmp (known-zero fold); 72 vs 76 bytes
-00dcc610 119 ticker/service-slot branch layout and register allocation differ; 200 bytes
 00dcc750 139 trade-order activation partially reconstructed; 211 vs 216 bytes
