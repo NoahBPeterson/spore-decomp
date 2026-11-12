@@ -1242,6 +1242,7 @@ public:
     uint32_t mTable;
     uint32_t mKey;
     uint32_t mText;
+    uint32_t mPad0C[2];
 };
 namespace SP {
 const wchar_t* f00df_c_str(cString_s00df_00b0& s);   // 0x006b55c0
@@ -4366,18 +4367,16 @@ void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::FillComboBoxes()
 {
     cString_s00df_00b0 text;
     int nKind = *(int*)(*(int*)((char*)this + 0x628) + 0xa0);
-    if (nKind == 0) {
-        cString_s00df_00b0 temp(0x2b7a0311, 0x5b08772, 0);
-        text = temp;
-        SP::f00df_c_str(temp);
-    } else if (nKind == 1) {
-        cString_s00df_00b0 temp(0x2b7a0311, 0x5b08773, 0);
-        text = temp;
-        SP::f00df_c_str(temp);
-    } else if (nKind == 2) {
-        cString_s00df_00b0 temp(0x2b7a0311, 0x5b08774, 0);
-        text = temp;
-        SP::f00df_c_str(temp);
+    switch (nKind) {
+    case 0:
+        text = cString_s00df_00b0(0x2b7a0311, 0x5b08772, 0);
+        break;
+    case 1:
+        text = cString_s00df_00b0(0x2b7a0311, 0x5b08773, 0);
+        break;
+    case 2:
+        text = cString_s00df_00b0(0x2b7a0311, 0x5b08774, 0);
+        break;
     }
 
     int idx = *(int*)(*(int*)((char*)this + 0x628));

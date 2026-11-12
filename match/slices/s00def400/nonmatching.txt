@@ -4,5 +4,4 @@
 00def8c0 823 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 823 bytes - UpdateNavigationControls not reconstructed.
 00defc00 127 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 127 bytes - random-name retry loop (eastl wstring assign plus FUN_00def400 validation) not reconstructed.
 00defdd0 723 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 723 bytes - SelectTheme not reconstructed.
-00df00b0 212 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 212 bytes - FillComboBoxes not reconstructed.
 00df0190 231 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 231 bytes - UpdateSpecialitySummaryText not reconstructed.

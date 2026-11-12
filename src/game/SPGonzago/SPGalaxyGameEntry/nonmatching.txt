@@ -31,7 +31,6 @@
 00def8c0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 823 bytes - UpdateNavigationControls not reconstructed; the body is a noinline placeholder (`(void)*(volatile int*)this;`) that still makes 0x00df0a40 emit its call.
 00defc00 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: random-name retry loop (eastl wstring assign plus FUN_00def400 validation) reconstructed at the retail size (127 bytes); the only residual is the order of the `lea eax,[esp+8]` before `push 0x7e1310a` versus this compiler's `push` then `lea` (same semantics, different scheduling), so the bytes still differ. Tried pkey locals, a named `void* pKey = &key.mpBegin;`, _ReadWriteBarrier and &key.mpBegin forms; none move the lea ahead of the constant push, so the same slot is addressed as [esp+0xc] after the push instead of [esp+8] before it.
 00defdd0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 723 bytes - SelectTheme not reconstructed.
-00df00b0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 212 bytes - FillComboBoxes not reconstructed.
 00df0190 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 231 bytes - UpdateSpecialitySummaryText not reconstructed.
 00df0280 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1007 bytes - cGalaxyGameEntryUIStateMachine::ShowPanel not reconstructed.
 00df0670 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 444 bytes - cGalaxyGameEntryUIStateMachine::SetCurrentState not reconstructed.
