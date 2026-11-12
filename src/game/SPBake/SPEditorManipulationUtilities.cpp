@@ -36,6 +36,7 @@
 #include "hkShape.h"
 #include "hkTransform.h"
 #include <float.h>
+#include <intrin.h>
 #include "SP/cSPEditorHandle.h"
 #include "cSPTransform.h"
 #include "SP/cSPEditorPhysicsWorld.h"
@@ -483,7 +484,7 @@ cSPEditorBlock_s0049_42b0* PickBlocks(BlockVector& ignore, cSPVector3_s0049_42b0
 
 // ---- items of slice s004956b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* g_tls_slot;                      // 0x016e4174
-extern void* __stdcall TlsGetValue(uint32_t index);
+extern __declspec(dllimport) void* __stdcall TlsGetValue(uint32_t index);
 extern void* g_vtbl_13ef554;
 extern void* g_vtbl_13ef534;
 extern void* g_vtbl_13ef55c;
@@ -499,8 +500,21 @@ struct MemMgr {
     virtual void Deallocate(void* p, int a, int b);
 };
 extern MemMgr* g_mem;                         // 0x016e4178
+inline MemMgr* GetMemoryManagerForDelete() { return g_mem; }
 struct HkThreadMemory {
     void DeallocateChunk(void* p, int size, int cls);
+};
+struct HkArrayForDelete {
+    void* data;
+    int size;
+    int capacityAndFlags;
+    __forceinline void Destroy() {
+        if ((capacityAndFlags & 0x80000000) == 0) {
+            int count = capacityAndFlags & 0x3fffffff;
+            void* mem = TlsGetValue(*(uint32_t*)&g_tls_slot);
+            ((HkThreadMemory*)mem)->DeallocateChunk(data, count * 0x30, 0x14);
+        }
+    }
 };
 struct D95 {
     void* vptr;
@@ -512,7 +526,7 @@ struct D960 {
     void* data;                               // 0x10
     char pad2[4];
     int cap;                                  // 0x18
-    void Dtor();
+    inline void Dtor();
     void* Del(unsigned flags);
 };
 struct D95fe0 {
@@ -2295,6 +2309,7 @@ class hkMemory { public:
     virtual void* Free(void* p, int align, int size);
 };
 extern hkMemory* g_hkMemory;                    // @ 0x16e4178
+inline hkMemory* GetHkMemoryForDelete() { return g_hkMemory; }
 struct HkObj {
     char data0[4];
     float mField4;                              // +0x04
@@ -3713,6 +3728,8 @@ namespace SP {
 Vector3T_s004a_5970 operator*(const Vector3T_s004a_5970& v, const float& s);                    // @ 0x41dca0
 }
 namespace SP {
+// Keep the pointer conversion ahead of the virtual-call temporary in the /Od build.
+inline cSkinMesh* SkinPointer(cSkinMesh* skin) { _ReadWriteBarrier(); return skin; }
 bool SkinUsesModel(cSkinMesh* skin, ArgRef<cSkinOwner> owner);            // @ 0x498850
 }
 namespace SP {
@@ -4099,8 +4116,7 @@ void* HkObj::F_48db10(unsigned flags)
 {
     *(void**)this = (void*)0x13ef534;
     if (flags & 1) {
-        hkMemory* node = g_hkMemory;
-        node->Free(this, 8, 0x1c);
+        GetHkMemoryForDelete()->Free(this, 8, 0x1c);
     }
     return this;
 }
@@ -4120,8 +4136,7 @@ void* HkObj::F_48dbb0(unsigned flags)
     *(void**)this = (void*)0x13ef52c;
     *(void**)this = (void*)0x13ef534;
     if (flags & 1) {
-        hkMemory* node = g_hkMemory;
-        node->Free(this, 8, 0x1c);
+        GetHkMemoryForDelete()->Free(this, 8, 0x1c);
     }
     return this;
 }
@@ -5366,8 +5381,7 @@ void* D95::Del(unsigned flags)
     this->vptr = &g_vtbl_13ef554;
     this->vptr = &g_vtbl_13ef534;
     if (flags & 1) {
-        MemMgr* z = g_mem;
-        z->Deallocate(this, 8, 0x1c);
+        GetMemoryManagerForDelete()->Deallocate(this, 8, 0x1c);
     }
     return this;
 }
@@ -5394,8 +5408,7 @@ void* D960::Del(unsigned flags)
 {
     this->Dtor();
     if (flags & 1) {
-        MemMgr* z = g_mem;
-        z->Deallocate(this, 8, 0x1c);
+        GetMemoryManagerForDelete()->Deallocate(this, 8, 0x1c);
     }
     return this;
 }
@@ -5404,12 +5417,7 @@ void* D960::Del(unsigned flags)
 void D960::Dtor()
 {
     this->vptr = &g_vtbl_13ef55c;
-    int c = *(int*)((char*)this + 0x18);
-    if ((c & 0x80000000) == 0) {
-        void* mem = TlsGetValue(*(uint32_t*)&g_tls_slot);
-        ((HkThreadMemory*)mem)->DeallocateChunk(*(void**)((char*)this + 0x10),
-                                                 (c & 0x3fffffff) * 0x30, 0x14);
-    }
+    ((HkArrayForDelete*)((char*)this + 0x10))->Destroy();
     this->vptr = &g_vtbl_13ef534;
 }
 
@@ -5707,8 +5715,8 @@ void FUN_00498230(int p, char flag)
     int n = (pv[1] - pv[0]) >> 2;
     for (int i = 0; i < n; ++i) {
         int child;
-        int* slot = (int*)(pv[0] + i * 4);
-        child = *slot;
+        int* pChild = (int*)(pv[0] + i * 4);
+        child = *pChild;
         FUN_00498230(child, flag);
     }
 }
@@ -7842,7 +7850,7 @@ void RebuildSkins(cSPEditorBlock_s004a_5970* block, cSkinOwner* owner)
     if (block && (block->mSkin || block->mFlags.test(8))) {
         if (block->mSkin) {
             if (!SkinUsesModel(block->mSkin, owner))
-                (*block->mSkin).Rebuild(3, 1);
+                SkinPointer(block->mSkin.mpObject)->Rebuild(3, 1);
         }
         vector_s004a_5970<AutoRefCount_s004a_5970<cSPEditorBlock_s004a_5970> >& syms = block->mSymmetricBlocks;
         for (int i = 0, n = syms.size(); i < n; i++) {

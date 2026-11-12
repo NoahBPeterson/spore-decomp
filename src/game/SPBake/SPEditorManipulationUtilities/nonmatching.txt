@@ -2,9 +2,7 @@
 00453250 294 complete; original has a plain "push ebp; and esp,-16" frame with esp-relative locals, our cl emits the ebx-based aligned frame (all stores otherwise the same)
 00481f00 90 IsNAN: comparison/short-circuit shape matches, but /Od local slot order (float params vs result) differs [equiv WEAK (97.8% cov) after marker fix]
 0048d010 693 /Od /Oy; complete. MoveBlockLowAngleStacking: same 22 calls/vslots/constants in order, frame 0x390 equal; diffs: inlined setInterpolate4 lacks the this/t slots, fabs return-slot copy, ToSPVector3 temp slots, uninit shape-ptr copies emulated
-0048db10 7 /Od; complete. Havok deleting-ctor: vtable set + hkMemory::Free; this-spill/mem temp slots swapped
 0048db60 29 /Od; complete. init +0x30/+0x2c/+4; constant-indexed array store not reproduced
-0048dbb0 8 /Od; complete. two vtable stores + hkMemory::Free; temp slot order swapped
 0048dcd0 1455 flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oy ; complete. Havok linear-cast lowering, same 29 callees in the same order; frame 0x270 vs 0x260 and slot layout differ, setInterpolate4 this/t slots absent
 0048e590 1925 /Od frame layout (local slot order, inline-return temps) and x87-vs-SSE fabs compare differ; complete and equivalent in structure
 0048ef30 1378 complete (all paths and calls); /Od frame layout and temp slots differ (original frame 0x370)
@@ -19,9 +17,6 @@
 00492e70 1230 complete: all 22 calls in original order (size 0.967x); /Od local-slot layout and a few spill temps differ (frame 0x194 vs 0x1ec); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Oi
 00493ce0 814 MoveBlockAndTranslateSnappedBlocks complete (flag bits, basis build, Cross/Normalize, direction-index flips, Matrix3 copy-out); /Od frame slot order not fitted (frame 0xe8 vs 0x14c), f1 local coalesced with the test() temp [equiv: PASS]
 004942b0 3496 SP::EditorUtils::GetRotationAndPositionBasedOnBehavior: complete (same 71 direct calls in order, all field offsets match); /Od Vector3 copy flavours (movss/int/fld) and local slot layout differ, 4219 vs 5113 bytes; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-00495f90 8 complete scalar-deleting-dtor; only the /Od slot of the cached hkMemory instance vs the `this` spill is swapped (frame otherwise identical)
-00496090 8 complete deleting-dtor (calls the array dtor then deallocates); only the `this` spill slot differs
-004960d0 49 complete hkArray-like destructor; vtable stores and the hkThreadMemory deallocateChunk call match in shape but the class layout/slots differ
 00496140 128 complete fixed-stride find(); matches the loop but the /Od frame (0x14 vs 0x10) and member slots differ
 004961d0 424 complete transform-save routine (copy 0x48->0x54 and three 9-float matrices for the object and each vector element); not byte-exact
 00496b60 114 complete cSPEditorLimbStructure helper; call sequence identical, only the /Od frame/struct-base slot differs (0x60 vs 0x68)
@@ -30,7 +25,6 @@
 004973f0 201 complete transform/flag routine; logic present, but the by-value Matrix3 argument and /Od frame differ
 004974e0 2218 complete (all paths and calls); /Od slot order, inline-vs-out-of-line Vector3 copy flavours and the inlined parent accessor differ
 00497f20 542 complete (direction search loops); /Od slot order and vector/string local init order differ
-00498230 4 complete recursive flag propagation; only the /Od slots of the two inner locals (slot pointer vs child) are swapped. Tried swapping declaration order, initializer vs assignment, and an inner scope for `slot`; MSVC 2008 /Od keeps assigning the pointer temp the lower slot (-0x14) and the loaded int -0x10, the reverse of retail.
 004982b0 217 complete (Matrix3/Vector3 by-value args via real copy ctors); /Od frame holes (0x10c vs 0x74) differ
 00498470 284 complete; /Od slot order (is15/b1 high bytes, outPos) not fitted; difftest PASS after fixing the build flags (recorded as a // Flags: comment; the checker had compiled /Od /EHsc without /Ob1 /arch:SSE /fp:fast) and the e parameter type (bool passed straight to FUN_0049ec40, not uint8_t normalised with != 0)
 004986d0 38 complete; Bitset::test temp slot order (word/result swapped) and nesting of returns not fitted
@@ -64,7 +58,6 @@
 004a3dc0 2236 complete; /Od frame slot layout and temp slots not matched
 004a4840 875 complete; /Od frame slot layout (locals/temps hash order) not matched
 004a5fe0 4 /Od; complete. operator[]/operator-> return slots allocated in swapped order (retail address temp at -0x10 then object at -0x14; ours reversed). Tried explicit `AutoRefCount* ref = &syms[i]` plus `ref->operator->()`; the compiler coalesces the locals and keeps the same temp order.
-004a63c0 13 /Od; complete. skin virtual call: conversion slot vs this-temp order differs
 004a6520 13 /Od; complete. skin virtual call: conversion slot vs this-temp order differs
 004a6f10 1696 SP::EditorUtils::DeleteInvalidBlocks: complete; same 53 ordered calls, frame 0x278 vs 0x30c (/Od name-hash slot order and declined-inline holes), Place() this-pointer evaluated before the by-value copies, message-param array indexing form
 004a7c90 169 complete behavior; best /Od frame differs (original 0x44 frame vs mine 0x20; inlined eastl push_back temps and local hash order)

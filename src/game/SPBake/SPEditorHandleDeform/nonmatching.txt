@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 0047fa30 233 cSPEditorHandleDeform_Ctor (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 335 vs 406 bytes; ctor chain and member stores match (deform vecs at 0x15d4fd8/fdc/fe0, transform at +0x54); original /Od keeps many extra dead temp slots; equiv PASS flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047fc10 96 cSPEditorHandleDeform_Dtor (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 138 vs 159 bytes; same teardown order, /Od spill slots differ; equiv PASS flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0047fce0 12 DeformIface::QueryInterface (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): equiv PASS; same interface-id chain, only /Od temp placement differs (12 bytes) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0047ff90 89 Mat3_TransformDir_ (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 114 vs 159 bytes; three dot products are all present, original /Od materializes each row sum into its own temp; equiv PASS flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00480280 124 Deform_GetTuningVec (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): 140 vs 145 bytes; same EditorTuning (0x401070) switch on pinning type; /Od branch-tail layout differs; equiv WEAK (197 valid, 55.1% cov), no mismatch flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00481fa0 109 GetHandlePos: transform/vector helper shapes and /Od slots differ flags: /Od /MD /Gy /EHsc /TP

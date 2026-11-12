@@ -336,10 +336,10 @@ void __fastcall cSPEditorHandleDeform_Shutdown(cSPEditorHandle* self)
 // @ 0x0047fce0
 void* DeformIface::QueryInterface(u32 id)
 {
-    switch (id) {
-    case 0xee3f516e: return this;
-    case 0x050a1fe5: return this;
+    switch ((int)id) {
     case 0x050a993c: return this;
+    case 0x050a1fe5: return this;
+    case (int)0xee3f516e: return this;
     }
     return 0;
 }

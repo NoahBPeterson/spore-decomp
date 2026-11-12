@@ -2,3 +2,4 @@
 ../src/game/SPBake/SPEditorHandleDeform.cpp  ?cSPEditorHandleDeform_Shutdown@@YIXPAUcSPEditorHandle@@@Z  0047fcb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorHandleDeform.cpp  ?Copy@cModelDeformationHandle@@QAEPAU1@PBU1@@Z  0047fda0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorHandleDeform.cpp  ?Update@RingHandle@@QAEXXZ  00480320  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorHandleDeform.cpp  ?QueryInterface@DeformIface@@QAEPAXI@Z  0047fce0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
