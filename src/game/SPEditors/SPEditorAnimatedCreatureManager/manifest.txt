@@ -27,3 +27,4 @@
 ../src/game/SPEditors/SPEditorAnimatedCreatureManager.cpp  ?SetCreatureTurnRate@cSPEditorAnimatedCreatureManager_s0059_c4c0@SP@@QAEXIH@Z  0059d180  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPEditorAnimatedCreatureManager.cpp  ?SetCreatureMoving@cSPEditorAnimatedCreatureManager_s0059_c4c0@SP@@QAEXI_N@Z  0059d1e0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPEditorAnimatedCreatureManager.cpp  ?ResetCreature@cSPEditorAnimatedCreatureManager_s0059_c4c0@SP@@QAEXI@Z  0059d240  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPEditorAnimatedCreatureManager.cpp  ?FUN_0059ae20@cAnimatedData@Simulator@@QAEXPAVcAnimatingCreature@2@H@Z  0059ae20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
