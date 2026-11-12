@@ -6,6 +6,8 @@
 // default 0x28-byte elements), hands each to the tray, then pushes the two formatting arguments
 // (two strings in the error case, two ints in the creature-stance case) to the rollover window.
 #include "types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 
 // ---------------------------------------------------------------- 0x28-byte descriptor element
@@ -310,6 +312,8 @@ RolloverItem* RolloverItem::Delete(int flags)
 {
     mVtblIWinProc = (void**)&g_vtblRolloverIWinProc;
     mVtblRefCount = (void**)&g_vtblRolloverRefCount;
+    // Install both interfaces before loading a member released during teardown.
+    _ReadWriteBarrier();
     if (mObjB4)
         mObjB4->Release();
     if (mObjB0)
