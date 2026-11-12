@@ -33,6 +33,7 @@ struct Ext {
     void  FUN_00c82f00();
     void* FUN_00c71e70();
     void* FUN_00c8b360();
+    void  FUN_01001360(void*);
     void  FUN_00c8b800();
     void* FUN_00c31730();
     void* FUN_00ba9370();
@@ -261,13 +262,16 @@ void* FUN_01021370()
 // @ 0x010213b0
 void FUN_010213b0(int param)
 {
-    if (param != 2) return;
-    int* s = (int*)DAT_016dda8c;
-    int* one = (int*)s[2];
-    void* ufo = FUN_00ffbe50();
-    if (one && ufo) {
-        void* r = ((void*(__thiscall*)(void*))VTP(one)[0 / 4])(one);
-        (void)r;
+    switch (param) {
+    case 2: {
+        int* s = (int*)DAT_016dda8c;
+        int* one = (int*)s[2];
+        void* ufo = FUN_00ffbe50();
+        if (one && ufo) {
+            E(ufo)->FUN_01001360(E(one)->FUN_00c8b360());
+        }
+        break;
+    }
     }
 }
 
@@ -277,12 +281,15 @@ void FUN_01021960(int param)
     int* s = (int*)DAT_016dda8c;
     if (s[4] == param) return;
     s[4] = param;
-    if (param != 2) return;
-    int* one = (int*)s[2];
-    void* ufo = FUN_00ffbe50();
-    if (one && ufo) {
-        int* r = (int*)E(one)->FUN_00c8b360();
-        (void)r;
+    switch (param) {
+    case 2: {
+        int* one = (int*)((cSPBackgroundSimManager*)DAT_016dda8c)->mpStar;
+        void* ufo = FUN_00ffbe50();
+        if (one && ufo) {
+            E(ufo)->FUN_01001360(E(one)->FUN_00c8b360());
+        }
+        break;
+    }
     }
 }
 
