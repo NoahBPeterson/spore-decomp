@@ -1,5 +1,4 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
-00f00ba0  10   placement V4 fetch: argument register allocation differs (eax vs ecx)
 00f00610  407  placement sync: CRT `exp` is absent from the image so the e^x step is a forced-inline polynomial, and the call/register schedule differs; equiv WEAK 22.3% cov [/O2 /MD /Gy /TP]
 00f00790  20   placement apply: `this`/param register allocation swapped (this in esi vs original edi); equiv WEAK 31.8% cov [/O2 /MD /Gy /TP]
 00f00850  524  secondary placement apply: container/record walk and vcall schedule differs; equiv WEAK 12.8% cov [/O2 /MD /Gy /TP]

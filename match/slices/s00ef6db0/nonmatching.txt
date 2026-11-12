@@ -3,12 +3,9 @@
 00ef6ea0  65   RemoveKey: lower_bound inline schedule and the dead always-false iterator compare
 00ef6f20  763  HandleMessage: 860-byte dispatch; branch tree/EA::AutoRef-count schedule differs
 00ef7330  66   value->state map: return-block layout / compare tree differs (shared return-1 block)
-00ef7740  6    shrink-wrap: `return 0` epilogue merged into a jmp instead of a trailing xor/ret
 00ef7780  36   register allocation of `this` vs the space-game/inventory chain
-00ef77d0  6    shrink-wrap: `return 0` epilogue merged into a jmp instead of a trailing xor/ret
 00ef7810  96   inventory scan: GetAllocator chain and loop register allocation
 00ef7900  34   ctor: base/derived vtable store order (manual stores differ from compiler ctor); difftest PASS (400 valid, 100% cov): declared a non-void return so cl keeps `this` live in eax (the ctor return-value register) instead of ending with the -1 fill value in eax
-00ef7950  5    dtor: first member load hoisted above the two vptr stores
 00ef7a00  32   tooltip toggle: cString ctor call is caller-clean (add esp,0x20) in the original
 00ef7a80  32   tooltip toggle: cString ctor call is caller-clean (add esp,0x20) in the original
 00ef7c00  69   hashtable DoRehash: complete; the bucket allocator at 0x00ef7b90 is a thiscall member (reads ecx=this, ends `ret 4`), now declared as CHash::AllocBuckets instead of a cdecl free function (the cdecl form let the callee pop the argument and then popped it again, so the function returned through a bogus address / fake-arity), and the old-bucket release calls FreeNode@0x00f47380 instead of the C free import (different function: it returns the node to the pool and writes the pool link). equiv PASS (257 valid, 100% coverage). Residual 69 bytes: i/buckets are allocated to ebx/edi instead of edi/ebx, the inner loop recomputes `p` with an lea instead of reloading `[this+4]`, and the tail puts the free path out of line with the epilogue stores in a different order
