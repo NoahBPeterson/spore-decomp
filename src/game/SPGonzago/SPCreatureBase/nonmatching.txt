@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00c0b030 28 complete; frame is exact (sub esp,8, size 204) once the temps are spelled as TWO slots: double v in the 8-byte frame slot and ONE 4-byte union {float f; bool b;} for the float write and both bool bytes (they land at the same address in retail). Union-of-all-four is worse (forces every temp into the frame qword); a &stream param-slot alias is worse (stream becomes memory-resident and gets reloaded). Remaining 28 bytes = pure load scheduling in blocks 1-2: retail hoists inner's vptr load (mov edx,[eax]) above the value load (fld qword / movss) and defers the temp store to just before the slot-6 call; the bool blocks are already byte-identical incl. the ebx byte caching. Neutral: all local renames (v/u/inner/s); value-init moved after the s-vcall is worse (49)
-00c0b100
 00c0bb20
 00c0c200 43 game-mode water render callback: complete; call/arg setup differs
 00c0c440 8 copy range of 0x24 records: complete; float field copied via fld/fstp in original

@@ -3164,21 +3164,19 @@ int* __cdecl FUN_00c0b030(int* stream, char* data)
 // @ 0x00c0b100
 int* __cdecl FUN_00c0b100(int* stream, char* data)
 {
-  void* inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  void* s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
+  void* inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  void* s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
   ReadUint64(s, data + 8, 1, 0);
 
-  inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
+  inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  s = ((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner);
   ReadInt32(s, data + 4, 1, 0);
 
-  inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
-  ReadBool(s, data);
+  inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  ReadBool(((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner), data);
 
-  inner = (*(void* (__thiscall**)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  s = (*(void* (__thiscall**)(void*))(*(void***)inner)[0x18 / 4])(inner);
-  ReadBool(s, data + 1);
+  inner = ((void* (__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
+  ReadBool(((void* (__thiscall*)(void*))(*(void***)inner)[0x18 / 4])(inner), data + 1);
   return stream;
 }
 
