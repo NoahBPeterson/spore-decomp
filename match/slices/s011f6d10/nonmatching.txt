@@ -9,9 +9,12 @@
                with the default key, else regenerate, then SetPixelShader vtbl+0x1ac):
                complete; the inlined strcmp/memcmp byte loop schedules differently.
                difftest UNSUPPORTED (default-descriptor image reads fault, 0/400 valid).
-011f6f20   37  attribute-offset generator (fills p+0x20 with register offsets from byte
-               table 0x171be38): complete; cl keeps the running offset in esi/ecx instead
-               of the original edi/dl. difftest PASS (400/400 valid, no mismatch).
+011f6f20   29  attribute-offset generator (fills p+0x20 with register offsets from byte
+               table 0x171be38): complete; now a TU-local static (cl 13.10 gives it the
+               custom register convention, table in edx, which the matched 011f78b0
+               wrapper needs). Residual: cl keeps the walker q in ecx/out in esi (retail
+               out=ecx/q=esi) and shapes the first branch as je+jmp vs retail jne.
+               Was 37 diff as a __fastcall(int,byte*). difftest PASS (400/400 valid).
 011f7650  266  rwg_D3D9BinaryFindVertexShader (stride-0x30 table, inlined strcmp):
                complete; the function takes the entry count in EAX and the table in ECX
                (custom LTCG ABI), which a C declaration cannot express. difftest
@@ -28,7 +31,6 @@
                Tried: named local + member tests, inline member tests, an explicit `volatile` read
                order; the early-exit block never moves before the push. difftest WEAK (400/400 valid,
                no mismatch, 26.7% coverage).
-011f78b0    9  rebuild attribute offsets then remap (FUN_011f6f20 + FUN_011fce20):
                complete; FUN_011f6f20 is called with the table in EDX and no ECX, an LTCG
                register convention a C call cannot reproduce (extra xor ecx,ecx). difftest
                PASS (400/400 valid, no mismatch).

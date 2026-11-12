@@ -6,6 +6,12 @@
 #if defined(_MSC_VER)
 #include <intrin.h>
 #define HK_RDTSC32() ((hkUint32)__rdtsc())
+// Retail frees pool pages through a writable .data function-pointer slot (0x15b9a38)
+// statically relocated to the MSVCR90 _aligned_free import thunk (0x107dce0, jmp [__imp__]).
+// Calling through the global keeps `call dword ptr [addr]` inside the loop; a dllimport
+// _aligned_free call lets cl hoist the target load out of the loop into a saved register.
+extern void (__cdecl* g_alignedFree_15b9a38)(void*);
+#define _aligned_free(p) g_alignedFree_15b9a38(p)
 #else
 #define _aligned_malloc(sz, al) aligned_alloc(al, sz)
 #define _aligned_free(p) free(p)

@@ -41,8 +41,6 @@ void* GetTriggerMgr(void);        // 0x00b3d4d0
 void* EA_Audio_GetSystemAT(void); // 0x00a206f0
 
 bool  FUN_00685520(int a);                    // 0x00685520  world flag test
-void  FUN_00921440(void* out, int n, int cap, int one);  // 0x00921440
-void  FUN_00ea97d0(int n);                    // 0x00ea97d0
 void  FUN_00b3f1b0(int n);                    // 0x00b3f1b0
 void  FUN_00ad8020(int n);                    // 0x00ad8020 rehash
 void  FUN_00b3f4c0();                         // (placeholder, unused)
@@ -83,6 +81,12 @@ struct Grower {                                  // hash growth policy at +0x10
 struct GrowResult {                              // {changed, new bucket count}
     char changed;
     int  cap;
+};
+
+struct FindResult {                              // SpHash operator[] result {node, bucketPtr, inserted}
+    char* node;
+    char* bucket;
+    char  inserted;
 };
 
 typedef void (__thiscall *VFn0)(void*);
@@ -133,7 +137,8 @@ struct Self {
     void FUN_00ad8020(int n);
     void FUN_00b3f1b0(int n);
     char* FUN_00ad9200(void* out, void* key, u32 unused);
-    void FUN_00ad9370(void* out, void* key);
+    FindResult FUN_00ad9370(void* key, u32 unused);
+    void FUN_00ea97d0(int n);                     // 0x00ea97d0 (thiscall member)
     char FUN_00ad94c0(int key);
     char FUN_00ad9520(int a, char* msg);
     void FUN_00ad95c0(CArgs* ca);
@@ -552,53 +557,51 @@ done:
 }
 
 // @ 0x00ad9370  SpHash::operator[]: find-or-insert {node, bucketPtr, inserted}
-void Self::FUN_00ad9370(void* out, void* key)
+FindResult Self::FUN_00ad9370(void* key, u32 unused)
 {
-    void* self = this;
-    char* s = (char*)self;
-    u32   k = *(u32*)key;
-    u32   bucket = k % *(u32*)(s + 8);
-    char* base = *(char**)(s + 4);
-    char* bp   = base + bucket * 4;
-    char* cur  = *(char**)bp;
+    FindResult r;
+    char* s = (char*)this;
+    (void)unused;
+    u32 k = *(u32*)key;
+    u32 bc = *(u32*)(s + 8);
+    u32 bucket = k % bc;
+    char* bp = *(char**)(s + 4) + bucket * 4;
+    char* cur = *(char**)bp;
     while (cur != 0) {
         if (k == *(u32*)cur) {
-            *(char**)out = cur;
-            *(char**)((char*)out + 4) = bp;
-            *((char*)out + 8) = 0;
-            return;
+            r.node = cur;
+            r.inserted = 0;
+            r.bucket = bp;
+            return r;
         }
         cur = *(char**)(cur + 0x10);
     }
 
-    char local[4];
-    FUN_00921440(local, *(int*)(s + 8), *(int*)(s + 0xc), 1);
+    GrowResult g;
+    ((Grower*)(s + 0x10))->Grow(&g, (int)bc, *(int*)(s + 0xc), 1);
 
     char* node = (char*)EAAllocate(0x14, DAT_013f09b4, 0, 0, (int)DAT_013ebb38, 0xd1);
     if (node != 0) {
-        *(u32*)(node + 0) = *(u32*)key;
+        *(u32*)(node + 0) = *(u32*)((char*)key + 0);
         *(u32*)(node + 4) = *(u32*)((char*)key + 4);
         *(u32*)(node + 8) = *(u32*)((char*)key + 8);
         *(u32*)(node + 0xc) = *(u32*)((char*)key + 0xc);
     }
     *(u32*)(node + 0x10) = 0;
 
-    if (local[0] != 0) {
-        u32 nb = k % (u32)*(int*)(local + 0);
-        FUN_00ea97d0(*(int*)(local + 0));
-        bucket = nb;
+    if (g.changed != 0) {
+        bucket = k % (u32)g.cap;
+        ((Self*)s)->FUN_00ea97d0(g.cap);
     }
 
-    base = *(char**)(s + 4);
-    bp   = base + bucket * 4;
-    node = node;
-    *(u32*)(node + 0x10) = *(u32*)bp;
-    *(char**)bp = node;
+    *(u32*)(node + 0x10) = *(u32*)(*(char**)(s + 4) + bucket * 4);
+    *(char**)(*(char**)(s + 4) + bucket * 4) = node;
 
     ++*(u32*)(s + 0xc);
-    *(char**)out = node;
-    *((char*)out + 8) = 1;
-    *(char**)((char*)out + 4) = base + bucket * 4;
+    r.node = node;
+    r.inserted = 1;
+    r.bucket = *(char**)(s + 4) + bucket * 4;
+    return r;
 }
 
 // @ 0x00ad9470  remove_copy_if front-end over a 4-byte-stride range

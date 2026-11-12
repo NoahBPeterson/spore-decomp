@@ -106,6 +106,10 @@ static inline void* vcall_p(void* o, int slot)
     return (*(void*(__thiscall**)(void*))((char*)*(void**)o + slot))(o);
 }
 
+// cSPEditorColorPicker::Clear (0x5a6390) as a thiscall member: a member call sets
+// only ecx at the call site, while the dummy-int fastcall form forces xor edx,edx.
+struct cSPEditorColorPickerStub { void Clear(); };  // 0x5a6390
+
 // ---------------------------------------------------------------------------
 // the pane (offsets per the disassembly; only fields that are read are named).
 // It has three polymorphic bases (vptrs at +0, +4, +8), which is what makes the
@@ -251,22 +255,23 @@ void __fastcall FUN_00ee6b10(Pane* this_, int, void* p)
 // @ 0x00ee6b40
 void __fastcall FUN_00ee6b40(Pane* this_)
 {
-    vcall_void(this_, 0x1c);
+    // slot 7 virtual call takes one argument (native pushes the zeroed edi here)
+    (*(void(__thiscall**)(void*, int))((char*)*(void**)this_ + 0x1c))(this_, 0);
 
     if (this_->mp1c != 0) {
-        void* ctl = this_->mp1c;
-        vcall_void(ctl, 0x14);
+        vcall_void(this_->mp1c, 0x14);
         if (this_->mp1c != 0) {
+            void* p = this_->mp1c;
             this_->mp1c = 0;
-            vcall_void(ctl, 0xc);
+            vcall_void(p, 0xc);
         }
     }
     if (this_->mp20 != 0) {
-        FUN_005a6390(this_->mp20, 0);
+        ((cSPEditorColorPickerStub*)this_->mp20)->Clear();
         if (this_->mp20 != 0) {
-            void* pick = this_->mp20;
+            void* p = this_->mp20;
             this_->mp20 = 0;
-            vcall_void(pick, 8);
+            vcall_void(p, 8);
         }
     }
     if (this_->mp28 != 0) {
@@ -276,8 +281,9 @@ void __fastcall FUN_00ee6b40(Pane* this_)
         EA_Messaging_RemoveHandler(h, a, b, c, d);
     }
     if (this_->mp14 != 0) {
+        void* p = this_->mp14;
         this_->mp14 = 0;
-        vcall_void(this_->mp14, 4);
+        vcall_void(p, 4);
     }
 }
 
