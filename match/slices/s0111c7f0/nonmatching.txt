@@ -11,5 +11,5 @@
 0111d2b0 0 havok-equivalent
 0111d340 0 havok-equivalent
 0111d3c0 90 FIXED initFromParent: the call reaches the binary's out-of-line copyFrom, which leaves ecx advanced; cl's same-TU analysis assumed our body (which preserves ecx) and skipped reloading `this`, so setFromFloatBox ran with ecx=box+0x34 and wrote the cell ranges into the box. Keeping the object pointer in a `MoppChunk* volatile` slot forces `mov ecx,[esp+..]` before both calls; equiv PASS 324 valid, 100% coverage; chk size 88 vs 72 (extra reloads)
-0111d410 0 havok-equivalent
+0111d410 0 havok-equivalent; R29 active byte-match claim
 0111d450 0 havok-equivalent
