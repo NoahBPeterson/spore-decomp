@@ -29,3 +29,4 @@
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?RegisterNounClasses@NounCreateMap@Simulator@@QAEXXZ  00b24740  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b25cd0@@YAXXZ  00b25cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameNounManager.cpp  ?FUN_00b26600@cGameNounManager_s00b2_5c30@@QAEXXZ  00b26600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ??0cMilitaryAttackCityOrder@@QAE@XZ  00b231b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
