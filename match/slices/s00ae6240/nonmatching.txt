@@ -10,6 +10,5 @@
 00ae6e70 34  VecTB::erase: same as 00ae6cc0 (family-B element, AddRef +0x60 / Release +0x64). difftest FAIL "memory pool @40010004".
 00ae7080 78  CollectSubsystemA: body recovered (AsInterface(iid_subsystem) -> AddRef -> vector push_back -> Release). Residual delta is the branch layout of the `noun ? ... : 0` ternary. difftest WEAK (145 valid inputs, 59.2% coverage).
 00ae7100 148 AddSubsystem: body recovered; residual delta is register allocation. difftest FAIL is a harness artefact: replay shows byte-identical register/file state, only the synthetic target address of the fake indirect AsInterface call differs.
-00ae71a0 70  cCitySimulator_HandleMessage: thiscall member (this in ecx at entry). difftest UNSUPPORTED (original reads ecx at entry).
 00ae7250 50  CollectSubsystemB: body recovered (AsInterface(iid_subsystem_b) -> AddRef -> push_back -> Release, family-B vtable slots). difftest FAIL: same "fake call target" artefact class as 00ae7100.
 00ae7350 11  AttachSubsystems: body recovered exactly; 11 bytes. Single residual difference is the position of `add esi,0x10` relative to the MessageServer call. difftest UNSUPPORTED (0/400 inputs valid: needs the singleton/MessageServer).

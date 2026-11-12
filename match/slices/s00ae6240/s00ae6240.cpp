@@ -524,16 +524,43 @@ void cCitySimulator::AddSubsystem(IQuery04* noun)
         ((IRefA*)noun)->Release();
 }
 
+// Prefix view of the noun interface used by the city noun-event payload.
+// Interface identifiers are integers, including 0x0142db2a.
+struct CityMessageNoun {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void* AsInterface(uint32_t id); // +0x0c
+};
+struct CityNounEvent {
+    uint32_t mPrefix00[2];
+    int mKind;                          // +0x08
+    uint32_t mPrefix0c;
+    CityMessageNoun* mpNoun;             // +0x10
+};
+
+// The message-handler receiver is the owner's +0x10 interface subobject;
+// its first subsystem vector immediately follows the interface table.
+struct CitySimulatorMessageHandler {
+    void* mpMessageTable;
+    VecT mSubsystems;
+    bool HandleMessage(unsigned int msg, const CityNounEvent* data);
+};
+
 // @ 0x00ae71a0
-bool cCitySimulator_HandleMessage(cCitySimulator* p, unsigned int msg, int* data)
+bool CitySimulatorMessageHandler::HandleMessage(unsigned int msg, const CityNounEvent* data)
 {
-    if (msg == 0x1a0219e && data[2] == 3 && (IQuery0C*)data[4] != 0) {
-        IRefA* obj = (IRefA*)((IQuery0C*)data[4])->AsInterface(iid_subsystem);
-        if (obj != 0) {
-            obj->AddRef();
-            IRefA* tmp = obj;
-            p->mV0.push_back(tmp);
-            obj->Release();
+    if (msg == 0x1a0219e) {
+        CityMessageNoun* noun = data->mpNoun;
+        if (data->mKind == 3 && noun != 0) {
+            IRefA* obj = (IRefA*)noun->AsInterface(0x0142db2a);
+            if (obj != 0) {
+                IRefA* tmp = obj;
+                obj->AddRef();
+                mSubsystems.push_back(tmp);
+                if (tmp)
+                    tmp->Release();
+            }
         }
     }
     return false;
