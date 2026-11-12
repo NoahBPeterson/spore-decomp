@@ -6,3 +6,5 @@
 ../src/game/SPGonzago/SPGameEditModeStrategy.cpp  ?FUN_00d1c2e0@cGameEditModeStrategy@SP@@QAEEHH@Z  00d1c2e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditModeStrategy.cpp  ?FUN_00d1c560@cGameEditModeStrategyGz@SP@@QAEXHH@Z  00d1c560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameEditModeStrategy.cpp  ?OnKeyUp@cGameEditModeStrategy@SP@@QAE_NII@Z  00d1c090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditModeStrategy.cpp  ?Shutdown@cGameEditModeStrategy@SP@@QAEEXZ  00d1c5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGameEditModeStrategy.cpp  ??1cGameEditModeStrategy@SP@@QAE@XZ  00d1c200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
