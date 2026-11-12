@@ -690,8 +690,7 @@ void cTribe::UpgradeHut()
   if (mSpatial_120.IsValid() == 0)
     return;
 
-  void* key = FUN_00ac8fa0(*(u32*)0x158128c, 0x93c8ee8, 5);
-  Vec3* pos = mSpatial_120.GetPosition();
-  FUN_00c8f3d0(0, (void*)1, *(float*)0x1486110, 0x2cc62c6, pos,
-               (u32)(SIZE_T)key);
+  FUN_00c8f3d0(0, (void*)1, *(float*)0x1486110, 0x2cc62c6,
+               mSpatial_120.GetPosition(),
+               (u32)(SIZE_T)FUN_00ac8fa0(*(u32*)0x158128c, 0x93c8ee8, 5));
 }

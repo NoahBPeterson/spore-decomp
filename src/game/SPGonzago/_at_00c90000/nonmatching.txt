@@ -1,4 +1,3 @@
 # va  diff-bytes  reason
 00c9ba80 15 complete ctor; FNVHash argument pushes are hoisted ahead of the compiler-emitted vtable stores, field order otherwise identical flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c9bc00 20 complete Write; only the scheduling of the local `value` store differs (emitted after the argument pushes instead of before the GetBuffer call) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-00c9bdf0 44 complete Cast; the `return this` case is emitted inline instead of the retail shared tail, base offsets/null checks otherwise identical flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

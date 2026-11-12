@@ -555,6 +555,7 @@ struct cTribe_s00da_7780 {
     u8  pad_290[0x2c8];
     cSub558 mSub558;                       // +0x558
     void FindSpot(u32 a, u32 b);
+    void ReleaseSpot(void* reservation, u32 index); // 0x00c98750
     void FUN_00c950f0(Creature* p);
     void V_9c(Creature* p, u32 a) { (*(void (__thiscall**)(void*, Creature*, u32))(*(char**)this + 0x9c))(this, p, a); }
 };
@@ -620,7 +621,8 @@ struct Creature {
     u8    FUN_00c25480(void* a, u32 b);
     void  SetCurrentToolEffect(u32 a, i32 b);
     void  RebuildCitizenOrderListDefault();
-    void  d0c0(u32 a, i32 b);
+    void  d0c0(u32 a, i32 b);                      // 0x00c0d0c0
+    void SetActionLocked(bool locked);             // 0x00c14750
     void  ForceOrdersUpdate();
     u8    FUN_00c04710();
     void  FUN_00c0bf10(u32 a0, u32 a1, u32 a2, u32 a3, f32 f4, u32 a5, u32 a6, u32 a7, u32 a8, u32 a9, u32 a10);
@@ -3320,6 +3322,13 @@ float __cdecl FUN_00da69e0(cSPCreatureCitizen* c, u32 a, u32 b, u8 flags)
     return 0.0f;
 }
 
+// Retail citizen exposes the combatant as a secondary interface at +0x5a8.
+struct StimulusCitizenPrefix {
+    virtual void v00();
+    char pad004[0x5a8 - 4];
+};
+struct StimulusCombatantCitizen : StimulusCitizenPrefix, Combatant {};
+
 // @ 0x00da6aa0
 float __cdecl FUN_00da6aa0(cSPCreatureCitizen* c, u32 a, u32 b, u8 flags, behavior_stimuli* stim, u8* out)
 {
@@ -3330,7 +3339,7 @@ float __cdecl FUN_00da6aa0(cSPCreatureCitizen* c, u32 a, u32 b, u8 flags, behavi
         if (s != 0 && s->mbDead == 0) {
             if (stim != 0)
                 stim->GetAny();
-            stim->mTarget = &s->mCombat;
+            stim->mTarget = static_cast<Combatant*>(reinterpret_cast<StimulusCombatantCitizen*>(s));
             *out = 1;
             return 1.0f;
         }
@@ -3475,7 +3484,7 @@ float __cdecl FUN_00da6fe0(cSPCreatureCitizen* c, u32 a, u32 b, u8 flags, behavi
         if (c->mCombat.GetHealthPct() * g_f13ec4d0 < g_f1687a10) {
             if (stim != 0)
                 stim->GetAny();
-            stim->mTarget = &s->mCombat;
+            stim->mTarget = static_cast<Combatant*>(reinterpret_cast<StimulusCombatantCitizen*>(s));
             *out = 1;
             return 1.0f;
         }
@@ -3491,7 +3500,7 @@ float __cdecl FUN_00da7060(cSPCreatureCitizen* c, u32 a, u32 b, u8 flags, behavi
     if (s != 0 && s->mbDead == 0) {
         if (stim != 0)
             stim->GetAny();
-        stim->mTarget = &s->mCombat;
+        stim->mTarget = static_cast<Combatant*>(reinterpret_cast<StimulusCombatantCitizen*>(s));
         *out = 1;
         return 1.0f;
     }
@@ -8037,4 +8046,59 @@ show_attack:
     // the common attack-icon tail shared by 0x354b9e8, 0x30aa01b, 0x55d55d9 and 0x5c3bed8
     ShowAttackIcon(attackWin, attackIt, attackID, attackColor, 0x5e51b8c, 10.0f, 2.0f);
     return false;
+}
+
+
+struct TribeReservationState {
+    u32 mState;
+    u32 mReservation;
+    u32 mUnknown08, mUnknown0c, mUnknown10;
+    Creature* mpOwner;
+};
+// @ 0x00da7dc0
+void ReleaseTribeReservation(Creature* pCreature, u32, u32, u32, u32, TribeReservationState* pState)
+{
+    pCreature->d0c0(6, 0);
+    pCreature->SetActionLocked(!pCreature->mObjC0.V_f8());
+    if (pState->mReservation != 0xffffffffu) {
+        cTribe_s00da_7780* tribe = pState->mpOwner->GetTribe();
+        tribe->mSub558.FUN_00cc7f90(pState->mReservation);
+        pState->mReservation = 0xffffffffu;
+    }
+}
+
+struct TribeSpotState {
+    u32 mState;
+    u32 mUnknown04;
+    u32 mIndex;
+    void* mpReservation;
+};
+// @ 0x00da7c50
+void FinishTribeSpot(Creature* pCreature, u32, u32, u32, u32, TribeSpotState* pState)
+{
+    if (pState->mpReservation && pState->mIndex != 0xffffffffu)
+        pCreature->GetTribe()->ReleaseSpot(pState->mpReservation, pState->mIndex);
+    if (!pCreature->mByte_b5e) {
+        pCreature->mObjC0.V_ec();
+        pCreature->SetActionLocked(!pCreature->mObjC0.V_f8());
+    }
+}
+
+struct TribeMemberStateInterface {
+    virtual void v00(); virtual void v04(); virtual void v08();
+    virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void v18(); virtual void v1c(); virtual void v20();
+    virtual void v24(); virtual void v28();
+    virtual int GetState(); // slot 0x2c
+};
+// @ 0x00da83b0
+float TribeMemberStateFraction(Creature* pCreature, int state)
+{
+    int count = 0;
+    PtrVec* members = pCreature->V_90();
+    Creature** first = members->mBegin;
+    Creature** last = members->mEnd;
+    for (; first != last; ++first)
+        count += (reinterpret_cast<TribeMemberStateInterface*>(&(*first)->mLoco.mSub58)->GetState() == state);
+    return (float)count / (unsigned)(members->mEnd - members->mBegin);
 }

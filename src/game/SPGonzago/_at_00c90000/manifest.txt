@@ -4,3 +4,4 @@
 ../src/game/SPGonzago/_at_00c90000.cpp  ?IsPlayerTribe@cTribe_s00c9_afb0@SP@@QAE_NXZ  00c9bd30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00c90000.cpp  ??_GcTribeFoodMat@@UAEPAXI@Z  00c9bda0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00c90000.cpp  ?FUN_00c9cec0@@YAIH@Z  00c9cec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c90000.cpp  ?Cast@cTribeHut_s00c9_afb0@@QAEPAXH@Z  00c9bdf0  /O2 /MD /Gy /TP /Isrc/game/include
