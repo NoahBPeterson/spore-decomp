@@ -2407,7 +2407,8 @@ char CharStream::Fn8f3a10(int)
 {
     if (scanPos < scanEnd) {
         wchar16 ch = *scanPos;
-        if ((unsigned)(ch - 0x30) <= 9) {
+        int t = ch;
+        if (t >= 0x30 && t <= 0x39) {
             ((WStr2*)((char*)this + 0x10))->push_back(ch);
             scanPos = scanPos + 1;
             return 1;

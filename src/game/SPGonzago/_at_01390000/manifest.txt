@@ -4,3 +4,4 @@
 ../src/game/SPGonzago/_at_01390000.cpp  ?PosseRingAngleInit@@YAXXZ  0139c070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_01390000.cpp  ?PropTableInit_e870@@YAXXZ  0139e870  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_01390000.cpp  ?init_16d6d30@@YAXXZ  01391bc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_01390000.cpp  ?init_16d6d70@@YAXXZ  01391c20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

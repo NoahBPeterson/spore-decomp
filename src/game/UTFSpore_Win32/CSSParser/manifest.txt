@@ -35,3 +35,4 @@
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?MatchSymbolBackgroundRepeat@CSSParser_s008f_43f0@Style@XHTML@EA@@QAE_NPBXPAM@Z  008f53e0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?ParsePropertyValue@CSSParser_s008f_85e0@Style@XHTML@EA@@QAE_NHPAVPropertyList_s008f_85e0@234@@Z  008f85e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?ParseProperty@CSSParser_s008f_85e0@Style@XHTML@EA@@QAE_NPAVPropertyList_s008f_85e0@234@@Z  008f8d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?Fn8f3a10@CharStream@@QAEDH@Z  008f3a10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

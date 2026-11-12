@@ -23,7 +23,6 @@
 008f38b0 9 CharStream ctor; address-load scheduling differs (equiv PASS)
 008f3900 66 CSSParser ctor (begin/end); codegen differs (equiv PASS)
 008f3970 56 CSSParser ctor (begin/count); codegen differs (equiv PASS)
-008f3a10 2 CharStream::Match(digit); sub/add enc (equiv PASS)
 008f3a40 6 CharStream::MatchWhile(digit); reg alloc differs (equiv PASS)
 008f3d20 86 CharStream::MatchString; codegen differs (equiv UNSUPPORTED: push_back extern)
 008f4290 39 CSSParser::skip TokenWS; codegen differs (equiv FAIL: execution)

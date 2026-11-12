@@ -434,8 +434,10 @@ public:
     typedef typename base_type::iterator iterator;
     T& operator[](const K& key) {
         iterator itHashtable(base_type::find(key));
-        if (itHashtable != base_type::end())
-            return itHashtable.mpNode->mValue.second;
+        typename base_type::node_type* pFound = itHashtable.mpNode;
+        bool bFound = pFound != *(base_type::mpBucketArray + base_type::mnBucketCount);
+        if (bFound)
+            return pFound->mValue.second;
         return base_type::insert(value_type(key, T())).first.mpNode->mValue.second;
     }
 };

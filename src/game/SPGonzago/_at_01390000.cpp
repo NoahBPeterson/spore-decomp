@@ -133,25 +133,30 @@ void init_16d6d30()
     atexit(&FUN_013c9dd0);
 }
 
+// The second sixteen owning terrain-layer slots (terrain layer table 2), shared with SPTerrainStateMgr.
+extern TerrainLayerRef g16d6d70[16]; // 0x016d6d70
+// The native initializer and reverse-release callback cover exactly this array too.
+typedef char TerrainLayerTable2Size[(sizeof(g16d6d70) == 64) ? 1 : -1];
+
 // @ 0x01391c20
 void init_16d6d70()
 {
-    *(int*)0x16d6d70 = 0;
-    *(int*)0x16d6d74 = 0;
-    *(int*)0x16d6d78 = 0;
-    *(int*)0x16d6d7c = 0;
-    *(int*)0x16d6d80 = 0;
-    *(int*)0x16d6d84 = 0;
-    *(int*)0x16d6d88 = 0;
-    *(int*)0x16d6d8c = 0;
-    *(int*)0x16d6d90 = 0;
-    *(int*)0x16d6d94 = 0;
-    *(int*)0x16d6d98 = 0;
-    *(int*)0x16d6d9c = 0;
-    *(int*)0x16d6da0 = 0;
-    *(int*)0x16d6da4 = 0;
-    *(int*)0x16d6da8 = 0;
-    *(int*)0x16d6dac = 0;
+    g16d6d70[0].mpLayer = 0;
+    g16d6d70[1].mpLayer = 0;
+    g16d6d70[2].mpLayer = 0;
+    g16d6d70[3].mpLayer = 0;
+    g16d6d70[4].mpLayer = 0;
+    g16d6d70[5].mpLayer = 0;
+    g16d6d70[6].mpLayer = 0;
+    g16d6d70[7].mpLayer = 0;
+    g16d6d70[8].mpLayer = 0;
+    g16d6d70[9].mpLayer = 0;
+    g16d6d70[10].mpLayer = 0;
+    g16d6d70[11].mpLayer = 0;
+    g16d6d70[12].mpLayer = 0;
+    g16d6d70[13].mpLayer = 0;
+    g16d6d70[14].mpLayer = 0;
+    g16d6d70[15].mpLayer = 0;
     atexit(&FUN_013c9e00);
 }
 

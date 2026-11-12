@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-008f3a10  2   CharStream::Match(digit); sub/add enc (equiv PASS)
 008f3a40  6   CharStream::MatchWhile(digit); reg alloc differs (equiv PASS)
 008f38b0  9   CharStream ctor; address-load scheduling differs (equiv PASS)
 008f4290  41  CSSParser::skip TokenWS; reg-alloc differs (equiv PASS)

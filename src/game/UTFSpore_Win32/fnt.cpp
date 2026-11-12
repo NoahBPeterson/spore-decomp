@@ -326,7 +326,7 @@ uint32 fnt_RoundToHalfGrid(int unused, int d, int a)
     else
         r = (uint32)(0xffffffe0u - ((unsigned)(a - d) & 0xffffffc0u));
     if ((int)(r ^ (uint32)d) < 0 && d != 0)
-        r = (uint32)((((int)(d <= 0) - 1) & 0x40) + 0xFFFFFFE0u);
+        r = (d > 0) ? 0x20u : 0xffffffe0u;
     return r;
 }
 

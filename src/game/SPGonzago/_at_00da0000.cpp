@@ -708,7 +708,7 @@ struct Creature {
     cTribe_s00da_7780* GetTribe();
     Creature* FUN_00bc9b10();
     u32   FUN_00c0ee60();
-    void  FUN_00c14750(i32 a);
+    void  FUN_00c14750(bool a);
     u8    FUN_00c0e0c0(u32 a);
     u32   PlayAnimation(u32 a, i32 b, i32 c);
     u32   InterruptAnimation(u32 a, i32 b, i32 c);
@@ -1166,8 +1166,7 @@ void FUN_00da7f40(Creature* p)
         return;
     p->d0c0(6, 0);
     p->V_84(0, 0, 0);
-    u8 b = (p->mObjC0.V_f8() == 0);
-    p->FUN_00c14750(b);
+    p->FUN_00c14750(p->mObjC0.V_f8() == 0);
     p->ForceOrdersUpdate();
 }
 

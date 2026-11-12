@@ -600,13 +600,16 @@ struct cScreen {
 
 // @ 0x00F46D60
 bool cScreen::FUN_00f46d60(int a1, int* msg) {
+    void* f;
     if (msg[2] == 0x3326e8a) {
         int v = *(int*)msg[6];
         if (v)
             return FrameAt(this, 0xc)->FUN_00997730((void*)msg[0], (void*)v,
                                                     (void*)((int*)msg[6])[1], 0);
     } else if (msg[2] == 0x3326e8b) {
-        return FrameAt(this, 0xc)->FUN_009978b0((void*)msg[0], (void*)msg[6]);
+        // comma-expression: staging msg[6] into the tail-call arg slot first
+        // keeps the msg[0] reload in edx (mov edx,[eax]) like retail.
+        return (f = (void*)msg[6], FrameAt(this, 0xc)->FUN_009978b0((void*)msg[0], f));
     } else if (msg[2] == 0x43b0aee) {
         FUN_00809db0(0, &g_15b0570);
         return true;
