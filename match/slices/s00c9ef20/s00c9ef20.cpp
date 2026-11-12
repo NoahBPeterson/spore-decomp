@@ -22,7 +22,7 @@ void* __stdcall SP_NounManager(int id);                // 0x00b3d300 ret 4
 void* __cdecl   GetCurrentGameMode();                  // 0x00b5b800
 void* __cdecl   FUN_00cf74c0();                        // 0x00cf74c0 returns manager
 void* __stdcall FUN_00ff0430(void* p);                 // 0x00ff0430 ret 4
-void* __stdcall FUN_00b3d390(void* e);                 // 0x00b3d390 ret 4
+void* __cdecl   SP_ToolManager();                      // 0x00b3d390 ?ToolManager@@YAPAVcSPToolManager@@XZ (no args)
 void* __cdecl   EAAllocate(int size, const char* name, int a, int b, int c, int d);
 void* __cdecl   FUN_00c9e5d0();                        // 0x00c9e5d0
 void* __cdecl   FUN_00befb60(void* p);                 // 0x00befb60 ret 4
@@ -82,9 +82,27 @@ struct SimSingletonStub {
 };
 
 struct RefStub {
-    u8   FUN_0104bd50();                                    // 0x0104bd50
-    void FUN_0104fa90();                                    // 0x0104fa90
+    u8   FUN_0104bd50();                                    // 0x0104bd50 thiscall, ret 0 (bool in al)
 };
+
+// 0x0104fa90: thiscall on the ToolManager result (ignores `this`), ret 4, one
+// stack arg = the tool object. Native call site: push elem; call ToolManager;
+// mov ecx,eax; call 0x104fa90.
+struct ToolManagerStub {
+    void FUN_0104fa90(void* e);                             // 0x0104fa90 ret 4
+};
+
+// Inline accessors used by FUN_00c9f250: spelling the slot fetch as a helper
+// call keeps the per-iteration member reload and reproduces the original's
+// register assignment (this in edi, count in ebx, off-based SIB).
+static inline RefStub* ToolSlot_00c9f250(char* self, int off)
+{
+    return *(RefStub**)(*(char**)(self + 0xc64) + off);
+}
+static inline RefStub* ExtraSlotTool_00c9f250(char* self)
+{
+    return *(RefStub**)(self + 0xb60);
+}
 
 struct EffStub {
     void* FUN_00bc97f0(int a, int b, float c, int d);       // 0x00bc97f0 ret 0x10
@@ -323,10 +341,6 @@ void* CStub::FUN_00c9f1e0()
 }
 
 // ===========================================================================
-// Closest attempt. Same size as retail: the counted loop, the alignment
-// nop and the reloaded element all match. this stays in ebx and the count
-// in edi; retail keeps this in edi and the count in ebx, which also swaps
-// the SIB order. That register choice is not source-controllable.
 // @ 0x00c9f250
 int CStub::FUN_00c9f250()
 {
@@ -336,15 +350,15 @@ int CStub::FUN_00c9f250()
         int off = 0;
         int cnt = n;
         do {
-            if ((*(RefStub**)(*(int*)(self + 0xc64) + off))->FUN_0104bd50())
-                ((RefStub*)FUN_00b3d390(*(void**)(*(int*)(self + 0xc64) + off)))->FUN_0104fa90();
+            if (ToolSlot_00c9f250(self, off)->FUN_0104bd50())
+                ((ToolManagerStub*)SP_ToolManager())->FUN_0104fa90(ToolSlot_00c9f250(self, off));
             off += 0x10;
             --cnt;
         } while (cnt != 0);
     }
     if (*(RefStub**)(self + 0xb60) != 0 &&
         (*(RefStub**)(self + 0xb60))->FUN_0104bd50())
-        ((RefStub*)FUN_00b3d390(*(void**)(self + 0xb60)))->FUN_0104fa90();
+        ((ToolManagerStub*)SP_ToolManager())->FUN_0104fa90(ExtraSlotTool_00c9f250(self));
     return n;
 }
 
