@@ -66,3 +66,15 @@
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?ClampHunger@cCreatureBase@Simulator@@QAEXM@Z  00c0b9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b710@@YIXPAUcCreatureBase@Simulator@@@Z  00c0b710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0b100@@YAPAHPAHPAD@Z  00c0b100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c0c440@@YAPAXPAI00@Z  00c0c440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?cfa0@CCB@@QAEMHD@Z  00c0cfa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?cf50@CCB@@QAEXXZ  00c0cf50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?d050@CCB@@QAEHM@Z  00c0d050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?Hide@Simulator_cCreatureBase@@QAEXXZ  00c0f280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?GetTargetAsCreature@Simulator_cCreatureBase@@QAEPAXXZ  00c0ee70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?e4f0@CCM@@QAEMXZ  00c0e4f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c15920@cSPCreatureBase_s00c1_5310@@QAEMXZ  00c15920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c15970@cSPCreatureBase_s00c1_5310@@QAEMXZ  00c15970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?e040@CCM@@QAEPAXXZ  00c0e040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?e370@CCM@@QAEPAXXZ  00c0e370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?ApplyCombatTarget@Simulator_cCreatureBase@@QAEPAXXZ  00c0ee90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

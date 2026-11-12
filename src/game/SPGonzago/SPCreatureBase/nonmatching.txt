@@ -2,44 +2,34 @@
 00c0b030 28 complete; frame is exact (sub esp,8, size 204) once the temps are spelled as TWO slots: double v in the 8-byte frame slot and ONE 4-byte union {float f; bool b;} for the float write and both bool bytes (they land at the same address in retail). Union-of-all-four is worse (forces every temp into the frame qword); a &stream param-slot alias is worse (stream becomes memory-resident and gets reloaded). Remaining 28 bytes = pure load scheduling in blocks 1-2: retail hoists inner's vptr load (mov edx,[eax]) above the value load (fld qword / movss) and defers the temp store to just before the slot-6 call; the bool blocks are already byte-identical incl. the ebx byte caching. Neutral: all local renames (v/u/inner/s); value-init moved after the s-vcall is worse (49)
 00c0bb20
 00c0c200 43 game-mode water render callback: complete; call/arg setup differs
-00c0c440 8 copy range of 0x24 records: complete; float field copied via fld/fstp in original
 00c0c4b0 218 quaternion half-angle swap: complete; x87/SSE mixing and expression order
 00c0c5b0 32 water reflection helper: complete; branch/arg shape differs
-00c0ce30 61 relation index: complete; call/global load order
-00c0cf50 58 PASS         init animation weight table +0xfac..; complete
-00c0cfa0 20 PASS         get animation weight by index; complete
-00c0d050 77 PASS         pick animation index by threshold; complete
+00c0ce30 58 schedule: relation index; complete; block order/tail-merge of the two return-0 exits differs (cl merges both early exits into one block; retail keeps the +0xb20 exit separate with eax pre-zeroed); 6 source shapes tried
 00c0d0c0 201 FAIL         set/clear fa4 bits + adjust +0xfa0; complete; equiv mismatch at vtable/table callee (harness)
 00c0d240 148 FAIL         IsAnimationQueuedOrCurrent; complete; 1-ulp float differ at pool slot
 00c0d340 84 UNSUPPORTED  transform + list replace; complete; only 0 valid inputs (fake-arity)
 00c0ddb0 60 PASS         Community::func58h wrapper + set bubble extents; complete
-00c0e040 40 FAIL         GetCurrentAnimationGUID; complete; equiv execution fault (vtable callee)
 00c0e070 41 FAIL         animation guid valid-motion query; complete; equiv eax&0xffff mismatch
 00c0e0c0 72 FAIL         current animation guid compare; complete; equiv call-depth fault (vtable callee)
 00c0e120 8 UNSUPPORTED  slot array membership at +0xf4c; complete; 0 valid inputs (read fault)
-00c0e370 39 FAIL         GetCurrentAnimationGUID (alt); complete; equiv execution fault (vtable callee)
 00c0e3d0 48 FAIL         animation flag via guid; complete; equiv execution fault
 00c0e420 42 FAIL         animation-check via guid; complete; equiv execution fault
 00c0e480 52 UNSUPPORTED  cSPCreatureBase::GetTime; complete; 0 valid inputs (import decode_pointer)
-00c0e4f0 27 WEAK         creature radius/scale lookup; complete
 00c0eae0 189 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) creature steering; the rotation / validity helpers and the transform push are modelled with unresolved services, so the blend block collapses; equiv UNSUPPORTED (unresolved steering helpers)
 00c0ed60 174 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) set creature target; the political-id and relation calls are unresolved and the animation check is inlined differently; equiv UNSUPPORTED (unresolved combatant services)
-00c0ee70 29 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) target as creature; the interface query slot differs from retail so the null path is longer; equiv FAIL (first mismatch execution)
-00c0ee90 41 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) apply combat target; the double interface query and the game-mode test are modelled with an unresolved accessor; equiv UNSUPPORTED (unresolved game-mode accessor)
 00c0eec0 473 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) steering update; the velocity, surface-trace and move calls are unresolved helpers so most of the vector math is folded away; equiv UNSUPPORTED (unresolved locomotion helpers)
-00c0f280 10 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) hide creature; the null check targets the epilogue instead of a tail call and the visibility call is unresolved; equiv FAIL (first mismatch execution)
 00c0f2e0 342 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) trace to point; the terrain trace helper is unresolved and the distance compares are not folded into the retail sqrt form; equiv UNSUPPORTED (unresolved trace helper)
 00c0f490 107 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) reset combatants; the three reference releases are modelled on the wrong sub-object offsets; equiv FAIL (first mismatch execution)
-00c0f510 68 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) is slot empty; the slot count uses a pointer difference instead of the retail signed byte division; equiv FAIL (first mismatch eax&0xff)
-00c0f570 54 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) count valid slots; the loop is a forward index scan rather than the retail raw-byte walk; equiv FAIL (first mismatch ecx (untouched by the original))
-00c0f5f0 47 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) is full; count-valid is not inlined and the count division differs from retail; equiv FAIL (first mismatch eax&0xff)
+00c0f510 68 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) regalloc: is slot empty; complete; cl caches mpSlotsBegin in esi across the bounds check (retail re-loads it from [this+0xe40] after, using a memory operand in the sub); 6 shapes tried (bEmpty local, &&/|| arms, char* walk)
+00c0f570 54 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) schedule: count valid slots; complete; retail re-computes the slot-count division inside the loop and re-loads mpSlotsBegin per pass (no hoisting); our cl hoists both and strength-reduces to a countdown; 3 shapes tried
+00c0f5f0 47 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) regalloc: is full; complete; retail keeps this in ecx across the out-of-line CountValid call (same-TU body, ecx never written); our cl spills this to esi and the result to edi; rename/noinline/local tried
 00c0f620 57 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find first empty; the slot scan is written with an index rather than the retail byte-offset walk; equiv FAIL (first mismatch ecx (untouched by the original))
 00c0f6b0 99 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find random empty; the random helper is unresolved and the scan order differs; equiv UNSUPPORTED (unresolved random generator)
 00c0f780 57 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find first valid (exported as Count); the scan loop shape differs from retail; equiv FAIL (first mismatch execution)
 00c0f810 67 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find next valid; the start-index clamp and byte walk differ from retail; equiv FAIL (first mismatch ecx (untouched by the original))
-00c0f8a0 55 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) get slot combatant; the count division and bounds test are not in the retail order; equiv FAIL (first mismatch eax)
+00c0f8a0 55 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) regalloc: get slot combatant; complete; same mpSlotsBegin-caching delta as 00c0f510 (retail: count in edi, result preset in esi, begin re-loaded; ours caches begin in esi); 5 shapes tried
 00c0f8f0 65 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find slot by combatant; the pointer compare is widened to an integer compare; equiv FAIL (first mismatch ecx (untouched by the original))
-00c0f960 54 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find slot by key; the walk uses an index rather than the retail raw pointer stride; equiv FAIL (first mismatch eax)
+00c0f960 54 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) regalloc: find slot by key; complete; result=index;break split now matches (or edi,-1 exit), but cl caches mpSlotsBegin in esi and puts the index in eax (retail: index in esi, begin re-loaded into ecx); 2 shapes tried
 00c0f9b0 68 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find slot by key with index out; the out-parameter branch is ordered after the hit rather than inside it; equiv FAIL (first mismatch execution)
 00c0fa10 94 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) find slot by combatant with index out; the compare and out-parameter order differ from retail; equiv FAIL (first mismatch eax)
 00c0fa70 102 FAIL         find animation entry by mask bit; complete; equiv eax mismatch
@@ -62,8 +52,6 @@
 00c14070 215 complete: create/bind the held-prop animation instance through the creature's animating object (Slot08/Slot0c/Slot18..Slot4c); not byte-exact (inline expansion and register scheduling differ) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c15310 363 cSPCreatureBase::func64h (Slice 64 bit-flag helper): complete translation of the flag get/set/clear path plus the 3 ability-state loop bodies; instruction stream diverges in the ability-state branch (retail inlines the cAbilityState accessor differently), written size 415 vs 340, /O2 /MD /Gy /EHsc /TP /arch:SSE2; equiv FAIL (execution)
 00c15470 934 cSPCreatureBase::FUN_00c15470 (body-effect slot install): full path incl. 4x0x34 slot search, ability lookup, spatial midpoint, effect create and matrix/template setup; written 1069 vs 1196; retail hoists several x87 expressions (fsqrt/fdivrp) into a different order, so the FP block cannot be reproduced from C++ source; equiv UNSUPPORTED (fake-arity)
-00c15920 44 cSPCreatureBase::FUN_00c15920 (wave amplitude A): 76 vs 69, /arch:SSE2 returns the float in XMM0 while retail uses the x87 ST0 path (fld/fmul/fadd/ret); scalar-return ABI, not expressible from C++ under this flag set; equiv UNSUPPORTED (unresolved ?gF_15826c@@3MA, external float not present in the test image)
-00c15970 44 cSPCreatureBase::FUN_00c15970 (wave amplitude B): same x87-vs-SSE float-return mismatch as 00c15920, 76 vs 69; equiv UNSUPPORTED (unresolved ?gF_158270@@3MA)
 00c18b40 1188 complete best-effort translation; difftest FAIL (return-register high bits / ABI artefact); flags +/GS-
 00c190e0 1164 complete best-effort translation; difftest WEAK (4.0% coverage, no mismatch observed); flags +/GS-
 00c196a0 171 complete; register allocation differs (index/result regs); difftest WEAK (36.9% coverage, no mismatch); flags +/GS-
