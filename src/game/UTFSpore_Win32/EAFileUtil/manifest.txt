@@ -8,3 +8,5 @@
 ../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?GetTempDirectoryPath@@YAHPA_W@Z  00932190  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?GetDriveSerialNumber@IO@EA@@YAHPB_WPA_W@Z  00932220  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?GetCurrentWorkingDirectory@Directory@IO@EA@@YAHPA_W@Z  00932370  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?Exists@File@IO@EA@@YA_NPB_W@Z  00931fa0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAFileUtil.cpp  ?Exists@Directory@@YA_NPB_W@Z  009322b0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
