@@ -25,6 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import run_all as R             # noqa: E402
 import asm_audit                # noqa: E402
 import fingerprint as F         # noqa: E402
+import ltcg                     # noqa: E402
 
 
 # compiler options a manifest row may use (every option the manifests used on 2026-11-09).  Anything else is refused
@@ -77,7 +78,12 @@ def main():
     R.OBJ_DIR = os.path.join(ROOT, "work", "ci", "obj")
     os.makedirs(R.OBJ_DIR, exist_ok=True)
 
-    rows = R.read_rows([os.path.abspath(m) for m in a.manifests], "")
+    eqfiles = [os.path.abspath(m) for m in a.manifests if os.path.basename(m) == "equivalent.txt"]
+    rows, rowfile = [], {}
+    for m in (os.path.abspath(m) for m in a.manifests if os.path.basename(m) != "equivalent.txt"):
+        for r in R.read_rows([m], ""):
+            rows.append(r)
+            rowfile[(r[0], r[2])] = m
     refused = {(r[0], r[3]): row_problem(r[0], r[3]) for r in rows}
     keys = sorted(k for k, why in refused.items() if not why)
     objs = {}
@@ -100,8 +106,14 @@ def main():
                 coffs[obj] = F.parse_coff(obj)
             secs, syms = coffs[obj]
             name = R.resolve(syms, sym)
+            stubs = ltcg_stubs(rowfile[(src, va)], va)
             if name is None:
                 st = "symbol %s not found in the object" % sym
+            elif stubs:
+                # built as RenderWare 4's core was: /GL + link /LTCG against the function's stub callees
+                data, rel, log = ltcg.build(os.path.join(ROOT, "match", src), list(flags),
+                                            stubs, name, fps[va]["size"])
+                st = F.check(fps[va], data, rel) if data is not None else "LTCG build failed: " + log[-300:]
             else:
                 st = F.check(fps[va], *F.extract(secs, syms, name))
             asm = asm_audit.transcribed(os.path.join(ROOT, "match", src)).get("%08x" % va)
@@ -111,10 +123,20 @@ def main():
         tag = "PASS" if st == "PASS" else "KNOWN" if va in known else "FAIL"
         out.append({"va": "%08x" % va, "src": src, "result": st, "tag": tag})
         print("%-5s %08x  %s%s" % (tag, va, src, "" if st == "PASS" else "  " + st))
+    neq = 0
+    for path in eqfiles:
+        for src, sym, va, flags in R.read_rows([path], ""):
+            st = equivalent_row(path, src, va, flags, fps)
+            neq += st == "EQUIV"
+            tag = "EQUIV" if st == "EQUIV" else "FAIL"
+            out.append({"va": "%08x" % va, "src": src, "result": st, "tag": tag, "kind": "equivalent"})
+            print("%-5s %08x  %s%s" % (tag, va, src, "" if st == "EQUIV" else "  " + st))
     fails = [r for r in out if r["tag"] == "FAIL"]
     nknown = sum(r["tag"] == "KNOWN" for r in out)
     print("\n%d / %d functions match the retail fingerprints (%d known failures, %d new failures)" % (
         ok, len(rows), nknown, len(fails)))
+    if eqfiles:
+        print("%d proven-equivalent rows still build to their proved bytes" % neq)
     lost = []
     if a.keep:
         now = {r[2] for r in R.read_rows(all_manifests(), "")}
@@ -137,8 +159,45 @@ def main():
     return 0 if not fails and not lost else 1
 
 
+def ltcg_stubs(manifest, va):
+    """The stub file of an /LTCG-built function (tools/matching/ltcg.py): ltcg/<va>.cpp next to its manifest."""
+    p = os.path.join(os.path.dirname(manifest), "ltcg", "%08x.cpp" % va)
+    return p if os.path.isfile(p) else None
+
+
+def equivalent_row(path, src, va, flags, fps):
+    """'EQUIV' when a proven-equivalent row (equivalent.txt, tools/contrib/prove.py) still builds to the bytes its
+    proof is about, else why not. The proof itself needs the game and is re-checked by a maintainer before merging
+    (prove.py --recheck); this keeps a later change from silently invalidating it."""
+    sys.path[:0] = [os.path.join(ROOT, "tools", "equiv"), os.path.join(ROOT, "tools", "contrib")]
+    import func as FN
+    if va not in fps:
+        return "no fingerprint for this address"
+    bp = FN.bundle_path(path, va)
+    if not os.path.isfile(bp):
+        return "no proof bundle %s" % os.path.relpath(bp, ROOT)
+    b = json.load(open(bp))
+    if b.get("va") != "%08x" % va or b.get("retail_fp") != fps[va]["sha256"]:
+        return "the proof bundle is for another function"
+    why = row_problem(src, flags)
+    if why:
+        return "refused: " + why
+    try:
+        ours = FN.our_func(va, " ".join(flags))
+    except SystemExit as e:
+        return "build failed: %s" % str(e)[-300:]
+    if FN.build_hash(ours) != b.get("build"):
+        return "our build changed since the proof (rerun tools/contrib/prove.py %#x --record)" % va
+    return "EQUIV"
+
+
 def all_manifests():
     return R.manifests() + sorted(glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"), recursive=True))
+
+
+def all_equivalent():
+    return sorted(glob.glob(os.path.join(ROOT, "match", "slices", "*", "equivalent.txt")) +
+                  glob.glob(os.path.join(ROOT, "src", "game", "**", "equivalent.txt"), recursive=True))
 
 
 if __name__ == "__main__":
