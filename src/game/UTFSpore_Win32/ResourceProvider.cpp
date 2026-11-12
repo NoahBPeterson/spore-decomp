@@ -119,12 +119,6 @@ struct HNode {
     RCObjN* p4;     // +4
     void* p8;       // +8
 };
-struct BucketNode {
-    char pad0[8];
-    void* p8;       // +8
-    char pad1[0x1c - 0xc];
-    BucketNode* p1c;  // +0x1c
-};
 struct TagT {};  // empty tag struct passed by value (eastl true_type)
 struct IAlloc {
     virtual void v0();
@@ -1127,17 +1121,15 @@ VObj* VObj::CopyCtor(VObj* src)
 }
 
 // @ 0x008ff110
-void __stdcall FreeBuckets(BucketNode** buckets, unsigned n)
+void WMap::FreeNodes(WNode** buckets, unsigned n)
 {
     for (unsigned i = 0; i < n; i++) {
-        BucketNode* p = buckets[i];
+        WNode* p = buckets[i];
         if (p) {
             do {
-                BucketNode* cur = p;
-                _ReadWriteBarrier();
-                void* buf = cur->p8;
-                _ReadWriteBarrier();
-                p = p->p1c;
+                WNode* cur = p;
+                p = p->next;
+                void* buf = cur->mpBegin;
                 if (buf != 0 && *((int*)buf - 1) != 0)
                     operator_delete__(buf);
                 operator_delete__(cur);

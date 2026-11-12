@@ -27,5 +27,6 @@ slices/s013ac650/s013ac650.cpp  ?FUN_013bda60@@YAXXZ  013bda60
 slices/s013ac650/s013ac650.cpp  ?FUN_013bdc30@@YAXXZ  013bdc30
 slices/s013ac650/s013ac650.cpp  ?FUN_013be2f0@@YAXXZ  013be2f0
 slices/s013ac650/s013ac650.cpp  ?FUN_013bed00@@YAXXZ  013bed00
-slices/s013ac650/s013ac650b.cpp  ?FUN_013bcc50@@YAXXZ  013bcc50  /Od /Ob1 /MD /Gy /TP
-slices/s013ac650/s013ac650b.cpp  ?FUN_013bcc70@@YAXXZ  013bcc70  /Od /Ob1 /MD /Gy /TP
+slices/s013ac650/s013ac650b.cpp  ?FUN_013bcc50@@YAXXZ  013bcc50  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+slices/s013ac650/s013ac650b.cpp  ?FUN_013bcc70@@YAXXZ  013bcc70  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+slices/s013ac650/s013ac650b.cpp  ?FUN_013bca50@@YAXXZ  013bca50  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
