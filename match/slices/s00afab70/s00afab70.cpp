@@ -287,8 +287,7 @@ bool DistCtx::IsCloser(int a, int b) const {
 void SP::cActionCircle::RemoveAgent(cGameData* agent) {
   int n = (int)(mSlots.mpEnd - mSlots.mpBegin);
   for (int i = 0; i < n; i++) {
-    tSlot* s = mSlots.mpBegin + i;
-    if (s->mpReservingNoun.mpObject == agent) s->Clear();
+    if (mSlots.mpBegin[i].mpReservingNoun.mpObject == agent) mSlots.mpBegin[i].Clear();
   }
 }
 

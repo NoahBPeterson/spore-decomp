@@ -5,3 +5,4 @@ slices/s00afab70/s00afab70.cpp  ?ClearSlots@cActionCircle@SP@@QAEXXZ  00afafd0  
 slices/s00afab70/s00afab70.cpp  ?CopyAllocNode@@YGXPBUAllocNode@@@Z  00afb1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00afab70/s00afab70.cpp  ?ShuffleSlots@@YAXPAH0PAX@Z  00afb8a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00afab70/s00afab70.cpp  ??1cActionCircle@SP@@QAE@XZ  00afbad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afab70/s00afab70.cpp  ?RemoveAgent@cActionCircle@SP@@QAEXPAVcGameData@2@@Z  00afae50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
