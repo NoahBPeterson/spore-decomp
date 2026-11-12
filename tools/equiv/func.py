@@ -111,6 +111,12 @@ def obj_func(obj, sym, size=None):
     return Func(0, data, toks, sym, "ours", {"obj": obj, "symbol": sym})
 
 
+def ret64(symbol):
+    """True when the decorated name returns a 64-bit integer (__int64 / unsigned __int64: edx:eax)."""
+    import re
+    return bool(symbol) and re.search(r"@@(?:Y[A-Z]|[A-Z][A-D][A-Z])_[JK]", symbol) is not None
+
+
 def our_func(va, flags=None):
     """Build our function the way the byte-match check does (an /LTCG build when it has a stub file)."""
     import task as T
@@ -128,7 +134,7 @@ def our_func(va, flags=None):
     sym, why = S.find_symbol(Coff(obj), ident, va, src, orig_size=fp["size"])
     if not isinstance(sym, str):
         raise SystemExit("0x%08x: compiled function not found: %s" % (va, why))
-    meta = {"src": os.path.relpath(src, ROOT), "flags": fl, "symbol": sym}
+    meta = {"src": os.path.relpath(src, ROOT), "flags": fl, "symbol": sym, "ret64": ret64(sym)}
     stubs = ltcg.stubs_file(ident, va)
     if stubs:
         import tempfile

@@ -1,0 +1,358 @@
+--- a/src/validator/ddec.cc
++++ b/src/validator/ddec.cc
+@@ -15,6 +15,7 @@
+ #include "src/cfg/paths.h"
+ #include "src/validator/bounded.h"
+ #include "src/validator/ddec.h"
++#include "src/validator/hint_parser.h"
+ #include "src/validator/null.h"
+ #include "src/validator/invariants/conjunction.h"
+ #include "src/validator/invariants/disjunction.h"
+@@ -149,6 +150,22 @@
+         end->add_invariant(mem_equ);
+ 
+       invariants.push_back(end);
++    } else if (ddec_hint_path()) {
++      // DDEC_HINTS: the invariant of cutpoint i is read back, never learned.
++      vector<DdecHintCut> cuts;
++      string err;
++      if (!ddec_read_hints(cuts, err) || cuts.size() != target_cuts.size() - 2)
++        throw VALIDATOR_ERROR("DDEC_HINTS: cannot read the invariants " + err);
++      auto conj = new ConjunctionInvariant();
++      for (auto& line : cuts[i - 1].lines) {
++        DdecInvariantParser parser(line);
++        auto inv = parser.parse_line(err);
++        if (!inv)
++          throw VALIDATOR_ERROR("DDEC_HINTS: parse error: " + err);
++        conj->add_invariant(inv);
++      }
++      cout << "DDEC_HINTS: cutpoint " << i << " has " << conj->size() << " invariant(s)" << endl;
++      invariants.push_back(conj);
+     } else {
+       auto inv = learn_disjunction_invariant(target, rewrite, i);
+       invariants.push_back(inv);
+@@ -211,7 +228,8 @@
+ 
+     sanity_checks(target, rewrite);
+ 
+-    make_tcs(target, rewrite);
++    if (!ddec_hint_path())
++      make_tcs(target, rewrite);
+ 
+     DDEC_TC_DEBUG(
+       cout << "DDEC sandbox at " << sandbox_ << endl;
+@@ -254,6 +272,13 @@
+           return true;
+         }
+ 
++        if (ddec_hint_path()) {
++          // DDEC_HINTS: the given proof does not check; never weaken it, never try other cutpoints.
++          cout << "DDEC_HINTS: the given invariants do not check" << endl;
++          reset_mm();
++          return false;
++        }
++
+         // otherwise, remove invariants that failed to validate and try again...
+         // we want to be sure not to change the start/end invariants
+         DDEC_DEBUG(cout << "Validation failed; attempting to remove failed invariants" << endl;)
+--- a/src/validator/cutpoints.cc
++++ b/src/validator/cutpoints.cc
+@@ -17,6 +17,7 @@
+ #include "src/solver/z3solver.h"
+ #include "src/symstate/bitvector.h"
+ #include "src/validator/cutpoints.h"
++#include "src/validator/hint_parser.h"
+ 
+ #define MAX(a,b) ((a) > (b) ? (a) : (b))
+ 
+@@ -71,6 +72,38 @@
+ 
+ void Cutpoints::compute() {
+ 
++  // DDEC_HINTS: use exactly the cutpoints given (no data mining, no alternatives).
++  if (ddec_hint_path()) {
++    vector<DdecHintCut> cuts;
++    string err;
++    cutpoint_options_.clear();
++    pos_ = 0;
++    if (!ddec_read_hints(cuts, err)) {
++      error_ = "DDEC_HINTS: " + err;
++      return;
++    }
++    CutpointList option;
++    option.first.push_back(target_.get_entry());
++    option.second.push_back(rewrite_.get_entry());
++    for (auto& c : cuts) {
++      bool bad = c.target_block <= target_.get_entry() || c.target_block >= target_.get_exit() ||
++                 c.rewrite_block <= rewrite_.get_entry() || c.rewrite_block >= rewrite_.get_exit();
++      for (size_t k = 1; k < option.first.size(); ++k)
++        bad |= option.first[k] == c.target_block || option.second[k] == c.rewrite_block;
++      if (bad) {
++        error_ = "DDEC_HINTS: invalid cutpoint blocks";
++        return;
++      }
++      option.first.push_back(c.target_block);
++      option.second.push_back(c.rewrite_block);
++    }
++    option.first.push_back(target_.get_exit());
++    option.second.push_back(rewrite_.get_exit());
++    cutpoint_options_.push_back(option);
++    cout << "DDEC_HINTS: " << cuts.size() << " cutpoint(s) given" << endl;
++    return;
++  }
++
+   CfgPaths cfg_paths;
+   CfgSccs target_sccs(target_);
+   CfgSccs rewrite_sccs(rewrite_);
+--- a/src/validator/invariants/flag.h
++++ b/src/validator/invariants/flag.h
+@@ -45,6 +45,10 @@
+     }
+   }
+ 
++  /** Rebuilds the invariant from its printed form "( target !ne)": predicate "ne", fallthrough = the "!". */
++  FlagInvariant(const std::string& predicate, bool is_rewrite, bool fallthrough) :
++    predicate_(predicate), fallthrough_(fallthrough), is_rewrite_(is_rewrite) { }
++
+   SymBool operator()(SymState& left, SymState& right, size_t& tln, size_t& rln) const {
+     if (predicate_ == "") {
+       // fallthrough is aways taken
+--- /dev/null
++++ b/src/validator/hint_parser.h
+@@ -0,0 +1,236 @@
++// Copyright 2026 spore-decomp contributors. Apache License 2.0, like the rest of STOKE.
++//
++// DDEC hint mode: read cutpoints and invariants back from the text STOKE prints in its SUMMARY
++// ("Cutpoint i at blocks T / R" followed by one invariant per line), so that a recheck only verifies
++// a known proof instead of searching for one.  Enabled by DDEC_HINTS=<file>.
++//
++// Only the forms the DDEC learner produces are understood: implications whose antecedent is a
++// conjunction of jump-direction facts, linear equalities over 64-bit registers, "no signals",
++// "(t/r agree on memory)", "true" and "false".  Anything else is a parse error, and a parse error
++// makes the whole check fail (hints are never trusted, only checked).
++
++#ifndef STOKE_SRC_VALIDATOR_HINT_PARSER_H
++#define STOKE_SRC_VALIDATOR_HINT_PARSER_H
++
++#include <cstdlib>
++#include <fstream>
++#include <sstream>
++#include <string>
++#include <utility>
++#include <vector>
++
++#include "src/ext/x64asm/include/x64asm.h"
++#include "src/symstate/memory/arm.h"
++#include "src/validator/invariant.h"
++#include "src/validator/invariants/conjunction.h"
++#include "src/validator/invariants/equality.h"
++#include "src/validator/invariants/false.h"
++#include "src/validator/invariants/flag.h"
++#include "src/validator/invariants/implication.h"
++#include "src/validator/invariants/memory_equality.h"
++#include "src/validator/invariants/no_signals.h"
++#include "src/validator/invariants/true.h"
++
++namespace stoke {
++
++struct DdecHintCut {
++  size_t target_block;
++  size_t rewrite_block;
++  std::vector<std::string> lines;
++};
++
++inline const char* ddec_hint_path() {
++  return getenv("DDEC_HINTS");
++}
++
++/** Reads "Cutpoint i at blocks T / R" headers (block ids in hex, as printed) and the indented lines after each. */
++inline bool ddec_read_hints(std::vector<DdecHintCut>& cuts, std::string& err) {
++  std::ifstream in(ddec_hint_path());
++  if (!in) {
++    err = "cannot open DDEC_HINTS file";
++    return false;
++  }
++  std::string line;
++  while (std::getline(in, line)) {
++    if (line.find_first_not_of(" \t\r") == std::string::npos)
++      continue;
++    if (line.compare(0, 9, "Cutpoint ") == 0) {
++      size_t at = line.find(" at blocks ");
++      size_t slash = line.find(" / ");
++      if (at == std::string::npos || slash == std::string::npos) {
++        err = "bad cutpoint header: " + line;
++        return false;
++      }
++      DdecHintCut c;
++      c.target_block = std::stoul(line.substr(at + 11, slash - at - 11), nullptr, 16);
++      c.rewrite_block = std::stoul(line.substr(slash + 3), nullptr, 16);
++      cuts.push_back(c);
++      continue;
++    }
++    if (cuts.empty()) {
++      err = "invariant before any cutpoint header";
++      return false;
++    }
++    size_t b = line.find_first_not_of(" \t");
++    size_t e = line.find_last_not_of(" \t\r");
++    cuts.back().lines.push_back(line.substr(b, e - b + 1));
++  }
++  return true;
++}
++
++class DdecInvariantParser {
++public:
++  explicit DdecInvariantParser(const std::string& s) : s_(s), p_(0) {}
++
++  /** Parses one whole line; returns NULL (and sets error) unless the entire line is consumed. */
++  Invariant* parse_line(std::string& err) {
++    Invariant* inv = atom();
++    if (inv && p_ != s_.size()) {
++      fail("trailing text");
++      inv = NULL;
++    }
++    if (!inv)
++      err = error_ + " at column " + std::to_string(p_) + " of: " + s_;
++    return inv;
++  }
++
++private:
++  std::string s_;
++  size_t p_;
++  std::string error_;
++
++  Invariant* fail(const std::string& why) {
++    if (error_.empty())
++      error_ = why;
++    return NULL;
++  }
++  bool eat(const std::string& t) {
++    if (s_.compare(p_, t.size(), t) == 0) {
++      p_ += t.size();
++      return true;
++    }
++    return false;
++  }
++  bool peek(const std::string& t) const {
++    return s_.compare(p_, t.size(), t) == 0;
++  }
++
++  // conj := atom (" ^ " atom)*
++  Invariant* conj() {
++    std::vector<Invariant*> parts;
++    Invariant* a = atom();
++    if (!a)
++      return NULL;
++    parts.push_back(a);
++    while (eat(" ^ ")) {
++      a = atom();
++      if (!a)
++        return NULL;
++      parts.push_back(a);
++    }
++    if (parts.size() == 1)
++      return parts[0];
++    return new ConjunctionInvariant(parts);
++  }
++
++  Invariant* atom() {
++    if (eat("( target ") || eat("( rewrite ")) {
++      bool is_rewrite = s_.compare(p_ - 8, 8, "rewrite ") == 0;
++      bool neg = eat("!");
++      size_t q = s_.find(')', p_);
++      if (q == std::string::npos)
++        return fail("unterminated jump fact");
++      std::string pred = s_.substr(p_, q - p_);
++      for (char c : pred)
++        if (c < 'a' || c > 'z')
++          return fail("bad jump predicate");
++      p_ = q + 1;
++      return new FlagInvariant(pred, is_rewrite, neg);
++    }
++    if (eat("(t/r agree on memory)"))
++      return new MemoryEqualityInvariant();
++    if (peek("(t/r agree on"))
++      return fail("register-set equality is not accepted inside a hint");
++    if (eat("no signals"))
++      return new NoSignalsInvariant();
++    if (eat("true"))
++      return new TrueInvariant();
++    if (eat("false"))
++      return new FalseInvariant();
++    if (eat("( ")) {
++      Invariant* a = conj();
++      if (!a)
++        return NULL;
++      if (!eat(" => "))
++        return fail("expected =>");
++      Invariant* b = conj();
++      if (!b)
++        return NULL;
++      if (!eat(" )"))
++        return fail("expected )");
++      return new ImplicationInvariant(a, b);
++    }
++    return equality();
++  }
++
++  bool hex(uint64_t& v) {
++    size_t q = p_;
++    while (q < s_.size() && isxdigit((unsigned char)s_[q]))
++      q++;
++    if (q == p_)
++      return false;
++    if (q - p_ > 16)
++      return false;
++    v = std::stoull(s_.substr(p_, q - p_), nullptr, 16);
++    p_ = q;
++    return true;
++  }
++
++  // equality := term (" + " term)* " = 0x" hex ; term := ["-"] [hex "*"] "%" reg ["'"]
++  Invariant* equality() {
++    std::vector<Variable> terms;
++    while (true) {
++      bool neg = eat("-");
++      uint64_t coef = 1;
++      size_t save = p_;
++      if (!peek("%")) {
++        if (!hex(coef) || !eat("*")) {
++          p_ = save;
++          return fail("expected an invariant");
++        }
++      } else if (neg) {
++        return fail("bad coefficient");
++      }
++      if (!peek("%"))
++        return fail("expected a register");
++      size_t q = p_ + 1;
++      while (q < s_.size() && isalnum((unsigned char)s_[q]))
++        q++;
++      std::istringstream rs(s_.substr(p_, q - p_));
++      x64asm::R64 r = x64asm::rax;
++      rs >> r;
++      if (rs.fail())
++        return fail("not a 64-bit register");
++      p_ = q;
++      bool is_rewrite = eat("'");
++      if (peek("["))
++        return fail("sub-register terms are not accepted");
++      Variable v(r, is_rewrite);
++      v.coefficient = neg ? -(long)coef : (long)coef;
++      terms.push_back(v);
++      if (eat(" + "))
++        continue;
++      if (eat(" = 0x"))
++        break;
++      return fail("expected + or =");
++    }
++    uint64_t c;
++    if (!hex(c))
++      return fail("bad constant");
++    return new EqualityInvariant(terms, (long)c);
++  }
++};
++
++} // namespace stoke
++
++#endif

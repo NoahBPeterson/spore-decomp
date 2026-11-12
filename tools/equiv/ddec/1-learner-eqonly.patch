@@ -1,0 +1,30 @@
+--- a/src/validator/learner.cc
++++ b/src/validator/learner.cc
+@@ -311,6 +311,9 @@
+     return conj;
+   }
+ 
++  // DDEC_EQ_ONLY: learn only the paper's invariants (linear equalities + memory equality)
++  const bool eq_only = getenv("DDEC_EQ_ONLY") != nullptr;
++  if (!eq_only) {
+   // NonZero invariants
+   for (size_t k = 0; k < 2; ++k) {
+     auto& states = k ? rewrite_states : target_states;
+@@ -398,6 +401,8 @@
+   }
+ 
+ 
++  } // !eq_only
++
+   // Define columns that will be used to learn equalities
+   vector<Variable> columns;
+ 
+@@ -416,7 +421,7 @@
+       }
+     }
+   }
+-  auto mem_vars = get_memory_variables(target_, rewrite_);
++  auto mem_vars = eq_only ? std::vector<Variable>() : get_memory_variables(target_, rewrite_);
+   for (auto var : mem_vars) {
+     DDEC_DEBUG(cout << "Checking mem var: " << var << endl;)
+     if (var.size <= 8) {

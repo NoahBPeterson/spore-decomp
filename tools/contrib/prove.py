@@ -12,7 +12,8 @@ needs no proof. Otherwise the layers run cheapest first, each with a time limit:
   ddec     loop invariants with STOKE's DDEC in Docker (tools/equiv/ddec_layer.py)
 A function is EQUIVALENT when a layer proves it at L2 (every register), or at L1 (the calling contract) with the same
 kill set and entry registers as retail (tools/equiv/facts.py), and that layer rejects every mutant of our build
-(tools/equiv/mutate.py). A counterexample from any layer makes it REFUTED: the source computes something else.
+(tools/equiv/mutate.py). A counterexample from any layer makes it REFUTED at that level: the two versions differ in something a caller can
+see at that level (at L2 that can be a scratch register a normal caller ignores; see facts).
 """
 import argparse, hashlib, importlib, json, os, sys, time
 
@@ -38,6 +39,8 @@ def load_layer(name):
 
 def tool_versions():
     v = {"prove": PROVE_VERSION}
+    if os.path.exists(os.path.join(ROOT, "tools", "equiv", "ddec", "Dockerfile")):
+        v["stoke"] = "98d8a0f+ddec-hints-1"
     try:
         import angr
         v["angr"] = angr.__version__ if isinstance(angr.__version__, str) else ".".join(map(str, angr.__version__))

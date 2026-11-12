@@ -1,0 +1,10 @@
+--- a/src/validator/cutpoints.cc
++++ b/src/validator/cutpoints.cc
+@@ -265,6 +265,7 @@
+   }
+ 
+   sandbox_.run(testcase);
++  if (getenv("DDEC_TRACE")) std::cout << "[mine] tc " << testcase << " entry=" << cfg.get_entry() << " trace=" << trace.size() << " sig=" << (int)sandbox_.get_output(testcase)->code << std::endl;
+ 
+   for (auto it : to_free)
+     delete it;
