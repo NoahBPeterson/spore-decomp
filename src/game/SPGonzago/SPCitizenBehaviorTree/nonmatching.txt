@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00acca00 51 complete; spstl::remove_1st returns bool (orig writes al only: mov al,1 / xor al,al) so it is declared bool, not char (char made the checker compare ax); shift-loop shape differs. equiv PASS: 267 valid, 85.7% coverage, flags /O2 /MD /Gy /EHsc /TP (--require-all WEAK)
-00d90ac0 3 virtual-call scratch register choice (funcptr in edx vs eax) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d90d70 46 switch case tail-merging block layout (95 vs 92) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d90f90 67 register allocation (pOut in ebp, constant 1 in bl) (84 vs 93) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d91280 43 register allocation (esi/edi role swap) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

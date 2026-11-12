@@ -1,7 +1,6 @@
 00d90640 648 large multi-branch iteration/selection codegen not byte-reproducible (744 vs 776)
 00d90950 198 iteration loop + x87/call scheduling not byte-reproducible (259 vs 266)
 00d90a60 57 x87 left-operand eval order + branch/tail block layout (80 vs 88)
-00d90ac0 3 virtual-call scratch register choice (funcptr in edx vs eax)
 00d90b20 3 virtual-call scratch register choice (funcptr in edx vs eax)
 00d90bb0 82 call scheduling / register allocation (134 vs 135)
 00d90d70 49 switch case tail-merging block layout (95 vs 92)

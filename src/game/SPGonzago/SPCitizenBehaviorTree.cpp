@@ -23,6 +23,8 @@
 #include <float.h>
 #include "SP/cAnimatingCreature.h"
 #include <string.h>
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---- items of slice s00d90640 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PVN(n) virtual void pv##n();
@@ -198,8 +200,8 @@ public:
     void FUN_00c0d0c0(int a, int b);                    // 0x00c0d0c0
 };
 void* GetCurrentGameMode();                             // 0x00b5b800
-struct cLocoWrapper { void FUN_00b45410(); };           // 0x00b45410
-cLocoWrapper* __stdcall FUN_00b3d310(void* p);          // 0x00b3d310
+struct cLocoWrapper { void FUN_00b45410(cLocomotiveObject_s00d9_0640* p); }; // 0x00b45410
+cLocoWrapper* FUN_00b3d310();                          // 0x00b3d310
 // ---- items of slice s00d90640 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
@@ -1243,8 +1245,10 @@ namespace SP {
 void FUN_00d90ac0(cSPCreatureCitizen_s00d9_0640* p, BehaviorStateOut* pOut)
 {
     if (p->mf5E0 <= 1.5258789e-05f) {
-        FUN_00b3d310(&p->mLoco)->FUN_00b45410();
-        p->Flag8c();
+        FUN_00b3d310()->FUN_00b45410(&p->mLoco);
+        void** vtable = *(void***)p;
+        _ReadWriteBarrier();
+        ((void (__thiscall*)(cSPCreatureCitizen_s00d9_0640*))vtable[0x8c / 4])(p);
         pOut->mf0C = 10.0f;
         pOut->mf14 = 1.5f;
         pOut->m18 = 0;
