@@ -229,6 +229,18 @@ struct HostileEntry {
     uint32_t mField1c;                                          // +0x1c
     uint32_t mField20;                                          // +0x20
     uint32_t pad24;                                             // +0x24
+
+    HostileEntry& operator=(const HostileEntry& src)
+    {
+        mField08 = src.mField08;
+        mField0c = src.mField0c;
+        mField10 = src.mField10;
+        mField14 = src.mField14;
+        mByte18 = src.mByte18;
+        mField1c = src.mField1c;
+        mField20 = src.mField20;
+        return *this;
+    }
 };
 void*  EffectsManagerPtr();                                     // 0x0067DDD0
 void*  MessageServer();                                         // 0x0067DCC0
@@ -945,19 +957,11 @@ void FUN_00bfd430(const HostileEntry* first, const HostileEntry* last, HostileEn
 }
 
 // @ 0x00bfd490
-void FUN_00bfd490(HostileEntry* first, HostileEntry* last, HostileEntry* out)
+HostileEntry* FUN_00bfd490(HostileEntry* first, HostileEntry* last, HostileEntry* out)
 {
-    while (last != first) {
-        last -= 1;
-        out -= 1;
-        out->mField08 = last->mField08;
-        out->mField0c = last->mField0c;
-        out->mField10 = last->mField10;
-        out->mField14 = last->mField14;
-        out->mByte18 = last->mByte18;
-        out->mField1c = last->mField1c;
-        out->mField20 = last->mField20;
-    }
+    while (last != first)
+        *--out = *--last;
+    return out;
 }
 
 // @ 0x00bfd4e0
