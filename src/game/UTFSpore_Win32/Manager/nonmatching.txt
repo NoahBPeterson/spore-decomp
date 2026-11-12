@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 008de280 18 Manager::GetLoadedResource compressor-vector scan; register allocation differs (equiv PASS)
-008de2d0 4 Manager::IsDatabaseRegistered database-list scan; register allocation differs (equiv PASS)
+008de2d0 4 Manager::IsDatabaseRegistered database-list scan; register allocation differs (equiv PASS); R29 active byte-match claim
 008de310 68 Manager::FindDatabase database scan + virtual call; codegen differs (equiv WEAK)
 008de360 60 Manager::Fn8de360 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
 008de3b0 50 Manager::Fn8de3b0 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
