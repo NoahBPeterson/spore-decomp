@@ -3,6 +3,9 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "sse_helpers.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 #include "SP/cRelationshipManager.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cStarManager.h"
@@ -165,7 +168,12 @@ extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
 struct Tuning { float base, scale, lo, hi, pad, asym; };    // asym at +0x14
 struct RecItem { uint32_t key; RelTree tree; uint32_t pad; };   // 0x20
 struct RelBook {
-    char pad0[0x24];
+    char pad0[0x10];
+    float mHatedThreshold;
+    float mDislikedThreshold;
+    float mLikedThreshold;
+    float mFriendlyThreshold;
+    char pad20[4];
     RelTree mEmpty;                 // +0x24
     char pad1[0x9c - 0x24 - sizeof(RelTree)];
     RecItem* mBegin;                // +0x9c
@@ -180,6 +188,12 @@ struct RelBook {
     __declspec(noinline) String A1db0(Noun* a, Noun* b);
     __declspec(noinline) void  A1e30(Noun* a, Noun* b);
     __declspec(noinline) bool A1f20(uint32_t a, uint32_t b);
+    bool GetFlag8(uint32_t a, uint32_t b);
+    void ClearEvents(uint32_t a, uint32_t b);
+    RelData* InsertRel(RelTree* tree, uint32_t a, uint32_t b); // 0x00d05730
+    float RecordEventInTree(RelTree*, uint32_t, uint32_t, uint32_t, float); // 0x00d05d90
+    int GetRelLevel(uint32_t a, uint32_t b, int flag);
+    float CalculateAbsolute(uint32_t a, uint32_t b, int flag); // 0x00d05a20
     float GetRel(uint32_t a, uint32_t b, int flag);   // 0x00d00a10
     __declspec(noinline) RelData* FindRel(RelTree* t, uint32_t a, uint32_t b);  // 0x00d01410 (this unused)
     __declspec(noinline) float FindRelFeedback(RelTree* t, uint32_t a, uint32_t b, uint32_t key);    // 0x00d01470
@@ -1023,16 +1037,15 @@ void __cdecl GetPropertyListForPersonality(uint32_t personalityId, void* pOut)
 namespace SP {
 tRelEntry* __cdecl FUN_00d041d0(tRelEntry* pFirst, tRelEntry* pLast, tRelEntry* pDest)
 {
-    if (pFirst == pLast)
+    if (pFirst != pLast) {
+        do {
+            pFirst->mSub.FUN_00d03b10(pFirst->mSub.mpNode);
+            ++pFirst;
+            ++pDest;
+        } while (pFirst != pLast);
         return pDest;
-
-    tRelEntry* pOut = pDest;
-    do {
-        pFirst->mSub.FUN_00d03b10(pFirst->mSub.mpNode);
-        ++pFirst;
-        ++pOut;
-    } while (pFirst != pLast);
-    return pOut;
+    }
+    return pDest;
 }
 }  // namespace SP
 
@@ -1114,11 +1127,11 @@ float SP::cRelationshipManager::CalculateRelationshipAbsolute(unsigned int a1, u
     return 0;
 }
 
-// @ 0x00d05d90
+// @ 0x00d06240
 float SP::cRelationshipManager::RecordEvent(unsigned int event, unsigned int a2, SP::eRelationshipEvents a3, float a4)
 {
-    (void)event;
-    return 0;
+    RelBook* book = reinterpret_cast<RelBook*>(this);
+    return book->RecordEventInTree(book->A1ab0(event, a2), event, a2, a3, a4);
 }
 
 // @ 0x00d06030
@@ -1240,4 +1253,181 @@ void FUN_013621a0()
 {
     g_01581f50 = T("mRelationships", 0x56920bau, 0x24, fn_00692ca0, fn_00d04aa0, fn_00d00ff0, fn_00c2e4e0, fn_00692fb0, fn_00d00c00, fn_00d022e0);
     g_01581f8c = T("mEmpiresToDecayPending", 0x6538767u, 0x60, fn_00692ca0, fn_00d03a40, fn_00c761c0, fn_00c2e4e0, fn_00692fb0, fn_00b1fbf0, fn_00eafe40);
+}
+
+// @ 0x00d038a0
+bool RelBook::GetFlag8(uint32_t a, uint32_t b)
+{
+    RelData* data = FindRel(A1ab0(a, b), a, b);
+    if (data) {
+        bool enabled = (data->flags & 8) != 0;
+        return enabled;
+    }
+    return false;
+}
+
+struct RelationshipPlanet {
+    unsigned int FindEmbassy(); // 0x00ce6950
+};
+RelationshipPlanet* GetRelationshipPlanet(); // 0x010212a0
+struct RelationshipSnapshot {
+    unsigned int reserved[2];
+    unsigned int count;
+    void Assign(const RelationshipSnapshot* source); // 0x00d049d0
+};
+struct RelationshipSnapshotVector {
+    int Erase(const unsigned int* key); // 0x00d05560
+    RelationshipSnapshot* Index(const unsigned int* key); // 0x00d055d0
+};
+struct RelationshipCountMap {
+    unsigned int* Insert(const unsigned int* key); // 0x00f41aa0
+};
+struct RelationshipSnapshotManager {
+    char pad[0x24];
+    RelationshipSnapshot current;
+    char pad2[0x9c - 0x24 - sizeof(RelationshipSnapshot)];
+    RelationshipSnapshotVector snapshots;
+    void Capture(const RelationshipSnapshotManager* source);
+};
+
+// @ 0x00d056c0
+void RelationshipSnapshotManager::Capture(const RelationshipSnapshotManager* source)
+{
+    unsigned int key = GetRelationshipPlanet()->FindEmbassy();
+    snapshots.Erase(&key);
+    RelationshipSnapshot* destination = snapshots.Index(&key);
+    destination->Assign(&source->current);
+    unsigned int count = snapshots.Index(&key)->count;
+    *reinterpret_cast<RelationshipCountMap*>(reinterpret_cast<char*>(this) + 0xb4)->Insert(&key) = count;
+}
+
+struct RelationshipFeedbackTree {
+    unsigned int allocator;
+    void* first;
+    void* last;
+    void* root;
+    unsigned char color;
+    char pad[3];
+    unsigned int size;
+    void Nuke(void* root); // 0x009a9600
+};
+
+// @ 0x00d05830
+void RelBook::ClearEvents(uint32_t a, uint32_t b)
+{
+    NormalizePair(&a, &b);
+    uint32_t second = b;
+    uint32_t first = a;
+    RelTree* tree = A1ab0(first, second);
+    RelData* data = FindRel(tree, first, second);
+    if (!data) data = InsertRel(tree, first, second);
+    RelationshipFeedbackTree* feedback = reinterpret_cast<RelationshipFeedbackTree*>(reinterpret_cast<char*>(data) + 8);
+    feedback->Nuke(feedback->root);
+    feedback->last = &feedback->first;
+    feedback->first = &feedback->first;
+    _ReadWriteBarrier();
+    feedback->root = 0;
+    feedback->color = 0;
+    feedback->size = 0;
+}
+
+struct RelationshipFeedbackNode {
+    RBNode links;
+    uint32_t key;
+    float value;
+};
+struct RelationshipFeedbackLookup {
+    void find(RelationshipFeedbackNode** result, const uint32_t* key); // 0x00e5c780
+};
+
+// @ 0x00d01470
+float RelBook::FindRelFeedback(RelTree* tree, uint32_t a, uint32_t b, uint32_t key)
+{
+    float result = 0.0f;
+    RelData* data = FindRel(tree, a, b);
+    if (data) {
+        uint32_t event = key;
+        RelationshipFeedbackNode* found;
+        reinterpret_cast<RelationshipFeedbackLookup*>(reinterpret_cast<char*>(data) + 8)->find(&found, &event);
+        if (reinterpret_cast<char*>(found) != reinterpret_cast<char*>(data) + 12) result = found->value;
+        else result = 0.0f;
+    }
+    return result;
+}
+
+extern const char kRelationshipAllocatorName[]; // 0x013f09b4
+extern const char kRelationshipAllocatorFile[]; // 0x013ebb38
+extern "C" void* __cdecl AllocateRelationshipNode(unsigned int size, const char* name, int flags, int alignment, const char* file, int line); // 0x00f473a0
+struct RelationshipEventTree {
+    void Copy(const RelationshipEventTree* source); // 0x00d01a40
+};
+struct RelationshipNodePayload {
+    unsigned int first;
+    unsigned int second;
+    float value;
+    unsigned int flags;
+    RelationshipEventTree events;
+};
+struct RelationshipNodeFactory {
+    __declspec(noinline) void* Create(const RelationshipNodePayload* value);
+};
+
+// @ 0x00d03e90
+void* RelationshipNodeFactory::Create(const RelationshipNodePayload* value)
+{
+    char* node = static_cast<char*>(AllocateRelationshipNode(0x3c, kRelationshipAllocatorName, 0, 0, kRelationshipAllocatorFile, 0xd1));
+    RelationshipNodePayload* payload = reinterpret_cast<RelationshipNodePayload*>(node + 0x10);
+    if (payload) {
+        payload->first = value->first;
+        payload->second = value->second;
+        payload->value = value->value;
+        payload->flags = value->flags;
+        payload->events.Copy(&value->events);
+    }
+    return node;
+}
+
+extern "C" void __cdecl InsertRelationshipTreeNode(RBNode* node, RBNode* parent, RBNode* anchor, int side); // 0x009216a0
+struct RelationshipInsertionTree {
+    unsigned int allocator;
+    RBNode anchor;
+    unsigned int size;
+    Iter Insert(RBNode* parent, const RelationshipNodePayload* value, bool forceLeft);
+};
+
+// @ 0x00d03ef0
+Iter RelationshipInsertionTree::Insert(RBNode* parent, const RelationshipNodePayload* value, bool forceLeft)
+{
+    const uint32_t* parentKey = reinterpret_cast<const uint32_t*>(parent + 1);
+    uint32_t first;
+    int side = !forceLeft && parent != &anchor &&
+        (first = value->first, _ReadWriteBarrier(),
+         !(parentKey[0] > first || (!(parentKey[0] < first) && value->second < parentKey[1])));
+    RBNode* node = static_cast<RBNode*>(reinterpret_cast<RelationshipNodeFactory*>(this)->Create(value));
+    InsertRelationshipTreeNode(node, parent, &anchor, side);
+    ++size;
+    return Iter(node);
+}
+
+extern const float kRelationshipMinimum; // 0x01478d5c
+extern const float kRelationshipMaximum; // 0x01478d60
+
+// @ 0x00d00a10
+float RelBook::GetRel(uint32_t a, uint32_t b, int flag)
+{
+    float result = CalculateAbsolute(a, b, flag);
+    float minimum = kRelationshipMinimum;
+    float maximum = kRelationshipMaximum;
+    return SseClamp(result, minimum, maximum);
+}
+
+// @ 0x00d00a70
+int RelBook::GetRelLevel(uint32_t a, uint32_t b, int flag)
+{
+    float result = SseClamp(CalculateAbsolute(a, b, flag), -10.0f, 10.0f);
+    if (result > mDislikedThreshold && result < mLikedThreshold) return 2;
+    if (result >= mLikedThreshold && result < mFriendlyThreshold) return 3;
+    if (result >= mFriendlyThreshold) return 4;
+    if (result <= mDislikedThreshold && result > mHatedThreshold) return 1;
+    return 0;
 }
