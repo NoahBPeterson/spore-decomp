@@ -241,19 +241,41 @@ def line_chart(pts, total_f, total_b):
     for k in range(0, span + 1, step):
         dd = d0 + datetime.timedelta(days=k)
         ticks.append('<text x="%.1f" y="%d" text-anchor="middle">%s</text>' % (x(dd.isoformat()), H - 8, dd.strftime("%b %-d")))
+    labels = []                                   # (y of the line's end, x, colour, text); placed after all lines
+
     def series(vals, color, label, dash=""):
         path = " ".join("%s%.1f,%.1f" % ("M" if i == 0 else "L", x(d), y(v)) for i, (d, v) in enumerate(vals))
         lx, ly = x(vals[-1][0]), y(vals[-1][1])
+        labels.append((ly, lx, color, "%.1f%% %s" % (vals[-1][1], label)))
         return ('<path d="%s" fill="none" stroke="%s" stroke-width="2.5" %s/>' % (path, color, dash) +
-                '<circle cx="%.1f" cy="%.1f" r="3.5" fill="%s"/>' % (lx, ly, color) +
-                '<text x="%.1f" y="%.1f" style="fill:%s;font-weight:600">%.1f%% %s</text>' % (lx + 8, ly + 4, color, vals[-1][1], label))
+                '<circle cx="%.1f" cy="%.1f" r="3.5" fill="%s"/>' % (lx, ly, color))
+
+    def place_labels(gap=15):
+        """End-of-line labels, pushed apart vertically so close lines (bytes vs + equivalent) never overlap; a
+        moved label gets a short leader line back to its point."""
+        order = sorted(labels)
+        ys = [ly for ly, _x, _c, _t in order]
+        for k in range(1, len(ys)):               # push down
+            ys[k] = max(ys[k], ys[k - 1] + gap)
+        ys[-1] = min(ys[-1], H - B)               # keep inside the plot, then push up
+        for k in range(len(ys) - 2, -1, -1):
+            ys[k] = min(ys[k], ys[k + 1] - gap)
+        out = []
+        for (ly, lx, color, text), ty in zip(order, ys):
+            if abs(ty - ly) > 1:
+                out.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="1"/>'
+                           % (lx + 4, ly, lx + 10, ty, color))
+            out.append('<text x="%.1f" y="%.1f" style="fill:%s;font-weight:600">%s</text>' % (lx + 12, ty + 4, color, text))
+        return "".join(out)
+
     sf = [(d, pct(f, total_f)) for d, f, b, e in pts]
     sb = [(d, pct(b, total_b)) for d, f, b, e in pts]
     se = [(d, pct(b + e, total_b)) for d, f, b, e in pts]
-    eq = series(se, "var(--equiv)", "+ equivalent", 'stroke-dasharray="2 3"') if any(e for _d, _f, _b, e in pts) else ""
-    return ('<svg class="chart" viewBox="0 0 %d %d" role="img" aria-label="Byte-exact share over time">%s%s%s%s%s</svg>'
-            % (W, H, "".join(g), "".join(ticks), series(sf, "var(--done2)", "of functions", 'stroke-dasharray="5 4"'),
-               series(sb, "var(--done)", "of bytes"), eq))
+    lines = series(sf, "var(--done2)", "of functions", 'stroke-dasharray="5 4"') + series(sb, "var(--done)", "of bytes")
+    if any(e for _d, _f, _b, e in pts):
+        lines += series(se, "var(--equiv)", "+ equivalent", 'stroke-dasharray="2 3"')
+    return ('<svg class="chart" viewBox="0 0 %d %d" role="img" aria-label="Byte-exact share over time">%s%s%s%s</svg>'
+            % (W, H, "".join(g), "".join(ticks), lines, place_labels()))
 
 
 def build(out, prs_path, repo):
