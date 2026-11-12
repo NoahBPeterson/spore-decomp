@@ -894,7 +894,13 @@ long long cEffectsManager::GetS1c(int t)
     IColl7* p = (IColl7*)m48;
     if (p)
         return p->s1c(t);
-    return 0xFFFFFFFFFFFFFFFFull;
+    union {
+        long long value;
+        struct { unsigned low, high; } words;
+    } missing;
+    missing.words.low = ~0u;
+    missing.words.high = ~0u;
+    return missing.value;
 }
 
 // @ 0x00a6cd90
