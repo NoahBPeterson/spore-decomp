@@ -1,3 +1,6 @@
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
+
 // s00e033d0 -- Spore global-UI ban list / pause helper slice (retail Spore).
 // Offsets and call sequences come from work/match/scratch_s00e033d0_cards.txt.
 // Every function has exactly one `// @ 0x<VA>` marker above it.
@@ -544,6 +547,8 @@ void* cSPUIGlobalUI::Construct()
 void cSPUIGlobalUI::Destroy()
 {
     this->mpVtbl = (void*)0x0147f288;
+    // Install the teardown interface before reading the registered handler.
+    _ReadWriteBarrier();
 
     void* h = this->mpHandler;
     if (h != 0) {

@@ -319,8 +319,10 @@ public:
 
 class cObjectManager {
 public:
-    uint32_t mField0;
-    uint32_t mField4;
+    // Retail has eight 0x38-byte stimuli, followed by the two mask words.
+    uint32_t mStimuliStorage[0x1c0 / 4];
+    uint32_t mMaskLow;                               // +0x1c0
+    uint32_t mMaskHigh;                              // +0x1c4
     void* Get(uint32_t mask, uint32_t zero);         // 0x00bc96a0
     void* GetZeroFirst(uint32_t zero, uint32_t mask); // 0x00bc96a0
     void Remove(uint32_t mask, uint32_t zero);       // 0x00bc98f0
@@ -330,8 +332,6 @@ class cManagerOwner {
 public:
     uint8_t mPad00[8];
     cObjectManager mManager;                         // +0x08
-    uint8_t mPad18[0x1cc - 0x10];
-    uint32_t mField1cc;                              // +0x1cc
     uint8_t mPad1d0[0x1d8 - 0x1d0];
     uint32_t mField1d8;                              // +0x1d8
 };
@@ -354,6 +354,9 @@ public:
     uint8_t mPad00[0xc];
     uint32_t mState;                                 // +0x0c
     uint32_t mField10;                               // +0x10
+    uint32_t mOpaque14[(0x2c - 0x14) / 4];
+    void* mpInterface;                              // +0x2c
+    uint32_t mOpaque30[2];
 };
 
 class cGameState {
@@ -468,8 +471,7 @@ void UpdateEditorSelection(cEditorGameObject* p, uint32_t objectID)
 // @ 0x00d7a260
 float IsDanceFinisher(cEditorGameObject* p)
 {
-    cObjectManager* manager = &p->mpB4C->mManager;
-    cRawHandle* raw = (cRawHandle*)manager->GetZeroFirst(0, 0x40000);
+    cRawHandle* raw = (cRawHandle*)p->mpB4C->mManager.GetZeroFirst(0, 0x40000);
     if (raw && raw->mState == 6) {
         if (HasTag(raw, 0xe9cb8ba) || HasTag(raw, 0x137e8e0))
             return 1.0f;
@@ -555,7 +557,7 @@ return_zero:
 // @ 0x00d7a490
 float IsEditorObjectBitClear(cEditorGameObject* p)
 {
-    if ((p->mpB4C->mField1cc & 0x100) != 0)
+    if ((p->mpB4C->mManager.mMaskHigh & 0x100) != 0)
         return 0.0f;
     return 1.0f;
 }

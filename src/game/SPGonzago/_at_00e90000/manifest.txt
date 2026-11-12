@@ -2,3 +2,4 @@
 ../src/game/SPGonzago/_at_00e90000.cpp  ?MakeView@cPlaceholderColonyEditorCursorAttachment@SP@@QAEPAV12@PAX@Z  00e90be0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e90000.cpp  ?IsIdInRange@@YA_N_K@Z  00e972b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00e90000.cpp  ??0cCreatureCameraEffects@@QAE@XZ  00e972e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00e90000.cpp  ??0cToolObject@SP@@QAE@XZ  00e90d00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
