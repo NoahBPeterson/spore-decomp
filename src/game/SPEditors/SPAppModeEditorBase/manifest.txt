@@ -85,3 +85,7 @@
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?Deactivate@cAppModeEditorBase_s0058_7a20@SP@@QAEXXZ  00587a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?GetBudgetFraction@cAppModeEditorBase_s0057_44b0@SP@@QAEMXZ  005745c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?GetName@cAppModeEditorNameView_s00575e50@SP@@UBEPB_WXZ  00575e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?AddRef@cAppModeEditorBase@SP@@UAEHXZ  005b2490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?GetEditorConfig@cEditor@@UAEHXZ  005723d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?AsLayer@cAppModeEditorBase@SP@@UAEPAVcILayer@2@XZ  00574a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?ScalarDeletingDestructor@EditorBaseLifetime@@QAEPAU1@I@Z  0057d6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -430,7 +430,9 @@ struct cEditor {
     cEditorModel* mpModel;           // +0x98
     char pad9c[0x150 - 0x9c];
     cUndoMgr* mpUndo;                // +0x150
-    char pad154[0x1cc - 0x154];
+    char pad154[0x18c - 0x154];
+    int mEditorConfig;               // +0x18c
+    char pad190[0x1cc - 0x190];
     cLimitsData* mpLimits;           // +0x1cc
     char pad1d0[0x2a8 - 0x1d0];
     uint32_t mGroup;                 // +0x2a8
@@ -13370,3 +13372,38 @@ cSPEditorManipulation56::cSPEditorManipulation56()
   mChangedObject = false;
 }
 }  // namespace SP
+
+// @ 0x005b2490
+int SP::cAppModeEditorBase::AddRef()
+{
+    volatile int& count = mRefCount;
+    const int next = count + 1;
+    count = next;
+    return next;
+}
+
+// @ 0x005723d0
+int cEditor::GetEditorConfig()
+{
+    return mEditorConfig;
+}
+
+// @ 0x00574a50
+SP::cILayer* SP::cAppModeEditorBase::AsLayer()
+{
+    return (SP::cILayer*)mEditorSaveModel.mpObject;
+}
+
+struct EditorBaseLifetime {
+    void Destroy();  // 0x00579e20 (cAppModeEditorBase destructor)
+    EditorBaseLifetime* ScalarDeletingDestructor(unsigned int flags);
+};
+
+// @ 0x0057d6f0
+EditorBaseLifetime* EditorBaseLifetime::ScalarDeletingDestructor(unsigned int flags)
+{
+    Destroy();
+    if (flags & 1)
+        operator delete(this);
+    return this;
+}
