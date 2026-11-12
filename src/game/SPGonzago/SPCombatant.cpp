@@ -7,6 +7,9 @@
 #include "SP/cCombatant.h"
 #include "SP/cVarListSerializer.h"
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 // unnamed retail callees and globals (address in the comment)
 extern unsigned GetCurrentGameMode();          // 0xb5b800
 extern void  FUN_00b69930(void* obj, float value, int extra);        // 0x00b69930, cdecl, 3 args
@@ -574,8 +577,9 @@ void TrikeNotify(void* obj, void* owner, int extra)
 // @ 0x00bfcac0
 void Sim::DetachSlot()
 {
-    void* p = this->p_028;
     this->m_03c = -1;
+    _ReadWriteBarrier();
+    void* p = this->p_028;
     if (p) {
         this->p_028 = 0;
         ((void (__thiscall*)(void*))((VtObj*)p)->vt[25])(p);
