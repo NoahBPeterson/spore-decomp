@@ -15,6 +15,14 @@ struct SubObj {
     char d[28];
     void CopyFrom(const SubObj* src);      // @ 0x00440ff0 (this = dst, arg = src)
 };
+
+inline void padfn4() { uint32_t pad[4]; }
+
+struct Elem32 {
+    int32_t key;
+    SubObj  sub;
+    Elem32(const Elem32& o) { key = o.key; sub.CopyFrom(&o.sub); padfn4(); }
+};
 // Fixed eight-slot vector at node+0x14; the complete value is 0x5c bytes.
 struct NodeValueVector {
     void* mpBegin;
@@ -24,11 +32,6 @@ struct NodeValueVector {
     void* mpOverflow;
     struct Pair { uint32_t key, value; } mFixed[8];
     NodeValueVector* ConstructFrom(const NodeValueVector& source); // 0x00455cf0
-};
-
-struct Elem32 {
-    int32_t key;
-    SubObj  sub;
 };
 
 // vector<Elem32, fixed_vector_allocator>: begin/end/capacity/allocator/fixed buffer
@@ -48,32 +51,38 @@ static Elem32* uninitialized_copy_Elem32(Elem32* first, Elem32* last, Elem32* ds
 // @ 0x456360
 Elem32* ElemVector::insert(Elem32* pos, const Elem32* val)
 {
-    int idx = pos - mpBegin;
-    if (pos == mpEnd && mpEnd != mpCapacity) {
-        Elem32* p = mpEnd;
-        mpEnd = mpEnd + 1;
-        if (p) {
-            p->key = val->key;
-            p->sub.CopyFrom(&val->sub);
-        }
-    } else {
+    const int idx = (int)(pos - mpBegin);
+    if ((pos != mpEnd) || (mpEnd == mpCapacity))
         DoInsertValue(pos, val);
-    }
+    else
+        ::new (mpEnd++) Elem32(*val);
     return mpBegin + idx;
+}
+
+// eastl::less<int> compare used by lower_bound below.
+__forceinline bool LessInt32(const int32_t& a, const int32_t& b) { return a < b; }
+
+// The retail /Od wrappers retain unused inline-frame dwords from helpers cl
+// declined to inline; preserve those reservations.
+template<int Count> inline void ReserveContainerInlineFrame()
+{
+    uint32_t slots[Count];
 }
 
 // @ 0x456410  (eastl::lower_bound on Elem32 keys, int less-than)
 Elem32* lower_bound_Elem32(Elem32* first, Elem32* last, const int32_t* key)
 {
-    int n = last - first;
+    int n = (int)(last - first);
     while (n > 0) {
-        int half = n >> 1;
-        Elem32* mid = first + half;
-        if (mid->key < *key) {
-            first = mid + 1;
-            n = n - (half + 1);
+        Elem32* it = first;
+        ReserveContainerInlineFrame<1>();
+        const int nHalf = n >> 1;
+        it = it + nHalf;
+        if (LessInt32(it->key, *key)) {
+            first = ++it;
+            n -= nHalf + 1;
         } else {
-            n = half;
+            n = nHalf;
         }
     }
     return first;
@@ -135,20 +144,22 @@ void* RBTree_GetInsertPosition(char* self, void* result, RBNode* hint, const uin
 }
 
 // @ 0x4565f0  (reads param as vec3, returns 1/sqrt(dot))
-struct Vec3 { float x, y, z; };
+struct Vec3 {
+    float x, y, z;
+    Vec3(float x_, float y_, float z_) : x(x_), y(y_), z(z_) {}
+};
 float Vec3_InvLength(const Vec3* v)
 {
-    float d = v->x * v->x + v->y * v->y + v->z * v->z;
-    return 1.0f / sqrtf(d);
+    return 1.0f / sqrtf(v->x * v->x + v->y * v->y + v->z * v->z);
 }
 
 // @ 0x456650
 Vec3* Vec3_Scale(Vec3* out, const Vec3* v, float s)
 {
-    float x = v->x * s;
-    float y = v->y * s;
-    float z = v->z * s;
-    out->x = x; out->y = y; out->z = z;
+    Vec3 t(v->x * s, v->y * s, v->z * s);
+    out->x = t.x;
+    out->y = t.y;
+    out->z = t.z;
     return out;
 }
 
@@ -264,8 +275,6 @@ Elem32* ElemVector::DoInsertValue(Elem32* pos, const Elem32* val)
     return pos;
 }
 
-inline void padfn4() { uint32_t pad[4]; }
-
 // @ 0x457030  (Elem32 copy-construct helper, this = dest, arg = src)
 struct Elem32Copy {
     int32_t key;
@@ -290,24 +299,17 @@ struct RefObj {
 // @ 0x4571d0  (copy range of RefObj* forward, with AddRef/Release)
 RefObj** copy_ref_forward(RefObj** first, RefObj** last, RefObj** dst)
 {
-    for (; first != last; ++first) {
-        RefObj* p = *first;
-        if (p != *dst) {
-            RefObj* old = *dst;
-            if (p) p->AddRef();
-            *dst = p;
+    RefObj* old;
+    for (; first != last; ++dst, ++first) {
+        RefObj* src = *first;
+        if (src != *dst) {
+            old = *dst;
+            if (src) src->AddRef();
+            *dst = src;
             if (old) old->Release();
         }
-        ++dst;
     }
     return dst;
-}
-
-// The retail /Od wrapper retains eight unused inline-frame dwords.
-// Preserve that reservation before the move-commit layer.
-template<int Count> inline void ReserveContainerInlineFrame()
-{
-    uint32_t slots[Count];
 }
 
 struct Elem32MoveTag {
@@ -374,11 +376,12 @@ Triple* uninitialized_fill_n_Triple(Triple* dst, int n, const Triple* v)
 // @ 0x4574c0  (copy_backward of RefObj* with AddRef/Release)
 RefObj** copy_ref_backward(RefObj** first, RefObj** last, RefObj** dst)
 {
+    RefObj* old;
     while (last != first) {
         --last; --dst;
         RefObj* p = *last;
         if (p != *dst) {
-            RefObj* old = *dst;
+            old = *dst;
             if (p) p->AddRef();
             *dst = p;
             if (old) old->Release();
