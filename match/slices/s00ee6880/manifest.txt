@@ -3,3 +3,4 @@ slices/s00ee6880/s00ee6880.cpp  ??0Pane@@QAE@XZ  00ee6e80  /O2 /MD /Gy /TP /arch
 slices/s00ee6880/s00ee6880.cpp  ?FUN_00ee78c0@@YG_NH@Z  00ee78c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ee6880/s00ee6880.cpp  ?FUN_00ee7910@@YGDHPAIPAE@Z  00ee7910  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ee6880/s00ee6880.cpp  ??1Pane@@UAE@XZ  00ee6ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ee6880/s00ee6880.cpp  ?FUN_00ee6b40@@YIXPAUPane@@@Z  00ee6b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast

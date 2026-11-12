@@ -88,7 +88,7 @@ struct F_c88670 { void  __thiscall f(float*); };           // 0x00c88670
 #define G32(a)  (*(uint32_t*)(a))
 #define GF(a)   (*(float*)(a))
 struct CCB {
-    float __thiscall ce80(int, int);
+    float __thiscall ce80(int, int);                  // 0x00c0ce80
     void  __thiscall cf50();
     float __thiscall cfa0(int, char);
     void  __thiscall cff0(int);
@@ -120,7 +120,8 @@ void* __cdecl FUN_0067cb20();                // 0x0067cb20
 void  __cdecl FUN_011e07ef(void*);           // 0x011e07ef
 struct F_58     { void  __thiscall f(float*); };      // 0x00c886d0 cCommunity::func58h
 struct F_a02b40 { char  __thiscall f(int); };         // 0x00a02b40
-struct F_c04750 { void* __thiscall f(); };            // 0x00c04750
+struct F_c04750 { void* __thiscall Call04750(); };      // 0x00c04750
+struct VQuery3 { virtual void pv0(); virtual void pv1(); virtual void pv2(); virtual void* Query(int); };
 struct F_d9b0   { void  __thiscall f(); };            // 0x00c0d9b0 (slice 117)
 struct F_sw     { void __thiscall Ctor(int, int); unsigned long long __thiscall GetElapsedTime(); }; // 0x168db70
 struct CCM {
@@ -1085,12 +1086,12 @@ public:
     virtual void AddRef();          // 0x00
     virtual void Release();         // 0x04
     virtual void v08();
-    virtual void* Query(const void* pType);   // 0x0c
+    virtual void* Query();   // 0x0c
     virtual void v10();
     virtual uint32_t GetPoliticalID();        // 0x14
     virtual void v18();
     virtual void v1c();
-    virtual void v20();
+    virtual uint32_t v20();
     virtual void v24();
     virtual void v28();
     virtual void v2c();
@@ -1141,6 +1142,7 @@ public:
     Vec3 mOrientation;              // 0x158
     Vec3 mPosition;                 // 0x164
     uint8_t mPad170[0x10];
+    void __thiscall SetVisible(bool bVisible);   // 0x00a02b00
 };
 struct cCombatantSlot {
     int mKey;                       // 0x00
@@ -1182,7 +1184,10 @@ public:
     AnimatedCreature* mpAnimatedCreature;   // 0xb54
     uint32_t mSteeringFlags;        // 0xb58
     uint8_t mTargetFlag;            // 0xb5c
-    uint8_t mPadB5D[0x2ff];         // 0xb5d
+    uint8_t mPadB5D[0x2e3];         // 0xb5d .. 0xe40
+    cCombatantSlot* mpSlotsBegin;   // 0xe40
+    cCombatantSlot* mpSlotsEnd;     // 0xe44
+    uint8_t mPadE48[0x14];          // 0xe48 .. 0xe5c
     IRefCounted* mpSenseObject;     // 0xe5c
     uint8_t mPadE60[0x03];          // 0xe60
     uint8_t mPathValid;             // 0xe63
@@ -1190,13 +1195,11 @@ public:
     uint8_t mPadE68[0x14];          // 0xe68
     IRefCounted* mpSteeringTarget;  // 0xe7c
     uint8_t mPadE80[0x1c0];         // 0xe80
-    cCombatantSlot* mpSlotsBegin;   // 0xe40
-    cCombatantSlot* mpSlotsEnd;     // 0xe44
 
     void SteerTowards(const Vec3* pTarget, int nDelta);        // 0x00c0eae0
     void SetCreatureTarget(cCombatant* pTarget, bool bFlag, int nIntention);  // 0x00c0ed60
     void* GetTargetAsCreature();                                // 0x00c0ee70
-    void ApplyCombatTarget();                                   // 0x00c0ee90
+    void* ApplyCombatTarget();                                  // 0x00c0ee90
     void UpdateSteering(int nDelta, float fAmount);              // 0x00c0eec0
     void Hide();                                                // 0x00c0f280
     void Show();                                                // 0x00c0f2b0
@@ -1413,6 +1416,8 @@ struct CCreature {
 
 // ---- items of slice s00c15310 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float gF_15826c;        // 0x15826c
+extern float gF_1582e6c;       // 0x1582e6c
+extern float gF_1582e70;       // 0x1582e70
 extern float gF_158270;        // 0x158270
 extern float gF_169e280;       // 0x169e280
 extern float gF_169e284;       // 0x169e284
@@ -1644,7 +1649,7 @@ virtual void  SlotBc();
   virtual void  SlotC0();
 };
 void*  __cdecl FUN_00b3d310();                        // 0xb3d310
-int    __fastcall FUN_00c06000_tc(void* thisptr, int dummy); // 0xc06000 (ecx=this)
+int    __fastcall FUN_00c06000_tc(void* thisptr);      // 0xc06000 (ecx=arg)
 u8     __fastcall FUN_00c15150_tc(void* thisobj, int dummy, void* a1, u32 a2); // 0xc15150
 void   __cdecl FUN_00c0f490(void*);                   // 0xc0f490
 void   __cdecl FUN_00c0ca00(Vec3_s00c1_5310*, Vec3_s00c1_5310*, float, void*, void*); // 0xc0ca00
@@ -3682,7 +3687,8 @@ void* __cdecl FUN_00c0c440(uint32_t* first, uint32_t* last, uint32_t* dst)
   while (first != last) {
     if (dst) {
       dst[0]=first[0]; dst[1]=first[1]; dst[2]=first[2]; dst[3]=first[3];
-      dst[4]=first[4]; dst[5]=first[5];
+      dst[4]=first[4];
+      *(float*)(dst+5) = *(float*)(first+5);
       *(uint8_t*)(dst+6) = *(uint8_t*)(first+6);
       dst[7]=first[7];
       void* o = (void*)first[8];
@@ -3727,22 +3733,25 @@ bool __cdecl C5b0(int obj, int b, int* out)
 // @ 0x00c0ce30
 int __thiscall C::RelationIndex(int idx, char b)
 {
-  if (*(int*)((char*)this + 0xb20) == 0) return 0;
-  if (idx == 0) return 0;
-  int v = Cdb0() + g_15716d8[idx];
-  if (b == 0) v += *(int*)((char*)this + 0xfa0);
-  if (v < 0) return 0;
-  return v < 6 ? v : 5;
+  if (*(int*)((char*)this + 0xb20) != 0) {
+    if (idx != 0) {
+      int v = Cdb0() + g_15716d8[idx];
+      if (b == 0) v += *(int*)((char*)this + 0xfa0);
+      if (v >= 0)
+        return v < 6 ? v : 5;
+    }
+  }
+  return 0;
 }
 
 // @ 0x00c0cf50
 void __thiscall CCB::cf50()
 {
-    G32((char*)this + 0xfa8) = 0;
+    GF((char*)this + 0xfa8) = 0.0f;
     GF((char*)this + 0xfac) = ce80(1, 1);
     GF((char*)this + 0xfb0) = ce80(2, 1);
     GF((char*)this + 0xfb4) = ce80(3, 1);
-    G32((char*)this + 0x2a4) = G32((char*)this + 0xfb0);
+    GF((char*)this + 0x2a4) = GF((char*)this + 0xfb0);
 }
 
 // @ 0x00c0cfa0
@@ -3750,9 +3759,8 @@ float __thiscall CCB::cfa0(int index, char flag)
 {
     if (*(char*)((char*)this + 0xbb0) != 0)
         return ce80(2, 1) + GF(0x150c900);
-    if (flag != 0)
-        return GF((char*)this + 0xfa8 + index * 4);
-    return ce80(index, 0);
+    float v = flag != 0 ? GF((char*)this + 0xfa8 + index * 4) : ce80(index, 0);
+    return v;
 }
 
 // @ 0x00c0cff0
@@ -3770,17 +3778,23 @@ void __thiscall CCB::cff0(int param)
 // @ 0x00c0d050
 int __thiscall CCB::d050(float param)
 {
+    int idx = 3;
     int iVar1 = 0;
     do {
         if (iVar1 != 1) {
             float f;
-            if (*(char*)((char*)this + 0xbb0) == 0) f = ce80(iVar1, 0);
-            else f = ce80(2, 1) + GF(0x150c900);
-            if (f >= param) return iVar1;
+            if (*(char*)((char*)this + 0xbb0) != 0)
+                f = ce80(2, 1) + GF(0x150c900);
+            else
+                f = ce80(iVar1, 0);
+            if (f >= param) {
+                idx = iVar1;
+                break;
+            }
         }
         ++iVar1;
-        if (iVar1 > 3) return 3;
-    } while (true);
+    } while (iVar1 < 4);
+    return idx;
 }
 
 // @ 0x00c0d0c0
@@ -3903,10 +3917,11 @@ void* __thiscall CCM::e040()
 {
     char* c = *(char**)((char*)this + 0xb54);
     uint32_t local_4 = 0;
-    if (c == 0) return (void*)local_4;
-    void* vt = *(void**)c;
-    ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
-        c, &local_4, 0, 0, 0);
+    if (c != 0) {
+        void* vt = *(void**)c;
+        ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
+            c, &local_4, 0, 0, 0);
+    }
     return (void*)local_4;
 }
 
@@ -3953,11 +3968,12 @@ char __thiscall CCM::e120(int param_2)
 void* __thiscall CCM::e370()
 {
     char* c = *(char**)((char*)this + 0xb54);
-    if (c == 0) return 0;
     uint32_t local_4 = 0;
-    void* vt = *(void**)c;
-    ((void(__thiscall*)(void*, int, int, void*, int))(*(void**)((char*)vt + 0x58)))(
-        c, 0, 0, &local_4, 0);
+    if (c != 0) {
+        void* vt = *(void**)c;
+        ((void(__thiscall*)(void*, int, int, void*, int))(*(void**)((char*)vt + 0x58)))(
+            c, 0, 0, &local_4, 0);
+    }
     return (void*)local_4;
 }
 
@@ -4029,9 +4045,10 @@ float __thiscall CCM::e4f0()
     if (SP_GetCurrentGameMode() == (void*)0x1654c10
         && *(int*)(G32(0x16c7aa4) + 0xcc) == 2
         && this != 0) {
-        int r = (*(int(__thiscall**)(void*, int))((*(void***)this)[0xc / 4]))(this, 0xd0036e08);
-        if (r != 0 && ((G32((char*)this + 0xb58) >> 9) & 1) == 0) {
-            int* q = (int*)((F_c04750*)(void*)r)->f();
+        int r = (int)((VQuery3*)this)->Query(0xd0036e08);
+        bool bFlag = ((G32((char*)this + 0xb58) >> 9) & 1) != 0;
+        if (r != 0 && !bFlag) {
+            void* q = ((F_c04750*)(void*)r)->Call04750();
             if (q != 0) return GF((char*)q + 0x484);
         }
     }
@@ -4155,21 +4172,24 @@ void Simulator_cCreatureBase::SetCreatureTarget(cCombatant* pTarget, bool bFlag,
 // @ 0x00c0ee70
 void* Simulator_cCreatureBase::GetTargetAsCreature()
 {
-    if (mpCombatantTarget != nullptr)
-        return mpCombatantTarget->QueryTarget((const void*)0xce9f6639);
+    IRefCounted* pTarget = mpSteeringTarget;
+    if (pTarget != nullptr)
+        return pTarget->QueryTarget((const void*)0xce9f6639);
     return nullptr;
 }
 
 // @ 0x00c0ee90
-void Simulator_cCreatureBase::ApplyCombatTarget()
+void* Simulator_cCreatureBase::ApplyCombatTarget()
 {
-    if (mpSteeringTarget == nullptr)
-        return;
-    IRefCounted* pTarget = (IRefCounted*)mpSteeringTarget->Query(nullptr);
-    if (pTarget == nullptr)
-        return;
-    if (GetCurrentGameMode_s00c0_eae0() == &gGameModeCity)
-        mpSteeringTarget = pTarget;
+    IRefCounted* pSteering = mpSteeringTarget;
+    if (pSteering != nullptr) {
+        IRefCounted* pTarget = (IRefCounted*)pSteering->Query();
+        if (pTarget != nullptr) {
+            if (pTarget->v20() == 0x18eb45e)
+                return pTarget;
+        }
+    }
+    return nullptr;
 }
 
 // @ 0x00c0eec0
@@ -4236,7 +4256,7 @@ void Simulator_cCreatureBase::Hide()
     if (mpAnimatedCreature != nullptr) {
         mpAnimatedCreature->mFlags &= ~1u;
         *(uint8_t*)((uint8_t*)mpAnimatedCreature + 0x64) = 0;
-        HideCreature(true);
+        mpAnimatedCreature->SetVisible(true);
     }
 }
 
@@ -4289,13 +4309,13 @@ void Simulator_cCreatureBase::ResetCombatants()
     mIntentionTowardsTarget = 0;
 
     if (mpSenseObject != nullptr) {
-        mpSenseObject->Query(nullptr);
+        mpSenseObject->Query();
         IRefCounted* pOld = mpSenseObject;
         mpSenseObject = nullptr;
         pOld->Release();
     }
     if (mpSteeringTarget != nullptr) {
-        mpSteeringTarget->Query(nullptr);
+        mpSteeringTarget->Query();
         IRefCounted* pOld = mpSteeringTarget;
         mpSteeringTarget = nullptr;
         pOld->Release();
@@ -4310,22 +4330,25 @@ void Simulator_cCreatureBase::ResetCombatants()
 // @ 0x00c0f510
 bool Simulator_cCreatureBase::IsSlotEmpty(uint32_t nIndex)
 {
-    uint32_t nCount = (uint32_t)(mpSlotsEnd - mpSlotsBegin);
-    if (nCount <= nIndex)
-        return true;
-    if (mpSlotsBegin[nIndex].mpCombatant == nullptr && mpSlotsBegin[nIndex].mSecondaryKey == 0)
-        return true;
-    return false;
+    int nCount = (int)(mpSlotsEnd - mpSlotsBegin);
+    bool bEmpty = true;
+    if (nIndex < (uint32_t)nCount) {
+        cCombatantSlot* pSlot = &mpSlotsBegin[nIndex];
+        if (pSlot->mpCombatant != nullptr || pSlot->mSecondaryKey != 0)
+            bEmpty = false;
+    }
+    return bEmpty;
 }
 
 // @ 0x00c0f570
 int Simulator_cCreatureBase::CountValid()
 {
-    int nCount = (int)(mpSlotsEnd - mpSlotsBegin);
     int nValid = 0;
-    for (int i = 0; i < nCount; ++i) {
-        if (mpSlotsBegin[i].mpCombatant != nullptr || mpSlotsBegin[i].mSecondaryKey != 0)
+    int i = 0;
+    while (i < (int)(mpSlotsEnd - mpSlotsBegin)) {
+        if (mpSlotsBegin[i].mpCombatant != 0 || mpSlotsBegin[i].mSecondaryKey != 0)
             ++nValid;
+        ++i;
     }
     return nValid;
 }
@@ -4333,8 +4356,9 @@ int Simulator_cCreatureBase::CountValid()
 // @ 0x00c0f5f0
 bool Simulator_cCreatureBase::IsFull()
 {
+    int nValid = CountValid();
     int nCount = (int)(mpSlotsEnd - mpSlotsBegin);
-    return CountValid() == nCount;
+    return nValid == nCount;
 }
 
 // @ 0x00c0f620
@@ -4391,9 +4415,10 @@ uint32_t Simulator_cCreatureBase::FindNextValid(int nAfter)
 // @ 0x00c0f8a0
 cCombatant* Simulator_cCreatureBase::GetAt(uint32_t nIndex)
 {
+    cCombatant* pResult = nullptr;
     if (nIndex < (uint32_t)(mpSlotsEnd - mpSlotsBegin))
-        return mpSlotsBegin[nIndex].mpCombatant;
-    return nullptr;
+        pResult = mpSlotsBegin[nIndex].mpCombatant;
+    return pResult;
 }
 
 // @ 0x00c0f8f0
@@ -4412,12 +4437,16 @@ uint32_t Simulator_cCreatureBase::FindByCombatant(int nCombatant)
 // @ 0x00c0f960
 uint32_t Simulator_cCreatureBase::FindByKey(int nKey)
 {
+    uint32_t result = 0xffffffff;
     uint32_t nCount = (uint32_t)(mpSlotsEnd - mpSlotsBegin);
-    for (uint32_t i = 0; i < nCount; ++i) {
-        if (mpSlotsBegin[i].mKey == nKey)
-            return i;
+    cCombatantSlot* pSlot = mpSlotsBegin;
+    for (uint32_t i = 0; i < nCount; ++i, ++pSlot) {
+        if (pSlot->mKey == nKey) {
+            result = i;
+            break;
+        }
     }
-    return 0xffffffff;
+    return result;
 }
 
 // @ 0x00c0f9b0
@@ -5284,20 +5313,26 @@ void cSPCreatureBase_s00c1_5310::FUN_00c15470(s32 a2, RefCnt* a3, u8 a4)
 float cSPCreatureBase_s00c1_5310::FUN_00c15920()
 {
   s32 saved = (s32)(u32)(this->mpRefA_4cc);
-  s32 cur = FUN_00c06000_tc(FUN_00b3d310(), 0);
-  if (saved == cur && ((this->mFlags_ee4 >> 5) & 1) == 0)
-    return this->mF_1e4 * gF_15826c + gF_169e280;
-  return gF_146a32c;
+  s32 cur = FUN_00c06000_tc(FUN_00b3d310());
+  if (saved != cur)
+    return gF_146a32c;
+  bool bBit = ((this->mFlags_ee4 >> 5) & 1) != 0;
+  if (bBit)
+    return gF_146a32c;
+  return this->mF_1e4 * gF_1582e6c + gF_169e280;
 }
 
 // @ 0x00c15970
 float cSPCreatureBase_s00c1_5310::FUN_00c15970()
 {
   s32 saved = (s32)(u32)(this->mpRefA_4cc);
-  s32 cur = FUN_00c06000_tc(FUN_00b3d310(), 0);
-  if (saved == cur && ((this->mFlags_ee4 >> 5) & 1) == 0)
-    return this->mF_1e4 * gF_158270 + gF_169e284;
-  return gF_146a32c;
+  s32 cur = FUN_00c06000_tc(FUN_00b3d310());
+  if (saved != cur)
+    return gF_146a32c;
+  bool bBit = ((this->mFlags_ee4 >> 5) & 1) != 0;
+  if (bBit)
+    return gF_146a32c;
+  return this->mF_1e4 * gF_1582e70 + gF_169e284;
 }
 
 // @ 0x00c17580

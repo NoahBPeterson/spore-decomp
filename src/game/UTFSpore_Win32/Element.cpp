@@ -302,9 +302,7 @@ u16* Element::GetAttrValue(const u16* name)
 {
     Element* self = this;
     Attr* a = self->GetAttr( name);
-    if (a == 0)
-        return 0;
-    return a->mpValue;
+    return a ? a->mpValue : 0;
 }
 
 // @ 0x008e45d0

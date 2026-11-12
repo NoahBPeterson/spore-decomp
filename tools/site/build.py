@@ -8,7 +8,9 @@ tools/ci/known_failures.txt; totals are every retail function with a fingerprint
 (the last commit on main of each day), so it needs the full history (actions/checkout fetch-depth: 0). Merged pull
 requests come from --prs (gh pr list --state merged --json number,author,mergedAt,mergeCommit,body).
 
-Public-site rules: byte-exact counts only (no equivalence results), and no function names, symbol names or code.
+Public-site rules: byte-exact is the headline count. Functions proven behaviourally equivalent (equivalent.txt, proved by
+tools/contrib/prove.py and re-checked by a maintainer) are shown stacked on top, never mixed into it (decision
+2026-11-12); difftest results are never shown. No function names, symbol names or code.
 Module names are EA's top-level directory names, already public as the folders under src/game/.
 """
 import argparse, bisect, collections, datetime, glob, gzip, html, json, os, re, subprocess
@@ -17,6 +19,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 BANDS = [(0, 63), (64, 255), (256, 1023), (1024, 4095), (4096, 1 << 30)]
 MANIFEST_RE = re.compile(r"^(match/manifest\.txt|match/clones\.txt|match/slices/[^/]+/manifest\.txt|match/synth/[^/]+\.manifest|"
                          r"src/game/.+/manifest\.txt)$")
+EQUIV_RE = re.compile(r"^(match/slices/[^/]+/equivalent\.txt|src/game/.+/equivalent\.txt)$")
 
 
 def git(*a, inp=None):
@@ -50,6 +53,14 @@ def current(fps):
     return (vas - known) & set(fps)
 
 
+def current_equivalent(fps, done):
+    vas = set()
+    for path in glob.glob(os.path.join(ROOT, "match", "slices", "*", "equivalent.txt")) + \
+            glob.glob(os.path.join(ROOT, "src", "game", "**", "equivalent.txt"), recursive=True):
+        vas |= rows_vas(open(path, errors="replace").read())
+    return (vas & set(fps)) - done
+
+
 class BlobCache:
     """byte-exact VAs at a commit, reading each manifest blob once across all commits"""
     def __init__(self):
@@ -57,7 +68,7 @@ class BlobCache:
 
     def at(self, commit, fps):
         tree = git("ls-tree", "-r", commit, "--", "match", "src/game", "tools/ci/known_failures.txt")
-        want, known_blob = [], None
+        want, eqw, known_blob = [], [], None
         for line in tree.splitlines():
             meta, path = line.split("\t", 1)
             sha = meta.split()[2]
@@ -65,7 +76,9 @@ class BlobCache:
                 known_blob = sha
             elif MANIFEST_RE.match(path):
                 want.append(sha)
-        need = [s for s in set(want) | ({known_blob} if known_blob else set()) if s not in self.vas]
+            elif EQUIV_RE.match(path):
+                eqw.append(sha)
+        need = [s for s in set(want) | set(eqw) | ({known_blob} if known_blob else set()) if s not in self.vas]
         if need:
             out = subprocess.run(["git", "cat-file", "--batch"], cwd=ROOT, capture_output=True,
                                  input="\n".join(need).encode() + b"\n", check=True).stdout
@@ -81,11 +94,15 @@ class BlobCache:
             done |= self.vas[s][1]
         if known_blob:
             done -= self.vas[known_blob][1]
-        return done & set(fps)
+        done &= set(fps)
+        eq = set()
+        for s in eqw:
+            eq |= self.vas[s][1]
+        return done, (eq & set(fps)) - done
 
 
 def history(fps):
-    """[(date, functions, bytes)] for the last first-parent commit on main of each day"""
+    """[(date, functions, bytes, equivalent bytes)] for the last first-parent commit on main of each day"""
     log = git("log", "--first-parent", "--format=%H %cI", "HEAD").split("\n")
     last = {}
     for line in log:
@@ -95,9 +112,9 @@ def history(fps):
             last.setdefault(day, sha)          # log is newest first
     cache, pts = BlobCache(), []
     for day in sorted(last):
-        done = cache.at(last[day], fps)
+        done, eq = cache.at(last[day], fps)
         if done:
-            pts.append((day, len(done), sum(fps[v] for v in done)))
+            pts.append((day, len(done), sum(fps[v] for v in done), sum(fps[v] for v in eq)))
     return pts
 
 
@@ -164,9 +181,9 @@ def kb(b):
 
 CSS = """
 :root{--bg:#f7f5f0;--panel:#fffdf8;--ink:#1d2228;--muted:#5d6670;--line:#e3ddd2;--done:#2f7d5b;--done2:#9cc9b2;
---todo:#e9e3d8;--accent:#b5562b;--code:#f0ece4}
+--todo:#e9e3d8;--accent:#b5562b;--code:#f0ece4;--equiv:#7a9cc6}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#14171b;--panel:#1b1f24;--ink:#e8e6e1;--muted:#9aa3ad;
---line:#2c3239;--done:#4fb487;--done2:#2b6a4f;--todo:#2a2f36;--accent:#e08a5c;--code:#22272e}}
+--line:#2c3239;--done:#4fb487;--done2:#2b6a4f;--todo:#2a2f36;--accent:#e08a5c;--code:#22272e;--equiv:#5b7ea8}}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
 a{color:var(--accent)}main,header,footer{max-width:960px;margin:0 auto;padding:0 16px}
@@ -230,11 +247,13 @@ def line_chart(pts, total_f, total_b):
         return ('<path d="%s" fill="none" stroke="%s" stroke-width="2.5" %s/>' % (path, color, dash) +
                 '<circle cx="%.1f" cy="%.1f" r="3.5" fill="%s"/>' % (lx, ly, color) +
                 '<text x="%.1f" y="%.1f" style="fill:%s;font-weight:600">%.1f%% %s</text>' % (lx + 8, ly + 4, color, vals[-1][1], label))
-    sf = [(d, pct(f, total_f)) for d, f, b in pts]
-    sb = [(d, pct(b, total_b)) for d, f, b in pts]
-    return ('<svg class="chart" viewBox="0 0 %d %d" role="img" aria-label="Byte-exact share over time">%s%s%s%s</svg>'
+    sf = [(d, pct(f, total_f)) for d, f, b, e in pts]
+    sb = [(d, pct(b, total_b)) for d, f, b, e in pts]
+    se = [(d, pct(b + e, total_b)) for d, f, b, e in pts]
+    eq = series(se, "var(--equiv)", "+ equivalent", 'stroke-dasharray="2 3"') if any(e for _d, _f, _b, e in pts) else ""
+    return ('<svg class="chart" viewBox="0 0 %d %d" role="img" aria-label="Byte-exact share over time">%s%s%s%s%s</svg>'
             % (W, H, "".join(g), "".join(ticks), series(sf, "var(--done2)", "of functions", 'stroke-dasharray="5 4"'),
-               series(sb, "var(--done)", "of bytes")))
+               series(sb, "var(--done)", "of bytes"), eq))
 
 
 def build(out, prs_path, repo):
@@ -242,6 +261,8 @@ def build(out, prs_path, repo):
     done = current(fps)
     tf, tb = len(fps), sum(fps.values())
     df, db = len(done), sum(fps[v] for v in done)
+    eqv = current_equivalent(fps, done)
+    ef, eb = len(eqv), sum(fps[v] for v in eqv)
     meta = {"repo": repo, "sha": git("rev-parse", "HEAD").strip(),
             "when": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")}
     hist = history(fps)
@@ -259,13 +280,17 @@ def build(out, prs_path, repo):
     b.append('<div class="panel"><div class="hero">'
              '<div class="stat"><b>%.1f%%</b><span>of the code, by bytes</span></div>'
              '<div class="stat"><b>%s</b><span>of %s functions byte-exact</span></div>'
-             '<div class="stat"><b>%s</b><span>of %s rebuilt</span></div></div>'
-             '<div class="bar" aria-hidden="true"><i style="width:%.2f%%"></i></div>'
+             '<div class="stat"><b>%s</b><span>of %s rebuilt</span></div>'
+             '<div class="stat"><b>%.1f%%</b><span>byte-exact or proven equivalent (%s more functions)</span></div></div>'
+             '<div class="bar" aria-hidden="true"><i style="width:%.2f%%"></i><i style="width:%.2f%%;background:var(--equiv)"></i></div>'
              '<div class="legend"><span><i style="background:var(--done)"></i>byte-exact</span>'
+             '<span><i style="background:var(--equiv)"></i>proven equivalent, not byte-exact yet</span>'
              '<span><i style="background:var(--todo)"></i>not yet</span></div></div>'
-             % (pct(db, tb), fmt(df), fmt(tf), kb(db), kb(tb), pct(db, tb)))
+             % (pct(db, tb), fmt(df), fmt(tf), kb(db), kb(tb), pct(db + eb, tb), fmt(ef), pct(db, tb), pct(eb, tb)))
     b.append('<p class="note">Bytes are the honest measure: most of what remains is in large functions. Every count here '
-             'is checked against retail fingerprints by the pull-request check; nothing is counted on trust.</p>')
+             'is checked against retail fingerprints by the pull-request check; nothing is counted on trust. '
+             '"Proven equivalent" functions compile to different bytes that a machine-checked proof shows behave '
+             'identically to the original; they stay open until someone makes them byte-exact.</p>')
     if len(hist) >= 2:
         b.append('<h2>Over time</h2><div class="panel">%s</div><p class="note">Byte-exact share at the end of each day '
                  '(solid: bytes, dashed: functions). The drop on Nov 9 is the pull-request fingerprint check arriving: '

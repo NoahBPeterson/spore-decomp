@@ -7,3 +7,4 @@ slices/s007c4be0/s007c4be0.cpp  ?RegFF0001C@@YAXXZ                      007c5720
 slices/s007c4be0/s007c4be0.cpp  ?RegFF0002C@@YAXXZ                      007c57c0
 slices/s007c4be0/s007c4be0.cpp  ?IsType1Or9@@YAHH@Z                     007c57e0
 slices/s007c4be0/s007c4be0.cpp  ?IsType9to11@@YAHH@Z                    007c5800
+slices/s007c4be0/s007c4be0.cpp  ?Alloc@SerializedArray@@QAEPAXXZ  007c5490  /O2 /MD /Gy /EHsc /TP

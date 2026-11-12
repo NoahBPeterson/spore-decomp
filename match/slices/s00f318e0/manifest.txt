@@ -21,3 +21,4 @@ slices/s00f318e0/s00f318e0.cpp  ?setD0@Obj@@QAEXM@Z  00f31de0  /O2 /MD /Gy /EHsc
 slices/s00f318e0/s00f318e0.cpp  ?ratio@Obj@@QAEMXZ  00f31e60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f318e0/s00f318e0.cpp  ?FUN_00f31f20@@YAXPAUIFace14@@HHH@Z  00f31f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f318e0/s00f318e0.cpp  ?fit@Obj@@QAEXM@Z  00f32240  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?FUN_00f31ff0@@YIMPAUP2@@@Z  00f31ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

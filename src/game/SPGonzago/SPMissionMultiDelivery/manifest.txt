@@ -29,3 +29,4 @@
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?FUN_00c582a0@cSPMissionMultiDelivery_s00c5_7570@SP@@QAEXPAUWString@2@@Z  00c582a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?OnDelivery@cSPMissionMultiDelivery_s00c5_7570@SP@@QAEHHPAX@Z  00c57ef0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?FUN_00c57a80@tItemInfo_s00c5_7570@SP@@QAEPAU12@PAVcMissionTarget@2@_NMMM@Z  00c57a80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiDelivery.cpp  ?copy_forward_item@SP@@YAPAUtItemInfo_s00c5_7570@1@PAU21@00@Z  00c57810  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

@@ -62,10 +62,11 @@ template<class T> struct AutoRefCount {
     operator T*() const { return mpObject; }
 };
 
-// Layout helper: the AutoRefCount vector's inline constructor reserves one unused /Od slot.
+// Layout helper: the AutoRefCount vector's inline constructor reserves no /Od slot; its one
+// reserved dword sits at the GetUIState() compare in SetUIState (0x48a580), above the dtor holes.
 template<class T> struct CtorSlots { static void Reserve() {} static void ReserveClear() {} };
 template<class T> struct AutoRefCount;
-template<class T> struct CtorSlots<AutoRefCount<T> > { static void Reserve() { ScratchSlots<1>(); } static void ReserveClear() { ScratchSlots<3>(); } };
+template<class T> struct CtorSlots<AutoRefCount<T> > { static void Reserve() {} static void ReserveClear() { ScratchSlots<3>(); } };
 
 template<class T> struct VectorBase {
     T* mpBegin;
@@ -199,8 +200,8 @@ void cSPEditorLimbStructure::SetUIState(int state)
 void cSPEditorLimbStructure::SetUIState(cSPEditorLimbJoint* joint, int state)
 {
     if (joint) {
-        int ui = joint->mJointBlock->GetUIState();
-        if (ui != state) {
+        ScratchSlots<1>();
+        if (joint->mJointBlock->GetUIState() != state) {
             vector<AutoRefCount<cSPEditorBlock> > blocks;
             GetSymmetricBlocks(joint->mJointBlock, blocks);
             EditorUtils::SetSymmetricBlocksUIState(joint->mJointBlock, blocks, true);

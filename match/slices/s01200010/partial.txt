@@ -3,7 +3,6 @@
 01200800    10  equiv PASS 400 inputs, 100% coverage; only the scheduling of the loop entry and the reload of the matched element differ
 01200890    19  equiv FAIL 5/5 valid inputs, first mismatch on eax only (void function, memory effects identical); diff is the folded base load
 012008d0    28  equiv PASS 400 inputs, 100% coverage; register choice for the rebased members differs
-01200940    28  not re-checked with equiv (only reachable through the fixup wrapper's callback slot); call-through-memory operands became load-then-call
 01200960    40  equiv PASS 283 inputs, 100% coverage; only hoisted slot loads differ
 012009c0    15  equiv PASS 367 inputs, 100% coverage; only hoisted slot loads differ
 01200a10    15  equiv PASS 361 inputs, 100% coverage; only hoisted slot loads differ

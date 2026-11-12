@@ -12,3 +12,4 @@ slices/s0048a4e0/s0048a4e0.cpp  ?CollectLimbJoints@cSPEditorLimbStructure@SP@@QA
 slices/s0048a4e0/s0048a4e0.cpp  ?CollectLimbJoints@cSPEditorLimbStructure@SP@@QAEXPAVcSPEditorLimbJoint@2@PAU?$vector@PAVcSPEditorLimbJoint@SP@@@@@Z  0048b200  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s0048a4e0/s0048a4e0.cpp  ?FindJoint@cSPEditorLimbStructure@SP@@QAEPAVcSPEditorLimbJoint@2@PAVcSPEditorBlock@2@@Z  0048b2c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s0048a4e0/s0048a4e0.cpp  ?FindJoint@cSPEditorLimbStructure@SP@@QAEPAVcSPEditorLimbJoint@2@PAVcSPEditorBlock@2@PAV32@@Z  0048b2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?SetUIState@cSPEditorLimbStructure@SP@@QAEXPAVcSPEditorLimbJoint@2@H@Z  0048a580  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

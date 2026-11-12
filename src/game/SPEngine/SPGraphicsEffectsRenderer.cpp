@@ -3513,8 +3513,7 @@ C9A30::~C9A30()
         f_f47380(a);
     int* p = m4;
     if (p != 0) {
-        int n = p[1] + -1;
-        p[1] = n;
+        int n = (*(volatile int*)&p[1] += -1);
         if (n == 0) {
             p[1] = 1;
             _ReadWriteBarrier();

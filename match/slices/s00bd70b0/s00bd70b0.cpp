@@ -704,16 +704,25 @@ void __fastcall FUN_00bd8000(int param_1)
 
 // ===========================================================================
 // @ 0x00bd80d0 — return the "level" of a noun (50 for the player civ).
+// GetPlayerCivilization (0x00b25fb0) and GetPlayerEmpireOrMinus1 (0x00b1f9d0)
+// are both reached through the manager returned by SP_NounManager (0x00b3d300,
+// called twice): `call 0xb3d300; mov ecx,eax; call <member>`.  The vtable slot
+// +0x4c virtual takes no arguments; FUN_00d00d00 (0x00d00d00) is a two-argument
+// cdecl float(void*, void*) whose right-to-left argument evaluation pushes the
+// empire id before the virtual call and its result after (`add esp, 8`).
 // ===========================================================================
-extern "C" void* __cdecl FUN_00b1f9d0p();
-extern "C" float __cdecl FUN_00d00d00p(int);
+struct NounMgr_s00bd70b0 {
+    void* GetPlayerCivilization();               // 0x00b25fb0, thiscall, ret 0
+    int   GetPlayerEmpire();                     // 0x00b1f9d0, thiscall, ret 0 (ignores this)
+};
+extern "C" float __cdecl FUN_00d00d00(void*, void*);   // 0x00d00d00
 float __cdecl FUN_00bd80d0(int* param_1)
 {
-    void* civ = FUN_00b25fb0(FUN_00b3d300p());
+    void* civ = ((NounMgr_s00bd70b0*)FUN_00b3d300())->GetPlayerCivilization();
     if ((void*)param_1 == civ) return 50.0f;
-    int uVar3 = (int)FUN_00b1f9d0p();
-    uVar3 = ((Fn_i_vi)*(void**)(*param_1 + 0x4c))((void*)param_1, uVar3);
-    return FUN_00d00d00p(uVar3);
+    return FUN_00d00d00(
+        (void*)((Fn_i_v)*(void**)(*param_1 + 0x4c))((void*)param_1),
+        (void*)((NounMgr_s00bd70b0*)FUN_00b3d300())->GetPlayerEmpire());
 }
 
 // ===========================================================================

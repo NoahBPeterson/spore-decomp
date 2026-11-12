@@ -3064,7 +3064,8 @@ void __thiscall cSPMission_s00c4_6ab0::FUN_00c471c0()
 {
     bool flag = vF8() || vFC();
     u32 shifted = mFlags >> 1;
-    if ((shifted & 1) != 0 && !flag)
+    bool requiresCheck = (shifted & 1) != 0;
+    if (requiresCheck && !flag)
         v19C();
     else
         v198(flag);

@@ -1,2 +1,1 @@
-0048a580  2  /Od; complete. The GetUIState() compare temp sits at -0x20 vs retail -0x24, and the local AutoRefCount vector (frame 0x40 on both sides) starts at -0x14 vs retail -0x18. Named GetUIState local, vector first/last, and function-scope scratch slots all move the whole vector rather than just the temp.
 0048a690  1237  /Od; complete. ~25 named locals in hash order + reserved inline slots not reproduced

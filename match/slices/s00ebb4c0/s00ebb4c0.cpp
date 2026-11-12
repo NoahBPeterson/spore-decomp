@@ -118,11 +118,14 @@ extern RandomLCG gMathRandom;
 // @ 0x00ebb820
 void __stdcall FUN_00ebb820(unsigned a, unsigned b)
 {
+    typedef int (__thiscall *ReleaseFunction)(void*);
     for (; a < b; a += 0x50) {
-        if (*(int**)(a + 0x4c) != 0)
-            (*(void(**)(void))(** (int**)(a + 0x4c) + 4))();
-        if (*(int**)(a + 0x48) != 0)
-            (*(void(**)(void))(** (int**)(a + 0x48) + 4))();
+        void* object = *(void**)(a + 0x4c);
+        if (object)
+            ((ReleaseFunction)VTSLOT(object, 4))(object);
+        object = *(void**)(a + 0x48);
+        if (object)
+            ((ReleaseFunction)VTSLOT(object, 4))(object);
         cGonzagoTimer_dtor((void*)(a + 0x28));
     }
 }

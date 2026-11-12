@@ -3,3 +3,4 @@ slices/s00a52080/s00a52080.cpp  ?FUN_00a52a90@@YAXPAD@Z  00a52a90  /O2 /MD /Gy /
 slices/s00a52080/s00a52080.cpp  ?FUN_00a52bb0@@YIHPAX@Z  00a52bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00a52080/s00a52080.cpp  ?FUN_00a52da0@@YAXPAH00@Z  00a52da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00a52080/s00a52080.cpp  ?GetPair@CM_Hash@@QAEPAXPIAX@Z  00a529c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00a52080/s00a52080.cpp  ?groupsize_new@@YAPAXXZ  00a52ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

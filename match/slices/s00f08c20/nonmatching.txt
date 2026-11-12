@@ -16,7 +16,6 @@
 00f08d10  134  complete; size 146 vs 152; loop/branch layout and callee-saved reg assignment differ; difftest PASS 347 valid, 100% coverage
 00f08db0  267  complete; size 302 vs 306; reg alloc + the FindWindowByID/CreditsTabInit call sites differ; difftest UNSUPPORTED (0/400 valid inputs)
 00f08ef0  259  complete; size 420 vs 415; reg alloc + the sret Init overload handling differ; difftest UNSUPPORTED (2 unresolved refs: Layout::Init / Layout::SetVisibility)
-00f09090    2  complete; identical except the `mov ecx,[edi]; mov edi,esi` copy is scheduled one slot later in ours (using cur[0]/cur[2] instead of e[0]/e[2] does not change it); difftest WEAK 162 valid, 100% coverage
 00f09170  109  complete; size 116 vs 123; node-chain walk reg alloc differs; difftest UNSUPPORTED (0/400 valid inputs)
 00f092b0  203  complete; size 232 vs 238; rehash/insert argument setup and reg alloc differ; difftest UNSUPPORTED (2 unresolved refs: NodeAlloc::alloc / EAAllocate)
 00f093a0  147  complete; size 151 vs 136; TaskRank inline expansion + pivot reg alloc differ; difftest UNSUPPORTED (0/400 valid inputs)

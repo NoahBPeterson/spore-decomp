@@ -12,3 +12,4 @@ slices/s00970f30/s00970f30.cpp  ?SetCellLimits@IWinGrid@UTFWinControls@EA@@UAEXH
 slices/s00970f30/s00970f30.cpp  ?GetColumnHeadingArea@IWinGrid@UTFWinControls@EA@@UAE_NHAAURectF@23@@Z  00971d30  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s00970f30/s00970f30.cpp  ?GetRowHeadingArea@IWinGrid@UTFWinControls@EA@@UAE_NHAAURectF@23@@Z  00971dd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s00970f30/s00970f30.cpp  ?SetHeadingSizes@IWinGrid@UTFWinControls@EA@@UAE_NMM@Z  00971e70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00970f30/s00970f30.cpp  ?SetDefaultAlignment@IWinGrid@UTFWinControls@EA@@UAE_NHH@Z  00971ce0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

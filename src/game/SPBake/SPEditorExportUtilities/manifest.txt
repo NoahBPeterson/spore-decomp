@@ -36,3 +36,8 @@
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?Init72a00@@YIPAUS62@@PAU1@@Z  00472a00  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?resize@?$vector_s0047_2b80@UAutoRefCount_s0047_2b80@@$03@@QAEXI@Z  00473270  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?Dtor@Holder@@QAEXXZ  004614b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ?Ctor@C461400@@QAEPAU1@XZ  00461400  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ??0CharVec@@QAE@ABU0@@Z  00473140  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ?RegisterCreatureModels@@YAXHIHHH@Z  004615e0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ?GetView@IntVecObj@@QAEPAUBufView@@PAU2@@Z  004728e0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ?FUN_00460bf0@@YAXPAUBone@@HHM@Z  00460bf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

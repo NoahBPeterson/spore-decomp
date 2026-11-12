@@ -3,7 +3,6 @@
 00dfeaa0  66  uninitialized_copy stride 0x238: element ctor flags differ
 00dfeb00  292  vector assign stride 0x188: growth path/scheduling differ difftest WEAK after ecx fix (467 valid, 44% cov).
 00dfec50  269  vector assign stride 0x4e0: growth path/scheduling differ difftest WEAK after ecx fix (296 valid, 53% cov).
-00dfed90  15  wrapper: missing tail-call form difftest PASS after ecx fix (246 valid, 100% cov).
 00dfedb0  145  0x2788-element copy-assign scheduling differs difftest UNSUPPORTED after ecx fix (0/1200 valid: memcpy/fault discards).
 00dfee80  234  0x27e8-element copy-ctor member-by-member differs; default WEAK 68/100% no mismatch, replay PASS (fixed wstring assign thiscall and tail offsets).
 00dff130  90  0x27e8-element init: SBO/vector init differs difftest UNSUPPORTED after ecx fix (0/1200 valid: faults).

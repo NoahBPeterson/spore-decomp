@@ -93,10 +93,33 @@ def locate(va):
     return None, None
 
 
+def equivalent():
+    """{va: (level, layer)} of the functions proven behaviourally equivalent (equivalent.txt + equivalent/<va>.json,
+    tools/contrib/prove.py). They are not byte-exact, so they stay open, but --list shows them last."""
+    import json
+    out = {}
+    for f in glob.glob(os.path.join(ROOT, "match", "slices", "*", "equivalent.txt")) + \
+            glob.glob(os.path.join(ROOT, "src", "game", "**", "equivalent.txt"), recursive=True):
+        for line in open(f):
+            p = line.split("#", 1)[0].split()
+            if len(p) >= 3:
+                va = int(p[2], 16)
+                b = os.path.join(os.path.dirname(f), "equivalent", "%08x.json" % va)
+                try:
+                    d = json.load(open(b))
+                    out[va] = (d.get("level", "?"), d.get("layer", "?"))
+                except (OSError, ValueError):
+                    out[va] = ("?", "no bundle")
+    return out
+
+
 def status(ident, va):
     d = S.slice_dir(ident)
     if any(r[2] == va for r in S.manifest_rows(ident)):
         return "byte-exact", ""
+    eq = equivalent().get(va)
+    if eq:
+        return "proven equivalent (%s, %s), not byte-exact yet" % eq, "a byte-exact match still counts; see its note below"
     for name, label in (("nonmatching.txt", "complete, not byte-exact yet"), ("partial.txt", "partial")):
         for rva, diff, reason in S.read_rows(os.path.join(d, name)):
             if rva == va:
@@ -348,6 +371,8 @@ def main():
     ap.add_argument("--seed", help="your own shuffle within each band (default: your git name and email)")
     ap.add_argument("--show-claimed", action="store_true", help="also list functions in open pull requests")
     ap.add_argument("--category", choices=CATEGORIES, help="with --list: only notes that start with this word")
+    ap.add_argument("--show-equivalent", action="store_true",
+                    help="with --list: also list functions already proven equivalent (tools/contrib/prove.py)")
     a = ap.parse_args()
     if a.list:
         skip, have = blocked(), marked()
@@ -358,6 +383,10 @@ def main():
         rows = [r for r in work + [r for r in never_tried(a.max_size) if r[1] not in seen] if r[1] not in skip]
         if a.category:
             rows = [r for r in rows if category(r[4]) == a.category]
+        eqv = equivalent()
+        neq = sum(1 for r in rows if r[1] in eqv)
+        if not a.show_equivalent:
+            rows = [r for r in rows if r[1] not in eqv]
         big = 1 << 30
         nd = lambda r: ndiff(r[2]) if ndiff(r[2]) is not None else big
         tr = tries() if a.by == "tries" else None
@@ -382,6 +411,8 @@ def main():
             print("(claims.txt could not be read: functions in open pull requests are not hidden)")
         elif hidden and not a.show_claimed:
             print("(%d more are in open pull requests and hidden; --show-claimed lists them)" % hidden)
+        if neq and not a.show_equivalent:
+            print("(%d more are proven equivalent already and hidden; --show-equivalent lists them)" % neq)
         print("  %-10s  %5s  %6s  %6s  %s" % ("function", "tries", "differ", "size", "where / last note"))
         for size, va, diff, where, reason in rows:
             n = ndiff(diff)

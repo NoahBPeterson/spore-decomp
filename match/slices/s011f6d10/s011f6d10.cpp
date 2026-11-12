@@ -86,7 +86,6 @@ typedef char* (__cdecl* VSFnDump)(char* dest, int effect, int texCount);
 char* __cdecl D3D9TextCopy(char* dst, const char* src);                                  // 0x011fd6d0
 int   __cdecl FUN_011f6660(const byte* pName, const byte* pKey, int table, unsigned n);  // 0x011f6660
 char* __cdecl FUN_011f69a0(int desc);                                                    // 0x011f69a0
-void  __fastcall FUN_011f6f20(int unused, byte* p);                                      // 0x011f6f20
 void  __cdecl FUN_011fce20(void* a, void* b);                                            // 0x011fce20
 int*  __cdecl FUN_011f8af0(void);                                                        // 0x011f8af0 DevCapsManager::GetD3DCAPS9
 int   __cdecl FUN_011e1fd4(const char* src, int len, void* defs, void* inc,
@@ -175,15 +174,16 @@ void FUN_011f6e80(void)
 }
 
 // ===========================================================================
-// @ 0x011f6f20  (fastcall: edx = attribute table); fills p+0x20 with offsets
+// @ 0x011f6f20  (TU-local static: custom register convention, table arrives in
+// edx); fills p+0x20 with register offsets. Declaring q before out puts the
+// parameter in edx at entry (cl 13.10 static convention, codegen 6.3).
 // ===========================================================================
-void __fastcall FUN_011f6f20(int unused, byte* param_2)
+static void FUN_011f6f20(byte* p)
 {
-    (void)unused;
-    byte b = *param_2;
+    byte b = *p;
     int prev = 4;
-    int* out = (int*)(param_2 + 0x20);
-    const byte* q = param_2 + 1;
+    const byte* q = p + 1;
+    int* out = (int*)(p + 0x20);
     do {
         byte t = g_171be38[b];
         int val = 0;
@@ -493,7 +493,7 @@ void FUN_011f7870(void)
 // ===========================================================================
 void FUN_011f78b0(void)
 {
-    FUN_011f6f20(0, g_170ee48);
+    FUN_011f6f20(g_170ee48);
     FUN_011fce20(g_170ee48, g_1711f00);
 }
 

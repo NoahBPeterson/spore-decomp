@@ -8,7 +8,6 @@
 007c5350  91  SetViewAngle; fptan-based fov path differs [equiv: UNSUPPORTED unresolved _tanf (original inlines fptan)]
 007c53d0  77  SetViewAngleY; fptan-based fov path differs [equiv: UNSUPPORTED unresolved _tanf (original inlines fptan)]
 007c5440  77  SetViewWindow; SSE reciprocal ordering differs [equiv: PASS 1200 valid, 100% cov]
-007c5490  18  operator new[] wrapper; calling convention/arg shape near-miss [equiv: PASS 824 valid, 100% cov (now SerializedArray::Alloc member)]
 007c54b0  42  rw resolve ObjectToId; arena pointer chain codegen differs
 007c54f0  33  rw resolve IdToObject; arena pointer chain codegen differs
 007c5520  41  rw resolve IdToObject (returns 1); fixed 2026-10-24: the manager pointer is arg1 (`[esp+0xc]`), not arg2; loop shape still differs [equiv: PASS 358 valid, 73.7% cov]

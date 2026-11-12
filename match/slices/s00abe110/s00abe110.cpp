@@ -3,6 +3,9 @@
 
 #include <math.h>
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 typedef unsigned int u32;
 typedef unsigned char u8;
 
@@ -710,10 +713,13 @@ MapDescription* MapDescription::create(void* a, void* b) {
   MapDescription* p = (MapDescription*)operator_new(0x28, "Swarm", 0, 0, 0, 0);
   MapDescription* result = 0;
   if (p) {
+    float frequency = g_mapFrequency;
     p->mpField04 = 0;
     p->mpVtbl = (void*)&g_vtbl_1453948;
+    _ReadWriteBarrier();
     p->mFlags = 0;
-    p->mFrequency = g_mapFrequency;
+    _ReadWriteBarrier();
+    p->mFrequency = frequency;
     p->mField10Int = 0;
     p->mField14 = 0;
     p->mField20 = 0.0f;

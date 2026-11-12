@@ -9,3 +9,4 @@ slices/s00ae9490/s00ae9490.cpp  ?GetCiv@Entry@@QAEHXZ  00ae9da0  /O2 /MD /Gy /EH
 slices/s00ae9490/s00ae9490.cpp  ?visit_vec@@YA_NPAXPAUVec12@@@Z  00ae9ed0  /O2 /MD /Gy /EHsc /TP
 slices/s00ae9490/s00ae9490.cpp  ?CloseCommEvent@CommManager@@QAEXXZ  00aea210  /O2 /MD /Gy /EHsc /TP
 slices/s00ae9490/s00ae9490.cpp  ?AssignString@SpaceTool@@QAEXPAUString64@@@Z  00aea230  /O2 /MD /Gy /EHsc /TP
+slices/s00ae9490/s00ae9490.cpp  ?Has@SpaceTool@@QAE_NHH@Z  00ae9c10  /O2 /MD /Gy /EHsc /TP

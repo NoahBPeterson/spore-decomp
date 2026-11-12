@@ -16,7 +16,7 @@ and a SHA-256 of the rest. Fingerprints contain no code and no names; the check 
 
 The check passes when every affected function matches its fingerprint (apart from the long-standing ones in
 `tools/ci/known_failures.txt`), no function that matched before has been dropped, and **at least one function is
-byte-exact that was not before** (a pull request that changes only `nonmatching.txt` / `partial.txt` notes needs
+byte-exact, or newly proven equivalent (step 6), that was not before** (a pull request that changes only `nonmatching.txt` / `partial.txt` notes needs
 no match). You can run the same check locally (below) before you open the pull request.
 
 ## Setup (once)
@@ -65,9 +65,20 @@ no match). You can run the same check locally (below) before you open the pull r
    is marked ready, do not add commits to it; put new work in a new pull request. If a `manifest.txt` or
    `nonmatching.txt` line conflicts with `main` after another merge, rebase onto `main` and resolve it; never leave a
    matched function's note behind to dodge the conflict.
-6. **Stuck?** After six to eight levers from `docs/codegen.md` without a match, stop and move on to another function.
-   **Code changes are merged only when they add at least one new byte-exact function**; the check fails any other. A
-   closer attempt that still differs stays on your machine. What you learned is welcome as a **notes-only** pull request:
+6. **No match? Prove it equivalent.** A function whose bytes still differ can still count, as **proven
+   equivalent**: `.venv/bin/python tools/contrib/prove.py 0x00529690` checks, with the game image, that your build
+   behaves exactly like the original (same results, same memory writes, same calls with the same arguments, same
+   registers a caller can see), not just on test inputs but for every input. On `EQUIVALENT`, `--record` writes the
+   function's line into `equivalent.txt` beside its manifest and a small proof file into `equivalent/<address>.json`;
+   commit both. The pull request check confirms your source still builds to the bytes that were proved, and a
+   maintainer re-runs the proof before merging (the `equiv-verified` label). Equivalent functions are counted
+   separately from byte-exact ones (the site stacks them) and stay open: making one byte-exact later still counts.
+   `REFUTED` means the source computes something different from the original: fix the source, not the proof.
+   `UNKNOWN` means no layer could decide; that is not a verdict on your code. Layers that need extra installs
+   (angr, Docker for DDEC) are skipped with a message when missing; see `tools/equiv/LAYERS.md`.
+7. **Stuck?** After six to eight levers from `docs/codegen.md` without a match or a proof, stop and move on to another
+   function. **Code changes are merged only when they add at least one new byte-exact or proven-equivalent function**;
+   the check fails any other. A closer attempt that still differs stays on your machine. What you learned is welcome as a **notes-only** pull request:
    update the function's `nonmatching.txt` line with what you tried, what worked and what still differs, and change
    nothing else. Close your draft for the function (that releases the claim); its source stays readable in the closed
    pull request, and `task.py <address>` points the next person to it.
@@ -77,7 +88,8 @@ no match). You can run the same check locally (below) before you open the pull r
    `frame:` stack slots or frame size differ; `inline:` something is inlined (or not) differently;
    `layout:` a class, member offset or type in the headers looks wrong; `data:` the size, flags or fingerprint
    the check uses look wrong (open an issue too); `other:` none of these. `task.py --list --category regalloc`
-   lists one group.
+   lists one group. `task.py --list` hides functions that are already proven equivalent (`--show-equivalent` shows
+   them), so the list starts with the ones that are neither.
 
 Keep experiments (test files, notes, listings) in `work/scratch/`: `work/` is ignored by git, so nothing there ends
 up in your pull request by accident.

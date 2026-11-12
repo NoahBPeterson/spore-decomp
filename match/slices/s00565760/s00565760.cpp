@@ -677,12 +677,16 @@ namespace eastl {
   template<class T> inline void destruct_trivial(T*, T*) { const bool bHasTrivialDestructor = true; }
   template<class T> inline T* uninitialized_copy_memcpy(T* first, T* last, T* result)
   {
-    const bool bHasTrivialCopy = true;
     return (last - first) + (T*)memcpy(result, first, (size_t)((char*)last - (char*)first));
   }
-  template<class T> inline T* uninitialized_copy_trivial(T* first, T* last, T* result)
+  // The outer helper's bool owns the pack's top byte ([ebp-0xd]); the nested destruct call's
+  // bool joins the same pack one byte lower ([ebp-0xe]). The result is written through the
+  // reference so both flag stores bracket the copy-result store inside one expansion.
+  template<class T> inline void uninitialized_copy_trivial(T* first, T* last, T* result, T*& result_out)
   {
-    return uninitialized_copy_memcpy(first, last, result);
+    const bool bHasTrivialCopy = true;
+    result_out = uninitialized_copy_memcpy(first, last, result);
+    destruct_trivial(first, last);   // DoDestroyValues is empty for this type
   }
 
   template<class T, class A> void vector2<T,A>::reserve(size_type n)
@@ -691,8 +695,8 @@ namespace eastl {
     {
         // (named for /Od slot order: p12 = previous size, p15 = new block, v18 = new end; K=3 -> use 3-name set)
         pointer const p15 = DoAllocate(n);
-        pointer v18 = eastl::uninitialized_copy_trivial(mpBegin, mpEnd, p15);
-        { const bool bHasTrivialDestructor = true; }   // DoDestroyValues is empty for this type
+        pointer v18;
+        eastl::uninitialized_copy_trivial(mpBegin, mpEnd, p15, v18);
         DoFree(mpBegin, (size_type)(mpCapacity - mpBegin));
         const size_type p12 = (size_type)(mpEnd - mpBegin);
         mpBegin    = p15;

@@ -316,7 +316,7 @@ namespace SP {
 }
 int WStr_Format(WStr_s0056_b680* s, const wchar_t* fmt, ...);                                    // 0x0041e050
 uint32_t FNV1_String16(const wchar_t* s, uint32_t seed, int caseSens);                // 0x00932f30
-inline wchar_t* wfind(wchar_t* first, wchar_t* last, const char& value)
+inline wchar_t* wfind(wchar_t* first, wchar_t* last, const char& value, const Alloc& a = Alloc())
 {
     while (first != last && *first != value)
         ++first;

@@ -713,7 +713,8 @@ char __cdecl FUN_00db1e70(Citizen* c, int, int, int, int, StDom* st)
 void __cdecl FUN_00db1fb0(Citizen* c, int, int, int, int, StDom* st)
 {
     if (FUN_00d99500(st->mp0c) != 0) {
-        st->mp0c->mpOrderMgr->mStimuli.ClearAll(4, 0);
+        Citizen* related = *(Citizen* volatile*)&st->mp0c;
+        related->mpOrderMgr->mStimuli.ClearAll(4, 0);
         st->mp0c->FUN_00c0d0c0(6, 0);
     }
     c->mpOrderMgr->FUN_00bcb430();

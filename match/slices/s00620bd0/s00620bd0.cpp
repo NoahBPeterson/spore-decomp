@@ -100,12 +100,15 @@ struct URLMap {
   String8* op_index(const void* key);                  // 0x546930
 };
 void String8_Erase(String8* self, int position, int n);   // 0x61e200
+struct MapEntryIt { uint32_t* p; };
+inline bool operator!=(MapEntryIt a, MapEntryIt b) { return a.p != b.p; }
+inline MapEntryIt operator+(MapEntryIt a, int n) { MapEntryIt r = { a.p + 5 }; return r; }
 // @ 0x00621460
 bool MapLookup(uint32_t key, String8* out) {
-  uint32_t* end = gMapBEnd;
-  uint32_t* r = eastl_lower_bound(gMapB, end, &key, (int)gMapBCmp);
-  if (r != end && key >= *r && r != r + 5) {
-    if (out != 0) out->assign((char*)r[1], (char*)r[2]);
+  MapEntryIt end = { gMapBEnd };
+  MapEntryIt r = { eastl_lower_bound(gMapB, end.p, &key, (int)gMapBCmp) };
+  if (r != end && key >= *r.p && r != r + 1) {
+    if (out != 0) out->assign((char*)r.p[1], (char*)r.p[2]);
     return true;
   }
   return false;

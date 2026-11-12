@@ -10,7 +10,6 @@
 00805400 4 FreeCoreBlock; originally push/call/pop ecx, compiler emitted add esp,4; equiv PASS: 659 valid inputs, 100.0% coverage (all insns)
 008054b0 31 FixedFree; chunk-head list update scheduling; equiv FAIL: 5/5 valid inputs mismatched
 008054f0 10 InitAlloc; global store/arg order; equiv UNSUPPORTED: our code stores the address of its own copy of an object/vtable/constant where the origina
-00805ea0 2 complete; only the -4 pointer adjust is sub eax,4 vs original add eax,-4
 00805ef0 84 complete; loop layout + merged epilogue (do-while not reproduced exactly)
 008060d0 126 complete; register allocation/argument scheduling differs
 00806370 256 complete; rect-temp scheduling and frame differs

@@ -16,6 +16,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void* __cdecl pd_new(void* cls);                                   // 0xa49390
 void  __cdecl pd_free(void* obj);                                  // 0xa493d0
 void* __cdecl outlet_new(void* obj, t_symbol* s, int a);           // 0xa49d30
+void* __cdecl outlet_new(void* obj, t_symbol s);                    // 0xa49d30; by-value symbol
 void  __cdecl outlet_float(void* out, float f);                    // 0xa49570
 void* __cdecl class_new(t_symbol* s, t_symbol* help, void* makefn,
                         void* freefn, int size, int flags, int a1, int a2); // 0xa48e50
@@ -409,13 +410,19 @@ void __cdecl FUN_00a52a90(char* obj)
         ->FreeGroup(*(int*)(obj + 0x2c), *(int*)(obj + 0x30), *(int*)(obj + 0x34));
 }
 
+struct GroupsizeObject {
+  unsigned int mPdHeader[10];
+  void* mpOutlet;  // +0x28
+  void* mpCanvas;  // +0x2c
+  unsigned int mOpaque30[3];
+};
+
 // @ 0x00a52ab0
 void* __cdecl groupsize_new()
 {
-  char* p = (char*)EA::Audio::Eapd::pd_new(spGroupsizeClass);
-  *(void**)(p + 0x28) =
-      EA::Audio::Eapd::outlet_new(p, &gFloatSymbol, gOutletDstA);
-  *(void**)(p + 0x2c) = EA::Audio::Eapd::canvas_getcurrentinstance();
+  GroupsizeObject* p = (GroupsizeObject*)EA::Audio::Eapd::pd_new(spGroupsizeClass);
+  p->mpOutlet = EA::Audio::Eapd::outlet_new(p, gFloatSymbol);
+  p->mpCanvas = EA::Audio::Eapd::canvas_getcurrentinstance();
   return p;
 }
 

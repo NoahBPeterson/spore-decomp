@@ -1725,7 +1725,7 @@ float __thiscall cSPSimulatorPlayerUFO_s00ff_d220::CalculateMaxHealth()
 // @ 0x00ffda80
 float __thiscall cSPSimulatorPlayerUFO_s00ff_d220::CalculateMaxEnergy()
 {
-    float fScale = kRealOne;
+    volatile float fScale = kRealOne;
 
     void* pInv = ((tHost*)SpaceGameGet())->FUN_00a1ad60();
     if (pInv != 0) {

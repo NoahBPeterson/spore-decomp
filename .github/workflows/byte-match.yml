@@ -8,7 +8,8 @@
 #
 # Passes when every manifest the pull request can affect (tools/ci/affected.py) matches its fingerprints, apart from
 # tools/ci/known_failures.txt, no function that matched on main has been dropped from the manifests, and at least one
-# function is byte-exact that was not on main (unless the pull request changes only nonmatching.txt / partial.txt notes).
+# function is byte-exact, or newly proven equivalent (equivalent.txt), that was not on main (unless the pull request
+# changes only nonmatching.txt / partial.txt notes). Proven-equivalent rows also need the equiv-verified label.
 name: Byte-match check
 
 on:
@@ -156,21 +157,45 @@ jobs:
           keep = {l.split()[0].lower() for l in open(sys.argv[1]) if l.strip()}
           rows = json.load(open(sys.argv[2])) if os.path.exists(sys.argv[2]) else []
           changed = [l.strip() for l in open(sys.argv[3]) if l.strip()]
-          new = sorted({r["va"] for r in rows if r["tag"] == "PASS" and r["va"] not in keep})
+          new = sorted({r["va"] for r in rows if r["tag"] == "PASS" and r["va"] not in keep and r.get("kind") != "equivalent"})
+          eq_changed = any(os.path.basename(p) == "equivalent.txt" or "/equivalent/" in p for p in changed)
+          neweq = sorted({r["va"] for r in rows if r["tag"] == "EQUIV"}) if eq_changed else []
           if new:
               print("New byte-exact functions: " + ", ".join("`0x%s`" % v for v in new))
+          if neweq:
+              print("Proven-equivalent rows (re-verified by a maintainer before merging): " + ", ".join("`0x%s`" % v for v in neweq))
+          if new or neweq:
+              pass
           elif changed and all(os.path.basename(p) in ("nonmatching.txt", "partial.txt") for p in changed):
               print("Notes only (nonmatching.txt / partial.txt): no new match needed.")
           else:
               print("This pull request changes code but adds no new byte-exact function (no manifest row passes here")
               print("that was not already byte-exact on main). Code changes are merged only when they add a match;")
-              print("what you tried can go in as a notes-only pull request (AGENTS.md, step 6).")
+              print("what you tried can go in as a notes-only pull request (AGENTS.md, step 7).")
               sys.exit(1)
           EOF2
 
       # No inline assembly without a maintainer's approval (2026-11-11): any `__asm` / `_emit` / `naked` line the pull
       # request adds fails the check unless a maintainer has put the `asm-approved` label on it (contributors cannot set
       # labels). Contributors ask for it with an `asm-override: <why>` line in the pull request body (AGENTS.md).
+      # Proven-equivalent rows (equivalent.txt + equivalent/<va>.json, tools/contrib/prove.py, 2026-11-12): CI can only
+      # check that the row still builds to the bytes its proof is about; the proof needs the game, so a maintainer
+      # re-runs `prove.py <va> --recheck` and then puts the `equiv-verified` label on the pull request.
+      - name: Proven-equivalent rows need a maintainer's re-check
+        if: always() && steps.refs.outcome == 'success'
+        env:
+          VERIFIED: ${{ contains(github.event.pull_request.labels.*.name, 'equiv-verified') || github.event_name == 'merge_group' }}
+        run: |
+          if ! grep -qE '(^|/)equivalent(\.txt$|/)' "$RUNNER_TEMP/changed.txt"; then
+            echo "No proven-equivalent rows changed." | tee -a "$GITHUB_STEP_SUMMARY"
+          elif [ "$VERIFIED" = "true" ]; then
+            echo "Proven-equivalent rows re-checked by a maintainer (equiv-verified)." | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            { echo "This pull request adds or changes proven-equivalent rows. A maintainer re-runs"
+              echo "'tools/contrib/prove.py <address> --recheck' for each and then adds the equiv-verified label."; } | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
       - name: No inline assembly unless a maintainer approved it
         if: always() && steps.refs.outcome == 'success'
         env:

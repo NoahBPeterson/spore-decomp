@@ -367,36 +367,3 @@ void RebaseToBase20(int* p, Base20Ctx* ctx)
 	int d = (int)ctx->mpBase - (int)p;
 	*p = *p + d;
 }
-
-// @ 0x01200940
-// Fixup wrapper destructor: releases the wrapped object through its secondary operator table and
-// then runs the recorded callback slot.
-struct RelVt
-{
-	void* s00;                       // +0x00
-	void* s04;                       // +0x04
-	void* s08;                       // +0x08
-	void (__thiscall* s0c)(void*);   // +0x0c
-};
-struct RelObj
-{
-	void*         pad00;             // +0x00
-	RelVt*        mpVt;              // +0x04
-	unsigned char pad08[0x18 - 8];
-	int           mRefs;             // +0x18
-};
-struct FixupHolder
-{
-	RelObj* mpObj;                                   // +0x00
-	void (__cdecl* mpFn)(int, FixupHolder*);         // +0x04
-	void Finish();
-};
-
-void FixupHolder::Finish()
-{
-	RelObj* obj = mpObj;
-	int refs = obj->mRefs;
-	if (!refs)
-		obj->mpVt->s0c(obj);
-	mpFn(0, this);
-}

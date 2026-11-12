@@ -20,6 +20,7 @@ import task as T            # noqa: E402
 import slice as S           # noqa: E402
 import fingerprint as F     # noqa: E402
 import asm_audit            # noqa: E402
+import ltcg                 # noqa: E402
 from coff import Coff       # noqa: E402
 
 IMAGE = os.path.join(ROOT, "work", "SporeApp.analysis.bin")
@@ -63,18 +64,31 @@ def main():
     if sym is None:
         print("no compiled function found for the marker: %s" % why)
         return 1
-    data, rel = F.extract(secs, syms, sym)
+    stubs = ltcg.stubs_file(ident, va)
+    raw, how_built = None, ""
+    if stubs:
+        # built as RenderWare 4's core was: /GL objects linked with /LTCG against the function's stub callees
+        data, rel, log = ltcg.build(src, flags, stubs, sym, fp["size"])
+        if data is None:
+            print(log)
+            return 1
+        how_built = " + /GL, link /LTCG with %s" % os.path.relpath(stubs, ROOT)
+        raw =os.path.join(ROOT, "work", "ltcg_%08x.bin" % va)
+        open(raw, "wb").write(data)
+    else:
+        data, rel = F.extract(secs, syms, sym)
     verdict = F.check(fp, data, rel)
     asm = asm_audit.transcribed(src).get("%08x" % va)
     if asm and verdict == "PASS":
         verdict = "assembly transcription, not decompiled (%s): write it as C++" % asm
-    print("%s  0x%08x  %s  [%s]" % ("MATCH" if verdict == "PASS" else "NO MATCH", va, sym, " ".join(flags)))
+    print("%s  0x%08x  %s  [%s]%s" % ("MATCH" if verdict == "PASS" else "NO MATCH", va, sym, " ".join(flags), how_built))
     if verdict != "PASS":
         print("  " + verdict)
         if os.path.exists(IMAGE):
             print("\ninstruction diff (original | yours):")
             sys.stdout.flush()
-            subprocess.run([sys.executable, os.path.join(ROOT, "tools", "matching", "cmpdis.py"), obj, sym, "%08x" % va])
+            what = ["--raw", raw] if raw else [obj, sym]
+            subprocess.run([sys.executable, os.path.join(ROOT, "tools", "matching", "cmpdis.py"), *what, "%08x" % va])
         else:
             print("  (for an instruction diff, make work/SporeApp.analysis.bin from your own game: tools/contrib/make_image.py)")
         return 1

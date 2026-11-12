@@ -16,7 +16,10 @@ INC = re.compile(r'^\s*#\s*include\s*[<"]([^">]+)[">]', re.M)
 
 
 def all_manifests():
-    return R.manifests() + sorted(glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"), recursive=True))
+    """manifest.txt files and the proven-equivalent lists (equivalent.txt) the gate also checks"""
+    return R.manifests() + sorted(glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"), recursive=True)) \
+        + sorted(glob.glob(os.path.join(ROOT, "match", "slices", "*", "equivalent.txt")) +
+                 glob.glob(os.path.join(ROOT, "src", "game", "**", "equivalent.txt"), recursive=True))
 
 
 def include_dirs(flags):
@@ -63,6 +66,12 @@ def affected(changed):
     out = []
     for m in all_manifests():
         if os.path.normpath(m) in changed:
+            out.append(m)
+            continue
+        # an LTCG stub file (ltcg/<va>.cpp) or a proof bundle (equivalent/<va>.json) next to the list
+        d = os.path.dirname(os.path.normpath(m))
+        if any(c.startswith(os.path.join(d, "ltcg") + os.sep) or c.startswith(os.path.join(d, "equivalent") + os.sep)
+               for c in changed):
             out.append(m)
             continue
         for src, _sym, _va, flags in R.read_rows([m], ""):

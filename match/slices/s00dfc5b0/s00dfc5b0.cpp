@@ -82,15 +82,46 @@ struct Entry188 {
 };
 
 // ---------------------------------------------------------------------------
-// 0x38-byte entry with a 0x34-element vector (external vector assign)
+// Property map in the 0x38-byte entry; its vector base is assigned at 0x006a1e80.
 // ---------------------------------------------------------------------------
-struct Vec38 {
-    void* mpBegin;           // +0x00
-    void* mpEnd;             // +0x04
-    void* mpCap;             // +0x08
-    char  pad0c[0x14 - 0xc];
-    u8    mOwner;            // +0x14
-    Vec38& operator=(const Vec38& o);            // 0x006a1e80 (external)
+struct VariantPair;
+namespace eastl {
+template<class A, class B, class R> struct binary_function {
+    typedef A first_argument_type;
+    typedef B second_argument_type;
+    typedef R result_type;
+};
+template<class T> struct less : binary_function<T, T, bool> {
+    bool operator()(const T& a, const T& b) const { return a < b; }
+};
+template<class Key, class Value, class Compare>
+class map_value_compare : public binary_function<Value, Value, bool> {
+public:
+    Compare c;
+    map_value_compare(const Compare& x) : c(x) {}
+    bool operator()(const Value& a, const Value& b) const { return c(a.first, b.first); }
+    bool operator()(const Value& a, const Key& b) const { return c(a.first, b); }
+    bool operator()(const Key& a, const Value& b) const { return c(a, b.first); }
+    bool operator()(const Key& a, const Key& b) const { return c(a, b); }
+};
+class pvector {
+public:
+    VariantPair* mpBegin;
+    VariantPair* mpEnd;
+    VariantPair* mpCapacity;
+    u32 mAllocA;
+    u32 mAllocB;
+    pvector& operator=(const pvector& src);      // 0x006a1e80
+};
+} // namespace eastl
+struct Vec38 : public eastl::pvector {
+    typedef eastl::map_value_compare<u32, VariantPair, eastl::less<u32> > value_compare;
+    value_compare mCompare;                    // +0x14
+    Vec38& operator=(const Vec38& src) {
+        eastl::pvector::operator=(src);
+        mCompare = value_compare(src.mCompare);
+        return *this;
+    }
 };
 
 struct Entry38 {
@@ -200,21 +231,18 @@ Entry38& Entry38::operator=(const Entry38& o) {
     m0c = o.m0c;
     m10 = o.m10;
     m14 = o.m14;
-    Vec38& s = *(Vec38*)&o.mVec;
-    Vec38& d = *(Vec38*)&mVec;
-    d.operator=(s);
-    d.mOwner = s.mOwner;
+    mVec = o.mVec;
     void* src = o.mp30;
     void* cur = mp30;
     if (src != cur) {
         if (src) {
-            typedef void (__thiscall *RefFn)(void*);
+            typedef int (__thiscall *RefFn)(void*);
             RefFn f = *(RefFn*)(*(void**)src);
             f(src);
         }
         mp30 = src;
         if (cur) {
-            typedef void (__thiscall *RefFn)(void*);
+            typedef int (__thiscall *RefFn)(void*);
             RefFn f = *(RefFn*)((char*)*(void**)cur + 4);
             f(cur);
         }

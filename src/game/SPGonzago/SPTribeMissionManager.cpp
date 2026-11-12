@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "SP/cTribe.h"
 #include "SP/cLocalInputState.h"
 #include "SP/cVarListSerializer.h"
@@ -268,7 +269,11 @@ void TM::F_cd3670(void* a)
         void* p = *(void**)((char*)this + 0x74);
         if (p != 0) {
             *(void**)((char*)this + 0x74) = 0;
-            ((CUnk*)p)->Release();
+            typedef void (__thiscall* ReleaseFunction)(void*);
+            void** table = *(void***)p;
+            _ReadWriteBarrier();
+            ReleaseFunction release = (ReleaseFunction)table[1];
+            release(p);
         }
     }
 }

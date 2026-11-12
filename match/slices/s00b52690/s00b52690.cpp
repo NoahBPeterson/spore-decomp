@@ -350,8 +350,16 @@ struct HIter {              // 8-byte iterator used by the u32 -> T tables
     void*  mpBucket;        // +0x04
 };
 
+struct KeyNode {
+    u32      mKeyA;          // +0x00
+    u32      mKeyB;          // +0x04
+    u32      mKeyC;          // +0x08
+    u32      mValue;         // +0x0c
+    KeyNode* mpNext;         // +0x10
+};
+
 struct KeyIter {            // 12-byte iterator used by the Key -> T table
-    HNode* mpNode;          // +0x00
+    KeyNode* mpNode;          // +0x00
     void*  mpBucket;        // +0x04
     u8     mbInserted;      // +0x08
     u8     mPad[3];
@@ -369,12 +377,14 @@ struct HashTable {
 
 struct Key4 { u32 a, b, c, d; };
 
+struct InsertTag {};
+
 struct KeyTable {
     u32     mf0;            // +0x00
-    HNode** mpBuckets;      // +0x04
+    KeyNode** mpBuckets;      // +0x04
     u32     mnBucket;       // +0x08
     void find(KeyIter* out, const void* key);             // 0x00833840
-    void insert(KeyIter* out, const void* key, u32 tag);  // 0x00b51930
+    void insert(KeyIter* out, const void* key, InsertTag tag);  // 0x00b51930
     int  GetTextureInstance(const Key4* key);             // 0x00b533a0
 };
 
@@ -441,10 +451,9 @@ int KeyTable::GetTextureInstance(const Key4* key)
     find(&it, key);
     if (it.mpNode == mpBuckets[mnBucket]) {
         Key4 pair = { key->a, key->b, key->c, 0 };
-        ((u8*)&key)[0] = 0;
-        insert(&it, &pair, (u32)key);
+        insert(&it, &pair, InsertTag());
     }
-    return (int)((char*)it.mpNode + 0xc);
+    return (int)&it.mpNode->mValue;
 }
 
 // @ 0x00b530e0

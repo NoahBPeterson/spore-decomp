@@ -23,3 +23,4 @@ slices/s00b5b540/s00b5b540.cpp  ?FUN_00b5ca60@@YIDPAH@Z  00b5ca60  /O2 /MD /Gy /
 slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cba0  00b5cba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cbc0  00b5cbc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00b5b540/s00b5b540.cpp  ??0cGonzagoSimulator@SP@@QAE@XZ  00b5b6c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  _FUN_00b5b690  00b5b690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
