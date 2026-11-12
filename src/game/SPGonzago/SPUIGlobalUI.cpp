@@ -9,6 +9,8 @@
 #include <intrin.h>
 #pragma intrinsic(_ReadWriteBarrier)
 
+class cEffectsManager;
+
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl EA_Allocate(uint32_t size, const char* name, int a, int b,
                                      int c, int d);              // 0xf473a0
@@ -16,6 +18,8 @@ extern "C" void* __cdecl SP_GetCurrentGameMode();                // 0xb5b800
 extern "C" void* __cdecl SP_MessageServer();                     // 0x67dcc0
 extern "C" void* __cdecl SP_WindowManager();                     // 0x67caa0
 extern "C" void* __cdecl SP_GameTimeManager();                   // 0xb3d380
+extern "C" cEffectsManager* __cdecl SP_EffectsManager();         // 0x67ddd0
+extern "C" void  __cdecl SPUIHelpers_BeginModal(void* window, int a, int b); // 0x8099a0
 extern "C" void* __cdecl SP_GetUniverseContext();                // 0x1021080
 extern "C" void* __cdecl SP_GetPlayerHomePlanet();               // 0x1021370
 extern "C" void* __cdecl SP_GetActivePlanet();                   // 0x1021260
@@ -87,7 +91,7 @@ virtual void* v06c();
     virtual void* v070();                               // 0x070
 virtual void* v074();
 virtual void* v078();
-    virtual void* v07c(int, void*);                     // 0x07c  set visual state
+    virtual void* v07c(int, char);                      // 0x07c  set visual state
 virtual void* v080();
 virtual void* v084();
 virtual void* v088();
@@ -217,6 +221,28 @@ struct NetworkActivityProc {
     void*   mField2c;                                   // +0x2c
     void*   mField30;                                   // +0x30
 };
+class cEffectsHandler {
+public:
+    virtual void v000();
+    virtual void Release();
+    virtual void Delete(int unused);
+    virtual void SetEnabled(int enabled);
+};
+class cEffectsManager {
+public:
+    virtual void v000();
+    virtual void v004();
+    virtual void v008();
+    virtual void v00c();
+    virtual void v010();
+    virtual void v014();
+    virtual void v018();
+    virtual void v01c();
+    virtual void v020();
+    virtual void v024();
+    virtual void v028();
+    virtual bool AddMessageHandler(uint32_t id, int priority, cEffectsHandler** handlerOut);
+};
 class cSPUIGlobalOptions {
 public:
     uint8_t      pad00[0x10];
@@ -225,6 +251,8 @@ public:
     cVtblObj*    mWin18;                                // +0x18
     cVtblObj*    mWin1c;                                // +0x1c
     cVtblObj*    mWin20;                                // +0x20
+    cEffectsHandler* mEffectsHandler;                   // +0x24
+    void Enable(char on);
     void Update();
 };
 class cSPUIGlobalUIRootWinProc {
@@ -604,7 +632,7 @@ struct cSPUIGlobalOptions_s00e0_33d0 {
     int   miSub;        // +0x14
 
     void __thiscall Reactivate();                        // 0x00e02e80
-    void __thiscall Enable(int on);                      // 0x00e018c0
+    void __thiscall Enable(char on);                      // 0x00e018c0
     bool __thiscall HandleMessage(int arg, UIMessage* msg); // 0x00e039d0
 };
 struct cSPUILayout_s00e0_33d0;
@@ -1100,8 +1128,8 @@ void GlobalUI::FUN_1250(void* x)
 {
     GUIRootObj* p = (GUIRootObj*)f04;
     if (p != 0) {
-        p->resetA();
-        p->resetB();
+        ((GUIRootObj*)((char*)p + 0x40))->resetA();
+        ((GUIRootObj*)((char*)p + 0x28))->resetB();
     }
     (void)x;
 }
@@ -1329,9 +1357,36 @@ char Dispatch(void* self, void* win, void* msg)
 }
 
 // @ 0x00e018c0
-void Activate(void* self, char on)
+void cSPUIGlobalOptions::Enable(char on)
 {
-    (void)self; (void)on;
+    if (mWin1c != 0)
+        mWin1c->v07c(1, on);
+
+    uint32_t mode = (uint32_t)SP_GetCurrentGameMode();
+    if (on) {
+        if (mode != (uint32_t)kModeC00)
+            SPUIHelpers_BeginModal(mWin14, 0, 0);
+
+        if (cEffectsManager* effects = SP_EffectsManager()) {
+            if (cEffectsHandler* old = mEffectsHandler) {
+                mEffectsHandler = 0;
+                old->Release();
+            }
+            if (effects->AddMessageHandler(0x4c4ba0a9, 0, &mEffectsHandler))
+                mEffectsHandler->Delete(0);
+        }
+    } else {
+        if (mode != (uint32_t)kModeC00)
+            FUN_00809c50(mWin14, 0, 0);
+
+        if (mEffectsHandler != 0) {
+            mEffectsHandler->SetEnabled(0);
+            if (cEffectsHandler* old = mEffectsHandler) {
+                mEffectsHandler = 0;
+                old->Release();
+            }
+        }
+    }
 }
 
 // @ 0x00e01990

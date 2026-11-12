@@ -1,6 +1,5 @@
 # va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
 00e01750  328  switch dispatch: case bodies / AutoRefCount assigns not reconstructed
-00e018c0  208  activate: modal begin/end and effects lookup differ
 00e01990  735  complete global-options update: reload/show state machine, layout lookup + window reparenting via AssignWindow, modal-open bookkeeping, timer restart, UI visibility toggle and the network-activity-proc tail; size 500 vs 815, difference is /O2 helper inlining and call scheduling; equiv: WEAK (207 valid inputs, 29.7% coverage).
 00e01d00  173  show-transition timing (rdtsc/QPC) body differs
 00e01db0  550  complete modal-window-end handler: full state machine over the 0x5107b17/0x5107b19/0x5107b1a/0xfffffff1 message ids and states 0..10, with the transition and callout helpers; size 481 vs 643; equiv: WEAK (399 valid inputs, 24.0% coverage).

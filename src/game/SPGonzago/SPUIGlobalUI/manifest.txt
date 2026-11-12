@@ -21,3 +21,5 @@
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?OnMessage@CivPauseUI@@QAE_NHH@Z  00e03a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?GetEventFlags@NetObj@@QBEIXZ  00e00d90  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FindWin@GlobalOpts2@@QAEPAVIWindow@UTFWin@EA@@I@Z  00e01ce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Enable@cSPUIGlobalOptions@@QAEXD@Z  00e018c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_1250@GlobalUI@@QAEXPAX@Z  00e01250  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
