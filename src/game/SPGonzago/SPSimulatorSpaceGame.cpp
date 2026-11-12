@@ -3465,8 +3465,7 @@ void* cObjectList::EraseFront(u8* p)
     if (p + 0x14 < mpEnd)
         FUN_01008820(p + 0x14, mpEnd, p);
     mpEnd = mpEnd - 0x14;
-    void* obj = *(void**)mpEnd;
-    VT_08_1(obj, 0);
+    reinterpret_cast<UFOElem*>(mpEnd)->Destroy(0);
     return p;
 }
 

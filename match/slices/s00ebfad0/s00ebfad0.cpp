@@ -1,3 +1,5 @@
+#include <stddef.h>
+
 // Slice s00ebfad0 — 0x00ebfad0 .. 0x00ec0970.
 //
 // Creature-AI "decider" predicates for the Simulator behaviour trees: animation
@@ -318,15 +320,25 @@ char FUN_00ebff10(int obj, int a, int b, int c, int d, void* out)
     return 1;
 }
 
+// Partial retail view used by the creature animation decider callbacks.
+// The complete owner class is not yet recovered.
+struct CreatureAnimationPrefix {
+    uint32 mUnknown[0x1660 / 4];
+    float mTimeRemaining_1660;
+    int mAnimationID_1664;
+};
+typedef char CreatureAnimationTimeOffset[(offsetof(CreatureAnimationPrefix, mTimeRemaining_1660) == 0x1660) ? 1 : -1];
+typedef char CreatureAnimationIDOffset[(offsetof(CreatureAnimationPrefix, mAnimationID_1664) == 0x1664) ? 1 : -1];
+typedef char CreatureAnimationPrefixSize[(sizeof(CreatureAnimationPrefix) == 0x1668) ? 1 : -1];
+
 // @ 0x00ebff50
-char FUN_00ebff50(int obj, int a, int b, int c, int d, int* p, int e, float dt)
+char FUN_00ebff50(CreatureAnimationPrefix* obj, int a, int b, int c, int d, int* p, int e, float dt)
 {
-    float v = *(float*)(obj + 0x1660) - dt;
-    *(float*)(obj + 0x1660) = v;
-    if (v > 0.0f)
-        return *(int*)(obj + 0x1664) == *p;
-    else
+    float v = obj->mTimeRemaining_1660 - dt;
+    obj->mTimeRemaining_1660 = v;
+    if (v <= 0.0f)
         return 0;
+    return obj->mAnimationID_1664 == *p;
 }
 
 // @ 0x00ebff90

@@ -526,7 +526,8 @@ void CToolState::Enable()
     IWindowManager* wm = WindowManager();
     if (wm->QueryPanel(1) == 0) {
         mFlag0 = 1;
-        wm->SetPanel(1, wm->GetActive());
+        void* active = wm->GetActive();
+        wm->SetPanel(1, active);
     }
 }
 

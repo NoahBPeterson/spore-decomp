@@ -16,3 +16,4 @@ slices/s00ebfad0/s00ebfad0.cpp  ?FUN_00ec03c0@@YAHH@Z  00ec03c0  /O2 /MD /Gy /EH
 slices/s00ebfad0/s00ebfad0.cpp  ?FUN_00ec07a0@@YAMH@Z  00ec07a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00ebfad0/s00ebfad0.cpp  ?FUN_00ec0820@@YAMH@Z  00ec0820  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00ebfad0/s00ebfad0.cpp  ?FUN_00ec00e0@@YADHHHHHPAMHM@Z  00ec00e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ebfad0/s00ebfad0.cpp  ?FUN_00ebff50@@YADPAUCreatureAnimationPrefix@@HHHHPAHHM@Z  00ebff50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
