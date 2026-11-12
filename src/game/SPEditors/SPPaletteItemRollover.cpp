@@ -4,6 +4,12 @@
 
 #include "game/types.h"
 
+// Declaration-only base view. No object or vtable is emitted here.
+class cSPUIPropertyLayout {
+ public:
+  virtual bool Shutdown();  // 0x00828be0; ECX receiver, AL result, no stack arguments.
+};
+
 // ---- items of slice s005ecf80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
 class cSPPaletteItemRollover_s005e_cf80 {
@@ -24,7 +30,7 @@ class cSPPaletteItemRollover_s005e_cf80 {
   void GetAreaPair(int* out);
   void ResetRollover();
   void ShutdownRollover();
-  void Destroy();
+  bool Shutdown();
 };  // namespace SP
 }
 // ---- items of slice s005ecf80 end
@@ -46,8 +52,24 @@ void cSPPaletteItemRolloverInit(cSPPaletteItemRollover_s005e_cf80* self)
 
 // @ 0x005ed650
 namespace SP {
-void cSPPaletteItemRollover_s005e_cf80::Destroy()
-{}
+bool cSPPaletteItemRollover_s005e_cf80::Shutdown()
+{
+  if (mField78 != 0) {
+    if (((void* (__thiscall*)(void*))(*(void***)mField78)[4])(mField78) != 0) {
+      void* parent = ((void* (__thiscall*)(void*))(*(void***)mField78)[4])(mField78);
+      ((void (__thiscall*)(void*, void*))(*(void***)parent)[55])(parent, mField78);
+    }
+  }
+  mFieldB8 = true;
+  if (mFieldB4 != 0) {
+    void* previous = *(void* volatile*)&mFieldB4;
+    if (previous != 0) {
+      mFieldB4 = 0;
+      ((int (__thiscall*)(void*))(*(void***)previous)[2])(previous);
+    }
+  }
+  return ((cSPUIPropertyLayout*)this)->cSPUIPropertyLayout::Shutdown();
+}
 }  // namespace SP
 
 // @ 0x005ed700
