@@ -1,4 +1,3 @@
 # va  diff-bytes  reason
 00e82140  81  PARTIAL: SP::sCellResourceLoadFailure; resource-manager key struct and callback call shapes approximate (difftest FAIL eax&0xff). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e821d0  95  PARTIAL: resource load by id; manager vtable slots and callback shape approximate (difftest FAIL eax&0xff). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e823a0  35  PARTIAL: SP::ResourceGetFromHandle; difftest FAIL (execution). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

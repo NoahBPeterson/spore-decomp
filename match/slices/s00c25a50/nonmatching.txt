@@ -22,7 +22,6 @@
 
 00c25f80  395 cSPCreatureCitizen::FUN_00c25f80(void): behavior-tree teardown.  We reproduce the main path (bail on a null +0xfc4, FUN_00c24040, FUN_00c15150, and reset +0xffc when the handle is unchanged) but the original body is 406 bytes and carries additional state we did not recover (ours 51 bytes). equiv FAIL 5/40 valid inputs mismatched; first: execution (ours fault: Invalid memory read at eip=00c15162)
 
-00c26120   19 cSPCreatureCitizen::FUN_00c26120(void): current tool effect.  Every load and branch matches -- GetToolEffect(+0x102c) when nonzero, otherwise walk +0x1010 then +0x1014 and return 0x11 when GetLeader()==this, else 0.  The original ends with `sete al; test al,al; je`; MSVC 15.00 /O2 emits `jne` for all 16 reconstructed source forms tried (bool temp, ternary, `!=0`, if/else-to-bool, inlined bool helper, negated tests).  Size 61 vs 66.  equiv PASS 400 valid inputs, 88.5% coverage
 
 00c26170  280 cSPCreatureCitizen::FUN_00c26170(void): desired tool effect for the pending order type.  The full case map is recovered (1->0x11/4, 2->0x11/0x10, 4->FUN_00c26120, 5->0x12 when tool==9 else fall to +0xffc, 3/6/0x1c->+0xffc, 7/10/0xf and 0x1a gated by FUN_00c22dd0, 0x16->0x11, 0x18->float compare, 0x19->0x0c).  The original dispatches through a byte-indexed jump table at 0xc262bc (index table 0xc262ec); a plain C++ switch compiles to a dword table, and the return/register scheduling differs.  Size 336 vs 409.  equiv WEAK 190 valid inputs (need 200), 23.5% coverage (need 60%)
 

@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern int* gListSentinel;        // 0x016b44f0
@@ -72,6 +73,7 @@ void FUN_00e82280()
                 (*(void(__thiscall*)(void*))(*(void**)((char*)*q + 4)))(q);
             }
             p = (int*)*p;
+            _ReadWriteBarrier();
         } while (p != gListSentinel);
     }
 }
@@ -107,11 +109,13 @@ int FUN_00e823a0(int param_1, int* param_2)
     (*(int*)(param_1 + 0xc))++;
     if (*(int*)(param_1 + 8) == 0)
         SP::LoadResource((int*)param_1);
-    if (*(int*)(param_1 + 8) != 0) {
-        int iVar1 = (*(int(**)(int))(**(int**)(param_1 + 8) + 0xc))(0x2269ed1);
-        return *(int*)(iVar1 + 0x14);
-    }
-    return *(int*)0x14;
+    void* resource = *(void**)(param_1 + 8);
+    int value;
+    if (resource != 0)
+        value = ((int(__thiscall*)(void*,int))(*(void***)resource)[3])(resource, 0x2269ed1);
+    else
+        value = (int)resource;
+    return *(int*)(value + 0x14);
 }
 
 // @ 0x00e824d0

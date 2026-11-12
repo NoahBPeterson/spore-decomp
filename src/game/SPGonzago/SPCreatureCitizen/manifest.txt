@@ -38,3 +38,7 @@
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00da8190@@YAMPAUCreature@@@Z  00da8190  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00da81c0@@YA_NPAUCreature@@@Z  00da81c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_01335fe0@@YAXXZ  01335fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c26120@cSPCreatureCitizen_s00c2_5a50@@QAEHXZ  00c26120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00da8050@@YAXPAUCreature@@HHHHPAUS24@@@Z  00da8050  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?IsLeader@cSPCreatureCitizen@@QAE_NXZ  00c232d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?Destroy@cCreatureCitizen@@QAEXXZ  00c27120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
