@@ -2034,9 +2034,33 @@ void __thiscall cSimulatorUniverse_s0101_46c0::AdjustAwareness()
 
 // @ 0x01014db0
 namespace SP {
+void __cdecl ShockInsertionSort(tGrobShockData_s0101_37b0* first,
+                                tGrobShockData_s0101_37b0* last,
+                                ShockCompare compare);
+void __cdecl ShockInsertionSortStarted(tGrobShockData_s0101_37b0* first,
+                                       tGrobShockData_s0101_37b0* last,
+                                       ShockCompare compare);
+template<typename Size> inline Size ShockLog2(Size n)
+{
+    int i;
+    for (i = 0; n; ++i)
+        n >>= 1;
+    return i - 1;
+}
 void __cdecl quick_sort_grob_shock(tGrobShockData_s0101_37b0* first,
                                    tGrobShockData_s0101_37b0* last,
-                                   ShockCompare compare);
+                                   ShockCompare compare)
+{
+    if (first != last) {
+        ShockQuickSort(first, last, 2 * ShockLog2((int32_t)(last - first)), compare);
+        if ((last - first) > 28) {
+            ShockInsertionSort(first, first + 28, compare);
+            ShockInsertionSortStarted(first + 28, last, compare);
+        } else {
+            ShockInsertionSort(first, last, compare);
+        }
+    }
+}
 }  // namespace SP
 
 // @ 0x01014e30
