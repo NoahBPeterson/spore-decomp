@@ -50,13 +50,10 @@ namespace IO {
 namespace File {
 bool Exists(wchar_t const * path)
 {
-    if (path && *path) {
-        DWORD a = GetFileAttributesW(path);
-        if (a != 0xffffffff && (a & 0x10) == 0)
-            return true;
+    if (!path || !*path)
         return false;
-    }
-    return false;
+    DWORD a = GetFileAttributesW(path);
+    return a != 0xffffffff && (a & 0x10) == 0 ? 1 : 0;
 }
 }
 }
@@ -222,13 +219,10 @@ int GetDriveSerialNumber(wchar_t const * path, wchar_t * out)
 namespace Directory {
 bool Exists(const wchar_t* path)
 {
-    if (path && *path) {
-        DWORD a = GetFileAttributesW(path);
-        if (a != 0xffffffff && (a & 0x10))
-            return true;
+    if (!path || !*path)
         return false;
-    }
-    return false;
+    DWORD a = GetFileAttributesW(path);
+    return a != 0xffffffff && (a & 0x10) ? 1 : 0;
 }
 }  // namespace Directory
 
