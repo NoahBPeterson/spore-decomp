@@ -429,13 +429,13 @@ hkBool hkConstrainedSystemFilter::isCollisionEnabled(const hkCollisionInput& inp
 hkBool hkConstrainedSystemFilter::isCollisionEnabled(const hkShapeRayCastInput& input, const hkShapeCollection& collection,
                                                      hkUint32 key) const
 {
-    if (m_otherFilter != 0)
-    {
-        const hkRayShapeCollectionFilter* f = static_cast<const hkRayShapeCollectionFilter*>(m_otherFilter);
-        if (!f->isCollisionEnabled(input, collection, key))
-            return false;
-    }
-    return true;
+    hkBool result;
+    if (m_otherFilter != 0 &&
+        !static_cast<const hkRayShapeCollectionFilter*>(m_otherFilter)->isCollisionEnabled(input, collection, key))
+        result = false;
+    else
+        result = true;
+    return result;
 }
 
 // @ 0x0112a340

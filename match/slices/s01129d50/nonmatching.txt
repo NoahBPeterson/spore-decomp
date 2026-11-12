@@ -5,7 +5,6 @@
 01129fc0 0 havok-equivalent
 0112a200 0 havok-equivalent
 0112a2b0 0 havok-equivalent
-0112a300 0 havok-equivalent; R29 active byte-match claim
 0112a340 0 havok-equivalent [equiv: PASS]
 0112a3c0 0 havok-equivalent [equiv: PASS]
 0112a430 0 havok-equivalent
