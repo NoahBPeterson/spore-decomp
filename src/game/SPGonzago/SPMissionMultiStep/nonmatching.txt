@@ -5,9 +5,7 @@
 00c59e70 32 GetCurrSubMission then tail-jmp to sub-mission vtbl[0x118]. Same inlined-bounds/reload register flip; 50 vs 54 bytes. equiv: UNSUPPORTED (0/400, fault(read))
 00c59eb0 34 AcceptCurrentStep: GetCurrSubMission -> SP::cSPMission::Accept -> tail vtbl[0x1a8]. Same inlined-bounds register flip and eax=0/mov-ecx-vs-xor-ecx null path; 59 vs 65 bytes. equiv: UNSUPPORTED (0/400, fault(read))
 00c59f00 57 FUN: notify current sub, if it is the last also self-notify, then tail vtbl[0x1ac]. Same inlined-bounds register flip (6-byte size gap) plus edx/eax on the final vtbl fetch; 90 vs 96 bytes. equiv: UNSUPPORTED (0/400, fault(read))
-00c5a000 26 sum of sub-mission vtbl[0xec]. Loop body identical; original keeps count in esi and index in edi with the end-first idiom, mine uses edi/esi and swaps eax/edx on the vtbl fetch. 65 bytes both. equiv: PASS
 00c5a0b0 9 Fulfill: FUN_00c2e4e0, walk from mCurrSub, self-complete the last (vtbl[0x88] + SetState 3 + vtbl[0x15c]). Three edx/eax vtbl-fetch coin flips; 122 bytes both. equiv: WEAK
-00c5a130 43 all-sub-missions-complete scan (vtbl[0xf8]). Same inlined-bounds register flip and null/loop register allocation; 72 vs 74 bytes. equiv: PASS
 00c5a280 69 GetUIMediumDescription: 15-key table (three 5-key groups) and the s==3 done-check / s==9 logic are exact; MSVC lays the s==9 body in the fall-through of `cmp eax,3; je done` in the original but puts the s==3 body in the fall-through of `cmp eax,3; jne` in mine (if/else-if block reordering), plus edx/eax flips. 257 bytes both. equiv: WEAK
 00c5a3b0 69 GetUILongDescription: identical shape to 00c5a280 with a different 15-key table; same if/else-if block-reordering + register coin flips. 257 bytes both. equiv: WEAK
 00c5a4e0 33 tail-call current sub-mission vtbl[0x124] after the inlined bounds check. Same begin/end register flip; 51 vs 57 bytes. equiv: FAIL (5/5, esp delta on the unresolved vtable tail-jump)
