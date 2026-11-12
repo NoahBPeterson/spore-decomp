@@ -27,13 +27,9 @@
 00ee3f60 293 message dispatch complete; switch tree/register base differ, size 417 vs 388 (equiv WEAK) flags: /O2 /MD /Gy /EHsc /TP /fp:fast
 00ee40f0 5 random resource pick complete; register allocation of index addressing differs (equiv UNSUPPORTED: 0/400 valid, global manager faults) flags: /O2 /MD /Gy /EHsc /TP /fp:fast
 00ee4390 2865 (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) complete HandleUIMessage of SP::cScenarioEditModeBehaviorUI (IWinProc at +8): all 9 message types (key, drag move/drop/pick-up with pie menu + cHideOnMoveScreenPosition, focus in/out edits, 17 button ids, slider); same ordered direct-call/vtable/immediate sequence as the original (178/179 direct calls, 48/48 vcalls, 4340 vs 4328 bytes); not byte-exact: the act-range default case keeps its own Refresh tail (original tail-merges it), pie-menu loop spills/colour temps, x87 vs movss for two Point temporaries, register choice; difftest WEAK (29533 valid at 30000 inputs, 8.1% coverage, no difference; the pie-menu anchor ref is now a plain struct HideOnMoveRef so its ctor 0x00572660 resolves)
-00ee6880 40 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ee68b0 448 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ee6bd0 284 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ee6f90 78 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ee70e0 279 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ee7240 755 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ee7810 40 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ee7850 5 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ee7b40 59 SetMode: a merged 276-byte analysis region (the mode dispatcher plus a second function at 0xee7bd0 and its two jump tables); ours implements only the mode dispatcher (160 bytes: the -1 guard, the five-way mode switch with the ToggleHint(0x89,0x8a) case and the trailing o028 = mode/0xffffffff store). difftest FAIL (5/306 valid inputs mismatched; first fake call #0 arg 0). flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00ee7cb0 8 FindPlanetSlot: complete key/offset selection from three id thresholds plus the linear species scan (GetSpeciesMgr()->GetAt, GetID, the +0xf8 table compare) and the two out-parameter stores; retail keeps key in eax and uses eax/ecx/edx while cl allocates ecx/edx/... for the same loads - only register encodings differ. difftest PASS (354 valid, 69.4% coverage 50/72 insns). flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
