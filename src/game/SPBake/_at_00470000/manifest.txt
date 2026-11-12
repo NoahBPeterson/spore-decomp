@@ -2,3 +2,5 @@
 ../src/game/SPBake/_at_00470000.cpp  ?SetStateFlags@cSPEditorHandle@@QAEXXZ  0047f3b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/_at_00470000.cpp  ?ConstructDerived@cSPEditorHandle@@QAEPAU1@XZ  0047f4b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/_at_00470000.cpp  ?BallConnector_Dtor@@YIXPAUcSPEditorHandle_s0047_f520@@@Z  0047f520  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00470000.cpp  ?QueryInterface@BallConnectorIface@@QAEPAXI@Z  0047f550  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00470000.cpp  ?GetTuningVec90@cSPEditorHandle@@QAEPAUVec3@@PAU2@@Z  0047f9e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

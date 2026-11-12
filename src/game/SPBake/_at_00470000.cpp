@@ -57,7 +57,9 @@ struct cMWModel {
     void Release();
     void SetFlag(bool b);         // @ 0x00437f70
 };
+struct Vec3;
 struct cSPEditorHandle {
+    Vec3* GetTuningVec90(Vec3* out);
     void** vptr;                  // +0x00
     void** vptr2;                 // +0x04
     int    mUnk8;                 // +0x08
@@ -229,10 +231,10 @@ void __fastcall BallConnector_Dtor(cSPEditorHandle_s0047_f520* self)
 // @ 0x0047f550
 void* BallConnectorIface::QueryInterface(u32 id)
 {
-    switch (id) {
-    case 0xee3f516e: return this;
-    case 0x050a1fe5: return this;
+    switch ((int)id) {
     case 0x050e8e23: return this;
+    case 0x050a1fe5: return this;
+    case (int)0xee3f516e: return this;
     }
     return 0;
 }
@@ -284,9 +286,9 @@ Vec3* __fastcall cSPEditorHandle_GetBlockOffset(cSPEditorHandle_s0047_f520* self
 }
 
 // @ 0x0047f9e0
-Vec3* __fastcall cSPEditorHandle_GetTuningVec90(void* self, int /*edx*/, Vec3* out)
+Vec3* cSPEditorHandle::GetTuningVec90(Vec3* out)
 {
-    Vec3* v = (Vec3*)((char*)EditorTuning() + 0x90);
-    *out = *v;
+    char* tuning = (char*)EditorTuning();
+    *out = *(Vec3*)(tuning + 0x90);
     return out;
 }
