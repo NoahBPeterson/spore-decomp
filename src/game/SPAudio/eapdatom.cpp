@@ -32,7 +32,7 @@ extern Sym2 gEmptyB;   // 0x167589c
 extern "C" void __cdecl gensym(Sym2* out, const char* name);   // 0x00a675f0 (equiv t2)
 
 // @ 0x00a46760
-float atom_getfloat(Atom* a)
+inline float atom_getfloat(Atom* a)
 {
     if (a->type == 1)
         return a->f;
@@ -42,9 +42,7 @@ float atom_getfloat(Atom* a)
 // @ 0x00a46770
 int atom_getint(Atom* a)
 {
-    if (a->type == 1)
-        return (int)a->f;
-    return 0;
+    return (int)atom_getfloat(a);
 }
 
 // @ 0x00a46790
@@ -106,23 +104,17 @@ Sym2* atom_vectorgensym(Sym2* out, int count, Atom* atoms)
 }
 
 // @ 0x00a468f0
-float atom_getfloat_at(int i, int n, Atom* arr)
+inline float atom_getfloat_at(int i, int n, Atom* arr)
 {
-    if (n <= i)
-        return 0.0f;
-    if (arr[i].type != 1)
-        return 0.0f;
-    return arr[i].f;
+    if (n > i && arr[i].type == 1)
+        return arr[i].f;
+    return 0.0f;
 }
 
 // @ 0x00a46920
 int atom_getint_at(int i, int n, Atom* arr)
 {
-    if (n <= i)
-        return 0;
-    if (arr[i].type != 1)
-        return 0;
-    return (int)arr[i].f;
+    return (int)atom_getfloat_at(i, n, arr);
 }
 
 // @ 0x00a46950
