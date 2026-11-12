@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "SP/FunctionalMatch/DeclareParam.h"
 #include <math.h>
 #include <intrin.h>
 
@@ -1395,9 +1396,54 @@ void __cdecl FUN_00e84a20()
 {
 }
 
+inline void* operator new(unsigned int, void* p) { return p; }
+
+struct CellKey {
+    int mValue0;
+    int mValue1;
+    int mValue2;
+};
+
+void FUN_00e6d4a0(CellKey* pKey, int* pOut0, int* pOut1);
+
+struct DeclareParamVector {
+    SP::FunctionalMatch::DeclareParam* mpBegin;
+    SP::FunctionalMatch::DeclareParam* mpEnd;
+    SP::FunctionalMatch::DeclareParam* mpCapacity;
+    uint32_t mAllocator[2];
+
+    void Reserve(uint32_t count);
+    void DoInsertValue(SP::FunctionalMatch::DeclareParam* pPosition,
+                       const SP::FunctionalMatch::DeclareParam& value);
+
+    SP::FunctionalMatch::DeclareParam& push_back()
+    {
+        if (mpEnd < mpCapacity)
+            ::new (mpEnd++) SP::FunctionalMatch::DeclareParam();
+        else
+            DoInsertValue(mpEnd, SP::FunctionalMatch::DeclareParam());
+        return *(mpEnd - 1);
+    }
+};
+
 // @ 0x00e84b20
-void __cdecl FUN_00e84b20()
+bool __stdcall FUN_00e84b20(CellKey* pKey, DeclareParamVector* pParams)
 {
+    int& value0 = (int&)pKey;
+    int value1;
+    FUN_00e6d4a0(pKey, &value0, &value1);
+    pParams->Reserve(2);
+
+    SP::FunctionalMatch::DeclareParam& first = pParams->push_back();
+    first.mParameter = 0xdddd0000;
+    first.mType = SP::FunctionalMatch::kInteger;
+    first.mIntVal = value0;
+
+    SP::FunctionalMatch::DeclareParam& second = pParams->push_back();
+    second.mParameter = 0xdddd0001;
+    second.mType = SP::FunctionalMatch::kInteger;
+    second.mIntVal = value1;
+    return true;
 }
 
 // @ 0x00e84bf0

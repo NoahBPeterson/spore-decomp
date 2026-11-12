@@ -18,3 +18,4 @@
 ../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82900@@YA_NHH@Z  00e82900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include /EHsc
 ../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82be0@SP@@YAXPAX_N@Z  00e82be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include /EHsc
 ../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e848c0@@YAXI@Z  00e848c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include /EHsc
+../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e84b20@@YG_NPAUCellKey@@PAUDeclareParamVector@@@Z  00e84b20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
