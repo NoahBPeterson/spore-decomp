@@ -3,6 +3,8 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 #include "EA/UTFWinControls/IWinButton.h"
 #include "EA/UTFWin/IWindow.h"
 
@@ -110,6 +112,8 @@ namespace UTFWinControls {
 Navigator::Navigator()
 {
     m04 = (void*)0x13fa72c;
+    // Finish installing the base interface before materializing its null state.
+    _ReadWriteBarrier();
     m08 = 0;
     m0c = (void*)0x1444434;
 }
