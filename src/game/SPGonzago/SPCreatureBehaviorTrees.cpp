@@ -4367,8 +4367,9 @@ u32 cSocialBandPool_s00da_5900::create(const cSocialBand_s00da_5900& item)
 // @ 0x00da5a00
 u32 cSocialBandPool_s00da_5900::CreateObject()
 {
-    cSocialBand_s00da_5900 local;
-    u32 index = create(local);
+    u32 storage[sizeof(cSocialBand_s00da_5900) / sizeof(u32)];
+    u32 index = create(*::new (storage) cSocialBand_s00da_5900);
+    ((cSocialBand_s00da_5900*)storage)->~cSocialBand_s00da_5900();
     return index | 0x40000000;
 }
 

@@ -6,3 +6,4 @@
 ../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?Fd9ef40@@YAXPAH0UVector3@@@Z  00d9ef40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?Fd9f660@@YAPAHPAH0PAXUVector3@@@Z  00d9f660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?resize@BigVec@@QAEXI@Z  00da1db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?CreateObject@cSocialBandPool_s00da_5900@@QAEIXZ  00da5a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -3,6 +3,7 @@
 // tribe tool enter/exit helpers and the mine proximity tests.
 
 typedef unsigned int uint32_t;
+typedef unsigned __int64 uint64_t;
 typedef int int32_t;
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -40,8 +41,8 @@ public:
     void ClearAll(int32_t nA, int32_t nFlags);  // 0x00bc98f0
     void* Play(int32_t nA, int32_t nFlags);     // 0x00bc96a0
 
-    uint8_t mPad000[0x1c4];                     // 0x000
-    uint32_t mnField1C4;                        // 0x1c4 (tree + 0x1cc)
+    uint8_t mPad000[0x1c0];                     // 0x000
+    uint64_t mnFlags1C0;                        // 0x1c0 (tree + 0x1c8)
 };
 
 class cBehaviorTree {
@@ -663,7 +664,7 @@ void FUN_00d7ca90(cCreatureBase* pCreature)
 // @ 0x00d7cb20
 int32_t FUN_00d7cb20(cCreatureBase* pCreature)
 {
-    if ((pCreature->mpBehaviorTree->mStimuli.mnField1C4 & 4) != 0)
+    if ((pCreature->mpBehaviorTree->mStimuli.mnFlags1C0 & 4) != 0)
         return 1;
     return 0;
 }
