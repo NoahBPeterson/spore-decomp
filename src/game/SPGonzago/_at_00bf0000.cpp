@@ -447,12 +447,6 @@ void  __cdecl RBTreeInsert(void* node, void* anchor, void* header, int side); //
 int   __cdecl WriteUint32(void* stream, const void* data, int count, int a);  // 0x0093aa70
 int   __cdecl ReadInt32(void* stream, void* data, int count, int a);          // 0x0093a780
 int   __cdecl FUN_00555e80(int begin, IntVec* vec);          // 0x00555e80
-struct TreeIter
-{
-    void* mpNode;                          // +0x00
-    TreeIter() {}
-    TreeIter(const TreeIter& o) : mpNode(o.mpNode) {}
-};
 struct StarNode
 {
     StarNode* mpLeft;                      // +0x00
@@ -465,7 +459,7 @@ struct StarTree
     int  mParent;                          // +0x00
     StarNode mAnchor;                      // +0x04
     uint mSize;                            // +0x14
-    TreeIter find(const int& key);         // 0x00e39fb0
+    StarNode** find(StarNode** out, const int& key); // 0x00e39fb0
     bool ContainsMap(int key);             // 0x00bf2c80
 };
 void* __fastcall FUN_041ea70(void* propObj);                 // 0x0041ea70  SP::GetPropertyAsValue
@@ -2464,6 +2458,7 @@ void CStub::FUN_00bf07c0()
 {
     int none = -1;
     m2a0 = none;
+    _ReadWriteBarrier();
     RefObj* a = m2a4;
     m2a4 = 0;
     if (a) a->Release();
@@ -3520,16 +3515,19 @@ StarTree* __fastcall StarMapInit(StarTree* map)
 // @ 0x00bf2c80
 bool StarTree::ContainsMap(int key)
 {
-    TreeIter it = find(key);
-    return it.mpNode != (void*)((int)this + 4);
+    StarNode* result;
+    StarNode** out = find(&result, key);
+    return *out != &mAnchor;
 }
 
 // @ 0x00bf2cb0
 bool cGameData::StarMapContainsMap2(int value)
 {
     StarTree* tree = (StarTree*)((char*)this + 0x6c);
-    TreeIter it = tree->find(value);
-    return it.mpNode != (void*)((int)tree + 4);
+    int key = value;
+    StarNode* result;
+    StarNode** out = tree->find(&result, key);
+    return *out != &tree->mAnchor;
 }
 
 // @ 0x00bf2ce0
