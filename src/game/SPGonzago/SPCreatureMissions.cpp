@@ -254,13 +254,26 @@ struct SP_cSPTimer {
 struct C45140Dtor {
     void FUN_00c45140();                    // 0x00c45140
 };
+// Goal-state resolver view. The native getter takes no arguments; Resolve
+// receives this in ECX and cleans up its three stack arguments.
+struct Goal {
+    int Resolve(const void* key, void* first, void* second); // 0x00ba3f90
+};
+extern Goal* __cdecl GetGoalState();                         // 0x00b3d4c0
+// Bounded view of the three-word key copied by Goal::Resolve. The rest
+// of the mission is intentionally opaque here.
+struct MissionGoalView {
+    uint32_t mPad00[0x80 / 4];
+    uint32_t mGoalKey80[3];
+};
+
 class MissionStub {
 public:
     void  SetSerializer();
     char  FUN_00c2e4b0();
     char  FUN_00c2e4f0(int param);
     void  FUN_00c2e780();
-    void  FUN_00c2e820();
+    int   FUN_00c2e820();
     void  FUN_00c2e980();
     float FUN_00c2e9b0();
     char  FUN_00c2e9e0();
@@ -430,10 +443,10 @@ void MissionStub::FUN_00c2e7b0(int param_2)
 }
 
 // @ 0x00c2e820
-void MissionStub::FUN_00c2e820()
+int MissionStub::FUN_00c2e820()
 {
-    char* p = (char*)this + 0x80;
-    FUN_00ba3f90(FUN_00b3d4c0(p, 0, 0));
+    MissionGoalView* mission = (MissionGoalView*)this;
+    return GetGoalState()->Resolve(mission->mGoalKey80, 0, 0);
 }
 
 // @ 0x00c2e8c0

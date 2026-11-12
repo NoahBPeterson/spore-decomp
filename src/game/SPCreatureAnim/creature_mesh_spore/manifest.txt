@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/SPCreatureAnim/creature_mesh_spore.cpp  ?Ufill@@YAXPAUmesh_instance@@IPBU1@@Z  009c6560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature_mesh_spore.cpp  ?ctor@creature_mesh_instance_data_s009c_7ff0@@QAEPAU1@XZ  009c8200  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPCreatureAnim/creature_mesh_spore.cpp  ?Transpose3x3@@YAPAMPAMPBM@Z  009c6660  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

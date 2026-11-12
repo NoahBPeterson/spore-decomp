@@ -296,14 +296,14 @@ struct CbdPart1 : ResAsyncBase {
 };
 struct CbdPart2 : ResAsyncBase {
 };
+// Retail layout view: drawable, serializable and component-image interfaces.
+// The concrete C++ inheritance declarations have not yet been recovered.
 struct ComboBoxDrawable {
-    int m00;
-    int m04;
-    int m08;
-    int m0c;
-    int m10;
-    int m14;
-    int m18;
+    const void* mpDrawableTable;             // +0x00
+    const void* mpSerializableTable;         // +0x04
+    int mnRefCount;                          // +0x08
+    const void* mpComponentImageTable;       // +0x0c
+    AutoRefCountIface* mpComponentImages[3];  // +0x10..0x1b
 
     ComboBoxDrawable();                                    // 0x969000
     static void* __stdcall CreateInstance(void* unused, void* ctx); // 0x969060
@@ -950,17 +950,20 @@ bool CreateRenderables(void* self, void* param_2, unsigned* param_3)
 // @ 0x00969000
 ComboBoxDrawable::ComboBoxDrawable()
 {
-    *(volatile uint32_t*)((char*)this + 4) = 0x13fa72c;
+    // Keep the two observed base-interface table stores distinct. The first uses
+    // the existing table symbol; the second retains its audited retail literal.
+    // The original source identities of these folded interface tables are unknown.
+    *(const void* volatile*)&mpSerializableTable = g_vtbl_ResourceAsync;
     _ReadWriteBarrier();
-    m08 = 0;
-    *(uint32_t*)((char*)this + 0xc) = 0x13fa72c;
+    mnRefCount = 0;
+    mpComponentImageTable = (const void*)0x013fa72c;
     _ReadWriteBarrier();
-    *(uint32_t*)((char*)this + 0) = 0x14416a0;
-    *(uint32_t*)((char*)this + 4) = 0x1441688;
-    *(uint32_t*)((char*)this + 0xc) = 0x1441670;
-    m10 = 0;
-    m14 = 0;
-    m18 = 0;
+    mpDrawableTable = (const void*)0x014416a0;
+    mpSerializableTable = (const void*)0x01441688;
+    mpComponentImageTable = (const void*)0x01441670;
+    mpComponentImages[0] = 0;
+    mpComponentImages[1] = 0;
+    mpComponentImages[2] = 0;
 }
 
 // @ 0x00969060
@@ -971,14 +974,14 @@ void* __stdcall ComboBoxDrawable::CreateInstance(void* unused, void* ctx)
     ComboBoxDrawable* p = (ComboBoxDrawable*)f_FactoryAlloc(0x1c, 4, g_szComboBoxDrawable, ctx);
     if (p) {
         *(void**)((char*)p + 4) = g_vtbl_ResourceAsync;
-        p->m08 = 0;
+        p->mnRefCount = 0;
         *(void**)((char*)p + 0xc) = g_vtbl_ResourceAsync;
         *(void**)((char*)p + 0) = g_vtbl_ComboBoxDrawable0;
         *(void**)((char*)p + 4) = g_vtbl_ComboBoxDrawable1;
         *(void**)((char*)p + 0xc) = g_vtbl_ComboBoxDrawable2;
-        p->m10 = 0;
-        p->m14 = 0;
-        p->m18 = 0;
+        p->mpComponentImages[0] = 0;
+        p->mpComponentImages[1] = 0;
+        p->mpComponentImages[2] = 0;
     }
     return p;
 }

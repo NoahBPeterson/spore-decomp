@@ -9,3 +9,4 @@ slices/s00d2aec0/s00d2aec0.cpp  ?UpdatePosseItemGhosts@cCreatureDisplayStrategyE
 slices/s00d2aec0/s00d2aec0.cpp  ?Terminate@cTimerBarHost@@QAEXXZ  00d2ba90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00d2aec0/s00d2aec0.cpp  ?Shutdown@cCreatureTimerBar@@QAEXXZ  00d2bc60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00d2aec0/s00d2aec0.cpp  ?SetVisibility@cCreatureTimerBar@@QAEX_N@Z  00d2bc90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d2aec0/s00d2aec0.cpp  ??0cTimerBarHost@@QAE@XZ  00d2ba60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -4,6 +4,9 @@
 
 #include "game/types.h"
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 // unnamed retail callees and globals (address in the comment)
 extern char*** g_namesBegin_1628b14;
 extern char*** g_namesEnd_1628b18;
@@ -588,21 +591,23 @@ __declspec(noinline) void Vec130::Insert(char* pos, unsigned n, void* value)
 // @ 0x006fe7f0
 void* __fastcall FUN_006fe7f0(char* p)
 {
-    *(int*)(p + 0x00) = 0;
-    *(void**)(p + 0x0c) = (void*)0x01667BAD;
-    *(void**)(p + 0x04) = (void*)0x01667BAC;
-    *(void**)(p + 0x08) = (void*)0x01667BAC;
-    *(void**)(p + 0x14) = (void*)0x01667BAC;
-    *(void**)(p + 0x18) = (void*)0x01667BAC;
-    *(void**)(p + 0x1c) = (void*)0x01667BAD;
-    *(int*)(p + 0x24) = 0;
-    *(int*)(p + 0x28) = 0;
-    *(int*)(p + 0x2c) = 0;
-    *(int*)(p + 0x38) = 0;
-    *(int*)(p + 0x3c) = 0;
-    *(unsigned char*)(p + 0x40) = 0;
-    *(unsigned char*)(p + 0x41) = 0;
-    *(unsigned char*)(p + 0x42) = 0;
+    FragInfo* info = (FragInfo*)p;
+    info->f00 = 0;
+    info->nameCap = (const char*)0x01667BAD;
+    _ReadWriteBarrier();
+    info->nameBegin = (const char*)0x01667BAC;
+    info->nameEnd = (const char*)0x01667BAC;
+    info->uniBegin = (const char*)0x01667BAC;
+    info->uniEnd = (const char*)0x01667BAC;
+    info->uniCap = (const char*)0x01667BAD;
+    info->vecBegin = 0;
+    info->vecEnd = 0;
+    info->vecCap = 0;
+    info->f38 = 0;
+    info->f3c = 0;
+    info->b40 = 0;
+    info->b41 = 0;
+    info->b42 = 0;
     return p;
 }
 

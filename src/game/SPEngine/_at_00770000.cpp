@@ -2268,10 +2268,11 @@ bool cShaderBase_s0077_76f0::Read(EAIOStream* io, void* key, unsigned int reserv
 // @ 0x007779e0
 void Mat44::assignTo(Mat44* dst) const
 {
-    dst->r[0] = r[0];
-    dst->r[1] = r[1];
-    dst->r[2] = r[2];
-    dst->r[3] = r[3];
+    Mat44* destination = *(Mat44* volatile*)&dst;
+    destination->r[0] = r[0];
+    destination->r[1] = r[1];
+    destination->r[2] = r[2];
+    destination->r[3] = r[3];
 }
 
 // @ 0x00777a10

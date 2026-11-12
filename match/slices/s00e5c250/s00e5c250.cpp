@@ -174,13 +174,42 @@ float __fastcall FUN_00e5c530(void* self) {
   return FUN_00e511e0(b, a);
 }
 
+// Bounded retail views: the cell pool allocates independent 0x398-byte records.
+struct CellRecordLookupView {
+  unsigned mPoolIndex;
+  unsigned mUnknown04[(0x244 - 4) / 4];
+  int mField244;
+  unsigned mUnknown248[(0x398 - 0x248) / 4];
+};
+struct CellPoolLookupView {
+  char* mpData;
+  int mFreeHead;
+  unsigned mNextHandle;
+  int mUsed;
+  int mHighWater;
+  int mStride;
+  int mCapacity;
+  CellRecordLookupView* Get(unsigned id); // 0x00b721d0
+};
+struct CellGameLookupView {
+  unsigned mPrefix[7];
+  CellPoolLookupView mCells; // +0x1c
+  unsigned mMiddle[(0x411c - 0x38) / 4];
+  unsigned mAvatarCellIndex; // +0x411c
+};
+
 // @ 0x00e5c560
-void __fastcall FUN_00e5c560(void* self) {
-  (void)self;
-  char* g = (char*)gCellGame_16b3c04;
-  int id = *(int*)(g + 0x411c);
-  char* e = (char*)((CellGameSub*)(g + 0x1c))->FUN_00B721D0(id);
-  if (e) *(int*)(e + 0x244) = 6;
+void FUN_00e5c560() {
+  CellRecordLookupView* e;
+  {
+    CellGameLookupView* game = (CellGameLookupView*)gCellGame_16b3c04;
+    const unsigned key = game->mAvatarCellIndex;
+    // Restrict only the read-only lookup; its records are separately allocated.
+    CellPoolLookupView* __restrict cells = &game->mCells;
+    e = cells->Get(key);
+  }
+  if (e)
+    e->mField244 = 6;
 }
 
 // @ 0x00e5c5d0

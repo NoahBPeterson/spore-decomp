@@ -6,6 +6,9 @@
 #include <math.h>
 #include "types.h"
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 __forceinline float Clamp(float value, float minValue, float maxValue)
 {
     __asm {
@@ -349,9 +352,9 @@ bool __stdcall OnRemovePosseMemberMessage(uint32_t msg, cPosseMessage* pMsg)
 }
 
 struct cGonzagoTimerLike {
-    void ResetTimer();                                              // 0x00b63890
+    cGonzagoTimerLike();                                            // 0x00b63890 constructor
     void ShutdownTimer();                                           // 0x00b638b0
-    uint8_t pad04[0x20];                                            // sizeof == 0x20
+    uint32_t mStorage[8];                                           // complete 0x20-byte timer view
 };
 struct IRefV08 {
     virtual void V00(); virtual void V04();
@@ -364,18 +367,14 @@ struct cTimerBarHost {
     uint8_t        pad08[0x38 - 0x08];
     cGonzagoTimerLike mTimerA;                                      // +0x38
     cGonzagoTimerLike mTimerB;                                      // +0x58
-    cTimerBarHost* Initialize();
+    cTimerBarHost();
     void Terminate();
 };
 
 // @ 0x00d2ba60
-cTimerBarHost* cTimerBarHost::Initialize()
+cTimerBarHost::cTimerBarHost()
+    : mVisible(1), mpRef((_ReadWriteBarrier(), static_cast<IRefV08*>(0)))
 {
-    mpRef = 0;
-    mVisible = 1;
-    this->mTimerA.ResetTimer();
-    this->mTimerB.ResetTimer();
-    return this;
 }
 
 // @ 0x00d2ba90

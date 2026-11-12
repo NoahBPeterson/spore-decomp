@@ -5,4 +5,3 @@
 009c6500  68  complete  _Ucopy with out-iterator; original hoists dest into eax before push esi and keeps first in ecx, ours picks the opposite assignment (84 vs 78 bytes); harness cannot build valid inputs for the pointer-to-pointer signature (0/400) [equiv: UNSUPPORTED]
 009c65b0  28  complete  _Ucopy of a mesh-instance range; original keeps dest in eax, first in ecx and last in esi (68 vs 68 bytes); harness cannot build valid inputs (0/400) [equiv: UNSUPPORTED]
 009c6600  80  complete  _Destroy of a mesh-instance range; original rotates the loop to cmp/je with last in ebp and the release flag in ebx (91 vs 81 bytes); harness cannot build valid inputs (0/400) [equiv: UNSUPPORTED]
-009c6660  6  complete  3x3 transpose; only the parameter->register assignment differs (original reads src into ecx and dst into eax before the first fld) (61 vs 61 bytes) [equiv: PASS]

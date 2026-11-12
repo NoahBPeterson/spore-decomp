@@ -810,8 +810,10 @@ mesh_instance* DestroyRange(mesh_instance* first, mesh_instance* last, mesh_inst
 // @ 0x009c6660
 float* Transpose3x3(float* dst, const float* src)
 {
-    float (*d)[3] = (float(*)[3])dst;
-    const float (*s)[3] = (const float(*)[3])src;
+    const float* source = *(const float* volatile*)&src;
+    float* destination = *(float* volatile*)&dst;
+    float (*d)[3] = (float(*)[3])destination;
+    const float (*s)[3] = (const float(*)[3])source;
     d[0][0] = s[0][0];
     d[1][0] = s[0][1];
     d[2][0] = s[0][2];
@@ -821,7 +823,7 @@ float* Transpose3x3(float* dst, const float* src)
     d[0][2] = s[2][0];
     d[1][2] = s[2][1];
     d[2][2] = s[2][2];
-    return dst;
+    return destination;
 }
 
 // @ 0x009c66a0

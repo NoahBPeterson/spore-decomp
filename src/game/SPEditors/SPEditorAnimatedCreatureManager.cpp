@@ -53,8 +53,8 @@ public:
     char pad158[0x164 - 0x158];
     float mLookAtPosition[3];       // +0x164
     char pad170[0x17c - 0x170];
-    void AddRef();                  // 0x00a02c30
-    void Release();                 // 0x00a05270
+    int AddRef();                   // 0x00a02c30
+    int Release();                  // 0x00a05270
     bool IsSomething(int a);        // 0x00a02b20
     void FUN_00a047d0(int a);       // 0x00a047d0
 };
@@ -1042,18 +1042,23 @@ void* Simulator::cAnimatedData::FUN_0059ace0()
     return this;
 }
 
+inline void AssignCreatureReference(Simulator::cAnimatingCreature*& destination, Simulator::cAnimatingCreature* p)
+{
+    Simulator::cAnimatingCreature* old = destination;
+    if (p != old) {
+        if (p)
+            p->AddRef();
+        destination = p;
+        if (old)
+            old->Release();
+    }
+}
+
 // @ 0x0059ae20
 void Simulator::cAnimatedData::FUN_0059ae20(Simulator::cAnimatingCreature* p, int a)
 {
     mField0c = a;
-    Simulator::cAnimatingCreature* old = mpCreature;
-    if (p != old) {
-        if (p)
-            p->AddRef();
-        mpCreature = p;
-        if (old)
-            old->Release();
-    }
+    AssignCreatureReference(mpCreature, p);
     mField1c = 0;
 }
 

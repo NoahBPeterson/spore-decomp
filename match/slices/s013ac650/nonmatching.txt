@@ -4,7 +4,6 @@
 013b52d0  12   x87 `1.0f - hkFpuRoundingProbe()` spills to a stack slot instead of staying on st0 across the three stores
 013b5db0  12   post-increment guard: original reloads the global (`mov ecx,[g]`), cl CSEs the two loads; retail is `mov eax,[g]; mov ecx,[g]; inc ecx; test eax,eax; mov [g],ecx; jne; call`; with /O2 cl15 reuses eax (`mov ecx,eax; inc eax; mov [g],eax; test ecx,ecx`), and /Od only adds a frame; flags /O2 /MD /Gy /TP
 013b5de0  12   post-increment guard: same as 013b5db0 (`mov eax,[g]; mov ecx,[g]; inc ecx; test eax,eax; mov [g],ecx`); cl15 reuses the loaded register for the increment; flags /O2 /MD /Gy /TP
-013bcd30  2    /Od virtual call: same ecx-before-vtable schedule as 0x013bca50 (slot +4); cl15 always loads the object/vtable into eax/edx first however the call is spelled (tested typed vcall, fn-pointer casts, manual deref, locals, /Ob0 /Ob2 /O1 /Ox, vc71); not steerable. equiv WEAK (54.5% cov; needs --src s013ac650b.cpp)
 013b8e50  144  Vector4 row copy emits integer dword moves; original copies 16 bytes with movaps; equiv PASS (needs --src s013ac650c.cpp)
 013b8ef0  144  Vector4 row copy emits integer dword moves; original copies 16 bytes with movaps; equiv PASS (needs --src s013ac650c.cpp)
 013b8f90  129  Vector4 row copy emits integer dword moves; original copies 16 bytes with movaps; equiv PASS (needs --src s013ac650c.cpp)
