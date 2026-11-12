@@ -2445,9 +2445,13 @@ void cSPSimPlanetHighLOD_s00ff_5d20::StartUFOCelebration(cCity* param)
 void __cdecl FUN_00ff69c0(u32* begin, u32* end)
 {
     int count = (int)(end - begin);
-    if (count >= 2)
-        for (int i = (count - 2) >> 1; i >= 0; --i)
+    if (count >= 2) {
+        int i = ((count - 2) >> 1) + 1;
+        do {
+            --i;
             FUN_00ff6570((int*)begin, i, count, i, (int)begin[i]);
+        } while (i != 0);
+    }
 }
 
 // @ 0x00ff6a00
@@ -3203,10 +3207,11 @@ namespace SP {
 void FUN_00ffab60()
 {
     cGameNounManager_s00ff_a2c0* nm = NounManager();
-    GdVector* gv = nm->GetGameDataVector(gFn_00cd7d10, gFn_00d3d420, gFn_00acdff0, gFn_00b1e500, (void*)0x18c43e8);
-    int cnt = (int)(((char*)gv->m08 - (char*)gv->m04) >> 2);
+    GdVector* gv = nm->GetGameDataVector((void*)0x00cd7d10, (void*)0x00d3d420, (void*)0x00acdff0, (void*)0x00b1e500, (void*)0x18c43e8);
+    void*** range = &gv->m04;
+    int cnt = (int)(range[1] - range[0]);
     for (int i = 0; i < cnt; i++) {
-        Entity* e = ((Entity**)gv->m04)[i];
+        Entity* e = ((Entity**)range[0])[i];
         SFXObj* s = e->Slot6C();
         s->FUN_00becd70(0);
     }

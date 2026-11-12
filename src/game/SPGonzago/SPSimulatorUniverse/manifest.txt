@@ -15,13 +15,11 @@
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FUN_01010870@tGrobShockData@@QAEPAU1@ABU1@@Z  01010870  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?quick_sort_grob_shock@SP@@YAXPAUtGrobShockData_s0101_37b0@@0P6A_NABU2@1@Z@Z  01014db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FindEmbassyEntry@cSimulatorUniverse@@QAE_NPAUcStarRecordRef@@PAD@Z  0100e730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?GetEventID@WarAttackEvent@SP@@UAEIXZ  0100d480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?GetEventID@GrobTeaseRaidEvent@SP@@UAEIXZ  0100d490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?GetEventID@PirateRaidEvent@SP@@UAEIXZ  0100d4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?GetEventID@PirateRaidPlunderEvent@SP@@UAEIXZ  0100d4b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?GetEventID@PirateRaidAllyEvent@SP@@UAEIXZ  0100d4c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?GetEventID@ArtifactEvent@SP@@UAEIXZ  0100d4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?GetEventID@BiosphereCollapseEvent@SP@@UAEIXZ  0100d4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?GetEventID@HappinessDisasterEvent@SP@@UAEIXZ  0100d4f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?GetEventID@GenericDisaster@SP@@UAEIXZ  0100d550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?GetEventID@GrobWarAttackEvent@SP@@UAEIXZ  0100d950  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?SetPropertyRef@cSimulatorUniverse@@QAEXPAX@Z  0100e6e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?UpdateEvent@UniverseEventClock@@QAEX_K@Z  01010730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FUN_01010b30@@YAPAUtGrobShockData@@PAU1@00@Z  01010b30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FUN_01010e30@@YAPAUtGrobShockData@@PAU1@00@Z  01010e30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FUN_01010bb0@@YAPAUtGrobShockData@@PAU1@00@Z  01010bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FUN_01010f70@@YAXPAUtGrobShockData@@0@Z  01010f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FUN_01010ea0@@YAXPAUtGrobShockData@@HHU1@P6A_NABU1@2@Z@Z  01010ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?UniverseMakeShockHeap@@YAXPAUtGrobShockData@@0P6A_NABU1@1@Z@Z  01012330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
