@@ -508,7 +508,7 @@ void FUN_00923330(void** p)
 {
     if (p != 0) {
         void* d = *p;
-        if (d != 0 && _InterlockedExchangeAdd((volatile long*)((char*)d + 0x20), -1) == 1)
+        if (d != 0 && _InterlockedDecrement((volatile long*)((char*)d + 0x20)) == 0)
             FUN_00922da0(d);
         EA::Thread::operator_delete_f47380(p);
     }

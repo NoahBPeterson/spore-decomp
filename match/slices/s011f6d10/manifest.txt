@@ -8,3 +8,4 @@ slices/s011f6d10/s011f6d10.cpp  ?FUN_011f77d0@@YAXXZ  011f77d0  /vc71 /O2 /MD /G
 slices/s011f6d10/s011f6d10.cpp  ?FUN_011f7830@@YAXH@Z  011f7830  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s011f6d10/s011f6d10.cpp  ?FUN_011f7850@@YAXXZ  011f7850  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s011f6d10/s011f6d10.cpp  ?FUN_011f7870@@YAXXZ  011f7870  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f6d10/s011f6d10.cpp  ?FUN_011f78b0@@YAXXZ  011f78b0  /vc71 /O2 /MD /Gy /EHsc /TP
