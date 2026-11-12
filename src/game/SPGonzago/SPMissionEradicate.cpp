@@ -505,8 +505,8 @@ void __fastcall FUN_00c4eec0(void* ecx_this, void* edx, int v)
 // @ 0x00c4eee0
 void __fastcall FUN_00c4eee0(void* ecx_this, void* edx)
 {
-    int d = ((SP::ThisStubs*)ecx_this)->CalcDuration();
-    *(int*)((char*)ecx_this + 0x80) = d * *(int*)((char*)ecx_this + 0x204);
+    *(int*)((char*)ecx_this + 0x80) =
+        ((SP::ThisStubs*)ecx_this)->CalcDuration() * *(int*)((char*)ecx_this + 0x204);
 }
 
 // @ 0x00c4ef00
