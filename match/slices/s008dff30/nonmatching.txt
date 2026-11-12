@@ -17,7 +17,6 @@
 008e04a0  152  reconstruction (Manager::RegisterChangeNotification); flags as above; difftest FAIL (5/6 valid inputs mismatched; ours faults at 008deecb where the original returns) -- not proven equivalent
 008e0550    5  reconstruction (HashTable::insertNode1c); flags as above; difftest WEAK (181 valid, 38.4% coverage); 5-byte diff is the same store-order scheduling swap as insertNode18
 008e0630   66  reconstruction (HashTable::eraseKey); flags as above; difftest FAIL (5/26 valid inputs mismatched: fake call #0 arg 1) -- not proven equivalent
-008e06d0    4  reconstruction (HashTable::DoFreeNodes18); flags as above; difftest PASS (215 valid inputs, 100% coverage); 4-byte diff is the `mov edi,esi` copy the compiler hoisted above the first field load
 008e0740    4  reconstruction (HashTable::DoFreeNodes20); flags as above; difftest WEAK (155 valid, 100% coverage); same 4-byte scheduling diff; equivalent
 008e07b0  110  reconstruction (DBList::Erase); flags as above; difftest PASS (262 valid inputs, 60% coverage)
 008e0840   93  reconstruction (DBList::Flush); flags as above; difftest WEAK (213 valid, 42% coverage) -- equivalent on the covered paths

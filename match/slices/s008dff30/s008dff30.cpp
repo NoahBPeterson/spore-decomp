@@ -641,9 +641,9 @@ void HashTable::DoFreeNodes18(void** pBucketArray, uint32 nCount)
         char* p = (char*)pBucketArray[i];
         while (p) {
             char* const pNode = p;
+            p = *(char**)(pNode + 0x14);
             void* pBegin = *(void**)(pNode + 4);
             uint32 nEnd = *(uint32*)(pNode + 0xc);
-            p = *(char**)(pNode + 0x14);
             int nBytes = (int)(nEnd - (uint32)pBegin) & (int)0xfffffffeu;
             if (nBytes > 2 && pBegin)
                 operator delete(pBegin);
