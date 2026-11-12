@@ -391,12 +391,20 @@ struct cSPTimer_s0101_04c0 {
     char   mPad19[3];
     int    mGetMs;       // +0x1c
 
+    __forceinline cSPTimer_s0101_04c0(const cSPTimer_s0101_04c0& o) {
+        mVtbl = (void*)0x01465d54;
+        mRefCount = 0;
+        *(uint64_t*)&mElapsedLo = *(const uint64_t*)&o.mElapsedLo;
+        *(uint64_t*)&mBaseLo = *(const uint64_t*)&o.mBaseLo;
+        mRunning = o.mRunning;
+        mGetMs = o.mGetMs;
+        mVtbl = (void*)0x01464450;
+    }
+    ~cSPTimer_s0101_04c0(); // 0x00b638b0
     cSPTimer_s0101_04c0& operator=(const cSPTimer_s0101_04c0& o)
     {
-        mElapsedLo = o.mElapsedLo;
-        mElapsedHi = o.mElapsedHi;
-        mBaseLo    = o.mBaseLo;
-        mBaseHi    = o.mBaseHi;
+        *(uint64_t*)&mElapsedLo = *(const uint64_t*)&o.mElapsedLo;
+        *(uint64_t*)&mBaseLo = *(const uint64_t*)&o.mBaseLo;
         mRunning   = o.mRunning;
         mGetMs     = o.mGetMs;
         return *this;
@@ -407,6 +415,8 @@ struct tGrobShockData {
     int       mField04;  // +0x04
     cSPTimer_s0101_04c0  mTimer;    // +0x08
 
+    __forceinline tGrobShockData(const tGrobShockData& o)
+      : mField00(o.mField00), mField04(o.mField04), mTimer(o.mTimer) {}
     tGrobShockData* FUN_01010870(const tGrobShockData& o);   // 0x01010870
 };
 void __stdcall Start(int a);        // 0x0100f7c0  SP::CreateArtifact::Start
@@ -1120,7 +1130,7 @@ void cSimulatorUniverse::SetPropertyRef(void* def)
     if (mTuning.mpObject) {
         Property* pResult;
         mTuning.mpObject->GetProperty(0x5a5e5bc, &pResult);
-        mProperty = pResult;
+        mProperty = def;
         mPropertyId = 0x5a5e5bc;
         return;
     }
@@ -1435,9 +1445,40 @@ void __stdcall FUN_01010720(int a, int b)
     Start(a);
 }
 
+struct UniverseCandidateList {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    u32 mAllocator[2];
+    UniverseCandidateList() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    void Destroy(); // 0x00ae6970
+};
+struct UniverseEventSelector {
+    virtual void Unused();
+    virtual void Choose(void* destination, UniverseCandidateList* candidates);
+    virtual float GetFrequency(u64 elapsed);
+};
+struct UniverseEventRandom {
+    double RandomDoubleUniform(); // 0x009360d0
+};
+struct UniverseEventClock {
+    char mPad00[0xd0];
+    UniverseEventSelector mSelector;
+    u32 mSelectorState;
+    u64 mLastEvent;
+    void UpdateEvent(u64 elapsed);
+};
+
 // @ 0x01010730
-void FUN_01010730(void)
-{}
+void UniverseEventClock::UpdateEvent(u64 elapsed)
+{
+    float frequency = mSelector.GetFrequency(elapsed);
+    if (frequency > 0.0f && ((UniverseEventRandom*)0x01601760)->RandomDoubleUniform() < frequency) {
+        UniverseCandidateList candidates;
+        mSelector.Choose(&mLastEvent, &candidates);
+        candidates.Destroy();
+    }
+}
 
 // @ 0x010107b0
 void FUN_010107b0(void)
@@ -1470,16 +1511,24 @@ void FUN_010109f0(void)
 {}
 
 // @ 0x01010b30
-void FUN_01010b30(void)
-{}
+tGrobShockData* FUN_01010b30(tGrobShockData* first, tGrobShockData* last, tGrobShockData* result)
+{
+    while (first != last) {
+        if (result)
+            new (result) tGrobShockData(*first);
+        ++first;
+        ++result;
+    }
+    return result;
+}
 
 // @ 0x01010bb0
 tGrobShockData* __cdecl FUN_01010bb0(tGrobShockData* first, tGrobShockData* last, tGrobShockData* result)
 {
     while (first != last) {
         *result = *first;
-        first++;
         result++;
+        first++;
     }
     return result;
 }
@@ -1491,7 +1540,7 @@ void FUN_01010c20(void)
 // @ 0x01010e30
 tGrobShockData* __cdecl FUN_01010e30(tGrobShockData* first, tGrobShockData* last, tGrobShockData* result)
 {
-    while (first != last) {
+    while (last != first) {
         last--;
         result--;
         *result = *last;
@@ -1499,13 +1548,28 @@ tGrobShockData* __cdecl FUN_01010e30(tGrobShockData* first, tGrobShockData* last
     return result;
 }
 
+typedef bool (__cdecl* UniverseShockCompare)(const tGrobShockData&, const tGrobShockData&);
+
 // @ 0x01010ea0
-void FUN_01010ea0(void)
-{}
+void FUN_01010ea0(tGrobShockData* first, int top, int hole,
+                  tGrobShockData value, UniverseShockCompare compare)
+{
+    int parent = (hole - 1) >> 1;
+    while (hole > top && compare(first[parent], value)) {
+        first[hole] = first[parent];
+        hole = parent;
+        parent = (hole - 1) >> 1;
+    }
+    first[hole] = value;
+}
 
 // @ 0x01010f70
-void FUN_01010f70(void)
-{}
+void FUN_01010f70(tGrobShockData* a, tGrobShockData* b)
+{
+    tGrobShockData temporary(*a);
+    *a = *b;
+    *b = temporary;
+}
 
 // @ 0x01011030
 void FUN_01011030(void)
@@ -2192,4 +2256,21 @@ SP::tUniversePair* __thiscall SP::cUniversePairVector::Insert(SP::tUniversePair*
 // @ 0x01015410
 void __cdecl UniverseEventMapIndex()
 {
+}
+
+void UniverseAdjustShockHeap(tGrobShockData* first, int hole, int count, int top,
+                            tGrobShockData value, UniverseShockCompare compare); // 0x01011900
+
+// @ 0x01012330
+void UniverseMakeShockHeap(tGrobShockData* first, tGrobShockData* last,
+                          UniverseShockCompare compare)
+{
+    int count = (int)(last - first);
+    if (count >= 2) {
+        int parent = ((count - 2) >> 1) + 1;
+        do {
+            --parent;
+            UniverseAdjustShockHeap(first, parent, count, parent, first[parent], compare);
+        } while (parent != 0);
+    }
 }
