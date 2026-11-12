@@ -3049,10 +3049,13 @@ u32* Median3(u32* a, u32* b, u32* c, cStrCmp comp)
 u32* Partition(u32* first, u32* last, u32 pivot, cStrCmp comp)
 {
     for (;;) {
-        while (comp(*first, pivot))
+        if (comp(*first, pivot)) {
             ++first;
-        while (comp(pivot, *--last))
-            ;
+            continue;
+        }
+        --last;
+        while (comp(pivot, *last))
+            --last;
         if (first >= last)
             break;
         u32 tmp = *first;
