@@ -43,10 +43,17 @@ int   FUN_00685450(int a, int* b, int c, void* out);
 void  VectorBoolDoInsert(void* a, void* b, int c);
 void  VectorKeyDoInsert(void* end, const void* val);
 
+// The cube-face grid stores one twelve-byte record per cell.
+struct PlanetCellFlags {
+    uint mValue00;
+    uint mFlags;
+    uint mValue08;
+};
+
 extern char  DAT_016888e8;          // RNG state
 extern char  DAT_0156c064;          // enabled flag
 extern int   DAT_0156c084;          // dim
-extern int   DAT_0156c094;          // base pointer
+extern PlanetCellFlags* DAT_0156c094;  // cell records
 extern int   DAT_016888ec;          // list begin
 extern int   DAT_016888f0;          // list end
 extern const unsigned char kCellBasis[];   // 0x01465948 byte table
@@ -239,15 +246,10 @@ bool FUN_00b908a0(int param_1, int param_2)
 // @ 0x00b908c0
 void FUN_00b908c0(void)
 {
-    if ((DAT_0156c064 != '\0') && (DAT_0156c084 * DAT_0156c084 * 6 > 0)) {
-        int iVar3 = DAT_0156c084 * DAT_0156c084 * 6;
-        int iVar2 = 0;
-        do {
-            uint* puVar1 = (uint*)(iVar2 + 4 + DAT_0156c094);
-            *puVar1 = *puVar1 & 0xffffff8f;
-            iVar2 = iVar2 + 0xc;
-            iVar3 = iVar3 - 1;
-        } while (iVar3 != 0);
+    if (DAT_0156c064 != '\0') {
+        const int cellCount = DAT_0156c084 * DAT_0156c084 * 6;
+        for (int i = 0; i < cellCount; ++i)
+            DAT_0156c094[i].mFlags &= ~0x70u;
     }
 }
 

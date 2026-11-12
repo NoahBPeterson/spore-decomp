@@ -43,7 +43,15 @@ extern "C" void  FUN_00f2b3d0();                                                
 void  FUN_00ec4e50_move(void* dst, const void* src, unsigned int n);                     // memmove-equivalent
 void  FUN_00f2b340();                                                                    // 0x00f2b340
 extern "C" void* FUN_005f7930();                                                        // 0x005f7930
-extern "C" void* FUN_00675250(unsigned int key, int a = 0);                             // 0x00675250
+namespace SP { namespace Achievements {
+class Controller
+{
+public:
+    bool AwardAchievement(uint32_t id);   // 0x00676710
+    void AutoTest(uint32_t id, int count); // 0x00676e90
+};
+} }
+SP::Achievements::Controller* AchievementsController(); // 0x00675250
 extern "C" void  EA_ResourceMan_GetManager_v();                                         // (thunk used via vtable)
 extern "C" void* EA_ResourceMan_GetManager();                                           // 0x00e2.. (manager getter)
 
@@ -674,9 +682,21 @@ void FUN_00ec4f00(Rec* first, Rec* last)
     }
 }
 
-// @ 0x00ec4f70
-void FUN_00ec4f70(void* self, char notify, int param)
+// Prefix view of the Sporepedia asset controller. The retail reset and completion
+// methods receive this object in ECX; the current state is at +0x48.
+class SporepediaAssetController
 {
+public:
+    uint32_t mPrefix_00[0x48 / 4];
+    uint32_t mState_48;
+    void Reset(char notify, int param); // 0x00ec4f70
+    void Finish();
+};
+
+// @ 0x00ec4f70
+void SporepediaAssetController::Reset(char notify, int param)
+{
+    void* self = this;
     *(uint8_t*)((char*)self + 0x24) = 0;
 
     if (*(int*)((char*)self + 0x1c) == 1)
@@ -750,15 +770,15 @@ void FUN_00ec5100(void* self)
     uint32_t id[3] = { 0, 0, 0 };
     if (o != 0) { id[0] = *(uint32_t*)(o + 8); id[1] = *(uint32_t*)(o + 0xc); id[2] = *(uint32_t*)(o + 0x10); }
 
-    FUN_00ec4f70(self, 1, 2);
+    ((SporepediaAssetController*)self)->Reset(1, 2);
     if (flag) FUN_00ec4330(self, id);
 }
 
 // @ 0x00ec5160
-void FUN_00ec5160(void* self)
+void SporepediaAssetController::Finish()
 {
-    *(uint32_t*)((char*)self + 0x48) = 5;
-    FUN_00ec4f70(self, 0, 0);
-    FUN_00675250(0x1881b6ecu);
-    FUN_00675250(0x4a384f78u, 1);
+    mState_48 = 5;
+    Reset(0, 0);
+    AchievementsController()->AwardAchievement(0x1881b6ecu);
+    AchievementsController()->AutoTest(0x4a384f78u, 1);
 }
