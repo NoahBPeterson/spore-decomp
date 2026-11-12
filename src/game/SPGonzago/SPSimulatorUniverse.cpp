@@ -1446,6 +1446,7 @@ tGrobShockData* tGrobShockData::FUN_01010870(const tGrobShockData& o)
 {
     mField00 = o.mField00;
     mField04 = o.mField04;
+    _ReadWriteBarrier();
     mTimer.mVtbl = (void*)0x01465d54;
     mTimer.mRefCount = 0;
     mTimer.mElapsedLo = o.mTimer.mElapsedLo;
