@@ -15,3 +15,4 @@ slices/s007f5300/s007f5300.cpp  ?CreateTimeSmooth@@YAPAXPAXMMMMM@Z  007f60d0  /O
 slices/s007f5300/s007f5300.cpp  ?Update@AnimatorS@@QAEXXZ  007f63b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s007f5300/s007f5300.cpp  ?M5490@Obj@@QAEHXZ  007f5490  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 slices/s007f5300/s007f5300.cpp  ?M5990@Obj@@QAE_NXZ  007f5990  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?M59E0@Obj@@QAE_NPAXHHH@Z  007f59e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

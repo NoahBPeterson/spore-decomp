@@ -4,7 +4,6 @@
 007f54e0  175  complete; stopwatch/timer register allocation differs
 007f55b0  54  complete; bool-to-int flag store/load differs
 007f5710  50  complete; percent->index math and tail call schedule differ
-007f59e0  2  complete; same edx-vs-eax problem as 0x007f5990 for the final `[eax+0x98]` slot. A direct call gives edx but hoists the two zero stores above `mov ecx,esi`; a typed/void local or `vt` local with a barrier restores the retail order but cl assigns the slot to eax. Direct call + barrier cannot be expressed without naming the slot (which flips it back to eax).
 007f5a60  289  complete; render sprite/UV setup float ordering differs
 007f5c20  85  complete; constructor vtable-store scheduling differs
 007f5d00  381  complete; drawable factory branch layout differs (fixed: the +0x23c store was a self-load placeholder and must store the frame-count division result `c` (or 1 in the spr==0 arm) that eax holds in retail; the old code copied the soup value back and failed equiv at this+0x23c)  [equiv: PASS (205 valid, 99% cov, no mismatch)]
