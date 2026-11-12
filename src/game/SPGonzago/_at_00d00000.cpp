@@ -168,9 +168,6 @@ struct Obj84D0 {
 };
 // ---- items of slice s00d084d0 end
 
-// Closest attempt, same size. The tag store now sits inside the second
-// virtual call, one instruction early: before `mov ecx, eax` instead of
-// after `mov eax, [edx+0x18]`.
 // @ 0x00d06d80
 namespace SP {
 struct PObj20 {
@@ -183,19 +180,19 @@ struct AObj18 {
     virtual void d4(); virtual void d5(); virtual void* s6();
 };
 struct Fn692f90 { void* __thiscall call(void* a, void* b, void* c); };  // 0x00692f90
-struct Fn692900 { void* __thiscall call(void* a); };                    // 0x00692900
-void* __cdecl FUN_0093aa70(void* a, void* b, int c, int d);  // 0x0093aa70
-void __fastcall FUN_00d06d80(void* this_, int unused, void* p)
+struct Fn692900 { bool __thiscall call(void* a); };                    // 0x00692900
+bool __cdecl FUN_0093aa70(void* a, void* b, int c, int d);  // 0x0093aa70
+bool __fastcall FUN_00d06d80(void* this_, int unused, void* p)
 {
     PObj20* o = (PObj20*)p;
     AObj18* a = (AObj18*)o->s8();
-    void** vt = *(void***)a;
+    void* const* __restrict vt = *(void* const**)a;
     uint32_t tag = 0x903c3ea3;
     void* b = ((void* (__thiscall*)(void*))vt[6])(a);
     uint8_t prop[0xa14];
     FUN_0093aa70(b, &tag, 1, 0);
     ((Fn692f90*)prop)->call(this_, (void*)0x15820f8, (void*)0x1a80d26);
-    ((Fn692900*)prop)->call(p);
+    return ((Fn692900*)prop)->call(p);
 }
 }  // namespace SP
 

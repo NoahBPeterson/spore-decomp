@@ -67,14 +67,8 @@ int FUN_00b5b820()
 void FUN_00b5b690(int v)
 {
     int* p = g_1686a18;
-    if (p == g_1686a1c) return;
-    while (*p != v)
-    {
-        ++p;
-        if (p == g_1686a1c) return;
-    }
-    if (p != g_1686a1c)
-    {
+    for (; p != g_1686a1c && *p != v; ++p) {}
+    if (p != g_1686a1c) {
         *p = g_1686a1c[-1];
         --g_1686a1c;
     }

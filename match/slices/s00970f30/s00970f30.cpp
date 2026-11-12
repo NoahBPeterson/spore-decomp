@@ -868,10 +868,10 @@ void IWinGrid::SetCellLimits(int col, int row)
 bool IWinGrid::SetDefaultAlignment(int hAlign, int vAlign)
 {
     if (mAlign16a != 0 || mAlign169 != 0) {
-        char b = (char)vAlign;
+        char b = *(volatile char*)&vAlign;
         char a = (char)hAlign;
-        mAlign16a = b;
         mAlign169 = a;
+        mAlign16a = b;
         mbRecalculateAllNeeded = 1;
         ((IWindow*)((char*)this - 0x208))->SetFlag(8, 1);
     }

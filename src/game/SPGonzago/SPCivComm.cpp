@@ -493,22 +493,19 @@ struct CommStreamObj {
     virtual void d4(); virtual void d5(); virtual void* s6();   // +0x18
 };
 struct CommSerializer { void* __thiscall call(void* a, void* b, void* c); };  // 0x00692f90
-struct CommSerializeCall { void* __thiscall call(void* a); };                 // 0x00692900
-void* __cdecl CommWriteUint32(void* a, void* b, int c, int d);                // 0x0093aa70
-void __fastcall FUN_00cfeb40(void* this_, int unused, void* p)
+struct CommSerializeCall { bool __thiscall call(void* a); };                 // 0x00692900
+bool __cdecl CommWriteUint32(void* a, void* b, int c, int d);                // 0x0093aa70
+bool __fastcall FUN_00cfeb40(void* this_, int unused, void* p)
 {
-    // Closest attempt, same size. The tag store now sits inside the second
-    // virtual call, one instruction early: before `mov ecx, eax` instead of
-    // after `mov eax, [edx+0x18]`.
     CommStreamSource* o = (CommStreamSource*)p;
     CommStreamObj* a = (CommStreamObj*)o->s8();
-    void** vt = *(void***)a;
+    void** __restrict vt = *(void***)a;
     uint32_t tag = 0x447341f;
     void* b = ((void* (__thiscall*)(void*))vt[6])(a);
     uint8_t prop[0xa14];
     CommWriteUint32(b, &tag, 1, 0);
     ((CommSerializer*)prop)->call(this_, (void*)0x1581d40, (void*)0x1a80d26);
-    ((CommSerializeCall*)prop)->call(p);
+    return ((CommSerializeCall*)prop)->call(p);
 }
 
 // @ 0x00cfec10
