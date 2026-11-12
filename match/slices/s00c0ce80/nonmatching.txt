@@ -1,8 +1,5 @@
 # va  diff-bytes  equiv-verdict  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00c0ce80  169  PASS         animation weight selector; complete; PASS (339 valid, 88.9% cov); vtable-call idiom fixed
-00c0cf50   59  PASS         init animation weight table +0xfac..; complete
-00c0cfa0   62  PASS         get animation weight by index; complete
-00c0d050   83  PASS         pick animation index by threshold; complete
 00c0d0c0  229  PASS         set/clear fa4 bits + adjust +0xfa0; complete; PASS (368 valid, 100%); param_3 raw-char compare
 00c0d240  172  PASS         IsAnimationQueuedOrCurrent; complete; PASS (381 valid, 100%); Release on contained ptr
 00c0d340   74  UNSUPPORTED  transform + list replace; complete; only 0 valid inputs (fake-arity)
