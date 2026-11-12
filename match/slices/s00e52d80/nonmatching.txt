@@ -4,7 +4,6 @@
 00e53210   38  slot count (1 -> 6 - count): complete; range test folds to lea/cmp/ja (orig 2 cmps), scratch regs swap [equiv: PASS 357 valid, 72% cov]
 00e53250   28  reset one 0x10 slot at (*(cCellGame+0x5190)) + (idx+8)*0x10: complete; retail keeps the countdown register convention (index in EAX, return in EAX, no `ret` after the loud-store tail) and words the frame as `mov ecx,[0x16b3c04]` then `add eax,[ecx+0x5190]` (a `__fastcall` thiscall-style leaf taking the index in EAX and returning this); as a normal `void f(int)` cl emits the two extra `mov eax,[esp+4]`/`ret` bytes (45 vs 41)
 00e53280   37  should-show predicate: complete; SP::sGetSourceLevel arg convention differs [equiv: PASS 400 valid, 100% cov]
-00e532e0    5  mark creature + hint: complete; key load lands in ecx (orig edx) so push/lea order swaps [equiv: PASS 336 valid, 71% cov]
 00e53340   89  build HUD descriptor: complete field init sequence; global/MOVSS schedule differs
 00e53460  184  mission slot transition: complete (sound + slot stores + inlined guard/==1/==2); arg arrives in EAX (custom register ABI) so prologue/schedule differs [equiv: UNSUPPORTED - original reads eax at entry]
 00e53580  137  mission panel teardown: complete (window, 3 gfx vtable[0xc], messaging); vcall schedule differs

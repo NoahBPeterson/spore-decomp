@@ -3,3 +3,4 @@ slices/s00d79470/s00d79470.cpp  ?Destroy@cEditorGameObject@SP@@QAEXXZ  00d79fd0 
 slices/s00d79470/s00d79470.cpp  ?IsSub58FlagSet@SP@@YAMPAVcEditorGameObject@1@@Z  00d7a320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00d79470/s00d79470.cpp  ?CanStartEditorAction@SP@@YAMPAVcEditorGameObject@1@III@Z  00d7a440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00d79470/s00d79470.cpp  ?CanUseEditorAction@SP@@YAMPAVcEditorGameObject@1@@Z  00d7a360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00d79470/s00d79470.cpp  ?IsDanceFinisher@SP@@YAMPAVcEditorGameObject@1@@Z  00d7a260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -3,6 +3,8 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 #include "EA/Messaging/AutoHandler.h"
 #include "EA/Allocator/ZoneObject.h"
 #include "SP/Audio/cMixModeManager.h"
@@ -475,7 +477,6 @@ public:
     void ClearPosition();                               // 0x00eab390
     void SetEnabled(uint8_t enabled);                   // 0x00eab3b0
     void SetVector(const Vector3* value);               // 0x00eab3e0
-    void SetGonzagoEnabled(bool enabled);               // 0x00eab860
 
     void* mpVtable0;                    // +0x00
     void* volatile mpVtable1;           // +0x04
@@ -484,7 +485,15 @@ public:
     void* mHandle;                      // +0x10
     void* mpAudioObject;                // +0x14
     uint8_t mEnabled;                   // +0x18
-    char pad19[0x34 - 0x19];            // +0x19
+    uint8_t mUnknown19[0x28 - 0x19];    // native factory allocates 0x28 bytes
+};
+
+// Separate reconstruction of the larger Gonzago controller state; it is not
+// part of the 0x28-byte city-music object constructed at 0x00eab4a0.
+class GonzagoMusicState_s00eab860 {
+public:
+    void SetGonzagoEnabled(bool enabled);               // 0x00eab860
+    uint32_t mUnknown00[0x34 / 4];
     GonzagoController mGonzago;         // +0x34
     float mGonzagoVolume;               // +0x98
     char pad9c[0x126 - 0x9c];           // +0x9c
@@ -621,6 +630,8 @@ namespace SP { namespace Audio {
 cNPCCityMusic::cNPCCityMusic()
 {
     mpVtable1 = (void*)0x13ec458;
+    // Keep the base-interface store ahead of zero materialization.
+    _ReadWriteBarrier();
     mField08 = 0;
     mpVtable0 = (void*)0x1488224;
     mpVtable1 = (void*)0x1488214;

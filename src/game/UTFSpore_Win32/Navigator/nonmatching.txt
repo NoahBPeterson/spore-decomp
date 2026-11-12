@@ -1,2 +1,1 @@
 # <va> <diff-bytes> <reason>
-00980430 5 ??0ExplicitNavigator@UTFWinControls@EA@@QAE@XZ: complete; 48 vs 48 bytes; identical stores, only xor ecx,ecx hoisted above the first base-vtable store; difftest PASS 100% (400/400 inputs, 11/11 insns); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

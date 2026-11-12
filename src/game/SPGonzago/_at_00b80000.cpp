@@ -444,10 +444,10 @@ extern "C" cTerrainEditor* __cdecl TerrainEditor();                    // 0x00f4
 // ---- items of slice s00b8d190 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void pv##n();
 namespace SP {
-    void* __stdcall StarManager(uint32_t id);             // 0x00b3d2a0
+    void* __cdecl StarManager();                         // 0x00b3d2a0
 }
 namespace SP {
-    void* __stdcall GetMissionManager(uint32_t id);        // 0x00feb9f0
+    void* __cdecl GetMissionManager();                   // 0x00feb9f0
 }
 namespace SP {
     void  GetPropertyAsKey(uint32_t property, uint32_t key, void* out); // 0x006a1250
@@ -474,18 +474,19 @@ struct cCursorHost {
     PV(30) PV(31) PV(32) PV(33) PV(34)
     virtual void v35(uint32_t value);                     // +0x8c
 };
+struct cPlanetModel_s00b8_d190;
 struct cStarObject {
-    int32_t  FUN_00bb99e0();                              // 0x00bb99e0
-    uint32_t FUN_00ba6440();                              // 0x00ba6440
-    void     FUN_00ba6660();                              // 0x00ba6660
-    uint32_t FUN_00ba6d80();                              // 0x00ba6d80
+    int32_t  FUN_00bb99e0(cPlanetModel_s00b8_d190* planet); // 0x00bb99e0
+    uint32_t FUN_00ba6440(uint32_t id);                   // 0x00ba6440
+    void     FUN_00ba6660(cPlanetModel_s00b8_d190* planet); // 0x00ba6660
+    uint32_t FUN_00ba6d80(uint32_t id);                   // 0x00ba6d80
     void*    FUN_00bb9b80();                              // 0x00bb9b80
 };
 struct cMission {
     int32_t FUN_00c4b220();                               // 0x00c4b220
 };
 struct cMissionManager {
-    cMission* FUN_00fee220();                             // 0x00fee220
+    cMission* FUN_00fee220(cPlanetModel_s00b8_d190* planet); // 0x00fee220
 };
 struct cOwnedElem {
     void FUN_00ff2e30();                                  // 0x00ff2e30
@@ -1040,7 +1041,7 @@ bool cPlanetModel_s00b8_d190::FUN_00b8d8a0(uint32_t a, bool refresh, uint32_t c)
 // @ 0x00b8d8f0
 uint32_t cPlanetModel_s00b8_d190::FUN_00b8d8f0()
 {
-    uint32_t result = ((cStarObject*)SP::StarManager(mField184))->FUN_00ba6440();
+    uint32_t result = ((cStarObject*)SP::StarManager())->FUN_00ba6440(mField184);
     _ReadWriteBarrier();
     return result;
 }
@@ -1072,12 +1073,12 @@ void cPlanetModel_s00b8_d190::FUN_00b8d980(bool flag)
 // @ 0x00b8d9b0
 int32_t cPlanetModel_s00b8_d190::FUN_00b8d9b0()
 {
-    int32_t result = ((cStarObject*)SP::StarManager((uint32_t)(void*)this))->FUN_00bb99e0();
+    int32_t result = ((cStarObject*)SP::StarManager())->FUN_00bb99e0(this);
     if (result == 0) {
         cMission* mission =
-            ((cMissionManager*)SP::GetMissionManager((uint32_t)(void*)this))->FUN_00fee220();
+            ((cMissionManager*)SP::GetMissionManager())->FUN_00fee220(this);
         if (mission != 0) {
-            return mission->FUN_00c4b220();
+            result = mission->FUN_00c4b220();
         }
     }
     return result;
@@ -1123,7 +1124,7 @@ cKey3* cPlanetModel_s00b8_d190::FUN_00b8dd60(cKey3* out)
             mField1A4 = 0;
             mField1A8 = 0;
             mField1AC = 0;
-            ((cStarObject*)SP::StarManager((uint32_t)(void*)this))->FUN_00ba6660();
+            ((cStarObject*)SP::StarManager())->FUN_00ba6660(this);
             found = ((cKeyService*)FUN_00f48a80())->v1(&mField1A4);
             if (found == 0) {
                 return out;
@@ -1243,8 +1244,8 @@ cKey3* cPlanetModel_s00b8_d190::FUN_00b8e090()
 {
     static cKey3 sEmptyKey;
     if (mField194 > 1) {
-        uint32_t banner = ((cStarObject*)SP::StarManager(mField184))->FUN_00ba6440();
-        uint32_t list = ((cStarObject*)SP::StarManager(banner))->FUN_00ba6d80();
+        uint32_t banner = ((cStarObject*)SP::StarManager())->FUN_00ba6440(mField184);
+        uint32_t list = ((cStarObject*)SP::StarManager())->FUN_00ba6d80(banner);
         return (cKey3*)((cStarObject*)list)->FUN_00bb9b80();
     }
     return &sEmptyKey;

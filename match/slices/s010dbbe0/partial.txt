@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-010dcb80    4  HkHeightFieldArray scalar deleting dtor; equiv PASS 218 inputs / 61% coverage; identical to the dtor difference

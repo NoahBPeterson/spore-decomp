@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/Navigator.cpp  ?Process@IOwner@UTFWinControls@EA@@QAE_NPAUIObj@23@PAUArg2@23@@Z  00980360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Navigator.cpp  ??1Navigator@UTFWinControls@EA@@QAE@XZ  00980420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Navigator.cpp  ??0ExplicitNavigator@UTFWinControls@EA@@QAE@XZ  00980430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

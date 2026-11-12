@@ -40,6 +40,7 @@ public:
     u8     mField32;                   // +0x32
     u8     mPad33;                     // +0x33
 
+    cSpatialObjectView();              // 0x00e92af0
     void BaseCtor();                   // 0x00e92af0
     void HandleSimulationUpdate(int a, int b);   // 0x00e92ca0
 };
@@ -226,11 +227,11 @@ void SP::cPlaceholderColonyEditorCursorAttachment::HandleSimulationUpdate_c40(in
 
 // @ 0x00e90d00
 SP::cToolObject::cToolObject()
+    : cSpatialObjectView()
 {
-    BaseCtor();
     Vec3 c = { 1.0f, 1.0f, 1.0f };
-    mColor = c;
     mVTable = (void**)0x14869bc;
+    mColor = c;
 }
 
 // @ 0x00e972b0
