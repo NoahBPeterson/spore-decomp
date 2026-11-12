@@ -373,6 +373,7 @@ public:
     u8     mField32;                   // +0x32
     u8     mPad33;                     // +0x33
 
+    cSpatialObjectView();              // 0x00e92af0
     void BaseCtor();                   // 0x00e92af0
     void HandleSimulationUpdate(int a, int b);   // 0x00e92ca0
 };
@@ -643,8 +644,8 @@ void cPlaceholderColonyEditorCursorAttachment::HandleSimulationUpdate_c40(int a,
 
 // @ 0x00E90D00
 cToolObject::cToolObject()
+    : cSpatialObjectView()
 {
-    BaseCtor();
     Vec3 c = { 1.0f, 1.0f, 1.0f };
     mColor = c;
     mVTable = (void**)0x14869bc;
@@ -652,9 +653,9 @@ cToolObject::cToolObject()
 
 // @ 0x00E90D80
 cPlanetaryArtifact::cPlanetaryArtifact()
+    : cSpatialObjectView()
 {
-    BaseCtor();
     Vec3 c = { 1.0f, 1.0f, 1.0f };
-    mColor = c;
     mVTable = (void**)0x14869f0;
+    mColor = c;
 }

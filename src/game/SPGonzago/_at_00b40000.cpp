@@ -2013,7 +2013,32 @@ struct World70 {
     float  ac;                  // +0xac
 };
 extern uint  __cdecl  FUN_00b3d700(uint a, uint b);
-struct HashClearTarget_s00b4_b41e20 { void Clear(void* arr, uint n); };  // 0x00B41E20
+// Prefixes of the two native containers used during world-state cleanup.
+struct VectorRange_s00b4_b7b0 {
+    void* mpBegin;
+    void* mpEnd;
+    void Erase(void* first, void* last); // 0x00b48e40: thiscall, ret 8
+};
+struct HashRange_s00b4_b7b0 {
+    uint mAllocator;
+    void* mpBuckets;
+    uint mnBucketCount;
+    uint mnElementCount;
+    uint mPoolStorage[9];
+    void Clear(void* buckets, uint count); // 0x00b41e20: thiscall, ret 8
+};
+struct WorldCleanup_s00b4_b7b0 {
+    uint mPrefix[0x60 / 4];
+    VectorRange_s00b4_b7b0 mObjects;
+    uint mMiddle[(0x47c - 0x68) / 4];
+    HashRange_s00b4_b7b0 mObjectLookup;
+    void Clear();
+};
+typedef char WorldCleanupVectorOffset_s00b4_b7b0[
+    offsetof(WorldCleanup_s00b4_b7b0, mObjects) == 0x60 ? 1 : -1];
+typedef char WorldCleanupHashOffset_s00b4_b7b0[
+    offsetof(WorldCleanup_s00b4_b7b0, mObjectLookup) == 0x47c ? 1 : -1];
+
 extern uint  __cdecl  FUN_00bbb110(void* o);                   // StarGridCount
 extern void  __cdecl  FUN_00b4b910(uint mode);
 // ---- items of slice s00b4b590 end
@@ -5461,18 +5486,15 @@ void __fastcall FUN_00b4b590(void* self, int /*edx*/, void* obj)
 }
 
 // @ 0x00b4b7b0
-void __fastcall FUN_00b4b7b0(void* self)
+void WorldCleanup_s00b4_b7b0::Clear()
 {
-    char* s = (char*)self;
-    void* beg = *(void**)(s + 0x60);
-    void* end = *(void**)(s + 0x64);
-    FUN_00b48e40(s + 0x60, (int)beg, beg, end);
-    {
-        char* h = s + 0x47c;
-        void* p4 = *(void**)(h + 4);
-        ((HashClearTarget_s00b4_b41e20*)h)->Clear(p4, *(uint*)(h + 8));
-        *(uint*)(h + 0xc) = 0;
-    }
+    void* first = mObjects.mpBegin;
+    void* last = mObjects.mpEnd;
+    mObjects.Erase(first, last);
+    HashRange_s00b4_b7b0& lookup = mObjectLookup;
+    void* buckets = lookup.mpBuckets;
+    lookup.Clear(buckets, lookup.mnBucketCount);
+    lookup.mnElementCount = 0;
 }
 
 // @ 0x00b4b7f0
