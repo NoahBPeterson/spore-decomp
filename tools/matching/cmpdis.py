@@ -2,6 +2,7 @@
 """Instruction-level diff of one function: original image vs compiled object.
 
 usage: cmpdis.py <obj> <symbol-substring> <va-hex>
+       cmpdis.py --raw <file> <va-hex>      (the function's bytes in a file, e.g. cut from an /LTCG build)
 Disassembles both, normalizes branch/call targets and relocated operands, prints a unified diff.
 """
 import difflib, os, re, sys
@@ -10,13 +11,16 @@ import pefile, capstone
 from cmpobj import parse_coff
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-obj, sym, va = sys.argv[1], sys.argv[2], int(sys.argv[3], 16)
-secs, syms = parse_coff(obj)
-c = [s for s in syms if s == sym] or [s for s in syms if sym in s and not s.startswith(("__ehhandler", "__unwindfunclet"))]
-if len(c) != 1:
-    sys.exit("ambiguous/not found: %s" % ", ".join(c) if c else "not found")
-si, off = syms[c[0]]
-mine = secs[si]["data"][off:]
+if sys.argv[1] == "--raw":
+    mine, va = open(sys.argv[2], "rb").read(), int(sys.argv[3], 16)
+else:
+    obj, sym, va = sys.argv[1], sys.argv[2], int(sys.argv[3], 16)
+    secs, syms = parse_coff(obj)
+    c = [s for s in syms if s == sym] or [s for s in syms if sym in s and not s.startswith(("__ehhandler", "__unwindfunclet"))]
+    if len(c) != 1:
+        sys.exit("ambiguous/not found: %s" % ", ".join(c) if c else "not found")
+    si, off = syms[c[0]]
+    mine = secs[si]["data"][off:]
 pe = pefile.PE(os.path.join(ROOT, "work/SporeApp.analysis.bin"), fast_load=True)
 # the retail function's own size (its fingerprint) when known: reading len(mine) bytes made a build longer than the
 # original run on into the next retail functions, which looked like extra code (0x007864c0, 2026-11-11)
