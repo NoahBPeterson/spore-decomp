@@ -57,6 +57,10 @@ def is_byte_exact(va, ours):
 def run(va, layers, timeout, hints=None, want=None, k_mutants=5, log=print):
     retail = FN.retail_func(va)
     ours = FN.our_func(va)
+    import asm_audit
+    asm = asm_audit.transcribed(os.path.join(ROOT, ours.meta["src"])).get("%08x" % va)
+    if asm:
+        return {"verdict": "ERROR", "detail": "assembly transcription (%s): write it as C++ first" % asm}
     if len(ours.code) == len(retail.code) and is_byte_exact(va, ours):
         return {"verdict": "MATCH", "detail": "byte-exact: nothing to prove"}
     same, why, fa = facts.same(retail, ours)
