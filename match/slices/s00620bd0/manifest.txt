@@ -1,2 +1,3 @@
 # source  symbol  original VA  [cl flags override]
 slices/s00620bd0/s00620bd0.cpp  ?OnModalEnd@DialogSub@@QAEXPAXH@Z  00620dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00620bd0/s00620bd0.cpp  ?MapLookup@@YA_NIPAUString8@@@Z  00621460  /O2 /MD /Gy /TP /arch:SSE /fp:fast
