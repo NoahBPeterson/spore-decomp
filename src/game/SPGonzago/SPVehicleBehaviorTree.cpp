@@ -326,7 +326,8 @@ void* __cdecl EA_Audio_GetSystemAT();                              // 0x00a206f0
 int  __cdecl FUN_008e7f80(void* self);                             // 0x008e7f80 (GetDamageState)
 int  __cdecl PlayIdleAnim(void* creature, int a, int b);           // 0x00bc96a0
 void* __cdecl FUN_00c420d0(void* loco);                            // 0x00c420d0
-void* __cdecl FUN_00dc6680(void* a, void* b, void* c);             // 0x00dc6680 (FindClosestVehicle)
+struct ClosestVehicleFlags { bool value; };
+void* __cdecl FUN_00dc6680(void* a, void* b, ClosestVehicleFlags c);             // 0x00dc6680 (FindClosestVehicle)
 void* __cdecl FUN_00afa070(cActionCircleSlot* slot, uint32_t id);  // 0x00afa070 (thiscall slot)
 inline void* VCall1(void* obj, int slot)
 {
@@ -1347,9 +1348,9 @@ public:
   cVehicleTicker_s00dc_77d0();                                      // 0x00dc7d70
   void Destroy();                                        // 0x00dc7cc0
 
-  void* volatile mpVt00;     // 0x00
+  void* mpVt00;     // 0x00
   uint32_t pad04;            // 0x04
-  void* volatile mpVt08;     // 0x08
+  void* mpVt08;     // 0x08
   uint32_t pad0c;            // 0x0c
   cGroupOrderVector mGroupOrders;   // 0x10
   uint8_t pad1c[8];          // 0x1c
@@ -2512,17 +2513,19 @@ void __cdecl FUN_00dc4610(void* self)
 // @ 0x00dc4c20
 void* KeyLookup::Match2E9(int key)
 {
-    if (key == 0x2e9ae69 || key == 0x2e98ab4)
+    if (key == 0x2e9ae69)
         return this;
-    return Default(key);
+    else
+        return key == 0x2e98ab4 ? this : Default(key);
 }
 
 // @ 0x00dc4c40
 void* KeyLookup::Match3DF(int key)
 {
-    if (key == 0x3df2cb9 || key == 0x2e98ab4)
+    if (key == 0x3df2cb9)
         return this;
-    return Default(key);
+    else
+        return key == 0x2e98ab4 ? this : Default(key);
 }
 
 // @ 0x00dc4c60
@@ -3340,7 +3343,9 @@ void Node76e0(RefHolder76e0* self)
 // @ 0x00dc7780
 extern "C" void* __cdecl SP_FindClosestVehicleWrap(void* a, void* b)
 {
-    return FUN_00dc6680(a, b, 0);
+    ClosestVehicleFlags flags;
+    flags.value = false;
+    return FUN_00dc6680(a, b, flags);
 }
 
 // @ 0x00dc77a0
@@ -3436,15 +3441,16 @@ cVehicleTicker_s00dc_77d0::cVehicleTicker_s00dc_77d0()
   FUN_00b5b6f0(this);
   mpVt00 = (void*)0x0147c4d8;
   mpVt08 = (void*)0x0147c4b4;
-  mGroupOrders.mpBegin = 0;
-  mGroupOrders.mpEnd = 0;
-  mGroupOrders.mpCapacity = 0;
-  mVoxSoundIds.mpBegin = 0;
-  mVoxSoundIds.mpEnd = 0;
-  mVoxSoundIds.mpCapacity = 0;
-  m38.mpBegin = 0;
-  m38.mpEnd = 0;
-  m38.mpCapacity = 0;
+  // Keep the vector initialization stores in their observed order.
+  *(void* volatile*)&mGroupOrders.mpBegin = 0;
+  *(void* volatile*)&mGroupOrders.mpEnd = 0;
+  *(void* volatile*)&mGroupOrders.mpCapacity = 0;
+  *(void* volatile*)&mVoxSoundIds.mpBegin = 0;
+  *(void* volatile*)&mVoxSoundIds.mpEnd = 0;
+  *(void* volatile*)&mVoxSoundIds.mpCapacity = 0;
+  *(void* volatile*)&m38.mpBegin = 0;
+  *(void* volatile*)&m38.mpEnd = 0;
+  *(void* volatile*)&m38.mpCapacity = 0;
 }
 
 // @ 0x00dc7dd0
@@ -4008,13 +4014,8 @@ void FUN_00dcc5c0(BehaviorObj* self)
 {
   int index = self->mFieldB20;
 
-  if (gVehicleTicker == 0) {
-    void* mem = AllocSimObject(0x58, "Simulator/SimSingleton", 0, 0, 0, 0);
-    if (mem == 0)
-      gVehicleTicker = 0;
-    else
-      gVehicleTicker = SimSingleton_ctor(mem);
-  }
+  if (gVehicleTicker == 0)
+    gVehicleTicker = new ("Simulator/SimSingleton", 0, 0, 0, 0) cVehicleTicker_s00dd_0230;
 
   ((Vector24*)gVehicleTicker)->PushUnique(
       (&gVehicleServiceTable708)[index]);
@@ -4023,39 +4024,36 @@ void FUN_00dcc5c0(BehaviorObj* self)
 // @ 0x00dcc610
 void FUN_00dcc610(BehaviorObj* self)
 {
-  if (!CallV(&self->mLoco, 0x58))
+  if (!((char (__thiscall*)(void*))(*(void***)&self->mLoco)[0x58 / 4])(&self->mLoco))
     return;
 
   int mode = 0;
   Brain* brain = self->GetBrain();
 
-  if (brain->mMode10 == 1) {
+  switch (brain->mMode10) {
+  case 1: {
     void* nearby = self->GetNearby();
     if (nearby != 0) {
       void* p = CallVArgP(nearby, 0xb8, 0xd0036e08);
       if (p != 0 && Flag388(p))
         mode = 1;
     }
-  } else if (brain->mMode10 == 8) {
+    break;
+  }
+  case 8: {
     int r = CallV(brain->mpObj0, 0x20);
     mode = (r != 0x403df5c) + 2;
+    break;
+  }
   }
 
   int index = self->mFieldB20;
-  index = index + mode * 3;
 
-  if (gVehicleTicker == 0) {
-    void* mem = AllocSimObject(0x58, "Simulator/SimSingleton", 0, 0, 0, 0);
-    void* obj;
-    if (mem != 0)
-      obj = SimSingleton_ctor(mem);
-    else
-      obj = 0;
-    gVehicleTicker = obj;
-  }
+  if (gVehicleTicker == 0)
+    gVehicleTicker = new ("Simulator/SimSingleton", 0, 0, 0, 0) cVehicleTicker_s00dd_0230;
 
   ((Vector24*)gVehicleTicker)->PushUnique(
-      (&gVehicleServiceTable714)[index]);
+      (&gVehicleServiceTable714)[index + mode * 3]);
 }
 
 // @ 0x00dcc6e0
