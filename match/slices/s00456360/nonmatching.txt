@@ -5,7 +5,6 @@
 004566e0  -1  complete behaviorally; EASTL inline layers flattened
 00456d60  -1  complete behaviorally; inlined copy loops flattened
 004571d0  -1  complete, not tried
-004572b0  -1  complete, not tried
 00457450  75  complete; retail leaves the last written element in eax (the void source left one-past), so the helper now returns Triple* last; chk diff 75; difftest PASS (427 valid, 97.2% coverage)
 004574c0  -1  complete, not tried
 00457540  102  complete; SubObj::CopyFrom was unresolved (the real callee is 0x00440ff0, ??0Trans@SP@@QAE@ABU01@@Z), so ours jumped to a fake and corrupted the stack; annotated the declaration and aligned the slice flags to /Od; chk diff 102; difftest PASS (373 valid, 97.6% coverage, replay needs --start-budget 10000000 for the 128-element range)

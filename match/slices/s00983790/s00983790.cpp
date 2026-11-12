@@ -168,7 +168,6 @@ class ScrollbarDrawable : public ObjHead, public AsyncBase { public:
         vtc = vtbl_ScrollbarDrawable_3;
         f[0] = 0; f[1] = 0; f[2] = 0; f[3] = 0; f[4] = 0; f[5] = 0; f[6] = 0;
     }
-    __declspec(noinline) ScrollbarDrawable* Construct();   // 0x009838a0 (standalone ctor body)
 };
 
 // @ 0x983790
@@ -191,17 +190,72 @@ WinScrollbar::WinScrollbar() : Window(), IWinScrollbar() {
     }
 }
 
-// @ 0x9838a0  (standalone constructor; the in-class ctor is inlined into the factories)
-ScrollbarDrawable* ScrollbarDrawable::Construct() {
-    vt4 = vtbl_Resource_Async;
-    f8 = 0;
-    vtc = vtbl_Resource_Async;
-    vt = vtbl_ScrollbarDrawable;
-    vt4 = vtbl_ScrollbarDrawable_1;
-    vtc = vtbl_ScrollbarDrawable_3;
-    f[0] = 0; f[1] = 0; f[2] = 0; f[3] = 0; f[4] = 0; f[5] = 0; f[6] = 0;
-    return this;
+// Standalone constructor view. The primary IDrawable, secondary ISerializable
+// plus reference count, and IScrollbarDrawable subobjects occupy +0, +4, and +0xc.
+// Keep the existing factory scaffold independent until those functions match.
+namespace ScrollbarConstruction {
+class Image;
+class RenderContext;
+struct DrawParams;
+struct SerInfo;
+struct RectF;
+struct PointI;
+struct PointF;
+
+class IRefCount { public:
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    IRefCount() {}
+};
+class IUnknown32 : public IRefCount { public:
+    virtual ~IUnknown32();
+    virtual void* AsInterface(unsigned int id) = 0;
+};
+class IDrawable : public IUnknown32 { public:
+    virtual void CreateRenderables(RenderContext&, const RectF&, const DrawParams&) = 0;
+    virtual bool HitTest(const RectF&, const PointI&, const DrawParams&) const = 0;
+    virtual bool GetNaturalSize(PointF&, unsigned int, unsigned int) const = 0;
+    virtual bool QueryAttribute(unsigned int, unsigned int&) const = 0;
+};
+class ISerializable : public IUnknown32 { public:
+    virtual void GetSerializationInfo(SerInfo&) = 0;
+    virtual unsigned int GetClassId() const = 0;
+};
+class MultiHeapObject { public:
+    static void operator delete(void*); // 0x00951330
+};
+class CustomDrawable : public IDrawable, public ISerializable, public MultiHeapObject { public:
+    int mRefCount;
+    CustomDrawable() : mRefCount(0) {}
+};
+class IScrollbarDrawable : public IUnknown32 { public:
+    virtual IDrawable* AsIDrawable() = 0;
+    virtual void SetComponentImage(unsigned int, const Image*) = 0;
+};
+class ScrollbarDrawableView : public CustomDrawable, public IScrollbarDrawable { public:
+    virtual int AddRef(); // 0x00980320
+    virtual int Release(); // 0x009800e0
+    virtual ~ScrollbarDrawableView(); // 0x00982710
+    virtual void* AsInterface(unsigned int); // 0x009817c0
+    virtual void CreateRenderables(RenderContext&, const RectF&, const DrawParams&); // 0x00982780
+    virtual bool HitTest(const RectF&, const PointI&, const DrawParams&) const; // 0x005ac970
+    virtual bool GetNaturalSize(PointF&, unsigned int, unsigned int) const; // 0x00981800
+    virtual bool QueryAttribute(unsigned int, unsigned int&) const; // 0x00950ea0
+    virtual void GetSerializationInfo(SerInfo&); // 0x009826e0 (ISerializable receiver)
+    virtual unsigned int GetClassId() const; // 0x009817b0
+    virtual IDrawable* AsIDrawable(); // 0x0096ff50 (IScrollbarDrawable receiver)
+    virtual void SetComponentImage(unsigned int, const Image*); // 0x00981860 (IScrollbarDrawable receiver)
+    Image* mpImages[7];
+    ScrollbarDrawableView();
+};
+typedef char ScrollbarDrawableViewSize[(sizeof(ScrollbarDrawableView) == 0x2c) ? 1 : -1];
+
+// @ 0x009838a0
+ScrollbarDrawableView::ScrollbarDrawableView() {
+    mpImages[0] = 0; mpImages[1] = 0; mpImages[2] = 0; mpImages[3] = 0;
+    mpImages[4] = 0; mpImages[5] = 0; mpImages[6] = 0;
 }
+} // namespace ScrollbarConstruction
 
 class BasicFactory_ScrollbarDrawable { public:
     ScrollbarDrawable* CreateInstance(int unused, void* alloc);

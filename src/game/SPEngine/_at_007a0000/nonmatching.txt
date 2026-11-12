@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 007a0460 249 complete (Elem14-vector::operator=(Elem14-vector const&), returns this): if capacity < n reallocates via 0x79ae00 + 0x79b0d0 + conditional operator_delete and resets begin/end/capacity; if size<n 0x79f730 + 0x79a710(5); else 0x79f730 + 0x79b0d0; every path returns self (declared void* matching the original int* return); flags /O2 /MD /Gy /EHsc /TP; 309 vs 322 bytes. Equivalence WEAK (152/400 valid, 44.4% cov).
-007a09f0 4 complete dtor; only `add eax,-1` vs our `sub eax,1` in the two PlainRc::Release inlines. Tried volatile compound assignment (`*(volatile int*)&mnRefCount += -1`), `--(*(volatile int*)&mnRefCount)`, `n += -1`, `n = x + ~0`, `x + (unsigned)-1`, `x + 0xffffffffu`: volatile gives `decl`/`cmp` (and a 2-byte-shorter frame), the rest canonicalise to `sub eax,1`; no non-volatile spelling gives `add eax,-1` (same wall as Papercuts s01073700). Baseline source is behaviorally PASSing (difftest PASS, 255 valid, 92% coverage).
 007a1000 150 complete; register allocation/spill of loop pointer differs
 007a1100 42 complete; begin/end load order (ebx/edi swapped); difftest PASS after fixing EraseTail 0x7a05b0 to a thiscall member of VecV20 (was __stdcall, so ecx was not the vector)
 007a11c0 379 complete; loop/iterator skeleton and spill layout differ

@@ -199,6 +199,35 @@ void* FUN_008061c0(void* layout, int id);                                   // 0
 char  FUN_00806230(void* key, void** out, int a, int width, int height);    // 0x00806230
 char  FUN_008068d0(void* window, void* image, int a);                       // 0x008068d0
 
+// Bounded view for the rollover constructor: its native callers allocate 0xb0 bytes.
+// The larger cSpaceInventory scaffold below also carries a separate configuration receiver.
+class PropertyLayout_s005994d0 {
+public:
+    void* mpWinProcTable;                          // +0x00
+    void* mpRefCountTable;                         // +0x04
+    unsigned mnRefCount;                          // +0x08
+    unsigned pad0C[(0x78 - 0x0c) / 4];
+
+    PropertyLayout_s005994d0();                    // 0x008286d0
+    void SetResourceKey(const wchar_t* name, int group); // 0x00827fc0
+    void SetRootWindowId(unsigned id);             // 0x00c87bc0 (folded setter)
+    void SetAutoUpdateInterval(float seconds);     // 0x00828010
+};
+
+class TraitSuperPowerRollover_s005994d0 : public PropertyLayout_s005994d0 {
+public:
+    Rect mArea;                                   // +0x78
+    Rect mTitleArea;                              // +0x88
+    Rect mDescriptionArea;                        // +0x98
+    IWindow* mpWindow;                            // +0xa8
+    unsigned padAC;
+
+    TraitSuperPowerRollover_s005994d0();
+};
+
+typedef char PropertyLayoutSize_s005994d0[sizeof(PropertyLayout_s005994d0) == 0x78 ? 1 : -1];
+typedef char RolloverSize_s005994d0[sizeof(TraitSuperPowerRollover_s005994d0) == 0xb0 ? 1 : -1];
+
 class cSpaceInventory {
 public:
     char pad0[0xc];
@@ -218,7 +247,6 @@ public:
     bool FUN_00599440(int a, int b, int c);           // 0x00599440
     __declspec(noinline) bool LoadConfiguration(int a, int b);   // 0x00599040
     void FUN_00599460();                              // 0x00599460
-    void* FUN_005994d0();                             // 0x005994d0
     void FUN_00599530();                              // 0x00599530
     void FUN_00599560();                              // 0x00599560
     bool FUN_005995d0();                              // 0x005995d0
@@ -393,16 +421,14 @@ bool cSpaceInventory::LoadConfiguration(int a, int b)
 }
 
 // @ 0x005994d0
-void* cSpaceInventory::FUN_005994d0()
+TraitSuperPowerRollover_s005994d0::TraitSuperPowerRollover_s005994d0()
 {
-    FUN_008286d0();
-    *(void**)this = (void*)0x013f6374;
-    *(void**)((char*)this + 4) = (void*)0x013f6364;
-    mpA8 = 0;
-    FUN_00827fc0(L"TraitSuperPowerRollover", 0x40464100);
-    FUN_008c87bc0(0);
-    FUN_00828010(*(float*)0x01488874);
-    return this;
+    mpWinProcTable = (void*)0x013f6374;
+    mpRefCountTable = (void*)0x013f6364;
+    *(IWindow* volatile*)&mpWindow = 0;
+    SetResourceKey(L"TraitSuperPowerRollover", 0x40464100);
+    SetRootWindowId(0);
+    SetAutoUpdateInterval(*(float*)0x01488874);
 }
 
 // @ 0x005995d0

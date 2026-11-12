@@ -56,7 +56,13 @@ extern void  FUN_00c75410(void*);                        // 0x00c75410
 extern void* AchievementsController();                   // 0x00675250
 extern void  AchievementsReset(void*);                   // 0x00675590
 extern void* FUN_0057cba0(void*, const void*, const void*); // 0x0057cba0
-extern void  DoNukeSubtree(void*);                       // 0x009a9600 (thiscall, DoNukeSubtree)
+struct SavedGameTreeNode;
+struct SavedGameTree {
+    uint32_t mPrefix_00[3];
+    SavedGameTreeNode* mpRoot_0c;
+    void DoNukeSubtree(SavedGameTreeNode* root);           // 0x009a9600
+    ~SavedGameTree() { DoNukeSubtree(mpRoot_0c); }
+};
 extern void* SP_GetSaveArea(uint32_t);                   // 0x006b1f90
 extern void  RangeInitialize(void*, const wchar_t*);     // 0x00579a90
 extern void  WString_Assign_CopyCtor(void*, const void*); // 0x0056e2d0
@@ -173,20 +179,27 @@ bool ResetDefaultSavedGame()
     return true;
 }
 
-// ===========================================================================
-// @ 0x00b271b0  scalar-deleting destructor for the saved-game object
-// ===========================================================================
-void* SavedGame_Dtor(void* self, uint8_t flags)
+// Prefix view of the saved-game cleanup object. Its tree starts at +0x14;
+// the deleting wrapper takes its receiver in ECX and returns that same pointer.
+struct SavedGameCleanup {
+    void* mpPrimaryTable_00;
+    void* mpSecondaryTable_04;
+    uint32_t mPrefix_08[3];
+    SavedGameTree mTree_14;
+    void* Destroy(uint32_t flags);
+};
+
+// @ 0x00b271b0
+void* SavedGameCleanup::Destroy(uint32_t flags)
 {
-    uint8_t* s = (uint8_t*)self;
-    *(void**)s = (void*)0x0145faa8;
-    *(void**)(s + 4) = (void*)0x0145fa98;
-    DoNukeSubtree((void*)*(uint32_t*)(s + 0x20));
-    *(void**)(s + 4) = (void*)0x013ec458;
-    *(void**)s = (void*)0x013eb938;
+    mpPrimaryTable_00 = (void*)0x0145faa8;
+    mpSecondaryTable_04 = (void*)0x0145fa98;
+    mTree_14.~SavedGameTree();
+    mpSecondaryTable_04 = (void*)0x013ec458;
+    mpPrimaryTable_00 = (void*)0x013eb938;
     if (flags & 1)
-        operator_delete(s);
-    return self;
+        operator_delete(this);
+    return this;
 }
 
 // ===========================================================================

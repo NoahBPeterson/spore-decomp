@@ -422,7 +422,7 @@ struct WorkerIter {
     WorkerFilter mFilter;                           // +0x08
     WorkerIter() {}
     WorkerIter(WorkerList_s00ce_1390* w) : mCur(w->mpBegin), mEnd(w->mpEnd) {}
-    WorkerIter& Init(WorkerList_s00ce_1390* w, void* p);       // 0x00ce0b20
+    WorkerIter& Init(WorkerList_s00ce_1390* w, const WorkerFilter* filter);       // 0x00ce0b20
     WorkerIter& Advance();                          // 0x00cdff70
 };
 struct cCreature {
@@ -1340,17 +1340,16 @@ void Shutdown(cTribePlanner* pThis)
 }
 
 // @ 0x00ce0b20
-int** FUN_00ce0b20(int** pIter, int** pSource, uint32_t uUnused)
+WorkerIter& WorkerIter::Init(WorkerList_s00ce_1390* workers, const WorkerFilter* filter)
 {
-    int* pBegin = *pSource;
-    pIter[0] = pBegin;
-    int* pEnd = pSource[1];
-    pIter[1] = pEnd;
-    if (pBegin != pEnd) {
-        if (!FUN_00cdfea0((cCitizen*)*pBegin))
-            FUN_00cdff70((int***)pIter);
+    mCur = workers->mpBegin;
+    mEnd = workers->mpEnd;
+    if (mCur != mEnd) {
+        cCreature* member = *mCur;
+        if (!mFilter.Pass(member))
+            Advance();
     }
-    return pIter;
+    return *this;
 }
 
 // @ 0x00ce0b60

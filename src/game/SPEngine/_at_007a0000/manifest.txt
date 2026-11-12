@@ -8,3 +8,4 @@
 ../src/game/SPEngine/_at_007a0000.cpp  ??0cStaticBufferDraw@@QAE@XZ  007a3df0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_007a0000.cpp  ?FreeArrayBlock@@YIXPAPAX@Z  007a41a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_007a0000.cpp  ?ScalarDelete@TextRenderWare@@QAEPAXE@Z  007a88b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007a0000.cpp  ??1SplitDrawBase@@UAE@XZ  007a09f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include /GR-

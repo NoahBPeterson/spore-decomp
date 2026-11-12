@@ -167,23 +167,30 @@ struct SplitState2 {
     VecPod20 mLists48;            // +0x48
     void Reset(int a, int b);     // 0x7a0de0
 };
-struct IntVecVec { int* mpBegin; int* mpEnd; int* mpCap; };
+struct IntVecVec { V20* mpBegin; V20* mpEnd; V20* mpCap; unsigned mAllocator[2]; };
 void ClearVecVec(IntVecVec* v);                            // 0x7a0410
+// Retail nine-slot dynamic-draw interface; later dev-only slots are absent.
 struct BaseA {
-    virtual void vA();      // 0x51e340
-    virtual void vA1();     // 0x51e380
-    virtual void vA2();     // 0x402ab0
-    virtual void vA3();     // 0x7a11c0
+    virtual int AddRef();          // 0x51e340 AddRef
+    virtual int Release();         // 0x51e380 Release
+    virtual BaseA* CreateInstance();      // 0x402ab0 CreateInstance
+    virtual void Dispatch(SP::cModelInstance*, SP::cDispatchState*, SP::cRenderStats*); // 0x7a11c0 Dispatch
+    virtual bool GetMaterialList(void*);  // 0x004cc320
+    virtual bool UpdateBounds(void*, float*); // 0x007f9b80
+    virtual bool GetMeshes(void*);        // 0x004cc320
+    virtual int GetNumTriangles();       // 0x0056f2b0
+    virtual bool GetTriangle(int, void**); // 0x007f9b80
 };
 struct GmeRefCount {        // RefCountTemplate<int> base; vtable 0x13ef094
+    int mnRefCount;
     virtual ~GmeRefCount() {}   // slot 0 (in SplitDrawBase: this-4 thunk 0x79ab80 -> deleting dtor 0x7a0ac0)
 };
 struct PlainRc {
     virtual ~PlainRc() {}
     int mnRefCount;
     __forceinline int Release() {
-        int n = mnRefCount + -1;
-        mnRefCount = n;
+        int n = mnRefCount - 1;
+        mnRefCount = mnRefCount - 1;
         if (n == 0) { mnRefCount = 1; delete this; }
         return n;
     }
@@ -193,22 +200,28 @@ template <class T> struct RcPtr {
     ~RcPtr() { if (mp) mp->Release(); }
 };
 struct CIntVec {
-    int* mpBegin; int* mpEnd; int* mpCap;
-    void DestroyRange(int* first, int* last) throw();   // 0x1023030 (thiscall)
+    V20* mpBegin; V20* mpEnd; V20* mpCap;
+    unsigned mAllocator[2];
+    void DestroyRange(V20* first, V20* last) throw();   // 0x1023030 (thiscall)
     ~CIntVec() {
         // element destruction through 0x1023030, then buffer release
         DestroyRange(mpBegin, mpEnd);
         if (mpBegin && ((int*)mpBegin)[-1]) operator delete[](mpBegin);
     }
 };
-struct SplitDrawBase : BaseA, GmeRefCount {
-    int pad8;
+// The implicit intermediate destructor leaves only the reference-base exit table.
+struct RefCountedDrawBase : BaseA, GmeRefCount {};
+// Destructor view of the cSplitDrawImpl owner used by Dispatch below.
+struct SplitDrawBase : RefCountedDrawBase {
     RcPtr<PlainRc> mA;            // +0xc
     CIntVec mVec;                 // +0x10
-    int pad1c, pad20;
     RcPtr<PlainRc> mC;            // +0x24
     ~SplitDrawBase();             // 0x7a09f0
 };
+typedef char SplitDrawRefBaseSize[(sizeof(GmeRefCount) == 8) ? 1 : -1];
+typedef char SplitDrawElementSize[(sizeof(V20) == 20) ? 1 : -1];
+typedef char SplitDrawVectorSize[(sizeof(CIntVec) == 20) ? 1 : -1];
+typedef char SplitDrawOwnerSize[(sizeof(SplitDrawBase) == 0x28) ? 1 : -1];
 struct V20Tmp { int w[5]; ~V20Tmp(); };     // 0x432e80 dtor
 struct V12 {
     V20* b; V20* e; V20* c; int x; int y;
