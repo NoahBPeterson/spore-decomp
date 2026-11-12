@@ -603,7 +603,8 @@ void SP::cGameEditModeStrategy::FUN_00d1c010()
     if (disp != 0)
         ((VFnVi)disp->mpVftable[0])(disp, 1);
     mpDisplayStrategy = 0;
-    ((cGameTimeManager*)GameTimeManager())->DecPauseGate(0x4bf38a7);
+    cGameTimeManager* time = (cGameTimeManager*)GameTimeManager();
+    time->DecPauseGate(0x4bf38a7);
 }
 
 struct InputManagerVt_s00d1_c090 {
