@@ -7,7 +7,6 @@
 00aeef00 67 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) sub-record count; the resource lookup and the filter test are unresolved so the 0xc4-stride walk collapses; equiv UNSUPPORTED (unresolved resource services)
 00aeefc0 145 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) sub-record value query; the resource lookup, the filter test and the gather helper are unresolved so the indexed arm disappears; equiv UNSUPPORTED (unresolved resource services)
 00aef0e0 96 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) debug behavior tick; the resource lookup and the random draws are unresolved so both vector picks collapse and the action switch is empty; equiv UNSUPPORTED (unresolved random and resource services)
-00d7a620 29 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: float return temp goes to a pushed slot instead of the dead parameter slot; equiv PASS
 00d7a700 105 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: cl shrink-wraps the esi push and folds the two return-true blocks into setne; equiv PASS
 00d7a850 72 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation around the FUN_00ac80d0 chain; equiv WEAK (27% coverage)
 00d7a920 235 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: distance-call temp slots and register allocation differ; equiv FAIL reg-only ecx (untouched by the original, 5 valid inputs)

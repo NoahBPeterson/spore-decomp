@@ -4539,7 +4539,12 @@ float __cdecl FUN_00d7a5e0(CB* p)
 // @ 0x00d7a620
 float __cdecl FUN_00d7a620(CB* p)
 {
-  return *(int*)((char*)p->Get() + 0x80) != -1 ? g_1485720 : 0.0f;
+  float& result = (float&)p;
+  if (*(int*)((char*)p->Get() + 0x80) != -1)
+    result = g_1485720;
+  else
+    result = 0.0f;
+  return result;
 }
 
 // @ 0x00d7a660

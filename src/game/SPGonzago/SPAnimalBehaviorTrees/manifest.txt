@@ -71,3 +71,4 @@
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bef0@@YA_NPAVcSPCreatureBase@@IIIIPAVtAnimCtx@@@Z  00d7bef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7bda0@@YAXPAVcSPCreatureBase@@@Z  00d7bda0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7ae80@@YAMPAUCB@@HHIPAXPAD@Z  00d7ae80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d7a620@@YAMPAUCB@@@Z  00d7a620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
