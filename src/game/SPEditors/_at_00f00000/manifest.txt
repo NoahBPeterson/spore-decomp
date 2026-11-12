@@ -12,3 +12,8 @@
 ../src/game/SPEditors/_at_00f00000.cpp  ?f03fa0@UI_s00f0_31a0@@QAEXXZ  00f03fa0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00f00000.cpp  ?f03fc0@UI_s00f0_31a0@@QAEXH@Z  00f03fc0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00f00000.cpp  ?f040e0@UI_s00f0_31a0@@QAEXH@Z  00f040e0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00f00000.cpp  ?UpdateScenarioState@@YAXPAXPAH@Z  00f08630  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00f00000.cpp  ?f03de0@UI_s00f0_31a0@@QAEXXZ  00f03de0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00f00000.cpp  ?IsScenarioValueWithinLimit@@YA_NPAUScenarioObjectView@@@Z  00f0a640  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00f00000.cpp  ?f00ba0@UI@@QAEXXZ  00f00ba0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00f00000.cpp  ?SetScenarioCoordinates@@YAXPAXPBUScenarioCoordinatePair@@@Z  00f088c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include

@@ -1807,11 +1807,11 @@ struct CPlayerInventory {
     int  FindCategoryIndex();
     void f5cb180(int);
     void f5ca910();
-    CPlayerInventory* f5cae30();
+    CPlayerInventory* f5cae30(); // 0x005cae30
     CPlayerInventory* f5cae30(int);   // 0x005cae30 (equiv t3)
-    CPlayerInventory* f5c2e50();
+    CPlayerInventory* f5c2e50(); // 0x005c2e50
     CPlayerInventory* GetPlayerInventory();
-    CPlayerInventory* GetPlayerInventory3(int, int, int);
+    CPlayerInventory* GetPlayerInventory3(int, int, int); // 0x00a1ad60
     CPlayerInventory* GetPlayerInventory2(int, int);
 };
 struct CSpaceGame {
@@ -6422,7 +6422,10 @@ int __cdecl FUN_00ef7740()
         CPlayerInventory* a = inv->GetPlayerInventory3(0, 0, 0);
         CPlayerInventory* b = a->f5cae30();
         CPlayerInventory* c = b->f5c2e50();
-        return (int)c->f5cae30();
+        int result = (int)c->f5cae30();
+        // Retail returns after the call rather than tail-jumping to it.
+        _ReadWriteBarrier();
+        return result;
     }
     return 0;
 }
@@ -6455,7 +6458,10 @@ int __cdecl FUN_00ef77d0()
         CPlayerInventory* a = inv->GetPlayerInventory3(1, 0, 0);
         CPlayerInventory* b = a->f5cae30();
         CPlayerInventory* c = b->f5c2e50();
-        return (int)c->f5cae30();
+        int result = (int)c->f5cae30();
+        // Retail returns after the call rather than tail-jumping to it.
+        _ReadWriteBarrier();
+        return result;
     }
     return 0;
 }
@@ -6530,6 +6536,7 @@ void __fastcall FUN_00ef7950(char* p)
 {
     *(void**)p = &gVtbl_A;
     *(void**)(p + 4) = &gVtbl_B;
+    _ReadWriteBarrier();
     if (*(void**)(p + 0x20) != 0)
         ((IRefCounted_s00ef_6db0*)*(void**)(p + 0x20))->v1();
     if (*(void**)(p + 0x1c) != 0)
@@ -6543,6 +6550,7 @@ void __fastcall FUN_00ef7950(char* p)
     if (*(void**)(p + 0xc) != 0)
         ((IRefCounted_s00ef_6db0*)*(void**)(p + 0xc))->v1();
     *(void**)p = &gVtbl_C;
+    _ReadWriteBarrier();
     *(void**)(p + 4) = &gVtbl_D;
 }
 
@@ -7711,8 +7719,17 @@ bool __cdecl FUN_00efc530(int* p)
 {
     if (p != 0) {
         int t = ((FN0_i)((*(void***)p)[0xe]))(p);
-        if (t == 0x7a309fb || t == 0x76c67df || t == 0x771ad6a || t == 0x7a81824 || t == 0x7abdd8d)
-            return true;
+        switch (t) {
+        case 0x7a309fb:
+        case 0x76c67df:
+        case 0x771ad6a:
+        case 0x7a81824:
+        case 0x7abdd8d:
+            break;
+        default:
+            return false;
+        }
+        return true;
     }
     return false;
 }
@@ -7879,13 +7896,22 @@ void __cdecl FUN_00efc8c0(int v)
         FUN_00f46410((void*)1, (void*)old, (void*)v);
 }
 
+struct EditorStateReadView {
+    void* mpState_0;
+    void* mpState_4;
+    void* mpState_8;
+};
 // @ 0x00efc8f0
 int __cdecl FUN_00efc8f0()
 {
-    int r = 0;
-    if (g_016c7b88 != 0 && *(int*)((char*)g_016c7b88 + 8) != 0)
-        r = (int)FUN_00eebf80(*(void**)((char*)g_016c7b88 + 8));
-    return r;
+    int result = 0;
+    EditorStateReadView* state = (EditorStateReadView*)g_016c7b88;
+    if (state) {
+        void* object = state->mpState_8;
+        if (object)
+            result = (int)FUN_00eebf80(object);
+    }
+    return result;
 }
 
 // @ 0x00efc910
@@ -9344,87 +9370,3 @@ void __cdecl f_eff760(void* obj, char flag)
         return;
     f_eff6c0(obj, flag);
 }
-
-// Remaining small editor lifetime and state accessors.
-struct EditorLifetime {
-    void Destroy(); // 0x00ef0400
-    EditorLifetime* Delete(unsigned flags);
-};
-// @ 0x00ef19d0
-EditorLifetime* EditorLifetime::Delete(unsigned flags)
-{
-    Destroy();
-    if (flags & 1) operator_delete(this);
-    return this;
-}
-struct EditorPanelLifetime {
-    void Destroy(); // 0x00ef3bf0
-    EditorPanelLifetime* Delete(unsigned flags);
-};
-// @ 0x00ef3e20
-EditorPanelLifetime* EditorPanelLifetime::Delete(unsigned flags)
-{
-    Destroy();
-    if (flags & 1) operator_delete(this);
-    return this;
-}
-struct LargeAssetLifetime {
-    void Destroy(); // 0x00ef61b0
-    LargeAssetLifetime* Delete(unsigned flags);
-};
-// @ 0x00ef6630
-LargeAssetLifetime* LargeAssetLifetime::Delete(unsigned flags)
-{
-    Destroy();
-    if (flags & 1) operator_delete(this);
-    return this;
-}
-struct ScenarioPanelLifetime {
-    void Destroy(); // 0x00ef7950
-    ScenarioPanelLifetime* Delete(unsigned flags);
-};
-// @ 0x00ef8530
-ScenarioPanelLifetime* ScenarioPanelLifetime::Delete(unsigned flags)
-{
-    Destroy();
-    if (flags & 1) operator_delete(this);
-    return this;
-}
-struct ScenarioTutorialLifetime {
-    void Destroy(); // 0x00ef9180
-    ScenarioTutorialLifetime* Delete(unsigned flags);
-};
-// @ 0x00ef9ad0
-ScenarioTutorialLifetime* ScenarioTutorialLifetime::Delete(unsigned flags)
-{
-    Destroy();
-    if (flags & 1) operator_delete(this);
-    return this;
-}
-// Retail editor-state pointer fields read by the accessors below.
-struct EditorStateAccessorView {
-    uint32_t pad0;
-    void* mpState_4;
-    void* mpState_8;
-    void* mpState_c;
-    uint32_t pad10[0x58 / 4];
-    void* mpState_68;
-};
-// @ 0x00efc510
-void* GetEditorState_00efc510()
-{ return ((EditorStateAccessorView*)g_016c7b88_s00ef_dee0)->mpState_68; }
-// @ 0x00efe5a0
-void* GetEditorState_00efe5a0()
-{ return ((EditorStateAccessorView*)g_016c7b88_s00ef_dee0)->mpState_4; }
-// @ 0x00efe5b0
-void* GetEditorState_00efe5b0()
-{ return ((EditorStateAccessorView*)g_016c7b88_s00ef_dee0)->mpState_8; }
-// @ 0x00efe5c0
-void* GetEditorState_00efe5c0()
-{ return ((EditorStateAccessorView*)g_016c7b88_s00ef_dee0)->mpState_c; }
-struct LargeAssetFlagView {
-    char pad[0x9d]; bool flag;
-    bool GetFlag();
-};
-// @ 0x00ef6410
-bool LargeAssetFlagView::GetFlag() { return flag; }

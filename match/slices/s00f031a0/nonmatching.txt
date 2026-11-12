@@ -5,7 +5,6 @@
 00f036f0  264  predicate/commit: branch and call schedule differ (equiv WEAK)
 00f03890  163  message dispatch: case compare chain and argument registers differ (equiv WEAK)
 00f039a0  418  noun teardown: repeated release blocks get different register allocation (equiv UNSUPPORTED: original faults on generated inputs)
-00f03de0    6  two global stores scheduled after the call-argument setup (equiv PASS 100%)
 00f03e40   48  bool spill/zero-extend idiom differs at the window toggle (equiv UNSUPPORTED: original faults on generated inputs)
 00f03e90  196  layout pointer cached in a register; float args use x87 instead of the original SSE sequence (equiv UNSUPPORTED: original faults on generated inputs)
 00f03ff0   99  count/index register allocation and ternary base addressing differ (equiv PASS 100%)

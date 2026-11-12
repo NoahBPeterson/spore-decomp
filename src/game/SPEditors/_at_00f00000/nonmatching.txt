@@ -2,7 +2,6 @@
 00f00610 273 placement sync: CRT `exp` is absent from the image so the e^x step is a forced-inline polynomial, and the call/register schedule differs; equiv WEAK 22.3% cov [/O2 /MD /Gy /TP]
 00f00790 20 placement apply: `this`/param register allocation swapped (this in esi vs original edi); equiv WEAK 31.8% cov [/O2 /MD /Gy /TP]
 00f00850 444 secondary placement apply: container/record walk and vcall schedule differs; equiv WEAK 12.8% cov [/O2 /MD /Gy /TP]
-00f00ba0 10 placement V4 fetch: argument register allocation differs (eax vs ecx)
 00f00bd0 214 placement commit: vcall/refcount call schedule differs; equiv PASS 83.0% cov [/O2 /MD /Gy /TP]
 00f00d10 199 teardown: release/audio-slot vcall schedule differs; equiv PASS 67.0% cov [/O2 /MD /Gy /TP]
 00f00e50 216 placement update: object/refcount schedule differs; equiv UNSUPPORTED (0/400 valid, every input fault-reads the global mgr) [/O2 /MD /Gy /TP]
@@ -32,7 +31,6 @@
 00f036f0 257 predicate/commit: branch and call schedule differ (equiv WEAK)
 00f03890 159 message dispatch: case compare chain and argument registers differ (equiv WEAK)
 00f039a0 390 noun teardown: repeated release blocks get different register allocation (equiv UNSUPPORTED: original faults on generated inputs)
-00f03de0 6 two global stores scheduled after the call-argument setup (equiv PASS 100%)
 00f03e40 45 bool spill/zero-extend idiom differs at the window toggle (equiv UNSUPPORTED: original faults on generated inputs)
 00f03e90 225 layout pointer cached in a register; float args use x87 instead of the original SSE sequence (equiv UNSUPPORTED: original faults on generated inputs)
 00f03ff0 89 count/index register allocation and ternary base addressing differ (equiv PASS 100%)

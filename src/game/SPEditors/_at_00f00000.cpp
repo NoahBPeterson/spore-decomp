@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern void*   g_mgr;             // 0x016c7b88 (singleton pointer variable)
@@ -1133,7 +1134,9 @@ void UI::f00b50()
 // @ 0x00f00ba0
 void UI::f00ba0()
 {
-    void* r = pGame->F32790(*(void**)((char*)g_mgr + 4));
+    void* object = ((Mgr*)g_mgr)->mp4;
+    _ReadWriteBarrier();
+    void* r = pGame->F32790(object);
     if (r) ((V4*)pC)->assign((V4*)r);
 }
 
@@ -2401,11 +2404,19 @@ void UI_s00f0_31a0::f03d80()
     }
 }
 
+struct EditorCommitStateView {
+    uint32_t pad0[0x18 / 4];
+    int mState_18;
+    int mState_1c;
+};
 // @ 0x00f03de0
 void UI_s00f0_31a0::f03de0()
 {
-    ((int*)g_15f7cf4)[6] = f54;
-    ((int*)g_15f7cf4)[7] = f64;
+    ((EditorCommitStateView*)g_15f7cf4)->mState_18 = f54;
+    EditorCommitStateView* secondTarget = (EditorCommitStateView*)g_15f7cf4;
+    _ReadWriteBarrier();
+    secondTarget->mState_1c = f64;
+    _ReadWriteBarrier();
     FUN_00809db0(&f4, g_015ad450);
     step = 1;
 }
@@ -2506,4 +2517,59 @@ void UI_s00f0_31a0::f040e0(int param)
     int n = (int)(end - begin) & ~1;
     if (n > 2 && begin)
         operator_delete_(begin);
+}
+
+// Scenario editor state-machine and object access helpers.
+void __cdecl AdvanceScenarioState(void* context, int* state); // 0x00f085b0
+// @ 0x00f08630
+void __cdecl UpdateScenarioState(void* context, int* state)
+{
+    if (*state == 0) {
+        *state = 1000;
+        return;
+    }
+    ++*state;
+    while (*state % 1000 >= 5) {
+        AdvanceScenarioState(context, state);
+        if (*state == -1)
+            break;
+    }
+}
+struct ScenarioObjectView {
+    void* GetData(); // 0x00b18530
+};
+int __cdecl GetScenarioValue(ScenarioObjectView* object); // 0x00f0a5a0
+struct ScenarioLimitView {
+    uint32_t pad0[0xb8 / 4];
+    int mLimit_b8;
+};
+struct ScenarioSimulatorLimitView {
+    uint32_t pad0[0x78 / 4];
+    ScenarioLimitView* mpLimits_78;
+};
+// @ 0x00f0a640
+bool __cdecl IsScenarioValueWithinLimit(ScenarioObjectView* object)
+{
+    if (!object->GetData())
+        return false;
+    int value = GetScenarioValue(object);
+    if (value == -1)
+        return false;
+    int index = value / 1000 - 1;
+    bool withinLimit = index <= ((ScenarioSimulatorLimitView*)gSimulator)->mpLimits_78->mLimit_b8;
+    return withinLimit;
+}
+struct ScenarioCoordinatePair {
+    float x, y;
+    __forceinline ScenarioCoordinatePair() {}
+    __forceinline ScenarioCoordinatePair(const ScenarioCoordinatePair& other)
+        : x(other.x), y(other.y) {}
+};
+// @ 0x00f088c0
+void __cdecl SetScenarioCoordinates(void* object, const ScenarioCoordinatePair* position)
+{
+    void* window = ((void*(__thiscall*)(void*))(*(void***)object)[4])(object);
+    ScenarioCoordinatePair result;
+    ((void(__thiscall*)(void*, ScenarioCoordinatePair*, ScenarioCoordinatePair))(*(void***)window)[0x31])(window, &result, *position);
+    ((void(__thiscall*)(void*, float, float))(*(void***)object)[0x19])(object, result.x, result.y);
 }

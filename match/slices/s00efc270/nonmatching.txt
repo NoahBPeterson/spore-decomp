@@ -1,8 +1,6 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
-00efc530  38   type predicate: vtable slot/temperature register allocation differs; equiv WEAK (90.5% cov)
 00efc660  73   permission check: FUN_00b18e00/FUN_00f40ea0 schedule + __thiscall shape differ; equiv WEAK (55.8% cov)
 00efc8c0  23   set global pointer: FUN_00f46410 argument registers differ; equiv WEAK (53.8% cov)
-00efc8f0  13   get object from +8: zero-init + branch layout differ; equiv WEAK (45.5% cov)
 00efcae0  44   close window: further vcalls (FUN_00d20430 path) not scheduled; equiv WEAK (50% cov)
 00efcd90  35   visibility check: vtable chain constants/offset differ; equiv WEAK (50% cov)
 00efcde0  66   disable toggle: this/param register shape differ; equiv UNSUPPORTED (0/1200 valid inputs)
