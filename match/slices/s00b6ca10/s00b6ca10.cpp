@@ -55,6 +55,7 @@ struct TmpStr {
     uint32_t mSentinel;
 };
 void operator_delete_array(void* p);                              // 0x00f47380
+void operator delete(void* p);                                     // 0x00f47380
 
 // @ 0x00b6cde0
 void FUN_00b6cde0(cCtx* p, int param2, float* param3, float param4)
@@ -219,7 +220,7 @@ struct TooltipMgr {                      // singleton at 0x01687348
     void F00b720e0();                    // 0x00b720e0
     int F00e31100();                     // 0x00e31100
     void* F00b72230(int* p);             // 0x00b72230
-    void F00c2e4e0();                    // 0x00c2e4e0
+    ~TooltipMgr();                      // 0x00c2e4e0 (empty destructor)
 };
 extern TooltipMgr* s_pTooltip;            // 0x01687348
 
@@ -416,10 +417,7 @@ void FUN_00b6d190(void)
     FUN_00b6c280();
     s_pTooltip->F00b720e0();
     TooltipMgr* p = s_pTooltip;
-    if (p) {
-        p->F00c2e4e0();
-        operator_delete_array(p);
-    }
+    delete p;
     s_pTooltip = 0;
 }
 
