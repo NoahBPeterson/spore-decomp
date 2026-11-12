@@ -17,3 +17,4 @@
 ../src/game/Spui/SPUIPopupMenu.cpp  ?OnTick@PSB@@QAEEXZ  0081ce80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPopupMenu.cpp  ?init_1546064@@YAXXZ  012fc2b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/SPUIPopupMenu.cpp  ?AddMenuItem2@cSPUIPopupMenuWin@@QAEXPAVcSPUIPopupMenuItemWin@@_N@Z  0081b650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPopupMenu.cpp  ?Ctor@ScrollBtnCtor@@QAEPAU1@XZ  0081ae90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

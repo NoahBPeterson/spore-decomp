@@ -33,7 +33,11 @@ struct IWindowHead {
     virtual void* AsInterface(int id);
     virtual IWindowHead* GetParent();
 };
-struct LimitStopwatch { void SetTimeLimit(int, int); };
+struct LimitStopwatch { void Construct(int, int); void SetTimeLimit(int, int); };
+struct PopupButtonBase { void Construct(); }; // 0x00966f90
+extern char vtbl_ScrollButton_Window[]; // 0x01419408
+extern char vtbl_ScrollButton_IWindow[]; // 0x014192e8
+extern char vtbl_ScrollButton_Serializable[]; // 0x01419278
 class cSPUIPopupMenuItemWin { public:
   char pad00[0x888];
   int mChildIndex;               // +0x888
@@ -78,7 +82,7 @@ struct ScrollBtnCtor {
   char pad2[0x8a8 - 0x888 - sizeof(LimitStopwatch)];
   bool b0;
   bool b1;
-  void Ctor();
+  ScrollBtnCtor* Ctor();
   void StopwatchCtor(int, int);
 };
 struct PopupWinCtor {
@@ -295,15 +299,18 @@ void cSPUIPopupMenuItemWin::SomeFunc()
 }
 
 // @ 0x0081ae90
-void ScrollBtnCtor::Ctor()
+ScrollBtnCtor* ScrollBtnCtor::Ctor()
 {
-  *(void**)this = (void*)&Mark1;
-  *(void**)((char*)this + 4) = (void*)&Mark2;
-  *(void**)((char*)this + 0x20c) = (void*)&Mark3;
-  StopwatchCtor(4, 0);
-  timer.SetTimeLimit(g_164dd8c, 0);
+  ((PopupButtonBase*)this)->Construct();
+  *(void**)this = vtbl_ScrollButton_Window;
+  *(void**)((char*)this + 4) = vtbl_ScrollButton_IWindow;
+  *(void**)((char*)this + 0x20c) = vtbl_ScrollButton_Serializable;
+  int limit = g_164dd8c;
+  timer.Construct(4, 0);
+  timer.SetTimeLimit(limit, 0);
   b0 = 0;
   b1 = 0;
+  return this;
 }
 
 // @ 0x0081af30

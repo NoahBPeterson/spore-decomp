@@ -1183,9 +1183,11 @@ void SetWindowAlpha(EA::UTFWin::IWindow * w, float a)
 // @ 0x00805040
 float GetAlpha(int* p)
 {
-    if (p == 0) return 1.0f;
-    unsigned v = (*(unsigned(__thiscall**)(void*))VSlot(p, 0x30))(p);
-    return (float)(v >> 0x18) * 0.0039215689f;
+    if (p != 0) {
+        unsigned v = ((unsigned(__thiscall*)(void*))(*(void***)p)[0x30 / 4])(p);
+        return (float)(v >> 0x18) * 0.0039215689f;
+    }
+    return 1.0f;
 }
 
 // @ 0x00805080
@@ -1206,13 +1208,15 @@ float GetElapsedSeconds()
 // @ 0x008050b0
 bool WalkAll(int* p)
 {
-    if (p == 0) return false;
-    for (;;) {
-        if (!((*(int(__thiscall**)(void*))VSlot(p, 0x28))(p) & 1))
-            return false;
-        p = (int*)(*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p);
-        if (p == 0) return true;
+    if (p != 0) {
+        do {
+            if (!(((int(__thiscall*)(void*))(*(void***)p)[0x28 / 4])(p) & 1))
+                return false;
+            p = (int*)((void*(__thiscall*)(void*))(*(void***)p)[0x10 / 4])(p);
+        } while (p != 0);
+        return true;
     }
+    return false;
 }
 
 // @ 0x008050f0
@@ -1220,15 +1224,15 @@ int* WalkFind(int* p)
 {
     if (p == 0) return 0;
     for (;;) {
-        if ((*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p) != 0) {
-            int* n = (int*)(*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p);
-            int r = (*(int(__thiscall**)(void*))VSlot(n, 0x1c))(n);
+        if (((void*(__thiscall*)(void*))(*(void***)p)[0x10 / 4])(p) != 0) {
+            int* n = (int*)((void*(__thiscall*)(void*))(*(void***)p)[0x10 / 4])(p);
+            int r = ((int(__thiscall*)(void*))(*(void***)n)[0x1c / 4])(n);
             if (r != 0) {
-                int* n2 = (int*)(*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p);
-                return (int*)(*(int(__thiscall**)(void*))VSlot(n2, 0x1c))(n2);
+                int* n2 = (int*)((void*(__thiscall*)(void*))(*(void***)p)[0x10 / 4])(p);
+                return (int*)((int(__thiscall*)(void*))(*(void***)n2)[0x1c / 4])(n2);
             }
         }
-        p = (int*)(*(void*(__thiscall**)(void*))VSlot(p, 0x10))(p);
+        p = (int*)((void*(__thiscall*)(void*))(*(void***)p)[0x10 / 4])(p);
         if (p == 0) return 0;
     }
 }
@@ -1239,7 +1243,7 @@ bool Contains(int* a, int* b)
     if (a == 0) return false;
     while (b != 0) {
         if (a == b) return true;
-        b = (int*)(*(void*(__thiscall**)(void*))VSlot(b, 0x10))(b);
+        b = (int*)((void*(__thiscall*)(void*))(*(void***)b)[0x10 / 4])(b);
     }
     return false;
 }

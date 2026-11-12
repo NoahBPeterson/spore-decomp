@@ -45,3 +45,7 @@
 ../src/game/Spui/SPUIHelpers.cpp  ?AttrF14@@YAMPAH@Z  00805200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?AttrF18@@YAMPAH@Z  00805230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?SPUIHelpers_GetMainWindowArea@@YAPAUVec4@@PAU1@@Z  00805ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?GetAlpha@@YAMPAH@Z  00805040  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?WalkFind@@YAPAHPAH@Z  008050f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?WalkAll@@YA_NPAH@Z  008050b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?Contains@@YA_NPAH0@Z  00805150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

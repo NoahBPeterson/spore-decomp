@@ -7,3 +7,7 @@
 ../src/game/Spui/SPUITooltip.cpp  ?ShouldTimeoutTooltip@TooltipManager@@QAEHXZ  00835440  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUITooltip.cpp  ?ShouldDisplayDetailedTooltip@TooltipManager@@QAEHXZ  00835470  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUITooltip.cpp  ?SetText@cSPUITooltipWinProc_s0083_56e0@@QAEXPB_WPAXD@Z  00835ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUITooltip.cpp  ??0cSPUITooltipWinProc_s0083_56e0@@QAE@XZ  00835cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUITooltip.cpp  ??0cSPUITooltipWinProc_s0083_56e0@@QAE@PB_WI0PAMI0I@Z  00835e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUITooltip.cpp  ?Destroy@cSPUITooltipWinProc_s0083_56e0@@QAEXXZ  00835d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUITooltip.cpp  ?SetTooltipText@TooltipManager@@QAEXHH@Z  008354a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
