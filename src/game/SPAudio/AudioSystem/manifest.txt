@@ -55,3 +55,13 @@
 ../src/game/SPAudio/AudioSystem.cpp  ?PostEvent@MgrBase@@QAEXIIIIPAX@Z  00a2ee40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?SetTypePriority@cTypeMapHolder@@QAEXII@Z  00a2f180  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?eraseKey@NodeMap@@QAEHPAI@Z  00a30f10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?GetFactoryType@FactoryVoiceTemplate@Audio@EA@@UBEIXZ  00a22ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?GetSupportedTypes@FactoryVoiceTemplate@Audio@EA@@UAEIPAII@Z  00a22ad0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?GetFactoryType@FactoryBinarySampleData@Audio@EA@@UBEIXZ  00a22af0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?GetFactoryType@FactoryInstrumentBank@Audio@EA@@UBEIXZ  00a22d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?GetSupportedTypes@FactoryInstrumentBank@Audio@EA@@UAEIPAII@Z  00a22d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?GetProperty@Submix@Audio@EA@@UAE_NIAAM@Z  00a2fa90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?HasProperty@Submix@Audio@EA@@UAE_NI@Z  00a2faa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?command_00a21b20@@YI_NPADPAXHHHHH@Z  00a21b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?command4_00a21b90@@YI_NPADPAXHHHHH@Z  00a21b90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?GetSystemAT@Audio@EA@@YAPAVISystem@12@XZ  00a206f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -45,6 +45,8 @@
 #include "SP/cSPCreatureAnimManager.h"
 #include "EA/ArgScript/cCommandBase.h"
 #include "EA/Audio/FactoryVoiceTemplate.h"
+#include "EA/Audio/FactoryInstrumentBank.h"
+#include "EA/Audio/ResourceVoiceTemplate.h"
 #include <stdarg.h>
 
 // unnamed retail callees and globals (address in the comment)
@@ -6441,3 +6443,49 @@ System_s00a3_2f20::System_s00a3_2f20()
     for (int i = 0; i < 9; ++i) { mat0[i] = (i % 4 == 0) ? 1.0f : 0.0f; }
     for (int i = 0; i < 9; ++i) { mat1[i] = (i % 4 == 0) ? 1.0f : 0.0f; }
 }
+
+// @ 0x00a22ac0
+unsigned int EA::Audio::FactoryVoiceTemplate::GetFactoryType() const {
+    return kFactoryTypeVoiceTemplate;
+}
+
+// @ 0x00a22ad0
+unsigned int EA::Audio::FactoryVoiceTemplate::GetSupportedTypes(unsigned int* types, unsigned int capacity) {
+    if (types)
+        *types = EA::Audio::ResourceVoiceTemplate::kResourceTypeVoiceTemplate;
+    return 1;
+}
+
+// @ 0x00a22af0
+unsigned int EA::Audio::FactoryBinarySampleData::GetFactoryType() const {
+    return kFactoryTypeBinarySampleData;
+}
+
+// @ 0x00a22d20
+unsigned int EA::Audio::FactoryInstrumentBank::GetFactoryType() const {
+    return kFactoryTypeInstrumentBank;
+}
+
+// @ 0x00a22d30
+unsigned int EA::Audio::FactoryInstrumentBank::GetSupportedTypes(unsigned int* types, unsigned int capacity) {
+    if (types)
+        *types = kFactoryTypeInstrumentBank;
+    return 1;
+}
+
+// @ 0x00a2fa90
+bool EA::Audio::Submix::GetProperty(unsigned int id, float& value) {
+    return mVoiceContainer.GetProperty(id, value);
+}
+
+// @ 0x00a2faa0
+bool EA::Audio::Submix::HasProperty(unsigned int id) {
+    return mVoiceContainer.HasPropertyBinding(id);
+}
+
+namespace EA { namespace Audio {
+// @ 0x00a206f0
+ISystem* GetSystemAT() {
+    return reinterpret_cast<ISystem*>(g_166d9f4);
+}
+} }
