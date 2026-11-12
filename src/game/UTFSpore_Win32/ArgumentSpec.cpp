@@ -576,7 +576,8 @@ bool StrNEqualI(const char* a, const char* b, unsigned int n)
 // @ 0x008387a0
 bool StrEqualI2(const char** p, const char* b)
 {
-    return _stricmp(*p, b) == 0;
+    const char* first = *p;
+    return _stricmp(first, b) == 0;
 }
 
 // @ 0x008387c0
