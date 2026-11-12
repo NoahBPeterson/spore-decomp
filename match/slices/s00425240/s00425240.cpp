@@ -12,7 +12,7 @@ struct __declspec(align(8)) HashNode {
 };
 
 extern void* AllocateRaw(void* alloc, unsigned size, unsigned align, unsigned offset);
-extern void EASTL_allocator_deallocate(void* p);
+extern void EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 struct HashTable {
     uint32_t pad0;
@@ -267,18 +267,17 @@ struct PtrVector {
 };
 
 // @ 0x00425990
-// Not byte-exact (6 bytes): p/q frame slots swapped.
 void PtrVector::Free()
 {
-    void** q;
-    void** p;
+    void** storage;
+    void** allocation;
     unsigned bytes;
     if (begin) {
         bytes = (cap - begin) * 4;
-        p = begin;
-        if (((int*)p)[-1]) {
-            q = p;
-            EASTL_allocator_deallocate(q);
+        storage = begin;
+        if (((int*)storage)[-1]) {
+            allocation = storage;
+            EASTL_allocator_deallocate(allocation);
         }
     }
 }
