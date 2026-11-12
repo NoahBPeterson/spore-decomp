@@ -7,7 +7,6 @@
 00e00f40  12  options dtor: refcount releases/cString dtors now modelled as member/virtual calls. equiv PASS
 00e010c0  128  winproc ctor: vtable/stopwatch/message registration differs; Stopwatch calls are member calls now. equiv PASS
 00e011a0  11  winproc dtor: RemoveHandler args/order differ; global +0x15a4878 store removed, old handler passed. equiv PASS
-00e01250  12  two reset calls: receiver register differs
 00e01270  25  gametime property set: call/arg scheduling differs; member calls now. equiv PASS
 00e01570  174  POD copy with refcounted members: field order differs; equiv PASS
 00e01620  50  pause-gate inc/dec path differs
