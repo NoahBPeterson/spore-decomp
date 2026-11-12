@@ -226,7 +226,7 @@ void cVarListSerializer_ctor(void* p, void* obj, void* list, uint sig);      // 
 bool cVarListSerializer_Serialize(void* p, cOutStream* s);                   // 0x00692900
 bool  EA_IO_WriteUint32(void* st, const void* buf, int n, int flag);         // 0x0093aa70
 bool  StreamWrite(void* st, int a, int b);                                   // 0x0093a9a0
-void  QuaternionFromDirections(Quaternion* out, const Vector3* dir, const Vector3* up); // 0x00698180
+Quaternion* QuaternionFromDirections(Quaternion* out, const Vector3* dir, const Vector3* up); // 0x00698180
 struct cLocomotiveObject_s00cb_44b0;
 struct cGameData_s00cb_44b0 {
 virtual void g00();
@@ -269,81 +269,21 @@ void  cLocomotiveObject_Write(cLocomotiveObject_s00cb_44b0* o, cOutStream* s);  
 void  cLocomotiveObject_Shutdown(cLocomotiveObject_s00cb_44b0* o);                      // 0x00c43f90
 Vector3* cLocomotiveObject_GetVelocity(cLocomotiveObject_s00cb_44b0* o);                // 0x00d20610
 struct cLocomotiveObject_s00cb_44b0 {
-virtual void l00();
-virtual void l04();
-virtual void l08();
-virtual void l0c();
-virtual void l10();
-virtual void l14();
-virtual void l18();
-virtual void l1c();
-virtual void l20();
-virtual void l24();
-virtual void l28();
-virtual void l2c();
-virtual void l30();
-virtual void l34();
-virtual void l38();
-virtual void l3c();
-virtual void l40();
-virtual void l44();
-virtual void l48();
-virtual void l4c();
-virtual void l50();
-virtual void l54();
-virtual void l58();
-virtual void l5c();
-virtual void l60();
-virtual void l64();
-virtual void l68();
-virtual void l6c();
-virtual void l70();
-virtual void l74();
-virtual void l78();
-virtual void l7c();
-virtual void l80();
-virtual void l84();
-virtual void l88();
-virtual void l8c();
-virtual void l90();
-virtual void l94();
-virtual void l98();
-virtual void l9c();
-virtual void lA0();
-virtual void lA4();
-virtual void lA8();
-virtual void lAC();
-virtual void lB0();
-virtual void lB4();
-virtual void lB8();
-virtual void lBC();
-virtual void lC0();
-virtual void lC4();
-virtual void lC8();
-virtual void lCC();
-virtual void lD0();
-virtual void lD4();
-virtual void lD8();
-virtual void lDC();
-virtual void lE0();
-virtual void lE4();
-virtual void lE8();
-virtual void lEC();
-virtual void lF0();
-virtual void lF4();
-virtual void lF8();
-virtual void lFC();
-virtual void l100();
-virtual void l104();
-virtual void l108();
-virtual void l10c();
-virtual void l110();
-virtual void l114();
-virtual void l118();
-virtual void l11c();
-virtual void l120();
-virtual void l124();
-virtual Vector3* GetPosition();
+    virtual void l00();
+    virtual void l04();
+    virtual void l08();
+    virtual void l0c();
+    virtual void l10();
+    virtual void l14();
+    virtual void l18();
+    virtual void l1c();
+    virtual void l20();
+    virtual void l24();
+    virtual void l28();
+    virtual Vector3* GetPosition();                           // +0x2c
+    virtual void l30();
+    virtual void l34();
+    virtual void l38();
     virtual void SetOrientation(Quaternion* q);              // +0x3c
 };
 float FUN_0104cda0(void* p);                                                 // 0x0104cda0
@@ -3128,18 +3068,23 @@ void CICBMProjectile::Write(IStream* s)
 }
 
 // @ 0x00cb4670
-void f00cb4670_ballistic_execute(Vector3* self, float unused)
+void __stdcall f00cb4670_ballistic_execute(Vector3* self)
 {
-    cLocomotiveObject_s00cb_44b0* obj = *(cLocomotiveObject_s00cb_44b0**)((char*)self + 0x14);
-    Vector3* vel = obj->GetPosition();                        // vtable +0x2c (direction)
-    float len = vel->x * vel->x + vel->y * vel->y + vel->z * vel->z;
+    Vector3* vel = (*(cLocomotiveObject_s00cb_44b0**)((char*)self + 0x14))->GetPosition();
+    float x = vel->x;
+    float y = vel->y;
+    float z = vel->z;
+    float sum = z * z + x * x;
+    float len = (float)sqrt(sum + y * y);
     if (len < 1.0f) {
-        self->x = 0.0f; self->y = 0.0f; self->z = 0.0f;
+        self->x = 0.0f;
+        self->y = 0.0f;
+        self->z = 0.0f;
         return;
     }
     Quaternion q;
-    QuaternionFromDirections(&q, (const Vector3*)0x0169a9e8, self);
-    obj->SetOrientation(&q);
+    (*(cLocomotiveObject_s00cb_44b0**)((char*)self + 0x14))->SetOrientation(
+        QuaternionFromDirections(&q, (const Vector3*)0x0169a9e8, self));
 }
 
 // @ 0x00cb46f0
