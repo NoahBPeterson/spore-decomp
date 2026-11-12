@@ -14,3 +14,4 @@
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?StartGrobShock@cSimulatorUniverse_s0101_46c0@SP@@QAEXPAUcStarRecordRef@@PAUcEmpire@@@Z  010151a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FUN_01010870@tGrobShockData@@QAEPAU1@ABU1@@Z  01010870  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?quick_sort_grob_shock@SP@@YAXPAUtGrobShockData_s0101_37b0@@0P6A_NABU2@1@Z@Z  01014db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorUniverse.cpp  ?FindEmbassyEntry@cSimulatorUniverse@@QAE_NPAUcStarRecordRef@@PAD@Z  0100e730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
