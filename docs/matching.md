@@ -70,6 +70,14 @@ Evidence and rules of thumb are below.
   (`symbols/renderware4_core.txt` lists the ranges). Leaf functions may still match.
 
 ## Workflow
+
+**Before starting any function:** complete the
+[required ownership check in AGENTS.md](../AGENTS.md#required-verify-function-claim-ownership-before-starting).
+Verify its address against current claims and open PRs (including drafts), record the owner/PR and check time,
+and publish your draft-PR claim before analysis or edits. If someone else owns it, choose another candidate unless
+an explicit handoff is agreed. Check every address in a batch and every rotation; local reservations and an
+unclaimed `task.py` result alone do not establish availability. Recheck before marking the PR ready.
+
 1. `tools/matching/disasm.py work/SporeApp.analysis.bin <va>` prints the original instructions.
 2. Write candidate spellings into a scratch file, then run
    `tools/matching/try_variants.py <scratch.cpp> <va>`, which ranks every function by diff bytes.

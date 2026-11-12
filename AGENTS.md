@@ -35,6 +35,32 @@ no match). You can run the same check locally (below) before you open the pull r
 
 ## The loop
 
+### Required: verify function claim ownership before starting
+
+Every contributor and agent must complete this check **for each function before analysis, experiments or source
+edits**, including each new candidate when rotating through a batch:
+
+- Run `.venv/bin/python tools/contrib/task.py <address>` and check the current
+  [`claims.txt`](https://raw.githubusercontent.com/NoahBPeterson/spore-decomp/claims/claims.txt) and
+  [open pull requests](https://github.com/NoahBPeterson/spore-decomp/pulls), including drafts, for that address.
+  Inspect relevant PR function lists and diffs; a batch title may not name every function. `task.py` caches claims
+  and the published list can lag behind PR updates, so appearing in `--list` or seeing no warning is insufficient.
+- If another contributor or agent owns the function, choose another function unless an explicit handoff has been
+  agreed with its owner. A stale claim needs confirmation before reuse. A PR under your own account may belong to
+  another active batch; verify the actual assignment rather than assuming ownership from the username.
+- Record the address, check time, claim owner and PR link (or that no claim/open PR was found) in the run notes.
+  If current ownership cannot be verified, leave the candidate unassigned until it can be checked.
+- Publish your own draft-PR claim before starting (step 3), and make sure every assigned address is covered by
+  the PR title or a diff the claims publisher indexes. An address only in the PR body is not indexed. Local queues
+  and reservations coordinate your agents but do not publish ownership to other contributors.
+
+For batches, the coordinator verifies ownership before assignment and each agent confirms that check before
+starting. Repeat it for every rotation and immediately before marking the PR ready. If a new overlap appears,
+pause work on that function and resolve ownership with the other contributor before proceeding. This avoids
+duplicate work and keeps the team effective.
+
+### Matching steps
+
 1. **Pick a function.** `.venv/bin/python tools/contrib/task.py --list --max-size 256` lists functions that already
    have complete C++ source whose bytes still differ, **fewest tries first, then smaller size bands first**: quick
    wins nobody has fought with yet come first. "Tries" counts how often the function's note was rewritten (from git
@@ -49,18 +75,20 @@ no match). You can run the same check locally (below) before you open the pull r
    earlier version of its note (what each person tried and how many bytes differed) and links any closed pull
    request for it: an attempt that was not merged still has its source there, so start from the closest one
    instead of from scratch.
-3. **Say you are on it.** Open a draft pull request early, titled with the address (`0x00529690: ...`). That is your
+3. **Say you are on it.** After the required ownership check above, open a draft pull request before starting,
+   titled with the address (`0x00529690: ...`). That is your
    claim: within minutes the function is listed in
    [`claims.txt`](https://raw.githubusercontent.com/NoahBPeterson/spore-decomp/claims/claims.txt) and drops out of
    everybody else's `task.py --list`, and `task.py <address>` warns anyone who looks it up. A claim lasts while the
-   pull request is open; one with no update for 7 days is stale and shows again. Before starting, check that
-   `task.py <address>` does not report someone else's claim.
+   pull request is open; one with no update for 7 days is stale and shows again. Reappearance in the list does
+   not establish that its owner has released it; confirm ownership before reuse.
 4. **Write, build, compare.** Edit the source, then `.venv/bin/python tools/contrib/check.py 0x00529690`. It prints
    `MATCH`, the compiler errors, or an instruction diff against the original. Before inventing source shapes, look
    up the difference in `docs/codegen.md`: most residual diffs are a known lever (`__restrict`, a single-expression
    virtual call, `_ReadWriteBarrier()`, declaration order, ...).
 5. **On MATCH**, `check.py` records it for you: it adds the function's `manifest.txt` line and removes its
-   `nonmatching.txt` (or `partial.txt`) line. Mark the pull request ready and fill in the template, including the
+   `nonmatching.txt` (or `partial.txt`) line. Recheck ownership for every included function, then mark the pull
+   request ready and fill in the template, including the
    model or tool that wrote the code. (`--dry-run` prints those changes instead of making them.) Once a pull request
    is marked ready, do not add commits to it; put new work in a new pull request. If a `manifest.txt` or
    `nonmatching.txt` line conflicts with `main` after another merge, rebase onto `main` and resolve it; never leave a

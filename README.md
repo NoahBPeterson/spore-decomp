@@ -29,11 +29,18 @@ sh tools/ci/setup_toolchain.sh             # the original compilers, from Micros
 
 .venv/bin/python tools/contrib/task.py --list          # fewest tries first, your own order; claimed ones hidden
 .venv/bin/python tools/contrib/task.py 0x00ee9260      # one function: its file, flags, note and source
+# Before starting: verify ownership and publish a draft-PR claim (AGENTS.md, required ownership check).
 .venv/bin/python tools/contrib/check.py 0x00ee9260     # MATCH, or an instruction diff against the original
 ```
 
-On `MATCH`, `check.py` updates the bookkeeping files itself; open a pull request with your change. One function (or a
-few) per pull request, using the template.
+Before analysis or edits, check each address against current claims and open PRs, including drafts, following the
+[required ownership check](AGENTS.md#required-verify-function-claim-ownership-before-starting). Choose another function
+if it is already owned, unless its owner has agreed to a handoff. Publish your draft-PR claim before starting;
+repeat the check on every candidate rotation and before marking the PR ready. Local reservations alone do not
+claim a function publicly.
+
+On `MATCH`, `check.py` updates the bookkeeping files itself; update your draft pull request with the change. One
+function (or a few) per pull request, using the template.
 
 **If you are an AI agent:** read [`AGENTS.md`](AGENTS.md) first and follow it. The short version:
 - Only `src/game/`, `match/slices/` and `match/include/` may change. Never commit anything from `work/`.
