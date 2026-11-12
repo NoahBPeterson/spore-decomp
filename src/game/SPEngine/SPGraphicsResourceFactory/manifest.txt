@@ -36,13 +36,3 @@
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Func76a300@@YIDPAXHH@Z  0076a300  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Init@Ctor764760@@QAEPAU1@I@Z  00764760  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Complete@Loader@@QAE_NPAD@Z  007649f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?RasterReadJob@@YAXHPAULoader@@@Z  007646f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?RasterGimexReadJob@@YAXHPAULoader@@@Z  00764700  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?LoadFinishedJob@@YA_NPADPAULoader@@@Z  00765180  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?PreStreamJob@@YA_NHPAULoader@@@Z  00765190  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Job7651a0@@YAXHPAULoader29@@@Z  007651a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Job7651b0@@YAXHPAULoaderF0@@@Z  007651b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Job7651c0@@YAXHPAULoader29@@@Z  007651c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?PNGWriteJob@@YA_NAAVcJob@SP@@PAVcGraphicsResourceFactory@2@@Z  00766940  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?ReadDecalBlockJob@@YA_NHPAUReader@@@Z  00767330  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?PaintDecalsJob@@YA_NPAXPAUTerrainSphere@@@Z  00767340  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

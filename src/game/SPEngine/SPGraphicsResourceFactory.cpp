@@ -581,9 +581,9 @@ struct JobLockL {
     JobLockL(IJobMgr* x) : m(x) { m->Lock(); }
     ~JobLockL() { m->Unlock(); }
 };
-void __cdecl Job7651a0(int, Loader29*);                // 0x007651a0
-void __cdecl Job7651b0(int, LoaderF0*);                // 0x007651b0
-void __cdecl Job7651c0(int, Loader29*);                // 0x007651c0
+void __cdecl Job7651a0(void*);                // 0x007651a0
+void __cdecl Job7651b0(void*);                // 0x007651b0
+void __cdecl Job7651c0(void*);                // 0x007651c0
 struct IRef2 { virtual void v0(); virtual void Release(); virtual void v2(); virtual void* Query(uint32_t id); };   // slot 3 = Query
 struct ReqState {
     IRef2* a;                   // +0
@@ -3797,69 +3797,3 @@ bool __fastcall CreateResourceAsync(void* self, int, void* out, void* unused2, i
     (void)unused2;
     return true;
 }
-
-// cJob callbacks receive the job first and the bound request as user data.
-// Keep the request operations out of line, as in the retail callback adapters.
-#pragma inline_depth(0)
-
-// @ 0x007646f0
-void __cdecl RasterReadJob(int job, Loader* request)
-{
-    request->Wrap670(job);
-}
-
-// @ 0x00764700
-void __cdecl RasterGimexReadJob(int job, Loader* request)
-{
-    request->Wrap6a0(job);
-}
-
-// @ 0x00765180
-bool __cdecl LoadFinishedJob(char* job, Loader* request)
-{
-    return request->Complete(job);
-}
-
-// @ 0x00765190
-bool __cdecl PreStreamJob(int job, Loader* request)
-{
-    return request->Load820(job);
-}
-
-// @ 0x007651a0
-void __cdecl Job7651a0(int job, Loader29* request)
-{
-    request->WrapA50(job);
-}
-
-// @ 0x007651b0
-void __cdecl Job7651b0(int job, LoaderF0* request)
-{
-    request->Fn7650f0(job);
-}
-
-// @ 0x007651c0
-void __cdecl Job7651c0(int job, Loader29* request)
-{
-    request->WrapDf0(job);
-}
-
-// @ 0x00766940
-bool __cdecl PNGWriteJob(SP::cJob& job, SP::cGraphicsResourceFactory* factory)
-{
-    return factory->PNGWriteCallback(job);
-}
-
-// @ 0x00767330
-bool __cdecl ReadDecalBlockJob(int job, Reader* request)
-{
-    return request->ReadDecalBlock(job);
-}
-
-// @ 0x00767340
-bool __cdecl PaintDecalsJob(void* job, TerrainSphere* request)
-{
-    return request->RequestPaintDecalsFromModels(job);
-}
-
-#pragma inline_depth()
