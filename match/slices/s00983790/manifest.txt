@@ -13,3 +13,4 @@ slices/s00983790/s00983790.cpp  ?GetDrawable@IWinSlider@UTFWinControls@EA@@QAEPA
 slices/s00983790/s00983790.cpp  ?OnRebuild@WinSlider@UTFWinControls@EA@@QAE_NH@Z  009842e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00983790/s00983790.cpp  ?RenderComponent@WinSlider@UTFWinControls@EA@@QAEXHI@Z  00984340  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00983790/s00983790.cpp  ?PickComponent@WinSlider@UTFWinControls@EA@@UAEHMM@Z  00984410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?OnFocusChange@WinSlider@UTFWinControls@EA@@QAE_NHPAX@Z  00983f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -580,7 +580,7 @@ bool WinSlider::OnMouseMove(float x, float y, int flags) {
 bool WinSlider::OnFocusChange(int state, void* w) {
     if (state == 1) {
         SliderIWin* iw = this;
-        if (w != iw && hi != 0xff) {
+        if (w != iw && static_cast<signed char>(hi) != -1) {
             hi = 0xff;
             Invalidate();
         }
