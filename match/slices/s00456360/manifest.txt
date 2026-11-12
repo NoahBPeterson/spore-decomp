@@ -3,3 +3,4 @@ slices/s00456360/s00456360.cpp  ?construct@Elem32Copy@@QAEPAU1@PBUElem32@@@Z  00
 slices/s00456360/s00456360.cpp  ?DeletingDtor@RangeOwner@@QAEPAXI@Z  00456bb0  /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE
 slices/s00456360/s00456360.cpp  ?uninitialized_move_Elem32@@YAPAUElem32@@PAU1@00@Z  00457250  /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE
 slices/s00456360/s00456360.cpp  ?DoCreateNode@NodeAlloc@@QAEPADPBUNodeValue@@@Z  004572b0  /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE
+slices/s00456360/s00456360.cpp  ?copy_ref_backward@@YAPAPAURefObj@@PAPAU1@00@Z  004574c0  /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE

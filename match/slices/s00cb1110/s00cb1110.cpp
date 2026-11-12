@@ -7,6 +7,9 @@
 // the eastl layout: hash-functor base, bucket array, bucket count, element count, rehash policy.
 #include "types.h"
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 // EA allocator entry points (0x00f473a0 / 0x00f47380)
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
 void  operator delete[](void* p);
@@ -142,10 +145,11 @@ TraceCache* FUN_00cb1210(unsigned key)
 
     ht->Find(&it, &key);
     Node* const pNode = it.mpNode;
+    _ReadWriteBarrier();
     if (pNode == ht->mpBuckets[ht->mBucketCount]) {
         TraceCache* cache = ht->FindOrInsert(&key);
         FUN_00cadb50(cache);
         return cache;
     }
-    return (TraceCache*)((int)pNode + 4);
+    return &pNode->mValue.mTrace;
 }

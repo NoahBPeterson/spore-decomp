@@ -376,9 +376,11 @@ RefObj** copy_ref_backward(RefObj** first, RefObj** last, RefObj** dst)
 {
     while (last != first) {
         --last; --dst;
-        RefObj* p = *last;
+        RefObj* p;
+        RefObj* old;
+        p = *last;
         if (p != *dst) {
-            RefObj* old = *dst;
+            old = *dst;
             if (p) p->AddRef();
             *dst = p;
             if (old) old->Release();
