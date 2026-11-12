@@ -272,6 +272,12 @@ struct PropTree {
     void Nuke(void* node);                          // 0x9a9600
     void Insert(const void* first, const void* last, void* out);  // 0xa17a70
 };
+// Retail IConfiguration prefix; the canonical interface still has unnamed slots.
+struct ConfigurationMembership {
+    virtual int AddRef();
+    virtual int Release();
+    virtual bool IncludesConfiguration(unsigned int key);
+};
 struct ResourceConfiguration_s00a1_7690 {
     uint8_t m[0x100];
 
@@ -279,7 +285,7 @@ struct ResourceConfiguration_s00a1_7690 {
 
     void ctor();                                             // 0xa17be0
     void dtor();                                             // 0xa17910
-    int  IncludesConfiguration(void* key);                   // 0xa176c0
+    int  IncludesConfiguration(unsigned int key);          // 0xa176c0
     bool GetPropertyAsBool(uint32_t key, uint8_t* out);      // 0xa176f0
     bool GetPropertyAsInt(uint32_t key, int32_t* out);       // 0xa17730
     bool GetPropertyAsUint32(uint32_t key, uint32_t* out);   // 0xa17770
@@ -400,12 +406,17 @@ int __stdcall FactoryConfiguration_s00a1_7690::GetSupportedTypes(uint32_t* out, 
 }
 
 // @ 0x00a176c0
-int ResourceConfiguration_s00a1_7690::IncludesConfiguration(void* key)
+int ResourceConfiguration_s00a1_7690::IncludesConfiguration(unsigned int key)
 {
-    if (key != *(void**)(m - 0xc)) {
-        void* p = *(void**)(m + 0x28);
-        if (p != 0) {
-            if (((bool(__thiscall*)(void*, void*))VtOf((char*)p + 0x14)[2])((char*)p + 0x14, key))
+    // This entry receives the non-null IConfiguration subobject at owner + 0x14.
+    __assume(this != 0);
+    EA::Audio::ResourceConfiguration& owner = static_cast<EA::Audio::ResourceConfiguration&>(
+        reinterpret_cast<EA::Audio::IConfiguration&>(*this));
+    if (key != owner.mKey.mInstance) {
+        EA::Audio::ResourceConfiguration* parent = owner.mParent.mpObject;
+        if (parent != 0) {
+            EA::Audio::IConfiguration* config = parent;
+            if (reinterpret_cast<ConfigurationMembership*>(config)->IncludesConfiguration(key))
                 return 1;
         }
         return 0;
