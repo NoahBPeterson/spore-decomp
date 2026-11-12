@@ -34,3 +34,4 @@
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?FUN_00bff6e0@CommodityNode@@QAEXH@Z  00bff6e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?FUN_00bff750@CommodityNode@@QAEXXZ  00bff750  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?GetScaledFloat@cCommunity_s00bf_d9f0@@QAEMXZ  00bfdf00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bf0000.cpp  ?LoadModel@cCommunity_s00bf_d9f0@@QAE_NPAX@Z  00bfe690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

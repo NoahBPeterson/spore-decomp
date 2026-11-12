@@ -360,30 +360,37 @@ void RelCity::BuildRelationshipString(void* out)
 // 0x00bdf3e0 -- eastl::vector<cEmptyBubble,sp_vector_allocator>::push_back()
 // ecx = vector; 0x14-byte elements, +0xc/+0x10 zeroed.
 // ===========================================================================
-struct BubbleVec {
-    char* mpBegin;                  // +0x0
-    char* mpEnd;                    // +0x4
-    char* mpCapacity;               // +0x8
-    void push_back();
+struct EmptyBubble_s00bd_ee20 {
+    float mCenter[3];               // +0x00, left uninitialized by the default constructor
+    float mRadius;                  // +0x0c
+    uint32_t mSourceID;              // +0x10
 };
-void* __stdcall FUN_00bde910(void* pos, void* value);            // DoInsertValue
+typedef char EmptyBubbleSize_s00bd_ee20[(sizeof(EmptyBubble_s00bd_ee20) == 0x14) ? 1 : -1];
+
+struct BubbleVec {
+    EmptyBubble_s00bd_ee20* mpBegin;    // +0x0
+    EmptyBubble_s00bd_ee20* mpEnd;      // +0x4
+    EmptyBubble_s00bd_ee20* mpCapacity; // +0x8
+    void push_back();
+    void DoInsertValue(EmptyBubble_s00bd_ee20* pos, const EmptyBubble_s00bd_ee20& value); // 0x00bde910, thiscall, ret 8
+};
 
 // @ 0x00bdf3e0
 void BubbleVec::push_back()
 {
-    char* end = mpEnd;
+    EmptyBubble_s00bd_ee20* end = mpEnd;
     if (end < mpCapacity) {
-        mpEnd = end + 0x14;
+        mpEnd = end + 1;
         if (end != 0) {
-            *(float*)(end + 0x0c) = 0.0f;
-            *(uint32_t*)(end + 0x10) = 0;
+            end->mRadius = 0.0f;
+            end->mSourceID = 0;
         }
         return;
     }
-    struct { uint32_t pad[3]; float f; uint32_t u; } tmp;
-    tmp.f = 0.0f;
-    tmp.u = 0;
-    FUN_00bde910(end, &tmp);
+    EmptyBubble_s00bd_ee20 tmp;
+    tmp.mRadius = 0.0f;
+    tmp.mSourceID = 0;
+    DoInsertValue(end, tmp);
 }
 
 // ===========================================================================
