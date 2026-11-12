@@ -1,6 +1,5 @@
 00e84850 97 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 90 bytes - layout-name range init: the zero fill, RangeInitialize(len+1), memcpy(mpBegin,first,len), end pointer, NUL and the +0x10/+0x14 copies all match, but retail spills last and the length into the dead argument slot and a push-ecx scratch slot (and caches first/last in ebx/eax) which this source shape does not reproduce (90 vs 97).
 00e84a20 244 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 244 bytes - UI layout helper not reconstructed.
-00e84b20 193 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 193 bytes - UI layout helper not reconstructed.
 00e84bf0 137 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 137 bytes - UI layout helper not reconstructed.
 00e84c80 262 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 262 bytes - UI layout helper not reconstructed.
 00e84d90 166 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 166 bytes - UI layout helper not reconstructed.
