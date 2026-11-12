@@ -60,6 +60,20 @@ typedef char HashNode18BeginCheck[(offsetof(HashNode18, mValue) + offsetof(WStri
 typedef char HashNode18CapCheck[(offsetof(HashNode18, mValue) + offsetof(WString, mpCap)) == 0xc ? 1 : -1];
 typedef char HashNode18NextCheck[offsetof(HashNode18, mpNext) == 0x14 ? 1 : -1];
 
+// A 0x20-byte resource-key map node with its string payload and chain link.
+struct HashNode20 {
+    Key mKey;                  // +0x00
+    WString mValue;             // +0x0c
+    uint32 mUnknown18;          // +0x18
+    HashNode20* mpNext;         // +0x1c
+};
+typedef char HashNode20KeyCheck[sizeof(Key) == 0xc ? 1 : -1];
+typedef char HashNode20SizeCheck[sizeof(HashNode20) == 0x20 ? 1 : -1];
+typedef char HashNode20ValueCheck[offsetof(HashNode20, mValue) == 0xc ? 1 : -1];
+typedef char HashNode20BeginCheck[(offsetof(HashNode20, mValue) + offsetof(WString, mpBegin)) == 0xc ? 1 : -1];
+typedef char HashNode20CapCheck[(offsetof(HashNode20, mValue) + offsetof(WString, mpCap)) == 0x14 ? 1 : -1];
+typedef char HashNode20NextCheck[offsetof(HashNode20, mpNext) == 0x1c ? 1 : -1];
+
 // eastl::basic_string<wchar_t>::assign(begin, end) - 0x00423650.
 struct WStringAsgn {
     void assign(const void* pBegin, const void* pEnd);
@@ -673,12 +687,12 @@ void HashTable::DoFreeNodes18(void** pBucketArray, uint32 nCount)
 void HashTable::DoFreeNodes20(void** pBucketArray, uint32 nCount)
 {
     for (uint32 i = 0; i < nCount; ++i) {
-        char* p = (char*)pBucketArray[i];
+        HashNode20* p = (HashNode20*)pBucketArray[i];
         while (p) {
-            char* const pNode = p;
-            void* pBegin = *(void**)(pNode + 0xc);
-            uint32 nEnd = *(uint32*)(pNode + 0x14);
-            p = *(char**)(pNode + 0x1c);
+            HashNode20* const pNode = p;
+            p = pNode->mpNext;
+            void* pBegin = pNode->mValue.mpBegin;
+            uint32 nEnd = (uint32)pNode->mValue.mpCap;
             int nBytes = (int)(nEnd - (uint32)pBegin) & (int)0xfffffffeu;
             if (nBytes > 2 && pBegin)
                 operator delete(pBegin);
