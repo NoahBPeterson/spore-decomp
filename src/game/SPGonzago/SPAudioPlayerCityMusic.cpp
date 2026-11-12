@@ -1788,20 +1788,26 @@ void cFloatVec::FUN_00eadf40(float* pos, float* value)
 // @ 0x00eae010
 int* __cdecl FUN_00eae010(void* first, void* last, int* out)
 {
-    while (first != last) {
-        *out++ = ((int*)first)[2];
-        first = *(void**)first;
-    }
+    void* current = first;
+    do {
+        if (current == last)
+            break;
+        *out++ = ((int*)current)[2];
+        current = *(void**)current;
+    } while (current != last);
     return out;
 }
 
 // @ 0x00eae040
 int* __cdecl FUN_00eae040(void* first, void* last, int* out)
 {
-    while (last != first) {
-        last = *(void**)((char*)last + 4);
-        *--out = ((int*)last)[2];
-    }
+    void* current = last;
+    do {
+        if (current == first)
+            break;
+        current = *(void**)((char*)current + 4);
+        *--out = ((int*)current)[2];
+    } while (current != first);
     return out;
 }
 
