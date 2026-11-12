@@ -4787,15 +4787,25 @@ float __cdecl FUN_00d7ae20(CB* cb, int, int, uint, void* st, char* out)
   return 0.0f;
 }
 
+// The state reset at 0x00d997e0 initializes all 0x28 bytes of this view.
+struct TargetState_s00d7_ae80 {
+  uint32_t mUnknown00;
+  void* mpTarget04;
+  uint32_t mUnknown08[8];
+  TargetState_s00d7_ae80* Reset();          // 0x00d997e0
+};
+typedef char TargetState_s00d7_ae80_size[(sizeof(TargetState_s00d7_ae80) == 0x28) ? 1 : -1];
+typedef char TargetState_s00d7_ae80_target[(offsetof(TargetState_s00d7_ae80, mpTarget04) == 4) ? 1 : -1];
+
 // @ 0x00d7ae80
 float __cdecl FUN_00d7ae80(CB* cb, int, int, uint, void* st, char* out)
 {
   CB* m = (CB*)FUN_00d999d0((void*)BS(cb)->Play(0, 8));
   if (m != 0) {
-    if (st != 0) ((Stimuli*)st)->GetAny();
-    void* p = &m->mStim5a8;
+    if (st != 0) ((TargetState_s00d7_ae80*)st)->Reset();
+    void* __restrict p = &m->mStim5a8;
     *out = 1;
-    *(void**)((char*)st + 4) = p;
+    ((TargetState_s00d7_ae80*)st)->mpTarget04 = p;
     return 1.0f;
   }
   return 0.0f;
