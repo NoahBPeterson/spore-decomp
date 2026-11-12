@@ -2193,3 +2193,117 @@ SP::tUniversePair* __thiscall SP::cUniversePairVector::Insert(SP::tUniversePair*
 void __cdecl UniverseEventMapIndex()
 {
 }
+
+// Universe event identifiers, named from the recovered event interfaces.
+namespace SP {
+class WarAttackEvent {
+public:
+    virtual uint32_t GetEventID();
+};
+
+// @ 0x0100d480
+uint32_t WarAttackEvent::GetEventID()
+{
+    return 0x1f87101b;
+}
+
+class GrobTeaseRaidEvent {
+public:
+    virtual uint32_t GetEventID();
+};
+
+// @ 0x0100d490
+uint32_t GrobTeaseRaidEvent::GetEventID()
+{
+    return 0x633f7dcf;
+}
+
+class PirateRaidEvent {
+public:
+    virtual uint32_t GetEventID();
+};
+
+// @ 0x0100d4a0
+uint32_t PirateRaidEvent::GetEventID()
+{
+    return 0x4e2c760a;
+}
+
+class PirateRaidPlunderEvent {
+public:
+    virtual uint32_t GetEventID();
+};
+
+// @ 0x0100d4b0
+uint32_t PirateRaidPlunderEvent::GetEventID()
+{
+    return 0x1d48fcc0;
+}
+
+class PirateRaidAllyEvent {
+public:
+    virtual uint32_t GetEventID();
+};
+
+// @ 0x0100d4c0
+uint32_t PirateRaidAllyEvent::GetEventID()
+{
+    return 0xb012d618;
+}
+
+class ArtifactEvent {
+public:
+    virtual uint32_t GetEventID();
+};
+
+// @ 0x0100d4d0
+uint32_t ArtifactEvent::GetEventID()
+{
+    return 0xeec211a9;
+}
+
+class BiosphereCollapseEvent {
+public:
+    virtual uint32_t GetEventID();
+};
+
+// @ 0x0100d4e0
+uint32_t BiosphereCollapseEvent::GetEventID()
+{
+    return 0x92a2072d;
+}
+
+class HappinessDisasterEvent {
+public:
+    virtual uint32_t GetEventID();
+};
+
+// @ 0x0100d4f0
+uint32_t HappinessDisasterEvent::GetEventID()
+{
+    return 0xab39b957;
+}
+
+class GenericDisaster {
+public:
+    virtual uint32_t GetEventID();
+};
+
+// @ 0x0100d550
+uint32_t GenericDisaster::GetEventID()
+{
+    return 0x8482335d;
+}
+
+class GrobWarAttackEvent {
+public:
+    virtual uint32_t GetEventID();
+};
+
+// @ 0x0100d950
+uint32_t GrobWarAttackEvent::GetEventID()
+{
+    return 0x284598e7;
+}
+
+} // namespace SP
