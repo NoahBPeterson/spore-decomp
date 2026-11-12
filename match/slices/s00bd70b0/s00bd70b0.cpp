@@ -6,6 +6,7 @@
 
 #include "types.h"
 #include <intrin.h>
+#include <stddef.h>
 
 #pragma warning(disable: 4100)
 
@@ -256,7 +257,16 @@ struct Sim {
     void  FUN_00bd7f70(int* p2, float* p3);
     bool  FUN_00bd7fc0(int p2);
     bool  FUN_00bd7c60(int p1);
+
+    // Partial retail prefix used by the upgrade-selection predicate.
+    void** mpVtable;
+    uint32_t mUnknown04[(0x758 - 4) / 4];
+    float mUpgradeMeter_758;
+    int mSelection_75c;
 };
+typedef char SimUpgradeMeterOffset[(offsetof(Sim, mUpgradeMeter_758) == 0x758) ? 1 : -1];
+typedef char SimSelectionOffset[(offsetof(Sim, mSelection_75c) == 0x75c) ? 1 : -1];
+typedef char SimPrefixSize[(sizeof(Sim) == 0x760) ? 1 : -1];
 
 // ===========================================================================
 // @ 0x00bd75f0 — if the message noun is a cheat-handler, respawn the cheat.
@@ -675,13 +685,14 @@ void Sim::FUN_00bd7f70(int* param_2, float* param_3)
 // ===========================================================================
 bool Sim::FUN_00bd7fc0(int param_2)
 {
-    int* param_1 = (int*)this;
-    int v = ((Fn_i_v)*(void**)(*param_1 + 0x4c))((void*)param_1);
-    if (((param_2 != v) && (param_2 == param_1[0x1d7])) &&
-        (*(float*)((char*)param_1 + 0x758) >= 100.0f)) {
-        return true;
-    }
-    return false;
+    int v = ((Fn_i_v)mpVtable[0x4c / 4])(this);
+    if (param_2 == v)
+        return false;
+    if (param_2 != mSelection_75c)
+        return false;
+    if (100.0f > mUpgradeMeter_758)
+        return false;
+    return true;
 }
 
 // ===========================================================================
