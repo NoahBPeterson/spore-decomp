@@ -286,6 +286,9 @@ cSPMissionManager* __stdcall GetMissionManagerOf(void* pOwner, void* pUnused); /
 namespace SP {
 class cSPMissionManager {
 public:
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
+    virtual void SetMissionProperty(uint32_t missionId, uint32_t key, void** out); // +0x2c
+
     bool FUN_00febf80();                                // 0x00febf80
     bool IsCompletedFeedbackActive();                   // 0x00febe50
     void Event();                                       // 0x00fecbb0
@@ -3019,6 +3022,13 @@ namespace SP {
 void __thiscall cSPMission_s00c4_6ab0::SetMissionID(uint32_t missionId)
 {
     mMissionId = missionId;
+    cSPMissionManager* pManager = GetMissionManagerNoArg();
+    cGameData* pOldProperty = (cGameData*)mpMissionKey;
+    if (pOldProperty) {
+        mpMissionKey = 0;
+        pOldProperty->Release();
+    }
+    pManager->SetMissionProperty(missionId, 0x02ae1a8e, (void**)&mpMissionKey);
 }
 }  // namespace SP
 
