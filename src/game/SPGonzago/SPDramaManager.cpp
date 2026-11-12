@@ -16,6 +16,7 @@
 #include "SP/cVarListSerializer.h"
 #include "SP/cViewer.h"
 #include "SP/cITerrainSphere.h"
+#include "EA/COM/IFactory.h"
 #include <math.h>
 #include <intrin.h>
 
@@ -4105,3 +4106,188 @@ void init_1583b00()
     a.mLocation = 0x6c;
     g_mateBehaviourAttributes[7] = a;
 }
+
+// Drama-event COM factory introspection. The returned names identify each event;
+// the factory and method names follow the recovered BasicFactory/IFactory interface.
+namespace SP {
+class BasicFactory_cTribeFoodRaidEvent : public EA::COM::IFactory {
+public:
+    virtual unsigned int GetClassIds(EA::COM::ClassId* ids, unsigned int capacity);
+    virtual const char* GetClassNameById(EA::COM::ClassId id);
+};
+
+// @ 0x00d4ad10
+unsigned int BasicFactory_cTribeFoodRaidEvent::GetClassIds(EA::COM::ClassId* ids, unsigned int capacity)
+{
+    if (ids != 0 && capacity != 0)
+        ids[0] = (EA::COM::ClassId)0x5599d0c;
+    return 1;
+}
+
+// @ 0x00d4ad30
+const char* BasicFactory_cTribeFoodRaidEvent::GetClassNameById(EA::COM::ClassId)
+{
+    return "cTribeFoodRaidEvent";
+}
+
+class BasicFactory_cNightPredatorEvent : public EA::COM::IFactory {
+public:
+    virtual unsigned int GetClassIds(EA::COM::ClassId* ids, unsigned int capacity);
+    virtual const char* GetClassNameById(EA::COM::ClassId id);
+};
+
+// @ 0x00d4ad40
+unsigned int BasicFactory_cNightPredatorEvent::GetClassIds(EA::COM::ClassId* ids, unsigned int capacity)
+{
+    if (ids != 0 && capacity != 0)
+        ids[0] = (EA::COM::ClassId)0x5599e3b;
+    return 1;
+}
+
+// @ 0x00d4ad60
+const char* BasicFactory_cNightPredatorEvent::GetClassNameById(EA::COM::ClassId)
+{
+    return "cNightPredatorEvent";
+}
+
+class BasicFactory_cUFOAbductionEvent : public EA::COM::IFactory {
+public:
+    virtual unsigned int GetClassIds(EA::COM::ClassId* ids, unsigned int capacity);
+    virtual const char* GetClassNameById(EA::COM::ClassId id);
+};
+
+// @ 0x00d4ad70
+unsigned int BasicFactory_cUFOAbductionEvent::GetClassIds(EA::COM::ClassId* ids, unsigned int capacity)
+{
+    if (ids != 0 && capacity != 0)
+        ids[0] = (EA::COM::ClassId)0x5599ec7;
+    return 1;
+}
+
+// @ 0x00d4ad90
+const char* BasicFactory_cUFOAbductionEvent::GetClassNameById(EA::COM::ClassId)
+{
+    return "cUFOAbductionEvent";
+}
+
+class BasicFactory_cMeteorStrikeEvent : public EA::COM::IFactory {
+public:
+    virtual unsigned int GetClassIds(EA::COM::ClassId* ids, unsigned int capacity);
+    virtual const char* GetClassNameById(EA::COM::ClassId id);
+};
+
+// @ 0x00d4ada0
+unsigned int BasicFactory_cMeteorStrikeEvent::GetClassIds(EA::COM::ClassId* ids, unsigned int capacity)
+{
+    if (ids != 0 && capacity != 0)
+        ids[0] = (EA::COM::ClassId)0x5599f00;
+    return 1;
+}
+
+// @ 0x00d4adc0
+const char* BasicFactory_cMeteorStrikeEvent::GetClassNameById(EA::COM::ClassId)
+{
+    return "cMeteorStrikeEvent";
+}
+
+class BasicFactory_cBabyGameEvent : public EA::COM::IFactory {
+public:
+    virtual unsigned int GetClassIds(EA::COM::ClassId* ids, unsigned int capacity);
+    virtual const char* GetClassNameById(EA::COM::ClassId id);
+};
+
+// @ 0x00d4add0
+unsigned int BasicFactory_cBabyGameEvent::GetClassIds(EA::COM::ClassId* ids, unsigned int capacity)
+{
+    if (ids != 0 && capacity != 0)
+        ids[0] = (EA::COM::ClassId)0x5599f34;
+    return 1;
+}
+
+// @ 0x00d4adf0
+const char* BasicFactory_cBabyGameEvent::GetClassNameById(EA::COM::ClassId)
+{
+    return "cBabyGameEvent";
+}
+
+class BasicFactory_cRainStormEvent : public EA::COM::IFactory {
+public:
+    virtual unsigned int GetClassIds(EA::COM::ClassId* ids, unsigned int capacity);
+    virtual const char* GetClassNameById(EA::COM::ClassId id);
+};
+
+// @ 0x00d4ae00
+unsigned int BasicFactory_cRainStormEvent::GetClassIds(EA::COM::ClassId* ids, unsigned int capacity)
+{
+    if (ids != 0 && capacity != 0)
+        ids[0] = (EA::COM::ClassId)0x5599f5a;
+    return 1;
+}
+
+// @ 0x00d4ae20
+const char* BasicFactory_cRainStormEvent::GetClassNameById(EA::COM::ClassId)
+{
+    return "cRainStormEvent";
+}
+
+class BasicFactory_cSeaMonsterEvent : public EA::COM::IFactory {
+public:
+    virtual unsigned int GetClassIds(EA::COM::ClassId* ids, unsigned int capacity);
+    virtual const char* GetClassNameById(EA::COM::ClassId id);
+};
+
+// @ 0x00d4ae30
+unsigned int BasicFactory_cSeaMonsterEvent::GetClassIds(EA::COM::ClassId* ids, unsigned int capacity)
+{
+    if (ids != 0 && capacity != 0)
+        ids[0] = (EA::COM::ClassId)0x5599f83;
+    return 1;
+}
+
+// @ 0x00d4ae50
+const char* BasicFactory_cSeaMonsterEvent::GetClassNameById(EA::COM::ClassId)
+{
+    return "cSeaMonsterEvent";
+}
+
+class BasicFactory_cCreatureAttackEvent : public EA::COM::IFactory {
+public:
+    virtual unsigned int GetClassIds(EA::COM::ClassId* ids, unsigned int capacity);
+    virtual const char* GetClassNameById(EA::COM::ClassId id);
+};
+
+// @ 0x00d4ae60
+unsigned int BasicFactory_cCreatureAttackEvent::GetClassIds(EA::COM::ClassId* ids, unsigned int capacity)
+{
+    if (ids != 0 && capacity != 0)
+        ids[0] = (EA::COM::ClassId)0x5ed29d9;
+    return 1;
+}
+
+// @ 0x00d4ae80
+const char* BasicFactory_cCreatureAttackEvent::GetClassNameById(EA::COM::ClassId)
+{
+    return "cCreatureAttackEvent";
+}
+
+class BasicFactory_cSummonCreatureEvent : public EA::COM::IFactory {
+public:
+    virtual unsigned int GetClassIds(EA::COM::ClassId* ids, unsigned int capacity);
+    virtual const char* GetClassNameById(EA::COM::ClassId id);
+};
+
+// @ 0x00d4ae90
+unsigned int BasicFactory_cSummonCreatureEvent::GetClassIds(EA::COM::ClassId* ids, unsigned int capacity)
+{
+    if (ids != 0 && capacity != 0)
+        ids[0] = (EA::COM::ClassId)0x609eedf;
+    return 1;
+}
+
+// @ 0x00d4aeb0
+const char* BasicFactory_cSummonCreatureEvent::GetClassNameById(EA::COM::ClassId)
+{
+    return "cSummonCreatureEvent";
+}
+
+} // namespace SP
