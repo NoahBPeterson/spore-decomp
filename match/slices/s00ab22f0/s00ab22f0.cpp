@@ -114,16 +114,35 @@ void Notice::NotifySet(int value)
     ((Obj*)((char*)this - 8))->Fn(idx);
 }
 
+// The shared 0x20-byte registration record at 0x01675ed0. The words at
+// +0x04 and +0x10 are populated elsewhere; this initializer preserves them.
+void InitializeRibbonModule(char flag);                                // 0x00aae8c0
+void* CreateRibbonComponent(void* world, void* manager);                // 0x00ab17e0
+void* CreateRibbonDescription(void* stream, int version);               // 0x00ab28c0
+int CollectRibbonResources(int context, int description,
+                           uint32_t* records, int capacity);           // 0x00aa8d30
+struct RibbonRegistration {
+    void (*initialize)(char);                                           // +0x00
+    uint32_t reserved04;
+    void* (*createComponent)(void*, void*);                             // +0x08
+    void* (*createDescription)(void*, int);                             // +0x0c
+    uint32_t reserved10;
+    int (*collectResources)(int, int, uint32_t*, int);                   // +0x14
+    int defaultValue18;                                                 // +0x18
+    int defaultValue1c;                                                 // +0x1c
+};
+extern RibbonRegistration gRibbonRegistration;                         // 0x01675ed0
+
 // @ 0x00ab2910
 int FUN_00ab2910()
 {
     int v = 1;
-    *(int*)0x01675ed0 = 0x00aae8c0;
-    *(int*)0x01675ed8 = 0x00ab17e0;
-    *(int*)0x01675edc = 0x00ab28c0;
-    *(int*)0x01675ee4 = 0x00aa8d30;
-    *(int*)0x01675ee8 = v;
-    *(int*)0x01675eec = v;
+    gRibbonRegistration.initialize = InitializeRibbonModule;
+    gRibbonRegistration.createComponent = CreateRibbonComponent;
+    gRibbonRegistration.createDescription = CreateRibbonDescription;
+    gRibbonRegistration.collectResources = CollectRibbonResources;
+    gRibbonRegistration.defaultValue18 = v;
+    gRibbonRegistration.defaultValue1c = v;
     return v;
 }
 
