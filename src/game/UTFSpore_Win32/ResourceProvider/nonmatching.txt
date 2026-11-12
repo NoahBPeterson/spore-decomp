@@ -11,7 +11,6 @@
 008feef0 128 Resolve (scheme lookup): complete; temp-slot reuse (alloc tag and key share a slot in original) differs; difftest PASS (operator_delete__, gSep1/gSep2 annotated; needs --inputs 2000 --alias 0.3 for 75.7% coverage) flags: /O2 /MD /Gy /TP /GS- /arch:SSE2
 008fefb0 189 protocol hashtable erase(key): complete; loop/register differences flags: /O2 /MD /Gy /TP /GS- /arch:SSE2
 008ff0b0 67 vector copy ctor: complete; register allocation differs flags: /O2 /MD /Gy /TP /GS- /arch:SSE2
-008ff110 1 bucket free: original copies node to edi before loading p8 (first two insns swapped); also tried a separate `BucketNode* next = p->p1c` local and moving the p8 load relative to the p1c load, but cl still folds the p8 load to `[esi+8]` instead of `[edi+8]` (cur and p are known equal). difftest PASS with --inputs 800 (operator_delete__ annotated 0x00f47380) flags: /O2 /MD /Gy /TP /GS- /arch:SSE2
 008ff170 104 CreateResource: complete; register choice for mime string temp differs; difftest PASS (gEmptyStr/gDefaultMsg annotated) flags: /O2 /MD /Gy /TP /GS- /arch:SSE2
 008ff270 134 Register handlers: complete; ebx/edi allocation and flag load order differ flags: /O2 /MD /Gy /TP /GS- /arch:SSE2
 008ff320 63 vector_map find: complete; original keeps this in esi flags: /O2 /MD /Gy /TP /GS- /arch:SSE2

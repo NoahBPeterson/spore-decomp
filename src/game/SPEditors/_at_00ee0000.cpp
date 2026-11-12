@@ -6545,7 +6545,10 @@ void View::OnAssetChanged(void* pChanged)
         do {
             IWinObj* v = (IWinObj*)(*it)->mWinA;
             if (v != 0 && (void*)v != pChanged) {
-                IWinObj* q = (IWinObj*)v->AsInterface(0x8ed27e7a);
+                typedef void* (__thiscall* AsInterfaceFunction)(IWinObj*, uint32_t);
+                void** vtable = *(void***)v;
+                _ReadWriteBarrier();
+                IWinObj* q = (IWinObj*)((AsInterfaceFunction)vtable[3])(v, 0x8ed27e7a);
                 if (q != 0) {
                     q->Cmd(4, 0);
                 }

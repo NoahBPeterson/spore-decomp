@@ -1,10 +1,24 @@
 // Unoptimized (/Od /Ob1) functions of slice s013ac650: global virtual cleanups and rbtree destructors.
 
+#include "game/types.h"
+#include "cSPUILayout.h"
+
 // ---- virtual cleanups
-struct VI { virtual void s0(); virtual void s1(); virtual void s2(); };
-extern VI* g_015d2dbc;
+// The existing initializer at 0x01226f30 owns this global and registers the
+// cleanup below. Keep the release in the global holder's inline boundary.
+template <class T> class AutoRefCount {
+public:
+    T* mpObject;
+    void ReleaseForDestruction() {
+        if (mpObject)
+            mpObject->Release();
+    }
+};
+extern AutoRefCount<cSPUILayout> g_layout; // 0x015d2dbc
 // @ 0x013BCA50
-void FUN_013bca50() { if (g_015d2dbc) g_015d2dbc->s2(); }
+void FUN_013bca50() { g_layout.ReleaseForDestruction(); }
+
+struct VI { virtual void s0(); virtual void s1(); virtual void s2(); };
 extern VI* g_015de138;
 // @ 0x013BCD30
 void FUN_013bcd30() { if (g_015de138) g_015de138->s1(); }

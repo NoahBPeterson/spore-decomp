@@ -24,3 +24,4 @@
 ../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9d800@@YAXPAX@Z  00d9d800  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9d890@S@@QAEXPAH0@Z  00d9d890  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00d90000.cpp  ?FinishBehaviorTask@@YAXPAVcSimCreature@@PAX111PAUcBehaviorCallback@@@Z  00d9e420  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00d90000.cpp  ?FUN_00d9b610@@YAXPAUCreature@@HHHHPAUDrainTimerMemory@@@Z  00d9b610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

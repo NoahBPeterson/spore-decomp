@@ -4,7 +4,6 @@
 00fd7660 161 RecordFrames loop
 00fd7750 110 cMovieLetterbox::Init refcount assignment + layout Init
 00fd7800 188 Shutdown: 5 message posts + layout release
-00fd7ab0 5 cContentValidationSummarizer Init returns this in eax (caller feeds AutoRefCount::operator=); base vtable store + zero-store scheduling differ
 00fd7b30 264 cMovieSystem constructor
 00fd7cd0 135 cMovieSystem destructor
 00fd8c40 155 `anonymous_namespace'::cMovieCheat::cMovieCheat: complete; the cCommandBase base ctor, the derived vtable store, the cArgumentSpec sub-object ctor and the full ConstructSpec argument list (all option pointers/flags/strings) are present in original order; remaining diff is register allocation and 4-byte frame slack. difftest: UNSUPPORTED (0/400 inputs valid; object-heavy). flags /O2 /MD /Gy /TP /arch:SSE

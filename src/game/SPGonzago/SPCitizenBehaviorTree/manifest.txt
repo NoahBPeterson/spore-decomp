@@ -42,3 +42,4 @@
 ../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?ArtifactHeld_Decide@CitizenTree@SP@@YAMPAVCitizen@2@@Z  00d946e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?RemoveFromCultureStageGroup@@YAXPAVCitizenTree_s00d9_7420@SP@@HPAVcSPCreatureCitizen_s00d9_7420@@@Z  00d97d40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?CultureAttack_Deactivate@@YAXPAVcSPCreatureCitizen_s00d9_7420@@HHHHPAUtCultureAttackInfo@@@Z  00d980e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?FUN_00d90ac0@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@PAUBehaviorStateOut@@@Z  00d90ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

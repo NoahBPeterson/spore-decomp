@@ -224,8 +224,15 @@ public:
     void StopRecordingMovie(unsigned int dtMs);      // 0x00fd7d80
     bool EndRecording();                             // 0x00fd7f80
 };
-struct cMovieLetterbox { void Init(); };             // 0x00fd7750
-struct cContentValidationSummarizer { cContentValidationSummarizer* Init(); };// 0x00fd7ab0
+struct cMovieLetterbox {
+    void* mpInterfaceTable;          // +0x00
+    void* mpRefCountTable;           // +0x04
+    int mnRefCount;                  // +0x08
+    IUILayoutObj* mpLayout;          // +0x0c
+    void Init();                    // 0x00fd7750
+    cMovieLetterbox* Construct();    // 0x00fd7ab0, returns the initialized receiver
+};
+typedef char MovieLetterboxSize[(sizeof(cMovieLetterbox) == 0x10) ? 1 : -1];
 IMessageServer* SP_MessageServer();                  // 0x0067dcc0
 ICheatManager*  SP_CheatManager();                   // 0x0067de20
 IHud*           FUN_0067dd50();                      // 0x0067dd50
@@ -732,15 +739,14 @@ void* cMovieSystem::GetSomething()
 }
 
 // @ 0x00fd7ab0
-cContentValidationSummarizer* cContentValidationSummarizer::Init()
+cMovieLetterbox* cMovieLetterbox::Construct()
 {
-    char* p = (char*)this;
-    *(void**)(p + 4) = (void*)0x13ec458;
+    mpRefCountTable = (void*)0x013ec458u;
+    mnRefCount = 0;
     _ReadWriteBarrier();
-    *(void**)(p + 8) = 0;
-    *(void**)p = (void*)0x14939f4;
-    *(void**)(p + 4) = (void*)0x14939e4;
-    *(void**)(p + 0xc) = 0;
+    mpInterfaceTable = (void*)0x014939f4u;
+    mpRefCountTable = (void*)0x014939e4u;
+    mpLayout = 0;
     return this;
 }
 

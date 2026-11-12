@@ -7,7 +7,6 @@
 00d7ac90 235 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: register allocation across the Play/GetSpeciesProfile chain differs; equiv FAIL reg-only ecx (untouched by the original, 5 valid inputs)
 00d7adc0 85 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: xmm product spilled differently before the vtable 0x58 float call; equiv UNSUPPORTED (no valid inputs: fake-arity)
 00d7ae20 13 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: lea vs add for the stimulus pointer plus an esi/edi swap; equiv WEAK (53% coverage)
-00d7ae80 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: add esi,0x5a8 where the original keeps lea eax,[esi+0x5a8]; equiv PASS
 00d7aed0 29 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: lea scheduled before push 1 and an edx/eax swap in the proximity vcall; equiv WEAK (31% coverage)
 00d7afb0 47 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: (f>>8)&1 folds to test imm instead of shr/test dl, exit blocks not merged; equiv PASS
 00d7b000 57 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: bit test and epilogue layout differ; equiv PASS

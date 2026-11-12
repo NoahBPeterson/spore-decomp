@@ -2079,7 +2079,7 @@ struct C_THISCALL {
   void* __thiscall FUN_00b20c60(int id);                         // 0xb20c60 CreateNoun
   void  __thiscall FUN_00b225d0(void* noun);                     // 0xb225d0 RemoveNoun
   int   __thiscall FUN_00c88a90(void* stream);                   // 0xc88a90 cSpatialObject::Write
-  unsigned char __thiscall FUN_00c8a550(void* arg);              // 0xc8a550 cSpatialObject::LoadModel
+  bool __thiscall FUN_00c8a550(void* arg);              // 0xc8a550 cSpatialObject::LoadModel
   void  __thiscall FUN_00c899a0(void* a);                        // 0xc899a0 cSpatialObject::func7Ch
   void  __thiscall FUN_00bc3130();                               // 0xbc3130 cSPTimer::Restart
   long long __thiscall FUN_00bc3190();                           // 0xbc3190 cSPTimer::GetElapsedTime (edx:eax)
@@ -2157,7 +2157,7 @@ struct cCommunity_s00bf_d9f0 {
   void  Deactivate();                                   // 0x00bfe4d0
   void  SetupScenery();                                 // 0x00bfe530
   unsigned char Read(void* arg);                        // 0x00bfe5d0
-  void  LoadModel(void* arg);                           // 0x00bfe690
+  bool  LoadModel(void* arg);                           // 0x00bfe690
   void  ReleaseTable();                                 // 0x00bfe6c0
   void  SpawnAt(float* pos);                            // 0x00bfe900
   void  Teardown();                                     // 0x00bfea10
@@ -6848,13 +6848,21 @@ unsigned char cCommunity_s00bf_d9f0::Read(void* arg)
   return ok;
 }
 
+struct CommunityModelFlagsView {
+  void* mWorld;                     // +0x00, cMWObject prefix
+  unsigned mFlags;                  // +0x04
+};
+
 // @ 0x00bfe690
-void cCommunity_s00bf_d9f0::LoadModel(void* arg)
+bool cCommunity_s00bf_d9f0::LoadModel(void* arg)
 {
-  if (((C_THISCALL*)this)->FUN_00c8a550(arg)) {
-    void* p = *(void**)((char*)this + 0x9c);
-    if (p) *(unsigned*)((char*)p + 4) |= 4;
+  bool loaded = ((C_THISCALL*)this)->FUN_00c8a550(arg);
+  if (loaded) {
+    CommunityModelFlagsView* model = (CommunityModelFlagsView*)m9c;
+    if (model)
+      model->mFlags |= 4;
   }
+  return loaded;
 }
 
 // @ 0x00bfe6c0
