@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "cSPUITooltipWinProc.h"
 #include "cSPUILayout.h"
 
@@ -173,6 +174,7 @@ struct cSPUITooltipWinProc_s0083_56e0 : CustomWinProc {
                         float* offset, uint32_t behavior, const wchar_t* detail,
                         uint32_t detailWindowID);
     ~cSPUITooltipWinProc_s0083_56e0();
+    void Destroy();
     void SetText(const wchar_t* text, void* data, char bImmediate);  // 0x00835ed0 (cSPUITooltipWinProc::SetText)
     uint32_t DoMessage(void* pWindow, int* msg);
 };
@@ -276,8 +278,8 @@ void TooltipManager::SetTooltipText(int a, int b)
 {
     ((void (__thiscall*)(void*, int))VT(window)[0x80 / 4])(window, a);
     ((void (__thiscall*)(void*, int))VT(window)[0x5c / 4])(window, b);
-    if (window) {
-        void* p = ((void* (__thiscall*)(void*, void*))VT(window)[0xc / 4])(window, (void*)0xf15f4bd);
+    if (void* w = window) {
+        void* p = ((void* (__thiscall*)(void*, void*))(*(void***)w)[0xc / 4])(w, (void*)0xf15f4bd);
         if (p) {
             ((void (__thiscall*)(void*, float, float))VT(window)[0x68 / 4])(window, g_13fdcf4, g_13fdcf8);
             ((void (__thiscall*)(void*, int))VT(p)[0x14 / 4])(p, 1);
@@ -508,7 +510,11 @@ cSPUITooltipWinProc_s0083_56e0::cSPUITooltipWinProc_s0083_56e0()
       mDetailWindowID(0x3754e6c),
       mTooltipString(),
       mTooltipDetailString(),
-      mTooltipOffsetPosition(g_tipOffX, g_tipOffY) {
+      mTooltipOffsetPosition() {
+    mTooltipOffsetPosition.mX = g_tipOffX;
+    _ReadWriteBarrier();
+    mTooltipOffsetPosition.mY = g_tipOffY;
+    _ReadWriteBarrier();
     mKeyInstance = 0;
     mKeyType = 0;
     mKeyGroup = 0;
@@ -518,10 +524,20 @@ cSPUITooltipWinProc_s0083_56e0::cSPUITooltipWinProc_s0083_56e0()
     mUnk64 = 0xffffffff;
 }
 
+extern char vtbl_TooltipWinProc_IWinProc[];      // 0x0141af08
+extern char vtbl_TooltipWinProc_ISerializable[]; // 0x0141aeec
+extern char vtbl_DefaultRefCounted[];           // 0x013eb938
+
 // @ 0x00835d90
-cSPUITooltipWinProc::~cSPUITooltipWinProc()
+void cSPUITooltipWinProc_s0083_56e0::Destroy()
 {
-    // member strings destroyed automatically in reverse declaration order
+    *(void**)this = vtbl_TooltipWinProc_IWinProc;
+    *(void**)((char*)this + 4) = vtbl_TooltipWinProc_ISerializable;
+    mTooltipDetailString.DeallocateSelf();
+    mTooltipString.DeallocateSelf();
+    mLayoutName.DeallocateSelf();
+    *(void* volatile*)((char*)this + 4) = vtbl_DefaultRefCounted;
+    *(void* volatile*)this = vtbl_DefaultRefCounted;
 }
 
 // @ 0x00835e30
@@ -535,7 +551,7 @@ cSPUITooltipWinProc_s0083_56e0::cSPUITooltipWinProc_s0083_56e0(const wchar_t* la
     mKeyInstance = 0;
     mKeyType = 0;
     mKeyGroup = 0;
-    mTooltipBehavior = behavior;
+    *(volatile uint32_t*)&mTooltipBehavior = behavior;
     mbMouseOver = false;
     mpMyWindow = 0;
     mUnk64 = 0xffffffff;

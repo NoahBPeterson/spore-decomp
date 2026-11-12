@@ -142,15 +142,11 @@ void* WinEvent::DeletingDtor(unsigned char flags)
 // @ 0x007fead0
 bool WinEvent::IsWinState(unsigned v)
 {
-    int i = *(int*)((char*)this + 0x84);
-    if (i != 0x7fffffff)
-        return i == (int)v;
-    void* p = *(void**)((char*)this + 0x14);
-    if (p) {
-        int q = VCallI(p, 0x1c);
-        if (q == (int)v) return true;
+    if (mMessageWinId == 0x7fffffff) {
+        void* p = mVtbl14;
+        return p && ((unsigned(__thiscall*)(void*))(*(void***)p)[7])(p) == v;
     }
-    return false;
+    return mMessageWinId == v ? 1 : 0;
 }
 
 // @ 0x007feb40
