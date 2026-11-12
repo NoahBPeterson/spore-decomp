@@ -57,3 +57,5 @@
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dba000@SP@@YA_NPAVcSPCreatureCitizen_s00db_9380@1@HHHHPAUcHealActionState@1@@Z  00dba000  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ??4cHealOtherData@SP@@QAEAAV01@ABV01@@Z  00dba120  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dac5d0@@YA_NPAUC5d0Obj@@@Z  00dac5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da6cb0@@YAMPAUcSPCreatureCitizen@@@Z  00da6cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da6d10@@YAMPAUcSPCreatureCitizen@@@Z  00da6d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

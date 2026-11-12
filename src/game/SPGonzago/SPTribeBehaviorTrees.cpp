@@ -3382,17 +3382,19 @@ float __cdecl FUN_00da6bb0(cSPCreatureCitizen* c)
 // @ 0x00da6cb0
 float __cdecl FUN_00da6cb0(cSPCreatureCitizen* c)
 {
-    if (c->FUN_c0b9c0() < g_f147c21c)
+    cSPCreatureCitizen* citizen = c;
+    if (citizen->FUN_c0b9c0() < g_f147c21c)
         return 0.0f;
-    return c->mCombat.GetHealthPct() * g_f13ec4d0 < g_f1687a14 ? 1.0f : 0.0f;
+    return citizen->mCombat.GetHealthPct() * g_f13ec4d0 < g_f1687a14 ? 1.0f : 0.0f;
 }
 
 // @ 0x00da6d10
 float __cdecl FUN_00da6d10(cSPCreatureCitizen* c)
 {
-    if (c->FUN_c0b9c0() < g_f147c21c)
+    cSPCreatureCitizen* citizen = c;
+    if (citizen->FUN_c0b9c0() < g_f147c21c)
         return 0.0f;
-    return c->mCombat.GetHealthPct() * g_f13ec4d0 < g_f1687a10 ? 1.0f : 0.0f;
+    return citizen->mCombat.GetHealthPct() * g_f13ec4d0 < g_f1687a10 ? 1.0f : 0.0f;
 }
 
 // @ 0x00da6d70
