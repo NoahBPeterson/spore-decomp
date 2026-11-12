@@ -328,7 +328,7 @@ i32 cMissionMultiStep::FUN_00c5a000()
     i32 sum = 0;
     for (i32 i = 0; i < n; i++) {
         void* m = SubAt(i);
-        sum += (*(i32(__thiscall**)(void*))((char*)vtbl(m) + 0xec))(m);
+        sum = sum + (*(i32(__thiscall**)(void*))((char*)(*(void***)m) + 0xec))(m);
     }
     return sum;
 }
@@ -370,14 +370,16 @@ void cMissionMultiStep::FUN_00c5a0b0()
 u8 cMissionMultiStep::FUN_00c5a130()
 {
     i32 n = SubCount();
+    u8 complete = 1;
     for (i32 i = 0; i < n; i++) {
         void* m = SubAt(i);
-        u8 ok = (*(u8(__thiscall**)(void*))((char*)vtbl(m) + 0xf8))(m);
+        u8 ok = (*(u8(__thiscall**)(void*))((char*)(*(void***)m) + 0xf8))(m);
         if (!ok) {
-            return 0;
+            complete = 0;
+            break;
         }
     }
-    return 1;
+    return complete;
 }
 
 // @ 0x00c5a260
