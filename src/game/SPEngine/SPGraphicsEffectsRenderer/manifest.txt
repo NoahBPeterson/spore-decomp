@@ -46,3 +46,5 @@
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?FindEntry@EffectsRenderer_s006f_1770@@QAEPAXII@Z  006f2050  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?f94a0@@YAPAUEffectReleaseRecord@@PAU1@00@Z  006e94a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ??1C9A30@@QAE@XZ  006e9a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method7da0@Host3@@QAEXXZ  006e7da0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m8160@CCreature@@QAEXMM@Z  006e8160  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

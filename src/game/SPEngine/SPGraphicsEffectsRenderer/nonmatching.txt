@@ -13,14 +13,12 @@
 006e7ac0 74 Method7ac0 - vertex-descriptor lookup; register assignment around the AreEqual loop differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7b50 140 Method7b50: render-state bind (shader-data push, shader(0x219)/shader(0x226), vtable v0 call, flush, counter/state update). [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7d40 52 Method7d40 - element store; register scheduling of the range check/base pointer differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-006e7da0 8 Method7da0 - refcount release; code identical except the vtable load is scheduled before the store-to-1 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7dd0 203 Method7dd0: element setter copying vertex/weight vectors and driving the midpoint vtable slot (0x18/0x1c). [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7ed0 72 Method7ed0 - element store; range-check register scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7f30 53 Method7f30: EH destructor releasing +0x60 and the refcounted +0x00. The SEH frame is omitted (functional version); release logic matches. [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7fa0 44 Method7fa0: the non-interface path now returns the original's magic-division low product (0x4ec4ec4f * (end-base)); index<0 still returns this, and the interface branch returns its call. [equiv: PASS 244 valid, 100% cov; src PASS; replay eax/edx match] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e8000 134 Method8000 - element setter; interface-call/branch layout differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e80d0 19 complete; only register/addressing-order differs (esi+ecx vs ecx+esi, edx/ecx arg regs) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-006e8160 97 complete; x87 div scheduled as fld+fidiv instead of fild+fdivr (source-expression dependent) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e83e0 10 complete; std::min pointer-select but out2 pointer hoisted one slot early flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e8480 639 complete; cl hoisted xor ebx/loop-pointer setup and reordered the three destroy/rebuild loops flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e8810 1093 complete; large debug-render path rewritten in full from the disasm; cl picks a different frame size (0x48 vs 0x78) and register allocation (ebp/edi/esi) so only scratch-pool floats differ on the float-rounding input class flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
