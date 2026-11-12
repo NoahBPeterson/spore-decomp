@@ -133,7 +133,9 @@ public:
     uint8_t             pad159[0x3];                     // +0x159 .. +0x15b
     cSPSpaceGameState*  mpSpaceState;                    // +0x15c
     void*               mpObj160;                        // +0x160
-    uint8_t             pad164[0x180 - 0x164];           // +0x164 .. +0x17f
+    uint8_t             pad164[0x8];                     // +0x164 .. +0x16b
+    void*               mpObj16c;                        // +0x16c
+    uint8_t             pad170[0x180 - 0x170];           // +0x170 .. +0x17f
     cGonzagoSubsystem_s00fd_9f70*  mpGonzagoSubsystem;              // +0x180
     uint8_t             pad184[0x9];                     // +0x184 .. +0x18c
     bool                mFlag18d;                        // +0x18d
@@ -317,6 +319,11 @@ struct cSelf
     bool      FUN_01046f30();        // 0x01046f30
     void      FUN_01003c60(float x, float y); // 0x01003c60
     bool      FUN_01017300(void* arg); // 0x01017300
+    void      FUN_00ffc6d0();        // 0x00ffc6d0  CalcMaxTravelDistance
+    void      FUN_00ffdbb0();        // 0x00ffdbb0
+    void      FUN_0101bf40();        // 0x0101bf40  restoreSavedView
+    void      FUN_01065d20();        // 0x01065d20
+    float     FUN_00c3ae70();        // 0x00c3ae70
     int       FUN_00bb9ae0();        // 0x00bb9ae0
     bool      FUN_00bb9fb0();        // 0x00bb9fb0
     void      FUN_00bb9b30();        // 0x00bb9b30
@@ -381,6 +388,8 @@ struct cSelf
     void  FUN_0102f660(Vector3* out);                // 0x0102f660
     void  FUN_00fda2e0(void* v);                     // 0x00fda2e0
     void  FUN_01017270(void* v);                     // 0x01017270
+    void  FUN_00c381e0(void* v);                     // 0x00c381e0
+    void  FUN_01066200(int v);                       // 0x01066200
     void  FUN_00c4cb90(void* a, void* b);            // 0x00c4cb90
     void  FUN_00c50300(void* a, void* b);            // 0x00c50300
 };
@@ -399,6 +408,8 @@ public:
     void FUN_0100a960();                           // 0x0100a960
     void FUN_01009470(int a, void* b, int c);      // 0x01009470
     void FUN_010039c0(void* a);                    // 0x010039c0
+    void FUN_01003490();                           // 0x01003490  GalaxyContextActivate
+    void FUN_01008100();                           // 0x01008100  ChaseFromSolarToGalaxy
     void FUN_01003620();                           // 0x01003620
     void FUN_01002be0();                           // 0x01002be0
     uint32_t pad00[5];                             // +0x00
@@ -3929,9 +3940,46 @@ void __thiscall cAppModeSpace::SetPlanetTimeOnFirstEntry()
 }  // namespace SP
 
 // @ 0x00fda5e0
+void __cdecl FUN_006b2350();
+void __cdecl FUN_0105c5d0(Vector3* out, void* tool, float value);
 namespace SP {
 void __thiscall cAppModeSpace::FUN_00fda5e0()
 {
+    mpSpaceState->mFlags |= 4;
+    FUN_006b2350();
+    ((V40p*)FUN_00401010())->X40(mpObj16c);
+    ((V40p*)FUN_00401010())->X40((void*)0x609b763);
+    ((cSelf*)FUN_00ffbe50())->FUN_00ffc6d0();
+    ((cSelf*)FUN_00ffbe50())->FUN_00ffdbb0();
+    mpSpaceState->FUN_01009470(1, (void*)1, 0);
+    cSPSpaceGameState* state = mpSpaceState;
+    state->FUN_010039c0(FUN_01021230());
+    mpSpaceState->FUN_01003490();
+    mpSpaceState->FUN_01008100();
+
+    void* modeMgr = ((V38*)((V50*)FUN_0067dd10())->GetModeManager())->Get14();
+    if (modeMgr != 0) {
+        void* view = ((V0c*)modeMgr)->Query(0x303154cc);
+        if (view != 0)
+            ((cSelf*)view)->FUN_0101bf40();
+    }
+
+    void* inventory = ((cSelf*)FUN_00ffbe50())->FUN_00a1ad60();
+    Vector3 position;
+    FUN_0105c5d0(&position, FUN_01021240(), ((cSelf*)inventory)->FUN_00c3ae70());
+    ((cSelf*)inventory)->FUN_00c381e0(&position);
+
+    void* effect = mpSpaceState->mpEffect;
+    if (effect != 0)
+        ((cSelf*)effect)->FUN_01066200(1);
+
+    cTutorial* tutorial = GetTutorial();
+    if (tutorial->mpCurrent != 0 && tutorial->mpCurrent->mID == 0xe43f6bbd) {
+        tutorial->Close(0xe43f6bbd, 1);
+        ((cSelf*)FUN_010666a0())->FUN_01065d20();
+    }
+    MessageServer_s00fd_dba0()->PostMessage(0x5e37a3b, 0, 0, 0);
+    mpSpaceState->mFlags &= ~4;
 }
 }  // namespace SP
 

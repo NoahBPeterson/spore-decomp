@@ -3,7 +3,6 @@
 00fd9d90 13 universe-context graphics refresh: complete and equivalence WEAK (400 valid, no mismatch, 16% coverage); the else-block is laid out before the final return instead of after it. flags /O2 /MD /Gy /TP /arch:SSE
 00fd9f70 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 628 bytes - cAppModeSpace::OnMouseUp not reconstructed.
 00fda530 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 172 bytes - cAppModeSpace::SetPlanetTimeOnFirstEntry not reconstructed.
-00fda5e0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 360 bytes - space-mode helper not reconstructed.
 00fda750 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 489 bytes - space-mode helper not reconstructed.
 00fdaa90 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 165 bytes - cAppModeSpace::Write not reconstructed.
 00fdab40 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 162 bytes - space-mode helper not reconstructed.
