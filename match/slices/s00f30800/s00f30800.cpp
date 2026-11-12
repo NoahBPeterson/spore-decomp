@@ -160,16 +160,18 @@ void __thiscall ImpactList::DestroyRange(PairBlock* first, PairBlock* last)
 // @ 0x00f30910
 PairBlock* __thiscall PairBlock::Assign(const PairBlock* s)
 {
-    if (s->p0 != p0) {
-        AddRef(s->p0);
-        void* old = p0;
-        p0 = s->p0;
+    void* incoming = s->p0;
+    void* old = p0;
+    if (incoming != old) {
+        AddRef(incoming);
+        p0 = incoming;
         Release(old);
     }
-    if (s->p1 != p1) {
-        AddRef(s->p1);
-        void* old = p1;
-        p1 = s->p1;
+    incoming = s->p1;
+    old = p1;
+    if (incoming != old) {
+        AddRef(incoming);
+        p1 = incoming;
         Release(old);
     }
     payload = s->payload;
