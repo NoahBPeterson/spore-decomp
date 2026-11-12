@@ -3227,7 +3227,7 @@ void F_00471000();               // 0x471000 cdecl: bound-info builder overload
 
 // ---- items of slice s004604f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
-extern char g_sentinel2;   // 0x01667bac
+extern char g_sentinel2[];   // 0x01667bac
 extern void __cdecl GetFloatProperty(int owner, int key, float* out);     // 0x40cf10
 extern float g_const_1486114;       // 0x1486114
 extern int   g_3e8c[3];             // 0x15d3e8c
@@ -3563,7 +3563,6 @@ void vector_s0047_2b80<T,A>::resize(uint32_t n)
 char* UninitCopyChar(char* first, char* last, char* dest);      // @ 0x00475bd0
 inline char* uninitialized_copy(char* first, char* last, char* dest)
 {
-    ScratchSlots_s0047_2b80<14>();
     return UninitCopyChar(first, last, dest);
 }
 struct CharVec {
@@ -3693,10 +3692,7 @@ void FUN_00460bf0(Bone* bones, int count, int root, float t)
     for (int i = root + 1; i < count; i++) {
         if (bones[i].parent == root) {
             Vec3_s0046_04f0 n28;
-            int v2;
-            Vec3_s0046_04f0* hi = Vector3_Sub(&n28, &bones[root].pos, &bones[i].pos);
-            Vec3_s0046_04f0 p30;
-            p30.x = hi->x; p30.y = hi->y; p30.z = hi->z;
+            Vec3_s0046_04f0 p30 = *Vector3_Sub(&n28, &bones[root].pos, &bones[i].pos);
             float key = 1.0f - t;
             Vec3_s0046_04f0 v9;
             Vector3_Add(&bones[i].pos, Vector3_Scale(&v9, &p30, &key));
@@ -3762,21 +3758,27 @@ int RefCounted::AddRef()
 // @ 0x00461400
 C461400* C461400::Ctor()
 {
-    Sub* s1 = &sub1;
-    s1->b = 0;
-    s1->e = 0;
-    s1->c = 0;
-    s1->b = &g_sentinel2;
-    s1->e = s1->b;
-    s1->c = (char*)s1->b + 2;
-    Sub* s2 = &sub2;
-    s2->b = 0;
-    s2->e = 0;
-    s2->c = 0;
-    void** p3 = &p3c;
-    *p3 = 0;
-    void** p4 = &p40;
-    *p4 = 0;
+    char nCount;
+    Sub* p15;
+    void** t22;
+    Sub* hi;
+    void** t26;
+    (void)nCount;
+    p15 = &sub1;
+    p15->b = 0;
+    p15->e = 0;
+    p15->c = 0;
+    p15->b = &g_sentinel2;
+    p15->e = p15->b;
+    p15->c = (char*)p15->b + 2;
+    hi = &sub2;
+    hi->b = 0;
+    hi->e = 0;
+    hi->c = 0;
+    t22 = &p3c;
+    *t22 = 0;
+    t26 = &p40;
+    *t26 = 0;
     return this;
 }
 
@@ -3831,18 +3833,38 @@ void UseName(int key)
     return;
 }
 
+static inline unsigned int MidBits_004615e0(unsigned int value)
+{
+    return (value & 0xff) << 8;
+}
+
+static inline unsigned int LoBits_004615e0(unsigned int value)
+{
+    return value & 0xff;
+}
+
+static inline unsigned int ApplyMidBits_004615e0(unsigned int current, unsigned int bits)
+{
+    return (current & 0xffff00ff) | bits;
+}
+
+static inline unsigned int ApplyLoBits_004615e0(unsigned int current, unsigned int bits)
+{
+    return (current & 0xffffff00) | bits;
+}
+
 // @ 0x004615e0
 void RegisterCreatureModels(int a, unsigned int flags, int c, int d, int e)
 {
     Bits y;
-    y.raw = flags;
-    y.f.mid = 0x29;
-    y.f.lo = 0;
     Bits x;
     x.raw = flags;
-    x.f.mid = 0x29;
-    x.f.lo = 1;
-    FUN_0052a400(a, x.raw, y.raw, c, d, e);
+    x.raw = ApplyMidBits_004615e0(x.raw, MidBits_004615e0(0x29));
+    x.raw = ApplyLoBits_004615e0(x.raw, LoBits_004615e0(1));
+    y.raw = flags;
+    y.raw = ApplyMidBits_004615e0(y.raw, MidBits_004615e0(0x29));
+    y.raw = ApplyLoBits_004615e0(y.raw, LoBits_004615e0(0));
+    FUN_0052a400(a, y.raw, x.raw, c, d, e);
     return;
 }
 
@@ -6183,10 +6205,12 @@ IntVecObj::IntVecObj()
 // @ 0x004728e0
 BufView* IntVecObj::GetView(BufView* pView)
 {
-    int* pBegin = mVec.begin();
+    int m;
+    int* pBegin = mVec.mpBegin;
+    IntVector_s0047_1b50* vec = &mVec;
     IntrusivePtr* pRef;
-    int nCount = mVec.size();
-    pView->count = nCount;
+    m = vec->size();
+    pView->count = m;
     pView->data = (char*)pBegin;
     pView->maskIdx = 4;
     pView->stride = 4;
@@ -6224,11 +6248,12 @@ S62* __fastcall Init72a00(S62* p)
 // @ 0x00473140
 CharVec::CharVec(const CharVec& x)
 {
+    ScratchSlots_s0047_2b80<17>();
     const uint32_t n = (uint32_t)(x.mpEnd - x.mpBegin);
     mpBegin = n ? (char*)EASTL_Allocate(&mAllocator, n, 1, 0) : 0;
     mpEnd = mpBegin;
     mpCapacity = mpBegin + n;
-    mpEnd = uninitialized_copy(x.mpBegin, x.mpEnd, mpBegin);
+    mpEnd = UninitCopyChar(x.mpBegin, x.mpEnd, mpBegin);
 }
 
 // @ 0x00473270
