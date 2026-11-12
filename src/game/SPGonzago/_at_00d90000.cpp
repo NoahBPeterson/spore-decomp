@@ -621,6 +621,7 @@ struct AnimHandle {
 struct BehaviorStimuli {
     AnimHandle* Play(uint flags, uint a);                 // 0x00bc96a0 (ret 8)
     void        ClearAll(uint flags, uint a);             // 0x00bc98f0 (ret 8)
+    void        ClearAll(unsigned __int64 flags);         // 0x00bc98f0 (ret 8)
     void        SetStimulus(uint flags, uint a, float f);// 0x00bc97f0 (ret 0x10)
     void*       GetAny();                                 // 0x00d997e0 (ret)
 };
@@ -2043,17 +2044,21 @@ bool FUN_00d9b5b0(int a, int b, int c, int d, int e, int* out, int* in)
     return true;
 }
 
+struct DrainTimerMemory {
+    uint32_t pad0[6];
+    unsigned __int64 mStimuliToClear;                     // +0x18
+};
+
 // @ 0x00d9b610
-void FUN_00d9b610(Creature* self, int a, int b, int c2, int d, void* p)
+void FUN_00d9b610(Creature* self, int a, int b, int c2, int d, DrainTimerMemory* p)
 {
     typedef bool (__thiscall *LocoFn)(void*);
     void* loco = (void*)((char*)self + 0xc0);
     bool r = ((LocoFn)(*(void***)loco)[0xf8 / 4])(loco);
     self->FUN_00c14750(!r);
-    int x = *(int*)((char*)p + 0x18);
-    int y = *(int*)((char*)p + 0x1c);
-    if ((x | y) != 0) {
-        self->mpBehaviorTreeData->mStimuli.ClearAll(x, y);
+    unsigned __int64 stimuli = p->mStimuliToClear;
+    if (stimuli != 0) {
+        self->mpBehaviorTreeData->mStimuli.ClearAll(stimuli);
     }
     (void)a;(void)b;(void)c2;(void)d;
 }

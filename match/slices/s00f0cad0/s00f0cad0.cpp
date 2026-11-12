@@ -1,5 +1,6 @@
 // Slice s00f0cad0: SporeApp/Simulator SP palette-item UI + placeable-effect.
 #include <intrin.h>
+#include <stddef.h>
 // Functions 00f0cad0..00f0d8b0 of utl/SP*.obj.
 //
 //  00f0cad0  SP::cSPPaletteItemUIOneClickPaint::Init
@@ -350,8 +351,20 @@ struct IWindow {
     virtual void SetIcon(void* p);                         // +0x104
 };
 
+class cSPUILayout;
+
 struct PaletteItemUIOneClickPaint {
-    char pad[0x34];
+    void* mpItemUIVtable;             // +0x00
+    uint32_t mBaseData04[2];
+    void* mpWinProcVtable;            // +0x0c
+    void* mpRefCountVtable;           // +0x10
+    uint32_t mBaseData14[3];
+    void* mpHandlerVtable;            // +0x20
+    cSPUILayout* mpLayout_24;
+    uint32_t mItemInstanceID_28;
+    uint32_t mItemGroupID_2c;
+    uint32_t mItemTypeID_30;
+    uint32_t mReserved34;             // allocation is 0x38; constructor leaves this untouched
     PaletteItemUIOneClickPaint* Ctor();                            // 0x00f0cdd0
     void* Dtor(unsigned flags);                                    // 0x00f0ce10
     void Shutdown();                                               // 0x00f0cc80
@@ -359,6 +372,11 @@ struct PaletteItemUIOneClickPaint {
     void Init(void* item, void* parent, void* a, void* info);      // 0x00f0cad0
     int  HandleMessage(unsigned messageID, void* message);         // 0x00f0ce60
 };
+
+typedef char PaletteItemUIOneClickPaintSize[(sizeof(PaletteItemUIOneClickPaint) == 0x38) ? 1 : -1];
+typedef char PaletteItemUIOneClickPaintHandlerOffset[(offsetof(PaletteItemUIOneClickPaint, mpHandlerVtable) == 0x20) ? 1 : -1];
+typedef char PaletteItemUIOneClickPaintLayoutOffset[(offsetof(PaletteItemUIOneClickPaint, mpLayout_24) == 0x24) ? 1 : -1];
+typedef char PaletteItemUIOneClickPaintKeyOffset[(offsetof(PaletteItemUIOneClickPaint, mItemTypeID_30) == 0x30) ? 1 : -1];
 
 class cSPUILayout { public:
     char pad[0x30];
@@ -445,16 +463,18 @@ extern "C" void  f_004e1bf0(void* p);
 PaletteItemUIOneClickPaint* PaletteItemUIOneClickPaint::Ctor()
 {
     ((PaletteItemUIBase*)this)->BaseCtor();
-    *(void* volatile*)((char*)this + 0x20) = (void*)0x013eb384u;
-    int zero = 0;
-    *(void* volatile*)((char*)this + 0x00) = (void*)0x0148bb3cu;
-    *(void* volatile*)((char*)this + 0x0c) = (void*)0x0148bb20u;
-    *(void* volatile*)((char*)this + 0x10) = (void*)0x0148bb10u;
-    *(void* volatile*)((char*)this + 0x20) = (void*)0x0148bb00u;
-    *(volatile int*)((char*)this + 0x24) = zero;
-    *(volatile int*)((char*)this + 0x28) = zero;
-    *(volatile int*)((char*)this + 0x2c) = zero;
-    *(volatile int*)((char*)this + 0x30) = zero;
+    // Preserve the IHandlerRC construction table before the derived tables.
+    *(void* volatile*)&mpHandlerVtable = (void*)0x013eb384u;
+    _ReadWriteBarrier();
+    mpItemUIVtable = (void*)0x0148bb3cu;
+    mpWinProcVtable = (void*)0x0148bb20u;
+    mpRefCountVtable = (void*)0x0148bb10u;
+    mpHandlerVtable = (void*)0x0148bb00u;
+    mpLayout_24 = 0;
+    mItemInstanceID_28 = 0;
+    mItemGroupID_2c = 0;
+    mItemTypeID_30 = 0;
+    _ReadWriteBarrier();
     return this;
 }
 
