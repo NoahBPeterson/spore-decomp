@@ -1,7 +1,3 @@
-00456360  -1  complete, /Od variants not tried (budget)
-00456410  -1  complete, /Od variants not tried
-004565f0  72  complete; original is /Od+SSE and calls the x87 _CIsqrt import, so the slice now carries a source Flags comment /Od /Ob1 /Oi (without /Oi sqrtf lowered to a __CIsqrt call with a stacked double and the import trace differed); chk diff 72; difftest PASS (500 valid, 100% coverage)
-00456650  -1  complete, not tried
 004566e0  -1  complete behaviorally; EASTL inline layers flattened
 00456d60  -1  complete behaviorally; inlined copy loops flattened
 004571d0  -1  complete, not tried
