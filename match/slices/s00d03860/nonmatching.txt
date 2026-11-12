@@ -1,5 +1,4 @@
 00d038a0 51 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 13 bytes - same lookup as 00d03860; retail extracts the flag with and al,1 while MSVC emits and eax,1.
-00d038e0 186 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 186 bytes - cRelationshipManager::StartPeace body not reconstructed.
 00d039a0 148 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 148 bytes - relationship helper body not reconstructed.
 00d03a40 206 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 206 bytes - relationship helper body not reconstructed.
 00d03b10 103 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 11 bytes - subtree release; only the hoisting of the node's sub-object address (lea before the child test instead of inside the loop) differs.

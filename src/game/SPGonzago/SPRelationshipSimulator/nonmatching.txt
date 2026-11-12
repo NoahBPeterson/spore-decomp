@@ -6,7 +6,6 @@
 00d022e0 222 world writer: eastl::wstring temporaries are emitted as real calls instead of the inlined SSO copies (268 vs 337 bytes); 256 valid inputs, 11.6% coverage
 00d02440 259 world reader: stream vtable calls and the thiscall tree insert cannot be resolved by the harness (302 vs 291 bytes, 0 valid inputs)
 00d02570 217 script-side world writer: eastl::wstring temporaries are emitted as real calls instead of the inlined SSO copies (271 vs 342 bytes); 243 valid inputs, 11.5% coverage
-00d038e0 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 186 bytes - cRelationshipManager::StartPeace body not reconstructed.
 00d03b10 11 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 11 bytes - subtree release; only the hoisting of the node's sub-object address (lea before the child test instead of inside the loop) differs.
 00d03b80 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 186 bytes - GetPropertyListForPersonality body not reconstructed.
 00d041d0 44 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 50 bytes - element-wise subtree release copy; retail places the equal-range return after the loop, MSVC hoists it before.

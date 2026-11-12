@@ -217,6 +217,7 @@ struct cRelationshipManager {
   u32  FUN_00d01ab0(u32 a, u32 b, u32 c, u32 d);   // 0x00d01ab0
   void* FUN_00d01410(u32 x);                       // 0x00d01410
   float FUN_00d01470(u32 x, u32 kind);             // 0x00d01470
+  u8 IsAtWar(cEmpire* a, cEmpire* b);               // 0x00d01f50
 };
 cEmpire* __cdecl GetPlayerEmpire_s00d0_1f50();                // 0x01021300
 struct cTerrainSphere {
@@ -631,7 +632,7 @@ bool RelBook::A1f20(uint32_t a, uint32_t b)
 }
 
 // @ 0x00d01f50
-u8 __fastcall FUN_00d01f50(cRelationshipManager* self, void* dummy, cEmpire* a, cEmpire* b)
+__declspec(noinline) u8 __fastcall FUN_00d01f50(cRelationshipManager* self, void* dummy, cEmpire* a, cEmpire* b)
 {
   cEmpire* player = GetPlayerEmpire_s00d0_1f50();
   cEmpire* p1 = a;
@@ -948,13 +949,45 @@ IdVec* GetRelationshipEvents()
     return &gRelationshipEvents;
 }
 
+namespace SP {
+struct cPeaceTerrainSphere {
+    void NoteWarEndedWithPlayer(cEmpire* empire);
+};
+struct cPeaceNounManager {
+    cPeaceTerrainSphere* GetCurrentTerrainSphere();
+};
+cPeaceNounManager* NounManagerForPeace();
+}
+
 // @ 0x00d038e0
 void SP::cRelationshipManager::StartPeace(SP::cEmpire * civilizationA, SP::cEmpire * civilizationB)
 {
-    uint32_t civilizationB_v = (uint32_t)civilizationB;
-    uint32_t civilizationA_v = (uint32_t)civilizationA;
-    (void)civilizationA_v;
-    (void)civilizationB_v;
+    SP::cEmpire* player = (SP::cEmpire*)GetPlayerEmpire();
+    if (!civilizationB)
+        civilizationB = player;
+
+    ::cRelationshipManager* manager = (::cRelationshipManager*)this;
+    if (manager->IsAtWar((::cEmpire*)civilizationA, (::cEmpire*)civilizationB)) {
+        uint32_t idA = civilizationA->mPoliticalID;
+        uint32_t idB = civilizationB->mPoliticalID;
+        ::cRelObj32* relationship = (::cRelObj32*)manager->FUN_00d01410(
+            manager->FUN_00d01ab0(idA, idB, idA, idB));
+        if (relationship)
+            relationship->f04 &= ~1u;
+        if (civilizationB != player) {
+            relationship = (cRelObj32*)manager->FUN_00d01410(
+                manager->FUN_00d01ab0(idB, idA, idB, idA));
+            if (relationship)
+                relationship->f04 &= ~1u;
+        }
+        civilizationA->CacheRemoveEnemy(civilizationB);
+        civilizationB->CacheRemoveEnemy(civilizationA);
+        if (civilizationB == player) {
+            SP::NounManagerForPeace()->GetCurrentTerrainSphere()->NoteWarEndedWithPlayer(civilizationA);
+        }
+    }
+    ((Noun*)civilizationA)->Finish();
+    ((Noun*)civilizationB)->Finish();
 }
 
 // @ 0x00d03b10
