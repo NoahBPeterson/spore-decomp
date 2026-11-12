@@ -1,6 +1,4 @@
 # va  diff-bytes  reason
-00c45340  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
-00c45560  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00c48c20  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 00c491c0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 00c4ad50  440  cSPMission::Init: same five boolean flag properties (1/8/0x80/2/4), the 0xfa24ee00 flag-0x10 test/set/clear, the two integer properties stored into mField184/mField188 and the OnPropertiesLoaded + PickGiveOnAcceptItems tail, but retail keeps the shared "1" property-type constant in edi while we allocate it to ebx (so every `cmp word [ecx+0x12], reg` and `mov reg,1` differs) (size 504 vs 519). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, equiv PASS (239 valid inputs, 76.0% coverage)

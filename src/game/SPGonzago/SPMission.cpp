@@ -23,6 +23,7 @@
 #include <wchar.h>
 #include <string.h>
 #include <xmmintrin.h>
+#include "../../../match/include/sse_helpers.h"
 #include <math.h>
 #include "SP/cGameData.h"
 #include "EA/Variant.h"
@@ -2182,6 +2183,7 @@ void __thiscall cSPMission_s00c4_6ab0::SetVisibleInStarmap(bool visible)
 void cSPMission::SetEmpire(cEmpire* p)
 {
     mCachedEmpireID94 = (p != 0) ? (int)p->mEmpireID84 : -1;
+    _ReadWriteBarrier();
     cEmpire* old = mpEmpire98;
     if (p != old) {
         if (p != 0)
@@ -2228,7 +2230,7 @@ bool cSPMission::IsVisibleInUI()
 {
     bool visible = true;
     if (mpPropertyList180 != 0) {
-        cProperty* prop = 0;
+        cProperty* prop;
         if (mpPropertyList180->GetProperty(0x05590946, &prop)) {
             if (prop->mType12 == 1)
                 visible = *prop->GetBool();
@@ -2253,32 +2255,30 @@ int cSPMission::GetNumAvailable()
 int cSPMission::GetTotalTravelCost()
 {
     cPlanet* origin = mpOriginPlanet9c;
-    if (origin == 0)
-        return 0;
-    cPlanet* target = mpTargetPlanet1e8;
-    if (target == 0)
-        return 0;
-    cStarRecord* targetRec = target->mpStarRecord13c;
-    cStarRecord* originRec = origin->mpStarRecord13c;
-    u32 targetID = targetRec->GetStarID();
-    u32 originID = originRec->GetStarID();
-    return 2 * GetUFOSimulator(originID)->ComputeCost(targetID);
+    if (origin != 0) {
+        cPlanet* target = mpTargetPlanet1e8;
+        if (target != 0) {
+            cStarRecord* targetRec = target->mpStarRecord13c;
+            cStarRecord* originRec = origin->mpStarRecord13c;
+            return 2 * GetUFOSimulator(originRec->GetStarID())->ComputeCost(targetRec->GetStarID());
+        }
+    }
+    return 0;
 }
 
 // @ 0x00c45560
 float cSPMission::GetTotalTravelCostFloat()
 {
     cPlanet* origin = mpOriginPlanet9c;
-    if (origin == 0)
-        return 0.0f;
-    cPlanet* target = mpTargetPlanet1e8;
-    if (target == 0)
-        return 0.0f;
-    cStarRecord* targetRec = target->mpStarRecord13c;
-    cStarRecord* originRec = origin->mpStarRecord13c;
-    u32 targetID = targetRec->GetStarID();
-    u32 originID = originRec->GetStarID();
-    return GetUFOSimulator(originID)->ComputeCostFloat(targetID) * 2.0f;
+    if (origin != 0) {
+        cPlanet* target = mpTargetPlanet1e8;
+        if (target != 0) {
+            cStarRecord* targetRec = target->mpStarRecord13c;
+            cStarRecord* originRec = origin->mpStarRecord13c;
+            return 2.0f * GetUFOSimulator(originRec->GetStarID())->ComputeCostFloat(targetRec->GetStarID());
+        }
+    }
+    return 0.0f;
 }
 
 // @ 0x00c455b0
@@ -2388,13 +2388,14 @@ u32 cSPMission_s00c4_5860::ReadTargetAnimalSpeciesType()
 // @ 0x00c45c60
 u8 cSPMission_s00c4_5860::ReadPickClosestStar()
 {
-    if (mpMissionPropList != 0) {
+    MissionPropList* list = (MissionPropList*)mpMissionPropList;
+    u8 result = 0;
+    if (list != 0) {
         cProperty_s00c4_5860* prop;
-        if (((MissionPropList*)mpMissionPropList)->GetProperty(0x1f707857, &prop) &&
-            prop->mType == 1)
-            return *prop->GetBool();
+        if (list->GetProperty(0x1f707857, &prop) && prop->mType == 1)
+            result = *prop->GetBool();
     }
-    return 0;
+    return result;
 }
 
 // @ 0x00c45ca0
@@ -2416,6 +2417,7 @@ Key12* cSPMission_s00c4_5860::GetMessageVector(Key12* out)
 void cSPMission_s00c4_5860::SetOwnerEmpire(cEntity* empire)
 {
     mOwnerEmpireID = empire != 0 ? empire->mEmpireID : 0xffffffff;
+    _ReadWriteBarrier();
     void* old = mpOwnerEmpire;
     if (empire != (cEntity*)old) {
         if (empire != 0)
@@ -3595,7 +3597,10 @@ void SPObject::FUN_00c48970(int idx, WStr* out)
 void SPObject::FUN_00c48a90(WStr* out)
 {
     int i = mFieldFC;
-    if (i >= 0 && i < 10) {
+    if (i < 0)
+        return;
+    _ReadWriteBarrier();
+    if (i < 10) {
         const wchar_t* p = ((CStr*)(0x168ef48 + i * 0x14))->GetText();
         out->assign(p, p + WStrLen(p));
     }
@@ -4021,25 +4026,27 @@ void SPObject::PickRewardUnlockTools()
 void SPObject::FUN_00c49800(WStr* out)
 {
     float f = mFieldC8;
-    int i = Rt(f);
-    if ((float)i < f)
-        i++;
+    int i = SseCeilToInt(f);
     WStr3(out, (const wchar_t*)0x13f01bc, i);
 }
 
 // @ 0x00c49840
 void SPObject::FUN_00c49840(WStr* out)
 {
-    float f = mFieldC8 - 0.5f;
-    int i = Rt(f);
-    WStr4(out, (const wchar_t*)0x13f01bc, i, mFieldC8 + 0.5f);
+    float value = mFieldC8;
+    // Retail computes both interval bounds before formatting the lower bound.
+    int low = SseRoundToInt(value - 0.5f);
+    SseRoundToInt(value + 0.5f);
+    WStr3(out, (const wchar_t*)0x13f01bc, low);
 }
 
 // @ 0x00c49890
 void SPObject::FUN_00c49890(WStr* out)
 {
-    float f = mFieldC8 + 0.5f;
-    int i = Rt(f);
+    float value = mFieldC8;
+    // Retail computes both interval bounds before formatting the upper bound.
+    SseRoundToInt(value - 0.5f);
+    int i = SseRoundToInt(value + 0.5f);
     WStr3(out, (const wchar_t*)0x13f01bc, i);
 }
 

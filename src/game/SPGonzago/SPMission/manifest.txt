@@ -56,3 +56,13 @@
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c470a0@cSPMission_s00c4_6ab0@SP@@QAE_NXZ  00c470a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?SetMissionID@cSPMission_s00c4_6ab0@SP@@QAEXI@Z  00c470f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c471c0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c471c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?IsVisibleInUI@cSPMission@@QAE_NXZ  00c45340  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49800@SPObject@@QAEXPAUWStr@@@Z  00c49800  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49890@SPObject@@QAEXPAUWStr@@@Z  00c49890  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?GetTotalTravelCost@cSPMission@@QAEHXZ  00c45510  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?GetTotalTravelCostFloat@cSPMission@@QAEMXZ  00c45560  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c49840@SPObject@@QAEXPAUWStr@@@Z  00c49840  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?SetEmpire@cSPMission@@QAEXPAUcEmpire@@@Z  00c45250  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?SetOwnerEmpire@cSPMission_s00c4_5860@@QAEXPAUcEntity@@@Z  00c45d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?ReadPickClosestStar@cSPMission_s00c4_5860@@QAEEXZ  00c45c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48a90@SPObject@@QAEXPAUWStr@@@Z  00c48a90  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
