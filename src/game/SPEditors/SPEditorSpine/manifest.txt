@@ -21,3 +21,4 @@
 ../src/game/SPEditors/SPEditorSpine.cpp  ?AddArc@cPathSegmentList@@QAEXABUPoint2@@M0M@Z  005d5a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorSpine.cpp  ?AddLine@cPathSegmentList@@QAEXABUPoint2@@0@Z  005d5ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorSpine.cpp  ?IntersectLine@cPathShape@@QAEXABUVector2@@0PAV1@@Z  005d5cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorSpine.cpp  ?FUN_005d3100@Spine@@QAEMXZ  005d3100  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

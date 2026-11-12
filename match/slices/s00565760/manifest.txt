@@ -24,3 +24,4 @@ slices/s00565760/s00565760.cpp  ?erase@?$rbtree@IUMapValueU@@U?$less@I@eastl@@U?
 slices/s00565760/s00565760.cpp  ?DoInsertKey@?$rbtree@HHU?$less@H@eastl@@U?$use_self@H@2@U?$rbtree_iterator@HPBH@2@@eastl@@QAE?AU?$pair@U?$rbtree_iterator@HPBH@eastl@@_N@2@ABHUtrue_type@2@@Z  00566600  /Od /Ob1 /MD /Gy /TP
 slices/s00565760/s00565760.cpp  ?lower_bound@?$rbtree@MMU?$less@M@eastl@@U?$use_self@M@2@U?$rbtree_iterator@MPBM@2@@eastl@@QAE?AU?$rbtree_iterator@MPBM@2@ABM@Z  00566880  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00565760/s00565760.cpp  ?DoNukeSubtree@?$rbtree@IUMapValueU@@U?$less@I@eastl@@U?$use_first@UMapValueU@@@3@U?$rbtree_iterator@UMapValueU@@PBU1@@3@@eastl@@QAEXPAU?$rbtree_node@UMapValueU@@@2@@Z  00566900  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?reserve@?$vector2@IVallocator@eastl@@@eastl@@QAEXI@Z  00565f50  /Od /Ob1 /MD /Gy /TP

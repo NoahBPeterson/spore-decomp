@@ -13,7 +13,6 @@
 005d2790 7 Refresh: same loop but cl keeps `this`/sentinel/iterator in different regs and does not tail-jump into FUN_005d1f30 (the helper stubs live in this TU, so the call is not a cross-TU tail jump) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 005d27e0 1755 complete (spine grow: phantom probe + block/body build); SSE math/regalloc differs from original; difftest WEAK (3.8% coverage: the entry guard needs src == this->+0xe8 or +0xec, which random inputs never produce, even with --alias 1.0; resolved by moving the deallocateChunk "// 0x0107db10" annotation onto the method line) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 005d3010 114 complete; lower_bound jump layout + key param spill differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-005d3100 1 complete; only the lower_bound null-root branch target differs (jump threading) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 005d3300 452 complete; reg alloc (this/next) and zero-compare form differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 005d36e0 1392 complete (walls, vertebra loop, handles); retail find/ctor inlines and x87 order differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 005d3f10 751 complete (vertebra build from block list, handle setup); size differs from original flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

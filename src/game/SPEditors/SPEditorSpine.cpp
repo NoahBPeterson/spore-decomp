@@ -676,15 +676,14 @@ struct VMap {                       // eastl::map<unsigned, VertVal> at spine+0x
     }
     RbNode* Anchor() { return (RbNode*)&anchorRight; }
     __forceinline RbNode* LowerFind(unsigned key) {
-        RbNode* anchor = Anchor();
         RbNode* cur = root;
-        RbNode* best = anchor;
+        RbNode* best = Anchor();
         while (cur) {
             if (!(cur->key < key)) { best = cur; cur = cur->mpLeft; }
             else cur = cur->mpRight;
         }
-        if (best != anchor && !(key < best->key)) return best;
-        return anchor;
+        if (best != Anchor() && !(key < best->key)) return best;
+        return Anchor();
     }
 };
 class hkMotion_s005d_27e0 { public: float getMass(); };                // 0x01088270 hkRigidMotion::getMass

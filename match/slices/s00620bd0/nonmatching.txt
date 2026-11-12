@@ -1,7 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00620e50  115  DialogUiNotify: complete; FindWindowByID/flag sequence and the +8 subobject adjust differ; equiv WEAK (46.7% cov)
-00621460    2  map lookup: complete; only `lea ecx,[eax+0x14]` vs our `lea edx` (and the matching cmp) differs. Tried `r+5`, `&r[5]`, a named `e=r+5`, byte-offset cast, reversed operands and moving the r+5 test first; moving it first gets ecx but reorders the key compare and puts key in edx, so the original eval order (key test then r+5) plus ecx is not reproducible from source.
-006214c0    2  GetURL: complete; same compare operand order (2 bytes)
 006216b0  116  RegisterURL: complete; the CtorSprintf tag/local-string call sequence is emitted differently
 00621770  116  RegisterInsecureURL: complete; same CtorSprintf call-sequence issue
 00620bd0  491  SubmitRegistrationForm: complete (frame document -> FindFirstTaggedElement, the registration code read into a wide-string triad from the registry key selected by the modal flag, line-break replacement + make_upper, cXHTMLRegistrationHandler with the "type"/"name" attributes, the hidden UI/Registration/Window carrying the code text, SetControl, the form callback and the frame's HandleFormSubmit, then the wide-string teardown); 520 bytes vs 491 (the original keeps the code string in one scratch slot and folds the two window-interface fetches) [equiv: FAIL, first mismatch on WinXHTML::GetDocument's ecx/stack-slot pair] flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

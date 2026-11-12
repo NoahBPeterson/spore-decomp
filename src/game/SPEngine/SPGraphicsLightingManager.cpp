@@ -3101,10 +3101,8 @@ void ClearDeque::ClearImpl(int)
 {
     while (mpBegin != mpEnd) {
         char* e = (char*)(mField14 * 0xc4 + *(int*)((char*)mpEnd - 4));
-        unsigned tag = *(int*)e;
-        unsigned top = tag >> 31;
-        _ReadWriteBarrier();
-        if ((top & 1) == 0) {
+        unsigned char ownershipBit = (unsigned char)((unsigned)*(int*)e >> 31);
+        if ((ownershipBit & 1) == 0) {
             void* x = *(void**)(e + 0x2c);
             if (x && x != *(void**)(e + 0x3c))
                 EastlFree(x);

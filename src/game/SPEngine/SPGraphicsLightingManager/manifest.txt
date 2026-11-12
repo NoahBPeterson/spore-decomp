@@ -30,3 +30,4 @@
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?FUN_00783380@@YAXPAM@Z  00783380  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?Release@cLocalLightInfo_s0092_72c0@@QAEXH@Z  009276c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?PopDestroy@Deque38@@QAEXXZ  00707f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?ClearImpl@ClearDeque@@QAEXH@Z  0070a1f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
