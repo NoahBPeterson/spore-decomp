@@ -86,6 +86,10 @@ def main():
     print("%s  0x%08x  %s  [%s]%s" % ("MATCH" if verdict == "PASS" else "NO MATCH", va, sym, " ".join(flags), how_built))
     if verdict != "PASS":
         print("  " + verdict)
+        stub = _stub(data, rel, fp["size"])
+        if stub:
+            print("  STUB: %s. That is a placeholder, not a decompilation: its note belongs in partial.txt, not "
+                  "nonmatching.txt (AGENTS.md, Rules)." % stub)
         if os.path.exists(IMAGE):
             print("\ninstruction diff (original | yours):")
             sys.stdout.flush()
@@ -133,6 +137,19 @@ def main():
             open(path, "w", encoding="utf-8").writelines(keep)
             print("removed its line from %s" % os.path.relpath(path, ROOT))
     return 0
+
+
+def _stub(data, rel, retail_size):
+    """A placeholder body ({}, { return a; }): at most two instructions, no relocation (no call, no global), where
+    retail is at least 16 bytes. -> description, or None. 1,018 such bodies were recorded as complete (2026-11-13)."""
+    if retail_size < 16 or rel:
+        return None
+    import capstone
+    n = sum(1 for _ in capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32).disasm_lite(bytes(data), 0))
+    if n <= 2:
+        return "your build is %d instruction%s (%d byte%s) with no call or global, retail is %d bytes" % (
+            n, "" if n == 1 else "s", len(data), "" if len(data) == 1 else "s", retail_size)
+    return None
 
 
 def note_files(va):

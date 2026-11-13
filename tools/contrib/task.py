@@ -159,18 +159,24 @@ def open_work(max_size):
                                                                   recursive=True)), "")}
     lib = library_functions()
     rows = []
-    for f in glob.glob(os.path.join(ROOT, "match", "slices", "*", "nonmatching.txt")) + \
-            glob.glob(os.path.join(ROOT, "src", "game", "**", "nonmatching.txt"), recursive=True):
-        for va, diff, reason in S.read_rows(f):
-            fp = fingerprints().get(va)
-            if fp and fp["size"] <= max_size and va not in done and va not in lib:
-                rows.append((fp["size"], va, diff, os.path.relpath(os.path.dirname(f), ROOT), reason))
-    # a function listed by both its slice and its migrated module: show it once, at the src/game copy (task.locate's choice)
+    # partial.txt rows too (an incomplete or placeholder body: it needs real source first), marked as such; they
+    # used to be in neither queue, so incomplete functions were invisible to --list
+    for name, partial in (("nonmatching.txt", False), ("partial.txt", True)):
+        for f in glob.glob(os.path.join(ROOT, "match", "slices", "*", name)) + \
+                glob.glob(os.path.join(ROOT, "src", "game", "**", name), recursive=True):
+            for va, diff, reason in S.read_rows(f):
+                fp = fingerprints().get(va)
+                if fp and fp["size"] <= max_size and va not in done and va not in lib:
+                    rows.append((fp["size"], va, "-" if partial else diff, os.path.relpath(os.path.dirname(f), ROOT),
+                                 ("PARTIAL, needs source: " + (reason or "")) if partial else reason, partial))
+    # a function listed by both its slice and its migrated module: show it once, at the src/game copy (task.locate's
+    # choice); a complete (nonmatching) note wins over a partial one
     best = {}
     for r in rows:
-        if r[1] not in best or r[3].startswith("src" + os.sep):
+        b = best.get(r[1])
+        if b is None or (b[5] and not r[5]) or (b[5] == r[5] and r[3].startswith("src" + os.sep)):
             best[r[1]] = r
-    return list(best.values())
+    return [r[:5] for r in best.values()]
 
 
 def never_tried(max_size):
