@@ -5,6 +5,8 @@ compile differently (try a codegen lever from docs/codegen.md, or prove it equiv
 
   1. register renaming (tools/equiv/rename.py): milliseconds; when it proves the function, the bytes differ only by
      register names and the order of independent instructions.
+  0. closeness (tools/equiv/closeness.py): milliseconds; CLOSE / NEAR / STRUCTURAL from the calls, stores, branch
+     shape and a register-insensitive instruction similarity, so an undecided function still says how far off it is.
   2. angr (tools/equiv/angr_layer.py), capped at a few seconds, without prove.py's mutant self-test: a proof says the
      function is very likely equivalent (prove.py --record runs the full proof and records it); a counterexample is
      a definite difference, printed in words with the inputs that show it.
@@ -108,6 +110,8 @@ def run(va, angr_timeout=15.0, emu_timeout=10, log=print):
             " missing or extra. Compare the call lines of the diff above first." % nc.groups())
     elif not same:
         log("quick check: our register use differs from retail's (%s), so it is checked at L2 (every register)" % why)
+    import closeness
+    log("closeness: " + closeness.describe(closeness.compare(retail, ours)))
     import rename
     r = rename.prove(retail, ours, level)
     if r["status"] == "proved":
