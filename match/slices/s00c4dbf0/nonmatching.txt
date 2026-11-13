@@ -9,6 +9,5 @@
 00c4e570  923  Complete cSPMission Update/driver; residual is loop scheduling, call ordering, and register pressure.
 00c4e9a0  198  Complete mission event registration; residual is message-id setup ordering and register allocation.
 00c4ea70  253  Complete cMissionColonize init; residual is vtable-call and store interleaving order.
-00c4ed50   5  Complete counter comparison predicate; residual is add-vs-sub encoding of the negative constant (semantically identical).
 00c4edd0  91  Complete register-callback on slot 0x14c; residual is thiscall stub shape and stack setup.
 00c4ee30  91  Complete register-callback on slot 0x150; residual is thiscall stub shape and stack setup.
