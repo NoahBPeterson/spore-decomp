@@ -15,3 +15,4 @@
 ../src/game/SPGonzago/SPMissionFetch.cpp  ?push_back@cFetchSampleVector@@QAEXABUcFetchSample@@@Z  00c53a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionFetch.cpp  ?clear@cFetchSampleVector@@QAEXXZ  00c53a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionFetch.cpp  ?ReadFetchSamples@@YAXPAVcSerializer@@AAVcFetchSampleVector@@@Z  00c53ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionFetch.cpp  ?UpdateDuration@cSPMissionFetch@@QAEHXZ  00c528a0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
