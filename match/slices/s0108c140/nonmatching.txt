@@ -5,7 +5,6 @@
 0108c590 0 havok-equivalent
 0108c670 0 havok-equivalent
 0108c700 0 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov)
-0108c790 0 havok-equivalent; R30 active byte-match claim
 0108c7e0 0 havok-equivalent
 0108c950 0 havok-equivalent
 0108c9d0 0 havok-equivalent; equiv.py WEAK (449 valid, 62.5% cov)
