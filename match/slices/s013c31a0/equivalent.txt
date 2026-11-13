@@ -1,5 +1,4 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 slices/s013c31a0/s013c31a0.cpp  ?f_013c31a0@@YAXXZ  013c31a0  /O2 /MD /Gy /EHsc /TP
-slices/s013c31a0/s013c31a0.cpp  ?f_013c3550@@YAXXZ  013c3550  /O2 /MD /Gy /EHsc /TP
 slices/s013c31a0/s013c31a0.cpp  ?f_013c43b0@@YAXXZ  013c43b0  /O2 /MD /Gy /EHsc /TP
 slices/s013c31a0/s013c31a0.cpp  ?f_013c7db0@@YAXXZ  013c7db0  /O2 /MD /Gy /EHsc /TP
