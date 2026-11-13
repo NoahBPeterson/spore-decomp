@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00961db0 43 complete hashtable DoFreeNodes; register allocation swaps the node/next roles (edi<->esi)
-00961e80 2 complete Window::Shutdown; cl emits `sub eax,8` where the original has `add eax,-8`
 00961f20 84 complete Window::SetName-style hash lookup: FUN_6ab760(self+0xac,key) early-out, WString assign via 0x423650, vtable+0x90 hook, then vtable-slot-4 attach whose this-adjust yields `self` when `this-4` is non-null and whose 16-byte local holds {0xe,2} in its upper half. ours=135B vs orig=150B (regalloc/scheduling). equiv WEAK: 215 valid inputs, 31.6% coverage (need 60%).
 00961fc0 193 complete window-proc/child-add path; two Win::RecomputeFlags calls (0x9613e0) as in the card. ours=254B vs orig=316B (the original inlines more of the tree walk). equiv UNSUPPORTED: the original cannot execute under the harness (fault(read)=371 of 400).
 00962100 82 complete cGetChildWindowCache lookup-and-insert. Fixed this session: find()'s hidden-return iterator is 8 bytes - it must be received in an adjacent int[2] (the old single int overflowed the frame and corrupted the locals), Release goes through the iterator's second word, and FUN_009615c0 is thiscall (ecx=self, pops 0xc) not cdecl. equiv PASS: 204 valid inputs, 93.2% coverage.

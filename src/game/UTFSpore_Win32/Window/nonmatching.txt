@@ -32,7 +32,6 @@
 00961ae0 37 PurgeProcs: list walk and free schedule differ
 00961b40 281 vector-of-lists copy: allocation and node clone schedule differ; equiv: WEAK (member Copy, 28.7% coverage)
 00961db0 43 complete hashtable DoFreeNodes; register allocation swaps the node/next roles (edi<->esi)
-00961e80 2 complete Window::Shutdown; only residual is cl emitting `sub eax,8` where the original has `add eax,-8` for the tagged-child adjustment (the following `add eax,4` already matches) [R31 active draft claim; native validation pending.]
 00962180 123 complete hashtable DoEraseNode; bucket-advance loop/pointer scheduling differs
 00962580 16 complete this-adjust wrapper; only the argument-evaluation schedule of the call differs
 009625b0 16 complete this-adjust wrapper; only the argument-evaluation schedule of the call differs
