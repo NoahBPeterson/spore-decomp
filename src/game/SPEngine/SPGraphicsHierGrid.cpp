@@ -537,7 +537,7 @@ ListNode** __stdcall list_insert_before(ListNode** out, ListIterator position, v
     node->pNext = position.mpNode;
     node->pPrev = position.mpNode->pPrev;
     position.mpNode->pPrev->pNext = node;
-    ListNode** r = out;
+    ListNode** r = *(ListNode** volatile*)&out;
     _ReadWriteBarrier();
     ListNode* pos = position.mpNode;
     pos->pPrev = node;

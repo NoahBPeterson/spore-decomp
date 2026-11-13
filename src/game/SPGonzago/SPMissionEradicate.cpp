@@ -449,12 +449,15 @@ void __fastcall FUN_00c4ed20(void* ecx_this, void* edx)
 // @ 0x00c4ed50
 int __fastcall FUN_00c4ed50(void* ecx_this, void* edx)
 {
-    int a = *(int*)((char*)ecx_this + 0x208);
-    int b = *(int*)((char*)ecx_this + 0x204);
-    int ge = (a >= b) ? 1 : 0;
-    int r = (ge - 1) & 0x2ee1aa4e;
-    r = r + (int)0xa2b7bfa8;
-    return r;
+    struct MissionCounterPrefix {
+        u32 mPrefix000[0x204 / 4];
+        int mTotalNumKillsNeeded;
+        int mNumDiseasedKills;
+    };
+    const MissionCounterPrefix* mission = (const MissionCounterPrefix*)ecx_this;
+    int a = mission->mNumDiseasedKills;
+    int b = mission->mTotalNumKillsNeeded;
+    return (int)((a < b) ? 0xd19969f6u : 0xa2b7bfa8u);
 }
 
 // @ 0x00c4edd0

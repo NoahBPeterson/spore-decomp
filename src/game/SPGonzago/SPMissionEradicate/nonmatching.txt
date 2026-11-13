@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00c4ed50 5 Complete counter comparison predicate; residual is add-vs-sub encoding of the negative constant (semantically identical). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c4edd0 87 Complete register-callback on slot 0x14c; residual is thiscall stub shape and stack setup. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c4ee30 87 Complete register-callback on slot 0x150; residual is thiscall stub shape and stack setup. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c4f220 43 nonmatching: ValidateHerds; remaining diff is register allocation/scheduling noise; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (400 valid, 7.6% coverage)

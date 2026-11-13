@@ -8,6 +8,5 @@
 00ec0340  100  complete; difftest FAIL (eax). Decider returning char via `al` only: original's obj==0 path does `xor al,al` leaving stale eax = 0x40454800, while ours clears the full register; shape differs throughout.
 00ec0430  255  complete; difftest UNSUPPORTED (all inputs discarded: fault-read). Victim-selection predicate walking several object pointers; every generated input dereferences an invalid address.
 00ec0530  436  complete; difftest UNSUPPORTED (all inputs discarded: fault-read). Nearest-eligible-combatant search arming the multistage attraction; multi-level pointer chase faults on all inputs.
-00ec0740  3  complete; difftest WEAK. `lea ecx,[esi+0xc0]` in the original vs `add esi,0xc0` in ours: passing `(int*)(obj+0xc0)` directly (no pointer local, no barrier) lets cl use lea ecx, then the following `push eax` no longer forces eax (the push of a pointer temp was what pinned esi).
 00ec08d0  72  complete; difftest WEAK. Inspect-object decider creating the stimulus; stimuli call layout differs.
 00ec0970  158  complete; difftest WEAK. Second inspect-object decider; same stimulus-construction differences plus branch layout.

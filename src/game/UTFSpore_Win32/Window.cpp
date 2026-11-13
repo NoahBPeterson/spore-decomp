@@ -1459,7 +1459,11 @@ bool EA::UTFWin::Window::Shutdown()
     do {
       char* v = *(char**)(self + 0x40);
       char* adj;
-      if (v) { v = v + -8; adj = v ? v + 4 : 0; }
+      if (v) {
+        EA::UTFWin::WindowNode* node = (EA::UTFWin::WindowNode*)v;
+        EA::UTFWin::Window* owner = static_cast<EA::UTFWin::Window*>(node);
+        adj = owner ? (char*)static_cast<EA::UTFWin::IWindow*>(owner) : 0;
+      }
       else adj = 0;
       ((VtblE0*)*(void**)base)->fn(base, (int)(size_t)adj);
     } while (lst[1] != (int)lst);

@@ -8,3 +8,4 @@
 ../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?CopyConstruct@cGrid_s0070_2980@@QAEPAU1@ABU1@@Z  00703050  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?grid_copy_forward@@YAPAUcGrid_s0070_2980@@PAU1@00@Z  00703620  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?erase@GridVec@@QAEPAUcGrid_s0070_3700@@PAU2@0@Z  00703da0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?list_insert_before@@YGPAPAUListNode@@PAPAU1@UListIterator@@PAPAX@Z  00701050  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
