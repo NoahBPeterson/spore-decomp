@@ -174,6 +174,12 @@ struct SRSub {
     void vfn4() { VFN(this, 4, TC_v0)(this); }
 };
 
+// Partial object view through the observed reference-interface vtable at +8.
+struct RefCountedPrefix {
+    unsigned int mPrefix[2];
+    void** mReferenceVtable;
+};
+
 // ================================================================================================
 // @ 0x00ad79d0
 CamInfo* CamInfo::init(void* pa, float* pb)
@@ -477,11 +483,14 @@ extern "C" void** __cdecl FUN_00ad81b0(void** begin, void** end, void** dst, cha
                 void* nw = *begin;
                 void* old = *dst;
                 if (nw != old) {
-                    if (nw)
-                        VFN((char*)nw + 8, 0, TC_v0)((char*)nw + 8);
+                    if (nw) {
+                        void** table = *(void** volatile*)&((RefCountedPrefix*)nw)->mReferenceVtable;
+                        TC_i0 call = (TC_i0)table[0];
+                        call(&((RefCountedPrefix*)nw)->mReferenceVtable);
+                    }
                     *dst = nw;
                     if (old)
-                        VFN((char*)old + 8, 4, TC_v0)((char*)old + 8);
+                        ((TC_i0)((RefCountedPrefix*)old)->mReferenceVtable[1])(&((RefCountedPrefix*)old)->mReferenceVtable);
                 }
                 dst++;
             }
