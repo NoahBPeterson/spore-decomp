@@ -573,23 +573,7 @@ void hkString::sprintf(char* buf, const char* fmt, ...)
 // @ 0x0107f3d0
 int hkString::strCmp(const char* a, const char* b)
 {
-	const unsigned char* pa = (const unsigned char*)a;
-	const unsigned char* pb = (const unsigned char*)b;
-	bool less;
-	for (;;)
-	{
-		unsigned char ca = pa[0];
-		less = ca < pb[0];
-		if (ca != pb[0]) break;
-		if (ca == 0) return 0;
-		ca = pa[1];
-		less = ca < pb[1];
-		if (ca != pb[1]) break;
-		pa += 2;
-		pb += 2;
-		if (ca == 0) return 0;
-	}
-	return (1 - (int)less) - (int)less;
+	return ::strcmp(a, b);
 }
 
 // @ 0x0107f420

@@ -20,3 +20,4 @@ slices/s0107f4a0/s0107f4a0.cpp  ??_GhkMemoryStreamReader@@UAEPAXI@Z  01080240  /
 slices/s0107f4a0/s0107f4a0.cpp  ?getNumMembers@hkClass@@QBEHXZ  01080330  /vc71 /O2 /MD /Gy /TP
 slices/s0107f4a0/s0107f4a0.cpp  ?hkReferencedObject_constructAt@@YAXPAVhkReferencedObject@@@Z  01080290  /vc71 /O2 /MD /Gy /TP
 slices/s0107f4a0/s0107f4a0.cpp  ??1hkPoolMemory@@UAE@XZ  0107f6c0  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?getMember@hkClass@@QBEABVhkClassMember@@H@Z  01080350  /vc71 /O2 /MD /Gy /TP

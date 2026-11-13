@@ -4,3 +4,4 @@ slices/s0108c140/s0108c140.cpp  ?getConstraintInfo@hkMovingSurfaceConstraintData
 slices/s0108c140/s0108c140.cpp  ?getContactPointId@hkContactPointConfirmedEvent@@QBEGXZ  0108d040  /vc71 /O2 /MD /Gy /TP
 slices/s0108c140/s0108c140.cpp  ?addOverlappingCollidable@hkSimpleShapePhantom@@UAEXPAVhkCollidable@@@Z  0108c620  /vc71 /O2 /MD /Gy /TP
 slices/s0108c140/s0108c140.cpp  ??0hkSimpleShapePhantom@@QAE@PBVhkShape@@ABVhkTransform@@I@Z  0108c750  /vc71 /O2 /MD /Gy /TP
+slices/s0108c140/s0108c140.cpp  ??1hkSimpleShapePhantom@@UAE@XZ  0108c790  /vc71 /O2 /MD /Gy /TP

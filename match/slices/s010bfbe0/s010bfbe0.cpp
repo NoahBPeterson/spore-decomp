@@ -79,6 +79,10 @@ class hkConvexTranslateShape : public hkConvexShape
 public:
     hkConvexTranslateShape(const hkConvexShape* childShape, const hkVector4& translation);                        // 0x010BFEB0
     virtual ~hkConvexTranslateShape();                                                                            // 0x010C0110 (scalar deleting form)
+    static void operator delete(void* p)
+    {
+        hkMemory::s_instance->deallocateChunk(p, static_cast<hkReferencedObject*>(p)->m_memSizeAndFlags, 0x24);
+    }
     virtual void calcStatistics(hkStatisticsCollector* c) const;                                                  // 0x010BFE50 (slot 1)
     virtual void getAabb(const hkTransform& localToWorld, float tolerance, hkAabb& out) const;                     // 0x010C0160
     virtual float getMaximumProjection(const hkVector4& dir) const;                                                // 0x010BFF00

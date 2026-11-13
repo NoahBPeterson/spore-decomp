@@ -5,6 +5,9 @@
 #include "hk31_agents.h"
 #include <math.h>
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 class hkThreadMemory { public: void deallocateChunk(void* p, int nbytes, int memClass); };      // 0x0107DB10
 static inline hkThreadMemory* getThreadMemory() { return (hkThreadMemory*)hkTlsGet(g_hkThreadMemoryTls); }
 
@@ -46,7 +49,8 @@ template void hkSymmetricAgent<hkMoppAgent>::getPenetrations(const hkCdBody&, co
 // @ 0x010e1a50  (destructor body; 0x010e19f0 is the scalar deleting destructor generated from it)
 hkBvTreeAgent::~hkBvTreeAgent()
 {
-	if (m_collisionPartners.m_capacityAndFlags >= 0)
+	_ReadWriteBarrier();
+	if ((m_collisionPartners.m_capacityAndFlags & 0x80000000u) == 0)
 		getThreadMemory()->deallocateChunk(m_collisionPartners.m_data, (m_collisionPartners.m_capacityAndFlags & HK_ARRAY_CAPACITY_MASK) * 12, HK_MEMORY_CLASS_ARRAY);
 }
 

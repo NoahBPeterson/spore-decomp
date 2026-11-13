@@ -341,7 +341,7 @@ hkConstraintInstance* hkWorldOperationUtil::addConstraintImmediately(hkWorld* wo
 void hkSimpleConstraintOwner::addConstraintInfo(hkConstraintInstance*, hkConstraintInfo& info)
 {
 	int v = info.m_maxSizeOfJacobians;
-	if (v < m_maxSizeOfJacobians)
+	if (m_maxSizeOfJacobians > v)
 		v = m_maxSizeOfJacobians;
 	m_maxSizeOfJacobians = v;
 	if (v <= info.m_sizeOfJacobians)

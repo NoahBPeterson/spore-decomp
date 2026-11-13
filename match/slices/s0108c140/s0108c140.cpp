@@ -6,6 +6,9 @@
 #include "../s010eb310/hk31_math.h"
 #include <string.h>
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 #ifdef _WIN32
 extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void* cs);
 #endif
@@ -382,7 +385,8 @@ hkSimpleShapePhantom::hkSimpleShapePhantom(const hkShape* shape, const hkTransfo
 // @ 0x0108c790
 hkSimpleShapePhantom::~hkSimpleShapePhantom()
 {
-	if (m_collisionDetails.m_capacityAndFlags >= 0)
+	_ReadWriteBarrier();
+	if ((m_collisionDetails.m_capacityAndFlags & 0x80000000u) == 0)
 	{
 		hkThreadMemory_getInstance()->deallocateChunk(m_collisionDetails.m_data,
 			(m_collisionDetails.m_capacityAndFlags & hkArray<hkCollisionDetail>::CAPACITY_MASK) * 4, HK_MEMORY_CLASS_ARRAY_T);

@@ -806,8 +806,16 @@ hkAabb& hkAabbPhantom::calcAabb(hkAabb& out) { out = m_aabb; return out; }
 // @ 0x0108dde0
 void hkAabbPhantom::setAabb(const hkAabb& aabb)
 {
-    m_aabb = aabb;
-    updateBroadPhase(m_aabb);   // tail call with the phantom's own copy
+    m_aabb.m_min.m_x = aabb.m_min.m_x;
+    hkAabb& target = m_aabb;
+    target.m_min.m_y = aabb.m_min.m_y;
+    target.m_min.m_z = aabb.m_min.m_z;
+    target.m_min.m_w = aabb.m_min.m_w;
+    target.m_max.m_x = aabb.m_max.m_x;
+    target.m_max.m_y = aabb.m_max.m_y;
+    target.m_max.m_z = aabb.m_max.m_z;
+    target.m_max.m_w = aabb.m_max.m_w;
+    updateBroadPhase(target);
 }
 
 // @ 0x0108de30

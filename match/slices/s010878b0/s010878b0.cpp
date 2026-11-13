@@ -504,7 +504,8 @@ void hkRigidMotion::setDeactivationClass(hkUint16 c)
 void hkRigidMotion::applyLinearImpulse(const hkVector4& imp)
 {
     // X87-PRECISION: massInv * imp is added to the velocity without an intermediate float store.
-    hkX87Real mInv = m_massInv;
+    const volatile float& massInv = m_massInv;
+    float mInv = massInv;
     m_linearVelocity.x = (float)(mInv * imp.x + m_linearVelocity.x);
     m_linearVelocity.y = (float)(mInv * imp.y + m_linearVelocity.y);
     m_linearVelocity.z = (float)(mInv * imp.z + m_linearVelocity.z);
