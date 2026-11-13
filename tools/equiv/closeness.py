@@ -8,8 +8,12 @@ Static and fast (milliseconds), so it can rank every undecided function. Four me
   stores      the memory offsets written through a register (member fields; the stack frame is left out) and to
               fixed addresses (globals)
   shape       conditional branches, loops (backward jumps) and returns
-and a label: CLOSE (same calls, stores and shape, high similarity: probably codegen only, a lever or a proof),
-NEAR (one of them differs a little) or STRUCTURAL (calls, stores or shape differ: the source does something else).
+and a label: SAME SHAPE (same calls, stores and conditional branches), NEAR, or DIFFERENT SHAPE.
+
+It measures structure, NOT correctness. Validated against proofs (2026-11-13, 300 random functions of each tier):
+72% of proven-equivalent functions are SAME SHAPE, but so are 64% of proven-different ones, because most real bugs
+(a wrong value, argument or condition) keep the calls, stores and branches. So it is a distance for orientation, never
+a verdict: the verdict comes from tools/contrib/prove.py or the quick check's angr and emulator steps.
 """
 import collections, difflib, re
 
@@ -78,7 +82,7 @@ def compare(retail, ours):
     st_common = sum((sa & sb).values())
     st_total = max(sum(sa.values()), sum(sb.values()))
     stores_same = sa == sb
-    shape_same = a[3] == b[3]
+    shape_same = a[3][0] == b[3][0]     # conditional branches; loop and return counts follow block layout
     diffs = []
     if not calls_same:
         if len(a[1]) != len(b[1]):
@@ -93,13 +97,12 @@ def compare(retail, ours):
                      "; only retail writes " + only_r if only_r else "",
                      "; only ours writes " + only_o if only_o else ""))
     if not shape_same:
-        diffs.append("shape (branches, loops, returns): retail %d/%d/%d, ours %d/%d/%d" % (a[3] + b[3]))
-    big = (len(a[1]) != len(b[1])) or (st_total and st_common / st_total < 0.8) or \
-          abs(a[3][0] - b[3][0]) > 1 or a[3][1] != b[3][1]
+        diffs.append("conditional branches: retail %d, ours %d" % (a[3][0], b[3][0]))
+    big = (len(a[1]) != len(b[1])) or (st_total and st_common / st_total < 0.8) or abs(a[3][0] - b[3][0]) > 1
     if calls_same and stores_same and shape_same and sim >= 0.5:
-        label = "CLOSE"         # the strong signal; similarity is noisy for short functions
+        label = "SAME SHAPE"
     elif big or sim < 0.6:
-        label = "STRUCTURAL"
+        label = "DIFFERENT SHAPE"
     else:
         label = "NEAR"
     return {"label": label, "similarity": round(sim, 3), "calls_same": calls_same, "stores_same": stores_same,
@@ -107,9 +110,8 @@ def compare(retail, ours):
 
 
 def describe(c):
-    head = {"CLOSE": "CLOSE: same calls, stores and shape; probably only codegen (a lever, or a proof)",
-            "NEAR": "NEAR: mostly the same; one part differs a little" if c["diffs"] else
-                    "NEAR: same calls, stores and shape, but the instructions differ more than codegen usually does",
-            "STRUCTURAL": "STRUCTURAL: the source does something different"}[c["label"]]
+    head = {"SAME SHAPE": "SAME SHAPE: the same calls, stores and branches (values can still differ: see the verdict)",
+            "NEAR": "NEAR: mostly the same shape; one part differs a little",
+            "DIFFERENT SHAPE": "DIFFERENT SHAPE: calls, stores or branches differ"}[c["label"]]
     return "%s; instructions %d%% alike ignoring registers (%d vs %d)%s" % (
         head, round(100 * c["similarity"]), c["n"][0], c["n"][1], "".join("\n  - " + d for d in c["diffs"]))
