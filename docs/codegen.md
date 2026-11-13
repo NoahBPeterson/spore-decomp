@@ -25,17 +25,17 @@ middleware, each built by its own compiler:
 
 | Code | Compiler | How we compile it | Marker |
 |---|---|---|---|
-| Spore game code + EA framework (UTFSpore) | **VS2008 SP1, cl 15.00.30729.01** (RTM 15.00.21022.08 still open) | default `tools/matching/cl.sh` | **[15]** |
+| Spore game code + EA framework (UTFSpore) | **VS2008 SP1, cl 15.00.30729.01** (the GOG build's intact Rich header: 2,341 objects from build 30729, none from RTM's 21022) | default `tools/matching/cl.sh` | **[15]** |
 | Havok 3.1.0 (all 469 objects) | **VC .NET 2003, cl 13.10.3077** | `/vc71` → `cl71.sh` (13.10.3077, Toolkit 1.01) | **[13]** |
 | RenderWare 4 core libraries | **VC .NET 2003, cl 13.10** | `/vc71` | **[13]** |
-| RenderWare 4 core **additionally** | **`/GL` + `/LTCG`** (link-time codegen) | not reproducible single-object | **[LTCG]** |
+| RenderWare 4 core **additionally** | **`/GL` + `/LTCG`** (link-time codegen) | `/vc71` + `/GL`, linked `/LTCG` against stub callees (`ltcg/<va>.cpp`, §11.4) | **[LTCG]** |
 | Other code inside the RenderWare address range (NegateRows, LpcSynthesize, RW audio) | VS2008 SP1 | default | **[15]** |
 | DirectX 8.1 `d3dx8.lib` members, IJG 6a / zlib 1.1.3 / libpng 1.0.5 | product 29 build 9178 (XP DDK); pinned upstream | `msvc7.0ddk`-style / upstream source | **[DDK]** |
 
 The distinction matters because cl 15 and cl 13.10 make the **same** decisions
 for integer code but **different** ones for x87 floating point, and `/LTCG`
-defers codegen to the linker so a single-object compile cannot match callers at
-all. The pseudo-flag `/vc71` selects `cl71.sh`; it lives in the flag list so
+defers codegen to the linker, so a plain single-object compile cannot match its callers (a /GL
+build linked against stubs of the callees can: §11.4). The pseudo-flag `/vc71` selects `cl71.sh`; it lives in the flag list so
 manifests, `chk.py` and `difftest` pick it per line. `tools/matching/chk.py
 --flags` and a manifest row's flags both accept it.
 
@@ -56,8 +56,12 @@ alone — which only the linker knows under `/LTCG`. More generally, the origina
 reads `ecx`/`eax`/`edx` at entry with no C signature that explains them
 (`docs/tickets.md`, "custom/LTCG register ABI"). See §11.4.
 
-**Policy for [LTCG]:** equivalence-only until the whole binary has compilable
-source. Do not chase byte-exactness for callers (`symbols/renderware4_core.txt`
+**Policy for [LTCG]:** a caller can be built as the original was: `/GL`, linked with `/LTCG` against a stub
+file `ltcg/<va>.cpp` beside its manifest that gives each callee the original's kill set and calling
+convention (`tools/matching/ltcg.py`; `check.py` does it automatically when the file exists;
+`match/slices/s011efb60/ltcg/011efeb0.cpp` is the example to copy). The pilot, `Raster::Initialize` 0x011efeb0, went from 25
+register differences to one instruction that is not an LTCG effect. Without a stub file, prove callers
+equivalent rather than chase byte-exactness (`symbols/renderware4_core.txt`
 lists the ranges: `0112c500–01176a90`, `011e2000–0120bc50`). Leaf functions that
 make no calls have nothing to cross-optimise and can still match under `/vc71`.
 
@@ -741,7 +745,8 @@ emits low-level IR and `link.exe /LTCG` generates code seeing every callee:
   caller: §11.3.2 has the static detection (`regs_written`) and the fixes, and
   `tools/hybrid/regfootprint.py` lists the affected hooks. The compiler owns
   allocation, so the fixes are indirect.
-- **Policy:** equivalence-only for callers; leaf functions may still match.
+- **Policy:** build callers with a stub file (`ltcg/<va>.cpp`, see the policy note in §1); without one, prove
+  them equivalent. Leaf functions may still match as plain `/vc71` objects.
   `equiv.py` reports such ABI mismatches as UNSUPPORTED rather than testing
   them.
 
@@ -834,10 +839,8 @@ source. Flag matrices almost never explain a residual in game code.
 | `/vc71` for Havok + RW4 core | dev PDB `S_COMPILE` = cl 13.10.3077 |
 | `/GL /LTCG` for RW4 core | cross-call register allocation |
 
-- RTM vs SP1 is still open: the Rich header was destroyed by SteamStub, and the
-  manifest's `9.0.21022.8` CRT binding is SP1's default too. Every function so
-  far matches with SP1. Test residual mismatches against VS2008 RTM
-  (15.00.21022.08).
+- SP1, not RTM: the Steam build's Rich header was destroyed by SteamStub, but the GOG build's is intact and
+  lists 2,341 objects from cl/link build 30729 (SP1) and none from RTM's 21022.
 - Havok was built with **cl 13.10.3077**, and we match with that build (Visual
   C++ Toolkit 2003 1.01; until 2026-11-09 Toolkit 1.0's 13.10.3052, which matched the same rows).
 - VC7.1 has no `/fp:` switch.
