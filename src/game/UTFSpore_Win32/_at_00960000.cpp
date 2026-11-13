@@ -53,7 +53,7 @@ extern void* g_16f6568;         // shader state object pointer
 // ---- items of slice s00961db0 end
 
 // ---- items of slice s00962ff0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct Stopwatch { void Init(int, int); void SetUnits(int); void Restart(); };
+// (the local Stopwatch stand-in is gone: FadeEffect uses EA::Stopwatch from EA/Stopwatch.h)
 // ---- items of slice s00962ff0 end
 
 // ---- items of slice s00966b20 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -244,7 +244,8 @@ void* __fastcall FadeEffect_Ctor(void* self)
     *(void**)((char*)self + 4) = (void*)0x1440d6c;
     *(void**)((char*)self + 0xc) = (void*)0x1440d30;
     *(float*) ((char*)self + 0x10) = 0.0f;
-    ((Stopwatch*)((char*)self + 0x18))->Init(0, 0);
+    EA::Stopwatch* sw = (EA::Stopwatch*)((char*)self + 0x18);
+    sw->EA::Stopwatch::Stopwatch(EA::Stopwatch::kUnitsCycles, false);
     *(int*)  ((char*)self + 0x30) = 1;
     *(int*)  ((char*)self + 0x34) = 0;
     *(float*)((char*)self + 0x38) = 0.0f;
@@ -256,7 +257,7 @@ void* __fastcall FadeEffect_Ctor(void* self)
     *(char*) ((char*)self + 0x50) = 0;
     *(int*)  ((char*)self + 0x54) = 2;
     *(int*)  ((char*)self + 0x58) = 0;
-    ((Stopwatch*)((char*)self + 0x18))->SetUnits(5);
+    sw->SetUnits(EA::Stopwatch::kUnitsSeconds);
     return self;
 }
 
