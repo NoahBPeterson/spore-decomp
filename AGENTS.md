@@ -60,7 +60,10 @@ no match). You can run the same check locally (below) before you open the pull r
    requests opened minutes ago, and says whose they are. If someone else has it, pick another function unless they
    agree to hand it over. A local queue or reservation is not a claim; only an open pull request is.
 4. **Write, build, compare.** Edit the source, then `.venv/bin/python tools/contrib/check.py 0x00529690`. It prints
-   `MATCH`, the compiler errors, or an instruction diff against the original. Before inventing source shapes, look
+   `MATCH`, the compiler errors, or an instruction diff against the original, followed by a **quick check** (seconds):
+   `DIFFERS` means the source computes something else (it says what: a return value, a call, a write, with inputs
+   that show it), so fix the logic; `EQUIVALENT` means it only compiles differently, so try a lever or record the
+   proof (step 6); `LIKELY DIFFERS` and "could not decide" are hints. Before inventing source shapes, look
    up the difference in `docs/codegen.md`: most residual diffs are a known lever (`__restrict`, a single-expression
    virtual call, `_ReadWriteBarrier()`, declaration order, ...).
 5. **On MATCH**, `check.py` records it for you: it adds the function's `manifest.txt` line and removes its

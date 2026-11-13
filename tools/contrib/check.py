@@ -6,7 +6,8 @@
 Compiles the function's source file with its flags (tools/contrib/task.py shows them) and compares the function with
 its retail fingerprint (tools/ci/fingerprint.py): MATCH, or why not.  No game files needed for the verdict.  With
 work/SporeApp.analysis.bin (made from your own copy of the game by tools/contrib/make_image.py) it also prints an
-instruction diff of your build against the original.
+instruction diff of your build against the original, then a quick equivalence check (tools/equiv/quick.py, seconds;
+--no-quick skips it): does the source compute something else (fix the logic), or does it only compile differently?
 
 On MATCH it records the result: it adds the function's manifest.txt line and removes its nonmatching.txt /
 partial.txt line, so the files are ready for your pull request.  --dry-run only prints what it would change.
@@ -36,6 +37,7 @@ def main():
     ap.add_argument("va")
     ap.add_argument("--flags", help="override the flags (space-separated)")
     ap.add_argument("--dry-run", action="store_true", help="on MATCH, print the bookkeeping changes instead of making them")
+    ap.add_argument("--no-quick", action="store_true", help="on NO MATCH, skip the quick equivalence check (tools/equiv/quick.py)")
     a = ap.parse_args()
     va = int(a.va, 16)
     fp = T.fingerprint(va)
@@ -89,6 +91,16 @@ def main():
             sys.stdout.flush()
             what = ["--raw", raw] if raw else [obj, sym]
             subprocess.run([sys.executable, os.path.join(ROOT, "tools", "matching", "cmpdis.py"), *what, "%08x" % va])
+            if not a.no_quick:
+                # is the source wrong, or does it only compile differently? (seconds; tools/equiv/quick.py)
+                print()
+                sys.stdout.flush()
+                sys.path.insert(0, os.path.join(ROOT, "tools", "equiv"))
+                try:
+                    import quick
+                    quick.run(va)
+                except Exception as e:      # the quick check is advice; it must never break check.py
+                    print("quick check: failed (%s: %s); --no-quick skips it" % (type(e).__name__, str(e)[:200]))
         else:
             print("  (for an instruction diff, make work/SporeApp.analysis.bin from your own game: tools/contrib/make_image.py)")
         return 1
