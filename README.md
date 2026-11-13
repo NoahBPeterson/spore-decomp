@@ -4,6 +4,14 @@ Rebuilding Spore's `SporeApp.exe` (2008, PC) as readable C++ that compiles to **
 one function at a time, with the original compilers (Visual C++ 2008 SP1, and the Visual C++ Toolkit 2003 for Havok
 and RenderWare). Every function is annotated with the original address it rebuilds (`// @ 0x00XXXXXX`).
 
+**Spore and Galactic Adventures are effectively one program.** The current PC release (Steam and GOG, rebuilt by EA
+in 2024) ships two executables, `SporeBin/SporeApp.exe` (Spore) and `SporebinEP1/SporeApp.exe` (Galactic
+Adventures). Both were built from the Galactic Adventures source tree an hour apart, with the same compilers and
+options: **99.75% of Spore's functions (90,260 of 90,482) are byte-identical in Galactic Adventures**, which adds
+about 1% of different code (mostly creature, tribe and vehicle behavior) and 4 MB of localized icons. Steam's and GOG's
+copies of each executable are identical apart from Steam's DRM section. So everything rebuilt here is Galactic
+Adventures code too; the fingerprints and addresses are those of `SporeBin/SporeApp.exe`.
+
 - **Progress:** [noahbpeterson.github.io/spore-decomp](https://noahbpeterson.github.io/spore-decomp/) (charts, modules,
   contributors), and the full tables in
   [`PROGRESS.md`](https://noahbpeterson.github.io/spore-decomp/PROGRESS.md), both rebuilt after every change.
@@ -20,13 +28,13 @@ Over 23,000 functions already have complete C++ source whose compiled bytes stil
 500 of them by only one to four bytes. Pick one, change the source until its bytes are identical, and open a pull
 request.
 
-You need Python 3.10+, Wine and `msitools` (macOS or Linux; on Windows, use WSL), and your own copy of Spore (Steam).
+You need Python 3.10+, Wine and `msitools` (macOS or Linux; on Windows, use WSL), and your own copy of Spore (Steam or GOG).
 
 ```sh
 python3 -m venv .venv && .venv/bin/pip install pefile capstone pycryptodome
 sh tools/ci/setup_toolchain.sh             # the original compilers, from Microsoft's installers, hash-checked
 sh tools/ci/setup_oss.sh                   # the open-source libraries some functions compile from, hash-checked
-.venv/bin/python tools/contrib/make_image.py "<Spore>/SporeBin/SporeApp.exe"   # must print IMAGE OK
+.venv/bin/python tools/contrib/make_image.py "<Spore>/SporeBin/SporeApp.exe"   # Steam or GOG; must print IMAGE OK
 
 .venv/bin/python tools/contrib/task.py --list          # fewest tries first, your own order; claimed ones hidden
 .venv/bin/python tools/contrib/task.py 0x00ee9260      # one function: its file, flags, note and source

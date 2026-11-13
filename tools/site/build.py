@@ -298,7 +298,11 @@ def build(out, prs_path, repo):
     # --- progress page
     b = ['<h1>Spore, rebuilt byte for byte</h1><p class="lede">Every function of Spore\'s <code>SporeApp.exe</code> (2008, PC) '
          'rewritten as readable C++ that compiles, with the original compilers, to exactly the machine code that shipped. '
-         'Almost right counts as zero.</p>']
+         'Almost right counts as zero.</p>'
+         '<p class="note"><b>Spore and Galactic Adventures are effectively one program.</b> The current PC release (Steam '
+         'and GOG) ships one executable for each, built from the same source with the same compilers: 99.75% of Spore\'s '
+         'functions are byte-identical in Galactic Adventures, which adds about 1% of different code. Every function '
+         'rebuilt here counts for both games.</p>']
     b.append('<div class="panel"><div class="hero">'
              '<div class="stat"><b>%.1f%%</b><span>of the code, by bytes</span></div>'
              '<div class="stat"><b>%s</b><span>of %s functions byte-exact</span></div>'
@@ -356,13 +360,13 @@ def build(out, prs_path, repo):
 change the source until the bytes are identical, and open a pull request. People and AI agents are both welcome;
 the check is the same for everyone.</p>
 <h2>You need</h2><ul><li>macOS or Linux (on Windows, WSL), Python 3.10+, Wine and <code>msitools</code></li>
-<li>Your own copy of Spore (Steam), to build a local analysis image that shows instruction diffs. It never leaves your machine.</li></ul>
+<li>Your own copy of Spore (Steam or GOG), to build a local analysis image that shows instruction diffs. It never leaves your machine.</li></ul>
 <h2>Set up and start</h2>
 <pre><code>git clone https://github.com/%(repo)s && cd %(name)s
 python3 -m venv .venv && .venv/bin/pip install pefile capstone pycryptodome
 sh tools/ci/setup_toolchain.sh        # the original compilers, from Microsoft's installers, hash-checked
 sh tools/ci/setup_oss.sh              # the open-source libraries some functions compile from, hash-checked
-.venv/bin/python tools/contrib/make_image.py "&lt;Spore&gt;/SporeBin/SporeApp.exe"   # must print IMAGE OK
+.venv/bin/python tools/contrib/make_image.py "&lt;Spore&gt;/SporeBin/SporeApp.exe"   # Steam or GOG; must print IMAGE OK
 
 .venv/bin/python tools/contrib/task.py --list        # fewest tries first, your own order; claimed ones hidden
 .venv/bin/python tools/contrib/task.py 0x00ee9260    # one function: file, flags, note, source
