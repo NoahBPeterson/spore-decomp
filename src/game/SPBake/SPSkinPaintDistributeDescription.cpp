@@ -364,6 +364,8 @@ struct cArguments_s0052_f170 {
     static void* MainArguments(cArguments_s0052_f170* self, ...);
     static void* OptionArguments(cArguments_s0052_f170* self, const char* name, int count);
     static unsigned char HasFlag(cArguments_s0052_f170* self, const char* name);  // 0x008380b0 (EA::ArgScript::cArguments::HasFlag)
+    void* MainArgs1(int count);
+    unsigned char HasFlagThis(const char* name);
 };
 }
 }
@@ -598,32 +600,37 @@ void DistributeParticles_OnEndParse(int param_1)
     }
 }
 
+struct cDistributeTarget_s0052_f170 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+    virtual void v36(); virtual void v37();
+    virtual float GetFloat(void* arg);
+    virtual int GetInt(void* arg);
+};
+
 // @ 0x0052f330
 void cDistributeCmd::SpacingExecute(cArguments_s0052_f170* args)
 {
-    int param_1 = (int)this;
-    typedef void* (__thiscall *MainArgsFn)(void*, int);
-    typedef unsigned char (__thiscall *HasFlagFn)(void*, const char*);
-    void** p = (void**)((MainArgsFn)0x00838320)(args, 1);
-    void* obj = *(void**)(param_1 + 4);
-    typedef float (__thiscall *VFnF)(void*, void*);
-    VFnF fn = (VFnF)(*(void***)obj)[0x98 / 4];
-    float v = fn(obj, *p);
-    *(float*)(*(int*)(param_1 + 0xc) + 0x54) = v;
-    *(unsigned char*)(*(int*)(param_1 + 0xc) + 0x72) = ((HasFlagFn)0x008380b0)(args, "cover");
-    *(unsigned char*)(*(int*)(param_1 + 0xc) + 0x73) = ((HasFlagFn)0x008380b0)(args, "ordered");
+    void** p = (void**)args->MainArgs1(1);
+    *(float*)(*(int*)((char*)this + 0xc) + 0x54) =
+        (*(cDistributeTarget_s0052_f170**)((char*)this + 4))->GetFloat(*p);
+    *(unsigned char*)(*(int*)((char*)this + 0xc) + 0x72) = args->HasFlagThis("cover");
+    *(unsigned char*)(*(int*)((char*)this + 0xc) + 0x73) = args->HasFlagThis("ordered");
 }
 
 // @ 0x0052f3a0
 void cDistributeCmd::LimitExecute(cArguments_s0052_f170* args)
 {
-    int param_1 = (int)this;
-    typedef void* (__thiscall *MainArgsFn)(void*, int);
-    void** p = (void**)((MainArgsFn)0x00838320)(args, 1);
-    void* obj = *(void**)(param_1 + 4);
-    VFnI fn = (VFnI)(*(void***)obj)[0x9c / 4];
-    int v = fn(obj, *p);
-    *(int*)(*(int*)(param_1 + 0xc) + 0x58) = v;
+    void** p = (void**)args->MainArgs1(1);
+    *(int*)(*(int*)((char*)this + 0xc) + 0x58) =
+        (*(cDistributeTarget_s0052_f170**)((char*)this + 4))->GetInt(*p);
 }
 
 // @ 0x0052f3f0
@@ -739,11 +746,12 @@ void cDistributeCmd::AddEffect(char param_2)
     }
 }
 
+extern void __fastcall CmdBaseDtor_0083cd90(void*);
+
 // @ 0x0052fb00
 void __fastcall BlockCmdBaseDerivedDtor(cBlockCommandBase_s0052_f170* p)
 {
-    typedef void (__thiscall *VoidFn)(void*);
-    ((VoidFn)0x0083cd90)(p);
+    CmdBaseDtor_0083cd90(p);
 }
 
 // @ 0x0052fb20

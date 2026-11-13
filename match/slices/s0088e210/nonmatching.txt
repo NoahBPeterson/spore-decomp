@@ -30,7 +30,6 @@
 
 0088e740 91 eastl::list<FaceSource,...>::DoAssign<ListIterator<FaceSource,...> >(...): complete; cause (B) -- retail is out-of-line 187 B, our DoAssign is inlined-smaller (112 B). difftest verdict UNSUPPORTED (4 unresolved refs: ??_U, FaceData::AddRef, FaceData::Release, ??_V).
 
-0088e800 3 eastl::hashtable<string16,pair<const string16,Face>,fixed_hashtable_allocator<...> >::DoFreeNode(hash_node*): complete; only cause (A) -- 3 differing bytes are the hash bucket / node-pool offsets (retail [x+0x4cc] vs ours [x+0x4f8]). difftest verdict UNSUPPORTED (2 unresolved refs: ??_V, FaceData::Release).
 
 0088e860 125 eastl::hashtable<string16,pair<const string16,Face>,...>::DoFreeNodes(hash_node**,uint): complete; cause (A) (retail 139 B, ours 244 B: our DoClear/DoFreeNode path not folded the same). difftest verdict UNSUPPORTED (1 unresolved ref: ??_V).
 

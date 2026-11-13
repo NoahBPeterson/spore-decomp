@@ -4,3 +4,4 @@ slices/s0082f9a0/s0082f9a0.cpp  ?SetMode1@ShadowDesc@@QAEXH@Z  00830280  /O2 /MD
 slices/s0082f9a0/s0082f9a0.cpp  ?FillDefaults@@YAXPAUShadowDesc@@PBU1@@Z  00830380  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s0082f9a0/s0082f9a0.cpp  ?SetPoint@DrawableTail@@QAEXPBM@Z  00830af0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s0082f9a0/s0082f9a0_b.cpp  ?FUN_008306a0@@YAXPAUImageInfoFull@@@Z  008306a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0082f9a0/s0082f9a0.cpp  ?QueryInterface@cSPUIStdDrawableImageInfo@@QAEPAXI@Z  00830430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

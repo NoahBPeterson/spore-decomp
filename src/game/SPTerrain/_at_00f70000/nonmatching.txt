@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00f71220 380 complete source; CCubeQuery::QueryD, NOT byte-exact (428 vs 414 bytes; x87 sqrt/dot shape differs); equiv UNSUPPORTED (SqrtF helper unresolved)
-00f713c0 11 complete source; CCubeQuery::GetCubeUV, NOT byte-exact (19 vs 17 bytes; nil-check address shape); equiv FAIL (esp/ABI)
 00f715d0 35 complete source; CCubeQuery::GetColorA, NOT byte-exact (45 vs 58 bytes; fld/fstp vs movss store shape); equiv FAIL (esp/ABI)
 00f71610 32 complete source; CCubeQuery::GetColorB, NOT byte-exact (45 vs 55 bytes; fld/fstp vs movss store shape); equiv FAIL (esp/ABI)
 00f71660 56 complete source; QueryScaleA, NOT byte-exact (72 vs 69 bytes); equiv FAIL (execution)

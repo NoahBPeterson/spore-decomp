@@ -3,3 +3,6 @@
 ../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?Parse@cSPSkinPaintDistributeParticlesCommand@?A0x5d0c430c@@UAE_NABULine@ArgScript@EA@@@Z  0052f040  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include
 ../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?WriteString@@YAPAUIStream@@PAU1@PAUstring@@@Z  005305c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include
 ../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?OnRegister@CmdStateMeta@@QAEXPAX0@Z  00530c40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include
+../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?BlockCmdBaseDerivedDtor@@YIXPAUcBlockCommandBase_s0052_f170@ArgScript@EA@@@Z  0052fb00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include
+../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?SpacingExecute@cDistributeCmd@@QAEXPAUcArguments_s0052_f170@ArgScript@EA@@@Z  0052f330  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include
+../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?LimitExecute@cDistributeCmd@@QAEXPAUcArguments_s0052_f170@ArgScript@EA@@@Z  0052f3a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include

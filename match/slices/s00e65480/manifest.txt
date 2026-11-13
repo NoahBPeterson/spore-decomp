@@ -1,0 +1,1 @@
+slices/s00e65480/s00e65480.cpp  ?InsertPair_00e65480@@YAXII@Z  00e65480  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

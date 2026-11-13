@@ -84,16 +84,19 @@ struct cSPUIStdDrawableImageInfo {
     void *QueryInterface(unsigned id);   // 0x00830430
 };
 
+// @ 0x00830430
 void *cSPUIStdDrawableImageInfo::QueryInterface(unsigned id)
 {
     switch (id) {
     case 0x5400186:
-    case 0xae9cb0fa:
     case 0xee3f516e:
     case 0xeec58382:
         return this;
+    case 0xae9cb0fa:
+        return this;
+    default:
+        return 0;
     }
-    return 0;
 }
 
 // ---------------------------------------------------------------- 0x008306a0
