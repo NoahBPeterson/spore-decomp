@@ -8,3 +8,4 @@ slices/s0108d0b0/s0108d0b0.cpp  ?createContactMgr@Factory@hkSimpleConstraintCont
 slices/s0108d0b0/s0108d0b0.cpp  ?calcAabb@hkShapePhantom@@UAEXAAVhkAabb@@@Z  0108dc20  /vc71 /O2 /MD /Gy /TP
 slices/s0108d0b0/s0108d0b0.cpp  ?isOverlappingCollidableAdded@hkAabbPhantom@@UAE?AVhkBool@@PBX@Z  0108de30  /vc71 /O2 /MD /Gy /TP
 slices/s0108d0b0/s0108d0b0.cpp  ??0Factory@hkSimpleConstraintContactMgr@@QAE@PAVhkWorld@@@Z  0108d850  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?setAabb@hkAabbPhantom@@QAEXABVhkAabb@@@Z  0108dde0  /vc71 /O2 /MD /Gy /TP
