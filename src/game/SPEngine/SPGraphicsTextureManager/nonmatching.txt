@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-007a9450 20 GetResourceForTexture: null path folds to absolute [0x24]; equiv: PASS 400 valid, 62.5% cov flags: /O2 /MD /Gy /EHsc /TP /GS-
 007a9470 34 CreateTexture: IDGenerator + vtable forwarding schedule; fixed 2026-10-12: generator call now goes through its vtable slot 1 (was the object field at +4) flags: /O2 /MD /Gy /EHsc /TP /GS-
 007a9620 22 CleanupJob: no EH frame (31 vs 87 B) and virtual-release shape differs; equiv: PASS 366 valid, 100% cov (release is a normal call, _ReadWriteBarrier blocks TCO) flags: /O2 /MD /Gy /EHsc /TP /GS-
 007a9680 83 deque range copy loop flags: /O2 /MD /Gy /EHsc /TP /GS-

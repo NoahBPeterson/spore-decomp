@@ -521,7 +521,10 @@ extern int   DAT_01565cec, DAT_01565cf0, DAT_01565cf8;
 extern int   DAT_01565d54, DAT_01565d58, DAT_01565d5c, DAT_01565d60;
 extern int   DAT_01565d00, DAT_01565d04, DAT_01565d08;
 extern int   DAT_015d9c6c, DAT_015d9c68;
-extern "C" void FUN_00ac9310(int a, int b, bool c);            // 0xac9310
+struct Vec;
+struct Vec3;
+struct NearestObjectTag { bool mValue; };
+extern "C" void* FUN_00ac9310(Vec* a, const Vec3* b, NearestObjectTag tag); // 0x00ac9310
 typedef unsigned char  byte;
 static inline void** VT(void* p) { return *(void***)p; }
 struct RCObj {                       // refcounted, vtable slot0 AddRef, slot1 Release
@@ -1807,9 +1810,10 @@ void Vec::FUN_00ac9d90()
 }
 
 // @ 0x00ac9dd0
-void FUN_00ac9dd0(int a, int b)
+void* FUN_00ac9dd0(Vec* a, const Vec3* b)
 {
-    FUN_00ac9310(a, b, false);
+    NearestObjectTag tag = { false };
+    return FUN_00ac9310(a, b, tag);
 }
 
 // @ 0x00ac9df0

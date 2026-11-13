@@ -55,7 +55,7 @@ struct VPi {
 uint32_t RwStreamX(uint32_t);                          // 0x011fd790
 void RwStreamY(uint32_t, void*);                       // 0x011fd7b0
 void RwGfxCall(int, void*);                            // 0x004cdd70
-struct RwObj { void Shutdown(); };
+void StateCacheEnd();                                  // 0x011fd820
 void RwShutdown2();                                    // 0x011fd7d0
 int  RwCheck();                                        // 0x011f3f20
 void RwSetMode(int, void*, int);                       // 0x00777ae0
@@ -167,7 +167,6 @@ extern uint32_t DAT_016f9238, DAT_016f923c, DAT_016f9218, DAT_016f9244;
 extern uint32_t DAT_015dea64, DAT_015dea5c, DAT_015dea58, DAT_015dea68, DAT_015dea60;
 extern uint32_t g_renderStateDirty;   // 0x016fa388
 extern uint32_t g_rasterDelta;        // 0x016f921c
-void RwTeardown();                                                     // 0x00529690
 void ActiveStateSetTexture(int n, void* tex);                          // rw::graphics::ActiveState::SetTexture
 void FUN_011f38e0();                                                   // 0x011f38e0
 struct V2 { uint32_t x, y; };
@@ -335,9 +334,9 @@ void WriteBuffer(uint32_t* a, uint32_t* b, uint32_t* c, uint32_t d)
 }
 
 // @ 0x00529690
-void __fastcall RwTeardown(RwObj* p)
+void nSPSkinner::cRTTBuffer::EndTriangles()
 {
-    p->Shutdown();
+    StateCacheEnd();
     RwShutdown2();
 }
 
@@ -375,7 +374,7 @@ void cQuadWriter::WriteQuadVerts(V2* a, V2* b, uint32_t param_3)
     uint32_t lac = a->x, la8 = a->y;
     EmitVertex4(&lac, &la4, &l9c, param_3);
 
-    RwTeardown();
+    reinterpret_cast<nSPSkinner::cRTTBuffer*>(this)->EndTriangles();
 }
 
 // @ 0x00529bf0

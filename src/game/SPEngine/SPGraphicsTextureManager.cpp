@@ -781,9 +781,11 @@ EA::ResourceMan::Key SP::cTextureManager::GetKeyFromTexture(SP::cTextureInstance
 }
 
 // @ 0x007a9450
-bool SP::cTextureManager::StallUntilLoaded(SP::cTextureInstance const * tex)
+void* cTextureManager::GetResourceForTexture(void* tex)
 {
-    return tex ? *(void**)((char*)tex + 0x1c) : *(void**)((char*)tex + 0x24);
+    SP::cTextureInstanceInternal const* texture = tex
+        ? static_cast<SP::cTextureInstanceInternal const*>(static_cast<SP::cTextureInstance const*>(tex)) : 0;
+    return texture->mResource.get();
 }
 
 // @ 0x007a9470

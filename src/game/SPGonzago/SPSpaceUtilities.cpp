@@ -562,7 +562,7 @@ long double FUN_010433e0(cPathSource* pSource, float fT, int iColumn)
 // @ 0x010434c0
 long double FUN_010434c0(float* pA, float* pB)
 {
-    long double fDx = (long double)pA[0] - (long double)pB[0];
+    float fDx = pA[0] - pB[0];
     long double fDy = (long double)pA[1] - (long double)pB[1];
     return fDy * fDy + fDx * fDx;
 }

@@ -194,7 +194,7 @@ extern "C" int   FUN_00b6e270(int);
 extern "C" int   FUN_00b6e290(int);
 extern "C" void  FUN_00c46500(void*);
 extern "C" void  FUN_00c449c0();
-extern "C" void  SP_cCreatureModeStrategy_NotifyEvent(float);
+extern "C" void __cdecl SP_cCreatureModeStrategy_NotifyEvent(float); // 0x00d2e8a0
 extern "C" void  SP_cSPTimer_Restart(void*);
 extern "C" int   SP_GetPropertyAsKey(int, int, int);
 extern "C" void* FUN_00b3d300(int);     // 0x00b3d300 SP::NounManager accessor
@@ -469,7 +469,13 @@ unsigned char MissionStub::FUN_00c2e8c0(int param_2)
 // @ 0x00c2e980
 void MissionStub::FUN_00c2e980()
 {
-    SP_cCreatureModeStrategy_NotifyEvent((float)*(int*)((char*)this + 0x84));
+    // Partial view through the signed amount consumed by this callback.
+    struct MissionEventValueView {
+        uint32_t mPad00[0x84 / 4];
+        int mAmount84;
+    };
+    const MissionEventValueView* mission = (const MissionEventValueView*)this;
+    SP_cCreatureModeStrategy_NotifyEvent((float)mission->mAmount84);
 }
 
 // @ 0x00c2e9b0

@@ -35,7 +35,8 @@ extern "C" int         vp6_get_info(int, void*);            // 0xfd6a50
 extern "C" void sub_00fd2970(void*);   // 0xfd2970
 extern "C" void sub_00fd5fa0(void);    // 0xfd5fa0
 extern "C" void sub_00fd69c0(void*, int, int); // 0xfd69c0
-extern "C" void sub_00fd6c10(void*);   // 0xfd6c10
+struct Vp6DecoderHandle;
+extern "C" int sub_00fd6c10(Vp6DecoderHandle*); // 0x00fd6c10
 typedef unsigned char  u8;
 struct DecodeOptions;
 static unsigned int cw_ctl(unsigned int newv, unsigned int mask)
@@ -89,10 +90,14 @@ struct Vp6Ext {
     void CtorDE80();
     void Ctor3E0(int p2, int p3, int p4);
 };
-struct ILayoutElem {
-    void SetSerializer();
+void EmptyCleanup();                                       // 0x00c2e4e0, folded empty target
+struct Vp6DecoderHandle {
+    void* mpDecoder;  // +0x00, passed by address to the VP6 decoder API
 };
+// Partial stream view through the embedded decoder handle; not a complete size claim.
 struct Vp6Stream43 {
+    unsigned int mPrefix[6];
+    Vp6DecoderHandle mDecoder;  // +0x18
     void Method430();
 };
 // ---- items of slice s00fcd210 end
@@ -272,8 +277,8 @@ void Vp6Ext::Ctor3E0(int p2, int p3, int p4)
 // @ 0x00fcd430
 void Vp6Stream43::Method430()
 {
-    sub_00fd6c10((void*)((char*)this + 0x18));
-    ((ILayoutElem*)((char*)this + 0x18))->SetSerializer();
+    sub_00fd6c10(&mDecoder);
+    EmptyCleanup();
 }
 
 // @ 0x00fcd450
