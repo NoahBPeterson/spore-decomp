@@ -431,7 +431,7 @@ def _exact_names():
     if _EXACT is not None:
         return _EXACT
     import glob
-    t = {}
+    seen = {}
     for f in glob.glob(os.path.join(ROOT, "match", "**", "manifest.txt"), recursive=True) + \
             glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"), recursive=True) + \
             glob.glob(os.path.join(ROOT, "match", "slices", "*", "equivalent.txt")) + \
@@ -439,17 +439,20 @@ def _exact_names():
         for line in open(f, errors="replace"):
             p = line.split()
             if len(p) >= 3 and re.fullmatch(r"[0-9a-f]{8}", p[2]):
-                t.setdefault(p[1], int(p[2], 16))
+                seen.setdefault(p[1], set()).add(int(p[2], 16))
     sm = os.path.join(ROOT, "work", "symmap.json")
     if os.path.exists(sm):
         for k, v in json.load(open(sm)).items():
-            t.setdefault(k, int(v, 16))
+            seen.setdefault(k, set()).add(int(v, 16))
     for line in open(os.path.join(ROOT, "symbols", "lib_names.txt")):
         p = line.split("#")[0].split()
         if len(p) >= 2:
-            t.setdefault(p[1], int(p[0], 16))
-    _EXACT = t
-    return t
+            seen.setdefault(p[1], set()).add(int(p[0], 16))
+    # a decorated name with more than one address is ambiguous: slices compile separately, so a slice's stand-in
+    # class can share a name with an unrelated function elsewhere (?SetUnits@Stopwatch@@ is RenderWare's in one slice
+    # and a stand-in for EA::Stopwatch in another)
+    _EXACT = {k: next(iter(v)) for k, v in seen.items() if len(v) == 1}
+    return _EXACT
 
 
 _IMPORTS = None
@@ -471,6 +474,8 @@ def _retail_imports():
 def _embedded(nm):
     """an address our sources put in a name by convention (FUN_00a11310, g_015f03fc, ..._0167a6d0), only when it is
     a known function start or lies in a data section of the retail image"""
+    if nm.startswith(("__ehhandler$", "__unwindfunclet$", "__catch$", "__tryend$", "$", "__real@", "__xmm@")):
+        return None                 # a compiler-generated wrapper names the function it belongs to, not itself
     m = re.search(r"(?:^|[^0-9a-fA-F])(0[0-9a-f]{7})(?:[^0-9a-fA-F]|$)", nm)
     if not m:
         return None
@@ -664,17 +669,33 @@ def prepare(retail, ours, level, hints):
         notes += problems[:3]
     # exact pairing from ground truth: when every relocation of ours resolves, it replaces the alignment's guesses
     # and the pairing is no longer heuristic, whatever the alignment looked like
+    # names CONFIRM the alignment's pairs or FILL its gaps, never override it: when the two disagree, neither is
+    # trusted (a name can mislead, e.g. a slice's stand-in class sharing a name with an unrelated function)
     exact, unresolved = exact_mapping(ours, mapping)
-    fixed = sum(1 for k, x in exact.items() if mapping.get(k) not in (None, x))
-    mapping.update(exact)
-    exact_complete = not unresolved
+    taken = {x: k for k, x in mapping.items()}
+    confirmed = filled = 0
+    conflicts = []
+    for k, x in exact.items():
+        if k in mapping:
+            if mapping[k] == x:
+                confirmed += 1
+            else:
+                conflicts.append(k[1])
+        elif x in taken and taken[x] != k:
+            conflicts.append(k[1])
+        else:
+            mapping[k], taken[x] = x, k
+            filled += 1
+    exact_complete = not unresolved and not conflicts
     if exact_complete:
         clean = True
-        notes = ["pairing exact (%d field(s) by name%s)" % (len(exact), ", %d alignment guess(es) corrected" % fixed
-                                                           if fixed else "")]
-    elif exact:
-        notes.append("%d of %d pairing(s) exact; not: %s" % (len(exact), len(exact) + len(set(unresolved)),
-                                                            ", ".join(sorted(set(unresolved))[:3])))
+        notes = ["pairing exact (%d confirmed by name, %d filled in by name)" % (confirmed, filled)]
+    else:
+        if conflicts:
+            notes.append("name and alignment disagree for %s" % ", ".join(sorted(set(conflicts))[:2]))
+        if unresolved:
+            notes.append("%d of %d pairing(s) exact; not: %s" % (confirmed + filled, len(exact) + len(set(unresolved)),
+                                                                ", ".join(sorted(set(unresolved))[:3])))
     pcode, unpaired, oname = patch_ours(retail, ours, mapping)
     if unpaired and not exact_complete:
         clean = False
