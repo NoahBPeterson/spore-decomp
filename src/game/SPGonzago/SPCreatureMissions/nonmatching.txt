@@ -4,7 +4,7 @@
 00c2e520 53 complete: timer elapsed/stop + game-mode dispatch (0x1654c01/02/04) + vtbl[0x30]/[0x28]; mode compare chain uses cmp where the original uses a sub chain; difftest WEAK (281 valid, 23.9% coverage) flags: /O2 /MD /Gy /TP
 00c2e5a0 83 complete: base 0x00c449c0 + game-mode dispatch + vtbl[0x2c] gate + SetGlobalProperty(0xc1fa4704, 1.0f) + RecordEvent2(0xc871d6e, audio id); mode compare chain differs; difftest UNSUPPORTED (0/400 valid: fake-arity 386, fault(read) 14) flags: /O2 /MD /Gy /TP
 00c2e7b0 68 complete: profile image key (profile+0x504, 0x2f7d0004, profile+0x50c) -> CreateImageFromResource2(key, out, 0, -1, -1); local-stack layout differs; difftest UNSUPPORTED (0/400 valid: fault(read) 400) flags: /O2 /MD /Gy /TP
-00c2e980 12 complete: NotifyEvent float push, register scheduling differs flags: /O2 /MD /Gy /TP
+00c2e980 12 complete: NotifyEvent float push, register scheduling differs flags: /O2 /MD /Gy /TP [R33 draft claim: verification and matching in progress.]
 00c2e9e0 34 complete: state change + timer restart, scheduling differs flags: /O2 /MD /Gy /TP
 00c2ed20 660 complete: per-frame mission update (3 manager lookups, two completion blocks with RecordEvent/triggers/reward scaling, then out1/out2 status keys); float->int truncates where the original uses cvtss2si; difftest UNSUPPORTED (0/400 valid: fault(read) 387, fault 7, fault(write) 6) flags: /O2 /MD /Gy /TP
 00c2f090 83 complete: mission progress export to g_169e3e8 (0x14/0x10 current+max, 0x1c profile, 0x20 mission, 0xc/0x18 remaining for 0x8c or 0x90); scheduling differs; difftest UNSUPPORTED (0/400 valid: fault(read) 399, fault 1) flags: /O2 /MD /Gy /TP
