@@ -9,7 +9,6 @@
 013c0e90  24  body complete (allocator teardown); bounds extend over an unlisted int3 + ret thunk
 013c0f40  6   body is byte-identical (mov eax,[g]; push eax; call __imp_FreeLibrary; ret); relayout impossible: the name points 12 bytes into a 0x20 region whose bytes 0x0c..0x0f are int3 and 0x10 is a jmp thunk (thunk void f(), __stdcall and a HMODULE typedef were tried)
 013c0fc0  13  body complete (WSACleanup); bounds extend over a following unlisted FreeLibrary function
-013c1b90  8   body complete; bounds extend over an unlisted int3 + ret thunk [R32 active draft claim; native validation pending.]
 013c1e00  8   body complete; bounds extend over an unlisted int3 + ret thunk
 013c1ea0  14  body matches instruction-for-instruction (mov eax,[g_1567e38]; push eax; mov ecx,imm; call 0x9a9600; ret); the relayout cannot come from source: the name points 17 bytes into a 0x20 region padded with int3 and the 0x9a9600 callee would have to be modelled as a __thiscall member
 013c21d0  24  body complete; bounds extend over an unlisted int3 + ret thunk
