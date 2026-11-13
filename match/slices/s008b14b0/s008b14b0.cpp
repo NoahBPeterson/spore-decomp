@@ -189,11 +189,9 @@ void tsi_DeletePFRClass(PFRClass* p)
 
     int cnt = (int)(uint16)p->f38;
     if (cnt > 0) {
-        int off = cnt * 0xc;
         do {
-            tsi_DeAllocMem(p->mem, *(void**)(((char*)p->f3c - 4) + off));
+            tsi_DeAllocMem(p->mem, *(void**)((char*)p->f3c - 4 + cnt * 0xc));
             cnt--;
-            off -= 0xc;
         } while (cnt > 0);
     }
     if (p->f38 != 0 && p->f3c != 0)

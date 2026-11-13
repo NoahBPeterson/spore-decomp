@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008b14b0/s008b14b0.cpp  ?tsi_DeletePFRClass@@YAXPAUPFRClass@@@Z  008b1520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
