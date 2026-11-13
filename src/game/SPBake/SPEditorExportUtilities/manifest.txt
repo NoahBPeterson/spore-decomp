@@ -41,3 +41,4 @@
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?RegisterCreatureModels@@YAXHIHHH@Z  004615e0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?GetView@IntVecObj@@QAEPAUBufView@@PAU2@@Z  004728e0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorExportUtilities.cpp  ?FUN_00460bf0@@YAXPAUBone@@HHM@Z  00460bf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorExportUtilities.cpp  ?LookupName@@YAPBDH@Z  00461520  /Od /Ob1 /MD /Gy /TP /Isrc/game/include

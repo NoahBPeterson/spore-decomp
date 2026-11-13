@@ -3410,6 +3410,10 @@ extern "C" void  FUN_0052a400(int a, unsigned int b, unsigned int c, int d, int 
 extern "C" void  FUN_00473300(void* p);               // 0x473300
 extern "C" void  WString_FreeBuffer(void* p);         // 0x4237d0
 extern "C" void  Counted_Release(void* p);            // 0x40f360
+struct LookupTag {
+    unsigned char flags;
+    operator unsigned char() const { return flags; }
+};
 extern "C" void* LowerBound12(void* start, void* end, const void* key, unsigned char flag); // 0x422430
 extern char g_table_150c050;
 extern int  g_count_13ec430;
@@ -3807,22 +3811,28 @@ unsigned char GetGlobalFlag()
     return g_byte_15d3c30;
 }
 
+static inline bool KeyLess_00461520(unsigned a, unsigned b)
+{
+    return a < b;
+}
+
 // @ 0x00461520
 const char* LookupName(int key)
 {
-    TableEntry* start = (TableEntry*)&g_table_150c050;
-    TableEntry* end = (TableEntry*)((char*)&g_table_150c050 + g_count_13ec430 * 0xc);
-    char zero = 0;
-    char copy = zero;
-    TableEntry* it = (TableEntry*)LowerBound12(start, end, &key, (unsigned char)copy);
-    TableEntry* found = end;
-    if (it != end && !((unsigned)key < it->key)) {
-        found = it;
+    TableEntry* p20 = (TableEntry*)&g_table_150c050;
+    TableEntry* last = p20 + g_count_13ec430;
+    LookupTag t24 = {};
+    TableEntry* p21 = (TableEntry*)LowerBound12(p20, last, &key, t24);
+    TableEntry* mid;
+    if (p21 != last && !KeyLess_00461520(key, p21->key)) {
+        mid = p21;
+    } else {
+        mid = last;
     }
-    if (found == end) {
-        return g_strUnknown_13eecec;
+    if (mid != last) {
+        return mid->name;
     }
-    return found->name;
+    return g_strUnknown_13eecec;
 }
 
 // @ 0x004615b0
