@@ -4509,7 +4509,9 @@ void UpdateUIContexts(float dt)
             float timeLeft = pCtx->mTimer - dt;
             pCtx->mTimer = timeLeft;
 
-            if (timeLeft >= 0)
+            if (timeLeft < 0)
+                CleanupUICtx(pCtx->mID);
+            else
             {
                 for (unsigned int i = 0; i < pCtx->mWindows.size(); ++i)
                 {
@@ -4528,17 +4530,15 @@ void UpdateUIContexts(float dt)
                 if (pCtx->mVisible)
                 {
                     float x = pCtx->mX;
-                    float y = pCtx->mY;
                     float rect[4];
                     rect[0] = x - 0.5f;
+                    float y = pCtx->mY;
                     rect[1] = y - 0.5f;
                     rect[2] = x + 0.5f;
                     rect[3] = y + 0.5f;
                     AnchorWindowToScreen(rect, pCtx->mWindow, 0x102, 0);
                 }
             }
-            else
-                CleanupUICtx(pCtx->mID);
         }
 
         pCtx = gUIMgr->Next(&key);

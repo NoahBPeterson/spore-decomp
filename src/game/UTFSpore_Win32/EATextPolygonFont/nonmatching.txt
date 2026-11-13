@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-00720250 24 eastl::copy_impl::do_copy<Vertex3D*,Vertex3D*> (6-dword struct): complete; only the register assignment of first/dest is swapped (original first=ecx,dest=eax)

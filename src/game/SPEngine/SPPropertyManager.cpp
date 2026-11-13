@@ -1480,13 +1480,8 @@ Variant& Variant::SetVec32(const void* p)
 // @ 0x006a38c0
 void cCommandStateA::OnRegister(void* parser, int b)
 {
-    if (b) {
-        mCmd = b - 0x10;
-        ((EA::ArgScript::cIMetaCommand*)this)->OnRegister(parser, b);
-    } else {
-        mCmd = 0;
-        ((EA::ArgScript::cIMetaCommand*)this)->OnRegister(parser, b);
-    }
+    mCmd = b ? b - 0x10 : 0;
+    ((EA::ArgScript::cIMetaCommand*)this)->OnRegister(parser, b);
 }
 
 // @ 0x006a38f0

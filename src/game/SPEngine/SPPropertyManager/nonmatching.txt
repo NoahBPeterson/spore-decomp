@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 006a3430 162 Euler-from-matrix: original uses x87 fpatan/fsqrt chains; C atan2f/sqrtf cannot reproduce the exact fpu sequence; equiv: UNSUPPORTED (unresolved ref _atan2f_)
-006a38c0 20 OnRegister: cl threads both branches to one shared tail call; original duplicates the tail jmp; equiv: UNSUPPORTED (orig-abi-broken, 0/1200 valid)
 006a38f0 20 OnRegister: same shared-tail shape as 006a38c0; equiv: UNSUPPORTED (orig-abi-broken, 0/1200 valid)
 006a39d0 26 GetAt: same CSE/register-assignment difference as Count; equiv: PASS
 006a44d0 75 vector<0x208> ctor: cl peels/vectorises the rep-movsd fill loop; equiv: FAIL (fill differs)

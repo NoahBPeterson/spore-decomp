@@ -1428,12 +1428,11 @@ inline T* resize_erase(vector_s007c_b590<T, A>* v, T* first, T* last) {
 namespace eastl {
 template <typename T, typename A>
 T* vector_s007c_b590<T, A>::erase(T* first, T* last) {
-    T* const pFirst = first;
-    T* const pLast = last;
-    T* const position = copy_impl<0, std::random_access_iterator_tag>::do_copy(pLast, this->mpEnd, pFirst);
+    T* const pEnd = this->mpEnd;
+    T* const position = copy_impl<0, std::random_access_iterator_tag>::do_copy(last, pEnd, first);
     DoDestroyValues(position, this->mpEnd);
-    this->mpEnd -= (pLast - pFirst);
-    return pFirst;
+    this->mpEnd -= (last - first);
+    return first;
 }
 }
 namespace eastl {
@@ -2050,7 +2049,8 @@ void vector_s007c_c5f0<T, A>::push_back() {
 namespace eastl {
 template <typename T, typename A>
 T* vector_s007c_c5f0<T, A>::erase(T* first, T* last) {
-    T* const position = copy_impl<0, std::random_access_iterator_tag>::do_copy(last, this->mpEnd, first);
+    T* const pEnd = this->mpEnd;
+    T* const position = copy_impl<0, std::random_access_iterator_tag>::do_copy(last, pEnd, first);
     DoDestroyValues(position, this->mpEnd);
     this->mpEnd -= (last - first);
     return first;

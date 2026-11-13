@@ -1111,8 +1111,8 @@ eastl::wstring cSPEditorVerbIconTray_s005e_5d40::GetTrayDescription()
 
 // @ 0x005e6b40
 namespace SP {
-void cSPEditorVerbIconTray_s005e_6b40::DoMessage(IWindow_s005e_6b40* w)
-{ (void)w; }
+// DoMessage: not written here yet (the complete draft is in match/slices/s005e6b40). Do not put an empty body here:
+// the compiler would inline it into DoMessage's caller (0x005e6fb0) and drop the call that retail makes.
 }  // namespace SP
 
 

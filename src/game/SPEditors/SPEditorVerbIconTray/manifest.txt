@@ -16,3 +16,4 @@
 ../src/game/SPEditors/SPEditorVerbIconTray.cpp  ??1cSPEditorVerbIconTray_s005e_5d40@SP@@UAE@XZ  005e6980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?GetTrayName@cSPEditorVerbIconTray_s005e_5d40@SP@@QAE?AVwstring@eastl@@H@Z  005e6a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?GetTrayDescription@cSPEditorVerbIconTray_s005e_5d40@SP@@QAE?AVwstring@eastl@@XZ  005e6ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorVerbIconTray.cpp  ?CheckMessage@cSPEditorVerbIconTray_s005e_6b40@SP@@QAE_NPAVIWindow_s005e_6b40@UTFWin@EA@@PAX@Z  005e6fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

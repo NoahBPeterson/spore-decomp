@@ -1326,7 +1326,7 @@ struct StrHashtable_s0084_6280 {
 
     FindResult_s0084_6280 find(const string8_s0084_6280* pKey) const;   // 0x007e2ea0
     void* FindByHash(unsigned nHash, const string8_s0084_6280* pKey);    // 0x00846530
-    void* EraseNode(StrNode_s0084_6280** ppSlot);                        // 0x00846c00
+    void* EraseNode(StrNode_s0084_6280** ppSlot);   // not 0x00846c00: that is MacroHashtable::erase(iterator)
     void DoFreeNodes(unsigned nBucketCount);                            // 0x00846630
     void DoRehash(unsigned nNewBucketCount);                            // 0x00847120
 };
@@ -2358,17 +2358,34 @@ void eastl::StrHashtable_s0084_6280::DoFreeNodes(unsigned nBucketCount)
     }
 }
 
+struct MacroHashNode { MacroPair mValue; MacroHashNode* mpNext; };
+struct MacroHashIterator { MacroHashNode* mpNode; MacroHashNode** mpBucket; MacroHashIterator(MacroHashNode* n, MacroHashNode** b) : mpNode(n), mpBucket(b) {}
+    void increment_bucket() { ++mpBucket; while (*mpBucket == 0) ++mpBucket; mpNode = *mpBucket; }
+    void operator++() { mpNode = mpNode->mpNext; while (mpNode == 0) mpNode = *++mpBucket; } };
+struct MacroHashtable { unsigned mPad00; MacroHashNode** mpBucketArray; unsigned mnBucketCount; unsigned mnElementCount;
+    MacroHashIterator erase(MacroHashIterator i); };
+void __fastcall MacroPair_dtor(MacroPair* p);
 // @ 0x00846c00
-void* eastl::StrHashtable_s0084_6280::EraseNode(StrNode_s0084_6280** ppSlot)
+MacroHashIterator MacroHashtable::erase(MacroHashIterator i)
 {
-    StrNode_s0084_6280* pNode = *ppSlot;
-    StrNode_s0084_6280** ppWalk = ppSlot;
-    while (*ppWalk != pNode) ppWalk = &(*ppWalk)->mpNext;
-    *ppWalk = pNode->mpNext;
-    (*(void(__thiscall**)(void*))(*(char**)pNode + 0x14))(pNode);   // ~macro-pair
+    MacroHashIterator iNext(i.mpNode, i.mpBucket);
+    ++iNext;
+    MacroHashNode* const pNode = i.mpNode;
+    MacroHashNode* pNodeCurrent = *i.mpBucket;
+    if (pNodeCurrent == pNode)
+        *i.mpBucket = pNodeCurrent->mpNext;
+    else {
+        MacroHashNode* pNodeNext = pNodeCurrent->mpNext;
+        while (pNodeNext != pNode) {
+            pNodeCurrent = pNodeNext;
+            pNodeNext = pNodeCurrent->mpNext;
+        }
+        pNodeCurrent->mpNext = pNodeNext->mpNext;
+    }
+    MacroPair_dtor(&pNode->mValue);
     PoolFree(pNode);
-    --mnNodeCount;
-    return ppSlot;
+    --mnElementCount;
+    return iNext;
 }
 
 // @ 0x00847060

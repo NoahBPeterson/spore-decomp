@@ -49,3 +49,5 @@
 ../src/game/Spui/SPUIHelpers.cpp  ?WalkFind@@YAPAHPAH@Z  008050f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?WalkAll@@YA_NPAH@Z  008050b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?Contains@@YA_NPAH0@Z  00805150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FixedFree@FixedAlloc@@QAEXPAXH@Z  008054b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807430@@YAXPAUW_s0080_68d0@@M@Z  00807430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

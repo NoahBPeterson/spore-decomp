@@ -2420,11 +2420,11 @@ void __stdcall DoFreeNodes(FreeNode** pNodeArray, uint32_t n)
     for (uint32_t i = 0; i < n; ++i) {
         FreeNode* pNode = pNodeArray[i];
         while (pNode) {
-            FreeNode* pNext = pNode->mpNext;
-            if (pNode->m8 - pNode->m0 > 1 && pNode->m0 != 0)
-                EastlFree((void*)pNode->m0);
-            EastlFree(pNode);
-            pNode = pNext;
+            FreeNode* const pTempNode = pNode;
+            pNode = pNode->mpNext;
+            if (pTempNode->m8 - pTempNode->m0 > 1 && pTempNode->m0 != 0)
+                EastlFree((void*)pTempNode->m0);
+            EastlFree(pTempNode);
         }
         pNodeArray[i] = 0;
     }

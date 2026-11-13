@@ -4,7 +4,6 @@
 008051b0 50 FindByKey; original passes the receiver in EDI (static-helper register convention); equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
 00805310 167 CreditsTabInit; layout ctor/init call reconstruction, register scheduling; equiv UNSUPPORTED: 5 unresolved reference(s): ?LayoutCtor@@YAXPAD@Z, ?LayoutInit@@YA_NPADHHH@Z, ?LayoutDtor@@
 00805400 4 FreeCoreBlock; originally push/call/pop ecx, compiler emitted add esp,4; equiv PASS: 659 valid inputs, 100.0% coverage (all insns)
-008054b0 31 FixedFree; chunk-head list update scheduling; equiv FAIL: 5/5 valid inputs mismatched
 008054f0 10 InitAlloc; global store/arg order; equiv UNSUPPORTED: our code stores the address of its own copy of an object/vtable/constant where the origina
 00805ef0 84 complete; loop layout + merged epilogue (do-while not reproduced exactly)
 008060d0 126 complete; register allocation/argument scheduling differs
@@ -18,7 +17,6 @@
 00806c60 14 complete; only parameter register assignment (esi/edi) swapped
 00806ca0 56 complete; SSE scheduling differs
 00806de0 72 complete; loop/register differences
-00807430 89 complete; float clamp scheduling differs
 008074a0 184 complete; control-flow/register differences
 00807590 63 complete; loop/register differences
 00807600 106 complete; ctor/control-flow differences

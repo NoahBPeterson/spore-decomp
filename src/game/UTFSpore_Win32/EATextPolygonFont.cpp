@@ -25,13 +25,14 @@ struct Vertex3D {
 // ---- items of slice s0071f410 end
 
 // @ 0x00720250
-void CopyVertex3D(Vertex3D* first, Vertex3D* last, Vertex3D* dest)
+Vertex3D* CopyVertex3D(Vertex3D* first, Vertex3D* last, Vertex3D* dest)
 {
     while (first != last) {
         *dest = *first;
         ++first;
         ++dest;
     }
+    return dest;
 }
 
 // @ 0x008924d0

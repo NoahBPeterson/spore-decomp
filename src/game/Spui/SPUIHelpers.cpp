@@ -1,3 +1,4 @@
+#include "sse_helpers.h"
 // src/game/Spui/SPUIHelpers.cpp -- migrated from slice(s) s00965230, s00828c30, s00829bc0, s00809700, s008087f0, s00807840, s008068d0, s00805940, s00804920 by tools/migrate/rewrite.py
 // Object file: Spui/SPUIHelpers.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -1414,7 +1415,7 @@ void FixedAlloc::FixedFree(void* p, int flags)
         return;
     }
     void* alloc = *(void**)0x164c4b8;
-    (*(void(__thiscall**)(void*, int*, int))VSlot(alloc, 0xc))(alloc, base, flags);
+    (*(void(__thiscall**)(void*, int*, int))VSlot(alloc, 0xc))(alloc, base, 0);
 }
 
 // @ 0x008054f0
@@ -2187,11 +2188,9 @@ void AnchorWindowToWindow(W_s0080_68d0* w)
 void FUN_00807430(W_s0080_68d0* w, float v)
 {
     W_s0080_68d0* o;
-    if (w == 0) o = 0;
-    else o = (W_s0080_68d0*)w->m0c(0x10edf11);
-    float x = v * 100.0f;
-    if (x <= 0.0f) x = 0.0f;
-    if (x >= 100.0f) x = 100.0f;
+    if (w != 0) o = (W_s0080_68d0*)w->m0c(0x10edf11);
+    else o = 0;
+    float x = SseClamp(v * 100.0f, 0.0f, 100.0f);
     (*(void(__thiscall**)(void*, float))VSlot(o, 4))(o, x);
 }
 

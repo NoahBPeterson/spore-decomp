@@ -2728,12 +2728,12 @@ int ModelInstanceDispatch::Dispatch(int a2, int a3)
 __declspec(noinline) static void* __fastcall CopyBackward8KeepResult(void* self) { return self; }
 
 // @ 0x0073fe50
-void __cdecl copy_backward8(T8* first, T8* last, T8* result)
+T8* __cdecl copy_backward8(T8* first, T8* last, T8* result)
 {
-    T8* r = (T8*)CopyBackward8KeepResult(result);
     while (last != first) {
-        *--r = *--last;
+        *--result = *--last;
     }
+    return result;
 }
 
 // @ 0x0073fe80

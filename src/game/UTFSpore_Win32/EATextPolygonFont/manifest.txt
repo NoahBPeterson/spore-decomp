@@ -1,2 +1,3 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/EATextPolygonFont.cpp  ?GetFontDescription@PolygonFont@Text@EA@@UAE_NAAUFontDescription@23@@Z  008924d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EATextPolygonFont.cpp  ?CopyVertex3D@@YAPAUVertex3D@@PAU1@00@Z  00720250  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

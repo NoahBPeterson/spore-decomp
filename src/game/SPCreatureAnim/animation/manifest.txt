@@ -5,3 +5,4 @@
 ../src/game/SPCreatureAnim/animation.cpp  ?Release@RefBlock@@QAEHXZ  0099f0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/animation.cpp  ?f@S9a35b0@@QAEXXZ  009a35b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPCreatureAnim/animation.cpp  ?f@S9a3c40@@QAEXPAX@Z  009a3c40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPCreatureAnim/animation.cpp  ?FUN_0099efa0@@YAPADPAD00@Z  0099efa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

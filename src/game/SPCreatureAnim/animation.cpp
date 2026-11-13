@@ -1451,19 +1451,13 @@ void* __cdecl ReadAnimationStaticDataFromStreamWrapper(stream_wrapper* s, const 
 }
 
 // @ 0x0099efa0
+struct Pair8 { int a, b; };
 char* FUN_0099efa0(char* first, char* last, char* dst)
 {
-  if (first != last) {
-    int off = (int)(first - dst);
-    do {
-      if (dst) {
-        *(int*)dst = *(int*)(dst + off);
-        *(int*)(dst + 4) = *(int*)(dst + off + 4);
-      }
-      dst += 8;
-    } while (dst + off != last);
-  }
-  return dst;
+  Pair8* f = (Pair8*)first; Pair8* d = (Pair8*)dst;
+  for (; f != (Pair8*)last; ++f, ++d)
+    if (d) *d = *f;
+  return (char*)d;
 }
 
 // @ 0x0099efd0

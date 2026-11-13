@@ -19,3 +19,4 @@
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?MapInsert@Map8@@QAEPAURefPair8_s0074_2b30@@PAU2@0@Z  00742ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?SetBoneTable@cModelInstance_s0073_afb0@SP@@QAEXHPBUcMDBoneTransform@2@@Z  0073b800  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?Animate@cModelInstance_s0073_afb0@SP@@QAEXM@Z  0073afb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?copy_backward8@@YAPAUT8@@PAU1@00@Z  0073fe50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

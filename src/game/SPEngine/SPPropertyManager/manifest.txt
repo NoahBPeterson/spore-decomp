@@ -18,3 +18,4 @@
 ../src/game/SPEngine/SPPropertyManager.cpp  ?RegisterPropertyName@cPropertyManager_s006a_a3f0@@QAEXPBDI@Z  006aa3f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPPropertyManager.cpp  ?RegisterPropertyNameLocal@cPropertyManager_s006a_a3f0@@QAEXPBDI@Z  006aa5e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPPropertyManager.cpp  ?Parse@cPropertyCommand@@QAE_NPAPAX@Z  006aadb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?OnRegister@cCommandStateA@@QAEXPAXH@Z  006a38c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
