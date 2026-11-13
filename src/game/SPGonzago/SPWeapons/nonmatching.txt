@@ -9,7 +9,7 @@
 00cb4350 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00cb46f0
 00cb4ae0
-00cb4bd0
+00cb4bd0 [R32 active draft claim; native validation pending.]
 00cb4d40
 00cb5090
 00cb5140
