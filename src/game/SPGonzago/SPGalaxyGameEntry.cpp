@@ -4271,8 +4271,11 @@ __declspec(noinline) void __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::
 }
 }  // namespace SP
 
-extern "C" void* __stdcall FUN_004010a0(void* out, u32 key);      // 0x004010a0
-extern "C" void* __fastcall FUN_005ecf80(void* key);              // 0x005ecf80
+extern "C" void* __cdecl FUN_004010a0(void);                      // 0x004010a0 (returns the name generator)
+class cSPNameGenerator_s005e_cf80 {
+public:
+    void* GetName(void* out, u32 key);                             // 0x005ecf80
+};
 
 struct NameString_s00df_fc80 {
     u32 mpBegin;
@@ -4303,7 +4306,8 @@ NameString_s00df_fc80 __thiscall cGalaxyGameEntryUIStateMachine_s00de_f400::FUN_
     u32 text;
     do {
         WString16 key;
-        EaString16* found = (EaString16*)FUN_005ecf80(FUN_004010a0(&key.mpBegin, 0x7e1310a));
+        EaString16* found =
+            (EaString16*)((cSPNameGenerator_s005e_cf80*)FUN_004010a0())->GetName(&key.mpBegin, 0x7e1310a);
         if (found != (EaString16*)&out)
             ((EaString16*)&out)->Assign(found->mpBegin, found->mpEnd);
         if ((s32)((key.mpCap - key.mpBegin) & 0xfffffffe) > 2 && key.mpBegin != 0)
