@@ -157,12 +157,11 @@ void SP::cSPEditorAnimatedEventInfo::MessagePost(SP::cSPEditorAnimatedEventInfo:
 {
     IMessageServer* server = MessageServer();
     if (server) {
-        
         mAnimatedCreatureID = creatureID;
         mSourceBlock = block;
         mEvent = event;
-        mSourceModel = model;
         mIsBaby = isBaby;
+        mSourceModel = model;
         mDelayTime = delayTime;
         mAnimID = animID;
         mDoLoop = doLoop;
@@ -176,7 +175,6 @@ void SP::cSPEditorAnimatedEventInfo_s0059_d300::MessageSend(SP::eAnimatedEvent e
 {
     SP::IMessageServer* server = MessageServer();
     if (server) {
-        
         mAnimatedCreatureID = creatureID;
         mEvent = event;
         mSourceBlock = block;
