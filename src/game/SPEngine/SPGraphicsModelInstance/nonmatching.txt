@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 0073abb0 32 cModelInstance::GetAnimationMoveToTimes: complete; regalloc/schedule differs
 0073af20 124 AdvanceBinding: complete; original keeps a zero in ebx (xor ebx,ebx) that cannot be reproduced [equiv: PASS 395 inputs 100% cov]
-0073afb0 67 cModelInstance::Animate: complete; only this/index register assignment (esi vs edi) differs  [equiv: WEAK (313 valid, 29% cov, no mismatch)]
 0073b530 298 cModelInstance::SetWeight: complete; group-array base reload / register schedule differs (loop A uses ecx/edx swapped)  [equiv: WEAK (400 valid, 40% cov, no mismatch)]
 0073b6d0 205 cModelInstance::GetAnimationRange: complete (4x unrolled loop reproduced); prologue register allocation (esi vs eax for grp) differs  [equiv: PASS (373 valid, 98% cov)]
 0073b840 90 cModelInstance::SetBoneCallback: complete; arg-load/register schedule differs

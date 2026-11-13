@@ -1146,11 +1146,20 @@ void cPlanetModel_s00b8_d190::FUN_00b8dde0(cKey3* key, int32_t unused)
 }
 
 // @ 0x00b8de60
+struct OwnedVec_b8de60 {
+    cOwnedElem** mpBegin; cOwnedElem** mpEnd;
+    bool empty() const { return mpBegin == mpEnd; }
+    cOwnedElem*& back() { return *(mpEnd - 1); }
+    void pop_back() { --mpEnd; }
+};
 void cPlanetModel_s00b8_d190::FUN_00b8de60()
 {
-    while (mField15C != mField160) {
-        cOwnedElem* element = *(cOwnedElem**)(mField160 - 4);
-        mField160 -= 4;
+    // the vector at +0x15c reached through an inline accessor: each inline call has its own `this`
+    // (= this + 0x15c), which is not copy-propagated, so back() and pop_back() read mpEnd separately
+    // and pop_back() becomes `add [esi+0x160], -4` (docs/c2/loadcse.md)
+    while (!((OwnedVec_b8de60*)&mField15C)->empty()) {
+        cOwnedElem* element = ((OwnedVec_b8de60*)&mField15C)->back();
+        ((OwnedVec_b8de60*)&mField15C)->pop_back();
         if (element != 0) {
             element->FUN_00ff2e30();
             FUN_00f47380(element);

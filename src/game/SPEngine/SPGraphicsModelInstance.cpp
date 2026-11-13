@@ -1,3 +1,4 @@
+template<class HsT> __forceinline HsT hs_id(HsT x) { return x; }
 // src/game/SPEngine/SPGraphicsModelInstance.cpp -- migrated from slice(s) s0073bf20, s00742b30, s00741b10, s00741210, s007403c0, s0073f320, s0073e410, s0073d6b0, s0073cdf0, s0073afb0, s0073a110 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsModelInstance.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -1746,7 +1747,7 @@ void cModelInstance_s0073_afb0::Animate(float dt)
     bool any = false;
     int n = (int)(mBindAEnd - mBindABegin);
     for (int i = 0; i < n; i++) {
-        if (UpdateBinding(mBindABegin + i, dt))
+        if (UpdateBinding(hs_id(mBindABegin + i), dt))
             any = true;
     }
     n = (int)(mMaterialsEnd - mMaterials);

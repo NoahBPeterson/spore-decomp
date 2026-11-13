@@ -531,14 +531,17 @@ void cSPSwatchManager::Update(uint32_t deltaTime)
 
 // @ 0x005f0a60
 namespace SP {
+template <class M, class K> inline typename M::iterator r2_find(M& m, const K& k) { return m.find(k); }
+}
+namespace SP {
 void cSPSwatchManager::ReleaseSwatch(cSPSwatch_s005f_07e0* swatch)
 {
   SwatchIDMap::iterator it;
-  it = mIDToSwatchMap.find(swatch->mID);
+  it = r2_find(mIDToSwatchMap, swatch->mID);
   if (it != mIDToSwatchMap.end() && it->second) {
     mSwatchTimeouts.erase(it->second);
     it->second->Shutdown();
-    mIDToSwatchMap.erase(it);
+    SwatchIDMap::iterator& rw_a = it; mIDToSwatchMap.erase(rw_a);
   }
 }
 }  // namespace SP

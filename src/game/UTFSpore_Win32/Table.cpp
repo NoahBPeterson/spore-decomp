@@ -1769,7 +1769,7 @@ struct StackingContext_s008e_fad0 {
     FloatEntry* mf580;                  // +0x580
 
     StackingContext_s008e_fad0(u32 owner);                       // @ 0x008efad0
-    void  Init(u32 owner, u32 a1, u32 a2);            // @ 0x008efba0
+    StackingContext_s008e_fad0* Init(u32 owner, u32 a1, u32 a2);            // @ 0x008efba0
     void  SetContextRect(const RectF_s008e_fad0& r);             // @ 0x008efc80
     void  InsertFloat(int kind);                      // @ 0x008efcd0
     void  RecomputeFloatLimits();                     // @ 0x008efd50
@@ -2336,19 +2336,20 @@ void EA::XHTML::Layout::SizingContext_s008e_ebb0::Finish()
 }
 
 // @ 0x008efba0
-void StackingContext_s008e_fad0::Init(u32 owner, u32 a1, u32 a2)
+struct R2F8 { float f[8]; void Reset() { f[0] = 0.0f; f[1] = 0.0f; f[2] = 0.0f; f[3] = 0.0f; f[4] = 0.0f; f[5] = 0.0f; f[6] = 0.0f; f[7] = 0.0f; } };
+struct R2F4 { float x, y, z, w; void Reset() { x = 0.0f; y = 0.0f; z = 0.0f; w = 0.0f; } };
+StackingContext_s008e_fad0* StackingContext_s008e_fad0::Init(u32 owner, u32 a1, u32 a2)
 {
     pad00 = owner;
     ((TypesetterCtor*)&mTypesetter)->Construct(0);
-    mf534 = 0.0f; mf538 = 0.0f; mf53c = 0.0f; mf540 = 0.0f;
-    mf544 = 0.0f; mf548 = 0.0f; mf54c = 0.0f; mf550 = 0.0f;
-    mf554 = 0.0f; mf558 = 0.0f; mf55c = 0.0f; mf560 = 0.0f;
+    ((R2F8*)&mf534)->Reset(); mf554 = 0.0f; mf558 = 0.0f; mf55c = 0.0f; mf560 = 0.0f;
     mf564 = 0.0f; mf568 = 0.0f; mf56c = 0.0f; mf570 = 0.0f;
     mb574 = 1;
     mpFloatsHead = 0;
     mpFloatsTail = 0;
     mf580 = 0;
     ((TypesetterCtor*)&mTypesetter)->SetSomething((void*)((char*)a2 + 0xc));
+    return this;
 }
 
 // @ 0x008efcd0

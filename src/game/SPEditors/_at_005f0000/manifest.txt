@@ -3,3 +3,4 @@
 ../src/game/SPEditors/_at_005f0000.cpp  ?Shutdown@cSPSwatchManager@SP@@QAEXXZ  005f0850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_005f0000.cpp  ?Update@cSPSwatchManager@SP@@QAEXI@Z  005f0940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_005f0000.cpp  ??0cSPSwatchManager@SP@@QAE@XZ  005f0ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005f0000.cpp  ?ReleaseSwatch@cSPSwatchManager@SP@@QAEXPAVcSPSwatch_s005f_07e0@2@@Z  005f0a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

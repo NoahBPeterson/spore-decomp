@@ -16,3 +16,4 @@
 ../src/game/UTFSpore_Win32/Table.cpp  ?FillCells@@YAXPAUCell14@@IPBU1@@Z  008f0640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Table.cpp  ?Walk7@ItemListOwner@@QAEXII@Z  008f0680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Table.cpp  ?Walk8@ItemListOwner@@QAEXII@Z  008f06e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Table.cpp  ?Init@StackingContext_s008e_fad0@@QAEPAU1@III@Z  008efba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

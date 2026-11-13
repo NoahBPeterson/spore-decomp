@@ -1,3 +1,4 @@
+template<class HsT> __forceinline HsT hs_cp(HsT x) { HsT r = x; return r; }
 // src/game/SPAudio/AudioEmitterSndPlayer.cpp -- migrated from slice(s) s00a12f90, s00a12260, s00a114a0, s00a102e0 by tools/migrate/rewrite.py
 // Object file: SPAudio/AudioEmitterSndPlayer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -1160,7 +1161,7 @@ void Vec12::DoInsertValue(char* pos, Elem12* value)
         ((uint32_t*)p)[1] = value->b;
         ((uint32_t*)p)[2] = value->c;
     }
-    char* q = (char*)FUN_00a11310((int*)pos, (int*)mpEnd, (int*)(p + 12));
+    char* q = (char*)FUN_00a11310((int*)pos, hs_cp((int*)mpEnd), (int*)(p + 12));
     mpBegin = 0;
     mpEnd = q;
     mpCapacity = (char*)(cap * 12);
