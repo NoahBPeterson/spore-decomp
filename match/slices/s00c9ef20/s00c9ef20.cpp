@@ -64,7 +64,7 @@ struct FieldStub {
 };
 
 struct CivMgrStub {
-    void FUN_00cf8d60(void* self, u32 changed, u32 flags);  // 0x00cf8d60 ret 0xc
+    void FUN_00cf8d60(void* self, bool changed, u32 flags);  // 0x00cf8d60 ret 0xc
     u8   FUN_00cf7830(void* a);                             // 0x00cf7830 ret 4
 };
 
@@ -124,7 +124,7 @@ struct VObjStub {
     virtual void v18();
     virtual void v1c();
     virtual void v20();
-    virtual void v24();
+    virtual u8   v24();
     virtual void v28();
     virtual u8   v2c();
     virtual void v30();
@@ -135,9 +135,9 @@ struct VObjStub {
     virtual void v44();
     virtual void v48();
     virtual int  v4c();
-    virtual void v50();
+    virtual u8   v50();
     virtual void v54();
-    virtual void v58();
+    virtual u8   v58();
     virtual int  v5c(int a);
 };
 
@@ -495,14 +495,15 @@ void CStub::FUN_00c9f5c0()
 {
     if (GetCurrentGameMode() != &g_1654c04)
         return;
-    void* sub = (char*)this + 0x34;
-    if (!(**(u8(__thiscall**)(void*))(vpt(sub) + 0x58))(sub))
+    VObjStub* sub = (VObjStub*)((char*)this + 0x34);
+    if (!sub->v58())
         return;
-    u32 flags = (**(u8(__thiscall**)(void*))(vpt(sub) + 0x50))(sub) != 0;
-    if (((ToolStub*)((char*)this + 0x508))->FUN_00bfc5d0() ||
-        (**(u8(__thiscall**)(void*))(vpt(sub) + 0x24))(sub))
+    u32 flags = 0;
+    if (sub->v50())
+        flags = 1;
+    if (((ToolStub*)((char*)this + 0x508))->FUN_00bfc5d0() || sub->v24())
         flags |= 2;
-    u32 changed = (flags != *(u32*)((char*)this + 0xc38));
+    bool changed = flags != *(u32*)((char*)this + 0xc38);
     if (changed)
         *(u32*)((char*)this + 0xc38) = flags;
     ((CivMgrStub*)FUN_00cf74c0())->FUN_00cf8d60(this, changed, flags);
