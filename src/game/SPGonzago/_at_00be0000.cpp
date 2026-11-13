@@ -2348,7 +2348,9 @@ void SP::cCivilization_s00be_eb70::RaiseLevel(int level)
 // @ 0x00bef7e0
 bool SP::cCivilization_s00be_eb70::IsBelowTopState()
 {
-    return (uint32_t)mState434 <= 4u;
+    uint32_t state = (uint32_t)mState434;
+    _ReadWriteBarrier();
+    return state <= 4u;
 }
 
 // @ 0x00bef800
