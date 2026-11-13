@@ -3,7 +3,6 @@
 0069d4f0  49  two-refcount holder conditional vcall; complete behaviour, secondary-base this adjustment and register scheduling differ; equiv UNSUPPORTED: 0/1200 valid inputs (fake-arity/fault(read))
 0069d980  44  conditionalA write helper; complete behaviour, but the this/secondary-base register allocation (edi vs esi) and the fall-through store order (store-0 then xor vs xor then store-al) differ [equiv: WEAK 299 valid, 25.8% cov, 0 mismatch]
 0069dca0  119  SP::cObjectDatabase::~cObjectDatabase; complete behaviour (4 vptr stores + 3 releases), but the compiler EH frame/state layout is not reproduced; the +0x1c slot must be captured before zeroing it (retail loads ecx then stores 0) [equiv: PASS 345 valid, 93.3% cov]
-0069dc60  11  conditionalB two-arg write helper; complete behaviour, only the store order of the false return path differs (store-0 then xor vs xor then store-al) [equiv: PASS 331 valid, 100% cov]
 0069df20  95  serializer guard/begin helper; complete behaviour, but the this+4/this+0x18/this+0x1c register allocation differs; equiv UNSUPPORTED: 0/1200 valid inputs (fake-arity)
 0069df90  32  two virtual predicates; complete behaviour, but cl makes the final bool branchless where the original uses branches; equiv UNSUPPORTED: 0/1200 valid inputs (fake-arity)
 0069d540  636  complete: Variant reader (all paths: bool/typed/flags 0x50 array/0x20 object, temp Variant EH); code order / eax-vs-al schedule and arg push order differ [equiv: WEAK, 0 mismatches over 1515 valid inputs, 8% coverage]

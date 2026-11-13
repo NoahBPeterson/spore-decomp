@@ -13,8 +13,6 @@
 0107de70  102  hkPointerMapBase<unsigned long>::insert
 0107df90  -  hkPointerMapBase<unsigned long>::remove(Dummy*) ; equiv PASS (271 valid, 100% cov, no mismatch); cluster-shift deletion with unsigned 32-bit indices (158B vs 183B); chk marker binds the sibling remove overload
 0107e050  113  hkPointerMapBase<unsigned long>::resizeTable
-0107e0f0  54  hkPointerMapBase<unsigned __int64> constructor ; equiv UNSUPPORTED: symbol not found (K/_K template ctors indistinguishable to lookup; tie picks K)
-0107e140  19  hkPointerMapBase<unsigned __int64> destructor ; equiv UNSUPPORTED: 0/1200 valid inputs (fake-arity); symbol via symbols file
 0107e160  222  hkPointerMapBase<unsigned __int64>::insert
 0107e240  130  hkPointerMapBase<unsigned __int64>::findKey
 0107e2d0  417  hkPointerMapBase<unsigned __int64>::remove(Dummy*) ; equiv PASS (207 valid, 100% cov, no mismatch); cluster-shift deletion with unsigned 64-bit indices and lib_crt::allmul (428B vs 456B)
