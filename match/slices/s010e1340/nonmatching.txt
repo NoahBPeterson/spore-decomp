@@ -1,4 +1,4 @@
-010e1380 0 havok-equivalent [R31 active draft claim; native validation pending.]
+010e1380 0 havok-equivalent
 010e13e0 0 havok-equivalent
 010e1720 0 havok-equivalent
 010e17e0 0 havok-equivalent
