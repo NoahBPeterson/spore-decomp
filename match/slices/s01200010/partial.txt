@@ -8,6 +8,5 @@
 01200a10    15  equiv PASS 361 inputs, 100% coverage; only hoisted slot loads differ
 01200ee0    96  equiv FAIL 5/151 valid inputs, first mismatch memory pool @40020010; loop-base register and hoisted loads differ
 01200f80    29  equiv PASS 226 inputs, 100% coverage; only the value register (ecx vs esi) differs
-01200fb0    20  equiv FAIL 5/5 valid inputs, first mismatch on eax only (void function, memory effects identical); first store uses the memory form [R32 active draft claim; native validation pending.]
 01201050    17  equiv FAIL 5/5 valid inputs, first mismatch on eax only (void function, memory effects identical); slot add uses the memory form
 01200ab0  1070  not reconstructed (SSE2 sampler); equiv not run (no symbol)
