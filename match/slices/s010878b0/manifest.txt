@@ -9,3 +9,4 @@ slices/s010878b0/s010878b0.cpp  ?setBroadPhaseWorldSize@hkWorldCinfo@@QAEXM@Z  0
 slices/s010878b0/s010878b0.cpp  ??4hkSweptTransform@@QAEAAV0@ABV0@@Z  01088480  /vc71 /O2 /MD /Gy /TP
 slices/s010878b0/s010878b0.cpp  ?finishLoadedObject_hkWorldCinfo@@YAXPAX@Z  01088200  /vc71 /O2 /MD /Gy /TP
 slices/s010878b0/s010878b0.cpp  ?getMass@hkRigidMotion@@QBEMXZ  01088270  /vc71 /O2 /MD /Gy /TP
+slices/s010878b0/s010878b0.cpp  ?applyLinearImpulse@hkRigidMotion@@UAEXABVhkVector4@@@Z  010883c0  /vc71 /O2 /MD /Gy /TP
