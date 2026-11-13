@@ -317,9 +317,7 @@ void hkBufferedStreamWriter::flush()
 // @ 0x01080a80
 hkBool hkBufferedStreamWriter::isOk() const
 {
-	if (m_stream != 0)
-		return m_stream->isOk();
-	return m_current != m_bufSize;
+	return m_stream != 0 ? m_stream->isOk() : hkBool(m_current != m_bufSize);
 }
 
 // @ 0x01080ac0
