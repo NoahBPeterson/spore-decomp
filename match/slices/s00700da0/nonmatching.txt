@@ -1,7 +1,6 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
 00700da0  290  complete cell-id-from-position helper; SSE schedule and floor-idiom spill slots differ, return blocks use short jumps where the original uses long
 00700ff0  75  slot_vector_base::destroy, complete; register allocation (blocks in edx vs the original's esi) and loop-entry load order differ
-00701050  4  list node insert-before, complete; only the final two operand loads are swapped (out vs position)
 007010b0  61  list::insert(pos, first, last, tag) range copy, complete; callee-saved register use differs (original keeps pos in edi and value temp in esi)
 00701110  76  eastl hashtable bucket-nonempty helper, complete (cdecl (table, key): bucket = *key % count, begin() iterator {node, &bucket} compared with the end node); /O2 register allocation of the bucket test differs; equiv PASS 953 valid, 100.0% coverage
 00701170  68  object-list copy constructor, complete; EH frame and call-argument register setup differ
