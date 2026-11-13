@@ -1,0 +1,1 @@
+slices/s00e65410/s00e65410.cpp  ?CreateAndRegister_00e65410@@YAXPAX_N@Z  00e65410  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
