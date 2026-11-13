@@ -415,8 +415,9 @@ void MixerTimer::Init()
 // @ 0x01154ee0
 void MixerTimer::Tick()
 {
+    struct OwnerPrefix { u32 mPad00[0xd8 / 4]; u32 mFieldD8; };
     mField4 = mField4 + (1 - mField8);
-    *(u32*)((u8*)mField0 + 0xD8) = 0;
+    ((OwnerPrefix*)mField0)->mFieldD8 = 0;
 }
 
 // @ 0x01154f00
