@@ -7,5 +7,5 @@
 010eb820 0 havok-equivalent
 010ebab0 0 havok-equivalent
 010ebb30 0 havok-equivalent
-010ebc00 0 havok-equivalent
+010ebc00 0 havok-equivalent; R30 active byte-match claim
 010ebc80 0 havok-equivalent

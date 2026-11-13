@@ -14,4 +14,4 @@
 0107f050 10 havok-equivalent
 0107f0c0 341 havok-equivalent
 0107f250 40 havok-equivalent
-0107f3d0 51 havok-equivalent
+0107f3d0 51 havok-equivalent; R30 active byte-match claim
