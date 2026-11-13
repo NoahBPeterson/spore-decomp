@@ -8,6 +8,5 @@
 0107ff60 86 havok-equivalent
 01080040 86 havok-equivalent
 01080170 69 havok-equivalent
-01080350 51 havok-equivalent; R30 active byte-match claim
 010803c0 106 havok-equivalent
 0107fdd0 366 havok-equivalent

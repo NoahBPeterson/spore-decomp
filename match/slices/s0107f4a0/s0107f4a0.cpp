@@ -618,13 +618,13 @@ const hkClassMember& hkClass::getMember(int index) const
 	int n = m_numDeclaredMembers;
 	for (const hkClass* p = m_parent; p != 0; p = p->m_parent)
 		n += p->m_numDeclaredMembers;
-	index = index - n;
 	const hkClass* c = this;
+	int localIndex = index - n;
 	do
 	{
-		index = index + c->m_numDeclaredMembers;
-		if (index >= 0)
-			return c->m_declaredMembers[index];
+		localIndex = localIndex + c->m_numDeclaredMembers;
+		if (localIndex >= 0)
+			return c->m_declaredMembers[localIndex];
 		c = c->m_parent;
 	} while (c != 0);
 	return m_declaredMembers[0];
