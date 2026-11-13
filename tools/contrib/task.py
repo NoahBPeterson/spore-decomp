@@ -142,16 +142,28 @@ def body(src, va):
     return t[m.start():j + 1]
 
 
+def library_functions():
+    """Addresses rebuilt from published library sources, outside the matching queue."""
+    out = set()
+    with open(os.path.join(ROOT, "symbols", "lib_names.txt")) as stream:
+        for line in stream:
+            fields = line.split("#", 1)[0].split()
+            if fields:
+                out.add(int(fields[0], 16))
+    return out
+
+
 def open_work(max_size):
     import run_all as R
     done = {r[2] for r in R.read_rows(R.manifests() + sorted(glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"),
                                                                   recursive=True)), "")}
+    lib = library_functions()
     rows = []
     for f in glob.glob(os.path.join(ROOT, "match", "slices", "*", "nonmatching.txt")) + \
             glob.glob(os.path.join(ROOT, "src", "game", "**", "nonmatching.txt"), recursive=True):
         for va, diff, reason in S.read_rows(f):
             fp = fingerprints().get(va)
-            if fp and fp["size"] <= max_size and va not in done:
+            if fp and fp["size"] <= max_size and va not in done and va not in lib:
                 rows.append((fp["size"], va, diff, os.path.relpath(os.path.dirname(f), ROOT), reason))
     # a function listed by both its slice and its migrated module: show it once, at the src/game copy (task.locate's choice)
     best = {}
@@ -172,11 +184,7 @@ def never_tried(max_size):
             glob.glob(os.path.join(ROOT, "src", "game", "**", "*.txt"), recursive=True):
         if f.endswith(("nonmatching.txt", "partial.txt")):
             noted |= {r[0] for r in S.read_rows(f)}
-    lib = set()
-    for l in open(os.path.join(ROOT, "symbols", "lib_names.txt")):
-        p = l.split("#", 1)[0].split()
-        if p:
-            lib.add(int(p[0], 16))
+    lib = library_functions()
     return [(fp["size"], va, "", "", "") for va, fp in fingerprints().items()
             if fp["size"] <= max_size and va not in done and va not in noted and va not in lib]
 
@@ -285,7 +293,7 @@ def category(reason):
 def ndiff(diff):
     """the differing-byte count of a nonmatching row ('12', '~12', '12?'), or None; 0 is a placeholder (305 rows
     such as 'havok-equivalent' were never measured), so it counts as unknown"""
-    m = re.match(r"\D*(\d+)", str(diff or ""))
+    m = re.fullmatch(r"~?(\d+)\??", str(diff or "").strip())
     return int(m.group(1)) or None if m else None
 
 
