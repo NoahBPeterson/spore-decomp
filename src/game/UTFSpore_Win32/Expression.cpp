@@ -302,12 +302,17 @@ void DiscardWhiteSpace(const char** p)
         ++*p;
 }
 
+struct ExprFunctionRef {
+    EA::ArgScript::cExprFunction* mpObject;
+    void ReleaseRefCount();
+};
+
 // @ 0x0083ced0
-void ReleaseRefCount(int** p)
+void ExprFunctionRef::ReleaseRefCount()
 {
-    int* obj = *p;
+    EA::ArgScript::cExprFunction* obj = mpObject;
     if (obj) {
-        if (--obj[1] == 0)
+        if (--obj->mRefCount == 0)
             EASTL_allocator_deallocate(obj);
     }
 }

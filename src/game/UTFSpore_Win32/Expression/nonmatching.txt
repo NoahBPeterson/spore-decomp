@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0083ced0 21 complete: AutoRefCount release; branch layout differs [R33 draft claim: verification and matching in progress.]
 0083cef0 93 complete: pair<string,AutoRefCount> ctor; string copy loop scheduling differs; equiv: FAIL (import call #0 mismatch)
 0083d020 89 complete: pair<string,AutoRefCount> copy ctor; scheduling differs; equiv: FAIL (import call #0 mismatch)
 0083d080 43 complete: pair<string,cExprFunction> dtor; branch layout differs
