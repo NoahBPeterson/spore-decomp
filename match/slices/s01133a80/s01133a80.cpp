@@ -8,6 +8,7 @@
 // ---------------------------------------------------------------------------
 extern void* g_sys;                        // 0x016e61a8  rw::audio::core::System
 extern uint32_t g_singleton[4];            // 0x016e6270  singleton scratch
+extern "C" void* memset(void*, int, unsigned int);
 extern const float kPcmScale;              // 0x0148f474  3.0517578e-05f (1/32768)
 extern const float g_14a7e88[][2];         // 0x014a7e88
 extern const float g_14a7ea8[];            // 0x014a7ea8
@@ -22,7 +23,21 @@ public:
 class SndSub
 {
 public:
-	void Init(void);   // 0x0112da90
+	void Init(void);   // 0x0112da90  TimerManager::TimerManager
+};
+
+// 0x16c-byte sound mixer object (constructed at 0x011341c0)
+class SndMixer
+{
+public:
+	void* mpScratch;          // +0x0   -> the 0x16e6270 singleton
+	char pad4[0xc];
+	int mi10;                 // +0x10
+	char pad14[0x48];
+	int mi5c;                 // +0x5c
+	SndSub mTimers;           // +0x60
+
+	SndMixer(void);           // 0x011341c0
 };
 
 extern int   __cdecl FUN_01143420(int, int, int, int*, void*);       // 0x01143420
@@ -541,19 +556,16 @@ void* __cdecl FUN_01133fc0(int* desc, int param_2, int param_3, System* param_4)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x011341c0
+// @ 0x011341c0  SndMixer::SndMixer: zero +0x10/+0x5c, construct the timer
+// manager at +0x60, reset the 0x16e6270 singleton, store its address.
 // ---------------------------------------------------------------------------
-void* __fastcall FUN_011341c0(int* p)
+SndMixer::SndMixer(void)
 {
-	p[4] = 0;
-	p[0x17] = 0;
-	((SndSub*)((char*)p + 0x60))->Init();
-	g_singleton[0] = 0;
-	g_singleton[1] = 0;
-	g_singleton[2] = 0;
-	g_singleton[3] = 0;
-	*p = (int)g_singleton;
-	return p;
+	memset(&mi10, 0, sizeof(int));
+	memset(&mi5c, 0, sizeof(int));
+	mTimers.Init();
+	memset(g_singleton, 0, sizeof(g_singleton));
+	mpScratch = g_singleton;
 }
 
 // ---------------------------------------------------------------------------

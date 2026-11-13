@@ -23,3 +23,4 @@ slices/s013bed20/s013bed20.cpp  ?f_013c1f50@@YAXXZ  013c1f50
 slices/s013bed20/s013bed20.cpp  ?f_013c20f0@@YAXXZ  013c20f0
 slices/s013bed20/s013bed20.cpp  ?f_013c2140@@YAXXZ  013c2140
 slices/s013bed20/s013bed20.cpp  ?f_013c29f0@@YAXXZ  013c29f0
+slices/s013bed20/s013bed20.cpp  ?f_013c1b90@@YAXXZ  013c1b90  /O2 /MD /Gy /EHsc /TP

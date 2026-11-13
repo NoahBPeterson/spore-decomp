@@ -49,3 +49,4 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?Teardown5580@cGameData_s00cb_5580@@QAEXXZ  00cb5580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb6060@cDefaultAoEArea@@QAEIXZ  00cb6060  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb6020@cDefaultAoEArea@@QAEIXZ  00cb6020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?SetTool@cFlakProjectile_s00cb_4bd0@@UAEXPAUcToolData_s00cb_4bd0@@@Z  00cb4bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

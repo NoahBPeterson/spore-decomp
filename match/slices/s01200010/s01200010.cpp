@@ -336,16 +336,6 @@ int FixupCallback(int arg, Fixup4* rec)
 	return FUN_012010e0((int*)rec->mpData10, (int*)rec->mpDataC, (int)rec->mpLink, (int*)arg);
 }
 
-// @ 0x01200fb0
-void RebaseOneReversed(int* p, Base20Ctx* ctx)
-{
-	if (p != ctx->mpBase)
-	{
-		*p = *p - (int)p;
-		*p = (int)ctx->mpBase + *p;
-	}
-}
-
 // @ 0x01200fd0
 void RebaseDeltaFrom(int* p, int* from)
 {

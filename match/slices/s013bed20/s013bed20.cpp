@@ -391,6 +391,13 @@ void f_013c1b90() {
     if (g_1679e8c && *(int*)(g_1679e8c - 4) != 0) cdecl_free((void*)g_1679e8c);
 }
 
+// The retail function list has no entry for the 1-byte empty function at 0x013C1BB0, so the
+// 33-byte fingerprint extent of f_013c1b90 runs over the linker's int3 padding (9 bytes, to
+// the next 16-byte boundary) and that function's bare `ret`. This empty function supplies the
+// adjacent `ret` when the row is linked (ltcg/013c1b90.cpp); it must stay directly after
+// f_013c1b90.
+void a07_link_pad_ret() {}
+
 // @ 0x013C1E00
 void f_013c1e00() {
     int d = g_15671b8 - g_15671b0;
