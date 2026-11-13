@@ -660,13 +660,30 @@ float FUN_00ec0530(int obj, int a, int b, int d)
 // @ 0x00ec0740
 float FUN_00ec0740(int obj)
 {
-    int v = EXT(*(int*)(obj + 0xb4c) + 8).i7(0, 0x40000);
-    int* self = (int*)(obj + 0xc0);
-    if (v != 0 && *(int*)(v + 0x14) != 0) {
-        int p = *(int*)(v + 0x14);
-        int o = (*(int (__thiscall**)(int, int))((*(int*)p) + 0xc))(p, 0x1186577);
+    struct MaskQueryOwnerPrefix { uint32 mUnknown00[2]; ExtApi mQueryInterface_08; };
+    struct CreaturePrimaryPrefix { uint32 mUnknown00[0xc0 / 4]; };
+    struct SpatialBasePrefix { int mVtable; };
+    struct DistanceCreaturePrefix : CreaturePrimaryPrefix, SpatialBasePrefix {
+        uint32 mUnknownC4[(0xb4c - 0xc4) / 4];
+        MaskQueryOwnerPrefix* mMaskQueryOwner_b4c;
+    };
+    struct TargetPrefix { uint32 mUnknown00[5]; int mQueryInterface_14; };
+    struct QueryPrefix { int (__thiscall** mVtable)(int, int); };
+
+
+    // Minimal retail views: the spatial interface is the secondary base at +0xc0.
+    typedef char SpatialOffset[(offsetof(DistanceCreaturePrefix, mVtable) == 0xc0) ? 1 : -1];
+    typedef char QueryOwnerOffset[(offsetof(DistanceCreaturePrefix, mMaskQueryOwner_b4c) == 0xb4c) ? 1 : -1];
+    typedef char CreaturePrefixSize[(sizeof(DistanceCreaturePrefix) == 0xb50) ? 1 : -1];
+    typedef char QueryInterfaceOffset[(offsetof(TargetPrefix, mQueryInterface_14) == 0x14) ? 1 : -1];
+    typedef char QueryOwnerInterfaceOffset[(offsetof(MaskQueryOwnerPrefix, mQueryInterface_08) == 8) ? 1 : -1];
+
+    int v = ((DistanceCreaturePrefix*)obj)->mMaskQueryOwner_b4c->mQueryInterface_08.i7(0, 0x40000);
+    if (v != 0 && ((TargetPrefix*)v)->mQueryInterface_14 != 0) {
+        int p = ((TargetPrefix*)v)->mQueryInterface_14;
+        int o = ((QueryPrefix*)p)->mVtable[3](p, 0x1186577);
         if (o != 0) {
-            float d = FUN_00ec0270((int*)o, self);
+            float d = FUN_00ec0270((int*)o, (int*)static_cast<SpatialBasePrefix*>((DistanceCreaturePrefix*)obj));
             if (d > *g_p8)
                 return 1.0f;
         }
