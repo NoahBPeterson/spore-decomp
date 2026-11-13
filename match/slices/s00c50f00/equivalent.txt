@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00c50f00/s00c50f00.cpp  ?Construct@cSPMissionExplore@SP@@QAEPAV12@XZ  00c50f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast

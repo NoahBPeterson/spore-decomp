@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s009b5ce0/s009b5ce0.cpp  ?get_workspace_origin@Creature@CA@@QAEPAUVec3@2@PAU32@I@Z  009b61f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

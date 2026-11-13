@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00fc8450/s00fc8450.cpp  ?SetOverlayStreamTap@MovieDecoder@movie@rw@@QAEXPAX@Z  00fc9210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

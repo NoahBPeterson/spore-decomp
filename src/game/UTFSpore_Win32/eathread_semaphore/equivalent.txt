@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/eathread_semaphore.cpp  ?Post@Semaphore@Thread@EA@@QAEHH@Z  00922740  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

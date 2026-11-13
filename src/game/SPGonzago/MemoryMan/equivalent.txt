@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/MemoryMan.cpp  ?HandleUIMessage@cSPUIChoiceDialog@@UAE_NPAVIWindow_s005f_e1d0@UTFWin@EA@@ABVMessage_s005f_e1d0@34@@Z  005fe8e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/MemoryMan.cpp  ?FUN_006abeb0@@YAXPAX@Z  006abeb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/MemoryMan.cpp  ?f_47480@@YAPAXXZ  00f47480  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

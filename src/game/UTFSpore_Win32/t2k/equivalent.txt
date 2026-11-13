@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/t2k.cpp  ?ConcatFontMatrix@@YAXPAHPAD@Z  008bfe80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

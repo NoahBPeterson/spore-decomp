@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s008038d0/s008038d0.cpp  ?DtorBody@cSPUIFrameSequencer@@QAEXXZ  008048c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

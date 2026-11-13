@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/HTTPHandler.cpp  ??4AutoRef@@QAEPAU0@PAURCObj@@@Z  008fd240  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include

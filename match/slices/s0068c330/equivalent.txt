@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0068c330/s0068c330.cpp  ?SetKeyKind@@YAXPAUResKey@@EE@Z  0068c6d0  /O2 /MD /Gy /EHsc /TP

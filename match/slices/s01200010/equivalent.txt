@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01200010/s01200010.cpp  ?Rebase3FromBase@@YAHPAURel3@@PAUArenaCtx@@@Z  012008d0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s01200010/s01200010.cpp  ?FixupToPointers@@YAXPAUFixup4@@HPAUArenaCtx@@@Z  012009c0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s01200010/s01200010.cpp  ?InitFixup4@@YAHPAUFixup4@@PAUArenaCtx@@@Z  01200a10  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

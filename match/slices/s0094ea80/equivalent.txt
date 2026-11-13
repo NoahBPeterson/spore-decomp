@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0094ea80/s0094ea80.cpp  ?Destroy@ResObj94@@QAEPAXH@Z  0094eae0  /O2 /MD /Gy /EHsc /TP /GS-

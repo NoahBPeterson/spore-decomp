@@ -1,3 +1,5 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
-../src/game/SPEditors/SPUIAssetGrid.cpp  ?UpdateScrollRegion@cSPUIAssetGrid_s0065_15a0@@QAEXXZ  006524a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?ParseHelper@@YAEPAXHE@Z  0064f350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetGrid.cpp  ??0cSPUIAssetGrid_s0065_15a0@@QAE@XZ  00651990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?ContentHeight@GridSub8@@QAEMM@Z  00651f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetGrid.cpp  ?UpdateScrollRegion@cSPUIAssetGrid_s0065_15a0@@QAEXXZ  006524a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

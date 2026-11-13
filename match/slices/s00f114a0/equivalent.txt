@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00f114a0/s00f114a0.cpp  ?FUN_00f11b60@cCreatureModeInputStrategy@@QAEPAXXZ  00f11b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

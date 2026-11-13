@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00d14460/s00d14460.cpp  ?Destroy@cCommandGameplayMarker@@QAEPAXE@Z  00d14f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

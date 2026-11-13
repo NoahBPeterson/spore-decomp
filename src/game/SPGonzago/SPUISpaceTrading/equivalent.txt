@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?Fn10762E0@cSPUISpaceTrading@@QAEPAU1@XZ  010762e0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

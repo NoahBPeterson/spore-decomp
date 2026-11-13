@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00753fc0@@YAXPAURC_00753fc0@@@Z  00753fc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00754620@@YA_NII@Z  00754620  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00754c20@S_00754c20@@QAEXPAUcJob@@@Z  00754c20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00755570@V_755570@@QAEXIH@Z  00755570  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include

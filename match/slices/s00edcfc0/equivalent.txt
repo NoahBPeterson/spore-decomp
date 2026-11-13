@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00edcfc0/s00edcfc0.cpp  ?f00edde30@C@@QAEXH@Z  00edde30  /O2 /MD /Gy /EHsc /TP /fp:fast

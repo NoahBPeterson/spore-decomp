@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPSpaceBackgroundSim.cpp  ?FUN_01021370@@YAPAXXZ  01021370  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

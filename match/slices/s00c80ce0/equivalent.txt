@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00c80ce0/s00c80ce0.cpp  ?UpdateBackgroundPlanet@cSimPlanetLowLOD@@QAEXPAUcPlanet@@H@Z  00c817e0  /O2 /MD /Gy /TP /arch:SSE /GS-

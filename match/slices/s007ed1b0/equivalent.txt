@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s007ed1b0/s007ed1b0.cpp  ?Update@EffectObject@@QAEXXZ  007edd80  /O2 /MD /Gy /EHsc /TP

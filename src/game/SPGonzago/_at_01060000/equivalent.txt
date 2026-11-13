@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_01060000.cpp  ?Resize_01065860@cString12@@QAEXI@Z  01065860  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

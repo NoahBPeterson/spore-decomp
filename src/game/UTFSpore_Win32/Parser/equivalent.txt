@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/Parser.cpp  ?GetLineLocationInfo@cParser_s0084_2620@ArgScript@EA@@UBEXPAUstring8_s0084_2620@eastl@@PAH@Z  00843240  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

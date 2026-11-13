@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/cmn/spktplay.cpp.cpp  ?F_0113f720@@YAHH@Z  0113f720  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

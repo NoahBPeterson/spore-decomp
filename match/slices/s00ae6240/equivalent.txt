@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00ae6240/s00ae6240.cpp  ?AttachSubsystems@cCitySimulator@@QAEXXZ  00ae7350  /O2 /MD /Gy /EHsc /TP

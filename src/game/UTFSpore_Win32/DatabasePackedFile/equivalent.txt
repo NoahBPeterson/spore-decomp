@@ -1,2 +1,8 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?MakeIndexModifiable@DatabasePackedFile@ResourceMan@EA@@UAEXXZ  008d83b0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?FreeSpace@DatabasePackedFile@ResourceMan@EA@@QAE_NJI_N@Z  008d84d0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?Shutdown@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  008d8650  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?SetStream@DatabasePackedFile@ResourceMan@EA@@UAE_NPAVIStream@IO@3@@Z  008d86c0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?WriteFileSpan@DatabasePackedFile@ResourceMan@EA@@QAE_NPBXJI@Z  008d90e0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ??0HoleSet_s008d_aff0@@QAE@XZ  008db8c0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetBuffer@PFRecordRead@@QAEPAXXZ  008dc5e0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include

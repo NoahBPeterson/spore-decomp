@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s008f0740/s008f0740_g7.cpp  ?Table_Layout_XHTML_EA_dtor@Table_Layout_XHTML_EA@@QAEPAXE@Z  008f11b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

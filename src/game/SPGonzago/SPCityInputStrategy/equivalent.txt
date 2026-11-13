@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf0fe0@cCityInputStrategy@@QAEIXZ  00cf0fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1810@cCityInputStrategy@@QAEXPAXE@Z  00cf1810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1ad0@cCityInputStrategy@@QAEIPAX0@Z  00cf1ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

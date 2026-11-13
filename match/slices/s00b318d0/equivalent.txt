@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00b318d0/s00b318d0.cpp  ??0cGameTimeManager@@QAE@XZ  00b31ea0  /O2 /MD /Gy /TP /arch:SSE /GS-

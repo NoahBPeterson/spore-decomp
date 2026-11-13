@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPPropertyList.cpp  ?erase@VariantMap@SP@@QAEIABI@Z  006a2cb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

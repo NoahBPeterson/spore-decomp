@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPBake/SPEditorBudget.cpp  ?AsInterface@cSPEditorBudget@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  00457950  /Od /MD /Gy /EHsc /TP /Isrc/game/include

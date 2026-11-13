@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPMissionFetch.cpp  ?GetUIShortDescription@cSPMissionFetch_s00c5_3180@@QAEXPAVWString@@@Z  00c53720  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

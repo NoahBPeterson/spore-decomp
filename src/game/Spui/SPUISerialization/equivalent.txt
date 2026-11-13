@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/SPUISerialization.cpp  ?RangeCheck@@YAHHH@Z  0082ab00  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include

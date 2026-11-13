@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00845370/s00845370.cpp  ?RegisterCommand@cParser@ArgScript@EA@@QAEXPBDPAVcICommand@23@@Z  00846000  /O2 /MD /Gy /EHsc /TP /GS-

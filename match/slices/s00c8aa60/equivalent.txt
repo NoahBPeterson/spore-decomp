@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00c8aa60/s00c8aa60.cpp  ?sub_b2e0@cSpatialObjectView@@QAEXXZ  00c8b2e0  /O2 /MD /Gy /EHsc /TP /arch:SSE

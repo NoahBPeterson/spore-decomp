@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/_at_007d0000.cpp  ?TestKey@@YAIPAXPBIPAIH@Z  007d4540  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ??0cSplitManager@@QAE@XZ  007d5d50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?AbilityCmdNew@@YAPAUcAbilityCmd@@PAX@Z  007d7ed0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0117f610/s0117f610.cpp  ?Ext_d2i_117f610@@YAPAXPAUX509_EXTENSION@@@Z  0117f610  /O2 /MD /Gy /TP
+slices/s0117f610/s0117f610.cpp  ?Ext_get_nid_a_117f7f0@@YAHI@Z  0117f7f0  /O2 /MD /Gy /TP
+slices/s0117f610/s0117f610.cpp  ?Ext_get_nid_b_117f870@@YAHI@Z  0117f870  /O2 /MD /Gy /TP
+slices/s0117f610/s0117f610.cpp  ?set_session_1181810@@YAHPAUSSL@@PAUSSL_SESSION@@@Z  01181810  /O2 /MD /Gy /TP

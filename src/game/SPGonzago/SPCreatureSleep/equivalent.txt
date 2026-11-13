@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCreatureSleep.cpp  ?FUN_00d705b0@@YAMPAVcSPCreatureBase_s00d7_0080@SP@@@Z  00d705b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

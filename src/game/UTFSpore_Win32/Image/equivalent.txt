@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/Image.cpp  ?GetGlobalImageTable@@YAPAXXZ  00957b00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include

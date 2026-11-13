@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00898dc0/s00898dc0.cpp  ?Assign@Self_00898dc0@@QAEPAHHHH@Z  00898dc0  /O2 /MD /Gy /EHsc /TP

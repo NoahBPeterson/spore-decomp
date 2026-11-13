@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00af0000.cpp  ?ReserveId@tSlot@cActionCircle_s00af_9aa0@SP@@QAEXI@Z  00afa070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

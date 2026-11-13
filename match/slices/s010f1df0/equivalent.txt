@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s010f1df0/s010f1df0.cpp  ?collideEntitiesNarrowPhaseDiscrete@hkDiscreteSimulation@@IAEXPAPAVhkEntity@@HABUhkProcessCollisionInput@@@Z  010f25d0  /O2 /MD /Gy /TP /GS- /vc71

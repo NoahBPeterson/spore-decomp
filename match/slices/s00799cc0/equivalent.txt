@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00799cc0/s00799cc0.cpp  ?reserve@SplitElem20Vector@@QAEPAXI@Z  0079a4f0  /O2 /MD /Gy /EHsc /TP /fp:fast

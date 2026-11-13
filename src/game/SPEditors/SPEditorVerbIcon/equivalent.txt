@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPEditorVerbIcon.cpp  ?SetArea@cSPEditorVerbIcon_s005e_2470@SP@@QAEXURectangle@Math@@@Z  005e2960  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

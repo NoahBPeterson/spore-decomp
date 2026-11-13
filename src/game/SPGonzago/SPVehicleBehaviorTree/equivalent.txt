@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPVehicleBehaviorTree.cpp  ?Destroy@cVehicleTicker_s00dc_77d0@@QAEXXZ  00dc7cc0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

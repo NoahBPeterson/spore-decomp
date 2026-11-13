@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPOrnament.cpp  ??0cInteractiveOrnament_s00c4_04c0@@QAE@XZ  00c404c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnament.cpp  ?TP_RemoveOwner@@YIXPAUTotemPole@@@Z  00c8deb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

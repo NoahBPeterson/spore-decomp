@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/_at_00820000.cpp  ?Do@C25b@@QAEXH@Z  00828df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00820000.cpp  ?BeginRender@@YAPAVcRender2D@@PAVRenderContext@@PAVIProv@@PAPAVcWrap@@@Z  00828e30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00820000.cpp  ?GetRectLocal@cPropLayout@@QAEPAURect@@PAU2@@Z  00829690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

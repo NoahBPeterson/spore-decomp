@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00572580/s00572580.cpp  ??4RefCountedPtr@@QAEAAU0@PAURefCounted@@@Z  00572680  /O2 /MD /Gy /EHsc /TP

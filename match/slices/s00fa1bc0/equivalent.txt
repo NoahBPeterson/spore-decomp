@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00fa1bc0/s00fa1bc0.cpp  ?AllocDecalIndex@cTerrainSphere@@QAEII@Z  00fa27d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

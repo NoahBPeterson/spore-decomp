@@ -1,2 +1,3 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPAppCertStore.cpp  ?BitLengthInit@cBitLength@@QAEXHI@Z  007c7770  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPAppCertStore.cpp  ?Seed@cRandom@@QAE_NPBD@Z  007c77e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

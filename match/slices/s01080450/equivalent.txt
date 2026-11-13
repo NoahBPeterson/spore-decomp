@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01080450/s01080450.cpp  ??0hkBufferedStreamReader@@QAE@PAVhkStreamReader@@H@Z  01080830  /vc71 /O2 /MD /Gy /TP

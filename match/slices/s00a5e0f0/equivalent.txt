@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00a5e0f0/s00a5e0f0.cpp  ?print_setup@Eapd@Audio@EA@@YA_NXZ  00a5ebe0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?random_seed@Eapd@Audio@EA@@YAXI@Z  00a5ecb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?x_random_setup@Eapd@Audio@EA@@YA_NXZ  00a5eea0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

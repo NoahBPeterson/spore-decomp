@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00c00000.cpp  ?Sub4790@CreatureBase_s00c0_45a0@@QAEHXZ  00c04790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

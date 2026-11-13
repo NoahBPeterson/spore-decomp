@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?FUN_006bc310@DatabasePackedFile@@QAE_NIIIID@Z  006bc310  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile_v2.cpp  ?FUN_006bd430@DatabasePackedFile_s006b_d150@@QAEDD@Z  006bd430  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

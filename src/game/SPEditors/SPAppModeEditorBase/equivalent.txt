@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?ShowBlockAbilities@cAppModeEditorBase_s0057_3520@SP@@QAEXPAUcEditorBlock@2@@Z  00573520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?GetSelectableBlock@cAppModeEditorBase_s0057_3520@SP@@QAEPAUcEditorBlock@2@XZ  00573a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ??1cPaletteCategory@SP@@QAE@XZ  0057c4b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?Resize@cIntVec@@QAEXI@Z  00584160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

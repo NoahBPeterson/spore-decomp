@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01130c50/s01130c50.cpp  ?Mp3Player_getPosition@core@audio@rw@@YAHPAUMp3Player@123@PAM@Z  01131630  /vc71 /O2 /MD /Gy /TP /arch:SSE

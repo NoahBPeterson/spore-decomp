@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/EAClipboard.cpp  ?Clipboard_EnablePlatform@Clipboard_s0092_abb0@@QAE_NXZ  0092b0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

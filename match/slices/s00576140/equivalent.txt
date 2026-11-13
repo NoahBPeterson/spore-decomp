@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00576140/s00576140.cpp  ?GetEditorCategory@cAppModeEditorBase@SP@@QAEHXZ  00576140  /O2 /MD /Gy /TP /arch:SSE /fp:fast

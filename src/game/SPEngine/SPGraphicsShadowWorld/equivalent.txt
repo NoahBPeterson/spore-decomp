@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPGraphicsShadowWorld.cpp  ?FUN_0077f5a0@ShadowCtx@@QAEXPAM0@Z  0077f5a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

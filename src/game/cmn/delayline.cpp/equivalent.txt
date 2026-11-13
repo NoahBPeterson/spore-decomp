@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/cmn/delayline.cpp.cpp  ?Init@DelayLine@core@audio@rw@@QAE_NHHH@Z  0114d7b0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/delayline.cpp.cpp  ?WrapCursor@DelayLine@core@audio@rw@@QBEPAMPBUChannelPointers@234@H@Z  0114da40  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

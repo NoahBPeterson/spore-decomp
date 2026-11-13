@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0050e850/s0050e850.cpp  ?HashWord@@YAII@Z  0050ea00  /Od /Ob1 /MD /Gy /TP /arch:SSE

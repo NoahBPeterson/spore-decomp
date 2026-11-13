@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00dddd20/s00dddd20.cpp  ?Parse@ArgCmd@@QAEXPAX@Z  00dddf90  /O2 /MD /Gy /EHsc /TP /arch:SSE

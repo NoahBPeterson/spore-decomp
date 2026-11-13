@@ -1,0 +1,7 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01129d50/s01129d50.cpp  ??0hkDisableEntityCollisionFilter@@QAE@VhkFinishLoadedObjectFlag@@@Z  01129d50  /vc71 /O2 /MD /Gy /TP
+slices/s01129d50/s01129d50.cpp  ??0hkDashpotAction@@QAE@PAVhkEntity@@0I@Z  01129f40  /vc71 /O2 /MD /Gy /TP
+slices/s01129d50/s01129d50.cpp  ?clone@hkDashpotAction@@UBEPAVhkAction@@ABV?$hkArray@PAVhkEntity@@@@ABV?$hkArray@PAVhkPhantom@@@@@Z  0112a200  /vc71 /O2 /MD /Gy /TP
+slices/s01129d50/s01129d50.cpp  ?isCollisionEnabled@hkConstrainedSystemFilter@@UBE?AVhkBool@@ABUhkWorldRayCastInput@@ABVhkCollidable@@@Z  0112a340  /vc71 /O2 /MD /Gy /TP
+slices/s01129d50/s01129d50.cpp  ??0hkAngularDashpotAction@@QAE@PAVhkEntity@@0I@Z  0112a5c0  /vc71 /O2 /MD /Gy /TP
+slices/s01129d50/s01129d50.cpp  ?clone@hkAngularDashpotAction@@UBEPAVhkAction@@ABV?$hkArray@PAVhkEntity@@@@ABV?$hkArray@PAVhkPhantom@@@@@Z  0112a890  /vc71 /O2 /MD /Gy /TP

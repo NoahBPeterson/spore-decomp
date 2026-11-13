@@ -1,2 +1,4 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCreatureBase.cpp  ?RelationIndex@C@@QAEHHD@Z  00c0ce30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?e120@CCM@@QAEDH@Z  00c0e120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?FUN_00c22470@cSPCreatureBase_s00c2_2010@@QAE_NPAX@Z  00c22470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

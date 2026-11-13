@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/manager1.cpp  ??0Manager@@QAE@XZ  0094c260  /O2 /MD /Gy /TP /GS- /Isrc/game/include

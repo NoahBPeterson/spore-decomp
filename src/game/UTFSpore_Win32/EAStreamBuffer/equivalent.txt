@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/EAStreamBuffer.cpp  ?SetStream@StreamBuffer@IO@EA@@QAE_NPAVIStream_s0093_a9d0@23@@Z  0093b3c0  /O2 /MD /Gy /TP /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00997f50/s00997f50.cpp  ?Release@RWTexFactory@@QAEHXZ  00998200  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

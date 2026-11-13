@@ -1,4 +1,13 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
-../src/game/SPGonzago/_at_00c60000.cpp  ?ClearVector@@YAXPAUVec@@@Z  00c687e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/_at_00c60000.cpp  ??0SimOrnament@@QAE@XZ  00c6f7f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?FUN_00c61e20@Mission@@QAEXHH@Z  00c61e20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?FUN_00c620c0@Mission@@QAEHH@Z  00c620c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?FUN_00c62590@Mission@@QAEXHH@Z  00c62590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?cMissionUseTool_ctor@@YIPAXPAXH@Z  00c62880  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?Fn642e0@Kin@@QAEXXZ  00c642e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?FUN_00c653e0@@YIXPAX@Z  00c653e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?FUN_00c65540@@YIXPAX@Z  00c65540  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?SetT@cMorphHandle_s00c6_5940@@QAEXM@Z  00c65af0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ??0cSimpleRotationBall@@QAE@XZ  00c65f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?ClearVector@@YAXPAUVec@@@Z  00c687e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?FUN_00c6f590@@YIPAXPAX0I@Z  00c6f590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ??0SimOrnament@@QAE@XZ  00c6f7f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

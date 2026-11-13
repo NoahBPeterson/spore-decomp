@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/Dialog.cpp  ?DoMessage@WinDialog_s0096_bdd0@@QAE_NPAX@Z  0096c430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

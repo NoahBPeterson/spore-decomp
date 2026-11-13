@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00c9de50/s00c9de50.cpp  ?WeaponClassFromHash@@YAHI@Z  00c9ed00  /O2 /MD /Gy /TP /arch:SSE /fp:fast

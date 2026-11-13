@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/FileParser.cpp  ?RefAssign@@YIPAPAHPAPAHH0@Z  0083f940  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/FileParser.cpp  ?Construct@FileWatcher@@QAEPAU1@XZ  0092f960  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

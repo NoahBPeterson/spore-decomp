@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/eapdlist.cpp  ?list_trim_new@Eapd@Audio@EA@@YAPAUt_list_trim@123@XZ  00a5d200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/eapdinstance.cpp  ?Op1@GroupOwnerL@@QAE_NII@Z  00a68670  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdinstance.cpp  ?Op2@GroupOwnerL@@QAE_NI@Z  00a686e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

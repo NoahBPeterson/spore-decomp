@@ -1,2 +1,3 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/SPEngine/SPStringManager.cpp  ?Create@cStringTableResourceFactory_s006b_6920@SP@@QAE_NPAUIResKeySrc@2@PAPAUStringTable@2@II@Z  006b6bf0  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/SPStringManager.cpp  ?GetString@StringTable@SP@@QAEPBGI@Z  006b7320  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00f4ef20/s00f4ef20.cpp  ?GetBrushVector@cTerrainTool@SP@@QAEPAMXZ  00f4faa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/_at_00710000.cpp  ?less@RecordCmp@@QBE_NII@Z  007144f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?insertRange@AppEditor@@QAEXHPADH@Z  00717cb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?finish@MeshBuilder8@@QAEXXZ  00719240  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?BeginMesh@cMeshBuilder_s0071_9e10@@QAEXXZ  0071aa20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

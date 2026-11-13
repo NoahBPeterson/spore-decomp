@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00829bc0/s00829bc0.cpp  ?Next@CursorRef@@QAEXXZ  0082aac0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2

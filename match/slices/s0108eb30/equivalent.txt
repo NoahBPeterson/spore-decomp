@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0108eb30/s0108eb30.cpp  ??0hkThinBoxMotion@@QAE@ABVhkVector4@@0@Z  0108f3e0  /vc71 /O2 /MD /Gy /TP /fp:fast

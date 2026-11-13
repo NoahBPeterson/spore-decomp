@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/Button.cpp  ?m@S_966dc0@@QAEPAXXZ  00966dc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/Button.cpp  ?CreateInstance@BasicFactoryStd@@QAEPAUDrawableStd@@IPAX@Z  00966ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/Button.cpp  ?CreateInstance@BasicFactoryRadio@@QAEPAUDrawableStd@@IPAX@Z  00966f30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

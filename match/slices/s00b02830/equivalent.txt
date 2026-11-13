@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00b02830/s00b02830.cpp  ??4cTreeData@@QAEAAU0@ABU0@@Z  00b03740  /O2 /MD /Gy /TP /arch:SSE /fp:fast

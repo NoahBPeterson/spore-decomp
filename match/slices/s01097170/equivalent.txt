@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01097170/s01097170.cpp  ?applyForcesAndBuildAccumulator@hkFixedRigidMotion@@UAEPAVhkVelocityAccumulator@@ABVhkStepInfo@@PAV2@@Z  01097170  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01097170/s01097170.cpp  ?deallocateInternalArrays@hkCachingShapePhantom@@UAEXXZ  01097c90  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01097170/s01097170.cpp  ??0hkBoxMotion@@QAE@ABVhkVector4@@ABVhkQuaternion@@@Z  01098140  /vc71 /O2 /MD /Gy /EHsc /TP

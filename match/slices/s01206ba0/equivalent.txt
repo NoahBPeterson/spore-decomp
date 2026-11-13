@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01206ba0/s01206ba0.cpp  ?rwcVolumeInstanceInitialize@@YAHPAX0@Z  012070e0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

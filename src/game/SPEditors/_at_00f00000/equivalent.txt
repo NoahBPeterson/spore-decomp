@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/_at_00f00000.cpp  ?ApplyPlacement@UI@@QAEDPAX@Z  00f00790  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00f00000.cpp  ?f02b80@PL@@QAEPAU1@XZ  00f02b80  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00f00000.cpp  ?destroy_global_2dd0@@YAXXZ  00f02dd0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00f00000.cpp  ?f03e40@UI_s00f0_31a0@@QAEXXZ  00f03e40  /O2 /MD /Gy /TP /GS- /Isrc/game/include

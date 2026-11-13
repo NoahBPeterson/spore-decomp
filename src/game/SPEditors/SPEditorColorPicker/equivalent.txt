@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPEditorColorPicker.cpp  ??0cSPColorSwatch_s005a_4250@@QAE@XZ  005a5000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

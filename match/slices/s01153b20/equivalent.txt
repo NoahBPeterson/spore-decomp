@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01153b20/s01153b20.cpp  ?FUN_01154770@ThreadObj@@QAEXH@Z  01154770  /O2 /MD /Gy /TP /arch:SSE /fp:fast

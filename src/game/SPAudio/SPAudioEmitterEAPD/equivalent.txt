@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/SPAudioEmitterEAPD.cpp  ?Shutdown@EmitterSub@@QAE_NXZ  00a37b90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

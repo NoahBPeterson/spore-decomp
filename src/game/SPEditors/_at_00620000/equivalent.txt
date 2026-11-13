@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/_at_00620000.cpp  ?GetNextPathPoint@cSPCasual_Path@@QAE_NPAUVec2@@@Z  0062de30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?IsSendPhotoWinVisible@cSPPlayModePhotoBrowser@@QAEEXZ  0062fd60  /O2 /MD /Gy /TP /GS- /Isrc/game/include

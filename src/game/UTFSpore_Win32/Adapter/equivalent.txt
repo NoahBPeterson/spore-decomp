@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/Adapter.cpp  ?AsInterface@CustomWinProc@UTFWin@EA@@UAEPAXW4InterfaceId@COM@3@@Z  00950eb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

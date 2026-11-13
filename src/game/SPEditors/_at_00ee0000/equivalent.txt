@@ -1,2 +1,7 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/_at_00ee0000.cpp  ?F40F0@Bee@@QAEXXZ  00ee40f0  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?FindPlanetSlot@@YAHIPAH0@Z  00ee7cb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?SetObject@SpuEd@@QAEXPAX@Z  00ee83a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?Ctor@Entry@@QAEXXZ  00ee9be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?QueryInterface@RefCountPart@@QAEPAXI@Z  00eea780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?f_00eec3d0@@YA?AUVec3i@@PAH@Z  00eec3d0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

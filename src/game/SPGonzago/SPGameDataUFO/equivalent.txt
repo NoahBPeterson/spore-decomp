@@ -1,2 +1,5 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c36e80@@YIPAXPAUUfo@@PAXI@Z  00c36e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameDataUFO.cpp  ?GetPos@OffsetHolder@@QAEXPAUVec3@@@Z  00c38c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameDataUFO.cpp  ?GetNextCollision@cSPGameDataUFO@@QAEHPAUVector3@@@Z  00c3c4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?func3db50@UFO@@QAEXPAX0@Z  00c3db50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

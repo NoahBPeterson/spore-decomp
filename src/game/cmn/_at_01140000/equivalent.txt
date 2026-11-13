@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/cmn/_at_01140000.cpp  ?Reset@DelayLine@core@audio@rw@@QAEXH@Z  0114d9d0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/_at_01140000.cpp  ??1FastFirEngine@core@audio@rw@@QAE@XZ  0114e340  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

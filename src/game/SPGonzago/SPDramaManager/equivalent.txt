@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPDramaManager.cpp  ?cDramaManagerCtor@@YIPAXPAXH@Z  00d4ea90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00e40000.cpp  ?SetItemColor@cSPUITimeline_s00e4_5760@@QAEXIE@Z  00e46210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e40000.cpp  ?FUN_00e49df0@cKeyQueue@@QAEXPAUKey12@@@Z  00e49df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

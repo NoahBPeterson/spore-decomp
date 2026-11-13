@@ -1,4 +1,12 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e563e0@@YAMPAX@Z  00e563e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e61140@@YAXXZ  00e61140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?CreateInstance_SaveGame@@YGPAXPAX0@Z  00e61a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e67d30@@YAPAMPAMHH@Z  00e67d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e696a0@@YANHUObjRef@@@Z  00e696a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e69740@@YANHUObjRef@@@Z  00e69740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e72360@@YAXPAH0HHHH@Z  00e72360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e72fb0@@YAXPAHH@Z  00e72fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e72e70@@YAXPAHH@Z  00e72e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e72fb0@@YAXPAHH@Z  00e72fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e730d0@@YA_NHHH@Z  00e730d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e818f0@@YGDHI@Z  00e818f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

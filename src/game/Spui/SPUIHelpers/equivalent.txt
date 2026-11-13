@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/SPUIHelpers.cpp  ?FreeCoreBlock@@YAXPAX@Z  00805400  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00806c60@@YAPAMPAMPAX@Z  00806c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807600@@YAPAXPAX00@Z  00807600  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

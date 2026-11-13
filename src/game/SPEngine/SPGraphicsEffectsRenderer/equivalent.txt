@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?SetParams@ShaderHost@@QAEXHHDDD@Z  006e6b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?me30@S8@@QAEXHHH@Z  006ece30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?DestroyEffectsRendererSystem@@YAXXZ  006efc10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

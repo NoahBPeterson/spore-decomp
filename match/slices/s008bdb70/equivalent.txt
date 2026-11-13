@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s008bdb70/s008bdb70.cpp  _T2_CharCodeToGlyphIndex  008bdfe0  /O2 /MD /Gy /TC

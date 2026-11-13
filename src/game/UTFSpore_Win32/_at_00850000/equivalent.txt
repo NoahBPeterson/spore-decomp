@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/_at_00850000.cpp  ?jinit_huff_encoder@@YAXPAHHH@Z  008502a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00850000.cpp  ?output_pass_setup@@YAXPAHHI@Z  008505f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00850000.cpp  ?FUN_0085cbf0@@YIHPAX0@Z  0085cbf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

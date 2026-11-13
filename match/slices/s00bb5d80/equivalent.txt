@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00bb5d80/s00bb5d80.cpp  ?resize@VecRows@@QAEXI@Z  00bb6740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

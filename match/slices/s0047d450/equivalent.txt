@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0047d450/s0047d450.cpp  ?AsInterface@cSPEditorHandle@@QAEPAXI@Z  0047d910  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

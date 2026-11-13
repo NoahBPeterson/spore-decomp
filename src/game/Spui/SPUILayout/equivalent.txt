@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/SPUILayout.cpp  ?ctor2@cConnectionDialog@@QAEPAXPAX@Z  00810020  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?ctor@cSPUILayoutObjectCollection_s0080_f7c0@@QAEPAXXZ  008100d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?insertNode@RBTree@@QAEXPAPAXPAURBNode@@PAI_N@Z  00810af0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

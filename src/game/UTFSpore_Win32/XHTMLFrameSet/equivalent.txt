@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/XHTMLFrameSet.cpp  ?FUN_009968f0@JobQueue@@QAEXPAX@Z  009968f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/XHTMLFrameSet.cpp  ??0cXHTMLFrameSet_s0099_5b20@@QAE@PAX@Z  00996cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/XHTMLFrameSet.cpp  ?insert@FrameMapVM@@QAE_NPAXPB_W@Z  00997350  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPEditorManipulationCellPinning.cpp  ??0cCellPinning@@QAE@XZ  005aac30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

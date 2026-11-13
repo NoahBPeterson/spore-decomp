@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/_at_007f0000.cpp  ?CopyThing@@YA_NPAUSerItem3@@PAX@Z  007ff940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

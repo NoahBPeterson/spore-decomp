@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00a4a500/s00a4a500.cpp  ?canvas_loadbanghandler@Eapd@Audio@EA@@YAHPAUt_glist@123@@Z  00a4a6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a4a500/s00a4a500.cpp  ?canvas_coords@Eapd@Audio@EA@@YAXPAUt_glist@123@HHHPAUt_atom@123@@Z  00a4a750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a4a500/s00a4a500.cpp  ?canvas_istable@Eapd@Audio@EA@@YAHPAUt_glist@123@@Z  00a4ad60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00a4a500/s00a4a500.cpp  ?canvas_showtext@Eapd@Audio@EA@@YAHPAUt_glist@123@@Z  00a4add0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00df6db0/s00df6db0.cpp  ?SetPendingGame@cGalaxyGameEntryImpl@@QAEXPAVcGalaxyGameEntry@@D@Z  00df7af0  /O2 /MD /Gy /TP

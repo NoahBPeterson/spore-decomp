@@ -1,0 +1,1 @@
+{"build":"f9462675fe3937e92e61e40b893bc8c83f5ade82a640949813ea0fbf4a2d1c79","facts":{"entry":["ecx"],"kill":["eax","ecx","edx"]},"hints":{"bij":[[4,4]],"v":1},"layer":"angr_layer","level":"L1","retail_fp":"4ed1be72f18ddc1265e9594c20fe487668b8df0ceb8aa3e640d1d28f68d40173","tools":{"prove":"1","stoke":"98d8a0f+ddec-hints-1"},"va":"00cfecc0"}

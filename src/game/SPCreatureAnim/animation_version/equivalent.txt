@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPCreatureAnim/animation_version.cpp  ?FUN_009a8170@@YAIII@Z  009a8170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

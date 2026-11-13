@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPPlanetaryArtifact.cpp  ?FUN_00c74bd0@cPlanetaryArtifact@@QAEXXZ  00c74bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

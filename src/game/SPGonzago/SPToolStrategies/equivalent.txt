@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPToolStrategies.cpp  ?FUN_01055130@@YGDPAX@Z  01055130  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?CanUseTool_56bb0@@YG_NPAVcSPToolStrategy_s0105_6160@@HPAH@Z  01056bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

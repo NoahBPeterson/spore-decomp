@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/SPUIShader.cpp  ?LayerWinProcCtor@@YIPAULayerWinProc@@PAU1@@Z  0082ebd0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUIShader.cpp  ?Shutdown2DSystem@@YAXXZ  0082f8a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIShader.cpp  ?findInsert@ParamMap@@QAEPAIPAI@Z  0082f930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

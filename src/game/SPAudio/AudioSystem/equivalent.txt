@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/AudioSystem.cpp  ?AudioBlockAlloc@@YGPAUAudioBlock@@PAU1@PBHPBD@Z  00a0f810  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?globalTime_00a21220@@YANXZ  00a21220  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ??_GAbilityList@@UAEPAXI@Z  00a27290  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?pushEmpty@Vec12@@QAEXXZ  00a2ab40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,4 +1,8 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00bf0000.cpp  ?FUN_00bf0f40@cCivilization@@QAEHXZ  00bf0f40  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?StarMapInit@@YIPAUStarTree@@PAU1@@Z  00bf2c60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00bf0000.cpp  ?FUN_00bf30b0@@YIXHHHPAUTri@@@Z  00bf30b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?SetDefinitionID@GameData_s00bf_cc80@@QAEXXZ  00bfd800  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bf0000.cpp  ?Activate@cCommunity_s00bf_d9f0@@QAEXHPAURefObj@@@Z  00bfe450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?Deactivate@cCommunity_s00bf_d9f0@@QAEXXZ  00bfe4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bf0000.cpp  ?FUN_00bff290@CommodityNode@@QAEXH@Z  00bff290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

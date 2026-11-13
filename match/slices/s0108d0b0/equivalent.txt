@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0108d0b0/s0108d0b0.cpp  ?calcStatistics@hkSimpleConstraintContactMgr@@QBEXPAVhkStatisticsCollector@@@Z  0108d900  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ??0hkShapePhantom@@QAE@PAVhkShape@@ABVhkTransform@@@Z  0108dd40  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?hkAabbPhantom_constructFinishLoaded@@YAXPAVhkAabbPhantom@@@Z  0108df90  /vc71 /O2 /MD /Gy /TP

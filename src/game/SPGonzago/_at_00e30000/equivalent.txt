@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00e30000.cpp  ?hide@CardView@@QAEXXZ  00e31550  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ??0cUISporepediaPlanetLargeAssetView@@QAE@XZ  00e33de0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ?ReleaseWindows@cUISporepediaPlanetLargeAssetView@@QAEXXZ  00e33f90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e30000.cpp  ??0cUITimedTooltip@@QAE@XZ  00e36480  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

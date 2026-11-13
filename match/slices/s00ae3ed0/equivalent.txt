@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00ae3ed0/s00ae3ed0.cpp  ?AssignMarkerNode@tMarkerNode@SP@@QAEPAU12@PAU12@@Z  00ae4430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

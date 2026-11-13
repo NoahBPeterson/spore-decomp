@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/eapdclass.cpp  ?class_setdrawfunction@Eapd@Audio@EA@@YAXPAUt_class@123@PAX@Z  00a48040  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

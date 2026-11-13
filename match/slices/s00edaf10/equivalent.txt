@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00edaf10/s00edaf10.cpp  ?FUN_00edaf10@@YIPAUActsBarUI@@PAU1@@Z  00edaf10  /O2 /MD /Gy /TP
+slices/s00edaf10/s00edaf10.cpp  ?ctor@cScenarioEditModeScriptActsBarUI@@QAEPAU1@XZ  00edbe00  /O2 /MD /Gy /TP
+slices/s00edaf10/s00edaf10.cpp  ?FUN_00edbe60@cScenarioEditModeScriptActsBarUI@@QAEXXZ  00edbe60  /O2 /MD /Gy /TP

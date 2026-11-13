@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPEditorPaletteCategoryUI.cpp  ?SetSelectedPack@cSPPaletteCategoryUI_s005c_3cb0@SP@@QAEXI@Z  005c3cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

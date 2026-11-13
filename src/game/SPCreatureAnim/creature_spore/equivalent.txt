@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPCreatureAnim/creature_spore.cpp  ?EraseEffect@creature_instance_data_s009c_b3f0@nSPCreatureAnim@@QAE?AUhashtable_iterator_s009c_b3f0@2@U32@@Z  009cb3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/EACanvas.cpp  ?OnMouseEnter@Canvas_s0084_7200@@QAEXPAX@Z  00847bb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EACanvas.cpp  ?FUN_00848bb0@Canvas_s0084_8210@@QAEXIPAH@Z  00848bb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EACanvas.cpp  ??0Canvas@@QAE@XZ  00849a40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

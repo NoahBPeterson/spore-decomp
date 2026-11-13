@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPStarmap.cpp  ??0cPropView@@QAE@XZ  01046e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

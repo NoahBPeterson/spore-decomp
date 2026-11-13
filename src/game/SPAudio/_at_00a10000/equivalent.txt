@@ -1,0 +1,6 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/_at_00a10000.cpp  ?BeginTree@Serializer@@QAEXI@Z  00a102e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?ctor@Ability@@QAEPAXXZ  00a107a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?q18@Ability@@QAE_NH@Z  00a10a00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?q44@Ability@@QAE_NHHH@Z  00a10d40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?Choose@Playlist@@QAEIXZ  00a146a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

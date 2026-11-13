@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s010317d0/s010317d0.cpp  ??0cSPSpaceGameBehaviorAbducted@@QAE@XZ  010326d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

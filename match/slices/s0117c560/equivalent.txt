@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0117c560/s0117c560.cpp  ?SSL_get_error@@YAHPAUssl_st@@H@Z  0117ccd0  /O2 /MD /Gy /TP

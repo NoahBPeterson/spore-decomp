@@ -1,0 +1,8 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/SSLSocket.cpp  ?SSLSocketBIOShutdown@@YAHPAX@Z  00950080  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLSocket.cpp  ?Read@Sock@@QAEHHHE@Z  00950450  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLSocket.cpp  ?Write@Sock@@QAEHHHE@Z  009504d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLSocket.cpp  ?Fn00950540@@YAHPAXHH@Z  00950540  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLSocket.cpp  ?Fn00950580@@YAHPAXHH@Z  00950580  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLSocket.cpp  ?Fn00950740@@YIXPAX@Z  00950740  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLSocket.cpp  ?StreamSSLSocket_ctor@@YIPAXPAX@Z  00950870  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

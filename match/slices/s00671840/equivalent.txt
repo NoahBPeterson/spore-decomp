@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00671840/s00671840.cpp  ?Destroy@CDetok@@QAEXXZ  00672960  /O2 /MD /Gy /EHsc /TP /arch:SSE

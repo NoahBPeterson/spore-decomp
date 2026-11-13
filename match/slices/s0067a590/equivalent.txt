@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0067a590/s0067a590.cpp  ?PackColor_67ac80@@YAIIIII@Z  0067ac80  /O2 /MD /Gy /TP /arch:SSE /GS-

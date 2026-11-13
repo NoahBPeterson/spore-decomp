@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00be30e0/s00be30e0.cpp  ?RemoveSlotAgent@cAgentAction@@QAEXPAUcNoun@@@Z  00be34a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

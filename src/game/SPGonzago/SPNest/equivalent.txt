@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPNest.cpp  ??0cNest_s00c6_a550@SP@@QAE@XZ  00c6a870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ??1cNest_s00c6_a550@SP@@QAE@XZ  00c6a970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

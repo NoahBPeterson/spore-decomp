@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00c14350/s00c14350.cpp  ?Alloc@Pool@@QAEPAXPAI@Z  00c144e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

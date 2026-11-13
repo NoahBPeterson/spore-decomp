@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00ed9f10/s00ed9f10.cpp  ?FUN_00edaa80@InputStrategy@@QAEPAU1@XZ  00edaa80  /O2 /MD /Gy /TP
+slices/s00ed9f10/s00ed9f10.cpp  _FUN_00edabf0  00edabf0  /O2 /MD /Gy /TP
+slices/s00ed9f10/s00ed9f10.cpp  ?FUN_00edae80@InputStrategy@@QAEXXZ  00edae80  /O2 /MD /Gy /TP

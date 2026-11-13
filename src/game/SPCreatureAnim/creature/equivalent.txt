@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPCreatureAnim/creature.cpp  ??0creature_static_data_s009c_1f60@nSPCreatureAnim@@QAE@XZ  009c1f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

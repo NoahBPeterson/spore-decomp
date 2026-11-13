@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Swarm/DistributeEffect.cpp  ?FUN_00a88220@cDistributeEffect_s00a8_7fb0@@QAE_JXZ  00a88220  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/TextEdit.cpp  ?GetParagraphAtTextIndex@IWinTextEdit_s0098_e3a0@UTFWinControls@EA@@QAEHI@Z  0098e8d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

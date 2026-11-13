@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?EraseKey@CDS_s00ce_a090@@QAEHPAX@Z  00ceab20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01209f50/s01209f50.cpp  ?initMotionState@hkMotionState@@QAEXABUhkVector4@@ABUhkQuaternion@@@Z  0120ac30  /O2 /MD /Gy /TP /fp:fast /vc71

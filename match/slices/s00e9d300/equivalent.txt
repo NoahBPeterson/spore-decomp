@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00e9d300/s00e9d300.cpp  ?Startup@cAmbienceLayerManager@@QAE_NXZ  00e9df00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

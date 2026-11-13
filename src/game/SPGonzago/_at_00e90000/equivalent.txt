@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00e90000.cpp  ?Construct@cPlaceholderColonyEditorCursorAttachment@SP@@QAEPAXXZ  00e90b50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e90000.cpp  ?HandleSimulationUpdate_c40@cPlaceholderColonyEditorCursorAttachment@SP@@QAEXHH@Z  00e90c40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

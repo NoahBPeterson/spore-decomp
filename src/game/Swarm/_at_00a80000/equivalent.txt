@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Swarm/_at_00a80000.cpp  _FUN_00a85090  00a85090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

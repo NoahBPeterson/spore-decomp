@@ -1,2 +1,4 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPUIFeedListItem.cpp  ?Reserve@CFeed@@QAEXHH@Z  00666630  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPUIFeedListItem.cpp  ??0WidA@@QAE@PAUIRef2@@@Z  00666a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUIFeedListItem.cpp  ?Set@FillBuf@@QAEPAU1@EH@Z  0066a5e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

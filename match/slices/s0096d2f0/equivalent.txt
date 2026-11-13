@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0096d2f0/s0096d2f0.cpp  ?SetSize@WinDialog@UTFWinControls@EA@@UAEXMM@Z  0096d2f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

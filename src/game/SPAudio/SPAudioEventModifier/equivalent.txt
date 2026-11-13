@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/SPAudioEventModifier.cpp  ?AddPrimitive@cEventModifier_s00a3_8e40@Audio@SP@@QAE_NIPAUcEventModifierPrimitive_s00a3_8e40@23@@Z  00a39280  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

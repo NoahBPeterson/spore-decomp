@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0115c360/s0115c360.cpp  ?SetGranuleInfo@HELPER_CMpegLayer3B@core@audio@rw@@QAEHI@Z  0115cbb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

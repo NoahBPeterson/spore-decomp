@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPGameCinematics.cpp  ?AsInterface@cGameCinematicsAppMode@SP@@QAEIH@Z  00eb2440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameCinematics.cpp  ?DtorBody@cGameCinematicsAppMode@SP@@QAEXXZ  00eb2470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameCinematics.cpp  ?CtorBody@cGameCinematicsAppMode@SP@@QAEPAV12@XZ  00eb28e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

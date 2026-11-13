@@ -1,0 +1,7 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080db70@@YIPAXPAD@Z  0080db70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080db90@@YIPAXPAD@Z  0080db90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080df50@@YIHPAD@Z  0080df50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080ed50@@YAPAXXZ  0080ed50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?ctor@UI_LayerManager@@QAEPAU1@XZ  0080edb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080fa00@@YIXPAX@Z  0080fa00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

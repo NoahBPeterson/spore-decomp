@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPPosseSimulator.cpp  ?Init@PosseSim@@QAEPAV1@XZ  00d538f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoPositionX@MovieRenderer_s00fc_b210@movie@rw@@QAEXM@Z  00fcbf10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoPositionY@MovieRenderer_s00fc_b210@movie@rw@@QAEXM@Z  00fcbf50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoScaleX@MovieRenderer_s00fc_b210@movie@rw@@QAEXM@Z  00fcbf90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/movieplayer.cpp  ?SetVideoScaleY@MovieRenderer_s00fc_b210@movie@rw@@QAEXM@Z  00fcbfd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

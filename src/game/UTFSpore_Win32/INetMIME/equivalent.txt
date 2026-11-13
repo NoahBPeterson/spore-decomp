@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/INetMIME.cpp  ?MIMETypeStringToMIMEType@Internet@EA@@YA?AW4MIMEType@12@PBD_NI@Z  00949e10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

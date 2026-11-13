@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/glyph.cpp  ?AllocGlyphPointMemory@@YAXPAUGlyphClass@@H@Z  008b0230  /O2 /MD /Gy /TP /Isrc/game/include

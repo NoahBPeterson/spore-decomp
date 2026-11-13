@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/EAStreamfixedmemory.cpp  ?Read@FixedMemoryStream@IO@EA@@UAEHPAXI@Z  0093b9a0  /O2 /MD /Gy /TP /Isrc/game/include

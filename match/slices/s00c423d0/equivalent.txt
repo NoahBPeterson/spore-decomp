@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00c423d0/s00c423d0.cpp  ?SegmentsNear@@YA_NPBUVec3@@000PAU1@@Z  00c42650  /O2 /MD /Gy /TP /arch:SSE /fp:fast

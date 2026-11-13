@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/xmlrole.cpp  ?attlist8@@YAHPAHHHPAX0@Z  0090b310  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

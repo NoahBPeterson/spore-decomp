@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00ac4060/s00ac4060.cpp  ?push_back@D4060@@QAEXABUE14@@@Z  00ac4390  /O2 /MD /Gy /TP /arch:SSE /fp:fast

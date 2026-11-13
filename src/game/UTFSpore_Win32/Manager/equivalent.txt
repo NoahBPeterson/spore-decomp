@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/Manager.cpp  ??4AutoRefObj@@QAEAAU0@ABU0@@Z  008dee30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Manager.cpp  ?CopyFrom@VecOwner_s008d_ff30@ResourceMan@EA@@QAEPAU123@PAXPAUAutoRefVec_s008d_ff30@23@@Z  008e0250  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include

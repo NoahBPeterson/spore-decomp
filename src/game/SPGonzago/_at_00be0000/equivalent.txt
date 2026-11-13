@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00be0000.cpp  ?AsInterface@cCityTerritory@@QAEPAXI@Z  00beb9c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?AsInterface2@cCityTerritory@@QAEPAXI@Z  00bebd40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?GetIsWallBuilt@cCityWalls@@QAE_NXZ  00bec860  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00be0000.cpp  ?IsTimer108Elapsed@cCivilization_s00be_eb70@SP@@QAE_NXZ  00bef8a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

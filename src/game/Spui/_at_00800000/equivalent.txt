@@ -1,0 +1,7 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/_at_00800000.cpp  ?f@C_802890@@QAEPAXPAX@Z  00802890  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?FUN_00809db0@@YADPAXPBX@Z  00809db0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?Fn@HelperObj@@QAEXPAUIWin@@PAX@Z  00809f40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?DeletingDtor@Big3@@QAEPAXD@Z  0080b9b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?ObjBCtor@@YIPAUObjB@@PAU1@@Z  0080ba10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/_at_00800000.cpp  ?ctor@cSPUILaunchScreenWinProc@@QAEPAV1@XZ  0080cf00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

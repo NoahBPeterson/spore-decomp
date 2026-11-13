@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00d197a0/s00d197a0.cpp  ??$quick_sort@PAIUcPropertyListNameSort@SP@@@eastl@@YAXPAI0UcPropertyListNameSort@SP@@@Z  00d1a180  /O2 /MD /Gy /TP /arch:SSE /fp:fast

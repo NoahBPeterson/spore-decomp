@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPXHTMLWin.cpp  ?OnKeyDown@cXHTMLWin@Pollen@SP@@QAE_NHHH@Z  00623ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

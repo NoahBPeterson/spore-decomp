@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s011e0560/s011e0560.cpp  ?rw_FindTypeReg@@YAPAXH@Z  011e21b0  /O2 /MD /Gy /EHsc /TP
+slices/s011e0560/s011e0560.cpp  ?copy4@ArenaSelf@@QAEXPAX@Z  011e2240  /O2 /MD /Gy /EHsc /TP
+slices/s011e0560/s011e0560.cpp  ?idToObject@ArenaSelf@@QAEPAXI@Z  011e2300  /O2 /MD /Gy /EHsc /TP
+slices/s011e0560/s011e0560.cpp  ?alignTo@ArenaSelf@@QAEXI@Z  011e24b0  /O2 /MD /Gy /EHsc /TP

@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPCreatureAnim/gait_record.cpp  ?Assign@Rec44@@QAEPAU1@PBU1@@Z  009dbfd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/gait_record.cpp  ?Assign@Rec58@@QAEPAU1@PBU1@@Z  009dc050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s006925c0/s006925c0.cpp  ?Wait@cJob@@QAEXXZ  006926b0  /O2 /MD /Gy /EHsc /TP /GS-

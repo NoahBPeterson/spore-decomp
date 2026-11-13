@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e393b0@@YIHPAUTimeline_s00e3_8ce0@@PAX@Z  00e393b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

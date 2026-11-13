@@ -1,2 +1,3 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s009a0d60/s009a0d60.cpp  ?Reset@SlotReset@@QAEXXZ  009a0df0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s009a0d60/s009a0d60.cpp  ?Construct@SlotObj@@QAEPAU1@XZ  009a1530  /O2 /MD /Gy /EHsc /TP /arch:SSE

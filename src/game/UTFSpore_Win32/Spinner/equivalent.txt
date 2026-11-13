@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/Spinner.cpp  ?ScalarDtor@WinSpinner@@QAEPAXI@Z  00987470  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Spinner.cpp  ?BasicFactory_SpinnerDrawable_CreateInstance@@YGPAXHH@Z  00987530  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

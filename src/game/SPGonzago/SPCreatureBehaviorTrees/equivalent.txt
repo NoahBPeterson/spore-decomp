@@ -1,0 +1,6 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?GetObject@cSocialBandPool@@QAEPAVcPoolObject@@I@Z  00d9eb70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?Fd9f530@@YAPAHI@Z  00d9f530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?Init@cSocialBand_s00da_49f0@@QAEPAU1@XZ  00da4f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?Assign@cSocialBandEntry@@QAEPAU1@ABU1@@Z  00da5550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBehaviorTrees.cpp  ?create@cSocialBandPool_s00da_5900@@QAEIABUcSocialBand_s00da_5900@@@Z  00da5900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

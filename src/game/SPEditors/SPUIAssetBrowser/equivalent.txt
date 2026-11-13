@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Fn990@HubD@@QAEXXZ  00644990  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Get_c@Browser@@QAEIXZ  006452c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?FindOrInsert@GridVec@@QAEPAUEntry14@@ABUKey12@@@Z  00648ce0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Launch@@YAXIII@Z  0064bc50  /O2 /MD /Gy /TP /GS- /Isrc/game/include

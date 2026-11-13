@@ -1,0 +1,12 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00f20000.cpp  ?FUN_00f20c60@@YAPAXPAXPAHH@Z  00f20c60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?FUN_00f20fe0@@YAXXZ  00f20fe0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?FUN_00f217a0@@YAXPAUEvtEntity@@@Z  00f217a0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?FUN_00f24390@@YAXXZ  00f24390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?fn256a0@Obj@@QAE_NXZ  00f256a0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?fn256e0@Obj@@QAE_NXZ  00f256e0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?fn257f0@Obj@@QAEDPAX@Z  00f257f0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?fn25ee0@DataObj@@QAE_NXZ  00f25ee0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?fn25f20@DataObj@@QAE_NXZ  00f25f20  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?fn26ac0@@YAXPAX@Z  00f26ac0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?fn26c60@@YAXPAX@Z  00f26c60  /O2 /MD /Gy /TP /Isrc/game/include

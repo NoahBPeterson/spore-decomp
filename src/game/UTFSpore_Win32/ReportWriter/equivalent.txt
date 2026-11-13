@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteText@ReportWriter@Debug@EA@@UAE_NPBD_N@Z  0091ea90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteKeyValueFormatted@ReportWriter@Debug@EA@@UAA_NPBD0ZZ  0091eba0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

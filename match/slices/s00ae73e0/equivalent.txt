@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00ae73e0/guicomm.cpp  ?Init@Gonzago@@QAEPAU1@XZ  00ae7f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

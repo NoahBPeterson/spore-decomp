@@ -1,2 +1,9 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/plugins/_at_01130000.cpp  ?FUN_01139390@core@audio@rw@@YAHPAX@Z  01139390  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/plugins/_at_01130000.cpp  ?F_4b0@AudioObj@core@audio@rw@@QAEXXZ  011394b0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/plugins/_at_01130000.cpp  ?F_660@AudioObj@core@audio@rw@@QAEXHPAH@Z  01139660  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/plugins/_at_01130000.cpp  ?F_eb0@RevObj@core@audio@rw@@QAEXXZ  01139eb0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/plugins/_at_01130000.cpp  ?FUN_0113aaf0@@YA_NPAE@Z  0113aaf0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/plugins/_at_01130000.cpp  ?FUN_0113b9d0@Ctx@@QAEXXZ  0113b9d0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/plugins/_at_01130000.cpp  ?FUN_0113ba30@@YAIPAE@Z  0113ba30  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/plugins/_at_01130000.cpp  ?FUN_0113baf0@@YAIPAI@Z  0113baf0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

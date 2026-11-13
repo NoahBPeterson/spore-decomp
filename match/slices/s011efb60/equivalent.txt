@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s011efb60/s011efb60.cpp  ?Initialize@Raster@graphics@rw@@SAPAV123@ABUMemoryResource@23@GGEHI@Z  011efeb0  /vc71 /O2 /MD /Gy /TP

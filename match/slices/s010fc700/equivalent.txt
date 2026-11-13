@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s010fc700/s010fc700.cpp  ?hkCapsuleTriangleAgent3_freePoints@@YAPAXPAUhkAgentEntry@@PAGPAVhkPointIdSink@@@Z  010fd0a0  /O2 /MD /Gy /TP /vc71

@@ -1,0 +1,11 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPTerrain/SPTerrainMap.cpp  ?GetRelativeIndex@?$cTerrainMap_s00f8_7b30@M@SP@@QAEHHHHHH@Z  00f87b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorF@GmeListF@@QAEXXZ  00f8f970  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorH@GmeListS@@QAEXXZ  00f8f9c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorB@SimVec12@@QAEXXZ  00f8fa90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorE@GmeListV3@@QAEXXZ  00f8fad0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorI@GmeListFB@@QAEPAXH@Z  00f8fb10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorC@GmeListSB@@QAEPAXH@Z  00f8fb70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorD@SimVec12@@QAEPAXH@Z  00f8fbd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?DtorJ@GmeListV3@@QAEPAXH@Z  00f8fc30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPTerrain/SPTerrainMap.cpp  ?Resize08@EastlVec@@QAEXI@Z  00f8fd40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -1,0 +1,6 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s009a2c90/s009a2c90.cpp  ?FUN_009a2c90@@YAMHMHH@Z  009a2c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s009a2c90/s009a2c90.cpp  ?FUN_009a2cc0@@YA_NPAXH@Z  009a2cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s009a2c90/s009a2c90.cpp  ?f@S9a34a0@@QAEPAU1@XZ  009a34a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s009a2c90/s009a2c90.cpp  ?f@S9a3630@@QAEHXZ  009a3630  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s009a2c90/s009a2c90.cpp  ?FUN_009a37a0@@YAHH@Z  009a37a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

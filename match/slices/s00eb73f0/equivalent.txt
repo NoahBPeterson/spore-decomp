@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00eb73f0/s00eb73f0.cpp  ?Viewer_Init@@YIPAXPAUViewerLayout@@@Z  00eb82c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

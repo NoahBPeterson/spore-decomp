@@ -1,0 +1,10 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/Window.cpp  ?AsInterface@Window@UTFWin@EA@@UAEPAXW4InterfaceId@COM@3@@Z  0095f960  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?Release@Window@@QAEHXZ  0095f9a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?SetArea@Window@@QAEXPAM@Z  0095fe40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?ResizeBy@Window@@QAEXMM@Z  0095fec0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?MoveBy@Window_s0095_ff20@@QAEXMM@Z  0095ff20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?GrowBy@Window_s0095_ff20@@QAEXMM@Z  0095ff70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?MoveBy2@Window_s0095_ff20@@QAEXMM@Z  0095ffd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?f@S962580@@QAEXHH@Z  00962580  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?f@S9625b0@@QAEHHHH@Z  009625b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

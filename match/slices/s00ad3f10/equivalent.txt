@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00ad3f10/s00ad3f10.cpp  ?ScalarDtor@cResObj@@QAEPAXI@Z  00ad3f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

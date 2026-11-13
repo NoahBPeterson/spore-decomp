@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s008ec360/s008ec360.cpp  ?Pick@Page@Layout@XHTML@EA@@QAEDPBXPAI@Z  008ec4f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ec360/s008ec360.cpp  ?GetTextStyle@Page@Layout@XHTML@EA@@QAEPAXPBVStyleState@Style@34@@Z  008ec580  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ec360/s008ec360.cpp  ??1Page@Layout@XHTML@EA@@QAE@XZ  008ec810  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s008ec360/s008ec360.cpp  ?AddResourceSlot@Page@Layout@XHTML@EA@@QAEHXZ  008ec910  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

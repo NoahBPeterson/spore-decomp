@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/cmn/collection.cpp.cpp  ?FUN_01133bd0@Collection@@QAE_NPAX@Z  01133bd0  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

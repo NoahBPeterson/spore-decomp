@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?Construct@SimPalette@@QAEPAU1@XZ  00ed2e40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

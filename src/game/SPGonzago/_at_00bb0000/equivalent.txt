@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00bb0000.cpp  ?CityLessBuildings@@YA_NPAX0@Z  00bbc630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?FUN_00bbcd40@@YA_NHH@Z  00bbcd40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?FUN_00bbebb0@SimSubDtor@@QAEXXZ  00bbebb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

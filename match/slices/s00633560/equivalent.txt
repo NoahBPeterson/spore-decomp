@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00633560/s00633560.cpp  ?SetSelectedPhoto@cSPPlayModePhotoBrowser@@QAEXI@Z  00634380  /O2 /MD /Gy /TP /arch:SSE /fp:fast

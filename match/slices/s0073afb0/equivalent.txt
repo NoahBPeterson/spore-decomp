@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0073afb0/s0073afb0.cpp  ?Reseat@cModelInstance@SP@@QAE_NH@Z  0073ba50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

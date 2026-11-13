@@ -1,2 +1,5 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c3f70@cViewer@@QAEPAU1@XZ  007c3f70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c4010@cViewer@@QAEXPAI@Z  007c4010  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?FUN_007c4b50@cViewer@@QAEXM@Z  007c4b50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsViewer.cpp  ?SetCameraToWorldFromBasis@cViewer_s007c_4be0@@QAEXPAM@Z  007c4d20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00deb840/s00deb840.cpp  ?OnMessageCloseZoom@cGalaxyGameEntryUIStateMachine@@QAE_NIH@Z  00debe30  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,7 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/eapdconnective.cpp  ?pack_setup@Eapd@Audio@EA@@YAEXZ  00a5ae10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?gate_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5b940  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?gate_symbol@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@@Z  00a5b9e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?gate_list@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@HPAX@Z  00a5ba20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?gate_anything@Eapd@Audio@EA@@YAXPADUt_symbol_s00a5_b510@123@HPAX@Z  00a5ba60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?value_free@Eapd@Audio@EA@@YAXPAUt_value@123@@Z  00a5c6a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

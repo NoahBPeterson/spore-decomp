@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00b872c0/s00b872c0.cpp  ?Reset@cGraphEditor@@QAEXXZ  00b87bb0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

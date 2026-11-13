@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00a56460/s00a56460.cpp  ?clip_setup@Eapd@Audio@EA@@YA_NXZ  00a56950  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

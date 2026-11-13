@@ -1,0 +1,7 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?qb_enable@@YA_NPAVanim_qb@@H@Z  00a01b50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ??0anim_qb@@QAE@XZ  00a01c10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?RootOnly@RootThunk@@QAEPAXPAX@Z  00a02d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Construct@Vec28@@QAEPAU1@HH@Z  00a05830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetTargetRoot@anim_creature_s00a0_5c20@@QAEXPAU1@@Z  00a06250  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?HandleMessage@AnimHandler@@QAE_NIPAUMsg@@@Z  00a0f610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

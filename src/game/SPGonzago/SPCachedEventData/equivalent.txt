@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCachedEventData.cpp  ??1cCachedEventData@@QAE@XZ  00fe6a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

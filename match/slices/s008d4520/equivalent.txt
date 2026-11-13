@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s008d4520/s008d4520.cpp  ?MatchString@TokenReader@@QAEEXZ  008d52f0  /O2 /MD /Gy /EHsc /TP

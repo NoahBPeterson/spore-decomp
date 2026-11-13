@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPTerrain/SPTerrainCameraController.cpp  ?FUN_00b10200@cTerrainCameraController_s00b1_0200@@QAEPAMXZ  00b10200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainCameraController.cpp  ?FUN_00b10260@cTerrainCameraController_s00b1_0200@@QAEPAMXZ  00b10260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

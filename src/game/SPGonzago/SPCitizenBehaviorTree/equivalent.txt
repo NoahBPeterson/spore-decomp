@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?ActInVignette_Activate@SP@@YAXPAVcSPCreatureCitizen_s00d9_0640@@@Z  00d911f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCitizenBehaviorTree.cpp  ?AlienGreeting_Activate@SP@@YA_NPAVcSPCreatureCitizen_s00d9_0640@@@Z  00d91480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

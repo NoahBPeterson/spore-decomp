@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00922500/s00922500.cpp  ?Create@Semaphore@Thread@EA@@SAPAV123@PAV123@@Z  009228c0  /O2 /MD /Gy /EHsc /TP /GS-

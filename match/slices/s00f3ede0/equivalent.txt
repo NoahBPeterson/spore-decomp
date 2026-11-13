@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00f3ede0/s00f3ede0.cpp  ?GetTutorialRowOffset@SimGlobals@@QAEHPAUSlotRef@@@Z  00f3f950  /O2 /MD /Gy /EHsc /TP

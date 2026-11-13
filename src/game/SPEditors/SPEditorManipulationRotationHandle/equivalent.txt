@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPEditorManipulationRotationHandle.cpp  ?GetPileCopy@RotationHandle_s005b_5110@@QBEPAUPileList_s005b_5110@@PAU2@@Z  005b5980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

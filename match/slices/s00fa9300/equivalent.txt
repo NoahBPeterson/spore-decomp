@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00fa9300/s00fa9300.cpp  ?Update@cTerrainBackgroundMapJob@@QAE_NH@Z  00fa9790  /O2 /MD /Gy /TP /arch:SSE /fp:fast

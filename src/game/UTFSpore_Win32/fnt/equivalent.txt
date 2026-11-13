@@ -1,0 +1,8 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_ComputeAndCheck_PF_Proj@@YAXPAX@Z  008ac7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?FUN_008ac800@@YAXPAX@Z  008ac800  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?FUN_008ac840@@YAXPAX@Z  008ac840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_SPVTCA@@YAXPAX@Z  008ac880  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_SFVTCA@@YAXPAX@Z  008ac900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_SPVTL@@YAXPAX@Z  008ac970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_SFVTL@@YAXPAX@Z  008acb50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

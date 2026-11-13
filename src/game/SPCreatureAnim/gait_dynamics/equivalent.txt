@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPCreatureAnim/gait_dynamics.cpp  ?SortElems@@YAXPAUTElem@@0UCmpObj@@@Z  009d7b20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

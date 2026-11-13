@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/ListItem.cpp  ?Place@ListItem@Layout@XHTML@EA@@QAEXAAVRenderingContext@234@AAVStyleState@Style@34@@Z  008eafa0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

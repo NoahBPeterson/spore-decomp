@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ??0Empty16@@QAE@XZ  007aa620  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?PushBack@DequeMap@@QAEXPAH@Z  007aa850  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?FUN_00834000@@YGXHHH@Z  00834000  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

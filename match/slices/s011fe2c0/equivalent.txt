@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s011fe2c0/s011fe2c0.cpp  ?GetResourceSize@Interpolator@oldanimation@rw@@QAEIXZ  011fe650  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE

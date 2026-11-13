@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPBake/_at_00440000.cpp  ?ResetSymmetryBlocks@cSPEditorBlock_s0044_8380@SP@@QAEXXZ  00448d60  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS- /Isrc/game/include

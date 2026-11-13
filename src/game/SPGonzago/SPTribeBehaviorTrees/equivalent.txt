@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00da6f60@@YAMPAUcSPCreatureCitizen@@@Z  00da6f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeBehaviorTrees.cpp  ?FUN_00dad260@SP@@YAXPAVcSPCreatureCitizen_s00da_cd40@1@@Z  00dad260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

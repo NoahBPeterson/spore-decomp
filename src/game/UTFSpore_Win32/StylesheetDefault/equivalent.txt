@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/StylesheetDefault.cpp  ??0Stylesheet_s008f_9220@Style@XHTML@EA@@QAE@PAX@Z  008f9db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

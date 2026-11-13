@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00e80000.cpp  ?FUN_00e86880@@YAPAUNode@@PAUSphereTree@@PBUVector3_s00e8_5dc0@@MH@Z  00e86880  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

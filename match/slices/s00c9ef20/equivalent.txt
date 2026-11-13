@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00c9ef20/s00c9ef20.cpp  ?FUN_00c9f650@CStub@@QAEPAMAAUVec3@@@Z  00c9f650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

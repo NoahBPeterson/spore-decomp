@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s008087f0/s008087f0.cpp  ?ctor@FixedNodeList@@QAEPAU1@XZ  00809670  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

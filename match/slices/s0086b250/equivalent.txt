@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0086b250/s0086b250.cpp  ?png_warning@@YAXPAUpng_struct_def@@PBD@Z  0086b300  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

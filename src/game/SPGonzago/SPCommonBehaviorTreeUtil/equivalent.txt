@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCommonBehaviorTreeUtil.cpp  ?AssignDefaultStimulus@@YA_NPAX0000PAUsStimulusAssignment@@PBUsStimulusRecord@@@Z  00d99830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCommonBehaviorTreeUtil.cpp  ?GetExtinguishAnchor@@YAPAXPAVcSPCreatureBase@@@Z  00d998f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

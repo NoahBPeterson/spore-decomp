@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00585330/s00585330.cpp  ?OnKeyUp@cAppModeEditorBase@@QAE_NII@Z  00585890  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS-

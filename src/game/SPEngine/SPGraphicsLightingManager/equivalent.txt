@@ -1,3 +1,7 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?init@Vec20@@QAEPAU1@HH@Z  00706af0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?init@Vec10@@QAEPAU1@HH@Z  00706d00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?Release@SlotVec28@@QAEXI@Z  00707540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?ReleaseDestroy@SlotVec28@@QAEXI@Z  00707590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?resize@Vec8b@@QAEXI@Z  00708d90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?SetLightingState@cLightingWorld_s0070_9cf0@@QAEXPAX@Z  0070a560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

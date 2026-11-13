@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPUIShared.cpp  ?FUN_00e2f270@cRelationsStrip@@QAEX_N@Z  00e2f270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

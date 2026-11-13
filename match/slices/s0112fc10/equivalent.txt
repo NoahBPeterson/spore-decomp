@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0112fc10/s0112fc10.cpp  ?AiffPlayer_releaseBuffer@core@audio@rw@@YAXPAXPAUAiffPlayer@123@@Z  0112fc10  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0112fc10/s0112fc10.cpp  ?AiffPlayer_acquireSampleBlock@core@audio@rw@@YAHHIHPAUAiffPlayer@123@PAI@Z  01130430  /vc71 /O2 /MD /Gy /TP /arch:SSE

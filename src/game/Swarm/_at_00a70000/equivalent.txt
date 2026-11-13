@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Swarm/_at_00a70000.cpp  ?cMapInfo_SortRect3@Swarm@EA@@YAXPAMPBM1@Z  00a75410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?cMapInfo_SortRect3R@Swarm@EA@@YAXPAMPBM1@Z  00a75480  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

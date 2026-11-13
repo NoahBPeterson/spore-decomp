@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00bd0000.cpp  ?cCheatObject_Dtor@@YIXPAVcCheatObject@SP@@@Z  00bd6c10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,2 +1,3 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 slices/s00fa47b0/s00fa47b0.cpp  ?DoInsertValue@RelevelVector@@QAEXPAUcRelevel@@ABU2@@Z  00fa47b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00fa47b0/s00fa47b0.cpp  ?DestroyDecalNode@cTerrainSphere@@QAEXPAX@Z  00fa4fc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/ealayer30/helper_lbmpeg_ealayer3.cpp.cpp  ?ProcessHeader@HELPER_CEALayer3_s0115_a5b0@core@audio@rw@@QAEII@Z  0115aeb0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

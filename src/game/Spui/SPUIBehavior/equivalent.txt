@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/SPUIBehavior.cpp  ?AsA@Ev@@QAEPAXH@Z  007f97a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehavior.cpp  ?AsC@Ev@@QAEPAXH@Z  007f9890  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehavior.cpp  ?AsInterface@Ev@@QAEPAXH@Z  007fa180  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0108c140/s0108c140.cpp  ?deallocateInternalArrays@hkSimpleShapePhantom@@UAEXXZ  0108c950  /vc71 /O2 /MD /Gy /TP

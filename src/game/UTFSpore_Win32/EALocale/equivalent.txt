@@ -1,0 +1,8 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_0087e510@@YIPAULangPrefixObj@@PAU1@@Z  0087e510  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_0087ed70@@YAPAXPAU?$LocT@$0BA@@@PAH@Z  0087ed70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_0087edd0@@YAPAXPAU?$LocT@$0BA@@@PAH@Z  0087edd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_0087f100@@YIPAULocaleFormatObj@@PAU1@@Z  0087f100  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_0087f580@Loc16x512@@QAEPAXPAPB_W0@Z  0087f580  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_00881ed0@@YAXNHHH@Z  00881ed0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EALocale.cpp  ?FUN_00881f00@@YAXNHHH@Z  00881f00  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

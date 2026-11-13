@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?FUN_00520110@@YAIHI@Z  00520110  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

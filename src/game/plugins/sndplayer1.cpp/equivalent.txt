@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/plugins/sndplayer1.cpp.cpp  ?GetDecoderRegistry@System_s0112_ce20@core@audio@rw@@QAEPAVDecoderRegistry_s0112_ce20@234@XZ  0112dc80  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

@@ -1,0 +1,8 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?ReadBuffer@MemoryStream_s0093_b9e0@IO@EA@@QAEHPAXI@Z  0093bbf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?SetVariant8@Variant_s0093_d740@EA@@QAEPAU12@PBG@Z  0093dbc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?SetUInt16@Variant_s0093_d740@EA@@QAEPAU12@PBG@Z  0093dfa0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?SetUInt8@Variant_s0093_d740@EA@@QAEPAU12@PBE@Z  0093e020  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?SetInt8@Variant_s0093_d740@EA@@QAEPAU12@PBE@Z  0093e0a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?SetUInt16b@Variant_s0093_d740@EA@@QAEPAU12@PBG@Z  0093e120  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00930000.cpp  ?SetDouble@Variant_s0093_d740@EA@@QAEPAU12@PBN@Z  0093e220  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

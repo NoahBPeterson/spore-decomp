@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/AudioEmitterSndPlayer.cpp  ?KeyToText@ResourceDeviceDriver@Audio@EA@@SA_NPAEPADPAI@Z  00a10f70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

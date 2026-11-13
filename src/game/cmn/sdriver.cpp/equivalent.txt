@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/cmn/sdriver.cpp.cpp  ?F_01140a70@@YAHHH@Z  01140a70  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

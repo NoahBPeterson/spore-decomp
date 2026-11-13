@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPBake/SPSkinnerRTT_SporeApp.cpp  ?Draw@DrawCtx@@QAEXPAMM@Z  005292d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

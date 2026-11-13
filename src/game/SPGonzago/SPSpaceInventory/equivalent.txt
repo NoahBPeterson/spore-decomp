@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPSpaceInventory.cpp  ??1cSpaceInventory_s00c8_7be0@@UAE@XZ  00c87be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

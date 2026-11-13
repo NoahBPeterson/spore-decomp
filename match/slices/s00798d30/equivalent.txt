@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00798d30/s00798d30.cpp  ?SP_cSplitInstance_ctor@@YIPAHPAH@Z  007993a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

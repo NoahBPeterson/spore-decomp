@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Swarm/ShakeDescription.cpp  ?create@cShakeDescription@Swarm@EA@@SAPAU123@PAX0@Z  00abe2f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

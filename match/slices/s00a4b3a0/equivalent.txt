@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00a4b3a0/s00a4b3a0.cpp  ?stub_get_ext_d2i@Eapd@Audio@EA@@YAXPAX@Z  00a4c1e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

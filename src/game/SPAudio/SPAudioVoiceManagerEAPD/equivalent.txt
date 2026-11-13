@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/SPAudioVoiceManagerEAPD.cpp  ?AudioFuncAC@@YG_NHHHM@Z  00a46050  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/SPAudioVoiceManagerEAPD.cpp  ?AudioFuncA8@@YG_NHHHHH@Z  00a46080  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

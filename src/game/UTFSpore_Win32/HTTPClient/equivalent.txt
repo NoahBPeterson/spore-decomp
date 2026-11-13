@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/HTTPClient.cpp  ??1Cookie40@@QAE@XZ  00942630  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/HTTPClient.cpp  ??0HTTPRequest@@QAE@XZ  00943de0  /O2 /MD /Gy /TP /GS- /Isrc/game/include

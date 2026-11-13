@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00b137d0/s00b137d0.cpp  ?FUN_00b13bb0@cTerrainCameraController@@QAEXPAUcSPQuaternion@@H@Z  00b13bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

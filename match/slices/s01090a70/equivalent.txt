@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01090a70/s01090a70.cpp  ??0hkSpatialRigidBodyDeactivator@@QAE@XZ  01091670  /vc71 /O2 /MD /Gy /TP

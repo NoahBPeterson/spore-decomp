@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s011bdbf0/rmd_thunk.cpp  _FUN_011bdbf0  011bdbf0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc

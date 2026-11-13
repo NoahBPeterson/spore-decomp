@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/eapdtext.cpp  ?message_add2@@YAXPAUText@@Ut_symbol@@HPAUt_atom_s00a4_f1e0@@@Z  00a4f810  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?clock_free_msg@@YAXPAUText@@@Z  00a4fa30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?gatom_free@Eapd@Audio@EA@@YAXH@Z  00a509f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

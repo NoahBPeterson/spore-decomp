@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00d04750/s00d04750.cpp  ?FUN_00d05010@@YIPAUcSPUILayoutManager@@PAU1@@Z  00d05010  /O2 /MD /Gy /TP /arch:SSE

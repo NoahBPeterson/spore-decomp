@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPTerrain/_at_00f40000.cpp  ??1SWARM_TerrainBrushCreate@@QAE@XZ  00f4b3a0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

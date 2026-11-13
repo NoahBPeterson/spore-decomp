@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/Interaction.cpp  ?SlotVectorInsert@@YA_NPAUSlotVector@@PAX@Z  00abece0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/Interaction.cpp  ?GetAgent@cInteraction_s00ab_f0b0@@QAEPAUcInteractionAgent_s00ab_f0b0@@XZ  00abf210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/Interaction.cpp  ??0cInteraction_s00ab_f0b0@@QAE@XZ  00abf320  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/Interaction.cpp  ?AddTarget@cInteraction_s00ab_f0b0@@QAE_NPAUcInteractionTarget_s00ab_f0b0@@@Z  00abf6a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

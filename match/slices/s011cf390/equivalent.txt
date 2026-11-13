@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s011cf390/ech_lib.cpp  _ECDH_DATA_new_method  011d01c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011cf390_inc

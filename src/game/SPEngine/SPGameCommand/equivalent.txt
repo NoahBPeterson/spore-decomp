@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPGameCommand.cpp  ?SetCommandDispatcher@cCommandServer@SP@@UAE_NPAVcICommandDispatcher@2@@Z  00689b00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

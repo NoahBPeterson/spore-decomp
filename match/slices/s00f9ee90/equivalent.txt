@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00f9ee90/s00f9ee90.cpp  ?Init@SphereBlock@@QAEPAU1@XZ  00f9f950  /O2 /MD /Gy /TP /arch:SSE /fp:fast

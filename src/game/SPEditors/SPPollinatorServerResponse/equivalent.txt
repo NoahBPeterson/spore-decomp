@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPPollinatorServerResponse.cpp  ?DoInsertValueImpl@StrMap@@QAE?AUStrMapIter@@PAURBNode@@ABUStrPair@@_N@Z  00614dc0  /O2 /MD /Gy /TP /Isrc/game/include

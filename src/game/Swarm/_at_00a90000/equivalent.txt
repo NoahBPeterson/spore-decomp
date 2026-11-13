@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Swarm/_at_00a90000.cpp  ?LightEffectSub_CreateAndRead@@YAPAULightEffectSub@@PAXH@Z  00a990d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

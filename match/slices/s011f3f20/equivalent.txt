@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s011f3f20/s011f3f20.cpp  ?ReleaseShaderC@@YAXPAUShader@@@Z  011f4220  /vc71 /O2 /MD /Gy /EHsc /TP

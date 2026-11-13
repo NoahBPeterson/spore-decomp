@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPAppSplitModelDescription.cpp  ??4cSafeDynamicKernelStorage@@QAEAAU0@ABU0@@Z  007e05e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

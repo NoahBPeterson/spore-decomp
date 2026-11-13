@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00ed2600/s00ed2600.cpp  ?Erase@RefMap@@QAEXPAPAXPAURBNode@@@Z  00ed2ae0  /O2 /MD /Gy /EHsc /TP /arch:SSE

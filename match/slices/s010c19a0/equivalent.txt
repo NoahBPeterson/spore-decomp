@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s010c19a0/s010c19a0.cpp  ?calcStatistics@hkConvexVerticesShape@@UBEXPAVhkStatisticsCollector@@@Z  010c1f40  /vc71 /O2 /MD /Gy /EHsc /TP

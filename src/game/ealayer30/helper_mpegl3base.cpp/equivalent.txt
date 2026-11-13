@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?FUN_01168670@Snd@@YAXPAUSndPitchState@1@PAH@Z  01168670  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

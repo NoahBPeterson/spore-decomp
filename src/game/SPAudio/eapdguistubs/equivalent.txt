@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPAudio/eapdguistubs.cpp  ?bng_any@Eapd@Audio@EA@@YAXPAD@Z  00a60b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdguistubs.cpp  ?bng_loadbang@Eapd@Audio@EA@@YAXPAD@Z  00a60bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/eapdguistubs.cpp  ?g_bng_setup@Eapd@Audio@EA@@YA_NXZ  00a60bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -1,2 +1,5 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c24df0@cCreatureBase_s00c2_3f80@@QAENXZ  00c24df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00c26310@cSPCreatureCitizen_s00c2_5a50@@QAEXPAX@Z  00c26310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureCitizen.cpp  ?ApplyToolOrder@cCreatureCitizen@@QAEXIPAX@Z  00c26c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureCitizen.cpp  ?FUN_00da7e20@@YA_NPAUCreature@@0@Z  00da7e20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

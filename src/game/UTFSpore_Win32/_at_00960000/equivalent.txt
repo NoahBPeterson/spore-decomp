@@ -1,2 +1,4 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?FadeEffect_Ctor@@YIPAXPAX@Z  00963db0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00960000.cpp  ?m@S_9676a0@@QAEIII@Z  009676a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00960000.cpp  ?resize@GlyphVec@@QAEXI@Z  0096e6d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

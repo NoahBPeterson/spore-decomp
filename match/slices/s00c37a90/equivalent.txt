@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00c37a90/s00c37a90.cpp  ?SetOffset@cSPGameDataUFO@@QAEXABUVector3@@@Z  00c381e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

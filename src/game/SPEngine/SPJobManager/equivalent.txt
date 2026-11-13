@@ -1,3 +1,8 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
-../src/game/SPEngine/SPJobManager.cpp  ?FlushWaiting@cJobManager_s0069_1680@@QAEXXZ  006920f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?ContinueJob@cJob@@QAEHXZ  0068f970  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?Continuation@cJob@@QAE_NPAX0@Z  0068f9f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?Queue@cJob_s0069_07e0@@QAEXXZ  006909b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?AddDependency@cJob_s0069_07e0@@QAEXPAU1@@Z  00691380  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?AddWeakDependency@cJob_s0069_07e0@@QAEXPAU1@@Z  006913c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?AddWaitingJob@cJobManager_s0069_1680@@QAEXH@Z  00692080  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?FlushWaiting@cJobManager_s0069_1680@@QAEXXZ  006920f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

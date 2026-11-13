@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Havok/_at_01090000.cpp  ?FUN_01099cb0@@YGXPAXH0@Z  01099cb0  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_01090000.cpp  ?prepareMultithreadStep@hkMultiThreadedSimulation@@QAEHXZ  0109c6d0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

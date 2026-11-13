@@ -1,0 +1,6 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00f10000.cpp  @FUN_00f13810@4  00f13810  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  @FUN_00f138f0@4  00f138f0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ?SetLocalized@Owner@@QAEXHABVcString@@I@Z  00f14b30  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ??0cScenarioPlayProgressBar_s00f1_8eb0@UI@@QAE@XZ  00f18eb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00f10000.cpp  ??1cScenarioPlayProgressBar_s00f1_8eb0@UI@@QAE@XZ  00f18f50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

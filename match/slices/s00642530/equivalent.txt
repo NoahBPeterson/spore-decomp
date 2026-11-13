@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00642530/s00642530.cpp  ??0PoolList@@QAE@XZ  00643740  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

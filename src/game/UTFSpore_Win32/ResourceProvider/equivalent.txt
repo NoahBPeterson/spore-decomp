@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/ResourceProvider.cpp  ??0ResourceCache@@QAE@PAUIAlloc@@IG@Z  008fe830  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/ResourceProvider.cpp  ??0ResourceProvider_s008f_f610@@QAE@PAUIAlloc_s008f_f610@@@Z  008ffe80  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include

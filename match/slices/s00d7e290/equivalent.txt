@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00d7e290/s00d7e290.cpp  ?FUN_00d7e860@@YAMPAUcGameObj@@PAX11PAUcOutRec@@PAE1PAUcKeySrc@@@Z  00d7e860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

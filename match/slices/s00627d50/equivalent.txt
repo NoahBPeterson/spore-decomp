@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00627d50/s00627d50.cpp  ?OnMouseUp@cSPPlayMode@SP@@QAEEHMMH@Z  00628520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00627d50/s00627d50.cpp  ?OnMouseMove@cSPPlayMode@SP@@QAEEMMH@Z  00628570  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00627d50/s00627d50.cpp  ?OnKeyUp@cSPPlayMode@SP@@QAEEHH@Z  006285c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

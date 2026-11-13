@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00ecad70/s00ecad70.cpp  ?dtor@PaletteItem@@QAEXXZ  00ecb8c0  /O2 /MD /Gy /EHsc /TP /arch:SSE

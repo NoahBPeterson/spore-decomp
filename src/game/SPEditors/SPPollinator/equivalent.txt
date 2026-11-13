@@ -1,2 +1,3 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/SPEditors/SPPollinator.cpp  ??0cJobResultMessage@Pollinator@@QAE@IIPAVAtomicRefCounted@SP@@@Z  0060d7a0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPollinator.cpp  ?UpdateProperty2@cPollinator_s0060_d860@SP@@QAEXIPBVKey_s0060_d860@ResourceMan@EA@@PAUVariant_s0060_d860@5@@Z  0060d920  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

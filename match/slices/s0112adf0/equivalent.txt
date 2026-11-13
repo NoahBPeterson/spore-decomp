@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0112adf0/s0112adf0.cpp  ?destruct@hkPointerMultiMap@@QAEXXZ  0112b050  /vc71 /O2 /MD /Gy /TP

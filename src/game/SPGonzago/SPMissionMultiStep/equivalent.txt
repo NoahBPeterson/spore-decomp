@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPMissionMultiStep.cpp  ?GetCurrSubMission@cMissionMultiStep@@QAEPAXXZ  00c59d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMissionMultiStep.cpp  ?FUN_00c59e20@cMissionMultiStep@@QAEXXZ  00c59e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPAppMode.cpp  ?CreateApp@@YAPAUcApp_s007d_85b0@SP@@XZ  007d8dc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

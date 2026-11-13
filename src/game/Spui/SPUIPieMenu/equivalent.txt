@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/SPUIPieMenu.cpp  ?sub8191b0@cSPUIPieMenuItem_s0081_89a0@@QAE_NXZ  008191b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPAppSystem.cpp  ?LockToSingleCore@@YAXXZ  007e5d90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?SuppressAppSwitchProc@@YGJHIJ@Z  007e5f60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPAppSystem.cpp  ?LoaderCommandHandler@cAppSystem@@QAEXXZ  007e6090  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPCreatureAnim/animation_events.cpp  ?CheckEventLocationType@nSPCreatureAnim@@YA_NKPAUcreature_instance_data@1@@Z  009a47e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

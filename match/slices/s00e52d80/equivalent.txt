@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00e52d80/s00e52d80.cpp  ?F_00e53210@cSlotOwner17@@QAEHXZ  00e53210  /O2 /MD /Gy /TP /arch:SSE /fp:fast

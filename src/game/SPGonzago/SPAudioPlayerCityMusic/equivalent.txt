@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPAudioPlayerCityMusic.cpp  ?Stop@cPlayerCityMusic_s00ea_d1a0@Audio@SP@@QAEXXZ  00ead7b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01135a30/s01135a30.cpp  ?FUN_01135a30@Layer3DecObj@@QAEXHH@Z  01135a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

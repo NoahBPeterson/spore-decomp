@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s008dff30/s008dff30.cpp  ?GetNameFromKey@Manager@ResourceMan@EA@@QAEXPAVKey@23@PAX@Z  008e01c0  /O2 /MD /Gy /TP /GS- /arch:SSE

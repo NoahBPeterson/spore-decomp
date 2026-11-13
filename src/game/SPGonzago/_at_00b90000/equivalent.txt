@@ -1,2 +1,4 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00b90000.cpp  ?FUN_00b938d0@@YAPAMPAMPAHHMMM@Z  00b938d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b90000.cpp  ?fn@S96600@@QAEXPAI0@Z  00b96600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00b90000.cpp  ?AllocNode@cSpawnTable@@QAEPAVNode@@PBUNodeSource@@@Z  00b98270  /O2 /MD /Gy /TP /GS- /Isrc/game/include

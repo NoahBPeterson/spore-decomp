@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/SPUIFeedListCategory.cpp  ?FUN_00664480@cSPUIFeedListCategory@@QAEX_N@Z  00664480  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

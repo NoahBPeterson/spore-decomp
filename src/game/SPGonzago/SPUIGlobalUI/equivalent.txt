@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Dtor@WinObj@@QAEXXZ  00e011a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e01270_impl@@YAXXZ  00e01270  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Ctor@NetObj@@QAEPAXXZ  00e01690  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

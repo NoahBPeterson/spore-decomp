@@ -1,0 +1,6 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/SPUIPropertyEditor.cpp  ?Reset@Variant@@QAEPAU1@H@Z  0081d7a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyEditor.cpp  ?Set20@Variant@@QAEPAU1@H@Z  0081da30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyEditor.cpp  ?Init@D3@@QAEPAU1@H@Z  0081ddd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyEditor.cpp  ?Init2@D3@@QAEPAU1@H@Z  0081de30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyEditor.cpp  ??0cPropertyUI_s0082_0cc0@@QAE@XZ  00820cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s010c6490/s010c6490.cpp  ?calcStatistics@hkSimpleMeshShape@@QBEXPAVhkStatisticsCollector@@@Z  010c67d0  /O2 /MD /Gy /EHsc /TP /vc71

@@ -1,2 +1,10 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Havok/_at_01080000.cpp  ??0hkWorldObject_s0108_2350@@QAE@H@Z  010826e0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01080000.cpp  ??0hkEntity_s0108_8960@@QAE@PBUhkShape_s0108_8960@@@Z  01088d20  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01080000.cpp  ?begin@hkConstraintConstructionKit@@QAEXPAVhkGenericConstraintData@@@Z  01089280  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01080000.cpp  ?constrainToAngularDof@hkConstraintConstructionKit@@QAEXH@Z  010894a0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01080000.cpp  ?getConstraintInfo@hkGenericConstraintData@@UBEXAAUhkConstraintInfo@@@Z  010896b0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_01080000.cpp  ?setAngularLimitW@hkGenericConstraintData_s0108_98f0@@IBEXAAPAHAAPAVhkVector4_s0108_98f0@@ABVhkGenericConstraintDataScheme_s0108_98f0@@AAVhkGenericConstraintDataParameters@@ABVhkConstraintQueryIn@@AAVhkConstraintQueryOut_s0108_98f0@@@Z  01089c60  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01080000.cpp  ??0hkGenericConstraintData_s0108_a3f0@@QAE@XZ  0108aa40  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01080000.cpp  ??0hkConstraintChainInstance@@QAE@PAX@Z  0108acb0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_01080000.cpp  ?deallocateInternalArrays@hkAabbPhantom@@UAEXXZ  0108e1d0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/_at_00570000.cpp  ??0cFeatureVector@@QAE@XZ  00571640  /Od /Ob1 /Oi /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

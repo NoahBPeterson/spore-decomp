@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00c50000.cpp  ?FUN_00c5bc30@@YIPAUcRaidPlunderEvent@@PAU1@PAX@Z  00c5bc30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

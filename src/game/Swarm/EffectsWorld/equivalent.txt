@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Swarm/EffectsWorld.cpp  ?CreateInternalEffect@cEffectsWorld@@QAEPAXIIPBX@Z  00a70ec0  /O2 /MD /Gy /EHsc /TP /GS- /fp:fast /arch:SSE /Isrc/game/include

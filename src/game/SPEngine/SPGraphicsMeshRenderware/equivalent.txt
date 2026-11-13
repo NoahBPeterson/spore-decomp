@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ?Init@C29820@@QAEPAU1@HPAMHH@Z  00729820  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

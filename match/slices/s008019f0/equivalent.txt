@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s008019f0/s008019f0.cpp  ?Refresh@CurMgr@@QAEXXZ  008027e0  /O2 /MD /Gy /TP /arch:SSE2

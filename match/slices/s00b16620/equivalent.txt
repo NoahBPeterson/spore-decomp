@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00b16620/s00b16620.cpp  ?Initialize@cCameraFrame@@QAEPAU1@PAVcViewer@SP@@@Z  00b16dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

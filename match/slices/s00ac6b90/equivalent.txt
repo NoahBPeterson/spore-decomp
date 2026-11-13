@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00ac6b90/s00ac6b90.cpp  ?ensureContainer@cGroundEditorRes@@QAEXXZ  00ac7910  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,2 +1,5 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01067b60@cSPUISpace_s0106_78e0@@QAEEXZ  01067b60  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01067e70@cSPUISpace_s0106_78e0@@QAEXPAXPAUKey@@@Z  01067e70  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_010687a0@@YAXXZ  010687a0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?Construct@cIntrusiveNode@SP@@QAEPAXPAPAX@Z  0106cbd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

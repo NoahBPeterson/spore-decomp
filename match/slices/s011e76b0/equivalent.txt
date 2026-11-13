@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s011e76b0/s011e76b0.cpp  ?Stream_Create@@YAPAXIIIIII@Z  011e7910  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE

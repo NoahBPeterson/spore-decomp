@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01126f80/s01126f80.cpp  ?clone@hkMouseSpringAction@@UBEPAVhkAction@@ABV?$hkArray@PAVhkEntity@@@@ABV?$hkArray@PAVhkPhantom@@@@@Z  01127970  /vc71 /O2 /MD /Gy /TP

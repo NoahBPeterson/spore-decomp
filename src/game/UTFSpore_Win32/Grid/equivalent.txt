@@ -1,0 +1,4 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/Grid.cpp  ?RowEnd@SparseMatrix@@QAEXPAUIter@@H@Z  009737a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?GetCellUsedRange@IWinGrid@@QAE_NPAURect_s0097_3dd0@@@Z  00974510  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?Comparator@@YAHPAUCellData_s0097_3dd0@@0@Z  00974c30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

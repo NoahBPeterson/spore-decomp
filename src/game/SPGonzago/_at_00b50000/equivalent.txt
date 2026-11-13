@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00b50000.cpp  ?CreatePlanetBody@@YAXXZ  00b512f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

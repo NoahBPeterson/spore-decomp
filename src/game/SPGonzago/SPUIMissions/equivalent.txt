@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPUIMissions.cpp  ?InitA@CardLayout@@QAEPAU1@XZ  00e141a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?GetCardColor@CardLayout@@QAEIXZ  00e142c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?InitC@CardLayout@@QAEPAU1@XZ  00e14810  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e1a1a0@@YIIPAUCIndexedArray@@@Z  00e1a1a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

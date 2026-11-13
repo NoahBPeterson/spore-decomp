@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01209060/s01209060.cpp  ?getWithDefault@hkStringMapBase@@QBEIPBDI@Z  01209a40  /vc71 /O2 /MD /Gy /EHsc /TP

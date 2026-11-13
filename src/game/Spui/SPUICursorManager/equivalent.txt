@@ -1,2 +1,5 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/SPUICursorManager.cpp  ?DoCreateNode@RbtreeNode@@QAEPAXPAX@Z  00801c80  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?f@C_801d80@@QAEEPAUIRecordSrc@@PAXHH@Z  00801d80  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUICursorManager.cpp  ?Sub_801fd0@@YIXPAX@Z  00801fd0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?Sub_8026b0@@YG_NPB_WPAX@Z  008026b0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

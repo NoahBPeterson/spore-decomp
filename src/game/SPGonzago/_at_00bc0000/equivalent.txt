@@ -1,0 +1,10 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00bc0000.cpp  ??0Big@@QAE@XZ  00bc4630  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?init@Entry_s00bc_4730@@QAEPAU1@XZ  00bc4820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bc7c40@WE@@QAEHHH@Z  00bc7c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bc7f80@@YIPAPAUWE@@PAPAU1@@Z  00bc7f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?Grid_FlushPending@@YAXDIPADIN@Z  00bc87b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?Reset@State44@@QAEPAU1@I@Z  00bc9ea0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bca670@@YAXPAX@Z  00bca670  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bca6a0@@YAXPAX@Z  00bca6a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?DestroyVarList@@YAXXZ  00bcb700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

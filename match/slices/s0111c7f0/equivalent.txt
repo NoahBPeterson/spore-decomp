@@ -1,0 +1,5 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s0111c7f0/s0111c7f0.cpp  ?beginToiAndSetupResources@hkDefaultToiResourceMgr@@UAE?AW4hkResult@@ABUhkToiEvent@@ABV?$hkArray@UhkToiEvent@@@@AAUhkToiResources@@@Z  0111cd10  /vc71 /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?snapBounds@MoppChunk@@QAEXXZ  0111ce00  /vc71 /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?chooseLevelForProperty@@YGXPBX0PAX@Z  0111cf00  /vc71 /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?addPropertiesIfNeeded@MoppAssembler@@QAEXPBHPBX1@Z  0111d140  /vc71 /O2 /MD /Gy /TP
