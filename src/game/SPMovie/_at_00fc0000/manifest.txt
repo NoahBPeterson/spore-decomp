@@ -6,3 +6,4 @@
 ../src/game/SPMovie/_at_00fc0000.cpp  _FUN_00fcd9a0  00fcd9a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/_at_00fc0000.cpp  _FUN_00fcd9e0  00fcd9e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/_at_00fc0000.cpp  ?DecodeBit@@YAHPAUBitState@@H@Z  00fcef00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPMovie/_at_00fc0000.cpp  ?Method430@Vp6Stream43@@QAEXXZ  00fcd430  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
