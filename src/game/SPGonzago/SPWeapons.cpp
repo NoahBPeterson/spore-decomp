@@ -3233,25 +3233,64 @@ void f00cb4ae0(int self, Vector3* p)
     }
 }
 
+// Types for 0x00cb4bd0, the cFlakProjectile "SetTool" (vtable 0x01475650, slot +0x54).
+// The stored object is a refcounted tool data (AddRef +0x04 / Release +0x08) whose
+// +0x114 member is the AoE-area pointer (SP::cSPSpaceToolData::mpArea, retail +0x114).
+struct cToolData_s00cb_4bd0 {
+    virtual void r00();
+    virtual void r04();                                  // AddRef   +0x04
+    virtual void r08();                                  // Release  +0x08
+    uint32_t pad04[(0x114 - 0x04) / 4];
+    struct cAreaObj_s00cb_4bd0* mpArea;                  // +0x114
+};
+// The area object's vtable slot +0xb8 takes the space-tool interface key (0x013f94d4).
+struct cAreaObj_s00cb_4bd0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+    virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6c();
+    virtual void v70(); virtual void v74(); virtual void v78(); virtual void v7c();
+    virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
+    virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
+    virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
+    virtual void vb0(); virtual void vb4();
+    virtual struct cCasted_s00cb_4bd0* CastB8(void* key); // +0xb8
+};
+// What the Cast returns; slot +0x10 supplies the id passed to the projectile.
+struct cCasted_s00cb_4bd0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual int v10();                                   // +0x10
+};
+// Receiver: cFlakProjectile (vtable 0x01475650); slot +0x48 sets the effect id.
+struct cFlakProjectile_s00cb_4bd0 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44();
+    virtual void SetEffectId(int id);                    // +0x48 (retail 0x00804820)
+    virtual void v4c(); virtual void v50();
+    virtual void SetTool(struct cToolData_s00cb_4bd0* obj); // +0x54 (this function)
+    uint32_t pad04b[(0x518 - 0x04) / 4];
+    cToolData_s00cb_4bd0* mpTool518;                     // +0x518
+};
+
 // @ 0x00cb4bd0
-void f00cb4bd0(int self, RefCounted* obj)
+void cFlakProjectile_s00cb_4bd0::SetTool(cToolData_s00cb_4bd0* obj)
 {
-    RefCounted* old = *(RefCounted**)(self + 0x518);
+    cToolData_s00cb_4bd0* old = mpTool518;
     if (obj != old) {
         if (obj) obj->r04();
-        *(RefCounted**)(self + 0x518) = obj;
+        mpTool518 = obj;
         if (old) old->r08();
     }
-    void* tool = *(void**)((char*)*(void**)(self + 0x518) + 0x114);
-    if (tool) {
-        void* t2 = (*(Vfn2*)(*(int*)tool + 0xb8))(tool, (void*)0x013f94d4);
-        if (t2) {
-            int v = (int)(*(Vfn1*)(*(int*)t2 + 0x10))(t2);
-            (*(void(**)(int, int))(*(int*)self + 0x48))(self, v);
-            return;
-        }
-    }
-    (*(void(**)(int, int))(*(int*)self + 0x48))(self, -1);
+    cAreaObj_s00cb_4bd0*& area = mpTool518->mpArea;
+    cCasted_s00cb_4bd0* casted = area ? area->CastB8((void*)0x013f94d4) : 0;
+    int id = casted ? casted->v10() : -1;
+    SetEffectId(id);
 }
 
 // @ 0x00cb4ca0
