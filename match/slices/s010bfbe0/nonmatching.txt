@@ -3,7 +3,6 @@
 010bfeb0 0 havok-equivalent
 010bff70 0 havok-equivalent
 010c00a0 0 havok-equivalent
-010c0110 0 havok-equivalent; R30 active byte-match claim
 010c0160 0 havok-equivalent
 010c0220 0 havok-equivalent
 010c03a0 487 FIXED hkAabbUtil::calcAabb signed-zero/return-register repair: precompute the eight final min/max sums into locals and store them last, so cl leaves the out pointer in EAX at the plain ret (the original loads out with `mov eax,[ebp+0x14]` and stores all eight components through it). The negated extents n0..n3 are declared `volatile float` so each is rounded to a float slot before its `+ m[12..15]` add, matching the original's `fchs`/`fstp [esp+..]`/`fld`/`fadd` sequence (without this, out.m_min.x/out.m_min.z came out -0.0 vs the original's +0.0 on tiny/zero extents). equiv PASS 400 valid, 100.0% coverage; replay first difference None; size 370 vs 516 (register schedule / stack frame differ). flags /vc71 /O2 /MD /Gy /TP
