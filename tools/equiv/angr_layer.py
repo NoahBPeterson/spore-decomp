@@ -366,7 +366,9 @@ def _reloc_shapes(code, base, relocs):
         for o in sorted(relocs):
             if o0 <= o < o1:
                 ops = re.sub(r"\b(e?[abcd]x|[abcd][lh]|e?[sd]i|e?bp|e?sp|xmm\d)\b", "R", i.op_str)
-                ops = re.sub(r"0x[0-9a-f]+", "K", ops)
+                # every immediate, hex or decimal: capstone prints a call to an external symbol (displacement 0 in
+                # an object) as a small decimal target ("call 8"), which must not change the shape
+                ops = re.sub(r"\b(0x[0-9a-f]+|\d+)\b", "K", ops)
                 out.append((o, "%s %s @%d" % (i.mnemonic, ops, o - o0)))
     return out
 
@@ -415,6 +417,119 @@ def build_mapping(retail, ours, pairs):
             if x not in inv:
                 m[k], inv[x] = x, k
     return m, problems
+
+
+_EXACT = None
+
+
+def _exact_names():
+    """{decorated name: retail address} from sources that are ground truth for this project, not guesses: the
+    // @ markers (work/symmap.json, tools/equiv/symmap.py), the symbol columns of manifest.txt / equivalent.txt rows
+    (byte-exact or proved), symbols/lib_names.txt (byte-exact library code). Heuristic tables (pdb_globals,
+    key_globals) are left out: a wrong 'exact' pairing could turn into a false refutation."""
+    global _EXACT
+    if _EXACT is not None:
+        return _EXACT
+    import glob
+    t = {}
+    for f in glob.glob(os.path.join(ROOT, "match", "**", "manifest.txt"), recursive=True) + \
+            glob.glob(os.path.join(ROOT, "src", "game", "**", "manifest.txt"), recursive=True) + \
+            glob.glob(os.path.join(ROOT, "match", "slices", "*", "equivalent.txt")) + \
+            glob.glob(os.path.join(ROOT, "src", "game", "**", "equivalent.txt"), recursive=True):
+        for line in open(f, errors="replace"):
+            p = line.split()
+            if len(p) >= 3 and re.fullmatch(r"[0-9a-f]{8}", p[2]):
+                t.setdefault(p[1], int(p[2], 16))
+    sm = os.path.join(ROOT, "work", "symmap.json")
+    if os.path.exists(sm):
+        for k, v in json.load(open(sm)).items():
+            t.setdefault(k, int(v, 16))
+    for line in open(os.path.join(ROOT, "symbols", "lib_names.txt")):
+        p = line.split("#")[0].split()
+        if len(p) >= 2:
+            t.setdefault(p[1], int(p[0], 16))
+    _EXACT = t
+    return t
+
+
+_IMPORTS = None
+
+
+def _retail_imports():
+    """{imported name: IAT address} of the retail image"""
+    global _IMPORTS
+    if _IMPORTS is None:
+        from func import image
+        pe = image()
+        if not hasattr(pe, "DIRECTORY_ENTRY_IMPORT"):
+            pe.parse_data_directories(directories=[1])
+        _IMPORTS = {(i.name or b"").decode(errors="replace"): i.address
+                    for e in getattr(pe, "DIRECTORY_ENTRY_IMPORT", []) for i in e.imports if i.name}
+    return _IMPORTS
+
+
+def _embedded(nm):
+    """an address our sources put in a name by convention (FUN_00a11310, g_015f03fc, ..._0167a6d0), only when it is
+    a known function start or lies in a data section of the retail image"""
+    m = re.search(r"(?:^|[^0-9a-fA-F])(0[0-9a-f]{7})(?:[^0-9a-fA-F]|$)", nm)
+    if not m:
+        return None
+    a = int(m.group(1), 16)
+    import task
+    if task.fingerprint(a):
+        return a
+    from func import image
+    pe = image()
+    base = pe.OPTIONAL_HEADER.ImageBase
+    for s in pe.sections:
+        if s.Name.rstrip(b"\0") in (b".data", b".rdata") and base + s.VirtualAddress <= a < base + s.VirtualAddress + s.Misc_VirtualSize:
+            return a
+    return None
+
+
+def exact_mapping(ours, heuristic):
+    """Pair every relocation of ours with its retail address from ground truth (see _exact_names; imports; embedded
+    addresses; a __real@/__xmm@ constant whose heuristic partner holds exactly its bytes). -> (mapping, unresolved
+    names): the mapping is complete when unresolved is empty."""
+    names, imps = _exact_names(), _retail_imports()
+    dll = _dll_names(ours)
+    from func import image
+    pe = image()
+    base = pe.OPTIONAL_HEADER.ImageBase
+    out, unresolved = {}, []
+    for _o, tok in ours.relocs.items():
+        k, nmad = _tok_key(tok)
+        if k in out:
+            continue
+        if nmad is None:            # an address inside the /LTCG DLL: name it from the link map, else unresolved
+            nm = dll.get(k[1])
+            if nm is None:
+                unresolved.append("dll+%x" % k[1])
+                continue
+            add = 0
+        else:
+            nm, add = nmad
+        x = None
+        if nm in names:
+            x = names[nm] + add
+        elif nm.startswith("__imp_"):
+            imp = nm[len("__imp_"):]
+            cand = [imp, re.sub(r"^_(\w+)@\d+$", r"\1", imp), imp.lstrip("_")]
+            x = next((imps[c] for c in cand if c in imps), None)
+            x = x + add if x is not None else None
+        elif nm.startswith(("__real@", "__xmm@")):
+            h = heuristic.get(k)
+            val = bytes.fromhex(nm.split("@", 1)[1])[::-1]
+            if h is not None and pe.get_data(h - base, len(val)) == val:
+                x = h
+        else:
+            e = _embedded(nm)
+            x = e + add if e is not None else None
+        if x is None:
+            unresolved.append(nm)
+        else:
+            out[k] = x & 0xffffffff
+    return out, unresolved
 
 
 def _rel32_fields(code, base):
@@ -547,8 +662,21 @@ def prepare(retail, ours, level, hints):
             raise HintError("hint bijection rejected: " + "; ".join(problems[:3]))
         clean = False
         notes += problems[:3]
+    # exact pairing from ground truth: when every relocation of ours resolves, it replaces the alignment's guesses
+    # and the pairing is no longer heuristic, whatever the alignment looked like
+    exact, unresolved = exact_mapping(ours, mapping)
+    fixed = sum(1 for k, x in exact.items() if mapping.get(k) not in (None, x))
+    mapping.update(exact)
+    exact_complete = not unresolved
+    if exact_complete:
+        clean = True
+        notes = ["pairing exact (%d field(s) by name%s)" % (len(exact), ", %d alignment guess(es) corrected" % fixed
+                                                           if fixed else "")]
+    elif exact:
+        notes.append("%d of %d pairing(s) exact; not: %s" % (len(exact), len(exact) + len(set(unresolved)),
+                                                            ", ".join(sorted(set(unresolved))[:3])))
     pcode, unpaired, oname = patch_ours(retail, ours, mapping)
-    if unpaired:
+    if unpaired and not exact_complete:
         clean = False
         notes.append("%d relocated field(s) of ours unpaired" % unpaired)
     dll = _dll_names(ours)
