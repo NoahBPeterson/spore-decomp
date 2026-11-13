@@ -17,7 +17,7 @@
 00a62410 315 fx_register_sequence: reflected-class registration (EapdRegisterClass/EapdIntern/EapdAddMethod) prologue and return-code folding differ ; equiv UNSUPPORTED 1 unresolved ref FUN_00a62050
 00a625f0 112 fx_notify_value: index clamp plus element-value load and recursion-guard walk schedule diverge ; equiv UNSUPPORTED 0/400 valid (fault read)
 00a62690 45 fx_dump: 2-instruction divergence in the two global loads vs the EapdDumpTable argument tail ; equiv UNSUPPORTED 0/400 valid (fault read)
-00a626e0 32 fx_alloc_insert: EapdAllocByClass null-test insert sequence register assignment differs ; equiv UNSUPPORTED 0/400 valid (fault read)
+00a626e0 32 fx_alloc_insert: EapdAllocByClass null-test insert sequence register assignment differs ; equiv UNSUPPORTED 0/400 valid (fault read) [R32 active draft claim; native validation pending.]
 00a62720 103 fx_register_decal: reflected-class registration chain differs from the kFXCmptDecal registration in the original ; equiv UNSUPPORTED 0/400 valid (fault read)
 00a627d0 535 fx_decal_update: early-out count guard plus recursion-guard element walk not laid out as in the original (orig 93 bytes vs 566 emitted) ; equiv UNSUPPORTED 0/400 valid (fault read)
 00a62a10 32 fx_alloc_insert2: same body as 00a626e0 but a distinct COMDAT; register assignment differs ; equiv UNSUPPORTED 0/400 valid (fault read)
