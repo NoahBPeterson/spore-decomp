@@ -14,7 +14,7 @@
 00cea1a0 223 cCityDisplayStrategy::Update: complete-ish; reticle/effect creation via EffectsManager vtable slots, mode-state reads; my reconstruction is structurally short (266 vs 1354 bytes) - full control flow not recovered flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00cea6f0 80 helper: complete-ish; mode-state index read + effect create; structurally short (118 vs 265 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00cea970 164 Refresh: complete-ish; camera/minimap lookup + civ% update; structurally short (202 vs 333 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ceaac0 3 eastl rbtree erase helper: only 3 bytes differ - MSVC picks a different load order for `*out = next` (loads next into eax then out into ecx, original loads out then next); semantically identical flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ceaac0 3 eastl rbtree erase helper: only 3 bytes differ - MSVC picks a different load order for `*out = next` (loads next into eax then out into ecx, original loads out then next); semantically identical flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [R31 active draft claim; native validation pending.]
 00ceab20 26 rbtree find+erase wrapper: complete; original materialises the iterator temp via `push node; mov eax,esp; mov [eax],node` before the call, mine passes `&key` directly (2 pushes), plus node kept in ecx vs my eax flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ceac50 456 Destruct: complete-ish; AutoHandler/posse/map/effect teardown; control flow and vtable-slot schedule differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ceae70 32 Assign/posse-update: structurally short (32 vs 244 bytes) - full AutoRefCount AddRef/Release + map find + Posse FindItem + minimap RemoveIcon sequence not recovered flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
