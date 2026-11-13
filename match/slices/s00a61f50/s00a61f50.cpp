@@ -5,6 +5,10 @@
 // Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast   (see manifest.txt)
 #include "fxcmpt.h"
 
+// Compiler fence for the fx_alloc_insert store scheduling (emits no instructions).
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 // Forward declarations for registration helpers defined further down.
 void* __cdecl fx_alloc_sound(uint32 a, uint32 b);   // 0x00a62b60
 
@@ -185,11 +189,12 @@ void __cdecl fx_dump(FXTableBase* self)
 void* __cdecl fx_alloc_insert(uint32 a, uint32 b)
 {
     void* obj = FUN_00a49390((void*)g_fxCmptMeta2_1675844);
-    if (obj == 0)
-        return 0;
-    *(uint32*)((char*)obj + 0x28) = a;
-    *(uint32*)((char*)obj + 0x2c) = b;
-    FUN_00a49d30(g_eapdC_16758c4, g_eapdD_16758c8, 0, obj);
+    if (obj != 0) {
+        *(uint32*)((char*)obj + 0x28) = a;
+        _ReadWriteBarrier();
+        *(uint32*)((char*)obj + 0x2c) = b;
+        FUN_00a49d30(obj, g_eapdC_16758c4, g_eapdD_16758c8);
+    }
     return obj;
 }
 
