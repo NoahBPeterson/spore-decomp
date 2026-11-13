@@ -20,3 +20,4 @@ slices/s00a4d340/s00a4d340.cpp  ?glist_pixelstox@Eapd@Audio@EA@@  00a4e120  /O2 
 slices/s00a4d340/s00a4d340.cpp  ?glist_pixelstoy@Eapd@Audio@EA@@  00a4e1c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a4d340/s00a4d340.cpp  ?glist_dpixtodx@Eapd@Audio@EA@@  00a4e260  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a4d340/s00a4d340.cpp  ?glist_dpixtody@Eapd@Audio@EA@@  00a4e2a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a4d340/s00a4d340.cpp  ?glist_add@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_gobj@123@@Z  00a4d340  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

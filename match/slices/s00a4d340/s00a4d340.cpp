@@ -8,11 +8,10 @@ void glist_add(t_glist* x, t_gobj* y)
 {
     t_gobj* y2;
     y->g_next = 0;
-    if (!(y2 = x->gl_list))
+    if (!x->gl_list)
         x->gl_list = y;
     else {
-        t_gobj* nx;
-        for (; (nx = y2->g_next); y2 = nx)
+        for (y2 = x->gl_list; y2->g_next; y2 = y2->g_next)
             ;
         y2->g_next = y;
     }
