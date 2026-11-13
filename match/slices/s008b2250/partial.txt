@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+008b2630  -  stub: placeholder body (ours 1 bytes, retail 1280 bytes); needs real source. Was noted as complete: complete but not byte-exact: register-ABI (edx=PFRClass, eax=source cursor, ebp=target); 6-way jump-table glyph/stroke byte decoder modelled at entry; size 1 vs 1280; equiv FAIL 5/5 valid (memory pool divergence at 0x40030000)

@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00951e10  -  stub: placeholder body (ours 3 bytes, retail 646 bytes); needs real source. Was noted as complete: complete; SkinBuilder::BuildSkinVertices skin-quad emit (retry/advance/flush over renderer+mesh vtable slots); equiv UNSUPPORTED (0/400 valid, fake-arity/read faults)

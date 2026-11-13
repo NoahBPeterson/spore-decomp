@@ -8,5 +8,5 @@
 00933c80  382  partial; IniFile::GetFileLine16To16 - endianness swap + read/seek loop approximated
 00933e50  107  partial; rbtree insert helper (operator_new 0x24 + RBTreeInsert) approximated
 00933ef0  n/a  partial; IniFile::ReadEntry (699B) - control flow skeleton only
-009350f0 862 IniFile::LoadSectionNames: EASTL rbtree traversal + string tokenizing not reconstructed
-00935560 1231 IniFile::EnumEntries: EASTL rbtree/string reconstruction not completed
+009350f0 862 IniFile::LoadSectionNames: EASTL rbtree traversal + string tokenizing not reconstructed; Earlier, fuller draft: match/slices/s009350f0/s009350f0.cpp (left behind by the migration); start from it.
+00935560 1231 IniFile::EnumEntries: EASTL rbtree/string reconstruction not completed; Earlier, fuller draft: match/slices/s009350f0/s009350f0.cpp (left behind by the migration); start from it.

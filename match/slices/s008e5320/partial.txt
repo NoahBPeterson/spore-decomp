@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+008e5480  -  stub: placeholder body (ours 22 bytes, retail 242 bytes); needs real source; match/slices/s008e5320/s008e5320.cpp mentions this address and may hold an earlier draft. Was noted as complete: eastl::equal_range; complete; hidden return slot now matches (StaticRange made non-POD with a copy ctor, so cl uses the sret pointer like the original); remaining residue is register allocation (count in ebx instead of edi); difftest PASS (375 valid, 100% coverage)

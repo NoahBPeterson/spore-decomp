@@ -1,1 +1,3 @@
 # va  diff-bytes  reason
+00da9390  -  stub: placeholder body (ours 3 bytes, retail 290 bytes); needs real source; match/slices/s00da8630/s00da8630.cpp mentions this address and may hold an earlier draft. Was noted as complete: 
+00da94c0  -  stub: placeholder body (ours 1 bytes, retail 309 bytes); needs real source; match/slices/s00da8630/s00da8630.cpp mentions this address and may hold an earlier draft. Was noted as complete: 

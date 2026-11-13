@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010cae40  -  stub: placeholder body (ours 24 bytes, retail 961 bytes); needs real source: an earlier, fuller draft is in match/slices/s010caa30/s010caa30.cpp (left behind by the migration); start from it. Was noted as complete: UNSUPPORTED difftest: orig-abi-broken(fake) child-shape vtable unemulatable; body stubbed (size 22 vs 961)

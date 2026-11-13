@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-0059b0f0 - PARTIAL: cSPEditorAnimatedCreatureData::SetTargetPosition 503 B; skeleton only
+0059b0f0 - PARTIAL: cSPEditorAnimatedCreatureData::SetTargetPosition 503 B; skeleton only; Earlier, fuller draft: match/slices/s0059acb0/s0059acb0.cpp (left behind by the migration); start from it.

@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00698b30  -  stub: placeholder body (ours 1 bytes, retail 353 bytes); needs real source: an earlier, fuller draft is in match/slices/s00697c40/s00697c40.cpp (left behind by the migration); start from it. Was noted as complete: point-to-segment distance (the slice's spelling ?QuaternionSlerp@SP@@... is wrong for these bytes: 3 pointer args, float returned in st(0), 353 bytes); complete real C++ (dot=(p-a).(b-a); dot<=0 -> |p-a|; dot>=|b-a|^2 -> |p-b|; else project onto the segment); emitted 401 vs 353 bytes, x87 sqrt tails

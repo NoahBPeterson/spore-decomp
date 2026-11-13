@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+0107a6b0  -  stub: placeholder body (ours 1 bytes, retail 738 bytes); needs real source; match/slices/s0107a510/s0107a510.cpp mentions this address and may hold an earlier draft. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 738 bytes - tool widget helper not reconstructed.

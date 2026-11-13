@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00baed60  -  stub: placeholder body (ours 138 bytes, retail 834 bytes); needs real source. Was noted as complete: editor event dispatcher; 0x4b719d4 branch abbreviated, other event ids dispatch normally; equiv UNSUPPORTED (gate timeout on game-global path)

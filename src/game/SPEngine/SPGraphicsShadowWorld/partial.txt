@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+0077ff30  -  stub: placeholder body (ours 3 bytes, retail 728 bytes); needs real source; match/slices/s0077ff30/s0077ff30.cpp mentions this address and may hold an earlier draft. Was noted as complete: complete: full DrawLayer control flow (viewer matrices, render-state save/restore, BuildBasisMap sequence) translated; size 524 vs 728 because inlined copy/inline scheduling differs

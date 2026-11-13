@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-008e5480  22   eastl::equal_range; stubbed
+008e5480  22   eastl::equal_range; stubbed; match/slices/s008e5320/s008e5320.cpp mentions this address and may hold an earlier draft.

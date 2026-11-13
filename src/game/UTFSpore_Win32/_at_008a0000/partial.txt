@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-008a76e0  118  partial: 0x430-byte scratch dispatch wrapper skeleton; opaque callee types not reconstructed flags: /O2 /MD /Gy /EHsc /TP
+008a76e0  118  partial: 0x430-byte scratch dispatch wrapper skeleton; opaque callee types not reconstructed flags: /O2 /MD /Gy /EHsc /TP; match/slices/s008a7400/s008a7400.cpp mentions this address and may hold an earlier draft.

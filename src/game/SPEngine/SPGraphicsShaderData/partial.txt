@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00777b50 - SP::SetShaderData (loop over shader-data entries); skeleton
+00777b50 - SP::SetShaderData (loop over shader-data entries); skeleton; Earlier, fuller draft: match/slices/s007776f0/s007776f0.cpp (left behind by the migration); start from it.

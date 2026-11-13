@@ -1,0 +1,1 @@
+0068d340  -  stub: placeholder body (ours 3 bytes, retail 215 bytes); needs real source. Was noted as complete: HashMap::Lookup (= hash_map<unsigned,WStr>::operator[]): thiscall ret 4; find(key&), else build pair<unsigned const,WStr>(key,&empty) via PairUW ctor, Insert(&it,&pair,pKey), free pair value if heap [equiv: PASS 298 valid, 92.5% cov]

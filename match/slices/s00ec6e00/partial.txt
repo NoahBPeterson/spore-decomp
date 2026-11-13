@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ec78e0  -  stub: placeholder body (ours 21 bytes, retail 97 bytes); needs real source. Was noted as complete: window handle lookup + call args approximated [equiv UNSUPPORTED (0/1200 valid, read faults)]

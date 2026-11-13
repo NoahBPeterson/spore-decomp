@@ -1,1 +1,2 @@
 # <va>  <dl>  <reason>   (incomplete / not equivalent)
+0104e570  -  stub: placeholder body (ours 30 bytes, retail 172 bytes); needs real source: an earlier, fuller draft is in match/slices/s0104e060/s0104e060.cpp (left behind by the migration); start from it. Was noted as complete: (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) tool selection; the inventory select and tree removal calls are unresolved so only the guard survives; equiv UNSUPPORTED (unresolved selection helpers) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

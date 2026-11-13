@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-00803020 -  cSPUIStringBinder constructor: only the vtable/refcount fields are modelled; FixedBufferAllocator setup omitted flags: /O2 /MD /Gy /TP /arch:SSE2
-00803220 -  cSPUIDebugConsole::DoMessage skeleton (message switch and text handling omitted) flags: /O2 /MD /Gy /TP /arch:SSE2
-00803790 -  cheat command handler skeleton (vtable context dispatch omitted) flags: /O2 /MD /Gy /TP /arch:SSE2
+00803020 -  cSPUIStringBinder constructor: only the vtable/refcount fields are modelled; FixedBufferAllocator setup omitted flags: /O2 /MD /Gy /TP /arch:SSE2; match/slices/s00802a30/s00802a30.cpp mentions this address and may hold an earlier draft.
+00803220 -  cSPUIDebugConsole::DoMessage skeleton (message switch and text handling omitted) flags: /O2 /MD /Gy /TP /arch:SSE2; match/slices/s00802a30/s00802a30.cpp mentions this address and may hold an earlier draft.
+00803790 -  cheat command handler skeleton (vtable context dispatch omitted) flags: /O2 /MD /Gy /TP /arch:SSE2; match/slices/s00802a30/s00802a30.cpp mentions this address and may hold an earlier draft.

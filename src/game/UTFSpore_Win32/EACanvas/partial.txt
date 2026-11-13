@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-00849230 2058 EA::App::Canvas::WindowProc; 2058-byte message switch, not reconstructed
-00849e30 318  eastl::vector<tagMSG>::insert; 28-byte element growth/copy template, not reconstructed
+00849230 2058 EA::App::Canvas::WindowProc; 2058-byte message switch, not reconstructed; Earlier, fuller draft: match/slices/s008491a0/s008491a0.cpp (left behind by the migration); start from it.
+00849e30 318  eastl::vector<tagMSG>::insert; 28-byte element growth/copy template, not reconstructed; match/slices/s008491a0/s008491a0.cpp mentions this address and may hold an earlier draft.
 00849f70  0  Canvas::FlushInput: only the drain/repost skeleton is written; the original's large inlined message-coalescing pass (mouse/keyboard filtering over a vector<tagMSG>) is omitted.

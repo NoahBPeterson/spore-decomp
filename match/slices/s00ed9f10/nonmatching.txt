@@ -1,4 +1,3 @@
-00ed9f10    535  complete; vtable/interface-heavy message helper (flags /O2 /MD /Gy /TP); equiv UNSUPPORTED ("original reads ecx at entry but our declaration passes nothing there")
 00eda130    312  complete; editor-mode cursor/handler install, heavy EA input vtable dispatch (flags /O2 /MD /Gy /TP); equiv UNSUPPORTED (0/400 valid inputs, fault(read))
 00eda2f0    778  complete; primary IWindow message switch (flags /O2 /MD /Gy /TP); equiv FAIL on leftover eax (47bf0000 vs 0, only 8 valid inputs / 16% coverage) - ABI-undefined dead return-register artifact
 00eda6f0    602  complete; +0x44 sub-object handler (flags /O2 /MD /Gy /TP); equiv UNSUPPORTED (0/400 valid inputs, fault(read))

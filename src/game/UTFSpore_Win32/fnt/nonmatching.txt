@@ -16,7 +16,6 @@
 008ac970 122 complete; difftest PASS (222 valid, 100% cov). fnt_SPVTL (pop two stack indices, distance*0x400, FixDiv, >>2, negate on opcode bit0); register differences.
 008aca20 256 complete; difftest FAIL (ecx untouched by the original). fnt_SDPVTL (both projection and dual-projection axes).
 008acb50 115 complete; difftest PASS (239 valid, 100% cov). fnt_SFVTL.
-008adac0 29 ?fnt_SHE@@YAXPAUTTExecCtx@@@Z  locates the reference point via fnt_SH_Common(ctx,&x,&x) then walks zp2+idx*0x2c; frame/scheduling deltas only. flags=/O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid: fault(write)=187 fault(read)=117 fault=96)
 008adbe0 48 ?fnt_SHPIX@@YAXPAUTTExecCtx@@@Z  dx=ShortFracMul(pix,singleX) dy=ShortFracMul(pix,singleY) then fnt_SHP_Common(ctx-in-edx, dx); body equivalent, prologue/push ebp+ebx frame differs. flags=/O2 /MD /Gy /EHsc /TP; difftest FAIL 5/5 (execution)
 008adc30 259 ?fnt_IP@@YAXPAUTTExecCtx@@@Z  interpolate-point handler; structure reproduced, zone field offsets verified, large scheduling delta. flags=/O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid: fault(read)=400)
 008add80 174 ?fnt_MSIRP@@YAXPAUTTExecCtx@@@Z  move-indirect-relative-point; register allocation and call ordering differ. flags=/O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/400 valid: fault(read)=238 fake-arity=162)

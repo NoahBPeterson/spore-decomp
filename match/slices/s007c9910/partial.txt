@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+007ca8e0  -  stub: placeholder body (ours 1 bytes, retail 100 bytes); needs real source: an earlier, fuller draft is in match/slices/s007c9910/s007c9910.cpp (left behind by the migration); start from it. Was noted as complete: MapVec::Destroy complete (loop dtor 0x7cef60 at 0x18 stride, free begin when != inlineCap; original adds MSVC EH unwind frame). [equiv: PASS, 247 valid, 86.1% coverage]

@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00cf2520  -  stub: placeholder body (ours 111 bytes, retail 971 bytes); needs real source: an earlier, fuller draft is in match/slices/s00cf1ca0/s00cf1ca0.cpp (left behind by the migration); start from it. Was noted as complete: Complete cCityInputStrategy::EndSelection; residual is long float-selection logic and inlined vector operations.

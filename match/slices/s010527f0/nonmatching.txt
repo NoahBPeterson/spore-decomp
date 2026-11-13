@@ -12,7 +12,6 @@
 01053650  20  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) tool stop; the timer stop is a tail-jump in retail but a normal call here; equiv FAIL (first mismatch esp)
 010536e0  26  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) animal cargo interface cast; the secondary interface lookup adds an extra indirection in retail; equiv FAIL (first mismatch execution)
 01053700  26  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) plant cargo interface cast; same secondary-interface indirection difference; equiv FAIL (first mismatch execution)
-010537e0  404  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) tool activation; the planet-model placement and the tool-manager start call are unresolved, collapsing most of the body; equiv FAIL (first mismatch execution)
 01053980  524  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) use-location validity; space-game inventory, item direction and event-log calls are unresolved so the target/range checks collapse; equiv UNSUPPORTED (unresolved accessors)
 01053bb0  54  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) passive update; the use-tool-stop path is modelled as a plain release, missing the manager call; equiv FAIL (first mismatch execution)
 01053be0  328  (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) test terrain location search; planet-model direction and random-surface helpers are unresolved; equiv UNSUPPORTED (unresolved PlanetModel helpers)

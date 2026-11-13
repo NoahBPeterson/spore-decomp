@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
-00638e90  -  HasRequiredPart: PARTIAL skeleton (315 B animation/part lookup)
-00638fd0  -  SetIdleAnimation: PARTIAL skeleton (784 B)
-00639350  -  FUN_00639350 (Init-ish): PARTIAL skeleton (1429 B)
-006398f0  -  MarkKeyInputKeyDown: PARTIAL skeleton (281 B)
-00639a10  -  CaptureGIF: PARTIAL skeleton (346 B)
+00638e90  -  HasRequiredPart: PARTIAL skeleton (315 B animation/part lookup); Earlier, fuller draft: match/slices/s00638e90/s00638e90.cpp (left behind by the migration); start from it.
+00638fd0  -  SetIdleAnimation: PARTIAL skeleton (784 B); Earlier, fuller draft: match/slices/s00638e90/s00638e90.cpp (left behind by the migration); start from it.
+00639350  -  FUN_00639350 (Init-ish): PARTIAL skeleton (1429 B); Earlier, fuller draft: match/slices/s00638e90/s00638e90.cpp (left behind by the migration); start from it.
+006398f0  -  MarkKeyInputKeyDown: PARTIAL skeleton (281 B); Earlier, fuller draft: match/slices/s00638e90/s00638e90.cpp (left behind by the migration); start from it.
+00639a10  -  CaptureGIF: PARTIAL skeleton (346 B); Earlier, fuller draft: match/slices/s00638e90/s00638e90.cpp (left behind by the migration); start from it.
 00639bd0  -  Init: PARTIAL skeleton (748 B)

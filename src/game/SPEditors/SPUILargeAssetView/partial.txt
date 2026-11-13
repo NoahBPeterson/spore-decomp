@@ -1,10 +1,10 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
-0066c0c0  619  layout/animation helper: only a placeholder body
-0066c490  644  layout/animation helper: only a placeholder body
-0066c720  697  layout/animation helper: only a placeholder body
-0066c9e0  400  layout/animation helper: only a placeholder body
-0066cbd0  300  layout/animation helper: only a placeholder body
-0066cd20  224  GetVerbIconKeysForLargeCard: RemapTypeId + property-key lookups not reconstructed
-0066d280  417   window refresh loop: only a placeholder body (SetWindowImage/property-key refresh)
-0066efe0  175   InitLayout: only a placeholder body
-0066f090  159   helper: only a placeholder body
+0066c0c0  619  layout/animation helper: only a placeholder body; Earlier, fuller draft: match/slices/s0066bf70/s0066bf70.cpp (left behind by the migration); start from it.
+0066c490  644  layout/animation helper: only a placeholder body; Earlier, fuller draft: match/slices/s0066bf70/s0066bf70.cpp (left behind by the migration); start from it.
+0066c720  697  layout/animation helper: only a placeholder body; match/slices/s0066bf70/s0066bf70.cpp mentions this address and may hold an earlier draft.
+0066c9e0  400  layout/animation helper: only a placeholder body; Earlier, fuller draft: match/slices/s0066bf70/s0066bf70.cpp (left behind by the migration); start from it.
+0066cbd0  300  layout/animation helper: only a placeholder body; Earlier, fuller draft: match/slices/s0066bf70/s0066bf70.cpp (left behind by the migration); start from it.
+0066cd20  224  GetVerbIconKeysForLargeCard: RemapTypeId + property-key lookups not reconstructed; match/slices/s0066bf70/s0066bf70.cpp mentions this address and may hold an earlier draft.
+0066d280  417   window refresh loop: only a placeholder body (SetWindowImage/property-key refresh); match/slices/s0066ce00/s0066ce00.cpp mentions this address and may hold an earlier draft.
+0066efe0  175   InitLayout: only a placeholder body; Earlier, fuller draft: match/slices/s0066ee50/s0066ee50.cpp (left behind by the migration); start from it.
+0066f090  159   helper: only a placeholder body; Earlier, fuller draft: match/slices/s0066ee50/s0066ee50.cpp (left behind by the migration); start from it.

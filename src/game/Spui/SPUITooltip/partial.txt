@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00835660  -  TooltipManager::ShowWindow: FindWindowByID/bounding-box path stubbed
+00835660  -  TooltipManager::ShowWindow: FindWindowByID/bounding-box path stubbed; Earlier, fuller draft: match/slices/s008356e0/s008356e0.cpp (left behind by the migration); start from it.

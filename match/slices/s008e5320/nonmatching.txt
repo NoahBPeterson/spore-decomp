@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 008e53a0  52  eastl::lower_bound; complete; register allocation differs; now returns the iterator in eax (declared char*); difftest PASS (/O2 /MD /Gy /EHsc /TP /arch:SSE, --require-all, 383 valid, 100% coverage); callerdeps: eax DEPENDS, read at 008e556b after the call at 008e5559 in 008e5480
 008e5410  91  eastl::upper_bound; complete; register allocation differs; now returns the iterator in eax (declared char*); difftest PASS (/O2 /MD /Gy /EHsc /TP /arch:SSE, --require-all, 383 valid, 100% coverage); callerdeps: eax DEPENDS, read at 008e5551 after the call at 008e554b in 008e5480
-008e5480  110  eastl::equal_range; complete; hidden return slot now matches (StaticRange made non-POD with a copy ctor, so cl uses the sret pointer like the original); remaining residue is register allocation (count in ebx instead of edi); difftest PASS (375 valid, 100% coverage)
 008e5580  49  LookupStandardHTMLEntity; local frame/arg arrange differ (equiv PASS: 400 valid, 87% coverage)
 008e5600  82  XmlParser::Fn8e5600 buffer walk; codegen differs (equiv PASS)
 008e5670  131  XmlParser::Fn8e5670 text-buffer shift; complete (second memmove destination was 0x22c too high - fixed); three memcpy call sites are not tail-merged and register allocation differs; difftest PASS (345 valid, 100% coverage)

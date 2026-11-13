@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ea2790  -  stub: placeholder body (ours 39 bytes, retail 337 bytes); needs real source: an earlier, fuller draft is in match/slices/s00ea1900/s00ea1900.cpp (left behind by the migration); start from it. Was noted as complete: (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) load key; the resource manager lookups and the music load are unresolved so the two resource probes collapse; equiv UNSUPPORTED (unresolved resource services)

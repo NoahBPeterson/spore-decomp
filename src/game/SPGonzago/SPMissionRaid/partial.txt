@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00c5b600  -  stub: placeholder body (ours 13 bytes, retail 96 bytes); needs real source: an earlier, fuller draft is in match/slices/s00c5a580/s00c5a580.cpp (left behind by the migration); start from it. Was noted as complete: (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) raid event init; the definition query and key-array read are unresolved so the body reduces to the base init check; equiv UNSUPPORTED (unresolved base init) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

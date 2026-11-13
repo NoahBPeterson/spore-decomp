@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-008409f0  -    partial: string/UTF conversion helper; conversion logic stubbed
-00840cc0  -    partial: MakeCaseInsensitive(char*,string8); case-fold + resize logic stubbed
-00840ec0  -    partial: StripCommentsAndWhiteSpace; #< / #> comment scanner stubbed
-00841000  -    partial: ArgScript::Output; message-server output path stubbed
+008409f0  -    partial: string/UTF conversion helper; conversion logic stubbed; Earlier, fuller draft: match/slices/s00840250/s00840250.cpp (left behind by the migration); start from it.
+00840cc0  -    partial: MakeCaseInsensitive(char*,string8); case-fold + resize logic stubbed; Earlier, fuller draft: match/slices/s00840250/s00840250.cpp (left behind by the migration); start from it.
+00840ec0  -    partial: StripCommentsAndWhiteSpace; #< / #> comment scanner stubbed; Earlier, fuller draft: match/slices/s00840250/s00840250.cpp (left behind by the migration); start from it.
+00841000  -    partial: ArgScript::Output; message-server output path stubbed; Earlier, fuller draft: match/slices/s00840250/s00840250.cpp (left behind by the migration); start from it.

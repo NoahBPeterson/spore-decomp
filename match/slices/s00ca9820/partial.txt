@@ -1,0 +1,7 @@
+00ca9820  -  stub: placeholder body (ours 1 bytes, retail 735 bytes); needs real source. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 735 bytes - vehicle helper not reconstructed.
+00ca9b70  -  stub: placeholder body (ours 1 bytes, retail 322 bytes); needs real source. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 322 bytes - vehicle helper not reconstructed.
+00ca9d20  -  stub: placeholder body (ours 1 bytes, retail 356 bytes); needs real source. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 356 bytes - vehicle helper not reconstructed.
+00ca9e90  -  stub: placeholder body (ours 1 bytes, retail 335 bytes); needs real source. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 335 bytes - vehicle helper not reconstructed.
+00caa0c0  -  stub: placeholder body (ours 1 bytes, retail 243 bytes); needs real source. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 243 bytes - vehicle helper not reconstructed.
+00caa1c0  -  stub: placeholder body (ours 1 bytes, retail 414 bytes); needs real source. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 414 bytes - vehicle helper not reconstructed.
+00caa360  -  stub: placeholder body (ours 1 bytes, retail 679 bytes); needs real source. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 679 bytes - cVehicle::DestroyVehicle not reconstructed.

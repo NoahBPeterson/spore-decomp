@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00830d90  660 cSPUIStdDrawable::draw_with_image_info: large mode switch + x87 validate translation not completed
+00830d90  660 cSPUIStdDrawable::draw_with_image_info: large mode switch + x87 validate translation not completed; Earlier, fuller draft: match/slices/s00830c00/s00830c00.cpp (left behind by the migration); start from it.

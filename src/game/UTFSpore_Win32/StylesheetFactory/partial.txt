@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00900410  326  partial: XHTML StylesheetFactory::CreateResource skeleton (operator_new + stream read + CSSParser path not reconstructed)
+00900410  326  partial: XHTML StylesheetFactory::CreateResource skeleton (operator_new + stream read + CSSParser path not reconstructed); Earlier, fuller draft: match/slices/s00900410/s00900410.cpp (left behind by the migration); start from it.

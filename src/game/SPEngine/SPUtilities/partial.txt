@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-006baec0 246 SP::FindDirectoryUp - empty stub, too small vs original for symbol lookup; equiv UNSUPPORTED
+006baec0 246 SP::FindDirectoryUp - empty stub, too small vs original for symbol lookup; equiv UNSUPPORTED; Earlier, fuller draft: match/slices/s006ba2f0/s006ba2f0.cpp (left behind by the migration); start from it.

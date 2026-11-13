@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00d6f590  -  stub: placeholder body (ours 1 bytes, retail 453 bytes); needs real source; match/slices/s00d6f1c0/s00d6f1c0.cpp mentions this address and may hold an earlier draft. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 453 bytes - class-dance behaviour packet body not reconstructed; retail takes a stack arg, validates [arg] and [arg+4], frame 0x78, and drives cBehaviorActor stimuli (retail first prologue: mov eax,[esp+0x1c]; sub esp,0x78). flags: /O2 /MD /Gy /EHsc /TP /ar

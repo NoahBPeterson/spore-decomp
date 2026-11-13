@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ceae70  -  stub: placeholder body (ours 32 bytes, retail 244 bytes); needs real source: an earlier, fuller draft is in match/slices/s00cea090/s00cea090.cpp (left behind by the migration); start from it. Was noted as complete: Assign/posse-update: structurally short (32 vs 244 bytes) - full AutoRefCount AddRef/Release + map find + Posse FindItem + minimap RemoveIcon sequence not recovered

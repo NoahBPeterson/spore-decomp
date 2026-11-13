@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-006b6620  108  stream reader helper: stubbed
-006b6740  109  eastl hashtable erase(key): stubbed
-006b67b0  226  eastl hashtable operator[]/insert: stubbed
+006b6620  108  stream reader helper: stubbed; Earlier, fuller draft: match/slices/s006b5770/s006b5770.cpp (left behind by the migration); start from it.
+006b6740  109  eastl hashtable erase(key): stubbed; Earlier, fuller draft: match/slices/s006b5770/s006b5770.cpp (left behind by the migration); start from it.
+006b67b0  226  eastl hashtable operator[]/insert: stubbed; Earlier, fuller draft: match/slices/s006b5770/s006b5770.cpp (left behind by the migration); start from it.

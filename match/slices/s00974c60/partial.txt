@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00975680  -  stub: placeholder body (ours 106 bytes, retail 1014 bytes); needs real source. Was noted as complete: complete; WinGrid::OnMouseDown-style cell action dispatcher. equiv.py FAIL (5/5 valid; first mismatch esp). The 1014-byte original gates on grid flag 0x400000 or `(action & 0xfffffffc) == 8`, then reads the cell area, walks the selection list, and dispatches the select/deselect/range operations. My 

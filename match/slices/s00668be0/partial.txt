@@ -1,1 +1,2 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+00668d90  -  stub: placeholder body (ours 17 bytes, retail 1480 bytes); needs real source; match/slices/s00668be0/s00668be0.cpp mentions this address and may hold an earlier draft. Was noted as complete: /O2 /MD /Gy /TP /arch:SSE /GS-; complete SP::cSPUIFeedListItem::GetAssetList; three-way dispatch on this+0x178: 0xe8104769 reuses the cached bucket lists through FUN_00668c80(out,7/8/9/10/11) (the 7 and 10 cases run with ecx==out, the others with ecx==this, exactly as the original does), 0x11f44f6b 

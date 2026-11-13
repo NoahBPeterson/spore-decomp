@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00783fb0  -  stub: placeholder body (ours 1 bytes, retail 885 bytes); needs real source: an earlier, fuller draft is in match/slices/s00783590/s00783590.cpp (left behind by the migration); start from it. Was noted as complete: complete FindSHCoeffsFromHemiEnvMap: per-texel disc test, solid-angle sinc weight, atan2/acos angles and the per-basis accumulation through FUN_00783130; size 885 vs 769; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast; difftest PASS (replay, first difference None)

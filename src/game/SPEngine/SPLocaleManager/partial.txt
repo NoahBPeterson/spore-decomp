@@ -1,3 +1,3 @@
 # va  diff-bytes  reason
-006964c0  1069  skeleton only; the full CommandLine/locale-info/registry bootstrap (dozens of GetLocaleInfoInt calls) not reconstructed
-00697710  582  skeleton only; cLocaleManager::SetLocale (IsLocaleAvailable + list walk + SetLocale + message) not reconstructed
+006964c0  1069  skeleton only; the full CommandLine/locale-info/registry bootstrap (dozens of GetLocaleInfoInt calls) not reconstructed; Earlier, fuller draft: match/slices/s006960f0/s006960f0.cpp (left behind by the migration); start from it.
+00697710  582  skeleton only; cLocaleManager::SetLocale (IsLocaleAvailable + list walk + SetLocale + message) not reconstructed; match/slices/s00696c80/s00696c80.cpp mentions this address and may hold an earlier draft.

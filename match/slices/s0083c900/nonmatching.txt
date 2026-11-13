@@ -12,5 +12,4 @@
 0083d140  53  hashtable<string, pair<string,AutoRefCount<cExprFunction>>>::insert(value, true_type): complete, EASTL-shaped; div operand form (mov ecx,[esi+8] first) and node-link store scheduling differ [equiv: UNSUPPORTED, 0/400 valid: pointer-chasing inputs fault]
 0083ca00  153  complete: cExpression::FindExprValue (thiscall); inline string8 key copy + hashtable::find; alloc/memcpy call shapes and key-copy register allocation differ; equiv: WEAK (173/400 valid, 100% coverage)
 0083cad0  141  complete: hashtable<cICommand>::DoFreeNodes (ret 8/ecx unused); node release+free loop; destructor cleanup EH frame not reproduced; equiv: WEAK (171/400 valid, 100% coverage)
-0083cb70  115  complete: hash_map<string,AutoRefCount<cICommand>>::operator[] (thiscall); find + insert-with-default; EH state store width and bool tag materialisation differ; equiv: UNSUPPORTED (0/400 valid: pointer-chasing inputs fault)
 0083cc30  213  complete: cExpression::SetCommand (thiscall); case-insensitive key + map slot refcount swap + vtable slot 8 call; key-copy allocation and EH frame layout differ; equiv: UNSUPPORTED (0/400 valid: pointer-chasing inputs fault)

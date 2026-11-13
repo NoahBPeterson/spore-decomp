@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-0080e6b0  -   approximate: only the opening calls/float-box path reconstructed
+0080e6b0  -   approximate: only the opening calls/float-box path reconstructed; Earlier, fuller draft: match/slices/s0080e6b0/s0080e6b0.cpp (left behind by the migration); start from it.
 0080e850  -   approximate: Matrix3::Assign / cViewer / winproc construction simplified
 0080ead0 193  approximate: model-vector destroy + refcount teardown simplified
 0080ebc0  94  approximate: second operator_new / base ctor path omitted
@@ -7,8 +7,8 @@
 0080f140  -   approximate: 12-byte vector grow/reinsert path not reproduced
 0080f2e0 121  approximate: AddLayer temp/iterator handling not reproduced
 0080f380  -   approximate: model set/binding paths after +0x258 omitted
-0080f530  -   approximate: cSPUILayerManager::Init body stubbed
-0080f730  -   approximate: builder body stubbed
+0080f530  -   approximate: cSPUILayerManager::Init body stubbed; Earlier, fuller draft: match/slices/s0080e6b0/s0080e6b0.cpp (left behind by the migration); start from it.
+0080f730  -   approximate: builder body stubbed; Earlier, fuller draft: match/slices/s0080e6b0/s0080e6b0.cpp (left behind by the migration); start from it.
 0080f7c0  269  approximate: removed-object push / winproc teardown paths simplified
 0080f920  58  approximate: DrawLayer message path + layer loop shapes not faithful
 0080fa20  120  approximate: Shutdown teardown order / member offsets approximate

@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00835660  -  stub: placeholder body (ours 1 bytes, retail 118 bytes); needs real source: an earlier, fuller draft is in match/slices/s008356e0/s008356e0.cpp (left behind by the migration); start from it. Was noted as complete: TooltipManager::ShowWindow (retail 118 B vs ours 122 B): near-exact — cSPUILayout::FindWindowByID(layout(+0x08), id, 1) reached as a thiscall, swaps the found window into +0x0c with AddRef/Release, then 0x7c(0x10,1), cSPBoundingBox::AddBoundingBox(window,0xe,1) and the bounding-box Add(0xe,1), finis

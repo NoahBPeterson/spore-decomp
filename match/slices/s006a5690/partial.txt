@@ -1,1 +1,2 @@
 # incomplete / approximate source (not counted as decompiled)
+006a5c50  -  stub: placeholder body (ours 17 bytes, retail 255 bytes); needs real source: an earlier, fuller draft is in match/slices/s006a5690/s006a5690.cpp (left behind by the migration); start from it. Was noted as complete: HashName::DoInsertValue: full FNV-1 insert/rehash path rebuilt; equiv: UNSUPPORTED (0/400 valid: the original itself faults on 263 inputs)

@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+0095fcc0  -  stub: placeholder body (ours 5 bytes, retail 134 bytes); needs real source. Was noted as complete: Window::WalkChildren: complete; original homes the iterator on the arg-1 slot and caches the pre-call value in esi, cl15 routes the copy through ecx

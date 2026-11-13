@@ -5,4 +5,3 @@
 00783830  745  complete: full SH normalisation remove for degrees 0..4; same vectorisation difference
 00783b20  281  complete ApplyDiffuseReflection: packed (lit*band+diff) band factors for degrees 1..5 plus the degree-6+ tail, end pointer returned in eax; size 363 vs 315; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest PASS (replay, first difference None)
 00783cf0  613  complete SP_MultiplySH: memset(out,0,count*16) then one pass over the 8-byte sparse triple table (diagonal, shared-index and full cross-term cases); size 585 vs 641; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest PASS (replay, first difference None)
-00783fb0  775  complete FindSHCoeffsFromHemiEnvMap: per-texel disc test, solid-angle sinc weight, atan2/acos angles and the per-basis accumulation through FUN_00783130; size 885 vs 769; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast; difftest PASS (replay, first difference None)

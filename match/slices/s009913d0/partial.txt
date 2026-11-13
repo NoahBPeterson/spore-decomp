@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00991710  -  stub: placeholder body (ours 5 bytes, retail 147 bytes); needs real source. Was noted as complete: TreeNodeListMarshaller::Read: complete (reads element count from container, seeds out-buffer pointer with heap base, loops reading each TreeNode). 132 bytes vs 147; the read loop/register schedule differs. equiv UNSUPPORTED: 0/400 valid (fault(read)=371, fault(write)=27, fault=1, budget=1).

@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-008f3a80  3   CSSTokenReader::MatchEscape; stubbed
-008f3c40  4   CSSTokenReader::MatchIdent; stubbed
+008f3a80  3   CSSTokenReader::MatchEscape; stubbed; Earlier, fuller draft: match/slices/s008f3530/s008f3530.cpp (left behind by the migration); start from it.
+008f3c40  4   CSSTokenReader::MatchIdent; stubbed; Earlier, fuller draft: match/slices/s008f3530/s008f3530.cpp (left behind by the migration); start from it.
 008f3d90  3   CSSParser::Advance; stubbed

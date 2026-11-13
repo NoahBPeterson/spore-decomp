@@ -1,2 +1,2 @@
 # <va>  <diff-bytes>  <reason>
-00620ef0 1383  cTOSDialog::DoMessage: skeleton; most message branches (window enabling, layout moves, cancel-confirmation dialog path) are approximated
+00620ef0 1383  cTOSDialog::DoMessage: skeleton; most message branches (window enabling, layout moves, cancel-confirmation dialog path) are approximated; Earlier, fuller draft: match/slices/s00620bd0/s00620bd0.cpp (left behind by the migration); start from it.

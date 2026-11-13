@@ -1,7 +1,7 @@
 # va  diff-bytes  reason   (incomplete / approximate)
 00805410  111  approximate FixedAllocatorBase::AllocateChunk: loop and big-path reconstructed
 00805660  174  approximate ExpandRect: min/max accumulation reconstructed; some paths unverified
-00805740  500  approximate DrawArc: x87 arc/pie routine skeleton with correct call sites but omitted arithmetic
+00805740  500  approximate DrawArc: x87 arc/pie routine skeleton with correct call sites but omitted arithmetic; match/slices/s00804920/s00804920.cpp mentions this address and may hold an earlier draft.
 00805940  0  approximate math/drawing transcription (fsin/fcos arc helper) - not verified complete
 00805bb0  0  approximate math/drawing transcription (ellipse/rect arc helper) - not verified complete
 00805fe0  0  approximate; the two GetArea-style calls are not reconstructed faithfully
@@ -9,4 +9,4 @@
 00806d10  0  partial; Typesetter::Validate calls not reconstructed
 008070d0  0  partial; anchor flag logic approximated
 00807340  0  partial; anchor rect construction approximated
-008099a0  -  SPUIHelpers::BeginModal: not reconstructed
+008099a0  -  SPUIHelpers::BeginModal: not reconstructed; Earlier, fuller draft: match/slices/s00809700/s00809700.cpp (left behind by the migration); start from it.

@@ -1,1 +1,2 @@
 # va  reason   (not started: slice 9 needs its own full read of work/match/scratch_s00bb4100_card.txt)
+00bb4100  -  stub: placeholder body (ours 15 bytes, retail 2532 bytes); needs real source. Was noted as complete: SP::cStarManager::FUN_00bb4100 (PDB candidate SP::TRIBE_DESTROY_TOOL_Tick): 2532-byte thiscall body not reconstructed; only the correct signature/call site is present (15 bytes, `__declspec(noinline)` + volatile mField00 keep-alive). Decompile starts with two hash-property reads from this+0x1a0, ran

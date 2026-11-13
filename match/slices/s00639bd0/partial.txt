@@ -1,1 +1,2 @@
 # va  size  description   (none: all claimed functions finished)
+00639bd0  -  stub: placeholder body (ours 3 bytes, retail 748 bytes); needs real source. Was noted as complete: cSPPlayModeSubModeAction::Init(SubModeParams_t*): complete behaviour port (zeroes the per-submode bools/click-time/effect-world slot, releases mCursorEffect+mHitEffect, resets the face-user Stopwatch, calls the base SubModeBase::Init(params), caches mEditorBase+0x360/0x364 into mAnimCreatureMgr/mCre

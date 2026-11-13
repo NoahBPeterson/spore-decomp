@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00e17570  -  stub: placeholder body (ours 3 bytes, retail 1323 bytes); needs real source; match/slices/s00e16a70/s00e16a70.cpp mentions this address and may hold an earlier draft. Was noted as complete: nonmatching: cUIMissionCard::InitForCreature; incomplete skeleton (3 vs 1323 bytes). Needs the full cUIMissionCard/cSPMission layouts plus eastl string temporaries for the title/subtitle (mission vtable 0xb8/0xbc), the timer text (slot 0xac + FUN_00881730 + string::append), the mission-control looku

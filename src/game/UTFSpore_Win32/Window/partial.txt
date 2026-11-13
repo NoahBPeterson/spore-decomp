@@ -4,10 +4,10 @@
 00960180  -  Window::ScreenToLocal: vtable +0xc8 call not reconstructed
 009601e0  -  Window::GetChild: child index lookup partially reconstructed
 00960230  -  Window::RemoveChild: detach path partially reconstructed
-00960310  -  Window::OnPaint: paint traversal not reconstructed
-00960410  -  Window::DoMessage: message dispatch not reconstructed
+00960310  -  Window::OnPaint: paint traversal not reconstructed; Earlier, fuller draft: match/slices/s0095ff20/s0095ff20.cpp (left behind by the migration); start from it.
+00960410  -  Window::DoMessage: message dispatch not reconstructed; Earlier, fuller draft: match/slices/s0095ff20/s0095ff20.cpp (left behind by the migration); start from it.
 009605a0  -  HashTable::Rehash: bucket relink loop not reconstructed
-00960650  -  WindowListMarshaller::Read: marshaller body not reconstructed
+00960650  -  WindowListMarshaller::Read: marshaller body not reconstructed; Earlier, fuller draft: match/slices/s0095ff20/s0095ff20.cpp (left behind by the migration); start from it.
 009608c0  -  Window::SetPhysicalArea: body not reconstructed
 009609b0  -  Window::InvalidateLayout: body not reconstructed
 00960ae0  -  FUN_00960ae0: stub only (returns 0); vtable dispatch body not reconstructed

@@ -1,9 +1,9 @@
 # va  diff-bytes  reason
-007c3de0  0  skeleton: 396-byte SSE 4x4 matrix inverse; SIMD shufps/mulps sequence omitted
+007c3de0  0  skeleton: 396-byte SSE 4x4 matrix inverse; SIMD shufps/mulps sequence omitted; Earlier, fuller draft: match/slices/s007c3ba0/s007c3ba0.cpp (left behind by the migration); start from it.
 007c40f0  0  skeleton: 140-byte vertex-buffer fill (rep movsd + flag words); not reconstructed
-007c4180  0  skeleton: 277-byte perspective divide of a point; FP sequence omitted
-007c42a0  0  skeleton: 305-byte projection-matrix build; omitted
-007c43e0  0  skeleton: 248-byte matrix multiply/transpose helper; omitted
-007c4510  0  skeleton: 480-byte screen->world projection; omitted
-007c4730  0  skeleton: 460-byte SP::cViewer::GetWorldRayFromScreenCoords; omitted
+007c4180  0  skeleton: 277-byte perspective divide of a point; FP sequence omitted; Earlier, fuller draft: match/slices/s007c3ba0/s007c3ba0.cpp (left behind by the migration); start from it.
+007c42a0  0  skeleton: 305-byte projection-matrix build; omitted; Earlier, fuller draft: match/slices/s007c3ba0/s007c3ba0.cpp (left behind by the migration); start from it.
+007c43e0  0  skeleton: 248-byte matrix multiply/transpose helper; omitted; Earlier, fuller draft: match/slices/s007c3ba0/s007c3ba0.cpp (left behind by the migration); start from it.
+007c4510  0  skeleton: 480-byte screen->world projection; omitted; Earlier, fuller draft: match/slices/s007c3ba0/s007c3ba0.cpp (left behind by the migration); start from it.
+007c4730  0  skeleton: 460-byte SP::cViewer::GetWorldRayFromScreenCoords; omitted; Earlier, fuller draft: match/slices/s007c3ba0/s007c3ba0.cpp (left behind by the migration); start from it.
 007c4940  0  skeleton: 277-byte recompute-derived-transforms; omitted

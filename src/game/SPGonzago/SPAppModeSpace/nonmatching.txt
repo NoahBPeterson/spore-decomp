@@ -1,12 +1,8 @@
 # va  diff-bytes  reason
 00fd9d00 24 InputManager mode test: complete and equivalence PASSes (399 valid, 100% coverage); cl factors the second comparison into `sete` instead of the original's shared `mov eax,1` tail. flags /O2 /MD /Gy /TP /arch:SSE
 00fd9d90 13 universe-context graphics refresh: complete and equivalence WEAK (400 valid, no mismatch, 16% coverage); the else-block is laid out before the final return instead of after it. flags /O2 /MD /Gy /TP /arch:SSE
-00fd9f70 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 628 bytes - cAppModeSpace::OnMouseUp not reconstructed.
 00fda530 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 172 bytes - cAppModeSpace::SetPlanetTimeOnFirstEntry not reconstructed.
-00fda750 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 489 bytes - space-mode helper not reconstructed.
-00fdaa90 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 165 bytes - cAppModeSpace::Write not reconstructed.
 00fdab40 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 162 bytes - space-mode helper not reconstructed.
-00fdabf0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 492 bytes - space-mode helper not reconstructed.
 00fdade0 370 FUN_00fdade0: size 735 vs 742; equiv UNSUPPORTED (only 0/400 inputs valid, fault(read)=400) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00fdb0c0 223 FUN_00fdb0c0: size 360 vs 320; equiv WEAK (400 valid, coverage 16.7% < 60%) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00fdb230 53 FUN_00fdb230: size 68 vs 68; equiv FAIL (eax is caller-saved; function is void, original happens to leave `out` in eax, ours leaves `begin`; benign) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
@@ -18,7 +14,6 @@
 00fdbf90 198 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) space achievement sweep; the empire item walk, the property keys and the inventory add are unresolved so the nested key tests collapse; equiv UNSUPPORTED (unresolved property and inventory services) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00fdc150 119 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) space-game shutdown; the space teardown, starmap reset, handler posts and cursor restores are unresolved; equiv UNSUPPORTED (unresolved teardown services) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00fdc240 110 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) new-game planet load; the planet view creation, the model view switch and the star record selection are unresolved; equiv UNSUPPORTED (unresolved planet services) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-00fdc340 33 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) space grid update; the cell enumeration, the per-cell distance test and the overlay ring draw are unresolved so the two loops collapse to single calls; equiv UNSUPPORTED (unresolved grid services) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00fdc520 252 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) mode mouse-down; the local input forward, the input manager, the starmap drag tests and the player/camera chain are unresolved so the two button arms collapse; equiv UNSUPPORTED (unresolved input and camera services) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00fdc710 36 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) load-to-planet transition; the planet key, the model view and the transition message post are unresolved; equiv UNSUPPORTED (unresolved transition services) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00fdc800 100 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) editor-to-planet transition; the planet view creation, the message post and the three context arms are unresolved; equiv UNSUPPORTED (unresolved transition services) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

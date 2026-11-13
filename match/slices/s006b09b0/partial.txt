@@ -1,1 +1,2 @@
 # Incomplete / skeleton.
+006b09b0  -  stub: placeholder body (ours 14 bytes, retail 453 bytes); needs real source. Was noted as complete: UNSUPPORTED: equiv cannot bind the symbol (definition carries __declspec(noinline), which the marker parser reads as the name); retail body is a lock cmpxchg8b CAS loop over a 64-bit handle slot that cannot be emitted portably (no __asm), so only a forwarding stub is emitted

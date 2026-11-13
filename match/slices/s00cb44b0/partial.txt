@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00cb46f0  -  stub: placeholder body (ours 95 bytes, retail 599 bytes); needs real source: an earlier, fuller draft is in match/slices/s00cb44b0/s00cb44b0.cpp (left behind by the migration); start from it. Was noted as complete: 
+00cb4d40  -  stub: placeholder body (ours 3 bytes, retail 769 bytes); needs real source; match/slices/s00cb44b0/s00cb44b0.cpp mentions this address and may hold an earlier draft. Was noted as complete: 

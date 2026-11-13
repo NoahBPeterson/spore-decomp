@@ -1,4 +1,3 @@
-00900410  399  StylesheetFactory::CreateResource: complete; no EH/unwind frame now; register allocation, frame size (+11) and strcmp-loop alignment differ; difftest WEAK (no mismatch)
 00900720  105  XmlReader::FindAttribute: complete; 8-bit compare-loop shape differs (cl emitted a 4-byte-wide strcmp-style loop)
 00900800  185  XmlReader::ReadString: complete; cl assigns this to ebp and the text pointer to ebx (swapped from the original), re-encoding the whole body; difftest PASS
 00900900  82   wstring->stack-allocator append: complete; signed allocator-space check + return value; difftest PASS

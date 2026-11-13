@@ -1,1 +1,2 @@
 # Incomplete / skeleton.
+006fea30  -  stub: placeholder body (ours 1 bytes, retail 520 bytes); needs real source: an earlier, fuller draft is in match/slices/s006fe430/s006fe430.cpp (left behind by the migration); start from it. Was noted as complete: `anonymous namespace'::GenerateVertexShader; complete: per-fragment flag/register scan (0x20 entries, OR of the +0x38/+0x3c words, AddFragmentDeclarations when +0x40 or the uniform string is set, sampler slots from +0x41/+0x42 capped at 8), the Input/Current/Output/Fill struct assembly chain, the pe

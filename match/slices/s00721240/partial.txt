@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+007222f0  -  stub: placeholder body (ours 3 bytes, retail 282 bytes); needs real source: an earlier, fuller draft is in match/slices/s00721240/s00721240.cpp (left behind by the migration); start from it. Was noted as complete: Insert34Vec: complete; equivalence WEAK (273 valid, no mismatch, 59.5% coverage; grow path not fully reachable under the emulator heap); grow-branch layout/register picks differ (280 vs 282)

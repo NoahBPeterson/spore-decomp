@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00729290  -  stub: placeholder body (ours 6 bytes, retail 111 bytes); needs real source: an earlier, fuller draft is in match/slices/s00728c90/s00728c90.cpp (left behind by the migration); start from it. Was noted as complete: Complete __thiscall member UVJob::Run plus its __cdecl adjustor thunk (defined separately at 0x7292f0): retail VA 0x729290 spans 111 bytes (member 0x729290-0x7292ed ends `ret 4`, then the thunk at 0x7292f0), so the bound region can never equal the 93-byte compiled member; even the member alone is 3 

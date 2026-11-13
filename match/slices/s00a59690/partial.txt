@@ -2,3 +2,4 @@
 # All 34 VAs in this slice are reconstructed and compile: 9 are byte-exact (manifest.txt)
 # and the remaining 25 are complete with their equivalence status recorded in
 # nonmatching.txt.
+00a59690  -  stub: placeholder body (ours 72 bytes, retail 562 bytes); needs real source: an earlier, fuller draft is in match/slices/s00a59690/s00a59690.cpp (left behind by the migration); start from it. Was noted as complete: UNSUP  coll-class registration; 562B of class_new/class_addmethod/class_addlist calls

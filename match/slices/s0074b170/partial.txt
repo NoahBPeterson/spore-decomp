@@ -1,0 +1,2 @@
+0074b390  -  stub: placeholder body (ours 1 bytes, retail 254 bytes); needs real source. Was noted as complete: complete eastl::partial_sort<cOccluder*>; temp staged on stack not xmm, regalloc differs
+0074c020  -  stub: placeholder body (ours 1 bytes, retail 334 bytes); needs real source. Was noted as complete: complete eastl::vector<Vertex3D>::insert(pos,val); prologue shrink-wrap/regalloc differs

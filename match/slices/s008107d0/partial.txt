@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00811330  -  stub: placeholder body (ours 5 bytes, retail 604 bytes); needs real source: an earlier, fuller draft is in match/slices/s008107d0/s008107d0.cpp (left behind by the migration); start from it. Was noted as complete: place_it: bool return restored; the slow path still builds its inline vector and rect min/max in a different order, and retail takes the arg in edx with a bare `ret` (fastcall-like) while ours is __thiscall with `ret 4`, so esp after return is +8 vs retail +4 (665 vs 604 bytes); flags /O2 /MD /Gy /E

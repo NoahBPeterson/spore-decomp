@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00dcc440  -  stub: placeholder body (ours 33 bytes, retail 374 bytes); needs real source: an earlier, fuller draft is in match/slices/s00dcb8e0/s00dcb8e0.cpp (left behind by the migration); start from it. Was noted as complete: city-selection scan abbreviated (world/noun state opaque); 33 vs 374 bytes

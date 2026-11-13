@@ -64,7 +64,6 @@
 00ba7bd0 55 complete source; HashTableCtl::Reset, NOT byte-exact (56 vs 78 bytes); equiv PASS flags: /O2 /MD /Gy /EHsc /TP
 00ba7c20 50 complete source; LoadAndRegisterPropertyList, NOT byte-exact (296 vs 306 bytes; body approximate); equiv UNSUPPORTED (fake-arity) flags: /O2 /MD /Gy /EHsc /TP
 00ba7dc0 285 complete source; ModelWorldCheatExecute, NOT byte-exact (285 vs 579 bytes; body approximate); equiv UNSUPPORTED (ecx-only ABI) flags: /O2 /MD /Gy /EHsc /TP
-00ba8010 51 complete source; GetPropertyTriple, NOT byte-exact (328 vs 334 bytes; body not reconstructed); equiv UNSUPPORTED (fake-arity) flags: /O2 /MD /Gy /EHsc /TP
 00ba81b0 76 complete source; HashOwner::Lookup, NOT byte-exact (103 vs 105 bytes); equiv FAIL (execution) flags: /O2 /MD /Gy /EHsc /TP
 00ba8550 47 complete source; eastl::make_heap<ElemC*>, NOT byte-exact (102 vs 99 bytes); equiv UNSUPPORTED (ElemCPromoteHeapHelper unresolved) flags: /O2 /MD /Gy /EHsc /TP
 00ba85c0 94 complete source; eastl::sort_heap<ElemC*>, NOT byte-exact (128 vs 144 bytes); equiv UNSUPPORTED (ElemCPromoteHeapHelper unresolved) flags: /O2 /MD /Gy /EHsc /TP

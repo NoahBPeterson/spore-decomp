@@ -1,2 +1,2 @@
 # Incomplete / skeleton.
-006fea30  407  `anonymous namespace'::GenerateVertexShader: stub only (the fragment scan, struct-string assembly and D3DXCompileShader orchestration are omitted).
+006fea30  407  `anonymous namespace'::GenerateVertexShader: stub only (the fragment scan, struct-string assembly and D3DXCompileShader orchestration are omitted). Earlier, fuller draft: match/slices/s006fe430/s006fe430.cpp (left behind by the migration); start from it.

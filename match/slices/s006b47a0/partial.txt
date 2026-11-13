@@ -1,1 +1,3 @@
 # va  reason
+006b51a0  -  stub: placeholder body (ours 15 bytes, retail 153 bytes); needs real source; match/slices/s006b47a0/s006b47a0_b.cpp mentions this address and may hold an earlier draft. Was noted as complete: complete; alloc_placeholder - eastl string local (16-byte string, inlined dtor) EH prologue/state scheduling differ. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: UNSUPPORTED]
+006b53a0  -  stub: placeholder body (ours 19 bytes, retail 134 bytes); needs real source; match/slices/s006b47a0/s006b47a0_b.cpp mentions this address and may hold an earlier draft. Was noted as complete: complete; basic_string concat helper - hidden return slot ctor plus EH frame (state/local flag) differ. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: UNSUPPORTED]

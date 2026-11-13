@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-004b33e0  n/a  per-block paint accumulation: skeleton only (return 0); heavy inlined EASTL paths omitted
-004b3660  n/a  prop lookup helper: skeleton only (return 0); inlined EASTL map paths omitted
-004b4470  n/a  ReadSkinThemeFromProp: summarized control flow; the large inlined EASTL/RNG/property body (skin colours, model enumeration) is not reproduced
-004b5080  n/a  hashtable find/insert (4-byte): skeleton only; inlined bucket/node code omitted
-004badd0  n/a  cSPEditorPaintTheme::Apply (2nd overload): skeleton only; large inlined body omitted
+004b33e0  n/a  per-block paint accumulation: skeleton only (return 0); heavy inlined EASTL paths omitted; Earlier, fuller draft: match/slices/s004b33e0/s004b33e0.cpp (left behind by the migration); start from it.
+004b3660  n/a  prop lookup helper: skeleton only (return 0); inlined EASTL map paths omitted; Earlier, fuller draft: match/slices/s004b33e0/s004b33e0.cpp (left behind by the migration); start from it.
+004b4470  n/a  ReadSkinThemeFromProp: summarized control flow; the large inlined EASTL/RNG/property body (skin colours, model enumeration) is not reproduced; match/slices/s004b3e10/s004b3e10.cpp mentions this address and may hold an earlier draft.
+004b5080  n/a  hashtable find/insert (4-byte): skeleton only; inlined bucket/node code omitted; match/slices/s004b4930/s004b4930.cpp mentions this address and may hold an earlier draft.
+004badd0  n/a  cSPEditorPaintTheme::Apply (2nd overload): skeleton only; large inlined body omitted; Earlier, fuller draft: match/slices/s004ba150/s004ba150.cpp (left behind by the migration); start from it.

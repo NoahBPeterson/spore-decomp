@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00e34e00  -  stub: placeholder body (ours 1 bytes, retail 146 bytes); needs real source; match/slices/s00e34290/s00e34290.cpp mentions this address and may hold an earlier draft. Was noted as complete: equiv UNSUPPORTED (0 of 400 inputs valid). asset swatch object filter: retail reads its argument from esi at entry (framereless callback) and chains IsObject/IsCreature/trait/trigger-manager/game-mode checks before FUN_00b69990, which no normal C++ calling convention expresses; our body only null-ch

@@ -1,11 +1,11 @@
 # va  diff-bytes  reason
 0068f350  204  try-lock two jobs + create JobLock: body omitted
-0068f4e0  91   mutex/semaphore member ctor helper: only field zeroing present
+0068f4e0  91   mutex/semaphore member ctor helper: only field zeroing present; Earlier, fuller draft: match/slices/s0068e670/s0068e670.cpp (left behind by the migration); start from it.
 0068f600  109  semaphore-list container ctor: mutex/semaphore init omitted
-006909e0  242  partial; eastl prof hashtable DoInsertValue left as skeleton
-00690b80  269  partial; eastl vector insert (waiting list 1) left as skeleton
-00690da0  445  partial; CreateJobThread left as stub
-00690f60  312  partial; FailJob approximated as stub
-006910a0  436  partial; FailNonRunnableJobs left as stub
-00691400  250  partial; eastl fixed_hash_set constructor left as stub
-00691500  188  partial; waiting-list fill left as stub
+006909e0  242  partial; eastl prof hashtable DoInsertValue left as skeleton; Earlier, fuller draft: match/slices/s006907e0/s006907e0.cpp (left behind by the migration); start from it.
+00690b80  269  partial; eastl vector insert (waiting list 1) left as skeleton; Earlier, fuller draft: match/slices/s006907e0/s006907e0.cpp (left behind by the migration); start from it.
+00690da0  445  partial; CreateJobThread left as stub; Earlier, fuller draft: match/slices/s006907e0/s006907e0.cpp (left behind by the migration); start from it.
+00690f60  312  partial; FailJob approximated as stub; Earlier, fuller draft: match/slices/s006907e0/s006907e0.cpp (left behind by the migration); start from it.
+006910a0  436  partial; FailNonRunnableJobs left as stub; Earlier, fuller draft: match/slices/s006907e0/s006907e0.cpp (left behind by the migration); start from it.
+00691400  250  partial; eastl fixed_hash_set constructor left as stub; Earlier, fuller draft: match/slices/s006907e0/s006907e0.cpp (left behind by the migration); start from it.
+00691500  188  partial; waiting-list fill left as stub; Earlier, fuller draft: match/slices/s006907e0/s006907e0.cpp (left behind by the migration); start from it.

@@ -1,3 +1,3 @@
 # va  diff-bytes  reason
-005ea8f0  -  vector copy-constructor helper: skeleton (EASTL omitted)
-005eae50  -  rbtree lower_bound/insert helper: skeleton (EASTL omitted)
+005ea8f0  -  vector copy-constructor helper: skeleton (EASTL omitted); Earlier, fuller draft: match/slices/s005ea3d0/s005ea3d0.cpp (left behind by the migration); start from it.
+005eae50  -  rbtree lower_bound/insert helper: skeleton (EASTL omitted); Earlier, fuller draft: match/slices/s005ea3d0/s005ea3d0.cpp (left behind by the migration); start from it.

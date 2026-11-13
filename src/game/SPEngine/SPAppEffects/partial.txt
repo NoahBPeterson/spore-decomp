@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-007cdcd0  172  `anonymous namespace'::UpdateFromGroundCoverConfig: stub.
+007cdcd0  172  `anonymous namespace'::UpdateFromGroundCoverConfig: stub. Earlier, fuller draft: match/slices/s007cd6d0/s007cd6d0.cpp (left behind by the migration); start from it.
 007cdee0  262  vector/matrix transform helper: stub; original scales a 3-vector by a matrix row block and adds a translation when bit 2 of the object flags is set.
-007cdff0  1288 float animation update helper: stub; original integrates a float over time against a limit and steps an animation state machine.
+007cdff0  1288 float animation update helper: stub; original integrates a float over time against a limit and steps an animation state machine. Earlier, fuller draft: match/slices/s007cd6d0/s007cd6d0.cpp (left behind by the migration); start from it.

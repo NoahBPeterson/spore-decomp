@@ -1,6 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00d52cb0 76 Complete heap-sift/adjust (parent loop + comparator) but cl scheduled it differently (hoisted parent, register roles). flags: /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
-00d52e90 1 nonmatching: large posse UI dispatch; body stubbed (1 vs 1172 bytes). difftest FAIL 5/5 (esp after return +0xc vs +0x4); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00d53330 33 register assignment (n/i in esi/edi) and base reload differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00d533c0 16 nonmatching: ReloadTuning property-enumeration logic incomplete; 25 vs 206 bytes. difftest UNSUPPORTED (unresolved PropertyEnum::set); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00d53490 1 nonmatching: RemovePosseMember; body stubbed (5 vs 470 bytes). difftest UNSUPPORTED (ambiguous _SP_NounManager 00b3d300/00b5b6c0); flags /O2 /MD /Gy /EHsc /TP /arch:SSE

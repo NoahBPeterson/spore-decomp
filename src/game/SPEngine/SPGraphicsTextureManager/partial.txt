@@ -1,13 +1,13 @@
 # va  diff-bytes  reason
 007aabb0  978  PARTIAL texture-raster factory: format switch + async job dispatch skeleton only.
-007aafc0  206  PARTIAL StallFinishBackgroundLoad: EH job-wait path skeleton only.
-007ab2f0  341  PARTIAL ~cTextureManager: EH + refcount teardown skeleton only.
-007ab460  390  PARTIAL Shutdown: full teardown path skeleton only.
-007ab730  298  PARTIAL RegisterArenaContents: arena export iteration skeleton only.
-007ab860  480  PARTIAL cTextureAsyncInfo::Setup: async job setup skeleton only.
-007aba40  153  PARTIAL cLoadQueue::Update: drain-queue skeleton only.
-007abae0  151  PARTIAL cLoadQueue::Schedule: enqueue skeleton only.
-007acbb0  467  PARTIAL cTextureManager::GetTexture (EH map lookup + sync/async load) skeleton only.
-007acd90  174  PARTIAL cTextureManager::StallUntilLoaded (EH) skeleton only.
+007aafc0  206  PARTIAL StallFinishBackgroundLoad: EH job-wait path skeleton only. Earlier, fuller draft: match/slices/s007aabb0/s007aabb0.cpp (left behind by the migration); start from it.
+007ab2f0  341  PARTIAL ~cTextureManager: EH + refcount teardown skeleton only. match/slices/s007aabb0/s007aabb0.cpp mentions this address and may hold an earlier draft.
+007ab460  390  PARTIAL Shutdown: full teardown path skeleton only. match/slices/s007aabb0/s007aabb0.cpp mentions this address and may hold an earlier draft.
+007ab730  298  PARTIAL RegisterArenaContents: arena export iteration skeleton only. match/slices/s007aabb0/s007aabb0.cpp mentions this address and may hold an earlier draft.
+007ab860  480  PARTIAL cTextureAsyncInfo::Setup: async job setup skeleton only. match/slices/s007aabb0/s007aabb0.cpp mentions this address and may hold an earlier draft.
+007aba40  153  PARTIAL cLoadQueue::Update: drain-queue skeleton only. match/slices/s007aabb0/s007aabb0.cpp mentions this address and may hold an earlier draft.
+007abae0  151  PARTIAL cLoadQueue::Schedule: enqueue skeleton only. match/slices/s007aabb0/s007aabb0.cpp mentions this address and may hold an earlier draft.
+007acbb0  467  PARTIAL cTextureManager::GetTexture (EH map lookup + sync/async load) skeleton only. Earlier, fuller draft: match/slices/s007acbb0/s007acbb0.cpp (left behind by the migration); start from it.
+007acd90  174  PARTIAL cTextureManager::StallUntilLoaded (EH) skeleton only. Earlier, fuller draft: match/slices/s007acbb0/s007acbb0.cpp (left behind by the migration); start from it.
 00833af0  -  hashtable find/insert wrapper: translation incomplete (helpers modelled opaquely) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00833ba0  -  UI::Image texture loader: 1105-byte body stubbed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00833ba0  -  UI::Image texture loader: 1105-byte body stubbed flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; Earlier, fuller draft: match/slices/s008337d0/s008337d0.cpp (left behind by the migration); start from it.

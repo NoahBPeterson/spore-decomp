@@ -17,7 +17,6 @@
 # sequences in most cases); the remaining byte differences are MSVC /O2 instruction
 # scheduling of the second constructor argument load and reloc-rendering artifacts.
 
-00a59690  x_coll_setup        UNSUP  coll-class registration; 562B of class_new/class_addmethod/class_addlist calls
 00a598d0  FUN_00a598d0        UNSUP  ANDs the three coll-registration sub-bootstraps
 00a598f0  FUN_00a598f0        UNSUP  pdint constructor (pd_new + outlet_new + floatinlet_new)
 00a59940  FUN_00a59940        PASS   bang handler: outlet count guard + outlet_float fan-out

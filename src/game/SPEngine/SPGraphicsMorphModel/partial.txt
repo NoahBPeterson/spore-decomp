@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-00759ff0  324  cMorphDrawImpl helper: stub
-0075a140  278  helper: stub
-0075a260  433  cMorphDrawImpl::Dispatch: stub
+00759ff0  324  cMorphDrawImpl helper: stub; Earlier, fuller draft: match/slices/s00759540/s00759540.cpp (left behind by the migration); start from it.
+0075a140  278  helper: stub; Earlier, fuller draft: match/slices/s00759540/s00759540.cpp (left behind by the migration); start from it.
+0075a260  433  cMorphDrawImpl::Dispatch: stub; Earlier, fuller draft: match/slices/s00759540/s00759540.cpp (left behind by the migration); start from it.

@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00d0c170  -  stub: placeholder body (ours 3 bytes, retail 1079 bytes); needs real source; match/slices/s00d0c010/s00d0c010.cpp mentions this address and may hold an earlier draft. Was noted as complete: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1079 bytes - cTribeToolView::UpdateRotationSound (tribe animation/sound dispatch), body not reconstructed.

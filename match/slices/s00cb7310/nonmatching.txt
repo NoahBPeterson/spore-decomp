@@ -1,4 +1,1 @@
-00cb7310 991 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 991 bytes - flak projectile helper not reconstructed.
-00cb76f0 762 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 762 bytes - flak projectile helper not reconstructed.
 00cb79f0 122 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 122 bytes - cFlakProjectile constructor: chain is known (cGameData base ctor, sub-object ctor on +0x34, float fields 0x508/0x50c/0x510 plus 0x51c zeroed, byte 0x514 cleared, pointer 0x518 nulled and five vtable stores for the MI bases), but the vtable store sequence only comes out of the real class hierarchy.
-00cb7ce0 358 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 358 bytes - ISimulatorSerializable::Read not reconstructed.

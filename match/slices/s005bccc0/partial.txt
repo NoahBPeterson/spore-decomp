@@ -1,0 +1,1 @@
+005bccc0  -  stub: placeholder body (ours 1 bytes, retail 2400 bytes); needs real source: an earlier, fuller draft is in match/slices/s005bccc0/s005bccc0.cpp (left behind by the migration); start from it. Was noted as complete: cSPEditorManipulationStackingSimple::DoOnMouseMove; complete (all calls in order), /O2 SSE scheduling and register allocation differ

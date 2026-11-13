@@ -1,4 +1,2 @@
 00c57570 110 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 110 bytes - WriteSTLSequence<tItemInfo> instantiation not reconstructed.
 00c575e0 174 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 174 bytes - multi-delivery helper not reconstructed.
-00c57ad0 546 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 546 bytes - multi-delivery helper not reconstructed.
-00c58600 365 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 365 bytes - multi-delivery helper not reconstructed.

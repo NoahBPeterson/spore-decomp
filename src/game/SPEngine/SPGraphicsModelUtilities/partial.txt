@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-007555d0  563  cGameModelWriteJob::CacheGameModelToDiskJob_KDTree; skeleton only
+007555d0  563  cGameModelWriteJob::CacheGameModelToDiskJob_KDTree; skeleton only; Earlier, fuller draft: match/slices/s007553c0/s007553c0.cpp (left behind by the migration); start from it.

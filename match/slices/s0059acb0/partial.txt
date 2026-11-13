@@ -1,0 +1,1 @@
+0059b0f0  -  stub: placeholder body (ours 3 bytes, retail 503 bytes); needs real source: an earlier, fuller draft is in match/slices/s0059acb0/s0059acb0.cpp (left behind by the migration); start from it. Was noted as complete: complete target-position/ground clamp with model-world raycast; stack temp construction differs; equiv PASS (315 valid inputs, 100% coverage)

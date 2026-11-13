@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
 004c2100  0  partial: vector swap fallback (element-wise) path omitted flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
-004c2740  0  partial: vector::operator= skeleton flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
-004c29c0  0  partial: basic_string<wchar_t,256>::set_capacity skeleton flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
-004c2ad0  0  partial: wide-buffer heap swap skeleton flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+004c2740  0  partial: vector::operator= skeleton flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast; match/slices/s004c2100/s004c2100.cpp mentions this address and may hold an earlier draft.
+004c29c0  0  partial: basic_string<wchar_t,256>::set_capacity skeleton flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast; match/slices/s004c2100/s004c2100.cpp mentions this address and may hold an earlier draft.
+004c2ad0  0  partial: wide-buffer heap swap skeleton flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast; match/slices/s004c2100/s004c2100.cpp mentions this address and may hold an earlier draft.

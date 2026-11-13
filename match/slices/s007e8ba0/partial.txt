@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+007e9450  -  stub: placeholder body (ours 1 bytes, retail 1453 bytes); needs real source. Was noted as complete: cAppSystem::Shutdown complete (every teardown block, global call, vtable slot and the +0x188 WStr/GetSystemPath writer reproduced); ours 1468B vs orig 1453B, frame 0x21c vs 0x214, and MSVC keeps mEffectsManager/mEffectsParser in ebx/edi across the block where the original re-loads them; equiv UNSUPP

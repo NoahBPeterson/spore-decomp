@@ -1,1 +1,2 @@
 # va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+004a92c0  -  stub: placeholder body (ours 5 bytes, retail 838 bytes); needs real source; match/slices/s004a89e0/s004a89e0.cpp mentions this address and may hold an earlier draft. Was noted as complete: HavokAlignedRoutine: complete source (three Vector4 rows built from the 3x3 input into an hkRot, then hkRot::Assign to param_2); equiv PASS 100.0% cov (400 valid) [/Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast]

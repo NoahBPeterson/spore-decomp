@@ -1,17 +1,17 @@
 # <va>  <diff-bytes>  <reason>
-00f26ef0  n/a      incomplete: cVarListSerializer over 0x38 array + tail jmp not reconstructed flags: /O2 /MD /Gy /TP
-00f27010  n/a      incomplete: cVarListSerializer over 0x534 array + tail jmp not reconstructed flags: /O2 /MD /Gy /TP
-00f270f0  n/a      incomplete: 0x238 stride marker loop not reconstructed flags: /O2 /MD /Gy /TP
-00f27170  n/a      incomplete: ReadInt32 length/clamp loop not reconstructed flags: /O2 /MD /Gy /TP
-00f27200  n/a      incomplete: pointer-vector serialize loop not reconstructed flags: /O2 /MD /Gy /TP
-00f27430  n/a      incomplete: big cVarListSerializer property loop not reconstructed flags: /O2 /MD /Gy /TP
-00f27670  n/a      incomplete: PropertyManager/eastl-string query path not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE
-00f27730  n/a      incomplete: same as 00f27670, result compared against 0xc flags: /O2 /MD /Gy /TP /arch:SSE
-00f277f0  n/a      incomplete: PropertyManager + GetUInt(0x1ea08337) range check not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE
-00f27990  n/a      incomplete: large scenario update function not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE
-00f27d80  n/a      incomplete: PlanetModel/Variant property set not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE
-00f27e00  n/a      incomplete: SP::GetSaveArea serialize + ObjectTemplateDB not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE
-00f27ee0  n/a      incomplete: cVarListSerializer over 0x27e8 array + tail jmp not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE
-00f28380  n/a      incomplete: ConvertToString16 + cVarListSerializer path not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE
-00f28480  n/a      incomplete: same as 00f28380 with a different type tag flags: /O2 /MD /Gy /TP /arch:SSE
-00f28580  n/a      incomplete: same as 00f28380 with a different type tag flags: /O2 /MD /Gy /TP /arch:SSE
+00f26ef0  n/a      incomplete: cVarListSerializer over 0x38 array + tail jmp not reconstructed flags: /O2 /MD /Gy /TP; match/slices/s00f25a40/s00f25a40.cpp mentions this address and may hold an earlier draft.
+00f27010  n/a      incomplete: cVarListSerializer over 0x534 array + tail jmp not reconstructed flags: /O2 /MD /Gy /TP; match/slices/s00f25a40/s00f25a40.cpp mentions this address and may hold an earlier draft.
+00f270f0  n/a      incomplete: 0x238 stride marker loop not reconstructed flags: /O2 /MD /Gy /TP; match/slices/s00f25a40/s00f25a40.cpp mentions this address and may hold an earlier draft.
+00f27170  n/a      incomplete: ReadInt32 length/clamp loop not reconstructed flags: /O2 /MD /Gy /TP; match/slices/s00f25a40/s00f25a40.cpp mentions this address and may hold an earlier draft.
+00f27200  n/a      incomplete: pointer-vector serialize loop not reconstructed flags: /O2 /MD /Gy /TP; match/slices/s00f25a40/s00f25a40.cpp mentions this address and may hold an earlier draft.
+00f27430  n/a      incomplete: big cVarListSerializer property loop not reconstructed flags: /O2 /MD /Gy /TP; match/slices/s00f25a40/s00f25a40.cpp mentions this address and may hold an earlier draft.
+00f27670  n/a      incomplete: PropertyManager/eastl-string query path not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE; match/slices/s00f27670/s00f27670.cpp mentions this address and may hold an earlier draft.
+00f27730  n/a      incomplete: same as 00f27670, result compared against 0xc flags: /O2 /MD /Gy /TP /arch:SSE; match/slices/s00f27670/s00f27670.cpp mentions this address and may hold an earlier draft.
+00f277f0  n/a      incomplete: PropertyManager + GetUInt(0x1ea08337) range check not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE; match/slices/s00f27670/s00f27670.cpp mentions this address and may hold an earlier draft.
+00f27990  n/a      incomplete: large scenario update function not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE; match/slices/s00f27670/s00f27670.cpp mentions this address and may hold an earlier draft.
+00f27d80  n/a      incomplete: PlanetModel/Variant property set not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE; match/slices/s00f27670/s00f27670.cpp mentions this address and may hold an earlier draft.
+00f27e00  n/a      incomplete: SP::GetSaveArea serialize + ObjectTemplateDB not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE; match/slices/s00f27670/s00f27670.cpp mentions this address and may hold an earlier draft.
+00f27ee0  n/a      incomplete: cVarListSerializer over 0x27e8 array + tail jmp not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE; match/slices/s00f27670/s00f27670.cpp mentions this address and may hold an earlier draft.
+00f28380  n/a      incomplete: ConvertToString16 + cVarListSerializer path not reconstructed flags: /O2 /MD /Gy /TP /arch:SSE; match/slices/s00f27670/s00f27670.cpp mentions this address and may hold an earlier draft.
+00f28480  n/a      incomplete: same as 00f28380 with a different type tag flags: /O2 /MD /Gy /TP /arch:SSE; match/slices/s00f27670/s00f27670.cpp mentions this address and may hold an earlier draft.
+00f28580  n/a      incomplete: same as 00f28380 with a different type tag flags: /O2 /MD /Gy /TP /arch:SSE; match/slices/s00f27670/s00f27670.cpp mentions this address and may hold an earlier draft.

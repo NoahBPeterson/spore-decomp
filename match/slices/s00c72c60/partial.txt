@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00c737a0  -  stub: placeholder body (ours 36 bytes, retail 925 bytes); needs real source. Was noted as complete: large load fn: 925 bytes of inlined module code, body left as a stub

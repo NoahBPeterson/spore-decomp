@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005b1cd0  -  stub: placeholder body (ours 1 bytes, retail 344 bytes); needs real source: an earlier, fuller draft is in match/slices/s005b0f80/s005b0f80.cpp (left behind by the migration); start from it. Was noted as complete: complete: FUN_005b1cd0(out,a,b,t) free cdecl — dot = a.b with term order ((a[1]*b[1]+a[3]*b[3])+a[2]*b[2])+a[0]*b[0]; if dot>0 componentwise out = a+(b-a)*t else out = a+(a+b)*(-t); original has a 32-byte stack frame ours lacks; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; equiv FAIL 5/5 valid (eax ret

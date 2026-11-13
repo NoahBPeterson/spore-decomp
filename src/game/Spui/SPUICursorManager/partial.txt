@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 008019f0 -  approximate property-database reads (subobject/variant layout unknown)
-00802050 -  AddCursor: map insert tail approximated, node fields not written
+00802050 -  AddCursor: map insert tail approximated, node fields not written; match/slices/s008019f0/s008019f0.cpp mentions this address and may hold an earlier draft.
 00802160 -  AddStandardCursors drives the partial AddCursor

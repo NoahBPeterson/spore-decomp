@@ -11,8 +11,6 @@
 00da74e0 35 FUN_00da74e0 (/O2 /MD /Gy /TP /arch:SSE /fp:fast): complete reconstruction (ours 72 vs 77); the original computes the bool argument as `test al,al; sete al; movzx ecx,al`, keeps the masked flag in eax (`mov eax,[esi+0x1c8]; and eax,M; xor ecx,ecx; or eax,ecx; jne`) and passes that masked value to ClearAll; ours uses `sete cl` and `test [mem],M` + `push 0`
 00da9160
 00da9220
-00da9390
-00da94c0
 00da9600 414 5/5 valid inputs mismatched (execution); SP::TRIBE_AREA_INTRUDERS_Decide; vtable-walk intruder scan, speculative FUN_00c8f470 SetStimuli arg ABI + register tie (self/iterator regs) (463 vs 500 bytes)
 00da9800 258 5/5 valid inputs mismatched (execution); citizen proximity predicate; x87 vs SSE float-compare ordering (fcompi) and thiscall GetTribe position getter reconstruction (302 vs 246 bytes)
 00da9900 46 5/5 valid inputs mismatched (execution, fault in LookupB fake); tribe layout-mgr lookup; thiscall CreateLayoutManager/LookupB arg plumbing + float compare (88 vs 80 bytes; card size includes next function at 0xda9950)

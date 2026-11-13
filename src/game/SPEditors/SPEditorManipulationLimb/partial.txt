@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-005aed80  1079  SP::cSPEditorManipulationLimb::PickOptimalPointOnLine: not translated
+005aed80  1079  SP::cSPEditorManipulationLimb::PickOptimalPointOnLine: not translated; Earlier, fuller draft: match/slices/s005ae870/s005ae870.cpp (left behind by the migration); start from it.

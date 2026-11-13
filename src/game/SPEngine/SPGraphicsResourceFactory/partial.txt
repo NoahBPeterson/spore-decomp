@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00767ee0  n/a  WriteResourceRaster: register-heavy mip/face event loop only structurally modelled
+00767ee0  n/a  WriteResourceRaster: register-heavy mip/face event loop only structurally modelled; match/slices/s00767ee0/s00767ee0.cpp mentions this address and may hold an earlier draft.

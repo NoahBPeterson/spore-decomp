@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+008f3a80  -  stub: placeholder body (ours 3 bytes, retail 444 bytes); needs real source: an earlier, fuller draft is in match/slices/s008f3530/s008f3530.cpp (left behind by the migration); start from it. Was noted as complete: CSSTokenReader::MatchEscape; complete reconstruction, hex-escape/erase codegen differs
+008f3c40  -  stub: placeholder body (ours 8 bytes, retail 209 bytes); needs real source: an earlier, fuller draft is in match/slices/s008f3530/s008f3530.cpp (left behind by the migration); start from it. Was noted as complete: CSSTokenReader::MatchIdent; complete reconstruction, shared push-block layout differs

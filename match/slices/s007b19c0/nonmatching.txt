@@ -6,6 +6,4 @@
 007b2270  143  complete; 32bpp row blit, pixel-by-pixel 4-byte copy. Original keeps the row pointers in ecx/esi and walks the pixel index in eax; MSVC gives us pointer-walking with a countdown, so the void_hides_eax leftover (a dead pointer) differs. callerdeps 007b2270 eax -> SAFE (the only caller ignores it).
 007b2320   81  complete; 8bpp row blit. Memory/pool state matches; the only mismatch is the void_hides_eax leftover (original ends with eax = x+w, ours with a row pointer). callerdeps 007b2320 eax -> SAFE.
 007b2380  569  complete; per-face mip blit + image write; loop/register allocation differs. equiv WEAK (247 valid inputs, 3.2% coverage)
-007b2600  107  complete; spherical angles + length. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast (inline x87 fsqrt, _CIacos/_CIasin).
-007b26a0  320  SP::cThumbnailManager::SetupThumbnailRTTs - complete; vtable/RTT setup; equiv WEAK (104 valid inputs)
 007b2890   61  destructor: original has an EH frame (vptr-restore protection); our body compiles without it

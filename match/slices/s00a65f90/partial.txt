@@ -1,0 +1,1 @@
+00a66300  -  stub: placeholder body (ours 41 bytes, retail 220 bytes); needs real source; match/slices/s00a65f90/s00a65f90.cpp mentions this address and may hold an earlier draft. Was noted as complete: InstanceManager::AddInstance: SEH-framed pool allocation + map insert; not emitted as a symbol of similar size ; difftest UNSUPPORTED (0/400 valid inputs)

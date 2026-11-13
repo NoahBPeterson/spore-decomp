@@ -5,5 +5,4 @@
 007f2600 874 VarMap::LoadProgram - blob deserialization reconstructed from the decompile's field permutation and cursor logic; instruction selection differs
 007f2960 92 ArithReadThing - read length-prefixed blob; reconstruction matches the original's calls and arguments but register allocation differs
 007f2a70 1296 VMContext::Execute - 0x21-op bytecode VM; the original uses a jump table (0x7f3048) with per-op inlined push/pop, ours is a switch
-007f31e0 286 IMEProxy::SetupDefaultFonts - style-manager / font setup reconstructed from the decompile; temporary layout differs
 007f3320 92 IMEProxy::Shutdown - secondary-object release through virtual calls; ours is a few bytes larger

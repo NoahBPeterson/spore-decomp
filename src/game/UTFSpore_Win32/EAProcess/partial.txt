@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00935e60 283 EA::Process::OpenFile(wchar_t*): eastl::basic_string + dynamic ShellExecuteW reconstruction not completed
+00935e60 283 EA::Process::OpenFile(wchar_t*): eastl::basic_string + dynamic ShellExecuteW reconstruction not completed; Earlier, fuller draft: match/slices/s009350f0/s009350f0.cpp (left behind by the migration); start from it.

@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-007dfed0  -  FUN_007dfed0; skeleton only
-007e0110  -  FUN_007e0110 MapDescription ctor; skeleton only
-007e01a0  -  FUN_007e01a0; skeleton only
+007dfed0  -  FUN_007dfed0; skeleton only; match/slices/s007df780/s007df780.cpp mentions this address and may hold an earlier draft.
+007e0110  -  FUN_007e0110 MapDescription ctor; skeleton only; match/slices/s007df780/s007df780.cpp mentions this address and may hold an earlier draft.
+007e01a0  -  FUN_007e01a0; skeleton only; match/slices/s007df780/s007df780.cpp mentions this address and may hold an earlier draft.

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ba8010  -  stub: placeholder body (ours 57 bytes, retail 334 bytes); needs real source: an earlier, fuller draft is in match/slices/s00ba7720/s00ba7720.cpp (left behind by the migration); start from it. Was noted as complete: complete source; GetPropertyTriple, NOT byte-exact (328 vs 334 bytes; body not reconstructed); equiv UNSUPPORTED (fake-arity)

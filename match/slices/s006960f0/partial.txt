@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+006964c0  -  stub: placeholder body (ours 6 bytes, retail 1069 bytes); needs real source: an earlier, fuller draft is in match/slices/s006960f0/s006960f0.cpp (left behind by the migration); start from it. Was noted as complete: SP::cLocaleManager::Init (1072B ours vs 1069B target): frame is 0x140 vs the target's 0x148 (two 4-byte gaps around the `tmp` object) and the per-call EH-state stores take a different form, so the exception-handling frame shape differs

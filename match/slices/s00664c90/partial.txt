@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00665410  -  stub: placeholder body (ours 37 bytes, retail 908 bytes); needs real source: an earlier, fuller draft is in match/slices/s00664c90/s00664c90.cpp (left behind by the migration); start from it. Was noted as complete: cSPUIFeedListCategory::Refresh: complete; GetProp(0x4e5892eb) -> propRef vtable+0x24 key 0x744717c7 type 9; propRef null / subprop fail / type!=9 / value<=0 take the single-item fallback, value>0 runs both directory loops (array1 +0xc8/+0xcc, array2 +0xb4/+0xb8, stride 0x70) then exits; auth compare

@@ -1,1 +1,2 @@
 # <va>  <diff-bytes>  <reason>
+0051fb90  -  stub: placeholder body (ours 5 bytes, retail 1404 bytes); needs real source: an earlier, fuller draft is in match/slices/s0051fb90/s0051fb90.cpp (left behind by the migration); start from it. Was noted as complete: flags /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE /GS- /fp:fast. Complete: switch (kind) over the nSPSkinner packed-element remap. case 3 -> result = *v2. case 5 -> result = Normalize(Cross(faceNormal(idx), elem->mat.yAxis)). cases 6/default -> result = (*v2) * elem->mat. case 7 -> result = Normalize((skinne

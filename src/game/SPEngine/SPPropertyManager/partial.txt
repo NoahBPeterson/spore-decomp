@@ -1,20 +1,20 @@
 # va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
 006a3330  163  CreateResource: stub of the EH operator-new path and vtable calls; wrong receiver/indices
-006a3ac0  270  cPropertyListCommand::Execute: stubbed body
-006a3c30  147  cPropertyListCommand::OnEndParse: stubbed body
+006a3ac0  270  cPropertyListCommand::Execute: stubbed body; Earlier, fuller draft: match/slices/s006a32a0/s006a32a0.cpp (left behind by the migration); start from it.
+006a3c30  147  cPropertyListCommand::OnEndParse: stubbed body; Earlier, fuller draft: match/slices/s006a32a0/s006a32a0.cpp (left behind by the migration); start from it.
 006a3d50  6  feedback-event find: real body; 125 vs 119. Only gap is the false path: retail sibling-calls `mOwner.s10(key)` (`pop esi; add esp,4; mov edx,[edx+0x28]; jmp edx`) while cl 15.00 emits `push key; call edx; pop esi; pop ecx; ret 4` (SCO refused once a stack temp's address is passed to FindSlot). Two zero-store bytes also scheduled around the `push` differently.
-006a3dd0  -  property apply helper: stubbed body
+006a3dd0  -  property apply helper: stubbed body; Earlier, fuller draft: match/slices/s006a32a0/s006a32a0.cpp (left behind by the migration); start from it.
 006a3f40  73  string-range ctor: approximate (RangeInitialize/DoInsertValue call shapes wrong)
 006a4190  142  EvalString+FNV hash helper: stub
-006a4240  111  hashtable lookup: stub returning false
-006a42d0  113  hashtable lookup: stub returning false
+006a4240  111  hashtable lookup: stub returning false; Earlier, fuller draft: match/slices/s006a32a0/s006a32a0.cpp (left behind by the migration); start from it.
+006a42d0  113  hashtable lookup: stub returning false; Earlier, fuller draft: match/slices/s006a32a0/s006a32a0.cpp (left behind by the migration); start from it.
 006a43b0  119  hashtable erase-by-key: approximate node walk
-006a4450  107  rbtree erase-node: stub
+006a4450  107  rbtree erase-node: stub; Earlier, fuller draft: match/slices/s006a32a0/s006a32a0.cpp (left behind by the migration); start from it.
 006a58a0  182  message handler: server/vtable calls stubbed
 006a59f0  135  message handler: stubbed body
 006a5a90  204  batch message handler: approximate
 006a5b80  178  batch message handler: approximate
-006a5c50  206  hashtable DoInsertValue: stubbed body
+006a5c50  206  hashtable DoInsertValue: stubbed body; Earlier, fuller draft: match/slices/s006a5690/s006a5690.cpp (left behind by the migration); start from it.
 006a5fd0  180  name lookup with temp string: approximate
 006a60b0  227  property lookup/apply: approximate
 006a61c0  87  map insert: approximate

@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+004f3c50  -  stub: placeholder body (ours 7 bytes, retail 266 bytes); needs real source: an earlier, fuller draft is in match/slices/s004f3c50/s004f3c50.cpp (left behind by the migration); start from it. Was noted as complete: complete: frame 0x34 vs 0x24 (our named 16-byte Bits128 temp gets an ebp slot; the original builds both Bits128 call temporaries in the arg area with no slot) so every [ebp-N] shifts by 0x10 and size is 289 vs 266; logic identical. flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (400 va

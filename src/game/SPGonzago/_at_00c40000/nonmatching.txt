@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00c4bdc0 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 212 bytes - disease-effect application body not reconstructed. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00c4db00 25 ContainsKey: complete; equiv PASS (100% coverage).  residual is induction-variable layout only: the original folds the base into `sub eax,[ecx+0x200]` and then reloads it as the loop pointer, whereas ours materialises the base in a register before the sub.  24 source variants all reproduce ours. flags: /O2 /MD /Gy /EHsc /TP
 00c4dd10 351 Complete cSPMission message dispatch; residual is call/stack scheduling and register allocation. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c4deb0 26 Complete cMissionChangeArchetype GetTagString; residual is tail-call merging vs separate mov/jmp body. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

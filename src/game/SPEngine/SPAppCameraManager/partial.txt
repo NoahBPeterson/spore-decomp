@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-007c6750  -  cCameraCheat::Execute; large arg-script command path not reproduced (stub: our body is a tiny fraction of the original size; equiv lookup rejects >5x size gap, UNSUPPORTED)
-007c6b80  -  LoadControllers; property-group + EASTL map walk not reproduced (stub: our body is a tiny fraction of the original size; equiv lookup rejects >5x size gap, UNSUPPORTED)
+007c6750  -  cCameraCheat::Execute; large arg-script command path not reproduced (stub: our body is a tiny fraction of the original size; equiv lookup rejects >5x size gap, UNSUPPORTED); match/slices/s007c6750/s007c6750.cpp mentions this address and may hold an earlier draft.
+007c6b80  -  LoadControllers; property-group + EASTL map walk not reproduced (stub: our body is a tiny fraction of the original size; equiv lookup rejects >5x size gap, UNSUPPORTED); match/slices/s007c6750/s007c6750.cpp mentions this address and may hold an earlier draft.
 007c70b0  -  cCameraManager::Init; command registration + EASTL assigns not reproduced (stub: our body is a tiny fraction of the original size; equiv lookup rejects >5x size gap, UNSUPPORTED)
-007c7270  -  RegisterController; hashtable update path not reproduced (stub: our body is a tiny fraction of the original size; equiv lookup rejects >5x size gap, UNSUPPORTED)
+007c7270  -  RegisterController; hashtable update path not reproduced (stub: our body is a tiny fraction of the original size; equiv lookup rejects >5x size gap, UNSUPPORTED); Earlier, fuller draft: match/slices/s007c6750/s007c6750.cpp (left behind by the migration); start from it.

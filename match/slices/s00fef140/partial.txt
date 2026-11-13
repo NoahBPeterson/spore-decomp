@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00fefcd0  -  stub: placeholder body (ours 67 bytes, retail 404 bytes); needs real source: an earlier, fuller draft is in match/slices/s00fef140/s00fef140.cpp (left behind by the migration); start from it. Was noted as complete: FUN_00fefcd0 (mission-requisite free/serialize helper): best-effort skeleton only; the 4-arg body walks a 0x60-byte-record list and calls several unmodelled helpers, so call shapes and the record stride are approximate (size 67 vs 404).  equiv FAIL: 5/5 valid inputs mismatched (ours faults on unmapp

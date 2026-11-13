@@ -1,10 +1,2 @@
-00c4bc00 151 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 151 bytes - eradicate-target predicate; needs the star manager / relationship manager calls plus the mission object's avatar and target-list fields, body not reconstructed.
-00c4bca0 81 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 81 bytes - float helper over the mission object; body not reconstructed.
-00c4bdc0 212 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 212 bytes - disease-effect application body not reconstructed.
-00c4bf80 261 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 261 bytes - cSPMissionBiosphere::GetPlanetCount walks the planet list; body not reconstructed.
 00c4c090 152 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 152 bytes - biosphere helper body not reconstructed.
-00c4c130 378 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 378 bytes - biosphere event handler body not reconstructed.
-00c4c4b0 350 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 350 bytes - cSPMissionBiosphere::UpdateEventLog body not reconstructed.
 00c4c690 244 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 244 bytes - biosphere helper body not reconstructed.
-00c4c790 179 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 179 bytes - biosphere helper body not reconstructed.
-00c4c910 630 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 630 bytes - biosphere mission update body not reconstructed.

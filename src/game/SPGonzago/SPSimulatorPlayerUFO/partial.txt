@@ -2,4 +2,4 @@
 00fff8e0  789  GetStarRecordUnderMouse: ray/record search simplified to skeleton flags: /O2 /MD /Gy /EHsc /TP
 00fffdd0  560  FUN_00fffdd0: effects/quaternion/string path simplified flags: /O2 /MD /Gy /EHsc /TP
 01000000  996  AutoAddSpiceToCargo: inventory/trading path simplified flags: /O2 /MD /Gy /EHsc /TP
-01000520  316  OnPlanetMoveDone: post-planet steps simplified flags: /O2 /MD /Gy /EHsc /TP
+01000520  316  OnPlanetMoveDone: post-planet steps simplified flags: /O2 /MD /Gy /EHsc /TP; Earlier, fuller draft: match/slices/s00fff8e0/s00fff8e0.cpp (left behind by the migration); start from it.

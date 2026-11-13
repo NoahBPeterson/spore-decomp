@@ -1,8 +1,5 @@
 00c46ab0 208 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 208 bytes - mission setup body not reconstructed.
-00c46b80 671 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 671 bytes - mission bookkeeping body not reconstructed.
-00c46e20 532 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 532 bytes - GiveOnAcceptItems body not reconstructed.
 00c473f0 76 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 72 bytes - ExportSpecies: retail derives the payload from the incoming argument slot while my version needs a callee-saved this; register/frame shape differs.
 00c47440 112 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 15 bytes - StartCompletedFeedbackTimer matches except the null device argument, which retail materialises as xor eax,eax / push eax while MSVC emits push 0.
 00c474b0 350 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 350 bytes - GetPlanetRecordFromTargetType body not reconstructed.
 00c47680 491 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 486 bytes - destructor body not reconstructed.
-00c478b0 349 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 349 bytes - Update body not reconstructed.

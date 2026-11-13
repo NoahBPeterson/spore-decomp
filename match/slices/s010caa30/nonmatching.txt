@@ -1,6 +1,5 @@
 010caa30 972 UNSUPPORTED difftest: orig-abi-broken(fake) child-shape vtable unemulatable; codegen diff (x87 transform loop unrolled differently, size 941 vs 890)
 010cadb0 249 UNSUPPORTED difftest: orig-abi-broken(fake) child-shape vtable unemulatable; codegen diff (size 192 vs 134)
-010cae40 960 UNSUPPORTED difftest: orig-abi-broken(fake) child-shape vtable unemulatable; body stubbed (size 22 vs 961)
 010cb250 547 FAIL difftest: ours faults where orig succeeds (child-shape vtable layout differs); size 530 vs 563
 010cb490 46 UNSUPPORTED difftest: fake-arity/fault(read); cl CSEs the stream reload the original re-issues; size 53 vs 55
 010cb4d0 333 UNSUPPORTED difftest: fault(read) child getAabb unemulatable; size 327 vs 346

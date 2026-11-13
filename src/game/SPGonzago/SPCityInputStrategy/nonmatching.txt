@@ -20,7 +20,6 @@
 00cf2010 111 Complete eaSTL partition/swap helper over AutoRefCount array; residual is loop layout and register allocation.
 00cf20b0 276 Complete eaSTL insertion/partition driver; residual is inlined vector growth and float-arg shuffle ordering.
 00cf2330 77 Complete free-camera toggle; residual is eastl::wstring local lifetime and call scheduling.
-00cf2520 81 Complete cCityInputStrategy::EndSelection; residual is long float-selection logic and inlined vector operations.
 00cf28f0 184 Complete cCityInputStrategy::SetDefaultPickPriorities; residual is inlined eaSTL vector<>::push_back growth code.
 00cf2b70 138 Complete pick-priority registrar (variant B); residual is inlined eaSTL vector<>::push_back growth code.
 00cf2d60 142 Complete pick-priority registrar (variant C); residual is inlined eaSTL vector<>::push_back growth code.

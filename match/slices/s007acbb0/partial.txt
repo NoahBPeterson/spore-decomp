@@ -1,3 +1,5 @@
 # No partial (incomplete) functions remain in slice s007acbb0.
 # All 8 batch VAs are COMPLETE; see nonmatching.txt for the complete-but-not-byte-exact
 # rows. There are no byte-exact rows in this slice (see manifest.txt header).
+007acbb0  -  stub: placeholder body (ours 1 bytes, retail 467 bytes); needs real source: an earlier, fuller draft is in match/slices/s007acbb0/s007acbb0.cpp (left behind by the migration); start from it. Was noted as complete: COMPLETE cTextureManager::GetTexture (EH map lookup + sync/async load); full lookup/load path reproduced. Residual diff is EH state-byte values and inline-EH-functor placement outside the symbol extent. [equiv: UNSUPPORTED unresolved ?GetManager@@YAPAXXZ in harness].
+007acd90  -  stub: placeholder body (ours 1 bytes, retail 174 bytes); needs real source: an earlier, fuller draft is in match/slices/s007acbb0/s007acbb0.cpp (left behind by the migration); start from it. Was noted as complete: COMPLETE cTextureManager::StallUntilLoaded (EH); waits on the resource lock and EH-unwinds the guard. [equiv: FAIL 5/66 valid, harness execution fault in the simulated resource manager].

@@ -3,10 +3,10 @@
 005f95a0  -  unnamed 212-byte helper: skeleton only
 005f96c0  -  unnamed 155-byte helper: skeleton only
 005f97c0  -  unnamed 350-byte helper: skeleton only
-005fa8d0  -  cImportExport::CreateExportThumb: only the guard/skeleton is reconstructed; the sprite/texture and file pipeline inside is not reproduced.
+005fa8d0  -  cImportExport::CreateExportThumb: only the guard/skeleton is reconstructed; the sprite/texture and file pipeline inside is not reproduced. Earlier, fuller draft: match/slices/s005fa8d0/s005fa8d0.cpp (left behind by the migration); start from it.
 005faec0  201  cImportExport::RemoveExportThumb: main key-map erase path written, but the Guid->Key / Key->Guid map erase calls are omitted.
-005fafb0  -  cImportExport::ImportFromFolder: only the signature and a false return are present; the folder-scan loop is not reconstructed.
-005fc9f0  -  cImportExport::ScanFolder: only the signature / a false return are reconstructed; the folder scan logic is not reproduced.
-005fd0a0  -  cImportExport::ScanForImports: only a zero-return skeleton is reconstructed; the bucket walk over the eight folder paths is not reproduced.
-005fd260  -  import deserializer: stub.
-005fd880  -  cImportExport::Init (candidate): stub.
+005fafb0  -  cImportExport::ImportFromFolder: only the signature and a false return are present; the folder-scan loop is not reconstructed. Earlier, fuller draft: match/slices/s005fa8d0/s005fa8d0.cpp (left behind by the migration); start from it.
+005fc9f0  -  cImportExport::ScanFolder: only the signature / a false return are reconstructed; the folder scan logic is not reproduced. match/slices/s005fc330/s005fc330.cpp mentions this address and may hold an earlier draft.
+005fd0a0  -  cImportExport::ScanForImports: only a zero-return skeleton is reconstructed; the bucket walk over the eight folder paths is not reproduced. match/slices/s005fc330/s005fc330.cpp mentions this address and may hold an earlier draft.
+005fd260  -  import deserializer: stub. Earlier, fuller draft: match/slices/s005fd260/s005fd260.cpp (left behind by the migration); start from it.
+005fd880  -  cImportExport::Init (candidate): stub. Earlier, fuller draft: match/slices/s005fd260/s005fd260.cpp (left behind by the migration); start from it.

@@ -1,1 +1,2 @@
 # va  reason
+00d52e90  -  stub: placeholder body (ours 1 bytes, retail 1172 bytes); needs real source; match/slices/s00d52e90/s00d52e90.cpp mentions this address and may hold an earlier draft. Was noted as complete: nonmatching: large posse UI dispatch; body stubbed (1 vs 1172 bytes). difftest FAIL 5/5 (esp after return +0xc vs +0x4); flags /O2 /MD /Gy /EHsc /TP /arch:SSE

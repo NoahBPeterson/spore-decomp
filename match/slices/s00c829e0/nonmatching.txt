@@ -1,3 +1,1 @@
-00c829e0 872 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 872 bytes - low-LOD planet cell update not reconstructed.
 00c82d50 326 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 326 bytes - background planet rebuild helper not reconstructed (stubbed with an explicit side effect so callers keep the call).
-00c82f80 198 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 198 bytes - cell grid rebuild helper not reconstructed.

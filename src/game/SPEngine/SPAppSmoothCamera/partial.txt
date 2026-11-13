@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 007dc340  -  cSmoothCameraController::HandleRequest; request switch reproduced, two zoom cases stubbed
-007dc7b0  -  ViewerOrientationFromPositionAndLookAt; basis/quaternion build stubbed
-007dcc30  -  ViewerPositionAndOrientationFromDistanceAlongCurve; spline sampling stubbed
+007dc7b0  -  ViewerOrientationFromPositionAndLookAt; basis/quaternion build stubbed; Earlier, fuller draft: match/slices/s007dc1b0/s007dc1b0.cpp (left behind by the migration); start from it.
+007dcc30  -  ViewerPositionAndOrientationFromDistanceAlongCurve; spline sampling stubbed; Earlier, fuller draft: match/slices/s007dc1b0/s007dc1b0.cpp (left behind by the migration); start from it.

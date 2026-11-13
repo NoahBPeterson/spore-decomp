@@ -5,7 +5,6 @@
 0092cc90 117 case-insensitive wstrstr; register/loop shape differs
 0092ce80 82 _ecvt result widened to UTF-16; local buffer layout differs
 0092cef0 82 _fcvt result widened to UTF-16; local buffer layout differs
-0092cf60 128 unsigned-64 -> string; base arrives in eax (static-helper convention) not reproduced
 0092cff0 85 base-10 signed formatter wrapper; static-helper eax convention differs
 0092d040 15 base-N unsigned formatter wrapper; static-helper eax convention differs
 0092d060 135 signed formatter to UTF-16; static-helper eax convention differs

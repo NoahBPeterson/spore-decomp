@@ -1,19 +1,19 @@
 # va  diff-bytes  reason
-006be820  0  partial: hashtable node erase skeleton
-006be890  0  partial: rbtree lower_bound skeleton
-006be8d0  0  partial: hashtable rehash skeleton
-006be980  0  partial: heap sift-down skeleton
-006beb60  0  partial: PFIndexModifiable::Write serialization omitted
-006bf030  0  partial: rbtree/hash helper skeleton
-006bf370  0  partial: PFIndexModifiable constructor skeleton
-006bf430  0  partial: hash_map destructor skeleton
-006bf4e0  0  partial: GetFileInfo skeleton
-006bf520  0  partial: RemoveFile skeleton
-006bf5d0  0  partial: quick_sort_impl skeleton
-006bf660  0  partial: PFIndexModifiable::Read skeleton
-006bf7d0  0  partial: hashtable find-or-insert skeleton
-006bf8f0  0  partial: rbtree DoInsertValue skeleton
-006bfa00  0  partial: GetFiles skeleton
-006bfac0  0  partial: GetAllFiles skeleton
-006bfbc0  0  partial: PutFileInfo skeleton
-006bfc20  0  partial: rbtree insert wrapper skeleton
+006be820  0  partial: hashtable node erase skeleton; Earlier, fuller draft: match/slices/s006bde30/s006bde30.cpp (left behind by the migration); start from it.
+006be890  0  partial: rbtree lower_bound skeleton; Earlier, fuller draft: match/slices/s006bde30/s006bde30.cpp (left behind by the migration); start from it.
+006be8d0  0  partial: hashtable rehash skeleton; Earlier, fuller draft: match/slices/s006bde30/s006bde30.cpp (left behind by the migration); start from it.
+006be980  0  partial: heap sift-down skeleton; Earlier, fuller draft: match/slices/s006bde30/s006bde30.cpp (left behind by the migration); start from it.
+006beb60  0  partial: PFIndexModifiable::Write serialization omitted; match/slices/s006bde30/s006bde30.cpp mentions this address and may hold an earlier draft.
+006bf030  0  partial: rbtree/hash helper skeleton; Earlier, fuller draft: match/slices/s006bede0/s006bede0.cpp (left behind by the migration); start from it.
+006bf370  0  partial: PFIndexModifiable constructor skeleton; Earlier, fuller draft: match/slices/s006bede0/s006bede0.cpp (left behind by the migration); start from it.
+006bf430  0  partial: hash_map destructor skeleton; Earlier, fuller draft: match/slices/s006bede0/s006bede0.cpp (left behind by the migration); start from it.
+006bf4e0  0  partial: GetFileInfo skeleton; Earlier, fuller draft: match/slices/s006bede0/s006bede0.cpp (left behind by the migration); start from it.
+006bf520  0  partial: RemoveFile skeleton; Earlier, fuller draft: match/slices/s006bede0/s006bede0.cpp (left behind by the migration); start from it.
+006bf5d0  0  partial: quick_sort_impl skeleton; Earlier, fuller draft: match/slices/s006bede0/s006bede0.cpp (left behind by the migration); start from it.
+006bf660  0  partial: PFIndexModifiable::Read skeleton; Earlier, fuller draft: match/slices/s006bede0/s006bede0.cpp (left behind by the migration); start from it.
+006bf7d0  0  partial: hashtable find-or-insert skeleton; Earlier, fuller draft: match/slices/s006bede0/s006bede0.cpp (left behind by the migration); start from it.
+006bf8f0  0  partial: rbtree DoInsertValue skeleton; Earlier, fuller draft: match/slices/s006bede0/s006bede0.cpp (left behind by the migration); start from it.
+006bfa00  0  partial: GetFiles skeleton; match/slices/s006bede0/s006bede0.cpp mentions this address and may hold an earlier draft.
+006bfac0  0  partial: GetAllFiles skeleton; Earlier, fuller draft: match/slices/s006bede0/s006bede0.cpp (left behind by the migration); start from it.
+006bfbc0  0  partial: PutFileInfo skeleton; Earlier, fuller draft: match/slices/s006bede0/s006bede0.cpp (left behind by the migration); start from it.
+006bfc20  0  partial: rbtree insert wrapper skeleton; match/slices/s006bede0/s006bede0.cpp mentions this address and may hold an earlier draft.

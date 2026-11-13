@@ -1,1 +1,2 @@
 # va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+0043e0f0  -  stub: placeholder body (ours 64 bytes, retail 437 bytes); needs real source. Was noted as complete: child-bone scan: full path reconstructed (world v68 count, v6c id fill into int[33], nested boneIds/mMorphHandles memId match). Residual is pure /Od stack-slot allocation: the original spills this/model/modelworld into extra shadow homes (frame 0xc0 vs 0xa8) around the v68/v6c vcalls, and the inner-

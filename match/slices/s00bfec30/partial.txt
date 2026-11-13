@@ -1,1 +1,3 @@
 # va  reason
+00bff2d0  -  stub: placeholder body (ours 1 bytes, retail 1038 bytes); needs real source; match/slices/s00bfec30/s00bfec30.cpp mentions this address and may hold an earlier draft. Was noted as complete: nonmatching: large mine-state dispatcher; only an out-of-line noinline declaration remains in the source (no definition), so the call sites keep their external call. chk cannot resolve the symbol (both target rows bind to the 00bff7a0 marker); difftest UNSUPPORTED (0/400 valid; 0/322 insns).
+00bff7a0  -  stub: placeholder body (ours 1 bytes, retail 816 bytes); needs real source. Was noted as complete: nonmatching: __fastcall per-tick mine update handler; stub only (1 byte) and not reconstructed. difftest FAIL 5/5 (memory pool @40010218: ffffffff vs 0).

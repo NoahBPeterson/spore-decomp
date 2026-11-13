@@ -16,5 +16,3 @@
 00cfa410 230 FUN_00cfa410 (/O2 /MD /Gy /TP /arch:SSE /fp:fast): 500B vs 511B, frame 0x44 vs 0x48; same calls and inlined Msg5 path but local slot assignment (esp+0xc vs esp+0x10) and register allocation (ebp temp) differ; equiv WEAK: 306 valid inputs, no observable mismatch, 17.5% coverage
 00cfa610 551 Strat::PreGameModeTransition (/O2 /MD /Gy /TP /arch:SSE /fp:fast): 835B vs 851B; same vtable calls, field writes and mode-tag compares, but original allocates this->edi / newMode->ebx with sub esp,0x10 while ours uses esi/ebp with sub esp,0xc, shifting every later instruction; equiv UNSUPPORTED: 397/400 inputs discarded (fake-arity disagreement on faked manager calls)
 00cfd3a0 1861 SP::cCivModeStrategy::HandleMessage: complete, all 21 message cases (190/190 calls, same targets/vcall slots/ids in order); block placement of the UnlockSea/Air body, register allocation and frame (0x78) layout differ
-00cfe160 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 1103 bytes - relation helper not reconstructed.
-00cfe5b0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 413 bytes - relation helper not reconstructed.

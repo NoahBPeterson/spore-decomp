@@ -1,1 +1,2 @@
 # Slice s00a59690 -- EA::Audio::Eapd: no partial/incomplete functions.
+00a59690  -  stub: placeholder body (ours 72 bytes, retail 562 bytes); needs real source: an earlier, fuller draft is in match/slices/s00a59690/s00a59690.cpp (left behind by the migration); start from it. Was noted as complete: UNSUP  coll-class registration; 562B of class_new/class_addmethod/class_addlist calls flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

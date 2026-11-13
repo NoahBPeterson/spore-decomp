@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ed9f10  -  stub: placeholder body (ours 78 bytes, retail 543 bytes); needs real source. Was noted as complete: complete; vtable/interface-heavy message helper (flags /O2 /MD /Gy /TP); equiv UNSUPPORTED ("original reads ecx at entry but our declaration passes nothing there")

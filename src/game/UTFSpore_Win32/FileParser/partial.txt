@@ -1,5 +1,5 @@
 # va  diff-bytes  reason (incomplete / approximated source)
 00840250  -    partial: cFileParser::~cFileParser; member teardown (hash_map/vector free) stubbed
 00840340  -    partial: cFileParser::ClearFilePaths; watcher-map iteration/reset stubbed
-00840420  -    partial: cFileParser::AddFilePath; path canonicalisation / dir-watch insert stubbed
+00840420  -    partial: cFileParser::AddFilePath; path canonicalisation / dir-watch insert stubbed; Earlier, fuller draft: match/slices/s00840250/s00840250.cpp (left behind by the migration); start from it.
 00840700  -    partial: cFileParser::cFileParser; hash_map ctor and vtable stores approximated

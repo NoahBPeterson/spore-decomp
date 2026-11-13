@@ -1,1 +1,2 @@
 # va  reason
+00582d70  -  stub: placeholder body (ours 1 bytes, retail 622 bytes); needs real source: an earlier, fuller draft is in match/slices/s00582250/s00582250.cpp (left behind by the migration); start from it. Was noted as complete: complete DestroyAnimatedCreature(eAnimatedCreatureType, bool, unsigned int): destroys the last/all/matching animated creature (GetCreaturePosition + xform message + RemoveCreature + erase/pop_back) and the type 0/2 single-creature teardown; size 625 vs 622; remaining diffs are /O2 loop register role

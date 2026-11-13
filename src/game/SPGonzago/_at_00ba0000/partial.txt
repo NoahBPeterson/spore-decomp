@@ -1,3 +1,4 @@
 # va  diff-bytes  reason
-00ba3350   138  erase-if over hash set: stubbed; predicate/erase loop omitted flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ba3350   138  erase-if over hash set: stubbed; predicate/erase loop omitted flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast; match/slices/s00ba2590/s00ba2590.cpp mentions this address and may hold an earlier draft.
 00ba33e0   353  read relationships: only the header ReadInt32 is present; per-record deserialisation omitted flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ba8010  -  stub: placeholder body (ours 57 bytes, retail 334 bytes); needs real source: an earlier, fuller draft is in match/slices/s00ba7720/s00ba7720.cpp (left behind by the migration); start from it. Was noted as complete: complete source; GetPropertyTriple, NOT byte-exact (328 vs 334 bytes; body not reconstructed); equiv UNSUPPORTED (fake-arity) flags: /O2 /MD /Gy /EHsc /TP

@@ -5,4 +5,3 @@
 00d652f0 50 FUN_00d652f0: object kept in ecx instead of esi; 60 vs 62 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00d65330 111 target selection: aim/world state opaque, loop abbreviated; 135 vs 459 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00d65850 5 symbol extent covers the following body too (388 bytes); 32 bytes emitted flags: /O2 /MD /Gy /TP /arch:SSE
-00d6f590 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 453 bytes - class-dance behaviour packet body not reconstructed; retail takes a stack arg, validates [arg] and [arg+4], frame 0x78, and drives cBehaviorActor stimuli (retail first prologue: mov eax,[esp+0x1c]; sub esp,0x78). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

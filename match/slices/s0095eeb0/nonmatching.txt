@@ -14,7 +14,6 @@
 0095fad0  69   Window::IsAncestorOf: complete; ancestor walk register schedule differs
 0095fb20  41   Window::Test30Slot48: complete; this-adjust mask differs
 0095fb60  41   Window::Test30Slot54: complete; this-adjust mask differs
-0095fcc0  19   Window::WalkChildren: complete; original homes the iterator on the arg-1 slot and caches the pre-call value in esi, cl15 routes the copy through ecx
 0095fd60  26   Window::SetA8: complete; event arg block order differs
 0095fe40  33   Window::SetArea: complete; float compare/set order differs
 0095fec0  54   Window::ResizeBy: complete; area composition order differs

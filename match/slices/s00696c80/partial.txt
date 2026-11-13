@@ -1,1 +1,2 @@
 # va  diff-bytes  reason (incomplete/approximate)
+00697710  -  stub: placeholder body (ours 3 bytes, retail 582 bytes); needs real source; match/slices/s00696c80/s00696c80.cpp mentions this address and may hold an earlier draft. Was noted as complete: SP::cLocaleManagerSetLocale; complete, 485B vs 582B -- SEH frame plus the original's LTCG custom-register ABI (takes the manager in ecx and a caller context in esi/ebx) are not reproduced; equiv: UNSUPPORTED (original reads ecx at entry but the manifest declaration passes nothing there -- custom/LTC

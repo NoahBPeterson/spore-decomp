@@ -7,15 +7,6 @@
 00d02440 259 world reader: stream vtable calls and the thiscall tree insert cannot be resolved by the harness (302 vs 291 bytes, 0 valid inputs)
 00d02570 217 script-side world writer: eastl::wstring temporaries are emitted as real calls instead of the inlined SSO copies (271 vs 342 bytes); 243 valid inputs, 11.5% coverage
 00d03b10 11 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 11 bytes - subtree release; only the hoisting of the node's sub-object address (lea before the child test instead of inside the loop) differs.
-00d03b80 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 186 bytes - GetPropertyListForPersonality body not reconstructed.
 00d051e0 26 vector erase-range; MSVC assigns this to ebx and arg2 to edi (original keeps this in edi, arg2 in ebx) and reorders the loop setup, same 93 bytes
 00d05560 63 map-key erase; MSVC assigns this to esi and end to edi (original keeps this in edi, end in esi); block layout of the p==end||key<p->key test differs, 100 vs 109 bytes
-00d058a0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 376 bytes - relationship helper not reconstructed.
-00d05a20 5 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 876 bytes - CalculateRelationshipAbsolute not reconstructed.
 00d05d90 5 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 656 bytes - RecordEvent sink not reconstructed.
-00d06030 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 517 bytes - relationship helper not reconstructed.
-00d06270 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 394 bytes - RecordFoughtEnemyEvent not reconstructed.
-00d06400 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 175 bytes - relationship helper not reconstructed.
-00d065a0 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 354 bytes - relationship helper not reconstructed.
-00d06710 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 419 bytes - helper not reconstructed.
-00d06920 3 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 289 bytes - cRelationshipManager::StartAlliance not reconstructed.

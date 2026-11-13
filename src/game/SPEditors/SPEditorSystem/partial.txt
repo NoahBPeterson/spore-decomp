@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00836bd0  -  partial: cSPUIXHTMLUTFResourceHandler::ProcessRequest - body summarised to a stub (property lookup + stream dispatch omitted)
+00836bd0  -  partial: cSPUIXHTMLUTFResourceHandler::ProcessRequest - body summarised to a stub (property lookup + stream dispatch omitted); Earlier, fuller draft: match/slices/s00836910/s00836910.cpp (left behind by the migration); start from it.

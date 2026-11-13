@@ -6,5 +6,4 @@
 00c73520 98 collect civ cities: correct now, stack slots and out-in-edi vs esi differ
 00c735e0 130 lower_bound lookup: structure present, size 137 vs 131, doubles as an insert probe
 00c73680 200 cPlanet dtor: vtable stores and member dtors present, size 281 vs 282
-00c737a0 912 large load fn: 925 bytes of inlined module code, body left as a stub
 00c73b60 201 rebuild tribe/city data: loop structure present, size 307 vs 294

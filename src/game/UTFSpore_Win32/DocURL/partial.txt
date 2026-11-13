@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 008e3a10  66   path-trim helper; original uses custom EBX register ABI; approximated
-008e3b90  24   ConvertURLToFilePath; parsing branches approximated
-008e3fa0  15   ResolveRelativeURL; URL assembly approximated
+008e3b90  24   ConvertURLToFilePath; parsing branches approximated; Earlier, fuller draft: match/slices/s008e2dd0/s008e2dd0.cpp (left behind by the migration); start from it.
+008e3fa0  15   ResolveRelativeURL; URL assembly approximated; Earlier, fuller draft: match/slices/s008e2dd0/s008e2dd0.cpp (left behind by the migration); start from it.

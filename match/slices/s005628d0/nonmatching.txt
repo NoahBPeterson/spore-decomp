@@ -1,9 +1,4 @@
 005628d0  675  complete; equiv WEAK (261 valid, 28.9% cov); /Od frame differs (nonmatching)
 00562b80  76  candidate-list assignment; all three calls are thiscall members (erase ecx=vec at +0x12c, 00565500/00562510 ecx=DB), so ecx no longer comes from a free-function call; /Od frame differs. [equiv: PASS 251 valid, 100% coverage; src PASS]
-00562c00  150  complete; equiv PASS (233 valid, 100% cov); /Od frame differs (inlined ConstraintCursor ctor + byte result slot)
 00562ca0  120  candidate filter path; same thiscall ecx fixes (erase/00565500/00562510) and now returns RandomizeFirstN(a,b) instead of true; /Od frame differs. [equiv: PASS 204 valid, 100% coverage; src PASS]
-00562de0  169  complete; equiv PASS (240 valid, 100% cov); /Od frame differs (inlined ConstraintCursor ctor + byte result slot)
-00562f50  312  complete; equiv WEAK (159 valid, 71% cov); /Od frame differs (0x60 frame, PodDeque temp)
-00563090  323  complete; equiv WEAK (222 valid, 18.7% cov); /Od frame differs
 005632d0  160  complete; equiv WEAK (148 valid, 75% cov); /Od slot order now matches; residual register allocation + bool-lowering differs
-00563370  366  complete; equiv PASS (400 valid, 100% cov); /Od frame differs (global init chains)

@@ -1,1 +1,2 @@
 # va diff reason
+007f31e0  -  stub: placeholder body (ours 1 bytes, retail 311 bytes); needs real source. Was noted as complete: IMEProxy::SetupDefaultFonts - style-manager / font setup reconstructed from the decompile; temporary layout differs

@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+0092c340  -  stub: placeholder body (ours 3 bytes, retail 464 bytes); needs real source. Was noted as complete: ?DecodeUnchecked@@YAHPAEI0@Z: structurally complete EA RefPack decoder (flags byte, 24/32-bit uncompressed size, four command classes with literal runs and back-references), 422 vs 464 bytes; the target's command-4 branch and the copy loops are scheduled differently, and the output pool at 0x4002000

@@ -1,1 +1,2 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2)
+007555d0  -  stub: placeholder body (ours 1 bytes, retail 563 bytes); needs real source: an earlier, fuller draft is in match/slices/s007553c0/s007553c0.cpp (left behind by the migration); start from it. Was noted as complete: CGMW::CacheGameModelToDiskJob_KDTree: complete; node/texture temp-vector gather/dedup uses a simplified list; equiv: WEAK (240/400 valid, 17.7% coverage)
