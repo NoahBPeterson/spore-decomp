@@ -2476,13 +2476,7 @@ BvStreamAgent* __fastcall FUN_010ceaf0(BvStreamAgent* self, int, int a, int b, i
     return self;
 }
 
-// @ 0x010ceb50
-void* FUN_010ceb50(int a, int b, int* c, int d)
-{
-    BvStreamAgent* p = (BvStreamAgent*)HKMEM->alloc(0x40, 0x1c);
-    *(unsigned short*)((char*)p + 4) = 0x40;
-    return FUN_010ceaf0(p, 0, a, b, c, d);
-}
+// The 0x010ceb50 factory is compiled with VC7.1 in _at_010c0000_bvtree_factory.cpp.
 
 // @ 0x010ceb90
 void __fastcall FUN_010ceb90(BvStreamAgent* self, int)
