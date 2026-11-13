@@ -445,9 +445,9 @@ cColor32* cPaintVarCtx::MapColor(cColor32* out, const Vector3* p)
 void cPaintVarCtx::ResetOffset()
 {
     Vector3 vMin;
-    Vector3 vMax;
+    Vector3 upper;
     cPaintVarEvalGrid* pEval = mpEval;
-    pEval->GetBounds(&vMin, &vMax);
+    pEval->GetBounds(&vMin, &upper);
     mOffset = vMin;
 }
 

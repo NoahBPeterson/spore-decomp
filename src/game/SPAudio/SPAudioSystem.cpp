@@ -107,6 +107,7 @@ struct HashTable {
     void  insert(Iterator* out, const void* value, uint32 extra);  // 0xa43bd0
     void  insertSymbol(Iterator* out, const void* value, bool flag); // 0xa26ce0
     Iterator erase(Iterator it);                      // 0xa443c0
+    Iterator* eraseTo(Iterator* out, Iterator it);     // 0xa443c0, explicit view of the native hidden result
     void     eraseVoid(Iterator it);                  // 0xa443c0
 };
 struct RefCounted {
@@ -2370,7 +2371,7 @@ void cSystem::FUN_00a44f70(int key)
     Iterator it;
     t.hashFind(&it, &key);
     if (it.mpNode != t.mpBucketArray[t.mnBucketCount]) {
-        it = t.erase(it);
+        t.eraseTo(&it, it);
     }
 }
 

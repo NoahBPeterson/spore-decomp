@@ -469,9 +469,10 @@ void cSPSimulatorWalkAround::ResetState()
 int cSPSimulatorWalkAround::FindPlantValue(int key)
 {
     int n = (int)((char*)mPlantObstacles.mpEnd - (char*)mPlantObstacles.mpBegin) >> 2;
+    int i = 0;
     if (n > 0) {
+        _ReadWriteBarrier();
         int* p = (int*)mPlantObstacles.mpBegin;
-        int i = 0;
         do {
             if (*p == key)
                 return ((int*)mPlants.mpBegin)[i];

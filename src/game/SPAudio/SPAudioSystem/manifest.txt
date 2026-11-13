@@ -21,3 +21,4 @@
 ../src/game/SPAudio/SPAudioSystem.cpp  ?ReadTuningValues@cSystemTuning@SP@@QAE_NPBUResourceKey@2@@Z  00a43a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/SPAudioSystem.cpp  ?SetListener@Eapd_s00a4_3d30@@QAEXPBUEapdGroupParam@@@Z  00a44230  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/SPAudioSystem.cpp  ?Set@Holder@@QAEXPAVRefC@@@Z  00a45cb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/SPAudioSystem.cpp  ?FUN_00a44f70@cSystem@@QAEXH@Z  00a44f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

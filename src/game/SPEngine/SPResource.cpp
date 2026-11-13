@@ -8,7 +8,8 @@
 // unnamed retail callees and globals (address in the comment)
 extern char sNullCache;            // 0x0152f7bc
 extern char sManualExplicitCache;  // 0x0152f7c0
-extern char sLRUCaches;            // 0x016032a8
+struct LRUCacheStorage { uint32_t words[0x150 / 4]; };
+extern LRUCacheStorage sLRUCaches[11]; // 0x016032a8, 11 cache slots of stride 0x150
 #include <intrin.h>
 #include "EA/Audio/IPrimitive.h"
 #include "EA/Thread/Mutex.h"
@@ -21,7 +22,7 @@ extern char sLRUCaches;            // 0x016032a8
 void  EASTL_allocator_deallocate(void* p);                          // 0x00f47380
 extern char sNullCache;            // 0x0152f7bc
 extern char sManualExplicitCache;  // 0x0152f7c0
-extern char sLRUCaches;            // 0x016032a8
+extern LRUCacheStorage sLRUCaches[11]; // 0x016032a8, 11 cache slots of stride 0x150
 struct CacheHolder { void** vtbl; };
 inline int CacheHolder_Find(CacheHolder* o, int id)
 {
@@ -250,16 +251,18 @@ void FUN_006abfa0(void* self)
 // @ 0x006ac040
 bool SetCachingType(int type, void* obj)
 {
-    if (*(void**)((char*)obj + 0x14) != 0)
+    struct ResourceCacheView { uint32_t prefix[5]; void* mpCache; };
+    if (static_cast<ResourceCacheView*>(obj)->mpCache != 0)
         return false;
-    if (type == 2) { *(void**)((char*)obj + 0x14) = &sNullCache; return true; }
-    if (type == 1) { *(void**)((char*)obj + 0x14) = &sManualExplicitCache; return true; }
-    if ((unsigned)(type - 3) <= 0xa) {
-        *(void**)((char*)obj + 0x14) = (char*)&sLRUCaches + (type - 3) * 0x150;
+    if (type == 2) { static_cast<ResourceCacheView*>(obj)->mpCache = &sNullCache; return true; }
+    if (type == 1) { static_cast<ResourceCacheView*>(obj)->mpCache = &sManualExplicitCache; return true; }
+    if (((unsigned)type - 3) <= 0xa) {
+        static_cast<ResourceCacheView*>(obj)->mpCache = &sLRUCaches[(unsigned)type - 3];
         return true;
     }
     if (type != 0)
         return false;
+    _ReadWriteBarrier();
     return true;
 }
 

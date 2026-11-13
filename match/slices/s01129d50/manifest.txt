@@ -4,3 +4,4 @@ slices/s01129d50/s01129d50.cpp  ?getSectionIndex@hkBinaryPackfileReader@@UAEHPBD
 slices/s01129d50/s01129d50.cpp  ?getContentsClassName@hkBinaryPackfileReader@@UAEPBDXZ  0112a990  /vc71 /O2 /MD /Gy /TP
 slices/s01129d50/s01129d50.cpp  ?loadFileHeader@hkBinaryPackfileReader@@QAE?AW4hkResult@@PAVhkStreamReader@@PAUhkPackfileHeader@@@Z  0112ac40  /vc71 /O2 /MD /Gy /TP
 slices/s01129d50/s01129d50.cpp  ?finishLoadedObject_hkDisableEntityCollisionFilter@@YAXPAX@Z  01129e10  /vc71 /O2 /MD /Gy /TP
+slices/s01129d50/s01129d50.cpp  ?isCollisionEnabled@hkConstrainedSystemFilter@@UBE?AVhkBool@@ABUhkShapeRayCastInput@@ABVhkShapeCollection@@I@Z  0112a300  /vc71 /O2 /MD /Gy /TP

@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-006ac040 4 SetCachingType: complete; final `return type==0` emitted as sete instead of branch to shared false epilogue
 006ac0a0 35 cache-type setter via vtable+0xc: complete; vtable call shape differs
 006ac0d0 34 cache-type getter: complete; division/compare schedule differs
 006ac440 17 8-byte element copy loop: complete; cl used sub/jne signed form instead of dec/test/ja (loop var/reg order)

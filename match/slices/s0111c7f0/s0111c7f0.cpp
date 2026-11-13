@@ -549,14 +549,17 @@ MoppChunk* MoppChunk::initFromParent(const MoppChunk* parent, const void* box, c
 // True when more than 2 levels remain: min(a - max(b-8, 0), a) > 2, a = c.shift(+0x24), b = d(+8).
 hkBool __stdcall hasSpareLevels(const void* unused, const void* c, const void* d)
 {
-	int t = at<int>(d, 8) - 8;
+	struct LevelInput { uint32_t prefix[9]; int mLevel; };
+	struct DepthInput { uint32_t prefix[2]; int mDepth; };
+	int t = static_cast<const DepthInput*>(d)->mDepth - 8;
 	if (t <= 0)
 		t = 0;
-	int level = at<int>(c, 0x24);
-	int remaining = level - t;
-	if (remaining > level)
-		remaining = level;
-	return hkBool(remaining > 2);
+	int remaining = static_cast<const LevelInput*>(c)->mLevel - t;
+	if (remaining > static_cast<const LevelInput*>(c)->mLevel)
+		remaining = static_cast<const LevelInput*>(c)->mLevel;
+	if (remaining > 2)
+		return hkBool(true);
+	return hkBool(false);
 }
 
 // @ 0x0111d450

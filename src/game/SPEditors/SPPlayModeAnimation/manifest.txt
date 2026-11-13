@@ -6,3 +6,4 @@
 ../src/game/SPEditors/SPPlayModeAnimation.cpp  ??_GcSPPlayModeAnimPanelInfo@@UAEPAXI@Z  0062ebb0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPPlayModeAnimation.cpp  ?NextAnimWindowSet@cSPPlayModeAnimation@SP@@QAEXXZ  0062ebe0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/SPPlayModeAnimation.cpp  ?PreviousAnimWindowSet@cSPPlayModeAnimation@SP@@QAEXXZ  0062ec30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPPlayModeAnimation.cpp  ?GetAnimCount@cSPPlayModeAnimation@@QAEHXZ  0062e4b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

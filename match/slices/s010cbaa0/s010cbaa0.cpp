@@ -533,7 +533,9 @@ void hkTypedBroadPhaseDispatcher::removePairs(hkTypedBroadPhaseHandlePair* delet
 {
 	for (int i = numDeletedPairs - 1; i >= 0; --i)
 	{
-		m_broadPhaseListeners[deletedPairs->m_a->m_type][deletedPairs->m_b->m_type]->removeCollisionPair(*deletedPairs);
+		const hkTypedBroadPhaseHandle* a = deletedPairs->m_a;
+		const hkTypedBroadPhaseHandle* b = deletedPairs->m_b;
+		m_broadPhaseListeners[a->m_type][b->m_type]->removeCollisionPair(*deletedPairs);
 		++deletedPairs;
 	}
 }
