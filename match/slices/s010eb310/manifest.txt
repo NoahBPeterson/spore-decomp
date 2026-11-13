@@ -11,3 +11,4 @@ slices/s010eb310/s010eb310.cpp  ?commitPotential@hkAgent3Bridge@@SAXPAUhkAgentEn
 slices/s010eb310/s010eb310.cpp  ?createZombie@hkAgent3Bridge@@SAXPAUhkAgentEntry@@PAXG@Z  010eba90  /vc71 /O2 /MD /Gy /TP
 slices/s010eb310/s010eb310.cpp  ?addCdBodyPair@hkSymmetricAgentFlipBodyCollector@@UAEXABVhkCdBody@@0@Z  010ebc50  /vc71 /O2 /MD /Gy /TP
 slices/s010eb310/s010eb310.cpp  ?addCdPoint@hkSymmetricAgentFlipCollector@@UAEXABUhkCdPoint@@@Z  010ebbb0  /vc71 /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ?addCdPoint@hkSymmetricAgentFlipCastCollector@@UAEXABUhkCdPoint@@@Z  010ebc00  /vc71 /O2 /MD /Gy /TP
