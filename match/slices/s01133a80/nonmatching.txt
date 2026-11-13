@@ -9,7 +9,6 @@
 01133f00 61 complete HeadList::FUN_01133f00: find-or-prepend entry (key entry[5]), returns the node base; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 362/400 100% cov.
 01133f80 19 complete FUN_01133f80: Alloc(0x10,0,0x10,0), zero three dwords, store the owner; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid (fault(fetch)).
 01133fc0 481 complete DecoderRegistry::DecoderFactory: query size, spacing, Alloc, init vtable + callbacks, optional block storage; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid (fault(fetch)) - object/vtable heavy.
-011341c0 28 complete FUN_011341c0: ctor - zero +0x10/+0x5c, init subobject at +0x60, reset the 0x16e6270 singleton, store its address; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov. [R32 active draft claim; native validation pending.]
 01134200 178 complete FUN_01134200: dst[0..15]=src[0..15]*scale chunked 16-wide do/while; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 164/400 valid 100% cov.
 01134260 103 complete FUN_01134260: aligned -> FUN_01134200 else scalar; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 312/400 100% cov (needs a non-tail call barrier so the depth-1 call trace matches).
 011342c0 294 complete FUN_011342c0: aligned -> dst += src*scale chunked 16-wide else scalar; real return type float* - original leaves eax on every path (aligned path returns the base dst, scalar path the walked pointer) so the void declaration failed the hidden-eax check; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 324/400 100% cov.
