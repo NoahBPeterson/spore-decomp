@@ -1066,13 +1066,14 @@ bool EA::ResourceMan::DatabasePackedFile::InternalSetPosition(long pos)
 // @ 0x008d88d0
 unsigned int EA::ResourceMan::DatabasePackedFile::InternalRead(void * dst, unsigned int size)
 {
-    if (mpMemoryLocation) {
+    void* base = mpMemoryLocation;
+    if (base) {
         unsigned pos = mnMemoryOffset;
         unsigned limit = mnMemorySize;
         unsigned n = size;
         if (pos + n > limit)
             n = limit - pos;
-        memcpy_pf(dst, (char*)(pos + (unsigned)mpMemoryLocation), n);
+        memcpy_pf(dst, (char*)(pos + (unsigned)base), n);
         mnMemoryOffset += n;
         return n;
     }

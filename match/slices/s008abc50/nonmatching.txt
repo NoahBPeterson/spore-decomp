@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 008abc50  799  complete; difftest UNSUPPORTED (no valid inputs: pool-limit). SetupGlobalHints with 12 real args + 2 phantom LTCG leading params (uninitialised eax). Body reconstructed from the dev source layout (blue-zone bubble sorts, TCB snap, StdHW/VW + SetupStemWeights/SetupInput tail calls); /O2 codegen differs throughout the sort loops.
 008abf90  80  complete; difftest UNSUPPORTED (all inputs discarded: import:longjmp). BlueShiftPix overflow handler; original tail-calls longjmp(buf,0x1101) so it has no ordinary epilogue (best candidate is a different symbol).
-008ac070  2  complete; difftest PASS (400/400, 100% cov). RoundToHalfGrid: only `add eax,-0x20` vs `sub eax,0x20` differs (compiler canonicalises the constant add).
 008ac0b0  77  complete; difftest FAIL (eax). blue-zone rounding mode reading the zone half-width at p+0x80/p+0x7e and the mask at p+0x74; boundary value differs.
 008ac100  141  complete; difftest FAIL (eax). fnt_Super45Round uses FixDiv by (p+0x74)>>14 then FixMul back; register differences + boundary value.
 008ac1a0  224  complete; difftest FAIL (execution). fnt_MovePoint returns the mark byte (eax = marks+idx, not void). Original re-reads the state pointer fields per branch and spills `delta` to a stack slot; /O2 keeps them in registers.

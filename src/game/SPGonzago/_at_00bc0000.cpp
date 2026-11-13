@@ -1898,6 +1898,8 @@ void  FUN_00542b80(void*, void*);                      // 0x00542b80 Variant::op
 int   FUN_0093aa70(void*, unsigned*, int, int);        // 0x0093aa70 EA::IO::WriteUint32
 void  FUN_00926640(void*);                             // 0x00926640 ~FixedAllocatorBase thunk
 char  FUN_00926650(void*, void*, unsigned);            // 0x00926650 FixedAllocatorBase::AddCore
+extern void (*g_0168B54C)(void*);                      // 0x0168b54c Gonzago class callback (FUN_00bca670)
+extern void (*g_0168B550)(void*);                      // 0x0168b550 Gonzago class callback (FUN_00bca6a0)
 void FUN_00bca670(void* p);                            // 0x00bca670
 void FUN_00bca6a0(void* p);                            // 0x00bca6a0
 void FUN_00bca6f0(void);                               // 0x00bca6f0
@@ -5674,8 +5676,8 @@ void FUN_00bca6a0(void* p)
 // @ 0x00bca6f0
 void FUN_00bca6f0(void)
 {
-    *(void**)0x168b54c = (void*)&FUN_00bca670;
-    *(void**)0x168b550 = (void*)&FUN_00bca6a0;
+    g_0168B54C = &FUN_00bca670;
+    g_0168B550 = &FUN_00bca6a0;
     FUN_00bc8fa0((void*)0x1590800);
     FUN_00bc8fa0((void*)0x1590888);
     FUN_00bc8fa0((void*)0x15906f0);

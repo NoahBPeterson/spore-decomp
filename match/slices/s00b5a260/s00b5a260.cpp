@@ -19,6 +19,7 @@
 //    +0x60  void** begin of the tracked-object list      +0x64  void** end
 //    +0x14c8  map head   +0x14cc  table pointer   +0x14d0  table count
 #include "types.h"
+#include <xmmintrin.h>
 
 typedef uint32_t u32;
 
@@ -188,7 +189,12 @@ void __thiscall HavokSystem::FUN_00b5a390()
             ((hkWorldObject*)wo)->removeReference();
             void* wo2 = DAT_0167ecd4;
             if (wo2 != 0) {
-                __declspec(align(16)) uint8_t buf;
+                // The dead SSE scratch makes cl keep its 16-byte-aligned frame for this
+                // function (and esp,-16), so the out-param byte lands at the top of the
+                // frame's last dword: retail reserves sub esp,0xc and passes esp+0x13.
+                __m128 sseScratch = _mm_setzero_ps();
+                (void)sseScratch;
+                uint8_t buf;
                 ((AccessorDummy*)*(void**)((uint8_t*)wo2 + 8))->FUN_01083110(&buf, wo2);
             }
             DAT_0167ecd4 = 0;

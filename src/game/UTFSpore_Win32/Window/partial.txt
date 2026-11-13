@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0095fc50  2  Window::FindChild: full body reconstructed (0xa-iteration loop: vtable +0x48 call, -4 adjustment, +0x38 parent walk to this, AllDescendantsAll(i==1) and vtable +0x4c notify). Only residual: cl emits `sub eax,4` for the -4 adjustment where retail has `add eax,-4` (2 bytes); source `r = (Window*)((int*)r - 1)` vs `add -4` is a cl15 instruction-selection tie in this loop shape (standalone pointer decrement does produce `add eax,-4`).
 0095fcc0  -  Window::WalkChildren: recursive child walk not reconstructed
 00960100  -  Window::TransformPoint: flag traversal + mMat transform not reproduced
 00960180  -  Window::ScreenToLocal: vtable +0xc8 call not reconstructed

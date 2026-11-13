@@ -36,3 +36,4 @@
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?DoInsertValue@Tbl2I@@QAE?AUInsertResult_s0055_2af0@@AB_KUTrueType@@@Z  00553750  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?Find@Tbl32F@@QAE?AUIterR@@ABI@Z  005538f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?CopyWStrings@@YAPAUWString@@PBU1@0PAU1@@Z  0084ab40  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetAuthorA@cAssetDirectory_s0054_dd30@Pollen@SP@@QAEXI_K@Z  0054e8c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

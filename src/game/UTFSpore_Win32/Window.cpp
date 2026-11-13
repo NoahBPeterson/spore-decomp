@@ -457,9 +457,14 @@ void Window::FindChild()
             Window* r = (Window*)(*(int(__thiscall**)(int, unsigned))((char*)*(void**)edi + 0x48))(edi, i);
             if (r == 0)
                 continue;
-            r = (Window*)((int*)r - 1);
-            if (r == 0)
+            // cl 15 emits `add eax,-4` only when the -1 element step is a standalone
+            // pointer pre-decrement whose result is tested while still int*-typed;
+            // `r = (Window*)((int*)r - 1)` canonicalises to `sub eax,4`.
+            int* q = (int*)r;
+            --q;
+            if (q == 0)
                 continue;
+            r = (Window*)q;
             while (r != 0 && r != this)
                 r = *(Window**)((char*)r + 0x38);
             if (r == 0)
