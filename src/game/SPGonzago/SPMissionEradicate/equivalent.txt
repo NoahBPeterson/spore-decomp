@@ -1,2 +1,1 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
-../src/game/SPGonzago/SPMissionEradicate.cpp  ?FUN_00c4ed50@@YIHPAX0@Z  00c4ed50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
