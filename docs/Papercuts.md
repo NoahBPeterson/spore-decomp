@@ -1214,3 +1214,76 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   `break` repeat the tiny `fld/pop/ret` epilogue per case like retail, while per-case `return` does not
   (0x00c0b380, 0x00c0b440); initial `1.0f` came from the named `_HK_REAL_ONE` global, not a literal.
   Fix idea: candidates for codegen.md 15/16 wave lists.
+- [s007a7d50 + SPTribe + SPMissionRaid, 2026-11-11 session] codegen — **the `_ftol2_sse` inline
+  spellings: the float must reach the `__asm` helper as an expression, and the scale wants a literal.**
+  Rounding form (`fstp dword` + `cvtss2si`): `inline int RoundToInt(float f) { __asm cvtss2si eax, f }`;
+  truncating form: same with `cvttss2si`. Rules learned: (1) call it as `RoundToInt(f * 255.0f)`. A named
+  product temp (`float t = f * k; RoundToInt(t)`) stores the temp at its source position and the convert
+  reads it later, so the spill does NOT sit beside the convert; inlining the product into the call put
+  SetStyleScale 13 -> 0 diff. (2) The scale operand wants a literal (`* 255.0f`), not an `extern const`
+  global: the literal's const-pool entry keeps retail's operand orientation (input in the register,
+  scale in memory); every `extern` spelling loaded the global into the register first (both sides are
+  relocated/masked, so either links). (3) Under `/arch:SSE`, a plain `(int)` of a float ALREADY IN MEMORY
+  inlines `cvttss2si` directly, while a float arriving in `st0` (call return) becomes a tail
+  `jmp __ftol2_sse` — read which before choosing a helper. Banked 0x007a82d0, 0x007a85e0, 0x00c5c310
+  (cvtss2si) and 0x00c8e6d0 (cvttss2si). Fix idea: fold into codegen.md next to the fistp-qword lever.
+- [SPMissionRaid 0x00c5c310, 2026-11-11 session] codegen — two smaller levers, both required for the
+  match: (1) a per-iteration `id = i + 4` whose retail store never changes is `idv = i + 4` evaluated
+  ONCE before the loop (hoisted `lea ebp,[edi+4]`, register store in the body); keeping `i + 4` in the
+  loop maintains a second IV retail never updates. (2) `RandomDouble` is a thiscall member on the
+  0x01601760 singleton; a free-function declaration drops the `mov ecx, imm32` and shifts every later
+  branch by 5 bytes — a wrong-convention callee shows up as a size delta long before equiv flags it.
+  Fix idea: both are codegen.md §16 candidates.
+- [s005e4190 0x005e4c90, 2026-11-11 session] codegen — **SP1 cl 15.00 never inlines `__ftol2`**
+  (flag matrix: /O2 /Ox /Oi /fp:fast /arch:SSE /arch:SSE2 all emit `fld; jmp __ftol2`). So a retail
+  function whose fnstcw/or-0xc00/fldcw/fistp-qword instructions INTERLEAVE with other statements'
+  stores saw compiler-inlined codegen — RTM-vs-SP1 candidate. Writing the conversion as separate
+  `__asm` statements (fnstcw / movzx / or / mov / fldcw / fistp / fldcw, 7 instructions, union so the
+  chop word and the fistp qword share one slot) reproduces the sequence and stays schedulable between
+  statements, but the statements hold source order, so no interleave. Related temp-layout finding from
+  0x00c0b030 (see its nonmatching.txt note): retail's write temps are TWO slots — the double in the 8-byte frame
+  slot, ONE 4-byte `union { float f; bool b; }` for the float and both bool bytes; one-union-for-all
+  forces everything into the qword, and a `&param` slot alias makes the param memory-resident.
+  Fix idea: note the RTM marker in matching.md's RTM-vs-SP1 section.
+- [tools/matching, 2026-11-11 session] tooling — **`try_variants.py` takes cl flags as separate shell
+  words; one quoted string is passed to cl as a single flag and the compile silently proceeds with
+  garbage flags** (symptoms: x87 lowering of /arch:SSE functions, wrong sizes). chk.py's `--flags` is
+  the opposite convention (one string). Fix idea: split on whitespace inside try_variants.py, or error
+  when a flag argument contains a space. Time lost: ~15 min.
+- [tools/contrib, 2026-11-11 session] tooling — **task.py's claims.txt fetch fails intermittently while
+  the file is reachable by curl**; the "could not be read" banner persists across re-runs, hiding
+  claimed functions. Workaround: read
+  https://raw.githubusercontent.com/NoahBPeterson/spore-decomp/claims/claims.txt directly before picking.
+  Fix idea: retry with a longer timeout or accept `--claims <file>`. Time lost: ~5 min.
+- [bare-fistp census, 2026-11-11 session] codegen/flags — **45 functions carry a bare `fistp qword`
+  (no fnstcw chain); 38 of them also contain SSE, and no flag combination can produce the two together.**
+  Capstone census over `tools/ci/fingerprints.jsonl.gz` (fnstcw-adjacent fistps excluded — those are the
+  0x005e4c90 interleaved-chain family, which stays RTM-only). `/QIfist` (still accepted by cl 15.00.30729
+  with D9035) inlines the bare fistp but is x87-only: D8016 against `/arch:SSE` (VC7.1: D2016), while
+  every `/arch`-less intrinsic spelling of an SSE scalar float copy (`_mm_store_ss`/`_mm_load_ss`/
+  `_mm_set_ss`/`_mm_move_ss`) drags a dead `xorps` zeroing. So `movss` + bare fistp in one function is
+  unreachable from flags on SP1 cl 15 and cl 13.10 — **the conversion must come from the reviewed
+  `X87RoundToInt64` in match/include/sse_helpers.h (#177), which is exactly what it exists for**: with it,
+  0x00b31a90 matched again and 0x00b322c0 is one byte from a match (its note has the spelling and the
+  remaining byte). The 6 pure-x87 members with SSE TU-mates (00b31a90, 00b31ae0, 0093a480, 0093a510,
+  009ac130, 0103a480) must not be "matched" with per-row `/QIfist`: the TU demonstrably used
+  `/arch:SSE`, so that would be a false-flags match. Fix idea: name the family in matching.md beside the
+  sse_helpers.h pointer; the interleaved cw-chain family (0x005e4c90 et al.) remains the RTM case.
+- [/QIfist fusion rule, 2026-11-11 session] codegen — **`/QIfist` inlines float→__int64 as the bare
+  fistp qword ONLY when the conversion result is not consumed by an in-memory 64-bit `+=`.** Probe
+  matrix (~25 variants, `work/match/scratch_s00b318d0_ftolprobe/`): `member/global/pointer +=
+  (__int64)expr` calls `__ftol2` under every flag (plain, `/fp:fast`, `float_control(precise,off)`,
+  `/QIfist`); returning the value, observing it twice, or taking its address inlines it. The clean
+  spelling: pass the conversion as a **by-value scratch argument** to a `__forceinline` helper that
+  performs the `+=` and hands `&scratch` to QueryPerformanceCounter — the argument stores straight
+  into the scratch slot and the fusion never forms (demonstrated on 0x00b322c0 under `/QIfist`: ebp/
+  `and esp,-8`/`sub esp,0x10` prologue, full `fild/fmul/fmul/fstp/fld/fistp` chain, `add/adc`,
+  QPC-temp-on-slot all match; 204 → 201 diff bytes). Post-#177 this is mostly of diagnostic value:
+  inside `/arch:SSE` slices use the vetted `X87RoundToInt64` instead — 0x00b322c0 reached one byte
+  from a match that way. Fix idea: fold into codegen.md beside the ftol levers.
+- [_mm_cvt_ss2si, 2026-11-11 session] codegen — **the intrinsic is not a drop-in replacement for the
+  2026-11-11-demoted `__asm` cvtss2si helpers.** `_mm_cvt_ss2si(_mm_set_ss(f))` emits the right
+  `cvtss2si` but always drags an `and esp,-16` frame (the `__m128` by-value machinery) plus the
+  `xorps`/`movss` `set_ss` zeroing dance (probed under `/O2 /arch:SSE /fp:fast`). A demoted function
+  re-matches through it only where retail itself shows that zeroing and alignment. Fix idea: candidate
+  for the VETTED shared-helper review (match/include) the demotion commit announces.
