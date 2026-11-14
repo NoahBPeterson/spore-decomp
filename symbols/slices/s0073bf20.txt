@@ -1,4 +1,12 @@
-0073c3b0 DestroyElems  # release refcounted pointer at element+0xc (0xc4-byte elements)
-0073c410 CopyPairs     # copy 8-byte {int,RefObj*} pairs with InterlockedIncrement
-0073c450 ReleasePairs  # release 8-byte {int,RefObj*} pairs atomically
+0073bf20 ?SampleA@ModelSet@@QAE_NPAMHHHH@Z  # ModelSet::SampleA migrated from s0073bf20 (verbatim, slice spelling)
+0073c040 ?Sample4@ModelSet@@QAE_NPAHHHHH@Z  # ModelSet::Sample4 migrated from s0073bf20 (verbatim, slice spelling)
+0073c170 ?Sample2@ModelSet@@QAE_NPAHHHHH@Z  # ModelSet::Sample2 migrated from s0073bf20 (verbatim, slice spelling)
+0073c290 ?Sample3@ModelSet@@QAE_NPAHHHHH@Z  # ModelSet::Sample3 migrated from s0073bf20 (verbatim, slice spelling)
+0073c3b0 ?DestroyElems@@YAPAUBigElem@@PAU1@00@Z  # DestroyElems migrated from s0073bf20 (verbatim, slice spelling)
+0073c410 ?CopyPairs@@YAXPAUPairPtr@@00@Z  # CopyPairs migrated from s0073bf20 (verbatim, slice spelling)
+0073c450 ?ReleasePairs@@YAPAUPairPtr@@PAU1@00@Z  # ReleasePairs migrated from s0073bf20 (verbatim, slice spelling)
+0073c4b0 ?SkinCollect@@YA_NPAUModelSet@@HPAIPAM@Z  # SkinCollect migrated from s0073bf20 (verbatim, slice spelling)
+0073c780 ?AnimCollect@ModelAnim@@QAE_NPAM@Z  # ModelAnim::AnimCollect migrated from s0073bf20 (verbatim, slice spelling)
+0073cac0 ??0AbilityC@@QAE@PAURefObjV@@H@Z  # AbilityC::AbilityC migrated from s0073bf20 (verbatim, slice spelling)
 0073cb40 ??0AbilityD@@QAE@PAURefObjV@@HH@Z  # AbilityD::AbilityD migrated from s0073bf20 (verbatim, slice spelling)
+0073cbc0 ?AbilityMethodE@ModelAnim@@QAE_NPAM@Z  # ModelAnim::AbilityMethodE migrated from s0073bf20 (verbatim, slice spelling)

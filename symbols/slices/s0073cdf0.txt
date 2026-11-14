@@ -1,2 +1,3 @@
+0073cdf0 ?FillTransform@cModelInstance_Deform@@QAE_NPAM@Z  # cModelInstance_Deform::FillTransform migrated from s0073cdf0 (verbatim, slice spelling)
 0073d160 ?GetArenaResource@cModelInstance_GetArenaResource@@QAEHXZ  # cModelInstance_GetArenaResource::GetArenaResource migrated from s0073cdf0 (verbatim, slice spelling)
 0073d1e0 ?GetDeformationHandles@cModelInstance_Deform@@QAEHPAUDeformHandle@@H@Z  # cModelInstance_Deform::GetDeformationHandles migrated from s0073cdf0 (verbatim, slice spelling)
