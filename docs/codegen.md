@@ -162,6 +162,12 @@ later register pick, and two identical arms get different registers (which also
 blocks cross-jumping). Same character as MSVC 6's id-keyed ties, but cl 15 makes
 it easy to see by adding one variant and watching distant bytes move.
 
+### 3.5 A per-iteration value whose store never changes is hoisted **[15]**
+
+`id = i + 4` stored every iteration, where the original computes `lea ebp,[edi+4]` once before the loop and stores a
+register in the body, is `int idv = i + 4;` before the loop. Keeping `i + 4` inside the loop keeps a second induction
+variable the original never updates (0x00c5c310).
+
 ---
 
 ## 4. Statement order, ownership and spelling
@@ -475,8 +481,9 @@ version:
   used for float args/returns. Flags: `/arch:SSE /fp:fast`.
 - `/arch:SSE` mesh modules need `Vector3` user copy ctor + `operator=` for
   `movss` copies.
-- `_mm_cvt_ss2si` (Floor/CeilToInt) adds `and esp,-16` and bloats frames; use an
-  `__asm { cvtss2si }` block instead (Papercut `s01011530…`).
+- `_mm_cvt_ss2si` (Floor/CeilToInt) adds `and esp,-16` and bloats frames; call the
+  reviewed `SseRoundToInt` / `SseFloorToInt` / `SseCeilToInt` from
+  `match/include/sse_helpers.h` instead, never a private `__asm` copy (§9.7).
 - Min/Max/Clamp use `minss`/`maxss`; `cmova`/`cmovbe` from an `/arch` flag.
 - A `Vec4` copies as `movaps` only with an `__m128` union member.
 - **Module flags by region** (Papercut batch-2):
@@ -588,6 +595,30 @@ realistic camera setups plus corners:
   switch cases (the 70 KB script interpreter: frame 0x2630 vs the original's 0x1ec0); every stack offset then
   differs.
 
+### 9.7 Float-to-int conversions (the ftol family) **[15]**
+
+From Papercuts #161 and #191 (2026-11-10/11). Inline assembly is not allowed in contributions; every conversion
+below comes from the reviewed helpers in `match/include/sse_helpers.h` or from plain C.
+
+- **Which form the original has.** Under `/arch:SSE`, a plain `(int)f` of a float already in memory inlines
+  `cvttss2si`; a float arriving in `st0` (a call's return) becomes a tail `jmp __ftol2_sse`. `fstp dword` +
+  `cvtss2si` (round to nearest) is `SseRoundToInt`; `cvttss2si` from a register is `SseTruncToInt`.
+- **Call the helper on the expression, with a literal scale:** `SseRoundToInt(f * 255.0f)`. A named temporary
+  (`float t = f * k; SseRoundToInt(t)`) spills `t` where it is declared, away from the convert; an `extern const`
+  scale loads the global into the register first and flips the operand order (0x007a82d0, 0x007a85e0, 0x00c5c310,
+  0x00c8e6d0).
+- **`_mm_cvt_ss2si(_mm_set_ss(f))`** emits `cvtss2si` but always drags an `and esp,-16` frame and `xorps`/`movss`
+  zeroing: it fits only where the original shows that alignment and zeroing.
+- **A bare `fistp qword` (no `fnstcw` chain) in an `/arch:SSE` function** is `X87RoundToInt64`. A census found 45
+  such functions, 38 of them also using SSE: no flag set produces both (`/QIfist` is x87-only, D8016 against
+  `/arch:SSE`), so do not "match" one with a per-row `/QIfist`: its translation unit was built with `/arch:SSE`, so
+  that would be a false-flags match (0x00b31a90 matched with the helper).
+- **`/QIfist` fusion rule (diagnostic):** under `/QIfist`, float to `__int64` inlines as a bare `fistp qword` only
+  when the result is not consumed by an in-memory 64-bit `+=`; `x += (__int64)expr` calls `__ftol2` under every flag.
+- **cl 15.00 SP1 never inlines `__ftol2`** (`/O2 /Ox /Oi /fp:fast /arch:SSE /arch:SSE2` all emit `fld; jmp
+  __ftol2`). An original whose `fnstcw`/`or 0xc00`/`fldcw`/`fistp qword` sequence interleaves with other statements'
+  stores is unreachable from SP1 source (0x005e4c90 family): record it with a `schedule:` or `other:` note and move on.
+
 ---
 
 ## 10. Instruction selection
@@ -627,7 +658,9 @@ right convention**, and the byte diff barely notices a wrong one — the most
 common equivalence bug is a thiscall declared as free `cdecl`/`stdcall`
 (`matching.md` "check every direct callee"). `__thiscall` is rejected on free
 functions (C3865) but accepted inside function-pointer casts (Papercut
-`s0064dbd0…`).
+`s0064dbd0…`). A wrong-convention callee often shows first as a size difference: a thiscall singleton method
+(`RandomDouble` on the 0x01601760 object) declared as a free function drops the `mov ecx, imm32` and shifts every
+later branch by 5 bytes (0x00c5c310).
 
 A method whose `this` is a **secondary base** (cl emits `lea esi,[ebp-4]` /
 `add esi,-N` before the owner calls) should be an ordinary member of the **full**
@@ -1014,7 +1047,7 @@ Mined from the final-report lessons of 127 DeepSeek sessions and 45 `work/match/
 
 **Floating point and flags**
 - `(float)sqrt((double)x)` gives the original's x87 `fld; fsqrt; fst`. `sqrtf` gives the SSE form (0xfc2080 to byte-exact).
-- `cvtss2si` in the original is round-to-nearest. A plain C cast compiles to truncating `cvttss2si` and is behaviourally different for fractional inputs, so the equivalence gate fails it. Use the `__asm` helper from `matching.md`.
+- `cvtss2si` in the original is round-to-nearest. A plain C cast compiles to truncating `cvttss2si` and is behaviourally different for fractional inputs, so the equivalence gate fails it. Use `SseRoundToInt` from `match/include/sse_helpers.h` (§9.7).
 - A float compare done as single-precision `ucomiss` needs `/fp:fast`. `/arch:SSE2` alone gives `cvtps2pd; ucomisd` and clobbers `xmm2`, which also fails equivalence (StageCache::Ready).
 - A region comment that says `/arch:SSE2` is wrong when the original uses x87 `fsqrt`/`fdivrp`. Recompile with `/arch:SSE`; this also removed an `xmm4` clobber that had failed equivalence (0x7df780).
 - `/GS` puts a stack cookie on any local whose type contains an array. Spelling a large padding as nested scalar structs removes the cookie and its frame shift (0x9c2ef0 and 0x9c3040 to byte-exact).

@@ -212,8 +212,9 @@ demoted for this on 2026-11-11 and 30 came back through the shared helpers). The
 
 **No assembly transcription.** A function written as `__declspec(naked)` + `__asm`, with `_emit` bytes, or
 generated from the disassembly by a script is not decompiled and never counts as byte-exact; record it in
-partial.txt. Only a few `__asm` statements inside C++ where the original used an asm helper (fnstcw/fldcw,
-cvtss2si, the maxss/minss clamp) are allowed: a block of at most 8 instructions. `run_all.py` enforces this (since
+partial.txt. Where the original used an asm helper (fnstcw/fldcw, cvtss2si, the maxss/minss clamp), call the
+shared helper in `match/include/sse_helpers.h`; since 2026-11-11 no other `__asm` counts (above). The older limit
+was a block of at most 8 instructions. `run_all.py` enforces this (since
 2026-10-18): a naked, `_emit` or longer-block row prints `ASM` instead of MATCH and does not count.
 `tools/matching/asm_audit.py --all-rows` lists offending manifest and nonmatching rows; `--review` adds bodies with
 many helper-sized blocks, for a human look. The 2026-10-18 audit moved 12 claimed rows (9 byte-exact) to partial.txt.
@@ -369,7 +370,7 @@ unless their header comment says the real `??__E` form was reproduced.
 - Overloaded virtuals are laid out in REVERSE declaration order. An IHandler::HandleMessage override sees `this` as the IHandler subobject (offsets shifted by -8). Dump vtables straight from the binary before writing stub classes.
 - Without /GL, `static` functions get register calling conventions (an arg in eax/edi means a static helper in the same TU): reproducible, keep the helper `static` with a same-TU stand-in caller (codegen.md 6.3). Distinct from the LTCG register ABI (codegen.md 11.4): a function that reads a register at entry no C signature explains, with callers in other objects, is equivalence-only; write the correct version, record it in nonmatching.txt with the register noted, and move on. A function with ecx=this and `ret 4` that uses no members is still a thiscall member.
 - Struct copies: a user copy ctor compiles to movss, a user `operator=` to fld/fstp. `T x(...); return x;` (NRVO) and `return T(...)` differ. Try a const copy against a const reference.
-- `/arch:SSE` modules use `__asm` float helpers (Floor/CeilToInt with cvtss2si/cmovb, and Min/Max/Clamp with minss/maxss), not `_mm_*`, which forces an aligned frame.
+- `/arch:SSE` modules use the reviewed float helpers in `match/include/sse_helpers.h` (`SseFloorToInt`/`SseCeilToInt`, `SseRoundToInt`, `SseClamp`/`SseMax`), not `_mm_*`, which forces an aligned frame, and never a private `__asm` copy (codegen.md §9.7).
 - EA `new("Editor",0,0,0,0) T()` must be a real new-expression against the 6-arg operator new with no matching delete.
 - An out-of-line same-TU helper that receives a local's address: give it its real body as a `__declspec(noinline)` specialization, so cl knows it doesn't write the object.
 - Parameter types: a float forwarded by `push reg` is an int param. `cvttss2si` vs fistp-qword tells int from unsigned. `(x>>n)&1` (shr; test r,1) is an inline helper, while bitfields give `test byte [m],mask`.
