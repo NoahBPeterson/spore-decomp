@@ -952,7 +952,9 @@ def parse_preamble(pre):
             continue
         # several bases (`class DxtSurface : public DxtBase1, public DxtBase2, public DxtRefCount {`, s007ada40) are a struct
         # too: before fix pass 2 the line fell through to the statement path and the item was named after its last base
-        m = re.match(r"^(struct|class|union)\s+(\w+)\s*(?::\s*((?:(?:public|private|protected|virtual)\s+)*[\w:<>, ]+?))?\s*\{?\s*(//.*)?$", s)
+        # `class IWinGrid { public:` (an access label on the header line, 2026-11-14 Grid s00970570: 47 methods of
+        # WinGrid/IWinGrid were never class members to the rewrite, so none landed)
+        m = re.match(r"^(struct|class|union)\s+(\w+)\s*(?::\s*((?:(?:public|private|protected|virtual)\s+)*[\w:<>, ]+?))?\s*\{?\s*(?:(?:public|private|protected)\s*:\s*)?(//.*)?$", s)
         one = re.match(r"^(struct|class|union)\s+(\w+)\s*(?::\s*((?:(?:public|private|protected|virtual)\s+)*[\w:<>, ]+?))?\s*\{(.*)\}\s*;\s*(//.*)?$", s)
         if one:             # struct Key { uint32_t inst, type, group; };
             body = []
@@ -4855,6 +4857,12 @@ class Rewrite:
         """Rename a local stub item (and every use of it in this slice's items and function texts) to `Name_<slice>`.
         verbatim_only: the converted functions spell the canonical class (`EA::ArgScript::cArguments`), the rename is
         for the slice's own stub that only the verbatim functions use."""
+        if old_n.endswith(self.rsfx):
+            # already this slice's renamed stub (a re-apply replays the earlier rename and then meets the TU's copy from
+            # that landing): a second suffix renamed the uses in landed functions too (2026-11-14 SPWeapons s00cc0700:
+            # IObj_s00cc_0700_s00cc_0700 in 0xcc0870, C2027)
+            self.notes.append(("rename-skipped", "%s: already this slice's renamed stub (%s)" % (old_n, why[:80])))
+            return
         # the slice's 8 hex digits are split: difftest/resolve.py reads any 6-8 hex digit run in a symbol name as the
         # address of the function ("hex-name": `Mutex_008d91e0` made every Mutex_008d91e0 method call 0x8d91e0)
         new_n = old_n + self.rsfx
