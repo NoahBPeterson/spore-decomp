@@ -16,6 +16,9 @@ usage: land.py <batch> [--only SUBSTR | --exact MODULE] [--log work/migrate/land
 import argparse, glob, json, os, re, subprocess, sys, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Git Bash, not System32's WSL bash.exe (CreateProcess looks in System32 before PATH: the commit ran in WSL and found
+# no repository at /mnt/d/..., 8 gated modules of mig39 lost)
+BASH = os.environ.get("GIT_BASH") or (r"C:\Program Files\Git\bin\bash.exe" if os.name == "nt" else "bash")
 # on Windows .venv/bin/python is a sh shim subprocess cannot start: the venv's python.exe
 PY = os.path.join(ROOT, ".venv", "Scripts", "python.exe") if os.name == "nt" else os.path.join(ROOT, ".venv", "bin", "python")
 SWEEP = os.path.join(ROOT, "work", "sweep_pod")
@@ -242,7 +245,7 @@ def land_once(m, sids, bname, batch, log):
     ok, why, bad = gate(m, log)
     if ok:
         # the gate just ran run_all and the asm audit on these files: commit_obj.sh need not repeat them
-        rc, out = run_env(["bash", "tools/migrate/commit_obj.sh", batch, m], {"LAND_GATED": "1"})
+        rc, out = run_env([BASH, "tools/migrate/commit_obj.sh", batch, m], {"LAND_GATED": "1"})
         ok, why = rc == 0, (out.strip().splitlines() or [""])[-1][:200]
     if not ok:
         rollback(m, sids)
