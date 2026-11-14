@@ -5793,14 +5793,21 @@ MAX_PROCS = int(os.environ.get("DIFFTEST_MAX_PROCS", os.cpu_count() or 2))
 def cpu_slot():
     """Hold one of MAX_PROCS machine-wide slots (flock'd files) while emulating, so concurrent
     checkers (batch shards, agents) use at most one core each (DIFFTEST_MAX_PROCS, default all). Blocks until a slot is free."""
-    import fcntl
-    d = os.path.join("/tmp", "difftest-slots-%d" % os.getuid())
+    if os.name == "nt":
+        # Windows has no fcntl: msvcrt's byte-range lock on the same slot files (released when the fd is closed)
+        import msvcrt, tempfile
+        d = os.path.join(tempfile.gettempdir(), "difftest-slots")
+        lock = lambda fd: msvcrt.locking(fd, msvcrt.LK_NBLCK, 1)
+    else:
+        import fcntl
+        d = os.path.join("/tmp", "difftest-slots-%d" % os.getuid())
+        lock = lambda fd: fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
     os.makedirs(d, exist_ok=True)
     while True:
         for i in range(MAX_PROCS):
             fd = os.open(os.path.join(d, "slot%d" % i), os.O_CREAT | os.O_RDWR)
             try:
-                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                lock(fd)
                 return fd
             except OSError:
                 os.close(fd)
