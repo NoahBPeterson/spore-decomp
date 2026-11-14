@@ -1,4 +1,4 @@
-// src/game/SPTerrain/SPTerrainMap.cpp -- migrated from slice(s) s00f918d0, s00f8f4d0, s00f8afd0, s00f87b30, s00f73260, s00f708d0, s00f6fc50, s00f6df40, s00f8fe60, s00f8e6c0, s00f8b2b0, s00f7d9d0 by tools/migrate/rewrite.py
+// src/game/SPTerrain/SPTerrainMap.cpp -- migrated from slice(s) s00f6edc0, s00f918d0, s00f8f4d0, s00f8afd0, s00f87b30, s00f73260, s00f708d0, s00f6fc50, s00f6df40, s00f8fe60, s00f8e6c0, s00f8b2b0, s00f7d9d0 by tools/migrate/rewrite.py
 // Object file: SPTerrain/SPTerrainMap.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1027,6 +1027,91 @@ struct CubeMapVec {
 };
 // ---- items of slice s00f918d0 end
 
+// ---- items of slice s00f6edc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vec3_s00f6_edc0 { float x, y, z; };
+struct cTerrainMapShort {                             // 8-bit/16-bit height map
+    char  mPad00[0x0c];
+    int   m0c;                                        // +0x0c
+    float GetFloat(const void* uv);                   // 0x00f8d620
+};
+struct cTerrainMapInt {                               // 32-bit splat map
+    char  mPad00[0x0c];
+    int   m0c;                                        // +0x0c
+    float GetFloat(const void* uv);                   // 0x00f88650
+    const float* GetVector3(void* out, const void* uv); // 0x00f88eb0
+};
+struct cCubeImage_s00f6_edc0 {                                   // cube-map normal source
+    char  mPad00[0x0c];
+    int   m0c;                                        // +0x0c
+    float SampleBilinear(const void* uv);             // 0x00f8de70
+};
+struct cEffectBlend {
+    float Eval(float a, float b);                     // 0x00fb8830
+};
+struct cTerrainEffectMapSet {
+    char              mPad00[0x08];
+    cTerrainMapShort* mp08;     // +0x08
+    cTerrainMapInt*   mp0c;     // +0x0c
+    cCubeImage_s00f6_edc0*       mp10;     // +0x10
+    char              mPad14[0x24];
+    float             m38;      // +0x38
+    float             m3c;      // +0x3c
+    char              mPad40[4];
+    float             m44;      // +0x44
+    float             m48;      // +0x48
+};
+extern Vec3_s00f6_edc0 gDefaultNormal;                               // 0x016c99e0
+struct FaceUv {
+    float u;
+    float v;
+    int   face;
+};
+static __forceinline void FaceFromDir(const float* dir, FaceUv* r)
+{
+    float x = dir[0];
+    float y = dir[1];
+    float z = dir[2];
+    float ax = fabsf(x), ay = fabsf(y), az = fabsf(z);
+
+    if (az >= ax && az >= ay) {
+        r->u = (x / z + 1.0f) * 0.5f;
+        r->v = (y / az + 1.0f) * 0.5f;
+        if (z < 0.0f)
+            r->face = 1;
+        else
+            r->face = 0;
+    } else if (ay < ax) {
+        r->u = (y / x + 1.0f) * 0.5f;
+        r->v = (z / ax + 1.0f) * 0.5f;
+        r->face = 2;
+        if (x < 0.0f)
+            r->face = 3;
+    } else {
+        r->u = (z / y + 1.0f) * 0.5f;
+        r->v = (x / ay + 1.0f) * 0.5f;
+        if (y < 0.0f)
+            r->face = 5;
+        else
+            r->face = 4;
+    }
+}
+struct cTerrainEffectMapNormal {
+    char                  mPad00[0x0c];
+    cTerrainEffectMapSet* mp0c;    // +0x0c  the loaded map set
+    cEffectBlend*         mp10;    // +0x10  the blend evaluator
+
+    float GetFloat(const float* dir);                 // 0x00f6edc0
+    int   GetCountShort();                            // 0x00f6efa0
+    Vec3_s00f6_edc0  Normal(const float* dir);                   // 0x00f6efc0
+    int   GetCountSum();                              // 0x00f6f190
+    float Blend(const float* dir);                    // 0x00f6f1b0
+    float GetNormalized(const float* dir);            // 0x00f6f390
+    float Test(const float* dir);                     // 0x00f6f5a0
+    float GetRatio(const float* dir);                 // 0x00f6f7d0
+    float TestRange(const float* dir);                // 0x00f6fa00
+};
+// ---- items of slice s00f6edc0 end
+
 // @ 0x00f6ebe0
 float cFaceMapper::GetFaceValue(const cSPVector3_s00f6_df40* pDir)
 {
@@ -1063,6 +1148,114 @@ float cFaceMapper::GetFaceValue(const cSPVector3_s00f6_df40* pDir)
         if (d.x < 0.0f)
             uv.mFace = 3;
         return pMap->GetFloat(&uv);
+    }
+    return 0.0f;
+}
+
+// @ 0x00f6edc0
+float cTerrainEffectMapNormal::GetFloat(const float* dir)
+{
+    cTerrainMapInt* map = mp0c->mp0c;
+    if (map == 0)
+        return 0.0f;
+
+    FaceUv r;
+    FaceFromDir(dir, &r);
+    return map->GetFloat(&r);
+}
+
+// @ 0x00f6efc0
+Vec3_s00f6_edc0 cTerrainEffectMapNormal::Normal(const float* dir)
+{
+    const Vec3_s00f6_edc0* src;
+    cTerrainMapInt* map = mp0c->mp0c;
+
+    if (map == 0) {
+        src = &gDefaultNormal;
+    } else {
+        FaceUv r;
+        FaceFromDir(dir, &r);
+
+        Vec3_s00f6_edc0 tmp;
+        const float* p = map->GetVector3(&tmp, &r);
+        Vec3_s00f6_edc0 res;
+        res.x = p[0];
+        res.y = p[1];
+        res.z = p[2];
+        src = &res;
+    }
+
+    return *src;
+}
+
+// @ 0x00f6f390
+float cTerrainEffectMapNormal::GetNormalized(const float* dir)
+{
+    cTerrainEffectMapSet* m = mp0c;
+    if (m->mp08 == 0 || m->mp0c == 0)
+        return 0.0f;
+
+    float k   = m->m38;
+    float mid = (m->m44 + m->m3c) * m->m38;
+    float b   = m->m48;
+
+    FaceUv r;
+    FaceFromDir(dir, &r);
+
+    float v = m->mp0c->GetFloat(&r) * k;
+    if (b > v) {
+        float t = m->mp08->GetFloat(&r) * k;
+        if (mid < t)
+            return (t - mid) / (k - mid);
+    }
+    return 0.0f;
+}
+
+// @ 0x00f6f5a0
+float cTerrainEffectMapNormal::Test(const float* dir)
+{
+    cTerrainEffectMapSet* m = mp0c;
+    if (m->mp08 == 0 || m->mp0c == 0)
+        return 0.0f;
+
+    float k   = m->m38;
+    float mid = (m->m44 + m->m3c) * m->m38;
+    float b   = m->m48;
+
+    FaceUv r;
+    FaceFromDir(dir, &r);
+
+    float v = m->mp0c->GetFloat(&r) * k;
+    if (b > v) {
+        float t = m->mp08->GetFloat(&r) * k;
+        if (mid < t)
+            return 1.0f;
+        return 0.0f;
+    }
+    return 0.0f;
+}
+
+// @ 0x00f6fa00
+float cTerrainEffectMapNormal::TestRange(const float* dir)
+{
+    cTerrainEffectMapSet* m = mp0c;
+    if (m->mp08 == 0 || m->mp0c == 0)
+        return 0.0f;
+
+    float k   = m->m38;
+    float hi  = (m->m44 + m->m3c) * m->m38;
+    float lo  = m->m3c * m->m38;
+    float b   = m->m48;
+
+    FaceUv r;
+    FaceFromDir(dir, &r);
+
+    float t = m->mp08->GetFloat(&r) * k;
+    if (lo <= t && t <= hi) {
+        float s = m->mp0c->GetFloat(&r) * k;
+        if (b > s)
+            return 1.0f;
+        return 0.0f;
     }
     return 0.0f;
 }
