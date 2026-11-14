@@ -1,12 +1,6 @@
-// src/game/UTFSpore_Win32/StdDrawable.cpp -- migrated from slice(s) s01300280, s009873a0 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/StdDrawable.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
-#include "EA/UTFWin/Window.h"
-#include "EA/UTFWin/RenderContext.h"
-#include "EA/Stopwatch.h"
-#include "EA/UTFWin/cDropShadowDescriptor.h"
+#include <math.h>
+#pragma intrinsic(sqrt)
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  FUN_0095c5f0(void*, void*, void*, void*, float, float, int, int); // 0x95c5f0
@@ -15,16 +9,7 @@ extern "C" void  FUN_0095d000(void*, void*, void*, void*, float*, float, float);
 extern "C" void  FUN_0095d780(void*, void*, int, int, float);                      // 0x95d780 DrawStdButton
 extern "C" void  FUN_0095da40(void*, void*, int, float);                           // 0x95da40
 extern "C" double FUN_011e0906(double);                       // floor
-#include <math.h>
-#pragma intrinsic(sqrt)
 
-// ---- items of slice s009873a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void  FUN_0095c5f0(void*, void*, void*, void*, float, float, int, int); // 0x95c5f0
-extern "C" void  FUN_0095ca40(void*, void*, void*, void*, float*, float, float);   // 0x95ca40
-extern "C" void  FUN_0095d000(void*, void*, void*, void*, float*, float, float);   // 0x95d000 BltEdgeStretch
-extern "C" void  FUN_0095d780(void*, void*, int, int, float);                      // 0x95d780 DrawStdButton
-extern "C" void  FUN_0095da40(void*, void*, int, float);                           // 0x95da40
-extern "C" double FUN_011e0906(double);                       // floor
 struct RenderContext { int* Begin2D(int mode); };            // 0x95bc10 EA::UTFWin::RenderContext::Begin2D (thiscall)
 struct ShadowDesc32;
 void __cdecl CopyWithQualityAdjustment(ShadowDesc32* dst, ShadowDesc32* src, int quality); // 0x96e3a0
@@ -39,7 +24,6 @@ struct ShadowDesc32 {
     int   m1c;
     int   m20;
     int   m24;
-    void SetMode1(int);   // 0x830280
     void SetMode2(int);   // 0x830150
 };
 struct ShadowDescC : ShadowDesc32 {
@@ -82,8 +66,6 @@ struct StdDrawable : StdDrawableBase {
     float mBevelWidth;              // +0x50
     ShadowDescC  mShadow;           // +0x54
 
-    void  SetSerializerX();                        // 0xc2e4e0
-    void  FUN_00987900();                          // 0x987900
     void  SetImageAt(unsigned idx, void* img);     // 0x987970
     void* GetImageAt(unsigned idx);                // 0x9879b0
     void* GetImageForState(unsigned st);           // 0x9879f0
@@ -95,7 +77,6 @@ struct StdDrawable : StdDrawableBase {
     bool  GetNaturalSize(float* out, int state, int unused);           // 0x9883f0
     StdDrawable();                                                     // 0x988420
 };
-// ---- items of slice s009873a0 end
 
 // @ 0x00987970
 void StdDrawable::SetImageAt(unsigned idx, void* img)
@@ -344,11 +325,12 @@ bool StdDrawable::HitTest(float* rect, int* pt, int unused)
 // @ 0x009883c0
 bool StdDrawable::QueryAttribute(int id, unsigned* out)
 {
-    if (id != 0x19c46fb)
+    if (id != 0x19c46fb)     // attribute id for "has hit mask" (name guessed)
         return false;
     *out = (mHitMask != 0);
     return true;
 }
+
 
 // @ 0x009883f0
 bool StdDrawable::GetNaturalSize(float* out, int state, int unused)
@@ -356,8 +338,8 @@ bool StdDrawable::GetNaturalSize(float* out, int state, int unused)
     (void)unused;
     void* img = GetImageForState((unsigned)state);
     if (img != 0) {
-        out[0] = (float)*(int*)((char*)img + 0x1c);
-        out[1] = (float)*(int*)((char*)img + 0x20);
+        out[0] = (float)*(int*)((char*)img + 0x1c);   // image width
+        out[1] = (float)*(int*)((char*)img + 0x20);   // image height
         return true;
     }
     return false;

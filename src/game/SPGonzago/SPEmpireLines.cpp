@@ -1,21 +1,7 @@
-// src/game/SPGonzago/SPEmpireLines.cpp -- migrated from slice(s) s00feb120, s00fea240 by tools/migrate/rewrite.py
-// Object file: SPGonzago/SPEmpireLines.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
-#include "EA/Variant.h"
-#include "EA/ArgScript/cArgumentSpec.h"
-#include "EA/ArgScript/cCommandBase.h"
-#include "SP/cGonzagoSimulator.h"
-#include "SP/cPropertyList.h"
-#include "SP/cStarManager.h"
-#include "SP/cViewer.h"
 #include <stddef.h>
-#include <string.h>
-#include <new>
 #include <math.h>
 
-// ---- items of slice s00fea240 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* AllocateBlocks(uint32_t size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
 void FreeArray(void* p);                                                                          // 0x00f47380
 void* GetPlayerEmpire();                          // 0x01021300
@@ -32,13 +18,10 @@ struct ViewerHolder {
     void* mpUnk0;     // +0x00
     void* mpViewer;   // +0x04
 };
-// ---- items of slice s00fea240 end
 
-// ---- items of slice s00feb120 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char      u8;
 typedef unsigned int       u32;
 typedef signed int         i32;
-typedef unsigned __int64   u64;
 #define MOPS(p) ((COps*)(p))
 static inline void** vtbl(const void* p) { return *(void***)p; }
 void* FUN_01046fc0();                                  // 0x01046fc0
@@ -51,37 +34,15 @@ void  __cdecl   FUN_006dde30(int a, int b, void* mat); // 0x006dde30
 struct COps
 {
     u8  FUN_00bb9c00();                    // 0x00bb9c00
-    void* FUN_00bfc5f0();                  // 0x00bfc5f0
-    u8  FUN_00fe4180();                    // 0x00fe4180
     u8  FUN_00c31c50();                    // 0x00c31c50
     u8  FUN_00c31bc0();                    // 0x00c31bc0
-    u8  FUN_00e18c70();                    // 0x00e18c70
-    u8  FUN_00feba90();                    // 0x00feba90
-    u8  FUN_007c4fd0();                    // 0x007c4fd0
     u8  FUN_01044bf0(void* civ);           // 0x01044bf0
     u8  FUN_010449e0(u32 arg);             // 0x010449e0
-    i32  FUN_00dd5d80(u32 a, u32 b);       // 0x00dd5d80
-    void FUN_00dd6d10(u32 a, u32 b);       // 0x00dd6d10
-    void FUN_00695b40(void* a, void* b, void* c); // 0x00695b40
-    void FUN_00c47d80();                   // 0x00c47d80
     void FUN_00c32cd0(float* out);         // 0x00c32cd0
     void FUN_007c3d30(float* a, float* b, int c, int d); // 0x007c3d30
-    void FUN_007c3c10();                   // 0x007c3c10
-    void FUN_007c50b0(void* src, u8 a, u8 b); // 0x007c50b0
-    void FUN_005481d0(u32* pos, u32* value);  // 0x005481d0
-    void FUN_00bc3110();                   // 0x00bc3110
-    void FUN_00bb1080();                   // 0x00bb1080
-    void FUN_00e25bd0(void* begin, void* end); // 0x00e25bd0
-    u32  FUN_00b1fdb0();                   // 0x00b1fdb0
-    u32  FUN_00ba9370();                   // 0x00ba9370
-    i32  FUN_00c317a0();                   // 0x00c317a0
     void* FUN_00c308d0();                  // 0x00c308d0
     void* FUN_00bef6c0();                  // 0x00bef6c0
-    void* FUN_00c8b360();                  // 0x00c8b360
     float* FUN_005c65e0();                 // 0x005c65e0
-    float FUN_00ffbfd0();                  // 0x00ffbfd0
-    double FUN_009360d0();                 // 0x009360d0
-    u64  FUN_00bc3190();                   // 0x00bc3190
 };
 class cEmpireLayer
 {
@@ -90,7 +51,6 @@ public:
     void* mpViewer;                    // +0x04
 
     void DrawEmpire(void* empire, void* mesh);
-    void DrawLayer(void* arg1, u32 layer, u32* viewer, void* mesh);
 };
 struct QuadVert
 {
@@ -100,11 +60,11 @@ struct QuadVert
     float uv1[2];         // +0x18
     float uv2[2];         // +0x20
 };
-// ---- items of slice s00feb120 end
 
 // @ 0x00feb060
 void __fastcall FUN_00feb060(ViewerHolder* self)
 {
+    // cViewer is sizeof 0x174 (SP::cViewer), allocated from the "Simulator" pool.
     void* mem = AllocateBlocks(0x174, "Simulator", 0, 0, 0, 0);
     cViewer* viewer;
     if (mem)

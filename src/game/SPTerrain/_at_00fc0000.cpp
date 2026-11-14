@@ -1,21 +1,18 @@
-// src/game/SPTerrain/_at_00fc0000.cpp -- migrated from slice(s) s00fc2080 by tools/migrate/rewrite.py
-// Object file: SPTerrain/_at_00fc0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
 #include <math.h>
 
-// ---- items of slice s00fc2080 begin (TODO(rewrite): local stubs, replace by canonical classes)
-namespace rw {
-namespace graphics {
-class EmbeddedState_s00fc_2080 { public:
+// rw::graphics::EmbeddedState as reached here: retail SetRaster (0x011ee6b0) takes (stage, value)
+// and D3D9GetTextureStageState (0x011ee870) takes (stage), which the canonical header spells
+// differently, so this local layout matches the call ABI.
+namespace rw { namespace graphics {
+class EmbeddedState_s00fc_2080 {
+public:
     char     pad00[0x10];
-    uint32_t mHardStateDirty;   // +0x10
+    uint32_t m_hardStateDirty;                                    // +0x10
     uint32_t D3D9GetTextureStageState(uint32_t stage);            // 0x11ee870
     void     SetRaster(uint32_t stage, uint32_t value);           // 0x11ee6b0
 };
-}
-}
+}}  // namespace rw::graphics
 using rw::graphics::EmbeddedState_s00fc_2080;
 class RasterState {
 public:
@@ -23,37 +20,37 @@ public:
     uint32_t       mStage;    // +0x04
     uint32_t       mValue;    // +0x08
     uint32_t       mOld;      // +0x0c
-    void          Assign(EmbeddedState_s00fc_2080* st, uint32_t stage, uint32_t value);  // 0xfc27e0
-    RasterState*  Construct(EmbeddedState_s00fc_2080* st, uint32_t stage, uint32_t value); // 0xfc2c10
-    void          Clear();                                                    // 0xfc2830
+    void           Assign(EmbeddedState_s00fc_2080* st, uint32_t stage, uint32_t value);  // 0xfc27e0
+    RasterState*   Construct(EmbeddedState_s00fc_2080* st, uint32_t stage, uint32_t value); // 0xfc2c10
+    void           Clear();                                                   // 0xfc2830
 };
+// Vtable shape only: the manager is called through slot +0x24 by TerraScatter.
 class ILightingManager {
 public:
-virtual void l0();
-virtual void l1();
-virtual void l2();
-virtual void l3();
-virtual void l4();
-virtual void l5();
-virtual void l6();
-virtual void l7();
+    virtual void l0();
+    virtual void l1();
+    virtual void l2();
+    virtual void l3();
+    virtual void l4();
+    virtual void l5();
+    virtual void l6();
+    virtual void l7();
     virtual void l8();
     virtual void GetDirection(float* out);   // +0x24 (only call site: 0xfc2ab0)
 };
 namespace SP {
- ILightingManager* LightingManager();   // 0x0067dd90
+ILightingManager* LightingManager();   // 0x0067dd90
 }
 void TerraVectorInsert(void* dst, const void* src, uint32_t bytes);  // 0x11e0744
 __declspec(noinline)
-bool     TerraPaint(float* a, float* b, float* normal, float* out);   // 0xfc2870
-float    TerraScatter(float* p);                                 // 0xfc2ab0
-void     TerraSmooth(float* items, int* count, float* normal);   // 0xfc2c70
-// ---- items of slice s00fc2080 end
+bool  TerraPaint(float* a, float* b, float* normal, float* out);      // 0xfc2870
+float TerraScatter(float* p);                                        // 0xfc2ab0
+void  TerraSmooth(float* items, int* count, float* normal);          // 0xfc2c70
 
 // @ 0x00fc27e0
 void RasterState::Assign(EmbeddedState_s00fc_2080* st, uint32_t stage, uint32_t value)
 {
-    if (st != 0 && (st->mHardStateDirty & (1u << stage)) != 0) {
+    if (st != 0 && (st->m_hardStateDirty & (1u << stage)) != 0) {
         mpState = st;
         mStage = stage;
         mValue = value;
@@ -150,7 +147,7 @@ RasterState* RasterState::Construct(EmbeddedState_s00fc_2080* st, uint32_t stage
     mStage = 0;
     mValue = 0;
     mOld = 0;
-    if (st != 0 && (st->mHardStateDirty & (1u << stage)) != 0) {
+    if (st != 0 && (st->m_hardStateDirty & (1u << stage)) != 0) {
         mpState = st;
         mStage = stage;
         mValue = value;

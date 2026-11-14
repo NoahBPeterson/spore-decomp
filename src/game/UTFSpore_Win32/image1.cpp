@@ -1,12 +1,11 @@
-// src/game/UTFSpore_Win32/image1.cpp -- migrated from slice(s) s0097cea0 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/image1.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
 #include "EA/UTFWin/Image.h"
 #include "EA/UTFWinControls/ImageDrawable.h"
 #include "EA/UTFWin/RenderContext.h"
 #include "EA/UTFWin/cDropShadowDescriptor.h"
+
+#include <math.h>
+#include <new>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  FUN_00951330(void*);              // MultiHeapObject::operator_delete
@@ -14,15 +13,9 @@ extern char g_vtblImageDrawable;
 extern char g_vtblImageDrawable2;
 extern char g_vtblImageDrawable3;
 extern char g_vtblEditorResource;
-#include <math.h>
-#include <new>
 
-// ---- items of slice s0097cea0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void  FUN_00951330(void*);              // MultiHeapObject::operator_delete
-extern char g_vtblImageDrawable;
-extern char g_vtblImageDrawable2;
-extern char g_vtblImageDrawable3;
-extern char g_vtblEditorResource;
+// The scalar deleting destructor writes the two leading vptrs and the IImageDrawable
+// vptr at +0xc, so its slots have to be laid out explicitly.
 struct ImageDrawable {
     void* vtbl0;        // +0
     void* vtbl1;        // +4
@@ -30,6 +23,7 @@ struct ImageDrawable {
     void* mpImage;      // +0x24
     ImageDrawable* DestroyScalar(unsigned char flags);
 };
+
 struct IntrusiveHolder { void SetIntrusive18(void* p); };
 struct NaturalSizeImage { char pad[0x1c]; int mWidth; int mHeight; };   // image w/h at +0x1c/+0x20
 struct NaturalSizeHolder {
@@ -44,20 +38,19 @@ typedef void (__thiscall* EmptyThunkFn)(void* self);
 typedef int  (__thiscall* ShadowSetSizeFn)(void* self, unsigned value);
 typedef int  (__thiscall* ShadowSetStrengthFn)(void* self, unsigned value);
 namespace Cr {
-struct Image { char pad[0x1c]; int mW; int mH; };
-}
-namespace Cr {
-struct Target2D {                       // object returned by RenderContext::Begin2D
+
+// object returned by RenderContext::Begin2D
+struct Target2D {
     virtual void slot0();
     virtual void SetColor(unsigned int argb);
 };
-}
-namespace Cr {
+
+struct Image { char pad[0x1c]; int mW; int mH; };
+
 struct RenderContext {
     Target2D* Begin2D(int);             // 0x95bc10, thiscall ret 4
 };
-}
-namespace Cr {
+
 struct cDropShadowDescriptor {          // 0x28 bytes
     unsigned int mSize, mStrength, mQuality;
     float mOffsetX, mOffsetY, mSizeX, mSizeY, mSmoothness, mSaturation;
@@ -71,11 +64,7 @@ struct cDropShadowDescriptor {          // 0x28 bytes
     void SetMode(int mode);             // 0x830150, thiscall ret 4 (sets +4, +0x1c, +0x20)
     static void CopyWithQualityAdjustment(cDropShadowDescriptor* dst, const cDropShadowDescriptor* src, int q); // 0x96e3a0 cdecl
 };
-}
-extern "C" void DrawImageTiled(Cr::Target2D*, const float* rect, Cr::Image*, float sx, float sy, float ox, float oy); // 0x95c420 cdecl
-extern "C" void DrawImage9Slice(Cr::Target2D*, const float* dst, const float* uv, Cr::Image*, const float* inner, float sx, float sy); // 0x95ca40 cdecl
-extern "C" void DrawImageStretch(Cr::Target2D*, const float* dst, Cr::Image*, const float* src); // 0x95c0d0 cdecl
-namespace Cr {
+
 struct ImageDrawable {
     char pad0[0x10];
     float mfScale;                      // +0x10
@@ -87,8 +76,34 @@ struct ImageDrawable {
     Cr::cDropShadowDescriptor mDropShadow; // +0x28
     void CreateRenderables(Cr::RenderContext* ctx, const float* rc, int unused);
 };
-}
-static __forceinline void DrawTiling(Cr::ImageDrawable* d, Cr::Target2D* t, const float* dst, const float* expanded) {
+
+// Constructor layout: the three interface subobjects' vptrs, then the data members.
+struct P0  { virtual void p0(); };
+struct P4  { virtual void p4(); int mRefCount; P4() : mRefCount(0) {} };   // +4, +8
+struct P12 { virtual void p12(); };                                         // +0xc
+struct CustomDrawableX : P0, P4, P12 {
+    float mfScale;                     // +0x10
+    CustomDrawableX() : mfScale(1.0f) {}
+};
+struct ImageDrawableCtor : CustomDrawableX {
+    unsigned int mnFlags;              // +0x14
+    unsigned int mnTiling;             // +0x18
+    unsigned int mnAlignmentH;         // +0x1c
+    unsigned int mnAlignmentV;         // +0x20
+    void*        mpImage;              // +0x24
+    cDropShadowDescriptor mDropShadow; // +0x28
+    ImageDrawableCtor();
+};
+
+}  // namespace Cr
+
+extern "C" void DrawImageTiled(Cr::Target2D*, const float* rect, Cr::Image*, float sx, float sy, float ox, float oy); // 0x95c420 cdecl
+extern "C" void DrawImage9Slice(Cr::Target2D*, const float* dst, const float* uv, Cr::Image*, const float* inner, float sx, float sy); // 0x95ca40 cdecl
+extern "C" void DrawImageStretch(Cr::Target2D*, const float* dst, Cr::Image*, const float* src); // 0x95c0d0 cdecl
+
+// Picks the draw call for the image drawable's tiling mode.
+static __forceinline void DrawTiling(Cr::ImageDrawable* d, Cr::Target2D* t, const float* dst, const float* expanded)
+{
     if (d->mnTiling == 2) {
         float inner[4]; float uv[4];
         inner[0] = 1.0f / 3.0f; inner[1] = 1.0f / 3.0f; inner[2] = 2.0f / 3.0f; inner[3] = 2.0f / 3.0f;
@@ -100,53 +115,6 @@ static __forceinline void DrawTiling(Cr::ImageDrawable* d, Cr::Target2D* t, cons
         DrawImageStretch(t, dst, d->mpImage, expanded);
     }
 }
-namespace Cur {
-struct IRef {                            // AutoRefCount target: slot 0 AddRef, slot 1 Release
-    virtual int AddRef() throw();
-    virtual int Release() throw();
-};
-}
-namespace Cur {
-struct Target2D {
-virtual void v0();
-virtual void v1();
-virtual void v2();
-virtual void v3();
-virtual void v4();
-virtual void v5();
-virtual void v6();
-virtual void v7();
-virtual void v8();
-virtual void v9();
-virtual void v10();
-virtual void v11();
-virtual void v12();
-virtual void v13();
-virtual void v14();
-virtual void v15();
-virtual void v16();
-virtual void v17();
-virtual void v18();
-virtual void v19();
-virtual void v20();
-virtual void v21();
-virtual void v22();
-virtual void v23();
-    virtual void DrawImage(float x, float y, IRef* img);          // slot 24
-};
-}
-namespace Cur {
-struct RenderContext {
-    Target2D* Begin2D(int);              // 0x95bc10, thiscall ret 4
-    void End2D();                        // 0x95bb20, thiscall
-};
-}
-// ---- items of slice s0097cea0 end
-
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" void DrawImageTiled(Cr::Target2D*, const float* rect, Cr::Image*, float sx, float sy, float ox, float oy); // 0x95c420 cdecl
-extern "C" void DrawImage9Slice(Cr::Target2D*, const float* dst, const float* uv, Cr::Image*, const float* inner, float sx, float sy); // 0x95ca40 cdecl
-extern "C" void DrawImageStretch(Cr::Target2D*, const float* dst, Cr::Image*, const float* src); // 0x95c0d0 cdecl
 
 // @ 0x0097d100
 void IntrusiveHolder::SetIntrusive18(void* p)
@@ -245,27 +213,8 @@ void Cr::ImageDrawable::CreateRenderables(Cr::RenderContext* ctx, const float* r
 }
 
 // @ 0x0097d8d0
-namespace Cr
-{
-struct P0  { virtual void p0(); };
-struct P4  { virtual void p4(); int mRefCount; P4() : mRefCount(0) {} };   // +4, +8
-struct P12 { virtual void p12(); };                                         // +0xc
-struct CustomDrawableX : P0, P4, P12 {
-    float mfScale;                     // +0x10
-    CustomDrawableX() : mfScale(1.0f) {}
-};
-struct ImageDrawableCtor : CustomDrawableX {
-    unsigned int mnFlags;              // +0x14
-    unsigned int mnTiling;             // +0x18
-    unsigned int mnAlignmentH;         // +0x1c
-    unsigned int mnAlignmentV;         // +0x20
-    void*        mpImage;              // +0x24
-    cDropShadowDescriptor mDropShadow; // +0x28
-    ImageDrawableCtor();
-};
-ImageDrawableCtor::ImageDrawableCtor()
+Cr::ImageDrawableCtor::ImageDrawableCtor()
     : mnFlags(0), mnTiling(0), mnAlignmentH(3), mnAlignmentV(3), mpImage(0) {}
-}
 
 // @ 0x0097d950
 ImageDrawable* ImageDrawable::DestroyScalar(unsigned char flags)

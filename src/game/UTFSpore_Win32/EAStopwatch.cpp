@@ -1,18 +1,12 @@
-// src/game/UTFSpore_Win32/EAStopwatch.cpp -- migrated from slice(s) s00939a60 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/EAStopwatch.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
 #include "EA/Stopwatch.h"
 #include "EA/LimitStopwatch.h"
-#include "EA/IO/IStream.h"
-#include "SP/cDirectPropertyList.h"
 
-// unnamed retail callees and globals (address in the comment)
-extern "C" unsigned short _byteswap_ushort(unsigned short);
-extern "C" unsigned long  _byteswap_ulong(unsigned long);
+// Retail callees and globals (address in the comment).
 extern "C" unsigned __int64 __rdtsc(void);
+__declspec(dllimport) int __stdcall QueryPerformanceCounter(int64_t* p);
 extern "C" uint64_t mnStopwatchFrequency;                    // 0x154eae8
+extern "C" uint64_t mnCPUFrequency;                          // 0x154eaf0
 extern "C" uint64_t mnStopwatchCycleReadingOverhead;         // 0x16699a0
 extern "C" float kfStopwatchRoundConstant;                   // 0x143eaa8
 extern "C" float mfStopwatchCyclesToNanosecondsCoefficient;  // 0x1669958
@@ -20,28 +14,17 @@ extern "C" float mfStopwatchCyclesToMicrosecondsCoefficient; // 0x1669974
 extern "C" float mfStopwatchCyclesToMillisecondsCoefficient; // 0x166996c
 extern "C" float mfStopwatchCyclesToSecondsCoefficient;      // 0x1669980
 extern "C" float mfStopwatchCyclesToMinutesCoefficient;      // 0x166995c
-#pragma intrinsic(_byteswap_ushort, _byteswap_ulong)
 #pragma intrinsic(__rdtsc)
 
-// ---- items of slice s00939a60 begin (TODO(rewrite): local stubs, replace by canonical classes)
-__declspec(dllimport) int __stdcall QueryPerformanceCounter(int64_t* p);
-extern "C" unsigned __int64 __rdtsc(void);
-extern "C" uint64_t mnStopwatchFrequency;                    // 0x154eae8
-extern "C" uint64_t mnStopwatchCycleReadingOverhead;         // 0x16699a0
-extern "C" float kfStopwatchRoundConstant;                   // 0x143eaa8
-extern "C" float mfStopwatchCyclesToNanosecondsCoefficient;  // 0x1669958
-extern "C" float mfStopwatchCyclesToMicrosecondsCoefficient; // 0x1669974
-extern "C" float mfStopwatchCyclesToMillisecondsCoefficient; // 0x166996c
-extern "C" float mfStopwatchCyclesToSecondsCoefficient;      // 0x1669980
-extern "C" float mfStopwatchCyclesToMinutesCoefficient;      // 0x166995c
+// Local stand-ins.  The canonical EA::Stopwatch declares neither SetElapsedCycles nor
+// GetElapsedTime with these signatures; no header declares cSPUILayerManager; the class
+// named here cDirectPropertyList is a timing helper wrongly named after SP::cDirectPropertyList.
 struct Stopwatch {
     uint64_t mnStartTime;                         // 0x00
     uint64_t mnTotalElapsedTime;                  // 0x08
     int      mnUnits;                             // 0x10
     float    mfStopwatchCyclesToUnitsCoefficient; // 0x14
 
-    Stopwatch(int units, bool start);
-    void SetUnits(int units);
     int64_t GetElapsedTimeFloat();
     int64_t GetElapsedTime();
     void SetElapsedCycles(int64_t cycles);
@@ -58,10 +41,6 @@ struct cDirectPropertyList {
     int32_t mGroup;      // 0x10
     void SetBoolProperty();
 };
-// ---- items of slice s00939a60 end
-
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" uint64_t mnCPUFrequency;                          // 0x154eaf0
 
 // @ 0x0093a1a0
 void EA::Stopwatch::SetUnits(int units)
@@ -127,11 +106,11 @@ void Stopwatch::SetElapsedCycles(int64_t cycles)
 float GetCyclesToUnitsCoefficient(int units)
 {
     switch (units) {
-    case 2: return mfStopwatchCyclesToNanosecondsCoefficient;
-    case 3: return mfStopwatchCyclesToMicrosecondsCoefficient;
-    case 4: return mfStopwatchCyclesToMillisecondsCoefficient;
-    case 5: return mfStopwatchCyclesToSecondsCoefficient;
-    case 6: return mfStopwatchCyclesToMinutesCoefficient;
+    case EA::Stopwatch::kUnitsNanoseconds: return mfStopwatchCyclesToNanosecondsCoefficient;
+    case EA::Stopwatch::kUnitsMicroseconds: return mfStopwatchCyclesToMicrosecondsCoefficient;
+    case EA::Stopwatch::kUnitsMilliseconds: return mfStopwatchCyclesToMillisecondsCoefficient;
+    case EA::Stopwatch::kUnitsSeconds: return mfStopwatchCyclesToSecondsCoefficient;
+    case EA::Stopwatch::kUnitsMinutes: return mfStopwatchCyclesToMinutesCoefficient;
     default: return 1.0f;
     }
 }

@@ -1,28 +1,27 @@
-// src/game/UTFSpore_Win32/CascadeEffect.cpp -- migrated from slice(s) s0097f390, s00966b20 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/CascadeEffect.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/UTFSpore_Win32/CascadeEffect.cpp
 
 #include "game/types.h"
-#include "EA/Stopwatch.h"
-#include "EA/UTFWinControls/IWinButton.h"
-#include "EA/UTFWin/IWindow.h"
 
 // unnamed retail callees and globals (address in the comment)
-extern float g_13f9428;                                                    // 0.001f
-extern float    g_1488874;   // 0.1f
+extern float g_13f9428;   // 0.001f
+extern float g_1488874;   // 0.1f
 
-// ---- items of slice s00966b20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// Local stand-ins for types without a canonical header yet; offsets come from the
+// retail disassembly and are addressed with F/FB/FF.
 #define F(o, off)  (*(uint32_t*)((uint8_t*)(o) + (off)))
 #define FB(o, off) (*(uint8_t*)((uint8_t*)(o) + (off)))
 #define FF(o, off) (*(float*)((uint8_t*)(o) + (off)))
+
+// The embedded Stopwatch at +0x18. The ctor of S_9675c0 (non-matching) calls it
+// through this local stand-in spelling, so it is kept rather than EA::Stopwatch.
 struct Stopwatch {
     void* __thiscall Ctor(int, int);   // 0x93a560
     void  __thiscall SetUnits(int);    // 0x93a1a0
 };
-struct S_93a3a0 { double __thiscall m(); };                                // 0x93a3a0
-struct S_571e80 { void   __thiscall m(); };                                // 0x571e80
-struct S_93a2e0 { void   __thiscall m(); };                                // 0x93a2e0
-extern float g_13f9428;                                                    // 0.001f
+struct S_93a3a0 { double __thiscall m(); };   // 0x93a3a0
+struct S_571e80 { void   __thiscall m(); };   // 0x571e80
+struct S_93a2e0 { void   __thiscall m(); };   // 0x93a2e0
+
 static inline void VCALL0(void* o, int off) {
     ((void (__thiscall*)(void*))(*(void***)o)[off / 4])(o);
 }
@@ -32,17 +31,14 @@ static inline uint32_t VCALL0R(void* o, int off) {
 static inline void* VCALL1P(void* o, int off, uint32_t a) {
     return ((void* (__thiscall*)(void*, uint32_t))(*(void***)o)[off / 4])(o, a);
 }
+
 struct S_967300 { void     __thiscall m(float); };
 struct S_967320 { void     __thiscall m(float); };
 struct S_9675c0 { void*    __thiscall m(); };
 struct S_9673b0 { uint32_t __thiscall m(void*, uint8_t*); };
-extern float    g_1488874;   // 0.1f
-// ---- items of slice s00966b20 end
 
-// ---- items of slice s0097f390 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" unsigned __cdecl wcslen(const wchar_t*);
-#pragma intrinsic(wcslen)
-void  MultiHeapDelete(void* p);                                  // 0x00951330
+void MultiHeapDelete(void* p);   // 0x00951330
+
 namespace EA {
 namespace UTFWinControls {
 struct CascadeEffect {
@@ -54,26 +50,25 @@ struct CascadeEffect {
 };
 }
 }
-// ---- items of slice s0097f390 end
 
 // @ 0x00967300
+// Stores v into the float at +0x04, clamping negatives to 0.
 void S_967300::m(float v)
 {
-    void* this_ = this;
     if (v < 0.0f)
-        FF(this_, 4) = 0.0f;
+        FF(this, 4) = 0.0f;
     else
-        FF(this_, 4) = v;
+        FF(this, 4) = v;
 }
 
 // @ 0x00967320
+// Stores v into the float at +0x08, clamping negatives to 0.
 void S_967320::m(float v)
 {
-    void* this_ = this;
     if (v < 0.0f)
-        FF(this_, 8) = 0.0f;
+        FF(this, 8) = 0.0f;
     else
-        FF(this_, 8) = v;
+        FF(this, 8) = v;
 }
 
 // @ 0x009673b0
@@ -183,12 +178,14 @@ void* S_9675c0::m()
 }
 
 // @ 0x00980490
+// Resets the interface vtable pointers, then frees the object when flags bit 0 is set.
 namespace EA { namespace UTFWinControls {
 CascadeEffect* CascadeEffect::Destroy(uint8_t flags)
 {
-    m0c = (void*)0x13eb938;
-    m04 = (void*)0x13eb938;
-    m00 = (void*)0x13eb938;
+    static const uint32_t kVtable = 0x13eb938;   // Destroy/Release vtable (address from retail)
+    m0c = (void*)kVtable;
+    m04 = (void*)kVtable;
+    m00 = (void*)kVtable;
     if (flags & 1)
         MultiHeapDelete(this);
     return this;

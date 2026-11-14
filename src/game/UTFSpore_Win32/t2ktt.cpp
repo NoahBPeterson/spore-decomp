@@ -1,10 +1,8 @@
-// src/game/UTFSpore_Win32/t2ktt.cpp -- migrated from slice(s) s008cc770 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/t2ktt.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/UTFSpore_Win32/t2ktt.cpp
+// TrueType "TT" scaler tables (t2k/fnt): object construction, scale selection and outline gridding.
 
 #include "game/types.h"
 
-// ---- items of slice s008cc770 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
@@ -26,7 +24,6 @@ void  FUN_008af5e0(void* p);                     // 0x8af5e0
 void  fnt_Execute(void* a, i32 b, i32 c, void* d, i32 e); // 0x8ac600
 i32   fnt_RoundToGrid(void);                     // 0x8ac040
 void  setT2KScaleFactors(i32 a, i32 b, u8* out); // 0x8cd1b0
-// ---- items of slice s008cc770 end
 
 // @ 0x008cc770
 void* New_T2KTTClass(void* mem, int* file, void* face)
@@ -154,6 +151,8 @@ void* New_T2KTTClass(void* mem, int* file, void* face)
 }
 
 // @ 0x008ccb20
+// Scale one x/y coordinate by the fixed-point pair at +0xa8/+0xb0, then shift down by the
+// fractional-bit count at +0xb4 (round toward negative infinity).
 i32 FUN_008ccb20(u8* o, i32 x)
 {
     u8 sh = *(u8*)(o + 0xb4);
@@ -161,6 +160,8 @@ i32 FUN_008ccb20(u8* o, i32 x)
 }
 
 // @ 0x008ccb40
+// Same scaling as FUN_008ccb20 but divides by the x-scale at +0xac instead of shifting,
+// truncating toward zero for both signs.
 i32 FUN_008ccb40(u8* o, i32 x)
 {
     if (x > -1)
@@ -169,6 +170,7 @@ i32 FUN_008ccb40(u8* o, i32 x)
 }
 
 // @ 0x008ccb90
+// Rounds a coordinate through the fixed 16.16 multiplier at +0xa4.
 void fnt_FixRound(u8* o, i32 v)
 {
     util_FixMul(v, *(i32*)(o + 0xa4));
@@ -357,6 +359,7 @@ void FUN_008cceb0(u8* o, u8* src)
 }
 
 // @ 0x008cd0f0
+// Releases every allocation owned by a T2KTTClass object, then the object itself.
 void FUN_008cd0f0(u8* p)
 {
     if (p == 0) return;
@@ -365,7 +368,7 @@ void FUN_008cd0f0(u8* p)
     tsi_DeAllocMem(*(void**)p, *(void**)(p + 0x20));
     tsi_DeAllocMem(*(void**)p, *(void**)(p + 0xa8));
     tsi_DeAllocMem(*(void**)p, *(void**)(p + 0xac));
-    if (*(u8*)(p + 0xf8) != 0) {
+    if (*(u8*)(p + 0xf8)) {
         void** q = (void**)(p + 0xb4);
         i32 n = 2;
         do {

@@ -1,62 +1,53 @@
-// src/game/UTFSpore_Win32/EATextUtil.cpp -- migrated from slice(s) s0093c950 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/EATextUtil.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
 
-// ---- items of slice s0093c950 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// Allocating operator used by the string helpers below (EASTL debug allocation, 0xf473a0).
 void* __cdecl operator new[](unsigned int size, const char* name, int a, int b,
                              const char* file, int line);
+
+// Release operator called to free the buffers those helpers allocate (0xf47380).
+extern "C" void __cdecl operator_delete__(void* p);   // 0xf47380
+
+extern "C" __declspec(dllimport) wchar_t* __cdecl _wcslwr(wchar_t* s);
+extern "C" __declspec(dllimport) char* __cdecl _strlwr(char* s);
+
 namespace EA {
 namespace Text {
+
 inline unsigned int Strlen(const char* pString) {
     const char* pBegin = pString + 1;
     while (*pString++)
         ;
     return (unsigned int)(pString - pBegin);
 }
-}
-}
-namespace EA {
-namespace Text {
+
 inline unsigned int Strlen(const wchar_t* pString) {
     const wchar_t* pBegin = pString + 1;
     while (*pString++)
         ;
     return (unsigned int)(pString - pBegin);
 }
-}
-}
-namespace EA {
-namespace Text {
+
 inline char* Strcpy(char* pDestination, const char* pSource) {
     char* p = pDestination;
     while ((*p++ = *pSource++) != 0)
         ;
     return pDestination;
 }
-}
-}
-namespace EA {
-namespace Text {
+
 inline wchar_t* Strcpy(wchar_t* pDestination, const wchar_t* pSource) {
     wchar_t* p = pDestination;
     while ((*p++ = *pSource++) != 0)
         ;
     return pDestination;
 }
-}
-}
-// ---- items of slice s0093c950 end
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" __declspec(dllimport) wchar_t* __cdecl _wcslwr(wchar_t* s);
-extern "C" __declspec(dllimport) char* __cdecl _strlwr(char* s);
-extern "C" void __cdecl operator_delete__(void* p);   // 0xf47380
+}  // namespace Text
+}  // namespace EA
 
 // @ 0x0093d210
 namespace EA {
 namespace Text {
+// Writes the binary data as uppercase hexadecimal text, one wchar_t per digit.
 void ConvertBinaryDataToASCIIArray(void const * pBinaryData_, unsigned int nBinaryDataLength, wchar_t * pASCIIArray)
 {
     const uint8_t* pBinaryData = (const uint8_t*)pBinaryData_;
@@ -65,11 +56,11 @@ void ConvertBinaryDataToASCIIArray(void const * pBinaryData_, unsigned int nBina
     while (pBinaryData < pEnd) {
         *pASCIIArray = (uint16_t)('0' + ((*pBinaryData & 0xf0) >> 4));
         if (*pASCIIArray > '9')
-            *pASCIIArray += 7;
+            *pASCIIArray += 7;  // skip the gap between '9' and 'A'
         pASCIIArray++;
         *pASCIIArray = (uint16_t)('0' + (*pBinaryData & 0x0f));
         if (*pASCIIArray > '9')
-            *pASCIIArray += 7;
+            *pASCIIArray += 7;  // skip the gap between '9' and 'A'
         pASCIIArray++;
         pBinaryData++;
     }
@@ -81,15 +72,17 @@ void ConvertBinaryDataToASCIIArray(void const * pBinaryData_, unsigned int nBina
 
 // @ 0x0093d280
 namespace EA { namespace Text {
+// Parses two uppercase hex digits per output byte; returns false on any non-hex digit
+// (which is treated as '0').
 bool ConvertASCIIArrayToBinaryData(const wchar_t* pASCIIArray, int nASCIIArrayLength, void* pBinaryData)
 {
-    uint8_t* pBinaryData8 = (uint8_t*)pBinaryData;
+    uint8_t* pBinaryOut = (uint8_t*)pBinaryData;
     const wchar_t* pEnd = pASCIIArray + nASCIIArrayLength;
     wchar_t cTemp;
     bool bReturnValue(true);
 
     while (pASCIIArray < pEnd) {
-        *pBinaryData8 = 0;
+        *pBinaryOut = 0;
 
         for (int j = 4; j >= 0; j -= 4) {
             cTemp = *pASCIIArray;
@@ -99,7 +92,7 @@ bool ConvertASCIIArrayToBinaryData(const wchar_t* pASCIIArray, int nASCIIArrayLe
                 bReturnValue = false;
             } else if (cTemp > 'F') {
                 if (cTemp >= 'a' && cTemp <= 'f')
-                    cTemp -= 39;
+                    cTemp -= 39;  // 'a'..'f' -> the same value as 'A'..'F'
                 else {
                     cTemp = '0';
                     bReturnValue = false;
@@ -108,13 +101,13 @@ bool ConvertASCIIArrayToBinaryData(const wchar_t* pASCIIArray, int nASCIIArrayLe
                 cTemp = '0';
                 bReturnValue = false;
             } else if (cTemp >= 'A')
-                cTemp -= 7;
+                cTemp -= 7;  // skip the gap between '9' and 'A'
 
-            *pBinaryData8 = (uint8_t)(*pBinaryData8 + ((cTemp - '0') << j));
+            *pBinaryOut = (uint8_t)(*pBinaryOut + ((cTemp - '0') << j));
             pASCIIArray++;
         }
 
-        pBinaryData8++;
+        pBinaryOut++;
     }
 
     return bReturnValue;
@@ -123,6 +116,8 @@ bool ConvertASCIIArrayToBinaryData(const wchar_t* pASCIIArray, int nASCIIArrayLe
 
 // @ 0x0093d320
 namespace EA { namespace Text {
+// Reads one delimiter-separated token out of pSource into pToken and advances
+// *ppNewSource past it. Returns false when there is no source to read.
 bool SplitTokenDelimited(const wchar_t* pSource, unsigned int nSourceLength, wchar_t cDelimiter, wchar_t* pToken, unsigned int nTokenLength, const wchar_t** ppNewSource)
 {
     if (pToken && nTokenLength)
@@ -154,6 +149,8 @@ bool SplitTokenDelimited(const wchar_t* pSource, unsigned int nSourceLength, wch
 
 // @ 0x0093d3a0
 namespace EA { namespace Text {
+// Recursive glob match supporting '*' and '?'; the template is instantiated for
+// char and wchar_t.
 template <class CharT> bool MatchPattern(const CharT* pElement, const CharT* pPattern)
 {
     if ((*pPattern == (CharT)'*') && !pPattern[1])

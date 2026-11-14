@@ -1,23 +1,12 @@
-// src/game/SPBake/_at_00470000.cpp -- migrated from slice(s) s0047f520, s0047e4b0 by tools/migrate/rewrite.py
-// Object file: SPBake/_at_00470000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// SPBake/_at_00470000.obj -- SP::cSPEditorHandle state/flag helpers and the ball-connector
+// (cSPEditorHandleBallConnector) destructor/interface query, built /Od /Ob1 /arch:SSE.
 
 #include "game/types.h"
-#include "cSPMatrix3.h"
-#include "cSPVector3.h"
-#include "SP/cMWModel.h"
-#include "SP/cModelDeformationHandle.h"
-#include "SP/cSPEditorBlock.h"
-#include "SP/cSPEditorHandle.h"
-#include "SP/cSPEditorHandleDeform.h"
-#include "SP/cSPEditorTrianglePinningInfo.h"
-#include "cSPTransform.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern float g_const_zero;   // 0x015d4578 (equiv t3)
 extern float g_const_one;
 
-// ---- items of slice s0047e4b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int uintptr_t;
 struct Bitset32 {
     uint32_t mWord[1];
@@ -58,10 +47,11 @@ struct cMWModel {
     void SetFlag(bool b);         // @ 0x00437f70
 };
 struct Vec3;
+// SP::cSPEditorHandle as it appears in this /Od module: the interface/refcount vtable
+// pointers are raw slots and the two models are plain pointers.
 struct cSPEditorHandle {
-    Vec3* GetTuningVec90(Vec3* out);
-    void** vptr;                  // +0x00
-    void** vptr2;                 // +0x04
+    void** vptr;                  // +0x00  primary vtable (EA::COM::IUnknown32)
+    void** vptr2;                 // +0x04  secondary vtable (EA::RefCountVTemplate<int>)
     int    mUnk8;                 // +0x08
     cPropertyList* mPropList;     // +0x0c
     cSPEditorBlock* mBlock;       // +0x10
@@ -77,31 +67,18 @@ struct cSPEditorHandle {
     bool   mHasOverdraw;          // +0x48
     float  mDefaultScale;         // +0x4c
 
-    uint32_t SetModelFlags(bool flag, uint8_t highlight);
-    void* GetPosition(void* out);
-    void* GetZeroVector(void* out);
-    float GetHandleAlphaForState(int state);
-    float GetOverdrawHandleAlphaForState(int state);
-    void* GetHandleColorForState(void* out, int state);
-    void* GetOverdrawHandleColorForState(void* out, int state);
-    bool IsFlagSet();
-    void SetStateFlags();
-    uint32_t SetScale(float s);
-    void SetState(int state, bool animate);
-    cMWModel* GetModel() { return mModel; }
-    cMWModel* GetOverdrawModel() { return mOverdrawModel; }
-    void BaseConstruct();
-    cSPEditorHandle* ConstructDerived();
+    void* GetPosition(void* out);             // 0x0047e600
+    uint32_t SetScale(float s);               // 0x0047f3e0
+    void SetStateFlags();                     // 0x0047f3b0
+    void BaseConstruct();                     // 0x0047d6a0
+    cSPEditorHandle* ConstructDerived();      // 0x0047f4b0
+    Vec3* GetTuningVec90(Vec3* out);          // 0x0047f9e0
 };
 struct cSPEditorBlock {
     char pad[0x48];
     float mPosX, mPosY, mPosZ;    // +0x48
 };
-extern float g_const_zero;   // 0x015d4578 (equiv t3)
-extern float g_const_one;
-// ---- items of slice s0047e4b0 end
-
-// ---- items of slice s0047f520 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- objects owned by slice s0047f520 (the deform/ball-connector handle family)
 extern void* EditorTuning();                  // 0x00401070 tuning struct, Vec3 members at +0x6c.. +0x90
 extern const float kDefaultHandleOffset[3];                // 0x15d4aa8
 extern void __fastcall cSPEditorHandle_Shutdown(void* self);   // 0x47e2c0 SP::cSPEditorHandle::Shutdown
@@ -164,7 +141,6 @@ struct cSPEditorBlock_s0047_f520 {
     void GetTransform(cSPTransformOps* out);   // 0x4362a0
 };
 struct BallConnectorIface { void* QueryInterface(u32 id); };
-// ---- items of slice s0047f520 end
 
 // @ 0x0047e600
 void* cSPEditorHandle::GetPosition(void* out)

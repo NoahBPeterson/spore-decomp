@@ -1,6 +1,3 @@
-// src/game/UTFSpore_Win32/EAHashString.cpp -- migrated from slice(s) s009323c0, s0041e730 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/EAHashString.obj.
-
 #include "game/types.h"
 #include <ctype.h>
 #include <wctype.h>
@@ -11,7 +8,7 @@ extern int g_defaultInt;
 // FNV-1 32-bit parameters.
 static const uint32_t kFnvPrime = 0x01000193;
 
-// TODO(rewrite): Property is a local stand-in; replace it with the canonical class once a header declares it.
+// Property is a local stand-in: no canonical header declares this class yet.
 struct Property {
     char* data;
     unsigned pad[3];
@@ -27,10 +24,14 @@ struct Property {
     int* GetInt();
 };
 
+// Property type tags that store an int directly (names are guesses).
+static const unsigned short kTypeInt = 9;
+static const unsigned short kTypeIntAlt = 0x10;
+
 // @ 0x0041e990
 int* Property::GetInt()
 {
-    if (type == 9 || type == 0x10) { return (int*)GetStorage(); }
+    if (type == kTypeInt || type == kTypeIntAlt) { return (int*)GetStorage(); }
     return &g_defaultInt;
 }
 

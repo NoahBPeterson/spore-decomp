@@ -1,23 +1,12 @@
-// src/game/SPGonzago/_at_01390000.cpp -- migrated from slice(s) s01399700, s0138d560 by tools/migrate/rewrite.py
-// Object file: SPGonzago/_at_01390000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
 #include <math.h>
-#include <string.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" int atexit(void (__cdecl*)());
-extern void FUN_013c9dd0(void);
-extern void FUN_013c9e00(void);
+extern void FUN_013c9dd0(void);   // reverse-release callback for the first layer table
+extern void FUN_013c9e00(void);   // reverse-release callback for the second layer table
 
-// ---- items of slice s0138d560 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" int atexit(void (__cdecl*)());
-extern void FUN_013c9dd0(void);
-extern void FUN_013c9e00(void);
-// ---- items of slice s0138d560 end
-
-// ---- items of slice s01399700 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// posse state used by the ring/offset initializers
 extern float g_posseBase;         // 0x15b625c
 extern float g_pfo_048;           // 0x16dc048
 extern float g_pfo_04c;           // 0x16dc04c
@@ -42,8 +31,6 @@ extern float g_ang_2;             // 0x16dc0dc
 extern float g_ang_3;             // 0x16dc0e0
 extern float g_ang_4;             // 0x16dc0e4
 typedef unsigned int uint;
-float cosf(float x);
-float sinf(float x);
 struct PropDesc {
     const char* name;    // +0x00
     uint        hash;    // +0x04
@@ -62,6 +49,8 @@ struct PropDesc {
     void*       f38;     // +0x38
 };
 extern PropDesc g_props_e870[2];    // 0x15b6a80  (stride 0x3c)
+
+// per-descriptor handlers stored by PropTableInit_e870 (f20..f38)
 void FUN_00692ca0();
 void FUN_00693090();
 void FUN_00572810();
@@ -69,7 +58,6 @@ void FUN_00572840();
 void FUN_00694f00();
 void FUN_00675ca0();
 void FUN_00b1fbf0();
-// ---- items of slice s01399700 end
 
 // @ 0x01390c90
 void init_16c9b8c()
@@ -88,6 +76,7 @@ void init_16c9b94()
 }
 
 // @ 0x01391740
+// Twelve int32 slots of one table, all set to the "none" sentinel -1.
 void init_16ca3d4()
 {
     *(int*)0x16ca3d4 = -1;
@@ -112,6 +101,7 @@ typedef char TerrainLayerRefSize[(sizeof(TerrainLayerRef) == 4) ? 1 : -1];
 typedef char TerrainLayerTableSize[(sizeof(g16d6d30) == 64) ? 1 : -1];
 
 // @ 0x01391bc0
+// Clears the first layer table, then registers the reverse-release callback that runs at exit.
 void init_16d6d30()
 {
     g16d6d30[0].mpLayer = 0;
@@ -139,6 +129,7 @@ extern TerrainLayerRef g16d6d70[16]; // 0x016d6d70
 typedef char TerrainLayerTable2Size[(sizeof(g16d6d70) == 64) ? 1 : -1];
 
 // @ 0x01391c20
+// Clears the second layer table, then registers its reverse-release callback at exit.
 void init_16d6d70()
 {
     g16d6d70[0].mpLayer = 0;
@@ -292,6 +283,7 @@ void PosseRingAngleInit()
 }
 
 // @ 0x0139e870
+// Builds the two entry descriptors of the "e870" property table (stride 0x3c).
 void PropTableInit_e870()
 {
     PropDesc d;

@@ -1,16 +1,32 @@
-// src/game/SPAudio/AudioCommandQueue.cpp -- migrated from slice(s) s00a0f350 by tools/migrate/rewrite.py
-// Object file: SPAudio/AudioCommandQueue.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// EA::Audio::Command parameter accessors and the command queue writer.
+// Object file: SPAudio/AudioCommandQueue.obj.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "EA/Audio/Command.h"
-#include "SP/cSPCreatureAnimManager.h"
-#include "EA/ArgScript/cCommandBase.h"
 #include <string.h>
 
-// ---- items of slice s00a0f350 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char  u8;
 typedef unsigned int   u32;
+
+// A command's parameters are packed as a three-word header (id, size, type) followed by
+// a payload padded up to 4 bytes.  These are the type codes the accessors accept.
+enum ParameterType {
+    kTypeFloat    = 0,
+    kTypeUint32   = 1,
+    kTypeString8  = 3,
+    kTypeVoidPtr  = 4,
+    kTypeData     = 5,
+    kTypeVector3  = 6,
+    kTypeMatrix33 = 7,
+};
+enum {
+    kParamHeaderSize = 0xc,          // three words: id, size, type
+    kParamAlignMask  = 0xfffffffc,   // round a payload size down to a 4-byte boundary
+};
+
+// The queue's reader functions (still in nonmatching.txt) use the dev-only Load/Clear
+// helpers, so this file keeps a stand-in for EA::Audio::Command that carries them; the
+// parameter accessors below are defined on the canonical class (src/game/include/EA/Audio/Command.h).
 namespace EA {
 namespace Audio {
 class Command_s00a0_f350 {
@@ -34,7 +50,6 @@ public:
         mCommandPtr = (u8*)p;
         mCommandEnd = mCommandPtr + mCommandSize;
     }
-    u8*  EnumParameter(u32* pos, u32* id, u32* type, int* size);  // 0x00a0f880 (EA::Audio::Command::EnumParameter)
     void* Find(int id, int* type, int* size);  // 0x00a0f8e0 (EA::Audio::Command::Find)
     bool SetT1(int id, int* type, int* size);
     bool GetFloat(int id, float* out);
@@ -47,43 +62,30 @@ public:
     bool GetMatrix33(int id, float* out);  // 0x00a0fc60 (EA::Audio::Command::GetMatrix33)
     bool SetUint64(int id, u32 v);  // 0x00a0fcf0 (EA::Audio::Command::SetUint64)
     bool SetFloat(int id, float v);  // 0x00a0fd30 (EA::Audio::Command::SetFloat)
-    void DeleteParameter(int id);  // 0x00a0fd70 (EA::Audio::Command::DeleteParameter)
 };
-}  // namespace
-}
-struct CmdQueue {
-    u32 mBegin, mEnd, mCap;      // +0 (fixed vector)
-    u8  pad[0x14 - 0xc];
-    EA::Audio::Command_s00a0_f350 mCmd;     // +0x14
-    u32 mWrite;                  // +0x2c
-    u32 mRead;                   // +0x30
-    u32 mCmdBase;                // +0x34
-    u32 mSizePtr;                // +0x38
-    u32 mCountPtr;               // +0x3c
-    u32 mNumCmds;                // +0x40
-    u32 mCapacity;               // +0x44
-    u32 mParamCount;             // +0x48
-    u32 mReadIndex;              // +0x4c
+}  // namespace Audio
+}  // namespace EA
 
-    CmdQueue();
-    void Swap(CmdQueue* o);
-    void Grow(u32 n);
-    void ResizeBuffer(u32 n);   // 0x4c0410
-    void Append(const void* data, u32 size);
-    void AddFloat(u32 id, u32 v);
-    void AddUint32(u32 id, u32 v);
-    void AddVoidPtr(u32 id, u32 v);
-    bool Reset(u32 n);
+// Ring buffer of packed audio commands, laid out from the retail assembly.
+struct CmdQueue {
+    u32 mBegin, mEnd, mCap;      // +0 fixed vector: base, end, capacity
+    u8  pad[0x14 - 0xc];         // +0xc reserved up to the embedded command
+    EA::Audio::Command_s00a0_f350 mCmd;     // +0x14 command being read
+    u32 mWrite;                  // +0x2c write cursor
+    u32 mRead;                   // +0x30 read cursor
+    u32 mCmdBase;                // +0x34 start of the command being written (0 = none)
+    u32 mSizePtr;                // +0x38 address of the open command's size word
+    u32 mCountPtr;               // +0x3c address of the open command's parameter count word
+    u32 mNumCmds;                // +0x40 number of complete commands in the buffer
+    u32 mCapacity;               // +0x44
+    u32 mParamCount;             // +0x48 parameters in the open command
+    u32 mReadIndex;              // +0x4c commands read so far
+
     void FinishCommand();
     void CancelCommand();
     bool ReadNext();
     void BeginRead();
-    void RewindRead();
-    void Clear();
-    void Ensure4() { if ((u32)((mBegin - mWrite) + mCapacity) < 4) Grow((mEnd - mBegin) * 2); }
-    void Put(u32 v) { Ensure4(); *(u32*)mWrite = v; mWrite += 4; }
 };
-// ---- items of slice s00a0f350 end
 
 // @ 0x00a0f880
 void const * EA::Audio::Command::EnumParameter(unsigned int & pos, unsigned int * id, unsigned int * type, unsigned int * size) const
@@ -98,7 +100,7 @@ void const * EA::Audio::Command::EnumParameter(unsigned int & pos, unsigned int 
     if (id) *id = rid;
     if (type) *type = ty;
     if (size) *size = sz;
-    pos = pos + ((sz + 3U) & 0xfffffffc) + 0xc;
+    pos = pos + ((sz + 3U) & kParamAlignMask) + kParamHeaderSize;
     return (u8*)q;
 }
 
@@ -118,7 +120,7 @@ void * EA::Audio::Command::Find(unsigned int id, unsigned int * type, unsigned i
                 return p;
             }
             i++;
-            p = (u32*)((u8*)p + ((sz + 3U) & 0xfffffffc));
+            p = (u32*)((u8*)p + ((sz + 3U) & kParamAlignMask));
         } while (i < mNumParameters);
     }
     return 0;
@@ -174,50 +176,43 @@ void CmdQueue::BeginRead()
 }
 
 // @ 0x00a0fa50
-namespace EA { namespace Audio {
-bool Command_s00a0_f350::SetT1(int id, int* type, int* size)
+bool EA::Audio::Command_s00a0_f350::SetT1(int id, int* type, int* size)
 {
     return Find(id, type, size) != 0;
 }
-}}  // namespace EA::Audio
 
 // @ 0x00a0fa70
-namespace EA { namespace Audio {
-bool Command_s00a0_f350::GetFloat(int id, float* out)
+bool EA::Audio::Command_s00a0_f350::GetFloat(int id, float* out)
 {
     int type; int size;
     float* p = (float*)Find(id, &type, &size);
     if (!p)
         return false;
-    if (type != 0)
+    if (type != kTypeFloat)
         return false;
     *out = *p; return true;
 }
-}}  // namespace EA::Audio
 
 // @ 0x00a0fab0
-namespace EA { namespace Audio {
-bool Command_s00a0_f350::GetUint32(int id, u32* out)
+bool EA::Audio::Command_s00a0_f350::GetUint32(int id, u32* out)
 {
     int type; int size;
     u32* p = (u32*)Find(id, &type, &size);
     if (!p)
         return false;
-    if (type != 1)
+    if (type != kTypeUint32)
         return false;
     *out = *p; return true;
 }
-}}  // namespace EA::Audio
 
 // @ 0x00a0faf0
-namespace EA { namespace Audio {
-bool Command_s00a0_f350::GetString8(int id, char* buf, u32* pSize)
+bool EA::Audio::Command_s00a0_f350::GetString8(int id, char* buf, u32* pSize)
 {
     int type; int size;
     void* p = Find(id, &type, &size);
     if (!p)
         return false;
-    if (type != 3)
+    if (type != kTypeString8)
         return false;
     if (pSize && (!buf || *pSize < (u32)size + 1)) {
         *pSize = size + 1;
@@ -227,107 +222,92 @@ bool Command_s00a0_f350::GetString8(int id, char* buf, u32* pSize)
     buf[size] = 0;
     return true;
 }
-}}  // namespace EA::Audio
 
 // @ 0x00a0fb60
-namespace EA { namespace Audio {
-const char* Command_s00a0_f350::GetString8(int id)
+const char* EA::Audio::Command_s00a0_f350::GetString8(int id)
 {
     int type; int size;
     const char* p = (const char*)Find(id, &type, &size);
     if (!p) return 0;
-    return type == 3 ? p : 0;
+    return type == kTypeString8 ? p : 0;
 }
-}}  // namespace EA::Audio
 
 // @ 0x00a0fb90
-namespace EA { namespace Audio {
-bool Command_s00a0_f350::GetVoidPtr(int id, void** out)
+bool EA::Audio::Command_s00a0_f350::GetVoidPtr(int id, void** out)
 {
     int type; int size;
     void** p = (void**)Find(id, &type, &size);
     if (!p)
         return false;
-    if (type != 4)
+    if (type != kTypeVoidPtr)
         return false;
     *out = *p; return true;
 }
-}}  // namespace EA::Audio
 
 // @ 0x00a0fbd0
-namespace EA { namespace Audio {
-void* Command_s00a0_f350::GetData(int id, void** out)
+void* EA::Audio::Command_s00a0_f350::GetData(int id, void** out)
 {
     int type; int size;
     void* p = Find(id, &type, &size);
     if (!p)
         return 0;
-    if (type != 5)
+    if (type != kTypeData)
         return 0;
     if (out) *out = (void*)size;
     return p;
 }
-}}  // namespace EA::Audio
 
 // @ 0x00a0fc10
-namespace EA { namespace Audio {
-bool Command_s00a0_f350::GetVector3(int id, float* out)
+bool EA::Audio::Command_s00a0_f350::GetVector3(int id, float* out)
 {
     int type; int size;
     float* p = (float*)Find(id, &type, &size);
     if (!p)
         return false;
-    if (type != 6)
+    if (type != kTypeVector3)
         return false;
-    float a = p[0], b = p[1], c = p[2];
-    out[0] = a; out[1] = b; out[2] = c;
+    float x = p[0], y = p[1], z = p[2];
+    out[0] = x; out[1] = y; out[2] = z;
     return true;
 }
-}}  // namespace EA::Audio
 
 // @ 0x00a0fc60
-namespace EA { namespace Audio {
-bool Command_s00a0_f350::GetMatrix33(int id, float* out)
+bool EA::Audio::Command_s00a0_f350::GetMatrix33(int id, float* out)
 {
     int type; int size;
     float* p = (float*)Find(id, &type, &size);
     if (!p)
         return false;
-    if (type != 7)
+    if (type != kTypeMatrix33)
         return false;
     float a = p[0], b = p[1], c = p[2], d = p[3], e = p[4], f = p[5], g = p[6], h = p[7], i = p[8];
     out[0] = a; out[1] = b; out[2] = c; out[3] = d; out[4] = e; out[5] = f; out[6] = g; out[7] = h; out[8] = i;
     return true;
 }
-}}  // namespace EA::Audio
 
 // @ 0x00a0fcf0
-namespace EA { namespace Audio {
-bool Command_s00a0_f350::SetUint64(int id, u32 v)
+bool EA::Audio::Command_s00a0_f350::SetUint64(int id, u32 v)
 {
     int type; int size;
     u32* p = (u32*)Find(id, &type, &size);
     if (!p)
         return false;
-    if (type != 1)
+    if (type != kTypeUint32)
         return false;
     *p = v; return true;
 }
-}}  // namespace EA::Audio
 
 // @ 0x00a0fd30
-namespace EA { namespace Audio {
-bool Command_s00a0_f350::SetFloat(int id, float v)
+bool EA::Audio::Command_s00a0_f350::SetFloat(int id, float v)
 {
     int type; int size;
     float* p = (float*)Find(id, &type, &size);
     if (!p)
         return false;
-    if (type != 0)
+    if (type != kTypeFloat)
         return false;
     *p = v; return true;
 }
-}}  // namespace EA::Audio
 
 // @ 0x00a0fd70
 void EA::Audio::Command::DeleteParameter(unsigned int id)
@@ -341,11 +321,11 @@ void EA::Audio::Command::DeleteParameter(unsigned int id)
             p++;
             if (id == (int)pid) {
                 if (p != 0)
-                    p[-3] = 0xffffffff;
+                    p[-3] = kInvalidId;   // Command::kInvalidId; marks the parameter deleted
                 return;
             }
             i++;
-            p = (u32*)((u8*)p + ((sz + 3U) & 0xfffffffc));
+            p = (u32*)((u8*)p + ((sz + 3U) & kParamAlignMask));
         } while (i < mNumParameters);
     }
 }

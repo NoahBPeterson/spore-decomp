@@ -213,7 +213,11 @@ public:
     bool IsDancingAnim(uint32_t animID, bool baby);
     bool HandleButton(uint32_t id);
 
-    char pad14[0x28 - 0x14];
+    uint32_t mEnvInclude;                                               // +0x14
+    uint32_t mRenderInclude;                                            // +0x18
+    uint32_t mModelWorld;                                               // +0x1c
+    uint32_t mCurrBkgNum;                                               // +0x20
+    uint32_t pad24;                                                     // +0x24
     uint32_t mField28;                                                  // +0x28
     uint32_t mDanceMovesGUID[6];                                        // +0x2c
     uint32_t mBabyDanceMovesGUID[6];                                    // +0x44
@@ -226,9 +230,9 @@ public:
 // @ 0x00630060
 cPlayModePhoto* cSPPlayModePhotoBrowser::GetPhotoAt(uint32_t idx, bool relative)
 {
-    uint32_t i = relative ? mCurrentFirstPhotoIndex + idx : idx;
-    if (i < mPhotos.size())
-        return mPhotos.mpBegin[i].mpObject;
+    const uint32_t photoIndex = relative ? mCurrentFirstPhotoIndex + idx : idx;
+    if (photoIndex < mPhotos.size())
+        return mPhotos.mpBegin[photoIndex].mpObject;
     return 0;
 }
 
@@ -263,9 +267,8 @@ cPlayModeTokenTranslator::cPlayModeTokenTranslator()
 // @ 0x0063b5a0
 cSPPlayModeSubModeDance::cSPPlayModeSubModeDance()
 {
-    char* p = (char*)this;
-    *(uint32_t*)(p + 0x14) = 0;
-    *(uint32_t*)(p + 0x18) = 0;
-    *(uint32_t*)(p + 0x1c) = 0;
-    *(uint32_t*)(p + 0x20) = 0;
+    mEnvInclude = 0;
+    mRenderInclude = 0;
+    mModelWorld = 0;
+    mCurrBkgNum = 0;
 }

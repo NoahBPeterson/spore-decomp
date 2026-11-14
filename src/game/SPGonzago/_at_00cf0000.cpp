@@ -1,23 +1,28 @@
-// src/game/SPGonzago/_at_00cf0000.cpp -- migrated from slice(s) s00cf6df0, s00cf0cf0 by tools/migrate/rewrite.py
-// Object file: SPGonzago/_at_00cf0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
 #include <math.h>
 #include <intrin.h>
 #pragma warning(disable: 4100)
 
-// ---- items of slice s00cf0cf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// This module rebuilds the SPGonzago city input/display strategy entry points
+// (SPGonzago/_at_00cf0000.obj).  Class/member names follow the canonical headers
+// under src/game/include; the few local layouts below are the slice's own stub
+// structs for objects whose canonical type lives in a not-yet-rebuilt module.
+
 typedef unsigned char  u8;
 typedef unsigned int   u32;
 typedef signed int     i32;
 #define MOPS(p) ((COps*)(p))
 #define VT(p)   (*(void***)(p))
+
+// Sibling-module helpers called by name (definitions live in other translation units).
 u8    __cdecl FUN_00b7c780();                                     // 0x00b7c780
 u32   __cdecl FUN_00b7c770();                                     // 0x00b7c770
 void  __cdecl FUN_00b7c810(u32 a);                                // 0x00b7c810
 void* __cdecl FUN_00b3d250();                                     // 0x00b3d250
 void* __cdecl FUN_00cf74c0();                                     // 0x00cf74c0
+
+// COps: opaque manager reached through FUN_00cf74c0(); the member list mirrors the
+// vtable slots callers in this module ask for (FUN_00cf74f0 / FUN_00cf7500 first).
 struct COps
 {
     void  FUN_00e352c0();                              // 0x00e352c0
@@ -47,6 +52,11 @@ struct COps
     void  FUN_00b815a0(void* a, void* b, void* c);      // 0x00b815a0
     void  FUN_00b7f1f0(void* a, void* b, u32 c);        // 0x00b7f1f0
 };
+
+// cCityInputStrategy: the local layout for SP::cCityInputStrategy, whose canonical
+// header lives in the not-yet-rebuilt SPCityInputStrategy.cpp (member offsets must
+// stay in sync with the CityInputStrategy struct there).  The slice banner "Strat"
+// was stripped so this object file is named '_at_00cf0000'.
 struct cCityInputStrategy
 {
     u8    pad0[0x48];            // +0x0000
@@ -105,9 +115,8 @@ struct cCityInputStrategy
     u32   FUN_00cf1ad0(void* a, void* b);
     void  FUN_00cf1be0(i32 a);
 };
-// ---- items of slice s00cf0cf0 end
 
-// ---- items of slice s00cf6df0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// Accessors, singleton getters and constructors defined in sibling modules.
 extern "C" void  *SP_NounManager();                         // 0x00b3d300
 extern "C" void  *GetPlayerCivilization(void *mgr);         // 0x00b25fb0
 extern const float kOne;        // 0x1485720 == 1.0f
@@ -144,7 +153,29 @@ extern const float kTwoj;       // 0x1470f1c == 2.0f
 extern const float kThird;      // 0x13f26dc == 0.33333334f
 extern const float kTwoThird;   // 0x140e87c == 0.6666667f
 extern const float kNegThird;   // 0x140d0cc == -0.33333334f
-// ---- items of slice s00cf6df0 end
+
+// The three civilization resource-capture keys FUN_00bf1880() switches on.  The
+// editor uses the same triple as the "next resource" ring in SPUILargeAssetView.
+const u32 kResMilitary  = 0x0a35d0f5;
+const u32 kResEconomic  = 0x3360727f;
+const u32 kResReligious = 0x6aeb96a1;
+
+// cCityInputStrategy::FUN_00cf0f10/FUN_00cf0f40 stamp these two fields to enter the
+// "civ tutorial/city view" state (meaning of the numeric id is a guess).  The
+// constructor writes the same id (SPCityInputStrategy.cpp: mn138 = 0x1510d07).
+const u8  kCityModeFlagOn = 1;
+const u32 kCityModeId     = 0x1510d07;
+
+// Pause gate released while the pending-noun queue is drained (0x4bf38a7; the
+// set-argument call site in SPCityInputStrategy.cpp still passes it raw).
+const u32 kGameTimeCityGate = 0x4bf38a7;
+
+// Id the world hands to the city-mode entry helper: only this arg skips
+// FUN_00cf1500(..., 1) (meaning is a guess; the set-argument call site still uses
+// the raw value).
+const u32 kCityEntryId = 0xdbdba1;
+// Camera control field +0x384: pitch/behaviour id for the city view (0x3e9).
+const u32 kCityCameraPitch = 0x3e9;
 
 // @ 0x00cf0e10
 bool FUN_00cf0e10()
@@ -176,8 +207,8 @@ void __stdcall FUN_00cf0f10(u32 param_1)
         void* st = MOPS(s)->FUN_00cf74f0();
         if (st)
         {
-            ((cCityInputStrategy*)st)->mField136 = 1;
-            ((cCityInputStrategy*)st)->mField138 = 0x1510d07;
+            ((cCityInputStrategy*)st)->mField136 = kCityModeFlagOn;
+            ((cCityInputStrategy*)st)->mField138 = kCityModeId;
         }
     }
 }
@@ -199,7 +230,7 @@ void FUN_00cf6df0()
 {
     void *gtm = GameTimeManager();
     typedef void (__thiscall *DecPauseFn)(void *self, u32 hash);
-    ((DecPauseFn)FUN_00b32250)(gtm, 0x4bf38a7);
+    ((DecPauseFn)FUN_00b32250)(gtm, kGameTimeCityGate);
     while (*(u32 *)((u8 *)FUN_00b3d4f0() + 0x54) != 0) {
         typedef void (__thiscall *StepFn)(void *self, int v);
         ((StepFn)FUN_00e2f270)(FUN_00b3d4f0(), 0);
@@ -207,41 +238,43 @@ void FUN_00cf6df0()
 }
 
 // @ 0x00cf6e70
+// Weighted hue/bias of the player civilization's three resource-capture ratios
+// (military, religious, economic -- see cCivilization::FUN_00bf1880).
 float FUN_00cf6e70()
 {
     float local = 0.0f;
     void *civ = ((void *(__thiscall *)(void *))GetPlayerCivilization)(SP_NounManager());
     if (civ != 0) {
-        float fVar6 = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, 0xa35d0f5);
-        float fVar1 = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, 0x6aeb96a1);
-        float fVar2 = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, 0x3360727f);
-        if (fVar6 > fVar2 && fVar2 < fVar1) {
-            float fVar7 = ((fVar1 / (fVar1 + fVar6)) * kTwoj) * kThird + kTwoThird;
+        float military = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, kResMilitary);
+        float religious = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, kResReligious);
+        float economic = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, kResEconomic);
+        if (military > economic && economic < religious) {
+            float fVar7 = ((religious / (religious + military)) * kTwoj) * kThird + kTwoThird;
             if (kOne < fVar7) {
-                return (fVar2 / ((fVar2 + fVar1) + fVar6)) * kThird + (fVar7 - kTwoj);
+                return (economic / ((economic + religious) + military)) * kThird + (fVar7 - kTwoj);
             }
-            return fVar7 - (fVar2 / ((fVar2 + fVar1) + fVar6)) * kThird;
+            return fVar7 - (economic / ((economic + religious) + military)) * kThird;
         }
-        if (fVar1 < fVar6 && fVar1 < fVar2) {
-            float fVar7 = ((fVar6 / (fVar2 + fVar6)) * kTwoj) * kThird;
-            float fVar6b = (fVar1 / ((fVar2 + fVar1) + fVar6)) * kThird;
+        if (religious < military && religious < economic) {
+            float fVar7 = ((military / (economic + military)) * kTwoj) * kThird;
+            float fVar6b = (religious / ((economic + religious) + military)) * kThird;
             if (kThird < fVar7) {
                 return fVar6b + fVar7;
             }
             return fVar7 - fVar6b;
         }
-        if (fVar6 < fVar1 && fVar6 < fVar2) {
-            float fVar7 = -(((fVar1 / (fVar2 + fVar1)) * kTwoj) * kThird);
-            float fVar6b = (fVar6 / ((fVar2 + fVar1) + fVar6)) * kThird;
+        if (military < religious && military < economic) {
+            float fVar7 = -(((religious / (economic + religious)) * kTwoj) * kThird);
+            float fVar6b = (military / ((economic + religious) + military)) * kThird;
             if (fVar7 < kNegThird) {
                 return fVar7 - fVar6b;
             }
             return fVar6b + fVar7;
         }
-        if (0.0f < fVar6) {
+        if (0.0f < military) {
             return kTwoThird;
         }
-        if (0.0f < fVar1) {
+        if (0.0f < religious) {
             local = -kTwoThird;
         }
     }
@@ -256,14 +289,14 @@ float FUN_00cf7090()
     if (civ == 0) {
         return result;
     }
-    float a = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, 0xa35d0f5);
-    float b = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, 0x6aeb96a1);
-    float c = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, 0x3360727f);
-    float lo1 = (b > a) ? a : b;
-    float m = (c > lo1) ? lo1 : c;
+    float military = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, kResMilitary);
+    float religious = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, kResReligious);
+    float economic = ((float (__thiscall *)(void *, u32))FUN_00bf1880)(civ, kResEconomic);
+    float lo1 = (religious > military) ? military : religious;
+    float m = (economic > lo1) ? lo1 : economic;
     result = m;
     if (m > kZero) {
-        result = m / (c + b + a);
+        result = m / (economic + religious + military);
     }
     return result;
 }
@@ -284,7 +317,7 @@ void __fastcall FUN_00cf71d0(void *self, void * /*edx*/, u32 arg)
     void *in = *(void **)(s + 0xe8);
     if (in != 0) {
         ((void (__thiscall *)(void *))(*(void ***)in)[1])(in);
-        if (arg == 0xdbdba1) {
+        if (arg == kCityEntryId) {
             ((void (__thiscall *)(void *))FUN_00cf14d0)(*(void **)(s + 0xe8));
         }
         void *cfg = SP_ConfigManager();
@@ -305,7 +338,7 @@ void __fastcall FUN_00cf71d0(void *self, void * /*edx*/, u32 arg)
         *(void **)(s + 0xec) = p;
         ((void (__thiscall *)(void *))FUN_00cea090)(p);
     }
-    if (arg != 0xdbdba1) {
+    if (arg != kCityEntryId) {
         ((void (__thiscall *)(void *, int))FUN_00cf1500)(*(void **)(s + 0xe8), 1);
     }
     void *cm = FUN_0067cab0();
@@ -315,7 +348,7 @@ void __fastcall FUN_00cf71d0(void *self, void * /*edx*/, u32 arg)
     void *cam = SP_GetCameraCtl();
     *(float *)((u8 *)cam + 0x380) = k42c80000;
     cam = SP_GetCameraCtl();
-    *(u32 *)((u8 *)cam + 0x384) = 0x3e9;
+    *(u32 *)((u8 *)cam + 0x384) = kCityCameraPitch;
     ((void (__thiscall *)(void *))FUN_00cf28f0)(*(void **)(s + 0xe8));
     ((void (__thiscall *)(void *, float, float, float, float))FUN_00b316d0)(
         GameTimeManager(), kCamPitch789, kCamPitch77c, kCamPitch780, kCamPitch784);

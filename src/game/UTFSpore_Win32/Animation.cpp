@@ -1,58 +1,41 @@
-// src/game/UTFSpore_Win32/Animation.cpp -- migrated from slice(s) s009515e0, s00950bb0 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/Animation.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// EA::UTFWin animation objects: curves, 2D paths and their factories.
+// Object file: UTFSpore_Win32/Animation.obj.
 
 #include "game/types.h"
-#include "EA/UTFWin/CustomWinProc.h"
-#include "EA/UTFWin/MultiHeapObject.h"
-#include <intrin.h>
 #include <string.h>
 #include <new>
 
-// ---- items of slice s00950bb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
 namespace UTFWin {
+// Reference-counted window procedure stub; only Release is part of this module.
+// The virtual slots are unnamed (no canonical header); slot2 is the deleting destructor.
 struct CustomWinProc_s0095_0bb0 {
     virtual void slot0();
     virtual void slot1();
     virtual void slot2(int);
+
     char pad[0x18];
     unsigned int mnRefCount;    // +0x1c
 
-    void* AsInterface(int typeId);   // 0x00950EB0
-    void* AsInterfaceA(int typeId);  // 0x00951240
-    int   Release();                 // 0x009514A0
+    int Release();                   // 0x009514A0
 };
 }
 }
-using EA::UTFWin::CustomWinProc_s0095_0bb0;
-// ---- items of slice s00950bb0 end
 
-// ---- items of slice s009515e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, int x, const char* file, int line); // 0x00f473a0
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 namespace eastl {
+
 struct false_type {};
-}
-namespace eastl {
 template <typename T> struct has_trivial_copy : public false_type {};
-}
-namespace eastl {
+
 struct input_iterator_tag {};
-}
-namespace eastl {
 struct forward_iterator_tag : public input_iterator_tag {};
-}
-namespace eastl {
 struct bidirectional_iterator_tag : public forward_iterator_tag {};
-}
-namespace eastl {
 struct random_access_iterator_tag : public bidirectional_iterator_tag {};
-}
-namespace eastl {
+
 template <typename T> inline const T& min_alt(const T& a, const T& b) { return (a < b) ? a : b; }
-}
-namespace eastl {
+
 template <typename T>
 class generic_iterator { public:
   T* mIterator;
@@ -61,28 +44,25 @@ class generic_iterator { public:
   T& operator*() const { return *mIterator; }
   T* base() const { return mIterator; }
 };
-}
-namespace eastl {
+
 template <typename T>
 inline bool operator!=(const generic_iterator<T>& a, const generic_iterator<T>& b) { return a.mIterator != b.mIterator; }
-}
-namespace eastl {
+
 template <typename T>
 inline T* uninitialized_copy_ptr(const T* first, const T* last, T* result) {
   const generic_iterator<T> i(uninitialized_copy_impl(generic_iterator<const T>(first), generic_iterator<const T>(last),
                                                       generic_iterator<T>(result), has_trivial_copy<T>()));
   return i.base();
 }
-}
-namespace eastl {
+
 template <typename T>
 __forceinline T* copy(const T* first, const T* last, T* result) {
   for (; first != last; ++first, ++result)
     *result = *first;
   return result;
 }
-}
-namespace eastl {
+
+// Minimal stand-in for eastl::vector<T> (the game's own vector, slice s009515e0).
 template <typename T>
 class vector_s0095_15e0 {
  public:
@@ -135,7 +115,9 @@ class vector_s0095_15e0 {
     }
   }
 };
-}
+
+}  // namespace eastl
+
 namespace Math {
 struct Vector3 {
   float x, y, z;
@@ -146,45 +128,25 @@ struct Vector3 {
 struct CurvePoint { float t, v; };
 namespace UTFWin {
 class ICoreAllocator;
-}
-namespace UTFWin {
 ICoreAllocator* GetDefaultAllocator();
-}
-namespace UTFWin {
 void* AllocObject(unsigned size, unsigned align, const char* name, ICoreAllocator* a);
-}
-namespace UTFWin {
 void FreeObject(void* p);
-}
-namespace UTFWin {
 struct TypeDesc { int x; };
-}
-namespace UTFWin {
 extern const TypeDesc kCurveDesc;
-}
-namespace UTFWin {
 extern const TypeDesc kPath2DDesc;
-}
-namespace UTFWin {
 struct PropertyRef {
   const TypeDesc* type;
   void* obj;
   int count;
   int value;
 };
-}
-namespace UTFWin {
 class Object {
  public:
   virtual int f0();
   virtual int f1() = 0;
   virtual ~Object() = 0;
 };
-}
-namespace UTFWin {
 inline Object::~Object() {}
-}
-namespace UTFWin {
 class AnimationCurve : public Object {
  public:
   eastl::vector_s0095_15e0<CurvePoint> mPoints;
@@ -207,10 +169,8 @@ class AnimationCurve : public Object {
   virtual int f7();
   virtual int f8();
   virtual void SetPoints(const CurvePoint* p, int n);
-  virtual unsigned GetPoints(CurvePoint* dst, unsigned max);
+  virtual unsigned GetPoints(CurvePoint* dst, unsigned maxCount);
 };
-}
-namespace UTFWin {
 class AnimationPath2D : public Object {
  public:
   eastl::vector_s0095_15e0<Math::Vector3> mPoints;
@@ -233,23 +193,18 @@ class AnimationPath2D : public Object {
   virtual int f7();
   virtual int f8();
   virtual void SetPoints(const Math::Vector3* p, int n);
-  virtual unsigned GetPoints(Math::Vector3* dst, unsigned max);
+  virtual unsigned GetPoints(Math::Vector3* dst, unsigned maxCount);
 };
-}
-namespace UTFWin {
 class AnimationCurveFactory {
  public:
   Object* Create(unsigned type, ICoreAllocator* alloc);
   const char* GetName(int);
 };
-}
-namespace UTFWin {
 class AnimationPath2DFactory {
  public:
   Object* Create(unsigned type, ICoreAllocator* alloc);
 };
 }
-// ---- items of slice s009515e0 end
 
 // @ 0x009513d0
 bool InitArray8(int* out, int src, int, int* allocator)
@@ -280,8 +235,10 @@ int CustomWinProc_s0095_0bb0::Release()
 // @ 0x009514d0
 bool ForwardCall514d0(int* a, int* b)
 {
+    // Forwards b[1], b[2] to virtual slot 9 of the object held at a[1].
     void* obj = *(void**)((char*)a + 4);
-    ((void(__thiscall*)(void*, int, int))((void**)*(void**)obj)[0x24 / 4])(obj, b[1], b[2]);
+    typedef void (__thiscall* ForwardFn)(void*, int, int);
+    ((ForwardFn)((void**)*(void**)obj)[0x24 / 4])(obj, b[1], b[2]);
     return true;
 }
 
@@ -305,28 +262,22 @@ bool InitArray12(int* out, int src, int, int* allocator)
 namespace UTFWin {
 const char* AnimationCurveFactory::GetName(int)
 { return "AnimationCurve"; }
-}  // namespace UTFWin
 
 // @ 0x009515f0
-namespace UTFWin {
 unsigned AnimationCurve::GetPointCount()
 { return mPoints.size(); }
-}  // namespace UTFWin
 
 // @ 0x00951600
-namespace UTFWin {
-unsigned AnimationCurve::GetPoints(CurvePoint* dst, unsigned max)
+unsigned AnimationCurve::GetPoints(CurvePoint* dst, unsigned maxCount)
 {
   if (dst) {
-    unsigned n = mPoints.size();
-    memcpy(dst, mPoints.mpBegin, eastl::min_alt(n, max) * sizeof(CurvePoint));
+    unsigned count = mPoints.size();
+    memcpy(dst, mPoints.mpBegin, eastl::min_alt(count, maxCount) * sizeof(CurvePoint));
   }
   return mPoints.size();
 }
-}  // namespace UTFWin
 
 // @ 0x00951650
-namespace UTFWin {
 void AnimationCurve::GetProperty(PropertyRef* out)
 {
   out->type = &kCurveDesc;
@@ -334,28 +285,22 @@ void AnimationCurve::GetProperty(PropertyRef* out)
   out->count = 1;
   out->value = f5();
 }
-}  // namespace UTFWin
 
 // @ 0x00951680
-namespace UTFWin {
 unsigned AnimationPath2D::GetPointCount()
 { return mPoints.size(); }
-}  // namespace UTFWin
 
 // @ 0x009516a0
-namespace UTFWin {
-unsigned AnimationPath2D::GetPoints(Math::Vector3* dst, unsigned max)
+unsigned AnimationPath2D::GetPoints(Math::Vector3* dst, unsigned maxCount)
 {
   if (dst) {
-    unsigned n = mPoints.size();
-    memcpy(dst, mPoints.mpBegin, eastl::min_alt(n, max) * sizeof(Math::Vector3));
+    unsigned count = mPoints.size();
+    memcpy(dst, mPoints.mpBegin, eastl::min_alt(count, maxCount) * sizeof(Math::Vector3));
   }
   return mPoints.size();
 }
-}  // namespace UTFWin
 
 // @ 0x00951710
-namespace UTFWin {
 void AnimationPath2D::GetProperty(PropertyRef* out)
 {
   out->type = &kPath2DDesc;
@@ -384,26 +329,20 @@ Object* AnimationPath2DFactory::Create(unsigned, ICoreAllocator* alloc)
     alloc = GetDefaultAllocator();
   return new (alloc) AnimationPath2D();
 }
-}  // namespace UTFWin
 
 // @ 0x00951960
-namespace UTFWin {
 Object* AnimationCurveFactory::Create(unsigned, ICoreAllocator* alloc)
 {
   if (!alloc)
     alloc = GetDefaultAllocator();
   return new (alloc) AnimationCurve();
 }
-}  // namespace UTFWin
 
 // @ 0x00951b60
-namespace UTFWin {
 void AnimationCurve::SetPoints(const CurvePoint* p, int n)
 { mPoints.assign(p, p + n); }
-}  // namespace UTFWin
 
 // @ 0x00951b80
-namespace UTFWin {
 void AnimationPath2D::SetPoints(const Math::Vector3* p, int n)
 { mPoints.assign(p, p + n); }
 }  // namespace UTFWin

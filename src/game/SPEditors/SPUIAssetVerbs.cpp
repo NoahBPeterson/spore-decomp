@@ -1,11 +1,14 @@
-// src/game/SPEditors/SPUIAssetVerbs.cpp -- migrated from slice(s) s00656310 by tools/migrate/rewrite.py
-// Object file: SPEditors/SPUIAssetVerbs.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// SP::cSPUIAssetVerbs -- the verb buttons of the Sporepedia asset browser.
+//
+// The class body comes from src/game/include/SP/cSPUIAssetVerbs.h.  The canonical EA::UTFWin::IWindow
+// and cSPUILayout headers declare no virtual slots, so the vtable helpers at the top spell the three
+// slots this module calls (AddRef +0, Release +4, the destructor +8).
 
 #include "game/types.h"
 #include "SP/cSPUIAssetVerbs.h"
 #include "SP/cSPUIAssetView.h"
 #include "cSPUILayout.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __fastcall cSPUILayout_Ctor(void* self);
@@ -13,9 +16,7 @@ extern "C" void* __cdecl EA_operator_new(int size, const char* name, int a, int 
 extern "C" void __cdecl RemoveHandler5(void* a, void* b, void* c, void* d, void* e);
 extern "C" void __cdecl SPUIHelpers_SetWindowAreaToParent(void* w);
 extern int gVtA, gVtB, gVtC, gVtD, gVtE, gVtF, gVtG, gVtH, gVtI;
-#include <intrin.h>
 
-// ---- items of slice s00656310 begin (TODO(rewrite): local stubs, replace by canonical classes)
 inline void  vc0(void* p, int off) { ((void(__thiscall*)(void*))(*(void**)((char*)*(void**)p + off)))(p); }
 inline void  vc1(void* p, int off, int a) { ((void(__thiscall*)(void*, int))(*(void**)((char*)*(void**)p + off)))(p, a); }
 inline void  vc2(void* p, int off, int a, int b) { ((void(__thiscall*)(void*, int, int))(*(void**)((char*)*(void**)p + off)))(p, a, b); }
@@ -51,10 +52,6 @@ struct cSPUILayout_s0065_6310 {
     void  SetReloadCallback(void* fn, void* self);  // 0x00810090 (cSPUILayout::SetReloadCallback)
     void  Init(void* key, int a, int id);  // 0x008120d0 (cSPUILayout::Init)
 };
-extern "C" void* __fastcall cSPUILayout_Ctor(void* self);
-extern "C" void* __cdecl EA_operator_new(int size, const char* name, int a, int b, int c, int d);
-extern "C" void __cdecl RemoveHandler5(void* a, void* b, void* c, void* d, void* e);
-extern "C" void __cdecl SPUIHelpers_SetWindowAreaToParent(void* w);
 struct cSPUIAssetVerbs {
     void* vf0;         // 0x00
     void* vf1;         // 0x04
@@ -80,8 +77,6 @@ struct cSPUIAssetVerbs {
     void SetVerbButtonEnabled(unsigned int idx);
     void Init(void* parent);
 };
-extern int gVtA, gVtB, gVtC, gVtD, gVtE, gVtF, gVtG, gVtH, gVtI;
-// ---- items of slice s00656310 end
 
 // @ 0x00656410
 void __fastcall cSPUIAssetVerbs_dtor(cSPUIAssetVerbs* self)
@@ -203,6 +198,72 @@ void SP::cSPUIAssetVerbs::Update(unsigned int p)
     if (mAutoMsgHandler.mpIdArray) vc2(mAutoMsgHandler.mpIdArray, 0x7c, 1, 0);
 }
 
+// The parent window of the verbs, reached through the slots the module calls.  The canonical
+// EA::UTFWin::IWindow header declares no virtual slots, so only FindWindow (vtable +0xf0) is spelled.
+struct IWinParent {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void slot02();
+    virtual void slot03();
+    virtual void slot04();
+    virtual void slot05();
+    virtual void slot06();
+    virtual void slot07();
+    virtual void slot08();
+    virtual void slot09();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void slot23();
+    virtual void slot24();
+    virtual void slot25();
+    virtual void slot26();
+    virtual void slot27();
+    virtual void slot28();
+    virtual void slot29();
+    virtual void slot30();
+    virtual void slot31();
+    virtual void slot32();
+    virtual void slot33();
+    virtual void slot34();
+    virtual void slot35();
+    virtual void slot36();
+    virtual void slot37();
+    virtual void slot38();
+    virtual void slot39();
+    virtual void slot40();
+    virtual void slot41();
+    virtual void slot42();
+    virtual void slot43();
+    virtual void slot44();
+    virtual void slot45();
+    virtual void slot46();
+    virtual void slot47();
+    virtual void slot48();
+    virtual void slot49();
+    virtual void slot50();
+    virtual void slot51();
+    virtual void slot52();
+    virtual void slot53();
+    virtual void slot54();
+    virtual void slot55();
+    virtual void slot56();
+    virtual void slot57();
+    virtual void slot58();
+    virtual void slot59();
+    virtual void* FindWindow(int id, int flag);  // vtable +0xf0
+};
+
 // @ 0x00656890
 void __cdecl ReloadCallback(cSPUIAssetVerbs* self, void* layout, bool reload)
 {
@@ -218,7 +279,7 @@ void __cdecl ReloadCallback(cSPUIAssetVerbs* self, void* layout, bool reload)
     void* w = ((cSPUILayout_s0065_6310*)self->mLayout)->FindWindowByID(0x149371c4, 1);
     AssignWin(&self->mWin7, w);
     if (self->mWinParent) {
-        void* w1 = vcp2(self->mWinParent, 0xf0, 0x67a3600, 1);
+        void* w1 = ((IWinParent*)self->mWinParent)->FindWindow(0x67a3600, 1);
         AssignWin(&self->mWinRoot, w1);
         if (self->mWinRoot) {
             float* r = vcfp(self->mWinRoot, 0x38);
@@ -229,9 +290,9 @@ void __cdecl ReloadCallback(cSPUIAssetVerbs* self, void* layout, bool reload)
             vc1(self->mWinParent, 0xdc, (int)self->mWin7);
             vc1(self->mWinRoot, 0xd8, (int)self->mWin7);
         }
-        void* w2 = vcp2(self->mWinParent, 0xf0, 0x667bf68, 1);
+        void* w2 = ((IWinParent*)self->mWinParent)->FindWindow(0x667bf68, 1);
         AssignWin(&self->mWin3, w2);
-        void* w3 = vcp2(self->mWinParent, 0xf0, 0x67a3238, 1);
+        void* w3 = ((IWinParent*)self->mWinParent)->FindWindow(0x67a3238, 1);
         AssignWin(&self->mWin4, w3);
         void* w4 = ((cSPUILayout_s0065_6310*)self->mLayout)->FindWindowByID(0x67a32d0, 1);
         AssignWin(&self->mWin6, w4);
@@ -240,7 +301,7 @@ void __cdecl ReloadCallback(cSPUIAssetVerbs* self, void* layout, bool reload)
             vc1(inner, 0xdc, (int)self->mWin6);
             if (self->mWin4) vc1(self->mWin4, 0xd8, (int)self->mWin6);
         }
-        void* w5 = vcp2(self->mWinParent, 0xf0, 0x67a36c0, 1);
+        void* w5 = ((IWinParent*)self->mWinParent)->FindWindow(0x67a36c0, 1);
         AssignWin(&self->mWin5, w5);
     }
     if (self->mWin7) SPUIHelpers_SetWindowAreaToParent(self->mWin7);

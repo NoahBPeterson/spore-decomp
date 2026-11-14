@@ -1,20 +1,18 @@
-// src/game/UTFSpore_Win32/EARandom.cpp -- migrated from slice(s) s00a68140, s00936090 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/EARandom.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
 #include "EA/Random/RandomLinearCongruential.h"
-#include "EA/Thread/Mutex.h"
-#include "EA/SharedLibrary.h"
-#include "EA/SharedLibraryRegistry.h"
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
 extern "C" unsigned __int64 __rdtsc(void);
+
+// Linear congruential generator parameters (descriptive names; the values are
+// the ones the original code uses).
+static const uint32_t kSeedMultiplier = 0x41c64e6d;
+static const uint32_t kSeedIncrement = 0x3039;
+static const uint32_t kInvalidSeed = 0xffffffff;
 
 // @ 0x00936090
 void EA::Random::RandomLinearCongruential::SetSeed(unsigned int seed)
 {
-    if (seed == 0xffffffff || seed == 0)
+    if (seed == kInvalidSeed || seed == 0)
         seed = (uint32_t)__rdtsc();
     mnSeed = seed;
 }
@@ -22,9 +20,9 @@ void EA::Random::RandomLinearCongruential::SetSeed(unsigned int seed)
 // @ 0x009360b0
 unsigned int EA::Random::RandomLinearCongruential::RandomUint32Uniform()
 {
-    uint64_t v = (uint64_t)mnSeed * 0x41c64e6d + 0x3039;
-    mnSeed = (uint32_t)v;
-    return v >> 16;
+    uint64_t product = (uint64_t)mnSeed * kSeedMultiplier + kSeedIncrement;
+    mnSeed = (uint32_t)product;
+    return product >> 16;
 }
 
 // @ 0x009360d0
@@ -43,8 +41,8 @@ double EA::Random::RandomLinearCongruential::RandomDoubleUniform()
 // @ 0x00a68fb0
 unsigned int EA::Random::RandomLinearCongruential::RandomUint32Uniform(unsigned int range)
 {
-    uint64_t l = (uint64_t)mnSeed * 0x41c64e6dULL + 0x3039;
-    mnSeed = (uint32_t)l;
-    uint32_t u = (uint32_t)(l >> 16);
-    return (uint32_t)(((uint64_t)u * range) >> 32);
+    uint64_t product = (uint64_t)mnSeed * kSeedMultiplier + kSeedIncrement;
+    mnSeed = (uint32_t)product;
+    uint32_t high = (uint32_t)(product >> 16);
+    return (uint32_t)(((uint64_t)high * range) >> 32);
 }

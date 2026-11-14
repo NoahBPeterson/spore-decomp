@@ -1,6 +1,5 @@
-// src/game/UTFSpore_Win32/_at_00980000.cpp -- migrated from slice(s) s009873a0, s0097f390 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/_at_00980000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/UTFSpore_Win32/_at_00980000.cpp
+// Object file: UTFSpore_Win32/_at_00980000.obj.
 
 #include "game/types.h"
 #include "EA/UTFWin/Window.h"
@@ -9,22 +8,23 @@
 #include "EA/UTFWin/cDropShadowDescriptor.h"
 #include <math.h>
 
-// unnamed retail callees and globals (address in the comment)
-extern "C" unsigned __cdecl wcslen(const wchar_t*);
-#pragma intrinsic(wcslen)
-
-// ---- items of slice s0097f390 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// Filler vtable slots: each VP expands to one `virtual void _pN();` declaration,
+// VP4 to four of them.
 #define CAT2(a, b) a##b
 #define CAT(a, b) CAT2(a, b)
 #define VP virtual void CAT(_p, __COUNTER__)();
 #define VP4 VP VP VP VP
+
+// unnamed retail callees and globals (address in the comment)
+extern "C" unsigned __cdecl wcslen(const wchar_t*);
+#pragma intrinsic(wcslen)
+#pragma intrinsic(sqrt)
+
 namespace EA {
 namespace UTFWinControls {
-struct IObj;
-}
-}
-namespace EA {
-namespace UTFWinControls {
+
+// Local stand-ins: the canonical headers declare none of these classes, so the
+// layout and the vtable slots this module needs are spelled out here.
 struct IObj {
     VP VP VP VP                                       // 0x00..0x0c
     virtual IObj* v10();                               // 0x10
@@ -34,15 +34,16 @@ struct IObj {
     VP4 VP4 VP4 VP4 VP VP VP                          // 0x4c..0x94
     virtual void  v98();                               // 0x98
 };
-}
-}
-namespace EA {
-namespace UTFWinControls {
-struct Arg2;
-}
-}
-namespace EA {
-namespace UTFWinControls {
+
+struct Arg2 {
+    char  pad0[8];
+    int   m08;                     // +0x08
+    int   m0c;                     // +0x0c
+    int   m10;                     // +0x10
+    int   m14;                     // +0x14
+    void* m18;                     // +0x18
+};
+
 struct IOwner {
     VP VP VP VP VP                                    // 0x00..0x10
     virtual int  v14();                                // 0x14
@@ -55,41 +56,22 @@ struct IOwner {
     bool Process(IObj* arg1, Arg2* arg2);
     bool Process2(IObj* arg1, Arg2* arg2);
 };
-}
-}
-namespace EA {
-namespace UTFWinControls {
+
+// A one-argument sink for a float value: Apply() pushes m10 through it.
 struct FloatSink {
     void Set(float v);                                 // 0x0095ee40
 };
-}
-}
-namespace EA {
-namespace UTFWinControls {
+
 struct FloatHolder {
     char  pad0[0x10];
     float m10;
     void Apply(FloatSink* sink);
 };
-}
-}
-namespace EA {
-namespace UTFWinControls {
-struct Arg2 {
-    char  pad0[8];
-    int   m08;                     // +0x08
-    int   m0c;                     // +0x0c
-    int   m10;                     // +0x10
-    int   m14;                     // +0x14
-    void* m18;                     // +0x18
-};
-}
-}
-// ---- items of slice s0097f390 end
 
-// ---- items of slice s009873a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-#pragma intrinsic(sqrt)
-struct ShadowDesc32;
+}  // namespace UTFWinControls
+}  // namespace EA
+
+// The retail shadow descriptor; SetMode1/SetMode2 are its two mode setters.
 struct ShadowDesc32 {
     int   m00;      // +0x00 mode
     int   m04;      // +0x04
@@ -118,21 +100,29 @@ struct ShadowDescC : ShadowDesc32 {
         SetMode2(2);
     }
 };
+
+// Vtable addresses the StdDrawable constructors install, in the order they are written.
+static const unsigned int kVtblBase0_04 = 0x013fa72c;
+static const unsigned int kVtblBase0_0C = 0x01445200;
+static const unsigned int kVtblStd_00   = 0x01445298;
+static const unsigned int kVtblStd_04   = 0x01445280;
+static const unsigned int kVtblStd_0C   = 0x01445240;
+
 struct StdDrawableBase0 {
     void* v[4];                     // +0x00 vtable ptrs (0,4,8,c)
     StdDrawableBase0()
     {
-        *(void* volatile*)&v[1] = (void*)0x13fa72c;
+        *(void* volatile*)&v[1] = (void*)kVtblBase0_04;
         v[2] = 0;
-        *(void* volatile*)&v[3] = (void*)0x1445200;
+        *(void* volatile*)&v[3] = (void*)kVtblBase0_0C;
     }
 };
 struct StdDrawableBase : StdDrawableBase0 {
     StdDrawableBase()
     {
-        *(void* volatile*)&v[0] = (void*)0x1445298;
-        *(void* volatile*)&v[1] = (void*)0x1445280;
-        *(void* volatile*)&v[3] = (void*)0x1445240;
+        *(void* volatile*)&v[0] = (void*)kVtblStd_00;
+        *(void* volatile*)&v[1] = (void*)kVtblStd_04;
+        *(void* volatile*)&v[3] = (void*)kVtblStd_0C;
     }
 };
 struct StdDrawable : StdDrawableBase {
@@ -157,7 +147,6 @@ struct StdDrawable : StdDrawableBase {
     bool  GetNaturalSize(float* out, int state, int unused);           // 0x9883f0
     StdDrawable();                                                     // 0x988420
 };
-// ---- items of slice s009873a0 end
 
 // @ 0x00980520
 namespace EA { namespace UTFWinControls {

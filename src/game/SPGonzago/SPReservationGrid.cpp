@@ -1,22 +1,21 @@
-// src/game/SPGonzago/SPReservationGrid.cpp -- migrated from slice(s) s00cc7fa0 by tools/migrate/rewrite.py
-// Object file: SPGonzago/SPReservationGrid.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// Reservation grid: two fixed-capacity sorted maps of reserved cube-map spots.
+// `Get` returns the existing entry for a key, inserting a default one when absent;
+// `FilterRCluster` drops from `dst` every key present in `src`.
 
 #include "game/types.h"
-#include "SP/cSPCreatureCitizen.h"
-#include "SP/cReservationGrid.h"
 
-// ---- items of slice s00cc7fa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int u32;
 typedef unsigned char u8;
+// A spot on the reservation grid: the cube-map cell (mX/mY/mZ are the header's
+// cCubeMapIndex mCol/mRow/mFace) plus the reserving id and two flags.
 struct cReservedSpot {
-    u32 mX;            // +0x00
-    u32 mY;            // +0x04
-    u32 mZ;            // +0x08
-    u32 mID;           // +0x0c
+    u32 mX;            // +0x00  cube-map column
+    u32 mY;            // +0x04  cube-map row
+    u32 mZ;            // +0x08  cube-map face
+    u32 mID;           // +0x0c  id of the reserver, 0 = none
     bool mbReserved;   // +0x10
     bool mbHasCitizen; // +0x11
-    u8 mPad12[2];      // +0x12
+    u8 mPad12[2];      // +0x12  tail padding to 0x14
 
     cReservedSpot() {
         mID = 0;
@@ -24,6 +23,7 @@ struct cReservedSpot {
         mbHasCitizen = false;
     }
 };
+// One (key, spot) entry of a fixed-capacity sorted map.
 struct ReservedPair {
     u32 mKey;           // +0x00
     cReservedSpot mSpot; // +0x04
@@ -35,11 +35,14 @@ struct Map100;
 struct Map121;
 ReservedPair* LowerBound(ReservedPair* first, ReservedPair* last, const u32* key, bool compare); // 0x00612db0
 void CopyVertex3D(void* first, void* last, void* result);                                         // 0x00720250
+
+// Backing store of a `spstl::fixed_vector_map<unsigned int, cReservedSpot, N, 1>`: an inline
+// array of pairs with a comparator flag. Map100 holds 100 entries, Map121 holds 121.
 struct Map100 {
     ReservedPair* mpBegin; // +0x000
-    ReservedPair* mpEnd;   // +0x004
-    u32 mPad08[0x25c];     // +0x008
-    bool mCompare;         // +0x978
+    ReservedPair* mpEnd;   // +0x004  one past the last live pair
+    u32 mPad08[0x25c];     // +0x008  inline pair storage (100 * 0x14 bytes)
+    bool mCompare;         // +0x978  eastl::less comparator state
     u8 mPadTail[3];        // +0x979
 
     cReservedSpot& Get(const u32& key);
@@ -48,9 +51,9 @@ struct Map100 {
 };
 struct Map121 {
     ReservedPair* mpBegin; // +0x000
-    ReservedPair* mpEnd;   // +0x004
-    u32 mPad08[0x2da];     // +0x008
-    bool mCompare;         // +0xb70
+    ReservedPair* mpEnd;   // +0x004  one past the last live pair
+    u32 mPad08[0x2da];     // +0x008  inline pair storage (121 * 0x14 bytes)
+    bool mCompare;         // +0xb70  eastl::less comparator state
     u8 mPadTail[3];        // +0xb71
 
     cReservedSpot& Get(const u32& key);
@@ -59,6 +62,8 @@ struct Map121 {
     void erase(ReservedPair* it);
     void clear();
 };
+
+// The grid's two reservation maps (kept clear / reserved) plus the resolution statistics.
 struct cReservationGrid {
     u32 mGridRes;           // +0x000
     float mSquareSize;      // +0x004
@@ -73,6 +78,7 @@ struct cReservationGrid {
     void GetRClusterByCoord(u32 rcoord, Map121* cluster, u32 face); // 0x00cc81f0
     void GetRCluster(void* position, Map121* cluster, u32 face); // 0x00cc8670
 };
+// Return the entry for `key`, or mpEnd when absent.
 ReservedPair* Map100::find(const u32& key) {
     ReservedPair* last = mpEnd;
     ReservedPair* it = LowerBound(mpBegin, last, &key, mCompare);
@@ -83,18 +89,19 @@ ReservedPair* Map121::find(const u32& key) {
     ReservedPair* it = LowerBound(mpBegin, last, &key, mCompare);
     return (it == last || key < it->mKey) ? last : it;
 }
+// Shift the tail down over `it` and shrink the map by one.
 void Map121::erase(ReservedPair* it) {
     if (it + 1 < mpEnd)
         CopyVertex3D(it + 1, mpEnd, it);
     mpEnd -= 1;
 }
+// Drop every live entry.
 void Map121::clear() {
     ReservedPair* first = mpBegin;
     ReservedPair* last = mpEnd;
     CopyVertex3D(last, mpEnd, first);
     mpEnd -= last - first;
 }
-// ---- items of slice s00cc7fa0 end
 
 // @ 0x00cc7fa0
 void __stdcall FilterRCluster(Map121* dst, const Map100* src)
@@ -112,9 +119,9 @@ void __stdcall FilterRCluster(Map121* dst, const Map100* src)
 // @ 0x00cc8040
 cReservedSpot& Map100::Get(const u32& key)
 {
-    ReservedPair* last = mpEnd;
-    ReservedPair* it = LowerBound(mpBegin, last, &key, mCompare);
-    if (it == last || key < it->mKey)
+    ReservedPair* end = mpEnd;
+    ReservedPair* it = LowerBound(mpBegin, end, &key, mCompare);
+    if (it == end || key < it->mKey)
         it = insert(it, ReservedPair(key, cReservedSpot()));
     return it->mSpot;
 }
@@ -122,9 +129,9 @@ cReservedSpot& Map100::Get(const u32& key)
 // @ 0x00cc80c0
 cReservedSpot& Map121::Get(const u32& key)
 {
-    ReservedPair* last = mpEnd;
-    ReservedPair* it = LowerBound(mpBegin, last, &key, mCompare);
-    if (it == last || key < it->mKey)
+    ReservedPair* end = mpEnd;
+    ReservedPair* it = LowerBound(mpBegin, end, &key, mCompare);
+    if (it == end || key < it->mKey)
         it = insert(it, ReservedPair(key, cReservedSpot()));
     return it->mSpot;
 }

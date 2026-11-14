@@ -1,38 +1,34 @@
-// src/game/UTFSpore_Win32/Arguments.cpp -- migrated from slice(s) s00837820 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/Arguments.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// EA::ArgScript command-line parsing: cArguments (the tokeniser and its accessors).
+// Object file: UTFSpore_Win32/Arguments.obj.
 
 #include "game/types.h"
 #include "EA/ArgScript/cArguments.h"
-#include "EA/ArgScript/cError.h"
 
-// unnamed retail callees and globals (address in the comment)
-extern "C" __declspec(dllimport) int __cdecl isspace(int);
-extern "C" __declspec(dllimport) int __cdecl isalpha(int);
-extern "C" unsigned int __cdecl strlen(const char*);
-#pragma intrinsic(strlen)
-
-// ---- items of slice s00837820 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// Retail helpers this translation unit calls but does not define (address in the comment).
 void  __cdecl operator_delete__(void*);
 __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 extern "C" __declspec(dllimport) int __cdecl isspace(int);
 extern "C" __declspec(dllimport) int __cdecl isalpha(int);
 extern "C" unsigned int __cdecl strlen(const char*);
+#pragma intrinsic(strlen)
 void* __cdecl EASTL_memmove(void* dst, const void* src, unsigned int n);   // 0x011e0744
+void  __cdecl ThrowError(const char* fmt, ...);
 struct cOptionArgInfo;
 cOptionArgInfo* __cdecl CopyOptionArgInfo(const cOptionArgInfo* first, const cOptionArgInfo* last, cOptionArgInfo* dest);   // 0x00705250
+
 inline void CopyElems(const char** first, const char** last, const char** dest) {
     EASTL_memmove(dest, first, (unsigned)((char*)last - (char*)first));
 }
 inline void CopyElems(cOptionArgInfo* first, cOptionArgInfo* last, cOptionArgInfo* dest) {
     CopyOptionArgInfo(first, last, dest);
 }
+
 struct cError {
     uint32_t m0, m1, m2, m3;
     cError(const char* fmt, ...);   // 0x0052df30 (cdecl, this pushed)
     cError(const cError&);
 };
-void  __cdecl ThrowError(const char* fmt, ...);
+
 struct cOptionArgInfo {
     char* mName;                 // +0
     int   mFirstArgumentIndex;   // +4
@@ -64,6 +60,13 @@ struct sp_vector {
         }
     }
 };
+
+// Release a vector's storage unless its allocator is a no-op (retail's flag at p[-1]).
+template <class T>
+inline void DestroyVector(sp_vector<T>& v) {
+    if (v.mpBegin && ((int*)v.mpBegin)[-1] != 0) operator_delete__(v.mpBegin);
+}
+
 inline void DoInsertValue(sp_vector<const char*>* vec, const char** pos, const char* const& v) { vec->DoInsertValueP(pos, v); }
 inline void DoInsertValue(sp_vector<cOptionArgInfo>* vec, cOptionArgInfo* pos, const cOptionArgInfo& v) { vec->DoInsertValueO(pos, v); }
 struct cArguments {
@@ -74,7 +77,6 @@ struct cArguments {
     int mNumMainArguments;                       // +0x40
 
     cArguments();
-    cArguments(int text);
     ~cArguments();
     void  Advance();                                   // 0x837ed0
     bool  HasArgument(const char* p);                  // 0x837ee0
@@ -107,7 +109,6 @@ struct cArgumentsEH {
     int mNumMainArguments;
     cArgumentsEH(int text);
 };
-// ---- items of slice s00837820 end
 
 // @ 0x00837f40
 void cArguments::FindUnprocessed()
@@ -135,15 +136,9 @@ void cArguments::GetArguments(int* count, char*** begin)
 // @ 0x00837fa0
 cArguments::~cArguments()
 {
-    if (mOptionArguments.mpBegin && ((int*)mOptionArguments.mpBegin)[-1] != 0) {
-        operator_delete__(mOptionArguments.mpBegin);
-    }
-    if (mArguments.mpBegin && ((int*)mArguments.mpBegin)[-1] != 0) {
-        operator_delete__((void*)mArguments.mpBegin);
-    }
-    if (mArgStorage.mpBegin && ((int*)mArgStorage.mpBegin)[-1] != 0) {
-        operator_delete__(mArgStorage.mpBegin);
-    }
+    DestroyVector(mOptionArguments);
+    DestroyVector(mArguments);
+    DestroyVector(mArgStorage);
 }
 
 // @ 0x00837ff0
@@ -228,10 +223,6 @@ void cArguments::OptionArguments(const char* label, int n)
 {
     OptionArguments(label, 0, n, n);
 }
-
-// @ 0x00838350
-void FUN_00838350(int self, void* vec)
-{ (void)self; (void)vec; }
 
 // @ 0x008383c0
 void cArguments::SplitIntoArguments(const char* text)

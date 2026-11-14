@@ -1,14 +1,10 @@
-// src/game/UTFSpore_Win32/XmlTextWriter.cpp -- migrated from slice(s) s009013e0 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/XmlTextWriter.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
-#include "game/types.h"
 #include "EA/XML/XmlTextWriter.h"
+#include "EA/IO/IStream.h"
 #include <stdarg.h>
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
+// Retail helpers this translation unit calls but does not define (address in the comment).
 extern "C" size_t wcslen(const wchar_t*);
-extern "C" bool  __cdecl IO_WriteEncoded(void* pStream, const void* p, unsigned int n,
+extern "C" bool  __cdecl IO_WriteEncoded(EA::IO::IStream* pStream, const void* p, unsigned int n,
                                          unsigned int enc);                    // 0x93b820
 extern "C" int   __cdecl Vsnprintf16(wchar_t* buf, unsigned int count,
                                      const wchar_t* fmt, va_list ap);          // 0x939950
@@ -55,13 +51,13 @@ bool EA::XML::XmlTextWriter::CloseCurrentElement()
 {
     switch (mnState) {
     case kStateElement:
-        if (!WriteText((const wchar_t*)0x140a054, 1)) return false;
+        if (!WriteText(L">", 1)) return false;
         break;
     case kStatePI:
-        if (!WriteText((const wchar_t*)0x143a110, 2)) return false;
+        if (!WriteText(L"?>", 2)) return false;
         break;
     case kStateCDATA:
-        if (!WriteText((const wchar_t*)0x143a118, 3)) return false;
+        if (!WriteText(L"]]>", 3)) return false;
         break;
     default:
         break;
@@ -89,7 +85,7 @@ bool EA::XML::XmlTextWriter::BeginProcessingInstruction(wchar_t const * s)
 // @ 0x00901700
 bool EA::XML::XmlTextWriter::EndProcessingInstruction()
 {
-    EState s = (EState)mnState;
+    EState s = mnState;
     mbSimpleElement = 0;
     switch (s) {
     case kStatePI:
@@ -109,7 +105,7 @@ bool EA::XML::XmlTextWriter::EndProcessingInstruction()
 // @ 0x00901740
 bool EA::XML::XmlTextWriter::AppendAttribute(wchar_t const * name, wchar_t const * value)
 {
-    if (mnState != 1 && mnState != 2)
+    if (mnState != kStateElement && mnState != kStatePI)
         return false;
     return (WriteText(L" ", 1)
          && WriteName(name)
@@ -121,14 +117,14 @@ bool EA::XML::XmlTextWriter::AppendAttribute(wchar_t const * name, wchar_t const
 // @ 0x009017d0
 bool __cdecl EA::XML::XmlTextWriter::AppendAttributeF(wchar_t const * name, wchar_t const * fmt, ...)
 {
-    if (this->mnState != 1 && this->mnState != 2)
+    if (this->mnState != kStateElement && this->mnState != kStatePI)
         return false;
     wchar_t buf[256];
     va_list ap;
     va_start(ap, fmt);
-    int n = Vsnprintf16(buf, 0x100, fmt, ap);
+    int n = Vsnprintf16(buf, 256, fmt, ap);
     va_end(ap);
-    if (n >= 0x100)
+    if (n >= 256)
         return false;
     return (this->WriteText(L" ", 1)
          && this->WriteName(name)
@@ -150,7 +146,7 @@ int EA::XML::XmlTextWriter::WriteCharData(wchar_t const * s)
 // @ 0x009018d0
 bool EA::XML::XmlTextWriter::WriteCDATA(wchar_t const * s)
 {
-    if (mnState != 3) {
+    if (mnState != kStateCDATA) {
         if (!CloseCurrentElement())
             return false;
         if (!WriteText(L"<![CDATA[", 9))
@@ -194,7 +190,7 @@ bool EA::XML::XmlTextWriter::WriteXmlHeader()
 EA::XML::XmlTextWriter::XmlTextWriter(bool bPretty, EA::XML::XmlTextWriter::OutputEncoding nEncoding)
 {
     mOutputEncoding = nEncoding;
-    *(void**)this = (void*)0x143a1c0;
+    *(void**)this = (void*)0x143a1c0;  // XmlTextWriter vtable
     mbFormatPretty = bPretty;
     mbSimpleElement = 0;
     mnState = kStateChars;
@@ -207,10 +203,10 @@ EA::XML::XmlTextWriter::XmlTextWriter(bool bPretty, EA::XML::XmlTextWriter::Outp
 // @ 0x00901a50
 EA::XML::XmlTextWriter::~XmlTextWriter()
 {
-    *(void**)this = (void*)0x143a1c0;
-    if (mpOutputStream.mpObject != 0) {
-        void* p = mpOutputStream.mpObject;
-        ((void(__thiscall*)(void*))(*(void***)p)[2])(p);
+    *(void**)this = (void*)0x143a1c0;  // XmlTextWriter vtable
+    if (mpOutputStream.get() != 0) {
+        EA::IO::IStream* p = mpOutputStream.get();
+        p->Release();
     }
 }
 
@@ -261,7 +257,7 @@ bool EA::XML::XmlTextWriter::BeginElement(wchar_t const * name)
 // @ 0x00901b90
 bool EA::XML::XmlTextWriter::EndElement(wchar_t const * name)
 {
-    EState s = (EState)mnState;
+    EState s = mnState;
     --mnIndentLevel;
     switch (s) {
     case kStateElement:
@@ -322,13 +318,13 @@ bool EA::XML::XmlTextWriter::WriteComment(wchar_t const * s, bool bIndent)
 // @ 0x00901d30
 void EA::XML::XmlTextWriter::SetOutputStream(EA::IO::IStream * pStream, bool bPretty)
 {
-    void* old = mpOutputStream.mpObject;
+    EA::IO::IStream* old = mpOutputStream.get();
     if (pStream != old) {
         if (pStream != 0)
-            ((void(__thiscall*)(void*))(*(void***)pStream)[1])(pStream);
+            pStream->AddRef();
         mpOutputStream.mpObject = pStream;
         if (old != 0)
-            ((void(__thiscall*)(void*))(*(void***)old)[2])(old);
+            old->Release();
     }
     mbFormatPretty = bPretty;
 }
@@ -336,8 +332,9 @@ void EA::XML::XmlTextWriter::SetOutputStream(EA::IO::IStream * pStream, bool bPr
 // @ 0x00901d90
 bool EA::XML::XmlTextWriter::WriteText(wchar_t const * p, unsigned int n)
 {
-    void* stream = mpOutputStream.mpObject;
+    EA::IO::IStream* stream = mpOutputStream.get();
     if (stream != 0) {
+        // 0x143a2ac maps OutputEncoding to the EA text-encoding id IO_WriteEncoded expects.
         return IO_WriteEncoded(stream, p, n,
                                ((unsigned int*)0x143a2ac)[mOutputEncoding]);
     }

@@ -1,15 +1,11 @@
-// src/game/UTFSpore_Win32/pnglwrite.cpp -- migrated from slice(s) s0086d090 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/pnglwrite.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/UTFSpore_Win32/pnglwrite.cpp -- the png_create_* / filter-heuristics writers of libpng 1.2.25.
 
 #include "game/types.h"
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <setjmp.h>
 
-// ---- items of slice s0086d090 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned long png_uint_32;
 typedef unsigned short png_uint_16;
 typedef unsigned char png_byte;
@@ -158,17 +154,28 @@ extern "C" void png_set_write_fn(png_structp, png_voidp, png_rw_ptr, png_flush_p
 extern "C" const char* png_get_libpng_ver(png_voidp);        // 0x0086aec0
 __declspec(noinline) png_voidp png_create_struct_2(int type, png_malloc_ptr malloc_fn, png_voidp mem_ptr);
 __declspec(noinline) void png_destroy_struct(png_voidp struct_ptr);
-// ---- items of slice s0086d090 end
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" png_voidp png_malloc(png_structp png_ptr, png_uint_32 size);   // 0x0086d7f0
-extern "C" void png_warning(png_structp, const char*);       // 0x0086b300
-extern "C" void png_error(png_structp, const char*);         // 0x0086b250
-extern "C" void png_free(png_structp, png_voidp);            // 0x0086d850
-extern "C" void png_set_mem_fn(png_structp, png_voidp, png_malloc_ptr, png_free_ptr);      // 0x0086d7a0
-extern "C" void png_set_error_fn(png_structp, png_voidp, png_error_ptr, png_error_ptr);    // 0x0086b230
-extern "C" void png_set_write_fn(png_structp, png_voidp, png_rw_ptr, png_flush_ptr);       // 0x008773d0
-extern "C" const char* png_get_libpng_ver(png_voidp);        // 0x0086aec0
+// Number of PNG filter types whose cost is tracked (None, Sub, Up, Avg, Paeth).
+const int kNumFilterTypes = 5;
+// png_struct / png_info allocation sizes (sizeof(png_struct), sizeof(png_info)).
+const unsigned int kPngInfoSize  = 0x120;
+const unsigned int kPngStructSize = 0x280;
+// png_create_struct_2 type codes: 1 asks for a png_struct, 2 for a png_info.
+const int PNG_STRUCT = 1;
+const int PNG_INFO_STRUCT = 2;
+// Filter heuristic methods: 0 = default, 1 = no weights (fixed), 2 = weighted, >= 3 is unknown.
+const int PNG_FILTER_HEURISTIC_DEFAULT    = 0;
+const int PNG_FILTER_HEURISTIC_UNWEIGHTED = 1;
+const int PNG_FILTER_HEURISTIC_WEIGHTED   = 2;
+// Methods at or above this count are not recognised.
+const int PNG_FILTER_HEURISTIC_MAX = 3;
+// Default compression output buffer size, and the "application vs library version differs" flag.
+const unsigned int kZbufSize = 0x2000;
+const png_uint_32 kFlagVersionMismatch = 0x20000;
+// Scale factors for the fixed-point filter weight/cost tables (libpng uses 8.8-ish integers).
+const int kFilterWeightScale = 256;
+const int kFilterCostScale   = 8;
+const int kFilterWeightInit  = 255;
 
 // @ 0x0086d090
 void png_set_filter_heuristics(png_structp png_ptr, int heuristic_method, int num_weights, double* filter_weights, double* filter_costs)
@@ -177,17 +184,17 @@ void png_set_filter_heuristics(png_structp png_ptr, int heuristic_method, int nu
 
    if (png_ptr == 0)
       return;
-   if (heuristic_method >= 3)
+   if (heuristic_method >= PNG_FILTER_HEURISTIC_MAX)
    {
       png_warning(png_ptr, "Unknown filter heuristic method");
       return;
    }
 
-   if (heuristic_method == 0)
-      heuristic_method = 1;
+   if (heuristic_method == PNG_FILTER_HEURISTIC_DEFAULT)
+      heuristic_method = PNG_FILTER_HEURISTIC_UNWEIGHTED;
 
    if (num_weights < 0 || filter_weights == 0 ||
-      heuristic_method == 1)
+      heuristic_method == PNG_FILTER_HEURISTIC_UNWEIGHTED)
       num_weights = 0;
 
    png_ptr->num_prev_filters = (png_byte)num_weights;
@@ -203,7 +210,7 @@ void png_set_filter_heuristics(png_structp png_ptr, int heuristic_method, int nu
          /* To make sure that the weighting starts out fairly */
          for (i = 0; i < num_weights; i++)
          {
-            png_ptr->prev_filters[i] = 255;
+            png_ptr->prev_filters[i] = kFilterWeightInit;
          }
       }
 
@@ -217,7 +224,7 @@ void png_set_filter_heuristics(png_structp png_ptr, int heuristic_method, int nu
          for (i = 0; i < num_weights; i++)
          {
             png_ptr->inv_filter_weights[i] =
-            png_ptr->filter_weights[i] = 256;
+            png_ptr->filter_weights[i] = kFilterWeightScale;
          }
       }
 
@@ -226,14 +233,14 @@ void png_set_filter_heuristics(png_structp png_ptr, int heuristic_method, int nu
          if (filter_weights[i] < 0.0)
          {
             png_ptr->inv_filter_weights[i] =
-            png_ptr->filter_weights[i] = 256;
+            png_ptr->filter_weights[i] = kFilterWeightScale;
          }
          else
          {
             png_ptr->inv_filter_weights[i] =
-               (png_uint_16)((double)256 * filter_weights[i] + 0.5);
+               (png_uint_16)((double)kFilterWeightScale * filter_weights[i] + 0.5);
             png_ptr->filter_weights[i] =
-               (png_uint_16)((double)256 / filter_weights[i] + 0.5);
+               (png_uint_16)((double)kFilterWeightScale / filter_weights[i] + 0.5);
          }
       }
    }
@@ -244,31 +251,31 @@ void png_set_filter_heuristics(png_structp png_ptr, int heuristic_method, int nu
    if (png_ptr->filter_costs == 0)
    {
       png_ptr->filter_costs = (png_uint_16p)png_malloc(png_ptr,
-         (png_uint_32)(sizeof(png_uint_16) * 5));
+         (png_uint_32)(sizeof(png_uint_16) * kNumFilterTypes));
 
       png_ptr->inv_filter_costs = (png_uint_16p)png_malloc(png_ptr,
-         (png_uint_32)(sizeof(png_uint_16) * 5));
+         (png_uint_32)(sizeof(png_uint_16) * kNumFilterTypes));
 
-      for (i = 0; i < 5; i++)
+      for (i = 0; i < kNumFilterTypes; i++)
       {
          png_ptr->inv_filter_costs[i] =
-         png_ptr->filter_costs[i] = 8;
+         png_ptr->filter_costs[i] = kFilterCostScale;
       }
    }
 
-   for (i = 0; i < 5; i++)
+   for (i = 0; i < kNumFilterTypes; i++)
    {
       if (filter_costs == 0 || filter_costs[i] < 0.0)
       {
          png_ptr->inv_filter_costs[i] =
-         png_ptr->filter_costs[i] = 8;
+         png_ptr->filter_costs[i] = kFilterCostScale;
       }
       else if (filter_costs[i] >= 1.0)
       {
          png_ptr->inv_filter_costs[i] =
-            (png_uint_16)((double)8 / filter_costs[i] + 0.5);
+            (png_uint_16)((double)kFilterCostScale / filter_costs[i] + 0.5);
          png_ptr->filter_costs[i] =
-            (png_uint_16)((double)8 * filter_costs[i] + 0.5);
+            (png_uint_16)((double)kFilterCostScale * filter_costs[i] + 0.5);
       }
    }
 }
@@ -279,7 +286,7 @@ png_structp png_create_write_struct_2(const char* user_png_ver, png_voidp error_
    png_structp png_ptr;
    int i;
 
-   png_ptr = (png_structp)png_create_struct_2(1, malloc_fn, mem_ptr);
+   png_ptr = (png_structp)png_create_struct_2(PNG_STRUCT, malloc_fn, mem_ptr);
    if (png_ptr == 0)
       return 0;
 
@@ -303,11 +310,11 @@ png_structp png_create_write_struct_2(const char* user_png_ver, png_voidp error_
       do
       {
          if (user_png_ver[i] != png_get_libpng_ver(0)[i])
-            png_ptr->flags |= 0x20000;
+            png_ptr->flags |= kFlagVersionMismatch;
       } while (png_get_libpng_ver(0)[i++]);
    }
 
-   if (png_ptr->flags & 0x20000)
+   if (png_ptr->flags & kFlagVersionMismatch)
    {
       if (user_png_ver == 0 || user_png_ver[0] != png_get_libpng_ver(0)[0] ||
           (user_png_ver[0] == '1' && user_png_ver[2] != png_get_libpng_ver(0)[2]) ||
@@ -332,13 +339,13 @@ png_structp png_create_write_struct_2(const char* user_png_ver, png_voidp error_
    }
 
    /* initialize zbuf - compression buffer */
-   png_ptr->zbuf_size = 0x2000;
+   png_ptr->zbuf_size = kZbufSize;
    png_ptr->zbuf = (png_bytep)png_malloc(png_ptr,
       (png_uint_32)png_ptr->zbuf_size);
 
    png_set_write_fn(png_ptr, 0, 0, 0);
 
-   png_set_filter_heuristics(png_ptr, 0, 1, 0, 0);
+   png_set_filter_heuristics(png_ptr, PNG_FILTER_HEURISTIC_DEFAULT, 1, 0, 0);
 
    if (setjmp(png_ptr->jmpbuf))
       abort();
@@ -352,10 +359,10 @@ png_voidp png_create_struct_2(int type, png_malloc_ptr malloc_fn, png_voidp mem_
    png_size_t size;
    png_voidp struct_ptr;
 
-   if (type == 2)
-      size = 0x120;
-   else if (type == 1)
-      size = 0x280;
+   if (type == PNG_INFO_STRUCT)
+      size = kPngInfoSize;
+   else if (type == PNG_STRUCT)
+      size = kPngStructSize;
    else
       return 0;
 

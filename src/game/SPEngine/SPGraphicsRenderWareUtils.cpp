@@ -1,7 +1,3 @@
-// src/game/SPEngine/SPGraphicsRenderWareUtils.cpp -- migrated from slice(s) s00761dc0, s00760ea0 by tools/migrate/rewrite.py
-// Object file: SPEngine/SPGraphicsRenderWareUtils.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
 #include "rw/core/arena/ArenaExportedObject.h"
 #include "rw/graphics/Raster.h"
@@ -18,26 +14,15 @@ extern "C" void* __cdecl Raster_Initialize(void* p, int a, int b, int c, int d, 
 extern "C" void* __cdecl GetD3DCAPS9();                                   // @ 0x11f8af0
 #include <new>
 #include <stdlib.h>
-#include <xmmintrin.h>
 
-// ---- items of slice s00760ea0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct E8 { int a, b; E8() {} E8(int x, int y) : a(x), b(y) {} ~E8(); };
 struct D1 { E8 v[4]; };
 struct D2 { E8 v[4]; };
 E8::~E8() {}   // 0xc2e4e0
-extern "C" void* __cdecl operator_new(unsigned int size, const char* name, int a, int b, int c, int d);
-extern "C" void  __cdecl operator_delete_(void* p);
-extern "C" void  __cdecl opnew3(void* p, int a, unsigned int n);           // @ 0x11e073e
 struct SPMemPoolStub {
 void* LockedAligned(unsigned int size, unsigned int align, int a, int b, int c, int d, int e, int f); // @ 0x928a30
 };
 extern "C" extern SPMemPoolStub* g_pSPMemPool;                            // 0x016c8b44
-extern "C" void* __cdecl FUN_011f34a0(void* p, int a, int b);             // @ 0x11f34a0
-extern "C" void* __cdecl FUN_011f9a90(void* p, int a);                    // @ 0x11f9a90
-extern "C" void* __cdecl FUN_011f9eb0(void* p, int a, int b);             // @ 0x11f9eb0
-extern "C" void* __cdecl FUN_011eef30(void* p, int a, int b);             // @ 0x11eef30
-extern "C" void* __cdecl Raster_Initialize(void* p, int a, int b, int c, int d, int e); // @ 0x11efeb0
-extern "C" void* __cdecl GetD3DCAPS9();                                   // @ 0x11f8af0
 D1 __cdecl FUN_011f0220(int a, int b, int c, int d, int e);    // @ 0x11f0220 (returns descriptor by value)
 D1 __cdecl FUN_011f9e50(int a, int b);                         // @ 0x11f9e50
 D1 __cdecl FUN_011eec00(int a, int b);                         // @ 0x11eec00
@@ -60,10 +45,8 @@ struct KDTreeDesc {
     unsigned int d;          // +0x14  == local[3]
     KDElem       tail[4];    // +0x18  copy of the descriptor's elems[0..3]
 };
-// ---- items of slice s00760ea0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" extern SPMemPoolStub* g_pSPMemPool;                            // 0x016c8b44
 extern "C" void* __cdecl FUN_011f1340(int a);                             // @ 0x11f1340
 extern unsigned int g_16fa38c, g_16f9218, g_16f923c, g_16f9530, g_16f9534;
 extern unsigned int g_16f9538, g_16f953c, g_16f9540, g_16f9544, g_16f9528;
@@ -78,14 +61,13 @@ extern unsigned int g_16fa380;
 extern float g_16fa4f0[16];      // the 4x4 affine matrix local copy (0x40 bytes)
 extern float g_1485720;          // _HK_REAL_ONE == 1.0f
 
-// ---- items of slice s00761dc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl FUN_011f3220(void* p);
 extern "C" void* __cdecl VectorDescr(int n);   // @ 0x761650
-// ---- items of slice s00761dc0 end
 
 // @ 0x00761280
 D1 __cdecl FUN_00761280(int n)
 {
+    // stride descriptor: 4 bytes per element, n*3+6 elements
     D1 d;
     d.v[0] = E8((n * 3 + 6) * 4, 4);
     return d;
@@ -94,6 +76,7 @@ D1 __cdecl FUN_00761280(int n)
 // @ 0x007612c0
 D2 __cdecl FUN_007612c0(int n)
 {
+    // n*4 bytes plus a 0x24-byte header, 4-byte aligned
     D2 d;
     d.v[0] = E8(n * 4 + 0x24, 4);
     return d;
@@ -103,6 +86,7 @@ D2 __cdecl FUN_007612c0(int n)
 void* __cdecl SP_CreateRaster(int w, int h, int levels, int fmt, int flags)
 {
     void* caps = GetD3DCAPS9();
+    // unless the device supports auto mip generation, force the fmt through the no-mip path
     if (!(*(unsigned int*)((char*)caps + 0xc) & 0x40000000))
         fmt &= 0xfffffdff;
     D1 d = FUN_011f0220(w, h, levels, fmt, flags);

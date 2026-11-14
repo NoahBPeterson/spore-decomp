@@ -1,42 +1,44 @@
-// src/game/SPMovie/videoencoder_jpeg.cpp -- migrated from slice(s) s00fcd210 by tools/migrate/rewrite.py
-// Object file: SPMovie/videoencoder_jpeg.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// SPMovie/videoencoder_jpeg.obj -- JPEG video encoder (libjpeg backend).
+// Each function keeps its '// @ 0xVA' marker; the VA is the retail address.
 
 #include "game/types.h"
 
-// unnamed retail callees and globals (address in the comment)
+// Callees and globals owned by other translation units (address in the comment).
 extern "C" void DoInsertValue(void* dst, void* src, int count);   // 0x11e0744
-extern "C" int  jpeg_std_error(void*);              // 0x85f190
-extern "C" void jpeg_create_compress_170(void*, int, int); // 0x8502a0
-extern "C" void jpeg_set_defaults(void*);           // 0x855a30
-extern "C" void jpeg_set_quality(void*, int, int);  // 0x8550e0
-extern "C" void jpeg_start_compress(void*, int);    // 0x850570
-extern "C" void jpeg_write_scanlines(void*, void*, int); // 0x8505f0
-extern "C" void jpeg_finish_compress(void*);        // 0x8503f0
-extern "C" void jpeg_destroy(void*);                // 0x850370
-extern "C" void FUN_00fcdc10();                     // 0xfcdc10
+extern "C" int  jpeg_std_error(void*);                            // 0x85f190
+extern "C" void jpeg_create_compress_170(void*, int, int);        // 0x8502a0
+extern "C" void jpeg_set_defaults(void*);                         // 0x855a30
+extern "C" void jpeg_set_quality(void*, int, int);                // 0x8550e0
+extern "C" void jpeg_start_compress(void*, int);                  // 0x850570
+extern "C" void jpeg_write_scanlines(void*, void*, int);          // 0x8505f0
+extern "C" void jpeg_finish_compress(void*);                      // 0x8503f0
+extern "C" void jpeg_destroy(void*);                              // 0x850370
+extern "C" void FUN_00fcdc10();                                   // 0xfcdc10
 
-// ---- items of slice s00fcd210 begin (TODO(rewrite): local stubs, replace by canonical classes)
-typedef unsigned char  u8;
+typedef unsigned char u8;
+
+// rw::movie::ICoreAllocator, as the object spells it (see the slice's local copy).
 struct ICoreAllocator {
     void* m_vtbl;  // +0x00
 };
+
+// rw::movie::VideoEncoder_Jpeg (retail member offsets).
 struct VideoEncoder_Jpeg {
-    char          m_pad00[0x04];
-    ICoreAllocator* mAllocator;             // +0x04
-    void (*mEncodedDataCallback)(u8*, int, int, void*); // +0x08
-    void (*mEncodingErrorCallback)(const char*, void*); // +0x0c
-    void*         mEncodedDataCallbackData; // +0x10
-    void*         mEncodingErrorCallbackData; // +0x14
-    u8*           mEncodeBuffer;            // +0x18
-    unsigned int  mEncodeBufferSize;        // +0x1c
-    unsigned int  mEncodeBufferPos;         // +0x20
-    unsigned int  mWidth;                   // +0x24
-    unsigned int  mHeight;                  // +0x28
-    char          m_pad2c[0x04];
-    unsigned int  mBitsPerSecond;           // +0x30
-    unsigned int  mQuality;                 // +0x34
-    unsigned int  mFrameNumber;             // +0x38
+    char            m_pad00[0x04];
+    ICoreAllocator* mAllocator;                          // +0x04
+    void (*mEncodedDataCallback)(u8*, int, int, void*);  // +0x08
+    void (*mEncodingErrorCallback)(const char*, void*);  // +0x0c
+    void*           mEncodedDataCallbackData;            // +0x10
+    void*           mEncodingErrorCallbackData;          // +0x14
+    u8*             mEncodeBuffer;                       // +0x18
+    unsigned int    mEncodeBufferSize;                   // +0x1c
+    unsigned int    mEncodeBufferPos;                    // +0x20
+    unsigned int    mWidth;                              // +0x24
+    unsigned int    mHeight;                             // +0x28
+    char            m_pad2c[0x04];
+    unsigned int    mBitsPerSecond;                      // +0x30
+    unsigned int    mQuality;                            // +0x34
+    unsigned int    mFrameNumber;                        // +0x38
 
     void Init(ICoreAllocator* alloc);
     void Shutdown();
@@ -46,20 +48,12 @@ struct VideoEncoder_Jpeg {
     void SetQuality(unsigned int v);
     void Encode(void* frame);
 };
-extern "C" void DoInsertValue(void* dst, void* src, int count);   // 0x11e0744
-extern "C" int  jpeg_std_error(void*);              // 0x85f190
-extern "C" void jpeg_create_compress_170(void*, int, int); // 0x8502a0
-extern "C" void jpeg_set_defaults(void*);           // 0x855a30
-extern "C" void jpeg_set_quality(void*, int, int);  // 0x8550e0
-extern "C" void jpeg_start_compress(void*, int);    // 0x850570
-extern "C" void jpeg_write_scanlines(void*, void*, int); // 0x8505f0
-extern "C" void jpeg_finish_compress(void*);        // 0x8503f0
-extern "C" void jpeg_destroy(void*);                // 0x850370
-extern "C" void FUN_00fcdc10();                     // 0xfcdc10
-// ---- items of slice s00fcd210 end
 
-// callees this slice defines outside this object (rewrite.py held_callee_protos)
-extern "C" void FUN_00fcda10(int self, int p2, int p3);  // 0x00fcda10 (stays in the slice: not this object's)
+// Defined elsewhere in the slice, not in this object.
+extern "C" void FUN_00fcda10(int self, int p2, int p3);  // 0x00fcda10
+
+// Highest quality the caller may ask for; higher values are clamped with an error.
+static const unsigned int kMaxQuality = 10000;
 
 // @ 0x00fcda60
 void VideoEncoder_Jpeg::Init(ICoreAllocator* alloc)
@@ -88,6 +82,9 @@ unsigned int VideoEncoder_Jpeg::GetSuggestedDecoderBufferSize()
 }
 
 // @ 0x00fcdb20
+// Repacks n 32-bit source pixels from format fmt into tightly packed 24-bit BGR
+// rows: fmt 0 (BGRA, the four bytes are read with the alpha first), 3 (RGBA),
+// 4 (BGRA) and 1 (24-bit, moved verbatim by DoInsertValue). Format 2 needs no work.
 extern "C" void FUN_00fcdb20(int fmt, unsigned char* src, unsigned char* dst, int n)
 {
     switch (fmt) {
@@ -156,12 +153,12 @@ unsigned int VideoEncoder_Jpeg::GetBitsPerSecond()
 // @ 0x00fcdc80
 void VideoEncoder_Jpeg::SetQuality(unsigned int v)
 {
-    if (v > 10000) {
+    if (v > kMaxQuality) {
         if (mEncodingErrorCallback != 0)
             mEncodingErrorCallback(
                 "VideoEncoder_Jpeg: Quality must be between 0 and 10000.",
                 mEncodingErrorCallbackData);
-        v = 10000;
+        v = kMaxQuality;
     }
     mQuality = v;
 }
@@ -177,15 +174,15 @@ void VideoEncoder_Jpeg::Encode(void* frame)
                 mEncodingErrorCallbackData);
         return;
     }
-    u8 cinfo[0x1f4];
+    u8 cinfo[0x1f4];  // jpeg_compress_struct; the fields written below are part of it.
     int* ci = (int*)cinfo;
     ci[0] = jpeg_std_error(cinfo + 0x174);
     jpeg_create_compress_170(cinfo, 0x3d, 0x170);
     FUN_00fcda10((int)cinfo, (int)&FUN_00fcdc10, (int)this);
     *(int*)(cinfo + 0x34) = fi[1];
     *(int*)(cinfo + 0x38) = fi[2];
-    *(int*)(cinfo + 0x3c) = 3;
-    *(int*)(cinfo + 0x40) = 2;
+    *(int*)(cinfo + 0x3c) = 3;  // input_components
+    *(int*)(cinfo + 0x40) = 2;  // in_color_space
     jpeg_set_defaults(cinfo);
     jpeg_set_quality(cinfo, mQuality / 100, 1);
     *(int*)(cinfo + 0x168) = 0;
@@ -195,6 +192,7 @@ void VideoEncoder_Jpeg::Encode(void* frame)
                      ((void**)mAllocator->m_vtbl)[2])(mAllocator, *(int*)(cinfo + 0x34) * 3,
                                                       "JPEG Line Buffer", 0);
     if (line != 0) {
+        // Bytes per source pixel: 24-bit data is packed, every other format is 32-bit.
         int bpp = 1;
         switch (fi[0]) {
         case 0: case 3: case 4: bpp = 4; break;

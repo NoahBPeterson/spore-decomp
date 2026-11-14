@@ -1,43 +1,33 @@
-// src/game/UTFSpore_Win32/red_black_tree.cpp -- migrated from slice(s) s009215c0, s009205e0 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/red_black_tree.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
-#include <windows.h>
-#include <stddef.h>
-#include <string.h>
 
-// ---- items of slice s009205e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct RBNode { RBNode* mpRight; RBNode* mpLeft; RBNode* mpParent; };
-// ---- items of slice s009205e0 end
+// EASTL's red-black tree routines.  The node type and its colour constants are
+// declared here: retail's mangled names spell the node unqualified, i.e. in the
+// global namespace.  The helpers below are the pieces of the trimmed EASTL
+// source this translation unit needs.
 
-// ---- items of slice s009215c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #ifndef NULL
 #define NULL 0
 #endif
 #define EASTL_API
+
+struct RBNode { RBNode* mpRight; RBNode* mpLeft; RBNode* mpParent; };
+
 struct rbtree_node_base {
     rbtree_node_base* mpNodeRight;
     rbtree_node_base* mpNodeLeft;
     rbtree_node_base* mpNodeParent;
     char              mColor;
 };
+
 namespace eastl {
 enum { kRBTreeColorRed = 0, kRBTreeColorBlack = 1 };
-}
-namespace eastl {
 enum RBTreeSide { kRBTreeSideLeft, kRBTreeSideRight };
-}
-namespace eastl {
+
 rbtree_node_base* RBTreeGetMinChild(const rbtree_node_base* p){ while (p->mpNodeLeft) p = p->mpNodeLeft; return const_cast<rbtree_node_base*>(p); }
-}
-namespace eastl {
 rbtree_node_base* RBTreeGetMaxChild(const rbtree_node_base* p){ while (p->mpNodeRight) p = p->mpNodeRight; return const_cast<rbtree_node_base*>(p); }
-}
-namespace eastl {
+
 template <class T> void swap(T& a, T& b){ T t = a; a = b; b = t; }
 }
-// ---- items of slice s009215c0 end
 
 // @ 0x00921580
 RBNode* RBTreeIncrement(RBNode* n)

@@ -1,19 +1,12 @@
-// src/game/SPGonzago/SPSpaceEconomyTuning.cpp -- migrated from slice(s) s0102f0d0 by tools/migrate/rewrite.py
-// Object file: SPGonzago/SPSpaceEconomyTuning.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
-#include "SP/cEmpire.h"
-#include "SP/cGameData.h"
 #include <intrin.h>
 
-// unnamed retail callees and globals (address in the comment)
+// Retail tuning constants loaded from the game's data segments.
 extern float g_1;        // 0x01485720
 extern float g_0;        // 0x01485378
 extern float g_0_01;     // 0x013eb960
 extern float g_0_04;     // 0x013ef53c
 
-// ---- items of slice s0102f0d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int uint;
 struct Prop {
     char pad[0x12];
@@ -40,17 +33,9 @@ struct cEmpire;
 struct Tribe { int GetUniverse(); };                    // 0x00fe42a0
 struct cGameData { Tribe* GetPlayerTribe(); };          // 0x00bfc5f0
 void* SpaceGameGet();                                   // 0x01002bd0
-struct cStarRecordVec { int* mpBegin; int* mpEnd; int* mpCapacity; };
 struct cEmpire {
     char pad[0x84];
-    cStarRecordVec mStars;                  // +0x84
-    int GetHomePlanet();                    // 0x00c31730
-    bool CanContact(cEmpire* other);        // 0x00c31bc0
 };
-extern float g_1;        // 0x01485720
-extern float g_0;        // 0x01485378
-extern float g_0_01;     // 0x013eb960
-extern float g_0_04;     // 0x013ef53c
 struct VtableDtor2 {
     virtual void e00();
     virtual void e04();
@@ -77,7 +62,6 @@ void* __stdcall GetStarManagerForEmpire(cEmpire* e);     // 0x00b3d2a0, ret 4
 struct StarManagerObj { void* GetHomeStar(); };          // 0x00baf700, thiscall(ecx=mgr)
 float RandomFloatRange(float lo, float hi);              // 0x00572a10
 float f010307a0(void* props, uint idA, uint idB);        // 0x010307a0
-// ---- items of slice s0102f0d0 end
 
 // @ 0x0102fa30
 int cSPSpaceEconomyTuning::GetTradeCaptureOfferPrice(int index)

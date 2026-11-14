@@ -1,27 +1,13 @@
-// src/game/UTFSpore_Win32/_at_00940000.cpp -- migrated from slice(s) s0094cac0, s0094bb50, s00949cc0, s00946dc0, s009413d0 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/_at_00940000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// Variant-op table, name-cache and socket helpers for the EA internet/socket
+// layer, plus a few URL and string utilities.
+//
+// Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
-#include "EA/Internet/HTTPMultipartFormDataPostBodyStream.h"
-#include <intrin.h>
 #include <string.h>
-#include <wchar.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include <wctype.h>
-#include "EA/Sockets/DatagramSocket.h"
-#include "EA/Sockets/IPAddress.h"
-#include "EA/Sockets/Manager.h"
-#include "EA/Sockets/StreamSocket.h"
-#include "EA/Internet/URL.h"
-#include "WSAData.h"
-#include <new>
 #include "EA/Sockets/Address.h"
-#include "EA/Sockets/Error.h"
-#include "EA/Thread/Mutex.h"
 #include "EA/Sockets/NameLookup.h"
-#include "EA/Sockets/Socket.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) __int64 __cdecl _time64(__int64*);
@@ -33,11 +19,6 @@ extern "C" void* g_opGetFn;                  // 0x0154EB44
 extern "C" void* g_opInvokeFn;               // 0x0154EB48
 extern "C" int   g_opField;                  // 0x0154EB58
 
-// ---- items of slice s009413d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" __declspec(dllimport) __int64 __cdecl _time64(__int64*);
-extern "C" void* g_variantOps[0x400];        // 0x016699C0
-extern "C" char  g_variantTableInit;         // 0x0166A9C0
-extern "C" void  FUN_0093E5F0();             // 0x0093E5F0 default variant op
 void* GetVariantOp(int a, uint16_t b);       // 0x009413D0
 void* SetVariantOp(int a, uint16_t b, void* op);  // 0x00941440
 void  InvokeVariantOp(int a, void* b, void* c, void* d, void* e, void* f); // 0x009414B0
@@ -45,6 +26,9 @@ int   InitVariantTable();                    // 0x009414F0
 void* GetVariantOpChecked(int a, uint16_t b);              // 0x00941560
 void* SetVariantOpChecked(int a, uint16_t b, void* op);    // 0x00941580
 void  InvokeVariantOpChecked(int a, void* b, void* c, void* d, void* e, void* f); // 0x009415A0
+
+// Variant ops for (a, b) with a or b >= 0x20 live in a sparse map keyed by
+// the 6-byte pair; the dense table covers the common small pairs.
 struct VariantMap {
     int   m00;       // +0x00
     int*  mpBegin;   // +0x04
@@ -54,18 +38,7 @@ struct VariantMap {
     void  Clear(int* begin, int count);
 };
 extern "C" VariantMap g_variantMap;          // 0x0154EB4C
-extern "C" void* g_opSetFn;                  // 0x0154EB40
-extern "C" void* g_opGetFn;                  // 0x0154EB44
-extern "C" void* g_opInvokeFn;               // 0x0154EB48
-extern "C" int   g_opField;                  // 0x0154EB58
-// ---- items of slice s009413d0 end
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" VariantMap g_variantMap;          // 0x0154EB4C
-
-// ---- items of slice s00946dc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-#ifndef S00946DC0_H
-#endif
 void  __cdecl operator delete(void*) throw();
 struct StrVec {
     char* mpBegin;
@@ -74,19 +47,13 @@ struct StrVec {
     void PushEmpty();                            // 0x009473a0
     void DoInsertValue(char* pos, void* value);  // 0x00554820
 };
-// ---- items of slice s00946dc0 end
 
-// ---- items of slice s00949cc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace eastl {
 class allocator_s0094_9cc0 { public: int mAlloc; };
-}
-namespace eastl {
+
 template <class T> struct EmptyString { static T s[8]; };
-}
-namespace eastl {
 template <class T> T EmptyString<T>::s[8];
-}
-namespace eastl {
+
 template <class T>
 struct basic_string_s0094_9cc0 {
     T* mpBegin;                 // +0
@@ -104,26 +71,14 @@ struct basic_string_s0094_9cc0 {
         return *this;
     }
     basic_string_s0094_9cc0& assign(const T* first, const T* last);
-    basic_string_s0094_9cc0& append(const T* first, const T* last);
-    basic_string_s0094_9cc0& erase(unsigned int pos, unsigned int n);
-    unsigned int  find(const T* s, unsigned int pos) const;
-    unsigned int  find(T c, unsigned int pos) const;
-    unsigned int  rfind(T c, unsigned int pos) const;
-    void clear() {
-        if (mpBegin != mpEnd) { *mpBegin = 0; mpEnd = mpBegin; }
-    }
-    unsigned int length() const { return (unsigned int)(mpEnd - mpBegin); }
     const T* c_str() const { return mpBegin; }
-    bool empty() const { return mpBegin == mpEnd; }
 };
-}
-namespace eastl {
 typedef basic_string_s0094_9cc0<char>    string;
 }
-namespace eastl {
-bool operator==(const string& lhs, const char* rhs);
-}
 using eastl::string;
+
+// Local stand-in for EA::Internet::URL used only to place GetPort's receiver;
+// the canonical header declares url layout identically (see EA/Internet/URL.h).
 namespace EA {
 namespace Internet {
 class URL_s0094_9cc0 {
@@ -138,34 +93,18 @@ public:
     URL_s0094_9cc0();
     URL_s0094_9cc0(const char* p);
     URL_s0094_9cc0& operator=(const URL_s0094_9cc0& o);
-
-    void SetURL(const char* p, bool b);
-    void SetComponent(int index, const char* p);
-    void SetPort(unsigned int port);  // 0x0094a750 (EA::Internet::URL::SetPort)
     unsigned int GetPort();
-    bool ParseUsernameAndPassword(string* pstr);  // 0x0094a9f0 (EA::Internet::URL::ParseUsernameAndPassword)
-    bool ParseURLFILE(string* pstr);  // 0x0094aae0 (EA::Internet::URL::ParseURLFILE)
-    static bool CanonicalizePath(const char* pszPath, string* pstr);  // 0x0094a7a0 (EA::Internet::URL::CanonicalizePath)
 };
-}
-}
-namespace EA {
-namespace Internet {
+
 URL_s0094_9cc0::URL_s0094_9cc0()
     : mbStrictConformance(true), mnMaxComponentLength(0x80), mbParsed(false), mURLType(0) {
 }
-}
-}
-namespace EA {
-namespace Internet {
+
 URL_s0094_9cc0::URL_s0094_9cc0(const char* p)
     : mbStrictConformance(true), mnMaxComponentLength(0x80), mbParsed(false), mURLType(0) {
     if (p) msURL.assign(p, p + strlen(p));
 }
-}
-}
-namespace EA {
-namespace Internet {
+
 URL_s0094_9cc0& URL_s0094_9cc0::operator=(const URL_s0094_9cc0& o) {
     if (&o != this) {
         mbStrictConformance = o.mbStrictConformance;
@@ -180,13 +119,9 @@ URL_s0094_9cc0& URL_s0094_9cc0::operator=(const URL_s0094_9cc0& o) {
 }
 }
 }
-// ---- items of slice s00949cc0 end
 
-// ---- items of slice s0094bb50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// inet_addr and closesocket are the wsock32 entry points; tolower is msvcr90.
 extern "C" __declspec(dllimport) unsigned long __stdcall inet_addr(const char* cp);          // wsock32!inet_addr
-// ---- items of slice s0094bb50 end
-
-// ---- items of slice s0094cac0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) int   __cdecl tolower(int c);                        // msvcr90
 extern "C" __declspec(dllimport) int __stdcall closesocket(unsigned s);               // wsock32
 extern char g_eastlEmptyString[];                            // 0x01667bac
@@ -222,11 +157,7 @@ struct LayoutCache {
     NameLookupCacheMap_s0094cac0 mCacheEntryMap; // +0x0c, 0x1c bytes
     MutexLike  mMutex;           // +0x28
 
-    void  FindInsert(void** out, void* key, unsigned value, unsigned timeout);     // 0x0094ce40
     ~LayoutCache();                                                               // 0x0094cf40
-    bool  SetEntry(const char* name, unsigned value, unsigned timeout);            // 0x0094cf60
-    CacheNode* Find(const char* name);                                             // 0x0094d0e0
-    void* Ctor();                                                                  // 0x0094d230
     void  Erase(const char* name);                                                 // 0x0094d270
 };
 void  __cdecl RBTree1_eraseSys(void** out, void* node);      // 0x00812310
@@ -237,9 +168,11 @@ struct Owner {                   // the owning Socket seen from -8
     virtual void o00();
     virtual void DoError(int err);          // slot 1 (+0x4)
 };
-// ---- items of slice s0094cac0 end
 
 // @ 0x009413d0
+// Look up the op for (a, b). Small pairs sit in the dense 0x20x0x20 table; the
+// rest are keyed by the 6-byte (int a, uint16 b) pair in g_variantMap, with the
+// op stored at map-node + 8. A miss returns the default op.
 void* GetVariantOp(int a, uint16_t b)
 {
     if (a < 0x20 && b < 0x20)
@@ -326,6 +259,8 @@ __int64 GetTime64()
 // @ 0x009473a0
 void StrVec::PushEmpty()
 {
+    // 0x1667bac is eastl's global empty string (g_eastlEmptyString): an empty
+    // string's begin and end point at it, its capacity one past.
     char* end = mpEnd;
     if (end < mpCapacity) {
         mpEnd = end + 0x10;

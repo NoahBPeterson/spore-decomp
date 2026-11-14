@@ -1,6 +1,6 @@
-// src/game/SPGonzago/SPSpaceTuning.cpp -- migrated from slice(s) s010409b0, s0103fe90 by tools/migrate/rewrite.py
-// Object file: SPGonzago/SPSpaceTuning.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/SPGonzago/SPSpaceTuning.cpp
+//
+// Space-stage tuning values, read from the game's property-list store.
 
 #include "game/types.h"
 
@@ -9,41 +9,24 @@ extern "C" void _ReadWriteBarrier(void);
 extern "C" void* __stdcall FUN_00b3d2a0(void* a);                  // 0x00b3d2a0 SP::StarManager
 extern "C" float __cdecl FUN_010307a0(void* p, int a, int b);      // 0x010307a0
 extern "C" void  __cdecl FUN_00571db0(void* server, void* handler, void* ids, int count, int prio); // 0x00571db0 EA::Messaging::RemoveHandler
-extern float     DAT_013ec5b4;               // 0x013ec5b4 1000.0f
-extern float     DAT_013eb960;               // 0x013eb960 0.01f
+extern float     gMillisecondsPerSecond;     // 0x013ec5b4 1000.0f
+extern float     gSecondsPerTick;            // 0x013eb960 0.01f
 #pragma intrinsic(_ReadWriteBarrier)
 
-// ---- items of slice s0103fe90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// Reads a virtual function pointer from an object's vtable slot.
 #define VFN(obj, off) (*(void**)((char*)(*(void**)obj) + (off)))
-extern "C" void _ReadWriteBarrier(void);
-extern "C" void* __stdcall FUN_00b3d2a0(void* a);                  // 0x00b3d2a0 SP::StarManager
-extern "C" float __cdecl FUN_010307a0(void* p, int a, int b);      // 0x010307a0
-extern "C" void  __cdecl FUN_00571db0(void* server, void* handler, void* ids, int count, int prio); // 0x00571db0 EA::Messaging::RemoveHandler
-extern float     DAT_013ec5b4;               // 0x013ec5b4 1000.0f
-extern float     DAT_013eb960;               // 0x013eb960 0.01f
+
 class tHost {
 public:
-    void  __thiscall FUN_00692f60(int a);                    // 0x00692f60 cRegNode::Construct
-    char  __thiscall FUN_00ab30c0();                         // 0x00ab30c0
-    void  __thiscall FUN_00692850();                         // 0x00692850
     void* __thiscall FUN_00baf700();                         // 0x00baf700
-    void  __thiscall FUN_00733030(void* a, void* b);         // 0x00733030
-    void* __thiscall FUN_00c71e30();                         // 0x00c71e30
-    void* __thiscall FUN_00f67d90();                         // 0x00f67d90 GetCurrentTerrainSphere
-    char  __thiscall FUN_00c75650();                         // 0x00c75650 cTerrainSphere::Check
-    void  __thiscall FUN_00bdbf10();                         // 0x00bdbf10
-    void  __thiscall FUN_00ff0350(float f);                  // 0x00ff0350 cCityData::AddValue
-    void  __thiscall FUN_00fffdd0(int a, int b);             // 0x00fffdd0
-    void* __thiscall FUN_00d06240(void* a);                  // 0x00d06240 cRelationshipManager::RecordEvent
-    void  __thiscall FUN_00dd8640(int a, int b, int c, int d, int e, int f); // 0x00dd8640 PostFeedbackEvent
-    void  __thiscall FUN_00676e90(int a, int b);             // 0x00676e90 Achievements::AutoTest
-    void* __thiscall FUN_00b21340(void* a, void* b, void* c, void* d, void* e); // 0x00b21340 GetGameDataVector
 };
+
+// Space-tuning object; only the three members the exported helpers read are named.
 class cSpaceTuning {
 public:
-    uint8_t m00[0x50];           // +0x50 float parameter lives in another view; pad 0x00..0x50
+    uint8_t m00[0x50];           // +0x00  unknown head, +0x50 float parameter lives in another view
     float   m50;                 // +0x50
-    uint8_t m54[0x40];           // +0x54 -> +0x94
+    uint8_t m54[0x40];           // +0x54  unknown tail up to +0x94
     int     m94;                 // +0x94
     uint8_t m98[4];              // +0x98
     float   m9c;                 // +0x9c
@@ -52,11 +35,16 @@ public:
     float __thiscall FUN_01040820(float param);
     uint32_t __thiscall FUN_01040870();
 };
+
+// Stand-in base for a reference-counted object: slot 0 is the destructor,
+// slot 1 (the address VFN(obj, 4) reads) is Release().
 class PaintSystem {
 public:
     virtual ~PaintSystem() {}
     virtual void _v01();
 };
+
+// Same object as SP::cSpaceRelationshipTuning_s0104_09b0, seen from its vtable slice.
 class cSpaceRelationshipTuning : public PaintSystem {
 public:
     void* mpServer;              // +0x04
@@ -70,29 +58,31 @@ public:
     void __thiscall FUN_010408f0();
     virtual ~cSpaceRelationshipTuning();
 };
-// ---- items of slice s0103fe90 end
 
-// ---- items of slice s010409b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern uint32_t gSpaceRelationshipMessageIds[];   // 0x01499ca8
+
+// Property / message ids (names guessed from the call sites).
+static const uint32_t kPropListGroupInstance = 0x86017d53;  // relationship tuning group
+static const uint32_t kPropListGroupKind     = 0x02ae0c7e;
+static const uint32_t kUIPropListInstance    = 0x5c770db7;  // relationship UI tuning group
+static const uint32_t kTuningChangedMessage  = 0x00f62def;
+
 #define PV(n) virtual void _pv##n();
+
 namespace App {
 enum PropertyType { kPropBool = 1, kPropInt32 = 9, kPropFloat = 13 };
-}
-namespace App {
+
+// A single value inside a PropertyList; only mnType and the Get* accessors are used.
 class Property {
  public:
-  void* mpData;
-  uint32_t field_4;
-  uint32_t mnItemCount;
-  uint32_t field_C;
+  char mPad00[0x10];  // size, payload pointer, item count, flags
   uint16_t mnFlags;   // +0x10
   uint16_t mnType;    // +0x12
   bool* GetBool();    // 0x0041e920
   int* GetInt();      // 0x0041e990
   float* GetFloat();  // 0x0041ea70
 };
-}
-namespace App {
+
 class PropertyList {
  public:
   virtual int AddRef();
@@ -100,8 +90,8 @@ class PropertyList {
   PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8)
   virtual bool GetProperty(uint32_t id, Property** ppOut);   // +0x24
 };
-}
-namespace App {
+
+// Owns a reference to a PropertyList, releasing it when Reset() or the owner dies.
 template <class T>
 struct AutoRefCount {
   T* mpObject;
@@ -113,15 +103,15 @@ struct AutoRefCount {
     }
   }
 };
-}
-namespace App {
+
 class IPropManager {
  public:
   PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
   virtual bool GetPropertyList(uint32_t instance, uint32_t group, AutoRefCount<PropertyList>* pOut);   // +0x2c
   virtual bool GetPropertyList2(uint32_t instance, AutoRefCount<PropertyList>* pOut);                  // +0x30
 };
-}
+}  // namespace App
+
 App::IPropManager* PropertyManager();   // 0x0067de30
 class CMessage {
  public:
@@ -138,6 +128,10 @@ void RemoveHandler(void* pServer, void* pHandler, uint32_t* pIdArray, int nIdCou
                    int nPriority);   // 0x00571db0
 void EastlDeallocate(void* pBlock);          // 0x00f47380
 namespace SP {
+
+// The space-relationship tuning object, seen from its message-handling slice:
+// mpVTable/mpServer/mpHandler/mpIdArray/mnIdCount/mnPriority then the property lists
+// and every tuning value it reads out of them.
 class cSpaceRelationshipTuning_s0104_09b0 {
  public:
   void* mpVTable;                           // +0x00
@@ -185,8 +179,8 @@ class cSpaceRelationshipTuning_s0104_09b0 {
   void Init();                              // 0x01041090
   bool HandleMessage(int nMessageId, CMessage* pMessage);   // 0x010410e0
 };
-}
-namespace SP {
+
+// One row of a tuning set, with the retail defaults baked into its constructor.
 struct cTuningEntry {
   int mn00, mn04, mn08, mn0c, mn10;     // +0x00  zeroed
   int mn14;                            // +0x14  1
@@ -209,8 +203,7 @@ struct cTuningEntry {
         mf38(0.0f), mb3c(false), mb3d(false), mf40(1.0f), mf44(1.0f), mf48(0.0f), mf4c(0.0f),
         mb50(false), mb51(false), mb52(false) {}
 };
-}
-namespace SP {
+
 class cTuningEntryVector {
  public:
   cTuningEntry* mpBegin;   // +0x00
@@ -227,8 +220,8 @@ class cTuningEntryVector {
       EastlDeallocate(mpBegin);
   }
 };
-}
-namespace SP {
+
+// Base of every message handler: the server, the handler id and its priority.
 class CMessageHandlerBase {
  public:
   PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8)
@@ -240,8 +233,7 @@ class CMessageHandlerBase {
   int mnIdCount;              // +0x10
   int mnPriority;             // +0x14
 };
-}
-namespace SP {
+
 class cTuningEntrySet : public CMessageHandlerBase {
  public:
   cTuningEntryVector mEntries;   // +0x18
@@ -249,8 +241,7 @@ class cTuningEntrySet : public CMessageHandlerBase {
   void Release();                                     // 0x01041480
   void* ScalarDeletingDestructor(unsigned char nFlags);   // 0x01041110
 };
-}
-namespace SP {
+
 static inline bool GetPropFloat(App::PropertyList* pList, uint32_t id, float& dst)
 {
   App::Property* p;
@@ -260,8 +251,7 @@ static inline bool GetPropFloat(App::PropertyList* pList, uint32_t id, float& ds
   }
   return false;
 }
-}
-namespace SP {
+
 static inline bool GetPropInt(App::PropertyList* pList, uint32_t id, int& dst)
 {
   App::Property* p;
@@ -271,8 +261,7 @@ static inline bool GetPropInt(App::PropertyList* pList, uint32_t id, int& dst)
   }
   return false;
 }
-}
-namespace SP {
+
 static inline bool GetPropBool(App::PropertyList* pList, uint32_t id, bool& dst)
 {
   App::Property* p;
@@ -282,17 +271,27 @@ static inline bool GetPropBool(App::PropertyList* pList, uint32_t id, bool& dst)
   }
   return false;
 }
-}
-// ---- items of slice s010409b0 end
+
+}  // namespace SP
+
+// ---------------------------------------------------------------------------
+// Function bodies
+// ---------------------------------------------------------------------------
+
+// Property ids read from the star object (the names are guesses from the call site).
+static const int kStarPropTravelTimeLow  = 0x068d6965;
+static const int kStarPropTravelTimeHigh = 0x068d696b;
+// Travel time is scaled to hundredths before being returned.
+static const int kTravelTimePercentScale = 100;
 
 // @ 0x010407d0
 int __thiscall cSpaceTuning::FUN_010407d0(void* param)
 {
-    void* p = FUN_00b3d2a0(param);
-    void* q = ((tHost*)p)->FUN_00baf700();
-    float r = FUN_010307a0(q, 0x68d6965, 0x68d696b);
-    float f = (float)m94 * r;
-    return (int)(f * DAT_013eb960) * 100;
+    void* star = FUN_00b3d2a0(param);
+    void* host = ((tHost*)star)->FUN_00baf700();
+    float travelTime = FUN_010307a0(host, kStarPropTravelTimeLow, kStarPropTravelTimeHigh);
+    float scaled = (float)m94 * travelTime;
+    return (int)(scaled * gSecondsPerTick) * kTravelTimePercentScale;
 }
 
 // @ 0x01040820
@@ -307,10 +306,12 @@ float __thiscall cSpaceTuning::FUN_01040820(float param)
 // @ 0x01040870
 uint32_t __thiscall cSpaceTuning::FUN_01040870()
 {
-    return (uint32_t)(m9c * DAT_013ec5b4);
+    return (uint32_t)(m9c * gMillisecondsPerSecond);
 }
 
 // @ 0x010408f0
+// Releases both property lists and unregisters the message handler.
+// (Called by the destructor path; the two lists are read through slot 1 = Release.)
 void __thiscall cSpaceRelationshipTuning::FUN_010408f0()
 {
     if (mPropList != 0) {
@@ -331,6 +332,8 @@ void __thiscall cSpaceRelationshipTuning::FUN_010408f0()
 }
 
 // @ 0x01040950
+// The barrier keeps the volatile reads of the list pointers from being reordered
+// ahead of the store to mpServer in the release above.
 cSpaceRelationshipTuning::~cSpaceRelationshipTuning()
 {
     _ReadWriteBarrier();
@@ -356,17 +359,19 @@ void cSpaceRelationshipTuning_s0104_09b0::ReloadTuning()
   if (!mPropList.mpObject) {
     App::IPropManager* pm = PropertyManager();
     mPropList.Reset();
-    pm->GetPropertyList(0x86017d53, 0x02ae0c7e, &mPropList);
+    pm->GetPropertyList(kPropListGroupInstance, kPropListGroupKind, &mPropList);
   }
   if (!mUIPropList.mpObject) {
     App::IPropManager* pm = PropertyManager();
     mUIPropList.Reset();
-    pm->GetPropertyList2(0x5c770db7, &mUIPropList);
+    pm->GetPropertyList2(kUIPropListInstance, &mUIPropList);
   }
+  // Relationship thresholds come from the UI tuning list.
   GetPropFloat(mUIPropList.mpObject, 0x01d37a06, mFriendThreshold);
   GetPropFloat(mUIPropList.mpObject, 0x01d37a0c, mGoodFriendThreshold);
   GetPropFloat(mUIPropList.mpObject, 0x01d37be0, mEnemyThreshold);
   GetPropFloat(mUIPropList.mpObject, 0x01d379fa, mBadEnemyThreshold);
+  // War and alliance thresholds; break-alliance starts from the good-friend value.
   GetPropFloat(mPropList.mpObject, 0x05b7e4f5, mEscortThreshold);
   GetPropFloat(mPropList.mpObject, 0x05b7e516, mHostileThreshold);
   GetPropFloat(mPropList.mpObject, 0x02fc233b, mWarThreshold);
@@ -375,6 +380,7 @@ void cSpaceRelationshipTuning_s0104_09b0::ReloadTuning()
   mBreakAllianceThreshold = mGoodFriendThreshold;
   GetPropFloat(mPropList.mpObject, 0x041a06f8, mBreakAllianceThreshold);
   GetPropFloat(mPropList.mpObject, 0x041a06fa, mGrobInitialRelationship);
+  // Empire size ratio caps fall back to the retail defaults when absent.
   mEmpireSizeRatioMinCap = 3.0f;
   GetPropFloat(mPropList.mpObject, 0x065266c0, mEmpireSizeRatioMinCap);
   mEmpireSizeRatioMaxCap = 0.0f;
@@ -382,6 +388,7 @@ void cSpaceRelationshipTuning_s0104_09b0::ReloadTuning()
   GetPropFloat(mPropList.mpObject, 0x0295c001, mEmpireSizeRatioFactor);
   GetPropFloat(mPropList.mpObject, 0x0295c002, mCurRelationshipFactor);
   GetPropFloat(mPropList.mpObject, 0x0295c003, mMissionThreshold);
+  // Gift and tribute amounts.
   GetPropFloat(mPropList.mpObject, 0x041a05e5, mLargeGiftAmount);
   GetPropFloat(mPropList.mpObject, 0x041a05e6, mMediumGiftAmount);
   GetPropInt(mPropList.mpObject, 0x041a05f5, mLargeGiftRelMultiplier);
@@ -393,16 +400,15 @@ void cSpaceRelationshipTuning_s0104_09b0::ReloadTuning()
   GetPropFloat(mPropList.mpObject, 0x041a05f8, mNPCGiftAmount);
   GetPropFloat(mPropList.mpObject, 0x041a05f9, mNPCTributeAmount);
   GetPropFloat(mPropList.mpObject, 0x041a05fa, mNPCTributeTimeLimit);
+  // Tribe feedback distances and flags.
   GetPropFloat(mPropList.mpObject, 0x04d80588, mTribeFeedbackActivationDistance);
   GetPropFloat(mPropList.mpObject, 0x04d8076d, mTribeFeedbackDeactivationDistance);
   GetPropBool(mPropList.mpObject, 0x04d805be, mTribeGameBehaviorsActivated);
   GetPropFloat(mPropList.mpObject, 0x04d805bf, mSmallGiftAmount);
   GetPropFloat(mPropList.mpObject, 0x0580dfe7, mField9c);
 }
-}  // namespace SP
 
 // @ 0x01041090
-namespace SP {
 void cSpaceRelationshipTuning_s0104_09b0::Init()
 {
   mpServer = MessageManager();
@@ -414,21 +420,19 @@ void cSpaceRelationshipTuning_s0104_09b0::Init()
     mpServer->AddHandler(mpHandler, 0xf62def);
   ReloadTuning();
 }
-}  // namespace SP
 
 // @ 0x010410e0
-namespace SP {
 bool cSpaceRelationshipTuning_s0104_09b0::HandleMessage(int nMessageId, CMessage* pMessage)
 {
-  if (nMessageId == 0xf62def &&
-      (pMessage->mnType == 0x86017d53 || pMessage->mnType == 0x5c770db7))
+  if (nMessageId == kTuningChangedMessage &&
+      (pMessage->mnType == kPropListGroupInstance || pMessage->mnType == kUIPropListInstance))
     ReloadTuning();
   return false;
 }
-}  // namespace SP
 
 // @ 0x01041110
-namespace SP {
+// Destroys the entry vector and base, unregisters from the message server,
+// and frees the object itself when bit 0 of nFlags is set.
 void* cTuningEntrySet::ScalarDeletingDestructor(unsigned char nFlags)
 {
   mEntries.~cTuningEntryVector();

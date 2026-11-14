@@ -1,19 +1,15 @@
-// src/game/SPAudio/eapdatom.cpp -- migrated from slice(s) s00a459d0 by tools/migrate/rewrite.py
-// Object file: SPAudio/eapdatom.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/SPAudio/eapdatom.cpp
+//
+// Eapd's atom accessors: pull a float, an int or a symbol out of a t_atom.
 
 #include "game/types.h"
 
-// unnamed retail callees and globals (address in the comment)
-extern "C" int __cdecl hk_snprintf(char* buf, unsigned int n, const char* fmt, ...);   // 0x0107f390 (equiv t2)
-
-// ---- items of slice s00a459d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct Sym2 {
-    const char* a;
-    const char* b;
+// Atom kinds stored in t_atom::mType.
+enum {
+    kAtomFloat  = 1,
+    kAtomSymbol = 2,
 };
-extern Sym2 gEmptyA;   // 0x16758c4
-extern Sym2 gEmptyB;   // 0x167589c
+
 struct Atom {
     int   type;
     union {
@@ -22,19 +18,22 @@ struct Atom {
         const char* v[2];
     };
 };
-extern "C" int __cdecl hk_snprintf(char* buf, unsigned int n, const char* fmt, ...);   // 0x0107f390 (equiv t2)
-extern "C" void __cdecl gensym(Sym2* out, const char* name);   // 0x00a675f0 (equiv t2)
-// ---- items of slice s00a459d0 end
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern Sym2 gEmptyA;   // 0x16758c4
-extern Sym2 gEmptyB;   // 0x167589c
-extern "C" void __cdecl gensym(Sym2* out, const char* name);   // 0x00a675f0 (equiv t2)
+// A symbol is a (hash, name) pair; 0x16758c4 is gFloatSymbol, 0x167589c gEmptySymbol.
+struct Sym2 {
+    const char* a;
+    const char* b;
+};
+extern Sym2 gFloatSymbol;   // 0x16758c4 ("float")
+extern Sym2 gEmptySymbol;   // 0x167589c
+
+extern "C" int  __cdecl hk_snprintf(char* buf, unsigned int n, const char* fmt, ...);   // 0x0107f390 (equiv t2)
+extern "C" void __cdecl gensym(Sym2* out, const char* name);                            // 0x00a675f0 (equiv t2)
 
 // @ 0x00a46760
 inline float atom_getfloat(Atom* a)
 {
-    if (a->type == 1)
+    if (a->type == kAtomFloat)
         return a->f;
     return 0.0f;
 }
@@ -52,8 +51,8 @@ Sym2* atom_getsymbol(Sym2* out, Atom* in)
         out->a = in->v[0];
         out->b = in->v[1];
     } else {
-        out->a = gEmptyA.a;
-        out->b = gEmptyA.b;
+        out->a = gFloatSymbol.a;
+        out->b = gFloatSymbol.b;
     }
     return out;
 }
@@ -106,7 +105,7 @@ Sym2* atom_vectorgensym(Sym2* out, int count, Atom* atoms)
 // @ 0x00a468f0
 inline float atom_getfloat_at(int i, int n, Atom* arr)
 {
-    if (n > i && arr[i].type == 1)
+    if (n > i && arr[i].type == kAtomFloat)
         return arr[i].f;
     return 0.0f;
 }
@@ -121,8 +120,8 @@ int atom_getint_at(int i, int n, Atom* arr)
 Sym2* atom_getsymbol_at(Sym2* out, int i, int n, Atom* arr)
 {
     if (n <= i) {
-        out->a = gEmptyB.a;
-        out->b = gEmptyB.b;
+        out->a = gEmptySymbol.a;
+        out->b = gEmptySymbol.b;
         return out;
     }
     if (arr[i].type == 2) {
@@ -130,7 +129,7 @@ Sym2* atom_getsymbol_at(Sym2* out, int i, int n, Atom* arr)
         out->b = arr[i].v[1];
         return out;
     }
-    out->a = gEmptyB.a;
-    out->b = gEmptyB.b;
+    out->a = gEmptySymbol.a;
+    out->b = gEmptySymbol.b;
     return out;
 }

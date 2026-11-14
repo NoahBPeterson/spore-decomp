@@ -1,27 +1,25 @@
-// src/game/UTFSpore_Win32/pngset.cpp -- migrated from slice(s) s008752b0 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/pngset.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// libpng "pngset.c" -- png_set_cHRM and png_set_gamma.
 
 #include "game/types.h"
 
-// ---- items of slice s008752b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-typedef unsigned char  png_byte;
+typedef unsigned char  png_byte;   // unused here; kept for pngwutil-style declarations
 typedef unsigned int   png_uint_32;
 typedef int            png_fixed_point;
 typedef unsigned int   png_size_t;
+
+// Fields below +0x8 were not needed by the functions in this file; the ones that
+// are read or written appear at their canonical offsets.
 struct PngStruct {
     char pad000[0x68];
     unsigned int   mode;                 // +0x68
-    unsigned int   flags;                // +0x6c
-    unsigned char  transformations;      // +0x70
-    char pad071[0x74 - 0x71];
-    png_byte*      znext_in;             // +0x74  zstream.next_in
-    unsigned int   z_avail_in;           // +0x78  zstream.avail_in
+    char pad06c[0x74 - 0x06c];
+    png_byte*      znext_in;             // +0x74
+    unsigned int   z_avail_in;           // +0x78
     char pad07c[0x80 - 0x7c];
-    png_byte*      znext_out;            // +0x80  zstream.next_out
-    unsigned int   z_avail_out;          // +0x84  zstream.avail_out
+    png_byte*      znext_out;            // +0x80
+    unsigned int   z_avail_out;          // +0x84
     char pad088[0x8c - 0x88];
-    char*          zmsg;                 // +0x8c  zstream.msg
+    char*          zmsg;                 // +0x8c
     char pad090[0xac - 0x90];
     png_byte*      zbuf;                 // +0xac
     png_size_t     zbuf_size;            // +0xb0
@@ -37,26 +35,17 @@ struct PngStruct {
     png_byte*      prev_row;             // +0xe8
     char pad0ec[0x10c - 0xec];
     png_uint_32    idat_size;            // +0x10c
-    char pad110[0x11c - 0x110];
-    png_byte       chunk_name[5];        // +0x11c
-    char pad121[0x123 - 0x121];
+    char pad110[0x123 - 0x110];
     unsigned char  interlaced;           // +0x123
     unsigned char  pass;                 // +0x124
     char pad125[0x129 - 0x125];
     unsigned char  pixel_depth;          // +0x129
     char pad12a[0x12c - 0x12a];
     png_byte       sig_bytes;            // +0x12c
-    char pad12d[0x21c - 0x12d];
-    int (*read_user_chunk_fn)(PngStruct*, void*);   // +0x21c
-    char pad220[0x26c - 0x220];
-    png_byte       unk_name[5];          // +0x26c
-    char pad271[0x274 - 0x271];
-    png_byte*      unk_data;             // +0x274
-    png_size_t     unk_size;             // +0x278
 };
 struct PngInfo {
     char pad000[0x08];
-    unsigned int   valid;                // +0x08
+    unsigned int   valid;                // +0x08, PNG_INFO_* bits
     char pad00c[0x28 - 0x0c];
     float          gamma;                // +0x28
     char pad02c[0x80 - 0x2c];
@@ -79,10 +68,15 @@ struct PngInfo {
     png_fixed_point int_x_blue;          // +0x118
     png_fixed_point int_y_blue;          // +0x11c
 };
+
 #define PNG_INFO_gAMA               0x0001
 #define PNG_INFO_cHRM               0x0004
+
+// Largest chromaticity / gamma libpng accepts: 21474.83 = INT_MAX / 100000.
+#define PNG_MAX_CHROMATICITY        21474.83
+#define PNG_FIXED_SCALE             100000.
+
 void  png_warning(PngStruct* png_ptr, const char* msg);
-// ---- items of slice s008752b0 end
 
 // @ 0x00875b40
 __declspec(noinline) void png_set_cHRM(PngStruct* png_ptr, PngInfo* info_ptr, double white_x, double white_y, double red_x, double red_y, double green_x, double green_y, double blue_x, double blue_y)
@@ -106,8 +100,10 @@ __declspec(noinline) void png_set_cHRM(PngStruct* png_ptr, PngInfo* info_ptr, do
         return;
     }
 
-    if (white_x > 21474.83 || white_y > 21474.83 || red_x > 21474.83 || red_y > 21474.83 ||
-        green_x > 21474.83 || green_y > 21474.83 || blue_x > 21474.83 || blue_y > 21474.83)
+    if (white_x > PNG_MAX_CHROMATICITY || white_y > PNG_MAX_CHROMATICITY ||
+        red_x > PNG_MAX_CHROMATICITY || red_y > PNG_MAX_CHROMATICITY ||
+        green_x > PNG_MAX_CHROMATICITY || green_y > PNG_MAX_CHROMATICITY ||
+        blue_x > PNG_MAX_CHROMATICITY || blue_y > PNG_MAX_CHROMATICITY)
     {
         png_warning(png_ptr, "Ignoring attempt to set chromaticity value exceeding 21474.83");
         return;
@@ -122,14 +118,14 @@ __declspec(noinline) void png_set_cHRM(PngStruct* png_ptr, PngInfo* info_ptr, do
     info_ptr->x_blue  = (float)blue_x;
     info_ptr->y_blue  = (float)blue_y;
 
-    info_ptr->int_x_white = (png_fixed_point)(white_x * 100000. + 0.5);
-    info_ptr->int_y_white = (png_fixed_point)(white_y * 100000. + 0.5);
-    info_ptr->int_x_red   = (png_fixed_point)(red_x   * 100000. + 0.5);
-    info_ptr->int_y_red   = (png_fixed_point)(red_y   * 100000. + 0.5);
-    info_ptr->int_x_green = (png_fixed_point)(green_x * 100000. + 0.5);
-    info_ptr->int_y_green = (png_fixed_point)(green_y * 100000. + 0.5);
-    info_ptr->int_x_blue  = (png_fixed_point)(blue_x  * 100000. + 0.5);
-    info_ptr->int_y_blue  = (png_fixed_point)(blue_y  * 100000. + 0.5);
+    info_ptr->int_x_white = (png_fixed_point)(white_x * PNG_FIXED_SCALE + 0.5);
+    info_ptr->int_y_white = (png_fixed_point)(white_y * PNG_FIXED_SCALE + 0.5);
+    info_ptr->int_x_red   = (png_fixed_point)(red_x   * PNG_FIXED_SCALE + 0.5);
+    info_ptr->int_y_red   = (png_fixed_point)(red_y   * PNG_FIXED_SCALE + 0.5);
+    info_ptr->int_x_green = (png_fixed_point)(green_x * PNG_FIXED_SCALE + 0.5);
+    info_ptr->int_y_green = (png_fixed_point)(green_y * PNG_FIXED_SCALE + 0.5);
+    info_ptr->int_x_blue  = (png_fixed_point)(blue_x  * PNG_FIXED_SCALE + 0.5);
+    info_ptr->int_y_blue  = (png_fixed_point)(blue_y  * PNG_FIXED_SCALE + 0.5);
 
     info_ptr->valid |= PNG_INFO_cHRM;
 }
@@ -174,6 +170,7 @@ __declspec(noinline) void png_set_cHRM_fixed(PngStruct* png_ptr, PngInfo* info_p
     info_ptr->int_x_blue  = blue_x;
     info_ptr->int_y_blue  = blue_y;
 
+    // 1e-05 is the reciprocal of PNG_FIXED_SCALE.
     info_ptr->x_white = (float)(white_x * 1e-05);
     info_ptr->y_white = (float)(white_y * 1e-05);
     info_ptr->x_red   = (float)(red_x   * 1e-05);
@@ -192,14 +189,14 @@ __declspec(noinline) void png_set_gamma(PngStruct* png_ptr, PngInfo* info_ptr, d
     if (info_ptr == 0)
         return;
 
-    if (scrn_gamma > 21474.83)
+    if (scrn_gamma > PNG_MAX_CHROMATICITY)
     {
         png_warning(png_ptr, "Limiting gamma to 21474.83");
-        scrn_gamma = 21474.83;
+        scrn_gamma = PNG_MAX_CHROMATICITY;
     }
 
     info_ptr->gamma = (float)scrn_gamma;
-    info_ptr->int_gamma = (png_fixed_point)(scrn_gamma * 100000. + 0.5);
+    info_ptr->int_gamma = (png_fixed_point)(scrn_gamma * PNG_FIXED_SCALE + 0.5);
     info_ptr->valid |= PNG_INFO_gAMA;
 
     if (scrn_gamma == 0.0)

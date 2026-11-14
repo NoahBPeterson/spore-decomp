@@ -1,11 +1,8 @@
-// src/game/UTFSpore_Win32/BiStateEffect.cpp -- migrated from slice(s) s00962ff0 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/BiStateEffect.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
 
-// ---- items of slice s00962ff0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct Stopwatch { void Init(int, int); void SetUnits(int); void Restart(); };
+// Local stand-ins for the retail classes; the generated headers carry no
+// class at these addresses (0x9634c0 / 0x9634f0).
+struct Stopwatch { void Restart(); };
 struct Btn {
     int   GetEventMask();                       // 0x9634c0
     void  OnlyWhenVisible(int* wnd, bool on);   // 0x963630
@@ -13,15 +10,18 @@ struct Btn {
     void  SetAlphaClamp(float a, float b);      // 0x9636f0
 };
 struct EaseFx { long double Ease(float t); };
-// ---- items of slice s00962ff0 end
 
 // @ 0x009634c0
 int Btn::GetEventMask()
 {
+    // Base event mask for a button, plus extra events while it is fading (state != 0).
+    const uint32_t kBaseEventMask = 0x10459;
+    const uint32_t kFadingEventMask = 0x200;
+
     uint32_t f = (*(uint32_t(__thiscall**)(void*))((char*)*(void**)this + 0x80))(this);
-    uint32_t r = *(uint32_t*)((char*)this + 0x54) | 0x10459;
+    uint32_t r = *(uint32_t*)((char*)this + 0x54) | kBaseEventMask;
     if (f & 1)
-        r |= 0x200;
+        r |= kFadingEventMask;
     return (int)r;
 }
 
@@ -53,6 +53,7 @@ long double EaseFx::Ease(float t)
 // @ 0x009635e0
 void Btn::SetFade(bool on)
 {
+    // Fade state stored at 0x54: 0 = idle, 2 = fading.
     int* p = *(int**)((char*)this + 0x58);
     if (p == 0)
         return;
@@ -95,6 +96,7 @@ void Btn::OnlyWhenVisible(int* wnd, bool on)
 // @ 0x009636f0
 void Btn::SetAlphaClamp(float a, float b)
 {
+    // Clamp both alpha clamps to [0, 1], then scale them down so they sum to at most 1.
     if (0.0f > a) a = 0.0f;
     if (0.0f > b) b = 0.0f;
     if (a > 1.0f) a = 1.0f;

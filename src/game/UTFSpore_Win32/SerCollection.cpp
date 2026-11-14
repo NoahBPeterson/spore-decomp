@@ -1,35 +1,11 @@
-// src/game/UTFSpore_Win32/SerCollection.cpp -- migrated from slice(s) s00999110, s00997f50 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/SerCollection.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
-#include "EA/Thread/Mutex.h"
-#include "EA/UTFWinTools/RWTextureFactory.h"
-#include "EA/UTFWinTools/SerCollection.h"
-#include "EA/UTFWinTools/SerScope.h"
-#include "EA/ResourceMan/Key.h"
-#include "EA/UTFWinTools/ISerAutoUpdate.h"
-#include "EA/ResourceMan/KeyFilter.h"
-#include "EA/UTFWinTools/SerializationService.h"
-#include "EA/Allocator/StackAllocator.h"
-#include <intrin.h>
-#include <string.h>
-#include <new>
 
 // unnamed retail callees and globals (address in the comment)
-extern "C" long _InterlockedExchangeAdd(volatile long*, long);
-extern "C" long _InterlockedExchange(volatile long*, long);
 extern "C" void FUN_011e0744_(void* a, void* b, int c);
 extern void* g_SerCollection_vftable[];       // 0x1446abc
 extern void* g_hashEmptyBucketArray[];        // 0x154df28 (eastl gpEmptyBucketArray)
 extern const wchar_t g_emptyWString[];        // 0x13fe144
-#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange)
 
-// ---- items of slice s00997f50 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void FUN_011e0744_(void* a, void* b, int c);
-extern void* g_SerCollection_vftable[];       // 0x1446abc
-extern void* g_hashEmptyBucketArray[];        // 0x154df28 (eastl gpEmptyBucketArray)
-extern const wchar_t g_emptyWString[];        // 0x13fe144
 struct WString16b {
     wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity;
     void FUN_00579a90(const wchar_t* s);      // basic_string<wchar_t>::RangeInitialize, thiscall
@@ -79,34 +55,15 @@ struct SerCollection {
     SerWString   mName;                       // +0x70
     SerCollection();
 };
-// ---- items of slice s00997f50 end
-
-// ---- items of slice s00999110 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  operator_delete(void*) throw();   // 0x00f47380
-extern "C" void* FUN_011e0744(void* dst, const void* src, unsigned n);   // memcpy thunk, returns dst
 extern void* FUN_008de1a0();                                             // service-manager singleton accessor
 extern wchar_t g_emptyWStr[2];     // 0x1667bac (empty string literal storage)
 extern void __fastcall FUN_00999050_(char*) throw();       // SerCollection::ClearObjects helper (0x999050)
 extern void __fastcall FUN_00999000_(char*) throw();       // SerCollection::RemoveAll (0x999000)
-#pragma intrinsic(_InterlockedExchange)
 typedef unsigned int uint;
 struct PluginVecRaw { void FUN_004b5440(); };   // eastl::vector<T*> dtor body, thiscall
 #define VF(o, off, sig) ((sig)(*(void***)(o))[(off) / 4])
 struct Key { uint mInstance; uint mType; uint mGroup; };
-struct IUnknown32 {
-  virtual void AddRef();
-  virtual void Release();
-  virtual void v08();
-  virtual void* Cast(uint type);
-  virtual void v10();
-  virtual void v14();
-  virtual void v18();
-  virtual void v1c();
-  virtual void v20();
-  virtual void v24();
-  virtual void v28();
-  virtual void v2c();
-};
 struct SSPluginVec {        // eastl::vector<IUnknown32*> (refcounted plugins)
   void** mpBegin;
   void** mpEnd;
@@ -137,27 +94,10 @@ struct SerializationService {
       ((void (__cdecl*)(uint, int, int, int, void*))mErrorCallback)
         (code, 0, 0, 0, mpCallbackContext);
   }
-  void*  GetReader(void* arg);
-  uint   Read(uint a, uint b, uint c, uint d);
-  void   AddPlugin(IUnknown32* obj);
-  void   RemovePlugin(IUnknown32* obj);
-  void   ClearAll();
 };
 struct SpVec {                       // eastl::vector<T*, sp_vector_allocator>
   void** b; void** e; void** c; char alloc[4];
-  void __thiscall DoInsertValue(void** pos, void** v);   // 0xa80dd0
   void __thiscall swap(SpVec* o);                        // 0x811a20
-  void __thiscall insert_n(void** pos, uint n, void** value);   // 0x999dd0
-  void push_back(void* v) {
-    void** p = e;
-    if (p < c) { e = p + 1; if (p) *p = v; }
-    else DoInsertValue(p, &v);
-  }
-  void clear_all() {
-    void** last = e; void** first = b;
-    FUN_011e0744(first, last, (uint)((char*)e - (char*)last));
-    e = e - (last - first);
-  }
 };
 struct SerScope {                 // eastl::hashtable member (alloc, buckets, count, elems, policy)
   char  alloc[4];
@@ -213,7 +153,6 @@ struct SerCollection_s0099_9110 : IListener {
   void Shutdown();  // 0x009991e0 (SerCollection::Shutdown)
   bool Reload();  // 0x00999250 (SerCollection::Reload)
 };
-// ---- items of slice s00999110 end
 
 // @ 0x00999000
 void __fastcall SerCollection_RemoveAll(char* self)
@@ -234,11 +173,13 @@ void __fastcall SerCollection_RemoveAll(char* self)
 }
 
 // @ 0x00999050
+// Drops the auto-update subscription, lets the listener clear its objects
+// (vtable slot 4) and then releases the objects left in the list.
 void __fastcall FUN_00999050(char* self)
 {
-    char* au = *(char**)(self + 8);
-    if (au) {
-        (*(void(__thiscall**)(char*, char*, char*))((char*)*(void**)au + 0x14))(au, self + 0xc, self);
+    char* autoUpdate = *(char**)(self + 8);
+    if (autoUpdate) {
+        (*(void(__thiscall**)(char*, char*, char*))((char*)*(void**)autoUpdate + 0x14))(autoUpdate, self + 0xc, self);
         *(unsigned*)(self + 8) = 0;
     }
     (*(void(__thiscall**)(char*))((char*)*(void**)self + 0x10))(self);
@@ -275,7 +216,7 @@ void SerCollection_s0099_9110::Shutdown()
     mAutoUpdate->Unregister(&mKey, this);
     mAutoUpdate = 0;
   }
-  VF(this, 0x10, void(__thiscall*)(void*))(this);
+  ((IListener*)(void*)this)->ClearObjects();
   FUN_00999000_((char*)this);
   mImports.clear();
   mExports.clear();

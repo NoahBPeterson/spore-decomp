@@ -1,14 +1,18 @@
-// src/game/SPEditors/SPPlayMode_Path.cpp -- migrated from slice(s) s0062da00 by tools/migrate/rewrite.py
-// Object file: SPEditors/SPPlayMode_Path.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/SPEditors/SPPlayMode_Path.cpp
+// Object file: SPEditors/SPPlayMode_Path.obj.
+//
+// The A* grid the casual editor modes walk along: SP::cSPCasual_Path (a 64x64 grid of
+// SP::PATHNODE_STRUCT plus an open list) and the neighbour search that drives the traversal.
 
 #include "game/types.h"
 #include <math.h>
 #include <new>
 
-// ---- items of slice s0062da00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void operator delete(void* p);                      // 0x00f47380 (EASTL/EA allocator free)
-void* memcpy(void*, const void*, unsigned int); // 0x011e0744
+void* memcpy(void*, const void*, unsigned int);     // 0x011e0744
+// SP::cSPCasual_Path's canonical headers (SP/PATHNODE_STRUCT.h, cSPVector2.h, EA/RefCountVTemplate.h)
+// declare constructors, which would make the grid members non-trivial and add ctor calls the retail
+// ctor does not make.  These POD stand-ins keep the exact layout with trivial construction.
 struct Vec2 { float x, y; };
 struct PathNode {
   Vec2 mPosition;            // +0x00
@@ -27,7 +31,6 @@ struct NodeVector {
   PathNode** mpCapacity;
   ~NodeVector() { if (mpBegin && ((int*)mpBegin)[-1] != 0) operator delete(mpBegin); }
   uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
-  bool empty() const { return mpEnd == mpBegin; }
   PathNode*& operator[](uint32_t i) { return mpBegin[i]; }
   void DoInsertValue(PathNode** pos, PathNode* const& value);
   void push_back(PathNode* const& value) {
@@ -68,17 +71,12 @@ class cSPCasual_Path : public RefCountVTemplate {
 
   cSPCasual_Path();
   virtual ~cSPCasual_Path();
-  void SetPositionOffset(float x, float y);
   PathNode* FindPassableNeighbor(PathNode* node, PathNode* exclude);
-  bool StartPath();
   void RemoveFromOpenList(PathNode* node);
   PathNode* GetBestOpenNode();
-  void BlockCircle(float x, float y, float radius, bool blocked);
-  bool GetNextPathPoint(Vec2* out);
   void ExpandNode(PathNode* node);
   bool FindPath(float sx, float sy, float gx, float gy);
 };
-// ---- items of slice s0062da00 end
 
 // @ 0x0062db30
 PathNode* cSPCasual_Path::FindPassableNeighbor(PathNode* node, PathNode* exclude)

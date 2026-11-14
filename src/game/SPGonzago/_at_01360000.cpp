@@ -1,6 +1,6 @@
-// src/game/SPGonzago/_at_01360000.cpp -- migrated from slice(s) s01364b20, s0135d100 by tools/migrate/rewrite.py
-// Object file: SPGonzago/_at_01360000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/SPGonzago/_at_01360000.cpp -- object file SPGonzago/_at_01360000.obj.
+// Types, members and virtual calls use the canonical headers under src/game/include;
+// each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 
@@ -29,7 +29,9 @@ extern "C" void fn_00595a70();
 extern "C" void fn_00c143c0();
 extern "C" void fn_00c143e0();
 
-// ---- items of slice s0135d100 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// Property descriptor (Simulator::Attribute) and the mutable tables it fills.
+// The T layout below is the initializer form used by FUN_01364240: same 0x3c-byte
+// record, with the seven trailing function pointers spelled individually.
 typedef void (__cdecl *fp)();
 struct T {
     const char* name;
@@ -49,36 +51,7 @@ struct T {
 };
 extern T g_015829b8, g_015829f4, g_01582a30, g_01582a6c, g_01582aa8,
          g_01582ae4, g_01582b20;
-extern unsigned char g_01582786, g_0169defc;
-extern "C" void fn_00692ca0();
-extern "C" void fn_00ac8050();
-extern "C" void fn_00572840();
-extern "C" void fn_00693090();
-extern "C" void fn_00694f00();
-extern "C" void fn_00b1fbf0();
-extern "C" void fn_00675ca0();
-extern "C" void fn_00c2e4e0();
-extern "C" void fn_00692fb0();
-extern "C" void fn_00ac88f0();
-extern "C" void fn_006930b0();
-extern "C" void fn_00694fc0();
-extern "C" void fn_00acbb80();
-extern "C" void fn_00692ff0();
-extern "C" void fn_00694ee0();
-extern "C" void fn_00aff840();
-extern "C" void fn_00aff870();
-extern "C" void fn_00692fd0();
-extern "C" void fn_00694ec0();
-extern "C" void fn_00595a70();
-extern "C" void fn_00c143c0();
-extern "C" void fn_00c143e0();
-// ---- items of slice s0135d100 end
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern T g_015829b8, g_015829f4, g_01582a30, g_01582a6c, g_01582aa8,
-         g_01582ae4, g_01582b20;
-
-// ---- items of slice s01364b20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" int      __cdecl atexit(void (__cdecl*)());
 extern "C" void FUN_00572810();
 extern "C" void FUN_00572840();
@@ -114,6 +87,8 @@ extern float g_halfPi;                                     // 0x015a303c
 extern float g_negativeHalfPi;                             // 0x015a3078
 extern float g_positiveHalfPi;                             // 0x015a307c
 #pragma warning(disable: 4100)
+
+// Simulator::Attribute -- one row of a reflected property table.
 namespace Simulator {
 struct Attribute {
     const char* mpName;                                    // +0x00  attribute name
@@ -131,26 +106,21 @@ struct Attribute {
     void*       mpFn30;                                    // +0x30
     void*       mpFn34;                                    // +0x34
     void*       mpFn38;                                    // +0x38
-};  // namespace Simulator
+};
 }
 using Simulator::Attribute;
 extern Attribute g_spaceGameDataAttributes[6];             // 0x015a38b8
 extern Attribute g_scenarioTerrainAttributes[4];           // 0x015a3a60
+
+// Stimulus callbacks and the stimulus objects they belong to.
 namespace SP {
 bool AddLoudness(void* stimulus);        // 0x00d85370
-}
-namespace SP {
 bool RemoveLoudness(void* stimulus);     // 0x00d853b0
-}
-namespace SP {
 bool UpdateLoudness(void* stimulus);     // 0x00d85400
-}
-namespace SP {
 bool AddHeldObject(void* stimulus);      // 0x00d85480
-}
-namespace SP {
 bool AddAlphaFade(void* stimulus);       // 0x00d854f0
 }
+
 typedef bool (__cdecl* StimulusCallback)(void* stimulus);
 class cStimulus {
 public:
@@ -161,7 +131,6 @@ extern cStimulus   g_loudnessStimulus;                     // 0x0169f0f0
 extern cStimulus   g_heardRagingRoarStimulus;              // 0x0169f134
 extern cStimulus   g_heardSirenSongStimulus;               // 0x0169f178
 extern cStimulus   g_wasMotherStimulus;                    // 0x0169f1bc
-// ---- items of slice s01364b20 end
 
 // @ 0x01363fe0
 void FUN_01363fe0()
@@ -197,9 +166,9 @@ void init_169f0f0()
 // @ 0x0136cfb0
 void init_15a3078()
 {
-    float value = g_halfPi;
-    g_negativeHalfPi = -value;
-    g_positiveHalfPi = value;
+    float halfPi = g_halfPi;
+    g_negativeHalfPi = -halfPi;
+    g_positiveHalfPi = halfPi;
 }
 
 // @ 0x0136da30

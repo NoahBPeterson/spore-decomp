@@ -1,16 +1,4 @@
-// src/game/SPGonzago/SPSimulatorColony.cpp -- migrated from slice(s) s00ff4d50 by tools/migrate/rewrite.py
-// Object file: SPGonzago/SPSimulatorColony.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
-#include "SP/cCity.h"
-#include "SP/cGameNounManager.h"
-#include "SP/cPlayer.h"
-#include "SP/cTribe.h"
-#include "SP/cDataSerializationInfo.h"
-#include "SP/cGonzagoTimer.h"
-#include "SP/cPropertyList.h"
-#include "SP/cVarListSerializer.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern char g_18c43e8[];    // [0x018c43e8] game-data selection key
@@ -21,19 +9,12 @@ extern char g_00b1e500[];   // [0x00b1e500] game-data selector
 extern void* g_vtbl_cColonySimulator;    // [0x01494ee4]
 extern void* g_vtbl_cContentValidation;  // [0x013ec458]
 
-// ---- items of slice s00ff4d50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// Local stand-in types for the retail classes this module pokes at.
 struct VObj { void** vt; };
 typedef void* (__thiscall *FnVp0)(void*);
 typedef int   (__thiscall *FnVp0i)(void*);
 typedef char  (__thiscall *FnVp0c)(void*);
-void  __cdecl operator_delete_array(void* p);                                            // 0x00f47380
-extern char g_18c43e8[];    // [0x018c43e8] game-data selection key
-extern char g_00cd7d10[];   // [0x00cd7d10] game-data selector
-extern char g_00d3d420[];   // [0x00d3d420] game-data selector
-extern char g_00acdff0[];   // [0x00acdff0] game-data selector
-extern char g_00b1e500[];   // [0x00b1e500] game-data selector
-extern void* g_vtbl_cColonySimulator;    // [0x01494ee4]
-extern void* g_vtbl_cContentValidation;  // [0x013ec458]
+void  __cdecl operator_delete_array(void* p);   // 0x00f47380
 struct CFileCountHolder {
     int __thiscall GetFileCount();   // 0x008e7f80
 };
@@ -108,11 +89,13 @@ struct CCombatTuning {
 struct CColonyEntry {
     void* __thiscall GetCity();          // 0x00bd9e30
 };
-// ---- items of slice s00ff4d50 end
 
-// callees this slice defines outside this object (rewrite.py held_callee_protos)
-void __cdecl FUN_00ff5330(int param_1, int* param_2, int* param_3, int* param_4, int* param_5, int* param_6);  // 0x00ff5330 (stays in the slice: not this object's)
-void __cdecl FUN_00ff5410(CTribe* param_1, int* param_2, int* param_3, int* param_4, int* param_5, int* param_6);  // 0x00ff5410 (stays in the slice: not this object's)
+// Helper callees defined elsewhere in the same object file.
+void __cdecl FUN_00ff5330(int param_1, int* param_2, int* param_3, int* param_4, int* param_5, int* param_6);  // 0x00ff5330
+void __cdecl FUN_00ff5410(CTribe* param_1, int* param_2, int* param_3, int* param_4, int* param_5, int* param_6);  // 0x00ff5410
+
+// Growth category id the population path keys on (guess: an unscoped retail message constant).
+static const int kGrowthCategoryPopulation = 0x0436f315;
 
 // @ 0x00ff5510
 int __cdecl SP_DetermineCityGrowth(CCityGrow* param_1, int* param_2)
@@ -190,7 +173,7 @@ void __thiscall cColonySimulator::DoGrowthSim(void* city)
     CCityGrow* c = (CCityGrow*)city;
 
     if (r > 0) {
-        if (code == 0x436f315) {
+        if (code == kGrowthCategoryPopulation) {
             if (!c->FUN_00bdb470(code))
                 c->FUN_00be3850();
         } else if (!c->FUN_00bdb470(code)) {
@@ -199,7 +182,7 @@ void __thiscall cColonySimulator::DoGrowthSim(void* city)
                 c->FUN_00be7370(code);
         }
     } else if (r < 0) {
-        if (code == 0x436f315)
+        if (code == kGrowthCategoryPopulation)
             c->FUN_00be2070(0, 0);
         else
             c->FUN_00be5130(code);
@@ -246,7 +229,7 @@ void __thiscall cColonySimulator::OnTick(int a, int b, int c)
         int n = (vec[1] - vec[0]) >> 2;
         for (int i = 0; i < n; ++i) {
             int* city = (int*)((int*)vec[0])[i];
-            if (city[0x74c / 4] == -1)
+            if (city[0x74c / 4] == -1)      // city whose growth sim has not run yet
                 DoGrowthSim(city);
         }
     }
@@ -256,6 +239,7 @@ void __thiscall cColonySimulator::OnTick(int a, int b, int c)
         CColonyEntry* e = (CColonyEntry*)((int*)vec[0])[i];
         void* p = e->GetCity();
         if (p != 0) {
+            // ask the +0x34 sub-object whether it is ready, then tick the city itself
             char ok = ((FnVp0c)((VObj*)((char*)p + 0x34))->vt[0x50 / 4])((char*)p + 0x34);
             if (ok != 0)
                 ((FnVp0)((VObj*)p)->vt[0x68 / 4])(p);

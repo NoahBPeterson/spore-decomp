@@ -1,15 +1,15 @@
-// src/game/SPEditors/TraitVector.cpp -- migrated from slice(s) s005718f0, s0056fb90, s005709b0 by tools/migrate/rewrite.py
-// Object file: SPEditors/TraitVector.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/SPEditors/TraitVector.cpp
+// Object file: SPEditors/TraitVector.obj.
+//
+// Feature vectors (an eastl::vector_map of cID -> weight) and the similarity operators that compare them:
+// the set-membership Manhattan distance, the blend operators, and the vector reallocation helpers.
 
 #include "game/types.h"
 #include "SP/Traits/cFeatureVector.h"
 #include <new>
-#include <string.h>
 #include <math.h>
-#include <intrin.h>
 
-// ---- items of slice s005709b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- types shared by the similarity operators (slice s005709b0)
 struct Allocator { const char* mpName; };
 struct Key12 {
     uint32_t mA;
@@ -49,13 +49,9 @@ struct cFeatureVector : KeyVector {
     void clear();                                            // 0x571680
     Key12* begin();                                          // 0x5716c0
     Key12* end();                                            // 0x5716e0
-    void ResetResourceType();                                // 0x571700
     void assign(const cFeatureVector& other);                // 0x571720
     float add(const Key12& key, float value);                // 0x571790
     InsertResult insertValue(const Key12& value);            // 0x571840
-
-    // out-of-line callee (0x526430), named from the PDB
-    void GetResourceTypeFromModelType();
 };
 Key12* __cdecl lower_bound(Key12* first, Key12* last, const Key12& value, unsigned char comp);  // 0x571c40
 struct WeightPair {
@@ -80,15 +76,14 @@ struct cTraitQuery {
     float Op2(cFeatureVector* a, cFeatureVector* b);       // 0x570e50
     float Op3(cFeatureVector* a, cFeatureVector* b);       // 0x571100
 };
-static const float kfSimilarityError = 4294967296.0f;       // 0x13f4fd0
+static const float kfSimilarityError = 4294967296.0f;       // 0x13f4fd0 == (float)0xFFFFFFFF, "no such operator"
 struct TraitData_s0057_09b0 {
     unsigned char mFlag;                                      // +0x00
     TraitData_s0057_09b0() { mFlag = 0; }
     float Intersect(cFeatureVector* a, cFeatureVector* b);   // 0x005704c0 (ignores this)
 };
-// ---- items of slice s005709b0 end
 
-// ---- items of slice s0056fb90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- types shared by TraitData::Intersect and TraitData::Blend (slice s0056fb90)
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
 struct SetPair { void* first; void* second; };
 struct VectorSetU32 {
@@ -96,8 +91,6 @@ struct VectorSetU32 {
     void*    mpEnd;                     // +4  (0x015e4a20)
     void*    mpCapacity;                // +8
     uint32_t mAllocator;                // +0xc
-    void  insert(void* position, const void* value);      // 0x00554020
-    void  eraseKey(const void* value);                    // 0x005540d0
     void  equal_range(SetPair* out, const void* value);   // 0x00555980
 };
 VectorSetU32 g_rigBlockSet;             // 0x015e4a1c
@@ -127,12 +120,11 @@ struct TraitData {                      // object holding two cFeatureVector mem
     float Intersect(FeatureVector* lhs, FeatureVector* rhs);   // 0x005704c0 (ret 8)
     void  Blend(bool positive, FeatureVector* src, uint32_t amount);   // 0x005708d0 (ret 0xc)
 };
-// ---- items of slice s0056fb90 end
 
-// callees this slice defines outside this object (rewrite.py held_callee_protos)
-bool __cdecl IntersectWeights(const cFeatureVector* a, const WeightVector* b);  // 0x00571530 (stays in the slice: not this object's)
+// callee defined outside this object
+bool __cdecl IntersectWeights(const cFeatureVector* a, const WeightVector* b);  // 0x00571530
 
-// ---- items of slice s005718f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- vector reallocation helpers (slice s005718f0)
 void* __cdecl AllocatorAllocate(Allocator* alloc, uint32_t size, uint32_t align, uint32_t offset);  // 0x42dee0
 void  __cdecl AllocatorDeallocate(void* block);                                                    // EASTL_allocator_deallocate
 struct Key12_s0057_18f0 {
@@ -150,6 +142,8 @@ inline Key12_s0057_18f0* copy_backward_impl(Key12_s0057_18f0* first, Key12_s0057
 }
 inline Key12_s0057_18f0* copy_backward(Key12_s0057_18f0* first, Key12_s0057_18f0* last, Key12_s0057_18f0* resultEnd)
 {
+    // The three unused flags are the dispatch values the original inlining passed to _Copy_backward;
+    // /Od still reserves their slots, so they must stay.
     const bool bOutputIsPointer = false;
     const bool bInputIsPointer = false;
     const bool bHasTrivialCopy = false;
@@ -177,11 +171,10 @@ struct KeyVector_s0057_18f0 {
     Key12_s0057_18f0* insert(Key12_s0057_18f0* position, const Key12_s0057_18f0& value);
     void DoInsertValue(Key12_s0057_18f0* position, const Key12_s0057_18f0& value);
 };
-struct less_key {
+struct KeyComparator {
     inline bool operator()(const Key12_s0057_18f0& a, const Key12_s0057_18f0& b) const { return a < b; }
 };
 inline void advance(Key12_s0057_18f0*& i, int n) { i += n; }
-// ---- items of slice s005718f0 end
 
 // @ 0x005704c0
 float TraitData::Intersect(FeatureVector* lhs, FeatureVector* rhs)
@@ -256,21 +249,22 @@ float TraitData::Intersect(FeatureVector* lhs, FeatureVector* rhs)
 }
 
 // @ 0x005708d0
+// Add +/-1 for every feature in `vec` to the base vector, then rebuild the extra vector with each
+// feature scaled by amount/weight.
 void TraitData::Blend(bool positive, FeatureVector* vec, uint32_t amount)
 {
     float n30 = 1.0f;
-    if (!positive) {
+    if (!positive)
         n30 = -n30;
-    }
     Elem12* p30 = (Elem12*)vec->begin();
     Elem12* v = (Elem12*)vec->end();
-    for (; p30 != v; p30 += 1) {
+    for (; p30 != v; ++p30) {
         mBase.add(p30, n30);
     }
     mExtra.clear();
     Elem12* t32 = (Elem12*)mBase.begin();
     Elem12* t21 = (Elem12*)mBase.end();
-    for (; t32 != t21; t32 += 1) {
+    for (; t32 != t21; ++t32) {
         Elem12* b = t32;
         mExtra.add(b, amount / b->f);
     }
@@ -363,14 +357,16 @@ InsertResult cFeatureVector::insertValue(const Key12& value)
 }
 
 // @ 0x005718f0
+// Returns an iterator to the inserted element. Appending at the end grows in place; anything else
+// (or a full buffer) goes through the reallocating path.
 Key12_s0057_18f0* KeyVector_s0057_18f0::insert(Key12_s0057_18f0* position, const Key12_s0057_18f0& value)
 {
-    const int n = position - mpBegin;
-    if ((position != mpEnd) || (mpEnd == mpCapacity))
+    const int index = position - mpBegin;
+    if (position != mpEnd || mpEnd == mpCapacity)
         DoInsertValue(position, value);
     else
         ::new(mpEnd++) Key12_s0057_18f0(value);
-    return mpBegin + n;
+    return mpBegin + index;
 }
 
 // @ 0x005719a0
@@ -381,6 +377,9 @@ KeyVector_s0057_18f0::~KeyVector_s0057_18f0()
 }
 
 // @ 0x005719f0
+// Shift the tail up by one to open a hole at `position`, or double the buffer and copy both halves
+// when it is full. `pValue` is bumped past the hole when the value being inserted lives inside the
+// buffer (e.g. insert(v[0], v[0])).
 void KeyVector_s0057_18f0::DoInsertValue(Key12_s0057_18f0* position, const Key12_s0057_18f0& value)
 {
     if (mpEnd != mpCapacity) {
@@ -407,6 +406,7 @@ void KeyVector_s0057_18f0::DoInsertValue(Key12_s0057_18f0* position, const Key12
 }
 
 // @ 0x00571c40
+// Binary search over a sorted run: the first element not less than `value`.
 Key12_s0057_18f0* __cdecl lower_bound(Key12_s0057_18f0* first, Key12_s0057_18f0* last, const Key12_s0057_18f0& value)
 {
     int d = last - first;
@@ -414,7 +414,7 @@ Key12_s0057_18f0* __cdecl lower_bound(Key12_s0057_18f0* first, Key12_s0057_18f0*
         Key12_s0057_18f0* i = first;
         int d2 = d >> 1;
         advance(i, d2);
-        less_key compare;
+        KeyComparator compare;
         if (compare(*i, value)) {
             first = ++i;
             d -= d2 + 1;

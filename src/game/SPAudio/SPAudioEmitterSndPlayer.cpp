@@ -1,25 +1,5 @@
-// src/game/SPAudio/SPAudioEmitterSndPlayer.cpp -- migrated from slice(s) s00a38e40 by tools/migrate/rewrite.py
-// Object file: SPAudio/SPAudioEmitterSndPlayer.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-
 #include "game/types.h"
-#include "EA/Audio/Command.h"
-#include "EA/Audio/IConfiguration.h"
-#include "EA/ResourceMan/Key.h"
-#include "EA/Audio/ResponseCurve.h"
-#include "rw/audio/core/System.h"
-#include "EA/Audio/VoiceContainer.h"
-#include "SP/Audio/cEventModifier.h"
-#include "SP/Audio/cEventModifierPrimitive.h"
-#include <ctype.h>
-#include <string.h>
 
-// ---- items of slice s00a38e40 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void operator delete(void*) throw();     // 0x00f47380
-void operator delete[](void*);           // 0x00f47380
-void operator delete(void*, const char*, int, int, int, int);
-void operator delete(void*, const char*, int, int, const char*, int);
-inline void operator delete(void*, void*) {}
 namespace EA {
 namespace Audio {
 struct ResponseCurve_s00a3_8e40 {
@@ -27,14 +7,9 @@ struct ResponseCurve_s00a3_8e40 {
     char pad4[0xc];      // +4..+0xf
     void* mpInline;      // +0x10
     char pad14[0x350];   // +0x14..+0x363
-    ResponseCurve_s00a3_8e40();                          // 0x00a1aa50
     long double GetOutputValue(float x);      // 0x00a1a110
     ~ResponseCurve_s00a3_8e40() { if (mpData && mpData != mpInline) operator delete[](mpData); }
 };
-}
-}
-namespace EA {
-namespace Audio {
 class EmitterSndPlayer { public:
     char pad0[0x10];
     ResponseCurve_s00a3_8e40 mAttenuationCurve;   // +0x10..+0x373
@@ -46,10 +21,6 @@ class EmitterSndPlayer { public:
     bool GetProperty(uint32_t key, float* out);   // 0x00a11a60
     void Reset();                              // 0x00a124a0
 };
-}
-}
-namespace EA {
-namespace Audio {
 struct VoiceContainer_s00a3_8e40 {
     void* FindPlugin(uint32_t id);   // 0x00a34230
 };
@@ -73,10 +44,6 @@ extern AudioLockObj* gAudioLockObj;   // 0x016e61a8
 namespace SP {
 namespace Audio {
 using namespace EA;
-}
-}
-namespace SP {
-namespace Audio {
 using namespace EA::Audio;
 }
 }
@@ -94,12 +61,12 @@ class cEmitterSndPlayer : public EmitterSndPlayer { public:
 };
 }
 }
-    void operator delete[](void*); // 0x00f47380
-    void operator delete(void*); // 0x00f47380
-// ---- items of slice s00a38e40 end
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern AudioLockObj* gAudioLockObj;   // 0x016e61a8
+// Command id passed to rw::audio::core::System::IsCommandComplete by SetCommandComplete.
+static const int kCommandIdSetCommandComplete = 0x12;
+
+// Plugin id of the level-meter plugin looked up in the voice container by CreateVoice.
+static const uint32_t kLevelMeterPluginId = 0x56754d31;
 
 // @ 0x00a38e40
 namespace SP { namespace Audio {
@@ -120,8 +87,7 @@ namespace SP { namespace Audio {
 bool cEmitterSndPlayer::CreateVoice()
 {
     if (!EmitterSndPlayer::CreateVoice()) return false;
-    void* p = ((VoiceContainer_s00a3_8e40*)((char*)this + 0x38c))->FindPlugin(0x56754d31);
-    mpE00 = p;
+    mpE00 = ((VoiceContainer_s00a3_8e40*)((char*)this + 0x38c))->FindPlugin(kLevelMeterPluginId);
     return true;
 }
 }}  // namespace SP::Audio
@@ -144,7 +110,7 @@ void cEmitterSndPlayer::SetCommandComplete(float t)
         int v;
         if (mE04 > t) v = 1;
         else v = 0;
-        s->IsCommandComplete(0x12, (float)v);
+        s->IsCommandComplete(kCommandIdSetCommandComplete, (float)v);
     }
 }
 }}  // namespace SP::Audio

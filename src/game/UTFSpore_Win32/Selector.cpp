@@ -1,27 +1,22 @@
-// src/game/UTFSpore_Win32/Selector.cpp -- migrated from slice(s) s008f9220 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/Selector.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/UTFSpore_Win32/Selector.cpp
+// Object file: UTFSpore_Win32/Selector.obj.
 
 #include "game/types.h"
-#include "EA/Allocator/StackAllocator.h"
-#include "EA/XHTML/Style/Stylesheet.h"
 
-// unnamed retail callees and globals (address in the comment)
+// unnamed retail callees (address in the comment)
 extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
 extern "C" int wcscmp(const wchar_t*, const wchar_t*);
-extern "C" int wmemcmp(const wchar_t*, const wchar_t*, unsigned int);
 
-// ---- items of slice s008f9220 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
-extern "C" int wcscmp(const wchar_t*, const wchar_t*);
-extern "C" int wmemcmp(const wchar_t*, const wchar_t*, unsigned int);
 namespace EA {
 namespace XHTML {
 namespace DOM {
-class Node {  // non-polymorphic DOM node (layout only)
+
+// Non-polymorphic DOM node (layout only).
+class Node {
 public:
-    Node* Parent();                                    // 0xff0420
-    const wchar_t* GetAttrValue(const wchar_t* name);  // 0x8e45b0
+    Node* Parent();                                    // 0x00ff0420
+    const wchar_t* GetAttrValue(const wchar_t* name);  // 0x008e45b0
+
     char _pad0[0x14];
     Node* mpParent;              // +0x14
     char _pad1[0x18];            // +0x18..0x2f
@@ -30,162 +25,132 @@ public:
     const wchar_t* mpId;         // +0x38
     char _pad2[4];               // +0x3c
     void* mpField40;             // +0x40
-};  // namespace DOM
-}
-}
-}
+};
+
+}  // namespace DOM
+}  // namespace XHTML
+}  // namespace EA
+
 namespace EA {
 namespace XHTML {
 namespace Style {
+
 using EA::XHTML::DOM::Node;
-}
-}
-}
-namespace EA {
-namespace XHTML {
-namespace Style {
+
 class Selector {
 public:
     Selector() : mpNext(0) {}
     virtual ~Selector();
     virtual bool Match(Node* pNode, bool bDeep);
     virtual void* Slot2() { return 0; }
-    void Append(Selector* p);   // 0x008f9fa0
-    Selector* mpNext;           // +0x4
+
+    Selector* mpNext;  // +0x4
 };
-}
-}
-}
-namespace EA {
-namespace XHTML {
-namespace Style {
+
 class TagSelector : public Selector {
 public:
     virtual ~TagSelector();
     virtual bool Match(Node* pNode, bool bDeep);
+
     const wchar_t* mName;  // +0x8
 };
-}
-}
-}
-namespace EA {
-namespace XHTML {
-namespace Style {
+
+// vtable 0x014399e8
 class ClassSelector : public Selector {  // vtable 0x014399e8
 public:
     virtual ~ClassSelector();
     virtual bool Match(Node* pNode, bool bDeep);
+
     const wchar_t* mName;  // +0x8
     int mLength;           // +0xc
 };
-}
-}
-}
-namespace EA {
-namespace XHTML {
-namespace Style {
+
+// vtable 0x014399f4
 class IdSelector : public Selector {  // vtable 0x014399f4
 public:
     virtual ~IdSelector();
     virtual bool Match(Node* pNode, bool bDeep);
+
     const wchar_t* mName;  // +0x8
 };
-}
-}
-}
-namespace EA {
-namespace XHTML {
-namespace Style {
+
 class DescendantSelector : public Selector {
 public:
     virtual ~DescendantSelector();
     virtual bool Match(Node* pNode, bool bDeep);
+
     Selector* mChild;  // +0x8
 };
-}
-}
-}
-namespace EA {
-namespace XHTML {
-namespace Style {
+
 class ChildSelector : public Selector {
 public:
     virtual ~ChildSelector();
     virtual bool Match(Node* pNode, bool bDeep);
+
     Selector* mChild;  // +0x8
 };
-}
-}
-}
-namespace EA {
-namespace XHTML {
-namespace Style {
+
+// vtable 0x01439a24
 class AttrExistsSelector : public Selector {  // vtable 0x01439a24
 public:
     virtual ~AttrExistsSelector();
     virtual bool Match(Node* pNode, bool bDeep);
+
     const wchar_t* mName;  // +0x8
 };
-}
-}
-}
-namespace EA {
-namespace XHTML {
-namespace Style {
+
+// vtable 0x01439a30
 class AttrEqualsSelector : public Selector {  // vtable 0x01439a30
 public:
     virtual ~AttrEqualsSelector();
     virtual bool Match(Node* pNode, bool bDeep);
+
     const wchar_t* mName;   // +0x8
     const wchar_t* mValue;  // +0xc
 };
-}
-}
-}
-namespace EA {
-namespace XHTML {
-namespace Style {
+
+// vtable 0x01439a3c
 class AttrIncludesSelector : public Selector {  // vtable 0x01439a3c
 public:
     virtual ~AttrIncludesSelector();
     virtual bool Match(Node* pNode, bool bDeep);
+
     const wchar_t* mName;   // +0x8
     const wchar_t* mValue;  // +0xc
     int mValueLen;          // +0x10
 };
-}
-}
-}
-namespace EA {
-namespace XHTML {
-namespace Style {
+
+// vtable 0x01439a48
 class AttrDashSelector : public Selector {  // vtable 0x01439a48
 public:
     virtual ~AttrDashSelector();
     virtual bool Match(Node* pNode, bool bDeep);
+
     const wchar_t* mName;   // +0x8
     const wchar_t* mValue;  // +0xc
     int mValueLen;          // +0x10
 };
-}
-}
-}
-namespace EA {
-namespace XHTML {
-namespace Style {
+
 class PseudoSelector : public Selector {
 public:
     virtual ~PseudoSelector();
     virtual bool Match(Node* pNode, bool bDeep);
+
     int mKind;  // +0x8
 };
-}
-}
-}
-// ---- items of slice s008f9220 end
+
+}  // namespace Style
+}  // namespace XHTML
+}  // namespace EA
+
+namespace EA { namespace XHTML { namespace Style {
+
+// Whitespace between class names in a "class" attribute, and the level
+// separator inside a dash-separated attribute value (as in lang="en-US").
+static const wchar_t kClassSeparator = L' ';
+static const wchar_t kDashSeparator  = L'-';
 
 // @ 0x008f96a0
-namespace EA { namespace XHTML { namespace Style {
 int wmemcmp(const wchar_t* p1, const wchar_t* p2, unsigned int n)
 {
     while (n > 0) {
@@ -197,18 +162,15 @@ int wmemcmp(const wchar_t* p1, const wchar_t* p2, unsigned int n)
     }
     return 0;
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f96e0
-namespace EA { namespace XHTML { namespace Style {
 bool Selector::Match(Node* pNode, bool bDeep)
 {
     return !(mpNext != 0 && !mpNext->Match(pNode, bDeep));
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f9710
-namespace EA { namespace XHTML { namespace Style {
+// True when pSub occurs in pString as a whole token delimited by ch (or a terminator).
 __declspec(noinline) static bool StringContains(const wchar_t* pString, const wchar_t* pSub, unsigned int nLen, wchar_t ch)
 {
     const wchar_t* p = pString;
@@ -233,10 +195,8 @@ __declspec(noinline) static bool StringContains(const wchar_t* pString, const wc
     }
     return false;
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f9780
-namespace EA { namespace XHTML { namespace Style {
 bool TagSelector::Match(Node* pNode, bool bDeep)
 {
     const wchar_t* pTag = pNode->mpTagName;
@@ -244,31 +204,25 @@ bool TagSelector::Match(Node* pNode, bool bDeep)
         return false;
     return !(mpNext != 0 && !mpNext->Match(pNode, bDeep));
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f97d0
-namespace EA { namespace XHTML { namespace Style {
 bool ClassSelector::Match(Node* pNode, bool bDeep)
 {
     const wchar_t* pAttr = pNode->GetAttrValue(L"class");
-    if (!StringContains(pAttr, mName, mLength, L' '))
+    if (!StringContains(pAttr, mName, mLength, kClassSeparator))
         return false;
     return !(mpNext != 0 && !mpNext->Match(pNode, bDeep));
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f9830
-namespace EA { namespace XHTML { namespace Style {
 bool IdSelector::Match(Node* pNode, bool bDeep)
 {
     if (pNode->mpId == 0 || wcscmp(pNode->mpId, mName) != 0)
         return false;
     return mpNext == 0 || mpNext->Match(pNode, bDeep);
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f98a0
-namespace EA { namespace XHTML { namespace Style {
 bool DescendantSelector::Match(Node* pNode, bool bDeep)
 {
     Node* p = pNode->Parent();
@@ -279,10 +233,8 @@ bool DescendantSelector::Match(Node* pNode, bool bDeep)
     }
     return false;
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f9910
-namespace EA { namespace XHTML { namespace Style {
 bool ChildSelector::Match(Node* pNode, bool bDeep)
 {
     Node* p = pNode->Parent();
@@ -290,45 +242,35 @@ bool ChildSelector::Match(Node* pNode, bool bDeep)
         return false;
     return mChild->Match(p, bDeep) && (mpNext == 0 || mpNext->Match(pNode, bDeep));
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f9970
-namespace EA { namespace XHTML { namespace Style {
 bool AttrExistsSelector::Match(Node* pNode, bool bDeep)
 {
     return pNode->GetAttrValue(mName) != 0 && !(mpNext != 0 && !mpNext->Match(pNode, bDeep));
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f99c0
-namespace EA { namespace XHTML { namespace Style {
 bool AttrEqualsSelector::Match(Node* pNode, bool bDeep)
 {
     const wchar_t* v = pNode->GetAttrValue(mName);
     return v != 0 && wcscmp(v, mValue) == 0 && !(mpNext != 0 && !mpNext->Match(pNode, bDeep));
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f9a40
-namespace EA { namespace XHTML { namespace Style {
 bool AttrIncludesSelector::Match(Node* pNode, bool bDeep)
 {
     const wchar_t* pAttr = pNode->GetAttrValue(mName);
-    return StringContains(pAttr, mValue, mValueLen, L' ') && !(mpNext != 0 && !mpNext->Match(pNode, bDeep));
+    return StringContains(pAttr, mValue, mValueLen, kClassSeparator) && !(mpNext != 0 && !mpNext->Match(pNode, bDeep));
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f9aa0
-namespace EA { namespace XHTML { namespace Style {
 bool AttrDashSelector::Match(Node* pNode, bool bDeep)
 {
     const wchar_t* pAttr = pNode->GetAttrValue(mName);
-    return StringContains(pAttr, mValue, mValueLen, L'-') && !(mpNext != 0 && !mpNext->Match(pNode, bDeep));
+    return StringContains(pAttr, mValue, mValueLen, kDashSeparator) && !(mpNext != 0 && !mpNext->Match(pNode, bDeep));
 }
-}}}  // namespace EA::XHTML::Style
 
 // @ 0x008f9b00
-namespace EA { namespace XHTML { namespace Style {
 bool PseudoSelector::Match(Node* pNode, bool bDeep)
 {
     if (bDeep)
@@ -368,4 +310,5 @@ bool PseudoSelector::Match(Node* pNode, bool bDeep)
         return false;
     }
 }
+
 }}}  // namespace EA::XHTML::Style

@@ -1,26 +1,30 @@
-// src/game/SPEngine/_at_00700000.cpp -- migrated from slice(s) s006ffe00 by tools/migrate/rewrite.py
-// Object file: SPEngine/_at_00700000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/SPEngine/_at_00700000.cpp
+// Object file: SPEngine/_at_00700000.obj.  The cell-record vector (SpCellRecord /
+// CellArray) and cCellList, the spatial cell list that owns five byte vectors, three
+// pointer vectors and a 0x7c-byte record vector.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include <xmmintrin.h>
-#include <math.h>
 #include <string.h>
 #include <float.h>
 #include <new>
 #include <intrin.h>
 
-// ---- items of slice s006ffe00 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void* __cdecl FUN_011e073e(void* p, int a, unsigned size);
-void  __cdecl FUN_00f47410(int a);
-void  __cdecl FUN_00762a00(int a);
-void  __cdecl FUN_00762a30(int a);
-void  __cdecl FUN_00761130(int a);
-void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
+// Destroy() flag: also hand the object's own storage back to the allocator.
+const unsigned kDestroyFreeThis = 1;
+
+// Unnamed retail callees (address in the comment).
+void* __cdecl FUN_011e073e(void* p, int value, unsigned size);     // 0x011e073e (memset)
+void  __cdecl FUN_00f47410(int a);                                 // 0x00f47410
+void  __cdecl FUN_00762a00(int a);                                 // 0x00762a00
+void  __cdecl FUN_00762a30(int a);                                 // 0x00762a30
+void  __cdecl FUN_00761130(int a);                                 // 0x00761130
+void  __cdecl EASTL_allocator_deallocate(void* p);                 // 0x00f47380
 void* __cdecl operator_new(unsigned size, int align, int flags, const char* name,
                            int a, int b, int c, int d);           // 0x00f473d0
-void* __cdecl FUN_006df700(void* a, void* b, void* c);            // 0x006df700 CopyRefPtr
-void  __stdcall FUN_0059c410(void* a, void* b);                   // 0x0059c410 ReleaseAutoRefRange
+void* __cdecl FUN_006df700(void* a, void* b, void* c);             // 0x006df700 CopyRefPtr
+void  __stdcall FUN_0059c410(void* a, void* b);                    // 0x0059c410 ReleaseAutoRefRange
+
 struct SpCellRecord {
     int     m00[3];     // +0x00
     __m128  m10;        // +0x10  (16-byte aligned -> 4-byte hole at +0x0c)
@@ -40,6 +44,7 @@ struct CellAccessor {
     int  fc;   // +0x0c
     int Get(int* out);
 };
+// Owning vector of SpCellRecord: `data` holds `count` elements of `sizeof(SpCellRecord)` bytes each.
 struct CellArray {
     void*         vt;      // +0x00
     int           f04;     // +0x04
@@ -152,11 +157,12 @@ struct Vec4b {
     void PushBack(const int* v);
     void Grow(void* pos, const void* v);
 };
+
+// Vector buffers are refcounted: word before the block holds the reference count.
 static void FreeVecBuf(void* p) {
     if (p != 0 && *(int*)((char*)p - 4) != 0)
         EASTL_allocator_deallocate(p);
 }
-// ---- items of slice s006ffe00 end
 
 // @ 0x00700290
 SpCellRecord::SpCellRecord(const SpCellRecord& o)
@@ -172,6 +178,7 @@ SpCellRecord::SpCellRecord(const SpCellRecord& o)
 }
 
 // @ 0x00700360
+// Reads the accessor's two ints; the second is written through `out` when non-null.
 int CellAccessor::Get(int* out)
 {
     if (out)
@@ -194,12 +201,13 @@ CellArray::CellArray(const SpCellRecord* src, unsigned n)
 }
 
 // @ 0x00700450
+// Releases the element storage, then the object itself when asked, and returns this.
 void* CellArray::Destroy(unsigned flags)
 {
-    vt = (void*)0x140c460;
+    vt = (void*)0x140c460;      // CellArray vtable
     EASTL_allocator_deallocate(data);
-    vt = (void*)0x13ef094;
-    if (flags & 1)
+    vt = (void*)0x13ef094;      // base vtable
+    if (flags & kDestroyFreeThis)
         EASTL_allocator_deallocate(this);
     return this;
 }
@@ -267,15 +275,16 @@ cCellList* cCellList::Construct()
 }
 
 // @ 0x00700640
+// Appends one element, growing the buffer when it is full.
 void Vec4b::PushBack(const int* v)
 {
-    int* old = end;
-    if (old < cap) {
-        end = old + 1;
-        if (old)
-            *old = *v;
+    int* slot = end;
+    if (slot < cap) {
+        end = slot + 1;
+        if (slot)
+            *slot = *v;
     } else {
-        Grow(old, v);
+        Grow(slot, v);
     }
 }
 

@@ -1,13 +1,13 @@
-// src/game/UTFSpore_Win32/jpgread.cpp -- migrated from slice(s) s00864330, s00863260 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/jpgread.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/UTFSpore_Win32/jpgread.cpp
+// The game's JPEG (Gimex) importer: format descriptor, signature test, and the
+// open/info/read entry points over the bundled libjpeg.
 
 #include "game/types.h"
 #ifndef NULL
 #define NULL 0
 #endif
 
-// unnamed retail callees and globals (address in the comment)
+// Allocation/stream helpers shared with the Gimex glue (address in the comment).
 extern "C" void*        __stdcall galloc(unsigned int size);                       // 0x0087d4a0
 extern "C" unsigned int __stdcall gread(void* h, void* buf, unsigned int n);       // 0x0087d4e0
 extern "C" int          __stdcall gseek(void* h, long off, int whence);            // 0x0087d540
@@ -15,38 +15,25 @@ extern "C" void* __cdecl memset(void* dst, int val, unsigned int n);
 extern "C" char* __cdecl strcpy(char* dst, const char* src);
 extern "C" char* __cdecl strncpy(char* dst, const char* src, unsigned int n);
 extern "C" int   __cdecl setjmp3(void* jb, int arg);                               // 0x011e0cac
-extern "C" void FUN_00857730(void* cinfo, int a, int size);
-extern "C" void FUN_00857820(void* cinfo, int marker, void* reader);
-extern "C" void FUN_00857bf0(void* cinfo, int a);
-extern "C" void FUN_00857e10(void* cinfo);
-extern "C" void FUN_00857d70(void* cinfo, void* buf, int n);
-extern "C" void FUN_00857b20(void* cinfo);
-extern "C" int FUN_00863c50(void* cinfo);
-extern "C" int FUN_00863d50(void* cinfo);
-extern "C" void FUN_00863e40(void* cinfo);
-extern "C" int __stdcall FUN_00864000(void** out, void* io, int a3, int a4);
 #pragma function(memset)
 
-// ---- items of slice s00863260 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
-extern "C" void*        __stdcall galloc(unsigned int size);                       // 0x0087d4a0
-extern "C" unsigned int __stdcall gread(void* h, void* buf, unsigned int n);       // 0x0087d4e0
-extern "C" int          __stdcall gseek(void* h, long off, int whence);            // 0x0087d540
-extern "C" void* __cdecl memset(void* dst, int val, unsigned int n);
-extern "C" char* __cdecl strcpy(char* dst, const char* src);
-extern "C" char* __cdecl strncpy(char* dst, const char* src, unsigned int n);
-extern "C" int   __cdecl setjmp3(void* jb, int arg);                               // 0x011e0cac
+
+// Glue to the bundled libjpeg, called through its public entry points.
 namespace lib_jpeg {
     void* jpeg_std_error(void* errmgr);
-}
-namespace lib_jpeg {
     void  jpeg_destroy(void* cinfo);
-}
-namespace lib_jpeg {
     void  jpeg_stdio_src(void* cinfo, void* io);
+    int   jpeg_read_header(void* cinfo, int require_image);              // 0x00857bf0
+    void  jpeg_start_decompress(void* cinfo);                           // 0x00857e10
+    int   jpeg_read_scanlines(void* cinfo, void** rows, int count);     // 0x00857d70
+    void  jpeg_finish_decompress(void* cinfo);                         // 0x00857b20
 }
+
+// Remaining libjpeg internals used by the decoder setup, plus the scanline
+// helper and the error handler.  gfree_i frees a Gimex allocation (0x0087d4c0).
 extern "C" void FUN_00857730(void* cinfo, int a, int size);
 extern "C" void FUN_00857820(void* cinfo, int marker, void* reader);
 extern "C" void FUN_00857bf0(void* cinfo, int a);
@@ -57,65 +44,86 @@ extern "C" int FUN_00863c50(void* cinfo);
 extern "C" int FUN_00863d50(void* cinfo);
 extern "C" void FUN_00863e40(void* cinfo);
 extern "C" int __stdcall FUN_00864000(void** out, void* io, int a3, int a4);
-// ---- items of slice s00863260 end
-
-// ---- items of slice s00864330 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" unsigned int  __stdcall gfree_i(void* p);                         // 0x0087d4c0 (same fn)
+extern "C" unsigned int __stdcall gfree_i(void* p);                    // 0x0087d4c0 (same fn)
 extern "C" unsigned int __stdcall FUN_00864910(void* p);
-# pragma function(memset)
-namespace lib_jpeg {
-    int   jpeg_read_header(void* cinfo, int require_image);    // 0x00857bf0
-}
-namespace lib_jpeg {
-    void  jpeg_start_decompress(void* cinfo);                  // 0x00857e10
-}
-namespace lib_jpeg {
-    int   jpeg_read_scanlines(void* cinfo, void** rows, int count);    // 0x00857d70
-}
-namespace lib_jpeg {
-    void  jpeg_finish_decompress(void* cinfo);                 // 0x00857b20
-}
 extern "C" void FUN_00863b70(u8* dst, u8* src, int width, int pixfmt, int flag);
-// ---- items of slice s00864330 end
+
+// Layout of the 0x100-byte format descriptor Gimex asks each importer for.
+// The strings (extension list, author, version) sit at fixed offsets past it.
+enum JpgAboutField
+{
+    kAboutSize        = 0x100,     // descriptor size in bytes
+    kAboutTag         = 0x00,      // "JPEG"
+    kAboutTagValue    = 0x4a504547,
+    kAboutSizeField   = 0x04,      // descriptor size, repeated in the header
+    kAboutVersion     = 0x08,
+    kAboutVersionVal  = 0x159,
+    kAboutFlags       = 0x0c,
+    kAboutFlagsMask   = 0xffffb3d7,
+    kAboutFlagsSet    = 0xb3d7,
+    kAboutKind        = 0x14,
+    kAboutMaxExt      = 0x18,      // maximum extension length
+    kAboutMaxExtVal   = 0x50,
+    kAboutFamily      = 0x1c,      // family tag, same value as kAboutTag
+    kAboutExtensions  = 0x3c,      // ".jpg", ".jpeg", ".jfif" (10 bytes each)
+    kAboutExtension2  = 0x44,
+    kAboutExtension3  = 0x4c,
+    kAboutAuthor      = 0x7c,
+    kAboutVersionStr  = 0x9c,
+    kAboutShortName   = 0xa4,      // "JP"...
+    kAboutShortNameVal = 0x47504a,
+    kAboutDisplayName  = 0xac,
+    kAboutSaveName     = 0xbc,
+};
 
 // @ 0x00863e60
 u8* JPG_about(void)
 {
-    u8* d = (u8*)galloc(0x100);
+    u8* d = (u8*)galloc(kAboutSize);
     if (d != NULL) {
-        memset(d, 0, 0x100);
-        *(u32*)(d + 0x00) = 0x4a504547;                 // "JPEG"
-        *(u32*)(d + 0x04) = 0x100;
-        *(u32*)(d + 0x08) = 0x159;
-        *(u32*)(d + 0x14) = 0;
-        *(u32*)(d + 0x18) = 0x50;
-        *(u32*)(d + 0x1c) = 0x4a504547;
-        *(u32*)(d + 0x0c) = (*(u32*)(d + 0x0c) & 0xffffb3d7) | 0xb3d7;
-        strcpy((char*)(d + 0x3c), ".jpg");
-        strcpy((char*)(d + 0x44), ".jpeg");
-        strcpy((char*)(d + 0x4c), ".jfif");
-        strcpy((char*)(d + 0x7c), "FrANK G. Barchard");
-        strcpy((char*)(d + 0x9c), "1.12");
-        *(u32*)(d + 0xa4) = 0x47504a;
-        strcpy((char*)(d + 0xac), "JPeg");
-        strcpy((char*)(d + 0xbc), "JPeg");
+        memset(d, 0, kAboutSize);
+        *(u32*)(d + kAboutTag) = kAboutTagValue;
+        *(u32*)(d + kAboutSizeField) = kAboutSize;
+        *(u32*)(d + kAboutVersion) = kAboutVersionVal;
+        *(u32*)(d + kAboutKind) = 0;
+        *(u32*)(d + kAboutMaxExt) = kAboutMaxExtVal;
+        *(u32*)(d + kAboutFamily) = kAboutTagValue;
+        *(u32*)(d + kAboutFlags) =
+            (*(u32*)(d + kAboutFlags) & kAboutFlagsMask) | kAboutFlagsSet;
+        strcpy((char*)(d + kAboutExtensions), ".jpg");
+        strcpy((char*)(d + kAboutExtension2), ".jpeg");
+        strcpy((char*)(d + kAboutExtension3), ".jfif");
+        strcpy((char*)(d + kAboutAuthor), "FrANK G. Barchard");
+        strcpy((char*)(d + kAboutVersionStr), "1.12");
+        *(u32*)(d + kAboutShortName) = kAboutShortNameVal;
+        strcpy((char*)(d + kAboutDisplayName), "JPeg");
+        strcpy((char*)(d + kAboutSaveName), "JPeg");
     }
     return d;
 }
+
+// Signatures JPG_is accepts: SOI+APP0 (JFIF), SOI+APP1 (EXIF), SOI+APP13 (IPTC).
+enum JpegSignature
+{
+    kJfif = 0xffd8ffe0,
+    kExif = 0xffd8ffe1,
+    kIptc = 0xffd8ffed,
+    kJpegType = 0x63,   // importer type code reported back to Gimex
+};
 
 // @ 0x00863f90
 int __stdcall JPG_is(void* io)
 {
     u8  buf[4];
-    u32 v;
-    int r = 0;
+    u32 sig;
+    int type = 0;
     gseek(io, 0, 0);
     if (gread(io, buf, 4) != 0) {
-        v = ((u32)buf[0] << 24) | ((u32)buf[1] << 16) | ((u32)buf[2] << 8) | buf[3];
-        if (v == 0xffd8ffe0 || v == 0xffd8ffe1 || v == 0xffd8ffed)
-            r = 0x63;
+        sig = ((u32)buf[0] << 24) | ((u32)buf[1] << 16) | ((u32)buf[2] << 8) | buf[3];
+        if (sig == kJfif || sig == kExif || sig == kIptc)
+            type = kJpegType;
     }
-    return r;
+    return type;
 }
 
 // @ 0x00864000
@@ -293,10 +301,12 @@ int __stdcall FUN_00864330(int handle, int desc, u8* dst, int stride)
 }
 
 // @ 0x00864910
+// Free a decoder buffer: a null pointer frees nothing and returns 0, otherwise
+// the result of the free is passed straight through.
 extern "C" unsigned int __stdcall FUN_00864910(void* p)
 {
-    unsigned int r = 0;
+    unsigned int freed = 0;
     if (p != NULL)
-        r = gfree_i(p);
-    return r;
+        freed = gfree_i(p);
+    return freed;
 }

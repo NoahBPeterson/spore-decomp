@@ -1,18 +1,12 @@
-// src/game/SPGonzago/SPSpaceGameBehaviorSlowDeath.cpp -- migrated from slice(s) s01033de0 by tools/migrate/rewrite.py
-// Object file: SPGonzago/SPSpaceGameBehaviorSlowDeath.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// SPGonzago/SPSpaceGameBehaviorSlowDeath.obj: space-game behaviour start/stop of the slow-death sequence.
+// Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
-#include "SP/cSPCreatureBase.h"
-#include "SP/cPlanetModel.h"
-#include "SP/cSPTimer.h"
-#include "EA/Variant.h"
-#include "SP/cSolarSystem.h"
-#include <math.h>
 
-// ---- items of slice s01033de0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void pv##n();
 struct Vec3 { float x, y, z; };
+static const uint32_t kSlowDeathCoreSize = 0xa0;   // bytes of the cSpaceGameBehaviorSlowDeath object
+static const uint32_t kAgentQueryTag      = 0xce9f6639;  // identifier of the behaviour's agent query
 #define G_STR_16DF2F8    ((void*)0x016df2f8)
 #define G_STR_SIMULATOR  ((void*)0x013f09b4)
 #define G_VT_BEHAVIOUR_A ((uint32_t)0x01499810)
@@ -69,7 +63,6 @@ struct SlowDeathTimer {                         // SP::cGonzagoTimer (0x20 bytes
     uint8_t mPad00[0x20];
     void ctor();                                // 0x00b63890
     void dtor();                                // 0x00b638b0
-    void Restart();                             // 0x00bc3130  (this == &mTimer, cSPTimer::Restart)
 };
 struct SlowDeathCore {                          // 0xa0-byte cInteraction-derived behaviour object
     uint32_t mVt0;                              // +0x00
@@ -132,25 +125,14 @@ struct Behavior {                               // large behaviour/editor subjec
     bool FUN_00abf640(int value);               // 0x00abf640
     void baseRemoveAgent(RemoveArgs args);      // 0x00abedb0
 
-    int  FUN_01033f50();
-    void FUN_01034260(int deathType);
-    void FUN_01034950(int mode, int unused);
-    void FUN_01034b90(void* star);
-
     bool   FUN_01033ea0(int value);
     void   RemoveAgent(AgentRef* ref, uint32_t index, int a2, int a3, int a4, int a5);
-    void   FUN_010346e0();
-    void   FUN_010347e0();
-    void   FUN_01034810();
-    void   FUN_01034840();
-    void   FUN_01034880();
 };
-// ---- items of slice s01033de0 end
 
 // @ 0x01033de0
 void* FUN_01033de0()
 {
-    SlowDeathCore* p = (SlowDeathCore*)operator_new(0xa0, G_STR_SIMULATOR, 0, 0, 0, 0);
+    SlowDeathCore* p = (SlowDeathCore*)operator_new(kSlowDeathCoreSize, G_STR_SIMULATOR, 0, 0, 0, 0);
     if (p != 0) {
         p->baseCtor();
         p->mVt0 = G_VT_BEHAVIOUR_A;
@@ -182,7 +164,7 @@ bool Behavior::FUN_01033ea0(int value)
     bool result = FUN_00abf640(value);
     Queryable* owner = pv22();
     if (owner != 0) {
-        Queryable* agent = owner->pv2(0xce9f6639);
+        Queryable* agent = owner->pv2(kAgentQueryTag);
         if (agent != 0) {
             agent->pv21();
             Loco* loco = &agent->mLoco;

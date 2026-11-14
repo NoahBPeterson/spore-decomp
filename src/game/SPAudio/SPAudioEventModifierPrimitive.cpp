@@ -1,17 +1,21 @@
-// src/game/SPAudio/SPAudioEventModifierPrimitive.cpp -- migrated from slice(s) s00a39ce0 by tools/migrate/rewrite.py
-// Object file: SPAudio/SPAudioEventModifierPrimitive.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
-// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
+// src/game/SPAudio/SPAudioEventModifierPrimitive.cpp
+// Object file: SPAudio/SPAudioEventModifierPrimitive.obj.
 
 #include "game/types.h"
 #include "SP/Audio/cEventModifierPrimitive.h"
 #include "EA/Audio/Command.h"
 #include "EA/Audio/IConfiguration.h"
-#include "EA/Audio/ResponseCurve.h"
-#include "SP/Audio/cEventModifier.h"
-#include <ctype.h>
 #include <string.h>
 
-// ---- items of slice s00a39ce0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// The audio tuning resource a primitive reads its values from: name hash and the fixed type/group shared
+// by all primitives (both constants are read straight out of the retail constructor at 0xa3a530).
+static const uint32_t kEventModifierType = 0x02b9f662;
+static const uint32_t kEventModifierGroup = 0x021407ee;
+
+// ---- local stand-ins for the tuning types used by slice s00a39ce0 ----
+// ReadTuningValues calls the audio system's vtable slot at +0x138.  EA::Audio::System's canonical
+// projection in src/game/include/EA/Audio/System.h places GetConfigurationInternal at +0x19c (its vtable
+// is 9 entries longer than retail's), so that function keeps the stub below, whose vtable matches retail.
 #define CAT2(a, b) a##b
 #define CAT(a, b) CAT2(a, b)
 #define V virtual void CAT(pad_, __COUNTER__)();
@@ -155,7 +159,7 @@ struct cEventModifierPrimitive_s00a3_9ce0 : RefCountBase, IEventModifier {
     AutoRefConfig mConfiguration;   // +0x14
 
     cEventModifierPrimitive_s00a3_9ce0(const char* name)
-        : mKey(FNV1_String8(name, 0x811c9dc5, 1), 0x2b9f662, 0x21407ee), mConfiguration() {}
+        : mKey(FNV1_String8(name, 0x811c9dc5, 1), kEventModifierType, kEventModifierGroup), mConfiguration() {}
     virtual bool Init();                                    // 0xa3a4b0
     virtual void pad2();
     virtual void ModifyEvent(Command_s00a3_9ce0* cmd, int a, char* dst, int capacity);
@@ -166,7 +170,7 @@ struct cEventModifierPrimitive_s00a3_9ce0 : RefCountBase, IEventModifier {
 };
 }
 }
-// ---- items of slice s00a39ce0 end
+// ---- local stand-ins end ----
 
 // @ 0x00a3a4b0
 bool SP::Audio::cEventModifierPrimitive::Init()
@@ -180,8 +184,8 @@ namespace SP { namespace Audio {
 void cEventModifierPrimitive_s00a3_9ce0::Append(char* dst, int capacity, char* str, bool sep)
 {
     unsigned dstLen = strlen(dst);
-    int n = (strlen(str) + sep) ? 1 : (int)dstLen;
-    if (n < capacity) {
+    int length = (strlen(str) + sep) ? 1 : (int)dstLen;
+    if (length < capacity) {
         if (sep) dst[dstLen++] = '_';
         strcpy(dst + dstLen, str);
     }
@@ -196,7 +200,7 @@ bool cEventModifierPrimitive_s00a3_9ce0::ReadTuningValues(const ResourceKey* key
         key->groupID == mKey.groupID) {
         AudioSystem* sys = GetSystemAT();
         mConfiguration.Reset();
-        return sys->GetConfiguration(mKey.instanceID, &mConfiguration, 0x21407ee);
+        return sys->GetConfiguration(mKey.instanceID, &mConfiguration, kEventModifierGroup);
     }
     return false;
 }
