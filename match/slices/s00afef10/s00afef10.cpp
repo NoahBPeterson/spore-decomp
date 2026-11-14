@@ -1034,8 +1034,9 @@ bool ReadTreeItems(cSerializeMgr* pMgr, const cRBTree* pTree)
 {
     for (cRBNode* pNode = pTree->mAnchor.mpParent;
          pNode != (cRBNode*)&pTree->mAnchor; pNode = RBTreeIncrement(pNode)) {
-        if (pNode->mpItem != 0)
-            pNode->mpItem->ReadItem(pMgr);
+        cSerializeItem* pReadItem = pNode->mpItem;
+        if (pReadItem != 0)
+            pReadItem->ReadItem(pMgr);
     }
     return true;
 }
