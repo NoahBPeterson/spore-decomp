@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/TreeView.cpp -- migrated from slice(s) s00990450, s0098f400, s007f5300, s01300280, s0098e3a0, s00950bb0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/TreeView.cpp -- migrated from slice(s) s009913d0, s00990450, s0098f400, s007f5300, s01300280, s0098e3a0, s00950bb0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/TreeView.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -16,6 +16,9 @@
 #include "EA/UTFWin/Window.h"
 #include "EA/UTFWin/IDrawable.h"
 #include "EA/UTFWin/IWindow.h"
+#include "EA/UTFWinControls/IScrollbarDrawable.h"
+#include "EA/UTFWinControls/IWinScrollbar.h"
+#include <math.h>
 
 // ---- items of slice s00950bb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* g_pMemPool16c8b44;  // 0x016c8b44
@@ -861,6 +864,475 @@ using EA::UTFWinControls::IWinScrollbar_s0099_0450;
 using EA::UTFWinControls::IScrollbarDrawable_s0099_0450;
 using EA::UTFWinControls::RenderCtxShim;
 // ---- items of slice s00990450 end
+
+// ---- items of slice s009913d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_1471064;  // 0.5f            0x01471064
+extern const float g_14853e0;  // 0.0f            0x014853e0
+extern const float g_13f4fd0;  // 4294967296.0f   0x013f4fd0  ((float)(unsigned) fixup)
+extern const float g_13f9428;  // 0.001f          0x013f9428
+extern const wchar_t gEmptyString16[];                    // 0x01667bac
+extern void* g_vtbl_1445c58;   // 0x01445c58  TreeNode::vftable (IUnknown32 subobject)
+extern void* g_vtbl_1445c54;   // 0x01445c54  TreeNode::vftable (RefCount subobject)
+extern void* g_vtbl_13ef094;   // 0x013ef094  GmeRefCount::vftable
+extern void* g_vtbl_13eb938;   // 0x013eb938  GmeEditorResBase::vftable
+extern void* g_vtbl_1445b68;   // 0x01445b68  (Window node subobject)
+extern void* g_vtbl_1445e60;   // 0x01445e60  WinTreeView::vftable
+extern void* g_vtbl_1445d40;   // 0x01445d40  WinTreeView::vftable (IWindow subobject)
+extern void* g_vtbl_1445cb8;   // 0x01445cb8  WinTreeView node-companion vftable
+extern void* g_rdata_1667bae;  // 0x01667bae  (empty-string terminator)
+#pragma intrinsic(fabs)
+void __cdecl FUN_00f47380(void* p);                       // 0x00f47380  operator delete
+void __cdecl FUN_011e0744(void* dst, void* src, unsigned int n);   // 0x011e0744 memset/memmove
+void FUN_00960020(int cursor);                                  // 0x00960020  SetCursor
+void FUN_0093a560(void* stopwatch, int units, bool a);          // 0x0093a560  Stopwatch ctor
+unsigned int __stdcall GetDoubleClickTime();                    // 0x011765e8
+void* FUN_00962a10(void* p);                                    // 0x00962a10
+namespace eastl {
+struct intrusive_list_node_s0099_13d0 {
+    intrusive_list_node_s0099_13d0* mpNext;
+    intrusive_list_node_s0099_13d0* mpPrev;
+};
+}
+namespace eastl {
+template <typename T>
+class intrusive_list_s0099_13d0 { public:
+    intrusive_list_node_s0099_13d0 mAnchor;
+    class iterator {
+    public:
+        T* mpNode;
+        iterator() : mpNode(0) {}
+        explicit iterator(T* p) : mpNode(p) {}
+        iterator& operator++()
+        {
+            mpNode = static_cast<T*>(mpNode->mpNext);
+            return *this;
+        }
+        T* operator->() const { return mpNode; }
+        T& operator*() const { return *mpNode; }
+        bool operator==(const iterator& o) const { return mpNode == o.mpNode; }
+        bool operator!=(const iterator& o) const { return mpNode != o.mpNode; }
+    };
+    iterator begin() { return iterator(static_cast<T*>(mAnchor.mpNext)); }
+    iterator end() { return iterator(static_cast<T*>(&mAnchor)); }
+    bool empty() const { return mAnchor.mpPrev == &mAnchor; }
+    // Retail calls the list teardown out of line (0x620230) from
+    // TreeNode::~TreeNode, so keep it from being inlined.  A plain member keeps
+    // it from becoming an implicit destructor call (which would run last).
+    __declspec(noinline) void Destroy()
+    {
+        intrusive_list_node_s0099_13d0* cur = mAnchor.mpNext;
+        while (cur != &mAnchor) {
+            intrusive_list_node_s0099_13d0* next = cur->mpNext;
+            cur->mpNext = 0;
+            cur->mpPrev = 0;
+            cur = next;
+        }
+        mAnchor.mpNext = &mAnchor;
+        mAnchor.mpPrev = &mAnchor;
+    }
+    // raw accessors mirroring the original's `&mChildren` / `mAnchor.mpNext` forms
+    intrusive_list_node_s0099_13d0* rawAnchor() { return &mAnchor; }
+    intrusive_list_node_s0099_13d0* firstRaw() { return mAnchor.mpNext; }
+    void pushPrev(intrusive_list_node_s0099_13d0* node, intrusive_list_node_s0099_13d0* pos);
+};
+}
+namespace EA {
+namespace UTFWinControls {
+class TreeNode_s0099_13d0;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class WinTreeView_s0099_13d0;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IDrawable_s0099_13d0 {
+virtual void d0();
+virtual void d1();
+virtual void d2();
+virtual void d3();
+    virtual void d4(void* ctx, void* rect, void* state);        // +0x10
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IUnknown32 {
+    virtual void u0();                                         // +0x0 AddRef
+    virtual void u1();                                         // +0x4 Release
+    virtual void* u2();                                        // +0x8
+    virtual void* u3(int id);                                  // +0xc QueryInterface
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class IWinScrollbar_s0099_13d0 { public:
+virtual void x0();
+virtual void x1();
+virtual void x2();
+virtual void x3();
+    virtual void* x4();                                        // +0x10
+    virtual void x5(int mode);                                 // +0x14
+virtual void x6();
+virtual void x7();
+virtual void x8();
+virtual void x9();
+virtual void x10();
+virtual void x11();
+virtual void x12();
+virtual void x13();
+virtual void x14();
+virtual void x15();
+virtual void x16();
+virtual void x17();
+virtual void x18();
+virtual void x19();
+virtual void x20();
+virtual void x21();
+virtual void x22();
+    virtual void x23(void* d);                                 // +0x5c
+virtual void x24();
+virtual void x25();
+virtual void x26();
+virtual void x27();
+virtual void x28();
+virtual void x29();
+virtual void x30();
+    virtual void x31(int a, int v);                            // +0x7c
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class IScrollbarDrawable_s0099_13d0 { public:
+virtual void x0();
+virtual void x1();
+virtual void y2();
+virtual void* y3();
+virtual void* y4();
+virtual void* y5();
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ScrollbarState_s0099_13d0 {
+    AutoRefCount<IWinScrollbar_s0099_13d0> mScrollbar;                     // +0
+    AutoRefCount<IScrollbarDrawable_s0099_13d0> mDrawable;                 // +4
+    int mEnabled;                                               // +8
+    float mPreferredX;                                          // +0xc
+    float mPreferredY;                                          // +0x10
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct TreeNodeBase_s0099_13d0 {                                           // vptr + 2 words = 0xc
+virtual void n0();
+virtual void n1();
+virtual void n2();
+virtual void n3();
+virtual void n4();
+virtual void n5();
+    virtual void n6(unsigned int oldFlags, unsigned int newFlags);   // +0x18
+    void* pad0;
+    void* pad1;
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class TreeNode_s0099_13d0 : public TreeNodeBase_s0099_13d0, public eastl::intrusive_list_node_s0099_13d0 { public:
+    WinTreeView_s0099_13d0* mpTreeView;                                    // +0x14
+    TreeNode_s0099_13d0* mpParent;                                         // +0x18
+    eastl::intrusive_list_s0099_13d0<TreeNode_s0099_13d0> mChildren;                  // +0x1c
+    int mVisibleLineCount;                                      // +0x24
+    unsigned int mFlags;                                        // +0x28
+    unsigned int mTextStyle;                                    // +0x2c
+    unsigned int mNodeID;                                       // +0x30
+    wchar_t* mCaptionBegin;                                     // +0x34
+    wchar_t* mCaptionEnd;                                       // +0x38
+    wchar_t* mCaptionCap;                                       // +0x3c
+    unsigned int mReserved40;                                   // +0x40  (never written by the factory)
+    unsigned int mReserved44;                                   // +0x44  (zeroed by the factory)
+    IDrawable_s0099_13d0* mpIcon;                                          // +0x48
+    IUnknown32* mpUserData;                                     // +0x4c
+
+    void Attach(WinTreeView_s0099_13d0* tree);                             // 0x009911e0
+    void Detach();                                              // 0x00991230
+    void CalcVisibleLines();                                    // 0x00991280
+    int CollectVisible(TreeNode_s0099_13d0** out, unsigned int count);     // 0x009912e0
+    void InnerChildRemoveAllRecursive();                        // 0x00990040
+
+    ~TreeNode_s0099_13d0();                                                // 0x00991410
+    bool IsExpanded();                                          // 0x00991470
+    // Retail keeps SetFlag out of line: the two 10-byte Expand/Collapse
+    // wrappers are plain `push on; push 2; call SetFlag; ret`.
+    __declspec(noinline) void SetFlag(unsigned int flag, bool on);   // 0x00991490
+    void SetFlagRecursive(unsigned int flag, bool on);          // 0x00991520
+    void ChildInsert(eastl::intrusive_list_node_s0099_13d0* pos, TreeNode_s0099_13d0* child);  // 0x00991580
+    void ChildRemoveAll();                                      // 0x00991600
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IWindow_s0099_13d0 {
+virtual void w0();
+virtual void w1();
+virtual void w2();
+virtual void w3();
+    virtual void w4();
+    virtual void* w5();                                         // +0x14
+virtual void w6();
+virtual void w7();
+virtual void w8();
+virtual void w9();
+    virtual unsigned int w10();                                 // +0x28
+virtual void w11();
+virtual void w12();
+virtual void w13();
+virtual void w14();
+virtual void w15();
+virtual void w16();
+virtual void w17();
+virtual void w18();
+virtual void w19();
+virtual void w20();
+virtual void w21();
+virtual void w22();
+virtual void w23();
+virtual void w24();
+virtual void w25();
+virtual void w26();
+virtual void w27();
+virtual void w28();
+virtual void w29();
+    virtual void w30();
+    virtual void w31(int a, int b);                             // +0x7c
+virtual void w32();
+virtual void w33();
+virtual void w34();
+virtual void w35();
+    virtual void w36();                                         // +0x90
+virtual void w37();
+virtual void w38();
+virtual void w39();
+virtual void w40();
+virtual void w41();
+virtual void w42();
+virtual void w43();
+virtual void w44();
+    virtual void w45();
+    virtual void w46(void* w);                                  // +0xb8
+virtual void w47();
+virtual void w48();
+virtual void w49();
+virtual void w50();
+virtual void w51();
+virtual void w52();
+virtual void w53();
+    virtual void w54(void* d);                                  // +0xd8
+    virtual void w55();
+    virtual void w56(void* d);                                  // +0xe0
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct CustomWindowBase_s0099_13d0 {
+virtual void c0();
+virtual void c1();
+virtual void c2();
+virtual void c3();
+virtual void c4();
+virtual void c5();
+virtual void c6();
+virtual void c7();
+virtual void c8();
+virtual void c9();
+virtual void c10();
+virtual void c11();
+virtual void c12();
+virtual void c13();
+virtual void c14();
+virtual void c15();
+virtual void c16();
+virtual void c17();
+virtual void c18();
+virtual void c19();
+virtual void c20();
+virtual void c21();
+virtual void c22();
+virtual void c23();
+virtual void c24();
+virtual void c25();
+virtual void c26();
+virtual void c27();
+virtual void c28();
+virtual void c29();
+virtual void c30();
+virtual void c31();
+virtual void c32();
+virtual void c33();
+    virtual void c34(void* ctx, TreeNode_s0099_13d0* node, EA::UTFWin::Point2F* pt);   // +0x88
+    virtual void c35(void* ctx, TreeNode_s0099_13d0* node, EA::UTFWin::Point2F* pt);   // +0x8c
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct TreeViewExtra_s0099_13d0 {
+    void CalculateRowHeight();                                  // 0x0098f620
+    void FocusChanged();                                        // 0x0098fd20
+    void CalculateVisibleArea();                                // 0x0098fbe0
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class TreeViewWindowBase : public CustomWindowBase_s0099_13d0 { public:
+    IWindow_s0099_13d0 mWindow;                                            // +0x4
+    unsigned int pad0[0x20];                                    // +0x8 .. 0x88
+    float mLocalX0;                                             // +0x88
+    float mLocalY0;                                             // +0x8c
+    float mLocalX1;                                             // +0x90
+    float mLocalY1;                                             // +0x94
+    unsigned int pad1[0x50];                                    // +0x98 .. 0x1d8
+    float mLineOff0;                                            // +0x1d8
+    float mLineOff1;                                            // +0x1dc
+    IDrawable_s0099_13d0* mpBackground;                                    // +0x1e0
+    unsigned int pad2[0xa];                                     // +0x1e4 .. 0x20c
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IWinTreeView {
+virtual void t0();
+virtual void t1();
+virtual void t2();
+virtual void t3();
+virtual void t4();
+virtual void t5();
+virtual void t6();
+virtual void t7();
+virtual void t8();
+virtual void t9();
+virtual void t10();
+virtual void t11();
+virtual void t12();
+virtual void t13();
+virtual void t14();
+virtual void t15();
+virtual void t16();
+virtual void t17();
+virtual void t18();
+virtual void t19();
+virtual void t20();
+virtual void t21();
+virtual void t22();
+virtual void t23();
+virtual void t24();
+virtual void t25();
+virtual void t26();
+virtual void t27();
+virtual void t28();
+virtual void t29();
+virtual void t30();
+    virtual void SetScrollbarEnabled(int which, int v);          // +0x7c
+    virtual void t32();
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class WinTreeView_s0099_13d0 : public TreeViewWindowBase, public IWinTreeView { public:
+    bool mInited;                                               // +0x210
+    unsigned char pad3[3];
+    TreeNode_s0099_13d0 mNodes;                                            // +0x214
+    unsigned int pad4[4];                                       // +0x264 .. 0x274
+    float mColors[4];                                           // +0x274
+    unsigned int mColorFlags[5];                                // +0x284  .. 0x298
+    unsigned int mItemHeight;                                   // +0x298
+    void* mpIconDrawable;                                       // +0x29c
+    void* mpIconDrawableRef;                                    // +0x2a0
+    unsigned int mIndentWidth;                                  // +0x2a4
+    unsigned int mLineWidth;                                    // +0x2a8
+    unsigned int mLineIndent;                                   // +0x2ac
+    unsigned int mIconSpacing;                                  // +0x2b0
+    IDrawable_s0099_13d0* mpExpanderDrawable;                              // +0x2b4
+    int mIndentY;                                               // +0x2b8
+    int mRowHeightIn;                                           // +0x2bc
+    int mTopRow;                                                // +0x2c0
+    unsigned int pad5;                                          // +0x2c4
+    float mExpanderW;                                           // +0x2c8
+    float mExpanderH;                                           // +0x2cc
+    float mRowHeight;                                           // +0x2d0
+    unsigned int pad6[2];                                       // +0x2d4 .. 0x2dc
+    void* mpSelectedNodesBegin;                                 // +0x2dc
+    unsigned int pad6b[3];                                      // +0x2e0 .. 0x2ec
+    TreeNode_s0099_13d0* mPickNode;                                        // +0x2ec
+    unsigned int mPickType;                                     // +0x2f0
+    ScrollbarState_s0099_13d0 mScrollbars[2];                              // +0x2f4
+    float mScrollX;                                             // +0x31c
+    float mScrollY;                                             // +0x320
+    float mVirtualTop;                                          // +0x324
+    float mVirtualSize;                                         // +0x328
+    unsigned int pad7[1];                                       // +0x32c
+    unsigned int mAutoScroll1;                                  // +0x330
+    unsigned int pad8[5];                                       // +0x334 .. 0x348
+    unsigned int mAutoScroll2;                                  // +0x348
+    unsigned int pad9[5];                                       // +0x34c .. 0x360
+    float mDoubleClickInterval;                                 // +0x360
+
+    WinTreeView_s0099_13d0();                                              // 0x00991a70
+    void Refresh();                                             // 0x00990f80
+    void CreateScrollbar(int which);                            // 0x00990ff0
+
+    int GetSelection(int which);                                // 0x009913d0
+    void InvalidateLayout();                                    // 0x009917b0
+    void SetBorders(EA::UTFWin::RectF* r);                      // 0x009917f0
+    void ClearSelection();                                      // 0x00991860
+    bool OnMouseDown(int, int, int, int);                       // 0x009918b0
+    bool OnTick();                                              // 0x00991400
+    void SetScrollbarDrawable(int which, void* p);              // 0x00991930
+    virtual void SetScrollbarEnabled(int which, int v);         // 0x00991990
+    ~WinTreeView_s0099_13d0();                                             // 0x00991df0
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+typedef char TreeViewWindowBaseSizeCheck[(sizeof(TreeViewWindowBase) == 0x20c) ? 1 : -1];
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class BasicFactory_TreeNode { public:
+    void* CreateInstance(void* unused, void* alloc);            // 0x009919e0
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct TreeNodeListMarshaller_s0099_13d0 {
+    bool Read(void* a, void* container, void* b);               // 0x00991710
+};
+}
+}
+using EA::UTFWinControls::TreeNode_s0099_13d0;
+using EA::UTFWinControls::WinTreeView_s0099_13d0;
+using EA::UTFWinControls::TreeViewExtra_s0099_13d0;
+using EA::UTFWinControls::BasicFactory_TreeNode;
+using EA::UTFWinControls::TreeNodeListMarshaller_s0099_13d0;
+using EA::UTFWinControls::IWindow_s0099_13d0;
+using EA::UTFWinControls::IDrawable_s0099_13d0;
+using EA::UTFWinControls::IUnknown32;
+// ---- items of slice s009913d0 end
 
 // @ 0x007f5d00
 void Obj::M5D00()
@@ -1846,6 +2318,407 @@ void* BasicFactory_TreeExpanderDrawable::CreateInstance(void* unused, void* allo
         p[1] = (unsigned int)&g_vtbl_1445bec;
     }
     return p;
+}
+
+// @ 0x009913d0
+int EA::UTFWinControls::WinTreeView_s0099_13d0::GetSelection(int which)
+{
+    TreeNode_s0099_13d0* out;
+    unsigned int cap;
+    if (which == 0) {
+        out = 0;
+        cap = 0;
+    } else {
+        out = (TreeNode_s0099_13d0*)0;
+        cap = (unsigned int)which;
+    }
+    return ((TreeNode_s0099_13d0*)&mNodes)->CollectVisible(&out, cap);
+}
+
+// @ 0x00991400
+bool EA::UTFWinControls::WinTreeView_s0099_13d0::OnTick()
+{
+    Refresh();
+    return true;
+}
+
+// @ 0x00991410
+EA::UTFWinControls::TreeNode_s0099_13d0::~TreeNode_s0099_13d0()
+{
+    *(void**)this = &g_vtbl_1445c58;
+    *(void**)((char*)this + 4) = &g_vtbl_1445c54;
+    _ReadWriteBarrier();
+    if (mpUserData != 0)
+        mpUserData->u1();
+    if (mpIcon != 0)
+        mpIcon->d1();
+    // Retail masks the low bit of the (capacity - begin) span before the
+    // "is it heap-allocated" test, then falls through to the free.
+    unsigned int span = (unsigned int)mCaptionCap - (unsigned int)mCaptionBegin;
+    span &= 0xfffffffeu;
+    if ((int)span > 2 && mCaptionBegin != 0)
+        FUN_00f47380(mCaptionBegin);
+    ((eastl::intrusive_list_s0099_13d0<TreeNode_s0099_13d0>*)&mChildren)->Destroy();
+    *(void**)((char*)this + 4) = &g_vtbl_13ef094;
+    *(void**)this = &g_vtbl_13eb938;
+}
+
+// @ 0x00991470
+bool EA::UTFWinControls::TreeNode_s0099_13d0::IsExpanded()
+{
+    return ((mFlags >> 1) & 1) != 0;
+}
+
+// @ 0x00991490
+__declspec(noinline) void EA::UTFWinControls::TreeNode_s0099_13d0::SetFlag(unsigned int flag, bool on)
+{
+    unsigned int old = mFlags;
+    if (on)
+        mFlags = old | flag;
+    else
+        mFlags = ~flag & old;
+    if (old == mFlags)
+        return;
+    unsigned int now = mFlags;
+    n6(old, now);
+    unsigned int changed = (now ^ old) & 2;
+    if (changed != 0)
+        CalcVisibleLines();
+    if (mpTreeView == 0)
+        return;
+    WinTreeView_s0099_13d0* tv = mpTreeView;
+    ((IWindow_s0099_13d0*)((char*)tv + 4))->w36();
+    if (changed != 0)
+        ((IWindow_s0099_13d0*)((char*)tv + 4))->w31(8, 1);
+}
+
+// @ 0x00991520
+void EA::UTFWinControls::TreeNode_s0099_13d0::SetFlagRecursive(unsigned int flag, bool on)
+{
+    SetFlag(flag, on);
+    eastl::intrusive_list_s0099_13d0<TreeNode_s0099_13d0>::iterator end = mChildren.end();
+    eastl::intrusive_list_s0099_13d0<TreeNode_s0099_13d0>::iterator it = mChildren.begin();
+    while (it != end) {
+        it->SetFlagRecursive(flag, on);
+        ++it;
+    }
+}
+
+// @ 0x00991580
+void EA::UTFWinControls::TreeNode_s0099_13d0::ChildInsert(eastl::intrusive_list_node_s0099_13d0* pos, TreeNode_s0099_13d0* child)
+{
+    void (*addref)(void*) = *(void (**)(void*))*(void**)child;
+    child->mpParent = (TreeNode_s0099_13d0*)pos;
+    addref(child);
+    child->mpParent = this;
+    eastl::intrusive_list_node_s0099_13d0* p = pos;
+    eastl::intrusive_list_node_s0099_13d0* cur = p->mpNext;
+    eastl::intrusive_list_node_s0099_13d0* cn = (eastl::intrusive_list_node_s0099_13d0*)child + 1;
+    p->mpNext = cn;
+    cur->mpPrev = cn;
+    cn->mpNext = p;
+    cn->mpPrev = cur;
+    child->Attach(mpTreeView);
+    child->CalcVisibleLines();
+    if (mpTreeView != 0) {
+        ((IWindow_s0099_13d0*)((char*)mpTreeView + 4))->w31(8, 1);
+        ((IWindow_s0099_13d0*)((char*)mpTreeView + 4))->w36();
+    }
+}
+
+// @ 0x00991600
+void EA::UTFWinControls::TreeNode_s0099_13d0::ChildRemoveAll()
+{
+    eastl::intrusive_list_node_s0099_13d0* anchor =
+        (eastl::intrusive_list_node_s0099_13d0*)((char*)this + 0x1c);
+    while (anchor->mpPrev != anchor) {
+        eastl::intrusive_list_node_s0099_13d0* n = anchor->mpNext;
+        TreeNode_s0099_13d0* child = (TreeNode_s0099_13d0*)((char*)n - 0xc);
+        n->mpNext->mpPrev = anchor;
+        anchor->mpNext = anchor->mpNext->mpNext;
+        if (n != anchor) {
+            n->mpPrev = 0;
+            n->mpNext = 0;
+        }
+        if (mpTreeView != 0 && mpTreeView->mPickNode == child)
+            mpTreeView->mPickNode = 0;
+        child->mpParent = 0;
+        child->mpTreeView = 0;
+        eastl::intrusive_list_node_s0099_13d0* ca =
+            (eastl::intrusive_list_node_s0099_13d0*)((char*)child + 0x1c);
+        eastl::intrusive_list_node_s0099_13d0* ci = ca->mpNext;
+        while (ci != ca) {
+            eastl::intrusive_list_node_s0099_13d0* cn = ci->mpNext;
+            ((TreeNode_s0099_13d0*)((char*)ci - 0xc))->Detach();
+            ci = cn;
+        }
+        (*(IUnknown32**)&child)->u1();
+    }
+    CalcVisibleLines();
+}
+
+// @ 0x009916b0
+void SerUpdate(TreeNode_s0099_13d0* p)
+{
+    p->CalcVisibleLines();
+    if (p->mpTreeView != 0) {
+        ((IWindow_s0099_13d0*)((char*)p->mpTreeView + 4))->w31(8, 1);
+        ((IWindow_s0099_13d0*)((char*)p->mpTreeView + 4))->w36();
+    }
+}
+
+// @ 0x009916f0
+void __fastcall TreeNode_Expand(TreeNode_s0099_13d0* p)
+{
+    p->SetFlag(2, true);
+}
+
+// @ 0x00991700
+void __fastcall TreeNode_Collapse(TreeNode_s0099_13d0* p)
+{
+    p->SetFlag(2, false);
+}
+
+// @ 0x00991710
+bool EA::UTFWinControls::TreeNodeListMarshaller_s0099_13d0::Read(void* a, void* container, void* b)
+{
+    (void)a; (void)container; (void)b;
+    return true;
+}
+
+// @ 0x009917b0
+void EA::UTFWinControls::WinTreeView_s0099_13d0::InvalidateLayout()
+{
+    ((TreeViewExtra_s0099_13d0*)this)->CalculateVisibleArea();
+}
+
+// @ 0x009917f0
+void EA::UTFWinControls::WinTreeView_s0099_13d0::SetBorders(EA::UTFWin::RectF* r)
+{
+    mLocalX0 = r->left;
+    mLocalY0 = r->top;
+    mLocalX1 = r->right;
+    mLocalY1 = r->bottom;
+    CreateScrollbar(1);
+    CreateScrollbar(0);
+    ((TreeViewExtra_s0099_13d0*)this)->CalculateVisibleArea();
+    mWindow.w31(8, 1);
+    mWindow.w36();
+}
+
+// @ 0x00991860
+void EA::UTFWinControls::WinTreeView_s0099_13d0::ClearSelection()
+{
+    eastl::intrusive_list_s0099_13d0<TreeNode_s0099_13d0>::iterator end = mNodes.mChildren.end();
+    eastl::intrusive_list_s0099_13d0<TreeNode_s0099_13d0>::iterator it = mNodes.mChildren.begin();
+    while (it != end) {
+        it->SetFlagRecursive(1, false);
+        ++it;
+    }
+}
+
+// @ 0x009918b0
+bool EA::UTFWinControls::WinTreeView_s0099_13d0::OnMouseDown(int, int, int, int)
+{
+    TreeNode_s0099_13d0* node = mPickNode;
+    if (node != 0) {
+        if (mPickType == 1) {
+            node->SetFlag(2, ((node->mFlags >> 1) & 1) == 0);
+            return false;
+        }
+        if ((node->mFlags & 1) == 0) {
+            static_cast<IWinTreeView*>(this)->t21();
+            mPickNode->SetFlag(1, true);
+        }
+    } else {
+        static_cast<IWinTreeView*>(this)->t21();
+    }
+    return false;
+}
+
+// @ 0x00991930
+void EA::UTFWinControls::WinTreeView_s0099_13d0::SetScrollbarDrawable(int which, void* p)
+{
+    ScrollbarState_s0099_13d0* sb = &mScrollbars[which];
+    IScrollbarDrawable_s0099_13d0* old = sb->mDrawable.mpObject;
+    if ((void*)old != p) {
+        if (p != 0)
+            (*(IScrollbarDrawable_s0099_13d0**)&p)->x0();
+        sb->mDrawable.mpObject = (IScrollbarDrawable_s0099_13d0*)p;
+        if (old != 0)
+            old->x1();
+    }
+    CreateScrollbar(1);
+    CreateScrollbar(0);
+}
+
+// @ 0x00991990
+void EA::UTFWinControls::WinTreeView_s0099_13d0::SetScrollbarEnabled(int which, int v)
+{
+    ScrollbarState_s0099_13d0* sb = &mScrollbars[which];
+    sb->mEnabled = v;
+    CreateScrollbar(1);
+    CreateScrollbar(0);
+}
+
+// @ 0x009919e0
+void* EA::UTFWinControls::BasicFactory_TreeNode::CreateInstance(void* unused, void* alloc)
+{
+    (void)unused;
+    if (!alloc)
+        alloc = FUN_009512c0();
+    unsigned int* p = (unsigned int*)FUN_009512d0(
+        0x50, 4, "UTFWin/EA::UTFWinControls::TreeNode", alloc);
+    if (p == 0)
+        return 0;
+    p[2] = 0;
+    p[1] = (unsigned int)&g_vtbl_13ef094;
+    p[4] = 0;
+    p[3] = 0;
+    p[5] = 0;
+    p[6] = 0;
+    p[0] = (unsigned int)&g_vtbl_1445c58;
+    p[1] = (unsigned int)&g_vtbl_1445c54;
+    p[8] = (unsigned int)(p + 7);
+    p[7] = (unsigned int)(p + 7);
+    p[9] = 0;
+    p[11] = 0;
+    p[12] = 0;
+    p[10] = 2;
+    p[13] = (unsigned int)gEmptyString16;
+    p[14] = (unsigned int)gEmptyString16;
+    p[15] = (unsigned int)&g_rdata_1667bae;
+    p[17] = 0;
+    p[18] = 0;
+    p[19] = 0;
+    return p;
+}
+
+// @ 0x00991a70
+EA::UTFWinControls::WinTreeView_s0099_13d0::WinTreeView_s0099_13d0()
+{
+    FUN_00962a10(this);
+    *(void**)((char*)this + 0x20c) = &g_vtbl_1445b68;
+    *(void**)this = &g_vtbl_1445e60;
+    *(void**)((char*)this + 4) = &g_vtbl_1445d40;
+    *(void**)((char*)this + 0x20c) = &g_vtbl_1445cb8;
+    mInited = false;
+    *(void**)((char*)this + 0x218) = &g_vtbl_13ef094;
+    *(void**)((char*)this + 0x21c) = 0;
+    *(void**)((char*)this + 0x224) = 0;
+    *(void**)((char*)this + 0x220) = 0;
+    *(void**)((char*)this + 0x214) = &g_vtbl_1445c58;
+    *(void**)((char*)this + 0x218) = &g_vtbl_1445c54;
+    *(void**)((char*)this + 0x228) = 0;
+    *(void**)((char*)this + 0x22c) = 0;
+    float z = g_14853e0;
+    unsigned int* anchor = (unsigned int*)((char*)this + 0x230);
+    anchor[1] = (unsigned int)anchor;
+    anchor[0] = (unsigned int)anchor;
+    *(void**)((char*)this + 0x238) = 0;
+    *(void**)((char*)this + 0x240) = 0;
+    *(void**)((char*)this + 0x244) = 0;
+    *(void**)((char*)this + 0x23c) = (void*)2;
+    *(void**)((char*)this + 0x250) = &g_rdata_1667bae;
+    *(void**)((char*)this + 0x248) = (void*)gEmptyString16;
+    *(void**)((char*)this + 0x24c) = (void*)gEmptyString16;
+    *(void**)((char*)this + 0x258) = 0;
+    *(void**)((char*)this + 0x25c) = 0;
+    *(void**)((char*)this + 0x260) = 0;
+    *(float*)((char*)this + 0x264) = z;
+    *(float*)((char*)this + 0x268) = z;
+    *(float*)((char*)this + 0x26c) = z;
+    *(float*)((char*)this + 0x270) = z;
+    *(float*)((char*)this + 0x274) = 0.0f;
+    *(float*)((char*)this + 0x278) = 0.0f;
+    *(float*)((char*)this + 0x27c) = 0.0f;
+    *(float*)((char*)this + 0x280) = 0.0f;
+    *(void**)((char*)this + 0x284) = (void*)0xb;
+    *(void**)((char*)this + 0x2ac) = 0;
+    *(void**)((char*)this + 0x2b0) = 0;
+    *(void**)((char*)this + 0x2b4) = 0;
+    *(void**)((char*)this + 0x2bc) = (void*)2;
+    *(void**)((char*)this + 0x2b8) = (void*)0x18;
+    *(void**)((char*)this + 0x2c0) = (void*)8;
+    *(void**)((char*)this + 0x2c4) = (void*)4;
+    *(float*)((char*)this + 0x2c8) = 0.0f;
+    *(float*)((char*)this + 0x2cc) = 0.0f;
+    *(float*)((char*)this + 0x2d0) = 0.0f;
+    *(void**)((char*)this + 0x2d4) = 0;
+    *(void**)((char*)this + 0x2d8) = 0;
+    *(void**)((char*)this + 0x2dc) = 0;
+    *(void**)((char*)this + 0x2e8) = 0;
+    *(void**)((char*)this + 0x2ec) = 0;
+    *(void**)((char*)this + 0x2f0) = 0;
+    *(void**)((char*)this + 0x2f4) = 0;
+    *(void**)((char*)this + 0x2f8) = 0;
+    *(float*)((char*)this + 0x31c) = 0.0f;
+    *(float*)((char*)this + 0x320) = 0.0f;
+    *(void**)((char*)this + 0x308) = 0;
+    *(void**)((char*)this + 0x30c) = 0;
+    *(float*)((char*)this + 0x324) = 0.0f;
+    *(float*)((char*)this + 0x328) = 0.0f;
+    FUN_0093a560((char*)this + 0x330, 5, false);
+    FUN_0093a560((char*)this + 0x348, 5, false);
+    *(float*)((char*)this + 0x360) = g_1471064;
+    *(void**)((char*)this + 0x22c) = 0;
+    *(void**)((char*)this + 0x228) = this;
+    *(void**)((char*)this + 0x288) = (void*)0xff000000;
+    *(void**)((char*)this + 0x28c) = (void*)0xffffffff;
+    *(void**)((char*)this + 0x290) = (void*)0xff808080;
+    *(void**)((char*)this + 0x294) = (void*)0xffffffff;
+    *(void**)((char*)this + 0x298) = (void*)0xff000000;
+    *(void**)((char*)this + 0x29c) = (void*)0xffc0c0ff;
+    *(void**)((char*)this + 0x2a0) = (void*)0xff0000ff;
+    *(void**)((char*)this + 0x2a4) = (void*)0xffffffff;
+    *(void**)((char*)this + 0x2a8) = (void*)0x30000000;
+    if (*(void**)((char*)this + 0x30c) != 0) {
+        void* q = *(void**)((char*)this + 0x30c);
+        *(void**)((char*)this + 0x30c) = 0;
+        (*(IUnknown32**)&q)->u1();
+    }
+    if (*(void**)((char*)this + 0x308) != 0) {
+        void* q = *(void**)((char*)this + 0x308);
+        *(void**)((char*)this + 0x308) = 0;
+        (*(IUnknown32**)&q)->u1();
+    }
+    *(void**)((char*)this + 0x310) = 0;
+    if (*(void**)((char*)this + 0x2f8) != 0) {
+        void* q = *(void**)((char*)this + 0x2f8);
+        *(void**)((char*)this + 0x2f8) = 0;
+        (*(IUnknown32**)&q)->u1();
+    }
+    if (*(void**)((char*)this + 0x2f4) != 0) {
+        void* q = *(void**)((char*)this + 0x2f4);
+        *(void**)((char*)this + 0x2f4) = 0;
+        (*(IUnknown32**)&q)->u1();
+    }
+    FUN_00960020(0x1002);
+    *(void**)((char*)this + 0x2fc) = 0;
+    unsigned int t = GetDoubleClickTime();
+    float f = (float)(int)t;
+    if ((int)t < 0)
+        f = f + g_13f4fd0;
+    *(float*)((char*)this + 0x360) = f * g_13f9428;
+}
+
+// @ 0x00991df0
+EA::UTFWinControls::WinTreeView_s0099_13d0::~WinTreeView_s0099_13d0()
+{
+    *(void**)this = &g_vtbl_1445e60;
+    *(void**)((char*)this + 4) = &g_vtbl_1445d40;
+    *(void**)((char*)this + 0x20c) = &g_vtbl_1445cb8;
+    void* srcEnd = *(void**)((char*)this + 0x2d8);
+    void* srcBeg = *(void**)((char*)this + 0x2d4);
+    FUN_011e0744(srcEnd, srcBeg, 0);
+    ((TreeViewExtra_s0099_13d0*)this)->CalculateVisibleArea();
+    mNodes.InnerChildRemoveAllRecursive();
+    mNodes.CalcVisibleLines();
+    if (mNodes.mpTreeView != 0) {
+        ((IWindow_s0099_13d0*)((char*)mNodes.mpTreeView + 4))->w31(8, 1);
+        ((IWindow_s0099_13d0*)((char*)mNodes.mpTreeView + 4))->w36();
+    }
+    (void)srcBeg;
 }
 
 // @ 0x01300e90
