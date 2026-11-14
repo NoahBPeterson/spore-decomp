@@ -19,6 +19,7 @@
 #include "SP/cSpeciesProfile.h"
 #include "SP/cTribe.h"
 #include <intrin.h>
+#include "sse_helpers.h"
 
 // ---- items of slice s00c4a850 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct ResourceKey {
@@ -675,29 +676,26 @@ extern "C" float __cdecl FUN_00c4bea0(void* pProp, void* pEco);
 extern "C" float __cdecl FUN_00c4bf10(void* pProp, void* pEco);
 namespace SP
 {
-// Body recovered: switch (mState_1f0) { case 0: v = FUN_00c4bea0(prop, planet->eco) * g_13ec5b4;
-// case 1: v = FUN_00c4bf10(prop, planet->eco) * g_13ec5b4; default: return 0; }
-// then ceil(v) as (int)v (+1 when (float)v < v).  Not byte-exact: the original computes
-// `(int)(float)ceil(...)` through the real CRT ceil (xmm/push mxcsr) whereas /arch:SSE has no
-// sse4 and cl expands ceil() to the x87 fld/fcompi sequence, changing both the tail bytes and the
-// stack frame (16 vs 8 bytes).  These functions are compiled with the manifest(majority) flags
-// `/arch:SSE`, while a `/arch:SSE2` build of the same source reproduces the retail sequence
-// exactly, so this row is a flags artefact as much as a source one.
+// Retail fetches the target planet's eco before testing the state (state 0 -> FUN_00c4bea0,
+// state 1 -> FUN_00c4bf10, both scaled by g_13ec5b4), then converts with the vetted SSE ceiling
+// helper: SseCeilToInt in match/include/sse_helpers.h (cvtss2si + cvtsi2ss + add 1 + ucomiss +
+// cmovb). The earlier C-only spelling ((int) cast plus a '<' compare) compiled to cvttss2si and a
+// jbe/inc branch instead.
 int __fastcall FUN_00c4c090(cSPMissionBiosphere_s00c4_cb90* this_, int unused)
 {
-    float f;
-    if (this_->mState_1f0 == 0)
-        f = FUN_00c4bea0(this_->mpPropList_180, this_->GetTargetPlanet()->mpEco_13c) * g_13ec5b4;
-    else if (this_->mState_1f0 == 1)
-        f = FUN_00c4bf10(this_->mpPropList_180, this_->GetTargetPlanet()->mpEco_13c) * g_13ec5b4;
-    else
+    cPlanetEco* pEco = this_->GetTargetPlanet()->mpEco_13c;
+    switch (this_->mState_1f0) {
+    case 1: {
+        void* pProp = this_->mpPropList_180;
+        return SseCeilToInt(FUN_00c4bf10(pProp, pEco) * g_13ec5b4);
+    }
+    case 0: {
+        void* pProp = this_->mpPropList_180;
+        return SseCeilToInt(FUN_00c4bea0(pProp, pEco) * g_13ec5b4);
+    }
+    default:
         return 0;
-    float result = f;
-    float* pSlot = &result;
-    int32_t value = (int32_t)*pSlot;
-    if (*pSlot < (float)value)
-        ++value;
-    return value;
+    }
 }
 }  // namespace SP
 

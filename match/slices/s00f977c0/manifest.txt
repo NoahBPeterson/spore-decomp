@@ -5,3 +5,4 @@ slices/s00f977c0/s00f977c0.cpp  ?GetQuadKeyC@cTerrainSphere@@QAEIH@Z  0x00f98280
 slices/s00f977c0/s00f977c0.cpp  ?AreRastersReady@cTerrainSphere@@QAE_NXZ  0x00f97c30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00f977c0/s00f977c0.cpp  ?ReleaseRasters@cTerrainSphere@@QAEXXZ  0x00f97d00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00f977c0/s00f977c0.cpp  ?DrawWaterQuads@cTerrainSphere@@QAEXII@Z  0x00f98170  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00f977c0/s00f977c0.cpp  ?RenderAtmosphere@cTerrainSphere@@QAEXII@Z  00f981d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

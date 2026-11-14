@@ -212,8 +212,12 @@ void FillEltIndices(int count, cEltArrayRef* dst, int start, int base)
             *(char*)((char*)dst->mData + dst->mEltStride * (start + i)) = (char)(base + i);
         break;
     case 2:
-        for (int i = 0; i < count; ++i)
-            *(short*)((char*)dst->mData + dst->mEltStride * (start + i)) = (short)(base + i);
+        for (int i = 0; i < count; ++i) {
+            // Named copy of the counter on the value side: keys the `base + i` lea
+            // so the counter takes the SIB base slot (retail `lea edi,[ecx+esi]`).
+            int j = i;
+            *(short*)((char*)dst->mData + dst->mEltStride * (start + i)) = (short)(base + j);
+        }
         break;
     case 4:
         for (int i = 0; i < count; ++i)

@@ -4,3 +4,4 @@ slices/s0071f410/s0071f410.cpp  ?AllocEltBuffer@@YAPAXH@Z  00720010  /O2 /MD /Gy
 slices/s0071f410/s0071f410.cpp  ?Obj15_ctor@@YAXIGPAUObj15@@@Z  00720190  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s0071f410/s0071f410.cpp  ?Obj15_copy@@YAXPBUObj15@@PAU1@@Z  007201b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s0071f410/s0071f410.cpp  ?Obj15_copyAssign@@YAXPBUObj15@@PAU1@@Z  007201d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0071f410/s0071f410.cpp  ?FillEltIndices@@YAXHPAUcEltArrayRef@@HH@Z  0071ff50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

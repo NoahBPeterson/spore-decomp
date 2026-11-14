@@ -12,3 +12,4 @@
 ../src/game/SPGonzago/SPMissionBiosphere.cpp  ?FUN_00c4c850@SP@@YI_NPAVcSPMissionBiosphere_s00c4_cb90@@HIPAX@Z  00c4c850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionBiosphere.cpp  ?FUN_00c4c450@SP@@YIPAXPAVcSPMissionBiosphere_s00c4_cb90@@HI@Z  00c4c450  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionBiosphere.cpp  ?cMissionBiosphere_ctor@SP@@YIPAVcSPMissionBiosphere_s00c4_cb90@@PAV2@H@Z  00c4c2f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionBiosphere.cpp  ?FUN_00c4c090@SP@@YIHPAVcSPMissionBiosphere_s00c4_cb90@@H@Z  00c4c090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

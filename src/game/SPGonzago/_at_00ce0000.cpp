@@ -229,7 +229,7 @@ void __fastcall FUN_00ce8ee0(void* self, void* /*edx*/, u8 visible)
     char* slot = *(char**)it;
     if (slot != 0) {
       u32 cnt = (u32)((s32)(*(u32*)(slot + 0xa8) - *(u32*)(slot + 0xa4)) >> 3);
-      bool doCall = cnt > 0 || visible != 0;
+      bool doCall = cnt > 0 || visible == 0;
       if (doCall) {
         ((void(__thiscall*)(void*, u8))(*(void***)slot)[0xc0 / 4])(slot, visible);
       }

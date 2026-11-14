@@ -608,14 +608,15 @@ EA::Variant* __cdecl FUN_00eccce0(EA::Variant* ret, const PropKey* prop, const u
 struct VariantTyped {
     char pad00[0x18];                                          // +0x00 .. +0x17
     uint32_t mTypeId;                                          // +0x18
-
-    int Classify() const;
 };
 
+// The retail helper receives the record pointer in EAX at entry: the register convention MSVC gives
+// a TU-local static with a same-TU caller (docs/codegen.md 6.3).  The stand-in caller below keeps
+// the static emitted out-of-line; it is scaffolding for this slice, not a retail function.
 // @ 0x00ecda00
-int VariantTyped::Classify() const
+static int Classify(const VariantTyped* self)
 {
-    switch (mTypeId) {
+    switch (self->mTypeId) {
     case 0x1a4e0708:
     case 0x2090a11b:
     case 0x441cd3e6:
@@ -634,4 +635,9 @@ int VariantTyped::Classify() const
     default:
         return 0;
     }
+}
+
+extern "C" int __cdecl s00ecda00_classify_keepalive(const VariantTyped* rec)
+{
+    return Classify(rec);
 }

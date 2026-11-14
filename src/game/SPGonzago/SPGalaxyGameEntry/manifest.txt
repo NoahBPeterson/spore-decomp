@@ -59,3 +59,4 @@
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FillComboBoxes@cGalaxyGameEntryUIStateMachine_s00de_f400@SP@@QAEXXZ  00df00b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de56f0@cGalaxyGameEntryImpl_s00de_5040@@QAEPAUOutKey3@@AAU2@PAUKeyNode@@@Z  00de56f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de5cb0@cGalaxyGameEntryImpl_s00de_5040@@QAE_NI@Z  00de5cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00defc00@cGalaxyGameEntryUIStateMachine_s00de_f400@SP@@QAE?AUNameString_s00df_fc80@@XZ  00defc00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

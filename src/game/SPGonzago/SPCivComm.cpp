@@ -540,14 +540,15 @@ __thiscall cGonzagoChild::cGonzagoChild()
 namespace SP {
 cCity_s00cf_eeb0* FindTargetCity(int kind, cGameData_s00cf_eeb0* source)
 {
+    struct CityPtrVector { cCity_s00cf_eeb0** mpBegin; cCity_s00cf_eeb0** mpEnd; };
+    struct CityDataList { void* pad0; CityPtrVector mData; };
     int count = 0;
-    int i = 0;
-    struct CityVec { int pad0; cCity_s00cf_eeb0** mpBegin; cCity_s00cf_eeb0** mpEnd; };
-    CityVec* v = (CityVec*)NounManager()->FUN_00b21340(0x00cd7d10, 0x00d3d420, 0x00acdff0, 0x00b1e500, 0x018c43e8);
-    cCity_s00cf_eeb0**& begin = v->mpBegin;
-    int n = (int)((char*)v->mpEnd - (char*)begin) >> 2;
-    for (; i < n; i++) {
-        cCity_s00cf_eeb0* city = begin[i];
+    cGameNounManager_s00cf_eeb0* pManager = NounManager();
+    CityDataList* pList = (CityDataList*)pManager->FUN_00b21340(0x00cd7d10, 0x00d3d420, 0x00acdff0, 0x00b1e500, 0x018c43e8);
+    CityPtrVector* pNouns = &pList->mData;
+    int n = (int)(pNouns->mpEnd - pNouns->mpBegin);
+    for (int i = 0; i < n; i++) {
+        cCity_s00cf_eeb0* city = pNouns->mpBegin[i];
         if (city->GetCivilization() == (cCivilization_s00cf_eeb0*)source)
             continue;
         if (city->GetCivilization() == NounManager()->GetPlayerCivilization())

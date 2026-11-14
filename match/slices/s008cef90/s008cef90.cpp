@@ -440,8 +440,11 @@ uint16 Get_Cached_AW(sfntClass* t, uint32 code)
         t->awCache_aw = p + 251;
         t->awCache_hashKey = p;
         for (i = 0; i < 251; i++) p[i] = 0xffff;
-    } else if (*(uint16*)((char*)t->awCache_hashKey + idx * 2) == (uint16)code) {
-        return t->awCache_aw[idx];
+    } else {
+        uint32 off = idx * 2;
+        if (*(uint16*)((char*)t->awCache_hashKey + off) == (uint16)code) {
+            return *(uint16*)((char*)t->awCache_aw + off);
+        }
     }
     r = ((uint16 (__cdecl*)(void*, uint32))t->GetAWFuncPtr2)(t->GetAWParam2, code);
     t->awCache_hashKey[idx] = (uint16)code;
