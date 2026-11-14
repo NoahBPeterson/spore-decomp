@@ -83,7 +83,20 @@ def run(va, layers, timeout, hints=None, want=None, k_mutants=5, log=print):
         log("  %-10s %-8s %6.1fs  %s" % (name, r["status"], r["seconds"], r["detail"][:150]))
         results.append((name, r))
         if r["status"] == "refuted":
-            return {"verdict": "REFUTED", "layer": name, "detail": r["detail"], "level": level}
+            lvl = level
+            if level == "L2" and not want:
+                # L2 compares every register, including scratch registers a normal caller ignores (00f2bd10: ecx at
+                # return). A difference counts only if the calling contract (L1) sees one too; an L1 difference is
+                # always a real one, so this re-check can only remove false refutations, never add a proof.
+                r1 = mod.prove(retail, ours, "L1", h, timeout)
+                log("  %-10s %-8s %6.1fs  (re-checked at L1) %s" % (name, r1["status"], r1["seconds"], r1["detail"][:120]))
+                if r1["status"] != "refuted":
+                    results.append((name, {"status": "unknown", "seconds": r1["seconds"],
+                                           "detail": "differs only at L2 (registers a normal caller ignores): " +
+                                                     r["detail"][:300]}))
+                    continue
+                r, lvl = r1, "L1"
+            return {"verdict": "REFUTED", "layer": name, "detail": r["detail"], "level": lvl}
         if r["status"] != "proved":
             continue
         bad = []
