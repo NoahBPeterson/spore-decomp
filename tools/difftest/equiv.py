@@ -6908,6 +6908,7 @@ def pin_hash_seed():
         os.environ["PYTHONHASHSEED"] = "0"
         if os.name == "nt":
             # Windows execv starts a new process and the caller sees this one exit at once (status 0, no output)
+            import subprocess
             sys.exit(subprocess.run([sys.executable] + sys.argv).returncode)
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
