@@ -15,3 +15,4 @@ slices/s00599c40/s00599c40.cpp  ?ScalarDelete@cSPUIWindowAnimation@@QAEPAXI@Z  0
 slices/s00599c40/s00599c40.cpp  ?UpdateTimeText@cEditorBudgetPanel@SP@@QAEXXZ  0059a470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00599c40/s00599c40.cpp  ?HandleMessage@cEditorBudgetPanel@SP@@UAE_NIPAX@Z  0059a770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00599c40/s00599c40.cpp  ?SetCreature@cEditorBudgetPanel@SP@@QAEXIPAUcCreatureData@2@I@Z  0059a980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?SseClamp@@YAMMMM@Z  0059ab50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

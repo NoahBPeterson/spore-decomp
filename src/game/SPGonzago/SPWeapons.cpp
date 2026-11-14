@@ -474,7 +474,7 @@ void  FUN_00c421b0();                        // 0x00c421b0 thiscall
 void  FUN_00b184c0();                        // 0x00b184c0 thiscall cGameData dtor
 char     g_169a408;   // 0x0169a408  byte flag store
 uint32_t g_169a40c;   // 0x0169a40c
-void*    g_vft_145dca8[4];  // 0x0145dca8  vtable reset stored into +0x504
+extern void* g_vft_145dca8[];  // 0x0145dca8  vtable reset stored into +0x504
 struct CtxObj {
     char _p000[0x08];
     char mState;                 // +0x08
@@ -4610,11 +4610,11 @@ void __cdecl FUN_00cb76f0()
 {
 }
 
-void* g_vft_1475650[2];             // 0x01475650  cFlakProjectile vtable 0
-void* g_vft_147563c[2];             // 0x0147563c  cFlakProjectile vtable 1
-void* g_vft_1475540[2];             // 0x01475540  cFlakProjectile locomotion vtable
-void* g_vft_1475538[2];             // 0x01475538  cFlakProjectile vtable 3
-void* g_vft_1475510[2];             // 0x01475510  cFlakProjectile vtable 4
+extern void* g_vft_1475650[];             // 0x01475650  cFlakProjectile vtable 0
+extern void* g_vft_147563c[];             // 0x0147563c  cFlakProjectile vtable 1
+extern void* g_vft_1475540[];             // 0x01475540  cFlakProjectile locomotion vtable
+extern void* g_vft_1475538[];             // 0x01475538  cFlakProjectile vtable 3
+extern void* g_vft_1475510[];             // 0x01475510  cFlakProjectile vtable 4
 void* g_vft_1475174[2];             // 0x01475174  cVerticalRocketLocomotion vtable
 void* g_vft_1475184[2];             // 0x01475184  cStraightLineLocomotion vtable
 void __fastcall FUN_00bc3130(void* timer);       // 0x00bc3130  SP::cSPTimer::Restart
