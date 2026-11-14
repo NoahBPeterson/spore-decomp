@@ -69,6 +69,10 @@
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?FUN_00a09810@@YGXPAURec@@0@Z  00a09810  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Destroy@MapA@@QAEXPAUMapNodeA@@@Z  00a09850  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?Destroy@MapB@@QAEXPAUMapNodeB@@@Z  00a09890  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?saDestroyClipRange@@YGXPAUsaClip@@0@Z  00a0aca0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?CreateCreatureWide@AnimWorld@@QAEPAUanim_creature@@PB_WIPBUvector_3@@PBUvector_4@@PAX_N@Z  00a0b8a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?CreateCreatureFromObject@AnimWorld@@QAEPAUanim_creature@@PAPAUResourceObject@@IPBUvector_3@@PBUvector_4@@_N@Z  00a0b940  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?CreateCreatureFromKey@AnimWorld@@QAEPAUanim_creature@@PBUResourceKey@@IPBUvector_3@@PBUvector_4@@_N@Z  00a0b980  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?ReverseCopySubs@@YAPAUSub_s00a0_bcf0@@PAU1@00@Z  00a0c230  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?c640@AnimFbOwner@@QAEIIPAI@Z  00a0c640  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?c670@AnimFbOwner@@QAEXIPAI@Z  00a0c670  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

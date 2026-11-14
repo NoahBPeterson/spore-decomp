@@ -19,6 +19,7 @@
 #include "SP/cJob.h"
 #include <stdio.h>
 #include <wchar.h>
+#include "SP/cSPCreatureAnimWorld.h"
 
 // ---- items of slice s00a01810 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" extern const float g_1485720;
@@ -324,19 +325,19 @@ struct cAnimatingCreature_s00a0_3da0
 	void* m_field18c;           // +0x18c  (unused by these functions)
 	Mgr193* m_scene190;         // +0x190
 
-	void FUN_00a04550(int index, const float* value);
+	void FUN_00a04550(int index, const float* value);  // 0x00a04550 (cAnimatingCreature::FUN_00a04550)
 	void FUN_00a047d0(unsigned char param2);
-	int  FUN_00a048b0(int id, int a3, int a4, int a5);
-	bool FUN_00a04900(int unused);
-	bool FUN_00a04940(int id);
-	bool FUN_00a04990(int id);
-	float FUN_00a049f0(int id);
-	void FUN_00a04ab0(unsigned char value);
-	void FUN_00a04ad0(int value);
-	void FUN_00a04af0(IUnknown_s00a0_3da0* model);
-	void FUN_00a04bb0(unsigned index, unsigned char enable);
-	void FUN_00a04ca0(unsigned char value);
-	void FUN_00a04cc0(unsigned char value);
+	int  FUN_00a048b0(int id, int a3, int a4, int a5);  // 0x00a048b0 (cAnimatingCreature::FUN_00a048b0)
+	bool FUN_00a04900(int unused);  // 0x00a04900 (cAnimatingCreature::FUN_00a04900)
+	bool FUN_00a04940(int id);  // 0x00a04940 (cAnimatingCreature::FUN_00a04940)
+	bool FUN_00a04990(int id);  // 0x00a04990 (cAnimatingCreature::FUN_00a04990)
+	float FUN_00a049f0(int id);  // 0x00a049f0 (cAnimatingCreature::FUN_00a049f0)
+	void FUN_00a04ab0(unsigned char value);  // 0x00a04ab0 (cAnimatingCreature::FUN_00a04ab0)
+	void FUN_00a04ad0(int value);  // 0x00a04ad0 (cAnimatingCreature::FUN_00a04ad0)
+	void FUN_00a04af0(IUnknown_s00a0_3da0* model);  // 0x00a04af0 (cAnimatingCreature::FUN_00a04af0)
+	void FUN_00a04bb0(unsigned index, unsigned char enable);  // 0x00a04bb0 (cAnimatingCreature::FUN_00a04bb0)
+	void FUN_00a04ca0(unsigned char value);  // 0x00a04ca0 (cAnimatingCreature::FUN_00a04ca0)
+	void FUN_00a04cc0(unsigned char value);  // 0x00a04cc0 (cAnimatingCreature::FUN_00a04cc0)
 };
 float* FUN_00a04590(cAnimatingCreature_s00a0_3da0* self, float* out);              // 0x00a04590
 void FUN_00a04630(cAnimatingCreature_s00a0_3da0* self, unsigned char param2, unsigned char param3);  // 0x00a04630
@@ -551,6 +552,11 @@ struct SL71
 // ---- items of slice s00a099e0 end
 
 // ---- items of slice s00a0aca0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint16_t g_saEmptyText16[2];     // eastl::gEmptyString16 (0x01667bac)
+extern "C" __declspec(dllimport) int __cdecl sprintf(char*, const char*, ...);   // msvcr90 (0x013cc4a0)
+extern "C" void* __cdecl memset(void*, int, size_t);            // msvcr90 (0x011e073e)
+extern float g_saDefaultAnimSpeed;      // 0x015517e4
+extern int32_t g_saAnimBytes;                                           // 0x0166c060
 namespace EA {
 namespace Hash {
 uint32_t __cdecl FNV1_String8(const char* pString, uint32_t nInitialValue, int charCase);   // 0x00932e80
@@ -655,8 +661,8 @@ struct BakedAnimManager {
     void* PostFeedback(creature_static_data* csd, int arg);   // 0x009abd10 (ret 8)
 };
 extern BakedAnimManager* g_pBakedAnimManager;                // 0x0166c084
-struct queued_blender {
-    queued_blender* Construct();                                         // 0x00a01c10
+struct queued_blender_s00a0_aca0 {
+    queued_blender_s00a0_aca0* Construct();                                         // 0x00a01c10
     void Init(creature_instance_data* cid, BakedAnimManager* mgr);      // 0x00a00910 (ret 8)
 };
 struct anim_creature {                  // 0x19c bytes
@@ -672,7 +678,7 @@ struct anim_creature {                  // 0x19c bytes
     uint32_t pad_08c[(0x17c - 0x8c) / 4];
     creature_instance_data* instance;   // +0x17c
     uint32_t pad_180;
-    queued_blender* blender;            // +0x184
+    queued_blender_s00a0_aca0* blender;            // +0x184
     uint32_t f188;                      // +0x188
     uint32_t f18c;                      // +0x18c
     void*    world;                     // +0x190
@@ -680,6 +686,10 @@ struct anim_creature {                  // 0x19c bytes
     int      f198;                      // +0x198
 
     anim_creature* Construct(const vector_3* pos, const vector_4* rot);   // 0x00a05d60 (ret 8)
+};
+struct queued_blender {
+    queued_blender* Construct();                                         // 0x00a01c10
+    void Init(creature_instance_data* cid, BakedAnimManager* mgr);      // 0x00a00910 (ret 8)
 };
 struct SimpleVector {                   // SP::SimpleVector<anim_creature*>
     anim_creature** mpBegin;
@@ -727,6 +737,225 @@ struct AnimWorld {
     anim_creature* CreateCreatureController(const ResourceKey* key, ResourceObject** pObj, const char* name,
                                             uint32_t userData, const vector_3* pos, const vector_4* rot,
                                             bool useCache);
+    anim_creature* CreateCreatureWide(const wchar_t* pName, uint32_t userData, const vector_3* pos,
+                                      const vector_4* rot, void* pUnused, bool useCache);
+    anim_creature* CreateCreatureFromObject(ResourceObject** pObj, uint32_t userData, const vector_3* pos,
+                                            const vector_4* rot, bool useCache);
+    anim_creature* CreateCreatureFromKey(const ResourceKey* key, uint32_t userData, const vector_3* pos,
+                                         const vector_4* rot, bool useCache);
+};
+struct saAllocHeader { int32_t mOwnerCount; };
+struct saText16 {                       // eastl::vector<uint16_t, sp_vector_allocator> (0x0c)
+    uint16_t* mpBegin;                  // +0x00
+    uint16_t* mpEnd;                    // +0x04
+    uint16_t* mpCapacityEnd;            // +0x08
+};
+struct saTrackKey {                     // 0x1c: one keyframe of an animation track
+    float     mTime;                    // +0x00
+    float     mValue;                   // +0x04
+    uint32_t  mFlags;                   // +0x08
+    saText16  mName;                    // +0x0c (nested 16-bit text)
+    uint32_t  mReserved;                // +0x18
+};
+struct saClip {                         // 0x18: a keyed track plus its timing
+    saTrackKey* mpBegin;                // +0x00
+    saTrackKey* mpEnd;                  // +0x04
+    saTrackKey* mpCapacityEnd;          // +0x08
+    float       mStart;                 // +0x0c
+    float       mBlend;                 // +0x10
+    float       mWeight;                // +0x14
+};
+namespace EA {
+namespace Text {
+void __cdecl StrncpyUTF8ToUTF16(char* pDest, int destSize, const wchar_t* pSrc, int srcLen);   // 0x0093cf10
+}
+}
+static void saCopyText16(saText16* pDest, const saText16* pSrc)
+{
+    uint32_t count = (uint32_t)(pSrc->mpEnd - pSrc->mpBegin);
+    if (count != 0 && pSrc->mpBegin)
+    {
+        uint16_t* pNew = (uint16_t*)operator_new((count + 1) * 2, "EASTL", 0, 0, 0, 0xd1);
+        for (uint32_t i = 0; i < count; ++i)
+            pNew[i] = pSrc->mpBegin[i];
+        pNew[count] = 0;
+        pDest->mpBegin = pNew;
+        pDest->mpEnd = pNew + count;
+        pDest->mpCapacityEnd = pNew + count + 1;
+    }
+    else
+    {
+        pDest->mpBegin = g_saEmptyText16;
+        pDest->mpEnd = g_saEmptyText16;
+        pDest->mpCapacityEnd = g_saEmptyText16 + 1;
+    }
+}
+static void saCopyClip(saClip* pDest, const saClip* pSrc)
+{
+    uint32_t count = (uint32_t)(pSrc->mpEnd - pSrc->mpBegin);
+    if (count != 0 && pSrc->mpBegin)
+    {
+        saTrackKey* pNew = (saTrackKey*)operator_new(count * sizeof(saTrackKey), "EASTL", 0, 0, 0, 0xd1);
+        for (uint32_t i = 0; i < count; ++i)
+        {
+            pNew[i].mTime = pSrc->mpBegin[i].mTime;
+            pNew[i].mValue = pSrc->mpBegin[i].mValue;
+            pNew[i].mFlags = pSrc->mpBegin[i].mFlags;
+            saCopyText16(&pNew[i].mName, &pSrc->mpBegin[i].mName);
+            pNew[i].mReserved = pSrc->mpBegin[i].mReserved;
+        }
+        pDest->mpBegin = pNew;
+        pDest->mpEnd = pNew + count;
+        pDest->mpCapacityEnd = pNew + count;
+    }
+    else
+    {
+        pDest->mpBegin = 0;
+        pDest->mpEnd = 0;
+        pDest->mpCapacityEnd = 0;
+    }
+    pDest->mStart = pSrc->mStart;
+    pDest->mBlend = pSrc->mBlend;
+    pDest->mWeight = pSrc->mWeight;
+}
+struct saKeyVector {
+    saTrackKey* mpBegin;                // +0x00
+    saTrackKey* mpEnd;                  // +0x04
+    saTrackKey* mpCapacityEnd;          // +0x08
+
+    uint32_t size() const     { return (uint32_t)(mpEnd - mpBegin); }
+    uint32_t capacity() const { return (uint32_t)(mpCapacityEnd - mpBegin); }
+
+    saTrackKey* AllocateCopy(uint32_t count, const saTrackKey* pFirst, const saTrackKey* pLast);   // 0x00a09e10
+    void        DestroyRange(saTrackKey* pFirst, saTrackKey* pLast);                               // 0x00a09810
+    saTrackKey* CopyRange(saTrackKey* pFirst, saTrackKey* pLast);                                  // 0x00a09680
+    void        InsertRange(void** ppOther, saTrackKey* pFirst, saTrackKey* pLast,
+                            saTrackKey* pPos, void* pOther);                                       // 0x00a09560
+    saKeyVector& operator=(const saKeyVector& other);                                              // 0x00a0b110
+};
+struct saRefCountedBase {
+    virtual int32_t AddRef();
+    virtual int32_t Release();
+};
+struct saListenerBase {
+    virtual void ListenerSlot00();
+    virtual void ListenerSlot04();
+};
+struct saContentValidationSummarizer {
+    virtual void SummarizerSlot00();
+    virtual void SummarizerSlot04();
+    int32_t mValidationState;           // +0x0c of the object
+};
+struct saLoadNode {                     // 0x1c: intrusive list node with a job slot
+    saLoadNode* mpNext;                 // +0x00
+    saLoadNode* mpPrev;                 // +0x04
+    int32_t     mJobState;              // +0x08
+    uint8_t     mFlags;                 // +0x0c
+    int32_t     mRefCount;              // +0x10
+    uint32_t    mPad14[2];              // +0x14
+};
+struct saAnimResource : saRefCountedBase, saListenerBase, saContentValidationSummarizer {
+    float       mSpeed;                 // +0x10
+    int32_t     mField14;               // +0x14
+    uint32_t    mField18;               // +0x18
+    saLoadNode  mLoad;                  // +0x1c
+    saLoadNode  mUnload;                // +0x38
+    uint32_t    mCounters[9];           // +0x50 .. +0x70
+    uint32_t    mField74;               // +0x74 (untouched by the ctor)
+    uint32_t    mField78;               // +0x78 (untouched by the ctor)
+    uint32_t    mField7c;               // +0x7c
+    uint32_t    mField80;               // +0x80
+    uint32_t    mField84;               // +0x84
+
+    saAnimResource();
+};
+struct saStream {
+    virtual void Stream00();
+    virtual void Stream04();
+    virtual void Stream08();
+};
+struct saJob {
+    virtual int32_t ContinueJob();      // 0x0068f970
+    void            Wait();             // 0x006926b0
+    int32_t         Release();          // 0x00690120
+    uint32_t pad_004[7];
+    void*    mpStream;                  // +0x20
+};
+struct saAnimStaticData {
+    int32_t mRefCount;                  // +0x00
+    int32_t mByteCount;                 // +0x04
+};
+struct saStreamWrapper {
+    virtual void Wrapper00();
+    virtual void Wrapper04();
+    virtual void Wrapper08();
+    void* mpStream;                     // +0x04
+
+    saStreamWrapper() {}
+    ~saStreamWrapper() { if (mpStream) ((saStream*)mpStream)->Stream08(); }
+};
+struct saRBNode {
+    saRBNode*   mpParent;               // +0x00
+    saRBNode*   mpLeft;                 // +0x04
+    saRBNode*   mpRight;                // +0x08
+    uint32_t    mColor;                 // +0x0c
+    const char* mpName;                 // +0x10
+    saJob*      mpJob;                  // +0x14
+};
+struct saRBTree {                       // eastl::rbtree anchor
+    saRBNode* mpNodeParent;             // +0x00
+    saRBNode* mpFirst;                  // +0x04 (leftmost node / begin())
+    saRBNode* mpNodeRight;              // +0x08
+    uint32_t  mColor;                   // +0x0c
+};
+saRBNode* __cdecl RBTreeIncrement(saRBNode* pNode);                     // 0x00921580
+void      __cdecl RBTreeErase(saRBNode* pNode, saRBTree* pTree);        // 0x00921880
+bool      __cdecl saHasPreloadedAnimation(const char* pName);           // 0x009a37a0
+saAnimStaticData* __cdecl ReadAnimationStaticDataFromStreamWrapper(saStreamWrapper& wrapper, char* pName,
+                                                                   const char* pBlocksName);   // 0x0099ed90
+saAnimStaticData** __cdecl saFindAnimationSlot(const char* pName);      // 0x009a4310
+void      __cdecl saAddRefAnimationData(saAnimStaticData* pData);       // 0x0099c660
+void      __cdecl saReleaseAnimationData(saAnimStaticData* pData);      // 0x0099d060
+struct saWorld {
+    virtual int32_t AddRef();           // vt[0]
+    virtual int32_t Release();          // vt[1]
+};
+struct saWorldVec {                     // pointer vector used by the manager
+    saWorld** mpBegin;                  // +0x00
+    saWorld** mpEnd;                    // +0x04
+    saWorld** mpCapacityEnd;            // +0x08
+    void DoInsertValue(saWorld** pPos, saWorld*& value);   // 0x00a0a360
+
+    void push_back(saWorld*& value)
+    {
+        if (mpEnd < mpCapacityEnd)
+        {
+            saWorld** pSlot = mpEnd++;
+            if (pSlot)
+            {
+                *pSlot = value;
+                if (value)
+                    value->AddRef();
+            }
+        }
+        else
+        {
+            DoInsertValue(mpEnd, value);
+        }
+    }
+};
+struct saAnimManager {
+    uint32_t  pad_000[14];              // +0x00
+    saRBTree  mAsyncLoads;              // +0x38
+    int32_t   mPendingLoads;            // +0x48
+    uint32_t  pad_04c[7];               // +0x4c
+    saWorldVec mWorlds;                 // +0x68
+
+    void     UpdateAnimationPreloads();          // 0x00a0ba70
+    saWorld* CreateWorld(saWorld* pSource);      // 0x00a0bbd0
+};
+struct saWorldCtor {                    // the world constructor (ecx = the new world)
+    saWorld* Construct(void* pOwner, void* pSource);    // 0x00a09e70
 };
 // ---- items of slice s00a0aca0 end
 
@@ -1595,9 +1824,9 @@ struct QueuedBlender_s00a0_0980 {
 
     void ClearQueued();                          // 00a00980 0x00a00980
     void FUN_00a00c40(uint param);               // 00a00c40 0x00a00c40
-    void Activate(uint idx, char force);         // 00a00d50
+    void Activate(uint idx, char force);         // 00a00d50 0x00a00d50
     void Deactivate(uint idx);                   // 00a00f10
-    void FUN_00a00f90(AnimCommand* cmd, uint x); // 00a00f90
+    void FUN_00a00f90(AnimCommand* cmd, uint x); // 00a00f90 0x00a00f90
     void FUN_00a01050(uint x);                   // 00a01050 0x00a01050
     void UpdateCreatureBodies(uint a2, float a3, float a4, uint a5,
                               uint a6, uint a7, float a8); // 00a010c0
@@ -7637,6 +7866,68 @@ void SL71::v0ac10(unsigned n)
     FUN_009e0480(begin + n * 0xc, end);
 }
 
+// @ 0x00a0aca0
+void __stdcall saDestroyClipRange(saClip* pFirst, saClip* pLast)
+{
+    for (; pFirst < pLast; ++pFirst)
+    {
+        saTrackKey* pKeyEnd = pFirst->mpEnd;
+        for (saTrackKey* pKey = pFirst->mpBegin; pKey < pKeyEnd; ++pKey)
+        {
+            int32_t capacity = (int32_t)((char*)pKey->mName.mpCapacityEnd - (char*)pKey->mName.mpBegin) & ~1;
+            if (capacity > 2 && pKey->mName.mpBegin)
+                operator_delete__(pKey->mName.mpBegin);
+        }
+        if (pFirst->mpBegin && ((saAllocHeader*)pFirst->mpBegin)[-1].mOwnerCount != 0)
+            operator_delete__(pFirst->mpBegin);
+    }
+}
+
+// @ 0x00a0ade0
+void __cdecl saFillClips(saClip* pDest, uint32_t count, const saClip* pValue)
+{
+    for (uint32_t i = 0; i < count; ++i, ++pDest)
+        saCopyClip(pDest, pValue);
+}
+
+// @ 0x00a0af70
+saClip* __cdecl saCopyClipRange(saClip* pFirst, saClip* pLast, saClip* pDest)
+{
+    for (; pFirst != pLast; ++pFirst, ++pDest)
+        saCopyClip(pDest, pFirst);
+    return pDest;
+}
+
+// @ 0x00a0b110
+saKeyVector& saKeyVector::operator=(const saKeyVector& other)
+{
+    if (this != &other)
+    {
+        uint32_t count = other.size();
+        if (count > capacity())
+        {
+            saTrackKey* pNew = AllocateCopy(count, other.mpBegin, other.mpEnd);
+            DestroyRange(mpBegin, mpEnd);
+            if (mpBegin && ((saAllocHeader*)mpBegin)[-1].mOwnerCount != 0)
+                operator_delete__(mpBegin);
+            mpBegin = pNew;
+            mpCapacityEnd = pNew + count;
+        }
+        else if (count > size())
+        {
+            CopyRange(other.mpBegin, other.mpBegin + size());
+            InsertRange((void**)&other, other.mpBegin + size(), other.mpEnd, mpEnd, (void*)&other);
+        }
+        else
+        {
+            saTrackKey* pNewEnd = CopyRange(other.mpBegin, other.mpEnd);
+            DestroyRange(pNewEnd, mpEnd);
+        }
+        mpEnd = mpBegin + count;
+    }
+    return *this;
+}
+
 // @ 0x00a0b260
 anim_creature* AnimWorld::CreateCreatureController(const ResourceKey* key, ResourceObject** pObj, const char* name, uint32_t userData, const vector_3* pos, const vector_4* rot, bool useCache)
 {
@@ -7779,7 +8070,7 @@ anim_creature* AnimWorld::CreateCreatureController(const ResourceKey* key, Resou
     ac->userData = userData;
     ac->world = this;
     void* qbMem = operator_new(0xfd0, "Anim/World/new_qb", 0, 0, 0, 0);
-    queued_blender* qb = qbMem ? ((queued_blender*)qbMem)->Construct() : 0;
+    queued_blender_s00a0_aca0* qb = qbMem ? ((queued_blender_s00a0_aca0*)qbMem)->Construct() : 0;
     ac->blender = qb;
     qb->Init(cid, g_pBakedAnimManager);
     ac->f18c = 0;
@@ -7803,6 +8094,124 @@ anim_creature* AnimWorld::CreateCreatureController(const ResourceKey* key, Resou
     if (res.mpObject) res.mpObject->Release();
     if (csdRef.mp) csdRef.mp->Release();
     return ac;
+}
+
+// @ 0x00a0b8a0
+anim_creature* AnimWorld::CreateCreatureWide(const wchar_t* pName, uint32_t userData, const vector_3* pos, const vector_4* rot, void* pUnused, bool useCache)
+{
+    char blocksName[0x104];
+    if (pName)
+    {
+        char name[0x104];
+        EA::Text::StrncpyUTF8ToUTF16(name, 0x104, pName, -1);
+        sprintf(blocksName, "%s.blocks", name);
+    }
+    else
+    {
+        sprintf(blocksName, "%s.blocks", "");
+    }
+    return CreateCreatureController(0, 0, blocksName, userData, pos, rot, useCache);
+}
+
+// @ 0x00a0b940
+anim_creature* AnimWorld::CreateCreatureFromObject(ResourceObject** pObj, uint32_t userData, const vector_3* pos, const vector_4* rot, bool useCache)
+{
+    return CreateCreatureController(0, pObj, 0, userData, pos, rot,
+                                    useCache && (*pObj)->key.instance != 0);
+}
+
+// @ 0x00a0b980
+anim_creature* AnimWorld::CreateCreatureFromKey(const ResourceKey* key, uint32_t userData, const vector_3* pos, const vector_4* rot, bool useCache)
+{
+    return CreateCreatureController(key, 0, 0, userData, pos, rot, useCache);
+}
+
+// @ 0x00a0b9b0
+saAnimResource::saAnimResource()
+: mSpeed(g_saDefaultAnimSpeed), mField14(0)
+{
+    mLoad.mpNext = &mLoad;
+    mLoad.mpPrev = &mLoad;
+    mLoad.mJobState = 0;
+    mLoad.mFlags = 0;
+    mLoad.mRefCount = 0;
+    mUnload.mpNext = &mUnload;
+    mUnload.mpPrev = &mUnload;
+    mUnload.mJobState = 0;
+    mUnload.mFlags = 0;
+    mUnload.mRefCount = 0;
+    for (int i = 0; i < 9; ++i)
+        mCounters[i] = 0;
+    mField7c = 0;
+    mField80 = 0;
+    mField84 = 0;
+}
+
+// @ 0x00a0ba70
+void saAnimManager::UpdateAnimationPreloads()
+{
+    saRBNode* pNode = mAsyncLoads.mpFirst;
+    while (pNode != (saRBNode*)&mAsyncLoads)
+    {
+        if (pNode->mpJob && (uint32_t)(pNode->mpJob->ContinueJob() - 7) <= 1)
+        {
+            pNode->mpJob->Wait();
+            saJob* pJob = pNode->mpJob;
+            if (pJob->mpStream && !saHasPreloadedAnimation(pNode->mpName))
+            {
+                saStream* pStream = (saStream*)pJob->mpStream;
+                saStreamWrapper wrapper;
+                wrapper.mpStream = pStream;
+                pStream->Stream04();
+
+                char fileName[0x100];
+                fileName[0] = 0;
+                memset(fileName, 0, 0xff);
+
+                saAnimStaticData* pData =
+                    ReadAnimationStaticDataFromStreamWrapper(wrapper, fileName, pNode->mpName);
+                saAnimStaticData** ppSlot = saFindAnimationSlot(pNode->mpName);
+                saAnimStaticData* pOld = *ppSlot;
+                if (pData != pOld)
+                {
+                    if (pData) saAddRefAnimationData(pData);
+                    *ppSlot = pData;
+                    if (pOld) saReleaseAnimationData(pOld);
+                }
+                if (pData)
+                    g_saAnimBytes += pData->mByteCount;
+
+                --mPendingLoads;
+                saRBNode* pNext = RBTreeIncrement(pNode);
+                RBTreeErase(pNode, &mAsyncLoads);
+                if (pNode->mpJob)
+                    pNode->mpJob->Release();
+                operator_delete__(pNode);
+                pNode = pNext;
+                continue;
+            }
+        }
+        pNode = RBTreeIncrement(pNode);
+    }
+}
+
+// @ 0x00a0bbd0
+saWorld* saAnimManager::CreateWorld(saWorld* pSource)
+{
+    saWorld* pWorld;
+    void* pMem = operator_new(0x303c, "Anim/Manager/new_world", 0, 0, 0, 0);
+    if (pMem)
+        pWorld = ((saWorldCtor*)pMem)->Construct(this, pSource);
+    else
+        pWorld = 0;
+    pSource = pWorld;
+    if (pWorld)
+        pWorld->AddRef();
+    mWorlds.push_back(pSource);
+    pWorld = pSource;
+    if (pWorld)
+        pWorld->Release();
+    return pWorld;
 }
 
 // @ 0x00a0bcf0
