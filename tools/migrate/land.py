@@ -16,7 +16,8 @@ usage: land.py <batch> [--only SUBSTR | --exact MODULE] [--log work/migrate/land
 import argparse, glob, json, os, re, subprocess, sys, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-PY = os.path.join(ROOT, ".venv", "bin", "python")
+# on Windows .venv/bin/python is a sh shim subprocess cannot start: the venv's python.exe
+PY = os.path.join(ROOT, ".venv", "Scripts", "python.exe") if os.name == "nt" else os.path.join(ROOT, ".venv", "bin", "python")
 SWEEP = os.path.join(ROOT, "work", "sweep_pod")
 RANK = {"PASS": 4, "PASS-FP": 4, "WEAK": 3, "WEAK-FP": 3, "TIMEOUT": 2, "UNSUPPORTED": 1, "FAIL": 0}
 # one scratch per worktree when tools/migrate/land_par.py runs several (work/ is shared through a symlink there)
@@ -25,6 +26,12 @@ SCRATCH = os.environ.get("LAND_SCRATCH") or os.path.join(ROOT, "work", "migrate"
 
 def run(args, timeout=3600):
     r = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
+    return r.returncode, r.stdout + r.stderr
+
+
+def run_env(args, extra, timeout=3600):
+    """run() with extra environment variables (no `env` program on Windows; bash there is Git Bash's)."""
+    r = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout, env=dict(os.environ, **extra))
     return r.returncode, r.stdout + r.stderr
 
 
@@ -234,7 +241,7 @@ def land_once(m, sids, bname, batch, log):
     ok, why, bad = gate(m, log)
     if ok:
         # the gate just ran run_all and the asm audit on these files: commit_obj.sh need not repeat them
-        rc, out = run(["env", "LAND_GATED=1", "bash", "tools/migrate/commit_obj.sh", batch, m])
+        rc, out = run_env(["bash", "tools/migrate/commit_obj.sh", batch, m], {"LAND_GATED": "1"})
         ok, why = rc == 0, (out.strip().splitlines() or [""])[-1][:200]
     if not ok:
         rollback(m, sids)

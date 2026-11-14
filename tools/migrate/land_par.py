@@ -19,7 +19,8 @@ usage: land_par.py <batch> [--workers 4] [--check]     log: work/migrate/land_<b
 import argparse, json, os, re, subprocess, sys, threading, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-PY = os.path.join(ROOT, ".venv", "bin", "python")
+# on Windows .venv/bin/python is a sh shim subprocess cannot start: the venv's python.exe
+PY = os.path.join(ROOT, ".venv", "Scripts", "python.exe") if os.name == "nt" else os.path.join(ROOT, ".venv", "bin", "python")
 
 
 def git(*args, cwd=ROOT):
@@ -45,7 +46,15 @@ def link_missing(src_root, wt, rel):
     the links alone (they are untracked)."""
     dst = os.path.join(wt, rel)
     if not os.path.lexists(dst):
-        os.symlink(os.path.join(src_root, rel), dst)
+        src = os.path.join(src_root, rel)
+        try:
+            os.symlink(src, dst, target_is_directory=os.path.isdir(src))
+        except OSError:
+            # Windows without the symlink privilege: a junction for a directory, a hard link for a file
+            if os.path.isdir(src):
+                subprocess.run(["cmd", "/c", "mklink", "/J", dst, src], capture_output=True)
+            else:
+                os.link(src, dst)
     elif os.path.isdir(dst) and not os.path.islink(dst):
         for name in os.listdir(os.path.join(src_root, rel)):
             if not name.startswith("landwt_"):

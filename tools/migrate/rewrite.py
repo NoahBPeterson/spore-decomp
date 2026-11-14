@@ -49,6 +49,14 @@ import headers as H  # noqa: E402
 import rewrite_stubs as RS  # noqa: E402
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), "matching"))
 import asm_audit  # noqa: E402
+import run_all as _RA  # noqa: E402   (winpath / cl_native: the compilers run directly on Windows)
+
+
+def run_cl(args):
+    """cl.sh under wine, or the same compiler run directly on Windows (run_all.cl_native)."""
+    if _RA.NATIVE:
+        return _RA.cl_native(list(args))
+    return subprocess.run([W("tools", "matching", "cl.sh"), *args], capture_output=True, text=True)
 
 W = lambda *p: os.path.join(ROOT, *p)
 
@@ -1974,10 +1982,9 @@ class Rewrite:
         os.replace(tmp, cp)
 
     def cl(self, path, extra):
-        w = lambda p: "Z:" + p.replace("/", "\\")
-        cmd = [W("tools", "matching", "cl.sh"), "/nologo", "/c", "/O2", "/MD", "/Gy", "/TP", "/GS-", "/arch:SSE",
-               "/I" + w(INC), "/I" + w(MINC), "/Fo" + w(path[:-4] + ".obj")] + extra + [w(path)]
-        r = subprocess.run(cmd, capture_output=True, text=True)
+        w = _RA.winpath
+        r = run_cl(["/nologo", "/c", "/O2", "/MD", "/Gy", "/TP", "/GS-", "/arch:SSE",
+                    "/I" + w(INC), "/I" + w(MINC), "/Fo" + w(path[:-4] + ".obj")] + extra + [w(path)])
         return r.stdout + r.stderr
 
     # ---- 3. member maps ------------------------------------------------------------------------
@@ -5123,11 +5130,11 @@ class Rewrite:
             d, obj = os.path.split(module)
             tu = W("src", "game", d, obj[:-4] + ".cpp")
             ofile = os.path.join(self.scratch, "tu_%s.obj" % obj[:-4])
-            w = lambda p: "Z:" + p.replace("/", "\\")
+            w = _RA.winpath
             if os.path.exists(ofile):
                 os.remove(ofile)
-            r = subprocess.run([W("tools", "matching", "cl.sh"), "/nologo", "/c", "/O2", "/MD", "/Gy", "/EHsc", "/TP", "/GS-", "/arch:SSE",
-                                "/I" + w(INC), "/I" + w(MINC), "/Fo" + w(ofile), w(tu)], capture_output=True, text=True)
+            r = run_cl(["/nologo", "/c", "/O2", "/MD", "/Gy", "/EHsc", "/TP", "/GS-", "/arch:SSE",
+                        "/I" + w(INC), "/I" + w(MINC), "/Fo" + w(ofile), w(tu)])
             log = r.stdout + r.stderr
             self.compile_log = log
             if not os.path.exists(ofile) or re.search(r"\berror C\d+", log):

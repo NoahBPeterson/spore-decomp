@@ -184,9 +184,12 @@ def main():
     os.makedirs(scratch, exist_ok=True)
     pp = os.path.join(scratch, "probe_%s.cpp" % cls)
     open(pp, "w").write("\n".join(probe) + "\n")
-    win = lambda p: "Z:" + p.replace("/", "\\")
-    r = subprocess.run([W("tools/matching/cl.sh"), "/nologo", "/c", "/TP", "/W3", "/I" + win(W("src/game/include")),
-                        "/Fo" + win(os.path.join(scratch, "probe_%s.obj" % cls)), win(pp)], capture_output=True, text=True)
+    sys.path.insert(0, W("tools", "matching"))
+    import run_all as _RA   # winpath / cl_native: the compiler runs directly on Windows
+    win = _RA.winpath
+    args = ["/nologo", "/c", "/TP", "/W3", "/I" + win(W("src/game/include")),
+            "/Fo" + win(os.path.join(scratch, "probe_%s.obj" % cls)), win(pp)]
+    r = _RA.cl_native(args) if _RA.NATIVE else subprocess.run([W("tools/matching/cl.sh"), *args], capture_output=True, text=True)
     out = r.stdout + r.stderr
     got = {}
     for m in re.finditer(r"'char \(\*\)\[(\d+)\]'", out):

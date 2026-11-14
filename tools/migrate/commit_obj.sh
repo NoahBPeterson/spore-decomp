@@ -17,7 +17,7 @@ if git cat-file -e HEAD:src/game/$M.cpp 2>/dev/null; then
   if [ -n "$gone" ] && [ -z "$FORCE" ]; then echo "FUNCTIONS REMOVED from the TU (not committed; FORCE=1 to override):"; echo "$gone"; exit 1; fi
 fi
 [ -n "$LAND_GATED" ] || .venv/bin/python tools/matching/asm_audit.py --all-rows src/game/$M.cpp >/dev/null 2>&1 || { echo "ASM AUDIT FAILED: not committed"; .venv/bin/python tools/matching/asm_audit.py --all-rows src/game/$M.cpp | head -5; exit 1; }
-sl=$(python3 -c "
+sl=$(.venv/bin/python -c "
 import json; print(' '.join(sorted({'symbols/slices/%s.txt' % e['id'] for e in json.load(open('work/batches/$B.json')) if e['module'] == '$M'})))")
 files=""
 # a new (untracked) symbols file is also a change: git diff --quiet says "no diff" for it, so it was never added
