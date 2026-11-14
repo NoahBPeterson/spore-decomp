@@ -377,7 +377,7 @@ int* FUN_00e82420(int param_1, int param_2)
 // @ 0x00e82490
 void FUN_00e82490()
 {
-    int* p = (int*)FUN_00f473a0(0xc, 0, 0, 0, 0, 0);
+    int* p = (int*)FUN_00f473a0(0xc, "Simulator", 0, 0, 0, 0);
     if (p != 0) {
         *p = (int)p;
         p[1] = (int)p;

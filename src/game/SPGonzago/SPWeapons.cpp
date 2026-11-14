@@ -4658,16 +4658,18 @@ FlakProjectile* FlakProjectile::ctor()
     ((void(__thiscall*)(void*)) FUN_00b18660)(this);
     ((void(__thiscall*)(void*)) FUN_00c43860)((char*)this + 0x34);
 
-    mpVt4 = (void*)g_vft_145dca8;
+    *(void* volatile*)&mpVt4 = (void*)g_vft_145dca8;
     mTargetOffset[0] = 0.0f;
     mTargetOffset[1] = 0.0f;
     mTargetOffset[2] = 0.0f;
+    _ReadWriteBarrier();
     mFlag514 = 0;
     mpVt0 = (void*)g_vft_1475650;
     mpVt1 = (void*)g_vft_147563c;
     mpVtLoco = (void*)g_vft_1475540;
     mpVt3 = (void*)g_vft_1475538;
     mpVt4 = (void*)g_vft_1475510;
+    _ReadWriteBarrier();
     mp518 = 0;
     m51c = 0.0f;
     return this;

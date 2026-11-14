@@ -10,3 +10,4 @@
 ../src/game/SPGonzago/_at_00e80000.cpp  ?treeInsertPending@@YAXXZ  00e87000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e80000.cpp  ?collectSphere@@YAHPAUEffTree@@PBM1PAPAXHM@Z  00e87200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00e80000.cpp  ??0cCreatureView@SP@@QAE@XZ  00e8bc80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00e80000.cpp  ?FUN_00e82490@@YAXXZ  00e82490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -15,7 +15,6 @@
 00b21da0 149 intrusive-list segment swap; MSVC keeps the anchor addresses in edx/esi and reorders the +4/+8/+0xc swap/store sequence (original reloads each field through [ecx+..]/[eax+..]), 165 vs 184 bytes flags: /O2 /MD /Gy /TP /arch:SSE
 00b21e60 324 complete; codegen differs (see source) ; difftest WEAK (117/400 valid, 33% coverage; callees mapped) flags: /O2 /MD /Gy /TP /arch:SSE
 00b22060 85 complete; codegen differs (see source) ; difftest WEAK (167/400 valid, 62% coverage; callees mapped) flags: /O2 /MD /Gy /TP /arch:SSE
-00b22100 3 complete; codegen differs (see source) ; difftest PASS (vtable stores now name the image vtables through a non-polymorphic base) options: /O2 /MD /Gy /TP /arch:SSE [R35: claimed for matching work]
 00b222a0 119 complete; codegen differs (see source) flags: /O2 /MD /Gy /TP /arch:SSE
 00b22440 172 complete; codegen differs (see source) flags: /O2 /MD /Gy /TP /arch:SSE
 00b225d0 107 complete; codegen differs (see source) flags: /O2 /MD /Gy /TP /arch:SSE

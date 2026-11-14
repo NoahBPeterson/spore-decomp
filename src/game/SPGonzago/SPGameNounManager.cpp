@@ -523,7 +523,11 @@ struct cGameDataNV {
     cGameDataNV();   // 0x00b18660
 };
 struct VGOBase : cGameDataNV {
-    VGOBase() {}
+    VGOBase() {
+        *(void* volatile*)&vp0 = vtbl_cVehicleGroupOrder;
+        *(void* volatile*)&vp1 = vtbl_cVehicleGroupOrder_1;
+        _ReadWriteBarrier();
+    }
 };
 struct cVehicleGroupOrder : VGOBase {
     VGOTree tree;       // +0x34
@@ -2763,9 +2767,6 @@ void __thiscall SPVecP::swap(SPVecP& x)
 // @ 0x00b22100
 cVehicleGroupOrder::cVehicleGroupOrder()
 {
-    *(void* volatile*)&vp0 = vtbl_cVehicleGroupOrder;
-    *(void* volatile*)&vp1 = vtbl_cVehicleGroupOrder_1;
-    _ReadWriteBarrier();
     arc64 = 0;
     f7c = 0; f80 = 0; f84 = 0;
 }
