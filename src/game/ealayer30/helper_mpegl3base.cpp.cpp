@@ -406,6 +406,9 @@ float g[0x40];   // 0x016f1740
 // ---- items of slice s01169f50 end
 
 // ---- items of slice s0116dd70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" const float g_antialiasCs_14da818[8];              // 0x014da818
+extern "C" const float g_antialiasCa_14da838[8];              // 0x014da838
+extern "C" const float g_antialiasCaPos_14cba4c[8];           // 0x014cba4c
 struct SFBandIndex_s0116dd70 {
     short l[23];      // +0x00
     u8    s[14];      // +0x2e
@@ -1666,6 +1669,30 @@ void HELPER_CMpegLayer3Base_s0116dd70::Reorder(int gr, int ch, float* src, float
                 for (int win = 0; win < 3; win++)
                     dst[base + 3 * j + win] = src[base + win * width + j];
             base += 3 * width;
+        }
+    }
+}
+
+// @ 0x0116e250
+void HELPER_CMpegLayer3Base_s0116dd70::Antialias(int gr, int ch, float* xr)
+{
+    III_gr_info_s0116dd70* gi = &gr_info[ch + 2 * gr];
+
+    float* end;
+    if (gi->windowSwitchingFlag && gi->blockType == 2) {
+        if (!gi->mixedBlockFlag)
+            return;
+        end = xr + 18;
+    } else {
+        end = xr + 558;
+    }
+
+    for (float* p = xr + 18; p <= end; p += 18) {
+        for (int ss = 0; ss < 8; ss++) {
+            float u = p[-1 - ss];
+            float v = p[ss];
+            p[-1 - ss] = u * g_antialiasCs_14da818[ss] - v * g_antialiasCa_14da838[ss];
+            p[ss]      = v * g_antialiasCs_14da818[ss] - u * g_antialiasCaPos_14cba4c[7 - ss];
         }
     }
 }
