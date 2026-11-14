@@ -6906,6 +6906,9 @@ def pin_hash_seed():
     A fixed seed makes every run reproducible."""
     if os.environ.get("PYTHONHASHSEED") != "0":
         os.environ["PYTHONHASHSEED"] = "0"
+        if os.name == "nt":
+            # Windows execv starts a new process and the caller sees this one exit at once (status 0, no output)
+            sys.exit(subprocess.run([sys.executable] + sys.argv).returncode)
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
 
