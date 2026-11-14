@@ -70,13 +70,16 @@ struct cCommManager {
     void RemoveMatching();         // 0x00aea720
 };
 cCommManager* __stdcall GetCommManager(int a, int b, void* owner);   // 0x00b3d4a0
+struct cKeyVector {                    // eastl::vector<EA::ResourceMan::Key>-like, 0x14 bytes
+    EA::ResourceMan::Key* mpBegin;     // +0x00
+    EA::ResourceMan::Key* mpEnd;       // +0x04
+    u8  mPad0008[0xc];                 // capacity + allocator
+    int size() const { return (int)(mpEnd - mpBegin); }
+};
 struct cPlanetCounts {
     u8  mPad00bc[0xbc];
-    int mBc;                       // 0xbc
-    int mC0;                       // 0xc0
-    u8  mPad00c4[0xd0 - 0xc4];
-    int mD0;                       // 0xd0
-    int mD4;                       // 0xd4
+    cKeyVector mVecBc;                 // 0xbc (mpBegin 0xbc, mpEnd 0xc0)
+    cKeyVector mVecD0;                 // 0xd0 (mpBegin 0xd0, mpEnd 0xd4)
 };
 struct cPlanet {
     u8             mPad0000[0x13c];
@@ -796,10 +799,7 @@ int cSPMissionFetch::UpdateDuration()
         if (planet != 0) {
             planet = GetTargetPlanet();
             cPlanetCounts* counts = planet->mpCounts13c;
-            int a = (counts->mC0 - counts->mBc) / 12;
-            int b = (counts->mD4 - counts->mD0) / 12;
-            int cells = a + b;
-            mField80 *= cells;
+            mField80 *= counts->mVecD0.size() + counts->mVecBc.size();
         }
         value = mField80;
     }

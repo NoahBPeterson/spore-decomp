@@ -34,7 +34,7 @@ bool  __cdecl FUN_00a48b30(void* cls, void* method, uint32 a, uint32 b,
 bool  __cdecl FUN_00a48a30(void* cls, void* method, uint32 a, uint32 b,
                              uint32 c, uint32 d);                            // 0x00a48a30
 void* __cdecl FUN_00a49390(void* cls);                                   // 0x00a49390
-void  __cdecl FUN_00a49d30(uint32 a, uint32 b, uint32 c, void* obj);           // 0x00a49d30
+void  __cdecl FUN_00a49d30(void* obj, uint32 b, uint32 c);           // 0x00a49d30
 void  __cdecl FUN_00a49e40(uint32 a, uint32 b, uint32 c, int n, void* arr); // 0x00a49e40
 void  __cdecl FUN_00a49a00(void* obj, void* b, float* v);                  // 0x00a49a00
 void  __cdecl FUN_00a487f0(const char* fmt, ...);                                 // 0x00a487f0

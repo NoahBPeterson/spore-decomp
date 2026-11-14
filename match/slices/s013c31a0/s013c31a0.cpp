@@ -141,6 +141,13 @@ void f_013c3550() {
     }
 }
 
+// The retail link placed a 1-byte empty COMDAT (an ICF-folded `void f(){}`) in the 16-byte
+// slot after f_013c3550's body, so that function's fingerprint extent spans the linker's
+// int3 padding plus the empty function's `ret`. Row 013c3550 is therefore verified from a
+// link (ltcg/013c3550.cpp builds it /GL + link /LTCG); this empty function supplies the
+// adjacent `ret` in that layout and matches nothing on its own.
+void a08_link_pad_ret() {}
+
 // @ 0x013C35B0
 void f_013c35b0() {
     char* p = g_168dc98;

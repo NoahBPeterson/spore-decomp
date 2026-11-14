@@ -3,3 +3,4 @@ slices/s01133a80/s01133a80.cpp  ?FUN_01133f40@@YIXH@Z  01133f40  /vc71 /O2 /MD /
 slices/s01133a80/s01133a80.cpp  ?FUN_01134380@@YA_NH@Z  01134380  /vc71 /O2 /MD /Gy /TP /arch:SSE
 slices/s01133a80/s01133a80.cpp  ?FUN_01134700@@YA_NH@Z  01134700  /vc71 /O2 /MD /Gy /TP /arch:SSE
 slices/s01133a80/s01133a80.cpp  ?FUN_01133b60@@YIHH@Z  01133b60  /O2 /MD /Gy /TP /arch:SSE
+slices/s01133a80/s01133a80.cpp  ??0SndMixer@@QAE@XZ  011341c0  /O2 /MD /Gy /TP /arch:SSE

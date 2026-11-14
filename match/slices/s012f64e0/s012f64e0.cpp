@@ -20,6 +20,16 @@ extern void Matrix4_SetIdentity(void* out);  // 0x004015f0
 extern void Matrix4_SetZero(void* out);      // 0x00401720
 
 struct Vector2f { float x, y; };
+struct Vector4f {
+    float x, y, z, w;
+    void Set(float ax, float ay, float az, float aw)
+    {
+        x = ax;
+        y = ay;
+        z = az;
+        w = aw;
+    }
+};
 struct Mat3 { uint32_t d[9]; };
 struct Mat4 { uint32_t d[16]; };
 
@@ -57,12 +67,7 @@ void init_164b384()
 void init_164b3f0()
 {
     ((GlobalLock*)0x164b3f0)->bootstrap();
-    float half = 0.5f;
-    float one = 1.0f;
-    *(float*)0x164b3f4 = half;
-    *(float*)0x164b3f0 = one;
-    *(float*)0x164b3f8 = 0.0f;
-    *(float*)0x164b3fc = one;
+    ((Vector4f*)0x164b3f0)->Set(1.0f, 0.5f, 0.0f, 1.0f);
 }
 
 // @ 0x012f65e0

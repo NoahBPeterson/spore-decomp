@@ -31,3 +31,4 @@ slices/s012f64e0/s012f64e0_od.cpp  ?init_1542c44@@YAXXZ  012f7570  /Od /Ob1 /MD 
 slices/s012f64e0/s012f64e0_od.cpp  ?init_1546064@@YAXXZ  012fc2b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
 slices/s012f64e0/s012f64e0_od.cpp  ?init_15477a4@@YAXXZ  012fe000  /Od /Ob1 /MD /Gy /TP /arch:SSE
 slices/s012f64e0/s012f64e0_od.cpp  ?init_1548764@@YAXXZ  012ffaf0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s012f64e0/s012f64e0.cpp  ?init_164b3f0@@YAXXZ  012f65a0  /O2 /MD /Gy /EHsc /TP /arch:SSE

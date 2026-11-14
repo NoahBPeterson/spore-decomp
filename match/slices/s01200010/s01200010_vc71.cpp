@@ -3,10 +3,11 @@
 //
 // These helpers only match under the Visual C++ Toolkit 2003 compiler (cl 13.10): cl 15 folds the
 // rebase second parameter into the memory operand (`sub ecx,[esp+8]` / `add [eax],ecx`), while retail
-// keeps the base in a register (`mov edx,[esp+8]; sub ecx,edx`); and for the fixup destructor cl 15
-// tests `cmp [ecx+0x18],0` and loads call targets into registers where retail loads-then-tests and
-// calls through memory. They live in their own translation unit because the rest of the serializer
-// slice uses intrinsics and __thiscall that cl 13.10 rejects.
+// keeps the base in a register (`mov edx,[esp+8]; sub ecx,edx`); for the single-slot rebase 0x01200fb0
+// cl 15 additionally reuses `sub [eax],eax` instead of keeping the delta in a register; and for the
+// fixup destructor cl 15 tests `cmp [ecx+0x18],0` and loads call targets into registers where retail
+// loads-then-tests and calls through memory. They live in their own translation unit because the rest
+// of the serializer slice uses intrinsics and __thiscall that cl 13.10 rejects.
 //
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
 
@@ -40,6 +41,24 @@ void Rebase3(Rel3* p, void* from)
 	p->mV2 += d;
 	p->mV0 += d;
 	p->mV1 += d;
+}
+
+// Context that only provides the relocation base (same shape as the main file's Base20Ctx).
+struct Base20Ctx
+{
+	unsigned char pad00[0x20];
+	int* mpBase;                     // +0x20
+};
+
+// @ 0x01200fb0
+Base20Ctx* RebaseOneReversed(int* p, Base20Ctx* ctx)
+{
+	if (p != ctx->mpBase)
+	{
+		*p = *p - (int)p;
+		*p = (int)ctx->mpBase + *p;
+	}
+	return ctx;
 }
 
 // @ 0x01201070
