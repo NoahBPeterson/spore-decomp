@@ -1,4 +1,4 @@
-// src/game/SPGonzago/_at_00b30000.cpp -- migrated from slice(s) s00b3fe40, s00b3ef30, s00b3cf00, s00b3ac20, s00b3aaf0, s00b38190, s00b362c0, s00b35300 by tools/migrate/rewrite.py
+// src/game/SPGonzago/_at_00b30000.cpp -- migrated from slice(s) s00b38e50, s00b3fe40, s00b3ef30, s00b3cf00, s00b3ac20, s00b3aaf0, s00b38190, s00b362c0, s00b35300 by tools/migrate/rewrite.py
 // Object file: SPGonzago/_at_00b30000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1038,6 +1038,165 @@ template <class T> __forceinline T Clamp(T v, T lo, T hi) { return (v < lo) ? lo
 __forceinline unsigned int EaxBits(float v) { union { float f; unsigned int u; } t; t.f = v; return t.u; }
 // ---- items of slice s00b3fe40 end
 
+// ---- items of slice s00b38e50_g7 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct ResManager_s00b3_8e50__g7 {
+    virtual void v000();
+    virtual void v004();
+    virtual void v008();
+    virtual void v00c();
+    virtual void v010();
+    virtual void v014();
+    virtual void v018();
+    virtual void v01c();
+    virtual void v020();
+    virtual void v024();
+    virtual void v028();
+    virtual void v02c();
+    virtual void v030();
+    virtual void v034();
+    virtual void v038();
+    virtual void v03c();
+    virtual void v040();
+    virtual void v044();
+    virtual void v048();
+    virtual void v04c();
+    virtual void v050();
+    virtual void v054();
+    virtual void v058();
+    virtual void v05c();
+    virtual void v060();
+    virtual void v064();
+    virtual void v068();
+    virtual void v06c();
+    virtual void v070();
+    virtual void v074();
+    virtual void v078();
+    virtual void v07c();
+    virtual void v080();
+    virtual void v084();
+    virtual void v088();
+    virtual void v08c();
+    virtual void v090();
+    virtual void v094();
+    virtual void v098();
+    virtual void v09c();
+    virtual void v0a0();
+    virtual void v0a4();
+    virtual void v0a8();
+    virtual void v0ac();
+    virtual void v0b0();
+    virtual void v0b4();
+    virtual void v0b8();
+    virtual void v0bc();
+    virtual void v0c0();
+    virtual void v0c4();
+    virtual void v0c8();
+    virtual void v0cc();
+    virtual void v0d0();
+    virtual void v0d4();
+    virtual void v0d8();
+    virtual void v0dc();
+    virtual void v0e0();
+    virtual void v0e4();
+    virtual void v0e8();
+    virtual void v0ec();
+    virtual void v0f0();
+    virtual void v0f4();
+    virtual void v0f8();
+    virtual void v0fc();
+    virtual void v100();
+    virtual void v104();
+    virtual void v108();
+    virtual void v10c();
+    virtual void v110();
+    virtual void v114();
+    virtual void v118();
+    virtual void v11c();
+    virtual void v120();
+    virtual void v124();
+    virtual void v128();
+    virtual void v12c();
+    virtual void v130();
+    virtual void v134();
+    virtual void v138();
+    virtual void v13c();
+    virtual void v140();
+    virtual void v144();
+    virtual void v148();
+    virtual void v14c();
+    virtual void v150();
+    virtual void v154();
+    virtual void v158();
+    virtual void v15c();
+    virtual void v160();
+    virtual void v164();
+    virtual void v168();
+    virtual void v16c();
+    virtual void Release(void* object, char threaded);  // +0x170
+};
+struct Res_s00b3_8e50__g7 {
+    ResManager_s00b3_8e50__g7* mpManager;   // +0x00
+    u32 mFlags;              // +0x04
+    u8 pad08[0x40 - 0x08];
+    int mRefCount;           // +0x40
+
+    void AddRef() { ++mRefCount; }
+    void Release()
+    {
+        if (mRefCount > 1)
+            --mRefCount;
+        else
+        {
+            bool threaded = (mFlags >> 31) & 1;
+            mpManager->Release(this, (char)threaded);
+        }
+    }
+};
+struct SmartPtr {
+    Res_s00b3_8e50__g7* mpRes;                                        // +0x00
+
+    SmartPtr() {}
+    SmartPtr(const SmartPtr& o) : mpRes(o.mpRes) { if (mpRes) mpRes->AddRef(); }
+    ~SmartPtr() { if (mpRes) mpRes->Release(); }
+
+    SmartPtr& operator=(Res_s00b3_8e50__g7* p);                       // 0x00478db0 (not inlined)
+
+    __forceinline SmartPtr& operator=(const SmartPtr& o)
+    {
+        Res_s00b3_8e50__g7* p = o.mpRes;
+        if (p != mpRes)
+        {
+            Res_s00b3_8e50__g7* old = mpRes;
+            if (p)
+                p->AddRef();
+            mpRes = p;
+            if (old)
+                old->Release();
+        }
+        return *this;
+    }
+};
+struct Elem_s00b3_8e50__g7 {
+    SmartPtr mObj;   // +0x00
+    float mVal;      // +0x04
+
+    Elem_s00b3_8e50__g7() {}
+    Elem_s00b3_8e50__g7(const Elem_s00b3_8e50__g7& o) : mObj(o.mObj), mVal(o.mVal) {}
+    ~Elem_s00b3_8e50__g7() {}
+
+    __forceinline Elem_s00b3_8e50__g7& operator=(const Elem_s00b3_8e50__g7& o)
+    {
+        mObj = o.mObj;
+        mVal = o.mVal;
+        return *this;
+    }
+};
+struct Cmp {
+    bool Less(const Elem_s00b3_8e50__g7& a, const Elem_s00b3_8e50__g7& b);           // 0x00b385d0
+};
+void PushHeap(Elem_s00b3_8e50__g7* first, int topIndex, int holeIndex, Elem_s00b3_8e50__g7 value, Cmp comp);  // 0x00b38bf0
+// ---- items of slice s00b38e50_g7 end
+
 // @ 0x00b35b80
 Vec3 __stdcall GetNounOffset(u32 id)
 {
@@ -1781,6 +1940,39 @@ void FUN_00b38bf0(RefPair_s00b3_8190* base, int first, int hole, RefPair_s00b3_8
     }
     base[hole].Assign(value);
     if (value.mpHandle) value.mpHandle->Decrement();
+}
+
+// @ 0x00b39970
+void SiftDown(Elem_s00b3_8e50__g7* first, int topIndex, int length, int holeIndex, Elem_s00b3_8e50__g7 value, Cmp comp)
+{
+    int child = 2 * holeIndex + 2;
+    if (child < length)
+    {
+        do
+        {
+            if (comp.Less(first[child], first[child - 1]))
+                --child;
+            first[holeIndex] = first[child];
+            holeIndex = child;
+            child = 2 * child + 2;
+        } while (child < length);
+    }
+    if (child == length)
+    {
+        first[holeIndex] = first[child - 1];
+        holeIndex = child - 1;
+    }
+    PushHeap(first, topIndex, holeIndex, value, comp);
+}
+
+// @ 0x00b39ac0
+void PopHeap(Elem_s00b3_8e50__g7* first, Elem_s00b3_8e50__g7* last, Cmp comp)
+{
+    Elem_s00b3_8e50__g7* pLast = last - 1;
+    Elem_s00b3_8e50__g7 value = *pLast;
+    pLast->mObj = first->mObj.mpRes;
+    pLast->mVal = first->mVal;
+    SiftDown(first, 0, (int)(last - first) - 1, 0, value, comp);
 }
 
 // @ 0x00b3aaf0
