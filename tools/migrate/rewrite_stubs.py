@@ -106,35 +106,84 @@ def mangled_path(sym):
 LOCAL_TYPES = re.compile(r'^\s*#\s*include\s+"(?:\.\./)*(?:include/|game/)?types\.h"\s*$')
 
 
+TRUE_MACROS = {"_WIN32", "WIN32", "_MSC_VER", "_M_IX86", "_X86_", "__cplusplus"}
+FALSE_MACROS = {"__APPLE__", "__linux__", "__unix__", "__GNUC__", "__clang__", "_WIN64", "_M_X64", "__x86_64__",
+                "__MINGW32__", "__CYGWIN__"}
+
+
+def pp_value(s):
+    """True / False for a conditional the Win32 cl build decides on its own (`#if 0`, `#ifdef _WIN32`, `#if
+    !defined(__APPLE__)`, ...), None for anything else (it stays in the text)."""
+    m = re.match(r"#\s*(ifdef|ifndef)\s+(\w+)\s*(?://.*|/\*.*)?$", s)
+    if m:
+        v = True if m.group(2) in TRUE_MACROS else False if m.group(2) in FALSE_MACROS else None
+        return None if v is None else (v if m.group(1) == "ifdef" else not v)
+    m = re.match(r"#\s*(?:el)?if\s+(!?)\s*(?:defined\s*\(\s*(\w+)\s*\)|defined\s+(\w+)|(\d+))\s*(?://.*|/\*.*)?$", s)
+    if not m:
+        return None
+    if m.group(4) is not None:
+        v = m.group(4) != "0"
+    else:
+        name = m.group(2) or m.group(3)
+        v = True if name in TRUE_MACROS else False if name in FALSE_MACROS else None
+        if v is None:
+            return None
+    return (not v) if m.group(1) else v
+
+
 def drop_if0(lines):
-    """Lines without `#if 0 .. #endif` blocks (nesting-aware; an `#else` of an `#if 0` keeps its branch).  mig8 s007de7d0: the
-    header's `#if 0` block of equivalence-checker annotations re-declared `struct FloatVec`, which the preamble parser took as a
-    second definition (C2011; the slice's six functions were held)."""
-    out, stack = [], []          # stack of (dead?, is_if0) per open conditional
+    """Lines with every conditional the Win32 build decides on its own resolved: `#if 0 .. #endif` blocks dropped
+    (nesting-aware; an `#else` of an `#if 0` keeps its branch), and since 2026-11-14 platform tests too (`#if
+    defined(_WIN32)` keeps its branch, `#else` POSIX branches go).  mig8 s007de7d0: the header's `#if 0` block of
+    equivalence-checker annotations re-declared `struct FloatVec`, which the preamble parser took as a second definition
+    (C2011; the slice's six functions were held).  mig38 Havok: hk31_b005.h's `#if defined(_WIN32) .. #else #include
+    <pthread.h> .. #endif` reached the module TU as loose lines (the preamble parser keeps no conditional structure),
+    C1083 pthread.h on 7 slices."""
+    out, stack = [], []          # per open conditional: [this branch dead?, decided?, a branch already taken?]
     for l in lines:
         s = l.strip()
-        dead = any(d for d, _z in stack)
+        outer_dead = any(f[0] for f in stack[:-1]) if stack else False
         if re.match(r"#\s*if(?:n?def)?\b", s):
-            stack.append((bool(re.match(r"#\s*if\s+0\s*(?://.*|/\*.*)?$", s)), bool(re.match(r"#\s*if\s+0\b", s))))
-            if not stack[-1][1] and not dead:
+            dead_above = any(f[0] for f in stack)
+            v = pp_value(s)
+            if v is None:
+                stack.append([False, False, False])
+                if not dead_above:
+                    out.append(l)
+            else:
+                stack.append([not v, True, v])
+            continue
+        if re.match(r"#\s*elif\b", s) and stack:
+            f = stack[-1]
+            if f[1]:
+                v = pp_value(s)
+                if f[2]:
+                    f[0] = True
+                elif v is None:             # undecidable after a decided-false branch: keep it as an #if
+                    f[0], f[1] = False, False
+                    if not outer_dead:
+                        out.append(re.sub(r"#\s*elif", "#if", l, count=1))
+                else:
+                    f[0], f[2] = not v, v
+                continue
+            if not any(x[0] for x in stack):
                 out.append(l)
             continue
         if re.match(r"#\s*else\b", s) and stack:
-            d, z = stack[-1]
-            if z:
-                stack[-1] = (not d, z)
+            f = stack[-1]
+            if f[1]:
+                f[0] = f[2]
+                f[2] = True
                 continue
-            if not dead:
+            if not outer_dead:
                 out.append(l)
-            continue
-        if re.match(r"#\s*elif\b", s) and stack and stack[-1][1]:
             continue
         if re.match(r"#\s*endif\b", s) and stack:
-            _d, z = stack.pop()
-            if not z and not any(d for d, _z in stack):
+            f = stack.pop()
+            if not f[1] and not any(x[0] for x in stack):
                 out.append(l)
             continue
-        if not dead:
+        if not any(f[0] for f in stack):
             out.append(l)
     return out
 
