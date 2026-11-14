@@ -3,12 +3,15 @@
 ../src/game/SPGonzago/SPPlayer.cpp  ?FreeNodes@VecHdr@@QAEXPAXI@Z  00ba2e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?FUN_00ba2e50@@YAPAXHHPAI@Z  00ba2e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?Run_00ba2f20@W@@QAEXXZ  00ba2f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?FUN_00c754e0@@YGXPAUcGameNounManager@@@Z  00c754e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?Increment@cDepthCounter@@QAEX_N@Z  00c755c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?Decrement@cDepthCounter@@QAEX_N@Z  00c755f0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?AddWarCaptureIncrement@cPlayer_s00c7_5e70@@QAEXII@Z  00c76790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?GetPlayerWarCaptureDelta@cPlayer_s00c7_5e70@@QAEHPAU1@@Z  00c76a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?Erase@cHashTableB@@QAEHPBI@Z  00c76be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?FixupWarData@@YA_NPAXAAUcWarMap@@@Z  00c76e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?CopyFrom@cWarRec@@QAEPAU1@ABU1@@Z  00c76f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?ctor@cSpacePlayerWarData@@QAEPAU1@ABU1@@Z  00c76f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?Contains@cHashTableD@@QAE_NI@Z  00c772c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?GetFlagValue@cPlayer_s00c7_7380@SP@@QAE_NIPAH@Z  00c77380  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?HasFlag@cPlayer_s00c7_7380@SP@@QAE_NI@Z  00c773d0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
@@ -26,6 +29,3 @@
 ../src/game/SPGonzago/SPPlayer.cpp  ?ResetWarDataWithPlayer@cPlayer_s00c7_b120@SP@@QAEXH@Z  00c7be30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?FUN_01351ae0@@YAXXZ  01351ae0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?FUN_01351e60@@YAXXZ  01351e60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPPlayer.cpp  ?CopyFrom@cWarRec@@QAEPAU1@ABU1@@Z  00c76f10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPPlayer.cpp  ?ctor@cSpacePlayerWarData@@QAEPAU1@ABU1@@Z  00c76f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPPlayer.cpp  ?FUN_00c754e0@@YGXPAUcGameNounManager@@@Z  00c754e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1163,6 +1163,7 @@ struct W {
 // ---- items of slice s00ba2590 end
 
 // ---- items of slice s00c75e70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const char  g_szAllocator[];        // 0x013ebb38 eastl allocator.h path
 extern float       g_f0p001;               // 0x013f9428, 0.001f
 typedef unsigned int   U32;
 typedef unsigned char  U8;
@@ -1206,7 +1207,9 @@ cRBNodeBase* __cdecl RBTreeIncrement(const cRBNodeBase* pNode);            // 0x
 struct IRegisterHost {
     void __thiscall Register(void* pValue, U32* pData, const wchar_t* pName);  // 0x00695b40
 };
+void* __cdecl operator_new(U32 size, const char* pName, int a, int b, const char* pAlloc, U32 line); // 0x00f473a0
 void  __cdecl operator_delete(void* p);                                                  // 0x00f47380
+extern const char  g_szSimulator_s00c7_5e70[];        // 0x013f09b4 "Simulator"
 extern U32         g_1579600;              // 0x01579600
 extern U32         g_1579858;              // 0x01579858
 extern U32         g_vtblTimerBase;        // 0x01465d54
@@ -1353,6 +1356,7 @@ U32   __cdecl GetPlayerEmpireID();                          // 0x01021090
 void* __cdecl FUN_01021300();                               // 0x01021300
 void* __cdecl EconomyTuning();                              // 0x0102f810
 int   __cdecl RoundFloat(float f);                          // 0x011e0810
+void* __fastcall FUN_00c308d0_s00c7_5e70(void* pEmpire);               // 0x00c308d0 (cEmpire::GetStars)
 void* __fastcall FUN_00c308d0(void* pEmpire);               // 0x00c308d0 (cEmpire::GetStars)
 void* __cdecl RelationshipManager();                        // 0x00b3d2c0
 void* __cdecl StarManager(void* p);                         // 0x00b3d2a0
@@ -1433,6 +1437,14 @@ struct cWarDataNode {
     U32                mKey;       // +0x10
     U32                pad014;     // +0x14
     struct cWarDataRec* mpValue;   // +0x18 -> value object at +0x18
+};
+void* __cdecl FUN_00bdaa40_s00c7_5e70(void* pDst, void* pSrcBegin, void* pSrcEnd, void* pNew, void* pExtra); // 0x00bdaa40
+struct CSubList {
+    U32* mpBegin;   // +0x00
+    U32* mpEnd;     // +0x04
+    U32* mpCap;     // +0x08
+    U32  mInt0c;    // +0x0c
+    U32  mInt10;    // +0x10
 };
 struct cWarRec {
     U32        mInt00;      // +0x00
@@ -2278,11 +2290,11 @@ int __thiscall cPlayer_s00c7_5e70::GetPeacePriceForPlayer(cPlayer_s00c7_5e70* pE
     float fElapsed = (float)nElapsed * g_f0p001;
     int nElapsedPrice = RoundFloat(((IEconTuning*)EconomyTuning())->GetPeacePriceElapsedSecondsFactor() * fElapsed);
 
-    cStarList* pMyStars = (cStarList*)FUN_00c308d0(pMe);
+    cStarList* pMyStars = (cStarList*)FUN_00c308d0_s00c7_5e70(pMe);
     int nMyStarCount = (int)(pMyStars->mpEnd - pMyStars->mpBegin);
     int nMySizePrice = RoundFloat(((IEconTuning*)EconomyTuning())->GetPeacePricePlayerSizeFactor() * (float)nMyStarCount);
 
-    cStarList* pEnemyStars = (cStarList*)FUN_00c308d0(pEnemy);
+    cStarList* pEnemyStars = (cStarList*)FUN_00c308d0_s00c7_5e70(pEnemy);
     int nEnemyStarCount = (int)(pEnemyStars->mpEnd - pEnemyStars->mpBegin);
     int nEnemySizePrice = RoundFloat(((IEconTuning*)EconomyTuning())->GetPeacePriceEnemySizeFactor() * (float)nEnemyStarCount);
 
@@ -2452,6 +2464,36 @@ cSpacePlayerWarData* __thiscall cSpacePlayerWarData::ctor(const cSpacePlayerWarD
     mPlayerCaptured = src.mPlayerCaptured;
     mEnemyCaptured = src.mEnemyCaptured;
     return this;
+}
+
+// @ 0x00c770d0
+void __cdecl FUN_00c770d0(CSubList* pDst, U32 nCount, CSubList* pSrc)
+{
+    // cl colors the copy helper's out-param onto the nCount argument slot, so every call
+    // overwrites the count the next call passes as its fifth argument; the loop bound is
+    // the register copy in nRemaining.
+    U32 nRemaining = nCount;
+    if (nCount <= 0)
+        return;
+    do {
+        if (pDst != 0) {
+            U32 nSub = (U32)(pSrc->mpEnd - pSrc->mpBegin);
+            U32* pNew;
+            if (nSub != 0)
+                pNew = (U32*)operator_new(nSub * 4, g_szSimulator_s00c7_5e70, 0, 0, g_szAllocator, 0xd1);
+            else
+                pNew = 0;
+            pDst->mpBegin = pNew;
+            pDst->mpEnd = pNew;
+            pDst->mpCap = pNew + nSub;
+            U32* pNewEnd;
+            FUN_00bdaa40_s00c7_5e70(&nCount, pSrc->mpBegin, pSrc->mpEnd, pNew, (void*)nCount);
+            pNewEnd = (U32*)nCount;
+            pDst->mpEnd = pNewEnd;
+        }
+        --nRemaining;
+        ++pDst;
+    } while (nRemaining > 0);
 }
 
 // @ 0x00c77160

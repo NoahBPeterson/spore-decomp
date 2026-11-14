@@ -19,7 +19,7 @@
 00c76f10 ?CopyFrom@cWarRec@@QAEPAU1@ABU1@@Z  # cWarRec::CopyFrom migrated from s00c75e70 (verbatim, slice spelling)
 00c76f60 ?ctor@cSpacePlayerWarData@@QAEPAU1@ABU1@@Z  # cSpacePlayerWarData::ctor migrated from s00c75e70 (verbatim, slice spelling)
 00c77020 FUN_00c77020  # eastl sub-vector copy helper: *ppOut = pDst; per 0x14-byte element operator_new("Simulator",0xD1) + FUN_00bdaa40(&end,srcBegin,srcEnd,new,src) -> dst->mpEnd; nonmatching (regalloc)
-00c770d0 FUN_00c770d0  # eastl fill-copy over n sub-vectors; out slot aliases the nCount argument so each call overwrites the next fifth argument; nonmatching (branch/regalloc), equiv PASS 204/400, 81.8% coverage
+00c770d0 ?FUN_00c770d0@@YAXPAUCSubList@@I0@Z  # FUN_00c770d0 migrated from s00c75e70 (verbatim, slice spelling)
 00c77160 ?FUN_00c77160@@YAPAUCElemTimer@@PBU1@0PAU1@@Z  # FUN_00c77160 migrated from s00c75e70 (verbatim, slice spelling)
 00c771e0 ?FUN_00c771e0@@YAPAUCElemTimer@@PBU1@0PAU1@@Z  # FUN_00c771e0 migrated from s00c75e70 (verbatim, slice spelling)
 00c77250 ?FUN_00c77250@@YAPAUCElemTimer@@PBU1@0PAU1@@Z  # FUN_00c77250 migrated from s00c75e70 (verbatim, slice spelling)
