@@ -527,6 +527,10 @@ bool __stdcall FUN_0080a320(void* a, Msg* m)
     case 2:
     case 5:
         return true;
+    case 6:
+    case 7:
+    case 8:
+    case 9:
     case 10:
         return false;
     default:

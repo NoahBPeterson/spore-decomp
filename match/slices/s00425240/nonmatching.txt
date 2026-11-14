@@ -1,3 +1,1 @@
-00425530  5  Deque::push_back: same frame slot issue as push_front
-00425600  2  Deque::erase(iterator): instruction-identical, only t0 tag temp frame slot differs
 004259e0  2  PtrVector::erase(first,last): instruction-identical, only 2 tag-byte frame slots differ

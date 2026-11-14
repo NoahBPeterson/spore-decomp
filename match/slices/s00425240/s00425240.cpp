@@ -153,14 +153,14 @@ void Deque::push_front(const Elem& v)
 }
 
 // @ 0x00425530
-// Not byte-exact (5 bytes): original frame has 0x24 bytes of unused locals below the new-temp.
+// Preserve the unused inline-frame storage of this unoptimized wrapper.
 void Deque::push_back(const Elem& v)
 {
     if (itEnd.cur + 1 != itEnd.end)
         ::new (itEnd.cur++) Elem(v);
     else
         DoPushBack(v);
-    uint32_t pad[9];
+    ReserveDequeInlineFrame<9>();
 }
 
 // @ 0x004255a0
@@ -174,18 +174,19 @@ void Deque::pop_front()
 }
 
 // @ 0x00425600
-// Not byte-exact (2 bytes): the empty-tag temporaries land in different frame slots.
+// Keep the empty-tag locals and their scopes for the unoptimized frame layout.
 DequeIter Deque::erase(DequeIter pos)
 {
-    DequeIter itNext(pos, Tag());
+    Tag t0 = {};
+    DequeIter itNext(pos, t0);
     int index = pos - itBegin;
     if (index < (int)(size() >> 1)) {
         Tag g; Tag t1; Tag h;
-        itNext.MoveBackwardInto(itBegin, pos, t1);
+        itNext.MoveBackwardInto(itBegin, pos, g);
         pop_front();
     } else {
         Tag g; Tag t2; Tag h;
-        pos.Copy(itNext, itEnd, t2);
+        pos.Copy(itNext, itEnd, h);
         pop_back();
     }
     return itBegin + index;
