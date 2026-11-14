@@ -6,3 +6,4 @@
 ../src/game/SPEngine/SPSaveAsync.cpp  ?FUN_006b4780@@YAXXZ  006b4780  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPSaveAsync.cpp  ?FUN_006b47a0@@YAXPAUcJob@@@Z  006b47a0  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
 ../src/game/SPEngine/SPSaveAsync.cpp  ?FUN_006b4840@@YAXXZ  006b4840  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/SPSaveAsync.cpp  ??1Job6B@@UAE@XZ  006b4400  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include /GR-

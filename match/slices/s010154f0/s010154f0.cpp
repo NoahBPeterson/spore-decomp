@@ -137,11 +137,30 @@ struct GrobWarAttackEvent {
 
 struct GonzagoA { virtual void a0(); int padA; };
 struct GonzagoB { virtual void b0(); int padB; };
-struct cGonzagoSimulator : GonzagoA, GonzagoB {
+// A non-owning view of the two dispatch-header fields in the native base.
+struct GonzagoDispatchHeaders {
+    void* mpPrimaryTable;
+    char mReserved04[4];
+    void* mpSecondaryTable;
+};
+// Native dispatch-table objects, with their complete byte extents. The local
+// GonzagoA/B declarations are only layout views, not callable table definitions.
+// novtable suppresses their artificial cGonzagoSimulator tables; teardown
+// publishes the actual terminal tables after the derived members are destroyed.
+extern char gWalkAroundPrimary[28];       // 0x01495894
+extern char gWalkAroundSecondary[36];     // 0x01495870
+extern char gGonzagoTerminalPrimary[16];   // 0x013ec458
+extern char gGonzagoTerminalSecondary[12]; // 0x013eb938
+struct __declspec(novtable) cGonzagoSimulator : GonzagoA, GonzagoB {
     cGonzagoSimulator();                                                  // 0x00b5b6c0
     ~cGonzagoSimulator();
 };
-inline cGonzagoSimulator::~cGonzagoSimulator() {}
+inline cGonzagoSimulator::~cGonzagoSimulator()
+{
+    ((GonzagoDispatchHeaders*)this)->mpPrimaryTable = gGonzagoTerminalPrimary;
+    ((GonzagoDispatchHeaders*)this)->mpSecondaryTable = gGonzagoTerminalSecondary;
+    _ReadWriteBarrier();
+}
 
 
 struct cSimulatorUniverse : cGonzagoSimulator {
@@ -710,7 +729,10 @@ void cSPSimulatorWalkAround::GetOutOfUFO()
 // @ 0x01015fe0
 cSPSimulatorWalkAround::~cSPSimulatorWalkAround()
 {
+    // Publish the real derived tables before member cleanup.
+    ((GonzagoDispatchHeaders*)this)->mpPrimaryTable = gWalkAroundPrimary;
+    ((GonzagoDispatchHeaders*)this)->mpSecondaryTable = gWalkAroundSecondary;
     gWalkAroundInstance = 0;
     // Member destructors (mPlantObstacles, mPlants, mBeamingTimer, then the
-    // AutoRef avatar/strategy) and the cGonzagoSimulator base run after this body.
+    // AutoRef strategy/avatar) and the cGonzagoSimulator base run after this body.
 }

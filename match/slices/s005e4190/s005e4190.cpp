@@ -2,6 +2,7 @@
 // Class layout follows the retail-correct layout recovered in match/slices/s005e2470
 // (mIconData +0x170, mRollover +0x174).
 #include "types.h"
+#include "sse_helpers.h"
 #include <xmmintrin.h>
 #include <new>
 
@@ -485,9 +486,7 @@ class cIconVerbHelper {
 
 // @ 0x005e4d30
 int FloatToInt(float value) {
-  __asm {
-    cvtss2si eax, [esp + 4]
-  }
+  return SseRoundToInt(value);
 }
 
 // @ 0x005e4d60
