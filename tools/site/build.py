@@ -371,7 +371,10 @@ def build(out, prs_path, repo):
         b.append('<tr><td>%s</td><td class="barcell"><div class="bar"><i style="width:%.2f%%"></i></div></td><td>%.0f%%</td>'
                  '<td>%s / %s</td><td>%s</td></tr>' % (E(m), pct(dbb, nb), pct(dbb, nb), fmt(d), fmt(n), kb(nb)))
     b.append('</table></div><p class="note">Modules are EA\'s own top-level source directories from the development '
-             'build. "Not yet attributed" is code whose module is not known yet.</p>')
+             'build. "Compiler-generated code" is the glue the compiler emits for every source file (initializers and '
+             'destructors of global objects, exception-handling stubs); "Open-source libraries" are the published '
+             'libraries the game links. "Not yet attributed" is code whose module is not known yet, most of it added '
+             'with Galactic Adventures after the development build the module map comes from.</p>')
     if prs:
         who = collections.defaultdict(lambda: [0, 0, 0])
         for p in prs:
