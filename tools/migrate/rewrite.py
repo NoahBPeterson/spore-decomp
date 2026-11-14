@@ -5056,7 +5056,7 @@ class Rewrite:
     def measure_rows(self):
         """Byte-diff counts of the nonmatching/partial rows against the new object (run_all on a scratch manifest), so
         the module's nonmatching.txt/partial.txt carry current numbers; a row that now matches is reported."""
-        py = W(".venv", "bin", "python")
+        py = sys.executable if os.name == "nt" else W(".venv", "bin", "python")   # the bin/ shim is sh on Windows
         py = py if os.path.exists(py) else sys.executable
         res = {}
         for module in {c.module for c in self.fns}:
@@ -5624,7 +5624,7 @@ class Rewrite:
     def run_all_locked(self, manifest, tries=120, wait=10):
         """run_all.py on a manifest; waits (never kills) while another run holds work/run_all.lock.  -> stdout+stderr."""
         import time
-        py = W(".venv", "bin", "python")
+        py = sys.executable if os.name == "nt" else W(".venv", "bin", "python")   # the bin/ shim is sh on Windows
         py = py if os.path.exists(py) else sys.executable
         out = ""
         for _i in range(tries):
@@ -5637,7 +5637,7 @@ class Rewrite:
 
     def verify_exact(self):
         """run_all on the module manifest rows of this slice's functions -> {va: status}."""
-        py = W(".venv", "bin", "python")
+        py = sys.executable if os.name == "nt" else W(".venv", "bin", "python")   # the bin/ shim is sh on Windows
         py = py if os.path.exists(py) else sys.executable
         res = {}
         for module in sorted({c.module for c in self.fns}):
