@@ -1,10 +1,11 @@
-// src/game/UTFSpore_Win32/Slider.cpp -- migrated from slice(s) s00984a70 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/Slider.cpp -- migrated from slice(s) s00985ad0, s00984a70 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/Slider.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "EA/UTFWin/Image.h"
 #include "EA/UTFWin/RenderContext.h"
+#include "EA/UTFWinControls/IWinSpinner.h"
 
 // ---- items of slice s00984a70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
@@ -88,6 +89,65 @@ class SliderDrawable { public:
 }
 }
 // ---- items of slice s00984a70 end
+
+// ---- items of slice s00985ad0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+inline void* operator new(size_t, void* p) { return p; }
+void* GetDefaultAllocator();                                                       // 009512C0
+void* AllocAligned(uint32_t size, uint32_t align, const char* name, void* alloc);  // 009512D0 (cdecl)
+namespace EA {
+namespace UTFWinControls {
+extern void* vtbl_Resource_Async[];
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* vtbl_SliderDrawable[];         // 0x01444c90
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* vtbl_SliderDrawable_1[];       // 0x01444c78
+}
+}
+namespace EA {
+namespace UTFWinControls {
+extern void* vtbl_SliderDrawable_3[];       // 0x01444c60
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ObjHead { void* vt; };
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct AsyncBase {
+    void* vt4; int f8; void* vtc;
+    AsyncBase() { vt4 = vtbl_Resource_Async; f8 = 0; vtc = vtbl_Resource_Async; }
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class SliderDrawable_s0098_5ad0 : public ObjHead, public AsyncBase { public:
+    int f[3];                               // +0x10, +0x14, +0x18
+    SliderDrawable_s0098_5ad0() {
+        vt = vtbl_SliderDrawable;
+        vt4 = vtbl_SliderDrawable_1;
+        vtc = vtbl_SliderDrawable_3;
+        f[0] = 0; f[1] = 0; f[2] = 0;
+    }
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class BasicFactory_SliderDrawable { public:
+    SliderDrawable_s0098_5ad0* CreateInstance(int unused, void* alloc);  // 00985bd0
+};
+}
+}
+// ---- items of slice s00985ad0 end
 
 // @ 0x00984a70
 namespace EA { namespace UTFWinControls {
@@ -179,3 +239,13 @@ void __thiscall SliderDrawable::Paint(UTFWin::RenderContext_s0098_4a70* ctx, con
     }
 }
 }}  // namespace EA::UTFWinControls
+
+// @ 0x00985bd0
+EA::UTFWinControls::SliderDrawable_s0098_5ad0* EA::UTFWinControls::BasicFactory_SliderDrawable::CreateInstance(int unused, void* alloc)
+{
+    (void)unused;
+    if (alloc == 0) alloc = GetDefaultAllocator();
+    void* mem = AllocAligned(0x1c, 4, "UTFWin/EA::UTFWinControls::SliderDrawable", alloc);
+    if (mem) return new (mem) EA::UTFWinControls::SliderDrawable_s0098_5ad0();
+    return 0;
+}
