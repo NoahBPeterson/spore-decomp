@@ -2,5 +2,4 @@
 00625e70  162  AimTowardsTarget: complete; compiler coalesces the transient stack slots and schedules the x87 rsqrt differently [equiv: PASS 400 valid, 100% cov]
 006268a0  427  CalculateCameraToWorldMatrix: complete; cTransform field offsets/matrix expression order (x87 vs SSE) differ [equiv: PASS 400 valid, 100% cov]
 00626b50  459  SetInitialCameraValues: complete; same cTransform/matrix transcription differences [equiv: PASS 400 valid, 100% cov]
-00626290   22  ReloadTuning: complete (all 24 tuning-property reads); only the SSE register choice of the two phi *= deg-to-rad multiplies differs (orig loads member into xmm1, const into xmm0) [equiv: WEAK 159/400 valid, 12.9% cov, 0 mismatch]
 00625f70  753  COMPLETE FUN_00625f70 (distance/theta/pitch exponential damping + quaternion-rotated look vector); x87/SSE register allocation differs, but each float temporary is rounded to single precision in memory to match the original's SSE combination [equiv: PASS 400 valid, 100% cov]

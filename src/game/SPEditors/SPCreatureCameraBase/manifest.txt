@@ -15,3 +15,4 @@
 ../src/game/SPEditors/SPCreatureCameraBase.cpp  ?SetTargetOffset@cCreatureCameraDepends_s0062_7d50@SP@@QAEXUVector3Copy@@_N@Z  006280d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPCreatureCameraBase.cpp  ?OnMouseMove@cCreatureCameraBase@SP@@UAE_NMMI@Z  00625010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPCreatureCameraBase.cpp  ?SetCurrentPolarCoords@cCreatureCameraBase@SP@@QAEXMMM@Z  00625560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?ReloadTuning@cCreatureCameraBase@@QAEXXZ  00626290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

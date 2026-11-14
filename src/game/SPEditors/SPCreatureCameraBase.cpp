@@ -1083,8 +1083,9 @@ void cCreatureCameraBase::ReloadTuning()
   ReadFloat(mpTuningProps, 0x01102b2f, mFarClip);
   ReadFloat(mpTuningProps, 0x00fe243b, mMinCameraPhi);
   ReadFloat(mpTuningProps, 0x00fe243f, mMaxCameraPhi);
-  mMinCameraPhi *= kDegToRad;
-  mMaxCameraPhi *= kDegToRad;
+  // degrees to radians as a literal: the extern const kDegToRad could alias the first store, so cl would reload it
+  mMinCameraPhi *= 0.017453292f;
+  mMaxCameraPhi *= 0.017453292f;
   ReadFloat(mpTuningProps, 0x303eb34d, mMinCameraDistance);
   ReadFloat(mpTuningProps, 0x703eb357, mMaxCameraDistance);
 

@@ -7,7 +7,6 @@
 00625bf0 546 platform velocity integrator; complete, x87/SSE mix and temp scheduling differ
 00625e70 98 AimTowardsTarget: complete; compiler coalesces the six transient stack slots and schedules the x87 rsqrt differently
 00625f70 608 COMPLETE FUN_00625f70 (distance/theta/pitch exponential damping + quaternion-rotated look vector); x87/SSE interleave and register allocation differ [equiv: FAIL 5/146 float-rounding only, denormal-range cancellation in desiredPosition.x; call trace and esp match]
-00626290 22 data: ReloadTuning: complete (all 24 tuning-property reads). Matches (1544/1544) only WITHOUT /EHsc: with this file's /EHsc it gets an EH frame and /GS cookie retail lacks (1604 B), so it probably belongs to an object compiled without /EHsc. Then the only diff is the phi *= deg-to-rad pair, fixed by the literal 0.017453292f instead of the extern const kDegToRad (a global may alias the first store; a literal is CSE'd into xmm0). vs2005-cpp benchmark, 2026-11-12
 006268a0 485 CalculateCameraToWorldMatrix: complete; cTransform field offsets/matrix expression order (x87 vs SSE) differ
 00626b50 414 SetInitialCameraValues: complete; same cTransform/matrix transcription differences
 00626db0 236 GetCurrentCameraPosition: complete; cTransform member offsets/matrix expression schedule differ
