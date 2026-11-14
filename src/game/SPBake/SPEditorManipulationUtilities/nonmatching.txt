@@ -13,14 +13,14 @@
 004904a0 227 complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
 004905d0 200 complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
 00491900 387 complete vector-insert-with-refcount routine; logic and all calls present, but the /Od frame (0x7c vs 0x30) and the intermediate pointer locals differ
-00492de0 130 complete: tracker offset check; only /Od local-slot assignment differs (frame 0x34 vs 0x30) and the bb.mx[2] offset
-00492e70 1230 complete: all 22 calls in original order (size 0.967x); /Od local-slot layout and a few spill temps differ (frame 0x194 vs 0x1ec); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Oi
+00492de0  76  complete: tracker offset check; only /Od local-slot assignment differs (frame 0x34 vs 0x30) and the bb.mx[2] offset flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00492e70  1284  complete: all 22 calls in original order (size 0.967x); /Od local-slot layout and a few spill temps differ (frame 0x194 vs 0x1ec); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Oi
 00493ce0 814 MoveBlockAndTranslateSnappedBlocks complete (flag bits, basis build, Cross/Normalize, direction-index flips, Matrix3 copy-out); /Od frame slot order not fitted (frame 0xe8 vs 0x14c), f1 local coalesced with the test() temp [equiv: PASS]
 004942b0 3496 SP::EditorUtils::GetRotationAndPositionBasedOnBehavior: complete (same 71 direct calls in order, all field offsets match); /Od Vector3 copy flavours (movss/int/fld) and local slot layout differ, 4219 vs 5113 bytes; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00496140 128 complete fixed-stride find(); matches the loop but the /Od frame (0x14 vs 0x10) and member slots differ
 004961d0 424 complete transform-save routine (copy 0x48->0x54 and three 9-float matrices for the object and each vector element); not byte-exact
-00496b60 114 complete cSPEditorLimbStructure helper; call sequence identical, only the /Od frame/struct-base slot differs (0x60 vs 0x68)
-00496bb0 187 complete bone/handle lookup; logic present, intermediate locals and vtable-call shape differ
+00496b60 114 complete cSPEditorLimbStructure helper; call sequence identical, only the /Od frame/struct-base slot differs (0x60 vs 0x68) flags: /Od /MD /Gy /EHsc /TP
+00496bb0 187 complete bone/handle lookup; logic present, intermediate locals and vtable-call shape differ flags: /O2 /MD /Gy /EHsc /TP
 00496d30 1431 complete: two opposed ray casts + hit-point/length evals; /Od slot order and out-of-line W-copy arg temps differ
 004973f0 201 complete transform/flag routine; logic present, but the by-value Matrix3 argument and /Od frame differ
 004974e0 2218 complete (all paths and calls); /Od slot order, inline-vs-out-of-line Vector3 copy flavours and the inlined parent accessor differ
@@ -65,3 +65,13 @@
 004a8d70 125 complete 9-float matrix constructor; original spills `this` at ebp-0xc and uses operator[] pointer temps
 004a96d0 327 complete flag/children walk; /Od inlined-flag + element temp slots differ
 004a9840 105 complete SP::EditorUtils::GetFirstFootBlock; /Od element/ref temp slot ordering differs
+004928d0  -  complete draft carried over from s004928d0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 1208, retail 1293
+004934d0  -  complete draft carried over from s004928d0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 278, retail 276
+00496300  -  complete draft carried over from s00496300 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 519, retail 1111
+00496760  -  complete draft carried over from s00496300 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 655, retail 1009
+0049b460  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 733, retail 1089
+0049b8b0  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 771, retail 1034
+0049bcc0  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 888, retail 1068
+0049c140  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 141, retail 205
+0049ecf0  -  complete draft carried over from s0049ecf0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 577, retail 655
+004a6d20  -  complete draft carried over from s004a6690 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: bytes differ

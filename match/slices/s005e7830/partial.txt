@@ -1,2 +1,1 @@
 # va  reason
-005e8130  -  stub: placeholder body (ours 1 bytes, retail 819 bytes); needs real source: an earlier, fuller draft is in match/slices/s005e7830/s005e7830.cpp (left behind by the migration); start from it. Was noted as complete: complete GetVerbIcon(index, layout): size guard with backup vector + vector resize, existing icon update/return path, icon creation (0x184) with AddRef, mShowIcons setup (icon key from layout/mIconKey, SetIconKeyIndex, full SetIconLayout arg list, mField17c ref assignment, SetEnabled/FUN_005e1f90, a

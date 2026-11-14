@@ -10,6 +10,10 @@ extern "C" __declspec(dllimport) int __stdcall WideCharToMultiByte(
     char* multi, int multiCount, const char* defaultChar, int* usedDefault);
 #include <stdarg.h>
 #include <float.h>
+#include "EA/Stopwatch.h"
+#include "EA/LimitStopwatch.h"
+#include "EA/IO/IStream.h"
+#include "SP/cDirectPropertyList.h"
 
 // ---- items of slice s00937da0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) int __stdcall WideCharToMultiByte(
@@ -562,12 +566,10 @@ static short* WriteInteger16_s0093_8bc0(unsigned int nValue, FormatData16* pData
 }
 // ---- items of slice s00938bc0 end
 
-// ---- items of slice s00939a60 begin
-extern "C" unsigned short _byteswap_ushort(unsigned short);
-extern "C" unsigned long  _byteswap_ulong(unsigned long);
-extern "C" unsigned __int64 __rdtsc(void);
-#pragma intrinsic(_byteswap_ushort, _byteswap_ulong)
-#pragma intrinsic(__rdtsc)
+// ---- items of slice s00939a60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+__declspec(dllimport) wchar_t* __cdecl wcschr(const wchar_t* s, wchar_t c);
+typedef int (__cdecl* ScanfFn)(const wchar_t*, const wchar_t*, ...);
+extern "C" ScanfFn gpScanfFn;                                // 0x166994c
 // ---- items of slice s00939a60 end
 
 // @ 0x00937da0
@@ -1283,9 +1285,65 @@ int Snprintf16(short* pDestination, unsigned int n, const wchar_t* pFormat, ...)
 }
 
 // @ 0x00939a60
-int ParseFormatToken(const char* p, char* out)
+namespace  {
+int Vsscanf16(wchar_t const * pString, wchar_t const * pFormat, char * arguments)
 {
-    (void)p;
-    (void)out;
-    return 0;
+    uint32_t args[16];
+    int count = 0;
+    const wchar_t* p = wcschr(pFormat, L'%');
+    while (p != 0) {
+        if (*p != L'%')
+            break;
+        if (count >= 20)
+            break;
+        switch (p[1]) {
+        case L'%':
+            ++p;
+            break;
+        case L' ':
+        case L'#':
+        case L'+':
+        case L'-':
+            if (p[2] != L'*')
+                ++count;
+            break;
+        case L'*':
+            break;
+        default:
+            ++count;
+            break;
+        }
+        p = wcschr(p + 1, L'%');
+    }
+
+    for (int i = 0; i < count; ++i)
+        args[i] = arguments[i];
+
+    switch (count) {
+    case 0:
+        return gpScanfFn(pString, pFormat);
+    case 1:
+        return gpScanfFn(pString, pFormat, args[0]);
+    case 2:
+        return gpScanfFn(pString, pFormat, args[0], args[1]);
+    case 3:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2]);
+    case 4:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3]);
+    case 5:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4]);
+    case 6:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4], args[5]);
+    case 7:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+    case 8:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+    case 9:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+    case 10:
+        return gpScanfFn(pString, pFormat, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
+    default:
+        return 0;
+    }
 }
+}  // namespace 

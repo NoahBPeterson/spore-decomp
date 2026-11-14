@@ -456,6 +456,17 @@ struct cMeshClusterer_s0072_4100 {
     void CalcError(cFaceCluster_s0072_4100* a, cFaceCluster_s0072_4100* b, float* out);  // 0x00720700
     void Setup();  // 0x00724100 (cMeshClusterer::Setup)
 };
+void __stdcall DestroyRange58(void* first, void* last);   // 0x006df9d0  ?DestroyRange58@@YGXPAUElem58@@0@Z
+void __fastcall VecElt16_dtor(void* self);                // 0x006df3b0  eastl::vector<Elem16>::~vector
+void __fastcall RefVector_dtor(void* self);               // 0x0041eb80  RefVector::~RefVector
+struct Pt2 { float x, y; };
+struct Pt2Vec {
+    Pt2* mpBegin;   // +0x00
+    Pt2* mpEnd;     // +0x04
+    Pt2* mpCap;     // +0x08
+    void DoInsertValues(Pt2* pos, int n, const Pt2& value);   // 0x00479830
+};
+struct VecAppend8_s0072_4100 { void Append(void* end, void* value); };   // 0x00722410
 // ---- items of slice s00724100 end
 
 // ---- items of slice s00725130 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1211,11 +1222,119 @@ extern "C" void FUN_00726c20(void* p, float f, int one, void* p4);   // 0x726c20
 extern "C" void FUN_00725130(void* p);                               // 0x725130
 extern "C" void FUN_00735a90(void* p);                               // 0x735a90
 extern "C" void FUN_00737ef0(void* p);                               // 0x737ef0
+extern "C" void  FUN_00733070(int n, void* alloc);
+extern "C" void  FUN_0047c800(void** srcPtr, void* begin, void* end, void* dst, void* src);
+extern "C" void  FUN_004d04f0(void* dst, void* end, void* src);
+extern "C" void  FUN_00723af0(void* dst, void* end, void* src);
+extern "C" void  FUN_0041eb80();
+extern "C" void  FUN_007269b0(void* end, unsigned count, void* temp);
+extern "C" void  FUN_00726960(void* begin, void* end);
+extern "C" void  FUN_00720070(void* p);
+extern "C" void  FUN_00723930(void* p);
+extern "C" void  FUN_00723a70(void* dst, void* src);
+extern "C" void  FUN_00723cb0(void* pos, void* oldEnd, void* newEnd);
+extern "C" void* FUN_00723c20(void* begin, void* pos, void* dst);
+extern "C" void  FUN_00720c20(void* begin, void* pos, void* dst);
 struct MeshRec_s0072_8020 { char pad[0x8c]; };
 struct MeshCtx {
     char     pad0[0x1c];
     MeshRec_s0072_8020* begin;   // +0x1c
     MeshRec_s0072_8020* end;     // +0x20
+};
+struct V3 { float x, y, z; };
+struct Elem68 {
+    char mData[0x68];
+    void Destroy() { FUN_00723930(this); }
+    void CopyCtor(void* src) { FUN_00723a70(this, src); }
+    void Init()
+    {
+        int* p = (int*)mData;
+        p[0] = -1;
+        p[1] = 0; p[2] = 0;
+        p[3] = -1; p[4] = -1;
+        p[5] = 0; p[6] = 0; p[7] = 0;
+        p[10] = 0; p[11] = 0;
+        ((unsigned char*)mData)[0x30] = 0;
+        p[13] = 0; p[14] = 0; p[15] = 0;
+        p[18] = 0; p[19] = 0; p[20] = 0;
+        p[23] = -1; p[24] = 0; p[25] = 0;
+    }
+};
+struct Vec68 {
+    Elem68* mpBegin;   // +0x00
+    Elem68* mpEnd;     // +0x04
+    Elem68* mpCap;     // +0x08
+    void Insert(Elem68* pos, Elem68* value);
+};
+struct cClusterInfo20 {
+    int mNumFaces;     // +0x00
+    V3  mNormal;       // +0x04
+    V3  mCenter;       // +0x10
+    float mArea;       // +0x1c
+    int mFirstFace;    // +0x20
+    int mLastFace;     // +0x24
+    int mIndex;        // +0x28
+    char pad2c[0x38];
+};
+struct cFaceCluster20 {
+    V3  mSumPoint;     // +0x00
+    V3  mSumNormal;    // +0x0c
+    float mArea;       // +0x18
+    int mFirstEdge;    // +0x1c
+    int mParent;       // +0x20
+    void* mPrevDE;     // +0x24
+};
+struct ClusterVec {
+    cClusterInfo20* mpBegin;   // +0x00
+    cClusterInfo20* mpEnd;     // +0x04
+    cClusterInfo20* mpCap;     // +0x08
+    int pad0c[2];
+    void Resize(unsigned n);
+};
+struct FaceVec_s0072_8020 {
+    cFaceCluster20* mpBegin;   // +0x00
+    cFaceCluster20* mpEnd;     // +0x04
+    cFaceCluster20* mpCap;     // +0x08
+    int pad0c[2];
+};
+struct cMeshClusterer20 {
+    char pad00[8];
+    void* mpMesh;                 // +0x08
+    ClusterVec mClusterInfo;      // +0x0c
+    char pad20[0x10];
+    int mClusterFaceCount;        // +0x30
+    char pad34[0x14];
+    FaceVec_s0072_8020 mFaceClusters;        // +0x48
+    char pad5c[0x14];
+    char mEdgeHeap[0x14];         // +0x70
+    float mMaxError;              // +0x84
+    int mSectionCount;            // +0x88
+    int mMaxClusterCount;         // +0x8c
+
+    void CreateClusterInfo();
+    void Cluster(void* meshData, int n);
+};
+struct UVGenJobInfo {
+    void* mVtbl0;        // +0x00
+    void* mVtbl1;        // +0x04
+    int   mRefCount;     // +0x08
+    void* mField0C;      // +0x0c
+    void* mField10;      // +0x10
+    void* mField14;      // +0x14
+    void* mField18;      // +0x18
+    void* mField1C;      // +0x1c
+    int   mField20;      // +0x20
+    void* mField24;      // +0x24
+    int   mField28;      // +0x28
+    int   mField2C;      // +0x2c
+    void* mField30;      // +0x30
+    void* mField34;      // +0x34
+    void* mField38;      // +0x38
+    void* mField3C;      // +0x3c
+    void* mField40;      // +0x40
+
+    UVGenJobInfo* Init(void* src, int mode, void* p4, void* p5);
+    void Destroy();
 };
 // ---- items of slice s00728020 end
 
@@ -3069,12 +3188,94 @@ void cMeshClusterer_s0072_4100::Setup()
 }
 
 // @ 0x00724700
-void __cdecl FUN_00724700(void* this_)
-{ (void)this_; }
+void __fastcall FUN_00724700(void* self, int /*unused*/)
+{
+    char* p = (char*)self;
+
+    void* v25c = *(void**)(p + 0x25c);
+    if (v25c != 0 && *(int*)((char*)v25c - 4) != 0)
+        EASTL_allocator_deallocate(v25c);
+
+    void* vEnd = *(void**)(p + 0x24c);
+    void* vBegin = *(void**)(p + 0x248);
+    DestroyRange58(vBegin, vEnd);
+
+    void* v248 = *(void**)(p + 0x248);
+    if (v248 != 0 && *(int*)((char*)v248 - 4) != 0)
+        EASTL_allocator_deallocate(v248);
+
+    void* v234 = *(void**)(p + 0x234);
+    if (v234 != 0 && *(int*)((char*)v234 - 4) != 0)
+        EASTL_allocator_deallocate(v234);
+
+    VecElt16_dtor(p + 0x18);
+    RefVector_dtor(p + 0x04);
+}
 
 // @ 0x007247c0
-void __cdecl FUN_007247c0()
-{}
+void __cdecl FUN_007247c0(const Pt2* pts, int n, Pt2Vec* out)
+{
+    Pt2 seed = pts[0];                 // fill value used by the assign growth path
+
+    int start = 0;
+    float minx = pts[0].x;
+    for (int i = 1; i < n; ++i) {
+        if (pts[i].x < minx) {
+            minx = pts[i].x;
+            start = i;
+        }
+    }
+
+    Pt2 inlineBuf[64];
+    Pt2Vec hull;
+    hull.mpBegin = inlineBuf;
+    hull.mpEnd = inlineBuf;
+    hull.mpCap = inlineBuf + 64;
+    Pt2* owner = inlineBuf;            // inline storage; a heap buffer differs from it
+
+    hull.mpEnd[0] = pts[start];
+    ++hull.mpEnd;
+
+    int i = (start + 1) % n;
+    if (i != start) {
+        do {
+            const Pt2* pAppend = &pts[i];
+            if (hull.mpEnd < hull.mpCap) {
+                if (hull.mpEnd != 0)
+                    hull.mpEnd[0] = *pAppend;
+                ++hull.mpEnd;
+            } else {
+                ((VecAppend8_s0072_4100*)&hull)->Append(hull.mpEnd, (void*)pAppend);
+            }
+            i = (i + 1) % n;
+
+            int size = (int)(hull.mpEnd - hull.mpBegin);
+            while (size > 1) {
+                const Pt2& back = hull.mpBegin[size - 1];
+                const Pt2& prev = hull.mpBegin[size - 2];
+                const Pt2& cand = pts[i];
+                float cross = (back.x - prev.x) * (cand.y - back.y)
+                            - (back.y - prev.y) * (cand.x - back.x);
+                if (cross >= 0.0f)
+                    break;
+                --hull.mpEnd;
+                --size;
+            }
+        } while (i != start);
+    }
+
+    // out->assign(hull.begin(), hull.end())
+    int count = (int)(hull.mpEnd - hull.mpBegin);
+    int cur = (int)(out->mpEnd - out->mpBegin);
+    if (cur < count)
+        out->DoInsertValues(out->mpEnd, count - cur, seed);
+    else
+        out->mpEnd -= cur - count;
+    memcpy(out->mpBegin, hull.mpBegin, (size_t)count * sizeof(Pt2));
+
+    if (hull.mpBegin != 0 && hull.mpBegin != owner)
+        EASTL_allocator_deallocate(hull.mpBegin);
+}
 
 // @ 0x007249f0
 void FUN_007249f0(MeshContext* ctx)
@@ -3794,39 +3995,159 @@ void FUN_00728020(MeshCtx* ctx, float f, int mode, void* p4)
 }
 
 // @ 0x007280b0
-void FUN_007280b0(void* self, void* param_2, int param_3, int param_4, int param_5)
+UVGenJobInfo* UVGenJobInfo::Init(void* src, int mode, void* p4, void* p5)
 {
-    (void)self; (void)param_2; (void)param_3; (void)param_4; (void)param_5;
+    int* s = (int*)src;
+    mVtbl0 = 0;
+    mVtbl1 = 0;
+    mRefCount = 0;
+    FUN_00733070((s[1] - s[0]) >> 2, (char*)src + 0xc);
+    FUN_0047c800((void**)&src, *(void**)src, ((void**)src)[1], mField0C, src);
+    mField10 = src;
+    mField20 = mode;
+    mField24 = 0;
+    mField28 = 0;
+    mField2C = 0;
+    mField38 = 0;
+    mField3C = 0;
+    mField40 = 0;
+    int count = (int)((char*)mField10 - (char*)mField0C) >> 2;
+    if (p4)
+        FUN_004d04f0(p4, (char*)p4 + count * 4, src);
+    if (p5)
+        FUN_00723af0(p5, (char*)p5 + count * 0x38, src);
+    return this;
 }
 
 // @ 0x007281d0
-void FUN_007281d0(void* self)
+void __fastcall FUN_007281d0(UVGenJobInfo* self)
 {
-    (void)self;
+    if (self->mField38 && *((int*)self->mField38 - 1) != 0)
+        FUN_00723930(self->mField38);
+    if (self->mField24 && *((int*)self->mField24 - 1) != 0)
+        FUN_00723930(self->mField24);
+    FUN_0041eb80();
+    self->mVtbl1 = 0;
+    self->mVtbl0 = 0;
 }
 
 // @ 0x00728330
-void FUN_00728330(void* self, unsigned n)
+void ClusterVec::Resize(unsigned n)
 {
-    (void)self; (void)n;
+    int count = (int)(mpEnd - mpBegin);
+    if ((unsigned)count < n) {
+        cClusterInfo20 temp;
+        FUN_007269b0(mpEnd, n - count, &temp);
+    } else {
+        FUN_00726960(mpBegin + n, mpEnd);
+    }
 }
 
 // @ 0x00728400
-void FUN_00728400(void* self, unsigned a, unsigned b)
+void Vec68::Insert(Elem68* pos, Elem68* value)
 {
-    (void)self; (void)a; (void)b;
+    if (mpEnd != mpCap) {
+        if (pos <= value && value < mpEnd)
+            ++value;
+        if (mpEnd)
+            FUN_00723930(mpEnd - 1);
+        FUN_00723cb0(pos, mpEnd - 1, mpEnd);
+        FUN_00723a70(value, value);
+        ++mpEnd;
+        return;
+    }
+
+    int cap = (int)(mpEnd - mpBegin);
+    cap = (cap == 0) ? 1 : cap * 2;
+    Elem68* buf = (Elem68*)operator_new(cap * 0x68, "Graphics", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    Elem68* mid = (Elem68*)FUN_00723c20(mpBegin, pos, buf);
+    FUN_00720c20(mpBegin, pos, buf);
+    if (mid)
+        FUN_00723930(value);
+    Elem68* newEnd = (Elem68*)FUN_00723c20(pos, mpEnd, mid + 1);
+    FUN_00720c20(pos, mpEnd, mid + 1);
+    if (mpBegin && *((int*)mpBegin - 1) != 0)
+        FUN_00723930(mpBegin);
+    mpBegin = buf;
+    mpEnd = newEnd;
+    mpCap = buf + cap;
 }
 
 // @ 0x007285a0
-void FUN_007285a0(void* self)
+void cMeshClusterer20::CreateClusterInfo()
 {
-    (void)self;
+    mClusterInfo.Resize(mSectionCount);
+    int faceCount = (int)(mFaceClusters.mpEnd - mFaceClusters.mpBegin);
+    mClusterFaceCount = faceCount;
+
+    for (int i = 0; i < faceCount; ++i) {
+        int root = i;
+        while (root >= 0 && root < faceCount) {
+            int p = mFaceClusters.mpBegin[root].mParent;
+            if (p == root || p < 0 || p >= faceCount)
+                break;
+            root = p;
+        }
+        if (root < 0 || root >= faceCount)
+            continue;
+
+        cFaceCluster20& f = mFaceClusters.mpBegin[root];
+        cClusterInfo20& ci = mClusterInfo.mpBegin[root];
+        if (ci.mNumFaces == 0) {
+            if (f.mArea <= 1e-08f) {
+                ci.mNormal.x = 0.0f;
+                ci.mNormal.y = 0.0f;
+                ci.mNormal.z = 0.0f;
+                ci.mCenter = f.mSumPoint;
+            } else {
+                float inv = 1.0f / sqrtf(f.mSumNormal.x * f.mSumNormal.x +
+                                                   f.mSumNormal.y * f.mSumNormal.y +
+                                                   f.mSumNormal.z * f.mSumNormal.z + 1e-08f);
+                ci.mNormal.x = f.mSumNormal.x * inv;
+                ci.mNormal.y = f.mSumNormal.y * inv;
+                ci.mNormal.z = f.mSumNormal.z * inv;
+                ci.mCenter.x = f.mSumPoint.x / f.mArea;
+                ci.mCenter.y = f.mSumPoint.y / f.mArea;
+                ci.mCenter.z = f.mSumPoint.z / f.mArea;
+                ci.mArea = f.mArea;
+            }
+        }
+        ++ci.mNumFaces;
+        mFaceClusters.mpBegin[i].mParent = root + faceCount;
+    }
+
+    for (int i = 1; i < mSectionCount; ++i) {
+        cClusterInfo20& ci = mClusterInfo.mpBegin[i];
+        ci.mFirstFace = ci.mFirstFace + ci.mLastFace;
+        ci.mLastFace = ci.mFirstFace;
+    }
+
+    FUN_00720070(&mClusterFaceCount);
+
+    for (int i = 0; i < faceCount; ++i) {
+        int root = mFaceClusters.mpBegin[i].mParent - faceCount;
+        if (root >= 0 && root < mSectionCount) {
+            cClusterInfo20& ci = mClusterInfo.mpBegin[root];
+            int n = ci.mIndex++;
+            (void)n;
+        }
+    }
 }
 
 // @ 0x007289a0
-void FUN_007289a0(void* self)
+void __fastcall FUN_007289a0(Vec68* vec)
 {
-    (void)self;
+    if (vec->mpEnd < vec->mpCap) {
+        Elem68* p = vec->mpEnd++;
+        if (p)
+            p->Init();
+        return;
+    }
+
+    Elem68 temp;
+    temp.Init();
+    vec->Insert(vec->mpEnd, &temp);
 }
 
 // @ 0x00728af0

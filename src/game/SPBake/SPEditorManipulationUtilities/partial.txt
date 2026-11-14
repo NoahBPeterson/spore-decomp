@@ -1,14 +1,6 @@
 # va  diff-bytes  reason
 0048fee0  982  approximate: control flow and most calls reproduced but the inner snap-offset loop (FUN_0041db10/VectorLength/FUN_004a9e40 + container method/dtor) is not a faithful translation
 004906e0  613  approximate: axis/basis construction reproduced but the acos/Transform branch (Transform header tweaks, FUN_006baba0 arg order) is reconstructed only approximately
-004928d0  1293  partial: skeleton of the large block-alignment routine; match/slices/s004928d0/s004928d0.cpp mentions this address and may hold an earlier draft.
-004934d0  276  partial: only the entry guard is present; the registry lookup + per-block translation loop is stubbed; match/slices/s004928d0/s004928d0.cpp mentions this address and may hold an earlier draft.
-00496300  1111  partial: large routine skeleton only; match/slices/s00496300/s00496300.cpp mentions this address and may hold an earlier draft.
-00496760  1009  partial: large routine skeleton only; Earlier, fuller draft: match/slices/s00496300/s00496300.cpp (left behind by the migration); start from it.
-0049b460  1089  partial: large routine skeleton only; Earlier, fuller draft: match/slices/s0049b340/s0049b340.cpp (left behind by the migration); start from it.
-0049b8b0  1034  partial: large routine skeleton only; Earlier, fuller draft: match/slices/s0049b340/s0049b340.cpp (left behind by the migration); start from it.
-0049bcc0  1068  partial: large routine skeleton only; Earlier, fuller draft: match/slices/s0049b340/s0049b340.cpp (left behind by the migration); start from it.
-0049c140  205  partial: matrix/repin helper skeleton only; Earlier, fuller draft: match/slices/s0049b340/s0049b340.cpp (left behind by the migration); start from it.
 0049c210  -  skeleton: matrix-from-direction builder, logic not reconstructed
 0049c630  -  skeleton: spine-ancestor surface snap, container logic not reconstructed
 0049c8f0  -  approximate: recursive transform accumulation, several paths guessed
@@ -18,11 +10,9 @@
 0049d550  -  skeleton: by-value matrix transform combine; match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'ret'] vs ]
 0049d6b0  -  skeleton: large recursive limb rebuild; match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft.
 0049dd20  -  skeleton: recursive child traversal (eastl::vector temp); match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft.
-0049ecf0  -  skeleton: bone/limb rebuild helper; match/slices/s0049ecf0/s0049ecf0.cpp mentions this address and may hold an earlier draft.
 004a37f0  -  skeleton: block search helper; match/slices/s004a3760/s004a3760.cpp mentions this address and may hold an earlier draft.
 004a3920  -  skeleton: block search helper; match/slices/s004a3760/s004a3760.cpp mentions this address and may hold an earlier draft.
 004a3c70  -  skeleton: nearest-block search; match/slices/s004a3760/s004a3760.cpp mentions this address and may hold an earlier draft.
-004a6d20  -  skeleton: block-validity helper; match/slices/s004a6690/s004a6690.cpp mentions this address and may hold an earlier draft.
 004a89e0  900  incomplete: large matrix routine (x87/SSE); only entry paths sketched
 004a8e10  250  incomplete: Matrix3FromFacingAndUp wrapper; sign-flip/xorps scheduling not fully reconstructed
 004a8fc0  760  incomplete: 764-byte 16-byte-aligned SSE matrix routine (and esp,-16); not reconstructed

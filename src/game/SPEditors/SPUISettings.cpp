@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include "cSPUIPropertyLayout.h"
 #include "cSPVerbIconRollover.h"
+#include "EA/UTFWin/IWindow.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(uint64_t* count);
@@ -1095,7 +1096,10 @@ class IWindow_s0060_1fd0 {
   virtual int Release();
   PV(2)
   virtual void* Cast(uint32_t typeID);                  // +0xc
-  PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12)
+  PV(4) PV(5) PV(6)
+  virtual uint32_t GetControlID();                      // +0x1c
+  virtual uint32_t GetValueID();                        // +0x20
+  PV(9) PV(10) PV(11) PV(12)
   virtual const Rect* GetArea();                        // +0x34
   PV(14) PV(15) PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23)
   PV(24)
@@ -1104,7 +1108,9 @@ class IWindow_s0060_1fd0 {
   virtual void SetFlag(int flag, bool value);           // +0x7c
   virtual void SetCaption(const wchar_t* caption);      // +0x80
   PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39) PV(40) PV(41) PV(42) PV(43) PV(44) PV(45) PV(46)
-  PV(47) PV(48) PV(49) PV(50) PV(51) PV(52) PV(53) PV(54) PV(55) PV(56) PV(57) PV(58) PV(59) PV(60) PV(61)
+  PV(47) PV(48) PV(49) PV(50) PV(51) PV(52) PV(53) PV(54) PV(55) PV(56) PV(57) PV(58) PV(59)
+  virtual IWindow_s0060_1fd0* GetWindowByID(uint32_t id, bool recursive); // +0xf0
+  PV(61)
   PV(62) PV(63) PV(64)
   virtual void AddWinProc(IWinProc_s0060_1fd0* proc);              // +0x104
 };
@@ -1239,6 +1245,58 @@ static __forceinline uint32_t RFind(WString& s, const wchar_t* lit) {
   }
   return (uint32_t)-1;
 }
+namespace EA {
+namespace UTFWin {
+struct Message_s0060_1fd0 {
+  IWindow_s0060_1fd0* mpSource;   // +0x0
+  uint32_t pad4;
+  uint32_t mType;      // +0x8
+  uint32_t padC[2];
+  int mValue;          // +0x14
+};
+}
+}
+namespace EA {
+namespace UTFWin {
+class ButtonState {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7)
+  virtual uint32_t GetStateFlags();   // +0x20
+};
+}
+}
+namespace SP {
+class IAuthService {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11)
+  PV(12) PV(13) PV(14) PV(15) PV(16)
+  virtual void OnLogin();   // +0x44
+};
+}
+namespace SP {
+IAuthService* AuthManager_s0060_1fd0();   // 0x00607a60
+}
+namespace SP {
+void WStr_Format_s0060_1fd0(WString* str, const wchar_t* fmt, ...);   // 0x0041e050
+}
+namespace SP {
+extern wchar_t gEmptyString16_s0060_1fd0;                             // 0x01667bac
+}
+namespace SP {
+class cOnlineTabMsg {
+ public:
+  virtual void vt0();
+  virtual void vt1();
+  IWinProc_s0060_1fd0* mWinProc;    // +0x4
+  cSPUILayout_s0060_1fd0 mLayout;   // +0x8
+  uint32_t mTabID;       // +0x20
+
+  bool DoMessage(IWindow_s0060_1fd0* window, EA::UTFWin::Message_s0060_1fd0* msg);
+};
+}
+using EA::UTFWin::Message_s0060_1fd0;
+using EA::UTFWin::ButtonState;
+using SP::IAuthService;
 // ---- items of slice s00601fd0 end
 
 // ---- items of slice s00602940 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -2671,8 +2729,73 @@ void SP::cGameTab_s0060_1fd0::Init(uint32_t layoutID, IWinProc_s0060_1fd0* winPr
 }
 
 // @ 0x006026f0
-bool cTerrainUILoadScriptFromGrid()
+bool SP::cOnlineTabMsg::DoMessage(IWindow_s0060_1fd0* window, Message_s0060_1fd0* msg)
 {
+  (void)window;
+  if (msg->mType == 0x287259f6) {
+    uint32_t id = msg->mpSource->GetControlID();
+    if (id == 0x5b1cc48) {
+      IWindow_s0060_1fd0* w = msg->mpSource;
+      if (w) {
+        ButtonState* b = (ButtonState*)w->Cast(0x8ed27e7a);
+        if (b) {
+          int on = (int)((b->GetStateFlags() >> 2) & 1);
+          SP::ConfigManager()->SetValue(0x5de7b4a, on);
+        }
+      }
+    } else if (id == 0x43b6178) {
+      if (SP::AuthManager_s0060_1fd0()) SP::AuthManager_s0060_1fd0()->OnLogin();
+      return true;
+    } else if (id == 0x56648f8) {
+      IWindow_s0060_1fd0* w = mLayout.FindWindowByID(0x56648f8, true);
+      if (w) {
+        ButtonState* b = (ButtonState*)w->Cast(0x8ed27e7a);
+        if (b) {
+          int on = (int)((b->GetStateFlags() >> 2) & 1);
+          SP::ConfigManager()->SetValue(0x5664a8b, on);
+        }
+      }
+      return true;
+    } else if (id == 0x626f940 || id == 0x626f9c0 || id == 0x685a785) {
+      IWindow_s0060_1fd0* w = mLayout.FindWindowByID(id, true);
+      if (w) {
+        ButtonState* b = (ButtonState*)w->Cast(0x8ed27e7a);
+        if (b) {
+          int on = (int)((b->GetStateFlags() >> 2) & 1);
+          SP::ConfigManager()->SetValue(id, on);
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+  if (msg->mType == 0xaf0b6441) {
+    uint32_t id = msg->mpSource->GetValueID();
+    int scale;
+    if (id == 0x626f958)
+      scale = 1;
+    else if (id == 0x685a63c)
+      scale = 0x100;
+    else if (id == 0x685a821)
+      scale = 1;
+    else
+      return false;
+
+    int value = msg->mValue;
+    WString text;
+    text.mpBegin = &SP::gEmptyString16_s0060_1fd0;
+    text.mpEnd = &SP::gEmptyString16_s0060_1fd0;
+    text.mpCapacity = &SP::gEmptyString16_s0060_1fd0 + 1;
+    SP::WStr_Format_s0060_1fd0(&text, L"%u", (uint32_t)(value * scale));
+
+    IWindow_s0060_1fd0* holder = mLayout.FindWindowByID(mTabID, true);
+    IWindow_s0060_1fd0* label = holder->GetWindowByID(id + 1, true);
+    label->SetCaption(text.mpBegin);
+    SP::ConfigManager()->SetValue(id, value);
+    if ((((uint32_t)text.mpCapacity - (uint32_t)text.mpBegin) & ~1u) > 2 && text.mpBegin)
+      operator_delete_array_00f47380(text.mpBegin);
+    return true;
+  }
   return false;
 }
 

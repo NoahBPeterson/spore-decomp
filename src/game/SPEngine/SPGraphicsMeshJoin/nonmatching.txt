@@ -28,9 +28,17 @@
 00723930 212 complete ChartRec copy ctor; EH prolog/state stores missing
 00723af0 16 complete vector<cSPTransform>::DoAssign; cap/end store order and tag arg load order
 00723d60 683 complete submesh remap export; EH and loop scheduling differ; difftest WEAK (22.5% coverage; after mapping kEastlAllocFile 0x13ebb38 and operator_delete__ 0xf47380)
-00724100 1285 cMeshClusterer::Setup (per-triangle face clusters + dual-edge heap): complete; x87/SSE scheduling and register allocation differ
+00724100 1285 cMeshClusterer::Setup (per-triangle face clusters + dual-edge heap): complete; x87/SSE scheduling and register allocation differ flags: /O2 /MD /Gy /EHsc /TP
 007249f0 1317 Large /O2 EH chart-connectivity builder; full transcription of all paths/calls, not byte-exact.
 00725130 2602 (flags /O2 /MD /Gy /EHsc /TP /GS-) CreateEdges complete: all 5 FindElementArray fallbacks, corner list (4/2-byte/no index), degenerate-triangle compaction for 4- and 2-byte position indices, edge-ring merging, index write-back, primitive remap, ring collapse into the adjacency stream, EH-scoped AutoRefCount/vector temporaries; call sequence identical (41 calls), size 0.977x; frame 0xb8 vs 0xd4, slot layout and register allocation differ
 00725e40 2240 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; SP::cMeshClusterer::AssignCharts complete (all 16 calls in order, EH, both bool paths); register allocation/scheduling and frame 0xe8 vs 0xdc differ
 00726c20 4441 COMPLETE SP::QuantizeVertices (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast); 62/62 calls identical, same EH state numbering and frame size; stack-slot assignment and register allocation differ; difftest WEAK (305 valid, no mismatch, 3.1% coverage: random meshes rarely get past the real FindEltArrayIndex lookup at the top; fixed: operator new annotated, template ctors/DoInsertValue instances mapped in symbols/slices/s00726c20.txt)
 00728c90 985 Complete CreateUVsAndCharts (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-); stack-slot order of vecB/rect temp, dead erase-copy loops and mesh-info induction pointer differ
+00724700  -  complete draft carried over from s00724100 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 114, retail 177
+007247c0  -  complete draft carried over from s00724100 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 864, retail 548
+007280b0  -  complete draft carried over from s00728020 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 171, retail 267
+007281d0  -  complete draft carried over from s00728020 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 67, retail 118
+00728330  -  complete draft carried over from s00728020 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 122, retail 193
+00728400  -  complete draft carried over from s00728020 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 281, retail 410
+007285a0  -  complete draft carried over from s00728020 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 497, retail 1010
+007289a0  -  complete draft carried over from s00728020 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 167, retail 329

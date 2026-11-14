@@ -1,5 +1,3 @@
-# va  diff-bytes  reason
+# va  reason
 004c2eb0  0  partial: cSPEditorSkinManager destructor skeleton flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast; match/slices/s004c2100/s004c2100.cpp mentions this address and may hold an earlier draft.
 004c3070  0  partial: create_ui_raster skeleton flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast; match/slices/s004c2100/s004c2100.cpp mentions this address and may hold an earlier draft.
-004c38e0  0  partial: cSPEditorSkinManager::Update top-level flow only (UpdateTorso call, mModel check, UpdatePaintedSkin tail); missing asm 0x4c3912..0x4c4270 (block loop, mLimbSkins find/insert, complete-skin update, cleanup loops); Earlier, fuller draft: match/slices/s004c38e0/s004c38e0.cpp (left behind by the migration); start from it.
-004c4290  0  partial: UpdatePaintedSkin skeleton; Earlier, fuller draft: match/slices/s004c38e0/s004c38e0.cpp (left behind by the migration); start from it.

@@ -1,4 +1,4 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason   (none)
 00783590 1109 complete: full SH normalisation apply for degrees 0..4; original vectorises each 4-float group into SIMD
 00783830 1431 complete: full SH normalisation remove for degrees 0..4; same vectorisation difference
 00783b20 1590 complete: diffuse-reflection application for degrees 0..4 including the 7x and 9x block loops
@@ -13,3 +13,5 @@
 00795ec0 500 complete Ghidra transcription of SP::FindSHCoeffsFromHDRCubeMap; float10/x87 normalization prevents byte match
 007961d0 245 complete behavioral transcription of SP::AddSphereLighting; compiler shrinks SSE body
 00796420 350 complete behavioral transcription of SP::CalcAtmosphereZH; constant/switch schedule differs
+00794610  -  complete draft carried over from s00794610 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 544, retail 701
+007948d0  -  complete draft carried over from s00794610 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 1486, retail 1415

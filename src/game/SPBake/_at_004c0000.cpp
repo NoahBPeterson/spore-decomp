@@ -19,9 +19,8 @@ extern "C" const char kEditorAllocName[];   // 0x013eb430 ?kEditorAllocName@@3QB
 
 // ---- items of slice s004c38e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* __cdecl operator new(unsigned int size, const char* name, int, int, int, int);
-extern "C" const char kEditorAllocName[];   // 0x013eb430 ?kEditorAllocName@@3QBDB
 namespace eastl {
-template <int N> class bitset {
+template <int N> class bitset_s004c_38e0 {
 public:
     uint32_t mWord[(N + 31) / 32];
     uint32_t& DoGetWord(uint32_t i) { return mWord[i >> 5]; }
@@ -46,7 +45,7 @@ namespace SP {
 class cIModelWorld_s004c_38e0;
 }
 namespace SP {
-class cPaintRequest;
+class cPaintRequest_s004c_38e0;
 }
 namespace SP {
 struct SkinElem;
@@ -101,7 +100,7 @@ struct SkinResource {
 };
 }
 namespace SP {
-class cPaintRequest {
+class cPaintRequest_s004c_38e0 {
 public:
     uint8_t mPad0[0x70];
     float   mA;                                                  // +0x70
@@ -145,15 +144,15 @@ public:
 };
 }
 namespace SP {
-template <class T> class AutoRefCount {
+template <class T> class AutoRefCount_s004c_38e0 {
 public:
-    AutoRefCount() : mpObject(0) {}
-    AutoRefCount(T* const& p) : mpObject(p) { if (mpObject) mpObject->AddDrawRef(); }
-    AutoRefCount(const AutoRefCount& o) : mpObject(o.mpObject) {
+    AutoRefCount_s004c_38e0() : mpObject(0) {}
+    AutoRefCount_s004c_38e0(T* const& p) : mpObject(p) { if (mpObject) mpObject->AddDrawRef(); }
+    AutoRefCount_s004c_38e0(const AutoRefCount_s004c_38e0& o) : mpObject(o.mpObject) {
         if (mpObject) mpObject->AddDrawRef();
     }
-    ~AutoRefCount() { if (mpObject) mpObject->DrawRelease(); }
-    AutoRefCount& operator=(T* const& p) {
+    ~AutoRefCount_s004c_38e0() { if (mpObject) mpObject->DrawRelease(); }
+    AutoRefCount_s004c_38e0& operator=(T* const& p) {
         if (p != mpObject) {
             T* old = mpObject;
             if (p) p->AddDrawRef();
@@ -168,14 +167,14 @@ public:
 }
 namespace SP {
 struct PaintRequestSlot {
-    cPaintRequest* mpObject;
-    cPaintRequest* operator->() const { return mpObject; }
+    cPaintRequest_s004c_38e0* mpObject;
+    cPaintRequest_s004c_38e0* operator->() const { return mpObject; }
 };
 }
 namespace SP {
 struct LimbPair {
     cSPEditorBlock_s004c_38e0* first;                                       // +0x00
-    AutoRefCount<cSPEditorSkinPart_s004c_38e0> second;                      // +0x04
+    AutoRefCount_s004c_38e0<cSPEditorSkinPart_s004c_38e0> second;                      // +0x04
 };
 }
 namespace SP {
@@ -199,7 +198,7 @@ public:
     uint8_t mPad0[0x33c];
     void*   mField33c;                                           // +0x33c
     uint8_t mPad1[0xdc8 - 0x340];
-    eastl::bitset<60> mFlags;                                    // +0xdc8
+    eastl::bitset_s004c_38e0<60> mFlags;                                    // +0xdc8
 };
 }
 namespace SP {
@@ -226,8 +225,8 @@ public:
     uint8_t mPad0[0x10];
     cSPEditorModel_s004c_38e0* mModel;                                      // +0x10
     cIModelWorld_s004c_38e0*   mSceneObjectModelWorld;                      // +0x14
-    AutoRefCount<cSPEditorSkinPart_s004c_38e0> mTorsoSkin;                  // +0x18
-    AutoRefCount<cSPEditorSkinPart_s004c_38e0> mCompleteSkin;               // +0x1c
+    AutoRefCount_s004c_38e0<cSPEditorSkinPart_s004c_38e0> mTorsoSkin;                  // +0x18
+    AutoRefCount_s004c_38e0<cSPEditorSkinPart_s004c_38e0> mCompleteSkin;               // +0x1c
     uint8_t mPad20[0x48 - 0x20];                                 // +0x20 transforms/pointers
     LimbVector mLimbSkins;                                       // +0x48
     PaintRequestSlot mPaintRequest;                              // +0x5c

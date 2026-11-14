@@ -5,7 +5,7 @@
 007bd5d0 ?Shutdown@cEditorJobInfo@@QAEXXZ  # cEditorJobInfo::Shutdown migrated from s007bced0 (verbatim, slice spelling)
 007bd640 ?Shutdown@cEditorThumbnailJob@@QAEXXZ  # cEditorThumbnailJob::Shutdown migrated from s007bced0 (verbatim, slice spelling)
 007bd6b0 ?Shutdown@cCSAThumbnailJob_s007b_ced0@@QAEXXZ  # cCSAThumbnailJob_s007b_ced0::Shutdown migrated from s007bced0 (verbatim, slice spelling)
-007bd750 ?RoundToInt@@YAHM@Z  # RoundToInt migrated from s007bced0 (verbatim, slice spelling)
+007bd750 ?DrawLayer@cCSAThumbnailJob_s007b_ced0@@QAEXHHPAUDrawCtx@@H@Z  # cCSAThumbnailJob_s007b_ced0::DrawLayer migrated from s007bced0 (verbatim, slice spelling)
 007bdd70 ?Shutdown@cGameThumbnailJob@@QAEXXZ  # cGameThumbnailJob::Shutdown migrated from s007bced0 (verbatim, slice spelling)
 007bdde0 ?FUN_007bdde0@@YIXPAX@Z  # FUN_007bdde0 migrated from s007bced0 (verbatim, slice spelling)
 007c3c20 ?SetClearColor@cViewer@SP@@QAEXABUcSPColorRGBA@@@Z  # SP::cViewer::SetClearColor (callee of s007bced0, named from the dev publics; slice address comment)

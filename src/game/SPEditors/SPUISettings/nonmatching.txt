@@ -2,7 +2,7 @@
 005ff230 26 inlined EA::Stopwatch restart: cl hoists the mnUnits compare above the zeroing stores and moves the mbRunning store (scheduling only) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 return target, ret#0 eax]
 005ff700 220 only difference is a 7-byte loop-alignment nop (lea esp,[esp]) before the child-search loop; everything after it is shifted
 00601e60 113 cSPUISettings::Shutdown: complete; the loop-over-tabs codegen (size() recomputation / register reuse) does not converge.
-00601fd0 1070 complete cGameTab::Init (/O2 /MD /Gy /TP /arch:SSE /fp:fast); 94 vs 94 calls, identical vtable slot sequence; frame 0x24 vs 0x28 and register scheduling differ
+00601fd0 1070 complete cGameTab::Init (/O2 /MD /Gy /TP /arch:SSE /fp:fast); 94 vs 94 calls, identical vtable slot sequence; frame 0x24 vs 0x28 and register scheduling differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00602940 1743 SP::cOnlineTab::InitUIState: complete (all branches/calls); /O2 scheduling and register assignment differ.
 006031c0 116 SP::cSPUISettings::AddTab: complete; tab ptr is reloaded from the stack in ours (address-taken param) vs held in esi.
 00603260 630 SP::cSPUISettings::Init: complete; scheduling/regalloc differ (float rotation compare, AddTab call sequence).
@@ -10,3 +10,4 @@
 00603650 167 SP::cGraphicsTab::init_profile_data: complete; register allocation differs (edi vs ebp zero reg, loop shape).
 00603f10 1 cGraphicsTab checkbox->canvas sync (setne variant): complete; the key-temp scheduling above the Canvas call does not converge.
 00603fe0 1 cGraphicsTab checkbox->canvas sync (sete variant): complete; same key-temp scheduling difference.
+006026f0  -  complete draft carried over from s00601fd0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 568, retail 588

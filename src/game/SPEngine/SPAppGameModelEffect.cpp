@@ -8,15 +8,25 @@
 #include <math.h>
 #include "EA/Swarm/cTransform.h"
 #include <string.h>
+#include "SP/cGameModelDescription.h"
 
 // ---- items of slice s007d3930 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* operator new[](size_t size);
 void* operator new(size_t size, const char* pName, int a, int b, const char* file, int line);  // 0xf473a0
+struct cSPTransformOps_s007d_3930 { cSPTransformOps_s007d_3930* Assign(const void* src); };  // 0x537dc0
+struct cLabelOps_s007d_3930      { void Propagate(const void* txf); };            // 0x79a0d0
 struct IUnknown32 { virtual void AddRef(); virtual void Release(); };
 struct EffComp {
-    virtual void e0(); virtual void e1(); virtual void e2(); virtual void e3();
-    virtual void e4(); virtual void e5(); virtual void e6(); virtual void e7();
-    virtual void e8(); virtual void e9();
+virtual void e0();
+virtual void e1();
+virtual void e2();
+virtual void e3();
+virtual void e4();
+virtual void e5();
+virtual void e6();
+virtual void e7();
+virtual void e8();
+virtual void e9();
     virtual void SetFlag(int f);   // +0x28
 };
 struct EffOwner { void SetVisible(int param); };
@@ -29,7 +39,7 @@ struct cEffectParams {
     IUnknown32* mUnknown[9];
     void UnknownStore(int idx, IUnknown32* p);
 };
-// UTFWin::Message layout used by the effect tick's messaging dispatch.
+struct cEffectNode { void Tick(void* arg); char HandleParam(int kind, float* value, void* extra); };
 struct cEffectMessage {
     void* mpSource;         // +0x00
     uint32_t mPad4;         // +0x04
@@ -37,7 +47,6 @@ struct cEffectMessage {
     uint32_t mPadc;         // +0x0c
     uint32_t mKey;          // +0x10
 };
-// Messaging context hung off the effect node at +0x0c.
 struct cEffectMsgContext {
     char pad00[0x0c];
     uint32_t mFlags;        // +0x0c
@@ -46,7 +55,15 @@ struct cEffectMsgContext {
 };
 struct cMessageServer;
 cMessageServer* __cdecl GetServer();   // 0x00883860
-struct cEffectNode { void Tick(void* arg); char HandleParam(int kind, float* value, void* extra); };
+struct XformVec {
+    int32_t  field00;      // +0x00
+    int32_t  field04;      // +0x04
+    void*    p08;          // +0x08  (cSPTransform copy target)
+    char     pad0c[0x34];  // +0x0c
+    char*    mpBegin;      // +0x40
+    char*    mpEnd;        // +0x44
+    void DoInsertValue(const void* src);
+};
 // ---- items of slice s007d3930 end
 
 // ---- items of slice s007d4a40 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -777,9 +794,30 @@ VecOut* VecOut::Allocate(unsigned n, void* alloc)
 }
 
 // @ 0x007d4980
-void AssignTransforms(void* self, void* src)
+void XformVec::DoInsertValue(const void* src)
 {
-    (void)self; (void)src;
+    ((cSPTransformOps_s007d_3930*)((char*)this + 8))->Assign(src);
+    unsigned count = (unsigned)((mpEnd - mpBegin) / 0x1c);
+    unsigned off = 0;
+    if (count == 0) return;
+    do {
+        char* base = *(char**)((char*)this + 0x40);
+        int* pm = (int*)*(void**)(base + off + 4);
+        int* last = (int*)*(void**)(base + off + 8);
+        int* pb = last;
+        while (pm != last && *pm != -2) pm = (int*)((char*)pm + 0x78);
+        while (pm != pb) {
+            ((cLabelOps_s007d_3930*)((char*)pm + 4))->Propagate((char*)this + 8);
+            pm = (int*)((char*)pm + 0x78);
+            if (pm != last) {
+                while (*pm != -2) {
+                    pm = (int*)((char*)pm + 0x78);
+                    if (pm == last) break;
+                }
+            }
+        }
+        off += 0x1c;
+    } while (--count);
 }
 
 // @ 0x007d4a40

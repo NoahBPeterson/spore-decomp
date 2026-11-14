@@ -1,2 +1,4 @@
-007c13f0 ?FUN_007c13f0@@YAXPAX@Z  # FUN_007c13f0 migrated from s007c13f0 (verbatim, slice spelling)
-007c1b70 ?FUN_007c1b70@@YAXPAX@Z  # FUN_007c1b70 migrated from s007c13f0 (verbatim, slice spelling)
+007c13f0 ?Initialize@cThumbnailManager_s007c_13f0@SPL@@QAE_NXZ  # cThumbnailManager_s007c_13f0::Initialize migrated from s007c13f0 (verbatim, slice spelling)
+007c1b70 ?Init@cSplatJob_s007c_13f0@SPL@@QAEXABURefVectorA@2@PAXABURefVectorB@2@ABUSplatParams@2@ABUElem24Vector@2@PBURectID_s007c_13f0@2@1ABUXformVector@2@PAUFilterChainJob@2@@Z  # cSplatJob_s007c_13f0::Init migrated from s007c13f0 (verbatim, slice spelling)
+007c3cc0 ?Clear@cViewer@SP@@QBEXI@Z  # SP::cViewer::Clear (callee of s007c13f0, named from the dev publics; slice address comment)
+007c4dd0 ?Init@cViewer@SP@@QAE_N_N@Z  # SP::cViewer::Init (callee of s007c13f0, named from the dev publics; slice address comment)

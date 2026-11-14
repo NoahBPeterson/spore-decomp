@@ -8,6 +8,7 @@
 #include <intrin.h>
 #include "SP/cDirectPropertyList.h"
 #include <wchar.h>
+#include "EA/ResourceMan/Database.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern void*  EAlloc(uint32_t, const char*, int, int, const char*, int);   // 0x00f473a0
@@ -308,38 +309,6 @@ struct C_6b04a0 { void*   f(void** out, char* pos, unsigned* key, char flag); };
 struct C_6b0670 { void*   f(void* out, unsigned* key, int extra); };
 struct C_6b0720 { void*   f(void* out, void* src); };
 void __fastcall FUN_006afe80(char*);
-// @ 0x006afe80
-void __fastcall FUN_006afe80(char* self)
-{
-    struct Req { int f0; int f1; int f2; };
-    Req req;
-    req.f0 = 0x2e5a9763;
-    req.f1 = 0x2e5a9763;
-    req.f2 = 0;
-    void* out = 0;
-    char* sink = *(char**)(self + 0xc);
-    char (__thiscall* sf)(void*, Req*, void**, int, int, int, int) =
-        (char(__thiscall*)(void*, Req*, void**, int, int, int, int))(*(void***)sink)[0x34 / 4];
-    if (sf(sink, &req, &out, 3, 4, 1, 0)) {
-        unsigned r = ((unsigned(__thiscall*)(void*))(*(void***)out)[0x18 / 4])(out);
-        ((ThiscallExt*)self)->FUN_006af720((void*)r);
-        ((void(__thiscall*)(void*))(*(void***)out)[0x24 / 4])(out);
-    } else {
-        if (out) {
-            void* t = out;
-            out = 0;
-            ((void(__thiscall*)(void*))(*(void***)t)[8 / 4])(t);
-        }
-        if (sf(sink, &req, &out, 3, 2, 1, 0)) {
-            unsigned r = ((unsigned(__thiscall*)(void*))(*(void***)out)[0x18 / 4])(out);
-            ((ThiscallExt*)self)->FUN_006af720((void*)r);
-            ((void(__thiscall*)(void*))(*(void***)out)[0x24 / 4])(out);
-        }
-    }
-    if (out)
-        ((void(__thiscall*)(void*))(*(void***)out)[8 / 4])(out);
-}
-// ---- items of slice s006afa10 end
 
 // @ 0x006af5c0
 void __stdcall FUN_006af5c0(void* p)
@@ -643,6 +612,39 @@ void CAfe40::f(LN* node)
 }
 
 #pragma code_seg()
+
+// @ 0x006afe80
+void __fastcall FUN_006afe80(char* self)
+{
+    struct Req { int f0; int f1; int f2; };
+    Req req;
+    req.f0 = 0x2e5a9763;
+    req.f1 = 0x2e5a9763;
+    req.f2 = 0;
+    void* out = 0;
+    char* sink = *(char**)(self + 0xc);
+    char (__thiscall* sf)(void*, Req*, void**, int, int, int, int) =
+        (char(__thiscall*)(void*, Req*, void**, int, int, int, int))(*(void***)sink)[0x34 / 4];
+    if (sf(sink, &req, &out, 3, 4, 1, 0)) {
+        unsigned r = ((unsigned(__thiscall*)(void*))(*(void***)out)[0x18 / 4])(out);
+        ((ThiscallExt*)self)->FUN_006af720((void*)r);
+        ((void(__thiscall*)(void*))(*(void***)out)[0x24 / 4])(out);
+    } else {
+        if (out) {
+            void* t = out;
+            out = 0;
+            ((void(__thiscall*)(void*))(*(void***)t)[8 / 4])(t);
+        }
+        if (sf(sink, &req, &out, 3, 2, 1, 0)) {
+            unsigned r = ((unsigned(__thiscall*)(void*))(*(void***)out)[0x18 / 4])(out);
+            ((ThiscallExt*)self)->FUN_006af720((void*)r);
+            ((void(__thiscall*)(void*))(*(void***)out)[0x24 / 4])(out);
+        }
+    }
+    if (out)
+        ((void(__thiscall*)(void*))(*(void***)out)[8 / 4])(out);
+}
+// ---- items of slice s006afa10 end
 
 // @ 0x006aff70
 void* C_6aff70::f(void* a1, void* a2)

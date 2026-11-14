@@ -1,8 +1,4 @@
-# va  diff-bytes  reason
-00630930  -  SP::cSPPlayModePhotoBrowser::~cSPPlayModePhotoBrowser: skeleton (162-byte teardown); Earlier, fuller draft: match/slices/s00630750/s00630750.cpp (left behind by the migration); start from it.
-00630d10  -  SP::cSPPlayModePhotoBrowser::UpdatePhotoCountText: skeleton (514 bytes); match/slices/s00630750/s00630750.cpp mentions this address and may hold an earlier draft.
-00630f20  -  SP::cSPPlayModePhotoBrowser::ShowSendEmailWindow: skeleton (962 bytes); Earlier, fuller draft: match/slices/s00630750/s00630750.cpp (left behind by the migration); start from it.
-006312f0  -  FUN_006312f0: skeleton (1307 bytes); Earlier, fuller draft: match/slices/s00630750/s00630750.cpp (left behind by the migration); start from it.
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00631810  -  FUN_00631810: skeleton (504 bytes); Earlier, fuller draft: match/slices/s00631810/s00631810.cpp (left behind by the migration); start from it.
 00631a10  -  FUN_00631a10: skeleton (273 bytes); Earlier, fuller draft: match/slices/s00631810/s00631810.cpp (left behind by the migration); start from it.
 00631b30  -  SP::cSPPlayModePhotoBrowser::PhotoCountChanged: skeleton (647 bytes); Earlier, fuller draft: match/slices/s00631810/s00631810.cpp (left behind by the migration); start from it.

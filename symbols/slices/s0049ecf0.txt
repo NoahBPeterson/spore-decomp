@@ -1,2 +1,2 @@
-0049ecf0 ?FUN_49ecf0@@YAXPAUcSPEditorBlock_s0049_ecf0@@@Z  # FUN_49ecf0 migrated from s0049ecf0 (verbatim, slice spelling)
+0049ecf0 ?FUN_49ecf0@@YAXPAUcSPEditorBlock_s0049_ecf0@@PAU?$LimbVec_s0049_ecf0@PAUcSPEditorBlock_s0049_ecf0@@@@UcSPVector3_s0049_ecf0@@UcSPMatrix3_s0049_ecf0@@@Z  # FUN_49ecf0 migrated from s0049ecf0 (verbatim, slice spelling)
 0049ef80 ?FUN_49ef80@@YAXPAUcSomeTracker@@PAUcSPVector3_s0049_ecf0@@@Z  # FUN_49ef80 migrated from s0049ecf0 (verbatim, slice spelling)

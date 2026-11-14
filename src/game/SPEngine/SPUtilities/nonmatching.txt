@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
-006baff0 35 complete; SporeAlert, extra EH state store vs original
+006baff0 35 SP::SporeAlert: complete source, message-box alert path; extra EH state store vs original; equiv UNSUPPORTED 0/400 valid (discards: import:MessageBoxA=295, fault(write)=92, fault(write-prot)=5, fault(pool-limit)=5, budget=2, fault(read)=1) [/O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast] flags: /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast
+006baec0  -  complete draft carried over from s006ba2f0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 204, retail 294

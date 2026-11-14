@@ -1,2 +1,1 @@
-# va  diff-bytes  reason
-007d4980  -  cSPTransform-vector assign loop: skeleton (per-label loop not reproduced); match/slices/s007d3930/s007d3930.cpp mentions this address and may hold an earlier draft.
+# <va>  <diff-bytes>  <reason>

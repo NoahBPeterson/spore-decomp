@@ -9,6 +9,9 @@
 #include "SP/cPropertyList.h"
 #include "SP/cString.h"
 #include <intrin.h>
+#include "SP/cDirectPropertyList.h"
+#include "SP/cJob.h"
+#include <wchar.h>
 #pragma intrinsic(_ReadWriteBarrier)
 
 // unnamed retail callees and globals (address in the comment)
@@ -17,6 +20,8 @@ extern void  FUN_006acfe0(void*, void*);        // 0x006acfe0
 extern uint32_t FUN_006b4b60(void*, void*, int, int);  // 0x006b4b60
 
 // ---- items of slice s006b18c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void EAFree(void* p);                    // 0x00f47380
+extern "C" void* ZoneObject_new(int size, const char* area, int a, int b, int c, int d);  // 0x00926020
 struct SaveAreaMap {
   uint32_t  f0;       // +0x00
   uint32_t  head;     // +0x04  (sentinel address 0x0152fdc8)
@@ -24,34 +29,65 @@ struct SaveAreaMap {
   uint32_t  f3;       // +0x0c
   void find(void** out, const uint32_t* key);   // 0x00e5c780 (thiscall)
 };
-extern SaveAreaMap g_saveAreas;
-extern "C" void* RBTreeIncrement(void*);        // 0x00921580
 struct PropertyMgr4 {
-  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-  virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
-  virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
   virtual void v12();
   virtual void Call34(void*, void*, void*);     // slot 13 (0x34)
 };
 extern PropertyMgr4* SP_PropertyManager();      // 0x0067de30
 struct ResourceMgr4 {
-  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-  virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
   virtual uint32_t Call20(void*, void*, void*, void*, void*);  // slot 8 (0x20)
-  virtual void v9(); virtual void v10(); virtual void v11();
+virtual void v9();
+virtual void v10();
+virtual void v11();
   virtual int Call30(void*, void*, void*);      // slot 12 (0x30)
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+  virtual bool Call50(int a, void* p, int b);   // slot 20 (0x50)
 };
 extern ResourceMgr4* ResourceMan_GetManager();  // 0x0067dcd0
 struct SaveObj {
-  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-  virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
   virtual void v8();
   virtual void Call24();                        // slot 9 (0x24)
-  virtual void v10(); virtual void v11(); virtual void v12();
+virtual void v10();
+virtual void v11();
+virtual void v12();
   virtual bool Call34(void*, void*, void*, void*, void*, void*); // slot 13
 };
-extern void  FUN_006acfe0(void*, void*);        // 0x006acfe0
-extern uint32_t FUN_006b4b60(void*, void*, int, int);  // 0x006b4b60
+struct Key12 { uint32_t a, b, c; };
+struct OwnerRef { virtual void AddRef(); virtual void Release(); };   // refcount subobject at owner+4
 struct RefVt { virtual void AddRef(); virtual void Release(); };
 struct RefA { uint32_t pad0; RefVt ref; };       // polymorphic subobject at +0x4
 struct RefB { virtual void AddRef(); virtual void Release(); };
@@ -63,12 +99,154 @@ struct RefPair {
   RefPair* CtorCopy(const RefPair* o);           // 0x6b1e90
   RefPair* Assign(const RefPair* o);             // 0x6b1ef0
 };
+struct EaHeader { uint32_t mRefCount; };            // 4 bytes in front of every EA allocation
+static inline void FreeOwned(void* p) {
+  if (p != 0 && ((EaHeader*)p)[-1].mRefCount != 0) EAFree(p);
+}
+struct Variant {
+  void*    mpData;      // +0x00 array payload
+  uint32_t m04;         // +0x04
+  uint32_t m08;         // +0x08 array length in 0x10-byte units
+  uint32_t m0c;         // +0x0c
+  uint16_t m10;         // +0x10 type flags (0x30 = external array)
+  uint16_t m12;         // +0x12 inline count/flag
+  uint32_t m14;         // +0x14
+};
+struct ExtEntry {                             // 0x20-byte map entry inside the variant array
+  const wchar_t* mpBegin;   // +0x00
+  const wchar_t* mpEnd;     // +0x04
+  uint32_t m08;             // +0x08
+  uint32_t m0c;             // +0x0c
+  uint32_t mValue;          // +0x10
+  uint32_t m14;             // +0x14
+  uint32_t m18;             // +0x18
+  uint32_t m1c;             // +0x1c
+};
+struct IConfigFile {
+virtual void s00();
+virtual void Release();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+  virtual void s18();
+  virtual bool HasSection(uint32_t key);                         // +0x1c
+virtual void s20();
+virtual void s24();
+  virtual Variant* GetVariant(uint32_t key);                     // +0x28
+};
+struct IExtMapSink {
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+virtual void s2c();
+virtual void s30();
+virtual void s34();
+virtual void s38();
+virtual void s3c();
+virtual void s40();
+virtual void s44();
+virtual void s48();
+  virtual void AddMapping(uint32_t value, unsigned long number);  // +0x4c
+virtual void s50();
+virtual void s54();
+virtual void s58();
+virtual void s5c();
+virtual void s60();
+virtual void s64();
+virtual void s68();
+virtual void s6c();
+  virtual void SetKey(uint32_t key);                             // +0x70
+};
+struct IPropMgrOpen {
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+  virtual bool Open(void* source, uint32_t section, IConfigFile** out);   // +0x2c
+};
+extern "C" void* VariantTypeTraits_Key_GetTPTR(Variant* v);      // 0x00454b10
+struct Elem12 { uint32_t a, b, c; };
+struct Vec12 { Elem12* mpBegin; Elem12* mpEnd; Elem12* mpCap; };
+struct SaveAreaObj {
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+virtual void s1c();
+virtual void s20();
+virtual void s24();
+virtual void s28();
+virtual void s2c();
+  virtual void Collect(Vec12* out, void* unused);   // +0x30
+virtual void s34();
+virtual void s38();
+virtual void s3c();
+  virtual void DestroyElem(Elem12* it);            // +0x40
+};
+struct WString {                             // eastl::wstring (0xc bytes)
+  wchar_t* mpBegin;   // +0x00
+  wchar_t* mpEnd;     // +0x04
+  wchar_t* mpCap;     // +0x08
+  WString(const wchar_t* s);                 // 0x00579a90 range_initialize
+  void Append(const wchar_t* first, const wchar_t* last);   // 0x00429580
+};
+struct DatabaseDirectoryFiles {
+virtual void s00();
+virtual void s04();
+virtual void s08();
+virtual void s0c();
+virtual void s10();
+virtual void s14();
+virtual void s18();
+  virtual bool Configure(int a, int b, int c);   // +0x18
+  virtual void Shutdown();                       // +0x1c
+virtual void s20();
+virtual void s24();
+virtual void s28();
+virtual void s2c();
+virtual void s30();
+virtual void s34();
+virtual void s38();
+virtual void s3c();
+virtual void s40();
+virtual void s44();
+virtual void s48();
+virtual void s4c();
+virtual void s50();
+virtual void s54();
+virtual void s58();
+virtual void s5c();
+virtual void s60();
+virtual void s64();
+virtual void s68();
+virtual void s6c();
+  virtual void SetSink(void* sink);              // +0x70
+  OwnerRef ref;                                  // +0x04 refcounted handle
+};
+extern "C" DatabaseDirectoryFiles* DatabaseDirectoryFiles_Ctor(DatabaseDirectoryFiles*, const wchar_t*, void*);  // 0x008d7400
 // ---- items of slice s006b18c0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern SaveAreaMap g_saveAreas;
-extern PropertyMgr4* SP_PropertyManager();      // 0x0067de30
-extern ResourceMgr4* ResourceMan_GetManager();  // 0x0067dcd0
 
 // ---- items of slice s006b27f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void EFree5(void*);                 // 0x00f47380
@@ -445,8 +623,60 @@ bool FUN_006b2090(void* p, char flag)
 }
 
 // @ 0x006b2110
-void ReadExtensionMappingsFromPropFile()
-{}
+void ReadExtensionMappingsFromPropFile(uint32_t propKey, IExtMapSink* sink)
+{
+  IConfigFile* file = 0;
+  IPropMgrOpen* pm = (IPropMgrOpen*)SP_PropertyManager();
+  if (pm != 0) {
+    IConfigFile* old = file;
+    if (old != 0) {
+      file = 0;
+      old->Release();
+    }
+    if (pm->Open((void*)propKey, 0x1c7ac81, &file)) {
+      if (file->HasSection(0x4334f33)) {
+        Variant* v = file->GetVariant(0x4334f33);
+        uint32_t count;
+        ExtEntry* begin;
+        if ((v->m10 & 0x30) != 0) {
+          count = v->m08;
+        } else {
+          count = 0;
+          if (v->m12 != 0) {
+            count = 1;
+          }
+        }
+        count &= 0xfffffffeu;
+        if ((v->m10 & 0x30) != 0) {
+          begin = (ExtEntry*)v->mpData;
+        } else {
+          begin = v->m12 != 0 ? (ExtEntry*)v : 0;
+        }
+        ExtEntry* last = (ExtEntry*)((char*)begin + count * 0x10);
+        for (ExtEntry* it = begin; it < last; ++it) {
+          const wchar_t* s = it->mpBegin;
+          const wchar_t* e = it->mpEnd;
+          wchar_t* endptr;
+          unsigned long number = wcstoul(s, &endptr, 16);
+          if (endptr - s == e - s) {
+            sink->AddMapping(it->mValue, number);
+          }
+        }
+      }
+      if (file->HasSection(0x4334f34)) {
+        Variant* v = file->GetVariant(0x4334f34);
+        uint32_t* key = (uint32_t*)VariantTypeTraits_Key_GetTPTR(v);
+        Key12 copy;
+        copy.a = key[0];
+        copy.b = key[1];
+        sink->SetKey(key[2]);
+      }
+    }
+  }
+  if (file != 0) {
+    file->Release();
+  }
+}
 
 // @ 0x006b22a0
 void* SP_UpdateSaveAreas(void* p)
@@ -486,12 +716,85 @@ void SP_SomethingAllSaveAreas()
 }
 
 // @ 0x006b2400
-void FUN_006b2400()
-{}
+void FUN_006b2400(uint32_t key)
+{
+  uint32_t* out;
+  g_saveAreas.find((void**)&out, &key);
+  if (out == &g_saveAreas.head) {
+    return;
+  }
+  SaveAreaObj* o = (SaveAreaObj*)out[5];
+  if (o == 0) {
+    return;
+  }
+  Vec12 v;
+  v.mpBegin = 0;
+  v.mpEnd = 0;
+  v.mpCap = 0;
+  try {
+    o->Collect(&v, 0);
+    for (Elem12* it = v.mpBegin; it != v.mpEnd; ++it) {
+      o->DestroyElem(it);
+    }
+  } catch (...) {
+    FreeOwned(v.mpBegin);
+    throw;
+  }
+  FreeOwned(v.mpBegin);
+}
 
 // @ 0x006b2620
-void FUN_006b2620()
-{}
+bool FUN_006b2620(uint32_t dirId, const wchar_t* name, DatabaseDirectoryFiles** out, uint32_t, uint32_t, IExtMapSink* sink)
+{
+  const wchar_t* dir = GetDirFromID(dirId);
+  WString path(dir);
+  const wchar_t* end = name;
+  while (*end != 0) {
+    ++end;
+  }
+  path.Append(name, end);
+  void* mem = ZoneObject_new(0x168, "App", 0, 0, 0, 0);
+  DatabaseDirectoryFiles* pFiles;
+  if (mem != 0) {
+    pFiles = DatabaseDirectoryFiles_Ctor((DatabaseDirectoryFiles*)mem, path.mpBegin, 0);
+  } else {
+    pFiles = 0;
+  }
+  if (pFiles != 0) {
+    pFiles->ref.AddRef();
+  }
+  if (pFiles == 0) {
+    goto cleanup;
+  }
+  pFiles->s04();
+  ReadExtensionMappingsFromPropFile(0x1c7ac81, (IExtMapSink*)pFiles);
+  if (sink != 0) {
+    pFiles->SetSink(sink);
+    ReadExtensionMappingsFromPropFile((uint32_t)sink, (IExtMapSink*)pFiles);
+  }
+  if (pFiles->Configure(3, 4, 0)) {
+    ResourceMgr4* rm = ResourceMan_GetManager();
+    if (rm->Call50(1, pFiles, 1000)) {
+      *out = pFiles;
+      pFiles->ref.AddRef();
+      pFiles->ref.Release();
+      if ((((uint32_t)((char*)path.mpEnd - (char*)path.mpBegin)) & 0xfffffffeu) > 2 && path.mpBegin != 0) {
+        EAFree(path.mpBegin);
+      }
+      return true;
+    }
+    pFiles->Shutdown();
+  }
+  pFiles->s08();
+cleanup:
+  if (pFiles != 0) {
+    pFiles->ref.Release();
+  }
+  if ((((uint32_t)((char*)path.mpEnd - (char*)path.mpBegin)) & 0xfffffffeu) > 2 && path.mpBegin != 0) {
+    EAFree(path.mpBegin);
+  }
+  return false;
+}
 
 // @ 0x006b27f0
 bool __cdecl SP_cAppSystem_CreateHTTPServer(uint32_t id, const wchar_t* sub, IRef6** outServer, IRef6** outCache, uint32_t cacheArg, uint32_t extraGroup)

@@ -2,16 +2,17 @@
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?FUN_007a93b0@@YAXXZ  007a93b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?GetTexture@cTextureManager@@QAEXHHH@Z  007a93c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?HasTexture@cTextureManager@@QAEXHH@Z  007a93f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?GetKeyFromTexture@cTextureManager@SP@@UAE?AVKey@ResourceMan@EA@@PBVcTextureInstance@2@@Z  007a9420  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?GetResourceForTexture@cTextureManager@@QAEPAXPAX@Z  007a9450  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?CreateTextureEx@cTextureManager@@QAEXHHHHHIHH@Z  007a94f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?RegisterGameTexture@cTextureManager@@QAEXHH@Z  007a9540  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?FUN_007a95b0@@YGXHD@Z  007a95b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?ReloadTexture@cTextureManager@@QAEXHH@Z  007a95e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?UnregisterArena@cTextureManager_s007a_abb0@@QAEXPAX@Z  007aaf90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?ClearEntries@cLoadQueue@@QAEXXZ  007ab090  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?ReloadTexture@cTextureManager_s007a_abb0@@QAE_NUResourceKey@@@Z  007ab6c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?GetC@RefHolder@@QAEIXZ  008332a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?GetE@RefHolder@@QAEIXZ  008332d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?CreateNode@TexTable@@QAEPAUTexNode@@PBX@Z  008337d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?Dtor@TexMgr@@QAEXXZ  00833a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?Clear@TexTable@@QAEXPAPAUTexNode@@I@Z  00833a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?GetKeyFromTexture@cTextureManager@SP@@UAE?AVKey@ResourceMan@EA@@PBVcTextureInstance@2@@Z  007a9420  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?GetResourceForTexture@cTextureManager@@QAEPAXPAX@Z  007a9450  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?Dtor@TexMgr@@QAEXXZ  00833a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

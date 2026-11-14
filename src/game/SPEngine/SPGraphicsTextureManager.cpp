@@ -25,6 +25,7 @@ extern "C" char  FUN_006b4b60();
 #include "SP/cTextureAsyncQueueEntry.h"
 #include "SP/cTextureInstanceInternal.h"
 #include <math.h>
+#include "rw/graphics/Raster.h"
 
 // ---- items of slice s007a8a50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct TextureKey { int mKey; unsigned int mType; int mExtra; };
@@ -253,6 +254,8 @@ public:
     void  Cancel(int bWait);   // 0x00692400
     void  Wait();              // 0x006926b0
     int   GetStatus();         // 0x00690120
+    int   AddRef();            // 0x0068f950
+    int   Release();           // 0x00690120
 private:
     char mData[0x28];
 };
@@ -292,7 +295,6 @@ struct TextureNode {
     void*       pInstance;  // +0x0c
     TextureNode* pNext;     // +0x10
 };
-// Raster view used by the synchronous path of CreateTextureRaster.
 struct Raster {
     uint32_t mFormat;       // +0x00
     char     mPad04[8];
@@ -301,7 +303,6 @@ struct Raster {
     uint32_t D3D9GetMipLevelSize(unsigned char level);                          // 0x011f0000
     void     FillSpriteTexture(void* pBuffer, unsigned int size, int zero);     // 0x011f0440
 };
-// Common texture-instance layout built by the three texture constructors.
 struct TextureObject {
     void*    mpVtable;      // +0x00
     uint32_t mRefCount;     // +0x04
@@ -318,12 +319,10 @@ struct TextureObject {
     void* InitRGBA8(int width, int height);     // 0x004328d0
     void* InitA8(int width, int height);        // 0x007a9e10
 };
-// Single-pointer smart slot used by the synchronous path.
 struct PointerSlot {
     void* mpObject;         // +0x00
     PointerSlot* Assign(void* pObject);         // 0x004535d0
 };
-// Instance object and its temporary smart-pointer wrapper built by the async path.
 struct AsyncTextureInstance {
     void*    mpVtable;      // +0x00
     uint32_t mRefCount;     // +0x04
@@ -396,7 +395,7 @@ public:
 class cTextureManager_s007a_abb0 {
 public:
     void UnregisterArena(void* pArena);             // 0x007aaf90
-    bool StallFinishBackgroundLoad(ResourceKey* pKey); // 0x007aafc0
+    void StallFinishBackgroundLoad(cTextureAsyncInfo* pInfo); // 0x007aafc0
     bool HasTexture(ResourceKey key);               // 0x007ab5f0
     bool ReloadTexture(ResourceKey key);            // 0x007ab6c0
     void RegisterArenaContents(void* pArena);       // 0x007ab730
@@ -424,6 +423,7 @@ public:
     int             mArenaTextureBytes;   // +0x140
     int             mArenaTextureCount;   // +0x144
 };
+void __fastcall FUN_007aa430(cTextureManager_s007a_abb0* self, int unused, cTextureAsyncInfo* pInfo); // 0x007aa430
 // ---- items of slice s007aabb0 end
 
 // ---- items of slice s007abc90 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1633,11 +1633,22 @@ void cTextureManager_s007a_abb0::UnregisterArena(void* pArena)
 }
 
 // @ 0x007aafc0
-bool cTextureManager_s007a_abb0::StallFinishBackgroundLoad(ResourceKey* pKey)
+void cTextureManager_s007a_abb0::StallFinishBackgroundLoad(cTextureAsyncInfo* pInfo)
 {
-    // PARTIAL: EH job-completion path.
-    (void)pKey;
-    return false;
+    cJob* pLoad = (cJob*)pInfo->mpLoad;
+    if (pLoad == 0) {
+        FUN_007aa430(this, 0, pInfo);
+        return;
+    }
+    pLoad->AddRef();                 // keep the job alive across the wait
+    pLoad->AddRef();                 // and for the second (exception) keep
+    mMutex.Unlock();
+    pLoad->Wait();
+    mMutex.Lock(&g_mutexAttribute);
+    if ((cJob*)pInfo->mpLoad == pLoad)
+        FUN_007aa430(this, 0, pInfo);
+    pLoad->Release();
+    pLoad->Release();
 }
 
 // @ 0x007ab090
@@ -1753,7 +1764,7 @@ void SP::cTextureManager::RegisterArenaContents(SP::cArenaResource * pArena)
 }
 
 // @ 0x007ab860
-uint32_t cTextureAsyncInfo::Setup(ResourceKey* pKey)
+bool SP::cTextureAsyncInfo::Setup(SP::cTextureAsyncQueueEntry const & pKey)
 {
     (void)pKey;
     // PARTIAL: async job setup.

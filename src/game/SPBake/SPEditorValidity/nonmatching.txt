@@ -16,3 +16,4 @@
 004f5c60 1791 complete: /Od frame-slot order (hash of local names) and some inline-arg temps differ; 2113 vs 2156 bytes
 004f65d0 7 complete; original keeps a dead w[3]&=0 block (size differs)
 004f68f0 11 slot order: the find() value temporary lands above the inlined find's first-param slot (orig below)
+004ef880  -  complete draft carried over from s004ef880 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 686, retail 671

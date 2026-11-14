@@ -1,9 +1,4 @@
-# va  diff-bytes  reason
-007e32c0  -  vector<cActionMessage> insert/grow; only a skeleton (grow path not reproduced); match/slices/s007e32c0/s007e32c0.cpp mentions this address and may hold an earlier draft.
-007e34f0  -  cTransitionCommand::Execute; skeleton (nesting check / arg parse not reproduced); Earlier, fuller draft: match/slices/s007e32c0/s007e32c0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'r]
-007e3610  -  cAppStateManager::HandleMessage (1320B); skeleton; Earlier, fuller draft: match/slices/s007e32c0/s007e32c0.cpp (left behind by the migration); start from it.
-007e3b40  -  FUN_007e3b40 (580B); skeleton; Earlier, fuller draft: match/slices/s007e32c0/s007e32c0.cpp (left behind by the migration); start from it.
-007e3f00  -  cStateCommand::Execute (456B); skeleton; Earlier, fuller draft: match/slices/s007e32c0/s007e32c0.cpp (left behind by the migration); start from it.
+# va  diff  reason (a partial.txt row alone does not settle a rework VA; it records what is left partial)
 007e42d0  -  FUN_007e42d0 (486B); skeleton; Earlier, fuller draft: match/slices/s007e4260/s007e4260.cpp (left behind by the migration); start from it.
 007e44c0  -  FUN_007e44c0 (133B); skeleton; Earlier, fuller draft: match/slices/s007e4260/s007e4260.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'ret'] vs ['ret']]
 007e45e0  -  cModeCommand::Execute; message built but AddMessage flag path omitted

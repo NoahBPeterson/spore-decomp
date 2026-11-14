@@ -1,2 +1,1 @@
-# va  diff-bytes  reason
-00939a60 720  ParseFormatToken: printf-style format tokenizer with jump table not reconstructed; Earlier, fuller draft: match/slices/s00939a60/s00939a60.cpp (left behind by the migration); start from it.
+# va  diff-bytes  reason  (incomplete / approximate: not counted as decompiled)

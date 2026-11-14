@@ -277,6 +277,37 @@ struct cSPEditorBlock2 {
     bool FUN_00438440(cSPEditorBlock2* other, int flag);                 // 0x00438440 (ret 8)
 };
 void Snap_004928d0(cSPEditorBlock2* blk, Vec3W pos, Matrix3_s0049_28d0 rot, Vec3W* outPos, Matrix3_s0049_28d0* outRot, int idx);
+struct Vec3N { float x, y, z; };                 // plain triple
+struct Blk {
+    char pad0[0x48];
+    Vec3N mPosition;                            // +0x48
+    char pad1[0x60 - 0x54];
+    Matrix3_s0049_28d0 mOrientation;                       // +0x60
+    int Count();                                // 0x0044e800
+    void GetBBox(void* out, int a, int b, int c);   // 0x0044ae00
+    void Corner(Vec3N* out, int a);             // 0x0043d240 (ret 8)
+    void GetBounds(Vec3N* out, unsigned index); // 0x0044d8f0 (ret 8)
+};
+Vec3N g_v492b24;                                // 0x015d6324 dummy third argument
+Vec3N* Cross(Vec3N* out, const Vec3N* a, const Vec3N* b);            // 0x0044e460
+Vec3N* ProjPerp(Vec3N* out, const Vec3N* a, const Vec3N* b);         // 0x004909d0
+void UpdateModel(void* obj);                    // 0x004ae250
+Matrix3_s0049_28d0* BuildFrame(Matrix3_s0049_28d0* out, Vec3N v0, Vec3N v1, Vec3N v2, Vec3N v3, Vec3N v4);  // 0x004906e0
+struct cSPEditorModel934 {
+    bool UsingSymmetry();             // 0x004adc40
+    void SetUsingSymmetry(bool v);    // 0x004adc20 (ret 4)
+    unsigned GetBlockCount();         // 0x004accf0
+    Blk* GetBlock(unsigned i);        // 0x004accb0
+};
+struct Blk934 {
+    char pad0[0x48];
+    Vec3N pos;                        // +0x48
+    Vec3N historyPos;                 // +0x54
+    void SetPosition934(const Vec3N* p, bool b);   // 0x00448e90 (ret 8)
+};
+Vec3N g_v492d64d8;                    // 0x015d64d8
+bool Vector3_NotEqual(const Vec3N* a, const Vec3N* b);  // 0x0041dd30
+bool BlockBlocked(Blk* b);                  // 0x004a7e60
 // ---- items of slice s004928d0 end
 
 // ---- items of slice s00493640 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -742,8 +773,12 @@ struct Vector3_s0049_6300 {
     float x, y, z;
 };
 Vector3_s0049_6300* Vector3_Sub_s0049_6300(Vector3_s0049_6300* out, const Vector3_s0049_6300* a, const Vector3_s0049_6300* b);   // 0x0041db10
-float VectorLength(const Vector3_s0049_6300* v);                                     // 0x0040ae50
+Vector3_s0049_6300* Vector3_Add(Vector3_s0049_6300* out, const Vector3_s0049_6300* a, const Vector3_s0049_6300* b);   // 0x0041dc10
+Vector3_s0049_6300* Vector3_Mul(Vector3_s0049_6300* out, const Vector3_s0049_6300* v, const float* s);     // 0x0041dca0
+Vector3_s0049_6300* Vector3_Normalize_s0049_6300(Vector3_s0049_6300* out, const Vector3_s0049_6300* v);               // 0x00436ce0
+float    VectorLength(const Vector3_s0049_6300* v);                                  // 0x0040ae50
 void* GetBoneForHandle(void* h);                                          // 0x004aa030
+void     FUN_004a02b0(void* blk, Vector3_s0049_6300 a, Vector3_s0049_6300 b);                   // 0x004a02b0
 struct Bone {
     virtual void v0();
     virtual void v1();
@@ -764,6 +799,32 @@ struct LimbStructure {
 };
 struct HolderA {
     void* Get();                          // 0x0047e6c0
+};
+struct BBox_s0049_6300 {
+    Vector3_s0049_6300 mMin;                         // +0x00
+    Vector3_s0049_6300 mMax;                         // +0x0c
+};
+struct Block_s0049_6300 {
+    char pad00[0x48];
+    Vector3_s0049_6300 mPos48;                       // +0x48 (mPos48.z is +0x50)
+    char pad54[0x1d8 - 0x54];
+    float mF1d8;                          // +0x1d8
+    char pad1dc[0x3f4 - 0x1dc];
+    Vector3_s0049_6300 mVec3f4;                      // +0x3f4
+    Vector3_s0049_6300 mVec400;                      // +0x400
+    char pad40c[0xdc8 - 0x40c];
+    uint32_t mBitsDc8;                    // +0xdc8
+
+    BBox_s0049_6300* GetBBox(BBox_s0049_6300* out, int a, bool b, int* c);        // 0x0044ae00
+    void  SetPosition(const Vector3_s0049_6300& v, bool b);            // 0x00448e90
+    Vector3_s0049_6300* F3e080(Vector3_s0049_6300* out);                          // 0x0043e080
+    void* F_43c1a0();                                       // 0x0043c1a0
+    bool  F_43c450(void* handle, float a, float* b, bool c); // 0x0043c450
+    void  F_449ce0();                                       // 0x00449ce0
+};
+struct BlockList_s0049_6300 {
+    Block_s0049_6300** mpBegin;                      // +0x00
+    Block_s0049_6300** mpEnd;                        // +0x04
 };
 // ---- items of slice s00496300 end
 
@@ -1143,6 +1204,107 @@ struct DirSrc {
 // ---- items of slice s00499410 end
 
 // ---- items of slice s0049b340 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Vector3_s0049_b340 {
+    float x, y, z;
+    Vector3_s0049_b340() {}
+    float& operator[](int i) { return (&x)[i]; }
+    const float& operator[](int i) const { return (&x)[i]; }
+};
+struct Matrix3_s0049_b340 {
+    Vector3_s0049_b340 xAxis, yAxis, zAxis;
+    Matrix3_s0049_b340();                                   // 0x402ab0 identity
+    Vector3_s0049_b340& operator[](int i) { return (&xAxis)[i]; }
+};
+struct cSPEditorBlock_s0049_b340;
+struct cSPEditorModel_s0049_b340;
+struct cSPEditorSnapVector;
+Matrix3_s0049_b340 Transposed(const Matrix3_s0049_b340& m);                          // 0x41ded0
+Vector3_s0049_b340 operator-(const Vector3_s0049_b340& a, const Vector3_s0049_b340& b);         // 0x41db10
+Vector3_s0049_b340 operator+(const Vector3_s0049_b340& a, const Vector3_s0049_b340& b);         // 0x41dc10
+Vector3_s0049_b340 operator*(const Vector3_s0049_b340& v, const Matrix3_s0049_b340& m);         // 0x41daf0
+Vector3_s0049_b340 operator*(const Vector3_s0049_b340& v, const float& s);           // 0x41dca0
+Vector3_s0049_b340* Vector3_Scale_s0049_b340(Vector3_s0049_b340* out, const float* s, const Vector3_s0049_b340* v);   // 0x41de40 (plane-hit path)
+Vector3_s0049_b340 operator-(const Vector3_s0049_b340& v);                           // 0x422020
+Vector3_s0049_b340 Normalize(const Vector3_s0049_b340& v);                           // 0x436ce0
+Vector3_s0049_b340 Cross(const Vector3_s0049_b340& a, const Vector3_s0049_b340& b);             // 0x44e460
+Matrix3_s0049_b340 operator*(const Matrix3_s0049_b340& a, const Matrix3_s0049_b340& b);         // 0x41de20
+bool Vector3Equal(const Vector3_s0049_b340* a, const Vector3_s0049_b340* b);         // 0x4232c0
+float Dot3(const Vector3_s0049_b340* a, const Vector3_s0049_b340* b);                // 0x455cc0
+extern Vector3_s0049_b340 g_SymmetryAxis_s0049_b340;      // 0x15d63f4
+extern Vector3_s0049_b340 g_ZAxis_s0049_b340;             // 0x15d6324
+extern Vector3_s0049_b340 g_UpAxis_s0049_b340;            // 0x15d6370
+extern Vector3_s0049_b340 g_ZeroVector;        // 0x15d64d8
+extern Matrix3_s0049_b340 g_IdentityMatrix;    // 0x15d63a8
+struct BBox_s0049_b340 {
+    Vector3_s0049_b340 mMin, mMax;
+};
+struct cSPBoundingBox_s0049_b340 : BBox_s0049_b340 {
+    void Add(const BBox_s0049_b340& b);                             // 0x43f050
+};
+struct Plane_s0049_b340 {
+    float nx, ny, nz, d;
+    Plane_s0049_b340(float x, float y, float z, float w);           // 0x44e410
+};
+bool IntersectRayPlane(const Vector3_s0049_b340* o, const Vector3_s0049_b340* d, const Plane_s0049_b340* p, float* t);   // 0x44e640
+struct BlockVector_s0049_b340 {
+    cSPEditorBlock_s0049_b340** mpBegin;
+    cSPEditorBlock_s0049_b340** mpEnd;
+    cSPEditorBlock_s0049_b340** mpCap;
+    uint32_t mAlloc[2];
+    BlockVector_s0049_b340(const AllocTag& a);                      // 0x540470
+    void DestroyRange(cSPEditorBlock_s0049_b340** b, cSPEditorBlock_s0049_b340** e);   // 0x454e90
+    void Free();                                         // 0x425990
+    ~BlockVector_s0049_b340() { DestroyRange(mpBegin, mpEnd); Free(); }
+    int size() const { return (int)(mpEnd - mpBegin); }
+    cSPEditorBlock_s0049_b340* operator[](int i) { return mpBegin[i]; }
+};
+void BuildPileList(cSPEditorBlock_s0049_b340* block, BlockVector_s0049_b340* list, bool b);        // 0x48c790
+bool FUN_0049a030(Vector3_s0049_b340 origin, Vector3_s0049_b340 dir, Vector3_s0049_b340* out);               // 0x49a030
+void RepinBlockToTorso(cSPEditorBlock_s0049_b340* block, Vector3_s0049_b340 pos, Matrix3_s0049_b340 m, bool flag);   // 0x49fbd0
+Matrix3_s0049_b340 FUN_49c210(cSPEditorBlock_s0049_b340* block, float x, float y, float z);       // 0x49c210
+bool GetRotationAndPositionBasedOnBehavior(cSPEditorBlock_s0049_b340* block, Vector3_s0049_b340& pos, Matrix3_s0049_b340& orient,
+                                           Vector3_s0049_b340 dir, bool bAlignToParent, bool bSnapToSymmetry); // 0x4942b0
+struct cSPEditorSnapVector {
+    Vector3_s0049_b340 mNormal;                                     // +0x00
+    char pad[0x20 - 0x0c];
+    ~cSPEditorSnapVector();                              // 0x4ae250
+};
+struct cSPEditorModel_s0049_b340 {
+    bool UsingSymmetry();                                // 0x4adc40
+    float FUN_4adaa0();                                  // 0x4adaa0
+    Vector3_s0049_b340 FUN_4abbc0(Vector3_s0049_b340 pos, cSPEditorBlock_s0049_b340* block, char a, char b, Vector3_s0049_b340 axis);  // 0x4abbc0
+};
+struct cSPEditorBlock_s0049_b340 {
+    virtual void v0();
+    char pad04[0x28 - 4];
+    cSPEditorModel_s0049_b340* mEditorModel;                        // +0x28
+    char pad2c[0x48 - 0x2c];
+    Vector3_s0049_b340 mPosition;                                   // +0x48
+    char pad54[0x60 - 0x54];
+    Matrix3_s0049_b340 mOrientation;                                // +0x60
+    char pad84[0xa8 - 0x84];
+    Matrix3_s0049_b340 mBaseOrientation;                            // +0xa8
+    char padcc[0x3c9 - 0xcc];
+    bool mIsOnGround;                                    // +0x3c9
+    char pad3ca[0x3e0 - 0x3ca];
+    cSPEditorBlock_s0049_b340* mPinTarget;                          // +0x3e0
+    char pad3e4[0xdc8 - 0x3e4];
+    uint32_t mFlags[2];                                  // +0xdc8
+
+    bool TestFlag(unsigned i) const {
+        if (i < 0x3c) {
+            uint32_t w = mFlags[i >> 5];
+            return (w & (1u << (i % 32))) != 0;
+        }
+        return false;
+    }
+    Vector3_s0049_b340* F3d240(Vector3_s0049_b340* out, char a);                       // 0x43d240
+    int FUN_0044e800();                                          // 0x44e800
+    cSPEditorSnapVector GetBounds(Vector3_s0049_b340 pos, float f);          // 0x44e720
+    bool IsPinnedOrLocked(char b);                               // 0x43bbc0
+    BBox_s0049_b340* GetBBox(BBox_s0049_b340* out, int a, bool b, bool c);             // 0x44ae00
+    void SetIsOnGround(bool b);                                  // 0x49c0f0
+};
 struct BitOwner {
     char pad0[0xdc8];
     uint32_t bits[2];                     // 0xdc8, 0xdcc
@@ -3207,18 +3369,45 @@ void ScaleVector(cSPVector3_s0049_cfd0* v, const float& s);                  // 
 struct Vector3T_s0049_ecf0 {
     float x, y, z;
     Vector3T_s0049_ecf0() {}
-    Vector3T_s0049_ecf0(const Vector3T_s0049_ecf0& v) : x(v.x), y(v.y), z(v.z) {}
+    Vector3T_s0049_ecf0(const Vector3T_s0049_ecf0& v);                 // @ 0x4098a0
+};
+struct Matrix33T_s0049_ecf0 {
+    Vector3T_s0049_ecf0 xAxis, yAxis, zAxis;
+    Matrix33T_s0049_ecf0() {}
+    Matrix33T_s0049_ecf0(const Matrix33T_s0049_ecf0& m);               // @ 0x41cb40
 };
 struct cSPVector3_s0049_ecf0 : Vector3T_s0049_ecf0 {
     cSPVector3_s0049_ecf0() {}
-    cSPVector3_s0049_ecf0(const Vector3T_s0049_ecf0& v) : Vector3T_s0049_ecf0(v) {}
+    cSPVector3_s0049_ecf0(const cSPVector3_s0049_ecf0& v) : Vector3T_s0049_ecf0(v) {}
+    cSPVector3_s0049_ecf0& operator=(const Vector3T_s0049_ecf0& v) { x = v.x; y = v.y; z = v.z; return *this; }
+};
+struct cSPMatrix3_s0049_ecf0 : Matrix33T_s0049_ecf0 {
+    cSPMatrix3_s0049_ecf0() {}
+    cSPMatrix3_s0049_ecf0(const cSPMatrix3_s0049_ecf0& m) : Matrix33T_s0049_ecf0(m) {}
+    cSPMatrix3_s0049_ecf0& operator=(const Matrix33T_s0049_ecf0& m) { Matrix33T_s0049_ecf0::operator=(m); return *this; }
+};
+template<typename T> struct LimbVec_s0049_ecf0 {
+    T* b; T* e; T* c; int allocPair[2];
+    LimbVec_s0049_ecf0() { b = 0; e = 0; c = 0; }
+    T* operator[](int i) { return b + i; }
 };
 struct cSPEditorBlock_s0049_ecf0 {
     virtual void _v0();
+    char pad0[0x48 - 4];
+    cSPVector3_s0049_ecf0 mPosition;                        // +0x48
+    char pad1[0xa8 - 0x54];
+    cSPMatrix3_s0049_ecf0 mTorsoMat;                        // +0xa8
+    void SetPosition(const cSPVector3_s0049_ecf0& v, bool b);   // @ 0x448e90
+    void SetOrientation(const cSPMatrix3_s0049_ecf0& m, bool b); // @ 0x449420
 };
 struct cSomeTracker {
     void AddVector(const cSPVector3_s0049_ecf0& v);       // @ 0x44d4f0
 };
+Matrix33T_s0049_ecf0 M33_Transpose(const Matrix33T_s0049_ecf0& m);                              // @ 0x41ded0
+Matrix33T_s0049_ecf0 operator*(const Matrix33T_s0049_ecf0& a, const Matrix33T_s0049_ecf0& b);              // @ 0x41de20
+Vector3T_s0049_ecf0 operator*(const cSPVector3_s0049_ecf0& v, const Matrix33T_s0049_ecf0& m);              // @ 0x41daf0
+Vector3T_s0049_ecf0 operator-(const Vector3T_s0049_ecf0& a, const Vector3T_s0049_ecf0& b);                 // @ 0x41db10
+Vector3T_s0049_ecf0 operator+(const Vector3T_s0049_ecf0& a, const Vector3T_s0049_ecf0& b);                 // @ 0x41dc10
 // ---- items of slice s0049ecf0 end
 
 // ---- items of slice s0049efc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -3779,6 +3968,7 @@ template <class T> struct AutoRefCount_s004a_6690 {
     T* operator->() const { return mpObject; }
 };
 struct cSPEditorBlock_s004a_6690;
+class cSPEditorSkinManager;
 typedef AutoRefCount_s004a_6690<cSPEditorBlock_s004a_6690> BlockRef_s004a_6690;
 struct BlockVector_s004a_6690 {
     BlockRef_s004a_6690* mpBegin;
@@ -3820,25 +4010,29 @@ struct cSPEditorBlock_s004a_6690 {
     virtual void _v0();
     uint32_t pad04[(0x28 - 0x04) / 4];
     struct cSPEditorModel_s004a_6690* mpModel;                                 // +0x028
-    uint32_t pad2c[(0x3e0 - 0x2c) / 4];
+    uint32_t pad2c[(0x340 - 0x2c) / 4];
+    BlockVector_s004a_6690 mChildren;                                          // +0x340
+    uint32_t pad354[(0x3e0 - 0x354) / 4];
     BlockRef_s004a_6690 mSymmetricBlock;                                       // +0x3e0
     uint32_t pad3e4[(0xdc8 - 0x3e4) / 4];
     bitset<60> mFlags;                                              // +0xdc8
 
     cSPEditorModel_s004a_6690* GetEditorModel() { return mpModel; }
     cSPEditorBlock_s004a_6690* GetSymmetricBlock() { return mSymmetricBlock; }
-    bool FUN_43fc20(int a, int b);               // @ 0x43fc20
-    void SetValid(bool v);                       // @ 0x43f6b0
+    bool FUN_43fc20(int a, int b);                                  // 0x43fc20
+    bool FUN_43fc20(void* p);                                       // 0x43fc20
+    void SetValid(bool v);                                          // 0x43f6b0
+    void SetValid(bool v, cSPEditorSkinManager* skin);              // 0x43f6b0
     void SetCollisionGroup(int group);                              // 0x00451e50
     bool IsFlagSet(unsigned i) { return mFlags.test(i); }
     bool HasRelevantPoints2(cSPEditorBlock_s004a_6690* other);                 // 0x00438420
     int GetSkinIdentifierForPicking();                              // 0x0043a870
 };
 struct cSPEditorModel_s004a_6690 : cSPEditorModelBase, RefCountTemplate_s004a_6690 {      // RefCountTemplate at +4
-    cSPEditorBlock_s004a_6690* GetBlock(int i);                                // @ 0x4accb0
-    int GetBlockCount();                                            // @ 0x4accf0
-    bool FUN_4adc40();                                              // @ 0x4adc40
-    void FUN_4adc20(int v);                                         // @ 0x4adc20
+    cSPEditorBlock_s004a_6690* GetBlock(int i);                                // 0x4accb0
+    int GetBlockCount();                                            // 0x4accf0
+    bool FUN_4adc40();                                              // 0x4adc40
+    void FUN_4adc20(int v);                                         // 0x4adc20
     cSPEditorPhysicsWorld_s004a_6690* GetPhysicsWorld();                       // 0x004ad450
 };
 bool GetSymmetricPile(cSPEditorBlock_s004a_6690* block, BlockVector_s004a_6690* list, bool b);   // 0x0049dd20
@@ -4885,15 +5079,87 @@ int FUN_00491900(Vec* p1, Vec* p2)
 }
 
 // @ 0x004928d0
-void FUN_004928d0(cSPEditorBlock_s0049_28d0* p, int a, int b, int c)
+void FUN_004928d0(Blk* p, Vec3W pos, Matrix3_s0049_28d0 rot, Vec3W* outPos, Matrix3_s0049_28d0* outRot, int idx)
 {
-    if (p == 0)
+    void* bb[6];
+    p->GetBBox(bb, 0, 0, 0);
+    outPos->x = pos.x;
+    outPos->y = pos.y;
+    outPos->z = pos.z;
+    *outRot = rot;
+    int n = p->Count();
+
+    if (idx == -1) {
+        Vec3N corner;
+        p->Corner(&corner, 0);
+        Matrix3_s0049_28d0 inv;
+        Mat_Inverse(&inv, &rot);
+        Vec3W sub;
+        Vec3W* r1 = Vec_Sub(&sub, (const Vec3W*)&p->mPosition, (const Vec3W*)&pos);
+        Vec3W* r2 = Vec_MulMat((Vec3W*)0, r1, &inv);
+        Vec3W term;
+        term.x = corner.x;
+        term.y = corner.y;
+        term.z = r2->x;
+        {
+            Vec3W tgt;
+            tgt.x = r2->x; tgt.y = r2->y; tgt.z = r2->z;
+            tgt.x = corner.x;
+            tgt.y = corner.y;
+            term.x = tgt.x; term.y = tgt.y;
+        }
+        Vec3W* r3 = Vec_Add((Vec3W*)0, &term, (const Vec3W*)&p->mPosition);
+        outPos->x = r3->x;
+        outPos->y = r3->y;
+        outPos->z = r3->z;
         return;
-    BoundingBox_s0049_28d0 bb;
-    p->GetBBox(&bb, 0, 0, 0);
-    (void)a;
-    (void)b;
-    (void)c;
+    }
+
+    if (idx >= 0 && idx < n) {
+        Matrix3_s0049_28d0 localRot;
+        localRot.Assign(&rot);
+        Vec3W sub;
+        Vec3W* r1 = Vec_Sub(&sub, (const Vec3W*)&pos, (const Vec3W*)&p->mPosition);
+        Vec3W rel; rel.x = r1->x; rel.y = r1->y; rel.z = r1->z;
+        Matrix3_s0049_28d0 inv;
+        Mat_Inverse(&inv, &localRot);
+        Vec3W r2;
+        {
+            Vec3W* p2 = Vec_MulMat(&r2, &rel, &inv);
+            (void)p2;
+        }
+        Vec3W snapped;
+        p->GetBounds((Vec3N*)&snapped, (unsigned)idx);
+        Vec3W rs;
+        Vec3W* rr = Vec_Sub(&rs, &r2, &snapped);
+        Vec3N e2l; e2l.x = rr->x; e2l.y = rr->y; e2l.z = rr->z;
+        Vec3N cross;
+        Cross(&cross, (const Vec3N*)&snapped, &g_v492b24);
+        Vec3N proj;
+        ProjPerp(&proj, &e2l, &cross);
+        Vec3W sr;
+        Vec3W* srr = Vec_Add(&sr, (const Vec3W*)&proj, (const Vec3W*)&snapped);
+        Vec3N term; term.x = srr->x; term.y = srr->y; term.z = srr->z;
+        term.z = snapped.z;
+        Vec3W fr;
+        Vec3W* frr = Vec_Add(&fr, (const Vec3W*)&term, (const Vec3W*)&p->mPosition);
+        outPos->x = frr->x;
+        outPos->y = frr->y;
+        outPos->z = frr->z;
+
+        Vec3W row3;
+        row3.x = localRot.m[6]; row3.y = localRot.m[7]; row3.z = localRot.m[8];
+        Vec3W l2;
+        {
+            Vec3W* pl = Vec_MulMat(&l2, &row3, &localRot);
+            (void)pl;
+        }
+        Vec3N l3; l3.x = l2.x; l3.y = l2.y; l3.z = snapped.z;
+        Matrix3_s0049_28d0 built;
+        BuildFrame(&built, *(Vec3N*)&pos, *(Vec3N*)&rel, *(Vec3N*)&snapped, l3, *(Vec3N*)&l2);
+        *outRot = built;
+        UpdateModel(0);
+    }
 }
 
 // @ 0x00492de0
@@ -4980,9 +5246,26 @@ float FUN_00492e70(cSPEditorBlock2* p, Vec3W* outPos, Matrix3_s0049_28d0* outRot
 }
 
 // @ 0x004934d0
-void FUN_004934d0(int p)
+void FUN_004934d0(cSPEditorModel934* model, Vec3N pos, unsigned char flag)
 {
-    (void)p;
+    if (Vector3_NotEqual(&pos, &g_v492d64d8)) {
+        if (model != 0) {
+            bool saved = model->UsingSymmetry();
+            model->SetUsingSymmetry(false);
+            int count = (int)model->GetBlockCount();
+            for (int i = 0; i < count; i++) {
+                Blk934* blk = (Blk934*)model->GetBlock(i);
+                if (flag && !BlockBlocked((Blk*)blk))
+                    continue;
+                Vec3W r;
+                Vec3W* p = Vec_Add(&r, (const Vec3W*)&blk->pos, (const Vec3W*)&pos);
+                Vec3N p2; p2.x = p->x; p2.y = p->y; p2.z = p->z;
+                blk->SetPosition934(&p2, true);
+                blk->historyPos = blk->pos;
+            }
+            model->SetUsingSymmetry(saved);
+        }
+    }
 }
 
 // @ 0x004935f0
@@ -5466,18 +5749,104 @@ void FUN_004961d0(char* save, Vec_s0049_56b0* vec)
 }
 
 // @ 0x00496300
-void FUN_00496300(void* p, void* a, void* b)
+bool FUN_00496300(Block_s0049_6300* blk, BlockList_s0049_6300* list, uint32_t u10, uint32_t u14, uint32_t u18, Vector3_s0049_6300 posA, Vector3_s0049_6300 posB, bool flag)
 {
-    (void)p;
-    (void)a;
-    (void)b;
+    Vector3_s0049_6300 rel;
+    Vector3_Sub_s0049_6300(&rel, &blk->mPos48, &posB);
+    bool placed = false;
+    int count = (int)(list->mpEnd - list->mpBegin);
+    if (flag) {
+        Block_s0049_6300* best = blk;
+        BBox_s0049_6300 box;
+        blk->GetBBox(&box, 0, false, 0);
+        float bestY = posB.z + rel.z + box.mMin.z;
+        for (int i = 0; i < count; i++) {
+            Block_s0049_6300* b = list->mpBegin[i];
+            BBox_s0049_6300 bb;
+            b->GetBBox(&bb, 1, false, 0);
+            float y = b->mPos48.z + rel.z + bb.mMin.z;
+            if (y < bestY) {
+                bestY = y;
+                best = b;
+            }
+        }
+        if (bestY < -0.0001f) {
+            float k = -1.0f;
+            Vector3_s0049_6300 t;
+            Vector3_Mul(&t, &posA, &k);
+            float scale = -bestY / t.z;
+            Vector3_s0049_6300 t2;
+            Vector3_Mul(&t2, &t, &scale);
+            Vector3_s0049_6300 r2;
+            Vector3_Add(&r2, &rel, &t2);
+            rel = r2;
+            placed = true;
+        }
+    }
+    Vector3_s0049_6300 p;
+    Vector3_Add(&p, &posB, &rel);
+    blk->SetPosition(p, true);
+    for (int i = 0; i < count; i++) {
+        Block_s0049_6300* b = list->mpBegin[i];
+        Vector3_s0049_6300 np;
+        Vector3_Add(&np, &b->mPos48, &rel);
+        b->SetPosition(np, true);
+    }
+    return placed;
 }
 
 // @ 0x00496760
-void FUN_00496760(void* p, void* a)
+float FUN_00496760(Block_s0049_6300* p, float target, char flag)
 {
-    (void)p;
-    (void)a;
+    if (p == 0)
+        return -1.0f;
+    if ((p->mBitsDc8 & 0x800) == 0)
+        return -1.0f;
+
+    float f = p->mF1d8;
+    Vector3_s0049_6300 ta;
+    Vector3_Mul(&ta, &p->mVec3f4, &f);
+    float lenA = VectorLength(&ta);
+
+    Vector3_s0049_6300 tb;
+    Vector3_Mul(&tb, &p->mVec400, &f);
+    float lenB = VectorLength(&tb);
+
+    float ratio = (target - lenA) / (lenB - lenA);
+    if (ratio < 0.0f)
+        ratio = 0.0f;
+    float len = (lenB - lenA) * ratio + lenA;
+
+    Vector3_s0049_6300 buf;
+    Vector3_s0049_6300* e = p->F3e080(&buf);
+    Vector3_s0049_6300 nrm;
+    Vector3_Normalize_s0049_6300(&nrm, e);
+    Vector3_s0049_6300 sc;
+    Vector3_Mul(&sc, &nrm, &len);
+    Vector3_s0049_6300 a1;
+    Vector3_Add(&a1, &sc, &p->mPos48);
+
+    Vector3_s0049_6300 buf2;
+    Vector3_s0049_6300* e2 = p->F3e080(&buf2);
+    Vector3_s0049_6300 a2;
+    Vector3_Add(&a2, e2, &p->mPos48);
+
+    void* handle = p->F_43c1a0();
+    float v = *(float*)((char*)handle + 0x180);
+
+    float t = ratio;
+    if ((p->mBitsDc8 & 0x400) == 0) {
+        t = (t > 0.0f) ? t : 0.0f;
+        t = (t < 1.0f) ? t : 1.0f;
+    }
+    if (t != v) {
+        void* h = p->F_43c1a0();
+        p->F_43c450(h, t, 0, true);
+        FUN_004a02b0(p, a2, a1);
+        if (flag)
+            p->F_449ce0();
+    }
+    return len;
 }
 
 // @ 0x00496b60
@@ -6285,21 +6654,131 @@ bool FUN_0049b340(BitOwner* p)
 }
 
 // @ 0x0049b460
-void FUN_0049b460(void* p, void* a, void* b)
+Matrix3_s0049_b340 GetSnapOrientation(cSPEditorBlock_s0049_b340* block, Vector3_s0049_b340 dir)
 {
-    (void)p; (void)a; (void)b;
+    Vector3_s0049_b340 tmp;
+    Vector3_s0049_b340 v = (*block->F3d240(&tmp, 1) - dir) * Transposed(block->mOrientation);
+    int snapCount = block->FUN_0044e800();
+
+    if (block->TestFlag(0x31)) {
+        Vector3_s0049_b340 forward = -v;
+        forward.z = 0.0f;
+        forward = Normalize(forward);
+        Vector3_s0049_b340 up = -g_ZAxis_s0049_b340;
+        Vector3_s0049_b340 right = Cross(up, forward);
+        Matrix3_s0049_b340 basis;
+        basis.xAxis = right;
+        basis.yAxis = up;
+        basis.zAxis = forward;
+        return basis * block->mOrientation;
+    }
+
+    if (snapCount < 1)
+        return g_IdentityMatrix;
+
+    cSPEditorSnapVector snap = block->GetBounds(dir, -1.0f);
+    Vector3_s0049_b340 forward = -snap.mNormal;
+    Vector3_s0049_b340 up = -g_ZAxis_s0049_b340;
+    Vector3_s0049_b340 right = Cross(up, forward);
+    Matrix3_s0049_b340 basis;
+    basis.xAxis = right;
+    basis.yAxis = up;
+    basis.zAxis = forward;
+    return basis * block->mOrientation;
 }
 
 // @ 0x0049b8b0
-void FUN_0049b8b0(void* p, void* a, void* b)
+void GetMissPlane(cSPEditorBlock_s0049_b340* block, Vector3_s0049_b340 dir, Vector3_s0049_b340* outPos, Vector3_s0049_b340* outNormal)
 {
-    (void)p; (void)a; (void)b;
+    float d = dir.x * g_SymmetryAxis_s0049_b340.x + dir.y * g_SymmetryAxis_s0049_b340.y + dir.z * g_SymmetryAxis_s0049_b340.z;
+    cSPEditorModel_s0049_b340* model = block->mEditorModel;
+
+    if (model->UsingSymmetry() && block->TestFlag(0xf) && fabs(d) < 0.8f) {
+        *outNormal = g_UpAxis_s0049_b340;
+        *outPos = g_ZeroVector;
+        return;
+    }
+
+    if (block->IsPinnedOrLocked(0)) {
+        Vector3_s0049_b340 side = -dir;
+        side.z = 0.0f;
+
+        *outPos = model->FUN_4abbc0(block->mPosition, block, 1, 1, g_ZAxis_s0049_b340);
+
+        Vector3_s0049_b340 negOne;
+        negOne.x = -1.0f;
+        negOne.y = -1.0f;
+        negOne.z = -1.0f;
+        if (Vector3Equal(outPos, &negOne))
+            *outPos = (side * model->FUN_4adaa0()) * 0.5f;
+
+        *outNormal = -dir;
+        outNormal->z = 0.0f;
+        *outNormal = Normalize(*outNormal);
+    } else {
+        *outNormal = -dir;
+        outNormal->z = 0.0f;
+        *outNormal = Normalize(*outNormal);
+        *outPos = block->mPosition;
+    }
 }
 
 // @ 0x0049bcc0
-void FUN_0049bcc0(void* p, void* a, void* b)
+void FUN_0049bcc0(cSPEditorBlock_s0049_b340* block, Vector3_s0049_b340 origin, Vector3_s0049_b340 dir, Vector3_s0049_b340 a, Vector3_s0049_b340 b, bool flag)
 {
-    (void)p; (void)a; (void)b;
+    cSPEditorModel_s0049_b340* model = block->mEditorModel;
+    float floorZ = 0.0f;
+    Vector3_s0049_b340 hit;
+
+    if (flag) {
+        FUN_0049a030(origin, dir, &hit);
+
+        cSPBoundingBox_s0049_b340 bounds;
+        block->GetBBox(&bounds, 0, 0, 0);
+        if (!block->TestFlag(8)) {
+            AllocTag alloc;
+            BlockVector_s0049_b340 pile(alloc);
+            BuildPileList(block, &pile, 0);
+            for (int i = 0; i < pile.size(); i++) {
+                BBox_s0049_b340 other;
+                pile[i]->GetBBox(&other, 0, 0, 0);
+                bounds.Add(other);
+            }
+        }
+
+        Vector3_s0049_b340 rel = block->mPosition - bounds.mMin;
+        floorZ = -rel.z;
+        float t = (rel.z - origin.z) / dir.z;
+        hit = origin + dir * t;
+    }
+
+    Vector3_s0049_b340 result(block->mPosition);
+    float dp = -Dot3(&a, &b);
+    Plane_s0049_b340 plane(b.x, b.y, b.z, dp);
+
+    float t;
+    Vector3_s0049_b340 planeHit;
+    if (IntersectRayPlane(&origin, &dir, &plane, &t)) {
+        Vector3_s0049_b340 scaled;
+        Vector3_Scale_s0049_b340(&scaled, &t, &dir);
+        planeHit = origin + scaled;
+    } else
+        planeHit = block->mPosition;
+
+    block->mIsOnGround = false;
+    if (block->mPinTarget != 0)
+        block->mPinTarget->mIsOnGround = false;
+
+    if (!flag) {
+        result = planeHit;
+    } else if (hit.z > planeHit.z) {
+        block->SetIsOnGround(true);
+        result = hit;
+    } else {
+        result = planeHit;
+    }
+
+    RepinBlockToTorso(block, result, block->mBaseOrientation, false);
 }
 
 // @ 0x0049c0f0
@@ -6314,9 +6793,12 @@ void Y9c0::Set(char v)
 }
 
 // @ 0x0049c140
-void FUN_0049c140(void* out, void* p, float x, float y, float z)
+Matrix3_s0049_b340 GetOrientationFromNormal(cSPEditorBlock_s0049_b340* block, Vector3_s0049_b340 normal)
 {
-    (void)out; (void)p; (void)x; (void)y; (void)z;
+    Matrix3_s0049_b340 orient = FUN_49c210(block, normal.x, normal.y, normal.z);
+    Vector3_s0049_b340 pos = block->mPosition;
+    GetRotationAndPositionBasedOnBehavior(block, pos, orient, block->mPosition, false, false);
+    return orient;
 }
 
 // @ 0x0049c210
@@ -6617,8 +7099,29 @@ void FUN_49ec40(cSPEditorBlock_s0049_de30* block, float* out, uint32_t scale, cS
 }
 
 // @ 0x0049ecf0
-void FUN_49ecf0(cSPEditorBlock_s0049_ecf0* block)
-{ (void)block; }
+void FUN_49ecf0(cSPEditorBlock_s0049_ecf0* block, LimbVec_s0049_ecf0<cSPEditorBlock_s0049_ecf0*>* blocks, cSPVector3_s0049_ecf0 pos, cSPMatrix3_s0049_ecf0 mat)
+{
+    cSPMatrix3_s0049_ecf0 savedTorso(block->mTorsoMat);
+    cSPVector3_s0049_ecf0 basePos(block->mPosition);
+    cSPMatrix3_s0049_ecf0 rot(block->mTorsoMat);
+    cSPMatrix3_s0049_ecf0 basis;
+    rot = M33_Transpose(rot);
+    basis = rot * mat;
+    block->SetPosition(pos, true);
+    block->SetOrientation(mat, true);
+    int n = (int)(blocks->e - blocks->b);
+    for (int i = 0; i < n; i++) {
+        cSPVector3_s0049_ecf0 offset;
+        offset = (*(*blocks)[i])->mPosition - basePos;
+        cSPVector3_s0049_ecf0 childPos;
+        childPos = basePos + offset * basis;
+        cSPMatrix3_s0049_ecf0 childMat;
+        childMat = (*(*blocks)[i])->mTorsoMat * basis;
+        (*(*blocks)[i])->SetOrientation(childMat, true);
+        (*(*blocks)[i])->SetPosition(childPos, true);
+    }
+    (void)savedTorso;
+}
 
 // @ 0x0049ef80
 void FUN_49ef80(cSomeTracker* self, cSPVector3_s0049_ecf0* vecs)
@@ -7964,8 +8467,29 @@ void FUN_4a6ca0(cSPEditorModel_s004a_6690* model, int value)
 }
 
 // @ 0x004a6d20
-void FUN_4a6d20(cSPEditorBlock_s004a_6690* block)
-{ (void)block; }
+void FUN_4a6d20(cSPEditorBlock_s004a_6690* block, BlockVector_s004a_6690* blocks, bool param3, cSPEditorSkinManager* skin, int param5, bool invalid, bool recurseChildren, bool recurseSymmetric)
+{
+    AutoRefCount_s004a_6690<cSPEditorModel_s004a_6690> model(block->GetEditorModel());
+    if (model) {
+        bool valid;
+        bool symmetry = model->FUN_4adc40();
+        model->FUN_4adc20(0);
+        valid = invalid ? false : block->FUN_43fc20(0);
+        block->SetValid(valid, skin);
+        if (recurseSymmetric && block->GetSymmetricBlock())
+            FUN_4a6d20(block->GetSymmetricBlock(), 0, param3, skin, 0, invalid, 0, 0);
+        if (blocks) {
+            int nList = blocks->size();
+            for (int i = 0; i < nList; i++)
+                FUN_4a6d20((*blocks)[i], 0, param3, skin, 0, invalid, 0, 1);
+        } else if (recurseChildren) {
+            BlockVector_s004a_6690& children = block->mChildren;
+            for (int i = 0, n = children.size(); i < n; i++)
+                FUN_4a6d20(children[i], 0, param3, skin, 0, invalid, 1, 1);
+        }
+        model->FUN_4adc20(symmetry);
+    }
+}
 
 // @ 0x004a6f10
 namespace SP { namespace EditorUtils {

@@ -25,7 +25,13 @@
 #include <xmmintrin.h>
 
 // ---- items of slice s0072aaf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void  FUN_007409d0(void* pos, void* value);
+extern "C" void* FUN_00f473a0(unsigned size, const char* name, int f, int df, const char* file, int line);
+extern "C" void FUN_0072a1a0(void* self, int count, void* pool);  // 0x0072a1a0
+extern "C" void* FUN_0072aa80(void* self, int a, int* b);         // 0x0072aa80
+extern void* const vtbl_Init0;  // 0x013eb938  (??_7ITracerBase@Trace@EA@@6B@)
+extern void* const vtbl_Init1;  // 0x013ef094  (??_7hkReferencedObject@@6B@)
+extern void* const vtbl_Final0; // 0x0140a660  (AddRef thunk)
+extern void* const vtbl_Final1; // 0x0140d178
 extern const uint32_t kIndexMasks[];     // 0x0140d15c
 extern int  ToD3DDeclType(int type);                                              // 0x00729560
 extern int  ToRwDecl(int semantic, int index);                                    // 0x007295f0
@@ -41,6 +47,8 @@ extern const int kRwPrimTypes[];         // 0x01536f0c
 extern int gActivePrimType;              // 0x016f85a8
 extern unsigned gSoftStateUpdated;       // 0x016f9110
 void operator_delete(void* p);   // 0x00f47380
+const char kEastlAllocatorFile[] =
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 struct TriRegionEntry {
     int mRegionId;   // +0
     int mBegin;      // +4
@@ -58,6 +66,34 @@ struct TriRegionVec {
 struct cTriToRegionMap_s0072_aaf0 {
     TriRegionVec mRegions;
     void AddRegion(int begin, int end, int id);  // 0x0072b560 (cTriToRegionMap::AddRegion)
+};
+struct Vec4 {
+    int* mpBegin;      // +0x00
+    int* mpEnd;        // +0x04
+    int* mpCap;        // +0x08
+    void* mpAlloc;     // +0x0c
+    int* mpPool;       // +0x10  (inline buffer start)
+
+    void DoInsertValue(int* pos, const int* value);   // 0x0072aaf0
+};
+struct SpanHolder {
+    int* mpBegin;   // +0
+    int* mpEnd;     // +4
+    SpanHolder* Init(const int* span);   // 0x0072ac10
+};
+struct IntSpan {
+    int* mpBegin;   // +0
+    int* mpEnd;     // +4
+    int  mpPad8;    // +8
+    int* mpPool;    // +0xc
+};
+struct RefObj_s0072_aaf0 {
+    void** mpVtbl0;      // +0x00  (ITracerBase then AddRef thunk vtable)
+    void** mpVtbl1;      // +0x04
+    volatile long mRef;  // +0x08
+    char  mPayload[0x14];// +0x0c
+    int   mField20;      // +0x20
+    RefObj_s0072_aaf0* Ctor(int arg);   // 0x0072ac60
 };
 struct IRefObject {                       // virtual AddRef/Release (slots 0/1)
     virtual int AddRef();
@@ -187,9 +223,16 @@ struct EmbeddedState {
 };
 struct Material { int pad; EmbeddedState* mpState; };
 struct IMaterialManager {
-    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
-    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
-    virtual void f20(); virtual void f24();
+virtual void f00();
+virtual void f04();
+virtual void f08();
+virtual void f0c();
+virtual void f10();
+virtual void f14();
+virtual void f18();
+virtual void f1c();
+virtual void f20();
+virtual void f24();
     virtual Material* GetMaterial(uint32_t id);            // +0x28
 };
 struct ShaderMapEntry { int key; ShaderDataItem* value; };
@@ -285,7 +328,7 @@ void* __cdecl MemCopy(void* dst, const void* src, unsigned n); // 0x011e0744 mem
 // ---- items of slice s00728c90 end
 
 // ---- items of slice s00729bd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* FUN_00f473a0(unsigned size, const char* name, int f, int df, const char* file, int line);
+
 extern "C" void  FUN_0042f0a0(void* p, int n, void* local, int m);                 // 0x0042f0a0
 extern "C" int   FUN_0071ddc0(void* p, int a, int b, int c, int d);                // 0x0071ddc0
 extern "C" double sqrt(double x);                                                  // CRT: inlined as fsqrt
@@ -1697,21 +1740,87 @@ EAArray* EAArray::Init(int n, int reserved)
 }
 
 // @ 0x0072aaf0
-void FUN_0072aaf0(void* a, void* b, void* c)
+void Vec4::DoInsertValue(int* pos, const int* value)
 {
-    (void)a; (void)b; (void)c;
+    if (mpEnd != mpCap) {
+        // Room for one more: shift [pos, mpEnd) up by one dword, then store *value.
+        int* insertAt = pos;
+        if (pos >= value && value < mpEnd)
+            insertAt = pos + 1;
+        if (mpEnd)
+            *mpEnd = mpEnd[-1];
+        int* src = mpEnd;
+        int* dst = src;
+        while (dst - 1 != insertAt) {
+            --dst;
+            *dst = src[-2];
+            --src;
+        }
+        *insertAt = *value;
+        mpEnd = mpEnd + 1;
+        return;
+    }
+
+    int count = (int)(mpEnd - mpBegin);
+    int newCap;
+    if (count == 0)
+        newCap = 1;
+    else
+        newCap = count * 2;
+
+    int* buf;
+    if (newCap == 0)
+        buf = 0;
+    else
+        buf = (int*)FUN_00f473a0((unsigned)(newCap * 4), "Graphics", 0, 0, kEastlAllocatorFile, 0xd1);
+
+    // Copy [mpBegin, pos), then *value, then [pos, mpEnd).
+    int* out = buf;
+    for (int* p = mpBegin; p != pos; ++p) {
+        if (out) *out = *p;
+        ++out;
+    }
+    if (out) *out = *value;
+    int* srcEnd = mpEnd;
+    int* writePos = out + 1;
+    if (pos != srcEnd) {
+        int* rd = pos;
+        int* wr = writePos;
+        do {
+            if (wr) *wr = *rd;
+            ++rd;
+            ++wr;
+        } while (rd != srcEnd);
+    }
+    if (mpBegin && mpBegin != mpPool)
+        operator_delete(mpBegin);
+    mpBegin = buf;
+    mpEnd = writePos;
+    mpCap = buf + newCap;
 }
 
 // @ 0x0072ac10
-void FUN_0072ac10(void* a, void* b)
+SpanHolder* SpanHolder::Init(const int* sp)
 {
-    (void)a; (void)b;
+    const IntSpan* span = (const IntSpan*)sp;
+    FUN_0072a1a0(this, (int)(span->mpEnd - span->mpBegin), span->mpPool);
+    int nbytes = (int)((char*)span->mpEnd - (char*)span->mpBegin);
+    memcpy(mpBegin, span->mpBegin, (size_t)nbytes);
+    mpEnd = (int*)((char*)mpBegin + (nbytes & ~3));
+    return this;
 }
 
 // @ 0x0072ac60
-void FUN_0072ac60(void* a, int b)
+RefObj_s0072_aaf0* RefObj_s0072_aaf0::Ctor(int arg)
 {
-    (void)a; (void)b;
+    mpVtbl0 = (void**)&vtbl_Init0;
+    mpVtbl1 = (void**)&vtbl_Init1;
+    _InterlockedExchange(&mRef, 0);
+    mpVtbl0 = (void**)&vtbl_Final0;
+    mpVtbl1 = (void**)&vtbl_Final1;
+    FUN_0072aa80(&mPayload[0], arg, &arg);
+    mField20 = 0;
+    return this;
 }
 
 // @ 0x0072ace0

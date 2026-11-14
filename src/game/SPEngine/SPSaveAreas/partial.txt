@@ -1,4 +1,1 @@
 # Incomplete / skeleton.
-006b2110  387  ReadExtensionMappingsFromPropFile; skeleton only; match/slices/s006b18c0/s006b18c0.cpp mentions this address and may hold an earlier draft.
-006b2400  176  save-area helper; skeleton only; match/slices/s006b18c0/s006b18c0.cpp mentions this address and may hold an earlier draft.
-006b2620  454  SP::CreateDirectorySave; skeleton only; match/slices/s006b18c0/s006b18c0.cpp mentions this address and may hold an earlier draft.

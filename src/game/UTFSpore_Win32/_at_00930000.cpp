@@ -19,6 +19,9 @@
 #include "EA/Allocator/ICoreAllocator.h"
 #include "EA/IO/MemoryStream.h"
 #include <new>
+#include "EA/Stopwatch.h"
+#include "EA/LimitStopwatch.h"
+#include "SP/cDirectPropertyList.h"
 
 // ---- items of slice s00931460 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct FixedPathString {

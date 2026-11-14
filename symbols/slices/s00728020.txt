@@ -1,8 +1,8 @@
-00728020 ?FUN_00728020@@YAXPAUMeshCtx@@MHPAX@Z  # SP::cMeshSimplifier::Simplify
-007280b0 ?Init@UVGenJobInfo@@QAEPAU1@PAXH00@Z  # UVGenJobInfo::Init (job-info ctor)
-007281d0 ?FUN_007281d0@@YIXPAUUVGenJobInfo@@@Z  # __fastcall UVGenJobInfo destructor
-00728330 ?Resize@ClusterVec@@QAEXI@Z  # eastl::vector<cClusterInfo>::resize
-00728400 ?Insert@Vec68@@QAEXPAUElem68@@0@Z  # 0x68-stride vector insert
-007285a0 ?CreateClusterInfo@cMeshClusterer20@@QAEXXZ  # cMeshClusterer::CreateClusterInfo
-007289a0 ?FUN_007289a0@@YIXPAUVec68@@@Z  # __fastcall 0x68-stride vector push_back
+00728020 ?FUN_00728020@@YAXPAUMeshCtx@@MHPAX@Z  # FUN_00728020 migrated from s00728020 (verbatim, slice spelling)
+007280b0 ?Init@UVGenJobInfo@@QAEPAU1@PAXH00@Z  # UVGenJobInfo::Init migrated from s00728020 (verbatim, slice spelling)
+007281d0 ?FUN_007281d0@@YIXPAUUVGenJobInfo@@@Z  # FUN_007281d0 migrated from s00728020 (verbatim, slice spelling)
+00728330 ?Resize@ClusterVec@@QAEXI@Z  # ClusterVec::Resize migrated from s00728020 (verbatim, slice spelling)
+00728400 ?Insert@Vec68@@QAEXPAUElem68@@0@Z  # Vec68::Insert migrated from s00728020 (verbatim, slice spelling)
+007285a0 ?CreateClusterInfo@cMeshClusterer20@@QAEXXZ  # cMeshClusterer20::CreateClusterInfo migrated from s00728020 (verbatim, slice spelling)
+007289a0 ?FUN_007289a0@@YIXPAUVec68@@@Z  # FUN_007289a0 migrated from s00728020 (verbatim, slice spelling)
 00728af0 ?Cluster@cMeshClusterer20@@QAEXPAXH@Z  # cMeshClusterer::Cluster

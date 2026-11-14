@@ -15,11 +15,8 @@ extern uint8_t g_16046d8;
 #include "EA/Thread/Mutex.h"
 #include "SP/cEditorsTokenTranslator.h"
 #include "EA/Swarm/cTransform.h"
+#include "EA/ResourceMan/Database.h"
 #pragma intrinsic(_ReadWriteBarrier)
-
-// ---- items of slice s006b18c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern uint8_t g_16046d8;
-// ---- items of slice s006b18c0 end
 
 // ---- items of slice s006b37d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Counter40 {

@@ -7,10 +7,10 @@
 ../src/game/SPEngine/SPAppStateManager.cpp  ?Execute@cStateFlag2Command@@QAEXAAVcArguments_s007e_17a0@ArgScript@EA@@@Z  007e1930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ?Execute@cSetStateCommand@@QAEXAAVcArguments_s007e_17a0@ArgScript@EA@@@Z  007e1a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ?FUN_007e20a0@cModeManager@@QAE_NPB_WPAUICommandLine@@_N@Z  007e20a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppStateManager.cpp  ?Execute@cDescriptionCommand@?A0x0f6d536d@@UAEXPAVcArguments@ArgScript@EA@@@Z  007e2640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ??4cActions@@QAEAAU0@ABU0@@Z  007e34a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ?FUN_007e3e20@@YAPAUcActions@@PAU1@00@Z  007e3e20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ?FUN_007e3e90@@YAPAUcActions@@PAU1@00@Z  007e3e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ?FUN_007e49f0@@YIXPAUcAppStateCmd@@PAXPAVcArguments_s007e_4260@ArgScript@EA@@@Z  007e49f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ?FUN_007e4a80@@YIXPAUcAppStateCmd@@PAXPAVcArguments_s007e_4260@ArgScript@EA@@@Z  007e4a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ?FUN_007e4b20@@YIXPAUcAppStateCmd@@PAXPAVcArguments_s007e_4260@ArgScript@EA@@@Z  007e4b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPEngine/SPAppStateManager.cpp  ?Execute@cDescriptionCommand@?A0x0f6d536d@@UAEXPAVcArguments@ArgScript@EA@@@Z  007e2640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

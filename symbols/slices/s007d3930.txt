@@ -23,7 +23,7 @@
 007d4730 ?HandleParam@cEffectNode@@QAEDHPAMPAX@Z  # cEffectNode::HandleParam migrated from s007d3930 (verbatim, slice spelling)
 007d4820 ?SetVisible@EffOwner@@QAEXH@Z  # EffOwner::SetVisible migrated from s007d3930 (verbatim, slice spelling)
 007d48e0 ?Allocate@VecOut@@QAEPAU1@IPAX@Z  # VecOut::Allocate migrated from s007d3930 (verbatim, slice spelling)
-007d4980 ?DoInsertValue@XformVec@@QAEXPBX@Z  # eastl vector<cSPTransform>::DoInsertValue
+007d4980 ?DoInsertValue@XformVec@@QAEXPBX@Z  # XformVec::DoInsertValue migrated from s007d3930 (verbatim, slice spelling)
 00838020 ?MainArguments@cArguments@ArgScript@EA@@QAEPAPBDPAHHH@Z  # EA::ArgScript::cArguments::MainArguments
 008380b0 ?HasFlag@cArguments@ArgScript@EA@@QAE_NPBD@Z  # EA::ArgScript::cArguments::HasFlag
 00838130 ?OptionArguments@cArguments@ArgScript@EA@@QAEPAPBDPBDPAHHH@Z  # OptionArguments(name,&count,min,max)

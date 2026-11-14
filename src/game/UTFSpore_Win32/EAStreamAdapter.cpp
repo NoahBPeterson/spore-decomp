@@ -17,6 +17,9 @@
 #include "SP/cSPMission.h"
 #include "SP/cSPMissionHappinessEvent.h"
 #include "SP/cTerrainSphere.h"
+#include "EA/Stopwatch.h"
+#include "EA/LimitStopwatch.h"
+#include "SP/cDirectPropertyList.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" unsigned short _byteswap_ushort(unsigned short);

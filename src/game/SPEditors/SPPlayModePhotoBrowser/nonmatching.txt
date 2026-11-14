@@ -1,13 +1,13 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 0062fee0 39 GetHeaderInfo: complete; shared Get(...) call tail (push 4/2 then common call) not reproduced
 00630360 41 FindPhotoByGuid: complete; original uses 4 callee-saved regs (extra element copy in loop)
 00630470 15 IsPhotosWriting: complete; this/job register swap (edi/esi)
 006306f0 30 LocaleMsg dtor (32-slot release loop): complete; original test-then-reload of slot pointer and eax/edx vcall chain; equiv: UNSUPPORTED (our vtable address stored where orig stores image vtable; needs vtable symbol mapping)
-006307a0 110 rbtree insert helper: complete; operator-new line-info args and node field copy schedule [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 esp]
-006308d0 58 cJob-holder deleting dtor: complete; GetStatus calls via +0x34/+0x30 and buffer free [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
-006309e0 47 eastl::operator+<wchar_t>: complete; strlen/append call setup order
-00630a50 130 cSPPlayModePhotoBrowser ctor: complete; 0x63-entry loop body store order
-00630b30 196 vector<cSettingsTab*>::DoInsertValue: complete; reallocation path memmove/DoInsertValue shape
+006307a0 110 rbtree insert helper: complete; operator-new line-info args and node field copy schedule [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 esp] flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+006308d0 58 cJob-holder deleting dtor: complete; GetStatus calls via +0x34/+0x30 and buffer free [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp] flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+006309e0 47 eastl::operator+<wchar_t>: complete; strlen/append call setup order flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00630a50 87 cSPPlayModePhotoBrowser ctor: complete; retail keeps the object base in eax and reuses one register for the 0x6c/0x84 sub-pointers (`mov eax,ecx` prologue, `lea ecx,[eax+...]`); building the 0x6c pointer from self first and recovering the base from it also leaves our eax = self on the void return; remaining diff is the zero/pointer register choice (ecx/edx swapped), size 174 vs 186; difftest PASS (400 valid, 100.0% cov) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00630b30 196 vector<cSettingsTab*>::DoInsertValue: complete; reallocation path memmove/DoInsertValue shape flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00631dc0 18 FUN_00631dc0: complete; register swap (edi/ebx), materialised zero size vs memcpy thunk call order
 00631df0 82 FUN_00631df0: complete; AutoRefCount push/AddRef/Release and grow-path call shape
 00632660 49 SP::cSPPlayModePhotoBrowser::DeleteSelected: complete; re-evaluated count loops + tail ExitDeleteMode
@@ -22,3 +22,7 @@
 00633230 125 MarkPhotoTypeForGuid: complete; find() out-param shape and operator[] call shape differ
 00633440 193 CapturePixels: complete; same entry-address folding as CopyPixelsToRaster
 00634520 32 NextPhoto: complete; original re-reads the vector size after the index increment and again for the clamp (no CSE), ours hoists/CSEs it flags: /O2 /MD /Gy /TP /GS-
+00630930  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 163, retail 162
+00630d10  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 499, retail 514
+00630f20  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 947, retail 962
+006312f0  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 1076, retail 1307

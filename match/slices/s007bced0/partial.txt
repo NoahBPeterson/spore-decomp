@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-007bd750  -  stub: placeholder body (ours 7 bytes, retail 1558 bytes); needs real source; match/slices/s007bced0/s007bced0.cpp mentions this address and may hold an earlier draft. Was noted as complete: complete (cCSAThumbnailJob::DrawLayer: single pass, or 2x2 tiled pass with a per-tile post filter); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; call sequence identical (43 calls, 0.98x size); x87 temps and strength reduction of j*tileH differ, the dead erase-copy loop of cJobPostFilter::Shutdown is 

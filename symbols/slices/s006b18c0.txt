@@ -14,9 +14,9 @@
 006b1fc0 ?FlushAllSaveAreas@SP@@YAXXZ  # SP::FlushAllSaveAreas migrated from s006b18c0
 006b2000 ?FUN_006b2000@@YA_NPAXD@Z  # FUN_006b2000 migrated from s006b18c0 (verbatim, slice spelling)
 006b2090 ?FUN_006b2090@@YA_NPAXD@Z  # FUN_006b2090 migrated from s006b18c0 (verbatim, slice spelling)
-006b2110 ReadExtensionMappingsFromPropFile  # property-file 'extension mapping' array import plus the trailing key variant
+006b2110 ?ReadExtensionMappingsFromPropFile@@YAXIPAUIExtMapSink@@@Z  # ReadExtensionMappingsFromPropFile migrated from s006b18c0 (verbatim, slice spelling)
 006b22a0 ?SP_UpdateSaveAreas@@YAPAXPAX@Z  # SP_UpdateSaveAreas migrated from s006b18c0 (verbatim, slice spelling)
 006b22f0 ?FUN_006b22f0@@YAPAXPAX@Z  # FUN_006b22f0 migrated from s006b18c0 (verbatim, slice spelling)
 006b2350 ?SP_SomethingAllSaveAreas@@YAXXZ  # SP_SomethingAllSaveAreas migrated from s006b18c0 (verbatim, slice spelling)
-006b2400 FUN_006b2400  # save-area key lookup, 12-byte element collect/destroy loop with the buffer freed through the EA header refcount
-006b2620 FUN_006b2620  # SP::CreateDirectorySave: dir id -> wstring path, 0x168-byte DatabaseDirectoryFiles, extension import, resource-manager insert
+006b2400 ?FUN_006b2400@@YAXI@Z  # FUN_006b2400 migrated from s006b18c0 (verbatim, slice spelling)
+006b2620 ?FUN_006b2620@@YA_NIPB_WPAPAUDatabaseDirectoryFiles@@IIPAUIExtMapSink@@@Z  # FUN_006b2620 migrated from s006b18c0 (verbatim, slice spelling)

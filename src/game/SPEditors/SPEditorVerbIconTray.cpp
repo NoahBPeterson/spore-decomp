@@ -19,6 +19,7 @@ extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 #include "SP/cPropertyManager.h"
 #include "cSPUILayout.h"
 #include "cSPVerbIconRollover.h"
+#include "EA/COM/IUnknown32.h"
 
 // ---- items of slice s005e5d40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void _pv##n();
@@ -456,7 +457,7 @@ struct Rectangle_s005e_7830 {
 }
 namespace EA {
 namespace ResourceMan {
-struct Key_s005e_7830 {
+class Key_s005e_7830 { public:
   uint32_t instanceID;
   uint32_t typeID;
   uint32_t groupID;
@@ -584,8 +585,23 @@ class cSPUILayout {
   PV(0)
   virtual int AddRef();                                              // +0x04
   virtual int Release();                                             // +0x08
+  PV(3) PV(4) PV(5)
+  virtual void SetIconKeyIndex(int index);                           // +0x18
   void Init(const Key_s005e_7830* key, int a, uint32_t b);                      // 0x8120d0
   IWindow_s005e_7830* FindWindowByID(uint32_t id, int flag);                    // 0x8105b0
+};
+}
+namespace SP {
+class cSPVerbIconLayout {
+ public:
+  uint32_t mPad[5];
+  char mPadToIconKey[0x9c - 0x18];
+  Key_s005e_7830 mIconKey;                                                      // +0x9c
+  PV(0)
+  virtual int AddRef();                                              // +0x04
+  virtual int Release();                                             // +0x08
+  PV(3) PV(4) PV(5)
+  virtual void SetIconKeyIndex(int index);                           // +0x18
 };
 }
 namespace SP {
@@ -604,8 +620,25 @@ enum eLayoutJustification_s005e_7830 { kJustificationRight_s005e_7830 = -4011498
 namespace SP {
 class cSPEditorVerbIcon_s005e_7830 {
  public:
-  virtual int AddRef();
-  virtual int Release();
+  virtual int AddRef();                                // +0x00
+  virtual int Release();                               // +0x04
+  PV(2) PV(3) PV(4) PV(5) PV(6)
+  virtual void SetIconLayout(IWindow_s005e_7830* panel, Key_s005e_7830 key, cSPVerbIconLayout* layout, uint32_t rolloverLayout,
+                             bool animate, int justification, bool forceEnabled, bool chargeDials);  // +0x1c
+  virtual void SetIconLayoutCollapsed(cSPVerbIconLayout* layout, bool flag, bool animate);          // +0x20
+  PV(9) PV(10) PV(11)
+  virtual void UpdateIcon(cSPVerbIconLayout* layout);  // +0x30
+  char mPadTo17c[0x17c - 4];
+  AutoRefCount_s005e_7830<IWindow_s005e_7830> mField17c;                     // +0x17c
+  uint32_t mPad180;                                    // +0x180
+  cSPEditorVerbIcon_s005e_7830();                                 // 0x5e2000
+  void FUN_005e3920();                                 // 0x5e3920
+  float FUN_005e1f80();                                // 0x5e1f80
+  void FUN_005e1f90(bool value);                       // 0x5e1f90
+  void SetEnabled(bool value);                         // 0x5e2cc0
+  void FUN_005e2890(Math::Rectangle_s005e_7830* out);             // 0x5e2890
+  void SetArea(Math::Rectangle_s005e_7830 area);                  // 0x5e2960
+  void SetState2();                                    // 0x5e3d40
 };
 }
 namespace SP {
@@ -627,10 +660,12 @@ struct IconVector {
   T* mpEnd;
   T* mpCapacity;
   uint32_t mAllocator;
+  IconVector(unsigned int n, const uint32_t& allocator);   // 0x66aec0
   unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }
   struct RawRef { void* p; };
   void insert(T* pos, unsigned int n, const RawRef& value);   // 0x5e7400
   void erase(T* first, T* last);                         // 0xe25bd0
+  void Resize(unsigned int n);                           // 0x5e77e0
   void resize(unsigned int n) {
     RawRef value;
     value.p = 0;
@@ -640,6 +675,14 @@ struct IconVector {
       erase(mpBegin + n, mpEnd);
   }
 };
+}
+namespace SP {
+void EASTL_allocator_deallocate(void* p);              // 0xf47380
+}
+namespace SP {
+void IconCopy(AutoRefCount_s005e_7830<cSPEditorVerbIcon_s005e_7830>** out, AutoRefCount_s005e_7830<cSPEditorVerbIcon_s005e_7830>* first,
+              AutoRefCount_s005e_7830<cSPEditorVerbIcon_s005e_7830>* last, AutoRefCount_s005e_7830<cSPEditorVerbIcon_s005e_7830>* dest,
+              int index);                              // 0x829110
 }
 namespace SP {
 class cSPEditorVerbIconTray_s005e_7830 : public EA::UTFWin::IWinProc_s005e_7830, public EA::RefCountVTemplate_s005e_7830<int> {
@@ -709,9 +752,11 @@ class cSPEditorVerbIconTray_s005e_7830 : public EA::UTFWin::IWinProc_s005e_7830,
   AutoRefCount_s005e_7830<cSPVerbIconRollover_s005e_7830> mRollover;                 // +0x110
   uint32_t* mAbilityArray;                                     // +0x114
   uint32_t mRepresentativeAnimation;                           // +0x118
+  IWindow_s005e_7830* mField11c;                                          // +0x11c
 
   void SetVerbIconSize();                                      // 0x5e6030
   void SetLevelText(float level);                              // 0x5e7030
+  cSPEditorVerbIcon_s005e_7830* FUN_005e8130(int index, cSPVerbIconLayout* layout);   // 0x5e8130
   void Init(IWindow_s005e_7830* parent, Key_s005e_7830 trayKey, uint32_t justification, bool animateIcons, int unused);   // @ 0x5e7830
 };
 }
@@ -731,8 +776,6 @@ void SP::cSPEditorVerbIconTray::SetRolloverLayout(EA::ResourceMan::Key key)
   mRolloverLayout.mInstance = 0x510a95b;
 }
 
-
-
 // @ 0x005e5e60
 namespace SP {
 void cSPEditorVerbIconTray_s005e_5d40::SetLayoutKey(EA::ResourceMan::Key_s005e_5d40 key)
@@ -742,8 +785,6 @@ void cSPEditorVerbIconTray_s005e_5d40::SetLayoutKey(EA::ResourceMan::Key_s005e_5
   mLayoutKey.typeID = 0x510a95b;
 }
 }  // namespace SP
-
-
 
 // @ 0x005e5e80
 namespace SP {
@@ -755,8 +796,6 @@ void cSPEditorVerbIconTray_s005e_5d40::SetLayoutID(uint32_t id)
 }
 }  // namespace SP
 
-
-
 // @ 0x005e5ea0
 namespace SP {
 void cSPEditorVerbIconTray_s005e_5d40::SetHaveChargeDials(bool b)
@@ -766,8 +805,6 @@ void cSPEditorVerbIconTray_s005e_5d40::SetHaveChargeDials(bool b)
 }
 }  // namespace SP
 
-
-
 // @ 0x005e5ec0
 namespace SP {
 void cSPEditorVerbIconTray_s005e_5d40::SetForceEnabled(bool b)
@@ -776,8 +813,6 @@ void cSPEditorVerbIconTray_s005e_5d40::SetForceEnabled(bool b)
   mIconsForceEnabled = b;
 }
 }  // namespace SP
-
-
 
 // @ 0x005e5f10
 namespace SP {
@@ -794,8 +829,6 @@ float cSPEditorVerbIconTray_s005e_5d40::GetMaxVerbWidth()
 }
 }  // namespace SP
 
-
-
 // @ 0x005e5fa0
 namespace SP {
 float cSPEditorVerbIconTray_s005e_5d40::GetMaxVerbHeight()
@@ -810,8 +843,6 @@ float cSPEditorVerbIconTray_s005e_5d40::GetMaxVerbHeight()
   return height / mVerbIcons.size();
 }
 }  // namespace SP
-
-
 
 // @ 0x005e6030
 namespace SP {
@@ -834,8 +865,6 @@ void cSPEditorVerbIconTray_s005e_5d40::SetVerbIconSize()
 }
 }  // namespace SP
 
-
-
 // @ 0x005e60d0
 namespace SP {
 void cSPEditorVerbIconTray_s005e_5d40::RemoveVerbIconInternal(int index)
@@ -854,8 +883,6 @@ void cSPEditorVerbIconTray_s005e_5d40::RemoveVerbIconInternal(int index)
 }
 }  // namespace SP
 
-
-
 // @ 0x005e6170
 void SP::cSPEditorVerbIconTray::SetShowRollover(bool b)
 {
@@ -864,8 +891,6 @@ void SP::cSPEditorVerbIconTray::SetShowRollover(bool b)
   for (int i = 0; i < count; i++)
     mVerbIcons[i]->SetShowRollover(b);
 }
-
-
 
 // @ 0x005e61b0
 void SP::cSPEditorVerbIconTray::SetIgnoreKeyPress(bool b)
@@ -877,8 +902,6 @@ void SP::cSPEditorVerbIconTray::SetIgnoreKeyPress(bool b)
       mVerbIcons[i]->SetIgnoreKeyPress(b);
   }
 }
-
-
 
 // @ 0x005e6200
 namespace SP {
@@ -924,8 +947,6 @@ void cSPEditorVerbIconTray_s005e_5d40::SetParent(IWindow_s005e_5d40* parent, boo
 }
 }  // namespace SP
 
-
-
 // @ 0x005e6390
 namespace SP {
 float cSPEditorVerbIconTray_s005e_5d40::GetHeight()
@@ -933,8 +954,6 @@ float cSPEditorVerbIconTray_s005e_5d40::GetHeight()
   return mWinRoot->GetArea().Height();
 }
 }  // namespace SP
-
-
 
 // @ 0x005e63b0
 namespace SP {
@@ -946,8 +965,6 @@ void cSPEditorVerbIconTray_s005e_5d40::SetMaxArea(const Math::Rectangle& area)
   LayoutTray();
 }
 }  // namespace SP
-
-
 
 // @ 0x005e6400
 namespace SP {
@@ -1033,8 +1050,6 @@ void cSPEditorVerbIconTray_s005e_5d40::LayoutTray()
 }
 }  // namespace SP
 
-
-
 // @ 0x005e67f0
 namespace SP {
 cSPEditorVerbIconTray_s005e_5d40::cSPEditorVerbIconTray_s005e_5d40()
@@ -1073,15 +1088,11 @@ cSPEditorVerbIconTray_s005e_5d40::cSPEditorVerbIconTray_s005e_5d40()
       mRepresentativeAnimation(0) {}
 }  // namespace SP
 
-
-
 // @ 0x005e6980
 namespace SP {
 cSPEditorVerbIconTray_s005e_5d40::~cSPEditorVerbIconTray_s005e_5d40()
 {}
 }  // namespace SP
-
-
 
 // @ 0x005e6a60
 namespace SP {
@@ -1095,8 +1106,6 @@ eastl::wstring cSPEditorVerbIconTray_s005e_5d40::GetTrayName(int unused)
 }
 }  // namespace SP
 
-
-
 // @ 0x005e6ae0
 namespace SP {
 eastl::wstring cSPEditorVerbIconTray_s005e_5d40::GetTrayDescription()
@@ -1108,13 +1117,11 @@ eastl::wstring cSPEditorVerbIconTray_s005e_5d40::GetTrayDescription()
 }
 }  // namespace SP
 
-
 // @ 0x005e6b40
 namespace SP {
 // DoMessage: not written here yet (the complete draft is in match/slices/s005e6b40). Do not put an empty body here:
 // the compiler would inline it into DoMessage's caller (0x005e6fb0) and drop the call that retail makes.
 }  // namespace SP
-
 
 // @ 0x005e6fb0
 namespace SP {
@@ -1143,18 +1150,15 @@ bool cSPEditorVerbIconTray_s005e_6b40::CheckMessage(IWindow_s005e_6b40* w, void*
 }
 }  // namespace SP
 
-
 // @ 0x005e7030
 void SP::cSPEditorVerbIconTray::SetLevelText(float level)
 { (void)level; }
-
 
 // @ 0x005e71d0
 namespace SP {
 void cSPEditorVerbIconTray_s005e_6b40::Update(float dt)
 { (void)dt; }
 }  // namespace SP
-
 
 // @ 0x005e7390
 namespace SP {
@@ -1167,7 +1171,6 @@ void* VectorDoAllocate(void* dst, unsigned int count, const unsigned char* value
 }
 }  // namespace SP
 
-
 // @ 0x005e7400
 namespace SP {
 void VectorDoInsert(void* out, unsigned int count, void* value)
@@ -1178,16 +1181,13 @@ void VectorDoInsert(void* out, unsigned int count, void* value)
 }
 }  // namespace SP
 
-
 // @ 0x005e75c0
 void SP::cSPEditorVerbIconTray::SetBaseStat(float value)
 { (void)value; }
 
-
 // @ 0x005e76b0
 void SP::cSPEditorVerbIconTray::Shutdown()
 {}
-
 
 // @ 0x005e77e0
 namespace SP {
@@ -1364,6 +1364,67 @@ void cSPEditorVerbIconTray_s005e_7830::Init(IWindow_s005e_7830* parent, Key_s005
 
 // @ 0x005e8130
 namespace SP {
-void FUN_005e8130()
-{}
+cSPEditorVerbIcon_s005e_7830* cSPEditorVerbIconTray_s005e_7830::FUN_005e8130(int index, cSPVerbIconLayout* layout)
+{
+  int count = (int)mVerbIcons.size();
+  if (index >= count) {
+    IconVector<AutoRefCount_s005e_7830<cSPEditorVerbIcon_s005e_7830> > temp((unsigned int)count, mVerbIcons.mAllocator);
+    AutoRefCount_s005e_7830<cSPEditorVerbIcon_s005e_7830>* endOut;
+    IconCopy(&endOut, mVerbIcons.mpBegin, mVerbIcons.mpEnd, temp.mpBegin, index);
+    mVerbIcons.Resize(index + 1);
+    for (int i = 0; i < count; i++)
+      mVerbIcons.mpBegin[i] = temp.mpBegin[i].mpObject;
+    for (AutoRefCount_s005e_7830<cSPEditorVerbIcon_s005e_7830>* p = temp.mpBegin; p < endOut; p++) {
+      if (p->mpObject != 0)
+        p->mpObject->Release();
+    }
+    if (temp.mpBegin != 0 && ((uint32_t*)temp.mpBegin)[-1] != 0)
+      EASTL_allocator_deallocate(temp.mpBegin);
+  }
+
+  AutoRefCount_s005e_7830<cSPEditorVerbIcon_s005e_7830>& slot = mVerbIcons.mpBegin[index];
+  if (slot.mpObject != 0) {
+    slot.mpObject->UpdateIcon(layout);
+    slot.mpObject->FUN_005e3920();
+    return mVerbIcons.mpBegin[index].mpObject;
+  }
+
+  cSPEditorVerbIcon_s005e_7830* icon = new ("Editor", 0, 0, 0, 0) cSPEditorVerbIcon_s005e_7830();
+  if (icon != 0)
+    icon->AddRef();
+
+  if (mShowIcons) {
+    Key_s005e_7830 key = layout->mIconKey;
+    if (mIconKey.instanceID != 0)
+      key = mIconKey;
+
+    layout->SetIconKeyIndex(index);
+    icon->SetIconLayout(mWinIconPanel.mpObject, key, layout, mRolloverLayout.instanceID,
+                        mAnimateIcons, mLayoutJustification, mIconsForceEnabled,
+                        mIconsHaveChargeDials);
+    icon->mField17c = mField11c;
+    icon->SetEnabled(mIsEnabled);
+    icon->FUN_005e1f90(mIgnoreKeyPress);
+    if (mVerbIconAspectRatio == -1.0f) {
+      mVerbIconAspectRatio = icon->FUN_005e1f80();
+      SetVerbIconSize();
+    }
+    Math::Rectangle_s005e_7830 current;
+    icon->FUN_005e2890(&current);
+    Math::Rectangle_s005e_7830 area;
+    area.x1 = 0.0f;
+    area.y1 = 0.0f;
+    area.x2 = current.x2 - current.x1;
+    area.y2 = current.y2 - current.y1;
+    icon->SetArea(area);
+    icon->SetState2();
+  } else {
+    bool show = mShowVerbIconWhenCollapsed && mShowRollover;
+    icon->SetIconLayoutCollapsed(layout, show, mAnimateIcons);
+  }
+
+  mVerbIcons.mpBegin[index] = icon;
+  icon->Release();
+  return icon;
+}
 }  // namespace SP

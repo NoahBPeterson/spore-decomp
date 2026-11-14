@@ -26,6 +26,7 @@
 #include "SP/cIRTTManager.h"
 #include "SP/cRenderer.h"
 #include "SP/cTextureManager.h"
+#include "SP/cILayer.h"
 
 // ---- items of slice s00572580 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct UintArray {
@@ -1725,7 +1726,7 @@ struct cThumbnailManager_s007b_bf80 {
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedIncrement, _InterlockedDecrement)
 namespace EA {
 namespace Thread {
-        struct AtomicInt_s007b_ced0 {
+        class AtomicInt_s007b_ced0 { public:
             volatile long mValue;
             long GetValue() const { return _InterlockedExchangeAdd((long*)&mValue, 0); }
             long Increment() { return _InterlockedIncrement((long*)&mValue); }
@@ -1734,7 +1735,7 @@ namespace Thread {
 }
 }
 namespace EA {
-    template <typename T> struct RefCountTemplate_s007b_ced0 {
+    template <typename T> class RefCountTemplate_s007b_ced0 { public:
         virtual ~RefCountTemplate_s007b_ced0() {}
         virtual int AddRef() { return mRefCount++ + 1; }
         virtual int Release() { int n = mRefCount - 1; mRefCount = n; if (n == 0) { mRefCount = 1; delete this; } return n; }
@@ -1742,7 +1743,7 @@ namespace EA {
     };
 }
 namespace EA {
-    template <typename T> struct AutoRefCount_s007b_ced0 {
+    template <typename T> class AutoRefCount_s007b_ced0 { public:
         T* mpObject;
         AutoRefCount_s007b_ced0(T* p = 0) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
         ~AutoRefCount_s007b_ced0() { if (mpObject) mpObject->Release(); }
@@ -2005,8 +2006,12 @@ struct Obj90 {
     virtual void v2();
 };
 struct MessageServer_s007b_ced0 {
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-    virtual void v10(); virtual void v14();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
     virtual void Send(int a, int b, int c, int d);            // +0x18
 };
 MessageServer_s007b_ced0* __cdecl SP_MessageServer_s007b_ced0();          // 0x0067dcc0
@@ -2029,33 +2034,96 @@ struct cPropertyList_s007b_ced0 {
 };
 extern cPropertyList_s007b_ced0* sAppProperties_s007b_ced0;                          // 0x015fd918
 struct IMgr_s007b_ced0 {                                                  // 0x0067dd50
-    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
-    virtual void s04(); virtual void s05(); virtual void s06();
+virtual void s00();
+virtual void s01();
+virtual void s02();
+virtual void s03();
+virtual void s04();
+virtual void s05();
+virtual void s06();
     virtual int* GetScreenSize();                              // +0x1c: {width, height}
-    virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
-    virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
+virtual void s08();
+virtual void s09();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
     virtual void DrawTarget(int a3, int w, int h, DrawCtx* c, int one, int zero);   // +0x40
-    virtual void s17(); virtual void s18(); virtual void s19();
-    virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23();
-    virtual void s24(); virtual void s25(); virtual void s26(); virtual void s27();
-    virtual void s28(); virtual void s29();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
     virtual void Post(void* sender, int a, void* msg);         // +0x78
 };
 IMgr_s007b_ced0* __cdecl GetMgr_s007b_ced0();                                        // 0x0067dd50
 struct IRtt_s007b_ced0 {                                                  // 0x0067dd40
-    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03(); virtual void s04();
-    virtual void s05(); virtual void s06(); virtual void s07(); virtual void s08(); virtual void s09();
-    virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14();
-    virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
-    virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24();
-    virtual void s25(); virtual void s26(); virtual void s27(); virtual void s28(); virtual void s29();
-    virtual void s30(); virtual void s31(); virtual void s32(); virtual void s33(); virtual void s34();
-    virtual void s35(); virtual void s36(); virtual void s37(); virtual void s38(); virtual void s39();
-    virtual void s40(); virtual void s41(); virtual void s42();
+virtual void s00();
+virtual void s01();
+virtual void s02();
+virtual void s03();
+virtual void s04();
+virtual void s05();
+virtual void s06();
+virtual void s07();
+virtual void s08();
+virtual void s09();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+virtual void s21();
+virtual void s22();
+virtual void s23();
+virtual void s24();
+virtual void s25();
+virtual void s26();
+virtual void s27();
+virtual void s28();
+virtual void s29();
+virtual void s30();
+virtual void s31();
+virtual void s32();
+virtual void s33();
+virtual void s34();
+virtual void s35();
+virtual void s36();
+virtual void s37();
+virtual void s38();
+virtual void s39();
+virtual void s40();
+virtual void s41();
+virtual void s42();
     virtual void GetRectAC(RectID* out);                       // +0xac
-    virtual void s44(); virtual void s45(); virtual void s46(); virtual void s47(); virtual void s48();
-    virtual void s49(); virtual void s50(); virtual void s51(); virtual void s52(); virtual void s53();
-    virtual void s54(); virtual void s55();
+virtual void s44();
+virtual void s45();
+virtual void s46();
+virtual void s47();
+virtual void s48();
+virtual void s49();
+virtual void s50();
+virtual void s51();
+virtual void s52();
+virtual void s53();
+virtual void s54();
+virtual void s55();
     virtual void GetRectE0(RectID* out, int index);            // +0xe0
 };
 IRtt_s007b_ced0* __cdecl GetRtt_s007b_ced0();                                        // 0x0067dd40
@@ -2171,92 +2239,7 @@ struct DilateReq_s007b_ced0 {
     unsigned f18;
 };
 typedef EA::AutoRefCount_s007b_ced0<cJobPostFilter_s007b_ced0> FilterPtr;
-__forceinline int RoundToInt(float f);  // 0x007bd750 (defined below; used by a stub's inline body)
-void cCSAThumbnailJob_s007b_ced0::DrawLayer(int a0, int layer, DrawCtx* ctx, int a3)
-{
-    mViewer->Copy(ctx->viewer, 0, 0);
-    Vec4_s007b_ced0 clear(0.0f, 0.0f, 0.0f, 0.0f);
-    mViewer->SetClearColor(clear);
-    if (!sAppProperties_s007b_ced0->GetDescription(0x5c8af84)) {
-        mViewer->SetRaster(&mInfo.mpObject->mSmallRectId, 1);
-        mViewer->Flush(7);
-        DrawCtx c;
-        c.viewer = mViewer;
-        c.a = 0;
-        c.b = 0;
-        c.c = 0;
-        mBackgroundModelWorld->GetLayerDraw()->Draw(a0, layer, &c, a3);
-        mModelWorld->GetLayerDraw()->Draw(a0, layer, &c, a3);
-        ILayerDraw* extra = mInfo.mpObject->mExtraLayer;
-        if (extra)
-            extra->Draw(a0, layer, &c, a3);
-        GetMgr_s007b_ced0()->DrawTarget(a3, 0x12, 0x12, &c, 1, 0);
-        if (mInfo.mpObject->mPostProcessLayer.mpObject) {
-            cJobPostFilter_s007b_ced0* first = *mInfo.mpObject->mPostProcessLayer.mpObject->mFilterBegin;
-            first->mDestRectID = mInfo.mpObject->mSmallRectId;
-            mInfo.mpObject->mPostProcessLayer.mpObject->DrawLayer(a0, layer, &c, a3);
-        }
-    } else {
-        mFilterViewer->Copy(mViewer, 0, 0);
-        mFilterViewer->Flush(7);
-        unsigned tileW = mInfo.mpObject->mResSmall;
-        int* screen = GetMgr_s007b_ced0()->GetScreenSize();
-        unsigned tileH = (unsigned)RoundToInt((float)screen[1] / (float)screen[0] * (float)mInfo.mpObject->mResSmall) >> 1;
-        tileW >>= 1;
-        float v1, v2;
-        mViewer->FUN_007c40c0(&v1, &v2);
-        v1 = v1 * 0.5f;
-        v2 = v2 * 0.5f;
-        mViewer->FUN_007c4b00(v1, v2);
-        Vec4_s007b_ced0 p0(1.2f, 1.0f, 1.0f, 1.0f);
-        Vec4_s007b_ced0 p1(0.0f, 1.0f, 1.0f, 0.0f);
-        for (unsigned i = 0; i < 2; i++) {
-            float rowF = 1.0f - (float)i * 2.0f;
-            unsigned xo = i * tileW;
-            for (unsigned j = 0; j < 2; j++) {
-                mViewer->FUN_007c4ad0(rowF * v1, -(1.0f - (float)j * 2.0f) * v2);
-                mViewer->SetRaster(&mInfo.mpObject->mAntiAliasRectId, 1);
-                mViewer->Flush(7);
-                DrawCtx c;
-                c.viewer = mViewer;
-                c.a = 0;
-                c.b = 0;
-                c.c = 0;
-                mBackgroundModelWorld->GetLayerDraw()->Draw(a0, layer, &c, a3);
-                mModelWorld->GetLayerDraw()->Draw(a0, layer, &c, a3);
-                ILayerDraw* extra = mInfo.mpObject->mExtraLayer;
-                if (extra)
-                    extra->Draw(a0, layer, &c, a3);
-                GetMgr_s007b_ced0()->DrawTarget(a3, 0x12, 0x12, &c, 1, 0);
-                if (mInfo.mpObject->mPostProcessLayer.mpObject) {
-                    cJobPostFilter_s007b_ced0* first = *mInfo.mpObject->mPostProcessLayer.mpObject->mFilterBegin;
-                    first->mDestRectID = mInfo.mpObject->mAntiAliasRectId;
-                    mInfo.mpObject->mPostProcessLayer.mpObject->DrawLayer(a0, layer, &c, a3);
-                }
-                mFilterViewer->SetRaster(&mInfo.mpObject->mSmallRectId, 1);
-                mFilterViewer->SetViewportRect(xo, j * tileH, tileW, tileH);
-                FilterPtr filter(new ("Graphics", 0, 0, 0, 0) cJobPostFilter_s007b_ced0());
-                filter.mpObject->Initialize(0);
-                filter.mpObject->mMaterialId = 0x88549f64;
-                filter.mpObject->mSrcRectID = mInfo.mpObject->mAntiAliasRectId;
-                filter.mpObject->mDestRectID = mInfo.mpObject->mSmallRectId;
-                filter.mpObject->mCustomParams[0] = p0;
-                filter.mpObject->mCustomParams[1] = p1;
-                filter.mpObject->mCustomParams[3] = clear;
-                filter.mpObject->mPreSetViewport = true;
-                DrawCtx c2;
-                c2.viewer = mFilterViewer;
-                c2.a = 0;
-                c2.b = 0;
-                c2.c = 0;
-                filter.mpObject->Draw(0, 0, &c2, a3);
-                filter.mpObject->Shutdown();
-            }
-        }
-    }
-    FUN_007b3090();
-    RenderLargeTiledImage(a0, layer, ctx, a3);
-}
+__forceinline int RoundToInt(float f) { __asm cvtss2si eax, f }
 // ---- items of slice s007bced0 end
 
 // ---- items of slice s007bde20 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -3728,20 +3711,42 @@ struct XformSource { void GetXform(Xform* out); };              // 0x007C40F0 (t
 }
 namespace SPL {
 struct IScene {
-    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
-    virtual void s04(); virtual void s05(); virtual void s06();
+virtual void s00();
+virtual void s01();
+virtual void s02();
+virtual void s03();
+virtual void s04();
+virtual void s05();
+virtual void s06();
     virtual XformSource* GetTransform();                        // +0x1C
-    virtual void s08(); virtual void s09(); virtual void s10();
+virtual void s08();
+virtual void s09();
+virtual void s10();
     virtual void SetMode(int mode);                             // +0x2C
 };
 }
 namespace SPL {
 struct IApp {
-    virtual void a00(); virtual void a01(); virtual void a02(); virtual void a03();
-    virtual void a04(); virtual void a05(); virtual void a06(); virtual void a07();
-    virtual void a08(); virtual void a09(); virtual void a10(); virtual void a11();
-    virtual void a12(); virtual void a13(); virtual void a14(); virtual void a15();
-    virtual void a16(); virtual void a17(); virtual void a18(); virtual void a19();
+virtual void a00();
+virtual void a01();
+virtual void a02();
+virtual void a03();
+virtual void a04();
+virtual void a05();
+virtual void a06();
+virtual void a07();
+virtual void a08();
+virtual void a09();
+virtual void a10();
+virtual void a11();
+virtual void a12();
+virtual void a13();
+virtual void a14();
+virtual void a15();
+virtual void a16();
+virtual void a17();
+virtual void a18();
+virtual void a19();
     virtual IScene* GetScene();                                 // +0x50
 };
 }
@@ -3750,18 +3755,61 @@ IApp* App();                                                    // 0x0067DD10
 }
 namespace SPL {
 struct IRenderTargetManager_s007c_1c10 {
-    virtual void r00(); virtual void r01(); virtual void r02(); virtual void r03(); virtual void r04();
-    virtual void r05(); virtual void r06(); virtual void r07(); virtual void r08();
+virtual void r00();
+virtual void r01();
+virtual void r02();
+virtual void r03();
+virtual void r04();
+virtual void r05();
+virtual void r06();
+virtual void r07();
+virtual void r08();
     virtual void SetFlag(int on);                               // +0x24
-    virtual void r10(); virtual void r11(); virtual void r12(); virtual void r13(); virtual void r14();
-    virtual void r15(); virtual void r16(); virtual void r17(); virtual void r18(); virtual void r19();
-    virtual void r20(); virtual void r21(); virtual void r22(); virtual void r23(); virtual void r24();
-    virtual void r25(); virtual void r26(); virtual void r27(); virtual void r28(); virtual void r29();
-    virtual void r30(); virtual void r31(); virtual void r32(); virtual void r33(); virtual void r34();
-    virtual void r35(); virtual void r36(); virtual void r37(); virtual void r38(); virtual void r39();
-    virtual void r40(); virtual void r41(); virtual void r42(); virtual void r43(); virtual void r44();
-    virtual void r45(); virtual void r46(); virtual void r47(); virtual void r48(); virtual void r49();
-    virtual void r50(); virtual void r51(); virtual void r52(); virtual void r53(); virtual void r54();
+virtual void r10();
+virtual void r11();
+virtual void r12();
+virtual void r13();
+virtual void r14();
+virtual void r15();
+virtual void r16();
+virtual void r17();
+virtual void r18();
+virtual void r19();
+virtual void r20();
+virtual void r21();
+virtual void r22();
+virtual void r23();
+virtual void r24();
+virtual void r25();
+virtual void r26();
+virtual void r27();
+virtual void r28();
+virtual void r29();
+virtual void r30();
+virtual void r31();
+virtual void r32();
+virtual void r33();
+virtual void r34();
+virtual void r35();
+virtual void r36();
+virtual void r37();
+virtual void r38();
+virtual void r39();
+virtual void r40();
+virtual void r41();
+virtual void r42();
+virtual void r43();
+virtual void r44();
+virtual void r45();
+virtual void r46();
+virtual void r47();
+virtual void r48();
+virtual void r49();
+virtual void r50();
+virtual void r51();
+virtual void r52();
+virtual void r53();
+virtual void r54();
     virtual void r55();
     virtual void FreeRect(RectID_s007c_1c10* rect, bool b);                // +0xE0
 };
@@ -3797,12 +3845,36 @@ struct LayerInfo_s007c_1c10 {
 }
 namespace SPL {
 struct ILayerManager_s007c_1c10 {
-    virtual void l00(); virtual void l01(); virtual void l02(); virtual void l03(); virtual void l04();
-    virtual void l05(); virtual void l06(); virtual void l07(); virtual void l08(); virtual void l09();
-    virtual void l10(); virtual void l11(); virtual void l12(); virtual void l13(); virtual void l14();
-    virtual void l15(); virtual void l16(); virtual void l17(); virtual void l18(); virtual void l19();
-    virtual void l20(); virtual void l21(); virtual void l22(); virtual void l23(); virtual void l24();
-    virtual void l25(); virtual void l26(); virtual void l27(); virtual void l28(); virtual void l29();
+virtual void l00();
+virtual void l01();
+virtual void l02();
+virtual void l03();
+virtual void l04();
+virtual void l05();
+virtual void l06();
+virtual void l07();
+virtual void l08();
+virtual void l09();
+virtual void l10();
+virtual void l11();
+virtual void l12();
+virtual void l13();
+virtual void l14();
+virtual void l15();
+virtual void l16();
+virtual void l17();
+virtual void l18();
+virtual void l19();
+virtual void l20();
+virtual void l21();
+virtual void l22();
+virtual void l23();
+virtual void l24();
+virtual void l25();
+virtual void l26();
+virtual void l27();
+virtual void l28();
+virtual void l29();
     virtual void AddLayer(void* layer);                         // +0x78
 };
 }
@@ -3904,7 +3976,10 @@ struct DrvPtr {
 }
 namespace SPL {
 struct cSplatJob {
-    virtual void j00(); virtual void j01(); virtual void j02(); virtual void j03();
+virtual void j00();
+virtual void j01();
+virtual void j02();
+virtual void j03();
     virtual void* GetLayer(int a, LayerInfo_s007c_1c10* info);             // +0x10
     char pad04[0x90 - 0x04];
     DrvPtr mEffect;                                             // +0x90
@@ -4151,6 +4226,402 @@ namespace SP {
 typedef EA::AutoRefCount_s007b_a350<cThumbnailManager_s007b_a350::cJobPostFilter> FilterPtr_s007b_a350;
 }
 // ---- items of slice s007ba350 end
+
+// ---- items of slice s007c13f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SPL {
+struct RefVectorA {
+    void* mpBegin;          // +0x00
+    void* mpEnd;            // +0x04
+    void* mpCapacity;       // +0x08
+    int   mAlloc0;          // +0x0c
+    int   mAlloc1;          // +0x10
+    RefVectorA& operator=(const RefVectorA& rhs);   // 0x0041EBE0
+};
+}
+namespace SPL {
+struct RefVectorB {
+    void* mpBegin;          // +0x00
+    void* mpEnd;            // +0x04
+    void* mpCapacity;       // +0x08
+    int   mAlloc0;          // +0x0c
+    int   mAlloc1;          // +0x10
+    RefVectorB& operator=(const RefVectorB& rhs);   // 0x0041EBE0
+};
+}
+namespace SPL {
+struct Elem24Vector {
+    void* mpBegin;          // +0x00
+    void* mpEnd;            // +0x04
+    void* mpCapacity;       // +0x08
+    int   mAlloc0;          // +0x0c
+    int   mAlloc1;          // +0x10
+    Elem24Vector& operator=(const Elem24Vector& rhs);   // 0x00421290
+};
+}
+namespace SPL {
+struct XformVector {
+    void* mpBegin;          // +0x00
+    void* mpEnd;            // +0x04
+    void* mpCapacity;       // +0x08
+    int   mAlloc0;          // +0x0c
+    int   mAlloc1;          // +0x10
+    XformVector& operator=(const XformVector& rhs);     // 0x0041E0D0
+};
+}
+namespace SPL {
+struct SplatParams {
+    struct V {
+        void* mpBegin;      // +0x00
+        void* mpEnd;        // +0x04
+        void* mpCapacity;   // +0x08
+        int   mAlloc0;      // +0x0c
+        int   mAlloc1;      // +0x10
+        V& operator=(const V& rhs);                     // 0x004269B0
+    } mVec;                 // +0x00
+    bool mFlag;             // +0x14
+};
+}
+namespace SPL {
+struct RectID_s007c_13f0 {
+    int mPageID;            // +0x00
+    int mAllocID;           // +0x04
+};
+}
+namespace SPL {
+struct FilterChainJob {
+    virtual int AddRef();   // +0x00
+    virtual int Release();  // +0x04
+};
+}
+namespace SPL {
+struct ChainRef {
+    FilterChainJob* mpObject;                               // +0x00
+    ChainRef& operator=(FilterChainJob* p)
+    {
+        if (p != mpObject) {
+            FilterChainJob* const old = mpObject;
+            if (p) p->AddRef();
+            mpObject = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+}
+namespace SPL {
+struct cSplatJob_s007c_13f0 {
+    virtual void j00();                                     // +0x00
+    virtual void j01();
+    virtual void j02();
+    virtual void j03();
+    virtual void* GetLayer(int a, void* info);              // +0x10
+    char pad04[0x0c - 0x04];                                // +0x04
+    RefVectorA  mMeshes;                                    // +0x0c
+    RefVectorB  mMaterials;                                 // +0x20
+    SplatParams mParams;                                    // +0x34
+    Elem24Vector mElem24;                                   // +0x4c
+    ChainRef    mChain;                                     // +0x60
+    RectID_s007c_13f0      mRect;                                      // +0x64
+    void*       mViewer;                                    // +0x6c
+    void*       mField70;                                   // +0x70
+    char pad74[0x7c - 0x74];                                // +0x74
+    XformVector mXforms;                                    // +0x7c
+
+    // 0x007C1B70 (thiscall, ret 0x24)
+    void Init(const RefVectorA& a0, void* a1, const RefVectorB& a2, const SplatParams& a3,
+              const Elem24Vector& a4, const RectID_s007c_13f0* a5, void* a6, const XformVector& a7,
+              FilterChainJob* a8);
+};
+}
+namespace SPL {
+struct RefCountedInline {
+    void* mpVtable;                 // +0x00
+    int   mField04;                 // +0x04
+    volatile long mnRefCount;       // +0x08
+    void AddRef()
+    {
+        _InterlockedIncrement(&mnRefCount);
+    }
+    void Release()
+    {
+        _InterlockedExchangeAdd(&mnRefCount, -1L);
+        if (_InterlockedExchangeAdd(&mnRefCount, 0L) < 1)
+            _InterlockedIncrement(&mnRefCount);
+        else
+            _InterlockedExchangeAdd(&mnRefCount, 0L);
+    }
+};
+}
+namespace SPL {
+template<class T> struct AutoRefCount_s007c_13f0 {
+    T* mpObject;                                            // +0x00
+    AutoRefCount_s007c_13f0& operator=(T* p)
+    {
+        if (p != mpObject) {
+            T* const old = mpObject;
+            if (p) p->AddRef();
+            mpObject = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+}
+namespace SPL {
+template<class T> struct AutoRefCountInline {
+    T* mpObject;                                            // +0x00
+    AutoRefCountInline& operator=(T* p)
+    {
+        if (p != mpObject) {
+            T* const old = mpObject;
+            if (p) p->AddRef();
+            mpObject = p;
+            if (old) old->Release();
+        }
+        return *this;
+    }
+};
+}
+namespace SPL {
+struct IModelWorld_s007c_13f0 {
+    virtual int AddRef();                                   // +0x00
+    virtual int Release();                                  // +0x04
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+virtual void v22();
+virtual void v23();
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v30();
+virtual void v31();
+virtual void v32();
+virtual void v33();
+virtual void v34();
+virtual void v35();
+virtual void v36();
+virtual void v37();
+virtual void v38();
+virtual void v39();
+virtual void v40();
+virtual void v41();
+virtual void v42();
+virtual void v43();
+virtual void v44();
+virtual void v45();
+virtual void v46();
+virtual void v47();
+virtual void v48();
+virtual void v49();
+virtual void v50();
+virtual void v51();
+virtual void v52();
+virtual void v53();
+virtual void v54();
+virtual void v55();
+virtual void v56();
+virtual void v57();
+virtual void v58();
+virtual void v59();
+virtual void v60();
+virtual void v61();
+virtual void v62();
+virtual void v63();
+virtual void v64();
+virtual void v65();
+virtual void v66();
+virtual void v67();
+virtual void v68();
+virtual void v69();
+virtual void v70();
+virtual void v71();
+virtual void v72();
+    virtual void SetSplatMode(int a, int b, int c);         // +0x124
+virtual void v74();
+virtual void v75();
+virtual void v76();
+    virtual void SetSplatFlags(int a);                      // +0x134
+};
+}
+namespace SPL {
+struct IModelManager {
+virtual void m00();
+virtual void m01();
+virtual void m02();
+virtual void m03();
+virtual void m04();
+    virtual IModelWorld_s007c_13f0* CreateWorld(unsigned int name, int flags);   // +0x14
+};
+}
+namespace SPL {
+struct IMessageServer_s007c_13f0 {
+virtual void m00();
+virtual void m01();
+virtual void m02();
+virtual void m03();
+virtual void m04();
+virtual void m05();
+virtual void m06();
+virtual void m07();
+    virtual void Subscribe(void* handler, unsigned int message);       // +0x20
+};
+}
+namespace SPL {
+IModelManager* ModelManager();          // 0x0067DD80
+}
+namespace SPL {
+IMessageServer_s007c_13f0* MessageServer_s007c_13f0();        // 0x0067DCC0
+}
+namespace SPL {
+void* GetRTTManager();                  // 0x0067DDA0
+}
+namespace SPL {
+struct cViewer_s007c_13f0 {
+    cViewer_s007c_13f0* Construct();               // 0x007C3F70
+    bool Init(bool value);              // 0x007C4DD0
+    void Clear(unsigned int flags) const;   // 0x007C3CC0
+    char mData[0x174];                  // objects are 0x174 bytes (no vptr modelled)
+};
+}
+namespace SPL {
+struct cFilterRes_s007c_13f0 {
+    virtual int AddRef();               // +0x00
+    virtual int Release();              // +0x04
+    cFilterRes_s007c_13f0* Ctor();                 // 0x007B8B30
+    char mData[0xd8];                   // objects are 0xdc bytes
+};
+}
+namespace SPL {
+struct cContentValidationSummarizer_s007c_13f0 {
+    virtual int AddRef();               // +0x00
+    virtual int Release();              // +0x04
+    cContentValidationSummarizer_s007c_13f0();     // 0x007C12A0
+    char mData[0x90];                   // objects are 0x94 bytes
+};
+}
+namespace SPL {
+struct IHandlerPrimary {
+    virtual int AddRef();               // +0x00
+    virtual int Release();              // +0x04
+virtual void h02();
+virtual void h03();
+};
+}
+namespace SPL {
+struct RefCountVTemplateInt_s007c_13f0 {
+    virtual void Destroy(int);          // +0x00
+    volatile long mnRefCount;           // +0x04
+    RefCountVTemplateInt_s007c_13f0() : mnRefCount(0) {}
+};
+}
+namespace SPL {
+struct cAmbOccDoneHandler : IHandlerPrimary, RefCountVTemplateInt_s007c_13f0 {
+    int  mField0c;                      // +0x0c
+    int  mField10;                      // +0x10
+    int  mField14;                      // +0x14
+    char pad18[0x20 - 0x18];            // +0x18
+    bool mbField20;                     // +0x20
+    int  mField24;                      // +0x24
+    int  mField28;                      // +0x28
+    int  mField2c;                      // +0x2c
+    int  mField30;                      // +0x30
+    cAmbOccDoneHandler()
+        : mField0c(0), mField10(0), mField14(0), mbField20(false),
+          mField24(0), mField28(0), mField2c(0), mField30(0) {}
+};
+}
+namespace SPL {
+struct cTimelineJobHandler : IHandlerPrimary, RefCountVTemplateInt_s007c_13f0 {
+    int  mField0c;                      // +0x0c
+    int  mField10;                      // +0x10
+    int  mField14;                      // +0x14
+    char pad18[0x20 - 0x18];            // +0x18
+    int  mField20;                      // +0x20
+    int  mField24;                      // +0x24
+    int  mField28;                      // +0x28
+    char pad2c[0x38 - 0x2c];            // +0x2c
+    int  mField38;                      // +0x38
+    int  mField3c;                      // +0x3c
+    bool mbField40;                     // +0x40
+    char pad44[0x54 - 0x44];            // +0x44
+    cTimelineJobHandler()
+        : mField0c(0), mField10(0), mField14(0), mField20(0), mField24(0), mField28(0),
+          mField38(-1), mField3c(-1), mbField40(false) {}
+};
+}
+namespace SPL {
+struct cThumbnailManager_s007c_13f0 {
+    void* mpVtable;                                     // +0x00
+    char  mHandlerSink[4];                              // +0x04  (this+4 for MessageServer)
+    char  pad08[0x64 - 0x08];                           // +0x08
+    AutoRefCountInline<RefCountedInline> mTimelineCellBg;    // +0x64
+    AutoRefCountInline<RefCountedInline> mTimelineCreatureBg;  // +0x68
+    AutoRefCountInline<RefCountedInline> mTimelineTribeBg;      // +0x6c
+    AutoRefCountInline<RefCountedInline> mTimelineCivBg;        // +0x70
+    AutoRefCountInline<RefCountedInline> mTimelineSpaceBg;      // +0x74
+    cViewer_s007c_13f0* mSplatterViewer;                           // +0x78
+    cViewer_s007c_13f0* mBakeInfoSplatterViewer;                   // +0x7c
+    cViewer_s007c_13f0* mNMapSpecSplatterViewer;                   // +0x80
+    cViewer_s007c_13f0* mDilateViewer;                             // +0x84
+    cViewer_s007c_13f0* mAmbOccShadowViewers[0x400];               // +0x88
+    cViewer_s007c_13f0* mAmbOccSplatterViewer;                     // +0x1088
+    cViewer_s007c_13f0* mAmbOccGatherViewer;                       // +0x108c
+    char  pad1090[0x109c - 0x1090];                     // +0x1090
+    void* mWatermarkRaster;                             // +0x109c
+    void* mScreenshotRaster;                            // +0x10a0
+    char  pad10a4[0x10b4 - 0x10a4];                     // +0x10a4
+    void* mRTTMgr;                                      // +0x10b4
+    char  pad10b8[0x10c4 - 0x10b8];                     // +0x10b8
+    AutoRefCount_s007c_13f0<IModelWorld_s007c_13f0> mAOModelWorld;            // +0x10c4
+    char  pad10c8[0x10e4 - 0x10c8];                     // +0x10c8
+    AutoRefCount_s007c_13f0<cContentValidationSummarizer_s007c_13f0> mDiffuseSplatterJob;    // +0x10e4
+    AutoRefCount_s007c_13f0<cContentValidationSummarizer_s007c_13f0> mBakeInfoSplatterJob;   // +0x10e8
+    AutoRefCount_s007c_13f0<cContentValidationSummarizer_s007c_13f0> mNMapSpecSplatterJob;   // +0x10ec
+    char  pad10f0[0x10fc - 0x10f0];                     // +0x10f0
+    AutoRefCount_s007c_13f0<cAmbOccDoneHandler> mAODoneHandler;    // +0x10fc
+    AutoRefCount_s007c_13f0<cFilterRes_s007c_13f0> mAmbOccRenderJobs[0x400];  // +0x1100
+    AutoRefCount_s007c_13f0<cTimelineJobHandler> mTimelineJobs[3]; // +0x2100
+
+    void Finalize();                                    // 0x007B9B00
+    bool Initialize();                                  // 0x007C13F0
+};
+}
+namespace SPL {
+inline cViewer_s007c_13f0* NewViewer_s007c_13f0()
+{
+    void* const mem = ::operator new(sizeof(cViewer_s007c_13f0), "Graphics", 0, 0, 0, 0);
+    return mem ? static_cast<cViewer_s007c_13f0*>(mem)->Construct() : 0;
+}
+}
+namespace SPL {
+inline cFilterRes_s007c_13f0* NewFilterRes()
+{
+    void* const mem = ::operator new(sizeof(cFilterRes_s007c_13f0), "Graphics", 0, 0, 0, 0);
+    return mem ? static_cast<cFilterRes_s007c_13f0*>(mem)->Ctor() : 0;
+}
+}
+// ---- items of slice s007c13f0 end
 
 // @ 0x00572590
 UintArray* UintArray::Self()
@@ -6630,8 +7101,91 @@ void cCSAThumbnailJob_s007b_ced0::Shutdown()
 }
 
 // @ 0x007bd750
-__forceinline int RoundToInt(float f)
-{ __asm cvtss2si eax, f }
+void cCSAThumbnailJob_s007b_ced0::DrawLayer(int a0, int layer, DrawCtx* ctx, int a3)
+{
+    mViewer->Copy(ctx->viewer, 0, 0);
+    Vec4_s007b_ced0 clear(0.0f, 0.0f, 0.0f, 0.0f);
+    mViewer->SetClearColor(clear);
+    if (!sAppProperties_s007b_ced0->GetDescription(0x5c8af84)) {
+        mViewer->SetRaster(&mInfo.mpObject->mSmallRectId, 1);
+        mViewer->Flush(7);
+        DrawCtx c;
+        c.viewer = mViewer;
+        c.a = 0;
+        c.b = 0;
+        c.c = 0;
+        mBackgroundModelWorld->GetLayerDraw()->Draw(a0, layer, &c, a3);
+        mModelWorld->GetLayerDraw()->Draw(a0, layer, &c, a3);
+        ILayerDraw* extra = mInfo.mpObject->mExtraLayer;
+        if (extra)
+            extra->Draw(a0, layer, &c, a3);
+        GetMgr_s007b_ced0()->DrawTarget(a3, 0x12, 0x12, &c, 1, 0);
+        if (mInfo.mpObject->mPostProcessLayer.mpObject) {
+            cJobPostFilter_s007b_ced0* first = *mInfo.mpObject->mPostProcessLayer.mpObject->mFilterBegin;
+            first->mDestRectID = mInfo.mpObject->mSmallRectId;
+            mInfo.mpObject->mPostProcessLayer.mpObject->DrawLayer(a0, layer, &c, a3);
+        }
+    } else {
+        mFilterViewer->Copy(mViewer, 0, 0);
+        mFilterViewer->Flush(7);
+        unsigned tileW = mInfo.mpObject->mResSmall;
+        int* screen = GetMgr_s007b_ced0()->GetScreenSize();
+        unsigned tileH = (unsigned)RoundToInt((float)screen[1] / (float)screen[0] * (float)mInfo.mpObject->mResSmall) >> 1;
+        tileW >>= 1;
+        float v1, v2;
+        mViewer->FUN_007c40c0(&v1, &v2);
+        v1 = v1 * 0.5f;
+        v2 = v2 * 0.5f;
+        mViewer->FUN_007c4b00(v1, v2);
+        Vec4_s007b_ced0 p0(1.2f, 1.0f, 1.0f, 1.0f);
+        Vec4_s007b_ced0 p1(0.0f, 1.0f, 1.0f, 0.0f);
+        for (unsigned i = 0; i < 2; i++) {
+            float rowF = 1.0f - (float)i * 2.0f;
+            unsigned xo = i * tileW;
+            for (unsigned j = 0; j < 2; j++) {
+                mViewer->FUN_007c4ad0(rowF * v1, -(1.0f - (float)j * 2.0f) * v2);
+                mViewer->SetRaster(&mInfo.mpObject->mAntiAliasRectId, 1);
+                mViewer->Flush(7);
+                DrawCtx c;
+                c.viewer = mViewer;
+                c.a = 0;
+                c.b = 0;
+                c.c = 0;
+                mBackgroundModelWorld->GetLayerDraw()->Draw(a0, layer, &c, a3);
+                mModelWorld->GetLayerDraw()->Draw(a0, layer, &c, a3);
+                ILayerDraw* extra = mInfo.mpObject->mExtraLayer;
+                if (extra)
+                    extra->Draw(a0, layer, &c, a3);
+                GetMgr_s007b_ced0()->DrawTarget(a3, 0x12, 0x12, &c, 1, 0);
+                if (mInfo.mpObject->mPostProcessLayer.mpObject) {
+                    cJobPostFilter_s007b_ced0* first = *mInfo.mpObject->mPostProcessLayer.mpObject->mFilterBegin;
+                    first->mDestRectID = mInfo.mpObject->mAntiAliasRectId;
+                    mInfo.mpObject->mPostProcessLayer.mpObject->DrawLayer(a0, layer, &c, a3);
+                }
+                mFilterViewer->SetRaster(&mInfo.mpObject->mSmallRectId, 1);
+                mFilterViewer->SetViewportRect(xo, j * tileH, tileW, tileH);
+                FilterPtr filter(new ("Graphics", 0, 0, 0, 0) cJobPostFilter_s007b_ced0());
+                filter.mpObject->Initialize(0);
+                filter.mpObject->mMaterialId = 0x88549f64;
+                filter.mpObject->mSrcRectID = mInfo.mpObject->mAntiAliasRectId;
+                filter.mpObject->mDestRectID = mInfo.mpObject->mSmallRectId;
+                filter.mpObject->mCustomParams[0] = p0;
+                filter.mpObject->mCustomParams[1] = p1;
+                filter.mpObject->mCustomParams[3] = clear;
+                filter.mpObject->mPreSetViewport = true;
+                DrawCtx c2;
+                c2.viewer = mFilterViewer;
+                c2.a = 0;
+                c2.b = 0;
+                c2.c = 0;
+                filter.mpObject->Draw(0, 0, &c2, a3);
+                filter.mpObject->Shutdown();
+            }
+        }
+    }
+    FUN_007b3090();
+    RenderLargeTiledImage(a0, layer, ctx, a3);
+}
 
 // @ 0x007bdd70
 void cGameThumbnailJob::Shutdown()
@@ -7576,12 +8130,99 @@ ContentValidationSummarizer::~ContentValidationSummarizer()
 }
 
 // @ 0x007c13f0
-void FUN_007c13f0(void* a)
-{ (void)a; }
+namespace SPL {
+bool cThumbnailManager_s007c_13f0::Initialize()
+{
+    mAOModelWorld = ModelManager()->CreateWorld(0x247d6ad, 0);
+    mAOModelWorld.mpObject->SetSplatMode(1, 0, 0);
+    mAOModelWorld.mpObject->SetSplatFlags(1);
+
+    IMessageServer_s007c_13f0* const server = MessageServer_s007c_13f0();
+    if (server) {
+        server->Subscribe(mHandlerSink, 0x1c913db);
+        server->Subscribe(mHandlerSink, 0x1c91270);
+        server->Subscribe(mHandlerSink, 0x212c1ee);
+        server->Subscribe(mHandlerSink, 0x21d7528);
+        server->Subscribe(mHandlerSink, 0x31e09b4);
+        server->Subscribe(mHandlerSink, 0x21d752f);
+        server->Subscribe(mHandlerSink, 0x50b834d);
+        server->Subscribe(mHandlerSink, 0x5221305);
+        server->Subscribe(mHandlerSink, 0x5fadac4);
+        server->Subscribe(mHandlerSink, 0x5fc2c38);
+        server->Subscribe(mHandlerSink, 0x7b240a0);
+        server->Subscribe(mHandlerSink, 0x238de9c);
+    }
+
+    mRTTMgr = GetRTTManager();
+
+    mSplatterViewer = NewViewer_s007c_13f0();
+    mSplatterViewer->Init(false);
+    mSplatterViewer->Clear(0);
+
+    mBakeInfoSplatterViewer = NewViewer_s007c_13f0();
+    mBakeInfoSplatterViewer->Init(false);
+    mBakeInfoSplatterViewer->Clear(0);
+
+    mNMapSpecSplatterViewer = NewViewer_s007c_13f0();
+    mNMapSpecSplatterViewer->Init(false);
+    mNMapSpecSplatterViewer->Clear(0);
+
+    mDilateViewer = NewViewer_s007c_13f0();
+    mDilateViewer->Init(false);
+    mDilateViewer->Clear(0);
+
+    mAmbOccSplatterViewer = NewViewer_s007c_13f0();
+    mAmbOccSplatterViewer->Init(false);
+    mAmbOccSplatterViewer->Clear(0);
+
+    mAmbOccGatherViewer = NewViewer_s007c_13f0();
+    mAmbOccGatherViewer->Init(false);
+    mAmbOccGatherViewer->Clear(0);
+
+    for (int i = 0; i < 0x400; ++i) {
+        mAmbOccShadowViewers[i] = NewViewer_s007c_13f0();
+        mAmbOccShadowViewers[i]->Init(false);
+        mAmbOccRenderJobs[i] = NewFilterRes();
+    }
+
+    mDiffuseSplatterJob = new ("Graphics", 0, 0, 0, 0) cContentValidationSummarizer_s007c_13f0();
+    mBakeInfoSplatterJob = new ("Graphics", 0, 0, 0, 0) cContentValidationSummarizer_s007c_13f0();
+    mNMapSpecSplatterJob = new ("Graphics", 0, 0, 0, 0) cContentValidationSummarizer_s007c_13f0();
+
+    mAODoneHandler = new ("Graphics", 0, 0, 0, 0) cAmbOccDoneHandler();
+
+    mScreenshotRaster = 0;
+    mWatermarkRaster = 0;
+
+    mTimelineCellBg = 0;
+    mTimelineCreatureBg = 0;
+    mTimelineTribeBg = 0;
+    mTimelineCivBg = 0;
+    mTimelineSpaceBg = 0;
+
+    for (int i = 0; i < 3; ++i)
+        mTimelineJobs[i] = new ("Graphics", 0, 0, 0, 0) cTimelineJobHandler();
+
+    Finalize();
+    return true;
+}
+}  // namespace SPL
 
 // @ 0x007c1b70
-void FUN_007c1b70(void* a)
-{ (void)a; }
+namespace SPL {
+void cSplatJob_s007c_13f0::Init(const RefVectorA& a0, void* a1, const RefVectorB& a2, const SplatParams& a3, const Elem24Vector& a4, const RectID_s007c_13f0* a5, void* a6, const XformVector& a7, FilterChainJob* a8)
+{
+    mMeshes = a0;                   // 0x0041ebe0
+    mMaterials = a2;                // 0x0041ebe0
+    mParams = a3;                   // 0x004269b0 (vector) + this+0x48 (flag)
+    mElem24 = a4;                   // 0x00421290
+    mViewer = a6;                   // this+0x6c
+    mChain = a8;                    // this+0x60 (AddRef / Release)
+    mField70 = a1;                  // this+0x70
+    mRect = *a5;                    // this+0x64 / this+0x68
+    mXforms = a7;                   // 0x0041e0d0
+}
+}  // namespace SPL
 
 // @ 0x007c1c10
 namespace SPL {

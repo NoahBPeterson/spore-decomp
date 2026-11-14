@@ -138,8 +138,53 @@ cBumpMapTable::cBumpMapTable(float param)
 }
 
 // @ 0x007c2540
-void FUN_007c2540(void* a)
-{ (void)a; }
+void FUN_007c2540(uint8_t* pBuffer, int dstStride, int srcCenterOffset, int srcStride, int width, int height, const float* pTable)
+{
+    uint32_t* pDstRow = (uint32_t*)pBuffer;
+    if (height <= 0)
+        return;
+    int prevOffset = srcCenterOffset - srcStride;   // row above the current one
+    int curOffset = srcCenterOffset;
+    for (int row = 0; row < height; row++) {
+        curOffset += srcStride;
+        int above = (row == 0) ? (height - 1) * srcStride + srcCenterOffset : prevOffset;
+        int below = (row < height - 1) ? curOffset : srcCenterOffset;
+        int last = width - 1;
+        int col = 0;
+        int step = 1;
+        int limit = last;
+        if (width > 0) {
+            do {
+                if (col < limit) {
+                    do {
+                        int d1 = pBuffer[above + last + col] - pBuffer[below + col + step];
+                        int d2 = pBuffer[above + col + step] - pBuffer[below + last + col];
+                        int dv = d1 - d2;
+                        int sv = d1 + d2;
+                        float f = pTable[((sv * sv + dv * dv) >> 6) + 1];
+                        int r = (int)((float)dv * f) + 0x80;
+                        int g = (int)((float)sv * f) + 0x80;
+                        int b = (int)(f * pTable[0]) + 0x80;
+                        if ((unsigned)r > 0xff)
+                            r = (int)~r >> 31 & 0xff;
+                        if ((unsigned)g > 0xff)
+                            g = (int)~g >> 31 & 0xff;
+                        if ((unsigned)b > 0xff)
+                            b = (int)~b >> 31 & 0xff;
+                        pDstRow[col] = ((r + 0xff00) * 0x100 + g) * 0x100 + b;
+                        col++;
+                        step++;
+                        last = -1;
+                    } while (col < limit);
+                }
+                limit = width;
+                step = 1 - width;
+            } while (col < width);
+        }
+        prevOffset += srcStride;
+        pDstRow = (uint32_t*)((char*)pDstRow + dstStride);
+    }
+}
 
 // @ 0x007c2730
 void __stdcall expand_2_32(uint32_t* dst, int stride, uint32_t src, uint32_t* table)

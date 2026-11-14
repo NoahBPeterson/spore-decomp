@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "EA/Stopwatch.h"
 #include "EA/LimitStopwatch.h"
+#include "EA/IO/IStream.h"
 #include "SP/cDirectPropertyList.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -52,7 +53,7 @@ class cSPUILayerManager { public:
     int64_t GetDelta();
 };
 struct cDirectPropertyList {
-    int64_t mnStart;     // 0x00 (the elapsed time is measured from this reading)
+    int64_t mnStart;     // 0x00
     int64_t mnAccum;     // 0x08
     int32_t mGroup;      // 0x10
     void SetBoolProperty();

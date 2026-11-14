@@ -1,3 +1,2 @@
-# va  diff-bytes  reason
-00668d90  1400  GetAssetList: only the output-vector zero-init is reconstructed; the managed-asset DB walk/filter and 16-byte entry construction are omitted; match/slices/s00668be0/s00668be0.cpp mentions this address and may hold an earlier draft.
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
 00669c90  700  constraint callback: guard chain reconstructed; the hash-dispatch / FunctionalMatch::Constraint / ObjectTemplateDB body is omitted; Earlier, fuller draft: match/slices/s00669430/s00669430.cpp (left behind by the migration); start from it.

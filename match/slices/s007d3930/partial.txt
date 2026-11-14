@@ -1,2 +1,1 @@
 # <va>  <diff-bytes>  <reason>
-007d4980  -  stub: placeholder body (ours 1 bytes, retail 183 bytes); needs real source; match/slices/s007d3930/s007d3930.cpp mentions this address and may hold an earlier draft. Was noted as complete: cSPTransform-vector insert: cSPTransformOps::Assign + the per-label propagate loop are present; ours stores the loop count into the scratch slot before the `count==0` early-out, so the trailing `pop ecx` yields 0 where the original (which stores the count only after the `je`) yields the incoming `th
