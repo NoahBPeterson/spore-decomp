@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00a93980 330 ??0cMetaParticlesEffect@@QAE@XZ: equivalence PASS (233 valid inputs, 80.4% coverage); instruction-identical, only MSVC store scheduling differs (size 706 vs 700).
-00a93c60 68 ?Erase@cSampleRange@@QAEXABUVector3@@@Z: equivalence PASS (400 valid inputs, 100% coverage); instruction-identical, only MSVC store scheduling differs (size 126 vs 130).
+00a93c60 68 ?Erase@cSampleRange@@QAEXABUVector3@@@Z: equivalence PASS (400 valid inputs, 100% coverage); instruction-identical, only MSVC store scheduling differs (size 126 vs 130). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00a93cf0 247 FUN_00a93cf0: complete; the ability record deserialiser reads the same fields in the same order, but the io-wrapper call setup and the record stores are scheduled differently, 401 vs 418 B.
 00a93ee0 254 FUN_00a93ee0: complete; the comm-event id==1 handler and its two branch paths match, difference is the argument reload and jump layout, 330 vs 328 B.
 00a94130 193 FUN_00a94130: complete; the reset-on-owner-change walk matches, difference is the register allocation across the notify calls, 233 vs 239 B.

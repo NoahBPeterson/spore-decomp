@@ -4,7 +4,7 @@
 0055c3c0 14 SP::cSPObjectTemplateDB::HandleMessage: complete switch, compare tree identical; only case-local slot placement/holes differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 0055d9e0 168 complete classifier-registration loop; intrusive-ptr temp schedule differs
 0055db30 263 complete summarizer-registration path; /Od register schedule differs
-0055eae0 52 complete vector constructor; vtable/frame schedule differs; equiv FAIL (ours faults where original returns)
+0055eae0 52 complete vector constructor; vtable/frame schedule differs; equiv FAIL (ours faults where original returns) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 0055f9e0 37 complete conditional object release; /Od local layout differs; equiv FAIL (ecx receiver fixed)
 0055fa20 213 complete asset activate/deactivate path; /Od frame differs; equiv FAIL (ecx receiver fixed)
 0055fb30 93 complete asset-membership query; /Od frame differs; equiv FAIL (ecx receiver fixed)

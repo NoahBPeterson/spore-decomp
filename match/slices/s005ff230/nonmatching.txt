@@ -1,2 +1,2 @@
-005ff230  26  inlined EA::Stopwatch restart: cl hoists the mnUnits compare above the zeroing stores and moves the mbRunning store (scheduling only)
+005ff230  26  inlined EA::Stopwatch restart: cl hoists the mnUnits compare above the zeroing stores and moves the mbRunning store (scheduling only) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 return target, ret#0 eax]
 005ff700  224  only difference is a 7-byte loop-alignment nop (lea esp,[esp]) before the child-search loop; everything after it is shifted

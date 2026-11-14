@@ -1,5 +1,5 @@
 00cb4ae0
-00cb4bd0
+00cb4bd0 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 esp, call#4 esp, ret#5 esp]
 00cb5090
 00cb5140
 00cb52c0

@@ -3,9 +3,9 @@
 010824a0 181 havok-equivalent
 010825a0 93 complete; inline capacity check and field-only property write leave m_alignmentPadding (+4) untouched; equiv PASS (373/400 valid, 89.7% coverage)
 01082600 60 havok-equivalent
-01082660 78 havok-equivalent
+01082660 78 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 memory]
 010826e0 79 havok-equivalent
-01082800 129 havok-equivalent
+01082800 129 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 01082890 31 complete; pad10 corrected to 8 floats so the velocity vectors and damp factors land at +0x30/+0x40/+0x50; 1/damping is rounded to float through a volatile store like the original's fst [esp+8]; equiv PASS (400/400 valid, 100% coverage)
 01082990 43 havok-equivalent
 01082a90 149 havok-equivalent

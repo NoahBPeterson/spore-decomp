@@ -16,7 +16,7 @@
 00c31a00 30 400/400 valid inputs, 100.0% coverage; tribute-point clamp; MSVC folds early-return `field = 0` to an immediate store where the original keeps `xor eax,eax; mov [..],eax` (32 diff)
 00c31a90 77 5/68 valid inputs mismatched (execution); enemy-by-index getter; thiscall GetHomePlanet target-vector indexing and register tie (self/iterator regs) (90 vs 114 bytes)
 00c31b10 65 359/359 valid inputs, 100.0% coverage; empire-id membership scan of mEnemies; begin-ptr hoist/si re-load scheduling and i/index register choice (edx vs ecx) (71 diff)
-00c31b50 79 5/120 valid inputs mismatched (execution); enemy-by-index getter; thiscall target-vector indexing and register allocation (80 vs 103 bytes)
+00c31b50 79 5/120 valid inputs mismatched (execution); enemy-by-index getter; thiscall target-vector indexing and register allocation (80 vs 103 bytes) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 return target, ret#2 esp]
 00c31bf0 30 310/310 valid inputs, 100.0% coverage; empire-id membership scan of mAllies; begin-ptr hoist/base+index register allocation tie (30 diff)
 00c31d50 327 157 valid inputs (need 200), 12.6% coverage; in-place vector insertion sort of enemy list; SSE/qsort-style compare and register scheduling differ (348 vs 375 bytes)
 00c31ed0 532 122 valid inputs (need 200), 8.9% coverage; insertion sort helper (mAllies/reachability); float compare + move-construct reconstruction (766 vs 349 bytes)

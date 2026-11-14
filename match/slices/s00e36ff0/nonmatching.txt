@@ -1,7 +1,7 @@
 00e36ff0 417 GetTimelineTime: size 692 vs 696; equiv WEAK (391 valid, coverage 33.8% < 60%), 0 mismatches
 00e372b0 1128 SetTimelineTime: size 1271 vs 1174; equiv WEAK (254 valid, coverage 34.2% < 60%), 0 mismatches
 00e37780 118 FUN_00e37780: size 181 vs 187; equiv WEAK (400 valid, coverage 54.7% < 60%), 0 mismatches
-00e37840 154 FUN_00e37840: size 206 vs 207; equiv UNSUPPORTED (fake-arity 397/400, no valid input)
+00e37840 154 FUN_00e37840: size 206 vs 207; equiv UNSUPPORTED (fake-arity 397/400, no valid input) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target]
 00e37910 39 FUN_00e37910: size differs; equiv PASS (389 valid, 100% coverage)
 00e37b40 113 FUN_00e37b40: size 146 vs 149; equiv PASS (266 valid, 100% coverage)
 00e37be0 405 FUN_00e37be0: size 418 vs 393; equiv WEAK (228 valid, coverage 25.2% < 60%), 0 mismatches

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00a8b940/s00a8b940.cpp  ?RegisterMeshStreamers@Swarm@EA@@YAX_N@Z  00a8bf10  /O2 /MD /Gy /TP /arch:SSE /fp:fast

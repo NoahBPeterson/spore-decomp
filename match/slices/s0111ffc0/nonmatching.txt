@@ -5,7 +5,7 @@
 01120610  72  hkMoppCompilerSettingsBlock::construct: complete and correct (vtable + 6-float copy + 0x01103830 init); equiv FAIL is the external 0x01103830 init call it cannot execute (ours faults reading the unmapped fake callee); size 1.10x
 01120660  63  hkMoppCompilerSettingsBlock::costSplitA: complete; equiv FAIL only on the virtual evalCost dispatch (different generated callee for the fake slot); x87 order kept
 011206c0  59  hkMoppCompilerSettingsBlock::costSplitB: complete and equiv PASS; size 0.79x (compiler fuses the separate term scheduling)
-01120710  74  hkMoppCompilerSettingsBlock::costSplitInto: complete and equiv PASS; out-field store order differs, size 0.91x
+01120710  74  hkMoppCompilerSettingsBlock::costSplitInto: complete and equiv PASS; out-field store order differs, size 0.91x [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#1 ecx, call#2 esp]
 01120770  199  hkWingedEdge::findTriangleOnNearestPlane: complete and equiv PASS (100% cov); 4x-unrolled scan reproduced but the min-selection branch shape and pointer walk differ, size 0.99x
 01120850  7  hkWingedEdge::initializeWithTetrahedron: complete and equiv PASS (100% cov); ONLY difference is one hoisted load (`mov ecx,[esp+0x10]` scheduled before the +0x3c store) — a pure scheduler artifact
 01120a00  112  hkConvexPenetrationUtil::addPointToSimplex: complete and equiv PASS (100% cov); the three 16-byte vector copies are done by four dword stores here vs the original's addressing, size 0.96x

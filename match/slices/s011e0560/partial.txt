@@ -6,4 +6,4 @@
 011e0bd2  n/a  __ArrayUnwind cifuncguard helper
 011e0c47  n/a  __ArrayUnwind cifuncguard helper
 011e1368  n/a  _amsg_exit table + atexit runner
-011e15de  n/a  ___report_gsfailure MSVCR90 runtime
+011e15de  n/a  ___report_gsfailure MSVCR90 runtime [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'ret'] vs ['ret']]

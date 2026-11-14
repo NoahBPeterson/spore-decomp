@@ -1,3 +1,3 @@
 00d0c970 141 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 102 bytes - tree insert with eastl allocator; retail copies the 16-byte value with fld/fstp while /fp:fast vectorises my copy, and register allocation of the key/parent differs.
-00d0ca00 151 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 147 bytes - tree insert for the second key type; body not reconstructed.
+00d0ca00 151 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 147 bytes - tree insert for the second key type; body not reconstructed. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'ret'] vs ['call', 'ret']]
 00d0cc00 157 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 132 bytes - OnAssetBrowserSelection; retail tests the selection's leading dword and passes this-4 to the editor methods, which the class layout I can express does not reproduce.

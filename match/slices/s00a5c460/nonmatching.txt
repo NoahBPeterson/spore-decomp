@@ -3,7 +3,7 @@
 00a5c9e0  16  argument push order in the inlet_new tail differs by one load slot
 00a5cb40  194  alloca/grow copy loops keep different induction registers than the original
 00a5ca60  155  alloca/grow copy loops keep different induction registers than the original
-00a5ccb0  16  argument push order in the inlet_new tail differs by one load slot
+00a5ccb0  16  argument push order in the inlet_new tail differs by one load slot [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 memory]
 00a5ce20  206  alloca/grow copy loops keep different induction registers than the original
 00a5cd30  168  alloca/grow copy loops keep different induction registers than the original
 00a5d0d0  125  alloca/grow copy loops keep different induction registers than the original

@@ -5,7 +5,7 @@
 006ae210 17 rbtree_node dtor: EH prologue not reproduced; equiv: PASS
 006ae280 17 return (unsigned)(r-7)<=1; cl uses sbb/inc instead of setbe al; equiv: PASS
 006ae2a0 56 AutoRefCount::operator= : lock xadd / xchg refcount shape not reproduced; equiv: FAIL (esp)
-006ae2f0 13 callback setter: extra pop esi moved to the end of the function; equiv: PASS
+006ae2f0 13 callback setter: extra pop esi moved to the end of the function; equiv: PASS [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, ret#2 esi]
 006ae4c0 30 getter: duplicated tail / xor eax scheduling differs; equiv: PASS
 006ae510 20 Resource::Async ctor: EH prologue + InterlockedExchange zero store not reproduced; equiv: FAIL (esp)
 006aebd0 21 dtor: EH prologue + vtable stores not reproduced; equiv UNSUPPORTED: unresolved refs XRBTree::DoNukeSubtree, Mutex2::dtor

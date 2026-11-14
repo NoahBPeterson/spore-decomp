@@ -1,2 +1,3 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 slices/s010c3860/s010c3860.cpp  ?getCollisionSpheres@hkTriangleShape@@UBEPAVhkSphere@@PAV2@@Z  010c4390  /vc71 /O2 /MD /Gy /TP
+slices/s010c3860/s010c3860.cpp  ??0hkGroupFilter@@QAE@XZ  010c3cb0  /vc71 /O2 /MD /Gy /TP

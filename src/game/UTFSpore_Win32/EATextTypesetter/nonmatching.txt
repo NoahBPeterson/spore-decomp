@@ -6,7 +6,7 @@
 0089bc80 158 vector<uint16,EASTLCoreAllocator>::operator=: complete; register allocation / load order differ; difftest WEAK (177 valid, 40.2% coverage, many inputs discarded at memcpy; no difference); body moved into force-inlined cvec::DoAssign so this wrapper carries it
 0089bdb0 22 vector<GlyphLayoutInfo>::resize: complete; zero-init temp register choice (eax vs edx); difftest PASS (body moved into force-inlined ResizableVec::DoResize so this wrapper carries it)
 0089bea0 169 AddRectangleToRectangleSet: complete; float compare shape (ucomiss parity checks) differs
-0089bf70 81 LineLayout copy ctor: complete; allocator store ordering differs
+0089bf70 81 LineLayout copy ctor: complete; allocator store ordering differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 memory, call#4 memory]
 0089c110 309 LineLayout::GetGlyphSelection: complete; fixed_list<Span,16> inlined parts and loop shape differ
 0089c2d0 536 LineLayout::GetGlyphDecoration: complete; switch jump table / min-max by-reference shapes differ; difftest FAIL was a checker artifact (the original passes pointers into its own dead a/b parameter slots as the glyph-range outputs, not normalised like frame pointers); source now writes the range into those parameters like the original, difftest WEAK (29.8% coverage)
 0089d3b0 431 ReorderBidiRunInfoArray: complete (UBA run reorder via index list); register alloc / fixed_vector inlining differ; difftest WEAK (30.6% coverage, reorder loops unreached) after fixing out->clear (original inlines erase(begin,end): mpEnd -= (end-begin)/16 elements; ours set mpEnd = mpBegin)

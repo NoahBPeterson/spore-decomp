@@ -4,7 +4,7 @@
 00ec8ed0   70  complete vector resize; signed cap and __thiscall grow/erase callees; equiv: PASS (not byte-exact: tmp-buffer init and loop scheduling)
 00ec90c0  113  complete intrusive-list initializer; returns the object and matches the original store order; equiv: PASS (our code is shorter -- cl folds some of the original's redundant stores)
 00ec9140   16  complete rbtree insert; 6-arg EA debug new, key ctor with this=node+0x10, returns the out slot; equiv: WEAK (185 valid, 0 mismatch, 100% coverage)
-00ec9250   52  complete rbtree teardown; subtree offset scheduling differs; equiv: UNSUPPORTED (unresolved refs DoNukeSubtree, operator delete)
+00ec9250   52  complete rbtree teardown; subtree offset scheduling differs; equiv: UNSUPPORTED (unresolved refs DoNukeSubtree, operator delete) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#4 esp, call#5 esp, ret#6 return target, ret#6 esp]
 00ec94d0   50  complete shutdown; refcount release scheduling differs; equiv: UNSUPPORTED (unresolved ref operator delete)
 00ec95f0   45  complete map pair lookup; id via map+4, map find with this=map+0x18; equiv: PASS
 00ec9640   45  complete map pair lookup; same body but map find with this=map+0x34; equiv: PASS

@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00840890 32 complete: NextToken; strspn/strcspn return expression differs flags: /O2 /MD /Gy /EHsc /TP /GS-
+00840890 32 complete: NextToken; strspn/strcspn return expression differs flags: /O2 /MD /Gy /EHsc /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 008476b0 181 FUN_008476b0: complete; SEH-framed include-command bootstrap; string16/vtable dispatch scheduling differs; difftest WEAK (236 valid, 23.8% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00847810 39 FUN_00847810 (IncludeRecord::Execute): complete; eastl string16 "%hs" format of MainArguments(1), ObjectError v78/v58 descriptor dispatch, v34 include-parse into an AutoRef out, parser v4c result forwarding and out v24, then out v8 release and string free; registers now match the original (esi this, ebp arg, edi err), only the extra EH-state -1 store before the final free (size 323 vs 315) differs; flags /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid, _CxxThrowException on random fake cArguments)
 0084a230 206 SetEnabled: repeated mpCanvas/mD0 member reloads and vcall register schedule differ flags: /O2 /MD /Gy /TP

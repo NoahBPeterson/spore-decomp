@@ -1,5 +1,5 @@
 00ec40b0  297  complete source; equiv UNSUPPORTED 0/400 valid (write-protect faults: allocator/messaging table) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ec41e0   62  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall base ctor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ec41e0   62  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall base ctor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 eax]
 00ec4330   70  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4380   96  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4430   36  complete source; equiv PASS 387 valid 100% coverage (regalloc/hoist order) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. Tried: key/value found in locals, nested if vs &&, an inline equal_rec helper (basic and with key/value locals), a copy of `last` - retail tests first!=last with both in registers before pushing (and returns last from the shared epilogue), cl always folds the compare into the loop and emits 42 bytes; none moved the empty-range test

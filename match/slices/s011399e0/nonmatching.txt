@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 011399e0  592 complete ReverbModel1 EQ-table configure; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (276 valid, 94.8% coverage; replay first difference None after return-value fix)
-01139d60  145 complete ReverbModel1 damping-vector; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100%)
+01139d60  145 complete ReverbModel1 damping-vector; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100%) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 01139e10  83 complete ReverbModel1 ctor; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% coverage)
 01139eb0  50 complete ReverbModel1 dtor; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (386 valid, 100% coverage)
 01139f20  170 complete ReverbModel1 gain update (x87 log2 math); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (1 unresolved reference _log2)

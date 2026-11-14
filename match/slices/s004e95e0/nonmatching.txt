@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-004ea190  -  complete; frame size differs (bitfield-flag construction not reproduced)
+004ea190  -  complete; frame size differs (bitfield-flag construction not reproduced) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 004e9950  372  complete; recursive child-property walk not byte-exact
 004e9fc0  349  complete; palette build/dispatch loop not byte-exact

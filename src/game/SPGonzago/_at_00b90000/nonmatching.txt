@@ -1,5 +1,5 @@
 # va  diff-bytes  reason  (complete source, not byte-exact) -- flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00b90010 124 rbtree find-or-insert wrapper returning the +0x1c value slot; 112 vs 140 bytes flags: /O2 /MD /Gy /EHsc /TP
+00b90010 124 rbtree find-or-insert wrapper returning the +0x1c value slot; 112 vs 140 bytes flags: /O2 /MD /Gy /EHsc /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 return target, ret#2 esp]
 00b900a0 766 Simulator::cPlantSpeciesManager record loader (anonymous namespace::ShowObstacleRadii per PDB candidate): local cPlantCargoInfo, GetPropertyAsKey x5 with the 0x2ebcd6a6 sentinel mask, four float properties, then insert into the species map; 900 vs 873 bytes flags: /O2 /MD /Gy /EHsc /TP
 00b90410 115 SP::cPlantSpeciesManager::GetSpeciesFromID: rbtree find, lazy load via GetPlantProfile + FUN_00b900a0 when the +0x38 flag is set, return the +0x1c value; 112 vs 104 bytes flags: /O2 /MD /Gy /EHsc /TP
 00b91320 849 cCubeGrid::MarkSphere: complete (cube-face span walk, flag cells within radius); float spill/ordering and Vec3 local layout differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
@@ -37,7 +37,7 @@
 00b96360 361 S96360::fn (vector<0x3c>::insert fill): complete; restored the fourth stack argument (the allocator, unused by the non-allocating paths) so the member emits `ret 0x10` like the original; the old 3-arg signature emitted `ret 0xc` and the replay returned with esp+0x10 instead of esp+0x14. memmove/alloc refcount path scheduling still differs (504 vs 506 bytes); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-. Replay None. Default equiv WEAK (165 valid < 200; generator cannot satisfy the raw vector-pointer invariants, 5% coverage); --inputs 2000 WEAK (806 valid, 5% coverage)
 00b96600 183 S96600::fn (vector<int>::insert): complete; relocation-fixup memmove path register allocation differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00b96710 148 S96710::fn (vector<0x10>::insert): complete; relocation-fixup copy path register allocation differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-00b96820 72 S96820::fn (rbtree node-pool insert): complete; comparison operand order + freelist branch layout differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00b96820 72 S96820::fn (rbtree node-pool insert): complete; comparison operand order + freelist branch layout differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 return target, ret#1 eax]
 00b969e0 53 FUN_00b969e0 (load planet sim params): complete; x87 float10 promotion through Arithmetica params differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00b96aa0 97 FUN_00b96aa0 (spawn tribes): complete; cTribeData ctor inline + float10 param reads differ flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00b96b80 205 FUN_00b96b80 (spawn cities): complete; RNG + cCivData/cCityData ctor inline glue scheduling differs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -3,9 +3,9 @@
 01035900 18 cSPSpaceGfx::InitForGame complete (/O2 /MD /Gy /TP /arch:SSE /fp:fast); size 2229 vs 2233, 91/91 vcalls, same slots/ids; diffs: original ends with tail jmp ModelManager (frame 0x10) and a different temp-slot order for the zero Vec3 copies; ours calls ModelManager normally (frame 0x14) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 01036830 186 codegen/register-allocation + control-flow order mismatch (258 vs 259)
 01036940 296 codegen mismatch (384 vs 420)
-01036af0 232 codegen mismatch (300 vs 291)
+01036af0 232 codegen mismatch (300 vs 291) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#3 esp, call#4 esp]
 01036c20 198 codegen mismatch (270 vs 265)
-01036d30 170 codegen mismatch (227 vs 220)
+01036d30 170 codegen mismatch (227 vs 220) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#2 esp, ret#3 esp]
 01036e20 286 codegen/register-allocation mismatch (378 vs 414)
 01036fc0 46 codegen/register-allocation mismatch (88 vs 98)
 01037030 546 codegen mismatch (568 vs 563)

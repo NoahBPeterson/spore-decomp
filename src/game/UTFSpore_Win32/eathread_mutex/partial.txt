@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00922500  -  Semaphore ctor (name/intra): empty stub (source body is a no-op; original 83 bytes); Earlier, fuller draft: match/slices/s00922500/s00922500.cpp (left behind by the migration); start from it.
+00922500  -  Semaphore ctor (name/intra): empty stub (source body is a no-op; original 83 bytes); Earlier, fuller draft: match/slices/s00922500/s00922500.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'ret'] vs ['ret']]

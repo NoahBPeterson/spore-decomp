@@ -7,7 +7,7 @@
 00fd9610   85  VideoRenderer part reset: complete and equivalence PASSes
                (257 valid, 100% coverage); the loop folds the combined
                (uStack_10/_c/_8/_4) stores differently. flags /O2 /MD /Gy /TP /arch:SSE
-00fd9750    8  VideoRenderer set-source: complete and equivalence PASSes
+00fd9750    8  VideoRenderer set-source: complete and equivalence PASSes [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#5 target]
                (227 valid, 100% coverage); the MaterialManager vtable slot
                (0x28) is loaded one instruction earlier than the original.
                flags /O2 /MD /Gy /TP /arch:SSE

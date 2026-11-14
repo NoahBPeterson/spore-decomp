@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00de0910/s00de0910.cpp  ?FUN_00de0a90@cContentValidationSummarizer@@QAEPAXPAXE@Z  00de0a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast

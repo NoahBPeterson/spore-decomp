@@ -13,9 +13,9 @@
 
 011ed0b0  stdc::ConvertU32ToHexLower size 60 vs 63, 34 diff. Equivalence PASS (400 valid, 100% coverage). Identical cause to ConvertU32ToHexUpper above.
 
-011ed0f0  stdc::ConvertIToA          size 189 vs 153, 195 diff. Equivalence FAIL (memory pool @40030000). The signed/64-bit path through ConvertI64ToA_rec differs because of the 64-bit helper issue above.
+011ed0f0  stdc::ConvertIToA          size 189 vs 153, 195 diff. Equivalence FAIL (memory pool @40030000). The signed/64-bit path through ConvertI64ToA_rec differs because of the 64-bit helper issue above. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 ebx, ret#1 esi]
 
-011ed190  stdc::ConvertI64ToA        size 192 vs 158, 200 diff. Equivalence WEAK (375 valid, 50.0% coverage). Same 64-bit helper root cause.
+011ed190  stdc::ConvertI64ToA        size 192 vs 158, 200 diff. Equivalence WEAK (375 valid, 50.0% coverage). Same 64-bit helper root cause. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 ebx, ret#1 ebp]
 
 011ed230  stdc::ConvertU32ToStr     size 61 vs 63, 6 diff. Equivalence FAIL (eax): the original keeps `buf` in esi (callee-saved) across the hex helper call and returns it; ours is allocated edx and returned from edx, which is only accidentally correct because our own hex helper happens not to clobber edx.
 
@@ -27,7 +27,7 @@
 
 011ed3b0  StreamName::set           size 60 vs 60, 5 diff. Equivalence WEAK (171 valid, 56.5% coverage; strncpy resolves to our own symbol so most inputs fault). The original stores m_type ([esi+4]) *after* `test name,name`; MSVC sinks ours to before the test. Otherwise identical.
 
-011ed400  Semaphore::Init           size 92 vs 104, 88 diff. Equivalence FAIL (eax): the original tests `p` before spilling `this` (mov eax,[esp+4]; test eax,eax; push esi; mov esi,ecx) whereas MSVC saves `this` first. Also CreateSemaphoreA is called indirectly through the IAT.
+011ed400  Semaphore::Init           size 92 vs 104, 88 diff. Equivalence FAIL (eax): the original tests `p` before spilling `this` (mov eax,[esp+4]; test eax,eax; push esi; mov esi,ecx) whereas MSVC saves `this` first. Also CreateSemaphoreA is called indirectly through the IAT. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 
 011ed470  Semaphore::Wait           size 159 vs 165, 124 diff. Equivalence UNSUPPORTED (_WaitForSingleObject@8, _InterlockedDecrement@4 unresolved).
 

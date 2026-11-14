@@ -1,7 +1,7 @@
 # <va>  <diff-bytes>  <reason>
 0051a350  717   /Od address-temp + vcall/refcount differences; complete cPaintSplatAlphaJob::Render
-0051a8a0  63    /Od member-address temp locals differ; complete ctor reconstruction
-0051a930  99    /Od member-address temps + thiscall helpers; complete dtor reconstruction
+0051a8a0  63    /Od member-address temp locals differ; complete ctor reconstruction [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
+0051a930  99    /Od member-address temps + thiscall helpers; complete dtor reconstruction [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 return target]
 0051a9a0  125   /Od arg stores; complete 10-arg ctor reconstruction [equiv PASS 288 valid, 100% coverage]
 0051aaa0  138   /Od refcount release pattern differs; complete Release reconstruction [equiv PASS 343 valid, 92.6% coverage]
 0051ab50  1018  /Od iterator loop shape differs; complete PreloadTextures reconstruction [equiv WEAK no mismatch: 278/7.6% default, 1467/40.6% at 2000 inputs; deeper blocks need unreachable property-key branches]

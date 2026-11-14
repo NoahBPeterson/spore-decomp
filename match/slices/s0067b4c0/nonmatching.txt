@@ -1,4 +1,4 @@
-0067bb80  60  hint-list teardown: complete behaviour; cl swaps the this/begin/end register roles (edi=this vs original ebx=this, ebp=begin); difftest PASS
+0067bb80  60  hint-list teardown: complete behaviour; cl swaps the this/begin/end register roles (edi=this vs original ebx=this, ebp=begin); difftest PASS [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 memory]
 0067c3b0  91  next-hint lookup: complete behaviour; list walk + UpdateHints call scheduling/register use differs
 0067b4c0  939  ParseHints: complete (clears list, reads each hint property list, builds cHint); not exact: ref/h register roles (edi/ebx/ebp) and merged pl-null tests differ
 0067ba10  13  InitHints: complete; exact except the window vtable[0x104] call schedules edx load before lea ecx

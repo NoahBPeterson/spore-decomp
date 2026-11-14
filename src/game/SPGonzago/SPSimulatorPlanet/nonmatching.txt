@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-00ff5a90 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
-00ff5c50 83 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00ff5a90 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
+00ff5c50 83 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target]
 00ff5d20 300 SpawnArtifact (/O2 /MD /Gy /TP /arch:SSE /fp:fast): complete reconstruction (ours 454 vs 447); the original keeps the cPlanetModel pointer in a stack slot (mov [esp+0xc],ebx) while ours pins it in ebp, and it lays the null-noun `return 0` out of line; the remaining shift is MSVC register allocation / frame layout flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ff5ee0 313 StartCVG2SPG (/O2 /MD /Gy /TP /arch:SSE /fp:fast): complete reconstruction (ours 436 vs 495); the original caches mpCity in edi and keeps a wider frame (sub esp,0x34) plus a duplicated tail for the null-city case, while ours narrows the frame (sub esp,0x28) and merges the early return; the city-hall sub-object / player-inventory virtual calls themselves line up flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ff6570 105 FUN_00ff6570 (/O2 /MD /Gy /TP /arch:SSE /fp:fast): complete sift-down/sift-up heap-adjust reconstruction (ours 119 vs 117); the algorithm is identical, the original just picks the opposite ecx/edx pairing for (a,i) and schedules the child load before the `dec`; pure MSVC register-allocator / scheduling artifact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

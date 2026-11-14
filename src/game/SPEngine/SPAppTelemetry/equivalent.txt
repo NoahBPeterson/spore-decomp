@@ -1,3 +1,4 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_007eb100@ObjB1@@QAEHH@Z  007eb100  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?resize@IntVector@SP@@QAEXI@Z  007eb820  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_011847f0@@YAHPAHH@Z  011847f0  /O2 /MD /Gy /TP /Isrc/game/include

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Ctor@cFilterRes@@QAEPAU1@XZ  007b8b30  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

@@ -5,22 +5,22 @@
 00a20eb0 248 emitter ordering predicate Less2: complete; tail-block placement and flag-bool materialization differ
 00a212b0 75 complete; eastl list splice (relink nodes); register/clone-layout differences; equiv FAIL
 00a21310 89 complete; eastl list erase; register/layout differences; equiv FAIL
-00a21390 52 complete; EA::Audio::Submix::DisconnectFromSubmix (thiscall + EH frame); equiv FAIL; now a thiscall stub-class member
+00a21390 52 complete; EA::Audio::Submix::DisconnectFromSubmix (thiscall + EH frame); equiv FAIL; now a thiscall stub-class member [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 00a21410 99 complete; voice connect (thiscall + EH frame); equiv FAIL; now a thiscall stub-class member
 00a214b0 149 complete; voice connect variant (4 stack args, thiscall + EH frame); equiv FAIL; now a thiscall stub-class member
-00a21590 52 complete; EA::Audio::VoiceContainer::Disconnect (SEH frame + import calls); equiv FAIL
-00a21630 59 complete; voice message handler (thiscall + EH frame, vtable factory); equiv UNSUPPORTED (fake-arity: 0/1200 valid inputs); now a thiscall stub-class member
+00a21590 52 complete; EA::Audio::VoiceContainer::Disconnect (SEH frame + import calls); equiv FAIL [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in tail call vs return at ret#3]
+00a21630 59 complete; voice message handler (thiscall + EH frame, vtable factory); equiv UNSUPPORTED (fake-arity: 0/1200 valid inputs); now a thiscall stub-class member [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 00a21710 748 complete; EA::Audio::System::HandleMessage (large vtable dispatch + EH + message-hash constants); equiv FAIL
 00a21c00 46 complete; eastl vector<T>::~vector; equiv WEAK (76.3% coverage); now a thiscall stub-class member
 00a21cb0 58 complete; eastl list insert helper; register/layout differences; equiv FAIL
 00a21dc0 84 complete; eastl rbtree find; equiv FAIL; now a thiscall stub-class member
 00a21eb0 120 complete; voice hash-bucket rehash (node next at +0x10); equiv FAIL; now a thiscall stub-class member
-00a21f60 64 complete; ref-counted allocation; reconstruction calls a faulting callee on synthetic inputs; equiv FAIL
+00a21f60 64 complete; ref-counted allocation; reconstruction calls a faulting callee on synthetic inputs; equiv FAIL [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 00a22060 123 complete; voice hash-bucket rehash (node next at +0x1e4); equiv WEAK (46.9% coverage); now a thiscall stub-class member
 00a22110 117 complete; hash-bucket rehash (node next at +0x24); equiv FAIL; now a thiscall stub-class member
 00a22370 123 HTable20::Rehash: complete; same bucket-array reload difference
 00a22410 51 SList::merge (intrusive_list<Sound>): complete; this spilled to stack and iterator temps built in place in original
-00a227a0 13 DrvBA22 ctor (RefBaseA22 + [0x80]=arg): complete; store scheduling differs (arg store before vtable store); difftest PASS (ctor made out-of-line thiscall, vtables mapped in symbols/slices/s00a22220.txt)
+00a227a0 13 DrvBA22 ctor (RefBaseA22 + [0x80]=arg): complete; store scheduling differs (arg store before vtable store); difftest PASS (ctor made out-of-line thiscall, vtables mapped in symbols/slices/s00a22220.txt) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00a228d0 65 worker thread loop: complete; esi/edi register swap and one vtable load hoist differ
 00a22b90 64 LoadShared: complete; inline Release uses dec vs add -1 and register order
 00a23830 19 ?DoInsertKey@EHTable@@QAEPAUEInsertRes@@PAU2@PBHI@Z: difftest UNSUPPORTED (unresolved RehashRequired + operator new); table-slot insert structurally reproduced
@@ -57,10 +57,10 @@
 00a2d790 195 complete; virtual-call schedule + hashtable find not byte-identical
 00a2d880 96 complete; EH ctor of feedback-event node, register schedule differs
 00a2de20 183 complete; two-pass submix teardown, iterator/register schedule differs
-00a2dfe0 45 complete; vector push_back node copy, inlined schedule differs
+00a2dfe0 45 complete; vector push_back node copy, inlined schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00a2e0e0 89 complete; hashtable erase, bucket-walk schedule differs
 00a2e1b0 109 complete; rbtree erase, node relink schedule differs
-00a2e260 66 complete; vector push_back of 0x14 node, schedule differs
+00a2e260 66 complete; vector push_back of 0x14 node, schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00a2e420 57 complete; pool node alloc, EH/pool order differs
 00a2e650 1433 complete effect-creation routine; frame/register allocation and EH state layout differ (structure aligned)
 00a2edd0 88 complete hashtable find+erase wrapper; temp/iterator slot reuse and callee-saved regs differ

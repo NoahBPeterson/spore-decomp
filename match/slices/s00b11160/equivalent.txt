@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00b11160/s00b11160.cpp  ?DirectionToSurfacePosition@cTerrainCameraController@@QAEPAXPAX@Z  00b11790  /O2 /MD /Gy /TP /arch:SSE /fp:fast

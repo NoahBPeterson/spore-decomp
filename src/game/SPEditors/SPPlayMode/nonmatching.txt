@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00628ca0 128 cAppModeEditorBase::SendButtonEventToBabies; complete, original keeps the vector base pointer in esi and recomputes element addresses
-00628f10 142 SetMomToFaceBaby: complete; V3 temp/stack layout differs (orig frame 0x48, mine 0x3c)
+00628f10 142 SetMomToFaceBaby: complete; V3 temp/stack layout differs (orig frame 0x48, mine 0x3c) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 00629220 2 SetAllBabySitUp: complete; only the two stores' SIB base/index order differs ([edi+eax] retail vs [eax+edi] mine). Tried writes via b->state/b->timer (133B, worse), Baby& ref (133B, 27), i[mpBegin], signed int index (137B); all keep the swapped SIB.
 006292b0 18 SetAllOtherBabiesToIdle: complete; ebx/edi register swap for id vs vector ptr
 006294e0 113 SetBabyCelebrationAnim: complete; orig keeps float result slot on stack and recomputes end-begin

@@ -1,5 +1,5 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-009206d0  109  EapdSymbolTable ctor: field-store order / vtable store schedule differ
+009206d0  109  EapdSymbolTable ctor: field-store order / vtable store schedule differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 esp, ret#1 eax]
 009209c0  139  hash-table lookup: equiv PASS at --inputs 900 (401 valid, 92.4% cov); remaining bytes are the find-iterator/bucket-chain loop layout (156 vs 169)
 00920a70  152  hash-table find2: equiv WEAK at --inputs 900 (355 valid, 43.7% cov, no mismatch); node-selection loop is unreachable with generated inputs, so its shape is unverified (169 vs 182)
 00920c20   29  HasAltSeparator: register allocation differs

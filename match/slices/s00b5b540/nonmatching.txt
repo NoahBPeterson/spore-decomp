@@ -4,11 +4,11 @@
 00b5b840   22  CheckGonzagoSubsystemInitState; virtual call schedule differs
 00b5b960   23  cGonzagoSubsystem ctor; base-ctor vtable store order differs
 00b5be10   49  serializer wrapper; cVarListSerializer arg schedule differs; equiv=UNSUPPORTED (now member S5be10::f, ecx fixed; 0/1200 inputs valid, fault(read))
-00b5bf30   48  message-server registration; vcall arg/order differs; equiv=UNSUPPORTED (now member S5bf30::f, ecx fixed, no stack arg; 0/1067 inputs valid, write faults)
+00b5bf30   48  message-server registration; vcall arg/order differs; equiv=UNSUPPORTED (now member S5bf30::f, ecx fixed, no stack arg; 0/1067 inputs valid, write faults) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['call', 'call', 'call', 'ret']]
 00b5bf80   71  multi-message registration loop; loop body schedule differs
 00b5c9d0   88  game-mode id remap; restored the original compare-tree shape and fixed 0x8916f92d to return 0x1654c11 (was returning the input); remaining diff is branch layout (the c10 arm constant-folds its return). [equiv: PASS]
 00b5ca70  n/a  current-game-mode predicate; switch/jump-table layout differs
-00b5cb20   29  game-mode guard; call/branch layout differs
+00b5cb20   29  game-mode guard; call/branch layout differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 00b5cc80   76  GameTimeManager cinematic registrations; vcall/arg schedule differs
 00b5cde0   85  App->mode vcall chain; call schedule differs
 00b5b730   78  eastl int-vector erase + copy-swap helper; complete source, but the temp vector frame is 0x14 in retail vs 0xc and the first memcpy keeps begin/count live in edi/esi (196 vs 194 bytes). [/O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-] [equiv: PASS 400 valid, 85.7% coverage]

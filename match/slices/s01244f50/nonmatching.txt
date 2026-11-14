@@ -11,10 +11,10 @@
 0124aab0   14  init_15d9834: complete; /Od float global->global copy is x87 (fld/fstp), original is SSE (movss/movss). Tried /arch:SSE alone, a file-level `#pragma float_control(precise, off)` and the /fp:fast module flag: cl 15 at /Od always lowers a float->float assignment through x87; this only changes with flags (needs /fp:fast on this row)
 0124aae0   14  init_15d9764: complete; same SSE-vs-x87 float-copy issue as 0124aab0 (needs /fp:fast on this row)
 0124ab10   14  init_15d9a68: complete; same SSE-vs-x87 float-copy issue as 0124aab0 (needs /fp:fast on this row)
-01250330   61  init_15dacc8: complete; bitfield RMW merge differs (cl folds the two field constants into one mask; original emits the per-field value/mask/shift then merge)
-012503b0   61  init_15dabcc: complete; same bitfield RMW merge issue as 01250330
+01250330   61  init_15dacc8: complete; bitfield RMW merge differs (cl folds the two field constants into one mask; original emits the per-field value/mask/shift then merge) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
+012503b0   61  init_15dabcc: complete; same bitfield RMW merge issue as 01250330 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 0125bd80   16  init_15de138: complete; frame/local slot layout for the inlined operator-new forwarder differs ([ebp-0xc] vs [ebp-0x18])
-0125dbc0   37  init_15de57c: complete; same bitfield RMW merge issue as 01250330 (2 of 3 ops identical)
+0125dbc0   37  init_15de57c: complete; same bitfield RMW merge issue as 01250330 (2 of 3 ops identical) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 01261040   56  init_15df0f0: complete; same SSE-vs-x87 float-copy issue as 0124aab0 (nine copies)
 0126dae0   12  init_15e2e48: complete; bool tag slot is [ebp-1] (`mov byte [ebp-1],0`) where the original writes [ebp-2] via `xor eax,eax; mov [ebp-2],al`
 0126db20   12  init_15e2da8: complete; same bool tag slot issue as 0126dae0

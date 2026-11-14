@@ -1,2 +1,3 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 slices/s008f55f0/s008f55f0.cpp  ?ParseFontWeight@CSSParser@Style@XHTML@EA@@QAE_NPAVPropertyList@234@@Z  008f6420  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008f55f0/s008f55f0.cpp  ?ParseFontSize@CSSParser@Style@XHTML@EA@@QAE_NPAVPropertyList@234@@Z  008f64f0  /O2 /MD /Gy /EHsc /TP /arch:SSE

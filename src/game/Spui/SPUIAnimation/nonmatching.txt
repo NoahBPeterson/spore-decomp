@@ -10,18 +10,18 @@
 007f6a60 37 complete; Color::Lerp/vcall register schedule differs
 007f6b50 118 complete; vtable slot call shape differs
 007f6d20 19 complete; cdecl argument register assignment differs
-007f6d90 83 complete; element copy / refcount addref order differs [equiv PASS (100% coverage)]
+007f6d90 83 complete; element copy / refcount addref order differs [equiv PASS (100% coverage)] [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 ebx]
 007f6df0 76 complete; element copy / refcount addref order differs [equiv PASS (100% coverage)]
 007f6ee0 114 complete; range copy loop layout differs
 007f6f80 63 complete; range destroy loop layout differs
 007f6ff0 7 complete; byte copy loop shape differs [equiv PASS (100% coverage)]
-007f7050 126 complete; reference-slot setup register/frame differs
-007f7100 126 complete; reference-slot setup register/frame differs
+007f7050 126 complete; reference-slot setup register/frame differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 ebp]
+007f7100 126 complete; reference-slot setup register/frame differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 ebp]
 007f71b0 40 complete; phase2 vector build/order differs
-007f7290 131 complete; reference-slot setup register/frame differs
-007f7340 119 complete; reference-slot setup register/frame differs
-007f73e0 118 complete; reference-slot setup register/frame differs
-007f7480 130 complete; reference-slot setup register/frame differs
+007f7290 131 complete; reference-slot setup register/frame differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 esi, ret#2 ebp]
+007f7340 119 complete; reference-slot setup register/frame differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 edi]
+007f73e0 118 complete; reference-slot setup register/frame differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 ebp]
+007f7480 130 complete; reference-slot setup register/frame differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 007f7830 5 complete; vtable-store / placement-address scheduling differs from original
 007f78c0 47 complete; loop register allocation (ebx/edi vs ebp/esi) differs
 007f7a60 157 complete do_copy of cAnimInfo; inline element-copy codegen differs (register schedule)

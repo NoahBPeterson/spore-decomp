@@ -3,5 +3,5 @@
           compact + cVarListSerializer): incomplete approximation of the list traversal; partial
 00b20c60   90  cGameNounManager::CreateNoun: create-through-manager + 0xc node + id/refcount wiring;
           list-node linkage approximated; partial
-00b20d30   -   cGameNounManager::PostRemove: not reconstructed (stub); partial
-00b20e40  151  cGameNounManager::CreateDebugNoun: not reconstructed (stub); partial
+00b20d30   -   cGameNounManager::PostRemove: not reconstructed (stub); partial [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]
+00b20e40  151  cGameNounManager::CreateDebugNoun: not reconstructed (stub); partial [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'c]

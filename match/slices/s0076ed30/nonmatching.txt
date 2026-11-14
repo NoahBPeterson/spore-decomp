@@ -1,10 +1,10 @@
 0076f540  31   LessPage: 3-int lexicographic less-than complete; final-compare setl vs branch differs
 0076f580  42   JobRecordI copy ctor: 0xa8 record memberwise copy complete; last-trio pointer bump differs; equiv PASS (1200 inputs, 100% cov)
-0076f210  75   SP::cRTTManager::Shutdown: erase + cheat/message calls complete; base-arg addressing (lea vs add) differs
+0076f210  75   SP::cRTTManager::Shutdown: erase + cheat/message calls complete; base-arg addressing (lea vs add) differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 target]
 0076f920  70   CopyElem30: 0x30 element uninitialized copy complete; pointer setup/offset schedule differs
 0076f990  68   CopyElem30InPlace: 0x30 element copy complete; pointer setup/offset schedule differs
 0076fa70  70   CopyElem30Back: backward 0x30 element copy complete; pointer setup/offset schedule differs
-0076ed30  66   ??_G scalar deleting destructor: cl emits an out-of-line ??1cRTTCheat (82B) + a 30B ??_G that CALLS it, while the original inlines the body (member ~cArgumentSpec call, base ~cCommandBase call, conditional operator delete, mov eax,esi, ret 4). Forcing ??_G emission keys the vtable and forces ??1. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: FAIL-as-artifact]
+0076ed30  66   ??_G scalar deleting destructor: cl emits an out-of-line ??1cRTTCheat (82B) + a 30B ??_G that CALLS it, while the original inlines the body (member ~cArgumentSpec call, base ~cCommandBase call, conditional operator delete, mov eax,esi, ret 4). Forcing ??_G emission keys the vtable and forces ??1. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: FAIL-as-artifact] [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'ret'] vs ['call', 'ret']]
 0076edf0  372  BigVec::Insert: 0x3c-record insert complete; growth/relocate shape differs (382B vs 475B). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED]
 0076f050  332  cRTTManager::RTTCheatInit: allocate/append/cheat/message sequence complete; EH-state + regalloc differ (395B vs 447B). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: UNSUPPORTED]
 0076f280  446  cRTTManager::RTTBigJob: find/allocate/append/capture sequence complete; scan-loop flag-test order and EH frame differ (703B original). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-  [equiv: FAIL]

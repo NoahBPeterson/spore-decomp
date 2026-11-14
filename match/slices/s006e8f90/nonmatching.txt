@@ -2,6 +2,6 @@
 006e9150  87  complete; cl hoists the -1-store branch and picks different registers (sar 2 constant-fold)
 006e95a0  764  complete; bounds transform: half extents use the f6e6e90 |m| copy, the centre offset the signed matrix, guard is the FLT_MAX sentinel; SSE/x87 schedule differs; equiv: PASS 400/400, 100% coverage
 006e9b00  121  ctor-style field init (0x00..0x6c); declared to return this (S5*) so eax matches the original's `mov eax,ecx`; equiv: PASS 400/400, 100% coverage (original's C++ EH prolog not reproduced)
-006e9bf0  123  ctor-style field init (other layout, 0x00..0x68); declared to return this (S5*) so eax matches the original; equiv: PASS 400/400, 100% coverage
+006e9bf0  123  ctor-style field init (other layout, 0x00..0x68); declared to return this (S5*) so eax matches the original; equiv: PASS 400/400, 100% coverage [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 006e9cc0  91  complete; field-init order/schedule differ
 006e9d50  650  complete; per-frame block copy + clip->screen direction (rect denominators per axis, x87 sqrt grouping); register/frame schedule differs; equiv: PASS 394/400 (6 fault-read), 100% coverage

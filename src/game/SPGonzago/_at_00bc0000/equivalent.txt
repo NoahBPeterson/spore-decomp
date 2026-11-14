@@ -8,3 +8,4 @@
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bca670@@YAXPAX@Z  00bca670  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?FUN_00bca6a0@@YAXPAX@Z  00bca6a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00bc0000.cpp  ?DestroyVarList@@YAXXZ  00bcb700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00bc0000.cpp  ?Insert@RawList@@QAEPAUListEntry@@PBDIHH@Z  00bcb0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-0059d840 20 MessagePost: complete; register selection/scheduling of the 9 member stores differs
+0059d840 20 MessagePost: complete; register selection/scheduling of the 9 member stores differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 memory]

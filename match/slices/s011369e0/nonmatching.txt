@@ -14,7 +14,7 @@
 01137450 133 complete DecoderThunk::FUN_01137450: unlink from the mix owner, optionally accumulate the float block, clear fields; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 95.7% cov.
 011374f0 11 complete FUN_011374f0: unlink all mix entries, pop the timer list node, Free +0x24; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 216/400 valid 47.5% cov.
 01137590 200 complete SubMix::CreateInstance: vtable, name copy, per-channel 1KB buffer Alloc + operator_new, timer node, zero mix fields; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 299/400 100% cov.
-011376d0 282 complete DecoderThunk::FUN_011376d0: thiscall FUN_00a10ef0 bit reads on a 2-dword state, sample tables; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 257/400 98.9% cov.
+011376d0 282 complete DecoderThunk::FUN_011376d0: thiscall FUN_00a10ef0 bit reads on a 2-dword state, sample tables; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 257/400 98.9% cov. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#8 memory]
 011377f0 163 complete DecoderThunk::FUN_011377f0: thiscall FUN_0114c880 mix parse, spread into the mix state; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 264/400 100% cov.
 01137910 42 complete FUN_01137910: ((channels*4+0x1d7)&~7) + round(*ptr)*0x30; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov (cvtss2si).
 01137950 143 complete FUN_01137950: retire 20 slot entries (drop finished decoders, advance buffer, free); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 217/400 valid 33.3% cov.

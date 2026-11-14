@@ -1,4 +1,4 @@
-00804f80  17  Help2 (4-arg window helper); x87 float-arg materialisation order differs; equiv PASS: 1199 valid inputs, 100.0% coverage (all insns)
+00804f80  17  Help2 (4-arg window helper); x87 float-arg materialisation order differs; equiv PASS: 1199 valid inputs, 100.0% coverage (all insns) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 memory]
 00804fc0  111 SetWindowAlpha; float rounding uses fnstcw/fldcw/fistp qword helper (not reproduced without asm); equiv UNSUPPORTED: 2 unresolved reference(s): ?H5c@IWnd@@QAEXH@Z, ?H90@IWnd@@QAEXXZ
 008051b0  52  FindByKey; original passes the receiver in EDI (static-helper register convention); equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
 00805310  148 CreditsTabInit; layout ctor/init call reconstruction, register scheduling; equiv UNSUPPORTED: 5 unresolved reference(s): ?LayoutCtor@@YAXPAD@Z, ?LayoutInit@@YA_NPADHHH@Z, ?LayoutDtor@@

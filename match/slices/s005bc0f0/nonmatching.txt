@@ -1,4 +1,4 @@
-005bc860 21   ctor: all zero-stores present; base-ctor call/register schedule differ (compiled shorter)
+005bc860 21   ctor: all zero-stores present; base-ctor call/register schedule differ (compiled shorter) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 005bc930 100  dtor: member destruction present; eastl::sp_vector destructor shape differs
 005bc0f0 1291  DoOnMouseMove: full flow reconstructed but codegen diverges (1102 diff bytes; 1070 vs 1291). equiv: WEAK (244 valid, 4.4% coverage, no mismatch observed)
 005bc9b0 206  eastl::vector<cIVisualEffect*>::operator=: real EASTL assign reconstructed; 175 diff bytes (199 vs 206), register allocation differs. equiv: WEAK (173 valid, 41.9% coverage)

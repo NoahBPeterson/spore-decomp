@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-006b6620  108  stream reader helper: stubbed; Earlier, fuller draft: match/slices/s006b5770/s006b5770.cpp (left behind by the migration); start from it.
+006b6620  108  stream reader helper: stubbed; Earlier, fuller draft: match/slices/s006b5770/s006b5770.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 return target, ret#0 eax]
 006b6740  109  eastl hashtable erase(key): stubbed; Earlier, fuller draft: match/slices/s006b5770/s006b5770.cpp (left behind by the migration); start from it.
 006b67b0  226  eastl hashtable operator[]/insert: stubbed; Earlier, fuller draft: match/slices/s006b5770/s006b5770.cpp (left behind by the migration); start from it.

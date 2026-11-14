@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/Spui/SPHints.cpp  ?init@cHintManager@@QAEPAU1@XZ  0067b270  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

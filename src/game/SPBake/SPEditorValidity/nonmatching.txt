@@ -3,7 +3,7 @@
 004e9500 156 RWXform::Attach (bind render object, drive builder vtable slot): equiv PASS (354 valid, 100% coverage); /Od frame shape flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 004e9950 360 complete; recursive child-property walk not byte-exact
 004e9fc0 326 complete; palette build/dispatch loop not byte-exact
-004ea190 143 complete; frame size differs (bitfield-flag construction not reproduced)
+004ea190 143 complete; frame size differs (bitfield-flag construction not reproduced) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 004ea780 118 complete; switch-remap + smart-pointer release not byte-exact
 004eda30 392 complete; /Od frame: 16-byte hole between inline-return temp and switch temp not reproduced (entry local ends up 8 bytes lower)
 004ee560 47 complete; /Od slot order: GetMgr401010 result must sit at ebp-0x34 (below the nested pv slots), name search found no spelling; difftest WEAK (301 valid, 55% coverage, no mismatch) after splitting PropVal so the GetFloat // 0x41ea70 annotation is read

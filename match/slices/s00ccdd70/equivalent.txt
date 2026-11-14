@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00ccdd70/s00ccdd70.cpp  ?FUN_00cceca0@cSPUITCCCursorStrategy@@QAEIPAX0@Z  00cceca0  /O2 /MD /Gy /TP /arch:SSE /GS-

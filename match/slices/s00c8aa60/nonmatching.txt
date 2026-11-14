@@ -9,9 +9,9 @@
 00c8b520  12   cl reordered the predicate returns
 00c8b640  10   cl reordered the independent pointer stores in the ctor
 00c8b6d0  116  00801920 called with ECX=param and no stack args; call/erase argument sharing differs
-00c8b700  58   operator-new / release schedule differs
-00c8b7e0  18   unsigned <= 5 lowered to cmp/sbb/inc instead of setbe
-00c8b800  18   unsigned > 2 lowered to cmp/sbb/neg instead of seta
+00c8b700  58   operator-new / release schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, ret#5 esp]
+00c8b7e0  18   unsigned <= 5 lowered to cmp/sbb/inc instead of setbe [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]
+00c8b800  18   unsigned > 2 lowered to cmp/sbb/neg instead of seta [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]
 00c8b040  41   optimization disabled to keep call instead of tail jmp; frame setup differs
 00c8aa60  733  cSpatialObjectView::UpdateEffects (/O2 /MD /Gy /EHsc /TP /arch=SSE): complete effect-list update loop (both the enabled and disabled-mode paths, resolve/rebuild XformMsg, compaction erase). equiv WEAK 228 valid 3.8% coverage (fault(read) 165, fake-arity 7) -- the harness cannot build a layout-correct cSpatialObjectView (type is not in the dev PDB), so the original is rarely entered. Not byte-exact: size 789 vs 712, cl keeps the XformMsg matrix/float staging in x87 where the original uses movss/xmm (precedent s005b94b0, s006e6100), plus extra spill/register pressure in the compaction loop.
 00c8add0  53  EffectVec::push_back_default (/O2 /MD /Gy /EHsc /TP /arch=SSE): complete push_back grow path (inline fast path storing mpEffect=0, else DoInsertValue with the temporary and release via vtable[1]). equiv PASS 295 valid 82.6% coverage. Not byte-exact: cl emits ret instead of the original's tail `jmp edx` in the release branch, and the witness/GS-slot handling differs by 1 byte of size (69 vs 68).

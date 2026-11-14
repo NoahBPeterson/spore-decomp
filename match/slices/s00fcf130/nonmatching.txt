@@ -1,5 +1,5 @@
 00fcf130
-00fcf1b0
+00fcf1b0 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 00fcf230
 00fcf330
 00fcf600

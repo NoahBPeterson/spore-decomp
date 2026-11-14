@@ -8,4 +8,4 @@
 00c0cdb0   114 game-mode creature id lookup: complete; original inlines _ftol2 (x87); gate WEAK 39.5% coverage
 00c0c630   840 SP::cCreatureLocomotion::Execute: complete state machine; gate UNSUPPORTED (difftest site_arity miscounts the 0x28 frame as args, shifting esp; all 400 inputs fault(write))
 00c0ca00   523 ballistic aim solver: complete; x87-vs-SSE overflow/NaN edge (gate FAIL 19/400, inf sign in out[1])
-00c0ccc0   213 creature transition tick: complete; FAIL-KEPT ECX (original push/pop ecx preserves entry ecx; wrapper clobbers it)
+00c0ccc0   213 creature transition tick: complete; FAIL-KEPT ECX (original push/pop ecx preserves entry ecx; wrapper clobbers it) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 ebx, ret#2 edi]

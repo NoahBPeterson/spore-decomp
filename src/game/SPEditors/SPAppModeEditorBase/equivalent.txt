@@ -3,3 +3,4 @@
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?GetSelectableBlock@cAppModeEditorBase_s0057_3520@SP@@QAEPAUcEditorBlock@2@XZ  00573a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ??1cPaletteCategory@SP@@QAE@XZ  0057c4b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?Resize@cIntVec@@QAEXI@Z  00584160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?HasSameMask@cAppModeEditorBase_s0057_94b0@SP@@QAE_NXZ  00579a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

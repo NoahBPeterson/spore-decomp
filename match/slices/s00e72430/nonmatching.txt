@@ -1,6 +1,6 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs are cmpobj exact-symbol byte counts)
-00e72430  143  ability-activate record build: complete; pool Get/Alloc call-site register choice and record-store schedule differ
-00e72530  117  ability event emit: complete; consumes incoming ESI(self)/EDI from caller (custom static-TU register convention), not reproducible with the standard ABI
+00e72430  143  ability-activate record build: complete; pool Get/Alloc call-site register choice and record-store schedule differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
+00e72530  117  ability event emit: complete; consumes incoming ESI(self)/EDI from caller (custom static-TU register convention), not reproducible with the standard ABI [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['ret'] vs ['call', 'call', 'call', 'call', 'ret']]
 00e725c0  327  link/attach ability: complete; consumes incoming ESI/EDI and pool call-site scheduling differs
 00e727e0  186  combine ability: complete; consumes incoming ESI/EDI
 00e72910  292  detach ability: complete; consumes incoming ESI/EDI

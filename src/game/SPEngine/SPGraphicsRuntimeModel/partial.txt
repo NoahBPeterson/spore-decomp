@@ -1,3 +1,3 @@
 # va  diff-bytes  reason
 00774110 - UI/resource glue with a full EH frame (ctor at 0x0075c9d0, factory calls through 0x016c8b44); not reconstructed (signature-only skeleton) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; Earlier, fuller draft: match/slices/s00773f60/s00773f60.cpp (left behind by the migration); start from it.
-01213750 153 compiler-generated EH cleanup funclet (PDB names it cRuntimeModelBuilder::CreateModelMeshes, but this VA is the cleanup fragment); enclosing body outside the slice
+01213750 153 compiler-generated EH cleanup funclet (PDB names it cRuntimeModelBuilder::CreateModelMeshes, but this VA is the cleanup fragment); enclosing body outside the slice [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]

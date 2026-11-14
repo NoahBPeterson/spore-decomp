@@ -3,5 +3,5 @@
 0062efb0  397  LoadPanelInfo: complete; local layout and register assignment differ (sorted insert of panel info)
 0062f1e0  149  LoadAllAnimInfo: complete; key filter object / vector locals laid out differently
 0062f2a0  35  Init: complete; orig reloads vector bounds after the store (alias) and loads args earlier
-0062f2f0  12  BGMgr effect-finished check: complete; epilogue block layout differs
+0062f2f0  12  BGMgr effect-finished check: complete; epilogue block layout differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in tail call vs return at ret#6]
 0062f610  127  BGMgr UpdateBackground: complete; orig reloads vector begin/end from memory after stores

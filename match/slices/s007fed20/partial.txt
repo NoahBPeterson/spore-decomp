@@ -1,3 +1,3 @@
 # va diff-bytes reason
-007ff9f0 - out of scope; ctor reconstructed (base + vtable stores), not byte-verified
+007ff9f0 - out of scope; ctor reconstructed (base + vtable stores), not byte-verified [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]
 007ffa50 - out of scope; PredicateWinState::Refresh reconstructed, not byte-verified

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01159630/s01159630.cpp  ?ReaderTable_Init1@core@audio@rw@@YAXXZ  01159760  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,5 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE)
 00e54b80  157  cell raster setup; complete. difftest: UNSUPPORTED (0/400 valid)
-00e54c70   12  layer Apply sweep; complete. difftest: UNSUPPORTED (0/400 valid)
+00e54c70   12  layer Apply sweep; complete. difftest: UNSUPPORTED (0/400 valid) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#7 esp]
 00e54d10    8  layer tail-jump; complete. difftest: UNSUPPORTED (0/400 valid)
 00e552f0  114  cCellMode::Activate; complete (now a SP::cCellMode member, this in ecx). difftest: UNSUPPORTED (only 0/712 inputs valid: fault(read) 686)

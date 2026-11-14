@@ -5,12 +5,12 @@
 011f7fd0   70  Device::Reset: complete; the 15-dword rep movsd block copies and the
                changed-check schedule differ
 011f8070   75  Device::D3D9WindowResize: complete; vcall form and register schedule differ
-011f8120   38  Device::ShowRaster: complete; vcall form differs
+011f8120   38  Device::ShowRaster: complete; vcall form differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, ret#3 esp]
 011f8160   69  Device::ResetVertexShader: complete; vcall form differs
-011f81d0   53  Device::RestoreVertexShader: complete; vcall form differs
+011f81d0   53  Device::RestoreVertexShader: complete; vcall form differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['call', 'call', 'call', 'call', 'ret']]
 011f82a0   78  Device::D3D9CreateDevice: complete; vcall form / 6-arg schedule differ
 011f8340  151  Device::GetDefaultParameters: complete; returns `this` in eax (Device* return type) with the 15-dword copy and switch constants in the original order; only the rep movsd/switch register layout differs [equiv PASS 400 valid, 100% cov]
-011f8400  139  Device::D3D9GetMaxSamplerStage: complete; DevCapsManager/DocMessage argument
+011f8400  139  Device::D3D9GetMaxSamplerStage: complete; DevCapsManager/DocMessage argument [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
                schedule differs
 011f8a40  117  Device::GetAdapterInfo: complete; nested-loop register schedule differs
 011f8b00  146  DevCapsManager::GetNonD3DDeviceInfo: complete; OSVERSIONINFOA zeroing and

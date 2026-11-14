@@ -1,15 +1,15 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs are chk.py best-symbol estimates)
 00e5c250  353  SP::sGetRandomCreatureKey: complete; weighted-random list walk + kind switch match (equiv PASS, WEAK 69.6% cov); x87/EA::Random schedule differs
-00e5c410  50  creature-kind predicate: complete; register/branch schedule differs
-00e5c460  59  creature-height predicate: complete; x87/SSE and branch schedule differs
-00e5c4f0  23  cell quota + refresh: complete; original loads member into edi before the call (dead) and re-reads the global for the return; ours reloads the global for the return only (cl drops the dead edi load); tried return-local, reference, comma
+00e5c410  50  creature-kind predicate: complete; register/branch schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 return target, ret#1 esp, ret#1 esi]
+00e5c460  59  creature-height predicate: complete; x87/SSE and branch schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 return target, ret#2 esp]
+00e5c4f0  23  cell quota + refresh: complete; original loads member into edi before the call (dead) and re-reads the global for the return; ours reloads the global for the return only (cl drops the dead edi load); tried return-local, reference, comma [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00e5c5d0  104  read up to 13 ints: complete; the min(13,count) select and loop schedule differ
 00e5c660  53  write 13 ints: complete; schedule differs
 00e5c6e0  104  read up to 6 var-list slots: complete; cVarListSerializer buffer/args approximated
 00e5c780  63  rbtree<unsigned,...>::find: complete (tree walk); register allocation (eax/ecx vs original) differs; equiv: PASS (now returns the retptr in eax; void hid eax=0 on not-found: hybrid crash 2026-10-11)
 00e5c860  114  copy range of 0x2c-byte structs: complete; branch/element schedule differs
-00e5c8e0  146  spawn marker for a creature: complete; local struct/arg slots approximated
-00e5c9d0  108  pick message id from source level vs thresholds: complete; thresholds come from the value returned by 0x00e4ce40, equiv PASS 100%; x87 schedule differs
+00e5c8e0  146  spawn marker for a creature: complete; local struct/arg slots approximated [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, call#2 esp, call#3 esp, call#4 esp]
+00e5c9d0  108  pick message id from source level vs thresholds: complete; thresholds come from the value returned by 0x00e4ce40, equiv PASS 100%; x87 schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#1 ecx, call#2 esp]
 00e5cb60  337  fluid ray/AABB cast: NOW RECONSTRUCTED (415 vs 404 bytes); the previous `return 0` stub is gone.  `if (level == target)` leaf: AABB midpoint from m[5..10] as float (cvtsi2ss), optional rotation by the box 3x3 column transform (+0x14/+0x20/+0x2c), scale by box[0x10], add box origin (+4/+8/+0xc), FUN_00e4dbc0(gCellGame+0x4108 fluid, point, dir, 1.0f, target), store the hit dword and advance the output cursor by 4; otherwise walk the four child slots at m[1..4] recursing with level+1.  Residual: register choice and FP schedule.  equiv FAIL 5/5 (execution fault at 00e4dc27 -- the real FUN_00e4dbc0 callee runs and dereferences a synthetic fluid volume).
 00e5cae0  106  normalize a random direction: complete; x87 sqrt schedule differs
 00e5cd00  144  distance-to-box vs radius test: complete; SSE branch schedule differs

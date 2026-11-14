@@ -31,11 +31,11 @@
 00f24b30 350 complete; /O2 scheduler + register allocation and a dead refcount block differ (442 vs 498 bytes); flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK 165/400 valid (8.3% coverage), no mismatch
 00f24d30 34 complete; redundant inlined default-construction zero stores eliminated by cl (67 vs 95 bytes); difftest FAIL 5/5 valid, only on uninitialised allocation-pool dwords at object +0x00/+0x1c that the original leaves untouched too flags: /O2 /MD /Gy /TP
 00f25110 24 complete; /O2 scheduler places the mode==2 compare after the zero stores flags: /O2 /MD /Gy /TP
-00f25160 33 complete; trailing key-rewrite compare/hoist scheduling differs flags: /O2 /MD /Gy /TP
-00f25190 51 complete; same compare-scheduling + branch layout differences flags: /O2 /MD /Gy /TP
+00f25160 33 complete; trailing key-rewrite compare/hoist scheduling differs flags: /O2 /MD /Gy /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
+00f25190 51 complete; same compare-scheduling + branch layout differences flags: /O2 /MD /Gy /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00f251f0 11 complete; 3-field Vector3 copy load/store interleaving differs flags: /O2 /MD /Gy /TP
 00f25240 34 complete; same accessor scheduling as 00f25190 flags: /O2 /MD /Gy /TP
-00f25580 68 complete; decision-tree block ordering differs (control flow equivalent) flags: /O2 /MD /Gy /TP
+00f25580 68 complete; decision-tree block ordering differs (control flow equivalent) flags: /O2 /MD /Gy /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 00f256a0 10 complete; inner switch tree evaluates u<=root then branches, block order differs flags: /O2 /MD /Gy /TP
 00f256e0 10 complete; same as 00f256a0 with the second constant set flags: /O2 /MD /Gy /TP
 00f257f0 43 complete; store scheduling + zero-register reuse differs (127 vs 131 bytes); difftest UNSUPPORTED 0/400 (original faults: read faults, GetUserNameW import) flags: /O2 /MD /Gy /TP

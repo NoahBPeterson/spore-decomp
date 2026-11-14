@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00962ff0 96  faithful GetResourceDescriptor+factory helper; argument/register layout differs
-00963060 92  faithful CreateIndexBuffer<cMallocAlloc>; argument/register layout differs; equiv: UNSUPPORTED (symbol found; all inputs fake-arity)
+00963060 92  faithful CreateIndexBuffer<cMallocAlloc>; argument/register layout differs; equiv: UNSUPPORTED (symbol found; all inputs fake-arity) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
 009634f0 202 faithful easing curve (mode 0/1/2); x87/SSE mix and constant pooling differ
 00963630 25  faithful OnlyWhenVisible; outgoing message-frame store scheduling differs
 00963f70 24  faithful flag set/clear; vtable-load scheduling differs

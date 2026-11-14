@@ -2,7 +2,7 @@
 007e5f60 56 GetAsyncKeyState result materialisation (cwde+sar 15) not reproduced by any of ~6 source spellings; rest identical
 007e6470 235 cAppSystem::PreShutdown complete behavioural reconstruction (vtable teardown); virtual-call register/order schedule differs
 007e66a0 10 PropWatcher::Check complete; only diff is the missing ecx=local argument load before FUN_004e41c0 (thiscall-vs-free mismatch)
-007e6720 60 PropWatcher::Read complete; type-tag selection compiled as setne instead of neg/sbb, plus ecx/eax register choice
+007e6720 60 PropWatcher::Read complete; type-tag selection compiled as setne instead of neg/sbb, plus ecx/eax register choice [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 eax]
 007e67a0 1589 cAppSystem::Init(CommandLine*) complete startup sequence (idgen, locale, cmd server, telemetry, prop mgr, sockets/SSL, save areas + preferences, pack mgr, input, canvas, graphics, app states, config mgr); frame 4 bytes larger (one extra stack local), state-var offsets shift; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE ; equiv: UNSUPPORTED (mktime64 import, writes)
 007e7260 50 PropWatcher constructor: behaviour complete but the original carries an SEH frame (state 0) around the vf0/Read calls; no destructor-bearing local in the reconstruction
 007e72d0 99 cQuitCheat::Execute complete; register allocation (ebx/edi) and crafted-object field-store order differ
@@ -13,7 +13,7 @@
 011c5230 8 /O2 /MD /Gy /TP PASS - complete/replay-equal (347 valid inputs, 100% coverage); only two rotate encodings differ (rol 3 vs the original's ror 29) and the loop counter reuses the `enc` argument slot instead of the `ks` slot flags: /O2 /MD /Gy /TP
 011c6c40 623 /O2 /MD /Gy /TP FAIL - complete but the round-key layout differs: the original's PC2 is done with eight 64-entry scatter tables (0x014f12a8..) whose 24-bit placement per word is not the plain libdes packing used here, so the schedule words differ flags: /O2 /MD /Gy /TP
 011c85a0 440 /O2 /MD /Gy /TP UNSUPPORTED - complete; 9 unresolved references (BN_CTX_start/BN_CTX_get/BN_ucmp/set_word/copy signatures), so the harness cannot link the replay flags: /O2 /MD /Gy /TP
-011c88e0 113 /O2 /MD /Gy /TP UNSUPPORTED - complete; ui/type arrive in ESI/EBX (LTCG register ABI) and ERR_put_error/CRYPTO_malloc stay unresolved, so no comparison is possible flags: /O2 /MD /Gy /TP
+011c88e0 113 /O2 /MD /Gy /TP UNSUPPORTED - complete; ui/type arrive in ESI/EBX (LTCG register ABI) and ERR_put_error/CRYPTO_malloc stay unresolved, so no comparison is possible flags: /O2 /MD /Gy /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 011c8960 109 /O2 /MD /Gy /TP UNSUPPORTED - complete; ui/type arrive in ESI/EBX and the remaining args in EAX/ECX/EDX (LTCG register ABI); sk_new_null/sk_push/free_string stay unresolved flags: /O2 /MD /Gy /TP
 011c89e0 11 /O2 /MD /Gy /TP UNSUPPORTED - complete; the wrapper itself is cdecl but its callee 011c8960 takes registers, so the resolved replay call passes garbage and the callee's heap writes diverge flags: /O2 /MD /Gy /TP
 011c8a10 18 /O2 /MD /Gy /TP UNSUPPORTED - same register-ABI callee as 011c89e0; only the type constant (2) and the trailing field differ flags: /O2 /MD /Gy /TP

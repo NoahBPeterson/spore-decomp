@@ -5,5 +5,5 @@
 00ea13e0 14 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (100% coverage, 59 valid inputs)
 00ea1470 14 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (unresolved operator_delete_array/vtable symbols)
 00ea1570 327 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid inputs, read faults)
-00ea17b0 141 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid inputs, read faults)
+00ea17b0 141 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid inputs, read faults) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 00ea18c0 28 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (no mismatch, 41.2% coverage)

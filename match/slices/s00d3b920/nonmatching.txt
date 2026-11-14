@@ -1,5 +1,5 @@
 00d3b920
-00d3b9b0
+00d3b9b0 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 ecx, call#1 ecx, call#2 ecx, ret#3 eax]
 00d3bb10
 00d3bdb0
 00d3c430

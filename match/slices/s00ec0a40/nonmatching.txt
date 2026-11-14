@@ -3,7 +3,7 @@
 00ec0a40 73 scenario-goal callback (8-arg); reordered ctx accessor calls and flag-store shape
 00ec0ae0 136 scenario-goal callback (early-out variant, 8-arg); deep vtable chain reorders
 00ec0b90 21 weapon-pickup entry; failure block placement and float-global reloc form differ
-00ec0c90 86 nested object/key lookup; combined success/failure tail layout differs
+00ec0c90 86 nested object/key lookup; combined success/failure tail layout differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 00ec0d00 370 9-way stimulus dispatch; jump-table body layout, inline vector walks and leftover-stack-arg c7d090 call diverge
 00ec0f70 732 target-acquire stimulus; 16-byte key frame, nested loops and vtable chain reorder heavily
 00ec11c0 337 mount/stimulus match; loop body and vtable-chain ordering diverge

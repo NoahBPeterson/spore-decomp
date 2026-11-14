@@ -1,3 +1,4 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 slices/s00ae9490/s00ae9490.cpp  ?Select@SpaceTool@@QAE_NHH@Z  00ae9b90  /O2 /MD /Gy /EHsc /TP
 slices/s00ae9490/s00ae9490.cpp  ?ctor@Entry@@QAEPAU1@XZ  00aea250  /O2 /MD /Gy /EHsc /TP
+slices/s00ae9490/s00ae9490.cpp  ?MatchesCiv@SpaceTool@@QAE_NH@Z  00ae9f10  /O2 /MD /Gy /EHsc /TP

@@ -1,13 +1,13 @@
 # va  diff-bytes  reason
 00657640  104  approximate: 9-arg (ret 0x24) template value-ctor helper; argument count/mapping not fully recovered (235 vs 339 bytes)
-00657bc0  -  SP::cSPUIAssetView key handler (526 bytes): switch head + window-manager branches implemented; remaining key branches are approximate; Earlier, fuller draft: match/slices/s00657ad0/s00657ad0.cpp (left behind by the migration); start from it.
-00657f70  -  UI::AssetDiscovery_View::AssetDiscovery_View (294 bytes): ctor skeleton; Earlier, fuller draft: match/slices/s00657ad0/s00657ad0.cpp (left behind by the migration); start from it.
+00657bc0  -  SP::cSPUIAssetView key handler (526 bytes): switch head + window-manager branches implemented; remaining key branches are approximate; Earlier, fuller draft: match/slices/s00657ad0/s00657ad0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 esp]
+00657f70  -  UI::AssetDiscovery_View::AssetDiscovery_View (294 bytes): ctor skeleton; Earlier, fuller draft: match/slices/s00657ad0/s00657ad0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'ret'] vs ['ret']]
 006582f0  -  UI update (330 bytes): skeleton; Earlier, fuller draft: match/slices/s00657ad0/s00657ad0.cpp (left behind by the migration); start from it.
 00658440  -  UI update (1417 bytes): skeleton; Earlier, fuller draft: match/slices/s00657ad0/s00657ad0.cpp (left behind by the migration); start from it.
 006589d0  -  SP::cSPUIAssetView::OnLeftMouseDown (670 bytes): skeleton; Earlier, fuller draft: match/slices/s006589d0/s006589d0.cpp (left behind by the migration); start from it.
-00658c70  -  cSPUIAssetView helper (386 bytes): skeleton; Earlier, fuller draft: match/slices/s006589d0/s006589d0.cpp (left behind by the migration); start from it.
+00658c70  -  cSPUIAssetView helper (386 bytes): skeleton; Earlier, fuller draft: match/slices/s006589d0/s006589d0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['ret']]
 00658e80  -  SP::cSPUIAssetView::SelectAsset update (994 bytes): skeleton; Earlier, fuller draft: match/slices/s006589d0/s006589d0.cpp (left behind by the migration); start from it.
-00659270  -  cSPUIAssetView helper (203 bytes): skeleton; Earlier, fuller draft: match/slices/s006589d0/s006589d0.cpp (left behind by the migration); start from it.
+00659270  -  cSPUIAssetView helper (203 bytes): skeleton; Earlier, fuller draft: match/slices/s006589d0/s006589d0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'ret'] vs ]
 00659340  -  cSPUIAssetView release/destroy helper (122 bytes): skeleton
 006593c0  -  cSPUIAssetView helper (752 bytes): skeleton; Earlier, fuller draft: match/slices/s006589d0/s006589d0.cpp (left behind by the migration); start from it.
 0065af90  293  Sibling UI window message helper: layout-construction half approximated

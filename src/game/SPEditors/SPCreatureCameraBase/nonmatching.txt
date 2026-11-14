@@ -10,8 +10,8 @@
 006268a0 485 CalculateCameraToWorldMatrix: complete; cTransform field offsets/matrix expression order (x87 vs SSE) differ
 00626b50 414 SetInitialCameraValues: complete; same cTransform/matrix transcription differences
 00626db0 236 GetCurrentCameraPosition: complete; cTransform member offsets/matrix expression schedule differ
-00626ee0 252 UpdateCamera_StandardControl: complete; the field-copy (newPlatformVelocity/quaternion) schedule differs
-00627000 32 GetAudioAnchorPosition: complete; the compiler reorders the three up*f products and reloads the up globals
+00626ee0 252 UpdateCamera_StandardControl: complete; the field-copy (newPlatformVelocity/quaternion) schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
+00627000 32 GetAudioAnchorPosition: complete; the compiler reorders the three up*f products and reloads the up globals [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00627060 144 InitCreatureData: complete; clamp/desired-value expression order and depends offsets differ
 006271a0 44 translateTransform: complete; Matrix3::Assign/Accumulate thiscall shape differs
 00627660 1281 FUN_00627660: complete (camera ground push-out: 4 clearance queries, two tan(), acos pitch fix, CalculateCameraToWorldMatrix; 10 calls in the original order); not exact: x87/SSE operand scheduling and spill slots differ, `test byte,al` flag test not reproduced

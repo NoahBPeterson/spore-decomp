@@ -5,10 +5,10 @@
 0107db10 69 hkThreadMemory::deallocateChunk flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 0107db90 42 hkThreadMemory::onStackUnderflow flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 0107dbd0 17 hkThreadMemory::replaceInstance (static) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
-0107dc10 86 hkThreadMemory::onStackOverflow flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+0107dc10 86 hkThreadMemory::onStackOverflow flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 0107dd30 24 hkMemory::replaceInstance (static) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
-0107dd70 26 hkMemory::allocateChunkByRow flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
-0107dda0 29 hkMemory::deallocateChunkByRow flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+0107dd70 26 hkMemory::allocateChunkByRow flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
+0107dda0 29 hkMemory::deallocateChunkByRow flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 0107de00  54  hkPointerMapBase<unsigned long> constructor ; equiv UNSUPPORTED: 0/1200 valid inputs (fault(write)/fake-arity); symbol via symbols file flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 0107de50  15  hkPointerMapBase<unsigned long> destructor ; equiv UNSUPPORTED: symbol not found (K/_K template dtors indistinguishable to lookup; closest-size would pick wrong one) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 0107de70 91 hkPointerMapBase<unsigned long>::insert flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
@@ -16,7 +16,7 @@
 0107e050 107 hkPointerMapBase<unsigned long>::resizeTable flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 0107e2d0 389 hkPointerMapBase<unsigned __int64>::remove(Dummy*) ; equiv PASS (207 valid, 100% cov, no mismatch); cluster-shift deletion with unsigned 64-bit indices and lib_crt::allmul (428B vs 456B) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 0107e560 14 hkPointerMapBase<unsigned long>::remove(KEY) -> hkResult flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
-0107e5b0 17 grow-to helper (tail-calls resizeTable, K) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+0107e5b0 17 grow-to helper (tail-calls resizeTable, K) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in tail call vs return at ret#1]
 0107e5d0 17 grow-to helper (tail-calls resizeTable, _K) ; equiv UNSUPPORTED: 0/1200 valid inputs (fault/fake-arity); marker added flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 0107e5f0 46 hkSingleton<hkStreambufFactory>::replaceInstance ; equiv WEAK: 400 valid, 27.3% cov (coverage-limited, no mismatch); global 0x016e42b4 resolves; chk ~size binds hkThreadMemory::replaceInstance flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 0107e640 21 small singleton/vtable allocator ; equiv PASS (232 valid, 100% cov, no mismatch) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

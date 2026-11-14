@@ -3,7 +3,7 @@
 010c81d0 334 havok-equivalent; equiv PASS 279/400 (100% coverage); replay PASS; not byte-exact (301 bytes differ: size 289 vs 334; VM scratch object sized/aligned to 0x40 so the outgoing-argument area matches; box built with direct member writes)
 010c83a0 236 havok-equivalent
 010c8490 205 havok-equivalent
-010c8560 89 havok-equivalent
+010c8560 89 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, ret#3 return target]
 010c85c0 110 havok-equivalent
 010c8630 197 havok-equivalent
 010c8700 307 havok-equivalent

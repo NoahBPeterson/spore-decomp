@@ -1,2 +1,3 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 slices/s00d39800/s00d39800.cpp  ?SpawnCreatureModeCallEffect@@YAXIPBM@Z  00d39dc0  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00d39800/s00d39800.cpp  ?CreatureModeCollisionCallback@@YAXPAUcCollisionEvent@@@Z  00d3a450  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS-

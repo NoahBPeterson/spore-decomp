@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPGraphicsCRAPI.cpp  ?WU_open@@YAPAUWuContext@@XZ  006e1d10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

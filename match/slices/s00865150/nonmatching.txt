@@ -1,7 +1,7 @@
 00865150
 00865300
 00865340  2  jpeg-6a coefficient-controller start_pass (jdcoefct.c): complete -- the mode switch (mode 0 preserve, 1 RGB, 2 dequantise: per component cinfo->comp_info[i].dct_table = cq->dct_table, cq->pub.consume_data = decompress_onepass, out_color_components * MCUs_per_row data units per call) reproduces the retail call sequence (227 bytes against 225). Residual: the retail callees use the LTCG custom-register ABI (FUN_00865300 reads cinfo from ESI, FUN_00864d60 from EBX) while ours pass cinfo on the stack, so ebp/ebx/edi shift: retail opens `push ebp; ... xor ebp,ebp` for the mode-0 null and keeps the coefficient vector in `lea ebx,[edi+0x44]`, ours takes `push ebx; xor ebx,ebx` and `add edi,0x44`. flags /O2 /MD /Gy /EHsc /TP /GS-
-00865450
+00865450 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#5 esp]
 008654f0
 00865570
 00865ad0

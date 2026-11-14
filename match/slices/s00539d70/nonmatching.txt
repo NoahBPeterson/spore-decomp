@@ -2,7 +2,7 @@
 00539ed0  131  SWARM_SPSkinPaintParticleAddCommands complete; registration (alloc block/command, vtable stores); codegen of explicit vtable stores not reproduced
 00539f90  -1  cSPSkinPaintParticleEffectBlockCommand::ctor complete; object/AppProps base init + 3 vtable stores differ; equiv: UNSUPPORTED (vtable stores need mapping)
 0053a030  -1  cSPSkinPaintParticleEffectBlockCommand::Parse complete; name assign + Skinner description alloc + inherited copy
-0053a1a0  -1  cSPSkinPaintParticleEffectBlockCommand::SetChild complete
+0053a1a0  -1  cSPSkinPaintParticleEffectBlockCommand::SetChild complete [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]
 0053a220  108  cSPSkinPaintParticleEffectBlockCommand::dtor complete; releases the brush block through slot 1 (Release) of its own vptr at description+0x08, then mName dealloc (0xf47380) and cBlockCommandBase::~cBlockCommandBase (0x83cd90); /Od local/stack slot order differs (122 vs 130 bytes); equiv PASS 981 valid, 100.0% coverage
 0053a460  38  cSPSkinPaintParticleEffectBlockCommand::AddDesc complete; equiv: UNSUPPORTED (0/1200 valid: _CxxThrowException)
 0053a4a0  110  FUN_0053a4a0 runtime-description lookup complete; equiv: WEAK (1200 valid, 29.5% cov)

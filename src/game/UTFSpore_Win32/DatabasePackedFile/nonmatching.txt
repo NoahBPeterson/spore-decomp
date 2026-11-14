@@ -6,11 +6,11 @@
 008d86c0 60 complete: SetStream; false-return block placed at the end in the original, ours inverts the branch
 008d87c0 88 complete: Verify; original keeps the mutex in edi and the divisor in ebp with SSE divss, ours swaps regs and (default flags) uses x87
 008d8980 350 complete: Open; large function, many scheduling/vtable-dispatch differences; difftest WEAK (50.9% coverage)
-008d8c50 232 complete: ReadHeaderRecord; header field copy order / vf74(header) call scheduling differ (return semantics verified PASS)
+008d8c50 232 complete: ReadHeaderRecord; header field copy order / vf74(header) call scheduling differ (return semantics verified PASS) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#4 target]
 008d8ee0 239 complete: WriteHeaderRecord; 0x60-byte DBPF header field packing order differs (return semantics verified PASS)
 008d90e0 38 complete: ReadRecordRaw; branch layout for the memory-mode false return is inverted
-008d9170 11 complete: ReadRecordSpan; register assignment of size / e->size swapped
-008d91e0 258 CompressRecordData: complete; cl hoists the Refpack vtable store/0xffff constant differently and orders flag stores differently; difftest PASS (after annotating kStrPackedRecord and declaring memcpy extern "C")
+008d9170 11 complete: ReadRecordSpan; register assignment of size / e->size swapped [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 memory]
+008d91e0 258 CompressRecordData: complete; cl hoists the Refpack vtable store/0xffff constant differently and orders flag stores differently; difftest PASS (after annotating kStrPackedRecord and declaring memcpy extern "C") [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 008d94a0 162 CloseInternal: complete; structure matches but cl spills the result bool to the stack and keeps zero in ebx instead of bl/edi
 008d95f0 343 WriteIndexRecord: complete; original has a partial prologue (ebx pushed only inside the dirty-index branch, mov al,1 hoisted)
 008d9850 87 TryCompress: complete; register assignment size/pOutSize (ebx/ebp) swapped vs original
@@ -27,7 +27,7 @@
 008db280 104 complete: PFIndexModifiable::CheckFilesInRange (bucket-array scan); loop/register allocation differs
 008db310 94 complete: PFIndexModifiable::CheckFilesInSizeRange (bucket-array scan); loop/register allocation differs
 008db450 220 complete: HT::InsertUnique (hash-map insert w/ growth); bucket split/rehash reconstruction differs
-008db560 96 complete: RBTree::insertUnique (rbtree insert + alloc); register allocation (this/node in edi/esi) swapped vs retail
+008db560 96 complete: RBTree::insertUnique (rbtree insert + alloc); register allocation (this/node in edi/esi) swapped vs retail [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 eax]
 008db5e0 72 complete: FUN_008db5e0 median/partition helper; register allocation differs
 008db630 80 complete: FUN_008db630 final sort pass; body shape differs
 008db730 54 complete: PFIndexModifiable ctor; vtable/alloc sequence close but differs
@@ -46,7 +46,7 @@
 008dc120 62 complete: HoleSet::MergeFrom (rbtree merge); register allocation differs
 008dc1a0 208 HoleSet::Insert rbtree lower_bound + two DoInsert calls; codegen/regalloc differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
 008dc2b0 108 PFIndexModifiable::ReserveRange bucket walk; register allocation differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
-008dc3f0 233 PFRecordRead::ReadSpan buffer-copy/ReadFileSpan codegen differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
+008dc3f0 233 PFRecordRead::ReadSpan buffer-copy/ReadFileSpan codegen differs (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]
 008dc510 186 PFRecordRead::EnsureLoaded decompress path; codegen differs (equiv WEAK) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
 008dc5e0 14 PFRecordRead::GetBuffer; `mov al`+`cmp al,3` vs `cmp byte ptr,3` and ret layout differ (equiv PASS) flags: /O2 /MD /Gy /TP /GS- /arch:SSE
 008dc600 122 PFRecordWrite::OpenTempFile; filename format + CreateTempFile/FileStream codegen differs (equiv UNSUPPORTED: import _time64) flags: /O2 /MD /Gy /TP /GS- /arch:SSE

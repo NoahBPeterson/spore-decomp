@@ -10,5 +10,5 @@
 00522b40 1478 /Od frame: original has ~0xc0 more temp slots (inline ref/copy temps); complete SetCreatureSkin, same calls in order (fabs inline needs /Oi)
 00523570 11 /Od mem/this/result slot permutation only; complete alloc factory
 00523900 1650 Ctx9::BuildHit complete (29 calls = original 29, all targets/order equal; size 1952 vs 2012): only /Od frame-slot/temp placement differs (orig frame 0x344 vs ours 0x198) and the 0-2/default switch folds to a table starting at 3; difftest WEAK (31% coverage, 0 mismatches) (compiled with /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast)
-005247d0 129 /Od packed-value unpack inlining / slot layout differs; complete GetChecked
+005247d0 129 /Od packed-value unpack inlining / slot layout differs; complete GetChecked [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00524a50 1494 /Od frame slot layout (large inlined-helper frame 0x188); behaviorally complete, frame offsets diverge

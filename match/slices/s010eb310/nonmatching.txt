@@ -6,5 +6,5 @@
 010eb730 0 havok-equivalent
 010eb820 0 havok-equivalent
 010ebab0 0 havok-equivalent
-010ebb30 0 havok-equivalent
+010ebb30 0 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 010ebc80 0 havok-equivalent

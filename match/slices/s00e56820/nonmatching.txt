@@ -8,6 +8,6 @@
 00e57340  65   complete: 1 call in original order; sGetSourceLevel(fastcall level in EDX) + level-table index reg-alloc differs
 00e573e0  73   complete: 2 calls in original order; two sGetSourceLevel sites; slot-clamp frame/reg-alloc differs, size 97 vs 120
 00e57460  184  complete: 9 calls in original order; Ref temp lifetime + FUN_00e823a0 chains, reg-alloc differs, size 265 vs 251
-00e57560  109  complete: 4 calls in original order; Ref temp + branch shape (cl bool) differs, size 134 vs 143
+00e57560  109  complete: 4 calls in original order; Ref temp + branch shape (cl bool) differs, size 134 vs 143 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
 00e575f0  211  complete: 6 calls in original order; FUN_00e52910 twice + Ref temp, branch/layout differs, size 242 vs 244
 00e576f0  75   complete: 4 calls in original order; original takes `this` in ESI, ours uses a normal first param

@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-007ecb50 87 cScreenFilterTextureCommand::Execute - float-conv vcall convention differs flags: /O2 /MD /Gy /EHsc /TP /GS-
+007ecb50 87 cScreenFilterTextureCommand::Execute - float-conv vcall convention differs flags: /O2 /MD /Gy /EHsc /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 007ecc30 133 vector<Vector3> scale - loop/frame codegen differs; scalar multiply forced to SSE (mulss) so no x87 subnormal divergence; equiv: WEAK (191/200 valid, 100% coverage, no mismatch) flags: /O2 /MD /Gy /EHsc /TP /GS-
 007ed090 132 EA::Swarm::cSphereSurface::ParseExtraOptions - string/sprintf args differ flags: /O2 /MD /Gy /EHsc /TP /GS-
 007ed1b0 274 EA::Swarm::ScaleCurve - vector insert shift loop schedule differs; equiv WEAK (33 valid < 200, 92.4% cov, 0 mismatches): modeled as Vec3Vec::ScaleCurve (__thiscall member with ret 8; MSVC rejects __thiscall on a free function, C3865), the insert branch calls ScaleCurve(mpEnd, value), and the allocator paths pass the full __FILE__ path literal c:\BuildAgent\max-spore001-spore\CMBuild\SporeEP1_RL\Core\UTFKernel\EASTL\include\EASTL/allocator.h (0x13ebb38), not "allocator.h" flags: /O2 /MD /Gy /EHsc /TP

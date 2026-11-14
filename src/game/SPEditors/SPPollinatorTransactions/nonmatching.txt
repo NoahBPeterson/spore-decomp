@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
-00615d30 15 cAssetUploadTransaction ctor: complete; parameter load scheduling differs flags: /O2 /MD /Gy /TP
+00615d30 15 cAssetUploadTransaction ctor: complete; parameter load scheduling differs flags: /O2 /MD /Gy /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 ecx]
 00615db0 20 cModelUploadTransaction::OnFailure: complete; esi/edi register assignment swapped flags: /O2 /MD /Gy /TP
-00615e50 15 cModelUploadTransaction ctor: complete; parameter load scheduling differs flags: /O2 /MD /Gy /TP
+00615e50 15 cModelUploadTransaction ctor: complete; parameter load scheduling differs flags: /O2 /MD /Gy /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 memory]
 00615ed0 19 cModelUploadTransaction::HandleResult: complete; only register choice for the AddMapping arguments and key copy differs flags: /O2 /MD /Gy /TP
 00616b80 334 cTxUpload::HandleResult: complete; result flag kept in memory differently (cmp vs mov al/test) and mov/or of -1 differ flags: /O2 /MD /Gy /TP
 00616d60 247 CreateDownloadJob: complete; job field store order (fn/mp4) and old-job load register differ flags: /O2 /MD /Gy /TP
@@ -21,8 +21,8 @@
 00618aa0 53 EASTL sort_heap (pop_heap loop): value load/store order flags: /O2 /MD /Gy /TP
 00618b90 19 cMsgString8 scalar deleting dtor: base vptr stores in reverse order ([+0] then [+4] vs original [+4] then [+0]) flags: /O2 /MD /Gy /TP
 00618c70 25 FillFeedInfo: copy of feed record, register assignment flags: /O2 /MD /Gy /TP
-00618d40 29 cFeedTransactionBase ctor (4 args): vptr/zero stores scheduled after the arg stores flags: /O2 /MD /Gy /TP
-00618da0 78 cFeedTransactionBase ctor (string arg): same scheduling issue flags: /O2 /MD /Gy /TP
+00618d40 29 cFeedTransactionBase ctor (4 args): vptr/zero stores scheduled after the arg stores flags: /O2 /MD /Gy /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
+00618da0 78 cFeedTransactionBase ctor (string arg): same scheduling issue flags: /O2 /MD /Gy /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00618f60 358 feed-entry asset ConstructRequest: complete; register allocation (this in edi, doc in ebp originally) flags: /O2 /MD /Gy /TP
 00619530 149 eastl::partial_sort<unsigned*, TimeGreater>: complete; comparator register allocation (compare spilled to stack instead of kept in ebp) flags: /O2 /MD /Gy /TP
 006195d0 47 uninitialized_copy_backward for 0x70-byte records: complete; register allocation (dest should occupy the sole callee-saved reg, first reloaded in eax) flags: /O2 /MD /Gy /TP
@@ -33,7 +33,7 @@
 0061a970 60 cEditFeedTransaction ctor: complete; vptr/mOpType store order and the second hash-set bucket-array store order
 0061bbc0 80 eastl::quick_sort_impl<unsigned*, TimeGreater>: complete; register allocation around median/get_partition (compare kept in esi vs ecx)
 0061c350 363 complete: asset-feed HandleResult (local key lookup, pooled FeedEvent push, sorted key insert); inlined pool/lower_bound scheduling differs; difftest WEAK (no difference; 21% coverage, feed-key match rarely hit by random inputs; fix: pool AddCore was declared cdecl with the pool as an arg, it is thiscall 0x926650 on 0x15f5254) flags: /O2 /MD /Gy /TP /arch:SSE
-0061c570 62 cFeedTransactionBase ctor: complete; FixedPtrVector default-init encoding/order + zero-register choice (ebx vs edx); difftest WEAK (no difference; 196/200 valid inputs, 100% coverage; ctor body was missing from the source, added) flags: /O2 /MD /Gy /TP /arch:SSE
+0061c570 62 cFeedTransactionBase ctor: complete; FixedPtrVector default-init encoding/order + zero-register choice (ebx vs edx); difftest WEAK (no difference; 196/200 valid inputs, 100% coverage; ctor body was missing from the source, added) flags: /O2 /MD /Gy /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 ebx, ret#1 esi]
 0061c610 244 complete: vector<FeedDescription> assign from reversed range (realloc/shrink/grow paths); eastl helpers are externs; fixed: third (tag) arg so it is ret 0xc like the original flags: /O2 /MD /Gy /TP /arch:SSE
 0061c760 62 complete: vector<FeedDescription> assign from forward range; eastl helpers are externs; fixed: third (tag) arg (ret 0xc) and uninitialized_copy(mid,last,end) argument order flags: /O2 /MD /Gy /TP /arch:SSE
 0061c880 1434 complete: RequestAssetsFromFeed full port (sort, local/remote branches, variant map, notifications); register/scheduling not exact; difftest WEAK (no difference; 13% coverage) flags: /O2 /MD /Gy /TP /arch:SSE

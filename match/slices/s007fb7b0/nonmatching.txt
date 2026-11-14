@@ -1,8 +1,8 @@
 # va diff reason
 007fbbc0 8 initialiser — complete; local-name slot assignment for the two sub-object pointers and the 4-iteration slot loop differs
 007fbf40 205 cSPUIBehaviorEventBase ctor — complete (sub-object ctor, 7 vtable stores, string ctor, two 4-slot clear loops); the eastl string tag temporary and helper frames differ
-007fc200 13 cSPUIBehaviorEventBase dtor — complete; the inlined Release/RemoveAll/FreeBuffer helpers leave four extra reserved frame slots in the original
-007fc2a0 10 UI::BehaviorMessage ctor — complete; one reserved frame slot (inlined base ctor) missing
+007fc200 13 cSPUIBehaviorEventBase dtor — complete; the inlined Release/RemoveAll/FreeBuffer helpers leave four extra reserved frame slots in the original [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
+007fc2a0 10 UI::BehaviorMessage ctor — complete; one reserved frame slot (inlined base ctor) missing [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 007fc600  12  BehaviorMessage dispatch — complete; named 0x4c message buffer (the +0x30 slot is the dispatch argument), bool return local so retail's mov al is reproduced, and Ctor/Dtor modelled as thiscall members. flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- (removes the security cookie). Saved replay identical; fresh gate PASS 398/400 valid, 100%; src gate PASS 398/400 valid, 100%. chk diff 12 (ours frame 0x60 vs retail 0x58: /Od name-hash local slot order puts r/ok at different ebp offsets).
 007fc690 196 cSPUIBehaviorEventBase::SetStateString — complete; eastl string temporaries / inlined helper frames differ
 007fc790 156 cSPUIBehaviorEventBase::SetStateInt — complete; action slot vcalls and message temporaries differ

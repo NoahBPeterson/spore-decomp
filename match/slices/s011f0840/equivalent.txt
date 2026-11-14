@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s011f0840/s011f0840.cpp  ?SetTexture@ActiveState@graphics@rw@@SAXIPBURaster@23@@Z  011f1280  /vc71 /O2 /MD /Gy /EHsc /TP

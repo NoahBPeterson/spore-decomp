@@ -7,11 +7,11 @@
                receiver is resolved wrongly). flags /O2 /MD /Gy /TP /arch:SSE
 01021110   89  planet float-order comparator: approximate; the two FUN_00c70f90
                calls are written as int casts rather than x87 floats.
-01021260  size  GetActivePlanet: approximate; the AutoRefCount cleanup block the
+01021260  size  GetActivePlanet: approximate; the AutoRefCount cleanup block the [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
                original emits (dead) is omitted.
-010212a0   63  GetActivePlanetRecord: approximate; same dropped AutoRefCount
+010212a0   63  GetActivePlanetRecord: approximate; same dropped AutoRefCount [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
                cleanup block. flags /O2 /MD /Gy /TP /arch:SSE
-01021300   77  GetPlayerEmpire: approximate; the StarManager vtable call is
+01021300   77  GetPlayerEmpire: approximate; the StarManager vtable call is [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 target, ret#4 esi, ret#4 edi]
                written as a slot-0 call rather than GetEmpireByID.
 01021420   15  insertion-heap sort: approximate (difftest timed out); the
                refcount addref/release helpers match but the loop schedule does not.

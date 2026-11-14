@@ -1,5 +1,5 @@
 # va  diff-bytes  equiv-verdict  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00c0ddb0  105  PASS         Community::func58h wrapper + set bubble extents; complete
+00c0ddb0  105  PASS         Community::func58h wrapper + set bubble extents; complete [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00c0de30   11  UNSUPPORTED  grasped-state query; complete; unresolved stubs F_a02bd0/F_64
 00c0de60   57  UNSUPPORTED  SetGraspedEffectOffsets; complete; unresolved stub F_b3050
 00c0dee0  161  PASS         find entry in +0x8c array (optional erase); complete; returns bool (was char: 16-bit eax mask false FAIL)

@@ -22,7 +22,7 @@
 00b8f690 60 Simulator::cPlantCargoInfo::cPlantCargoInfo; memberwise init + three vtable stores matches, ours is 113 vs 110 bytes (float constant load scheduled differently) flags: /O2 /MD /Gy /EHsc /TP
 00b8f730 116 Simulator::cPlantCargoInfo assignment operator (operator= then the 0xa4 tail copy); 143 vs 139 bytes, block order differs flags: /O2 /MD /Gy /EHsc /TP
 00b8f7f0 77 Simulator::cSpaceInventoryItem::Duplicate: operator_new(0xa4) + cPlantCargoInfo ctor + FUN_00b8f730 + Release; AddRef/Release around the returned pointer scheduled differently flags: /O2 /MD /Gy /EHsc /TP
-00b8f9b0 62 Simulator::cSpaceInventoryItem::GetImageID; reads the +0x57c kind then copies one of three 3-DWORD globals into *out; 54 vs 141 bytes because our zero-fill/return paths fold flags: /O2 /MD /Gy /EHsc /TP
+00b8f9b0 62 Simulator::cSpaceInventoryItem::GetImageID; reads the +0x57c kind then copies one of three 3-DWORD globals into *out; 54 vs 141 bytes because our zero-fill/return paths fold flags: /O2 /MD /Gy /EHsc /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00b8fa40 115 cVarListSerializer serialize-to-stream wrapper; 154 vs 141 bytes (0xa14 stack buffer + ctor/serialize call order) flags: /O2 /MD /Gy /EHsc /TP
 00b8fad0 138 cVarListSerializer deserialize-from-stream wrapper + GetPlantProfile lookup into +0x94; 178 vs 147 bytes flags: /O2 /MD /Gy /EHsc /TP
 00b8fdd0 325 eastl rbtree insert_unique (anchor/root/increment/insert paths); the original's three-way key compare inlines to setb chains, ours reuses stack temporaries so 374 vs 345 bytes flags: /O2 /MD /Gy /EHsc /TP

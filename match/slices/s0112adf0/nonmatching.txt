@@ -3,7 +3,7 @@
 0112b050 34 havok-equivalent; now a member (this in ECX); difftest UNSUPPORTED: 0/1200 inputs valid (fake-arity discards)
 0112b110 520 havok-equivalent
 0112b390 102 havok-equivalent
-0112b460 46 havok-equivalent
+0112b460 46 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 0112b570 50 havok-equivalent
 0112b620 63 havok-equivalent
 0112b680 33 havok-equivalent

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s01035900/spacegfx.cpp  ?FUN_010361c0@@YAXXZ  010361c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

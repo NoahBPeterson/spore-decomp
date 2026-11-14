@@ -7,7 +7,7 @@
 # field layout plus the observable hashtable / AutoRefVec algorithms).  difftest verdicts from
 # tools/difftest/equiv.py (DEFAULT inputs).
 #
-008e0eb0  112  reconstruction (hash_map<Key,string>::operator[]); flags /O2 /MD /Gy /TP /GS- /arch:SSE; difftest FAIL (5/5 valid inputs mismatched; ours faults where the original returns) -- not proven equivalent
+008e0eb0  112  reconstruction (hash_map<Key,string>::operator[]); flags /O2 /MD /Gy /TP /GS- /arch:SSE; difftest FAIL (5/5 valid inputs mismatched; ours faults where the original returns) -- not proven equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 eax]
 008e0f50  127  reconstruction (hashtable<uint,string>::erase node-1c variant); flags as above; difftest UNSUPPORTED (0/400 valid inputs: node-chain reads fault on the synthesized iterator)
 008e0fe0  127  reconstruction (hashtable<Key,string>::erase node-20 variant); flags as above; difftest UNSUPPORTED (0/400 valid inputs: node-chain reads fault on the synthesized iterator)
 008e1070  349  reconstruction (AutoRefVec::insert grow path); flags as above; difftest UNSUPPORTED (0/400 valid inputs: the vector allocator call faults under the harness)

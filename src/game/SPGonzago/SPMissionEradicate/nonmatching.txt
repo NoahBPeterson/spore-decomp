@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 00c4ed50 5 Complete counter comparison predicate; residual is add-vs-sub encoding of the negative constant (semantically identical). flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c4edd0 87 Complete register-callback on slot 0x14c; residual is thiscall stub shape and stack setup. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c4ee30 87 Complete register-callback on slot 0x150; residual is thiscall stub shape and stack setup. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00c4edd0 87 Complete register-callback on slot 0x14c; residual is thiscall stub shape and stack setup. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
+00c4ee30 87 Complete register-callback on slot 0x150; residual is thiscall stub shape and stack setup. flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00c4f220 43 nonmatching: ValidateHerds; remaining diff is register allocation/scheduling noise; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (400 valid, 7.6% coverage)
 00c4f7b0 13 nonmatching: Init; mState(+0x1f4) store scheduled before the vtable stores instead of after; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict PASS (320 valid, 100.0% coverage)
 00c4f890 89 nonmatching: GetUIShortDescription; stack-frame/string-buffer layout difference only (our 140 bytes vs 207); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; verdict WEAK (111 valid, 47.7% coverage)

@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-01390c90  14  init_16c9b8c: complete; constant folded to memory store instead of register
-01390cb0  14  init_16c9b94: complete; constant folded to memory store instead of register
+01390c90  14  init_16c9b8c: complete; constant folded to memory store instead of register [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
+01390cb0  14  init_16c9b94: complete; constant folded to memory store instead of register [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 013921c0  760  init_16d6fa8: complete; 72-float basis-matrix block of +1/sqrt(2), -1/sqrt(2), +0 and -0; explicit immediate stores (547 vs 941 B) leave eax untouched; equiv PASS 400 valid inputs, 100.0% coverage
 0138d560  812  init_15afd38: complete; 9 property-descriptor records at 0x15afd38..0x15aff18 (0x3c stride, {name VA, hash, size, 3 uninitialised dwords, 0,0, 7 fn ptrs}); our .rdata template + 9-iteration copy loop replaces the original's per-record stack temporary + rep movsd (158 vs 884 B); only memory difference is the three uninitialised +0x0c..+0x14 dwords (original leaves 0xcc stack garbage, ours writes 0); equiv FAIL (5/5 inputs, padding dwords only)
 01396110  475  init_15b4568: complete; 5 records at 0x15b4568..0x15b4658 (names 0x1494424/414/404/3f8/3f0, hashes 0x374176b/796/811/81f/82d, sizes 0/4/0x10/0x14/0x20); same .rdata template + copy loop shape (90 vs 514 B); equiv FAIL (5/5 inputs, uninitialised +0x0c..+0x14 dwords only)

@@ -5,4 +5,4 @@
 00d3b0c0
 00d3b690
 00d3b7c0
-00d3b880
+00d3b880 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]

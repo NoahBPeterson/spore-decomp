@@ -2,7 +2,7 @@
 00b0f770 194 ClampSpread: min/max clause selection + NaN compare order differs
 00b0f880 140 InterpByAngle: dot product / acos / pi interpolation; x87+SSE mix differs
 00b0f950 33 SetToggle: complete; call scheduling differs
-00b0f9a0 32 KeysHeld: complete; input-manager vtable call chain scheduling differs
+00b0f9a0 32 KeysHeld: complete; input-manager vtable call chain scheduling differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'ret'] vs ['call', 'call', 'ret']]
 00b0fa70 67 Spring1f::Set: complete; NaN compare + store order differ
 00b0fae0 157 Spring3f::Set: complete; NaN compare + store order differ
 00b0fbe0 68 Spring1f::Reset: complete; scheduling differs

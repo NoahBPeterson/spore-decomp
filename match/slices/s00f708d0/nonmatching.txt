@@ -4,7 +4,7 @@
 00f71220 - complete source; CCubeQuery::QueryD, NOT byte-exact (428 vs 414 bytes; x87 sqrt/dot shape differs); equiv UNSUPPORTED (SqrtF helper unresolved)
 00f713e0 - complete source; CCubeQuery::DirToTerrainColor, NOT byte-exact (137 vs 487 bytes; face-selection and lookups not fully reconstructed); equiv FAIL (execution)
 00f715d0 - complete source; CCubeQuery::GetColorA, NOT byte-exact (45 vs 58 bytes; fld/fstp vs movss store shape); equiv FAIL (esp/ABI)
-00f71610 - complete source; CCubeQuery::GetColorB, NOT byte-exact (45 vs 55 bytes; fld/fstp vs movss store shape); equiv FAIL (esp/ABI)
+00f71610 - complete source; CCubeQuery::GetColorB, NOT byte-exact (45 vs 55 bytes; fld/fstp vs movss store shape); equiv FAIL (esp/ABI) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 esp]
 00f71660 - complete source; QueryScaleA, NOT byte-exact (72 vs 69 bytes); equiv FAIL (execution)
-00f716b0 - complete source; CCubeQuery::GetScaledColor, NOT byte-exact (155 vs 165 bytes); equiv FAIL (execution)
+00f716b0 - complete source; CCubeQuery::GetScaledColor, NOT byte-exact (155 vs 165 bytes); equiv FAIL (execution) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'ret'] vs ['call', 'call', 'call',]
 00f71760 - complete source; RefCountedDtor, NOT byte-exact (68 vs 65 bytes); equiv UNSUPPORTED (ecx-only ABI)

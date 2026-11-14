@@ -1,2 +1,2 @@
 # <va>  <diff-bytes>  <reason>
-01146a90 254 complete: CMpegLayer3Base::InitHuffTables - fill mHuffTables[0..31] (size/entries) from the static Huffman tables; difftest PASS (400 valid, 100% coverage); flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+01146a90 254 complete: CMpegLayer3Base::InitHuffTables - fill mHuffTables[0..31] (size/entries) from the static Huffman tables; difftest PASS (400 valid, 100% coverage); flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]

@@ -6,8 +6,8 @@
 00d04d10 167 destructor (map nukes, vector frees, RemoveHandler); loop setup and tail layout differ (equiv WEAK, 100% coverage)
 00d04e90 241 find-or-insert (lower_bound + insert + two temp-tree nukes); lower_bound and tree copy-constructor inlined (equiv PASS, 100% coverage)
 00d05010 182 constructor (vtable/field init + two map anchors); extra byte/word stores and store order differ (equiv PASS, 100% coverage)
-00d05140 116 vector reserve (deep copy, destroy old range, free); copy/destroy helpers inlined differently (equiv PASS)
-00d05240 249 vector insert/grow helper; element move/copy and growth path layout differ (equiv UNSUPPORTED)
+00d05140 116 vector reserve (deep copy, destroy old range, free); copy/destroy helpers inlined differently (equiv PASS) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
+00d05240 249 vector insert/grow helper; element move/copy and growth path layout differ (equiv UNSUPPORTED) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#3 ebx, ret#3 ebp]
 00d053e0 271 manager reset (map/vector/bit-vector clears, global class-tree reset); inlined resets and pointer arithmetic differ (equiv PASS, 100% coverage)
 00d055d0 199 map find-or-append; inlined lower_bound and element insert differ (equiv PASS)
 00d05730 169 map insert path; same call sequence, tail/register layout differs (equiv WEAK)

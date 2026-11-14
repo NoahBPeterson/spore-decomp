@@ -4,7 +4,7 @@
                main loop, the tail step loop, and the x/y write-back. Byte layout differs
                (cl scheduled the unrolled body differently) but difftest PASSes 348 valid
                inputs at 94% coverage. flags /O2 /MD /Gy /TP
-01183f70   36  ex_data_get_item: complete (lazy ex_data_check, CRYPTO_lock(9), lh_retrieve,
+01183f70   36  ex_data_get_item: complete (lazy ex_data_check, CRYPTO_lock(9), lh_retrieve, [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
                CRYPTO_malloc of the {index, sk_new_null, 0} item, lh_insert, lock(10),
                ERR_put_error on failure). The original receives its hash key in EBX (a
                custom register convention cl cannot express for a cdecl function), so the

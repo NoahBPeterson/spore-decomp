@@ -3,7 +3,7 @@
 01131f00 347 complete; cl register/scheduling choice in the six unlink blocks; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 90.8% coverage)
 01132090 326 complete; LTCG + inlined gain loops; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (299 valid, 37.1% coverage, no mismatch)
 01132280 45 complete; cl keeps the constant in esi vs imul-immediate (register allocation only); (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (400 valid, 50% coverage, no mismatch)
-01132320 24 complete; LTCG register scheduling; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest UNSUPPORTED (0 valid, 400 fault(read) -- needs a valid stream table)
+01132320 24 complete; LTCG register scheduling; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest UNSUPPORTED (0 valid, 400 fault(read) -- needs a valid stream table) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#3 eax]
 011323a0 167 complete; LTCG + line-accounting loop; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (181 valid, 42.4% coverage, no mismatch; input-limited, 219/400 fault(read))
 01132450 310 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (85 valid, 45.4% coverage, no mismatch; PASS at --inputs 1500)
 011325d0 97 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (392/400, 100% coverage)

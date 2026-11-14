@@ -7,7 +7,7 @@
 00bb9ff0 223   complete: ProtectFromBio property/flag decision tree; equiv WEAK, property-chain codegen differs
 00bba130 123   complete: cStarRecord ctor; equiv PASS, unscheduled stores/order differ
 00bba2a0 484   complete: OnBan species-key search loop; equiv WEAK, extensive register/scheduling differences
-00bba4b0  57   complete: SetName string assign path; equiv WEAK, scheduling differs
+00bba4b0  57   complete: SetName string assign path; equiv WEAK, scheduling differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 return target, ret#2 esp, ret#2 esi, ret#2 edi]
 00bba500  77   complete: GetCitizenSpecies lazy profile lookup; equiv PASS, scheduling differs
 00bba790 180   complete: GetPlanetRecords filtered copy; equiv WEAK, call encoding and scheduling differ
 00bba870  67   complete: HasActivePlanets iteration; equiv WEAK, call encoding differs

@@ -6,7 +6,7 @@
 00d3b0c0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 00d3b690  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 00d3b7c0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
-00d3b880  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+00d3b880  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]
 00d3bcc0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00d3bea0  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00d3bf30  - flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-

@@ -1,9 +1,9 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2)
 00755570  23  complete behaviourally (vector fill/relocate via FUN_00429e00/FUN_006df700/FUN_0059c410); inlined helper scheduling differs; equiv: PASS (395/600 valid, 100% coverage)
-007553c0  138  CS553::ctor553: complete; EH ctor + member-init AddRefs (m64 via +4, m68 via +0); EH state/register layout differs; equiv: PASS (399/400 valid, 100.0% coverage)
+007553c0  138  CS553::ctor553: complete; EH ctor + member-init AddRefs (m64 via +4, m68 via +0); EH state/register layout differs; equiv: PASS (399/400 valid, 100.0% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target, call#0 esp, call#1 esp, ret#2 eax]
 00755470  130  CS553::dtor554: complete; EH dtor + DestroyRange/refcount teardown; scheduling differs; equiv: PASS (223/400 valid, 100.0% coverage)
 00755810  336  FUN_00755810: complete; model alloc/register + RefVec resize via FUN_00755570/FUN_00754310; equiv: FAIL (5/5 mismatched, fake-arity: no call site before 00000000)
 007559a0  668  FUN_007559a0: complete; texture gather + vtable dispatch (slot 0x44 / 0x20) + FUN_006b4b60; equiv: FAIL (fault: invalid read at eip 00755d49)
-00755c80  25  CS553::f55c80: complete; ResourceMan slot-0x10 swap + Node::Type weak dependency + Continuation; equiv: FAIL (fault: invalid read at eip 00755d49)
+00755c80  25  CS553::f55c80: complete; ResourceMan slot-0x10 swap + Node::Type weak dependency + Continuation; equiv: FAIL (fault: invalid read at eip 00755d49) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#5 esp, call#6 esp, ret#8 esp]
 00755da0  475  CS755da0::dtor755da0: complete; derived dtor teardown (RefVecs/ref arrays/single refs); scheduling differs; equiv: FAIL (5/5 mismatched, fake-arity: no call site before cccccccc)
 00756030  548  FUN_00756030: complete; property-key scan (0xf9efbb+i) + secondary dispatch; equiv: FAIL (fault: invalid read at eip 00755d49)

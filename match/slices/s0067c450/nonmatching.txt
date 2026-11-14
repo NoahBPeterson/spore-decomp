@@ -1,5 +1,5 @@
 0067c450  164  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; cUIHints::UpdateHintTimers; complete 7-way state machine: state 5/7 arms restored to retail order, per-arm transitions skip the best-hint selection (for-loop continue), selection uses signed mType compare; difftest PASS (322 valid, 66.5% cov); residual 164-byte register/slot layout diff
-0067c790  n/a  HideAllHints; complete, register allocation (this in esi vs edi) differs.
+0067c790  n/a  HideAllHints; complete, register allocation (this in esi vs edi) differs. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#6 esp]
 0067c830  33  cUIHints::ActivateHint; complete, equiv WEAK (no mismatch, under-covered); fixed decl-marker comment so the checker stops testing the wrong symbol.
 0067c8c0  32  cUIHints::SetHintState; complete, equiv WEAK (no mismatch, under-covered); fixed decl-marker comment so the checker stops testing the wrong symbol.
 0067c960  n/a  cUIHints::Update; complete; cl spills elapsed instead of keeping it in x87 across the branch (79 vs 72 bytes).

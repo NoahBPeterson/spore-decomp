@@ -7,7 +7,7 @@
 00f00e50 216 placement update: object/refcount schedule differs; equiv UNSUPPORTED (0/400 valid, every input fault-reads the global mgr) [/O2 /MD /Gy /TP]
 00f00f80 126 vtable dispatch: virtual-slot call schedule differs; equiv WEAK 41.0% cov [/O2 /MD /Gy /TP]
 00f01030 43 placement adjust: indirect f_eff4c0 call shape / x87 mul schedule differs
-00f01090 69 object add: call schedule differs; equiv UNSUPPORTED (0/400 valid: budget/global reads) [/O2 /MD /Gy /TP]
+00f01090 69 object add: call schedule differs; equiv UNSUPPORTED (0/400 valid: budget/global reads) [/O2 /MD /Gy /TP] [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 esp, call#3 esp, call#4 esp, call#5 esp]
 00f01140 82 uninitialized_copy: the original returns its `out` argument in eax, but the source was declared void and the compiler happened to leave the final `dst` there. Restored the return type to `void**` and `return out;` on both exits (the replay's eax was 40040000 vs the original's 40020000). Iterator/loop register assignment still differs (89 vs 109 bytes); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; replay None; equiv PASS 318 valid/100.0% coverage and PASS 1496 valid/100.0% at --inputs 2000
 00f011b0 745 scene build: inline SSE/quaternion math and register-ABI helper FUN_00efd8e0 (pointer arrives in esi) not reproducible; equiv UNSUPPORTED (0/400 valid) [/O2 /MD /Gy /TP]
 00f015b0 1353 DragObjectToSurface: complete behaviour (all paths, calls and vtable slots); ObjPlaneVec (esi/edi implicit args) is called with explicit args, frame 0xe4 vs 0x98; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
@@ -25,7 +25,7 @@
 00f02e00 374 scene build: window path + VecBox temp schedule differs (equiv WEAK 400/400 valid, 5.4% cov)
 00f03010 16 list dtor: outer/inner callee-saved register swap (edi<->esi) only (equiv PASS 260/400 valid, 100% cov)
 00f030a0 184 scene commit: FUN_00f01140 vec copy + VecBox schedule differs (equiv WEAK 400/400 valid, 11.2% cov)
-00f031d0 123 refcounted copy + virtual slot call: call-argument setup and `&tmp` register differ (equiv WEAK)
+00f031d0 123 refcounted copy + virtual slot call: call-argument setup and `&tmp` register differ (equiv WEAK) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, call#2 esp, call#3 esp, call#4 esp]
 00f03320 162 scenario check/commit: branch layout and call schedule differ (equiv WEAK)
 00f03440 437 window/handler setup: vcall slots and argument registers differ (equiv UNSUPPORTED: original faults on generated inputs)
 00f036f0 257 predicate/commit: branch and call schedule differ (equiv WEAK)

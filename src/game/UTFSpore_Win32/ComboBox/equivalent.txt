@@ -1,3 +1,4 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/UTFSpore_Win32/ComboBox.cpp  ?GetValue@WCB@@QAEII@Z  00968c10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/ComboBox.cpp  ?RemoveValue@WinComboBox@@QAE_NI@Z  00969920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/ComboBox.cpp  ?CreateInstance@ComboBoxDrawable@@SGPAXPAX0@Z  00969060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

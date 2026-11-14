@@ -1,8 +1,8 @@
 00a46050  16   bool-normalisation / vcall register choice
 00a46080  16   bool-normalisation / vcall register choice
 00a46690  22   branch orientation and bool materialisation
-00a46790  13   symbol copy register allocation; original returns Sym2* (out) in eax, now returned too; difftest PASS under flags /O2 /MD /Gy /EHsc /TP (400 valid, 100% coverage)
-00a46950  15   duplicated default branch reordered; original returns Sym2* (out) in eax, now returned too; difftest PASS under flags /O2 /MD /Gy /EHsc /TP (394 valid, 100% coverage)
+00a46790  13   symbol copy register allocation; original returns Sym2* (out) in eax, now returned too; difftest PASS under flags /O2 /MD /Gy /EHsc /TP (400 valid, 100% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
+00a46950  15   duplicated default branch reordered; original returns Sym2* (out) in eax, now returned too; difftest PASS under flags /O2 /MD /Gy /EHsc /TP (394 valid, 100% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00a467c0  999  sprintf/gensym helper shape differs
 00a46830  999  snprintf loop shape differs
 00a465b0  10  hashtable member init store order (movss/vptr scheduling); equiv UNSUPPORTED (vtable of ours not mapped: secondary-base thunk 0xa46140 not in this slice)

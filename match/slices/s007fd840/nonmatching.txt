@@ -6,7 +6,7 @@
 007fdfe0 52 complete; SetValue + SList allocator; schedule differs
 007fe390 11 complete; state deleting-dtor; vtable-store order preserved, only the [this+0x40] load is hoisted above the stores (scheduling-only); equiv PASS
 007fe7d0 176 complete; BoolStateEvent predicate switch; receiver is the embedded object at self+0x18 (not a pointer deref) and the jump table is [0]=7fe83f [1]=7fe810 [2]=7fe88e [3]=7fe86f; logic matches, register/local schedule differs; equiv PASS
-007feb40 35 complete; SerRead secondary-base flavour; vcall base offset differs
+007feb40 35 complete; SerRead secondary-base flavour; vcall base offset differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 esi]
 007fec00 27 complete; SetWinMessageType; message-manager vcall schedule differs
 007fec90 27 complete; SetMessageWinId; message-manager vcall schedule differs
 007fdab0 4 complete; Interp ctor; Stopwatch/QPC reset; 64-bit elapsed reset stores its halves high-then-low (retail low-then-high); equiv: PASS (400 valid, 80.0% coverage)

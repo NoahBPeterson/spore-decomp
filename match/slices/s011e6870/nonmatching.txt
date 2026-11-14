@@ -11,7 +11,7 @@
 011e6c00   15  lookup request by id, returns +0x130. Eq PASS (100% coverage).
 011e6c80   12  lookup request by id, returns +4 or 0. Eq PASS (85% coverage).
 011e6cd0   87  set priority threshold + AsyncOp::SetPriority wake. Eq UNSUPPORTED (needs `this` in ecx; harness ABI).
-011e6d20   67  StreamImpl allocator shim. Eq UNSUPPORTED (harness fake-arity).
+011e6d20   67  StreamImpl allocator shim. Eq UNSUPPORTED (harness fake-arity). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 esp]
 011e6d70  510  parsechunks: complete chunk-walker (per-chunk callback, 0x18-byte node alloc, queue link). Eq UNSUPPORTED (executes callback through allocator slot).
 011e6fc0  379  readcallback: complete (byte accounting, 64-bit total vs need, parsechunks, schedule). Eq UNSUPPORTED (executes unresolved externals).
 011e70f0  669  readcallback thunk (tail-call form): retail is `mov eax,[esp+4]; mov eax,[eax+0x14]; jmp readcallback` (12 bytes). Ours never gets the two-load + tail jmp: with the body in this file cl inlines the callee into the thunk (363 bytes) even through `__declspec(noinline)` (that keyword is a C++-front-end hint in cl 13.10), and a local and `return f(...)` only change the call to `call f; ret` (16/18 bytes), which still fails the last `jmp`. The thunk and its callee 0x011e6fc0 must be in different translation units (the retail build put them in different .obj files, so the callee is only an external symbol, which also stops the inline). Eq UNSUPPORTED (tail-call convention).

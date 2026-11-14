@@ -1,8 +1,8 @@
-00613240  16  tail register allocation of spilled pNewEnd/pNewData/nNewSize; recheck FAIL was symbol misresolution: EA::Variant copy-assign resolved to 0x00478300 (symbols(mangled) collision) instead of the original call target 0x00542b80, so renamed the member to Assign (annotation // 0x00542b80 wins); equiv now no mismatch, verdict UNSUPPORTED (18/400 valid inputs, original faults on soup) flags /O2 /MD /Gy /TP /GS-
+00613240  16  tail register allocation of spilled pNewEnd/pNewData/nNewSize; recheck FAIL was symbol misresolution: EA::Variant copy-assign resolved to 0x00478300 (symbols(mangled) collision) instead of the original call target 0x00542b80, so renamed the member to Assign (annotation // 0x00542b80 wins); equiv now no mismatch, verdict UNSUPPORTED (18/400 valid inputs, original faults on soup) flags /O2 /MD /Gy /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#7 eax]
 006133b0  11  load of this->p scheduled before a/b stores (intrusive_ptr assign)
 006135d0  121  find() result merge is threaded by cl (original keeps cmp it,end after merge)
 00613660  121  same as GetFloat
-006136f0  132  push esi/edi order at entry, epilogue tail layout
+006136f0  132  push esi/edi order at entry, epilogue tail layout [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 target, ret#4 esi, ret#4 edi]
 00613860  56  key param copied to a stack temp; reg alloc
 006138b0  18  Release/lo-hi load reg order; equiv WEAK (1199 valid, 41.3% cov)
 00613a10  5  Shutdown: complete; the listener range erase now targets the original out-of-line helper 0x006130e0 (renamed eraseRange with a `// 0x006130e0` annotation so it no longer collides with the single-key erase's `erase` ident) and the uint set's clear uses memcpy like the original (the import trace compared memmove vs memcpy); only the push edi placement differs [equiv PASS 280 valid, 76.6% cov]

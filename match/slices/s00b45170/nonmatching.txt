@@ -8,4 +8,4 @@
 00b45540  1318  cObj45540::Build: complete source, float/vector kernel, x87 and helper call schedule differs; equiv PASS 100.0% cov (325 valid) [/O2 /MD /Gy /TP /arch:SSE /fp:fast]
 00b45ab0  143  cHash30::Remove: complete source, hashtable walk/compare call schedule differs; equiv PASS 95.1% cov (251 valid) [/O2 /MD /Gy /TP /arch:SSE /fp:fast]
 00b45b50  236  cHash30::Insert: complete source, hashtable insert/rehash call schedule differs; equiv WEAK 89.3% cov (193 valid) [/O2 /MD /Gy /TP /arch:SSE /fp:fast]
-00b45c10  91  cVec3c::InitCopy: complete source, allocation/copy call schedule differs; equiv WEAK 74.5% cov (152 valid) [/O2 /MD /Gy /TP /arch:SSE /fp:fast]
+00b45c10  91  cVec3c::InitCopy: complete source, allocation/copy call schedule differs; equiv WEAK 74.5% cov (152 valid) [/O2 /MD /Gy /TP /arch:SSE /fp:fast] [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 memory]

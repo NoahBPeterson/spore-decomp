@@ -1,2 +1,3 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/Havok/_at_010d0000.cpp  ?getCollisionSpheresInfo@hkConvexListConvexShape@@UBEXAAUhkCollisionSpheresInfo@@@Z  010dd380  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?destroy@hkReferencedObjectWithArray@@QAEPAU1@I@Z  010df100  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -6,7 +6,7 @@
 00f95150 112 /O2 /MD /Gy /TP /arch:SSE equiv UNSUPPORTED -- property reload (size 129 vs 132); 0/400 valid (fake-arity=223, fault(read)=173)
 00f951e0 51 /O2 /MD /Gy /TP /arch:SSE equiv PASS -- cSPTransformOps assign (size 75 vs 73); 387/400 valid, 100% coverage; residual is arg-register choices
 00f95230 39 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- reload-from-desc (size 123 vs 116); 5/5 mismatch first: esp (stack-shape differs); 100% coverage
-00f952b0 247 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- GmeRefCount-derived component ctor (size 276 vs 320); 5/5 mismatch, first: execution (orig calls into a ctor chain ours does not); incomplete
-00f95430 58 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- component dtor (size 100 vs 96); 5/5 mismatch, first: execution; vtable teardown order differs
+00f952b0 247 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- GmeRefCount-derived component ctor (size 276 vs 320); 5/5 mismatch, first: execution (orig calls into a ctor chain ours does not); incomplete [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 esp]
+00f95430 58 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- component dtor (size 100 vs 96); 5/5 mismatch, first: execution; vtable teardown order differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp]
 00f95490 113 /O2 /MD /Gy /TP /arch:SSE equiv WEAK -- attach/notify user-data (size 169 vs 163); 210/400 valid (need 200), 51.6% coverage (need 60%)
 00f95540 158 /O2 /MD /Gy /TP /arch:SSE equiv FAIL -- compact ready list (size 177 vs 175); 5/5 mismatch, first: execution

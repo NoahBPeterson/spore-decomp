@@ -11,7 +11,7 @@
 # pool grow paths differently (details per row).  The per-row verdict is the
 # equivalence-gate result measured with default inputs.
 #
-00d67140   12  SlotPool::reserve(uint): eastl-style vector reserve for the 0x18-byte slot
+00d67140   12  SlotPool::reserve(uint): eastl-style vector reserve for the 0x18-byte slot [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#3 eax]
 #                records -- early-out on (mpCapacity - mpBegin), null-safe operator_new,
 #                copy the live records with the std::copy helper, then conditionally
 #                delete the old buffer, recompute the moved-record count and store the

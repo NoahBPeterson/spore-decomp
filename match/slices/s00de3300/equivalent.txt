@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00de3300/s00de3300.cpp  ?Ctor_de3370@GameEntry@@QAEPAU1@XZ  00de3370  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

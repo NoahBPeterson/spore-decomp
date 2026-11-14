@@ -3,7 +3,7 @@
 0108d420 299 havok-equivalent
 0108d590 700 havok-equivalent
 0108d900 155 havok-equivalent
-0108d9a0 142 havok-equivalent
+0108d9a0 142 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 memory]
 0108db50 82 havok-equivalent
 0108dbb0 112 havok-equivalent
 0108dc50 227 havok-equivalent
@@ -11,6 +11,6 @@
 0108dd90 66 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov): original leaves the out pointer in EAX (void_hides_eax), so calcAabb now returns hkAabb& and returns the out reference
 0108de70 104 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (336 valid, 100% cov); chk 105 vs 104 (74 diff): hkBool by-value temp built in a local slot and pushed; retail pushes a scratch register and writes the byte in place
 0108dee0 72 havok-equivalent
-0108df30 93 havok-equivalent
+0108df30 93 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 memory]
 0108df90 75 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov); chk 71 vs 75 (53 diff): retail materialises the base flag with mov eax,1/push eax and schedules mov eax,0x80000000 after the first two stores
 0108dfe0 148 havok-equivalent

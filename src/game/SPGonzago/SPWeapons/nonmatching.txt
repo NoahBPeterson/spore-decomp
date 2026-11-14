@@ -1,14 +1,14 @@
 # va  diff-bytes  reason
 00cb37d0 14 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-00cb3940 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-00cb3b70 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-00cb3d20 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-00cb3e90 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00cb3940 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
+00cb3b70 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
+00cb3d20 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
+00cb3e90 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 00cb3f80  386  spin-blend barycentric helper with three divide-by-denominator terms (each `1.0f/den` computed inline via BARYDEN so cl keeps a real `divss` per term instead of hoisting the reciprocal). All six outputs computed and stored in the original order/semantics; the difference is scheduling: cl hoists out3's first combine `(f9*f1 - f7*f2)` ahead of out1's, and uses a 0x10 frame instead of 0x14 (one fewer temp float slot); the three `divss` and the sign-mask `xorps` on out2 are all present. Size 429 vs 459. | difftest: PASS - 400 valid inputs, 100.0% coverage (102/102), 0 mismatches flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-00cb41c0 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-00cb4350 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00cb41c0 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
+00cb4350 15 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 00cb4ae0
-00cb4bd0
+00cb4bd0 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 esp, call#4 esp, ret#5 esp]
 00cb5090
 00cb5140
 00cb52c0
@@ -21,8 +21,8 @@
 00cb5fe0 34 pointer load folds to [eax+0x118]; original materializes eax + add eax,imm
 00cb6090 238 repeated item lookups materialize eax + add eax,imm; large function
 00cb61d0 214 repeated item lookups materialize eax + add eax,imm; large function
-00cb6310 112 callee-saved push/epilogue layout and branch layout diverge
-00cb6400 145 callee-saved push/epilogue layout and branch layout diverge
+00cb6310 112 callee-saved push/epilogue layout and branch layout diverge [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target]
+00cb6400 145 callee-saved push/epilogue layout and branch layout diverge [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00cb6500 111 compiler re-pushes args for second call; original reuses stack args
 00cb6570 846 FUN_00cb6570 (886 vs 1001): full behavioural reconstruction of the combat-line ray pick.  Normalises p2, builds the ray end point E = p1 + n*fDist, probes the object vtable slot 0x50 with the six stack arguments (p1, &E, callback, &hit, &probe, a6), measures the probe distance only when the probe reports a hit, then runs the water probe (SP::PlanetModel/GetWaterHeight, the |p1|^2 >= water^2 gate, IntersectRaySphere, the fWaterT > fDist rejection and the clamped water end point) and the terrain reference sample via FUN_00b82060.  The three-way pick matches the original exactly: terrain (code 1, selected = terrain distance) when waterT > terrainDist and probe > terrainDist, probe (code 0, selected = probe distance) otherwise, the clamped water end point (code 2, selected = waterT) when waterT <= terrainDist and probe > waterT, and the near-plane clamp that writes p1 + n*fDist and returns 3.  Diff is the whole FP/pointer dual use of the frame slots plus cl's x87/SSE scheduling of the two probe-helper call sequences and the exact stack argument shapes of the two SP::PlanetModel() entry points (modelled with a variadic accessor); the emitted sequences diverge from the very first normalisation block (the original keeps p2[0] in an xmm while computing the sum of squares in x87), so no round converged.  difftest equiv: PASS (244/400 valid, 79.2% coverage, 229/289 insns). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00cb6a50 400 FUN_00cb6a50 (565 vs 585): closest-hit pick between a water plane and the terrain along a ray.  Full reconstruction: direction normalisation, the SP::PlanetModel()/cPlanetModel::GetWaterHeight water probe, the IntersectRaySphere gate, the terrain sample via FUN_00b82060, the three-way distance comparison and the 0/1/2/3 result code all present.  Diff is SSE/x87 scheduling plus cl keeping the near-plane and water-height values in different xmm/x87 slots; the two SP::PlanetModel() entry points were modelled with a variadic accessor so the extra stack args cl pushed for the following call are not reproduced.  equiv FAIL (5/7 valid inputs mismatched, eax: original 2 vs ours 3 — the whole call trace and every argument match, so this is the final `t > dist` gate resolving differently; an explicit selected-distance `v` variant compiles to the same 423-byte diff and the same FAIL). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

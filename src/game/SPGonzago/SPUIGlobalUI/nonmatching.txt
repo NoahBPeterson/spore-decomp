@@ -6,7 +6,7 @@
 00e00c40 44 menu-allowed predicate scheduling differs. equiv WEAK flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e00d20 40 menu predicate scheduling differs. equiv PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e00db0 142 stopwatch UI update: same inline fcos/SSE shape, diff in scheduling. equiv PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-00e00ec0 34 options ctor: cString ctor arg order differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read)) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00e00ec0 34 options ctor: cString ctor arg order differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read)) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 esp]
 00e00f40 12 options dtor: refcount releases/cString dtors now modelled as member/virtual calls. equiv PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e010c0 110 winproc ctor: vtable/stopwatch/message registration differs; Stopwatch calls are member calls now. equiv PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e011a0 11 winproc dtor: RemoveHandler args/order differ; global +0x15a4878 store removed, old handler passed. equiv PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
@@ -15,7 +15,7 @@
 00e01390 169 large menu predicate: same tail semantics but MSVC emits `setne al` where the original branches with `je`/`mov al,1`; upper-eax byte after the fake F_00ed9e60 call then differs. equiv FAIL (1/391 valid, eax&0xffff, fake-call upper-byte artifact) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e014a0 131 large menu predicate: original reserves a dead 4-byte slot (push ecx/pop ecx) preserving ecx; ours has no such slot and leaves ecx clobbered. equiv FAIL (5/5 valid, ecx clobber) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e01570 84 POD copy with refcounted members: field order differs; equiv PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-00e01620 10 pause-gate inc/dec path differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00e01620 10 pause-gate inc/dec path differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'ret'] vs ['call', 'call', 'ret']]
 00e01690 44 NetworkActivityProc ctor: vtable stores differ; equiv PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e016f0 28 NetworkActivityProc dtor: teardown differs; equiv PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00e01990 392 complete global-options update: reload/show state machine, layout lookup + window reparenting via AssignWindow, modal-open bookkeeping, timer restart, UI visibility toggle and the network-activity-proc tail; size 500 vs 815, difference is /O2 helper inlining and call scheduling; equiv: WEAK (207 valid inputs, 29.7% coverage). flags: /O2 /MD /Gy /EHsc /TP

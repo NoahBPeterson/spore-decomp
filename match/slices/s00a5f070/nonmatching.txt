@@ -6,7 +6,7 @@
 #   mov eax,[esp+4]; mov ecx,[eax+0x28]; mov [esp+4],ecx; jmp clock_free)
 #   with metro_new (starts 0xa5f470) into one 216-byte region.  chk.py compares
 #   that whole region against a single symbol, so no single symbol can match.
-00a5f1e0  282  EA::Audio::Eapd::delay_setup: complete (class_new6("delay") + class_addcreator("del",A_GIMME) + addbang/addmethod/addfloat/pause); the original materialises each gensym out-param in a distinct outgoing-argument temp slot (frame 8) that MSVC will not reproduce from a named t_symbol
+00a5f1e0  282  EA::Audio::Eapd::delay_setup: complete (class_new6("delay") + class_addcreator("del",A_GIMME) + addbang/addmethod/addfloat/pause); the original materialises each gensym out-param in a distinct outgoing-argument temp slot (frame 8) that MSVC will not reproduce from a named t_symbol [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, call#2 esp, call#3 esp]
 00a5f540  236  EA::Audio::Eapd::metro_setup: complete (class_new7("metro") + addbang/stop/ft1/addfloat/pause); same gensym temp-slot residue as delay_setup
 00a5f630  285  EA::Audio::Eapd::line_tick: complete (logical-time compare, outlet_float ramp over the outconnect list, clock_delay clamped to x_58); original reuses the arg scratch for linediff (frame 0x10) and keeps x in esi, so every frame displacement differs
 00a5f750  338  EA::Audio::Eapd::line_float: complete (pause check, target interpolation, clock reschedule, outlet fan-out); same frame/register residue as line_tick

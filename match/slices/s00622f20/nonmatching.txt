@@ -5,7 +5,7 @@
 00623570  96   FindSubmitChild: complete; original keeps a top-tested loop with two back-jumps (no loop inversion)
 00623610  58   FindFormChild: same loop shape issue
 00623660  116  cXHTMLWin::SubmitForm: complete; register assignment (edi/ebx) and click-struct slot
-00623730  24   cSPHoverTitle ctor: complete; store scheduling (movss hoisted)
+00623730  24   cSPHoverTitle ctor: complete; store scheduling (movss hoisted) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 return target, ret#1 esi]
 006237d0  64   change notifier (NotifyAll with modification-count check): complete; scheduling
 00623830  336  cSPHoverTitle::Layout (position tooltip near the cursor): complete; SSE operand order of (w + pad + x) and SPPoint arg copies
 00623be0  60   cXHTMLWin ctor: complete; store scheduling around the base ctor

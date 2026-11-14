@@ -4,7 +4,7 @@
 00864d60 82 FUN_00864d60 (jquant1.c create_odither_tables): complete; LTCG custom register ABI — cinfo arrives in EBX (loop-carried), not expressible in standard C, so cl's cdecl prologue/regalloc differs [equiv UNSUPPORTED: non-C register ABI] flags: /O2 /MD /Gy /EHsc /TP /GS-
 00865150 380 flags: /O2 /MD /Gy /EHsc /TP /GS-
 00865300 36 flags: /O2 /MD /Gy /EHsc /TP /GS-
-00865450 8 flags: /O2 /MD /Gy /EHsc /TP /GS-
+00865450 8 flags: /O2 /MD /Gy /EHsc /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#5 esp]
 008654f0 67 flags: /O2 /MD /Gy /EHsc /TP /GS-
 00865570 1024 flags: /O2 /MD /Gy /EHsc /TP /GS-
 00865ad0 346 flags: /O2 /MD /Gy /EHsc /TP /GS-

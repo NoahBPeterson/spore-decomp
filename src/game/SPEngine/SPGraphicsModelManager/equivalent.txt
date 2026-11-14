@@ -6,3 +6,4 @@
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?SelectMesh@cModelWorld_s0074_4ad0@@QAE_NPAUModel_s0074_4ad0@@HHD@Z  00745050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Find@SlotList@@QAEXPAX@Z  0074bda0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ??0cFeedbackMgr@@QAE@XZ  0074fd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ??0cLoadQueue_00753880@@QAE@XZ  00753880  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include

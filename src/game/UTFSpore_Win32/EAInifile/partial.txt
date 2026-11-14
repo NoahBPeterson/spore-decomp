@@ -2,8 +2,8 @@
 009334d0  384  partial; IniFile::ReadBinary - StackArray<char> conversion path approximated
 00933640  156  partial; IniFile::WriteBinary - ConvertBinaryDataToASCIIArray args approximated
 00933850  99  partial; IniFile::ReadEntry - vtable +0x24 / wcsncpy path approximated
-009338e0  90  partial; IniFile::ReadEntryFormatted - Vsscanf16 path approximated
-00933980  157  partial; IniFile::GetFileLine - vtable +0x54/+0x58 dispatch approximated
+009338e0  90  partial; IniFile::ReadEntryFormatted - Vsscanf16 path approximated [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, ret#3 esp]
+00933980  157  partial; IniFile::GetFileLine - vtable +0x54/+0x58 dispatch approximated [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 esp]
 00933b70  241  partial; IniFile::GetFileLine8To8 - read/seek vtable loop approximated
 00933c80  382  partial; IniFile::GetFileLine16To16 - endianness swap + read/seek loop approximated
 00933e50  107  partial; rbtree insert helper (operator_new 0x24 + RBTreeInsert) approximated

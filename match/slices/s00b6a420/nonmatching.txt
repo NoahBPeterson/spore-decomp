@@ -4,7 +4,7 @@
                 in order +0x10, 0, 4, 8, 0xc, float while ours copies from the local's stack slot in
                 ascending order; g_pMgr is stored through esi before InitPool instead of ecx, and the
                 5-global block is pointer-bumped from +0x1c by the original.
-00b6a610  155  complete semantics; difftest PASS (210/400 valid inputs, 80.6% coverage).
+00b6a610  155  complete semantics; difftest PASS (210/400 valid inputs, 80.6% coverage). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
                 /fp:fast hit test (ucomiss/lahf/test/jnp) matches, but fVar1/fVar2 are spilled to
                 [esp+4]/[esp+8] by the original whereas ours keeps one in a register and lays the
                 16-byte GetMainWindowArea local at [esp+8] (frame 0x18 vs 0x14).

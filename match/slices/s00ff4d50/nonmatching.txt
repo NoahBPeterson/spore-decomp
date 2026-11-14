@@ -2,5 +2,5 @@
 00ff5190
 00ff5330  ~24  complete counter switch (21 cases, 5 outputs). Bodies now match; residual is case-block layout: retail emits five shared `inc [reg]` blocks ordered param_6,param_3,param_2,param_5,param_4, ours emits one per case in case order (param_2 first) plus an unreachable sixth block after the ret; also the zeroing stores come out in a different order than the retail eax/edx/edi/ecx/ebx sequence. Case order, switch order and the zeroing order were varied without changing either.
 00ff5510
-00ff5a90
-00ff5c50
+00ff5a90 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
+00ff5c50 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target]

@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00df5670/s00df5670.cpp  ?cDownloadDialog_ctor_5c80@@YIPAUcDownloadDialog@@PAU1@@Z  00df5c80  /O2 /MD /Gy /TP /arch:SSE
+slices/s00df5670/s00df5670.cpp  ?cDownloadDialog_ctor_5940@@YIPAUcDownloadDialog@@PAU1@@Z  00df5940  /O2 /MD /Gy /TP /arch:SSE

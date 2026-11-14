@@ -4,4 +4,4 @@
 009b3970  108  partial; angle/power curve helper skeleton
 009b39e0  178  partial
 009b3c10  106  partial; wrap-around helper skeleton
-009b3cd0  357  partial
+009b3cd0  357  partial [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]

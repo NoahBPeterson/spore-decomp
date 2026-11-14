@@ -3,12 +3,12 @@
 00936110  577  MersenneTwister::Reload: complete MT reload (two loops + wrap-around); cl's unrolled counter/rotation schedule differs. The retail tail leaves mState[0] with its low byte masked by the scalar `and al,1` in eax, so the slice declares Reload returning that value (dead for the game, observable to LTCG callers) -- equiv PASS 400 valid inputs, 100% coverage; only byte shape differs (size 401 vs 217)
 009361f0  70  MersenneTwister::InitState: complete; register allocation differs (seed kept in ebx vs eax) and store/or split
 009362d0  16  MersenneTwister::GenerateDouble: complete; double clamp uses fcomp/fnstsw instead of fcomi
-00936330  18  SharedLibrary::CanUnload: complete; branch layout around the IsLoaded/ExecuteCommand short-circuit differs
+00936330  18  SharedLibrary::CanUnload: complete; branch layout around the IsLoaded/ExecuteCommand short-circuit differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 eax]
 00936380  21  SharedLibrary::Reload: complete; tail merge of the false path differs
 00936440  135  SharedLibrary::generic_command_function: complete; inlined strcmp differs from cl's byte-pair compare loop. The handler dispatch now loads fn/user into locals before the call so ecx holds the entry's user pointer at the call site like the retail code (equivalent calls, but the harness compares ecx there and input-dependent fakes used to cascade into extra iterations) -- equiv PASS 400 valid inputs, 88.2% coverage
 009364f0  62  SharedLibraryRegistry::RemoveAllLibraries: complete; eastl vector erase/locking schedule differs
 00936550  21  SharedLibraryRegistry::ExecuteCommandAll: complete; loop counter and vtable arg reload schedule differ
-009365e0  167  SharedLibrary::Load: complete; registry vtable call, startup callback and command-dispatch sequence differ
+009365e0  167  SharedLibrary::Load: complete; registry vtable call, startup callback and command-dispatch sequence differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 ebx, ret#1 edi]
 009366d0  43  SharedLibrary::Unregister: complete; pair erase tail moves differ
 00936760  156  SharedLibraryRegistry::RemoveLibrary: complete; eastl refcount swap and pair erase schedule differ
 00936820  163  SharedLibraryRegistry::GetLibraries: complete; AddRef/Release swap loop and mutex scoping differ

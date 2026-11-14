@@ -1,6 +1,6 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
 007d8060 155 SP::cApp::Init; complete (camera manager, cheat command alloc, 3 message registrations), new-expression/EH schedule differs
-007d8180 95 SP::cApp::HandleMessage (IHandlerRC subobject); complete 3 message cases, register/call shape differs
+007d8180 95 SP::cApp::HandleMessage (IHandlerRC subobject); complete 3 message cases, register/call shape differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 007d81f0 34 SP::cApp::PreInitAppModes; complete loop over modes calling vtable+0xc, count/register shape differs
 007d8230 56 SP::cApp::InitAppModes; complete loop over modes calling vtable+0x10, count/register shape differs
 007d8270 61 SP::cApp::AppMode(unsigned); complete linear search by mID, byte-diff count/register shape differs

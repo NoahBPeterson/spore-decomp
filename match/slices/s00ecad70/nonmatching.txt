@@ -7,4 +7,4 @@
 00ecb7a0 114  slider clamp: needs __asm Min/Max helper shape (not reproduced); equiv FAIL: 5/433 valid inputs mismatched; first: st0
 00ecb830 114  slider clamp: needs __asm Min/Max helper shape (not reproduced); equiv FAIL: 3/1200 valid inputs mismatched; first: st0
 00ecb8c0 14   palette-item dtor: the three releases are real __thiscall virtual calls (vtable +8/+8/+4) on the member objects, and the dtor ends with a direct qualified base-dtor call to 0x005c6c50. equiv PASS 275/400, 100% coverage; the 14 diff bytes are load scheduling (ecx=+0x2c hoisted above the vtable stores).
-00ecba50 71   palette-item ctor: original keeps 0.0f/1.0f/0.5f in xmm registers and orders the 0x5c/0x64 stores before the byte stores; our build schedules them after; equiv PASS 400/400, 100% coverage
+00ecba50 71   palette-item ctor: original keeps 0.0f/1.0f/0.5f in xmm registers and orders the 0x5c/0x64 stores before the byte stores; our build schedules them after; equiv PASS 400/400, 100% coverage [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 memory]

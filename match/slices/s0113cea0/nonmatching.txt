@@ -10,5 +10,5 @@
 0113d7b0  226  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: fake DirectSound enumerator vtable)
 0113d930  91   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (unresolved DirectSound/user32 imports)
 0113d9f0  169  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: import:ord9 discarded)
-0113dae0  69   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (387 valid, 82.8% cov); hoists P(this,4) so both x87 double adds reuse the same pointer and edx is left untouched; remaining scheduling
+0113dae0  69   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (387 valid, 82.8% cov); hoists P(this,4) so both x87 double adds reuse the same pointer and edx is left untouched; remaining scheduling [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 0113db70  76   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (400 valid, 18.9% cov < 60%): the state==2 branch is rarely reached from random state

@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00817e20 27 cSPUIPieMenu::Init: resource-key build + 5-arg vtable dispatch shape differs
-00817ee0 134 cSPUIPieMenuItem::SetTextColor: nested window/property vtable sequence differs
+00817ee0 134 cSPUIPieMenuItem::SetTextColor: nested window/property vtable sequence differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 00818000 82 cSPUIPieMenuItem::SetIcon: complete; SSE operand folding/schedule in rect centring differs (fast-math pragma) [equiv: WEAK 6.9% coverage]
 008181e0 97 item loop colour set: register allocation / pointer increment differs
 00818250 97 item loop text-colour set: register allocation / pointer increment differs

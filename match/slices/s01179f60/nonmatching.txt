@@ -1,5 +1,5 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
-01179f60  408  RSA_sign: complete translation of the RSA_sign fast-path/der-encode/private-encrypt
+01179f60  408  RSA_sign: complete translation of the RSA_sign fast-path/der-encode/private-encrypt [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
                flow (method override at meth+0x2c, NID 0x72 MD5 shortcut, FUN_011895b0 digest-info
                encode, CRYPTO_malloc, RSA_private_encrypt PKCS1, OPENSSL_cleanse+free). diff is
                register allocation / block layout of the 6-arg frame. difftest: UNSUPPORTED

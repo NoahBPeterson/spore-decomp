@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 00595320  338  same template as s0057bfb0 0x0057C770: short-circuit chain/stack slots differ; equiv UNSUPPORTED (unresolved basic_string copy ctor, operator delete[], sbWriteType)
 005954f0  338  same template as s0057bfb0 0x0057C770: short-circuit chain/stack slots differ; equiv UNSUPPORTED (unresolved basic_string copy ctor, operator delete[], sbWriteType)
-00595870  255  copy_backward/GetNewCapacity codegen differs (original spills new capacity to the stack); equiv UNSUPPORTED (0/1200 valid inputs; memmove discards)
+00595870  255  copy_backward/GetNewCapacity codegen differs (original spills new capacity to the stack); equiv UNSUPPORTED (0/1200 valid inputs; memmove discards) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 005957d0  38  64-bit element copy loads high dword first in original
 00595d40  101  value_type temporary construction order differs; equiv UNSUPPORTED (unresolved DoAllocateBuckets, operator new[]/delete[])
 00595eb0  37  value_type temporary construction order differs; equiv UNSUPPORTED (unresolved DoAllocateBuckets, operator new[]/delete[])

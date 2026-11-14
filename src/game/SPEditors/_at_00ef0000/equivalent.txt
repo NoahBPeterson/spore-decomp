@@ -3,3 +3,4 @@
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef7330@@YGHH@Z  00ef7330  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00efca60@@YA_NPAD@Z  00efca60  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00efe630@@YA_NHPAX@Z  00efe630  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef7900@@YIIPAD@Z  00ef7900  /O2 /MD /Gy /TP /Isrc/game/include

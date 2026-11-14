@@ -6,7 +6,7 @@
 009989d0 88 KeyHT::insert (multi): complete; schedule differs; flag param is now eastl::false_type (by-value empty tag); difftest FAIL is a checker artifact: the input's bucket index is out of range and the bucket slot it reads is a pool page that the first-run side wrote (buckets[idx] = new node) and that is not restored before the second side runs; swapping run order moves the 'difference' to the original (verified with work/match/scratch_s00997f50_trace.py) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00998ac0 45 SerAutoUpdate::RemoveEntry: complete; schedule not checked flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00998bd0 302 SerAutoUpdate::ProcessChanges: complete; iterator/register schedule not checked flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-00998d30 22 ReloadChangedLayouts callback: complete; tail call not checked flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00998d30 22 ReloadChangedLayouts callback: complete; tail call not checked flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in tail call vs return at ret#3]
 00998d70 48 OnResourceChanged callback: complete; schedule differs flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00998df0 76 SerAutoUpdate ctor: complete; store order differs flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00998eb0 98 SerAutoUpdate dtor: complete; schedule differs flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

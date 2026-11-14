@@ -14,8 +14,8 @@
 0049c8f0  -  approximate: recursive transform accumulation, several paths guessed
 0049cfd0  -  skeleton: flag propagation over symmetry chain; match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft.
 0049d1f0  -  skeleton: recursive symmetry update (bitset 0x1f, block transform build); match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft.
-0049d390  -  skeleton: limb/again recursion; match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft.
-0049d550  -  skeleton: by-value matrix transform combine; match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft.
+0049d390  -  skeleton: limb/again recursion; match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'ret'] vs ['ret']]
+0049d550  -  skeleton: by-value matrix transform combine; match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'ret'] vs ]
 0049d6b0  -  skeleton: large recursive limb rebuild; match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft.
 0049dd20  -  skeleton: recursive child traversal (eastl::vector temp); match/slices/s0049cfd0/s0049cfd0.cpp mentions this address and may hold an earlier draft.
 0049ecf0  -  skeleton: bone/limb rebuild helper; match/slices/s0049ecf0/s0049ecf0.cpp mentions this address and may hold an earlier draft.

@@ -1,5 +1,5 @@
 00571640  45  ctor: complete; /Od frame is 2 slots (this at -8, one hole at -4), ours spills this at -4
-00571680  37  clear(): complete erase(begin,end)+mfLen=0; /Od frame is 0x1c of inline-helper holes
+00571680  37  clear(): complete erase(begin,end)+mfLen=0; /Od frame is 0x1c of inline-helper holes [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00571720  73  assign(): complete erase+range-insert+mfLen copy; /Od slot order/frame (0x58) differs
 00571790  134 add(): complete; fabs/SSE compare and Key12 temp slot placement differ at /Od
 00571840  120 insertValue(): complete lower_bound+insert pair. The result is now returned as a prvalue through InsertResult(Key12*,bool), so the fields land directly in the caller's sret buffer (4+1 bytes) instead of an 8-byte copy that leaked 0xcc padding into the dword at +4; /Od frame (0x2c) and name-hash slot placement still differ. equiv: PASS 1157 valid inputs, 100% coverage, 0 mismatches. Row flags: /Od /Ob1 /Oi /MD /Gy /EHsc /TP /arch:SSE.

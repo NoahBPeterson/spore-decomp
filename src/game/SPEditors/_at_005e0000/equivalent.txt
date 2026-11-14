@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEditors/_at_005e0000.cpp  ??0VerbTray@@QAE@XZ  005e0cf0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

@@ -22,6 +22,6 @@
 0083b580 270 complete: ParseOptionArgs; loop register allocation differs
 0083b6d0 236 complete: ParseOption; string/hash scheduling differs
 0083b810 318 complete: cArgumentSpec::Parse; loop/register allocation and vector-size math differ flags: /O2 /MD /Gy /EHsc /TP /GS-
-0083b9d0 41 complete: Parse throwing overload; helper call conventions (thiscall on arg1) and throw frame differ flags: /O2 /MD /Gy /EHsc /TP /GS-
+0083b9d0 41 complete: Parse throwing overload; helper call conventions (thiscall on arg1) and throw frame differ flags: /O2 /MD /Gy /EHsc /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 0083baa0 251 complete: vector<cOptionsSpec>::DoInsertValue; local-frame size and EH/scheduling differ flags: /O2 /MD /Gy /EHsc /TP /GS-
 0083bcd0 2052 complete: cArgumentSpec::ConstructSpec (variadic spec parser); size 2650/2682, same call order; register/frame layout and tail-merged enum push_back / "return 2" paths differ flags: /O2 /MD /Gy /EHsc /TP /GS-

@@ -1,3 +1,4 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 slices/s00832790/s00832790.cpp  ?Dtor@cSPUISwarmEffect@@QAEPAXI@Z  00833210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00832790/s00832790.cpp  ?Dtor@UI_Image@@QAEXXZ  00833400  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00832790/s00832790.cpp  ??0Subtitles@@QAE@XZ  00832900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

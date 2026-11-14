@@ -5,8 +5,8 @@
 00ac88f0  13   complete; float writer, f stack-store scheduled before the vtable-slot load; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (100% cov)
 00ac7de0  202 approximate; COrder order attach, stack/cc mismatch (214 vs 201 bytes); difftest FAIL 5/5, esp +0xc vs +0x8
 00ac7eb0  47  approximate; COrder wrapper calling the two helpers (52 vs 57 bytes); difftest UNSUPPORTED 0/400 valid
-00ac7ef0  115 approximate; COrder predicate with sub-object vcalls (120 vs 129 bytes); difftest FAIL 5/12, fault at 3000001e
-00ac8050  76  approximate; IObj string/type probe + string free (122 vs 127 bytes); difftest FAIL 5/5, fake-arity
+00ac7ef0  115 approximate; COrder predicate with sub-object vcalls (120 vs 129 bytes); difftest FAIL 5/12, fault at 3000001e [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target, ret#1 esi, ret#1 edi]
+00ac8050  76  approximate; IObj string/type probe + string free (122 vs 127 bytes); difftest FAIL 5/5, fake-arity [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 00ac8130  461 approximate; CVis simulator distance-config builder (0x34/0x10 objects) (926 vs 917 bytes); difftest UNSUPPORTED 0/400 valid
 00ac8550  178 approximate; cVarListSerializer wrapper (179 vs 134 bytes); difftest UNSUPPORTED (original reads ecx at entry)
 00ac8a30  19  approximate; reverse range assign, out-register schedule differs (77 bytes); difftest UNSUPPORTED 0/400 valid

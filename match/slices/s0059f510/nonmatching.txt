@@ -2,6 +2,6 @@
 0059f950  70  UILayoutVector::resize: complete; temporary cSPUILayout ctor (0x810000) + insert + dtor now reproduced; only the missing mpEnd reload after the ctor call and a count register pick differ; equiv PASS (239 inputs, 100% cov)
 0059f510  339  UILayoutVector::insert: complete; grow + no-grow paths present; register allocation and 4-byte frame size differ (474 vs 489); equiv WEAK
 0059f7c0  263  cSPEditorBlockAbilities::SortAbilities: complete; byte-offset bubble sort; register allocation differs (base ptr folded vs reloaded); equiv WEAK
-0059f9e0  73  VehicleAbilities ctor: base ctor (0x59f030) + both vtable stores now reproduced; zero materialisation (edi/ecx/edx vs eax) and the int-param load/push registers differ; equiv PASS (400 inputs, 100% cov)
+0059f9e0  73  VehicleAbilities ctor: base ctor (0x59f030) + both vtable stores now reproduced; zero materialisation (edi/ecx/edx vs eax) and the int-param load/push registers differ; equiv PASS (400 inputs, 100% cov) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 0059faa0  33  AbilityVector::EraseRange: FindAbilitySlot arg order, record-`this` teardown slot and first-last tail now match; arg push order and count register differ; equiv WEAK (84 valid inputs, 80.5% cov)
 0059fc60  -  SP::BlockGetAbilities: complete; block layout (flag path vs fallback order), 4-byte frame shift, dtor inlined at 1 of 2 original sites

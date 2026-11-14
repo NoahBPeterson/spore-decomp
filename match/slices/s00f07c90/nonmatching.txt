@@ -12,7 +12,7 @@
 00f07c90  249  complete; /O2 LTCG-style register ABI in the original (ecx/esi/edi first args); difftest FAIL only on the incidental TerrainMgr `this`/EAX
 00f07e10  170  complete; original passes the game-state in ESI (custom/LTCG ABI), ours via the first stack arg; difftest UNSUPPORTED (entry ECX)
 00f07e90  158  complete; thiscall (window in ECX) in the original; difftest UNSUPPORTED (entry ECX)
-00f07f50  116  complete; original takes the counter in EAX and the panel in ECX (thiscall+register); difftest UNSUPPORTED (entry EAX)
+00f07f50  116  complete; original takes the counter in EAX and the panel in ECX (thiscall+register); difftest UNSUPPORTED (entry EAX) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 eax, ret#2 edi]
 00f07fd0  726  complete; 5 callee-saved regs vs 4, loop/branch layout and FindWindowByID site differ; difftest UNSUPPORTED (unresolved Layout/Animator/wcscspn references)
 00f08350  303  complete; x87 reciprocal-sqrt normalisation and reg alloc differ
 00f084b0  138  complete; reg alloc (ebx/esi/edi assignment of a/counter) differs; difftest PASS 100% coverage

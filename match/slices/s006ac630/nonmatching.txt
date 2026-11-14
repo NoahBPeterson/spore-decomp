@@ -1,4 +1,4 @@
-006acfe0  10  registry register wrapper: complete; first/second arg register roles swapped (a=eax/b=edx vs a=edx/b=eax)
+006acfe0  10  registry register wrapper: complete; first/second arg register roles swapped (a=eax/b=edx vs a=edx/b=eax) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 006ac630  92  OnRegister: refcount add/release arm and callback-loop scheduling differ
 006ac7d0  88  Registry::ClearAll: complete; hashtable iterator loop peeling differs
 006ac840  91  Registry::Lookup: complete; EH state/guard layout differs; difftest WEAK after fixing the spin-lock this pointer (AcquireShared/Exclusive are methods of the lock at Registry+0x48, not of Registry)

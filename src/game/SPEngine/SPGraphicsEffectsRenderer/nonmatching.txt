@@ -15,11 +15,11 @@
 006e7d40 52 Method7d40 - element store; register scheduling of the range check/base pointer differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7dd0 203 Method7dd0: element setter copying vertex/weight vectors and driving the midpoint vtable slot (0x18/0x1c). [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7ed0 72 Method7ed0 - element store; range-check register scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-006e7f30 53 Method7f30: EH destructor releasing +0x60 and the refcounted +0x00. The SEH frame is omitted (functional version); release logic matches. [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+006e7f30 53 Method7f30: EH destructor releasing +0x60 and the refcounted +0x00. The SEH frame is omitted (functional version); release logic matches. [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 006e7fa0 44 Method7fa0: the non-interface path now returns the original's magic-division low product (0x4ec4ec4f * (end-base)); index<0 still returns this, and the interface branch returns its call. [equiv: PASS 244 valid, 100% cov; src PASS; replay eax/edx match] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e8000 134 Method8000 - element setter; interface-call/branch layout differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e80d0 19 complete; only register/addressing-order differs (esi+ecx vs ecx+esi, edx/ecx arg regs) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-006e83e0 10 complete; std::min pointer-select but out2 pointer hoisted one slot early flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+006e83e0 10 complete; std::min pointer-select but out2 pointer hoisted one slot early flags: /O2 /MD /Gy /EHsc /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 return target, ret#0 eax]
 006e8480 639 complete; cl hoisted xor ebx/loop-pointer setup and reordered the three destroy/rebuild loops flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e8810 1093 complete; large debug-render path rewritten in full from the disasm; cl picks a different frame size (0x48 vs 0x78) and register allocation (ebp/edi/esi) so only scratch-pool floats differ on the float-rounding input class flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e8d70 71 complete; behaviourally exact (equiv PASS, 100% coverage) but cl saves esi and materialises the Vector3 temp with movs instead of the original's edx/eax fld+fstp (register-allocation difference) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
@@ -28,12 +28,12 @@
 006e9150 84 complete; cl hoists the -1-store branch and picks different registers (sar 2 constant-fold) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006e95a0 537 complete; bounds transform: half extents use the f6e6e90 |m| copy, the centre offset the signed matrix, guard is the FLT_MAX sentinel; SSE/x87 schedule differs; equiv: PASS 400/400, 100% coverage flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006e9b00 121 ctor-style field init (0x00..0x6c); declared to return this (S5*) so eax matches the original's `mov eax,ecx`; equiv: PASS 400/400, 100% coverage (original's C++ EH prolog not reproduced) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-006e9bf0 123 ctor-style field init (other layout, 0x00..0x68); declared to return this (S5*) so eax matches the original; equiv: PASS 400/400, 100% coverage flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+006e9bf0 123 ctor-style field init (other layout, 0x00..0x68); declared to return this (S5*) so eax matches the original; equiv: PASS 400/400, 100% coverage flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 006e9cc0 91 complete; field-init order/schedule differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006e9d50 630 complete; per-frame block copy + clip->screen direction (rect denominators per axis, x87 sqrt grouping); register/frame schedule differs; equiv: PASS 394/400 (6 fault-read), 100% coverage flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006ea030 787 complete; render pass A, all four culling loops present but SSE schedule/loop shape differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (7 unresolved externs: f67dd70/f7c4fd0/f777bf0/f6e6ee0/f6e95a0)
 006ea470 948 complete; render pass B, walks the 8-byte {tag,entity} list for bucket a, filters by mask/frustum, lazily flushes shader+texture+shader-data state and dispatches each entity through the direct or state-batched path (batch c, viewer arg); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (11 unresolved externs: f7c4fd0/f777bf0/f777c10/f6ddde0/f6ddef0 + setters)
-006ea920 72 complete; releases [this+0x6c] through vtable+8, then atomically decrements and (when the result drops below 1) restores the refcounts at [this+0x2c]+8 and [this+0x28]+8; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (319 valid inputs, 100% coverage); the retail body also carries an SEH frame/funclet that the rebuilt body omits
+006ea920 72 complete; releases [this+0x6c] through vtable+8, then atomically decrements and (when the result drops below 1) restores the refcounts at [this+0x2c]+8 and [this+0x28]+8; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (319 valid inputs, 100% coverage); the retail body also carries an SEH frame/funclet that the rebuilt body omits [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 esi]
 006ea9e0 364 complete; entity box setter (vtable pool alloc + transform), schedule and compare layout differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (367 valid inputs, 95.5% coverage)
 006ead40 196 complete; transform setter, cSPTransform call and update-index schedule differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (251 valid inputs, 100% coverage)
 006eae40 1223 SP::cEffectsRenderer::ReleaseAndDrawModelBuffer complete (same size 2193, same 27 calls in order); stack-slot layout (vector temps, loop/start/data slots) differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
@@ -43,8 +43,8 @@
 006ebea0 81 complete; sort helper, register assignment/loop shape differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 006ebf50 137 ctor pointer-init + Vector3 splat; declared to return this (S7*) so eax matches the original's `mov eax,ecx`; equiv: PASS 400/400, 100% coverage flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 006ec5b0 143 complete; quicksort median-of-three driver, scheduling/register layout differs
-006ec660 38 complete; string setup + FUN_006ebd20 ctor, stack layout differs
-006ec730 99 complete; state ctor, register/temp ordering differs (extra esi zero reg)
+006ec660 38 complete; string setup + FUN_006ebd20 ctor, stack layout differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 eax]
+006ec730 99 complete; state ctor, register/temp ordering differs (extra esi zero reg) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 006ecdd0 69 complete; vector<Pair3> push_back, local temp placement/`add ecx,8` differs
 006ece30 57 complete; vector<Pair3> push_back(3 args), temp placement differs
 006ece90 106 complete; vector<Pair3> fill_n loop, schedule differs

@@ -1,11 +1,11 @@
-00840890  46   complete: NextToken; strspn/strcspn return expression differs
+00840890  46   complete: NextToken; strspn/strcspn return expression differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 008409b0  52   complete: MakeCaseInsensitive(string8); tolower loop register allocation differs
 00840bb0  70   complete: ParseEnum; table walk + throw frame differ
 00840c20  21   complete: Sprintf; buf scan loop shape differs
 00840c70  21   complete: SprintfAppend; buf scan loop shape differs
 00840d50  67   complete: ParseRangedFloat; x87 range compare + throw frame differ
-00840dc0  44   complete: ParseRangedInt; range compare + throw frame differ
+00840dc0  44   complete: ParseRangedInt; range compare + throw frame differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, ret#3 esp]
 00840e10  169  complete: ParseRangedVector3; aligned frame + SSE range compare differ
 00840250  162  complete: cFileParser dtor; SEH frame and hash_map/spec-vector teardown schedule differ
 00840340  198  complete: ClearFilePaths; node walk/hash free and spec-vector clear codegen differs
-00840700  126  complete: cFileParser ctor; member-init store schedule and EH frame differ
+00840700  126  complete: cFileParser ctor; member-init store schedule and EH frame differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]

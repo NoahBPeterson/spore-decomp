@@ -12,4 +12,4 @@
 00b3dcd0  99  FUN_00b3dcd0 scale factor; complete behavior, /fp:fast reassociation reorders the product; equiv=PASS 497/497
 00b3dd40  71  FUN_00b3dd40 selection test; complete behavior, null-check register setup differs; equiv=PASS 365/365
 00b3dda0  236  FUN_00b3dda0 accumulate controller transforms; complete behavior, switch goto shape and xmm scheduling differ; equiv=PASS 362/362
-00b3dec0  190  FUN_00b3dec0 integrate scale; complete behavior, /fp:fast merged the equivalent mode0/mode1 bodies; equiv=WEAK (398 valid, 59.3% coverage)
+00b3dec0  190  FUN_00b3dec0 integrate scale; complete behavior, /fp:fast merged the equivalent mode0/mode1 bodies; equiv=WEAK (398 valid, 59.3% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]

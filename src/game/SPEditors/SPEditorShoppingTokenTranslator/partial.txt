@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 005ccc90  1180  cSPEditorShoppingTokenTranslator::TranslateToken: body not reconstructed (stub)
 005cd190  420   SP::GetDayOfWeekString: body not reconstructed (stub)
-005cd340  765   cSPEditorShoppingTokenTranslator::GetTimeString: body not reconstructed (stub)
+005cd340  765   cSPEditorShoppingTokenTranslator::GetTimeString: body not reconstructed (stub) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'r]

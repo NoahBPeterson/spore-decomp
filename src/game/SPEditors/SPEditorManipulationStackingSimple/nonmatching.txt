@@ -1,3 +1,3 @@
 # va  diff-bytes  reason
-005bc860 126 ctor: all zero-stores present; base-ctor call/register schedule differ (compiled shorter)
+005bc860 126 ctor: all zero-stores present; base-ctor call/register schedule differ (compiled shorter) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 005bc930 61 dtor: member destruction present; eastl::sp_vector destructor shape differs

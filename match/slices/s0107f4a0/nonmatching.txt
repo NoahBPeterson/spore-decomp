@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 0107f4a0 57 havok-equivalent
-0107f530 77 havok-equivalent
+0107f530 77 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 0107f5d0 11 havok-equivalent
 0107f820 115 havok-equivalent
 0107f910 679 havok-equivalent

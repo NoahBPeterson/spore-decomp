@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00663b80 48 category comparator - complete, only branch encoding differs
+00663b80 48 category comparator - complete, only branch encoding differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]
 00663e50 11 Shutdown; AttachProc receiver/arg register (eax vs edx) and vtable-load order differ
 00664480 60 Expand; ternary null-check/merge schedule differs
 006644e0 51 visibility toggle; float join goes x87 instead of the original's shared xmm0 store

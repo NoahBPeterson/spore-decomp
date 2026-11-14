@@ -9,7 +9,7 @@
 # of the algorithm.  Kept here (rather than nonmatching.txt) because a FAIL row
 # may not claim behavioural equivalence.
 #
-00d79080    8  RBTree16::InsertNode(RBNode16**, RBNodeBase*, const RBValue16*, char):
+00d79080    8  RBTree16::InsertNode(RBNode16**, RBNodeBase*, const RBValue16*, char): [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 eax]
 #                decide the child side from the parent key, allocate a 0x20-byte node,
 #                copy the 4-dword pair into it, link it through the tree insert helper,
 #                bump the size and hand the node back through the out pointer.

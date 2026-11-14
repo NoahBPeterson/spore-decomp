@@ -1,13 +1,13 @@
 # va  diff-bytes  reason
 00645620  -  cSPUIAssetBrowser::LoadConfigFile: PARTIAL skeleton (1480 B); Earlier, fuller draft: match/slices/s00645620/s00645620.cpp (left behind by the migration); start from it.
-00645bf0  -  FUN_00645bf0: PARTIAL skeleton (208 B)
-00645cc0  -  FUN_00645cc0: PARTIAL skeleton (207 B)
+00645bf0  -  FUN_00645bf0: PARTIAL skeleton (208 B) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'ret'] vs ['ret']]
+00645cc0  -  FUN_00645cc0: PARTIAL skeleton (207 B) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'ret'] vs ['ret']]
 00645e20  -  ShowPublishDialog: PARTIAL skeleton (174 B)
 00646030  -  FUN_00646030 (lower_bound): PARTIAL skeleton (121 B); Earlier, fuller draft: match/slices/s00645620/s00645620.cpp (left behind by the migration); start from it.
-006462b0  -  FUN_006462b0 (hashtable find + AssetDiscovery_View new): PARTIAL skeleton (178 B)
+006462b0  -  FUN_006462b0 (hashtable find + AssetDiscovery_View new): PARTIAL skeleton (178 B) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'ret'] vs ['ret']]
 00646ae0  283   outline only: ObjectTemplateDB constraint/vector manipulation (stubbed); Earlier, fuller draft: match/slices/s00646370/s00646370.cpp (left behind by the migration); start from it.
 00649f60  699   outline only: cSPUIAssetBrowser helper (stubbed); Earlier, fuller draft: match/slices/s00649f60/s00649f60.cpp (left behind by the migration); start from it.
 0064a220  472   outline only: cSPUIAssetBrowser::Shutdown (stubbed); Earlier, fuller draft: match/slices/s00649f60/s00649f60.cpp (left behind by the migration); start from it.
 0064a400  1422  outline only: cSPUIAssetBrowser::SetVisibility (stubbed); Earlier, fuller draft: match/slices/s00649f60/s00649f60.cpp (left behind by the migration); start from it.
 0064a990  393   outline only: cSPUIAssetBrowser::AdvancedLaunch (stubbed); Earlier, fuller draft: match/slices/s00649f60/s00649f60.cpp (left behind by the migration); start from it.
-0064aba0  297   outline only: cSPUIAssetBrowser::LaunchSporeGuide (stubbed); Earlier, fuller draft: match/slices/s00649f60/s00649f60.cpp (left behind by the migration); start from it.
+0064aba0  297   outline only: cSPUIAssetBrowser::LaunchSporeGuide (stubbed); Earlier, fuller draft: match/slices/s00649f60/s00649f60.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'ret'] vs ['ret']]

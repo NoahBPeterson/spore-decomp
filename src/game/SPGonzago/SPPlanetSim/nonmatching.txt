@@ -5,7 +5,7 @@
 00f28780 139 complete; serialize wrapper around FUN_00f26810 (L"cScenarioClassAct"); size 188 vs 256; equiv FAIL (eax upper bits, byte return)
 00f28880 223 complete; cString group writer (BeginGroup/SetValue/EndGroup); size 272 vs 327; equiv FAIL (eax upper bits)
 00f289d0 225 complete; cScenarioDialog wrapper around 00f28880; size 292 vs 338; equiv FAIL (eax upper bits)
-00f28b30 46 complete; constructor store scheduling / this-register choice differs
+00f28b30 46 complete; constructor store scheduling / this-register choice differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00f28b80 90 complete; BigObj::fn28b80 cString get-vs-assign; size 132 vs 137; equiv FAIL (eax upper bits)
 00f28c50 116 complete; cVarListSerializer Read + cString rebuild; size 241 vs 131; equiv UNSUPPORTED (0 valid inputs, fault(read))
 00f28ce0 186 complete; cVarListSerializer over 0x238-stride array; size 249 vs 226; equiv UNSUPPORTED (0 valid inputs)

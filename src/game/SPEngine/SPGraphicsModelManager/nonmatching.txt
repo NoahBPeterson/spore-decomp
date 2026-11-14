@@ -20,7 +20,7 @@
 007455e0 49 DestroyChunk: vtable release + chunk-pointer reload schedule differs [equiv: PASS equiv]
 00745660 63 slot_vector count: bit-extraction lowering differs [equiv: WEAK (34.8% cov)]
 007456a0 73 slot assign: value-copy/flag branch layout differs [equiv: PASS equiv]
-00745710 98 deque advance: segment index math/register schedule differs [equiv: FAIL (memory pool)]
+00745710 98 deque advance: segment index math/register schedule differs [equiv: FAIL (memory pool)] [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 007458d0 163 deque init: chunk allocation loop register schedule differs [equiv: UNSUPPORTED (unresolved EA_New)]
 007459c0 175 sort of 24-byte records: temp/compare schedule differs [equiv: UNSUPPORTED (0/220 valid inputs)]
 00745ac0 199 insertion-merge sort shape differs (register/scheduling)
@@ -62,7 +62,7 @@
 0074a070 530 model sphere/box filter complete but register/schedule differs flags: /O2 /MD /Gy /EHsc /TP
 0074a290 429 SP::cModelWorld::SetExternalEffectsTransform - complete; frame 0x4c vs 0x48 and register allocation differ (model kept in edi / rec in esi / zero in ebx in the original) [equiv: PASS 361/400 valid, 66.5% coverage] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 0074a490 357 SP::cModelWorld::SubA490 - complete; original has an SEH prolog (`push -1; fs:[0]` + frame 0x3c) that we do not emit [equiv: UNSUPPORTED original faults on all inputs] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-0074a780 82 SP::cModelWorld::GetBakedMeshes2 - complete; original threads translateTransform's returned pointer into operator= while we recompute `lea eax,[esp+4]`, and the zero/constant store order differs [equiv: UNSUPPORTED original faults/mis-arity on all inputs] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+0074a780 82 SP::cModelWorld::GetBakedMeshes2 - complete; original threads translateTransform's returned pointer into operator= while we recompute `lea eax,[esp+4]`, and the zero/constant store order differs [equiv: UNSUPPORTED original faults/mis-arity on all inputs] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 memory]
 0074a920 645 SP::cModelWorld::SubA920 - complete; register allocation differs (object kept in ebp, loop counter in edi) and the tail call layout differs [equiv: WEAK 275/400 valid, 39.9% coverage] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 0074ac80 1028 SP::cModelWorld::AddAttachments - complete, needs /GS- (old EH prolog); reg alloc differs (this in ebp, list in edi, rec spilled), frame 0x7c vs 0x78 [equiv: WEAK 15% coverage, run with default flags] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 0074b170 20 complete cLoadQueue reset/clear; EH-scoped 0x1c temp elided by /O2 (original keeps EH frame + scratch), regalloc differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

@@ -12,7 +12,7 @@
 00d3b5d0 64 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 00d3b620 86 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 00d3b920 53 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
-00d3b9b0 191 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+00d3b9b0 191 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 ecx, call#1 ecx, call#2 ecx, ret#3 eax]
 00d3bb10 229 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00d3bdb0 136 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00d3c430 7 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
@@ -32,7 +32,7 @@
 00d40e70 380 FUN_00d40e70 (Ghidra FUN; post the species-migrate trigger actions): complete - post the "CRG_SpeciesMigrate" trigger, walk the avatar's animal list clamping the migrate timer and posting a target action for every animal owned by the avatar, then post three more target actions for the avatar's herd nest, the best desired herd's nest and the UI root parent; 501 vs 376 bytes; the model is faithful in intent but this build emits the whole post-action body as straight-line code (retail shares the cActionTarget temporary across four `lea ecx,[esp+..]` constructions and threads the trigger manager in `ebx`), so the frame, the four temporary constructions and every displacement differ. flags /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-. difftest UNSUPPORTED (0/400 valid inputs: the model reads a real cActionTarget temporary it cannot construct under the emulator).
 00d425f0 1543 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast complete (sUpdateMinimap: recenter, icon rebuild every 2.5 s, queued icon per second); x87 length/regalloc and block layout differ
 00d463a0 539 0/400 valid inputs (fake stream reads fault); cCreatureModeStrategy::Read grid deserializer; 547-byte diff (632 vs 624 bytes) from 0xa14-byte cVarListSerializer/local frame layout and vtable-slot call modelling flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00d46610 58 392 valid inputs, 95.2% coverage; eastl fixed_hash_map ctor; 82-byte diff (185 vs 209 bytes) as MSVC reuses dead stack slots and keeps the inline-pool address in a different register flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00d46610 58 392 valid inputs, 95.2% coverage; eastl fixed_hash_map ctor; 82-byte diff (185 vs 209 bytes) as MSVC reuses dead stack slots and keeps the inline-pool address in a different register flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 memory]
 00d46730 404 4 unresolved references (?GetUInt/?GetBool/?GetInt/?GetFloat@PropC); ReadTrigger property table; member-modelled getters are declaration-only flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d46970 39 376 valid inputs, 100.0% coverage; cTriggersInfo assignment; 39-byte diff from one hoisted load of self->mRef28 across the scalar field copies flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d46c30 796 1 unresolved reference (?FUN_00d67dd0); EvaluateTrigger; 808-byte diff (988 vs 1000 bytes) from missing eastl::string16 scratch teardown, x87 vs SSE clamp and stack layout flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

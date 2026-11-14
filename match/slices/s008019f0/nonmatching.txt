@@ -7,7 +7,7 @@
 00802580 69   clear cursor map (complete)
 008025e0 101  base constructor field stores (complete)
 008026b0 15   LoadImageW wrapper; bool scheduling (complete)
-008027a0 37   destroy entry cursor (complete)
+008027a0 37   destroy entry cursor (complete) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 008027e0 58   pick + apply cursor (complete)
 00802890 49   find console child window (complete)
 00801d80  5  SaveCursorToFile complete (temp file, FileStream open/write/close, load cursor, remove, free); data/vtable load order differs [equiv: WEAK (12% coverage)]

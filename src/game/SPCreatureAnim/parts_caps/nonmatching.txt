@@ -7,7 +7,7 @@
 009fdb00 389 CapVec::DoInsertValues: complete grow+copy (EAAllocate + memcpy + tail); loop rotation/inline differs | difftest WEAK (25 valid, 13.2% cov) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 009fdd10 234 eastl::quick_sort<CapName*,less>: complete median-of-three partition + recursion; no similarly sized candidate symbol (inlined/merged) | difftest WEAK (36 valid, 17.2% cov) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 009fdec0 42 cRemapCommand::Execute: complete arg fetch + remap store; virtual dispatch scheduling differs | difftest WEAK (21 valid, 11.5% cov) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-009fdf80 103 cDeformBlocksEnabledCommand::Execute(bool): complete; branch layout differs | difftest WEAK (51 valid, 100% cov) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+009fdf80 103 cDeformBlocksEnabledCommand::Execute(bool): complete; branch layout differs | difftest WEAK (51 valid, 100% cov) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 009fe010 13 eastl::sort<CapName*,less> shell over quick_sort/insertion; thin wrapper scheduling differs | difftest UNSUPPORTED (0 valid inputs: write/read faults, memcpy imports) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 009fe1a0 202 PurgeCapabilityTables: complete registry teardown (VirtualFree + table clears); inline frame differs | difftest UNSUPPORTED (0 valid inputs: read/write faults, VirtualFree) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 009fe390 136 cAddCapabilityCommand::Execute: complete; virtual dispatch + scheduling differ | difftest WEAK (26 valid, 7.9% cov) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

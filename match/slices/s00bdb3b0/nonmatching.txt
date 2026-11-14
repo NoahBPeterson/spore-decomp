@@ -2,7 +2,7 @@
 00bdb470
 00bdb590
 00bdb7f0  5  model-id select then kAnim-holder call. Tried if/else-if chains with <, <=, >, >= forms, switch with 3 cases (cl emits sub/neg/sbb/and bit test), and explicit ==-split; two issues remain: (a) cl folds the switch into a single index and uses ebx instead of edi for the model (retail uses edi); (b) retail hoists `push edi`+`mov ebp,[esi+0x34]` before the second FUN_00bf9770 call while ours computes after. Retail shape is cmp/jg+je then two ordered cmps with je.
-00bdb880
+00bdb880 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 00bdb960
 00bdbaa0
 00bdbc20

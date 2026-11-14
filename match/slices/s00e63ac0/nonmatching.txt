@@ -6,6 +6,6 @@
 00e63e70  49  eastl FixedVector<SoundElem>::DoInsertValue: complete; element assign helper schedule differs
 00e642a0  65  DNA-effect HUD label: complete; literal/format-arg slot layout approx; vtable calls folded
 00e643e0  70  notify cell-owner HUD: complete; arg/eval schedule and null-check layout differ
-00e646d0  40  cCellGfx ctor-ish init: complete; nested inline-field store schedule differs
+00e646d0  40  cCellGfx ctor-ish init: complete; nested inline-field store schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'ret'] vs ['call', 'call',]
 00e647d0  33  cCellGfx zero-init + list: complete; memset fold and member order differ
 00e64980  40  spawn cell-data into gfx list: complete; RTTI/hash consts and insert schedule differ

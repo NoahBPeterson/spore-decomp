@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
 0083ca00  206 partial: hashtable<cExprFunction>::find; only the key-copy prologue reconstructed
 0083cad0  156 partial: hashtable<cICommand>::DoFreeNodes; node free chain not reconstructed
-0083cb70  179 partial: hash_map<string,AutoRefCount>::operator[]; not reconstructed; Earlier, fuller draft: match/slices/s0083c900/s0083c900.cpp (left behind by the migration); start from it.
+0083cb70  179 partial: hash_map<string,AutoRefCount>::operator[]; not reconstructed; Earlier, fuller draft: match/slices/s0083c900/s0083c900.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]
 0083cc30  295 partial: install-command-under-name; hash_map setter not reconstructed

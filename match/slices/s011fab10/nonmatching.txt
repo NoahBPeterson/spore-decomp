@@ -1,4 +1,4 @@
-011fab10 52 complete: transposed projection constant setter; original uses call [ecx+N] (toolset difference), ours mov eax,[ecx+N]; call eax
+011fab10 52 complete: transposed projection constant setter; original uses call [ecx+N] (toolset difference), ours mov eax,[ecx+N]; call eax [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp]
 011fab60 35 complete: projection constant setter; same indirect-call form + load scheduling difference. This whole group (011fab10-011faf60) is the cl 13.10 virtual-call shape (`call dword ptr [ecx+N]`), so it needs a `/vc71`-built file; /vc71 cannot be tried from here because the slice also holds the /arch:SSE intrinsic functions the 13.10 headers do not provide.
 011fab90 100 complete: light-position constant (movaps + zero-vector path); call form + first-light scan scheduling
 011fac30 118 complete: light-colour constant (w=0); call form + scan scheduling

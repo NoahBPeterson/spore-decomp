@@ -1,4 +1,4 @@
-0059d840  20  MessagePost: complete; register selection/scheduling of the 9 member stores differs
+0059d840  20  MessagePost: complete; register selection/scheduling of the 9 member stores differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 memory]
 0059d960  51  cSPEditorAnimatedEventInfo ctor: complete; two-phase vptr stores + atomic refcount init layout
 0059da80  21  RandomRange: complete; test result < dRange first so unordered/NaN returns dRange like the original x87 branch; equiv PASS (400 valid, 85.0% coverage), hybrid PASS, replay PASS
 0059dc70  1625  GetAnimation: complete; register allocation/frame (0x70 vs 0x90) differs, all 36 calls/vtable slots in order, size 1801 vs 1763; equiv WEAK (313 valid, 22.4% cov, 0 mismatches)

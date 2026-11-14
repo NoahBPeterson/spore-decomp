@@ -1,5 +1,5 @@
 # va        diff-bytes  reason
-00f28b30  50  complete; constructor store scheduling / this-register choice differs
+00f28b30  50  complete; constructor store scheduling / this-register choice differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00f28680  207  complete; serialize wrapper around FUN_00f26770 (L"cScenarioGoal"); size 188 vs 256; equiv FAIL (eax upper bits, byte return)
 00f28780  207  complete; serialize wrapper around FUN_00f26810 (L"cScenarioClassAct"); size 188 vs 256; equiv FAIL (eax upper bits, byte return)
 00f28880  278  complete; cString group writer (BeginGroup/SetValue/EndGroup); size 272 vs 327; equiv FAIL (eax upper bits)

@@ -10,7 +10,7 @@
 006acaa0 314 vector<8B>::insert n copies: complete; register allocation differs; difftest WEAK (38% coverage, grow path rarely reached by random inputs) after mapping AllocBytes/operator delete and passing eastl::copy's by-value tag argument (an uninitialised dword) like the original flags: /O2 /MD /Gy /EHsc /TP /GS-
 006acc60 423 Registry::Register: complete; EH unwind states/inlined smartptr differ flags: /O2 /MD /Gy /EHsc /TP /GS-
 006ace70 296 Registry::Unregister: complete; EH unwind states differ flags: /O2 /MD /Gy /EHsc /TP /GS-
-006acfe0 10 registry register wrapper: complete; first/second arg register roles swapped (a=eax/b=edx vs a=edx/b=eax) flags: /O2 /MD /Gy /EHsc /TP /GS-
+006acfe0 10 registry register wrapper: complete; first/second arg register roles swapped (a=eax/b=edx vs a=edx/b=eax) flags: /O2 /MD /Gy /EHsc /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 006ad070 54 RemoveRegistrationCallback: complete; reg alloc differs flags: /O2 /MD /Gy /EHsc /TP /GS-
 006ad180 50 vector<AutoRef>::push_back(null): complete; DoInsertValue call shape differs flags: /O2 /MD /Gy /EHsc /TP /GS-
 006ad270 97 RegList::ReleaseAll: complete; mutex guard/EH shape differs; difftest PASS after fixing the RegList layout (4 bytes padding before the Mutex: it is at +0x120, not +0x11c) flags: /O2 /MD /Gy /EHsc /TP /GS-

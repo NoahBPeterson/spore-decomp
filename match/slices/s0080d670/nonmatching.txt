@@ -1,6 +1,6 @@
 0080d670  53  complete; callee 0x80d620 argument/return shape and register use differ
 0080d6d0  65  complete; return high byte (ah) from scanned value needs explicit u16 mask
-0080d710  39  complete; VisitWindowTreeDepthFirst local-record layout/arg order differ
+0080d710  39  complete; VisitWindowTreeDepthFirst local-record layout/arg order differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 0080da50 258  complete; first stack arg is the rect; 0x14 frame needed for callee stack residue
 0080db70   9  complete; null-arm address folded to absolute instead of kept in eax
 0080db90   9  complete; null-arm address folded to absolute instead of kept in eax

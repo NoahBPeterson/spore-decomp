@@ -5,7 +5,7 @@
 007c5f50  305  IsVistaKB940105Required; Windows version-check path differs
 007c6110  44  cCameraManager::SetActiveController(name); vtable + SPKeyFromName shape differs
 007c6200  -  UpdateFromControllerProperties; vtable property fetch differs (now member, ECX this; equiv UNSUPPORTED: 0/1200 valid inputs)
-007c6370  17  scalar deleting destructor; operator_delete call shape differs
+007c6370  17  scalar deleting destructor; operator_delete call shape differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 esp, ret#1 eax]
 007c63a0  120  cCameraManager::Update; complete behaviour; second vtable +0x4c call, parent/self modification-count comparison against +0xac, mViewer early-out and mViewer argument to vtable +0x20; slice/hybrid equiv WEAK 248 valid, 19.6% coverage, no mismatch; replay PASS
 007c6420  66  SetActiveControllerByIndex; vtable order differs
 007c65a0  24  VariantTypeTraits::GetTPTR; lazy static init differs

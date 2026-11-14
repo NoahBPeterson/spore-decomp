@@ -1,11 +1,11 @@
 00a987c0 232 Register-allocation/idiom difference; original's OnRegister uses a custom register convention that cannot be produced from plain C++ (mine 410 vs 428).
 00a98990 98 Original has no prologue and uses incoming esi as state (custom convention); plain C++ requires push esi/edi (mine 155 vs 146).
-00a98a80 68 EA arg-enum dispatch idiom mismatch; original inlines comparisons differently (mine 100 vs 113).
+00a98a80 68 EA arg-enum dispatch idiom mismatch; original inlines comparisons differently (mine 100 vs 113). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 return target, ret#2 esp, ret#2 esi]
 00a98b00 192 Vec3 push via ScaleCurve helper; store scheduling and register allocation differ (mine 196 vs 179).
 00a98bc0 153 FloatVec push_back loop; original re-derives sub pointer per iteration, register allocation differs (mine 202 vs 202).
 00a98c90 153 FloatVec push_back loop; original re-derives sub pointer per iteration, register allocation differs (mine 202 vs 202).
 00a98d60 178 FloatVec push_back loop + penumbra option; store scheduling/register allocation differ (mine 221 vs 214).
-00a98ea0 155 Copy-construct of LightEffectSub; sub-object vector copies and register allocation differ (mine 168 vs 186).
+00a98ea0 155 Copy-construct of LightEffectSub; sub-object vector copies and register allocation differ (mine 168 vs 186). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#2 ecx]
 00a98f60 7 Register tie only (ebx vs ebp, eax/edx swap); byte-equivalent logic, no source change resolves it.
 00a990d0 47 MSVC store-scheduling of deferred [+0]/[+0xc]/[+0x14] stores differs; tried multiple source orderings, no change.
 00a99190 86 x87 7-float rolling copy of Elem1C; register allocation differs (mine 96 vs 85).

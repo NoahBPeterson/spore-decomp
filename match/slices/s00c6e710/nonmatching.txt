@@ -4,5 +4,5 @@
 00c6ee40 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK 10.9% coverage, equivalence-only
 00c6f470 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast UNSUPPORTED no valid inputs (import:memcpy)
 00c6f590 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact (schedule)
-00c6f5e0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL different generated callee (register-ABI external)
-00c6f660 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL different generated callee (register-ABI external)
+00c6f5e0 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL different generated callee (register-ABI external) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#4 esp, ret#5 esp, ret#5 ebx, ret#5 esi]
+00c6f660 size/regs /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL different generated callee (register-ABI external) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 esp, call#3 esp, ret#4 esp]

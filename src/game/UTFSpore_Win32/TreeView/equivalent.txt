@@ -1,2 +1,3 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/UTFSpore_Win32/TreeView.cpp  ?AsInterfaceA@CustomWinProc_s0095_0bb0@UTFWin@EA@@QAEPAXH@Z  00951240  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?CreateInstance@BasicFactory_TreeExpanderDrawable@UTFWinControls@EA@@QAEPAXPAX0@Z  00991380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

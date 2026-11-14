@@ -1,5 +1,5 @@
 # va  diff  reason
-00a62ec0 76 custom-register ABI: `iface` arrives in edi, sym/sym2/p4/p5 on the stack; cannot be expressed in plain C++ without naked asm [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a62ec0 76 custom-register ABI: `iface` arrives in edi, sym/sym2/p4/p5 on the stack; cannot be expressed in plain C++ without naked asm [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 esp]
 00a62f80 46 local creator: custom edi-ABI tail-call into x_input_new after InstanceCreate; only reloc/reg-allocation differs [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a62fc0 46 local creator (bang): custom edi-ABI tail-call into x_input_new; register allocation differs [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a63000 37 global creator: custom edi-ABI tail-call into x_input_new after InputCreate; arg load order differs [equiv UNSUPPORTED 0/400 valid, fault(read)] flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

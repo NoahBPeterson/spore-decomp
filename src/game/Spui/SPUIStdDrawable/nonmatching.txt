@@ -19,4 +19,4 @@
 00831410 129 PickImageInfo: switch lowering + default-info copy schedule differs; equiv WEAK: 1113 valid inputs (need 200), 94.2% coverage (need 100%% (all insns))
 00831650 37 EnsureImageInfo0: refcount swap + CopyFrom schedule differs; equiv FAIL: 5/8 valid inputs mismatched; first: memory pool @40010090
 008316b0 179 DSub::SetImage: factory/create + refcount swap schedule differs; equiv FAIL: 5/24 valid inputs mismatched; first: memory pool @4001007c
-012fe300 198 init_15476e4: complete; /Od arithmetic for size field not reproduced
+012fe300 198 init_15476e4: complete; /Od arithmetic for size field not reproduced [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]

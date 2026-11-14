@@ -1,14 +1,14 @@
 # va  diff-bytes  reason
 006abf20  114  spin-wait retire queue stubbed; Earlier, fuller draft: match/slices/s006ab3d0/s006ab3d0.cpp (left behind by the migration); start from it.
 006abfa0  148  atomic refcount retire helper stubbed; Earlier, fuller draft: match/slices/s006ab3d0/s006ab3d0.cpp (left behind by the migration); start from it.
-006ac140  112  FixedAllocatorBase::Init + vtable setup stubbed; Earlier, fuller draft: match/slices/s006ab3d0/s006ab3d0.cpp (left behind by the migration); start from it.
+006ac140  112  FixedAllocatorBase::Init + vtable setup stubbed; Earlier, fuller draft: match/slices/s006ab3d0/s006ab3d0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['ret']]
 006ac260  140  fixed-allocator node alloc + value copy stubbed; Earlier, fuller draft: match/slices/s006ab3d0/s006ab3d0.cpp (left behind by the migration); start from it.
 006ac2f0  193  fixed-allocator node init loop stubbed; Earlier, fuller draft: match/slices/s006ab3d0/s006ab3d0.cpp (left behind by the migration); start from it.
-006ac3c0  117  fixed-allocator core teardown stubbed; Earlier, fuller draft: match/slices/s006ab3d0/s006ab3d0.cpp (left behind by the migration); start from it.
+006ac3c0  117  fixed-allocator core teardown stubbed; Earlier, fuller draft: match/slices/s006ab3d0/s006ab3d0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['ret']]
 006ad5c0   -  large /Od EH routine: only a skeleton (EASTL vector build + callback filter + GC); Earlier, fuller draft: match/slices/s006ad5c0/s006ad5c0.cpp (left behind by the migration); start from it.
 006ada20   -  /Od EH cache resize/GC: skeleton only; Earlier, fuller draft: match/slices/s006ad5c0/s006ad5c0.cpp (left behind by the migration); start from it.
-006adb40   -  KRMap singleton ctor: skeleton only; Earlier, fuller draft: match/slices/s006ad5c0/s006ad5c0.cpp (left behind by the migration); start from it.
-006adc90   -  KRMap init: skeleton only; Earlier, fuller draft: match/slices/s006ad5c0/s006ad5c0.cpp (left behind by the migration); start from it.
+006adb40   -  KRMap singleton ctor: skeleton only; Earlier, fuller draft: match/slices/s006ad5c0/s006ad5c0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'ret'] vs ['ret']]
+006adc90   -  KRMap init: skeleton only; Earlier, fuller draft: match/slices/s006ad5c0/s006ad5c0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'ret'] vs ['ret']]
 006add30   -  sub-list ctor: approximate (FUN_006ad970 call only)
 006adda0   -  pool node alloc: approximate (alloc + shallow copy)
-006adee0   -  hash_map::operator[] find+insert: skeleton only; Earlier, fuller draft: match/slices/s006ad5c0/s006ad5c0.cpp (left behind by the migration); start from it.
+006adee0   -  hash_map::operator[] find+insert: skeleton only; Earlier, fuller draft: match/slices/s006ad5c0/s006ad5c0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]

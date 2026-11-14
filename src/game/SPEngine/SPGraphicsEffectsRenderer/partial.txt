@@ -1,13 +1,13 @@
 # va  diff-bytes  reason
 006ec0c0  253  skill/effect resource installer; body omitted (entry shape only); Earlier, fuller draft: match/slices/s006ec0c0/s006ec0c0.cpp (left behind by the migration); start from it.
 006ec260  286  VecC::DoInsert growth path approximated (malloc instead of EA operator new)
-006ec4a0  269  eastl::vector<bool> DoInsertValue; body omitted; Earlier, fuller draft: match/slices/s006ec0c0/s006ec0c0.cpp (left behind by the migration); start from it.
+006ec4a0  269  eastl::vector<bool> DoInsertValue; body omitted; Earlier, fuller draft: match/slices/s006ec0c0/s006ec0c0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]
 006ec840  82  vector<AutoRefCount>::erase + release tail; body stubbed; Earlier, fuller draft: match/slices/s006ec0c0/s006ec0c0.cpp (left behind by the migration); start from it.
 006ec8a0  422  vector<AutoRefCount<visual effect>>::DoInsertValue; body omitted; Earlier, fuller draft: match/slices/s006ec0c0/s006ec0c0.cpp (left behind by the migration); start from it.
 006ecb40  505  vector<AutoRefCount>::DoInsertValues; body omitted; Earlier, fuller draft: match/slices/s006ec0c0/s006ec0c0.cpp (left behind by the migration); start from it.
 006ed070  300  eastl::vector<AutoRefCount<Resource>>::DoInsertValue; body omitted; Earlier, fuller draft: match/slices/s006ec0c0/s006ec0c0.cpp (left behind by the migration); start from it.
 006efa90  -  skeleton: cEffectsRendererSystem shutdown (vector<bool> contractions + atomic refcount release) not reconstructed. Earlier, fuller draft: match/slices/s006ef990/s006ef990.cpp (left behind by the migration); start from it.
-006efb90  -  skeleton: static singleton factory (8-arg operator new + zero-init + tail-call Init) not reconstructed. Earlier, fuller draft: match/slices/s006ef990/s006ef990.cpp (left behind by the migration); start from it.
+006efb90  -  skeleton: static singleton factory (8-arg operator new + zero-init + tail-call Init) not reconstructed. Earlier, fuller draft: match/slices/s006ef990/s006ef990.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['ret']]
 006efc70  -  skeleton: renderer helper not reconstructed. Earlier, fuller draft: match/slices/s006ef990/s006ef990.cpp (left behind by the migration); start from it.
 006efe90  -  skeleton: cEffectsRenderer::RenderTextureParticles (1166 B) not reconstructed. Earlier, fuller draft: match/slices/s006ef990/s006ef990.cpp (left behind by the migration); start from it.
 006f0320  -  skeleton: effects helper (627 B) not reconstructed. Earlier, fuller draft: match/slices/s006ef990/s006ef990.cpp (left behind by the migration); start from it.

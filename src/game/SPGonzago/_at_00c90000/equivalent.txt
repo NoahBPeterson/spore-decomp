@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00c90000.cpp  ??0cTribeFoodMat@@QAE@XZ  00c9ba80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

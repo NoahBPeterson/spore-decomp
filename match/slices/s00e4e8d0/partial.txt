@@ -3,7 +3,7 @@
 00e4ec30  -    cell bbox/transform setup; partial (layout/field roles approximated)
 00e4eea0   42  level float lookup; complete attempt but difftest FAIL (x87 depth)
 00e4eef0   37  level ratio lookup; complete attempt but difftest FAIL (x87 depth)
-00e4f000   39  sMyCreateModel; partial (self pointer placeholder, custom ABI)
+00e4f000   39  sMyCreateModel; partial (self pointer placeholder, custom ABI) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 esi]
 00e4f040  180  cell model select; approximate (rbtree iterator/field roles approximated)
 00e4f100  -    cell-gfx apply (big vtable sweep); partial (vtable slot args approximated)
 00e4f330  -    cell-gfx apply variant; partial (vtable slot args approximated)

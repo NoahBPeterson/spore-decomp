@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00e926d0 100 equiv UNSUPPORTED (0/400 valid); SetModel_926d0 float-temp spill + duplicated epilogue differ; orig faults on random inputs. flags /O2 /MD /Gy /TP /arch:SSE
 00e92740 418 equiv WEAK (209 valid, 20.6% cov); MakeView_740 member/enumeration staging differs. flags /O2 /MD /Gy /TP /arch:SSE
-00e92910 140 equiv FAIL (5/41 valid, fake call #4); Init: generated callee differs (fake-call). flags /O2 /MD /Gy /TP /arch:SSE
-00e92a10 199 equiv WEAK (400 valid, 4.8% cov); UpdateFadeState loops/branches never reached under random inputs. flags /O2 /MD /Gy /TP /arch:SSE
+00e92910 140 equiv FAIL (5/41 valid, fake call #4); Init: generated callee differs (fake-call). flags /O2 /MD /Gy /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 ebp]
+00e92a10 199 equiv WEAK (400 valid, 4.8% cov); UpdateFadeState loops/branches never reached under random inputs. flags /O2 /MD /Gy /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 00e92b50 169 equiv UNSUPPORTED (ecx at entry, register-ABI); MakeView factory thunk takes this in ecx. flags /O2 /MD /Gy /TP /arch:SSE

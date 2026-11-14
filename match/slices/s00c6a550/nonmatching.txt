@@ -11,7 +11,7 @@
 00c6ac90  23  Complete ClearLocationStatus; residual is bounds-compare register allocation order.
 00c6adc0  60  Complete evolved-key vector serialiser; residual is loop/call scheduling.
 00c6ae70  81  Complete copy_if filter; residual is iterator/refcount register allocation and ordering.
-00c6af40  150  Complete herd-animal screen; residual is compare-tree folding and register allocation.
+00c6af40  150  Complete herd-animal screen; residual is compare-tree folding and register allocation. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00c6b040  603  Complete cEgg::Update hatch path; residual is large scheduling delta across vector/quat temps.
 00c6b390  114  Complete cNest::AsInterface chain; residual is folded compare tree and register allocation (edi vs esi).
 00c6b410  39  Complete cNest::LoadModel; residual is AddFootprint inline-call scheduling.

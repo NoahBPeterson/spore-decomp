@@ -1,6 +1,6 @@
 006ec5b0  143  complete; quicksort median-of-three driver, scheduling/register layout differs
-006ec660  90  complete; inline-small-string init + thiscall FUN_006ebd20; SEH prologue/stack layout differs. equiv WEAK (170 valid, 100% cov, no mismatch).
-006ec730  108  complete; state ctor, register/temp ordering differs (extra esi zero reg)
+006ec660  90  complete; inline-small-string init + thiscall FUN_006ebd20; SEH prologue/stack layout differs. equiv WEAK (170 valid, 100% cov, no mismatch). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 eax]
+006ec730  108  complete; state ctor, register/temp ordering differs (extra esi zero reg) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 006ecdd0  77  complete; vector<Pair3> push_back fast path fixed (p==0 returns); slow-path/local temp layout differs. equiv PASS (291 valid, 100% cov).
 006ece30  8   complete; vector<Pair3> 3-arg push_back fast path fixed (p==0 returns); only call-site scheduling differs. equiv PASS (295 valid, 100% cov).
 006ece90  110  complete; vector<Pair3> fill_n loop, schedule differs

@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 00722990  80  complete; original SEH/GS-free __stdcall with ret 0xc (modelled __stdcall, symbol _AllocConstruct38@12 vs migrated cdecl spelling); remaining diff is cl's register allocation framing the alloc vs the F_f337a0 range-init; equiv WEAK (97.1% coverage, 44 valid inputs)
-00722ba0  147  complete; original has an SEH/fs:[0] frame (cl emits none) plus thiscall IVec copy-ctors at 0x473b00/0x473a60; only the byte-exact SEH prologue is unreproducible; equiv FAIL (fault at modelled copy helper)
+00722ba0  147  complete; original has an SEH/fs:[0] frame (cl emits none) plus thiscall IVec copy-ctors at 0x473b00/0x473a60; only the byte-exact SEH prologue is unreproducible; equiv FAIL (fault at modelled copy helper) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 esp, ret#0 eax]
 00722ca0  77  complete; original has a thunk/unwind EH frame (push -1; push handler; fs:[0]) that cl does not emit without a try/dtor; body itself is behaviourally exact (calls Assign(n,val,val)); equiv PASS 100% coverage

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s005fd260/s005fd260.cpp  ??0AchievementNotifier@UI@@QAE@XZ  005fdeb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

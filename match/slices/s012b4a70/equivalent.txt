@@ -1,2 +1,3 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 slices/s012b4a70/s012b4a70.cpp  ?SetColor_13@@YAXXZ  012f6460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s012b4a70/s012b4a70.cpp  ?SetVec3Pair@@YAXXZ  012cc3b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

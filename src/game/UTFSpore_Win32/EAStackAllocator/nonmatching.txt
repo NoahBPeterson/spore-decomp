@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 00928ba0 73 StackAllocator::AllocateNewBlock: complete; block-link/copy schedule differs
 00928c40 101 StackAllocator::Reset(begin): complete; block-walk/bookmark loop schedule differs
-00928cd0 76 StackAllocator ctor: complete; default alloc/free setup + conditional Init differs
+00928cd0 76 StackAllocator ctor: complete; default alloc/free setup + conditional Init differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]

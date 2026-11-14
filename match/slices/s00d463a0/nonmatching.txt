@@ -1,7 +1,7 @@
 # Slice s00d463a0 nonmatching functions (compiled; behaviourally faithful but not byte-exact).
 # Format: <va> <difftest-verdict> <reason>
 00d463a0 UNSUPPORTED 0/400 valid inputs (fake stream reads fault); cCreatureModeStrategy::Read grid deserializer; 547-byte diff (632 vs 624 bytes) from 0xa14-byte cVarListSerializer/local frame layout and vtable-slot call modelling
-00d46610 PASS 392 valid inputs, 95.2% coverage; eastl fixed_hash_map ctor; 82-byte diff (185 vs 209 bytes) as MSVC reuses dead stack slots and keeps the inline-pool address in a different register
+00d46610 PASS 392 valid inputs, 95.2% coverage; eastl fixed_hash_map ctor; 82-byte diff (185 vs 209 bytes) as MSVC reuses dead stack slots and keeps the inline-pool address in a different register [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 memory]
 00d46730 UNSUPPORTED 4 unresolved references (?GetUInt/?GetBool/?GetInt/?GetFloat@PropC); ReadTrigger property table; member-modelled getters are declaration-only
 00d46970 PASS 376 valid inputs, 100.0% coverage; cTriggersInfo assignment; 39-byte diff from one hoisted load of self->mRef28 across the scalar field copies
 00d46c30 UNSUPPORTED 1 unresolved reference (?FUN_00d67dd0); EvaluateTrigger; 808-byte diff (988 vs 1000 bytes) from missing eastl::string16 scratch teardown, x87 vs SSE clamp and stack layout

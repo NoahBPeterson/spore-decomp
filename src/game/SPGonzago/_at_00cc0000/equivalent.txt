@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/_at_00cc0000.cpp  ?FUN_00ccea10@cSPUITCCCursorStrategy@@QAEXPAX_N@Z  00ccea10  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

@@ -1,5 +1,5 @@
-0045aa70 7 complete; base-table ctor is a thiscall member (ecx=&table, tag pointer on the stack); frame 0xc vs 8
-0045ab00 25 complete; base-table dtor is a 0-arg thiscall member; frame/schedule
+0045aa70 7 complete; base-table ctor is a thiscall member (ecx=&table, tag pointer on the stack); frame 0xc vs 8 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
+0045ab00 25 complete; base-table dtor is a 0-arg thiscall member; frame/schedule [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 0045ac20 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)
 0045ae10 0 complete; flags /Od /Ob1 /MD /Gy /EHsc /TP; `Play(key, mode, &XformMsg(), 0)` matches the push/call schedule exactly; only the frame differs (0x3c vs retail 0x6c: the retail /Od build reserved a second 0x30 block below the 0x38 object, probably a spilled 0x30-byte temporary); named-object, reference-launder, extra char buffer and static-slot forms all tried, none grows the frame
 0045ae40 0 complete; module is /Od, compiled /O2 here, not byte-exact (not tuned)

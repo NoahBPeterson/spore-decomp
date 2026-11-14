@@ -3,7 +3,7 @@
 00e696a0  103  cell-value getter (reads +0xa8): complete; same switch/return schedule differs
 00e69740  103  cell-value getter (reads +0xb0): complete; same switch/return schedule differs
 00e697e0  112  animation/UI update (float arg): complete; call-site register choice and float-arg schedule differ
-00e699f0  88  transform setup helper: complete; argument/register schedule and member-call ordering differ
+00e699f0  88  transform setup helper: complete; argument/register schedule and member-call ordering differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, ret#3 esp]
 00e69a90  270  effect spawn (5-arg): complete; record build/pool call-site scheduling and register allocation differ
 00e69c10  320  effect spawn variant: complete; record build/pool call-site scheduling and register allocation differ
 00e69e00  263  effect spawn variant: complete; record build/pool call-site scheduling and register allocation differ

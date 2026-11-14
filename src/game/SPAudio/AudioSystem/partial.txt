@@ -2,7 +2,7 @@
 00a233b0  -   System::MuteAll approximated (difftest FAIL: execution); submix mute/unmute flow not reproduced
 00a24210  -   RBTree::Assign stub (difftest UNSUPPORTED: symbol not found); body not implemented; Earlier, fuller draft: match/slices/s00a23360/s00a23360.cpp (left behind by the migration); start from it.
 00a243e0  130 EraseNode: approximated bucket splicing; difftest FAIL
-00a2d940  64   EH constructor frame (fs:[0] handler + object ctor) not reproduced
+00a2d940  64   EH constructor frame (fs:[0] handler + object ctor) not reproduced [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00a2d9d0  59   EH destructor frame + operator_delete path approximated
 00a2da30  -    PickRandomKey: 525-byte EASTL hashtable iteration + EH body skipped; Earlier, fuller draft: match/slices/s00a2d790/s00a2d790.cpp (left behind by the migration); start from it.
 00a2dc40  -    SetupPropertyAggregationRules: 472-byte EH + EASTL body skipped; Earlier, fuller draft: match/slices/s00a2d790/s00a2d790.cpp (left behind by the migration); start from it.

@@ -4,6 +4,6 @@
 00bd0ce0 103 complete (cPropertyInfo<float> ctor); EQUIV UNSUPPORTED 0/400 valid (fault(read)=400); PropertyManager vcall + refcount release
 00bd0dd0 368 complete (cBuilding::~cBuilding body); EQUIV UNSUPPORTED 0/400 valid (fault(read)/budget); sub-destructor order + FreeArray inlining
 00bd1080 118 complete (deque pop-front from +0x200); EQUIV FAIL 5/214 valid mismatch; node-block free + iterator reload
-00bd1100 94 complete (cBuildingCityHall::~cBuildingCityHall body); EQUIV UNSUPPORTED 0/400 valid (fault(read)/budget); vtable stores + cGameData::RemoveOwner
+00bd1100 94 complete (cBuildingCityHall::~cBuildingCityHall body); EQUIV UNSUPPORTED 0/400 valid (fault(read)/budget); vtable stores + cGameData::RemoveOwner [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 00bd15a0 240 complete (turret weapon enable + turret health); EQUIV UNSUPPORTED 3 unresolved refs; weapon-name globals + tuning vcalls
 00bd16d0 163 complete (read-star-record deque); EQUIV UNSUPPORTED 0/400 valid (fault(read)=345); stream reads + deque grow path

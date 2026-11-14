@@ -1,6 +1,6 @@
 00928ba0  80   StackAllocator::AllocateNewBlock: complete; block-link/copy schedule differs; difftest PASS (209 valid, 88.7% cov)
 00928c40  117  StackAllocator::Reset(begin): complete; bookmark walk now also requires bm < block end; difftest PASS (377 valid, 100.0% cov)
-00928cd0  88   StackAllocator ctor: complete; Init now receives the caller's original (possibly null) alloc/free; difftest PASS (396 valid, 100.0% cov)
+00928cd0  88   StackAllocator ctor: complete; Init now receives the caller's original (possibly null) alloc/free; difftest PASS (396 valid, 100.0% cov) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00928d40  98   StackAllocator::MallocAligned: complete; alignment arithmetic schedule differs; difftest PASS (256 valid, 100.0% cov)
 00928dc0  10   StackAllocator::Reset thunk: 8-byte `push 0; call 0x928c40; ret` matches; 10 diff bytes are the image's int3 padding; difftest PASS (363 valid, 100.0% cov)
 009290c0  20   "all valid" loop: complete; begin/end now loaded from [this]/[this+4] (not their addresses); difftest PASS (218 valid, 100.0% cov)

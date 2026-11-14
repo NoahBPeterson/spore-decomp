@@ -1,3 +1,4 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?UpdateLoudness@@YA_NPAVtLoudnessStim@@M@Z  00d85400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d88c10@@YAEPAX@Z  00d88c10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d86850@@YA_NPAVCitizen@@PAX111PAUStateReceive@@@Z  00d86850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

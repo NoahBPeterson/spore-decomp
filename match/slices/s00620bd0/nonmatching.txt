@@ -1,5 +1,5 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00620e50  115  DialogUiNotify: complete; FindWindowByID/flag sequence and the +8 subobject adjust differ; equiv WEAK (46.7% cov)
-006216b0  116  RegisterURL: complete; the CtorSprintf tag/local-string call sequence is emitted differently
-00621770  116  RegisterInsecureURL: complete; same CtorSprintf call-sequence issue
+006216b0  116  RegisterURL: complete; the CtorSprintf tag/local-string call sequence is emitted differently [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
+00621770  116  RegisterInsecureURL: complete; same CtorSprintf call-sequence issue [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00620bd0  491  SubmitRegistrationForm: complete (frame document -> FindFirstTaggedElement, the registration code read into a wide-string triad from the registry key selected by the modal flag, line-break replacement + make_upper, cXHTMLRegistrationHandler with the "type"/"name" attributes, the hidden UI/Registration/Window carrying the code text, SetControl, the form callback and the frame's HandleFormSubmit, then the wide-string teardown); 520 bytes vs 491 (the original keeps the code string in one scratch slot and folds the two window-interface fetches) [equiv: FAIL, first mismatch on WinXHTML::GetDocument's ecx/stack-slot pair] flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

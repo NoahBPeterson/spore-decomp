@@ -5,6 +5,6 @@
 00692880  90   complete; Init serializer-record layout near-miss
 00692ee0  14   complete; registry resolve walk near-miss
 00692f20  28   complete; registry release walk near-miss; equiv WEAK (25% cov)
-006930b0  14   complete; ParseFloat stack-slot reuse near-miss
+006930b0  14   complete; ParseFloat stack-slot reuse near-miss [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00692900  371  complete; Serialize: tmp/ok stack-slot assignment and store scheduling differ (bool flag wants the dead param slot); equiv: UNSUPPORTED (0/400 valid inputs)
 00692d20  64  complete; unguarded insertion sort: induction-variable choice (src derived from dst + constant offset) differs; equiv: WEAK (19% cov)

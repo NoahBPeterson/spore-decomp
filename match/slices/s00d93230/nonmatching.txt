@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00d932e0  186  complex multi-call state function; register allocation and scheduling diverge
+00d932e0  186  complex multi-call state function; register allocation and scheduling diverge [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, call#2 esp, call#3 esp, call#4 esp]
 00d933d0  22  SetSprinting bool arg emitted as push imm; original sets al then pushes eax
 00d934f0  89  vector loop pointer/index register allocation and shared epilogue diverge
 00d93560  93  vector loop pointer/index register allocation diverges (ebx/esi/edi/ebp assignment)

@@ -18,4 +18,4 @@
 
 008f9ed0    7  Stylesheet::Clear -- only 7 differing bytes (masked): cl allocates the Slot2() result `v` in a different stack slot (esp+0x1c vs the original esp+0x14) and the tag byte at esp+0x14 vs esp+0x1c, plus a 0x20-byte frame-size difference.  Behaviour identical.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (284 valid inputs, 100% coverage).
 
-008f9fd0   30  CreateNameListPropertyFunc -- inlined NameListProp ctor: mField4=0/vptr stores are scheduled in the middle of the four argument stores instead of first.  Scheduler coin-flip.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (243 valid inputs, 97.4% coverage).
+008f9fd0   30  CreateNameListPropertyFunc -- inlined NameListProp ctor: mField4=0/vptr stores are scheduled in the middle of the four argument stores instead of first.  Scheduler coin-flip.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (243 valid inputs, 97.4% coverage). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]

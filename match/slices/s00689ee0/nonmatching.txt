@@ -5,7 +5,7 @@
 0068a720  78   ~cCommandParameterSet: vtable stores + DoNukeSubtree correct, EH state table from real base-class dtors not reproduced
 0068a870  64   RemoveParameter: find/erase sequence correct, but cl uses an extra callee-saved reg and reads the iterator from a different slot
 0068a8d0  98   ~cStringCommandGenerator: DoDestroyValues invoked as thiscall with this=&mArrBegin; EH frame/state from base-class dtors not reproduced [equiv: PASS 236 valid inputs, 100.0% coverage]
-0068a970  65   RegisterCommandParameterInfo: find/assign/format paths present, block layout and assign argument setup differ
+0068a970  65   RegisterCommandParameterInfo: find/assign/format paths present, block layout and assign argument setup differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 ecx]
 0068aae0  178  RegisterCommandGenerator: insert/Walk helpers called thiscall (ecx=set / this); info loop walks the command-info map (cm*) not the generator set [equiv: PASS 302 valid inputs, 78.1% coverage]
 0068abb0  152  UnregisterCommandGenerator: set-find/erase + release correct, body unchanged by this pass; EH states/temporaries differ [equiv: PASS 388 valid inputs, 72.6% coverage]
 0068ac60  209  ExecuteCommandFormatted: format string is the dereferenced fmt argument (*(const wch**)fmt); EH frame and va_list forwarding differ [equiv: WEAK 306 valid inputs, 50.8% coverage]

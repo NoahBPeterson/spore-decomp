@@ -1,6 +1,6 @@
 0116b1c0 7168 /vc71 /O2 /MD /Gy /TP /arch:SSE UNSUPPORTED - ecx passed at entry (custom /LTCG register ABI) and Dct32 inlined by the original at link time
 0116b4b0 422 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - bus ReadA destination is a caller-frame stack slot past the 3 declared args; modelled as a local scratch buffer, so the harness sees a different pool word
-0116b6c0 87 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - only harness divergence is the stubbed 0x1175ca0 ctor writing past the toy allocation from FUN_011402c0
+0116b6c0 87 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - only harness divergence is the stubbed 0x1175ca0 ctor writing past the toy allocation from FUN_011402c0 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 0116b740 78 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - same past-the-args scratch slot as 0116b4b0; modelled as a local
 0116b7c0 119 /vc71 /O2 /MD /Gy /TP /arch:SSE UNSUPPORTED - 0/400 inputs valid (fault(write) in the stubbed ctor); no observable comparison possible
 0116b880 122 /vc71 /O2 /MD /Gy /TP /arch:SSE FAIL - past-the-args scratch slot plus the zero/one pair written into the Put argument area

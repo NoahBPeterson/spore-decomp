@@ -1,4 +1,4 @@
-00c72c60 71 cPlanet::AddDebugInfo: structure correct, strlen/sprintf arg schedule and 2-byte size differ
+00c72c60 71 cPlanet::AddDebugInfo: structure correct, strlen/sprintf arg schedule and 2-byte size differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
 00c72d70 84 map find + node compare: whole body close, key compare polarity and register roles differ
 00c72e10 791 rebuild vehicle/city data: size 534 vs 910, eastl inlines collapsed differently
 00c731a0 220 build 0x2c vector entry: size 211 vs 174, aggregate copy schedule differs

@@ -1,9 +1,9 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
 00efc660  73   permission check: FUN_00b18e00/FUN_00f40ea0 schedule + __thiscall shape differ; equiv WEAK (55.8% cov)
 00efc8c0  23   set global pointer: FUN_00f46410 argument registers differ; equiv WEAK (53.8% cov)
-00efcae0  44   close window: further vcalls (FUN_00d20430 path) not scheduled; equiv WEAK (50% cov)
+00efcae0  44   close window: further vcalls (FUN_00d20430 path) not scheduled; equiv WEAK (50% cov) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 esp, call#4 esp, ret#5 esp]
 00efcd90  35   visibility check: vtable chain constants/offset differ; equiv WEAK (50% cov)
-00efcde0  66   disable toggle: this/param register shape differ; equiv UNSUPPORTED (0/1200 valid inputs)
+00efcde0  66   disable toggle: this/param register shape differ; equiv UNSUPPORTED (0/1200 valid inputs) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, ret#3 esp]
 00efce30  -    set toggle params: signature/register shape not reproduced (size mismatch); equiv UNSUPPORTED (0/1200 valid inputs)
 00efc270  443  message dispatch: 9-case tag switch is complete; switch tree/register allocation and thiscall callee shapes differ (576 vs 583 bytes); equiv WEAK (397 valid, 27.4% cov)
 00efc4c0  59   ratio helper: cl emits x87 sub/div where retail uses SSE (subss/divss) for the scalar float math; equiv PASS at default flags (400 valid, 100% cov)

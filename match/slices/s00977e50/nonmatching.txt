@@ -1,9 +1,9 @@
 00977f90 551 SetCellFormat: complete (default/row/column/cell formats, new CellData+CellFormat, recalc + redraw); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; regalloc and inline-ctor schedule differ; difftest FAIL is a checker artifact: only operator new's name argument differs, the address of the identical "UTFWin/Grid" literal (orig 0x1442bc4, ours in our .rdata); the call-trace compare does not apply the pooled-constant rule to call args; with the literal pointed at 0x1442bc4 in a scratch copy, 293 valid inputs show no mismatch (WEAK, 44% coverage)
 00978250 326 SetCellTextStyle: complete (existing/new cell format, changed flag, dirty+notify); flags +/arch:SSE; regalloc/arg reloads differ
-009783f0 273 SetCellColors: complete; original keeps col/row in the stack arg slots and reloads, mine enregisters them
-00978560 265 SetCellWrapping: complete; same regalloc pattern as SetCellColors
-009786c0 203 SetCellAlignment: complete; same regalloc pattern as SetCellColors
+009783f0 273 SetCellColors: complete; original keeps col/row in the stack arg slots and reloads, mine enregisters them [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
+00978560 265 SetCellWrapping: complete; same regalloc pattern as SetCellColors [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
+009786c0 203 SetCellAlignment: complete; same regalloc pattern as SetCellColors [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 target]
 00978830 216 SetCellBorder: complete; same regalloc pattern as SetCellColors
 009789a0 387 SetSizeCachedActualForRow: complete (reset all via FindByValue iterator, or per-row set/insert); frame is 4 bytes larger and the iterator loop differs
 00978b50 370 SetSizeCachedActualForColumn: complete (reset-all via RowBegin/RowEnd iterators, or per-column set/insert); frame 4 bytes larger, iterator regs differ
-00978d30 63 SetCellExtraData: complete; original skips Set() when operator new returns null (merged check), mine does not
+00978d30 63 SetCellExtraData: complete; original skips Set() when operator new returns null (merged check), mine does not [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 ebp]

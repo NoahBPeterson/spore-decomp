@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
 00922570 50 EASemaphoreData::UpdateCancelCount: complete; CAS loop schedule differs
-00922620 65 Semaphore::Init: complete; CreateSemaphoreA arg/register schedule differs
+00922620 65 Semaphore::Init: complete; CreateSemaphoreA arg/register schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target, ret#1 eax]
 00922690 114 Semaphore::Wait: complete; intra-process fast path schedule differs
 00922740 70 Semaphore::Post: complete; cancel-count exchange schedule differs

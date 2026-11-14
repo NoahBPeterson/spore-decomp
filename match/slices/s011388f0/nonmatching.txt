@@ -4,7 +4,7 @@
 01138d40  46 complete Snd9Service::UpdateSnd9SampleRate; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (2 unresolved cfg globals)
 01138d90  256 complete Snd9Service timer client mix loop; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (127 valid, 100% coverage, no mismatch)
 01138ec0  123 complete Snd9Service::CreateInstance; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (329 valid, 100% coverage)
-01139000  59 complete SinePlayer command ring; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100%)
+01139000  59 complete SinePlayer command ring; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100%) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 edi]
 011390b0  200 complete SinePlayer process; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (342 valid, 100% coverage)
 011391a0  145 complete SinePlayer record handler; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (4/313 inputs; the out-of-range mix-channel read in FUN_01137450 consumes the caller's return address, which embeds our OBJ_BASE code address instead of 0x011391b1, so the float-sum result differs; same class as 01139230)
 01139260  58 complete init; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (130 valid, 100%)

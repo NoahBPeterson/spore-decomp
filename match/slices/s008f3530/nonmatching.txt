@@ -2,11 +2,11 @@
 008f3a40  6   CharStream::MatchWhile(digit); reg alloc differs (equiv PASS)
 008f38b0  9   CharStream ctor; address-load scheduling differs (equiv PASS)
 008f4290  41  CSSParser::skip TokenWS; reg-alloc differs (equiv PASS)
-008f3970  56  CSSParser ctor (begin/count); codegen differs (equiv PASS)
+008f3970  56  CSSParser ctor (begin/count); codegen differs (equiv PASS) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 008f4360  46  CSSParser triple-swap; codegen differs (equiv PASS)
 008f3900  66  CSSParser ctor (begin/end); codegen differs (equiv PASS)
-008f42d0  44  CSSParser skip-to ';'; codegen differs (equiv PASS)
-008f4320  26  CSSParser skip-to '}'; codegen differs (equiv PASS)
+008f42d0  44  CSSParser skip-to ';'; codegen differs (equiv PASS) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
+008f4320  26  CSSParser skip-to '}'; codegen differs (equiv PASS) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 ecx]
 008f3d20  86  CharStream::MatchString; codegen differs (equiv UNSUPPORTED: push_back extern)
 008f43a0  98  CSSParser ident compare; loop-cmp shape differs (equiv WEAK, 53% cov)
 008f3830  101 CharStream::skip whitespace; codegen differs (equiv UNSUPPORTED: iswctype)

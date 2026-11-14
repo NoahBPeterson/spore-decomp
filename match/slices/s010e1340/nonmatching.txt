@@ -1,9 +1,9 @@
 010e1380 0 havok-equivalent
 010e13e0 0 havok-equivalent
-010e1720 0 havok-equivalent
+010e1720 0 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
 010e17e0 0 havok-equivalent
 010e1ae0 0 havok-equivalent
-010e1c70 0 havok-equivalent
+010e1c70 0 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
 010e1db0 0 havok-equivalent
 010e1e00 0 havok-equivalent
 010e1f90 0 havok-equivalent

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPGonzago/SPCreatureMissionManager.cpp  ?Init@cSPCreatureMissionManager@@QAEPAV1@XZ  00d37cf0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

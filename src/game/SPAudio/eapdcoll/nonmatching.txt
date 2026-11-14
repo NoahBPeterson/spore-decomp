@@ -17,7 +17,7 @@
 00a58ec0 60 flags: /O2 /MD /Gy /EHsc /TP
 00a58fa0 182 flags: /O2 /MD /Gy /EHsc /TP
 00a59150 20 flags: /O2 /MD /Gy /EHsc /TP
-00a591c0 20 flags: /O2 /MD /Gy /EHsc /TP
+00a591c0 20 flags: /O2 /MD /Gy /EHsc /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00a592f0 130 flags: /O2 /MD /Gy /EHsc /TP
 00a593e0 315 flags: /O2 /MD /Gy /EHsc /TP
 00a59630 30 flags: /O2 /MD /Gy /EHsc /TP

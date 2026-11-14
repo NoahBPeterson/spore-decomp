@@ -4,11 +4,11 @@
 # FAIL = an observed mismatch (none in this slice).
 # Bounded gate: --budget 200000 --time-limit 60 --min-valid 1 --min-cov 0
 00cee1c0  cCommandMakeTradeRoutes::Execute -- enumerate class-0x18c43e8 sim objects, dispatch vtbl[0x58] on their +0x120 subobject, mark via FUN_00be1340; loop/register layout differs
-00cee2c0  bundle owner/scale setter -- addref/release owner @+0x18, store int/float @+0x1c/@+0x20, spawn via FUN_00b3d2b0; member-store ordering differs
+00cee2c0  bundle owner/scale setter -- addref/release owner @+0x18, store int/float @+0x1c/@+0x20, spawn via FUN_00b3d2b0; member-store ordering differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 esp]
 00cee330  first-element getter -- return *begin or 0. Retail derefs through a second register (`mov ecx,eax; mov eax,[ecx]`, 16 B, null block placed after `ret`); cl always folds to `mov eax,[eax]` (14 B) and keeps the null block inline. Tried: `volatile` read, element-struct member, inline member accessor, out-of-line accessor (own COMDAT, wrong symbol), template iterator/range helpers (extra test or full inlining), explicit null test on `p`, `if (empty) return 0; return *begin;` vs `!=` + trailing return.
 00cee340  random-element getter -- signed range -> RandomUint32Uniform, index begin[i]. Retail does not CSE: `mov eax,[esi+4]; cmp eax,[esi+8]; je tail; mov eax,[esi+8]; sub eax,[esi+4]` with the null block at the end; cl keeps begin in ecx and reuses eax for end (41 vs 43 B). Tried: dropping the `it` local, `empty()` accessor spelling up front, `!=`/`==` with the tail block, u8 subtraction. Same root as 00cee330: the two `begin` loads are not merged in the original.
 00cee380  sum of +0x134 floats over vector -- SSE accumulation + x87 double return; duplicate begin/end checks collapsed
-00cee3d0  serialize signature 0x135b1e8 + cVarListSerializer frame; scheduler reorders the signature store vs the 0x18 vtable call
+00cee3d0  serialize signature 0x135b1e8 + cVarListSerializer frame; scheduler reorders the signature store vs the 0x18 vtable call [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 00cee4a0  nearest-object search over vector (squared distance); float expression reassociation/register allocation differs
 00cee540  nearest/far-object search with occupancy +0x120 and threshold +0x134; expression order differs
 00cee650  remove-value from vector -- addref value, linear scan, copy_impl tail, release popped element; loop layout and epilogue duplication differ

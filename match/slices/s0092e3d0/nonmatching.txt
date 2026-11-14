@@ -1,5 +1,5 @@
 0092e470 51 DateTime::Add: same logic, callee-saved register choice (esi vs edi) differs; difftest PASS (mapped GetParameter 0x92df80, SetDate 0x92e200)
-0092e5a0 131 GetLocalTimeBias: calls SetDate with garbage this (ecx), block order/regalloc differs
+0092e5a0 131 GetLocalTimeBias: calls SetDate with garbage this (ecx), block order/regalloc differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#2 ecx]
 0092e680 52 FILETIME epoch: SYSTEMTIME zero-init stores scheduled differently
 0092ea90 373 basic_string::insert(p,n,c): register allocation differs; difftest WEAK (5.9% coverage; memcpy/fault discards)
 0092ec60 149 deque::DoReallocPtrArray: register allocation / spill order; difftest WEAK (185 valid, 61% coverage)

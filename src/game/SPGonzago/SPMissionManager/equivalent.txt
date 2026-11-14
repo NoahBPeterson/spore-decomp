@@ -1,3 +1,4 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/SPGonzago/SPMissionManager.cpp  ?FUN_00fec430@cSPMissionManager@@QAEXH@Z  00fec430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManager.cpp  ?CopyFrom@tTimerValue@@QAEPAU1@PBU1@@Z  00fecb50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionManager.cpp  ?FUN_00fecc90@cSPMissionManager_s00fe_c590@@QAEPAV1@XZ  00fecc90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

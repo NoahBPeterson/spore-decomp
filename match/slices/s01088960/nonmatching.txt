@@ -12,4 +12,4 @@
 010896b0 27 getConstraintInfo(): hkConstraintData now has m_userData (+0x08) so m_scheme.m_info lands at +0x0c; behaviourally equivalent (replay exact, fresh PASS 397 valid, 100% cov)
 01089700 170 havok-equivalent
 010897d0 149 havok-equivalent
-01089870 96 havok-equivalent
+01089870 96 havok-equivalent [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]

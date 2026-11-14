@@ -3,7 +3,7 @@
                complete; the mode-3 memmove loop is a placeholder and
                FUN_011ef750 is declared stdcall instead of thiscall (difftest
                shows ecx=STK vs the original's object). flags /O2 /MD /Gy /TP /arch:SSE
-00fd96d0  n/a  released-object destructor: incomplete. The intrusive RefCount
+00fd96d0  n/a  released-object destructor: incomplete. The intrusive RefCount [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
                interlocked decrement/`lock xadd` sequence is stubbed.
                flags /O2 /MD /Gy /TP /arch:SSE
 00fd9b70  167  VideoRenderableOperations::Prepare: approximate. GetDataBufSizes

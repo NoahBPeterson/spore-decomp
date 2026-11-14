@@ -5,7 +5,7 @@
 00701050 4 list node insert-before, complete; only the final two operand loads are swapped (out vs position)
 007010b0 60 list::insert(pos, first, last, tag) range copy, complete; callee-saved register use differs (original keeps pos in edi and value temp in esi)
 00701110 37 eastl hashtable bucket-nonempty / find, complete; the original materialises a two-word iterator local that is not reproduced
-00701170 18 object-list copy constructor, complete; EH frame and call-argument register setup differ
+00701170 18 object-list copy constructor, complete; EH frame and call-argument register setup differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 eax]
 007011d0 651 SP::cHierGrid::CullCellList, complete recursive reconstruction; register scheduling throughout differs
 007014c0 1124 SP::cHierGrid::QueryCells, complete cell-range/mask query reconstruction; inlined hashtable lookup and morton build differ
 00701a00 812 complete SP::cHierGrid range-query over two world-space endpoints; reconstruction is much smaller than the original because the original inlines more of the per-cell scan

@@ -1,5 +1,5 @@
 01045200 324 BuildVisual: aux call signatures/layout reconstructed from disasm; 392 vs 365 bytes
-01045370 81 deque block-map growth inlined differently; 115 bytes
+01045370 81 deque block-map growth inlined differently; 115 bytes [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 return target, ret#2 esp]
 010453f0 133 ReadSTLSequence: serializer vtable slots reconstructed; 144 vs 148 bytes
 01045490 90 rbtree DoInsertValueImpl search/insert codegen differs; 90 vs 104 bytes
 01045500 48 SetInitialVisuals: register allocation and branch layout differ; 149 vs 144 bytes

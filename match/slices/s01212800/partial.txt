@@ -21,7 +21,7 @@
 012134e0 154 compiler-generated EH cleanup funclet; enclosing source is outside the slice
 01213630 52 compiler-generated EH cleanup funclet; enclosing source is outside the slice
 012136b0 82 compiler-generated EH cleanup funclet; enclosing source is outside the slice
-01213750 153 compiler-generated EH cleanup funclet (PDB names it cRuntimeModelBuilder::CreateModelMeshes, but this VA is the cleanup fragment); enclosing body outside the slice
+01213750 153 compiler-generated EH cleanup funclet (PDB names it cRuntimeModelBuilder::CreateModelMeshes, but this VA is the cleanup fragment); enclosing body outside the slice [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]
 012137f0 94 compiler-generated EH cleanup funclet; enclosing source is outside the slice
 012138e0 68 compiler-generated EH cleanup funclet; enclosing source is outside the slice
 01213930 68 compiler-generated EH cleanup funclet; enclosing source is outside the slice

@@ -8,7 +8,7 @@
 0080f2e0 121  approximate: AddLayer temp/iterator handling not reproduced
 0080f380  -   approximate: model set/binding paths after +0x258 omitted
 0080f530  -   approximate: cSPUILayerManager::Init body stubbed; Earlier, fuller draft: match/slices/s0080e6b0/s0080e6b0.cpp (left behind by the migration); start from it.
-0080f730  -   approximate: builder body stubbed; Earlier, fuller draft: match/slices/s0080e6b0/s0080e6b0.cpp (left behind by the migration); start from it.
+0080f730  -   approximate: builder body stubbed; Earlier, fuller draft: match/slices/s0080e6b0/s0080e6b0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'ret'] vs ['ret']]
 0080f7c0  269  approximate: removed-object push / winproc teardown paths simplified
 0080f920  58  approximate: DrawLayer message path + layer loop shapes not faithful
 0080fa20  120  approximate: Shutdown teardown order / member offsets approximate

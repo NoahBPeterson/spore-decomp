@@ -1,4 +1,4 @@
-008068d0  264 complete; drawable assignment switch, register/scheduling differences
+008068d0  264 complete; drawable assignment switch, register/scheduling differences [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 00806aa0  58  complete; callee-saved register choice (ebx vs esi) differs
 00806b20  196 complete; index/wrap expression and scheduling differ
 00806bf0  77  complete; SSE scheduling differs
@@ -13,4 +13,4 @@
 00807760  78  complete; allocator ctor arg/register differences
 00806d10  15  complete; only volatile Rect4 load/scheduling differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv WEAK 150/400 valid, 14.0% coverage
 008070d0  571  complete; source 558 B vs retail 613 B; float args materialized with x87 fstp instead of retail movss; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv UNSUPPORTED 0/400 valid
-00807340  198  complete; source 171 B vs retail 232 B; float args materialized with x87 fstp instead of retail movss; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv UNSUPPORTED 0/400 valid
+00807340  198  complete; source 171 B vs retail 232 B; float args materialized with x87 fstp instead of retail movss; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv UNSUPPORTED 0/400 valid [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'ret'] vs ['call', 'call', 'call', 'call',]

@@ -2,5 +2,5 @@
 007fcff0 130 PARTIAL: refcount release reconstructed; hashtable node lookup/free path approximated flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fd090 151 PARTIAL: hashtable find_or_insert reconstructed; allocator/tag argument roles approximated flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fd140 142 PARTIAL: refcount add reconstructed; hashtable find/insert and interface vcall paths approximated flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-007ff9f0 - out of scope; ctor reconstructed (base + vtable stores), not byte-verified flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+007ff9f0 - out of scope; ctor reconstructed (base + vtable stores), not byte-verified flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]
 007ffa50 - out of scope; PredicateWinState::Refresh reconstructed, not byte-verified flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

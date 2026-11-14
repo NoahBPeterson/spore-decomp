@@ -1,6 +1,6 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-006307a0  113  rbtree insert helper: complete; operator-new line-info args and node field copy schedule
-006308d0   58  cJob-holder deleting dtor: complete; GetStatus calls via +0x34/+0x30 and buffer free
+006307a0  113  rbtree insert helper: complete; operator-new line-info args and node field copy schedule [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 esp]
+006308d0   58  cJob-holder deleting dtor: complete; GetStatus calls via +0x34/+0x30 and buffer free [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 006309e0   49  eastl::operator+<wchar_t>: complete; strlen/append call setup order
 00630a50   87  cSPPlayModePhotoBrowser ctor: complete; retail keeps the object base in eax and reuses one register for the 0x6c/0x84 sub-pointers (`mov eax,ecx` prologue, `lea ecx,[eax+...]`); building the 0x6c pointer from self first and recovering the base from it also leaves our eax = self on the void return; remaining diff is the zero/pointer register choice (ecx/edx swapped), size 174 vs 186; difftest PASS (400 valid, 100.0% cov)
 00630b30  207  vector<cSettingsTab*>::DoInsertValue: complete; reallocation path memmove/DoInsertValue shape

@@ -7,7 +7,7 @@
 008feba0  22  ResourceCache::Find: complete; edi (node) reloaded after inlined splice stores
 008fec20  323  ResourceCache::Insert: complete; original keeps the bool result in a reused param slot
 008fedb0  77  protocol hashtable DoInsertValue: complete; bucket-offset arithmetic and slot spill differ; difftest FAIL is a checker artifact: on the saved input (bucket count 0x80000000, slot offset wraps) the first side to run succeeds and writes its new node into a bucket slot outside the restored state, so whichever side runs second (orig or ours) faults in DoFindNode; replaying ours first makes the original fail identically
-008feef0  140  Resolve (scheme lookup): complete; temp-slot reuse (alloc tag and key share a slot in original) differs; difftest PASS (operator_delete__, gSep1/gSep2 annotated; needs --inputs 2000 --alias 0.3 for 75.7% coverage)
+008feef0  140  Resolve (scheme lookup): complete; temp-slot reuse (alloc tag and key share a slot in original) differs; difftest PASS (operator_delete__, gSep1/gSep2 annotated; needs --inputs 2000 --alias 0.3 for 75.7% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 008fefb0  201  protocol hashtable erase(key): complete; loop/register differences
 008ff0b0  69  vector copy ctor: complete; register allocation differs
 008ff170  106  CreateResource: complete; register choice for mime string temp differs; difftest PASS (gEmptyStr/gDefaultMsg annotated)

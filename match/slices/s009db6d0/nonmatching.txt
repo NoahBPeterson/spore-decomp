@@ -3,7 +3,7 @@
 009dc0f0  76  Copy44: complete, differs (90 vs 97); difftest UNSUPPORTED
 009dc160  80  Copy58: complete, differs (96 vs 103); difftest WEAK (105 valid, 19% coverage, no mismatch)
 009dc410  131  All (Blend9): complete, differs; difftest PASS 400 valid inputs 100% coverage
-009dc4f0  405  All (BlendQ): complete, differs (311 vs 185); difftest PASS 321 valid inputs 100% coverage
+009dc4f0  405  All (BlendQ): complete, differs (311 vs 185); difftest PASS 321 valid inputs 100% coverage [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 eax]
 009dc6a0  163  TotalItems (Track2): complete, differs (181 vs 184); difftest PASS 280 valid inputs 100% coverage
 009dc5b0  269  SampleAt: destination is the first stack argument (callee-pop, __stdcall), left/right path copies match; difftest PASS 363 valid inputs 100% coverage (size 263 vs 236)
 009db6d0  736  complete; Layout::Build full port (active-segment runs via Call630, time-ratio split with Channel 0x104 stride, per-part particle scaling and index write-back); this cl keeps this in esi vs retail ebp, swaps the start/last registers and lays the f3e0==0 arm out as fallthrough; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv FAIL (5/5 valid, x87 depth)

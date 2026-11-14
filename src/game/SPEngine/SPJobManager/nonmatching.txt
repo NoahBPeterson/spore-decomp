@@ -12,7 +12,7 @@
 0068fed0 111 complete, not byte-exact: IsAffinityInUse scan ordering near-miss (renders "WEAK": 54.4% original coverage, no mismatch)
 0068ffb0 21 complete, not byte-exact: cmov max-priority near-miss
 0068fff0 49 complete, not byte-exact: priority-insert loop register allocation near-miss
-00690050 78 complete, not byte-exact: head-pop list idiom near-miss
+00690050 78 complete, not byte-exact: head-pop list idiom near-miss [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 006900b0 28 complete, not byte-exact: wrapper call shape near-miss (FreeJobUnderLock args)
 00690120 17 complete, not byte-exact: Release refcount decrement shape differs (renders "WEAK": 44.8% original coverage, no mismatch)
 006903c0 212 complete, not byte-exact: Shutdown drains mJobs[0..8] (extra release, dependency list clears, deallocate), then mFreeLinks, then mFreeWaitNodes with the Semaphore dtor; differs only in loop/register shapes.

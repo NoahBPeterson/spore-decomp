@@ -18,7 +18,7 @@
 007fb480 397 C_TF-subobject "set active" — complete behaviour (MI subobject method at real+0x18; predicate combine, per-action vcalls 0x18/0x1c, event release, callback); the action lookup at 0x007f93d0 is a thiscall member (ecx = real object, arg i) and the 0x0065c480 stack temp is a thiscall on a 0xc-byte local with args (0xc, 0), both now declared as stub-class members; 435 bytes vs original 473 (chk diff 435); equiv: PASS (885/1500 slice, 584/1000 src, 81.4% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 007fbbc0 8 initialiser — complete; local-name slot assignment for the two sub-object pointers and the 4-iteration slot loop differs
 007fbdb0 13 uninitialized_copy of 8-byte pairs — complete (placement-new copy loop + trivial destroy loop); /Od slot order of the new-expression temp differs [equiv: PASS]
-007fc2a0 10 UI::BehaviorMessage ctor — complete; one reserved frame slot (inlined base ctor) missing
+007fc2a0 10 UI::BehaviorMessage ctor — complete; one reserved frame slot (inlined base ctor) missing [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 007fc600 86 BehaviorMessage dispatch — complete; the local message buffer and vtable dispatch schedule differ; equiv: FAIL (5/5 mismatched on eax, ecx fixed via member)
 007fc690 196 cSPUIBehaviorEventBase::SetStateString — complete; eastl string temporaries / inlined helper frames differ
 007fc790 156 cSPUIBehaviorEventBase::SetStateInt — complete; action slot vcalls and message temporaries differ

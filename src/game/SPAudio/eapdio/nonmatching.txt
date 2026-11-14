@@ -1,4 +1,4 @@
 # slice s00a60ef0 (EA::Audio::Eapd externals) -- functions that are NOT byte-exact.
 00a61530 42 size 196 vs 221, 67 diff. The original normalises each class_add* result with "test al,al; setne al" before "and bl,al"; ours accumulates directly in bl. Equivalence UNSUPPORTED (pd class registry globals unpopulated). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-00a61610 87 size 162 vs 154, 95 diff. Same early-return restructure as vinlet_new but the inlet_new call has different stack-arg shapes. UNSUPPORTED (pd globals). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a61610 87 size 162 vs 154, 95 diff. Same early-return restructure as vinlet_new but the inlet_new call has different stack-arg shapes. UNSUPPORTED (pd globals). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 esp]
 00a617c0 42 size 196 vs 221, 67 diff. Same setne-per-call pattern as vinlet_setup. UNSUPPORTED (pd globals). flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

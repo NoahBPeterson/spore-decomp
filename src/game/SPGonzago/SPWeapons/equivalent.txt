@@ -5,3 +5,4 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb8dd0@cCulturalProjectile_s00cb_7e50@@QAEPAXXZ  00cb8dd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb9010@cResourceProjectile@@QAEPAXXZ  00cb9010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cbc930@@YIHH@Z  00cbc930  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb94b0@TObj@@QAEPAV1@XZ  00cb94b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

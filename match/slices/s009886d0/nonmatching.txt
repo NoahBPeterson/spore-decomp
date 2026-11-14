@@ -22,7 +22,7 @@
 00988ad0   236   Typesetter layout + min/max clamp pair; x87-vs-SSE and scheduling.
 00988cd0   596   large CalcSize variant; heavy scheduling + float-register differences.
 00989000   139   constructor init sequence; store ordering differs throughout.
-00989130    58   factory: slot 0x28 / slot 0x10 / slot 0x84 chain; p1 kept in edi vs
+00989130    58   factory: slot 0x28 / slot 0x10 / slot 0x84 chain; p1 kept in edi vs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 esp, call#4 esp, call#5 esp]
                  reloaded from the argument slot, and cold-return placement.
 00989410    38   original branches on the flag byte with a duplicated virtual load;
                  cl folds the two arms.

@@ -11,7 +11,7 @@
 0068fed0  186  complete, not byte-exact: IsAffinityInUse scan ordering near-miss (renders "WEAK": 54.4% original coverage, no mismatch)
 0068ffb0  33   complete, not byte-exact: cmov max-priority near-miss
 0068fff0  49   complete, not byte-exact: priority-insert loop register allocation near-miss
-00690050  80   complete; the free link comes off the TAIL of mFreeLinks (anchor->mpPrev) like AppendTail fills it, not the head -- the old head pop dereferenced a stale mpNext and faulted (eip=3000000d); residual is retail's redundant reloads of mpPrev; flags /O2 /MD /Gy /EHsc /TP /GS-; equiv WEAK (391 valid, 47.4% cov, no mismatch)
+00690050  80   complete; the free link comes off the TAIL of mFreeLinks (anchor->mpPrev) like AppendTail fills it, not the head -- the old head pop dereferenced a stale mpNext and faulted (eip=3000000d); residual is retail's redundant reloads of mpPrev; flags /O2 /MD /Gy /EHsc /TP /GS-; equiv WEAK (391 valid, 47.4% cov, no mismatch) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 006900b0  86   complete, not byte-exact: wrapper call shape near-miss (FreeJobUnderLock args)
 00690120  -    complete, not byte-exact: Release refcount decrement shape differs (renders "WEAK": 44.8% original coverage, no mismatch)
 006903c0  316  complete, not byte-exact: Shutdown drains mJobs[0..8] (extra release, dependency list clears, deallocate), then mFreeLinks, then mFreeWaitNodes with the Semaphore dtor; differs only in loop/register shapes.

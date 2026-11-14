@@ -13,7 +13,7 @@
 00e50540   15  egg-kid predicate: complete; FNV call scheduling differs
 00e50620   73  remove first matching 0xc entry: complete (shift last down); register-convention (EAX/ESI/EDI) differs
 00e50680  118  recursive set byte: complete; nested guard schedule differs
-00e50750   88  window-coord transform: complete; local struct/arg schedule differs
+00e50750   88  window-coord transform: complete; local struct/arg schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 esp, call#3 esp]
 00e507d0   78  parity of rounded ratio: complete; cvtss2si + unordered-safe cmov and AL-only mask; equiv PASS (400 valid, 100% cov)
 00e4fac0  110  configure collectable items: complete (two table passes); call/arg schedule differs
 00e4f860  434  collectable visibility refresh (320 vs 177): complete behavioural reconstruction -- the two-slot guard (VecClear 0x743b50 + destructor 0xe82130), the FUN_00e823a0 handle lookup, the +0x18 count loop at 0x28 stride, the `entry+4 == 1` filter and the full four-way visibility tree (b<0: show when a in [0,arg2) else hide-on-visible; a<0: hide-on-invisible when b>arg2; both>=0: hide when b<arg2 || arg2<=a, else show) all present, matching the retail branches at 0xe4f8e5/0xe4f8f1/0xe4f8fd.  Diff is cl's i386 register allocation and branch layout for the tree (the original threads the a,b,arg2 compares through a shared join at 0xe4f8fd) plus the vtable-slot addressing; the call trace matches.  difftest equiv: UNSUPPORTED (unresolved reference ??0cGuard16@@QAE@XZ -- the guard constructor is an engine routine the model does not provide).

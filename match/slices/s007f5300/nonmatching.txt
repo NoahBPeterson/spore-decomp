@@ -4,7 +4,7 @@
 007f54e0  175  complete; stopwatch/timer register allocation differs
 007f55b0  54  complete; bool-to-int flag store/load differs
 007f5710  50  complete; percent->index math and tail call schedule differ
-007f5a60  289  complete; render sprite/UV setup float ordering differs
+007f5a60  289  complete; render sprite/UV setup float ordering differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#2 esp, call#2 ecx]
 007f5c20  85  complete; constructor vtable-store scheduling differs
 007f5d00  381  complete; drawable factory branch layout differs (fixed: the +0x23c store was a self-load placeholder and must store the frame-count division result `c` (or 1 in the spr==0 arm) that eax holds in retail; the old code copied the soup value back and failed equiv at this+0x23c)  [equiv: PASS (205 valid, 99% cov, no mismatch)]
 007f5eb0  164  complete; channel-lerp expression evaluation order differs

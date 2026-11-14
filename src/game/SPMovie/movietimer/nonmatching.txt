@@ -1,2 +1,2 @@
 # Slice s00fcb210: complete functions that are not byte-exact.
-00fcc0b0 40 48	UNSUPPORTED (0 valid; imports GetCurrentProcess) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00fcc0b0 40 48	UNSUPPORTED (0 valid; imports GetCurrentProcess) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, ret#2 esp]

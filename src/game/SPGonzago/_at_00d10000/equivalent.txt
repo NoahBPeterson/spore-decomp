@@ -1,3 +1,5 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/SPGonzago/_at_00d10000.cpp  ?FiniBall@cRotationBall@@QAEXXZ  00d1da60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d10000.cpp  ?FiniRing@cRotationRing@@QAEXXZ  00d1de10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d10000.cpp  ?InitBall@cRotationBall@@QAEPAU1@XZ  00d1d810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d10000.cpp  ?InitRing@cRotationRing@@QAEPAU1@XZ  00d1dc20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

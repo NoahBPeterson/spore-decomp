@@ -1,5 +1,5 @@
 # <va>  <diff-bytes>  <reason>   (nonmatching: complete source, behaviourally equivalent, but not byte-exact)
-009a3ef0  60  nSPCreatureAnim::FUN_009a3ef0 (animation-cache shutdown: clears the two global anim-cache trees, g_animCac
+009a3ef0  60  nSPCreatureAnim::FUN_009a3ef0 (animation-cache shutdown: clears the two global anim-cache trees, g_animCac [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 009a4190  301  nSPCreatureAnim::AnimTree::FUN_009a4190 (drains the global anim-cache tree at 0x166c058: walks it in key 
 009a46a0  220  FUN_009a46a0 (quaternion -> 3x3 row-major rotation matrix, scalar SSE).  /O2 /MD /Gy /TP /GS- /arch:SSE /
 009a47e0  101  nSPCreatureAnim::CheckEventLocationType (three packed location-field predicates on param_1 bits 0x00c0000

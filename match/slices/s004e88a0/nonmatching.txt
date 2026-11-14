@@ -5,6 +5,6 @@
 004e8be0  102  RBTree::InsertNode (allocate + relink + count++): equiv PASS (334 valid, 100% coverage); /Od frame shape
 004e8c80  157  Body8c80 (refcounted pointer range copy w/ AddRef): equiv UNSUPPORTED (0/400 valid, fault(read)=376) - body only dereferences raw caller pointers, so no valid input can be synthesized
 004e8ee0  126  ApplyCopyLoop8ee0 (same range copy, writes end through out): equiv UNSUPPORTED (0/400 valid, fault(read)=383) - same raw-pointer dereference limitation
-004e8f70  151  RWXform::RWXform (null pointers, default basis/matrix, reset sentinels): equiv PASS (400 valid, 88.1% coverage); /Od frame shape
+004e8f70  151  RWXform::RWXform (null pointers, default basis/matrix, reset sentinels): equiv PASS (400 valid, 88.1% coverage); /Od frame shape [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 004e9050  680  RWXform::Build (rebuild transform from render object + optional matrix/vector): equiv PASS (253 valid, 100% coverage); /Od frame shape
 004e9500  195  RWXform::Attach (bind render object, drive builder vtable slot): equiv PASS (354 valid, 100% coverage); /Od frame shape

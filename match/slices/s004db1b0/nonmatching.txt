@@ -1,1 +1,1 @@
-004db3e0  15  complete; residual is /Od frame size (inlined-callee reserved frame) + vtable immediate form
+004db3e0  15  complete; residual is /Od frame size (inlined-callee reserved frame) + vtable immediate form [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#1 ecx, call#2 esp]

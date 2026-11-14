@@ -4,7 +4,7 @@
 008db280 135 complete: PFIndexModifiable::CheckFilesInRange (bucket-array scan); range condition corrected (mnPosition-a vs b-a); difftest PASS (350 valid, 100.0% cov)
 008db310 94 complete: PFIndexModifiable::CheckFilesInSizeRange (bucket-array scan); loop/register allocation differs
 008db450 292 complete: HT::InsertUnique (hash-map insert w/ growth); returns out (void*), rehash flag=byte[0]/count=[1]; difftest PASS (366 valid @800 inputs, 92.0% cov)
-008db560 98 complete: RBTree::insertUnique (rbtree insert + alloc); returns out (int*); difftest PASS (336 valid, 100.0% cov)
+008db560 98 complete: RBTree::insertUnique (rbtree insert + alloc); returns out (int*); difftest PASS (336 valid, 100.0% cov) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 eax]
 008db5e0 72 complete: FUN_008db5e0 median/partition helper; register allocation differs
 008db630 80 complete: FUN_008db630 final sort pass; body shape differs
 008db730 49 complete: PFIndexModifiable ctor; difftest PASS (400 valid, 100.0% cov)

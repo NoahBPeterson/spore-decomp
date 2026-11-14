@@ -1,2 +1,2 @@
 00c4c090 152 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 152 bytes - biosphere helper body not reconstructed.
-00c4c690 244 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 244 bytes - biosphere helper body not reconstructed.
+00c4c690 244 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 244 bytes - biosphere helper body not reconstructed. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#4 eax]

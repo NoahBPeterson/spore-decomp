@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00920ee0  0  NormalizeSeparators2: our reconstruction compiles to a bare ret (call to FindExtension result dropped, 1 byte vs 20); not checkable by equiv.py (size filter)
+00920ee0  0  NormalizeSeparators2: our reconstruction compiles to a bare ret (call to FindExtension result dropped, 1 byte vs 20); not checkable by equiv.py (size filter) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]

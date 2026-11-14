@@ -11,5 +11,5 @@
 005302b0 82 ReadString: helper frame (orig 0x14 vs 0x4) and loop shape differ
 00530310 221 Write description: /Od write-helper temp schedule differs
 00530770 127 vector copy ctor: EH frame + uninitialized_copy shape (mine 146 vs orig 241)
-00530b70 70 vector resize: DoInsertValues reserved frame differs
+00530b70 70 vector resize: DoInsertValues reserved frame differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00530c80 127 vector erase: missing eastl::copy three tag locals

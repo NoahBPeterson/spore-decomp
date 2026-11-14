@@ -7,7 +7,7 @@
 00810d30 137 complete; message construction path reconstructed; register schedule differs
 00811260 158 complete; vector operator= grow/copy branch schedule differs; equiv: FAIL (ours faults on read where original returns) after symbol fix
 00811f20 46 complete; manager ctor field-store order/schedule differs
-00811f80 14 complete; scalar deleting dtor teardown order differs
-008120d0 74 complete; InitB acquire/store schedule + tail call differs
+00811f80 14 complete; scalar deleting dtor teardown order differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 memory]
+008120d0 74 complete; InitB acquire/store schedule + tail call differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 memory]
 00812210 60 complete; comparison operand load order / register allocation differs
 00812310 64 complete; eraseSys RBTreeIncrement/Erase schedule differs

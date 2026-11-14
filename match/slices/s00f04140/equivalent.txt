@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00f04140/s00f04140.cpp  ?FUN_00f04740@cScenarioYouTube@Simulator@@QAEPAXXZ  00f04740  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

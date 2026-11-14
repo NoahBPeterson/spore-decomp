@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/UTFSpore_Win32/XmlParser.cpp  ?Fn8e5ea0@XmlParser@@QAEPAXPAX@Z  008e5ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

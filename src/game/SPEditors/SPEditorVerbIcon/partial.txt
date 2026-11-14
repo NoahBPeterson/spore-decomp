@@ -1,3 +1,3 @@
 # va  diff-bytes  reason
 005e1d00  -  SP::cSPEditorVerbIcon /O2 routine (386-byte); not decompiled; Earlier, fuller draft: match/slices/s005e16c0/s005e16c0.cpp (left behind by the migration); start from it.
-005e2000  -  UI::TimelineEventEditorVerbIcon ctor (608-byte); not decompiled; Earlier, fuller draft: match/slices/s005e16c0/s005e16c0.cpp (left behind by the migration); start from it.
+005e2000  -  UI::TimelineEventEditorVerbIcon ctor (608-byte); not decompiled; Earlier, fuller draft: match/slices/s005e16c0/s005e16c0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]

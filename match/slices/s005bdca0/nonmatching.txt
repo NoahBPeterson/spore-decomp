@@ -1,5 +1,5 @@
 # va        diff-bytes  reason
-005bdca0  164  complete; SP::cSPEditorManipulation* constructor (2 vtables + field init); size 139 vs 202; equiv FAIL (memory pool @40010060)
+005bdca0  164  complete; SP::cSPEditorManipulation* constructor (2 vtables + field init); size 139 vs 202; equiv FAIL (memory pool @40010060) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 005bde60   29  complete; eastl::vector<SP::cSPEditorLimbStructure*>::clear (release+destroy each, memcpy tail); size 100 vs 103; equiv PASS (276 valid inputs)
 005bded0  144  complete; std::map<float,cSPVector3> find-or-insert returning &value; size 93 vs 153; equiv FAIL (execution)
 005bdf70 1207  complete; cSPEditorManipulationTranslateCreature::CalcBoundsForMovement; size 1198 vs 1422; equiv FAIL (call #0 depth 1)

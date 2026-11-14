@@ -2,3 +2,4 @@
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?SetParams@ShaderHost@@QAEXHHDDD@Z  006e6b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?me30@S8@@QAEXHHH@Z  006ece30  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?DestroyEffectsRendererSystem@@YAXXZ  006efc10  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?mebf50@S7@@QAEPAU1@XZ  006ebf50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

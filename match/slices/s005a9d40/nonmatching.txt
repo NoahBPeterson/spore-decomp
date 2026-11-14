@@ -4,6 +4,6 @@
 005aa490  30  vector copy: arg-slot/result handling and load order differ
 005aa5d0  243  ClampToPinned: loop reg alloc (ebx vs ebp) and flag test shr/test vs test imm
 005aa7a0  454  CalculateInflatedMesh: complete, x87/sse scheduling differs
-005aa9c0  264  GetPlacement: complete, arg copies differ
+005aa9c0  264  GetPlacement: complete, arg copies differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 005aab00  225  Setup: complete, dead stores/ordering differ; difftest PASS (--inputs 800: 370 valid, 100% coverage; 400 inputs gave 182 valid) after splitting the cPosHolder declarations so F4ac610/F4ac710 each carry their // 0x comment
 005aac30  99  CellPinning ctor: vptr stores scheduled late; difftest PASS after mapping the vtables (??_7cCellPinning@@6BcManipBase@@@ 0x13f70e4, ...6BcRC@@@ 0x13f70d4, ??_7cRC@@6B@ 0x13ec458) in symbols/slices/s005a9d40.txt

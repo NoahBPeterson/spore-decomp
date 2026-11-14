@@ -5,7 +5,7 @@
 00a4a750  31  complete; canvas_coords - 6 atom loads; the argc>7 branch layout and call scheduling differ. difftest PASS (399 inputs, 100% coverage)
 00a4a810  75  complete; canvas_makebindsym - strcat/gensym inlined differently (1000-byte buffer build). difftest UNSUPPORTED (strcat_i is an inlined helper with no emulated body)
 00a4a870  223  complete; canvas_reflecttitle - 500-byte name buffer, atom_string/strcat loop inlined differently. difftest UNSUPPORTED (str*_i helpers unresolved)
-00a4a9a0  56  complete; canvas_drawredrect - sys_gui format call and gl_flags layout inlined differently. difftest PASS (400 inputs, 100% coverage)
+00a4a9a0  56  complete; canvas_drawredrect - sys_gui format call and gl_flags layout inlined differently. difftest PASS (400 inputs, 100% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 00a4aa00  79  complete; editor_new - 0x54-byte alloc, binbuf_new/guiconnect_new prologue differs. difftest UNSUPPORTED (needs a real allocator/global PD instance)
 00a4aa80  39  complete; editor_free - glist_noselect/guiconnect_notarget/binbuf_free/freebytes sequence inlined differently. difftest UNSUPPORTED (needs a real allocator)
 00a4aac0  101  complete; canvas_create_editor - editor teardown and rtext_new loop inlined differently. difftest WEAK (294 valid inputs, 27.7% coverage - the editor paths need real heap objects)

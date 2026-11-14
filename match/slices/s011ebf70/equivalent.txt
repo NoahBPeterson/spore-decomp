@@ -3,3 +3,4 @@ slices/s011ebf70/s011ebf70.cpp  ?Destroy@Mutex@@QAEXXZ  011ec0f0  /O2 /MD /Gy /E
 slices/s011ebf70/s011ebf70.cpp  ?Init@Mutex@@QAE_NPBD@Z  011ec110  /O2 /MD /Gy /EHsc /TP
 slices/s011ebf70/s011ebf70.cpp  ?condWait@ThreadObj@@QAEHPAUMutex@@PAI@Z  011ec410  /O2 /MD /Gy /EHsc /TP
 slices/s011ebf70/s011ebf70.cpp  ?f_011ecf40@@YIXPAH@Z  011ecf40  /O2 /MD /Gy /EHsc /TP
+slices/s011ebf70/s011ebf70.cpp  ?f_011ec750@@YAXPAXD@Z  011ec750  /O2 /MD /Gy /EHsc /TP

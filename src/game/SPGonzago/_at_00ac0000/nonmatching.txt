@@ -22,7 +22,7 @@
 00ac9740 7 complete; 0xc-pair range assign w/ AddRef/Release; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
 00ac97a0 20 complete; reverse refcounted-pointer range assign; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
 00ac97f0 16 complete; reverse 0xc-pair range assign; schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; difftest UNSUPPORTED (0/400 valid)
-00ac9850 36 complete; cLocomotionRequest ctor (global float fields), store order differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
+00ac9850 36 complete; cLocomotionRequest ctor (global float fields), store order differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00ac9d90 38 complete; vector<ptr> release + pool free, schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (71.4% cov)
 00ac9f70 83 complete; hashmap serialize loop, register schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00aca0c0 252 complete; heap sift-down (always descends into the farther child via SortValue::FUN_00ac0730, addrefs/releases the displaced element, then completes the repair through 0x00ac93c0 with arg5 addref/release around the tail call). equiv WEAK: 153 valid inputs (need 200), 35.4% coverage (need 60%); the remaining inputs are discarded as fake-arity=142 / fault(read)=105 because the generated vector slots do not point at valid 0x120-bearing elements flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00d79470/s00d79470.cpp  ?IsPartyModeReady@SP@@YAMPAVcEditorGameObject@1@@Z  00d7a3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

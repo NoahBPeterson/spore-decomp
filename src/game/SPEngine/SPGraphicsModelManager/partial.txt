@@ -10,7 +10,7 @@
 007469b0 232 cModelWorld::SetWorldBounds approximated (hiergrid math/rounding)
 00746cf0 154 cModelManager::DebugPick approximated (pick protocol guessed)
 00746e50 222 load-entry constructor incomplete
-007471f0  70 cLoadingModel::cLoadingModel incomplete (member offsets)
+007471f0  70 cLoadingModel::cLoadingModel incomplete (member offsets) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]
 00747340 373 load-queue slot refresh approximated
 00747640  88 deque entry lookup approximated (helper arg list guessed)
 00747980 175 deque push_back approximated (block allocator details)
@@ -24,7 +24,7 @@
 00751560  1475  heavily inlined /O2 job/refcount/EH code; skeleton only; Earlier, fuller draft: match/slices/s00751560/s00751560.cpp (left behind by the migration); start from it.
 00751b30   461  inlined vector<bool>/AutoRefCount highlight-property code; skeleton only; Earlier, fuller draft: match/slices/s00751560/s00751560.cpp (left behind by the migration); start from it.
 00751de0   240  intrusive job-queue update loop; skeleton only; Earlier, fuller draft: match/slices/s00751560/s00751560.cpp (left behind by the migration); start from it.
-00751ed0   252  fixed_vector grow/relocate with inlined cSPTransform ctor; skeleton only; Earlier, fuller draft: match/slices/s00751560/s00751560.cpp (left behind by the migration); start from it.
+00751ed0   252  fixed_vector grow/relocate with inlined cSPTransform ctor; skeleton only; Earlier, fuller draft: match/slices/s00751560/s00751560.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['ret']]
 00751ff0   240  EH init (MessageServer handler registration + draw-set reset); skeleton only; Earlier, fuller draft: match/slices/s00751560/s00751560.cpp (left behind by the migration); start from it.
 007520e0   703  EH shutdown (large object teardown); skeleton only; Earlier, fuller draft: match/slices/s00751560/s00751560.cpp (left behind by the migration); start from it.
 007523a0  623  render-dispatch built from masked renderer/global-state calls and per-viewer draw lists; not yet byte-exact. Compiling skeleton. match/slices/s007523a0/s007523a0.cpp mentions this address and may hold an earlier draft.

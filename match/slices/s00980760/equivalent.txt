@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00980760/s00980760.cpp  ?CreateInstance@BasicFactory_RelativeNavigator@UTFWinControls@EA@@QAEPAVNavigator@23@HPAX@Z  00980b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast

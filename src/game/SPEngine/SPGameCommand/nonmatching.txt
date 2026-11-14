@@ -11,7 +11,7 @@
 0068a7a0 72 AdjustParameterCount: add loop through vtable +0x24 with a Variant local (inline dtor), shrink loop via RBTreeDecrement/Increment/Erase; original holds two separate copies of the map anchor in ebx/ebp, which spills n to the stack [equiv: WEAK 98 valid inputs, 68.7% coverage]
 0068a870 65 RemoveParameter: find/erase sequence correct, but cl uses an extra callee-saved reg and reads the iterator from a different slot
 0068a8d0 49 ~cStringCommandGenerator: members destroyed correctly, EH frame/state from base-class dtors not reproduced
-0068a970 63 RegisterCommandParameterInfo: find/assign/format paths present, block layout and assign argument setup differ
+0068a970 63 RegisterCommandParameterInfo: find/assign/format paths present, block layout and assign argument setup differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 ecx]
 0068a9e0 193 GetCommandIDFromCommandString: vector<WStr> local, ParseCmd, vtable +0x34; original keeps the str parameter in a register across the vector ctor call (empty allocator argument is the parameter slot address) [equiv: WEAK 183 valid inputs, 96.6% coverage]
 0068aae0 120 RegisterCommandGenerator: refcount, set-find/insert and info loop present, EH states/temporaries differ
 0068abb0 106 UnregisterCommandGenerator: set-find/erase + release present, EH states/temporaries differ

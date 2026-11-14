@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00a62e90 16 fx_register_all: final `and al,bl` accumulator folding differs (movzx widening in ours) ; equiv UNSUPPORTED 0/400 valid (fault read) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a62e90 16 fx_register_all: final `and al,bl` accumulator folding differs (movzx widening in ours) ; equiv UNSUPPORTED 0/400 valid (fault read) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#5 eax]

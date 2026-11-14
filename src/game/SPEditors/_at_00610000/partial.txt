@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 0061dfe0  na  PollenNotifyHelper: skeleton; MessageServer call + two Release calls omitted flags: /O2 /MD /Gy /TP /arch:SSE; match/slices/s0061d240/s0061d240.cpp mentions this address and may hold an earlier draft.
 0061e040  na  Pollen helper (311 bytes): skeleton; not identified flags: /O2 /MD /Gy /TP /arch:SSE; Earlier, fuller draft: match/slices/s0061d240/s0061d240.cpp (left behind by the migration); start from it.
-0061e1a0  na  0x13fca98 MI transaction ctor: skeleton; dual vtable + AddRef omitted flags: /O2 /MD /Gy /TP /arch:SSE; Earlier, fuller draft: match/slices/s0061d240/s0061d240.cpp (left behind by the migration); start from it.
+0061e1a0  na  0x13fca98 MI transaction ctor: skeleton; dual vtable + AddRef omitted flags: /O2 /MD /Gy /TP /arch:SSE; Earlier, fuller draft: match/slices/s0061d240/s0061d240.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['ret']]

@@ -7,5 +7,5 @@
 009d8020 400 complete 3-pointer sort; branch layout and register allocation differ (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); difftest PASS after fixing the sort predicate argument (an empty struct passed by value: only its low byte is written, the rest is the stale arg slot; was passed as int 0)
 009d81f0 577 complete 4-pointer sort by squared distance; SSE scheduling and register allocation differ; difftest PASS after fixing the last compare (original measures from (d, e), not (e, f)) and the empty-struct sort predicate argument
 009d84f0 267 complete per-item dispatch on pointer count; locals/regalloc differ
-009d8660 27 complete alloc+uninitialized_copy; n reloaded from stack after call in original
+009d8660 27 complete alloc+uninitialized_copy; n reloaded from stack after call in original [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#2 esp]
 009d86c0 36 complete ItemVec copy-init; arg slot reuse differs

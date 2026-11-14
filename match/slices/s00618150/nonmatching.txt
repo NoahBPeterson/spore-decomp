@@ -7,6 +7,6 @@
 00618aa0  55   EASTL sort_heap (pop_heap loop): value load/store order
 00618b90  3    cMsgString8 scalar deleting dtor: base vptr stores in reverse order ([+0] then [+4] vs original [+4] then [+0])
 00618c70  28   FillFeedInfo: copy of feed record, register assignment
-00618d40  29   cFeedTransactionBase ctor (4 args): vptr/zero stores scheduled after the arg stores
-00618da0  74   cFeedTransactionBase ctor (string arg): same scheduling issue
+00618d40  29   cFeedTransactionBase ctor (4 args): vptr/zero stores scheduled after the arg stores [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
+00618da0  74   cFeedTransactionBase ctor (string arg): same scheduling issue [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00618f60  362  feed-entry asset ConstructRequest: complete; register allocation (this in edi, doc in ebp originally)

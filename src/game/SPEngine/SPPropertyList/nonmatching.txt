@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00612ba0 93 frame 0x34 vs 0x30: count local not sharing dead param slot flags: /O2 /MD /Gy /TP /arch:SSE /GS-
-00613240 16 tail register allocation of spilled pNewEnd/pNewData/nNewSize; recheck FAIL was symbol misresolution: EA::Variant copy-assign resolved to 0x00478300 (symbols(mangled) collision) instead of the original call target 0x00542b80, so renamed the member to Assign (annotation // 0x00542b80 wins); equiv now no mismatch, verdict UNSUPPORTED (18/400 valid inputs, original faults on soup) flags /O2 /MD /Gy /TP /GS-
+00613240 16 tail register allocation of spilled pNewEnd/pNewData/nNewSize; recheck FAIL was symbol misresolution: EA::Variant copy-assign resolved to 0x00478300 (symbols(mangled) collision) instead of the original call target 0x00542b80, so renamed the member to Assign (annotation // 0x00542b80 wins); equiv now no mismatch, verdict UNSUPPORTED (18/400 valid inputs, original faults on soup) flags /O2 /MD /Gy /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#7 eax]
 006135d0 118 find() result merge is threaded by cl (original keeps cmp it,end after merge) flags: /O2 /MD /Gy /TP /GS-
 00613660 116 same as GetFloat flags: /O2 /MD /Gy /TP /GS-
 00613e50 359 deserializer: variant/key stack layout and slot reuse flags: /O2 /MD /Gy /TP /GS-

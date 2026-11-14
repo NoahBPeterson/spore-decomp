@@ -11,7 +11,7 @@
 006bccb0 106 complete; DecompressRecord allocation/read path; argument marshalling differs
 006bcd70 262 complete; rbtree find + RecordInfo build; inlining/EH schedule differs
 006bcea0 397 complete; index compaction state machine; heavy scheduling/inlining differences
-006bd070 163 complete; hole-table flush/compact; hole-table inline call schedule differs
+006bd070 163 complete; hole-table flush/compact; hole-table inline call schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#6 esp, ret#7 esp, ret#7 esi]
 006bd150 289 complete; compressed-record allocation path; RefPack local + register/frame differs
 006bd430 97 complete; Close(); duplicated cleanup blocks merged differently by cl
 006bd4d0 131 complete; GetOpenCount rbtree walk; iterator/frame differences

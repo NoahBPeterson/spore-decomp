@@ -2,3 +2,6 @@
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf0fe0@cCityInputStrategy@@QAEIXZ  00cf0fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1810@cCityInputStrategy@@QAEXPAXE@Z  00cf1810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1ad0@cCityInputStrategy@@QAEIPAX0@Z  00cf1ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf17b0@cCityInputStrategy@@QAEIPAX0@Z  00cf17b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf0f80@@YGIPAX0@Z  00cf0f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCityInputStrategy.cpp  ?FUN_00cf1440@cCityInputStrategy@@QAEXXZ  00cf1440  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

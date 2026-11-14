@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-007d93a0 42 base-object destructor (restore 3 vtables, release member +0x24); complete, original EH prologue/vtable store order not reproduced; equiv: PASS (1183 valid inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+007d93a0 42 base-object destructor (restore 3 vtables, release member +0x24); complete, original EH prologue/vtable store order not reproduced; equiv: PASS (1183 valid inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 007d9460 815 SP::cMouseCameraController::ConfigUpdated; complete (all ~20 property lookups into zoom/pan/rotate/offset/angle/pitch/clip fields), property-extraction scheduling/register allocation differs flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 007d9a50 254 quaternion -> 3x3 matrix helper (then Sub_6a3430 copy); complete, /fp:fast makes the SSE mulss/addss schedule match; equiv: PASS 600/600 valid, 100% cov flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 007d9bd0 99 SP::cMouseCameraController::Begin (capture start state); complete, float load/store interleave and Vec3 integer-copy scheduling differ; equiv PASS (1200 inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

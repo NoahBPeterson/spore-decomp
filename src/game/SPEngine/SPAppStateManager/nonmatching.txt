@@ -20,4 +20,4 @@
 007e48f0 79 cLightingCommand::Execute; same BehaviorMessage construction schedule differs
 007e4970 79 cCameraCommand::Execute; same BehaviorMessage construction schedule differs
 007e5220 252 constructor reconstructed as member/subobject stores; original inlines EASTL string ctors under an SEH frame, so bytes differ
-007e5bc0 76 cTransitionCommand::OnEndBlock complete but EASTL basic_string::assign / vector count arithmetic schedule differs
+007e5bc0 76 cTransitionCommand::OnEndBlock complete but EASTL basic_string::assign / vector count arithmetic schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]

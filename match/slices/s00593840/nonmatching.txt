@@ -2,7 +2,7 @@
 00594260  8  complete; the equivalence FAIL was the marker placement, not the loop: the marker sat on fill_imp, the 8-byte-item inline helper that takes the value by value, so the checker fed the ItemId as two stack dwords while the original (eastl::fill taking ItemId const&) reads it through a pointer and the two sides wrote different data. The marker now sits on fill, which takes the reference and forwards it by value to fill_imp (the same hoisted two-register copy the original makes), so both read the item through the pointer. Replay clean, equiv PASS (956 valid inputs, 100% coverage). The remaining 8 bytes are scheduling only: the original loads the item dwords before touching the destination (edx=value, eax=first, then ecx/edx=*value), ours loads the value pointer into eax first and first into eax afterwards
 00593ba0  69  register assignment of first/last swapped in adjacent_find/unique
 00594b60  40  scheduling of the bucket/element-count stores at the end differs; equiv UNSUPPORTED (unresolved callees DoAllocateBuckets, operator new[]/delete[])
-00593890  15  version store scheduled before the GetStreamHolder call
+00593890  15  version store scheduled before the GetStreamHolder call [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 00595040  76  result kept in edi:ebx in original; register allocation differs
 00595230  171  register allocation (this/vector end in different registers)
 00593a40  177  register allocation and iterator scheduling differ

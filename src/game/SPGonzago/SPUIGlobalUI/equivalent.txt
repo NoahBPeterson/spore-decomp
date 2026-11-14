@@ -2,3 +2,4 @@
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Dtor@WinObj@@QAEXXZ  00e011a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e01270_impl@@YAXXZ  00e01270  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Ctor@NetObj@@QAEPAXXZ  00e01690  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e00d20_impl@@YADXZ  00e00d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-008019f0 -  approximate property-database reads (subobject/variant layout unknown)
+008019f0 -  approximate property-database reads (subobject/variant layout unknown) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'ret'] vs ['call', 'call', 'call',]
 00802050 -  AddCursor: map insert tail approximated, node fields not written
 00802160 -  AddStandardCursors drives the partial AddCursor
 008026e0 -  cursor hotspot/handle resolution partial (virtual call result path approximated)

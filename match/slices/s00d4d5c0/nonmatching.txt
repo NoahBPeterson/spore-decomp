@@ -34,22 +34,22 @@
 #                game-data map.  Same semantics; the original caches the map end pointer in edi and
 #                keeps &mGameDataMap in ebp, ours swaps ebx/ebp and materialises the loop bound one
 #                slot earlier (101 vs 102 bytes).  equiv WEAK: 148/400 inputs valid, 81.8% coverage.
-00d4db50   15  cDramaEventInstanceData::Write(void*): emit signature, WriteData, then run the per-event
+00d4db50   15  cDramaEventInstanceData::Write(void*): emit signature, WriteData, then run the per-event [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 #                serialiser.  Same delayed-signature-store discrepancy as WriteData.  equiv
 #                UNSUPPORTED: 0/400 inputs valid.
-00d4dbe0   15  cNightPredatorEvent::Write(void*): same body, signature 0x5599e34 / name 0x1583920.
+00d4dbe0   15  cNightPredatorEvent::Write(void*): same body, signature 0x5599e34 / name 0x1583920. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 #                equiv UNSUPPORTED: 0/400 inputs valid.
-00d4dc70   15  cUFOAbductionEvent::Write(void*): signature 0x5599eb8 / name 0x158395c.  equiv
+00d4dc70   15  cUFOAbductionEvent::Write(void*): signature 0x5599eb8 / name 0x158395c.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 #                UNSUPPORTED: 0/400 inputs valid.
-00d4dd00   15  cBabyGameEvent::Write(void*): signature 0x5599f2c / name 0x15839d4.  equiv UNSUPPORTED:
+00d4dd00   15  cBabyGameEvent::Write(void*): signature 0x5599f2c / name 0x15839d4.  equiv UNSUPPORTED: [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 #                0/400 inputs valid.
-00d4dd90   15  cRainStormEvent::Write(void*): signature 0x5599f52 / name 0x1583a10.  equiv UNSUPPORTED:
+00d4dd90   15  cRainStormEvent::Write(void*): signature 0x5599f52 / name 0x1583a10.  equiv UNSUPPORTED: [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 #                0/400 inputs valid.
-00d4de20   15  cSeaMonsterEvent::Write(void*): signature 0x5599f7c / name 0x1583a4c.  equiv
+00d4de20   15  cSeaMonsterEvent::Write(void*): signature 0x5599f7c / name 0x1583a4c.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 #                UNSUPPORTED: 0/400 inputs valid.
-00d4deb0   15  cTribeFoodRaidEvent::Write(void*): signature 0x5ed29d3 / name 0x1583a88.  equiv
+00d4deb0   15  cTribeFoodRaidEvent::Write(void*): signature 0x5ed29d3 / name 0x1583a88.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 #                UNSUPPORTED: 0/400 inputs valid.
-00d4df40   15  cMeteorStrikeEvent::Write(void*): signature 0x609eedc / name 0x1583ac4.  equiv
+00d4df40   15  cMeteorStrikeEvent::Write(void*): signature 0x609eedc / name 0x1583ac4.  equiv [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 #                UNSUPPORTED: 0/400 inputs valid.
 00d4e070  629  Init(): mode-gated rebuild of the drama-event multimap from the mode's tuning property
 #                list — property queries, variant tag dispatch (0..8), per-event factory calls, key

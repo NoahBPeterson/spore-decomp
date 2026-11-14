@@ -4,7 +4,7 @@
 00692d20 57 complete; unguarded insertion sort: induction-variable choice (src derived from dst + constant offset) differs; equiv: WEAK (19% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00692ee0 24 complete; registry resolve walk near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
 00692f20 28 complete; registry release walk near-miss; equiv WEAK (25% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
-006930b0 16 complete; ParseFloat stack-slot reuse near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
+006930b0 16 complete; ParseFloat stack-slot reuse near-miss flags: /O2 /MD /Gy /EHsc /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00693390  772  Variant writer (complete; flags /O2 /MD /Gy /EHsc /TP /GS-): io/info register roles swapped and cl cross-jumps identical case tails the original keeps separate [equiv: WEAK]
 00693900  158  binder destructor: vtable store, +0x18/+0x14 probe, two smart-ref releases present; cl EH frame/state layout differs
 006939b0 165 binder bind A: virtual +0x18 probe, +0x1c release, AutoRef assignment all present; EH frame and this-arg reordering differ

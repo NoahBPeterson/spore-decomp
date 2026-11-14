@@ -4,10 +4,10 @@
 0082b160 -   cSPUIDeserializeHelper::SkipProperty: 419-byte body not reconstructed
 0082b310 -   cSPUIDeserializeHelper::ReadProperty: 1246-byte body not reconstructed
 0082b9c0 -   ProcessTokens/WriteHitmask: 1496-byte serializer body not reconstructed
-0082c000 105 rbtree insert: RBTreeInsert call sequence and node init not reconstructed
+0082c000 105 rbtree insert: RBTreeInsert call sequence and node init not reconstructed [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['ret']]
 0082c210 -   WriteHitmaskInline (519 bytes) not reconstructed
 0082c420 -   292-byte serializer helper not reconstructed
 0082c550 -   destructor/nuke helper skeleton
 0082c5a0 -   destructor/nuke helper skeleton
-0082c770 -   148-byte helper not reconstructed
-0082c810 -   352-byte helper not reconstructed
+0082c770 -   148-byte helper not reconstructed [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'ret'] vs ['ret']]
+0082c810 -   352-byte helper not reconstructed [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['ret']]

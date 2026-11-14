@@ -11,4 +11,4 @@
 006bccb0  108  complete; DecompressRecord has 6 stack params (ret 0x18): Alloc(d), ReadFileSpan(buf,b,c,d), DecompressData(a,buf,d,e,f); the 6th param was missing (5-param ret 0x14) and the marshalling was wrong; equivalence replay identical (WEAK 19.3% cov); frame differences
 006bcd70  249  complete; rbtree find + RecordInfo build; inlining/EH schedule differs
 006bcea0  404  complete; index compaction state machine; heavy scheduling/inlining differences
-006bd070  167  complete; hole-table flush/compact; hole-table inline call schedule differs
+006bd070  167  complete; hole-table flush/compact; hole-table inline call schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#6 esp, ret#7 esp, ret#7 esi]

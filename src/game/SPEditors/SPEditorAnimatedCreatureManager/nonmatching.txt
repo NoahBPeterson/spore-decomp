@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 0059ace0 28 complete ctor; float-global load/store scheduling differs from original flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 0059b2f0 54 complete orientation setter; original builds the quaternion through stack temps flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-0059b420 83 complete target-position setter; orig builds a Vector3 temp on the stack; store reordered before call; equiv PASS (400 valid inputs, 100% coverage) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0059b420 83 complete target-position setter; orig builds a Vector3 temp on the stack; store reordered before call; equiv PASS (400 valid inputs, 100% coverage) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 0059c060 130 manager::Init: complete; callee-saved register assignment swapped (param in ebp vs original ebx) and AutoRefCount operator= scheduling
 0059c190 313 Matrix3FromQuaternion: complete; original fills the stack temp with a different float-op schedule / register allocation [equiv: PASS 1200/1200, 100% cov]
 0059c6e0 71 RemoveCreature: iterator kept in esi in original; stack slot/register allocation differs

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s008337d0/s008337d0.cpp  ??0TextZoomName@@QAE@XZ  008345c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

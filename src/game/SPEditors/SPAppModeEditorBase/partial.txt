@@ -2,9 +2,9 @@
 0057f420 670 cheat handler (ArgScript/hashtable/string heavy); skeleton only; Earlier, fuller draft: match/slices/s0057f420/s0057f420.cpp (left behind by the migration); start from it.
 005802f0 745 skeleton only (not reconstructed); match/slices/s005802f0/s005802f0.cpp mentions this address and may hold an earlier draft.
 00580700 672 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s005802f0/s005802f0.cpp (left behind by the migration); start from it.
-005809a0 610 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s005802f0/s005802f0.cpp (left behind by the migration); start from it.
+005809a0 610 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s005802f0/s005802f0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'c]
 00580c10 90 reconstructed but format string/global content guessed
-00580cb0 307 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s005802f0/s005802f0.cpp (left behind by the migration); start from it.
+00580cb0 307 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s005802f0/s005802f0.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'call', 'c]
 00580df0 674 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s005802f0/s005802f0.cpp (left behind by the migration); start from it.
 005810d0 478 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s005810d0/s005810d0.cpp (left behind by the migration); start from it.
 005812b0 1086 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s005810d0/s005810d0.cpp (left behind by the migration); start from it.
@@ -17,7 +17,7 @@
 00585330 631 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s00585330/s00585330.cpp (left behind by the migration); start from it.
 005855b0 517 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s00585330/s00585330.cpp (left behind by the migration); start from it.
 005858f0 797 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s00585330/s00585330.cpp (left behind by the migration); start from it.
-00585c10 155 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s00585330/s00585330.cpp (left behind by the migration); start from it.
+00585c10 155 skeleton only (not reconstructed); Earlier, fuller draft: match/slices/s00585330/s00585330.cpp (left behind by the migration); start from it. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'ret'] vs ['ret']]
 00586410 - PARTIAL: AddUndoState 625B; only vector reset modelled, EASTL/refcount traffic omitted; Earlier, fuller draft: match/slices/s00585d40/s00585d40.cpp (left behind by the migration); start from it.
 00586700 244 PARTIAL: per-slot bit-vector reset; resize/memcpy insertion path omitted
 00586800 - PARTIAL: state serialization via cVarListSerializer stubbed; only vector normalisation modelled; Earlier, fuller draft: match/slices/s00585d40/s00585d40.cpp (left behind by the migration); start from it.

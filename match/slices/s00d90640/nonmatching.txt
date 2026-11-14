@@ -4,6 +4,6 @@
 00d90b20 3 virtual-call scratch register choice (funcptr in edx vs eax)
 00d90bb0 82 call scheduling / register allocation (134 vs 135)
 00d90f90 76 register allocation (pOut in ebp, constant 1 in bl) (84 vs 93)
-00d91280 43 register allocation (esi/edi role swap)
+00d91280 43 register allocation (esi/edi role swap) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['ret'] vs ['call', 'call', 'call', 'call', 'call', 'call', 'call', 'ret']]
 00d913d0 156 merged target: tooling bounds() folds unlisted 0xd913e0 into this VA (20 vs 165)
 00d91480 61 switch case block hoisting (shared load/push) + push imm vs mov eax,imm (118 vs 135)

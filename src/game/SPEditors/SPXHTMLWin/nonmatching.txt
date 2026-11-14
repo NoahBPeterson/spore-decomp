@@ -5,10 +5,10 @@
 00623570 95 FindSubmitChild: complete; original keeps a top-tested loop with two back-jumps (no loop inversion) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00623610 51 FindFormChild: same loop shape issue flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00623660 114 cXHTMLWin::SubmitForm: complete; register assignment (edi/ebx) and click-struct slot flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00623730 18 cSPHoverTitle ctor: complete; store scheduling (movss hoisted) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00623730 18 cSPHoverTitle ctor: complete; store scheduling (movss hoisted) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 return target, ret#1 esi]
 00623830 326 cSPHoverTitle::Layout (position tooltip near the cursor): complete; SSE operand order of (w + pad + x) and SPPoint arg copies flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00623be0 58 cXHTMLWin ctor: complete; store scheduling around the base ctor flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00623c90 530 cXHTMLWin::SetFormControlValue (select/option handling): complete; list end iterator kept as a null-checked value in the original flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00623f90 7 popup timer OnMessage; complete, only the fstp/mov al scheduling in the 0x51a1a2e path differs
+00623f90 7 popup timer OnMessage; complete, only the fstp/mov al scheduling in the 0x51a1a2e path differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#4 edi]
 00624080 1600 cXHTMLWin::CreateFormControl; complete behaviour, structure/regalloc differ (jump-table switch, duplicated inlined tails)
 006248d0 130 cXHTMLWin::GetFormControlValue; complete; WString assign is a usercall (eax=begin) and list anchor null-test shape differs

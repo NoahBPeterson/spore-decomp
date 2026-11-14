@@ -8,6 +8,6 @@
 010c23c0  269  complete hkAlgorithm::quickSortRecursive<hkRootCdPoint>; swap block register allocation differs
 010c2570  24   complete hkAllCdPointCollector::sortPoints; tag temporary / loop entry differs
 010c25a0  122  complete collision-agent registration sequence; helpers are __thiscall (dispatcher in ecx) and the 37-call order matches, instruction scheduling differs
-010c2730  88   complete hkCapsuleShape constructor; m_referenceCount (+6) is the initialised halfword, store scheduling differs
+010c2730  88   complete hkCapsuleShape constructor; m_referenceCount (+6) is the initialised halfword, store scheduling differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 010c27a0  122  complete hkCapsuleShape::getSupportingVertex; vertex/memory results match, only the leftover eax (out+0xc) differs
 010c2570  35   hkAllCdPointCollector::sortPoints: complete; the sort call and arguments match, the only gap is the temporary comparator. Retail stores the empty tag as a byte in the frame slot before the size test (`mov byte ptr [esp],0` between `cmp eax,1` and `jle`); cl 13.10 materialises the tag only when passing it. Tried: tag declared before the `if` (dropped), after the `if` (dropped), `if (size <= 1) return;` (dropped), named base/lo/hi locals (no test at all). Needs a source shape that gives the empty tag a stack slot ctor vc71 keeps.

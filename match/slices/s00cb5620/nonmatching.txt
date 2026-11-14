@@ -7,6 +7,6 @@
 00cb5fe0  47  pointer load folds to [eax+0x118]; original materializes eax + add eax,imm
 00cb6090  280  repeated item lookups materialize eax + add eax,imm; large function
 00cb61d0  274  repeated item lookups materialize eax + add eax,imm; large function
-00cb6310  116  callee-saved push/epilogue layout and branch layout diverge
-00cb6400  148  callee-saved push/epilogue layout and branch layout diverge
+00cb6310  116  callee-saved push/epilogue layout and branch layout diverge [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target]
+00cb6400  148  callee-saved push/epilogue layout and branch layout diverge [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00cb6500  142  compiler re-pushes args for second call; original reuses stack args

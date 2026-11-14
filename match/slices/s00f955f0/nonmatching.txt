@@ -3,7 +3,7 @@
 00f95ac0  142  UnpackColor: complete; x87 fild + unsigned fixup ported, cl orders the int-to-float conversions differently
 00f95b70  196  DrawTerrainOverlay: complete; the overlay draw loop matches but cl lays out the per-cell stores differently (no equivalence verdict)
 00f95dd0  158  cTerrainOverlay::Start: complete; unresolved `?fabs_f@SP@@YAMM@Z` at link time so equivalence is UNSUPPORTED
-00f96110  113  HashTerrainDesc: complete (equivalence PASS); cl reorders the mixing multiply/shift chain
+00f96110  113  HashTerrainDesc: complete (equivalence PASS); cl reorders the mixing multiply/shift chain [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00f962b0   74  cTerrainOverlay scalar deleting dtor: complete (equivalence PASS); cl orders the dtor/vtbl-store/vfree sequence differently
 00f96310   92  cTerrainOverlay::Start: complete (equivalence PASS); the flag/latch writes match, cl reorders the branch blocks
 00f96390  129  DrawTerrainGrid: complete; the grid-emit loop matches but cl reorders the vertex stores

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00985ad0/s00985ad0.cpp  ?CreateInstance@BasicFactory_SliderDrawable@UTFWinControls@EA@@QAEPAVSliderDrawable@23@HPAX@Z  00985bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

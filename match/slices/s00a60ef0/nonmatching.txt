@@ -6,12 +6,12 @@
 
 00a61180  slider_float       size equal, 75 diff. Equivalence PASS (224 valid, 73.8% coverage). Semantically equivalent; MSVC chose a different xmm/register allocation for the clamp and the outlet walk.
 
-00a61200  slider_setfloat    size 48 vs 68, 22 diff. Equivalence FAIL: ours writes xmm2 which the original never touches (clamp bounds reload register). The slice extent for 0x00a61200 is 68 bytes because it swallows the adjacent 0x00a61230 loadbang handler; with /Gy our COMDAT stops at 48, so the extent can never match.
+00a61200  slider_setfloat    size 48 vs 68, 22 diff. Equivalence FAIL: ours writes xmm2 which the original never touches (clamp bounds reload register). The slice extent for 0x00a61200 is 68 bytes because it swallows the adjacent 0x00a61230 loadbang handler; with /Gy our COMDAT stops at 48, so the extent can never match. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 memory]
 
 
 00a61530  vinlet_setup       size 196 vs 221, 67 diff. The original normalises each class_add* result with "test al,al; setne al" before "and bl,al"; ours accumulates directly in bl. Equivalence UNSUPPORTED (pd class registry globals unpopulated).
 
-00a61610  voutlet_new       size 162 vs 154, 95 diff. Same early-return restructure as vinlet_new but the inlet_new call has different stack-arg shapes. UNSUPPORTED (pd globals).
+00a61610  voutlet_new       size 162 vs 154, 95 diff. Same early-return restructure as vinlet_new but the inlet_new call has different stack-arg shapes. UNSUPPORTED (pd globals). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 esp]
 
 
 00a617c0  voutlet_setup     size 196 vs 221, 67 diff. Same setne-per-call pattern as vinlet_setup. UNSUPPORTED (pd globals).

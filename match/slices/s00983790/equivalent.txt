@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+slices/s00983790/s00983790.cpp  ?CreateInstance@BasicFactory_ScrollbarDrawable@UTFWinControls@EA@@QAEPAVScrollbarDrawable@23@HPAX@Z  00983940  /O2 /MD /Gy /TP /arch:SSE /fp:fast

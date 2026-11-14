@@ -6,7 +6,7 @@
 00ec7320 110  UI virtual-call sequence differs [equiv UNSUPPORTED (0/1200 valid, read faults)]
 00ec73c0 200  window-search loop; virtual calls approximated [equiv UNSUPPORTED (0/1200 valid, read faults)]
 00ec7490 56   null-check / tail-merge block ordering differs [equiv PASS]
-00ec74e0 43   window lookup logic close; virtual-call slots approximated [equiv FAIL (3/791 mismatch eax&0xff)]
+00ec74e0 43   window lookup logic close; virtual-call slots approximated [equiv FAIL (3/791 mismatch eax&0xff)] [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'ret'] vs ['call', 'call', 'ret']]
 00ec70d0 523  drag-reindex path reconstructed: two ComputeRect temporaries, float SetPos delta, camera-relative index query and the 10-entry value-shift loop; retail keeps more values live in xmm/fpu registers so the byte layout differs (380 vs 587).
 00ec7580 169  property lookup reconstructed: property-manager query, typed bool at +0x12, value accessor at 0x0041ea00, refcounted release; the dead pre-release block retained by retail is dropped by the compiler here (156 vs 186).
 00ec7640 120  stage-mode predicate reconstructed for kinds 1, 2 and 8 incl. the 0x00f25680, 0x00f25670, 0x00f25720 and 0x00ec7580 chain; the frame lookup and stage-set compare use a typed 0x4e0-byte record (164 vs 158).

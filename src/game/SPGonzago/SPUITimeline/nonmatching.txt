@@ -6,7 +6,7 @@
 00e36ff0 413 GetTimelineTime: size 692 vs 696; equiv WEAK (391 valid, coverage 33.8% < 60%), 0 mismatches
 00e372b0 1031 SetTimelineTime: size 1271 vs 1174; equiv WEAK (254 valid, coverage 34.2% < 60%), 0 mismatches
 00e37780 112 FUN_00e37780: size 181 vs 187; equiv WEAK (400 valid, coverage 54.7% < 60%), 0 mismatches
-00e37840 153 FUN_00e37840: size 206 vs 207; equiv UNSUPPORTED (fake-arity 397/400, no valid input)
+00e37840 153 FUN_00e37840: size 206 vs 207; equiv UNSUPPORTED (fake-arity 397/400, no valid input) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target]
 00e37910 39 FUN_00e37910: size differs; equiv PASS (389 valid, 100% coverage)
 00e37b40 110 FUN_00e37b40: size 146 vs 149; equiv PASS (266 valid, 100% coverage)
 00e37be0 380 FUN_00e37be0: size 418 vs 393; equiv WEAK (228 valid, coverage 25.2% < 60%), 0 mismatches
@@ -24,7 +24,7 @@
 00e393b0 14 400 valid inputs, 100% coverage; only 17/37 bytes differ: original widens the IsVisible() bool with movzx eax,al and places the ret0 block before ret1, ours tests al directly with the epilogues swapped; al-value identical flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e39de0 103 complete KeyValue::ApplyTo; the original hoists all three payload triple members into esi/edi/eax before the compare chain, MSVC reloads them one at a time through a single scratch register (115 vs 117 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e3a230 34 complete GetDrawPriority; MSVC materialises the bool condition in al (`xor al,al` / `mov al,1` / `test al,al`), the original uses eax forms plus a redundant `movzx eax,al` widening in each arm (55 vs 61 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
-00e3a270 713 complete cBigEditorObject::OnChange; message dispatch, per-key property/binding updates and the redraw calls are all reconstructed, differences are block layout of the key dispatch and register/stack-slot assignment (767 vs 763 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+00e3a270 713 complete cBigEditorObject::OnChange; message dispatch, per-key property/binding updates and the redraw calls are all reconstructed, differences are block layout of the key dispatch and register/stack-slot assignment (767 vs 763 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 00e3a570 255 complete ClampToCirclePair; same two-circle clamp and sqrtf branches, but the original mixes x87 loads with SSE sqrt/comiss and evaluates the r*r - dx*dx temporaries in a different order, so the frame is 0xc instead of 0x10 (293 vs 311 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e3a730 223 complete cBigEditorObject::GetTerrainImage; the Init() result is kept in esi instead of being spilled to the original's [esp+0x10] temp, so the frame is 0xc instead of 0x10 and every local/parameter offset plus the colour-array stores shift by 4 (427 vs 433 bytes) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00e3c100 58 angle-wrap helper for mode key 0x2500e82c vs default: logic and constants identical; complete (ours 135B, orig 145B) but cl contracts the branch arithmetic into fld/fsub where the original uses addss/subss. equiv PASS (345 valid inputs, 100% coverage, no mismatch). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

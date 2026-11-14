@@ -1,6 +1,6 @@
 00bb9a70 116   incomplete: cVarListSerializer Write frame approximated; equiv UNSUPPORTED (only 0/400 inputs valid)
-00bb9cd0  21   incomplete: attribute-read helper; raw vtable slot calls, fake arity; equiv UNSUPPORTED (0/400 valid)
-00bb9d00  30   incomplete: attribute-write helper; raw vtable slot calls, fake arity; equiv UNSUPPORTED (0/400 valid)
+00bb9cd0  21   incomplete: attribute-read helper; raw vtable slot calls, fake arity; equiv UNSUPPORTED (0/400 valid) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#3 eax]
+00bb9d00  30   incomplete: attribute-write helper; raw vtable slot calls, fake arity; equiv UNSUPPORTED (0/400 valid) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target, ret#3 return target, ret#3 esp, ret#3 eax]
 00bb9e00 149   incomplete: terrainScript property-lookup chain stubbed (dead holder branch); equiv FAIL (eax mismatch)
 00bba570 199   incomplete: cStarRecord Read name-reset string compare approximated; equiv UNSUPPORTED (0/400 valid)
 00bba640 286   incomplete: CachePlanetRecords uses stub RefObj/virtual Create, unresolved; equiv UNSUPPORTED (0/400 valid)

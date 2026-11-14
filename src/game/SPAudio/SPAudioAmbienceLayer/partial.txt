@@ -3,4 +3,4 @@
 00a35420  358 F_a35420::call (move segment endpoint along direction): approximated; difftest FAIL (5/390, direction/capping math diverges)
 00a35720  209 FUN_00a35720 (object destructor): approximated; difftest FAIL (5/5, fake-arity: indirect call through zero)
 00a35840  119 F_a35840::call (set + cache global audio style property): approximated; difftest FAIL (5/5, fault in hashtable find at 0x645ed8; find/insert iterator ABI not reproduced)
-00a35aa0  -   FUN_00a35aa0 (ambience-layer ctor): approximated; difftest FAIL (5/5, invalid write at 0x9212a8; inlined pool ctor args differ)
+00a35aa0  -   FUN_00a35aa0 (ambience-layer ctor): approximated; difftest FAIL (5/5, invalid write at 0x9212a8; inlined pool ctor args differ) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 esp]

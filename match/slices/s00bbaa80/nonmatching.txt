@@ -5,8 +5,8 @@
 00bbb120 230 StarGridInsert: field offsets and hidden eax result differ
 00bbb210 217 StarGridErase: ecx/eax base-register roles swapped
 00bbb2e0 236 StarGridMeasure: Merge call arg order and local buffer size
-00bbb400 174 StarGridAlloc2: overflow-guarded 64-bit multiply not emitted
-00bbb500 172 StarGridAlloc3: overflow-guarded 64-bit multiply not emitted
+00bbb400 174 StarGridAlloc2: overflow-guarded 64-bit multiply not emitted [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#4 memory]
+00bbb500 172 StarGridAlloc3: overflow-guarded 64-bit multiply not emitted [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 memory, call#5 memory, call#7 memory]
 00bbb600 197 StarGridSiftDownEq1: loop shape and register roles
 00bbb710 257 StarGridSiftUpEq0: loop shape and register roles
 00bbb820 218 StarGridResolveEq1: writes ecx the original leaves untouched

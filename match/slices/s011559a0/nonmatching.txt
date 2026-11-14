@@ -6,11 +6,11 @@
 01155f40  655  SNDI_precalcaztospkrvol (azimuth->speaker volume table builder) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (196 valid, 57.1% coverage)
 01156310   91  FUN_01156310 (volume-table lookup into float[6]) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (400 valid, 28.6% coverage)
 01156380   11  FUN_01156380 (free azimuth table) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (225 valid, 60.0% coverage). Residual: retail pushes only the two live arguments to 0x112c850 (`mov ecx,[0x16e61a8]; push 0; push eax; call`), because that callee is a fastcall whose second argument is the call-site `edx` slot; our TU is compiled without /GL, so cl spells the argument as `xor edx,edx` (45 vs 43 bytes). A named `void* p` local compiles the same
-011563b0  138  FUN_011563b0 (init speaker angle table) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (400 valid, 100.0% coverage)
+011563b0  138  FUN_011563b0 (init speaker angle table) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (400 valid, 100.0% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 01156480   37  FUN_01156480 (set module base offsets) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (400 valid, 100.0% coverage)
 01156530  287  FUN_01156530 (CPU feature probe, uint64) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler)
 01156660   99  FUN_01156660 (find next free voice slot) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (179 valid, 63.6% coverage)
 011566f0   69  MIX_createFxglobals complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (210 valid, 100.0% coverage)
 01156780   77  FUN_01156780 (free FX globals, walk bucket lists) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv WEAK (400 valid, 7.5% coverage)
-01156800  117  FUN_01156800 (CPU feature probe, alt) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler)
+01156800  117  FUN_01156800 (CPU feature probe, alt) complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'ret'] vs ['call', 'call', 'call',]
 011568a0  114  MIX_setpitch complete. flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv PASS (205 valid, 98.0% coverage)

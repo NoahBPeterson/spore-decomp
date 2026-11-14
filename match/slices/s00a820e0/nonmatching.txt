@@ -9,11 +9,11 @@
 00a821e0   10  cVisualEffect::SetVectorParams: complete.  Ends in a jmp-style tail call in the
                original (LTCG sibling call); a single-object /O2 build emits call+ret.
                Equiv UNSUPPORTED (0/400 valid inputs, harness rejects the generated `this`).
-00a82370   72  cVisualEffect::SetDescription: complete; member-reload and stack-frame differences
+00a82370   72  cVisualEffect::SetDescription: complete; member-reload and stack-frame differences [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
                (the original keeps the description in eax/tail-jumps to UpdateDescription).
                Equiv FAIL: return value differs on 5/9 valid inputs because the harness binds
                the neighbour call to real original code (the call clobbers eax differently).
-00a823e0   20  cVisualEffect::UpdateDescription: complete; ours keeps the string pointer in a
+00a823e0   20  cVisualEffect::UpdateDescription: complete; ours keeps the string pointer in a [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
                different register.  Equiv FAIL for the same harness-binding reason as above
                (return value, 5/5 valid inputs); coverage 100%.
 00a82430  183  cVisualEffect::CheckIfStopped: complete; the original's message-server call is

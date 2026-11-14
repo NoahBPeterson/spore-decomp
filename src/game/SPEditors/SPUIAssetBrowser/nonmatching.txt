@@ -1,9 +1,9 @@
 # va  diff-bytes  reason
-006447c0 167 MakeLaunchData(flag, out): complete; constant-vs-register byte stores and store order differ flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+006447c0 167 MakeLaunchData(flag, out): complete; constant-vs-register byte stores and store order differ flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 target]
 00644990 9 Hub::Fn990 (dialog key select): complete; only store scheduling of the Key3 copy around the pushes differs flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 00644b90 134 cSPUIAssetBrowser::SetWebBrowserVisibility: complete; original passes the bool byte unwidened (mov cl,1/push ecx) and loads vtable slot after the pushes
 00644c50 131 sibling of SetWebBrowserVisibility (+Navigate call): complete; same bool-arg/vcall scheduling difference
-00644d10 80 same visibility helper with the SubA toggle: complete; same bool-arg scheduling difference
+00644d10 80 same visibility helper with the SubA toggle: complete; same bool-arg scheduling difference [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 target]
 00644eb0 169 font-size fit loop (style/rect compare): complete; SSE scheduling and stack slot layout of the two rects differ
 00645160 162 Browser validate loop over 20-byte entries then WindowManager/SetWin: complete; register allocation differs
 00645260 20 Browser::Fn_260 (error-dialog key select): complete; original pushes the key address in each arm (push imm; jmp), mine materializes in eax

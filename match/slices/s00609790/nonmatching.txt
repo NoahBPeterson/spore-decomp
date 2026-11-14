@@ -1,1 +1,1 @@
-00609e50  62  DomainMatches: static helper's register calling convention differs (orig: domain in edi, host on stack; real caller not in batch)
+00609e50  62  DomainMatches: static helper's register calling convention differs (orig: domain in edi, host on stack; real caller not in batch) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]

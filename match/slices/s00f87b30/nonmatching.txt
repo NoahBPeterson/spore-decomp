@@ -6,4 +6,4 @@
 00f88090  -1  FaceTangentBasis: complete; face>5 is UB (original reads uninitialised locals) matched with a volatile xyz[3]; size/regs differ (equiv PASS, 100% coverage)
 00f884a0  -1  IntersectRaySphere: complete; register allocation/size differ (equiv PASS, 400 valid, 100% coverage)
 00f885b0  -1  ToVector3: complete; MSVC 2008 emits x87 fild/fstp for int->float under /arch:SSE where the original restructured (equiv PASS, 100% coverage)
-00f885f0  -1  ToVector4: complete; x87 unsigned->float sequence + one reordered store differ (equiv PASS, 96.2% coverage)
+00f885f0  -1  ToVector4: complete; x87 unsigned->float sequence + one reordered store differ (equiv PASS, 96.2% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]

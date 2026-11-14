@@ -1,13 +1,13 @@
 # va  diff-bytes  reason
 007e70b0  414  cAppSystem::HandleMessage (message dispatch with ResourceMan wait loop) not reconstructed
 007e7380  673  cAppSystem::Configure not reconstructed
-007e7630  631  cAppSystem::cAppSystem constructor not reconstructed
+007e7630  631  cAppSystem::cAppSystem constructor not reconstructed [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'call', 'call', 'ret'] vs ['ret']]
 007e78d0  632  cAppSystem::~cAppSystem destructor not reconstructed
 007e7b50  427  FUN_007e7b50 not reconstructed
 007e9450  1453  cAppSystem::Shutdown not reconstructed
 007e9a00  743  cAppSystem::LoadEffectCollections not reconstructed
 007e9db0  1331  cAppSystem::Update not reconstructed
-007ea2f0  294  cheat constructor registering cArgumentSpec entries not reconstructed
+007ea2f0  294  cheat constructor registering cArgumentSpec entries not reconstructed [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'ret'] vs ['ret']]
 007ea440  1480  large serialization routine not reconstructed
 007eaa10  1233  cAppSystem::InitGraphics not reconstructed
 011ce130 1369 INCOMPLETE: PEM block decoder keeps only the skeleton (default BIO when none is given with the 0x41 error, the extension info allocation, the name comparison against "CERTIFICATE" and the hand-off); the original also contains the full name table walk, the per-name decode call, the AUX handling and the whole error/cleanup path (1415 vs 230 bytes); equiv UNSUPPORTED (unresolved BIO_*/CRYPTO_malloc/ERR_put_error) flags: /O2 /MD /Gy /TP /GS- /fp:fast

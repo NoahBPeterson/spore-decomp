@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?init@Big2@@QAEPAU1@PAX@Z  00694e60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

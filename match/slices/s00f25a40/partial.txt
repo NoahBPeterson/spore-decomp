@@ -1,6 +1,6 @@
 # va        diff-bytes  reason
-00f25a40  n/a      incomplete: asset-directory key/return handling not reconstructed
-00f25af0  n/a      incomplete: serializer dispatch via SP::GetSaveArea virtual not reconstructed
+00f25a40  n/a      incomplete: asset-directory key/return handling not reconstructed [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'call', 'ret'] vs ['ret']]
+00f25af0  n/a      incomplete: serializer dispatch via SP::GetSaveArea virtual not reconstructed [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['ret']]
 00f25d80  n/a      incomplete: EA::IO::WriteUint32 serialization loop not reconstructed
 00f25f80  n/a      incomplete: jumptable serialization function not reconstructed
 00f26230  n/a      incomplete: rep-movsd struct reset of a 0x27e8 array not reconstructed
