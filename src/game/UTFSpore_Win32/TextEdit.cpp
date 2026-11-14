@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/TextEdit.cpp -- migrated from slice(s) s0098d630, s0098c880, s0098b910, s009886d0, s0098e3a0, s0098a820, s0096e3a0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/TextEdit.cpp -- migrated from slice(s) s00989870, s0098d630, s0098c880, s0098b910, s009886d0, s0098e3a0, s0098a820, s0096e3a0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/TextEdit.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1698,6 +1698,153 @@ float RectWidth(const EA::UTFWin::RectF* r)  { return r->right - r->left; }
 }
 // ---- items of slice s0098d630 end
 
+// ---- items of slice s00989870 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define WIN_s0098_9870(iface) ((TextWindow_s0098_9870*)((char*)(iface) - 0x20c))
+#define IFACE(win) ((IWinTextEdit_s0098_9870*)((char*)(win) + 0x20c))
+void* GetDefaultAllocator();                                                       // 009512C0
+void* AllocAligned(uint32_t size, uint32_t align, const char* name, void* alloc);  // 009512D0
+bool  FUN_006ab760(void* vecField, const wchar_t* str);                            // 006AB760
+typedef int (*HashHookFn)(void*, const wchar_t*, int, unsigned);
+extern HashHookFn g_hashHook;                                                      // 0166B210
+namespace EA {
+class Stopwatch_s0098_9870 { public:
+    uint64_t mnStartTime;
+    uint64_t mnTotalElapsedTime;
+    int      mnUnits;
+    float    mfCyclesToUnitsCoefficient;
+    void Restart();                                 // 00571E80 0x00571e80
+};
+}
+namespace EA {
+namespace UTFWinControls {
+struct TextVector {
+    void DoInsertValue(unsigned idx, void* at, unsigned nbytes);   // 011E0744
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IWindow { void* vt; };
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IUnk_s0098_9870 { };
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ScrollbarSlot_s0098_9870 {
+    IUnk_s0098_9870*  scrollbar;                                 // +0x00
+    IUnk_s0098_9870*  drawable;                                  // +0x04
+    int    enabled;                                   // +0x08
+    float  f0c;                                       // +0x0c
+    float  f10;                                       // +0x10
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct TextWindow_s0098_9870 {
+    void* vtPrimary;                                  // +0x000
+    void* vtIWindow;                                  // +0x004
+    uint32_t p08[(0x80 - 0x08) / 4];                  // +0x008
+    int id0, id1;                                     // +0x080, +0x084
+    float area[4];                                    // +0x088
+    uint32_t p98[(0xb0 - 0x98) / 4];                  // +0x098
+    wchar_t* textBegin;                               // +0x0b0
+    wchar_t* textEnd;                                 // +0x0b4
+    uint32_t pB8[(0x20c - 0xb8) / 4];                 // +0x0b8
+    unsigned TextLength() const { return (unsigned)(textEnd - textBegin); }
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class IWinTextEdit_s0098_9870 { public:
+    void* vt;                                         // +0x000
+    uint32_t p04;                                     // +0x004
+    uint32_t flags;                                   // +0x008
+    uint32_t flags2;                                  // +0x00c
+    uint32_t lineMode;                                // +0x010
+    float mRect[4];                                   // +0x014
+    float mColors[4];                                 // +0x024
+    uint32_t p34[(0x5c - 0x34) / 4];                  // +0x034
+    unsigned cursor;                                  // +0x05c
+    unsigned anchor;                                  // +0x060
+    uint32_t p64[(0x2e8 - 0x64) / 4];                 // +0x064
+    uint32_t f2e8;                                    // +0x2e8
+    uint32_t p2ec[(0x374 - 0x2ec) / 4];               // +0x2ec
+    ScrollbarSlot_s0098_9870 sb[2];                              // +0x374
+    float mScrollX;                                   // +0x39c
+    float mScrollY;                                   // +0x3a0
+    uint32_t f3a4;                                    // +0x3a4
+    float viewExtent;                                 // +0x3a8
+    uint32_t p3ac[(0x3cc - 0x3ac) / 4];               // +0x3ac
+    EA::Stopwatch_s0098_9870 caretTimer;                         // +0x3cc
+    uint32_t p3e4[(0x440 - 0x3e4) / 4];               // +0x3e4
+    uint8_t  byte440;                                 // +0x440
+
+    int  F989A20();                                   // 00989A20
+    int  F989A30(void* at, unsigned idx, unsigned n);    // 00989A30
+    void F989B00(unsigned a, unsigned b);             // 00989B00
+    char F989B70(unsigned* a, unsigned* b);           // 00989B70
+    void F989BB0(uint32_t flag, char on);             // 00989BB0
+    void SetScrollPosition(float* p);                 // 00989C60
+    void* F989D10(int idx);                           // 00989D10
+    int  F989D30(int idx);                            // 00989D30
+    void F98A320(float* r);                           // 0098A320
+    void F98A370(const wchar_t* str, int arg2);       // 0098A370
+    void F98A3F0(int a, int b, int c);                // 0098A3F0
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class WinScrollbar { public: void* Construct(); };           // 00983790
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class ScrollbarDrawable { public: void* Construct(); };      // 009838A0
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class WinTextEdit_s0098_9870 : public TextWindow_s0098_9870, public IWinTextEdit_s0098_9870 { public:
+    void ShowCaret(int on);                           // 00989660 0x00989660
+    int  DoMessageBase(int msg);                      // 00950BB0
+
+    void CalculateVisibleArea();                      // 00989870 0x00989870
+    void F9899B0();                                   // 009899B0
+    char ValidateChange();                            // 00989A90 0x00989a90
+    char F989D70(int a1, int a2, int a3, int a4);     // 00989D70
+    char OnFocusChange(int flag, void* other);        // 00989E60
+    char OnKeyChar(int unused, unsigned key);         // 00989EC0
+    int  DoMessage(int msg);                          // 00989FE0 0x00989fe0
+    void F98A090(int idx);                            // 0098A090
+    void F98A270(unsigned idx, int* outBegin, int* outLen);  // 0098A270
+    void F98A2F0(int flag);                           // 0098A2F0
+    unsigned SnapIndex(unsigned pos, int* out);       // 0098A430
+    unsigned F98A4B0(unsigned pos);                   // 0098A4B0
+    unsigned F98A570(unsigned pos);                   // 0098A570
+    unsigned F98A660(unsigned pos);                   // 0098A660
+    unsigned F98A730(unsigned pos);                   // 0098A730
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+template <class T> inline const T& emin(const T& a, const T& b) { return b < a ? b : a; }
+}
+}
+namespace EA {
+namespace UTFWinControls {
+template <class T> inline const T& emax(const T& a, const T& b) { return a < b ? b : a; }
+}
+}
+// ---- items of slice s00989870 end
+
 // @ 0x0096f320
 bool __cdecl FUN_0096f320(void* p1, char* p2, char* p3)
 {
@@ -1918,6 +2065,420 @@ extern "C" void __cdecl sub_9897d0(uint32_t* first, uint32_t* last, uint32_t* de
         *(float*)(destEnd + 4) = *(float*)(last + 4);
         *(float*)(destEnd + 5) = *(float*)(last + 5);
     }
+}
+
+// @ 0x00989870
+void EA::UTFWinControls::WinTextEdit_s0098_9870::CalculateVisibleArea()
+{
+    EA::UTFWinControls::IWinTextEdit_s0098_9870* p = IFACE(this);
+    float w = area[2] - area[0];
+    float h = area[3] - area[1];
+    p->mColors[2] = w;
+    p->mColors[0] = 0.0f;
+    p->mColors[1] = 0.0f;
+    p->mColors[3] = h;
+    p->mColors[0] = p->mRect[0] + p->mColors[0];
+    p->mColors[1] = p->mRect[1] + p->mColors[1];
+    p->mColors[2] = p->mColors[2] - p->mRect[2];
+    p->mColors[3] = p->mColors[3] - p->mRect[3];
+    if (VSLOT(char (__thiscall*)(void*, int), p, 0xf4)(p, 1))
+        p->mColors[2] = p->mColors[2] - p->sb[1].f0c;
+    if (VSLOT(char (__thiscall*)(void*, int), p, 0xf4)(p, 0))
+        p->mColors[3] = p->mColors[3] - p->sb[0].f10;
+    if (p->mColors[2] < p->mColors[0] || p->mColors[3] < p->mColors[1]) {
+        p->mColors[2] = p->mColors[0];
+        p->mColors[3] = p->mColors[1];
+    }
+}
+
+// @ 0x009899b0
+void EA::UTFWinControls::WinTextEdit_s0098_9870::F9899B0()
+{
+    EA::UTFWinControls::TextMsg m;
+    m.type = 0x18;
+    m.src = (uint32_t)id1;
+    m.w4 = (uint32_t)id0;
+    m.length = (int)(float)TextLength();
+    m.text = textBegin;
+    EA::UTFWinControls::IWindow* iw = (EA::UTFWinControls::IWindow*)((char*)this + 4);
+    VSLOT(void (__thiscall*)(void*, EA::UTFWinControls::TextMsg*), iw, 0x114)(iw, &m);
+}
+
+// @ 0x00989a30
+int EA::UTFWinControls::IWinTextEdit_s0098_9870::F989A30(void* at, unsigned idx, unsigned n)
+{
+    EA::UTFWinControls::TextWindow_s0098_9870* w = WIN_s0098_9870(this);
+    unsigned len = w->TextLength();
+    if (idx >= len) return 0;
+    const unsigned& c = EA::UTFWinControls::emin(n, len - idx);
+    ((EA::UTFWinControls::TextVector*)w->textBegin)->DoInsertValue(idx, at, c * 2);
+    return (int)c;
+}
+
+// @ 0x00989a90
+char EA::UTFWinControls::WinTextEdit_s0098_9870::ValidateChange()
+{
+    struct Rec {
+        wchar_t* text;          // +0x00
+        int      len;           // +0x04
+        uint8_t  one;           // +0x08
+        uint8_t  pad09[3];      // +0x09
+        void*    f0c;           // +0x0c
+        uint32_t id;            // +0x14
+        uint8_t  pad18[0xc];    // +0x18
+        void*    self;          // +0x24
+    };
+    Rec rec;
+    rec.text = textBegin;
+    rec.len = (int)(textEnd - textBegin);
+    rec.one = 1;
+    rec.id = 0x9b1552da;
+    rec.self = &rec;
+    EA::UTFWinControls::IWindow* iw = (EA::UTFWinControls::IWindow*)((char*)this + 4);
+    if (VSLOT(int (__thiscall*)(void*), iw, 0x14)(iw)) {
+        void* obj = VSLOT(void* (__thiscall*)(void*), iw, 0x14)(iw);
+        VSLOT(void (__thiscall*)(void*, void*, void*, void*, int), obj, 0x10)(obj, iw, iw, &rec.f0c, 0);
+    }
+    return (char)rec.one;
+}
+
+// @ 0x00989b00
+void EA::UTFWinControls::IWinTextEdit_s0098_9870::F989B00(unsigned a, unsigned b)
+{
+    EA::UTFWinControls::TextWindow_s0098_9870* w = WIN_s0098_9870(this);
+    int len = (int)w->TextLength();
+    unsigned u1 = EA::UTFWinControls::emin(a, (unsigned)len);
+    unsigned u2 = EA::UTFWinControls::emin(b, (unsigned)len);
+    if (u1 != cursor || u2 != anchor) {
+        flags2 |= 3;
+        cursor = u1;
+        anchor = u2;
+        EA::UTFWinControls::IWindow* iw = (EA::UTFWinControls::IWindow*)((char*)this - 0x208);
+        VSLOT(void (__thiscall*)(void*), iw, 0x90)(iw);
+    }
+}
+
+// @ 0x00989bb0
+void EA::UTFWinControls::IWinTextEdit_s0098_9870::F989BB0(uint32_t flag, char on)
+{
+    uint32_t old = flags;
+    if (!on) flags = ~flag & flags;
+    else     flags |= flag;
+    uint32_t diff = flags ^ old;
+    if ((diff & 0x21) && !(flags & 0x21))
+        ((EA::Stopwatch_s0098_9870*)((char*)this + 0x3cc))->Restart();
+    f2e8 = (uint32_t)((uint8_t)(flags >> 7) & 1);
+    if (diff & 0xb8) {
+        EA::UTFWinControls::IWindow* iw = (EA::UTFWinControls::IWindow*)((char*)this - 0x208);
+        VSLOT(void (__thiscall*)(void*), iw, 0x90)(iw);
+    }
+}
+
+// @ 0x00989c60
+void EA::UTFWinControls::IWinTextEdit_s0098_9870::SetScrollPosition(float* p)
+{
+    if (mScrollX != p[0] || mScrollY != p[1]) {
+        mScrollX = p[0];
+        mScrollY = p[1];
+        if (sb[1].scrollbar)
+            VSLOT(void (__thiscall*)(void*, int, int), sb[1].scrollbar, 0x24)
+                (sb[1].scrollbar, (int)p[1], 0);
+        if (sb[0].scrollbar)
+            VSLOT(void (__thiscall*)(void*, int, int), sb[0].scrollbar, 0x24)
+                (sb[0].scrollbar, (int)p[0], 0);
+        EA::UTFWinControls::IWindow* iw = (EA::UTFWinControls::IWindow*)((char*)this - 0x208);
+        VSLOT(void (__thiscall*)(void*), iw, 0x90)(iw);
+    }
+}
+
+// @ 0x00989d70
+char EA::UTFWinControls::WinTextEdit_s0098_9870::F989D70(int a1, int a2, int a3, int a4)
+{
+    (void)a1; (void)a2; (void)a3;
+    EA::UTFWinControls::IWindow* iw = (EA::UTFWinControls::IWindow*)((char*)this + 4);
+    if (VSLOT(char (__thiscall*)(void*, int), iw, 0x100)(iw, 1)) return 0;
+    EA::UTFWinControls::IWinTextEdit_s0098_9870* p = IFACE(this);
+    float pair[2];
+    pair[0] = p->mScrollX;
+    pair[1] = p->mScrollY - (float)(a4 / 4);
+    pair[1] = EA::UTFWinControls::emin(pair[1], (p->viewExtent - (p->mColors[3] - p->mColors[1])) + 3.0f);
+    pair[1] = EA::UTFWinControls::emax(0.0f, pair[1]);
+    if (pair[0] != p->mScrollX || pair[1] != p->mScrollY)
+        VSLOT(void (__thiscall*)(void*, float*), p, 0xd8)(p, pair);
+    return 0;
+}
+
+// @ 0x00989ec0
+char EA::UTFWinControls::WinTextEdit_s0098_9870::OnKeyChar(int unused, unsigned key)
+{
+    (void)unused;
+    EA::UTFWinControls::IWinTextEdit_s0098_9870* p = IFACE(this);
+    if (p->flags & 1) return 1;
+    if ((unsigned short)key < 0x20) {
+        switch ((unsigned short)key) {
+        case 9:
+            return 0;
+        case 10:
+            if (!(p->flags & 2)) return 0;
+            break;
+        case 13:
+            if (!(p->flags & 2)) return 0;
+            key = 10;
+            break;
+        default:
+            return 0;
+        }
+    }
+    unsigned sel = EA::UTFWinControls::emin(p->cursor, p->anchor);
+    if (sel == EA::UTFWinControls::emax(p->cursor, p->anchor)) sel = p->cursor;
+    if (p->byte440) {
+        HashHookFn hook = g_hashHook;
+        if (hook && !hook(&key, textBegin, (int)TextLength(), sel)) return 1;
+    }
+    if (p->cursor == p->anchor && (p->flags & 8)) {
+        VSLOT(void (__thiscall*)(void*, unsigned, int, unsigned*, int, int), p, 0x78)
+            (p, p->cursor, 1, &key, 1, 1);
+        return 1;
+    }
+    VSLOT(void (__thiscall*)(void*, unsigned*, int, int), p, 0x74)(p, &key, 1, 1);
+    return 1;
+}
+
+// @ 0x00989fe0
+int EA::UTFWinControls::WinTextEdit_s0098_9870::DoMessage(int msg)
+{
+    if (*(uint32_t*)((char*)msg + 8) != 0x8ef0c8dd) return DoMessageBase(msg);
+    EA::UTFWinControls::IWinTextEdit_s0098_9870* p = IFACE(this);
+    float x = p->sb[0].scrollbar
+        ? (float)VSLOT(int (__thiscall*)(void*), p->sb[0].scrollbar, 0x28)(p->sb[0].scrollbar) : 0.0f;
+    float y = p->sb[1].scrollbar
+        ? (float)VSLOT(int (__thiscall*)(void*), p->sb[1].scrollbar, 0x28)(p->sb[1].scrollbar) : 0.0f;
+    if (x != p->mScrollX || y != p->mScrollY) {
+        p->mScrollX = x;
+        p->mScrollY = y;
+        EA::UTFWinControls::IWindow* iw = (EA::UTFWinControls::IWindow*)((char*)this + 4);
+        VSLOT(void (__thiscall*)(void*), iw, 0x90)(iw);
+    }
+    return 1;
+}
+
+// @ 0x0098a090
+void EA::UTFWinControls::WinTextEdit_s0098_9870::F98A090(int idx)
+{
+    EA::UTFWinControls::IWinTextEdit_s0098_9870* p = IFACE(this);
+    EA::UTFWinControls::ScrollbarSlot_s0098_9870* s = &p->sb[idx];
+    if (s->enabled == 0) {
+        if (s->scrollbar) {
+            EA::UTFWinControls::IWindow* iw = (EA::UTFWinControls::IWindow*)((char*)this + 4);
+            VSLOT(void (__thiscall*)(void*, void*), iw, 0xe0)
+                (iw, VSLOT(void* (__thiscall*)(void*), s->scrollbar, 0x10)(s->scrollbar));
+            if (s->scrollbar) {
+                EA::UTFWinControls::IUnk_s0098_9870* old = s->scrollbar;
+                s->scrollbar = 0;
+                VSLOT(void (__thiscall*)(void*), old, 4)(old);
+            }
+        }
+        return;
+    }
+
+    if (s->scrollbar == 0) {
+        void* mem = AllocAligned(0x2d0, 8, "UTFWin/WinTextEdit/Scrollbar", GetDefaultAllocator());
+        EA::UTFWinControls::IUnk_s0098_9870* ni = 0;
+        if (mem) {
+            void* ws = ((EA::UTFWinControls::WinScrollbar*)mem)->Construct();
+            if (ws) ni = (EA::UTFWinControls::IUnk_s0098_9870*)((char*)ws + 0x20c);
+        }
+        EA::UTFWinControls::IUnk_s0098_9870* old = s->scrollbar;
+        if (ni != old) {
+            if (ni) VSLOT(void (__thiscall*)(void*), ni, 0)(ni);
+            s->scrollbar = ni;
+            if (old) VSLOT(void (__thiscall*)(void*), old, 4)(old);
+        }
+        void* o = VSLOT(void* (__thiscall*)(void*), s->scrollbar, 0x10)(s->scrollbar);
+        VSLOT(void (__thiscall*)(void*, int, int), o, 0x7c)(o, 0x200, 1);
+        VSLOT(void (__thiscall*)(void*, int), s->scrollbar, 0x14)(s->scrollbar, idx == 1 ? 2 : 1);
+        EA::UTFWinControls::IWindow* iw = (EA::UTFWinControls::IWindow*)((char*)this + 4);
+        VSLOT(void (__thiscall*)(void*, void*), iw, 0xd8)
+            (iw, VSLOT(void* (__thiscall*)(void*), s->scrollbar, 0x10)(s->scrollbar));
+        void* o2 = VSLOT(void* (__thiscall*)(void*), s->scrollbar, 0x10)(s->scrollbar);
+        VSLOT(void (__thiscall*)(void*, int), o2, 0x78)(o2, 0x1002);
+    }
+
+    if (s->drawable == 0) {
+        void* mem = AllocAligned(0x2c, 4, "UTFWin/WinTextEdit/ScrollbarDrawable", GetDefaultAllocator());
+        void* d = mem ? ((EA::UTFWinControls::ScrollbarDrawable*)mem)->Construct() : 0;
+        VSLOT(void (__thiscall*)(void*, void*), s->scrollbar, 0x5c)(s->scrollbar, d);
+    }
+
+    s->f0c = 20.0f;
+    s->f10 = 20.0f;
+
+    struct Rec {
+        uint8_t  pad00[4];      // +0x00
+        void*    f04;           // +0x04
+        uint32_t type;          // +0x08 = 0x16
+        uint32_t f0c;           // +0x0c = 0
+        uint8_t  pad10[8];      // +0x10
+        void*    f18;           // +0x18 = &s->f0c
+    };
+    Rec rec;
+    rec.type = 0x16;
+    rec.f0c = 0;
+    rec.f18 = &s->f0c;
+    EA::UTFWinControls::IWindow* iw = (EA::UTFWinControls::IWindow*)((char*)this + 4);
+    if (VSLOT(int (__thiscall*)(void*), iw, 0x14)(iw)) {
+        void* obj = VSLOT(void* (__thiscall*)(void*), iw, 0x14)(iw);
+        void* a = VSLOT(void* (__thiscall*)(void*, void*, int), s->scrollbar, 0x10)(s->scrollbar, &rec.f04, 0);
+        void* b = VSLOT(void* (__thiscall*)(void*), s->scrollbar, 0x10)(s->scrollbar);
+        VSLOT(void (__thiscall*)(void*, void*, void*), obj, 0x10)(obj, b, a);
+    }
+}
+
+// @ 0x0098a270
+void EA::UTFWinControls::WinTextEdit_s0098_9870::F98A270(unsigned idx, int* outBegin, int* outLen)
+{
+    int* vec = *(int**)((char*)this + 0x50c);
+    int* vend = *(int**)((char*)this + 0x510);
+    int  total = *(int*)((char*)this + 0x520);
+    unsigned n = (unsigned)(vend - vec);
+    if (idx >= n) {
+        *outBegin = total;
+        *outLen = 0;
+        return;
+    }
+    int v = vec[idx];
+    *outBegin = v;
+    if (idx < n - 1)
+        *outLen = vec[idx + 1] - v;
+    else
+        *outLen = total - v;
+}
+
+// @ 0x0098a370
+void EA::UTFWinControls::IWinTextEdit_s0098_9870::F98A370(const wchar_t* str, int arg2)
+{
+    EA::UTFWinControls::TextWindow_s0098_9870* w = WIN_s0098_9870(this);
+    if (FUN_006ab760(&w->textBegin, str)) return;
+    const wchar_t* e = str;
+    while (*e) e++;
+    unsigned len = (unsigned)(e - str);
+    VSLOT(void (__thiscall*)(void*, unsigned, unsigned, const wchar_t*, unsigned, int), this, 0x78)
+        (this, 0, 0xffffffff, str, len, arg2);
+    if (VSLOT(char (__thiscall*)(void*, int), this, 0x48)(this, 1))
+        VSLOT(void (__thiscall*)(void*, int, int), this, 0x8c)(this, 0, 0);
+    EA::UTFWinControls::IWindow* iw = (EA::UTFWinControls::IWindow*)((char*)this - 0x208);
+    VSLOT(void (__thiscall*)(void*), iw, 0x90)(iw);
+}
+
+// @ 0x0098a3f0
+void EA::UTFWinControls::IWinTextEdit_s0098_9870::F98A3F0(int a, int b, int c)
+{
+    unsigned lo = EA::UTFWinControls::emin(cursor, anchor);
+    unsigned hi = EA::UTFWinControls::emax(cursor, anchor);
+    VSLOT(void (__thiscall*)(void*, unsigned, unsigned, int, int, int), this, 0x78)
+        (this, lo, hi - lo, a, b, c);
+}
+
+// @ 0x0098a430
+unsigned EA::UTFWinControls::WinTextEdit_s0098_9870::SnapIndex(unsigned pos, int* out)
+{
+    Text::TextRun run;
+    run.text = textBegin;
+    run.style = VSLOT(void* (__thiscall*)(void*), IFACE(this), 0x50)(IFACE(this));
+    Text::CharacterBreakIterator it;
+    it.SetTextRunArray(&run, 1, 0, 0, 0xffffffff);
+    it.f1c = 0;
+    it.SetPosition(pos);
+    unsigned a = it.GetNextCharBreak();
+    unsigned b = it.GetPrevCharBreak();
+    if (out) *out = (int)(a - b);
+    return b;
+}
+
+// @ 0x0098a4b0
+unsigned EA::UTFWinControls::WinTextEdit_s0098_9870::F98A4B0(unsigned pos)
+{
+    unsigned n = TextLength();
+    bool was = false;
+    for (; pos < n; pos++) {
+        bool w = iswctype(textBegin[pos], 8) != 0;
+        if (!w && was) break;
+        was = w;
+    }
+    Text::TextRun run;
+    run.text = textBegin;
+    run.style = VSLOT(void* (__thiscall*)(void*), IFACE(this), 0x50)(IFACE(this));
+    Text::CharacterBreakIterator it;
+    it.SetTextRunArray(&run, 1, 0, 0, 0xffffffff);
+    it.f1c = 0;
+    it.SetPosition(pos);
+    it.GetNextCharBreak();
+    return it.GetPrevCharBreak();
+}
+
+// @ 0x0098a570
+unsigned EA::UTFWinControls::WinTextEdit_s0098_9870::F98A570(unsigned pos)
+{
+    bool word = true;
+    while (pos != 0) {
+        pos--;
+        bool w = iswctype(textBegin[pos], 8) != 0;
+        if (w && !word) { pos++; break; }
+        word = w;
+    }
+    Text::TextRun run;
+    run.text = textBegin;
+    run.style = VSLOT(void* (__thiscall*)(void*), IFACE(this), 0x50)(IFACE(this));
+    Text::CharacterBreakIterator it;
+    it.SetTextRunArray(&run, 1, 0, 0, 0xffffffff);
+    it.f1c = 0;
+    it.SetPosition(pos);
+    it.GetNextCharBreak();
+    return it.GetPrevCharBreak();
+}
+
+// @ 0x0098a660
+unsigned EA::UTFWinControls::WinTextEdit_s0098_9870::F98A660(unsigned pos)
+{
+    unsigned n = TextLength();
+    bool was = false;
+    while (pos < n) {
+        bool w = iswctype(textBegin[pos], 8) != 0;
+        if (w && !was) break;
+        pos++;
+        was = w;
+    }
+    if (pos >= n) return n;
+    Text::TextRun run;
+    run.text = textBegin;
+    run.style = VSLOT(void* (__thiscall*)(void*), IFACE(this), 0x50)(IFACE(this));
+    Text::CharacterBreakIterator it;
+    it.SetTextRunArray(&run, 1, 0, 0, 0xffffffff);
+    it.f1c = 0;
+    it.SetPosition(pos);
+    it.GetNextCharBreak();
+    return it.GetPrevCharBreak();
+}
+
+// @ 0x0098a730
+unsigned EA::UTFWinControls::WinTextEdit_s0098_9870::F98A730(unsigned pos)
+{
+    bool word = true;
+    while (pos != 0) {
+        pos--;
+        bool w = iswctype(textBegin[pos], 8) != 0;
+        if (!w && word) { pos++; break; }
+        word = w;
+    }
+    Text::TextRun run;
+    run.text = textBegin;
+    run.style = VSLOT(void* (__thiscall*)(void*), IFACE(this), 0x50)(IFACE(this));
+    Text::CharacterBreakIterator it;
+    it.SetTextRunArray(&run, 1, 0, 0, 0xffffffff);
+    it.f1c = 0;
+    it.SetPosition(pos);
+    it.GetNextCharBreak();
+    return it.GetPrevCharBreak();
 }
 
 // @ 0x0098a820
