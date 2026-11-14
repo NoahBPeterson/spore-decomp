@@ -65,13 +65,13 @@
 004a8d70 125 complete 9-float matrix constructor; original spills `this` at ebp-0xc and uses operator[] pointer temps
 004a96d0 327 complete flag/children walk; /Od inlined-flag + element temp slots differ
 004a9840 105 complete SP::EditorUtils::GetFirstFootBlock; /Od element/ref temp slot ordering differs
-004928d0  -  complete draft carried over from s004928d0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 1208, retail 1293
-004934d0  -  complete draft carried over from s004928d0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 278, retail 276
-00496300  -  complete draft carried over from s00496300 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 519, retail 1111
-00496760  -  complete draft carried over from s00496300 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 655, retail 1009
-0049b460  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 733, retail 1089
-0049b8b0  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 771, retail 1034
-0049bcc0  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 888, retail 1068
-0049c140  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 141, retail 205
-0049ecf0  -  complete draft carried over from s0049ecf0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 577, retail 655
-004a6d20  -  complete draft carried over from s004a6690 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: bytes differ
+004928d0  -  complete draft carried over from s004928d0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 1208, retail 1293
+004934d0  -  complete draft carried over from s004928d0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 278, retail 276
+00496300  -  complete draft carried over from s00496300 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 519, retail 1111
+00496760  -  complete draft carried over from s00496300 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 655, retail 1009
+0049b460  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 733, retail 1089
+0049b8b0  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 771, retail 1034
+0049bcc0  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 888, retail 1068
+0049c140  -  complete draft carried over from s0049b340 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 141, retail 205
+0049ecf0  -  complete draft carried over from s0049ecf0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 577, retail 655
+004a6d20  -  complete draft carried over from s004a6690 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: bytes differ

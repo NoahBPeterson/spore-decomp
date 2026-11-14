@@ -22,7 +22,7 @@
 00633230 125 MarkPhotoTypeForGuid: complete; find() out-param shape and operator[] call shape differ
 00633440 193 CapturePixels: complete; same entry-address folding as CopyPixelsToRaster
 00634520 32 NextPhoto: complete; original re-reads the vector size after the index increment and again for the clamp (no CSE), ours hoists/CSEs it flags: /O2 /MD /Gy /TP /GS-
-00630930  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 163, retail 162
-00630d10  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 499, retail 514
-00630f20  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 947, retail 962
-006312f0  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 1076, retail 1307
+00630930  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 163, retail 162
+00630d10  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 499, retail 514
+00630f20  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 947, retail 962
+006312f0  -  complete draft carried over from s00630750 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 1076, retail 1307

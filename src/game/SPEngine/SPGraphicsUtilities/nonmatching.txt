@@ -5,4 +5,4 @@
 007c2ab0 930 complete DXT3->ARGB8888 decode (alpha nibbles + colour interp); different loop/register scheduling
 007c2ee0 1187 complete DXT5->ARGB8888 decode (interpolated alpha, 8/6-level); different loop/register scheduling
 007c3410 1030 complete WriteAnimatedCSAGIF (SEH, string, GIF writer, message post); frame/layout differences; difftest WEAK (149 valid, 14% coverage: the bitmap path needs the FileStream ctor, which calls the unemulated MultiByteToWideChar; GetSaveArea key 0x011ac198 is now passed as a value)
-007c2540  -  complete draft carried over from s007c1c10 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 486, retail 489
+007c2540  -  complete draft carried over from s007c1c10 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 486, retail 489

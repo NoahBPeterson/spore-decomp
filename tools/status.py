@@ -21,7 +21,9 @@ lib_in_funcs = {a: v for a, v in lib.items() if a in funcs}
 exact = set()
 import re as _re
 nonmatching = set(); partial = set()
-_PARTIAL = _re.compile(r"approx|stub|partial|omit|skeleton|incomplete|placeholder|loose|thin|structural|sketch", _re.I)
+# at the start of a word: unanchored, "thin" matched "something" in every "[equiv REFUTED ..: the source computes something
+# else ..]" note (2026-11-13: 1,803 complete drafts counted as partial)
+_PARTIAL = _re.compile(r"\b(?:approx|stub|partial|omit|skeleton|incomplete|placeholder|loose|thin|structural|sketch)", _re.I)
 for f in glob.glob(W("match/slices/*/nonmatching.txt")) + glob.glob(W("match/slices/*/partial.txt")):
     for line in open(f):
         p = line.split("#", 1)[0].split()

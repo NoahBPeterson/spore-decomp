@@ -14,4 +14,4 @@
 007d72e0 530 eastl::vector<cSplitInstanceList>::DoInsertValues; complete grow + in-place insert paths, call/inlining schedule differs flags: /O2 /MD /Gy /EHsc /TP /GS-
 007d76d0 528 SP::cGameModelEffect::HandleSplitCommand; complete (3 command kinds, split-instance/effect-param construction, RBTree walk), inlining/register schedule differs flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 007d7a10 566 SP::cGameModelEffect::Init; complete (build param holder, per-command HandleSplitCommand loop, transform copy, ModelManager query), register/loop schedule differs; equivalence WEAK (no mismatch, coverage-limited) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
-007d4980  -  complete draft carried over from s007d3930 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 165, retail 183
+007d4980  -  complete draft carried over from s007d3930 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 165, retail 183

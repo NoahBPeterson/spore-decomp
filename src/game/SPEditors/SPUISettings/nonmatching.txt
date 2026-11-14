@@ -10,4 +10,4 @@
 00603650 167 SP::cGraphicsTab::init_profile_data: complete; register allocation differs (edi vs ebp zero reg, loop shape).
 00603f10 1 cGraphicsTab checkbox->canvas sync (setne variant): complete; the key-temp scheduling above the Canvas call does not converge.
 00603fe0 1 cGraphicsTab checkbox->canvas sync (sete variant): complete; same key-temp scheduling difference.
-006026f0  -  complete draft carried over from s00601fd0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 568, retail 588
+006026f0  -  complete draft carried over from s00601fd0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 568, retail 588

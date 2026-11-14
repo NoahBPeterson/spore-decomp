@@ -13,5 +13,5 @@
 00795ec0 500 complete Ghidra transcription of SP::FindSHCoeffsFromHDRCubeMap; float10/x87 normalization prevents byte match
 007961d0 245 complete behavioral transcription of SP::AddSphereLighting; compiler shrinks SSE body
 00796420 350 complete behavioral transcription of SP::CalcAtmosphereZH; constant/switch schedule differs
-00794610  -  complete draft carried over from s00794610 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 544, retail 701
-007948d0  -  complete draft carried over from s00794610 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 1486, retail 1415
+00794610  -  complete draft carried over from s00794610 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 544, retail 701
+007948d0  -  complete draft carried over from s00794610 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 1486, retail 1415

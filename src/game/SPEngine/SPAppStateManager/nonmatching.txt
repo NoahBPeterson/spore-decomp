@@ -21,8 +21,8 @@
 007e4970 79 cCameraCommand::Execute; same BehaviorMessage construction schedule differs
 007e5220 252 constructor reconstructed as member/subobject stores; original inlines EASTL string ctors under an SEH frame, so bytes differ
 007e5bc0 76 cTransitionCommand::OnEndBlock complete but EASTL basic_string::assign / vector count arithmetic schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
-007e32c0  -  complete draft carried over from s007e32c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 386, retail 478
-007e34f0  -  complete draft carried over from s007e32c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 284, retail 274
-007e3610  -  complete draft carried over from s007e32c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 28, retail 1320
-007e3b40  -  complete draft carried over from s007e32c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 498, retail 580
-007e3f00  -  complete draft carried over from s007e32c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 389, retail 456
+007e32c0  -  complete draft carried over from s007e32c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 386, retail 478
+007e34f0  -  complete draft carried over from s007e32c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 284, retail 274
+007e3610  -  complete draft carried over from s007e32c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 28, retail 1320
+007e3b40  -  complete draft carried over from s007e32c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 498, retail 580
+007e3f00  -  complete draft carried over from s007e32c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 389, retail 456

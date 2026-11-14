@@ -15,6 +15,6 @@
 006b3680 165 map::operator[] complete; original reuses the key param slot for the insert's sret result; difftest PASS after fixing the DoInsertValue tag argument (an empty true_type passed in the reused key slot, not a literal 0 dword)
 006b37d0 1475 complete; EH-state/stack layout and call-arg scheduling differ (cString/out refs)
 006b4010 288 complete; stack slot order (dot/key/str/mgr) and spill placement differ; difftest WEAK (fixed: parameter order is (key, name, res), and the wstring dtor tests the byte capacity (char*)cap-(char*)b, not the element count)
-006b2110  -  complete draft carried over from s006b18c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 336, retail 387
-006b2400  -  complete draft carried over from s006b18c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 196, retail 176
-006b2620  -  complete draft carried over from s006b18c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept the earlier placeholder); check.py: size 358, retail 454
+006b2110  -  complete draft carried over from s006b18c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 336, retail 387
+006b2400  -  complete draft carried over from s006b18c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 196, retail 176
+006b2620  -  complete draft carried over from s006b18c0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 358, retail 454
