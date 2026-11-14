@@ -93,7 +93,8 @@ def changed_landed(m):
 
 def rollback(m, sids):
     paths = module_files(m) + ["symbols/slices/%s.txt" % s for s in sids] + ["src/game/include"]
-    tracked = run(["git", "ls-files", "--"] + paths)[1].split()
+    # the paths themselves, not the files under them: src/game/include's file list overflows the Windows command line
+    tracked = [p for p in paths if run(["git", "ls-files", "--", p])[1].strip()]
     if tracked:
         run(["git", "checkout", "HEAD", "--"] + tracked)
     run(["git", "clean", "-fdq", "--"] + paths)
