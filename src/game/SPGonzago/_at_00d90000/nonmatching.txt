@@ -2,7 +2,6 @@
 00d90640 616 large multi-branch iteration/selection codegen not byte-reproducible (744 vs 776) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d90950 191 iteration loop + x87/call scheduling not byte-reproducible (259 vs 266) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d90a60 49 x87 left-operand eval order + branch/tail block layout (80 vs 88) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00d90b20 3 virtual-call scratch register choice (funcptr in edx vs eax) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [R35: claimed for matching work]
 00d90bb0 81 call scheduling / register allocation (134 vs 135) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00d99ff0 235 complete FUN_00d99ff0: interaction predicate over the object's tag switch (all tag constants and the +0xc/+0x20/+0xb8/+0xf8 vtable queries present); 306 bytes vs 286 because MSVC balances the unsigned tag range tree differently from the original; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv WEAK 277/400 valid, 41.6% coverage.
 00d9a110 116 creature social-object compare: reads eax (the vector argument) at entry with no declared parameter; LTCG register ABI; best of the loop shapes tried; difftest UNSUPPORTED (original reads eax at entry) flags: /O2 /MD /Gy /EHsc /TP

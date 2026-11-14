@@ -20,6 +20,8 @@
 #include "SP/cSpatialObject.h"
 #include <math.h>
 #include <stddef.h>
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void FUN_00cd7d10();
@@ -219,8 +221,8 @@ cGameNounManager_s00d9_0640* NounManager();                        // 0x00b3d300
 bool FUN_00c38990(void* self, int flag);                // 0x00c38990
 bool FUN_00c03520(void* entry);                         // 0x00c03520
 void FUN_00b3d870(void* ppIt);                          // 0x00b3d870
-struct cLocoWrapper { void FUN_00b45410(); };           // 0x00b45410
-cLocoWrapper* __stdcall FUN_00b3d310(void* p);          // 0x00b3d310
+struct cLocoWrapper { void FUN_00b45410(cLocomotiveObject_s00d9_0640* p); }; // 0x00b45410
+cLocoWrapper* FUN_00b3d310();                          // 0x00b3d310
 int  FUN_00d99a10(int v);                               // 0x00d99a10
 int* FUN_00d998f0(int v);                               // 0x00d998f0
 extern "C" void FUN_00cd7d10();
@@ -1225,9 +1227,10 @@ bool FUN_00d90b20(cSPCreatureCitizen_s00d9_0640* p, void* a2, void* a3, uint32_t
     pOut->m10 = 0;
     pOut->m18 = 0;
     if (p->mf5E0 <= 1.5258789e-05f) {
-        FUN_00b3d310(&p->mLoco)->FUN_00b45410();
-        cSPCreatureCitizen_s00d9_0640* q = p;
-        q->Flag8c();
+        FUN_00b3d310()->FUN_00b45410(&p->mLoco);
+        void** vtable = *(void***)p;
+        _ReadWriteBarrier();
+        ((void (__thiscall*)(cSPCreatureCitizen_s00d9_0640*))vtable[0x8c / 4])(p);
         pOut->mf0C = 10.0f;
         pOut->mf14 = 1.5f;
         pOut->m18 = 0;
