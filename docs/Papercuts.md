@@ -1214,18 +1214,19 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   `break` repeat the tiny `fld/pop/ret` epilogue per case like retail, while per-case `return` does not
   (0x00c0b380, 0x00c0b440); initial `1.0f` came from the named `_HK_REAL_ONE` global, not a literal.
   Fix idea: candidates for codegen.md 15/16 wave lists.
-- [s007a7d50 + SPTribe + SPMissionRaid, 2026-11-11 session] codegen — **the `_ftol2_sse` inline
-  spellings: the float must reach the `__asm` helper as an expression, and the scale wants a literal.**
-  Rounding form (`fstp dword` + `cvtss2si`): `inline int RoundToInt(float f) { __asm cvtss2si eax, f }`;
-  truncating form: same with `cvttss2si`. Rules learned: (1) call it as `RoundToInt(f * 255.0f)`. A named
-  product temp (`float t = f * k; RoundToInt(t)`) stores the temp at its source position and the convert
-  reads it later, so the spill does NOT sit beside the convert; inlining the product into the call put
-  SetStyleScale 13 -> 0 diff. (2) The scale operand wants a literal (`* 255.0f`), not an `extern const`
-  global: the literal's const-pool entry keeps retail's operand orientation (input in the register,
-  scale in memory); every `extern` spelling loaded the global into the register first (both sides are
-  relocated/masked, so either links). (3) Under `/arch:SSE`, a plain `(int)` of a float ALREADY IN MEMORY
-  inlines `cvttss2si` directly, while a float arriving in `st0` (call return) becomes a tail
-  `jmp __ftol2_sse` — read which before choosing a helper. Banked 0x007a82d0, 0x007a85e0, 0x00c5c310
+- [s007a7d50 + SPTribe + SPMissionRaid, 2026-11-11 session] codegen — **`_ftol2_sse` inlines: call the vetted
+  `SseRoundToInt` / `SseTruncToInt` (match/include/sse_helpers.h) with the float as an expression, and keep the scale a
+  literal.** Rounding form (`fstp dword` + `cvtss2si`) is `SseRoundToInt`, truncating form (`cvttss2si`) is
+  `SseTruncToInt`; never write your own `__asm` copy (inline assembly is not allowed in contributions, and the
+  functions first matched with private `__asm` helpers were demoted on 2026-11-11). Rules learned (measured with the
+  earlier `__asm` helpers; the functions below match today with the vetted ones written this way): (1) call it as
+  `SseRoundToInt(f * 255.0f)`. A named product temp (`float t = f * k; SseRoundToInt(t)`) stores the temp at its
+  source position and the convert reads it later, so the spill does NOT sit beside the convert; inlining the product
+  into the call put SetStyleScale 13 -> 0 diff. (2) The scale operand wants a literal (`* 255.0f`), not an `extern
+  const` global: the literal's const-pool entry keeps retail's operand orientation (input in the register, scale in
+  memory); every `extern` spelling loaded the global into the register first. (3) Under `/arch:SSE`, a plain `(int)`
+  of a float ALREADY IN MEMORY inlines `cvttss2si` directly, while a float arriving in `st0` (call return) becomes a
+  tail `jmp __ftol2_sse`; read which before choosing a helper. Matching today: 0x007a82d0, 0x007a85e0, 0x00c5c310
   (cvtss2si) and 0x00c8e6d0 (cvttss2si). Fix idea: fold into codegen.md next to the fistp-qword lever.
 - [SPMissionRaid 0x00c5c310, 2026-11-11 session] codegen — two smaller levers, both required for the
   match: (1) a per-iteration `id = i + 4` whose retail store never changes is `idv = i + 4` evaluated
@@ -1245,16 +1246,6 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   slot, ONE 4-byte `union { float f; bool b; }` for the float and both bool bytes; one-union-for-all
   forces everything into the qword, and a `&param` slot alias makes the param memory-resident.
   Fix idea: note the RTM marker in matching.md's RTM-vs-SP1 section.
-- [tools/matching, 2026-11-11 session] tooling — **`try_variants.py` takes cl flags as separate shell
-  words; one quoted string is passed to cl as a single flag and the compile silently proceeds with
-  garbage flags** (symptoms: x87 lowering of /arch:SSE functions, wrong sizes). chk.py's `--flags` is
-  the opposite convention (one string). Fix idea: split on whitespace inside try_variants.py, or error
-  when a flag argument contains a space. Time lost: ~15 min.
-- [tools/contrib, 2026-11-11 session] tooling — **task.py's claims.txt fetch fails intermittently while
-  the file is reachable by curl**; the "could not be read" banner persists across re-runs, hiding
-  claimed functions. Workaround: read
-  https://raw.githubusercontent.com/NoahBPeterson/spore-decomp/claims/claims.txt directly before picking.
-  Fix idea: retry with a longer timeout or accept `--claims <file>`. Time lost: ~5 min.
 - [bare-fistp census, 2026-11-11 session] codegen/flags — **45 functions carry a bare `fistp qword`
   (no fnstcw chain); 38 of them also contain SSE, and no flag combination can produce the two together.**
   Capstone census over `tools/ci/fingerprints.jsonl.gz` (fnstcw-adjacent fistps excluded — those are the
