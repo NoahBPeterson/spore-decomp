@@ -6,10 +6,12 @@ square, coloured by status, animated over the history of main.
   build.py imports map_body() for the site's map.html
 
 Statuses, per function and per day (the last first-parent commit on main of each day, as build.py's history):
-  2  byte-exact: a manifest row lists it and tools/ci/known_failures.txt does not (the site's only "done" count)
+  4  byte-exact: a manifest row lists it and tools/ci/known_failures.txt does not
+  3  proven equivalent: an equivalent.txt row (tools/contrib/prove.py), not byte-exact
+  2  tested: passed the randomized difftest sweep (docs/equiv_verdicts.json pass/comdat), neither of the above
   1  source written: a nonmatching.txt or partial.txt note exists for it (its C++ is in the repo, bytes still differ)
   0  not started
-Public-site rules hold: byte-exact counts only (no equivalence results), and no names, symbols or code; the page
+The tiers are build.py's (matching, proven, tested). No names, symbols or code; the page
 carries only addresses and sizes (already public in tools/ci/fingerprints.jsonl.gz) and module names (src/game/).
 """
 import argparse, bisect, datetime, gzip, json, os, re, subprocess, sys
@@ -41,7 +43,7 @@ def note_vas(text):
 
 
 class StateCache:
-    """per commit: (byte-exact VAs, noted VAs), reading each blob once"""
+    """per commit: (byte-exact, proven, tested, noted) VA sets, disjoint, reading each blob once"""
     def __init__(self):
         self.blob = {}
 
@@ -60,25 +62,36 @@ class StateCache:
 
     def at(self, commit, fps):
         tree = B.git("ls-tree", "-r", commit, "--", "match", "src/game", "tools/ci/known_failures.txt")
-        man, notes, known = [], [], None
+        tree += B.git("ls-tree", commit, "--", B.VERDICTS)
+        man, notes, eqs, known, ver = [], [], [], None, None
         for line in tree.splitlines():
             meta, path = line.split("\t", 1)
             sha = meta.split()[2]
             if path == "tools/ci/known_failures.txt":
                 known = sha
+            elif path == B.VERDICTS:
+                ver = sha
+            elif B.EQUIV_RE.match(path):
+                eqs.append(sha)
             elif B.MANIFEST_RE.match(path):
                 man.append(sha)
             elif NOTE_RE.match(path):
                 notes.append(sha)
-        self._read(man + notes + ([known] if known else []))
-        exact, noted = set(), set()
+        self._read(man + notes + eqs + [x for x in (known, ver) if x])
+        exact, noted, proven = set(), set(), set()
         for s in man:
             exact |= B.rows_vas(self.blob[s])
         if known:
             exact -= B.known_vas(self.blob[known])
         for s in notes:
             noted |= note_vas(self.blob[s])
-        return exact & fps.keys(), (noted & fps.keys()) - exact
+        for s in eqs:
+            proven |= B.rows_vas(self.blob[s])
+        tested = B.tested_vas(self.blob[ver]) if ver else set()
+        exact &= fps.keys()
+        proven = (proven & fps.keys()) - exact
+        tested = (tested & fps.keys()) - exact - proven
+        return exact, proven, tested, (noted & fps.keys()) - exact - proven - tested
 
 
 def days():
@@ -116,6 +129,9 @@ def deltas(sorted_idx):
     return out
 
 
+NSTATES = 5
+
+
 def map_data():
     fps = {int(d["va"], 16): d["size"] for d in map(json.loads, gzip.open(os.path.join(ROOT, "tools", "ci", "fingerprints.jsonl.gz"), "rt"))}
     vas = sorted(fps)
@@ -125,13 +141,11 @@ def map_data():
     mod_of = [mods["runs"][bisect.bisect_right(starts, v) - 1][1] if bisect.bisect_right(starts, v) else 0 for v in vas]
     cache, frames, prev = StateCache(), [], [0] * len(vas)
     for day, sha in days():
-        exact, noted = cache.at(sha, fps)
         cur = [0] * len(vas)
-        for v in noted:
-            cur[index[v]] = 1
-        for v in exact:
-            cur[index[v]] = 2
-        changed = [[], [], []]
+        for k, group in zip((4, 3, 2, 1), cache.at(sha, fps)):
+            for v in group:
+                cur[index[v]] = k
+        changed = [[] for _ in range(NSTATES)]
         for i, (a, b) in enumerate(zip(prev, cur)):
             if a != b:
                 changed[b].append(i)
@@ -163,28 +177,30 @@ const cx=new Uint16Array(CELLS),cy=new Uint16Array(CELLS);
 for(let d=0;d<CELLS;d++){let x=0,y=0,t=d;for(let s=1;s<SIDE;s*=2){const rx=1&(t>>1),ry=1&(t^rx);
  if(ry===0){if(rx===1){x=s-1-x;y=s-1-y}const q=x;x=y;y=q}x+=s*rx;y+=s*ry;t>>=2}cx[d]=x;cy[d]=y}
 const states=[];let st=new Uint8Array(N);
-for(const f of D.frames){for(let s=0;s<3;s++){let i=-1;for(const g of dec(f.c[s])){i+=g+1;st[i]=s}}states.push(st.slice())}
+const S=5;for(const f of D.frames){for(let s=0;s<f.c.length;s++){let i=-1;for(const g of dec(f.c[s])){i+=g+1;st[i]=s}}states.push(st.slice())}
 const cv=document.getElementById('map'),ctx=cv.getContext('2d');cv.width=SIDE;cv.height=SIDE;
 const img=ctx.createImageData(SIDE,SIDE);
 function rgb(v){const m=/#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i.exec(v.trim());return m?[1,2,3].map(k=>parseInt(m[k],16)):[128,128,128]}
 let C;function colours(){const cs=getComputedStyle(document.documentElement);
- C=[rgb(cs.getPropertyValue('--todo')),rgb(cs.getPropertyValue('--wip')),rgb(cs.getPropertyValue('--done'))]}
+ C=['--todo','--wip','--tested','--equiv','--done'].map(v=>rgb(cs.getPropertyValue(v)))}
 colours();
-const w0=new Float32Array(CELLS),w1=new Float32Array(CELLS),w2=new Float32Array(CELLS);const W=[w0,w1,w2];
-function draw(k){const s=states[k];w0.fill(0);w1.fill(0);w2.fill(0);
+const W=[];for(let q=0;q<S;q++)W.push(new Float32Array(CELLS));
+function draw(k){const s=states[k];for(const w of W)w.fill(0);
  for(let i=0;i<N;i++){const a=off[i]/PER,b=off[i+1]/PER,w=W[s[i]];let c=Math.floor(a);const e=Math.min(CELLS-1,Math.floor(b-1e-9));
   if(c===e){w[c]+=b-a;continue}w[c]+=c+1-a;for(c++;c<e;c++)w[c]+=1;w[e]+=b-e}
- const p=img.data;let nf=[0,0,0],nb=[0,0,0];
- for(let d=0;d<CELLS;d++){const t=w0[d]+w1[d]+w2[d]||1,a=w0[d]/t,b=w1[d]/t,c=w2[d]/t,j=(cy[d]*SIDE+cx[d])*4;
-  p[j]=a*C[0][0]+b*C[1][0]+c*C[2][0];p[j+1]=a*C[0][1]+b*C[1][1]+c*C[2][1];p[j+2]=a*C[0][2]+b*C[1][2]+c*C[2][2];p[j+3]=255}
+ const p=img.data,nf=new Array(S).fill(0),nb=new Array(S).fill(0);
+ for(let d=0;d<CELLS;d++){let t=0;for(let q=0;q<S;q++)t+=W[q][d];t=t||1;const j=(cy[d]*SIDE+cx[d])*4;let r=0,g=0,b=0;
+  for(let q=0;q<S;q++){const f=W[q][d]/t;r+=f*C[q][0];g+=f*C[q][1];b+=f*C[q][2]}p[j]=r;p[j+1]=g;p[j+2]=b;p[j+3]=255}
  ctx.putImageData(img,0,0);
  for(let i=0;i<N;i++){nf[s[i]]++;nb[s[i]]+=size[i]}
  document.getElementById('mday').textContent=new Date(D.frames[k].d+'T12:00:00Z').toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
  const nt=document.getElementById('mnote');nt.textContent=D.frames[k].note||'';nt.hidden=!D.frames[k].note;
  const pc=(x,t)=>(100*x/t).toFixed(1)+'%';
- document.getElementById('mexact').textContent=pc(nb[2],TOTAL)+' of bytes, '+nf[2].toLocaleString()+' functions';
- document.getElementById('msrc').textContent=pc(nb[1],TOTAL)+' of bytes, '+nf[1].toLocaleString()+' functions';
- document.getElementById('mnone').textContent=pc(nb[0],TOTAL)+' of bytes, '+nf[0].toLocaleString()+' functions';}
+ const line=q=>pc(nb[q],TOTAL)+' of bytes, '+nf[q].toLocaleString()+' functions';
+ document.getElementById('mexact').textContent=line(4);document.getElementById('mproven').textContent=line(3);
+ document.getElementById('mtested').textContent=line(2);
+ document.getElementById('mall').textContent=pc(nb[4]+nb[3]+nb[2],TOTAL)+' of bytes';
+ document.getElementById('msrc').textContent=line(1);document.getElementById('mnone').textContent=line(0);}
 const sl=document.getElementById('mslider');sl.max=states.length-1;sl.value=states.length-1;let cur=states.length-1;draw(cur);
 sl.addEventListener('input',()=>{stop();cur=+sl.value;draw(cur)});
 let timer=null;const btn=document.getElementById('mplay');
@@ -193,7 +209,7 @@ btn.addEventListener('click',()=>{if(timer){stop();return}if(cur>=states.length-
  const step=()=>{cur++;sl.value=cur;draw(cur);if(cur>=states.length-1){stop();return}timer=setTimeout(step,D.frames[cur].note?4000:450)};
  timer=setTimeout(step,450)});
 const inv=new Int32Array(CELLS);for(let d=0;d<CELLS;d++)inv[cy[d]*SIDE+cx[d]]=d;
-const tip=document.getElementById('mtip'),names=['not started','source written','byte-exact'];
+const tip=document.getElementById('mtip'),names=['not started','source written','tested','proven equivalent','byte-exact'];
 function modAt(i){let lo=0,hi=D.runs.length-1;while(lo<hi){const m=(lo+hi+1)>>1;if(D.runs[m][0]<=i)lo=m;else hi=m-1}return D.modules[D.runs[lo][1]]}
 cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect(),x=Math.floor((e.clientX-r.left)/r.width*SIDE),y=Math.floor((e.clientY-r.top)/r.height*SIDE);
  if(x<0||y<0||x>=SIDE||y>=SIDE){tip.hidden=true;return}const pos=(inv[y*SIDE+x]+.5)*PER;let lo=0,hi=N-1;
@@ -229,7 +245,10 @@ def map_body():
             '<div class="mctl"><button id="mplay" type="button">Play</button><input id="mslider" type="range" min="0" '
             'step="1" aria-label="Date"></div><div id="mtip" hidden></div></div>'
             '<div><div id="mday"></div><p id="mnote" hidden></p><ul class="mkey">'
-            '<li><b><i style="background:var(--done)"></i>Byte-exact</b><span id="mexact"></span></li>'
+            '<li><b>Matching, proven or tested: <span id="mall"></span></b></li>'
+            '<li><b><i style="background:var(--done)"></i>Matching (byte-exact)</b><span id="mexact"></span></li>'
+            '<li><b><i style="background:var(--equiv)"></i>Proven equivalent</b><span id="mproven"></span></li>'
+            '<li><b><i style="background:var(--tested)"></i>Tested (passed the randomized test sweep)</b><span id="mtested"></span></li>'
             '<li><b><i style="background:var(--wip)"></i>C++ written, bytes still differ</b><span id="msrc"></span></li>'
             '<li><b><i style="background:var(--todo);outline:1px solid var(--line)"></i>Not started</b><span id="mnone"></span></li>'
             '</ul><p class="note">One frame per day of work on the main branch. A cell that holds several functions blends '

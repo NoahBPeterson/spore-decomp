@@ -205,9 +205,9 @@ def kb(b):
 
 CSS = """
 :root{--bg:#f7f5f0;--panel:#fffdf8;--ink:#1d2228;--muted:#5d6670;--line:#e3ddd2;--done:#2f7d5b;--done2:#9cc9b2;
---todo:#e9e3d8;--accent:#b5562b;--code:#f0ece4;--equiv:#7a9cc6;--tested:#c9b26b}
+--todo:#e9e3d8;--accent:#b5562b;--code:#f0ece4;--equiv:#7a9cc6;--tested:#a8d5ba}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#14171b;--panel:#1b1f24;--ink:#e8e6e1;--muted:#9aa3ad;
---line:#2c3239;--done:#4fb487;--done2:#2b6a4f;--todo:#2a2f36;--accent:#e08a5c;--code:#22272e;--equiv:#5b7ea8;--tested:#8f7d45}}
+--line:#2c3239;--done:#4fb487;--done2:#2b6a4f;--todo:#2a2f36;--accent:#e08a5c;--code:#22272e;--equiv:#5b7ea8;--tested:#356650}}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
 a{color:var(--accent)}main,header,footer{max-width:960px;margin:0 auto;padding:0 16px}
