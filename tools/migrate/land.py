@@ -55,6 +55,35 @@ def markers_now(m):
     return {v.lower() for v in MARK.findall(open(p, errors="replace").read())} if os.path.exists(p) else set()
 
 
+def bodies(text):
+    """VA -> text from its marker to the end of its first brace block (a function's definition)."""
+    out = {}
+    for mk in re.finditer(r"(?m)^// @ 0x0*([0-9a-fA-F]+)[^\n]*\n", text):
+        i = j = text.find("{", mk.end())
+        d = 0
+        while 0 <= j < len(text):
+            d += {"{": 1, "}": -1}.get(text[j], 0)
+            if d == 0:
+                break
+            j += 1
+        out[mk.group(1).lower()] = text[mk.end():j + 1]
+    return out
+
+
+def changed_landed(m):
+    """Functions that were in the TU at HEAD and whose text the rewrite changed or removed. A re-applied slice carries the
+    slice's text, which can undo a fix made in src/game after the first landing (2026-11-14: forward-port of 290 slices,
+    96 would have changed landed functions)."""
+    r = subprocess.run(["git", "show", "HEAD:" + module_files(m)[0]], cwd=ROOT, capture_output=True, text=True)
+    p = os.path.join(ROOT, module_files(m)[0])
+    if r.returncode or not os.path.exists(p):
+        return []
+    # rewrite.py's own clash renames (`FUN_00c308d0` -> `FUN_00c308d0_s00c7_5e70`, SPPlayer 2026-11-14) are not edits
+    sfx = lambda s: re.sub(r"_s[0-9a-f]{4}_[0-9a-f]{4}\b", "", s) if s is not None else None
+    a, b = bodies(r.stdout), bodies(open(p, errors="replace").read())
+    return sorted(va for va in a if sfx(a[va]) != sfx(b.get(va)))
+
+
 def rollback(m, sids):
     paths = module_files(m) + ["symbols/slices/%s.txt" % s for s in sids] + ["src/game/include"]
     tracked = run(["git", "ls-files", "--"] + paths)[1].split()
@@ -198,6 +227,10 @@ def land_once(m, sids, bname, batch, log):
         rollback(m, sids)
         return False, "no new function written%s" % (
             "".join("; %s: %s" % (k, " ".join(v)) for k, v in sorted(why_none.items())) or "; every listed function stayed in its slice"), set()
+    touched = changed_landed(m)
+    if touched:
+        rollback(m, sids)
+        return False, "changed %d function(s) already in the TU: %s" % (len(touched), " ".join(touched[:8])), set()
     ok, why, bad = gate(m, log)
     if ok:
         # the gate just ran run_all and the asm audit on these files: commit_obj.sh need not repeat them

@@ -74,6 +74,7 @@ def read_rows(path):
         rows.append(line.rstrip("\n"))
     return rows
 INC = W("src", "game", "include")
+MINC = W("match", "include")   # run_all adds it to every build (sse_helpers.h): compile checks need it too
 SLICES = W("match", "slices")
 SCALARS = {"int", "unsigned", "unsigned int", "short", "unsigned short", "char", "unsigned char", "signed char", "long",
            "unsigned long", "float", "double", "bool", "wchar_t", "uint8_t", "uint16_t", "uint32_t", "int8_t", "int16_t",
@@ -1973,7 +1974,7 @@ class Rewrite:
     def cl(self, path, extra):
         w = lambda p: "Z:" + p.replace("/", "\\")
         cmd = [W("tools", "matching", "cl.sh"), "/nologo", "/c", "/O2", "/MD", "/Gy", "/TP", "/GS-", "/arch:SSE",
-               "/I" + w(INC), "/Fo" + w(path[:-4] + ".obj")] + extra + [w(path)]
+               "/I" + w(INC), "/I" + w(MINC), "/Fo" + w(path[:-4] + ".obj")] + extra + [w(path)]
         r = subprocess.run(cmd, capture_output=True, text=True)
         return r.stdout + r.stderr
 
@@ -4410,7 +4411,20 @@ class Rewrite:
                         RS.norm(t) not in have and any(n in ctx_used for n in RS.item_names(k, t)) and
                         self.rsfx not in t]      # (an item spelled with this slice's previous renames is stale)
             if keep_old:
-                rest = keep_old + rest
+                # in the previous block's order, among this run's items: put in front of them all, a kept item could come
+                # before a typedef it uses (2026-11-14, SPPlayer s00c75e70 re-apply: `extern U32 g_vtblWarData` above
+                # `typedef unsigned int U32`, C4430).  A new item not in the old block stays right after its predecessor
+                old_pos = {}
+                for i, (k, t) in enumerate(own_old):
+                    old_pos.setdefault(RS.norm(t), i)
+                keyed, last = [], -1.0
+                for j, t in enumerate(rest):
+                    p = old_pos.get(RS.norm(t))
+                    last = float(p) if p is not None else last + 1e-6
+                    keyed.append((last, 1, j, t))
+                for j, t in enumerate(keep_old):
+                    keyed.append((float(old_pos[RS.norm(t)]), 0, j, t))
+                rest = [t for _p, _o, _j, t in sorted(keyed)]
                 self.notes.append(("kept-items", "%d item(s) of this slice's previous block that the TU still uses" % len(keep_old)))
         if VA_GUARD in new and VA_GUARD not in lines:
             first_inc = next((i for i, l in enumerate(lines) if l.startswith("#include")), len(lines))
@@ -5078,7 +5092,7 @@ class Rewrite:
             if os.path.exists(ofile):
                 os.remove(ofile)
             r = subprocess.run([W("tools", "matching", "cl.sh"), "/nologo", "/c", "/O2", "/MD", "/Gy", "/EHsc", "/TP", "/GS-", "/arch:SSE",
-                                "/I" + w(INC), "/Fo" + w(ofile), w(tu)], capture_output=True, text=True)
+                                "/I" + w(INC), "/I" + w(MINC), "/Fo" + w(ofile), w(tu)], capture_output=True, text=True)
             log = r.stdout + r.stderr
             self.compile_log = log
             if not os.path.exists(ofile) or re.search(r"\berror C\d+", log):
