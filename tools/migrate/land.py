@@ -106,7 +106,7 @@ def gate(m, log):
     rc, out = run([PY, "tools/matching/asm_audit.py", "--all-rows", tu])
     if rc:
         return False, "asm audit: " + out.strip()[:200], set()
-    rc, out = run([PY, "tools/migrate/samecode.py", tu])
+    rc, out = run([PY, "tools/migrate/samecode.py", tu, "--base", "HEAD"])   # old rows: vs the committed TU
     if "Traceback" in out:
         # mig27 SPUIBehavior: the traceback's first line was gated as a row ("verdict None -> None at Traceback")
         return False, "samecode crashed: " + out.strip().splitlines()[-1][:200], set()

@@ -9,7 +9,10 @@ slice's.  The function's bytes are compared with relocation fields masked, and t
 name, with rewrite.py's renamed-stub suffix (`Foo_s004a_b690` -> `Foo`) and string-literal labels (`$SG123`)
 normalised.  Same code = the old verdict carries over; anything else needs an equiv.py run.
 
-usage: samecode.py src/game/<dir>/<Obj>.cpp [va ...]     (default: every row of the module's nonmatching.txt)
+usage: samecode.py src/game/<dir>/<Obj>.cpp [va ...] [--base REF]   (default: every row of the module's nonmatching.txt)
+       --base REF: a function already in the TU at git REF is compared with the TU at REF instead of its slice (it was
+       gated when it landed; since then src/game may have fixed it, so the slice is no longer its baseline).  This skips
+       an equiv.py run per old row on every landing (2026-11-14: 23 runs, ~17 min, to land 2 functions in SPPlayer)
        prints one line per VA: SAME / DIFF <what> / ERROR <why>; exit 1 if any row is not SAME
 """
 import glob, os, re, sys
@@ -82,12 +85,46 @@ def module_id(tu):
 
 
 def main():
-    tu = os.path.abspath(sys.argv[1])
+    argv = sys.argv[1:]
+    base = None
+    if "--base" in argv:
+        i = argv.index("--base")
+        base = argv[i + 1]
+        del argv[i:i + 2]
+    tu = os.path.abspath(argv[0])
     rows = os.path.join(os.path.splitext(tu)[0], "nonmatching.txt")
-    vas = [int(v, 16) for v in sys.argv[2:]] or [va for va, _d, _r in S.read_rows(rows)]
+    vas = [int(v, 16) for v in argv[1:]] or [va for va, _d, _r in S.read_rows(rows)]
     mid = module_id(tu)
     bad = 0
+    old_tu, old_vas = None, set()
+    if base:
+        import subprocess
+        rel = os.path.relpath(tu, ROOT)
+        r = subprocess.run(["git", "show", "%s:%s" % (base, rel)], cwd=ROOT, capture_output=True, text=True)
+        if r.returncode == 0:
+            old_vas = {int(v, 16) for v in re.findall(r"(?mi)^// @ 0x([0-9a-f]+)", r.stdout)}
+            # beside the TU, so its relative includes resolve the same way; the symbol lookup is by the marker
+            old_tu = os.path.join(os.path.dirname(tu), "_base_%d_%s" % (os.getpid(), os.path.basename(tu)))
+            open(old_tu, "w").write(r.stdout)
+    try:
+        bad = run_rows(vas, mid, tu, old_tu, old_vas)
+    finally:
+        if old_tu and os.path.exists(old_tu):
+            os.remove(old_tu)
+    sys.exit(1 if bad else 0)
+
+
+def run_rows(vas, mid, tu, old_tu, old_vas):
+    bad = 0
     for va in vas:
+        if va in old_vas:
+            try:
+                a, b = code(mid, va, tu), code(mid, va, old_tu)
+            except RuntimeError as e:
+                a, b = None, e
+            if a == b:
+                print("%08x SAME (base)" % va)
+                continue
         sid, ssrc = slice_of(va)
         try:
             if not sid:
@@ -107,7 +144,7 @@ def main():
         else:
             what = "relocation targets: " + ", ".join("%s/%s" % (x[1], y[1]) for x, y in zip(a[1], b[1]) if x != y)[:200]
         print("%08x DIFF %s (%s)" % (va, what, sid))
-    sys.exit(1 if bad else 0)
+    return bad
 
 
 if __name__ == "__main__":
