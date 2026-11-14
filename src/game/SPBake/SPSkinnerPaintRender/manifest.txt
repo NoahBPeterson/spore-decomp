@@ -16,3 +16,4 @@
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ?deleting_dtor@EditorResource@@QAEPAXI@Z  0051d090  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ?adv@DList@@QAEXXZ  0051d140  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ?deleting_dtor@SimAbility@@QAEPAXI@Z  0051d5f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?erase@PtrVector@@QAEPAURefPtr_s0042_5240@@PAU2@0@Z  004259e0  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include

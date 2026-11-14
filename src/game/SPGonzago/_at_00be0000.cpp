@@ -1191,8 +1191,9 @@ void cCityTerritory::ApplyTo(void* obj)
     uint32_t s = *(uint32_t*)sub34;
     void* v = (*(void* (__thiscall*)(void*))*(void**)(*(uint32_t*)obj + 0x2c))(obj);
     (*(void (__thiscall*)(void*, void*))*(void**)(s + 0x38))(sub34, v);
+    uint32_t secondTable = *(uint32_t*)sub34;
     void* w = (*(void* (__thiscall*)(void*))*(void**)(*(uint32_t*)obj + 0x30))(obj);
-    (*(void (__thiscall*)(void*, void*))*(void**)(*(uint32_t*)sub34 + 0x3c))(sub34, w);
+    (*(void (__thiscall*)(void*, void*))*(void**)(secondTable + 0x3c))(sub34, w);
 }
 
 // @ 0x00beba70

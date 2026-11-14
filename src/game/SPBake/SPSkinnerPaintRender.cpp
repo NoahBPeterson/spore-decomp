@@ -1308,8 +1308,9 @@ struct PtrVector {
 };
 static inline RefPtr_s0042_5240* MoveHelper(RefPtr_s0042_5240* a, RefPtr_s0042_5240* b, RefPtr_s0042_5240* c)
 {
-    bool t0 = false;
-    bool t1 = false;
+    uint32_t pad[4];
+    bool copyTag = false;
+    bool moveTag = false;
     return MoveRange(a, b, c);
 }
 static inline void DestroyRange(RefPtr_s0042_5240* f, RefPtr_s0042_5240* l)
@@ -1382,7 +1383,6 @@ struct RCPtrVec {
 RefPtr_s0042_5240* PtrVector::erase(RefPtr_s0042_5240* first, RefPtr_s0042_5240* last)
 {
     RefPtr_s0042_5240* dest;
-    uint32_t pad[4];
     dest = MoveHelper(last, end, first);
     DestroyRange(dest, end);
     end -= (last - first);
