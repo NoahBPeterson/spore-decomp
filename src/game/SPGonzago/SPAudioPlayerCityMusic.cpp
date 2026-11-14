@@ -1954,6 +1954,27 @@ void FUN_00eae8a0(IReader* reader, int* v)
     reader->v1c();
 }
 
+// @ 0x00eae9b0
+void FUN_00eae9b0(IReader* reader, int* v)
+{
+    FUN_11e0744_memcpy((void*)v[0], (void*)v[1], 0);
+    v[1] += -((int)(v[1] - v[0]) >> 2) * 4;
+    int count = 0;
+    IStream* s = reader->v20()->s18();
+    ReadInt32(s, &count, 1, 0);
+    FUN_00eade60(count);
+    for (unsigned i = 0; i < (unsigned)count; ++i) {
+        IStream* s2 = reader->v20()->s18();
+        int val = 0;
+        ReadInt32(s2, &val, 1, 0);
+        if ((int*)v[1] < (int*)v[2])
+            *(int*)v[1] = val, v[1] += 4;
+        else
+            FUN_00ea9440((int*)v[1], &val);
+    }
+    reader->v1c();
+}
+
 // @ 0x00eaea80
 void FUN_00eaea80(IReader* reader, int* v)
 {
