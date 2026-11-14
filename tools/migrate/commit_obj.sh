@@ -11,8 +11,8 @@ echo "$M: $out"
 [ -n "$LAND_GATED" ] || echo "$out" | awk '{ if ($1 != $3) exit 1 }' || { echo "NOT ALL MATCH: not committed"; exit 1; }
 if git cat-file -e HEAD:src/game/$M.cpp 2>/dev/null; then
   # addresses only: a marker whose trailing comment changed is not a removed function (mig27 ResourceProvider)
-  gone=$(comm -23 <(git show HEAD:src/game/$M.cpp | rg -o "^// @ 0x[0-9a-fA-F]+" | sort -u) <(rg -o "^// @ 0x[0-9a-fA-F]+" src/game/$M.cpp | sort -u))
-  new=$(comm -13 <(git show HEAD:src/game/$M.cpp | rg -o "^// @ 0x[0-9a-fA-F]+" | sort -u) <(rg -o "^// @ 0x[0-9a-fA-F]+" src/game/$M.cpp | sort -u) | wc -l | tr -d ' ')
+  gone=$(comm -23 <(git show HEAD:src/game/$M.cpp | grep -oE "^// @ 0x[0-9a-fA-F]+" | sort -u) <(grep -oE "^// @ 0x[0-9a-fA-F]+" src/game/$M.cpp | sort -u))
+  new=$(comm -13 <(git show HEAD:src/game/$M.cpp | grep -oE "^// @ 0x[0-9a-fA-F]+" | sort -u) <(grep -oE "^// @ 0x[0-9a-fA-F]+" src/game/$M.cpp | sort -u) | wc -l | tr -d ' ')
   echo "new functions in TU: $new"
   if [ -n "$gone" ] && [ -z "$FORCE" ]; then echo "FUNCTIONS REMOVED from the TU (not committed; FORCE=1 to override):"; echo "$gone"; exit 1; fi
 fi
