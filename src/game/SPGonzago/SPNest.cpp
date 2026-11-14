@@ -13,11 +13,21 @@
 
 // ---- items of slice s00c69300 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char u8;
+typedef unsigned int  u32;
+struct cPlanetModel {
+    void SnapB();                 // 0x00b82970
+};
+struct cCreatureModeStrategy {
+    bool HasCreatureTutorialOccurred();   // 0x00d38980
+};
 struct cVec3 {
     float mX;                     // 0x00
     float mY;                     // 0x04
     float mZ;                     // 0x08
 };
+u32 __stdcall SP_PlanetModel(u32 a, u32 b, u32 c);            // 0x00b3d350
+u32 GetCurrentGameMode();                                     // 0x00b5b800
+cCreatureModeStrategy* __stdcall GetCreatureModeStrategy(u32 key);  // 0x00d38840
 static inline bool VT_2C_0(void* p)
 {
     return ((bool (__thiscall*)(void*))(*(void***)p)[11])(p);
@@ -88,7 +98,6 @@ extern float gViewerOrigin[3];   // 0x01693e50..0x01693e58
 extern int   gViewerGuard;       // 0x01693e4c
 extern void* gEggSerializerList; // 0x015778f0
 #pragma warning(disable : 4100)
-typedef unsigned int u32;
 
 namespace EA {
 namespace IO {
@@ -363,7 +372,6 @@ extern u8    DAT_014718b8[4]; // axis-permutation table (bytes)
 
 // ---- items of slice s00c6b660 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  __fastcall FUN_00c6b5b0(void* ecxHerd);            // 0x00c6b5b0 SP::cHerd::FindWateringHole
-extern "C" void** __fastcall FUN_00c6bd60(void* self);              // 0x00c6bd60 list node recycler
 extern "C" void  __cdecl FUN_00f47380(void* p);                     // 0x00f47380 operator delete
 extern "C" float __cdecl FUN_00694fe0(void* out, const void* vec2); // 0x00694fe0 cTypedValueToStringT<Vector2>::Write
 extern "C" void* __cdecl FUN_0093c5a0(void* out, int name, int n);  // 0x0093c5a0 EA::ConvertToString16
@@ -404,7 +412,7 @@ class cHerd_s00c6_b660
     // 0x00c6ba20
     void SetPosition(const Vec3* pos);  // 0x00c6ba20 (SP::cHerd::SetPosition)
     // 0x00c6bdc0
-    Vec3* GetWateringHolePosition();
+    Vec3* GetWateringHolePosition();  // 0x00c6bdc0 (SP::cHerd::GetWateringHolePosition)
 
     ISpatial_s00c6_b660* NestSpatial() { return reinterpret_cast<ISpatial_s00c6_b660*>(mpNest); }
     const Vec3* OwnPosition() { return reinterpret_cast<const Vec3*>(this); }
@@ -738,6 +746,14 @@ AttrStorage cHerd_sAttributes[43];   // 0x01577bc8
 }
 // ---- items of slice s0134d380 end
 
+// @ 0x00c69bc0
+u32 __stdcall SP_CreatePlanetAndSnap(u32 a, u32 b)
+{
+    cPlanetModel* model = (cPlanetModel*)SP_PlanetModel(a, b, 0);
+    model->SnapB();
+    return a;
+}
+
 // @ 0x00c69db0
 void* cObject::Cast(int type)
 {
@@ -763,6 +779,19 @@ void cHerd::SetTarget(const cVec3* v)
 {
     mFlag208 = 1;
     mTarget20c = *v;
+}
+
+// @ 0x00c6a030
+bool cHerd::ShouldActivate()
+{
+    if (mState15c == 9) {
+        if (GetCurrentGameMode() == 0x01654c01u) {
+            cCreatureModeStrategy* strategy = GetCreatureModeStrategy(0x7aee5ee7);
+            return strategy->HasCreatureTutorialOccurred() == false;
+        }
+        return false;
+    }
+    return true;
 }
 
 // @ 0x00c6a550

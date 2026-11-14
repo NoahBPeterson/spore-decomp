@@ -1,7 +1,9 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPNest.cpp  ?SP_CreatePlanetAndSnap@@YGIII@Z  00c69bc0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?Cast@cObject@@QAEPAXH@Z  00c69db0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?SP_ObjectCheck@@YAHPAX@Z  00c69e30  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?SetTarget@cHerd@@QAEXPBUcVec3@@@Z  00c69ff0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?ShouldActivate@cHerd@@QAE_NXZ  00c6a030  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?SetState@cEgg_s00c6_a550@SP@@QAEXW4EggState@12@@Z  00c6a670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?RemoveOwner@cNest_s00c6_a550@SP@@QAEXXZ  00c6a9c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6aa10@SP@@YIEPAX0@Z  00c6aa10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
