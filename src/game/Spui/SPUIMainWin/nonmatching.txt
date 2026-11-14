@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0080a320 4 other: enter/esc message filter: complete and 98/102 bytes exact; two jump/byte-table entries differ; table destinations need semantic verification before case-order experiments
 00813300 99 complete: cSPUIMainWin::ApplyToFocus; test-then-reload vs load-once register allocation
 00813370 94 complete: cSPUIMainWin::RouteKey; callee-saved register assignment differs
 008137f0 182 complete: MainWin::InitStringFactories; thiscall StringMan/refcount call shapes differ
