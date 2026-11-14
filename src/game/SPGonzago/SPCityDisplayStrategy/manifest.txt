@@ -5,3 +5,4 @@
 ../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?ShutdownAll@CDS@@QAEXXZ  00ce97e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?FUN_00cea030@@YIPAXPAX0PAPAX@Z  00cea030  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?Init@CDS_s00ce_a090@@QAEXXZ  00cea090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCityDisplayStrategy.cpp  ?RemoveVehicle@CDS_s00ce_a090@@QAEPAXPAX0@Z  00ceaac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

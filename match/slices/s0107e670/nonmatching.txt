@@ -6,7 +6,6 @@
 0107ec20 103 havok-equivalent
 0107ed00 88 havok-equivalent
 0107edb0 40 havok-equivalent
-0107ee30 40 havok-equivalent ; equiv PASS (1182 valid inputs, symbol via ?6hkOstream in symbols file)
 0107ee80 56 havok-equivalent ; equiv UNSUPPORTED: symbol not found (operator<< overloads int/uint have identical size and base identifier; lookup cannot tell them apart)
 0107eed0 56 havok-equivalent ; equiv UNSUPPORTED: symbol not found (operator<< overloads int/uint have identical size and base identifier; lookup cannot tell them apart)
 0107ef20 60 havok-equivalent

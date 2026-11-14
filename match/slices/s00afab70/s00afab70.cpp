@@ -334,8 +334,7 @@ void SP::cActionCircle::ClearSlots() {
 void SP::cActionCircle::RemoveSlotsByReservingId(unsigned int id) {
   int n = (int)(mSlots.mpEnd - mSlots.mpBegin);
   for (int i = 0; i < n; i++) {
-    tSlot* s = mSlots.mpBegin + i;
-    if (s->mReservingId == id) s->Clear();
+    if (mSlots.mpBegin[i].mReservingId == id) mSlots.mpBegin[i].Clear();
   }
 }
 

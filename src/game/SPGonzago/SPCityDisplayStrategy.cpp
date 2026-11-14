@@ -448,7 +448,7 @@ struct CDS_s00ce_a090 {
     void Update2(void* a, int b);
     void Refresh();
     void Assign(void* other);
-    void RemoveVehicle(void* out, void* node);  // 0x00ceaac0 (CDS::RemoveVehicle)
+    void* RemoveVehicle(void* out, void* node);  // 0x00ceaac0 (CDS::RemoveVehicle)
     int  EraseKey(void* key);  // 0x00ceab20 (CDS::EraseKey)
     void Destruct();  // 0x00ceac50 (CDS::Destruct)
     void* ctor(void* a);  // 0x00ceb090 (CDS::ctor)
@@ -2266,7 +2266,7 @@ void CDS_s00ce_a090::Refresh()
 }
 
 // @ 0x00ceaac0
-void CDS_s00ce_a090::RemoveVehicle(void* out, void* node)
+void* CDS_s00ce_a090::RemoveVehicle(void* out, void* node)
 {
     char* self = (char*)this;
     (*(int*)(self + 0x14)) -= 1;
@@ -2283,7 +2283,9 @@ void CDS_s00ce_a090::RemoveVehicle(void* out, void* node)
         ((Rel)(*(void**)(*(char**)p1 + 4)))(p1);
     }
     FUN_00f47380(node);
-    *(void**)out = next;
+    void** result = *(void** volatile*)&out;
+    *result = next;
+    return result;
 }
 
 // @ 0x00ceab20

@@ -348,12 +348,13 @@ hkOstream& hkOstream::operator<<(char c)
 // @ 0x0107ee30
 hkOstream& hkOstream::operator<<(const char* s)
 {
+	hkStreamWriter* writer = m_writer;
 	if (s != 0)
 	{
-		m_writer->write(s, hkString::strLen(s));
+		writer->write(s, hkString::strLen(s));
 		return *this;
 	}
-	m_writer->write("(null)", 6);
+	writer->write("(null)", 6);
 	return *this;
 }
 
@@ -577,7 +578,7 @@ int hkString::strCmp(const char* a, const char* b)
 }
 
 // @ 0x0107f420
-int hkString::strLen(const char* s)
+__declspec(noinline) int hkString::strLen(const char* s)
 {
 	const char* p = s + 1;
 	char c;

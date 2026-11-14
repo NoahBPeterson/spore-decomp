@@ -459,7 +459,7 @@ void* __fastcall Viewer_Init(ViewerLayout* self)
     uint32_t zero = 0;
     self->mpVtable0 = (void**)0x01488728u;
     self->mpVtable1 = (void**)0x01488718u;
-    self->m108 = zero;
+    *(volatile uint32_t*)&self->m108 = zero;
     self->m10c = zero;
     self->m110 = zero;
     self->m114 = zero;

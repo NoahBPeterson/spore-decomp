@@ -1,3 +1,2 @@
 # source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
 ../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?FUN_00700c00@@YAII@Z  00700c00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
-../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?list_insert_before@@YGPAPAUListNode@@PAPAU1@UListIterator@@PAPAX@Z  00701050  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

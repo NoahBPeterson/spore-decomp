@@ -632,9 +632,10 @@ void hkGskfAgent::commitPotential(hkUint16 id)
 // @ 0x010ec630
 void hkGskfAgent::createZombie(hkUint16 id)
 {
-    hkGskManifold::ContactPoint* point = m_manifold.m_contactPoints;
-    for (int i = 0; i < m_manifold.m_numContactPoints; ++i, ++point)
+    const int count = m_manifold.m_numContactPoints;
+    for (int i = 0; i < count; ++i)
     {
+        hkGskManifold::ContactPoint* point = &m_manifold.m_contactPoints[i];
         if (point->m_id == id)
         {
             point->m_dimA = 0;
