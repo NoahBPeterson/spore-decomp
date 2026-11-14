@@ -7,5 +7,4 @@
 00abd590  93  detach + purge children: original walks the vector through esi with inline size recomputation, ours through the Vector object; equiv WEAK (216 valid, 51.6% coverage)
 00abd640  127  compact live children: original orders the loop and index slots differently (esi/ebp/edi roles); equiv WEAK (222 valid, 39.1% coverage)
 00abd6f0  393  effect update: overall control flow matches but the entry test emits jmp+comiss ordering differences; equiv FAIL (xmm1 clobber on 5/6 inputs)
-00abda70  1  random range lerp: only the final fcomi/jb sense differs (fcomi st(1) vs the original double-compare sequence, 1 byte); equiv UNSUPPORTED (unresolved RandomDoubleUniform ref)
 00abdbb0  943  effect sample/emit: curve sampling, floor, table lerp and attenuation scheduling all differ; equiv FAIL (5/5 mismatch, first call arg)

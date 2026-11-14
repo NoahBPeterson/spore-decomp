@@ -195,22 +195,25 @@ void __cdecl FUN_00abd9c0(int* stream, int unused, char* out)
 // @ 0x00abda70
 float* __cdecl FUN_00abda70(float* out, int unused, float* lo, float* hi)
 {
-    float l = *lo;
-    float h = *hi;
+    double l = *lo;
+    double h = *hi;
     double r = g_random_16778dc.RandomDoubleUniform();
-    double v = (double)l + ((double)h - (double)l) * r;
+    double v = l + (h - l) * r;
+    double res;
     if (v >= h)
-        v = h;
+        res = h;
     else if (v < l)
-        v = l;
-    out[0] = (float)v;
+        res = l;
+    else
+        res = v;
+    out[0] = (float)res;
 
-    float h2;
-    float l2;
+    double h2;
+    double l2;
     l2 = lo[1];
     h2 = hi[1];
     r = g_random_16778dc.RandomDoubleUniform();
-    v = (double)l2 + ((double)h2 - (double)l2) * r;
+    v = l2 + (h2 - l2) * r;
     if (v >= h2)
         v = h2;
     else if (v < l2)
