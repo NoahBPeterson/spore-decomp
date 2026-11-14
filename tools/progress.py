@@ -109,6 +109,23 @@ def mb(items):
 
 exact_total = byte_exact | equiv
 
+
+def _proven():
+    """Proven-equivalent (equivalent.txt rows, tools/contrib/prove.py) that are not byte-exact; counted like the site."""
+    vas = set()
+    for path in glob.glob(W("match", "slices", "*", "equivalent.txt")) + glob.glob(W("src", "game", "**", "equivalent.txt"), recursive=True):
+        for line in open(path, errors="replace"):
+            f = line.split("#", 1)[0].split()
+            if len(f) >= 3:
+                try:
+                    vas.add(int(f[2], 16))
+                except ValueError:
+                    pass
+    return (vas & set(game)) - byte_exact
+
+
+proven = _proven()
+
 # ---- equivalence verdicts of the compilable-but-not-exact functions, from the latest sweep ----
 # docs/equiv_verdicts.json is written by tools/difftest/verdicts.py from the merged harness's results (2026-10-29 on).
 # A FAIL is a mismatch, so that function is NOT equivalent; only a PASS (every branch exercised on both builds) counts
@@ -721,6 +738,10 @@ def plot_history(path):
         live["v"] = {k + sfx: (100.0 * len(equiv_by[k]) / G if not sfx else pctb_f(equiv_by[k]))
                      for k, _l in VERDICT_CATS for sfx in ("", "_sz")}
         live["v_when"] = VERDICT_WHEN
+    # Proven (equivalent.txt) and tested (sweep PASS, not proven): the plot's tiers above matching.
+    tested = (equiv_by["pass"] - proven) if VERDICT_WHEN else set()
+    live.update(proven=100.0 * len(proven) / G, proven_sz=pctb_f(proven),
+                tested=100.0 * len(tested) / G, tested_sz=pctb_f(tested))
     # One saved point per day (docs/progress_history.json): each run overwrites today's entry with
     # its live numbers, so a day keeps its latest figure and earlier days stay on the chart.
     hist_path = W("docs", "progress_history.json")
@@ -760,7 +781,7 @@ def plot_history(path):
     for ax, (title, ke, _kc, _km) in zip(axes, panels):
         # No "compilable" line: before the first equivalence sweep it counted every compiling function as done
         # (up to 97%), which the sweep's verdicts then disproved.
-        for key, color, label in ((ke, BLUE, "Byte-exact"),):
+        for key, color, label in ((ke, BLUE, "Matching (byte-exact)"),):
             xs = [t for t, p in pts if p.get(key) is not None]
             ys = [p[key] for t, p in pts if p.get(key) is not None]
             if not xs:
@@ -771,16 +792,28 @@ def plot_history(path):
         # From the first equivalence sweep on (points that carry verdicts): what is shown correct, byte-exact + test
         # PASS; WEAK, FAIL, untestable and untested do not count. It branches up out of the byte-exact line at the last
         # point before verdicts existed.
+        # Above it: + proven (equivalent.txt, from the points that saved it) and + tested (a sweep PASS that is not
+        # proven; points saved before 2026-11-14 have no proven share, so there the whole PASS share counts as tested).
         sfx = ke[len("exact"):]
-        vx = [(t, p) for t, p in pts if p.get(ke) is not None and (p.get("v") or {}).get("pass" + sfx) is not None]
-        if vx:
-            prior = [(t, p) for t, p in pts if t < vx[0][0] and p.get(ke) is not None][-1:]
-            xs = [t for t, _p in prior] + [t for t, _p in vx]
-            ys = [p[ke] for _t, p in prior] + [p[ke] + p["v"]["pass" + sfx] for _t, p in vx]
-            ax.plot(xs, ys, color=TC_LINE["pass"], lw=2, ls="--", marker="o", ms=4,
-                    markevery=list(range(len(prior), len(xs))), label="Byte-exact + equivalent (test PASS)")
-            ax.annotate("%.1f%%" % ys[-1], (xs[-1], ys[-1]), xytext=(6, 0), textcoords="offset points",
-                        va="center", fontsize=9, color=TC_LINE["pass"])
+        def tier(p, which):
+            pr = p.get("proven" + sfx)
+            if which == "proven":
+                return None if pr is None else p[ke] + pr
+            if (p.get("v") or {}).get("pass" + sfx) is None:
+                return None
+            return p[ke] + (pr + p["tested" + sfx] if pr is not None and "tested" + sfx in p else p["v"]["pass" + sfx])
+        for which, color, ls, label in (("proven", "#7a9cc6", ":", "+ proven equivalent"),
+                                        ("tested", TC_LINE["pass"], "--", "+ tested (sweep PASS)")):
+            vx = [(t, tier(p, which)) for t, p in pts if p.get(ke) is not None and tier(p, which) is not None]
+            if not vx:
+                continue
+            prior = [(t, p[ke]) for t, p in pts if t < vx[0][0] and p.get(ke) is not None][-1:]
+            xs = [t for t, _y in prior + vx]; ys = [y for _t, y in prior + vx]
+            ax.plot(xs, ys, color=color, lw=2, ls=ls, marker="o", ms=4,
+                    markevery=list(range(len(prior), len(xs))), label=label)
+            if which == "tested":     # the proven line ends about a point above matching; its label would collide
+                ax.annotate("%.1f%%" % ys[-1], (xs[-1], ys[-1]), xytext=(6, 0), textcoords="offset points",
+                            va="center", fontsize=9, color=color)
         ax.set_title(title, loc="left", fontsize=11, color=INK)
         ax.set_ylim(0, 100)
         ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(decimals=0))
@@ -878,8 +911,9 @@ def plot_history(path):
         bx.set_title("By module, now (same colours as above)", loc="left", fontsize=11, color=INK)
     fig.suptitle("Spore decompilation progress (game functions; third-party libraries excluded)",
                  x=0.01, ha="left", fontsize=12, color=INK)
-    fig.text(0.01, 0.01, "One point per committed docs/STATUS.md, one per day of --plot runs (latest run that day), plus now.\nEquivalent = test PASS: complete "
-             "source, not byte-identical, that behaved identically on every branch. Size shares only exist in later "
+    fig.text(0.01, 0.01, "One point per committed docs/STATUS.md, one per day of --plot runs (latest run that day), plus now.\nProven = equivalent.txt (a proof "
+             "for every input). Tested = test PASS, not proven: same results on random inputs with every branch run (evidence, "
+             "not proof). Size shares only exist in later "
              "snapshots.\nEvidence bands: verdicts of the merged equivalence harness (tools/difftest/verdicts.py, first "
              "sweep 2026-10-29); a FAIL is a mismatch, so not equivalent. Days before it count as not tested.",
              fontsize=8, color=MUTED)
