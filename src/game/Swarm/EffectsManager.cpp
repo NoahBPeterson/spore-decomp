@@ -215,6 +215,7 @@ extern "C" __declspec(dllimport) int sprintf(char*, const char*, ...);          
 extern "C" __declspec(dllimport) int isdigit(int);                              // 0x13cc4cc
 extern "C" __declspec(dllimport) unsigned long strtoul(const char*, char**, int); // 0x13cc4f8
 extern "C" __declspec(dllimport) size_t strlen(const char*);
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(long long* p); // 0x13cc2b8
 extern int gTblB[];        // 0x1675eb0
 extern int gTblBEnd;       // 0x16766b0
 extern int gTblA[];        // 0x16759f8
@@ -225,6 +226,7 @@ extern const char  kSwarmSurface[]; // 0x1455c48
 extern const char  kSwarm[];        // 0x13f1fdc
 extern const float kOne;            // 0x1485720
 extern const float kZero;           // 0x1485378
+extern const float kPoint1;         // 0x1488874
 extern const float kPoint9;         // 0x13ec4b4
 extern const float kPoint4;         // 0x13ec434
 extern char kVtA2c[];    // 0x1455a2c
@@ -979,6 +981,102 @@ int GmeRefCount::ScalarDeletingDestructor(unsigned flags)
         operator_delete__(this);
     return (int)this;
 }
+
+// @ 0x00a6d020
+namespace EA { namespace Swarm {
+void cEffectsManager_s00a6_d020::DoUpdate(float a, float b)
+{
+    if (mTimer.mnUnits == 1) {
+        unsigned long long t = __rdtsc();
+        mTimer.mnStartLo = (unsigned)t;
+        mTimer.mnStartHi = (unsigned)(t >> 32);
+    }
+    else {
+        long long ctr;
+        QueryPerformanceCounter(&ctr);
+        mTimer.mnStartLo = (unsigned)ctr;
+        mTimer.mnStartHi = (unsigned)(ctr >> 32);
+    }
+    mTimer.mnElapsedLo = 0;
+    mTimer.mnElapsedHi = 0;
+    FUN_011e073e(&mResInfo, 0, 0x4c);
+    mResInfo.f38 = m54;
+
+    int count = (int)(mCollectionsEnd - mCollectionsBegin);
+    for (int i = 0; i < count; ++i) {
+        ICollection* coll = mCollectionsBegin[i];
+        if (coll != 0 && coll->v08() != 0) {
+            HashNode** bucket = mHash.mpBucketArray;
+            HashNode* node = HashFirst(bucket);
+            HashNode* end = mHash.mpBucketArray[mHash.mnBucketCount];
+            while (node != end) {
+                ((IValue*)node->mValue)->FUN_00a719c0(i);
+                HashNext(bucket, node);
+            }
+            coll->v0c();
+            bucket = mHash.mpBucketArray;
+            node = HashFirst(bucket);
+            end = mHash.mpBucketArray[mHash.mnBucketCount];
+            while (node != end) {
+                ((IValue*)node->mValue)->FUN_00a72010(i);
+                HashNext(bucket, node);
+            }
+        }
+    }
+
+    if (m1f0 != 0)
+        m1f0->v1c();
+
+    for (int i = 0; i < 12; ++i) {
+        if (m1f4[i] != 0)
+            m1f4[i]->v1c();
+    }
+
+    if (mRenderer != 0)
+        mRenderer->v08(&mDensity);
+
+    if (m50 > kZero) {
+        if (a > m50) a = m50;
+        if (b > m50) b = m50;
+    }
+
+    m6c = 0;
+    {
+        HashNode** bucket = mHash.mpBucketArray;
+        HashNode* node = HashFirst(bucket);
+        HashNode* end = mHash.mpBucketArray[mHash.mnBucketCount];
+        while (node != end) {
+            IValue* v = (IValue*)node->mValue;
+            if (*(int*)((char*)v + 0x20) != 4) {
+                int before = mResInfo.f10 + mResInfo.f18;
+                v->v54(a, b, &mResInfo);
+                int after = mResInfo.f10 + mResInfo.f18;
+                if ((v->v28() & 1) == 0)
+                    m6c += after - before;
+            }
+            HashNext(bucket, node);
+        }
+    }
+
+    float fA = (float)mE0;
+    float fB = m58;
+    float fC = m5c;
+    if (fA != 0.0f && (float)m6c > fA) {
+        mDensity = (((kOne - fC) * fA) / (float)m6c + fC) * mDensity;
+    }
+    else if (fB > mDensity) {
+        float x = ((kOne - fC) * fA + (float)m6c * fC) * mDensity;
+        if ((float)m6c * fB <= x)
+            mDensity = fB;
+        else
+            mDensity = x / (float)m6c;
+    }
+
+    long long elapsed = mTimer.GetElapsedTimeFloat();
+    float sim = (float)elapsed * mTimer.mfCoeff;
+    mDampedSimTimeInMS = (sim - mDampedSimTimeInMS) * kPoint1 + mDampedSimTimeInMS;
+}
+}}  // namespace EA::Swarm
 
 // @ 0x00a6d3b0
 namespace EA { namespace Swarm {
