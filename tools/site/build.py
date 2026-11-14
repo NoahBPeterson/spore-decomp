@@ -217,7 +217,7 @@ def page(title, here, body, meta):
     return """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>%s</title><meta name="description" content="Rebuilding Spore's SporeApp.exe as C++ that compiles to exactly the retail machine code.">
 <style>%s</style></head><body>
-<header><a class="brand" href="index.html">spore-decomp</a><nav>%s<a href="https://github.com/%s">GitHub</a></nav></header>
+<header><a class="brand" href="index.html">spore-decomp</a><nav>%s<a href="https://github.com/%s">GitHub</a><a href="https://discord.gg/5svSGHpFA">Discord</a></nav></header>
 <main>%s</main>
 <footer>Generated %s from commit <a href="https://github.com/%s/commit/%s"><code>%s</code></a>.
 A fan preservation project, not affiliated with or endorsed by Electronic Arts or Maxis. This site and the repository
@@ -381,7 +381,9 @@ needs: the loop, the rules, and where the known compiler tricks are written down
 <li>Only <code>src/game/</code>, <code>match/slices/</code> and <code>match/include/</code> change in a contribution.</li>
 <li>Real C++: no inline assembly or raw bytes (a maintainer can approve a short helper if you ask with an <code>asm-override:</code> line in the pull request), no constants disguised as addresses of made-up globals.</li>
 <li>Never commit game files or anything derived from them.</li>
-<li>Stuck? Move on to another function. Code changes are merged only when they add a new byte-exact function; what you tried can go in as a notes-only pull request (the function's line in the <code>nonmatching.txt</code> beside its source).</li></ul>""" % {"repo": E(repo), "name": E(repo.split("/")[-1])}
+<li>Stuck? Move on to another function. Code changes are merged only when they add a new byte-exact function; what you tried can go in as a notes-only pull request (the function's line in the <code>nonmatching.txt</code> beside its source).</li></ul>
+<h2>Talk to us</h2><p>Questions, a function that will not match, or just want to say hi: join the
+<a href="https://discord.gg/5svSGHpFA">spore-decomp Discord server</a>.</p>""" % {"repo": E(repo), "name": E(repo.split("/")[-1])}
 
     how = """<h1>How it works</h1>
 <h2>What "byte-exact" means</h2><p>Spore's executable was built in 2008 with Visual C++ 2008 SP1 (and the Visual
@@ -398,7 +400,8 @@ other platforms.</p>
 <h2>What is not here</h2><p>No game code, data or assets. Contributors use their own copy of the game locally to see
 instruction diffs; nothing derived from it is ever committed. The open-source libraries the game links (jpeg, libpng,
 OpenSSL, and EA's published EASTL and EAWebKit) are rebuilt from their published sources rather than decompiled.</p>
-<p>Source, tools and every rule: <a href="https://github.com/%s">github.com/%s</a>.</p>""" % (E(repo), E(repo))
+<p>Source, tools and every rule: <a href="https://github.com/%s">github.com/%s</a>. Questions, or want to talk it
+through: join the <a href="https://discord.gg/5svSGHpFA">Discord server</a>.</p>""" % (E(repo), E(repo))
 
     import addrmap                       # imports this module; deferred to avoid a cycle
     map_page = addrmap.map_body()[0]
