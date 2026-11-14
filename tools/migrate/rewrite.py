@@ -4296,6 +4296,10 @@ class Rewrite:
         for mm in re.finditer(r"(?m)^([^\n;{}]*?)\b%s\s*\(([^;{}]*)\)\s*\{" % re.escape(name), body):
             if "::" in mm.group(1).split("(")[0][-2:] or re.search(r"extern\s*\"C\"", t[k + mm.start():k + mm.end()]):
                 continue
+            if re.search(r"[(!=]|\b(?:if|while|for|return|switch|else|case|do)\b", mm.group(1)):
+                # a call followed by a block, not a definition: `if (!FUN_009a38f0(p, key, &tmp)) {` dropped the slice's
+                # extern "C" FUN_009a38f0 (2026-11-14, SPCreatureAnimManager s009ffa00: C3861, LoadGoalChildren held)
+                continue
             if nparams is not None:
                 ps = mm.group(2).strip()
                 if len(split_params(ps) if ps and ps != "void" else []) != nparams:
@@ -4330,8 +4334,11 @@ class Rewrite:
             # every identical copy of this item sits behind this slice's section (a later slice's block deduplicated against
             # this slice's copy when it was applied): dropping it here leaves the section without it (fix pass 5, s007ca950:
             # `aligned_buffer` only in s007cc5f0's block below, C2143 in fixed_vector)
-            first = next((l.strip() for l in text.split("\n") if l.strip()), "")
-            pos = [i for i, l in enumerate(lines) if first and l.strip() == first]
+            # compared as `have` compares them (RS.norm: whitespace and comments aside): `void EASTLFree(void* p);  // 0x..`
+            # with other spacing before the comment was in `have` but never found here, so it was dropped instead of moved
+            # up (2026-11-14, SPEditorSpeciesManager s004d06e0: C3861 EASTLFree)
+            first = next((RS.norm(l) for l in text.split("\n") if RS.norm(l).strip()), "")
+            pos = [i for i, l in enumerate(lines) if first and RS.norm(l) == first]
             return bool(pos) and min(pos) >= ins_at
         incs, rest, seen_local = [], [], False
         for kind, text in new_items:
@@ -4407,9 +4414,18 @@ class Rewrite:
             # (fix pass 5, s007ca950 re-applied after s007cb590/s007cc5f0: `aligned_buffer` vanished, C2143 in their blocks)
             ctx_used = RS.item_uses("other", "\n".join(lines) + "\n" + others)
             newn = {RS.norm(t) for k, t in new_items if k not in ("comment", "include")}
+            # an item spelled with this slice's previous renames is stale, unless a function the TU keeps still spells that
+            # renamed name and no new item declares it (2026-11-14, SPCreatureAnimManager s009ffa00: the landed
+            # LoadGoalChildren calls FUN_009a37a0_s009f_fa00, its extern was dropped as stale: C3861)
+            new_names = {nm for k, t in new_items if k not in ("comment", "include") for nm in RS.item_names(k, t)}
+            def _stale(k, t):
+                if self.rsfx not in t:
+                    return False
+                ren = [nm for nm in RS.item_names(k, t) if self.rsfx in nm]
+                return not ren or any(nm in new_names or nm not in ctx_used for nm in ren)
             keep_old = [t for k, t in own_old if k not in ("comment", "include") and RS.norm(t) not in newn and
                         RS.norm(t) not in have and any(n in ctx_used for n in RS.item_names(k, t)) and
-                        self.rsfx not in t]      # (an item spelled with this slice's previous renames is stale)
+                        not _stale(k, t)]
             if keep_old:
                 # in the previous block's order, among this run's items: put in front of them all, a kept item could come
                 # before a typedef it uses (2026-11-14, SPPlayer s00c75e70 re-apply: `extern U32 g_vtblWarData` above
