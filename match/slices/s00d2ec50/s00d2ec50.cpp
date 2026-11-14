@@ -6,11 +6,11 @@
 // slots are reached through stub interfaces that declare the slot at its index (VPad<N,B>).
 //
 // Classification (see manifest.txt / nonmatching.txt / partial.txt):
-//   byte-exact C++ (manifest)  : 00d2ede0, 00d2ee20
+//   byte-exact C++ (manifest)  : 00d2ede0, 00d2ee20, 00d2f380
 //   complete, not byte-exact   : 00d2ec50 (nonmatching.txt)
-//   naked asm transcription    : 00d2ee70, 00d2f2a0, 00d2f380, 00d2f3c0, 00d2f630, 00d2f710,
+//   naked asm transcription    : 00d2ee70, 00d2f2a0, 00d2f3c0, 00d2f630, 00d2f710,
 //                                00d2f880 (partial.txt -- docs/matching.md "No assembly transcription")
-// The seven transcriptions are byte-exact copies of the retail instruction stream; they are kept
+// The six transcriptions are byte-exact copies of the retail instruction stream; they are kept
 // because their x87 stack schedule / register allocation is not reproducible from C++.
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
@@ -147,40 +147,25 @@ u8 __stdcall FUN_00d2ee20(void** out) {
 }
 
 // =============================================================================================
-// 00d2f380  FUN_00d2f380 -- pack (vecA, vecB, scalar) into a 7-float record
+// 00d2f380  SP::TargetSortCompare -- construct the vector-pair/scalar sort functor
 // =============================================================================================
-struct cVec7 {
-    float mX, mY, mZ;
-    float mU, mV, mW;
-    float mT;
-    void FUN_00d2f380(float* a, float* b, float c);
+namespace SP {
+// Local 12-byte vector layout view used by the target-sort functor.
+struct TargetSortVectorView {
+    float x, y, z;
+    TargetSortVectorView(const TargetSortVectorView& v) { x = v.x; y = v.y; z = v.z; }
 };
+struct TargetSortCompare {
+    TargetSortVectorView mA, mB;
+    float mT;
+    TargetSortCompare(const TargetSortVectorView& a, const TargetSortVectorView& b, float c);
+};
+} // namespace SP
 
-// @ 0x00d2f380  cVec7::FUN_00d2f380
-// Hand-written: the original keeps the destination ('this') in eax and the source vector in ecx,
-// but every C++ form MSVC's allocator keeps 'this' in ecx and the source in eax.
-void __declspec(naked) cVec7::FUN_00d2f380(float* a, float* b, float c) {
-    __asm {
-        movss xmm0, dword ptr [esp + 0xc]
-        mov   eax, ecx
-        mov   ecx, dword ptr [esp + 4]
-        fld   dword ptr [ecx]
-        fstp  dword ptr [eax]
-        fld   dword ptr [ecx + 4]
-        fstp  dword ptr [eax + 4]
-        fld   dword ptr [ecx + 8]
-        mov   ecx, dword ptr [esp + 8]
-        fstp  dword ptr [eax + 8]
-        fld   dword ptr [ecx]
-        fstp  dword ptr [eax + 0xc]
-        fld   dword ptr [ecx + 4]
-        fstp  dword ptr [eax + 0x10]
-        fld   dword ptr [ecx + 8]
-        fstp  dword ptr [eax + 0x14]
-        movss dword ptr [eax + 0x18], xmm0
-        ret   0xc
-    }
-}
+// @ 0x00d2f380  SP::TargetSortCompare::TargetSortCompare
+SP::TargetSortCompare::TargetSortCompare(const TargetSortVectorView& a,
+                                       const TargetSortVectorView& b, float c)
+    : mA(a), mB(b), mT(c) {}
 
 // =============================================================================================
 // 00d2ec50  SetAvatarMoveTarget -- snap the avatar's move target onto the planet surface

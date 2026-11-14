@@ -767,8 +767,10 @@ int cSPSpaceTrading::GetRareKeyCount(uint32_t groupIndex)
 // @ 0x0103a060  SP::cSPSpaceTrading::PopValue
 void* cSPSpaceTrading::PopValue()
 {
+    void* value = mpStackTop[-1];
+    _ReadWriteBarrier();
     --mpStackTop;
-    return *mpStackTop;
+    return value;
 }
 
 // @ 0x0103a080  SP::cGameNounManager::CreatePlanetaryArtifact
