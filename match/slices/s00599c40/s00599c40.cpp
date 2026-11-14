@@ -681,16 +681,10 @@ int IsFiniteFloat(float f)
     return 0;
 }
 
-// @ 0x0059ab50
+// Usage wrapper for the reviewed helper; native 0x0059ab50 binds to the SseClamp COMDAT.
 float Clamp(float value, float minValue, float maxValue)
 {
-    __asm {
-        movss xmm0, value
-        maxss xmm0, minValue
-        minss xmm0, maxValue
-        movss value, xmm0
-    }
-    return value;
+    return SseClamp(value, minValue, maxValue);
 }
 
 static inline bool IsFiniteInline(float f)

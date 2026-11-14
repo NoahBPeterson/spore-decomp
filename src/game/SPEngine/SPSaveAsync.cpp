@@ -82,9 +82,34 @@ struct IRefPtr6 { IRefC* p; ~IRefPtr6() { if (p) p->Release(); } };
 struct JobCtx6 {
   void Done(int n);   // 0x0068f9b0
 };
-struct BG6 { virtual void bg0(); virtual ~BG6() {} };
-struct ER6 { virtual void er0(); virtual ~ER6() {} };
-struct Job6B : ER6, BG6 {
+extern void* const vtbl_BG6[]; // 0x013effb8, Anim::BackgroundLoading destructor root
+extern void* const vtbl_ER6[]; // 0x013eb938, EA::COM::IRefCount destructor root
+struct __declspec(novtable) BG6 { virtual ~BG6() { *(const void* volatile*)this = vtbl_BG6; } };
+struct BGInterface6 : BG6 {
+  virtual int AddRef() = 0;
+  virtual int Release() = 0;
+  virtual int GetRefCount(); // 0x004c0190; secondary this +4
+  virtual void* GetKey(); // 0x008dc790; secondary this +0xc
+  virtual void SetKey(void*); // 0x006b42c0; ret4
+  virtual void* GetStream(); // 0x006b42e0; secondary this +0x1c
+  virtual void* GetProvider(); // 0x006c0200; secondary this +0x18
+  virtual bool Begin(); // 0x006b42f0; secondary counter +0x40
+  virtual bool Complete(); // 0x006b4ce0
+};
+struct __declspec(novtable) ER6 {
+  virtual int AddRef() = 0;
+  virtual int Release() = 0;
+  virtual ~ER6() { *(const void* volatile*)this = vtbl_ER6; }
+};
+struct ERInterface6 : ER6 {
+  virtual void* AsInterface(uint32_t) = 0;
+};
+struct Job6B : ERInterface6, BGInterface6 {
+  virtual int AddRef(); // 0x00768530
+  virtual int Release(); // 0x0067da30
+  virtual void* AsInterface(uint32_t); // 0x006b4310
+  static void operator delete(void*); // 0x00926060, cdecl
+
   uint32_t pad8;
   IRefPtr6 m0c;
   uint32_t m10;

@@ -1254,7 +1254,8 @@ void cGameModelEffect::Unload()
 {
     unsigned n = (unsigned)(mSplitControllers.mpEnd - mSplitControllers.mpBegin);
     for (unsigned i = 0; i < n; ++i) {
-        mSplitControllers.mpBegin[i].mComponent->Dispose();
+        unsigned j = i;
+        mSplitControllers.mpBegin[j].mComponent->Dispose();
         cEffectParams_s007d_56f0* p = mSplitControllers.mpBegin[i].mParams;
         if (p) {
             p->~cEffectParams_s007d_56f0();

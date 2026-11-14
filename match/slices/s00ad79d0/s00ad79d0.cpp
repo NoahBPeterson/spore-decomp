@@ -100,16 +100,30 @@ struct CamInfo {                       // 0x30 bytes: pos(3f) + quat(4f) + 4f + 
     CamInfo* assign(CamInfo*);         // 0x00ad7f00
 };
 
-struct EditorRes {                     // 0x34 bytes
-    void* vt0;                         // +0x00
-    int   f4;                          // +0x04
-    void* vt8;                         // +0x08
+// Non-owning views of the native dispatch headers. These classes do not
+// emit replacement tables; native table slots retain the destruction contract.
+struct EditorResDispatchHeader { void* vt0; int f4; void* vt8; };
+struct __declspec(novtable) EditorResCountPrefix {
+    virtual ~EditorResCountPrefix();
+    int f4;
+    EditorResCountPrefix() { f4 = 0; }
+};
+struct EditorResUnknownDispatch { void* vt; };
+struct __declspec(novtable) EditorResUnknownPrefix {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual ~EditorResUnknownPrefix();
+    EditorResUnknownPrefix() { ((EditorResUnknownDispatch*)this)->vt = &VT_13eb938; }
+};
+
+struct __declspec(novtable) EditorRes : EditorResCountPrefix, EditorResUnknownPrefix {                     // 0x34 bytes
     void* fC;                          // +0x0c
     float f10, f14, f18, f1c, f20, f24;// +0x10
     uchar b28, b29, b2a, b2b, b2c, b2d, b2e; // +0x28
     int   f30;                         // +0x30
     EditorRes* ctor();                 // 0x00ad7c30
-    EditorRes* copyCtor(EditorRes*);   // 0x00ad7ca0
+    EditorRes(const EditorRes& src); // 0x00ad7ca0
+    virtual ~EditorRes();           // native cleanup through VT_145b2f8 slot 0
 };
 
 struct PtrField {
@@ -310,40 +324,36 @@ EditorRes* EditorRes::ctor()
 {
     int z = 0;
     this->f4 = z;
-    *(void* volatile*)&this->vt8 = &VT_13eb938;
-    this->vt0 = &VT_145b2f8;
-    this->vt8 = &VT_145b2ec;
+    *(void* volatile*)&((EditorResDispatchHeader*)this)->vt8 = &VT_13eb938;
+    ((EditorResDispatchHeader*)this)->vt0 = &VT_145b2f8;
+    ((EditorResDispatchHeader*)this)->vt8 = &VT_145b2ec;
     this->fC = (void*)z;
     return this;
 }
 
 // ================================================================================================
 // @ 0x00ad7ca0
-EditorRes* EditorRes::copyCtor(EditorRes* src)
+EditorRes::EditorRes(const EditorRes& src)
 {
-    this->f4 = 0;
-    *(void* volatile*)&this->vt8 = &VT_13eb938;
-    _ReadWriteBarrier();
-    this->vt0 = &VT_145b2f8;
-    this->vt8 = &VT_145b2ec;
-    this->fC = src->fC;
+    ((EditorResDispatchHeader*)this)->vt0 = &VT_145b2f8;
+    ((EditorResDispatchHeader*)this)->vt8 = &VT_145b2ec;
+    this->fC = src.fC;
     if (this->fC)
         VFN(this->fC, 0, TC_v0)(this->fC);
-    this->f10 = src->f10;
-    this->f14 = src->f14;
-    this->f18 = src->f18;
-    this->f1c = src->f1c;
-    this->f20 = src->f20;
-    this->f24 = src->f24;
-    this->b28 = src->b28;
-    this->b29 = src->b29;
-    this->b2a = src->b2a;
-    this->b2b = src->b2b;
-    this->b2c = src->b2c;
-    this->b2d = src->b2d;
-    this->b2e = src->b2e;
-    this->f30 = src->f30;
-    return this;
+    this->f10 = src.f10;
+    this->f14 = src.f14;
+    this->f18 = src.f18;
+    this->f1c = src.f1c;
+    this->f20 = src.f20;
+    this->f24 = src.f24;
+    this->b28 = src.b28;
+    this->b29 = src.b29;
+    this->b2a = src.b2a;
+    this->b2b = src.b2b;
+    this->b2c = src.b2c;
+    this->b2d = src.b2d;
+    this->b2e = src.b2e;
+    this->f30 = src.f30;
 }
 
 // ================================================================================================

@@ -422,7 +422,7 @@ public:
     cSpaceInventoryItem* FindStoreItem(cSpaceInventoryItem* pItem);
     int GetTradeBalance();
     int AdjustTradeValue(bool bSetCountToOne, cSpaceInventoryItem* pItem);
-    void GetRareKey(ResourceKey* pOut, uint32_t groupIndex, uint32_t rareIndex);
+    ResourceKey GetRareKey(uint32_t groupIndex, uint32_t rareIndex);
     int GetRareKeyCount(uint32_t groupIndex);
     void* PopValue();
     cSpaceInventoryItem* GetUserItem(uint32_t index);
@@ -752,13 +752,9 @@ int cSPSpaceTrading::AdjustTradeValue(bool bSetCountToOne, cSpaceInventoryItem* 
 }
 
 // @ 0x01039fb0  SP::cSPSpaceTrading::GetRareKey
-void cSPSpaceTrading::GetRareKey(ResourceKey* pOut, uint32_t groupIndex, uint32_t rareIndex)
+ResourceKey cSPSpaceTrading::GetRareKey(uint32_t groupIndex, uint32_t rareIndex)
 {
-    const uint32_t* pSrc = (const uint32_t*)&mRareGroups.mpBegin[groupIndex].mRares.mpBegin[rareIndex];
-    uint32_t* pDst = (uint32_t*)pOut;
-    pDst[0] = pSrc[0];
-    pDst[1] = pSrc[1];
-    pDst[2] = pSrc[2];
+    return mRareGroups.mpBegin[groupIndex].mRares.mpBegin[rareIndex];
 }
 
 // @ 0x01039ff0  SP::cSPSpaceTrading::GetRareKeyCount
@@ -771,8 +767,10 @@ int cSPSpaceTrading::GetRareKeyCount(uint32_t groupIndex)
 // @ 0x0103a060  SP::cSPSpaceTrading::PopValue
 void* cSPSpaceTrading::PopValue()
 {
+    void* value = mpStackTop[-1];
+    _ReadWriteBarrier();
     --mpStackTop;
-    return *mpStackTop;
+    return value;
 }
 
 // @ 0x0103a080  SP::cGameNounManager::CreatePlanetaryArtifact

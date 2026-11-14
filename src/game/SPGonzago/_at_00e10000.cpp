@@ -1032,8 +1032,7 @@ void cPanel::FUN_00e190c0(void* p)
 // @ 0x00e19230
 void cSkinPaintClear::FUN_00e19230(int)
 {
-    cPanel* p = (cPanel*)FUN_00b3d3f0();
-    p->FUN_00e190c0(0);
+    ((cPanel*)FUN_00b3d3f0())->FUN_00e190c0(0);
 }
 
 // @ 0x00e19250

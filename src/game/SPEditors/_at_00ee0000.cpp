@@ -7436,8 +7436,13 @@ bool __cdecl f00eed840(int param)
 fail:
     ok = false;
 done:
-    if (local != 0)
-        ((RefObj*)local)->Release();
+    if (local != 0) {
+        RefObj* receiver = (RefObj*)local;
+        void** table = *(void***)receiver;
+        _ReadWriteBarrier();
+        typedef void (__thiscall *ReleaseFn)(void*);
+        ((ReleaseFn)table[1])(receiver);
+    }
     return ok;
 }
 

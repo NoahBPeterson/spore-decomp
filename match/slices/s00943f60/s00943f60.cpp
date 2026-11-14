@@ -807,7 +807,8 @@ bool HTTPHeaders::RemoveHeaderEntryWorker(const char* pField, int nWhich) {
             HeaderPair* it = mHeaders.mpBegin;
             if (it != mHeaders.mpEnd) {
                 do {
-                    if (_stricmp(it->first.mpBegin, pField) == 0) {
+                    const char* headerField = it->first.mpBegin;
+                    if (_stricmp(headerField, pField) == 0) {
                         if (count == nWhich) {
                             mHeaders.erase(it);
                             return true;

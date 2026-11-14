@@ -23,3 +23,4 @@ slices/s00afef10/s00afef10.cpp  ?VectorAt@@YAPAXPBVcPtrVector@@I@Z  00afff30  /O
 slices/s00afef10/s00afef10.cpp  ?Update@cSpatialObjectView@SP@@QAEXII@Z  00afffa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00afef10/s00afef10.cpp  ?WriteVector3Value5@@YAXPAVcValueHost@@@Z  00b00350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00afef10/s00afef10.cpp  ?ReadItemList@@YA_NPAVcSerializeMgr@@PBVcSerializeItemList@@@Z  00b00400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00afef10/s00afef10.cpp  ?ReadTreeItems@@YA_NPAVcSerializeMgr@@PBVcRBTree@@@Z  00b004e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
