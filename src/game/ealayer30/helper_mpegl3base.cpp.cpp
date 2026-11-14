@@ -261,9 +261,66 @@ public:
 // ---- items of slice s011666d0 end
 
 // ---- items of slice s011675c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int   g_compactBlocks;                                      // 0x016f1734  packed-layout switch
+extern "C" const unsigned short g_sizeTable[];                         // 0x014d76e8  u16 per-index sizes
+extern "C" const short          g_spanTable[];                         // 0x014d7608  s16 per-block spans
+#ifndef HEIGHTCODEC_H
+#endif
 struct Cell { float f[8]; };
 struct Row { Cell c[9]; };
 #define NEGATE_CELL(i) r->c[i].f[5] *= -1.0f; r->c[i].f[7] *= -1.0f;
+void* __cdecl MemSet(void* dst, int value, unsigned size);             // 0x011e073e
+extern "C" void* (__cdecl* const g_alloc_016f16ec)(unsigned size);     // 0x016f16ec  block allocator
+extern "C" void  (__cdecl* const g_free_016f16f4)(void* p);            // 0x016f16f4  block release
+struct cHeightCodec {
+    virtual void Slot00();
+    virtual int  ResolveId(unsigned id);          // +0x04
+    virtual void Slot08();
+    virtual void ReleaseSource();                 // +0x0c
+    virtual void Slot10();
+    virtual void OnAllocated();                   // +0x14
+    virtual ~cHeightCodec();
+
+    unsigned      mSize04;          // +0x04  divisor read back from the size table
+    unsigned      mSize08;          // +0x08  same size table value
+    unsigned      mField0c;         // +0x0c
+    int           mBlockSize;       // +0x10  signed span from the span table
+    int           mComputedSize;    // +0x14  derived block size
+    unsigned char mCellDim;         // +0x18  4 - packed dimension bits
+    unsigned char mPad19[0x0b];     // +0x19
+    const unsigned char* mpSourceData;  // +0x24  packed id seen as four bytes
+    unsigned      mSourceCopy;      // +0x28
+    unsigned      mCursor;          // +0x2c
+    unsigned      mCursorOffset;    // +0x30
+    unsigned      mCursorExtra;     // +0x34
+    unsigned char mPad38[2];        // +0x38
+    unsigned char mMode3a;          // +0x3a  outer layout switch
+    unsigned char mMode3b;          // +0x3b  inner layout switch
+    unsigned char mMode3c;          // +0x3c
+    unsigned char mPad3d;           // +0x3d
+    unsigned char mBit3e;           // +0x3e  descriptor bit 0x13
+    unsigned char mBit3f;           // +0x3f  descriptor bit 0x10
+    unsigned char mNibble40;        // +0x40  descriptor bits 0x0c..0x0f
+    unsigned char mIndex41;         // +0x41  size-table index
+    unsigned char mBit42;           // +0x42  descriptor bit 0x09
+    unsigned char mType43;          // +0x43  descriptor bits 0x06..0x07
+    unsigned char mType44;          // +0x44  descriptor bits 0x04..0x05
+    unsigned char mBit45;           // +0x45  descriptor bit 0x03
+    unsigned char mBit46;           // +0x46  descriptor bit 0x02
+    unsigned char mInited;          // +0x47  data allocated
+    unsigned char mBlockCount;      // +0x48  1 or 2 blocks per size
+    unsigned char mPad49[3];        // +0x49
+    unsigned      mHandle4c;        // +0x4c  id handed to ResolveId when no pointer
+    void*         mpData;           // +0x50  allocated block data
+
+    cHeightCodec();
+    void SetHandle(unsigned handle);
+    int  Decode(unsigned desc);
+    void AllocBlocks();
+    int  Init(unsigned handle, unsigned unused);
+    int  ResolveSource();
+    void CopyHandle();
+};
 static __forceinline short ToFixed14(float value)
 {
     return (short)_mm_cvtss_si32(_mm_set_ss(value));
@@ -845,6 +902,157 @@ void PackHeightBlock(const float* src, short* dst)
         PACK_ROW(6)
         PACK_ROW(7)
     }
+}
+
+// @ 0x011680f0
+void cHeightCodec::SetHandle(unsigned handle)
+{
+    mpSourceData = (const unsigned char*)handle;
+    mSourceCopy = handle;
+    mCursor = handle;
+    mCursorOffset = 0;
+    mCursorExtra = 0;
+}
+
+// @ 0x01168110
+cHeightCodec::cHeightCodec()
+{
+    mInited = 0;
+    mHandle4c = 0;
+}
+
+// @ 0x01168130
+void cHeightCodec::AllocBlocks()
+{
+    if (g_compactBlocks != 0) {
+        mpData = g_alloc_016f16ec(mBlockCount * 0x480);
+        MemSet(mpData, 0, mBlockCount * 0x480);
+    } else {
+        mpData = g_alloc_016f16ec(mBlockCount * 0x900);
+        MemSet(mpData, 0, mBlockCount * 0x900);
+    }
+}
+
+// @ 0x01168190
+int cHeightCodec::Decode(unsigned desc)
+{
+    if ((desc & 0xffe00000) != 0xffe00000)
+        return -1;
+
+    unsigned char dim = (unsigned char)(4 - ((desc >> 0x11) & 3));
+    unsigned char bit9 = (unsigned char)((desc >> 9) & 1);
+    mBit42 = bit9;
+    unsigned char type43 = (unsigned char)((desc >> 6) & 3);
+    mType43 = type43;
+    mCellDim = dim;
+    mType44 = (unsigned char)((desc >> 4) & 3);
+    mBit3f = (unsigned char)((desc >> 0x10) & 1);
+    mBit45 = (unsigned char)((desc >> 3) & 1);
+    unsigned char nibble40 = (unsigned char)((desc >> 0xc) & 0xf);
+    mBit3e = (unsigned char)((desc >> 0x13) & 1);
+    mNibble40 = nibble40;
+    mBit46 = (unsigned char)((desc >> 2) & 1);
+
+    if ((desc & 0x100000) != 0) {
+        mMode3b = (unsigned char)(((desc >> 0x13) & 1) == 0);
+        mMode3a = 0;
+    } else {
+        mMode3b = 1;
+        mMode3a = 1;
+    }
+
+    int type10 = (desc >> 0xa) & 3;
+    unsigned char mode3c;
+    if (mMode3a != 0) {
+        mode3c = (unsigned char)(type10 + 6);
+        mIndex41 = mode3c;
+    } else {
+        mIndex41 = (unsigned char)(mMode3b * 3 + type10);
+        mode3c = (unsigned char)((mMode3b ? 3 : 0) + type10);
+    }
+    mMode3c = mode3c;
+
+    mBlockCount = (unsigned char)((type43 != 3) + 1);
+    unsigned size = g_sizeTable[mIndex41];
+    mSize08 = size;
+    mSize04 = size;
+
+    if (nibble40 == 0)
+        return -1;
+
+    unsigned char mode3b = mMode3b;
+    int blockSize = g_spanTable[((mode3b * 3 + dim) << 4) + nibble40];
+    mBlockSize = blockSize;
+
+    if (dim == 1) {
+        mComputedSize = (blockSize * 0x2ee0 / (int)mSize04 + bit9) * 4 - 4;
+        return 0;
+    }
+
+    int computed = blockSize * 0x23280 / (int)mSize04;
+    mComputedSize = computed;
+    if (dim == 3 && mode3b != 0)
+        mComputedSize = computed >> 1;
+    if (bit9 != 0)
+        ++mComputedSize;
+    mComputedSize += -4;
+    return 0;
+}
+
+// @ 0x01168330
+int cHeightCodec::ResolveSource()
+{
+    int result;
+    if (mpSourceData == 0) {
+        unsigned id = mHandle4c;
+        void** vt = *(void***)this;
+        result = ((int (__thiscall*)(cHeightCodec*, unsigned))vt[1])(this, id);
+    } else {
+        unsigned value = mpSourceData[1] + ((unsigned)mpSourceData[0] << 8);
+        value = (value << 8) + mpSourceData[2];
+        value = (value << 8) + mpSourceData[3];
+        void** vt = *(void***)this;
+        result = ((int (__thiscall*)(cHeightCodec*, unsigned))vt[1])(this, value);
+    }
+    return (result + 1 != 0) - 1;
+}
+
+// @ 0x011683d0
+void cHeightCodec::CopyHandle()
+{
+    mCursor = (unsigned)mpSourceData;
+    mCursorOffset = 0;
+    mCursorExtra = 0;
+}
+
+// @ 0x01168400
+cHeightCodec::~cHeightCodec()
+{
+    if (mInited != 0) {
+        mHandle4c = 0;
+        mInited = 0;
+        g_free_016f16f4(mpData);
+    }
+}
+
+// @ 0x01168460
+int cHeightCodec::Init(unsigned handle, unsigned unused)
+{
+    if (mInited != 0)
+        ReleaseSource();
+    mInited = 1;
+    mpSourceData = (const unsigned char*)handle;
+    mSourceCopy = handle;
+    if (handle == 0)
+        return -1;
+    if (ResolveSource() != 0)
+        return -1;
+    AllocBlocks();
+    OnAllocated();
+    mCursor = (unsigned)mpSourceData;
+    mCursorOffset = 0;
+    mCursorExtra = 0;
+    return 0;
 }
 
 // @ 0x011684c0

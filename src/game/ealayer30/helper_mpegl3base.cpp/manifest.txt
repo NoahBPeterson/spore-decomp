@@ -1,5 +1,11 @@
 # source  symbol  va  flags
 ../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?NegateRows@@YAXPAURow@@@Z  011675c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?SetHandle@cHeightCodec@@QAEXI@Z  011680f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ??0cHeightCodec@@QAE@XZ  01168110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?AllocBlocks@cHeightCodec@@QAEXXZ  01168130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?CopyHandle@cHeightCodec@@QAEXXZ  011683d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ??1cHeightCodec@@UAE@XZ  01168400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?Init@cHeightCodec@@QAEHII@Z  01168460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?ReadBigEndian@@YAHPBEH@Z  011684c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?FUN_01168520@Snd@@YAHPAUResampler@1@HPAM1@Z  01168520  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/ealayer30/helper_mpegl3base.cpp.cpp  ?FUN_01168580@Snd@@YAHPAUResampler@1@@Z  01168580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
