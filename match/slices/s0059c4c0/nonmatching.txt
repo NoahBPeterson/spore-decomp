@@ -3,4 +3,4 @@
 0059c830  322  AddCreature(skin, model): register allocation (this spilled, skinned kept in ebx) and frame size 0x48 vs 0x44
 0059cbd0  17  SetCreatureIdle: original tail-calls SetIdle(0) (add esp,4; mov [esp+4],0; jmp); mine calls + ret. Body complete; replay/fresh FAIL only on the original's tail-jmp call-arg recorder (it reports the previous call's stack address 7efff000 instead of the actual 0; all registers, memory and return values match, 100% coverage, 5/181 inputs). Keeping a real call is deliberate (no asm); the src/game copy is identical and reproduces the same result.
 0059cc40  199  IsAnimationPlaying: original packs count into the id param slot (frame 4 vs 8), shifts all offsets
-0059cd20  3  IsPlayingAnimation: count stored in id param slot in original, in the local slot in mine
+0059cd20  3  IsPlayingAnimation: count stored in id param slot in original, in the local slot in mine [R35: claimed for matching work]
