@@ -4864,6 +4864,28 @@ class Rewrite:
         """Rename a local stub item (and every use of it in this slice's items and function texts) to `Name_<slice>`.
         verbatim_only: the converted functions spell the canonical class (`EA::ArgScript::cArguments`), the rename is
         for the slice's own stub that only the verbatim functions use."""
+        # a dllimport declaration of old_n, also one line of an `extern "C" { ... }` block (parsed as one nameless item)
+        imp = re.compile(r"(?m)^[ \t]*__declspec\s*\(\s*dllimport\s*\)[^;{}]*\b%s\s*\([^;{}]*\)\s*;[^\n]*\n?" % re.escape(old_n))
+        sysname = old_n in ("FILE", "size_t", "ptrdiff_t", "wchar_t", "va_list", "time_t", "HANDLE", "DWORD", "BOOL") or \
+            re.match(r"^_[a-z]", old_n) or any(imp.search(t) for _k, t in self.items)
+        if old_n in getattr(self, "sys_dropped", set()) and not ns:
+            return              # already dropped for the system header's (a later round met the same clash)
+        if sysname and not ns:
+            self.sys_dropped = getattr(self, "sys_dropped", set()) | {old_n}
+            # a C runtime / Win32 name (`struct _iobuf`, `typedef struct _iobuf FILE;`, `__declspec(dllimport) TlsGetValue`):
+            # the system header the TU includes declares it, so the slice's copy goes and every use means the system one.
+            # Renamed, `_iobuf_s0107_e670` made FILE another type and TlsGetValue_s0107_e670 an import that does not exist
+            # (2026-11-14, Havok s0107e670: eight functions held on C2664 fclose / C3861)
+            def _declares(k, t):
+                if old_n not in RS.item_names(k, t):
+                    return False
+                inner = RS.mask(RS.unwrap_namespaces(t)[1]).strip()
+                return not re.search(r"\{", inner) or re.match(r"^(?:struct|union)\s+%s\b" % re.escape(old_n), inner)
+            before = len(self.items)
+            self.items = [(k, imp.sub("", t)) for k, t in self.items if not _declares(k, t)]
+            self.notes.append(("system-name", "%s: dropped %d slice declaration(s), the system header's is used (%s)" % (
+                old_n, before - len(self.items), why[:80])))
+            return
         if old_n.endswith(self.rsfx):
             # already this slice's renamed stub (a re-apply replays the earlier rename and then meets the TU's copy from
             # that landing): a second suffix renamed the uses in landed functions too (2026-11-14 SPWeapons s00cc0700:

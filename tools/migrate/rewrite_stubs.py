@@ -142,22 +142,29 @@ def drop_if0(lines):
 def slice_lines(sid, text):
     """The slice text with its own header expanded in place and the slice-local types.h includes removed."""
     out = []
-    for l in text.split("\n"):
-        if LOCAL_TYPES.match(l):
-            continue
-        # `#include "s006bd150.h"` (the slice's own header) or `#include "../s006bc1b0/s006bc1b0.h"` (a sibling slice's
-        # header shared by a run of slices)
-        # `s00634490_ui.h`, `s0049d760_pal.h`: any header of the slice's own name (fix pass 6 C7, mig7 report s00634490)
-        m = re.match(r'^\s*#\s*include\s+"(?:\.\./(s[0-9a-f]{8})/)?(s[0-9a-f]{8}\w*\.h)"\s*$', l)
-        if m:
-            hp = os.path.join(SLICES, m.group(1) or sid, m.group(2))
-            if os.path.exists(hp):
-                for hl in open(hp, encoding="utf-8", errors="replace").read().split("\n"):
-                    if LOCAL_TYPES.match(hl) or re.match(r"^\s*#\s*pragma\s+once", hl):
-                        continue
-                    out.append(hl)
+    seen = set()
+
+    def expand(lines, base):
+        for l in lines:
+            if LOCAL_TYPES.match(l):
                 continue
-        out.append(l)
+            # `#include "s006bd150.h"` (the slice's own header), `#include "../s006bc1b0/s006bc1b0.h"` (a sibling slice's
+            # header shared by a run of slices), `s00634490_ui.h` (any header of the slice's own name, fix pass 6 C7), and
+            # any other header that resolves inside match/slices: `hk31_base.h`, `../s010cbaa0/hk31_b005.h`, `bake.h`,
+            # `heightcodec.h` (2026-11-14: dropped as an unresolvable include, so their classes were missing in the module
+            # TU, C2653 on 47 held functions).  Expanded once each, recursively; open-source library headers stay includes
+            m = re.match(r'^\s*#\s*include\s+"([^"]+\.h)"\s*(//.*)?$', l)
+            if m and not re.search(r"(?i)jpeg|jinclude|jconfig|jmorecfg|deflate|zlib|zconf|png|expat|xmlparse|xmltok", m.group(1)):
+                hp = os.path.normpath(os.path.join(base, m.group(1)))
+                if os.path.isfile(hp) and os.path.normpath(hp).startswith(os.path.normpath(SLICES) + os.sep):
+                    if hp not in seen:
+                        seen.add(hp)
+                        expand([hl for hl in open(hp, encoding="utf-8", errors="replace").read().split("\n")
+                                if not re.match(r"^\s*#\s*pragma\s+once", hl)], os.path.dirname(hp))
+                    continue
+            out.append(l)
+
+    expand(text.split("\n"), os.path.join(SLICES, sid))
     return drop_if0(out)
 
 
