@@ -16,3 +16,4 @@
 ../src/game/SPEngine/_at_007d0000.cpp  ?SP_AutomateEntry@@YAXHH@Z  007db570  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_007d0000.cpp  ?FUN_007dfbd0@@YAXPAX0@Z  007dfbd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_007d0000.cpp  ?FUN_007dfbf0@@YAPAXXZ  007dfbf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?Ser1F0@@YAPAXPAUIStream@@PAD@Z  007d01f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
