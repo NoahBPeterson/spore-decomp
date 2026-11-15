@@ -1015,10 +1015,10 @@ void RotationBall::Destroy()
 // @ 0x00483070
 void* RotationBall::AsInterface(uint32_t id)
 {
-    switch (id) {
-    case 0xee3f516e: return this;
-    case 0x050a1fe5: return this;
+    switch (static_cast<int32_t>(id)) {
     case 0x050a510e: return this;
+    case 0x050a1fe5: return this;
+    case static_cast<int32_t>(0xee3f516e): return this;
     }
     return 0;
 }

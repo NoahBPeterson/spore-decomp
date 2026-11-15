@@ -1236,12 +1236,10 @@ void cCityInputStrategy::FUN_00cf14d0()
 // @ 0x00cf1500
 void cCityInputStrategy::FUN_00cf1500(u32 param_1)
 {
-    if (FUN_00b5b800() == (u32)&gEditorCursor[0])
+    if (FUN_00b5b800() == 0x01654c04u)
     {
         MOPS(mFielde4)->FUN_00e34ea0((void*)param_1);
-        void* a = FUN_00cf74c0();
-        void* b = MOPS(a)->FUN_00cf7500();
-        MOPS(b)->FUN_00ce8ee0(param_1);
+        MOPS(MOPS(FUN_00cf74c0())->FUN_00cf7500())->FUN_00ce8ee0(param_1);
     }
 }
 

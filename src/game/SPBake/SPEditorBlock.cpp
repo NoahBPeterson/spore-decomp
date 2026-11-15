@@ -5871,10 +5871,17 @@ void cSPBoundingBox_s0043_e3f0::Add(const cSPBoundingBox_s0043_e3f0& o)
     }
 }
 
+template<int N> inline void ReserveEditorBlockInlineFrame()
+{
+    // Preserve unused inline-callee storage in the original unoptimized frame.
+    uint32_t slots[N];
+}
+
 // @ 0x0043f250
 float SP::cSPEditorBlock_s0043_e3f0::F_43f250()
 {
     cSPBoundingBox_s0043_e3f0 box = F_43eef0();
+    ReserveEditorBlockInlineFrame<4>();
     return Length(box.GetCorner(0)) / 2.0f;
 }
 
@@ -7609,6 +7616,7 @@ V3_s0044_ae00* Blk_s0044_ae00::B550(V3_s0044_ae00* out)
 // @ 0x0044b590
 M3_s0044_ae00* Blk_s0044_ae00::B590(M3_s0044_ae00* out)
 {
+    ReserveEditorBlockInlineFrame<11>();
     *out = mMat;
     return out;
 }
