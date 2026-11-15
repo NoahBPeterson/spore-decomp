@@ -8,7 +8,6 @@
 0055f9e0 37 complete conditional object release; /Od local layout differs; equiv FAIL (ecx receiver fixed)
 0055fa20 213 complete asset activate/deactivate path; /Od frame differs; equiv FAIL (ecx receiver fixed)
 0055fb30 93 complete asset-membership query; /Od frame differs; equiv FAIL (ecx receiver fixed)
-0055fbb0 64 complete asset timestamp setter; /Od frame differs; equiv FAIL (ecx receiver fixed)
 0055fc10 379 complete asset key-list builder (bounded top-N by mnTimeStamp); /Od frame differs (our 420 vs 591 bytes); equiv WEAK (135 valid inputs, 31.6% coverage) flags: /Od /MD /Gy /EHsc /TP
 0055fe60 61 complete population-count update; /Od frame differs flags: /Od /MD /Gy /EHsc /TP
 0055fed0 37 complete clear/free-list reset; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; the retail helpers are thiscall (receiver in ecx), not cdecl: `SimpleVector<unsigned>::erase` gets ecx=&vec (this+0x64) plus (first,last) on the stack, and FUN_00561cc0 gets ecx=this with no stack args. The old cdecl stubs left ecx garbage, so the replay faulted inside the helper (eip=004769bd, unmapped read). Both are now declared __fastcall(self,dummy,...) and the function replays bit-identically. equiv PASS 231/231 valid, 100% coverage, 0 mismatches (mirror in src/game/SPEditors/SPObjectTemplateDB.cpp: PASS 285/285, 100%). Residual /Od stack-frame/register diff, size 56 vs 51

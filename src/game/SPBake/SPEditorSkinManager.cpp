@@ -944,6 +944,7 @@ void* cSPEditorSkinManager::AsInterface(EA::COM::InterfaceId id)
     switch (id) {
     case 0xcfeb4c03:
         return this;
+        break;
     case 0xee3f516e:
         return this;
     }

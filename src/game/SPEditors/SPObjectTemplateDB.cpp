@@ -1526,7 +1526,7 @@ struct Iter70 {
     void  Increment();                                  // 0x00422c50
 };
 struct DateVal70 {
-    int mLow; int mHigh;
+    __int64 mnSeconds; // EA::DateTime::DateTime seconds and 8-byte alignment.
     void Set(int mode);                                 // 0x0092e3d0
 };
 struct CJob70 {
@@ -5688,15 +5688,17 @@ bool EcxStub70::FUN_0055fb30(void* key)
 namespace SP {
 bool EcxStub70::FUN_0055fbb0(void* key)
 {
-    void* this_ = this;
-    int index = ((LookupDB70*)this_)->FindAssetIndex(key);
-    if (index == -1)
-        return 0;
-    DateVal70 now;
-    now.Set(1);
-    char* asset = (char*)(index * 0x50 + *(int*)((char*)this_ + 0x14));
-    *(DateVal70*)(asset + 0x48) = now;
-    return 1;
+    int index = ((LookupDB70*)this)->FindAssetIndex(key);
+    if (index != -1) {
+        DateVal70 now;
+        now.Set(1);
+        {
+            __int64 seconds = now.mnSeconds;
+            ((DateVal70*)(index * 0x50 + *(char**)((char*)this + 0x14) + 0x48))->mnSeconds = seconds;
+        }
+        return true;
+    }
+    return false;
 }
 }  // namespace SP
 
