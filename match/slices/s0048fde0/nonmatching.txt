@@ -1,4 +1,3 @@
-0048fde0  222  recursive child-walk; complete, equivalence WEAK (390 valid, 32.1% coverage); not byte-exact - frame slots / inlined callee shapes differ
 0048fee0  982  snap-offset / weighted-point search; complete, GetSymmetrySign gate, bounding-box centers, VSet push_back and min-weight scan reproduced, fabs lowered to x87 fabs; equivalence WEAK (350 valid, 34.7% coverage, inline-call tolerance); not byte-exact - frame layout and inlined-callee shapes differ
 004902c0  108  AABB overlap wrapper; complete, but original reserves a much larger (0xb4) frame and stores the 1.1f margin in a local
 00490330  212  AABB 6-axis overlap test; complete, but the original indexes through an inlined Vector3::operator[] and the LHS ends up in xmm0 (my plain member-access form folds to direct offsets)

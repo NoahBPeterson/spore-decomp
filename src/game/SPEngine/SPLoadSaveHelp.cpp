@@ -811,11 +811,12 @@ void ParseULong(const char** src, unsigned long* out)
 { const char* s = src[0]; out[0] = strtoul(s, 0, 10); }
 
 // @ 0x006930b0
-void ParseFloat(const char** src, float* out)
+void ParseFloat(const eastl::string8& source, void* out)
 {
     char* end;
-    double v = strtod(src[0], &end);
-    out[0] = (float)v;
+    const char* text = source.c_str();
+    double value = strtod(text, &end);
+    *static_cast<float*>(out) = (float)value;
 }
 
 // @ 0x006930d0

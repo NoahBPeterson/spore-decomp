@@ -1110,6 +1110,7 @@ struct Vector3_s0049_9410 {
     Vector3_s0049_9410() {}
     Vector3_s0049_9410(float ax, float ay, float az);          // 0x00436CA0
     Vector3_s0049_9410(const Vector3_s0049_9410& o) : x(o.x), y(o.y), z(o.z) {}
+    Vector3_s0049_9410& operator=(const Vector3_s0049_9410& o) { x = o.x; y = o.y; z = o.z; return *this; }
 };
 struct V3Agg { float x, y, z; };
 struct Vec3I {
@@ -1133,6 +1134,8 @@ extern Vec3C_s0049_9410   g_15d64d8_v3c;                    // 0x015d64d8 (g_15d
 Vector3_s0049_9410* VectorSub(Vector3_s0049_9410* out, const Vector3_s0049_9410* a, const Vector3_s0049_9410* b);            // 0x41db10
 Vector3_s0049_9410* VectorAdd(Vector3_s0049_9410* out, const Vector3_s0049_9410* a, const Vector3_s0049_9410* b);            // 0x41dc10
 Vector3_s0049_9410* Vector3_Scale_s0049_9410(Vector3_s0049_9410* out, const float* s, const Vector3_s0049_9410* v);          // 0x41de40
+Vector3_s0049_9410 VectorAdd(const Vector3_s0049_9410& a, const Vector3_s0049_9410& b); // 0x0041dc10
+Vector3_s0049_9410 Vector3_Scale_s0049_9410(const float& s, const Vector3_s0049_9410& v); // 0x0041de40
 Vector3_s0049_9410* Vector3_Negate(Vector3_s0049_9410* out, const Vector3_s0049_9410* v);                         // 0x422020
 bool     Vector3Equal(const Vector3_s0049_9410* a, const Vector3_s0049_9410* b);                       // 0x4232c0
 Vector3_s0049_9410* Vector3_Normalize(Vector3_s0049_9410* out, const Vector3_s0049_9410* v);                      // 0x436ce0
@@ -3139,15 +3142,17 @@ struct BoundingBox {
     BoundingBox() {}
     bool Intersects(const BoundingBox& b) const;
 };
+struct cSPEditorBlock;
 struct Tracker {
     char pad0[0x33c];
-    int field33c;                          // 0x33c
+    cSPEditorBlock* mParentBlock;           // 0x33c
     char pad1[0x3a0 - 0x340];
     Vector3 dir;                           // 0x3a0
     Vector3 off;                           // 0x3ac
-    void GetOffsetB(Vector3* out, char flag);               // 0x004381e0
-    void GetTrianglePickDirection(Vector3* out, char flag); // 0x00438120
-    void PlaceHandlesBaseOnPinning(Vector3 a, Vector3 b);   // 0x00437b00
+    Vector3 GetTrianglePickOrigin(bool flag) const;        // 0x004381e0
+    Vector3 GetTrianglePickDirection(bool flag) const;     // 0x00438120
+    bool RecordPositionBasedOnPick(Vector3 a, Vector3 b);  // 0x00437b00
+    cSPEditorBlock* GetParent() const { return mParentBlock; }
 };
 struct SubMgr {
     int Count();
@@ -3158,6 +3163,14 @@ struct ModelType {
     void** end;                           // 0x04
     bool GetResourceTypeX();              // 0x00526430, thiscall
 };
+struct ChildVector_s0048_fde0 {
+    EA::AutoRefCount<cSPEditorBlock>* mpBegin;
+    EA::AutoRefCount<cSPEditorBlock>* mpEnd;
+    EA::AutoRefCount<cSPEditorBlock>* mpCapacity;
+    uint32_t mAllocator[2];
+    int size() const { return mpEnd - mpBegin; }
+    EA::AutoRefCount<cSPEditorBlock>& operator[](int i) { return mpBegin[i]; }
+};
 struct cSPEditorBlock {
     char pad0[0x28];
     SubMgr* mgr;                          // 0x28
@@ -3165,15 +3178,15 @@ struct cSPEditorBlock {
     Vector3 position;                     // 0x48
     char pad2[0x33c - 0x54];
     int field33c;                         // 0x33c
-    void** vecBegin;                      // 0x340
-    void** vecEnd;                        // 0x344
-    char pad3[0x3e0 - 0x348];
+    ChildVector_s0048_fde0 mChildBlockList; // 0x340
+    char pad3[0x3e0 - 0x354];
     Tracker* tracker;                     // 0x3e0
     void* field3e4;                       // 0x3e4
     char pad4[0xdc8 - 0x3e8];
     uint32_t bits;                        // 0xdc8
 
     int GetSymmetrySign();                // 0x0044f220
+    Tracker* GetSymmetricBlock() const { Tracker* p = tracker; return p; }
     BoundingBox* GetBBox(BoundingBox* out, int a, int b, int c);
     BoundingBox* GetBBox(BoundingBox* out, int a, int b, int c, Vector3* extra);
     void AddChild(Tracker* t);            // 0x00438700
@@ -4655,24 +4668,20 @@ void UpdateSymmetryRec(cSPEditorBlock_s0048_ef30* block, int sign)
 // @ 0x0048fde0
 void FUN_0048fde0(cSPEditorBlock* block)
 {
-    if (block == 0)
-        return;
-    if (block->GetSymmetrySign() != 0)
-        return;
-    void** begin = block->vecBegin;       // 0x340
-    void** end = block->vecEnd;           // 0x344
-    for (int i = 0; i < (int)(end - begin); ++i) {
-        cSPEditorBlock* child = (cSPEditorBlock*)begin[i];
-        Tracker* t = child->tracker;      // 0x3e0
-        if (t != 0 && t->field33c == 0) {
-            block->AddChild(t);
-            Vector3 off;
-            t->GetOffsetB(&off, 1);
-            Vector3 dir;
-            t->GetTrianglePickDirection(&dir, 1);
-            t->PlaceHandlesBaseOnPinning(dir, off);
-        } else {
-            FUN_0048fde0(child);
+    if (block != 0 && block->GetSymmetrySign() == 0) {
+        ChildVector_s0048_fde0& children = block->mChildBlockList;
+        for (int i = 0, n = children.size(); i < n; ++i) {
+            Tracker* t;
+            {
+                cSPEditorBlock* child = children[i];
+                t = child->GetSymmetricBlock();
+            }
+            if (t != 0 && t->GetParent() == 0) {
+                block->AddChild(t);
+                t->RecordPositionBasedOnPick(t->GetTrianglePickDirection(true), t->GetTrianglePickOrigin(true));
+            } else {
+                FUN_0048fde0(children[i]);
+            }
         }
     }
 }
@@ -6445,14 +6454,12 @@ bool FUN_0049a030(Vector3_s0049_9410 origin, Vector3_s0049_9410 dir, Vector3_s00
     Plane p;
     PlaneFromPointNormal((Plane*)&p, &g_15d64d8, &g_15d6324);
     float t;
-    if (!IntersectRayPlane(&origin, &dir, &p, &t))
-        return false;
-    Vector3_s0049_9410 sv;
-    Vector3_Scale_s0049_9410(&sv, &t, &dir);
-    Vector3_s0049_9410 r;
-    VectorAdd(&r, &origin, &sv);
-    *out = r;
-    return true;
+    if (IntersectRayPlane(&origin, &dir, &p, &t)) {
+        ScratchSlots<6>();
+        *out = VectorAdd(origin, Vector3_Scale_s0049_9410(t, dir));
+        return true;
+    }
+    return false;
 }
 
 // @ 0x0049a0c0

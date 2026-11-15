@@ -7,7 +7,6 @@
 0048e590 1925 /Od frame layout (local slot order, inline-return temps) and x87-vs-SSE fabs compare differ; complete and equivalent in structure
 0048ef30 1378 complete (all paths and calls); /Od frame layout and temp slots differ (original frame 0x370)
 0048f790 482 complete (all paths and calls); /Od temp slot layout differs (original frame 0x140, second AllocTag temp at -0xd1)
-0048fde0 166 recursive child-walk; complete but frame slots / inlined callee shapes differ
 004902c0 62 AABB overlap wrapper; complete, but original reserves a much larger (0xb4) frame and stores the 1.1f margin in a local
 00490330 130 AABB 6-axis overlap test; complete, but the original indexes through an inlined Vector3::operator[] and the LHS ends up in xmm0 (my plain member-access form folds to direct offsets)
 004904a0 227 complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
@@ -32,7 +31,6 @@
 00498f10 510 complete; /Od slot order not fitted (name hill-climb stalled at ~510)
 00499410 816 editor pick-block routine (ray vs block pick / skin pick / ground-plane fallback): complete; /Od inner-scope slot layout, Vector3 copy flavours (inline movss vs fld/fstp vs 0x4098a0 call) and by-value temp order differ; difftest PASS (fixed: the skin-pick retry passes the plane hit as Vec3C, copied with the out-of-line copy ctor 0x4098a0, as the original)
 00499b40 409 barycentric weights of a point in a triangle: complete; /Od slot order (needs all locals in one scope with hash-picked names) and copy flavours differ
-0049a030 64 complete ray/plane intersection helper (plane through two globals, origin + t*dir); only the /Od frame/temp slots and branch layout differ
 0049a0c0 349 block-direction picker (GetDir of owner+0x28, -1 sentinel test, normalized -dir or dir-delta): complete; /Od frame has extra reserved slots and by-value temps ordered differently; difftest PASS [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 0049cb90 509 complete; /Od frame/slot layout and tracker call shapes differ
 0049ce40 243 complete; /Od frame 0x100 vs 0xa8, temp/slot layout differs
