@@ -6104,6 +6104,7 @@ void OBJ174::AddEntry(LayoutRecord* e)
             eastl_move(p, q, (uint32_t)((uint8_t*)rec->mF8.mEnd - (uint8_t*)q));
         }
         rec->mF8.mEnd--;
+        _ReadWriteBarrier();
     }
     {
         float* p = rec->m110.mBegin + idx;

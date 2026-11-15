@@ -547,8 +547,8 @@ void fnt_InterpChars(uint32* st, uint32 ip, uint32 end)
 void fnt_NoInterpChars(uint32* st, uint32 ip, uint32 end)
 {
     uint32 prev = *st;
-    int    tbl  = *(int*)(st[10] + 0x8c);
     *st = ip;
+    int    tbl  = *(int*)(st[10] + 0x8c);
     while ((uint32)*st < end) {
         unsigned int op = *(unsigned char*)*st;
         st[1] = op;

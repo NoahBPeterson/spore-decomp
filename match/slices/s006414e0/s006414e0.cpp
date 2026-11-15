@@ -1,5 +1,6 @@
 // slice s006414e0: cSPAssetDataOTDB helpers and a few asset-slot window helpers.
 // Module flags: /O2 /MD /Gy /TP (no /arch:SSE, no /EHsc).
+#include <intrin.h>
 #include "s006414e0.h"
 extern "C" void* memmove(void*, const void*, size_t);
 
@@ -289,6 +290,7 @@ void cTimelineSporepediaCardData::FUN_00641bf0()
     ILoadSlot* a = mA.mpObject;
     if (a) {
         AutoRef<IResource> tmp;
+        _ReadWriteBarrier();
         if (a->GetResult(&tmp))
             mText = tmp.mpObject ? tmp.mpObject->Cast(0x30bdee3) : 0;
         mA = 0;
@@ -296,6 +298,7 @@ void cTimelineSporepediaCardData::FUN_00641bf0()
     ILoadSlot* b = mB.mpObject;
     if (b) {
         AutoRef<IResource> tmp;
+        _ReadWriteBarrier();
         if (b->GetResult(&tmp))
             Slot0xb0(tmp.mpObject);
         mB = 0;

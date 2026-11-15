@@ -23,3 +23,4 @@
 ../src/game/SPGonzago/SPUIMinimapWin.cpp  ?OnRebuild@cSPUIMinimapWin_s00e1_0e30@@QAE_NPAVRenderContext_s00e1_0e30@UTFWin@EA@@@Z  00e119c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMinimapWin.cpp  ?e0e9a0@@YGXII@Z  00e0e9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMinimapWin.cpp  ?RemoveAllIcons@cSPUIMinimapWin_s00e0_f050@@QAE_NXZ  00e0fb50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMinimapWin.cpp  ?FUN_00e0bdc0@ObjC@@QAEPAU1@ABU1@@Z  00e0bdc0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

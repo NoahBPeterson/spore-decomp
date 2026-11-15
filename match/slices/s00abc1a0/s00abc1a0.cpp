@@ -556,6 +556,7 @@ void* AList::ctor(void* a1)
     *(float*)(s + 0x38) = DAT_016799d4;
     *(float*)(s + 0x3c) = DAT_016799d8;
     *(float*)(s + 0x40) = DAT_01679a1c;
+    _ReadWriteBarrier();
     *(float*)(s + 0x44) = DAT_01679a20;
     *(float*)(s + 0x48) = DAT_01679a24;
     return this;

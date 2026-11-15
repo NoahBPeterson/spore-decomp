@@ -65,3 +65,4 @@
 ../src/game/SPGonzago/_at_00c60000.cpp  ?Func6fe00@@YAHH@Z  00c6fe00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?AsInterface@cMorphHandle@RetailMorphHandle@@QAEPAXI@Z  00c639a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c60000.cpp  ?AsInterface@cTargetMorphHandle@RetailTargetMorphQuery@@QAEPAXI@Z  00c639d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c60000.cpp  ?FUN_00c61390@Mission@@QAEXH@Z  00c61390  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

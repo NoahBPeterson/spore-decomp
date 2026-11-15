@@ -2,6 +2,7 @@
 // Object file: SPCreatureAnim/parts_caps.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include <math.h>
 #include <string.h>
@@ -396,6 +397,7 @@ void RBTreeX::InsertIdx(void** out, void* where, uint32* key, char hint)
     RBTreeInsert(node, where, (char*)this + 4, left);
     count = count + 1;
     *out = node;
+    _ReadWriteBarrier();
 }
 
 // @ 0x009fc5b0

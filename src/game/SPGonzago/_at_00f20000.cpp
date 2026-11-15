@@ -1792,6 +1792,7 @@ unsigned int* EventTree::Insert(unsigned int* out, unsigned int* key, unsigned i
     unsigned int* pOut = out;
     *(int*)((char*)this + 0x14) = *(int*)((char*)this + 0x14) + 1;
     *pOut = uVar2;
+    _ReadWriteBarrier();
     return pOut;
 }
 

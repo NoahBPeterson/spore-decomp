@@ -1,6 +1,7 @@
 // Slice s01062ce0 -- SP::cUFOLocomotion::UpdateLocomotion + movement command helpers, and
 // SP::cUIBadgeCard (vtable 0x149c070) init/shutdown/feed update helpers.
 // Flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+#include <intrin.h>
 #include "types.h"
 
 // EA FloatToInt64: a 1-instruction inline-asm helper. 0x01062ce0's original converts its
@@ -474,6 +475,7 @@ void UB::f01063400()
     v0 = (void*)0x149c070;
     v8 = (void*)0x149c054;
     vC = (void*)0x149c04c;
+    _ReadWriteBarrier();
     if (f1a8) (*(void (__thiscall**)(void*))((char*)*(void**)f1a8 + 4))(f1a8);
     if (feed) (*(void (__thiscall**)(void*))((char*)*(void**)feed + 4))(feed);
     if (handler) {

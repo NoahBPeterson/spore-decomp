@@ -1,4 +1,5 @@
 // Slice s00ecbb10 -- Sporepedia card data / asset helpers.
+#include <intrin.h>
 #include "types.h"
 
 typedef unsigned char u8;
@@ -190,6 +191,7 @@ void* TC_780::FUN_00ecc780(void* src)
     *(void**)s = &vtbl_ecb_b0;
     *(void**)((char*)s + 0x10) = &vtbl_ecb_9c;
     *(void**)((char*)s + 0x14) = &vtbl_ecb_8c;
+    _ReadWriteBarrier();
     s->s80.begin = eastl_gEmptyString16;
     s->s80.end = eastl_gEmptyString16;
     s->s80.cap = eastl_gEmptyString16_end;

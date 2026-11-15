@@ -1112,6 +1112,7 @@ namespace EA { namespace Swarm {
 void cEffectsManager_s00a6_d020::FUN_00a6d480()
 {
     HashNode** bucket = mHash.mpBucketArray;
+    _ReadWriteBarrier();
     HashNode* node = HashFirst(bucket);
     HashNode* end = mHash.mpBucketArray[mHash.mnBucketCount];
     while (node != end) {

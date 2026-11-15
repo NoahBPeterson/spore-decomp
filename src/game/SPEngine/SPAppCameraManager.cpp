@@ -2,6 +2,7 @@
 // Object file: SPEngine/SPAppCameraManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "SP/cCameraManager.h"
 #include "eastl/string.h"
@@ -215,6 +216,7 @@ void SP::cCameraManager::SetActiveControllerByIndex(int idx)
 {
     if (idx < 0) return;
     if (idx >= (int)((char*)mControllers.mpEnd - (char*)mControllers.mpBegin) >> 2) return;
+    _ReadWriteBarrier();
     void* old = mControllers.mpBegin[mActiveControllerIndex];
     ((void(__thiscall*)(void*))((void**)*(void**)old)[0x1c / 4])(old);
     mActiveControllerIndex = idx;

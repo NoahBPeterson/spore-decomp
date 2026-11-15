@@ -436,7 +436,10 @@ void* hkBinaryPackfileReader::getContentsWithRegistry(const char* className, con
 
     void* top;
     const char* name;
-    if (m_tracker == 0) {
+    if (m_tracker != 0) {
+        top = m_tracker->m_topLevelObject;
+        name = m_tracker->m_topLevelClassName;
+    } else {
         int s = m_header->m_contentsSectionIndex, o = m_header->m_contentsSectionOffset;
         if (s < 0 || o < 0)
             top = getSectionDataByIndex(getSectionIndex("__data__"), 0);
@@ -445,9 +448,6 @@ void* hkBinaryPackfileReader::getContentsWithRegistry(const char* className, con
         int cs = m_header->m_contentsClassNameSectionIndex, co = m_header->m_contentsClassNameSectionOffset;
         if (cs < 0 || co < 0) name = 0;
         else name = (const char*)getSectionDataByIndex(cs, co);
-    } else {
-        top = m_tracker->m_topLevelObject;
-        name = m_tracker->m_topLevelClassName;
     }
     if (className != 0 && name != 0) {
         if (hkString::strCmp(className, name) != 0)

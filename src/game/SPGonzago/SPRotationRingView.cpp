@@ -2,6 +2,7 @@
 // Object file: SPGonzago/SPRotationRingView.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include <math.h>
 #include "EA/ResourceMan/Key.h"
@@ -268,6 +269,7 @@ cViewA::~cViewA()
 {
     cModel* m = mModel;
     *(void**)this = (void*)0x1486a80;
+    _ReadWriteBarrier();
     ((void(__thiscall*)(void*, void*, int))VF(m->mpObj, 0x16c))(m->mpObj, m, 0);
 
     m = mModel;
@@ -354,6 +356,7 @@ cRotationRingView::~cRotationRingView()
 {
     cModel* m = mModel;
     *(void**)this = (void*)0x1486b1c;
+    _ReadWriteBarrier();
     ((void(__thiscall*)(void*, void*, int))VF(m->mpObj, 0x16c))(m->mpObj, m, 0);
 
     m = mModel;

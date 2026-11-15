@@ -49,7 +49,6 @@
 0112cd60  57  NodeList::insert: list splice is exact; the original walks with the sentinel
                offset folded into the index register, ours subtracts 0x24 per iteration.
                flags /vc71 /O2 /MD /Gy /EHsc /TP
-0112cdb0  11  audio_allocNode: call, null test and all six stores exact; ours stores the
                back-pointer +0x10 first (releases esi early), the original stores it third.
                flags /O2 /MD /Gy /EHsc /TP
 

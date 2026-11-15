@@ -6608,6 +6608,7 @@ EColIterB* EColIterB::Init(int row)
 {
     EColIterB* self = this;
     self->mRow = row;
+    _ReadWriteBarrier();
     void** pSentinel = &self->mpListHead;
     pSentinel[1] = 0;
     pSentinel[2] = 0;

@@ -53,3 +53,4 @@
 ../src/game/SPGonzago/SPTribe.cpp  ?Tribe_SetEditorMode@@YIXPAUTribe@@HE@Z  00c8e730  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?resize@?$SpVector@UcTribeChatArea_s00c9_47d0@@@@QAEXI@Z  00c955e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c93640@@YAPAPAHPAPAH00@Z  00c93640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c92b70@Deque@@QAEXXZ  00c92b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
