@@ -1207,12 +1207,16 @@ struct DirSrc {
 struct Vector3_s0049_b340 {
     float x, y, z;
     Vector3_s0049_b340() {}
+    Vector3_s0049_b340(float a, float b, float c) : x(a), y(b), z(c) {}
+    Vector3_s0049_b340(const Vector3_s0049_b340& v) : x(v.x), y(v.y), z(v.z) {}
+    Vector3_s0049_b340& operator=(const Vector3_s0049_b340& v) { x = v.x; y = v.y; z = v.z; return *this; }
     float& operator[](int i) { return (&x)[i]; }
     const float& operator[](int i) const { return (&x)[i]; }
 };
 struct Matrix3_s0049_b340 {
     Vector3_s0049_b340 xAxis, yAxis, zAxis;
     Matrix3_s0049_b340();                                   // 0x402ab0 identity
+    Matrix3_s0049_b340(const Matrix3_s0049_b340& m);          // 0x0041cb40
     Vector3_s0049_b340& operator[](int i) { return (&xAxis)[i]; }
 };
 struct cSPEditorBlock_s0049_b340;
@@ -1261,7 +1265,7 @@ struct BlockVector_s0049_b340 {
 void BuildPileList(cSPEditorBlock_s0049_b340* block, BlockVector_s0049_b340* list, bool b);        // 0x48c790
 bool FUN_0049a030(Vector3_s0049_b340 origin, Vector3_s0049_b340 dir, Vector3_s0049_b340* out);               // 0x49a030
 void RepinBlockToTorso(cSPEditorBlock_s0049_b340* block, Vector3_s0049_b340 pos, Matrix3_s0049_b340 m, bool flag);   // 0x49fbd0
-Matrix3_s0049_b340 FUN_49c210(cSPEditorBlock_s0049_b340* block, float x, float y, float z);       // 0x49c210
+Matrix3_s0049_b340 FUN_49c210(cSPEditorBlock_s0049_b340* block, Vector3_s0049_b340 normal);       // 0x49c210
 bool GetRotationAndPositionBasedOnBehavior(cSPEditorBlock_s0049_b340* block, Vector3_s0049_b340& pos, Matrix3_s0049_b340& orient,
                                            Vector3_s0049_b340 dir, bool bAlignToParent, bool bSnapToSymmetry); // 0x4942b0
 struct cSPEditorSnapVector {
@@ -4160,7 +4164,7 @@ struct cSPEditorBlock_s0049_de30 {
     bool HasAnyBlockFlag();                                              // 0x00435d40
     void FUN_44c0e0(int* a, int* b, int* c);                             // 0x0044c0e0
 };
-void FUN_4942b0(cSPEditorBlock_s0049_de30* block, float* out, uint32_t scale, cSPVector3_s0049_de30 pos, int a, int b);  // 0x4942b0
+bool FUN_4942b0(cSPEditorBlock_s0049_de30* block, cSPVector3_s0049_de30& out, cSPMatrix3_s0049_de30& orient, cSPVector3_s0049_de30 pos, bool a, bool b);  // 0x4942b0
 cSPMatrix3_s0049_de30 FUN_49e880(cSPEditorBlock_s0049_de30* block, cSPMatrix3_s0049_de30 m);                                       // 0x49e880
 void FUN_49de30(cSPEditorBlock_s0049_de30* block, float newScale, float oldScale, BlockVector_s0049_de30* blocks, bool flag);  // 0x49de30
 float ClampAndSetScale(cSPEditorBlock_s0049_de30* block, float value, bool clamp);                           // 0x49dca0
@@ -6795,10 +6799,14 @@ void Y9c0::Set(char v)
 // @ 0x0049c140
 Matrix3_s0049_b340 GetOrientationFromNormal(cSPEditorBlock_s0049_b340* block, Vector3_s0049_b340 normal)
 {
-    Matrix3_s0049_b340 orient = FUN_49c210(block, normal.x, normal.y, normal.z);
-    Vector3_s0049_b340 pos = block->mPosition;
-    GetRotationAndPositionBasedOnBehavior(block, pos, orient, block->mPosition, false, false);
-    return orient;
+    Vector3_s0049_b340 pos;
+    {
+        Matrix3_s0049_b340 orient = FUN_49c210(block, Vector3_s0049_b340(normal.x, normal.y, normal.z));
+        pos = block->mPosition;
+        GetRotationAndPositionBasedOnBehavior(block, pos, orient, block->mPosition, false, false);
+        ScratchSlots<11>();
+        return orient;
+    }
 }
 
 // @ 0x0049c210
@@ -7089,13 +7097,14 @@ cSPMatrix3_s0049_de30 FUN_49e880(cSPEditorBlock_s0049_de30* block, cSPMatrix3_s0
 }
 
 // @ 0x0049ec40
-void FUN_49ec40(cSPEditorBlock_s0049_de30* block, float* out, uint32_t scale, cSPMatrix3_s0049_de30* mat, bool flag)
+void FUN_49ec40(cSPEditorBlock_s0049_de30* block, cSPVector3_s0049_de30* out, cSPMatrix3_s0049_de30* orient, cSPMatrix3_s0049_de30* mat, bool flag)
 {
     if (flag) {
-        FUN_4942b0(block, out, scale, block->mPosition, 1, 0);
+        FUN_4942b0(block, *out, *orient, block->mPosition, true, false);
+        ScratchSlots<11>();
         *mat = FUN_49e880(block, *mat);
     }
-    out[0] = 0.0f;
+    (*out)[0] = 0.0f;
 }
 
 // @ 0x0049ecf0

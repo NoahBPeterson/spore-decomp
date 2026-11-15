@@ -1,4 +1,3 @@
-004b2320  65  template construct/AddRef array helper; /Od frame and inlined-loop temps differ
 004b24c0  126  constructor; inlined base/container ctor frames and trailing array loop differ
 004b25e0  125  destructor; inlined container destruct loops and frame holes differ
 004b2710  67  Reset; inline-buffer clear holes and loop layout differ
