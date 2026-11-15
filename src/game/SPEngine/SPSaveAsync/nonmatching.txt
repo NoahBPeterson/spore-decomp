@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 006b4490 302 complete; svc kept in register (edi) instead of stack slot [esp+0x1c], stream this spilled; difftest PASS flags: /O2 /MD /Gy /EHsc /TP /GS-
-006b4730 6 local-static init of the job holder: placement-new form still emits an operator-new call instead of a bare ctor call flags: /O2 /MD /Gy /EHsc /TP /GS-
+006b4730 6 local-static init of the job holder: placement-new form still emits an operator-new call instead of a bare ctor call flags: /O2 /MD /Gy /EHsc /TP /GS- [R40 active draft claim: terra09]
 006b48d0 127 complete; async-save request ctor (MI: primary+secondary vptr, inlined GraphicsFactoryAsyncRequest at +0x20) - cl schedules the two vptr stores / nested-ctor EH state differently. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: UNSUPPORTED]
 006b4a10 203 complete; async-save commit (Finish) - provider vtable dispatch plus EH frame layout differ. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: UNSUPPORTED]
 006b4b60 270 complete; async-save submit - LTCG register ABI (arg0 arrives in a register, not on the stack) plus zone-alloc/EH framing differ. flags /O2 /MD /Gy /EHsc /GS- /TP [equiv: PASS]
