@@ -936,8 +936,9 @@ void* RBTreeW::Insert(void* out, void* parent, int* value, char flag)
     if ((int*)((char*)node + 0x10) != 0)
         *(int*)((char*)node + 0x10) = *value;
     RBTreeInsert(node, parent, (char*)this + 4, insertLeft);
-    void* o = out;
-    ((int*)this)[5] = ((int*)this)[5] + 1;
+    // Keep the output-argument load before the count update, as in the native tail.
+    void* o = *(void* volatile*)&out;
+    ((volatile uint32_t*)this)[5] += 1;
     *(void**)o = node;
     return o;
 }

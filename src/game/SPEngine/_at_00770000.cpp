@@ -3162,8 +3162,9 @@ WireObj* WireObj::CopyWire(const WireObj* src)
         const WireElem* s = &src->elems[i];
         WireElem* d = &this->elems[i];
         d->field0 = s->field0;
-        WireRef* op = d->ref;
+        _ReadWriteBarrier(); // Keep the field copy before both reference loads.
         WireRef* np = s->ref;
+        WireRef* op = d->ref;
         if (np != op) {
             if (np)
                 _InterlockedIncrement(&np->refcount);

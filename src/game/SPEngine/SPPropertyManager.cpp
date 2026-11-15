@@ -1753,10 +1753,9 @@ VecC* VecC::Init(unsigned n, const void* alloc)
     end = p;
     cap = p + bytes;
     unsigned cnt = n;
-    for (; cnt; --cnt) {
+    for (; cnt > 0; --cnt, p += 0xc) {
         if (p)
             *(E12*)p = zero;
-        p = (char*)p + 0xc;
     }
     end = (char*)begin + bytes;
     return this;

@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPAudioCityMusicLoadSave.cpp  ?Destroy@cCityMusicLoadSave_s00ea_28f0@@QAEXXZ  00ea29b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAudioCityMusicLoadSave.cpp  ?LoadKeyAndClear@LoadSaveIface8@@QAEXPAULoadSaveKey@@@Z  00ea2a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAudioCityMusicLoadSave.cpp  ?Load@cCityMusicLoadSave@RetailCityMusic@@QAEXXZ  00ea20a0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

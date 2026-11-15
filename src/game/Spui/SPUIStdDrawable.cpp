@@ -89,6 +89,11 @@ extern "C" void *__cdecl FUN_00920090(void);                  // 0x920090 (retur
 extern "C" void __cdecl MultiHeap_delete(void *);              // 0x951330
 struct ShadowDesc_s0083_0c00 { char pad[0x28]; };
 void FillDefaults(ShadowDesc_s0083_0c00 *dst, const ShadowDesc_s0083_0c00 *src);   // 0x00830380
+struct DrawablePoint2 {
+    float x, y;
+    DrawablePoint2() {}
+    DrawablePoint2(const DrawablePoint2& p) : x(p.x), y(p.y) {}
+};
 struct Drawable_s0083_0c00 {
     void    *vptr0;      // +0x00
     void    *vptr4;      // +0x04
@@ -101,6 +106,8 @@ struct Drawable_s0083_0c00 {
     uint8_t  mbHasUserDefaults;  // +0x134
 
     __declspec(noinline) void *GetImageInfo(int index);   // 0x00830c00
+    DrawablePoint2 GetPair28(int index);                 // 0x00830c90
+    DrawablePoint2 GetPair30(int index);                 // 0x00830cc0
     void  SetImageColor(int index, int color);        // 0x00831170
     void  SetField18At(int index, int v);             // 0x008311f0
     void  SetField20At(int index, int v);             // 0x00831270
@@ -118,7 +125,10 @@ struct ImageInfo2 {
     uint32_t r8;      // +0x08
     void    *mpImage; // +0x0c
     void    *mpIcon;  // +0x10
-    char     pad14[0x84];
+    char     pad14[0x28 - 0x14];
+    DrawablePoint2 mPair28; // +0x28
+    DrawablePoint2 mPair30; // +0x30
+    char     pad38[0x98 - 0x38];
     void *ScalarDtor(unsigned flags); // 0x00831030
     void  CopyFrom(const ImageInfo2 *src); // 0x008310a0
 };
@@ -126,8 +136,6 @@ struct DSub {
     char pad[0xc];
     int  GetFieldC(int index);    // 0x00830c60
     int  GetField14(int index);   // 0x00830c80
-    void GetPair28(float *out, int index);  // 0x00830c90
-    void GetPair30(float *out, int index);  // 0x00830cc0
     int  GetField10(int index);   // 0x00830cf0
     int  GetField18(int index);   // 0x00830d10
     int  GetField20(int index);   // 0x00830d20
@@ -374,19 +382,17 @@ int DSub::GetField14(int index)
 }
 
 // @ 0x00830c90
-void DSub::GetPair28(float *out, int index)
+DrawablePoint2 Drawable_s0083_0c00::GetPair28(int index)
 {
-    char *p = (char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index);
-    out[0] = *(float *)(p + 0x28);
-    out[1] = *(float *)(p + 0x2c);
+    ImageInfo2* info = static_cast<ImageInfo2*>(GetImageInfo(index));
+    return info->mPair28;
 }
 
 // @ 0x00830cc0
-void DSub::GetPair30(float *out, int index)
+DrawablePoint2 Drawable_s0083_0c00::GetPair30(int index)
 {
-    char *p = (char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index);
-    out[0] = *(float *)(p + 0x30);
-    out[1] = *(float *)(p + 0x34);
+    ImageInfo2* info = static_cast<ImageInfo2*>(GetImageInfo(index));
+    return info->mPair30;
 }
 
 // @ 0x00830cf0

@@ -261,7 +261,7 @@ struct PtrVec_s0080_f7c0 {
     void* mEnd;     // +4
     void* mCap;     // +8
     void* mAlloc;   // +0xc
-    void __thiscall erase(void* first, void* last);
+    void* __thiscall erase(void* first, void* last);
 };
 struct cMWModel_s0080_f7c0 {
     void** vtbl;      // +0
@@ -310,7 +310,7 @@ class cSPUILayerManager { public:
     u8     pad50[0x94 - 0x50];
     u8     b94;         // +0x94
 
-    u32  __thiscall RemoveObject(cSPUILayeredObject_s0080_f7c0* p);
+    bool __thiscall RemoveObject(cSPUILayeredObject_s0080_f7c0* p);
     void __thiscall RemoveAllObjects();
     void __thiscall DrawLayer(void* a, void* b, void* c, void* d);
     bool __thiscall Shutdown();
@@ -861,7 +861,10 @@ u32 __thiscall cSPUILayeredObject_s0080_e6b0::RemoveModel(cMWModel* param)
 // @ 0x0080ea50
 void cSPUILayeredObject::RemoveAllModels()
 {
-    while (mModels.mpBegin != mModels.mpEnd) RemoveModel(*mModels.mpBegin);
+    while (mModels.mpBegin != mModels.mpEnd) {
+        _ReadWriteBarrier();
+        RemoveModel(*mModels.mpBegin);
+    }
 }
 
 // @ 0x0080ea80
@@ -1122,7 +1125,7 @@ void __cdecl FUN_0080f730()
 {}
 
 // @ 0x0080f7c0
-u32 __thiscall cSPUILayerManager::RemoveObject(cSPUILayeredObject_s0080_f7c0* p)
+bool __thiscall cSPUILayerManager::RemoveObject(cSPUILayeredObject_s0080_f7c0* p)
 {
     u32 n = (u32)((u8*)mObjects.mEnd - (u8*)mObjects.mBegin) >> 2;
     for (u32 i = 0; i < n; ++i) {
@@ -1168,6 +1171,7 @@ u32 __thiscall cSPUILayerManager::RemoveObject(cSPUILayeredObject_s0080_f7c0* p)
 void __thiscall cSPUILayerManager::RemoveAllObjects()
 {
     while (mObjects.mBegin != mObjects.mEnd) {
+        _ReadWriteBarrier();
         cSPUILayeredObject_s0080_f7c0* o = *(cSPUILayeredObject_s0080_f7c0**)mObjects.mBegin;
         RemoveObject(o);
     }

@@ -1234,7 +1234,7 @@ struct cSPEditorBlock_s0043_f3a0 {
     float F3eed0();                            // 0043EED0
     float F3f250();                            // 0043F250
     cSPBoundingBox_s0043_e3f0 F3eef0();        // 0043EEF0
-    void  F404f0(Matrix3_s0043_f3a0 m);         // 004404F0
+    void  SetUserOrientationHelper(Matrix3_s0043_f3a0 m);         // 004404F0
     void  F40420(float v, uint8_t b);          // 00440420
     void  F40520(float v, uint8_t b, int c);   // 00440520
     void  F3a5e0(int type, uint8_t a, uint8_t b, char c);  // 0043A5E0
@@ -1398,7 +1398,9 @@ struct cSPEditorBlock_s0044_0110 {
     bool        mIsFullInit;     // +0x2C
     char        pad2d[0x48 - 0x2D];
     Vector3     mPosition;       // +0x48
-    char        pad54[0x154 - 0x54];
+    char        pad54[0xF0 - 0x54];
+    Matrix3_s0044_0110 mUserOrientation; // +0xF0 (retail)
+    char        pad114[0x154 - 0x114];
     AutoRefCount<cSPEditorHandleRotationRing_s0044_0110> mRotationRingHandles[3]; // +0x154
     AutoRefCount<cSPEditorHandle_s0044_0110> mRotationBallHandle;                 // +0x160
     char        pad164[0x168 - 0x164];
@@ -1435,14 +1437,14 @@ struct cSPEditorBlock_s0044_0110 {
     void  F40e60(void* key);                    // 00440E60
     void  F40390(float f);                      // 00440390
     void  F40420(float f, char b);              // 00440420
-    void  F404f0(Matrix3_s0044_0110 m);                    // 004404F0
+    void  SetUserOrientationHelper(Matrix3_s0044_0110 m);                    // 004404F0
     void  F40110(float f);                      // 00440110
     void  SetUniformScale(float scale, bool b, bool force);   // 00440520
     void  SetFlag(int a, int b);                // 00435A10
 };
 }
 namespace SP {
-void  Sub_698650(void* m);
+void __cdecl OrthonormalizeMatrix(Matrix3_s0044_0110* m); // 0x00698650
 }
 namespace SP {
 extern const Vec3 g_v3_241c;   // 015D241C
@@ -2169,6 +2171,7 @@ struct AutoRefCount_s0044_8380 {
     T* operator->() const { return mpObject; }
     operator T*() const { return mpObject; }
     AutoRefCount_s0044_8380& operator=(T* p) {
+        SP::ScratchSlots<2>(); // Reserved inline assignment frame in the original /Od build.
         if (p != mpObject) {
             T* old = mpObject;
             if (p) p->AddRef();
@@ -2241,7 +2244,7 @@ struct cMWModel_s0044_8380 {
     char pad58[0x64 - 0x58];
     AutoRefCount_s0044_8380<cSPTransformOps> mOwner;       // +0x64
     void AddRef() { mRefCount++; }
-    void Release();                             // 0x0040f360
+    int Release();                              // 0x0040f360; returns remaining refcount
 };
 }
 namespace SP {
@@ -3477,8 +3480,8 @@ struct Block2 {
     void*    mPtr188;     // +0x188
     Sub*     mSub18c;     // +0x18c
     char     pad190[0x194 - 0x190];
-    Vec3_s0045_0f70     mVec194;     // +0x194
-    bool     mFlag1a0;    // +0x1a0
+    Vec3_s0045_0f70     mPreviousPosition;     // +0x194
+    bool     mHasPreviousPosition;    // +0x1a0
     char     pad1a1[0x1a4 - 0x1a1];
     int      mField1a4;   // +0x1a4
     char     pad1a8[0x1d8 - 0x1a8];
@@ -3510,7 +3513,7 @@ struct Block2 {
     void   SetF(void* a, unsigned char b);// 0x00451240
     void   SetRef(RCObj* p);              // 0x00451280
     Vec3_s0045_0f70*  GetVec14(Vec3_s0045_0f70* out);           // 0x004512e0
-    Vec3_s0045_0f70*  SetVec194(int x, int y, int z);// 0x00451330
+    void SetPreviousPosition(Vec3_s0045_0f70 position); // 0x00451330
     void   ResetVec194();                 // 0x00451360
     Vec3_s0045_0f70*  GetVec194(Vec3_s0045_0f70* out);          // 0x004513a0
     void   SetPtr188(void* p);            // 0x00451e20
@@ -6008,9 +6011,9 @@ bool cSPEditorBlock_s0043_f3a0::F3fc20(void* pos)
 namespace SP {
 void cSPEditorBlock_s0043_f3a0::FFa0(Matrix3_s0043_f3a0 m)
 {
-    F404f0(m);
+    SetUserOrientationHelper(m);
     if (node != 0 && node->Check() && link3e0 != 0) {
-        link3e0->F404f0(Sub_4A8E10(&m, 0));
+        link3e0->SetUserOrientationHelper(Sub_4A8E10(&m, 0));
     }
 }
 }  // namespace SP
@@ -6075,12 +6078,10 @@ void cSPEditorBlock_s0044_0110::F40420(float f, char b)
 
 // @ 0x004404f0
 namespace SP {
-void cSPEditorBlock_s0044_0110::F404f0(Matrix3_s0044_0110 m)
+void cSPEditorBlock_s0044_0110::SetUserOrientationHelper(Matrix3_s0044_0110 m)
 {
-    Sub_698650(&m);
-    uint32_t* dst = (uint32_t*)((char*)this + 0xF0);
-    uint32_t* src = (uint32_t*)&m;
-    for (int i = 0; i < 9; i++) dst[i] = src[i];
+    OrthonormalizeMatrix(&m);
+    mUserOrientation = m;
 }
 }  // namespace SP
 
@@ -7239,7 +7240,8 @@ void cSPEditorBlock_s0044_8380::AddToEffectsMask(cSPVector3 pos, bool /*flag*/)
 namespace SP {
 void cSPEditorBlock_s0044_8380::RemoveFromEffectsMask()
 {
-    if (mEffectsMaskObject != 0) {
+    cMWModel_s0044_8380* model = mEffectsMaskObject;
+    if (model != 0) {
         cMWModel_s0044_8380* pModel = mEffectsMaskObject;
         pModel->mpWorld->SetInWorld(pModel, 0);
         mEffectsMaskObject = 0;
@@ -7478,23 +7480,29 @@ bool Blk_s0044_9ed0::A4a9a0(Blk_s0044_9ed0* other)
 {
     int count = 0;
     while (other != 0 && other != this && count < 100) {
-        other = other->mParent;
+        Blk_s0044_9ed0* parent = other->mParent;
+        other = parent;
         count = count + 1;
     }
     if (count > 100)
         return false;
-    return other == this;
+    if (other == this)
+        return true;
+    else
+        return false;
 }
 
 // @ 0x0044aa10
 int Blk_s0044_9ed0::A4aa10(int i)
 {
-    if (i < 0 || i >= 3)
-        return 0;
-    int x = mArr[i];
-    if (x == 0)
-        return 0;
-    return mArr[i];
+    if (i >= 0 && i < 3) {
+        int x = mArr[i];
+        if (x != 0) {
+            int result = mArr[i];
+            return result;
+        }
+    }
+    return 0;
 }
 
 // @ 0x0044aaa0
@@ -7624,15 +7632,19 @@ M3_s0044_ae00* Blk_s0044_ae00::B590(M3_s0044_ae00* out)
 // @ 0x0044b5c0
 float Blk_s0044_ae00::GetDefaultScale()
 {
-    if (mPropList) {
-        float r = 1.0f;
-        PropList* pl = mPropList.p;
-        if (pl) {
-            Prop* p;
-            if (pl->GetProp(0x536c50c, &p) && p->type == 0xd)
-                r = *p->GetFloat();
+    SP::ScratchSlots<1>(); // Preserve the unused /Od inline slot.
+    PropList* propertyList;
+    float scale;
+    propertyList = mPropList;
+    if (propertyList) {
+        scale = 1.0f;
+        PropList* list = mPropList.p;
+        if (list) {
+            Prop* property;
+            if (list->GetProp(0x536c50c, &property) && property->type == 0xd)
+                scale = *property->GetFloat();
         }
-        return r;
+        return scale;
     }
     return 1.0f;
 }
@@ -7747,15 +7759,9 @@ void Blk_s0044_bcf0::Abcf0()
 // @ 0x0044c050
 int Blk_s0044_bcf0::C050()
 {
-    float f = mVec[0];
-    float r;
-    if (f < -g_eps) {
-        r = -1.0f;
-    } else {
-        r = (f > g_eps) ? 1.0f : 0.0f;
-    }
-    int n = (int)r;
-    return n;
+    float value = mVec[0];
+    int rounded = (int)(value < -g_eps ? -1.0f : (value > g_eps ? 1.0f : 0.0f));
+    return rounded;
 }
 
 // @ 0x0044c0e0
@@ -8482,31 +8488,23 @@ Vec3_s0045_0f70* Block2::GetVec14(Vec3_s0045_0f70* out)
 }
 
 // @ 0x00451330
-// The original leaves eax = &mVec194: it materialises the address once
-// (mov eax,[ebp-4]; add eax,0x194), stores all three words through it and never
-// overwrites eax again, so the setter returns the vector (its result is unused by
-// the callers).  The integer stores keep the compiler from using SSE moves.
-Vec3_s0045_0f70* Block2::SetVec194(int x, int y, int z)
+void Block2::SetPreviousPosition(Vec3_s0045_0f70 position)
 {
-    Vec3_s0045_0f70* p = &mVec194;
-    *(int*)&p->x = x;
-    *(int*)&p->y = y;
-    *(int*)&p->z = z;
-    mFlag1a0 = true;
-    return p;
+    mPreviousPosition = position;
+    mHasPreviousPosition = true;
 }
 
 // @ 0x00451360
 void Block2::ResetVec194()
 {
-    mVec194 = mVec48;
-    mFlag1a0 = false;
+    mPreviousPosition = mVec48;
+    mHasPreviousPosition = false;
 }
 
 // @ 0x004513a0
 Vec3_s0045_0f70* Block2::GetVec194(Vec3_s0045_0f70* out)
 {
-    Vec3_s0045_0f70* p = &mVec194;
+    Vec3_s0045_0f70* p = &mPreviousPosition;
     out->x = p->x;
     out->y = p->y;
     out->z = p->z;
@@ -8617,9 +8615,8 @@ void* Block2::GetSub38()
         SubInner* q = &mSub18c->inner;
         void* result = q->field;
         return result;
-    } else {
-        return 0;
     }
+    return 0;
 }
 
 // @ 0x00451ed0

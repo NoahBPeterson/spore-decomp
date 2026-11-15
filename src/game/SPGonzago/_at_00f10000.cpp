@@ -2848,7 +2848,9 @@ void Host::FUN_00f12340()
 void* Host::FUN_00f12690()
 {
     Sub900* h = (Sub900*)this->mItemHost;
-    return h ? (void*)h->mpWin.mpObject : 0;
+    // Only the missing-host arm creates and destroys an empty reference wrapper.
+    return h ? static_cast<const WinObjRef&>(h->mpWin)
+             : static_cast<const WinObjRef&>(WinObjRef());
 }
 
 // @ 0x00f126d0

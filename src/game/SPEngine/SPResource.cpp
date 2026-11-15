@@ -867,11 +867,11 @@ void SP::FlushCache(int x)
 // @ 0x006ad800
 void FUN_006ad800(int n)
 {
-    int c = n;
-    if (c > 0) {
+    if (n > 0) {
+        int c = n;
         do {
             void* p = g_pRegistry;
-            ((void(__thiscall*)(void*, int))VFN(0x28))(p, 0);
+            ((void(__thiscall*)(void*, IFilter*))VFN(0x28))(p, 0);
             cLRUCache* q = (cLRUCache*)g_caches;
             do {
                 q->Clear();

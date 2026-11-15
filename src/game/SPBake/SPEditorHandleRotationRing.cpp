@@ -404,7 +404,7 @@ struct RotationRing_s0048_3f10 {
 
     Vector3* GetHandlePosition(Vector3* out);           // 0x4845d0
     Vector3* GetPropListKey(Vector3* out);               // 0x484e00
-    void     GetHandleDirection(Vector3* out, bool flag); // 0x484f80
+    Vector3* GetHandleDirection(Vector3* out, bool flag); // 0x484f80
 };
 Vector3* VMul(Vector3* out, const Vector3* v, const float* s);  // @ 0x0041dca0
 void*    EditorTuning();                                        // @ 0x00401070
@@ -663,14 +663,14 @@ void cSPEditorHandleRotationRing_s0048_3f10::Update()
 // @ 0x004845d0
 Vector3* RotationRing_s0048_3f10::GetHandlePosition(Vector3* out)
 {
-    Vector3 dir;
-    this->GetHandleDirection(&dir, false);
+    Vector3 direction;
+    this->GetHandleDirection(&direction, false);
     float scale = this->mCustomScale;
-    Vector3 r;
-    VMul(&r, &dir, &scale);
-    out->x = r.x;
-    out->y = r.y;
-    out->z = r.z;
+    Vector3 scaled;
+    Vector3* product = VMul(&scaled, &direction, &scale);
+    out->x = product->x;
+    out->y = product->y;
+    out->z = product->z;
     return out;
 }
 

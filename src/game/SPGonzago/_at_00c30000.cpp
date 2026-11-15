@@ -534,7 +534,7 @@ public:
     virtual Vec3* GetPosition();          // 0x2c
     virtual Vec3* GetDirection();         // 0x30
     virtual void v34();
-    virtual void v38();
+    virtual void SetPosition(const cSPVector3& position); // retail slot 0x38
     virtual void v3c();
     virtual void v40();
     virtual void v44();
@@ -596,7 +596,6 @@ public:
     bool Write(void* pData);
     bool Init(void* pData, int a, int b);
     int GetFieldValues(int nFlags);
-    void RemoveOwner();
 };
 struct ModelKey {
     uint32_t typeID;                // 0x00
@@ -606,6 +605,7 @@ struct ModelKey {
 class cOrnament : public cGameData {
 public:
     uint8_t mPad54[0x1c0];
+    void Shutdown();                          // 0x00c6fac0, no-argument thiscall
 };
 class cHitSphere : public cOrnament {
 public:
@@ -618,6 +618,8 @@ public:
     uint8_t mbKeepPinnedToPlanet;   // 0x22c
 
     cHitSphere();
+    void SetSphere(const cSPVector3& position, float radius); // 0x00c3f160
+    void Shutdown();                                        // 0x00c3f310
     bool Write(void* pData);
     void* Cast(void* pType);
     int GetDelegateLowerBound(int nOffset);
@@ -663,7 +665,6 @@ public:
     bool Write(void* pData);
     bool Read(void* pData);
     int GetFieldValues(int nFlags);
-    void SetEffectId(int nEffectId);
     bool LoadModelChecked(void* pModel);
     void SetModelState(int nState, bool bForce);
     bool InitFromDefinition(void* pData, int a, uint flags);
@@ -686,6 +687,7 @@ public:
 };
 }
 void RemoveOwnerExtra();
+void* CastOrnamentBase(void* pObject);
 void operator_delete__(void* pMemory);
 void ResetOrnamentList(void* pOwner);
 void ResetInteractableState(void* pOwner);
@@ -1576,10 +1578,10 @@ void* C3eac0::f(void* other_)
 }
 
 // @ 0x00c3f160
-void cInteractableObject::SetEffectId(int nEffectId)
+void cHitSphere::SetSphere(const cSPVector3& position, float radius)
 {
-    ((void (*)(int))*(void**)(*(uint32_t*)((uint8_t*)this + 0x70) + 0x38))(nEffectId);
-    *(uint32_t*)((uint8_t*)this + 0x238) = (uint32_t)nEffectId;
+    ((cSpatialObject*)((uint8_t*)this + 0x70))->SetPosition(position);
+    *(float*)((uint8_t*)this + 0x238) = radius;
 }
 
 // @ 0x00c3f1d0
@@ -1625,14 +1627,14 @@ void cInteractableObject::Shutdown()
 }
 
 // @ 0x00c3f310
-void cGameData::RemoveOwner()
+void cHitSphere::Shutdown()
 {
-    IRefCounted* pOwner = *(IRefCounted**)((uint8_t*)this + 0x2c);
-    if (pOwner != nullptr) {
-        *(IRefCounted**)((uint8_t*)this + 0x2c) = nullptr;
-        pOwner->Release();
+    IRefCounted* pDelegate = *(IRefCounted**)((uint8_t*)this + 0x24c);
+    if (pDelegate != nullptr) {
+        *(IRefCounted**)((uint8_t*)this + 0x24c) = nullptr;
+        pDelegate->Release();
     }
-    RemoveOwnerExtra();
+    cOrnament::Shutdown();
 }
 
 // @ 0x00c3f340
