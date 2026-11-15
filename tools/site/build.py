@@ -165,8 +165,10 @@ def model_field(body):
 def pr_credits(prs_path, fps):
     if not prs_path or not os.path.exists(prs_path):
         return []
-    out = []
-    for p in json.load(open(prs_path)):
+    # A function is credited to the first merged pull request that added it, until a later merge removes it: a reverted
+    # pull request loses its credit, and one that lands the same work again gets it.
+    owner, rows = {}, []
+    for p in sorted(json.load(open(prs_path)), key=lambda p: p.get("mergedAt") or ""):
         sha = (p.get("mergeCommit") or {}).get("oid")
         if not sha:
             continue
@@ -183,7 +185,14 @@ def pr_credits(prs_path, fps):
                     added |= rows_vas(line[1:])
                 elif line.startswith("-") and not line.startswith("---"):
                     removed |= rows_vas(line[1:])
-        new = (added - removed) & set(fps)
+        for v in removed - added:
+            owner.pop(v, None)
+        for v in (added - removed) & set(fps):
+            owner.setdefault(v, p["number"])
+        rows.append(p)
+    out = []
+    for p in rows:
+        new = [v for v, n in owner.items() if n == p["number"]]
         out.append({"n": p["number"], "who": (p.get("author") or {}).get("login", "?"), "when": (p.get("mergedAt") or "")[:10],
                     "f": len(new), "b": sum(fps[v] for v in new), "model": model_field(p.get("body"))[:48]})
     return sorted(out, key=lambda r: -r["n"])
