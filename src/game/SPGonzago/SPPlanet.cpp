@@ -7386,10 +7386,11 @@ void ModelList::F06cd0()
     }
 }
 
+void* __cdecl destroy_range_big_s06(void* src, void* end, void* dst); // 0x00b03f10 (slice view: declared only)
 // @ 0x00b07140
 void cBigVector::Erase(void* first, void* last)
 {
-    cBigElement* p = (cBigElement*)destroy_range_big(last, mpEnd, first);
+    cBigElement* p = (cBigElement*)destroy_range_big_s06(last, mpEnd, first);
     cBigElement* end = (cBigElement*)mpEnd;
     while (p < end) {
         ((void (__thiscall*)(cBigElement*, int))((void**)p->mpVtable)[2])(p, 0);
@@ -10152,6 +10153,7 @@ bool SimCivObject_Func704a0(SimCivObject_c7* self, int a, int b, int c, float am
     return true;
 }
 
+#pragma float_control(precise, on, push)   // the slice builds without /fp:fast
 // @ 0x00c705c0
 int SimCivObject_Func705c0(SimCivObject_c7* self, int amount) {
     if (FUN_01021300_c7() == 0) return 0;
@@ -10177,6 +10179,7 @@ int SimCivObject_Func705c0(SimCivObject_c7* self, int amount) {
     }
     return (int)spent;
 }
+#pragma float_control(pop)
 
 // @ 0x00c706d0
 void SimCivObject_SetPlanetTechLevel(SimCivObject_c7* self, int level) {
