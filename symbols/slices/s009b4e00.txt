@@ -2,8 +2,8 @@
 009b4ef0 ?Solver_UpdateSegment@@YAXPAUSolver@nSPCreatureAnim@@PAX0@Z  # FUN_009b4ef0 body not recovered
 009b5080 ?DistX@Solver@nSPCreatureAnim@@QAEMHHM@Z  # (x/z difference over two bone indices)
 009b5100 ?DistY@Solver@nSPCreatureAnim@@QAEMHHM@Z  # (y/z difference over two bone indices)
-009b5180 ?SqX@Solver@nSPCreatureAnim@@QAEMMHH@Z  # k*(dx*dx*k) on +0x10c
-009b51c0 ?SqY@Solver@nSPCreatureAnim@@QAEMMHH@Z  # k*(dy*dy*k) on +0x110
+009b5180 ?SqX@Solver@nSPCreatureAnim@@QAEMMHH@Z  # Solver::SqX migrated from s009b4e00 (verbatim, slice spelling)
+009b51c0 ?SqY@Solver@nSPCreatureAnim@@QAEMMHH@Z  # Solver::SqY migrated from s009b4e00 (verbatim, slice spelling)
 009b5200 ?AverageSegment@Solver@nSPCreatureAnim@@QAEMXZ  # per-bone segment length sum with 0.01 sentinel
 009b5360 ?AverageSegment@Solver@nSPCreatureAnim@@QAEMXZ  # mean segment length over flag&4 bones
 009b53f0 ?Bone_AddScaledVectors@@YAXPAMPAUBone@nSPCreatureAnim@@M@Z  # out = pos*k (or pos*k - parent*k)

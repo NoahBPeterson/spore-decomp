@@ -1,4 +1,4 @@
-// src/game/SPCreatureAnim/creature.cpp -- migrated from slice(s) s009c4a30, s009c32c0, s009c1f60, s009bfc20, s009bd340, s009bc580, s009bb910, s009ba4c0, s009b77a0, s009b6b10, s009b5ce0, s009b3180 by tools/migrate/rewrite.py
+// src/game/SPCreatureAnim/creature.cpp -- migrated from slice(s) s009c56c0, s009c2ef0, s009c0f60, s009bf210, s009be260, s009bb360, s009b95d0, s009b8720, s009b4e00, s009b3e40, s009c4a30, s009c32c0, s009c1f60, s009bfc20, s009bd340, s009bc580, s009bb910, s009ba4c0, s009b77a0, s009b6b10, s009b5ce0, s009b3180 by tools/migrate/rewrite.py
 // Object file: SPCreatureAnim/creature.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -12,6 +12,11 @@
 #include "checkerlib/vector_3.h"
 #include "checkerlib/vector_4.h"
 #include "nSPCreatureAnim/dynamics_walking.h"
+#include <string.h>
+#include <intrin.h>
+#include <stddef.h>
+#include "checkerlib/matrix_3x3.h"
+#include <xmmintrin.h>
 
 // ---- items of slice s009b3180 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace nSPCreatureAnim {
@@ -72,6 +77,136 @@ struct Owner {
 bool BoxRayTest(const float* org, const float* dir, const float* center, const float* rot3x3,
                 float ex, float ey, float ez, float* tOut, float* normalOut);  // 0x00a02530
 float* QuaternionVectorTransform(float* out, const float* quat, const float* v);  // 0x0099c1a0
+namespace CA {
+typedef unsigned int  u32;
+}
+namespace CA {
+typedef unsigned char u8;
+}
+namespace CA {
+struct Vec3 { float x, y, z; };
+}
+namespace CA {
+struct PartCaps {
+  u32 NameFOURCCs[32];          // +0x00
+  u8  Values[32];               // +0x80
+};
+}
+namespace CA {
+struct BoneMesh {
+  void* mpShape;                // +0x00
+  char  pad04[0x0c];
+  Vec3  mCenter;                // +0x10
+  float mQuat[4];               // +0x1c
+  char  pad2c[0x2bc - 0x2c];
+};
+}
+namespace CA {
+struct CreaturePart {
+  char  pad000[0x10c];
+  Vec3  mA;                     // +0x10c local offset
+  Vec3  mB;                     // +0x118 local offset
+  char  pad124[0x150 - 0x124];
+  u32   m150;                   // +0x150 capability flags of this part
+  u32   m154;                   // +0x154 capability flags inherited from children
+  PartCaps mCaps;               // +0x158
+  void* m1f8;                   // +0x1f8 own spine constraint
+  u32   m1fc;                   // +0x1fc next part index (0 == root)
+  u32   m200;                   // +0x200
+  u32   m204;                   // +0x204 first child index
+  u32   m208;                   // +0x208 child count
+  u32   m20c;                   // +0x20c
+  u32   m210;                   // +0x210 traversal state
+  CreaturePart* m214;           // +0x214 next part in the state chain
+  CreaturePart* m218;           // +0x218 child array (stride 0x468)
+  char  pad21c[0x464 - 0x21c];
+  u8    m464;                   // +0x464
+};
+}
+namespace CA {
+struct PartRef {
+  CreaturePart* mPart;          // +0x00
+  u32           mExtra;         // +0x04
+};
+}
+namespace CA {
+class WorkspaceSource {
+public:
+  u8    mUseOrigin;             // +0x00
+  char  pad01[3];
+  void* mCallback;              // +0x04
+  void* mContext;               // +0x08
+  Vec3* rotateInto(Vec3* out, const Vec3* v, int zero);   // 0x009a49d0
+};
+}
+namespace CA {
+struct BoneRecord {
+  char pad00[0x58];
+  u32  mIndex;                  // +0x58
+  char pad5c[0x108 - 0x5c];
+  void finish();                // 0x009cf3c0
+};
+}
+namespace CA {
+struct BonePool {
+  u32          addPart(void* owner, const Vec3* local, const Vec3* world);  // 0x009d7d10
+  BoneRecord** storage();                                                   // 0x00a09f50
+  char pad00[0x88];
+};
+}
+namespace CA {
+extern float kWorkspaceDirEps;   // 0x014471fc  1e-6f
+}
+namespace CA {
+extern float kWorkspaceMinSq;    // 0x013eb960  0.01f
+}
+namespace CA {
+extern float kWorkspaceOne;      // 0x01485720  1.0f
+}
+namespace CA {
+extern int gExtraBoneCount;      // 0x01550d58
+}
+namespace CA {
+u32  FUN_009b3460(CreaturePart* part);                       // 0x009b3460
+}
+namespace CA {
+struct Creature {
+  char  pad00[0x04];
+  void* m04;                    // +0x04
+  char  pad08[0x18 - 0x08];
+  Vec3  m18;                    // +0x18
+  char  pad24[0x70 - 0x24];
+  float m70;                    // +0x70
+  char  pad74[0x2e4 - 0x74];
+  BoneMesh* mpBonesBegin;       // +0x2e4
+  BoneMesh* mpBonesEnd;         // +0x2e8
+  char  pad2ec[0x384 - 0x2ec];
+  CreaturePart* mpPartsBegin;   // +0x384
+  CreaturePart* mpPartsEnd;     // +0x388
+  char  pad38c[0x3ac - 0x38c];
+  u32   m3ac;                   // +0x3ac
+  u32   m3b0;                   // +0x3b0
+  char  pad3b4[0x3cc - 0x3b4];
+  PartRef* mpRefsBegin;         // +0x3cc
+  PartRef* mpRefsEnd;           // +0x3d0
+  char  pad3d4[0x15b8 - 0x3d4];
+  BonePool mPool;               // +0x15b8
+  u32   m1640;                  // +0x1640
+  char  pad1644[0x1688 - 0x1644];
+  WorkspaceSource* mpSource;    // +0x1688
+
+  Vec3* get_workspace_origin(Vec3* out, u32 unused);        // 0x009b61f0
+  float set_workspace_dir(const Vec3* dir, Vec3* out);      // 0x009b6220
+  Vec3* workspace_origin_for(Vec3* out, const Vec3* v);     // 0x009b62c0
+  void  update_part_states();                               // 0x009b6360
+};
+}
+namespace CA {
+void FUN_009b5ce0(Creature* c);                             // 0x009b5ce0
+}
+namespace CA {
+void FUN_009b5f90(u32 index, Creature* c);                  // 0x009b5f90
+}
 // ---- items of slice s009b5ce0 end
 
 // ---- items of slice s009b6b10 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -169,19 +304,19 @@ int  __fastcall FUN_009d1050(int a);
 
 // ---- items of slice s009ba4c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace checkerlib {
-struct vector_3_s009b_a4c0 {
+class vector_3_s009b_a4c0 { public:
     float x, y, z;
     vector_3_s009b_a4c0& operator=(const vector_3_s009b_a4c0& o) { x = o.x; y = o.y; z = o.z; return *this; }
 };
 }
 namespace checkerlib {
-struct vector_4_s009b_a4c0 { float x, y, z, w; };
+class vector_4_s009b_a4c0 { public: float x, y, z, w; };
 }
 namespace checkerlib {
 vector_3_s009b_a4c0* QuaternionVectorTransform(vector_3_s009b_a4c0* out, const vector_4_s009b_a4c0* q, const vector_3_s009b_a4c0* v);  // 0x0099c1a0
 }
 namespace checkerlib {
-__forceinline vector_4_s009b_a4c0 QuaternionProduct(const vector_4_s009b_a4c0& a, const vector_4_s009b_a4c0& b)
+__forceinline vector_4_s009b_a4c0 QuaternionProduct_s009b_a4c0(const vector_4_s009b_a4c0& a, const vector_4_s009b_a4c0& b)
 {
     vector_4_s009b_a4c0 r;
     r.x = ((a.w * b.x + b.w * a.x) - a.z * b.y) + a.y * b.z;
@@ -192,7 +327,7 @@ __forceinline vector_4_s009b_a4c0 QuaternionProduct(const vector_4_s009b_a4c0& a
 }
 }
 namespace checkerlib {
-__forceinline vector_3_s009b_a4c0 QuaternionVectorTransformInverse(const vector_4_s009b_a4c0& q, const vector_3_s009b_a4c0& v)
+__forceinline vector_3_s009b_a4c0 QuaternionVectorTransformInverse_s009b_a4c0(const vector_4_s009b_a4c0& q, const vector_3_s009b_a4c0& v)
 {
     float nxw = -(q.x * q.w);
     float nzw = -(q.z * q.w);
@@ -223,8 +358,12 @@ struct creature_body_static_data_s009b_a4c0 {
     uint32_t pad_000[0x10c / 4];
     checkerlib::vector_3_s009b_a4c0 rest_center__SCALABLE;      // +0x10c
     checkerlib::vector_4_s009b_a4c0 rest_orientation_q;         // +0x118
-    uint32_t pad_128[(0x1f8 - 0x128) / 4];
+    uint32_t pad_128[(0x150 - 0x128) / 4];
+    uint32_t flags_150;                  // +0x150 (alternate flag word)
+    uint32_t flags_154;                  // +0x154
+    uint32_t pad_158[(0x1f8 - 0x158) / 4];
     unsigned long bidx;                  // +0x1f8 (body index in the creature)
+    int      parent_bidx;                // +0x1fc (parent body index, -1: root)
 };
 }
 namespace nSPCreatureAnim {
@@ -297,7 +436,7 @@ namespace nSPCreatureAnim {
 bool GoalStateIsActive(creature_instance_data_s009b_a4c0* c, goal_state* st, float t);  // 0x009ba8d0 (cdecl)
 }
 namespace nSPCreatureAnim {
-void GoalStateInit(creature_instance_data_s009b_a4c0* c, goal_state* st, int flag);       // 0x009ba7d0 (cdecl)
+void GoalStateInit(creature_instance_data_s009b_a4c0* c, goal_state* st, char flag);      // 0x009ba7d0 (cdecl)
 }
 namespace nSPCreatureAnim {
 extern float g_GoalSpringMaxDist;        // 0x01550ab8 (1.0)
@@ -327,11 +466,48 @@ namespace nSPCreatureAnim {
 extern const float kMinSpeed2;           // 0x013ebca0 (1e-4)
 }
 namespace nSPCreatureAnim {
+extern char  g_GoalUseAltFlags;          // 0x01550c2c (use flags_150 instead of flags_154)
+}
+namespace nSPCreatureAnim {
 static __forceinline void MarkBodyGoal(creature_body_instance_data_s009b_a4c0* body)
 {
     unsigned long bit = body->static_data->bidx * 2;
     body->creature->body_goal_bits[bit >> 3] |= (uint8_t)(1 << (bit & 7));
 }
+}
+namespace nSPCreatureAnim {
+struct anim_body_data {                    // stride 0x468
+    uint32_t pad_000[0x10c / 4];
+    checkerlib::vector_3_s009b_a4c0 rest_center__SCALABLE;        // +0x10c
+    checkerlib::vector_4_s009b_a4c0 rest_orientation_q;           // +0x118
+    uint32_t pad_128[(0x468 - 0x128) / 4];
+};
+}
+namespace nSPCreatureAnim {
+struct creature_anim {                     // nSPCreatureAnim data
+    uint32_t        pad_000[0x384 / 4];
+    anim_body_data* anim_bodies_begin;     // +0x384
+    anim_body_data* anim_bodies_end;       // +0x388
+};
+}
+namespace nSPCreatureAnim {
+struct wiggle_data {                       // size 0x39 (padded to 0x3c)
+    int      body_a;                       // +0x00
+    int      body_b;                       // +0x04
+    int      body_c;                       // +0x08
+    int      body_d;                       // +0x0c
+    float    weight;                       // +0x10
+    float    length;                       // +0x14
+    float    angle;                        // +0x18
+    checkerlib::vector_3_s009b_a4c0 pos;                          // +0x1c
+    checkerlib::vector_4_s009b_a4c0 rot;                          // +0x28
+    uint8_t  flag_038;                     // +0x38
+    void CopyFrom(const wiggle_data* w);   // 0x009b3ab0 (0x39-byte copy)
+};
+}
+namespace nSPCreatureAnim {
+bool CalcWiggle(creature_anim* anim, anim_body_data* body, wiggle_data* w,
+                int a4, int a5, int a6, int a7, int a8, int a9);   // 0x009ba180
 }
 // ---- items of slice s009ba4c0 end
 
@@ -494,13 +670,13 @@ struct creature_instance_data_s009b_b910 {
 
 // ---- items of slice s009bc580 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace checkerlib {
-struct vector_3_s009b_c580 {
+class vector_3_s009b_c580 { public:
     float x, y, z;
     vector_3_s009b_c580& operator=(const vector_3_s009b_c580& o) { x = o.x; y = o.y; z = o.z; return *this; }
 };
 }
 namespace checkerlib {
-struct vector_4_s009b_c580 {
+class vector_4_s009b_c580 { public:
     float x, y, z, w;
     vector_4_s009b_c580& operator=(const vector_4_s009b_c580& o) { x = o.x; y = o.y; z = o.z; w = o.w; return *this; }
 };
@@ -557,33 +733,86 @@ struct creature_body_instance_data_s009b_c580 {      // size 0x2bc (retail)
     checkerlib::vector_3_s009b_c580                     velocity;      // +0x02c
     bool                         blend_active;  // +0x038
     uint8_t                      pad_039[3];
-    uint32_t                     pad_03c[(0x280 - 0x3c) / 4];
+    uint32_t                     pad_03c[(0x190 - 0x3c) / 4];
+    checkerlib::vector_3_s009b_c580                     target_center; // +0x190
+    checkerlib::vector_4_s009b_c580                     target_rotation; // +0x19c
+    uint32_t                     pad_1ac[(0x280 - 0x1ac) / 4];
     checkerlib::vector_3_s009b_c580                     blend_pos;     // +0x280
     checkerlib::vector_4_s009b_c580                     blend_rot;     // +0x28c
     uint32_t                     pad_29c[(0x2bc - 0x29c) / 4];
 };
 }
 namespace nSPCreatureAnim {
+class cGameData {
+public:
+    uint32_t mData[0x8c / 4];
+    int  GetPoliticalID();                // 0x0097e850
+    void F_9d33a0(int* p);                // 0x009d33a0
+};
+}
+namespace nSPCreatureAnim {
+class anim_state_x {
+public:
+    void F_9e3f70(int a, int b);          // 0x009e3f70
+};
+}
+namespace nSPCreatureAnim {
 struct creature_instance_data_s009b_c580 {
-    uint32_t pad_000[0x70 / 4];
+    uint32_t pad_000[0x18 / 4];
+    checkerlib::vector_3_s009b_c580 center;                      // +0x018
+    checkerlib::vector_3_s009b_c580 prev_center;                 // +0x024
+    uint32_t pad_030[(0x3c - 0x30) / 4];
+    checkerlib::vector_4_s009b_c580 orientation;                 // +0x03c
+    checkerlib::vector_4_s009b_c580 orientation_b;               // +0x04c
+    uint32_t pad_05c[(0x6c - 0x5c) / 4];
+    float    field_06c;                   // +0x06c
     float    requested_scale;             // +0x070
-    uint32_t pad_074[(0x2e4 - 0x74) / 4];
+    checkerlib::vector_3_s009b_c580 velocity;                    // +0x074
+    checkerlib::vector_3_s009b_c580 prev_velocity;               // +0x080
+    checkerlib::vector_3_s009b_c580 smooth_velocity;             // +0x08c
+    checkerlib::vector_3_s009b_c580 smooth_velocity_prev;        // +0x098
+    checkerlib::vector_3_s009b_c580 rot_velocity;                // +0x0a4
+    checkerlib::vector_3_s009b_c580 velocity2;                   // +0x0b0
+    checkerlib::vector_3_s009b_c580 rot_velocity2;               // +0x0bc
+    checkerlib::vector_4_s009b_c580 rel_rotation;                // +0x0c8
+    uint32_t pad_0d8[(0xe8 - 0xd8) / 4];
+    checkerlib::vector_3_s009b_c580 new_center;                  // +0x0e8
+    checkerlib::vector_3_s009b_c580 field_f4;                    // +0x0f4
+    checkerlib::vector_3_s009b_c580 direction;                   // +0x100
+    float    field_10c;                   // +0x10c
+    float    anim_speed;                  // +0x110
+    float    field_114;                   // +0x114
+    uint32_t pad_118[(0x2e4 - 0x118) / 4];
     creature_body_instance_data_s009b_c580* mpBegin; // +0x2e4  (Bodies vector)
     creature_body_instance_data_s009b_c580* mpEnd;   // +0x2e8
+    uint32_t pad_2ec[(0x2f8 - 0x2ec) / 4];
+    void*    mpAnimState;                 // +0x2f8
+    uint32_t pad_2fc[(0x15b8 - 0x2fc) / 4];
+    cGameData gameData;                   // +0x15b8
+    float    saved_center[3];             // +0x1644
+    float    saved_orientation[4];        // +0x1650
+
+    float     F_9b6220(checkerlib::vector_3_s009b_c580* a, checkerlib::vector_3_s009b_c580* b);       // 0x009b6220
+    checkerlib::vector_3_s009b_c580* F_9b62c0(checkerlib::vector_3_s009b_c580* out, checkerlib::vector_3_s009b_c580* v);     // 0x009b62c0
+    void      F_9b7b10(int a, int b);                   // 0x009b7b10
 };
+}
+namespace nSPCreatureAnim {
+checkerlib::vector_3_s009b_c580 FUN_0099c310(const checkerlib::vector_4_s009b_c580* q, const checkerlib::vector_3_s009b_c580* v);   // 0x0099c310
 }
 // ---- items of slice s009bc580 end
 
 // ---- items of slice s009bd340 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float g_IKFloorWeightRate;   // 0x01550d88 (20.0)
+extern "C" void* memset(void* dst, int value, unsigned int size);
 namespace checkerlib {
-struct vector_3_s009b_d340 {
+class vector_3_s009b_d340 { public:
     float x, y, z;
     vector_3_s009b_d340& operator=(const vector_3_s009b_d340& o) { x = o.x; y = o.y; z = o.z; return *this; }
 };
 }
 namespace checkerlib {
-struct vector_4_s009b_d340 {
+class vector_4_s009b_d340 { public:
     float x, y, z, w;
     vector_4_s009b_d340& operator=(const vector_4_s009b_d340& o);   // 0x00572600 (EA::RectT<float>::operator= by COMDAT folding)
 };
@@ -635,9 +864,20 @@ struct creature_body_static_data_s009b_d340 {
     unsigned long caps_flags;                   // +0x150
 
     bool HasCap(unsigned int bit) const { return ((caps_flags >> bit) & 1) != 0; }
-    uint32_t      pad_154[(0x344 - 0x154) / 4];
+    uint8_t       field_154;                    // +0x154
+    uint8_t       pad_155[3];
+    uint32_t      pad_158[(0x344 - 0x158) / 4];
     checkerlib::vector_3_s009b_d340      ik_joint_r__SCALABLE;         // +0x344 (name guessed)
     checkerlib::vector_3_s009b_d340      parent_local_joint_r__SCALABLE;  // +0x350 (name guessed)
+};
+}
+namespace nSPCreatureAnim {
+struct creature_deform {                        // 0x14 bytes
+    int32_t key;                                // +0x00
+    int32_t flags;                              // +0x04
+    float   value8;                             // +0x08
+    int32_t field_0c;                           // +0x0c
+    float   value10;                            // +0x10
 };
 }
 namespace nSPCreatureAnim {
@@ -648,10 +888,23 @@ struct creature_body_instance_data_s009b_d340 {            // size 0x2bc (retail
     creature_body_instance_data_s009b_d340* first_child;   // +0x00c
     checkerlib::vector_3_s009b_d340                     center;        // +0x010
     checkerlib::vector_4_s009b_d340                     orientation;   // +0x01c
-    uint32_t                     pad_02c[(0x38 - 0x2c) / 4];
+    checkerlib::vector_3_s009b_d340                     velocity;      // +0x02c
     bool                         floored;       // +0x038
     uint8_t                      pad_039[3];
-    uint32_t                     pad_03c[(0x29c - 0x3c) / 4];
+    checkerlib::vector_3_s009b_d340                     blended_center; // +0x03c
+    int32_t                      field_048;     // +0x048
+    int32_t                      field_04c;     // +0x04c
+    int32_t                      field_050;     // +0x050
+    uint8_t                      field_054;     // +0x054
+    uint8_t                      field_055;     // +0x055
+    uint8_t                      pad_056[2];
+    float                        reset_floats[18]; // +0x058..+0x09f
+    uint32_t                     field_0a0;     // +0x0a0
+    creature_deform              deforms[11];  // +0x0a4..+0x17f
+    uint32_t                     pad_180[4];   // +0x180..+0x18f
+    checkerlib::vector_3_s009b_d340                     saved_center; // +0x190
+    checkerlib::vector_4_s009b_d340                     saved_orientation; // +0x19c
+    uint32_t                     pad_1ac[(0x29c - 0x1ac) / 4];
     float                        floored_weight;     // +0x29c
     bool                         known_ground_pos;   // +0x2a0
     uint8_t                      pad_2a1[3];
@@ -662,7 +915,9 @@ struct creature_body_instance_data_s009b_d340 {            // size 0x2bc (retail
 namespace nSPCreatureAnim {
 struct creature_instance_data_s009b_d340 {
     creature_static_data_s009b_d340* static_data;          // +0x000
-    uint32_t pad_004[(0x18 - 0x4) / 4];
+    uint32_t pad_004[3];                        // +0x004
+    int32_t  reset_counter;                     // +0x010
+    uint32_t pad_014;                           // +0x014
     checkerlib::vector_3_s009b_d340 position;                          // +0x018
     uint32_t pad_024[(0x3c - 0x24) / 4];
     checkerlib::vector_4_s009b_d340 orientation;                       // +0x03c
@@ -671,7 +926,18 @@ struct creature_instance_data_s009b_d340 {
     uint32_t pad_074[(0xe8 - 0x74) / 4];
     checkerlib::vector_3_s009b_d340 ground_pos;                        // +0x0e8
     checkerlib::vector_3_s009b_d340 ground_normal;                     // +0x0f4
-    uint32_t pad_100[(0x2e4 - 0x100) / 4];
+    uint32_t pad_100[4];                        // +0x100
+    float    reset_110;                         // +0x110
+    float    reset_114;                         // +0x114
+    uint32_t pad_118[(0x13c - 0x118) / 4];
+    float    reset_floats[27];                  // +0x13c..+0x1a7
+    uint8_t  reset_1a8;                         // +0x1a8
+    uint8_t  reset_1a9;                         // +0x1a9
+    uint8_t  pad_1aa[0x1b8 - 0x1aa];
+    uint8_t  reset_mask;                        // +0x1b8
+    uint8_t  pad_1b9[0x262 - 0x1b9];
+    uint8_t  reset_262;                         // +0x262
+    uint8_t  pad_263[0x2e4 - 0x263];
     eastl::vector_s009b_d340<creature_body_instance_data_s009b_d340, eastl::sp_vector_allocator_s009b_d340> Bodies;  // +0x2e4
     uint32_t pad_2f4[(0x168c - 0x2f4) / 4];
     uint8_t  pad_168c;
@@ -682,7 +948,7 @@ struct creature_instance_data_s009b_d340 {
 
 // ---- items of slice s009bfc20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace checkerlib {
-struct vector_3_s009b_fc20 {
+class vector_3_s009b_fc20 { public:
     float x, y, z;
     vector_3_s009b_fc20() {}
     vector_3_s009b_fc20(const vector_3_s009b_fc20& o) : x(o.x), y(o.y), z(o.z) {}
@@ -690,7 +956,7 @@ struct vector_3_s009b_fc20 {
 };
 }
 namespace checkerlib {
-struct vector_4_s009b_fc20 { float x, y, z, w; };
+class vector_4_s009b_fc20 { public: float x, y, z, w; };
 }
 namespace checkerlib {
 vector_3_s009b_fc20* QuaternionVectorTransform(vector_3_s009b_fc20* out, const vector_4_s009b_fc20* q, const vector_3_s009b_fc20* v);         // 0x0099c1a0
@@ -753,7 +1019,19 @@ struct creature_body_static_data_s009b_fc20 {
     checkerlib::vector_4_s009b_fc20 rest_orientation_q;         // +0x118
     uint32_t pad_128[(0x138 - 0x128) / 4];
     checkerlib::vector_3_s009b_fc20 extent;                     // +0x138 (half size, unscaled)
+    uint32_t pad_144[(0x150 - 0x144) / 4];
+    uint32_t ground_flags;               // +0x150 (bit 2: store placement, bit 4: alternate)
+    uint32_t pad_154[(0x468 - 0x154) / 4];
+
+    void SetFromBuilt(uint32_t value);   // 0x009b3e40
+    uint32_t Build();                    // 0x009b3cd0
 };
+}
+namespace nSPCreatureAnim {
+struct creature_body_instance_data_s009b_fc20;
+}
+namespace nSPCreatureAnim {
+struct creature_body_ref;
 }
 namespace nSPCreatureAnim {
 struct creature_instance_data_s009b_fc20 {
@@ -765,15 +1043,25 @@ struct creature_instance_data_s009b_fc20 {
     float    requested_scale;            // +0x070
     uint32_t pad_074[(0x100 - 0x74) / 4];
     checkerlib::vector_3_s009b_fc20 ground_up;                  // +0x100
+    uint32_t pad_10c[(0x260 - 0x10c) / 4];
+    bool     ground_placement_valid;     // +0x260
+    uint8_t  pad_261[0x2e4 - 0x261];
+    creature_body_instance_data_s009b_fc20* body_begin;      // +0x2e4
+    creature_body_instance_data_s009b_fc20* body_end;        // +0x2e8
+    creature_body_instance_data_s009b_fc20* body_capacity;   // +0x2ec
 
     float GetGroundHeight(const checkerlib::vector_3_s009b_fc20* pos, checkerlib::vector_3_s009b_fc20* normal);   // 0x009b6220
     checkerlib::vector_3_s009b_fc20* GetGroundUp(checkerlib::vector_3_s009b_fc20* out, const checkerlib::vector_3_s009b_fc20* pos);      // 0x009b62c0
+    void FUN_009b8fd0(float* pBase, float* pRate);                  // 0x009b8fd0
+    void UpdateGoalGrounds();                                       // 0x009c0680
+    void UpdateGoalGround(creature_body_ref* pRef);                 // 0x009c0860
 };
 }
 namespace nSPCreatureAnim {
 struct creature_body_instance_data_s009b_fc20 {
     creature_body_static_data_s009b_fc20* static_data;  // +0x000
-    uint32_t pad_004[(0x7c - 0x4) / 4];
+    uint32_t pad_004[(0x58 - 0x4) / 4];
+    goal_pos_rot_s009b_fc20 goal_a;                     // +0x058
     goal_pos_rot_s009b_fc20 goal_b;                     // +0x07c
     uint32_t pad_0a0[(0x2a0 - 0xa0) / 4];
     bool     known_ground_pos;               // +0x2a0
@@ -783,6 +1071,12 @@ struct creature_body_instance_data_s009b_fc20 {
 
     void GroundGoal(checkerlib::vector_3_s009b_fc20* outPos, checkerlib::vector_4_s009b_fc20* outRot, creature_instance_data_s009b_fc20* c,
                     float baseHeight, float rate, bool storeGround);
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_ref {
+    uint32_t pad_000;                        // +0x000
+    creature_body_instance_data_s009b_fc20* body;       // +0x004
 };
 }
 // ---- items of slice s009bfc20 end
@@ -1452,7 +1746,31 @@ namespace nSPCreatureAnim {
 void FUN_009e3f70(void* self, int a, int b);                // 0x009e3f70
 }
 namespace nSPCreatureAnim {
+void FUN_009bd340(creature_instance_data_s009c_4a30* c);               // 0x009bd340
+}
+namespace nSPCreatureAnim {
 void* FUN_011e073e(void* p, int a, int b);                  // 0x011e073e
+}
+namespace nSPCreatureAnim {
+void  FUN_009db1d0(void* self);                             // 0x009db1d0
+}
+namespace nSPCreatureAnim {
+void  FUN_009db270(void* self);                             // 0x009db270
+}
+namespace nSPCreatureAnim {
+void  FUN_009db4d0(void* self, float v);                    // 0x009db4d0
+}
+namespace nSPCreatureAnim {
+void  FUN_009db6d0(void* self, float v, creature_instance_data_s009c_4a30* c);  // 0x009db6d0
+}
+namespace nSPCreatureAnim {
+void  FUN_009d34a0(void* self);                             // 0x009d34a0
+}
+namespace nSPCreatureAnim {
+void  FUN_009da640(void* self, creature_instance_data_s009c_4a30* c);  // 0x009da640
+}
+namespace nSPCreatureAnim {
+void  FUN_009d3170(void* self);                             // 0x009d3170
 }
 namespace nSPCreatureAnim {
 struct phasegroup_vec {
@@ -1464,7 +1782,7 @@ struct phasegroup_vec {
 };
 }
 namespace nSPCreatureAnim {
-struct dynamics_walking_s009c_4a30 {
+class dynamics_walking_s009c_4a30 { public:
     uint8           pad00[0x10];
     phasegroup_vec  groups;                                 // 0x10
     uint8           pad20[0x24 - 0x20];
@@ -1472,6 +1790,15 @@ struct dynamics_walking_s009c_4a30 {
     uint8           pad28[0x38 - 0x28];
     void*           vert;                                   // 0x38
     ~dynamics_walking_s009c_4a30();
+};
+}
+namespace nSPCreatureAnim {
+struct body_vec {                                           // object at instance+0x2e4
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    uint32 mAllocator;
+    void FUN_009c3040(int n);                               // 0x009c3040
 };
 }
 namespace nSPCreatureAnim {
@@ -1548,6 +1875,1151 @@ namespace nSPCreatureAnim {
 struct vec2c  { Elem2c*  mpBegin; Elem2c*  mpEnd; };
 }
 // ---- items of slice s009c4a30 end
+
+// ---- items of slice s009b3e40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace nSPCreatureAnim {
+struct wiggle_static_data_s009b_3e40 {
+    int   a0, a1, a2, a3;              // +0x00
+    float f[10];                       // +0x10
+    uint8_t c;                         // +0x38
+    uint8_t pad_39[3];
+    wiggle_static_data_s009b_3e40& operator=(const wiggle_static_data_s009b_3e40& o)
+    {
+        a0 = o.a0; a1 = o.a1; a2 = o.a2; a3 = o.a3;
+        f[0] = o.f[0]; f[1] = o.f[1]; f[2] = o.f[2]; f[3] = o.f[3]; f[4] = o.f[4];
+        f[5] = o.f[5]; f[6] = o.f[6]; f[7] = o.f[7]; f[8] = o.f[8]; f[9] = o.f[9];
+        c = o.c;
+        return *this;
+    }
+};
+}
+namespace nSPCreatureAnim {
+struct wiggle_instance_data_s009b_3e40 {
+    void*   wiggle;                    // +0x00
+    uint8_t flag4;                     // +0x04
+    uint8_t flag5;                     // +0x05
+    uint8_t pad_06[2];
+    float   f[9];                      // +0x08
+    wiggle_instance_data_s009b_3e40& operator=(const wiggle_instance_data_s009b_3e40& o);   // 0x009b4230
+};
+}
+namespace nSPCreatureAnim {
+struct xform12 {
+    float m[9];                        // +0x00
+    float v[3];                        // +0x24
+    xform12& operator=(const xform12& o);   // 0x009b41e0
+};
+}
+namespace nSPCreatureAnim {
+struct Transform30_s009b_3e40 {
+    int   a;                           // +0x00
+    int   b;                           // +0x04
+    float f[10];                       // +0x08
+    Transform30_s009b_3e40& operator=(const Transform30_s009b_3e40& o)
+    {
+        a = o.a; b = o.b;
+        f[0] = o.f[0]; f[1] = o.f[1]; f[2] = o.f[2]; f[3] = o.f[3]; f[4] = o.f[4];
+        f[5] = o.f[5]; f[6] = o.f[6]; f[7] = o.f[7]; f[8] = o.f[8]; f[9] = o.f[9];
+        return *this;
+    }
+};
+}
+namespace nSPCreatureAnim {
+struct bone_xform_s009b_3e40 {
+    float m[9];                        // +0x00
+    float v[3];                        // +0x24
+    bone_xform_s009b_3e40& operator=(const bone_xform_s009b_3e40& o)
+    {
+        __movsd((unsigned long*)m, (unsigned long*)o.m, 9);
+        float* d = v; const float* s = o.v;
+        d[0] = s[0]; d[1] = s[1]; d[2] = s[2];
+        return *this;
+    }
+};
+}
+namespace nSPCreatureAnim {
+struct blob_f4 {
+    uint32_t u00;                      // +0x00
+    float    f04[7];                   // +0x04
+    uint32_t u20;                      // +0x20
+    float    f24[19];                  // +0x24
+    uint8_t  b70, b71;                 // +0x70
+    float    f74[3];                   // +0x74
+    float    f80[6];                   // +0x80
+    uint32_t u98[4];                   // +0x98
+    uint8_t  ba8, ba9;                 // +0xa8
+    uint32_t uac;                      // +0xac
+    float    fb0;                      // +0xb0
+    uint32_t ub4, ub8;                 // +0xb4
+    float    fbc[14];                  // +0xbc
+    blob_f4& operator=(const blob_f4& o);   // 0x009b45b0
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_static_data_s009b_3e40 {
+    char     name[0x104];              // +0x000
+    uint32_t instance_id;              // +0x104
+    uint32_t group_id;                 // +0x108
+    float    f10c[17];                 // +0x10c
+    uint32_t w150[0x2a];               // +0x150
+    uint32_t w1f8[10];                 // +0x1f8
+    uint32_t w220[0x41];               // +0x220
+    float    f324[6];                  // +0x324
+    uint32_t u33c;                     // +0x33c
+    uint8_t  b340;                     // +0x340
+    uint8_t  pad341[3];
+    float    f344[11];                 // +0x344
+    uint8_t  b370;                     // +0x370
+    uint8_t  b371;                     // +0x371
+    uint8_t  pad372[2];
+    float    f374[3];                  // +0x374
+    uint32_t w380[0x29];               // +0x380
+    uint32_t u424;                     // +0x424
+    uint32_t u428;                     // +0x428
+    uint8_t  b42c;                     // +0x42c
+    uint8_t  pad42d[3];
+    uint32_t u430;                     // +0x430
+    float    f434[3];                  // +0x434
+    uint32_t u440;                     // +0x440
+    uint32_t u444;                     // +0x444
+    float    f448[7];                  // +0x448
+    uint8_t  b464;                     // +0x464
+    uint8_t  pad465[3];
+    creature_body_static_data_s009b_3e40& operator=(const creature_body_static_data_s009b_3e40& o);   // 0x009b3e40
+};
+}
+namespace nSPCreatureAnim {
+struct creature_static_data_s009b_3e40 {
+    uint8_t  pad_000[0x384];
+    creature_body_static_data_s009b_3e40* Bodies;      // +0x384
+    creature_body_static_data_s009b_3e40* BodiesEnd;   // +0x388
+    uint8_t  pad_38c[0x440 - 0x38c];
+    uint32_t u440;                          // +0x440
+    void FUN_009b4ce0();
+};
+}
+void NormalizeVec3(float* out, const float* v, float* lenOut);   // 0x009a49d0
+// ---- items of slice s009b3e40 end
+
+// ---- items of slice s009b4e00 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_14471fc;  // 0.0f (or small)  0x014471fc
+extern const float g_1550b04;  // int  0x01550b04 (global gate)
+extern const float g_1550d3c;  // float 0x01550d3c
+extern const float g_1550d40;  // float 0x01550d40
+extern const float g_1550d44;  // float 0x01550d44
+extern const float g_1550d48;  // float 0x01550d48
+#pragma intrinsic(fabs)
+void* __cdecl FUN_0099c1a0(void* out, void* quat, void* pos);   // 0x0099c1a0 QuaternionVectorTransform
+int  __cdecl FUN_009b4d90();                                     // 0x009b4d90
+void __cdecl FUN_009b3090(unsigned int tag, int n);              // 0x009b3090
+void __cdecl FUN_009dfc40(int* p);                               // 0x009dfc40 AnimA dtor
+void __cdecl FUN_009dfd30(int* p);                               // 0x009dfd30 AnimC dtor
+double __cdecl FUN_009f9c60(void* p);                            // 0x009f9c60
+bool __cdecl nSPCreatureAnim_ShouldJiggle(void* p);              // ShouldJiggle
+namespace nSPCreatureAnim {
+struct Bone {                       // stride 0x468; only the used fields are modelled
+    unsigned char pad0[0x10c];
+    float mOffsetX;                 // +0x10c
+    float mOffsetY;                 // +0x110
+    float mOffsetZ;                 // +0x114
+    unsigned char pad1[0x2c];       // +0x118 .. 0x144
+    float mParentOffX;              // +0x144
+    float mParentOffY;              // +0x148
+    float mParentOffZ;              // +0x14c
+    unsigned char mFlags150;        // +0x150
+    unsigned char pad2[0x3];        // +0x151 .. 0x154
+    unsigned char mFlags154;        // +0x154
+    unsigned char pad3[0x1b8 - 0x155];
+    unsigned char mBitset[0x1f8 - 0x1b8];
+    int mPrevIndex;                 // +0x1f8
+    int mNextIndex;                 // +0x1fc
+    int mChildFirst;                // +0x204
+    int mChildCount;                // +0x208
+    unsigned char pad4[0x348 - 0x20c];
+    float mPosX;                    // +0x344
+    float mPosY;                    // +0x348
+    float mPosZ;                    // +0x34c
+    float mAttX;                    // +0x350
+    float mAttY;                    // +0x354
+    float mAttZ;                    // +0x358
+    unsigned char pad6[0x368 - 0x35c];
+    float mLen;                     // +0x368
+    float mScale;                   // +0x36c
+    unsigned char mJiggle;          // +0x370
+    unsigned char pad7[0x3];
+    float mAvgSegLen;               // +0x374
+};
+}
+namespace nSPCreatureAnim {
+struct Solver {
+    unsigned char pad0[0x10c];
+    float mOffsetX;                 // +0x10c
+    float mOffsetY;                 // +0x110
+    float mOffsetZ;                 // +0x114
+    unsigned char pad1[0x2c];       // +0x118 .. 0x144
+    float mParentOffX;              // +0x144
+    float mParentOffY;              // +0x148
+    float mParentOffZ;              // +0x14c
+    unsigned char mFlags150;        // +0x150
+    unsigned char pad2[0x3];
+    unsigned char mFlags154;        // +0x154
+    unsigned char pad3[0x1f8 - 0x155];
+    int mPrevIndex;                 // +0x1f8
+    int mNextIndex;                 // +0x1fc
+    unsigned char pad4[0x344 - 0x200];
+    float mPosX;                    // +0x344
+    float mPosY;                    // +0x348
+    float mPosZ;                    // +0x34c
+    float mAttX;                    // +0x350
+    float mAttY;                    // +0x354
+    float mAttZ;                    // +0x358
+    float mVX;                      // +0x358?  (see ForceAdd)
+    unsigned char pad5[0x368 - 0x360];
+    float mSizeA;                   // +0x368
+    float mSizeB;                   // +0x36c
+    unsigned char mJiggle;          // +0x370
+    unsigned char pad6[0x3];
+    float mAvgSegLen;               // +0x374
+    unsigned char pad7[0x384 - 0x378];
+    Bone* mBones;                   // +0x384
+    Bone* mBonesEnd;                // +0x388
+    unsigned char pad8[0x3ac - 0x38c];
+    int mRootIndex;                 // +0x3ac
+    unsigned char pad9[0x3c8 - 0x3b0];
+    int mUseDirect;                 // +0x3c8
+    int* mOrderPairs;               // +0x3cc (pairs of {Bone*, int})
+    int* mOrderPairsEnd;            // +0x3d0
+    unsigned char pad10[0x3e0 - 0x3d4];
+    int mFlaggedCount;              // +0x3e0
+
+    float DistX(int i0, int i1, float k);
+    float DistY(int i0, int i1, float k);
+    float SqX(float k, int i0, int i1);
+    float SqY(float k, int i0, int i1);
+    float SegmentLengthSum(Bone* b);
+    float AverageSegment();
+    void  MarkDeepBones();
+    int   IsDeeperRatio(Bone** a, Bone** b);
+    int   FindMinIndex(int* from, int* to);
+    void  SortRange(int* a, int* b);
+    void  SortFlaggedRuns();
+    void  ShutdownAnims();
+    void  UpdateAvgSegLen();
+    void  BuildOrderPairs();
+    float SegmentLengthSum2(Bone* b);
+};
+}
+using nSPCreatureAnim::Solver;
+using nSPCreatureAnim::Bone;
+static inline float fsq(float v) { return v * v; }
+// ---- items of slice s009b4e00 end
+
+// ---- items of slice s009b8720 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int DAT_014470a0;      // 0x014470a0  (double 1e-08)
+extern "C" int DAT_01485720;      // 0x01485720  (_HK_REAL_ONE = 1.0f)
+extern "C" int DAT_014853e0;      // 0x014853e0  (float 2.0f)
+extern "C" int DAT_015509f8;      // 0x015509f8  (float)
+extern "C" int DAT_01550b18;      // 0x01550b18  (float eps)
+extern "C" int DAT_01550d64;      // 0x01550d64  (float)
+extern "C" int DAT_01448874;      // 0x01448874  (float 1e-06f)
+extern "C" int DAT_013eb960;      // 0x013eb960  (float 0.01f)
+extern "C" int DAT_01485544;      // 0x01485544  (0.75f)
+extern "C" int DAT_014471fc;      // 0x014471fc  (0.0f)
+extern "C" int DAT_01550d6c;      // 0x01550d6c  (float)
+extern "C" int DAT_01550d68;      // 0x01550d68  (float)
+extern "C" int DAT_01550d70;      // 0x01550d70  (float)
+extern "C" int DAT_01550d74;      // 0x01550d74  (float)
+extern "C" int DAT_01550d78;      // 0x01550d78  (float)
+extern "C" int DAT_01550d08;      // 0x01550d08  (float)
+extern "C" int DAT_01550d0c;      // 0x01550d0c  (float)
+extern "C" int DAT_01550d10;      // 0x01550d10  (float)
+extern "C" int DAT_01550d14;      // 0x01550d14  (float)
+extern "C" int DAT_01550d18;      // 0x01550d18  (float)
+extern "C" int DAT_01550d1c;      // 0x01550d1c  (float)
+extern "C" int DAT_01550d20;      // 0x01550d20  (float)
+extern "C" int DAT_01550d24;      // 0x01550d24  (float)
+extern "C" int DAT_01550d28;      // 0x01550d28  (float)
+extern "C" int DAT_015509e0;      // 0x015509e0
+extern "C" int DAT_015509ec;      // 0x015509ec
+void  __fastcall FUN_0099c4a0(int this_, int dummy, int a, int b, float c, float d); // 0x0099c4a0
+void  __fastcall Bone_IntegrateVelocity(int this_, int dummy, float f, float* a, float* b); // 0x009b5ab0
+int   __fastcall FUN_00c37030(int this_);                          // 0x00c37030  (GetFootprintRadius)
+int   __fastcall FUN_009d3530(int this_);                          // 0x009d3530
+float __fastcall FUN_009ce700(float x);                            // 0x009ce700
+void  __fastcall FUN_009d00a0(int this_, int dummy, void* out, void* param); // 0x009d00a0
+void  __fastcall FUN_009b3970(void* p);                            // 0x009b3970
+namespace nSPCreatureAnim {
+struct vector_3 { float x, y, z; };
+}
+namespace nSPCreatureAnim {
+struct SpatialObject {
+    uint32_t _00[0x1c/4];                               // 0x000
+    float    orient_w;                                  // 0x01c orientation.w
+    float    extent_lower_z;                            // 0x020 original-local lower.z
+    uint32_t _24;                                       // 0x024
+    float    extent_lower_x;                            // 0x028 original-local lower.x
+    float    extent_upper_x;                            // 0x02c original-local upper.x
+};
+}
+namespace nSPCreatureAnim {
+struct Obj2;                                            // the creature instance (this slice)
+}
+namespace nSPCreatureAnim {
+struct AniDyn;                                          // 0x15b8
+}
+namespace nSPCreatureAnim {
+struct GaitGroup;
+}
+namespace nSPCreatureAnim {
+struct BoneGoal;
+}
+namespace nSPCreatureAnim {
+struct Vector30 { void* begin; void* end; };            // elements are 0x30 bytes
+}
+namespace nSPCreatureAnim {
+struct Vector104 { void* begin; void* end; };           // elements are 0x104 bytes
+}
+namespace nSPCreatureAnim {
+struct Vector108 { void* begin; void* end; };           // elements are 0x108 bytes
+}
+namespace nSPCreatureAnim {
+struct GaitGroup {                                      // stride 0x108
+    float    vx, vy, vz;                                // 0x000 desired velocity
+    uint32_t _0c[6];                                    // 0x00c
+    uint32_t f24_0[9];                                  // 0x024 integration scratch (float[9])
+    uint32_t i44;                                       // 0x044
+    uint32_t i48;                                       // 0x048
+    float    f4c;                                       // 0x04c
+    float    f50;                                       // 0x050
+    float    f54;                                       // 0x054
+    int      i58;                                       // 0x058 bone index
+    uint32_t pad_05c[0x108/4 - 0x5c/4];                 // 0x05c..0x108
+};
+}
+namespace nSPCreatureAnim {
+struct BoneGoal {                                       // stride 0x104
+    uint32_t f00_0[0x100/4];                            // 0x000
+    float    f100;                                      // 0x100
+    void     FUN_009d63e0(float t);                     // 0x009d63e0
+};
+}
+namespace nSPCreatureAnim {
+struct GoalBone {                                       // stride 0x2bc
+    uint32_t _00[0x38/4];                               // 0x000
+    bool     flag_38;                                   // 0x038
+    uint8_t  pad_039[0x0f];                             // 0x039..0x048
+    float    f48;                                       // 0x048
+    uint32_t _4c[0x30/4];                               // 0x04c..0x07c
+    float    cur_x;                                     // 0x07c current pose
+    float    cur_y;                                     // 0x080
+    float    cur_z;                                     // 0x084
+    uint32_t pad_088[0x108/4];                          // 0x088..0x190
+    float    goal_x;                                    // 0x190 goal pose
+    float    goal_y;                                    // 0x194
+    float    goal_z;                                    // 0x198
+    uint32_t tail[0x124/4];                             // 0x19c..0x2bc
+};
+}
+namespace nSPCreatureAnim {
+struct BoneHandle {
+    uint32_t _00[0x1c/4];                               // 0x000
+    void     FUN_0099c4a0(int a, int b, float c, float d); // 0x0099c4a0
+};
+}
+namespace nSPCreatureAnim {
+struct BoneInst {                                       // stride 0x2bc
+    uint32_t   _00[0x4c/4];                             // 0x000
+    float      f4c;                                     // 0x04c
+    uint32_t   _50[0x50/4];                             // 0x050
+    BoneHandle hA0;                                     // 0x0a0
+    uint32_t   tail[0x200/4];                           // 0x0bc..0x2bc
+    void       Bone_IntegrateVelocity(float f, float* a, float* b); // 0x009b5ab0
+};
+}
+namespace nSPCreatureAnim {
+struct GaitState {                                      // 0x2f8
+    int    state;                                       // 0x000
+    int    prev;                                        // 0x004
+    float  f08;                                         // 0x008
+    float  f0c;                                         // 0x00c
+    uint32_t _10[10];                                   // 0x010
+    void*  p38;                                         // 0x038
+    void*  p3c;                                         // 0x03c
+    float  FUN_009dbd50();                              // 0x009dbd50
+};
+}
+namespace nSPCreatureAnim {
+struct AniDyn {                                         // receiver of the 0x9d3xxx helpers
+    uint32_t _00[0xa8/4];                               // 0x000..0x0a8
+
+    int*   FUN_009d3200(void* p, float f);              // 0x009d3200
+    void   FUN_009d32d0();                              // 0x009d32d0
+    void   FUN_009d3f70(Obj2* p);                       // 0x009d3f70
+    float  FUN_009d3a20(Obj2* p, float a, int x, float b); // 0x009d3a20
+    void   FUN_009d3b50(float t);                       // 0x009d3b50
+    void   FUN_009d6700(float t);                       // 0x009d6700
+    Vector108* FUN_00a09f50();                          // 0x00a09f50 gait-group vector
+    Vector30*  FUN_00ad2800();                          // 0x00ad2800
+    Vector104* GetPoliticalID();                        // 0x0097e850
+    float  FUN_009d3530();                              // 0x009d3530
+    float  FUN_009ce700(float x);                       // 0x009ce700
+    void   FUN_009d00a0(float* out, void* phase);       // 0x009d00a0
+    float* FUN_009b9340(float* out, int** a, SpatialObject* s, float dt); // 0x009b9340
+};
+}
+namespace nSPCreatureAnim {
+struct creature_instance_data_s009b_8720 {
+    // 0x000..0x058 : requested rot + scale + actual rot block
+    uint32_t pad_000[6];                         // 0x000
+    float    f_18;                               // 0x018
+    float    f_1c;                               // 0x01c
+    float    f_20;                               // 0x020
+    uint32_t pad_024[6];                         // 0x024
+    float    f_3c;                               // 0x03c
+    float    f_40;                               // 0x040
+    float    f_44;                               // 0x044
+    float    f_48;                               // 0x048
+    float    f_4c;                               // 0x04c
+    float    f_50;                               // 0x050
+    float    f_54;                               // 0x054
+    float    f_58;                               // 0x058
+    uint32_t pad_05c[5];                         // 0x05c
+    float    requested_scale;                    // 0x070
+    uint32_t pad_074[6];                         // 0x074
+    float    f_8c;                              // 0x08c
+    float    f_90;                              // 0x090
+    float    f_94;                              // 0x094
+    uint32_t pad_098[26];                        // 0x098
+    float    f_100;                              // 0x100
+    float    f_104;                              // 0x104
+    float    f_108;                              // 0x108
+    float    f_10c;                              // 0x10c
+    uint32_t pad_110[11];                        // 0x110
+    float    f_13c;                              // 0x13c
+    float    f_140;                              // 0x140
+    float    f_144;                              // 0x144
+    uint32_t pad_148;                            // 0x148
+    float    f_14c;                              // 0x14c
+    float    f_150;                              // 0x150
+    float    f_154;                              // 0x154
+    float    f_158;                              // 0x158
+    uint32_t pad_15c;
+    float    f_160;                              // 0x160
+    uint32_t pad_164[7];
+    float    f_180;                              // 0x180
+    float    f_184;                              // 0x184
+    float    f_188;                              // 0x188
+    float    f_18c;                              // 0x18c
+    float    f_190;                              // 0x190
+    float    f_194;                              // 0x194
+    float    f_198;                              // 0x198
+    float    f_19c;                              // 0x19c
+    float    f_1a0;                              // 0x1a0
+    uint32_t pad_1a4[47];                        // 0x1a4
+    bool     flag_260;                           // 0x260
+    char     flag_261;                           // 0x261
+    uint16_t pad_262;                            // 0x262
+    float    walk_linear_x;                      // 0x264
+    float    walk_linear_y;                      // 0x268
+    float    walk_angular;                       // 0x26c
+    uint32_t pad_270[0x74/4];                    // 0x270..0x2e4
+    int*     mpBone_2e4;                         // 0x2e4
+    uint32_t pad_2e8[0x10/4];                    // 0x2e8..0x2f8
+    GaitState gait_2f8;                          // 0x2f8
+    uint32_t pad_338[0x1280/4];                  // 0x338..0x15b8
+    AniDyn   anim_15b8;                          // 0x15b8
+    uint32_t pad_1600[0x60/4];                   // 0x1600..0x1660
+    float    accum_1660;                         // 0x1660 root motion delta
+    float    accum_1664;
+    float    accum_1668;
+    float    accum_166c;
+    vector_3 root_1670;                          // 0x1670
+    float    root_167c;
+    bool     flag_1680;                          // 0x1680
+
+    void FUN_009b8250(float param_2);            // 0x009b8250
+    void FUN_009b83b0(float param_2);            // 0x009b83b0
+    void FUN_009b8650(float param_2);            // 0x009b8650
+    void FUN_009b7da0(float param_2);            // 0x009b7da0
+    void FUN_009b7c00(float param_2, float* param_3, float param_4); // 0x009b7c00
+
+    // this slice
+    void FUN_009b8720(float param_2);            // 0x009b8720
+    void FUN_009b8760(float param_2);            // 0x009b8760
+    void FUN_009b8d50(float param_2);            // 0x009b8d50
+    void FUN_009b8e40(float param_2);            // 0x009b8e40
+    void FUN_009b8f40(float param_2);            // 0x009b8f40
+    void FUN_009b8fd0(float* out_a, float* out_b); // 0x009b8fd0
+    void FUN_009b9090();                         // 0x009b9090
+    float* FUN_009b9250(float* out, float* p);   // 0x009b9250
+};
+}
+using nSPCreatureAnim::creature_instance_data_s009b_8720;
+using nSPCreatureAnim::AniDyn;
+using nSPCreatureAnim::SpatialObject;
+// ---- items of slice s009b8720 end
+
+// ---- items of slice s009b95d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_1485720;  // 1.0f               0x01485720
+extern const float g_1550d2c;  // quat w             0x01550d2c
+extern const float g_1550d30;  // quat x             0x01550d30
+extern const float g_1550d34;  // quat y             0x01550d34
+extern const float g_1550d38;  // angle scale        0x01550d38
+extern const float g_1550d14;  // axis x             0x01550d14
+extern const float g_1550d18;  // axis y             0x01550d18
+extern const float g_1550d1c;  // axis z             0x01550d1c
+extern const float g_1550d04;  // clamp high         0x01550d04
+extern const float g_1550d7c;  // scale x            0x01550d7c
+extern const float g_1550d80;  // scale y            0x01550d80
+extern const float g_1550d84;  // scale z            0x01550d84
+extern int g_15509e4;          // root-update enable 0x015509e4
+extern int g_15509e8;          // extra-update enable 0x015509e8
+void* __cdecl FUN_009b9250(void* q);                                     // 0x009b9250
+void* __cdecl FUN_009b9340(void* out, int inst, int b, float scale);     // 0x009b9340
+float __cdecl FUN_009b3110(void* p);                                     // 0x009b3110
+void  __cdecl FUN_009b39e0(float v);                                     // 0x009b39e0
+void  __cdecl FUN_0099cae0(void* out, void* in, int mode);               // 0x0099cae0 quat normalize
+int   __cdecl FUN_009d0460(void* out, float a);                          // 0x009d0460
+double __cdecl FUN_009d3530(void* g);                                    // 0x009d3530
+double __cdecl FUN_009ce700(void* g);                                    // 0x009ce700
+void  __cdecl FUN_009d0a40(void* out, void* obj);                        // 0x009d0a40
+int   __cdecl FUN_00ff3ba0(void* h);                                     // 0x00ff3ba0
+int   __cdecl GetPoliticalID(void* g);                                   // 0x0097e850
+float __cdecl GetFootprintRadius(void* o);                               // 0x00c37030
+void __cdecl FUN_009b95d0(void* a, int b, int c, float d);
+void __cdecl FUN_009b9ac0(void* a, int b, int c);
+struct Body {
+    unsigned char pad0[0x7c];
+    float mVelX;                    // +0x7c
+    float mVelY;                    // +0x80
+    float mVelZ;                    // +0x84
+    float mVelW;                    // +0x88
+    float mRadX;                    // +0x8c
+    float mRadY;                    // +0x90
+    float mRadZ;                    // +0x94
+    float mRadW;                    // +0x98
+    float mBlend;                   // +0x9c
+    float mScaleX;                  // +0xa0
+    float mScaleY;                  // +0xa4
+    float mScaleZ;                  // +0xa8
+};
+struct Quat { float x, y, z, w; };
+static inline Quat qmul(const Quat& a, const Quat& b)
+{
+    Quat r;
+    r.x = ((a.x * b.w + a.w * b.x) - a.y * b.z) + a.z * b.y;
+    r.y = ((a.y * b.w + a.w * b.y) + a.z * b.x) - a.x * b.z;
+    r.z = ((a.z * b.w - a.y * b.x) + a.x * b.y) + a.w * b.z;
+    r.w = ((a.w * b.w - a.x * b.x) - a.y * b.y) - a.z * b.z;
+    return r;
+}
+// ---- items of slice s009b95d0 end
+
+// ---- items of slice s009bb360 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" double fmod(double, double);
+#pragma intrinsic(fmod)
+namespace checkerlib {
+class vector_3_s009b_b360 { public:
+    float x, y, z;
+    vector_3_s009b_b360() {}
+    vector_3_s009b_b360(const vector_3_s009b_b360& o) : x(o.x), y(o.y), z(o.z) {}
+    vector_3_s009b_b360& operator=(const vector_3_s009b_b360& o) { x = o.x; y = o.y; z = o.z; return *this; }
+};
+}
+namespace checkerlib {
+class vector_4_s009b_b360 { public: float x, y, z, w; };
+}
+using checkerlib::vector_3_s009b_b360;
+using checkerlib::vector_4_s009b_b360;
+namespace nSPCreatureAnim {
+struct creature_static_data_s009b_b360 {
+    uint32_t pad000[0x3f4 / 4];
+    uint8_t  dead;                        // +0x3f4 (disables the wiggle springs)
+    uint8_t  pad3f5[3];
+};
+}
+namespace nSPCreatureAnim {
+struct goal_def_s009b_b360 {                         // only +0x00 is read here
+    unsigned long bidx;                   // +0x00
+};
+}
+namespace nSPCreatureAnim {
+struct goal_state_s009b_b360 {                       // size 0x2c
+    goal_def_s009b_b360* def;                        // +0x00
+    bool      initialized;                // +0x04
+    bool      reset;                      // +0x05
+    uint8_t   pad06[2];
+    vector_3_s009b_b360  vel;                        // +0x08
+    vector_3_s009b_b360  pos;                        // +0x14
+    vector_3_s009b_b360  prev;                       // +0x20
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_instance_data_s009b_b360 {      // size 0x2bc; only ->pos (+0x10) is read here
+    uint32_t pad000[0x10 / 4];
+    vector_3_s009b_b360 pos;                         // +0x010
+    uint32_t pad01c[(0x2bc - 0x1c) / 4];
+};
+}
+namespace nSPCreatureAnim {
+struct body_vector_s009b_b360 {                      // eastl::vector<creature_body_instance_data>
+    creature_body_instance_data_s009b_b360* mpBegin;     // +0x2e4
+    creature_body_instance_data_s009b_b360* mpEnd;
+    creature_body_instance_data_s009b_b360* mpCapacity;
+    uint32_t mAllocator;
+};
+}
+namespace nSPCreatureAnim {
+struct creature_instance_data_s009b_b360 {
+    creature_static_data_s009b_b360* static_data;    // +0x000
+    uint32_t pad004[(0x18 - 0x4) / 4];
+    vector_3_s009b_b360 position;                    // +0x018
+    uint32_t pad024[(0x3c - 0x24) / 4];
+    vector_4_s009b_b360 orientation;                 // +0x03c
+    uint32_t pad04c[(0x2e4 - 0x4c) / 4];
+    body_vector_s009b_b360 Bodies;                   // +0x2e4
+    uint32_t pad2f4[(0x168c - 0x2f4) / 4];
+    uint8_t  pad168c[2];
+    uint8_t  wiggles_enabled;             // +0x168e
+    uint8_t  pad68f[1];
+    float    wiggle_timer;                // +0x1690
+    goal_state_s009b_b360* states_begin;             // +0x1694
+    goal_state_s009b_b360* states_end;               // +0x1698
+    uint32_t states_capacity;             // +0x169c
+    uint32_t pad6a0[(0x16a8 - 0x16a0) / 4];
+    float    hit_time;                    // +0x16a8
+    float    root_time;                   // +0x16ac
+    float    hold_time;                   // +0x16b0
+    vector_3_s009b_b360 hit_dir;                     // +0x16b4
+    float    hit_len;                     // +0x16c0
+    uint32_t hit_wiggle[0x3c / 4];        // +0x16c4 (opaque instance, CreateWiggle)
+    goal_state_s009b_b360 hit_goal;                  // +0x1700
+    uint32_t pad172c[(0x1768 - 0x172c) / 4];
+    goal_state_s009b_b360 root_goal;                 // +0x1768
+
+    void UpdateGoalSpring(goal_state_s009b_b360* st, int nSteps, float dt, float t, float rate); // 0x009ba990
+    void UpdateHitWiggles(int nSteps, float dt, float t, float rate);
+    void UpdateWiggles(float dt, float t);  // 0x009bb4f0 (nSPCreatureAnim::creature_instance_data::UpdateWiggles)
+    void HitBody(unsigned long bidx, const vector_3_s009b_b360& dir, uint32_t a3, bool a4, float a5);  // 0x009bb680 (nSPCreatureAnim::creature_instance_data::HitBody)
+};
+}
+namespace nSPCreatureAnim {
+extern float g_01550ab4;   // 0x01550ab4 wiggle timer clamp
+}
+namespace nSPCreatureAnim {
+extern float g_01550c30;   // 0x01550c30 wiggle tick interval
+}
+namespace nSPCreatureAnim {
+extern float g_0166c018;   // 0x0166c018 hit-wiggle fade window
+}
+// ---- items of slice s009bb360 end
+
+// ---- items of slice s009be260 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct V3_s009b_e260 { float x, y, z; };
+struct V4 { float x, y, z, w; };
+struct AnimDesc {                       // *slot : creature animation descriptor
+    uint32_t pad0[0x10c / 4];           // 0x00..0x10b
+    float scaleX, scaleY, scaleZ;       // 0x10c..0x114
+    V4 tint;                            // 0x118..0x127
+};
+struct BoneSlot {                       // 700 bytes
+    AnimDesc* desc;                     // 0x00
+    uint32_t pad04[3];                  // 0x04..0x0f
+    V3_s009b_e260 pos;                             // 0x10
+    V4 tint;                            // 0x1c
+    V3_s009b_e260 zero;                            // 0x2c
+    uint8_t flag38;                     // 0x38
+    uint8_t pad39[3];
+    V3_s009b_e260 pos2;                            // 0x3c
+    uint8_t pad48[0x2bc - 0x48];
+};
+struct CreatureAnim {
+    uint32_t pad00[6];                  // 0x00..0x17
+    V3_s009b_e260 a18;                             // 0x18
+    V3_s009b_e260 b24;                             // 0x24
+    V3_s009b_e260 c30;                             // 0x30
+    V4 d3c;                             // 0x3c
+    V4 e4c;                             // 0x4c
+    V4 f5c;                             // 0x5c
+    float g6c;                          // 0x6c
+    float h70;                          // 0x70
+    V3_s009b_e260 i74;                             // 0x74
+    V3_s009b_e260 j80;                             // 0x80
+    V3_s009b_e260 k8c;                             // 0x8c
+    V3_s009b_e260 l98;                             // 0x98
+    V3_s009b_e260 ma4;                             // 0xa4
+    V3_s009b_e260 nb0;                             // 0xb0
+    V3_s009b_e260 obc;                             // 0xbc
+    V3_s009b_e260 pc8;                             // 0xc8
+    float qd4;                          // 0xd4
+    uint8_t padD8[0x2e4 - 0xd8];
+    uint8_t* slotsBegin;                // 0x2e4
+    uint8_t* slotsEnd;                  // 0x2e8
+};
+static void InitSlot(BoneSlot* s, float t) {
+    s->pos.x = s->desc->scaleX * t;
+    s->pos.y = s->desc->scaleY * t;
+    s->pos.z = s->desc->scaleZ * t;
+    s->pos2.x = s->pos.x;
+    s->pos2.y = s->pos.y;
+    s->pos2.z = s->pos.z;
+    s->tint.x = s->desc->tint.x;
+    s->tint.y = s->desc->tint.y;
+    s->tint.z = s->desc->tint.z;
+    s->tint.w = s->desc->tint.w;
+    s->zero.x = 0.0f;
+    s->zero.y = 0.0f;
+    s->zero.z = 0.0f;
+    s->flag38 = 1;
+}
+struct BodyVertex28 { int a; int b; float f[8]; };
+struct Matrix30 { float f[12]; };
+struct WiggleInstance {
+    const void* static_data;            // 0x00
+    bool enabled;                       // 0x04
+    bool force_override;                // 0x05
+    V3_s009b_e260 world_vel;                       // 0x08
+    V3_s009b_e260 world_pos;                       // 0x14
+    V3_s009b_e260 world_pos_old;                   // 0x20
+};
+struct Blob12 { int d[12]; };
+struct Copy108 {                        // 0x009befa0: tail unrolled
+    int i[4];                           // 0x00..0x0c
+    float a[28];                        // 0x10..0x7c
+    float b[5];                         // 0x80..0x90
+    int m;                              // 0x94
+    float c[13];                        // 0x98..0xc8
+    int j[3];                           // 0xcc..0xd4
+    int k[12];                          // 0xd8..0x104
+    int n;                              // 0x108
+    Copy108& operator=(const Copy108& o);
+};
+struct Copy108c {                       // 0x009be850: tail is one block (rep movsd)
+    int i[4];                           // 0x00..0x0c
+    float a[28];                        // 0x10..0x7c
+    float b[5];                         // 0x80..0x90
+    int m;                              // 0x94
+    float c[13];                        // 0x98..0xc8
+    int j[3];                           // 0xcc..0xd4
+    Blob12 k;                           // 0xd8..0x104
+    int n;                              // 0x108
+    Copy108c& operator=(const Copy108c& o);
+};
+struct Sub18c {                         // 0x18c..0x27f (0xf4), copied by 0x009b45b0
+    uint8_t d[0xf4];
+    void Init(const Sub18c& o);
+};
+struct Blob41 { int d[41]; };           // 0xa0..0x143
+struct Body2bc {
+    int i00, i04, i08, i0c;             // 0x00..0x0c
+    float f[10];                        // 0x10..0x34
+    uint8_t b38;                        // 0x38
+    uint8_t pad39[3];
+    float g[3];                         // 0x3c..0x44
+    int j[3];                           // 0x48..0x50
+    uint8_t b54, b55;                   // 0x54,0x55
+    uint8_t pad56[2];
+    float h[18];                        // 0x58..0x9c
+    Blob41 arr;                         // 0xa0..0x143
+    int i144;                           // 0x144
+    float p[17];                        // 0x148..0x188
+    Sub18c sub;                         // 0x18c..0x27f
+    float q[8];                         // 0x280..0x29c
+    uint8_t b2a0;                       // 0x2a0
+    uint8_t pad2a1[3];
+    float r[6];                         // 0x2a4..0x2b8
+
+    Body2bc(const Body2bc& o);
+};
+// ---- items of slice s009be260 end
+
+// ---- items of slice s009bf210 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct V3_s009b_f210 { float x, y, z; };
+struct Sub18cF {                        // same layout, different copy routine
+    uint8_t d[0xf4];
+    void Init(const Sub18cF& o);        // -> 0x009b45d0 (009bf210 flavour)
+    void Reset();                       // -> 0x009b2e50 (009bf680)
+};
+struct Body2bcF {
+    int i00, i04, i08, i0c;             // 0x00..0x0c
+    float f[10];                        // 0x10..0x34
+    uint8_t b38;                        // 0x38
+    uint8_t pad39[3];
+    float g[3];                         // 0x3c..0x44
+    float j3[3];                        // 0x48..0x50   (floats in this flavour)
+    uint8_t b54, b55;                   // 0x54,0x55
+    uint8_t pad56[2];
+    float h[18];                        // 0x58..0x9c
+    Blob41 arr;                         // 0xa0..0x143
+    int i144;                           // 0x144
+    float p[17];                        // 0x148..0x188
+    Sub18cF sub;                        // 0x18c..0x27f
+    float q[8];                         // 0x280..0x29c
+    uint8_t b2a0;                       // 0x2a0
+    uint8_t pad2a1[3];
+    float r[6];                         // 0x2a4..0x2b8
+
+    Body2bcF(const Body2bcF& o);
+};
+struct BodyAnimC {
+    uint8_t pad00[0x10];
+    V3_s009b_f210 a;                               // 0x10
+    V3_s009b_f210 b;                               // 0x1c
+    float c;                            // 0x28
+    V3_s009b_f210 d;                               // 0x2c
+    int unk38;                          // 0x38 (untouched)
+    V3_s009b_f210 e;                               // 0x3c
+    uint8_t pad48[0x10];                // 0x48..0x57 (untouched)
+    float f[18];                        // 0x58..0x9c
+    int g;                              // 0xa0
+    uint8_t padA4[0x148 - 0xa4];
+    V3_s009b_f210 h;                               // 0x148
+    float i;                            // 0x154
+    V3_s009b_f210 j;                               // 0x158
+    V3_s009b_f210 k;                               // 0x164
+    V3_s009b_f210 l;                               // 0x170
+    V3_s009b_f210 m;                               // 0x17c
+    float n;                            // 0x188
+    Sub18cF sub;                        // 0x18c..0x27f
+    V3_s009b_f210 o;                               // 0x280
+    V3_s009b_f210 p;                               // 0x28c
+    float q;                            // 0x298
+    uint8_t pad29c[8];                  // 0x29c..0x2a3
+    V3_s009b_f210 r;                               // 0x2a4
+    V3_s009b_f210 s;                               // 0x2b0
+    void Finalize();                    // -> 0x009b5a00
+
+    BodyAnimC();
+};
+struct WiggleElem {
+    uint8_t pad000[0x10c];
+    V3_s009b_f210 pos;                             // 0x10c
+    uint8_t pad118[0x150 - 0x118];
+    unsigned flags;                     // 0x150
+    uint8_t pad154[0x1f8 - 0x154];
+    int link1;                          // 0x1f8
+    uint8_t pad1fc[0x204 - 0x1fc];
+    int first;                          // 0x204  first dependent node
+    int count;                          // 0x208  number of dependents
+    uint8_t pad20c[0x430 - 0x20c];
+    int link2;                          // 0x430
+    float dist;                         // 0x434
+    float span;                         // 0x438
+    float gap;                          // 0x43c
+    int root;                           // 0x440  -1 none, -2 merged, -3 orphan
+    int other;                          // 0x444
+};
+struct WiggleAnim {
+    uint8_t pad000[0x384];
+    WiggleElem* beg;                    // 0x384
+    WiggleElem* end;                    // 0x388
+    uint8_t pad38c[0x3e4 - 0x38c];
+    float maxDist;                      // 0x3e4
+    float maxDist2;                     // 0x3e8
+
+    void Prep();                        // -> 0x009b4ce0
+    void Recompute();                   // -> 0x009bf860
+    float Weight(WiggleElem* e);        // -> 0x009b5200
+    void Walk();                        // -> 0x009bfa20
+};
+float g_eps = 1e-6f;                    // -> 0x014471fc
+void FUN_009b4ef0(void* p);             // -> 0x009b4ef0, cdecl pointer arg
+// ---- items of slice s009bf210 end
+
+// ---- items of slice s009c0f60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned char u8_s009c_0f60;
+typedef unsigned int u32_s009c_0f60;
+typedef unsigned short u16;
+void* operator_new(size_t n, const char* name, int flags, int align,
+                   const char* file, int line);
+void operator_delete__(void* p);
+#define EASTL_NEW(n) operator_new((n), "EASTL", 0, 0, \
+    "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1)
+#define EASTL_FREE(p) do { \
+    if ((p) != 0 && *(int*)((u8_s009c_0f60*)(p) - 4) != 0) operator_delete__(p); \
+} while (0)
+void  FUN_009b3c80(void* p);                       // destroy / move slot (0x30)
+void  FUN_009b47f0(void* dst, void* first, void* last);
+void* FUN_009b4290(void* first, void* last, void* dst);
+void  FUN_009b3ab0(void* p);                       // destroy / copy slot (0x3c)
+void  FUN_009b4870(void* dst, void* first, void* last);
+void* FUN_009b4350(void* first, void* last, void* dst);
+void  FUN_009b41e0(const void* value);             // copy to a temporary slot
+void* FUN_009b4910(void* first, void* last, void* dst);
+void  FUN_009b44e0(void* dst, unsigned n, const void* value, void* at);
+void  FUN_009b4ab0(void* dst, void* first, void* last);
+void  FUN_009b4490(void* first, void* end, const void* temp);
+void  FUN_009b4230(const void* value);
+void* FUN_009b4990(void* first, void* last, void* dst);
+void  FUN_009b4b10(void* dst, void* first, void* last);
+void  FUN_009bef30(void* dst, unsigned n, const void* value, void* at);
+void  FUN_009beec0(void* first, void* last, const void* src);
+void  FUN_009be850(const void* value);             // 0x10c copy ctor / assign
+void  FUN_009bedb0(void* out, void* first, void* last, void* dst);
+void  FUN_009bf600(void* dst, void* first, void* last);
+void  FUN_009c0d40(void* first, void* end, const void* temp);
+void  FUN_009bea50(const void* value);             // 700-byte copy ctor / assign
+void  FUN_009bedf0(void* out, void* first, void* last, void* dst);
+void  FUN_009bf640(void* dst, void* first, void* last);
+void  FUN_009c0d70(void* first, void* end, const void* temp);
+void* FUN_009bf500(void* first, void* last, void* dst);
+void* FUN_009bf580(void* first, void* last, void* dst);
+void  FUN_009c0aa0(void* dst, unsigned n, const void* value);
+void  FUN_009c0ad0(void* dst, unsigned n, const void* value);
+void  FUN_009b4310(void* dst, void* first, void* last);
+void  FUN_009b43f0(void* dst, void* first, void* last);
+void  RBTreeInsert(void* node, void* key, void* root, u32_s009c_0f60 reuse);
+void  FUN_00a22220(u32_s009c_0f60 n);                         // hash_table::Rehash
+static unsigned grow_count(unsigned have) {
+    return have == 0 ? 1 : have * 2;
+}
+struct Vec30 {
+    u8_s009c_0f60* begin;
+    u8_s009c_0f60* end;
+    u8_s009c_0f60* cap;
+
+    void Insert(u8_s009c_0f60* pos, u8_s009c_0f60* value);                            // 009c0f60
+    void InsertFill(u8_s009c_0f60* pos, unsigned n, const void* value);    // 009c11e0
+};
+struct Vec3c {
+    u8_s009c_0f60* begin;
+    u8_s009c_0f60* end;
+    u8_s009c_0f60* cap;
+
+    void Insert(u8_s009c_0f60* pos, u8_s009c_0f60* value);                            // 009c10c0
+};
+struct Vec44 {
+    u8_s009c_0f60* begin;
+    u8_s009c_0f60* end;
+    u8_s009c_0f60* cap;
+
+    void InsertFill(u8_s009c_0f60* pos, unsigned n, const void* value);    // 009c13a0
+};
+struct Vec10c {
+    u8_s009c_0f60* begin;
+    u8_s009c_0f60* end;
+    u8_s009c_0f60* cap;
+
+    void InsertFill(u8_s009c_0f60* pos, unsigned n, const void* value);    // 009c1790
+};
+struct Vec700 {
+    u8_s009c_0f60* begin;
+    u8_s009c_0f60* end;
+    u8_s009c_0f60* cap;
+
+    void InsertFill(u8_s009c_0f60* pos, unsigned n, const void* value);    // 009c1980
+};
+struct HTable {
+    u32_s009c_0f60 bucketCount;                    // 0x00
+    void* buckets;                      // 0x04
+    u32_s009c_0f60 pad08;                          // 0x08
+    u32_s009c_0f60 elementCount;                   // 0x0c
+    float loadFactor;                   // 0x10
+    float growthFactor;                 // 0x14
+    void* freeList;                     // 0x18
+
+    void DoInsertValue(void** out, void* key, u32_s009c_0f60* value, char reuse);   // 009c1560
+};
+extern "C" void fixed_pool_base_init(void* pool, void* begin, u32_s009c_0f60 size,
+                                     u32_s009c_0f60 nodeSize, u32_s009c_0f60 alignment, u32_s009c_0f60 flags);
+void* FUN_00921340(u32_s009c_0f60 n);
+u32_s009c_0f60   FUN_009213c0(u32_s009c_0f60 n);
+void* FUN_009c09c0(void* node, void* a, void* b, void* c, void* d, void* e,
+                   void* pool);
+struct BoolVec {
+    u8_s009c_0f60* begin;                          // 0x00
+    u8_s009c_0f60* end;                            // 0x04
+    u8_s009c_0f60* cap;                            // 0x08
+    u8_s009c_0f60* storage;                        // 0x0c  inline buffer
+    u8_s009c_0f60* storageEnd;                     // 0x10
+
+    void Insert(u8_s009c_0f60* pos, u8_s009c_0f60* first, u8_s009c_0f60* last);                  // 009c1b70
+};
+void* bool_insert_dispatch(void* at, void* first, long bytes);
+struct AnimNode {                       // 0x468 bytes
+    u8_s009c_0f60 pad000[0x150];
+    u32_s009c_0f60 flags;                          // 0x150
+    u8_s009c_0f60 pad154[0x440 - 0x154];
+    int root;                           // 0x440
+};
+struct PendingRec {                     // 8-byte queue element
+    AnimNode* node;
+    char flag;
+};
+struct PendingQueue {                   // vector<{AnimNode*, char}> at +0x3cc
+    PendingRec* begin;                  // 0x3cc
+    PendingRec* end;                    // 0x3d0
+    PendingRec* cap;                    // 0x3d4
+
+    void Push(const PendingRec& value) {
+        PendingRec* e = end;
+        if (e < cap) {
+            end = e + 1;
+            if (e != 0) *e = value;
+        } else {
+            Grow(e, &value);
+        }
+    }
+    void Grow(PendingRec* at, const PendingRec* value);   // -> 0x009a0c50
+};
+struct XformRec {                       // one inv_bone_rest_xforms entry
+    u8_s009c_0f60 d[0x3c];
+};
+struct BodyVec {                        // vector<creature_body_static_data>, 0x468
+    AnimNode* begin;
+    AnimNode* end;
+    AnimNode* cap;
+};
+struct XformVec {                       // vector<0x3c-byte record>
+    XformRec* begin;
+    XformRec* end;
+    XformRec* cap;
+};
+struct Rgb3 {                           // one skin-colour triple
+    float x1, x2, x3;
+};
+struct CreatureStaticData {
+    u16   name[0x104];                          // 0x000
+    char  filename[0x108];                      // 0x208
+    u32_s009c_0f60   uid[2];                               // 0x310
+    u32_s009c_0f60   type_id;                              // 0x318
+    u32_s009c_0f60   group_id;                             // 0x31c
+    u32_s009c_0f60   instance_id;                          // 0x320
+    Rgb3  skin_colors[3];                       // 0x324
+    u8_s009c_0f60    pad348[0x34c - 0x348];
+    u8_s009c_0f60    BranchPredicates;                     // 0x34c
+    u8_s009c_0f60    pad34d[0x350 - 0x34d];
+    u32_s009c_0f60   f350;                                 // 0x350
+    u32_s009c_0f60   f354;                                 // 0x354
+    u8_s009c_0f60    pad358[0x374 - 0x358];
+    float f374;                                 // 0x374
+    int   num_bones_with_mesh_parts;            // 0x378
+    u8_s009c_0f60    pad37c[0x380 - 0x37c];
+    u8_s009c_0f60    f380;                                 // 0x380
+    u8_s009c_0f60    pad381[0x384 - 0x381];
+    BodyVec Bodies;                             // 0x384  vector<creature_body_static_data>
+    u8_s009c_0f60    pad390[0x3ac - 0x390];
+    int   mMaxStraightLegLength_Scalable;       // 0x3ac  stored as 0xffffffff
+    int   mGear;                                // 0x3b0
+    XformVec inv_bone_rest_xforms;              // 0x3b4  vector<0x3c-byte records>
+    u8_s009c_0f60    pad3c0[0x3c8 - 0x3c0];
+    u32_s009c_0f60   f3c8;                                 // 0x3c8
+    PendingQueue pending;                       // 0x3cc  vector<{AnimNode*, char}>
+    u8_s009c_0f60    pad3d8[0x3e0 - 0x3d8];
+    u32_s009c_0f60   f3e0;                                 // 0x3e0
+    u8_s009c_0f60    pad3e4[0x3ec - 0x3e4];
+    float f3ec;                                 // 0x3ec  defaults to 4.0f
+    u32_s009c_0f60   f3f0;                                 // 0x3f0
+    u8_s009c_0f60    pad3f4[0x3f5 - 0x3f4];
+    u8_s009c_0f60    f3f5;                                 // 0x3f5
+
+    void CollectFlagged();                                          // 009c1d30
+    void Clear(int unused);                                         // 009c1dc0
+};
+// ---- items of slice s009c0f60 end
+
+// ---- items of slice s009c2ef0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef unsigned char u8_s009c_2ef0;
+typedef unsigned int u32_s009c_2ef0;
+void FUN_009bf540(void* newEnd, void* first, void* last);      // 0x10c range destroy
+void FUN_009bf5c0(void* newEnd, void* first, void* last);      // 700-byte range destroy
+struct V3_s009c_2ef0 {                             // a checkerlib vector_3
+    float x1, x2, x3;
+};
+struct PadFirst {                       // 0x1c bytes
+    float a, b, c, d, e, f, g;
+};
+struct PadLast {                        // 0x84 bytes
+    float a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w,
+          x, y, z, aa, ab, ac, ad, ae, af, ag;
+};
+struct IkConstraint {                   // 0x10c bytes
+    PadFirst p0;
+    V3_s009c_2ef0 v0, v1, v2, v3, v4, v5, v6, v7, v8;   // 0x1c .. 0x88 -- reset to zero
+    PadLast p1;
+};
+struct IKVec {                          // vector<ik_constraint>
+    IkConstraint* begin;                // 0x00
+    IkConstraint* end;                  // 0x04
+    IkConstraint* cap;                  // 0x08
+
+    void InsertFill(IkConstraint* pos, unsigned n, const IkConstraint* value);  // 0x009c1790
+    void Resize(unsigned n);            // 009c2ef0
+};
+struct F25 { float a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t,
+                   u, v, w, x, y; };   // 100 bytes
+struct BodyAnimC_s009c_2ef0 {                      // 0x2bc = 700 bytes; ctor 0x009bf680
+    F25 p0, p1, p2, p3, p4, p5, p6;
+
+    BodyAnimC_s009c_2ef0* Ctor();                  // 0x009bf680 -- returns this
+};
+struct WiggleVec {
+    BodyAnimC_s009c_2ef0* begin;                   // 0x00
+    BodyAnimC_s009c_2ef0* end;                     // 0x04
+    BodyAnimC_s009c_2ef0* cap;                     // 0x08
+
+    void InsertFill(BodyAnimC_s009c_2ef0* pos, unsigned n, const BodyAnimC_s009c_2ef0* value);  // 0x009c1980
+    void Resize(unsigned n);            // 009c3040
+};
+struct BodyNode {                       // 0x468-byte creature_body_static_data
+    u8_s009c_2ef0 pad000[0x204];
+    unsigned prevCount;                 // 0x204
+    unsigned count;                     // 0x208
+    int      total;                     // 0x20c
+    u8_s009c_2ef0 pad210[0x468 - 0x210];
+};
+struct AnimOwner {
+    u8_s009c_2ef0 pad000[0x384];
+    BodyNode* bodies;                   // 0x384
+};
+struct WordVec {                        // the dword-backed bit vector
+    u32_s009c_2ef0* begin;                         // 0x00
+    u32_s009c_2ef0* end;                           // 0x04
+    u32_s009c_2ef0* cap;                           // 0x08
+
+    void Insert(u32_s009c_2ef0* pos, u32_s009c_2ef0* first, u32_s009c_2ef0* last, void* owner);  // 0x009c1b70
+};
+int FUN_009c3150(AnimOwner* a, WordVec* v, u32_s009c_2ef0** base, unsigned idx);
+struct FixedVec {
+    void*     begin;                    // 0x00
+    void*     end;                      // 0x04
+    void*     cap;                      // 0x08
+    void*     pad0c;                    // 0x0c
+    u8_s009c_2ef0*       buf;                      // 0x10
+    void*     pad14;                    // 0x14
+    u8_s009c_2ef0        storage[0x3fc];           // 0x18
+
+    FixedVec* Init(void* a, void* b);   // 009c3210 -- __thiscall, ret 8
+    void      Setup(void* a, void* b);  // 0x009c30f0
+};
+struct PhaseGroup {                     // 0x104 bytes
+    u8_s009c_2ef0 pad00[0x4c];
+    void* subBegin;                     // 0x4c
+    void* subEnd;                       // 0x50
+    u8_s009c_2ef0 pad54[0xbc - 0x54];
+    void* block;                        // 0xbc
+    u8_s009c_2ef0 padc0[0x104 - 0xc0];
+};
+struct PhaseGroupVec {
+    void* begin;                        // 0x00
+    void* end;                          // 0x04
+    void* cap;                          // 0x08
+
+    void DestroyValues(PhaseGroup* first, PhaseGroup* last);   // 009c3240
+};
+// ---- items of slice s009c2ef0 end
+
+// ---- items of slice s009c56c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct XBodySub { void Construct(); };                        // 0x009e3ec0
+struct XGaitSub { void Construct(void* a, void* b); };        // 0x009c1630
+struct creature_instance_data {
+    char pad00[0x14];
+    int  flags14;                       // +0x14
+    char pad18[0x17b0 - 0x18];
+    void Clear(bool);                   // 0x009c4d40
+    creature_instance_data();
+};
+// ---- items of slice s009c56c0 end
 
 // @ 0x009b3180
 void __fastcall FUN_009b3180(void* self)
@@ -1658,6 +3130,1088 @@ Transform30& Transform30::operator=(const Transform30& src)
 // @ 0x009b3cd0
 void __fastcall FUN_009b3cd0(void* self)
 { (void)self; }
+
+// @ 0x009b3e40
+nSPCreatureAnim::creature_body_static_data_s009b_3e40& nSPCreatureAnim::creature_body_static_data_s009b_3e40::operator=(const nSPCreatureAnim::creature_body_static_data_s009b_3e40& o)
+{
+    memcpy(name, o.name, 0x104);
+    instance_id = o.instance_id;
+    group_id = o.group_id;
+    f10c[0] = o.f10c[0]; f10c[1] = o.f10c[1]; f10c[2] = o.f10c[2]; f10c[3] = o.f10c[3];
+    f10c[4] = o.f10c[4]; f10c[5] = o.f10c[5]; f10c[6] = o.f10c[6]; f10c[7] = o.f10c[7];
+    f10c[8] = o.f10c[8]; f10c[9] = o.f10c[9]; f10c[10] = o.f10c[10]; f10c[11] = o.f10c[11];
+    f10c[12] = o.f10c[12]; f10c[13] = o.f10c[13]; f10c[14] = o.f10c[14]; f10c[15] = o.f10c[15];
+    f10c[16] = o.f10c[16];
+    memcpy(w150, o.w150, 0x2a * 4);
+    w1f8[0] = o.w1f8[0]; w1f8[1] = o.w1f8[1]; w1f8[2] = o.w1f8[2]; w1f8[3] = o.w1f8[3];
+    w1f8[4] = o.w1f8[4]; w1f8[5] = o.w1f8[5]; w1f8[6] = o.w1f8[6]; w1f8[7] = o.w1f8[7];
+    w1f8[8] = o.w1f8[8]; w1f8[9] = o.w1f8[9];
+    memcpy(w220, o.w220, 0x41 * 4);
+    f324[0] = o.f324[0]; f324[1] = o.f324[1]; f324[2] = o.f324[2];
+    f324[3] = o.f324[3]; f324[4] = o.f324[4]; f324[5] = o.f324[5];
+    u33c = o.u33c;
+    b340 = o.b340;
+    f344[0] = o.f344[0]; f344[1] = o.f344[1]; f344[2] = o.f344[2]; f344[3] = o.f344[3];
+    f344[4] = o.f344[4]; f344[5] = o.f344[5]; f344[6] = o.f344[6]; f344[7] = o.f344[7];
+    f344[8] = o.f344[8]; f344[9] = o.f344[9]; f344[10] = o.f344[10];
+    b370 = o.b370;
+    b371 = o.b371;
+    f374[0] = o.f374[0]; f374[1] = o.f374[1]; f374[2] = o.f374[2];
+    memcpy(w380, o.w380, 0x29 * 4);
+    u424 = o.u424;
+    u428 = o.u428;
+    b42c = o.b42c;
+    u430 = o.u430;
+    f434[0] = o.f434[0]; f434[1] = o.f434[1]; f434[2] = o.f434[2];
+    u440 = o.u440;
+    u444 = o.u444;
+    f448[0] = o.f448[0]; f448[1] = o.f448[1]; f448[2] = o.f448[2]; f448[3] = o.f448[3];
+    f448[4] = o.f448[4]; f448[5] = o.f448[5]; f448[6] = o.f448[6];
+    b464 = o.b464;
+    return *this;
+}
+
+// @ 0x009b41e0
+nSPCreatureAnim::xform12& nSPCreatureAnim::xform12::operator=(const nSPCreatureAnim::xform12& o)
+{
+    m[0] = o.m[0]; m[3] = o.m[3]; m[6] = o.m[6];
+    m[1] = o.m[1]; m[4] = o.m[4]; m[7] = o.m[7];
+    m[2] = o.m[2]; m[5] = o.m[5]; m[8] = o.m[8];
+    v[0] = o.v[0];
+    v[1] = o.v[1];
+    v[2] = o.v[2];
+    return *this;
+}
+
+// @ 0x009b4230
+nSPCreatureAnim::wiggle_instance_data_s009b_3e40& nSPCreatureAnim::wiggle_instance_data_s009b_3e40::operator=(const nSPCreatureAnim::wiggle_instance_data_s009b_3e40& o)
+{
+    wiggle = o.wiggle;
+    flag4 = o.flag4;
+    flag5 = o.flag5;
+    f[0] = o.f[0]; f[1] = o.f[1]; f[2] = o.f[2]; f[3] = o.f[3]; f[4] = o.f[4];
+    f[5] = o.f[5]; f[6] = o.f[6]; f[7] = o.f[7]; f[8] = o.f[8];
+    return *this;
+}
+
+// @ 0x009b4290
+nSPCreatureAnim::Transform30_s009b_3e40* CopyTransform30Guarded(nSPCreatureAnim::Transform30_s009b_3e40* first, nSPCreatureAnim::Transform30_s009b_3e40* last, nSPCreatureAnim::Transform30_s009b_3e40* result)
+{
+    for (; first != last; ++first, ++result)
+        if (result) {
+            result->a = first->a;
+            result->b = first->b;
+            float* d = result->f; float* s = first->f;
+            d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4];
+            d[5] = s[5]; d[6] = s[6]; d[7] = s[7]; d[8] = s[8]; d[9] = s[9];
+        }
+    return result;
+}
+
+// @ 0x009b4350
+nSPCreatureAnim::wiggle_static_data_s009b_3e40* CopyWigglesGuarded(nSPCreatureAnim::wiggle_static_data_s009b_3e40* first, nSPCreatureAnim::wiggle_static_data_s009b_3e40* last, nSPCreatureAnim::wiggle_static_data_s009b_3e40* result)
+{
+    for (; first != last; ++first, ++result)
+        if (result) {
+            result->a0 = first->a0; result->a1 = first->a1;
+            result->a2 = first->a2; result->a3 = first->a3;
+            float* d = result->f; float* s = first->f;
+            d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4];
+            d[5] = s[5]; d[6] = s[6]; d[7] = s[7]; d[8] = s[8]; d[9] = s[9];
+            result->c = first->c;
+        }
+    return result;
+}
+
+// @ 0x009b43f0
+nSPCreatureAnim::wiggle_static_data_s009b_3e40* CopyWiggles(nSPCreatureAnim::wiggle_static_data_s009b_3e40* first, nSPCreatureAnim::wiggle_static_data_s009b_3e40* last, nSPCreatureAnim::wiggle_static_data_s009b_3e40* result)
+{
+    for (; first != last; ++first, ++result) {
+        result->a0 = first->a0; result->a1 = first->a1;
+        result->a2 = first->a2; result->a3 = first->a3;
+        float* d = result->f; float* s = first->f;
+        d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4];
+        d[5] = s[5]; d[6] = s[6]; d[7] = s[7]; d[8] = s[8]; d[9] = s[9];
+        result->c = first->c;
+    }
+    return result;
+}
+
+// @ 0x009b4490
+void FillBoneXforms(nSPCreatureAnim::bone_xform_s009b_3e40* first, nSPCreatureAnim::bone_xform_s009b_3e40* last, const nSPCreatureAnim::bone_xform_s009b_3e40* value)
+{
+    for (; first != last; ++first)
+        *first = *value;
+}
+
+// @ 0x009b44e0
+void FillXform12(nSPCreatureAnim::xform12* dest, uint32_t n, const nSPCreatureAnim::xform12* value)
+{
+    for (; n != 0; --n, ++dest)
+        if (dest) *dest = *value;
+}
+
+// @ 0x009b4550
+nSPCreatureAnim::bone_xform_s009b_3e40* CopyBoneXforms(nSPCreatureAnim::bone_xform_s009b_3e40* first, nSPCreatureAnim::bone_xform_s009b_3e40* last, nSPCreatureAnim::bone_xform_s009b_3e40* result)
+{
+    for (; first != last; ++first, ++result)
+        *result = *first;
+    return result;
+}
+
+// @ 0x009b45b0
+nSPCreatureAnim::blob_f4& nSPCreatureAnim::blob_f4::operator=(const nSPCreatureAnim::blob_f4& o)
+{
+    u00 = o.u00;
+    f04[0] = o.f04[0]; f04[1] = o.f04[1]; f04[2] = o.f04[2]; f04[3] = o.f04[3];
+    f04[4] = o.f04[4]; f04[5] = o.f04[5]; f04[6] = o.f04[6];
+    u20 = o.u20;
+    f24[0] = o.f24[0]; f24[1] = o.f24[1]; f24[2] = o.f24[2]; f24[3] = o.f24[3];
+    f24[4] = o.f24[4]; f24[5] = o.f24[5]; f24[6] = o.f24[6]; f24[7] = o.f24[7];
+    f24[8] = o.f24[8]; f24[9] = o.f24[9]; f24[10] = o.f24[10]; f24[11] = o.f24[11];
+    f24[12] = o.f24[12]; f24[13] = o.f24[13]; f24[14] = o.f24[14]; f24[15] = o.f24[15];
+    f24[16] = o.f24[16]; f24[17] = o.f24[17]; f24[18] = o.f24[18];
+    b70 = o.b70;
+    b71 = o.b71;
+    f74[0] = o.f74[0]; f74[1] = o.f74[1]; f74[2] = o.f74[2];
+    f80[0] = o.f80[0]; f80[1] = o.f80[1]; f80[2] = o.f80[2];
+    f80[3] = o.f80[3]; f80[4] = o.f80[4]; f80[5] = o.f80[5];
+    u98[0] = o.u98[0]; u98[1] = o.u98[1]; u98[2] = o.u98[2]; u98[3] = o.u98[3];
+    ba8 = o.ba8;
+    ba9 = o.ba9;
+    uac = o.uac;
+    fb0 = o.fb0;
+    ub4 = o.ub4;
+    ub8 = o.ub8;
+    fbc[0] = o.fbc[0]; fbc[1] = o.fbc[1]; fbc[2] = o.fbc[2]; fbc[3] = o.fbc[3];
+    fbc[4] = o.fbc[4]; fbc[5] = o.fbc[5]; fbc[6] = o.fbc[6]; fbc[7] = o.fbc[7];
+    fbc[8] = o.fbc[8]; fbc[9] = o.fbc[9]; fbc[10] = o.fbc[10]; fbc[11] = o.fbc[11];
+    fbc[12] = o.fbc[12]; fbc[13] = o.fbc[13];
+    return *this;
+}
+
+// @ 0x009b47f0
+nSPCreatureAnim::Transform30_s009b_3e40* CopyTransform30Backward(nSPCreatureAnim::Transform30_s009b_3e40* first, nSPCreatureAnim::Transform30_s009b_3e40* last, nSPCreatureAnim::Transform30_s009b_3e40* result)
+{
+    while (last != first) {
+        --last;
+        --result;
+        result->a = last->a;
+        result->b = last->b;
+        float* d = result->f; float* s = last->f;
+        d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4];
+        d[5] = s[5]; d[6] = s[6]; d[7] = s[7]; d[8] = s[8]; d[9] = s[9];
+    }
+    return result;
+}
+
+// @ 0x009b4870
+nSPCreatureAnim::wiggle_static_data_s009b_3e40* CopyWigglesBackward(nSPCreatureAnim::wiggle_static_data_s009b_3e40* first, nSPCreatureAnim::wiggle_static_data_s009b_3e40* last, nSPCreatureAnim::wiggle_static_data_s009b_3e40* result)
+{
+    while (last != first) {
+        --last;
+        --result;
+        result->a0 = last->a0; result->a1 = last->a1;
+        result->a2 = last->a2; result->a3 = last->a3;
+        float* d = result->f; float* s = last->f;
+        d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4];
+        d[5] = s[5]; d[6] = s[6]; d[7] = s[7]; d[8] = s[8]; d[9] = s[9];
+        result->c = last->c;
+    }
+    return result;
+}
+
+// @ 0x009b4910
+void CopyXform12Guarded(nSPCreatureAnim::xform12* first, nSPCreatureAnim::xform12* last, nSPCreatureAnim::xform12* result)
+{
+    for (; first != last; ++first, ++result)
+        if (result) *result = *first;
+}
+
+// @ 0x009b4990
+nSPCreatureAnim::wiggle_instance_data_s009b_3e40* CopyWiggleInstancesGuarded(nSPCreatureAnim::wiggle_instance_data_s009b_3e40* first, nSPCreatureAnim::wiggle_instance_data_s009b_3e40* last, nSPCreatureAnim::wiggle_instance_data_s009b_3e40* result)
+{
+    for (; first != last; ++first, ++result)
+        if (result) {
+            result->wiggle = first->wiggle;
+            result->flag4 = first->flag4;
+            result->flag5 = first->flag5;
+            float* d = result->f; float* s = first->f;
+            d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4];
+            d[5] = s[5]; d[6] = s[6]; d[7] = s[7]; d[8] = s[8];
+        }
+    return result;
+}
+
+// @ 0x009b4a20
+nSPCreatureAnim::wiggle_instance_data_s009b_3e40* CopyWiggleInstances(nSPCreatureAnim::wiggle_instance_data_s009b_3e40* first, nSPCreatureAnim::wiggle_instance_data_s009b_3e40* last, nSPCreatureAnim::wiggle_instance_data_s009b_3e40* result)
+{
+    for (; first != last; ++first, ++result) {
+        result->wiggle = first->wiggle;
+        result->flag4 = first->flag4;
+        result->flag5 = first->flag5;
+        float* d = result->f; float* s = first->f;
+        d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4];
+        d[5] = s[5]; d[6] = s[6]; d[7] = s[7]; d[8] = s[8];
+    }
+    return result;
+}
+
+// @ 0x009b4ab0
+nSPCreatureAnim::bone_xform_s009b_3e40* CopyBoneXformsBackward(nSPCreatureAnim::bone_xform_s009b_3e40* first, nSPCreatureAnim::bone_xform_s009b_3e40* last, nSPCreatureAnim::bone_xform_s009b_3e40* result)
+{
+    while (last != first) {
+        --last;
+        --result;
+        *result = *last;
+    }
+    return result;
+}
+
+// @ 0x009b4b10
+nSPCreatureAnim::wiggle_instance_data_s009b_3e40* CopyWiggleInstancesBackward(nSPCreatureAnim::wiggle_instance_data_s009b_3e40* first, nSPCreatureAnim::wiggle_instance_data_s009b_3e40* last, nSPCreatureAnim::wiggle_instance_data_s009b_3e40* result)
+{
+    while (last != first) {
+        --last;
+        --result;
+        result->wiggle = last->wiggle;
+        result->flag4 = last->flag4;
+        result->flag5 = last->flag5;
+        float* d = result->f; float* s = last->f;
+        d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3]; d[4] = s[4];
+        d[5] = s[5]; d[6] = s[6]; d[7] = s[7]; d[8] = s[8];
+    }
+    return result;
+}
+
+// @ 0x009b4ba0
+void FUN_009b4ba0(float* out, const float* v, const float* fallback)
+{
+    float nvec[3];
+    float len;
+    NormalizeVec3(nvec, v, &len);
+    float angle;
+    if (len < 1e-6f) {
+        angle = 0.0f;
+        if (fallback == 0) {
+            float axis[3] = { 1.0f, 0.0f, 0.0f };
+            fallback = axis;
+        }
+        nvec[0] = fallback[0];
+        nvec[1] = fallback[1];
+        nvec[2] = fallback[2];
+    } else if (len < 0.01f) {
+        if (v[3] >= 0.0f)
+            angle = len * 2.0f;
+        else
+            angle = len * -2.0f;
+    } else {
+        float x = v[3];
+        const float one = 1.0f;
+        if (-1.0f < x) {
+            if (one < x) x = one;
+        } else {
+            x = -1.0f;
+        }
+        angle = acosf(x) * 2.0f;
+        if (angle > 3.1415927f)
+            angle = angle - 6.2831855f;
+    }
+    out[0] = nvec[0];
+    out[1] = nvec[1];
+    out[2] = nvec[2];
+    out[3] = angle;
+}
+
+// @ 0x009b4ce0
+void nSPCreatureAnim::creature_static_data_s009b_3e40::FUN_009b4ce0()
+{
+    int n = (int)(((int)((char*)BodiesEnd - (char*)Bodies)) / 0x468);
+    for (int i = 0; i < n; ++i) {
+        nSPCreatureAnim::creature_body_static_data_s009b_3e40* b = Bodies + i;
+        if (b != 0) {
+            if ((b->w150[0] & 8) != 0) {
+                b->u430 = b->w1f8[0];
+            } else {
+                uint32_t idx = b->w1f8[1];
+                uint32_t cur;
+                int cnt = 0;
+                do {
+                    cur = idx;
+                    ++cnt;
+                    if (cur == 0 || (Bodies[cur].w150[0] & 8) != 0) break;
+                    idx = Bodies[cur].w1f8[1];
+                } while (cnt < 0xff);
+                b->u430 = cur;
+            }
+        }
+    }
+}
+
+// @ 0x009b4d90
+uint32_t FUN_009b4d90(nSPCreatureAnim::creature_static_data_s009b_3e40* self, nSPCreatureAnim::creature_body_static_data_s009b_3e40* b)
+{
+    nSPCreatureAnim::creature_body_static_data_s009b_3e40* p = self->Bodies + self->u440;
+    nSPCreatureAnim::creature_body_static_data_s009b_3e40* parent = (nSPCreatureAnim::creature_body_static_data_s009b_3e40*)p->w1f8[7];   // +0x214
+    int n = 0;
+    nSPCreatureAnim::creature_body_static_data_s009b_3e40* c = parent;
+    if (c != b) {
+        do {
+            c = (nSPCreatureAnim::creature_body_static_data_s009b_3e40*)c->w1f8[7];
+            ++n;
+        } while (c != b);
+        if (n == 0)
+            return b->w1f8[0];
+        if (n == 1)
+            return p->w1f8[1];
+        int k = n / 2 + 1;
+        c = parent;
+        for (;;) {
+            if (c == b) return 0;
+            --k;
+            if (k == 0) break;
+            c = (nSPCreatureAnim::creature_body_static_data_s009b_3e40*)c->w1f8[7];
+        }
+        return c->w1f8[0];
+    }
+    return b->w1f8[0];
+}
+
+// @ 0x009b4e00
+void Bone_ComputeSegment(Solver* self, Solver* other)
+{
+    float* a = (float*)FUN_0099c1a0((void*)0, (char*)self + 0x118, (char*)self + 0x344);
+    float ax = a[0] + self->mOffsetX;
+    float ay = a[1] + self->mOffsetY;
+    float az = a[2] + self->mOffsetZ;
+    float* b = (float*)FUN_0099c1a0((void*)0, (char*)other + 0x118, (char*)other + 0x344);
+    float bx = b[0] + other->mOffsetX;
+    float by = b[1] + other->mOffsetY;
+    float bz = b[2] + other->mOffsetZ;
+    self->mPosX = bx - ax;
+    self->mPosY = by - ay;
+    self->mPosZ = bz - az;
+}
+
+// @ 0x009b4ef0
+void Solver_UpdateSegment(Solver* self, void* unk, Solver* a)
+{
+    int n = FUN_009b4d90();
+    int i = (int)(char*)a->mBones + 0x444;
+    (void)i;
+}
+
+// @ 0x009b5080
+float nSPCreatureAnim::Solver::DistX(int i0, int i1, float k)
+{
+    Solver* self = this;
+    Bone* a = (Bone*)((char*)self->mBones + i0 * 0x468);
+    Bone* b = (Bone*)((char*)self->mBones + i1 * 0x468);
+    float d = a->mOffsetZ - b->mOffsetZ;
+    float dx = a->mOffsetX - b->mOffsetX;
+    return k * (dx * dx * k);
+}
+
+// @ 0x009b5100
+float nSPCreatureAnim::Solver::DistY(int i0, int i1, float k)
+{
+    Solver* self = this;
+    Bone* a = (Bone*)((char*)self->mBones + i0 * 0x468);
+    Bone* b = (Bone*)((char*)self->mBones + i1 * 0x468);
+    float d = a->mOffsetZ - b->mOffsetZ;
+    float dy = a->mOffsetY - b->mOffsetY;
+    return k * (dy * dy * k);
+}
+
+// @ 0x009b5180
+float nSPCreatureAnim::Solver::SqX(float k, int i0, int i1)
+{
+    Solver* self = this;
+    Bone* a = (Bone*)((char*)self->mBones + i0 * 0x468);
+    Bone* b = (Bone*)((char*)self->mBones + i1 * 0x468);
+    float d = a->mOffsetX - b->mOffsetX;
+    return k * (d * d * k);
+}
+
+// @ 0x009b51c0
+float nSPCreatureAnim::Solver::SqY(float k, int i0, int i1)
+{
+    Solver* self = this;
+    Bone* a = (Bone*)((char*)self->mBones + i0 * 0x468);
+    Bone* b = (Bone*)((char*)self->mBones + i1 * 0x468);
+    float d = a->mOffsetY - b->mOffsetY;
+    return k * (d * d * k);
+}
+
+// @ 0x009b5200
+float nSPCreatureAnim::Solver::SegmentLengthSum(Bone* bone)
+{
+    Solver* self = this;
+    float accum = 0.0f;
+    float best = 0.01f;
+    if (bone->mPrevIndex != bone->mChildFirst) {
+        float* b0 = (float*)((char*)self->mBones + bone->mPrevIndex * 0x468 + 0x344);
+        accum = sqrtf(fsq(b0[0]) + fsq(b0[1]) + fsq(b0[2]));
+        int prev = bone->mPrevIndex;
+        int cur = bone->mNextIndex;
+        while (cur != bone->mChildFirst) {
+            float* p0 = (float*)((char*)self->mBones + cur * 0x468 + 0x344);
+            float* p1 = (float*)((char*)self->mBones + prev * 0x468 + 0x350);
+            float dx = p0[0] - p1[0];
+            float dy = p0[1] - p1[1];
+            float dz = p0[2] - p1[2];
+            accum = sqrtf(fsq(dx) + fsq(dy) + fsq(dz)) + accum;
+            prev = cur;
+            cur = *(int*)((char*)self->mBones + cur * 0x468 + 0x1fc);
+        }
+        float* p1 = (float*)((char*)self->mBones + prev * 0x468 + 0x350);
+        accum = sqrtf(fsq(p1[0]) + fsq(p1[1]) + fsq(p1[2])) + accum;
+        if (0.01f < accum)
+            return accum;
+    }
+    (void)best;
+    return best;
+}
+
+// @ 0x009b5360
+float nSPCreatureAnim::Solver::AverageSegment()
+{
+    Solver* self = this;
+    int count = (int)((self->mBonesEnd - self->mBones) / 0x468);
+    float accum = 0.0f;
+    int used = 0;
+    if (count != 0) {
+        Bone* b = self->mBones;
+        do {
+            if ((b->mFlags154 & 4) != 0) {
+                accum = SegmentLengthSum2(b) + accum;
+                ++used;
+            }
+            b = (Bone*)((char*)b + 0x468);
+        } while (--count != 0);
+        if (used != 0)
+            accum = accum / (float)used;
+    }
+    return accum;
+}
+
+// @ 0x009b53f0
+void Bone_AddScaledVectors(float* out, Bone* b, float k)
+{
+    float f4 = b->mPosX * k;
+    if ((b->mFlags150 & 8) != 0) {
+        float f1 = b->mParentOffX;
+        float f2 = b->mParentOffY;
+        float f3 = b->mParentOffZ;
+        float f5 = b->mPosY;
+        out[0] = f4 - f1 * k;
+        float f6 = b->mPosZ;
+        out[1] = f5 * k - f2 * k;
+        out[2] = f6 * k - f3 * k;
+        return;
+    }
+    out[0] = f4;
+    out[1] = b->mPosY * k;
+    out[2] = b->mPosZ * k;
+}
+
+// @ 0x009b54a0
+void nSPCreatureAnim::Solver::BuildOrderPairs()
+{
+    Solver* self = this;
+    Bone* b = (Bone*)((char*)self->mBones + self->mRootIndex * 0x468);
+    int idx = 0;
+    while (b->mPrevIndex != 0) {
+        Bone* cur = b;
+        *(Bone**)((char*)self->mOrderPairs + idx * 8) = cur;
+        *(int*)((char*)self->mOrderPairs + idx * 8 + 4) = 0;
+        b = (Bone*)((char*)self->mBones + cur->mNextIndex * 0x468);
+        ++idx;
+    }
+    idx = idx * 4;
+    for (;;) {
+        *(Bone**)((char*)self->mOrderPairs + idx * 2) = b;
+        unsigned int n = (unsigned int)b->mChildCount;
+        Bone* c = (Bone*)((char*)self->mBones + b->mChildFirst * 0x468);
+        int found = 0;
+        if (n != 0) {
+            do {
+                if ((c->mFlags150 & 8) != 0 && c != b)
+                    break;
+                ++found;
+                c = (Bone*)((char*)c + 0x468);
+            } while ((unsigned int)found < n);
+        }
+        if ((unsigned int)found == n || c == 0)
+            return;
+        b = c;
+        idx += 4;
+    }
+}
+
+// @ 0x009b5580
+void nSPCreatureAnim::Solver::MarkDeepBones()
+{
+    Solver* self = this;
+    float f = (self->mSizeA / self->mSizeB - 1.0f) * g_1550d48 + g_1550d44;
+    if (f <= g_1550d40)
+        f = g_1550d40;
+    if (g_1550d3c < f)
+        f = g_1550d3c;
+    float limit = f * self->mSizeB;
+    unsigned int count = (unsigned int)((int)((char*)self->mOrderPairsEnd - (char*)self->mOrderPairs) >> 3);
+    unsigned int i = 0;
+    if (3 < (int)count) {
+        int* p = self->mOrderPairs;
+        do {
+            Bone* b0 = *(Bone**)((char*)p + 0);
+            if (b0->mOffsetZ - b0->mParentOffZ < limit) {
+                *(unsigned char*)((char*)p + 4) = 1;
+                self->mFlaggedCount = self->mFlaggedCount + 1;
+            }
+            Bone* b1 = *(Bone**)((char*)p + 8);
+            if (b1->mOffsetZ - b1->mParentOffZ < limit) {
+                *(unsigned char*)((char*)p + 12) = 1;
+                self->mFlaggedCount = self->mFlaggedCount + 1;
+            }
+            Bone* b2 = *(Bone**)((char*)p + 16);
+            if (b2->mOffsetZ - b2->mParentOffZ < limit) {
+                *(unsigned char*)((char*)p + 20) = 1;
+                self->mFlaggedCount = self->mFlaggedCount + 1;
+            }
+            Bone* b3 = *(Bone**)((char*)p + 24);
+            if (b3->mOffsetZ - b3->mParentOffZ < limit) {
+                *(unsigned char*)((char*)p + 28) = 1;
+                self->mFlaggedCount = self->mFlaggedCount + 1;
+            }
+            p = (int*)((char*)p + 32);
+            i = i + 4;
+        } while (i < count - 3);
+    }
+    for (; i < count; ++i) {
+        Bone* b0 = *(Bone**)((char*)self->mOrderPairs + i * 8);
+        if (b0->mOffsetZ - b0->mParentOffZ < limit) {
+            *(unsigned char*)((char*)self->mOrderPairs + i * 8 + 4) = 1;
+            self->mFlaggedCount = self->mFlaggedCount + 1;
+        }
+    }
+}
+
+// @ 0x009b5700
+int nSPCreatureAnim::Solver::IsDeeperRatio(Bone** a, Bone** b)
+{
+    Solver* self = this;
+    /* Both epsilons are the global 0x014471fc (1e-06f); when the measured value
+       is at least the epsilon the address of the local is used instead. */
+    float denom = self->mSizeA;
+    float* pDenom = (float*)&g_14471fc;
+    if (!(denom < *pDenom))
+        pDenom = &denom;
+    int result = 1;
+    if (a != b) {
+        Bone* ba = *a;
+        Bone* bb = *b;
+        float dx = ba->mOffsetX - bb->mOffsetX;
+        float dy = ba->mOffsetY - bb->mOffsetY;
+        float absdz = fabsf(ba->mOffsetZ - bb->mOffsetZ);
+        float len = sqrtf(fsq(dy) + fsq(dx));
+        float* pLen = (float*)&g_14471fc;
+        if (!(len < *pLen))
+            pLen = &len;
+        if (self->mSizeB / *pDenom < absdz / *pLen)
+            return 1;
+        result = 0;
+    }
+    return result;
+}
+
+// @ 0x009b57b0
+int nSPCreatureAnim::Solver::FindMinIndex(int* from, int* to)
+{
+    Solver* self = this;
+    int* base = self->mOrderPairs;
+    unsigned int n = (unsigned int)(to - base) >> 3;
+    unsigned int i = (unsigned int)((from - base) >> 3) + 1;
+    if (i <= n) {
+        unsigned int rem = (n - i) + 1;
+        if (3 < rem) {
+            while (rem > 3) {
+                int* p = (int*)(base + i * 8);
+                if (*(float*)(*(int*)(p - 4) + 0x114) <= *(float*)(*from + 0x114) &&
+                    *(float*)(*from + 0x114) != *(float*)(*(int*)(p - 4) + 0x114))
+                    from = p - 4;
+                if (*(float*)(*(int*)(p - 2) + 0x114) <= *(float*)(*from + 0x114) &&
+                    *(float*)(*from + 0x114) != *(float*)(*(int*)(p - 2) + 0x114))
+                    from = p - 2;
+                if (*(float*)(*(int*)(p + 0) + 0x114) <= *(float*)(*from + 0x114) &&
+                    *(float*)(*from + 0x114) != *(float*)(*(int*)(p + 0) + 0x114))
+                    from = p;
+                if (*(float*)(*(int*)(p + 2) + 0x114) <= *(float*)(*from + 0x114) &&
+                    *(float*)(*from + 0x114) != *(float*)(*(int*)(p + 2) + 0x114))
+                    from = p + 2;
+                p = p + 8;
+                i += 4;
+                rem -= 4;
+            }
+        }
+        while (i <= n) {
+            int* p = (int*)((char*)base + i * 8);
+            if (*(float*)(*(int*)(p + 0) + 0x114) <= *(float*)(*from + 0x114) &&
+                *(float*)(*from + 0x114) != *(float*)(*(int*)(p + 0) + 0x114))
+                from = p;
+            i += 1;
+        }
+    }
+    return (int)((from - base) >> 3);
+}
+
+// @ 0x009b58b0
+void nSPCreatureAnim::Solver::SortRange(int* a, int* b)
+{
+    Solver* self = this;
+    (void)self;
+    if (3 < ((int)b - (int)a >> 3) + 1) {
+        int ok = self->IsDeeperRatio((Bone**)a, (Bone**)b);
+        if (ok == 0) {
+            FUN_009b3090(0x74667370, 1);
+            FUN_009b3090(0x74667370, 1);
+            return;
+        }
+    }
+    self->FindMinIndex(a, b);
+    FUN_009b3090(0x74667370, 1);
+}
+
+// @ 0x009b5930
+void nSPCreatureAnim::Solver::SortFlaggedRuns()
+{
+    Solver* self = this;
+    unsigned int n = (unsigned int)((int)((char*)self->mOrderPairsEnd - (char*)self->mOrderPairs) >> 3);
+    int first = 0;
+    int last = 0;
+    if (self->mFlaggedCount == 0) {
+        self->SortRange(self->mOrderPairs, (int*)((char*)self->mOrderPairs - 8 + n * 8));
+        return;
+    }
+    unsigned int i = 0;
+    if (n != 0) {
+        do {
+            char flag = *(char*)((char*)self->mOrderPairs + 4 + i * 8);
+            int cur = (int)((char*)self->mOrderPairs + i * 8);
+            if (flag != 0 && last == 0)
+                last = cur;
+            if (first == 0) {
+                first = cur;
+            }
+            if ((first != 0 && last != 0) && (flag == 0 || i == n - 1)) {
+                self->SortRange((int*)first, (int*)last);
+                last = 0;
+                first = 0;
+            }
+            ++i;
+        } while (i < n);
+    }
+}
+
+// @ 0x009b59c0
+void nSPCreatureAnim::Solver::ShutdownAnims()
+{
+    Solver* self = this;
+    int* p = (int*)((char*)self + 0x1220);
+    FUN_009dfc40(p);
+    p = (int*)((char*)self + 0x1220);
+    int i = 0x17;
+    do {
+        p = (int*)((char*)p - 0xb4);
+        FUN_009dfd30(p);
+        --i;
+    } while (-1 < i);
+}
+
+// @ 0x009b5a00
+void Bone_ResetState(unsigned int* p)
+{
+    p[0] = 0; p[1] = 0; p[2] = 0; p[3] = 0;
+    p[0x16] = 0; p[0x17] = 0; p[0x18] = 0; p[0x19] = 0; p[0x1a] = 0; p[0x1b] = 0;
+    p[0x1c] = 0; p[0x1d] = 0; p[0x1e] = 0; p[0x1f] = 0; p[0x20] = 0; p[0x21] = 0;
+    p[0x22] = 0; p[0x23] = 0; p[0x24] = 0; p[0x25] = 0; p[0x26] = 0; p[0x27] = 0;
+    p[0x28] = 0; p[0x12] = 0; p[0x13] = 0; p[0x14] = 0;
+    *(unsigned char*)((char*)p + 0x54) = 0;
+    *(unsigned char*)((char*)p + 0x55) = 0;
+    *(unsigned char*)((char*)p + 0x2a0) = 0;
+    *(unsigned char*)((char*)p + 0x38) = 0;
+    p[0x51] = 0;
+}
+
+// @ 0x009b5ab0
+void Bone_IntegrateVelocity(unsigned int* p, float dt, float* accel, float* quat)
+{
+    if (!(0.0f < dt))
+        return;
+    float qx = accel[0];
+    float qz = accel[2];
+    float vy = accel[1];
+    p[0x20] = (unsigned int)(vy * dt + (float)p[0x20]);
+    p[0x21] = (unsigned int)((float)p[0x21] + qz * dt);
+    p[0x1f] = (unsigned int)((float)p[0x1f] + qx * dt);
+    p[0x22] = (unsigned int)(dt + (float)p[0x22]);
+    float ax = (float)p[0x23];
+    float ay = (float)p[0x24];
+    float az = (float)p[0x25];
+    float aw = (float)p[0x26];
+    float bx = quat[0] * dt;
+    float by = quat[1] * dt;
+    float bz = quat[2] * dt;
+    float bw = quat[3] * dt;
+    if (0.0f <= (aw * bw + ax * bx) + ay * by + az * bz) {
+        ax += bx; ay += by; az += bz; aw += bw;
+    } else {
+        ax -= bx; ay -= by; az -= bz; aw -= bw;
+    }
+    p[0x23] = *(unsigned int*)&ax;
+    p[0x24] = *(unsigned int*)&ay;
+    p[0x25] = *(unsigned int*)&az;
+    p[0x26] = *(unsigned int*)&aw;
+    p[0x27] = (unsigned int)(dt + (float)p[0x27]);
+    unsigned int idx = *(unsigned int*)(((Bone*)p)->pad0 + 0x1f8) & 0x7fffffff;
+    unsigned char* flag = (unsigned char*)(p[1] + 0x1b8 + (idx >> 2));
+    *flag |= (unsigned char)(2 << ((idx * 2) & 7));
+}
+
+// @ 0x009b5c50
+void nSPCreatureAnim::Solver::UpdateAvgSegLen()
+{
+    Solver* self = this;
+    int n = (int)((char*)self->mBonesEnd - (char*)self->mBones) / 0x468;
+    if (0 < n) {
+        int off = 0;
+        do {
+            Solver* b = (Solver*)((char*)self->mBones + off);
+            b->mAvgSegLen = (float)FUN_009f9c60(b);
+            if (*(int*)&g_1550b04 == 0)
+                b->mJiggle = nSPCreatureAnim_ShouldJiggle(b) ? 1 : 0;
+            if (b->mSizeA <= 0.001f && b->mSizeA != 0.001f)
+                b->mJiggle = 0;
+            off += 0x468;
+            --n;
+        } while (n != 0);
+    }
+}
+
+// @ 0x009b5ce0
+void CA::FUN_009b5ce0(CA::Creature* c)
+{
+  CA::u32 numParts = (CA::u32)(c->mpPartsEnd - c->mpPartsBegin);
+  CA::u32 numRefs  = (CA::u32)(c->mpRefsEnd - c->mpRefsBegin);
+  int firstIdx = -1;
+  int lastIdx  = -1;
+  int bestIdx  = -1;
+  bool viaRefs = true;
+
+  if (numRefs != 0) {
+    CA::u32 i = 0;
+    do {
+      CA::CreaturePart* part = c->mpRefsBegin[i].mPart;
+      if (part->m1f8 == 0)
+        bestIdx = (int)i;
+      CA::u32 n = part->m208;
+      if (n > 0) {
+        CA::CreaturePart* child = part->m218;
+        CA::u32 k = 0;
+        do {
+          CA::u32 flags = child->m150;
+          if ((flags & 2) && !(flags & 8)) {
+            if (firstIdx == -1)
+              firstIdx = (int)i;
+            lastIdx = (int)i;
+          }
+          child += 1;
+          ++k;
+        } while (k < n);
+      }
+      ++i;
+    } while (i < numRefs);
+
+    if (firstIdx != -1) {
+      if (firstIdx > bestIdx)
+        firstIdx = bestIdx;
+      else if (lastIdx < bestIdx)
+        lastIdx = bestIdx;
+    }
+    if (firstIdx == lastIdx)
+      viaRefs = false;
+  }
+
+  if (viaRefs) {
+    if (lastIdx > firstIdx) {
+      /* nothing to mark */
+    } else {
+      int i = firstIdx;
+      do {
+        c->mpRefsBegin[i].mPart->m210 = 0x200;
+        ++i;
+      } while (i <= lastIdx);
+    }
+  } else {
+    CA::u32 n = (CA::u32)CA::gExtraBoneCount;
+    c->mpPartsBegin->m210 = 0x200;
+    if (n != 0) {
+      int off = 0;
+      CA::u32 k = 0;
+      do {
+        int fwd = bestIdx + off;
+        if ((CA::u32)fwd < numRefs)
+          ((CA::PartRef*)((char*)c->mpRefsBegin + off * 8))->mPart->m210 = 0x200;
+        int bwd = bestIdx - off;
+        if ((CA::u32)bwd < numRefs)
+          ((CA::PartRef*)((char*)c->mpRefsBegin - off * 8))->mPart->m210 = 0x200;
+        ++off;
+        ++k;
+      } while (k < n);
+    }
+  }
+
+  if (numParts > 0) {
+    CA::u32 off = 0;
+    CA::u32 i = 0;
+    do {
+      CA::CreaturePart* p = (CA::CreaturePart*)((char*)c->mpPartsBegin + off);
+      if (p->m150 & 0x20) {
+        CA::CreaturePart* q = p;
+        for (;;) {
+          CA::CreaturePart* nxt = q->m214;
+          q->m210 = 0x200000;
+          if (nxt->m210 != 0x200)
+            break;
+          q = nxt;
+        }
+      }
+      off += 0x468;
+      ++i;
+    } while (i < numParts);
+  }
+
+  if (numRefs > 0) {
+    CA::u32 i = 0;
+    do {
+      CA::CreaturePart* p = c->mpRefsBegin[i].mPart;
+      if (p->m210 == 0)
+        p->m210 = 0x10000;
+      ++i;
+    } while (i < numRefs);
+  }
+
+  if (numParts > 0) {
+    CA::u32 off = 0;
+    CA::u32 i = 0;
+    do {
+      CA::CreaturePart* p = (CA::CreaturePart*)((char*)c->mpPartsBegin + off);
+      if (p->m210 == 0 && (p->m150 & 2))
+        p->m210 = p->m464 ? 0x400000 : 0x100;
+      off += 0x468;
+      ++i;
+    } while (i < numParts);
+  }
+
+  if (numParts > 1) {
+    CA::u32 off = 0x468;
+    CA::u32 i = 1;
+    do {
+      CA::CreaturePart* p = (CA::CreaturePart*)((char*)c->mpPartsBegin + off);
+      if (p->m210 == 0) {
+        CA::CreaturePart* nxt = p->m214;
+        CA::u32 v = nxt->m210;
+        p->m210 = v ? v : CA::FUN_009b3460(nxt);
+      }
+      off += 0x468;
+      ++i;
+    } while (i < numParts);
+  }
+}
+
+// @ 0x009b5f90
+void CA::FUN_009b5f90(CA::u32 index, CA::Creature* c)
+{
+  for (;;) {
+    if (index == 0)
+      return;
+    CA::CreaturePart* part = c->mpPartsBegin + index;
+
+    if (part->m208 > 0) {
+      CA::CreaturePart* parent = c->mpPartsBegin + part->m204;
+      CA::u32 n = part->m208;
+      CA::u32 hits = 0;
+      do {
+        if (*(CA::u8*)&parent->m154 & 2)
+          ++hits;
+        parent += 1;
+        --n;
+      } while (n != 0);
+      if (hits > 1)
+        return;
+    }
+
+    CA::PartCaps* caps = &part->mCaps;
+    CA::u32* names = caps->NameFOURCCs;
+    CA::u32 ci = 0;
+    for (;;) {
+      CA::u32 v = names[ci];
+      if (v == 0x626d696c) {          // 'limb'
+        caps->Values[ci] = 1;
+        break;
+      }
+      if (v == 0) {
+        names[ci] = 0x626d696c;
+        caps->Values[ci] = 1;
+        break;
+      }
+      if (++ci >= 32)
+        break;
+    }
+
+    part->m154 = 0;
+    part->m150 = 0;
+    CA::u32* nm = caps->NameFOURCCs;
+    for (CA::u32 k = 0; k < 32; ++k) {
+      CA::u32 v = nm[k];
+      if (v == 0)
+        break;
+      CA::u32 f;
+      switch (v) {
+        case 0x626d696c: f = 2;    break;   // 'limb'
+        case 0x6e697073: f = 8;    break;   // 'spin'
+        case 0x70737267: f = 0x40; break;   // 'grsp'
+        case 0x7274736e: f = 0x80; break;   // 'nstr'
+        case 0x74667370: f = 0x10; break;   // 'psft'
+        case 0x746f6f66: f = 4;    break;   // 'foot'
+        case 0x746f6f72: f = 1;    break;   // 'root'
+        case 0x74756f6d: f = 0x20; break;   // 'mout'
+        default:         f = 0;    break;
+      }
+      part->m150 |= f;
+      if (caps->Values[k] != 0)
+        part->m154 |= f;
+    }
+
+    CA::u32 si = 0;
+    for (;;) {
+      CA::u32 v = names[si];
+      if (v == 0x6e697073) {          // 'spin'
+        caps->Values[si] = 0;
+        break;
+      }
+      if (v == 0) {
+        names[si] = 0x6e697073;
+        caps->Values[si] = 0;
+        break;
+      }
+      if (++si >= 32)
+        break;
+    }
+
+    part->m154 = 0;
+    part->m150 = 0;
+    CA::u32* nm2 = caps->NameFOURCCs;
+    for (CA::u32 k = 0; k < 32; ++k) {
+      CA::u32 v = nm2[k];
+      if (v == 0)
+        break;
+      CA::u32 f;
+      switch (v) {
+        case 0x626d696c: f = 2;    break;   // 'limb'
+        case 0x6e697073: f = 8;    break;   // 'spin'
+        case 0x70737267: f = 0x40; break;   // 'grsp'
+        case 0x7274736e: f = 0x80; break;   // 'nstr'
+        case 0x74667370: f = 0x10; break;   // 'psft'
+        case 0x746f6f66: f = 4;    break;   // 'foot'
+        case 0x746f6f72: f = 1;    break;   // 'root'
+        case 0x74756f6d: f = 0x20; break;   // 'mout'
+        default:         f = 0;    break;
+      }
+      part->m150 |= f;
+      if (caps->Values[k] != 0)
+        part->m154 |= f;
+    }
+
+    index = part->m1fc;
+  }
+}
+
+// @ 0x009b61f0
+CA::Vec3* CA::Creature::get_workspace_origin(CA::Vec3* out, CA::u32 unused)
+{
+  float* o = &out->x;
+  const CA::Vec3* c = &mpBonesBegin->mCenter;
+  o[0] = c->x;
+  o[1] = c->y;
+  o[2] = c->z;
+  return out;
+}
+
+// @ 0x009b6220
+float CA::Creature::set_workspace_dir(const CA::Vec3* dir, CA::Vec3* out)
+{
+  float result = 0.0f;
+  CA::WorkspaceSource* src = mpSource;
+  if (src && src->mCallback) {
+    if (src->mUseOrigin ||
+        dir->x * dir->x + dir->y * dir->y + dir->z * dir->z > CA::kWorkspaceDirEps) {
+      result = ((float (__cdecl*)(void*, void*, const CA::Vec3*, CA::Vec3*, int, int))
+                src->mCallback)(src->mContext, m04, dir, out, 0, 0);
+      return result;
+    }
+  }
+  if (out) {
+    out->x = 0.0f;
+    out->y = 0.0f;
+    out->z = CA::kWorkspaceOne;
+  }
+  return result;
+}
+
+// @ 0x009b62c0
+CA::Vec3* CA::Creature::workspace_origin_for(CA::Vec3* out, const CA::Vec3* v)
+{
+  out->x = 0.0f;
+  out->y = 0.0f;
+  out->z = CA::kWorkspaceOne;
+  if (!v)
+    v = &m18;
+  CA::WorkspaceSource* src = mpSource;
+  if (src && src->mUseOrigin) {
+    if (v->x * v->x + v->y * v->y + v->z * v->z > CA::kWorkspaceMinSq) {
+      CA::Vec3 tmp;
+      *out = *src->rotateInto(&tmp, v, 0);
+    }
+  }
+  return out;
+}
+
+// @ 0x009b6360
+void CA::Creature::update_part_states()
+{
+  CA::u32 count = (CA::u32)(mpBonesEnd - mpBonesBegin);
+  if (count == 0)
+    return;
+
+  CA::u32 off = 0;
+  for (CA::u32 i = 0; i < count; ++i) {
+    CA::BoneMesh* bm = (CA::BoneMesh*)((char*)mpBonesBegin + off);
+    CA::CreaturePart* part = (CA::CreaturePart*)bm->mpShape;
+    if (part->m150 & 4) {
+      CA::Vec3 local;
+      local.x = part->mA.x * m70;
+      local.y = part->mA.y * m70;
+      local.z = part->mA.z * m70;
+      CA::u32 id = mPool.addPart(this, &local, &part->mB);
+      m1640 = id + 1;
+      CA::BoneRecord* rec = (CA::BoneRecord*)((char*)*mPool.storage() + id * 0x108);
+      rec->mIndex = i;
+      rec->finish();
+    }
+    off += 0x2bc;
+  }
+}
 
 // @ 0x009b6450
 bool RayCastParts(const float* org, const float* dir, RC::Owner* obj, unsigned* pIndex, float* pT, float* pHit, float* pNormal)
@@ -2126,6 +4680,678 @@ void __fastcall FUN_009b8650(int param_1, int dummy, float param_2)
     }
 }
 
+// @ 0x009b8720
+void nSPCreatureAnim::creature_instance_data_s009b_8720::FUN_009b8720(float param_2)
+{
+    FUN_009b8250(param_2);
+    if (*(char*)(*(int*)this + 0x3f4) != 0) {
+        FUN_009b83b0(param_2);
+    } else {
+        FUN_009b8650(param_2);
+    }
+}
+
+// @ 0x009b8760
+void nSPCreatureAnim::creature_instance_data_s009b_8720::FUN_009b8760(float param_2)
+{
+    float fVar1 = f_194;
+    float fVar9 = (float)(1.0 / ((double)param_2 + *(double*)&DAT_014470a0));
+    float fVar2 = f_154;
+    float fVar3 = f_198;
+    float fVar4 = f_158;
+    // first quaternion (input) and its rectifying-output vector
+    float q1_20 = ((fVar1 * fVar4 + f_14c * f_1a0) - f_150 * f_19c) + fVar2 * fVar3;
+    float q1_1c = ((fVar3 * fVar4 + f_19c * f_14c) + f_150 * f_1a0) - fVar2 * fVar1;
+    float q1_14 = ((fVar4 * f_1a0 - fVar1 * f_14c) - fVar3 * f_150) - fVar2 * f_19c;
+    float q1_18 = ((f_19c * fVar4 - fVar3 * f_14c) + f_150 * fVar1) + fVar2 * f_1a0;
+    // scaled increments (computed before the call; the call may reuse their slots)
+    float s_x = (f_184 + f_13c) * fVar9;
+    float s_y = (f_188 + f_140) * fVar9;
+    float s_z = (f_18c + f_144) * fVar9;
+    float m1[4];                       // first call output (x,y,z,w)
+    FUN_009b4ba0(m1, &q1_20, 0);
+    float fA = f_40;
+    float fB = f_3c;
+    float fC = f_48;
+    float fD = f_44;
+    float fVar10 = f_58;
+    float fVar13 = m1[2] * (1.0f - (fB * fB + fA * fA) * 2.0f);
+    float fVar11 = m1[1] * ((fD * fA - fB * fC) * 2.0f);
+    float fVar5 = f_54;
+    float fVar6 = f_50;
+    float fVar7 = f_90;
+    float fVar12 = f_4c * fVar6;
+    float fVar8 = f_4c;
+    walk_linear_x =
+        (((-(fVar6 * fVar10) + f_4c * fVar5) * f_94 +
+          (-(fVar6 * fVar6) + -(fVar5 * fVar5)) * f_8c) +
+         (fVar12 - -(fVar5 * fVar10)) * fVar7) * 2.0f + f_8c;
+    walk_linear_y =
+        (((fVar6 * fVar5 - -(fVar8 * fVar10)) * f_94 +
+          (-(fVar8 * fVar8) + -(fVar5 * fVar5)) * fVar7) +
+         (fVar12 + -(fVar5 * fVar10)) * f_8c) * 2.0f + fVar7;
+    float fVar10b = f_4c;
+    float fVar5b = f_58;
+    float fVar6b = f_48;
+    float fVar7b = f_54;
+    float fVar8b = f_40;
+    float q2_20 = ((f_3c * fVar5b - fVar10b * fVar6b) + f_50 * f_44) - fVar7b * fVar8b;
+    float fVar12b = f_3c;
+    float q2_1c = ((fVar8b * fVar5b - f_44 * fVar10b) - f_50 * fVar6b) + fVar7b * fVar12b;
+    float q2_18 = ((fVar8b * fVar10b + f_44 * fVar5b) - f_50 * fVar12b) - fVar7b * fVar6b;
+    float q2_14 = ((fVar8b * f_50 + fVar7b * f_44) + fVar10b * fVar12b) + fVar6b * fVar5b;
+    float m2[4];                       // second call output (x,y,z,w)
+    FUN_009b4ba0(m2, &q2_20, 0);
+    float fVar10c = f_40;
+    float fVar5c = f_3c;
+    walk_angular =
+        (m2[3] * fVar9) *
+        (m2[1] * ((f_44 * fVar10c - fVar5c * f_48) * 2.0f) +
+         (m2[2] * (1.0f - (fVar5c * fVar5c + fVar10c * fVar10c) * 2.0f) +
+          ((fVar5c * f_44 + fVar10c * f_48) * 2.0f) * m2[0]));
+    float fVar10d = (f_108 * s_z + f_104 * s_y) + f_100 * s_x;
+    float d_z = s_z - f_108 * fVar10d;
+    float d_x = s_x - f_100 * fVar10d;
+    float d_y = s_y - f_104 * fVar10d;
+    int result;
+    if ((d_x * d_x + d_y * d_y) + d_z * d_z > *(float*)&DAT_01550b18) {
+        result = 1;
+    } else if ((float)fabs(((((fB * fD + fA * fC) * 2.0f) * m1[0] + fVar13) + fVar11) *
+                         (m1[2] * fVar9)) > *(float*)&DAT_01550b18) {
+        result = 1;
+    } else {
+        result = 0;
+    }
+    flag_261 = result;
+}
+
+// @ 0x009b8d50
+void nSPCreatureAnim::creature_instance_data_s009b_8720::FUN_009b8d50(float param_2)
+{
+    if (1e-06f < param_2) {
+        float local_c = accum_1660;
+        float uVar1 = accum_166c;
+        float local_8 = accum_1664;
+        float local_4 = accum_1668;
+        FUN_009b7da0(param_2);
+        anim_15b8.FUN_009d3200(&accum_1660, accum_166c);
+        FUN_009b7c00(param_2, &local_c, uVar1);
+    }
+    anim_15b8.FUN_009d3f70((Obj2*)this);
+    anim_15b8.FUN_009d32d0();
+    float f = gait_2f8.FUN_009dbd50();
+    f = anim_15b8.FUN_009d3a20((Obj2*)this, f, (int)&root_1670, root_167c);
+    anim_15b8.FUN_009d3b50(f);
+    anim_15b8.FUN_009d6700(param_2);
+}
+
+// @ 0x009b8e40
+void nSPCreatureAnim::creature_instance_data_s009b_8720::FUN_009b8e40(float param_2)
+{
+    (void)param_2;
+    Vector108* v = anim_15b8.FUN_00a09f50();
+    unsigned n = (unsigned)(((char*)v->end - (char*)v->begin) / 0x108);
+    if (n == 0) return;
+    char* base = (char*)v->begin;
+    for (unsigned i = 0; i != n; ++i) {
+        GaitGroup* p = (GaitGroup*)(base + i * 0x108);
+        BoneInst* bone = &((BoneInst*)mpBone_2e4)[p->i58];
+        float fVar1 = bone->f4c;
+        if (fVar1 > 0.0f) {
+            float local_c = p->vx * requested_scale;
+            float local_8 = p->vy * requested_scale;
+            float local_4 = p->vz * requested_scale;
+            bone->Bone_IntegrateVelocity(fVar1, &local_c, (float*)p->f24_0);
+            if (DAT_015509e0 != 0) {
+                bone->hA0.FUN_0099c4a0(
+                    (int)p->i44, (int)p->i48, p->f4c, p->f54);
+            }
+        }
+    }
+}
+
+// @ 0x009b8f40
+void nSPCreatureAnim::creature_instance_data_s009b_8720::FUN_009b8f40(float param_2)
+{
+    if (DAT_015509ec != 0 && *(char*)(*(int*)this + 0x3f5) == 0) {
+        Vector30* v = anim_15b8.FUN_00ad2800();
+        if (v != 0 && 3u <= (unsigned)(((char*)v->end - (char*)v->begin) / 0x30)) {
+            Vector104* g = anim_15b8.GetPoliticalID();
+            int ebx = (int)(((char*)g->end - (char*)g->begin) / 0x104);
+            if (ebx != 0) {
+                int esi = 0;
+                do {
+                    BoneGoal* p = (BoneGoal*)((char*)g->begin + esi);
+                    p->FUN_009d63e0(param_2);
+                    esi += 0x104;
+                } while (--ebx != 0);
+            }
+        }
+    }
+}
+
+// @ 0x009b8fd0
+void nSPCreatureAnim::creature_instance_data_s009b_8720::FUN_009b8fd0(float* param_2, float* param_3)
+{
+    float fVar2 = ((f_20 * f_108 + f_1c * f_104) + f_18 * f_100);    if (fVar2 <= f_10c) {
+        *param_2 = fVar2;
+        *param_3 = *(float*)&DAT_01485720;
+        return;
+    }
+    *param_2 = f_10c;
+    float t = 1.0f - ((fVar2 - f_10c) /
+                      (*(float*)(*(int*)this + 0x36c) * requested_scale)) *
+                         *(float*)&DAT_01550d64;
+    float lo = 0.0f;
+    float* p = (t > lo) ? &t : &lo;
+    *param_3 = *p;
+}
+
+// @ 0x009b9090
+void nSPCreatureAnim::creature_instance_data_s009b_8720::FUN_009b9090()
+{
+    Vector108* v = anim_15b8.FUN_00a09f50();
+    if (v == 0) return;
+    int n = (int)(((char*)v->end - (char*)v->begin) / 0x108);
+    if (n <= 0) return;
+    int off = 0;
+    int cnt = n;
+    do {
+        char* b = (char*)v->begin;
+        int bi = *(int*)(off + b + 0x58);
+        if (bi != -1) {
+            GoalBone* bone = (GoalBone*)((char*)mpBone_2e4 + bi * 0x2bc);
+            if (bone->f48 <= 0.0f) {
+                float ddz = bone->goal_z - bone->cur_z;
+                float ddx = bone->goal_x - bone->cur_x;
+                float ddy = bone->goal_y - bone->cur_y;
+                float d2 = ddy * ddy + ddz * ddz + ddx * ddx;
+                float l2 = *(float*)&DAT_015509f8 * *(float*)&DAT_015509f8;
+                if (d2 <= l2 * *(float*)&DAT_014853e0) {
+                    if (l2 >= d2) {
+                        bone->goal_x = bone->cur_x;
+                        bone->goal_y = bone->cur_y;
+                        bone->goal_z = bone->cur_z;
+                    } else {
+                        float t = (float)sqrt(d2) - *(float*)&DAT_015509f8;
+                        t = t / *(float*)&DAT_015509f8;
+                        float u = *(float*)&DAT_01485720 - t;
+                        bone->goal_x = bone->cur_x * u + bone->goal_x * t;
+                        bone->goal_y = bone->cur_y * u + bone->goal_y * t;
+                        bone->goal_z = bone->cur_z * u + bone->goal_z * t;
+                    }
+                    bone->flag_38 = true;
+                }
+            }
+        }
+        off += 0x108;
+    } while (--cnt != 0);
+}
+
+// @ 0x009b9250
+float* nSPCreatureAnim::creature_instance_data_s009b_8720::FUN_009b9250(float* param_2, float* param_3)
+{
+    float py = param_3[1];
+    float px = param_3[0];
+    param_2[2] = 0.0f;
+    param_2[1] = 0.0f;
+    param_2[0] = 0.0f;
+    float len = (float)sqrt(px * px + py * py);
+    if (len <= *(float*)&DAT_014471fc) {
+        param_2[0] = 0.0f;
+        param_2[1] = 0.0f;
+        param_2[2] = 0.0f;
+        return param_2;
+    }
+    FUN_009b3970(&len);
+    float s = (float)sin(len);
+    float c = (float)cos(len);
+    float k = *(float*)&DAT_01550d68;
+    if (param_3[1] < 0.0f)
+        k = *(float*)&DAT_01485720;
+    float f1 = *(float*)&DAT_01485720;
+    float inv = f1 / len;
+    param_2[0] = (inv * param_3[0]) * *(float*)&DAT_01550d68 * s;
+    param_2[1] = (inv * param_3[1] * k) * s;
+    param_2[2] = (c - f1) * inv;
+    return param_2;
+}
+
+// @ 0x009b9340
+float* nSPCreatureAnim::AniDyn::FUN_009b9340(float* param_1, int** param_2, SpatialObject* param_3, float param_4)
+{
+    param_1[2] = 0.0f;
+    param_1[1] = 0.0f;
+    param_1[0] = 0.0f;
+    float minimum = *(float*)&DAT_01448874;
+    float orient_w = param_3->orient_w;
+    float ext_lz = param_3->extent_lower_z;
+    int* v = *param_2;
+    int* core = (int*)v[0];
+    float ext_lx = param_3->extent_lower_x;
+    float ext_ux = param_3->extent_upper_x;
+    float scale = *(float*)(v[1] + 0x70);
+    float lc = *(float*)(core + 0x10c) * scale;
+    float l8 = *(float*)(core + 0x110) * scale;
+    float l4 = *(float*)(core + 0x114) * scale;
+
+    float lo = minimum;
+    float* p = (l4 > minimum) ? &l4 : &lo;
+    float sel = *p;
+    float sel2 = sel * *(float*)&DAT_01485544;
+    float hi = *(float*)&DAT_013eb960;
+    float* p2 = (sel2 > hi) ? &sel2 : &hi;
+    float chosen = *p2;
+    float fpr = FUN_00c37030((int)param_3) * scale;
+    float* p3 = (fpr <= chosen) ? &chosen : &fpr;
+    float ratio = *p3 / chosen;
+    float one = *(float*)&DAT_01485720;
+    float* p4 = (one > ratio) ? &ratio : &one;
+    float factor = FUN_009d3530();
+    factor = FUN_009ce700(factor) * *p4;
+
+    FUN_009d00a0(&lc, param_3);
+    float dt = factor * param_4;
+
+    float a = ((lc * *(float*)&DAT_01550d74) * l4) * ext_lx;
+    float b = ((l8 * *(float*)&DAT_01550d70) * sel) * ext_ux;
+    float c = ((ext_lz * *(float*)&DAT_01550d78 + l4 * orient_w) * *(float*)&DAT_01550d6c) * sel;
+
+    param_1[0] = ((*(float*)&DAT_01550d08 * c + *(float*)&DAT_01550d14 * l8 * ext_lx) +
+                  *(float*)&DAT_01550d20 * a) * dt;
+    param_1[1] = ((*(float*)&DAT_01550d0c * c + *(float*)&DAT_01550d18 * b +
+                   *(float*)&DAT_01550d24 * a)) * dt;
+    param_1[2] = ((*(float*)&DAT_01550d10 * c + *(float*)&DAT_01550d1c * b +
+                   *(float*)&DAT_01550d28 * a)) * dt;
+    return param_1;
+}
+
+// @ 0x009b95d0
+void __fastcall UpdateRootPosition(int* inst, int* unused, float dt, int* owner, float scale)
+{
+    Body* body = *(Body**)((char*)inst + 0);
+    float vx, vy, vz;
+    if (*(char*)((char*)inst + 0x24) == 0) {
+        float* a = (float*)FUN_009b9250((char*)body + 0x10);
+        float* b = (float*)FUN_009b9340((void*)0, (int)inst, (int)owner, scale);
+        vx = b[0] + a[0];
+        vy = b[1] + a[1];
+        vz = b[2] + a[2];
+    } else {
+        double f = FUN_009d3530((char*)owner + 0x15b8);
+        float* q = (float*)FUN_009d0460((void*)0, (float)f);
+        vx = q[0];
+        vy = q[1];
+        vz = q[2];
+    }
+    int* b0 = *(int**)((char*)body + 0);
+    if (body->mVelW <= 1e-06f) {
+        float s = *(float*)((char*)body + 4);
+        body->mVelX = (*(float*)((char*)b0 + 0x10c) * s + vx) * dt;
+        body->mVelY = (*(float*)((char*)b0 + 0x110) * s + vy) * dt;
+        body->mVelZ = (*(float*)((char*)b0 + 0x114) * s + vz) * dt;
+        body->mVelW = dt;
+    } else {
+        float inv = 1.0f / body->mVelW;
+        body->mVelX = body->mVelX + (inv * body->mVelX + vx) * dt;
+        body->mVelY = body->mVelY + (inv * body->mVelY + vy) * dt;
+        body->mVelZ = body->mVelZ + (inv * body->mVelZ + vz) * dt;
+        body->mVelW = body->mVelW + dt;
+    }
+    if (0.0f < dt) {
+        unsigned int idx = *(unsigned int*)(b0 + 0x1f8);
+        unsigned char* p = (unsigned char*)(*(int*)((char*)body + 4) + 0x1b8 + ((idx & 0x7fffffff) >> 2));
+        *p = *p | (unsigned char)(2 << ((idx * 2) & 7));
+    }
+}
+
+// @ 0x009b97c0
+int* BuildOrientation(int* out, int* inst, char* so, void* self, float scale)
+{
+    Quat ext;
+    ext.x = *(float*)(so + 0x3c);
+    ext.y = *(float*)(so + 0x40);
+    ext.z = *(float*)(so + 0x44);
+    int* b = *(int**)((char*)inst + 0);
+    float s = *(float*)(*(int*)((char*)((char*)b + 0)) + 0x70);
+    Quat ax;
+    ax.x = (float)b[0x10c / 4] * s;
+    ax.y = (float)b[0x110 / 4] * s;
+    ax.z = (float)b[0x114 / 4] * s;
+    float lim = (ext.z <= 0.1f) ? 0.1f : ext.z;
+    float r = lim * 0.75f;
+    if (r <= 0.01f)
+        r = 0.01f;
+    float dia = GetFootprintRadius(so) * 2.0f;
+    if (r <= dia)
+        r = 0;
+    if (r != 0) { /* keep r */ }
+    float ratio = (r != 0 ? r : dia) / r;
+    if (ratio > 1.0f)
+        ratio = 1.0f;
+    double t = FUN_009d3530((char*)self + 0x15b8);
+    double st = FUN_009ce700((char*)self + 0x15b8);
+    (void)t; (void)st;
+    float k = ratio;
+    float px, py, pz;
+    FUN_009d0a40((void*)&px, so);
+    (void)py;
+    ext.x = ((ext.x * g_1550d80) * k) * ext.x;
+    ext.y = ((ext.y * g_1550d84) * k) * ext.y;
+    ext.z = ((ext.z * g_1550d7c) * k) * ext.z;
+    float lo = -g_1550d04;
+    if (ext.x < lo) ext.x = lo;
+    if (g_1550d04 < ext.x) ext.x = g_1550d04;
+    if (ext.y < lo) ext.y = lo;
+    if (g_1550d04 < ext.y) ext.y = g_1550d04;
+    if (ext.z < lo) ext.z = lo;
+    if (g_1550d04 < ext.z) ext.z = g_1550d04;
+    out[0] = (int)0;
+    out[0] = 0;
+    return out;
+}
+
+// @ 0x009b9a00
+float* QuatFromAxisAngle(float angle, float out[4], float unused)
+{
+    out[0] = g_1550d2c;
+    out[1] = g_1550d30;
+    out[2] = g_1550d34;
+    out[3] = g_1550d38;
+    if (fabsf(angle) > 1e-06f) {
+        FUN_009b39e0(angle);
+        float s = g_1550d38 * 0.5f;
+        float sn = (float)sin((double)s);
+        float cs = (float)cos((double)s);
+        out[0] = g_1550d14 * sn;
+        out[1] = g_1550d18 * sn;
+        out[2] = g_1550d1c * sn;
+        out[3] = cs;
+    }
+    return out;
+}
+
+// @ 0x009b9ac0
+void __fastcall FUN_009b9ac0(int* self, int* inst, int h, int prim, float dt)
+{
+    Body* body = *(Body**)((char*)inst + 0);
+    Quat a;
+    BuildOrientation((int*)&a, inst, (char*)prim, self, dt);
+    Quat b;
+    QuatFromAxisAngle(*(float*)((char*)self + 0x15c4), (float*)&b, 0.0f);
+    Quat q = qmul(b, a);
+    if (body->mBlend <= 1e-06f) {
+        Quat w = qmul(a, *(Quat*)((char*)body + 0));
+        Quat n;
+        FUN_0099cae0((void*)&n, (void*)&w, 0);
+        body->mVelX = n.x * dt;
+        body->mVelY = n.y * dt;
+        body->mVelZ = n.z * dt;
+        body->mVelW = n.w * dt;
+        body->mBlend = dt;
+    } else {
+        float len = sqrtf(((body->mVelX * body->mVelX + body->mVelY * body->mVelY) +
+                           body->mVelZ * body->mVelZ) + body->mVelW * body->mVelW);
+        if (len != 0.0f) {
+            float inv = g_1485720 / len;
+            body->mVelX = body->mVelX * inv;
+            body->mVelY = body->mVelY * inv;
+            body->mVelZ = body->mVelZ * inv;
+            body->mVelW = body->mVelW * inv;
+        }
+        Quat cur = *(Quat*)((char*)body + 0x0);
+        Quat n;
+        FUN_0099cae0((void*)&n, (void*)&cur, 0);
+        n.x = n.x * dt;
+        n.y = n.y * dt;
+        n.z = n.z * dt;
+        n.w = n.w * dt;
+        if (0.0f <= ((body->mVelX * n.x + body->mVelY * n.y) + body->mVelZ * n.z) + body->mVelW * n.w) {
+            body->mVelX = body->mVelX + n.x;
+            body->mVelY = body->mVelY + n.y;
+            body->mVelZ = body->mVelZ + n.z;
+            body->mVelW = body->mVelW + n.w;
+        } else {
+            body->mVelX = body->mVelX - n.x;
+            body->mVelY = body->mVelY - n.y;
+            body->mVelZ = body->mVelZ - n.z;
+            body->mVelW = body->mVelW - n.w;
+        }
+        body->mBlend = body->mBlend + dt;
+    }
+    if (0.0f < dt) {
+        unsigned int idx = *(unsigned int*)((char*)body + 4 - 4);
+        (void)idx;
+        unsigned int link = *(unsigned int*)(*(int*)((char*)body + 0) + 0x1f8);
+        unsigned char* p = (unsigned char*)(*(int*)((char*)body + 4) + 0x1b8 + ((link & 0x7fffffff) >> 2));
+        *p = *p | (unsigned char)(2 << ((link * 2) & 7));
+    }
+}
+
+// @ 0x009ba040
+void __fastcall UpdateRoots(char* self, void* unused, float param)
+{
+    if (!(g_14471fc < param) || *(char*)(self + 0x262) == 0)
+        return;
+    {
+        int* p = (int*)GetPoliticalID(self + 0x15b8);
+        int n = (p[1] - p[0]) / 0x104;
+        if (n <= 0)
+            return;
+        {
+            int stride = 0;
+            do {
+                p = (int*)GetPoliticalID(self + 0x15b8);
+                int base = p[0];
+                p = (int*)FUN_00ff3ba0(self + 0x15b8);
+                int cnt = (p[1] - p[0]) / 0x38;
+                if (0 < cnt) {
+                    int off = 0;
+                    do {
+                        p = (int*)FUN_00ff3ba0(self + 0x15b8);
+                        int node = *(int*)(p[0] + off);
+                        int ptr = p[0] + off;
+                        if (0.0f < *(float*)(node + 0x4c) &&
+                            ((*(unsigned int*)(*(int*)(node + 0)) >> 4 & 1) == 0)) {
+                            if (g_15509e4 != 0)
+                                FUN_009b95d0((void*)ptr, base + stride, 0, 1.0f);
+                            if (g_15509e8 != 0)
+                                FUN_009b9ac0((void*)ptr, base + stride, 0);
+                        }
+                        off += 0x38;
+                        --cnt;
+                    } while (cnt != 0);
+                }
+                stride += 0x104;
+                --n;
+            } while (n != 0);
+        }
+    }
+}
+
+// @ 0x009ba180
+int __fastcall FindRootChain(int* self, int* out, int a, int b, int node, char dbg, char hasParent, char checkKids, char a9, char a10, char a11)
+{
+    if (a10 == 0 && (*(unsigned char*)(node + 0x154) & 4) != 0)
+        return 0;
+    if (a11 == 0) {
+        for (int n = *(int*)(node + 0x214); n != 0; n = *(int*)(n + 0x214)) {
+            if ((*(unsigned char*)(n + 0x154) & 4) != 0)
+                return 0;
+        }
+    }
+    if (checkKids != 0) {
+        unsigned int cnt = *(unsigned int*)(node + 0x208);
+        unsigned int i = 0;
+        if (cnt != 0) {
+            int k = *(int*)(node + 0x204) * 0x468 + 0x150 + *(int*)((char*)self + 900);
+            do {
+                if (*(int*)(k + 0xb8) > 0)
+                    return 0;
+                if (FUN_009b3110((void*)k) != 0)
+                    return 0;
+                ++i;
+                k += 0x468;
+            } while (i < cnt);
+        }
+    }
+    unsigned int nflags = 0;
+    int* walk = (int*)(node + 0x158);
+    while (nflags < 0x20) {
+        if (*walk == 0)
+            break;
+        ++nflags;
+        ++walk;
+    }
+    if (checkKids == 0 && 0 < nflags)
+        return 0;
+    if (dbg != 0) {
+        out[0] = *(int*)(node + 0x1f8);
+        out[1] = -1;
+        return 1;
+    }
+    return 0;
+}
+
+// @ 0x009ba4c0
+namespace nSPCreatureAnim {
+bool CreateWiggle(creature_anim* anim, unsigned index, wiggle_data* out, int a4, int a5, int a6, int a7, int a8, int a9)
+{
+    if (index < (unsigned)(anim->anim_bodies_end - anim->anim_bodies_begin)) {
+        wiggle_data w;
+        w.pos.x = w.pos.y = w.pos.z = 0.0f;
+        w.rot.x = w.rot.y = w.rot.z = 0.0f;
+        w.rot.w = 1.0f;
+        anim_body_data* body = &anim->anim_bodies_begin[index];
+        if (CalcWiggle(anim, body, &w, a4, a5, a6, a7, a8, a9)) {
+            out->CopyFrom(&w);
+            return true;
+        }
+        out->body_a = -1;
+        out->body_b = -1;
+        out->body_c = -1;
+    }
+    return false;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009ba590
+namespace nSPCreatureAnim {
+void ComputeWiggle(creature_anim* anim, wiggle_data* w)
+{
+    if (w->body_a == -1 || w->body_b == -1)
+        return;
+
+    anim_body_data* a = &anim->anim_bodies_begin[w->body_a];
+    anim_body_data* b = &anim->anim_bodies_begin[w->body_b];
+
+    checkerlib::vector_3_s009b_a4c0 delta;
+    delta.x = a->rest_center__SCALABLE.x - b->rest_center__SCALABLE.x;
+    delta.y = a->rest_center__SCALABLE.y - b->rest_center__SCALABLE.y;
+    delta.z = a->rest_center__SCALABLE.z - b->rest_center__SCALABLE.z;
+
+    checkerlib::vector_4_s009b_a4c0 conj_b;
+    conj_b.x = -b->rest_orientation_q.x;
+    conj_b.y = -b->rest_orientation_q.y;
+    conj_b.z = -b->rest_orientation_q.z;
+    conj_b.w = b->rest_orientation_q.w;
+
+    checkerlib::vector_4_s009b_a4c0 rot_a = a->rest_orientation_q;
+
+    checkerlib::vector_3_s009b_a4c0 v;
+    checkerlib::QuaternionVectorTransform(&v, &conj_b, &delta);
+    w->pos = v;
+
+    checkerlib::vector_4_s009b_a4c0 q;
+    q.x = ((conj_b.w * rot_a.x + rot_a.w * conj_b.x) - rot_a.y * conj_b.z)
+        + rot_a.z * conj_b.y;
+    q.y = ((conj_b.w * rot_a.y + conj_b.z * rot_a.x) + conj_b.y * rot_a.w)
+        - rot_a.z * conj_b.x;
+    q.z = ((conj_b.z * rot_a.w - conj_b.y * rot_a.x) + conj_b.w * rot_a.z)
+        + rot_a.y * conj_b.x;
+    q.w = ((conj_b.w * rot_a.w - rot_a.x * conj_b.x) - conj_b.y * rot_a.y)
+        - conj_b.z * rot_a.z;
+    w->rot = q;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009ba7d0
+namespace nSPCreatureAnim {
+void GoalStateInit(creature_instance_data_s009b_a4c0* c, goal_state* st, char flag)
+{
+    creature_body_instance_data_s009b_a4c0* body = &c->Bodies.mpBegin[st->def->bidx];
+
+    checkerlib::vector_3_s009b_a4c0 local;
+    const checkerlib::vector_3_s009b_a4c0* src;
+    if (flag != 0) {
+        float s = c->requested_scale;
+        const checkerlib::vector_3_s009b_a4c0& rc = body->static_data->rest_center__SCALABLE;
+        local.x = rc.x * s;
+        local.y = rc.y * s;
+        local.z = rc.z * s;
+        src = &local;
+    } else {
+        src = &body->pos;
+    }
+
+    checkerlib::vector_3_s009b_a4c0 v;
+    v.x = src->x;
+    v.y = src->y;
+    v.z = src->z;
+
+    st->vel.x = 0.0f;
+    st->vel.y = 0.0f;
+    st->vel.z = 0.0f;
+
+    checkerlib::vector_3_s009b_a4c0* r = checkerlib::QuaternionVectorTransform(&local, &c->orientation, &v);
+
+    st->pos.x = r->x + c->position.x;
+    st->pos.y = r->y + c->position.y;
+    st->pos.z = r->z + c->position.z;
+    st->prev = st->pos;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009ba8d0
+namespace nSPCreatureAnim {
+bool GoalStateIsActive(creature_instance_data_s009b_a4c0* c, goal_state* st, float t)
+{
+    goal_def* def = st->def;
+    unsigned bidx = def->bidx;
+    creature_body_instance_data_s009b_a4c0* body = &c->Bodies.mpBegin[(int)bidx];
+
+    if (!st->reset) {
+        if (body->goal_time >= t)
+            return false;
+        if ((body->static_data->flags_154 >> 2) & 1)
+            return false;
+    }
+
+    int parent = def->parent_bidx;
+    if (parent == -1)
+        return true;
+    if ((int)bidx == -1)
+        return true;
+    if ((int)bidx == parent)
+        return true;
+
+    for (;;) {
+        uint32_t flags = g_GoalUseAltFlags ? body->static_data->flags_150
+                                           : body->static_data->flags_154;
+        if ((flags >> 3) & 1)
+            return true;
+        if (body->goal_blend > 0.0f)
+            return false;
+        if (body->goal_time > 0.0f && !st->reset)
+            return false;
+        bidx = (unsigned)body->static_data->parent_bidx;
+        body = &c->Bodies.mpBegin[(int)bidx];
+        if ((int)bidx == -1)
+            return true;
+    }
+}
+}  // namespace nSPCreatureAnim
+
 // @ 0x009ba990
 namespace nSPCreatureAnim {
 void creature_instance_data_s009b_a4c0::UpdateGoalSpring(goal_state* st, int nSteps, float dt, float t, float rate)
@@ -2170,7 +5396,7 @@ void creature_instance_data_s009b_a4c0::UpdateGoalSpring(goal_state* st, int nSt
         lpos.x = parent->pos.x + r->x * s;
         lpos.y = parent->pos.y + r->y * s;
         lpos.z = parent->pos.z + r->z * s;
-        lrot = checkerlib::QuaternionProduct(parent->orientation, def->rot);
+        lrot = checkerlib::QuaternionProduct_s009b_a4c0(parent->orientation, def->rot);
     }
 
     checkerlib::vector_3_s009b_a4c0 target;
@@ -2246,7 +5472,7 @@ void creature_instance_data_s009b_a4c0::UpdateGoalSpring(goal_state* st, int nSt
     d.x = p.x - position.x;
     d.y = p.y - position.y;
     d.z = p.z - position.z;
-    checkerlib::vector_3_s009b_a4c0 g = checkerlib::QuaternionVectorTransformInverse(orientation, d);
+    checkerlib::vector_3_s009b_a4c0 g = checkerlib::QuaternionVectorTransformInverse_s009b_a4c0(orientation, d);
     if (g_GoalClampAboveGround != 0 && 0.0f > g.z)
         g.z = 0.0f;
 
@@ -2290,6 +5516,50 @@ void creature_instance_data_s009b_a4c0::UpdateGoalSpring(goal_state* st, int nSt
             body->goal.rot_weight = body->goal.rot_weight + body->goal_blend;
             MarkBodyGoal(body);
         }
+    }
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009bb4f0
+namespace nSPCreatureAnim {
+void creature_instance_data_s009b_b360::UpdateWiggles(float dt, float t)
+{
+    if (!wiggles_enabled) return;
+    if (t == 0.0f) return;
+    wiggle_timer += dt;
+    const float& m = wiggle_timer > g_01550ab4 ? g_01550ab4 : wiggle_timer;
+    float clamped = m;
+    wiggle_timer = clamped;
+    int count;
+    float step;
+    if (0.0f < dt) {
+        if (g_01550c30 <= clamped) {
+            step = g_01550c30;
+            count = (int)(clamped / g_01550c30);
+            wiggle_timer = (float)fmod((double)clamped, (double)g_01550c30);
+        } else {
+            step = clamped;
+            count = 1;
+            wiggle_timer = 0.0f;
+        }
+    } else {
+        step = 0.0f;
+        count = 0;
+    }
+    float weight = 1.0f;
+    if (0.0f < hit_time && hit_time < g_0166c018)
+        weight = 1.0f - (g_0166c018 - hit_time) / g_0166c018;
+    UpdateHitWiggles(count, step, t, weight);
+    if (static_data->dead) return;
+    if (hit_time <= 0.0f) return;
+    int n = (int)((char*)states_end - (char*)states_begin) / 0x2c;
+    if (n != 0) {
+        int left = n;
+        unsigned int off = 0;
+        do {
+            UpdateGoalSpring((goal_state_s009b_b360*)((char*)states_begin + off), count, step, t, weight);
+            off += 0x2c;
+        } while (--left);
     }
 }
 }  // namespace nSPCreatureAnim
@@ -2339,6 +5609,131 @@ void __cdecl FinalizeCreatureGoals(creature_instance_data_s009b_b910* c)
 }
 }  // namespace nSPCreatureAnim
 
+// @ 0x009bc580
+namespace nSPCreatureAnim {
+void __cdecl FUN_009bc580(creature_instance_data_s009b_c580* c, float dt)
+{
+    if (c->field_114 <= 0.0f)
+        c->anim_speed = 1.0f;
+    else
+        c->anim_speed = c->anim_speed / c->field_114;
+    c->field_114 = 1.0f;
+
+    const float speed = c->field_06c * c->anim_speed;
+    c->requested_scale = (speed > 0.001f) ? speed : 0.001f;
+    c->field_10c = c->F_9b6220(&c->center, &c->field_f4);
+
+    checkerlib::vector_3_s009b_c580 dir;
+    c->F_9b62c0(&dir, &c->center);
+    c->direction = dir;
+
+    const float dot = -((c->center.z * dir.z + c->center.y * dir.y) + c->center.x * dir.x);
+    const float len = c->field_10c;
+    c->new_center.x = c->center.x + (dir.x * dot + len * dir.x);
+    c->new_center.y = c->center.y + (dir.y * dot + dir.y * len);
+    c->new_center.z = c->center.z + (dir.z * dot + dir.z * len);
+
+    if (1e-06f < dt) {
+        const float inv = 1.0f / dt;
+        const float vx = (c->center.x - c->prev_center.x) * inv;
+        const float vy = (c->center.y - c->prev_center.y) * inv;
+        const float vz = (c->center.z - c->prev_center.z) * inv;
+        c->velocity.x = vx;
+        c->velocity.y = vy;
+        c->velocity.z = vz;
+
+        const float sz = c->smooth_velocity.z * 0.8f + vz * 0.19999999f;
+        const float sy = c->smooth_velocity.y * 0.8f + vy * 0.19999999f;
+        c->smooth_velocity.x = c->smooth_velocity.x * 0.8f + vx * 0.19999999f;
+        c->smooth_velocity.y = sy;
+        c->smooth_velocity.z = sz;
+        if ((c->smooth_velocity.x * c->smooth_velocity.x + c->smooth_velocity.y * c->smooth_velocity.y) +
+            c->smooth_velocity.z * c->smooth_velocity.z < 1e-06f) {
+            c->smooth_velocity.x = 0.0f;
+            c->smooth_velocity.y = 0.0f;
+            c->smooth_velocity.z = 0.0f;
+        }
+
+        c->rot_velocity = FUN_0099c310(&c->orientation, &c->smooth_velocity);
+
+        const float t2z = c->velocity2.z * 0.8f +
+                          ((c->smooth_velocity.z - c->smooth_velocity_prev.z) * inv) * 0.19999999f;
+        const float t2y = c->velocity2.y * 0.8f +
+                          ((c->smooth_velocity.y - c->smooth_velocity_prev.y) * inv) * 0.19999999f;
+        c->velocity2.x = c->velocity2.x * 0.8f +
+                         ((c->smooth_velocity.x - c->smooth_velocity_prev.x) * inv) * 0.19999999f;
+        c->velocity2.y = t2y;
+        c->velocity2.z = t2z;
+        if ((c->velocity2.x * c->velocity2.x + c->velocity2.y * c->velocity2.y) +
+            c->velocity2.z * c->velocity2.z < 1e-06f) {
+            c->velocity2.x = 0.0f;
+            c->velocity2.y = 0.0f;
+            c->velocity2.z = 0.0f;
+        }
+
+        c->rot_velocity2 = FUN_0099c310(&c->orientation, &c->velocity2);
+
+        const float a0 = c->orientation.x, a1 = c->orientation.y;
+        const float a2 = c->orientation.z, a3 = c->orientation.w;
+        const float b0 = c->orientation_b.x, b1 = c->orientation_b.y;
+        const float b2 = c->orientation_b.z, b3 = c->orientation_b.w;
+        c->rel_rotation.x = ((a0 * b3 - b0 * a3) + a1 * b2) - a2 * b1;
+        c->rel_rotation.y = ((a1 * b3 - b1 * a3) - b2 * a0) + a2 * b0;
+        c->rel_rotation.z = ((b1 * a0 - b2 * a3) - a1 * b0) + a2 * b3;
+        c->rel_rotation.w = ((b1 * a1 + a2 * b2) + b0 * a0) + a3 * b3;
+
+        c->prev_center = c->center;
+        c->prev_velocity = c->velocity;
+        c->smooth_velocity_prev = c->smooth_velocity;
+        c->orientation_b = c->orientation;
+    }
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009bcab0
+namespace nSPCreatureAnim {
+float* __cdecl FUN_009bcab0(creature_instance_data_s009b_c580* c, float w1, float w2)
+{
+    const int byteDiff = (int)((char*)c->mpEnd - (char*)c->mpBegin);
+    const int count = byteDiff / 700;
+    if (count == 0)
+        return (float*)(int)(0x5d9f7391u * (uint32_t)byteDiff);
+
+    float* p = (float*)((char*)c->mpBegin + 0x18);
+    int left = count;
+    do {
+        creature_body_instance_data_s009b_c580* b = (creature_body_instance_data_s009b_c580*)((char*)p - 0x18);
+        b->blend_pos.x = b->target_center.x * w1 + b->center.x * w2;
+        b->blend_pos.z = b->target_center.z * w1 + b->center.z * w2;
+        b->blend_pos.y = b->target_center.y * w1 + b->center.y * w2;
+
+        const float ax = b->target_rotation.x * w1;
+        const float ay = b->target_rotation.y * w1;
+        const float az = b->target_rotation.z * w1;
+        const float aw = b->target_rotation.w * w1;
+        const float bx = b->orientation.x * w2;
+        const float by = b->orientation.y * w2;
+        const float bz = b->orientation.z * w2;
+        const float bw = b->orientation.w * w2;
+        const float dot = ((aw * bw + az * bz) + ay * by) + ax * bx;
+        if (!(dot < 0.0f)) {
+            b->blend_rot.x = ax + bx;
+            b->blend_rot.y = ay + by;
+            b->blend_rot.z = az + bz;
+            b->blend_rot.w = aw + bw;
+        } else {
+            b->blend_rot.x = ax - bx;
+            b->blend_rot.y = ay - by;
+            b->blend_rot.z = az - bz;
+            b->blend_rot.w = aw - bw;
+        }
+        p = (float*)((char*)p + 0x2bc);
+        --left;
+    } while (left != 0);
+    return p;
+}
+}  // namespace nSPCreatureAnim
+
 // @ 0x009bcc70
 namespace nSPCreatureAnim {
 void __cdecl UpdateBodyTransforms(creature_instance_data_s009b_c580* c, float dt)
@@ -2376,6 +5771,154 @@ void __cdecl UpdateBodyTransforms(creature_instance_data_s009b_c580* c, float dt
             }
         }
     }
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009bd2b0
+namespace nSPCreatureAnim {
+void __cdecl FUN_009bd2b0(creature_instance_data_s009b_c580* c)
+{
+    c->saved_center[0] = c->center.x;
+    c->saved_center[1] = c->center.y;
+    c->saved_center[2] = c->center.z;
+    c->saved_orientation[0] = c->orientation.x;
+    c->saved_orientation[1] = c->orientation.y;
+    c->saved_orientation[2] = c->orientation.z;
+    c->saved_orientation[3] = c->orientation.w;
+    int* p = (int*)&c->mpAnimState;
+    if (*p == 0) {
+        ((anim_state_x*)p)->F_9e3f70(6, 4);
+        c->F_9b7b10(0, 0);
+    }
+    if (c->gameData.GetPoliticalID() != 0)
+        c->gameData.F_9d33a0(p);
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009bd340
+namespace nSPCreatureAnim {
+void ResetBodies(creature_instance_data_s009b_d340* c)
+{
+    int count = (int)(c->Bodies.mpEnd - c->Bodies.mpBegin);
+    if (count != 0) {
+        int offset = 0;
+        int remaining = count;
+        do {
+            creature_body_instance_data_s009b_d340* b =
+                (creature_body_instance_data_s009b_d340*)((char*)c->Bodies.mpBegin + offset);
+            b->reset_floats[0] = 0.0f;
+            b->reset_floats[1] = 0.0f;
+            b->reset_floats[2] = 0.0f;
+            b->reset_floats[3] = 0.0f;
+            b->reset_floats[4] = 0.0f;
+            b->reset_floats[5] = 0.0f;
+            b->reset_floats[6] = 0.0f;
+            b->reset_floats[7] = 0.0f;
+            b->reset_floats[8] = 0.0f;
+            b->reset_floats[9] = 0.0f;
+            b->reset_floats[10] = 0.0f;
+            b->reset_floats[11] = 0.0f;
+            b->reset_floats[12] = 0.0f;
+            b->reset_floats[13] = 0.0f;
+            b->reset_floats[14] = 0.0f;
+            b->reset_floats[15] = 0.0f;
+            b->reset_floats[16] = 0.0f;
+            b->reset_floats[17] = 0.0f;
+            b->field_0a0 = 0;
+            b->field_048 = 0;
+            b->field_04c = 0;
+            b->field_050 = 0;
+            _ReadWriteBarrier();
+            offset += (int)sizeof(creature_body_instance_data_s009b_d340);
+            remaining--;
+            b->field_054 = 0;
+            b->field_055 = 0;
+            b->known_ground_pos = 0;
+            b->floored = 0;
+        } while (remaining != 0);
+    }
+
+    c->reset_114 = 0.0f;
+    c->reset_110 = 0.0f;
+    c->reset_floats[0] = 0.0f;
+    c->reset_floats[1] = 0.0f;
+    c->reset_floats[2] = 0.0f;
+    c->reset_floats[3] = 0.0f;
+    c->reset_floats[4] = 0.0f;
+    c->reset_floats[5] = 0.0f;
+    c->reset_floats[6] = 0.0f;
+    c->reset_floats[7] = 0.0f;
+    c->reset_floats[8] = 0.0f;
+    c->reset_floats[9] = 0.0f;
+    c->reset_floats[10] = 0.0f;
+    c->reset_floats[11] = 0.0f;
+    c->reset_floats[12] = 0.0f;
+    c->reset_floats[13] = 0.0f;
+    c->reset_floats[14] = 0.0f;
+    c->reset_floats[15] = 0.0f;
+    c->reset_floats[16] = 0.0f;
+    c->reset_floats[17] = 0.0f;
+    c->reset_floats[18] = 0.0f;
+    c->reset_floats[19] = 0.0f;
+    c->reset_floats[20] = 0.0f;
+    c->reset_floats[21] = 0.0f;
+    c->reset_floats[22] = 0.0f;
+    c->reset_floats[23] = 0.0f;
+    c->reset_floats[24] = 0.0f;
+    c->reset_floats[25] = 0.0f;
+    const unsigned int maskSize = ((unsigned int)(count * 2 + 7)) >> 3;
+    _ReadWriteBarrier();
+    c->reset_floats[26] = 0.0f;
+    _ReadWriteBarrier();
+    memset((c->reset_1a8 = 0, c->reset_1a9 = 0, c->reset_262 = 1, &c->reset_mask),
+           0, maskSize);
+    c->reset_counter++;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009bd550
+namespace nSPCreatureAnim {
+void BlendBodyPoses(float dt, float blend, creature_instance_data_s009b_d340* c, bool keep_pose)
+{
+    int count = (int)(c->Bodies.mpEnd - c->Bodies.mpBegin);
+    if (count == 0)
+        return;
+
+    float invBlend = 1.0f - blend;
+    int offset = 0;
+    int remaining = count;
+    do {
+        creature_body_instance_data_s009b_d340* b =
+            (creature_body_instance_data_s009b_d340*)((char*)c->Bodies.mpBegin + offset);
+
+        if (!keep_pose) {
+            checkerlib::vector_3_s009b_d340 velocity;
+            if (dt <= 1e-06f) {
+                velocity.x = 0.0f;
+                velocity.y = 0.0f;
+                velocity.z = 0.0f;
+            } else {
+                float invDt = 1.0f / dt;
+                velocity.x = (b->saved_center.x - b->center.x) * invDt;
+                velocity.y = (b->saved_center.y - b->center.y) * invDt;
+                velocity.z = (b->saved_center.z - b->center.z) * invDt;
+            }
+            b->velocity = velocity;
+            b->center = b->saved_center;
+            b->orientation.x = b->saved_orientation.x;
+            b->orientation.y = b->saved_orientation.y;
+            b->orientation.z = b->saved_orientation.z;
+            b->orientation.w = b->saved_orientation.w;
+            b->floored = 1;
+        }
+
+        b->blended_center.x = b->center.x * invBlend + b->blended_center.x * blend;
+        b->blended_center.y = b->center.y * invBlend + b->blended_center.y * blend;
+        b->blended_center.z = b->center.z * invBlend + b->blended_center.z * blend;
+
+        offset += (int)sizeof(creature_body_instance_data_s009b_d340);
+        remaining--;
+    } while (remaining != 0);
 }
 }  // namespace nSPCreatureAnim
 
@@ -2551,6 +6094,449 @@ void FloorBodies(creature_instance_data_s009b_d340* c)
 }
 }  // namespace nSPCreatureAnim
 
+// @ 0x009be150
+namespace nSPCreatureAnim {
+void UpdateDeforms(creature_instance_data_s009b_d340* c)
+{
+    int count = (int)(c->Bodies.mpEnd - c->Bodies.mpBegin);
+    if (count == 0)
+        return;
+
+    int offset = 0;
+    int remaining = count;
+    do {
+        creature_body_instance_data_s009b_d340* b =
+            (creature_body_instance_data_s009b_d340*)((char*)c->Bodies.mpBegin + offset);
+
+        if ((b->static_data->field_154 & 0x20) != 0) {
+            uint32_t n = b->field_0a0;
+            uint32_t first = 0;
+            if (n != 0) {
+                creature_deform* p = &b->deforms[0];
+                do {
+                    if (p->key == 0x4d5bf589)
+                        goto found_first;
+                    first++;
+                    p++;
+                } while (first < n);
+            }
+            first = 0xffffffffu;
+        found_first:
+            if (first < n) {
+                creature_deform* src = &b->deforms[first];
+                uint32_t second = 0;
+                if (n != 0) {
+                    creature_deform* p = &b->deforms[0];
+                    do {
+                        if (p->key == 0x89e06a31)
+                            goto found_second;
+                        second++;
+                        p++;
+                    } while (second < n);
+                }
+                second = 0xffffffffu;
+            found_second:
+                if (second < n) {
+                    creature_deform* dst = &b->deforms[second];
+                    dst->value8 = src->value8 + dst->value8;
+                    dst->value10 = src->value10 + dst->value10;
+                } else {
+                    src->flags &= ~1;
+                    src->key = 0x89e06a31;
+                }
+            }
+        }
+
+        offset += (int)sizeof(creature_body_instance_data_s009b_d340);
+        remaining--;
+    } while (remaining != 0);
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009be260
+void __cdecl FUN_009be260(CreatureAnim* c)
+{
+    c->a18.x = 0.0f; c->a18.y = 0.0f; c->a18.z = 0.0f;
+    c->d3c.x = 0.0f; c->d3c.y = 0.0f; c->d3c.z = 0.0f; c->d3c.w = 1.0f;
+    c->i74.x = 0.0f; c->i74.y = 0.0f; c->i74.z = 0.0f;
+    c->k8c.x = 0.0f; c->k8c.y = 0.0f; c->k8c.z = 0.0f;
+    c->ma4.x = 0.0f; c->ma4.y = 0.0f; c->ma4.z = 0.0f;
+    c->nb0.x = 0.0f; c->nb0.y = 0.0f; c->nb0.z = 0.0f;
+    c->obc.x = 0.0f; c->obc.y = 0.0f; c->obc.z = 0.0f;
+    c->pc8.x = 0.0f; c->pc8.y = 0.0f; c->pc8.z = 0.0f;
+    c->qd4 = 1.0f;
+    c->h70 = c->g6c;
+    c->c30 = c->a18;
+    c->b24 = c->c30;
+    c->j80 = c->i74;
+    c->f5c = c->d3c;
+    c->e4c = c->f5c;
+
+    int n = (int)((c->slotsEnd - c->slotsBegin) / 700);
+    float t = c->h70;
+    BoneSlot* slots = (BoneSlot*)c->slotsBegin;
+    for (int i = 0; i < n; i++) InitSlot(&slots[i], t);
+}
+
+// @ 0x009be750
+BodyVertex28** __cdecl FUN_009be750(BodyVertex28** out, const BodyVertex28* first, const BodyVertex28* last, BodyVertex28* dst)
+{
+    *out = dst;
+    if (first != last) {
+        do {
+            if (dst) {
+                dst->a = first->a;
+                dst->b = first->b;
+                dst->f[0] = first->f[0]; dst->f[1] = first->f[1];
+                dst->f[2] = first->f[2]; dst->f[3] = first->f[3];
+                dst->f[4] = first->f[4]; dst->f[5] = first->f[5];
+                dst->f[6] = first->f[6]; dst->f[7] = first->f[7];
+            }
+            first++; dst++;
+        } while (first != last);
+        *out = dst;
+    }
+    return out;
+}
+
+// @ 0x009be7d0
+Matrix30** __cdecl FUN_009be7d0(Matrix30** out, const Matrix30* first, const Matrix30* last, Matrix30* dst)
+{
+    *out = dst;
+    if (first != last) {
+        do {
+            if (dst) {
+                dst->f[0]  = first->f[0];
+                dst->f[3]  = first->f[3];
+                dst->f[6]  = first->f[6];
+                dst->f[1]  = first->f[1];
+                dst->f[4]  = first->f[4];
+                dst->f[7]  = first->f[7];
+                dst->f[2]  = first->f[2];
+                dst->f[5]  = first->f[5];
+                dst->f[8]  = first->f[8];
+                dst->f[9]  = first->f[9];
+                dst->f[10] = first->f[10];
+                dst->f[11] = first->f[11];
+            }
+            first++; dst++;
+        } while (first != last);
+        *out = dst;
+    }
+    return out;
+}
+
+// @ 0x009be850
+Copy108c& Copy108c::operator=(const Copy108c& o)
+{
+    i[0] = o.i[0]; i[1] = o.i[1]; i[2] = o.i[2]; i[3] = o.i[3];
+    a[0] = o.a[0]; a[1] = o.a[1]; a[2] = o.a[2]; a[3] = o.a[3];
+    a[4] = o.a[4]; a[5] = o.a[5]; a[6] = o.a[6]; a[7] = o.a[7];
+    a[8] = o.a[8]; a[9] = o.a[9]; a[10] = o.a[10]; a[11] = o.a[11];
+    a[12] = o.a[12]; a[13] = o.a[13]; a[14] = o.a[14]; a[15] = o.a[15];
+    a[16] = o.a[16]; a[17] = o.a[17]; a[18] = o.a[18]; a[19] = o.a[19];
+    a[20] = o.a[20]; a[21] = o.a[21]; a[22] = o.a[22]; a[23] = o.a[23];
+    a[24] = o.a[24]; a[25] = o.a[25]; a[26] = o.a[26]; a[27] = o.a[27];
+    b[0] = o.b[0]; b[1] = o.b[1]; b[2] = o.b[2]; b[3] = o.b[3]; b[4] = o.b[4];
+    m = o.m;
+    c[0] = o.c[0]; c[1] = o.c[1]; c[2] = o.c[2]; c[3] = o.c[3];
+    c[4] = o.c[4]; c[5] = o.c[5]; c[6] = o.c[6]; c[7] = o.c[7];
+    c[8] = o.c[8]; c[9] = o.c[9]; c[10] = o.c[10]; c[11] = o.c[11];
+    c[12] = o.c[12];
+    j[0] = o.j[0]; j[1] = o.j[1]; j[2] = o.j[2];
+    k = o.k;
+    n = o.n;
+    return *this;
+}
+
+// @ 0x009bea50
+Body2bc::Body2bc(const Body2bc& o)
+{
+    i00 = o.i00; i04 = o.i04; i08 = o.i08; i0c = o.i0c;
+    f[0] = o.f[0]; f[1] = o.f[1]; f[2] = o.f[2]; f[3] = o.f[3]; f[4] = o.f[4];
+    f[5] = o.f[5]; f[6] = o.f[6]; f[7] = o.f[7]; f[8] = o.f[8]; f[9] = o.f[9];
+    b38 = o.b38;
+    g[0] = o.g[0]; g[1] = o.g[1]; g[2] = o.g[2];
+    j[0] = o.j[0]; j[1] = o.j[1]; j[2] = o.j[2];
+    b54 = o.b54; b55 = o.b55;
+    h[0] = o.h[0]; h[1] = o.h[1]; h[2] = o.h[2]; h[3] = o.h[3];
+    h[4] = o.h[4]; h[5] = o.h[5]; h[6] = o.h[6]; h[7] = o.h[7];
+    h[8] = o.h[8]; h[9] = o.h[9]; h[10] = o.h[10]; h[11] = o.h[11];
+    h[12] = o.h[12]; h[13] = o.h[13]; h[14] = o.h[14]; h[15] = o.h[15];
+    h[16] = o.h[16]; h[17] = o.h[17];
+    arr = o.arr;
+    i144 = o.i144;
+    p[0] = o.p[0]; p[1] = o.p[1]; p[2] = o.p[2]; p[3] = o.p[3];
+    p[4] = o.p[4]; p[5] = o.p[5]; p[6] = o.p[6]; p[7] = o.p[7];
+    p[8] = o.p[8]; p[9] = o.p[9]; p[10] = o.p[10]; p[11] = o.p[11];
+    p[12] = o.p[12]; p[13] = o.p[13]; p[14] = o.p[14]; p[15] = o.p[15];
+    p[16] = o.p[16];
+    sub.Init(o.sub);
+    q[0] = o.q[0]; q[1] = o.q[1]; q[2] = o.q[2]; q[3] = o.q[3];
+    q[4] = o.q[4]; q[5] = o.q[5]; q[6] = o.q[6]; q[7] = o.q[7];
+    b2a0 = o.b2a0;
+    r[0] = o.r[0]; r[1] = o.r[1]; r[2] = o.r[2];
+    r[3] = o.r[3]; r[4] = o.r[4]; r[5] = o.r[5];
+}
+
+// @ 0x009bed40
+BodyVertex28* __cdecl FUN_009bed40(const BodyVertex28* first, const BodyVertex28* last, BodyVertex28* dst)
+{
+    if (first != last) {
+        do {
+            dst->a = first->a;
+            dst->b = first->b;
+            dst->f[0] = first->f[0]; dst->f[1] = first->f[1];
+            dst->f[2] = first->f[2]; dst->f[3] = first->f[3];
+            dst->f[4] = first->f[4]; dst->f[5] = first->f[5];
+            dst->f[6] = first->f[6]; dst->f[7] = first->f[7];
+            first++; dst++;
+        } while (first != last);
+    }
+    return dst;
+}
+
+// @ 0x009bee30
+WiggleInstance** __cdecl FUN_009bee30(WiggleInstance** out, const WiggleInstance* first, const WiggleInstance* last, WiggleInstance* dst)
+{
+    *out = dst;
+    if (first != last) {
+        do {
+            if (dst) {
+                dst->static_data = first->static_data;
+                dst->enabled = first->enabled;
+                dst->force_override = first->force_override;
+                dst->world_vel = first->world_vel;
+                dst->world_pos = first->world_pos;
+                dst->world_pos_old = first->world_pos_old;
+            }
+            first++; dst++;
+        } while (first != last);
+        *out = dst;
+    }
+    return out;
+}
+
+// @ 0x009beec0
+void __cdecl FUN_009beec0(WiggleInstance* first, WiggleInstance* last, const WiggleInstance* src)
+{
+    if (first != last) {
+        do {
+            first->static_data = src->static_data;
+            first->enabled = src->enabled;
+            first->force_override = src->force_override;
+            first->world_vel = src->world_vel;
+            first->world_pos = src->world_pos;
+            first->world_pos_old = src->world_pos_old;
+            first++;
+        } while (first != last);
+    }
+}
+
+// @ 0x009bef30
+void __cdecl FUN_009bef30(WiggleInstance* dst, unsigned n, const WiggleInstance* src)
+{
+    if (n == 0) return;
+    do {
+        if (dst) {
+            dst->static_data = src->static_data;
+            dst->enabled = src->enabled;
+            dst->force_override = src->force_override;
+            dst->world_vel = src->world_vel;
+            dst->world_pos = src->world_pos;
+            dst->world_pos_old = src->world_pos_old;
+        }
+        n--; dst++;
+    } while (n != 0);
+}
+
+// @ 0x009befa0
+Copy108& Copy108::operator=(const Copy108& o)
+{
+    i[0] = o.i[0]; i[1] = o.i[1]; i[2] = o.i[2]; i[3] = o.i[3];
+    a[0] = o.a[0]; a[1] = o.a[1]; a[2] = o.a[2]; a[3] = o.a[3];
+    a[4] = o.a[4]; a[5] = o.a[5]; a[6] = o.a[6]; a[7] = o.a[7];
+    a[8] = o.a[8]; a[9] = o.a[9]; a[10] = o.a[10]; a[11] = o.a[11];
+    a[12] = o.a[12]; a[13] = o.a[13]; a[14] = o.a[14]; a[15] = o.a[15];
+    a[16] = o.a[16]; a[17] = o.a[17]; a[18] = o.a[18]; a[19] = o.a[19];
+    a[20] = o.a[20]; a[21] = o.a[21]; a[22] = o.a[22]; a[23] = o.a[23];
+    a[24] = o.a[24]; a[25] = o.a[25]; a[26] = o.a[26]; a[27] = o.a[27];
+    b[0] = o.b[0]; b[1] = o.b[1]; b[2] = o.b[2]; b[3] = o.b[3]; b[4] = o.b[4];
+    m = o.m;
+    c[0] = o.c[0]; c[1] = o.c[1]; c[2] = o.c[2]; c[3] = o.c[3];
+    c[4] = o.c[4]; c[5] = o.c[5]; c[6] = o.c[6]; c[7] = o.c[7];
+    c[8] = o.c[8]; c[9] = o.c[9]; c[10] = o.c[10]; c[11] = o.c[11];
+    c[12] = o.c[12];
+    j[0] = o.j[0]; j[1] = o.j[1]; j[2] = o.j[2];
+    k[0] = o.k[0]; k[1] = o.k[1]; k[2] = o.k[2]; k[3] = o.k[3];
+    k[4] = o.k[4]; k[5] = o.k[5]; k[6] = o.k[6]; k[7] = o.k[7];
+    k[8] = o.k[8]; k[9] = o.k[9]; k[10] = o.k[10]; k[11] = o.k[11];
+    n = o.n;
+    return *this;
+}
+
+// @ 0x009bf210
+Body2bcF::Body2bcF(const Body2bcF& o)
+{
+    i00 = o.i00; i04 = o.i04; i08 = o.i08; i0c = o.i0c;
+    f[0] = o.f[0]; f[1] = o.f[1]; f[2] = o.f[2]; f[3] = o.f[3]; f[4] = o.f[4];
+    f[5] = o.f[5]; f[6] = o.f[6]; f[7] = o.f[7]; f[8] = o.f[8]; f[9] = o.f[9];
+    b38 = o.b38;
+    g[0] = o.g[0]; g[1] = o.g[1]; g[2] = o.g[2];
+    j3[0] = o.j3[0]; j3[1] = o.j3[1]; j3[2] = o.j3[2];
+    b54 = o.b54; b55 = o.b55;
+    h[0] = o.h[0]; h[1] = o.h[1]; h[2] = o.h[2]; h[3] = o.h[3];
+    h[4] = o.h[4]; h[5] = o.h[5]; h[6] = o.h[6]; h[7] = o.h[7];
+    h[8] = o.h[8]; h[9] = o.h[9]; h[10] = o.h[10]; h[11] = o.h[11];
+    h[12] = o.h[12]; h[13] = o.h[13]; h[14] = o.h[14]; h[15] = o.h[15];
+    h[16] = o.h[16]; h[17] = o.h[17];
+    arr = o.arr;
+    i144 = o.i144;
+    p[0] = o.p[0]; p[1] = o.p[1]; p[2] = o.p[2]; p[3] = o.p[3];
+    p[4] = o.p[4]; p[5] = o.p[5]; p[6] = o.p[6]; p[7] = o.p[7];
+    p[8] = o.p[8]; p[9] = o.p[9]; p[10] = o.p[10]; p[11] = o.p[11];
+    p[12] = o.p[12]; p[13] = o.p[13]; p[14] = o.p[14]; p[15] = o.p[15];
+    p[16] = o.p[16];
+    sub.Init(o.sub);
+    q[0] = o.q[0]; q[1] = o.q[1]; q[2] = o.q[2]; q[3] = o.q[3];
+    q[4] = o.q[4]; q[5] = o.q[5]; q[6] = o.q[6]; q[7] = o.q[7];
+    b2a0 = o.b2a0;
+    r[0] = o.r[0]; r[1] = o.r[1]; r[2] = o.r[2];
+    r[3] = o.r[3]; r[4] = o.r[4]; r[5] = o.r[5];
+}
+
+// @ 0x009bf680
+BodyAnimC::BodyAnimC()
+{
+    a.z = 0.0f; a.y = 0.0f; a.x = 0.0f;
+    b.z = 0.0f; b.y = 0.0f; b.x = 0.0f;
+    c = 1.0f;
+    d.z = 0.0f; d.y = 0.0f; d.x = 0.0f;
+    e.z = 0.0f; e.y = 0.0f; e.x = 0.0f;
+    f[0] = 0.0f;  f[1] = 0.0f;  f[2] = 0.0f;  f[3] = 0.0f;  f[4] = 0.0f;
+    f[5] = 0.0f;  f[6] = 0.0f;  f[7] = 0.0f;  f[8] = 0.0f;  f[9] = 0.0f;
+    f[10] = 0.0f; f[11] = 0.0f; f[12] = 0.0f; f[13] = 0.0f; f[14] = 0.0f;
+    f[15] = 0.0f; f[16] = 0.0f; f[17] = 0.0f;
+    g = 0;
+    h.z = 0.0f; h.y = 0.0f; h.x = 0.0f;
+    i = 1.0f;
+    j.z = 0.0f; j.y = 0.0f; j.x = 0.0f;
+    k.z = 0.0f; k.y = 0.0f; k.x = 0.0f;
+    l.z = 0.0f; l.y = 0.0f; l.x = 0.0f;
+    m.z = 0.0f; m.y = 0.0f; m.x = 0.0f;
+    n = 1.0f;
+    sub.Reset();
+    o.z = 0.0f; o.y = 0.0f; o.x = 0.0f;
+    p.z = 0.0f; p.y = 0.0f; p.x = 0.0f;
+    q = 1.0f;
+    r.z = 0.0f; r.y = 0.0f; r.x = 0.0f;
+    s.z = 0.0f; s.y = 0.0f; s.x = 0.0f;
+    Finalize();
+}
+
+// @ 0x009bf860
+void WiggleAnim::Recompute()
+{
+    maxDist = 0.0f;
+    maxDist2 = 0.0f;
+    int n = (int)((int)((char*)end - (char*)beg) / 0x468);
+    if (n <= 0) return;
+
+    for (int i = 0; i < n; i++) {
+        WiggleElem* node = (WiggleElem*)((char*)beg + i * 0x468);
+        WiggleElem* a = (WiggleElem*)((char*)beg + node->link1 * 0x468);
+        WiggleElem* b = (WiggleElem*)((char*)beg + node->link2 * 0x468);
+
+        float dx = a->pos.x - b->pos.x;
+        float dy = a->pos.y - b->pos.y;
+        float dz = a->pos.z - b->pos.z;
+
+        float local[3];
+        local[1] = 0.01f;
+        local[0] = (float)sqrt(dx * dx + dy * dy + dz * dz);
+        float* p = local;
+        if (local[0] <= local[1]) p = local + 1;
+        node->span = *p;
+
+        float w = Weight(node);
+        node->dist = w;
+        if (maxDist < w) maxDist = w;
+        if ((node->flags & 4) && (node->dist > maxDist2)) maxDist2 = node->dist;
+
+        local[2] = b->pos.z - node->pos.z;
+        float* q = local + 2;
+        if (local[2] <= g_eps) q = &g_eps;
+        node->gap = *q;
+    }
+}
+
+// @ 0x009bfa20
+void WiggleAnim::Walk()
+{
+    Prep();
+    Recompute();
+
+    unsigned count = (unsigned)((int)((char*)end - (char*)beg) / 0x468);
+    int i = (int)count - 1;
+    if (i < 0) return;
+
+    do {
+        WiggleElem* node = (WiggleElem*)((char*)beg + i * 0x468);
+        unsigned nflags = node->flags;
+        unsigned d = (unsigned)node->first;
+        unsigned dend = (unsigned)node->count + d;
+        node->root = -1;
+        node->other = -1;
+        unsigned kept = 0xffffffff;
+        int seen = 0;
+
+        if (d < dend) {
+            unsigned j = d;
+            do {
+                WiggleElem* dep = (WiggleElem*)((char*)beg + j * 0x468);
+                if ((dep->flags & 8) == 0) {
+                    if ((dep->flags & 4) == 0) {
+                        if (dep->root != -1) {
+                            if (((nflags >> 3 & 1) == 0) && seen == 0) {
+                                node->root = dep->root;
+                                kept = 0xffffffff;
+                                if (dep->root != -2) kept = j;
+                                seen = 1;
+                            } else {
+                                if (kept != 0xffffffff && seen == 1) {
+                                    FUN_009b4ef0((char*)beg + kept * 0x468);
+                                    node->root = -2;
+                                }
+                                if (dep->root != -2) FUN_009b4ef0(dep);
+                                seen++;
+                            }
+                        }
+                    } else {
+                        node->root = (int)j;
+                        dep->root = (int)j;
+                    }
+                }
+                j++;
+            } while (j < dend);
+        }
+
+        if (node->root < (int)count) {
+            unsigned k1 = (unsigned)node->first;
+            unsigned kend = (unsigned)node->count + k1;
+            if (k1 < kend) {
+                unsigned k = k1;
+                do {
+                    WiggleElem* dep = (WiggleElem*)((char*)beg + k * 0x468);
+                    if (dep->root == -1) dep->root = -3;
+                    k++;
+                } while (k < kend);
+            }
+        }
+
+        i--;
+    } while (i >= 0);
+}
+
 // @ 0x009bfc20
 namespace nSPCreatureAnim {
 void creature_body_instance_data_s009b_fc20::GroundGoal(checkerlib::vector_3_s009b_fc20* outPos, checkerlib::vector_4_s009b_fc20* outRot, creature_instance_data_s009b_fc20* c, float baseHeight, float rate, bool storeGround)
@@ -2660,6 +6646,492 @@ void creature_body_instance_data_s009b_fc20::GroundGoal(checkerlib::vector_3_s00
     *outRot = QuatConjMul(c->orientation, grot);
 }
 }  // namespace nSPCreatureAnim
+
+// @ 0x009c0680
+namespace nSPCreatureAnim {
+void creature_instance_data_s009b_fc20::UpdateGoalGrounds()
+{
+    checkerlib::vector_4_s009b_fc20 rot;
+    checkerlib::vector_3_s009b_fc20 pos;
+    float baseHeight;
+    bool storeGround;
+    float rate;
+
+    FUN_009b8fd0(&baseHeight, &rate);
+    if (!(rate > 1.0e-6f))
+        return;
+    int32_t count = (int32_t)(body_end - body_begin);
+    if (count <= 0)
+        return;
+    for (int32_t i = 0; i < count; ++i) {
+        creature_body_instance_data_s009b_fc20* pBody = &body_begin[i];
+        if (pBody->goal_b.pos_weight != 0.0f || pBody->goal_b.rot_weight != 0.0f ||
+            pBody->goal_a.pos_weight != 0.0f || pBody->goal_a.rot_weight != 0.0f) {
+            uint32_t flags = pBody->static_data->ground_flags;
+            uint32_t alt = flags >> 4;
+            storeGround = ((flags >> 2) & 1) != 0;
+            if (ground_placement_valid && (storeGround || (alt & 1) != 0)) {
+                pos.z = 0.0f;
+                pos.y = 0.0f;
+                pos.x = 0.0f;
+                rot.z = 0.0f;
+                rot.y = 0.0f;
+                rot.x = 0.0f;
+                rot.w = 1.0f;
+                pBody->GroundGoal(&pos, &rot, this, baseHeight, rate, storeGround);
+                float w = pBody->goal_b.pos_weight;
+                if (w > 0.0f) {
+                    float x = w * pos.x;
+                    float y = w * pos.y;
+                    float z = w * pos.z;
+                    pBody->goal_b.pos.x = x;
+                    pBody->goal_b.pos.y = y;
+                    pBody->goal_b.pos.z = z;
+                }
+                w = pBody->goal_b.rot_weight;
+                if (w > 0.0f) {
+                    float x = w * rot.x;
+                    float y = w * rot.y;
+                    float z = w * rot.z;
+                    float qw = w * rot.w;
+                    pBody->goal_b.rot.x = x;
+                    pBody->goal_b.rot.y = y;
+                    pBody->goal_b.rot.z = z;
+                    pBody->goal_b.rot.w = qw;
+                }
+            }
+        }
+    }
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009c0860
+namespace nSPCreatureAnim {
+void creature_instance_data_s009b_fc20::UpdateGoalGround(creature_body_ref* pRef)
+{
+    checkerlib::vector_4_s009b_fc20 rot;
+    checkerlib::vector_3_s009b_fc20 pos;
+    float baseHeight;
+    float rate;
+
+    FUN_009b8fd0(&baseHeight, &rate);
+    if (!(rate > 1.0e-6f))
+        return;
+    creature_body_instance_data_s009b_fc20* pBody = pRef->body;
+    if (pBody->goal_b.pos_weight == 0.0f && pBody->goal_b.rot_weight == 0.0f)
+        return;
+    if (!ground_placement_valid)
+        return;
+    pos.z = 0.0f;
+    pos.y = 0.0f;
+    pos.x = 0.0f;
+    rot.z = 0.0f;
+    rot.y = 0.0f;
+    rot.x = 0.0f;
+    rot.w = 1.0f;
+    pBody->GroundGoal(&pos, &rot, this, baseHeight, rate, false);
+    float w = pBody->goal_b.pos_weight;
+    if (w > 0.0f) {
+        float x = w * pos.x;
+        float y = w * pos.y;
+        float z = w * pos.z;
+        pBody->goal_b.pos.x = x;
+        pBody->goal_b.pos.y = y;
+        pBody->goal_b.pos.z = z;
+    }
+    w = pBody->goal_b.rot_weight;
+    if (w > 0.0f) {
+        float x = w * rot.x;
+        float y = w * rot.y;
+        float z = w * rot.z;
+        float qw = w * rot.w;
+        pBody->goal_b.rot.x = x;
+        pBody->goal_b.rot.y = y;
+        pBody->goal_b.rot.z = z;
+        pBody->goal_b.rot.w = qw;
+    }
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009c0f60
+void Vec30::Insert(u8_s009c_0f60* pos, u8_s009c_0f60* value)
+{
+    if (end != cap) {
+        // the value may live inside the range we are about to shift
+        if (pos <= value && value < end) value += 0x30;
+        if (end != 0) FUN_009b3c80(end - 0x30);
+        FUN_009b47f0(pos, end - 0x30, end);
+        for (int i = 0; i < 12; i++) ((u32_s009c_0f60*)pos)[i] = ((u32_s009c_0f60*)value)[i];
+        end += 0x30;
+        return;
+    }
+
+    unsigned n = grow_count((unsigned)((end - begin) / 0x30));
+    u8_s009c_0f60* mem = (u8_s009c_0f60*)EASTL_NEW(n * 0x30);
+    u8_s009c_0f60* mid = (u8_s009c_0f60*)FUN_009b4290(begin, pos, mem);
+    if (mem != 0) FUN_009b3c80(value);
+    u8_s009c_0f60* newEnd = (u8_s009c_0f60*)FUN_009b4290(pos, end, mem + 0x30);
+    EASTL_FREE(begin);
+    begin = mem;
+    end = newEnd;
+    cap = mem + n * 0x30;
+    (void)mid;
+}
+
+// @ 0x009c10c0
+void Vec3c::Insert(u8_s009c_0f60* pos, u8_s009c_0f60* value)
+{
+    if (end != cap) {
+        if (pos <= value && value < end) value += 0x3c;
+        if (end != 0) FUN_009b3ab0(end - 0x3c);
+        FUN_009b4870(pos, end - 0x3c, end);
+        FUN_009b3ab0(value);
+        end += 0x3c;
+        return;
+    }
+
+    unsigned n = grow_count((unsigned)((end - begin) / 0x3c));
+    u8_s009c_0f60* mem = (u8_s009c_0f60*)EASTL_NEW(n * 0x3c);
+    FUN_009b4350(begin, pos, mem);
+    FUN_009b3ab0(value);
+    u8_s009c_0f60* newEnd = (u8_s009c_0f60*)FUN_009b4350(pos, end, mem + 0x3c);
+    EASTL_FREE(begin);
+    begin = mem;
+    end = newEnd;
+    cap = mem + n * 0x3c;
+}
+
+// @ 0x009c11e0
+void Vec30::InsertFill(u8_s009c_0f60* pos, unsigned n, const void* value)
+{
+    if ((unsigned)((cap - end) / 0x30) < n) {
+        unsigned have = (unsigned)((end - begin) / 0x30);
+        unsigned need = have + n;
+        unsigned want = grow_count(have);
+        if (need < want) need = want;
+        u8_s009c_0f60* mem = (u8_s009c_0f60*)EASTL_NEW(need * 0x30);
+        u8_s009c_0f60* p = (u8_s009c_0f60*)FUN_009b4910(begin, pos, mem);
+        FUN_009b44e0(p, n, value, pos);
+        u8_s009c_0f60* newEnd = (u8_s009c_0f60*)FUN_009b4910(pos, end, p + n * 0x30);
+        EASTL_FREE(begin);
+        begin = mem;
+        end = newEnd;
+        cap = mem + need * 0x30;
+        return;
+    }
+    if (n == 0) return;
+
+    FUN_009b41e0(value);                       // copy the value into a local slot
+    u8_s009c_0f60 tmp[0x30];
+    memcpy(tmp, value, 0x30);
+    u8_s009c_0f60* e = end;
+    unsigned tail = (unsigned)((e - pos) / 0x30);
+
+    if (tail < n) {
+        // not enough room after pos: fill the gap, then shift the tail
+        FUN_009b44e0(e, n - tail, tmp, pos);
+        end = e + (n - tail) * 0x30;
+        FUN_009b4ab0(pos, e, end);
+        end += tail * 0x30;
+        FUN_009b4490(pos, pos + n * 0x30, tmp);
+    } else {
+        // enough room: move the last n elements out, then shift in the fill
+        u8_s009c_0f60* at = e - n * 0x30;
+        FUN_009b4ab0(at, e, e);
+        end = e + n * 0x30;
+        FUN_009b4490(pos, at + n * 0x30, tmp);
+    }
+}
+
+// @ 0x009c13a0
+void Vec44::InsertFill(u8_s009c_0f60* pos, unsigned n, const void* value)
+{
+    if ((unsigned)((cap - end) / 0x2c) < n) {
+        unsigned have = (unsigned)((end - begin) / 0x2c);
+        unsigned need = have + n;
+        unsigned want = grow_count(have);
+        if (need < want) need = want;
+        u8_s009c_0f60* mem = (u8_s009c_0f60*)EASTL_NEW(need * 0x2c);
+        u8_s009c_0f60* p = (u8_s009c_0f60*)FUN_009b4990(begin, pos, mem);
+        FUN_009bef30(p, n, value, pos);
+        u8_s009c_0f60* newEnd = (u8_s009c_0f60*)FUN_009b4990(pos, end, p + n * 0x2c);
+        EASTL_FREE(begin);
+        begin = mem;
+        end = newEnd;
+        cap = mem + need * 0x2c;
+        return;
+    }
+    if (n == 0) return;
+
+    FUN_009b4230(value);
+    u8_s009c_0f60 tmp[0x2c];
+    memcpy(tmp, value, 0x2c);
+    u8_s009c_0f60* e = end;
+    unsigned tail = (unsigned)((e - pos) / 0x2c);
+
+    if (tail < n) {
+        FUN_009bef30(e, n - tail, tmp, pos);
+        end = e + (n - tail) * 0x2c;
+        FUN_009b4b10(pos, e, end);
+        end += tail * 0x2c;
+        FUN_009beec0(pos, pos + n * 0x2c, tmp);
+    } else {
+        u8_s009c_0f60* at = e - n * 0x2c;
+        FUN_009b4b10(at, e, e);
+        end = e + n * 0x2c;
+        FUN_009beec0(pos, at + n * 0x2c, tmp);
+    }
+}
+
+// @ 0x009c1560
+void HTable::DoInsertValue(void** out, void* key, u32_s009c_0f60* value, char reuse)
+{
+    // a key that is already stored and sorts before the incoming value keeps
+    // its node; everything else links a fresh one
+    u32_s009c_0f60 keep = 0;
+    if (reuse == 0 && key != (void*)((u8_s009c_0f60*)this + 4) &&
+        *(u32_s009c_0f60*)((u8_s009c_0f60*)key + 0x10) <= *value)
+        keep = 1;
+
+    void** node = (void**)*(void**)((u8_s009c_0f60*)this + 0x18);
+    if (node == 0)
+        node = (void**)EASTL_NEW(*(u32_s009c_0f60*)((u8_s009c_0f60*)this + 0x28));
+    else
+        *(void**)((u8_s009c_0f60*)this + 0x18) = *node;
+
+    if (node != 0) node[4] = (void*)*value;
+
+    RBTreeInsert(node, key, (u8_s009c_0f60*)this + 4, keep);
+    ((u32_s009c_0f60*)((u8_s009c_0f60*)this + 0x14))[0]++;
+    *out = node;
+}
+
+// @ 0x009c1630
+HTable* HTableCtor(HTable* self, u32_s009c_0f60 bucketCount, void* allocator)
+{
+    void* pool[0x18 / 4];
+    ((void**)pool)[0] = 0;                                  // mpHead
+    fixed_pool_base_init(pool, (u8_s009c_0f60*)self + 0x7c, 0xc0, 0xc, 4, 0);
+
+    void* node = FUN_00921340(0x11);
+    FUN_009c09c0(node, (void*)bucketCount, &allocator, &allocator, allocator,
+                 &allocator, pool);
+
+    (*(float*)((u8_s009c_0f60*)self + 0x10)) = 1.0f;                   // 0x461c4000
+    (*(float*)((u8_s009c_0f60*)self + 0x14)) = 2.0f;                   // 0x40000000
+    *(void**)((u8_s009c_0f60*)self + 0x18) = 0;
+
+    u32_s009c_0f60 need = FUN_009213c0(*(u32_s009c_0f60*)((u8_s009c_0f60*)self + 0x0c));
+    if (*(u32_s009c_0f60*)((u8_s009c_0f60*)self + 0x08) < need)
+        FUN_00a22220(need);                                 // Rehash
+    return self;
+}
+
+// @ 0x009c1790
+void Vec10c::InsertFill(u8_s009c_0f60* pos, unsigned n, const void* value)
+{
+    if ((unsigned)((cap - end) / 0x10c) < n) {
+        unsigned have = (unsigned)((end - begin) / 0x10c);
+        unsigned need = have + n;
+        unsigned want = grow_count(have);
+        if (need < want) need = want;
+        u8_s009c_0f60* mem = (u8_s009c_0f60*)EASTL_NEW(need * 0x10c);
+        u8_s009c_0f60* p = (u8_s009c_0f60*)FUN_009bf500(begin, pos, mem);
+        FUN_009c0aa0(p, n, value);
+        u8_s009c_0f60* newEnd = (u8_s009c_0f60*)FUN_009bf500(pos, end, p + n * 0x10c);
+        EASTL_FREE(begin);
+        begin = mem;
+        end = newEnd;
+        cap = mem + need * 0x10c;
+        return;
+    }
+    if (n == 0) return;
+
+    FUN_009be850(value);
+    u8_s009c_0f60 tmp[0x10c];
+    memcpy(tmp, value, 0x10c);
+    u8_s009c_0f60* e = end;
+    unsigned tail = (unsigned)((e - pos) / 0x10c);
+
+    if (tail <= n) {
+        FUN_009c0aa0(e, n - tail, tmp);
+        end = e + (n - tail) * 0x10c;
+        FUN_009bedb0(&n, pos, e, end);
+        end += tail * 0x10c;
+        FUN_009c0d40(pos, e, tmp);
+    } else {
+        u8_s009c_0f60* at = e - n * 0x10c;
+        FUN_009bedb0(&n, at, e, e);
+        end += n * 0x10c;
+        FUN_009bf600(pos, at, e);
+        FUN_009c0d40(pos, pos + n * 0x10c, tmp);
+    }
+}
+
+// @ 0x009c1980
+void Vec700::InsertFill(u8_s009c_0f60* pos, unsigned n, const void* value)
+{
+    if ((unsigned)((cap - end) / 700) < n) {
+        unsigned have = (unsigned)((end - begin) / 700);
+        unsigned need = have + n;
+        unsigned want = grow_count(have);
+        if (need < want) need = want;
+        u8_s009c_0f60* mem = (u8_s009c_0f60*)EASTL_NEW(need * 700);
+        u8_s009c_0f60* p = (u8_s009c_0f60*)FUN_009bf580(begin, pos, mem);
+        FUN_009c0ad0(p, n, value);
+        u8_s009c_0f60* newEnd = (u8_s009c_0f60*)FUN_009bf580(pos, end, p + n * 700);
+        EASTL_FREE(begin);
+        begin = mem;
+        end = newEnd;
+        cap = mem + need * 700;
+        return;
+    }
+    if (n == 0) return;
+
+    FUN_009bea50(value);
+    u8_s009c_0f60 tmp[700];
+    memcpy(tmp, value, 700);
+    u8_s009c_0f60* e = end;
+    unsigned tail = (unsigned)((e - pos) / 700);
+
+    if (tail <= n) {
+        FUN_009c0ad0(e, n - tail, tmp);
+        end = e + (n - tail) * 700;
+        FUN_009bedf0(&n, pos, e, end);
+        end += tail * 700;
+        FUN_009c0d70(pos, e, tmp);
+    } else {
+        u8_s009c_0f60* at = e - n * 700;
+        FUN_009bedf0(&n, at, e, e);
+        end += n * 700;
+        FUN_009bf640(pos, at, e);
+        FUN_009c0d70(pos, pos + n * 700, tmp);
+    }
+}
+
+// @ 0x009c1b70
+void BoolVec::Insert(u8_s009c_0f60* pos, u8_s009c_0f60* first, u8_s009c_0f60* last)
+{
+    if (first == last) return;
+
+    u8_s009c_0f60* e = end;
+    long bytes = last - first;
+    unsigned words = (unsigned)(bytes >> 2);
+
+    if (words <= (unsigned)((cap - e) >> 2)) {
+        u8_s009c_0f60* at = e;
+        unsigned have = (unsigned)((e - pos) >> 2);
+        if (have <= words) {
+            // build the new tail first, then insert the remainder in place
+            u8_s009c_0f60* tail = first + have * 4;
+            bool_insert_dispatch(at, tail, last - tail);
+            end += (words - have) * 4;
+            bool_insert_dispatch(end, pos, at - pos);
+            end += have * 4;
+            memmove(pos + (have - (unsigned)((tail - first) >> 2)) * 4,
+                    first, tail - first);
+            return;
+        }
+        u8_s009c_0f60* split = at - words * 4;
+        bool_insert_dispatch(at, split, at - split);
+        end += words * 4;
+        memmove(split + words * 4, split, (size_t)(at - split));
+        u8_s009c_0f60* head = split;
+        bool_insert_dispatch(pos, first, bytes);
+        (void)head;
+        return;
+    }
+
+    unsigned have = (unsigned)((e - begin) >> 2);
+    unsigned need = have + words;
+    unsigned want = grow_count(have);
+    if (need < want) need = want;
+
+    u8_s009c_0f60* mem = (u8_s009c_0f60*)EASTL_NEW(need * 4);
+    u8_s009c_0f60* head = pos;
+    u8_s009c_0f60* p = (u8_s009c_0f60*)bool_insert_dispatch(mem, begin, head - begin);
+    p += words * 4;
+    p = (u8_s009c_0f60*)bool_insert_dispatch(p, first, bytes);
+    p += (e - pos);
+    bool_insert_dispatch(p, pos, e - pos);
+
+    if (begin != 0 && begin != storage) EASTL_FREE(begin);
+    end = p;
+    begin = mem;
+    cap = mem + need * 4;
+}
+
+// @ 0x009c1d30
+void CreatureStaticData::CollectFlagged()
+{
+    int n = (int)(Bodies.end - Bodies.begin);
+    if (n == 0) return;
+
+    for (int off = 0; n != 0; off += 0x468, n--) {
+        AnimNode* node = (AnimNode*)((char*)Bodies.begin + off);
+        if ((node->flags & 8) != 0) {
+            PendingRec rec;
+            rec.node = node;
+            rec.flag = 0;
+            pending.Push(rec);
+        }
+    }
+}
+
+// @ 0x009c1dc0
+void CreatureStaticData::Clear(int)
+{
+    name[0] = 0;
+    filename[0] = 0;
+    uid[0] = 0;
+    uid[1] = 0;
+    instance_id = 0;
+    group_id = 0;
+    type_id = 0;
+    BranchPredicates = 1;
+
+    // Bodies: run the range destructor, then rewind mpEnd by the whole-element
+    // count.  The original spells this `mpEnd -= (mpEnd - mpBegin)` in element
+    // units, so any partial trailing element (impossible for a well formed
+    // vector) would survive the rewind.
+    FUN_009b4310(Bodies.end, Bodies.end, Bodies.begin);
+    Bodies.end -= Bodies.end - Bodies.begin;
+
+    mMaxStraightLegLength_Scalable = -1;
+    mGear = -1;
+    num_bones_with_mesh_parts = -1;
+
+    skin_colors[0].x1 = 1.0f;
+    skin_colors[1].x1 = 1.0f;
+    skin_colors[0].x2 = 1.0f;
+    skin_colors[0].x3 = 1.0f;
+    skin_colors[1].x2 = 1.0f;
+    skin_colors[1].x3 = 1.0f;
+    skin_colors[2].x1 = 1.0f;
+    skin_colors[2].x2 = 1.0f;
+    skin_colors[2].x3 = 1.0f;
+
+    // inv_bone_rest_xforms: same destroy + whole-element rewind
+    FUN_009b43f0(inv_bone_rest_xforms.end, inv_bone_rest_xforms.end,
+                 inv_bone_rest_xforms.begin);
+    inv_bone_rest_xforms.end -= inv_bone_rest_xforms.end -
+                                inv_bone_rest_xforms.begin;
+
+    f3c8 = 0;
+
+    // pending: the original copies the 8-byte records backwards over themselves
+    // and then rewinds mpEnd onto mpBegin by the same (dead) element count
+    pending.end -= pending.end - pending.begin;
+
+    f374 = 0.0f;
+    f350 = 0;
+    f354 = 0;
+    f3f0 = 0;
+    f3f5 = 0;
+    f380 = 0;
+    f3e0 = 0;
+    f3ec = 4.0f;
+}
 
 // @ 0x009c1f60
 namespace nSPCreatureAnim {
@@ -3037,6 +7509,105 @@ void creature_instance_data_s009c_1f60::InitWiggles()
     f_1690 = 0.0f;
 }
 }  // namespace nSPCreatureAnim
+
+// @ 0x009c2ef0
+void IKVec::Resize(unsigned n)
+{
+    IkConstraint* e = end;
+    IkConstraint* b = begin;
+    unsigned have = (unsigned)(e - b);
+
+    if (n > have) {
+        IkConstraint t;
+        t.v0.x1 = t.v0.x2 = t.v0.x3 = 0.0f;
+        t.v1.x1 = t.v1.x2 = t.v1.x3 = 0.0f;
+        t.v2.x1 = t.v2.x2 = t.v2.x3 = 0.0f;
+        t.v3.x1 = t.v3.x2 = t.v3.x3 = 0.0f;
+        t.v4.x1 = t.v4.x2 = t.v4.x3 = 0.0f;
+        t.v5.x1 = t.v5.x2 = t.v5.x3 = 0.0f;
+        t.v6.x1 = t.v6.x2 = t.v6.x3 = 0.0f;
+        t.v7.x1 = t.v7.x2 = t.v7.x3 = 0.0f;
+        t.v8.x1 = t.v8.x2 = t.v8.x3 = 0.0f;
+        InsertFill(e, n - have, &t);
+    } else {
+        IkConstraint* newEnd = b + n;
+        FUN_009bf540(e, e, newEnd);
+        end -= e - newEnd;
+    }
+}
+
+// @ 0x009c3040
+void WiggleVec::Resize(unsigned n)
+{
+    BodyAnimC_s009c_2ef0* e = end;
+    BodyAnimC_s009c_2ef0* b = begin;
+    unsigned have = (unsigned)(e - b);
+
+    if (n > have) {
+        BodyAnimC_s009c_2ef0 t;
+        BodyAnimC_s009c_2ef0* src = t.Ctor();
+        InsertFill(end, n - (unsigned)(end - begin), src);
+    } else {
+        BodyAnimC_s009c_2ef0* newEnd = b + n;
+        FUN_009bf5c0(e, e, newEnd);
+        end -= e - newEnd;
+    }
+}
+
+// @ 0x009c3150
+int FUN_009c3150(AnimOwner* a, WordVec* v, u32_s009c_2ef0** base, unsigned idx)
+{
+    BodyNode* node = &a->bodies[idx];
+
+    unsigned prev = node->prevCount;
+    node->prevCount = (unsigned)(((char*)v->end - (char*)v->begin) >> 2);
+    unsigned n = node->count;
+    node->total = (int)n;
+    if (n == 0) return 0;
+
+    unsigned off = prev * 4;
+    v->Insert(v->end, (u32_s009c_2ef0*)((char*)*base + off),
+              (u32_s009c_2ef0*)((char*)*base + off + n * 4), a);
+
+    for (unsigned i = 0; i < node->count; i++) {
+        node->total += FUN_009c3150(a, v, base, *(u32_s009c_2ef0*)((char*)*base + off));
+        off += 4;
+    }
+    return node->total;
+}
+
+// @ 0x009c3210
+FixedVec* FixedVec::Init(void* a, void* b)
+{
+    u8_s009c_2ef0* s = storage;
+    buf = s;
+    end = s;
+    begin = s;
+    cap = s + 0x3fc;
+    Setup(a, b);
+    return this;
+}
+
+// @ 0x009c3240
+void PhaseGroupVec::DestroyValues(PhaseGroup* p, PhaseGroup* e)
+{
+    for (; p < e; ++p) {
+        void* b = p->block;
+        if (b != 0 && *(int*)((char*)b - 4) != 0)
+            operator delete(b);
+
+        char* qe = (char*)p->subEnd;
+        for (char* q = (char*)p->subBegin; q < qe; q += 0x38) {
+            void* sub = *(void**)(q + 4);
+            if (sub != 0 && *(int*)((char*)sub - 4) != 0)
+                operator delete(sub);
+        }
+
+        void* r = p->subBegin;
+        if (r != 0 && *(int*)((char*)r - 4) != 0)
+            operator delete(r);
+    }
+}
 
 // @ 0x009c32c0
 namespace nSPCreatureAnim {
@@ -3690,3 +8261,329 @@ void creature_instance_data_s009c_4a30::Clear(bool flag)
     FUN_011e073e(b + 0x1b8, 0, 0x40);
 }
 }  // namespace nSPCreatureAnim
+
+// @ 0x009c52a0
+namespace nSPCreatureAnim {
+bool InitCreatureInstance(creature_static_data_s009c_4a30* c, creature_instance_data_s009c_4a30* inst, float a, float fb, float p5, float p6, float p7, float p8, float p9, int arg10)
+{
+    char* b = (char*)inst;
+    unsigned count = (unsigned)((*(char**)((char*)c + 0x388) - *(char**)((char*)c + 0x384)) / 0x468);
+    if (count == 0)
+        return false;
+
+    inst->Clear(false);
+
+    creature_static_data_s009c_4a30* old = *(creature_static_data_s009c_4a30**)b;
+    if (c != old) {
+        if (c)
+            ++*(int*)((char*)c + 0x348);
+        *(creature_static_data_s009c_4a30**)b = c;
+        if (old)
+            old->Release();
+    }
+    *(uint8*)(b + 0xc) = 1;
+    *(uint8*)((char*)c + 0x34c) = 0;
+
+    *(float*)(b + 0x30) = a;
+    *(float*)(b + 0x34) = fb;
+    *(float*)(b + 0x38) = p5;
+    *(float*)(b + 0x18) = a;
+    *(float*)(b + 0x1c) = fb;
+    *(float*)(b + 0x20) = p5;
+    *(float*)(b + 0x24) = a;
+    *(float*)(b + 0x28) = fb;
+    *(float*)(b + 0x2c) = p5;
+    *(float*)(b + 0x60) = p7;
+    *(float*)(b + 0x64) = p8;
+    *(float*)(b + 0x68) = p9;
+    *(float*)(b + 0x5c) = p6;
+    *(float*)(b + 0x3c) = p6;
+    *(float*)(b + 0x40) = p7;
+    *(float*)(b + 0x44) = p8;
+    *(float*)(b + 0x48) = p9;
+    *(float*)(b + 0x4c) = p6;
+    *(float*)(b + 0x50) = p7;
+    *(float*)(b + 0x54) = p8;
+    *(float*)(b + 0x58) = p9;
+    *(float*)(b + 0x1644) = a;
+    *(float*)(b + 0x1648) = fb;
+    *(float*)(b + 0x164c) = p5;
+    *(float*)(b + 0x1650) = p6;
+    *(float*)(b + 0x1654) = p7;
+    *(float*)(b + 0x1658) = p8;
+    *(float*)(b + 0x165c) = p9;
+    *(float*)(b + 0x6c) = 1.0f;
+    *(float*)(b + 0x70) = 1.0f;
+
+    ((body_vec*)(b + 0x2e4))->FUN_009c3040((int)count);
+    *(uint32*)(b + 8) = *(uint32*)(b + 0x2e4);
+    *(float*)(b + 0x1660) = 0.0f; *(float*)(b + 0x1664) = 0.0f;
+    *(float*)(b + 0x1668) = 0.0f; *(float*)(b + 0x166c) = 0.0f;
+    *(float*)(b + 0x1670) = 0.0f; *(float*)(b + 0x1674) = 0.0f;
+    *(float*)(b + 0x1678) = 0.0f; *(float*)(b + 0x167c) = 0.0f;
+    FUN_009db1d0(b + 0x15b8);
+    *(uint8*)(b + 0x270) = 1;
+
+    // Per-body instance initialisation.
+    for (unsigned i = 0; i < count; ++i) {
+        char* e = *(char**)(b + 0x2e4) + i * 0x2bc;      // body instance record
+        char* bs = *(char**)((char*)c + 0x384) + i * 0x468;
+        *(uint32*)(e + 8) = 0;
+        *(uint32*)(e + 0xc) = 0;
+        for (int k = 0; k < 20; ++k)
+            *(float*)(e + 0x58 + k * 4) = 0.0f;
+        *(uint32*)(e + 0xa0) = 0;
+        *(uint32*)(e + 0x48) = 0; *(uint32*)(e + 0x4c) = 0;
+        *(uint32*)(e + 0x50) = 0;
+        *(uint8*)(e + 0x54) = 0; *(uint8*)(e + 0x55) = 0;
+        *(uint8*)(e + 0x2a0) = 0; *(uint8*)(e + 0x38) = 0;
+        *(uint32*)(e + 0x144) = 0;
+        *(void**)(e + 0) = bs;
+        *(void**)(e + 4) = inst;
+        *(uint32*)(e + 8) = 0;
+        *(uint32*)(e + 0xc) = 0;
+        *(float*)(e + 0x1c) = *(float*)(bs + 0x118);
+        *(float*)(e + 0x20) = *(float*)(bs + 0x11c);
+        *(float*)(e + 0x24) = *(float*)(bs + 0x120);
+        *(float*)(e + 0x28) = *(float*)(bs + 0x124);
+        float sc = *(float*)(b + 0x70);
+        *(float*)(e + 0x10) = *(float*)(bs + 0x10c) * sc;
+        *(float*)(e + 0x14) = *(float*)(bs + 0x110) * sc;
+        *(float*)(e + 0x18) = *(float*)(bs + 0x114) * sc;
+        *(uint8*)(e + 0x38) = 0;
+        *(float*)(e + 0x3c) = *(float*)(e + 0x10);
+        *(float*)(e + 0x40) = *(float*)(e + 0x14);
+        *(float*)(e + 0x44) = *(float*)(e + 0x18);
+        *(uint32*)(e + 0x144) = 0;
+        *(float*)(e + 0x148) = 0.0f; *(float*)(e + 0x14c) = 0.0f;
+        *(float*)(e + 0x150) = 0.0f; *(float*)(e + 0x154) = 1.0f;
+        *(float*)(e + 0x158) = 0.0f; *(float*)(e + 0x15c) = 0.0f;
+        *(float*)(e + 0x160) = 0.0f;
+    }
+
+    FUN_009bd340(inst);
+    *(uint32*)(b + 0x1688) = arg10;
+    *(uint8*)(b + 0x263) = 0;
+    *(uint32*)(b + 0x1640) = 0;
+    FUN_009db270(b + 0x15b8);
+
+    if (*(int*)(*(char**)((char*)c + 0x3c8)) == 0)
+        inst->BuildBodyList();
+    else
+        inst->FUN_009b6360();
+
+    if (*(uint32*)(b + 0x1640) > 0) {
+        void* gt = (void*)(b + 0x15b8);
+        if (*(int*)(*(char**)((char*)c + 0x3c8)) == 0)
+            FUN_009db6d0(gt, 2.0f, inst);
+        else
+            FUN_009db4d0(gt, 2.0f);
+        FUN_009d34a0(gt);
+        FUN_009da640(gt, inst);
+        FUN_009d3170(gt);
+    }
+
+    inst->InitWiggles();
+    return true;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009c56c0
+creature_instance_data::creature_instance_data()
+{
+    char tmp;
+    *(int*)this = 0;
+    *(float*)((char*)this + 0x20) = 0.0f;
+    *(float*)((char*)this + 0x1c) = 0.0f;
+    *(float*)((char*)this + 0x18) = 0.0f;
+    *(float*)((char*)this + 0x2c) = 0.0f;
+    *(float*)((char*)this + 0x28) = 0.0f;
+    *(float*)((char*)this + 0x24) = 0.0f;
+    *(float*)((char*)this + 0x38) = 0.0f;
+    *(float*)((char*)this + 0x34) = 0.0f;
+    *(float*)((char*)this + 0x30) = 0.0f;
+    *(float*)((char*)this + 0x44) = 0.0f;
+    *(float*)((char*)this + 0x40) = 0.0f;
+    *(float*)((char*)this + 0x3c) = 0.0f;
+    *(float*)((char*)this + 0x48) = 1.0f;
+    *(float*)((char*)this + 0x54) = 0.0f;
+    *(float*)((char*)this + 0x50) = 0.0f;
+    *(float*)((char*)this + 0x4c) = 0.0f;
+    *(float*)((char*)this + 0x58) = 1.0f;
+    *(float*)((char*)this + 0x64) = 0.0f;
+    *(float*)((char*)this + 0x60) = 0.0f;
+    *(float*)((char*)this + 0x5c) = 0.0f;
+    *(float*)((char*)this + 0x68) = 1.0f;
+    *(float*)((char*)this + 0x6c) = 1.0f;
+    *(float*)((char*)this + 0x70) = 1.0f;
+    *(float*)((char*)this + 0x7c) = 0.0f;
+    *(float*)((char*)this + 0x78) = 0.0f;
+    *(float*)((char*)this + 0x74) = 0.0f;
+    *(float*)((char*)this + 0x88) = 0.0f;
+    *(float*)((char*)this + 0x84) = 0.0f;
+    *(float*)((char*)this + 0x80) = 0.0f;
+    *(float*)((char*)this + 0x94) = 0.0f;
+    *(float*)((char*)this + 0x90) = 0.0f;
+    *(float*)((char*)this + 0x8c) = 0.0f;
+    *(float*)((char*)this + 0xa0) = 0.0f;
+    *(float*)((char*)this + 0x9c) = 0.0f;
+    *(float*)((char*)this + 0x98) = 0.0f;
+    *(float*)((char*)this + 0xac) = 0.0f;
+    *(float*)((char*)this + 0xa8) = 0.0f;
+    *(float*)((char*)this + 0xa4) = 0.0f;
+    *(float*)((char*)this + 0xb8) = 0.0f;
+    *(float*)((char*)this + 0xb4) = 0.0f;
+    *(float*)((char*)this + 0xb0) = 0.0f;
+    *(float*)((char*)this + 0xc4) = 0.0f;
+    *(float*)((char*)this + 0xc0) = 0.0f;
+    *(float*)((char*)this + 0xbc) = 0.0f;
+    *(float*)((char*)this + 0xd0) = 0.0f;
+    *(float*)((char*)this + 0xcc) = 0.0f;
+    *(float*)((char*)this + 0xc8) = 0.0f;
+    *(float*)((char*)this + 0xd4) = 1.0f;
+    *(float*)((char*)this + 0xe4) = 0.0f;
+    *(float*)((char*)this + 0xe0) = 0.0f;
+    *(float*)((char*)this + 0xdc) = 0.0f;
+    *(float*)((char*)this + 0xf0) = 0.0f;
+    *(float*)((char*)this + 0xec) = 0.0f;
+    *(float*)((char*)this + 0xe8) = 0.0f;
+    *(float*)((char*)this + 0xfc) = 0.0f;
+    *(float*)((char*)this + 0xf8) = 0.0f;
+    *(float*)((char*)this + 0xf4) = 0.0f;
+    *(float*)((char*)this + 0x108) = 0.0f;
+    *(float*)((char*)this + 0x104) = 0.0f;
+    *(float*)((char*)this + 0x100) = 0.0f;
+    *(float*)((char*)this + 0x118) = 0.0f;
+    *(float*)((char*)this + 0x11c) = 0.0f;
+    *(float*)((char*)this + 0x120) = 0.0f;
+    *(float*)((char*)this + 0x124) = 0.0f;
+    *(float*)((char*)this + 0x128) = 0.0f;
+    *(float*)((char*)this + 0x12c) = 0.0f;
+    *(float*)((char*)this + 0x130) = 0.0f;
+    *(float*)((char*)this + 0x134) = 0.0f;
+    *(float*)((char*)this + 0x138) = 0.0f;
+    *(float*)((char*)this + 0x13c) = 0.0f;
+    *(float*)((char*)this + 0x140) = 0.0f;
+    *(float*)((char*)this + 0x144) = 0.0f;
+    *(float*)((char*)this + 0x148) = 0.0f;
+    *(float*)((char*)this + 0x14c) = 0.0f;
+    *(float*)((char*)this + 0x150) = 0.0f;
+    *(float*)((char*)this + 0x154) = 0.0f;
+    *(float*)((char*)this + 0x158) = 0.0f;
+    *(float*)((char*)this + 0x15c) = 0.0f;
+    *(float*)((char*)this + 0x160) = 0.0f;
+    *(float*)((char*)this + 0x164) = 0.0f;
+    *(float*)((char*)this + 0x168) = 0.0f;
+    *(float*)((char*)this + 0x16c) = 0.0f;
+    *(float*)((char*)this + 0x170) = 0.0f;
+    *(float*)((char*)this + 0x174) = 0.0f;
+    *(float*)((char*)this + 0x178) = 0.0f;
+    *(float*)((char*)this + 0x17c) = 0.0f;
+    *(float*)((char*)this + 0x180) = 0.0f;
+    *(float*)((char*)this + 0x184) = 0.0f;
+    *(float*)((char*)this + 0x188) = 0.0f;
+    *(float*)((char*)this + 0x18c) = 0.0f;
+    *(float*)((char*)this + 0x190) = 0.0f;
+    *(float*)((char*)this + 0x194) = 0.0f;
+    *(float*)((char*)this + 0x198) = 0.0f;
+    *(float*)((char*)this + 0x19c) = 0.0f;
+    *(float*)((char*)this + 0x1a0) = 0.0f;
+    *(float*)((char*)this + 0x1a4) = 0.0f;
+    *(float*)((char*)this + 0x240) = 0.0f;
+    *(float*)((char*)this + 0x23c) = 0.0f;
+    *(float*)((char*)this + 0x238) = 0.0f;
+    *(float*)((char*)this + 0x244) = 1.0f;
+    *(float*)((char*)this + 0x268) = 0.0f;
+    *(float*)((char*)this + 0x264) = 0.0f;
+    *(float*)((char*)this + 0x280) = 0.0f;
+    *(float*)((char*)this + 0x27c) = 0.0f;
+    *(float*)((char*)this + 0x278) = 0.0f;
+    *(int*)((char*)this + 0x24c) = 0;
+    *(int*)((char*)this + 0x250) = 0;
+    *(int*)((char*)this + 0x254) = 0;
+    *(float*)((char*)this + 0x28c) = 0.0f;
+    *(float*)((char*)this + 0x288) = 0.0f;
+    *(float*)((char*)this + 0x284) = 0.0f;
+    *(float*)((char*)this + 0x290) = 1.0f;
+    *(int*)((char*)this + 0x294) = 0;
+    *(int*)((char*)this + 0x298) = 0;
+    *(int*)((char*)this + 0x29c) = 0;
+    *(int*)((char*)this + 0x2a0) = 0;
+    *(int*)((char*)this + 0x2a4) = 0;
+    *(float*)((char*)this + 0x2cc) = 0.0f;
+    *(float*)((char*)this + 0x2c8) = 0.0f;
+    *(float*)((char*)this + 0x2c4) = 0.0f;
+    *(int*)((char*)this + 0x2e4) = 0;
+    *(int*)((char*)this + 0x2e8) = 0;
+    *(int*)((char*)this + 0x2ec) = 0;
+    ((XBodySub*)((char*)this + 0x2f8))->Construct();
+    *(float*)((char*)this + 0x160c) = 0.0f;
+    *(float*)((char*)this + 0x1608) = 0.0f;
+    *(float*)((char*)this + 0x1604) = 0.0f;
+    *(float*)((char*)this + 0x1618) = 0.0f;
+    *(float*)((char*)this + 0x1614) = 0.0f;
+    *(float*)((char*)this + 0x1610) = 0.0f;
+    *(float*)((char*)this + 0x164c) = 0.0f;
+    *(float*)((char*)this + 0x1648) = 0.0f;
+    *(float*)((char*)this + 0x1644) = 0.0f;
+    *(int*)((char*)this + 0x15c8) = 0;
+    *(int*)((char*)this + 0x15cc) = 0;
+    *(int*)((char*)this + 0x15d0) = 0;
+    *(float*)((char*)this + 0x1658) = 0.0f;
+    *(float*)((char*)this + 0x1654) = 0.0f;
+    *(float*)((char*)this + 0x1650) = 0.0f;
+    *(float*)((char*)this + 0x165c) = 1.0f;
+    *(int*)((char*)this + 0x15dc) = 0;
+    *(int*)((char*)this + 0x15e0) = 0;
+    *(int*)((char*)this + 0x15e4) = 0;
+    *(float*)((char*)this + 0x1668) = 0.0f;
+    *(float*)((char*)this + 0x1664) = 0.0f;
+    *(float*)((char*)this + 0x1660) = 0.0f;
+    *(int*)((char*)this + 0x15f0) = 0;
+    *(int*)((char*)this + 0x15f4) = 0;
+    *(int*)((char*)this + 0x15f8) = 0;
+    *(float*)((char*)this + 0x1678) = 0.0f;
+    *(float*)((char*)this + 0x1674) = 0.0f;
+    *(float*)((char*)this + 0x1670) = 0.0f;
+    *(float*)((char*)this + 0x16bc) = 0.0f;
+    *(float*)((char*)this + 0x16b8) = 0.0f;
+    *(float*)((char*)this + 0x16b4) = 0.0f;
+    *(float*)((char*)this + 0x16e8) = 0.0f;
+    *(float*)((char*)this + 0x16e4) = 0.0f;
+    *(float*)((char*)this + 0x16e0) = 0.0f;
+    *(float*)((char*)this + 0x16f4) = 0.0f;
+    *(float*)((char*)this + 0x16f0) = 0.0f;
+    *(float*)((char*)this + 0x16ec) = 0.0f;
+    *(float*)((char*)this + 0x16f8) = 1.0f;
+    *(float*)((char*)this + 0x1710) = 0.0f;
+    *(float*)((char*)this + 0x170c) = 0.0f;
+    *(float*)((char*)this + 0x1708) = 0.0f;
+    *(float*)((char*)this + 0x171c) = 0.0f;
+    *(float*)((char*)this + 0x1718) = 0.0f;
+    *(float*)((char*)this + 0x1714) = 0.0f;
+    *(float*)((char*)this + 0x1728) = 0.0f;
+    *(float*)((char*)this + 0x1724) = 0.0f;
+    *(float*)((char*)this + 0x1720) = 0.0f;
+    *(float*)((char*)this + 0x1750) = 0.0f;
+    *(float*)((char*)this + 0x174c) = 0.0f;
+    *(float*)((char*)this + 0x1748) = 0.0f;
+    *(float*)((char*)this + 0x175c) = 0.0f;
+    *(float*)((char*)this + 0x1758) = 0.0f;
+    *(float*)((char*)this + 0x1754) = 0.0f;
+    *(float*)((char*)this + 0x1760) = 1.0f;
+    *(float*)((char*)this + 0x1778) = 0.0f;
+    *(float*)((char*)this + 0x1774) = 0.0f;
+    *(float*)((char*)this + 0x1770) = 0.0f;
+    *(float*)((char*)this + 0x1784) = 0.0f;
+    *(float*)((char*)this + 0x1780) = 0.0f;
+    *(float*)((char*)this + 0x177c) = 0.0f;
+    *(int*)((char*)this + 0x1694) = 0;
+    *(int*)((char*)this + 0x1698) = 0;
+    *(int*)((char*)this + 0x169c) = 0;
+    *(float*)((char*)this + 0x1790) = 0.0f;
+    *(float*)((char*)this + 0x178c) = 0.0f;
+    *(float*)((char*)this + 0x1788) = 0.0f;
+    ((XGaitSub*)((char*)this + 0x17a0))->Construct(&tmp, &tmp);
+    flags14 = 0;
+    Clear(true);
+}
