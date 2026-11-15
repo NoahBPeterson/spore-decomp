@@ -3,7 +3,6 @@
 0054b7b0 1994 complete; /Od serialization chain reordered into loops/guards (same write sequence); equiv WEAK (1% coverage, member-this fix)
 0054c780 2179 complete; instruction stream and registers identical, only /Od frame-slot offsets differ (frame 0x25c vs 0x2ec: missing inline-callee holes)
 0054def0 24 ~cAssetDirectory: original omits the derived vptr store at destructor entry (only IHandler vptr restored at end)
-0054e970 3 SetAuthorB: same frame-size difference as SetAuthorA
 0054eb10 242 complete; /Od mutex-guarded map/set lookup dispatch schedule differs
 0054ed50 243 complete; /Od mutex-guarded lookup+erase schedule differs
 0054efb0 170 complete; /Od three-container clear schedule differs
@@ -16,8 +15,6 @@
 005506c0 87 complete; /Od dtor vtable/store schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 00550740 54 complete; /Od Object::Cast compare tree schedule differs
 00550910 9 complete; /Od vector<ptr> getter else-branch/jmp shape differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
-00550b00 29 complete; /Od map find out-param frame differs
-00550b30 25 complete; /Od map find frame 0x38 vs ours differs
 00550b60 83 complete; /Od 64-bit key/store schedule differs
 00550bd0 207 complete; /Od CSV tag-splitter schedule differs
 00550cf0 118 complete; /Od string-vector join schedule differs

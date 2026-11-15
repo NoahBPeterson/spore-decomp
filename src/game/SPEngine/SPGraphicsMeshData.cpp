@@ -732,12 +732,10 @@ int PrimCursor::Seek(RefCounted* meshRef, int budget)
 void FillNInt(int* first, unsigned n, const int* value)
 {
     int* p = first;
-    if (n == 0) return;
-    do {
+    for (; n > 0; --n, ++p) {
         if (p)
             *p = *value;
-        ++p;
-    } while (--n);
+    }
 }
 
 // @ 0x0071e7d0

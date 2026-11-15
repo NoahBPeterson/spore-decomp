@@ -25,3 +25,5 @@
 ../src/game/SPBake/SPFeedXml.cpp  ?push_back@?$vector_s0054_6f80@UFeedDescription_s0054_6f80@Feed@SP@@Usp_vector_allocator_s0054_6f80@eastl@@@eastl@@QAEXXZ  00547640  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPFeedXml.cpp  ?find_first_not_of@?$basic_string_s0054_6f80@_WVallocator_s0054_6f80@eastl@@@eastl@@QBEIPB_WII@Z  00547900  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPFeedXml.cpp  ?find_last_not_of@?$basic_string_s0054_6f80@_WVallocator_s0054_6f80@eastl@@@eastl@@QBEIPB_WII@Z  00547970  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?CharTypeStringFindFirstNotOf@eastl@@YAPB_WPB_W000@Z  005497e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPFeedXml.cpp  ?CharTypeStringRFindFirstNotOf@eastl@@YAPB_WPB_W000@Z  00549840  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

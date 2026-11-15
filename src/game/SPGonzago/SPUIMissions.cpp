@@ -3193,10 +3193,14 @@ void CardLayout::UpdateButtonStateB(ISelectable* src)
     }
 }
 
+static __forceinline void InitBaseVtbl(void* volatile& v) {
+    v = (void*)0x013ec458;
+}
+
 // @ 0x00e147a0
 CardLayout* CardLayout::InitB()
 {
-    mpVtbl1 = (void*)0x013ec458;
+    InitBaseVtbl(mpVtbl1);
     m08 = 0;
     m0C = 0;
     m10 = 0;

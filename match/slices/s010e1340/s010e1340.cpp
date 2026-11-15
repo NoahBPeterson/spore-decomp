@@ -14,11 +14,12 @@ static inline hkThreadMemory* getThreadMemory() { return (hkThreadMemory*)hkTlsG
 // ---------------------------------------------------------------------------------------------------------
 // hkShapeCollectionAgent
 // ---------------------------------------------------------------------------------------------------------
-// @ 0x010e1380  (scalar deleting destructor: the compiler-generated one for this class, which hkMultiSphereAgent shares)
-hkShapeCollectionAgent::~hkShapeCollectionAgent()
+// @ 0x010e1380  (implicit scalar deleting destructor; the manifest binds compiler-generated ??_GhkShapeCollectionAgent)
+// This owned-array cleanup is inlined into that naturally emitted destructor; it is not an explicit native entry body.
+hkShapeCollectionAgentArray::~hkShapeCollectionAgentArray()
 {
-	if (m_agents.m_capacityAndFlags >= 0)
-		getThreadMemory()->deallocateChunk(m_agents.m_data, (m_agents.m_capacityAndFlags & HK_ARRAY_CAPACITY_MASK) << 3, HK_MEMORY_CLASS_ARRAY);
+    if ((m_capacityAndFlags & 0x80000000u) == 0)
+        getThreadMemory()->deallocateChunk(m_data, getCapacity() * sizeof(hkShapeCollectionKeyAgentPair), HK_MEMORY_CLASS_ARRAY);
 }
 
 // @ 0x010e1340
@@ -371,4 +372,44 @@ HK_LAYOUT_CHECK(funcs, sizeof(hkAgentFuncs) == 0x14 && offsetof(hkCollisionDispa
 
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
+}
+
+// @ 0x010e1090
+// Co-located with its owning-member cleanup and implicit deleting destructor.
+hkShapeCollectionAgent::hkShapeCollectionAgent(const hkCdBody& bodyA, const hkCdBody& bodyB, const hkCollisionInput& input, hkContactMgr* mgr)
+    : hkCollisionAgent(mgr)
+{
+    m_agents.m_data = m_agents.m_storage;
+    m_agents.m_size = 0;
+    m_agents.m_capacityAndFlags = 0x80000004;
+    const hkShapeCollection* collection = (const hkShapeCollection*)bodyA.m_shape;
+    int numChild = collection->getNumChildShapes();
+    if (m_agents.getCapacity() < numChild) {
+        int newCap = m_agents.getCapacity() * 2;
+        if (newCap <= numChild) newCap = numChild;
+        hkArrayUtil::_reserveExactly(&m_agents, newCap, 8);
+    }
+    unsigned int key = collection->getFirstKey();
+    if (numChild > 0) {
+        __declspec(align(16)) hkShapeBuffer buffer;
+        int remaining = numChild;
+        do {
+            const hkShape* child = collection->getChildShape(key, &buffer);
+            if (input.m_filter->isCollisionEnabled(input, bodyB, bodyA, *collection, key)) {
+                hkShapeCollectionKeyAgentPair& entry = m_agents.m_data[m_agents.m_size];
+                m_agents.m_size = m_agents.m_size + 1;
+                hkCollisionDispatcher* dispatcher = (hkCollisionDispatcher*)input.m_dispatcher;
+                const uint8_t (*table)[32] = input.m_createPredictiveAgents ? dispatcher->m_agent2TypesPred : dispatcher->m_agent2Types;
+                uint8_t agentType = table[child->getType()][bodyB.m_shape->getType()];
+                hkCdBody childBody;
+                childBody.m_shape = child;
+                childBody.m_shapeKey = key;
+                childBody.m_motion = bodyA.m_motion;
+                childBody.m_parent = &bodyA;
+                entry.m_agent = dispatcher->m_agent2Func[agentType].m_createFunc(childBody, bodyB, input, mgr);
+                entry.m_key = key;
+            }
+            key = collection->getNextKey(key);
+        } while (--remaining != 0);
+    }
 }

@@ -159,7 +159,7 @@ struct RAnchor {
 struct MapV {
     char pad0[4];
     RAnchor mAnchor;                        // +4
-    int mnSize;                             // +0x14
+    uint32_t mnSize;                        // +0x14
     RNode* CreateNode(const int* key);      // 0x006811d0
     RNode** InsertPair(RNode** pOut, RNode* pos, int* key, bool bAllowEquiv); // 0x00681590 (below)
     void InsertUnique(PairOut* pOut, const int* key, AllocArg alloc);     // 0x006815f0 (below)
@@ -1336,9 +1336,11 @@ RNode** MapV::InsertPair(RNode** pOut, RNode* pos, int* key, bool bAllowEquiv)
         bIns = 0;
     RNode* nNew = CreateNode(key);
     RBTreeInsert(nNew, pos, &mAnchor, bIns);
-    ++mnSize;
-    *pOut = nNew;
-    return pOut;
+    // Preserve the native output-argument load before the count update.
+    RNode** output = static_cast<RNode** volatile&>(pOut);
+    static_cast<volatile uint32_t&>(mnSize) += 1;
+    *output = nNew;
+    return output;
 }
 
 // @ 0x006815f0
