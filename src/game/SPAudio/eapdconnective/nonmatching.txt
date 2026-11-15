@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 00a59a10 51 UNSUP  pdint class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a59ab0 11 UNSUP  float constructor (variadic creator) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00a59b00 10 UNSUP  float constructor (explicit creator) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59b00 10 UNSUP  float constructor (explicit creator) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [R40 active draft claim: terra12]
 00a59b50 67 ART    float handler; FAIL is a live-register/callee artifact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a59bb0 52 UNSUP  pdfloat class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a59cc0 26 ART    symbol/anything handler; calls outlet_symbol flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
