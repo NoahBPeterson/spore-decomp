@@ -24,4 +24,4 @@
 008e0a30  479  reconstruction (Manager::Fn8e0a30, KeyVec/PtrVec insert); flags as above; difftest WEAK (367 valid, 51.3% coverage) -- equivalent on the covered paths
 008e0c10  263  reconstruction (Manager::Fn8e0c10, KeyVec erase); flags as above; difftest FAIL (5/29 valid inputs mismatched; first: eax) -- not proven equivalent
 008e0d30  201  reconstruction (Manager::RegisterDatabase); flags as above; difftest WEAK (322 valid, 42.4% coverage) -- equivalent on the covered paths
-008e0e10   69  reconstruction (HashTable::refKey, find); flags as above; difftest FAIL (5/50 valid inputs mismatched: call #2 (depth 1)) -- not proven equivalent
+008e0e10   69  reconstruction (HashTable::refKey, find); flags as above; difftest FAIL (5/50 valid inputs mismatched: call #2 (depth 1)) -- not proven equivalent [R37: same-module result-buffer review, r37_a07]
