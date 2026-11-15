@@ -508,7 +508,7 @@ struct Ext {
     u32_s00b5_1b00   FUN_00c763d0(u32_s00b5_1b00);
     int*  FUN_00b51780(void*, u32_s00b5_1b00);
     void  FUN_00833840(void*, void*);
-    void  FUN_00645ed0(void*, void*);
+    int*  FUN_00645ed0(void*, void*);
     void  FUN_00b4f930(void*, void*, void*);
     void  FUN_00b4f8a0(void*, void*, void*);
     u32_s00b5_1b00   FUN_00b576d0(void*);
@@ -2491,10 +2491,12 @@ int __cdecl FUN_00b521f0(void* a)
     int it[2];
     void* key = a;
     ((Ext*)0x16852e8)->FUN_00645ed0(it, &key);
+    int node = it[0];
+    _ReadWriteBarrier();
     int base = *(int*)0x16852ec;
     int count = *(int*)0x16852f0;
-    if (it[0] != *(int*)(base + count * 4))
-        return *(int*)(it[0] + 4);
+    if (node != *(int*)(base + count * 4))
+        return *(int*)(node + 4);
     return 0;
 }
 

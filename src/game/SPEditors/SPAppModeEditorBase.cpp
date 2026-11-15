@@ -7561,14 +7561,21 @@ void __cdecl SetCullBackfaces(int enable)
 // @ 0x00572110
 uint32_t __cdecl LookupByHash(uint32_t hash)
 {
-    switch (hash) {
-    case 0x3d97a8e4: return g_value74;
-    case 0x2399be55: return g_value7c;
-    case 0x24682294: return g_value80;
-    case 0x476a98c7: return g_value84;
-    case 0x438f6347: return g_value88;
+    if (hash <= 0x3d97a8e4) {
+        if (hash != 0x3d97a8e4) {
+            switch (hash) {
+            case 0x2399be55: return g_value7c;
+            case 0x24682294: return g_value80;
+            default: return g_value78;
+            }
+        }
+        return g_value74;
     }
-    return g_value78;
+    switch (hash) {
+    case 0x438f6347: return g_value88;
+    case 0x476a98c7: return g_value84;
+    default: return g_value78;
+    }
 }
 
 // @ 0x00572160

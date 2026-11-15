@@ -22,7 +22,6 @@
 0070f320 44 vector<AutoRefCount> teardown; EH frame missing
 0070f390 44 vector<AutoRefCount> teardown; EH frame missing
 0070f520 27 atomic weak-release range; deferred-release sequence differs
-0070f570 8 fill_n weak-refcount; one instruction scheduled earlier
 0070f8c0 176 SP::cMaterialManager::HasMaterial; map/mutex register shape differs
 0070fa60 33 vector::erase (RC3c); register assignment differs
 0070fab0 33 vector::erase (RC3b); register assignment differs

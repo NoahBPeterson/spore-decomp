@@ -15,3 +15,4 @@
 ../src/game/SPGonzago/SPUIHealthBar.cpp  ?Hide@cSPUILoyaltyMeter_s00e0_6d90@SP@@QAEXXZ  00e07990  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIHealthBar.cpp  ?ShowExpanded@cSPUILoyaltyMeter_s00e0_6d90@SP@@QAEXXZ  00e07b20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIHealthBar.cpp  ?HideExpanded@cSPUILoyaltyMeter_s00e0_6d90@SP@@QAEXXZ  00e07b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIHealthBar.cpp  ?SetRange@cSPUILoyaltyMeter@@QAEXMM@Z  00e06730  /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

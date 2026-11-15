@@ -7,6 +7,7 @@
 #include "SP/cJob.h"
 #include "SP/cJobManager.h"
 #include <intrin.h>
+#include <string.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void ea_dealloc(void*);          // 0x00f47380
@@ -24,8 +25,8 @@ extern "C" void* ea_eastl_alloc(unsigned size, void* zone, int, int, const char*
 struct Job {
     void f();   // 0x690120
 };
-struct JobManager {
-    int ContinueJob();   // 0x68f970
+struct AsyncJobStatus {
+    SP::tJobStatus GetStatus() const; // 0x0068f970; reads status under the job-manager lock
 };
 extern "C" void ea_dealloc(void*);          // 0x00f47380
 extern void FUN_006ae090(void*);            // 0x006ae090 callback thunk
@@ -141,12 +142,18 @@ void __fastcall FUN_006ae210(void* self)
 }
 
 // @ 0x006ae280
-bool __fastcall FUN_006ae280(int self)
+bool SP::cAsyncResourceRequest::IsComplete()
 {
-    JobManager* j = *(JobManager**)(self + 0xc);
-    if (j) {
-        unsigned r = (unsigned)j->ContinueJob();
-        return r - 7 <= 1;
+    AsyncJobStatus* job;
+    memcpy(&job, mFutureResource, sizeof(job));
+    if (job) {
+        switch (job->GetStatus()) {
+        case SP::kJobStatusFinished:
+        case SP::kJobStatusFailed:
+            return true;
+        default:
+            return false;
+        }
     }
     return true;
 }

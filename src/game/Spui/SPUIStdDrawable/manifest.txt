@@ -5,3 +5,5 @@
 ../src/game/Spui/SPUIStdDrawable.cpp  ?GetFieldC@DSub@@QAEHH@Z  00830c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIStdDrawable.cpp  ?GetField10@DSub@@QAEHH@Z  00830cf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIStdDrawable.cpp  ?ScalarDtor@ImageInfo2@@QAEPAXI@Z  00831030  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?GetPair28@Drawable_s0083_0c00@@QAE?AUDrawablePoint2@@H@Z  00830c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIStdDrawable.cpp  ?GetPair30@Drawable_s0083_0c00@@QAE?AUDrawablePoint2@@H@Z  00830cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
