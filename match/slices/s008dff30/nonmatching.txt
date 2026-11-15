@@ -12,7 +12,6 @@
 008e0140   75  reconstruction (Manager::Fn8e0140, list head); flags as above; difftest WEAK (212 valid, 30.4% coverage) -- equivalent on the covered paths
 008e01c0    7  reconstruction (Manager::GetNameFromKey); flags as above; difftest WEAK (143 valid, 69.1% coverage); remaining diff is a pure ebp/ebx register-allocation swap
 008e0250   33  reconstruction (VecOwner::CopyFrom); flags as above; difftest WEAK (152 valid, 100% coverage); retail reads the first argument from EAX (LTCG register ABI) so the this/arg codegen differs
-008e02b0    5  reconstruction (HashTable::insertNode18); flags as above; difftest WEAK (187 valid, 90.7% coverage); 5-byte diff is one store-order scheduling swap (`*pOut = pNew` before reloading mpBucketArray for pOut+1) [R37: claimed for matching work]
 008e0390  207  reconstruction (HashTable::insertNode20); flags as above; difftest WEAK (135 valid, 78.8% coverage) -- equivalent on the covered paths
 008e04a0  152  reconstruction (Manager::RegisterChangeNotification); flags as above; difftest FAIL (5/6 valid inputs mismatched; ours faults at 008deecb where the original returns) -- not proven equivalent
 008e0550    5  reconstruction (HashTable::insertNode1c); flags as above; difftest WEAK (181 valid, 38.4% coverage); 5-byte diff is the same store-order scheduling swap as insertNode18
@@ -24,4 +23,4 @@
 008e0a30  479  reconstruction (Manager::Fn8e0a30, KeyVec/PtrVec insert); flags as above; difftest WEAK (367 valid, 51.3% coverage) -- equivalent on the covered paths
 008e0c10  263  reconstruction (Manager::Fn8e0c10, KeyVec erase); flags as above; difftest FAIL (5/29 valid inputs mismatched; first: eax) -- not proven equivalent
 008e0d30  201  reconstruction (Manager::RegisterDatabase); flags as above; difftest WEAK (322 valid, 42.4% coverage) -- equivalent on the covered paths
-008e0e10   69  reconstruction (HashTable::refKey, find); flags as above; difftest FAIL (5/50 valid inputs mismatched: call #2 (depth 1)) -- not proven equivalent [R37: same-module result-buffer review, r37_a07]
+008e0e10   69  frame: 147-byte build vs 155 retail; repaired 12-byte insert result storage via aggregate return; caller still has stack/tag/string-temporary differences and is not proven equivalent
