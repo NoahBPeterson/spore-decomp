@@ -35,7 +35,6 @@
 00447030 183 complete behaviour; /Od name-hash frame layout, scratch-ctor loop and obj temp differ
 00448380 180 GetEffectsMaskScale - /Od frame/slot layout differs (retail declares the float result first, a/b after it, and keeps the mField33c test in a pointer slot); equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
 00448690 358 AddToEffectsMask - complete but retail inlines a two-branch mGroups set-bit (or/and form, +159 bytes) and copies pos through cSPVector3::operator[]; /Od frame differs; equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
-00448a80 16 RemoveFromEffectsMask - complete; /Od frame is 8 bytes larger in retail (two unnamed operator= temps) and the mEffectsMaskObject condition copy sits in the higher slot; equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
 00448fa0 821 complete; /Od frame layout (inline AutoRefCount operator-> temp slots, uninit copy pattern) not reproduced; difftest PASS (78% coverage) after mapping the two operator* overloads by mangled name in symbols/slices/s00448fa0.txt flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 00449420 90 complete; /Od frame holes and the by-value Matrix3 dest-pointer temp slot not reproduced flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 00449d40 215 complete; /Od inline operator-> junk-copy temps (3 extra slots) not reproduced flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
@@ -43,9 +42,7 @@
 0044a0e0 1263 Blk::A4a0e0 (SetOrientation) complete; /Od frame layout and inline temps differ flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044aaa0 335 Blk::A4aaa0 (GetBounds by value) complete; inline bool helpers / switch layout differ flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044ae00 1442 complete GetBBox; /Od hole/slot layout differs (frame 0x108 vs 0x168), instruction shapes otherwise close
-0044b5c0 16 complete GetDefaultScale; only local slot order (hash) differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 0044ba20 567 complete recursive visibility/flags update; /Od named-local slot order and inline-set this temps differ; difftest FAIL is a checker artifact: the generated vtable slot m3ec->vtbl[0x30] holds 0x44bc01 (a jump target inside the original Ba20, harvested from its immediates), so both sides jump into the middle of the original body, which reads the original's own frame slots; seed 2 gives PASS (324 valid, 69.8% coverage)
-0044c050 10 instruction sequence identical; only the hidden this-home slot and the result slot are swapped
 0044d9e0 1707 complete; original Clamp uses maxss/minss (inline-asm only) and /Od slot hash fits for 7+18 locals unmatched flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044e460 58 Cross: this cl build evaluates the left product first; original computes the subtrahend first (same result, mirrored instruction order) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044e720 160 GetBounds: inlined Bounds construct/destroy and snap-axis (0x234 base, stride 0x20) handling not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
@@ -61,5 +58,4 @@
 00450f70 493 Rebuild: inlined bit-array set/clear and the 9-arg BuildBlock wrapper not reproduced
 00451330 49 SetVec194: original materialises &mVec194 once (add eax,0x194); this cl folds the displacement
 00451400 3 SP::cSPEditorBlock::Shutdown2: complete, instruction stream identical (647/647 instrs, 42/42 calls+vcalls in order, size 2592/2592); one inline slot (operator= pTemp of the socket-connector release) sits 8 bytes off (an unexplained 2-dword hole; filled with ScratchSlots)
-00451e90 10 GetSub38: only the /Od inline branch layout (extra jmp) differs
 00451ef0 187 SetPhysicsObject: addEntity/hkWorld wiring, inlined Vec3/Matrix3 temporaries and /Od frames not reproduced

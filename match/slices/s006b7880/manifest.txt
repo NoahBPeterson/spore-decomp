@@ -3,3 +3,4 @@ slices/s006b7880/s006b7880.cpp  FUN_006b8250  006b8250  /O2 /MD /Gy /GS- /EHsc /
 slices/s006b7880/s006b7880.cpp  FUN_006b8180  006b8180  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
 slices/s006b7880/s006b7880.cpp  Init@SysInfo  006b81e0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
 slices/s006b7880/s006b7880.cpp  ??4CBig       006b8520  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
+slices/s006b7880/s006b7880.cpp  ?FUN_006b8410@@YAIXZ  006b8410  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE

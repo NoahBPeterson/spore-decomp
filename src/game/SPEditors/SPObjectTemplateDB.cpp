@@ -1526,7 +1526,7 @@ struct Iter70 {
     void  Increment();                                  // 0x00422c50
 };
 struct DateVal70 {
-    int mLow; int mHigh;
+    __int64 mnSeconds; // EA::DateTime::DateTime seconds and 8-byte alignment.
     void Set(int mode);                                 // 0x0092e3d0
 };
 struct CJob70 {
@@ -1537,6 +1537,7 @@ struct CJob70 {
 };
 struct LookupDB70 {
     void OnIndexComplete();                             // 0x00563e10
+    void FUN_00561cc0();                                 // no-argument thiscall
     int  FindAssetIndex(const void* key);               // 0x005631e0
     void DecreasePopulation(int index);                 // 0x00561970
     void UpdateGroupMembership(int index);              // 0x00561850
@@ -3518,6 +3519,7 @@ struct UIntSet {
     eastl::sp_vector_allocator_s0055_fc10 mAllocator;   // 0x0c
     uint32_t mComparePad;                    // 0x14
     uint32_t* FUN_004769b0(uint32_t* first, uint32_t* last);       // erase
+    void clear() { ScratchSlots<4>(); FUN_004769b0(mpBegin, mpEnd); }
     void FUN_00554020(void* pResult, const uint32_t& value);       // insert
 };
 }
@@ -5635,11 +5637,12 @@ void* PaintStub::FUN_0055eae0(int* first, int count)
 namespace SP {
 void EcxStub70::FUN_0055f9e0()
 {
-    void* this_ = this;
-    if (*(char*)((char*)this_ + 0x40) == 0) {
-        void* obj = *(void**)((char*)this_ + 0x44);
-        if (obj != 0)
-            ((CJob70*)obj)->Wait();
+    if (*(unsigned char*)((char*)this + 0x40) == 0) {
+        CJob70* pending = *(CJob70**)((char*)this + 0x44);
+        if (pending != 0) {
+            CJob70* job = *(CJob70**)((char*)this + 0x44);
+            job->Wait();
+        }
     }
 }
 }  // namespace SP
@@ -5694,15 +5697,17 @@ bool EcxStub70::FUN_0055fb30(void* key)
 namespace SP {
 bool EcxStub70::FUN_0055fbb0(void* key)
 {
-    void* this_ = this;
-    int index = ((LookupDB70*)this_)->FindAssetIndex(key);
-    if (index == -1)
-        return 0;
-    DateVal70 now;
-    now.Set(1);
-    char* asset = (char*)(index * 0x50 + *(int*)((char*)this_ + 0x14));
-    *(DateVal70*)(asset + 0x48) = now;
-    return 1;
+    int index = ((LookupDB70*)this)->FindAssetIndex(key);
+    if (index != -1) {
+        DateVal70 now;
+        now.Set(1);
+        {
+            __int64 seconds = now.mnSeconds;
+            ((DateVal70*)(index * 0x50 + *(char**)((char*)this + 0x14) + 0x48))->mnSeconds = seconds;
+        }
+        return true;
+    }
+    return false;
 }
 }  // namespace SP
 
@@ -5770,9 +5775,8 @@ void FUN_0055fe60(void* this_, unsigned key, unsigned value)
 // @ 0x0055fed0
 void SP::cSPObjectTemplateDB::slot_26()
 {
-    void* this_ = this;
-    FUN_004769b0((char*)this_ + 0x64, 0, *(void**)((char*)this_ + 0x64), *(void**)((char*)this_ + 0x68));
-    FUN_00561cc0(this_, 0);
+    ((UIntSet*)((char*)this + 0x64))->clear();
+    ((LookupDB70*)this)->FUN_00561cc0();
 }
 
 // @ 0x0055ff10
@@ -5905,13 +5909,13 @@ bool DBMethods::FUN_00560470()
 namespace SP {
 bool EcxStubFc::FUN_00560880(void* key, unsigned* out)
 {
-    void* this_ = this;
-    int index = FUN_005631e0(this_, 0, key);
-    if (index == -1)
-        return false;
-    char* asset = (char*)(index * 0x50 + *(int*)((char*)this_ + 0x14));
-    *out = *(unsigned*)(asset + 0xc);
-    return true;
+    int index = ((LookupDB70*)this)->FindAssetIndex(key);
+    if (index != -1) {
+        char* asset = index * 0x50 + *(char**)((char*)this + 0x14);
+        *out = *(unsigned*)(asset + 0xc);
+        return true;
+    }
+    return false;
 }
 }  // namespace SP
 

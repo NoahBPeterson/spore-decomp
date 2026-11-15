@@ -1948,17 +1948,16 @@ void VecBase::DestroyRange(void** first, void** last)
 // @ 0x0070f570
 void FillWeak14N(void** dst, unsigned n, void** value)
 {
-    while (n > 0)
+    void** current = dst;
+    for (; n > 0; --n, ++current)
     {
-        if (dst != 0)
+        if (current != 0)
         {
             void* p = *value;
-            *dst = p;
+            *current = p;
             if (p != 0)
                 ++*(int*)((char*)p + 0x14);
         }
-        --n;
-        ++dst;
     }
 }
 

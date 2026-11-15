@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-004e89c0  28  rbtree lower_bound: complete; /Od slot order (current/candidate) and one reserved inline frame slot
 004e88a0  167  RBTree::FindOrInsert (find-or-insert + zero tail): equiv PASS (286 valid, 100% coverage); /Od frame/loop shape
 004e8a80  297  RBTree::InsertUnique (hinted insert_unique): equiv PASS (330 valid, 66.7% coverage); /Od frame shape + inlined helper copies
 004e8be0  102  RBTree::InsertNode (allocate + relink + count++): equiv PASS (334 valid, 100% coverage); /Od frame shape

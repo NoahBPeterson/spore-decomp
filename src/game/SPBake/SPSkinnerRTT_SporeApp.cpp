@@ -31,7 +31,7 @@ virtual void v01();
 virtual void v02();
 virtual void v03();
     virtual cRenderTargetRectID v04(uint32_t w, uint32_t h, int fmt, short flags, uint32_t z, int n);  // +0x10 (hidden sret)
-    virtual void v05();                                                                            // +0x14
+    virtual bool v05(cRenderTargetRectID id); // +0x14; releases the page allocation
     virtual int  v06(cRenderTargetRectID id);                                                      // +0x18
 virtual void v07();
 virtual void v08();
@@ -146,9 +146,6 @@ struct cRTTBuffer_s0052_88f0 {                     // size 0x64
     uint32_t ClampAndStream(uint32_t requested); // 0x00529520
 };
 }
-namespace nSPSkinner {
-typedef void (__thiscall *RwDeviceVtbl5)(void* self, int pageID, int allocID);
-}
 using nSPSkinner::cRTTBuffer_s0052_88f0;
 struct Matrix44f { float m[16]; };
 struct DrawCtx {
@@ -226,11 +223,8 @@ cRTTBuffer_s0052_88f0::cRTTBuffer_s0052_88f0(uint32_t w, uint32_t h)
 namespace nSPSkinner {
 void cRTTBuffer_s0052_88f0::Destroy()
 {
-    cRTTBuffer_s0052_88f0* self = this;
-    RwDevice* d = GetDevice();
-    RwDeviceVtbl5 fn = *(RwDeviceVtbl5*)(*(int*)d + 0x14);
-    fn(d, self->mRTTRect.mPageID, self->mRTTRect.mAllocID);
-    FreeObj(self->mCamera);
+    GetDevice()->v05(mRTTRect);
+    FreeObj(mCamera);
 }
 }  // namespace nSPSkinner
 

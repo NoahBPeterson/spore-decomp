@@ -794,12 +794,12 @@ struct Bone {
     int Check();                          // 0x0044f220
 };
 struct LimbStructure {
-    char pad[0x5c];
-    void Ctor();                          // 0x00488850
-    void Init(void* limb, int a, int b);  // 0x004891a0
+    uint32_t pad[0x54 / 4]; // Three 0x14-byte vectors, with the last at +0x40.
+    LimbStructure* Ctor();               // 0x00488850; returns this
+    void Init(void* limb, bool a, bool b); // 0x004891a0
     void UpdateScaleRange(void* limb, float f); // 0x0048b370
     void F();                             // 0x00488980
-    ~LimbStructure();                     // 0x00488900
+    void Destroy();                       // 0x00488900
 };
 struct HolderA {
     void* Get();                          // 0x0047e6c0
@@ -1015,14 +1015,17 @@ struct Matrix3_s0049_8470 {
 template <unsigned N> struct Bitset {
     u32 mWord[(N + 31) / 32];
     bool test(unsigned pos) const {
-        bool r;
-        if (pos < N) {
-            u32 w = mWord[pos >> 5];
-            r = (w & (1u << (pos % 32))) != 0;
-        } else {
-            r = false;
+        u32 w;
+        {
+            bool r;
+            if (pos < N) {
+                w = mWord[pos >> 5];
+                r = (w & (1u << (pos % 32))) != 0;
+            } else {
+                r = false;
+            }
+            return r;
         }
-        return r;
     }
 };
 struct RefCountV {
@@ -3134,6 +3137,7 @@ struct Vector3 {
     Vector3(const Vector3& o) : x(o.x), y(o.y), z(o.z) {}
     Vector3& operator=(const Vector3& o) { x = o.x; y = o.y; z = o.z; return *this; }
     float Dot(const Vector3& v) const { return x * v.x + y * v.y + z * v.z; }
+    const float& operator[](int index) const { return (&x)[index]; }
 };
 struct Matrix3_s0048_fde0 {
     float m[9];
@@ -3144,6 +3148,7 @@ struct BoundingBox {
     Vector3 mx;
     BoundingBox() {}
     bool Intersects(const BoundingBox& b) const;
+    void Scale(float factor);             // 0x0044ad00
 };
 struct Tracker {
     char pad0[0x33c];
@@ -3199,7 +3204,6 @@ Vector3* Cross(Vector3* out, const Vector3* a, const Vector3* b);     // 0x0044e
 Vector3* Vector3_Scale(Vector3* out, const float* s, const Vector3* v); // 0x0041de40
 Vector3* Vector3_Sub(Vector3* out, const Vector3* a, const Vector3* b); // 0x0041db10
 float VectorLength(const Vector3* v);                                 // 0x0040ae50
-void ExpandBy(BoundingBox* b, float m);                               // 0x0044ad00
 void SomeCtor(void* self, void* src);                                 // 0x00540470
 void SomePush(void* self, void* v);                                   // 0x004a9e40
 bool SomeMethod(void* self);                                          // 0x00526430
@@ -4324,10 +4328,7 @@ void* HkObj::F_48db10(unsigned flags)
 // @ 0x0048db60
 void HkObj::F_48db60()
 {
-    mField30 = 0;
-    float k = *(float*)0x13ef4f8;
-    mArray[3] = k;
-    mField4 = *(float*)0x13ef4f8;
+    ((hkClosestCdPointCollector_s0048_dcd0*)this)->resetInline();
 }
 
 // @ 0x0048dbb0
@@ -4734,24 +4735,29 @@ bool FUN_004902c0(cSPEditorBlock* a, cSPEditorBlock* b)
 {
     if (b == 0)
         return false;
-    BoundingBox bbB, bbA;
-    b->GetBBox(&bbB, 0, 0, 0);
-    a->GetBBox(&bbA, 0, 0, 0);
-    ExpandBy(&bbB, 1.1f);
-    return bbB.Intersects(bbA);
+    BoundingBox bbB;
+    {
+        float margin;
+        {
+            BoundingBox bbA;
+            ScratchSlots<32>();
+            b->GetBBox(&bbB, 0, 0, 0);
+            a->GetBBox(&bbA, 0, 0, 0);
+            margin = 1.1f;
+            bbB.Scale(margin);
+            if (bbB.Intersects(bbA))
+                return true;
+            return false;
+        }
+    }
 }
 
 // @ 0x00490330
 bool BoundingBox::Intersects(const BoundingBox& b) const
 {
-    int r;
-    if (mx.x < b.mn.x || b.mx.x < mn.x ||
-        mx.y < b.mn.y || b.mx.y < mn.y ||
-        mx.z < b.mn.z || b.mx.z < mn.z)
-        r = 0;
-    else
-        r = 1;
-    return r;
+    return mx[0] >= b.mn[0] && mn[0] <= b.mx[0] &&
+           mx[1] >= b.mn[1] && mn[1] <= b.mx[1] &&
+           mx[2] >= b.mn[2] && mn[2] <= b.mx[2];
 }
 
 // @ 0x00490420
@@ -5869,7 +5875,7 @@ void FUN_00496b60(HolderA* a, float f)
     ls.Init(limb, 0, 0);
     ls.UpdateScaleRange(limb, f);
     ls.F();
-    ls.~LimbStructure();
+    ls.Destroy();
 }
 
 // @ 0x00496bb0
@@ -6177,11 +6183,11 @@ bool FUN_004986d0(Block* blk)
                 return false;
             else
                 return true;
-        } else {
-            return FUN_004986d0(blk->mSocketBlock);
         }
+        return FUN_004986d0(blk->mSocketBlock);
+    } else {
+        return false;
     }
-    return false;
 }
 
 // @ 0x00498850
@@ -8300,7 +8306,8 @@ bool HasSymmetricLimb(cSPEditorBlock_s004a_5970* block)
     if (block) {
         vector_s004a_5970<AutoRefCount_s004a_5970<cSPEditorBlock_s004a_5970> >& syms = block->mSymmetricBlocks;
         for (int i = 0, n = syms.size(); i < n; i++) {
-            if (syms[i]->mFlags.test(0xb))
+            cSPEditorBlock_s004a_5970* sym = syms[i];
+            if (sym->mFlags.test(0xb))
                 return true;
         }
     }
