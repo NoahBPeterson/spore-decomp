@@ -230,6 +230,7 @@ struct RefVec {
     void* mBegin;
     void* mEnd;
     void* mCap;
+    uint32_t mAlloc[2];                  // allocator storage; vector size is 0x14
     RefVec() { mBegin = 0; mEnd = 0; mCap = 0; }
     ~RefVec();
 };
@@ -734,6 +735,8 @@ void BuildDispatch6c10(void* owner, VerbSink* sink)
         RefVec vec;
         FillRefVec6a10(owner, &vec);
         sink->Deliver(&vec);
+        // Preserve the unused inline-helper frame storage.
+        ScratchSlots<6>();
     }
 }
 
