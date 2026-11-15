@@ -4867,6 +4867,14 @@ class Rewrite:
         """Rename a local stub item (and every use of it in this slice's items and function texts) to `Name_<slice>`.
         verbatim_only: the converted functions spell the canonical class (`EA::ArgScript::cArguments`), the rename is
         for the slice's own stub that only the verbatim functions use."""
+        # a static data member defined out of class (`hkMemory* hkMemory::s_instance;`, mig38c Havok s01090a70) is named by
+        # its member name only, but it belongs to its class: another class's `X::s_instance` in the TU is no clash.  Renamed,
+        # the member's declaration inside the class changed and every `hkMemory::s_instance` use broke (C2039)
+        decl_items = [t for k, t in self.items if old_n in RS.item_names(k, t)]
+        if decl_items and not ns and all(re.search(r"\b\w+\s*::\s*%s\s*(?:[;=\[(])" % re.escape(old_n), RS.mask(t).split("{")[0])
+                                         and not re.search(r"\b(?:struct|class|union)\b", RS.mask(t)) for t in decl_items):
+            self.notes.append(("member-definition", "%s: a static member definition, not renamed (%s)" % (old_n, why[:80])))
+            return
         # a dllimport declaration of old_n, also one line of an `extern "C" { ... }` block (parsed as one nameless item)
         imp = re.compile(r"(?m)^[ \t]*__declspec\s*\(\s*dllimport\s*\)[^;{}]*\b%s\s*\([^;{}]*\)\s*;[^\n]*\n?" % re.escape(old_n))
         sysname = old_n in ("FILE", "size_t", "ptrdiff_t", "wchar_t", "va_list", "time_t", "HANDLE", "DWORD", "BOOL") or \
