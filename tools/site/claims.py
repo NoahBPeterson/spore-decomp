@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Write claims.txt: every function address that an open pull request works on, one claim per line.
 
-A pull request claims the functions it names: addresses in its title, `// @ 0x...` markers it adds, and the
-manifest.txt / nonmatching.txt / partial.txt lines it adds or removes. tools/contrib/task.py reads the published file
+A pull request claims the functions it names: addresses in its title, `// @ 0x...` markers it adds, the
+manifest.txt / nonmatching.txt / partial.txt lines it adds or removes, and `claim: 0x...` lines in its description (one
+or more addresses per line; how a draft claims a batch it has not edited yet). tools/contrib/task.py reads the published file
 (the `claims` branch, written by .github/workflows/claims.yml) to hide functions somebody is already working on.
 
   python3 tools/site/claims.py --repo OWNER/NAME --out claims.txt      # needs gh and GH_TOKEN
@@ -12,6 +13,7 @@ Standard library only.
 import argparse, datetime, json, re, subprocess
 
 ADDR = re.compile(r"0x([0-9a-fA-F]{6,8})\b")
+CLAIM_LINE = re.compile(r"^\s*[-*]?\s*claim:\s*(.*)$", re.I | re.M)   # description lines
 MANIFEST_ROW = re.compile(r"^[+-]\S+\s+\S+\s+([0-9a-fA-F]{8})\b")      # source  symbol  va  [flags]
 NOTE_ROW = re.compile(r"^[+-]([0-9a-fA-F]{8})\b")                       # va  diff  reason
 MARKER = re.compile(r"^\+\s*//\s*@\s*0x0*([0-9a-fA-F]+)\b")
@@ -32,8 +34,10 @@ def pr_diff(repo, n):
                        for page in json.loads(pages) for f in page)
 
 
-def addresses(title, diff):
+def addresses(title, diff, body=""):
     out = {int(m, 16) for m in ADDR.findall(title)}
+    for line in CLAIM_LINE.findall(body or ""):
+        out |= {int(m, 16) for m in ADDR.findall(line)}
     path = ""
     for line in diff.splitlines():
         if line.startswith("diff --git "):
@@ -55,11 +59,11 @@ def main():
     ap.add_argument("--out", default="claims.txt")
     a = ap.parse_args()
     prs = json.loads(gh("pr", "list", "--repo", a.repo, "--state", "open", "--limit", "1000",
-                        "--json", "number,author,title,updatedAt"))
+                        "--json", "number,author,title,body,updatedAt"))
     rows = []
     for p in prs:
         diff = pr_diff(a.repo, p["number"])
-        for va in addresses(p["title"], diff):
+        for va in addresses(p["title"], diff, p.get("body")):
             rows.append((va, p["number"], (p.get("author") or {}).get("login") or "?", p["updatedAt"][:10]))
     rows.sort()
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
