@@ -210,15 +210,14 @@ void* canvas_realizedollar(void** out, void* env, void* a3, const char* s)
 }
 
 // @ 0x00a4a5d0
-void* canvas_findtext(int* out, void* x)
+void* canvas_findtext(int* __restrict out, void* x)
 {
     while (*(int*)((char*)x + 0x74) == 0)
         x = *(void**)((char*)x + 0x2c);
-    int* p = *(int**)((char*)x + 0x74);
-    int a = p[0];
-    out[1] = p[1];
-    out[0] = a;
-    return out;
+    const t_symbol* p = (const t_symbol*)((t_glist*)x)->gl_symtag;
+    t_symbol* result = (t_symbol*)out;
+    *result = *p;
+    return result;
 }
 
 // @ 0x00a4a600
