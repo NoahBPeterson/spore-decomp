@@ -3,7 +3,7 @@
 00a26f30 ?DoFreeNodes@ResTable@@QAEXPAPAUResNode@@I@Z  # ResTable::DoFreeNodes migrated from s00a26e10 (verbatim, slice spelling)
 00a27010 ?Alloc@NodePool@@QAEPAXPBUPayload@@@Z  # NodePool::Alloc migrated from s00a26e10 (verbatim, slice spelling)
 00a270b0 ??0PropList_s00a2_6e10@@QAE@XZ  # PropList_s00a2_6e10::PropList migrated from s00a26e10 (verbatim, slice spelling)
-00a27110  ??_EPropList@@UAEPAXI@Z
+00a27110 ??_GPropList_s00a2_6e10@@UAEPAXI@Z  # PropList_s00a2_6e10::~PropList migrated from s00a26e10 (verbatim, slice spelling)
 00a27170 ?CreateResource@FactoryVoiceTemplate@@QAE_NHPAPAUPropList_s00a2_6e10@@HH@Z  # FactoryVoiceTemplate::CreateResource migrated from s00a26e10 (verbatim, slice spelling)
 00a27290 ??_GAbilityList@@UAEPAXI@Z  # AbilityList::AbilityList migrated from s00a26e10 (verbatim, slice spelling)
 00a27340 ?Remove@StyleMgr@@QAE_NI@Z  # StyleMgr::Remove migrated from s00a26e10 (verbatim, slice spelling)

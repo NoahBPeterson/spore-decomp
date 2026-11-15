@@ -646,7 +646,7 @@ struct RDD {
 // ---- items of slice s00a23360 end
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
-__declspec(noinline) RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent);   // defined at 0x00a245e0, called earlier in the TU
+__declspec(noinline) RBNode_s00a2_3360* __stdcall RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent);   // defined at 0x00a245e0, called earlier in the TU
 
 // ---- items of slice s00a24e10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern unsigned g_tid1;      // 0x0166d9f8
@@ -1296,6 +1296,8 @@ void* __cdecl operator_new(uint, const char*, int, int, const char*, int);   // 
 void  __cdecl operator_delete(void*);
 void* __cdecl FUN_00a17090(uint size);
 void* __cdecl FUN_00a17100(void* p);
+void __cdecl FUN_00fccdd0(unsigned id);   // 0x00fccdd0
+void FUN_00a26ce0();   // 0x00a26ce0 hashtable insert (thiscall, called through a cast)
 void* __cdecl copy_impl(void* first, void* last, void* dst);   // 0x006782c0
 struct AudioSystem {
     uchar pad[0x140000];
@@ -6079,12 +6081,13 @@ RBNode_s00a2_3360* __thiscall RBTree::CloneNode(RBNode_s00a2_3360* src, RBNode_s
 }
 
 // @ 0x00a245e0
-__declspec(noinline) RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent)
+__declspec(noinline) RBNode_s00a2_3360* __stdcall RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent)
 {
     RBNode_s00a2_3360* n = (RBNode_s00a2_3360*)operator new(0x18, "EASTL", 0, 0, EA_FILE, 0xd1);
-    if ((char*)n + 0x10) {
-        n->key0 = src->key0;
-        n->key1 = src->key1;
+    u32* kv = (u32*)((char*)n + 0x10);
+    if (kv) {
+        kv[0] = src->key0;
+        kv[1] = src->key1;
     }
     n->left = 0;
     n->right = 0;
@@ -7033,6 +7036,12 @@ void* NodePool::Alloc(const Payload* src)
 // @ 0x00a270b0
 PropList_s00a2_6e10::PropList_s00a2_6e10()
 {
+}
+
+// @ 0x00a27110   scalar deleting destructor of the property list
+PropList_s00a2_6e10::~PropList_s00a2_6e10()
+{
+    // the two fixed vectors free their heap buffers in their own destructors (v2, then v1)
 }
 
 // @ 0x00a27170
@@ -10117,6 +10126,51 @@ u32 Submix_s00a2_f660::SetPerformanceData(int level, const void* a, u32 b)
 	mParams.mFlag4 = 0;
 	mParams.mFlag3 = 0;
 	return nActive;
+}
+
+// @ 0x00a2fe30
+void Submix_s00a2_f660::SetProperty(u32 id, u32 value)
+{
+	if ((value & 0x7fffffff) == 0
+			|| (((value - 0x800000) & 0x7f800000) < 0x7f000000)
+			|| (((value & 0x7fffffff) - 1) < 0x7fffff)) {
+		void* const pPrim = (*(void*(__thiscall**)(u32))(*(char**)gEapdDebug + 0xf8))(id);
+		if (pPrim == 0) {
+			mVoiceContainer.SetProperty(id, value);
+			return;
+		}
+
+		IPrimitiveNode* pFound;
+		((void(__thiscall*)(RegTable*, u32*, IPrimitiveNode**))FUN_00645ed0)(&mRegisters, &id, &pFound);
+
+		IPrimitive* pCreated = 0;
+		IPrimitiveNode* const pEnd =
+			*(IPrimitiveNode**)((char*)mRegisters.mpBucketArray + mRegisters.mnBucketCount * 4);
+
+		if (pFound == pEnd) {
+			IPrimitiveNode* const pStorage = (IPrimitiveNode*)FUN_00a17090(0x1c);
+			if (pStorage != 0)
+				pCreated = (IPrimitive*)FUN_00a17100(this);
+			if (pCreated != 0)
+				(*(void(__thiscall**)(IPrimitive*))(*(char**)pCreated + 0x00))(pCreated);
+
+			FUN_00fccdd0(id);
+			((void(__thiscall*)(IPrimitive*, u32))(void*)FUN_00a16fd0)(pCreated, value);
+			((void(__thiscall*)(RegTable*, IPrimitiveNode*, u32))FUN_00a26ce0)
+				(&mRegisters, (IPrimitiveNode*)&pStorage, value & 0xffffff00);
+			(*(void(__thiscall**)(Submix_s00a2_f660*, u32, IPrimitive*))(*(char**)this + 0x18))(this, id, pCreated);
+		} else {
+			IPrimitive* const pValue = pFound->mpValue;
+			if (pValue != 0) {
+				(*(void(__thiscall**)(IPrimitive*))(*(char**)pValue + 0x00))(pValue);
+				pCreated = pValue;
+			}
+			((void(__thiscall*)(IPrimitive*, u32))(void*)FUN_00a16fd0)(pCreated, value);
+		}
+
+		if (pCreated != 0)
+			(*(void(__thiscall**)(IPrimitive*))(*(char**)pCreated + 0x04))(pCreated);
+	}
 }
 
 // @ 0x00a2ffe0
