@@ -11,15 +11,16 @@ assign falls back, in order, to:
     initializers (atexit destructors, exception-handling funclets): "Compiler-generated code";
   - an unassigned run of the module map with the same object, or the same top directory, on both sides: that
     directory (retail .text keeps each object's functions together);
-  - the call graph (work/xmatch/retail.json direct calls): when every attributed caller and callee of a function is
-    in one directory, and there are at least two, that directory; repeated until nothing changes.  Holdout on 6,000
-    attributed functions (2026-11-14): 1,457 right, 89 wrong (94%%) at that threshold;
+  - then, repeated until nothing changes: runs with one directory on both sides take it; a function's named
+    evidence (Spore-ModAPI's class for it, mapped onto this build by modapi_addr.py, and namespace strings such as
+    "Simulator/cScenarioResource", each calibrated on attributed code) or, without any, its call graph (every
+    attributed caller and callee in one directory, at least two) gives its directory (see decide());
   - else "Not yet attributed". The output holds only address runs and directory-level module names, which are already public as the
 folders under src/game/: no function names, no code.
 
   .venv/bin/python tools/site/make_module_map.py
 """
-import bisect, collections, gzip, json, os
+import bisect, collections, gzip, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SOUND_DIRS = ("cmn", "plugins", "mix", "decoders", "ealayer30", "ealayer31")   # EA's sound library: one module
@@ -83,18 +84,64 @@ def main():
         for c in cs:
             callers[c].append(f)
     skip = {OTHER, STARTUP, LIBS}
-    while True:
-        new = {}
-        for va in vas:
-            if lab[va] != OTHER:
+    # named evidence: ModAPI's class / file category for a function placed on this build (modapi_addr.py), and
+    # namespace-like strings it references ("Simulator", "Simulator/cScenarioResource", "Graphics", "Anim", ...).  Each
+    # key is calibrated on already-attributed functions: kept when one directory holds at least 90% of them (and 5+).
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import modapi_addr
+    mapi = modapi_addr.mapping(set(vas))
+    keys = collections.defaultdict(list)
+    for va, (cat, cls) in mapi.items():
+        keys[va] += [("modapi-class", cls), ("modapi-file", cat)]
+    for a, v in feat.items():
+        for st in v["strs"]:
+            m = re.match(r"^([A-Z][A-Za-z]+)(?:/|$)", st)
+            if m and len(st) < 80:
+                keys[int(a, 16)].append(("string", m.group(1)))
+    tally = collections.defaultdict(collections.Counter)
+    for va, ks in keys.items():
+        if lab[va] not in skip:
+            for k in set(ks):
+                tally[k][lab[va]] += 1
+    calib = {k: c.most_common(1)[0][0] for k, c in tally.items()
+             if c.most_common(1)[0][1] >= 5 and c.most_common(1)[0][1] >= 0.9 * sum(c.values())}
+
+    def decide(va):
+        """Directory for an unattributed function, or None.  Named evidence first (all of it must agree, and the
+        call graph must not be all elsewhere); else the call graph alone (every attributed neighbour in one directory,
+        at least two).  Holdout 2026-11-14: named 1,277 right / 68 wrong (95%), call graph 94%."""
+        ev = {calib[k] for k in keys.get(va, ()) if k in calib}
+        cg = collections.Counter(lab[g] for g in calls.get(va, []) + callers.get(va, []) if lab.get(g) and lab[g] not in skip)
+        if len(ev) == 1:
+            d = next(iter(ev))
+            return d if not cg or cg[d] else None
+        if not ev and len(cg) == 1 and sum(cg.values()) >= 2:
+            return next(iter(cg))
+        return None
+
+    def fill():
+        """An unattributed run with the same directory on both sides takes it (holdout: 29,180 right, 51 wrong)."""
+        add, i = {}, 0
+        while i < len(vas):
+            if lab[vas[i]] != OTHER:
+                i += 1
                 continue
-            c = collections.Counter(lab.get(g) for g in calls.get(va, []) + callers.get(va, []) if lab.get(g) not in skip
-                                    and lab.get(g) is not None)
-            if c and len(c) == 1 and sum(c.values()) >= 2:
-                new[va] = next(iter(c))
-        if not new:
-            break
+            j = i
+            while j < len(vas) and lab[vas[j]] == OTHER:
+                j += 1
+            b4, af = (lab[vas[i - 1]] if i else None), (lab[vas[j]] if j < len(vas) else None)
+            if b4 and b4 == af and b4 not in skip:
+                add.update((vas[k], b4) for k in range(i, j))
+            i = j
+        return add
+
+    while True:
+        new = fill()
         lab.update(new)
+        votes = {va: d for va in vas if lab[va] == OTHER for d in [decide(va)] if d}
+        lab.update(votes)
+        if not new and not votes:
+            break
     names, runs, last = [], [], None
     for va in vas:
         m = lab[va]
