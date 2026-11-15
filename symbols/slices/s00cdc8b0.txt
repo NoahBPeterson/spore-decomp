@@ -1,4 +1,4 @@
 00cdc8b0 cTribeModeStrategy::StampTransitionTargets  # stamp the transition targets onto the planet model (PARTIAL: not reconstructed)
 00cdcb10 cTribeModeStrategy::FinishTransition  # finish the tribe-mode transition and clean up ownership (PARTIAL: not reconstructed)
-00cdce40 cTribeModeStrategy::AppendTransitionTargets  # append one timeline record for the strategy plus one per pointer in the passed vector (0x1c-stride records, three-word swap, vt[0x20] float)
+00cdce40 ?CvgObj_AppendTransitionTargets@@YIXPAUCvgObj@@HPAUPtrVec_s00cd_c8b0@@@Z  # CvgObj_AppendTransitionTargets migrated from s00cdc8b0 (verbatim, slice spelling)
 00cdcf70 SP::cTribeModeStrategy::StartCvgTransitionCinematic  # 1413-byte coverage-transition entry point (PARTIAL: not reconstructed)

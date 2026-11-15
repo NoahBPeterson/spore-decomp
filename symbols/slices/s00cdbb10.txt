@@ -1,1 +1,3 @@
-00cdbd20 SP::cTribeModeStrategy::HandleUIMessage  # card PDB name DoMessage; IWinProc subobject at +4 (this-4 adjust for strategy calls)
+00cdbb10 ?FUN_00cdbb10@cTribeModeStrategy_s00cd_bb10@SP@@QAEHXZ  # cTribeModeStrategy_s00cd_bb10::FUN_00cdbb10 migrated from s00cdbb10 (verbatim, slice spelling)
+00cdbcc0 ?FindClosestNPCHut@cTribeModeStrategy_s00cd_bb10@SP@@QAEPAUcHut@@I@Z  # cTribeModeStrategy_s00cd_bb10::FindClosestNPCHut migrated from s00cdbb10 (verbatim, slice spelling)
+00cdbd20 ?HandleUIMessage@cTribeModeStrategy_s00cd_bb10@SP@@UAE_NPAXABUUTFWinMessage@@@Z  # cTribeModeStrategy_s00cd_bb10::HandleUIMessage migrated from s00cdbb10 (verbatim, slice spelling)
