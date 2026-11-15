@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-009233f0 12 ILogFilter::IsFiltered tail-call thunk: complete; register order differs
 009234f0 252 ITracer::TraceVaList (needs /GS-): complete; original keeps constant 0 in ebx, ours uses immediates
 009236d0 32 Server::Release: complete; interlocked schedule + dec/sub differ
 00923700 21 LogReporter::FilterEnabled: complete; `this` in eax vs ecx
