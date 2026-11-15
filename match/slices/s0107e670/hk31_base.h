@@ -385,14 +385,14 @@ struct hkSingletonInitNode
 // Win32 imports used by the base library, declared by hand (no <windows.h>).
 extern "C"
 {
-	__declspec(dllimport) void* __stdcall TlsGetValue(hkUint32 index);
-	__declspec(dllimport) int __stdcall TlsSetValue(hkUint32 index, void* value);
+	__declspec(dllimport) void* __stdcall TlsGetValue(unsigned long index);
+	__declspec(dllimport) int __stdcall TlsSetValue(unsigned long index, void* value);
 	__declspec(dllimport) int __stdcall TryEnterCriticalSection(void* cs);
 	__declspec(dllimport) void __stdcall EnterCriticalSection(void* cs);
 	__declspec(dllimport) void __stdcall LeaveCriticalSection(void* cs);
 	__declspec(dllimport) void __stdcall DeleteCriticalSection(void* cs);
-	__declspec(dllimport) int __stdcall InitializeCriticalSectionAndSpinCount(void* cs, hkUint32 spin);
-	__declspec(dllimport) hkUint32 __stdcall GetCurrentThreadId(void);
+	__declspec(dllimport) int __stdcall InitializeCriticalSectionAndSpinCount(void* cs, unsigned long spin);
+	__declspec(dllimport) unsigned long __stdcall GetCurrentThreadId(void);
 	__declspec(dllimport) void* __stdcall GetCurrentProcess(void);
 	__declspec(dllimport) void* __stdcall LoadLibraryA(const char* name);
 	__declspec(dllimport) int __stdcall FreeLibrary(void* module);
