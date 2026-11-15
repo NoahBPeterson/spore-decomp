@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include "SP/cCameraManager.h"
+#include "eastl/string.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  SPKeyFromName(void* out, void* name, int, int);   // 0x0068d840 (equiv t2)
@@ -222,17 +223,23 @@ void SP::cCameraManager::SetActiveControllerByIndex(int idx)
     ((void(__thiscall*)(void*))((void**)*(void**)nw)[0x18 / 4])(nw);
 }
 
+extern wchar_t gEmptyString16[];                  // 0x01667bac
+extern eastl::string16 gDefaultCameraString;      // 0x01636248
+extern unsigned int gDefaultCameraStringInit;    // 0x01636258
+extern "C" void DestroyDefaultCameraString();    // 0x013bfff0
+extern "C" int __cdecl atexit(void (__cdecl* fn)()); // 0x011e07ef
+
 // @ 0x007c65a0
 void* VariantGetTPTR()
 {
-    static int once = 0;
-    static void* data[2];
-    if ((once & 1) == 0) {
-        once |= 1;
-        data[0] = (void*)1;
-        data[1] = (void*)1;
+    if ((gDefaultCameraStringInit & 1) == 0) {
+        gDefaultCameraStringInit |= 1;
+        gDefaultCameraString.mpBegin = gEmptyString16;
+        gDefaultCameraString.mpEnd = gEmptyString16;
+        gDefaultCameraString.mpCapacity = gEmptyString16 + 1;
+        atexit(DestroyDefaultCameraString);
     }
-    return data;
+    return &gDefaultCameraString;
 }
 
 // @ 0x007c6610
