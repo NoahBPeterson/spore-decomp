@@ -5654,11 +5654,6 @@
 "how": "anchor",
 "name": "SP::cSPPlayModeUI::SendVideoURLInfoToServer"
 },
-"00637f80": {
-"dev": "00df0040",
-"how": "callee-scored",
-"name": "SP::cString::~cString"
-},
 "00638430": {
 "dev": "00d4ce70",
 "how": "anchor",
@@ -8380,9 +8375,9 @@
 "name": "eastl::operator+<wchar_t,eastl::allocator>"
 },
 "006b5240": {
-"dev": "00df0630",
-"how": "callee-scored",
-"name": "SP::cString::c_str"
+"dev": "00df0040",
+"how": "manual",
+"name": "SP::cString::~cString"
 },
 "006b54b0": {
 "dev": "00df04f0",
@@ -8390,9 +8385,9 @@
 "name": "SP::cString::Load"
 },
 "006b55c0": {
-"dev": "00d71360",
-"how": "callee-single",
-"name": "SP::cSPEditorVerbIconTray::IsMaxValue"
+"dev": "00df0630",
+"how": "manual",
+"name": "SP::cString::c_str"
 },
 "006b5770": {
 "dev": "00df0910",
@@ -46938,11 +46933,6 @@
 "dev": "01148470",
 "how": "callee-single",
 "name": "EA::SSL::SSLManager::RemoveAllSessions"
-},
-"0117ca60": {
-"dev": "00def400",
-"how": "anchor",
-"name": "SP::cTelemetry::AddStat"
 },
 "01193270": {
 "dev": "011770d0",

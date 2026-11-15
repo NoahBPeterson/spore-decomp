@@ -238,7 +238,7 @@ extern "C" void  __cdecl Fn011831e0();                                     // 0x
 extern "C" void* __cdecl Fn011831d0();                                     // 0x011831D0
 extern "C" void* __cdecl Fn011831a0();                                     // 0x011831A0
 extern "C" void* __cdecl Fn01182ab0();                                     // 0x01182AB0
-extern "C" void* __cdecl AddStat(unsigned v);                              // 0x0117CA60
+extern "C" void* __cdecl SSL_CTX_new(unsigned v);                          // 0x0117CA60
 extern "C" __declspec(dllimport) __int64 __cdecl _time64(__int64*);        // 0x013CC55C
 #pragma intrinsic(_InterlockedIncrement, _InterlockedExchangeAdd)
 #define B(p)         ((char*)(p))
@@ -1105,7 +1105,7 @@ char __fastcall SSLManager_Init(void* self)
             t = Fn011831a0();
         else
             t = Fn011831d0();
-        ctx = AddStat((unsigned)t);
+        ctx = SSL_CTX_new((unsigned)t);
         if (ctx == 0)
             goto done;
     }

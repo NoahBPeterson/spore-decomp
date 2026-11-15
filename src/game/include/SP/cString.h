@@ -21,10 +21,10 @@ class cString {
   enum {
     kInstanceIdInvalid = -1,
   };
-  ~cString();                                                            // 0x00637f80
+  ~cString();                                                            // 0x006b5240
   static void SetColorLocalized(bool);                                   // 0x006b5030
   cString();                                                             // 0x006b5060
-  wchar_t const * c_str() const;                                         // 0x006b5240
+  wchar_t const * c_str() const;                                         // 0x006b55c0
   bool Load(unsigned int, unsigned int, wchar_t const *);                // 0x006b54b0
   cString(unsigned int, unsigned int, wchar_t const *);                  // 0x006b5770
   void set_source_string(wchar_t const *, bool);                         // dev only, protected

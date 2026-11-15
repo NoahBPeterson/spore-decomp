@@ -40,7 +40,7 @@ class cTelemetry : public EA::RefCountTemplate<int> /* +0x0 */, public SP::cISer
 
   void FileDump();                                                       // 0x007eb600, private
   void Reset(unsigned int);                                              // 0x007ebb60
-  SP::cTelemetryItem * AddStat(unsigned int, unsigned int);              // 0x0117ca60
+  SP::cTelemetryItem * AddStat(unsigned int, unsigned int);
   unsigned __int64 GetSession();                                         // dev only
   EA::IO::MemoryStream * GetStream();                                    // dev only
   void NewSession();                                                     // dev only
