@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cSPMission.h"
+#include "SP/eUniverseContext.h"
 #include "EA/Random/RandomLinearCongruential.h"
 #include "SP/cCity.h"
 #include "SP/cCivData.h"
@@ -584,8 +585,8 @@ public:
 cTerrainEditor* NounManager_s00c5_a580();
 Vec3_s00c5_a580* GetTerrainSpherePosition();
 void* GetSpaceTuning();
-void* GetUniverseContext();
-void* GetActivePlanet();
+int GetUniverseContext();                    // 0x01021080
+SP::cPlanet* GetActivePlanet();              // 0x01021260
 void CreateMissionSteps(void* pOwner);
 void ResetStepSchedule();
 void SetPlanetHighlight(uint32_t planetId);
@@ -971,19 +972,25 @@ void cMissionPlanetRefresher::RefreshTargetPlanet()
     SP::cSPMission::OnComplete();
 }
 
-// @ 0x00c5b150
-void RefreshTargetPlanetConditional(cSPMission* pMission)
-{
-    uint32_t nPlanet = pMission->GetTargetPlanet();
-    SetPlanetHighlight(nPlanet);
+void FUN_0102c0c0(SP::cPlanet* planet);                          // 0x0102c0c0
 
-    if (GetUniverseContext() == nullptr) {
-        if (pMission->GetTargetPlanet() == (uint32_t)(intptr_t)GetActivePlanet()) {
-            RequestMissionRefresh();
+class cMissionPlanetConditional : public SP::cSPMission {
+public:
+    void RefreshTargetPlanetConditional();
+};
+
+// @ 0x00c5b150
+void cMissionPlanetConditional::RefreshTargetPlanetConditional()
+{
+    FUN_0102c0c0(GetTargetPlanet());
+    if (GetUniverseContext() == SP::kUniverseContextPlanet) {
+        SP::cPlanet* target = GetTargetPlanet();
+        if (target == GetActivePlanet()) {
+            SP::cSPMission::OnComplete();
             return;
         }
     }
-    NotifyMissionEvent(0);
+    SP::cSPMission::OnFail();
 }
 
 // @ 0x00c5bc30

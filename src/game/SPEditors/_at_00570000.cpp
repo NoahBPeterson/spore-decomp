@@ -8,6 +8,9 @@
 #include <string.h>
 #include <math.h>
 
+// Preserve unused storage from the original inlined /Od helpers.
+template<int N> inline void ScratchSlots() { uint32_t slots[N]; }
+
 // ---- items of slice s0056fb90 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Elem1cB {                        // 0x1c-byte element: 4-byte key + 0x18-byte payload
     uint32_t key;                       // +0
@@ -52,7 +55,7 @@ struct KeyVector {
     Allocator mAllocator;
 
     ~KeyVector();                                                            // 0x5719a0 (frees the buffer)
-    void erase(Key12* first, Key12* last);                                   // 0x50f740
+    Key12* erase(Key12* first, Key12* last);                                 // 0x50f740; returns first, ret 8
     Key12* insert(Key12* position, const Key12& value);                      // 0x5718f0
 };
 struct InsertResult {
@@ -377,6 +380,7 @@ cFeatureVector::cFeatureVector()
 // @ 0x00571680
 void cFeatureVector::clear()
 {
+    ScratchSlots<6>();
     erase(mpBegin, mpEnd);
     mfLen = 0.0f;
 }

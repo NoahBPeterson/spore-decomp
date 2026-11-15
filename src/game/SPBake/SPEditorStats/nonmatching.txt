@@ -7,6 +7,5 @@
 004e7da0 19 complete (collect entries, build icon vec, deliver, empty iteration); /Od slot order of entries/vec (-0x14 vs -0x28) and frame holes (0x30 vs 0x54); difftest WEAK (no mismatch; 15% coverage, owner!=0 path faults in callees 0x433210/0x4e7610 on random inputs) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 004e7eb0 1935 complete (creature verb-icon list builder); /Od named-local slot order (profile among locals by name hash) and frame (0xb00 vs 0xb20); difftest WEAK (no mismatch; 1.5% coverage, cSpeciesProfile ctor/Update fault on random inputs) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 004e88a0 101 RBTree::FindOrInsert (find-or-insert + zero tail): equiv PASS (286 valid, 100% coverage); /Od frame/loop shape flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-004e89c0 28 rbtree lower_bound: complete; /Od slot order (current/candidate) and one reserved inline frame slot flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 004e8a80 216 RBTree::InsertUnique (hinted insert_unique): equiv PASS (330 valid, 66.7% coverage); /Od frame shape + inlined helper copies flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 004e8be0 92 RBTree::InsertNode (allocate + relink + count++): equiv PASS (334 valid, 100% coverage); /Od frame shape flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
