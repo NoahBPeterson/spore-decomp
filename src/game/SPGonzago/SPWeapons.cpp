@@ -841,6 +841,7 @@ struct cGameData_s00cb_b020 {
     void* mpField5d8;                        // +0x5d8
     u8    mVector5dc[0x10];                  // +0x5dc  eastl vector
 
+    bool CheckSpaceToolTarget();
     void FUN_00cbb6f0();                     // 0x00cbb6f0  teardown
     void RemoveOwner();                      // 0x00cbb790
     bool FUN_00cbb840();                     // 0x00cbb840  space-tool update
@@ -3457,16 +3458,23 @@ float* f00cb5140(int self, float* out)
 }
 
 // @ 0x00cb52c0
-int f00cb52c0(int self)
+bool Simulator::cGameData_s00cb_b020::CheckSpaceToolTarget()
 {
-    if (FUN_0104cda0(*(void**)(self + 0x518)) == 0.0f)
-        return 0;
-    void* p = *(void**)(self + 0x5cc);
-    if (p && (*(Vfn1*)(*(int*)p + 0x10))(p))
-        return 1;
-    int* strat = (int*)0;   // GetStrategy stub
-    (void)strat;
-    return 0;
+    typedef bool (__thiscall *TargetQuery)(void*);
+    if (!mpSpaceTool->m_104cda0())
+        return false;
+    void* target = mpField5cc;
+    if (target && ((TargetQuery)VTSLOT(target, 0x10))(target))
+        return true;
+    Obj* strategy = mpSpaceTool->m_104f930();
+    if (strategy) {
+        uint32_t fourth = (uint32_t)mpField5d4;
+        cSPSpaceTool* tool = mpSpaceTool;
+        ((IToolStrategy*)strategy)->Use(tool,
+            ((ILoco*)&mLoco)->GetPosition(),
+            (uint32_t)mState5d0, fourth);
+    }
+    return false;
 }
 
 // @ 0x00cb5330

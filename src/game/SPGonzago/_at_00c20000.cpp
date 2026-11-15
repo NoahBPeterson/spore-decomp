@@ -1652,6 +1652,9 @@ TraceCache* Ht::FindOrInsert(const unsigned* key)
 	return &out.res.mpNode->mValue;
 }
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x00c2b110
 TraceCache* __cdecl FUN_00c2b110(unsigned key)
 {
@@ -1659,13 +1662,15 @@ TraceCache* __cdecl FUN_00c2b110(unsigned key)
 	Iter it;
 
 	ht->Find(&it, &key);
-	if (it.mpNode == ht->mpBuckets[ht->mBucketCount])
+	Node* node = it.mpNode;
+	_ReadWriteBarrier();
+	if (node == ht->mpBuckets[ht->mBucketCount])
 	{
 		TraceCache* cache = ht->FindOrInsert(&key);
 		FUN_00cadb50(cache);
 		return cache;
 	}
-	return &it.mpNode->mValue;
+	return &node->mValue;
 }
 
 // @ 0x00c2d220

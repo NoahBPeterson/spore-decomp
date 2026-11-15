@@ -644,11 +644,11 @@ struct SpeciesProfile {
     int  mSelector;       // +0x518
     char pad3[0x9b4 - 0x51c];
 
-    void Update(void* p, int flag);   // 0x004d8c10
+    void Update(void* p, bool flag);  // 0x004d8c10; byte flag, ret 8
 
     int GetVariantA(void* p);
-    int GetVariantB(void* p);
-    int GetVariantC(void* p);
+    void* GetVariantB(void* p);
+    void* GetVariantC(void* p);
 };
 // ---- items of slice s004d8c10 end
 
@@ -853,7 +853,7 @@ struct cSpeciesProfile_s004d_a330 {
 // ---- items of slice s004da330 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
-void ResourceManager(uint32_t param);  // 0x004da3a0 (stays in the slice: not this object's)
+bool ResourceManager(const ResourceKey* key);  // 0x004da3a0: forwards GetResource; bool result is discarded here
 
 // ---- items of slice s004da440 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
@@ -1050,7 +1050,14 @@ public:
 extern int g_paintSystemVtblA[];
 extern int g_paintSystemVtblB[];
 struct Sub0 { void f(); };
-struct Sub1 { void f(); };
+struct Sub1 {
+    void* object;
+    bool f(); // 0x004039f0; returns success in AL
+    void Destroy() {
+        ScratchSlots<2>(); // The original inline member cleanup reserves two dwords.
+        if (object) f();
+    }
+};
 struct Sub2 { void f(); };
 struct Sub3 { void f(); };
 struct IVtbl9 {
@@ -2760,32 +2767,32 @@ int SpeciesProfile::GetVariantA(void* p)
 }
 
 // @ 0x004d8f10
-int SpeciesProfile::GetVariantB(void* p)
+void* SpeciesProfile::GetVariantB(void* p)
 {
-    int* pOwner = *(int**)((char*)p + 0x17c);
-    int* pData = (int*)*pOwner;
-    bool b = *(int*)((char*)pData + 0x31c) == mSelector;
+    bool b;
+    void* result;
+    {
+        void** owner = *(void***)((char*)p + 0x17c);
+        void* data = *owner;
+        b = *(int*)((char*)data + 0x31c) == mSelector;
+    }
     Update(p, b);
-    int result;
-    if (b)
-        result = (int)((char*)this + 0x948);
-    else
-        result = (int)((char*)this + 0x878);
+    result = b ? (char*)this + 0x948 : (char*)this + 0x878;
     return result;
 }
 
 // @ 0x004d8f90
-int SpeciesProfile::GetVariantC(void* p)
+void* SpeciesProfile::GetVariantC(void* p)
 {
-    int* pOwner = *(int**)((char*)p + 0x17c);
-    int* pData = (int*)*pOwner;
-    bool b = *(int*)((char*)pData + 0x31c) == mSelector;
+    bool b;
+    void* result;
+    {
+        void** owner = *(void***)((char*)p + 0x17c);
+        void* data = *owner;
+        b = *(int*)((char*)data + 0x31c) == mSelector;
+    }
     Update(p, b);
-    int result;
-    if (b)
-        result = (int)((char*)this + 0x9b0);
-    else
-        result = (int)((char*)this + 0x8e0);
+    result = b ? (char*)this + 0x9b0 : (char*)this + 0x8e0;
     return result;
 }
 
@@ -2978,20 +2985,21 @@ void cSpeciesProfile_s004d_a330::GetUiName(WString* out)
 }
 
 // @ 0x004da3d0
-uint32_t* GetValidatedSpeciesKey(uint32_t* out, uint32_t instance, bool flora)
+ResourceKey* GetValidatedSpeciesKey(ResourceKey* out, uint32_t instance, bool flora)
 {
-    uint32_t keyInstance;              // actually the group id (slot -0x10)
-    if (!flora)
-        keyInstance = kCreatureEditorModelGroup;
-    else
-        keyInstance = kFloraEditorModelGroup;
-    uint32_t group = instance;         // actually the instance (slot -0xc)
-    uint32_t keyGroup = ((flora ? 0xffffffffu : 0u) & 0x17f7d701) + 0x2b978c46;  // type (slot -8)
-    uint32_t keyType = keyInstance;    // group copy (slot -4)
-    ResourceManager((uint32_t)&group);
-    out[0] = group;
-    out[1] = keyGroup;
-    out[2] = keyType;
+    ResourceKey result;
+    {
+        uint32_t group;
+        if (!flora)
+            group = kCreatureEditorModelGroup;
+        else
+            group = kFloraEditorModelGroup;
+        result.instanceID = instance;
+        result.typeID = ((flora ? 0xffffffffu : 0u) & 0x17f7d701) + 0x2b978c46;
+        result.groupID = group;
+    }
+    ResourceManager(&result);
+    *out = result;
     return out;
 }
 
@@ -3089,9 +3097,7 @@ void PaintSystem::Destroy()
 {
     *(void**)this = (void*)g_paintSystemVtblA;
     ((Sub0*)this)->f();
-    int* p = (int*)((char*)this + 0xd0);
-    if (*p != 0)
-        ((Sub1*)p)->f();
+    ((Sub1*)((char*)this + 0xd0))->Destroy();
     ((Sub2*)((char*)this + 0xb0))->f();
     ((Sub3*)((char*)this + 0x84))->f();
     ((Sub3*)((char*)this + 0x64))->f();
@@ -3099,6 +3105,7 @@ void PaintSystem::Destroy()
     ((Sub3*)((char*)this + 0x24))->f();
     ((Sub3*)((char*)this + 4))->f();
     *(void**)this = (void*)g_paintSystemVtblB;
+    ScratchSlots<18>(); // Remaining unused /Od destructor frame.
 }
 
 // @ 0x004db470

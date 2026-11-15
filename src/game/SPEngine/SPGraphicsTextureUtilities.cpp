@@ -776,11 +776,13 @@ public:
     IEditorResource* mObj;
     virtual ~C0160();
 };
-class C03e0 : public IEditorResource, public IRefCounted {
+class ImageVector : public AutoVec, public ImageVectorRefCount,
+              public EA::RefCountTemplate<EA::Thread::AtomicInt<int> > {
 public:
-    AutoVec mVec;
-    virtual ~C03e0();
+    virtual ~ImageVector() {}
+    ImageVector* ScalarDelete(unsigned int flags);
 };
+typedef char ImageVector_size_must_be_0x18[sizeof(ImageVector) == 0x18 ? 1 : -1];
 struct B0 { virtual int AddRef(); virtual int Release(); virtual int Query(); };
 struct B1 { virtual int AddRef(); virtual int Release(); };
 class BakeSprites : public B0, public B1 {
@@ -2165,8 +2167,13 @@ SP::cTexturePreload::~cTexturePreload()
 {}
 
 // @ 0x007b03e0
-C03e0::~C03e0()
-{}
+ImageVector* ImageVector::ScalarDelete(unsigned int flags)
+{
+    this->ImageVector::~ImageVector();
+    if (flags & 1)
+        EASTLFree(this);
+    return this;
+}
 
 // @ 0x007b0430
 bool FUN_007b0430(cImageDataRaw* src, int mode, int quality, CJob** out)
