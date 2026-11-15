@@ -65,8 +65,8 @@ hkMemory* hkMemory::s_instance;
 extern hkUint32 g_hkMonitorStreamCurrentTls;          // 0x016e42a4
 extern hkUint32 g_hkMonitorStreamEndTls;              // 0x016e42a8
 extern const char hkMonitorTimerEndTag[];             // 0x0149cc34 (end-of-timer marker)
-extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(hkUint32 index);
-extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(hkUint32 index, void* value);
+extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long index);
+extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(unsigned long index, void* value);
 
 static inline hkUint32 hkRdtscLow()
 {

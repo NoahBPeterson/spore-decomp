@@ -207,7 +207,8 @@ struct FlagObj {
     uint32_t mFlags;                // +8
     void SetFlags(bool a, bool b);
 };
-struct Mat24 { int d[9]; };
+struct MatrixRow { float x, y, z; };
+struct Mat24 { MatrixRow xAxis, yAxis, zAxis; };
 struct MatOwner {
     char pad0[0x14];
     Mat24 mMat;                     // +0x14
@@ -1098,10 +1099,10 @@ void Vec::FUN_007353c0(Vec* other)
 // @ 0x0073a7a0
 bool MatOwner::GetMat(Mat24* out)
 {
-    for (int i = 0; i < 9; ++i)
-        out->d[i] = 0;
-    for (int i = 0; i < 9; ++i)
-        out->d[i] = mMat.d[i];
+    memset(out, 0, sizeof(*out));
+    out->xAxis = mMat.xAxis;
+    out->yAxis = mMat.yAxis;
+    out->zAxis = mMat.zAxis;
     return true;
 }
 

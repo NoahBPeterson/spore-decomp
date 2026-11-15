@@ -1,6 +1,12 @@
 # source  symbol  va  flags
 ../src/game/Havok/_at_010d0000.cpp  ?FUN_010d0000@@YIXPAVhkMultiSphereTriangleAgent@@@Z  010d0000  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?FUN_010d0040@hkContactPoint_s010c_fcf0@@QAEXABVhkVector4_s010c_fcf0@@M@Z  010d0040  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?getPenetrations@hkSymmetricAgent_hkMultiSphereTriangleAgent@@QAEXABVhkCdBody_s010d_18c0__b@@0ABUhkCollisionInput_s010d_18c0__b@@AAUhkCdBodyPairCollector_s010d_18c0__b@@@Z  010d25b0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?getClosestPoints@hkSymmetricAgent_hkMultiSphereTriangleAgent@@QAEXABVhkCdBody_s010d_18c0__b@@0ABUhkCollisionInput_s010d_18c0__b@@AAUhkCdPointCollector_s010d_18c0__b@@@Z  010d2630  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?processCollision@hkSymmetricAgent_hkMultiSphereTriangleAgent@@QAEXABVhkCdBody_s010d_18c0__b@@0ABUhkProcessCollisionInput_s010d_18c0__b@@AAUhkProcessCollisionOutput_s010d_18c0__b@@@Z  010d26b0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?cleanup@hkCapsuleTriangleAgent_s010d_18c0__b@@QAEXXZ  010d27c0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?createCapsuleTriangleAgent@hkCapsuleTriangleAgent_s010d_18c0__b@@SAPAVhkCollisionAgent_s010d_18c0__b@@ABVhkCdBody_s010d_18c0__b@@0ABUhkCollisionInput_s010d_18c0__b@@PAUhkContactMgr_s010d_18c0__b@@@Z  010d2800  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?createTriangleCapsuleAgent@hkCapsuleTriangleAgent_s010d_18c0__b@@SAPAVhkCollisionAgent_s010d_18c0__b@@ABVhkCdBody_s010d_18c0__b@@0ABUhkCollisionInput_s010d_18c0__b@@PAUhkContactMgr_s010d_18c0__b@@@Z  010d2860  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?getPenetrationsWrapper@hkCapsuleTriangleAgent_s010d_37d0@@QAEXPBX00PAX@Z  010d4070  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?getClosestPointsWrapper@hkCapsuleTriangleAgent_s010d_37d0@@QAEXPBX00PAX@Z  010d40f0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?hkCapsuleCapsuleAgent__create@@YAPAXPBX00PAX@Z  010d4280  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
@@ -12,7 +18,19 @@
 ../src/game/Havok/_at_010d0000.cpp  ?createTriangleSphereAgent@hkSphereTriangleAgent@@SAPAVhkCollisionAgent@@ABVhkCdBody_s010d_6420@@0ABUhkCollisionInput_s010d_6420@@PAVhkContactMgr_s010d_6420@@@Z  010d6680  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?getPenetrations@hkSymmetricSphereTriangleAgent@@QAEXABVhkCdBody_s010d_6420@@0ABUhkCollisionInput_s010d_6420@@AAVhkCdBodyPairCollector_s010d_6420@@@Z  010d7470  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?getClosestPoints@hkSymmetricSphereTriangleAgent@@QAEXABVhkCdBody_s010d_6420@@0ABUhkCollisionInput_s010d_6420@@AAVhkCdPointCollector_s010d_6420@@@Z  010d74f0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?processCollision@hkSymmetricAgent_hkSphereTriangleAgent@@UAEXABVhkCdBody_s010d_7570@@0ABUhkProcessCollisionInput_s010d_7570@@AAUhkProcessCollisionOutput_s010d_7570@@@Z  010d7570  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?cleanup@hkSphereTriangleAgent_s010d_7570@@UAEXXZ  010d7680  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?create@hkSphereCapsuleAgent@@SAPAVhkCollisionAgent_s010d_7570@@ABVhkCdBody_s010d_7570@@0ABUhkCollisionInput_s010d_7570@@PAVhkContactMgr_s010d_7570@@@Z  010d76b0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?create@hkSymmetricAgent_hkSphereCapsuleAgent@@SAPAVhkCollisionAgent_s010d_7570@@ABVhkCdBody_s010d_7570@@0ABUhkCollisionInput_s010d_7570@@PAVhkContactMgr_s010d_7570@@@Z  010d76e0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?getClosestPoints@hkSymmetricAgent_hkSphereCapsuleAgent_s010d_8520@@UAEXABVhkCdBody_s010d_8520@@0ABUhkCollisionInput_s010d_8520@@AAVhkCdPointCollector_s010d_8520@@@Z  010d8840  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?cleanup@hkSphereSphereAgent@@UAEXXZ  010d89d0  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?create@hkSphereSphereAgent@@SAPAV1@ABVhkCdBody_s010d_8520@@0ABUhkCollisionInput_s010d_8520@@PAVhkContactMgr_s010d_8520@@@Z  010d8a00  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?registerAgent@hkSphereSphereAgent@@SAXPAVhkCollisionDispatcher_s010d_8520@@@Z  010d92a0  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?cleanup@hkBoxBoxAgent@@UAEXXZ  010d92f0  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?registerAgent@hkBoxBoxAgent_s010d_9470@@SAXPAVhkCollisionDispatcher_s010d_9470@@@Z  010d9e50  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?registerAgent@hkPredGskfAgent_s010d_9470@@SAXPAVhkCollisionDispatcher_s010d_9470@@@Z  010d9f10  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?processCollision@hkSymmetricAgentLinearCast_hkHeightFieldAgent@@UAEXABVhkCdBody_s010d_cd40@@0ABUhkProcessCollisionInput_s010d_cd40@@AAUhkProcessCollisionOutput_s010d_cd40@@@Z  010dcd40  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?staticGetClosestPoints@hkSymmetricAgentLinearCast_hkHeightFieldAgent@@SGXABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@AAVhkCdPointCollector_s010d_cd40@@@Z  010dce00  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?createHeightFieldAAgent@hkHeightFieldAgentCreator@@SAPAVhkCollisionAgent_s010d_cd40@@ABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@PAVhkContactMgr@@@Z  010dcf80  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?getFirstVertex@hkConvexListConvexShape@@UBEXAAVhkVector4_s010d_cd40@@@Z  010dd050  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?getCollisionSpheres@hkConvexListConvexShape@@UBEPBVhkSphere@@PAV2@@Z  010dd060  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
@@ -23,11 +41,10 @@
 ../src/game/Havok/_at_010d0000.cpp  ?createZombie@hkConvexListAgent@@UAEXG@Z  010dd160  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?createConvexListAgent@hkConvexListAgent@@SAPAVhkCollisionAgent_s010d_cd40@@ABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@PAVhkContactMgr@@@Z  010dd750  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?hkConvexListAgent_staticLinearCastForwarder@@YGXABVhkCdBody_s010d_cd40@@0ABUhkLinearCastCollisionInput@@AAVhkCdPointCollector_s010d_cd40@@PAV3@@Z  010ddde0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?hkSymmetricAgent_hkConvexListAgent_staticGetClosestPoints@@YGXABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@AAVhkCdPointCollector_s010d_cd40@@@Z  010dde90  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?createListConvexAgent@hkConvexListAgent@@SAPAVhkCollisionAgent_s010d_cd40@@ABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@PAVhkContactMgr@@@Z  010de010  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?cleanup@hkPhantomAgent@@UAEXXZ  010df350  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?getPenetrations@hkPhantomAgent@@UAEXABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@AAVhkCdBodyPairCollector_s010d_f100@@@Z  010df390  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ?staticGetPenetrations@hkPhantomAgent@@SAXABVhkCdBody_s010d_f100@@0ABUhkCollisionInput_s010d_f100@@AAVhkCdBodyPairCollector_s010d_f100@@@Z  010df3b0  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/Havok/_at_010d0000.cpp  ?cleanup@hkTransformAgent@@UAEXXZ  010df560  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/Havok/_at_010d0000.cpp  ?staticGetClosestPoints@hkSymmetricAgentLinearCast_hkHeightFieldAgent@@SGXABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@AAVhkCdPointCollector_s010d_cd40@@@Z  010dce00  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/Havok/_at_010d0000.cpp  ?hkSymmetricAgent_hkConvexListAgent_staticGetClosestPoints@@YGXABVhkCdBody_s010d_cd40@@0ABUhkCollisionInput_s010d_cd40@@AAVhkCdPointCollector_s010d_cd40@@@Z  010dde90  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/Havok/_at_010d0000.cpp  ??0hkPhantomAgent@@QAE@ABVhkCdBody_s010d_f100@@0PAVhkContactMgr@@@Z  010df3d0  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/Havok/_at_010d0000.cpp  ?cleanup@hkTransformAgent@@UAEXXZ  010df560  /vc71 /O2 /MD /Gy /EHsc /TP /Isrc/game/include

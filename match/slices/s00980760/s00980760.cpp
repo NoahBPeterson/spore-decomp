@@ -121,6 +121,47 @@ class BasicFactory_RotateEffect { public:
 
 // ---------------------------------------------------------------- WinScrollbar
 class WinScrollbar;
+// Retail IWindow prefix through Invalidate (slot36, table0x014445d0).
+// Declaration-only dispatch view: no instances, defined virtuals, vtable or RTTI emitted.
+struct ScrollbarWindowInvalidation {
+    virtual void slot0();
+    virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
+    virtual void slot5();
+    virtual void slot6();
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void slot23();
+    virtual void slot24();
+    virtual void slot25();
+    virtual void slot26();
+    virtual void slot27();
+    virtual void slot28();
+    virtual void slot29();
+    virtual void slot30();
+    virtual void slot31();
+    virtual void slot32();
+    virtual void slot33();
+    virtual void slot34();
+    virtual void slot35();
+    virtual void Invalidate();
+};
 struct SBMsg { int w0, w1; uint32_t type; uint32_t src; int from; int to; int pad; };
 
 class IWinScrollbar { public:
@@ -155,9 +196,121 @@ class IWinScrollbar { public:
     void SetPageOverlap(int v);                                        // 00981200
 };
 
-class WinScrollbar { public:
-    void* vt0;                                                         // +0x000
-    void* vtIW;                                                        // +0x004
+// Call-only retail prefix views: no objects, vtables or RTTI are emitted.
+// This AL view consumes native IsActive's proven int0/1 result; its original return type is unknown.
+struct ScrollbarActiveCall {
+    virtual void active0();
+    virtual void active1();
+    virtual void active2();
+    virtual void active3();
+    virtual void active4();
+    virtual void active5();
+    virtual void active6();
+    virtual void active7();
+    virtual void active8();
+    virtual void active9();
+    virtual void active10();
+    virtual void active11();
+    virtual void active12();
+    virtual void active13();
+    virtual void active14();
+    virtual void active15();
+    virtual void active16();
+    virtual void active17();
+    virtual void active18();
+    virtual void active19();
+    virtual void active20();
+    virtual void active21();
+    virtual void active22();
+    virtual void active23();
+    virtual void active24();
+    virtual void active25();
+    virtual void active26();
+    virtual void active27();
+    virtual void active28();
+    virtual void active29();
+    virtual void active30();
+    virtual void active31();
+    virtual void active32();
+    virtual void active33();
+    virtual void active34();
+    virtual bool IsActive();
+};
+struct ScrollbarPrimaryCalls {
+    virtual void primary0();
+    virtual void primary1();
+    virtual void primary2();
+    virtual void primary3();
+    virtual void primary4();
+    virtual void primary5();
+    virtual void primary6();
+    virtual void primary7();
+    virtual void primary8();
+    virtual void primary9();
+    virtual void primary10();
+    virtual void primary11();
+    virtual void primary12();
+    virtual void primary13();
+    virtual void primary14();
+    virtual void primary15();
+    virtual void primary16();
+    virtual void primary17();
+    virtual void primary18();
+    virtual void primary19();
+    virtual void primary20();
+    virtual void primary21();
+    virtual void primary22();
+    virtual void primary23();
+    virtual void primary24();
+    virtual void primary25();
+    virtual void primary26();
+    virtual void primary27();
+    virtual void primary28();
+    virtual void primary29();
+    virtual void primary30();
+    virtual void primary31();
+    virtual void primary32();
+    virtual void primary33();
+    virtual void primary34();
+    virtual int IsActive();
+    virtual void SetRefreshFlag(char on);
+    virtual void SetRefresh(char on);
+};
+struct ScrollbarSecondaryCalls {
+    virtual void secondary0();
+    virtual void secondary1();
+    virtual void secondary2();
+    virtual void secondary3();
+    virtual void secondary4();
+    virtual void secondary5();
+    virtual void secondary6();
+    virtual void secondary7();
+    virtual void secondary8();
+    virtual void secondary9();
+    virtual void secondary10();
+    virtual void secondary11();
+    virtual void secondary12();
+    virtual void secondary13();
+    virtual void secondary14();
+    virtual void secondary15();
+    virtual void secondary16();
+    virtual void secondary17();
+    virtual void secondary18();
+    virtual void secondary19();
+    virtual void secondary20();
+    virtual void secondary21();
+    virtual void secondary22();
+    virtual void secondary23();
+    virtual void secondary24();
+    virtual void secondary25();
+    virtual void secondary26();
+    virtual void secondary27();
+    virtual void secondary28();
+    virtual void secondary29();
+    virtual void secondary30();
+    virtual void SetFlag(unsigned mask, bool on);
+};
+class WinScrollbar : public ScrollbarPrimaryCalls, public ScrollbarSecondaryCalls { public:
     char  pad008[0x34 - 8];
     void* winMgr;                                                      // +0x034
     char  pad038[0x80 - 0x38];
@@ -434,6 +587,84 @@ void IWinScrollbar::SetDrawable(void* d) {
     VSLOT(void(__thiscall*)(void*, int), w, 0x94)(w, 1);
 }
 
+namespace EA { namespace UTFWinControls {
+// Borrowed secondary IWindow prefix through Notify; never instantiated.
+struct ScrollbarNotifyCall {
+    virtual void slot0();
+    virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
+    virtual void slot5();
+    virtual void slot6();
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void slot23();
+    virtual void slot24();
+    virtual void slot25();
+    virtual void slot26();
+    virtual void slot27();
+    virtual void slot28();
+    virtual void slot29();
+    virtual void slot30();
+    virtual void slot31();
+    virtual void slot32();
+    virtual void slot33();
+    virtual void slot34();
+    virtual void slot35();
+    virtual void slot36();
+    virtual void slot37();
+    virtual void slot38();
+    virtual void slot39();
+    virtual void slot40();
+    virtual void slot41();
+    virtual void slot42();
+    virtual void slot43();
+    virtual void slot44();
+    virtual void slot45();
+    virtual void slot46();
+    virtual void slot47();
+    virtual void slot48();
+    virtual void slot49();
+    virtual void slot50();
+    virtual void slot51();
+    virtual void slot52();
+    virtual void slot53();
+    virtual void slot54();
+    virtual void slot55();
+    virtual void slot56();
+    virtual void slot57();
+    virtual void slot58();
+    virtual void slot59();
+    virtual void slot60();
+    virtual void slot61();
+    virtual void slot62();
+    virtual void slot63();
+    virtual void slot64();
+    virtual void slot65();
+    virtual void slot66();
+    virtual void slot67();
+    virtual void slot68();
+    virtual bool Notify(const SBMsg& message); // slot69/0x114
+};
+typedef char ScrollbarNotifyCallLayout[(sizeof(SBMsg) == 0x1c && sizeof(ScrollbarNotifyCall) == 4) ? 1 : -1];
+
+}}
+
 // @ 0x9810a0
 void IWinScrollbar::SetValue(int v, char notify) {
     int t = maxVal - visibleRange;
@@ -449,10 +680,8 @@ void IWinScrollbar::SetValue(int v, char notify) {
         m.src = w->id1 ? w->id1 : w->id0;
         m.from = old;
         void* iwv = (char*)this - 0x208;
-        typedef void (__thiscall *SFn)(void*, SBMsg*);
-        SFn fn = VSLOT(SFn, iwv, 0x114);
         m.to = v;
-        fn(iwv, &m);
+        ((ScrollbarNotifyCall*)iwv)->Notify(m);
     }
     VSLOT(void(__thiscall*)(void*, int), win(), 0x94)(win(), 1);
 }
@@ -556,9 +785,9 @@ bool WinScrollbar::OnMouseUp(float x, float y, int a3, int flags) {
 bool WinScrollbar::OnFocusChange(int state, void* w) {
     if (state == 1) {
         void* iwv = this ? (char*)this + 4 : 0;
-        if (w != iwv && sb.hlComp != 0xff) {
+        if (w != iwv && static_cast<signed char>(sb.hlComp) != -1) {
             sb.hlComp = 0xff;
-            VSLOT(void(__thiscall*)(void*), iwv, 0x90)(iwv);
+            ((ScrollbarWindowInvalidation*)((char*)this + 4))->Invalidate();
         }
     }
     return true;
@@ -639,9 +868,7 @@ void WinScrollbar::SetRefreshFlag(char on) {
 void WinScrollbar::SetRefresh(char on) {
     if (sb.refresh == (uint8_t)on) return;
     sb.refresh = (uint8_t)on;
-    void* iwv = (char*)this + 4;
-    char active = (char)VSLOT(int(__thiscall*)(void*), this, 0x8c)(this);
-    VSLOT(void(__thiscall*)(void*, int, int), iwv, 0x7c)(iwv, 8, (uint8_t)active);
+    SetFlag(8, ((ScrollbarActiveCall*)this)->IsActive());
 }
 
 // ================================================================ ScrollbarDrawable

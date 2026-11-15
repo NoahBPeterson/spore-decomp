@@ -1,4 +1,4 @@
-# va  diff-bytes  reason   (compile with /vc71 /O2 /MD /Gy /TP)
+# va  diff-bytes  reason
 010d0070 37 createMultiSphereTriangleAgent: complete. Allocates 0x2c/0x1c, sets size/flags/contactMgr/vtable 0x014a4508 and four 0xffffffff contact ids, then setupClosestPointTriangleCache from bodyB. difftest UNSUPPORTED, 0/400 valid (fake allocator path faults). Not byte-exact: same size, eax/edx register allocation and store scheduling differ. Flags /vc71 /O2 /MD /Gy /EHsc /TP
 010d00d0 41 createTriangleMultiSphereAgent: complete. Same allocation/ids as 010d0070, cache from bodyA, then vtable 0x014a453c. difftest UNSUPPORTED, 0/400 valid (fake allocator path faults). Not byte-exact: same size, eax/edx register allocation and store scheduling differ. Flags /vc71 /O2 /MD /Gy /EHsc /TP
 010d0130 1808 processCollision: complete (timer, vertex/sphere transform, closestPointTriangle per sphere, contact point append with contactMgr add/remove id, reversed id slot index); size 2017 = original; frame 0x154 vs 0x134, x87 scheduling/register allocation differ. Flags /vc71 /O2 /MD /Gy /EHsc /TP
@@ -23,6 +23,22 @@
 010d6e00 576 hkSphereTriangleAgent::staticGetClosestPoints; complete (rebuilds the triangle cache with setupClosestPointTriangleCache then queries); size 716 vs 907; same schedule difference; equiv PASS 216 valid inputs, 89.7% coverage flags: /vc71 /O2 /MD /Gy /TP
 010d7190 205 hkSphereTriangleAgent::getPenetrations; complete (sphere centre into the triangle's local frame by basis rows, closestPointTriangle against the shape's local vertices, addCdBodyPair when distance < rA+rB); size 351 vs 353; remaining diff is register allocation (esi/edi/ebx) and the monitor slot; equiv PASS 250 valid inputs, 77.8% coverage flags: /vc71 /O2 /MD /Gy /TP
 010d7300 257 hkSphereTriangleAgent::staticGetPenetrations; complete (cache rebuilt each call); size 386 vs 360; same schedule difference; equiv PASS 248 valid inputs, 78.5% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d7710 950 hkSphereCapsuleAgent::processCollision; complete (segment closest point, degenerate segment->normal construction, contact append/removePoint, contact-point id round-trip); the original keeps the whole geometry in one 0xc4 x87 frame with per-scalar spills so the schedule/frame differ (1122 vs 1220); equiv FAIL 2/274 valid inputs -- both are 156-ulp differences in a denormal contact position.w (orig 80005ec9 vs ours 80005f65) on float-special garbage bodies; --ulp 200 gives PASS 274 valid, 92.0% coverage. Not confirmed fixable in source flags: /vc71 /O2 /MD /Gy /TP
+010d7be0 895 hkSphereCapsuleAgent::getClosestPoints; complete and behaviourally correct; same body as the passing static variant but the x87 register schedule and frame differ (1077 vs 1178); equiv PASS 276 valid inputs, 91.2% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d8080 893 hkSphereCapsuleAgent::staticGetClosestPoints; same body as getClosestPoints plus the HK_TIMER_BEGIN("TtSphereCapsule") prologue; frame/schedule differ (1075 vs 1176); equiv PASS 275 valid inputs, 90.0% coverage flags: /vc71 /O2 /MD /Gy /TP
+010d8520 369 havok +vc71; equiv PASS 274 valid 86.3% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d88c0 25 havok +vc71; equiv PASS 292 valid 78.6% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d8a30 408 havok +vc71; equiv FAIL contact-point float: orig bfec2631 vs ours 00002631 (distance term) flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d8c80 355 havok +vc71; equiv PASS 397 valid 83.6% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d8e90 353 havok +vc71; equiv PASS 396 valid 83.6% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d90a0 155 havok +vc71; equiv PASS 400 valid 72.0% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d91a0 153 havok +vc71; equiv PASS 399 valid 72.0% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d9330 10 havok +vc71; equiv WEAK 170 valid 100% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d93e0 106 havok +vc71; equiv PASS 400 valid 100% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d9470 478 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: box/box processCollision modelled on the reference s010fd4c0 cd; the original fully inlines the aTb/radius/boundary-tolerance setup and the sepDist frame (0x1d4) into one block, ours calls setMulInverseMul/calcManifold from a smaller 0x164 frame; difftest 5/5 valid inputs mismatched (fault in our smaller frame) flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d97a0 511 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: box/box staticGetClosestPoints, same cd setup gap as 010d9470, block layout/scheduling differs; difftest 2/400 valid inputs mismatched (fault) flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d9b10 491 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: box/box staticGetPenetrations, same cd setup gap, checkIntersection called from a smaller frame; difftest 5/30 valid inputs mismatched (fault) flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010d9ea0 40 complete UNSUPPORTED /vc71 /O2 /MD /Gy /EHsc /TP: createPredGskfAgent; callee-saved register allocation and the shared-vs-duplicated epilogue differ (esi pushed inside the first branch in the original), vtable slot and size stores reproduced; difftest 0/400 valid inputs (all discarded as faults), no verdict flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010dce40 217 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010dd180 33 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010dd1d0 41 havok-equivalent; default PASS 329/100%, replay PASS flags: /vc71 /O2 /MD /Gy /TP

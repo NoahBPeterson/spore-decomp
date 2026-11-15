@@ -962,8 +962,11 @@ def parse_preamble(pre):
         # too: before fix pass 2 the line fell through to the statement path and the item was named after its last base
         # `class IWinGrid { public:` (an access label on the header line, 2026-11-14 Grid s00970570: 47 methods of
         # WinGrid/IWinGrid were never class members to the rewrite, so none landed)
-        m = re.match(r"^(struct|class|union)\s+(\w+)\s*(?::\s*((?:(?:public|private|protected|virtual)\s+)*[\w:<>, ]+?))?\s*\{?\s*(?:(?:public|private|protected)\s*:\s*)?(//.*)?$", s)
-        one = re.match(r"^(struct|class|union)\s+(\w+)\s*(?::\s*((?:(?:public|private|protected|virtual)\s+)*[\w:<>, ]+?))?\s*\{(.*)\}\s*;\s*(//.*)?$", s)
+        # an alignment macro or __declspec between the keyword and the name (`struct HK_ALIGN16 hkVector4`, Havok's
+        # hk31_b005.h): the name is the identifier after it (mig38c: the item was named HK_ALIGN16, so hkVector4 counted
+        # as undefined and its uses broke, C2146 on 5 Havok slices)
+        m = re.match(r"^(struct|class|union)\s+(?:__declspec\s*\([^)]*\)\s*|[A-Z][A-Z0-9_]+\s+)?(\w+)\s*(?::\s*((?:(?:public|private|protected|virtual)\s+)*[\w:<>, ]+?))?\s*\{?\s*(?:(?:public|private|protected)\s*:\s*)?(//.*)?$", s)
+        one = re.match(r"^(struct|class|union)\s+(?:__declspec\s*\([^)]*\)\s*|[A-Z][A-Z0-9_]+\s+)?(\w+)\s*(?::\s*((?:(?:public|private|protected|virtual)\s+)*[\w:<>, ]+?))?\s*\{(.*)\}\s*;\s*(//.*)?$", s)
         if one:             # struct Key { uint32_t inst, type, group; };
             body = []
             for decl in one.group(4).split(";"):
@@ -4864,6 +4867,14 @@ class Rewrite:
         """Rename a local stub item (and every use of it in this slice's items and function texts) to `Name_<slice>`.
         verbatim_only: the converted functions spell the canonical class (`EA::ArgScript::cArguments`), the rename is
         for the slice's own stub that only the verbatim functions use."""
+        # a static data member defined out of class (`hkMemory* hkMemory::s_instance;`, mig38c Havok s01090a70) is named by
+        # its member name only, but it belongs to its class: another class's `X::s_instance` in the TU is no clash.  Renamed,
+        # the member's declaration inside the class changed and every `hkMemory::s_instance` use broke (C2039)
+        decl_items = [t for k, t in self.items if old_n in RS.item_names(k, t)]
+        if decl_items and not ns and all(re.search(r"\b\w+\s*::\s*%s\s*(?:[;=\[(])" % re.escape(old_n), RS.mask(t).split("{")[0])
+                                         and not re.search(r"\b(?:struct|class|union)\b", RS.mask(t)) for t in decl_items):
+            self.notes.append(("member-definition", "%s: a static member definition, not renamed (%s)" % (old_n, why[:80])))
+            return
         # a dllimport declaration of old_n, also one line of an `extern "C" { ... }` block (parsed as one nameless item)
         imp = re.compile(r"(?m)^[ \t]*__declspec\s*\(\s*dllimport\s*\)[^;{}]*\b%s\s*\([^;{}]*\)\s*;[^\n]*\n?" % re.escape(old_n))
         sysname = old_n in ("FILE", "size_t", "ptrdiff_t", "wchar_t", "va_list", "time_t", "HANDLE", "DWORD", "BOOL") or \

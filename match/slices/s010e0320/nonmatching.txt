@@ -8,4 +8,3 @@
 010e0c30 161 havok-equivalent; difftest PASS (332 inputs, 72.5% cov)
 010e0d50 223 havok-equivalent; difftest UNSUPPORTED (0/400 valid, synthetic inputs fault)
 010e0ec0 453 havok-equivalent; difftest UNSUPPORTED (0/400 valid, synthetic inputs fault)
-010e1090 363 havok-equivalent; difftest UNSUPPORTED (0/400 valid, synthetic inputs fault)

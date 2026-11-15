@@ -459,11 +459,7 @@ int EA::SharedLibrary::Release()
 bool EA::SharedLibrary::CanUnload() const
 {
     void* p = 0;
-    if (IsLoaded()) {
-        if (!ExecuteCommand("CanSharedLibraryUnload", &p, 0, 0, 0) || p == 0)
-            return false;
-    }
-    return true;
+    return !IsLoaded() || (ExecuteCommand("CanSharedLibraryUnload", &p, 0, 0, 0) && p != 0);
 }
 
 // @ 0x00936380

@@ -841,6 +841,7 @@ struct cGameData_s00cb_b020 {
     void* mpField5d8;                        // +0x5d8
     u8    mVector5dc[0x10];                  // +0x5dc  eastl vector
 
+    bool CheckSpaceToolTarget();
     void FUN_00cbb6f0();                     // 0x00cbb6f0  teardown
     void RemoveOwner();                      // 0x00cbb790
     bool FUN_00cbb840();                     // 0x00cbb840  space-tool update
@@ -1851,7 +1852,7 @@ struct cResourceProjectile_s00cb_a050 {
     Vector3  mEndPoint;                      // +0x01c
     uint32_t mPad028[(0x2c - 0x28) / 4];
     cSPTimer_s00cb_a050 mTimer;                         // +0x02c
-    bool Update();
+    bool Update();  // 0x00cbac80 (SP::cResourceProjectile::Update)
 };
 }
 namespace SP {
@@ -1890,7 +1891,7 @@ struct cPathFollowingLocomotion_s00cb_a050 {
     float    mLastSpeed;                     // +0x48
     uint32_t m4c;                            // +0x4c
 
-    cPathFollowingLocomotion_s00cb_a050(const Vector3Vector_s00cb_a050& points, int motionID);
+    cPathFollowingLocomotion_s00cb_a050(const Vector3Vector_s00cb_a050& points, int motionID);  // 0x00cbaf00 (Simulator::cPathFollowingLocomotion::cPathFollowingLocomotion_s00cb_a050)
     void PathUpdated();                      // 0x00cb4a70
 };  // namespace Simulator
 }
@@ -2623,6 +2624,7 @@ template <class T> struct ScopedRef {               // AddRef on entry, Release 
 // ---- items of slice s00cc0700 end
 
 // ---- items of slice s00cc15b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float gPi;                                             // 0x0157d364
 #pragma intrinsic(sqrt, cos)
 struct cSPVector3_s00cc_15b0;
 struct Vector3_s00cc_15b0 {
@@ -2631,8 +2633,8 @@ struct Vector3_s00cc_15b0 {
     Vector3_s00cc_15b0(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
     __forceinline float SquaredLength() const { return x * x + y * y + z * z; }
     __forceinline float Length() const { return (float)sqrt(SquaredLength()); }
-    __forceinline cSPVector3_s00cc_15b0 Normalized_s00cc_15b0() const;
-    __forceinline cSPVector3_s00cc_15b0 NormalizedSafe_s00cc_15b0() const;   // inlined SP::normalized_safe (epsilon 1e-8)
+    __forceinline cSPVector3_s00cc_15b0 Normalized() const;
+    __forceinline cSPVector3_s00cc_15b0 NormalizedSafe() const;   // inlined SP::normalized_safe (epsilon 1e-8)
 };
 struct cSPVector3_s00cc_15b0 : Vector3_s00cc_15b0 {
     cSPVector3_s00cc_15b0() {}
@@ -2644,7 +2646,22 @@ struct cSPVector3_s00cc_15b0 : Vector3_s00cc_15b0 {
     cSPVector3_s00cc_15b0 operator*(float s) const { return cSPVector3_s00cc_15b0(x * s, y * s, z * s); }
     cSPVector3_s00cc_15b0 operator+(const Vector3_s00cc_15b0& o) const { return cSPVector3_s00cc_15b0(x + o.x, y + o.y, z + o.z); }
 };
+__forceinline cSPVector3_s00cc_15b0 Vector3_s00cc_15b0::Normalized() const
+{
+    float len = Length();
+    float inv = 1.0f / len;
+    return cSPVector3_s00cc_15b0(x * inv, y * inv, z * inv);
+}
+__forceinline cSPVector3_s00cc_15b0 Vector3_s00cc_15b0::NormalizedSafe() const
+{
+    float sq = SquaredLength() + 1e-8f;
+    float len = (float)sqrt(sq);
+    float inv = 1.0f / len;
+    return cSPVector3_s00cc_15b0(x * inv, y * inv, z * inv);
+}
 struct Matrix3_s00cc_15b0 { float m[9]; };
+cSPVector3_s00cc_15b0 OrthogonalVector(const Vector3_s00cc_15b0& v);                // 0x006985b0
+Matrix3_s00cc_15b0 Matrix3FromFacingAndUp(const Vector3_s00cc_15b0& facing, const Vector3_s00cc_15b0& up);   // 0x0069b440
 struct XformMsg {
     uint16_t flags;
     uint16_t count;
@@ -2664,6 +2681,11 @@ struct IVisualEffect {
     VSLOT(4) VSLOT(5)
     virtual void SetTransform(const XformMsg& xf);            // +0x18
 };
+struct cEffectsManager_s00cc_15b0 {
+    VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9) VSLOT(10)
+    virtual bool CreateVisualEffect(uint32_t id, int flags, IVisualEffect** out);   // +0x2c
+};
+cEffectsManager_s00cc_15b0* EffectsManager_s00cc_15b0();                            // 0x0067ddd0
 struct cLocomotiveObject_s00cc_15b0 {
     VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5) VSLOT(6) VSLOT(7) VSLOT(8) VSLOT(9) VSLOT(10)
     virtual const Vector3_s00cc_15b0& GetPosition();                     // +0x2c
@@ -2675,6 +2697,11 @@ struct ResourceKey {
         return instanceID == o.instanceID && typeID == o.typeID && groupID == o.groupID;
     }
 };
+extern const ResourceKey kGravitationWaveTool;    // 0x0169a8f0
+extern const ResourceKey kPeaceBombTool;          // 0x0169a8e4
+extern const ResourceKey kCashInfusionTool;       // 0x0169a89c
+extern const ResourceKey kPlanetConversionTool;   // 0x0169a908
+bool __cdecl IsToolKey(const ResourceKey* key, const ResourceKey* ref);   // 0x004eb930
 struct cSpaceToolData_s00cc_15b0 {
     VSLOT(0) VSLOT(1) VSLOT(2) VSLOT(3) VSLOT(4) VSLOT(5)
     virtual const ResourceKey* GetToolKey();                  // +0x18
@@ -2709,6 +2736,13 @@ void __cdecl FUN_00d3d420();
 void __cdecl FUN_00acdff0();
 void __cdecl FUN_00accbb0();
 void __cdecl FUN_00b1e500();
+struct cPlanetModel_s00cc_15b0 {
+    float GetRadius();                                        // 0x00b7e4d0
+};
+cPlanetModel_s00cc_15b0* PlanetModel();                                  // 0x00b3d350
+struct cBombTarget { void FUN_00bda120(IVisualEffect* effect); };   // 0x00bda120
+struct EmptyTag {};
+cBombTarget* __cdecl FUN_00ac9310(void* container, const Vector3_s00cc_15b0* pos, EmptyTag tag);   // 0x00ac9310
 struct cDefaultToolProjectile_s00cc_15b0 {
     uint32_t pad00[0x34 / 4];
     cLocomotiveObject_s00cc_15b0 mLocomotive;                            // 0x34 (vptr only)
@@ -3424,16 +3458,23 @@ float* f00cb5140(int self, float* out)
 }
 
 // @ 0x00cb52c0
-int f00cb52c0(int self)
+bool Simulator::cGameData_s00cb_b020::CheckSpaceToolTarget()
 {
-    if (FUN_0104cda0(*(void**)(self + 0x518)) == 0.0f)
-        return 0;
-    void* p = *(void**)(self + 0x5cc);
-    if (p && (*(Vfn1*)(*(int*)p + 0x10))(p))
-        return 1;
-    int* strat = (int*)0;   // GetStrategy stub
-    (void)strat;
-    return 0;
+    typedef bool (__thiscall *TargetQuery)(void*);
+    if (!mpSpaceTool->m_104cda0())
+        return false;
+    void* target = mpField5cc;
+    if (target && ((TargetQuery)VTSLOT(target, 0x10))(target))
+        return true;
+    Obj* strategy = mpSpaceTool->m_104f930();
+    if (strategy) {
+        uint32_t fourth = (uint32_t)mpField5d4;
+        cSPSpaceTool* tool = mpSpaceTool;
+        ((IToolStrategy*)strategy)->Use(tool,
+            ((ILoco*)&mLoco)->GetPosition(),
+            (uint32_t)mState5d0, fourth);
+    }
+    return false;
 }
 
 // @ 0x00cb5330
@@ -7227,6 +7268,83 @@ void cDefaultToolProjectile_s00cc_15b0::FireGravityWave(cSPVector3_s00cc_15b0 po
     }
     if (list.mpBegin != 0 && ((uint32_t*)list.mpBegin)[-1] != 0)
         EFree(list.mpBegin);
+}
+
+// @ 0x00cc1c30
+bool cDefaultToolProjectile_s00cc_15b0::UpdateBombPhase1()
+{
+    cSPTimer_s00cc_15b0* timer = &mPhaseTimer;
+    if (!timer->IsRunning()) {
+        timer->Restart();
+        cGameNounManager_s00cc_15b0* nm = NounManager_s00cc_15b0();
+        mWaveFrontTargetCities =
+            nm->GetGameDataVector(FUN_00cd7d10, FUN_00d3d420, FUN_00acdff0, FUN_00b1e500, (const void*)0x018c43e8)->vec;
+    }
+    float t = (float)timer->GetElapsedTime() * 0.001f;
+    if (20.0f > t) {
+        if (mpEffect == 0) {
+            uint32_t effectID = mpTool->GetEffectID();
+            cEffectsManager_s00cc_15b0* effects = EffectsManager_s00cc_15b0();
+            if (mpEffect) {
+                IVisualEffect* e = mpEffect;
+                mpEffect = 0;
+                e->Release();
+            }
+            if (effects->CreateVisualEffect(effectID, 0, &mpEffect)) {
+                XformMsg xf;
+                xf.SetPosition(mLocomotive.GetPosition());
+                Vector3_s00cc_15b0 up = mLocomotive.GetPosition().Normalized();
+                Vector3_s00cc_15b0 facing = OrthogonalVector(up).Normalized();
+                xf.SetRotation(Matrix3FromFacingAndUp(facing, up));
+                mpEffect->SetTransform(xf);
+                mpEffect->Start(0);
+                if (mDamageType == 0xb) {
+                    const Vector3_s00cc_15b0& p = mLocomotive.GetPosition();
+                    void* container = NounManager_s00cc_15b0()->FUN_00ace2c0();
+                    cBombTarget* target = FUN_00ac9310(container, &p, EmptyTag());
+                    if (target)
+                        target->FUN_00bda120(mpEffect);
+                }
+            }
+        }
+
+        float wave = (1.0f - (float)cos(t * 0.05f * gPi)) * 0.5f;
+        cSPVector3_s00cc_15b0 down = -mLocomotive.GetPosition().NormalizedSafe();
+        float depth = PlanetModel()->GetRadius() * wave * 2.3f;
+        cSPVector3_s00cc_15b0 offset = down * depth;
+        const Vector3_s00cc_15b0& p1 = mLocomotive.GetPosition();
+        cSPVector3_s00cc_15b0 pos(p1.x + offset.x, p1.y + offset.y, p1.z + offset.z);
+        cSPVector3_s00cc_15b0 dir = -down;
+
+        const ResourceKey* key = mpTool->GetToolKey();
+        if (*key == kGravitationWaveTool) {
+            FireGravityWave(pos, dir);
+            return true;
+        }
+        if (*key == kPeaceBombTool) {
+            FirePeaceBomb(pos, dir);
+            return true;
+        }
+        if (*key == kCashInfusionTool) {
+            FireCashInfusion(pos, dir);
+            return true;
+        }
+        if (IsToolKey(key, &kPlanetConversionTool)) {
+            FirePlanetConversion(pos, dir);
+            return true;
+        }
+    } else {
+        if (mpEffect) {
+            mpEffect->Stop(0);
+            IVisualEffect* e = mpEffect;
+            mpEffect = 0;
+            if (e)
+                e->Release();
+        }
+        mBombPhase = 2;
+        mWaveFrontTargetCities.erase(mWaveFrontTargetCities.mpBegin, mWaveFrontTargetCities.mpEnd);
+    }
+    return true;
 }
 
 // @ 0x00cc22c0

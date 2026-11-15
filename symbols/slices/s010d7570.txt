@@ -1,13 +1,10 @@
-010d7570 hkSymmetricAgent<hkSphereTriangleAgent>::processCollision  # vtable 0x014a477c
-010d7680 hkSphereTriangleAgent::cleanup  # shared COMDAT body (also hkSphereCapsuleAgent slot)
-010d76b0 hkSphereCapsuleAgent::create  # vtable 0x014a47d8
-010d76e0 hkSymmetricAgent<hkSphereCapsuleAgent>::create  # vtable 0x014a480c
-010d7710 hkSphereCapsuleAgent::processCollision
-010d7be0 hkSphereCapsuleAgent::getClosestPoints
-010d8080 hkSphereCapsuleAgent::staticGetClosestPoints
-016e42a4 ?g_hkMonitorStreamCurrentTls@@3KA  # TLS index of the monitor stream write pointer
-016e42a4 g_hkMonitorStreamCurrentTls
-016e42a8 ?g_hkMonitorStreamEndTls@@3KA  # TLS index of the monitor stream end pointer
-016e42a8 g_hkMonitorStreamEndTls
-0149cc34 ?hkMonitorTimerEndTag@@3QBDB  # "Et"
+010d7570 ?processCollision@hkSymmetricAgent_hkSphereTriangleAgent@@UAEXABVhkCdBody_s010d_7570@@0ABUhkProcessCollisionInput_s010d_7570@@AAUhkProcessCollisionOutput_s010d_7570@@@Z  # hkSymmetricAgent_hkSphereTriangleAgent::processCollision migrated from s010d7570 (verbatim, slice spelling)
+010d7680 ?cleanup@hkSphereTriangleAgent_s010d_7570@@UAEXXZ  # hkSphereTriangleAgent_s010d_7570::cleanup migrated from s010d7570 (verbatim, slice spelling)
+010d76b0 ?create@hkSphereCapsuleAgent@@SAPAVhkCollisionAgent_s010d_7570@@ABVhkCdBody_s010d_7570@@0ABUhkCollisionInput_s010d_7570@@PAVhkContactMgr_s010d_7570@@@Z  # hkSphereCapsuleAgent::create migrated from s010d7570 (verbatim, slice spelling)
+010d76e0 ?create@hkSymmetricAgent_hkSphereCapsuleAgent@@SAPAVhkCollisionAgent_s010d_7570@@ABVhkCdBody_s010d_7570@@0ABUhkCollisionInput_s010d_7570@@PAVhkContactMgr_s010d_7570@@@Z  # hkSymmetricAgent_hkSphereCapsuleAgent::create migrated from s010d7570 (verbatim, slice spelling)
+010d7710 ?processCollision@hkSphereCapsuleAgent@@UAEXABVhkCdBody_s010d_7570@@0ABUhkProcessCollisionInput_s010d_7570@@AAUhkProcessCollisionOutput_s010d_7570@@@Z  # hkSphereCapsuleAgent::processCollision migrated from s010d7570 (verbatim, slice spelling)
+010d7be0 ?getClosestPoints@hkSphereCapsuleAgent@@UAEXABVhkCdBody_s010d_7570@@0ABUhkCollisionInput_s010d_7570@@AAVhkCdPointCollector_s010d_7570@@@Z  # hkSphereCapsuleAgent::getClosestPoints migrated from s010d7570 (verbatim, slice spelling)
+010d8080 ?staticGetClosestPoints@hkSphereCapsuleAgent@@SAXABVhkCdBody_s010d_7570@@0ABUhkCollisionInput_s010d_7570@@AAVhkCdPointCollector_s010d_7570@@@Z  # hkSphereCapsuleAgent::staticGetClosestPoints migrated from s010d7570 (verbatim, slice spelling)
 0149cc34 hkMonitorTimerEndTag
+016e42a4 g_hkMonitorStreamCurrentTls
+016e42a8 g_hkMonitorStreamEndTls

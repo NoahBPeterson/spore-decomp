@@ -18,7 +18,6 @@
 0043ce40 240 F3ce40 - reset all slot states; /Od frame + inlined accessor slots differ
 0043e3f0 539 complete; original uses an and-esp aligned ebp frame with esp-relative locals, ours gets the ebx-aligned frame from inline asm Clamp; also copy of operator- result into a named local
 0043eef0 267 complete; frame layout only (original has 0x20 extra temp bytes, 0x18-byte hole) - all instructions otherwise identical [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
-0043f250 3 complete; original frame is 0x10 bytes larger (unknown extra temp) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
 0043f3a0 18 F3a0 - only an /Od dead-tail jump differs
 0043f3f0 89 F3f0 child-block scan - /Od frame accessor slots differ
 0043f4d0 89 F4d0 child-block scan - /Od frame accessor slots differ
@@ -46,7 +45,6 @@
 0044aa10 54 complete behaviour; /Od frame/slot order differs flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044aaa0 335 Blk::A4aaa0 (GetBounds by value) complete; inline bool helpers / switch layout differ flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044ae00 1442 complete GetBBox; /Od hole/slot layout differs (frame 0x108 vs 0x168), instruction shapes otherwise close
-0044b590 26 tight loop body identical; original reserves a 0x30 frame (extra 0x24 local), ours only reserves the this slot
 0044b5c0 16 complete GetDefaultScale; only local slot order (hash) differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 0044ba20 567 complete recursive visibility/flags update; /Od named-local slot order and inline-set this temps differ; difftest FAIL is a checker artifact: the generated vtable slot m3ec->vtbl[0x30] holds 0x44bc01 (a jump target inside the original Ba20, harvested from its immediates), so both sides jump into the middle of the original body, which reads the original's own frame slots; seed 2 gives PASS (324 valid, 69.8% coverage)
 0044d9e0 1707 complete; original Clamp uses maxss/minss (inline-asm only) and /Od slot hash fits for 7+18 locals unmatched flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
