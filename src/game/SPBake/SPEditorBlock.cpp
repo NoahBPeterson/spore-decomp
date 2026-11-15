@@ -7626,15 +7626,19 @@ M3_s0044_ae00* Blk_s0044_ae00::B590(M3_s0044_ae00* out)
 // @ 0x0044b5c0
 float Blk_s0044_ae00::GetDefaultScale()
 {
-    if (mPropList) {
-        float r = 1.0f;
-        PropList* pl = mPropList.p;
-        if (pl) {
-            Prop* p;
-            if (pl->GetProp(0x536c50c, &p) && p->type == 0xd)
-                r = *p->GetFloat();
+    SP::ScratchSlots<1>(); // Preserve the unused /Od inline slot.
+    PropList* propertyList;
+    float scale;
+    propertyList = mPropList;
+    if (propertyList) {
+        scale = 1.0f;
+        PropList* list = mPropList.p;
+        if (list) {
+            Prop* property;
+            if (list->GetProp(0x536c50c, &property) && property->type == 0xd)
+                scale = *property->GetFloat();
         }
-        return r;
+        return scale;
     }
     return 1.0f;
 }

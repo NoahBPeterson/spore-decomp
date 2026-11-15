@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern unsigned short gCfgDateTable[];  // @ 0x13f3a00
@@ -2360,6 +2361,7 @@ AutoRefCount* CopyAutoRef(AutoRefCount* first, AutoRefCount* last, AutoRefCount*
     while (first != last) {
         dest->m0 = first->m0;
         dest->m4 = first->m4;
+        _ReadWriteBarrier();
         RC* s = first->mRC;
         RC* d = dest->mRC;
         if (s != d) {
