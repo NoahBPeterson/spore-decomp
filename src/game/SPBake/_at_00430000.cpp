@@ -129,13 +129,13 @@ float cSPEditorBlock_s0043_a460::Length2()
 namespace SP {
 Vec3* cSPEditorBlock_s0043_a460::GetVec2(Vec3* out)
 {
-    float t = f1d8;
-    float key = t;
-    Vec3 tmp;
-    Vec3* r = (Vec3*)Sub_41DCA0(&tmp, tbl400, &key);
-    out->x = r->x;
-    out->y = r->y;
-    out->z = r->z;
+    float key = f1d8;
+    float value = key;
+    Vec3 vector;
+    Vec3* result = (Vec3*)Sub_41DCA0(&vector, tbl400, &value);
+    out->x = result->x;
+    out->y = result->y;
+    out->z = result->z;
     return out;
 }
 }  // namespace SP

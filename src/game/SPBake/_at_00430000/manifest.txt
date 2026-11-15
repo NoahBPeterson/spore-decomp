@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPBake/_at_00430000.cpp  ?GetVec2@cSPEditorBlock_s0043_a460@SP@@QAEPAUVec3@2@PAU32@@Z  0043a530  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
