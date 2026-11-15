@@ -3686,6 +3686,7 @@ void AppMode::f9d90()
         void* x = (void*)FUN_01021230_0();
         void* y = FUN_00b3d470(x);
         E(y)->FUN_01034b90();
+        _ReadWriteBarrier();
         return;
     }
     u = FUN_01021080();

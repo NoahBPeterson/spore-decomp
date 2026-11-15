@@ -1,5 +1,6 @@
 // slice s007f8540: /O2 region (eastl::vector<cAnimInfo> and cSPUIAnimator).
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#include <intrin.h>
 #include "types.h"
 #include <string.h>
 #include <new>
@@ -362,6 +363,7 @@ cSPUIAnimator::~cSPUIAnimator() {
     AInfo88* ne = copy_animinfo88(last, last, first);
     v->DoDestroy(ne, v->mpEnd);
     v->mpEnd -= (last - first);
+    _ReadWriteBarrier();
     AInfo88* e2 = v->mpEnd;
     v->DoDestroy(v->mpBegin, e2);
     if (v->mpBegin != 0 && ((int*)v->mpBegin)[-1] != 0) eastl_free(v->mpBegin);

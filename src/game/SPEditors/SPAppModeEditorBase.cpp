@@ -9370,6 +9370,7 @@ bool SP::cAppModeEditorBase_s0057_7130::LoadSomething(void* param)
     ResKey3 k1 = ((cSPEditorBlock_s0057_7130*)param)->GetMirroredKey(0, 0);
     ResKey3 k2 = ((cSPEditorBlock_s0057_7130*)param)->GetMirroredKey(1, 0);
     cSPPaletteCursor* cur = new ("Editor", 0, 0, 0, 0) cSPPaletteCursor();
+    _ReadWriteBarrier();
     if (cur)
         cur->AddRef();
     cur->SetPalette(Ref<void*>(this, 0x3b8));

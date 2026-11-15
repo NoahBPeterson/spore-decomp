@@ -2,6 +2,7 @@
 // Object file: UTFSpore_Win32/DatabasePackedFile.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "EA/ResourceMan/DatabasePackedFile.h"
 #include "EA/IO/FileStream.h"
@@ -2344,6 +2345,7 @@ bool PFIndexModifiable_s008d_aff0::Write(void** ppBuf, unsigned* pSize, unsigned
 void PFIndexModifiable_s008d_aff0::SetIsSaved()
 {
     HTNode** pb = mItemsMap.mpBucketArray;
+    _ReadWriteBarrier();
     HTNode* p = *pb;
     if (p == 0) {
         ++pb;

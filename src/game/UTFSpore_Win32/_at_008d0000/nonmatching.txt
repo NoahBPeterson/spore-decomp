@@ -26,6 +26,5 @@
 008d64a0 94 reconstruction (KeyTreeErase); flags as above; difftest FAIL (5/5 valid inputs mismatched; ours faults at 00a21dd6 = retail rbtree::find where the original returns)
 008d6510 104 reconstruction (ListRefAppend); flags as above; difftest FAIL (5/5 valid inputs mismatched: execution diverges inside the copied list nodes)
 008dcea0 387 PFRecordWrite ctor; MemoryStream/FileStream Construct + temp-file open path codegen differs (equiv UNSUPPORTED: unresolved stub MemoryStream SetOption/SetData/GetData)
-008dd0d0 110 complete: PFRecordWrite ctor; constructors now thiscall on mMemStream/mFileStream, AddRef calls use their vtables, SetOption/SetData pass mMemStream in ECX; equiv PASS 218/600 valid, 100% cov
 008dd1f0 34 complete: PFRecordWrite::_virtual_dtor; vtable store order differs
 008dd510 298 complete: Resource::FindEmbeddedPackageHeader; parse/scan flow reconstructed; buffer handling differs

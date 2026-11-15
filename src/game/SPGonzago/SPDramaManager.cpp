@@ -2041,6 +2041,7 @@ SP::cDramaEventInstanceData_s00d4_bc60* SP::cSPDramaManager_s00d4_bc60::GetActiv
     mDramaEvents.equal_range(&out, &key);
     void* it = out.mFirst;
     void* end = out.mSecond;
+    _ReadWriteBarrier();
     while (it != end) {
         void* v = *(void**)((u8*)it + 0x14);
         if (!onlyActive || *(u8*)((u8*)v + 0xc) != 0) return (cDramaEventInstanceData_s00d4_bc60*)v;
@@ -2393,6 +2394,7 @@ void cSPDramaManager_s00d4_d5c0::TriggerDramaEvent(u32 eventType, u32 unused)
     mDramaEvents.equalRange_00d4b450(range, &key);
     RBNode_s00d4_d5c0* n = range[0];
     RBNode_s00d4_d5c0* const hi = range[1];
+    _ReadWriteBarrier();
     while (n != hi) {
         cDramaEventInstanceData_s00d4_d5c0* ev = (cDramaEventInstanceData_s00d4_d5c0*)n->mValue;
         if (!ev->mbActive) {

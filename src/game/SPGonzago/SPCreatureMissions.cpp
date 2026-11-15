@@ -784,6 +784,7 @@ int* __fastcall FUN_00c2f340(int* self)
     self[0] = 0x146b0f8;
     self[1] = 0x146b0e8;
     self[0xd] = 0x146b0d8;
+    _ReadWriteBarrier();
     self[0x20] = 0;
     return self;
 }
@@ -816,6 +817,7 @@ int* __fastcall FUN_00c2f470(int* self) // Simulator::cTribeToTribeMission ctor
         vt[0] = 0x0146b210;               // vtbl_Simulator::cTribeToTribeMission
         vt[1] = 0x0146b200;
         vt[0x0d] = 0x0146b1f0;
+        _ReadWriteBarrier();
     }
     self[0x20] = 0;
     self[0x21] = 0;

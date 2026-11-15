@@ -230,6 +230,7 @@ void Fn8e5c50(void* parser)
     }
     *(char*)(c + 0x224) = 0;
     XML_DefaultCurrent(*(void**)(c + 0x220));
+    _ReadWriteBarrier();
 }
 
 // @ 0x008e5ca0

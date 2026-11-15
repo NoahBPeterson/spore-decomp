@@ -2,6 +2,7 @@
 // Object file: SPGonzago/SPAnimalBehaviorTrees.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "nSPBehaviorTree/behavior_stimuli.h"
 #include <stddef.h>
@@ -7518,6 +7519,7 @@ float __cdecl FUN_00d7a850(CB* cb, int, int, uint, void* st, char* out)
           CB* x = (CB*)FUN_00ac80d0(w, (void*)0x18eb4b7);
           if (x != 0) {
             if (x->mbDead != 0) return 0.0f;
+            _ReadWriteBarrier();
           } else {
             if (FUN_00ac80d0(w, (void*)0x18c6de8) != 0) goto L;
             if (FUN_00ac80d0(w, (void*)0x436f342) != 0) goto L;

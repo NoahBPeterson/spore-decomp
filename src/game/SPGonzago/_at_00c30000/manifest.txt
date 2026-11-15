@@ -25,3 +25,4 @@
 ../src/game/SPGonzago/_at_00c30000.cpp  ?Destroy@cGameplayMarker@@QAEPAXH@Z  00c3f1f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00c30000.cpp  ?WriteAsText@cGameData@@QAEHPAX@Z  00c3e490  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00c30000.cpp  ?GetDelegateLowerBound@cHitSphere@@QAEHXZ  00c3f560  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?Dtor@cGameBundle@@QAEXXZ  00c35f70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

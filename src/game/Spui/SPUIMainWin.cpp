@@ -1009,6 +1009,7 @@ void MainWin_s0081_43a0::RemoveElem(int val)
     Vec* v = &mVec;
     Elem** pi = (Elem**)v->mBegin;
     Elem** end = (Elem**)v->mEnd;
+    _ReadWriteBarrier();
     for (; pi != end; ++pi) {
         if ((int)*pi == val) {
             if (pi + 1 < (Elem**)v->mEnd) CopyImpl(pi + 1, v->mEnd, pi);
