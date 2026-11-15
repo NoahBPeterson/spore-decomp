@@ -517,18 +517,18 @@ bool __cdecl FUN_006b82a0(char driveLetter, uint32_t* pHash)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006b8410  min(logical, physical) processor count
+// @ 0x006b8410  larger reported processor count
 // ---------------------------------------------------------------------------
-static inline const uint32_t& MinR(const uint32_t& a, const uint32_t& b) { return a < b ? a : b; }
+static inline const uint32_t& MaxR(const uint32_t& a, const uint32_t& b) { return a < b ? b : a; }
 uint32_t __cdecl FUN_006b8410(void)
 {
     g_sysInfo.Init();
     DAT_01605ab0 = 1;
-    uint32_t a = (uint32_t)FUN_011e1fa0();
-    DAT_01605aa8 = a;
-    if (DAT_01605aa8 < 1) { DAT_01605aa8 = 1; a = 1; }
+    DAT_01605aa8 = (uint32_t)FUN_011e1fa0();
+    if (DAT_01605aa8 < 1) DAT_01605aa8 = 1;
+    uint32_t a = DAT_01605aa8;
     uint32_t b = DAT_01530ff8;
-    return MinR(b, a);
+    return MaxR(b, a);
 }
 
 // ---------------------------------------------------------------------------

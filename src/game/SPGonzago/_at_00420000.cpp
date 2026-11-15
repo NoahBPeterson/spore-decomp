@@ -296,9 +296,9 @@ struct IntMap {
     IntNode* DoInsertValue(IntNode* pos, const IntNode& v);   // 0x00426cc0
     IntNode* lower_bound(const int& k)
     {
-        IntNode* last = mEnd;
-        IntNode* first = mBegin;
-        return LowerBound(first, last, &k, mFlag);
+        IntNode* rangeEnd = mEnd;
+        IntNode* rangeBegin = mBegin;
+        return LowerBound(rangeBegin, rangeEnd, &k, mFlag);
     }
     IntNode* end() { return mEnd; }
     int& operator[](const int& k);

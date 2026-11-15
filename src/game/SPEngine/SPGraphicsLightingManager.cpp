@@ -1829,10 +1829,9 @@ void fill_705ec0(__m128* first, unsigned n, const __m128* value)
     // the cursor copy makes the entry load `first` land in eax before the count test,
     // which is what retail leaves in eax for n == 0
     __m128* p = first;
-    for (unsigned i = n; i != 0; --i) {
+    for (unsigned i = n; i > 0; --i, ++p) {
         if (p)
             *p = *value;
-        ++p;
     }
 }
 

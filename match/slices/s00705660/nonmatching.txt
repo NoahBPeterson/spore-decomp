@@ -4,4 +4,3 @@
 00705a20  175  complete SetAtmosphereModel; x87 length/sqrt/reciprocal from double intermediates, volatile reciprocal, V4 phase copies
 00705af0   66  complete 0x144-stride linear search; register allocation differs
 00705c40   69  complete forward copy with destination end-report; cl's /O2 keeps the end report in esi (retail kept it in eax and spilled first to its arg slot), restored with a one-instruction eax fix-up
-00705ec0    8  complete fill-n with null check; cursor copy keeps first in eax for n == 0, loop back-edge (sub/jne vs dec/test/ja) differs
