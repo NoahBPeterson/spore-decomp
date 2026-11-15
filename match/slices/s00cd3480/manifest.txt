@@ -16,3 +16,4 @@ slices/s00cd3480/s00cd3480.cpp  ?F_cd41d0@TM@@QAEXMMH@Z  00cd41d0  /O2 /MD /Gy /
 slices/s00cd3480/s00cd3480.cpp  ?F_cd4220@TM@@QAEXHMMH@Z  00cd4220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00cd3480/s00cd3480.cpp  ??1TM@@QAE@XZ  00cd3ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00cd3480/s00cd3480.cpp  ?RegisterCityHallAndStartCinematic@TM@@QAEXPAH@Z  00cd43e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd43c0@TM@@QAEXPAX@Z  00cd43c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
