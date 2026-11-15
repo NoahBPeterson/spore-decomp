@@ -21,6 +21,17 @@ def gh(*args):
     return subprocess.run(["gh", *args], capture_output=True, text=True, check=True).stdout
 
 
+def pr_diff(repo, n):
+    """The pull request's diff.  GitHub refuses `gh pr diff` for very large pull requests (over 20,000 lines), so then
+    rebuild it from the per-file patches of the files endpoint (up to 3,000 files)."""
+    try:
+        return gh("pr", "diff", str(n), "--repo", repo)
+    except subprocess.CalledProcessError:
+        pages = gh("api", "--paginate", "--slurp", "repos/%s/pulls/%d/files?per_page=100" % (repo, n))
+        return "".join("diff --git a/%s b/%s\n%s\n" % (f["filename"], f["filename"], f.get("patch") or "")
+                       for page in json.loads(pages) for f in page)
+
+
 def addresses(title, diff):
     out = {int(m, 16) for m in ADDR.findall(title)}
     path = ""
@@ -47,7 +58,7 @@ def main():
                         "--json", "number,author,title,updatedAt"))
     rows = []
     for p in prs:
-        diff = gh("pr", "diff", str(p["number"]), "--repo", a.repo)
+        diff = pr_diff(a.repo, p["number"])
         for va in addresses(p["title"], diff):
             rows.append((va, p["number"], (p.get("author") or {}).get("login") or "?", p["updatedAt"][:10]))
     rows.sort()
