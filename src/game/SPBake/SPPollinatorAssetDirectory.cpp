@@ -744,8 +744,8 @@ void  FUN_00553fb0(void* v);
 void  WString_FreeBuffer(void* self);                // 0x4237d0
 void  DoFreeNodes(void* a, void* b);                 // 0x5687d0
 struct Map5 {
-    void F4020(void* out, int* key);   // 0x554020
-    void F40d0(int* key);              // 0x5540d0
+    void* F4020(void* out, int* key);  // 0x554020: insert result buffer
+    unsigned F40d0(int* key);          // 0x5540d0: erased element count
 };
 void  FUN_00555980(void* out, void* k);
 void  FUN_00552af0(void* v, void* k);
@@ -2779,16 +2779,16 @@ bool Meta::FUN_00550aa0(void* key)
 // @ 0x00550b00
 void Meta::FUN_00550b00(int key)
 {
-    char* s = (char*)this;
     char local_8[8];
-    ((Map5*)(s + 0xc0))->F4020(local_8, &key);
+    ScratchSlots<9>();
+    ((Map5*)((char*)this + 0xc0))->F4020(local_8, &key);
 }
 
 // @ 0x00550b30
 void Meta::FUN_00550b30(int key)
 {
-    char* s = (char*)this;
-    ((Map5*)(s + 0xc0))->F40d0(&key);
+    ScratchSlots<13>();
+    ((Map5*)((char*)this + 0xc0))->F40d0(&key);
 }
 
 // @ 0x00550b60

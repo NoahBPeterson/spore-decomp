@@ -724,10 +724,6 @@ void ParamSetStatus::SetStatusParameterValue(int id)
 // ===========================================================================
 // (see marker at definition) ~cMessageCommandDispatcher
 // ===========================================================================
-// @ 0x00689880
-CMessageCommandDispatcher::~CMessageCommandDispatcher()
-{
-}
 
 // ===========================================================================
 // (see marker at definition) SP::cMessageCommandDispatcher::ExecuteCommand

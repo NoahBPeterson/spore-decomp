@@ -5,6 +5,8 @@
 #include "game/types.h"
 #include <string.h>
 #include <malloc.h>
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---- items of slice s00a59690 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   uintptr_t;
@@ -1230,6 +1232,7 @@ void* pdfloat_new2(float f)
     if (o != 0)
     {
         *(float*)((char*)o + 0x28) = f;
+        _ReadWriteBarrier();
         EA::Audio::Eapd::outlet_new(o, g_gFloatSymbol.s_name, g_gFloatSymbol2);
         EA::Audio::Eapd::floatinlet_new(o, (char*)o + 0x28);
         g_gpNewestObject = o;
@@ -1281,8 +1284,9 @@ void* pdsymbol_new(uint32_t a, uint32_t b, uint32_t c)
     {
         PdPayload* p = (PdPayload*)((char*)o + 0x28);
         p->at28 = b;
+        _ReadWriteBarrier();
         p->at2c = c;
-        EA::Audio::Eapd::outlet_new(o, g_gSymbolSymbol.s_name, g_gSymbolSymbol2);
+        EA::Audio::Eapd::outlet_new(o, g_gSymbolSymbol.s_name, g_gSymbolSymbol.s_name2);
         EA::Audio::Eapd::symbolinlet_new(o, (char*)o + 0x28);
         g_gpNewestObject = o;
     }
@@ -1402,6 +1406,7 @@ void* FUN_00a59f00(uint32_t a, uint32_t b)
     {
         PdPayload* p = (PdPayload*)((char*)o + 0x28);
         p->at28 = a;
+        _ReadWriteBarrier();
         p->at2c = b;
     }
     return o;

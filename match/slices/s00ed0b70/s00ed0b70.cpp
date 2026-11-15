@@ -1,6 +1,7 @@
 // Slice s00ed0b70 -- Scenario::AvatarPaletteItemUI and swatch/item UI glue.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
+#include <intrin.h>
 
 // ---------------------------------------------------------------- globals
 extern void*         g_16c7aa4;      // 0x016c7aa4
@@ -292,6 +293,7 @@ void __fastcall FUN_00ed0b70(void* self)
     }
     ((FV_v)(*(void***)o->p18)[8 / 4])(o->p18);
     o->p18 = 0;
+    _ReadWriteBarrier();
     void* p1c = o->p1c;
     if (p1c != 0) {
         ((Fn00644b60*)p1c)->fn();

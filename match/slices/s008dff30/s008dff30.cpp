@@ -97,6 +97,12 @@ struct AutoRefVec {
 };
 
 // Shared header of every node-based eastl::hashtable instantiation in this slice.
+struct HashInsert18Result { void* node; void** bucket; uint8 inserted; };
+typedef char HashInsert18ResultSizeCheck[sizeof(HashInsert18Result) == 12 ? 1 : -1];
+typedef char HashInsert18ResultNodeCheck[offsetof(HashInsert18Result, node) == 0 ? 1 : -1];
+typedef char HashInsert18ResultBucketCheck[offsetof(HashInsert18Result, bucket) == 4 ? 1 : -1];
+typedef char HashInsert18ResultFlagCheck[offsetof(HashInsert18Result, inserted) == 8 ? 1 : -1];
+
 struct HashTable {    uint32 mUnk0;               // +0x00
     void** mpBucketArray;       // +0x04
     uint32 mnBucketCount;       // +0x08
@@ -117,7 +123,7 @@ struct HashTable {    uint32 mUnk0;               // +0x00
     void  DoFreeNodes20(void** pBucketArray, uint32 n);   // 0x008E0740
 
     void* insertNode3(void* pOut, void* pKey, void* p3);  // 0x008DFCD0
-    void* insertNode18(void* pOut, void* pKey, void* p3); // 0x008E02B0
+    HashInsert18Result insertNode18(void* pKey, void* p3); // 0x008E02B0
     void* insertNode20(void* pOut, void* pKey, void* p3); // 0x008E0390
     void* insertNode1c(void* pOut, void* pKey, void* p3); // 0x008E0550
     int   eraseKey(uint32* pKey);                         // 0x008E0630
@@ -488,8 +494,9 @@ VecOwner* VecOwner::CopyFrom(void* p1, AutoRefVec* pSrc)
 // ===========================================================================
 // @ 0x008E02B0
 // ===========================================================================
-void* HashTable::insertNode18(void* pOut, void* pKey, void* p3)
+HashInsert18Result HashTable::insertNode18(void* pKey, void* p3)
 {
+    HashInsert18Result result;
     (void)p3;
     uint32 nKey = *(uint32*)pKey;
     uint32 idx = nKey % mnBucketCount;
@@ -512,15 +519,15 @@ void* HashTable::insertNode18(void* pOut, void* pKey, void* p3)
         *(void**)((char*)pNew + 0x14) = mpBucketArray[idx];
         mpBucketArray[idx] = pNew;
         ++mnElementCount;
-        *(void**)pOut = pNew;
-        *((void**)pOut + 1) = &mpBucketArray[idx];
-        *((uint8*)pOut + 8) = 1;
-        return pOut;
+        result.node = pNew;
+        result.bucket = &mpBucketArray[idx];
+        result.inserted = 1;
+        return result;
     }
-    *(void**)pOut = (void*)node;
-    *((void**)pOut + 1) = pSlot;
-    *((uint8*)pOut + 8) = 0;
-    return pOut;
+    result.node = (void*)node;
+    result.bucket = (void**)pSlot;
+    result.inserted = 0;
+    return result;
 }
 
 // ===========================================================================
@@ -989,9 +996,8 @@ void* HashTable::refKey(uint32 nKey)
     tmp.mpCap = (void*)0x1667BAE;
     char pairBuf[0x14];
     void* pPair = ((MapPairProxy*)pairBuf)->makePair(nKey, &tmp);
-    void* out;
-    insertNode18(&out, pPair, (void*)0);
-    void* pResult = (char*)out + 4;
+    HashInsert18Result out = insertNode18(pPair, (void*)0);
+    void* pResult = (char*)out.node + 4;
 
     void* pBegin = *(void**)((char*)pairBuf + 4);
     uint32 nBytes = (*(uint32*)((char*)pairBuf + 0xc)) - (uint32)pBegin;

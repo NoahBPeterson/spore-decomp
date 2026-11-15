@@ -21,6 +21,7 @@
 #include <math.h>
 #include <float.h>
 #include <wchar.h>
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
@@ -1101,9 +1102,10 @@ namespace SP { namespace Pollen {
 int RefCounted::ReleaseRef()
 {
   int n = mRefCount + -1;
-  mRefCount = n;
+  mRefCount = mRefCount - 1;
   if (n == 0) {
     mRefCount = 1;
+    _ReadWriteBarrier();
     Destroy(1);
     return 0;
   }

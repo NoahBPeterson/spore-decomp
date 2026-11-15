@@ -184,10 +184,11 @@ void FUN_013b55d0() {
 extern float FUN_010c9050();
 extern float g_015ba2d8;
 void FUN_013b52d0() {
+    extern const float g_01485720;
     float probe = FUN_010c9050();
     g_016e58e0.name   = "hkCylinderShape";
     g_016e58e0.finish = (void (*)(void*))0x010c98e0;
-    g_015ba2d8 = 1.0f - probe;
+    g_015ba2d8 = g_01485720 - probe;
     g_016e58e0.vtbl   = (const void*)0x014a40c4;
 }
 
