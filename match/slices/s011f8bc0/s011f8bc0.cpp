@@ -385,17 +385,19 @@ uint32_t f011f94a0(uint32_t param_1)
 uint32_t f011f94f0(uint32_t param_1, uint32_t param_2)
 {
     uint32_t* arena = *(uint32_t**)(param_2 + 0x78);
-    *(uint32_t*)(param_1 + 8) = Arena_IdToObject(arena, *(uint32_t*)(param_1 + 8));
+    uint32_t* block = (uint32_t*)param_1;
+    const uint32_t id = block[2];
+    uint32_t n = block[4];
     uint32_t i = 0;
-    uint32_t count = *(uint32_t*)(param_1 + 0x10);
-    if (0 < (int)count) {
-        uint32_t* p = (uint32_t*)(param_1 + 0x24);
+    block[2] = Arena_IdToObject(arena, id);
+    if (n != 0) {
+        uint32_t* p = block + 9;
         do {
             *p = Arena_IdToObject(arena, *p);
-            count = *(uint32_t*)(param_1 + 0x10);
             i++;
             p++;
-        } while (i < count);
+            n = block[4];
+        } while (i < n);
     }
     return 1;
 }

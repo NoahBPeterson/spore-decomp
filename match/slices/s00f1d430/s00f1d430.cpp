@@ -131,7 +131,7 @@ struct GBlock {                      // *0x016c7aa4
     cGameMgr* mpGameMgr;             // +0x74
 };
 extern GBlock* g_16c7aa4;
-void FUN_00f0e6c0(void* p);          // 0x00f0e6c0
+void __fastcall FUN_00f0e6c0(void* p);   // 0x00f0e6c0 (thiscall: the pointer arrives in ecx)
 
 struct cNoun;                        // a world noun (see the interaction commands below)
 

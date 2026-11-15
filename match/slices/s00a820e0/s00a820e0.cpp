@@ -8,6 +8,7 @@
 // Flags: default VS2008 (/O2 /MD /Gy /EHsc /TP).
 #include "types.h"
 #include <math.h>
+#include <intrin.h>
 
 typedef unsigned int   u32;
 typedef unsigned short u16;
@@ -24,7 +25,6 @@ typedef int  (__thiscall *Fn2i)(void*, int, int);
 typedef void (__thiscall *FnF2)(void*, float, float, int*);
 
 static inline void* comp(void* elem) { return *(void**)((char*)elem + 0x38); }
-
 // ---- external helpers -------------------------------------------------------
 struct cSPTransformOps {
     void FUN_00537dc0(const void* src);              // Assign, 0x00537dc0, thiscall ret 4
@@ -32,7 +32,6 @@ struct cSPTransformOps {
 
 extern "C" void* FUN_00883860();                     // EA::Messaging::GetServer, 0x00883860
 extern "C" void* FUN_00f473a0(u32 size, const char* name, int a, int b, int c, int d); // 0x00f473a0
-
 struct RandomLCG {
     void FUN_00936090(u32 seed);                     // SetSeed, 0x00936090
 };
@@ -99,6 +98,22 @@ struct cVisualEffect {
     void ApplyCursorControl(float* p);
     bool SetUnknownParam(u32 idx, void* val);
 };
+
+// Mirror of the "time present" flag and its seed copy. The original passes the
+// comparison result as a bool argument, so the value is materialised in AL
+// before the branch is taken.
+static inline void setTimeFlag(u32& flags, cVisualEffect* self, bool on)
+{
+    if (on) {
+        flags |= 0x2000;
+        _ReadWriteBarrier();
+        self->m180 = *(i32*)(self->m28 + 0x40);
+        return;
+    }
+    flags &= ~0x2000;
+    _ReadWriteBarrier();
+    self->m180 = *(i32*)(self->m28 + 0x40);
+}
 
 // @ 0x00a820e0
 void cVisualEffect::SetIsHidden(u8 hidden)
@@ -232,28 +247,23 @@ void cVisualEffect::SetDescription(int desc)
         m2c |= 0x800;
     else
         m2c &= ~0x800;
-    if (*(float*)(m28 + 0x14) != 0.0f) {
-        m2c |= 0x2000;
-        m180 = *(i32*)(m28 + 0x40);
-        return;
-    }
-    m2c &= ~0x2000;
-    m180 = *(i32*)(m28 + 0x40);
+    _ReadWriteBarrier();
+    setTimeFlag(m2c, this, *(float*)(m28 + 0x14) != 0.0f);
 }
 
 // @ 0x00a823e0
 void cVisualEffect::UpdateDescription(int desc)
 {
+    int* d = (int*)desc;
     m28 = desc;
-    m5c = *(i32*)(desc + 8);
-    if (*(i32*)(desc + 0x1c) != *(i32*)(desc + 0x20))
+    m5c = d[2];
+    if (d[7] != d[8])
         m2c |= 0x800;
     else
         m2c &= ~0x800;
-    u32 a = *(u32*)0x016779fc;
-    u32 b = *(u32*)0x01677a00;
-    m50 = a;
-    m54 = b;
+    m50 = *(u32*)0x016779fc;
+    _ReadWriteBarrier();
+    m54 = *(u32*)0x01677a00;
     m180 = *(i32*)(m28 + 0x40);
 }
 

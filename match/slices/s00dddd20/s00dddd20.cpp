@@ -4,6 +4,7 @@
 #include "types.h"
 #include <math.h>
 #include <new>
+#include "sse_helpers.h"
 
 extern "C" void* __cdecl EA_Allocate(uint32_t size, const char* name, int a, int b,
                                      int c, int d);              // 0xf473a0
@@ -135,10 +136,8 @@ char PropFetch(void* self, uint32_t a, uint32_t b) {
 // ===========================================================================
 //  0x00ddde80  allocate a small object and register it
 // ===========================================================================
-struct SmallReg { void* vt0; void* vt1; int a; int b; };
-struct Registrator {
-    void reg(SmallReg* obj, uint32_t id, const char* name);  // vtable slot 0x20
-};
+// volatile vt1: retail keeps the first store to +4 (the compiler must not dead-store-eliminate it)
+struct SmallReg { void* vt0; void* volatile vt1; int a; int b; };
 // @ 0x00ddde80
 void RegisterSmall(void* param) {
     SmallReg* o = (SmallReg*)EA_Allocate(0x10, "App", 0, 0, 0, 0);
@@ -151,7 +150,8 @@ void RegisterSmall(void* param) {
     } else {
         o = 0;
     }
-    ((Registrator*)param)->reg(o, 0x2ccd1d2, "GalaxyGameEntry");
+    ((void (__thiscall*)(void*, SmallReg*, uint32_t, const char*))(
+        *(void***)param)[0x20 / 4])(param, o, 0x2ccd1d2, "GalaxyGameEntry");
 }
 
 // ===========================================================================
@@ -338,20 +338,21 @@ struct CamCtl {
     char Set2(int a, float v1, float v2, int unused);
     char Reset2(int a, int b, int c, int d);
     char Zoom(int n, int b, int c, int d);
+    char Key(uint32_t key, int unused);
 };
 // @ 0x00dde2b0
 void CamCtl::init(void* arg2, const Vec3* v) {
     f30 = g_15a308c;
     f1c = g_15a3090;
-    f10 = v->x; f14 = v->y; f18 = v->z;
+    *(Vec3*)&f10 = *v;
     f24 = g_15a3094;
-    f2c = *(float*)0x13ec4d0;
-    f40 = v->x; f44 = v->y; f48 = v->z;
-    f34 = g_cc0; f38 = g_cc4; f3c = g_cc8;
-    f4c = f34; f50 = f38; f54 = f3c;
+    f2c = 100.0f;
+    *(Vec3*)&f40 = *v;
+    *(Vec3*)&f34 = *(Vec3*)&g_cc0;
+    *(Vec3*)&f4c = *(Vec3*)&f34;
     f04 = 0;
     f08 = 500;
-    f0c = 0;
+    *(int*)&f0c = 0;
     (void)arg2;
 }
 
@@ -362,21 +363,23 @@ void CamCtl::init(void* arg2, const Vec3* v) {
 void CamCtl::Update(int dt, int unused) {
     CamCtl* self = this; (void)unused;
     *(int*)&self->f08 += dt;
-    double q = (double)(unsigned int)self->f08 / (double)(unsigned int)self->f04;
+    float q = (float)(unsigned int)self->f08 / (float)(unsigned int)self->f04;
     if (1.0 < q) {
         void* ms = SP_MessageServer();
-        (*(void(__thiscall**)(void*, uint32_t, void*, void*))*(void**)((char*)ms + 0))(ms, 0x4360e14, 0, 0);
+        ((void(__thiscall*)(void*, uint32_t, void*, void*))(
+            (*(void***)ms)[0x14 / 4]))(ms, 0x4360e14, 0, 0);
         self->f08 = 0;
         g_16a10c8 = (void*)0x15a30b4;
     }
-    self->f10 = (self->f0c - self->f14) * (float)(1.0 - q) + self->f14;
+    self->f10 = (self->f0c - self->f14) * (1.0f - q) + self->f14;
 }
 
 // ===========================================================================
 //  0x00dde400  input key handler
 // ===========================================================================
 // @ 0x00dde400
-char CamCtl_Key(CamCtl* self, uint32_t key) {
+char CamCtl::Key(uint32_t key, int unused) {
+    CamCtl* self = this; (void)unused;
     if (key == 0xbb || key == 0x6b) {
         g_camera_roll = self->f18 * *(float*)0x147dab8;
     }
@@ -384,7 +387,7 @@ char CamCtl_Key(CamCtl* self, uint32_t key) {
         g_camera_roll = self->f18 * *(float*)0x13f08c0;
     }
     if (key == 0x25 || key == 0xbc || key == 0x64) {
-        g_camera_pitch = self->f1c * g_16a10dc * *(float*)0x13f1cac;
+        g_camera_pitch = (self->f1c * g_16a10dc) * *(float*)0x13f1cac;
     }
     if (key == 0x27 || key == 0xbe || key == 0x66) {
         g_camera_pitch = self->f1c * g_16a10dc * *(float*)0x14000fc;
@@ -529,14 +532,14 @@ void CamCtl::Integrate(float dt) {
 //  0x00dde7f0  easing helper
 // ===========================================================================
 // @ 0x00dde7f0
-double Ease(double t, double p) {
-    double x = t * 2.0;
-    if (x < 1.0) {
+double Ease(float x, float p) {
+    x *= 2.0f;
+    if (x < 1.0f) {
         double a = sqrt(1.0 / p) * x;
-        return a * a * p * 0.5;
+        return a * a * p * 0.5f;
     }
-    double a = (2.0 - x) * sqrt(1.0 / p);
-    return 1.0 - a * a * p * 0.5;
+    double a = (2.0f - x) * sqrt(1.0 / p);
+    return 1.0 - a * a * p * 0.5f;
 }
 
 // ===========================================================================
@@ -560,9 +563,9 @@ void __stdcall CamCtl_Tick(int ms, int unused) {
 //  0x00dde900  initialise a camera-controller preset
 // ===========================================================================
 // @ 0x00dde900
-void CamCtl_Preset(float f) {
+void __stdcall CamCtl_Preset(float f) {
     g_3118 = 0;
-    g_3114 = (int)(f * *(float*)0x13ec5b4);
+    g_3114 = SseRoundToInt(f * 1000.0f);
     g_311c = g_15a3094;
     g_3120 = g_15a3094;
     g_3124 = *(float*)0x13f1cac;
@@ -577,12 +580,12 @@ void CamCtl_Preset(float f) {
 // ===========================================================================
 // @ 0x00dde9e0
 void CamCtl_PresetReset() {
-    g_cct0 = 0.0f;
-    g_cct4 = 0.0f;
-    g_cct8 = *(float*)0x147da94;
-    g_cc0 = 0.0f;
-    g_cc4 = 0.0f;
-    g_cc8 = *(float*)0x147da94;
+    Vec3 v;
+    v.x = 0.0f;
+    v.y = 0.0f;
+    v.z = *(float*)0x147da94;
+    *(Vec3*)&g_cct0 = v;
+    *(Vec3*)&g_cc0 = v;
     g_16a10c8 = (void*)0x15a30b4;
 }
 // --- equivalence checker address annotations

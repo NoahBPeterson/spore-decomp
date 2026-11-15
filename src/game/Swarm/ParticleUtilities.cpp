@@ -87,7 +87,7 @@ extern "C" void FUN_007d0250(void* stream, void* obj);                       // 
 extern "C" void EA_WriteUint32(void* stream, const void* data, int count, int flags); // 0x93aa70
 extern "C" void EA_StreamWrite(void* stream, const void* data, int count);   // 0x93a9a0
 extern "C" void operator_delete__(void* p);   // 0xf47380
-extern const unsigned vtbl_ArgScript_Path[];
+extern const unsigned vtbl_ArgScript_Path[];   // (0x1457914) ArgScript::Path vtable
 struct V3 { float x, y, z; V3() {} V3(float a, float b, float c) { x = a; y = b; z = c; } };
 struct HKey {              // 0x1c bytes
     V3 p;                  // +0x00 position
@@ -712,11 +712,14 @@ void __fastcall FUN_00a7a4a0(PathCommandObj* self, void* dummy)
 }
 
 // @ 0x00a7a500
-PathObj* __fastcall FUN_00a7a500(PathObj* self, void* dummy, unsigned a, unsigned b, unsigned c)
+PathObj* __fastcall FUN_00a7a500(PathObj* self, void* dummy, volatile unsigned a, volatile unsigned b, volatile unsigned c)
 {
     ((AppPropsFields*)self)->ctor();
+    unsigned bv = b, cv = c;
+    _ReadWriteBarrier();
     *(volatile void**)&self->mVtbl = (void*)vtbl_ArgScript_Path;
     *(volatile unsigned*)&self->mField34 = 0xad5c3612;
+    _ReadWriteBarrier();
     self->mField38 = 0;
     self->mField3c = 0;
     self->mField40 = 0;
@@ -730,8 +733,8 @@ PathObj* __fastcall FUN_00a7a500(PathObj* self, void* dummy, unsigned a, unsigne
     self->mField78 = 0;
     self->mField7c = 0;
     self->mField88 = a;
-    self->mField8c = b;
-    self->mField90 = c;
+    self->mField8c = bv;
+    self->mField90 = cv;
     return self;
 }
 

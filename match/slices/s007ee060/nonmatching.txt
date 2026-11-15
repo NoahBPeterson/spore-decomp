@@ -1,6 +1,5 @@
 # va diff reason
 007ee060 883 cVolumeDescription effect update - interpolation codegen differs (no similar-size symbol)
-007ee3e0 70 volume-effect allocate+construct - new/EH schedule differs
 007ee480 111 write cVolumeDescription - virtual write calls differ
 007ee540 227 SP::cVolumeDescription::cVolumeDescription - field/vtable store schedule differs
 007ee630 111 SP::VolumeRead - read helper shapes differ

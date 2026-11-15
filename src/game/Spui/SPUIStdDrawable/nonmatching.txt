@@ -6,10 +6,6 @@
 00830950 211 cSPUIStdDrawable ctor: base ctor + 8 AutoRefCount stores schedule differs; equiv: FAIL (field stores differ)
 00830b30 122 cSPUIStdDrawable dtor: embedded image-info release loop differs; equiv: PASS
 00830c00 53 Drawable::GetImageInfo: register allocation (this/def swap) and branch layout differ; equiv WEAK: 1200 valid inputs (need 200), 89.5% coverage (need 100%% (all insns))
-00830c90 18 DSub::GetPair28: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: memory pool @40020000
-00830cc0 18 DSub::GetPair30: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: memory pool @40020000
-00830d30 18 DSub::GetPair38: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: memory pool @40020000
-00830d60 18 DSub::GetPair40: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: execution
 008310a0 188 ImageInfo2::CopyFrom: refcount + rep movsd block schedule differs; equiv PASS: 1120 valid inputs, 100.0% coverage (all insns)
 00831170 99 SetImageColor: factory/create + CopyFrom inlining schedule differs
 008311f0 99 SetField18At: factory/create path now force-inlined (as in original), removing the edx clobber the original never writes (callerdeps depth-8 SAFE); equiv WEAK: 348 valid inputs, 73.3% coverage (need 100% all insns); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
@@ -17,6 +13,4 @@
 008312f0 106 SetPair38At: same clone-of-template schedule differs
 00831380 106 SetPair40At: same clone-of-template schedule differs
 00831410 129 PickImageInfo: switch lowering + default-info copy schedule differs; equiv WEAK: 1113 valid inputs (need 200), 94.2% coverage (need 100%% (all insns))
-00831650 37 EnsureImageInfo0: refcount swap + CopyFrom schedule differs; equiv FAIL: 5/8 valid inputs mismatched; first: memory pool @40010090
-008316b0 179 DSub::SetImage: factory/create + refcount swap schedule differs; equiv FAIL: 5/24 valid inputs mismatched; first: memory pool @4001007c
-012fe300 198 init_15476e4: complete; /Od arithmetic for size field not reproduced [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
+008316b0 179 regalloc: fixed the factory call order (CreateInstance is (type, out, a2, a3), not (out, type, ...)) and made it __declspec(noinline) so SetImage makes the same separate calls retail does (7 calls); now same shape and size 168, only this/info callee-saved registers (esi/edi) and one lea position differ; fix1: quick check UNSUPPORTED

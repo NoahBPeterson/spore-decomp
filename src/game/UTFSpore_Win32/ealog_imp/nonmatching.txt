@@ -7,14 +7,14 @@
 009237c0 95 Server::GetLogReporter: complete; vector walk/return schedule differs
 00923990 126 ITracer::Trace (needs /GS-): complete; counter/sender load order and lea-vs-inc schedule differ; difftest PASS after annotating g_timeoutP (0x143dc78) and fixing the symbol lookup (declaration comments no longer look like @ markers)
 00923ac0 91 rbtree::find: complete; template traversal schedule differs (_stricmp not hoisted into ebp, anchor not spilled); difftest WEAK after fixing argument order (the out-iterator is the first argument and is returned in eax; ours had (key, out) and returned *out)
-00923bc0 212 LogFilterGroupLevels::RemoveGroupLevel: complete; whole-tree clear schedule differs
+00923bc0 112 regalloc: LogFilterGroupLevels::RemoveGroupLevel: complete; fixed the whole-tree clear (start from mAnchor.mpRight, DoNukeSubtree(root->mpLeft), next=root->mpRight) and marked DoNukeSubtree __declspec(noinline) so it is called, not inlined; only `this` in ebp vs edi and the anchor-reset zero register differ. fix1: quick check could not decide (emulator time limit)
 00923c90 13 LogFilterGroupLevels::IsFiltered: complete; level compare operand order / tail block order differ; difftest PASS after fixing return type (bool: the original writes only al) and find's argument order
-00923d40 32 Server::Server: complete; MI vtable/new/mutex schedule differs; difftest PASS after mapping the vtables (IServer/ITracer slots annotated with the original targets of 0x143dd20/0x143dd04) and fixing the init (the original leaves +0x28 unwritten) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['call', 'ret']]
-00923de0 115 rbtree::DoInsertValueImpl: complete; allocator vcall schedule differs
+00923d40 20 schedule: Server::Server: complete; fixed the mutex construction (__assume on the member pointer removes the placement-new null check, so the ctor is called directly like retail); only the `add esp,0x18` position and the `lea ecx`/`push ebx` order differ. fix1: quick check EQUIVALENT
+00923de0 88 regalloc: rbtree::DoInsertValueImpl: complete; fixed color to int (retail keeps it in ebx), made *out unconditional, declared the return type RBNode** with `return out` (retail leaves out in eax: void_hides_eax), and tests `&node->mpKey` so a null allocation still writes +0x10 like retail; remaining diff is the hasParent compare hoisted before the pushes, the `_stricmp`/allocator vcall register choice, and the zero of color at entry vs the shared else. fix1: quick check could not decide (emulator time limit, no mismatch)
 00923f30 30 LogFilterGroupLevels::LogFilterGroupLevels: complete; mName/anchor init store schedule differs; difftest PASS after fixing the string init call (thiscall RangeInitialize on mName, was a free call with cfg) and the anchor color store (the original zeroes the whole color dword +0x2c)
 00923f90 11 LogFilterGroupLevels::~LogFilterGroupLevels: complete; DoNukeSubtree arg register differs
 00924060 39 rbtree::DoInsertValue: complete; traversal/insert schedule differs
-00924170 100 LogReporter::LogReporter: complete; string/notify schedule differs
+00924170 34 schedule: LogReporter::LogReporter: complete; defined the empty ILogReporter base ctor in this TU so the original's missing base-ctor call is gone; only the vtable-store position (after push edi vs before) and the mName store addressing differ. fix1: quick check WEAK (emulator found no mismatch)
 009241f0 59 Server::RemoveLogReporter: complete; copy/erase schedule differs
 00924270 29 LogReporter::SkipFilter1: complete; register allocation differs
 009242b0 34 LogReporter::SkipFilter2: complete; register allocation differs

@@ -8,6 +8,7 @@
 #include "SP/cVarListSerializer.h"
 #include "SP/cEmpire.h"
 #include "SP/cGameBundle.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern float g_Zero15812d0;      // 0x015812d0
@@ -436,10 +437,17 @@ extern int   g_168e57c;    // 0x0168e57c  (dword guard, tested as byte)
 void  __cdecl FUN_00c41d00(void*, int);                        // 0x00c41d00
 void* __cdecl FUN_00b18460(int);                               // 0x00b18460
 struct FnB184c0 { void __thiscall f(); };                      // 0x00b184c0 cGameData::~cGameData
+struct FnB18420 { int __thiscall f(void* pData); };            // 0x00b18420 cGameData::WriteAsText
 struct FnA05270 { void __thiscall f(); };                      // 0x00a05270 cAnimatingCreature::Release
 struct FnAbfec0 { void __thiscall f(); };                      // 0x00abfec0
 struct FnBfcd00 { void __thiscall f(); };                      // 0x00bfcd00
 struct FnAc0520 { void __thiscall f(); };                      // 0x00ac0520
+struct FnC8a420 { void __thiscall f(); };                      // 0x00c8a420
+struct CVarListSer {                                           // cVarListSerializer stack object
+    uint32_t mPad00[0x14 / 4];
+    void ctor(void* pOwner, void* pFields, int nFlags);         // 0x00692f90
+    int  GetFields(void* pOut);                                 // 0x00695960
+};
 struct FnC432e0 { void __thiscall f(); };                      // 0x00c432e0
 struct FnA02c30 { void __thiscall f(); };                      // 0x00a02c30 cAnimatingCreature::AddRef
 void* __cdecl FUN_00b18660(void*);                             // 0x00b18660 cGameData::cGameData
@@ -461,6 +469,15 @@ bool  __cdecl FUN_0093aa70(void*, void*, int, int);            // 0x0093aa70 Wri
 void* __cdecl FUN_00401090(void*);                             // 0x00401090 GetSetting
 void* __cdecl FUN_004df440(void*);                             // 0x004df440 GetPlantProfile
 struct C3eac0 { void* f(void* other); };                       // 0x00c3eac0
+struct CQueryCast {                                            // cGamePlant base query interface
+    void* Query(int type);                                     // 0x00b18460
+};
+struct CNotifyOwner {                                          // spatial notify
+    void Notify(int type);                                     // 0x00c41d00
+};
+struct CCastOwner {                                            // cGamePlant::Cast
+    void* Cast(int type);
+};
 struct C3e510 { void* f(); };                                  // 0x00c3e510
 struct C3e700 { void f(); };                                   // 0x00c3e700
 struct C3e800 { void f(void* p); };                            // 0x00c3e800
@@ -523,6 +540,11 @@ public:
     int GetFields(int nFlags);
     uint8_t mPad00[0x414];
 };
+struct ModelKey {
+    uint32_t typeID;                // 0x00
+    uint32_t instanceID;            // 0x04
+    uint32_t groupID;               // 0x08
+};
 class cSpatialObject : public IRefCounted {
 public:
     virtual void v14();
@@ -582,7 +604,11 @@ public:
     uint8_t mPad8c[0x18];           // 0x8c
     uint8_t mVisible;               // 0xa4
     uint8_t mHidden;                // 0xa5
-    uint8_t mPadA6[0x87];           // 0xa6
+    uint8_t mPadA6[0x5a];           // 0xa6
+    ModelKey mModelKey;             // 0x100
+    uint8_t mPad10c[0x0a];          // 0x10c
+    uint8_t mbKeepPinnedToPlanet;   // 0x116
+    uint8_t mPad117[0x16];          // 0x117
     uint8_t mModelStateIndex;       // 0x12d
     uint8_t mPad12e[0x02];          // 0x12e
     uint8_t mModelReady;            // 0x130
@@ -596,36 +622,53 @@ public:
     bool Write(void* pData);
     bool Init(void* pData, int a, int b);
     int GetFieldValues(int nFlags);
+    int WriteAsText(void* pData);
     void RemoveOwner();
-};
-struct ModelKey {
-    uint32_t typeID;                // 0x00
-    uint32_t instanceID;            // 0x04
-    uint32_t groupID;               // 0x08
 };
 class cOrnament : public cGameData {
 public:
-    uint8_t mPad54[0x1c0];
+    uint8_t mPad134[0x104];         // 0x134
 };
 class cHitSphere : public cOrnament {
 public:
-    float mRadius;                  // 0x214
-    float mMaxScreenSize;           // 0x218
-    float mMinScreenSize;           // 0x21c
-    float mMinDistance;             // 0x220
-    float mMaxDistance;             // 0x224
-    cGameData* mpDelegate;          // 0x228
-    uint8_t mbKeepPinnedToPlanet;   // 0x22c
+    float mRadius;                  // 0x238
+    float mMinScreenSize;           // 0x23c
+    float mMaxScreenSize;           // 0x240
+    float mMinDistance;             // 0x244
+    float mMaxDistance;             // 0x248
+    cGameData* mpDelegate;          // 0x24c
 
     cHitSphere();
     bool Write(void* pData);
     void* Cast(void* pType);
-    int GetDelegateLowerBound(int nOffset);
+    int GetDelegateLowerBound();
+    void RemoveOwner();
 };
 class cSolarHitSphere : public cHitSphere {
 public:
-    ModelKey mModelKey;             // 0x230
     cSolarHitSphere();
+    void* Cast(int nType);
+};
+// the simulator-side ornament object the hit spheres belong to (its own query interface cast)
+class SimOrnamentCast {
+public:
+    void* Cast(int nType);          // 0x00c6f6e0
+    void Destroy();                 // 0x00c6fac0
+    void Construct();               // 0x00c6f7f0
+};
+// the sub-object vtables a hit sphere installs while it is constructed
+struct CHitSphereVtbls {
+    void* mpVtbl00;                 // 0x00
+    void* mpVtbl04;                 // 0x04
+    uint8_t mPad08[0x2c];           // 0x08
+    void* mpVtbl34;                 // 0x34
+    uint8_t mPad38[0x38];           // 0x38
+    void* mpVtbl70;                 // 0x70
+    uint8_t mPad74[0xd0];           // 0x74
+    void* mpVtbl144;                // 0x144
+    void* mpVtbl148;                // 0x148
+    uint8_t mPad14c[0xc4];          // 0x14c
+    void* mpVtbl210;                // 0x210
 };
 class cGameplayMarker : public cGameData {
 public:
@@ -642,7 +685,7 @@ public:
     IRefCounted* mpNextMarker;      // 0xb74
 
     cGameplayMarker();
-    void Destroy(int bDelete);
+    void* Destroy(int bDelete);
     void Shutdown();
     bool Read(void* pData);
     bool InitFromDefinition(void* pData, int a, int b);
@@ -672,9 +715,20 @@ public:
     void AttachEffect(void* pEffect);
     void ClearEffectState();
 };
-void* CastOrnamentBase(void* pObject);
+void* __fastcall CastOrnamentBase(void* pObject);
+void* CastSpatialObjectBase(void* pObject);
 void RemoveOwnerExtra();
 void operator_delete__(void* pMemory);
+// the base sub-object a marker destructor runs over: its own vtable (0x146c56c) and four references
+struct CMarkerBase {
+    void* mpVtbl00;                 // 0x00
+    uint8_t mPad04[0x14];           // 0x04
+    IRefCounted* mpRef18;           // 0x18
+    IRefCounted* mpRef1c;           // 0x1c
+    IRefCounted* mpRef20;           // 0x20
+    uint8_t mPad24[0x14];           // 0x24
+    IRefCounted* mpRef38;           // 0x38
+};
 void ResetOrnamentList(void* pOwner);
 void ResetInteractableState(void* pOwner);
 void FreeGameDataMembers();
@@ -1294,27 +1348,26 @@ u8 __fastcall FUN_00c368c0(Ufo* self, void* dummy, ParamObj* param)
 }
 
 // @ 0x00c3e2c0
-void* __cdecl FUN_00c3e2c0(void* self, int type)
+void* CCastOwner::Cast(int type)
 {
-    if ((unsigned)type < 0x11c0ba4) {
-        if (type != 0x11c0ba3) {
-            if (type == (int)0xaeb336b4 || type == (int)0xee3f516e) {
-                return self;
-            }
-        } else {
-            if (self != 0) return (char*)self + 0x5e8;
+    if (type <= 0x11c0ba3) {
+        if (type == 0x11c0ba3) {
+            if (this != 0) return (char*)this + 0x5e8;
             return 0;
         }
+        if (type == (int)0xaeb336b4 || type == (int)0xee3f516e) {
+            return this;
+        }
     } else if (type == 0x13f94d4) {
-        if (self != 0) return (char*)self + 0x520;
+        if (this != 0) return (char*)this + 0x520;
         return 0;
     } else if (type == 0x102a041a) {
-        if (self != 0) return (char*)self + 0x504;
+        if (this != 0) return (char*)this + 0x504;
         return 0;
     }
-    void* r = FUN_00b18460(type);
+    void* r = ((CQueryCast*)this)->Query(type);
     if (r != 0) return r;
-    FUN_00c41d00((char*)self + 0x34, type);
+    ((CNotifyOwner*)((char*)this + 0x34))->Notify(type);
     return 0;
 }
 
@@ -1361,15 +1414,15 @@ float __fastcall FUN_00c3e460(char* self)
 }
 
 // @ 0x00c3e490
-int __cdecl FUN_00c3e490(char* self, void* stream)
+int cGameData::WriteAsText(void* pData)
 {
-    char serA[0x14];
-    char serB[0x1414];
-    int n = (int)FUN_00b18420(self, stream);
-    FUN_00692f90(serA, self + 0x34, (void*)0x157a1f8, 0x1a80d26);
-    n += FUN_00695960(serA, stream);
-    FUN_00692f90(serB, self, (void*)0x1573a60, 0x1a80d26);
-    n += FUN_00695960(serB, stream);
+    uint8_t serA[0xa14];
+    uint8_t serB[0xa14];
+    int n = ((FnB18420*)this)->f(pData);
+    ((CVarListSer*)serA)->ctor((char*)this + 0x34, (void*)0x157a1f8, 0x1a80d26);
+    n += ((CVarListSer*)serA)->GetFields(pData);
+    ((CVarListSer*)serB)->ctor(this, (void*)0x1573a60, 0x1a80d26);
+    n += ((CVarListSer*)serB)->GetFields(pData);
     return n;
 }
 
@@ -1571,56 +1624,65 @@ void cInteractableObject::SetEffectId(int nEffectId)
 }
 
 // @ 0x00c3f1d0
-void* cGameplayMarkerCast(void* pObject, int nType)
+void* cSolarHitSphere::Cast(int nType)
 {
     if (nType != 0x32f9777 && nType != 0x2e71a5a)
-        return CastOrnamentBase(pObject);
-    return pObject;
+        return ((SimOrnamentCast*)this)->Cast(nType);
+    return this;
 }
 
 // @ 0x00c3f1f0
-void cGameplayMarker::Destroy(int bDelete)
+void* cGameplayMarker::Destroy(int bDelete)
 {
-    if (mpNextMarker != nullptr)
-        mpNextMarker->Release();
-    if (mpUseNounTriggers != nullptr)
-        mpUseNounTriggers->Release();
-    if (mpTriggerB != nullptr)
-        mpTriggerB->Release();
-    if (mpTriggerA != nullptr)
-        mpTriggerA->Release();
+    CMarkerBase* pBase = (CMarkerBase*)this;
+    pBase->mpVtbl00 = (void*)0x146c56c;
+    _ReadWriteBarrier();
+    if (pBase->mpRef38 != nullptr)
+        pBase->mpRef38->Release();
+    if (pBase->mpRef20 != nullptr)
+        pBase->mpRef20->Release();
+    if (pBase->mpRef1c != nullptr)
+        pBase->mpRef1c->Release();
+    if (pBase->mpRef18 != nullptr)
+        pBase->mpRef18->Release();
     if ((bDelete & 1) != 0)
         operator_delete__(this);
+    return this;
 }
 
 // @ 0x00c3f250
 void cInteractableObject::Shutdown()
 {
-    ResetInteractableState(this);
-    ResetOrnamentList(this);
+    ((FnAc0520*)((uint8_t*)this + 0x210))->f();
+    ((FnBfcd00*)((uint8_t*)this + 0x148))->f();
     *(uint32_t*)((uint8_t*)this + 0x144) = 0x1466c14;
-    FreeInteractableInherited();
+    ((FnC8a420*)((uint8_t*)this + 0x70))->f();
     *(uint32_t*)((uint8_t*)this + 0x34) = 0x146c56c;
-    if (mpOwner != nullptr)
-        mpOwner->Release();
-    if (*(IRefCounted**)((uint8_t*)this + 0x54) != nullptr)
-        (*(IRefCounted**)((uint8_t*)this + 0x54))->Release();
-    if (*(IRefCounted**)((uint8_t*)this + 0x50) != nullptr)
-        (*(IRefCounted**)((uint8_t*)this + 0x50))->Release();
-    if (*(IRefCounted**)((uint8_t*)this + 0x4c) != nullptr)
-        (*(IRefCounted**)((uint8_t*)this + 0x4c))->Release();
-    FreeGameDataMembers();
+    _ReadWriteBarrier();
+    IRefCounted* pOwner = *(IRefCounted**)((uint8_t*)this + 0x6c);
+    if (pOwner != nullptr)
+        pOwner->Release();
+    IRefCounted* pRef54 = *(IRefCounted**)((uint8_t*)this + 0x54);
+    if (pRef54 != nullptr)
+        pRef54->Release();
+    IRefCounted* pRef50 = *(IRefCounted**)((uint8_t*)this + 0x50);
+    if (pRef50 != nullptr)
+        pRef50->Release();
+    IRefCounted* pRef4c = *(IRefCounted**)((uint8_t*)this + 0x4c);
+    if (pRef4c != nullptr)
+        pRef4c->Release();
+    ((FnB184c0*)this)->f();
 }
 
 // @ 0x00c3f310
-void cGameData::RemoveOwner()
+void cHitSphere::RemoveOwner()
 {
-    IRefCounted* pOwner = *(IRefCounted**)((uint8_t*)this + 0x2c);
+    cGameData* pOwner = mpDelegate;
     if (pOwner != nullptr) {
-        *(IRefCounted**)((uint8_t*)this + 0x2c) = nullptr;
+        mpDelegate = nullptr;
         pOwner->Release();
     }
-    RemoveOwnerExtra();
+    ((SimOrnamentCast*)this)->Destroy();
 }
 
 // @ 0x00c3f340
@@ -1649,8 +1711,9 @@ bool cHitSphere::Write(void* pData)
 }
 
 // @ 0x00c3f4a0
-cHitSphere::cHitSphere()
+__declspec(noinline) cHitSphere::cHitSphere()
 {
+    ((SimOrnamentCast*)this)->Construct();
     mRadius = 1.0f;
     mMaxScreenSize = 1.0f;
     mMinScreenSize = 0.0f;
@@ -1658,13 +1721,22 @@ cHitSphere::cHitSphere()
     mMaxDistance = 3.4028234e+38f;
     mpDelegate = nullptr;
     mbKeepPinnedToPlanet = false;
+    CHitSphereVtbls* pVtbls = (CHitSphereVtbls*)this;
+    pVtbls->mpVtbl00 = (void*)0x146c700;
+    pVtbls->mpVtbl04 = (void*)0x146c6ec;
+    pVtbls->mpVtbl34 = (void*)0x146c8e4;
+    pVtbls->mpVtbl70 = (void*)0x146c628;
+    pVtbls->mpVtbl144 = (void*)0x146c600;
+    pVtbls->mpVtbl148 = (void*)0x146c598;
+    pVtbls->mpVtbl210 = (void*)0x146c578;
 }
 
 // @ 0x00c3f560
-int cHitSphere::GetDelegateLowerBound(int nOffset)
+int cHitSphere::GetDelegateLowerBound()
 {
-    if (nOffset != 0x34)
-        return nOffset + 0x3c;
+    int nBase = (int)(uintptr_t)this - 0x34;
+    if (nBase != 0)
+        return (int)(uintptr_t)this + 0x3c;
     return 0;
 }
 
@@ -1673,5 +1745,13 @@ cSolarHitSphere::cSolarHitSphere()
 {
     mModelKey.typeID = 0;
     mModelKey.instanceID = 0;
+    CHitSphereVtbls* pVtbls = (CHitSphereVtbls*)this;
+    pVtbls->mpVtbl00 = (void*)0x146c8f0;
+    pVtbls->mpVtbl04 = (void*)0x146c6ec;
+    pVtbls->mpVtbl34 = (void*)0x146c8e4;
+    pVtbls->mpVtbl70 = (void*)0x146c820;
+    pVtbls->mpVtbl144 = (void*)0x146c7f8;
+    pVtbls->mpVtbl148 = (void*)0x146c790;
+    pVtbls->mpVtbl210 = (void*)0x146c774;
     mModelKey.groupID = 0;
 }

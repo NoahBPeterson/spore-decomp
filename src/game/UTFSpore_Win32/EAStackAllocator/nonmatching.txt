@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 00928ba0 73 StackAllocator::AllocateNewBlock: complete; block-link/copy schedule differs
 00928c40 101 StackAllocator::Reset(begin): complete; block-walk/bookmark loop schedule differs
-00928cd0 76 StackAllocator ctor: complete; default alloc/free setup + conditional Init differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
+00928cd0 76 regalloc: the ctor's logic is fixed -- mpCoreFunctionContext/mpTopBookmark are cleared after the Init call (they used to be zeroed before it) and Init receives the caller's original (possibly null) alloc/free; 200/200 random inputs PASS, 100% insn and 6/6 edge coverage on both builds. Still 104 vs 102 bytes with the same instruction set: cl 15 hoists the two callback compares and keeps their results in edi/ebx across Init (the original compares each parameter in place and reuses edi/ecx), which also costs a saved ebx. Tried the origAlloc/origFree declaration order both ways and an early-Init variant; the register frame did not move. fix1: quick check PASS (emulator, no mismatch)

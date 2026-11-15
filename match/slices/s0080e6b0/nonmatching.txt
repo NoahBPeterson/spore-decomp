@@ -7,5 +7,4 @@
 0080ebc0  68  complete renderer ctor; inline-vec + viewer + memset full; equiv WEAK 163 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
 0080efe0 284  complete Insert1; copy/destroy + grow/reinsert full; equiv UNSUPPORTED 0 valid; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
 0080f140 363  complete Insert12; 12-byte copy/destroy + grow/reinsert full; equiv WEAK 82 valid; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
-0080f2e0 119  complete AddLayer; append/grow + addref/release full; equiv FAIL (ours-abi-broken, fastcall-4 compromise for 0080f360 MATCH, see fixlog); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
 0080f380 399  complete MethodF380; model bind + layer/effect setup full; equiv UNSUPPORTED 0 valid; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2

@@ -493,8 +493,9 @@ tNavigationGoal* tNavigationGoal::InitAt(float* p, float a, float b)
     f58 = 0.0f;
     f60 = b;
     f64 = kf_13ec4b4;
+    const float f68v = kf_145a5c8;
     i5c = 1;
-    f68 = kf_145a5c8;
+    f68 = f68v;
     f6c = 0.0f;
     i70 = 0;
     return this;

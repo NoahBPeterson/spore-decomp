@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00684bf0 63 complete: SP::CoordToIndex; cl keeps the float->int conversion in a register while the original spills to a stack temp
+00684bf0 63 inline: SP::CoordToIndex is correct (equivalent, refuted earlier by an emulator limit); it needs /arch:SSE /fp:fast (cvtsi2ss/mulss/cvttss2si, no x87 and no __ftol2 calls) and the original's store order: the upper lane (out[2]) is stored after the first mulss and the slot [esp+0x14] is reused for both product spills. Every source shape tried (cast-in-expression, named float temporaries, volatile spill) still stores out[2] first and converts the product in a register. fix1: quick check DIFFERS

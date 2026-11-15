@@ -232,23 +232,20 @@ struct PlanStim {
     int m1c;
     void Touch(); // 0x00d997e0
 };
-extern float gPlanLimit; // 0x0158133c
 int __cdecl PlanFind(void* a1, int kind, int flag); // 0x00ce2f00
 
 // @ 0x00ce33b0
-// Closest attempt, 129 bytes against 131. The truncated float is converted after the
-// virtual call (ecx) instead of cvttss2si eax / mov ebx, eax before it.
+// 129 bytes against 131. The limit float is the real global at 0x0158133c (was a made-up extern
+// resolved to address 0). Only codegen differs now: retail hoists cvttss2si eax + mov ebx, eax above
+// the +0xa4 virtual call; here the conversion lands after it (ecx), and *flag uses edx not eax.
 double __cdecl FUN_00ce33b0(void* a1, int a2, int a3, int a4, PlanStim* stim, unsigned char* flag)
 {
     PlanTribe* obj = *(PlanTribe**)a1;
-    float limitf = gPlanLimit;
+    float limitf = (*(float*)0x0158133c);
     unsigned ready = obj->IsReady();
     unsigned other = obj->Other();
     if (ready < other) {
-        int limit = (int)limitf;
-        int got = obj->GetLimit();
-        _ReadWriteBarrier();
-        if (limit <= got) {
+        if (obj->GetLimit() >= (int)limitf) {
             int plan = PlanFind(a1, 6, 1);
             if (plan != -1) {
                 if (stim)

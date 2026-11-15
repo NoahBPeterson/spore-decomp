@@ -12,3 +12,5 @@
 ../src/game/UTFSpore_Win32/Animation.cpp  ?Create@AnimationCurveFactory@UTFWin@@QAEPAVObject@2@IPAVICoreAllocator@2@@Z  00951960  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Animation.cpp  ?SetPoints@AnimationCurve@UTFWin@@UAEXPBUCurvePoint@@H@Z  00951b60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/Animation.cpp  ?SetPoints@AnimationPath2D@UTFWin@@UAEXPBUVector3@Math@@H@Z  00951b80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?InitArray12@@YA_NPAHHH0@Z  009514f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Animation.cpp  ?InitArray8@@YA_NPAHHH0@Z  009513d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

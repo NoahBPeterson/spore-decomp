@@ -778,7 +778,7 @@ char MissionStub::FUN_00c2f320(int* out)
 // @ 0x00c2f340
 int* __fastcall FUN_00c2f340(int* self)
 {
-    FUN_00c46500(self);
+    ((void(__thiscall*)(void*))FUN_00c46500)(self);
     self[0x1e] = 0;
     self[0x1f] = 3;
     self[0] = 0x146b0f8;
@@ -808,12 +808,15 @@ void __fastcall FUN_00c2f3e0(int* self)
 // @ 0x00c2f470
 int* __fastcall FUN_00c2f470(int* self) // Simulator::cTribeToTribeMission ctor
 {
-    FUN_00c46500(self);                   // base ctor (this in ECX)
+    ((void(__thiscall*)(void*))FUN_00c46500)(self);   // base ctor (this in ECX)
     self[0x1e] = 0;
     self[0x1f] = 3;
-    self[0] = 0x0146b210;                 // vtbl_Simulator::cTribeToTribeMission
-    self[1] = 0x0146b200;
-    self[0x0d] = 0x0146b1f0;
+    {
+        volatile int* vt = self;
+        vt[0] = 0x0146b210;               // vtbl_Simulator::cTribeToTribeMission
+        vt[1] = 0x0146b200;
+        vt[0x0d] = 0x0146b1f0;
+    }
     self[0x20] = 0;
     self[0x21] = 0;
     self[0x22] = 0;

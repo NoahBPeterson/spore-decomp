@@ -476,7 +476,7 @@ public:
     void FUN_009007b0();
     __declspec(noinline) void* ReadString(EA::Allocator::StackAllocator_s0090_0410* pAlloc, uint32* pOut);
     void FUN_009008f0();
-    void* FUN_00900970(const void* v);
+    void* FUN_00900970(const void* v);   // 0x00900970
 
     XmlReader(void* pAllocator);
     ~XmlReader();
@@ -581,7 +581,9 @@ extern "C" __declspec(dllimport) void* __stdcall GetProcessHeap();
 extern "C" __declspec(dllimport) void* __stdcall HeapAlloc(void*, unsigned long, unsigned int);
 extern char* g_16c8b44;
 extern "C" void  FUN_00571db0(void*, void*, void*, void*, void*);  // 0x00571db0  EA::Messaging::RemoveHandler
-struct Method { void M(); };
+struct Method {
+    void M();   // 0x009289e0
+};
 struct Method1 { void FUN_009276c0(void*); };
 struct Method6 { void M(int, int, int, int, int, int); };
 struct Method8 { void M(int, int, int, int, int, int, int, int); };
@@ -630,7 +632,7 @@ struct cOnlineTab {
     void  FUN_00f46cf0(int a1, int a2, int a3, int a4); // url builder
 };
 extern "C" __declspec(dllimport) int __stdcall HeapFree(void*, unsigned long, void*);
-extern char __cdecl cdecl_f935ad0(void*);
+extern char __cdecl cdecl_00935ad0(void*);
 extern char* g_16c8b40;
 // ---- items of slice s00f46560 end
 
@@ -814,13 +816,13 @@ void* FUN_00900900(short* s, EA::Allocator::StackAllocator_s0090_0410* a)
     do { } while (*p++ != 0);
     uint32 n = ((uint32)((p - (s + 1)) * 2) + 9) & ~7u;
     char* dst;
-    if ((int)((a->mpCurrentBlockEnd - a->mpCurrentObjectBegin) - n) < 0) {
-        if (!a->AllocateNewBlock(n))
-            return 0;
+    if ((int)((a->mpCurrentBlockEnd - a->mpCurrentObjectBegin) - n) < 0 && !a->AllocateNewBlock(n)) {
+        dst = 0;
+    } else {
+        dst = a->mpCurrentObjectBegin;
+        a->mpCurrentObjectBegin = dst + n;
+        a->mpCurrentObjectEnd = dst + n;
     }
-    dst = a->mpCurrentObjectBegin;
-    a->mpCurrentObjectBegin = dst + n;
-    a->mpCurrentObjectEnd = dst + n;
     short* d = (short*)dst;
     while ((*d++ = *s++) != 0) { }
     return dst;
@@ -975,20 +977,18 @@ void OnStartElement2(XmlTextReader* t, void* a2, void* a3, void* a4)
 void OnStartElement(XmlTextReader* t, void* a2, int* a3)
 {
     Token* p = AllocToken(t, 0x20);
-    if (!p)
-        return;
-    p->mToken = 1;
+    if (p != 0)
+        p->mToken = 1;
     int n = 0;
     while (a3[n] != 0)
         n++;
     p->mnEntryCount = n / 2;
     p->field8 = (int)t->FUN_00900970(a2);
     p->fieldc = 0;
-    int* arr = (int*)((EA::Allocator::StackAllocator_s0090_0410*)(t->mAllocator))
-                   ->Allocate((uint32)(n * 4 + 7) & ~7u);
-    p->mpEntries = arr;
+    p->mpEntries = (int*)((EA::Allocator::StackAllocator_s0090_0410*)(t->mAllocator))
+                       ->Allocate((uint32)(n * 4 + 7) & ~7u);
     for (int i = 0; i < n; i++)
-        arr[i] = (int)t->FUN_00900970((void*)a3[i]);
+        p->mpEntries[i] = (int)t->FUN_00900970((void*)a3[i]);
     p->mpNext = 0;
     p->field10 = t->mnDepth;
     if (t->mpLastToken != 0) {
@@ -1006,9 +1006,8 @@ void OnStartElement(XmlTextReader* t, void* a2, int* a3)
 void OnEndElement(XmlTextReader* t, void* a2)
 {
     Token* p = AllocToken(t, 0x18);
-    if (!p)
-        return;
-    p->mToken = 2;
+    if (p != 0)
+        p->mToken = 2;
     p->field8 = (int)t->FUN_00900970(a2);
     p->fieldc = 0;
     t->mnDepth--;
@@ -1044,9 +1043,8 @@ void OnComment(XmlTextReader* t, void* a2)
     if ((t->mnFlags & 1) == 0)
         return;
     Token* p = AllocToken(t, 0x18);
-    if (!p)
-        return;
-    p->mToken = 3;
+    if (p != 0)
+        p->mToken = 3;
     p->field8 = 0;
     p->fieldc = (int)t->FUN_00900970(a2);
     p->mpNext = 0;
@@ -1060,9 +1058,8 @@ void OnPI(XmlTextReader* t, void* a2, void* a3)
     if ((t->mnFlags & 2) == 0)
         return;
     Token* p = AllocToken(t, 0x18);
-    if (!p)
-        return;
-    p->mToken = 5;
+    if (p != 0)
+        p->mToken = 5;
     p->field8 = (int)t->FUN_00900970(a2);
     p->fieldc = (int)t->FUN_00900970(a3);
     p->mpNext = 0;
@@ -1194,11 +1191,12 @@ void ShutdownSharedAllocator()
 {
     char* p = g_16c8b40;
     if (p) {
-        char ok = cdecl_f935ad0(p);
-        p = g_16c8b40;
-        if (ok && p) {
-            ((Method*)(p + 0x18))->M();
-            HeapFree(GetProcessHeap(), 0, p);
+        if (cdecl_00935ad0(p)) {
+            char* q = g_16c8b40;
+            if (q) {
+                ((Method*)(q + 0x18))->M();
+                HeapFree(GetProcessHeap(), 0, q);
+            }
         }
         g_16c8b40 = 0;
     }

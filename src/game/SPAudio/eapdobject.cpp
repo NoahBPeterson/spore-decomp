@@ -474,11 +474,10 @@ void inlet_float(t_inlet* x, float f)
 namespace EA { namespace Audio { namespace Eapd {
 void inlet_list(t_inlet* x, t_symbol s, int argc, t_atom* argv)
 {
-    t_symbol from = x->i_symfrom;
-
-    if (from == gListSymbol || from == gFloatSymbol || from == gSymbolSymbol)
+    if (x->i_symfrom == gListSymbol || x->i_symfrom == gFloatSymbol ||
+        x->i_symfrom == gSymbolSymbol)
         pd_typedmess(x->i_dest, x->u.i_symto, argc, argv);
-    else if (from == gEmptySymbol)
+    else if (x->i_symfrom == gEmptySymbol)
         pd_list(x->i_dest, s, argc, argv);
 }
 }}}  // namespace EA::Audio::Eapd
@@ -816,12 +815,13 @@ void obj_disconnect(t_object* source, int outno, t_object* sink, int inno)
     t_outlet* o = source->te_outlet;
     t_inlet* i;
 
-    if (o) {
-        for (; outno; outno--) {
-            if (!o)
-                return;
-            o = o->o_next;
-        }
+    while (o) {
+        if (outno == 0)
+            break;
+        if (!o)
+            return;
+        o = o->o_next;
+        outno--;
     }
     if (sink->g_pd->c_firstin) {
         if (!inno) {
@@ -833,11 +833,9 @@ void obj_disconnect(t_object* source, int outno, t_object* sink, int inno)
     i = sink->te_inlet;
     if (!i)
         return;
-    while (inno) {
+    while (i && inno) {
         i = i->i_next;
         inno--;
-        if (!i)
-            return;
     }
     if (!i)
         return;
@@ -847,9 +845,10 @@ remove:
         t_outconnect* oc2;
         if (!oc)
             return;
-        if ((oc2 = oc->oc_next)->oc_to == i) {
-            o->o_connections = oc2->oc_next;
-            freebytes(oc2, 8);
+        oc2 = oc->oc_next;
+        if (oc->oc_to == i) {
+            o->o_connections = oc2;
+            freebytes(oc, 8);
             return;
         }
         while (oc2) {

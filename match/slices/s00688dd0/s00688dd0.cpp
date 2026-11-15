@@ -681,10 +681,8 @@ struct GmeRC {
 };
 
 struct Slot0c { int x; Slot0c() {} ~Slot0c() {} };
-struct GmeEditorResBase2 : IDispBase, GmeRC {
-};
 
-struct CMessageCommandDispatcher : GmeEditorResBase2 {
+struct CMessageCommandDispatcher : IDispBase, GmeRC {
     Slot0c           mUnk0c;     // +0x0c
     EditorResDerived mMessage;   // +0x10
     ArcRef           mpIn;       // +0x38

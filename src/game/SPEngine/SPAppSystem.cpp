@@ -1289,24 +1289,22 @@ void PropWatcher::Read(void* p2)
     PropListBase* pb = (PropListBase*)p2;
     if (pb->vf24(f8, &p2)) {
         int* q = (int*)p2;
-        short t = *(short*)((char*)q + 0x12);
+        uint16_t t = *(uint16_t*)((char*)q + 0x12);
         int* src;
         if (t == 9 || t == 0x10) {
-            if ((*(uint8_t*)((char*)q + 0x10) & 0x30) == 0)
-                src = (int*)(-(uint32_t)(t != 0) & (uint32_t)q);
-            else
+            if ((*(uint8_t*)((char*)q + 0x10) & 0x30) != 0)
                 src = (int*)*q;
+            else
+                // the original's `neg eax; sbb eax, eax` mask (0 or -1): the `? -1 : 0` spelling keeps that codegen
+                src = (int*)((uint32_t)q & (uint32_t)((t != 0) ? -1 : 0));
         } else {
             src = &gDefaultWatcherValue;
         }
         f0 = (uint32_t)*src;
     }
     int* w = (int*)f4;
-    if (w[0xc]) {
-        fc = (int)w[0xd] + ((CPropList*)w[0xc])->GetModificationCount();
-        return;
-    }
-    fc = (int)w[0xd];
+    int mc = w[0xc] ? ((CPropList*)w[0xc])->GetModificationCount() : 0;
+    fc = (int)w[0xd] + mc;
 }
 
 // @ 0x007e67a0
@@ -2127,7 +2125,7 @@ end:
 }
 
 // @ 0x011c88e0
-UI_STRING* general_allocate_prompt(UI* ui, const char* prompt, int prompt_freeable, int type, int result_buf, int min, int max)
+static UI_STRING* general_allocate_prompt(UI* ui, const char* prompt, int prompt_freeable, int type, int result_buf, int min, int max)
 {
     if (ui == 0)
     {

@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "EA/Messaging/AutoHandler.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern float    g_14853bc;      // 0x014853bc
@@ -248,7 +249,7 @@ void cCachedEventData::RebuildAllyColonyPlanetCache()
     int count = (int)((*(void***)((char*)list + 4) - *(void***)list));
     for (int i = 0; i < count; ++i) {
         void* e = (*(void***)list)[i];
-        if (e == 0)
+        if (e == empire)
             continue;
         void* sm = FUN_00b3d2a0();
         if (e == ((MC*)sm)->f_00ba93b0())
@@ -432,18 +433,20 @@ void cCachedEventData::Init()
     Prime();
 
     void* server = FUN_0067dcc0();
-    cCachedEventData* p = this;
-    p->mHandler = server;
-    p->mArg08 = (void*)p;
-    p->mArg0c = 0x1494378;
-    p->mArg10 = 5;
-    p->mArg14 = 0;
+
+    // the embedded message handler at +0x04 registers this object with the server
+    EA::Messaging::AutoHandler* h = (EA::Messaging::AutoHandler*)&mHandler;
+    h->mpServer = (EA::Messaging::Server*)server;
+    h->mpHandler = (EA::Messaging::IHandler*)this;
+    h->mpIdArray = (unsigned int*)0x1494378;
+    h->mnIdArrayCount = 5;
+    h->mnPriority = 0;
 
     typedef void (__thiscall* Fn)(void*, void*, uint32_t);
-    if (server != 0 && p != 0) {
-        for (int i = 0; i < 0x14; i += 4) {
+    if (h->mpServer != 0 && h->mpHandler != 0) {
+        for (uint32_t i = 0; i < 0x14; i += 4) {
             uint32_t fn = *(uint32_t*)(0x1494378 + i);
-            ((Fn)VF(server, 0x24))(server, p, fn);
+            ((Fn)VF(server, 0x24))(server, this, fn);
         }
     }
 }

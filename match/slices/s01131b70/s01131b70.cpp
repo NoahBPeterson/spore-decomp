@@ -4,15 +4,13 @@
 // behaviour-equivalent source (nonmatching.txt).  32-bit only.
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
 #include "types.h"
+#include "sse_helpers.h"
 
 namespace rw { namespace audio { namespace core {
 
 static inline int RwFloat2Int(float f)
 {
-    int r;
-    __asm { cvtss2si eax, f }
-    __asm { mov r, eax }
-    return r;
+    return SseRoundToInt(f);
 }
 
 // ---------------------------------------------------------------- filesys Stream
@@ -58,7 +56,8 @@ void   FUN_011416b0(void* proc);                              // 0x011416b0
 int    SNDPKTPLAY_submit(int handle, void* packet);           // 0x0113f5c0
 
 extern uint8_t  g_016e7bfe;     // 0x016e7bfe  stream-state count
-extern void*    g_016e61e0[];   // 0x016e61e0  stream-state table
+struct SndStreamState;
+extern SndStreamState* g_016e61e0[];   // 0x016e61e0  stream-state table
 extern int      g_016e7c78;     // 0x016e7c78
 extern uint8_t  g_015ba5fe[];   // 0x015ba5fe
 extern int      g_015bfe38;     // 0x015bfe38
@@ -71,7 +70,8 @@ extern int      g_016e7c74;     // 0x016e7c74
 
 // ---------------------------------------------------------------- stream state
 // Full 0x220-byte layout, addressed by explicit byte offsets (the original overlaps words/bytes).
-struct SndStreamState { char m[0x224]; };
+struct SndStreamState { char m[0x224]; };  // stream-state table 0x016e61e0
+extern SndStreamState* g_016e61e0[];
 
 static inline int&     fi(SndStreamState* s, int off) { return *(int*)(s->m + off); }
 static inline void*&   fp(SndStreamState* s, int off) { return *(void**)(s->m + off); }
@@ -324,12 +324,14 @@ int SndStream_getState(int index)
 // @ 0x01132320
 void SndStream_removeLine(unsigned a)
 {
-    SndStreamState* s = (SndStreamState*)g_016e61e0[a & 0xff];
+    SndStreamState* s = g_016e61e0[a & 0xff];
     int v = FUN_01141270(a);
-    FUN_01141230(s->m + 0x114, v);
-    FUN_011411a0(s->m + 0x120, v);
-    if (fi(s, 0x12c) == v)
-        fi(s, 0x12c) = 0;
+    if (fi(s, 0x12c) != v)
+    {
+        FUN_01141230(s->m + 0x114, v);
+        FUN_011411a0(s->m + 0x120, v);
+        fi(s, 0x12c) = v;
+    }
 }
 
 // @ 0x01132370

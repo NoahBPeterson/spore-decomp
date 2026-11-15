@@ -50,6 +50,20 @@ struct TrackInfo
 	float biasZ, scaleZ;    // +0x1c
 };
 
+union Vec4Access
+{
+	__m128 v;
+	float f[4];
+};
+
+// first scalar of a vector (cl 13.10 has no _mm_cvtss_f32)
+static __forceinline float Lane0(__m128 v)
+{
+	Vec4Access a;
+	a.v = v;
+	return a.f[0];
+}
+
 static __forceinline __m128 Splat(float f) { return _mm_set_ps1(f); }
 #define SPLAT(v, i) _mm_shuffle_ps((v), (v), (i) * 0x55)
 
@@ -79,26 +93,26 @@ static __forceinline __m128 Normalize4(__m128 v)
 static __forceinline __m128 Slerp(__m128 q0, __m128 q1, __m128 tv)
 {
 	__m128 dot = Dot4(q0, q1);
-	if (kZero > _mm_cvtss_f32(dot))
+	if (kZero > Lane0(dot))
 	{
 		q0 = _mm_mul_ps(q0, Splat(kMinusOne));
 		dot = _mm_sub_ps(_mm_setzero_ps(), dot);
 	}
 	const float cosLimit = (float)cos((double)kSlerpAngle);
-	if (_mm_cvtss_f32(dot) > cosLimit)
+	if (Lane0(dot) > cosLimit)
 	{
 		__m128 d;
-		if (_mm_cvtss_f32(Dot4(q0, q1)) > kZero)
+		if (Lane0(Dot4(q0, q1)) > kZero)
 			d = _mm_mul_ps(_mm_sub_ps(q1, q0), tv);
 		else
 			d = _mm_mul_ps(_mm_add_ps(q1, q0), _mm_sub_ps(_mm_setzero_ps(), tv));
 		return Normalize4(_mm_add_ps(d, q0));
 	}
-	const float angle = (float)acos((double)_mm_cvtss_f32(dot));
+	const float angle = (float)acos((double)Lane0(dot));
 	const __m128 av = Splat(angle);
-	const __m128 w0 = _mm_div_ps(Splat((float)sin((double)_mm_cvtss_f32(_mm_mul_ps(_mm_sub_ps(Splat(kOne), tv), av)))),
+	const __m128 w0 = _mm_div_ps(Splat((float)sin((double)Lane0(_mm_mul_ps(_mm_sub_ps(Splat(kOne), tv), av)))),
 	                             Splat((float)sin((double)angle)));
-	const __m128 w1 = _mm_div_ps(Splat((float)sin((double)_mm_cvtss_f32(_mm_mul_ps(tv, av)))),
+	const __m128 w1 = _mm_div_ps(Splat((float)sin((double)Lane0(_mm_mul_ps(tv, av)))),
 	                             Splat((float)sin((double)angle)));
 	return _mm_add_ps(_mm_mul_ps(q0, w0), _mm_mul_ps(q1, w1));
 }
@@ -265,13 +279,16 @@ void CopyDword(unsigned int* dst, const unsigned int* src)
 	*dst = *src;
 }
 
-// @ 0x01200890
+// Rel3 unbase. Retail keeps the +0x20 relocation base in esi (`push esi; mov esi,[edx+0x20]`)
+// and unbases the three members through a register delta, which cl 15 never does (it folds the
+// base into `sub ecx,[edx+0x20]`), so this helper comes from the Toolkit 2003 build; vc71/01200890.cpp
+// holds its VC7.1 source.
 void Unbase3(Rel3* p, Base20Ctx* ctx)
 {
 	int d = (int)p - (int)ctx->mpBase;
-	p->mV2 -= d;
-	p->mV0 -= d;
-	p->mV1 -= d;
+	p->mV2 = p->mV2 - d;
+	p->mV0 = p->mV0 - d;
+	p->mV1 = p->mV1 - d;
 }
 
 // @ 0x012008d0
@@ -320,10 +337,12 @@ int InitFixupTable(FixupTable* rec, ArenaCtx* ctx)
 	rec->mpFn = (void*)SampleTrackPairs;
 	rec->mpLink = ctx->mpArena->IdToObject((int)rec->mpLink);
 	rec->mpData10 = ctx->mpArena->IdToObject((int)rec->mpData10);
-	rec->mpEntries = (int*)((char*)rec->mpEntries + ((char*)rec - (char*)ctx->mpBase));
-	int** entries = (int**)rec->mpEntries;
-	for (unsigned int i = 0; i < rec->mCount; i++)
-		entries[i * 2] = (int*)ctx->mpArena->IdToObject((int)entries[i * 2]);
+	int* entries = (int*)((char*)rec->mpEntries + ((char*)rec - (char*)ctx->mpBase));
+	rec->mpEntries = entries;
+	unsigned int count = rec->mCount;
+	int** table = (int**)entries;
+	for (unsigned int i = 0; i < count; count = rec->mCount, i++)
+		table[i * 2] = (int*)ctx->mpArena->IdToObject((int)table[i * 2]);
 	rec->mpDataC = ctx->mpArena->IdToObject((int)rec->mpDataC);
 	return 1;
 }
@@ -355,5 +374,5 @@ int RebaseDeltaFromBase(int* p, ArenaCtx* ctx)
 void RebaseToBase20(int* p, Base20Ctx* ctx)
 {
 	int d = (int)ctx->mpBase - (int)p;
-	*p = *p + d;
+	*p += d;
 }

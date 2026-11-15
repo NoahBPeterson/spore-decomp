@@ -890,7 +890,8 @@ AttrStorage cCreatureBase_sAttributes[35];   // 0x01571798
 extern float g_146a32c;         // FLT_MAX
 extern float g_150c8e4, g_150c8e8, g_150c8ec, g_150c8f0;
 extern float g_150c8f4, g_150c8f8, g_150c8fc;
-extern float g_150c888, g_150c88c;
+float g_150c88c = 1.25f;                    // 0x0150c88c
+float g_150c888 = 0.25f;                    // 0x0150c888
 extern float g_1687a00, g_1687a04, g_1687a0c, g_1687a10, g_1687a14;
 extern float g_1687a2c, g_1687a30, g_169e288;
 extern int   g_168d900;
@@ -3532,11 +3533,10 @@ float __fastcall FUN_00c0bb20(CB* self)
     value = *(float*)((char*)self->mp_e84 + 0x368);
   else
     value = *(float*)((char*)self->mpSpecies + 0x570);
-  if (self->m_b34 == 1) {
-    if ((self->mGeneralFlags & 1) == 1)
-      value = g_150c88c * value;
-  } else {
+  if (self->m_b34 != 1) {
     value = g_150c888 * value;
+  } else if (self->mGeneralFlags & 1) {
+    value = g_150c88c * value;
   }
   return value;
 }
@@ -4306,25 +4306,29 @@ bool Simulator_cCreatureBase::TraceTo(const Vec3* pFrom, const Vec3* pTo, Vec3* 
 // @ 0x00c0f490
 void Simulator_cCreatureBase::ResetCombatants()
 {
-    mIntentionTowardsTarget = 0;
-
+    mFlags = 0;
     if (mpSenseObject != nullptr) {
-        mpSenseObject->Query();
         IRefCounted* pOld = mpSenseObject;
-        mpSenseObject = nullptr;
-        pOld->Release();
+        pOld->Query();
+        if (mpSenseObject != nullptr) {
+            mpSenseObject = nullptr;
+            pOld->Release();
+        }
     }
     if (mpSteeringTarget != nullptr) {
-        mpSteeringTarget->Query();
         IRefCounted* pOld = mpSteeringTarget;
-        mpSteeringTarget = nullptr;
-        pOld->Release();
+        pOld->Query();
+        if (mpSteeringTarget != nullptr) {
+            mpSteeringTarget = nullptr;
+            pOld->Release();
+        }
     }
     if (mpCombatantTarget != nullptr) {
-        IRefCounted* pOld = mpCombatantTarget;
+        cCombatant* pOld = mpCombatantTarget;
         mpCombatantTarget = nullptr;
         pOld->Release();
     }
+    mIntentionTowardsTarget = 0;
 }
 
 // @ 0x00c0f510
@@ -4334,7 +4338,9 @@ bool Simulator_cCreatureBase::IsSlotEmpty(uint32_t nIndex)
     bool bEmpty = true;
     if (nIndex < (uint32_t)nCount) {
         cCombatantSlot* pSlot = &mpSlotsBegin[nIndex];
-        if (pSlot->mpCombatant != nullptr || pSlot->mSecondaryKey != 0)
+        if (pSlot->mpCombatant != nullptr)
+            bEmpty = false;
+        if (pSlot->mSecondaryKey != 0)
             bEmpty = false;
     }
     return bEmpty;
@@ -4344,11 +4350,9 @@ bool Simulator_cCreatureBase::IsSlotEmpty(uint32_t nIndex)
 int Simulator_cCreatureBase::CountValid()
 {
     int nValid = 0;
-    int i = 0;
-    while (i < (int)(mpSlotsEnd - mpSlotsBegin)) {
-        if (mpSlotsBegin[i].mpCombatant != 0 || mpSlotsBegin[i].mSecondaryKey != 0)
+    for (int i = 0; i < (int)(mpSlotsEnd - mpSlotsBegin); ++i) {
+        if (mpSlotsBegin[i].mSecondaryKey != 0 || mpSlotsBegin[i].mpCombatant != 0)
             ++nValid;
-        ++i;
     }
     return nValid;
 }
@@ -4357,8 +4361,7 @@ int Simulator_cCreatureBase::CountValid()
 bool Simulator_cCreatureBase::IsFull()
 {
     int nValid = CountValid();
-    int nCount = (int)(mpSlotsEnd - mpSlotsBegin);
-    return nValid == nCount;
+    return nValid == (int)(mpSlotsEnd - mpSlotsBegin);
 }
 
 // @ 0x00c0f620
@@ -4366,7 +4369,8 @@ uint32_t Simulator_cCreatureBase::FindFirstEmpty()
 {
     uint32_t nCount = (uint32_t)(mpSlotsEnd - mpSlotsBegin);
     for (uint32_t i = 0; i < nCount; ++i) {
-        if (mpSlotsBegin[i].mpCombatant == nullptr && mpSlotsBegin[i].mSecondaryKey == 0)
+        cCombatantSlot* pSlot = &mpSlotsBegin[i];
+        if (pSlot->mpCombatant == nullptr && pSlot->mSecondaryKey == 0)
             return i;
     }
     return 0xffffffff;
@@ -4415,8 +4419,9 @@ uint32_t Simulator_cCreatureBase::FindNextValid(int nAfter)
 // @ 0x00c0f8a0
 cCombatant* Simulator_cCreatureBase::GetAt(uint32_t nIndex)
 {
+    unsigned nCount = (unsigned)(int)(mpSlotsEnd - mpSlotsBegin);
     cCombatant* pResult = nullptr;
-    if (nIndex < (uint32_t)(mpSlotsEnd - mpSlotsBegin))
+    if (nIndex < nCount)
         pResult = mpSlotsBegin[nIndex].mpCombatant;
     return pResult;
 }
@@ -4424,6 +4429,7 @@ cCombatant* Simulator_cCreatureBase::GetAt(uint32_t nIndex)
 // @ 0x00c0f8f0
 uint32_t Simulator_cCreatureBase::FindByCombatant(int nCombatant)
 {
+    uint32_t result = 0xffffffff;
     uint32_t nCount = (uint32_t)(mpSlotsEnd - mpSlotsBegin);
     for (uint32_t i = 0; i < nCount; ++i) {
         if (nCombatant == 0)
@@ -4431,17 +4437,16 @@ uint32_t Simulator_cCreatureBase::FindByCombatant(int nCombatant)
         if ((int)(intptr_t)mpSlotsBegin[i].mpCombatant == nCombatant)
             return i;
     }
-    return 0xffffffff;
+    return result;
 }
 
 // @ 0x00c0f960
 uint32_t Simulator_cCreatureBase::FindByKey(int nKey)
 {
     uint32_t result = 0xffffffff;
-    uint32_t nCount = (uint32_t)(mpSlotsEnd - mpSlotsBegin);
-    cCombatantSlot* pSlot = mpSlotsBegin;
-    for (uint32_t i = 0; i < nCount; ++i, ++pSlot) {
-        if (pSlot->mKey == nKey) {
+    int nCount = (int)(mpSlotsEnd - mpSlotsBegin);
+    for (uint32_t i = 0; i < (uint32_t)nCount; ++i) {
+        if (mpSlotsBegin[i].mKey == nKey) {
             result = i;
             break;
         }
@@ -4453,11 +4458,12 @@ uint32_t Simulator_cCreatureBase::FindByKey(int nKey)
 cCombatantSlot* Simulator_cCreatureBase::FindSlotByKey(int nKey, uint32_t* pIndex)
 {
     uint32_t nCount = (uint32_t)(mpSlotsEnd - mpSlotsBegin);
-    for (uint32_t i = 0; i < nCount; ++i) {
-        if (mpSlotsBegin[i].mKey == nKey) {
+    cCombatantSlot* pSlot = mpSlotsBegin;
+    for (uint32_t i = 0; i < nCount; ++i, ++pSlot) {
+        if (pSlot->mKey == nKey) {
             if (pIndex != nullptr)
                 *pIndex = i;
-            return &mpSlotsBegin[i];
+            return pSlot;
         }
     }
     return nullptr;
@@ -4467,11 +4473,12 @@ cCombatantSlot* Simulator_cCreatureBase::FindSlotByKey(int nKey, uint32_t* pInde
 cCombatantSlot* Simulator_cCreatureBase::FindSlotByCombatant(int nCombatant, uint32_t* pIndex)
 {
     uint32_t nCount = (uint32_t)(mpSlotsEnd - mpSlotsBegin);
-    for (uint32_t i = 0; i < nCount; ++i) {
-        if ((int)(intptr_t)mpSlotsBegin[i].mpCombatant == nCombatant) {
+    cCombatantSlot* pSlot = mpSlotsBegin;
+    for (uint32_t i = 0; i < nCount; ++i, ++pSlot) {
+        if ((int)(intptr_t)pSlot->mpCombatant == nCombatant) {
             if (pIndex != nullptr)
                 *pIndex = i;
-            return &mpSlotsBegin[i];
+            return pSlot;
         }
     }
     return nullptr;

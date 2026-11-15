@@ -247,9 +247,9 @@ void CmdDtor::Dtor()
 {
     vtbl = (void*)&vtbl_AppProps;
     DoFreeNodesTable(mTable.mpBucketArray, mTable.mnBucketCount);
+    mTable.mnElementCount = 0;
     if (mTable.mnBucketCount > 1)
         EASTL_allocator_deallocate(mTable.mpBucketArray);
-    mTable.mnElementCount = 0;
 }
 
 // @ 0x0083ce20

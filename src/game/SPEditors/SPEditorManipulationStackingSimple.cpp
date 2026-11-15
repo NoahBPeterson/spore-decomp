@@ -52,7 +52,21 @@ template <typename T>
 class sp_vector {
  public:
   T* mpBegin; T* mpEnd; T* mpCapacity; int mAllocator[2];
-  ~sp_vector() { if (mpBegin && ((int*)mpBegin)[-1] != 0) EASTL_allocator_deallocate(mpBegin); }
+  sp_vector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+  // element destruction, as eastl::vector does it: nothing for a plain pointer, ~T() (Release) otherwise
+  static void DestroyElement(void** p) { (void)p; }
+  template <class U> static void DestroyElement(U* p) { p->~U(); }
+  // erase(first, last): move the tail down over [first, last) and drop the freed slots from the end
+  void erase(T* first, T* last)
+  {
+    memcpy(first, last, (unsigned)((char*)mpEnd - (char*)last));
+    mpEnd -= (last - first);
+  }
+  ~sp_vector() {
+    for (T* p = mpBegin; p != mpEnd; ++p) DestroyElement(p);
+    erase(mpBegin, mpEnd);
+    if (mpBegin && ((int*)mpBegin)[-1] != 0) EASTL_allocator_deallocate(mpBegin);
+  }
   int size() const { return (int)(mpEnd - mpBegin); }
   T& operator[](int i) { return mpBegin[i]; }
   sp_vector& operator=(const sp_vector& x);
@@ -73,7 +87,7 @@ class cSPEditorBlock_s005b_c0f0 {
 namespace SP {
 class cSPEditorManipulationObject_s005b_c0f0 {
  public:
-  __declspec(noinline) cSPEditorManipulationObject_s005b_c0f0();
+  cSPEditorManipulationObject_s005b_c0f0();  // @ 0x005b0f80; defined out of line, so the derived ctor calls it
   virtual ~cSPEditorManipulationObject_s005b_c0f0() {}
   bool mChangedObject;         // +0x4
   bool mUseDeadZone;           // +0x5
@@ -98,19 +112,13 @@ class cSPEditorManipulationStackingSimple : public cSPEditorManipulationObject_s
   cSPVector3_s005b_c0f0 mOriginalMouseOffset;                                    // +0x64
   bool mUnk70;                                                        // +0x70
 
-  cSPEditorManipulationStackingSimple();
-  ~cSPEditorManipulationStackingSimple();
+  cSPEditorManipulationStackingSimple();                                       // @ 0x005bc860
+  ~cSPEditorManipulationStackingSimple();                                      // @ 0x005bc930
   void Init(cSPEditorBlock_s005b_c0f0** block, cSPVector3_s005b_c0f0 offset);
   bool DoOnMouseDown();
   void Other1();
   void Other2();
 };
-}
-namespace SP {
-volatile int g_s59_sink;
-}
-namespace SP {
-__declspec(noinline) cSPEditorManipulationObject_s005b_c0f0::cSPEditorManipulationObject_s005b_c0f0() { g_s59_sink = 1; }
 }
 // ---- items of slice s005bc0f0 end
 
@@ -211,7 +219,7 @@ struct cSPEditorBlock_s005b_ccc0 {
     char Unk43bbc0(int a);                                 // @ 0x0043bbc0
     void DetachFrom(cSPEditorBlock_s005b_ccc0* b);                    // @ 0x00438a40 (called on the parent)
 };
-struct cIVisualEffect { virtual void v0(); virtual void v1(); virtual void v2(); virtual void Update(int a); };  // slot 3 @ +0xc
+struct cIVisualEffect_s005b_ccc0 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void Update(int a); };  // slot 3 @ +0xc
 namespace EditorUtils {
     void RepinBlockToTorso(cSPEditorBlock_s005b_ccc0* b, Vec3 pos, Mat3 rot, int flag);   // 0x0049fbd0
 }
@@ -249,13 +257,13 @@ namespace SP {
 namespace SP {
     inline cViewer_s005b_ccc0* GetViewer() { return App()->GetViewer(); }
 }
-struct cEffectVec {              // eastl::vector<cIVisualEffect*, sp_vector_allocator>
-    cIVisualEffect** mpBegin;
-    cIVisualEffect** mpEnd;
-    cIVisualEffect** mpCapacity;
-    cEffectVec& operator=(const cEffectVec& o);   // @ 0x005bc9b0
+struct cEffectVec_s005b_ccc0 {       // eastl::vector<cIVisualEffect*, sp_vector_allocator>
+    cIVisualEffect_s005b_ccc0** mpBegin;
+    cIVisualEffect_s005b_ccc0** mpEnd;
+    cIVisualEffect_s005b_ccc0** mpCapacity;
+    cEffectVec_s005b_ccc0& operator=(const cEffectVec_s005b_ccc0& o);   // @ 0x005bc9b0
 };
-struct cTempVec { cIVisualEffect** mpBegin; cIVisualEffect** mpEnd; cIVisualEffect** mpCapacity; };
+struct cTempVec_s005b_ccc0 { cIVisualEffect_s005b_ccc0** mpBegin; cIVisualEffect_s005b_ccc0** mpEnd; cIVisualEffect_s005b_ccc0** mpCapacity; };
 namespace SP {
 class cSPEditorManipulationStackingSimple_s005b_ccc0 {
  public:
@@ -268,7 +276,7 @@ class cSPEditorManipulationStackingSimple_s005b_ccc0 {
   cSPEditorBlock_s005b_ccc0* mpOriginalParent;  // +0x24
   cSPEditorPileList mPileList;       // +0x28 (taken by address)
   char pad34[0x3c - 0x34];
-  cEffectVec mEffectList;            // +0x3c
+  cEffectVec_s005b_ccc0 mEffectList; // +0x3c
   char pad48[0x50 - 0x48];
   Vec3 mMouseOffset;                 // +0x50
   float mX;                          // +0x5c
@@ -304,17 +312,13 @@ void cSPEditorManipulationStackingSimple::Init(cSPEditorBlock_s005b_c0f0** block
 // @ 0x005bc860
 namespace SP {
 cSPEditorManipulationStackingSimple::cSPEditorManipulationStackingSimple()
+  : mBlock((cSPEditorBlock_s005b_c0f0*)0),
+    mPileList(),
+    mMouseOffset(cSPVector3_s005b_c0f0(0.0f, 0.0f, 0.0f)),
+    mEffectList(),
+    mOriginalMouseOffset(cSPVector3_s005b_c0f0(0.0f, 0.0f, 0.0f)),
+    mUnk70(false)
 {
-  mBlock = (cSPEditorBlock_s005b_c0f0*)0;
-  mPileList.mpBegin = 0;
-  mPileList.mpEnd = 0;
-  mPileList.mpCapacity = 0;
-  mMouseOffset = cSPVector3_s005b_c0f0(0.0f, 0.0f, 0.0f);
-  mEffectList.mpBegin = 0;
-  mEffectList.mpEnd = 0;
-  mEffectList.mpCapacity = 0;
-  mOriginalMouseOffset = cSPVector3_s005b_c0f0(0.0f, 0.0f, 0.0f);
-  mUnk70 = false;
   mChangedObject = false;
 }
 }  // namespace SP
@@ -379,15 +383,15 @@ bool cSPEditorManipulationStackingSimple_s005b_ccc0::DoOnMouseMove(float x, floa
         if (bit12) {
             mMouseOffset = mOriginalMouseOffset;
             // mEffectList.erase(begin, end)
-            cIVisualEffect** first = mEffectList.mpBegin;
-            cIVisualEffect** last = mEffectList.mpEnd;
+            cIVisualEffect_s005b_ccc0** first = mEffectList.mpBegin;
+            cIVisualEffect_s005b_ccc0** last = mEffectList.mpEnd;
             memcpy(first, last, (char*)last - (char*)last);
             mEffectList.mpEnd -= (last - first);
             block = mpBlock;
             if (((block->mFlagsB >> 12) & 1) || ((block->mFlagsB >> 13) & 1)) {
-                cTempVec tmp;
-                cTempVec* r = (cTempVec*)FUN_004a37f0(&tmp, block->mpModel, 0x6027fb5a);
-                mEffectList = *(cEffectVec*)r;
+                cEffectVec_s005b_ccc0 tmp;
+                cEffectVec_s005b_ccc0* r = (cEffectVec_s005b_ccc0*)FUN_004a37f0(&tmp, block->mpModel, 0x6027fb5a);
+                mEffectList = *(cEffectVec_s005b_ccc0*)r;
                 if (tmp.mpBegin && ((int*)tmp.mpBegin)[-1])
                     operator_delete__(tmp.mpBegin);
             }
@@ -500,7 +504,7 @@ bool cSPEditorManipulationStackingSimple_s005b_ccc0::DoOnMouseMove(float x, floa
             parent != mpOriginalParent && parent->mpSymmetric != mpOriginalParent &&
             ((block->mFlagsA >> 12) & 1))
             mNewAttachment = 1;
-        cIVisualEffect** b = mEffectList.mpBegin;
+        cIVisualEffect_s005b_ccc0** b = mEffectList.mpBegin;
         if (b != mEffectList.mpEnd) {
             int n = (int)(mEffectList.mpEnd - b);
             for (int i = 0; i < n; i++)

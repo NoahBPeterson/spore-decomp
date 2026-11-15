@@ -2,3 +2,4 @@
 slices/s004b7b80/s004b7b80.cpp  ?SetEq@BaseCmp@@  004b8950  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s004b7b80/s004b7b80.cpp  ?SetEqFromNodes@DerivedCmp@@  004b8980  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s004b7b80/s004b7b80.cpp  ?SetEqFromModel@ModelCmp@@QAEPAEPAEPAUCmpArg@@PAUModelTypeObj@@H@Z  004b8a70  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b7b80/s004b7b80.cpp  ?FUN_004b8750@@YAXHPAXPAUIdVec3@?A0x5fa824a2@@I@Z  004b8750  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

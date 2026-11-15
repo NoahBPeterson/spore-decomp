@@ -117,21 +117,21 @@ extern "C" __declspec(dllimport) int   __stdcall UnDecorateSymbolName(const char
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
-void  StrRangeInit(void* s, unsigned n);                    // 0x00475ab0
-void  StrAppend(void* s, const char* b, const char* e);     // 0x00455d60
 struct EStr {
     char* mpBegin;   // 0
     char* mpEnd;     // 4
     char* mpCap;     // 8
+    void StrRangeInit(unsigned n);                    // 0x00475ab0
+    void StrAppend(const char* b, const char* e);     // 0x00455d60
 };
 struct DisassemblerX86 {
     void* vftable;                       // 0x000
     void* Ctor2();                       // 0x0091b5d0
     void* Dasm(const u8* start, const u8* end, u32 u3, u32 u4); // 0x0091b6d0
     void  Dtor();                        // 0x0091b6b0
-    int   Undecorate(char* out, const char* sym, u32 len, u32 flags); // 0x0091b840
     u8*   ScalarDtor(u8 flags);          // 0x0091b810
 };
+int UndecorateName(const char* in, char* out, unsigned outSize, int flags); // 0x0091b840
 struct MapFile {
     u8    mOpened;          // 0x00
     u32   mKind;            // 0x04
@@ -146,6 +146,7 @@ struct MapFile {
     u8    mPad28[0x10];     // 0x28
     u32   mBase38;          // 0x38
     u32   mBase3c;          // 0x3c
+    u8    mPad40[0x0a];     // 0x40
     u16   mStride;          // 0x4a
     u16   mCount;           // 0x4c
     u16   mSel;             // 0x4e
@@ -154,8 +155,8 @@ struct MapFile {
     u8    ReadSymbolBytes(int idx, u8* dst);        // 0x0091bd70
     u8    Parse(u8* buf);                           // 0x0091bb00
     u8    ReadRecord(u8* dst);                      // 0x0091bc30
-    u8*   FindByAddress(u8* dst, u32 addr);         // 0x0091bdd0
-    u8    CompareName(const char* other, u8* scratch); // 0x0091bce0
+    u8    FindByAddress(u8* dst, u32 addr);         // 0x0091bdd0
+    u8    CompareName(const char* other);           // 0x0091bce0
     u8    Reset();                                  // 0x0091beb0
     void* CtorEmpty();                              // 0x0091c0a0
     void  FreeStringsA();                           // 0x0091c0c0
@@ -193,7 +194,7 @@ extern "C" __declspec(dllimport) BOOL  __stdcall SymGetSymFromAddr64(HANDLE, DWO
 extern "C" __declspec(dllimport) BOOL  __stdcall CloseHandle(HANDLE);
 extern "C" __declspec(dllimport) HANDLE __stdcall CreateEventA(void*, BOOL, BOOL, LPCSTR);
 void EA_Text_StrncpyUTF8ToUTF16(void* dst, unsigned n, const void* src, int len); // 0x93cf10
-unsigned __int64 FUN_0091a1d0();                     // 0x91a1d0
+unsigned __int64 GetModuleBase(int);                 // 0x91a1d0
 void* FUN_00932060(const void* name);                // 0x932060
 void  FUN_00943570(void* p);                         // 0x943570
 struct ReportWriter {
@@ -280,11 +281,12 @@ struct SymbolEngine {
     void* mHandle;       // +0x04
     unsigned mLo;        // +0x08
     unsigned mHi;        // +0x0c
-    bool Load(const char* path, unsigned extra);  // @ 0091d6b0
+    int Load(const char* path, unsigned extra);   // @ 0091d6b0
     bool Cleanup();                               // @ 0091d760
     SymbolEngine();                               // @ 0091d7a0
-    virtual ~SymbolEngine();                      // @ 0091d7d0
+    void* ScalarDeletingDtor(u8 flags);           // @ 0091d7d0
 };
+extern "C" void FreeRawBlock(void* p);            // 0x00f47380
 extern "C" __declspec(dllimport) size_t __cdecl strlen(const char*);
 // ---- items of slice s0091d6b0 end
 
@@ -321,7 +323,7 @@ float *LerpSpriteRect(float *out, float *a, float *b, float t)
 {
   out[0] = (b[0] - a[0]) * t + a[0];
   out[1] = (b[1] - a[1]) * t + a[1];
-  out[2] = (float)LerpColor(*(unsigned int *)&a[2], *(unsigned int *)&b[2], t);
+  *(unsigned int *)&out[2] = LerpColor(*(unsigned int *)&a[2], *(unsigned int *)&b[2], t);
   out[3] = (b[3] - a[3]) * t + a[3];
   out[4] = (b[4] - a[4]) * t + a[4];
   return out;
@@ -362,38 +364,29 @@ cAddressRepCache::cAddressRepCache()
 }
 
 // @ 0x0091b840
-int DisassemblerX86::Undecorate(char* out, const char* sym, u32 bufLen, u32 flags)
+int UndecorateName(const char* in, char* out, unsigned outSize, int flags)
 {
     *out = 0;
     if (flags == 1) {
-        if (UnDecorateSymbolName(sym, out, 0x2e0, bufLen) == 0)
+        if (UnDecorateSymbolName(in, out, outSize, 0x2e0) == 0)
             *out = 0;
     }
-    char* p = out;
-    char* start = out;
-    do {
-        ++p;
-    } while (p[-1] != 0);
-    return (int)(p - (start + 1));
+    return (int)strlen(out);
 }
 
 // @ 0x0091ba90
-EStr* StrConcat3(EStr* out, const char* mid, EStr* pre, const char* suffix)
+EStr* StrConcat3(EStr* out, EStr* pre, const char* mid, const char* suffix)
 {
-    const char* e = suffix;
-    do {
-        ++e;
-    } while (e[-1] != 0);
-    u32 nSuffix = (u32)(e - suffix) - 1;
+    (void)suffix;
+    u32 nMid = (u32)strlen(mid);
     u32 nPre = (u32)(pre->mpEnd - pre->mpBegin);
-    u32 nMid = (u32)(e - (const char*)mid) - 1;
     out->mpBegin = 0;
     out->mpEnd = 0;
     out->mpCap = 0;
-    StrRangeInit(out, nMid + nPre + 1);
+    out->StrRangeInit(nMid + nPre + 1);
     *out->mpEnd = 0;
-    StrAppend(out, pre->mpBegin, pre->mpEnd);
-    StrAppend(out, mid, (char*)mid + nMid);
+    out->StrAppend(pre->mpBegin, pre->mpEnd);
+    out->StrAppend(mid, (char*)mid + nMid);
     return out;
 }
 
@@ -430,13 +423,6 @@ u8 MapFile::ReadRecord(u8* dst)
     if (mKind == 1) {
         void* stream = mpStream;
         void** vtbl = *(void***)stream;
-        if (((u32 (__thiscall*)(void*, u8*, u32))vtbl[0x30 / 4])(stream, dst, 0x40) != 0x40)
-            return 0;
-        return 1;
-    }
-    if (mKind == 2) {
-        void* stream = mpStream;
-        void** vtbl = *(void***)stream;
         u8 tmp[0x28];
         if (((u32 (__thiscall*)(void*, u8*, u32))vtbl[0x30 / 4])(stream, tmp, 0x28) != 0x28)
             return 0;
@@ -458,16 +444,24 @@ u8 MapFile::ReadRecord(u8* dst)
         *(u32*)(dst + 0x3c) = 0;
         return 1;
     }
+    if (mKind == 2) {
+        void* stream = mpStream;
+        void** vtbl = *(void***)stream;
+        if (((u32 (__thiscall*)(void*, u8*, u32))vtbl[0x30 / 4])(stream, dst, 0x40) != 0x40)
+            return 0;
+        return 1;
+    }
     return 0;
 }
 
 // @ 0x0091bce0
-u8 MapFile::CompareName(const char* other, u8* scratch)
+u8 MapFile::CompareName(const char* other)
 {
+    u8 scratch;
     void* stream = mpStream;
     void** vtbl = *(void***)stream;
-    ((u32 (__thiscall*)(void*, u8*, int))vtbl[0x30 / 4])(stream, scratch, 1);
-    u8 c = *scratch;
+    ((u32 (__thiscall*)(void*, u8*, int))vtbl[0x30 / 4])(stream, &scratch, 1);
+    u8 c = scratch;
     const char* p = other;
     if (c != 0) {
         if (*p == 0)
@@ -477,8 +471,8 @@ u8 MapFile::CompareName(const char* other, u8* scratch)
         for (;;) {
             stream = mpStream;
             vtbl = *(void***)stream;
-            ((u32 (__thiscall*)(void*, u8*, int))vtbl[0x30 / 4])(stream, scratch, 1);
-            c = *scratch;
+            ((u32 (__thiscall*)(void*, u8*, int))vtbl[0x30 / 4])(stream, &scratch, 1);
+            c = scratch;
             ++p;
             if (c == 0)
                 break;
@@ -519,13 +513,12 @@ u8 MapFile::ReadSymbolBytes(int idx, u8* dst)
 }
 
 // @ 0x0091bdd0
-u8* MapFile::FindByAddress(u8* dst, u32 addr)
+u8 MapFile::FindByAddress(u8* dst, u32 addr)
 {
     if (mOpened == 0)
         return 0;
     u32 sel = mSel;
     u32 idx;
-    u8 vb;
     if (sel < 0xff00) {
         idx = sel;
     } else if (sel == 0xffff) {
@@ -544,40 +537,39 @@ u8* MapFile::FindByAddress(u8* dst, u32 addr)
     if (mOpened != 0 && (mBase38 | mBase3c) != 0 && mStride != 0)
         count = mCount;
     for (int i = 0; i < (int)count; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            if (!ReadSymbolBytes(i + j, dst))
-                continue;
-            u32 a = *(u32*)dst + *(u32*)(rec + 0x10);
-            void* stream = mpStream;
-            void** vtbl = *(void***)stream;
-            if (((u8 (__thiscall*)(void*, u32, int))vtbl[0x28 / 4])(stream, a, 0) == 0)
-                continue;
-            if (CompareName((const char*)addr, &vb) != 0)
-                return dst;
-        }
+        if (!ReadSymbolBytes(i, dst))
+            continue;
+        u32 a = *(u32*)dst + *(u32*)(rec + 0x18);
+        void* stream = mpStream;
+        void** vtbl = *(void***)stream;
+        if (((u8 (__thiscall*)(void*, u32, int))vtbl[0x28 / 4])(stream, a, 0) == 0)
+            continue;
+        if (CompareName((const char*)addr) != 0)
+            return 1;
     }
     return 0;
 }
 
 // @ 0x0091d6b0
-bool SymbolEngine::Load(const char* path, unsigned)
+int SymbolEngine::Load(const char* path, unsigned)
 {
     char buf[0x104];
     EA_Text_StrncpyUTF8ToUTF16(buf, 0x104, path, -1);
+    buf[0x103] = 0;
     if ((mLo | mHi) == 0) {
-        unsigned __int64 h = FUN_0091a1d0();
+        unsigned __int64 h = GetModuleBase(0);
         mLo = (unsigned)h;
         mHi = (unsigned)(h >> 32);
     }
     void* mod = FUN_00932060(path);
     SymSetOptions(0x52);
     SymInitialize(mHandle, 0, 0);
-    unsigned __int64 r = SymLoadModule64(mHandle, 0, buf, 0, ((unsigned __int64)mHi << 32) | mLo, (DWORD)mod);
+    unsigned __int64 r = SymLoadModule64(mHandle, 0, buf, 0, *(unsigned __int64*)((char*)this + 8), (DWORD)mod);
     mLo = (unsigned)r;
     mHi = (unsigned)(r >> 32);
-    if ((mLo | mHi) != 0)
-        return true;
-    return false;
+    if (r != 0)
+        return 1;
+    return 0;
 }
 
 // @ 0x0091d760
@@ -603,7 +595,7 @@ SymbolEngine::SymbolEngine()
 }
 
 // @ 0x0091d7d0
-SymbolEngine::~SymbolEngine()
+void* SymbolEngine::ScalarDeletingDtor(u8 flags)
 {
     *(void**)this = (void*)0x0143cf5c;
     if (mHandle != 0) {
@@ -614,6 +606,9 @@ SymbolEngine::~SymbolEngine()
         mHi = 0;
     }
     *(void**)this = (void*)0x013f68c4;
+    if (flags & 1)
+        FreeRawBlock(this);
+    return this;
 }
 
 // @ 0x0091d830

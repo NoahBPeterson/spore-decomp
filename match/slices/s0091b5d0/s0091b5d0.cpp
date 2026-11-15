@@ -27,7 +27,7 @@ void  MemCopy(void* d, const void* s, unsigned n);          // 0x011e073e
 void  MemMove(void* d, const void* s, unsigned n);          // 0x011e0744
 void  StrRangeInit(void* s, unsigned n);                    // 0x00475ab0
 void  StrAppend(void* s, const char* b, const char* e);     // 0x00455d60
-u32   MemFindLastOf(const char* first, const char* last, const char* end); // 0x0062ff90
+const char* RFindFirstOf(const char* last, const char* first, const char* s, const char* sEnd); // 0x0062ff90
 struct StrObj {
     char* a; char* b; char* c;
     void Init(const char* p);                       // 0x0057cb10
@@ -78,6 +78,7 @@ struct EStr {
     char* mpBegin;   // 0
     char* mpEnd;     // 4
     char* mpCap;     // 8
+    u32   find_last_of(const char* s, u32 pos) const;   // 0x0091bec0
 };
 
 // ===========================================================================
@@ -320,26 +321,30 @@ EStr* StrConcat3(EStr* out, const char* mid, EStr* pre, const char* suffix)
 // ===========================================================================
 // 0x0091bec0  eastl::string::find_last_of
 // ===========================================================================
+template <class T> static inline const T& MinRef(const T& a, const T& b) { return (a < b) ? a : b; }
+
 // @ 0x0091bec0
-u32 StrFindLastOf(EStr* self, const char* s, u32 pos)
+u32 EStr::find_last_of(const char* s, u32 pos) const
 {
     const char* e = s;
+    const char* e0 = e + 1;
+    char c;
     do {
+        c = *e;
         ++e;
-    } while (e[-1] != 0);
-    u32 n = (u32)(e - s) - 1;
-    char* base = self->mpBegin;
-    u32 len = (u32)(self->mpEnd - base);
-    u32 use = pos;
-    if (len == 0)
-        return 0xffffffff;
-    u32 cap = len - 1;
-    if (pos >= cap)
-        use = cap;
-    const char* r = (const char*)MemFindLastOf(base, base + use + 1, base + use + n + 1);
-    if (r == base)
-        return 0xffffffff;
-    return (u32)(r - base) - 1;
+    } while (c != 0);
+    u32 n = (u32)(e - e0);
+    const char* base = mpBegin;
+    u32 len = (u32)(mpEnd - base);
+    u32 p = pos;
+    if (len != 0) {
+        u32 cap = len - 1;
+        u32 use = MinRef(p, cap);
+        const char* r = RFindFirstOf(base + use + 1, base, s, s + n);
+        if (r != base)
+            return (u32)(r - base) - 1;
+    }
+    return 0xffffffff;
 }
 
 // ===========================================================================

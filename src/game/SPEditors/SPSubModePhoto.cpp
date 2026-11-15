@@ -19,6 +19,7 @@
 #include "cSPVector4.h"
 #include <string.h>
 #include <stdlib.h>
+#include <intrin.h>
 #include "SP/cSPPlayMode.h"
 #include "SP/cSPPlayModeAnimation.h"
 #include "SP/cSPPlayModeSubModeBase.h"
@@ -1011,6 +1012,7 @@ void cSPPlayModeSubModePhoto_s0063_e880::StartCameraFlash()
     }
     mFlashEffect = ((cEffectFactory*)FUN_00401050(0x44ed103, 0))->Create();
     mbFlashD = true;
+    _ReadWriteBarrier();
     if (mTimerD.mnUnits == 1)
         mTimerD.mnStartTime = __rdtsc();
     else {
@@ -1040,14 +1042,13 @@ void cSPPlayModeSubModePhoto_s0063_e880::FUN_0063f060()
 // @ 0x0063f0e0
 cUIParamMessage::~cUIParamMessage()
 {
-    uint32_t bit = 1;
-    Slot* s = slots;
-    for (int i = 32; i; --i, ++s) {
-        if (*(uint32_t*)((char*)this + 0x18) & bit) {
-            if (s->p)
-                s->p->Release();
-        }
-        bit = _rotl(bit, 1);
+    uint32_t mask = 1;
+    IRefCounted** slot = (IRefCounted**)this + 2;
+    for (int n = 32; n; --n) {
+        if ((((uint32_t*)this)[0x18 / 4] & mask) && *slot)
+            (*slot)->Release();
+        slot += 2;
+        mask = _rotl(mask, 1);
     }
 }
 

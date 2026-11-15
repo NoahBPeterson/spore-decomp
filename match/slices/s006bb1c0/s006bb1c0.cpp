@@ -239,13 +239,14 @@ DebugMessage* ConstructDebugMessage(void* mem)
 // ---------------------------------------------------------------------------
 DebugMessage::DebugMessage(const wchar_t* src, int count)
 {
-    mText.mpBegin = 0;
-    mText.mpEnd = 0;
-    mText.mpCapacity = 0;
-    mText.AllocateSelf(count + 1);
-    memcpy(mText.mpBegin, src, (size_t)(count * 2));
-    mText.mpEnd = (wchar_t*)((char*)mText.mpBegin + count * 2);
-    *mText.mpEnd = 0;
+    WStr16& t = mText;
+    t.mpBegin = 0;
+    t.mpEnd = 0;
+    t.mpCapacity = 0;
+    t.AllocateSelf(count + 1);
+    memcpy(t.mpBegin, src, (size_t)(count * 2));
+    t.mpEnd = (wchar_t*)((char*)t.mpBegin + count * 2);
+    *t.mpEnd = 0;
     _InterlockedExchange(&mRef, 0);
 }
 
@@ -349,17 +350,21 @@ long __stdcall FUN_006bba70(void* pThis, unsigned arg1, unsigned arg2,
 void __cdecl FUN_006bbb60(void* hwnd, void** ppOut)
 {
     OleInitialize(0);
-    char* p = (char*)EA_New6(0x30, "App", 0, 0, 0, 0);
-    if (p) {
-        *(void**)(p + 0x00)         = &g_vtbl_140a05c;
-        *(void**)(p + 0x04)         = 0;
-        *(void**)(p + 0x08)         = hwnd;
-        *(unsigned char*)(p + 0x0c) = 0;
-        *(unsigned short*)(p + 0x10) = 0x000f;
-        *(unsigned*)(p + 0x14)      = 0;
-        *(unsigned*)(p + 0x18)      = 1;
-        *(unsigned*)(p + 0x1c)      = 0xffffffff;
-        *(unsigned*)(p + 0x20)      = 1;
+    char* q = (char*)EA_New6(0x30, "App", 0, 0, 0, 0);
+    char* p;
+    if (q) {
+        *(void**)(q + 0x00)         = &g_vtbl_140a05c;
+        *(void**)(q + 0x04)         = 0;
+        *(void**)(q + 0x08)         = hwnd;
+        *(unsigned char*)(q + 0x0c) = 0;
+        *(unsigned short*)(q + 0x10) = 0x000f;
+        *(unsigned*)(q + 0x14)      = 0;
+        *(unsigned*)(q + 0x18)      = 1;
+        *(unsigned*)(q + 0x1c)      = 0xffffffff;
+        *(unsigned*)(q + 0x20)      = 1;
+        p = q;
+    } else {
+        p = 0;
     }
     ((void(__stdcall*)(void*))((IUnknownStub*)p)->vtbl[1])(p);
     CoLockObjectExternal(p, 1, 0);

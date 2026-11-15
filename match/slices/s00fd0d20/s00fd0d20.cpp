@@ -363,20 +363,22 @@ const short* __cdecl FUN_00fd1610(const short* in, const short* quant, short* ou
 }
 
 // @ 0x00fd1a20
-// Expand an 8x8 byte block: pack eight 16-bit samples per row to bytes, XOR the
-// dither mask, and write each row with the caller's stride.
+// Expand an 8x8 word block to bytes with saturation, XOR the dither mask whose
+// bytes are mirrored over 16 bits, and store a qword per row with the stride.
 void __cdecl FUN_00fd1a20(int unused, unsigned char* out, const unsigned char* in, int stride)
 {
-    __m64 mask = G_VP6_DITHER;
-    mask = _mm_or_si64(mask, mask);
-    const unsigned char* end = in + 0x80;
+    const __m64* src = (const __m64*)in;
+    const __m64* end = (const __m64*)(in + 0x80);
+    __m64 dither = G_VP6_DITHER;
+    __m64 v;
+    unsigned char* line = out;
     do {
-        __m64 v = _mm_packs_pi16(*(const __m64*)in, *(const __m64*)(in + 8));
-        v = _mm_xor_si64(v, mask);
-        *(__m64*)out = v;
-        in += 0x10;
-        out += stride;
-    } while (in < end);
+        v = _mm_packs_pi16(src[0], src[1]);
+        v = _mm_xor_si64(v, _mm_or_si64(dither, dither));
+        *(__m64*)line = v;
+        src += 2;
+        line += stride;
+    } while (src < end);
 }
 
 // @ 0x00fd1a60

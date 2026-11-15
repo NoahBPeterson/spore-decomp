@@ -79,11 +79,13 @@ struct IAudioSystem {
 };
 struct IUILayoutObj {
     virtual void v00_AddRef() = 0;
-    virtual void v04_Release1(int) = 0;
+    virtual void v04_Release() = 0;
     virtual void v08_Release0() = 0;
     virtual void v0c() = 0;
-    virtual void Init(const void* key, bool, int) = 0;
-    virtual void Ctor();                               // 0x00810000
+    // cSPUILayout's retail vtable has only 4 slots (dtor/AddRef/Release/GetRefCount): Init and the constructor are
+    // plain non-virtual members, so retail calls them directly (0x008120d0 / 0x00810000), not through the vtable.
+    IUILayoutObj* Ctor();                              // 0x00810000
+    void Init(const void* key, bool, int);             // 0x008120d0
 };
 // Resource objects released by Shutdown: [0]=Release(int), [4]=Close(), [8]=Stop().
 struct IMovieResource {
@@ -648,13 +650,13 @@ void cMovieLetterbox::Init()
     char* p = (char*)this;
     void* obj = operator_new(0x18, "Simulator", 0, 0, 0, 0);
     if (obj != 0)
-        ((IUILayoutObj*)obj)->Ctor();
+        obj = ((IUILayoutObj*)obj)->Ctor();
     else
         obj = 0;
     void* old = *(void**)(p + 0xc);
     if (obj != old) {
         if (obj != 0)
-            ((IUILayoutObj*)obj)->v04_Release1(1);
+            ((IUILayoutObj*)obj)->v04_Release();
         *(void**)(p + 0xc) = obj;
         if (old != 0)
             ((IUILayoutObj*)old)->v08_Release0();
@@ -830,7 +832,7 @@ cMovieSystem::~cMovieSystem()
     }
     void* lb = *(void**)(p + 0x318);
     if (lb != 0)
-        ((IUILayoutObj*)lb)->v04_Release1(1);
+        ((IUILayoutObj*)lb)->v04_Release();
     FileStream_dtor(p + 0xd0);
     int e = *(int*)(p + 0xa4);
     int b = *(int*)(p + 0xac);

@@ -128,10 +128,10 @@ public:
     cCity* mpCity2;               // +0x120
     int mRoadType;                // +0x124
     Vec3Vector mPathData;         // +0x128
-    char pad13c[4];
-    float mWidth;                 // +0x13c (unused here)
+    float mWidth;                 // +0x13c
     void BuildPath();             // 0x00c41360
-    void SetupCities(void* city1, void* city2, int roadType, int flag);  // 0x00c41c60
+    void RegisterCity(void* city);                             // 0x00b18550
+    void SetupCities(void* city1, void* city2, int roadType);  // 0x00c41c60
 };
 
 // @ 0x00c41360
@@ -512,35 +512,34 @@ struct RefCounted
     virtual void AddRef();                             // +0x00
     virtual void Release();                            // +0x04
 };
-void __cdecl RegisterCity(void* city);                 // 0x00b18550
-
 // @ 0x00c41c60
-void cInterCityRoad::SetupCities(void* city1, void* city2, int roadType, int flag)
+void cInterCityRoad::SetupCities(void* city1, void* city2, int roadType)
 {
     RegisterCity(city1);
 
     cCity* old1 = mpCity1;
-    if (city2 != old1)
+    if ((cCity*)city1 != old1)
     {
-        if (city2 != 0)
-            ((RefCounted*)city2)->AddRef();
-        mpCity1 = (cCity*)city2;
+        if (city1 != 0)
+            ((RefCounted*)city1)->AddRef();
+        mpCity1 = (cCity*)city1;
         if (old1 != 0)
             ((RefCounted*)old1)->Release();
     }
 
     cCity* old2 = mpCity2;
-    if ((cCity*)roadType != old2)
+    if ((cCity*)city2 != old2)
     {
-        if (roadType != 0)
-            ((RefCounted*)roadType)->AddRef();
-        mpCity2 = (cCity*)roadType;
+        if (city2 != 0)
+            ((RefCounted*)city2)->AddRef();
+        mpCity2 = (cCity*)city2;
         if (old2 != 0)
             ((RefCounted*)old2)->Release();
     }
 
-    mRoadType = flag;
+    mRoadType = roadType;
+    const float scale = g_RoadDefaultScale;
     mbFlag118 = true;
-    mWidth = g_RoadDefaultScale;
+    mWidth = scale;
     BuildPath();
 }

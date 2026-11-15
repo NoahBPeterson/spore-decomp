@@ -280,22 +280,50 @@ struct cSPUILayoutObjectCollection_s0081_17f0 {
     u8     b8d;             // +0x8d
 
     void __thiscall attach_parent();                               // 0x811b30
-    u8   __thiscall SetParentWin(void* p, char b, u32 c);          // 0x812010
+    u8   __thiscall SetParentWin(void* p, u32 b, u32 c);           // 0x812010
     void __thiscall detach_parent();                               // 0x810140 (external)
 };
+// Real classes (retail layout): the two eastl::map members of cSPUILayoutManager.
+// Each map is a westl/eastl rbtree whose node anchor occupies the first four
+// dwords; retail's destructor nukes the root held in the anchor's fourth dword.
+// eastl::map<unsigned int, cWorld>: 0x1c bytes, the root in anchor dword 3.
+struct WorldTree_s0081_17f0 {
+    void* mpLeft;           // +0x0
+    void* mpRight;          // +0x4
+    void* mpParent;         // +0x8
+    void* mpRoot;           // +0xc (passed to DoNukeSubtree)
+    i32   count;            // +0x10
+    void* mAlloc;           // +0x14
+    void* mPad18;           // +0x18
+    void __thiscall DoNukeSubtree(void* node);   // 0x9a9600
+    ~WorldTree_s0081_17f0() { DoNukeSubtree(mpRoot); }
+};
+// eastl::map<EA::AutoRefCount<cSPUILayoutObjectCollection>, cObjectCollectionInfo>:
+// 0x20 bytes; its out-of-line subtree walk (0x810df0) releases each object.
+struct CollTree_s0081_17f0 {
+    void* mpLeft;           // +0x0
+    void* mpRight;          // +0x4
+    void* mpParent;         // +0x8
+    void* mpRoot;           // +0xc (passed to DoNukeSubtree)
+    i32   count;            // +0x10
+    void* mAlloc;           // +0x14
+    void* mPad18;           // +0x18
+    i32   mPad1c;           // +0x1c
+    void __thiscall DoNukeSubtree(void* node);   // 0x810df0
+    ~CollTree_s0081_17f0() { DoNukeSubtree(mpRoot); }
+};
 struct cSPUILayoutManager_s0081_17f0 {
-    void** vtbl;            // +0
+    // primary vtable (IHandlerRC): destructor slot 0, then the handler slots
+    virtual void* scalarDtor(u8 flag);                             // slot 0, 0x811f80
+    virtual bool  HandleMessage(unsigned int, void*);              // slot 1
+    // EA::RefCountTemplate<int> is the second base: its slot 0 holds +4 at run time
+    virtual ~cSPUILayoutManager_s0081_17f0();                      // secondary base slot
     void** vtbl2;           // +4
-    u8     pad8[0xc - 8];
-    void*  f0c;             // +0xc
-    u8     pad10[0x18 - 0x10];
-    void*  f18;             // +0x18
-    u8     pad1c[0x28 - 0x1c];
-    void*  f28;             // +0x28
-    u8     pad2c[0x30 - 0x2c];
+    u32    mRefCount;       // +8
+    WorldTree_s0081_17f0 mWorlds;    // +0xc  eastl::map<unsigned int, cWorld>
+    CollTree_s0081_17f0 mObjectCollections;  // +0x28 eastl::map<AutoRefCount<coll>, cObjectCollectionInfo>
 
     void* __thiscall ctor();                                       // 0x811f20
-    void* __thiscall scalarDtor(u8 flag);                          // 0x811f80
     __declspec(noinline) void* __thiscall CloseLayout(void* coll, u32 param); // 0x8117f0
     void* __thiscall Method11c20();                                // 0x811c20
     void  __thiscall Method11330();                                // 0x811330 (external)
@@ -312,15 +340,10 @@ struct RBTree1 {
     RBNode1 anchor;         // +4
     void*   mColor;         // +0x10
     i32     count;          // +0x14
-    void __thiscall DoNukeSubtree(void* node);   // 0x810df0
     void* __thiscall eraseSys(void** out, void* node);  // 0x812310
     void __thiscall Method12370(void** out, VecView* key);  // 0x812370
 };
-struct RBTree2 {
-    RBNode1 anchor;         // +0
-    i32     count;          // +0x10
-    void __thiscall DoNukeSubtree(void* node);   // 0x9a9600
-};
+
 // ---- items of slice s008117f0 end
 
 // ---- items of slice s009a9600 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1238,13 +1261,12 @@ void* __thiscall cSPUILayoutManager_s0081_17f0::ctor()
 void* __thiscall cSPUILayoutManager_s0081_17f0::scalarDtor(u8 flag)
 {
     u8* s = (u8*)this;
-    RBTree1* t1 = (RBTree1*)(s + 0x28);
-    RBTree2* t2 = (RBTree2*)(s + 0xc);
     *(u32*)s = (u32)&vtbl_014182a4;
     *(u32*)(s + 4) = (u32)&vtbl_014182a0;
     g_spLayoutManager = 0;
-    t1->DoNukeSubtree(*(void**)(s + 0x28 + 0xc));
-    t2->DoNukeSubtree(*(void**)(s + 0x18));
+    // mObjectCollections (0x28) is torn down first, then mWorlds (0xc)
+    ((CollTree_s0081_17f0*)(s + 0x28))->~CollTree_s0081_17f0();
+    ((WorldTree_s0081_17f0*)(s + 0xc))->~WorldTree_s0081_17f0();
     *(u32*)(s + 4) = (u32)&vtbl_SimCreatureAbility;
     *(u32*)s = (u32)&vtbl_SkinnerPaintSystem;
     if (flag & 1) operator_delete__(s);
@@ -1309,11 +1331,13 @@ u8 __thiscall cSPUILayout_s0081_17f0::InitB(u32* key, u32 b, u32 c)
         if (old) ((VF0v)VT(old)[2])(old);
     }
     void* cur = mpCollection;
-    if (!cur) return 0;
-    f8 = key[0]; fc = key[1]; f10 = key[2];
-    if (*(u32*)((u8*)cur + 0x88) == 0)
-        return ((cSPUILayoutObjectCollection_s0081_17f0*)cur)->SetParentWin(0, 1, b);
-    return 1;
+    if (cur) {
+        f8 = key[0]; fc = key[1]; f10 = key[2];
+        if (*(u32*)((u8*)cur + 0x88) == 0)
+            return ((cSPUILayoutObjectCollection_s0081_17f0*)cur)->SetParentWin(0, b, c);
+        return 1;
+    }
+    return 0;
 }
 
 // @ 0x00812160

@@ -220,18 +220,21 @@ class cCommandManager {
 public:
     virtual void m00(); virtual void m04(); virtual void m08(); virtual void m0c();
     virtual void m10();
-    virtual void AddDescription(const char* name, void* cmd);   // +0x14
-    virtual void AddEffect(const char* name, void* cmd);        // +0x18
+    virtual void AddDescription(const wchar_t* name, void* cmd); // +0x14
+    virtual void AddEffect(const wchar_t* name, void* cmd);      // +0x18
 };
 
 // ---- callees -------------------------------------------------------------------------
 float SP_RandomInRange(const Vector2& range);                    // 0x004df2d0
 Vector4 SP_QuatMul(const Vector4& a, const Vector4& b);          // 0x007dcb00
-void* CreateParticlesDescriptionCommand(void* param);            // 0x00aa6bf0
-void* CreateParticlesEffectCommand(int param);                   // 0x00aa32b0
 
 typedef void (*StreamCommand)(cEffectObject* obj, void* param, u8* offsets);
 extern StreamCommand gStreamCommands[256];                       // 0x016c9aa0
+
+// The ground cover command factories: __cdecl, the flags are pushed and the caller cleans
+// them up.
+void* CreateParticlesDescriptionCommand(void* flags);            // 0x00aa6bf0
+void* CreateParticlesEffectCommand(int flags);                   // 0x00aa32b0
 
 // ---- math helpers --------------------------------------------------------------------
 
@@ -341,11 +344,16 @@ void ApplyLoopBox(cEffectObject* effect, cParticlesDescription* desc, Vector3* p
     __asm { mov eax, eaxOut }
 }
 
+// The command factories (EA::Swarm::CreateParticlesDescriptionCommand 0x00aa6bf0 and
+// CreateParticlesEffectCommand 0x00aa32b0) take the flags as their only argument (__cdecl)
+// and return the new command.  The name literal is written wide: retail calls the factory
+// with a path that has no call of its own behind it (cl would inline a trivial one), so
+// the factory has more to do than return `new X(flags)`; see nonmatching.txt.
 // @ 0x00f74480
 void GroundCoverAddCommands(void* unused, cCommandManager* mgr)
 {
-    mgr->AddDescription("groundCover", CreateParticlesDescriptionCommand((void*)0x2c));
-    mgr->AddEffect("groundCover", CreateParticlesEffectCommand(0x2c));
+    mgr->AddDescription(L"groundCover", CreateParticlesDescriptionCommand((void*)0x2c));
+    mgr->AddEffect(L"groundCover", CreateParticlesEffectCommand(0x2c));
 }
 
 // @ 0x00f747a0

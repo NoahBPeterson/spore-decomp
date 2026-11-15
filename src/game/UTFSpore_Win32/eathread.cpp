@@ -63,7 +63,8 @@ void ThreadGroup::AddRemoveThread(HANDLE h, char bAdd)
         if (mThreads[i] == h) {
             CloseHandle(h);
             mThreads[i] = 0;
-            break;
+            LeaveCriticalSection(&mCS);
+            return;
         }
     }
     LeaveCriticalSection(&mCS);
@@ -113,16 +114,15 @@ void GetCurrentThreadPriority()
 namespace EA { namespace Thread {
 bool SetCurrentThreadPriority(int nPriority)
 {
+    bool b = SetThreadPriority(GetCurrentThread(), nPriority) != 0;
     HANDLE h = GetCurrentThread();
-    int r = SetThreadPriority(h, nPriority);
-    h = GetCurrentThread();
-    for (;;) {
-        if (r != 0) return true;
-        if (nPriority > 0xe)  { return SetThreadPriority(h, 0xf) != 0; }
-        if (nPriority < -0xe) { return SetThreadPriority(h, -0xf) != 0; }
-        r = SetThreadPriority(h, nPriority);
+    while (!b) {
+        if (nPriority >= 0xf)  return SetThreadPriority(h, 0xf) != 0;
+        if (nPriority <= -0xf) return SetThreadPriority(h, -0xf) != 0;
+        b = SetThreadPriority(h, nPriority) != 0;
         ++nPriority;
     }
+    return b;
 }
 }}  // namespace EA::Thread
 

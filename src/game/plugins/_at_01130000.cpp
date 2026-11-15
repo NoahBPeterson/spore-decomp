@@ -420,7 +420,7 @@ void AudioObj::F_2c0(int cmd, int* param)
     }
     char* name = (char*)param[0];
     char* e = name; while (*e) e++;
-    unsigned len = (unsigned)(e - name) + 1;
+    unsigned len = (unsigned)(e - name);
     rec = RING(sys);
     unsigned rs = (len + 0x10) & ~3u;
     sys->mCommandIndex += rs;
@@ -680,7 +680,7 @@ void Ctx::FUN_0113aa50(int param_2, uint32_t* param_3)
         q[2] = param_3[0];
     } else {
         W(sys, 0xb4) = off + 8;
-        q[0] = (uint32_t)&FUN_0113a770;
+        q[0] = (uint32_t)&rw::audio::core::FUN_0113a770;
         q[1] = (uint32_t)this;
     }
 }
@@ -829,10 +829,10 @@ void Ctx::FUN_0113af90()
 // @ 0x0113afc0
 uint32_t FUN_0113afc0(uint32_t* p)
 {
-    int v = 0;
+    long long v = 0;
     if (*p != 0)
-        v = (int)F((uint8_t*)*p, 4);
-    return (uint32_t)v * 0x50 + 0x138;
+        v = (long long)F((uint8_t*)*p, 4);
+    return (uint32_t)(int)v * 0x50 + 0x138;
 }
 
 // @ 0x0113b000
