@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00ea20a0 18 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) load; the asset browser launch takes the callback in ecx, the modelled free helper passes it on the stack; equiv FAIL (first mismatch call #0) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00ea20d0 22 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) start dialog; the modal begin and the two window calls are unresolved; equiv UNSUPPORTED (only 0/40 inputs valid) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00ea2120 41 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) stop dialog; the modal end and the two window calls are unresolved and the flag clear follows the wrong call; equiv FAIL (first mismatch execution) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00ea2170 203 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) load-save constructor; the viewer and two layout creations are modelled as external creators; equiv UNSUPPORTED (unresolved construction helpers) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

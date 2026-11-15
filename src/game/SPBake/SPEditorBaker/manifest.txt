@@ -61,3 +61,4 @@
 ../src/game/SPBake/SPEditorBaker.cpp  ??_EEditorResourceD@@W3AEPAXI@Z  0042fc20  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?BakeSpritesCreateThunk@@YAXPAURefVector@@III0PAUVector8@@PAUElem24Vec@@PAUTransformVec@@@Z  0042ff00  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?f@CEditorResourceThunk@SP@@UAEHPAX@Z  00561150  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?OnReset@Obj@@QAE_NH@Z  0040eab0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include

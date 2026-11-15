@@ -761,7 +761,7 @@ struct Meta {
     void* FUN_00550910(unsigned idx);
     unsigned FUN_005509e0(unsigned idx);
     unsigned FUN_00550a60(unsigned idx);
-    bool FUN_00550aa0(void* key);
+    bool FUN_00550aa0(uint32_t key);
     void FUN_00550b00(int key);
     void FUN_00550b30(int key);
     char FUN_00550b60(int key);
@@ -1433,13 +1433,25 @@ struct InsertResult {                        // pair<iterator, bool>
 };
 }
 namespace eastl {
+struct EqualRangeU32 { uint32_t* first; uint32_t* second; };
 struct vector_set_u32 {
     uint32_t* mpBegin;
     uint32_t* mpEnd;
     uint32_t* mpCapacity;
     sp_vector_allocator_s0054_c780 mAllocator;
     InsertResult insert(const uint32_t& value);   // 0x00554020
-    void equal_range(void* out, void* key);       // 0x00555980
+    uint8_t mCompare;                            // +0x14, empty comparison functor storage
+    EqualRangeU32* equal_range(EqualRangeU32* out, const uint32_t& key); // 0x00555980, returns out
+    uint32_t* end() { return mpEnd; }
+    uint32_t* find(const uint32_t& key) {
+        EqualRangeU32 range;
+        // Preserve the unread inline lookup frame after the returned pair.
+        { uint32_t unused[5]; }
+        equal_range(&range, key);
+        if (range.first != range.second)
+            return range.first;
+        return end();
+    }
 };
 }
 namespace SP {
@@ -2751,20 +2763,10 @@ unsigned Meta::FUN_00550a60(unsigned idx)
 }
 
 // @ 0x00550aa0
-bool Meta::FUN_00550aa0(void* key)
+bool Meta::FUN_00550aa0(uint32_t key)
 {
-    char* s = (char*)this;
-    int range[2];
-    ((eastl::vector_set_u32*)(s + 0xc0))->equal_range(&range[0], &key);
-    int local_c = range[0];
-    int local_8 = range[1];
-    int local_2c;
-    if (local_c == local_8) {
-        local_2c = *(int*)(s + 0xc4);
-    } else {
-        local_2c = local_c;
-    }
-    return local_2c != *(int*)(s + 0xc4);
+    return ((eastl::vector_set_u32*)((char*)this + 0xc0))->find(key)
+        != ((eastl::vector_set_u32*)((char*)this + 0xc0))->end();
 }
 
 // @ 0x00550b00
