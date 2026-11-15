@@ -936,24 +936,25 @@ HostileEntry* __fastcall FUN_00bfd3e0(HostileEntry* self, int, const HostileEntr
 }
 
 // @ 0x00bfd430
-void FUN_00bfd430(const HostileEntry* first, const HostileEntry* last, HostileEntry* out)
+HostileEntry* FUN_00bfd430(const HostileEntry* first, const HostileEntry* last, HostileEntry* out)
 {
-    if (out != 0 || first != last) {
-        for (; first != last; first += 1, out += 1) {
-            if (out != 0) {
-                out->vftable = (void*)0x1465d54;
-                out->mRefCount4 = 0;
-                out->mField08 = first->mField08;
-                out->mField0c = first->mField0c;
-                out->mField10 = first->mField10;
-                out->mField14 = first->mField14;
-                out->mByte18 = first->mByte18;
-                out->mField1c = first->mField1c;
-                out->vftable = (void*)0x1464450;
-                out->mField20 = first->mField20;
-            }
+    while (first != last) {
+        if (out != 0) {
+            out->vftable = (void*)0x1465d54;
+            out->mRefCount4 = 0;
+            out->mField08 = first->mField08;
+            out->mField0c = first->mField0c;
+            out->mField10 = first->mField10;
+            out->mField14 = first->mField14;
+            out->mByte18 = first->mByte18;
+            out->mField1c = first->mField1c;
+            out->vftable = (void*)0x1464450;
+            out->mField20 = first->mField20;
         }
+        ++first;
+        ++out;
     }
+    return out;
 }
 
 // @ 0x00bfd490
