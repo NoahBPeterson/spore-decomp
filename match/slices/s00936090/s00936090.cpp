@@ -167,12 +167,6 @@ public:
 };
 }
 
-// EA's atomic int: assignment is an InterlockedExchange (xchg), so the store is a full barrier.
-struct AtomicInt {
-    long mValue;
-    AtomicInt& operator=(long v) { _InterlockedExchange(&mValue, v); return *this; }
-};
-
 struct ILibraryCommand {
     virtual void v0();                                        // +0x00
     virtual int  AddRef();                                    // +0x04
@@ -220,7 +214,7 @@ struct WPathString {
 
 class SharedLibrary : public ILibraryCommand {
 public:
-    AtomicInt mnRefCount;   // +0x04  (atomic)
+    int    mnRefCount;      // +0x04  (atomic)
     void*  mHandle;         // +0x08
     wchar_t* mpPathBegin;   // +0x0c
     wchar_t* mpPathEnd;     // +0x10
@@ -356,7 +350,6 @@ struct ObjectVector {
     void Destruct();   // 0x005c7f10 (equiv t3)
     void push_back_impl(void* value);
     void insert_pair(void* pos, void* value);   // 0x009a0c50 (8-byte elements)
-    void insert_slot(void* pos, void* value);   // 0x00936a20 (4-byte elements)
 };
 
 extern void* gpRegistryMutexName;   // 0x0143e98c
@@ -398,9 +391,7 @@ EA::SharedLibraryRegistry::~SharedLibraryRegistry() {
 
 // @ 0x00936920
 void* EA::SharedLibraryRegistry::scalar_deleting_destructor(uint8_t f) {
-    *(void**)this = (void*)0x143e9d8;   // vftable
-    mMutex.Destroy();
-    mSharedLibraries.Destruct();
+    this->~SharedLibraryRegistry();
     if (f & 1)
         FreeMem(this);
     return this;
@@ -530,32 +521,21 @@ bool EA::SharedLibrary::SetPath(const wchar_t* path, bool flag) {
 }
 
 // @ 0x00936C80
-EA::SharedLibrary::SharedLibrary(uint32_t a, uint32_t b) {
-    *(void**)this = (void*)0x13f65b4;   // ILibraryCommand vftable
+void EA::SharedLibrary::Construct(uint32_t a, uint32_t b) {
     mnRefCount = 0;
-    *(void**)this = (void*)0x143ea00;   // SharedLibrary vftable
     mHandle = 0;
-    mpPathBegin = (wchar_t*)0x1667bac;
-    mpPathEnd = (wchar_t*)0x1667bac;
-    mpPathCap = (wchar_t*)0x1667bae;
+    m18 = 0;
     mHandlerBegin = 0;
     mHandlerEnd = 0;
     mHandlerCap = 0;
+    m28 = 0;
+    m2c = 0;
     mMutex.Construct(0, 1);
     Register((void*)a, (void*)b);
 }
 
-void EA::SharedLibrary::Construct(uint32_t a, uint32_t b) {
-    mnRefCount = 0;
-    mHandle = 0;
-    mpPathBegin = (wchar_t*)0x1667bac;
-    mpPathEnd = (wchar_t*)0x1667bac;
-    mpPathCap = (wchar_t*)0x1667bae;
-    mHandlerBegin = 0;
-    mHandlerEnd = 0;
-    mHandlerCap = 0;
-    mMutex.Construct(0, 1);
-    Register((void*)a, (void*)b);
+EA::SharedLibrary::SharedLibrary(uint32_t a, uint32_t b) {
+    Construct(a, b);
 }
 
 // @ 0x009365E0
@@ -759,29 +739,26 @@ EA::SharedLibrary* EA::SharedLibraryRegistry::LoadPath(const wchar_t* path, char
 // @ 0x00937010
 bool EA::SharedLibraryRegistry::AddLibraryRef(SharedLibrary* lib) {
     mMutex.Lock(&gpRegistryMutexName);
-    ObjectVector& v = mSharedLibraries;
-    SharedLibrary** end = (SharedLibrary**)v.mpEnd;
-    for (SharedLibrary** it = (SharedLibrary**)v.mpBegin; it < end; it++) {
+    SharedLibrary** begin = (SharedLibrary**)mSharedLibraries.mpBegin;
+    SharedLibrary** end = (SharedLibrary**)mSharedLibraries.mpEnd;
+    for (SharedLibrary** it = begin; it < end; it++) {
         if (*it == lib) {
             mMutex.Unlock();
             return true;
         }
     }
-    SharedLibrary* p = lib;
-    if (lib != 0)
-        lib->AddRef();
-    if (v.mpEnd < v.mpCap) {
-        SharedLibrary** s = (SharedLibrary**)v.mpEnd;
-        v.mpEnd = s + 1;
+    SharedLibrary** slot = &begin[(end - begin)];
+    (void)slot;
+    if (mSharedLibraries.mpEnd < mSharedLibraries.mpCap) {
+        SharedLibrary** s = (SharedLibrary**)mSharedLibraries.mpEnd;
+        mSharedLibraries.mpEnd = s + 1;
         if (s != 0)
             *s = lib;
         if (lib != 0)
             lib->AddRef();
     } else {
-        v.insert_slot(v.mpEnd, &p);
+        ((ObjectVector*)&mSharedLibraries)->push_back_impl(&lib);
     }
-    if (p != 0)
-        p->Release();
     mMutex.Unlock();
     return true;
 }

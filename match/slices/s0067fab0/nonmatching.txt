@@ -7,6 +7,7 @@
 00680300  n/a  backward copy-range over 0x48 records; complete, cl schedules the output decrement before the first field store.
 00680390  n/a  vector<unsigned> serializer; complete, loop/register allocation differs.
 00680500  n/a  bitset serializer; complete, bool round-trip (setne al then test) and stream register choice differ.
+00680560  n/a  bitset deserializer; complete, register/branch layout differs.
 006805c0  n/a  vector<0x48-record> serializer; complete, EH/temp-copy scheduling differs.
 00680730  n/a  vector<0x48-record> destroy-and-free; complete, missing compiler EH frame and register layout differs.
 00680930  n/a  cCheatManager record destructor chain; complete (tail call to 0x00680730), register layout differs.

@@ -7,7 +7,6 @@
 #include <string.h>
 #include <math.h>
 #include <xmmintrin.h>
-#include "sse_helpers.h"
 #pragma function(memset)
 
 // ---- items of slice s0114da70 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -141,18 +140,21 @@ void Resample::SetResampleIncrement(f32 ratio)
 {
     mfRequestedRatio = ratio;
 
-    if (ratio >= 4.0f) {
-        miIncr16_16 = 0x40000;
-    } else if (ratio <= 0.0f) {
-        miIncr16_16 = 0;
+    s32 inc;
+    if (ratio < 4.0f) {
+        if (0.0f < ratio)
+            inc = _mm_cvtss_si32(_mm_set_ss(ratio * 65536.0f)); // cvtss2si: round-nearest
+        else
+            inc = 0;
     } else {
-        miIncr16_16 = SseRoundToInt(ratio * 65536.0f); // cvtss2si: round-nearest
+        inc = 0x40000;
     }
+    miIncr16_16 = inc;
 
-    f32 actual = (f32)miIncr16_16 * (1.0f / 65536.0f);
+    const f32 actual = (f32)inc * (1.0f / 65536.0f);
     mfActualRatio = actual;
-    f32 latency = 1.0f / actual;
 
+    f32 latency = 1.0f / actual;
     if (!(10000.0f > latency))
         latency = 10000.0f;
 

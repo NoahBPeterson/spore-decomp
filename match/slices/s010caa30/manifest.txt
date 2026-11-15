@@ -2,7 +2,3 @@ slices/s010caa30/s010caa30.cpp  ?FUN_010cb210@@YAXPAX@Z  010cb210  /vc71 /O2 /MD
 slices/s010caa30/s010caa30.cpp  ?getNextKey@hkConvexPieceMeshShape@@QAEII@Z  010cb230  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s010caa30/s010caa30.cpp  ?scalarDeletingDtor@hkConvexPieceMeshShape@@QAEPAXI@Z  010cb630  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s010caa30/s010caa30.cpp  ?scalarDeletingDtor@hkConvexListShape@@QAEPAXI@Z  010cb760  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
-slices/s010caa30/s010caa30.cpp  ?isCollisionEnabled@hkCollisionFilterList@@QAE?AVhkBool@@ABUhkCollidable@@0@Z  010cb7b0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
-slices/s010caa30/s010caa30.cpp  ?isCollisionEnabled2@hkCollisionFilterList@@QAE?AVhkBool@@ABUhkCollisionInput@@ABUhkCdBody@@ABU1@ABVhkShapeCollection@@I@Z  010cb800  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
-slices/s010caa30/s010caa30.cpp  ?isCollisionEnabled3@hkCollisionFilterList@@QAE?AVhkBool@@ABUhkShapeRayCastInput@@ABVhkShapeCollection@@I@Z  010cb860  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
-slices/s010caa30/s010caa30.cpp  ?isCollisionEnabled4@hkCollisionFilterList@@QAE?AVhkBool@@ABUhkWorldRayCastInput@@ABUhkCollidable@@@Z  010cb8c0  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE

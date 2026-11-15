@@ -456,9 +456,9 @@ t_alist_obj* list_prepend_new(void* a, void* b, int argc, t_atom* argv)
     t_alist_obj* x = (t_alist_obj*)pd_new(list_prepend_class);
     if (x != 0) {
         t_alist* a = &x->a;
-        a->cls = spAlistClass;
         a->count = 0;
         a->atoms = 0;
+        a->cls = spAlistClass;
         alist_list(a, gListSymbol, argc, argv);
         outlet_new(x, gListSymbol);
         inlet_new(x, a, gEmptySymbol, gEmptySymbol);
@@ -575,7 +575,7 @@ namespace EA { namespace Audio { namespace Eapd {
 void list_split_anything(t_list_split* self, t_symbol sel, int argc, t_atom* argv)
 {
     int n = argc + 1;
-    int bytes = (argc + 1) * sizeof(t_atom);
+    int bytes = n * sizeof(t_atom);
     t_atom* buf;
     if (n < 100)
         buf = (t_atom*)_alloca(bytes);
@@ -665,11 +665,11 @@ byte list_message_setup()
     t_symbol_s00a5_d3c0* s = gensym(&local, "list message");
     g_listMessageClass_1675698 = class_new(s->s_name, s->s_thing, (void*)list_message_ctor,
                                            0, 0x30, 0, 6, 0);
-    byte ok = (g_listMessageClass_1675698 != 0) & 1;
-    ok = ok & class_addlist(g_listMessageClass_1675698, (void*)list_message_list);
+    byte ok = g_listMessageClass_1675698 != 0;
+    byte added = class_addlist(g_listMessageClass_1675698, (void*)list_message_list);
     class_sethelpsymbol(g_listTrimClass_167568c, g_listSymbol_16758ac.s_name,
                         g_listSymbol_16758ac.s_thing);
-    return ok;
+    return (byte)(added & ok);
 }
 
 // @ 0x00a5d430

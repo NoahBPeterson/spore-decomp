@@ -239,38 +239,6 @@ class Stopwatch
     float   mScale;      // +0x20
 
     virtual void Destroy(int a);        // +0x00 (deleting-ish dtor)
-
-    // The other rw::core::timer virtuals (interfaces): they keep a null check on the pointer alive.
-    virtual void v04(unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned int e);
-    virtual void v08();
-    virtual void v0c();
-    virtual void v10();
-    virtual void v14();
-    virtual void v18();
-    virtual void v1c();
-    virtual void v20();
-    virtual void v24();
-    virtual void v28();
-    virtual void v2c();
-    virtual void v30();
-    virtual void v34();
-    virtual void v38();
-    virtual void v3c();
-    virtual void v40();
-    virtual void v44();
-    virtual void v48();
-    virtual void v4c();
-    virtual void v50();
-    virtual void v54();
-    virtual void v58();
-    virtual void v5c();
-    virtual void v60();
-    virtual void v64();
-    virtual void v68();
-    virtual void v6c();
-    virtual void v70();
-    virtual void v74();
-    virtual void v78();
 };
 }
 }

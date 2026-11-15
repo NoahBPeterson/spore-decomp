@@ -14,6 +14,3 @@
 ../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6ae30@SP@@YAXPAX@Z  00c6ae30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6b350@SP@@YIXPAX0HHHHH@Z  00c6b350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?GetWateringHolePosition@cHerd_s00c6_b660@SP@@QAEPAUVec3@2@XZ  00c6bdc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6b410@@YI_NPAX0PAVcIModelWorld@SP@@@Z  00c6b410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?AsInterface@cNest_s00c6_a550@SP@@QAEPAXH@Z  00c6b390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPNest.cpp  ?FindWateringHole@cHerd_s00c6_a550@SP@@QAEXXZ  00c6b5b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -221,7 +221,7 @@ namespace IO {
 class IStream_s0067_d550 {
  public:
   IStream_s0067_d550() {}
-  virtual ~IStream_s0067_d550() {}
+  virtual ~IStream_s0067_d550();
   virtual int AddRef();
   virtual int Release();
   virtual uint32_t GetType() const;
@@ -378,15 +378,9 @@ class cCheatManager : public ICCheatMgr {
   void BroadcastWrite(uint32_t p);      // @ 0x0067e7b0
   void ActivateConsole(uint32_t p);     // @ 0x0067e7f0
 };
-class CmdBase {   // EA::ArgScript::cCommandBase: vfptr + 0xc bytes -> 0x10, so members start at +0x10
+class CmdBase {
  public:
   CmdBase();
-  virtual void Execute(EA::ArgScript::cArguments* pArgs);
-  virtual const char* Description(int idx);
-  virtual void OnRegister(void* pParser, void* pState);
-  virtual int AddRef();
-  virtual int Release();
-  virtual ~CmdBase();
   uint8_t pad[0x10 - 0x4];
 };
 class HelpCommand : public CmdBase {
@@ -402,9 +396,6 @@ class HistoryCommand : public CmdBase {
     ArcMgr() : mpObject(0) {}
     explicit ArcMgr(ICCheatMgr* p) : mpObject(p) {
       if (mpObject) mpObject->AddRef();
-    }
-    ~ArcMgr() {
-      if (mpObject) mpObject->Release();
     }
   };
   HistoryCommand(cCheatManager* pManager);
@@ -438,7 +429,6 @@ class PairB_s0067_d550 {
 static char gEmptyStr[2];
 class RCPlainBlock {
  public:
-  RCPlainBlock() : mRefCount(0) {}
   virtual ~RCPlainBlock() {}
   int mRefCount;
 };
@@ -447,7 +437,7 @@ class ConsoleStream : public EA::IO::IStream_s0067_d550, public RCPlainBlock {
   ConsoleStream(EA::IU01* pTarget);  // @ 0x0067e9a0
   ~ConsoleStream();                  // @ 0x0067ea40
 
-  EA::Arc01 mTarget;    // +0x0c
+  EA::IU01* mTarget;    // +0x0c
   char* mpBegin;        // +0x10
   char* mpEnd;          // +0x14
   char* mpCapacity;     // +0x18
@@ -468,19 +458,15 @@ class ConsoleDispatch {
   uint8_t pad1[0x24 - 0xc];
   cCheatManager* mManager;      // +0x24
 };
-class LogReporter {   // EA::Trace::LogReporter: vfptr + 0x20 bytes -> 0x24, mTarget of a derived starts at +0x24
+class LogReporter {
  public:
   LogReporter(int nGroup);
-  virtual int Report(const EA::Trace::LogRecord& record);
-  virtual bool IsFiltered(const EA::Trace::LogRecord& record);
-  virtual ~LogReporter();
   bool FilterEnabled2(const EA::Trace::LogRecord& record); // 0x00923740
   uint8_t pad[0x24 - 0x4];
 };
 class CheatReporter : public LogReporter {
  public:
   CheatReporter(int nGroup, EA::IU01* pTarget);
-  virtual bool IsFiltered(const EA::Trace::LogRecord& record) { return CheckFlagB(record) != 0; }
   int CheckFlagB(const EA::Trace::LogRecord& record);
 
   EA::Arc01 mTarget;  // +0x24
@@ -882,10 +868,9 @@ NodeHdr** StrTree::InsertAt(NodeHdr** out, NodeHdr* at, const PairB* val, char f
     if (!flag && at != &a && _stricmp(val->k.b, ((Node*)at)->v.k.b) >= 0) left = 1; else left = 0;
     Node* nn = NewNodeFromPair(val);
     RBTreeInsert(nn, at, &a, left);
-    NodeHdr** pOut = out;
     count += 1;
-    *pOut = nn;
-    return pOut;
+    *out = nn;
+    return out;
 }
 
 // @ 0x0067f260

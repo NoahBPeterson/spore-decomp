@@ -1,8 +1,6 @@
 // Slice s00a52ff0 - EA::Audio::Eapd (Pure Data) fracplay: fixed pool, voice list, parameter map.
 // Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 #include "s00a52ff0.h"
-#include <new>
-#include <string.h>
 
 #define NOINLINE __declspec(noinline)
 
@@ -232,7 +230,7 @@ NOINLINE ParamNode* ParamTable::AllocNode(const ParamPair* v)
 {
     ParamNode* node = (ParamNode*)mAllocator.mpHead;
     if (node != 0) {
-        mAllocator.mpHead = *(ParamNode**)node;
+        mAllocator.mpHead = node->mpNext;
     } else {
         node = (ParamNode*)mAllocator.mOverflowAllocator.v08(mAllocator.mnNodeSize);
     }
@@ -241,8 +239,8 @@ NOINLINE ParamNode* ParamTable::AllocNode(const ParamPair* v)
         if (mAllocator.mnCurrentSize > mAllocator.mnPeakSize)
             mAllocator.mnPeakSize = mAllocator.mnCurrentSize;
         node->mValue = *v;
+        node->mpNext = 0;
     }
-    node->mpNext = 0;
     return node;
 }
 
@@ -270,41 +268,43 @@ NOINLINE ParamIter::ParamIter(ParamTable* t)
 }
 
 // @ 0xa536a0
-NOINLINE bool ParamIter::Next(Symbol* out, AtomValue* value)
+NOINLINE unsigned ParamIter::Next(Symbol* out, ParamPair* value)
 {
-    bool r = false;
-    if (mpNode != mpLast) {
-        *out = mpNode->mValue.first;
-        const AtomValue* src = (const AtomValue*)&mpNode->mValue.a_type;
-        switch (src->a_type) {
-        case 1:
-            value->a_type = 0;
-            value->a_float = src->a_float;
-            r = true;
-            break;
-        case 2:
-            value->a_type = 1;
-            value->a_sym = src->a_sym;
-            value->a_sym2 = src->a_sym2;
-            r = true;
-            break;
-        default:
-            r = false;
-            break;
-        }
-        mpNode = mpNode->mpNext;
-        while (mpNode == 0) {
-            mpBucket = mpBucket + 1;
-            mpNode = *mpBucket;
-        }
+    ParamNode* node = mpNode;
+    if (node == mpLast)
+        return 0;
+    *out = node->mValue.first;
+    unsigned r;
+    switch (node->mValue.a_type) {
+    case 1:
+        value->a_type = 0;
+        value->a_float = node->mValue.a_float;
+        r = 1;
+        break;
+    case 2:
+        value->a_type = 1;
+        value->a_float = node->mValue.a_float;
+        value->a_sym2 = node->mValue.a_sym2;
+        r = 1;
+        break;
+    default:
+        r = 0;
+        break;
+    }
+    ParamNode* next = node->mpNext;
+    mpNode = next;
+    while (next == 0) {
+        mpBucket = mpBucket + 1;
+        next = *mpBucket;
+        mpNode = next;
     }
     return r;
 }
 
 // @ 0xa53730
-NOINLINE void ParamTable::Bucket(void** out, const Symbol* key, BucketTag t, void* a4)
+NOINLINE void ParamTable::Bucket(void** out, const Symbol* key, void* a3, void* a4)
 {
-    (void)t; (void)a4;
+    (void)a3; (void)a4;
     ParamNode** base = mpBucketArray;
     unsigned idx = key->mHash % mnBucketCount;
     ParamNode** slot = base + idx;
@@ -397,15 +397,26 @@ NOINLINE ParamTable::~ParamTable()
     }
 }
 
-struct VoiceListCtor {
-    VoiceListCtor(FixedPool* src);
-};
-
-// Same construction routine, declared only at this call site: the unwinder must
-// be kept for a callee whose body is not visible (the original TU did not see it).
-struct VoiceListCtorExternal {
-    void Construct(FixedPool* src);
-};
+// @ 0xa53970
+NOINLINE void VoiceList_CopyCtor(VoiceList* dst, FixedPool* src)
+{
+    dst->mNode.mpNext = 0;
+    dst->mNode.mpPrev = 0;
+    *(void**)&dst->mPool.mInitAllocator = g_allocVftable;
+    dst->mPool.mInitAllocator.mpCoreAllocator = src->mInitAllocator.mpCoreAllocator;
+    dst->mPool.mInitAllocator.mpNamePtr = src->mInitAllocator.mpNamePtr;
+    *(void**)&dst->mPool.mOverflowAllocator = g_allocVftable;
+    dst->mPool.mOverflowAllocator.mpCoreAllocator = src->mOverflowAllocator.mpCoreAllocator;
+    dst->mPool.mOverflowAllocator.mpNamePtr = src->mOverflowAllocator.mpNamePtr;
+    dst->mPool.mnNodeSize = src->mnNodeSize;
+    dst->mPool.mpPoolBegin = src->mpPoolBegin;
+    dst->mPool.mpPoolEnd = src->mpPoolEnd;
+    dst->mPool.mpHead = src->mpHead;
+    dst->mPool.mnCurrentSize = src->mnCurrentSize;
+    dst->mPool.mnPeakSize = src->mnPeakSize;
+    dst->mNode.mpNext = &dst->mNode;
+    dst->mNode.mpPrev = &dst->mNode;
+}
 
 // @ 0xa539d0
 NOINLINE int artists_play_step(void* self)
@@ -449,35 +460,25 @@ NOINLINE void VoiceList::PushBack(ListLink* anchor, const unsigned* value2)
 }
 
 // @ 0xa53a80
-NOINLINE bool Play::GetParam(unsigned key, ParamPair* out)
+NOINLINE unsigned Play::GetParam(void* outAtom, Symbol key)
 {
-    ParamTable* table = *(ParamTable**)((char*)this + 0x14);
-    struct HashIter { ParamNode* mpNode; ParamNode** mpBucket; };
-    HashIter it;
-    unsigned keyCopy = key;
-    table->Bucket((void**)&it, (const Symbol*)&keyCopy, BucketTag(), out);
-    ParamNode* node = it.mpNode;
-    bool r = false;
-    if (node != (ParamNode*)table->mpBucketArray[table->mnBucketCount]) {
-        const AtomValue* v = (const AtomValue*)&node->mValue.a_type;
-        switch (v->a_type) {
-        case 1:
-            out->a_type = 0;
-            out->a_float = v->a_float;
-            r = true;
-            break;
-        case 2:
-            out->a_type = 1;
-            out->a_sym = v->a_sym;
-            out->a_sym2 = v->a_sym2;
-            r = true;
-            break;
-        default:
-            r = false;
-            break;
-        }
+    ParamNode* node = 0;
+    mParameters.Bucket((void**)&node, &key, 0, 0);
+    ParamPair* out = (ParamPair*)outAtom;
+    if (node == (ParamNode*)mParameters.mpBucketArray[mParameters.mnBucketCount])
+        return 0;
+    if (node->mValue.a_type == 1) {
+        out->a_type = 0;
+        out->a_float = node->mValue.a_float;
+        return 1;
     }
-    return r;
+    if (node->mValue.a_type == 2) {
+        out->a_type = 1;
+        out->a_float = node->mValue.a_float;
+        out->a_sym2 = node->mValue.a_sym2;
+        return 1;
+    }
+    return 0;
 }
 
 // @ 0xa53b20
@@ -505,64 +506,54 @@ NOINLINE bool Play::Init(unsigned maxVoices, unsigned maxParams, void* a3, void*
 // @ 0xa53c20
 NOINLINE ParamPair* ParamTable::LocateOrInsert(const Symbol* key)
 {
-    struct HashIter { ParamNode* mpNode; ParamNode** mpBucket; };
-    struct HashPair { HashIter first; bool second; };
-    HashPair it;
-    HashFind(&it, key);
-    if (it.first.mpNode == (ParamNode*)mpBucketArray[mnBucketCount]) {
+    unsigned it[2];
+    FUN_00a3b2c0(it, key);
+    ParamNode* found = (ParamNode*)it[0];
+    if (found == (ParamNode*)mpBucketArray[mnBucketCount]) {
         ParamPair tmp;
-        tmp.a_type = 0;
-        tmp.a_sym = 0;
-        tmp.a_sym2 = 0;
         tmp.first = *key;
-        HashInsert(&it, &tmp, ParamTable::DoInsertTrueType());
+        tmp.a_type = 0;
+        tmp.a_float = 0.0f;
+        tmp.a_sym2 = 0;
+        FUN_00a65bb0(this, &tmp, 0);
     }
-    return (ParamPair*)((char*)it.first.mpNode + 8);
+    return (ParamPair*)((char*)found + 8);
 }
 
 // @ 0xa53c90
-struct VoiceListInitHelper {
-    void* InitFromName(void* name);
+NOINLINE struct PoolForCtor {
+    void*  vftable0;   // +0x00
+    void*  field4;     // +0x04
+    void*  name0;      // +0x08
+    void*  vftable1;   // +0x0c
+    void*  field4b;    // +0x10
+    void*  name1;      // +0x14
+    uint32_t nodeSize; // +0x18
+    void*  poolBegin;  // +0x1c
+    void*  poolEnd;    // +0x20
+    void*  head;       // +0x24
+    uint32_t curSize;  // +0x28
+    uint32_t peakSize; // +0x2c
 };
 
-NOINLINE void* VoiceListInitHelper::InitFromName(void* name)
+void* VoiceList_InitFromName(void* dst, void* name)
 {
-    FixedPool local;
-    local.mInitAllocator.mpNamePtr = name;
-    local.mOverflowAllocator.mpNamePtr = name;
-    *(void**)&local.mInitAllocator = g_allocVftable;
-    *(void**)&local.mOverflowAllocator = g_allocVftable;
-    local.mInitAllocator.mpCoreAllocator = 0;
-    local.mOverflowAllocator.mpCoreAllocator = 0;
-    local.mnNodeSize = 0;
-    local.mpPoolBegin = 0;
-    local.mpPoolEnd = 0;
-    local.mpHead = 0;
-    local.mnCurrentSize = 0;
-    local.mnPeakSize = 0;
-    ((VoiceListCtorExternal*)this)->Construct(&local);
-    return this;
-}
-
-// @ 0xa53970
-NOINLINE VoiceListCtor::VoiceListCtor(FixedPool* src)
-{
-    VoiceList* dst = (VoiceList*)this;
-    memset(&dst->mNode, 0, sizeof(dst->mNode));
-    *(void**)&dst->mPool.mInitAllocator = g_allocVftable;
-    dst->mPool.mInitAllocator.mpCoreAllocator = src->mInitAllocator.mpCoreAllocator;
-    dst->mPool.mInitAllocator.mpNamePtr = src->mInitAllocator.mpNamePtr;
-    *(void**)&dst->mPool.mOverflowAllocator = g_allocVftable;
-    dst->mPool.mOverflowAllocator.mpCoreAllocator = src->mOverflowAllocator.mpCoreAllocator;
-    dst->mPool.mOverflowAllocator.mpNamePtr = src->mOverflowAllocator.mpNamePtr;
-    dst->mPool.mnNodeSize = src->mnNodeSize;
-    dst->mPool.mpPoolBegin = src->mpPoolBegin;
-    dst->mPool.mpPoolEnd = src->mpPoolEnd;
-    dst->mPool.mpHead = src->mpHead;
-    dst->mPool.mnCurrentSize = src->mnCurrentSize;
-    dst->mPool.mnPeakSize = src->mnPeakSize;
-    dst->mNode.mpNext = &dst->mNode;
-    dst->mNode.mpPrev = &dst->mNode;
+    PoolForCtor local;
+    local.vftable0 = 0;
+    local.field4 = 0;
+    local.name0 = name;
+    local.vftable1 = (void*)0;
+    local.field4b = 0;
+    local.name1 = name;
+    local.nodeSize = 0;
+    local.poolBegin = 0;
+    local.poolEnd = 0;
+    local.head = 0;
+    local.curSize = 0;
+    local.peakSize = 0;
+    VoiceList_CopyCtor((VoiceList*)dst, (FixedPool*)&local);
+    ((FixedPool*)&local)->~FixedPool();
+    return dst;
 }
 
 // @ 0xa53d20

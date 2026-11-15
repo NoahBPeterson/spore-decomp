@@ -372,8 +372,8 @@ struct cBuilding {
     Timer mTimer3;           // +0x320
     u8b   mF340;             // +0x340
     char  mF341[0x344 - 0x341];      // +0x341 .. +0x343
-    void* mTail344;          // +0x344
-    char  mF348[0x358 - 0x348];      // +0x348 .. +0x357
+    char  mTail344[8];       // +0x344
+    char  mF34c[0x358 - 0x34c];      // +0x34c .. +0x357
     Timer mTimerHit;         // +0x358
     char  mF378[0x388 - 0x378];      // +0x378 .. +0x387
     u16b  mF388;             // +0x388
@@ -419,14 +419,14 @@ extern char cBuildingHouse_vtable4[];         // 0x01467608
 extern char cBuildingHouse_vtable5[];         // 0x014675e0
 
 // Destructor / sub-destructor helpers.
-void __fastcall dtor_cGonzagoTimer(void* p);      // 0x00b638b0 (this in ecx)
+void dtor_cGonzagoTimer(void* p);                 // 0x00b638b0
 void Func_004aa120(void* p);                      // 0x004aa120  deque<T>::~deque
 void dtor_cCombatant(void* p);                    // 0x00bfcd00
 void dtor_cInteractionTarget(void* p);            // 0x00ac0520
 void dtor_cSpatialObject(void* p);                // 0x00c8a420
 void dtor_cGameData(void* p);                     // 0x00b184c0
 void operator_delete__(void* p);                  // 0x00f47380
-void __fastcall Func_00bcddc0(void* p);           // 0x00bcddc0  cGameData::RemoveOwner (this in ecx)
+void Func_00bcddc0(void* p);                      // 0x00bcddc0  cGameData::RemoveOwner
 
 // Release an array allocation whose count is stored in its preceding dword.
 static void FreeArray(void* p)
@@ -501,7 +501,7 @@ void cBuildingCityHall::Dtor()
 
     if (self->mTail344 != 0) {
         void* p = self->mTail344;
-        ((void (__thiscall*)(void*))(*(void***)p)[1])(p);
+        (*(void (__thiscall**)(void*))(*(void***)p)[1])(p);
     }
 
     cBuilding* self2 = this;
@@ -594,16 +594,16 @@ struct StarRecordVec {
 // An eastl::deque<T, allocator, 64> view: two 12-byte iterators (begin at +0x08,
 // end at +0x14) followed by the node map {begin, end, capacity} at +0x20.
 struct Deque64 {
-    cStarRecordPtr** mpMap;          // +0x00
-    unsigned int     mnMapSize;      // +0x04
-    cStarRecordPtr*  mBeginCurrent;  // +0x08
-    cStarRecordPtr*  mBeginFirst;    // +0x0c
-    cStarRecordPtr*  mBeginNodeEnd;  // +0x10  begin.last
-    cStarRecordPtr** mBeginNode;     // +0x14  begin.node
-    cStarRecordPtr*  mEndCurrent;    // +0x18
-    cStarRecordPtr*  mEndFirst;      // +0x1c
-    cStarRecordPtr*  mEndNodeEnd;    // +0x20  end.last
-    cStarRecordPtr** mEndNode;       // +0x24  end.node
+    char mData00[0x08];
+    cStarRecordPtr* mBeginCurrent;   // +0x08
+    cStarRecordPtr** mBeginNode;     // +0x0c
+    cStarRecordPtr* mBeginNodeEnd;   // +0x10
+    cStarRecordPtr* mEndCurrent;     // +0x14
+    cStarRecordPtr** mEndNode;       // +0x18
+    cStarRecordPtr* mEndNodeEnd;     // +0x1c
+    cStarRecordPtr** mMapBegin;      // +0x20
+    cStarRecordPtr** mMapEnd;        // +0x24
+    cStarRecordPtr** mMapCapacity;   // +0x28
 };
 
 // A byte-stream writer/reader view (EA::IO); the object's vtable provides the
@@ -632,6 +632,7 @@ extern const char gBuildingNameStr[];   // 0x0146715c "Building"
 extern const char gBuildingNameStrEnd[]; // 0x01467164
 
 // Globals used by the turret-weapon configuration.
+extern void* gAppNameTag;               // 0x01654c05 (compared value)
 extern float gTurretHealthDefault;      // 0x013ec5b4
 extern char  gTurretWeaponA[];          // 0x057e291e
 extern char  gTurretWeaponB[];          // 0x057e2933
@@ -641,13 +642,12 @@ char gTurretWeaponB[16] = "space_turret_b";
 char gTurretWeaponC[16] = "space_turret_c";
 
 void* GetCurrentGameMode();                              // 0x00b5b800
-void* StarManager();                                     // 0x00b3d2a0 (returns the global star manager)
-struct cStarManager {
-    void* GetEmpireByID(int empireId);                   // 0x00ba9370 (thiscall, one stack arg)
-};
+void  StarManager(void* pEmpireId);                      // 0x00b3d2a0
+void* GetEmpireByID(void* pEmpireId);                    // 0x00ba9370
 struct cSPSpaceCombatTuning;
-cSPSpaceCombatTuning* GetSpaceCombatTuning();            // 0x01029940
-bool  __fastcall FUN_0075e620(void* pProp);              // 0x0075e620 (this in ecx)
+cSPSpaceCombatTuning* GetSpaceCombatTuning(void* pTuning); // 0x01029940
+bool  FUN_0075e620(void* pProp);                         // 0x0075e620
+PropertyInfoF* FUN_00bd0ce0(void* a, uint32_t id, float v); // 0x00bd0ce0
 void  enableWeapon(char* pName, void* pTuning, void* pOut); // 0x00c3a220
 
 // A ref-counted object accessor used by the property getters.
@@ -667,8 +667,9 @@ struct StarRecordDequeOwner {
     cStarRecordPtr*  mpCurrent;   // +0x200  iterator current
     cStarRecordPtr*  mpNodeBase;  // +0x204  allocation of the current node
     cStarRecordPtr*  mpNodeEnd;   // +0x208  end of the current node
-    cStarRecordPtr** mpNodeMap;   // +0x20c  node-map cursor
-    cStarRecordPtr*  mpEnd;       // +0x210  end-of-deque iterator (compared against)
+    char  mData20c[4];            // +0x20c
+    cStarRecordPtr** mpNodeMap;   // +0x210  node-map cursor (end marker)
+    cStarRecordPtr*  mpEnd;       // end-of-deque iterator (compared against)
 };
 
 // The turret-owning building subobject (cBuildingHouse tail region).
@@ -693,7 +694,7 @@ struct TurretOwner {
 
 // Space-combat tuning object (turret health source).
 struct cSPSpaceCombatTuning {
-    float GetTurretHealth(void* pTuning);   // 0x0102a780 (thiscall, one stack arg)
+    float GetTurretHealth();      // 0x0102a780
 };
 
 // @ 0x00bd0ce0 repeated note: done above.
@@ -775,9 +776,9 @@ void deque7027Clear(Deque64* pDeque);                         // 0x00996460
 static int Deque64Size(Deque64* pDeque)
 {
     int nHeadSlots = (int)((char*)pDeque->mBeginNodeEnd - (char*)pDeque->mBeginCurrent) >> 2;
-    int nTailSlots = (int)((char*)pDeque->mEndCurrent - (char*)pDeque->mEndFirst) >> 2;
-    int nMidNodes = (((int)((char*)pDeque->mEndNode - (char*)pDeque->mBeginNode) >> 2) - 1);
-    return nMidNodes * 64 + nTailSlots + nHeadSlots;
+    int nTailNodes = ((int)((char*)pDeque->mMapEnd - (char*)pDeque->mEndCurrent) >> 2) - 1;
+    int nMidSlots = (int)((char*)pDeque->mEndNode - (char*)pDeque->mBeginNode) >> 2;
+    return nTailNodes * 64 + nHeadSlots + nMidSlots;
 }
 
 // @ 0x00bd0bb0
@@ -820,14 +821,16 @@ void __fastcall WriteStarRecordDeque(SaveWriter* pWriter, void* /*edx*/,
 
 // @ 0x00bd0c80
 // Walk the deque<...,64> iterator (no-op body) and report success.
-bool __cdecl IsStarRecordDequeEmpty(void* /*unused*/, Deque64* pDeque)
+bool __fastcall IsStarRecordDequeEmpty(void* /*ecx*/, void* /*edx*/,
+                                       Deque64* pDeque)
 {
     cStarRecordPtr* pCur = pDeque->mBeginCurrent;
-    cStarRecordPtr* pNodeEnd = pDeque->mBeginNodeEnd;
     cStarRecordPtr** pNode = pDeque->mBeginNode;
+    cStarRecordPtr* pNodeEnd = pDeque->mBeginNodeEnd;
 
     while (pCur != pDeque->mEndCurrent) {
-        if (++pCur == pNodeEnd) {
+        ++pCur;
+        if (pCur == pNodeEnd) {
             pCur = (cStarRecordPtr*)pNode[1];
             ++pNode;
             pNodeEnd = pCur + 64;
@@ -845,10 +848,9 @@ cStarRecordPtr __fastcall PopStarRecord(StarRecordDequeOwner* self)
     if (pCur == self->mpEnd)
         return 0;
 
-    cStarRecordPtr* pNext = pCur + 1;
     cStarRecordPtr value = *pCur;
-    if (pNext != self->mpNodeEnd) {
-        self->mpCurrent = pNext;
+    if (pCur + 1 != self->mpNodeEnd) {
+        self->mpCurrent = pCur + 1;
         return value;
     }
 
@@ -870,35 +872,38 @@ cStarRecordPtr __fastcall PopStarRecord(StarRecordDequeOwner* self)
 // health for the given tuning parameter.
 void TurretOwner::ConfigureTurretWeapons(void* pTuning)
 {
-    float value = 0.0f;
-    int bOwnsTemp = 0;
-    PropertyInfoF temp;
+    bool bOwnsTemp = false;
+    PropertyInfoF* pTemp = 0;
 
     mpTurretTuning = pTuning;
     enableWeapon(gTurretWeaponA, pTuning, &mF698);
     enableWeapon(gTurretWeaponB, pTuning, &mF69c);
     enableWeapon(gTurretWeaponC, pTuning, &mF694);
 
-    if (GetCurrentGameMode() == (void*)0x1654c05) {
+    float value;
+    if (GetCurrentGameMode() == gAppNameTag) {
         void* pEmpireId = ((void* (__thiscall*)(void*))
                            (*(void***)mF688)[0x4c / 4])(mF688);
-        if (((cStarManager*)StarManager())->GetEmpireByID((int)pEmpireId) != 0) {
-            value = GetSpaceCombatTuning()->GetTurretHealth(pTuning);
+        StarManager(pEmpireId);
+        if (GetEmpireByID(pEmpireId) != 0) {
+            cSPSpaceCombatTuning* pTune = GetSpaceCombatTuning(pTuning);
+            value = pTune->GetTurretHealth();
             goto store;
         }
     }
 
-    bOwnsTemp = 1;
-    PropertyInfoF* pTemp = temp.Ctor((void*)0xa4c2f6bd, 0xc5291fee, gTurretHealthDefault);
-    FUN_0075e620(pTemp);
+    bOwnsTemp = true;
+    pTemp = FUN_00bd0ce0((void*)0xa4c2f6bd, 0xc5291fee, gTurretHealthDefault);
+    FUN_0075e620((void*)pTemp);
     value = pTemp->mValue;
 
 store:
     mF5b4 = value;
     mF5c0 = value;
-    if ((bOwnsTemp & 1) != 0 && temp.mpObject != 0) {
-        void* pObj = temp.mpObject;
-        ((void (__thiscall*)(void*))(*(void***)pObj)[1])(pObj);
+    if (bOwnsTemp && pTemp != 0) {
+        void* pObj = pTemp->mpObject;
+        if (pObj != 0)
+            (*(void (__thiscall**)(void*))(*(void***)pObj)[1])(pObj);
     }
 }
 

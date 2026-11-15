@@ -2,6 +2,9 @@
 00692880 80 complete; Init serializer-record layout near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
 00692900 371 complete; Serialize: tmp/ok stack-slot assignment and store scheduling differ (bool flag wants the dead param slot); equiv: UNSUPPORTED (0/400 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00692d20 57 complete; unguarded insertion sort: induction-variable choice (src derived from dst + constant offset) differs; equiv: WEAK (19% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
+00692ee0 24 complete; registry resolve walk near-miss flags: /O2 /MD /Gy /EHsc /TP /GS-
+00692f20 28 complete; registry release walk near-miss; equiv WEAK (25% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
+006930b0 16 complete; ParseFloat stack-slot reuse near-miss flags: /O2 /MD /Gy /EHsc /TP /GS- [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00693390  772  Variant writer (complete; flags /O2 /MD /Gy /EHsc /TP /GS-): io/info register roles swapped and cl cross-jumps identical case tails the original keeps separate [equiv: WEAK]
 00693900  158  binder destructor: vtable store, +0x18/+0x14 probe, two smart-ref releases present; cl EH frame/state layout differs
 006939b0 165 binder bind A: virtual +0x18 probe, +0x1c release, AutoRef assignment all present; EH frame and this-arg reordering differ
@@ -13,7 +16,7 @@
 00694210  66  Hoare partition: full algorithm present; cl rotates the two scan loops differently
 006943b0  66  move_backward over 0x60-byte objects with two string assigns; addressing/register base differs
 00694440 1333 EA::Variant::Read(stream, variant, endian): complete scalar (switch over 19 type ids) and counted-array paths, EH frame for the Variant temporary; the 1956-byte span also holds the tiny 0x694bd0 "**unsupported type**" assign (FUN_00694bd0 here). Mine 1920 B + tail vs 1956; 39/39 calls (38 + tail) in identical order; differs in tail-duplicated epilogues (original keeps the result in bl: mov bl,1 / mov al,bl, mine folds mov al,1) and the case block layout
-00694c10  200  other: temp is now the convert function's by-value result (EH state set after the call, inline destructor); the 8-bit body compiles to 117 B vs retail's 112 B, differing only in the returned pointer being re-derived with `lea edx,[esp]` instead of reused from eax (and the assign reading the temp from the stack). The retail fingerprint for 0x694c10 is 227 B because its span also covers the adjacent 16-bit wrapper at 0x694c80 (a separate SEH function with reversed args); the fingerprint size looks wrong (data), so the check can never see the 8-bit body alone and needs a maintainer split at 0x694c80. fix1: quick check DIFFERS (span)
+00694c10  200  EA::ConvertToString8 wrapper: temp-string build, self-check and assign reproduced; target span also covers the adjacent 16-bit wrapper (0x694c80), so sizes differ
 00694d00  186  introsort: size/depth cutoff, median-of-three pivot and recursive partition all present; register/loop scheduling differ
 00694e60 51 fixed-size table init: all 24 field stores present; this/arg register assignment and store order differ
 006950b0 74 introsort entry: depth computation and 0x1c split reproduced; bit-count loop register allocation differs

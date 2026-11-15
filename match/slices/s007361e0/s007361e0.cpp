@@ -14,9 +14,6 @@ void* EAAlloc(size_t_ n, const char* name, int flags, unsigned debugFlags,
               const char* file, int line);              // 0x00f473a0
 void  EAFree(void* p);                                  // 0x00f47380
 inline void* operator new(size_t_, void* p) { return p; }
-// The placement delete the new-expression below uses for its unwind cleanup; its declaration is what makes MSVC
-// emit the retail EH frame (retail's copy ctor 0x00423080 may throw).
-void __cdecl operator delete(void*, void*);
 
 // ---------------------------------------------------------------------------
 // Ref-counted buffer (EA::RefCountTemplate<EA::Thread::AtomicInt<int>>)
@@ -189,40 +186,39 @@ struct MeshData {
 // Mask table indexed by element width (0x0140d4e0).
 extern const uint32_t g_d4e0[];     // 0x0140d4e0
 
+void FUN_00423080(int);
+void FUN_00424cf0(int, int);
+typedef void (__thiscall *FnVoidIP)(void*, int);
+typedef void (__thiscall *FnVoidIIP)(void*, int, int);
 void FUN_004751a0(int);
 void FUN_00424f70(int*);
 int* FUN_00732ff0(void*);
 void* FUN_00723680(int);
 
-// ---------------------------------------------------------------------------
-// 0x20-byte element (four words + a 0x10-byte ref-counted handle) and the
-// begin/end/capacity vector that holds it.
-// ---------------------------------------------------------------------------
-struct Elem32
-{
-    int w0, w1, w2, w3;     // +0x00
-    int h0, h1, h2, h3;     // +0x10 ref-counted payload
-    Elem32(const Elem32& src);              // 0x00423080
-};
-
 struct Vec41
 {
-    Elem32* mpBegin;        // +0x00
-    Elem32* mpEnd;          // +0x04
-    Elem32* mpCapacity;     // +0x08
-    void DoInsertValue(Elem32* pos, const Elem32* val);   // 0x00424cf0
-    Elem32* insert(Elem32* pos, const Elem32* val);       // 0x00736660
+    int* mBegin;
+    int* mEnd;
+    int* mCap;
+    int  emit(int pos, int src);   // 0x736660
 };
 
 // @ 0x00736660
-Elem32* Vec41::insert(Elem32* pos, const Elem32* val)
+int Vec41::emit(int param_2, int param_3)
 {
-    const int idx = (int)(pos - mpBegin);
-    if ((pos != mpEnd) || (mpEnd == mpCapacity))
-        DoInsertValue(pos, val);
+    int iVar1 = (int)mEnd;
+    int iVar2 = (int)mBegin;
+    if (param_2 == iVar1 && iVar1 != (int)mCap)
+    {
+        mEnd = (int*)(iVar1 + 0x20);
+        if (iVar1 != 0)
+            ((FnVoidIP)FUN_00423080)((void*)iVar1, param_3);
+    }
     else
-        ::new (mpEnd++) Elem32(*val);
-    return mpBegin + idx;
+    {
+        ((FnVoidIIP)FUN_00424cf0)(this, param_2, param_3);
+    }
+    return ((param_2 - iVar2) >> 5) * 0x20 + (int)mBegin;
 }
 
 // ---------------------------------------------------------------------------

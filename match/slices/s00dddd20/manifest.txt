@@ -6,9 +6,3 @@ slices/s00dddd20/s00dddd20.cpp  ?CamCtl_SetFlag@@YGXE@Z  00dde5b0  /O2 /MD /Gy /
 slices/s00dddd20/s00dddd20.cpp  ?Reset2@CamCtl@@QAEDHHHH@Z  00dde4f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00dddd20/s00dddd20.cpp  ?Set2@CamCtl@@QAEDHMMH@Z  00dde4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00dddd20/s00dddd20.cpp  ?CamCtl_Release@@YGXPAX@Z  00dde590  /O2 /MD /Gy /EHsc /TP /arch:SSE
-slices/s00dddd20/s00dddd20.cpp  ?RegisterSmall@@YAXPAX@Z  00ddde80  /O2 /MD /Gy /EHsc /TP /arch:SSE
-slices/s00dddd20/s00dddd20.cpp  ?CamCtl_PresetReset@@YAXXZ  00dde9e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
-slices/s00dddd20/s00dddd20.cpp  ?Update@CamCtl@@QAEXHH@Z  00dde350  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-slices/s00dddd20/s00dddd20.cpp  ?init@CamCtl@@QAEXPAXPBUVec3@@@Z  00dde2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
-slices/s00dddd20/s00dddd20.cpp  ?Key@CamCtl@@QAEDIH@Z  00dde400  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-slices/s00dddd20/s00dddd20.cpp  ?CamCtl_Preset@@YGXM@Z  00dde900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

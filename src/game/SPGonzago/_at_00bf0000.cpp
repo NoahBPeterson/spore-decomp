@@ -194,7 +194,7 @@ struct SPTimer
 {
     unsigned __int64 GetElapsedTime();   // 0x00bc3190
     void Restart();                      // 0x00bc3130
-    char IsRunning();                    // 0x00feba90
+    bool IsRunning();                    // 0x00feba90
     uint32_t pad00[0x20 / 4];            // the object is 0x20 bytes (array stride)
 };
 struct TimerOwner { int FUN_0104bde0(); };                 // 0x0104bde0 (ret, int)
@@ -697,7 +697,7 @@ extern "C" int   vtbl_0146937c[];   // 0x0146937c
 extern "C" int   vtbl_01469360[];   // 0x01469360
 extern "C" int   vtbl_013eb394[];   // 0x013eb394
 void* __cdecl    do_copy(void* first, void* last, void* dst);                  // 0x006782c0
-void* __cdecl    EAAllocate(uint size, const char* file, int a, int b, const char* alloc, int line); // 0x00f473a0
+void* __cdecl    EAAllocate(uint size, const char* file, int a, int b, int c, int line); // 0x00f473a0
 void* __cdecl    SP_BehaviorManager();                                         // 0x00b3d260
 void* __cdecl    CommManager_s00bf_2ce0();                                                // 0x00b3d4a0
 void* __cdecl    FUN_01021260_s00bf_2ce0();                                               // 0x01021260
@@ -773,26 +773,21 @@ public:
 };
 class cGameData_s00bf_4170 : public IRefCounted {
 public:
-    uint8_t mPad14[0x30];
+    uint8_t mPad14[0x20];
 };
 class cEditorObject : public cGameData_s00bf_4170 {
 public:
     Vec3_s00bf_4170 mPosition;                 // 0x34
     uint8_t mPad40[0x10];
     void* GetIcon();                // 0x50
+    uint8_t mPad54[0xac8];
+    int mCityKind;                  // 0xb1c
+    int mCityLevel;                 // 0xb20
 };
 class cCity_s00bf_4170 : public cEditorObject {
 public:
-    uint8_t mPad50[0xb1c - 0x50];
-    int mCityKind;                  // 0xb1c
-    int mCityLevel;                 // 0xb20
     int GetVehicleSpecialty();      // 0x94 via terrain sphere, direct here 0x00bd81d0
     void* GetCityHall();            // 0xa4 0x00bd9b40
-    void VehicleCreateHook(cCommunityEditor* pEditor);   // 0x00be4a10
-};
-// The rbtree sub-object embedded at cCommunityEditor+0x6c (0x00bf3460 operates on it).
-struct SubObject6c {
-    void AddRef(cCity_s00bf_4170* pCity);   // 0x00bf3460
 };
 class cPlayerCityMusic : public IRefCounted {
 public:
@@ -846,7 +841,7 @@ cGameNounManager* NounManager_s00bf_4170();
 cGameNounManager* NounManager_s00bf_4170(int type);
 cBehaviorManager* BehaviorManager();
 void* GetCurrentGameMode_s00bf_4170();
-void* __fastcall GetTerrainEditorObject(void* self);
+void* GetTerrainEditorObject();
 extern uint8_t gGameModeCivilization;
 extern uint8_t gGameModeSpace;
 class cVector3Map {
@@ -858,12 +853,11 @@ public:
     uint8_t mPad10[0x08];           // 0x10
     int mCount;                     // 0x18
 
-    Vec3_s00bf_4170* FindOrInsert(const int* pKey);   // 0x00bf5050
+    Vec3_s00bf_4170* FindOrInsert(uint32_t key);   // 0x00bf5050
 };
 class cCommunityEditor : public cEditorObject {
 public:
     // Editor flags used by the city-reduction paths.
-    uint8_t mPad50[0x89 - 0x50];
     uint8_t mBadgeToasterShown;      // 0x89
     uint8_t mCityBadgeReady;         // 0x8a
     uint8_t mOneCityBadgeShown;      // 0x8b
@@ -887,25 +881,24 @@ public:
     uint8_t mPad464[0x6c];
     int mMaxCityCount;               // 0x4d0
 
-    void RefreshCityStatistics(cCommunityEditor* pEditor);   // 0x00bf3b50
     void InsertCityAt(int* pPosition, cCity_s00bf_4170* pCity, int nCount);   // 0x00bf4170
     cCommunityEditor* AttachCity(cCity_s00bf_4170* pCity);                     // 0x00bf4350
     void ReduceCitiesOnPlanet(cCity_s00bf_4170* pCity);                        // 0x00bf4370
     void DetachCity(cCity_s00bf_4170* pCity, int bRemoving);                   // 0x00bf45f0
-    void NotifySubEditor(cCommunityEditor* pSub);                    // 0x00bf49e0
+    void NotifySubEditor();                                         // 0x00bf49e0
     void CreateVehicleFromModelType(cCity_s00bf_4170* pCity, const Vec3_s00bf_4170* pPosition);  // 0x00bf4b10
     void RemoveAllCities(cCity_s00bf_4170* pCity);                             // 0x00bf4e50
     void RebuildCityFromTerrainSphere();                            // 0x00bf4eb0
     void CreateVehicleFromTerrainSphere();                          // 0x00bf4fc0
 };
-void __stdcall CityAddRef(cCity_s00bf_4170* pCity);
+void CityAddRef(cCity_s00bf_4170* pCity);
 void CityRelease(cCity_s00bf_4170* pCity);
 void CompanionReleaseContents(void* pObject);
 void CityListAppend(cCommunityEditor* pEditor, cCity_s00bf_4170** pPosition, cCity_s00bf_4170* pCity);
 void CityVectorShift(cCity_s00bf_4170** pSource, cCity_s00bf_4170** pDest, cCity_s00bf_4170** pEnd);
 void CityVectorCopyFill(cCity_s00bf_4170** pDest, cCity_s00bf_4170** pSource, cCity_s00bf_4170** pEnd);
 void CityVectorShiftDown(cCity_s00bf_4170** pDest, cCity_s00bf_4170** pSource, cCity_s00bf_4170** pEnd, cCity_s00bf_4170** pSlot);
-void __fastcall SetModelTypeKey(void* pMap, int edx, int* pKey, const Vec3_s00bf_4170* pValue); // 0x00bf4a60
+void SetModelTypeKey(int* pKey, const Vec3_s00bf_4170* pValue);         // 0x00bf4a60
 void ResetVector3Map(cCommunityEditor* pEditor);              // 0x00bf4a90
 void ReduceCitiesForPlanet(cCommunityEditor* pEditor);        // 0x00be1150
 void RefreshCityBadges();                                     // 0x00bf0f90
@@ -927,8 +920,8 @@ void* GetNodeParent(void* pNode);                             // 0x00c710c0
 void RemoveCityHallEntry(int nIndex);                         // 0x00c71150
 void UpdateCommunityCamera(cCommunityEditor* pEditor);        // 0x00e052d0
 void MessageServerPost(uint32_t msgId, void* pMessage);       // inlined message post
-void* SpaceGameGet();                                         // 0x01002bd0
-bool __fastcall IsSpaceLevelReady(void* self);                // 0x00b18e40
+void* SpaceGameGet();
+bool IsSpaceLevelReady();                                     // 0x00b18e40
 void CityVehicleCreateHook(void* pUnused);                    // 0x00be4a10
 // ---- items of slice s00bf4170 end
 
@@ -1259,7 +1252,7 @@ void* FUN_00b3d390(u32* a, void* b);        // 0x00b3d390  vector<AutoRefCount<c
 int   FUN_00b1f9d0();                       // 0x00b1f9d0  GetPlayerEmpireOrMinus1
 void* FUN_01021260_s00bf_6cb0();                       // 0x1021260   SP::cSPLivingUniverse::GetActivePlanet
 u32   FUN_00b5b800();                       // 0x00b5b800  SP::GetCurrentGameMode
-int   __fastcall FUN_00c70e00(void* self);             // 0x00c70e00  living-universe state query
+int   FUN_00c70e00(void* self);             // 0x00c70e00  living-universe state query
 struct ThTimer {                            // SP::cGonzagoTimer (0x20 bytes)
   void* FUN_00b63890();                     // 0x00b63890  ctor
   void  FUN_00b638b0();                     // 0x00b638b0  dtor
@@ -1283,9 +1276,7 @@ void  FUN_00bf5220(void* self, void* a, int n, void* val);  // 0x00bf5220
 void  FUN_00bf5420(void* self, void* val);  // 0x00bf5420
 void  FUN_00bf40d0(void* self, int n);      // 0x00bf40d0
 struct ThNounMgr {
-  void* GetGameDataVector(void* a, void* b, void* c, void* d, u32 tag);  // 0xb21340
-  // 0xb21340 with the vector object left in eax and the caller's buffer first.
-  void  GetGameDataVector(void* out, void* a, void* b, void* c, void* d, u32 tag);
+  void  GetGameDataVector(void* out, void* a, void* b, void* c, void* d, u32 tag);  // 0xb21340
   void* GetPlayerCivilization();            // 0xb25fb0
   void* FUN_00f67d90();                     // 0xf67d90 GetCurrentTerrainSphere
 };
@@ -1337,7 +1328,7 @@ struct AI {
   int   FUN_00bf7730(int type);
   void  FUN_00bf7760(u32 n);
   void  FUN_00bf77d0(void* stream);
-  void  FUN_00befd80(float r, u8 flag);
+  void  FUN_00befd80(float r);
 };
 struct Community {
   void* GetNoun();                          // 0x00bfdf80
@@ -2917,8 +2908,8 @@ bool cCivilization::SuperweaponOnCooldown(int w)
 {
     SPTimer* t = mSuperweaponCooldown + w;
     if (t->IsRunning()) {
-        return t->GetElapsedTime() <
-               (unsigned __int64)(mpField470[w])->FUN_0104bde0();
+        unsigned __int64 limit = (unsigned __int64)(unsigned)(mpField470[w])->FUN_0104bde0();
+        return t->GetElapsedTime() < limit;
     }
     return false;
 }
@@ -3023,12 +3014,9 @@ void cCivilization_s00bf_1ba0::FUN_00bf1cf0(IntVec* timers)
 // @ 0x00bf1d90
 void** StarTreeOps::MapInsert4(void** outIt, void* anchor, int* value, char hint)
 {
-    // EASTL map's insert_with_hint: allocator path, allocation site, then the node.
-    int side;
+    int side = 0;
     if (hint == 0 && anchor != (char*)this + 4 && *value >= *(int*)((char*)anchor + 0x10))
         side = 1;
-    else
-        side = 0;
 
     void* node = EAAllocate(0x20, "Simulator", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
@@ -4247,7 +4235,7 @@ void cCommunityEditor::ReduceCitiesOnPlanet(cCity_s00bf_4170* pCity)
             ClearCitySelection();
             ShowCityLimitToast();
             UpdateCityInfoPanel(this);
-            uint32_t nSphere = (uint32_t)GetTerrainEditorObject(pNouns);
+            uint32_t nSphere = (uint32_t)GetTerrainEditorObject();
             UpdateCityBoundaries(nSphere);
             pNouns = NounManager_s00bf_4170();
             pPlayer = pNouns->GetPlayerCivilization();
@@ -4380,29 +4368,30 @@ void cCommunityEditor::DetachCity(cCity_s00bf_4170* pCity, int bRemoving)
 }
 
 // @ 0x00bf49e0
-void cCommunityEditor::NotifySubEditor(cCommunityEditor* pSub)
+void cCommunityEditor::NotifySubEditor()
 {
-    if (pSub == 0)
+    if (this == nullptr)
         return;
-    cCommunityEditor* pCity = (cCommunityEditor*)pSub->Query((void*)0xee9b2232);
-    if (pCity != 0) {
-        u8 bFlag = 0;
-        if (GetCurrentGameMode_s00bf_4170() == &gGameModeSpace)
-            bFlag = IsSpaceLevelReady(SpaceGameGet()) & 1;
-        this->DetachCity((cCity_s00bf_4170*)pCity, bFlag);
+    void* pSub = Query((void*)0xee9b2232);
+    if (pSub != nullptr) {
+        int bFlag = 0;
+        if (GetCurrentGameMode_s00bf_4170() == &gGameModeSpace) {
+            SpaceGameGet();
+            bFlag = IsSpaceLevelReady() ? 1 : 0;
+        }
+        ((cCommunityEditor*)pSub)->DetachCity((cCity_s00bf_4170*)this, bFlag);
         return;
     }
-    cCommunityEditor* pOther = (cCommunityEditor*)pSub->Query((void*)0x137e8e0);
-    if (pOther != 0)
-        pOther->RefreshCityStatistics(this);
+    void* pOther = Query((void*)0x137e8e0);
+    if (pOther != nullptr)
+        RefreshCityStatistics((cCommunityEditor*)pOther);
 }
 
 // @ 0x00bf4a60
-void __fastcall SetModelTypeKey(void* pMap, int edx, int* pKey, const Vec3_s00bf_4170* pValue)
+void SetModelTypeKey(int* pKey, const Vec3_s00bf_4170* pValue)
 {
-    Vec3_s00bf_4170 value = *pValue;
-    Vec3_s00bf_4170* pSlot = ((cVector3Map*)pMap)->FindOrInsert((const int*)&pKey);
-    *pSlot = value;
+    Vec3_s00bf_4170* pSlot = ((cVector3Map*)pKey)->FindOrInsert((uint32_t)pKey);
+    *pSlot = *pValue;
 }
 
 // @ 0x00bf4a90
@@ -4420,23 +4409,24 @@ void ResetVector3Map(cCommunityEditor* pEditor)
         zero.mX = 0.0f;
         zero.mY = 0.0f;
         zero.mZ = 0.0f;
-        SetModelTypeKey(pMap, 0, (int*)nKey, &zero);
+        SetModelTypeKey((int*)nKey, &zero);
     }
     for (uint32_t nKey = 5; nKey < 18; ++nKey) {
         Vec3_s00bf_4170 zero;
         zero.mX = 0.0f;
         zero.mY = 0.0f;
         zero.mZ = 0.0f;
-        SetModelTypeKey(pMap, 0, (int*)nKey, &zero);
+        SetModelTypeKey((int*)nKey, &zero);
     }
 }
 
 // @ 0x00bf4e50
 void cCommunityEditor::RemoveAllCities(cCity_s00bf_4170* pCity)
 {
-    ((SubObject6c*)((char*)this + 0x6c))->AddRef(pCity);
-    for (int i = 0; i < (int)(mpCitiesEnd - mpCitiesBegin); ++i)
-        mpCitiesBegin[i]->VehicleCreateHook(this);
+    CityAddRef(pCity);
+    int nCount = (int)(mpCitiesEnd - mpCitiesBegin);
+    for (int i = 0; i < nCount; ++i)
+        CityVehicleCreateHook(this);
 }
 
 // @ 0x00bf4eb0
@@ -4451,7 +4441,7 @@ void cCommunityEditor::RebuildCityFromTerrainSphere()
     position.mX = (float)pSphere->mModelKind;
     position.mY = (float)pSphere->mModelA;
     position.mZ = (float)pSphere->mModelB;
-    SetModelTypeKey((void*)((char*)this + 0x6c), 0, (int*)0x99e92f05, &position);
+    SetModelTypeKey((int*)0x99e92f05, &position);
 
     RemoveAllCities((cCity_s00bf_4170*)0x9c);
 
@@ -4459,38 +4449,38 @@ void cCommunityEditor::RebuildCityFromTerrainSphere()
     stored.mX = (float)pSphere->mModelKind;
     stored.mY = (float)pSphere->mModelA;
     stored.mZ = (float)pSphere->mModelB;
-    SetModelTypeKey((void*)0x168caf0, 0, (int*)0x99e92f05, &stored);
+    SetModelTypeKey((int*)0x99e92f05, &stored);
 }
 
 // @ 0x00bf4fc0
 void cCommunityEditor::CreateVehicleFromTerrainSphere()
 {
     cTerrainEditor* pTerrain = (cTerrainEditor*)NounManager_s00bf_4170();
-    Vec3_s00bf_4170* pPosition = &pTerrain->GetCurrentTerrainSphere()->mModelPosition;
-    if (*(int*)&pPosition->mZ == 0)
+    cTerrainSphere* pSphere = pTerrain->GetCurrentTerrainSphere();
+    if (pSphere->mModelPosition.mZ == 0.0f)
         return;
 
-    cCity_s00bf_4170* pCity = (cCity_s00bf_4170*)GetTerrainEditorObject(NounManager_s00bf_4170());
+    NounManager_s00bf_4170();
+    cCity_s00bf_4170* pCity = (cCity_s00bf_4170*)GetTerrainEditorObject();
     int nSpecialty = pCity->GetVehicleSpecialty();
 
-    int nModel;
-    switch (nSpecialty) {
-    case 0: nModel = 0x7d433fad; break;
-    case 1: nModel = 0x9ad7d4aa; break;
-    default: nModel = 0xf670aa43; break;
-    }
+    uint32_t nModel;
+    if (nSpecialty == 0)
+        nModel = 0x7d433fad;
+    else if (nSpecialty == 1)
+        nModel = 0x9ad7d4aa;
+    else
+        nModel = 0xf670aa43;
 
-    CreateVehicleFromModelType((cCity_s00bf_4170*)(intptr_t)nModel, pPosition);
+    CreateVehicleFromModelType((cCity_s00bf_4170*)(intptr_t)nModel, &pSphere->mModelPosition);
 
-    Vec3_s00bf_4170 stored = *pPosition;
-    Vec3_s00bf_4170* pSlot = ((cVector3Map*)0x168caf0)->FindOrInsert(&nModel);
-    *pSlot = stored;
+    Vec3_s00bf_4170 stored = pSphere->mModelPosition;
+    SetModelTypeKey((int*)nModel, &stored);
 }
 
 // @ 0x00bf5050
-Vec3_s00bf_4170* cVector3Map::FindOrInsert(const int* pKey)
+Vec3_s00bf_4170* cVector3Map::FindOrInsert(uint32_t key)
 {
-    int key = *pKey;
     int* pHeader = (int*)&mpRoot;
     int* pLower = pHeader;
 
@@ -4498,7 +4488,7 @@ Vec3_s00bf_4170* cVector3Map::FindOrInsert(const int* pKey)
         int* pNode = mpHead;
         do {
             int* pNext;
-            if ((uint32_t)pNode[4] < (uint32_t)key) {
+            if ((uint32_t)pNode[4] < key) {
                 pNext = (int*)*pNode;
             } else {
                 pNext = (int*)pNode[1];
@@ -4508,12 +4498,12 @@ Vec3_s00bf_4170* cVector3Map::FindOrInsert(const int* pKey)
         } while (pNode != nullptr);
     }
 
-    if (pLower == pHeader || (uint32_t)key < (uint32_t)pLower[4]) {
+    if (pLower == pHeader || key < (uint32_t)pLower[4]) {
         Vec3_s00bf_4170 value;
         value.mX = 0.0f;
         value.mY = 0.0f;
         value.mZ = 0.0f;
-        MapInsertNode(pLower, (uint32_t)key, &value);
+        MapInsertNode(pLower, key, &value);
     }
     return (Vec3_s00bf_4170*)(pLower + 5);
 }
@@ -5430,24 +5420,26 @@ u8_s00bf_6cb0 AI::FUN_00bf7050()
 // @ 0x00bf7150
 int AI::FUN_00bf7150()
 {
-  V4 gd;
-  gd.a = 0;
-  int count = 0;
+  int local_4 = 0;
+  int iv;
   {
     void* nm = FUN_00b3d300();
-    ((ThNounMgr*)nm)->GetGameDataVector(&gd, (void*)0xcd7d10, (void*)0xd3d420,
-                               (void*)0xae5ea0, (void*)0xb1e500, 0x403df5c);
+    ((ThNounMgr*)nm)->GetGameDataVector(&iv, (void*)0xcd7d10, (void*)0xd3d420,
+                                         (void*)0xae5ea0, (void*)0xb1e500, 0x403df5c);
   }
-  void** cur = *(void***)(&gd.b);
-  void** end = *(void***)(&gd.c);
-  while (cur != end) {
-    void* e = *cur;
-    int a = ((int(__thiscall*)(void*))(*(void***)e)[0x4c / 4])(e);
-    int b = ((int(__thiscall*)(void*))(*(void***)this)[0x4c / 4])(this);
-    if (a == b) ++count;
-    ++cur;
+  void** cur = *(void***)(iv + 4);
+  void** end = *(void***)(iv + 8);
+  if (cur != end) {
+    do {
+      void* e = *cur;
+      int a = ((int(__thiscall*)(void*))(*(void***)e)[0x4c / 4])(e);
+      int b = ((int(__thiscall*)(void*))(*(void***)this)[0x4c / 4])(this);
+      if (a == b) ++local_4;
+      ++cur;
+    } while (cur != end);
+    return local_4;
   }
-  return count;
+  return 0;
 }
 
 // @ 0x00bf71d0
@@ -5463,7 +5455,7 @@ void AI::FUN_00bf71d0()
   if (mTick4b4 >= 6) {
     mTick4b4 -= 6;
     float f = FUN_00bf6fa0(1);
-    FUN_00befd80(f * 0.1f, 1);
+    FUN_00befd80(f * 0.1f);
   }
 }
 
@@ -6907,28 +6899,29 @@ void cCommunity_s00bf_d9f0::ReleaseTable()
 // @ 0x00bfe7c0
 void FUN_00bfe7c0(SeqIter* out, RefObj*** bucketLo, RefObj** cur, RefObj** end, void** key)
 {
-  int* sp10 = (int*)out;        // out
-  RefObj** sp14 = cur;          // cur
-  RefObj*** sp18 = bucketLo;    // bucket
-  RefObj** sp1c = end;          // end
+  RefObj*** bl = bucketLo;
   void* k = *key;
-  if (sp14 == sp1c) goto result;
+  if (cur == end) {
+    out->cur = cur;
+    out->bucket = (RefObj***)bl;
+    return;
+  }
   for (;;) {
-    if (*sp14 == (RefObj*)k) break;
-    ++sp14;
-    if (sp14 == sp1c) {
-      ++sp18;
-      sp14 = *sp18;
-      sp1c = sp14 + 0x40;
+    if (*cur == (RefObj*)k) break;
+    cur++;
+    if (cur == end) {
+      bl++;
+      RefObj** q = *bl;
+      end = q + 0x40;
+      cur = q;
     }
   }
-result:
-  sp10[0] = (int)sp14;
-  sp10[1] = (int)sp18;
-  sp10[2] = (int)sp1c;
-  sp10[3] = (int)sp18;
-  if (out != 0) (void)sp10;
+  out->cur = cur;
+  out->begin = (RefObj**)bl;
+  out->end = end;
+  out->bucket = (RefObj***)(cur);
 }
+
 // @ 0x00bfe840
 void FUN_00bfe840(SeqIter* out, SeqIter* a, SeqIter* b)
 {

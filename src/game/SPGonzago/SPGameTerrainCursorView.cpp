@@ -26,34 +26,31 @@ struct cDispatchObject {
     cMethodTable* mpMethods;                    // 0x00
 
     void* Call(int nSlot) {
-        return ((void* (__thiscall*)(void*))mpMethods->mSlots[nSlot >> 2])(this);
+        return ((void* (*)(void*))mpMethods->mSlots[nSlot >> 2])(this);
     }
     void* Call(int nSlot, void* pArg1) {
-        return ((void* (__thiscall*)(void*, void*))mpMethods->mSlots[nSlot >> 2])(this, pArg1);
+        return ((void* (*)(void*, void*))mpMethods->mSlots[nSlot >> 2])(this, pArg1);
     }
     void* Call(int nSlot, uint32_t nArg1) {
-        return ((void* (__thiscall*)(void*, uint32_t))mpMethods->mSlots[nSlot >> 2])(this, nArg1);
+        return ((void* (*)(void*, uint32_t))mpMethods->mSlots[nSlot >> 2])(this, nArg1);
     }
     void* Call(int nSlot, uint32_t nArg1, uint32_t nArg2) {
-        return ((void* (__thiscall*)(void*, uint32_t, uint32_t))mpMethods->mSlots[nSlot >> 2])(this, nArg1, nArg2);
+        return ((void* (*)(void*, uint32_t, uint32_t))mpMethods->mSlots[nSlot >> 2])(this, nArg1, nArg2);
     }
     void* Call(int nSlot, void* pArg1, uint32_t nArg2) {
-        return ((void* (__thiscall*)(void*, void*, uint32_t))mpMethods->mSlots[nSlot >> 2])(this, pArg1, nArg2);
-    }
-    void* Call(int nSlot, void* pArg1, uint32_t nArg2, uint32_t nArg3) {
-        return ((void* (__thiscall*)(void*, void*, uint32_t, uint32_t))mpMethods->mSlots[nSlot >> 2])(this, pArg1, nArg2, nArg3);
+        return ((void* (*)(void*, void*, uint32_t))mpMethods->mSlots[nSlot >> 2])(this, pArg1, nArg2);
     }
     void* Call(int nSlot, uint32_t nArg1, void* pArg2) {
-        return ((void* (__thiscall*)(void*, uint32_t, void*))mpMethods->mSlots[nSlot >> 2])(this, nArg1, pArg2);
+        return ((void* (*)(void*, uint32_t, void*))mpMethods->mSlots[nSlot >> 2])(this, nArg1, pArg2);
     }
     void CallVoid(int nSlot, void* pArg1, uint32_t nArg2) {
-        ((void (__thiscall*)(void*, void*, uint32_t))mpMethods->mSlots[nSlot >> 2])(this, pArg1, nArg2);
+        ((void (*)(void*, void*, uint32_t))mpMethods->mSlots[nSlot >> 2])(this, pArg1, nArg2);
     }
     float CallFloat(int nSlot) {
-        return ((float (__thiscall*)(void*))mpMethods->mSlots[nSlot >> 2])(this);
+        return ((float (*)(void*))mpMethods->mSlots[nSlot >> 2])(this);
     }
     char CallChar(int nSlot) {
-        return ((char (__thiscall*)(void*))mpMethods->mSlots[nSlot >> 2])(this);
+        return ((char (*)(void*))mpMethods->mSlots[nSlot >> 2])(this);
     }
 };
 class cSpatialObject {
@@ -65,7 +62,7 @@ public:
     };
 
     void* GetComponent(uint32_t nKey) {
-        return ((void* (__thiscall*)(void*, uint32_t))((cMethodTable*)mpMethods)->mSlots[0x0c >> 2])(this, nKey);
+        return ((void* (*)(void*, uint32_t))((cMethodTable*)mpMethods)->mSlots[0xb8 >> 2])(this, nKey);
     }
 };
 class cAnimatingCreature {
@@ -79,12 +76,11 @@ struct Frame {
     uint8_t mPad08[0x38];                       // 0x08
     int mnRefCount;                             // 0x40
 };
-extern void* vtbl_gameTerrainCursorView[];      // 0x0148664c
 class cSpatialObjectView {
 public:
     cSpatialObjectView();
 
-    void** mpVtbl;                              // 0x00
+    void* mpVftable;                            // 0x00
     uint32_t mPad04[5];                         // 0x04
     Vec3 mColor;                                // 0x18
     ModelKey mKey;                              // 0x24
@@ -95,21 +91,13 @@ public:
 };
 class cGameTerrainCursorView : public cSpatialObjectView {
 public:
-    cGameTerrainCursorView() {
-        mpVtbl = vtbl_gameTerrainCursorView;
-        mpAnimated = 0;
-        mpObject = 0;
-        mpFrame = 0;
-    }
+    cGameTerrainCursorView();
     ~cGameTerrainCursorView();
     void HandleSimulationUpdate();
     void SetFlag(char bSet);
     char GetFlag();
 };
-struct ModelRef {
-    void Assign(void* pValue);                  // 0x00478db0 (thiscall, ret 4)
-};
-void* operator new(unsigned int nSize, const char* pName, int nA3, int nA4, int nA5, int nA6);
+void* operator new(size_t nSize, void* pPlace);
 void* GonzagoModelWorld(void* pFirst, void* pSecond);
 void* GonzagoModelWorld();
 void* GetLayoutManager(uint32_t nId);
@@ -119,10 +107,12 @@ void* CreateFrame(uint32_t nSize, uint32_t nAlign, const char* pName, void* pMan
 void* CreateWindow(uint32_t nSize, uint32_t nAlign, const char* pName, void* pManager);
 void BuildFrameDrawable(void* pOut, void* pSource);
 void SetModelTransform(void* pModel, const float* pTransform);
+void LoadModelFile(void* pModel);
 void GetMousePosition(float* pOut);
 float GetFloatProperty(void* pProperties, uint32_t nId);
 void* GetProperties();
 void GetVectorProperty(void* pProperties, uint32_t nId, float* pOut);
+void* CreateObject(size_t nSize, const char* pName);
 void* GetPlanetModel();
 // ---- items of slice s00e8d0e0 end
 
@@ -257,10 +247,11 @@ void* loadModel()
 {
     void* pWorld = GonzagoModelWorld();
     void* pModel = ((cDispatchObject*)pWorld)->Call(0x0c, (void*)(intptr_t)0x7f70e30b,
-                                                    (uint32_t)0x5c4fce4c, (uint32_t)0);
+                                                    (uint32_t)0x5c4fce4c);
     *(uint32_t*)((uint8_t*)pModel + 4) |= 2;
-    Vec3 v = { 1.0f, 1.0f, 1.0f };
-    *(Vec3*)((uint8_t*)pModel + 0x4c) = v;
+    *(float*)((uint8_t*)pModel + 0x4c) = 1.0f;
+    *(float*)((uint8_t*)pModel + 0x50) = 1.0f;
+    *(float*)((uint8_t*)pModel + 0x54) = 1.0f;
     *(float*)((uint8_t*)pModel + 0x58) = 1.0f;
     void* pOld = *(void**)((uint8_t*)pModel + 0x64);
     if (pOld != nullptr) {
@@ -271,10 +262,12 @@ void* loadModel()
 }
 
 // @ 0x00e8de10
-cGameTerrainCursorView* __stdcall CreateGameTerrainCursorView(cSpatialObject* pObject)
+cGameTerrainCursorView* CreateGameTerrainCursorView(cSpatialObject* pObject)
 {
     cGameTerrainCursorView* pView =
-        new ("Simulator/cGameTerrainCursorView", 0, 0, 0, 0) cGameTerrainCursorView();
+        (cGameTerrainCursorView*)CreateObject(0x40, "Simulator/cGameTerrainCursorView");
+    if (pView != nullptr)
+        ::new ((void*)pView) cGameTerrainCursorView();
 
     cAnimatingCreature* pModel = nullptr;
     if (pObject != nullptr)
@@ -290,7 +283,7 @@ cGameTerrainCursorView* __stdcall CreateGameTerrainCursorView(cSpatialObject* pO
     }
 
     void* pLoaded = loadModel();
-    ((ModelRef*)((uint8_t*)pView + 0x38))->Assign(pLoaded);
+    LoadModelFile(pLoaded);
     ((cDispatchObject*)pView)->Call(0x24, pObject);
     return pView;
 }

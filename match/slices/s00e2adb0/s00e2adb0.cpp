@@ -340,13 +340,6 @@ struct WorldNode
     uint32_t   mKey[5];         // +0x10
 };
 
-struct WorldNodeIter
-{
-    WorldNode* mpNode;
-    WorldNodeIter(WorldNode* p) : mpNode(p) {}
-    WorldNodeIter(const WorldNodeIter& o) : mpNode(o.mpNode) {}
-};
-
 struct WorldTree
 {
     uint32_t mField00;          // +0x00
@@ -359,10 +352,10 @@ struct WorldTree
 
     void NukeSubtree(void* node);
     void Clear();
-    WorldNodeIter InsertNode(WorldNode* parent, const uint32_t* key, bool left);
+    void InsertNode(WorldNode** out, WorldNode* parent, const uint32_t* key, bool left);
 };
 
-extern "C" void eastl_RBTreeInsert(WorldNode* node, WorldNode* parent, WorldNode* header, int side);
+extern "C" void eastl_RBTreeInsert(WorldNode* node, WorldNode* parent, WorldNode* header, bool side);
 
 // @ 0x00e2adb0
 void __fastcall FUN_00e2adb0(void* self)
@@ -389,24 +382,27 @@ void WorldTree::Clear()
 }
 
 // @ 0x00e2b6c0
-WorldNodeIter WorldTree::InsertNode(WorldNode* parent, const uint32_t* key, bool left)
+void WorldTree::InsertNode(WorldNode** out, WorldNode* parent, const uint32_t* key, bool left)
 {
-    int side = (!left && parent != (WorldNode*)&mpLeft && key[0] >= parent->mKey[0]) ? 1 : 0;
+    int side;
+    if (!left && parent != (WorldNode*)&mpLeft && key[0] >= parent->mKey[0])
+        side = 1;
+    else
+        side = 0;
 
     WorldNode* node = (WorldNode*)operator new(0x24, "Simulator", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
         0xd1);
-    uint32_t* nv = (uint32_t*)((char*)node + 0x10);
-    if (nv) {
-        nv[0] = key[0];
-        nv[1] = key[1];
-        nv[2] = key[2];
-        nv[3] = key[3];
-        nv[4] = key[4];
+    if (&node->mKey[0]) {
+        node->mKey[0] = key[0];
+        node->mKey[1] = key[1];
+        node->mKey[2] = key[2];
+        node->mKey[3] = key[3];
+        node->mKey[4] = key[4];
     }
     eastl_RBTreeInsert(node, parent, (WorldNode*)&mpLeft, side);
     mSize++;
-    return WorldNodeIter(node);
+    *out = node;
 }
 
 struct SmallNode

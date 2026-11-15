@@ -26,14 +26,6 @@ struct RwFieldTableRef
 	int  lookup(void* out);      // 0x011e2240
 	int  entry(void* out);       // 0x011e2670
 };
-// rw::core::filesys allocator interface: the driver record release lives in slot 2.
-struct RwFsAllocator
-{
-	virtual void slot0();
-	virtual void slot1();
-	virtual void release(unsigned int* record);
-};
-
 // Arena subreference container (rw::core::arena::DynamicArenaSubreferencesData);
 // its ctor and AddNewSubreference are __thiscall, so model them as members.
 struct RwArenaSubrefsData
@@ -109,7 +101,6 @@ struct rw_ArenaTypeRegistry
 	unsigned int  m_numUsed;   // +0x00
 	unsigned int  m_numAlloc;  // +0x04
 	ArenaTypeReg  m_record[1]; // +0x08
-	void Add(unsigned int id);
 };
 // rw::core::atom::StaticAtomTable::Members
 struct StaticAtomMembers
@@ -251,17 +242,16 @@ unsigned int* rw_ArenaTypeRegistry_Open(int self, int sizeBytes)
 // 011eb110: rw::core::arena::rw_ArenaTypeRegistry::Add
 // ---------------------------------------------------------------------------------------------------------
 // @ 0x11eb110
-void rw_ArenaTypeRegistry::Add(unsigned int id)
+void rw_ArenaTypeRegistry_Add(rw_ArenaTypeRegistry* self, unsigned int id)
 {
-	unsigned int  used = m_numAlloc;
-	m_numAlloc = used + 1;
-	ArenaTypeReg r;
-	r.id         = id;
-	r.unfixCB    = (void*)&FUN_011eb0d0;
-	r.refixCB    = (void*)&FUN_011fb220;
-	r.fixupCB    = (void*)&FUN_012057f0;
-	r.destructCB = 0;
-	m_record[used] = r;
+	unsigned int  used = self->m_numUsed;
+	self->m_numUsed = used + 1;
+	ArenaTypeReg* r = &self->m_record[used];
+	r->id         = id;
+	r->unfixCB    = (void*)0x011eb0d0;
+	r->refixCB    = (void*)0x011fb220;
+	r->fixupCB    = (void*)0x012057f0;
+	r->destructCB = 0;
 }
 
 // ---------------------------------------------------------------------------------------------------------
@@ -471,13 +461,12 @@ unsigned int RwArenaSubrefsData::addNew()
 	int* self = (int*)this;
 	unsigned int old = (unsigned int)self[7];
 	unsigned int idx = old + 1;
-	unsigned int zero = 0;
 	FUN_011eb1d0(self, idx);
 
 	unsigned int* rec = (unsigned int*)self[5];
 	self[7] = (int)idx;
-	rec[old * 2]     = zero;
-	rec[old * 2 + 1] = zero;
+	rec[old * 2]     = 0;
+	rec[old * 2 + 1] = 0;
 
 	int* dict = self + 8;
 	unsigned int old2 = (unsigned int)self[15];
@@ -487,7 +476,7 @@ unsigned int RwArenaSubrefsData::addNew()
 	unsigned int* d = (unsigned int*)self[13];
 	self[15] = (int)idx2;
 	unsigned int* e = (unsigned int*)((char*)d + (old2 * 3) * 8);
-	e[0] = zero; e[1] = zero; e[2] = zero; e[3] = zero; e[4] = zero; e[5] = zero;
+	e[0] = 0; e[1] = 0; e[2] = 0; e[3] = 0; e[4] = 0; e[5] = 0;
 	return old;
 }
 
@@ -636,20 +625,23 @@ void FUN_011eb630(unsigned int* out, int param)
 // @ 0x11eb710
 void FUN_011eb710(int* param_1, int* obj, int index)
 {
-	unsigned int scratch[8];
-	RwFieldTableRef* ft = (RwFieldTableRef*)((char*)obj + 0xc);
-	unsigned int  a = *(unsigned int*)(ft->lookup(scratch) + index * 4);
-	unsigned int  size = *(unsigned int*)(ft->entry(scratch) + index * 8);
+	void* selfc = (char*)obj + 0xc;
+	unsigned char local[32];
+	RwFieldTableRef* ft = (RwFieldTableRef*)selfc;
+	int  fields = ft->lookup(local);
+	unsigned int a = *(unsigned int*)(fields + index * 4);
+	int  entries = ft->entry(local);
+	int  size = *(int*)(entries + index * 8);
 	if (size <= 0)
 		return;
 
 	if (*(void**)((char*)obj + 0x2c) != 0)
 	{
-		((void (__cdecl*)(unsigned int, unsigned int, int))*(void**)((char*)obj + 0x2c))(a, size, 0);
+		((void (__cdecl*)(unsigned int, int, int))*(void**)((char*)obj + 0x2c))(a, size, 0);
 	}
 	else
 	{
-		((void (__cdecl*)(unsigned int, unsigned int, int, unsigned int))*(void**)((char*)obj + 0x30))(
+		((void (__cdecl*)(unsigned int, int, int, unsigned int))*(void**)((char*)obj + 0x30))(
 			a, size, 0, *(unsigned int*)((char*)obj + 0x34));
 	}
 	*(int*)((char*)obj + 0x7c) += size;
@@ -766,22 +758,20 @@ void FUN_011eb830(int* param_1, int param_2)
 void __stdcall FUN_011eb980(unsigned int* out, unsigned int* pairs, unsigned int unused)
 {
 	(void)unused;
-	unsigned int rec[4] = { 0, 0, 0, 0 };
+	unsigned int acc[4];
+	acc[0] = 0; acc[1] = 0; acc[2] = 0; acc[3] = 0;
 
-	unsigned int i = 0;
-	for (unsigned int* p = pairs; i < 4; ++i, p += 2)
+	for (unsigned int i = 0; i < 4; ++i)
 	{
-		// the size is always read, and the slot is only written for a non-zero size
-		unsigned int size = p[0];
-		if (size > 0)
-			rec[i] = (unsigned int)((void* (__cdecl*)(unsigned int, unsigned int))g_rwAllocFn)(
-				p[0], p[1]);
+		if (pairs[i * 2] != 0)
+			acc[i] = (unsigned int)((void* (__cdecl*)(unsigned int, unsigned int))g_rwAllocFn)(
+				pairs[i * 2], pairs[i * 2 + 1]);
 	}
 
-	out[0] = rec[0];
-	out[1] = rec[1];
-	out[2] = rec[2];
-	out[3] = rec[3];
+	out[0] = acc[0];
+	out[1] = acc[1];
+	out[2] = acc[2];
+	out[3] = acc[3];
 }
 
 // ---------------------------------------------------------------------------------------------------------
@@ -824,43 +814,31 @@ char* rw_stdc_StringnCopy(char* dst, const char* src, int n)
 // ---------------------------------------------------------------------------------------------------------
 // 011eba60 / 011ebaa0: file read / write with a 64-bit byte counter.
 // ---------------------------------------------------------------------------------------------------------
-// rw::core::filesys stream: HANDLE + a cached 64-bit read/write offset, 0x10 bytes
-// (the same layout the slice's StreamImpl describes).
-struct FileStream
-{
-	void*                m_handle;   // +0x00
-	unsigned int         m_pad04;    // +0x04
-	unsigned long long   m_pos;      // +0x08  cached 64-bit byte position
-};
-
 // @ 0x11eba60
-void __stdcall FUN_011eba60(FileStream* stream, void* buf, unsigned long count,
-                            unsigned int unused4, unsigned int unused5)
+void FUN_011eba60(unsigned int* stream, void* buf, unsigned long count)
 {
-	(void)unused4; (void)unused5;
-	ReadFile(stream->m_handle, buf, count, &count, 0);
-	stream->m_pos += count;
+	ReadFile((void*)stream[0], buf, count, &count, 0);
+	unsigned int lo = stream[2];
+	stream[2] = lo + count;
+	stream[3] = stream[3] + (unsigned int)((lo + count) < lo);
 }
 
 // @ 0x11ebaa0
-void __stdcall FUN_011ebaa0(FileStream* stream, const void* buf, unsigned long count,
-                            unsigned int unused4, unsigned int unused5)
+void FUN_011ebaa0(unsigned int* stream, const void* buf, unsigned long count)
 {
-	(void)unused4; (void)unused5;
-	WriteFile(stream->m_handle, buf, count, &count, 0);
-	stream->m_pos += count;
+	WriteFile((void*)stream[0], buf, count, &count, 0);
+	unsigned int lo = stream[2];
+	stream[2] = lo + count;
+	stream[3] = stream[3] + (unsigned int)((lo + count) < lo);
 }
 
 // ---------------------------------------------------------------------------------------------------------
 // 011ebae0: seek, keeping the cached 64-bit position in sync.
 // ---------------------------------------------------------------------------------------------------------
 // @ 0x11ebae0
-void __stdcall FUN_011ebae0(FileStream* stream, long posLo, long posHi, unsigned long origin,
-                            unsigned int unused5, unsigned int unused6)
+void FUN_011ebae0(unsigned int* stream, int posLo, int posHi, int origin)
 {
-	(void)unused5; (void)unused6;
-	unsigned long long* pos = &stream->m_pos;
-	if (origin == 0 && posLo == *((long*)pos) && posHi == ((long*)pos)[1])
+	if (origin == 0 && posLo == (int)stream[2] && posHi == (int)stream[3])
 		return;
 
 	unsigned long method;
@@ -871,14 +849,16 @@ void __stdcall FUN_011ebae0(FileStream* stream, long posLo, long posHi, unsigned
 	else
 		method = 0;
 
-	int high = posHi;
-	unsigned long r = SetFilePointer(stream->m_handle, posLo, &high, method);
+	int local = posHi;
+	unsigned long r = SetFilePointer((void*)stream[0], posLo, &local, method);
 	if (r == 0xffffffff && GetLastError() != 0)
 	{
-		stream->m_pos = 0xffffffffffffffffull;
+		stream[2] = 0xffffffff;
+		stream[3] = 0xffffffff;
 		return;
 	}
-	stream->m_pos = ((unsigned long long)(unsigned int)high << 32) | r;
+	stream[2] = r;
+	stream[3] = (unsigned int)local;
 }
 
 // ---------------------------------------------------------------------------------------------------------
@@ -895,16 +875,16 @@ unsigned long long __stdcall FUN_011ebb70(unsigned int* stream)
 // 011ebb90: truncate the file to `length` bytes, restoring the position.
 // ---------------------------------------------------------------------------------------------------------
 // @ 0x11ebb90
-char __stdcall FUN_011ebb90(FileStream* stream, long length, unsigned int unused)
+char FUN_011ebb90(unsigned int* stream, long length)
 {
-	(void)unused;
-	unsigned long saved = SetFilePointer(stream->m_handle, 0, 0, 1);
-	SetFilePointer(stream->m_handle, length, 0, 0);
-	bool ok = SetEndOfFile(stream->m_handle) == 1;
-	SetFilePointer(stream->m_handle, (long)saved, 0, 0);
+	unsigned long saved = SetFilePointer((void*)stream[0], 0, 0, 1);
+	SetFilePointer((void*)stream[0], length, 0, 0);
+	long ok = SetEndOfFile((void*)stream[0]);
+	SetFilePointer((void*)stream[0], (long)saved, 0, 0);
 
-	stream->m_pos = saved;
-	return (char)ok;
+	stream[2] = saved;
+	stream[3] = 0;
+	return (char)(ok == 1);
 }
 
 // ---------------------------------------------------------------------------------------------------------
@@ -992,22 +972,31 @@ int FUN_011ebd30(void)
 // record through the filesystem allocator.
 // ---------------------------------------------------------------------------------------------------------
 // @ 0x11ebd80
-void __stdcall FUN_011ebd80(void** handle)
+void FUN_011ebd80(void** handle)
 {
-	void* h = *handle;
-	CloseHandle(h);
+	CloseHandle(*handle);
 
-	unsigned int rec[4] = { (unsigned int)handle, 0, 0, 0 };
-	((RwFsAllocator*)g_rwFsAllocator)->release(rec);
+	unsigned int rec[4];
+	rec[0] = (unsigned int)handle;
+	rec[1] = 0;
+	rec[2] = 0;
+	rec[3] = 0;
+	void** alloc = *(void***)g_rwFsAllocator;
+	((void (__thiscall*)(void*, unsigned int*))alloc[2])(g_rwFsAllocator, rec);
 }
 
 // @ 0x11ebdc0
-char __stdcall FUN_011ebdc0(void** findHandle)
+char FUN_011ebdc0(void** findHandle)
 {
 	char ok = (char)(FindClose(*findHandle) == 1);
 
-	unsigned int rec[4] = { (unsigned int)findHandle, 0, 0, 0 };
-	((RwFsAllocator*)g_rwFsAllocator)->release(rec);
+	unsigned int rec[4];
+	rec[0] = (unsigned int)findHandle;
+	rec[1] = 0;
+	rec[2] = 0;
+	rec[3] = 0;
+	void** alloc = *(void***)g_rwFsAllocator;
+	((void (__thiscall*)(void*, unsigned int*))alloc[2])(g_rwFsAllocator, rec);
 	return ok;
 }
 

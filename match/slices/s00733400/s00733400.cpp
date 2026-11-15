@@ -192,38 +192,23 @@ void FUN_00733ed0(int param_1)
     }
 }
 
-// --- EH/unwind constructors (vtable + cookie).  The objects derive from two bases
-//     (GmeEditorResBase at +0, GmeRefCount at +4); constructing the member vector at +0xc
-//     is what makes cl emit the ctor's EH frame and the derived vtable stores. ------------
-extern "C" long __cdecl _InterlockedExchange(long volatile*, long);
-#pragma intrinsic(_InterlockedExchange)
+// --- EH/unwind constructors (vtable + cookie).  Vtable addresses are relocations; the EH
+//     prolog is approximated with a plain prolog, so these are not byte-exact. --------------
+extern void* g_vtblEditor;
+extern void* g_vtblCreatureAbility; // 0x013ef094
+extern void* g_vtblA; // 0x013ebcc8
+extern void* g_vtblB; // 0x013ef8d4
 
-struct GmeEditorResBase {
-    virtual ~GmeEditorResBase();
-};
-
-struct GmeRefCount {
-    volatile long mRef;      // +0x04 of the base, +0x08 of the object
-    virtual ~GmeRefCount();
-    GmeRefCount() { volatile long* p = &mRef; _InterlockedExchange(p, 0); }
-};
-
-// 0x006A46A0: vector of 0xc-byte elements, initialised from a 3-float value.
-struct VecC3 {
-    void* begin;
-    void* end;
-    void* cap;
-    VecC3(unsigned n, const void* value);
-};
-
-struct CtorObj : GmeEditorResBase, GmeRefCount
+struct CtorObj
 {
-    VecC3 mVec;      // +0x0c
-    int   mPad0;     // +0x18
-    int   mPad1;     // +0x1c
+    void* mVT0;
+    void* mVT1;
+    int   mRef;      // +0x08
+    int   mArr;      // +0x0c
+    int   mArrEnd;   // +0x10
+    int   mPad[3];
     int   mLast;     // +0x20
 
-    CtorObj(int arg);
     void ctor_c0(int arg);
     void ctor_640(int arg);
     void ctor_6e0(int arg);
@@ -235,24 +220,40 @@ struct CtorObj : GmeEditorResBase, GmeRefCount
 };
 
 // @ 0x007335c0
-CtorObj::CtorObj(int arg) : mVec((unsigned)arg, (const void*)&arg)
+void CtorObj::ctor_c0(int arg)
 {
+    mVT0 = g_vtblEditor;
+    mVT1 = g_vtblCreatureAbility;
+    mRef = 0;
+    mVT0 = g_vtblA;
+    mVT1 = g_vtblB;
+    FUN_006a46a0(arg, &arg);
     mLast = 0;
 }
 
 // @ 0x00733640
 void CtorObj::ctor_640(int arg)
 {
+    mVT0 = g_vtblEditor;
+    mVT1 = g_vtblCreatureAbility;
+    mRef = 0;
+    mVT0 = g_vtblA;
+    mVT1 = g_vtblB;
     char buf[16];
     FUN_007c7a40(arg, &arg);
-    FUN_0047cae0((int)mVec.begin, arg, buf, arg);
-    mVec.end = (void*)(arg * 0x10 + (int)mVec.begin);
+    FUN_0047cae0(mArr, arg, buf, arg);
+    mArrEnd = arg * 0x10 + mArr;
     mLast = 0;
 }
 
 // @ 0x007336e0
 void CtorObj::ctor_6e0(int arg)
 {
+    mVT0 = g_vtblEditor;
+    mVT1 = g_vtblCreatureAbility;
+    mRef = 0;
+    mVT0 = g_vtblA;
+    mVT1 = g_vtblB;
     FUN_006a4600(arg, &arg);
     mLast = 0;
 }
@@ -260,15 +261,20 @@ void CtorObj::ctor_6e0(int arg)
 // @ 0x00733760
 void CtorObj::ctor_760(int arg)
 {
+    mVT0 = g_vtblEditor;
+    mVT1 = g_vtblCreatureAbility;
+    mRef = 0;
+    mVT0 = g_vtblA;
+    mVT1 = g_vtblB;
     FUN_00733070(arg, &arg);
-    int* p = (int*)mVec.begin;
+    int* p = (int*)mArr;
     for (int n = arg; n != 0; --n)
     {
         if (p)
             *p = 0;
         p++;
     }
-    mVec.end = (void*)((int)mVec.begin + arg * 4);
+    mArrEnd = mArr + arg * 4;
     mLast = 0;
 }
 
@@ -293,7 +299,7 @@ void FUN_00733a50(void* p)
             for (int i = 0; i < e->mSrc.mNumElts; ++i)
             {
                 uint32_t h = *(uint32_t*)((char*)e->mSrc.mData + e->mSrc.mEltStride * i);
-                FUN_006c2690((int)h, (void*)((int)res->mVec.begin + 0xc * i));
+                FUN_006c2690((int)h, (void*)(res->mArr + 0xc * i));
             }
             e->mFormat = 3;
             EltArray tmp;
@@ -313,7 +319,7 @@ void FUN_00733a50(void* p)
                 res->ctor_640(e->mSrc.mNumElts);
             else
                 res = 0;
-            float* dst = (float*)res->mVec.begin;
+            float* dst = (float*)res->mArr;
             for (int i = 0; i < e->mSrc.mNumElts; ++i)
             {
                 uint32_t v = *(uint32_t*)((char*)e->mSrc.mData + e->mSrc.mEltStride * i);
@@ -344,7 +350,7 @@ void FUN_00733a50(void* p)
         float scale = 1.0f;
         if (e->mFormat == 11)
             scale = 3.051851e-05f;       // 1/32768
-        float* dst = (float*)res->mVec.begin;
+        float* dst = (float*)res->mArr;
         for (int i = 0; i < e->mSrc.mNumElts; ++i)
         {
             uint32_t v = *(uint32_t*)((char*)e->mSrc.mData + e->mSrc.mEltStride * i);
@@ -372,7 +378,7 @@ void FUN_00733a50(void* p)
         float scale = 1.0f;
         if (e->mFormat == 12)
             scale = 3.051851e-05f;
-        float* dst = (float*)res->mVec.begin;
+        float* dst = (float*)res->mArr;
         for (int i = 0; i < e->mSrc.mNumElts; ++i)
         {
             int off = e->mSrc.mEltStride * i;
@@ -433,7 +439,7 @@ void FUN_00733f20(void* pm)
                 float g = ftmp[1] * 255.0f;
                 float b = ftmp[2] * 255.0f;
                 float a = ftmp[3] * 255.0f;
-                *(uint32_t*)((int)res->mVec.begin + 4 * (int)v) =
+                *(uint32_t*)(res->mArr + 4 * (int)v) =
                     ((((int)a << 8 | (int)b) << 8 | (int)g) << 8) |
                     ((0xff - (int)a) - (int)b) - (int)g;
             }
@@ -482,7 +488,7 @@ void FUN_00733f20(void* pm)
                 uint32_t acc = 0;
                 for (uint32_t k = 0; k < (uint32_t)gatherCount; ++k)
                     ((uint8_t*)&acc)[k] = *(uint8_t*)(stride * v + data + k * 2);
-                *(uint32_t*)((int)res->mVec.begin + 4 * (int)v) = acc;
+                *(uint32_t*)(res->mArr + 4 * (int)v) = acc;
             }
 
             float ftmp[4];

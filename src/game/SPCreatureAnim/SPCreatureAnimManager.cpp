@@ -5,7 +5,6 @@
 #include "game/types.h"
 #include "SP/cViewer.h"
 #include <math.h>
-#include "sse_helpers.h"
 #include "nSPCreatureAnim/creature_instance_data.h"
 #include "nSPCreatureAnim/creature_static_data.h"
 #include "nSPCreatureAnim/queued_blender.h"
@@ -539,7 +538,7 @@ struct SL71
     void*    v09e70(void* a2, void* a3);
     void     v09f90();
     void     v0a020();
-    uint8 v0a0b0(void* a1, unsigned a2, unsigned a3);
+    unsigned v0a0b0(void* a1, unsigned a2, unsigned a3);
     void     v0a360(void* a2, void* a3);
     void*    v0a520(void* a2);
     unsigned v0a600();
@@ -2033,7 +2032,8 @@ struct AnimPimpl {
 };
 struct GoalList {
     uint8_t  pad00[0x50];
-    int      mSlots[11];    // +0x50 .. per-index rank; the use count of index i is mSlots[i+3] (+0x5c)
+    int      mSlots[8];     // +0x50
+    int      mCounts[8];    // +0x5c .. overlaps; classic overlapping-array trick
 
     int SelectFor(void* owner, int index, char useIndex); // 0x00a05660
 };
@@ -2045,9 +2045,7 @@ struct var_t {
 };
 void   FUN_009bd340(RigidBody* o);                              // 0x009bd340
 float  FUN_009d3530(void* o);                                   // 0x009d3530
-struct RegionAnim_s00a0_5660 {          // 0x009b3920 Set@TargetFrame (thiscall: ecx = region, ret 8)
-    void SetTargetFrame(const float* pos, const float* quat);
-};
+void   FUN_009b3920(const float* a, const float* b);            // 0x009b3920 Set@TargetFrame
 AnimGoalInfo* FUN_009ff750_s00a0_4d20(queued_blender* b);                  // 0x009ff750
 AnimGoalInfo* FUN_009ff6f0_s00a0_4d20(queued_blender* b, uint handle);     // 0x009ff6f0
 int    FUN_009fef90(queued_blender* b, AnimGoalInfo* g);        // 0x009fef90
@@ -2074,8 +2072,7 @@ struct CallbackPair {
     void*    arg;       // +0x20
     void*    fn;        // +0x24
 
-    // retail takes the pair on the stack (cdecl): `mov eax,[esp+8]` selects the object after push esi
-    static bool SetCallbackPair(CallbackPair* self, void* newObj);   // 0x00a057a0
+    bool SetCallbackPair(void* newObj);   // 0x00a057a0
 };
 struct Vec28 {
     void*  begin;       // +0x00
@@ -3181,7 +3178,6 @@ struct TreeMap {                                                     // rbtree<u
     void*  root;                                                     // +0x0c
     uint   pad10;                                                    // +0x10
     uint   count;                                                    // +0x14
-    void* insert(void** out, void* hint, void* key, char flag);      // 0x00a0ad10 (thiscall, ret 0x10)
     void* findOrInsert(uint* key);                                   // 0x00a0d2d0
     void* find(void** out, const void* key);                         // 0x00e5c780
 };
@@ -5159,17 +5155,15 @@ int cAnimatingCreature_s00a0_4d20::Release()
 }
 
 // @ 0x00a052e0
-struct AnimClock_s00a0_52e0 {      // 0x009d3530: anim clock, receiver = animObj + 0x15b8
-    float GetTime();
-};
 float AnimProgress(void* animObj)
 {
-    float frac = ((AnimClock_s00a0_52e0*)((char*)animObj + 0x15b8))->GetTime()
-               / *(float*)(*(char**)animObj + 0x3ec);
-    frac = SseClamp(frac, 0.0f, 1.0f);
-    float p = (float)pow((double)frac, 0.7);
+    float raw = FUN_009d3530((char*)animObj + 0x15b8);
+    float frac = raw / *(float*)(*(char**)animObj + 0x3ec);
+    if (!(frac > 0.0f)) frac = 0.0f;
+    if (frac > 1.0f) frac = 1.0f;
+    float p = (float)FUN_011e08f0((double)frac);
     float s = (float)sin(p * g_piOver2);
-    if (s < g_tiny) return 0.0f;
+    if (!(s > g_tiny)) return 0.0f;
     return s;
 }
 
@@ -5205,6 +5199,7 @@ void cAnimatingCreature_s00a0_4d20::UpdateGoalFade()
 // @ 0x00a054a0
 char WrappedAnim::SetFlagFromProperty(bool value)
 {
+    char old = mFlag3038;
     void* iface = *(void**)((char*)mOwner + 0x50);
     var_t* var = (var_t*)(*(void*(__thiscall**)(void*, uint32_t))(*(void***)iface + 10))(iface, 0xf0a16bfc);
     char* p;
@@ -5215,7 +5210,6 @@ char WrappedAnim::SetFlagFromProperty(bool value)
     } else {
         p = (char*)0x15d115d;
     }
-    char old = mFlag3038;
     if (*p != 0) {
         mFlag3038 = value;
         return old;
@@ -5283,27 +5277,28 @@ int GoalList::SelectFor(void* owner, int index, char useIndex)
     int chosen = 0;
     if (useIndex) {
         *(int*)(o + 0x54) = index;
-        ++mSlots[index + 3];
+        ++mCounts[index];
         chosen = index;
     }
     if (index >= 0) {
         int* slot = &mSlots[index];
-        for (int i = index; i >= 0; ) {
-            if (slot[3] < *slot || i == 0) {
-                *(int*)(o + 0x50) = i;
+        for (;;) {
+            if (slot[3] < *slot || index == 0) {
+                *(int*)(o + 0x50) = index;
                 if (!useIndex) {
-                    ++mSlots[i + 3];
+                    ++mCounts[index];
                     chosen = *(int*)(o + 0x50);
                 }
                 break;
             }
-            --i;
+            --index;
             --slot;
+            if (index < 0) break;
         }
     }
     if (chosen != 0 && chosen != *(int*)(o + 0x58)) {
         char* rb = *(char**)(o + 0x17c);
-        ((RegionAnim_s00a0_5660*)rb)->SetTargetFrame((const float*)(rb + 0x18), (const float*)(rb + 0x3c));
+        FUN_009b3920((const float*)(rb + 0x18), (const float*)(rb + 0x3c));
     }
     *(int*)(o + 0x58) = chosen;
     return chosen;
@@ -5369,22 +5364,22 @@ void* RBTreeHead::FindLower(void** outNode, uint32_t* key)
 }
 
 // @ 0x00a057a0
-bool CallbackPair::SetCallbackPair(CallbackPair* self, void* newObj)
+bool CallbackPair::SetCallbackPair(void* newObj)
 {
     void (*oldFn)(void*);
     void* oldArg;
     if (newObj != 0) {
         void** vt = *(void***)newObj;
         ((void(__thiscall*)(void*))vt[1])(newObj);
-        oldFn = *(void(**)(void*))((char*)self + 0x24);
-        oldArg = *(void**)((char*)self + 0x20);
-        *(void**)((char*)self + 0x20) = newObj;
-        *(void**)((char*)self + 0x24) = (void*)FUN_00a02d80;
+        oldFn = *(void(**)(void*))((char*)this + 0x24);
+        oldArg = *(void**)((char*)this + 0x20);
+        *(void**)((char*)this + 0x20) = newObj;
+        *(void**)((char*)this + 0x24) = (void*)FUN_00a02d80;
     } else {
-        oldFn = *(void(**)(void*))((char*)self + 0x24);
-        oldArg = *(void**)((char*)self + 0x20);
-        *(void**)((char*)self + 0x20) = 0;
-        *(void**)((char*)self + 0x24) = 0;
+        oldFn = *(void(**)(void*))((char*)this + 0x24);
+        oldArg = *(void**)((char*)this + 0x20);
+        *(void**)((char*)this + 0x20) = 0;
+        *(void**)((char*)this + 0x24) = 0;
     }
     if (oldFn != 0) oldFn(oldArg);
     return true;
@@ -7480,23 +7475,17 @@ void SL71::v0a020()
 }
 
 // @ 0x00a0a0b0
-uint8 SL71::v0a0b0(void* a1, unsigned a2, unsigned a3)
+unsigned SL71::v0a0b0(void* a1, unsigned a2, unsigned a3)
 {
-    if (a3 != 0)
-    {
-        unsigned key[4];
-        key[0] = (unsigned)(size_t)a1;
-        key[1] = a2;
-        key[2] = a3;
-        ((void (__thiscall *)(void*))FUN_009b3450)((void*)(size_t)a3);
-        struct Tag { bool b; } tag;
-        tag.b = false;
-        ((void (__thiscall *)(void*, Pair*, unsigned*, Tag))FUN_00a09420)(
-            (void*)((char*)this + 0x18), (Pair*)&a1, key, tag);
-        ((void (__thiscall *)(void*))FUN_009c26a0)((void*)(size_t)a3);
-        return ((Pair*)&a1)->inserted;
-    }
-    return 0;
+    if (a3 == 0)
+        return 0;
+    unsigned local_10 = (unsigned)(size_t)a1;
+    unsigned local_c  = a2;
+    unsigned local_8  = a3;
+    ((void (__fastcall *)(void*))FUN_009b3450)((void*)(size_t)a3);
+    FUN_00a09420(&a1, &local_10, (void*)(size_t)(a3 & 0xffffff00));
+    FUN_009c26a0((void*)(size_t)a3);
+    return a2 & 0xff;
 }
 
 // @ 0x00a0a120
@@ -8687,7 +8676,7 @@ void* TreeMap::findOrInsert(uint* key)
     k[0] = *key;
     k[1] = 0;
     void* out;
-    insert(&out, lb, k, 0);
+    FUN_00a0ad10(&out, lb, k, 0);
     return (char*)out + 0x14;
 }
 
@@ -9041,7 +9030,7 @@ void S::reset()
     KF* r = FUN_00a0d3e0(e, e, b);
     VHelper* vh = (VHelper*)&vec;
     vh->dtor(r, e);
-    vec.end -= (e - b);
+    vec.end = (KF*)((char*)vec.end + ((uint)((char*)e - (char*)b) / 0x18) * 0x18);
 }
 
 // @ 0x00a0e2e0

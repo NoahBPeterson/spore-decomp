@@ -147,7 +147,6 @@ void Unwind_01214420(void* frame) {
 void Unwind_012144d0(void* frame) {
   Del(frame, 0x0c, "Graphics");
   Clean<T_7a9610>(frame, 0x0c);
-  Clean<T_7a9610>(frame, 0x0c);
 }
 
 // @ 0x1214580
@@ -158,7 +157,7 @@ void Unwind_01214580(void* frame) {
 
 // @ 0x12145c0
 void Unwind_012145c0(void* frame) {
-  Clean<T_6ae110>(frame, 0x04);
+  Rel(frame, 0x04);
   Clean<T_7a9610>(frame, -0x14);
   Clean<T_7a9610>(frame, -0x10);
 }
@@ -240,7 +239,7 @@ void Unwind_01214cc0(void* frame) {
 
 // @ 0x1214d30
 void Unwind_01214d30(void* frame) {
-  Clean<T_7a9610>(frame, -0x48);
+  Rel(frame, -0x48);
   Clean<T_69d350>(frame, -0x44);
   Clean<T_69d350>(frame, 0x04);
 }
@@ -390,7 +389,7 @@ void Unwind_01215350(void* frame) {
 
 // @ 0x1215390
 void Unwind_01215390(void* frame) {
-  Clean<T_7a9610>(frame, 0x04);
+  Rel(frame, 0x04);
   Clean<T_933960>(frame, -0x1c);
   Clean<T_933960>(frame, -0x1c);
 }
@@ -443,7 +442,7 @@ void Unwind_01215710(void* frame) {
 
 // @ 0x1215770
 void Unwind_01215770(void* frame) {
-  Clean<T_7c8490>(frame, 0x0c);
+  Clean<T_7c8490>(frame, 0x04);
 }
 
 // @ 0x1215790

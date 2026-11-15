@@ -383,7 +383,7 @@ class cImageLayers {
   bool mVisible;  // +0x64
 };
 
-class cUILayeredObject : public EA::RefCountVTemplate<int> {
+class cUILayeredObject {
  public:
   void SetVisible(bool visible);   // 0x0080d7c0
   void RemoveModel(void* model);   // 0x0080e980
@@ -418,7 +418,7 @@ class vector {
   ~vector() {
     DoDestroyValues(mpBegin, mpEnd);
     if (mpBegin && ((int*)mpBegin)[-1] != 0)
-      EASTL_allocator_deallocate(mpBegin);
+      do_deallocate(mpBegin);
   }
   void do_deallocate(T* p);
 };
@@ -433,7 +433,7 @@ class cSwatchRenderer {
 
 class cSwatch3DView { public:
   bool mVisible;                                            // +0x00
-  AutoRefCount<cUILayeredObject> mLayeredObject;            // +0x04
+  cUILayeredObject* mLayeredObject;                         // +0x04
   eastl::vector<AutoRefCount<cMWModel> > mModels;           // +0x08
   uint32_t pad14;                                           // +0x14
   uint32_t pad18;                                           // +0x18
@@ -725,7 +725,7 @@ void cSwatch3DView::Shutdown() {
     }
     cUILayeredObject* layered = mLayeredObject;
     if (layered) {
-      mLayeredObject.mpObject = 0;
+      mLayeredObject = 0;
       ((cRefVt*)layered)->Vt8();
     }
   }
@@ -758,21 +758,19 @@ void cSwatch3DView::Shutdown() {
 cSwatch3DView::~cSwatch3DView() {
   if (mRenderer)
     Shutdown();
-  cSwatchTexture* texture = mTexture;
-  if (texture)
-    texture->FUN_0080df80();
-  cRefVt* camera = (cRefVt*)mCamera;
-  if (camera)
-    camera->Vt4();
-  cRefVt* renderer = (cRefVt*)mRenderer;
-  if (renderer)
-    renderer->Vt4();
-  cRefVt* window = (cRefVt*)mWindow;
-  if (window)
-    window->Vt4();
-  cAnimWorld* animWorld = (cAnimWorld*)mAnimWorld;
-  if (animWorld)
-    animWorld->Release();
+  if (mTexture)
+    FUN_0080df80(mTexture);
+  if (mCamera)
+    ((cRefVt*)mCamera)->Vt4();
+  if (mRenderer)
+    ((cRefVt*)mRenderer)->Vt4();
+  if (mWindow)
+    ((cRefVt*)mWindow)->Vt4();
+  if (mAnimWorld)
+    ((cAnimWorld*)mAnimWorld)->Release();
+  mModels.~vector();
+  if (mLayeredObject)
+    ((cRefVt*)mLayeredObject)->Vt8();
 }
 
 // @ 0x005F68A0

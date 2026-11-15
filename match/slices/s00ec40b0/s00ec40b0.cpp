@@ -110,10 +110,6 @@ extern "C" void* FUN_00ec40b0()
 // =====================================================================================================
 namespace UI
 {
-    struct CardDataBase
-    {
-        void reinit();                               // placeholder for the 0x00642100 base constructor
-    };
     class TimelineSporepediaCardData
     {
     public:
@@ -122,14 +118,12 @@ namespace UI
     void TimelineSporepediaCardData_ctor(void* self);   // 0x00642100 (base ctor)
 }
 
-// 0x00642100 is __thiscall (this in ecx) and returns `this` in eax. 0x00ec41e0 is its only in-slice caller and
-// cl inlined it there: the source is the base constructor's body, called as a member of the object.
-
 // @ 0x00ec41e0
-UI::TimelineSporepediaCardData* __fastcall UI_TimelineSporepediaCardData_ctor(UI::TimelineSporepediaCardData* self, int /*unused*/)
+void FUN_00642100(void*);            // base ctor at 0x00642100
+UI::TimelineSporepediaCardData* UI_TimelineSporepediaCardData_ctor(UI::TimelineSporepediaCardData* self)
 {
     void* p = self;
-    ((UI::CardDataBase*)p)->reinit();
+    FUN_00642100(p);
 
     uint8_t* b = (uint8_t*)p;
     b[0x78] = 0; b[0x79] = 0; b[0x7a] = 0; b[0x7b] = 0; b[0x7c] = 0;
@@ -139,9 +133,9 @@ UI::TimelineSporepediaCardData* __fastcall UI_TimelineSporepediaCardData_ctor(UI
     w[0x10 / 4] = (void*)0x0148907c;
     w[0x14 / 4] = (void*)0x0148906c;
 
-    *(int*)(b + 0x80) = -1;
     *(int*)(b + 0x84) = 0x7fffffff;
     *(int*)(b + 0x88) = 0x7fffffff;
+    *(int*)(b + 0x80) = -1;
     return self;
 }
 
@@ -213,29 +207,16 @@ static inline bool equal_rec(const Rec& a, const Rec& b)
     return a.key == b.key && a.value == b.value;
 }
 
-// @ 0x00ec4430  -- find(first,last,val): the matching record's iterator, or last when none matches. The value's
-// two dwords are hoisted into registers before the loop; the empty-range test loads `last` on the spot (the
-// original's `mov edx,[esp+8]; cmp eax,edx; je done`) and returns it from the shared epilogue.
-template <class It, class T>
-static inline It find_rec(It first, It last, const T& val)
-{
-    for (; first != last; ++first)
-        if (equal_rec(*first, val))
-            return first;
-    return last;
-}
-
-// @ 0x00ec4430  -- find(first,last,val): the matching record's iterator, or last when none matches (STL find).
+// @ 0x00ec4430  -- find(first,last,val): returns matching record pointer or last
 Rec* FUN_00ec4430(Rec* first, Rec* last, const Rec* val)
 {
-    const uint32_t key = val->key;
-    const uint32_t value = val->value;
-    for (; first != last; ++first)
+    while (first != last)
     {
-        if (first->key == key && first->value == value)
+        if (first->key == val->key && first->value == val->value)
             return first;
+        ++first;
     }
-    return last;
+    return first;
 }
 
 // @ 0x00ec4460

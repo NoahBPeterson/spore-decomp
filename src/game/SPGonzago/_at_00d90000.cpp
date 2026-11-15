@@ -790,7 +790,7 @@ int    FUN_00d99500(void* p);                             // 0x00d99500
 int    FUN_00d994c0(void* p);                             // 0x00d994c0
 void*  FUN_00d999d0(int handle);                          // 0x00d999d0 (WatchMemoryBlock)
 void   FUN_00da6270(Creature* c, int state);              // 0x00da6270
-void* __stdcall FUN_00b3d2b0(int a, void* b);             // 0x00b3d2b0 (ret 8)
+void*  FUN_00b3d2b0(int a, void* b);                      // 0x00b3d2b0 (ret 8)
 void   FUN_00ac7de0(void* p);                             // 0x00ac7de0 (thiscall)
 void   GetAny_00d997e0(void* p);                          // 0x00d997e0
 // ---- items of slice s00d9af60 end
@@ -932,7 +932,6 @@ extern "C" void  __cdecl FUN_00c12310(void* creature, int a, int b, int c);   //
 extern "C" char  __cdecl FUN_00c123f0(void* creature, int x);      // AnimationFinished
 extern "C" void  __cdecl FUN_00bc98f0(void* tree, int a, int b);   // ClearAll
 extern "C" void  __cdecl FUN_00bcafe0(void* x, int y);             // 0x00bcafe0
-extern "C" void  __fastcall FUN_00bcb430(void* self);               // 0x00bcb430
 extern "C" char  __cdecl FUN_00ac0730(void* a, void* b);           // 0x00ac0730
 extern "C" void  __cdecl FUN_00d9b950(void* arr, void* a, int n, float f1, float f2,
                                       float f3, float f4, float f5, float f6,
@@ -1661,7 +1660,7 @@ void FUN_00d9a290(int a1, void* a2, void* a3, int* a4)
     if (!((v == 6) || (v == 4) || (rec[0x4c8] != 0))) return;
     if (!FUN_00d9a110((void*)(*(int*)((char*)a2 + 0x28) + a1 * 0x34 - 0x18),
                      (void*)(*(int*)((char*)a2 + 0x28) + a1 * 0x34 + 0x1c))) return;
-    a4[1] = FUN_00d9a190((char*)a2 + 0x28 + a1 * 0x34 + 0x1c, (float*)a3);
+    a4[1] = FUN_00d9a190((char*)a2 + 0x28 + a1 * 0x34 - 0x18 + 0x1c, (float*)a3);
     {
         int noun2 = (int)((DB*)*(void**)((char*)DAT_016c7aa4 + 0x74))->FUN_00f3e8a0(*(int*)a2);
         if (*(int*)(*(int*)(noun2 + 0x70) + off - 0x28) == 6 &&
@@ -1939,21 +1938,17 @@ bool FUN_00d9b2d0(BehaviorMgr* mgr, int* pair)
 float FUN_00d9b320(Creature* self, int a, int b, int c, int d, void* stimuli, char* outFlag)
 {
     AnimHandle* h = self->mpBehaviorTreeData->mStimuli.Play(0, 0x200);
-    if (h != 0) {
-        int f = FUN_00d998d0((int)h, 0x4ffcdeda);
-        if (f != 0) {
-            void* v = FUN_00b3d2b0(f, &self->mSub34);
-            ((void (__thiscall*)(void*))FUN_00ac7de0)(v);
-            void* p = (void*)d;
-            if (p) ((void (__thiscall*)(void*))GetAny_00d997e0)(p);
-            *(int*)((char*)p + 8) = f;
-            *(int*)((char*)p + 0x18) = h->mState;
-            *(char*)stimuli = 1;
-            return 1.0f;
-        }
-    }
-    (void)a;(void)b;(void)c;(void)outFlag;
-    return 0.0f;
+    if (h == 0) return 0.0f;
+    int f = FUN_00d998d0((int)h, 0x4ffcdeda);
+    if (f == 0) return 0.0f;
+    void* v = FUN_00b3d2b0(f, &self->mSub34);
+    FUN_00ac7de0(v);
+    if (stimuli) GetAny_00d997e0(stimuli);
+    *(int*)((char*)stimuli + 8) = f;
+    *(int*)((char*)stimuli + 0x18) = h->mState;
+    *outFlag = 1;
+    (void)a;(void)b;(void)c;(void)d;
+    return 1.0f;
 }
 
 // @ 0x00d9b3a0
@@ -2194,21 +2189,26 @@ void S::FUN_00d9d100(void* creature, int target)
   char* self = (char*)this;
   char* t = (char*)target;
   float pos[3];
-  float* p = (float*)(*(int*)(t + 0xf4) + 0x3c);
-  pos[0] = p[0];
-  pos[1] = p[1];
-  pos[2] = p[2];
-  int slot = ((int (__thiscall*)(void*, void*))FUN_00afa5d0)((void*)(t + 0x178), pos);
+  int src = *(int*)(t + 0xf4);
+  pos[0] = *(float*)(src + 0x3c);
+  pos[1] = *(float*)(src + 0x40);
+  pos[2] = *(float*)(src + 0x44);
+  int slot = FUN_00afa5d0(pos);
   *(int*)(self + 0xc) = slot;
   if (slot == -1) return;
-  void* slotObj = ((void* (__thiscall*)(void*, int))FUN_00af9ff0)((void*)(t + 0x178), slot);
-  ((void (__thiscall*)(void*, void*))FUN_00afa030)(slotObj, creature);
+  void* slotObj = FUN_00af9ff0((void*)(self + 0x178), slot);
+  FUN_00afa030(slotObj, creature);
+  float face[3];
+  face[0] = *(float*)(t + 0x1c);
+  face[1] = *(float*)(t + 0x20);
+  face[2] = *(float*)(t + 0x24);
+  unsigned nx = *(unsigned*)&face[0] ^ 0x80000000u;
+  unsigned ny = *(unsigned*)&face[1] ^ 0x80000000u;
+  unsigned nz = *(unsigned*)&face[2] ^ 0x80000000u;
   float nf[3];
-  nf[0] = -*(float*)(t + 0x1c);
-  nf[1] = -*(float*)(t + 0x20);
-  nf[2] = -*(float*)(t + 0x24);
-  ((void (__thiscall*)(void*, int, void*, void*, float, float))FUN_00c1c5c0)(creature, 2, (void*)((char*)slotObj + 0xc), nf, 2.0f, 1.0f);
-  void* r = ((void* (__thiscall*)(void*))FUN_00c41ec0)((char*)creature + 0xc0);
+  nf[0] = *(float*)&nx; nf[1] = *(float*)&ny; nf[2] = *(float*)&nz;
+  FUN_00c1c5c0(creature, 2, (void*)((char*)slotObj + 0xc), nf, 1.0f, 2.0f);
+  void* r = FUN_00c41ec0((char*)creature + 0xc0);
   *(unsigned*)((char*)r + 0x70) |= 2;
 }
 
@@ -2264,12 +2264,19 @@ char S::FUN_00d9d1e0(void* creature)
 }
 
 // @ 0x00d9d570
-void __cdecl FUN_00d9d570(void* owner)
+void S::FUN_00d9d570(void* owner)
 {
-  char* self = (char*)owner;
+  char* self = (char*)this;
   int arr = *(int*)(*(int*)(self + 0xb4c) + 0x600);
   if (arr != 0 && *(int*)(arr + 0x1ac) == (int)self) *(int*)(arr + 0x1ac) = 0;
-  FUN_00bcb430(*(void**)(self + 0xb4c));
+  int base = *(int*)(self + 0xb4c);
+  int* p = *(int**)(base + 0x600);
+  if (p != 0) {
+    *(int*)(base + 0x600) = 0;
+    ((void (*)(int*))VFn(p, 8))(p);
+  }
+  FUN_00bcafe0(p, *(int*)(base + 0x604));
+  *(int*)(base + 0x604) = -1;
 }
 
 // @ 0x00d9d800
@@ -2311,22 +2318,19 @@ void S::FUN_00d9d890(int* first, int* last)
 }
 
 // @ 0x00d9d8d0
-void __cdecl FUN_00d9d8d0(int* out, int* src, int* end, int* dst)
+void S::FUN_00d9d8d0(int* out, int* src, int* end, int* dst)
 {
-  Elem20* s = (Elem20*)src;
-  Elem20* e = (Elem20*)end;
-  Elem20* d = (Elem20*)dst;
-  *out = (int)d;
-  if (s != e) {
-    do {
+  *out = (int)dst;
+  if (src != end) {
+    int* d = dst;
+    while (src != end) {
       if (d != 0) {
-        d->a = s->a;
-        d->f[0] = s->f[0]; d->f[1] = s->f[1]; d->f[2] = s->f[2]; d->f[3] = s->f[3];
-        d->f[4] = s->f[4]; d->f[5] = s->f[5]; d->f[6] = s->f[6];
+        d[0] = src[0]; d[1] = src[1]; d[2] = src[2]; d[3] = src[3];
+        d[4] = src[4]; d[5] = src[5]; d[6] = src[6]; d[7] = src[7];
       }
-      ++s;
-      ++d;
-    } while (s != e);
+      src += 8;
+      d += 8;
+    }
     *out = (int)d;
   }
 }
@@ -2348,89 +2352,82 @@ void __cdecl FUN_00d9d940(void* dst, unsigned n, void* src)
 }
 
 // @ 0x00d9d9a0
-void __cdecl FUN_00d9d9a0(void* arr, int a, int n, int i, int v, float f1, float f2, float f3, float f4, float f5, float f6, float f7, void* cmp)
+void S::FUN_00d9d9a0(void* arr, int a, int n, int i, int v, float f1, float f2, float f3, float f4, float f5, float f6, float f7, void* cmp)
 {
   char* base = (char*)arr;
   (void)a; (void)v;
-  int child = i * 2 + 2;
-  if (child < n) {
-    do {
-      char* c = base + child * 0x20;
-      char ok = ((char (*)(void*, void*))cmp)(c, c - 0x20);
-      if (ok != 0) --child;
-      *(Elem20*)(base + i * 0x20) = *(Elem20*)(base + child * 0x20);
-      i = child;
-      child = i * 2 + 2;
-    } while (child < n);
+  for (;;) {
+    int child = i * 2 + 2;
+    if (n <= child) break;
+    char* c = base + child * 0x20;
+    char ok = ((char (*)(void*, void*))cmp)(c, c - 0x20);
+    if (ok != 0) child = i * 2 + 1;
+    Copy8((int*)(base + i * 0x20), (int*)(base + child * 0x20));
+    i = child;
   }
-  if (child == n) {
-    *(Elem20*)(base + i * 0x20) = *(Elem20*)(base + (child - 1) * 0x20);
-    i = child - 1;
+  if (i == n - 1) {
+    Copy8((int*)(base + i * 0x20), (int*)(base + (n - 1) * 0x20));
+    i = n - 1;
   }
-  FUN_00d9b950(arr, (void*)a, i, *(float*)&v, f1, f2, f3, f4, f5, f6, f7, cmp);
+  FUN_00d9b950(arr, (void*)a, i, f1, f2, f3, f4, f5, f6, f7, *(float*)&v, cmp);
 }
 
 // @ 0x00d9da80
-void __cdecl FUN_00d9da80(void* arr, void* a, int n, int i, float f1, float f2, float f3)
+void S::FUN_00d9da80(void* arr, void* a, int n, int i, float f1, float f2, float f3)
 {
   int* base = (int*)arr;
-  int child = i * 2 + 2;
-  if (child < n) {
-    do {
-      int l = base[child - 1];
-      void* c0 = l == 0 ? 0 : (void*)(l + 0xc0);
-      int r = base[child];
-      void* c1 = r == 0 ? 0 : (void*)(r + 0xc0);
-      char ok = ((char (__thiscall*)(void*, void*, void*))FUN_00ac0730)((void*)&f2, c1, c0);
-      if (ok != 0) --child;
-      base[i] = base[child];
-      i = child;
-      child = i * 2 + 2;
-    } while (child < n);
+  (void)a;
+  for (;;) {
+    int child = i * 2 + 2;
+    if (n <= child) break;
+    int r = base[child];
+    void* c1 = r == 0 ? 0 : (void*)(r + 0xc0);
+    int l = base[child - 1];
+    void* c0 = l == 0 ? 0 : (void*)(l + 0xc0);
+    char ok = FUN_00ac0730(c0, c1);
+    if (ok != 0) child = i * 2 + 1;
+    base[i] = base[child];
+    i = child;
   }
-  if (child == n) {
-    base[i] = base[child - 1];
-    i = child - 1;
+  if (i == n - 1) {
+    base[i] = base[n - 1];
+    i = n - 1;
   }
   FUN_00d9b9b0(arr, a, i, f1, f2, f3);
 }
 
 // @ 0x00d9db30
-void __cdecl FUN_00d9db30(void* src, void* end, void* dst)
+void S::FUN_00d9db30(void* src, void* end, void* dst)
 {
-  Elem20* s = (Elem20*)src;
-  Elem20* e = (Elem20*)end;
-  Elem20* d = (Elem20*)dst;
+  int* s = (int*)src;
+  int* e = (int*)end;
+  int* d = (int*)dst;
   if (s != e) {
-    do {
+    while (s != e) {
       if (d != 0) {
-        d->a = s->a;
-        d->f[0] = s->f[0]; d->f[1] = s->f[1]; d->f[2] = s->f[2]; d->f[3] = s->f[3];
-        d->f[4] = s->f[4]; d->f[5] = s->f[5]; d->f[6] = s->f[6];
+        d[0] = s[0]; d[1] = s[1]; d[2] = s[2]; d[3] = s[3];
+        d[4] = s[4]; d[5] = s[5]; d[6] = s[6]; d[7] = s[7];
       }
-      ++s;
-      ++d;
-    } while (s != e);
+      s += 8; d += 8;
+    }
   }
 }
 
 // @ 0x00d9dc80
-void __cdecl FUN_00d9dc80(void* self0, int a, int b, int c, int d, void* block)
+void S::FUN_00d9dc80(void* creature, void* block)
 {
-  char* self = (char*)self0;
+  char* self = (char*)this;
   char* blk = (char*)block;
-  if (((*(unsigned*)(self + 0xb58) >> 9) & 1) == 0)
-    ((void (__thiscall*)(void*, void*, void*, void*))VFn(self, 0x84))(self, 0, 0, 0);
-  ((void (__thiscall*)(void*, int, int))FUN_00bc98f0)((void*)(*(int*)(self + 0xb4c) + 8), 0x10000000, 0);
-  ((void (__thiscall*)(void*))FUN_00c0ba10)(self);
+  if (((*(unsigned*)(self + 0xb58) >> 9) & 1) == 0) VCall3(self, 0x84, 0, 0, 0);
+  FUN_00bc98f0((void*)(*(int*)(self + 0xb4c) + 8), 0x10000000, 0);
+  FUN_00c0ba10(self);
   *(unsigned*)(self + 0xb58) &= 0xffffffdfu;
   if (blk != 0) {
     int* q = *(int**)(blk + 4);
     if (q != 0) {
-      ((void (__thiscall*)(int*))((void**)(*q))[1])(q);
+      ((void (*)(int*))((void**)q[0])[1])(q);
     }
   }
-  (void)a;(void)b;(void)c;(void)d;
 }
 
 // @ 0x00d9e420

@@ -11,7 +11,3 @@ slices/s00e4f860/s00e4f860.cpp  ?level@cState16@@QAEHXZ  00e4fd80  /O2 /MD /Gy /
 slices/s00e4f860/s00e4f860.cpp  ?FUN_00e50590@@YAXPAH00H@Z  00e50590  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e4f860/s00e4f860.cpp  ?FUN_00e501f0@@YAXXZ  00e501f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00e4f860/s00e4f860.cpp  ?SP_sOnQuitDesktopButtonClick@@YAXXZ  00e501a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s00e4f860/s00e4f860.cpp  ?FUN_00e4fe50@@YAXXZ  00e4fe50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s00e4f860/s00e4f860.cpp  ?FUN_00e50400@@YAXPAXD@Z  00e50400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s00e4f860/s00e4f860.cpp  ?FUN_00e4f920@@YAXHPAMMMMM@Z  00e4f920  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s00e4f860/s00e4f860.cpp  ?FUN_00e4f9d0@@YAMH@Z  00e4f9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

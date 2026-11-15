@@ -20,8 +20,7 @@ uint32 __cdecl FUN_011e22c0(uint32 typeId);                  // ArenaTypeRegGetT
 uint32 __cdecl FUN_011e22b0(void* arena);                    // arena header lookup
 void*  __cdecl FUN_011e22a0(void* arena);                    // ArenaSectionManifest::ExternalArenas
 void*  __cdecl FUN_011e3e10(uint32 id);                      // arena lookup by id
-void* __cdecl FUN_011e5e90(void* a, void* b);               // stream ctor
-typedef void* (__cdecl* rw_stream_new_fn)(uint32 size);      // operator new (allocator)
+void*  __cdecl FUN_011e5e90(void* a, void* b);               // stream ctor
 uint32 __cdecl FUN_011e5ff0(const char* s, int n);           // string length helper
 uint32 __cdecl FUN_011e8b20(char* dst, const char* src);     // StringCopy
 uint32 __cdecl FUN_011e8c40(const char* s);                  // string length
@@ -719,36 +718,23 @@ void ArenaPathHolder::Split(const char* path)
         end[-1] = 0;
 }
 
-// ------------------------------------------------------------------ rw stream
-// Stream object rw_stream_push allocates (0x130 bytes; only the vtable slot and
-// the ordinal at +0x0c are touched here) and its __thiscall constructor.
-typedef struct rwStreamBase rwStreamBase;
-struct rwStreamBase {
-    void*  vf;                      // +0x00
-    uint8  pad04[0x08];
-    uint32 ordinal;                 // +0x0c
-    rwStreamBase* Ctor(void* a, void* b);       // 0x011e5e90 (__thiscall)
-};
-
 // @ 0x011e59b0
 void __cdecl rw_stream_push(int a, int b)
 {
-    rwStreamBase* mem = (rwStreamBase*)FUN_011e6d20(0x130);
-    rwStreamBase* p;
-    if (mem != 0)
-        p = mem->Ctor((void*)a, (void*)b);
-    else
+    void* p = FUN_011e6d20(0x130);
+    if (p == 0) {
         p = 0;
+    } else {
+        p = FUN_011e5e90((void*)a, (void*)b);
+    }
     uint32* head = (uint32*)g_streamListHead;
     uint32* slot = head + 1;
     uint32* prev = (uint32*)*slot;
-    uint32 n = head[2];
-    p->vf = 0;
-    p->ordinal = n + 1;
+    *(uint32*)p = 0;
     *slot = (uint32)p;
-    if (prev != 0) {
+    head[2] = head[2] + 1;
+    if (prev == 0)
+        *head = (uint32)p;
+    else
         *prev = (uint32)p;
-        return;
-    }
-    head[0] = (uint32)p;
 }

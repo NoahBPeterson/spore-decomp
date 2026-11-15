@@ -8,7 +8,6 @@
 extern float g_15435bc, g_15435c0;
 #include <new>
 #include <intrin.h>
-#pragma intrinsic(_InterlockedExchange)
 #include "EA/IO/FileStream.h"
 
 // ---- items of slice s007ffc70 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -21,8 +20,7 @@ void  __fastcall f_8027e0(void* self);
 void  __cdecl f_804f10(float a, float b);
 void  __cdecl f_804ed0(float* a, float* b);
 bool  __cdecl f_806a60(void* a, void* b, int c, int d);
-struct LayoutMgr { void* GetWorldMainWindow(); };   // 0x00810620 (ret 4)
-LayoutMgr* __stdcall GetLayoutManager(unsigned id);  // 0x00805070
+void* __cdecl f_805070(uint32_t id);          // SPUIHelpers::GetLayoutManager
 void* __cdecl f_80620(void* manager);         // cSPUILayoutManager::GetWorldMainWindow
 void* __cdecl f_962a10(void* p);              // UI::Window::Window
 extern float g_15435bc, g_15435c0;
@@ -44,7 +42,7 @@ struct C_801980 { char pad[0x44]; uint8_t m44; char pad45[0xb]; void* m50; void 
 // ---- items of slice s008019f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern char fac_a[], fac_b[];
 void* __cdecl operator_new(unsigned size, const char* name, int a, int b, const char* f, int l);
-struct C_801ac0 { bool f(void* p2, void* p3, int p4, int p5); };
+struct C_801ac0 { int f(void* p2, void* p3, int p4, int p5); };
 extern "C" void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" __declspec(dllimport) void* __stdcall LoadImageW(void* hinst, const wchar_t* name, unsigned type,
 int cx, int cy, unsigned fuLoad);
@@ -184,7 +182,7 @@ void __stdcall f_801420(int a, int b)
 void __stdcall f_801450(int* p1, int* p2)
 {
   float x, y;
-  f_804ed0(&x, &y);
+  f_804ed0(&y, &x);
   *p1 = (int)x;
   *p2 = (int)y;
 }
@@ -213,7 +211,7 @@ int C_8014c0::Init()
   ((void (__thiscall*)(void*, int, int))VFN(m4c, 0x7c))(m4c, 0x10, 1);
   ((void (__thiscall*)(void*, int, int))VFN(m4c, 0x7c))(m4c, 1, 0);
   ((void (__thiscall*)(void*, int))VFN(m4c, 0xac))(m4c, 0);
-  void* mainWin = GetLayoutManager(0x5b598fa)->GetWorldMainWindow();
+  void* mainWin = f_80620(f_805070(0x5b598fa));
   ((void (__thiscall*)(void*, void*))VFN(mainWin, 0xd8))(mainWin, m4c);
   ((void (__thiscall*)(void*, float, float))VFN(m4c, 0x68))(m4c, 1.0f, 1.0f);
   m28 = 1;
@@ -227,14 +225,15 @@ void C_8016e0::Move(float x, float y)
     return;
   float px = g_15435bc + x;
   float py = g_15435c0 + y;
-  void* mainWin = GetLayoutManager(0x5b598fa)->GetWorldMainWindow();
-  if (m48 && (void*)((void* (__thiscall*)(void*))VFN(m48, 0x18))(m48)) {
+  void* mainWin = f_80620(f_805070(0x5b598fa));
+  if (m48) {
     void* w = (void*)((void* (__thiscall*)(void*))VFN(m48, 0x18))(m48);
-    {
+    if (w) {
+      void* a = (void*)((void* (__thiscall*)(void*))VFN(w, 0x18))(w);
       void* b = (void*)((void* (__thiscall*)(void*))VFN(mainWin, 0x34))(mainWin);
-      void* c = (void*)((void* (__thiscall*)(void*))VFN(w, 0x38))(w);
+      void* c = (void*)((void* (__thiscall*)(void*))VFN(a, 0x38))(a);
       float cw = *(float*)((char*)c + 8) + px;
-      if (cw > *(float*)((char*)b + 8))
+      if (*(float*)((char*)b + 8) <= cw && cw != *(float*)((char*)b + 8))
         px = x - (*(float*)((char*)c + 8) + g_15435bc);
       float ch = *(float*)((char*)b + 0xc) - (*(float*)((char*)c + 0xc) + py);
       if (ch < 0.0f)
@@ -331,19 +330,19 @@ void Sub_8019f0()
 }
 
 // @ 0x00801ac0
-bool C_801ac0::f(void* param_2, void* param_3, int param_4, int param_5)
+int C_801ac0::f(void* param_2, void* param_3, int param_4, int param_5)
 {
   if (param_5 != 0x2393756)
     return 0;
   void* p = operator_new(0x18, "App/cSPUICursorManager", 0, 0, 0, 0);
   void* r = 0;
   if (p) {
-    *(void* volatile*)p = (void*)fac_a;
-    _InterlockedExchange((long*)((char*)p + 4), 0);
+    *(void**)p = (void*)fac_a;
+    *(void**)((char*)p + 4) = 0;
     *(void**)((char*)p + 8) = 0;
     *(void**)((char*)p + 0xc) = 0;
     *(void**)((char*)p + 0x10) = 0;
-    *(void* volatile*)p = (void*)fac_b;
+    *(void**)p = (void*)fac_b;
     r = p;
   }
   void* v = ((void* (__thiscall*)(void*))((*(void***)param_2)[0x10 / 4]))(param_2);
@@ -459,9 +458,10 @@ uint8_t C_801d80::f(IRecordSrc* src, void* info, int c, int type)
 // @ 0x00801e90
 void MapBase::Erase(void** outIter, void* node)
 {
-  *(int*)((char*)this + 0x14) = *(int*)((char*)this + 0x14) - 1;
-  void* volatile next = (void*)(unsigned)RBTreeIncrement(node);
-  RBTreeErase(node, (char*)this + 4);
+  void* tree = this;
+  *(int*)((char*)tree + 0x14) = *(int*)((char*)tree + 0x14) - 1;
+  void* next = (void*)(unsigned)RBTreeIncrement(node);
+  RBTreeErase(node, (char*)tree + 4);
   int a = *(int*)((char*)node + 0x14);
   int sz = (*(int*)((char*)node + 0x1c) - a) & 0xfffffffe;
   if (sz > 2 && a)
@@ -603,11 +603,11 @@ bool CurMgr::Clear()
 // @ 0x008025e0
 void* __fastcall Sub_8025e0(void* self)
 {
-  *(void* volatile*)self = (void*)cc_a;
-  _InterlockedExchange((long*)((char*)self + 4), 0);
-  *(void* volatile*)((char*)self + 8) = (void*)cc_b;
-  *(void* volatile*)self = (void*)cc_c;
-  *(void* volatile*)((char*)self + 8) = (void*)0x1416fd4;
+  *(void**)self = (void*)cc_a;
+  *(void**)((char*)self + 4) = 0;
+  *(void**)((char*)self + 8) = (void*)cc_b;
+  *(void**)self = (void*)cc_c;
+  *(void**)((char*)self + 8) = (void*)0x1416fd4;
   *(void**)((char*)self + 0x14) = 0;
   *(void**)((char*)self + 0x18) = 0;
   *(void**)((char*)self + 0x1c) = 0;

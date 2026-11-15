@@ -69,10 +69,9 @@ void __thiscall IdxVec::Get(t_symbol* out, unsigned idx)
 {
   out->s_name = gEmptySymbol.s_name;
   out->s_thing = gEmptyA;
-  unsigned n = (unsigned)((int)(end - begin) >> 3);
-  if (idx < n) {
-    const char* const* p = (const char* const*)begin;
-    out->s_name = p[idx * 2];
-    out->s_thing = (int)(size_t)p[idx * 2 + 1];
+  int n = (int)(end - begin) >> 3;
+  if (idx < (unsigned)n) {
+    out->s_name = *(const char**)(begin + idx * 8);
+    out->s_thing = *(int*)(begin + idx * 8 + 4);
   }
 }

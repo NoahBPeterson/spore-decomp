@@ -23,11 +23,3 @@
 ../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e829a0@@YAXH@Z  00e829a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82970@@YAHXZ  00e82970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82c80@SP@@YAXPAUcEditorState@1@PAIPAE1PAUtLayoutKey@1@@Z  00e82c80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e83380@SP@@YA_NPAUcLayoutOwner@1@IPAM@Z  00e83380  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e831a0@SP@@YAXPAUtLayoutKey@1@II@Z  00e831a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e83430@SP@@YAXPAUcEditorWorld@1@@Z  00e83430  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82620@@YAHHPAUcVec3@SP@@@Z  00e82620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e82d50@SP@@YAXPAUcVec3@1@H@Z  00e82d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e83590@SP@@YAXPAUcRefTriple@1@@Z  00e83590  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e83640@SP@@YAXPAXIM@Z  00e83640  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
-../src/game/SPGonzago/SPCellSlowCompile.cpp  ?FUN_00e833f0@SP@@YAXIII@Z  00e833f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

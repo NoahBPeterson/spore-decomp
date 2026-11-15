@@ -415,9 +415,6 @@ cTribeView_s00e9_2ca0::cTribeView_s00e9_2ca0()
     mField28 = 0;
     mField2c = 0x5c4fce4c;
     mTransitionEnd = 0;
-    // the stand-in class's own vtable copy is not the game's: point at the retail table once the
-    // members are in place (as ~cTribeView does), so the object's vtable slot matches the original.
-    *(void**)this = (void*)0x1486ca4;
 }
 
 // @ 0x00e93c00

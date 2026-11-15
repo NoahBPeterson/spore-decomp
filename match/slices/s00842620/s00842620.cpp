@@ -552,8 +552,9 @@ void cPurgeCommand_s0084_2620::Execute(cArguments* pArgs)
 // @ 0x00842a00
 void cVersionCommand_s0084_2620::Execute(cArguments* pArgs)
 {
-    const char* const* ppVer = pArgs->MainArguments(1);
-    int version = ((cParser*)mParser)->ParseInt(*ppVer);
+    const char* pVer = *pArgs->MainArguments(1);
+    cParser* pParser = (cParser*)mParser;
+    int version = pParser->ParseInt(pVer);
     mState->mCurrentVersion = version;
     if (version < mState->mMinVersion) {
         char buf[16];

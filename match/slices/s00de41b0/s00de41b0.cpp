@@ -642,9 +642,9 @@ void __thiscall cGalaxyGameEntryImpl::FUN_00de4630()
         mec = 1;
         me8 = 2;
         FUN_00809db0(&g_dw15a41d4, &g_dw15a3860);
-    } else if (mef != 0) {                  // re-read the member: this keeps cl from folding the clause away,
-        med = 1;                            // so the mef byte stays in al like the original
-    } else if (m1f1 != c) {
+    } else if (c != 0) {
+        med = 1;
+    } else if (m1f1 != 0) {
         mee = 1;
     }
 }

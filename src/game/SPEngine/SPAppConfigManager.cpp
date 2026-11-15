@@ -1815,29 +1815,6 @@ struct vector_s007c_c5f0 : VectorBase_s007c_c5f0<T, A> {
 };
 }
 namespace eastl {
-template <typename T, typename A>
-template <typename It>
-void vector_s007c_c5f0<T, A>::DoAssignFromIterator(It first, It last, std::random_access_iterator_tag) {
-    const size_type n = (size_type)(last - first);
-    if (n > capacity()) {
-        T* const pNewData = DoRealloc(n, first, last);
-        DoDestroyValues(this->mpBegin, this->mpEnd);
-        DoFree(this->mpBegin, capacity());
-        this->mpBegin = pNewData;
-        this->mpEnd = this->mpBegin + n;
-        this->mpCapacity = this->mpEnd;
-    } else if (n <= size()) {
-        T* const pNewEnd = copy_impl<0, std::random_access_iterator_tag>::do_copy(first, last, this->mpBegin);
-        DoDestroyValues(pNewEnd, this->mpEnd);
-        this->mpEnd = pNewEnd;
-    } else {
-        It position = first + size();
-        copy_impl<0, std::random_access_iterator_tag>::do_copy(first, position, this->mpBegin);
-        this->mpEnd = uninitialized_copy_ptr(position, last, this->mpEnd);
-    }
-}
-}
-namespace eastl {
 template <typename Key_s007c_c5f0, typename Value, typename Compare>
 struct map_value_compare_s007c_c5f0 {
     Compare c;
@@ -1926,10 +1903,9 @@ struct fixed_vector_s007c_c5f0 : vector_s007c_c5f0<T, fixed_vector_allocator<siz
         this->DoAssignFromIterator(x.mpBegin, x.mpEnd, std::random_access_iterator_tag());
     }
     fixed_vector_s007c_c5f0& operator=(const fixed_vector_s007c_c5f0& x) {
-        if (this != &x) {
-            std::random_access_iterator_tag tag;
+        if (&x != this) {
             this->erase(this->mpBegin, this->mpEnd);
-            this->DoAssignFromIterator(x.mpBegin, x.mpEnd, tag);
+            this->DoAssignFromIterator(x.mpBegin, x.mpEnd, std::random_access_iterator_tag());
         }
         return *this;
     }
@@ -2138,20 +2114,17 @@ struct V16 {
     void* mInline;   // +0x10
     void clear();
 };
-struct Vec64 { void dtor(); };                         // 0x004b5440 (thiscall, ~vector)
 struct Big2 {
     char   pad00[4];
     void*  m04;          // +0x04
     char   pad08[0x1c - 0x08];
     V16    m1c;          // +0x1c
-    char   pad30[0x34 - 0x30];
+    char   pad28[0x34 - 0x28];
     void*  m34;          // +0x34
     void*  m38;          // +0x38
     char   pad3c[0x4c - 0x3c];
     void*  m4c;          // +0x4c
-    char   pad50[0x64 - 0x50];
-    Vec64  m64;          // +0x64
-    ~Big2();
+    void dtor();
 };
 struct MapV {
     void*  mpTree;    // +0
@@ -3446,19 +3419,11 @@ inline void AssignRaw(string8& dst, const StrRaw& src)
 // @ 0x007cc5f0
 SP::cOption & SP::cOption::operator=(SP::cOption const & x)
 {
-    cOption_s007c_c5f0* self = (cOption_s007c_c5f0*)this;
-    const cOption_s007c_c5f0& s = *(const cOption_s007c_c5f0*)&x;
-    std::random_access_iterator_tag tag;
-    self->mID = s.mID;
-    self->mDefaultSetting = s.mDefaultSetting;
-    self->mCurrentSetting = s.mCurrentSetting;
-    if (&self->mPropertySettings != &s.mPropertySettings) {
-        eastl::fixed_vector_s007c_c5f0<EA::AutoRefCount_s007c_c5f0<cPropertyList_s007c_c5f0>, 4, 1>& d = self->mPropertySettings;
-        const eastl::fixed_vector_s007c_c5f0<EA::AutoRefCount_s007c_c5f0<cPropertyList_s007c_c5f0>, 4, 1>& o = s.mPropertySettings;
-        d.erase(d.mpBegin, d.mpEnd);
-        d.DoAssignFromIterator(o.mpBegin, o.mpEnd, tag);
-    }
-    self->mExternalSettings = s.mExternalSettings;
+    mID = x.mID;
+    mDefaultSetting = x.mDefaultSetting;
+    mCurrentSetting = x.mCurrentSetting;
+    mPropertySettings = x.mPropertySettings;
+    mExternalSettings = x.mExternalSettings;
     return *this;
 }
 
@@ -3466,11 +3431,6 @@ SP::cOption & SP::cOption::operator=(SP::cOption const & x)
 SP::cOption_s007c_c5f0::cOption_s007c_c5f0(const cOption_s007c_c5f0& x)
 : mID(x.mID), mDefaultSetting(x.mDefaultSetting), mCurrentSetting(x.mCurrentSetting),
       mPropertySettings(x.mPropertySettings), mExternalSettings(x.mExternalSettings) {}
-
-namespace SP {
-cOption_s007c_c5f0::~cOption_s007c_c5f0()
-{}
-}  // namespace SP
 
 // @ 0x007cc7f0
 template void SP::cOptionVec::DoInsertValue(SP::cOption_s007c_c5f0*, const SP::cOption_s007c_c5f0&)
@@ -3537,9 +3497,9 @@ VVec::~VVec()
 }
 
 // @ 0x007cf4e0
-Big2::~Big2()
+void Big2::dtor()
 {
-    m64.dtor();
+    FUN_004b5440();
     if (m4c)
         EFree(m4c);
     ((VecCommon*)((char*)this + 0x34))->destructRange(m34, m38);

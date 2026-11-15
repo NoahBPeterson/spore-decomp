@@ -56,7 +56,7 @@ struct C3 {
     char pad[8];
     void* stream;       // +8
     unsigned char flag; // +0xc
-    char read(int size);
+    unsigned char read(int size);
 };
 struct C5 { char pad[0x20]; float mfProgress; void setProgress(float v); };
 struct C6 { VP asInterface(int iid); };
@@ -610,19 +610,18 @@ bool C2a::f(int, int)
 { flag = 0; return false; }
 
 // @ 0x0069d210
-char C3::read(int size)
+unsigned char C3::read(int size)
 {
     char buffer[1024];
-    int remaining = size;
-    unsigned blocks = (unsigned)size >> 10;
     if (size >= 0x400) {
-        remaining = size - ((int)blocks << 10);
+        unsigned blocks = (unsigned)size >> 10;
+        size -= blocks << 10;
         do {
             ((void(__thiscall*)(void*, void*, int))(*(void***)stream)[0x34 / 4])(stream, buffer, 0x400);
         } while (--blocks);
     }
-    if (remaining > 0) {
-        ((void(__thiscall*)(void*, void*, int))(*(void***)stream)[0x34 / 4])(stream, buffer, remaining);
+    if (size > 0) {
+        ((void(__thiscall*)(void*, void*, int))(*(void***)stream)[0x34 / 4])(stream, buffer, size);
     }
     return flag;
 }

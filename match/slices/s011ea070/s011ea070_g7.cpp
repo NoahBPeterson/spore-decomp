@@ -68,15 +68,11 @@ struct FreeDesc {
   uint32_t mZero2;   // +0x0c
 };
 
-// The allocator's vtable as the filesys code sees it (slot 2 = +0x08).
-struct AllocVtbl {
-  void (__thiscall* slot0)(void* self);                    // +0x00
-  void (__thiscall* slot1)(void* self);                    // +0x04
-  void (__thiscall* release)(void* self, FreeDesc* desc);   // +0x08
-};
+typedef void (__thiscall* AllocFreeFn)(void* self, FreeDesc* desc);
 
 static inline void AllocatorFree(void* alloc, FreeDesc* desc) {
-  ((AllocVtbl*)*(void**)alloc)->release(alloc, desc);
+  void** vtbl = *(void***)alloc;
+  ((AllocFreeFn)vtbl[2])(alloc, desc);
 }
 
 // filesys stream handle (0x28 bytes); only the fields the two helpers read.
@@ -84,7 +80,8 @@ struct FsHandle {
   uint8_t  m00[0x08];   // +0x00
   int32_t  m08;         // +0x08
   uint8_t  m0c[0x0c];   // +0x0c
-  uint64_t mSize;       // +0x18  stream size (two dwords in the original)
+  int32_t  m18;         // +0x18
+  int32_t  m1c;         // +0x1c
 
   FsHandle* Construct(const char* path, int flags, void* resolved); // 0x011ecdf0
   void Cleanup();                                                   // 0x011ecf40
@@ -188,16 +185,18 @@ int Wrapper790(char* dst, unsigned remain, const char* fmt, ...) {
 // @ 0x011ea7d0
 bool FileIsNonEmpty(const char* path) {
   FsHandle* mem = (FsHandle*)RwAlloc(0x28);
-  FsHandle* h = mem != 0 ? mem->Construct(path, 0, ResolvePath(path, 0)) : 0;
+  FsHandle* h = 0;
+  if (mem != 0)
+    h = mem->Construct(path, 0, ResolvePath(path, 0));
   int size = h->m08;
-  bool nonempty = size != 0;
   h->Cleanup();
-  AllocVtbl* vtbl = *(AllocVtbl**)g_rwFsAllocator;
   FreeDesc desc;
-  memset(&desc, 0, sizeof(desc));
   desc.mPtr = h;
-  vtbl->release(g_rwFsAllocator, &desc);
-  return nonempty;
+  desc.mZero0 = 0;
+  desc.mZero1 = 0;
+  desc.mZero2 = 0;
+  AllocatorFree(g_rwFsAllocator, &desc);
+  return size != 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -206,18 +205,23 @@ bool FileIsNonEmpty(const char* path) {
 // @ 0x011ea850
 uint64_t FileSizePair(const char* path) {
   FsHandle* mem = (FsHandle*)RwAlloc(0x28);
-  FsHandle* h = mem != 0 ? mem->Construct(path, 0, ResolvePath(path, 0)) : 0;
-  int open = h->m08;
-  uint64_t size = 0;
-  if (open != 0)
-    size = h->mSize;
+  FsHandle* h = 0;
+  if (mem != 0)
+    h = mem->Construct(path, 0, ResolvePath(path, 0));
+  uint32_t lo = 0;
+  uint32_t hi = 0;
+  if (h->m08 != 0) {
+    lo = (uint32_t)h->m18;
+    hi = (uint32_t)h->m1c;
+  }
   h->Cleanup();
-  AllocVtbl* vtbl = *(AllocVtbl**)g_rwFsAllocator;
   FreeDesc desc;
-  memset(&desc, 0, sizeof(desc));
   desc.mPtr = h;
-  vtbl->release(g_rwFsAllocator, &desc);
-  return size;
+  desc.mZero0 = 0;
+  desc.mZero1 = 0;
+  desc.mZero2 = 0;
+  AllocatorFree(g_rwFsAllocator, &desc);
+  return ((uint64_t)hi << 32) | lo;
 }
 
 // ---------------------------------------------------------------------------

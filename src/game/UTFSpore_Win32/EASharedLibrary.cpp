@@ -710,10 +710,8 @@ EA::SharedLibrary_s0093_6090::~SharedLibrary_s0093_6090()
     if (mHandlerBegin != 0 && ((int*)mHandlerBegin)[-1] != 0)
         FreeMem(mHandlerBegin);
     wchar_t* p = mpPathBegin;
-    int d = (int)((int)((int)mpPathCap - (int)p) & 0xfffffffeU);
-    if (d > 2 && p != 0)
+    if ((((char*)mpPathCap - (char*)p) & 0xfffffffe) > 2 && p != 0)
         FreeMem(p);
-    *(void**)this = (void*)0x13f65b4;   // ILibraryCommand vftable
 }
 
 // @ 0x00936e10

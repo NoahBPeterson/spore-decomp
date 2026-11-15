@@ -334,24 +334,24 @@ char* __cdecl ReadLine94(char* buf)
     }
     char* out = buf;
     int left = maxLen - 1;
-    char c;
+    char c = (char)-1;
     int r = -1;
     if (left > 0) {
-        do {
-            if (s->i30((int)&c, 1) != 1) {
-                r = -1;                 // read failed: the original forces -1 (`or eax,-1`)
+        for (;;) {
+            r = s->i30((int)&c, 1);
+            if (r != 1)
                 break;
-            }
-            r = c;                      // the original sign-extends the byte into eax
-            if (r < 0)
+            if (c < 0)
                 break;
-            *out++ = (char)r;
-            if (r == '\n')
+            *out++ = c;
+            if (c == '\n')
                 break;
-        } while (--left > 0);
+            if (--left <= 0)
+                break;
+        }
     }
     *out = 0;
-    if (r < 0 && out == buf)            // retail tests the last char (or -1), not the read count
+    if (r < 0 && out == buf)
         return 0;
     return buf;
 }
@@ -827,41 +827,24 @@ int __thiscall SSLManager::RemoveSession()
     return m->Unlock();
 }
 
-// Temporary SSL_CTX params callback's rbtree: anchor at +4, count at +0x14, the
-// recyclable-node free list at +0x18, node size at +0x28.
-struct SSLTree94 {
-    unsigned pad00;         // +0
-    void*    anchor;        // +4  (rbtree base node)
-    char     pad08[0xc];    // +8 .. +0x13
-    int      count;         // +0x14
-    void*    freeList;      // +0x18
-    char     pad1c[0xc];    // +0x1c .. +0x27
-    unsigned nodeSize;      // +0x28
-
-    void** insert(void** __restrict out, void* parent, unsigned* key, char flag);
-};
-
 // @ 0x0094FA60
-void** SSLTree94::insert(void** __restrict out, void* parent, unsigned* key, char flag)
+void** __fastcall Fn0094fa60(int param_1, int, void** out, void* parent, unsigned* key, char flag)
 {
-    int lt = (flag == 0 && parent != &anchor && *key >= *(unsigned*)((char*)parent + 0x10)) ? 1 : 0;
-    void* node = freeList;
+    int lt = (flag == 0 && parent != (void*)(param_1 + 4) && *key >= *(unsigned*)((char*)parent + 0x10)) ? 1 : 0;
+    void* node = *(void**)(param_1 + 0x18);
     if (node != 0)
-        freeList = *(void**)node;
-    else {
-        unsigned size = nodeSize;
-        node = operator new(size,
-                            "EASTL", 0, 0,
-                            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-                            0xd1);
+        *(void**)(param_1 + 0x18) = *(void**)node;
+    else
+        node = operator new(*(unsigned*)(param_1 + 0x28),
+                           "EASTL", 0, 0,
+                           "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                           0xd1);
+    if ((char*)node + 0x10 != 0) {
+        *(unsigned*)((char*)node + 0x10) = key[0];
+        *(unsigned*)((char*)node + 0x14) = key[1];
     }
-    unsigned* dst = (unsigned*)((char*)node + 0x10);
-    if (dst != 0) {
-        dst[0] = key[0];
-        dst[1] = key[1];
-    }
-    RBTreeInsert(node, parent, &anchor, lt);
-    ++count;
+    RBTreeInsert(node, parent, (void*)(param_1 + 4), lt);
+    *(int*)(param_1 + 0x14) = *(int*)(param_1 + 0x14) + 1;
     *out = node;
     return out;
 }

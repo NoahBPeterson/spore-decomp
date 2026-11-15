@@ -207,19 +207,19 @@ void Blob5b0::dtor() {
 // ===========================================================================
 //  0x00dfc600  range destructor, stride 0x188, inner vector of 0x44 elements
 // ===========================================================================
-struct EffectVec { void EraseRange(u32 first, u32 last); };
+struct EffectVec { void EraseRange(void* first, void* last); };
 // @ 0x00dfc600
-void EffectVec::EraseRange(u32 first, u32 last) {
-    if (first >= last) return;
-    do {
+void EffectVec::EraseRange(void* firstP, void* lastP) {
+    char* first = (char*)firstP;
+    char* last = (char*)lastP;
+    for (; first < last; first += 0x188) {
         u32 end = *(u32*)(first + 0x1c);
         for (u32 e = *(u32*)(first + 0x18); e < end; e += 0x44) {
             ((Elem44*)(e + 4))->sub_f280f0();
         }
         int p = *(int*)(first + 0x18);
         if (p && *(int*)(p - 4) != 0) operator_delete((void*)p);
-        first += 0x188;
-    } while (first < last);
+    }
 }
 
 // ===========================================================================
@@ -373,7 +373,7 @@ struct BlobE40 {
 };
 // @ 0x00dfce40
 void BlobE40::dtor() {
-    ((EffectVec*)((char*)this + 0x84))->EraseRange((u32)mp84, (u32)mp88);
+    ((EffectVec*)((char*)this + 0x84))->EraseRange(mp84, mp88);
     if (mp84 && *(int*)((char*)mp84 - 4) != 0) operator_delete(mp84);
     m3c.sub_f280f0();
     ((Elem3c*)this)->sub_f280f0();
@@ -483,12 +483,11 @@ Sub028& Sub028::operator=(const Sub028& o) {
 //  0x00dfd300  range destructor over 0x238-byte records
 // ===========================================================================
 // @ 0x00dfd300
-void __stdcall d300(int* first, int* last) {
+void __cdecl d300(int* first, int* last) {
     if (first >= last) return;
     int* pi = first + 0x84;
     do {
-        bool negative = (((u32)*first) >> 31) & 1;
-        if (!negative) {
+        if (*first >= 0) {
             int x = *pi;
             if (x && *(int*)(x - 4) != 0) operator_delete((void*)x);
             u32 e1 = (u32)pi[-0x78];

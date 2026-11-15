@@ -45,11 +45,9 @@ struct EditorResource2 {
     u32   arr34[4];          // +0x34
     void Destroy();
 };
-extern "C" long __cdecl _InterlockedExchange(long volatile* target, long value);
-#pragma intrinsic(_InterlockedExchange)
 struct PropertyList {
     void* vtbl;              // +0x00
-    volatile long field04;   // +0x04 (atomic reference count)
+    u32   field04;           // +0x04
     u32   f08, f0c, f10, f14, f18; // +0x08
     void* field1c;           // +0x1c
     PropertyList(void* p);
@@ -154,7 +152,7 @@ void EditorResource2::Destroy()
 PropertyList::PropertyList(void* p)
 {
     vtbl = (void*)0x13ebcdc;
-    _InterlockedExchange(&field04, 0);
+    field04 = 0;
     f08 = 0; f0c = 0; f10 = 0; f14 = 0; f18 = 0;
     vtbl = (void*)0x140a5bc;
     field1c = p;

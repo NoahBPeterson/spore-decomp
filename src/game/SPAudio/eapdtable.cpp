@@ -19,6 +19,5 @@ bool __cdecl fx_register_all()
     ok &= fx_register_decal();
     ok &= fx_register_metaparticles();
     bool last = fx_register_sound();
-    ok = last & ok;
-    return ok;
+    return last & ok;
 }

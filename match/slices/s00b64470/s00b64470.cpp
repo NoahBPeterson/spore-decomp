@@ -317,10 +317,10 @@ struct IShapeSource {
     PV2 PV
     virtual void* MakeShapeKey(void* owner);           // +0x0c
 };
-// Container returned by the collision-world singleton (slot +0x0c maps an owner key to the shape class).
+// Container returned by the collision-world singleton (slot +0x0c resolves the source).
 struct IShapeContainer {
     PV2 PV
-    virtual void* MakeShapeKey(void* owner);           // +0x0c
+    virtual void* ResolveSource(void* owner);          // +0x0c
     virtual IShapeContainer* Self();                   // +0x10
 };
 struct ICollisionWorld {
@@ -362,23 +362,7 @@ int BuildShapeFromSource(void* owner, float scale, IShapeSource* source)
 int BuildShapeFromWorld(void* owner, float scale)
 {
     IShapeContainer* container = g_hkCollisionWorld->GetContainer();
-    void* key = container->MakeShapeKey(owner);
-    if (!key)
-        return 0;
-    int result = 0;
-    IShapeContainer* self = container->Self();
-    ShapeBuilderFn builder = (ShapeBuilderFn)GetShapeBuilderMap()->find(key, self);
-    if (!builder)
-        return result;
-    return builder(owner, scale, self);
-}
-
-#if 0
-// @ 0x00b64a00
-int BuildShapeFromWorld_alt(void* owner, float scale)
-{
-    IShapeContainer* container = g_hkCollisionWorld->GetContainer();
-    void* key = container->MakeShapeKey(owner);
+    void* key = container->ResolveSource(owner);
     if (!key)
         return 0;
     int result = 0;
@@ -387,8 +371,6 @@ int BuildShapeFromWorld_alt(void* owner, float scale)
         result = builder(owner, scale, container);
     return result;
 }
-#endif
-
 
 // ---- Mesh-group selection for one layer --------------------------------------------------------
 struct cModelInstance {

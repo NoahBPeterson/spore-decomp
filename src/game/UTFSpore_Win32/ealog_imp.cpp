@@ -252,7 +252,7 @@ struct RBTreeMap {
     void  DoNukeSubtree(RBNode* node);
     RBNode** find(RBNode** out, const char** key);
     RBNode** erase(RBNode** outNext, RBNode* pos);
-    RBNode** DoInsertValueImpl(RBNode** out, RBNode* parent, const void* value, char hasParent);
+    void  DoInsertValueImpl(RBNode** out, RBNode* parent, const void* value, char hasParent);
     void  DoInsertValue(RBNode** out, const void* value);
 };
 }
@@ -1365,7 +1365,7 @@ EA::Trace::RBNode** EA::Trace::RBTreeMap::find(EA::Trace::RBNode** out, const ch
 }
 
 // @ 0x00923b40
-__declspec(noinline) void EA::Trace::RBTreeMap::DoNukeSubtree(EA::Trace::RBNode* node)
+void EA::Trace::RBTreeMap::DoNukeSubtree(EA::Trace::RBNode* node)
 {
     while (node) {
         DoNukeSubtree(node->mpLeft);
@@ -1391,12 +1391,12 @@ bool EA::Trace::LogFilterGroupLevels_s0092_34f0::RemoveGroupLevel(const char* na
 {
     if (name == 0 || *name == 0) {
         EA::Trace::RBNodeBase* end = &mGroupLevelMap.mAnchor;
-        for (EA::Trace::RBNode* n = (EA::Trace::RBNode*)end->mpRight; n != (EA::Trace::RBNode*)end; n = (EA::Trace::RBNode*)eastl_RBTreeIncrement(n))
+        for (EA::Trace::RBNode* n = (EA::Trace::RBNode*)end->mpLeft; n != (EA::Trace::RBNode*)end; n = (EA::Trace::RBNode*)eastl_RBTreeIncrement(n))
             EA_operator_delete((void*)n->mpKey);
         EA::Trace::RBNodeBase* root = (EA::Trace::RBNodeBase*)end->mpParent;
         while (root) {
-            mGroupLevelMap.DoNukeSubtree((EA::Trace::RBNode*)((EA::Trace::RBNode*)root)->mpLeft);
-            EA::Trace::RBNodeBase* next = root->mpRight;
+            mGroupLevelMap.DoNukeSubtree((EA::Trace::RBNode*)((EA::Trace::RBNode*)root)->mpRight);
+            EA::Trace::RBNodeBase* next = root->mpLeft;
             ((void(__thiscall*)(void*, EA::Trace::RBNodeBase*, int))(*(void***)mGroupLevelMap.mpAllocator)[3])(mGroupLevelMap.mpAllocator, root, 0x18);
             root = next;
         }
@@ -1407,11 +1407,11 @@ bool EA::Trace::LogFilterGroupLevels_s0092_34f0::RemoveGroupLevel(const char* na
         mGroupLevelMap.mnSize = 0;
         return false;
     }
-    EA::Trace::RBNode* found;
+    EA::Trace::RBNode* found = 0;
     mGroupLevelMap.find(&found, &name);
     if (found != (EA::Trace::RBNode*)&mGroupLevelMap.mAnchor) {
         EA_operator_delete((void*)found->mpKey);
-        EA::Trace::RBNode* next = found;
+        EA::Trace::RBNode* next = 0;
         mGroupLevelMap.erase(&next, found);
         return true;
     }
@@ -1457,9 +1457,7 @@ EA::Trace::Server_s0092_34f0::Server_s0092_34f0()
     mDefaultFormatter = 0;
     mUnknown30 = 0;
     _InterlockedExchange((volatile long*)&mnRefCount, 0);
-    EA::Thread::Mutex_s0092_34f0* pMutex = &mMutex;
-    __assume(pMutex != 0);
-    new (pMutex) EA::Thread::Mutex_s0092_34f0(0, 1);
+    new (&mMutex) EA::Thread::Mutex_s0092_34f0(0, 1);
 }
 
 // @ 0x00923dc0
@@ -1471,24 +1469,22 @@ void* FUN_00923dc0(void* out, const char* fmt, ...)
 }
 
 // @ 0x00923de0
-EA::Trace::RBNode** EA::Trace::RBTreeMap::DoInsertValueImpl(EA::Trace::RBNode** out, EA::Trace::RBNode* parent, const void* value, char hasParent)
+void EA::Trace::RBTreeMap::DoInsertValueImpl(EA::Trace::RBNode** out, EA::Trace::RBNode* parent, const void* value, char hasParent)
 {
-    int color = 0;
+    char color = 0;
     if (!hasParent && parent != (EA::Trace::RBNode*)&mAnchor) {
         const char* k = *(const char**)value;
         if (_stricmp(k, parent->mpKey) >= 0)
             color = 1;
     }
     EA::Trace::RBNode* node = (EA::Trace::RBNode*)((void*(__thiscall*)(void*, int, int, int))(*(void***)mpAllocator)[2])(mpAllocator, 0x18, 0, (int)mpAllocator2);
-    const char** pKey = &node->mpKey;
-    if (pKey) {
+    if (node) {
         node->mpKey = *(const char**)value;
         node->mnValue = *(int*)((char*)value + 4);
     }
     eastl_RBTreeInsert(node, parent, &mAnchor, color);
     mnSize++;
-    *out = node;
-    return out;
+    if (out) *out = node;
 }
 
 // @ 0x00923e70
@@ -1582,9 +1578,6 @@ void EA::Trace::RBTreeMap::DoInsertValue(EA::Trace::RBNode** out, const void* va
         if (out) *out = spot;
     }
 }
-
-// The dev-only base constructor the header declares is empty; the original's LogReporter ctor does not call it.
-namespace EA { namespace Trace { ILogReporter::ILogReporter() {} } }
 
 // @ 0x00924170
 EA::Trace::LogReporter::LogReporter(char const * name)

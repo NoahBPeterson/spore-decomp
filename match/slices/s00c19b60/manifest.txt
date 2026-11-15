@@ -1,1 +1,0 @@
-slices/s00c19b60/s00c19b60.cpp  ?AllocRows@CAnimTable@@QAEPAUAnimRow@@HHH@Z  00c19cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

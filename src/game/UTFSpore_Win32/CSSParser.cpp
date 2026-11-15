@@ -49,7 +49,7 @@ struct CharStream {
     char  Fn8f3a10(int);         // match a digit
     void  Fn8f3a40(int);         // match digits while in range
     int   Fn8f3d20(int c);       // match a string up to terminator c
-    __declspec(noinline) char Fn8f3a80();            // MatchEscape (stub)
+    char  Fn8f3a80();            // MatchEscape (stub)
 };
 struct CSSParser {
     void* Fn8f3900(int p1, wchar16* begin, wchar16* end);

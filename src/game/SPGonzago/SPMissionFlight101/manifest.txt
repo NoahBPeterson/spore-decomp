@@ -4,5 +4,3 @@
 ../src/game/SPGonzago/SPMissionFlight101.cpp  ?PostLoad@cSPMissionFlight101@@QAEXXZ  00c55ef0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionFlight101.cpp  ?Destroy@cSPMissionFlight101@@QAEPAXD@Z  00c55fc0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPMissionFlight101.cpp  ?OnSubMissionComplete@cSPMissionFlight101@@QAEXXZ  00c56170  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPMissionFlight101.cpp  ?GetUIMediumDescription@cSPMissionFlight101@@QAEXPAX@Z  00c55de0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPMissionFlight101.cpp  ?GetUILongDescription@cSPMissionFlight101@@QAEXPAX@Z  00c55e50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

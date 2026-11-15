@@ -344,10 +344,13 @@ bool Win32Clipboard::WriteText(const wchar_t* text, int len)
                     memcpy(p, text, bytes);
                     *(unsigned short*)(p + bytes) = 0;
                     GlobalUnlock(h);
-                    if (SetClipboardData(13, h))
+                    if (SetClipboardData(13, h)) {
                         ok = true;
-                    else
-                        GlobalFree(h);
+                        CloseClipboard();
+                        --mnSettingText;
+                        return ok;
+                    }
+                    GlobalFree(h);
                 }
             }
             CloseClipboard();
@@ -477,11 +480,12 @@ void* FUN_0092ad50(bool create)
     char* g = (char*)g_ClipboardAutoPtr;
     if (*(void**)(g + 0x10) == 0 && create) {
         void* mem = operator_new(0x150, "Clipboard", 0, 0, 0, 0);
-        if (mem != 0)
-            return FUN_0092ac90(new (mem) EA::Clipboard::Clipboard());
-        return FUN_0092ac90(0);
+        if (mem != 0) {
+            void* obj = 0;
+            (void)obj;
+        }
     }
-    return *((void**)((char*)g_ClipboardAutoPtr + 0x10));
+    return *(void**)(g + 0x10);
 }
 
 // @ 0x0092adb0

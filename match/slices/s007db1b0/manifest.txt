@@ -8,4 +8,3 @@ slices/s007db1b0/s007db1b0.cpp  ?SetFocus@cSmoothCameraController@@QAEXH@Z      
 slices/s007db1b0/s007db1b0.cpp  ?SetZoomDuration@cSmoothCameraController@@QAEXI@Z   007dbd90  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
 slices/s007db1b0/s007db1b0.cpp  ?GetSavedCamera@cSmoothCameraController@@QAEPAXXZ   007dbdd0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
 slices/s007db1b0/s007db1b0.cpp  ?SetSavedCamera@cSmoothCameraController@@QAEXPAM@Z  007dbdf0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
-slices/s007db1b0/s007db1b0.cpp  ?Clear@cPackInfoVec@@QAE_NXZ  007db8b0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast

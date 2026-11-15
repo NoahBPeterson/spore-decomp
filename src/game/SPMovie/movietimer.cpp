@@ -11,8 +11,7 @@ namespace rw {
 namespace core {
 namespace timer {
 class Stopwatch
-{
-public:
+{ public:
     void*   vftable;     // +0x00
     void*   mCallback;   // +0x04
     int32_t mUnits;      // +0x08
@@ -42,7 +41,7 @@ struct ICoreAllocator
     virtual void* Alloc(uint32_t size, const char* name, int a,
                         int b, int c);                     // +0x04
     virtual void  v08();                                   // +0x08
-    virtual void  v0c();                                   // +0x0c
+    virtual void  Free(void* p, int a);                    // +0x0c
 };
 namespace rw {
 namespace movie {
@@ -78,14 +77,15 @@ rw::movie::MovieTimer* rw::movie::MovieTimer::Ctor(ICoreAllocator* allocator)
 {
     mAllocator = allocator;
     Stopwatch* sw = (Stopwatch*)allocator->Alloc(0x28, "Stopwatch object", 1, 4, 0);
+    mStopwatch = sw;
     if (sw != 0)
     {
-        Stopwatch* c = rw::core::timer::Stopwatch_Ctor(sw, 4, 0);
-        mStopwatch = c;
-        mCallback = (IMovieTimerCallback*)c;
+        sw = rw::core::timer::Stopwatch_Ctor(sw, 4, 0);
+        mStopwatch = sw;
+        mCallback = 0;
         return this;
     }
-    this->mStopwatch = sw;
-    this->mCallback = (IMovieTimerCallback*)sw;
+    mStopwatch = 0;
+    mCallback = 0;
     return this;
 }

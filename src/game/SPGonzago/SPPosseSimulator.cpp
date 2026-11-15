@@ -61,14 +61,12 @@ public:
     Slot**   mpEnd;                    // +0x24
     Slot**   mpCapacity;               // +0x28
     int pad_2c[3];                     // +0x2c..0x37
-    int pad_38[8];                     // +0x38..0x57
+    int pad_38;
     void removeSlot(RefObj* p);
     void* Dtor(unsigned int flags);
     void Shutdown();
     PosseSim* Init();
 };
-typedef char PosseSimSizeCheck[sizeof(PosseSim) == 0x58 ? 1 : -1];
-void* operator new(unsigned int, const char*, int = 0, int = 0, int = 0, int = 0);
 class Inst {
 public:
     void slot();          // vtable slot 7 (offset 0x1c)
@@ -251,14 +249,14 @@ extern "C" int __cdecl F52c90(int a, int b)
 // @ 0x00d52cb0
 void __cdecl F52cb0(int* arr, int start, int hole, int value, Cmp cmp)
 {
-    int parent;
     if (hole <= start) {
         arr[hole] = value;
         return;
     }
+    int parent;
     do {
         parent = (hole - 1) >> 1;
-        if (!cmp(arr[parent], *(int*)(value + 8)))
+        if (!cmp(arr[parent], value))
             break;
         arr[hole] = arr[parent];
         hole = parent;
@@ -390,10 +388,8 @@ void** partition(void** first, void** last, int pivot, char (__cdecl* pred)(int,
         while (pred((int)*first, pivot)) {
             ++first;
         }
-        for (;;) {
+        while (pred(pivot, (int)last[-1])) {
             --last;
-            if (!pred(pivot, (int)*last))
-                break;
         }
         if (first >= last) {
             return first;
@@ -445,15 +441,17 @@ void* PosseSim_Instance()
 {
     void* inst = *(void**)0x169e5b8;
     if (inst == 0) {
-        PosseSim* raw = new ("Simulator/cPosseSimulator") PosseSim;
-        if (raw) {
-            raw->Init();
+        Inst* raw = (Inst*)EA_Allocate(0x58, "Simulator/cPosseSimulator", 0, 0, 0, 0);
+        if (raw != 0) {
+            ((PosseSim*)raw)->Init();
+            inst = (void*)raw;
+            *(void**)0x169e5b8 = inst;
+            ((Inst*)inst)->slot();
+        } else {
+            *(void**)0x169e5b8 = 0;
         }
-        *(PosseSim**)0x169e5b8 = raw;
-        ((Inst*)raw)->slot();
-        inst = raw;
     }
-    return inst;
+    return *(void**)0x169e5b8;
 }
 
 // @ 0x00d53a80

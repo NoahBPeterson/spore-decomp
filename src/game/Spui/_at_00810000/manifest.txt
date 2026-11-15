@@ -14,6 +14,3 @@
 ../src/game/Spui/_at_00810000.cpp  ?FUN_008177e0@@YAXPAUMsgBoxE@@PAX_N@Z  008177e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/_at_00810000.cpp  ?UpdateTimeText@PieMenuTimeText@@QAEXXZ  00817cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/_at_00810000.cpp  ??0cSPUIProgressBarWin@UTFWin@@QAE@XZ  0081d510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/_at_00810000.cpp  ?Ctor@ItemWinCtor@@QAEPAU1@XZ  0081aa00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/_at_00810000.cpp  ?RegisterLayoutCheat@@YAXXZ  008129c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/_at_00810000.cpp  ?GetScaledMouse@@YGXPAM0@Z  00812f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

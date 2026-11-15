@@ -6,4 +6,3 @@
 ../src/game/UTFSpore_Win32/MapFile.cpp  ?RbtreeValCtor@MapFile@@QAEPAXPAIPBX@Z  0091c310  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/MapFile.cpp  ?ListClear@MapFile@@QAEXXZ  0091c380  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/MapFile.cpp  ?Push@Vec12@@QAEXPBI@Z  0091c490  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/UTFSpore_Win32/MapFile.cpp  ?ListPushString@MapFile@@QAEPAXPBD@Z  0091c330  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

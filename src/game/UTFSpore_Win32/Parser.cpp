@@ -1236,7 +1236,7 @@ struct bool_vec_s0084_3650 {
     unsigned mPad14;    // +0x14
     bool mStorage[16];  // +0x18
 
-    void DoInsertValue(bool* pPosition, const bool* pValue);    // 0x00843bc0 (pos, value)
+    void push_back(const bool* pValue);    // 0x00843bc0 (pos, value)
 };
 }
 // ---- items of slice s00843650 end
@@ -1308,9 +1308,6 @@ struct StrNode_s0084_6280 {
     StrNode_s0084_6280* mpNext;     // +0x20
 };
 }
-// the macro-table node: a MacroPair (string8 key + refcounted value) followed by the bucket chain link
-struct MacroHashNode { MacroPair mValue; MacroHashNode* mpNext; };
-void __fastcall MacroPair_dtor(MacroPair* p);
 namespace eastl {
 struct FindResult_s0084_6280 {
     StrNode_s0084_6280* mpNode;
@@ -1330,7 +1327,7 @@ struct StrHashtable_s0084_6280 {
     FindResult_s0084_6280 find(const string8_s0084_6280* pKey) const;   // 0x007e2ea0
     void* FindByHash(unsigned nHash, const string8_s0084_6280* pKey);    // 0x00846530
     void* EraseNode(StrNode_s0084_6280** ppSlot);   // not 0x00846c00: that is MacroHashtable::erase(iterator)
-    void DoFreeNodes(MacroHashNode** pBucketArray, unsigned nBucketCount);   // 0x00846630
+    void DoFreeNodes(unsigned nBucketCount);                            // 0x00846630
     void DoRehash(unsigned nNewBucketCount);                            // 0x00847120
 };
 }
@@ -2015,18 +2012,18 @@ const char* EA::ArgScript::cParser_s0084_2620::LookupName(const char* pName) con
 }
 
 // @ 0x00843bc0
-void eastl::bool_vec_s0084_3650::DoInsertValue(bool* pPosition, const bool* pValue)
+void eastl::bool_vec_s0084_3650::push_back(const bool* pValue)
 {
     bool* pEnd = mpEnd;
     if (pEnd != mpCapacity) {
         const bool* pSource = pValue;
-        if (pValue >= pPosition && pValue < pEnd)
+        if (pValue >= pEnd && pValue < mpCapacity)
             ++pSource;
         if (pEnd != 0)
             *pEnd = pEnd[-1];
-        bool* pLast = mpEnd - 1;
-        ::memmove(pPosition + (mpEnd - pLast), pPosition, (unsigned)(pLast - pPosition));
-        *pPosition = *pSource;
+        bool* pDst = pEnd - ((mpEnd - 1) - pEnd) - 1;
+        ::memmove(pDst, pEnd, (unsigned)((mpEnd - 1) - pEnd));
+        *pEnd = *pSource;
         ++mpEnd;
         return;
     }
@@ -2036,14 +2033,14 @@ void eastl::bool_vec_s0084_3650::DoInsertValue(bool* pPosition, const bool* pVal
     bool* pNew = nNew != 0
         ? (bool*)EAAllocate(nNew, "ArgScript", 0, 0, kAllocFile, 0xd1)
         : 0;
-    unsigned nHead = (unsigned)(pPosition - mpBegin);
-    bool* pMid = (bool*)CopyBytes(pNew, mpBegin, nHead);
-    pMid += nHead;
-    if (pMid != 0)
+    bool* pMid = pNew;
+    if (pNew) {
+        CopyBytes(pNew, mpBegin, (unsigned)(pValue - mpBegin));
+        pMid = pNew + (pValue - mpBegin);
         *pMid = *pValue;
-    unsigned nTail = (unsigned)(mpEnd - pPosition);
-    bool* pNewEnd = (bool*)CopyBytes(pMid + 1, pPosition, nTail);
-    pNewEnd += nTail;
+    }
+    bool* pNewEnd = (bool*)CopyBytes(pMid + 1, pValue, (unsigned)(mpEnd - pValue));
+    pNewEnd += (mpEnd - pValue);
     if (mpBegin != 0 && mpBegin != mpBuffer)
         ::operator delete(mpBegin);
     mpBegin = pNew;
@@ -2347,25 +2344,27 @@ void* eastl::StrHashtable_s0084_6280::FindByHash(unsigned nHash, const string8_s
 }
 
 // @ 0x00846630
-void eastl::StrHashtable_s0084_6280::DoFreeNodes(MacroHashNode** pBucketArray, unsigned nBucketCount)
+void eastl::StrHashtable_s0084_6280::DoFreeNodes(unsigned nBucketCount)
 {
     for (unsigned i = 0; i < nBucketCount; ++i) {
-        MacroHashNode* pNode = pBucketArray[i];
+        StrNode_s0084_6280* pNode = mpBucketArray[i];
         while (pNode) {
-            MacroHashNode* pTemp = pNode;
-            pNode = pNode->mpNext;
-            MacroPair_dtor(&pTemp->mValue);
-            PoolFree(pTemp);
+            StrNode_s0084_6280* pNext = pNode->mpNext;
+            (*(void(__thiscall**)(void*))(*(char**)pNode + 0x14))(pNode);   // ~macro-pair at +0x14
+            PoolFree(pNode);
+            pNode = pNext;
         }
-        pBucketArray[i] = 0;
+        mpBucketArray[i] = 0;
     }
 }
 
+struct MacroHashNode { MacroPair mValue; MacroHashNode* mpNext; };
 struct MacroHashIterator { MacroHashNode* mpNode; MacroHashNode** mpBucket; MacroHashIterator(MacroHashNode* n, MacroHashNode** b) : mpNode(n), mpBucket(b) {}
     void increment_bucket() { ++mpBucket; while (*mpBucket == 0) ++mpBucket; mpNode = *mpBucket; }
     void operator++() { mpNode = mpNode->mpNext; while (mpNode == 0) mpNode = *++mpBucket; } };
 struct MacroHashtable { unsigned mPad00; MacroHashNode** mpBucketArray; unsigned mnBucketCount; unsigned mnElementCount;
     MacroHashIterator erase(MacroHashIterator i); };
+void __fastcall MacroPair_dtor(MacroPair* p);
 // @ 0x00846c00
 MacroHashIterator MacroHashtable::erase(MacroHashIterator i)
 {

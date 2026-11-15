@@ -48,13 +48,6 @@ __declspec(dllimport) int   __stdcall DestroyCursor(void* cursor);
 
 struct RCObj { virtual void r0(); virtual void Release(); };
 
-// the handle stored at entry+0x2c answers through vtable slot +0x10: `push handle; call dword ptr [vtable+0x10]`,
-// i.e. a virtual method taking one pointer argument and returning the success flag.
-struct CursorHandle {
-  virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-  virtual bool Destroy(void* a);                        // +0x10 (slot 4)
-};
-
 // methods of classes owned by slice s007ffc70 (declared only -> out-of-line calls)
 struct Slice11 {
   void SetWindow(void* p);
@@ -211,7 +204,7 @@ bool CurMgr::DestroyEntry(void* it) {
   void* h = *(void**)((char*)it + 0x2c);
   bool r = true;
   if (h)
-    r = ((CursorHandle*)h)->Destroy(h);
+    r = DestroyCursor(h) != 0;
   *(void**)((char*)it + 0x2c) = 0;
   return r;
 }

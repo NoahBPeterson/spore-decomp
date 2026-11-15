@@ -1,3 +1,2 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/SPAccessor.cpp  ?ResourceManager@@YAXI@Z  004da3a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPEngine/SPAccessor.cpp  ?FUN_0080d710@@YGXPAXHE@Z  0080d710  /Od /Ob1 /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

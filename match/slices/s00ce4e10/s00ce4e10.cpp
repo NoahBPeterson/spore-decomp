@@ -61,7 +61,7 @@ public:
 // 0x00bcae90 -- cAgentOrderManager::~cAgentOrderManager (thiscall: the pointer lands in ecx)
 void __fastcall FUN_00bcae90(cBehaviorTreeData* pThis, void* pUnused);
 
-// primary base of the simulator (EA::RefCountVTemplate<int> subobject, vptr at +0x00).
+// 0x00b5b6c0 -- SP::cGonzagoSimulator constructor (primary base of the planner).
 class ContentValidationSummarizer {
 public:
     virtual void Summarize();                       // +0x00
@@ -69,7 +69,13 @@ public:
     uint32_t    mPad04;                             // +0x04
 };
 
-// secondary base of the simulator (SP::cISerializableObject subobject, vptr at +0x08)
+class cGonzagoSimulator : public ContentValidationSummarizer {
+public:
+    cGonzagoSimulator();                            // 0x00b5b6c0
+    virtual void Update();                          // +0x08
+};
+
+// secondary base of the planner (EA::Trace::ITracerBase subobject, vptr at +0x08)
 class ITracerBase {
 public:
     virtual void TraceBegin();                      // +0x00
@@ -77,13 +83,6 @@ public:
 
 
     uint32_t    mPad04;                             // +0x04
-};
-
-// 0x00b5b6c0 -- SP::cGonzagoSimulator constructor (sole base of the planner, 0x10 bytes).
-class cGonzagoSimulator : public ContentValidationSummarizer, public ITracerBase {
-public:
-    cGonzagoSimulator();                            // 0x00b5b6c0
-    virtual void Update();                          // +0x08
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -203,7 +202,7 @@ public:
 
 class cTribe;
 
-class cTribePlanner : public cGonzagoSimulator {
+class cTribePlanner : public cGonzagoSimulator, public ITracerBase {
 public:
     cTribePlanner();                                // 0x00ce55a0
     ~cTribePlanner();                               // 0x00ce4ed0
@@ -219,7 +218,7 @@ public:
 };
 
 // 0x00bcb2a0 -- cAgentOrderManager-derived behaviour tree data constructor (thiscall)
-cBehaviorTreeData* __fastcall FUN_00bcb2a0(cBehaviorTreeData* pThis);
+cBehaviorTreeData* __fastcall FUN_00bcb2a0(cBehaviorTreeData* pThis, void* pUnused);
 
 
 // ---------------------------------------------------------------------------------------------
@@ -541,18 +540,17 @@ cTribePlanner::cTribePlanner()
     mpPlansCapacity = nullptr;
 
     SpVectorFloat* pTimes = &mTimeBetweenPlanExecutionByType;
-    float* pBuffer = pTimes->mBuffer;
-    pTimes->mpBegin = pBuffer;
-    pTimes->mpEnd = pBuffer;
+    pTimes->mpBegin = pTimes->mBuffer;
+    pTimes->mpEnd = pTimes->mBuffer;
     pTimes->mUnused14 = 0;
-    pTimes->mpCapacity = pBuffer + 12;
+    pTimes->mpCapacity = pTimes->mBuffer + 12;
     mpTribe = nullptr;
     mAccumulatedDeltaTime = 0.0f;
 
     cBehaviorTreeData* pData = (cBehaviorTreeData*)operator_new(
         0x670, "Simulator/cBehaviorTreeData", 0, 0, nullptr, 0);
     if (pData != nullptr) {
-        mpBehaviorTreeData = FUN_00bcb2a0(pData);
+        mpBehaviorTreeData = FUN_00bcb2a0(pData, nullptr);
         pTimes->resize(0xc);
         return;
     }

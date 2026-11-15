@@ -2,9 +2,3 @@
 slices/s008edc30/s008edc30.cpp  ?ScrollbarStyleSet@@YGXPBUVec2@Layout@XHTML@EA@@@Z  008edd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s008edc30/s008edc30.cpp  ?PlaceFloat@PickingContext@Layout@XHTML@EA@@QAEXPAUFloatEntry@234@@Z  008edf60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s008edc30/s008edc30.cpp  ?ReleaseScroll@RenderingContext@Layout@XHTML@EA@@QAEXXZ  008ee7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-slices/s008edc30/s008edc30.cpp  ?SubStyleSetValue@RenderingContext@Layout@XHTML@EA@@QAEXPBUVec2@234@@Z  008ee740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-slices/s008edc30/s008edc30.cpp  ?RefreshMargins@PickingContext@Layout@XHTML@EA@@QAEXXZ  008eddb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-slices/s008edc30/s008edc30.cpp  ?RefreshMargins@RenderingContext@Layout@XHTML@EA@@QAEXXZ  008eea30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-slices/s008edc30/s008edc30.cpp  ?lower_bound@PickingContext@Layout@XHTML@EA@@SAPAUTranslationEntry@234@PAU5234@0PBH@Z  008edfc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-slices/s008edc30/s008edc30.cpp  ?SetContextRect@PickingContext@Layout@XHTML@EA@@QAEXPBM@Z  008ede40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-slices/s008edc30/s008edc30.cpp  ?SetDocument@Page@Layout@XHTML@EA@@QAEXPAX@Z  008edc90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

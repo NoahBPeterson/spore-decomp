@@ -241,12 +241,7 @@ public:
 
 class cRandomLinearCongruential {
 public:
-    uint32_t RandomUint32Uniform(uint32_t nRange);  // 0x00a68fb0
-};
-
-class cStimulusController {
-public:
-    void SetSlot(int32_t nIndex, void* pValue);  // 0x00bc9a30
+    uint32_t RandomUint32Uniform(uint32_t nA, uint32_t nB, uint32_t nC);  // 0x00a68fb0
 };
 
 class cSpriteEffect {
@@ -344,7 +339,7 @@ void* GetCurrentGameMode();                     // 0x00b5b800
 int32_t FUN_00efe5c0();                         // 0x00efe5c0
 cSpriteEffect* FUN_00d51660();                  // 0x00d51660
 void* GetAnimalFromStimulus(void* pStimulus);   // 0x00d99980
-void __stdcall FUN_00bc9a30(int32_t nA, void* pTable);    // 0x00bc9a30 (__thiscall: ecx is the slot owner)
+void __stdcall FUN_00bc9a30(int32_t nA, void* pTable);    // 0x00bc9a30
 void* __stdcall FUN_00bc9b00(uint32_t nId, void* pFn, void* pArg);   // 0x00bc9b00
 void* FUN_00d995c0(int32_t nA, int32_t nB, void* pArg);    // 0x00d995c0
 cGameNounManager* NounManager();                // 0x00b3d300
@@ -576,8 +571,9 @@ bool FUN_00d7c8f0(cCreatureBase* pCreature)
 
     if (pCreature->mLocomotive.IsNearGoal()) {
         if (pCreature->AnimationFinishedById(0)) {
-            uint32_t nAnimId = pCreature->mpData->mnAnimId;
-            pCreature->PlayAnimation(g_random.RandomUint32Uniform(nAnimId) + 0x42a1ca0, 1, -1);
+            uint32_t nAnim = g_random.RandomUint32Uniform(pCreature->mpData->mnAnimId, 1,
+                                                          0xffffffff);
+            pCreature->PlayAnimation(nAnim + 0x42a1ca0, 1, -1);
         }
     }
     return true;
@@ -657,9 +653,9 @@ void FUN_00d7ca90(cCreatureBase* pCreature)
         g_stimulusTable.mSlots[3].mnValue = 3;
     }
 
-    cStimulusController* pController = (cStimulusController*)pCreature->mpFieldB48;
+    void* pController = pCreature->mpFieldB48;
     if (pController != nullptr)
-        pController->SetSlot(nInitialized, &g_stimulusTable);
+        FUN_00bc9a30(nInitialized, &g_stimulusTable);
 }
 
 // ---------------------------------------------------------------------------
@@ -687,8 +683,8 @@ void FUN_00d7cb50(cCreatureBase* pCreature)
 // 0x00d7cb90  SP::NEST_UPGRADE_Tick
 // ---------------------------------------------------------------------------
 // @ 0x00d7cb90
-bool FUN_00d7cb90(cCreatureBase* pCreature, int32_t nArg2, int32_t nArg3, int32_t nArg4,
-                  int32_t nArg5, float* pfTimer, int32_t nArg7, float fDelta)
+int32_t FUN_00d7cb90(cCreatureBase* pCreature, int32_t nArg2, int32_t nArg3, int32_t nArg4,
+                     int32_t nArg5, float* pfTimer, int32_t nArg7, float fDelta)
 {
     if (pCreature->mLocomotive.IsNearGoal()) {
         *pfTimer = *pfTimer - fDelta;
@@ -699,7 +695,7 @@ bool FUN_00d7cb90(cCreatureBase* pCreature, int32_t nArg2, int32_t nArg3, int32_
         return (0.0f < *pfTimer) ? 1 : 0;
     }
 
-    return true;
+    return 1;
 }
 
 // ---------------------------------------------------------------------------

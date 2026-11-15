@@ -13,7 +13,6 @@ extern "C" void* __cdecl operator_new(int size, const char* name, int a, int b, 
 // ---------------------------------------------------------------------------
 // One tEffectInfo entry (0x3c bytes).
 // ---------------------------------------------------------------------------
-struct Effect;
 struct EffectInfo {
     int   mId;                   // +0x00
     int   mOwner;                // +0x04
@@ -36,7 +35,7 @@ struct EffectInfo {
     int   mPad2c;                // +0x2c
     int   mPad30;                // +0x30
     int   mPad34;                // +0x34
-    Effect* mpEffect;            // +0x38
+    void* mpEffect;              // +0x38
 };
 typedef char EffectInfo_layout_check[(sizeof(EffectInfo) == 0x3c) ? 1 : -1];
 
@@ -232,28 +231,25 @@ bool cSpatialObjectView::sub_b220(int param2, int id, char create, void** out) {
 // ===========================================================================
 // @ 0x00c8ad30
 void cSpatialObjectView::sub_ad30(int param2, int id) {
+    EffectInfo* it = mEffects.pBegin;
     EffectInfo* end = mEffects.pEnd;
-    for (EffectInfo* it = mEffects.pBegin; it != end; it = (EffectInfo*)((char*)it + 0x3c)) {
-        if (it->mId != param2) continue;
-        Effect* pe = it->mpEffect;
-        if (pe) {
-            if (pe->e10() || it->mFlag8) {
-                it->mpEffect->e0c(id);
-            }
+    if (it == end) return;
+    while (it->mId != param2) {
+        it = (EffectInfo*)((char*)it + 0x3c);
+        if (it == end) return;
+    }
+    if (it->mpEffect) {
+        char c = ((char(__thiscall*)(void*))(*(void***)it->mpEffect)[0x10 / 4])(it->mpEffect);
+        if (c || it->mFlag8) {
+            ((void(__thiscall*)(void*, int))(*(void***)it->mpEffect)[0xc / 4])(it->mpEffect, id);
         }
-        EffectInfo* last = mEffects.pEnd;
-        EffectInfo* dst = it;
-        EffectInfo* p = it + 1;
-        if (p < last) {
-            do {
-                ((EffectInfo* (__thiscall*)(EffectInfo*, const EffectInfo*))sub_c88c30)(dst, p);
-                ++p;
-                ++dst;
-            } while (p != last);
-        }
-        Effect* de = (--mEffects.pEnd)->mpEffect;
-        if (de) de->e04();
-        return;
+    }
+    for (EffectInfo* p = (EffectInfo*)((char*)it + 0x3c); p < mEffects.pEnd; p = (EffectInfo*)((char*)p + 0x3c)) {
+        ((void(__thiscall*)(void*, void*))sub_c88c30)(it, p);
+    }
+    mEffects.pEnd = (EffectInfo*)((char*)mEffects.pEnd - 0x3c);
+    if (mEffects.pEnd->mpEffect) {
+        ((void(__thiscall*)(void*))(*(void***)mEffects.pEnd->mpEffect)[4 / 4])(mEffects.pEnd->mpEffect);
     }
 }
 

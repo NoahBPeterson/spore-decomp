@@ -49,6 +49,3 @@
 ../src/game/SPGonzago/SPTribe.cpp  ?OnExtentsChanged@cSpatialObject_s00c9_afb0@@QAEXPAXM@Z  00c9be50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?F8e6d0@@YIHPAX@Z  00c8e6d0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?findHotSpot@@YAPAUcFishingHotSpot@@I@Z  00c94430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c8ec60@@YAPAXPAPAX00@Z  00c8ec60  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPTribe.cpp  ?Tribe_SetEditorMode@@YIXPAUTribe@@HE@Z  00c8e730  /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/SPGonzago/SPTribe.cpp  ?resize@?$SpVector@UcTribeChatArea_s00c9_47d0@@@@QAEXI@Z  00c955e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

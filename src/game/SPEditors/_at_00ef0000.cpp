@@ -8084,18 +8084,19 @@ int __cdecl FUN_00efcd90()
 // @ 0x00efcde0
 void __fastcall FUN_00efcde0(void* p)
 {
-    void* r;
+    int r;
     if (p == 0)
         r = 0;
     else
-        r = (void*)((FN0_i)((*(void***)p)[3]))(p);
-    if (*(void**)((char*)r + 0x54) != 0) {
-        void* q = *(void**)((char*)r + 0x54);
-        if (q != 0)
-            q = (void*)((FN0_i)((*(void***)q)[3]))(q);
-        else
-            q = (void*)FUN_00d20430(0);
-        ((FN2_ii)((*(void***)q)[0x15]))(q, 0, 0);
+        r = ((FN0_i)((*(void***)p)[3]))(p);
+    if (*(int*)(r + 0x54) != 0) {
+        void* q = *(void**)(r + 0x54);
+        if (q != 0) {
+            int s = ((FN0_i)((*(void***)q)[3]))(q);
+            ((FN2_ii)((*(void***)s)[0x15]))((void*)s, 0, 0);
+            return;
+        }
+        FUN_00d20430(0);
     }
 }
 
@@ -8125,25 +8126,20 @@ void __fastcall FUN_00efce30(void* p)
 }
 
 // @ 0x00efcfb0
-// Retail tests the byte count with `test ecx, 0xffffffe0 / jle` (low 5 bits clear: a multiple of 32
-// that is non-zero) before the scan, so it walks the entries and stops only by finding the state.
 bool __cdecl FUN_00efcfb0(char* p)
 {
-    int i;
-    int n;
     if (p[0x4c8] != 0) {
-        n = *(unsigned int*)(p + 0x4d0) - *(unsigned int*)(p + 0x4cc);
-        if ((n & 0xffffffe0) == 0)
+        int n = *(int*)(p + 0x4d0) - *(int*)(p + 0x4cc);
+        int i = 0;
+        if (n < 0x20)
             return 0;
-        i = 0;
+        int* it = (int*)(*(int*)(p + 0x4cc) + 0x0c);
         while (1) {
-            char* e = (char*)(*(int*)(p + 0x4cc) + 0x0c) + (i << 5);
-            int st = *(int*)e;
-            if (st == 2 || st == 10)
+            if (*it == 2 || *it == 10)
                 break;
             i++;
-            int m = *(int*)(p + 0x4d0) - *(int*)(p + 0x4cc);
-            if (i >= (m >> 5))
+            it += 8;
+            if (i << 5 >= n)
                 return 0;
         }
     } else {
@@ -8436,18 +8432,18 @@ void ToolSnapUpdate()
 }
 
 // @ 0x00efde90
-// NOTE: retail compares byte +0x18 with 1 (see the instruction diff). The branch that skips the
-// COM-interface query when the selected object answers 0x137e8e0 (TAG_ANIM_TARGET) is kept.
 bool SelCtx::FUN_00efde90(int param_2)
 {
-    int* p = *(int**)((char*)param_2 + 0x20);
-    if (*(char*)((char*)p + 0x18) == 1)
-        p = (int*)((char*)p + *(int*)((char*)p + 0x10));
-    if (p != 0) {
-        int* piVar1 = (int*)p[3];
-        if (piVar1 != 0 && *(char*)((char*)this + 4) != 0) {
-            if (((VObj_s00ef_d020*)piVar1)->s3(0x137e8e0) != 0)
-                return false;
+    int* base = (int*)param_2;
+    int* p = *(int**)((char*)base + 0x20);
+    if (*(char*)((char*)p + 0x18) == 1) {
+        int* q = (int*)((char*)p + *(int*)((char*)p + 0x10));
+        if (q != 0) {
+            int* piVar1 = (int*)q[3];
+            if (piVar1 != 0 && *(char*)((char*)this + 4) != 0) {
+                if (((VObj_s00ef_d020*)piVar1)->s3(0x137e8e0) != 0)
+                    return false;
+            }
         }
     }
     return true;
@@ -9140,8 +9136,6 @@ bool UI_s00ef_ee60::f_eff1e0(int)
 }
 
 // @ 0x00eff230
-// The store of p into the slot sits between the two refcount virtuals (retail: call v0, store,
-// call the old object's +0x04), which the old source had the other way round.
 void UI_s00ef_ee60::f_eff230(void* p)
 {
     *(uint8_t*)((char*)g_mgr + 0x64) = 1;
@@ -9150,9 +9144,10 @@ void UI_s00ef_ee60::f_eff230(void* p)
     void* old = *slot;
     if (p != old) {
         if (p) ((RefObj*)p)->v0();
-        if (old) ((RefObj*)old)->v4();
         *slot = p;
-    }}
+        if (old) ((RefObj*)old)->v4();
+    }
+}
 
 // @ 0x00eff280
 void UI_s00ef_ee60::f_eff280(void* p)
@@ -9198,13 +9193,13 @@ void UI_s00ef_ee60::f_eff280(void* p)
 void UI_s00ef_ee60::f_eff360(void* p)
 {
     if (b5) {
-        void* u = ((MgrState*)g_mgr)->handle;
+        void* u = *(void**)((char*)g_mgr + 4);
         b5 = 0;
         f_eff230(u);
         return;
     }
     pGame->F33BF0();
-    pGame->F36450(0, 0, (void*)p);
+    pGame->F36450(0, 0, p);
     f_eff230(p);
 }
 

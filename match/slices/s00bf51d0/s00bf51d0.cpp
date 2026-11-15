@@ -154,7 +154,7 @@ struct CityEventSub
 // object that checks cities against the planet model (0x00bf5720)
 struct PlanetChecker
 {
-    bool CheckPlanet(void* obj);     // 0x00bf5720
+    int CheckPlanet(void* obj);      // 0x00bf5720
 };
 
 // vehicle factory (0x00bf57b0)
@@ -446,7 +446,7 @@ void FeedbackSink::AddPair(void* obj)
 // 0x00bf5720 - is there a city of this tribe on the given planet?
 // ---------------------------------------------------------------------------
 // @ 0x00bf5720
-bool PlanetChecker::CheckPlanet(void* obj)
+int PlanetChecker::CheckPlanet(void* obj)
 {
     void* mgr = FUN_00b3d300();
     void* vec = ((void* (__thiscall*)(void*, void*, void*, void*, void*, void*))
@@ -454,23 +454,21 @@ bool PlanetChecker::CheckPlanet(void* obj)
                                (void*)0x00acdff0, (void*)0x00b1e500,
                                (void*)0x018c43e8);
 
-    struct NounVec { void** m_begin; void** m_end; void** m_cap; };
-    NounVec* v = (NounVec*)((char*)vec + 4);
-    int count = (int)(v->m_end - v->m_begin);
+    int count = (*(int*)((char*)vec + 8) - *(int*)((char*)vec + 4)) >> 2;
 
-    void* model = ((void* (__stdcall*)(void*))FUN_00b3d350)(obj);
+    void* model = FUN_00b3d350();
     int continent = ((int (__thiscall*)(void*))FUN_00b88590)(model);
 
     for (int i = 0; i < count; ++i) {
-        void* city = v->m_begin[i];
+        void* city = *(void**)(*(int*)((char*)vec + 4) + i * 4);
         int civ = ((int (__thiscall*)(void*))FUN_00bd9bf0)(city);
         if (civ != (int)this) {
             int c = FUN_00bd8210(city);
             if (c == continent)
-                return true;
+                return 1;
         }
     }
-    return false;
+    return 0;
 }
 
 // ---------------------------------------------------------------------------
