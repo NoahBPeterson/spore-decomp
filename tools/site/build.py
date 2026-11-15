@@ -162,6 +162,31 @@ def model_field(body):
     return k.group(1) if k else ""
 
 
+def present_before(sha, vas):
+    """The addresses of `vas` that already had byte-exact source in the merge's first parent: a manifest row of a slice
+    or a src/game module.  Rows of the generated manifests (match/synth/*, match/clones.txt) do not count: replacing a
+    template or clone match with written C++ is new work."""
+    if not vas:
+        return set()
+    args = ["grep", "-I", "-F"]
+    for v in vas:
+        args += ["-e", "%08x" % v]
+    try:
+        out = git(*args, "%s^" % sha, "--", "match", "src/game")
+    except subprocess.CalledProcessError:   # git grep exits 1 when nothing matches
+        return set()
+    found = set()
+    for line in out.splitlines():
+        _rev, path, text = line.split(":", 2)   # "<sha>^:<path>:<line>"
+        if MANIFEST_RE.match(path) and path.startswith(("match/slices/", "src/game/")):
+            found |= rows_vas(text)
+    try:   # rows listed but failing the fingerprint check (tools/ci/known_failures.txt) were not byte-exact yet
+        found -= known_vas(git("show", "%s^:tools/ci/known_failures.txt" % sha))
+    except subprocess.CalledProcessError:
+        pass
+    return found & vas
+
+
 def pr_credits(prs_path, fps):
     if not prs_path or not os.path.exists(prs_path):
         return []
@@ -187,7 +212,11 @@ def pr_credits(prs_path, fps):
                     removed |= rows_vas(line[1:])
         for v in removed - added:
             owner.pop(v, None)
-        for v in (added - removed) & set(fps):
+        new = (added - removed) & set(fps)
+        # a function that was already byte-exact somewhere before the merge (a migration moving it from its slice's
+        # manifest into its module's, rows pushed before contributions opened) is not new work
+        new -= present_before(sha, new)
+        for v in new:
             owner.setdefault(v, p["number"])
         rows.append(p)
     out = []
