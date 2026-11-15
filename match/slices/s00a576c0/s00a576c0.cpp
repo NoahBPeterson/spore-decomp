@@ -6,6 +6,8 @@
 // the 4th/5th argument slots.
 #include "types.h"
 #include <string.h>
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 namespace EA {
 namespace Audio {
@@ -173,13 +175,15 @@ CollObject* CollReadNew(unsigned a, unsigned b)
 }
 
 // @ 0x00a57700
-void CollWriteNew(unsigned a, unsigned b)
+CollObject* CollWriteNew(unsigned a, unsigned b)
 {
     CollObject* x = (CollObject*)pd_new((void*)gCollWriteClass);
     if (x) {
         x->mKeyA = a;
+        _ReadWriteBarrier();
         x->mKeyB = b;
     }
+    return x;
 }
 
 // @ 0x00a57730
