@@ -7,4 +7,3 @@ struct AlignInfo {
     unsigned int AlignUpTo(const AlignInfo* other);
     void Advance(const AlignInfo* other);
 };
-

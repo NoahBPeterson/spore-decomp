@@ -11,4 +11,3 @@ unsigned int AlignInfo::AlignUpTo(const AlignInfo* other)
     this->alignment = oldAlignment > other->alignment ? this->alignment : other->alignment;
     return oldAlignment;
 }
-
