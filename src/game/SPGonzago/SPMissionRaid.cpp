@@ -117,7 +117,7 @@ class cSPRaidEvent : public cSPMission {
 public:
     uint8_t mPad1f0[0x40];                  // 0x1f0
     int mTargetId;                          // 0x230
-    void GenerateBomberCount();             // 0x00c5b530
+    int GenerateBomberCount();              // 0x00c5b530
     bool Init(int a, int b, int c);         // 0x00c5b600
     void Shutdown();                        // 0x00c5b660
     uint32_t CheckDistanceCondition();      // 0x00c5b6c0
@@ -125,7 +125,7 @@ public:
 };
 class cSPRaidPlunderEvent : public cSPRaidEvent {
 public:
-    void GeneratePirateCount();             // 0x00c5b510
+    int GeneratePirateCount();              // 0x00c5b510
     void BackgroundUpdate();                // 0x00c5b550
 };
 class cUFOKinestheticsTuning {
@@ -171,7 +171,7 @@ cUFOKinestheticsTuning* GetKinestheticsTuning(int a, int b);
 cMessageServer* MessageServer();
 void* GetUniverseContext();
 void* GetActivePlanet();
-int sGetNumUFOs(void* pDefinition, int keyA, int keyB);
+int sGetNumUFOs(SP::cPropertyList* pDefinition, uint32_t keyA, uint32_t keyB); // 0x0102b010, cdecl
 void RemoveArtifact(int pOwner, void* pArtifact, uint16_t nCount);
 void GetPropertyAsKeyArray(void* pDefinition, int key, void* pOut);
 void* GetPropertyAsFloat();
@@ -393,10 +393,12 @@ struct cSPMission_s00c5_b9c0 {
   u32   pad098[39];                // 0x098
   SPVecU32 ev134;                  // 0x134
   u32   pad140[16];                // 0x140
-  void* p180;                      // 0x180
+  SP::cPropertyList* mMissionPropList; // 0x180; retail property-list field
   u32   pad184[24];                // 0x184
   void* p1e4;                      // 0x1e4
   u32   pad1e8[2];                 // 0x1e8
+
+  SP::cPropertyList* GetMissionProperties() const { return mMissionPropList; }
 
   void  InitGeneric();             // 0x00c48e90
   void  Destroy();                 // 0x00c47680
@@ -993,15 +995,17 @@ MissionElement* CopyMissionElementsBackward(MissionElement* pFirst, MissionEleme
 }
 
 // @ 0x00c5b510
-void cSPRaidPlunderEvent::GeneratePirateCount()
+int cSPRaidPlunderEvent::GeneratePirateCount()
 {
-    sGetNumUFOs(this, 0x398db08, 0x398db09);
+    return sGetNumUFOs(((cSPMission_s00c5_b9c0*)this)->GetMissionProperties(),
+                      0x398db08, 0x398db09);
 }
 
 // @ 0x00c5b530
-void cSPRaidEvent::GenerateBomberCount()
+int cSPRaidEvent::GenerateBomberCount()
 {
-    sGetNumUFOs(this, 0x2fd1ef6, 0x2fd1efa);
+    return sGetNumUFOs(((cSPMission_s00c5_b9c0*)this)->GetMissionProperties(),
+                      0x2fd1ef6, 0x2fd1efa);
 }
 
 // @ 0x00c5b550
@@ -1150,10 +1154,10 @@ void __fastcall FUN_00c5b9c0(cRaidEvent* self, void* dummy)
   void* prop;
 
   if (self->b21c != 0) goto done;
-  if (self->p180 == 0) goto done;
+  if (self->mMissionPropList == 0) goto done;
   val = 0.0f;
   prop = 0;
-  if (((MissionObjVt*)self->p180)->GetProperty(0x39787b3, &prop) != 0 &&
+  if (((MissionObjVt*)self->mMissionPropList)->GetProperty(0x39787b3, &prop) != 0 &&
       *(u16*)((char*)prop + 0x12) == 0xd) {
     val = *((Property*)prop)->GetFloat();
   }
@@ -1190,14 +1194,14 @@ void __fastcall FUN_00c5bab0(cRaidEvent* self, void* dummy)
       return;
     }
   }
-  if (self->p180 != 0) {
+  if (self->mMissionPropList != 0) {
     u32 other = self->targetEmpireID;
     if (other != GetPlayerEmpireID()) {
       cCivObject* emp = StarManager()->GetEmpireByID(other);
       if (emp != 0) {
         if (RelationshipManager()->FUN_00d01ff0(emp, 0) != 0) {
           float f = 0.0f;
-          GetPropertyT(self->p180, 0x39787ae, &f);
+          GetPropertyT(self->mMissionPropList, 0x39787ae, &f);
           float v = (float)(f < 0.0f ? -f : f);
           RelationshipManager()->RecordEvent(other, GetPlayerEmpireID(), 0x526e51c, v);
         }

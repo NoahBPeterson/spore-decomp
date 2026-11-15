@@ -7,7 +7,6 @@
 0048ef30 1378 complete (all paths and calls); /Od frame layout and temp slots differ (original frame 0x370)
 0048f790 482 complete (all paths and calls); /Od temp slot layout differs (original frame 0x140, second AllocTag temp at -0xd1)
 0048fde0 166 recursive child-walk; complete but frame slots / inlined callee shapes differ
-004902c0 62 AABB overlap wrapper; complete, but original reserves a much larger (0xb4) frame and stores the 1.1f margin in a local
 00490330 130 AABB 6-axis overlap test; complete, but the original indexes through an inlined Vector3::operator[] and the LHS ends up in xmm0 (my plain member-access form folds to direct offsets)
 004904a0 227 complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
 004905d0 200 complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
@@ -18,7 +17,6 @@
 004942b0 3496 SP::EditorUtils::GetRotationAndPositionBasedOnBehavior: complete (same 71 direct calls in order, all field offsets match); /Od Vector3 copy flavours (movss/int/fld) and local slot layout differ, 4219 vs 5113 bytes; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00496140 128 complete fixed-stride find(); matches the loop but the /Od frame (0x14 vs 0x10) and member slots differ
 004961d0 424 complete transform-save routine (copy 0x48->0x54 and three 9-float matrices for the object and each vector element); not byte-exact
-00496b60 114 complete cSPEditorLimbStructure helper; call sequence identical, only the /Od frame/struct-base slot differs (0x60 vs 0x68) flags: /Od /MD /Gy /EHsc /TP
 00496bb0 187 complete bone/handle lookup; logic present, intermediate locals and vtable-call shape differ flags: /O2 /MD /Gy /EHsc /TP
 00496d30 1431 complete: two opposed ray casts + hit-point/length evals; /Od slot order and out-of-line W-copy arg temps differ
 004973f0 201 complete transform/flag routine; logic present, but the by-value Matrix3 argument and /Od frame differ
