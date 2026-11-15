@@ -12,7 +12,6 @@
 00810660  54  complete; same find() argument staging difference as 00810620 plus a one-instruction difference in the counter store sequence; size 60 vs 64. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (388 valid, 100.0% coverage).
 008106a0  128  complete; frame shape push ecx vs sub esp,8 and the anchor address is formed with lea instead of add ecx,0x10 with the address spilled; loop tail layout differs; size 103 vs 133. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest WEAK (322 valid, 19.2% coverage).
 00810760  61  complete; same find() argument staging difference as 00810620 (key pointer via eax, iterator slot staged at [esp]) with the hidden-counter load scheduled later; size 65 vs 67. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest PASS (389 valid, 100.0% coverage).
-0080f8e0  24  complete; begin-pointer reloaded through eax instead of a fresh ecx load
 0080fa00  5   complete; vbase adjustor uses add ecx,0xfffffdb0 (cl canonicalises to sub)
 00810020  20  complete; ctor register allocation (zero in eax, this in esi) differs
 008100d0  7   complete; derived-vtable store scheduling / pop edi placement differ

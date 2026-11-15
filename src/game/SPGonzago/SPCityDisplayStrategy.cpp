@@ -1263,7 +1263,9 @@ void* __cdecl FUN_00bd9bf0(void* self);              // 0x00bd9bf0 SP::cCity::Ge
 void* __cdecl FUN_00b25f40(void* self, u32 id);      // 0x00b25f40 FindNounByID
 void* __cdecl FUN_00b6f310(void* self);              // 0x00b6f310
 void* __cdecl FUN_00b81780(void* self, void* out, void* a, void* b, void* c); // 0x00b81780 MakeRandomWorldPosition
-void* __cdecl FUN_00bfc490(void* self);              // 0x00bfc490
+struct CityDisplayRatioCalls {
+    float NodeRatio();                              // 0x00bfc490, thiscall, no arguments
+};
 // ---- items of slice s00ce8160 end
 
 // @ 0x00ae4ec0
@@ -1432,19 +1434,55 @@ void cPlanetModel_s00b8_bb70::AddResourceNodes()
     }
 }
 
+struct CityDisplayCommandCalls {
+  virtual void Slot00();
+  virtual void Slot04();
+  virtual void Slot08();
+  virtual void Slot0C();
+  virtual void Slot10();
+  virtual void Slot14();
+  virtual void Slot18();
+  virtual void Slot1C();
+  virtual void Slot20();
+  virtual void Slot24();
+  virtual void Slot28();
+  virtual void Slot2C();
+  virtual void Slot30();
+  virtual void Slot34();
+  virtual void Slot38();
+  virtual void Slot3C();
+  virtual void Slot40();
+  virtual void Slot44();
+  virtual void Slot48();
+  virtual void Slot4C();
+  virtual void Slot50();
+  virtual void Slot54();
+  virtual void Slot58();
+  virtual void Slot5C();
+  virtual void Slot60();
+  virtual void Slot64();
+  virtual void Slot68();
+  virtual void Slot6C();
+  virtual void Slot70();
+  virtual void Slot74();
+  virtual void Slot78();
+  virtual void Slot7C();
+  virtual void Slot80();
+  virtual void Slot84(int, int);
+};
+
 // @ 0x00ce8d00
 void __fastcall FUN_00ce8d00(void* self, void* /*edx*/, void* cmd, void* owner)
 {
   char* o = (char*)owner;
-  float r = ((float(__thiscall*)(void*))FUN_00bfc490)(o + 0x508);
-  void* self2 = cmd;
-  void** vtbl = *(void***)self2;
+  float r = ((CityDisplayRatioCalls*)(o + 0x508))->NodeRatio();
+  CityDisplayCommandCalls* command = (CityDisplayCommandCalls*)cmd;
   if (r < *(float*)0x013ef74c) {
-    ((void(__thiscall*)(void*, int, int))vtbl[0x84 / 4])(self2, 0, 2);
+    command->Slot84(0, 2);
   } else if (o[0xbcc] != 0) {
-    ((void(__thiscall*)(void*, int, int))vtbl[0x84 / 4])(self2, 0, 1);
+    command->Slot84(0, 1);
   } else {
-    ((void(__thiscall*)(void*, int, int))vtbl[0x84 / 4])(self2, 0, 0);
+    command->Slot84(0, 0);
   }
 }
 

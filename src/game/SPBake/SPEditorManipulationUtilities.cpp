@@ -4320,10 +4320,7 @@ void* HkObj::F_48db10(unsigned flags)
 // @ 0x0048db60
 void HkObj::F_48db60()
 {
-    mField30 = 0;
-    float k = *(float*)0x13ef4f8;
-    mArray[3] = k;
-    mField4 = *(float*)0x13ef4f8;
+    ((hkClosestCdPointCollector_s0048_dcd0*)this)->resetInline();
 }
 
 // @ 0x0048dbb0
@@ -8301,7 +8298,8 @@ bool HasSymmetricLimb(cSPEditorBlock_s004a_5970* block)
     if (block) {
         vector_s004a_5970<AutoRefCount_s004a_5970<cSPEditorBlock_s004a_5970> >& syms = block->mSymmetricBlocks;
         for (int i = 0, n = syms.size(); i < n; i++) {
-            if (syms[i]->mFlags.test(0xb))
+            cSPEditorBlock_s004a_5970* sym = syms[i];
+            if (sym->mFlags.test(0xb))
                 return true;
         }
     }

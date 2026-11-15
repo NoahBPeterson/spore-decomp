@@ -1100,13 +1100,17 @@ void RotationBall_s0048_34d0::Update()
     PLAY_ANIM(mgr, this->mModel, 4, alpha, this->mAnimateInTime, 1);
 }
 
+inline void cSPTransform::SetScale(float s)
+{
+    mScale = s;
+    ++mModificationCount;
+}
+
 // @ 0x00483cc0
 void SP::cSPEditorHandleRotationBall::SetScale(float s)
 {
     if (this->mModel) {
-        cSPTransform& x = this->mModel->mTransform;
-        x.mScale = s;
-        ++x.mModificationCount;
+        this->mModel->mTransform.SetScale(s);
     }
 }
 
