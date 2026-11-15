@@ -1,4 +1,4 @@
-00bf0c60 2 /O2 /MD /Gy /TP /arch:SSE equiv=WEAK(244 valid,24.5% cov) 4th arg tested as byte in retail (cmp byte [esp+0x24]) but cl emits cmp dword for an int parameter; residual is the arg width plus an ebp/ebx swap.
+00bf0c60 2 /O2 /MD /Gy /TP /arch:SSE equiv=WEAK(244 valid,24.5% cov) 4th arg tested as byte in retail (cmp byte [esp+0x24]) but cl emits cmp dword for an int parameter; residual is the arg width plus an ebp/ebx swap. [R38: archived backlog retry under review.]
 00bf0d10 42 /O2 /MD /Gy /TP /arch:SSE equiv=WEAK(236 valid,37.1% cov) vtable slot-0x08 value is kept in a stack slot in retail; cl here keeps it in a register and spills *it* instead. Call/compare shape otherwise identical.
 00bf0e00 218 /O2 /MD /Gy /TP /arch:SSE equiv=UNSUPPORTED(0/400 valid, fault(read)) retail builds a ~0xa18-byte cVarListSerializer temp and routes Write through 0xb18590 + 0xb6e2d0; the harness cannot resolve the serializer's stack references so no input is valid.
 00bf0f90 146 /O2 /MD /Gy /TP /arch=SSE equiv=WEAK(394 valid,20.9% cov) city-music update walks two lists and calls slot 0x30/0x2c; block ordering and list-load order differ.
