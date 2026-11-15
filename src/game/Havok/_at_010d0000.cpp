@@ -1,4 +1,4 @@
-// src/game/Havok/_at_010d0000.cpp -- migrated from slice(s) s010df100, s010dcd40, s010d6420, s010d53d0, s010d4730, s010d37d0, s010d28c0, s010d18c0, s010d0920, s010cfcf0 by tools/migrate/rewrite.py
+// src/game/Havok/_at_010d0000.cpp -- migrated from slice(s) s010d9470, s010d8520, s010d7570, s010df100, s010dcd40, s010d6420, s010d53d0, s010d4730, s010d37d0, s010d28c0, s010d18c0, s010d0920, s010cfcf0 by tools/migrate/rewrite.py
 // Object file: Havok/_at_010d0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -14,6 +14,8 @@ extern const char hkTtMultiSphereTri[];             // 0x014a4570 ("TtMultiSpher
 extern void* g_hkMemoryInstance;                 // 0x016e4178
 #include <intrin.h>
 #include <stddef.h>
+#include <string.h>
+#include <math.h>
 #pragma intrinsic(__rdtsc)
 
 // ---- items of slice s010cfcf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1559,6 +1561,1585 @@ struct hkTransformedChildBody : hkCdBody_s010d_f100 {
 };
 // ---- items of slice s010df100 end
 
+// ---- items of slice s010d18c0_b begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef short hkInt16;
+class hkBool_s010d_18c0__b
+{
+public:
+	hkBool_s010d_18c0__b(bool b) : m_bool(b ? 1 : 0) {}
+	operator bool() const { return m_bool != 0; }
+private:
+	char m_bool;
+};
+enum
+{
+	HK_MEMORY_CLASS_ARRAY = 0x14,
+	HK_MEMORY_CLASS_COLLIDE_s010d_18c0__b = 0x1c,
+	HK_MEMORY_CLASS_CDINFO = 0x1e
+};
+class hkMemory_s010d_18c0__b
+{
+public:
+	virtual void* allocate(int nbytes, int cl);                          // 0
+	virtual void deallocate(void* p);                                    // 1
+	virtual void* alignedAllocate(int alignment, int nbytes, int cl);    // 2
+	virtual void alignedDeallocate(void* p);                             // 3
+	virtual void* allocateChunk(int nbytes, int cl);                     // 4 (+0x10)
+	virtual void deallocateChunk(void* p, int nbytes, int cl);           // 5 (+0x14)
+	static hkMemory_s010d_18c0__b* s_instance;
+};
+#define HK_ALIGN16 __declspec(align(16))
+class hkRotation_s010d_18c0__b;
+struct HK_ALIGN16 hkVector4_s010d_18c0__b
+{
+	float x, y, z, w;
+	void setRotatedInverseDir(const hkRotation_s010d_18c0__b& a, const hkVector4_s010d_18c0__b& b);     // 0x01081440 (this = transpose(a) * b)
+};
+class hkAabb_s010d_18c0__b { public: hkVector4_s010d_18c0__b m_min; hkVector4_s010d_18c0__b m_max; };
+class hkRotation_s010d_18c0__b { public: hkVector4_s010d_18c0__b m_col[3]; };
+class hkTransform_s010d_18c0__b
+{ public:
+	hkVector4_s010d_18c0__b m_rot[3];
+	hkVector4_s010d_18c0__b m_trans;
+	void setMulInverseMul(const hkTransform_s010d_18c0__b& a, const hkTransform_s010d_18c0__b& b);      // 0x010810F0 (this = inverse(a) * b)
+};
+class hkReferencedObject_s010d_18c0__b
+{
+public:
+	virtual ~hkReferencedObject_s010d_18c0__b() {}                                     // 0
+	virtual void calcStatistics(class hkStatisticsCollector* c) const {} // 1 (0x0052E650 is the empty default)
+
+	// HK_DECLARE_CLASS_ALLOCATOR: chunk allocation, size stored in m_memSizeAndFlags.
+	static void* operator new(size_t nbytes)
+	{
+		void* p = hkMemory_s010d_18c0__b::s_instance->allocateChunk((int)nbytes, HK_MEMORY_CLASS_COLLIDE_s010d_18c0__b);
+		((hkReferencedObject_s010d_18c0__b*)p)->m_memSizeAndFlags = (unsigned short)nbytes;
+		return p;
+	}
+	static void operator delete(void* p)
+	{
+		hkMemory_s010d_18c0__b::s_instance->deallocateChunk(p, ((hkReferencedObject_s010d_18c0__b*)p)->m_memSizeAndFlags, HK_MEMORY_CLASS_COLLIDE_s010d_18c0__b);
+	}
+	static void* operator new(size_t, void* p) { return p; }
+	static void operator delete(void*, void*) {}
+
+	// memSize == 0 means "not heap owned": never reference counted.
+	void addReference() { if (m_memSizeAndFlags != 0) ++m_referenceCount; }
+	void removeReference()
+	{
+		if (m_memSizeAndFlags != 0)
+		{
+			m_referenceCount = (hkInt16)(m_referenceCount - 1);
+			if (m_referenceCount == 0)
+				delete this;
+		}
+	}
+
+	unsigned short m_memSizeAndFlags;  // 0x04
+	hkInt16 m_referenceCount;   // 0x06
+
+protected:
+	hkReferencedObject_s010d_18c0__b() : m_referenceCount(1) {}
+};
+class hkStatisticsCollector
+{ public:
+	virtual void s0();
+	virtual void beginObject(const char* name, int mode, const void* obj);                                     // +4
+	virtual void addArray(const char* name, int elemSize, const void* ptr, int usedBytes, int allocBytes);    // +8
+	virtual void addReferencedObject(const char* name, int mode, const void* obj);                             // +0xc
+	virtual void s4();
+	virtual void s5();
+	virtual void endObject();                                                                                  // +0x18
+};
+class hkCdBody_s010d_18c0__b;
+struct hkShapeRayCastInput
+{
+	hkVector4_s010d_18c0__b m_from;                          // +0
+	hkVector4_s010d_18c0__b m_to;                            // +0x10
+	uint32_t m_filterInfo;                     // +0x20
+	const void* m_rayShapeCollectionFilter;    // +0x24 (hkRayShapeCollectionFilter*)
+	uint32_t m_pad[2];                         // size 0x30
+};
+struct hkShapeRayCastOutput
+{
+	hkVector4_s010d_18c0__b m_normal;                        // +0
+	uint32_t m_shapeKey;                       // +0x10
+	float m_hitFraction;                       // +0x14
+	uint32_t m_pad[2];                         // size 0x20
+};
+class hkRayHitCollector
+{ public:
+	virtual void addRayHit(const hkCdBody_s010d_18c0__b& cdBody, const hkShapeRayCastOutput& hitInfo) = 0;   // 0
+	virtual ~hkRayHitCollector() {}                                                              // 1
+	float m_earlyOutHitFraction;               // +4
+};
+class hkShape_s010d_18c0__b : public hkReferencedObject_s010d_18c0__b { public:
+	int m_userData;                            // +8
+	virtual int getType() const = 0;                                                                   // 2
+	virtual void getAabb(const hkTransform_s010d_18c0__b& localToWorld, float tolerance, hkAabb_s010d_18c0__b& out) const = 0;    // 3 (+0xc)
+	virtual float getMaximumProjection(const hkVector4_s010d_18c0__b& direction) const = 0;                         // 4 (0x010c3510 is hkShape's)
+	virtual hkBool_s010d_18c0__b castRay(const hkShapeRayCastInput& input, hkShapeRayCastOutput& output) const = 0; // 5 (+0x14)
+	virtual void castRayWithCollector(const hkShapeRayCastInput& input, const hkCdBody_s010d_18c0__b& cdBody,
+	                                  hkRayHitCollector& collector) const = 0;                        // 6 (+0x18)
+protected:
+	hkShape_s010d_18c0__b() : m_userData(0) {}
+};
+class hkCdBody_s010d_18c0__b
+{ public:
+	const hkShape_s010d_18c0__b* m_shape;                    // +0
+	uint32_t m_shapeKey;                       // +4
+	const void* m_motion;                      // +8 (hkMotionState*)
+	const hkCdBody_s010d_18c0__b* m_parent;                  // +0xc
+};
+typedef uint16_t hkContactPointId_s010d_18c0__b;
+class hkContactPoint_s010d_18c0__b
+{
+public:
+    hkVector4_s010d_18c0__b m_position;                          // +0x00
+    hkVector4_s010d_18c0__b m_separatingNormal;                  // +0x10 (w = distance)
+    void setFlipped(const hkContactPoint_s010d_18c0__b& other);  // 0x010cecf0
+};
+struct hkProcessCdPoint_s010d_18c0__b { hkContactPoint_s010d_18c0__b m_contact; uint32_t m_extra[4]; };   // 0x30 bytes
+struct hkContactMgr_s010d_18c0__b
+{
+    virtual void v0();
+    virtual void v1();
+    virtual void v2();
+    virtual void v3();
+    virtual void removePoint(hkContactPointId_s010d_18c0__b id);   // slot 4 (+0x10)
+};
+class hkCollisionDispatcher_s010d_18c0__b;
+struct hkCollisionInput_s010d_18c0__b
+{
+    hkCollisionDispatcher_s010d_18c0__b* m_dispatcher;           // +0
+    uint32_t m_pad[3];
+};
+struct hkProcessCollisionInput_s010d_18c0__b : hkCollisionInput_s010d_18c0__b {};
+struct hkCdPointCollector_s010d_18c0__b
+{
+    void* m_vftable;                               // +0
+    float m_earlyOutDistance;                      // +4
+};
+struct hkCdBodyPairCollector_s010d_18c0__b
+{
+    void* m_vftable;                               // +0
+    char  m_earlyOut;                              // +4
+};
+struct hkProcessCollisionOutput_s010d_18c0__b
+{
+    hkProcessCdPoint_s010d_18c0__b* m_firstFreeContactPoint;     // +0x0000
+    uint32_t m_pad0[3];
+    hkContactPoint_s010d_18c0__b m_toiContact;                   // +0x0010
+    hkProcessCdPoint_s010d_18c0__b m_contactPoints[256];         // +0x0030
+    uint32_t m_toiProperties;                      // +0x3030
+    float m_toiTime;                               // +0x3034
+};
+struct hkSymmetricAgentFlipCollector_s010d_18c0__b : hkCdPointCollector_s010d_18c0__b
+{
+    hkCdPointCollector_s010d_18c0__b* m_original;                // +8
+};
+struct hkSymmetricAgentFlipBodyCollector_s010d_18c0__b : hkCdBodyPairCollector_s010d_18c0__b
+{
+    hkCdBodyPairCollector_s010d_18c0__b* m_original;             // +8
+};
+class hkCollisionAgent_s010d_18c0__b : public hkReferencedObject_s010d_18c0__b
+{
+public:
+    hkContactMgr_s010d_18c0__b* m_contactMgr;                    // +8
+    virtual void getPenetrations(const hkCdBody_s010d_18c0__b&, const hkCdBody_s010d_18c0__b&, const hkCollisionInput_s010d_18c0__b&, hkCdBodyPairCollector_s010d_18c0__b&);
+    virtual void getClosestPoints(const hkCdBody_s010d_18c0__b&, const hkCdBody_s010d_18c0__b&, const hkCollisionInput_s010d_18c0__b&, hkCdPointCollector_s010d_18c0__b&);
+    virtual void processCollision(const hkCdBody_s010d_18c0__b&, const hkCdBody_s010d_18c0__b&, const hkProcessCollisionInput_s010d_18c0__b&, hkProcessCollisionOutput_s010d_18c0__b&);
+};
+class hkConvexShape_s010d_18c0__b : public hkShape_s010d_18c0__b { public: float m_radius; };
+class hkTriangleShape_s010d_18c0__b : public hkConvexShape_s010d_18c0__b { public: hkVector4_s010d_18c0__b m_vertices[3]; };
+struct hkCollideTriangleUtil_s010d_18c0__b
+{
+    struct PointTriangleDistanceCache { float m_data[5]; };   // fills the agent's +0x14 slot
+    static void setupPointTriangleDistanceCache(const hkVector4_s010d_18c0__b* triangle, PointTriangleDistanceCache& cache);   // 0x01105e90
+};
+class hkMultiSphereTriangleAgent_s010d_18c0__b
+{
+public:
+    void getPenetrations(const hkCdBody_s010d_18c0__b&, const hkCdBody_s010d_18c0__b&, const hkCollisionInput_s010d_18c0__b&, hkCdBodyPairCollector_s010d_18c0__b&);  // 0x010d18c0 (hkMultiSphereTriangleAgent::getPenetrations)
+    void getClosestPoints(const hkCdBody_s010d_18c0__b&, const hkCdBody_s010d_18c0__b&, const hkCollisionInput_s010d_18c0__b&, hkCdPointCollector_s010d_18c0__b&);  // 0x010d0920 (hkMultiSphereTriangleAgent::getClosestPoints)
+    void processCollision(const hkCdBody_s010d_18c0__b&, const hkCdBody_s010d_18c0__b&, const hkProcessCollisionInput_s010d_18c0__b&, hkProcessCollisionOutput_s010d_18c0__b&);  // 0x010d0130 (hkMultiSphereTriangleAgent::processCollision)
+};
+class hkSymmetricAgent_hkMultiSphereTriangleAgent : public hkMultiSphereTriangleAgent_s010d_18c0__b
+{
+public:
+    void getPenetrations(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB, const hkCollisionInput_s010d_18c0__b& input, hkCdBodyPairCollector_s010d_18c0__b& collector);
+    void getClosestPoints(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB, const hkCollisionInput_s010d_18c0__b& input, hkCdPointCollector_s010d_18c0__b& collector);
+    void processCollision(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB, const hkProcessCollisionInput_s010d_18c0__b& input, hkProcessCollisionOutput_s010d_18c0__b& result);
+};
+class hkCapsuleTriangleAgent_s010d_18c0__b : public hkCollisionAgent_s010d_18c0__b
+{
+public:
+    hkContactPointId_s010d_18c0__b m_contactPointId[3];          // +0x0c
+    char             m_pad[2];                     // +0x12
+    hkCollideTriangleUtil_s010d_18c0__b::PointTriangleDistanceCache m_triangleCache;   // +0x14
+
+    hkCapsuleTriangleAgent_s010d_18c0__b(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB, const hkCollisionInput_s010d_18c0__b& input, hkContactMgr_s010d_18c0__b* mgr)
+    {
+        m_contactPointId[0] = 0xffff;
+        m_contactPointId[1] = 0xffff;
+        m_contactPointId[2] = 0xffff;
+        m_contactMgr = mgr;
+        hkCollideTriangleUtil_s010d_18c0__b::setupPointTriangleDistanceCache(
+            static_cast<const hkTriangleShape_s010d_18c0__b*>(bodyB.m_shape)->m_vertices, m_triangleCache);
+    }
+
+    static hkCollisionAgent_s010d_18c0__b* createCapsuleTriangleAgent(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB,
+                                                        const hkCollisionInput_s010d_18c0__b& input, hkContactMgr_s010d_18c0__b* mgr);
+    static hkCollisionAgent_s010d_18c0__b* createTriangleCapsuleAgent(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB,
+                                                        const hkCollisionInput_s010d_18c0__b& input, hkContactMgr_s010d_18c0__b* mgr);
+    void cleanup();
+};
+class hkTriangleCapsuleAgent : public hkCapsuleTriangleAgent_s010d_18c0__b
+{
+public:
+    hkTriangleCapsuleAgent(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB, const hkCollisionInput_s010d_18c0__b& input, hkContactMgr_s010d_18c0__b* mgr)
+        : hkCapsuleTriangleAgent_s010d_18c0__b(bodyB, bodyA, input, mgr) {}
+};
+// ---- items of slice s010d18c0_b end
+
+// ---- items of slice s010d7570 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define HK_CALL __cdecl
+class hkBool_s010d_7570
+{
+public:
+	hkBool_s010d_7570(bool b) : m_bool(b ? 1 : 0) {}
+	operator bool() const { return m_bool != 0; }
+private:
+	char m_bool;
+};
+enum
+{
+	HK_MEMORY_CLASS_ARRAY_s010d_7570 = 0x14,
+	HK_MEMORY_CLASS_COLLIDE_s010d_7570 = 0x1c,
+	HK_MEMORY_CLASS_CDINFO_s010d_7570 = 0x1e
+};
+class hkMemory_s010d_7570
+{
+public:
+	virtual void* allocate(int nbytes, int cl);                          // 0
+	virtual void deallocate(void* p);                                    // 1
+	virtual void* alignedAllocate(int alignment, int nbytes, int cl);    // 2
+	virtual void alignedDeallocate(void* p);                             // 3
+	virtual void* allocateChunk(int nbytes, int cl);                     // 4 (+0x10)
+	virtual void deallocateChunk(void* p, int nbytes, int cl);           // 5 (+0x14)
+	static hkMemory_s010d_7570* s_instance;
+};
+static inline void* hkTlsGet(unsigned long i) { return TlsGetValue(i); }
+static inline void hkTlsSet(unsigned long i, void* v) { TlsSetValue(i, v); }
+struct hkMonitorCommand_s010d_7570 { const char* m_commandAndMonitor; uint32_t m_time0; uint32_t m_pad; };   // 12 bytes (32-bit)
+#define HK_RDTSC32() ((uint32_t)__rdtsc())
+#define HK_TIMER_COMMAND_s010d_7570(name) do { \
+	void* hkEnd_ = hkTlsGet(g_hkMonitorStreamEndTls); \
+	if (hkTlsGet(g_hkMonitorStreamCurrentTls) < hkEnd_) { \
+		hkMonitorCommand_s010d_7570* c_ = (hkMonitorCommand_s010d_7570*)hkTlsGet(g_hkMonitorStreamCurrentTls); \
+		c_->m_commandAndMonitor = name; \
+		c_->m_time0 = HK_RDTSC32(); \
+		hkTlsSet(g_hkMonitorStreamCurrentTls, c_ + 1); } } while (0)
+#define HK_TIMER_BEGIN_s010d_7570(name) HK_TIMER_COMMAND_s010d_7570(name)
+#define HK_TIMER_END_s010d_7570()       HK_TIMER_COMMAND_s010d_7570(hkMonitorTimerEndTag)
+class hkRotation_s010d_7570;
+struct HK_ALIGN16 hkVector4_s010d_7570
+{
+	float x, y, z, w;
+	void setRotatedInverseDir(const hkRotation_s010d_7570& a, const hkVector4_s010d_7570& b);     // 0x01081440 (this = transpose(a) * b)
+};
+class hkAabb_s010d_7570 { public: hkVector4_s010d_7570 m_min; hkVector4_s010d_7570 m_max; };
+class hkRotation_s010d_7570 { public: hkVector4_s010d_7570 m_col[3]; };
+class hkTransform_s010d_7570
+{ public:
+	hkVector4_s010d_7570 m_rot[3];
+	hkVector4_s010d_7570 m_trans;
+	void setMulInverseMul(const hkTransform_s010d_7570& a, const hkTransform_s010d_7570& b);      // 0x010810F0 (this = inverse(a) * b)
+};
+class hkReferencedObject_s010d_7570
+{
+public:
+	virtual ~hkReferencedObject_s010d_7570() {}                                     // 0
+	virtual void calcStatistics(class hkStatisticsCollector* c) const {} // 1 (0x0052E650 is the empty default)
+
+	// HK_DECLARE_CLASS_ALLOCATOR: chunk allocation, size stored in m_memSizeAndFlags.
+	static void* operator new(size_t nbytes)
+	{
+		void* p = hkMemory_s010d_7570::s_instance->allocateChunk((int)nbytes, HK_MEMORY_CLASS_COLLIDE_s010d_7570);
+		((hkReferencedObject_s010d_7570*)p)->m_memSizeAndFlags = (unsigned short)nbytes;
+		return p;
+	}
+	static void operator delete(void* p)
+	{
+		hkMemory_s010d_7570::s_instance->deallocateChunk(p, ((hkReferencedObject_s010d_7570*)p)->m_memSizeAndFlags, HK_MEMORY_CLASS_COLLIDE_s010d_7570);
+	}
+	static void* operator new(size_t, void* p) { return p; }
+	static void operator delete(void*, void*) {}
+
+	// memSize == 0 means "not heap owned": never reference counted.
+	void addReference() { if (m_memSizeAndFlags != 0) ++m_referenceCount; }
+	void removeReference()
+	{
+		if (m_memSizeAndFlags != 0)
+		{
+			m_referenceCount = (hkInt16)(m_referenceCount - 1);
+			if (m_referenceCount == 0)
+				delete this;
+		}
+	}
+
+	unsigned short m_memSizeAndFlags;  // 0x04
+	hkInt16 m_referenceCount;   // 0x06
+
+protected:
+	hkReferencedObject_s010d_7570() : m_referenceCount(1) {}
+};
+class hkCdBody_s010d_7570;
+struct hkShapeRayCastInput_s010d_7570
+{
+	hkVector4_s010d_7570 m_from;                          // +0
+	hkVector4_s010d_7570 m_to;                            // +0x10
+	uint32_t m_filterInfo;                     // +0x20
+	const void* m_rayShapeCollectionFilter;    // +0x24 (hkRayShapeCollectionFilter*)
+	uint32_t m_pad[2];                         // size 0x30
+};
+struct hkShapeRayCastOutput_s010d_7570
+{
+	hkVector4_s010d_7570 m_normal;                        // +0
+	uint32_t m_shapeKey;                       // +0x10
+	float m_hitFraction;                       // +0x14
+	uint32_t m_pad[2];                         // size 0x20
+};
+class hkRayHitCollector_s010d_7570
+{ public:
+	virtual void addRayHit(const hkCdBody_s010d_7570& cdBody, const hkShapeRayCastOutput_s010d_7570& hitInfo) = 0;   // 0
+	virtual ~hkRayHitCollector_s010d_7570() {}                                                              // 1
+	float m_earlyOutHitFraction;               // +4
+};
+class hkShape_s010d_7570 : public hkReferencedObject_s010d_7570 { public:
+	int m_userData;                            // +8
+	virtual int getType() const = 0;                                                                   // 2
+	virtual void getAabb(const hkTransform_s010d_7570& localToWorld, float tolerance, hkAabb_s010d_7570& out) const = 0;    // 3 (+0xc)
+	virtual float getMaximumProjection(const hkVector4_s010d_7570& direction) const = 0;                         // 4 (0x010c3510 is hkShape's)
+	virtual hkBool_s010d_7570 castRay(const hkShapeRayCastInput_s010d_7570& input, hkShapeRayCastOutput_s010d_7570& output) const = 0; // 5 (+0x14)
+	virtual void castRayWithCollector(const hkShapeRayCastInput_s010d_7570& input, const hkCdBody_s010d_7570& cdBody,
+	                                  hkRayHitCollector_s010d_7570& collector) const = 0;                        // 6 (+0x18)
+protected:
+	hkShape_s010d_7570() : m_userData(0) {}
+};
+class hkCdBody_s010d_7570
+{ public:
+	const hkShape_s010d_7570* m_shape;                    // +0
+	uint32_t m_shapeKey;                       // +4
+	const void* m_motion;                      // +8 (hkMotionState*)
+	const hkCdBody_s010d_7570* m_parent;                  // +0xc
+};
+class hkShapeCollection;
+struct hkCollisionInput_s010d_7570;
+class hkShapeCollectionFilter_s010d_7570
+{
+public:
+	virtual hkBool_s010d_7570 isCollisionEnabled(const hkCollisionInput_s010d_7570& input, const hkCdBody_s010d_7570& collA, const hkCdBody_s010d_7570& collB,
+	                                  const hkShapeCollection& bContainer, unsigned int bKey) const = 0;           // 0
+	virtual hkBool_s010d_7570 isCollisionEnabled(const hkCdBody_s010d_7570& collA, const hkShapeCollection& aContainer, const hkCdBody_s010d_7570& collB,
+	                                  const hkShapeCollection& bContainer, unsigned int aKey, unsigned int bKey) const = 0;   // 1
+};
+struct hkCollisionInput_s010d_7570
+{
+	void* m_dispatcher;                        // +0 (hkCollisionDispatcher*)
+	const hkShapeCollectionFilter_s010d_7570* m_filter;   // +4
+	float m_tolerance;                         // +8
+	hkBool_s010d_7570 m_createPredictiveAgents;           // +0xc
+	hkCollisionInput_s010d_7570() : m_dispatcher(0), m_filter(0), m_tolerance(0), m_createPredictiveAgents(false) {}
+};
+struct hkProcessCollisionInput_s010d_7570 : hkCollisionInput_s010d_7570   // size 0x2c
+{
+	uint32_t m_stepInfo[4];                    // +0x10 (hkStepInfo)
+	void* m_config;                            // +0x20
+	void* m_dynamicsInfo;                      // +0x24
+	void* m_collisionQualityInfo;              // +0x28
+};
+class hkCollisionAgent_s010d_7570;
+class hkContactMgr_s010d_7570;
+class hkCdPointCollector_s010d_7570;
+class hkCdBodyPairCollector_s010d_7570;
+struct hkLinearCastCollisionInput_s010d_7570;
+#define HK_REAL_MAX_BITS 0x7f7fffeeu
+static inline float hkRealMax()      // 3.40282e+38f in this build: bit pattern 0x7f7fffee
+{
+	uint32_t u = HK_REAL_MAX_BITS;
+	float f;
+	memcpy(&f, &u, sizeof(f));
+	return f;
+}
+class hkContactPoint_s010d_7570
+{ public:
+	hkVector4_s010d_7570 m_position;                                  // +0
+	hkVector4_s010d_7570 m_separatingNormal;                          // +0x10 (w = distance)
+	void setFlipped(const hkContactPoint_s010d_7570& other);          // 0x010CECF0
+};
+struct hkCdPoint_s010d_7570 { hkContactPoint_s010d_7570 m_contact; const hkCdBody_s010d_7570* m_cdBodyA; const hkCdBody_s010d_7570* m_cdBodyB; };
+class hkCdPointCollector_s010d_7570
+{
+public:
+	hkCdPointCollector_s010d_7570() : m_earlyOutDistance(hkRealMax()) {}
+	virtual void* scalarDeletingDtor(unsigned int flags);  // 0, 0x010CDCA0
+	virtual void addCdPoint(const hkCdPoint_s010d_7570& point) = 0;   // 1
+	float m_earlyOutDistance;                              // +4
+};
+class hkCdBodyPairCollector_s010d_7570
+{
+public:
+	virtual void* scalarDeletingDtor(unsigned int flags);  // 0, inherited deleting slot at 0x010CDCA0
+	virtual void addCdBodyPair(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b) = 0;   // 1
+	hkBool_s010d_7570 m_earlyOut;                                     // +4
+	hkCdBodyPairCollector_s010d_7570() : m_earlyOut(false) {}
+};
+struct hkProcessCdPoint_s010d_7570 { hkContactPoint_s010d_7570 m_contact; uint32_t m_extra[4]; };     // 0x30 bytes
+struct hkProcessCollisionOutput_s010d_7570
+{
+	hkProcessCdPoint_s010d_7570* m_firstFreeContactPoint;             // +0
+	uint32_t m_pad0[3];
+	hkContactPoint_s010d_7570 m_toiContact;                           // +0x10 (normal at +0x20)
+	hkProcessCdPoint_s010d_7570 m_contactPoints[256];                 // +0x30
+	uint32_t m_toiProperties;                              // +0x3030
+	float m_toiTime;                                       // +0x3034
+};
+struct hkLinearCastCollisionInput_s010d_7570 : hkCollisionInput_s010d_7570
+{
+	hkVector4_s010d_7570 m_path;                         // +0x10
+	float m_maxExtraPenetration;              // +0x20
+	float m_cachedPathLength;                 // +0x24
+	void* m_config;                           // +0x28
+};
+class hkSymmetricAgentFlipCollector_s010d_7570 : public hkCdPointCollector_s010d_7570        // vtable 0x014A43A4
+{
+public:
+	explicit hkSymmetricAgentFlipCollector_s010d_7570(hkCdPointCollector_s010d_7570& original) : m_original(original) {}
+	virtual void addCdPoint(const hkCdPoint_s010d_7570& point);           // 0x010EBBB0
+	hkCdPointCollector_s010d_7570& m_original;                            // +8
+};
+class hkSymmetricAgentFlipCastCollector_s010d_7570 : public hkCdPointCollector_s010d_7570    // size 0x30 in the binary
+{
+public:
+	hkSymmetricAgentFlipCastCollector_s010d_7570(const hkVector4_s010d_7570& path, hkCdPointCollector_s010d_7570* original)
+		: m_path(path), m_original(original) { m_earlyOutDistance = hkRealMax(); }
+	virtual void addCdPoint(const hkCdPoint_s010d_7570& point);           // 0x010EBC00
+	hkVector4_s010d_7570 m_path;                                          // +0x10
+	hkCdPointCollector_s010d_7570* m_original;                            // +0x20
+};
+class hkSymmetricAgentFlipBodyCollector_s010d_7570 : public hkCdBodyPairCollector_s010d_7570    // 0x014A43B4
+{
+public:
+	explicit hkSymmetricAgentFlipBodyCollector_s010d_7570(hkCdBodyPairCollector_s010d_7570& original) : m_original(original) {}
+	virtual void addCdBodyPair(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b);   // 0x010EBC50
+	hkCdBodyPairCollector_s010d_7570& m_original;                         // +8
+};
+class hkCollisionAgent_s010d_7570 : public hkReferencedObject_s010d_7570             // vtable slots 2..9 as used by the compound agents
+{
+public:
+	virtual void getPenetrations(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkCollisionInput_s010d_7570& input, hkCdBodyPairCollector_s010d_7570& collector) = 0;       // 2
+	virtual void getClosestPoints(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkCollisionInput_s010d_7570& input, hkCdPointCollector_s010d_7570& collector) = 0;          // 3
+	virtual void linearCast(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkLinearCastCollisionInput_s010d_7570& input,
+	                        hkCdPointCollector_s010d_7570& castCollector, hkCdPointCollector_s010d_7570* startCollector) = 0;                                                 // 4
+	virtual void processCollision(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkProcessCollisionInput_s010d_7570& input, hkProcessCollisionOutput_s010d_7570& output) = 0;   // 5
+	virtual void cleanup() = 0;                                                                                                                     // 6
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkCollisionInput_s010d_7570& input) = 0;                               // 7
+	virtual void invalidateTim(hkCollisionInput_s010d_7570& input);                                                                                             // 8
+	virtual void warpTime(float oldTime, float newTime, hkCollisionInput_s010d_7570& input);                                                                    // 9
+	virtual void removePoint(unsigned short contactPointId);                                                                                         // 10 (0x010829F0)
+	virtual void commitPotential(unsigned short contactPointId);                                                                                     // 11
+	virtual void createZombie(unsigned short contactPointId);                                                                                        // 12
+
+	hkContactMgr_s010d_7570* m_contactMgr;     // +8
+protected:
+	explicit hkCollisionAgent_s010d_7570(hkContactMgr_s010d_7570* mgr) : m_contactMgr(mgr) {}
+};
+class hkShapeCollection : public hkShape_s010d_7570
+{
+public:
+	virtual int getNumChildShapes() const = 0;                                                // 7 (+0x1c, 0x010E7F80)
+	virtual void shapeCollectionSlot8();                                                      // 8
+	virtual void shapeCollectionSlot9();                                                      // 9
+	virtual const hkShape_s010d_7570* getChildShape(unsigned int key, void* shapeBuffer) const = 0;      // 10 (+0x28)
+};
+template <typename AGENT>
+class hkSymmetricAgent : public AGENT
+{
+public:
+	hkSymmetricAgent(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkCollisionInput_s010d_7570& input, hkContactMgr_s010d_7570* mgr) : AGENT(a, b, input, mgr) {}
+	explicit hkSymmetricAgent(hkContactMgr_s010d_7570* mgr) : AGENT(mgr) {}
+	virtual void getPenetrations(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkCollisionInput_s010d_7570& input, hkCdBodyPairCollector_s010d_7570& collector);
+	virtual void getClosestPoints(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkCollisionInput_s010d_7570& input, hkCdPointCollector_s010d_7570& collector);
+	virtual void linearCast(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkLinearCastCollisionInput_s010d_7570& input,
+	                        hkCdPointCollector_s010d_7570& castCollector, hkCdPointCollector_s010d_7570* startCollector);
+	virtual void processCollision(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkProcessCollisionInput_s010d_7570& input, hkProcessCollisionOutput_s010d_7570& output);
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkCollisionInput_s010d_7570& input);
+};
+template <typename AGENT>
+void hkSymmetricAgent<AGENT>::getPenetrations(const hkCdBody_s010d_7570& bodyA, const hkCdBody_s010d_7570& bodyB, const hkCollisionInput_s010d_7570& input, hkCdBodyPairCollector_s010d_7570& collector)
+{
+	hkSymmetricAgentFlipBodyCollector_s010d_7570 flipCollector(collector);
+	AGENT::getPenetrations(bodyB, bodyA, input, flipCollector);
+}
+template <typename AGENT>
+void hkSymmetricAgent<AGENT>::getClosestPoints(const hkCdBody_s010d_7570& bodyA, const hkCdBody_s010d_7570& bodyB, const hkCollisionInput_s010d_7570& input, hkCdPointCollector_s010d_7570& collector)
+{
+	hkSymmetricAgentFlipCollector_s010d_7570 flipCollector(collector);
+	AGENT::getClosestPoints(bodyB, bodyA, input, flipCollector);
+}
+template <typename AGENT>
+void hkSymmetricAgent<AGENT>::linearCast(const hkCdBody_s010d_7570& bodyA, const hkCdBody_s010d_7570& bodyB, const hkLinearCastCollisionInput_s010d_7570& input,
+                                         hkCdPointCollector_s010d_7570& collector, hkCdPointCollector_s010d_7570* startCollector)
+{
+	// copy of the input with the path negated (all four components, as the binary does)
+	hkLinearCastCollisionInput_s010d_7570 input2 = input;
+	input2.m_path.x = -input.m_path.x;
+	input2.m_path.y = -input.m_path.y;
+	input2.m_path.z = -input.m_path.z;
+	input2.m_path.w = -input.m_path.w;
+
+	hkSymmetricAgentFlipCastCollector_s010d_7570 flipCollector(input.m_path, &collector);
+	if (startCollector)
+	{
+		hkSymmetricAgentFlipCastCollector_s010d_7570 flipStartCollector(input.m_path, startCollector);
+		AGENT::linearCast(bodyB, bodyA, input2, flipCollector, &flipStartCollector);
+	}
+	else
+	{
+		AGENT::linearCast(bodyB, bodyA, input2, flipCollector, 0);
+	}
+}
+template <typename AGENT>
+void hkSymmetricAgent<AGENT>::processCollision(const hkCdBody_s010d_7570& bodyA, const hkCdBody_s010d_7570& bodyB, const hkProcessCollisionInput_s010d_7570& input, hkProcessCollisionOutput_s010d_7570& output)
+{
+	float toiTimeBefore = output.m_toiTime;
+	hkProcessCdPoint_s010d_7570* firstNewPoint = output.m_firstFreeContactPoint;
+	AGENT::processCollision(bodyB, bodyA, input, output);
+	for (hkProcessCdPoint_s010d_7570* p = firstNewPoint; p < output.m_firstFreeContactPoint; ++p)
+		p->m_contact.setFlipped(p->m_contact);
+	if (toiTimeBefore != output.m_toiTime)       // fucompp: unordered counts as different
+	{
+		output.m_toiContact.m_separatingNormal.x = -output.m_toiContact.m_separatingNormal.x;
+		output.m_toiContact.m_separatingNormal.y = -output.m_toiContact.m_separatingNormal.y;
+		output.m_toiContact.m_separatingNormal.z = -output.m_toiContact.m_separatingNormal.z;
+	}
+}
+template <typename AGENT>
+void hkSymmetricAgent<AGENT>::updateShapeCollectionFilter(const hkCdBody_s010d_7570& bodyA, const hkCdBody_s010d_7570& bodyB, const hkCollisionInput_s010d_7570& input)
+{
+	AGENT::updateShapeCollectionFilter(bodyB, bodyA, input);
+}
+struct ClosestPointLineSegResult
+{
+	hkVector4_s010d_7570 m_point;       // +0
+	uint32_t m_pad[4];
+};
+class hkCollideTriangleUtil_s010d_7570
+{
+public:
+	static int HK_CALL closestPointLineSeg(const hkVector4_s010d_7570& a, const hkVector4_s010d_7570& b, const hkVector4_s010d_7570& c,
+	                                       ClosestPointLineSegResult& outResult);   // 0x01105c30
+};
+class hkContactMgr_s010d_7570 : public hkReferencedObject_s010d_7570
+{
+public:
+	virtual unsigned short addContactPoint(const hkCdBody_s010d_7570& bodyA, const hkCdBody_s010d_7570& bodyB,
+	                                       const hkProcessCollisionInput_s010d_7570& input, hkProcessCdPoint_s010d_7570& point);   // slot 2 (+8)
+	virtual void contactMgrSlot3();                                                                    // slot 3 (+0xc)
+	virtual void removePoint(unsigned short contactPointId);                                           // slot 4 (+0x10)
+};
+class hkSphereTriangleAgent_s010d_7570 : public hkCollisionAgent_s010d_7570
+{
+public:
+	virtual void getPenetrations(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkCollisionInput_s010d_7570&, hkCdBodyPairCollector_s010d_7570&);  // 0x010d7190 (hkSphereTriangleAgent::getPenetrations)
+	virtual void getClosestPoints(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkCollisionInput_s010d_7570&, hkCdPointCollector_s010d_7570&);  // 0x010d6a80 (hkSphereTriangleAgent::getClosestPoints)
+	virtual void linearCast(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkLinearCastCollisionInput_s010d_7570&, hkCdPointCollector_s010d_7570&, hkCdPointCollector_s010d_7570*);
+	virtual void processCollision(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkProcessCollisionInput_s010d_7570&, hkProcessCollisionOutput_s010d_7570&);   // 0x010d66e0
+	virtual void cleanup();                                                                                                       // 0x010d7680
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkCollisionInput_s010d_7570&);
+
+protected:
+	unsigned short m_contactPointId;      // +0xc
+};
+class hkSphereCapsuleAgent : public hkCollisionAgent_s010d_7570
+{
+public:
+	virtual void getPenetrations(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkCollisionInput_s010d_7570&, hkCdBodyPairCollector_s010d_7570&);
+	virtual void getClosestPoints(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkCollisionInput_s010d_7570&, hkCdPointCollector_s010d_7570&);   // 0x010d7be0
+	virtual void linearCast(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkLinearCastCollisionInput_s010d_7570&, hkCdPointCollector_s010d_7570&, hkCdPointCollector_s010d_7570*);
+	virtual void processCollision(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkProcessCollisionInput_s010d_7570&, hkProcessCollisionOutput_s010d_7570&);   // 0x010d7710
+	virtual void cleanup();                                                                                                       // 0x010d7680
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkCollisionInput_s010d_7570&);
+
+	static hkCollisionAgent_s010d_7570* HK_CALL create(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkCollisionInput_s010d_7570& input, hkContactMgr_s010d_7570* mgr);   // 0x010d76b0
+	static void HK_CALL staticGetClosestPoints(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkCollisionInput_s010d_7570&, hkCdPointCollector_s010d_7570&);   // 0x010d8080
+	static void HK_CALL staticGetPenetrations(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkCollisionInput_s010d_7570&, hkCdBodyPairCollector_s010d_7570&); // 0x010d8520
+
+protected:
+	hkSphereCapsuleAgent(hkContactMgr_s010d_7570* mgr) : hkCollisionAgent_s010d_7570(mgr), m_contactPointId(0xffff) {}
+	unsigned short m_contactPointId;      // +0xc (0x10-byte object)
+};
+class hkSymmetricAgent_hkSphereCapsuleAgent : public hkSphereCapsuleAgent
+{
+public:
+	explicit hkSymmetricAgent_hkSphereCapsuleAgent(hkContactMgr_s010d_7570* mgr) : hkSphereCapsuleAgent(mgr) {}
+	static hkCollisionAgent_s010d_7570* HK_CALL create(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkCollisionInput_s010d_7570& input, hkContactMgr_s010d_7570* mgr);   // 0x010d76e0
+	virtual void getPenetrations(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkCollisionInput_s010d_7570&, hkCdBodyPairCollector_s010d_7570&);
+	virtual void getClosestPoints(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkCollisionInput_s010d_7570&, hkCdPointCollector_s010d_7570&);
+	virtual void linearCast(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkLinearCastCollisionInput_s010d_7570&, hkCdPointCollector_s010d_7570&, hkCdPointCollector_s010d_7570*);
+	virtual void processCollision(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkProcessCollisionInput_s010d_7570&, hkProcessCollisionOutput_s010d_7570&);
+};
+class hkSymmetricAgent_hkSphereTriangleAgent : public hkSphereTriangleAgent_s010d_7570
+{
+public:
+	virtual void processCollision(const hkCdBody_s010d_7570&, const hkCdBody_s010d_7570&, const hkProcessCollisionInput_s010d_7570&, hkProcessCollisionOutput_s010d_7570&);   // 0x010d7570
+};
+struct hkCapsuleShapeViewA
+{
+	uint32_t m_header[3];    // +0
+	float m_radius;          // +0xc
+	hkVector4_s010d_7570 m_vertexA;     // +0x10
+	hkVector4_s010d_7570 m_vertexB;     // +0x20
+};
+struct hkSphereShapeViewA
+{
+	uint32_t m_header[3];    // +0
+	float m_radius;          // +0xc
+};
+static __forceinline float hkAbsf(float x) { return x < 0.0f ? -x : x; }
+#define HK_XFORM_COL(O, I, T) { \
+	const float inx = (I).x, iny = (I).y, inz = (I).z; \
+	(O).x = (T)[0] * inx + ((T)[4] * iny + (T)[8]  * inz) + (T)[0xc]; \
+	(O).y = (T)[1] * inx + ((T)[5] * iny + (T)[9]  * inz) + (T)[0xd]; \
+	(O).z = (T)[2] * inx + ((T)[6] * iny + (T)[10] * inz) + (T)[0xe]; \
+	(O).w = 0.0f; }
+// ---- items of slice s010d7570 end
+
+// ---- items of slice s010d8520 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float g_hkBoxBoxRadiusFactor;                       // 0x014a48c8 (1.999f)
+class hkBool_s010d_8520
+{
+public:
+	hkBool_s010d_8520(bool b) : m_bool(b ? 1 : 0) {}
+	operator bool() const { return m_bool != 0; }
+private:
+	char m_bool;
+};
+enum
+{
+	HK_MEMORY_CLASS_ARRAY_s010d_8520 = 0x14,
+	HK_MEMORY_CLASS_COLLIDE_s010d_8520 = 0x1c,
+	HK_MEMORY_CLASS_CDINFO_s010d_8520 = 0x1e
+};
+class hkMemory_s010d_8520
+{
+public:
+	virtual void* allocate(int nbytes, int cl);                          // 0
+	virtual void deallocate(void* p);                                    // 1
+	virtual void* alignedAllocate(int alignment, int nbytes, int cl);    // 2
+	virtual void alignedDeallocate(void* p);                             // 3
+	virtual void* allocateChunk(int nbytes, int cl);                     // 4 (+0x10)
+	virtual void deallocateChunk(void* p, int nbytes, int cl);           // 5 (+0x14)
+	static hkMemory_s010d_8520* s_instance;
+};
+struct hkMonitorCommand_s010d_8520 { const char* m_commandAndMonitor; uint32_t m_time0; uint32_t m_pad; };   // 12 bytes (32-bit)
+#define HK_TIMER_COMMAND_s010d_8520(name) do { \
+	void* hkEnd_ = hkTlsGet(g_hkMonitorStreamEndTls); \
+	if (hkTlsGet(g_hkMonitorStreamCurrentTls) < hkEnd_) { \
+		hkMonitorCommand_s010d_8520* c_ = (hkMonitorCommand_s010d_8520*)hkTlsGet(g_hkMonitorStreamCurrentTls); \
+		c_->m_commandAndMonitor = name; \
+		c_->m_time0 = HK_RDTSC32(); \
+		hkTlsSet(g_hkMonitorStreamCurrentTls, c_ + 1); } } while (0)
+#define HK_TIMER_BEGIN_s010d_8520(name) HK_TIMER_COMMAND_s010d_8520(name)
+#define HK_TIMER_END_s010d_8520()       HK_TIMER_COMMAND_s010d_8520(hkMonitorTimerEndTag)
+class hkRotation_s010d_8520;
+struct HK_ALIGN16 hkVector4_s010d_8520
+{
+	float x, y, z, w;
+	void setRotatedInverseDir(const hkRotation_s010d_8520& a, const hkVector4_s010d_8520& b);     // 0x01081440 (this = transpose(a) * b)
+};
+class hkAabb_s010d_8520 { public: hkVector4_s010d_8520 m_min; hkVector4_s010d_8520 m_max; };
+class hkRotation_s010d_8520 { public: hkVector4_s010d_8520 m_col[3]; };
+class hkTransform_s010d_8520
+{ public:
+	hkVector4_s010d_8520 m_rot[3];
+	hkVector4_s010d_8520 m_trans;
+	void setMulInverseMul(const hkTransform_s010d_8520& a, const hkTransform_s010d_8520& b);      // 0x010810F0 (this = inverse(a) * b)
+};
+class hkReferencedObject_s010d_8520
+{
+public:
+	virtual ~hkReferencedObject_s010d_8520() {}                                     // 0
+	virtual void calcStatistics(class hkStatisticsCollector* c) const {} // 1 (0x0052E650 is the empty default)
+
+	// HK_DECLARE_CLASS_ALLOCATOR: chunk allocation, size stored in m_memSizeAndFlags.
+	static void* operator new(size_t nbytes)
+	{
+		void* p = hkMemory_s010d_8520::s_instance->allocateChunk((int)nbytes, HK_MEMORY_CLASS_COLLIDE_s010d_8520);
+		((hkReferencedObject_s010d_8520*)p)->m_memSizeAndFlags = (unsigned short)nbytes;
+		return p;
+	}
+	static void operator delete(void* p)
+	{
+		hkMemory_s010d_8520::s_instance->deallocateChunk(p, ((hkReferencedObject_s010d_8520*)p)->m_memSizeAndFlags, HK_MEMORY_CLASS_COLLIDE_s010d_8520);
+	}
+	static void* operator new(size_t, void* p) { return p; }
+	static void operator delete(void*, void*) {}
+
+	// memSize == 0 means "not heap owned": never reference counted.
+	void addReference() { if (m_memSizeAndFlags != 0) ++m_referenceCount; }
+	void removeReference()
+	{
+		if (m_memSizeAndFlags != 0)
+		{
+			m_referenceCount = (hkInt16)(m_referenceCount - 1);
+			if (m_referenceCount == 0)
+				delete this;
+		}
+	}
+
+	unsigned short m_memSizeAndFlags;  // 0x04
+	hkInt16 m_referenceCount;   // 0x06
+
+protected:
+	hkReferencedObject_s010d_8520() : m_referenceCount(1) {}
+};
+class hkCdBody_s010d_8520;
+struct hkShapeRayCastInput_s010d_8520
+{
+	hkVector4_s010d_8520 m_from;                          // +0
+	hkVector4_s010d_8520 m_to;                            // +0x10
+	uint32_t m_filterInfo;                     // +0x20
+	const void* m_rayShapeCollectionFilter;    // +0x24 (hkRayShapeCollectionFilter*)
+	uint32_t m_pad[2];                         // size 0x30
+};
+struct hkShapeRayCastOutput_s010d_8520
+{
+	hkVector4_s010d_8520 m_normal;                        // +0
+	uint32_t m_shapeKey;                       // +0x10
+	float m_hitFraction;                       // +0x14
+	uint32_t m_pad[2];                         // size 0x20
+};
+class hkRayHitCollector_s010d_8520
+{ public:
+	virtual void addRayHit(const hkCdBody_s010d_8520& cdBody, const hkShapeRayCastOutput_s010d_8520& hitInfo) = 0;   // 0
+	virtual ~hkRayHitCollector_s010d_8520() {}                                                              // 1
+	float m_earlyOutHitFraction;               // +4
+};
+class hkShape_s010d_8520 : public hkReferencedObject_s010d_8520 { public:
+	int m_userData;                            // +8
+	virtual int getType() const = 0;                                                                   // 2
+	virtual void getAabb(const hkTransform_s010d_8520& localToWorld, float tolerance, hkAabb_s010d_8520& out) const = 0;    // 3 (+0xc)
+	virtual float getMaximumProjection(const hkVector4_s010d_8520& direction) const = 0;                         // 4 (0x010c3510 is hkShape's)
+	virtual hkBool_s010d_8520 castRay(const hkShapeRayCastInput_s010d_8520& input, hkShapeRayCastOutput_s010d_8520& output) const = 0; // 5 (+0x14)
+	virtual void castRayWithCollector(const hkShapeRayCastInput_s010d_8520& input, const hkCdBody_s010d_8520& cdBody,
+	                                  hkRayHitCollector_s010d_8520& collector) const = 0;                        // 6 (+0x18)
+protected:
+	hkShape_s010d_8520() : m_userData(0) {}
+};
+class hkCdBody_s010d_8520
+{ public:
+	const hkShape_s010d_8520* m_shape;                    // +0
+	uint32_t m_shapeKey;                       // +4
+	const void* m_motion;                      // +8 (hkMotionState*)
+	const hkCdBody_s010d_8520* m_parent;                  // +0xc
+};
+class hkShapeCollection_s010d_8520;
+struct hkCollisionInput_s010d_8520;
+class hkShapeCollectionFilter_s010d_8520
+{
+public:
+	virtual hkBool_s010d_8520 isCollisionEnabled(const hkCollisionInput_s010d_8520& input, const hkCdBody_s010d_8520& collA, const hkCdBody_s010d_8520& collB,
+	                                  const hkShapeCollection_s010d_8520& bContainer, unsigned int bKey) const = 0;           // 0
+	virtual hkBool_s010d_8520 isCollisionEnabled(const hkCdBody_s010d_8520& collA, const hkShapeCollection_s010d_8520& aContainer, const hkCdBody_s010d_8520& collB,
+	                                  const hkShapeCollection_s010d_8520& bContainer, unsigned int aKey, unsigned int bKey) const = 0;   // 1
+};
+struct hkCollisionInput_s010d_8520
+{
+	void* m_dispatcher;                        // +0 (hkCollisionDispatcher*)
+	const hkShapeCollectionFilter_s010d_8520* m_filter;   // +4
+	float m_tolerance;                         // +8
+	hkBool_s010d_8520 m_createPredictiveAgents;           // +0xc
+	hkCollisionInput_s010d_8520() : m_dispatcher(0), m_filter(0), m_tolerance(0), m_createPredictiveAgents(false) {}
+};
+struct hkProcessCollisionInput_s010d_8520 : hkCollisionInput_s010d_8520   // size 0x2c
+{
+	uint32_t m_stepInfo[4];                    // +0x10 (hkStepInfo)
+	void* m_config;                            // +0x20
+	void* m_dynamicsInfo;                      // +0x24
+	void* m_collisionQualityInfo;              // +0x28
+};
+class hkCollisionAgent_s010d_8520;
+class hkContactMgr_s010d_8520;
+class hkCdPointCollector_s010d_8520;
+class hkCdBodyPairCollector_s010d_8520;
+struct hkLinearCastCollisionInput_s010d_8520;
+typedef hkCollisionAgent_s010d_8520* (HK_CALL *hkAgentCreateFunc_s010d_8520)(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkContactMgr_s010d_8520*);
+typedef void (HK_CALL *hkAgentGetPenetrationsFunc_s010d_8520)(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdBodyPairCollector_s010d_8520&);
+typedef void (HK_CALL *hkAgentGetClosestPointsFunc_s010d_8520)(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdPointCollector_s010d_8520&);
+typedef void (HK_CALL *hkAgentLinearCastFunc_s010d_8520)(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkLinearCastCollisionInput_s010d_8520&, hkCdPointCollector_s010d_8520&, hkCdPointCollector_s010d_8520*);
+struct hkAgentFuncs_s010d_8520                            // hkCollisionDispatcher::AgentFuncs, 0x14 bytes in the 32-bit binary
+{
+	hkAgentCreateFunc_s010d_8520 m_createFunc;                         // +0
+	hkAgentGetPenetrationsFunc_s010d_8520 m_getPenetrationsFunc;       // +4
+	hkAgentGetClosestPointsFunc_s010d_8520 m_getClosestPointFunc;      // +8
+	hkAgentLinearCastFunc_s010d_8520 m_linearCastFunc;                 // +0xc
+	hkBool_s010d_8520 m_isFlipped;                                     // +0x10
+	hkBool_s010d_8520 m_isPredictive;                                  // +0x11
+	hkAgentFuncs_s010d_8520() : m_createFunc(0), m_getPenetrationsFunc(0), m_getClosestPointFunc(0), m_linearCastFunc(0), m_isFlipped(false), m_isPredictive(false) {}
+};
+class hkCollisionDispatcher_s010d_8520                   // size 0x1c28 (32-bit layout); spelled out up to the quality table
+{ public:
+	void* m_vptr_and_refcount[2];              // +0
+	void* m_defaultCollisionAgent;             // +8 (hkCollisionDispatcher is an hkReferencedObject; first 8 bytes)
+	uint8_t m_pad0c[0x190 - 0xc];
+	uint8_t m_agent2Types[32][32];             // +0x190
+	uint8_t m_agent2TypesPred[32][32];         // +0x590
+	hkAgentFuncs_s010d_8520 m_agent2Func[64];             // +0x990 (stride 0x14 in the 32-bit binary)
+	uint8_t m_pad0e90[0x19d4 - 0xe90];         // (agent3 tables)
+	char m_collisionQualityTable[8][8];        // +0x19d4
+	void registerCollisionAgent(hkAgentFuncs_s010d_8520& funcs, int typeA, int typeB);   // 0x010CD3E0
+};
+class hkContactPoint_s010d_8520
+{ public:
+	hkVector4_s010d_8520 m_position;                                  // +0
+	hkVector4_s010d_8520 m_separatingNormal;                          // +0x10 (w = distance)
+	void setFlipped(const hkContactPoint_s010d_8520& other);          // 0x010CECF0
+};
+struct hkCdPoint_s010d_8520 { hkContactPoint_s010d_8520 m_contact; const hkCdBody_s010d_8520* m_cdBodyA; const hkCdBody_s010d_8520* m_cdBodyB; };
+class hkCdPointCollector_s010d_8520
+{
+public:
+	hkCdPointCollector_s010d_8520() : m_earlyOutDistance(hkRealMax()) {}
+	virtual void* scalarDeletingDtor(unsigned int flags);  // 0, 0x010CDCA0
+	virtual void addCdPoint(const hkCdPoint_s010d_8520& point) = 0;   // 1
+	float m_earlyOutDistance;                              // +4
+};
+class hkCdBodyPairCollector_s010d_8520
+{
+public:
+	virtual void* scalarDeletingDtor(unsigned int flags);  // 0, inherited deleting slot at 0x010CDCA0
+	virtual void addCdBodyPair(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b) = 0;   // 1
+	hkBool_s010d_8520 m_earlyOut;                                     // +4
+	hkCdBodyPairCollector_s010d_8520() : m_earlyOut(false) {}
+};
+struct hkProcessCdPoint_s010d_8520 { hkContactPoint_s010d_8520 m_contact; uint32_t m_extra[4]; };     // 0x30 bytes
+struct hkProcessCollisionOutput_s010d_8520
+{
+	hkProcessCdPoint_s010d_8520* m_firstFreeContactPoint;             // +0
+	uint32_t m_pad0[3];
+	hkContactPoint_s010d_8520 m_toiContact;                           // +0x10 (normal at +0x20)
+	hkProcessCdPoint_s010d_8520 m_contactPoints[256];                 // +0x30
+	uint32_t m_toiProperties;                              // +0x3030
+	float m_toiTime;                                       // +0x3034
+};
+struct hkLinearCastCollisionInput_s010d_8520 : hkCollisionInput_s010d_8520
+{
+	hkVector4_s010d_8520 m_path;                         // +0x10
+	float m_maxExtraPenetration;              // +0x20
+	float m_cachedPathLength;                 // +0x24
+	void* m_config;                           // +0x28
+};
+class hkSymmetricAgentFlipCollector_s010d_8520 : public hkCdPointCollector_s010d_8520        // vtable 0x014A43A4
+{
+public:
+	explicit hkSymmetricAgentFlipCollector_s010d_8520(hkCdPointCollector_s010d_8520& original) : m_original(original) {}
+	virtual void addCdPoint(const hkCdPoint_s010d_8520& point);           // 0x010EBBB0
+	hkCdPointCollector_s010d_8520& m_original;                            // +8
+};
+class hkSymmetricAgentFlipCastCollector_s010d_8520 : public hkCdPointCollector_s010d_8520    // size 0x30 in the binary
+{
+public:
+	hkSymmetricAgentFlipCastCollector_s010d_8520(const hkVector4_s010d_8520& path, hkCdPointCollector_s010d_8520* original)
+		: m_path(path), m_original(original) { m_earlyOutDistance = hkRealMax(); }
+	virtual void addCdPoint(const hkCdPoint_s010d_8520& point);           // 0x010EBC00
+	hkVector4_s010d_8520 m_path;                                          // +0x10
+	hkCdPointCollector_s010d_8520* m_original;                            // +0x20
+};
+class hkSymmetricAgentFlipBodyCollector_s010d_8520 : public hkCdBodyPairCollector_s010d_8520    // 0x014A43B4
+{
+public:
+	explicit hkSymmetricAgentFlipBodyCollector_s010d_8520(hkCdBodyPairCollector_s010d_8520& original) : m_original(original) {}
+	virtual void addCdBodyPair(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b);   // 0x010EBC50
+	hkCdBodyPairCollector_s010d_8520& m_original;                         // +8
+};
+class hkCollisionAgent_s010d_8520 : public hkReferencedObject_s010d_8520             // vtable slots 2..9 as used by the compound agents
+{
+public:
+	virtual void getPenetrations(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input, hkCdBodyPairCollector_s010d_8520& collector) = 0;       // 2
+	virtual void getClosestPoints(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input, hkCdPointCollector_s010d_8520& collector) = 0;          // 3
+	virtual void linearCast(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkLinearCastCollisionInput_s010d_8520& input,
+	                        hkCdPointCollector_s010d_8520& castCollector, hkCdPointCollector_s010d_8520* startCollector) = 0;                                                 // 4
+	virtual void processCollision(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkProcessCollisionInput_s010d_8520& input, hkProcessCollisionOutput_s010d_8520& output) = 0;   // 5
+	virtual void cleanup() = 0;                                                                                                                     // 6
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input) = 0;                               // 7
+	virtual void invalidateTim(hkCollisionInput_s010d_8520& input);                                                                                             // 8
+	virtual void warpTime(float oldTime, float newTime, hkCollisionInput_s010d_8520& input);                                                                    // 9
+	virtual void removePoint(unsigned short contactPointId);                                                                                         // 10 (0x010829F0)
+	virtual void commitPotential(unsigned short contactPointId);                                                                                     // 11
+	virtual void createZombie(unsigned short contactPointId);                                                                                        // 12
+
+	hkContactMgr_s010d_8520* m_contactMgr;     // +8
+protected:
+	explicit hkCollisionAgent_s010d_8520(hkContactMgr_s010d_8520* mgr) : m_contactMgr(mgr) {}
+};
+class hkShapeCollection_s010d_8520 : public hkShape_s010d_8520
+{
+public:
+	virtual int getNumChildShapes() const = 0;                                                // 7 (+0x1c, 0x010E7F80)
+	virtual void shapeCollectionSlot8();                                                      // 8
+	virtual void shapeCollectionSlot9();                                                      // 9
+	virtual const hkShape_s010d_8520* getChildShape(unsigned int key, void* shapeBuffer) const = 0;      // 10 (+0x28)
+};
+template <typename AGENT>
+class hkSymmetricAgent_s010d_8520 : public AGENT
+{
+public:
+	hkSymmetricAgent_s010d_8520(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input, hkContactMgr_s010d_8520* mgr) : AGENT(a, b, input, mgr) {}
+	explicit hkSymmetricAgent_s010d_8520(hkContactMgr_s010d_8520* mgr) : AGENT(mgr) {}
+	virtual void getPenetrations(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input, hkCdBodyPairCollector_s010d_8520& collector);
+	virtual void getClosestPoints(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input, hkCdPointCollector_s010d_8520& collector);
+	virtual void linearCast(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkLinearCastCollisionInput_s010d_8520& input,
+	                        hkCdPointCollector_s010d_8520& castCollector, hkCdPointCollector_s010d_8520* startCollector);
+	virtual void processCollision(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkProcessCollisionInput_s010d_8520& input, hkProcessCollisionOutput_s010d_8520& output);
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input);
+};
+template <typename AGENT>
+void hkSymmetricAgent_s010d_8520<AGENT>::getPenetrations(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkCollisionInput_s010d_8520& input, hkCdBodyPairCollector_s010d_8520& collector)
+{
+	hkSymmetricAgentFlipBodyCollector_s010d_8520 flipCollector(collector);
+	AGENT::getPenetrations(bodyB, bodyA, input, flipCollector);
+}
+template <typename AGENT>
+void hkSymmetricAgent_s010d_8520<AGENT>::getClosestPoints(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkCollisionInput_s010d_8520& input, hkCdPointCollector_s010d_8520& collector)
+{
+	hkSymmetricAgentFlipCollector_s010d_8520 flipCollector(collector);
+	AGENT::getClosestPoints(bodyB, bodyA, input, flipCollector);
+}
+template <typename AGENT>
+void hkSymmetricAgent_s010d_8520<AGENT>::linearCast(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkLinearCastCollisionInput_s010d_8520& input,
+                                         hkCdPointCollector_s010d_8520& collector, hkCdPointCollector_s010d_8520* startCollector)
+{
+	// copy of the input with the path negated (all four components, as the binary does)
+	hkLinearCastCollisionInput_s010d_8520 input2 = input;
+	input2.m_path.x = -input.m_path.x;
+	input2.m_path.y = -input.m_path.y;
+	input2.m_path.z = -input.m_path.z;
+	input2.m_path.w = -input.m_path.w;
+
+	hkSymmetricAgentFlipCastCollector_s010d_8520 flipCollector(input.m_path, &collector);
+	if (startCollector)
+	{
+		hkSymmetricAgentFlipCastCollector_s010d_8520 flipStartCollector(input.m_path, startCollector);
+		AGENT::linearCast(bodyB, bodyA, input2, flipCollector, &flipStartCollector);
+	}
+	else
+	{
+		AGENT::linearCast(bodyB, bodyA, input2, flipCollector, 0);
+	}
+}
+template <typename AGENT>
+void hkSymmetricAgent_s010d_8520<AGENT>::processCollision(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkProcessCollisionInput_s010d_8520& input, hkProcessCollisionOutput_s010d_8520& output)
+{
+	float toiTimeBefore = output.m_toiTime;
+	hkProcessCdPoint_s010d_8520* firstNewPoint = output.m_firstFreeContactPoint;
+	AGENT::processCollision(bodyB, bodyA, input, output);
+	for (hkProcessCdPoint_s010d_8520* p = firstNewPoint; p < output.m_firstFreeContactPoint; ++p)
+		p->m_contact.setFlipped(p->m_contact);
+	if (toiTimeBefore != output.m_toiTime)       // fucompp: unordered counts as different
+	{
+		output.m_toiContact.m_separatingNormal.x = -output.m_toiContact.m_separatingNormal.x;
+		output.m_toiContact.m_separatingNormal.y = -output.m_toiContact.m_separatingNormal.y;
+		output.m_toiContact.m_separatingNormal.z = -output.m_toiContact.m_separatingNormal.z;
+	}
+}
+template <typename AGENT>
+void hkSymmetricAgent_s010d_8520<AGENT>::updateShapeCollectionFilter(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkCollisionInput_s010d_8520& input)
+{
+	AGENT::updateShapeCollectionFilter(bodyB, bodyA, input);
+}
+struct HK_ALIGN16 hkTransformCols
+{
+	hkVector4_s010d_8520 m_col[3];      // +0  (basis columns)
+	hkVector4_s010d_8520 m_trans;       // +0x30
+};
+struct hkSphereShapeView
+{
+	uint32_t m_header[3];    // +0  (vftable, memSizeAndFlags+referenceCount, m_userData)
+	float m_radius;          // +0xc
+};
+struct hkCapsuleShapeView
+{
+	uint32_t m_header[3];    // +0
+	float m_radius;          // +0xc
+	hkVector4_s010d_8520 m_vertexA;     // +0x10
+	hkVector4_s010d_8520 m_vertexB;     // +0x20
+};
+struct hkConvexShapeView
+{
+	uint32_t m_header[3];    // +0
+	float m_radius;          // +0xc
+	hkVector4_s010d_8520 m_halfExtents; // +0x10 (w at +0x1c)
+};
+struct ClosestPointLineSegResult_s010d_8520
+{
+	hkVector4_s010d_8520 m_point;       // +0
+	uint32_t m_pad[4];
+};
+class hkCollideTriangleUtil_s010d_8520
+{
+public:
+	static int HK_CALL closestPointLineSeg(const hkVector4_s010d_8520& a, const hkVector4_s010d_8520& b, const hkVector4_s010d_8520& c,
+	                                       ClosestPointLineSegResult_s010d_8520& outResult);   // 0x01105c30
+};
+class hkContactMgr_s010d_8520 : public hkReferencedObject_s010d_8520
+{
+public:
+	virtual unsigned short addContactPoint(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB,
+	                                       const hkProcessCollisionInput_s010d_8520& input, hkProcessCdPoint_s010d_8520& point);   // slot 2 (+8)
+	virtual void contactMgrSlot3();                                                                    // slot 3 (+0xc)
+	virtual void removePoint(unsigned short contactPointId);                                           // slot 4 (+0x10)
+};
+void HK_CALL hkIterativeLinearCastAgent_staticLinearCast(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b,
+                                                         const hkLinearCastCollisionInput_s010d_8520& input,
+                                                         hkCdPointCollector_s010d_8520& castCollector,
+                                                         hkCdPointCollector_s010d_8520* startCollector);   // 0x010ebc80
+class hkSphereSphereAgent : public hkCollisionAgent_s010d_8520          // vtable 0x014a4850, size 0x10
+{
+public:
+	static hkSphereSphereAgent* HK_CALL create(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input, hkContactMgr_s010d_8520* mgr);   // 0x010d8a00
+	virtual void getPenetrations(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdBodyPairCollector_s010d_8520&);   // 0x010d90a0
+	virtual void getClosestPoints(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdPointCollector_s010d_8520&);      // 0x010d8c80
+	virtual void linearCast(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkLinearCastCollisionInput_s010d_8520&, hkCdPointCollector_s010d_8520&, hkCdPointCollector_s010d_8520*);
+	virtual void processCollision(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkProcessCollisionInput_s010d_8520&, hkProcessCollisionOutput_s010d_8520&);   // 0x010d8a30
+	virtual void cleanup();                                                                                              // 0x010d89d0
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&);
+
+	static void HK_CALL staticGetClosestPoints(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input,
+	                                           hkCdPointCollector_s010d_8520& collector);                                          // 0x010d8e90
+	static void HK_CALL staticGetPenetrations(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input,
+	                                          hkCdBodyPairCollector_s010d_8520& collector);                                        // 0x010d91a0
+	static void HK_CALL registerAgent(hkCollisionDispatcher_s010d_8520* dispatcher);                                               // 0x010d92a0
+
+protected:
+	hkSphereSphereAgent(hkContactMgr_s010d_8520* mgr) : hkCollisionAgent_s010d_8520(mgr), m_contactPointId(0xffff) {}
+	unsigned short m_contactPointId;      // +0xc
+};
+struct hkBoxBoxManifold
+{
+	uint8_t m_pad0[2];                                                // +0x10
+	struct Entry { uint16_t m_key; uint16_t m_pad; } m_entries[8];    // +0x12 (stride 4)
+	uint8_t m_pad32[0x2e];                                            // +0x32
+	void init();                                                      // 0x010ec500
+};
+inline unsigned char& hkBoxBoxManifold_numEntries(hkBoxBoxManifold& m) { return ((unsigned char*)&m)[0x21]; }
+inline const unsigned char& hkBoxBoxManifold_numEntries(const hkBoxBoxManifold& m) { return ((const unsigned char*)&m)[0x21]; }
+struct hkBoxBoxOriginCache
+{
+	uint8_t m_pad00[0x20];
+	hkVector4_s010d_8520 m_rot[3];        // +0x20
+	hkVector4_s010d_8520 m_trans;         // +0x50
+	uint8_t m_pad60[0x60];
+	hkVector4_s010d_8520 m_cachedOrigin;  // +0xc0
+	hkVector4_s010d_8520 m_cachedAxis;    // +0xd0
+	void update();             // 0x010d93e0
+};
+class hkBoxBoxAgent : public hkCollisionAgent_s010d_8520               // vtable 0x014a4894, size 0x60
+{
+public:
+	virtual void getPenetrations(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdBodyPairCollector_s010d_8520&);
+	virtual void getClosestPoints(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdPointCollector_s010d_8520&);
+	virtual void linearCast(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkLinearCastCollisionInput_s010d_8520&, hkCdPointCollector_s010d_8520&, hkCdPointCollector_s010d_8520*);
+	virtual void processCollision(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkProcessCollisionInput_s010d_8520&, hkProcessCollisionOutput_s010d_8520&);   // 0x010d9470
+	virtual void cleanup();                                                                                            // 0x010d92f0
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&);
+
+	static hkCollisionAgent_s010d_8520* HK_CALL createBoxBoxAgent(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input, hkContactMgr_s010d_8520* mgr);   // 0x010d9330
+	static void HK_CALL staticGetClosestPoints(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input,
+	                                           hkCdPointCollector_s010d_8520& collector);                                          // 0x010d97a0
+	static void HK_CALL staticGetPenetrations(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input,
+	                                          hkCdBodyPairCollector_s010d_8520& collector);                                        // 0x010d9b10
+	static void HK_CALL registerAgent(hkCollisionDispatcher_s010d_8520* dispatcher);                                               // 0x010d9e50
+
+protected:
+	hkBoxBoxAgent(hkContactMgr_s010d_8520* mgr) : hkCollisionAgent_s010d_8520(mgr) {}
+	uint32_t m_pad0c;                 // +0xc
+	hkBoxBoxManifold m_manifold;      // +0x10
+};
+hkCollisionAgent_s010d_8520* HK_CALL hkGskfAgent_createGskfAgent(const hkCdBody_s010d_8520& a, const hkCdBody_s010d_8520& b, const hkCollisionInput_s010d_8520& input, hkContactMgr_s010d_8520* mgr);   // 0x010ec690
+class hkSphereCapsuleAgent_s010d_8520 : public hkCollisionAgent_s010d_8520
+{
+public:
+	virtual void getPenetrations(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdBodyPairCollector_s010d_8520&);
+	virtual void getClosestPoints(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdPointCollector_s010d_8520&);      // 0x010d7be0
+	virtual void linearCast(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkLinearCastCollisionInput_s010d_8520&, hkCdPointCollector_s010d_8520&, hkCdPointCollector_s010d_8520*);
+	virtual void processCollision(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkProcessCollisionInput_s010d_8520&, hkProcessCollisionOutput_s010d_8520&);   // 0x010d7710
+	virtual void cleanup();
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&);
+
+	static void HK_CALL staticGetClosestPoints(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdPointCollector_s010d_8520&);    // 0x010d8080
+	static void HK_CALL staticGetPenetrations(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdBodyPairCollector_s010d_8520&);   // 0x010d8520
+};
+struct hkFlipCollectorFixed                                 // vtable 0x014A43A4
+{
+	void* m_vftable;                     // +0
+	float m_earlyOutDistance;            // +4
+	hkCdPointCollector_s010d_8520* m_original;      // +8
+};
+class hkSymmetricAgent_hkSphereCapsuleAgent_s010d_8520 : public hkSphereCapsuleAgent_s010d_8520
+{
+public:
+	virtual void getPenetrations(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdBodyPairCollector_s010d_8520&);
+	virtual void getClosestPoints(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkCdPointCollector_s010d_8520&);      // 0x010d8840
+	virtual void linearCast(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkLinearCastCollisionInput_s010d_8520&, hkCdPointCollector_s010d_8520&, hkCdPointCollector_s010d_8520*);
+	virtual void processCollision(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkProcessCollisionInput_s010d_8520&, hkProcessCollisionOutput_s010d_8520&);   // 0x010d88c0
+};
+// ---- items of slice s010d8520 end
+
+// ---- items of slice s010d9470 begin (TODO(rewrite): local stubs, replace by canonical classes)
+class hkBool_s010d_9470
+{
+public:
+	hkBool_s010d_9470(bool b) : m_bool(b ? 1 : 0) {}
+	operator bool() const { return m_bool != 0; }
+private:
+	char m_bool;
+};
+enum
+{
+	HK_MEMORY_CLASS_ARRAY_s010d_9470 = 0x14,
+	HK_MEMORY_CLASS_COLLIDE_s010d_9470 = 0x1c,
+	HK_MEMORY_CLASS_CDINFO_s010d_9470 = 0x1e
+};
+class hkMemory_s010d_9470
+{
+public:
+	virtual void* allocate(int nbytes, int cl);                          // 0
+	virtual void deallocate(void* p);                                    // 1
+	virtual void* alignedAllocate(int alignment, int nbytes, int cl);    // 2
+	virtual void alignedDeallocate(void* p);                             // 3
+	virtual void* allocateChunk(int nbytes, int cl);                     // 4 (+0x10)
+	virtual void deallocateChunk(void* p, int nbytes, int cl);           // 5 (+0x14)
+	static hkMemory_s010d_9470* s_instance;
+};
+struct hkMonitorCommand_s010d_9470 { const char* m_commandAndMonitor; uint32_t m_time0; uint32_t m_pad; };   // 12 bytes (32-bit)
+#define HK_TIMER_COMMAND_s010d_9470(name) do { \
+	void* hkEnd_ = hkTlsGet(g_hkMonitorStreamEndTls); \
+	if (hkTlsGet(g_hkMonitorStreamCurrentTls) < hkEnd_) { \
+		hkMonitorCommand_s010d_9470* c_ = (hkMonitorCommand_s010d_9470*)hkTlsGet(g_hkMonitorStreamCurrentTls); \
+		c_->m_commandAndMonitor = name; \
+		c_->m_time0 = HK_RDTSC32(); \
+		hkTlsSet(g_hkMonitorStreamCurrentTls, c_ + 1); } } while (0)
+#define HK_TIMER_BEGIN_s010d_9470(name) HK_TIMER_COMMAND_s010d_9470(name)
+#define HK_TIMER_END_s010d_9470()       HK_TIMER_COMMAND_s010d_9470(hkMonitorTimerEndTag)
+class hkRotation_s010d_9470;
+struct HK_ALIGN16 hkVector4_s010d_9470
+{
+	float x, y, z, w;
+	void setRotatedInverseDir(const hkRotation_s010d_9470& a, const hkVector4_s010d_9470& b);     // 0x01081440 (this = transpose(a) * b)
+};
+class hkAabb_s010d_9470 { public: hkVector4_s010d_9470 m_min; hkVector4_s010d_9470 m_max; };
+class hkRotation_s010d_9470 { public: hkVector4_s010d_9470 m_col[3]; };
+class hkTransform_s010d_9470
+{ public:
+	hkVector4_s010d_9470 m_rot[3];
+	hkVector4_s010d_9470 m_trans;
+	void setMulInverseMul(const hkTransform_s010d_9470& a, const hkTransform_s010d_9470& b);      // 0x010810F0 (this = inverse(a) * b)
+};
+class hkReferencedObject_s010d_9470
+{
+public:
+	virtual ~hkReferencedObject_s010d_9470() {}                                     // 0
+	virtual void calcStatistics(class hkStatisticsCollector* c) const {} // 1 (0x0052E650 is the empty default)
+
+	// HK_DECLARE_CLASS_ALLOCATOR: chunk allocation, size stored in m_memSizeAndFlags.
+	static void* operator new(size_t nbytes)
+	{
+		void* p = hkMemory_s010d_9470::s_instance->allocateChunk((int)nbytes, HK_MEMORY_CLASS_COLLIDE_s010d_9470);
+		((hkReferencedObject_s010d_9470*)p)->m_memSizeAndFlags = (unsigned short)nbytes;
+		return p;
+	}
+	static void operator delete(void* p)
+	{
+		hkMemory_s010d_9470::s_instance->deallocateChunk(p, ((hkReferencedObject_s010d_9470*)p)->m_memSizeAndFlags, HK_MEMORY_CLASS_COLLIDE_s010d_9470);
+	}
+	static void* operator new(size_t, void* p) { return p; }
+	static void operator delete(void*, void*) {}
+
+	// memSize == 0 means "not heap owned": never reference counted.
+	void addReference() { if (m_memSizeAndFlags != 0) ++m_referenceCount; }
+	void removeReference()
+	{
+		if (m_memSizeAndFlags != 0)
+		{
+			m_referenceCount = (hkInt16)(m_referenceCount - 1);
+			if (m_referenceCount == 0)
+				delete this;
+		}
+	}
+
+	unsigned short m_memSizeAndFlags;  // 0x04
+	hkInt16 m_referenceCount;   // 0x06
+
+protected:
+	hkReferencedObject_s010d_9470() : m_referenceCount(1) {}
+};
+class hkCdBody_s010d_9470;
+struct hkShapeRayCastInput_s010d_9470
+{
+	hkVector4_s010d_9470 m_from;                          // +0
+	hkVector4_s010d_9470 m_to;                            // +0x10
+	uint32_t m_filterInfo;                     // +0x20
+	const void* m_rayShapeCollectionFilter;    // +0x24 (hkRayShapeCollectionFilter*)
+	uint32_t m_pad[2];                         // size 0x30
+};
+struct hkShapeRayCastOutput_s010d_9470
+{
+	hkVector4_s010d_9470 m_normal;                        // +0
+	uint32_t m_shapeKey;                       // +0x10
+	float m_hitFraction;                       // +0x14
+	uint32_t m_pad[2];                         // size 0x20
+};
+class hkRayHitCollector_s010d_9470
+{ public:
+	virtual void addRayHit(const hkCdBody_s010d_9470& cdBody, const hkShapeRayCastOutput_s010d_9470& hitInfo) = 0;   // 0
+	virtual ~hkRayHitCollector_s010d_9470() {}                                                              // 1
+	float m_earlyOutHitFraction;               // +4
+};
+class hkShape_s010d_9470 : public hkReferencedObject_s010d_9470 { public:
+	int m_userData;                            // +8
+	virtual int getType() const = 0;                                                                   // 2
+	virtual void getAabb(const hkTransform_s010d_9470& localToWorld, float tolerance, hkAabb_s010d_9470& out) const = 0;    // 3 (+0xc)
+	virtual float getMaximumProjection(const hkVector4_s010d_9470& direction) const = 0;                         // 4 (0x010c3510 is hkShape's)
+	virtual hkBool_s010d_9470 castRay(const hkShapeRayCastInput_s010d_9470& input, hkShapeRayCastOutput_s010d_9470& output) const = 0; // 5 (+0x14)
+	virtual void castRayWithCollector(const hkShapeRayCastInput_s010d_9470& input, const hkCdBody_s010d_9470& cdBody,
+	                                  hkRayHitCollector_s010d_9470& collector) const = 0;                        // 6 (+0x18)
+protected:
+	hkShape_s010d_9470() : m_userData(0) {}
+};
+class hkCdBody_s010d_9470
+{ public:
+	const hkShape_s010d_9470* m_shape;                    // +0
+	uint32_t m_shapeKey;                       // +4
+	const void* m_motion;                      // +8 (hkMotionState*)
+	const hkCdBody_s010d_9470* m_parent;                  // +0xc
+};
+class hkShapeCollection_s010d_9470;
+struct hkCollisionInput_s010d_9470;
+class hkShapeCollectionFilter_s010d_9470
+{
+public:
+	virtual hkBool_s010d_9470 isCollisionEnabled(const hkCollisionInput_s010d_9470& input, const hkCdBody_s010d_9470& collA, const hkCdBody_s010d_9470& collB,
+	                                  const hkShapeCollection_s010d_9470& bContainer, unsigned int bKey) const = 0;           // 0
+	virtual hkBool_s010d_9470 isCollisionEnabled(const hkCdBody_s010d_9470& collA, const hkShapeCollection_s010d_9470& aContainer, const hkCdBody_s010d_9470& collB,
+	                                  const hkShapeCollection_s010d_9470& bContainer, unsigned int aKey, unsigned int bKey) const = 0;   // 1
+};
+struct hkCollisionInput_s010d_9470
+{
+	void* m_dispatcher;                        // +0 (hkCollisionDispatcher*)
+	const hkShapeCollectionFilter_s010d_9470* m_filter;   // +4
+	float m_tolerance;                         // +8
+	hkBool_s010d_9470 m_createPredictiveAgents;           // +0xc
+	hkCollisionInput_s010d_9470() : m_dispatcher(0), m_filter(0), m_tolerance(0), m_createPredictiveAgents(false) {}
+};
+struct hkProcessCollisionInput_s010d_9470 : hkCollisionInput_s010d_9470   // size 0x2c
+{
+	uint32_t m_stepInfo[4];                    // +0x10 (hkStepInfo)
+	void* m_config;                            // +0x20
+	void* m_dynamicsInfo;                      // +0x24
+	void* m_collisionQualityInfo;              // +0x28
+};
+class hkCollisionAgent_s010d_9470;
+class hkContactMgr_s010d_9470;
+class hkCdPointCollector_s010d_9470;
+class hkCdBodyPairCollector_s010d_9470;
+struct hkLinearCastCollisionInput_s010d_9470;
+typedef hkCollisionAgent_s010d_9470* (HK_CALL *hkAgentCreateFunc_s010d_9470)(const hkCdBody_s010d_9470&, const hkCdBody_s010d_9470&, const hkCollisionInput_s010d_9470&, hkContactMgr_s010d_9470*);
+typedef void (HK_CALL *hkAgentGetPenetrationsFunc_s010d_9470)(const hkCdBody_s010d_9470&, const hkCdBody_s010d_9470&, const hkCollisionInput_s010d_9470&, hkCdBodyPairCollector_s010d_9470&);
+typedef void (HK_CALL *hkAgentGetClosestPointsFunc_s010d_9470)(const hkCdBody_s010d_9470&, const hkCdBody_s010d_9470&, const hkCollisionInput_s010d_9470&, hkCdPointCollector_s010d_9470&);
+typedef void (HK_CALL *hkAgentLinearCastFunc_s010d_9470)(const hkCdBody_s010d_9470&, const hkCdBody_s010d_9470&, const hkLinearCastCollisionInput_s010d_9470&, hkCdPointCollector_s010d_9470&, hkCdPointCollector_s010d_9470*);
+struct hkAgentFuncs_s010d_9470                            // hkCollisionDispatcher::AgentFuncs, 0x14 bytes in the 32-bit binary
+{
+	hkAgentCreateFunc_s010d_9470 m_createFunc;                         // +0
+	hkAgentGetPenetrationsFunc_s010d_9470 m_getPenetrationsFunc;       // +4
+	hkAgentGetClosestPointsFunc_s010d_9470 m_getClosestPointFunc;      // +8
+	hkAgentLinearCastFunc_s010d_9470 m_linearCastFunc;                 // +0xc
+	hkBool_s010d_9470 m_isFlipped;                                     // +0x10
+	hkBool_s010d_9470 m_isPredictive;                                  // +0x11
+	hkAgentFuncs_s010d_9470() : m_createFunc(0), m_getPenetrationsFunc(0), m_getClosestPointFunc(0), m_linearCastFunc(0), m_isFlipped(false), m_isPredictive(false) {}
+};
+class hkCollisionDispatcher_s010d_9470                   // size 0x1c28 (32-bit layout); spelled out up to the quality table
+{ public:
+	void* m_vptr_and_refcount[2];              // +0
+	void* m_defaultCollisionAgent;             // +8 (hkCollisionDispatcher is an hkReferencedObject; first 8 bytes)
+	uint8_t m_pad0c[0x190 - 0xc];
+	uint8_t m_agent2Types[32][32];             // +0x190
+	uint8_t m_agent2TypesPred[32][32];         // +0x590
+	hkAgentFuncs_s010d_9470 m_agent2Func[64];             // +0x990 (stride 0x14 in the 32-bit binary)
+	uint8_t m_pad0e90[0x19d4 - 0xe90];         // (agent3 tables)
+	char m_collisionQualityTable[8][8];        // +0x19d4
+	void registerCollisionAgent(hkAgentFuncs_s010d_9470& funcs, int typeA, int typeB);   // 0x010CD3E0
+};
+class hkContactPoint_s010d_9470
+{ public:
+	hkVector4_s010d_9470 m_position;                                  // +0
+	hkVector4_s010d_9470 m_separatingNormal;                          // +0x10 (w = distance)
+	void setFlipped(const hkContactPoint_s010d_9470& other);          // 0x010CECF0
+};
+struct hkCdPoint_s010d_9470 { hkContactPoint_s010d_9470 m_contact; const hkCdBody_s010d_9470* m_cdBodyA; const hkCdBody_s010d_9470* m_cdBodyB; };
+class hkCdPointCollector_s010d_9470
+{
+public:
+	hkCdPointCollector_s010d_9470() : m_earlyOutDistance(hkRealMax()) {}
+	virtual void* scalarDeletingDtor(unsigned int flags);  // 0, 0x010CDCA0
+	virtual void addCdPoint(const hkCdPoint_s010d_9470& point) = 0;   // 1
+	float m_earlyOutDistance;                              // +4
+};
+class hkCdBodyPairCollector_s010d_9470
+{
+public:
+	virtual void* scalarDeletingDtor(unsigned int flags);  // 0, inherited deleting slot at 0x010CDCA0
+	virtual void addCdBodyPair(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b) = 0;   // 1
+	hkBool_s010d_9470 m_earlyOut;                                     // +4
+	hkCdBodyPairCollector_s010d_9470() : m_earlyOut(false) {}
+};
+struct hkProcessCdPoint_s010d_9470 { hkContactPoint_s010d_9470 m_contact; uint32_t m_extra[4]; };     // 0x30 bytes
+struct hkProcessCollisionOutput_s010d_9470
+{
+	hkProcessCdPoint_s010d_9470* m_firstFreeContactPoint;             // +0
+	uint32_t m_pad0[3];
+	hkContactPoint_s010d_9470 m_toiContact;                           // +0x10 (normal at +0x20)
+	hkProcessCdPoint_s010d_9470 m_contactPoints[256];                 // +0x30
+	uint32_t m_toiProperties;                              // +0x3030
+	float m_toiTime;                                       // +0x3034
+};
+struct hkLinearCastCollisionInput_s010d_9470 : hkCollisionInput_s010d_9470
+{
+	hkVector4_s010d_9470 m_path;                         // +0x10
+	float m_maxExtraPenetration;              // +0x20
+	float m_cachedPathLength;                 // +0x24
+	void* m_config;                           // +0x28
+};
+class hkSymmetricAgentFlipCollector_s010d_9470 : public hkCdPointCollector_s010d_9470        // vtable 0x014A43A4
+{
+public:
+	explicit hkSymmetricAgentFlipCollector_s010d_9470(hkCdPointCollector_s010d_9470& original) : m_original(original) {}
+	virtual void addCdPoint(const hkCdPoint_s010d_9470& point);           // 0x010EBBB0
+	hkCdPointCollector_s010d_9470& m_original;                            // +8
+};
+class hkSymmetricAgentFlipCastCollector_s010d_9470 : public hkCdPointCollector_s010d_9470    // size 0x30 in the binary
+{
+public:
+	hkSymmetricAgentFlipCastCollector_s010d_9470(const hkVector4_s010d_9470& path, hkCdPointCollector_s010d_9470* original)
+		: m_path(path), m_original(original) { m_earlyOutDistance = hkRealMax(); }
+	virtual void addCdPoint(const hkCdPoint_s010d_9470& point);           // 0x010EBC00
+	hkVector4_s010d_9470 m_path;                                          // +0x10
+	hkCdPointCollector_s010d_9470* m_original;                            // +0x20
+};
+class hkSymmetricAgentFlipBodyCollector_s010d_9470 : public hkCdBodyPairCollector_s010d_9470    // 0x014A43B4
+{
+public:
+	explicit hkSymmetricAgentFlipBodyCollector_s010d_9470(hkCdBodyPairCollector_s010d_9470& original) : m_original(original) {}
+	virtual void addCdBodyPair(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b);   // 0x010EBC50
+	hkCdBodyPairCollector_s010d_9470& m_original;                         // +8
+};
+class hkCollisionAgent_s010d_9470 : public hkReferencedObject_s010d_9470             // vtable slots 2..9 as used by the compound agents
+{
+public:
+	virtual void getPenetrations(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input, hkCdBodyPairCollector_s010d_9470& collector) = 0;       // 2
+	virtual void getClosestPoints(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input, hkCdPointCollector_s010d_9470& collector) = 0;          // 3
+	virtual void linearCast(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkLinearCastCollisionInput_s010d_9470& input,
+	                        hkCdPointCollector_s010d_9470& castCollector, hkCdPointCollector_s010d_9470* startCollector) = 0;                                                 // 4
+	virtual void processCollision(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkProcessCollisionInput_s010d_9470& input, hkProcessCollisionOutput_s010d_9470& output) = 0;   // 5
+	virtual void cleanup() = 0;                                                                                                                     // 6
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input) = 0;                               // 7
+	virtual void invalidateTim(hkCollisionInput_s010d_9470& input);                                                                                             // 8
+	virtual void warpTime(float oldTime, float newTime, hkCollisionInput_s010d_9470& input);                                                                    // 9
+	virtual void removePoint(unsigned short contactPointId);                                                                                         // 10 (0x010829F0)
+	virtual void commitPotential(unsigned short contactPointId);                                                                                     // 11
+	virtual void createZombie(unsigned short contactPointId);                                                                                        // 12
+
+	hkContactMgr_s010d_9470* m_contactMgr;     // +8
+protected:
+	explicit hkCollisionAgent_s010d_9470(hkContactMgr_s010d_9470* mgr) : m_contactMgr(mgr) {}
+};
+class hkShapeCollection_s010d_9470 : public hkShape_s010d_9470
+{
+public:
+	virtual int getNumChildShapes() const = 0;                                                // 7 (+0x1c, 0x010E7F80)
+	virtual void shapeCollectionSlot8();                                                      // 8
+	virtual void shapeCollectionSlot9();                                                      // 9
+	virtual const hkShape_s010d_9470* getChildShape(unsigned int key, void* shapeBuffer) const = 0;      // 10 (+0x28)
+};
+template <typename AGENT>
+class hkSymmetricAgent_s010d_9470 : public AGENT
+{
+public:
+	hkSymmetricAgent_s010d_9470(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input, hkContactMgr_s010d_9470* mgr) : AGENT(a, b, input, mgr) {}
+	explicit hkSymmetricAgent_s010d_9470(hkContactMgr_s010d_9470* mgr) : AGENT(mgr) {}
+	virtual void getPenetrations(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input, hkCdBodyPairCollector_s010d_9470& collector);
+	virtual void getClosestPoints(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input, hkCdPointCollector_s010d_9470& collector);
+	virtual void linearCast(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkLinearCastCollisionInput_s010d_9470& input,
+	                        hkCdPointCollector_s010d_9470& castCollector, hkCdPointCollector_s010d_9470* startCollector);
+	virtual void processCollision(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkProcessCollisionInput_s010d_9470& input, hkProcessCollisionOutput_s010d_9470& output);
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input);
+};
+template <typename AGENT>
+void hkSymmetricAgent_s010d_9470<AGENT>::getPenetrations(const hkCdBody_s010d_9470& bodyA, const hkCdBody_s010d_9470& bodyB, const hkCollisionInput_s010d_9470& input, hkCdBodyPairCollector_s010d_9470& collector)
+{
+	hkSymmetricAgentFlipBodyCollector_s010d_9470 flipCollector(collector);
+	AGENT::getPenetrations(bodyB, bodyA, input, flipCollector);
+}
+template <typename AGENT>
+void hkSymmetricAgent_s010d_9470<AGENT>::getClosestPoints(const hkCdBody_s010d_9470& bodyA, const hkCdBody_s010d_9470& bodyB, const hkCollisionInput_s010d_9470& input, hkCdPointCollector_s010d_9470& collector)
+{
+	hkSymmetricAgentFlipCollector_s010d_9470 flipCollector(collector);
+	AGENT::getClosestPoints(bodyB, bodyA, input, flipCollector);
+}
+template <typename AGENT>
+void hkSymmetricAgent_s010d_9470<AGENT>::linearCast(const hkCdBody_s010d_9470& bodyA, const hkCdBody_s010d_9470& bodyB, const hkLinearCastCollisionInput_s010d_9470& input,
+                                         hkCdPointCollector_s010d_9470& collector, hkCdPointCollector_s010d_9470* startCollector)
+{
+	// copy of the input with the path negated (all four components, as the binary does)
+	hkLinearCastCollisionInput_s010d_9470 input2 = input;
+	input2.m_path.x = -input.m_path.x;
+	input2.m_path.y = -input.m_path.y;
+	input2.m_path.z = -input.m_path.z;
+	input2.m_path.w = -input.m_path.w;
+
+	hkSymmetricAgentFlipCastCollector_s010d_9470 flipCollector(input.m_path, &collector);
+	if (startCollector)
+	{
+		hkSymmetricAgentFlipCastCollector_s010d_9470 flipStartCollector(input.m_path, startCollector);
+		AGENT::linearCast(bodyB, bodyA, input2, flipCollector, &flipStartCollector);
+	}
+	else
+	{
+		AGENT::linearCast(bodyB, bodyA, input2, flipCollector, 0);
+	}
+}
+template <typename AGENT>
+void hkSymmetricAgent_s010d_9470<AGENT>::processCollision(const hkCdBody_s010d_9470& bodyA, const hkCdBody_s010d_9470& bodyB, const hkProcessCollisionInput_s010d_9470& input, hkProcessCollisionOutput_s010d_9470& output)
+{
+	float toiTimeBefore = output.m_toiTime;
+	hkProcessCdPoint_s010d_9470* firstNewPoint = output.m_firstFreeContactPoint;
+	AGENT::processCollision(bodyB, bodyA, input, output);
+	for (hkProcessCdPoint_s010d_9470* p = firstNewPoint; p < output.m_firstFreeContactPoint; ++p)
+		p->m_contact.setFlipped(p->m_contact);
+	if (toiTimeBefore != output.m_toiTime)       // fucompp: unordered counts as different
+	{
+		output.m_toiContact.m_separatingNormal.x = -output.m_toiContact.m_separatingNormal.x;
+		output.m_toiContact.m_separatingNormal.y = -output.m_toiContact.m_separatingNormal.y;
+		output.m_toiContact.m_separatingNormal.z = -output.m_toiContact.m_separatingNormal.z;
+	}
+}
+template <typename AGENT>
+void hkSymmetricAgent_s010d_9470<AGENT>::updateShapeCollectionFilter(const hkCdBody_s010d_9470& bodyA, const hkCdBody_s010d_9470& bodyB, const hkCollisionInput_s010d_9470& input)
+{
+	AGENT::updateShapeCollectionFilter(bodyB, bodyA, input);
+}
+struct hkConvexShapeView_s010d_9470
+{
+	uint32_t m_header[3];    // +0
+	float m_radius;          // +0xc
+	hkVector4_s010d_9470 m_halfExtents; // +0x10 (w at +0x1c)
+};
+class hkContactMgr_s010d_9470 : public hkReferencedObject_s010d_9470
+{
+public:
+	virtual unsigned short addContactPoint(const hkCdBody_s010d_9470& bodyA, const hkCdBody_s010d_9470& bodyB,
+	                                       const hkProcessCollisionInput_s010d_9470& input, hkProcessCdPoint_s010d_9470& point);   // slot 2 (+8)
+	virtual void contactMgrSlot3();                                                                    // slot 3 (+0xc)
+	virtual void removePoint(unsigned short contactPointId);                                           // slot 4 (+0x10)
+};
+void HK_CALL hkIterativeLinearCastAgent_staticLinearCast(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b,
+                                                         const hkLinearCastCollisionInput_s010d_9470& input,
+                                                         hkCdPointCollector_s010d_9470& castCollector,
+                                                         hkCdPointCollector_s010d_9470* startCollector);   // 0x010ebc80
+class hkBoxBoxAgent_s010d_9470 : public hkCollisionAgent_s010d_9470               // vtable 0x014a4894, size 0x60
+{
+public:
+	virtual void getPenetrations(const hkCdBody_s010d_9470&, const hkCdBody_s010d_9470&, const hkCollisionInput_s010d_9470&, hkCdBodyPairCollector_s010d_9470&);
+	virtual void getClosestPoints(const hkCdBody_s010d_9470&, const hkCdBody_s010d_9470&, const hkCollisionInput_s010d_9470&, hkCdPointCollector_s010d_9470&);
+	virtual void linearCast(const hkCdBody_s010d_9470&, const hkCdBody_s010d_9470&, const hkLinearCastCollisionInput_s010d_9470&, hkCdPointCollector_s010d_9470&, hkCdPointCollector_s010d_9470*);
+	virtual void processCollision(const hkCdBody_s010d_9470&, const hkCdBody_s010d_9470&, const hkProcessCollisionInput_s010d_9470&, hkProcessCollisionOutput_s010d_9470&);   // 0x010d9470
+	virtual void cleanup();                                                                                            // 0x010d92f0
+	virtual void updateShapeCollectionFilter(const hkCdBody_s010d_9470&, const hkCdBody_s010d_9470&, const hkCollisionInput_s010d_9470&);
+
+	static hkCollisionAgent_s010d_9470* HK_CALL createBoxBoxAgent(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input, hkContactMgr_s010d_9470* mgr);   // 0x010d9330
+	static void HK_CALL staticGetClosestPoints(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input,
+	                                           hkCdPointCollector_s010d_9470& collector);                                          // 0x010d97a0
+	static void HK_CALL staticGetPenetrations(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input,
+	                                          hkCdBodyPairCollector_s010d_9470& collector);                                        // 0x010d9b10
+	static void HK_CALL registerAgent(hkCollisionDispatcher_s010d_9470* dispatcher);                                               // 0x010d9e50
+
+protected:
+	hkBoxBoxAgent_s010d_9470(hkContactMgr_s010d_9470* mgr) : hkCollisionAgent_s010d_9470(mgr) {}
+	uint32_t m_pad0c;                 // +0xc
+	hkBoxBoxManifold m_manifold;      // +0x10
+};
+class hkBoxBoxCollisionDetection
+{
+public:
+	const hkCdBody_s010d_9470*           m_bodyA;                  // +0x00
+	const hkCdBody_s010d_9470*           m_bodyB;                  // +0x04
+	const hkCollisionInput_s010d_9470*   m_env;                    // +0x08
+	hkContactMgr_s010d_9470*             m_contactMgr;             // +0x0c
+	hkProcessCollisionOutput_s010d_9470* m_result;                 // +0x10
+	const hkTransform_s010d_9470*        m_wTa;                    // +0x14
+	const hkTransform_s010d_9470*        m_wTb;                    // +0x18
+	uint32_t                  m_pad1c;                  // +0x1c
+	hkRotation_s010d_9470                m_aRb;                    // +0x20
+	hkVector4_s010d_9470                 m_aTb;                    // +0x50
+	hkVector4_s010d_9470                 m_radiusA;                // +0x60
+	hkVector4_s010d_9470                 m_radiusB;                // +0x70
+	hkVector4_s010d_9470                 m_tolerance4;             // +0x80
+	hkVector4_s010d_9470                 m_boundaryToleranceA;     // +0x90
+	hkVector4_s010d_9470                 m_boundaryToleranceB;     // +0xa0
+	float                     m_tolerance;              // +0xb0
+	uint32_t                  m_padb4[3];
+	hkVector4_s010d_9470                 m_dinA;                   // +0xc0
+	hkVector4_s010d_9470                 m_dinB;                   // +0xd0
+
+	void calcManifold(hkBoxBoxManifold& manifold) const;                    // 0x0110b3a0
+	hkBool_s010d_9470 calculateClosestPoint(hkContactPoint_s010d_9470& point) const;              // 0x0110b260
+	int checkIntersection(const hkVector4_s010d_9470& tolerance4);                     // 0x01109460
+};
+inline void hkRotation_set(hkRotation_s010d_9470& r, const hkVector4_s010d_9470* cols)
+{
+	r.m_col[0] = cols[0]; r.m_col[1] = cols[1]; r.m_col[2] = cols[2];
+}
+class hkPredGskfAgent_s010d_9470 : public hkCollisionAgent_s010d_9470      // vtable 0x014a48f8
+{
+public:
+	static hkCollisionAgent_s010d_9470* HK_CALL createPredGskfAgent(const hkCdBody_s010d_9470&, const hkCdBody_s010d_9470&, const hkCollisionInput_s010d_9470&,
+	                                                     hkContactMgr_s010d_9470* mgr);                                  // 0x010d9ea0
+	static void HK_CALL registerAgent(hkCollisionDispatcher_s010d_9470* dispatcher);                                     // 0x010d9f10
+};
+void HK_CALL hkGskBaseAgent_staticGetPenetrations(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input,
+                                                  hkCdBodyPairCollector_s010d_9470& collector);                              // 0x010edaa0
+void HK_CALL hkGskBaseAgent_staticGetClosestPoints(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, const hkCollisionInput_s010d_9470& input,
+                                                   hkCdPointCollector_s010d_9470& collector);                                // 0x010ed430
+struct hkPredGskfAgentCtor {
+	hkPredGskfAgentCtor() {}
+	void init(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, hkContactMgr_s010d_9470* mgr);          // 0x010ec660
+};
+struct hkGskBaseAgentCtor {
+	hkGskBaseAgentCtor() {}
+	void init(const hkCdBody_s010d_9470& a, const hkCdBody_s010d_9470& b, hkContactMgr_s010d_9470* mgr);          // 0x010ed2a0
+};
+struct hkAgentFuncs18 : hkAgentFuncs_s010d_9470 { uint16_t m_pad12; };
+struct hkMemoryAllocator {
+	virtual void* slot0();
+	virtual void* slot1();
+	virtual void* slot2();
+	virtual void* slot3();
+	virtual void* allocate(int nbytes, int align);                              // vtable slot 4 (+0x10)
+};
+extern hkMemoryAllocator* hkMemory_s_instance_s010d_9470;                                  // 0x016e4178
+// ---- items of slice s010d9470 end
+
 // @ 0x010d0000
 void __fastcall FUN_010d0000(hkMultiSphereTriangleAgent* self)
 {
@@ -1779,6 +3360,65 @@ void hkMultiSphereTriangleAgent_s010d_18c0::staticGetPenetrations(const hkCdBody
             return;
         }
     }
+}
+
+// @ 0x010d25b0
+void hkSymmetricAgent_hkMultiSphereTriangleAgent::getPenetrations(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB, const hkCollisionInput_s010d_18c0__b& input, hkCdBodyPairCollector_s010d_18c0__b& collector)
+{
+    hkSymmetricAgentFlipBodyCollector_s010d_18c0__b flip;
+    flip.m_original = &collector;
+    flip.m_earlyOut = 0;
+    flip.m_vftable = (void*)0x014a43b4;
+    hkMultiSphereTriangleAgent_s010d_18c0__b::getPenetrations(bodyB, bodyA, input, flip);
+}
+
+// @ 0x010d2630
+void hkSymmetricAgent_hkMultiSphereTriangleAgent::getClosestPoints(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB, const hkCollisionInput_s010d_18c0__b& input, hkCdPointCollector_s010d_18c0__b& collector)
+{
+    hkSymmetricAgentFlipCollector_s010d_18c0__b flip;
+    flip.m_original = &collector;
+    flip.m_earlyOutDistance = HK_REAL_MAX;
+    flip.m_vftable = (void*)0x014a43a4;
+    hkMultiSphereTriangleAgent_s010d_18c0__b::getClosestPoints(bodyB, bodyA, input, flip);
+}
+
+// @ 0x010d26b0
+void hkSymmetricAgent_hkMultiSphereTriangleAgent::processCollision(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB, const hkProcessCollisionInput_s010d_18c0__b& input, hkProcessCollisionOutput_s010d_18c0__b& result)
+{
+    hkProcessCdPoint_s010d_18c0__b* pp = result.m_firstFreeContactPoint;
+    float oldToi = result.m_toiTime;
+    hkMultiSphereTriangleAgent_s010d_18c0__b::processCollision(bodyB, bodyA, input, result);
+    for (; pp < result.m_firstFreeContactPoint; pp++)
+        pp->m_contact.setFlipped(pp->m_contact);
+    if (oldToi != result.m_toiTime)
+    {
+        result.m_toiContact.m_separatingNormal.x = -result.m_toiContact.m_separatingNormal.x;
+        result.m_toiContact.m_separatingNormal.y = -result.m_toiContact.m_separatingNormal.y;
+        result.m_toiContact.m_separatingNormal.z = -result.m_toiContact.m_separatingNormal.z;
+    }
+}
+
+// @ 0x010d27c0
+void hkCapsuleTriangleAgent_s010d_18c0__b::cleanup()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        if (m_contactPointId[i] != (hkContactPointId_s010d_18c0__b)0xffff)
+            m_contactMgr->removePoint(m_contactPointId[i]);
+    }
+    delete this;
+}
+
+// @ 0x010d2800
+hkCollisionAgent_s010d_18c0__b* hkCapsuleTriangleAgent_s010d_18c0__b::createCapsuleTriangleAgent(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB, const hkCollisionInput_s010d_18c0__b& input, hkContactMgr_s010d_18c0__b* mgr)
+{
+    return new hkCapsuleTriangleAgent_s010d_18c0__b(bodyA, bodyB, input, mgr);
+}
+
+// @ 0x010d2860
+hkCollisionAgent_s010d_18c0__b* hkCapsuleTriangleAgent_s010d_18c0__b::createTriangleCapsuleAgent(const hkCdBody_s010d_18c0__b& bodyA, const hkCdBody_s010d_18c0__b& bodyB, const hkCollisionInput_s010d_18c0__b& input, hkContactMgr_s010d_18c0__b* mgr)
+{
+    return new hkTriangleCapsuleAgent(bodyA, bodyB, input, mgr);
 }
 
 // @ 0x010d28c0
@@ -2770,6 +4410,841 @@ void hkSymmetricSphereTriangleAgent::getClosestPoints(const hkCdBody_s010d_6420&
 
     hkSphereTriangleAgent::getClosestPoints(bodyB, bodyA, input,
                                             *(hkCdPointCollector_s010d_6420*)&sym);
+}
+
+// @ 0x010d7570
+void hkSymmetricAgent_hkSphereTriangleAgent::processCollision(const hkCdBody_s010d_7570& bodyA, const hkCdBody_s010d_7570& bodyB, const hkProcessCollisionInput_s010d_7570& input, hkProcessCollisionOutput_s010d_7570& output)
+{
+	const float toiTimeBefore = output.m_toiTime;
+	hkProcessCdPoint_s010d_7570* p = output.m_firstFreeContactPoint;
+	hkSphereTriangleAgent_s010d_7570::processCollision(bodyB, bodyA, input, output);
+	while (p < output.m_firstFreeContactPoint)
+	{
+		p->m_contact.setFlipped(p->m_contact);
+		++p;
+	}
+	if (toiTimeBefore != output.m_toiTime)      // fucompp: unordered counts as different
+	{
+		output.m_toiContact.m_separatingNormal.x = -output.m_toiContact.m_separatingNormal.x;
+		output.m_toiContact.m_separatingNormal.y = -output.m_toiContact.m_separatingNormal.y;
+		output.m_toiContact.m_separatingNormal.z = -output.m_toiContact.m_separatingNormal.z;
+	}
+}
+
+// @ 0x010d7680
+void hkSphereTriangleAgent_s010d_7570::cleanup()
+{
+	if (m_contactPointId != 0xffff)
+		m_contactMgr->removePoint(m_contactPointId);
+	delete this;
+}
+
+// @ 0x010d76b0
+hkCollisionAgent_s010d_7570* HK_CALL hkSphereCapsuleAgent::create(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkCollisionInput_s010d_7570& input, hkContactMgr_s010d_7570* mgr)
+{
+	return new hkSphereCapsuleAgent(mgr);
+}
+
+// @ 0x010d76e0
+hkCollisionAgent_s010d_7570* HK_CALL hkSymmetricAgent_hkSphereCapsuleAgent::create(const hkCdBody_s010d_7570& a, const hkCdBody_s010d_7570& b, const hkCollisionInput_s010d_7570& input, hkContactMgr_s010d_7570* mgr)
+{
+	return new hkSymmetricAgent_hkSphereCapsuleAgent(mgr);
+}
+
+// @ 0x010d7710
+void hkSphereCapsuleAgent::processCollision(const hkCdBody_s010d_7570& bodyA, const hkCdBody_s010d_7570& bodyB, const hkProcessCollisionInput_s010d_7570& input, hkProcessCollisionOutput_s010d_7570& output)
+{
+	HK_TIMER_BEGIN_s010d_7570("TtSphereCapsule");
+
+	const float* sphereTrans = (const float*)bodyA.m_motion;                 // centre at +0x30
+	const hkSphereShapeViewA* sphereShape = (const hkSphereShapeViewA*)bodyA.m_shape;
+	const float* capsuleTrans = (const float*)bodyB.m_motion;
+	const hkCapsuleShapeViewA* capsuleShape = (const hkCapsuleShapeViewA*)bodyB.m_shape;
+
+	hkProcessCdPoint_s010d_7570* contact = output.m_firstFreeContactPoint;
+
+	hkVector4_s010d_7570 pA, pB;
+	HK_XFORM_COL(pA, capsuleShape->m_vertexA, capsuleTrans)
+	HK_XFORM_COL(pB, capsuleShape->m_vertexB, capsuleTrans)
+
+	ClosestPointLineSegResult closest;
+	hkCollideTriangleUtil_s010d_7570::closestPointLineSeg(*(const hkVector4_s010d_7570*)(sphereTrans + 0xc), pA, pB, closest);
+
+	const float dx = (sphereTrans + 0xc)[0] - closest.m_point.x;
+	const float dy = (sphereTrans + 0xc)[1] - closest.m_point.y;
+	const float dz = (sphereTrans + 0xc)[2] - closest.m_point.z;
+	const float dw = (sphereTrans + 0xc)[3] - closest.m_point.w;
+
+	const float radiusSum = sphereShape->m_radius + capsuleShape->m_radius;
+	const float radius = radiusSum + input.m_tolerance;
+	const float distSq = dx * dx + dy * dy + dz * dz;
+
+	if (radius * radius <= distSq)
+	{
+		if (m_contactPointId != 0xffff)
+		{
+			m_contactMgr->removePoint(m_contactPointId);
+			m_contactPointId = 0xffff;
+		}
+	}
+	else
+	{
+		hkVector4_s010d_7570 n;
+		float distance;
+		if (!(distSq > 0.0f))
+		{
+			// sphere centre coincides with the segment: build an axis-aligned direction from the
+			// segment direction by zeroing its smallest component and swapping the other two.
+			n.x = pB.x - pA.x;
+			n.y = pB.y - pA.y;
+			n.z = pB.z - pA.z;
+			n.w = pB.w - pA.w;
+			const float ax = hkAbsf(n.x);
+			const float ay = hkAbsf(n.y);
+			// x87 `fcomp st(1)` + `test ah,5`/`jp` keeps the taken side on unordered, so the
+			// min/max pick is !(ay < ax), not (ax <= ay).
+			const bool xIsMin = !(ay < ax);
+			const float small = xIsMin ? ax : ay;
+			const unsigned minIdx = xIsMin ? 0u : 1u;
+			const unsigned maxIdx = xIsMin ? 1u : 0u;
+			unsigned zeroIdx = minIdx;
+			unsigned otherIdx = 2u;
+			if (hkAbsf(n.z) < small) { zeroIdx = 2u; otherIdx = minIdx; }
+			const float segMax = xIsMin ? (pB.y - pA.y) : (pB.x - pA.x);
+			const float oth    = (otherIdx == 2u) ? (pB.z - pA.z)
+			                   : (otherIdx == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
+			((float*)&n)[zeroIdx] = 0.0f;
+			n.w = 0.0f;
+			((float*)&n)[maxIdx] = oth;
+			((float*)&n)[otherIdx] = -segMax;
+			distance = 0.0f;
+		}
+		else
+		{
+			distance = sqrtf(distSq);
+			n.x = dx; n.y = dy; n.z = dz; n.w = dw;
+		}
+
+		const float lenSq = n.x * n.x + n.y * n.y + n.z * n.z;
+		const float invLen = (lenSq == 0.0f) ? 0.0f : 1.0f / sqrtf(lenSq);
+		n.x *= invLen; n.y *= invLen; n.z *= invLen;
+
+		const float k = capsuleShape->m_radius - distance;
+		contact->m_contact.m_position.x = n.x * k + (sphereTrans + 0xc)[0];
+		contact->m_contact.m_position.y = n.y * k + (sphereTrans + 0xc)[1];
+		contact->m_contact.m_position.z = n.z * k + (sphereTrans + 0xc)[2];
+		contact->m_contact.m_position.w = (n.w * invLen) * k + (sphereTrans + 0xc)[3];
+		contact->m_contact.m_separatingNormal.x = n.x;
+		contact->m_contact.m_separatingNormal.y = n.y;
+		contact->m_contact.m_separatingNormal.z = n.z;
+		contact->m_contact.m_separatingNormal.w = distance - radiusSum;
+
+		if (m_contactPointId == 0xffff)
+			m_contactPointId = m_contactMgr->addContactPoint(bodyA, bodyB, input, *contact);
+		if (m_contactPointId != 0xffff)
+		{
+			*(unsigned short*)&contact->m_extra[0] = m_contactPointId;
+			output.m_firstFreeContactPoint = contact + 1;
+		}
+	}
+
+	HK_TIMER_END_s010d_7570();
+}
+
+// @ 0x010d7be0
+void hkSphereCapsuleAgent::getClosestPoints(const hkCdBody_s010d_7570& bodyA, const hkCdBody_s010d_7570& bodyB, const hkCollisionInput_s010d_7570& input, hkCdPointCollector_s010d_7570& collector)
+{
+	HK_TIMER_BEGIN_s010d_7570("TtSphereCapsule");
+
+	const float* sphereTrans = (const float*)bodyA.m_motion;
+	const hkSphereShapeViewA* sphereShape = (const hkSphereShapeViewA*)bodyA.m_shape;
+	const float* capsuleTrans = (const float*)bodyB.m_motion;
+	const hkCapsuleShapeViewA* capsuleShape = (const hkCapsuleShapeViewA*)bodyB.m_shape;
+
+	hkVector4_s010d_7570 pA, pB;
+	HK_XFORM_COL(pA, capsuleShape->m_vertexA, capsuleTrans)
+	HK_XFORM_COL(pB, capsuleShape->m_vertexB, capsuleTrans)
+
+	ClosestPointLineSegResult closest;
+	hkCollideTriangleUtil_s010d_7570::closestPointLineSeg(*(const hkVector4_s010d_7570*)(sphereTrans + 0xc), pA, pB, closest);
+
+	const float dx = (sphereTrans + 0xc)[0] - closest.m_point.x;
+	const float dy = (sphereTrans + 0xc)[1] - closest.m_point.y;
+	const float dz = (sphereTrans + 0xc)[2] - closest.m_point.z;
+	const float dw = (sphereTrans + 0xc)[3] - closest.m_point.w;
+
+	const float radiusSum = sphereShape->m_radius + capsuleShape->m_radius;
+	const float radius = radiusSum + input.m_tolerance;
+	const float distSq = dx * dx + dy * dy + dz * dz;
+
+	if (distSq < radius * radius)
+	{
+		hkVector4_s010d_7570 n;
+		float distance;
+		if (distSq <= 0.0f)
+		{
+			n.x = pB.x - pA.x;
+			n.y = pB.y - pA.y;
+			n.z = pB.z - pA.z;
+			n.w = pB.w - pA.w;
+			const float ax = hkAbsf(n.x);
+			const float ay = hkAbsf(n.y);
+			// x87 `fcomp st(1)` + `test ah,5`/`jp` keeps the taken side on unordered, so the
+			// min/max pick is !(ay < ax), not (ax <= ay).
+			const bool xIsMin = !(ay < ax);
+			const float small = xIsMin ? ax : ay;
+			const unsigned minIdx = xIsMin ? 0u : 1u;
+			const unsigned maxIdx = xIsMin ? 1u : 0u;
+			unsigned zeroIdx = minIdx;
+			unsigned otherIdx = 2u;
+			if (hkAbsf(n.z) < small) { zeroIdx = 2u; otherIdx = minIdx; }
+			const float segMax = xIsMin ? (pB.y - pA.y) : (pB.x - pA.x);
+			const float oth    = (otherIdx == 2u) ? (pB.z - pA.z)
+			                   : (otherIdx == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
+			((float*)&n)[zeroIdx] = 0.0f;
+			n.w = 0.0f;
+			((float*)&n)[maxIdx] = oth;
+			((float*)&n)[otherIdx] = -segMax;
+			distance = 0.0f;
+		}
+		else
+		{
+			distance = sqrtf(distSq);
+			n.x = dx; n.y = dy; n.z = dz; n.w = dw;
+		}
+
+		const float lenSq = n.x * n.x + n.y * n.y + n.z * n.z;
+		const float invLen = (lenSq == 0.0f) ? 0.0f : 1.0f / sqrtf(lenSq);
+		n.x *= invLen; n.y *= invLen; n.z *= invLen;
+
+		const float k = capsuleShape->m_radius - distance;
+		hkCdPoint_s010d_7570 point;
+		point.m_contact.m_position.x = n.x * k + (sphereTrans + 0xc)[0];
+		point.m_contact.m_position.y = n.y * k + (sphereTrans + 0xc)[1];
+		point.m_contact.m_position.z = n.z * k + (sphereTrans + 0xc)[2];
+		point.m_contact.m_position.w = (n.w * invLen) * k + (sphereTrans + 0xc)[3];
+		point.m_contact.m_separatingNormal.x = n.x;
+		point.m_contact.m_separatingNormal.y = n.y;
+		point.m_contact.m_separatingNormal.z = n.z;
+		point.m_contact.m_separatingNormal.w = distance - radiusSum;
+		point.m_cdBodyA = &bodyA;
+		point.m_cdBodyB = &bodyB;
+		collector.addCdPoint(point);
+	}
+
+	HK_TIMER_END_s010d_7570();
+}
+
+// @ 0x010d8080
+void hkSphereCapsuleAgent::staticGetClosestPoints(const hkCdBody_s010d_7570& bodyA, const hkCdBody_s010d_7570& bodyB, const hkCollisionInput_s010d_7570& input, hkCdPointCollector_s010d_7570& collector)
+{
+	HK_TIMER_BEGIN_s010d_7570("TtSphereCapsule");
+
+	const float* sphereTrans = (const float*)bodyA.m_motion;
+	const hkSphereShapeViewA* sphereShape = (const hkSphereShapeViewA*)bodyA.m_shape;
+	const float* capsuleTrans = (const float*)bodyB.m_motion;
+	const hkCapsuleShapeViewA* capsuleShape = (const hkCapsuleShapeViewA*)bodyB.m_shape;
+
+	hkVector4_s010d_7570 pA, pB;
+	HK_XFORM_COL(pA, capsuleShape->m_vertexA, capsuleTrans)
+	HK_XFORM_COL(pB, capsuleShape->m_vertexB, capsuleTrans)
+
+	ClosestPointLineSegResult closest;
+	hkCollideTriangleUtil_s010d_7570::closestPointLineSeg(*(const hkVector4_s010d_7570*)(sphereTrans + 0xc), pA, pB, closest);
+
+	const float dx = (sphereTrans + 0xc)[0] - closest.m_point.x;
+	const float dy = (sphereTrans + 0xc)[1] - closest.m_point.y;
+	const float dz = (sphereTrans + 0xc)[2] - closest.m_point.z;
+	const float dw = (sphereTrans + 0xc)[3] - closest.m_point.w;
+
+	const float radiusSum = sphereShape->m_radius + capsuleShape->m_radius;
+	const float radius = radiusSum + input.m_tolerance;
+	const float distSq = dx * dx + dy * dy + dz * dz;
+
+	if (distSq < radius * radius)
+	{
+		hkVector4_s010d_7570 n;
+		float distance;
+		if (distSq <= 0.0f)
+		{
+			n.x = pB.x - pA.x;
+			n.y = pB.y - pA.y;
+			n.z = pB.z - pA.z;
+			n.w = pB.w - pA.w;
+			const float ax = hkAbsf(n.x);
+			const float ay = hkAbsf(n.y);
+			// x87 `fcomp st(1)` + `test ah,5`/`jp` keeps the taken side on unordered, so the
+			// min/max pick is !(ay < ax), not (ax <= ay).
+			const bool xIsMin = !(ay < ax);
+			const float small = xIsMin ? ax : ay;
+			const unsigned minIdx = xIsMin ? 0u : 1u;
+			const unsigned maxIdx = xIsMin ? 1u : 0u;
+			unsigned zeroIdx = minIdx;
+			unsigned otherIdx = 2u;
+			if (hkAbsf(n.z) < small) { zeroIdx = 2u; otherIdx = minIdx; }
+			const float segMax = xIsMin ? (pB.y - pA.y) : (pB.x - pA.x);
+			const float oth    = (otherIdx == 2u) ? (pB.z - pA.z)
+			                   : (otherIdx == 0u ? (pB.x - pA.x) : (pB.y - pA.y));
+			((float*)&n)[zeroIdx] = 0.0f;
+			n.w = 0.0f;
+			((float*)&n)[maxIdx] = oth;
+			((float*)&n)[otherIdx] = -segMax;
+			distance = 0.0f;
+		}
+		else
+		{
+			distance = sqrtf(distSq);
+			n.x = dx; n.y = dy; n.z = dz; n.w = dw;
+		}
+
+		const float lenSq = n.x * n.x + n.y * n.y + n.z * n.z;
+		const float invLen = (lenSq == 0.0f) ? 0.0f : 1.0f / sqrtf(lenSq);
+		n.x *= invLen; n.y *= invLen; n.z *= invLen;
+
+		const float k = capsuleShape->m_radius - distance;
+		hkCdPoint_s010d_7570 point;
+		point.m_contact.m_position.x = n.x * k + (sphereTrans + 0xc)[0];
+		point.m_contact.m_position.y = n.y * k + (sphereTrans + 0xc)[1];
+		point.m_contact.m_position.z = n.z * k + (sphereTrans + 0xc)[2];
+		point.m_contact.m_position.w = (n.w * invLen) * k + (sphereTrans + 0xc)[3];
+		point.m_contact.m_separatingNormal.x = n.x;
+		point.m_contact.m_separatingNormal.y = n.y;
+		point.m_contact.m_separatingNormal.z = n.z;
+		point.m_contact.m_separatingNormal.w = distance - radiusSum;
+		point.m_cdBodyA = &bodyA;
+		point.m_cdBodyB = &bodyB;
+		collector.addCdPoint(point);
+	}
+
+	HK_TIMER_END_s010d_7570();
+}
+
+// @ 0x010d8520
+void hkSphereCapsuleAgent_s010d_8520::staticGetPenetrations(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkCollisionInput_s010d_8520& input, hkCdBodyPairCollector_s010d_8520& collector)
+{
+	HK_TIMER_BEGIN_s010d_8520("TtSphereCapsule");
+
+	const hkSphereShapeView* shapeA = (const hkSphereShapeView*)bodyA.m_shape;
+	const hkCapsuleShapeView* shapeB = (const hkCapsuleShapeView*)bodyB.m_shape;
+	const hkTransformCols* transA = (const hkTransformCols*)bodyA.m_motion;
+	const hkTransformCols* transB = (const hkTransformCols*)bodyB.m_motion;
+
+	// the two capsule endpoints, transformed into world space (transB's basis, used transposed: the three stored
+	// vectors are the columns).
+	hkVector4_s010d_8520 p0, p1;
+	p0.x = shapeB->m_vertexA.x * transB->m_col[0].x + shapeB->m_vertexA.y * transB->m_col[1].x + shapeB->m_vertexA.z * transB->m_col[2].x + transB->m_trans.x;
+	p0.y = shapeB->m_vertexA.x * transB->m_col[0].y + shapeB->m_vertexA.y * transB->m_col[1].y + shapeB->m_vertexA.z * transB->m_col[2].y + transB->m_trans.y;
+	p0.z = shapeB->m_vertexA.x * transB->m_col[0].z + shapeB->m_vertexA.y * transB->m_col[1].z + shapeB->m_vertexA.z * transB->m_col[2].z + transB->m_trans.z;
+	p1.x = shapeB->m_vertexB.x * transB->m_col[0].x + shapeB->m_vertexB.y * transB->m_col[1].x + shapeB->m_vertexB.z * transB->m_col[2].x + transB->m_trans.x;
+	p1.y = shapeB->m_vertexB.x * transB->m_col[0].y + shapeB->m_vertexB.y * transB->m_col[1].y + shapeB->m_vertexB.z * transB->m_col[2].y + transB->m_trans.y;
+	p1.z = shapeB->m_vertexB.x * transB->m_col[0].z + shapeB->m_vertexB.y * transB->m_col[1].z + shapeB->m_vertexB.z * transB->m_col[2].z + transB->m_trans.z;
+
+	ClosestPointLineSegResult_s010d_8520 closest;
+	hkCollideTriangleUtil_s010d_8520::closestPointLineSeg(transA->m_trans, p0, p1, closest);
+
+	float dx = closest.m_point.x - transA->m_trans.x;
+	float dy = closest.m_point.y - transA->m_trans.y;
+	float dz = closest.m_point.z - transA->m_trans.z;
+
+	float radius = shapeA->m_radius + shapeB->m_radius;
+	if (dx * dx + dy * dy + dz * dz < radius * radius)
+		collector.addCdBodyPair(bodyA, bodyB);
+
+	HK_TIMER_END_s010d_8520();
+}
+
+// @ 0x010d8840
+void hkSymmetricAgent_hkSphereCapsuleAgent_s010d_8520::getClosestPoints(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkCollisionInput_s010d_8520& input, hkCdPointCollector_s010d_8520& collector)
+{
+	hkFlipCollectorFixed flipCollector;
+	flipCollector.m_original = &collector;
+	flipCollector.m_earlyOutDistance = hkRealMax();
+	flipCollector.m_vftable = (void*)0x014A43A4;
+	hkSphereCapsuleAgent_s010d_8520::getClosestPoints(bodyB, bodyA, input, *(hkCdPointCollector_s010d_8520*)&flipCollector);
+}
+
+// @ 0x010d88c0
+void hkSymmetricAgent_hkSphereCapsuleAgent_s010d_8520::processCollision(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkProcessCollisionInput_s010d_8520& input, hkProcessCollisionOutput_s010d_8520& output)
+{
+	float toiTimeBefore = output.m_toiTime;
+	hkProcessCdPoint_s010d_8520* firstNewPoint = output.m_firstFreeContactPoint;
+	hkSphereCapsuleAgent_s010d_8520::processCollision(bodyB, bodyA, input, output);
+	for (hkProcessCdPoint_s010d_8520* p = firstNewPoint; p < output.m_firstFreeContactPoint; ++p)
+		p->m_contact.setFlipped(p->m_contact);
+	if (toiTimeBefore != output.m_toiTime)
+	{
+		output.m_toiContact.m_separatingNormal.x = -output.m_toiContact.m_separatingNormal.x;
+		output.m_toiContact.m_separatingNormal.y = -output.m_toiContact.m_separatingNormal.y;
+		output.m_toiContact.m_separatingNormal.z = -output.m_toiContact.m_separatingNormal.z;
+	}
+}
+
+// @ 0x010d89d0
+void hkSphereSphereAgent::cleanup()
+{
+	if (m_contactPointId != 0xffff)
+	{
+		m_contactMgr->removePoint(m_contactPointId);
+		m_contactPointId = 0xffff;
+	}
+	delete this;
+}
+
+// @ 0x010d8a00
+hkSphereSphereAgent* HK_CALL hkSphereSphereAgent::create(const hkCdBody_s010d_8520&, const hkCdBody_s010d_8520&, const hkCollisionInput_s010d_8520&, hkContactMgr_s010d_8520* mgr)
+{
+	return new hkSphereSphereAgent(mgr);
+}
+
+// @ 0x010d8a30
+void hkSphereSphereAgent::processCollision(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkProcessCollisionInput_s010d_8520& input, hkProcessCollisionOutput_s010d_8520& output)
+{
+	HK_TIMER_BEGIN_s010d_8520("TtSphereSphere");
+
+	const hkSphereShapeView* shapeA = (const hkSphereShapeView*)bodyA.m_shape;
+	const hkSphereShapeView* shapeB = (const hkSphereShapeView*)bodyB.m_shape;
+	const hkTransformCols* transA = (const hkTransformCols*)bodyA.m_motion;
+	const hkTransformCols* transB = (const hkTransformCols*)bodyB.m_motion;
+
+	float dx = transA->m_trans.x - transB->m_trans.x;
+	float dy = transA->m_trans.y - transB->m_trans.y;
+	float dz = transA->m_trans.z - transB->m_trans.z;
+	float dw = transA->m_trans.w - transB->m_trans.w;
+	float distSq = dx * dx + dy * dy + dz * dz;
+	float radius = input.m_tolerance + shapeB->m_radius + shapeA->m_radius;
+
+	if (distSq < radius * radius)
+	{
+		hkProcessCdPoint_s010d_8520* point = output.m_firstFreeContactPoint;
+		float* pf = (float*)point;
+		float distance;
+		if (distSq <= 0.0f)
+		{
+			pf[4] = 1.0f; pf[5] = 0.0f; pf[6] = 0.0f; pf[7] = 0.0f;
+			distance = -(shapeA->m_radius + shapeB->m_radius);
+		}
+		else
+		{
+			float invDist = 1.0f / sqrtf(distSq);
+			pf[4] = dx * invDist;
+			pf[5] = dy * invDist;
+			pf[6] = dz * invDist;
+			pf[7] = dw * invDist;
+			distance = distSq * invDist - (shapeA->m_radius + shapeB->m_radius);
+		}
+
+		float rB = shapeB->m_radius;
+		pf[0] = transB->m_trans.x;
+		pf[1] = transB->m_trans.y;
+		pf[2] = transB->m_trans.z;
+		pf[3] = transB->m_trans.w;
+		pf[0] = rB * pf[4] + pf[0];
+		pf[1] = rB * pf[5] + pf[1];
+		pf[2] = rB * pf[6] + pf[2];
+		pf[3] = rB * pf[7] + pf[3];
+		pf[7] = distance;
+
+		if (m_contactPointId == 0xffff)
+			m_contactPointId = m_contactMgr->addContactPoint(bodyA, bodyB, input, *point);
+
+		if (m_contactPointId != 0xffff)
+		{
+			point->m_extra[0] = m_contactPointId;
+			output.m_firstFreeContactPoint = point + 1;
+		}
+	}
+	else if (m_contactPointId != 0xffff)
+	{
+		m_contactMgr->removePoint(m_contactPointId);
+		m_contactPointId = 0xffff;
+	}
+
+	HK_TIMER_END_s010d_8520();
+}
+
+// @ 0x010d8c80
+void hkSphereSphereAgent::getClosestPoints(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkCollisionInput_s010d_8520& input, hkCdPointCollector_s010d_8520& collector)
+{
+	HK_TIMER_BEGIN_s010d_8520("TtSphereSphere");
+
+	const hkSphereShapeView* shapeA = (const hkSphereShapeView*)bodyA.m_shape;
+	const hkSphereShapeView* shapeB = (const hkSphereShapeView*)bodyB.m_shape;
+	const hkTransformCols* transA = (const hkTransformCols*)bodyA.m_motion;
+	const hkTransformCols* transB = (const hkTransformCols*)bodyB.m_motion;
+
+	float dx = transA->m_trans.x - transB->m_trans.x;
+	float dy = transA->m_trans.y - transB->m_trans.y;
+	float dz = transA->m_trans.z - transB->m_trans.z;
+	float dw = transA->m_trans.w - transB->m_trans.w;
+	float distSq = dx * dx + dy * dy + dz * dz;
+	float radius = input.m_tolerance + shapeB->m_radius + shapeA->m_radius;
+
+	if (distSq < radius * radius)
+	{
+		hkVector4_s010d_8520 n;
+		float distance;
+		if (distSq <= 0.0f)
+		{
+			distance = 0.0f;
+			n.x = 1.0f; n.y = 0.0f; n.z = 0.0f;
+		}
+		else
+		{
+			float invDist = 1.0f / sqrtf(distSq);
+			n.x = dx * invDist;
+			n.y = dy * invDist;
+			n.z = dz * invDist;
+			n.w = dw * invDist;
+			distance = distSq * invDist;
+		}
+
+		float rB = shapeB->m_radius;
+		hkCdPoint_s010d_8520 point;
+		point.m_contact.m_position.x = n.x * rB + transB->m_trans.x;
+		point.m_contact.m_position.y = n.y * rB + transB->m_trans.y;
+		point.m_contact.m_position.z = n.z * rB + transB->m_trans.z;
+		point.m_contact.m_position.w = n.w * rB + transB->m_trans.w;
+		point.m_contact.m_separatingNormal.x = n.x;
+		point.m_contact.m_separatingNormal.y = n.y;
+		point.m_contact.m_separatingNormal.z = n.z;
+		point.m_contact.m_separatingNormal.w = distance - (shapeB->m_radius + shapeA->m_radius);
+		point.m_cdBodyA = &bodyA;
+		point.m_cdBodyB = &bodyB;
+		collector.addCdPoint(point);
+	}
+
+	HK_TIMER_END_s010d_8520();
+}
+
+// @ 0x010d8e90
+void HK_CALL hkSphereSphereAgent::staticGetClosestPoints(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkCollisionInput_s010d_8520& input, hkCdPointCollector_s010d_8520& collector)
+{
+	HK_TIMER_BEGIN_s010d_8520("TtSphereSphere");
+
+	const hkSphereShapeView* shapeA = (const hkSphereShapeView*)bodyA.m_shape;
+	const hkSphereShapeView* shapeB = (const hkSphereShapeView*)bodyB.m_shape;
+	const hkTransformCols* transA = (const hkTransformCols*)bodyA.m_motion;
+	const hkTransformCols* transB = (const hkTransformCols*)bodyB.m_motion;
+
+	float dx = transA->m_trans.x - transB->m_trans.x;
+	float dy = transA->m_trans.y - transB->m_trans.y;
+	float dz = transA->m_trans.z - transB->m_trans.z;
+	float dw = transA->m_trans.w - transB->m_trans.w;
+	float distSq = dx * dx + dy * dy + dz * dz;
+	float radius = input.m_tolerance + shapeB->m_radius + shapeA->m_radius;
+
+	if (distSq < radius * radius)
+	{
+		hkVector4_s010d_8520 n;
+		float distance;
+		if (distSq <= 0.0f)
+		{
+			distance = 0.0f;
+			n.x = 1.0f; n.y = 0.0f; n.z = 0.0f;
+		}
+		else
+		{
+			float invDist = 1.0f / sqrtf(distSq);
+			n.x = dx * invDist;
+			n.y = dy * invDist;
+			n.z = dz * invDist;
+			n.w = dw * invDist;
+			distance = distSq * invDist;
+		}
+
+		float rB = shapeB->m_radius;
+		hkCdPoint_s010d_8520 point;
+		point.m_contact.m_position.x = n.x * rB + transB->m_trans.x;
+		point.m_contact.m_position.y = n.y * rB + transB->m_trans.y;
+		point.m_contact.m_position.z = n.z * rB + transB->m_trans.z;
+		point.m_contact.m_position.w = n.w * rB + transB->m_trans.w;
+		point.m_contact.m_separatingNormal.x = n.x;
+		point.m_contact.m_separatingNormal.y = n.y;
+		point.m_contact.m_separatingNormal.z = n.z;
+		point.m_contact.m_separatingNormal.w = distance - (shapeB->m_radius + shapeA->m_radius);
+		point.m_cdBodyA = &bodyA;
+		point.m_cdBodyB = &bodyB;
+		collector.addCdPoint(point);
+	}
+
+	HK_TIMER_END_s010d_8520();
+}
+
+// @ 0x010d90a0
+void hkSphereSphereAgent::getPenetrations(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkCollisionInput_s010d_8520& input, hkCdBodyPairCollector_s010d_8520& collector)
+{
+	HK_TIMER_BEGIN_s010d_8520("TtSphereSphere");
+
+	const hkSphereShapeView* shapeA = (const hkSphereShapeView*)bodyA.m_shape;
+	const hkSphereShapeView* shapeB = (const hkSphereShapeView*)bodyB.m_shape;
+	const hkTransformCols* transA = (const hkTransformCols*)bodyA.m_motion;
+	const hkTransformCols* transB = (const hkTransformCols*)bodyB.m_motion;
+
+	float dx = transB->m_trans.x - transA->m_trans.x;
+	float dy = transB->m_trans.y - transA->m_trans.y;
+	float dz = transB->m_trans.z - transA->m_trans.z;
+	float radius = shapeA->m_radius + shapeB->m_radius;
+
+	if (dx * dx + dy * dy + dz * dz < radius * radius)
+		collector.addCdBodyPair(bodyA, bodyB);
+
+	HK_TIMER_END_s010d_8520();
+}
+
+// @ 0x010d91a0
+void HK_CALL hkSphereSphereAgent::staticGetPenetrations(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkCollisionInput_s010d_8520& input, hkCdBodyPairCollector_s010d_8520& collector)
+{
+	HK_TIMER_BEGIN_s010d_8520("TtSphereSphere");
+
+	const hkSphereShapeView* shapeA = (const hkSphereShapeView*)bodyA.m_shape;
+	const hkSphereShapeView* shapeB = (const hkSphereShapeView*)bodyB.m_shape;
+	const hkTransformCols* transA = (const hkTransformCols*)bodyA.m_motion;
+	const hkTransformCols* transB = (const hkTransformCols*)bodyB.m_motion;
+
+	float dx = transB->m_trans.x - transA->m_trans.x;
+	float dy = transB->m_trans.y - transA->m_trans.y;
+	float dz = transB->m_trans.z - transA->m_trans.z;
+	float radius = shapeA->m_radius + shapeB->m_radius;
+
+	if (dx * dx + dy * dy + dz * dz < radius * radius)
+		collector.addCdBodyPair(bodyA, bodyB);
+
+	HK_TIMER_END_s010d_8520();
+}
+
+// @ 0x010d92a0
+void HK_CALL hkSphereSphereAgent::registerAgent(hkCollisionDispatcher_s010d_8520* dispatcher)
+{
+	hkAgentFuncs_s010d_8520 funcs;
+	funcs.m_createFunc = (hkAgentCreateFunc_s010d_8520)&hkSphereSphereAgent::create;
+	funcs.m_getPenetrationsFunc = (hkAgentGetPenetrationsFunc_s010d_8520)&hkSphereSphereAgent::staticGetPenetrations;
+	funcs.m_getClosestPointFunc = (hkAgentGetClosestPointsFunc_s010d_8520)&hkSphereSphereAgent::staticGetClosestPoints;
+	funcs.m_linearCastFunc = (hkAgentLinearCastFunc_s010d_8520)&hkIterativeLinearCastAgent_staticLinearCast;
+	dispatcher->registerCollisionAgent(funcs, 4, 4);
+}
+
+// @ 0x010d92f0
+void hkBoxBoxAgent::cleanup()
+{
+	for (int i = 0; i < (int)hkBoxBoxManifold_numEntries(m_manifold); ++i)
+		m_contactMgr->removePoint(m_manifold.m_entries[i].m_key);
+	delete this;
+}
+
+// @ 0x010d9330
+hkCollisionAgent_s010d_8520* HK_CALL hkBoxBoxAgent::createBoxBoxAgent(const hkCdBody_s010d_8520& bodyA, const hkCdBody_s010d_8520& bodyB, const hkCollisionInput_s010d_8520& input, hkContactMgr_s010d_8520* mgr)
+{
+	const hkConvexShapeView* shapeA = (const hkConvexShapeView*)bodyA.m_shape;
+	const hkConvexShapeView* shapeB = (const hkConvexShapeView*)bodyB.m_shape;
+	float radiusA = shapeA->m_halfExtents.w * g_hkBoxBoxRadiusFactor;
+	if ((radiusA > input.m_tolerance) &&
+	    (shapeB->m_halfExtents.w * g_hkBoxBoxRadiusFactor > input.m_tolerance))
+	{
+		hkBoxBoxAgent* agent = new hkBoxBoxAgent(mgr);
+		agent->m_manifold.init();
+		return agent;
+	}
+	return hkGskfAgent_createGskfAgent(bodyA, bodyB, input, mgr);
+}
+
+// @ 0x010d93e0
+void hkBoxBoxOriginCache::update()
+{
+	m_cachedOrigin.x = m_trans.x;
+	m_cachedOrigin.y = m_trans.y;
+	m_cachedOrigin.z = m_trans.z;
+	m_cachedOrigin.w = m_trans.w;
+	m_cachedAxis.x = m_cachedOrigin.x * m_rot[0].x + m_cachedOrigin.y * m_rot[0].y + m_cachedOrigin.z * m_rot[0].z;
+	m_cachedAxis.y = m_cachedOrigin.x * m_rot[1].x + m_cachedOrigin.y * m_rot[1].y + m_cachedOrigin.z * m_rot[1].z;
+	m_cachedAxis.z = m_cachedOrigin.x * m_rot[2].x + m_cachedOrigin.y * m_rot[2].y + m_cachedOrigin.z * m_rot[2].z;
+	m_cachedAxis.w = 0.0f;
+}
+
+// @ 0x010d9470
+void hkBoxBoxAgent_s010d_9470::processCollision(const hkCdBody_s010d_9470& bodyA, const hkCdBody_s010d_9470& bodyB, const hkProcessCollisionInput_s010d_9470& input, hkProcessCollisionOutput_s010d_9470& output)
+{
+	HK_TIMER_BEGIN_s010d_9470("TtBoxBox");
+
+	const hkConvexShapeView_s010d_9470* shapeA = (const hkConvexShapeView_s010d_9470*)bodyA.m_shape;
+	const hkConvexShapeView_s010d_9470* shapeB = (const hkConvexShapeView_s010d_9470*)bodyB.m_shape;
+	const hkTransform_s010d_9470* wTa = (const hkTransform_s010d_9470*)bodyA.m_motion;
+	const hkTransform_s010d_9470* wTb = (const hkTransform_s010d_9470*)bodyB.m_motion;
+	const float tolerance = input.m_tolerance;
+
+	hkTransform_s010d_9470 aTb;
+	aTb.setMulInverseMul(*wTa, *wTb);
+
+	hkBoxBoxCollisionDetection cd;
+	cd.m_pad1c = 0;
+	hkRotation_set(cd.m_aRb, aTb.m_rot);
+	cd.m_aTb = aTb.m_trans;
+	cd.m_radiusA.x = shapeA->m_radius + shapeA->m_halfExtents.x;
+	cd.m_radiusA.y = shapeA->m_radius + shapeA->m_halfExtents.y;
+	cd.m_radiusA.z = shapeA->m_radius + shapeA->m_halfExtents.z;
+	cd.m_radiusA.w = shapeA->m_radius + shapeA->m_halfExtents.w;
+	cd.m_radiusB.x = shapeB->m_radius + shapeB->m_halfExtents.x;
+	cd.m_radiusB.y = shapeB->m_radius + shapeB->m_halfExtents.y;
+	cd.m_radiusB.z = shapeB->m_radius + shapeB->m_halfExtents.z;
+	cd.m_radiusB.w = shapeB->m_radius + shapeB->m_halfExtents.w;
+	cd.m_bodyA = &bodyA;
+	cd.m_bodyB = &bodyB;
+	cd.m_wTa = wTa;
+	cd.m_wTb = wTb;
+	cd.m_tolerance = tolerance;
+	cd.m_tolerance4.x = tolerance; cd.m_tolerance4.y = tolerance;
+	cd.m_tolerance4.z = tolerance; cd.m_tolerance4.w = tolerance;
+	cd.m_boundaryToleranceA.x = tolerance + cd.m_radiusA.x;
+	cd.m_boundaryToleranceA.y = tolerance + cd.m_radiusA.y;
+	cd.m_boundaryToleranceA.z = tolerance + cd.m_radiusA.z;
+	cd.m_boundaryToleranceA.w = tolerance + cd.m_radiusA.w;
+	cd.m_boundaryToleranceB.x = tolerance + cd.m_radiusB.x;
+	cd.m_boundaryToleranceB.y = tolerance + cd.m_radiusB.y;
+	cd.m_boundaryToleranceB.z = tolerance + cd.m_radiusB.z;
+	cd.m_boundaryToleranceB.w = tolerance + cd.m_radiusB.w;
+
+	cd.calcManifold(m_manifold);
+
+	HK_TIMER_END_s010d_9470();
+}
+
+// @ 0x010d97a0
+void HK_CALL hkBoxBoxAgent_s010d_9470::staticGetClosestPoints(const hkCdBody_s010d_9470& bodyA, const hkCdBody_s010d_9470& bodyB, const hkCollisionInput_s010d_9470& input, hkCdPointCollector_s010d_9470& collector)
+{
+	HK_TIMER_BEGIN_s010d_9470("TtBoxBox");
+
+	const hkConvexShapeView_s010d_9470* shapeA = (const hkConvexShapeView_s010d_9470*)bodyA.m_shape;
+	const hkConvexShapeView_s010d_9470* shapeB = (const hkConvexShapeView_s010d_9470*)bodyB.m_shape;
+	const hkTransform_s010d_9470* wTa = (const hkTransform_s010d_9470*)bodyA.m_motion;
+	const hkTransform_s010d_9470* wTb = (const hkTransform_s010d_9470*)bodyB.m_motion;
+	const float tolerance = input.m_tolerance;
+
+	hkTransform_s010d_9470 aTb;
+	aTb.setMulInverseMul(*wTa, *wTb);
+
+	hkBoxBoxCollisionDetection cd;
+	cd.m_pad1c = 0;
+	hkRotation_set(cd.m_aRb, aTb.m_rot);
+	cd.m_aTb = aTb.m_trans;
+	cd.m_radiusA.x = shapeA->m_radius + shapeA->m_halfExtents.x;
+	cd.m_radiusA.y = shapeA->m_radius + shapeA->m_halfExtents.y;
+	cd.m_radiusA.z = shapeA->m_radius + shapeA->m_halfExtents.z;
+	cd.m_radiusA.w = shapeA->m_radius + shapeA->m_halfExtents.w;
+	cd.m_radiusB.x = shapeB->m_radius + shapeB->m_halfExtents.x;
+	cd.m_radiusB.y = shapeB->m_radius + shapeB->m_halfExtents.y;
+	cd.m_radiusB.z = shapeB->m_radius + shapeB->m_halfExtents.z;
+	cd.m_radiusB.w = shapeB->m_radius + shapeB->m_halfExtents.w;
+	cd.m_bodyA = &bodyA;
+	cd.m_bodyB = &bodyB;
+	cd.m_wTa = wTa;
+	cd.m_wTb = wTb;
+	cd.m_tolerance = tolerance;
+	cd.m_tolerance4.x = tolerance; cd.m_tolerance4.y = tolerance;
+	cd.m_tolerance4.z = tolerance; cd.m_tolerance4.w = tolerance;
+	cd.m_boundaryToleranceA.x = tolerance + cd.m_radiusA.x;
+	cd.m_boundaryToleranceA.y = tolerance + cd.m_radiusA.y;
+	cd.m_boundaryToleranceA.z = tolerance + cd.m_radiusA.z;
+	cd.m_boundaryToleranceA.w = tolerance + cd.m_radiusA.w;
+	cd.m_boundaryToleranceB.x = tolerance + cd.m_radiusB.x;
+	cd.m_boundaryToleranceB.y = tolerance + cd.m_radiusB.y;
+	cd.m_boundaryToleranceB.z = tolerance + cd.m_radiusB.z;
+	cd.m_boundaryToleranceB.w = tolerance + cd.m_radiusB.w;
+
+	hkContactPoint_s010d_9470 point;
+	if (cd.calculateClosestPoint(point))
+		collector.addCdPoint(*(const hkCdPoint_s010d_9470*)&point);
+
+	HK_TIMER_END_s010d_9470();
+}
+
+// @ 0x010d9b10
+void HK_CALL hkBoxBoxAgent_s010d_9470::staticGetPenetrations(const hkCdBody_s010d_9470& bodyA, const hkCdBody_s010d_9470& bodyB, const hkCollisionInput_s010d_9470& input, hkCdBodyPairCollector_s010d_9470& collector)
+{
+	HK_TIMER_BEGIN_s010d_9470("TtBoxBox");
+
+	const hkConvexShapeView_s010d_9470* shapeA = (const hkConvexShapeView_s010d_9470*)bodyA.m_shape;
+	const hkConvexShapeView_s010d_9470* shapeB = (const hkConvexShapeView_s010d_9470*)bodyB.m_shape;
+	const hkTransform_s010d_9470* wTa = (const hkTransform_s010d_9470*)bodyA.m_motion;
+	const hkTransform_s010d_9470* wTb = (const hkTransform_s010d_9470*)bodyB.m_motion;
+	const float tolerance = input.m_tolerance;
+
+	hkTransform_s010d_9470 aTb;
+	aTb.setMulInverseMul(*wTa, *wTb);
+
+	hkBoxBoxCollisionDetection cd;
+	cd.m_pad1c = 0;
+	hkRotation_set(cd.m_aRb, aTb.m_rot);
+	cd.m_aTb = aTb.m_trans;
+	cd.m_radiusA.x = shapeA->m_radius + shapeA->m_halfExtents.x;
+	cd.m_radiusA.y = shapeA->m_radius + shapeA->m_halfExtents.y;
+	cd.m_radiusA.z = shapeA->m_radius + shapeA->m_halfExtents.z;
+	cd.m_radiusA.w = shapeA->m_radius + shapeA->m_halfExtents.w;
+	cd.m_radiusB.x = shapeB->m_radius + shapeB->m_halfExtents.x;
+	cd.m_radiusB.y = shapeB->m_radius + shapeB->m_halfExtents.y;
+	cd.m_radiusB.z = shapeB->m_radius + shapeB->m_halfExtents.z;
+	cd.m_radiusB.w = shapeB->m_radius + shapeB->m_halfExtents.w;
+	cd.m_bodyA = &bodyA;
+	cd.m_bodyB = &bodyB;
+	cd.m_wTa = wTa;
+	cd.m_wTb = wTb;
+	cd.m_tolerance = tolerance;
+	cd.m_tolerance4.x = tolerance; cd.m_tolerance4.y = tolerance;
+	cd.m_tolerance4.z = tolerance; cd.m_tolerance4.w = tolerance;
+	cd.m_boundaryToleranceA.x = tolerance + cd.m_radiusA.x;
+	cd.m_boundaryToleranceA.y = tolerance + cd.m_radiusA.y;
+	cd.m_boundaryToleranceA.z = tolerance + cd.m_radiusA.z;
+	cd.m_boundaryToleranceA.w = tolerance + cd.m_radiusA.w;
+	cd.m_boundaryToleranceB.x = tolerance + cd.m_radiusB.x;
+	cd.m_boundaryToleranceB.y = tolerance + cd.m_radiusB.y;
+	cd.m_boundaryToleranceB.z = tolerance + cd.m_radiusB.z;
+	cd.m_boundaryToleranceB.w = tolerance + cd.m_radiusB.w;
+
+	if (cd.checkIntersection(cd.m_tolerance4) == 0)
+		collector.addCdBodyPair(bodyA, bodyB);
+
+	HK_TIMER_END_s010d_9470();
+}
+
+// @ 0x010d9e50
+void HK_CALL hkBoxBoxAgent_s010d_9470::registerAgent(hkCollisionDispatcher_s010d_9470* dispatcher)
+{
+	hkAgentFuncs18 funcs;
+	funcs.m_createFunc = (hkAgentCreateFunc_s010d_9470)&hkBoxBoxAgent_s010d_9470::createBoxBoxAgent;
+	funcs.m_getPenetrationsFunc = (hkAgentGetPenetrationsFunc_s010d_9470)&hkBoxBoxAgent_s010d_9470::staticGetPenetrations;
+	funcs.m_getClosestPointFunc = (hkAgentGetClosestPointsFunc_s010d_9470)&hkBoxBoxAgent_s010d_9470::staticGetClosestPoints;
+	funcs.m_linearCastFunc = (hkAgentLinearCastFunc_s010d_9470)&hkIterativeLinearCastAgent_staticLinearCast;
+	funcs.m_isFlipped = false;
+	funcs.m_isPredictive = false;
+	dispatcher->registerCollisionAgent(funcs, 7, 7);
+}
+
+// @ 0x010d9ea0
+hkCollisionAgent_s010d_9470* HK_CALL hkPredGskfAgent_s010d_9470::createPredGskfAgent(const hkCdBody_s010d_9470& bodyA, const hkCdBody_s010d_9470& bodyB, const hkCollisionInput_s010d_9470& input, hkContactMgr_s010d_9470* mgr)
+{
+	if (mgr != 0)
+	{
+		hkPredGskfAgentCtor* agent = (hkPredGskfAgentCtor*)hkMemory_s_instance_s010d_9470->allocate(0x80, 0x1c);
+		((hkInt16*)agent)[2] = 0x80;
+		agent->init(bodyA, bodyB, mgr);
+		*(void**)agent = (void*)0x014a48f8;
+		return (hkCollisionAgent_s010d_9470*)agent;
+	}
+	hkGskBaseAgentCtor* agent = (hkGskBaseAgentCtor*)hkMemory_s_instance_s010d_9470->allocate(0x30, 0x1c);
+	((hkInt16*)agent)[2] = 0x30;
+	agent->init(bodyA, bodyB, 0);
+	return (hkCollisionAgent_s010d_9470*)agent;
+}
+
+// @ 0x010d9f10
+void HK_CALL hkPredGskfAgent_s010d_9470::registerAgent(hkCollisionDispatcher_s010d_9470* dispatcher)
+{
+	hkAgentFuncs18 funcs;
+	funcs.m_createFunc = (hkAgentCreateFunc_s010d_9470)&hkPredGskfAgent_s010d_9470::createPredGskfAgent;
+	funcs.m_getPenetrationsFunc = (hkAgentGetPenetrationsFunc_s010d_9470)&hkGskBaseAgent_staticGetPenetrations;
+	funcs.m_getClosestPointFunc = (hkAgentGetClosestPointsFunc_s010d_9470)&hkGskBaseAgent_staticGetClosestPoints;
+	funcs.m_linearCastFunc = (hkAgentLinearCastFunc_s010d_9470)&hkIterativeLinearCastAgent_staticLinearCast;
+	funcs.m_isFlipped = false;
+	funcs.m_isPredictive = true;
+	dispatcher->registerCollisionAgent(funcs, 1, 1);
 }
 
 // @ 0x010dcd40
