@@ -27,6 +27,18 @@ struct CollNode {
     CollNode* next;        // +0x1c
 };
 
+// The lookup key is a 12-byte aggregate passed **by value** (cl reserves 12 bytes on the stack and stores the
+// three dwords), so the key arguments must be one struct, not three separate scalars.
+struct CollKey { uint32_t type; uint32_t value; uint32_t sym; };
+static inline CollKey MakeCollKey(uint32_t type, uint32_t value, uint32_t sym)
+{
+    CollKey k;
+    k.type = type;
+    k.value = value;
+    k.sym = sym;
+    return k;
+}
+
 struct Pair { CollNode* node; CollNode** bucket; };
 struct InsResult { CollNode* node; CollNode** bucket; bool ok; };
 
@@ -144,8 +156,8 @@ struct CollRecv {
     OutletList* mOutlets;                  // +0x1b8
     void*      mOutlets2;                  // +0x1bc
 
-    bool LookupKey(uint32_t a0, uint32_t a1, uint32_t a2, int* outA, int* outB);      // 0xa57b60
-    bool LookupIndex(uint32_t a0, uint32_t a1, uint32_t a2, int idx, void* out);      // 0xa57be0
+    bool LookupKey(CollKey key, int* outA, int* outB);                                // 0xa57b60
+    bool LookupIndex(CollKey key, int idx, void* out);                                // 0xa57be0
 };
 
 struct CollObject {
@@ -367,14 +379,14 @@ void CollTable::FreeList(CollNode** v, unsigned n)
 }
 
 // @ 0x00a57b60
-bool CollRecv::LookupKey(uint32_t a0, uint32_t a1, uint32_t a2, int* outA, int* outB)
+bool CollRecv::LookupKey(CollKey k, int* outA, int* outB)
 {
     CollNode key;
     key.k0 = 0;
     key.k1 = 0;
-    key.type = a0;
-    key.value = a1;
-    key.sym = a2;
+    key.type = k.type;
+    key.value = k.value;
+    key.sym = k.sym;
     Pair p;
     mTable.Lookup(&p, &key);
     if (mTable.mBuckets[mTable.mBucketCount] != p.node) {
@@ -386,21 +398,21 @@ bool CollRecv::LookupKey(uint32_t a0, uint32_t a1, uint32_t a2, int* outA, int* 
 }
 
 // @ 0x00a57be0
-bool CollRecv::LookupIndex(uint32_t a0, uint32_t a1, uint32_t a2, int idx, void* out)
+bool CollRecv::LookupIndex(CollKey k, int idx, void* out)
 {
     int count;
     int items;
-    if (!LookupKey(a0, a1, a2, &count, &items))
-        return false;
-    if (idx <= 0)
-        return false;
-    if (idx > count)
-        return false;
-    uint32_t* src = (uint32_t*)items + (idx - 1) * 3;
-    ((uint32_t*)out)[0] = src[0];
-    ((uint32_t*)out)[1] = src[1];
-    ((uint32_t*)out)[2] = src[2];
-    return true;
+    bool ok = false;
+    if (LookupKey(k, &count, &items)) {
+        if (idx > 0 && idx <= count) {
+            uint32_t* src = (uint32_t*)items + (idx - 1) * 3;
+            ((uint32_t*)out)[0] = src[0];
+            ((uint32_t*)out)[1] = src[1];
+            ((uint32_t*)out)[2] = src[2];
+            ok = true;
+        }
+    }
+    return ok;
 }
 
 // @ 0x00a57c60
@@ -411,7 +423,7 @@ void Float_(void* x, float f, uint32_t b)
     uint32_t unused;
     uint32_t u = *(volatile uint32_t*)&unused;
     int outA, outB;
-    if (r->LookupKey(1, fbits, u, &outA, &outB)) {
+    if (r->LookupKey(MakeCollKey(1, fbits, u), &outA, &outB)) {
         if (++gOutletCount < 1000) {
             for (OutletNode* n = r->mOutlets->head; n; n = n->next)
                 outlet_float(n->target, f);
@@ -426,7 +438,7 @@ void Symbol_(void* x, uint32_t a, uint32_t b)
 {
     CollRecv* r = (CollRecv*)((char*)x + 0x30);
     int outA, outB;
-    if (r->LookupKey(2, a, b, &outA, &outB)) {
+    if (r->LookupKey(MakeCollKey(2, a, b), &outA, &outB)) {
         outlet_symbol(r->mOutlets, a, b);
         outlet_list(r->mOutlets2, gListSymbol.mHash, (uint32_t)gListSymbol.mpName, outA, (void*)outB);
     }
@@ -456,7 +468,11 @@ void List_(void* x, t_symbol s, int argc, void* atoms)
         return;
     int local;
     uint32_t* a = (uint32_t*)atoms;
-    if (r->LookupKey(a[0], a[1], a[2], &argc, &local)) {
+    CollKey key;
+    key.type = a[0];
+    key.value = a[1];
+    key.sym = a[2];
+    if (r->LookupKey(key, &argc, &local)) {
         float v = (float)argc;
         ++gOutletCount;
         if (gOutletCount < 1000) {
@@ -482,7 +498,7 @@ void DoInt(void* x, t_symbol s, int argc, void* atoms)
     uint32_t* a = (uint32_t*)atoms;
     uint32_t buf[3];
     int idx = atom_getint((char*)atoms + 0xc, buf);
-    if (r->LookupIndex(a[0], a[1], a[2], idx, buf))
+    if (r->LookupIndex(MakeCollKey(a[0], a[1], a[2]), idx, buf))
         outlet_list(r->mOutlets2, gListSymbol.mHash, (uint32_t)gListSymbol.mpName, 1, buf);
 }
 
@@ -511,7 +527,7 @@ void Output(void* x)
         key.value = n->value;
         key.sym = n->sym;
         int outA = 0, outB = 0;
-        r->LookupKey(n->type, n->value, n->sym, &outA, &outB);
+        r->LookupKey(MakeCollKey(n->type, n->value, n->sym), &outA, &outB);
         outlet_list(r->mOutlets2, gListSymbol.mHash, (uint32_t)gListSymbol.mpName, outA, (void*)outB);
         n = (ListItem*)n->next;
     }
@@ -528,7 +544,7 @@ void PdFloat_(void* x, float f)
         uint32_t unused;
         uint32_t u = *(volatile uint32_t*)&unused;
         int outA = 0, outB = 0;
-        if (r->LookupKey(1, fbits, u, &outA, &outB))
+        if (r->LookupKey(MakeCollKey(1, fbits, u), &outA, &outB))
             outlet_list(*(void**)((char*)x + 0xc), gListSymbol.mHash,
                         (uint32_t)gListSymbol.mpName, outA, (void*)outB);
     }
@@ -542,7 +558,7 @@ void PdSymbol_(void* x, uint32_t a, uint32_t b)
     if (o) {
         CollRecv* r = (CollRecv*)((char*)o + 0x30);
         int outA = 0, outB = 0;
-        if (r->LookupKey(2, a, b, &outA, &outB))
+        if (r->LookupKey(MakeCollKey(2, a, b), &outA, &outB))
             outlet_list(*(void**)((char*)x + 0xc), gListSymbol.mHash,
                         (uint32_t)gListSymbol.mpName, outA, (void*)outB);
     }
@@ -572,7 +588,11 @@ void PdLength(void* x, t_symbol s, int argc, void* atoms)
     CollRecv* r = (CollRecv*)((char*)o + 0x30);
     uint32_t* a = (uint32_t*)atoms;
     int count = 0, items = 0;
-    if (r->LookupKey(a[0], a[1], a[2], &count, &items)) {
+    CollKey key;
+    key.type = a[0];
+    key.value = a[1];
+    key.sym = a[2];
+    if (r->LookupKey(key, &count, &items)) {
         ++gOutletCount;
         if (gOutletCount < 1000 && ol) {
             float v = (float)count;
@@ -597,7 +617,7 @@ void PdNth(void* x, t_symbol s, int argc, void* atoms)
     uint32_t* a = (uint32_t*)atoms;
     uint32_t buf[3];
     int idx = atom_getint((char*)atoms + 0xc, buf);
-    if (r->LookupIndex(a[0], a[1], a[2], idx, buf))
+    if (r->LookupIndex(MakeCollKey(a[0], a[1], a[2]), idx, buf))
         outlet_list(*(void**)((char*)x + 0xc), gListSymbol.mHash,
                     (uint32_t)gListSymbol.mpName, 1, buf);
 }
@@ -712,9 +732,17 @@ bool CollLess::Less(CollNode* a, CollNode* b)
         keyB2    = x->sym;
     } else {
         keyType = 0; keyA = 0; keyB = 0;
-        recv->LookupIndex(y->type, y->value, y->sym, index, &keyType);
+        CollKey ky;
+        ky.type = y->type;
+        ky.value = y->value;
+        ky.sym = y->sym;
+        recv->LookupIndex(ky, index, &keyType);
         keyType2 = 0; keyA2 = 0; keyB2 = 0;
-        recv->LookupIndex(x->type, x->value, x->sym, index, &keyType2);
+        CollKey kx;
+        kx.type = x->type;
+        kx.value = x->value;
+        kx.sym = x->sym;
+        recv->LookupIndex(kx, index, &keyType2);
     }
     if (keyType != keyType2 || keyType == 0)
         return keyType2 < keyType;

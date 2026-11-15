@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include "sse_helpers.h"
+#include <intrin.h>
 #include "SP/cCivData.h"
 #include "SP/cEmpire.h"
 #include "SP/cGameData.h"
@@ -76,7 +77,7 @@ public:
     virtual void v18();
     virtual Vec3* GetPosition();            // 0x1c
     virtual void v20();
-    uint8_t mPad18[0x1c];
+    uint8_t mPad04[0x30];                   // 0x04 .. 0x34
 };
 class cGameData : public cSpatialObject {
 public:
@@ -99,13 +100,17 @@ public:
     uint32_t GetTargetPlanet();
     cEmpire* GetOwnerEmpire();
 
-    uint8_t mPad134[0x0bc];                 // 0x134 .. 0x1f0
+    uint8_t mPad134[0x4c];                  // 0x134 .. 0x180
+    void* mpDefinition;                     // 0x180
+    uint8_t mPad184[0x70];                  // 0x184 .. 0x1f4
+    uint32_t mTargetPlanetId;               // 0x1f4
+    uint8_t mPad1f8[0x8];                   // 0x1f8 .. 0x200
 };
 class cPlanetMission : public cSPMission {
 public:
-    Vec3 mPlanetPosition;                   // 0x1f0
-    uint8_t mPad1fc[0x30];                  // 0x1fc
-    int mTargetId;                          // 0x22c
+    Vec3 mPlanetPosition;                   // 0x200
+    uint8_t mPad20c[0x24];                  // 0x20c
+    int mTargetId;                          // 0x230
 
     bool Read(void* pData);                 // 0x00c5b210
     void UpdateFromPlanet();                // 0x00c5b280
@@ -113,18 +118,21 @@ public:
 };
 class cSPRaidEvent : public cSPMission {
 public:
-    uint8_t mPad1f0[0x40];                  // 0x1f0
+    uint8_t mPad1f0[0x30];                  // 0x1f0 .. 0x220
+    uint32_t mEventId;                      // 0x220
+    uint8_t mPad224[0xc];                   // 0x224 .. 0x230
     int mTargetId;                          // 0x230
     int GenerateBomberCount();              // 0x00c5b530
     bool Init(int a, int b, int c);         // 0x00c5b600
     void Shutdown();                        // 0x00c5b660
+    void ShutdownMissionStepState();        // thiscall on the mission
     uint32_t CheckDistanceCondition();      // 0x00c5b6c0
     void Update();                          // 0x00c5b860
 };
 class cSPRaidPlunderEvent : public cSPRaidEvent {
 public:
     int GeneratePirateCount();              // 0x00c5b510
-    void BackgroundUpdate();                // 0x00c5b550
+    void BackgroundUpdate(int a);           // 0x00c5b550
 };
 class cUFOKinestheticsTuning {
 public:
@@ -136,6 +144,31 @@ class cTerrainEditor {
 public:
     void* GetCurrentTerrainSphere();
 };
+class ITerrainSphere {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40();                    // vtable slot 0x40
+};
+class ISpaceTuningVt {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14();
+    virtual bool Serialize(void* pData);    // vtable slot 0x18
+};
+struct cUIEvent { uint32_t m00; uint16_t m04; uint16_t m06; };
+class ISpaceUIManager {
+public:
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48();
+    virtual void PostUpdate(void* pData, cUIEvent* pEvent);   // vtable slot 0x4c
+};
+ISpaceUIManager* GetSpaceUIManager();
 class cMessageServer {
 public:
     virtual void v00();
@@ -152,14 +185,14 @@ public:
     virtual void v2c(int* pTarget, const void* pMessage, int nFlags);
 };
 struct MissionElement {
-    uint32_t mField00;
-    uint32_t mField04;
-    uint32_t mField08;
-    uint32_t mField0c;
-    uint32_t mField10;
-    uint32_t mField14;
-    uint32_t mField18;
-    uint32_t mField1c;
+    virtual void v00();                     // vptr at 0x00 (an implicit copy does not copy it)
+    uint32_t mField04;                      // 0x04
+    uint32_t mField08;                      // 0x08
+    uint32_t mField0c;                      // 0x0c
+    uint32_t mField10;                      // 0x10
+    float mField14;                         // 0x14
+    float mField18;                         // 0x18
+    uint32_t mField1c;                      // 0x1c
 };
 cTerrainEditor* NounManager();
 Vec3* GetTerrainSpherePosition();
@@ -183,6 +216,22 @@ bool ReadMissionBase(void* pData);
 void ClearMissionUI();
 void RequestMissionRefresh();
 cCivData* GetPlanetEmpire(uint32_t planetId);
+struct cPlanetHandle {
+    cCivData* GetEmpire();              // 0x005c6760 (thiscall on a planet)
+    void* GetActivePlanet();            // thiscall on a planet
+};
+cPlanetHandle* __stdcall GetPlanetHandle(uint32_t planetId); // planet lookup from a planet id
+uint32_t __fastcall GetEmpireFromPlanet(cPlanetHandle* pPlanet); // empire id of a planet (ecx = planet)
+struct cRaidSpawner {
+    void SpawnRaid(int a, int b);       // thiscall on the spawner object
+};
+struct cPlaceListRaid {
+    cRaidSpawner* GetSpawner();         // thiscall on the place list
+};
+struct cPlanetRaid {
+    uint8_t mPad000[0x13c];
+    cPlaceListRaid* p13c;               // 0x13c
+};
 void NotifyMissionEvent(uint32_t id);
 double RoundValue(double fValue);
 // ---- items of slice s00c5a580 end
@@ -910,23 +959,27 @@ void cPlanetMission::UpdateFromPlanet()
     Vec3* pPosition;
     if (nTarget == -1) {
         cTerrainEditor* pEditor = NounManager();
-        ((IRefCounted*)pEditor->GetCurrentTerrainSphere())->v10();
+        ((ITerrainSphere*)pEditor->GetCurrentTerrainSphere())->v40();
         pEditor = NounManager();
-        pEditor->GetCurrentTerrainSphere();
-        pPosition = GetTerrainSpherePosition();
+        pPosition = (Vec3*)pEditor->GetCurrentTerrainSphere();
     } else {
-        IsPlanetValid(nTarget);
-        int nEmpire = (int)(intptr_t)GetPlanetEmpire((uint32_t)nTarget);
-        if (nEmpire == 0)
+        cCivData* pEmpire = GetPlanetHandle((uint32_t)nTarget)->GetEmpire();
+        if (pEmpire == 0)
             return;
-        pPosition = GetTerrainSpherePosition();
+        pPosition = pEmpire->GetCities();
     }
 
-    mPlanetPosition = *pPosition;
+    *(Vec3*)((uint8_t*)this + 0x200) = *pPosition;
 
     void* pTuning = GetSpaceTuning();
-    if (!((ISerializer*)pTuning)->Serialize(&mPlanetPosition))
-        ClearMissionUI();
+    if (!((ISpaceTuningVt*)pTuning)->Serialize((void*)((uint8_t*)this + 0x200))) {
+        ISpaceUIManager* pUI = GetSpaceUIManager();
+        cUIEvent event;
+        event.m00 = 0;
+        event.m04 = 0;
+        event.m06 = 1;
+        pUI->PostUpdate((void*)((uint8_t*)this + 0x200), &event);
+    }
 }
 
 // @ 0x00c5b340
@@ -965,7 +1018,7 @@ void WriteMissionElementList(ISerializer* pSerializer, MissionElement** ppElemen
     WriteUint32(pStream->GetStream(), &nType, 1, 0);
 
     for (MissionElement* pCur = pBegin; pCur != pEnd; ++pCur)
-        ((IRefCounted*)pCur->mField00)->AddRef();
+        ((IRefCounted*)pCur->mField04)->AddRef();
 
     nCount = 0;
     (void)nCount;
@@ -974,11 +1027,8 @@ void WriteMissionElementList(ISerializer* pSerializer, MissionElement** ppElemen
 // @ 0x00c5b450
 MissionElement* CopyMissionElementsForward(MissionElement* pFirst, MissionElement* pLast, MissionElement* pDest)
 {
-    while (pFirst != pLast) {
+    for (; pFirst != pLast; ++pFirst, ++pDest)
         *pDest = *pFirst;
-        ++pFirst;
-        ++pDest;
-    }
     return pDest;
 }
 
@@ -986,11 +1036,8 @@ MissionElement* CopyMissionElementsForward(MissionElement* pFirst, MissionElemen
 MissionElement* CopyMissionElementsBackward(MissionElement* pFirst, MissionElement* pLast, MissionElement* pDest)
 {
     MissionElement* pSrc = pLast;
-    while (pSrc != pFirst) {
-        --pSrc;
-        --pDest;
-        *pDest = *pSrc;
-    }
+    for (; pSrc != pFirst; --pSrc, --pDest)
+        *(pDest - 1) = *(pSrc - 1);
     return pDest;
 }
 
@@ -1009,14 +1056,13 @@ int cSPRaidEvent::GenerateBomberCount()
 }
 
 // @ 0x00c5b550
-void cSPRaidPlunderEvent::BackgroundUpdate()
+void cSPRaidPlunderEvent::BackgroundUpdate(int a)
 {
     uint32_t nPlanet = GetTargetPlanet();
     if (IsPlanetValid(nPlanet))
         return;
 
-    GetTargetPlanet();
-    void* pWorld = GetActivePlanet();
+    ((cPlanetHandle*)GetTargetPlanet())->GetActivePlanet();
     uint32_t nPlanetId = GetTargetPlanet();
     int pList = *(int*)((uint8_t*)(void*)nPlanetId + 0x13c);
     int nCount = (*(int*)((uint8_t*)pList + 0x138) - *(int*)((uint8_t*)pList + 0x134)) / 0x2c;
@@ -1030,7 +1076,7 @@ void cSPRaidPlunderEvent::BackgroundUpdate()
             RemoveArtifact(pList, artifact, *(uint16_t*)(pEntry + 0x10));
         }
     }
-    (void)pWorld;
+    (void)a;
 }
 
 // @ 0x00c5b600
@@ -1055,16 +1101,17 @@ bool cSPRaidEvent::Init(int a, int b, int c)
 // @ 0x00c5b660
 void cSPRaidEvent::Shutdown()
 {
-    GetTargetPlanet();
-    SpawnRaidUFOs(nullptr, 0, 0);
-    RequestMissionRefresh();
+    cRaidSpawner* pSpawner = ((cPlanetRaid*)(intptr_t)GetTargetPlanet())->p13c->GetSpawner();
+    _ReadWriteBarrier();
+    pSpawner->SpawnRaid(0x200, 0);
+
     uint32_t nPlanet = GetTargetPlanet();
     SetPlanetHighlight(nPlanet);
     ShutdownMissionStepState();
-    NotifyMissionEvent(0);
+    mEventId = 0;
 
     cMessageServer* pServer = MessageServer();
-    pServer->v2c(&mTargetId, (const void*)0x01622184, 0xffffd8f1);
+    pServer->v2c((int*)((uint8_t*)this + 0x34), (const void*)0x01622184, 0xffffd8f1);
 }
 
 // @ 0x00c5b6c0
@@ -2056,17 +2103,23 @@ int RaidPlunderEvent::Update(int dt)
 namespace SP {
 bool RaidHandler::HandleMessage_F50(uint32_t msg, void* m)
 {
-    if (msg == 0x2489760) {
-        if (*(int*)((char*)m + 8) == (int)Mis()->GetTargetPlanet()) {
+    int nField;
+    switch (msg) {
+    case 0x248975f:
+        nField = *(int*)((char*)m + 0x10);
+        if (nField == (int)Mis()->GetTargetPlanet()) {
+            FUN_00c5d140(Mis(), &F<void*>(0x1e0), -1, &F<void*>(0x1bc), gDefaultVec3, 0, 0);
+        }
+        break;
+    case 0x2489760:
+        nField = *(int*)((char*)m + 8);
+        if (nField == (int)Mis()->GetTargetPlanet()) {
             FUN_00c5d640(Mis(), (RecVec*)&F<void*>(0x1e0), (int*)&F<void*>(0x1d0),
                          (int*)&F<void*>(0x1d4), (int*)&F<void*>(0x1cc));
         }
-    } else if (msg == 0x248975f) {
-        if (*(int*)((char*)m + 0x10) == (int)Mis()->GetTargetPlanet()) {
-            FUN_00c5d140(Mis(), &F<void*>(0x1e0), -1, &F<void*>(0x1bc), gDefaultVec3, 0, 0);
-        }
+        break;
     }
-    return BaseHandleMessage(msg, m) != 0;
+    return (bool)BaseHandleMessage(msg, m);
 }
 }  // namespace SP
 

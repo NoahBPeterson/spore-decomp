@@ -458,8 +458,10 @@ bool cGameEditInputStrategy::GetSaveFileName(eastl::string16* pOutName, bool bAp
 // Comparator carrying the two names a property list is sorted by; it is passed by value, so the
 // callees destroy their own copies.
 struct cPropertyListNameSort {
-    eastl::string16 mNameA;                           // +0x00
-    eastl::string16 mNameB;                           // +0x10
+    uint32_t mGroupID;                                // +0x00
+    void* mpResMan;                                   // +0x04
+    eastl::string16 mNameA;                           // +0x08
+    eastl::string16 mNameB;                           // +0x18
 };
 
 // eastl::adjust_heap<unsigned int*, int, unsigned int, cPropertyListNameSort>
@@ -475,11 +477,12 @@ void FUN_00d18cd0(uint32_t* pFirst, uint32_t* pLast, cPropertyListNameSort compa
     const int count = (int)(pLast - pFirst);
     if (count >= 2)
     {
-        int parent = (count - 2) / 2;
+        int parent = ((count - 2) >> 1) + 1;
         do
         {
+            --parent;
             FUN_00d180c0(pFirst, parent, count, parent, pFirst[parent], compare);
-        } while (parent-- != 0);
+        } while (parent != 0);
     }
 }
 
@@ -488,7 +491,7 @@ void FUN_00d18cd0(uint32_t* pFirst, uint32_t* pLast, cPropertyListNameSort compa
 // @ 0x00d18d60
 void FUN_00d18d60(uint32_t* pFirst, uint32_t* pLast, cPropertyListNameSort compare)
 {
-    for (int count = (int)(pLast - pFirst); count > 1; --count)
+    while ((pLast - pFirst) > 1)
     {
         FUN_00d18180(pFirst, pLast, compare);
         --pLast;

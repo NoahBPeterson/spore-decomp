@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include <stdio.h>
 #include <string.h>
+#include <intrin.h>
 
 // ---- items of slice s00a4e2e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
@@ -292,7 +293,7 @@ const char* rtext_gettag(t_rtext* x);                                    // 0xa4
 namespace EA {
 namespace Audio {
 namespace Eapd {
-void rtext_senditup(t_rtext* x, int action, int* pWidth, int* pHeight,
+static void rtext_senditup(t_rtext* x, int action, int* pWidth, int* pHeight,
                     int* pCursor);                                        // 0xa4e9c0
 }
 }
@@ -379,6 +380,7 @@ t_rtext* rtext_new(t_glist* x, t_text* ob)
     rt->rt_active = 0;
     rt->rt_selectto = 0;
     rt->rt_selectfrom = 0;
+    _ReadWriteBarrier();
     rt->rt_next = next;
     binbuf_gettext(ob->te_binbuf, &rt->rt_buf, &rt->rt_bufsize);
     x->gl_editor->e_rtextlist = rt;
@@ -429,7 +431,7 @@ void rtext_measures(int* pIn, int* pA, int* pB)
 
 // @ 0x00a4e9c0
 namespace EA { namespace Audio { namespace Eapd {
-void rtext_senditup(t_rtext* x, int action, int* widthp, int* heightp, int* cursorp)
+static void rtext_senditup(t_rtext* x, int action, int* widthp, int* heightp, int* cursorp)
 {
     int nleft = 0;          // characters written to the flattened buffer
     int nlines = 0;         // lines emitted so far
@@ -701,6 +703,7 @@ void rtext_activate(t_rtext* x, int state)
 {
     int w = 0;
     int h = 0;
+    int c = 0;
     t_glist* canvas;
     t_glist* gl = x->rt_glist;
 
@@ -720,6 +723,6 @@ void rtext_activate(t_rtext* x, int state)
             gl->gl_editor->e_textedfor = 0;
         x->rt_active = 0;
     }
-    rtext_senditup(x, 2, &w, &h, &h);
+    rtext_senditup(x, 2, &w, &h, &c);
 }
 }}}  // namespace EA::Audio::Eapd

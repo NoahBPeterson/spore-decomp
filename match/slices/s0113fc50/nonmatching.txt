@@ -14,7 +14,6 @@
 01140560  108  SndDecoder::DecodeMul complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (375 valid, 100% coverage)
 01140650  87  F_01140650 (apply per-channel mix gains) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (213 valid, 61.1% coverage)
 011406e0  80  F_011406e0 (reset/alternate voice gain table) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (183 valid, 83.3% coverage)
-01140780  50  F_01140780 (apply global state to the renderer) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (40.0% coverage)
 01140810  60  SNDPLATFORM_init complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (217 valid, 100% coverage)
 01140870  9  SNDPLATFORM_restore complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (331 valid, 100% coverage)
 01140890  126  SNDPLATFORM_setpitch complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (97 valid, 100% coverage)

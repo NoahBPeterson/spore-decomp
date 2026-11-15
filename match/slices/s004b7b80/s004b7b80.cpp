@@ -82,7 +82,7 @@ extern "C" {
     void  FUN_004b69d0();
     void  FUN_004b6450();
     void  FUN_004b6bf0();
-    char  SP_GetResourceTypeFromModelType();
+    unsigned char SP_GetResourceTypeFromModelType();
     void  FUN_004b8950(void* a, void* b, void* c);
     void  FUN_004b5fb0(void* a, void* b);
     void  FUN_004b54b0(void* a);
@@ -373,22 +373,34 @@ void FUN_004b8180(uint32_t instId, Col3 colA, Col3 colB, ModelTypeObject* owner,
         list->Release();
 }
 
+namespace {
+
+// SP::SimpleVector<unsigned>: three pointers, out-of-line push_back (0x00454860).
+struct IdVec3 {
+    uint32_t* mpBegin;                       // +0x0
+    uint32_t* mpEnd;                         // +0x4
+    uint32_t* mpCap;                         // +0x8
+    void push_back(const uint32_t& v);       // 0x00454860
+    bool IsResourceType();                   // 0x00526430
+};
+
+} // namespace
+
 // @ 0x4b8750
-void FUN_004b8750(int a, int* b, int c, int d)
+void FUN_004b8750(int a, void* b, IdVec3* c, unsigned d)
 {
+    ScratchSlots<4>();
     if (c != 0) {
-        if (d == -1) {
+        if (d == 0xffffffffu) {
             if (b != 0 && a != 0) {
-                (*(void(__thiscall**)(int*, int, int))(*b + 0x54))(b, a, c);
-                if (SP_GetResourceTypeFromModelType()) {
-                    uint32_t v = 0xffffffff;
-                    extern void vec_push_u32(uint32_t*);
-                    vec_push_u32(&v);
+                (*(void(__thiscall**)(void*, int, IdVec3*))((char*)*(void**)b + 0x54))(b, a, c);
+                if (c->IsResourceType()) {
+                    uint32_t id = 0xffffffff;
+                    c->push_back(id);
                 }
             }
         } else {
-            extern void vec_push_u32(uint32_t*);
-            vec_push_u32((uint32_t*)&d);
+            c->push_back(d);
         }
     }
 }

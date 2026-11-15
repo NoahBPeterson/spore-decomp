@@ -310,13 +310,13 @@ SimArray* SimArray::Assign(int count, const SimRecord* value, int unused)
     SimRecord* p;
     if (count)
         p = (SimRecord*)SimAllocBlock(count * (int)sizeof(SimRecord), "Simulator", 0, 0,
-                                      "SimData.cpp", 209);
+                                      "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+                                      209);
     else
         p = 0;
-    SimRecord* end = p + count;
     mBegin = p;
     mCur = p;
-    mEnd = end;
+    mEnd = p + count;
     SimFillRecords(p, count, value, count);
     mCur = mBegin + count;
     return this;

@@ -91,7 +91,8 @@ void LoadResource(int* param_1)
     char c = FUN_00e821d0((unsigned)*param_1, param_1[1], piVar1) ? 1 : 0;
     if (c == 0) {
         int uVar4 = DebugNameFromSPID(*param_1, *param_1, *(int*)param_1[1]);
-        FUN_00e84e40("cannot load asset id:%s (0x%X), type:%s", uVar4);
+        FUN_00e84e40("cannot load asset id:%s (0x%X)", uVar4);
+        _ReadWriteBarrier();
         int* piVar2b = (int*)*piVar1;
         if (piVar2b != 0) {
             *piVar1 = 0;

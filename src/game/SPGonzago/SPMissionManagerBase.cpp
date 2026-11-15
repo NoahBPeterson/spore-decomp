@@ -864,16 +864,18 @@ IRefLite** __thiscall StratMapEntry::Lookup(unsigned* key)
     HashUIntARC* self = (HashUIntARC*)this;
     HashIt it;
     ((HashFind*)self)->find(&it, key);
-    if (it.node != self->mpBucket[self->mnBucketCount])
-        return (IRefLite**)((char*)it.node + 4);
-    NodeUIntARC value;
-    value.key = *key;
-    value.value = 0;
-    value.next = 0;
-    HashIt res;
-    ((InsUIntARC*)self)->Ins((InsIt*)&res, &value, 0);
-    if (value.value) value.value->Release();
-    return (IRefLite**)((char*)res.node + 4);
+    if (it.node == self->mpBucket[self->mnBucketCount]) {
+        // On a miss the find result is dead; the original reuses that slot as the value to insert
+        // (its key/value land on it.node/it.bucket, and the InsIt output on the following dword).
+        NodeUIntARC* value = (NodeUIntARC*)&it;
+        value->key = *key;
+        value->value = 0;
+        InsIt res;
+        ((InsUIntARC*)self)->Ins(&res, value, 0);
+        if (value->value) value->value->Release();
+        return (IRefLite**)((char*)res.node + 4);
+    }
+    return (IRefLite**)((char*)it.node + 4);
 }
 
 // @ 0x00b6ffa0
@@ -901,17 +903,18 @@ void __thiscall MissionMgr::Shutdown()
     SimTicker_s00b6_f4f0* ticker = (SimTicker_s00b6_f4f0*)FUN_00b3d330();
     ticker->RemoveTicker(this);
     ((VecOps2*)&mObjectsBegin)->EraseRange(mObjectsBegin, mObjectsEnd);
-    ((HashOps*)&mStrategyMap)->DoFreeNodes((void**)mStrategyMap.mpBucket, mStrategyMap.mnBucketCount);
-    mStrategyMap.mnElementCount = 0;
-    ((TriOps*)&mTripleMap)->FreeNodes((void**)mTripleMap.mpBucket, mTripleMap.mnBucketCount);
-    mTripleMap.mnElementCount = 0;
+    HashUIntARC* sm = &mStrategyMap;
+    ((HashOps*)sm)->DoFreeNodes((void**)sm->mpBucket, sm->mnBucketCount);
+    sm->mnElementCount = 0;
+    HashTripleARC* tm = &mTripleMap;
+    ((TriOps*)tm)->FreeNodes((void**)tm->mpBucket, tm->mnBucketCount);
+    tm->mnElementCount = 0;
     if (mCard68) {
         IRefLite* c = mCard68;
         mCard68 = 0;
         c->Release();
     }
-    NounMgr* nm = (NounMgr*)FUN_00b3d300();
-    nm->RemoveNounType(0x14066ce5);
+    ((NounMgr*)FUN_00b3d300())->RemoveNounType(0x14066ce5);
 }
 
 // @ 0x00b700f0

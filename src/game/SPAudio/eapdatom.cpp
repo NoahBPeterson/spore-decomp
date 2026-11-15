@@ -23,6 +23,8 @@ struct Atom {
 struct Sym2 {
     const char* a;
     const char* b;
+    Sym2() {}
+    Sym2(const Sym2& o) { a = o.a; b = o.b; }
 };
 extern Sym2 gFloatSymbol;   // 0x16758c4 ("float")
 extern Sym2 gEmptySymbol;   // 0x167589c
@@ -48,11 +50,11 @@ int atom_getint(Atom* a)
 Sym2* atom_getsymbol(Sym2* out, Atom* in)
 {
     if (in->type == 2) {
-        out->a = in->v[0];
-        out->b = in->v[1];
+        Sym2 t(*(Sym2*)in->v);
+        *out = t;
     } else {
-        out->a = gFloatSymbol.a;
-        out->b = gFloatSymbol.b;
+        Sym2 t(gFloatSymbol);
+        *out = t;
     }
     return out;
 }
@@ -62,8 +64,8 @@ Sym2* atom_gensym(Sym2* out, Atom* in)
 {
     char buf[32];
     if (in->type == 2) {
-        out->a = in->v[0];
-        out->b = in->v[1];
+        Sym2 t(*(Sym2*)in->v);
+        *out = t;
         return out;
     }
     if (in->type == 1)
@@ -120,16 +122,14 @@ int atom_getint_at(int i, int n, Atom* arr)
 Sym2* atom_getsymbol_at(Sym2* out, int i, int n, Atom* arr)
 {
     if (n <= i) {
-        out->a = gEmptySymbol.a;
-        out->b = gEmptySymbol.b;
-        return out;
+        Sym2 t(gEmptySymbol);
+        *out = t;
+    } else if (arr[i].type == 2) {
+        Sym2 t(*(Sym2*)arr[i].v);
+        *out = t;
+    } else {
+        Sym2 t(gEmptySymbol);
+        *out = t;
     }
-    if (arr[i].type == 2) {
-        out->a = arr[i].v[0];
-        out->b = arr[i].v[1];
-        return out;
-    }
-    out->a = gEmptySymbol.a;
-    out->b = gEmptySymbol.b;
     return out;
 }

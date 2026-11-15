@@ -44,3 +44,4 @@
 ../src/game/SPGonzago/SPPlanet.cpp  ?WriteTreeClumps@@YA_NPAUTreeClumpArchive@@PAUcTreeClumpVector@@@Z  00b00520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00c73310@PlanetCls@@QAEXXZ  00c73310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?FUN_00c73330@PlanetCls@@QAEXXZ  00c73330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?Apply@TreeApplyOps@@QAEXPAXII@Z  00b023d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

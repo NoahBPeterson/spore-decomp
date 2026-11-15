@@ -45,6 +45,9 @@ struct PtrVec {                            // local eastl vector<void*> used by 
     void** mpCapacity;                     // +0x08
     void ctor(u32 n, void* src);           // 0x00b93c60
 };
+struct BoolTag {                           // EASTL bool tag passed by value to the insert
+    bool b;
+};
 struct HashTable {                         // eastl hash_map sub-object
     u32   mField00;                        // +0x00
     u32*  mpBuckets;                       // +0x04
@@ -58,7 +61,20 @@ struct HashTable {                         // eastl hash_map sub-object
     void* FUN_d380c0(u32* key);            // 0x00d380c0  find-or-insert, returns &value
     int   Erase(u32* key);                 // 0x00d37fe0
     int   EraseU32(u32* key);              // 0x00b6faa0
-    void  FUN_b6fe40(void*, void*, void*);// 0x00b6fe40
+    void  FUN_b6fe40(void*, void*, BoolTag);// 0x00b6fe40
+};
+struct IRefLite {                          // ref-counted payload held by the +0x48 map
+    virtual void AddRef();                 // +0x00
+    virtual void Release();                // +0x04
+};
+struct InsIt {                             // iterator written by Find / by the insert
+    void*         node;                    // +0x00
+    void*         bucket;                  // +0x04
+    unsigned char flag;                    // +0x08
+};
+struct TripleNodeValue {                   // value handed to the triple-table insert
+    u32        k0, k1, k2;                 // +0x00..+0x08
+    IRefLite*  value;                      // +0x0c
 };
 struct HashTableU32 {                      // eastl hash_map<uint> sub-object (0x1c bytes)
     u32   mField00;                        // +0x00
@@ -282,17 +298,23 @@ void** X_FUN_00d38080(void** first, void** last, void** value)
 // @ 0x00d380c0
 void* HashTable::FUN_d380c0(u32* key)
 {
-    u32 it[3];
-    Find(it, key);
-    if ((void*)it[0] != *(void**)((u8*)mpBuckets + mBucketCount * 4))
-        return (u8*)it[0] + 0xc;
+    InsIt it;
+    Find(&it, key);
+    if (it.node != (void*)mpBuckets[mBucketCount])
+        return (u8*)it.node + 0xc;
 
-    u32 stored[3];
-    stored[0] = key[0];
-    stored[1] = key[1];
-    stored[2] = key[2];
-    FUN_b6fe40(it, stored, 0);
-    return (u8*)it[0] + 0xc;
+    TripleNodeValue value;
+    value.k0 = key[0];
+    value.k1 = key[1];
+    value.k2 = key[2];
+    value.value = 0;
+    BoolTag tag;
+    tag.b = false;
+    FUN_b6fe40(&it, &value, tag);
+    void* result = (u8*)it.node + 0xc;
+    if (value.value != 0)
+        value.value->Release();
+    return result;
 }
 
 // @ 0x00d38530

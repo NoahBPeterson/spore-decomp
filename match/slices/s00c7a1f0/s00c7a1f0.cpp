@@ -31,6 +31,9 @@ struct cTree {
 
     // 0x00c7a8f0
     uint32_t* MapEntry(const uint32_t& key);
+    // 0x00abff10  the insert-or-assign helper is a __thiscall method of the tree itself
+    // (`ret 0x10`: it pops its four arguments), so it is a member and not a free function.
+    uint32_t* InsertOrAssign(uint32_t* hintOut, cMapNode* hint, uint32_t* query, uint32_t flag);
     // 0x00e5c780
     cMapNode** Find(cMapNode** out, const uint32_t* key);
 };
@@ -61,11 +64,15 @@ struct cNatElem {                      // 0x14 bytes
 // External helpers (retail addresses in comments; not defined here).
 // ---------------------------------------------------------------------------
 uint8_t* lowerBound(cFlagPair* begin, cFlagPair* end, const uint32_t* key, uint8_t flag); // 0x00d01260
-uint32_t* mapInsertOrAssign(uint32_t* hintOut, cMapNode* hint, uint32_t* query, uint32_t flag); // 0x00abff10
 uint8_t* eastlCopyImpl(void* dst, void* src, void* last);                                 // 0x00c771e0
 struct cGonzagoTimer { void Dtor(); };                                                     // 0x00b638b0
-void     FUN_00db5b30(void* elem);                                                        // 0x00db5b30
-void     vectorErase(void* a, void* b);                                                   // 0x00b48e40
+// Both helpers are __thiscall on the caller's second argument (`arg`): retail sets `ecx` to it
+// before the call (0x00db5b30 reads `[esp+8]` as the source and `esi`/`ecx` as the target; 0x00b48e40
+// reads `edi`/`ecx` as the target and both stack slots as the range), so model them as members.
+struct cNatTarget {
+    void AssignElement(void* elem);        // 0x00db5b30
+    void ErasePair(void* begin, void* end); // 0x00b48e40
+};
 struct cStarRecordRefView {                                                              // SP::cStarRecordRef
     int32_t  GetCommContext();                                                             // 0x00ce6950
     void*    SortBanners();                                                                // 0x00b8de30
@@ -209,14 +216,15 @@ bool cPlayer::GetFlag5(uint32_t key)
     return (((cFlagPair*)it)->mValue >> 5) & 1;
 }
 
-// 0x00c7ad00  nat-table element dispatch
+// @ 0x00c7ad00  nat-table element dispatch
 void cPlayer::NatOp(uint32_t index, void* arg)
 {
-    if (index < 10) {
-        FUN_00db5b30(&mNatTable[index]);
+    cNatTarget* target = (cNatTarget*)arg;
+    if (index <= 9) {
+        target->AssignElement(&mNatTable[index]);
         return;
     }
-    vectorErase(*(void**)arg, *(void**)((char*)arg + 4));
+    target->ErasePair(*(void**)arg, *(void**)((char*)arg + 4));
 }
 
 // 0x00c7ad40  remove a star from the capture progress list
@@ -243,7 +251,7 @@ found:
     ((cGonzagoTimer*)((char*)mCaptureEnd + 8))->Dtor();
 }
 
-// 0x00c7ae80  ensure the embassy entry for a star
+// @ 0x00c7ae80  ensure the embassy entry for a star
 void cPlayer::FUN_00c7ae80(cStarRecordRefView* star)
 {
     uint32_t ctx = (uint32_t)star->GetCommContext();
@@ -286,11 +294,12 @@ void SP::cPlayer::UpdatePlayerCaptureProgressDecay()
     } while (begin != mCaptureEnd);
 }
 
-// 0x00c7a8f0  eastl::map::operator[]-style find-or-insert (value at node+0x14)
+// @ 0x00c7a8f0  eastl::map::operator[]-style find-or-insert (value at node+0x14)
 uint32_t* cTree::MapEntry(const uint32_t& key)
 {
     cMapNode* node  = mRoot;
-    cMapNode* found = mEnd;
+    cMapNode* end   = (cMapNode*)&mEnd;   // the end iterator is the anchor node's address
+    cMapNode* found = end;
     while (node != 0) {
         if (node->mKey < key) {
             node = node->mLeft;
@@ -299,15 +308,16 @@ uint32_t* cTree::MapEntry(const uint32_t& key)
             node = node->mRight;
         }
     }
-    if (found != mEnd && found->mKey <= key) {
-        return &found->mValue;
+    if (found != end) {
+        if (found->mKey == key)
+            return &found->mValue;
     }
     uint32_t query[3];
     query[0] = key;
     query[1] = 0;
     query[2] = 0;
     uint32_t flag = 0;
-    mapInsertOrAssign((uint32_t*)&found, found, query, flag);
+    InsertOrAssign((uint32_t*)&found, found, query, flag);
     return (uint32_t*)((char*)found + 0x14);
 }
 

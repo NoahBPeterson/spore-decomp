@@ -6,3 +6,4 @@ slices/s004098a0/s004098a0.cpp  ?Scale@Transform@@QAEXM@Z  00409b30  /Od /Ob1 /M
 slices/s004098a0/s004098a0.cpp  ?GetCenter@BoundingBox@@QBEAAUVector3@@AAU2@@Z  00409b90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi
 slices/s004098a0/s004098a0.cpp  ?Reset@BoundingBox@@QAEXXZ  00409c00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi
 slices/s004098a0/s004098a0.cpp  ?SetCenterRadius@BoundingBox@@QAEXABUVector3@@M@Z  00409ce0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi
+slices/s004098a0/s004098a0.cpp  ??0Transform@@QAE@XZ  00409930  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi

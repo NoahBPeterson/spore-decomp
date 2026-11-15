@@ -17,3 +17,4 @@ slices/s00c9de50/s00c9de50.cpp  ?SetTimer@cVehicle@@QAEXH@Z  00c9ee30  /O2 /MD /
 slices/s00c9de50/s00c9de50.cpp  ?ConsumeTimer@cVehicle@@QAEXXZ  00c9ee50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c9de50/s00c9de50.cpp  ?PlaySomething@cVehicle@@QAEXXZ  00c9eea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c9de50/s00c9de50.cpp  ?IsFlying@cVehicle@@QAE_NXZ  00c9eef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c9de50/s00c9de50.cpp  ?IsLocalPlayer@cLoco@@QAE_NXZ  00c9e690  /O2 /MD /Gy /TP /arch:SSE /fp:fast

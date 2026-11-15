@@ -2,3 +2,5 @@ slices/s011ecf70/s011ecf70.cpp  ?ConvertU32ToBase@stdc@core@rw@@YAPADPADII@Z  01
 slices/s011ecf70/s011ecf70.cpp  ?CloseHandleIfSet@thread@core@rw@@YIXPAPAX@Z  011ed3f0  /O2 /MD /Gy /EHsc /TP
 slices/s011ecf70/s011ecf70.cpp  ?SetVertexDescriptor@EmbeddedState@graphics@rw@@QAEIXZ  011edcd0  /O2 /MD /Gy /EHsc /TP
 slices/s011ecf70/s011ecf70.cpp  ?GetMaterialColor@EmbeddedState@graphics@rw@@QAEPAXXZ  011eda90  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011ecf70/s011ecf70.cpp  ?ConvertU32ToHexUpper@stdc@core@rw@@YAPADPADI@Z  011ed070  /O2 /MD /Gy /EHsc /TP
+slices/s011ecf70/s011ecf70.cpp  ?ConvertU32ToHexLower@stdc@core@rw@@YAPADPADI@Z  011ed0b0  /O2 /MD /Gy /EHsc /TP

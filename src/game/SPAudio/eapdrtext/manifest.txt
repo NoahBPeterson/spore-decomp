@@ -6,3 +6,7 @@
 ../src/game/SPAudio/eapdrtext.cpp  ?rtext_erase@Eapd@Audio@EA@@YAXPAUt_rtext@123@@Z  00a4f080  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdrtext.cpp  ?rtext_displace@Eapd@Audio@EA@@YAXPAUt_rtext@123@HH@Z  00a4f0b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdrtext.cpp  ?rtext_select@Eapd@Audio@EA@@YAXPAUt_rtext@123@H@Z  00a4f0e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdrtext.cpp  ?rtext_activate@Eapd@Audio@EA@@YAXPAUt_rtext@123@H@Z  00a4f130  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdrtext.cpp  ?rtext_width@Eapd@Audio@EA@@YAHPAUt_rtext@123@@Z  00a4efd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdrtext.cpp  ?rtext_height@Eapd@Audio@EA@@YAHPAUt_rtext@123@@Z  00a4f010  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdrtext.cpp  ?rtext_draw@Eapd@Audio@EA@@YAXPAUt_rtext@123@@Z  00a4f050  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

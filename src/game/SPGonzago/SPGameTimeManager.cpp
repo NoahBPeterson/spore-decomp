@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "cSPVector3.h"
 
 // ---- items of slice s00642530 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct RBNode { RBNode* right; RBNode* left; RBNode* parent; uint32_t color; };
@@ -37,7 +38,7 @@ struct cDispatchObject {
         return ((void* (*)(void*, uint32_t, uint32_t))mpMethods->mSlots[nSlot >> 2])(this, nArg1, nArg2);
     }
     void* Call(int nSlot, void* pArg1) {
-        return ((void* (*)(void*, void*))mpMethods->mSlots[nSlot >> 2])(this, pArg1);
+        return ((void* (__thiscall*)(void*, void*))mpMethods->mSlots[nSlot >> 2])(this, pArg1);
     }
     void* Call(int nSlot, void* pArg1, int nArg2) {
         return ((void* (*)(void*, void*, int))mpMethods->mSlots[nSlot >> 2])(this, pArg1, nArg2);
@@ -48,7 +49,7 @@ public:
     cInterfaceState(cDispatchObject* pTarget);
     ~cInterfaceState();
     bool ResetDefaults();
-    void PushMatrix(uint32_t nKey);
+    void PushMatrix(const cSPVector3* pVec);
     void UpdateTransition(unsigned int nElapsed, uint32_t nFlags);
     void UpdateFade(float fDelta);
     void UpdateSequence(int nDelta);
@@ -87,6 +88,65 @@ struct cInterfaceDefaults {
 extern cDispatchObject* gInterfaceNotifier;
 extern cInterfaceDefaults gInterfaceFrom;
 extern uint8_t gInterfaceStarted;
+
+// The camera controller object (0x015a30b8) and the identity transform it is reset from.
+// Its Init is defined here (as it was in the retail translation unit): the caller's code keeps the
+// object address in ecx across the call, which cl only does when it can see the callee's body.
+struct cCameraCtl {
+    int32_t mPad00;                                              // 0x00
+    int32_t m04;                                                 // 0x04
+    int32_t m08;                                                 // 0x08
+    float   m0c;                                                 // 0x0c
+    rw::math::fpu::Vector3Template<float, 0> m10;                // 0x10
+    float   m1c;                                                 // 0x1c
+    float   m20;                                                 // 0x20
+    float   m24;                                                 // 0x24
+    float   m28;                                                 // 0x28
+    float   m2c;                                                 // 0x2c
+    float   m30;                                                 // 0x30
+    rw::math::fpu::Vector3Template<float, 0> m34;                // 0x34
+    rw::math::fpu::Vector3Template<float, 0> m40;                // 0x40
+    rw::math::fpu::Vector3Template<float, 0> m4c;                // 0x4c
+    void init(void* pArg, const rw::math::fpu::Vector3Template<float, 0>* pVec);
+};
+extern cCameraCtl gCameraCtl;                                        // 0x015a30b8
+extern rw::math::fpu::Vector3Template<float, 0> gZeroTranslation;    // 0x016a10cc
+extern rw::math::fpu::Matrix33Template<float, 0> gIdentityRotation;  // 0x016a10e0
+extern float gCamStep30;                                             // 0x015a308c
+extern float gCamStep1c;                                             // 0x015a3090
+extern float gCamValue24;                                            // 0x015a3094
+extern rw::math::fpu::Vector3Template<float, 0> gCamTranslation;     // 0x015a3048
+
+// @ 0x00dde2b0
+void cCameraCtl::init(void* pArg, const rw::math::fpu::Vector3Template<float, 0>* pVec)
+{
+    m30 = gCamStep30;
+    m1c = gCamStep1c;
+    m10 = *pVec;
+    m24 = gCamValue24;
+    m2c = 100.0f;
+    m40 = *pVec;
+    m34 = gCamTranslation;
+    m4c = m34;
+    m04 = 0;
+    m08 = 500;
+    *(int32_t*)&m0c = 0;
+    (void)pArg;
+}
+
+// The 0x38-byte transform handed to the notifier: RenderWare's cTransform layout.  Its rotation
+// assignment is out of line (Matrix3::Assign, 0x0041cb40), so the type declares it without a body.
+struct cXformMatrix : public rw::math::fpu::Matrix33Template<float, 0> {
+    cXformMatrix& operator=(const rw::math::fpu::Matrix33Template<float, 0>&);
+};
+struct cXform {
+    uint16_t mFlags;                                             // 0x00
+    uint16_t mModificationCount;                                 // 0x02
+    rw::math::fpu::Vector3Template<float, 0> mTranslation;       // 0x04
+    float mScale;                                                // 0x10
+    cXformMatrix mRotation;                                      // 0x14
+};
+typedef char sizeof_check_cXform[(sizeof(cXform) == 0x38) ? 1 : -1];
 // ---- items of slice s00ddf990 end
 
 // @ 0x00643a40
@@ -109,22 +169,20 @@ uint32_t* MapUU::operator_idx(const uint32_t* k)
 }
 
 // @ 0x00ddfb50
-void cInterfaceState::PushMatrix(uint32_t nKey)
+void cInterfaceState::PushMatrix(const cSPVector3* pVec)
 {
-    float matrix[9];
-    matrix[0] = gInterfaceFrom.mfX;
-    matrix[1] = gInterfaceFrom.mfY;
-    matrix[2] = gInterfaceFrom.mfZ;
-    matrix[3] = gInterfaceValue;
-    matrix[4] = gInterfaceBlend;
-    matrix[5] = gInterfaceAngle;
-    matrix[6] = gInterfaceSpeed;
-    matrix[7] = 0.0f;
-    matrix[8] = 1.0f;
+    cXform xform;
+    xform.mFlags = 0;
+    xform.mModificationCount = 0;
+    xform.mTranslation.x = gZeroTranslation.x;
+    xform.mTranslation.y = gZeroTranslation.y;
+    xform.mTranslation.z = gZeroTranslation.z;
+    xform.mScale = 1.0f;
+    xform.mRotation = gIdentityRotation;
 
     if (gInterfaceNotifier != nullptr)
-        gInterfaceNotifier->Call(0x04, (void*)matrix);
+        gInterfaceNotifier->Call(0x04, (void*)&xform);
 
-    gInterfaceStarted = 0;
-    (void)nKey;
+    gCameraCtl.init(&xform.mTranslation, pVec);
+    gInterfaceNotifier = (cDispatchObject*)&gCameraCtl;
 }

@@ -39,8 +39,16 @@ extern "C" void  __cdecl FUN_00dfab20(int);
 extern "C" void* __cdecl Vec38_AllocCopy(void* self, int n, void* first, void* last); // 0xdfb1b0
 extern "C" void  __cdecl Vec38_Copy(void* first, void* last, void* dest);             // 0xdfb210
 extern "C" void* __cdecl CopyRangeB(void* first, void* last, void* dest);             // 0xdfc170
-extern "C" void* __cdecl UninitCopyD(void* out, const void* first, const void* last, void* dest); // 0xdfb8e0
+extern "C" void* __cdecl UninitCopyD_5(void* out, const void* first, const void* last, void* dest, int n); // 0xdfb8e0 (5-slot call form)
 extern "C" void* __cdecl UninitCopyA(void* out, const void* first, const void* last, void* dest);
+
+// EASTL allocator pool request (the allocator state lives at 0x1f2014): the caller hands in
+// the element count, the pool scales it back to bytes and passes it on with the allocation
+// site, tagged "Simulator".
+static __declspec(noinline) void* AllocSizeD(uint32_t elements) {
+  return EA_Allocate(elements * 0x44, "Simulator", 0, 0,
+      "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+}
 extern "C" void  __cdecl FUN_0050f740(void* a, void* b, void* c);
 extern "C" void  __cdecl VecInsertKey(void* self, void* pos, void* val);
 struct SubVec38 {                                  // 12-byte eastl vector at TypeB+0x1c
@@ -248,7 +256,8 @@ TypeB* TypeB::CopyCtorA(const TypeB* o) {
 }
 
 // @ 0x00dfb8e0  uninitialized_copy of 0x44-byte TypeD elements
-void* UninitCopyD(void* outP, const void* firstP, const void* lastP, void* dest) {
+void* UninitCopyD_5(void* outP, const void* firstP, const void* lastP, void* dest, int n) {
+  (void)n;  // the element count is passed but never read by the original
   TypeD** out = (TypeD**)outP;
   const TypeD* first = (const TypeD*)firstP;
   const TypeD* last = (const TypeD*)lastP;
@@ -523,11 +532,10 @@ void* CopyRangeB(void* first, void* last, void* dest) {
 
 // @ 0x00dfc1e0  allocate an array of n TypeD elements and uninitialized-copy into it
 void* __stdcall AllocCopyD(int n, void* first, void* last) {
-  void* buf = n ? EA_Allocate(n * 0x44, "Simulator", 0, 0,
-        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
-  // retail also pushes the element count as a fifth (unused) stack slot; our 4-arg
-  // call leaves the same observable state
-  UninitCopyD((void**)&n, first, last, buf);
+  // the pool request keeps the element count in eax and derives the byte size from it
+  void* buf = n ? AllocSizeD((uint32_t)n) : 0;
+  // retail pushes the element count as a fourth (never read) argument slot
+  UninitCopyD_5((void**)&n, first, last, buf, n);
   return buf;
 }
 

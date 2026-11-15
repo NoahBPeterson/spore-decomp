@@ -1,4 +1,5 @@
 #include "game/types.h"
+#include <intrin.h>
 
 namespace EA {
 namespace Audio {
@@ -74,7 +75,7 @@ long double cEmitterSndPlayer::ComputeGainAttenuation(float a, float b, float c,
 {
     if (c <= a) {
         if (b != 0.0f) {
-            if (d < a) return 0.0L;
+            if (a <= d) return 0.0L;
             return mAttenuationCurve.GetOutputValue((a - c) / (d - c));
         }
     }

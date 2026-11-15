@@ -159,17 +159,21 @@ void __fastcall FUN_00d57ef0(void* self, void* /*edx*/, void* arg) {
   }
   *(u8*)(e + 0x648) = 0;
   int v = *(int*)(*(int*)(p + 0xaf0) + 0x640);
-  arg = (void*)*(int*)(*(int*)(p + 0xaf0) + 0x644);
-  (void)arg;
-  if (v == 1) {
-    u32 r = ((u32(__thiscall*)(void*, u32))FUN_00a68fb0)((void*)0x01601760, 2);
-    *(u32*)(p + 0x9f4) = r + 3;
-    return;
-  }
-  if (v == 0) {
-    u32 r = ((u32(__thiscall*)(void*, u32))FUN_00a68fb0)((void*)0x01601760, 3);
-    *(u32*)(p + 0x9f4) = r + 1;
-    return;
+  int x = *(int*)(*(int*)(p + 0xaf0) + 0x644);
+  (void)x;
+  switch (v) {
+    case 0: {
+      u32 r = ((u32(__thiscall*)(void*, u32))FUN_00a68fb0)((void*)0x01601760, 3);
+      *(u32*)(p + 0x9f4) = r + 1;
+      return;
+    }
+    case 1: {
+      u32 r = ((u32(__thiscall*)(void*, u32))FUN_00a68fb0)((void*)0x01601760, 2);
+      *(u32*)(p + 0x9f4) = r + 3;
+      return;
+    }
+    default:
+      return;
   }
 }
 

@@ -196,14 +196,14 @@ struct PgSymbol {              // t_symbol: by-value pair (hash, name pointer)
 namespace EA {
 namespace Audio {
 namespace Eapd {
-extern PgSymbol gFieldSymbol;        // 0x0167586c
+extern PgSymbol gEmptySymbol;        // 0x0167589c
 }
 }
 }
 namespace EA {
 namespace Audio {
 namespace Eapd {
-extern PgSymbol gEmptySymbol;        // 0x01675874
+extern PgSymbol gEmptySymbol_s00a6_2ec0;        // 0x01675874
 }
 }
 }
@@ -225,20 +225,6 @@ namespace EA {
 namespace Audio {
 namespace Eapd {
 PgSymbol* GetGroupSymbol(PgSymbol* out);                             // 0x00a635d0
-}
-}
-}
-namespace EA {
-namespace Audio {
-namespace Eapd {
-PgSymbol  gFieldSymbol;         // 0x0167586c
-}
-}
-}
-namespace EA {
-namespace Audio {
-namespace Eapd {
-PgSymbol  gEmptySymbol;         // 0x01675874
 }
 }
 }
@@ -394,6 +380,7 @@ public:
     void*    mpBucketBuffer;             // +0x34
     bool InitTables(uint32_t a, uint32_t b, uint32_t c, uint32_t d); // 0xa669d0
     void DestroyAllocator();                                         // 0xa67d30
+    void CopyFrom(const void* src);                                  // 0xa65ab0
 };
 struct HashNode { uint32_t mKey; void* mValue; HashNode* mpNext; };
 struct HashIter_s00a6_5f90 { HashNode* mpNode; HashNode** mpBucket; HashNode* mpEnd; };
@@ -404,12 +391,14 @@ public:
     uint32_t   mnBucketCount;             // +0x08
     uint32_t   mnElementCount;            // +0x0c
     float      mfMaxLoadFactor;           // +0x10
-    uint32_t   mnGrowthFactor;            // +0x14
+    float      mfGrowthFactor;            // +0x14
     uint32_t   mnNextResize;              // +0x18
     FixedHashtableAllocator mAlloc;       // +0x1c
 
     Hashtable_s00a6_5f90* Construct(void* name);                                 // 0xa665f0
     void      Destruct();                                             // 0xa66550
+    void      PatchMapInit(const char* name);                         // 0xa666e0
+    void      InstanceMapInit(const char* name);                      // 0xa66260
     void      ClearBuckets(HashNode** arr, uint32_t n);               // 0xa660e0
     HashIter_s00a6_5f90  erase(HashIter_s00a6_5f90 it);                                     // 0xa66cc0
     void      Rehash(uint32_t n);                                     // 0xa66b40
@@ -491,9 +480,6 @@ public:
     void RemoveAllFor(void* key, int unused);            // 0xa663e0
     void RemoveCurrentClass(CursorValue value);          // 0xa66410
 };
-void  PdPatchMapInit(void* self, const char* name);               // 0xa666e0
-void  PdInstanceMapInit(void* self, const char* name);            // 0xa66260
-void  PdClassResize(void* self, uint32_t a);                      // 0xa65ab0
 // ---- items of slice s00a65f90 end
 
 // @ 0x006859b0
@@ -545,24 +531,27 @@ extern "C" void EraseEntry(void* key)
 namespace EA { namespace Audio { namespace Eapd {
 PgSymbol* GetGroupSymbol(PgSymbol* out)
 {
-    uint32_t    emptyH = gEmptySymbol.mHash;
-    uint32_t    fieldH = gFieldSymbol.mHash;
-    const char* emptyN = gEmptySymbol.mpName;
-    out->mHash = emptyH;
-    out->mpName = emptyN;
-    if (emptyH != fieldH) {
+    PgSymbol    empty = gEmptySymbol;
+    uint32_t    fieldH = gEmptySymbol_s00a6_2ec0.mHash;
+    out->mHash = empty.mHash;
+    out->mpName = empty.mpName;
+    if (empty.mHash != fieldH) {
         out->mHash = fieldH;
-        out->mpName = gFieldSymbol.mpName;
-        gFieldSymbol.mHash = emptyH;
-        gFieldSymbol.mpName = emptyN;
+        const char* fieldN = gEmptySymbol_s00a6_2ec0.mpName;
+        _ReadWriteBarrier();
+        gEmptySymbol_s00a6_2ec0.mHash = empty.mHash;
+        out->mpName = fieldN;
+        gEmptySymbol_s00a6_2ec0.mpName = empty.mpName;
         return out;
     }
     void* canvas = canvas_getcurrent();
     if (canvas != 0) {
         PgSymbol tmp;
         PgSymbol* r = (PgSymbol*)canvas_realizedollar2(&tmp, canvas);
-        out->mHash = r->mHash;
-        out->mpName = r->mpName;
+        PgSymbol v;
+        v.mHash = r->mHash;
+        v.mpName = r->mpName;
+        *out = v;
     }
     return out;
 }
@@ -1015,9 +1004,9 @@ Hashtable_s00a6_5f90* Hashtable_s00a6_5f90::Construct(void* name)
     mnBucketCount = 0;
     mnElementCount = 0;
     mfMaxLoadFactor = 1.0f;
-    mnGrowthFactor = 2;
+    mfGrowthFactor = 2.0f;
     mnNextResize = 0;
-    PdClassResize(&mAlloc, (uint32_t)name);
+    mAlloc.CopyFrom(name);
     mnElementCount = 0;
     mnNextResize = 0;
     mnBucketCount = 1;
@@ -1043,8 +1032,8 @@ void InstanceManager::Construct(void* a, void* b)
     mField34 = 0;
     mpVtbl4 = (void*)0x14556c0;
     mField38 = b;
-    PdPatchMapInit((char*)this + 0x3c, "EAPd/PatchMap");
-    PdInstanceMapInit((char*)this + 0x90, "EAPd/InstanceMap");
+    mSymbols.PatchMapInit("EAPd/PatchMap");
+    mBindings.InstanceMapInit("EAPd/InstanceMap");
     mCurId = 0;
     mCurId2 = 0xffffffff;
 }

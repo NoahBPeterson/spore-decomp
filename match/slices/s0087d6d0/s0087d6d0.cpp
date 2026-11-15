@@ -442,18 +442,19 @@ struct LocFmt : FixedBuf<16> {
 LocFmt* LocFmt::Assign(const LocFmt* src)
 {
     mpInline   = mBuf;
-    mpCapacity = mBuf + 16;
-    mpBegin    = mBuf;
+    mpCapacity = mpInline + 16;
     mpEnd      = mBuf;
+    mpBegin    = mBuf;
     *mpBegin   = 0;
     AppendElement(src->mpBegin, src->mpEnd);
 
-    mSecond.mpInline   = mSecond.mBuf;
-    mSecond.mpCapacity = mSecond.mBuf + 512;
-    mSecond.mpBegin    = mSecond.mBuf;
-    mSecond.mpEnd      = mSecond.mBuf;
-    *mSecond.mpBegin   = 0;
-    mSecond.AppendElement(src->mSecond.mpBegin, src->mSecond.mpEnd);
+    FixedBuf<512>& sec = mSecond;
+    sec.mpInline   = sec.mBuf;
+    sec.mpCapacity = sec.mpInline + 512;
+    sec.mpEnd      = sec.mBuf;
+    sec.mpBegin    = sec.mBuf;
+    *sec.mpBegin   = 0;
+    sec.AppendElement(src->mSecond.mpBegin, src->mSecond.mpEnd);
     return this;
 }
 

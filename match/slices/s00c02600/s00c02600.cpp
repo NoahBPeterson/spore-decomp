@@ -267,15 +267,14 @@ int __stdcall FUN_00c02650(void* entry)
 }
 
 // @ 0x00c02690
-void __cdecl FUN_00c02690(float* v)
+float __cdecl FUN_00c02690(float* v)
 {
-    float x = v[0];
-    float y = v[1];
-    float z = v[2];
-    float inv = 1.0f / sqrtf(z * z + (y * y + x * x) + 1e-8f);
-    v[0] = x * inv;
-    v[1] = y * inv;
-    v[2] = z * inv;
+    float len = sqrtf(v[0] * v[0] + v[1] * v[1] + v[2] * v[2] + 1e-8f);
+    float inv = 1.0f / len;
+    v[0] *= inv;
+    v[1] *= inv;
+    v[2] *= inv;
+    return len;
 }
 
 // @ 0x00c02710
@@ -655,13 +654,16 @@ float __cdecl FUN_00c03440(int param)
     int n = g_0169e370 * 2 - param;
     float result = 1.0f;
     if (n >= 0) {
-        int count = 0;
+        int& count = (int&)param;
+        count = 0;
         float* arr = 0;
-        void* list = *(void**)((char*)cCreatureModeStrategy_Instance_00d38840() + 0xb4);
-        SP_GetPropertyAsFloatArray_006a08b0(list, 0x3819a4d3, &count, &arr);
-        if (count > 0) {
-            int idx = (n < count) ? n : count;
-            result = arr[idx];
+        char* base = (char*)cCreatureModeStrategy_Instance_00d38840() + 0xb4;
+        void* list = *(void**)base;
+        if (SP_GetPropertyAsFloatArray_006a08b0(list, 0x3819a4d3, &count, &arr)) {
+            if (count > 0) {
+                int* idx = (n < count) ? &n : &count;
+                result = arr[*idx];
+            }
         }
     }
     return result;

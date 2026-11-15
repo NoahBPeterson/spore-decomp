@@ -22,6 +22,7 @@ slices/s0094dbc0/s0094dbc0.cpp  ?StreamWrite@ISocket@@QAEHPBXHH@Z  0094e3f0  /O2
 slices/s0094dbc0/s0094dbc0.cpp  ?StartListen@ISocket@@QAE_NH@Z  0094e440  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0094dbc0/s0094dbc0.cpp  ?Close@ISocket@@QAE_NXZ  0094e4a0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0094dbc0/s0094dbc0.cpp  ?Connect@ISocket@@QAE_NPA_NPAX@Z  0094e4b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094dbc0/s0094dbc0.cpp  ?WaitForWrite@ISocket@@QAEIXZ  0094e560  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0094dbc0/s0094dbc0.cpp  ?AcceptPeer@ISocket@@QAE_NPAXAA_N@Z  0094e5f0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0094dbc0/s0094dbc0.cpp  ?Accept@ISocket@@QAE_NPAIPAUAddress@@PA_N@Z  0094e650  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0094dbc0/s0094dbc0.cpp  ?DoAccepted@ISocket@@QAE_NABIABUAddress@@HHHH@Z  0094e6b0  /O2 /MD /Gy /EHsc /TP /GS-

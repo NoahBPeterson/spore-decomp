@@ -9,3 +9,5 @@ slices/s009913d0/s009913d0.cpp  ?TreeNode_Collapse@@YIXPAVTreeNode@UTFWinControl
 slices/s009913d0/s009913d0.cpp  ?OnMouseDown@WinTreeView@UTFWinControls@EA@@QAE_NHHHH@Z  009918b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009913d0/s009913d0.cpp  ?OnTick@WinTreeView@UTFWinControls@EA@@QAE_NXZ  00991400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009913d0/s009913d0.cpp  ?SetScrollbarEnabled@WinTreeView@UTFWinControls@EA@@UAEXHH@Z  00991990  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009913d0/s009913d0.cpp  ??0WatchGraph@UTFWinControls@EA@@QAE@XZ  00991ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009913d0/s009913d0.cpp  ?Clear@WatchGraph@UTFWinControls@EA@@QAEXXZ  00991f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast

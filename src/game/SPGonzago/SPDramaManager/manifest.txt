@@ -41,3 +41,4 @@
 ../src/game/SPGonzago/SPDramaManager.cpp  ?GetClassNameById@BasicFactory_cCreatureAttackEvent@SP@@UAEPBDW4ClassId@COM@EA@@@Z  00d4ae80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?GetClassIds@BasicFactory_cSummonCreatureEvent@SP@@UAEIPAW4ClassId@COM@EA@@I@Z  00d4ae90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?GetClassNameById@BasicFactory_cSummonCreatureEvent@SP@@UAEPBDW4ClassId@COM@EA@@@Z  00d4aeb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?TriggerEvent@cSPDramaManager_s00d4_bc60@SP@@QAEXPAUcDramaEventInstanceData_s00d4_bc60@2@H@Z  00d4d530  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -513,23 +513,24 @@ Element* Element::Ctor1(void* doc, const u16* tag)
 {
     Element* self = this;
     ((void (__thiscall*)(void*, void*, int))Fn8e52b0)(self, doc, 1);
-    self->vftable = (void*)g_vtbl_element;
     *(void**)((char*)self + 0x1c) = (char*)self + 0x18;
     *(void**)((char*)self + 0x18) = (char*)self + 0x18;
     *(void**)((char*)self + 0x24) = (char*)self + 0x20;
     *(void**)((char*)self + 0x20) = (char*)self + 0x20;
-    self->mpTagName = tag;
+    self->mpName = tag;
+    struct Key { const u16* name; u32 type; } key;
+    key.type = 0;
+    key.name = tag;
+    struct Range { const char* first; const char* last; } r;
+    *(void* volatile*)&self->vftable = (void*)g_vtbl_element;
     self->mnAttrId = -1;
     self->mFlags30 = 0;
     self->mpIdValue = 0;
     self->mpNameValue = 0;
     self->mpExtra40 = 0;
-    void* r;
-    Fn8f3790(&r, g_defs_b, g_defs_c, &tag);
-    if ((char*)r + 8 == *(char**)&r)
-        self->mpTagName = *(const u16**)((char*)r + 4);
-    else
-        self->mpTagName = tag;
+    Fn8f3790(&r, g_defs_b, g_defs_c, &key);
+    const u32* p = (r.first + 8 == r.last) ? (const u32*)(r.first + 4) : &key.type;
+    self->mElementType = *p;
     return self;
 }
 
@@ -848,7 +849,7 @@ void* Node::Init(void* doc, int type)
     Node* self = this;
     *(void* volatile*)&self->link1 = 0;
     *(void* volatile*)&self->link0 = 0;
-    self->mnType = (u32)type;
+    *(u32 volatile*)&self->mnType = (u32)type;
     self->vftable = (void*)g_vtbl_node;
     self->mpDocument = doc;
     self->mpParent = 0;

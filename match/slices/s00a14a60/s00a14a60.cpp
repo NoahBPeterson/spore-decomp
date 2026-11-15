@@ -36,7 +36,7 @@ struct EffectOwner { char pad[0x28]; float mTailTime; };   // accumulated tail l
 // helpers are real functions here so the relocation resolves to the original's address.
 extern "C" void FUN_00a149b0(void* node);                 // 0x00a149b0, takes `this` in ecx
 #pragma inline_depth(0)
-extern "C" int FUN_00a150e0(void* node, int size);        // 0x00a150e0
+extern "C" void* FUN_00a150e0(void* node, int size);      // 0x00a150e0: `this` in ecx, size on the stack
 extern "C" char FUN_00a15150(void* obj, int count);       // 0x00a15150
 extern "C" void __fastcall FUN_00a151a0(void* ecx_p, void* edx_unused);   // 0x00a151a0
 extern "C" void __fastcall FUN_00a151d0(void* p, void*);          // 0x00a151d0
@@ -374,19 +374,22 @@ int MultiDelay::Process(MultiDelay* fx, MixCtx* ctx)
 // @ 0x00a150e0
 // Initialises the node in place (0x00a149b0 takes `this`=node in ecx and installs the vftable +
 // destructor vector at +0x24) and, when `size` is set, records the block end `node + size` at
-// node+0xc. The original additionally wraps the body in a C++ try/catch whose scope-table EH frame
-// (/Oy, no framepointer) this toolchain cannot emit from source at /O2 -- see nonmatching.txt.
-// `optimize("g", off)` disables global optimizations here so 0x00a15150 will not inline the call,
-// as the original keeps it out of line.
+// node+0x0c; that block end, zero when there is none, is the return value. The original additionally
+// wraps the body in a C++ try/catch whose scope-table EH frame (/Oy, no framepointer) this toolchain
+// cannot emit from source at /O2 -- see nonmatching.txt. `optimize("g", off)` disables global
+// optimizations here so the node constructor is not inlined into this small body.
 #pragma optimize("g", off)
-extern "C" int FUN_00a150e0(void* node, int size)
+extern "C" void* FUN_00a150e0(void* node, int size)
 {
+    char* end = 0;
     if (node != 0) {
         FUN_00a149b0(node);
+        if (size != 0) {
+            end = (char*)node + size;
+            *(void**)((char*)node + 0xc) = end;
+        }
     }
-    if (size != 0)
-        *(void**)((char*)node + 0xc) = (char*)node + size;
-    return size;
+    return end;
 }
 #pragma optimize("g", on)
 
@@ -417,10 +420,10 @@ extern "C" void __fastcall FUN_00a151a0(void* ecx_p, void* edx_unused)
 
 // @ 0x00a151d0
 // Destroys the 6-entry vector of Chorus lines (+0x24, stride 0xc) and installs the vftable. `p`
-// arrives in ecx (__thiscall) and the original returns void (eax is incidental). The original's C++
-// EH scope-table frame (push -1; push <table>; fs-registration; push ecx; push esi) is not
-// reproducible at /O2 -- see nonmatching.txt. The destructor loop is open-coded here (the original
-// calls the compiler helper 0x011e0b22) so the reconstruction is behaviourally self-contained.
+// arrives in ecx and the original returns void. The original hands the array to the compiler's EH
+// vector-destructor iterator 0x011e0b22 (array, 0xc, 6, element destructor) inside a C++ scope-table
+// frame whose stack layout no source-level try/catch reproduces at /O2 (see nonmatching.txt), so the
+// same destruction is spelled out here with the vector's own line destructor, loop kept unrolled.
 extern "C" void __fastcall FUN_00a151d0(void* p, void*)
 {
     char* line = (char*)p + 0x24;

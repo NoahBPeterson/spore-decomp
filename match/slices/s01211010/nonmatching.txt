@@ -9,46 +9,46 @@
 # (fault(read)=400)" — the funclet runs on a caller frame the input generator cannot synthesise,
 # so the ORIGINAL faults on every generated input (same as the neighbouring slice s01214320).
 #
-# 2026-11-10 re-check of the eight assigned rows (012114d0, 01211540, 012116a0, 012119b0,
-# 01211d60, 01212660): each compiles (15-32 bytes) but retail's 26-44 bytes are the
-# compiler's own `lea ecx,[ebp-N]; jmp dtor` / operator_delete__ thunk + ret prologue, which
-# cl only emits while compiling the owning function with /EHsc.  A standalone spelling of the
-# same cleanup gets a normal frame (push ebp; sub esp) or folds to `jmp <ext>`, and the trailing
-# `ret`/int3 tail cannot be reproduced.  No lever left outside the owning function's source.
+# 2026-11-14 pass over the ten assigned rows: each source now spells the *whole* retail sequence (every
+# inlined dtor tail, every operator_delete__ tail and the closing `mov eax,FuncInfo; jmp handler` record),
+# so the remaining bytes differ only in how cl reaches them (levers tried: __forceinline helpers, value vs
+# call form of the handler tail, the two-argument operator_delete__ entry).  Retail's funclets are reached by
+# `lea ecx,[ebp-N]; jmp <dtor>`, which no standalone C++ body reproduces: cl always gives the function a
+# frame and keeps the epilogue of a value return after a call; difftest is UNSUPPORTED for every row.
 # va  diff-bytes  reason
 01211010 607  complete EH cleanup funclet chain (eastl::VectorBase dtors + SetSerializer); compiler-generated; difftest UNSUPPORTED (0/400 valid, fault(read))
 01211270 206  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01211360 146  complete EH cleanup funclet (operator_delete__ chain, tag 0x13eb8a4); compiler-generated; difftest UNSUPPORTED
 01211400 110  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
 01211470 60  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
-012114d0 42  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+012114d0 42  other: now emits retail's four dtor tails ([ebp-0x20], then [ebp-0x30] x3) and the handler record; retail reaches them with 5 `lea ecx,[ebp-N]; jmp <ext>` thunks, ours is one body with call/jmp-reachable dtors, so the bytes cannot align; difftest UNSUPPORTED (0/400 valid, fault(read)); fix1: quick check DIFFERS (callee tail-calls folded to jmp/call)
 01211500 52  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
-01211540 44  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
+01211540 44  logic fixed: operator_delete__ on [ebp-0x20] (tag 0x13eb8a4) followed by the ~T_4e1bf0 at -0x1c (missing before), then the handler record; still differs because retail's delete is the inlined `push 0 x4; push tag; push [ebp-0x20]; call` tail and the dtor a `lea ecx; jmp` thunk, ours is a call plus in-body codegen; difftest UNSUPPORTED; fix1: quick check DIFFERS
 01211600 124  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
-012116a0 26  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+012116a0 26  logic fixed: the funclets are dtor tails at [ebp-0x34] AND [ebp-0x30] plus the `mov eax,FuncInfo; jmp __CxxFrameHandler3` record (FuncInfo 0x014ff308), which the source was missing; still differs: retail is three bare `lea ecx; jmp`/`mov eax; jmp` thunks, ours a prologue+call body (cl always gives a standalone function a frame and keeps a value return's epilogue); difftest UNSUPPORTED; fix1: quick check DIFFERS
 01211750 109  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 012118d0 106  complete EH cleanup funclet chain (four sub-object dtors at +0,+0x14,+0x28,+0x3c); compiler-generated; difftest UNSUPPORTED
-01211980 44  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
-012119b0 34  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01211980 44  logic fixed: ~T_6c12c0 at -0x44 followed by operator_delete__ on [ebp-0x48] (tag 0x13eb8a4), not a handler record; still differs: retail is a `lea ecx; jmp` thunk + the inlined delete tail, ours a call body; difftest UNSUPPORTED; fix1: quick check DIFFERS
+012119b0 34  logic fixed: three ~T_7a9610 funclets on [ebp+4] plus the handler record (FuncInfo 0x014ff678), which the source was missing; still differs: retail is three bare `lea ecx; jmp` thunks + the record tail, ours a prologue+call body; difftest UNSUPPORTED; fix1: quick check DIFFERS
 01211a70 152  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01211b60 58  complete EH cleanup funclet (RefVector::~RefVector); compiler-generated; difftest UNSUPPORTED
-01211ba0 44  complete EH cleanup funclet (operator_delete__ chain, tag 0x140d6d0); compiler-generated; difftest UNSUPPORTED
+01211ba0 44  logic fixed: operator_delete__ on [ebp-0x10] (tag 0x140d6d0), then the ~T_7a9610 at -0x10 and the handler record (FuncInfo 0x014ff8cc), which the source was missing; still differs: retail is the inlined delete tail + `lea ecx; jmp` + `mov eax; jmp`, ours a call body; difftest UNSUPPORTED; fix1: quick check DIFFERS
 01211c30 45  complete EH cleanup funclet (sub-object +8 dtor, then ??_M at +0x9c); compiler-generated; difftest UNSUPPORTED
 01211c60 83  complete EH cleanup funclet (sub-object +8 dtor, then ??_M at +0x9c); compiler-generated; difftest UNSUPPORTED
 01211d00 63  complete EH cleanup funclet (??_M vector dtor iterator); compiler-generated; difftest UNSUPPORTED
-01211d60 38  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01211d60 38  logic fixed: ~T_7455d0 at -0x28, ~AutoRefCountV of [ebp-0x2c], operator_delete__ of [[ebp-0x2c]+0x18] with the tag in [ebp+4], then the handler record (FuncInfo 0x015003b0); still differs: retail's dtor tails are bare `lea ecx; jmp` thunks and its delete the inlined `push ecx; mov edx,[ebp+4]; push edx; call` tail; difftest UNSUPPORTED; fix1: quick check DIFFERS
 01211e10 53  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01211e50 60  complete EH cleanup funclet (AutoRefCountV dtor); compiler-generated; difftest UNSUPPORTED
 01211f40 306  complete EH cleanup funclet chain (AutoRefCountV x3 + T_7c6190 across a pointer element); compiler-generated; difftest UNSUPPORTED
 012120a0 77  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01212160 282  complete EH cleanup funclet (??_M 8x0x50 + sub-object dtor); compiler-generated; difftest UNSUPPORTED
 012122f0 60  complete EH cleanup funclet (AutoRefCountV dtor); compiler-generated; difftest UNSUPPORTED
-01212350 44  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
+01212350 44  logic fixed: operator_delete__ on [ebp-0x1c] (tag 0x13eb8a4), then the ~T_7a9610 at -0x1c and the handler record (FuncInfo 0x015000a0), which the source was missing; still differs: retail is the inlined delete tail + `lea ecx; jmp` + `mov eax; jmp`, ours a call body; difftest UNSUPPORTED; fix1: quick check DIFFERS
 01212410 93  complete EH cleanup funclet (AutoRefCountV dtors + ??_M 4x4 at +0x44); compiler-generated; difftest UNSUPPORTED
 012124d0 52  complete EH cleanup funclet (operator_delete__ chain); compiler-generated; difftest UNSUPPORTED
 01212530 203  complete EH cleanup funclet chain (AutoRefCountV dtors + ??_M 4x4); compiler-generated; difftest UNSUPPORTED
 01212620 60  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
-01212660 26  complete EH cleanup funclet (two sub-object dtors on outgoing args); compiler-generated; difftest UNSUPPORTED
+01212660 26  logic fixed: two ~T_6ae110 funclets on [ebp+8] and [ebp+0xc] plus the handler record (FuncInfo 0x015003ac), which the source was missing; still differs: retail is two bare `lea ecx; jmp` thunks + the record tail, ours a prologue+call body; difftest UNSUPPORTED; fix1: quick check DIFFERS
 012126a0 70  complete EH cleanup funclet (operator_delete__ chain on an outgoing arg); compiler-generated; difftest UNSUPPORTED
-012126f0 44  complete EH cleanup funclet (operator_delete__ chain on an outgoing arg); compiler-generated; difftest UNSUPPORTED
+012126f0 44  logic fixed: operator_delete__ on [ebp+8] (tag 0x13eb8a4), then the ~T_7a9610 at +8 and the handler record (FuncInfo 0x01500450), which the source was missing; still differs: retail is the inlined delete tail + `lea ecx; jmp` + `mov eax; jmp`, ours a call body; difftest UNSUPPORTED; fix1: quick check DIFFERS
 01212740 158  complete EH cleanup funclet chain (AutoRefCountV dtor + operator_delete__); compiler-generated; difftest UNSUPPORTED

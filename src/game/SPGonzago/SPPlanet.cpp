@@ -320,9 +320,9 @@ void* SP_cGameNounManager_CreateNoun(void* key);                         // 0x00
 void* SP_GetActiveTerrainSphere(void);                                   // 0x00f48aa0
 void  SP_cHierGrid_Shutdown(void);                                       // 0x00704060
 void  SP_cHierGrid_Init(void* self, const void* v, float f, int a, int b); // 0x00704260
-struct CRBTreeFind { void find(const u32* key, u32* out); };             // 0x00e5c780
+struct CRBTreeFind { void find(u32* out, const u32* key); };             // 0x00e5c780
 #define RBF(p) ((CRBTreeFind*)(p))
-void  FUN_00a887b0(u32 a, u32 b);                                        // 0x00a887b0
+struct TreeApplyTarget { void SetKey(u32 id, float key); };              // 0x00a887b0
 void  FUN_00a057f0(void* a, const void* b);                              // 0x00a057f0
 void* cProperty_GetBool(void* p);                                        // 0x0041e920
 void* cProperty_GetInt(void* p);                                         // 0x0041e990
@@ -373,14 +373,16 @@ struct Simulator_cFruit {
     void* vtbl4;     // +0x04
     u32   m08[0xb];  // +0x08
     void* vtbl34;    // +0x34
-    u32   m38[0x10]; // +0x38
+    u32   m38[0x13]; // +0x38  (to +0x84)
     u32   f84;       // +0x84
     u32   f88;       // +0x88
     u8    f8c[0x19]; // +0x8c
     u8    fa5;       // +0xa5
+    u8    pad_a6[0x62]; // +0xa6
     u32   m108;      // +0x108
-    u8    pad10c[0x44];
+    u8    pad10c[0x3c];
     u32   f148;      // +0x148
+    u8    pad14c[4];
     u32   f150;      // +0x150
     u32   f154;      // +0x154
     u32   f158;      // +0x158
@@ -438,6 +440,7 @@ struct TreeApplyOps {
 };
 struct PairTreeOps {
     void Find(void* out, const u32* key);
+    void FindNode(u32* out, const u32* key);   // 0x00a057f0
 };
 struct RefRecordCtorStruct {
     void* Construct2(void* src);  // 0x00b01cb0
@@ -466,6 +469,15 @@ void __cdecl FUN_00b01690(void* first, void* last, int holeIndex, void* top,
 struct Op {
     void* M18660();                    // 0x00b18660 SP::cGameData::cGameData
     void  M03d0();                     // 0x00ac03d0 SP::cInteractionTarget::cInteractionTarget
+    void  M3f9b0();                    // 0x00c3f9b0
+    void  M3f9a0(u32);                 // 0x00c3f9a0
+    void  M0520();                     // 0x00ac0520
+    void  M184c0();                    // 0x00b184c0
+    void* Mecdba0();                   // 0x00ecdba0
+    int   Mb8dab0();                   // 0x00b8dab0
+    void* Mba9370(void* arg);          // 0x00ba9370
+    void* Mc30eb0();                   // 0x00c30eb0
+    void* Mc92af0();                   // 0x00e92af0 cSpatialObjectView ctor
     void  M8550(int v);               // 0x00b18550 cGameData SetGameDataOwner2
     void* M2a690(uint32 a, uint32 b, uint32 c);  // 0x00b2a690
     void* M90410();                    // 0x00b90410
@@ -1004,7 +1016,7 @@ extern void* vtbl_CPlanet_d8_01472570;
 void  StrAppendSprintf(void* s, const char* fmt, ...);               // 0x005f9450
 void* FUN_00ecdba0(void* p);                                        // 0x00ecdba0
 int   FUN_00b8dab0(void* p);                                        // 0x00b8dab0
-void* SP_StarManager_00b3d2a0(void* p);                             // 0x00b3d2a0
+void* SP_StarManager_00b3d2a0();                                    // 0x00b3d2a0
 void* cStarManager_GetEmpireByID_00ba9370(void* sm);                // 0x00ba9370
 void* cEmpire_DebugArchetype_00c30eb0(void* e);                     // 0x00c30eb0
 void* FUN_00f473a0(int size, const char* file, int a, int b, int c, int d); // 0x00f473a0
@@ -1028,12 +1040,14 @@ void  DoInsertValue_00ac9200(void* a);                              // 0x00ac920
 void  FUN_00acb810(void* cur, void* v);                             // 0x00acb810
 struct VecH_00b96600 { void Push(void* cur, const void* v); };            // 0x00b96600
 struct VecH_004e3e10 { void GrowAndAppend(void* pos, const void* v); };   // 0x004e3e10
+struct VecSlot_00ac9200 { void Insert(void* v); };                        // 0x00ac9200 ecx=slot
+struct VecBase_00acb810 { void GrowInsert(void* pos, void* v); };         // 0x00acb810 ecx=vector base
 struct EaVec3 { void* begin; void* end; void* cap; void erase(void* first, void* last); };
 void  FUN_00533500(void* a, void* b);                               // 0x00533500
 void  cGonzagoTimer_dtor_00b638b0(void* p);                         // 0x00b638b0
 void  cGameData_dtor_00b184c0(void* p);                             // 0x00b184c0
 void  FUN_00c8a420(void);                                           // 0x00c8a420
-void  FUN_00c72d00(void* a, void* b);                               // 0x00c72d00
+
 void  FUN_00ba70d0(void* p);                                        // 0x00ba70d0
 void  WStr_Assign(void* vec3, const uint16_t* src);                 // helper (not a slice VA)
 void* SP_cGameNounManager_GetGameDataVector(void* mgr, void* f1, void* f2, void* f3, void* f4, void* id); // 0x00b21340
@@ -1063,6 +1077,7 @@ struct PlanetCls {
     void FUN_00c733b0();
     void** FUN_00c73520(void** out);
     int* FUN_00c735e0(int* key);
+    void FUN_00c72d00(void* r, void* k);   // 0x00c72d00 thiscall
     void FUN_00c73680();
     void FUN_00c73b60();
 };
@@ -2361,27 +2376,27 @@ void* cFruitViewFactory::Create(void* owner)
     }
     u8* o = (u8*)op_new(0x38, "Simulator/cFruitView", 0, 0, 0, 0);
     if (o != 0) {
-        SP_cSpatialObjectView_ctor(o);
+        ((Op*)o)->Mc92af0();
         *(void**)o = (void*)0x0145c6d0;
         *(u32*)(o + 0x34) = 0;
         (*(void(__thiscall**)(void*, void*))((char*)vtbl(o) + 0x24))(o, owner);
         return o;
     }
-    (*(void(__thiscall**)(void*))((char*)vtbl((void*)0) + 0x24))((void*)0);
+    (*(void(__thiscall**)(void*, void*))((char*)vtbl((void*)0) + 0x24))((void*)0, owner);
     return 0;
 }
 
 // @ 0x00b01910
 Simulator_cFruit::Simulator_cFruit()
 {
-    FUN_00c3f9b0();
-    SP_cInteractionTarget_ctor((u8*)this + 0x130);
+    ((Op*)this)->M3f9b0();
+    ((Op*)((u8*)this + 0x130))->M03d0();
     *(void**)this = (void*)0x0145c5c8;
     this->vtbl4 = (void*)0x0145c5b4;
     this->vtbl34 = (void*)0x0145c4f0;
     *(void**)((u8*)this + 0x130) = (void*)0x0145c4d0;
     this->f148 = 0;
-    FUN_00c3f9a0(4);
+    ((Op*)this)->M3f9a0(4);
     this->f88 = 6;
     this->f84 |= 0x200;
     this->fa5 = 0;
@@ -2451,8 +2466,8 @@ Simulator_cFruitGroup::~Simulator_cFruitGroup()
     if (p3 != 0) {
         vcall0(p3, 4);
     }
-    FUN_00ac0520();
-    FUN_00b184c0();
+    ((Op*)at(self, 0x34))->M0520();
+    ((Op*)self)->M184c0();
 }
 
 // @ 0x00b01cb0
@@ -2726,19 +2741,19 @@ void TreeApplyOps::Apply(void* key, u32 id, u32 arg)
         return;
     }
     u8* self = (u8*)this;
-    u32 out;
-    RBF(self + 0x8080)->find(&id, &out);
-    if ((void*)out == (void*)(self + 0x8084)) {
+    u32 idv = id;
+    RBF(self + 0x8080)->find(&id, (const u32*)&key);
+    if ((void*)id == (void*)(self + 0x8084)) {
         return;
     }
-    u8* node = (u8*)out;
+    u8* node = (u8*)id;
     if (*(u32*)(node + 0x30) == 0) {
         return;
     }
-    if (*(u32*)(node + 0x18) <= id) {
+    if (*(u32*)(node + 0x18) <= idv) {
         return;
     }
-    FUN_00a887b0(*(u32*)(node + 0x2c), arg);
+    ((TreeApplyTarget*)*(u32*)(node + 0x2c))->SetKey(idv, *(float*)&arg);
 }
 
 // @ 0x00b02430
@@ -2748,21 +2763,21 @@ void PairTreeOps::Find(void* out, const u32* key)
     u8* first = (u8*)(self + 4);
     u8* node = *(u8**)(self + 0xc);
     if (node != 0) {
-        u32 k0 = key[0], k1 = key[1];
+        u32 k1 = key[1], k0 = key[0];
         do {
             u32 nk1 = *(u32*)(node + 0x14);
             u32 nk0 = *(u32*)(node + 0x10);
-            if (nk1 > k1 || (nk1 == k1 && nk0 >= k0)) {
+            if (k1 > nk1 || (k1 == nk1 && k0 >= nk0)) {
+                node = *(u8**)node;
+            } else {
                 first = node;
                 node = *(u8**)(node + 4);
-            } else {
-                node = *(u8**)node;
             }
         } while (node != 0);
     }
-    u32 outv;
-    FUN_00a057f0(&outv, key);
-    *(u32*)out = outv;
+    u32* tmp = (u32*)&key;
+    FindNode(tmp, key);
+    *(u32*)out = *tmp;
     *(u8**)((u8*)out + 4) = first;
 }
 
@@ -2903,7 +2918,7 @@ done:
 cFruitView* cFruitView::ScopedDtor(uint8 del)
 {
     cFruitView* s = this;
-    s->vtbl = gVtblFruitView;
+    s->vtbl = (void*)0x0145c6d0;
     _ReadWriteBarrier();
     ScopedDtorEffect* eff = s->mpEffect;
     if (eff != 0) {
@@ -3127,16 +3142,16 @@ void SP::cPlanet::AddDebugInfo(eastl::basic_string<char, eastl::allocator> * str
 {
     char* s = (char*)this;
     void* pd = *(void**)(s + 0x13c);
-    StrAppendSprintf(str, "\nPlanet Name: %S", ((void**)FUN_00ecdba0(pd))[0]);
+    StrAppendSprintf(str, "\nPlanet Name: %S", ((void**)((Op*)pd)->Mecdba0())[0]);
 
     pd = *(void**)(s + 0x13c);
-    if (pd != 0 && FUN_00b8dab0(pd) == 5) {
-        void* gd = *(void**)(s + 0xd4);
-        void* slot = ((void*(__thiscall*)(void*))(*(void***)gd)[0x4c / 4])(gd);
-        void* sm = SP_StarManager_00b3d2a0(slot);
-        void* emp = cStarManager_GetEmpireByID_00ba9370(sm);
+    if (pd != 0 && ((Op*)pd)->Mb8dab0() == 5) {
+        void* gd = (void*)(s + 0xd4);
+        void* slot = (*(void*(__thiscall**)(void*))((char*)vtbl(gd) + 0x4c))(gd);
+        void* sm = SP_StarManager_00b3d2a0();
+        void* emp = ((Op*)sm)->Mba9370(slot);
         if (emp != 0)
-            StrAppendSprintf(str, "\nArchetype: %s\n", cEmpire_DebugArchetype_00c30eb0(emp));
+            StrAppendSprintf(str, "\nArchetype: %s\n", ((Op*)emp)->Mc30eb0());
     }
 }
 
@@ -3147,7 +3162,7 @@ bool PlanetCls::FUN_00c72d70(int key)
     int* end = *(int**)(s + 0x11c4);
     int* r = (int*)FUN_00c72540(*(void**)(s + 0x11c0), end, &key,
                                 *(unsigned char*)(s + 0x11d4));
-    if (r == end || key < *r || r == (int*)((char*)r + 0xb0))
+    if (r == end || (unsigned)key < (unsigned)*r || r == (int*)((char*)r + 0xb0))
         r = end;
     if (r != end)
         return *(char*)((char*)r + 0xaa) != 0;
@@ -3235,30 +3250,45 @@ void PlanetCls::FUN_00c72e10(char* pd)
 void FUN_00c731a0(void* self, char b2, void* p3, uint16_t w4, char b5, int d6, int d7, int d8, char b9)
 {
     char* s = (char*)self;
-    char local[0x2c];
-    local[0x00] = *(int*)p3;
-    local[0x04] = d6;
-    local[0x08] = d7;
-    local[0x0c] = d8;
-    local[0x10] = w4;
-    local[0x12] = b2;
-    local[0x14] = 0;
-    local[0x18] = 0;
-    local[0x1c] = 0;
-    local[0x20] = 0;
-    local[0x24] = 0;
-    local[0x28] = (char)((1 << ((b9 != 0) + 3)) | (-(b5 != 0) & 2) | 0x20);
+    struct Entry {
+        int      f00;   // +0x00
+        int      f04;   // +0x04
+        int      f08;   // +0x08
+        int      f0c;   // +0x0c
+        uint16_t f10;   // +0x10
+        char     f12;   // +0x12
+        char     pad13; // +0x13
+        float    f14;   // +0x14
+        int      f18;   // +0x18
+        int      f1c;   // +0x1c
+        int      f20;   // +0x20
+        int      f24;   // +0x24
+        char     f28;   // +0x28
+        char     pad29[3];
+    };
+    Entry local;
+    local.f00 = *(int*)p3;
+    local.f04 = d6;
+    local.f08 = d7;
+    local.f0c = d8;
+    local.f10 = w4;
+    local.f12 = b2;
+    local.f14 = 0.0f;
+    local.f18 = 0;
+    local.f1c = 0;
+    local.f20 = 0;
+    local.f24 = 0;
+    local.f28 = (char)((1 << ((b9 != 0) + 3)) | (-(b5 != 0) & 2) | 0x20);
 
     int* vec = (int*)(s + 0x134);
-    if (vec[1] < vec[2]) {
-        vec[1] += 0x2c;
-        if (vec[1] != 0) {
-            DoInsertValue_00ac9200(local);
-            return;
+    if ((unsigned)vec[1] < (unsigned)vec[2]) {
+        int* slot = (int*)vec[1];
+        vec[1] = (int)((char*)slot + 0x2c);
+        if (slot != 0) {
+            ((VecSlot_00ac9200*)slot)->Insert(&local);
         }
     } else {
-        char* cur = (char*)vec[1];
-        FUN_00acb810(cur, local);
+        ((VecBase_00acb810*)vec)->GrowInsert((void*)vec[1], &local);
     }
 }
 
@@ -3440,15 +3470,18 @@ int* PlanetCls::FUN_00c735e0(int* key)
     char* s = (char*)this;
     int* beg = *(int**)s;
     int* end = *(int**)(s + 4);
+    struct Key8 { int k; char c; };
     int* r = (int*)FUN_00d01260(beg, end, key, *(unsigned char*)(s + 0x14));
-    if (r == end || *key < *r) {
-        int k = *key;
-        if (r == end || *r <= k) {
+    if (r == end || (unsigned)*key < (unsigned)*r) {
+        Key8 k;
+        k.k = *key;
+        k.c = 0;
+        if (r == end || (unsigned)*r <= (unsigned)k.k) {
             r = (int*)FUN_00d01260(r, end, &k, *(unsigned char*)(s + 0x14));
         } else {
             r = (int*)FUN_00d01260(beg, r, &k, *(unsigned char*)(s + 0x14));
         }
-        if (r == end || k < *r)
+        if (r == end || (unsigned)k.k < (unsigned)*r)
             FUN_00c72d00(r, &k);
     }
     return r + 1;
@@ -3461,7 +3494,7 @@ void PlanetCls::FUN_00c73680()
     *(void**)s = &vtbl_CPlanet_014725d8;
     *(void**)(s + 0xd4) = &vtbl_CPlanet_gd_01472580;
     *(void**)(s + 0xd8) = &vtbl_CPlanet_d8_01472570;
-    void* sm = SP_StarManager_00b3d2a0(s);
+    void* sm = SP_StarManager_00b3d2a0();
     FUN_00ba70d0(sm);
     FUN_00c733b0();
 

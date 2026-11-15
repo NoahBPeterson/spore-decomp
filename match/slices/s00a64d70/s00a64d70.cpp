@@ -202,7 +202,9 @@ void* HashtableBig::Rehash16(uint32_t newCount)
     }
     mpBucketArray = (HashNode20**)newBuckets;
     mnBucketCount = newCount;
-    return newBuckets;
+    /* retail returns the OLD bucket array (the value left in eax by the free
+       path), not the freshly allocated one */
+    return old;
 }
 
 // ===========================================================================
@@ -247,7 +249,9 @@ void* HashtableBig::Rehash20(uint32_t newCount)
     }
     mpBucketArray = (HashNode20**)newBuckets;
     mnBucketCount = newCount;
-    return newBuckets;
+    /* retail returns the OLD bucket array (the value left in eax by the free
+       path), not the freshly allocated one */
+    return old;
 }
 
 // ===========================================================================
@@ -308,7 +312,9 @@ uint32_t SymbolDispatchSlot::Dispatch(uint32_t sym, float f)
     mpMap->FindNode(local, &sym);
     if (mpMap->mpBucketArray[mpMap->mnBucketCount] == local[0])
         return found;
-    return MakeFloatHandler((char*)local[0] + 4, f);
+    /* the float handler is a member (thiscall): `this` = local[0]+4 in ecx */
+    typedef uint32_t (__thiscall* FloatFn)(void*, float);
+    return ((FloatFn)MakeFloatHandler)((char*)local[0] + 4, f);
 }
 
 // ===========================================================================
@@ -323,16 +329,24 @@ uint32_t GroupAdder::AddGroup(void* group)
     map->FindNode(local, &key);
     if (map->mpBucketArray[map->mnBucketCount] == (HashNode16*)local[0])
     {
-        uint32_t* entry = (uint32_t*)MakeEntryIter(group);
+        /* 0xa646f0 is IterHelper::MakeEntryIter(entry): this = a stack
+           IterHelper, entry = group; it[0] = *(group+0x34), it[1] = group. */
+        typedef void* (__thiscall* MakeIterFn)(void*, void*);
+        uint32_t entry[2];
+        ((MakeIterFn)MakeEntryIter)(entry, group);
+        /* retail fills mKey, mV1 = it[0] and mV2 = it[1] (it leaves mpNext
+           unused: Insert only copies the three leading words) */
         HashNode16 pair;
-        pair.mKey  = key;
-        pair.mV1   = *(uint32_t*)((char*)group + 0x30);
-        pair.mV2   = entry[0];
-        pair.mpNext = (HashNode16*)entry[1];
+        pair.mKey   = key;
+        pair.mV1    = entry[0];
+        pair.mV2    = entry[1];
+        pair.mpNext = 0;
         InsertResult res;
         map->Insert(&res, &pair, 0);
-        ResetAndClear(&res);
-        ResetAndClear(&local);
+        /* 0xa64710 is a thiscall taking the argument in ecx */
+        typedef void (__thiscall* ResetFn)(void*);
+        ((ResetFn)ResetAndClear)(&res);
+        ((ResetFn)ResetAndClear)(&local);
         if (mpListener)
         {
             typedef void (__thiscall* Fn)(void*, void*, uint32_t, void*);
@@ -341,7 +355,10 @@ uint32_t GroupAdder::AddGroup(void* group)
         }
         return 1;
     }
-    return PushNode(group);
+    /* 0xa64730 is EapdAssetManager::PushNode(node), called with this = the
+       found node's value word (local[0]+4) */
+    typedef uint32_t (__thiscall* PushFn)(void*, void*);
+    return ((PushFn)PushNode)((char*)local[0] + 4, group);
 }
 
 // ===========================================================================
@@ -398,7 +415,9 @@ Hashtable* Hashtable::Construct(const void* nameSlot)
     const uint32_t* slot = (const uint32_t*)nameSlot;
     mnElementCount   = 0;
     mfMaxLoadFactor  = 1.0f;
-    mnGrowthFactor   = 2;
+    /* +0x14 is the growth factor, a float in the original (retail stores
+       2.0f with movss, not a plain integer 2) */
+    *(float*)&mnGrowthFactor = 2.0f;
     mnNextResize     = 0;
     mPool.mpVtbl = (void*)0x1454fac;
     mPool.mA     = slot[1];
@@ -441,16 +460,6 @@ void Hashtable::Dispose()
 }
 
 // ===========================================================================
-// Hashtable::Dtor -- tear the small table down
-// ===========================================================================
-// @ 0x00a651e0
-void Hashtable::BaseDtor()
-{
-    Dispose();
-    *(void**)this = (void*)0x1455648;
-}
-
-// ===========================================================================
 // Hashtable::Insert -- find-or-insert one {key,v1,v2} triple
 // ===========================================================================
 // @ 0x00a64d70
@@ -484,10 +493,12 @@ void Hashtable::Insert(InsertResult* out, const HashNode16* pair, const uint32_t
     }
     fresh->mpNext = 0;
 
-    if (local[0])
+    /* NextBucketCount writes the "changed" flag as a single byte (retail tests
+       it with `cmp byte ptr [..]`), then the new count in the next dword */
+    if (((uint8_t*)local)[0])
     {
-        bucket = &mpBucketArray[key % local[1]];
         ResizeBuckets(local[1]);
+        bucket = &mpBucketArray[key % local[1]];
     }
 
     fresh->mpNext = *bucket;
@@ -533,8 +544,10 @@ uint32_t Hashtable::Erase(uint32_t* key)
 }
 
 // ===========================================================================
-// GroupMap::DisposeInner -- tear down the GroupMap's inner table and install
-// the Instance vtable
+// GroupMap::~GroupMap (base destructor) -- tear down the GroupMap's inner
+// table at this+0x10 and install the base vtable.  The old duplicate
+// `Hashtable::BaseDtor` definition that shared this address (and compiled to
+// Dispose() on `this`) was removed: retail disposes this+0x10.
 // ===========================================================================
 // @ 0x00a651e0
 void GroupMap::DisposeInner()
@@ -690,7 +703,7 @@ Instance* Instance::InstanceCtor(void* sys, void* a3, void* a4)
 bool InstanceManager::CanvasOrId(void* a2, void* a3, uint32_t* out)
 {
     mCurId2 = 0xffffffff;
-    CreateCanvas(a3, a2, 0, 0);
+    CreateCanvas(a2, a3, 0, 0);
     *out = mCurId2;
     mCurId2 = 0xffffffff;
     return *out != 0xffffffff;

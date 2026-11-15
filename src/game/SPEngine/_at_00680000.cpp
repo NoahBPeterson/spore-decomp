@@ -1620,13 +1620,13 @@ ObjC30_s0068_1f10* Map1::operator[](const int& key)
     Node1* cur = mpRoot;
     while (cur) {
         if (cur->mKey < key) {
+            cur = cur->mpRight;
+        } else {
             pos = cur;
             cur = cur->mpLeft;
-        } else {
-            cur = cur->mpRight;
         }
     }
-    if (pos == anchor || pos->mKey < key) {
+    if (pos == anchor || key < pos->mKey) {
         Node1* nNew = 0;
         Node1** out = &nNew;
         InsertHint(out, pos, (int*)&key, 0);
@@ -2139,24 +2139,28 @@ uint64 __fastcall AtomicExchange64(volatile uint64* p, uint64 v)
 // @ 0x0068c220
 void FreeList::Drain()
 {
-    while (AtomicRead64(&mHead) != 0) {
-        FreeItem* n = (FreeItem*)(uintptr_t_s0068_b150)AtomicRead64(&mHead);
+    while ((uint32)AtomicRead64(&mHead) != 0) {
+        volatile uint64 head = mHead;
+        FreeItem* n = (FreeItem*)(uintptr_t_s0068_b150)AtomicRead64((volatile uint64*)&head);
         mHead = n->next;
-        EAFree((void*)(uintptr_t_s0068_b150)AtomicRead64(&mHead));
+        EAFree((void*)(uintptr_t_s0068_b150)AtomicRead64((volatile uint64*)&head));
     }
 }
 
 // @ 0x0068c280
 void FreeList::Push(uint32 a, uint32 b)
 {
-    FreeItem* n = (FreeItem*)(uintptr_t_s0068_b150)AtomicRead64(&mHead);
+    FreeItem* n = (FreeItem*)(uintptr_t_s0068_b150)AtomicRead64((volatile uint64*)&a);
     n->pad0 = a;
     n->pad4 = b;
     for (;;) {
-        uint64 old = AtomicRead64(&mHead);
-        n->next = old;
-        uint64 want = AtomicRead64(&mHead);
-        if (_InterlockedCompareExchange64((volatile __int64*)&mHead, (__int64)(old + 1), (__int64)want) == (__int64)want)
+        uint64 m = mHead;
+        ((FreeItem*)(uintptr_t_s0068_b150)AtomicRead64((volatile uint64*)&a))->next = m;
+        uint32 node = (uint32)AtomicRead64((volatile uint64*)&a);
+        uint64 local = mHead;
+        uint64 old = AtomicRead64(&local);
+        uint64 desired = (uint64)node | ((uint64)((uint32)(old >> 32) + 1) << 32);
+        if (_InterlockedCompareExchange64((volatile __int64*)&mHead, (__int64)desired, (__int64)old) == (__int64)old)
             break;
     }
 }
@@ -2379,7 +2383,8 @@ void Citizen::Init(void* param_2, void* param_3, u32 param_4)
         u8 found;
         u8 pad[3];
     } l8;
-    ((void(__thiscall*)(void*, void*, void*, void*))Sub68dc00)((char*)this + 8, &l8, &key, out);
+    ((void(__thiscall*)(void*, void*, void*, void*))Sub68dc00)((char*)this + 8, &l8, &key,
+        (void*)((uintptr_t)out & ~(uintptr_t)0xff));
     SetNode* node = (SetNode*)l8.p;
     if (!l8.found)
         node->mVal += 1;
@@ -3054,7 +3059,7 @@ bool CJobHolder::SetJob(void* target, void* job)
     void* old = mJob;
     JobPtr held(old);                                   // strong ref to the old job
     if (job != mJob) {
-        JobPtr add(job);                                // (acquire, freed below)
+        if (job) ((FnAddRef)AddRef_68F950)(job);        // acquire the new job's reference
         mJob = job;
         if (old) ((FnRelease)Release_690120)(old);
     }
@@ -3067,7 +3072,7 @@ bool CJobHolder::SetJob(void* target, void* job)
 bool CJobHolder2::Attach(void* job)
 {
     CJobHolder* holder = mHolder;
-    if (holder->SetJob(mArg, job)) {
+    if (holder->SetJob(job, mArg)) {
         return ((FnContinuation)Continuation_68F9F0)(job, (void*)0x00753fb0, this);
     }
     return false;
@@ -3088,5 +3093,5 @@ JobLock::JobLock(void* out, void* job, void* refObj)
     if (job) ((FnAddRef)AddRef_68F950)(job);
     *(void**)out = (void*)0x0068f1c0;
     *((void**)out + 1) = this;
-    ((FnLockDec)LockDec_68F9B0)(this);
+    ((int (__thiscall*)(void*, void*))LockDec_68F9B0)(out, this);
 }

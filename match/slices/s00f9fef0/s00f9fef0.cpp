@@ -271,17 +271,19 @@ void __cdecl FUN_00f9af30(Elem16* first, int a, int n, int b,
                           Elem16 tmp, unsigned key); // 0x00f9af30
 
 // @ 0x00fa0670
-void __cdecl PartitionElem16(Elem16* lo, Elem16* hi, void* a2, void* a4, unsigned key)
+Elem16* __cdecl PartitionElem16(Elem16* lo, Elem16* hi, void* a2, void* a4, unsigned key)
 {
-    for (;;) {
-        for (; lo->key < key; lo = lo + 1) { }
-        for (; key < (hi - 1)->key; hi = hi - 1) { }
+    for (;; lo = lo + 1) {
+        while (lo->key < key)
+            lo = lo + 1;
+        hi = hi - 1;
+        while (key < hi->key)
+            hi = hi - 1;
         if (lo >= hi)
-            return;
+            return lo;
         Elem16 tmp = *lo;
         *lo = *hi;
         *hi = tmp;
-        lo = lo + 1;
     }
 }
 
@@ -300,7 +302,9 @@ void __cdecl SortElem16Pass(Elem16* first, Elem16* last, Elem16* end, unsigned k
 }
 
 // ---- the terrain RTT texture globals ---------------------------------------
-struct RTTVtbl {
+// FUN_0067dda0's result is the object itself: its first dword is the vtable, and
+// FreeRTT is slot +0x14 (retail: mov eax,[mgr]; mov eax,[eax+0x14]; call eax).
+struct RTTMgr {
     virtual void v00();
     virtual void v04();
     virtual void v08();
@@ -308,7 +312,6 @@ struct RTTVtbl {
     virtual void v10();
     virtual void FreeRTT(unsigned a, unsigned b);   // +0x14
 };
-struct RTTMgr { RTTVtbl* mpVtbl; };              // FUN_0067dda0 result
 
 extern unsigned g_rttHandles[6];        // 0x016c9e44
 extern unsigned g_rttNames[6][2];       // 0x016ca3d4
@@ -323,9 +326,14 @@ extern int g_rttRefCount;               // 0x016c9e88
 
 extern void* g_viewerObj;               // 0x016ca410 (a cViewer)
 
+// The 0x016ca410 cViewer singleton: ShutdownRTTSphere drives it thiscall.
+struct ViewerObject {
+    void Shutdown();                    // cViewer::Shutdown  0x007c3ba0
+};
+extern ViewerObject g_viewer;           // 0x016ca410
+
 void FUN_00f9e1f0();                    // 0x00f9e1f0
 void FUN_00f9e350();                    // 0x00f9e350
-void FUN_007c3ba0();                    // 0x007c3ba0
 void FUN_00762a00(void* p);             // 0x00762a00
 
 // @ 0x00fa0360
@@ -341,14 +349,14 @@ void ShutdownRTTSphere()
     unsigned* h = g_rttHandles;
     unsigned* n = (unsigned*)g_rttNames;
     do {
-        mgr->mpVtbl->FreeRTT(n[0], n[1]);
+        mgr->FreeRTT(n[0], n[1]);
         *h = 0;
         n += 2;
         ++h;
     } while ((int)n < 0x16ca404);
-    mgr->mpVtbl->FreeRTT(g_colorMap[0], g_colorMap[1]);
+    mgr->FreeRTT(g_colorMap[0], g_colorMap[1]);
     g_texTerrain = 0;
-    FUN_007c3ba0();
+    g_viewer.Shutdown();
     FUN_00762a00(g_pSomeTex);
 }
 
