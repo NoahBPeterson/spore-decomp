@@ -8,3 +8,4 @@
 ../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?LimitExecute@cDistributeCmd@@QAEXPAUcArguments_s0052_f170@ArgScript@EA@@@Z  0052f3a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include
 ../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?ReadString@@YAPAUIStream@@PAU1@PAUstring@@@Z  005302b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include
 ../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?resize@VectorIF@@QAEXI@Z  00530b70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include
+../src/game/SPBake/SPSkinPaintDistributeDescription.cpp  ?erase@VectorIF@@QAEPAUPairIF@@PAU2@0@Z  00530c80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc /Isrc/game/include

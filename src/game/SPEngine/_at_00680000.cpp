@@ -871,7 +871,6 @@ extern "C" void  MemcpyT2(void*, const void*, unsigned);
 typedef unsigned int   u32;
 typedef unsigned char  u8;
 typedef wchar_t        wch;
-extern "C" void* RBTreeInsert_s0068_d840(void* node, void* pos, void* anchor, int canInsert); // 0x09216a0
 extern "C" u32   Sub932da0(void* data, int len, u32 seed, int flag);  // 0x0932da0
 extern "C" void* Sub932df0(void* a, u32 b, u32 c, u32 d, u32 e);     // 0x0932df0
 extern "C" int   WriteUint32_s0068_d840(void* io, void* p, int n, int f);       // 0x093aa70
@@ -905,7 +904,7 @@ struct RBSet {
     u32 mnSize;             // +0x14
     u32 mAlloc;             // +0x18
 
-    void Insert(SetNode** pOut, SetNode* pos, const int* val, char bAllow);
+    SetNode** Insert(SetNode** pOut, SetNode* pos, const int* val, char bAllow);
 };
 struct Coder {
     u8* mBuf;          // +0x00
@@ -2324,7 +2323,7 @@ void IWriter::Emit(int a, int b, u8 c, u32 d, u8 e, u8 f)
 }
 
 // @ 0x0068daf0
-void RBSet::Insert(SetNode** pOut, SetNode* pos, const int* val, char bAllow)
+SetNode** RBSet::Insert(SetNode** pOut, SetNode* pos, const int* val, char bAllow)
 {
     int canInsert;
     if (bAllow == 0 && pos != (SetNode*)&aRight && *val >= *(int*)((char*)pos + 0x10))
@@ -2337,10 +2336,12 @@ void RBSet::Insert(SetNode** pOut, SetNode* pos, const int* val, char bAllow)
         pKey[0] = val[0];
         pKey[1] = val[1];
     }
-    RBTreeInsert_s0068_d840(n, pos, &aRight, canInsert);
-    SetNode** pp = pOut;
-    mnSize += 1;
+    RBTreeInsert(n, pos, &aRight, canInsert);
+    // Keep the output-argument load before the count update, as in the native tail.
+    SetNode** pp = *(SetNode** volatile*)&pOut;
+    *(volatile uint32_t*)&mnSize += 1;
     *pp = n;
+    return pp;
 }
 
 // @ 0x0068db70

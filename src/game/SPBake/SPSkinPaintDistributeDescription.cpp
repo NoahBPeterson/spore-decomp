@@ -985,10 +985,22 @@ void CmdStateMeta::OnRegister(void* parser, void* state)
 // @ 0x00530c80
 PairIF* VectorIF::erase(PairIF* first, PairIF* last)
 {
-    PairIF* pEnd = mpEnd;
-    PairIF* p = first;
-    for (PairIF* q = last; q != pEnd; ++q, ++p)
-        *p = *q;
+    PairIF* p;
+    // The copy-dispatch tags belong outside the nested iterator scope.
+    bool bIsMove;
+    bool bIsSimple;
+    bool bIsIntegral;
+    {
+        PairIF* source = mpEnd; // end of the source range
+        bIsSimple = false;
+        bIsIntegral = false;
+        bIsMove = false;
+        PairIF* result = first;
+        PairIF* end = last; // cursor through the source range
+        for (; end != source; ++result, ++end)
+            *result = *end;
+        p = result;
+    }
     for (PairIF* q = p; q < mpEnd; ++q) {
     }
     mpEnd = mpEnd - (last - first);
