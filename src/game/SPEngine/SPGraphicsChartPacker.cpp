@@ -1007,20 +1007,36 @@ int Elem16Vector::Elem16VecEraseRange(int dest, int from)
     return dest;
 }
 
+// The retail sort overload forwards its empty comparator by value.
+void QuickSortImplByArea(SP::cClusterRect_s006d_eee0* first,
+                        SP::cClusterRect_s006d_eee0* last,
+                        int depth, cRectAreaSort compare); // 0x006dfb00
+void InsertionSortByArea(SP::cClusterRect_s006d_eee0* first,
+                         SP::cClusterRect_s006d_eee0* last,
+                         cRectAreaSort compare); // 0x006dede0
+void InsertionSortSimpleByArea(SP::cClusterRect_s006d_eee0* first,
+                               SP::cClusterRect_s006d_eee0* last,
+                               cRectAreaSort compare); // 0x006deee0
+
+template <typename Size>
+inline Size ChartSortLog2(Size n)
+{
+    int i;
+    for (i = 0; n; ++i)
+        n >>= 1;
+    return i - 1;
+}
+
 // @ 0x006dfd00
-void QuickSortCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0* last, const cRectAreaSort& compare)
+void QuickSortCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0* last, cRectAreaSort compare)
 {
     if (first != last) {
-        int n = (int)(last - first);
-        int k = 0;
-        for (int i = n; i != 0; i >>= 1)
-            ++k;
-        QuickSortImplCR(first, last, k * 2 - 2, compare);
-        if (n > 28) {
-            InsertionSortCR(first, first + 28, &compare);
-            InsertionSortSimpleCR(first + 28, last, compare);
+        QuickSortImplByArea(first, last, 2 * ChartSortLog2(last - first), compare);
+        if ((last - first) > 28) {
+            InsertionSortByArea(first, first + 28, compare);
+            InsertionSortSimpleByArea(first + 28, last, compare);
         } else {
-            InsertionSortCR(first, last, &compare);
+            InsertionSortByArea(first, last, compare);
         }
     }
 }

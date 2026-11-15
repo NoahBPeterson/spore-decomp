@@ -8,6 +8,7 @@
 #include "EA/Audio/ResponseCurve.h"
 #include <intrin.h>
 #include <string.h>
+#include <new>
 #include "EA/Thread/Mutex.h"
 #include "EA/Variant.h"
 #include "EA/Audio/IConfiguration.h"
@@ -290,8 +291,6 @@ struct ResourceConfiguration_s00a1_7690 {
     bool GetPropertyAsInt(uint32_t key, int32_t* out);       // 0xa17730
     bool GetPropertyAsUint32(uint32_t key, uint32_t* out);   // 0xa17770
     bool GetPropertyAsFloat(uint32_t key, float* out);       // 0xa177b0
-    void SetChild(void* p);                                  // 0xa17820
-    void Attach(void** out, void* parent, const uint32_t* key, char flag);  // 0xa17890
     bool GetProperty(uint32_t key, void** out);              // 0xa18620
     void* GetPropertyAsChar16Ptr(uint32_t key);              // 0xa186e0
     void* GetPropertyAsChar8Ptr(uint32_t key);               // 0xa18720
@@ -481,43 +480,71 @@ template void eastl::fill_imp<0>::do_fill<EA::Text::AnalysisInfo_s00a1_7690*, EA
 ;
 
 // @ 0x00a17820
-void ResourceConfiguration_s00a1_7690::SetChild(void* p)
+void EA::Audio::ResourceConfiguration::SetParent(ResourceConfiguration* parent)
 {
-    if (*(void**)(m + 0x3c) != 0) {
-        void* next = *(void**)(m + 0x1c);
-        void* prev = *(void**)(m + 0x18);
-        *(void**)next = prev;
-        *(void**)((char*)prev + 4) = next;
-        *(void**)(m + 0x18) = 0;
-        *(void**)(m + 0x1c) = 0;
+    if (mParent.mpObject != 0) {
+        eastl::intrusive_list_node* prev = mpPrev;
+        eastl::intrusive_list_node* next = mpNext;
+        prev->mpNext = next;
+        next->mpPrev = prev;
+        mpNext = 0;
+        mpPrev = 0;
     }
-    void* old = *(void**)(m + 0x3c);
-    if (p != old) {
-        if (p != 0) ((void(__thiscall*)(void*))VtOf(p)[0])(p);
-        *(void**)(m + 0x3c) = p;
-        if (old != 0) ((void(__thiscall*)(void*))VtOf(old)[1])(old);
+    ResourceConfiguration* old = mParent.mpObject;
+    if (parent != old) {
+        if (parent != 0)
+            parent->AddRef();
+        mParent.mpObject = parent;
+        if (old != 0)
+            old->Release();
     }
-    void* np = *(void**)(m + 0x3c);
-    if (np != 0) {
-        *(void**)(m + 0x1c) = *(void**)((char*)np + 0x44);
-        void* head = (char*)np + 0x40;
-        void* node = m + 0x18;
-        *(void**)node = head;
-        *(void**)((char*)head + 4) = node;
-        *(void**)(*(void**)(m + 0x1c)) = node;
+    if (mParent.mpObject != 0) {
+        eastl::intrusive_list_node& head = mParent->mChildren.mAnchor;
+        mpPrev = head.mpPrev;
+        mpNext = &head;
+        head.mpPrev = this;
+        mpPrev->mpNext = this;
     }
 }
 
+// Retail set<unsigned int> node and tree prefix used by GetPropertyIDs.
+struct ConfigurationPropertyNodeBase {
+    ConfigurationPropertyNodeBase* mpNodeRight;
+    ConfigurationPropertyNodeBase* mpNodeLeft;
+    ConfigurationPropertyNodeBase* mpNodeParent;
+    unsigned char mColor;
+    unsigned char mPadding[3];
+};
+struct ConfigurationPropertyNode : ConfigurationPropertyNodeBase {
+    uint32_t mValue;
+};
+struct ConfigurationPropertySet {
+    unsigned char mCompareAndPadding[4];
+    ConfigurationPropertyNodeBase mAnchor; // +0x04
+    uint32_t mnSize;                       // +0x14
+
+    void** DoInsertValue(void** out, ConfigurationPropertyNodeBase* parent,
+                         const uint32_t* key, bool forceLeft);
+};
+
 // @ 0x00a17890
-void ResourceConfiguration_s00a1_7690::Attach(void** out, void* parent, const uint32_t* key, char flag)
+void** ConfigurationPropertySet::DoInsertValue(void** out, ConfigurationPropertyNodeBase* parent,
+                                              const uint32_t* key, bool forceLeft)
 {
-    int side = (flag == 0 && parent != (void*)(m + 4) && *key >= *(uint32_t*)((char*)parent + 0x10)) ? 1 : 0;
-    void* node = FUN_00f473a0(0x14, "EASTL", 0, 0, kFile_A17890, 0xd1);
-    uint32_t* dst = (uint32_t*)((char*)node + 0x10);
-    if (dst != 0) *dst = *key;
-    FUN_009216a0(node, parent, m + 4, side);
-    *(uint32_t*)(m + 0x14) += 1;
-    *out = node;
+    int side = (!forceLeft && parent != &mAnchor &&
+                *key >= static_cast<ConfigurationPropertyNode*>(parent)->mValue) ? 1 : 0;
+    ConfigurationPropertyNode* node = new (FUN_00f473a0(sizeof(ConfigurationPropertyNode),
+        "EASTL", 0, 0, kFile_A17890, 0xd1)) ConfigurationPropertyNode;
+    uint32_t* value = &node->mValue;
+    if (value != 0)
+        new (value) uint32_t(*key);
+    FUN_009216a0(node, parent, &mAnchor, side);
+    void** volatile& output = out;
+    void** result = output;
+    volatile uint32_t& size = mnSize;
+    ++size;
+    *result = node;
+    return result;
 }
 
 // @ 0x00a17910
