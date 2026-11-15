@@ -1,3 +1,9 @@
 00d56c30 SP::cBehaviorSpaceTurret::Action  # card PDB name (caller-scored); retail layout from disassembly
 00d576b0 ?GetEntry@CTribe@@QAEPAUCEntry@@H@Z  # CTribe::GetEntry migrated from s00d56c30 (verbatim, slice spelling)
 00d576d0 ?SeedCitizenTool@@YAXPAUCCitizen@@@Z  # SeedCitizenTool migrated from s00d56c30 (verbatim, slice spelling)
+00d577b0 ?CopyElems16@@YAXPBUElem16@@0PAU1@@Z  # CopyElems16 migrated from s00d56c30 (verbatim, slice spelling)
+00d57800 ?PlaceCitizen@@YAXPAUCCitizen@@PAUCTribe@@HHHHMMM@Z  # PlaceCitizen migrated from s00d56c30 (verbatim, slice spelling)
+00d57940 ?DeactivateCitizen@@YGXPAUCCitizen@@@Z  # DeactivateCitizen migrated from s00d56c30 (verbatim, slice spelling)
+00d579a0 ?FindSlot@CCitizenManager@@QAEPAUCRecord12@@PAUCCitizen@@@Z  # CCitizenManager::FindSlot migrated from s00d56c30 (verbatim, slice spelling)
+00d57a00 ?ComputeVisualizedPopulation@cCityVisualizer_s00d5_6c30@SP@@QAEHXZ  # cCityVisualizer_s00d5_6c30::ComputeVisualizedPopulation migrated from s00d56c30 (verbatim, slice spelling)
+00d57a60 ?ApplyToAll@CCitizenManager@@QAEXPAUCCitizen@@PAUCCitizenInfo@@@Z  # CCitizenManager::ApplyToAll migrated from s00d56c30 (verbatim, slice spelling)
