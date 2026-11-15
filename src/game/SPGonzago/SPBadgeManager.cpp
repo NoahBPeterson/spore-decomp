@@ -14,7 +14,6 @@
 // unnamed retail callees and globals (address in the comment)
 extern const uint32_t g_badgeEventIds[];        // 0x01494214 (the ten tracked badge event ids)
 extern const char g_statStrings[];              // 0x063bb6d0 (GetStatString texts, laid end to end)
-extern const char g_badgePropNames[];           // 0x04a37dfb (two adjacent property names)
 extern const char g_serializedFieldName[];      // 0x015b42f8 (name handed to cVarListSerializer)
 extern void* g_pSpaceTokenTranslator;           // 0x016e0d08 (its +0x44 holds the badge being named)
 
@@ -33,7 +32,7 @@ void        __cdecl FUN_00579a90(void* pString, uint32_t nCount);    // 0x00579a
 void        __cdecl FUN_0056e2d0(void* pString, const void* pOther); // 0x0056e2d0
 struct tRBNode;
 tRBNode*    __cdecl RBTreeIncrement(tRBNode* pNode);       // 0x00921580
-void        __cdecl GetPropertyAsText(void* pObject, const char* pszName, void* pOut); // 0x006a1360
+bool        __cdecl GetPropertyAsText(void* pObject, uint32_t propertyId, void* pOut); // 0x006a1360
 void        __cdecl GetPropertyAsKeyInstance(void* pObject, uint32_t id, void* pOut);   // 0x006a12a0
 namespace EA {
 namespace IO {
@@ -105,12 +104,17 @@ public:
     wchar_t* mpBegin;                   // +0x00
     wchar_t* mpEnd;                     // +0x04
     wchar_t* mpCapacity;                // +0x08
-    void assign(const wchar_t* pFirst, const wchar_t* pLast);        // 0x00423650
+    eastlWString& assign(const wchar_t* pFirst, const wchar_t* pLast);        // 0x00423650
     const wchar_t* c_str() const { return mpBegin; }
 };
 class cString {
 public:
-    eastlWString mText;                 // +0x00
+    void* mpTableResource;             // +0x00
+    eastlWString* mpLocalString;        // +0x04
+    wchar_t* mpSourceCStr;              // +0x08
+    uint32_t mPlaceholderId;           // +0x0c
+    bool mbHasTokens;                  // +0x10
+    bool mField11;                     // +0x11
     cString();                                                     // 0x006b5060
     ~cString();                                                    // 0x006b5240
     const wchar_t* GetText() const;                                // 0x006b55c0
@@ -928,7 +932,7 @@ void cSPBadgeManager::GetBadgeName(uint32_t nBadge, eastlWString& strOut) const
     if (pList == 0)
         return;
     cString text;
-    GetPropertyAsText(pList, (const char*)0x043b3dc0, &text);
+    GetPropertyAsText(pList, 0x043b3dc0, &text);
     const wchar_t* pszText = text.GetText();
     strOut.assign(pszText, pszText + WStrLen(pszText));
 }
@@ -944,7 +948,7 @@ void cSPBadgeManager::GetBadgeDescription(uint32_t nBadge, eastlWString& strOut)
     if (pList == 0)
         return;
     cString text;
-    GetPropertyAsText(pList, (const char*)0x066e4315, &text);
+    GetPropertyAsText(pList, 0x066e4315, &text);
     const wchar_t* pszText = text.GetText();
     strOut.assign(pszText, pszText + WStrLen(pszText));
 }
@@ -963,9 +967,9 @@ void cSPBadgeManager::GetBadgeHintActionString(uint32_t nBadge, eastlWString& st
     cString text;
     tPairNode* pEvent;
     tPairNode** ppEvent = mEventCounts.find(&pEvent, &nBadge);
-    const char* pszName = (*ppEvent != mEventCounts.end() && (*ppEvent)->mValue <= 1)
-                        ? g_badgePropNames + 0 : g_badgePropNames + 1;
-    GetPropertyAsText(pList, pszName, &text);
+    uint32_t propertyId = (*ppEvent != mEventCounts.end() && (*ppEvent)->mValue <= 1)
+                        ? 0x04a37dfb : 0x04a37dfc;
+    GetPropertyAsText(pList, propertyId, &text);
     const wchar_t* pszText = text.GetText();
     strOut.assign(pszText, pszText + WStrLen(pszText));
 }
@@ -982,7 +986,7 @@ void cSPBadgeManager::FUN_00fe4900(uint32_t nBadge, eastlWString& strOut) const
         return;
     *(uint32_t*)((char*)g_pSpaceTokenTranslator + 0x44) = nBadge;
     cString text;
-    GetPropertyAsText(pList, (const char*)0x063c233b, &text);
+    GetPropertyAsText(pList, 0x063c233b, &text);
     const wchar_t* pszText = text.GetText();
     strOut.assign(pszText, pszText + WStrLen(pszText));
 }

@@ -76,6 +76,18 @@
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?push_front@?$deque@PAUcSPEditorPart@SP@@@SP@@QAEXABQAUcSPEditorPart@2@@Z  004aa230  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ??0OrientedPoint@SP@@QAE@ABU01@@Z  004aa2f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetCreatorType@@YA_NPBUResourceKey@@@Z  00641900  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?HasSymmetricLimb@EditorUtils@SP@@YA_NPAUcSPEditorBlock_s004a_5970@2@@Z  004a5fe0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetFirstFootBlock@@YAPAUcSPEditorBlock_s004a_89e0@@PAU1@@Z  004a9840  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?F_48db60@HkObj@@QAEXXZ  0048db60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_004902c0@@YA_NPAUcSPEditorBlock@@0@Z  004902c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00496b60@@YAXPAUHolderA@@M@Z  00496b60  /Od /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?Intersects@BoundingBox@@QBE_NABU1@@Z  00490330  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_004986d0@@YA_NPAUBlock@@@Z  004986d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?Find@D961@@QAEPAHPAHH@Z  00496140  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00492de0@@YA_NPAUcSPEditorBlock_s0049_28d0@@@Z  00492de0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?IsNAN@@YA_NPBM@Z  00481f00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ??0M3@@QAE@MMMMMMMMM@Z  004a8d70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_49ec40@@YAXPAUcSPEditorBlock_s0049_de30@@PAUcSPVector3_s0049_de30@@PAUcSPMatrix3_s0049_de30@@2_N@Z  0049ec40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetOrientationFromNormal@@YA?AUMatrix3_s0049_b340@@PAUcSPEditorBlock_s0049_b340@@UVector3_s0049_b340@@@Z  0049c140  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_0049a030@@YA_NUVector3_s0049_9410@@0PAU1@@Z  0049a030  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_0048fde0@@YAXPAUcSPEditorBlock@@@Z  0048fde0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetFirstFootBlock@@YAPAUcSPEditorBlock_s004a_89e0@@PAU1@@Z  004a9840  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
