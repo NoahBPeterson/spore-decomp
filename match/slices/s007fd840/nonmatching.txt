@@ -9,7 +9,6 @@
 007feb40 35 complete; SerRead secondary-base flavour; vcall base offset differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 esi]
 007fec00 27 complete; SetWinMessageType; message-manager vcall schedule differs
 007fec90 27 complete; SetMessageWinId; message-manager vcall schedule differs
-007fdab0 4 complete; Interp ctor; Stopwatch/QPC reset; 64-bit elapsed reset stores its halves high-then-low (retail low-then-high); equiv: PASS (400 valid, 80.0% coverage)
 007fdbc0 297 complete; Interp HandleMessage; message guards follow the base call, per-branch lazy field loads; register schedule differs (size 310 vs 299); equiv: PASS (399 valid, 60.9% coverage)
 007fdd10 134 complete; Interp SetEnabled; base gate + owner coefficient arm differ only in schedule (size 159 vs 160); equiv: UNSUPPORTED (0/400 valid; the retail itself faults on every generated input)
 007fe070 25 complete; State ctor; multi-base vtable store order differs; equiv: PASS (400 valid, 100.0% coverage)

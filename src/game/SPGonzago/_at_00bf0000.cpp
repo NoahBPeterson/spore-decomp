@@ -882,7 +882,6 @@ public:
     int mMaxCityCount;               // 0x4d0
 
     void InsertCityAt(int* pPosition, cCity_s00bf_4170* pCity, int nCount);   // 0x00bf4170
-    cCommunityEditor* AttachCity(cCity_s00bf_4170* pCity);                     // 0x00bf4350
     void ReduceCitiesOnPlanet(cCity_s00bf_4170* pCity);                        // 0x00bf4370
     void DetachCity(cCity_s00bf_4170* pCity, int bRemoving);                   // 0x00bf45f0
     void NotifySubEditor();                                         // 0x00bf49e0
@@ -1459,8 +1458,8 @@ public:
     int        mnSize;               // +0x14
     int        mPad18;               // +0x18
     Map6C() : mnSize(0) {}
-    void FUN_00bf3460(void* p);      // 0x00bf3460
-    void FUN_00bf4350(void* p);      // 0x00bf4350
+    Map6C* FUN_00bf3460(void* p);    // 0x00bf3460; tree assignment, returns this
+    Map6C* FUN_00bf4350(void* p);    // 0x00bf4350
 };
 template <class T>
 class Vec {
@@ -4192,9 +4191,9 @@ void cCommunityEditor::InsertCityAt(int* pPosition, cCity_s00bf_4170* pCity, int
 }
 
 // @ 0x00bf4350
-cCommunityEditor* cCommunityEditor::AttachCity(cCity_s00bf_4170* pCity)
+Map6C* Map6C::FUN_00bf4350(void* p)
 {
-    CityAddRef(pCity);
+    FUN_00bf3460(p);
     return this;
 }
 

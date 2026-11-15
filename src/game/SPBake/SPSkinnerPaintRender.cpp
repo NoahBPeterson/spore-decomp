@@ -609,19 +609,13 @@ public:
 };
 }
 namespace nSPSkinner {
-class cFieldSwap {
-public:
-    uint32_t f0;                 // 0x00
-    uint8_t pad1[0x50 - 0x04];
-    uint32_t f50, f54;           // 0x50, 0x54
-    uint32_t f58, f5c, f60;      // 0x58, 0x5c, 0x60
-
-    // returns the swapped-out f0: retail leaves it in eax
-    uint32_t SwapWith(cFieldSwap* o);   // 0x00518b00
-};
-}
-namespace nSPSkinner {
 template <class T> inline void swapv(T& a, T& b) { T t = a; a = b; b = t; }
+inline void SwapCameras(cRTTBuffer* a, cRTTBuffer* b)
+{
+    rw::graphics::Camera* t = a->mCamera;
+    a->mCamera = b->mCamera;
+    b->mCamera = t;
+}
 }
 namespace nSPSkinner {
 class cPaintCopyIdentityJob_s0051_82f0 {
@@ -822,7 +816,7 @@ struct cPaintSplatJob_s0051_9640 {             // size 0x18
 extern void* g_paintRendererVtbl;      // 0x013f1ac0
 extern void* g_paintRendererBaseVtbl;  // 0x013ef094
 int   GetPaintSystem_s0051_a350();                                              // 0x00401080
-void  FUN_004c6ae0(void* dst, char* a, int n, char* b);              // 0x004c6ae0
+char** FUN_004c6ae0(char** dst, char* first, unsigned count, char* value); // 0x004c6ae0
 void  FUN_00552750();                                                // 0x00552750
 void  FUN_0051d1e0(void* p);                                         // 0x0051d1e0
 void  FUN_0051d140();                                                // 0x0051d140
@@ -1417,14 +1411,14 @@ void RefPtrVec::DoInsertValue(RefPtr* position, const RefPtr& value)
 }
 
 // @ 0x004c6ae0
-int* __cdecl FUN_004c6ae0(int* out, char* first, int count, char* value)
+char** __cdecl FUN_004c6ae0(char** out, char* first, unsigned count, char* value)
 {
-    int n = count;
-    char* p = first;
+    unsigned z = count;
+    char* n = first;
     char v = *value;
-    for (; n--; ++p)
-        *p = v;
-    *out = (int)p;
+    for (; z-- > 0; ++n)
+        *n = v;
+    *out = n;
     return out;
 }
 
@@ -2012,16 +2006,13 @@ bool cPaintDilateJob_s0051_82f0::Render()
 
 // @ 0x00518b00
 namespace nSPSkinner {
-uint32_t cFieldSwap::SwapWith(cFieldSwap* o)
+void cRTTBuffer::Swap(cRTTBuffer* o)
 {
-    swapv(*(uint64_t*)((char*)o + 0x50), *(uint64_t*)((char*)this + 0x50));
-    swapv(*(uint32_t*)((char*)o + 0x60), *(uint32_t*)((char*)this + 0x60));
-    swapv(*(uint32_t*)((char*)o + 0x58), *(uint32_t*)((char*)this + 0x58));
-    swapv(*(uint32_t*)((char*)o + 0x5c), *(uint32_t*)((char*)this + 0x5c));
-    uint32_t t = *(uint32_t*)o;
-    *(uint32_t*)o = *(uint32_t*)this;
-    *(uint32_t*)this = t;
-    return t;
+    swapv(o->mRTTRect, mRTTRect);
+    swapv(o->mTexture, mTexture);
+    swapv(o->mWidth, mWidth);
+    swapv(o->mHeight, mHeight);
+    SwapCameras(o, this);
 }
 }  // namespace nSPSkinner
 

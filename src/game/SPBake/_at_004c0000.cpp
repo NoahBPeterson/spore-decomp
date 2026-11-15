@@ -1583,6 +1583,7 @@ void* cSPEditorSkinManager_s004c_4650::GetSkin(uint32_t which)
     case 0: {
         cSPEditorSkinPart_s004c_4650* p = mTorsoSkin;
         return p;
+        break;
     }
     case 1: {
         cSPEditorSkinPart_s004c_4650* p = mCompleteSkin;
@@ -1965,6 +1966,7 @@ Elem* __cdecl FUN_004c69b0(Elem* first, Elem* last, Elem* dst)
 {
     bool flag = false;
     (void)flag;
+    ScratchSlots<2>();
     return FUN_004c69e0(first, last, dst);
 }
 

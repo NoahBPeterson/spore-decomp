@@ -1,5 +1,4 @@
 00560c30  194  complete asset insertion; /Od frame/holes differ; equiv PASS 339 valid, 100% coverage
-00560d20    0  complete asset key equality; /Od frame differs; equiv PASS (ecx receiver fixed)
 00561090  154  complete cEditorResource constructor; vtable/frame schedule differs; equiv PASS (ecx receiver fixed)
 005611b0  103  complete cEditorResource destructor; frame schedule differs; equiv PASS 399 valid, 100% coverage
 005609a0  558  complete OTDB asset-registration driver (pollinator post, asset lookup/population decrease, map+set cleanup, 0x50-byte asset destroy/dtor); size 662 vs 651, /Od temp slots and helper call shapes differ; equiv UNSUPPORTED 2 unresolved refs (FeatVec54::clear, VecBase54::destroy)

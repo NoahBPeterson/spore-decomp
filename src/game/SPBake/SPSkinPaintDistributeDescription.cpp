@@ -424,7 +424,7 @@ virtual void v08();
 virtual void v09();
 virtual void v10();
 virtual void v11();
-    virtual int Read(void* data, uint32_t size);                  // +0x30
+    virtual uint32_t Read(void* data, uint32_t size);             // +0x30
     virtual void v13();
     virtual bool Write(const void* data, uint32_t size);          // +0x38
 };
@@ -898,6 +898,7 @@ IStream* ReadString(IStream* stream, string* str)
         str->mpEnd = str->mpBegin;
     }
     char c;
+    ScratchSlots<4>();
     while (stream->Read(&c, 1) == 1 && c != 0)
         str->push_back(c);
     return stream;
@@ -960,9 +961,15 @@ VectorIF::VectorIF(const VectorIF& x)
 // @ 0x00530b70
 void VectorIF::resize(uint32_t n)
 {
-    if ((uint32_t)(mpEnd - mpBegin) < n) {
+    if (n > (uint32_t)(mpEnd - mpBegin)) {
         PairIF value;
-        DoInsertValues(mpEnd, n - (uint32_t)(mpEnd - mpBegin), value);
+        PairIF* position;
+        {
+            uint32_t count = n - (uint32_t)(mpEnd - mpBegin);
+            position = mpEnd;
+            ScratchSlots<6>();
+            DoInsertValues(position, count, value);
+        }
     } else {
         erase(mpBegin + n, mpEnd);
     }

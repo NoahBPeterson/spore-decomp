@@ -229,13 +229,15 @@ struct CPropList { int GetModificationCount(); };
 struct PropWatcher {
   uint32_t f0;   // +0
   void*    f4;   // +4  (wraps the PropListBase)
-  void*    f8;   // +8  (owner passed to vf24)
-  int      fc;   // +0xc cached modification count
+  void*    f8;   // +8 property ID stored in 32 bits
+  uint32_t fc;   // +0xc cached modification count
   void* f10;     // +0x10 (property list at wrapper+0x30)
   bool Check();
   void Read(void* p2);
 };
-uint32_t* FUN_004e41c0();
+struct WatcherVariant {
+  const int32_t* GetInt32() const; // 0x004e41c0, no-argument thiscall accessor
+};
 struct JobManagerVtbl_ {
   virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
   virtual void v10(); virtual void v14(); virtual void v18();
@@ -1265,14 +1267,14 @@ bool PropWatcher::Check()
 {
     int* w = (int*)f4;
     if (w) {
-        int mc = (int)w[0xc] ? ((CPropList*)w[0xc])->GetModificationCount() : 0;
-        if ((int)fc != (int)w[0xd] + mc) {
-            int mc2 = (int)w[0xc] ? ((CPropList*)w[0xc])->GetModificationCount() : 0;
-            fc = (int)w[0xd] + mc2;
-            PropListBase* pb = (PropListBase*)w;
-            PropWatcher* local = this;
-            if (pb->vf24(f8, &local)) {
-                uint32_t v = *FUN_004e41c0();
+        uint32_t mc = (int)w[0xc] ? ((SP::cPropertyList*)w[0xc])->GetModificationCount() : 0;
+        if (fc != (uint32_t)w[0xd] + mc) {
+            uint32_t mc2 = (int)w[0xc] ? ((SP::cPropertyList*)w[0xc])->GetModificationCount() : 0;
+            fc = (uint32_t)w[0xd] + mc2;
+            const SP::cPropertyList* pb = (SP::cPropertyList*)w;
+            const EA::Variant* local;
+            if (pb->GetProperty((uint32_t)f8, &local)) {
+                uint32_t v = *((const WatcherVariant*)local)->GetInt32();
                 if (f0 != v) {
                     f0 = v;
                     return true;
