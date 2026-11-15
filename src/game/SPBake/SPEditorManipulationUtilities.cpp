@@ -8289,7 +8289,8 @@ bool HasSymmetricLimb(cSPEditorBlock_s004a_5970* block)
     if (block) {
         vector_s004a_5970<AutoRefCount_s004a_5970<cSPEditorBlock_s004a_5970> >& syms = block->mSymmetricBlocks;
         for (int i = 0, n = syms.size(); i < n; i++) {
-            if (syms[i]->mFlags.test(0xb))
+            cSPEditorBlock_s004a_5970* sym = syms[i];
+            if (sym->mFlags.test(0xb))
                 return true;
         }
     }

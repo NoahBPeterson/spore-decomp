@@ -623,12 +623,21 @@ struct cSpeciesProfile {
 // ---- items of slice s004d34f0 end
 
 // ---- items of slice s004d44e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// Begin/end view of the species pointer vector at SpeciesDB +0x6d4.
+struct SpeciesPointerVector {
+    void** mpBegin;
+    void** mpEnd;
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+    void*& operator[](uint32_t index) {
+        void** slot = mpBegin + index;
+        return *slot;
+    }
+};
 struct SpeciesDB {
     char  pad0[0x5ac];
     float mScale;      // +0x5ac
     char  pad2[0x6d4 - 0x5b0];
-    int   mVecBegin;   // +0x6d4
-    int   mVecEnd;     // +0x6d8
+    SpeciesPointerVector mEntries; // +0x6d4; begin/end prefix
 
     float GetScale();
     uint32_t FindField8(int id);
@@ -2709,14 +2718,11 @@ float SpeciesDB::GetScale()
 // @ 0x004d46d0
 uint32_t SpeciesDB::FindField8(int id)
 {
-    uint32_t i = 0;
-    int* vec = (int*)((char*)this + 0x6d4);
-    int n = (vec[1] - vec[0]) >> 2;
-    for (; i < (uint32_t)n; i = i + 1) {
-        int* slot = (int*)(mVecBegin + i * 4);
-        int elem = *slot;
-        if (*(int*)(elem + 8) == id)
-            return i;
+    uint32_t index = 0;
+    for (uint32_t count = mEntries.size(); index < count; index = index + 1) {
+        void* element = mEntries[index];
+        if (*(int*)((char*)element + 8) == id)
+            return index;
     }
     return 0xffffffff;
 }
@@ -2724,14 +2730,11 @@ uint32_t SpeciesDB::FindField8(int id)
 // @ 0x004d4750
 uint32_t SpeciesDB::FindField10(int id)
 {
-    uint32_t i = 0;
-    int* vec = (int*)((char*)this + 0x6d4);
-    int n = (vec[1] - vec[0]) >> 2;
-    for (; i < (uint32_t)n; i = i + 1) {
-        int* slot = (int*)(mVecBegin + i * 4);
-        int elem = *slot;
-        if (*(int*)(elem + 0x10) == id)
-            return i;
+    uint32_t index = 0;
+    for (uint32_t count = mEntries.size(); index < count; index = index + 1) {
+        void* element = mEntries[index];
+        if (*(int*)((char*)element + 0x10) == id)
+            return index;
     }
     return 0xffffffff;
 }

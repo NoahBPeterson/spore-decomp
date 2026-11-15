@@ -57,7 +57,6 @@
 004a29a0 1874 SnapBlockToSocket: complete (56/56 calls same order and targets, vcall slots 0x14/0x24/0x30, msg ids); /Od frame slot layout (name hash, 0x2f8 vs 0x380) differs
 004a3dc0 2236 complete; /Od frame slot layout and temp slots not matched
 004a4840 875 complete; /Od frame slot layout (locals/temps hash order) not matched
-004a5fe0 4 /Od; complete. operator[]/operator-> return slots allocated in swapped order (retail address temp at -0x10 then object at -0x14; ours reversed). Tried explicit `AutoRefCount* ref = &syms[i]` plus `ref->operator->()`; the compiler coalesces the locals and keeps the same temp order.
 004a6520 13 /Od; complete. skin virtual call: conversion slot vs this-temp order differs
 004a6f10 1696 SP::EditorUtils::DeleteInvalidBlocks: complete; same 53 ordered calls, frame 0x278 vs 0x30c (/Od name-hash slot order and declined-inline holes), Place() this-pointer evaluated before the by-value copies, message-param array indexing form
 004a7c90 169 complete behavior; best /Od frame differs (original 0x44 frame vs mine 0x20; inlined eastl push_back temps and local hash order)
