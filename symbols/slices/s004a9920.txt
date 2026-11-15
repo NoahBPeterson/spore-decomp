@@ -1,5 +1,5 @@
-004a9920 ?FindSymmetricFoot@EditorUtils@SP@@YAPAUcSPEditorBlock_s004a_9920@2@PAU32@@Z  # FindSymmetricFoot migrated from s004a9920 (verbatim, slice spelling)
-004a9a00 ?FindSymmetricSkinnedPart@EditorUtils@SP@@YAPAUcSPEditorBlock_s004a_9920@2@PAU32@@Z  # FindSymmetricSkinnedPart migrated from s004a9920 (verbatim, slice spelling)
+004a9920 ?FindSymmetricFoot@EditorUtils@SP@@YAPAVcSPEditorBlock_s004a_9920@2@PAV32@@Z  # FindSymmetricFoot migrated from s004a9920 (verbatim, slice spelling)
+004a9a00 ?FindSymmetricSkinnedPart@EditorUtils@SP@@YAPAVcSPEditorBlock_s004a_9920@2@PAV32@@Z  # FindSymmetricSkinnedPart migrated from s004a9920 (verbatim, slice spelling)
 004a9a90 ?KeyMatches@SP@@YA_NABUResourceKey_s004a_9920@1@0@Z  # KeyMatches migrated from s004a9920 (verbatim, slice spelling)
 004a9ae0 ??1?$AutoRefCountR@UcRefCountedResource@SP@@@SP@@QAE@XZ  # AutoRefCountR migrated from s004a9920 (verbatim, slice spelling)
 004a9b10 ??1?$AutoRefCountV@UcVirtualRefCounted@SP@@@SP@@QAE@XZ  # AutoRefCountV migrated from s004a9920 (verbatim, slice spelling)
@@ -13,4 +13,5 @@
 004aa1d0 ??A?$deque@PAUcSPEditorPart@SP@@@SP@@QAEAAPAUcSPEditorPart@1@I@Z  # None migrated from s004a9920 (verbatim, slice spelling)
 004aa230 ?push_front@?$deque@PAUcSPEditorPart@SP@@@SP@@QAEXABQAUcSPEditorPart@2@@Z  # push_front migrated from s004a9920 (verbatim, slice spelling)
 004aa2f0 ??0OrientedPoint@SP@@QAE@ABU01@@Z  # OrientedPoint::OrientedPoint migrated from s004a9920 (verbatim, slice spelling)
-004aa3c0 evector<WeightedPoint>::DoInsertValue
+004aa350 ??0?$evector@PAUcSPEditorPart@SP@@@SP@@QAE@IABI@Z  # evector migrated from s004a9920 (verbatim, slice spelling)
+004aa3c0 ?DoInsertValue@?$evector@UWeightedPoint@SP@@@SP@@QAEXPAUWeightedPoint@2@ABU32@@Z  # DoInsertValue migrated from s004a9920 (verbatim, slice spelling)

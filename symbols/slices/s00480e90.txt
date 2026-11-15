@@ -1,1 +1,3 @@
-00480e90  SP::cSPEditorHandleDeform::RecordHandlePosition  # byte-exact; ?RecordHandlePosition@cSPEditorHandleDeform@SP@@QAE_N_N@Z
+004363d0 ?GetGeometryTransform@cSPEditorBlock@SP@@QBE?AUcSPTransform@@XZ  # SP::cSPEditorBlock::GetGeometryTransform (callee of s00480e90, named from the dev publics; slice address comment)
+00480cf0 ?SetPickData@cSPEditorHandleDeform@SP@@QAEXXZ  # SP::cSPEditorHandleDeform::SetPickData (callee of s00480e90, named from the dev publics; slice address comment)
+00480e90 ?RecordHandlePosition@cSPEditorHandleDeform_s0048_0e90@SP@@QAE_N_N@Z  # cSPEditorHandleDeform_s0048_0e90::RecordHandlePosition migrated from s00480e90 (verbatim, slice spelling)

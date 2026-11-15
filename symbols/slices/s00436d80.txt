@@ -1,4 +1,4 @@
-00436d80 SceneObject::SnapToAnchor  # transforms offset by anchor basis, attaches via physics
-00436fa0 SceneObject::MoveTo  # checks physics then calls Reposition
+00436d80 ?SnapToAnchor@SceneObject@@QAEXPAUAnchor@@UVector3_s0043_6d80@@@Z  # SceneObject::SnapToAnchor migrated from s00436d80 (verbatim, slice spelling)
+00436fa0 ?MoveTo@SceneObject@@QAEXHUVector3_s0043_6d80@@0_N@Z  # SceneObject::MoveTo migrated from s00436d80 (verbatim, slice spelling)
 004370a0 SceneObject::Reposition  # attach + child update
 00437310 SceneObject::UpdateOthers  # loop over item vector at +0x6cc

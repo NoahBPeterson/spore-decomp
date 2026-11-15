@@ -1,3 +1,3 @@
-00485b90  SP::cSPEditorHandleRotationRing::ComputeDistance  # bitset tests (bits 0xb/0x14), bbox + direction math
-00485eb0  SP::cSPEditorHandleRotationRing::GetBoundingRadius  # bbox transform, branch on flag bit 0x2000 at +0xdcc
-004860b0  SP::cSPEditorHandleRotationRing::Update  # large ring physics update
+00485b90 ?ComputeDistance@RotationRing@@QAEPAUcSPVector3_s0048_5b90@@PAU2@@Z  # RotationRing::ComputeDistance migrated from s00485b90 (verbatim, slice spelling)
+00485eb0 ?ComputeBoundingRadius@RotationRing@@QAEMXZ  # RotationRing::ComputeBoundingRadius migrated from s00485b90 (verbatim, slice spelling)
+004860b0 ?UpdateBig@RotationRing@@QAEXMM@Z  # RotationRing::UpdateBig migrated from s00485b90 (verbatim, slice spelling)
