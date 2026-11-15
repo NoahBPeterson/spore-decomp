@@ -1,5 +1,8 @@
 0040ccb0 ?Accumulate@Modifier@@QAEXABU1@@Z  # Modifier::Accumulate migrated from s0040ccb0 (verbatim, slice spelling)
 0040cf10 ?GetFloatProperty@@YA_NPAVPropertyList@@IAAM@Z  # GetFloatProperty migrated from s0040ccb0 (verbatim, slice spelling)
+0040cf60 ??0ColorKey_s0040_ccb0@@QAE@XZ  # ColorKey_s0040_ccb0::ColorKey migrated from s0040ccb0 (verbatim, slice spelling)
+0040d010 ??0SlotAbility_s0040_ccb0@@QAE@XZ  # SlotAbility_s0040_ccb0::SlotAbility migrated from s0040ccb0 (verbatim, slice spelling)
+0040d160 ??0ListAbility_s0040_ccb0@@QAE@XZ  # ListAbility_s0040_ccb0::ListAbility migrated from s0040ccb0 (verbatim, slice spelling)
 0040d230 ?_GListAbility  # ListAbility::`scalar deleting destructor' (mangled ??_GListAbility@@...; written as its base identifier so the checker's name matcher finds it)
 0040d260 ~ListAbility  # implicit destructor
 013ef094 ??_7RefCountedAbility@@6B@  # shared RefCountTemplate vtable that ListAbility's dtor stores

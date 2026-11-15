@@ -1,10 +1,10 @@
-004098a0 Vector3_CopyCtor  # fld/fstp memberwise copy, ret 4, ecx=this
+004098a0 ??0Vector3Copyable@@QAE@ABU0@@Z  # Vector3Copyable::Vector3Copyable migrated from s004098a0 (verbatim, slice spelling)
 004098e0 ?MulMatrixAssign@@YAAAUVector3@@AAU1@ABUMatrix3@@@Z  # MulMatrixAssign migrated from s004098a0 (verbatim, slice spelling)
-00409930 Transform_Ctor  # flags/version=0, pos=zero, scale=1.0, rot=identity (0x15d1434)
-004099b0 Transform_RotateY  # _CIsin/_CIcos, mixes rows 0 and 1, flags|=2
+00409930 ??0Transform@@QAE@XZ  # Transform::Transform migrated from s004098a0 (verbatim, slice spelling)
+004099b0 ?RotateY@Transform@@QAEXM@Z  # Transform::RotateY migrated from s004098a0 (verbatim, slice spelling)
 00409b30 ?Scale@Transform@@QAEXM@Z  # Transform::Scale migrated from s004098a0 (verbatim, slice spelling)
-00409b90 BoundingBox_GetCenter  # (min+max)*0.5
-00409c00 BoundingBox_Reset  # min=+FLT_MAX, max=-FLT_MAX
-00409ce0 BoundingBox_SetCenterRadius  # center -/+ r
+00409b90 ?GetCenter@BoundingBox@@QBEAAUVector3@@AAU2@@Z  # BoundingBox::GetCenter migrated from s004098a0 (verbatim, slice spelling)
+00409c00 ?Reset@BoundingBox@@QAEXXZ  # BoundingBox::Reset migrated from s004098a0 (verbatim, slice spelling)
+00409ce0 ?SetCenterRadius@BoundingBox@@QAEXABUVector3@@M@Z  # BoundingBox::SetCenterRadius migrated from s004098a0 (verbatim, slice spelling)
 00409dd0 ?TransformBy@BoundingBox@@QAEXABUTransform@@@Z  # BoundingBox::TransformBy migrated from s004098a0 (verbatim, slice spelling)
 0040a0f0 ?Matrix3_Abs@@YAXABUMatrix3@@AAU1@@Z  # Matrix3_Abs migrated from s004098a0 (verbatim, slice spelling)

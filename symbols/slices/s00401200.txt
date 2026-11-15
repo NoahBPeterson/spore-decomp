@@ -14,3 +14,4 @@
 00401850 Vector4_SetUnitW  # writes (0,0,0,1)
 00401930 `vector_constructor_iterator'  # Ghidra library match (VS), ??_H
 00401960 `vector_destructor_iterator'  # Ghidra library match (VS2008), ??_I
+00401990 ?ConvertObjectIdsToIndices@@YAXPAUBlockContainer@@@Z  # ConvertObjectIdsToIndices migrated from s00401200 (verbatim, slice spelling)

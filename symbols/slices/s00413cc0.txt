@@ -1,3 +1,8 @@
-00413d60 Vector3_MinComponent  # min(min(v[0],v[1]),v[2]) returned as float
+00413cc0 ?ComputeVector@@YAPAUVector3_s0041_3cc0@@PAU1@PBX1U1@@Z  # ComputeVector migrated from s00413cc0 (verbatim, slice spelling)
+00413d60 ?MinComponent@@YAMPAUVector3_s0041_3cc0@@@Z  # MinComponent migrated from s00413cc0 (verbatim, slice spelling)
+00413de0 ?BuildBlend@ClipPlayer@@QAE_NPAUClip@@@Z  # ClipPlayer::BuildBlend migrated from s00413cc0 (verbatim, slice spelling)
+004142e0 ?Advance@ClipPlayer@@QAE_NPAUClip@@M_N@Z  # ClipPlayer::Advance migrated from s00413cc0 (verbatim, slice spelling)
+004143e0 ?Rewind@ClipPlayer@@QAEXH@Z  # ClipPlayer::Rewind migrated from s00413cc0 (verbatim, slice spelling)
 00414420 ?Step@ClipPlayer@@QAE_NPAUClip@@M@Z  # ClipPlayer::Step migrated from s00413cc0 (verbatim, slice spelling)
+00414470 ?Start@ClipPlayer@@QAE_NPAUClip@@MPAPAULoadHandle_s0041_3cc0@@@Z  # ClipPlayer::Start migrated from s00413cc0 (verbatim, slice spelling)
 0068f950 ?AddRef@cJob@SP@@QAEHXZ  # SP::cJob::AddRef (callee of s00413cc0, named from the dev publics; slice address comment)
