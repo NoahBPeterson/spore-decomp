@@ -469,10 +469,17 @@ Owner::~Owner()
 {
 }
 
+template<int N> inline void ReserveElemListInlineFrame()
+{
+    // Preserve the original destructor's unused inline-callee frame storage.
+    uint32_t slots[N];
+}
+
 // @ 0x0041f9b0
 ElemList::~ElemList()
 {
     DestroyElems(mpBegin, mpEnd);
+    ReserveElemListInlineFrame<3>();
 }
 
 // @ 0x0041fa20

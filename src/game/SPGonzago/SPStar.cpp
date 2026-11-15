@@ -426,14 +426,16 @@ bool __cdecl c8b450(int k)
     return true;
 }
 
+#pragma optimize("", on)
 // @ 0x00c8b520
 bool __cdecl c8b520(int k)
 {
-    if (k == 0) return false;
-    if (k <= 0) return true;
-    if (k <= 3) return false;
-    return true;
+    if (k != 0) {
+        if (k <= 0 || k > 3) return true;
+    }
+    return false;
 }
+#pragma optimize("", off)
 
 // @ 0x00c8b640
 cStar_s00c8_aa60::cStar_s00c8_aa60()

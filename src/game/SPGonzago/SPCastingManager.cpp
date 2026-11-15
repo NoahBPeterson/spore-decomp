@@ -744,11 +744,14 @@ void VectorSwap4(uint32_t* a, uint32_t* b)
 namespace eastl {
 void WideFixedStr::EnsureCapacity(uint32_t n)
 {
-    uint32_t nSize = (uint32_t)(mpEnd - mpBegin);
-    uint32_t* p = (n < nSize) ? &nSize : &n;
-    n = *p + 1;
-    if ((uint32_t)(mpCapacity - mpBegin) < n)
+    uint32_t* selectedSize;
+    uint32_t length = (uint32_t)(mpEnd - mpBegin);
+    selectedSize = (n < length) ? &length : &n;
+    n = *selectedSize + 1;
+    if (n > (uint32_t)(mpCapacity - mpBegin))
         SetCapacity(n);
+    // Preserve the original unused inline-helper storage.
+    ScratchSlots<17>();
 }
 }  // namespace eastl
 

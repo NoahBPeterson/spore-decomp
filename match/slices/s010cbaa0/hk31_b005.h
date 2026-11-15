@@ -155,7 +155,8 @@ class hkTransform
 // ---------------------------------------------------------------------------------------------------------
 // referenced objects
 // ---------------------------------------------------------------------------------------------------------
-class hkReferencedObject
+class hkBaseObject { public: virtual ~hkBaseObject() {} };
+class hkReferencedObject : public hkBaseObject
 {
 public:
 	virtual ~hkReferencedObject() {}                                     // 0

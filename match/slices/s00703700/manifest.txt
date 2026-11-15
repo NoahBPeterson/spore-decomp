@@ -7,3 +7,4 @@ slices/s00703700/s00703700.cpp  ?Image_WriteV1@@YA_NPAXPAUImageData@@@Z  0070462
 slices/s00703700/s00703700.cpp  ?Image_WriteV2@@YA_NPAXPAUImageData@@@Z  00704670  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00703700/s00703700.cpp  ?Image_WriteV0@@YA_NPAXPAUImageData@@@Z  007046c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00703700/s00703700.cpp  ?CreateEntry@cHierGrid@@QAEIMPBUVec3@@I@Z  00703d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00703700/s00703700.cpp  ?Image_Write@@YA_NPAXPAUImageData@@I@Z  00704500  /O2 /MD /Gy /EHsc /TP /arch:SSE

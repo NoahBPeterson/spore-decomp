@@ -463,7 +463,8 @@ public:
 // @ 0x00ad3e00
 cVignetteContext::cVignetteContext()
 {
-    mpVtable8 = (void*)0x13ec458;
+    void* volatile& baseVtable = mpVtable8;
+    baseVtable = (void*)0x13ec458;
     mField0c = 0;
     mpVtable0 = (void*)0x145a6e0;
     mpVtable8 = (void*)0x145a6d0;

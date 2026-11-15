@@ -115,24 +115,7 @@ void __cdecl crt_report_gsfailure_stub() { }
 // ---------------------------------------------------------------------------
 // RenderWare arena.
 // ---------------------------------------------------------------------------
-struct AlignInfo {
-    uint32_t current;
-    uint32_t alignment;
-    void AlignUpTo(const AlignInfo* other);
-    void Advance(const AlignInfo* other);
-};
-
-// @ 0x011e20a0
-void AlignInfo::AlignUpTo(const AlignInfo* other)
-{
-    uint32_t cur = this->current;
-    uint32_t a = other->alignment;
-    if (a > 1)
-        cur = (cur + a - 1) & ~(a - 1);
-    this->current = cur;
-    if (this->alignment < other->alignment)
-        this->alignment = other->alignment;
-}
+#include "align_info.h"
 
 // @ 0x011e20d0
 void AlignInfo::Advance(const AlignInfo* other)
