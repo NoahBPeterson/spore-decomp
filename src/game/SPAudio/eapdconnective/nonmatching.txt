@@ -8,7 +8,6 @@
 00a59cc0 26 ART    symbol/anything handler; calls outlet_symbol flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a59cf0 38 UNSUP  pdsymbol class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a59dc0 95 UNSUP  bang class registration (7-arg class_new) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00a59f00 7 UNSUP  send constructor flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [R40 active draft claim: terra11]
 00a59f30 85 UNSUP  send class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a5a050 12 UNSUP  forward constructor (symbolinlet_new failure path) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a5a0a0 65 UNSUP  forward class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

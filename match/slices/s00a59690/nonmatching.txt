@@ -30,7 +30,6 @@
 00a59cc0  pdsymbol_anything   ART    symbol/anything handler; calls outlet_symbol
 00a59cf0  pdsymbol_setup      UNSUP  pdsymbol class registration
 00a59dc0  bang_setup          UNSUP  bang class registration (7-arg class_new)
-00a59f00  FUN_00a59f00        UNSUP  send constructor
 00a59f30  send_setup          UNSUP  send class registration
 00a5a050  forward_new         UNSUP  forward constructor (symbolinlet_new failure path)
 00a5a0a0  forward_setup       UNSUP  forward class registration

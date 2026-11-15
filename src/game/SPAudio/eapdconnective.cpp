@@ -5,6 +5,8 @@
 #include "game/types.h"
 #include <string.h>
 #include <malloc.h>
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---- items of slice s00a59690 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   uintptr_t;
@@ -1402,6 +1404,7 @@ void* FUN_00a59f00(uint32_t a, uint32_t b)
     {
         PdPayload* p = (PdPayload*)((char*)o + 0x28);
         p->at28 = a;
+        _ReadWriteBarrier();
         p->at2c = b;
     }
     return o;
