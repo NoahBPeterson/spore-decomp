@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Carry Spore ModAPI names (github.com/emd4600/Spore-ModAPI, for the 2017 Steam build) over to our 2024 build.
+"""Carry Spore ModAPI names (github.com/emd4600/Spore-ModAPI) over to our build, SporeBin/SporeApp.exe.
 
 usage: modapi_map.py <out.json>
-The 2024 exe is a recompile of nearly the same code, so addresses differ by a small, piecewise-constant
-shift (e.g. -0x320 across the whole DBPF module). Anchors are ModAPI entries whose method name equals the
+ModAPI's addresses are for Galactic Adventures' executable (SporebinEP1/SporeApp.exe; its "March 2017" addresses also
+hold for the 2024 build). Ours shares almost all of that code at other addresses, a small, piecewise-constant shift
+(e.g. -0x320 across the whole DBPF module). Superseded by tools/ga_map.py, which pairs the two executables' functions
+by their bytes; tools/site/modapi_addr.py uses that map when work/ga_map.json exists. Anchors are ModAPI entries whose method name equals the
 dev-PDB name of exactly one retail function within +-256 KB. Every ModAPI address is then shifted by the
 offset that most of its nearest anchors agree on, and kept only if it lands on a retail function start.
 Precision is measured leave-one-out on the anchors and printed.
