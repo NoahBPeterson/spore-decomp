@@ -263,18 +263,28 @@ bool cTextRenderer::AllocDevice(void* obj)
     return false;
 }
 
+// scoped critical-section guard: the ctor stores the section and enters it, the dtor leaves it.
+// Retail keeps the dtor out of line (0x00609e40) for the unwind funclet and inlines it on the
+// normal exits, which is what puts the C++ EH frame around FreeDevice.
+namespace EA { namespace Thread {
+class AutoFutex {
+public:
+    void* mpFutex;
+    AutoFutex(void* futex) : mpFutex(futex) { EnterCriticalSection(mpFutex); }
+    ~AutoFutex() { LeaveCriticalSection(mpFutex); }
+};
+}}  // namespace EA::Thread
+
 // @ 0x007a8700
 bool cTextRenderer::FreeDevice(void* obj)
 {
-    EnterCriticalSection(this->mCriticalSection);
+    EA::Thread::AutoFutex lock(this->mCriticalSection);
     if (*(int*)((char*)obj + 0x38) != 0) {
         ((ObjDevice*)*(void**)((char*)obj + 0x34))->release_011ef880((char*)obj + 8);
         *(void**)((char*)obj + 0x38) = 0;
         LeaveCriticalSection(this->mCriticalSection);
-        LeaveCriticalSection(this->mCriticalSection);
         return true;
     }
-    LeaveCriticalSection(this->mCriticalSection);
     return false;
 }
 

@@ -437,22 +437,37 @@ void FUN_012058e0(float* a, int b, int count, float* out)
 //   Build the axis-aligned segment from an oriented box and store it in `out`.
 // @ 0x012059b0
 struct OrientedBox {
-    void BuildSegment(int a, int b, int out);      // 0x012059b0  ecx = this
+    int BuildSegment(int a, int b, int out);       // 0x012059b0  ecx = this
 };
-void OrientedBox::BuildSegment(int a, int b, int out)
+// The original calls SP::Segment::Segment(lo, hi) as a __thiscall: ecx is the
+// destination object, the two arguments are the endpoint vectors, and eax
+// returns the constructed object.
+struct SegmentStore {
+    unsigned int words[13];
+    void* Build(void* lo, void* hi);               // 0x012016f0
+};
+struct SegmentBuildLocals {
+    __m128 lo;
+    __m128 hi;
+    SegmentStore seg;
+};
+int OrientedBox::BuildSegment(int a, int b, int out)
 {
     (void)a; (void)b;
-    float s = *(float*)((char*)this + 0x44);
-    __m128 e = _mm_mul_ps(*(__m128*)((char*)this + 0x10), _mm_set1_ps(s));
+    __m128 dir = _mm_load_ps((const float*)((char*)this + 0x10));
+    __m128 s4 = _mm_load1_ps((const float*)((char*)this + 0x44));
+    __m128 e = _mm_mul_ps(dir, s4);
     __m128 c = *(__m128*)((char*)this + 0x30);
-    __m128 lo = _mm_sub_ps(c, e);
-    __m128 hi = _mm_add_ps(c, e);
-    float* seg = (float*)FUN_012016f0(&hi, &lo);
-    *(__m128*)(out + 0x10) = *(__m128*)(seg + 0);
-    *(__m128*)(out + 0x20) = *(__m128*)(seg + 4);
-    *(__m128*)(out + 0x30) = *(__m128*)(seg + 8);
-    *(unsigned int*)(out + 0x40) = *(unsigned int*)(seg + 12);
+    SegmentBuildLocals loc;
+    loc.lo = _mm_sub_ps(c, e);
+    loc.hi = _mm_add_ps(c, e);
+    float* segp = (float*)loc.seg.Build(&loc.hi, &loc.lo);
+    *(__m128*)(out + 0x10) = *(__m128*)(segp + 0);
+    *(__m128*)(out + 0x20) = *(__m128*)(segp + 4);
+    *(__m128*)(out + 0x30) = *(__m128*)(segp + 8);
+    *(unsigned int*)(out + 0x40) = *(unsigned int*)(segp + 12);
     *(int*)(out + 0x130) = 1;
+    return 1;
 }
 
 // ================================================================== 0x01205a30

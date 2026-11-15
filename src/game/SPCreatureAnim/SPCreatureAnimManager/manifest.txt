@@ -84,3 +84,6 @@
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?AddProb@Cmd_s00a0_d2d0@@QAEXPAX@Z  00a0e350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetName@Cmd_s00a0_d2d0@@QAEXPAX@Z  00a0e3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ??0AnimParseContext@@QAE@PAUEntryMap@@@Z  00a0e4c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?v0a0b0@SL71@@QAEEPAXII@Z  00a0a0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetFlagFromProperty@WrappedAnim@@QAED_N@Z  00a054a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SelectFor@GoalList@@QAEHPAXHD@Z  00a05660  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

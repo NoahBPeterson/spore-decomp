@@ -157,7 +157,7 @@ struct cDramaEventInstanceData {
     u8        m_pad44[0x30];
 
     void DestroyMembers();          // 0x00d4b4b0
-    void Construct();               // 0x00d4ba40
+    cDramaEventInstanceData* Construct();  // 0x00d4ba40
     void InitFromTuning(int unused); // 0x00d4af80
 };
 typedef u32   *(__thiscall *GetUIntP)(void *self);    // 0x41ea00
@@ -343,7 +343,7 @@ struct MMRange { void* mFirst; void* mSecond; };
 }
 namespace SP {
 struct RBTreeMM {
-    u8 pad00[4];
+    u8 pad00[0x1c];
     void equal_range(MMRange* out, const u32* key);        // 0x00f21cd0
 };
 }
@@ -1807,15 +1807,15 @@ void RBTree::equal_range(RBNode **out, u32 *key)
     }
     RBNode *hi = &mAnchor;
     for (RBNode *n = root; n != 0; ) {
-        if (*key > n->mKey) {
+        if (n->mKey >= *key) {
+            hi = n;
             n = n->mpNodeRight;
         } else {
-            hi = n;
             n = n->mpNodeLeft;
         }
     }
-    out[0] = lo;
-    out[1] = hi;
+    out[0] = hi;
+    out[1] = lo;
 }
 
 // @ 0x00d4b4b0
@@ -1835,10 +1835,10 @@ void cDramaEventInstanceData::DestroyMembers()
 }
 
 // @ 0x00d4ba40
-void cDramaEventInstanceData::Construct()
+cDramaEventInstanceData* cDramaEventInstanceData::Construct()
 {
     cDramaEventInstanceData *p = this;
-    *(void **)((u8 *)p + 0x04) = (void *)&kVtblB;
+    *(void *volatile *)((u8 *)p + 0x04) = (void *)&kVtblB;
     *(u32 *)((u8 *)p + 0x08) = 0;
     *(u8  *)((u8 *)p + 0x0c) = 0;
     *(u32 *)((u8 *)p + 0x14) = 0;
@@ -1862,6 +1862,7 @@ void cDramaEventInstanceData::Construct()
     *(float *)((u8 *)p + 0x74) = gVec0169e440[0];
     *(float *)((u8 *)p + 0x78) = gVec0169e440[1];
     *(float *)((u8 *)p + 0x7c) = gVec0169e440[2];
+    return p;
 }
 
 // @ 0x00d4bbb0
@@ -1871,15 +1872,14 @@ bool Thresholded::IsBelowZero()
 }
 
 // @ 0x00d4bbd0
-void *FUN_00d4bbd0(Vec3 *out)
+Vec3 * __stdcall FUN_00d4bbd0(Vec3 *out)
 {
     u8 *mode = (u8 *)SP_GetCurrentGameMode();
     if (mode == &gModeA || mode == &gModeB) {
         void *src = (mode == &gModeA)
-            ? (u8 *)FUN_00b1fdb0(SP_NounManager()) + 0xc0
-            : (u8 *)FUN_00bfc5f0(SP_NounManager()) + 0x120;
-        void **vtbl = *(void ***)src;
-        Vec3 *v = (Vec3 *)((void *(__thiscall *)(void *))vtbl[0x2c / 4])(src);
+            ? (u8 *)((void *(__thiscall *)(void *))FUN_00b1fdb0)(SP_NounManager()) + 0xc0
+            : (u8 *)((void *(__thiscall *)(void *))FUN_00bfc5f0)(SP_NounManager()) + 0x120;
+        Vec3 *v = (Vec3 *)((void *(__thiscall *)(void *))((void **)*(void ***)src)[0x2c / 4])(src);
         out->x = v->x;
         out->y = v->y;
         out->z = v->z;
@@ -2285,19 +2285,20 @@ u8 SP::cDramaEventInstanceData_s00d4_bc60::AnyGameDataFlagged()
 void SP::cSPDramaManager_s00d4_bc60::TriggerEvent(cDramaEventInstanceData_s00d4_bc60* e, int a2)
 {
     e->mFlag0c = 1;
-    if (e->mCountdown18 != 0xffffffffu && e->mCountdown18 != 0)
+    if (e->mCountdown18 != 0xffffffffu && e->mCountdown18 > 0)
         e->mCountdown18 = e->mCountdown18 - 1;
 
     if (e->mpPropList40 != 0) {
-        Property* p = 0;
+        Property* p;
         if (e->mpPropList40->FindProperty(0xb1f42539, &p) && p->m_type12 == 13)
             e->mActivationType2c = *p->GetFloat();
     }
     ((IEventVtbl*)e)->v30();
 
     i32 type = e->mEventType14;
+    bool active = GetActiveEvent((u32)type, true) != 0;
     u32 bit = sDramaEventToBitArray[type];
-    if (GetActiveEvent((u32)type, true) != 0)
+    if (active)
         mActiveDramaEventMask |= bit;
     else
         mActiveDramaEventMask &= ~bit;
@@ -3373,7 +3374,7 @@ void SP::cMeteorStrikeEvent_s00d5_0380::TickEvent(float dt)
 // @ 0x00d509f0
 void SP::cMeteorStrikeEvent_s00d5_0380::FUN_00d509f0(int flag)
 {
-    InitFromTuning(flag);
+    ((cDramaEventInstanceData *)this)->InitFromTuning(flag);
     if (m_pPropList40 != 0 && (u8)flag == 0) {
         int n = (int)m_thresh20.x;
         u32 r = gRand_s00d5_0380.RandomUint32Uniform(0);

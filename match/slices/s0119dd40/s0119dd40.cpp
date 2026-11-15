@@ -163,7 +163,8 @@ int gen_dirname_119e1c0(void* section, void* out, void* conf)
     int name = FUN_01194f70();
     if (name == 0)
         return 0;
-    void* m = gen_conf_method_119ec80(conf);
+    typedef void* (__cdecl* gen_conf_method_fn)(void*, void*);
+    void* m = ((gen_conf_method_fn)gen_conf_method_119ec80)(conf, section);
     if (m == 0) {
         ERR_put_error(0x22, 0x90, 0x96, 0, 0);
         ERR_add_error_data(2, "section=", section);

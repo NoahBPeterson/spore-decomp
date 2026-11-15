@@ -11,6 +11,7 @@
 ../src/game/SPEditors/SPSubModePhoto.cpp  ?Init@cSPPlayModeSubModePhoto_s0063_e880@@QAEXPAX@Z  0063ee30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModePhoto.cpp  ?Shutdown@cSPPlayModeSubModePhoto_s0063_e880@@QAEXXZ  0063eef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModePhoto.cpp  ?HandleKey@cSPPlayModeSubModePhoto_s0063_e880@@QAE_NIH@Z  0063ef30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModePhoto.cpp  ?StartCameraFlash@cSPPlayModeSubModePhoto_s0063_e880@@QAEXXZ  0063ef70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModePhoto.cpp  ??0cSPPlayModeSubModePhoto_s0063_e880@@QAE@XZ  0063f1c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModePhoto.cpp  ??1cSPPlayModeSubModePhoto_s0063_e880@@UAE@XZ  0063f2b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModePhoto.cpp  ??1cFourStrings@@QAE@XZ  0063f350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -348,7 +348,7 @@ void __fastcall FUN_00c005b0(void* ecx_this, void* edx, void* stream)
 }
 
 // @ 0x00c00850
-void FUN_00c00850(Elem20* first, Elem20* last, Elem20* dst)
+Elem20* FUN_00c00850(Elem20* first, Elem20* last, Elem20* dst)
 {
     for (; first != last; ++first, ++dst) {
         if (dst) {
@@ -362,6 +362,7 @@ void FUN_00c00850(Elem20* first, Elem20* last, Elem20* dst)
             dst->u = first->u;
         }
     }
+    return dst;
 }
 
 // @ 0x00c008c0

@@ -11,3 +11,7 @@ slices/s00a52ff0/s00a52ff0.cpp  ?SetPlaying@Play@Eapd@Audio@EA@@  00a53860  /O2 
 slices/s00a52ff0/s00a52ff0.cpp  ?artists_play_updateplaying@Eapd@Audio@EA@@  00a538d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a52ff0/s00a52ff0.cpp  ??1ParamTable@Eapd@Audio@EA@@  00a538e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a52ff0/s00a52ff0.cpp  ?PushBack@VoiceList@Eapd@Audio@EA@@  00a53a20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?AllocNode@ParamTable@Eapd@Audio@EA@@QAEPAUParamNode@234@PBUParamPair@234@@Z  00a535e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ??0VoiceListCtor@Eapd@Audio@EA@@QAE@PAVFixedPool@123@@Z  00a53970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?LocateOrInsert@ParamTable@Eapd@Audio@EA@@QAEPAUParamPair@234@PBVSymbol@234@@Z  00a53c20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a52ff0/s00a52ff0.cpp  ?Next@ParamIter@Eapd@Audio@EA@@QAE_NPAVSymbol@234@PAUAtomValue@234@@Z  00a536a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

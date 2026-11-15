@@ -18,6 +18,7 @@
 // an opaque byte array so the derived field offsets stay right.
 #include "types.h"
 #include <stddef.h>
+#include <intrin.h>
 
 typedef unsigned int u32;
 
@@ -193,7 +194,7 @@ struct StyleCarrier
 void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_ctor(void* a, void* b)
 {
 	char* self = (char*)this;
-	((LayoutBase*)self)->ctor008e7f90(b, a, 6);
+	((LayoutBase*)self)->ctor008e7f90(a, b, 6);
 
 	*(u32*)(self + 0xc4) = 0;          // mColCount
 	*(u32*)(self + 0xc8) = 0;          // mRowIndex
@@ -202,6 +203,7 @@ void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_ctor(void* a, void* b)
 
 	*(float*)(self + 0xd0) = 0.0f;     // mRowSpacing
 	*(float*)(self + 0xd4) = 0.0f;     // mColSpacing
+	_ReadWriteBarrier();
 	*(u32*)(self + 0xd8) = 0;          // mColsBegin
 	*(u32*)(self + 0xdc) = 0;          // mColsEnd
 	*(u32*)(self + 0xe0) = 0;          // mColsCap

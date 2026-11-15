@@ -11,7 +11,11 @@
 // ---- items of slice s008e2dd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   uint32;
 typedef unsigned short wchar16;
-struct WStrErase { int* Fn8e3a70(uint32 pos, uint32 count); };   // 0x008e3a70 (thiscall)
+template <typename T>
+inline const T& WMin(const T& a, const T& b) { return b < a ? b : a; }   // eastl::min's shape
+struct WStrErase {
+    int* Fn8e3a70(uint32 pos, uint32 count);
+};   // 0x008e3a70 (thiscall)
 // ---- items of slice s008e2dd0 end
 
 // @ 0x008e38b0
@@ -67,18 +71,18 @@ char Fn8e3a10(int* strObj, int idx)
 // @ 0x008e3a70
 int* WStrErase::Fn8e3a70(uint32 pos, uint32 count)
 {
-    int* pThis = (int*)this;
+    int* pThis  = (int*)this;
     char* begin = (char*)pThis[0];
     char* end   = (char*)pThis[1];
     uint32 avail = (uint32)((end - begin) >> 1) - pos;
-    uint32 n = (count <= avail) ? count : avail;
+    uint32 n = WMin(count, avail);
     char* src = begin + (n + pos) * 2;
     char* dst = begin + pos * 2;
     if (dst != src) {
         memmove(dst, src, ((end - src) >> 1) * 2 + 2);
         pThis[1] = (int)(pThis[1] + (((src - dst) >> 1) * -2));
     }
-    return (int*)this;
+    return pThis;
 }
 
 // @ 0x008e3b90

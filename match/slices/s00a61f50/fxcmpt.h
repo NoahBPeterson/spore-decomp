@@ -20,7 +20,7 @@ typedef unsigned __int64   uint64;
 struct EapdInterned { uint32 name; uint32 id; };
 
 // --------------------------------------------------------------- EAPd runtime
-EapdInterned* __cdecl FUN_00a675f0(const char* s, EapdInterned* out);          // 0x00a675f0
+EapdInterned* __cdecl FUN_00a675f0(EapdInterned* out, const char* s);          // 0x00a675f0
 void* __cdecl FUN_00a48ea0(uint32 a, uint32 b, void* ctor, uint32 size,
                                 uint32 d, uint32 e, uint32 f, uint32 g);     // 0x00a48ea0
 bool  __cdecl FUN_00a47f30(void* cls, void* handler);                      // 0x00a47f30
@@ -32,11 +32,12 @@ bool  __cdecl FUN_00a48b30(void* cls, void* method, uint32 a, uint32 b,
                                uint32 c, uint32 d, uint32 e, uint32 f,
                                uint32 g);                                    // 0x00a48b30
 bool  __cdecl FUN_00a48a30(void* cls, void* method, uint32 a, uint32 b,
-                             uint32 c, uint32 d);                            // 0x00a48a30
+                             uint32 c);                            // 0x00a48a30
 void* __cdecl FUN_00a49390(void* cls);                                   // 0x00a49390
 void  __cdecl FUN_00a49d30(void* obj, uint32 b, uint32 c);           // 0x00a49d30
 void  __cdecl FUN_00a49e40(uint32 a, uint32 b, uint32 c, int n, void* arr); // 0x00a49e40
-void  __cdecl FUN_00a49a00(void* obj, void* b, float* v);                  // 0x00a49a00
+void  __cdecl FUN_00a49a00(void* obj, float* v);                  // 0x00a49a00
+void  __cdecl FUN_00a48100(void* tbl, uint32 a, uint32 b, uint32 c, uint32 d); // 0x00a48100
 void  __cdecl FUN_00a487f0(const char* fmt, ...);                                 // 0x00a487f0
 void  __cdecl FUN_00a49570(void* it, float v);                                // 0x00a49570
 void* __cdecl FUN_00a671f0(uint32 a, uint32 b, uint32 c);                   // 0x00a671f0
@@ -61,11 +62,12 @@ extern uint32 g_eapdB_16758b0;           // 0x016758b0
 extern uint32 g_eapdC_16758c4;           // 0x016758c4
 extern uint32 g_eapdD_16758c8;           // 0x016758c8
 extern uint32 g_eapdE_1675490;           // 0x01675490
-extern uint32 g_refDepth_167545c;        // 0x0167545c  (recursion guard, limit 1000)
+extern int g_refDepth_167545c;        // 0x0167545c  (recursion guard, limit 1000)
 
 // Referenced string constants.
 extern const char g_fxEmptyStr_13f2ce4[];  // 0x013f2ce4
 extern const char g_fxMetaStr_14546a4[];   // 0x014546a4
+extern const char g_fxTableStr_145454c[];  // 0x0145454c "table"
 extern const char g_fxFmt_1432d80[];       // 0x01432d80
 extern const char g_fxFmt2_1432d80[];      // 0x01432d80
 extern const char g_fxFmt3_1455518[];      // 0x01455518

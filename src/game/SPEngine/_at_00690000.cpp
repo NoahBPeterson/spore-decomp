@@ -153,7 +153,7 @@ bool cSerializerLazy::Resolve()
         void* p = (void*)FUN_00920090();
         if (p) {
             void* q = (void*)FUN_00920090();
-            bool r = ((bool(*)(cSerializerLazy*, void*))(((void**)q)[1]))(this, mpContext);
+            bool r = ((bool(__thiscall*)(void*, cSerializerLazy*, void*))VFN(q, 4))(q, this, mpContext);
             mbDone = r;
         }
     }

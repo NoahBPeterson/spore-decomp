@@ -389,7 +389,7 @@ struct KeyTable {
 };
 
 struct RBTree {
-    void InsertNode(void** out, void* parent, const u32* key, u8 flag);   // 0x00b53700
+    void** InsertNode(void** out, void* parent, const u32* key, u8 flag);   // 0x00b53700
 };
 struct CollectorOps {
     void*  mpVtable;        // +0x00
@@ -561,9 +561,8 @@ void Vec12::Insert(Item12* pos, const Item12* value)
 }
 
 // @ 0x00b53700
-void RBTree::InsertNode(void** out, void* parent, const u32* key, u8 flag)
+void** RBTree::InsertNode(void** __restrict out, void* parent, const u32* key, u8 flag)
 {
-    void** outp = out;
     int right = (flag == 0 && parent != (char*)this + 4 &&
                  *(const int*)key >= *(int*)((char*)parent + 0x10)) ? 1 : 0;
     void* node = *(void**)((char*)this + 0x18);
@@ -578,8 +577,9 @@ void RBTree::InsertNode(void** out, void* parent, const u32* key, u8 flag)
     if ((char*)node + 0x10 != 0)
         *(u32*)((char*)node + 0x10) = *key;
     RBTreeInsert(node, parent, (char*)this + 4, right);
+    *out = node;
     ++*(u32*)((char*)this + 0x14);
-    *outp = node;
+    return out;
 }
 
 // @ 0x00b53790

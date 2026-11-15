@@ -431,7 +431,7 @@ struct MsgServer2 {
     virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8();
     virtual void Register(void* h, unsigned id);                    // +0x24
 };
-MsgServer2* __cdecl GetServer2();
+MsgServer2* __cdecl GetServer2();                                    // 0x883860
 void __cdecl HandlerMsgCb(unsigned a, unsigned b, int id, void* m);
 struct ReqProvider {
     ResourceRequest* FindRequest(int id);                           // 0x8ff320

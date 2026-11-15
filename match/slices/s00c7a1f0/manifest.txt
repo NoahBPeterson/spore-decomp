@@ -1,1 +1,2 @@
 # No byte-exact functions in this slice.
+slices/s00c7a1f0/s00c7a1f0.cpp  ?NatOp@cPlayer@SP@@QAEXIPAX@Z  00c7ad00  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

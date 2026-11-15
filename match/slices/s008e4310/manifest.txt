@@ -9,3 +9,4 @@ slices/s008e4310/s008e4310.cpp  ?Dtor2@Element@@QAEXXZ  008e4ba0
 slices/s008e4310/s008e4310.cpp  ?GatherValues@Element@@QAEXPAX0@Z  008e4f00
 slices/s008e4310/s008e4310.cpp  ?AsElement@Node@@QAEPAUElement@@XZ  008e52f0
 slices/s008e4310/s008e4310.cpp  ?Reset@Form@@QAEXXZ  008e5130  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast
+slices/s008e4310/s008e4310.cpp  ?Init@Node@@QAEPAXPAXH@Z  008e52b0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast

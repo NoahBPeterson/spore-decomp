@@ -8,7 +8,6 @@
 01140560 111 SndDecoder::DecodeMul complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (375 valid, 100% coverage)
 01140650 106 F_01140650 (apply per-channel mix gains) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (213 valid, 61.1% coverage)
 011406e0 84 F_011406e0 (reset/alternate voice gain table) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (183 valid, 83.3% coverage)
-01140780 49 F_01140780 (apply global state to the renderer) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (40.0% coverage)
 01140b20 62 SNDPLATFORM_filteradd complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (191 valid, 41.4% coverage)
 0114d9d0 15 DelayLine::Reset: complete; near-miss only in cl's load/store scheduling. Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (400 valid, 100% coverage).
 0114da70 577 CombFilterFunc: the comb recurrence, grouped to match the SSE kernel's lane order (base - work*g2 computed first, then state*g1 subtracted) plus the lowPass==0 memset of the feedforward bank. Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (232 valid, 93.8% coverage).

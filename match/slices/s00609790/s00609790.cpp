@@ -611,10 +611,10 @@ static char* TrimWhitespace(char* s) {
 }
 
 // @ 0x00609e50
-static __declspec(noinline) bool DomainMatches(const string8& domain, const string8& host) {
-  const int offset = (int)(host.mpEnd - host.mpBegin) - (int)(domain.mpEnd - domain.mpBegin);
-  if (_stricmp(host.mpBegin + offset, domain.mpBegin) == 0) {
-    if (offset == 0 || *domain.mpBegin == '.' || host.mpBegin[offset - 1] == '.') return true;
+static __declspec(noinline) bool DomainMatches(const char* domain, const string8& host) {
+  const unsigned int offset = (unsigned int)(host.mpEnd - host.mpBegin) - (unsigned int)strlen(domain);
+  if (_stricmp(host.mpBegin + offset, domain) == 0) {
+    if (offset == 0 || *domain == '.' || host.mpBegin[offset - 1] == '.') return true;
   }
   return false;
 }
@@ -633,7 +633,9 @@ class cCookie : public EA::COM::RefCountTemplate<int> {
 };
 
 // Reconstruction-only caller so the static helper above is emitted (real caller not in this batch).
-bool CookieDomainMatches(const cCookie* pCookie, const string8& host) { return DomainMatches(pCookie->mDomain, host); }
+bool CookieDomainMatches(const cCookie* pCookie, const string8& host) {
+  return DomainMatches(pCookie->mDomain.c_str(), host);
+}
 
 // @ 0x0060a040
 cCookie::cCookie() {}

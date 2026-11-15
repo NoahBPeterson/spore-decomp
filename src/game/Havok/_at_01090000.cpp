@@ -441,6 +441,15 @@ void  hkMemCpy(void* dst, const void* src, uint n);// 0x0107f440 hkString::memCp
 extern const hkVector4_s0109_5320 DAT_016e42d0;
 extern const hkVector4_s0109_5320 DAT_015b9b50;
 void  hkRigidMotionCtor(void* self, const hkVector4_s0109_5320* pos, const void* rot); // 0x01088500
+// 0x01088500 is hkRigidMotion::hkRigidMotion(position, rotation): a base constructor, so it takes `this` in ecx,
+// takes the two references on the stack and pops them itself (ret 8).  The same member also names the two fields the
+// keyframed-motion constructor clears by hand afterwards.
+struct hkRigidMotionCtorThunk {
+    void init(const hkVector4_s0109_5320* pos, const void* rot);   // 0x01088500, __thiscall, callee pops 8
+    void* vftable;                      // +0x00
+    char pad0[0xf4 - 8];
+    void* m_savedMotion;                // +0xf0 (hkKeyframedRigidMotion::m_savedMotion)
+};
 inline float SqrtF(float f) { return sqrtf(f); }
 struct hkLinearParametricCurve {
     char pad0[8];
@@ -469,12 +478,11 @@ struct hkKeyframedRigidMotion {
     char pad0[0x60];
     hkVector4_s0109_5320 v60;              // +0x60
     char pad1[0xc0 - 0x70];
-    unsigned short mC0;         // +0xc0
-    unsigned short mC2;         // +0xc2
-    char pad2[0xd0 - 0xc4];
+    unsigned int mC0;           // +0xc0
+    unsigned int mC4;           // +0xc4
+    char pad2[0xd0 - 0xc8];
     hkVector4_s0109_5320 vD0;              // +0xd0
     hkVector4_s0109_5320 vE0;              // +0xe0
-    char pad4[0xf0 - 0xf0 + 4];
     void* mpF0;                 // +0xf0
 
     hkKeyframedRigidMotion(const hkVector4_s0109_5320& pos, const void* rot);  // 0x01095b60
@@ -1263,7 +1271,7 @@ static inline void hkRemoveNullListeners(hkArray_s0109_e8e0<T*>& a)
 {
     for (int i = a.m_size - 1; i >= 0; --i) {
         if (a.m_data[i] == 0) {
-            a.m_size = a.m_size - 1;
+            --a.m_size;
             for (int j = i; j < a.m_size; ++j)
                 a.m_data[j] = a.m_data[j + 1];
         }
@@ -1433,10 +1441,11 @@ struct hkWorldCallbackUtil {
     static void fireIslandPostIntegrateCallback(hkWorld_s0109_e8e0* w, hkSimulationIsland_s0109_e8e0* i, const hkStepInfo_s0109_e8e0& s);
     static void fireIslandPostCollideCallback(hkWorld_s0109_e8e0* w, hkSimulationIsland_s0109_e8e0* i, const hkStepInfo_s0109_e8e0& s);
 };
-#define HK_FIRE_LISTENERS(ARR, CALL)                                  \
+#define HK_FIRE_LISTENERS(ARR, T, CALL)                               \
     do {                                                              \
         for (int i_ = (ARR).m_size - 1; i_ >= 0; --i_) {              \
-            if ((ARR).m_data[i_] != 0) { CALL((ARR).m_data[i_]); }    \
+            T l_ = (ARR).m_data[i_];                                  \
+            if (l_ != 0) { CALL(l_); }                                \
         }                                                             \
         hkRemoveNullListeners(ARR);                                   \
     } while (0)
@@ -2316,23 +2325,22 @@ void hkLinearParametricCurve::getPointsToDraw(void* outp)
 // @ 0x01095b60
 hkKeyframedRigidMotion::hkKeyframedRigidMotion(const hkVector4_s0109_5320& pos, const void* rot)
 {
-    hkRigidMotionCtor(this, &pos, rot);
-    mpF0 = 0;
-    mC0 = 0;
+    ((hkRigidMotionCtorThunk*)this)->init(&pos, rot);
+    ((hkRigidMotionCtorThunk*)this)->m_savedMotion = 0;
+    mC4 = 0;
     *(unsigned int*)(void*)&mC0 = 0;
-    ((unsigned int*)this)[0x30] = 0;
-    *(void**)this = g_hkKeyframedRigidMotionVtbl;
+    ((hkRigidMotionCtorThunk*)this)->vftable = (void*)0x014a1c08;
 }
 
 // @ 0x01095ba0
-void AccumulatorClear(void* p)
+void* __stdcall AccumulatorClear(void* p)
 {
-    __declspec(align(16)) hkVector4_s0109_5320 tmp;
-    tmp.x = 0.0f; tmp.y = 0.0f; tmp.z = 0.0f; tmp.w = 0.0f;
     unsigned int* q = (unsigned int*)p;
-    q[0] = *(unsigned int*)&tmp.x;
-    for (int i = 1; i < 12; ++i)
+    __declspec(align(16)) hkVector4_s0109_5320 zero;
+    zero.x = 0.0f; zero.y = 0.0f; zero.z = 0.0f; zero.w = 0.0f;
+    for (int i = 0; i < 12; ++i)
         q[i] = 0;
+    return q;
 }
 
 // @ 0x01095be0
@@ -2724,15 +2732,18 @@ void hkBoxMotion::getInertiaInvWorld(hkMatrix3_s0109_8200& out) const
 // @ 0x01098390
 void hkBoxMotion::getInertiaWorld(hkMatrix3_s0109_8200& out) const
 {
-    float ix = 1.0f / m_inertiaAndMassInv.x;
-    float iy = 1.0f / m_inertiaAndMassInv.y;
-    float iz = 1.0f / m_inertiaAndMassInv.z;
+    const hkRotation_s0109_8200& rot = *(const hkRotation_s0109_8200*)&m_motionState.m_transform.m_rotation[0];
+    __declspec(align(16)) hkVector4_s0109_8200 inv;
+    inv.x = 1.0f / m_inertiaAndMassInv.x;
+    inv.y = 1.0f / m_inertiaAndMassInv.y;
+    inv.z = 1.0f / m_inertiaAndMassInv.z;
+    inv.w = 0.0f;
     for (int i = 0; i < 12; ++i)
         out.m_el[i] = 0.0f;
-    out.m_el[0]  = ix;
-    out.m_el[5]  = iy;
-    out.m_el[10] = iz;
-    out.changeBasis(*(const hkRotation_s0109_8200*)&m_motionState.m_transform.m_rotation[0]);
+    out.m_el[0]  = inv.x;
+    out.m_el[5]  = inv.y;
+    out.m_el[10] = inv.z;
+    out.changeBasis(rot);
 }
 
 // @ 0x01098410
@@ -2755,7 +2766,8 @@ void hkBoxMotion::applyForce(float deltaTime, const hkVector4_s0109_8200& force)
 // @ 0x010984c0
 void hkBoxMotion::applyForce(float deltaTime, const hkVector4_s0109_8200& force, const hkVector4_s0109_8200& p)
 {
-    hkVector4_s0109_8200 impulse;
+    __declspec(align(16)) hkVector4_s0109_8200 impulse;
+    impulse.x = 0.0f;
     impulse.x = deltaTime * force.x;
     impulse.y = deltaTime * force.y;
     impulse.z = deltaTime * force.z;
@@ -3613,7 +3625,7 @@ void hkEntityCallbackUtil::fireContactPointRemovedInternal(hkEntity_s0109_e8e0* 
 {
     ev.m_callbackFiredFrom = e;
 #define CALL(l) (l)->contactPointRemovedCallback(ev)
-    HK_FIRE_LISTENERS(e->m_contactListeners, CALL);
+    HK_FIRE_LISTENERS(e->m_contactListeners, hkContactListener*, CALL);
 #undef CALL
 }
 
@@ -3622,7 +3634,7 @@ void hkEntityCallbackUtil::fireContactProcessInternal(hkEntity_s0109_e8e0* e, hk
 {
     ev.m_callbackFiredFrom = e;
 #define CALL(l) (l)->contactProcessCallback(ev)
-    HK_FIRE_LISTENERS(e->m_contactListeners, CALL);
+    HK_FIRE_LISTENERS(e->m_contactListeners, hkContactListener*, CALL);
 #undef CALL
 }
 
@@ -3648,7 +3660,7 @@ void hkEntityCallbackUtil::fireEntityRemoved(hkEntity_s0109_e8e0* e)
 void hkWorldCallbackUtil::fireActionAdded(hkWorld_s0109_e8e0* w, hkAction_s0109_e8e0* a)
 {
 #define CALL(l) (l)->actionAddedCallback(a)
-    HK_FIRE_LISTENERS(w->m_actionListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_actionListeners, hkActionListener_s0109_e8e0*, CALL);
 #undef CALL
 }
 
@@ -3656,7 +3668,7 @@ void hkWorldCallbackUtil::fireActionAdded(hkWorld_s0109_e8e0* w, hkAction_s0109_
 void hkWorldCallbackUtil::fireActionRemoved(hkWorld_s0109_e8e0* w, hkAction_s0109_e8e0* a)
 {
 #define CALL(l) (l)->actionRemovedCallback(a)
-    HK_FIRE_LISTENERS(w->m_actionListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_actionListeners, hkActionListener_s0109_e8e0*, CALL);
 #undef CALL
 }
 
@@ -3664,7 +3676,7 @@ void hkWorldCallbackUtil::fireActionRemoved(hkWorld_s0109_e8e0* w, hkAction_s010
 void hkWorldCallbackUtil::fireEntityAdded(hkWorld_s0109_e8e0* w, hkEntity_s0109_e8e0* e)
 {
 #define CALL(l) (l)->entityAddedCallback(e)
-    HK_FIRE_LISTENERS(w->m_entityListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_entityListeners, hkWorldEntityListener*, CALL);
 #undef CALL
 }
 
@@ -3672,7 +3684,7 @@ void hkWorldCallbackUtil::fireEntityAdded(hkWorld_s0109_e8e0* w, hkEntity_s0109_
 void hkWorldCallbackUtil::fireEntityRemoved(hkWorld_s0109_e8e0* w, hkEntity_s0109_e8e0* e)
 {
 #define CALL(l) (l)->entityRemovedCallback(e)
-    HK_FIRE_LISTENERS(w->m_entityListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_entityListeners, hkWorldEntityListener*, CALL);
 #undef CALL
 }
 
@@ -3680,7 +3692,7 @@ void hkWorldCallbackUtil::fireEntityRemoved(hkWorld_s0109_e8e0* w, hkEntity_s010
 void hkWorldCallbackUtil::fireEntityShapeSet(hkWorld_s0109_e8e0* w, hkEntity_s0109_e8e0* e)
 {
 #define CALL(l) (l)->entityShapeSetCallback(e)
-    HK_FIRE_LISTENERS(w->m_entityListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_entityListeners, hkWorldEntityListener*, CALL);
 #undef CALL
 }
 
@@ -3688,7 +3700,7 @@ void hkWorldCallbackUtil::fireEntityShapeSet(hkWorld_s0109_e8e0* w, hkEntity_s01
 void hkWorldCallbackUtil::firePhantomAdded(hkWorld_s0109_e8e0* w, hkPhantom_s0109_e8e0* p)
 {
 #define CALL(l) (l)->phantomAddedCallback(p)
-    HK_FIRE_LISTENERS(w->m_phantomListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_phantomListeners, hkWorldPhantomListener*, CALL);
 #undef CALL
 }
 
@@ -3696,7 +3708,7 @@ void hkWorldCallbackUtil::firePhantomAdded(hkWorld_s0109_e8e0* w, hkPhantom_s010
 void hkWorldCallbackUtil::firePhantomRemoved(hkWorld_s0109_e8e0* w, hkPhantom_s0109_e8e0* p)
 {
 #define CALL(l) (l)->phantomRemovedCallback(p)
-    HK_FIRE_LISTENERS(w->m_phantomListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_phantomListeners, hkWorldPhantomListener*, CALL);
 #undef CALL
 }
 
@@ -3704,7 +3716,7 @@ void hkWorldCallbackUtil::firePhantomRemoved(hkWorld_s0109_e8e0* w, hkPhantom_s0
 void hkWorldCallbackUtil::firePhantomShapeSet(hkWorld_s0109_e8e0* w, hkPhantom_s0109_e8e0* p)
 {
 #define CALL(l) (l)->phantomShapeSetCallback(p)
-    HK_FIRE_LISTENERS(w->m_phantomListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_phantomListeners, hkWorldPhantomListener*, CALL);
 #undef CALL
 }
 
@@ -3712,7 +3724,7 @@ void hkWorldCallbackUtil::firePhantomShapeSet(hkWorld_s0109_e8e0* w, hkPhantom_s
 void hkWorldCallbackUtil::fireConstraintAdded(hkWorld_s0109_e8e0* w, hkConstraintInstance_s0109_e8e0* c)
 {
 #define CALL(l) (l)->constraintAddedCallback(c)
-    HK_FIRE_LISTENERS(w->m_constraintListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_constraintListeners, hkWorldConstraintListener*, CALL);
 #undef CALL
 }
 
@@ -3720,7 +3732,7 @@ void hkWorldCallbackUtil::fireConstraintAdded(hkWorld_s0109_e8e0* w, hkConstrain
 void hkWorldCallbackUtil::fireConstraintRemoved(hkWorld_s0109_e8e0* w, hkConstraintInstance_s0109_e8e0* c)
 {
 #define CALL(l) (l)->constraintRemovedCallback(c)
-    HK_FIRE_LISTENERS(w->m_constraintListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_constraintListeners, hkWorldConstraintListener*, CALL);
 #undef CALL
 }
 
@@ -3729,7 +3741,7 @@ void hkWorldCallbackUtil::fireContactPointAdded(hkWorld_s0109_e8e0* w, hkContact
 {
     ev.m_callbackFiredFrom = 0;
 #define CALL(l) (l)->contactPointAddedCallback(ev)
-    HK_FIRE_LISTENERS(w->m_contactListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_contactListeners, hkContactListener*, CALL);
 #undef CALL
 }
 
@@ -3738,7 +3750,7 @@ void hkWorldCallbackUtil::fireContactPointConfirmed(hkWorld_s0109_e8e0* w, hkCon
 {
     ev.m_callbackFiredFrom = 0;
 #define CALL(l) (l)->contactPointConfirmedCallback(ev)
-    HK_FIRE_LISTENERS(w->m_contactListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_contactListeners, hkContactListener*, CALL);
 #undef CALL
 }
 
@@ -3747,7 +3759,7 @@ void hkWorldCallbackUtil::fireContactPointRemoved(hkWorld_s0109_e8e0* w, hkConta
 {
     ev.m_callbackFiredFrom = 0;
 #define CALL(l) (l)->contactPointRemovedCallback(ev)
-    HK_FIRE_LISTENERS(w->m_contactListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_contactListeners, hkContactListener*, CALL);
 #undef CALL
 }
 
@@ -3756,7 +3768,7 @@ void hkWorldCallbackUtil::fireContactProcess(hkWorld_s0109_e8e0* w, hkContactPro
 {
     ev.m_callbackFiredFrom = 0;
 #define CALL(l) (l)->contactProcessCallback(ev)
-    HK_FIRE_LISTENERS(w->m_contactListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_contactListeners, hkContactListener*, CALL);
 #undef CALL
 }
 
@@ -3764,7 +3776,7 @@ void hkWorldCallbackUtil::fireContactProcess(hkWorld_s0109_e8e0* w, hkContactPro
 void hkWorldCallbackUtil::fireWorldDeleted(hkWorld_s0109_e8e0* w)
 {
 #define CALL(l) (l)->worldDeletedCallback(w)
-    HK_FIRE_LISTENERS(w->m_worldDeletionListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_worldDeletionListeners, hkWorldDeletionListener_s0109_e8e0*, CALL);
 #undef CALL
 }
 
@@ -3773,12 +3785,12 @@ void hkWorldCallbackUtil::fireIslandActivated(hkWorld_s0109_e8e0* w, hkSimulatio
 {
     w->m_criticalOperationsLockCount++;
 #define CALL(l) (l)->islandActivatedCallback(island)
-    HK_FIRE_LISTENERS(w->m_islandActivationListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_islandActivationListeners, hkIslandActivationListener*, CALL);
 #undef CALL
     for (int i = 0; i < island->m_numEntities; ++i) {
         hkEntity_s0109_e8e0* e = island->m_entities[i];
 #define CALL(l) (l)->entityActivatedCallback(island->m_entities[i])
-        HK_FIRE_LISTENERS(e->m_activationListeners, CALL);
+        HK_FIRE_LISTENERS(e->m_activationListeners, hkEntityActivationListener*, CALL);
 #undef CALL
     }
     hkWorld_unlockAndFlush(w);
@@ -3789,12 +3801,12 @@ void hkWorldCallbackUtil::fireIslandDeactivated(hkWorld_s0109_e8e0* w, hkSimulat
 {
     w->m_criticalOperationsLockCount++;
 #define CALL(l) (l)->islandDeactivatedCallback(island)
-    HK_FIRE_LISTENERS(w->m_islandActivationListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_islandActivationListeners, hkIslandActivationListener*, CALL);
 #undef CALL
     for (int i = 0; i < island->m_numEntities; ++i) {
         hkEntity_s0109_e8e0* e = island->m_entities[i];
 #define CALL(l) (l)->entityDeactivatedCallback(island->m_entities[i])
-        HK_FIRE_LISTENERS(e->m_activationListeners, CALL);
+        HK_FIRE_LISTENERS(e->m_activationListeners, hkEntityActivationListener*, CALL);
 #undef CALL
     }
     hkWorld_unlockAndFlush(w);
@@ -3804,7 +3816,7 @@ void hkWorldCallbackUtil::fireIslandDeactivated(hkWorld_s0109_e8e0* w, hkSimulat
 void hkWorldCallbackUtil::firePostSimulationCallback(hkWorld_s0109_e8e0* w, const hkStepInfo_s0109_e8e0& s)
 {
 #define CALL(l) (l)->postSimulationCallback(w, s)
-    HK_FIRE_LISTENERS(w->m_postSimulationListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_postSimulationListeners, hkWorldPostSimulationListener*, CALL);
 #undef CALL
 }
 
@@ -3812,7 +3824,7 @@ void hkWorldCallbackUtil::firePostSimulationCallback(hkWorld_s0109_e8e0* w, cons
 void hkWorldCallbackUtil::firePostIntegrateCallback(hkWorld_s0109_e8e0* w, const hkStepInfo_s0109_e8e0& s)
 {
 #define CALL(l) (l)->postIntegrateCallback(w, s)
-    HK_FIRE_LISTENERS(w->m_postIntegrateListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_postIntegrateListeners, hkWorldPostIntegrateListener*, CALL);
 #undef CALL
 }
 
@@ -3820,7 +3832,7 @@ void hkWorldCallbackUtil::firePostIntegrateCallback(hkWorld_s0109_e8e0* w, const
 void hkWorldCallbackUtil::firePostCollideCallback(hkWorld_s0109_e8e0* w, const hkStepInfo_s0109_e8e0& s)
 {
 #define CALL(l) (l)->postCollideCallback(w, s)
-    HK_FIRE_LISTENERS(w->m_postCollideListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_postCollideListeners, hkWorldPostCollideListener*, CALL);
 #undef CALL
 }
 
@@ -3828,7 +3840,7 @@ void hkWorldCallbackUtil::firePostCollideCallback(hkWorld_s0109_e8e0* w, const h
 void hkWorldCallbackUtil::fireIslandPostIntegrateCallback(hkWorld_s0109_e8e0* w, hkSimulationIsland_s0109_e8e0* i, const hkStepInfo_s0109_e8e0& s)
 {
 #define CALL(l) (l)->postIntegrateCallback(i, s)
-    HK_FIRE_LISTENERS(w->m_islandPostIntegrateListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_islandPostIntegrateListeners, hkIslandPostIntegrateListener*, CALL);
 #undef CALL
 }
 
@@ -3836,7 +3848,7 @@ void hkWorldCallbackUtil::fireIslandPostIntegrateCallback(hkWorld_s0109_e8e0* w,
 void hkWorldCallbackUtil::fireIslandPostCollideCallback(hkWorld_s0109_e8e0* w, hkSimulationIsland_s0109_e8e0* i, const hkStepInfo_s0109_e8e0& s)
 {
 #define CALL(l) (l)->postCollideCallback(i, s)
-    HK_FIRE_LISTENERS(w->m_islandPostCollideListeners, CALL);
+    HK_FIRE_LISTENERS(w->m_islandPostCollideListeners, hkIslandPostCollideListener*, CALL);
 #undef CALL
 }
 

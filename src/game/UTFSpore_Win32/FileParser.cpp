@@ -345,7 +345,7 @@ int** __fastcall RefAssign(int** self, int, int** other)
 }
 
 // @ 0x0083fa00
-void __fastcall HashNodeDtorRef(int* self)
+__declspec(noinline) void __fastcall HashNodeDtorRef(int* self)
 {
     int* o = (int*)self[4];
     if (o && --*(int*)((char*)o + 0x240) == 0) {
@@ -460,15 +460,15 @@ void __fastcall HashInsertFileNotify(int* self, int, int* outIt, int* key)
 }
 
 // @ 0x0083fee0
-void __cdecl DoFreeNodesFileNotify(char** bucketArray, unsigned bucketCount)
+void __stdcall DoFreeNodesFileNotify(char** bucketArray, unsigned bucketCount)
 {
     for (unsigned i = 0; i < bucketCount; ++i) {
-        char* n = *(char**)((char*)bucketArray + i * 4);
-        while (n) {
-            char* next = *(char**)(n + 0x14);
-            HashNodeDtorRef((int*)n);
-            EASTL_allocator_deallocate(n);
-            n = next;
+        char* node = *(char**)((char*)bucketArray + i * 4);
+        while (node) {
+            char* cur = node;
+            node = *(char**)(node + 0x14);
+            HashNodeDtorRef((int*)cur);
+            EASTL_allocator_deallocate(cur);
         }
         *(char**)((char*)bucketArray + i * 4) = 0;
     }

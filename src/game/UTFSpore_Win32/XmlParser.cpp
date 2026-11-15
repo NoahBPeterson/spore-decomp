@@ -27,6 +27,7 @@ extern "C" void  FUN_0090a870(void*, int);                 // 0x0090a870
 #include <stddef.h>
 #include <string.h>
 #include <wchar.h>
+#include <intrin.h>
 
 // ---- items of slice s008e5320 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned short wchar16;
@@ -99,8 +100,9 @@ __declspec(noinline) void XmlParser::Fn8e59a0(char param2)
 {
     char* c = (char*)this;
     if (*(void**)(c + 0x21c) == 0) return;
-    int n = (int)(*(wchar16**)(c + 0xc) - *(wchar16**)(c + 8));
-    if (n == 0) return;
+    if (*(wchar16**)(c + 0xc) - *(wchar16**)(c + 8) == 0) return;
+    _ReadWriteBarrier();
+    unsigned n = (unsigned)(*(wchar16**)(c + 0xc) - *(wchar16**)(c + 8));
     wchar16* begin = *(wchar16**)(c + 8);
     if (param2 != 0) {
         if (n > 0) {

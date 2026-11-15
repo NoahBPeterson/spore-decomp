@@ -574,34 +574,34 @@ void FUN_011551d0(s32* dst, const f32* src, u32 count)
 // @ 0x011552a0
 void FUN_011552a0(f32* ptr, f32 lo, f32 hi, s32 count)
 {
-    if (count == 0)
-        return;
-    f32* end = ptr + count;
+    f32* end = ptr + count - 8;
     __m128 vlo = _mm_set1_ps(lo);
     __m128 vhi = _mm_set1_ps(hi);
+    if (count == 0)
+        return;
     if (count >= 0xC) {
         while (((u32)ptr & 0xF) != 0) {
-            __m128 v = _mm_load_ss(ptr);
-            v = _mm_max_ss(v, vlo);
-            v = _mm_min_ss(v, vhi);
-            _mm_store_ss(ptr, v);
+            _mm_store_ss(ptr, _mm_min_ss(_mm_max_ss(_mm_load_ss(ptr), vlo), vhi));
             ++ptr;
             --count;
         }
         do {
-            _mm_store_ps(ptr, _mm_min_ps(_mm_max_ps(_mm_load_ps(ptr), vlo), vhi));
-            _mm_store_ps(ptr + 4, _mm_min_ps(_mm_max_ps(_mm_load_ps(ptr + 4), vlo), vhi));
+            __m128 v0 = _mm_load_ps(ptr);
+            __m128 v1 = _mm_load_ps(ptr + 4);
+            v0 = _mm_max_ps(v0, vlo);
+            v1 = _mm_max_ps(v1, vlo);
+            v0 = _mm_min_ps(v0, vhi);
+            v1 = _mm_min_ps(v1, vhi);
+            _mm_store_ps(ptr, v0);
+            _mm_store_ps(ptr + 4, v1);
             ptr += 8;
             count -= 8;
-        } while (ptr <= end - 8);
+        } while (ptr <= end);
         if (count == 0)
             return;
     }
     do {
-        __m128 v = _mm_load_ss(ptr);
-        v = _mm_max_ss(v, vlo);
-        v = _mm_min_ss(v, vhi);
-        _mm_store_ss(ptr, v);
+        _mm_store_ss(ptr, _mm_min_ss(_mm_max_ss(_mm_load_ss(ptr), vlo), vhi));
         ++ptr;
         --count;
     } while (count != 0);

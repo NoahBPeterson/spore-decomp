@@ -23,3 +23,4 @@
 ../src/game/Spui/SPUILayout.cpp  ?detach_parent@cSPUILayoutObjectCollection@@QAEXXZ  00810140  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?attach_parent@cSPUILayoutObjectCollection@@QAEXXZ  00811b30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?FindWindowByID@cSPUILayoutObjectCollection_s0080_f7c0@@QAEPAXHD@Z  00810200  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?InitB@cSPUILayout_s0081_17f0@@QAEEPAIII@Z  008120d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

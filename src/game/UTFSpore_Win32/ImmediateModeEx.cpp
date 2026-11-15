@@ -9,22 +9,18 @@ extern "C" void* __cdecl FUN_011f5010(int*, int, int, int, int, int);  // 0x11f5
 extern void* g_pfnIndexBuffer;                                         // 0x16f4ae4
 
 // ---- items of slice s00962ff0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct ResDesc { int a, b, c, d, e; };
-extern "C" void __cdecl  FUN_011f51d0(ResDesc*, int, int, int, int);   // GetResourceDescriptor 0x11f51d0
+// rw::ResourceDescriptor is 8 dwords; GetResourceDescriptor fills it through a hidden return pointer.
+extern "C" void __cdecl  FUN_011f51d0(int*, int, int, int, int, int);  // GetResourceDescriptor 0x11f51d0
 extern "C" void* __cdecl FUN_011f5010(int*, int, int, int, int, int);  // 0x11f5010
 extern void* g_pfnIndexBuffer;                                         // 0x16f4ae4
 // ---- items of slice s00962ff0 end
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" void __cdecl  FUN_011f51d0(ResDesc*, int, int, int, int);   // GetResourceDescriptor 0x11f51d0
-
 // @ 0x00963060
 int __cdecl FUN_00963060(int p1, int p2, int p3, int p4, int p5, int p6)
 {
-    ResDesc desc;
-    FUN_011f51d0(&desc, p2, p3, p4, p5);
-    (void)p6;
-    int r = ((int (__cdecl*)(int, int))g_pfnIndexBuffer)(desc.b, desc.c);
+    int desc[8];
+    FUN_011f51d0(desc, p2, p3, p4, p5, p6);
+    int r = ((int (__cdecl*)(int, int))g_pfnIndexBuffer)(desc[0], desc[1]);
     if (r != 0) {
         int local[4];
         local[0] = r;

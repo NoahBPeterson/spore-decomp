@@ -73,7 +73,7 @@ struct W {
     int   m8c;                   // +0x8c
     int IndexOf(void* p);
     int GetAt(int* p);
-    void FUN_00f3c120(void** out, int);
+    void** FUN_00f3c120(void** out, int);
     int  FUN_00f3c160(int index);
     void FUN_00f3c2c0();
     bool FUN_00f3c330(int* key);
@@ -236,7 +236,7 @@ static __forceinline void ReleaseRef(void** slot)
 }
 
 // @ 0x00F3C120
-void W::FUN_00f3c120(void** out, int)
+void** W::FUN_00f3c120(void** out, int)
 {
     *out = begin;
     bool go = true;
@@ -246,9 +246,10 @@ void W::FUN_00f3c120(void** out, int)
         begin = q;
         bool stop = (*(unsigned*)p >> 30) & 1;
         if (stop)
-            return;
+            return out;
         go = (*(unsigned*)q >> 31) & 1;
     }
+    return out;
 }
 
 // @ 0x00F3C160
@@ -303,18 +304,21 @@ void W::FUN_00f3c2c0()
 bool W::FUN_00f3c330(int* key)
 {
     bool result = false;
-    if (key[0] == 0)
-        return key[1] != 0 || key[2] != 0;
-    AutoRefCount<PropertyList> propList;
-    if (!GetManager()->Find((unsigned*)key, propList.AsPPTypeParam(), 0, 0, 0, 0))
-        result = true;
-    else if (propList) {
-        void* p = propList->Cast(0x3c609f8);
-        if (p) {
-            Bitset128 bits;
-            ((Obj4b*)p)->fn(&bits, g_15dab18, 1);
-            if (!bits.none())
-                result = true;
+    if (key[0] == 0) {
+        if (key[1] != 0 || key[2] != 0)
+            return true;
+    } else {
+        AutoRefCount<PropertyList> propList;
+        if (!GetManager()->Find((unsigned*)key, propList.AsPPTypeParam(), 0, 0, 0, 0))
+            result = true;
+        else if (propList) {
+            void* p = propList->Cast(0x3c609f8);
+            if (p) {
+                Bitset128 bits;
+                ((Obj4b*)p)->fn(&bits, g_15dab18, 1);
+                if (!bits.none())
+                    result = true;
+            }
         }
     }
     return result;

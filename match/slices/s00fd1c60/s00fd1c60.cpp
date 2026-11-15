@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <crtdefs.h>
-#undef _CRT_ALIGN
-#define _CRT_ALIGN(x)
 #include <intrin.h>
 #include <mmintrin.h>
 #include <xmmintrin.h>
@@ -505,9 +503,10 @@ void vp6_store_row_dc(unsigned char* dst, int stride, __m128i* src)
 {
     unsigned __int64 mask;
     memcpy(&mask, (void*)0x015b3bb0, 8);
+    __m128i zero = _mm_setzero_si128();
     int n = 8;
     do {
-        __m64 lo = _mm_movepi64_pi64(_mm_packs_epi16(*src, _mm_setzero_si128()));
+        __m64 lo = _mm_movepi64_pi64(_mm_packs_epi16(*src, zero));
         *(__m64*)dst = _mm_xor_si64(lo, *(__m64*)&mask);
         src++;
         dst += stride;

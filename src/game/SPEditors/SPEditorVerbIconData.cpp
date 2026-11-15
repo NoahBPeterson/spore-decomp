@@ -13,6 +13,8 @@ extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 // ---- items of slice s005e4db0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define PV(n) virtual void _pv##n();
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
+// non-template twin of the same deallocator, so the scalar deleting destructor emits a real call
+extern "C" void __cdecl SP_AllocatorFree_nothrow(void* p) throw(); // 0x00f47380
 namespace eastl {
 union EmptyString {
   uint32_t mUint32;
@@ -138,7 +140,7 @@ class cSPCreatureVerbIconData : public cSPEditorVerbIconData_s005e_4db0 {
  public:
   cSPCreatureVerbIconData();
   virtual ~cSPCreatureVerbIconData();
-  static void operator delete(void* p) { EASTL_allocator_deallocate(p); }
+  static void operator delete(void* p) { SP_AllocatorFree_nothrow(p); }
   cRefObj* mData;  // +0xc4
   int mFieldC8;    // +0xc8
   void Init(uint32_t type, cSPCreatureVerbIconData* data);
@@ -301,10 +303,10 @@ cSPCreatureVerbIconData::~cSPCreatureVerbIconData()
     object->mRefCount = count;
     if (count == 0) {
       object->mRefCount = 1;
-      _ReadWriteBarrier();
       object->Release(1);
     }
   }
+  delete this;
 }
 }  // namespace SP
 

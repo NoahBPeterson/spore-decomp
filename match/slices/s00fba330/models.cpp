@@ -248,11 +248,12 @@ void TerrainMgr::Select5c4(int idx)
     if (mSel5c4 == idx)
         return;
     mSel5c4 = idx;
-    IRef* o = mpRef1f4;
-    IRef* n = *(IRef**)((char*)0x016d6d70 + idx * 4);
+    IRef** const pRef = &mpRef1f4;
+    IRef* o = *pRef;
+    IRef* n = ((IRef**)0x016d6d70)[idx];
     if (n != o) {
         if (n) n->AddRef();
-        mpRef1f4 = n;
+        *pRef = n;
         if (o) o->Release();
     }
 }

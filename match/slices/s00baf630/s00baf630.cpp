@@ -32,7 +32,7 @@ struct RBTree
 
 struct Obj700
 {
-    void* FUN_00c30e80(void);                   // 0x00c30e80
+    unsigned FUN_00c30e80(void);                // 0x00c30e80
 };
 
 extern int __cdecl FUN_0067de30(void);          // 0x0067de30  SP::PropertyManager
@@ -43,7 +43,7 @@ struct PropertyManager
     virtual void p00(); virtual void p04(); virtual void p08(); virtual void p0c();
     virtual void p10(); virtual void p14(); virtual void p18(); virtual void p1c();
     virtual void p20(); virtual void p24(); virtual void p28();
-    virtual void p2c(void* a, const char* name, void* b);
+    virtual void p2c(unsigned a, const char* name, void* b);
 };
 
 // ---------------------------------------------------------------------------
@@ -99,16 +99,19 @@ void Obj630::FUN_00baf630(int param_2, void* param_3)
 // ---------------------------------------------------------------------------
 void* __stdcall FUN_00baf700(void* param_1)
 {
-    void* key = ((Obj700*)param_1)->FUN_00c30e80();
+    unsigned key = ((Obj700*)param_1)->FUN_00c30e80();
+    // The tree lookups take the key by address; the copy keeps the value
+    // itself in a register for the PropertyManager call.
+    unsigned lookupKey = key;
 
     void* it;
-    ((RBTree*)(void*)g_0156c61c)->find(&it, &key);
+    ((RBTree*)(void*)g_0156c61c)->find(&it, &lookupKey);
     if (it != (void*)g_0156c620)
         return *(void**)((char*)it + 0x14);
 
     PropertyManager* pm = (PropertyManager*)FUN_0067de30();
     FeedbackEvent** slot =
-        (FeedbackEvent**)((RBTree*)(void*)g_0156c61c)->FUN_00dd85c0(&key);
+        (FeedbackEvent**)((RBTree*)(void*)g_0156c61c)->FUN_00dd85c0(&lookupKey);
     FeedbackEvent* old = *slot;
     if (old != 0)
     {
@@ -118,7 +121,7 @@ void* __stdcall FUN_00baf700(void* param_1)
     pm->p2c(key, (const char*)0x568de14, slot);
 
     FeedbackEvent** s2 =
-        (FeedbackEvent**)((RBTree*)(void*)g_0156c61c)->FUN_00dd85c0(&key);
+        (FeedbackEvent**)((RBTree*)(void*)g_0156c61c)->FUN_00dd85c0(&lookupKey);
     return *s2;
 }
 

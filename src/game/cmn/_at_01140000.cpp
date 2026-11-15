@@ -46,6 +46,26 @@ struct SndDecoder {
     int  Setup(void* buf, int a, int n);// 0x1140530
     void* Dtor(unsigned char flags);    // 0x11404f0
 };
+// 0x16e7bf4 is the live renderer state and 0x16e7c0c its saved copy; both are four dwords, and the
+// dword at +8 doubles as four flag/count bytes (0x16e7bfc state active, 0x16e7bfd channel count,
+// 0x16e7bfe stream count), so the block is a union.
+struct MixState {
+    unsigned int a;          // +0  0x16e7bf4
+    unsigned int b;          // +4  0x16e7bf8
+    union {
+        unsigned int c;              // +8  0x16e7bfc
+        struct {
+            unsigned char flag;      // +8  0x16e7bfc
+            unsigned char chans;     // +9  0x16e7bfd
+            unsigned char nstr;      // +10 0x16e7bfe
+            unsigned char pad;       // +11 0x16e7bff
+        };
+    };
+    unsigned int d;          // +12 0x16e7c00
+};
+extern MixState      g_16e7bf4;   // 0x16e7bf4
+extern MixState      g_16e7c0c;   // 0x16e7c0c
+extern unsigned char g_16e7c23;   // 0x16e7c23
 // ---- items of slice s0113fc50 end
 
 // ---- items of slice s0114cb60 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -849,23 +869,24 @@ int F_01140760(void)
 // @ 0x01140780
 int F_01140780(void)
 {
-    Sub_1142730(A8(0x16e7bfd));
+    Sub_1142730(g_16e7bf4.chans);
     if (g_16e7c1c != 0) {
-        A32(0x16e7bf4) = A32(0x16e7c0c);
-        A32(0x16e7bf8) = A32(0x16e7c10);
-        A8(0x16e7bfd) = A8(0x16e7bfd);
-        A32(0x16e7bfc) = A32(0x16e7c14);
-        A32(0x16e7c00) = A32(0x16e7c18);
+        int v = g_16e7bf4.chans;
+        g_16e7bf4.a = g_16e7c0c.a;
+        g_16e7bf4.b = g_16e7c0c.b;
+        g_16e7bf4.c = g_16e7c0c.c;
+        g_16e7bf4.chans = (unsigned char)v;
+        g_16e7bf4.d = g_16e7c0c.d;
         return 0;
     }
-    if (A8(0x16e7bfc) != 0) {
+    if (g_16e7bf4.flag != 0) {
         if ((Sub_1156800() & 2) != 0) {
-            A8(0x16e7c23) |= 2;
+            g_16e7c23 |= 2;
             return 0;
         }
     }
-    A8(0x16e7c23) &= 0xfd;
-    A8(0x16e7bfc) = 0;
+    g_16e7c23 &= 0xfd;
+    g_16e7bf4.flag = 0;
     return 0;
 }
 

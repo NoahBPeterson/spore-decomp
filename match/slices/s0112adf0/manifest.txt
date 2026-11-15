@@ -13,3 +13,5 @@ slices/s0112adf0/s0112adf0.cpp  ?getClassFromVirtualInstance@hkVtableClassRegist
 slices/s0112adf0/s0112adf0.cpp  ?objectPointedBy@hkPackfileObjectUpdateTracker@@UAEXPAX0@Z  0112b600  /vc71 /O2 /MD /Gy /TP
 slices/s0112adf0/s0112adf0.cpp  ?getContents@hkBinaryPackfileReader@@UAEPAXPBD@Z  0112be10  /vc71 /O2 /MD /Gy /TP
 slices/s0112adf0/s0112adf0.cpp  ?merge@hkFinishLoadedObjectRegistry@@UAEXABV1@@Z  0112bb40  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ??0hkPackfileObjectUpdateTracker@@QAE@PAUhkPackfileData@@@Z  0112b460  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?replaceObject@hkPackfileObjectUpdateTracker@@UAEXPAX0PBVhkClass@@@Z  0112b570  /vc71 /O2 /MD /Gy /TP

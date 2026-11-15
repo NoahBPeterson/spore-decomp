@@ -298,7 +298,7 @@ struct WinText {
     // 0x009890d0
     WinText* __thiscall m_9890d0(uint8_t p2);
     // 0x00989130
-    static WinText* __cdecl Factory(void* p1);
+    static WinText* __cdecl Factory(int color, uint32_t styleId);
     // 0x00989240
     void __thiscall m_989240(uint32_t p2);
     // 0x00989290
@@ -763,17 +763,20 @@ WinText* __thiscall WinText::m_9890d0(uint8_t p2)
 }
 
 // @ 0x00989130
-WinText* __cdecl WinText::Factory(void* p1)
+WinText* __cdecl WinText::Factory(int color, uint32_t styleId)
 {
     void* r = FUN_009512d0_s0098_86d0(0x834, 4, "UTFWin/WinText", FUN_009512c0());
-    if (r == 0) return 0;
-    WinText* t = ((WinText*)r)->m_989000();
-    if (t == 0) return 0;
-    Iface* s = (Iface*)((uint8_t*)t + 0x20c);
-    if (s != 0) {
-        ((void (__thiscall*)(void*, void*))((void**)*(void**)s)[0x28 / 4])(s, p1);
-        void* o = ((void* (__thiscall*)(void*))((void**)*(void**)s)[0x10 / 4])(s);
-        ((void (__thiscall*)(void*, void*))((void**)*(void**)o)[0x84 / 4])(o, p1);
+    if (r != 0) {
+        WinText* t = ((WinText*)r)->m_989000();
+        if (t != 0) {
+            Iface* s = (Iface*)((uint8_t*)t + 0x20c);
+            if (s != 0) {
+                ((void (__thiscall*)(void*, uint32_t))((void**)*(void**)s)[0x28 / 4])(s, (uint32_t)color);
+                void* o = ((void* (__thiscall*)(void*))((void**)*(void**)s)[0x10 / 4])(s);
+                ((void (__thiscall*)(void*, uint32_t))((void**)*(void**)o)[0x84 / 4])(o, styleId);
+            }
+            return (WinText*)s;
+        }
     }
-    return (WinText*)s;
+    return 0;
 }
