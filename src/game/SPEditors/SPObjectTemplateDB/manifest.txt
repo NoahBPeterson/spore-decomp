@@ -62,3 +62,4 @@
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_00560880@EcxStubFc@SP@@QAE_NPAXPAI@Z  00560880  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_0055fbb0@EcxStub70@SP@@QAE_NPAX@Z  0055fbb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_0055fb30@EcxStub70@SP@@QAE_NPAX@Z  0055fb30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?UpdatePopulation@PopulationDB@SP@@QAEXII@Z  0055fe60  /Od /MD /Gy /EHsc /TP /Isrc/game/include

@@ -17,3 +17,4 @@
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?pop_front@DequeElem48@@QAEXXZ  005263f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Make@Factory@@QAEPAXXZ  00523570  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Assign@TickState@@QAEAAU1@ABU1@@Z  005218e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?FUN_005229c0@@YAXHPBUVector3@nSPSkinner@@@Z  005229c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

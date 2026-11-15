@@ -93,3 +93,5 @@
 ../src/game/SPBake/SPEditorBlock.cpp  ?GetDefaultScale@Blk_s0044_ae00@@QAEMXZ  0044b5c0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?A4a9a0@Blk_s0044_9ed0@@QAE_NPAU1@@Z  0044a9a0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?A4aa10@Blk_s0044_9ed0@@QAEHH@Z  0044aa10  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?SetUserOrientationHelper@cSPEditorBlock_s0044_0110@SP@@QAEXUMatrix3_s0044_0110@2@@Z  004404f0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?SetPreviousPosition@Block2@@QAEXUVec3_s0045_0f70@@@Z  00451330  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include

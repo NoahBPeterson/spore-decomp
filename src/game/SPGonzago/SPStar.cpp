@@ -249,6 +249,7 @@ struct Sub48 {
 struct Font {
     void SetUserData(void* p); // 0x00fd9450
 };
+// Retail cStar query view: mpStarRecord is at +0x48 in this build.
 struct Obj48 {
     char pad_00[0x34];
     int  mField34;           // +0x34
@@ -263,8 +264,8 @@ struct Obj48 {
     void sub_b570(int param);      // 0x00c8b570
     void sub_b5c0(void* p);        // 0x00c8b5c0
     void sub_b7d0();               // 0x00c8b7d0
-    bool sub_b7e0();               // 0x00c8b7e0
-    bool sub_b800();               // 0x00c8b800
+    bool IsBinary() const;               // 0x00c8b7e0
+    bool CanHavePlanets() const;               // 0x00c8b800
     void sub_b6d0(void* param);    // 0x00c8b6d0
 };
 struct cGameDataStub { void ctor(); };
@@ -504,18 +505,26 @@ void Obj48::sub_b7d0()
 }
 
 // @ 0x00c8b7e0
-bool Obj48::sub_b7e0()
+bool Obj48::IsBinary() const
 {
-    int k = mp48->sub_801920();
-    if (k != 0) { unsigned int v = (unsigned int)(k - 7); return v <= 5u; }
+    int type = mp48->sub_801920();
+    if (type != SP::kStarTypeNone) {
+        unsigned int value = (unsigned int)type - SP::kTypeBinaryOO;
+        bool binary = value <= (SP::kTypeBinaryMM - SP::kTypeBinaryOO);
+        return binary;
+    }
     return false;
 }
 
 // @ 0x00c8b800
-bool Obj48::sub_b800()
+bool Obj48::CanHavePlanets() const
 {
-    int k = mp48->sub_801920();
-    if (k != 0) { unsigned int v = (unsigned int)(k - 1); return v > 2u; }
+    int type = mp48->sub_801920();
+    if (type != SP::kStarTypeNone) {
+        unsigned int value = (unsigned int)type - SP::kTypeGalacticCore;
+        bool canHavePlanets = value > (SP::kTypeProtoplanetary - SP::kTypeGalacticCore);
+        return canHavePlanets;
+    }
     return false;
 }
 
