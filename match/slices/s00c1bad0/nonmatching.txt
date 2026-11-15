@@ -4,4 +4,3 @@
 00c1c1d0  244  complete but not byte-exact: thiscall(ecx) MoveToPointAtSpeed; struct-by-value goal local plus the FUN_00c0ce80 speed selection; /GS cookie emitted for our uninitialized local; size 307 vs 312; equiv UNSUPPORTED 0/400 (fake-arity=278)
 00c1c310  731  complete but not byte-exact: thiscall(ecx) path-plan branch with the A* search push (FUN_00b3d290 + FUN_00ac65d0); register-ABI body with stack args at +0x8c/varying; size 764 vs 679; equiv UNSUPPORTED 0/400 (fault read=392)
 00c1c5c0  649  complete but not byte-exact: thiscall(ecx) MoveToPointAndFacingAtSpeed; SSE normalize/projection path plus struct-by-value goal; size 717 vs 798; equiv UNSUPPORTED 0/400 (fake-arity=247)
-00c1c8e0  241  complete but not byte-exact: thiscall(ecx) Shutdown; vcall chain, vector compact and the +0xf84 list reset/delete loops; memmove import resolution differs; size 282 vs 272; equiv UNSUPPORTED 0/400 (fault read=341)

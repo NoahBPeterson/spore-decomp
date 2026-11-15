@@ -7527,6 +7527,15 @@ bool __cdecl FUN_00c0be70(int x)
   return false;
 }
 
+// @ 0x00c0bea0
+bool __cdecl FUN_00c0bea0(int x)
+{
+  if (x == 0x5261d56 || x == 0x5261d78 || x == 0x692e5bf || x == 0x5485a4c ||
+      x == 0x77300f2 || x == 0x77300fb || x == 0x77300ff)
+    return true;
+  return false;
+}
+
 // @ 0x00c0bee0
 void __thiscall C_s00c0_bd70::C0bee0(int a, int b)
 {
@@ -8661,6 +8670,64 @@ int __thiscall CCM_s00c0_ddb0::e6a0()
     else if (iVar8 == 2) { if (c1 == 0) return 2; }
     else if (iVar8 == 3 && c1 == 0) return 1;
     return u;
+}
+
+void* __cdecl FUN_00ac8960(void*);           // 0x00ac8960
+struct F_c04790 { int __thiscall f(); };      // 0x00c04790
+
+// @ 0x00c0e8d0
+char __thiscall CCM_s00c0_ddb0::e8d0(int param_2, int param_3) {
+    char* p2 = (char*)param_2;
+    if ((G32((char*)this + 0xb20) == G32(p2 + 0xb20) && SP_GetCurrentGameMode() != (void*)0x1654c10)
+        || (((G32((char*)this + 0xb58) >> 8) & 1) != 0
+            && (((G32(p2 + 0xb58) >> 8) & 1) != 0 || ((G32(p2 + 0xb58) >> 9) & 1) != 0)))
+        return 1;
+    if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
+        if (((G32((char*)this + 0xb58) >> 9) & 1) != 0 && ((G32(p2 + 0xb58) >> 8) & 1) != 0)
+            return 1;
+    } else {
+        char c1 = (*(char(__thiscall**)(void*, int))((*(void***)this)[0xd0 / 4]))(this, param_3);
+        if (c1 != 0 && ((G32(p2 + 0xb58) >> 8) & 1) != 0) return 1;
+    }
+    char* ebx = (char*)FUN_00b3d4c0();
+    if (ebx == 0) return 0;
+    if (((G32((char*)this + 0xb58) >> 8) & 1) != 0) {
+        if (SP_GetCurrentGameMode() == (void*)0x1654c10
+            && ((G32(p2 + 0xb58) >> 9) & 1) == 0
+            && ((G32((char*)this + 0xb58) >> 9) & 1) == 0) {
+            char* s = (char*)FUN_00ac8960((void*)param_2);
+            char* d = (char*)FUN_00ac8960((void*)this);
+            if (s == 0 || d == 0) return 0;
+            int x = ((F_c04790*)s)->f();
+            int y = ((F_c04790*)d)->f();
+            if (x != y || y == 1) return 0;
+            return 1;
+        }
+        switch (param_3) {
+        case 3:
+            if (((F_ba3f90*)ebx)->f((void*)((char*)this + 0xb28), (CB*)this, (unsigned int)param_2) == 3) return 1;
+            /* fallthrough */
+        case 4:
+            if (((F_ba3f90*)ebx)->f((void*)((char*)this + 0xb28), (CB*)this, (unsigned int)param_2) == 4) return 1;
+            /* fallthrough */
+        case 6:
+            return ((F_ba3f90*)ebx)->f((void*)((char*)this + 0xb28), (CB*)this, (unsigned int)param_2) == 6;
+        default:
+            return 0;
+        }
+    }
+    switch (param_3) {
+    case 3:
+        if (((F_ba3f90*)ebx)->f((void*)(p2 + 0xb28), (CB*)this, (unsigned int)param_2) == 3) return 1;
+        /* fallthrough */
+    case 4:
+        if (((F_ba3f90*)ebx)->f((void*)(p2 + 0xb28), (CB*)this, (unsigned int)param_2) == 4) return 1;
+        /* fallthrough */
+    case 6:
+        return ((F_ba3f90*)ebx)->f((void*)(p2 + 0xb28), (CB*)this, (unsigned int)param_2) == 6;
+    default:
+        return 0;
+    }
 }
 
 // @ 0x00c0eae0
@@ -11713,6 +11780,67 @@ bool cSPCreatureBase_s00c1_7350::CanReachPointWithBodyPart(cSPTransform_s00c1_73
     return false;
 }
 
+extern const float kOne;                   // 0x01485720
+extern const cVector3 gZeroVector;         // 0x0168d910
+extern const cMatrix3 gIdentityMatrix;     // 0x0168db30
+
+// @ 0x00c17a30
+bool cSPCreatureBase_s00c1_7350::GetBodyPartPosition(float* outPos, uint32_t kind, bool world, int32_t part)
+{
+    uint32_t parts[255];
+    cVector3 local;
+    cSPTransform_s00c1_7350 xf;
+
+    if (part < 0) {
+        part = 0;
+    }
+
+    uint32_t count = QueryCreatureBodyParts(this, (int32_t)kind, parts, 255);
+    if ((uint32_t)part >= count) {
+        return false;
+    }
+
+    int32_t partIndex = (int32_t)parts[part];
+    if (partIndex == -1) {
+        return false;
+    }
+
+    cBodyAnim* anim = mBody->mAnim;
+    if (world) {
+        cBodyPart* bp = anim->mpBodyParts + partIndex;
+        FUN_0099c1a0((void*)&local.x, (const void*)anim->mOrientation, (const void*)bp->mPosition);
+        outPos[0] = local.x + anim->mPosX;
+        outPos[1] = local.y + anim->mPosY;
+        outPos[2] = local.z + anim->mPosZ;
+        return true;
+    }
+
+    cBodyPart* bp = anim->mpBodyParts + partIndex;
+    outPos[0] = bp->mPosition[0];
+    outPos[1] = bp->mPosition[1];
+    outPos[2] = bp->mPosition[2];
+
+    xf.mFlags = 0;
+    xf.mVersion = 0;
+    xf.mOffset = gZeroVector;
+    xf.mScale = kOne;
+    xf.mRot.Assign(&gIdentityMatrix);
+    xf.PreRotateY(-kPi);
+
+    if (xf.mFlags & 2) {
+        float x = outPos[0];
+        float y = outPos[1];
+        float z = outPos[2];
+        outPos[0] = xf.mRot.m[0] * x + xf.mRot.m[3] * y + xf.mRot.m[6] * z;
+        outPos[1] = xf.mRot.m[1] * x + xf.mRot.m[4] * y + xf.mRot.m[7] * z;
+        outPos[2] = xf.mRot.m[2] * x + xf.mRot.m[5] * y + xf.mRot.m[8] * z;
+    }
+    outPos[0] *= xf.mScale;
+    outPos[1] *= xf.mScale;
+    outPos[2] *= xf.mScale;
+    return true;
+}
+
 // @ 0x00c17c80
 uint32_t cSPCreatureBase_s00c1_7350::CreateBodyEffect(uint32_t kind, uint32_t a, uint32_t b)
 {
@@ -13160,6 +13288,73 @@ void cSPCreatureBase_s00c1_bad0::MoveToPointAndFacingAtSpeed(void* pOwner, Vec3_
     FUN_00ac4570(mCurve, *(void**)(mCurve + 4));
 }
 
+void  FUN_00c7dba0(void* pSub);                                       // 0x00c7dba0
+void  FUN_00bfc720(void* pSub);                                       // 0x00bfc720
+
+// @ 0x00c1c8e0
+void cSPCreatureBase_s00c1_bad0::Shutdown()
+{
+    VCall0(this, 0xc4);
+
+    ((cLocomotiveObject_s00c1_bad0*)((u8*)this + 0xc0))->Shutdown();
+    FUN_00c7dba0((u8*)this + 0x670);
+
+    void* pAnim = *(void**)((u8*)this + 0xb54);
+    if (pAnim && *(void**)pAnim)
+    {
+        if ((i32)VCall(pAnim, 0x70))
+        {
+            typedef void (__thiscall* fn_set)(void*, void*);
+            (*(fn_set)((u8*)*(void**)pAnim + 0x70))(pAnim, (void*)0);
+            void* pInner = (void*)VCall(pAnim, 0x70);
+            (*(void(__thiscall**)(void*, void*))((u8*)*(void**)pInner + 0x3c))(pInner, pAnim);
+            if (pAnim)
+            {
+                *(void**)((u8*)this + 0xb54) = 0;
+                cAnimatingCreature_Release(pAnim);
+            }
+        }
+    }
+
+    FUN_00bfc720((u8*)this + 0x5a8);
+
+    void* pSub = *(void**)((u8*)this + 0x2c);
+    if (pSub)
+    {
+        *(void**)((u8*)this + 0x2c) = 0;
+        VCall0(pSub, 0x04);
+    }
+
+    // eastl vector compact: memmove(begin, end, begin), then shrink end.
+    u8* pBegin = *(u8**)((u8*)this + 0xc28);
+    u8* pEnd   = *(u8**)((u8*)this + 0xc2c);
+    FUN_011e0744((void*)pBegin, (const void*)pEnd, (size_t)(u32)(pEnd - pBegin));
+    *(u8**)((u8*)this + 0xc2c) += ((i32)(pBegin - pEnd) >> 4) * 16;
+
+    // Walk the render list at +0xf84; first reset each entry, then delete each node.
+    u8* pSentinel = (u8*)this + 0xf84;
+    u8* pNode = *(u8**)pSentinel;
+    while (pNode != pSentinel)
+    {
+        void* pObj = *(void**)(pNode + 8);
+        VCall(pObj, 0x0c);
+        pNode = *(u8**)pNode;
+    }
+
+    pNode = *(u8**)pSentinel;
+    while (pNode != pSentinel)
+    {
+        u8* pNext = *(u8**)pNode;
+        void* pObj = *(void**)(pNode + 8);
+        if (pObj)
+            VCall0(pObj, 0x04);
+        EASTL_deallocate(pNode);
+        pNode = pNext;
+    }
+    *(u8**)(pSentinel + 4) = pSentinel;
+    *(u8**)pSentinel = pSentinel;
+}
+
 // @ 0x00c1c9f0
 void cSPCreatureBase_s00c1_c9f0::FUN_00c1c9f0(char a)
 {
@@ -13819,6 +14014,267 @@ uint Creature::ChooseAbility(AbilityMask* mask, Creature* target, float dist, bo
     return best;
 }
 
+#define PV16 PV8 PV8
+#define CHECK_OFFSET(T, m, off) typedef char PVCAT(check_, __COUNTER__)[offsetof(T, m) == (off) ? 1 : -1]
+namespace sl_s00c1_e460 {
+extern float g_1582ef0;      // 0x01582ef0 (attack range slack)
+extern float g_1582ef4;      // 0x01582ef4
+
+float __cdecl FUN_00d38a30(int nWhich, void* pCreature);            // 0x00d38a30
+float __cdecl FUN_00d99ac0(void* pA, void* pB, bool bFlags);        // 0x00d99ac0 (distance)
+unsigned int FUN_00c0b380(void* pCreature, void* pAbility);   // 0x00c0b380
+
+// Animation context-target query: fills pOut with up to nMax noun ids of the records that match
+// the 16-byte query record, returns how many were written.
+int FUN_009b2340(void* pOut, int nMax, unsigned int nModel, void* pRecord,
+                            int nA, int nB);                        // 0x009b2340
+
+
+// Four-character animation result tags / noun ids reached through the target.
+enum {
+    kNounTribeTool = 0x018c8f0c,
+    kNounTribeHut  = 0x01e4daae,
+};
+
+enum {
+    kAnimNone = 0x02c39370,
+};
+
+struct cIdVector {
+    int* mpBegin;      // +0x00
+    int* mpEnd;        // +0x04
+    int* mpCapacity;   // +0x08
+};
+
+// 16-byte animation context query record handed to EvaluateContextTargetQuery.
+struct ContextQueryRecord {
+    unsigned int mKind;      // +0x00
+    unsigned int mTag;       // +0x04
+    unsigned int mField08;   // +0x08
+    unsigned int mField0c;   // +0x0c
+};
+
+class cGameData {
+public:
+    PV8
+    virtual uint32_t GetNounID();                                   // 0x20
+};
+
+// The spatial/locomotive sub-object living at +0xc0 of a creature.
+class cSpatialObject {
+public:
+    PV16 PV2
+    virtual bool CanAttack();                                       // 0x48
+};
+
+// Target interface held at +0xe7c.
+class IQueryTarget {
+public:
+    PV2
+    virtual void* ToSpatialObject();                                // 0x08
+    virtual cGameData* ToGameData();                                // 0x0c
+    PV16 PV2 PV
+    virtual void* Query(unsigned int nID);                          // 0x5c
+};
+
+// Animated-creature payload at +0xb54 (only the model pointer is needed here).
+class cAnimatedCreature {
+public:
+    char pad00[0x17c];
+    void* mpModel;     // +0x17c
+};
+
+// The per-frame ability record returned by GetAbility() (vtable slot 0xb4).
+class cCreatureAbility {
+public:
+    unsigned int GetAnimationID(unsigned int nIndex);               // 0x004d3cd0
+    /* +0x00 */ char pad00[8];
+    /* +0x08 */ int mType;
+    /* +0x0c */ char pad0c[0x48 - 0x0c];
+    /* +0x48 */ cIdVector mAnimIds;
+    /* +0x54 */ char pad54[0x78 - 0x54];
+    /* +0x78 */ unsigned int mTribeAnimationID;
+    /* +0x7c */ char pad7c[0xa8 - 0x7c];
+    /* +0xa8 */ float mRangeA8;
+    /* +0xac */ char padac[0xf4 - 0xac];
+    /* +0xf4 */ float mRangeF4;
+    /* +0xf8 */ unsigned int mAnimationID;
+    /* +0xfc */ char padfc[0x100 - 0xfc];
+    /* +0x100 */ unsigned char mbFlags100;
+};
+CHECK_OFFSET(cCreatureAbility, mType, 0x08);
+CHECK_OFFSET(cCreatureAbility, mAnimIds, 0x48);
+CHECK_OFFSET(cCreatureAbility, mRangeA8, 0xa8);
+CHECK_OFFSET(cCreatureAbility, mRangeF4, 0xf4);
+CHECK_OFFSET(cCreatureAbility, mAnimationID, 0xf8);
+CHECK_OFFSET(cCreatureAbility, mbFlags100, 0x100);
+
+// Ability override record (kept at +0xe84).
+class cAbilityOverride {
+public:
+    char pad00[0x388];
+    unsigned char mbFlags388;   // +0x388
+};
+
+class SpeciesData {
+public:
+    cIdVector* GetAnimationList(void* pAnimContext);                 // 0x004d9030
+};
+
+namespace SP {
+
+class cSPCreatureBase {
+public:
+    PV16 PV16 PV8 PV4
+    virtual int GetAbilitiesCount();                                          // 0xb0
+    virtual cCreatureAbility* GetAbility(int nIndex);                         // 0xb4
+
+    int  BeginAttack(unsigned int nIndex, bool bA, bool bB);                  // 0x00c196a0
+    void CancelAttackAnimation(int nIndex);                                   // 0x00c073a0
+    unsigned int InterruptAnimation(unsigned int nAnimationID, int nA, int nB);   // 0x00c12310
+    unsigned int InterruptAnimationWithTarget(unsigned int nAnimationID, void* pTarget,
+                                              int nA, int nB);                // 0x00c149c0
+
+    /* +0x000 */ char pad000[0xc0 - 0x04];
+    /* +0x0c0 */ cSpatialObject mBody;
+    /* +0x0c4 */ char pad0c4[0xb20 - 0x0c4];
+    /* +0xb20 */ SpeciesData* mpSpecies;
+    /* +0xb24 */ char pad0b24[0xb4c - 0xb24];
+    /* +0xb4c */ void* mpBehaviorData;
+    /* +0xb50 */ char pad0b50[4];
+    /* +0xb54 */ cAnimatedCreature* mpAnimatedCreature;
+    /* +0xb58 */ unsigned int mGeneralFlags;
+    /* +0xb5c */ unsigned char mbFlags5c;
+    /* +0xb5d */ char pad0b5d[0xe7c - 0xb5d];
+    /* +0xe7c */ IQueryTarget* mpTargetHolder;
+    /* +0xe80 */ char pad0e80[0xe84 - 0xe80];
+    /* +0xe84 */ cAbilityOverride* mpOverride;
+    /* +0xe88 */ char pad0e88[0xe8c - 0xe88];
+    /* +0xe8c */ unsigned int mCurrentAttackIdx;
+    /* +0xe90 */ unsigned int mCurrentAttackAnimId;
+    /* +0xe94 */ float mRushDistanceLeft;
+    /* +0xe98 */ char pad0e98[0xeac - 0xe98];
+    /* +0xeac */ int mAttackState;
+
+    unsigned int Attack(unsigned int nAttackIndex, unsigned int* pnAnimationID);
+};
+CHECK_OFFSET(cSPCreatureBase, mBody, 0xc0);
+CHECK_OFFSET(cSPCreatureBase, mpSpecies, 0xb20);
+CHECK_OFFSET(cSPCreatureBase, mpAnimatedCreature, 0xb54);
+CHECK_OFFSET(cSPCreatureBase, mbFlags5c, 0xb5c);
+CHECK_OFFSET(cSPCreatureBase, mpTargetHolder, 0xe7c);
+CHECK_OFFSET(cSPCreatureBase, mpOverride, 0xe84);
+CHECK_OFFSET(cSPCreatureBase, mCurrentAttackAnimId, 0xe90);
+CHECK_OFFSET(cSPCreatureBase, mRushDistanceLeft, 0xe94);
+CHECK_OFFSET(cSPCreatureBase, mAttackState, 0xeac);
+
+// @ 0x00c1e460
+unsigned int cSPCreatureBase::Attack(unsigned int nAttackIndex, unsigned int* pnAnimationID)
+{
+    unsigned int nAbilityIndex = BeginAttack(nAttackIndex, true, false);
+    if (nAbilityIndex != (unsigned int)-1) {
+        int nVariant;
+        IQueryTarget* pTarget = mpTargetHolder;
+        cCreatureAbility* pAbility = GetAbility(nAbilityIndex);
+
+        if (pAbility->mRangeF4 > ::kZero && pAbility->mAnimationID != (unsigned int)-1) {
+            mCurrentAttackAnimId = pAbility->mAnimationID;
+            float fScale = FUN_00d38a30(0, this);
+            mRushDistanceLeft = (pAbility->mRangeA8 + pAbility->mRangeF4) * fScale;
+            mRushDistanceLeft += g_1582ef0;
+            mRushDistanceLeft += g_1582ef4;
+            mbFlags5c = pAbility->mbFlags100;
+        } else if (pAbility->mType == 0x2b) {
+            if (pTarget == NULL)
+                goto done;
+            {
+                void* pSpatial = pTarget->ToSpatialObject();
+                float fDistance = FUN_00d99ac0(&mBody, pSpatial, true);
+                if (FUN_00d38a30(0, this) * pAbility->mRangeF4 < fDistance) {
+                    mCurrentAttackAnimId = kAnimNone;
+                    goto done;
+                }
+            }
+            {
+                unsigned int nCount =
+                    (unsigned int)(pAbility->mAnimIds.mpEnd - pAbility->mAnimIds.mpBegin);
+                if (nCount > 0) {
+                    unsigned int nIndex = ::sMathRandom.RandomUint32Uniform(nCount);
+                    mCurrentAttackAnimId = pAbility->GetAnimationID(nIndex);
+                } else {
+                    unsigned int nIndex = 0;
+                    mCurrentAttackAnimId = pAbility->GetAnimationID(nIndex);
+                }
+            }
+        } else {
+            if (mpOverride != NULL && mpOverride->mbFlags388 != 0) {
+                mCurrentAttackAnimId = FUN_00c0b380(this, pAbility);
+                goto done;
+            }
+            {
+                unsigned int nCount =
+                    (unsigned int)(pAbility->mAnimIds.mpEnd - pAbility->mAnimIds.mpBegin);
+                unsigned int nIndex = (nCount > 0) ? ::sMathRandom.RandomUint32Uniform(nCount) : 0;
+                mCurrentAttackAnimId = pAbility->GetAnimationID(nIndex);
+            }
+            if (pTarget == NULL)
+                goto done;
+        }
+        {
+            cGameData* pGameData = pTarget->ToGameData();
+            unsigned int nNounID = pGameData->GetNounID();
+            if ((nNounID == kNounTribeTool || nNounID == kNounTribeHut)
+                && pAbility->mTribeAnimationID != 0)
+                mCurrentAttackAnimId = pAbility->mTribeAnimationID;
+        }
+
+    done:
+        {
+            nVariant = -1;
+            if (mBody.CanAttack() && mAttackState == 2) {
+                int nType = pAbility->mType;
+                switch (nType) {
+                case 0x1e: {
+                    cIdVector* pAnimList = mpSpecies->GetAnimationList(mpAnimatedCreature);
+                    unsigned int nCount =
+                        (unsigned int)(pAnimList->mpEnd - pAnimList->mpBegin);
+                    nVariant = pAnimList->mpBegin[::sMathRandom.RandomUint32Uniform(nCount)];
+                    break;
+                }
+                case 0x21: {
+                    unsigned int aResults[0xff];
+                    ContextQueryRecord record = { 0, 0x73726b73, 0, 0 };
+                    unsigned int nFound = FUN_009b2340(aResults, 0xff,
+                                                       *(unsigned int*)mpAnimatedCreature->mpModel,
+                                                       &record, 0, 0);
+                    if (nFound > 0)
+                        nVariant = aResults[::sMathRandom.RandomUint32Uniform(nFound)];
+                    break;
+                }
+                }
+            }
+
+            unsigned int nResult;
+            void* pQueryResult = (pTarget != NULL) ? pTarget->Query(0x1186577) : NULL;
+            if (pQueryResult != NULL)
+                nResult = InterruptAnimationWithTarget(mCurrentAttackAnimId, pQueryResult, -1, nVariant);
+            else
+                nResult = InterruptAnimation(mCurrentAttackAnimId, nVariant, 0);
+
+            if (pnAnimationID != NULL)
+                *pnAnimationID = nResult;
+            CancelAttackAnimation(nAbilityIndex);
+        }
+    }
+    return nAbilityIndex;
+}
+
+}  // namespace SP
+
+}  // namespace sl_s00c1_e460
+#undef CHECK_OFFSET
+#undef PV16
+
 // @ 0x00c1f580
 cCreatureDataBlock* cCreatureDataBlock::FUN_00c1f580(void* param2, void* param3)
 {
@@ -13861,6 +14317,101 @@ void cCurvePointVector::PushBackDefault()
 
     cCurvePoint value;
     InsertValue(p, &value);
+}
+
+class cUIntVector_s00c1_f580 {
+public:
+    uint* mpBegin;    // +0x00
+    uint* mpEnd;      // +0x04
+    uint* mpCapacity; // +0x08
+    uint* mpFixed;    // +0x10
+
+    void insert(void* position, const uint* first, const uint* last, uint); // 0x00c1f6d0
+};
+extern "C" void* __cdecl operator_new_fun_00f473a0(uint size, const char* name, int a3, int a4, const char* file, int line);
+extern "C" void  __cdecl operator_delete_array(void* p);
+extern "C" void  __cdecl FUN_00bc4030(void* a, const void* b, const void* c);
+
+// @ 0x00c1f6d0
+void cUIntVector_s00c1_f580::insert(void* position, const uint* first, const uint* last, uint)
+{
+    if (first == last) {
+        return;
+    }
+
+    uint* pEnd = mpEnd;
+    const uint count = (uint)(last - first);
+
+    if (count <= (uint)(mpCapacity - pEnd)) {
+        // The run fits inside the existing block.
+        const uint after = (uint)(pEnd - (uint*)position);
+
+        if (after <= count) {
+            // The run reaches past the old end: the input tail moves into the
+            // free room, then the old tail slides up behind it.
+            FUN_00bc4030((uint*)first + after, (uint*)last, pEnd);
+            mpEnd = pEnd + (count - after);
+
+            memmove((void*)mpEnd, (const void*)position, (size_t)((char*)pEnd - (char*)position));
+            mpEnd = mpEnd + after;
+
+            FUN_00c16090((uint*)first, (uint*)first + after,
+                         (uint*)position + after);
+        } else {
+            // The run fits entirely behind "position": shift the tail right
+            // by "count" elements and drop the run into the gap.
+            uint* pShift = pEnd - count;
+            memcpy(pEnd, pShift, (uint)((char*)pEnd - (char*)pShift));
+            mpEnd = pEnd + count;
+
+            memmove((void*)((char*)pEnd - ((char*)pShift - (char*)position)),
+                    (const void*)position, (size_t)((char*)pShift - (char*)position));
+
+            FUN_00bc4030((uint*)first, (uint*)last, position);
+        }
+        return;
+    }
+
+    // Grow: allocate a fresh block, splice the three pieces in, then free the
+    // old block unless it is the in-place buffer.
+    const uint size = (uint)(pEnd - mpBegin);
+    uint newCapacity = size * 2;
+    if (size == 0) {
+        newCapacity = 1;
+    }
+    uint needed = size + count;
+    if (needed < newCapacity) {
+        needed = newCapacity;
+    }
+
+    uint* pNew = 0;
+    if (needed != 0) {
+        pNew = (uint*)operator_new_fun_00f473a0(
+            needed * 4, "Simulator", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\"
+            "UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+            0xd1);
+    }
+
+    const uint headBytes = (uint)((char*)position - (char*)mpBegin);
+    memcpy(pNew, mpBegin, headBytes);
+    uint* pDst = (uint*)((char*)pNew + headBytes);
+
+    for (const uint* src = first; src != last; ++src) {
+        *pDst++ = *src;
+    }
+
+    const uint tailBytes = (uint)((char*)pEnd - (char*)position);
+    memcpy(pDst, position, tailBytes);
+    uint* pNewEnd = (uint*)((char*)pDst + tailBytes);
+
+    if (mpBegin != 0 && mpBegin != mpFixed) {
+        operator_delete_array(mpBegin);
+    }
+
+    mpEnd      = pNewEnd;
+    mpBegin    = pNew;
+    mpCapacity = (uint*)((char*)pNew + needed * 4);
 }
 
 // @ 0x00c1f8d0
@@ -14344,6 +14895,45 @@ void FUN_01334ee0(void)
 {
     g_ScenarioOverridesKey.mnNameHash = FNVHash_s0133_29c0("Scenario_Overrides", 0x811c9dc5, 1);
     g_ScenarioOverridesKey.mnTypeHash = 0x623d3400;
+}
+
+// Enter/update/leave callbacks stored in the six creature-action records (retail 0x0168d998).
+// 0xc160c0, 0xc0ccc0 and 0xc16100 are defined in this module (FUN_00c160c0, FUN_00c0ccc0, FUN_00c16100_impl).
+void __cdecl FUN_00c19e30(void);   // 0x00c19e30  damage-over-time start
+void __cdecl FUN_00c10f80(void);   // 0x00c10f80  speed boost start
+void __cdecl FUN_00c10fc0(void);   // 0x00c10fc0  speed boost update
+void __cdecl FUN_00c11030(void);   // 0x00c11030  speed boost stop
+void __cdecl FUN_00c11090(void);   // 0x00c11090  manage speed boost
+void __cdecl FUN_00c19ee0(void);   // 0x00c19ee0  update animation target
+void __cdecl FUN_00c1a270(void);   // 0x00c1a270  set animation event control
+void __cdecl FUN_00c148a0(void);   // 0x00c148a0  apply damage over time
+void __cdecl FUN_00c110e0(void);   // 0x00c110e0  disable animation overlay
+void __cdecl FUN_013c3550(void);   // 0x013c3550  action-array destructor
+
+// One 0x44-byte action record; SetupAction fills kind/state/sub/f0c and the three callbacks.
+struct ActionRecord
+{
+    void SetupAction(float fMaxTime, void* pStart, void* pUpdate, void* pStop, const char* pName);  // 0x00bc9e30
+};
+
+extern char g_ActionRecords[];    // 0x0168d998  six 0x44-byte records
+
+// @ 0x01334f10
+void FUN_01334f10(void)
+{
+    ((ActionRecord*)(g_ActionRecords + 0x00))->SetupAction(FLT_MAX, (void*)&FUN_00c19e30,
+        (void*)&FUN_00c160c0, (void*)&FUN_00c0ccc0, "DamageOverTime");
+    ((ActionRecord*)(g_ActionRecords + 0x44))->SetupAction(FLT_MAX, (void*)&FUN_00c10f80,
+        (void*)&FUN_00c10fc0, (void*)&FUN_00c11030, "SpeedBoost");
+    ((ActionRecord*)(g_ActionRecords + 0x88))->SetupAction(FLT_MAX, 0,
+        0, (void*)&FUN_00c16100_impl, "ManageBodyEffects");
+    ((ActionRecord*)(g_ActionRecords + 0xCC))->SetupAction(FLT_MAX, 0,
+        (void*)&FUN_00c11090, (void*)&FUN_00c19ee0, "SetAnimationTarget");
+    ((ActionRecord*)(g_ActionRecords + 0x110))->SetupAction(FLT_MAX, 0,
+        0, (void*)&FUN_00c1a270, "SetAnimEventControl");
+    ((ActionRecord*)(g_ActionRecords + 0x154))->SetupAction(FLT_MAX, 0,
+        (void*)&FUN_00c148a0, (void*)&FUN_00c110e0, "DisableAnimationOverlay");
+    atexit(&FUN_013c3550);
 }
 
 // @ 0x01335000

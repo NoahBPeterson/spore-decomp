@@ -4,4 +4,4 @@
 00c1c1d0 ?MoveToPointAtSpeed@cSPCreatureBase_s00c1_bad0@@QAEXPAXPAUVec3_s00c1_bad0@@MM@Z  # cSPCreatureBase_s00c1_bad0::MoveToPointAtSpeed migrated from s00c1bad0 (verbatim, slice spelling)
 00c1c310 ?MoveToPointAtSpeedPathPlan@cSPCreatureBase_s00c1_bad0@@QAEXPAXPAUVec3_s00c1_bad0@@MID@Z  # cSPCreatureBase_s00c1_bad0::MoveToPointAtSpeedPathPlan migrated from s00c1bad0 (verbatim, slice spelling)
 00c1c5c0 ?MoveToPointAndFacingAtSpeed@cSPCreatureBase_s00c1_bad0@@QAEXPAXPAUVec3_s00c1_bad0@@1MM@Z  # cSPCreatureBase_s00c1_bad0::MoveToPointAndFacingAtSpeed migrated from s00c1bad0 (verbatim, slice spelling)
-00c1c8e0 cSPCreatureBase::Shutdown(cSPCreatureBase*)  # shutdown: vcall +0xc4, cLocomotiveObject::Shutdown, FUN_00c7dba0(+0x670), detach the animating creature at +0xb54 (SetAttachments(0), slot 0x3c, Release via 0xa05270), FUN_00bfc720(+0x5a8), release +0x2c, compact the +0xc28 vector, then reset+delete every node of the +0xf84 list
+00c1c8e0 ?Shutdown@cSPCreatureBase_s00c1_bad0@@QAEXXZ  # cSPCreatureBase_s00c1_bad0::Shutdown migrated from s00c1bad0 (verbatim, slice spelling)

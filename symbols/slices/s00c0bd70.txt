@@ -1,6 +1,7 @@
 00bc97f0 ?Set@behavior_stimuli@nSPBehaviorTree@@QAEXAAUstimulus@12@_KMPAVIUnknown32@COM@EA@@@Z  # nSPBehaviorTree::behavior_stimuli::Set (callee of s00c0bd70, named from the dev publics; slice address comment)
 00c0bd70 ?C0bd70@C_s00c0_bd70@@QAEHPAX@Z  # C_s00c0_bd70::C0bd70 migrated from s00c0bd70 (verbatim, slice spelling)
 00c0be70 ?FUN_00c0be70@@YA_NH@Z  # FUN_00c0be70 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0bea0 ?FUN_00c0bea0@@YA_NH@Z  # FUN_00c0bea0 migrated from s00c0bd70 (verbatim, slice spelling)
 00c0be70/00c0bea0 cached-handle id predicates
 00c0bee0 ?C0bee0@C_s00c0_bd70@@QAEXHH@Z  # C_s00c0_bd70::C0bee0 migrated from s00c0bd70 (verbatim, slice spelling)
 00c0bf10 ?C0bf10@C_s00c0_bd70@@QAEXHHHHMHHHHHD@Z  # C_s00c0_bd70::C0bf10 migrated from s00c0bd70 (verbatim, slice spelling)

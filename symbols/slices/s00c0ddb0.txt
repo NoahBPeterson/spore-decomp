@@ -23,4 +23,4 @@
 00c0e660 ?e660@CCM@@QAEHXZ  # CCM::e660 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0e680 ?e680@CCM_s00c0_ddb0@@QAEHH@Z  # CCM_s00c0_ddb0::e680 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0e6a0 ?e6a0@CCM_s00c0_ddb0@@QAEHXZ  # CCM_s00c0_ddb0::e6a0 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e8d0 relation/can-attack predicate
+00c0e8d0 ?e8d0@CCM_s00c0_ddb0@@QAEDHH@Z  # CCM_s00c0_ddb0::e8d0 migrated from s00c0ddb0 (verbatim, slice spelling)

@@ -1,0 +1,1 @@
+00c1e460 ?Attack@cSPCreatureBase@SP@sl_s00c1_e460@@QAEIIPAI@Z  # sl_s00c1_e460::SP::cSPCreatureBase::Attack migrated from s00c1e460 (verbatim, slice spelling)

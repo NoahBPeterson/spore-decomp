@@ -1,7 +1,7 @@
           # FUN_00c201a0(param1, param2, param2).  BYTE-EXACT.
 00c1f580 ?FUN_00c1f580@cCreatureDataBlock@@QAEPAV1@PAX0@Z  # cCreatureDataBlock::FUN_00c1f580 migrated from s00c1f580 (verbatim, slice spelling)
 00c1f650 ?PushBackDefault@cCurvePointVector@@QAEXXZ  # cCurvePointVector::PushBackDefault migrated from s00c1f580 (verbatim, slice spelling)
-00c1f6d0  cUIntVector::insert(void* position, const uint* first, const uint* last,
+00c1f6d0 ?insert@cUIntVector_s00c1_f580@@QAEXPAXPBI1I@Z  # cUIntVector_s00c1_f580::insert migrated from s00c1f580 (verbatim, slice spelling)
 00c1f8d0 ??0cSPCreatureBase_s00c1_f580@@QAE@XZ  # cSPCreatureBase_s00c1_f580::cSPCreatureBase migrated from s00c1f580 (verbatim, slice spelling)
 00c1fe80 ?FUN_00c1fe80@cSPCreatureBase_s00c1_f580@@QAEXXZ  # cSPCreatureBase_s00c1_f580::FUN_00c1fe80 migrated from s00c1f580 (verbatim, slice spelling)
 00c1ffb0 ?FUN_00c1ffb0@cCreaturePart@@QAEXD@Z  # cCreaturePart::FUN_00c1ffb0 migrated from s00c1f580 (verbatim, slice spelling)
