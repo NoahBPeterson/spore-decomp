@@ -7,7 +7,6 @@
 0048ef30 1378 complete (all paths and calls); /Od frame layout and temp slots differ (original frame 0x370)
 0048f790 482 complete (all paths and calls); /Od temp slot layout differs (original frame 0x140, second AllocTag temp at -0xd1)
 0048fde0 166 recursive child-walk; complete but frame slots / inlined callee shapes differ
-00490330 130 AABB 6-axis overlap test; complete, but the original indexes through an inlined Vector3::operator[] and the LHS ends up in xmm0 (my plain member-access form folds to direct offsets)
 004904a0 227 complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
 004905d0 200 complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
 00491900 387 complete vector-insert-with-refcount routine; logic and all calls present, but the /Od frame (0x7c vs 0x30) and the intermediate pointer locals differ
@@ -24,7 +23,6 @@
 00497f20 542 complete (direction search loops); /Od slot order and vector/string local init order differ
 004982b0 217 complete (Matrix3/Vector3 by-value args via real copy ctors); /Od frame holes (0x10c vs 0x74) differ
 00498470 284 complete; /Od slot order (is15/b1 high bytes, outPos) not fitted; difftest PASS after fixing the build flags (recorded as a // Flags: comment; the checker had compiled /Od /EHsc without /Ob1 /arch:SSE /fp:fast) and the e parameter type (bool passed straight to FUN_0049ec40, not uint8_t normalised with != 0)
-004986d0 38 complete; Bitset::test temp slot order (word/result swapped) and nesting of returns not fitted
 00498850 1582 complete; /Od slot order and picker->-after-args evaluation order not fitted; difftest WEAK after fixing the build flags (recorded as a // Flags: comment; the checker had compiled /Od /EHsc without /Ob1 /arch:SSE /fp:fast): no mismatch at seeds 2/3 but only ~10% coverage; seed 1 crashes the checker (unicorn fetch error in reset_cpu)
 00498f10 510 complete; /Od slot order not fitted (name hill-climb stalled at ~510)
 00499410 816 editor pick-block routine (ray vs block pick / skin pick / ground-plane fallback): complete; /Od inner-scope slot layout, Vector3 copy flavours (inline movss vs fld/fstp vs 0x4098a0 call) and by-value temp order differ; difftest PASS (fixed: the skin-pick retry passes the plane hit as Vec3C, copied with the out-of-line copy ctor 0x4098a0, as the original)

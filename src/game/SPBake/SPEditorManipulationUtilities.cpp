@@ -1011,14 +1011,17 @@ struct Matrix3_s0049_8470 {
 template <unsigned N> struct Bitset {
     u32 mWord[(N + 31) / 32];
     bool test(unsigned pos) const {
-        bool r;
-        if (pos < N) {
-            u32 w = mWord[pos >> 5];
-            r = (w & (1u << (pos % 32))) != 0;
-        } else {
-            r = false;
+        u32 w;
+        {
+            bool r;
+            if (pos < N) {
+                w = mWord[pos >> 5];
+                r = (w & (1u << (pos % 32))) != 0;
+            } else {
+                r = false;
+            }
+            return r;
         }
-        return r;
     }
 };
 struct RefCountV {
@@ -3130,6 +3133,7 @@ struct Vector3 {
     Vector3(const Vector3& o) : x(o.x), y(o.y), z(o.z) {}
     Vector3& operator=(const Vector3& o) { x = o.x; y = o.y; z = o.z; return *this; }
     float Dot(const Vector3& v) const { return x * v.x + y * v.y + z * v.z; }
+    const float& operator[](int index) const { return (&x)[index]; }
 };
 struct Matrix3_s0048_fde0 {
     float m[9];
@@ -4747,14 +4751,9 @@ bool FUN_004902c0(cSPEditorBlock* a, cSPEditorBlock* b)
 // @ 0x00490330
 bool BoundingBox::Intersects(const BoundingBox& b) const
 {
-    int r;
-    if (mx.x < b.mn.x || b.mx.x < mn.x ||
-        mx.y < b.mn.y || b.mx.y < mn.y ||
-        mx.z < b.mn.z || b.mx.z < mn.z)
-        r = 0;
-    else
-        r = 1;
-    return r;
+    return mx[0] >= b.mn[0] && mn[0] <= b.mx[0] &&
+           mx[1] >= b.mn[1] && mn[1] <= b.mx[1] &&
+           mx[2] >= b.mn[2] && mn[2] <= b.mx[2];
 }
 
 // @ 0x00490420
@@ -6175,11 +6174,11 @@ bool FUN_004986d0(Block* blk)
                 return false;
             else
                 return true;
-        } else {
-            return FUN_004986d0(blk->mSocketBlock);
         }
+        return FUN_004986d0(blk->mSocketBlock);
+    } else {
+        return false;
     }
-    return false;
 }
 
 // @ 0x00498850
