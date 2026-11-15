@@ -1,11 +1,4 @@
-00a25ff0  78  complete; EASTL hashtable find + node value read, schedule differs
-00a260c0  66  complete; EASTL hashtable find, returns node value or 0, schedule differs
-00a26360  68  complete; EASTL hashtable find, returns node value or 0, schedule differs
 00a26530  36  complete; fixed_hashtable DoFreeNodes + count clears, register schedule differs
-00a26570  67  complete; EASTL hashtable find, returns node value or 0, schedule differs
-00a26680  97  complete; hashtable find + intrusive refcount, inlining schedule differs
-00a26730  97  complete; hashtable find + intrusive refcount, inlining schedule differs
-00a26790  62  complete; find2 iterator vs end-node compare, register schedule differs
 00a26da0  97  complete; vector element release loop + block free, schedule differs
 00a25c40  581 complete; AudioSystem::Update SEH frame + queue/stopwatch timing loop reproduced; 269 vs 651 bytes. [equiv: FAIL 5/7 valid, fault at 00a0f9b1]
 00a25ed0  273 complete; RemoveFromList intrusive-list unlink/refcount body; 123 vs 281 bytes. [equiv: WEAK 94 valid, 16.7% coverage]
@@ -15,7 +8,6 @@
 00a26230  111 regalloc: traversal and the (a,b) argument order are right; retail holds `end` in ebp and unrolls the scan, ours mirrors it with ebx and only one compare (104 vs 112). fix1: quick check UNSUPPORTED
 00a263a0  157 frame: the map value at node+4 is a factory function pointer, called as __fastcall with itself as the argument (mov ecx,[node+4]; call ecx), and the result is a refcounted object: ctor AddRef, one extra AddRef, *out, dtor Release under an AutoRefCount EH frame. Source now reproduces that and the End() compare. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; residual is the temp slot placement (167 vs 169). fix1: quick check UNSUPPORTED
 00a26450  172 complete; UpdateSoundStates rbtree AssignLess2 + inbound walk; 204 vs 211 bytes. [equiv: UNSUPPORTED 0/400 valid, fault(read)]
-00a265b0  68  complete; Lookup_265b0 hashtable find, returns node value or 0; 70 vs 60 bytes. [equiv: WEAK 182 valid, 100% coverage]
 00a265f0  103 logic: the parameters are really (float a, uint b), not (uint,float): retail loads the float from the first arg and pushes the second as the uint to vtable[0x28]. Fixed the signature and call; residual is end/arg register choice and scan unroll (117 vs 133). The instruction structure matches, but the emulator still reports 5/5 execution mismatches (ours fails where the original returns), so a residual behavioural difference may remain. fix1: quick check DIFFERS
 00a267d0  151 complete; Map_267d0 find2/EraseNode erase + ring notify; 167 vs 139 bytes. [equiv: WEAK 294 valid, 52.2% coverage]
 00a26860  63  frame: the target is a sub-object at this+4 whose DoNukeSubtree receives this[0x10] - fixed (was using a tree member). Retail also wraps it in an EH frame (a scoped local holding `this`); without that local ours is 23 vs 71 bytes. fix1: quick check UNSUPPORTED
