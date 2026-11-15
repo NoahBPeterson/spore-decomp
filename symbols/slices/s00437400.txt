@@ -1,4 +1,4 @@
-00437400 SceneObject::SyncTransform  # per-frame transform sync: anchor->Compute, optional negate, ApplyTarget/Check/Finish
-00437890 SceneObject::ClearNodeState  # flag 46 set -> SetNodeState(GetStateA()), else clears node flag bit 8
+00437400 ?SyncTransform@SceneObject_s0043_7400@@QAEX_N@Z  # SceneObject_s0043_7400::SyncTransform migrated from s00437400 (verbatim, slice spelling)
+00437890 ?ClearNodeState@SceneObject_s0043_7400@@QAEXXZ  # SceneObject_s0043_7400::ClearNodeState migrated from s00437400 (verbatim, slice spelling)
 00437990 SceneObject::SetNodeState  # sets node flag bit 8 and node->state (+0x5d); state 2 falls back to 4 if owner->Query() fails
-00437a60 SceneObject::SetNodeStateChecked  # flag 47 and !b -> SetNodeState(GetStateB()), else SetNodeState(s)
+00437a60 ?SetNodeStateChecked@SceneObject_s0043_7400@@QAEXH_N@Z  # SceneObject_s0043_7400::SetNodeStateChecked migrated from s00437400 (verbatim, slice spelling)

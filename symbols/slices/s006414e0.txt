@@ -1,5 +1,6 @@
 006414e0 SP::cSPAssetDataOTDB::GetKey  # builds {instance, 0x2f7d0004, group}
 00641500 ?GetThumbnailBackdrop@cSPAssetDataOTDB@@QAEPAUResourceKey@@PAU2@@Z  # cSPAssetDataOTDB::GetThumbnailBackdrop migrated from s006414e0 (verbatim, slice spelling)
 00641900 ?GetCreatorType@@YA_NPBUResourceKey@@@Z  # GetCreatorType migrated from s006414e0 (verbatim, slice spelling)
+00641fa0 ?FUN_00641fa0@cTimelineSporepediaCardData@@QAE_NXZ  # cTimelineSporepediaCardData::FUN_00641fa0 migrated from s006414e0 (verbatim, slice spelling)
 00642100 UI::TimelineSporepediaCardData::TimelineSporepediaCardData  # PDB name
 00642190 UI::TimelineSporepediaCardData::~TimelineSporepediaCardData  # vptr stores + base dtor tail call

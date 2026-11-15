@@ -1,2 +1,3 @@
-00fabd60 SP::cRibbonBuilder::BuildRibbon  # builds ribbon quads along a path and calls AddRibbonQuad (0xfab2b0) per segment, then hands the 6 per-face poly lists to the face quads at this+0x118 (0xfb7920); Claude-coined name
+00fab2b0 ?AddRibbonQuad@SP@@YAXPAUcRibbonPolyList_s00fa_bd60@1@PBUcSPVector3_s00fa_bd60@@PBUcSPTexCoord@@PBMPBUcRibbonPolyInfo@1@@Z  # AddRibbonQuad migrated from s00fabd60 (verbatim, slice spelling)
+00fabd60 ?BuildRibbon@cRibbonBuilder@SP@@QAEXHPAUcRibbonPath@2@@Z  # cRibbonBuilder::BuildRibbon migrated from s00fabd60 (verbatim, slice spelling)
 00fb7920 SP::cTerrainSphereQuad::AddRibbonPolys  # thiscall(list) on the face quad (this+0x18c = ribbon verts, see 0xfb50d0); Claude-coined name

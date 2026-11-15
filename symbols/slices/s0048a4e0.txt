@@ -1,6 +1,8 @@
 0048a4e0 ?UpdateLimbModels@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAVcSPEditorLimbJoint_s0048_a4e0@2@@Z  # UpdateLimbModels migrated from s0048a4e0 (verbatim, slice spelling)
 0048a560 ?SetUIState@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXH@Z  # SetUIState migrated from s0048a4e0 (verbatim, slice spelling)
+0048a580 ?SetUIState@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAVcSPEditorLimbJoint_s0048_a4e0@2@H@Z  # cSPEditorLimbStructure_s0048_a4e0::SetUIState migrated from s0048a4e0 (verbatim, slice spelling)
 0048a650 ?SetJointTarget@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAVcSPEditorLimbJoint_s0048_a4e0@2@UcSPVector3_s0048_a4e0@@@Z  # SetJointTarget migrated from s0048a4e0 (verbatim, slice spelling)
+0048a690 ?AdjustJoint@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAVcSPEditorLimbJoint_s0048_a4e0@2@00_N@Z  # cSPEditorLimbStructure_s0048_a4e0::AdjustJoint migrated from s0048a4e0 (verbatim, slice spelling)
 0048ad20 ?UpdateSymmetryModels@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAVcSPEditorLimbJoint_s0048_a4e0@2@_N1@Z  # UpdateSymmetryModels migrated from s0048a4e0 (verbatim, slice spelling)
 0048ae30 ?UpdateSymmetryModels@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEX_N0@Z  # UpdateSymmetryModels migrated from s0048a4e0 (verbatim, slice spelling)
 0048ae60 ?AreJointsValid@cSPEditorLimbStructure_s0048_a4e0@SP@@QAE_NPAU?$vector_s0048_a4e0@PAVcSPEditorLimbJoint_s0048_a4e0@SP@@@@@Z  # AreJointsValid migrated from s0048a4e0 (verbatim, slice spelling)

@@ -1,0 +1,3 @@
+0041a0c0 ?Bake@Part_s0041_a0c0@@QAE_NXZ  # Part_s0041_a0c0::Bake migrated from s0041a0c0 (verbatim, slice spelling)
+0041a980 ??0D@@QAE@XZ  # D::D migrated from s0041a0c0 (verbatim, slice spelling)
+0041a9f0 ?Destroy@D@@UAEPAXI@Z  # D::Destroy migrated from s0041a0c0 (verbatim, slice spelling)

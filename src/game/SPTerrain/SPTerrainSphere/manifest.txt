@@ -1,2 +1,41 @@
 # source  symbol  va  flags
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?ToggleFlag@cTerrainOverlay@@QAEXXZ  00f96370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?ClearSlot@cTerrainOverlay@@QAEDXZ  00f964a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?Cast@cDynCast@@QAEPAXI@Z  00f964f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?RenderAtmosphere@cTerrainSphere_s00f9_77c0@@QAEXII@Z  00f981d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?FUN_00f986f0@@YIHPAUTerrainSphere@@PAXH@Z  00f986f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?FUN_00f987f0@@YIMPAUTerrainSphere@@PAX@Z  00f987f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?FUN_00f9a610@cTerrainSphere141@@QAEXXZ  00f9a610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?FUN_00f9adf0@@YAPAURefPair@@PAU1@00@Z  00f9adf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?FUN_00f9ae80@@YAPAURefPair@@PAU1@00@Z  00f9ae80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?FUN_00f9bee0@cTS142@@QAEXPAX@Z  00f9bee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?FUN_00f9c010@cTS142@@QAEXH@Z  00f9c010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?InitScatterTexture@cTerrainSphere@SP@@SAXXZ  00f9e120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?ShutdownScatterTexture1@@YAXXZ  00f9e1f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?InitScatterTexture2@cScatterSphere@@QAEXXZ  00f9e280  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?ShutdownScatterTexture2@@YAXXZ  00f9e350  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?RebuildEffects@cScatterHost@@QAEXXZ  00f9e3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?RefreshTerraform@cTerrainSphere8@@QAEXXZ  00f9eda0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?CopyFaceA@TerrainSphereLike@@QAE_NHPBM@Z  00fa0010  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?CopyFaceB@TerrainSphereLike@@QAE_NHPBM@Z  00fa0070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?CopyFaceC@TerrainSphereLike@@QAE_NHPBM@Z  00fa00d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?ShutdownRTTSphere@@YAXXZ  00fa0360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?PartitionElem16@@YAPAUElem16@@PAU1@0PAX1I@Z  00fa0670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?SortElem16Pass@@YAXPAUElem16@@00I@Z  00fa06e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?InitBuffer@DirtyFlag@@QAEXXZ  00fa0dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?SetFlag@DirtyFlag@@QAEX_N@Z  00fa0e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?Dirty@DirtyFlag@@QAEXE@Z  00fa0e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?TestFlag@DirtyFlag@@QAE_NE@Z  00fa0e60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPTerrain/SPTerrainSphere.cpp  ?Initialize@cTerrainSphere@@QAE_N_N@Z  00fa0f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?QuickSort16@@YAXPAUSortRec16@@0HUSortLess16@@@Z  00fa1a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?DestroyImpostorRange@@YAPAXPAUImpostorRecord110@@00@Z  00fa1b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?FUN_00fa2620@@YGXPAUDecalArrayElem@@0@Z  00fa2620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?FreeDecalIndex@cTerrainSphere_s00fa_1bc0@@QAEXI@Z  00fa2850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?NewDecal@cTerrainSphere_s00fa_1bc0@@QAEPAUcTerrainSphereDecal_s00fa_1bc0@@IPBUcSPTransform_s00fa_1bc0@@M@Z  00fa28b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?NewDecalLayer@cTerrainSphere_s00fa_1bc0@@QAEPAUcTerrainSphereDecal_s00fa_1bc0@@IPBUcSPTransform_s00fa_1bc0@@MI@Z  00fa2920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?resize@VecRec20@@QAEXI@Z  00fa4730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?ClearModels@cTerrainSphere_s00fa_5610@@QAEXXZ  00fa5e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?CreateDecal@cTerrainSphere_s00fa_86c0@@QAEHHHHM@Z  00fa9140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ??4Blob110@@QAEAAU0@ABU0@@Z  00fa99c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?Append@cQuadVec@@QAEXXZ  00fab230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?AddStrand@StrandMesh@@QAEIPAUStrand@@@Z  00facef0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

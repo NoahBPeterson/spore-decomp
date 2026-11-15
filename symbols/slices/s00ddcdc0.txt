@@ -1,11 +1,11 @@
 00ddcdc0 ?FUN_00ddcdc0@@YAXXZ  # free __cdecl: simulator reset/setup (random spherical jitter + timestamps + name-table vcall)
 00ddd1a0 ?Setup@cModelSetup@@QAEXXZ  # cModelSetup::Setup migrated from s00ddcdc0 (verbatim, slice spelling)
-00ddd970 ?FUN_00ddd970@@YAXXZ  # free __cdecl: return 0 (stub/const-returned default)
-00ddd9b0 ?FUN_00ddd9b0@@YIDPAX@Z  # free __cdecl(void*)->unsigned int: GUI panel id lookup helper
-00ddda30 ?FUN_00ddda30@@YIHPAX@Z  # free __cdecl(void*)->unsigned int: GUI panel id lookup helper (second form)
-00dddaa0 ?FUN_00dddaa0@@YGDHMMH@Z  # free __cdecl(char,int,float,float,int)->char: panel/extent setup on the keyed GUI panel
-00dddb10 ?FUN_00dddb10@@YGDHMMH@Z  # free __cdecl(char,int,float,float,int)->char: two WindowManager()->GetLayoutManager() chains
-00dddba0 ?FUN_00dddba0@@YGXMMH@Z  # free __cdecl(float,float,int): panel resize/reposition through the GUI panel vtable
-00dddbd0 ?FUN_00dddbd0@@YGXMM@Z  # free __cdecl(float,float): scale arg2 by 1000, feed FUN_00b3d230 -> FUN_00b5e9a0 after the panel M8760 call
-00dddc30 ?FUN_00dddc30@@YIDPAUcGUIHandler@@@Z  # free __cdecl(cGUIHandler*)->unsigned int: attach model object via FUN_00e20780 / FUN_00c2e4e0
-00dddca0 ?FUN_00dddca0@@YIDPAUcGUIHandler@@@Z  # free __cdecl(cGUIHandler*)->unsigned int: detach model object and reset cheat/flag state
+00ddd970 ?FUN_00ddd970@@YAXXZ  # FUN_00ddd970 migrated from s00ddcdc0 (verbatim, slice spelling)
+00ddd9b0 ?FUN_00ddd9b0@@YIDPAX@Z  # FUN_00ddd9b0 migrated from s00ddcdc0 (verbatim, slice spelling)
+00ddda30 ?FUN_00ddda30@@YIHPAX@Z  # FUN_00ddda30 migrated from s00ddcdc0 (verbatim, slice spelling)
+00dddaa0 ?FUN_00dddaa0@@YGDHMMH@Z  # FUN_00dddaa0 migrated from s00ddcdc0 (verbatim, slice spelling)
+00dddb10 ?FUN_00dddb10@@YGDHMMH@Z  # FUN_00dddb10 migrated from s00ddcdc0 (verbatim, slice spelling)
+00dddba0 ?FUN_00dddba0@@YGXMMH@Z  # FUN_00dddba0 migrated from s00ddcdc0 (verbatim, slice spelling)
+00dddbd0 ?FUN_00dddbd0@@YGXMM@Z  # FUN_00dddbd0 migrated from s00ddcdc0 (verbatim, slice spelling)
+00dddc30 ?FUN_00dddc30@@YIDPAUcGUIHandler@@@Z  # FUN_00dddc30 migrated from s00ddcdc0 (verbatim, slice spelling)
+00dddca0 ?FUN_00dddca0@@YIDPAUcGUIHandler@@@Z  # FUN_00dddca0 migrated from s00ddcdc0 (verbatim, slice spelling)

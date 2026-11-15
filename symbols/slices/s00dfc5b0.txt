@@ -1,3 +1,18 @@
-00dfca50 eastl::pair-ish copy assignment  # vector<pair<unsigned int,EA::Variant>> operator=
-00dfcb00 eastl::vector<0x44-byte>::operator=  # inlined assign/copy
-00dfc6f0 cSPUILayout::Init scenario menu builder  # L"GGENewScenariov3" literal
+00dfc5b0 ?dtor@Blob5b0@@QAEXXZ  # Blob5b0::dtor migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfc600 ?EraseRange@EffectVec@@QAEXII@Z  # EffectVec::EraseRange migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfc6f0 ?Init@GgeLayout@@QAEXXZ  # GgeLayout::Init migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfca50 ??4Entry38@@QAEAAU0@ABU0@@Z  # Entry38::operator= migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfcac0 ?dtor@BlobAC0@@QAEXXZ  # BlobAC0::dtor migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfcb00 ?assignFrom@Vec44@@QAEAAU1@ABU1@@Z  # Vec44::assignFrom migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfcc40 ?dtor@BlobC40@@QAEXXZ  # BlobC40::dtor migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfcc90 ??4Entry188@@QAEAAU0@ABU0@@Z  # Entry188::operator= migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfcce0 ?ctorr@BigRec@@QAEAAU1@ABU1@@Z  # BigRec::ctorr migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfce40 ?dtor@BlobE40@@QAEXXZ  # BlobE40::dtor migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfce90 ?dtor@BlobE90@@QAEXXZ  # BlobE90::dtor migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfcee0 ?assignFrom@Vec34@@QAEAAU1@ABU1@@Z  # Vec34::assignFrom migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfd020 ?ctorr@Entry188@@QAEAAU1@ABU1@@Z  # Entry188::ctorr migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfd080 ?Run@Init@?1??copyCtor@Huge_s00df_c5b0@@QAEAAU3@ABU3@@Z@SAXPAUVec44@@@Z  # Huge_s00df_c5b0::copyCtor migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfd250 ?uninitCopy188@@YAPADPAD00@Z  # uninitCopy188 migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfd300 ?d300@@YGXPAH0@Z  # d300 migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfd3a0 ??4Sub028@@QAEAAU0@ABU0@@Z  # Sub028::operator= migrated from s00dfc5b0 (verbatim, slice spelling)
+00dfd4e0 ?placeCopy188@@YAPAPADPAPADPAD11@Z  # placeCopy188 migrated from s00dfc5b0 (verbatim, slice spelling)

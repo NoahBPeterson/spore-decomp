@@ -1,6 +1,6 @@
-00fa9300 ?HandleMessage@cTerrainSphere@@QAE_NIPAUSlotMessage@@@Z  # SP::cTerrainSphere::HandleMessage (ret 8), message switch + face update
-00fa96d0 ?SetModels@cTerrainSphere@@QAEXXZ  # SP::cTerrainSphere::SetModels
-00fa9790 ?Update@cTerrainBackgroundMapJob@@QAE_NH@Z  # cTerrainBackgroundMapJob::Update (ret 4), finished-background-map notification
-00fa9840 ??0Blob110@@QAE@ABU0@@Z  # Blob110 copy constructor (0x110-byte relevel record)
-00fa99c0 ??4Blob110@@QAEAAU0@ABU0@@Z  # Blob110 operator=
-00fa9b50 ?ResetQuadsCaller@cTerrainSphere@@QAEXXZ  # SP::cTerrainSphere::ResetQuadsCaller
+00fa9300 ?HandleMessage@cTerrainSphere_s00fa_9300@@QAE_NIPAUSlotMessage@@@Z  # cTerrainSphere_s00fa_9300::HandleMessage migrated from s00fa9300 (verbatim, slice spelling)
+00fa96d0 ?SetModels@cTerrainSphere_s00fa_9300@@QAEXXZ  # cTerrainSphere_s00fa_9300::SetModels migrated from s00fa9300 (verbatim, slice spelling)
+00fa9790 ?Update@cTerrainBackgroundMapJob@@QAE_NH@Z  # cTerrainBackgroundMapJob::Update migrated from s00fa9300 (verbatim, slice spelling)
+00fa9840 ??0Blob110@@QAE@ABU0@@Z  # Blob110::Blob110 migrated from s00fa9300 (verbatim, slice spelling)
+00fa99c0 ??4Blob110@@QAEAAU0@ABU0@@Z  # Blob110::operator= migrated from s00fa9300 (verbatim, slice spelling)
+00fa9b50 ?ResetQuadsCaller@cTerrainSphere_s00fa_9300@@QAEXXZ  # cTerrainSphere_s00fa_9300::ResetQuadsCaller migrated from s00fa9300 (verbatim, slice spelling)

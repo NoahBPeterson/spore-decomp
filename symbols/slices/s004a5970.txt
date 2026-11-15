@@ -18,3 +18,5 @@
 004a6660 ?RefreshLimbSkins@EditorUtils@SP@@YAXPAUcSPEditorBlock_s004a_5970@2@_N@Z  # RefreshLimbSkins migrated from s004a5970 (verbatim, slice spelling)
 004accb0 ?GetBlock@cSPEditorModel@SP@@QAEPAVcSPEditorBlock@2@I@Z  # SP::cSPEditorModel::GetBlock (callee of s004a5970, named from the dev publics; slice address comment)
 004accf0 ?GetBlockCount@cSPEditorModel@SP@@QBEIXZ  # SP::cSPEditorModel::GetBlockCount (callee of s004a5970, named from the dev publics; slice address comment)
+004a5970 ?FindSymmetricSpine@EditorUtils@SP@@YAPAUcSPEditorBlock_s004a_5970@2@PAU32@@Z  # FindSymmetricSpine migrated from s004a5970 (verbatim, slice spelling)
+004a5b30 ?AddBlockScale@EditorUtils@SP@@YAXPAUcSPEditorBlock_s004a_5970@2@M@Z  # AddBlockScale migrated from s004a5970 (verbatim, slice spelling)

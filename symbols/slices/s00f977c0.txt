@@ -1,15 +1,15 @@
-00f977c0 AddToEffectsSystem  # SP::cTerrainSphere::AddToEffectsSystem
-00f97960 QuadDetailTest  # SP::cTerrainSphere::QuadDetailTest
+00f977c0 ?AddToEffectsSystem@cTerrainSphere_s00f9_77c0@@QAEXXZ  # cTerrainSphere_s00f9_77c0::AddToEffectsSystem migrated from s00f977c0 (verbatim, slice spelling)
+00f97960 ?QuadDetailTest@cTerrainSphere_s00f9_77c0@@QAE_NPBUViewFrame@@PBMPAM@Z  # cTerrainSphere_s00f9_77c0::QuadDetailTest migrated from s00f977c0 (verbatim, slice spelling)
 00f97c30 AreRastersReady  # SP::cTerrainSphere::AreRastersReady
 00f97d00 ReleaseRasters  # SP::cTerrainSphere::ReleaseRasters
-00f97e60 RenderJobPass  # SP::cTerrainSphere::RenderJobPass
-00f97f50 DrawSkyQuads  # SP::cTerrainSphere::DrawSkyQuads
-00f98020 RenderWater  # SP::cTerrainSphere::RenderWater
+00f97e60 ?RenderJobPass@cTerrainSphere_s00f9_77c0@@QAE_NI@Z  # cTerrainSphere_s00f9_77c0::RenderJobPass migrated from s00f977c0 (verbatim, slice spelling)
+00f97f50 ?DrawSkyQuads@cTerrainSphere_s00f9_77c0@@QAEXII@Z  # cTerrainSphere_s00f9_77c0::DrawSkyQuads migrated from s00f977c0 (verbatim, slice spelling)
+00f98020 ?RenderWater@cTerrainSphere_s00f9_77c0@@QAEXII@Z  # cTerrainSphere_s00f9_77c0::RenderWater migrated from s00f977c0 (verbatim, slice spelling)
 00f98170 DrawWaterQuads  # SP::cTerrainSphere::DrawWaterQuads
-00f981d0 RenderAtmosphere  # SP::cTerrainSphere::RenderAtmosphere
+00f981d0 ?RenderAtmosphere@cTerrainSphere_s00f9_77c0@@QAEXII@Z  # cTerrainSphere_s00f9_77c0::RenderAtmosphere migrated from s00f977c0 (verbatim, slice spelling)
 00f98260 GetQuadKeyA  # SP::cTerrainSphere::GetQuadKeyA
 00f98270 GetQuadKeyB  # SP::cTerrainSphere::GetQuadKeyB
 00f98280 GetQuadKeyC  # SP::cTerrainSphere::GetQuadKeyC
-00f98290 UpdateAboveRaster  # SP::cTerrainSphere::UpdateAboveRaster
-00f98530 DrawAtmoQuads  # SP::cTerrainSphere::DrawAtmoQuads
-00f98620 MergeFaceBox  # SP::cTerrainSphere::MergeFaceBox
+00f98290 ?UpdateAboveRaster@cTerrainSphere_s00f9_77c0@@QAE_NHPBMII@Z  # cTerrainSphere_s00f9_77c0::UpdateAboveRaster migrated from s00f977c0 (verbatim, slice spelling)
+00f98530 ?DrawAtmoQuads@cTerrainSphere_s00f9_77c0@@QAEXII@Z  # cTerrainSphere_s00f9_77c0::DrawAtmoQuads migrated from s00f977c0 (verbatim, slice spelling)
+00f98620 ?MergeFaceBox@cTerrainSphere_s00f9_77c0@@QAEXHMMMM@Z  # cTerrainSphere_s00f9_77c0::MergeFaceBox migrated from s00f977c0 (verbatim, slice spelling)

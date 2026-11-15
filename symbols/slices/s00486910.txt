@@ -1,5 +1,5 @@
-00486910 SP::cSPEditorLimbJoint::UpdateLength  # bool, uses mEditorModel radius/scale slots, mFlags.test(0x2d)
-00486d40 SP::cSPEditorLimbJoint::IsValid  # reads mUpperJoint->GetLength, sets block flag 0xf
+00486910 ?UpdateLength@cSPEditorLimbJoint_s0048_6910@SP@@QAE_N_N@Z  # cSPEditorLimbJoint_s0048_6910::UpdateLength migrated from s00486910 (verbatim, slice spelling)
+00486d40 ?IsValid@cSPEditorLimbJoint_s0048_6910@SP@@QAE_NXZ  # cSPEditorLimbJoint_s0048_6910::IsValid migrated from s00486910 (verbatim, slice spelling)
 00486e70 ?Fix@cSPEditorLimbJoint_s0048_6910@SP@@QAE_NPAV12@@Z  # Fix migrated from s00486910 (verbatim, slice spelling)
 00486f50 ?F_486f50@cSPEditorLimbJoint_s0048_6910@SP@@QAEXUcSPVector3_s0048_6910@@@Z  # F_486f50 migrated from s00486910 (verbatim, slice spelling)
 00487040 ?AddLowerJoint@cSPEditorLimbJoint_s0048_6910@SP@@QAEXPAV12@@Z  # AddLowerJoint migrated from s00486910 (verbatim, slice spelling)

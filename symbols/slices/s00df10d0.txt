@@ -1,2 +1,3 @@
-00df10d0 SP::tNewGameFlow::ReadPropList  # card/PDB name; ChooseXxx panel flags, string16 flow array
 00685520 IsWorldLayoutFlagSet  # byte flag of 0x28-byte entry, bounds-checked index (role name)
+00df10d0 SP::tNewGameFlow::ReadPropList  # card/PDB name; ChooseXxx panel flags, string16 flow array
+00df1ba0 ?FillStarterWorldCombo@cGalaxyGameEntryUIStateMachine_s00df_10d0@SP@@QAE_NPAVIWinComboBox_s00df_10d0@UTFWinControls@EA@@@Z  # cGalaxyGameEntryUIStateMachine_s00df_10d0::FillStarterWorldCombo migrated from s00df10d0 (verbatim, slice spelling)

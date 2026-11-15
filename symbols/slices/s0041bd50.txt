@@ -1,4 +1,4 @@
-0041bd50 BoundingBox::Extend  # grows min/max box by a point, seeds when empty (lo.x > hi.x)
-0041bf30 Vector3_MaxComponent  # max of three floats
-0041bfb0 Vector3_MaxVec  # component-wise max
-0041c0c0 Vector3_MinVec  # component-wise min
+0041bd50 ?Extend@BoundingBox_s0041_bd50@@QAEXABUVector3_s0041_bd50@@@Z  # BoundingBox_s0041_bd50::Extend migrated from s0041bd50 (verbatim, slice spelling)
+0041bf30 ?MaxComponent@@YAMPBUVector3_s0041_bd50@@@Z  # MaxComponent migrated from s0041bd50 (verbatim, slice spelling)
+0041bfb0 ?MaxVec@@YA?AUVector3_s0041_bd50@@ABU1@0@Z  # MaxVec migrated from s0041bd50 (verbatim, slice spelling)
+0041c0c0 ?MinVec@@YA?AUVector3_s0041_bd50@@ABU1@0@Z  # MinVec migrated from s0041bd50 (verbatim, slice spelling)

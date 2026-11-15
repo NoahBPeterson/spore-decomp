@@ -1,0 +1,1 @@
+00412900 ?BuildRope@Builder@A@@QAEHPAUNode@2@HHIIIH@Z  # Builder::BuildRope migrated from s00412900 (verbatim, slice spelling)

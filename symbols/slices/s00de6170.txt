@@ -1,4 +1,4 @@
-00de6170 FUN_00de6170   # GGE user-data container destructor: reinstalls the four vtables, nukes the +0x254 and +0x124 trees, destroys the +0x250 interface object, the +0x1d8 block and the +0x144 layout, releases the +0x1d4/+0x1b0/+0x174 refcount runs, frees the +0x110/+0x24 heap blocks (non-zero [p-4] cookie) and the path buffer, nukes the five 0x3c..0xac trees and unlinks the messaging handler (complete, 744 diff)
+00de6170 ?FUN_00de6170@@YIXPAUCGGEUserData@@@Z  # FUN_00de6170 migrated from s00de6170 (verbatim, slice spelling)
 00de63e0 ?FUN_00de63e0@@YIXPAX@Z  # FUN_00de63e0 migrated from s00de6170 (verbatim, slice spelling)
 00de6650 ?FUN_00de6650@CGGEUserData@@QAEXMM@Z  # CGGEUserData::FUN_00de6650 migrated from s00de6170 (verbatim, slice spelling)
 00de67b0 ?FUN_00de67b0@@YIPAHH@Z  # FUN_00de67b0 migrated from s00de6170 (verbatim, slice spelling)

@@ -6,8 +6,8 @@
 00974110 ?SerializeProp@@YA_NPAPAXHH0@Z  # SerializeProp migrated from s00973dd0 (verbatim, slice spelling)
 009741c0 ?OnKeyDown@WinGrid_s0097_3dd0@@QAE_NHII@Z  # WinGrid_s0097_3dd0::OnKeyDown migrated from s00973dd0 (verbatim, slice spelling)
 009743e0 ?GetSelectionCount@IWinGrid@@QAEHXZ  # IWinGrid::GetSelectionCount migrated from s00973dd0 (verbatim, slice spelling)
-00974400 ?GetSelection@IWinGrid@@QAE_NPAUCellCoordinates@@PAH@Z  # IWinGrid::GetSelection migrated from s00973dd0 (verbatim, slice spelling)
-00974460 ?SetSelection@IWinGrid@@QAE_NHH@Z  # EA::UTFWinControls::WinGrid::SetSelection (PDB)
+00974400 ?GetSelection@IWinGrid_s0097_0f30@UTFWinControls@EA@@UAE_NAAH0@Z  # IWinGrid::GetSelection migrated from s00973dd0 (verbatim, slice spelling)
+00974460 ?SetSelection@WinGrid@UTFWinControls@EA@@UAE_NHH@Z  # EA::UTFWinControls::WinGrid::SetSelection migrated from s00973dd0
 00974510 ?GetCellUsedRange@IWinGrid@@QAE_NPAURect_s0097_3dd0@@@Z  # IWinGrid::GetCellUsedRange migrated from s00973dd0 (verbatim, slice spelling)
 009745b0 ?GetCellType@IWinGrid@@QAE_NHHPAH@Z  # IWinGrid::GetCellType migrated from s00973dd0 (verbatim, slice spelling)
 009745f0 ?GetCellFormat@IWinGrid@@QAE_NHHPAUCellFormat_s0097_3dd0@@@Z  # IWinGrid::GetCellFormat migrated from s00973dd0 (verbatim, slice spelling)

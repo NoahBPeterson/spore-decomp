@@ -1,2 +1,2 @@
-00417210 ExportResources  # exports resource files to disk, p4.exe edit/add around copy
+00417210 ?ExportResources@@YAXPAUKeyVec_s0041_7210@@PB_W1PAUHandler@@2_N@Z  # ExportResources migrated from s00417210 (verbatim, slice spelling)
 0067dcd0 GetManager  # returns global DAT_015fd894

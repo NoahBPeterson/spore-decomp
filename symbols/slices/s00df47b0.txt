@@ -1,4 +1,5 @@
-00df47b0 cGalaxyGameEntryUIStateMachine::SetupForGame  # role name (no PDB/ModAPI name): stores cGameInfo* at +0x628, rebuilds new-game flow order from the flow-layout property, calls SetCurrentState(0)/(0xc), UpdateNavigationControls
+00df47b0 ?SetupForGame@cGalaxyGameEntryUIStateMachine_s00df_47b0@@QAEXPAUcGameInfo_s00df_47b0@@@Z  # cGalaxyGameEntryUIStateMachine_s00df_47b0::SetupForGame migrated from s00df47b0 (verbatim, slice spelling)
+00df5330 ?FUN_00df5330@cGalaxyGameEntryUIStateMachine_s00df_47b0@@QAEXXZ  # cGalaxyGameEntryUIStateMachine_s00df_47b0::FUN_00df5330 migrated from s00df47b0 (verbatim, slice spelling)
 00df5430 ?FUN_00df5430@cGalaxyGameEntryUIStateMachine@@QAEXH@Z  # cGalaxyGameEntryUIStateMachine::FUN_00df5430 migrated from s00df47b0 (verbatim, slice spelling)
 00df54f0 ?FUN_00df54f0@cGalaxyGameEntryUIStateMachine@@QAEOM@Z  # cGalaxyGameEntryUIStateMachine::FUN_00df54f0 migrated from s00df47b0 (verbatim, slice spelling)
 00df5540 ?FUN_00df5540@cGalaxyGameEntryUIStateMachine@@QAEXXZ  # cGalaxyGameEntryUIStateMachine::FUN_00df5540 migrated from s00df47b0 (verbatim, slice spelling)
