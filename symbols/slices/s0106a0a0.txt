@@ -6,4 +6,4 @@
 0106aa10 ?FUN_0106aa10@cSPUISpace_s0106_a0a0@@QAEXI@Z  # cSPUISpace_s0106_a0a0::FUN_0106aa10 migrated from s0106a0a0 (verbatim, slice spelling)
 0106aab0 ?FUN_0106aab0@cSPUISpace_s0106_a0a0@@QAEXI@Z  # cSPUISpace_s0106_a0a0::FUN_0106aab0 migrated from s0106a0a0 (verbatim, slice spelling)
 0106ab20 ?FUN_0106ab20@cSPUISpace_s0106_a0a0@@QAEXH@Z  # cSPUISpace_s0106_a0a0::FUN_0106ab20 migrated from s0106a0a0 (verbatim, slice spelling)
-0106ac90  FUN_0106ac90          # emit the UFO/space effect for the selected city (cCivData)
+0106ac90 ?FUN_0106ac90@cSPUISpace_s0106_a0a0@@QAEXPAX@Z  # cSPUISpace_s0106_a0a0::FUN_0106ac90 migrated from s0106a0a0 (verbatim, slice spelling)

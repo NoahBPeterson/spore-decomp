@@ -1,4 +1,7 @@
 01037d30 ?SystemHasTradeRouteWithPlayer@cSpaceTradeRouteManager@SP@@QAE_NII@Z  # SP::cSpaceTradeRouteManager::SystemHasTradeRouteWithPlayer (callee of s01066a40, named from the dev publics; slice address comment)
+01066a40 ?FUN_01066a40@cSPUISpace_s0106_6a40@SP@@QAEDH@Z  # cSPUISpace_s0106_6a40::FUN_01066a40 migrated from s01066a40 (verbatim, slice spelling)
+01066d60 ?FUN_01066d60@cSPUISpace_s0106_6a40@SP@@QAEXXZ  # cSPUISpace_s0106_6a40::FUN_01066d60 migrated from s01066a40 (verbatim, slice spelling)
+01066dd0 ?FUN_01066dd0@cSPUISpace_s0106_6a40@SP@@QAEXXZ  # cSPUISpace_s0106_6a40::FUN_01066dd0 migrated from s01066a40 (verbatim, slice spelling)
 01066e30 ?ShowForTutorial@cSPUISpace_s0106_6a40@SP@@QAEXH@Z  # cSPUISpace_s0106_6a40::ShowForTutorial migrated from s01066a40 (verbatim, slice spelling)
 01066f20 ?UpdateTerraformingBullseye@cSPUISpace_s0106_6a40@SP@@QAEXXZ  # cSPUISpace_s0106_6a40::UpdateTerraformingBullseye migrated from s01066a40 (verbatim, slice spelling)
 010673f0 ?UpdateCaptureBarsVisibility@cSPUISpace_s0106_6a40@SP@@QAEIH@Z  # cSPUISpace_s0106_6a40::UpdateCaptureBarsVisibility migrated from s01066a40 (verbatim, slice spelling)
