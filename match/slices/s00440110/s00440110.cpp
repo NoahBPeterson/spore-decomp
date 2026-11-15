@@ -332,14 +332,19 @@ void cSPEditorBlock::F40c40(void* item, int flag)
 bool cSPEditorBlock::F40d80(void* out, uint32_t key)
 {
     Range r;
-    ScratchSlots<5>();
-    TransMap* m = Map();
-    m->Find(&r, &key);
     char* it;
-    if (r.a != r.b)
-        it = (char*)r.a;
-    else
-        it = m->end();
+    {
+        uint32_t scratch[5];
+        TransMap* m = Map();
+        char* e;
+        m->Find(&r, &key);
+        if (r.a != r.b)
+            it = (char*)r.a;
+        else {
+            e = (char*)m->mpEnd;
+            it = e;
+        }
+    }
     if (it != Map()->end()) {
         if (out)
             *(Trans*)out = *(Trans*)(it + 4);

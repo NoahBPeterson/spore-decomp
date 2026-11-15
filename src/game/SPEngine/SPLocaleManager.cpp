@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "EA/Allocator/ZoneObject.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* GetManager();         // 0x67dcd0
@@ -301,15 +302,28 @@ extern "C" int __fastcall FUN_00695cd0(void* self)
     return 0;
 }
 
+// Retail Database has the canonical ZoneObject / IUnknown32 base layout.
+// The query consumes a full-width ID; the generated InterfaceId enum currently
+// lists only its sentinels, so this local interface keeps the native ID domain.
+namespace LocaleDatabaseRetail {
+struct IUnknown32 {
+    virtual int AddRef();
+    virtual int Release();
+    virtual ~IUnknown32();
+    virtual void* AsInterface(uint32_t typeID);
+};
+struct Database : EA::Allocator::ZoneObject, IUnknown32 {
+    int mRefCount;
+};
+}
+
 // @ 0x00695cf0
-extern "C" int FUN_00695cf0(void** p)
+extern "C" void* FUN_00695cf0(LocaleDatabaseRetail::Database** p)
 {
-    void* o = *p;
-    if (o == 0)
-        return 0;
-    void* t = *(void**)((char*)o + 4);
-    void* self = (char*)o + 4;
-    return ((int(__thiscall*)(void*, int))*(void**)((char*)t + 0xc))(self, 0x226a25b);
+    LocaleDatabaseRetail::Database* database = *p;
+    if (database != 0)
+        return static_cast<LocaleDatabaseRetail::IUnknown32*>(database)->AsInterface(0x0226a25b);
+    return 0;
 }
 
 // @ 0x00695d10

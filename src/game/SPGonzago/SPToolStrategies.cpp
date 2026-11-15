@@ -224,17 +224,23 @@ int ScanColony(cSPSimulatorSpaceGame* pGame);               // 0x010533d0
 int ScanAllSpecies(cPlanet* pPlanet);                       // 0x010534c0
 void AddToolCharge(int nAmount);
 int gSpaceToolFlags[8];
-class IQueryable {
+// Retail view: the generated InterfaceId enum only contains -1, 0 and 1,
+// but AsInterface accepts full 32-bit IDs. Keep the observed interface contract
+// and the canonical base order; construction puts cISerializableObject at +0xc.
+namespace RetailCargo {
+class cISerializableObject {
 public:
-    virtual void v00();
-    virtual void v04();
-    virtual void v08();
-    virtual IRefCounted* Query(const void* pType);  // 0x0c
+    virtual int AddRef();
+    virtual int Release();
+    virtual ~cISerializableObject();
+    virtual void* AsInterface(uint32_t interfaceId);
 };
+class cSPSpaceInventoryItem : public EA::RefCountVTemplate<int>,
+    public EA::Messaging::IHandler, public cISerializableObject {};
+}
+// The holder stores one item pointer; the serializable interface belongs to the item.
 struct IItemHolder {
-    IRefCounted* mpItem;      // 0x00
-    uint32_t mPad04[2];       // 0x04
-    IQueryable* mpSecondary;  // 0x0c
+    RetailCargo::cSPSpaceInventoryItem* mpItem;
 };
 // ---- items of slice s010527f0 end
 
@@ -2540,19 +2546,23 @@ bool cSPToolStrategy::StopTool()
 }
 
 // @ 0x010536e0
-IRefCounted* CastToAnimalCargoInfo(IItemHolder* pHolder)
+void* CastToAnimalCargoInfo(IItemHolder* pHolder)
 {
-    if (pHolder->mpItem == nullptr)
-        return nullptr;
-    return pHolder->mpSecondary->Query((const void*)0x30fc270b);
+    RetailCargo::cSPSpaceInventoryItem* item = pHolder->mpItem;
+    if (item) {
+        return static_cast<RetailCargo::cISerializableObject*>(item)->AsInterface(0x30fc270b);
+    }
+    return nullptr;
 }
 
 // @ 0x01053700
-IRefCounted* CastToPlantCargoInfo(IItemHolder* pHolder)
+void* CastToPlantCargoInfo(IItemHolder* pHolder)
 {
-    if (pHolder->mpItem == nullptr)
-        return nullptr;
-    return pHolder->mpSecondary->Query((const void*)0x70a2863c);
+    RetailCargo::cSPSpaceInventoryItem* item = pHolder->mpItem;
+    if (item) {
+        return static_cast<RetailCargo::cISerializableObject*>(item)->AsInterface(0x70a2863c);
+    }
+    return nullptr;
 }
 
 // @ 0x010537e0

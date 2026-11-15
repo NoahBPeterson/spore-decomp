@@ -16,6 +16,7 @@
 #include "SP/cStaticBuffer.h"
 #include "nSPSkinner/cPaintList.h"
 #include "nSPSkinner/cPaintRenderJob.h"
+#include "nSPSkinner/cPaintRenderer.h"
 #include "nSPSkinner/cRTTBuffer.h"
 #include "nSPSkinner/cPaintCopyIdentityJob.h"
 #include "nSPSkinner/cPaintDifferentiateJob.h"
@@ -812,15 +813,15 @@ struct cPaintSplatJob_s0051_9640 {             // size 0x18
 // ---- items of slice s00519640 end
 
 // ---- items of slice s0051a350 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern void* g_splatVtblDerived;
-extern void* g_splatVtblBase;
+extern void* g_paintRendererVtbl;      // 0x013f1ac0
+extern void* g_paintRendererBaseVtbl;  // 0x013ef094
 int   GetPaintSystem_s0051_a350();                                              // 0x00401080
 void  FUN_004c6ae0(void* dst, char* a, int n, char* b);              // 0x004c6ae0
 void  FUN_00552750();                                                // 0x00552750
 void  FUN_0051d1e0(void* p);                                         // 0x0051d1e0
 void  FUN_0051d140();                                                // 0x0051d140
 void  FUN_00402420();                                                // 0x00402420
-struct SubObj { void FUN_0051d0d0(); };
+struct SubObj { SubObj* FUN_0051d0d0(); }; // fixed-vector constructor, 0x0051d0d0
 void  FUN_0051d180(void* p);                                         // 0x0051d180
 void  FUN_004259e0(void* a, void* b);                                // 0x004259e0
 void  SP_cJob_GetStatus(void* job);                                  // 0x00690120
@@ -2417,15 +2418,23 @@ void FUN_0051a6a0(TexObj** out)
     *out = moved;
 }
 
+inline void InitPaintRendererJobs(nSPSkinner::cPaintRenderer* renderer)
+{
+    EA::AutoRefCount<nSPSkinner::cPaintJobBase>* renderJob = &renderer->mRenderJob;
+    renderJob->mpObject = 0;
+    EA::AutoRefCount<SP::cJob>* textureJob = &renderer->mTextureJob;
+    textureJob->mpObject = 0;
+}
+
 // @ 0x0051a8a0
 void* SkinJob::FUN_0051a8a0()
 {
-    *(void**)this = &g_splatVtblBase;
+    ScratchSlots<3>();
+    *(void**)this = &g_paintRendererBaseVtbl;
     *(int*)((char*)this + 4) = 0;
-    *(void**)this = &g_splatVtblDerived;
+    *(void**)this = &g_paintRendererVtbl;
     ((SubObj*)((char*)this + 8))->FUN_0051d0d0();
-    *(int*)((char*)this + 0x330) = 0;
-    *(int*)((char*)this + 0x334) = 0;
+    InitPaintRendererJobs((nSPSkinner::cPaintRenderer*)this);
     return this;
 }
 
@@ -2433,13 +2442,13 @@ void* SkinJob::FUN_0051a8a0()
 void SkinJob::FUN_0051a930()
 {
     void* self = this;
-    *(void**)self = &g_splatVtblDerived;
+    *(void**)self = &g_paintRendererVtbl;
     if (*(void**)((char*)self + 0x334) != 0)
         SP_cJob_GetStatus(*(void**)((char*)self + 0x334));
     if (*(void**)((char*)self + 0x330) != 0)
         (*(Factory**)((char*)self + 0x330))->v1();
     FUN_0051d180((char*)self + 8);
-    *(void**)self = &g_splatVtblBase;
+    *(void**)self = &g_paintRendererBaseVtbl;
 }
 
 // @ 0x0051a9a0

@@ -754,11 +754,21 @@ PoolPtr::~PoolPtr()
         mp->Release();
 }
 
+static __forceinline Elem38_s0052_66f0* CopyForErase38(
+    Elem38_s0052_66f0* first, Elem38_s0052_66f0* last, Elem38_s0052_66f0* result)
+{
+    const bool bIsMove = false;
+    const bool bCanMemmove = false;
+    const bool bIsPod = false;
+    ScratchSlots_s0052_66f0<5>();
+    return copy_impl(first, last, result);
+}
+
 // @ 0x005266f0
 Elem38_s0052_66f0* VectorElem38::erase(Elem38_s0052_66f0* first, Elem38_s0052_66f0* last)
 {
-    ScratchSlots_s0052_66f0<8>();
-    Elem38_s0052_66f0* const position = copy(last, mpEnd, first);
+    Elem38_s0052_66f0* const position = CopyForErase38(last, mpEnd, first);
+    ScratchSlots_s0052_66f0<3>();
     destruct(position, mpEnd);
     mpEnd -= (last - first);
     return first;
