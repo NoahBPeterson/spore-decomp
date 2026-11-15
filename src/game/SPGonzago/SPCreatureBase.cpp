@@ -7911,12 +7911,15 @@ int __thiscall C_s00c0_bd70::Cdb0()
 // @ 0x00c0ce30
 int __thiscall C_s00c0_bd70::RelationIndex(int idx, char b)
 {
-  if (*(int*)((char*)this + 0xb20) == 0) return 0;
-  if (idx == 0) return 0;
-  int v = Cdb0() + g_15716d8[idx];
-  if (b == 0) v += *(int*)((char*)this + 0xfa0);
-  if (v < 0) return 0;
-  return v < 6 ? v : 5;
+  if (*(int*)((char*)this + 0xb20) != 0) {
+    if (idx != 0) {
+      int v = Cdb0() + g_15716d8[idx];
+      if (b == 0) v += *(int*)((char*)this + 0xfa0);
+      if (v >= 0)
+        return v < 6 ? v : 5;
+    }
+  }
+  return 0;
 }
 
 // @ 0x00c0ce80
