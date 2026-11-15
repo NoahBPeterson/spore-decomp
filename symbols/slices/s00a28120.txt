@@ -1,11 +1,12 @@
-00a28120 ?StartSoundFromCommand@Sys@@QAE_NAAUCommand@@I@Z  # Sys::StartSoundFromCommand, dev PDB name
-00a28450 ?TryStartSound@Sys@@QAE_NPADIPAUIConfig@@PAUVec3@@I@Z  # Sys::TryStartSound, dev PDB name
-00a28810 ?MaintainLRU@Sys@@QAEXXZ  # Sys::MaintainLRU
-00a28a20 ?AddTextureRef@Sys@@QAEXPAUKey4@@@Z  # Sys::AddTextureRef
-00a28aa0 ?GetOrRegisterVoice@Sys@@QAE_NIPAPAUVoice@@HPAX@Z  # Sys::GetOrRegisterVoice
-00a28c60 ?RegisterObj@Sys@@QAEXPAUSnd@@@Z  # Sys::RegisterObj
-00a28d10 ?UnregisterObj@Sys@@QAE_NI@Z  # Sys::UnregisterObj
-00a28d70 ?GetCounterPlaylist@Sys@@QAEHI@Z  # Sys::GetCounterPlaylist
-00a28e90 ?AddCounter@Sys@@QAEHIH@Z  # Sys::AddCounter
-00a28f10 ?TrackPlayingKey@Sys@@QAE_NPAUSnd@@@Z  # Sys::TrackPlayingKey
-00a29000 ?UntrackPlayingKey@Sys@@QAE_NPAUSnd@@@Z  # Sys::UntrackPlayingKey
+00a1a9d0 ?InitFromConfiguration@ResponseCurve@Audio@EA@@QAE_NPAVIConfiguration@23@I@Z  # EA::Audio::ResponseCurve::InitFromConfiguration (callee of s00a28120, named from the dev publics; slice address comment)
+00a28120 ?StartSoundFromCommand@Sys_s00a2_8120@@QAE_NAAUCommand@@I@Z  # Sys_s00a2_8120::StartSoundFromCommand migrated from s00a28120 (verbatim, slice spelling)
+00a28450 ?TryStartSound@Sys_s00a2_8120@@QAE_NPADIPAUIConfig@@PAUVec3_s00a2_8120@@I@Z  # Sys_s00a2_8120::TryStartSound migrated from s00a28120 (verbatim, slice spelling)
+00a28810 ?MaintainLRU@Sys_s00a2_8120@@QAEXXZ  # Sys_s00a2_8120::MaintainLRU migrated from s00a28120 (verbatim, slice spelling)
+00a28a20 ?AddTextureRef@Sys_s00a2_8120@@QAEXPAUKey4_s00a2_8120@@@Z  # Sys_s00a2_8120::AddTextureRef migrated from s00a28120 (verbatim, slice spelling)
+00a28aa0 ?GetOrRegisterVoice@Sys_s00a2_8120@@QAE_NIPAPAUVoice@@HPAX@Z  # Sys_s00a2_8120::GetOrRegisterVoice migrated from s00a28120 (verbatim, slice spelling)
+00a28c60 ?RegisterObj@Sys_s00a2_8120@@QAEXPAUSnd_s00a2_8120@@@Z  # Sys_s00a2_8120::RegisterObj migrated from s00a28120 (verbatim, slice spelling)
+00a28d10 ?UnregisterObj@Sys_s00a2_8120@@QAE_NI@Z  # Sys_s00a2_8120::UnregisterObj migrated from s00a28120 (verbatim, slice spelling)
+00a28d70 ?GetCounterPlaylist@Sys_s00a2_8120@@QAEHI@Z  # Sys_s00a2_8120::GetCounterPlaylist migrated from s00a28120 (verbatim, slice spelling)
+00a28e90 ?AddCounter@Sys_s00a2_8120@@QAEHIH@Z  # Sys_s00a2_8120::AddCounter migrated from s00a28120 (verbatim, slice spelling)
+00a28f10 ?TrackPlayingKey@Sys_s00a2_8120@@QAE_NPAUSnd_s00a2_8120@@@Z  # Sys_s00a2_8120::TrackPlayingKey migrated from s00a28120 (verbatim, slice spelling)
+00a29000 ?UntrackPlayingKey@Sys_s00a2_8120@@QAE_NPAUSnd_s00a2_8120@@@Z  # Sys_s00a2_8120::UntrackPlayingKey migrated from s00a28120 (verbatim, slice spelling)

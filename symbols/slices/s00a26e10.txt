@@ -16,5 +16,6 @@
 00a27910 ?DoInsertValue@Rec12Vector@@QAEXPAURec12@@PBU2@@Z  # Rec12Vector::DoInsertValue migrated from s00a26e10 (verbatim, slice spelling)
 00a27a40 ?DoInsertValue@Rec24Vector@@QAEXPAURec24@@PBU2@@Z  # Rec24Vector::DoInsertValue migrated from s00a26e10 (verbatim, slice spelling)
 00a27b90 ?DoInsertValue@ZoneVector@@QAEXPAUZone@@PBU2@@Z  # ZoneVector::DoInsertValue migrated from s00a26e10 (verbatim, slice spelling)
+00a27e60 ?AddRef@CountMap@@QAE_NI@Z  # CountMap::AddRef migrated from s00a26e10 (verbatim, slice spelling)
 00a27ed0 ?ConnectToSubmix@Submix_s00a2_6e10@@QAE_NPAU1@@Z  # Submix_s00a2_6e10::ConnectToSubmix migrated from s00a26e10 (verbatim, slice spelling)
 00a27ff0 ?Register@EvOwner@@QAE_NIIPAXN@Z  # EvOwner::Register migrated from s00a26e10 (verbatim, slice spelling)
