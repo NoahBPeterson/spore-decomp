@@ -251,7 +251,7 @@ class cCivilization : public RCObject
 {
 public:
     void  FUN_00bf0be0(void* noun);                       // 0x00bf0be0
-    int   FUN_00bf0c60(int spec, int continent, int flag, int zero);  // 0x00bf0c60
+    int   FUN_00bf0c60(int spec, int continent, int flag, bool zero) const;  // 0x00bf0c60
     int   FUN_00bf0cf0(int continent, int flag, int zero);            // 0x00bf0cf0
     int   FUN_00bf0d10(cNounEntity* v);                   // 0x00bf0d10
     bool  FUN_00bf0db0(void* c);                          // 0x00bf0db0
@@ -2634,8 +2634,34 @@ void cCivilization::FUN_00bf0be0(void* noun)
     mTimer300.Restart();
 }
 
+// Borrowed retail cVehicle spatial-interface prefix; no instances are constructed.
+struct VehicleCountSpatialView {
+    virtual void Slot00();
+    virtual void Slot04();
+    virtual void Slot08();
+    virtual void Slot0c();
+    virtual void Slot10();
+    virtual void Slot14();
+    virtual void Slot18();
+    virtual void Slot1c();
+    virtual void Slot20();
+    virtual void Slot24();
+    virtual void Slot28();
+    virtual const cSPVector3& GetPosition() const; // retail slot 0x2c
+    virtual void Slot30();
+    virtual void Slot34();
+    virtual void Slot38();
+    virtual void Slot3c();
+    virtual void Slot40();
+    virtual void Slot44();
+    virtual void Slot48();
+    virtual void Slot4c();
+    virtual bool GetIsSelected() const; // retail slot 0x50
+};
+typedef char VehicleCountSpatialLayout[(sizeof(VehicleCountSpatialView) == 4 && __alignof(VehicleCountSpatialView) == 4 && offsetof(cNounEntity, mSpatial34) == 0x34) ? 1 : -1];
+
 // @ 0x00bf0c60
-int cCivilization::FUN_00bf0c60(int spec, int continent, int flag, int zero)
+int cCivilization::FUN_00bf0c60(int spec, int continent, int flag, bool zero) const
 {
     cNounEntity** end = mVehiclesEnd;
     cNounEntity** it = mVehiclesBegin;
@@ -2643,9 +2669,9 @@ int cCivilization::FUN_00bf0c60(int spec, int continent, int flag, int zero)
     for (; it != end; ++it) {
         cNounEntity* v = *it;
         if (v->mKindB20 != spec) continue;
-        if (continent != -1 && PlanetModel()->GetContinent(GetPos(&v->mSpatial34)) != continent) continue;
+        if (continent != -1 && continent != ((const SP::cPlanetModel*)PlanetModel())->GetContinent(((const VehicleCountSpatialView*)&v->mSpatial34)->GetPosition())) continue;
         if (flag != -1 && v->mFieldB1C != flag) continue;
-        if (zero && Slot50(&v->mSpatial34) != 1) continue;
+        if (zero && ((const VehicleCountSpatialView*)&v->mSpatial34)->GetIsSelected() != 1) continue;
         ++count;
     }
     return count;

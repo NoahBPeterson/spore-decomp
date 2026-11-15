@@ -111,20 +111,39 @@ template struct AutoRefCountI<IRefCounted>;
 // @ 0x004535d0 sym=??4?$AutoRefCountI@UIRefCounted@@@@QAEAAU0@PAUIRefCounted@@@Z
 
 // ---------------------------------------------------------------- strings
-struct FixedAllocTag { uint32_t mName; FixedAllocTag() {} };
+struct FixedAllocTag {
+    uint32_t unused;
+    char* buffer;
+    FixedAllocTag(char* p) : buffer(p) {}
+};
+typedef char FixedAllocTagSizeCheck[sizeof(FixedAllocTag) == 8 ? 1 : -1];
+typedef char FixedAllocTagBufferCheck[offsetof(FixedAllocTag, buffer) == 4 ? 1 : -1];
 struct string32 {
     char* mpBegin; char* mpEnd; char* mpCapacity; uint32_t mAlloc[2];
     char mBuffer[0x20];
-    void InitAllocator(FixedAllocTag* t);                       // 0x422cf0
+    string32* InitAllocator(FixedAllocTag* t);                       // 0x422cf0
     void assign(const char* first, const char* last);           // 0x45f430
     string32();
     string32& operator=(const char* p);
 };
+extern char gEmptyStringStorage; // native zero-filled byte at 0x01667bac
+inline string32* string32::InitAllocator(FixedAllocTag* t)
+{
+    mpBegin = 0;
+    mpEnd = 0;
+    mpCapacity = 0;
+    uint32_t* pAllocator = mAlloc;
+    pAllocator[1] = (uint32_t)t->buffer;
+    mpBegin = &gEmptyStringStorage;
+    mpEnd = mpBegin;
+    mpCapacity = mpBegin + 1;
+    return this;
+}
+
 // @ 0x00453630
 string32::string32()
 {
-    char* p = mBuffer;
-    FixedAllocTag a;
+    FixedAllocTag a(mBuffer);
     InitAllocator(&a);
     mpEnd = mBuffer;
     mpBegin = mpEnd;
