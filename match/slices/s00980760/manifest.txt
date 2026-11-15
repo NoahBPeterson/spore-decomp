@@ -15,3 +15,4 @@ slices/s00980760/s00980760.cpp  ?SetComponentImage@IScrollbarDrawable@UTFWinCont
 slices/s00980760/s00980760.cpp  ?IsActive@WinScrollbar@UTFWinControls@EA@@UAEHXZ  009816e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00980760/s00980760.cpp  ?OnFocusChange@WinScrollbar@UTFWinControls@EA@@QAE_NHPAX@Z  009814c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00980760/s00980760.cpp  ?SetRefresh@WinScrollbar@UTFWinControls@EA@@UAEXD@Z  00981770  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00980760/s00980760.cpp  ?SetValue@IWinScrollbar@UTFWinControls@EA@@QAEXHD@Z  009810a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

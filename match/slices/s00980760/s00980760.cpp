@@ -587,6 +587,84 @@ void IWinScrollbar::SetDrawable(void* d) {
     VSLOT(void(__thiscall*)(void*, int), w, 0x94)(w, 1);
 }
 
+namespace EA { namespace UTFWinControls {
+// Borrowed secondary IWindow prefix through Notify; never instantiated.
+struct ScrollbarNotifyCall {
+    virtual void slot0();
+    virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
+    virtual void slot5();
+    virtual void slot6();
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void slot23();
+    virtual void slot24();
+    virtual void slot25();
+    virtual void slot26();
+    virtual void slot27();
+    virtual void slot28();
+    virtual void slot29();
+    virtual void slot30();
+    virtual void slot31();
+    virtual void slot32();
+    virtual void slot33();
+    virtual void slot34();
+    virtual void slot35();
+    virtual void slot36();
+    virtual void slot37();
+    virtual void slot38();
+    virtual void slot39();
+    virtual void slot40();
+    virtual void slot41();
+    virtual void slot42();
+    virtual void slot43();
+    virtual void slot44();
+    virtual void slot45();
+    virtual void slot46();
+    virtual void slot47();
+    virtual void slot48();
+    virtual void slot49();
+    virtual void slot50();
+    virtual void slot51();
+    virtual void slot52();
+    virtual void slot53();
+    virtual void slot54();
+    virtual void slot55();
+    virtual void slot56();
+    virtual void slot57();
+    virtual void slot58();
+    virtual void slot59();
+    virtual void slot60();
+    virtual void slot61();
+    virtual void slot62();
+    virtual void slot63();
+    virtual void slot64();
+    virtual void slot65();
+    virtual void slot66();
+    virtual void slot67();
+    virtual void slot68();
+    virtual bool Notify(const SBMsg& message); // slot69/0x114
+};
+typedef char ScrollbarNotifyCallLayout[(sizeof(SBMsg) == 0x1c && sizeof(ScrollbarNotifyCall) == 4) ? 1 : -1];
+
+}}
+
 // @ 0x9810a0
 void IWinScrollbar::SetValue(int v, char notify) {
     int t = maxVal - visibleRange;
@@ -602,10 +680,8 @@ void IWinScrollbar::SetValue(int v, char notify) {
         m.src = w->id1 ? w->id1 : w->id0;
         m.from = old;
         void* iwv = (char*)this - 0x208;
-        typedef void (__thiscall *SFn)(void*, SBMsg*);
-        SFn fn = VSLOT(SFn, iwv, 0x114);
         m.to = v;
-        fn(iwv, &m);
+        ((ScrollbarNotifyCall*)iwv)->Notify(m);
     }
     VSLOT(void(__thiscall*)(void*, int), win(), 0x94)(win(), 1);
 }
