@@ -2048,7 +2048,7 @@ struct Range {                                  // 16-byte-element vector (begin
 struct Range2 {
     char* begin;
     char* end;
-    void Clear(char* first, char* last);        // FUN_00426280
+    char* Clear(char* first, char* last);       // FUN_00426280, returns first
     inline void clear() { uint32_t scratch[11]; Clear(begin, end); }
 };
 struct Flags { char pad[4]; uint16_t flags; };
@@ -5152,16 +5152,22 @@ bool Obj::OnClear(int)
 // @ 0x0040eab0
 bool Obj::OnReset(int)
 {
-    r34c.clear();
+    // Retain the unused inlined clear frame without reading its storage.
+    uint32_t resetFrame[10];
+    Range2* clearRange = &r34c;
+    clearRange->Clear(clearRange->begin, clearRange->end);
     f3f8 = 0;
     f3fc = 0x10;
-    Provider* prov = provider;
-    if (prov) {
-        Prop* prop;
-        if (prov->GetProp(0x67B804D, &prop) && prop->type == 9) {
-            f3fc = *((ValueRef*)prop)->Get();
+    {
+        Provider* prov = provider;
+        if (prov) {
+            Prop* prop;
+            if (prov->GetProp(0x67B804D, &prop) && prop->type == 9) {
+                f3fc = *((ValueRef*)prop)->Get();
+            }
         }
     }
+    { uint32_t finalFrame; }
     GetMsgManager()->Post4(0x67B65F1, 0, 0, 0);
     return true;
 }

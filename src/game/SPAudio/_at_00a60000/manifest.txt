@@ -30,3 +30,5 @@
 ../src/game/SPAudio/_at_00a60000.cpp  ?HashCall@SymbolManager@@QAEII@Z  00a669b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
   ../src/game/SPAudio/_at_00a60000.cpp  ?vinlet_new@Eapd@@YAPAXPAX0HPAUt_atom@1@@Z  00a613c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/_at_00a60000.cpp  ?GetTwoWords@EapdAssetManager_s00a6_3dd0@Eapd@Audio@EA@@QAEPAXPIAX@Z  00a649b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a60000.cpp  ?Insert1c@EapdTree@Eapd@Audio@EA@@QAEPAPAXPAPAXPAUEapdTreeNode@234@PBUEapdValue1c@234@D@Z  00a63770  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a60000.cpp  ?Insert18@EapdTree@Eapd@Audio@EA@@QAEPAPAXPAPAXPAUEapdTreeNode@234@PBUEapdValue18@234@D@Z  00a637f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

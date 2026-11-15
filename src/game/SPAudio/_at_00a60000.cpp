@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <new>
 
 // ---- items of slice s00a60ef0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   uint;
@@ -191,6 +192,42 @@ struct XThisInstance {
 namespace EA {
 namespace Audio {
 namespace Eapd {
+// The map owner embeds this tree at +0x10. Insertion methods receive the
+// tree itself: its count is +0x14 and its named allocator is +0x18.
+struct EapdTreeNode {
+    EapdTreeNode* mpRight;
+    EapdTreeNode* mpLeft;
+    EapdTreeNode* mpParent;
+    uint32_t mColor;
+};
+struct EapdValue1c {
+    uint32_t mKey;
+    uint32_t mData[2];
+};
+struct EapdNode1c : EapdTreeNode { EapdValue1c mValue; };
+struct EapdValue18 {
+    uint32_t mKey;
+    uint32_t mData;
+};
+struct EapdNode18 : EapdTreeNode { EapdValue18 mValue; };
+struct EapdNamedAllocator {
+    virtual ~EapdNamedAllocator();
+    virtual void* AllocNamed(unsigned int size, const char* name);
+    virtual void* Alloc(unsigned int size);
+    virtual void Free(void* memory);
+    void* mpCoreAllocator;
+    const char* mpName;
+};
+struct EapdTree {
+    uint32_t mCompare;
+    EapdTreeNode mAnchor;
+    uint32_t mnSize;
+    EapdNamedAllocator mAllocator;
+    void** Insert1c(void** output, EapdTreeNode* hint,
+                         const EapdValue1c* value, char isEnd);
+    void** Insert18(void** output, EapdTreeNode* hint,
+                         const EapdValue18* value, char isEnd);
+};
 struct EapdMapBase {
     void*       mpvtable;      // +0x00
     void*       mpAllocVtbl;   // +0x04
@@ -214,8 +251,6 @@ struct EapdMapBase {
     bool  HasKeyEvent(uint32_t key);                             // 0x00a63680
     bool  HasKeyField(uint32_t key, int arg);                    // 0x00a636b0
     void* Insert28(void** out, void* hint, uint32_t* key, char isEnd);   // 0x00a636e0
-    void  Insert1c(uint32_t* val, void* hint, uint32_t* key, char isEnd); // 0x00a63770
-    void  Insert18(uint32_t* val, void* hint, uint32_t* key, char isEnd); // 0x00a637f0
     void* FindOrInsert18(void** out, uint32_t* key);             // 0x00a63a50
     void* FindOrInsert28(void** out, uint32_t* key);             // 0x00a63bf0
     bool  FindEventSample(uint32_t a0, uint32_t key, int sym2, uint32_t a4, uint32_t a5,
@@ -1306,44 +1341,41 @@ void* EapdMapBase::Insert28(void** out, void* hint, uint32_t* key, char isEnd)
 
 // @ 0x00a63770
 namespace EA { namespace Audio { namespace Eapd {
-void EapdMapBase::Insert1c(uint32_t* val, void* hint, uint32_t* key, char isEnd)
+void** EapdTree::Insert1c(void** output, EapdTreeNode* hint,
+                               const EapdValue1c* value, char isEnd)
 {
     int side;
-    if (isEnd == 0 && hint != (char*)this + 4 && *key >= *(uint32_t*)((char*)hint + 0x10))
+    if (isEnd == 0 && hint != &mAnchor && value->mKey >= static_cast<EapdNode1c*>(hint)->mValue.mKey)
         side = 1;
     else
         side = 0;
-    void* alloc = (char*)this + 0x18;
-    void* node = ((void* (__thiscall*)(void*, unsigned))(*(void***)alloc)[2])(alloc, 0x1c);
-    if ((char*)node + 0x10 != 0) {
-        uint32_t* d = (uint32_t*)((char*)node + 0x10);
-        d[0] = key[0]; d[1] = key[1]; d[2] = key[2];
-    }
-    RBTreeInsert(node, hint, (char*)this + 4, side);
-    uint32_t* v = val;
-    ++*(int*)((char*)this + 0x14);
-    *v = (uint32_t)node;
+    EapdNode1c* node = static_cast<EapdNode1c*>(mAllocator.Alloc(sizeof(EapdNode1c)));
+    ::new (&node->mValue) EapdValue1c(*value);
+    RBTreeInsert(node, hint, &mAnchor, side);
+    void** result = static_cast<void** volatile&>(output);
+    static_cast<volatile uint32_t&>(mnSize) += 1;
+    *result = node;
+    return result;
 }
 }}}  // namespace EA::Audio::Eapd
 
 // @ 0x00a637f0
 namespace EA { namespace Audio { namespace Eapd {
-void EapdMapBase::Insert18(uint32_t* val, void* hint, uint32_t* key, char isEnd)
+void** EapdTree::Insert18(void** output, EapdTreeNode* hint,
+                               const EapdValue18* value, char isEnd)
 {
     int side;
-    if (isEnd == 0 && hint != (char*)this + 4 && *key >= *(uint32_t*)((char*)hint + 0x10))
+    if (isEnd == 0 && hint != &mAnchor && value->mKey >= static_cast<EapdNode18*>(hint)->mValue.mKey)
         side = 1;
     else
         side = 0;
-    void* alloc = (char*)this + 0x18;
-    void* node = ((void* (__thiscall*)(void*, unsigned))(*(void***)alloc)[2])(alloc, 0x18);
-    if ((char*)node + 0x10 != 0) {
-        uint32_t* d = (uint32_t*)((char*)node + 0x10);
-        d[0] = key[0]; d[1] = key[1];
-    }
-    RBTreeInsert(node, hint, (char*)this + 4, side);
-    ++*(int*)((char*)this + 0x14);
-    *val = (uint32_t)node;
+    EapdNode18* node = static_cast<EapdNode18*>(mAllocator.Alloc(sizeof(EapdNode18)));
+    ::new (&node->mValue) EapdValue18(*value);
+    RBTreeInsert(node, hint, &mAnchor, side);
+    void** result = static_cast<void** volatile&>(output);
+    static_cast<volatile uint32_t&>(mnSize) += 1;
+    *result = node;
+    return result;
 }
 }}}  // namespace EA::Audio::Eapd
 
@@ -1425,7 +1457,9 @@ void* EapdMapBase::FindOrInsert18(void** out, uint32_t* key)
     char* hint = parent;
     if (cmp) {
         if (parent == *(char**)((char*)this + 8)) {
-            Insert18((uint32_t*)out, hint, key, 0);
+            reinterpret_cast<EapdTree*>(this)->Insert18(
+                out, reinterpret_cast<EapdTreeNode*>(hint),
+                reinterpret_cast<const EapdValue18*>(key), 0);
             return out;
         }
         hint = (char*)RBTreeDecrement(parent);

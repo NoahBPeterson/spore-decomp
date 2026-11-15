@@ -686,7 +686,7 @@ struct Map844 {
     void* head;    // +0x04
     void* tail;    // +0x08
     char padc[8];
-    int count;     // +0x14
+    uint32_t count; // +0x14
     void* allocNode(int* key);   // FUN_00684420
     void* insert(void** out, void* at, int* key, char flag);
 };
@@ -1836,9 +1836,11 @@ void* Map844::insert(void** out, void* at, int* key, char flag)
     int f = (!flag && at != (char*)this + 4 && *key >= *(int*)((char*)at + 0x10)) ? 1 : 0;
     void* node = allocNode(key);
     RBTreeInsert(node, at, (char*)this + 4, f);
-    count += 1;
-    *out = node;
-    return out;
+    // Preserve the native output-argument load before updating the count.
+    void** output = static_cast<void** volatile&>(out);
+    static_cast<volatile uint32_t&>(count) += 1;
+    *output = node;
+    return output;
 }
 
 // @ 0x00684500

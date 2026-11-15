@@ -21,3 +21,4 @@
 ../src/game/SPEngine/_at_00680000.cpp  ??1RefObj@@UAE@XZ  0068f050  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ?Insert@RBSet@@QAEPAPAUSetNode@@PAPAU2@PAU2@PBHD@Z  0068daf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ?InsertPair@MapV@@QAEPAPAURNode@@PAPAU2@PAU2@PAH_N@Z  00681590  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ?insert@Map844@@QAEPAXPAPAXPAXPAHD@Z  006844a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

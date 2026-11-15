@@ -198,11 +198,9 @@ Rec24_s006c_4a70* Median(Rec24_s006c_4a70* a, Rec24_s006c_4a70* b, Rec24_s006c_4
 void InsertionSortA(Rec24_s006c_4a70* first, Rec24_s006c_4a70* last);                        // 0x006c27b0
 void InsertionSortB(Rec24_s006c_4a70* first, Rec24_s006c_4a70* last);                        // 0x006c28a0
 static inline int Log2(int n) {
-  int i = 0;
-  while (n > 0) {
+  int i;
+  for (i = 0; n; ++i)
     n >>= 1;
-    ++i;
-  }
   return i - 1;
 }
 // ---- items of slice s006c4a70 end
@@ -905,9 +903,8 @@ void QuickSortImpl(Rec24_s006c_4a70* first, Rec24_s006c_4a70* last, int depth)
 void QuickSort(Rec24_s006c_4a70* first, Rec24_s006c_4a70* last)
 {
   if (first != last) {
-    int n = (int)(last - first);
-    QuickSortImpl(first, last, 2 * Log2(n));
-    if (n > 0x1c) {
+    QuickSortImpl(first, last, 2 * Log2(last - first));
+    if ((last - first) > 0x1c) {
       InsertionSortA(first, first + 0x1c);
       InsertionSortB(first + 0x1c, last);
     } else {

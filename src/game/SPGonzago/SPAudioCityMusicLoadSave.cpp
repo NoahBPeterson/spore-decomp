@@ -4,6 +4,8 @@
 
 #include "game/types.h"
 #include "cSPUILayout.h"
+#include "SP/cSPUIAssetBrowser.h"
+#include "SP/cSPUIAssetBrowserCallback.h"
 #include <stddef.h>
 
 // unnamed retail callees and globals (address in the comment)
@@ -93,7 +95,6 @@ public:
 class cCityMusicLoadSave : public IWinProc {
 public:
     cCityMusicLoadSave();
-    void Load();
     void StartDialog(IWindow* pDialog);
     void StopDialog(IWindow* pDialog);
     void Init();
@@ -121,7 +122,6 @@ void* operator_new(size_t nSize, const char* pName, int a);
 cMessageServer* MessageServer();
 void* CenterWindowInRect(void* pLayout, void* pArea);
 void* GetResourceManager();
-void LaunchAssetBrowser(uint32_t id, void* pCallback, void* pProc);
 void BeginModal(IWindow* pWindow, int a, int b);
 void EndModal(IWindow* pWindow, int a, int b);
 void ResetMusicViewer();
@@ -237,11 +237,24 @@ struct LoadSaveIface8 {
 };
 // ---- items of slice s00ea28f0 end
 
+// Retail constructor 00ea2170 installs the asset-browser callback at +8.
+// Its callback clears the pending-browser byte at whole-object +0x24.
+namespace RetailCityMusic {
+class cCityMusicLoadSave : public EA::RefCountVTemplate<int>,
+    public SP::cSPUIAssetBrowserCallback {
+public:
+    uint8_t mPad0c[0x18];
+    uint8_t mbWaitingForAssetBrowser;
+    void Load();
+};
+}
+
 // @ 0x00ea20a0
-void cCityMusicLoadSave::Load()
+void RetailCityMusic::cCityMusicLoadSave::Load()
 {
-    LaunchAssetBrowser(0xc132061au, (cCityMusicLoadSave*)this, (void*)0);
-    mbWaitingForSaveDialog = 1;
+    SP::cSPUIAssetBrowser::Launch(0xc132061au,
+        static_cast<SP::cSPUIAssetBrowserCallback*>(this), 0x00ad0e52u);
+    mbWaitingForAssetBrowser = 1;
 }
 
 // @ 0x00ea20d0
