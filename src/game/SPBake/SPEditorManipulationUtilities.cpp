@@ -7,6 +7,8 @@
 #include "cSPMatrix3.h"
 #include "hkRotation.h"
 #include "hkVector4.h"
+extern "C" double __cdecl fabs(double);
+#pragma intrinsic(fabs)
 #include <math.h>
 #include <string.h>
 #include <new>
@@ -204,7 +206,7 @@ struct Vec {
 extern float g_492de0_limit;
 struct Vector3_s0049_28d0 {
     float x, y, z;
-    float operator[](int i) const { return (&x)[i]; }
+    const float& operator[](int i) const { return (&x)[i]; }
     Vector3_s0049_28d0() {}
     Vector3_s0049_28d0(const Vector3_s0049_28d0& o) : x(o.x), y(o.y), z(o.z) {}
     Vector3_s0049_28d0& operator=(const Vector3_s0049_28d0& o) { x = o.x; y = o.y; z = o.z; return *this; }
@@ -218,7 +220,7 @@ struct cSPEditorBlock_s0049_28d0 {
     Vector3_s0049_28d0 position;                     // 0x48
     char pad1[0x33c - 0x54];
     void* tracker;                        // 0x33c
-    BoundingBox_s0049_28d0* GetBBox(BoundingBox_s0049_28d0* out, int a, int b, int c);  // 0x0044ae00 (cSPEditorBlock::GetBBox)
+    BoundingBox_s0049_28d0* GetBBox(BoundingBox_s0049_28d0* out, int type, bool a, bool b);  // 0x0044ae00 (cSPEditorBlock::GetBBox)
 };
 Vector3_s0049_28d0* Vector3_Sub_s0049_28d0(Vector3_s0049_28d0* out, const Vector3_s0049_28d0* a, const Vector3_s0049_28d0* b);
 struct S935 {
@@ -566,9 +568,11 @@ struct D95fe0 {
     void* Ctor();
 };
 struct D961 {
+    struct Value { int first, second; };
     char pad[0x4c];
     void** data;                              // 0x4c
     int count;                                // 0x50
+    int size() const { int n = count; return n; }
     int* Find(int* out, int key);
 };
 struct Vec_s0049_56b0 {
@@ -5165,16 +5169,24 @@ void FUN_004928d0(Blk* p, Vec3W pos, Matrix3_s0049_28d0 rot, Vec3W* outPos, Matr
 // @ 0x00492de0
 bool FUN_00492de0(cSPEditorBlock_s0049_28d0* p)
 {
-    cSPEditorBlock_s0049_28d0* t1 = (cSPEditorBlock_s0049_28d0*)p->tracker;
-    if (t1 == 0)
-        return false;
-    cSPEditorBlock_s0049_28d0* t2 = (cSPEditorBlock_s0049_28d0*)p->tracker;
-    BoundingBox_s0049_28d0 bb;
-    t2->GetBBox(&bb, 0, 0, 0);
-    float dz = bb.mx[2] - p->position[2];
-    float ad = (float)fabs(dz);
-    if (g_492de0_limit > ad)
-        return true;
+    float height;
+    {
+        BoundingBox_s0049_28d0 bb;
+        cSPEditorBlock_s0049_28d0* t1 = (cSPEditorBlock_s0049_28d0*)p->tracker;
+        if (t1 != 0) {
+            cSPEditorBlock_s0049_28d0* t2 = (cSPEditorBlock_s0049_28d0*)p->tracker;
+            t2->GetBBox(&bb, 0, 0, 0);
+            height = bb.mx[2];
+            {
+                float dz = height - p->position[2];
+                {
+                    float ad = (float)fabs(dz);
+                    if (g_492de0_limit > ad)
+                        return true;
+                }
+            }
+        }
+    }
     return false;
 }
 
@@ -5707,19 +5719,16 @@ void D960::Dtor()
 // @ 0x00496140
 int* D961::Find(int* out, int key)
 {
-    int i = 0;
-    while (true) {
-        if (this->count <= i) {
-            out[0] = 0;
-            out[1] = 0;
+    Value empty;
+    for (int i = 0; i < size(); ++i) {
+        if (*(int*)((char*)this->data + i * 0x10) == key) {
+            *(Value*)out = *(Value*)((char*)this->data + i * 0x10 + 8);
             return out;
         }
-        if (*(int*)((char*)this->data + i * 0x10) == key)
-            break;
-        ++i;
     }
-    out[0] = *(int*)((char*)this->data + i * 0x10 + 8);
-    out[1] = *(int*)((char*)this->data + i * 0x10 + 0xc);
+    empty.first = 0;
+    empty.second = 0;
+    *(Value*)out = empty;
     return out;
 }
 

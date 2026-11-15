@@ -42,8 +42,6 @@
 00449d40 215 complete; /Od inline operator-> junk-copy temps (3 extra slots) not reproduced flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 00449ed0 200 Blk::A49ed0 complete; AutoRefCount operator-> temps and frame layout differ; difftest PASS (347 valid, 74.2% coverage) after the GetScale annotation became a // 0x004adaa0 line comment flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044a0e0 1263 Blk::A4a0e0 (SetOrientation) complete; /Od frame layout and inline temps differ flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
-0044a9a0 42 complete behaviour; /Od frame/slot order differs flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
-0044aa10 54 complete behaviour; /Od frame/slot order differs flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044aaa0 335 Blk::A4aaa0 (GetBounds by value) complete; inline bool helpers / switch layout differ flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044ae00 1442 complete GetBBox; /Od hole/slot layout differs (frame 0x108 vs 0x168), instruction shapes otherwise close
 0044b590 26 tight loop body identical; original reserves a 0x30 frame (extra 0x24 local), ours only reserves the this slot
