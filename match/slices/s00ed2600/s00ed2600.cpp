@@ -62,7 +62,7 @@ struct RefMap {
     int      mSize;    // +0x14
     void Nuke(RBNode* node);                                              // 0x00ed2a10
     void Insert(MapInsertResult* result, void** key, int flag);           // 0x00ed2b30
-    void InsertUnique(void** result, RBNode* pos, void** key, char flag);  // 0x00ed2a50
+    void** InsertUnique(void** result, RBNode* pos, void** key, char flag);  // 0x00ed2a50
     void Erase(void** result, RBNode* node);                              // 0x00ed2ae0
 };
 
@@ -349,7 +349,7 @@ void RefMap::Nuke(RBNode* node)
 // ---------------------------------------------------------------- 0x00ed2a50
 // @ 0x00ed2a50
 // Insert a new refcounted key node beside `pos` in the tree.
-void RefMap::InsertUnique(void** result, RBNode* pos, void** key, char flag)
+void** RefMap::InsertUnique(void** result, RBNode* pos, void** key, char flag)
 {
     int side = (flag == 0 && pos != (RBNode*)&mAnchor && *key >= pos->mpValue) ? 1 : 0;
     RBNode* node = (RBNode*)operator_new(0x14, "Simulator", 0, 0, (const char*)0x13ebb38, 0xd1);
@@ -359,8 +359,10 @@ void RefMap::InsertUnique(void** result, RBNode* pos, void** key, char flag)
             ((RefObj*)node->mpValue)->mpVtbl->mSlot08(node->mpValue);
     }
     eastl_RBTreeInsert(node, pos, &mAnchor, side);
+    void** destination = *(void** volatile*)&result;
     mSize++;
-    *result = node;
+    *destination = node;
+    return destination;
 }
 
 // ---------------------------------------------------------------- 0x00ed2ae0

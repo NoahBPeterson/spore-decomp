@@ -62,7 +62,6 @@
 004a7c90 169 complete behavior; best /Od frame differs (original 0x44 frame vs mine 0x20; inlined eastl push_back temps and local hash order)
 004a88f0 259 complete behavior (XformMsg post to EffectsManager); /GS cookie and vector-copy shape differ; equiv: UNSUPPORTED (0/1200 inputs valid: fake-arity/read faults on EffectsManager vtable calls)
 004a96d0 327 complete flag/children walk; /Od inlined-flag + element temp slots differ
-004a9840 105 complete SP::EditorUtils::GetFirstFootBlock; /Od element/ref temp slot ordering differs
 004928d0  -  complete draft carried over from s004928d0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 1208, retail 1293
 004934d0  -  complete draft carried over from s004928d0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 278, retail 276
 00496300  -  complete draft carried over from s00496300 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 519, retail 1111
