@@ -5,3 +5,4 @@
 ../src/game/SPBake/SPEditorStats.cpp  ?BuildAndDispatch3@@YAXPAXPAUVerbSink_s004e_7990@@0M@Z  004e87f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorStats.cpp  ?Reset@TreeHead@@QAEXXZ  004e8850  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorStats.cpp  ?FreeNodes@FreeCtx@@QAEXPAX@Z  004e8a30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorStats.cpp  ?BuildDispatch6c10@@YAXPAXPAUVerbSink@@@Z  004e6c10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

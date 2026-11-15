@@ -1948,15 +1948,21 @@ void cCityData_s00fe_ff80::SetKey(const cInt3* pKey)
 }
 }  // namespace SP
 
+namespace SP {
+static inline void WriteCityNameWord(cStreamWriter* pWriter, uint32_t nWord)
+{
+    EA::IO::IStream_s00fe_ff80* pPos = pWriter->GetStream();
+    EA::IO::WriteUint16(pPos, &nWord, 1, 0);
+}
+}
+
 // @ 0x00ff0450
 namespace SP {
 void cCityData_s00fe_ff80::Write(cOutStream* pStream)
 {
     for (int i = 0; i < 14; ++i) {
         cStreamWriter* pWriter = pStream->GetWriter();
-        uint32_t nWord = mName[i];
-        EA::IO::IStream_s00fe_ff80* pPos = pWriter->GetStream();
-        EA::IO::WriteUint16(pPos, &nWord, 1, 0);
+        WriteCityNameWord(pWriter, mName[i]);
     }
     cVarListSerializer_s00fe_ff80 serializer(this, gCityVarList, 0x1a80d26);
     serializer.Serialize(pStream);
