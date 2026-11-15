@@ -446,13 +446,12 @@ void ExceptionHandlerWin32::WriteExceptionReport()
     unsigned n = mpOwner->mReportWriters.size();
     if (n == 0) {
         WriteExceptionReportInternal(rw);
-        rw->Destroy();
-        return;
-    }
-    for (int i = 0; i < (int)n; ++i) {
-        ReportWriter* w = (unsigned)i < mpOwner->mReportWriters.size()
-                              ? mpOwner->mReportWriters.mpBegin[i] : 0;
-        WriteExceptionReportInternal(w);
+    } else {
+        for (int i = 0; i < (int)n; ++i) {
+            ReportWriter* w = (unsigned)i < mpOwner->mReportWriters.size()
+                                  ? mpOwner->mReportWriters.mpBegin[i] : 0;
+            WriteExceptionReportInternal(w);
+        }
     }
     rw->Destroy();
 }

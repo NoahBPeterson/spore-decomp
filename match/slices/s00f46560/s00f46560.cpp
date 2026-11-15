@@ -321,7 +321,7 @@ unsigned char cEditor::FUN_00f46630(void* win) {
 bool UIComments::FUN_00f468c0(int a1, int* msg) {
     if (msg[2] == (int)0x287259f6) {
         void* p = (void*)msg[0];
-        void* r = (*(FnRetP)Vslot(p, 0x1c))(p);
+        void* r = ((FnRetP)(*(void***)p)[0x1c / 4])(p);
         if (r == (void*)0x519e168) {
             void* am = FUN_00607a60();
             (*(FnP)Vslot(am, 0x44))(am);

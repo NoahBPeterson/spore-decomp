@@ -543,11 +543,7 @@ bool __cdecl Image_Write(void* stream, ImageData* d, unsigned count)
     if (!WriteUint32(stream, &v, 1, 0)) return false;
     v = count;
     if (!WriteUint32(stream, &v, 1, 0)) return false;
-    Stream* st = (Stream*)stream;
-    void* vtbl = st->mVtbl;
-    void* data = d->mData;
-    StreamWriteFn fn = (StreamWriteFn)(*(void**)((char*)vtbl + 0x38));
-    return fn(st, data, count);
+    return ((StreamWriteFn)(*(void**)((char*)((Stream*)stream)->mVtbl + 0x38)))(stream, d->mData, count);
 }
 
 // @ 0x007045d0

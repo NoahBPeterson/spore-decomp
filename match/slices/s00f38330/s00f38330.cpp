@@ -4,6 +4,8 @@
 // clock display, a cCivTokenTranslator and its string members.  Module flags
 // /O2 /MD /Gy /TP.
 #include "types.h"
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 typedef unsigned int   uint32_t;
 typedef unsigned short uint16_t;
@@ -631,6 +633,7 @@ BigAssetView* __fastcall FUN_00f38c70(BigAssetView* p)
 {
     *(void* volatile*)&p->mpVtbl4 = kpBigBaseVtbl4;   // base-class constructor vptrs
     *(void* volatile*)&p->mpVtbl8 = kpBaseVtbl4;
+    _ReadWriteBarrier();
     void* pNull = 0;
     *(int*)p->mPad0c = (int)pNull;
     p->mpVtbl0 = kpBigVtbl0;

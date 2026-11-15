@@ -957,13 +957,18 @@ void cMissionMultiStep::UpdateFromTerrainSphereB()
         ClearMissionUI();
 }
 
+void FUN_0102c0c0(SP::cPlanet* planet);                          // 0x0102c0c0
+
+class cMissionPlanetRefresher : public SP::cSPMission {
+public:
+    void RefreshTargetPlanet();
+};
+
 // @ 0x00c5b130
-void RefreshTargetPlanet()
+void cMissionPlanetRefresher::RefreshTargetPlanet()
 {
-    cSPMission* pMission = nullptr;
-    uint32_t nPlanet = pMission->GetTargetPlanet();
-    SetPlanetHighlight(nPlanet);
-    RequestMissionRefresh();
+    FUN_0102c0c0(GetTargetPlanet());
+    SP::cSPMission::OnComplete();
 }
 
 // @ 0x00c5b150

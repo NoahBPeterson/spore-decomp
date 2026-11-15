@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-005266f0 15 /Od frame-slot order differs (frame size matches; named-local hash offsets off by a few bytes) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 005267c0 451 Elem38 vector DoInsertValue; complete; VectorBase::DoAllocate now passes alignment 0 (matching the original's EASTL_Allocate allocator,size,0,0 call), remaining /Od frame (0xcc) and helper spill slots differ. [equiv: WEAK 360 valid (--layout 0 --inputs 1600), 55.6% cov, 0 mismatches; replay PASS] flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00526b30 402 0x1c-byte vector operator=; complete but /Od frame/spill slots differ; equiv WEAK (442 valid, 45.5% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 00526e70 402 0x18-byte vector operator=; complete but /Od frame/spill slots differ; equiv WEAK (402 valid, 45.5% coverage) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
