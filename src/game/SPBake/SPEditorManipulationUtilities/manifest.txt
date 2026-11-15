@@ -76,3 +76,5 @@
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?push_front@?$deque@PAUcSPEditorPart@SP@@@SP@@QAEXABQAUcSPEditorPart@2@@Z  004aa230  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ??0OrientedPoint@SP@@QAE@ABU01@@Z  004aa2f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetCreatorType@@YA_NPBUResourceKey@@@Z  00641900  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_004902c0@@YA_NPAUcSPEditorBlock@@0@Z  004902c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00496b60@@YAXPAUHolderA@@M@Z  00496b60  /Od /MD /Gy /EHsc /TP /Isrc/game/include

@@ -57,3 +57,6 @@
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?push_back@?$vector_s0056_46b0@URecord50@@Vallocator_s0056_46b0@eastl@@@eastl@@QAEXXZ  00564820  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?insert@?$vector_set_s0056_46b0@IU?$less_s0056_46b0@I@eastl@@Vallocator_s0056_46b0@2@V?$vector_s0056_46b0@IVallocator_s0056_46b0@eastl@@@2@@eastl@@QAE?AU?$pair_s0056_46b0@PAI_N@2@ABI@Z  00564960  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetPartVolumePercentages@@YAXPBUCreature@@PAUFloatVector@@@Z  0056a5f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_0055f9e0@EcxStub70@SP@@QAEXXZ  0055f9e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?slot_26@cSPObjectTemplateDB@SP@@UAEXXZ  0055fed0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FUN_00560880@EcxStubFc@SP@@QAE_NPAXPAI@Z  00560880  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

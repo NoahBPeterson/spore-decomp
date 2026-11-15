@@ -790,12 +790,12 @@ struct Bone {
     int Check();                          // 0x0044f220
 };
 struct LimbStructure {
-    char pad[0x5c];
-    void Ctor();                          // 0x00488850
-    void Init(void* limb, int a, int b);  // 0x004891a0
+    uint32_t pad[0x54 / 4]; // Three 0x14-byte vectors, with the last at +0x40.
+    LimbStructure* Ctor();               // 0x00488850; returns this
+    void Init(void* limb, bool a, bool b); // 0x004891a0
     void UpdateScaleRange(void* limb, float f); // 0x0048b370
     void F();                             // 0x00488980
-    ~LimbStructure();                     // 0x00488900
+    void Destroy();                       // 0x00488900
 };
 struct HolderA {
     void* Get();                          // 0x0047e6c0
@@ -3138,6 +3138,7 @@ struct BoundingBox {
     Vector3 mx;
     BoundingBox() {}
     bool Intersects(const BoundingBox& b) const;
+    void Scale(float factor);             // 0x0044ad00
 };
 struct Tracker {
     char pad0[0x33c];
@@ -3193,7 +3194,6 @@ Vector3* Cross(Vector3* out, const Vector3* a, const Vector3* b);     // 0x0044e
 Vector3* Vector3_Scale(Vector3* out, const float* s, const Vector3* v); // 0x0041de40
 Vector3* Vector3_Sub(Vector3* out, const Vector3* a, const Vector3* b); // 0x0041db10
 float VectorLength(const Vector3* v);                                 // 0x0040ae50
-void ExpandBy(BoundingBox* b, float m);                               // 0x0044ad00
 void SomeCtor(void* self, void* src);                                 // 0x00540470
 void SomePush(void* self, void* v);                                   // 0x004a9e40
 bool SomeMethod(void* self);                                          // 0x00526430
@@ -4728,11 +4728,21 @@ bool FUN_004902c0(cSPEditorBlock* a, cSPEditorBlock* b)
 {
     if (b == 0)
         return false;
-    BoundingBox bbB, bbA;
-    b->GetBBox(&bbB, 0, 0, 0);
-    a->GetBBox(&bbA, 0, 0, 0);
-    ExpandBy(&bbB, 1.1f);
-    return bbB.Intersects(bbA);
+    BoundingBox bbB;
+    {
+        float margin;
+        {
+            BoundingBox bbA;
+            ScratchSlots<32>();
+            b->GetBBox(&bbB, 0, 0, 0);
+            a->GetBBox(&bbA, 0, 0, 0);
+            margin = 1.1f;
+            bbB.Scale(margin);
+            if (bbB.Intersects(bbA))
+                return true;
+            return false;
+        }
+    }
 }
 
 // @ 0x00490330
@@ -5858,7 +5868,7 @@ void FUN_00496b60(HolderA* a, float f)
     ls.Init(limb, 0, 0);
     ls.UpdateScaleRange(limb, f);
     ls.F();
-    ls.~LimbStructure();
+    ls.Destroy();
 }
 
 // @ 0x00496bb0

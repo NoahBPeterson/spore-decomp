@@ -89,7 +89,6 @@ virtual void s6();
 };
 static void* g_allocGPtr;
 struct VThunk8 { void CallVt8(int a, int b, int c, int d, int e); };
-void* g_alloc;
 // ---- items of slice s00804920 end
 
 // ---- items of slice s00805940 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -306,8 +305,9 @@ extern void* SYM_14178b0;
 extern void* SYM_1417874;
 extern void* SYM_141785c;
 extern void* SYM_141788c;
-extern int DAT_0164c4b8;
-extern char DAT_0164c598;
+extern void* DAT_0164c4b8;   // backing core allocator, 0x0164c4b8
+struct UIAllocatorObject;
+extern UIAllocatorObject DAT_0164c598; // 0x0164c598; constructed by 0x00807760
 extern int DAT_1440aec;                       // 0x01440aec (runtime member offset)
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #pragma intrinsic(fabs)
@@ -1421,9 +1421,8 @@ void FixedAlloc::FixedFree(void* p, int flags)
 // @ 0x008054f0
 void InitAlloc()
 {
-    g_alloc = GetDefaultAllocator();
-    *(void**)0x164c4b8 = g_alloc;
-    FUN_009512b0(&g_alloc);
+    DAT_0164c4b8 = GetDefaultAllocator();
+    FUN_009512b0(&DAT_0164c598);
 }
 
 // @ 0x00805510
