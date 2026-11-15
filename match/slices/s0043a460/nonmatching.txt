@@ -1,6 +1,4 @@
 # va  diff-bytes  reason
-0043a460  15   GetVec1 result length (VectorLength) - /Od slot layout differs
-0043a500  15   GetVec2 result length (VectorLength) - /Od slot layout differs
 0043a870  268  GetSkinIdentifierForPicking - /Od frame/build differs; equiv PASS after making the key-vector test a KeyVec::empty() thiscall (0x00526430 needs this in ecx, not a stack arg)
 0043a9e0  370  F9e0 selection-state update - /Od slot layout differs; equiv PASS after swapping the F3cfc0 args to F3cfc0(0, b) (retail symbol is QAEXHD) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp]
 0043ab90  109  Fb90 state setter - Vector4 temp + /Od frame differ

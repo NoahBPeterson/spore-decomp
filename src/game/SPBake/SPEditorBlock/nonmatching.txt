@@ -47,7 +47,6 @@
 0044ae00 1442 complete GetBBox; /Od hole/slot layout differs (frame 0x108 vs 0x168), instruction shapes otherwise close
 0044b5c0 16 complete GetDefaultScale; only local slot order (hash) differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 0044ba20 567 complete recursive visibility/flags update; /Od named-local slot order and inline-set this temps differ; difftest FAIL is a checker artifact: the generated vtable slot m3ec->vtbl[0x30] holds 0x44bc01 (a jump target inside the original Ba20, harvested from its immediates), so both sides jump into the middle of the original body, which reads the original's own frame slots; seed 2 gives PASS (324 valid, 69.8% coverage)
-0044c050 10 instruction sequence identical; only the hidden this-home slot and the result slot are swapped
 0044d9e0 1707 complete; original Clamp uses maxss/minss (inline-asm only) and /Od slot hash fits for 7+18 locals unmatched flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044e460 58 Cross: this cl build evaluates the left product first; original computes the subtrahend first (same result, mirrored instruction order) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0044e720 160 GetBounds: inlined Bounds construct/destroy and snap-axis (0x234 base, stride 0x20) handling not reproduced flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
@@ -63,5 +62,4 @@
 00450f70 493 Rebuild: inlined bit-array set/clear and the 9-arg BuildBlock wrapper not reproduced
 00451330 49 SetVec194: original materialises &mVec194 once (add eax,0x194); this cl folds the displacement
 00451400 3 SP::cSPEditorBlock::Shutdown2: complete, instruction stream identical (647/647 instrs, 42/42 calls+vcalls in order, size 2592/2592); one inline slot (operator= pTemp of the socket-connector release) sits 8 bytes off (an unexplained 2-dword hole; filled with ScratchSlots)
-00451e90 10 GetSub38: only the /Od inline branch layout (extra jmp) differs
 00451ef0 187 SetPhysicsObject: addEntity/hkWorld wiring, inlined Vec3/Matrix3 temporaries and /Od frames not reproduced
