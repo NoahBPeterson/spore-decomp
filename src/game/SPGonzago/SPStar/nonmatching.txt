@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00c8b450 36 cl folded the range test to add/cmp/setle flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-00c8b520 37 cl reordered the predicate returns flags: /O2 /MD /Gy /EHsc /TP /arch:SSE [R37: claimed for matching work]
 00c8b640 83 cl reordered the independent pointer stores in the ctor flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00c8b6d0 71 00801920 called with ECX=param and no stack args; call/erase argument sharing differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00c8b700 56 operator-new / release schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, ret#5 esp]
