@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorSpeciesManager.cpp -- migrated from slice(s) s004e01d0, s005beaf0, s004df2d0, s004dc660, s004db6e0, s004db1b0, s004da440, s004da330, s004d92b0, s004d8c10, s004d44e0, s004d34f0, s004d2450, s004d2200, s004d15c0, s004d06e0 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorSpeciesManager.cpp -- migrated from slice(s) s004cf770, s004ce770, s004ce310, s004cd1b0, s004e01d0, s005beaf0, s004df2d0, s004dc660, s004db6e0, s004db1b0, s004da440, s004da330, s004d92b0, s004d8c10, s004d44e0, s004d34f0, s004d2450, s004d2200, s004d15c0, s004d06e0 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorSpeciesManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -50,7 +50,280 @@
 #pragma pack(pop)
 
 // ---- items of slice s004d06e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kSkinLevelValues[7];                             // 0x0150C890
+extern uint32_t gEditorConfigGroup;                                  // 0x015D9950
 template <int N> inline void ScratchSlots() { uint32_t s[N]; }
+void EASTLFree(void* p);                                             // 0x00F47380
+namespace eastl {
+struct false_type {};
+}
+namespace eastl {
+struct is_integral_false : public false_type { is_integral_false() {} };
+}
+namespace eastl {
+struct random_access_iterator_tag { random_access_iterator_tag() {} };
+}
+namespace eastl {
+struct Vector3_s004d_06e0 {
+    float x, y, z;
+    Vector3_s004d_06e0(const Vector3_s004d_06e0& v) : x(v.x), y(v.y), z(v.z) {}
+};
+}
+namespace eastl {
+struct Vec4_s004d_06e0 {
+    float x, y, z, w;
+    Vec4_s004d_06e0(const Vec4_s004d_06e0& v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
+    Vec4_s004d_06e0& operator=(const Vec4_s004d_06e0& v) { x = v.x; y = v.y; z = v.z; w = v.w; return *this; }
+};
+}
+namespace eastl {
+struct Rec14_s004d_06e0 {                          // 0x14: key + Vec4
+    uint32_t mKey;
+    Vec4_s004d_06e0 mValue;
+};
+}
+namespace eastl {
+struct EASTLAllocator_s004d_06e0 { const char* mpName; EASTLAllocator_s004d_06e0() {} };
+}
+namespace eastl {
+class fixed_vector_allocator : public EASTLAllocator_s004d_06e0 { public:
+    void* mpPoolBegin;
+    fixed_vector_allocator(void* pNodeBuffer) : mpPoolBegin(pNodeBuffer) {}
+    fixed_vector_allocator(const fixed_vector_allocator& x) { mpPoolBegin = x.mpPoolBegin; }
+};
+}
+namespace eastl {
+template <class T> struct VectorBase_s004d_06e0 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    fixed_vector_allocator mAllocator;
+    VectorBase_s004d_06e0(const fixed_vector_allocator& allocator) : mpBegin(0), mpEnd(0), mpCapacity(0), mAllocator(allocator) {}
+};
+}
+namespace eastl {
+struct FixedU32Vector_s004d_06e0 : public VectorBase_s004d_06e0<uint32_t> {
+    uint32_t mUnknown14;                // +0x14
+    uint32_t mBuffer[4];                // +0x18
+    // 0x004D08C0. cl declines to inline it, so callers reserve its 6-dword frame (the holes in the copy loops).
+    FixedU32Vector_s004d_06e0(const FixedU32Vector_s004d_06e0& x)
+        : VectorBase_s004d_06e0<uint32_t>(fixed_vector_allocator(mBuffer))
+    {
+        mpEnd = mBuffer;
+        mpBegin = mpEnd;
+        mpCapacity = mpBegin + 4;
+        assign(x.begin(), x.end());
+    }
+    ~FixedU32Vector_s004d_06e0()
+    {
+        for (uint32_t* p = mpBegin; p < mpEnd; ++p)
+            ;
+        ScratchSlots<3>();
+        DoFree();
+    }
+    __forceinline FixedU32Vector_s004d_06e0& operator=(const FixedU32Vector_s004d_06e0& x)
+    {
+        ScratchSlots<4>();
+        if (this != &x) {
+            erase(mpBegin, mpEnd);
+            assign(x.begin(), x.end());
+        }
+        return *this;
+    }
+    void assign(const uint32_t* first, const uint32_t* last) { DoAssign(first, last, is_integral_false()); }
+    void DoAssign(const uint32_t* first, const uint32_t* last, false_type) { DoAssignFromIterator(first, last, random_access_iterator_tag()); }
+    const uint32_t* begin() const { return mpBegin; }
+    const uint32_t* end() const { return mpEnd; }
+    uint32_t* erase(uint32_t* first, uint32_t* last);                // 0x004769B0
+    void DoAssignFromIterator(const uint32_t* first, const uint32_t* last, random_access_iterator_tag);  // 0x0042C750
+    void DoFree();                                                   // 0x004C0B80
+    static void operator delete(void* p) { EASTLFree(p); }
+};
+}
+namespace eastl {
+struct Elem34_s004d_06e0 {                         // 0x34: Vector3 + fixed_vector<uint32_t, 4>
+    Vector3_s004d_06e0 mHeader;
+    FixedU32Vector_s004d_06e0 mValues;             // +0x0c
+    Elem34_s004d_06e0& operator=(const Elem34_s004d_06e0& x);
+};
+}
+namespace eastl {
+template <class I> struct iterator_traits;
+}
+namespace eastl {
+template <class T> struct iterator_traits<T*> { typedef T value_type; typedef T& reference; };
+}
+namespace eastl {
+template <class T> struct iterator_traits<const T*> { typedef T value_type; typedef const T& reference; };
+}
+namespace eastl {
+template <class Iterator, class Container = void>
+class generic_iterator_s004d_06e0 {
+public:
+    typedef typename iterator_traits<Iterator>::value_type value_type;
+    typedef typename iterator_traits<Iterator>::reference reference;
+    Iterator mIterator;
+    explicit generic_iterator_s004d_06e0(const Iterator& x) : mIterator(x) {}
+    reference operator*() const { return *mIterator; }
+    generic_iterator_s004d_06e0& operator++() { ++mIterator; return *this; }
+    const Iterator& base() const { return mIterator; }
+};
+}
+namespace eastl {
+template <class I, class C> struct iterator_traits<generic_iterator_s004d_06e0<I, C> > { typedef typename iterator_traits<I>::value_type value_type; };
+}
+namespace eastl {
+template <class IL, class IR, class C>
+inline bool operator!=(const generic_iterator_s004d_06e0<IL, C>& lhs, const generic_iterator_s004d_06e0<IR, C>& rhs)
+{
+    return lhs.base() != rhs.base();
+}
+}
+namespace eastl {
+template <bool bHasTrivialMove, class ForwardIterator, class ForwardIteratorDest>
+struct uninitialized_move_impl {
+    static ForwardIteratorDest do_move_start(ForwardIterator first, ForwardIterator last, ForwardIteratorDest dest)
+    {
+        typedef typename iterator_traits<ForwardIterator>::value_type value_type;
+        for (; first != last; ++first, ++dest)
+            ::new (&*dest) value_type(*first);
+        return dest;
+    }
+    static ForwardIteratorDest do_move_commit(ForwardIterator first, ForwardIterator last, ForwardIteratorDest dest)
+    {
+        typedef typename iterator_traits<ForwardIterator>::value_type value_type;
+        for (; first != last; ++first, ++dest)
+            (*first).~value_type();
+        return dest;
+    }
+};
+}
+namespace eastl {
+template struct uninitialized_move_impl<false, Elem34_s004d_06e0*, Elem34_s004d_06e0*>;
+}
+namespace eastl {
+template Rec14_s004d_06e0* uninitialized_move_impl<false, Rec14_s004d_06e0*, Rec14_s004d_06e0*>::do_move_start(Rec14_s004d_06e0*, Rec14_s004d_06e0*, Rec14_s004d_06e0*);
+}
+namespace eastl {
+struct Link { Link* mpNext; };
+}
+namespace eastl {
+class fixed_pool_with_overflow_s004d_06e0 { public:
+    Link* mpHead;
+    Link* mpNext;
+    void* mpPoolBegin;
+    void* mpCapacity;
+    uint32_t mnNodeSize;
+    static void OverflowFree(void* p, uint32_t n) { (void)&n; void* const pMemory = p; EASTLFree(pMemory); }
+};
+}
+namespace eastl {
+class fixed_hashtable_allocator_s004d_06e0 { public:
+    fixed_pool_with_overflow_s004d_06e0 mPool;
+    void* mpBucketBuffer;
+    void deallocate(void* p, uint32_t)
+    {
+        if (p != mpBucketBuffer) {
+            if ((p >= mPool.mpPoolBegin) && (p < mPool.mpCapacity)) {
+                ((Link*)p)->mpNext = mPool.mpHead;
+                mPool.mpHead = (Link*)p;
+            } else
+                fixed_pool_with_overflow_s004d_06e0::OverflowFree(p, mPool.mnNodeSize);
+        }
+    }
+};
+}
+namespace eastl {
+struct HashNode_s004d_06e0;
+}
+namespace eastl {
+class hashtable_s004d_06e0 {
+public:
+    uint32_t mFunctors;                              // 0x00
+    HashNode_s004d_06e0** mpBucketArray;                        // 0x04
+    uint32_t mnBucketCount;                          // 0x08
+    uint32_t mnElementCount;                         // 0x0C
+    uint32_t mRehashPolicy[3];                       // 0x10
+    fixed_hashtable_allocator_s004d_06e0 mAllocator;            // 0x1C
+    void DoFreeNode(HashNode_s004d_06e0* pNode);
+};
+}
+namespace App {
+class Property_s004d_06e0 {
+public:
+    char pad0[0x12];
+    uint16_t mnType;                            // +0x12
+    uint32_t* GetValueUInt32();                                      // 0x0041E990
+};
+}
+namespace App {
+class PropertyList_s004d_06e0 {
+public:
+    virtual int AddRef();  // 0x00432be0 (App::PropertyList::AddRef)
+    virtual int Release();
+virtual void _v08();
+virtual void _v0c();
+virtual void _v10();
+virtual void _v14();
+virtual void _v18();
+virtual void _v1c();
+virtual void _v20();
+    virtual bool GetProperty(uint32_t propertyID, Property_s004d_06e0*& result) const;   // 0x24
+};
+}
+namespace App {
+template <class T> class intrusive_ptr {
+public:
+    T* mpObject;
+    intrusive_ptr() : mpObject(0) {}
+    ~intrusive_ptr() { if (mpObject) mpObject->Release(); }
+    T* get() const { return mpObject; }
+    operator T*() const { return mpObject; }
+    T** reset_get()
+    {
+        if (mpObject) {
+            T* const pTemp = mpObject;
+            mpObject = 0;
+            pTemp->Release();
+        }
+        return &mpObject;
+    }
+};
+}
+namespace App {
+typedef intrusive_ptr<PropertyList_s004d_06e0> PropertyListPtr_s004d_06e0;
+}
+namespace App {
+class cPropertyManager {
+public:
+virtual void _v00();
+virtual void _v04();
+virtual void _v08();
+virtual void _v0c();
+virtual void _v10();
+virtual void _v14();
+virtual void _v18();
+virtual void _v1c();
+virtual void _v20();
+virtual void _v24();
+virtual void _v28();
+    virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyList_s004d_06e0** result);   // 0x2c
+};
+}
+namespace App {
+inline bool GetUInt32_s004d_06e0(const PropertyList_s004d_06e0* pPropList, uint32_t propertyID, uint32_t& value)
+{
+    ScratchSlots<1>();
+    Property_s004d_06e0* prop;
+    if (pPropList && pPropList->GetProperty(propertyID, prop) && prop->mnType == 9) {
+        value = *prop->GetValueUInt32();
+        return true;
+    }
+    return false;
+}
+}
+App::cPropertyManager* PropertyManager_s004d_06e0();                            // 0x0067DE30
+uint32_t RemapTypeId(uint32_t modelType);                            // 0x00432F10
 struct Vector2 {
     float x, y;
     Vector2(const Vector2& v) { x = v.x; y = v.y; }
@@ -58,11 +331,21 @@ struct Vector2 {
 };
 struct cSkinPaintEntry { const Vector2& GetUV(); };                 // 0x004E1A20
 struct cSkinPaintTable {
-    virtual void _v00(); virtual void _v04(); virtual void _v08(); virtual void _v0c(); virtual void _v10(); virtual void _v14(); virtual void _v18();
+virtual void _v00();
+virtual void _v04();
+virtual void _v08();
+virtual void _v0c();
+virtual void _v10();
+virtual void _v14();
+virtual void _v18();
     virtual bool HasEntry(uint32_t id);                              // 0x1c
-    virtual void _v20(); virtual void _v24();
+virtual void _v20();
+virtual void _v24();
     virtual cSkinPaintEntry* GetEntry(uint32_t id);                  // 0x28
 };
+struct Vector3i { int x, y, z; };
+struct BBox { Vector3i mMin; Vector3i mMax; };
+bool GetBoundsPoints(uint32_t a, uint32_t b, int* count, Vector3i** points);   // 0x006A0990
 // ---- items of slice s004d06e0 end
 
 // ---- items of slice s004d15c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1229,7 +1512,7 @@ extern int g_speciesStaticType; // DAT_015d9674
 void* operator new(unsigned int size, const char* pName, int flags, unsigned debugFlags, const char* file, int line); // 0x00F473A0
 namespace EA {
 namespace ResourceMan {
-struct Key_s004d_f2d0 {
+class Key_s004d_f2d0 { public:
     uint32_t mInstance;
     uint32_t mType;
     uint32_t mGroup;
@@ -1252,7 +1535,7 @@ extern RandomLinearCongruential sMathRandom;                                   /
 double RandomRange(RandomLinearCongruential* r, double lo, double hi);         // 0x004B8900
 struct Vector2_s004d_f2d0 { float mData[2]; const float& operator[](int i) const { return mData[i]; } };
 namespace SP {
-class cSpeciesProfile_s004d_f2d0 {
+struct cSpeciesProfile_s004d_f2d0 { private:
 public:
     cSpeciesProfile_s004d_f2d0(const Key_s004d_f2d0& key, bool bPlant);   // 0x004D3DD0
     ~cSpeciesProfile_s004d_f2d0();                              // 0x004D44E0
@@ -1265,7 +1548,7 @@ public:
 };
 }
 namespace SP {
-class cSpeciesArchetype_s004d_f2d0;
+struct cSpeciesArchetype_s004d_f2d0;
 }
 namespace SP {
 bool ResourceExists(const Key_s004d_f2d0* key); // 0x004DA3A0
@@ -1423,7 +1706,7 @@ struct ArchetypeIdVector { uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCapac
     uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); } };
 }
 namespace SP {
-class cSpeciesArchetype_s004d_f2d0 {
+struct cSpeciesArchetype_s004d_f2d0 { private:
 public:
     char pad0[0x3C4];
     ArchetypeIdVector mParentIds;   // 0x3C4
@@ -1434,7 +1717,7 @@ struct ArchetypeNode { uint32_t mKey; SP::cSpeciesArchetype_s004d_f2d0 mValue; }
 }
 namespace SP {
 namespace FunctionalMatch {
- class Constraint_s004d_f2d0; 
+ struct Constraint_s004d_f2d0; 
 }
 }
 namespace SP {
@@ -1472,7 +1755,7 @@ struct ConstraintVector : public ConstraintVectorBase {   // eastl::vector<Funct
 }
 namespace SP {
 namespace FunctionalMatch {
-class Constraint_s004d_f2d0 {
+struct Constraint_s004d_f2d0 { private:
 public:
     Constraint_s004d_f2d0(uint32_t property, uint32_t op, uint32_t value);   // 0x00558960
     uint32_t mData[4];
@@ -1716,7 +1999,7 @@ struct Property_s005b_eaf0 {
 namespace App {
 class PropertyList_s005b_eaf0 {
  public:
-  virtual void AddRef();
+  virtual void AddRef();  // 0x00432be0 (App::PropertyList::AddRef)
   virtual void Release();
   PV(2) PV(3) PV(4)
   virtual void SetProperty(uint32_t id, const EA::Variant_s005b_eaf0& value);   // +0x14
@@ -1737,6 +2020,14 @@ class IPropertyManager {
   PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
   virtual bool HasPropertyList(uint32_t instanceID, uint32_t groupID);                         // +0x28
   virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyList_s005b_eaf0*& result);  // +0x2c
+};
+}
+namespace Editor {
+class cPropertyList : public App::PropertyList_s005b_eaf0 {
+ public:
+  cPropertyList();
+  char pad[0x38 - 4];
+  void AddRef();
 };
 }
 namespace SP {
@@ -1810,7 +2101,9 @@ uint64_t MakeItemID(uint32_t group, uint32_t instance);       // FUN_00593980
 // ---- items of slice s004e01d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* memcpy(void* dst, const void* src, unsigned int n);
 #pragma intrinsic(memcpy)
-void EASTLFree(void* p);                                                         // 0x00F47380
+typedef char* va_list;
+#define va_start(ap, v) (ap = (va_list)&v + ((sizeof(v) + 3) & ~3))
+#define va_end(ap) (ap = (va_list)0)
 void* EASTLAlloc(void* allocator_s004e_01d0, uint32_t n, uint32_t align, uint32_t offset);  // 0x0042DEE0
 namespace EA {
 template <class T> class RefCountTemplate_s004e_01d0 {
@@ -1832,7 +2125,7 @@ public:
 }
 namespace EA {
 namespace ResourceMan {
-struct Key_s004e_01d0 {
+class Key_s004e_01d0 { public:
     uint32_t mInstance;
     uint32_t mType;
     uint32_t mGroup;
@@ -1857,7 +2150,7 @@ struct sp_vector_allocator_s004e_01d0 {
 };
 }
 namespace eastl {
-template <class T> struct vector_s004e_01d0 {
+template <class T> class vector_s004e_01d0 { public:
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -1937,15 +2230,12 @@ template <class Node> struct insert_return_type {
 };
 }
 namespace eastl {
-struct allocator_s004e_01d0 {
+class allocator_s004e_01d0 { public:
     void deallocate(void* p, uint32_t) { void* const pMemory = p; EASTLFree(pMemory); }
 };
 }
 namespace eastl {
 extern void* gpEmptyBucketArray[2];                  // 0x0154DF28
-}
-namespace eastl {
-struct Link { Link* mpNext; };
 }
 namespace eastl {
 struct fixed_pool_base {
@@ -2179,7 +2469,7 @@ namespace SP {
 class cSpeciesProfile_s004e_01d0;
 }
 namespace SP {
-class cSpeciesArchetype_s004e_01d0 {
+struct cSpeciesArchetype_s004e_01d0 { private:
 public:
     cSpeciesArchetype_s004e_01d0();                               // 0x004DA440
     cSpeciesArchetype_s004e_01d0(const cSpeciesArchetype_s004e_01d0& x);     // 0x004E1CB0
@@ -2212,6 +2502,14 @@ namespace eastl {
 typedef hash_map_s004e_01d0<uint32_t, SP::cSpeciesArchetype_s004e_01d0, hash_s004e_01d0<uint32_t>, allocator_s004e_01d0> ArchetypeMap_s004e_01d0;
 }
 namespace eastl {
+class fixed_hash_map_PartLayout : public PartLayoutMap {
+public:
+    fixed_hash_map_PartLayout(const hash_s004e_01d0<uint32_t>& hashFunction, const equal_to_s004e_01d0<uint32_t>& predicate);
+    void* mBucketBuffer[34];          // 0x34
+    char mNodeBuffer[0x380];          // 0xBC
+};
+}
+namespace eastl {
 template class hashtable_s004e_01d0<uint32_t, PartLayout, hash_s004e_01d0<uint32_t>, fixed_hashtable_allocator>;
 }
 namespace eastl {
@@ -2240,7 +2538,1873 @@ public:
     eastl::vector_s004e_01d0<EA::AutoRefCount_s004e_01d0<cEditorEvent> > mLateEvents;   // 0x73C
 };
 }
+namespace SP {
+class string {
+public:
+    string& sprintf(const char* pFormat, ...);
+    void sprintf_va_list(const char* pFormat, va_list arguments);   // 0x004234B0
+};
+}
 // ---- items of slice s004e01d0 end
+
+// ---- items of slice s004cd1b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+struct sp_vector_allocator_s004c_d1b0 {
+    const char* mpName;
+    uint32_t mFlags;
+};
+}
+namespace eastl {
+struct Vec4 { float x, y, z, w; };
+}
+namespace eastl {
+template <class T> class vector_s004c_d1b0 { public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator_s004c_d1b0 mAllocator;
+
+    uint32_t size() const { return (uint32_t)(mpEnd - mpBegin); }
+    T* erase(T* first, T* last);  // 0x00621f50 (eastl::vector::erase)
+    void DoInsertValues(T* position, uint32_t n, const T& value);
+    void DoInsertValue(T* position, const T& value);  // 0x00621fc0 (eastl::vector::DoInsertValue)
+    void insert(T* position, uint32_t n, const T& value) { DoInsertValues(position, n, value); }
+    void resize(uint32_t n);
+    void resize(uint32_t n, const T& value);
+    void push_back(const T& value);
+    void push_back();
+    void DoFree();
+    T* DoAllocate(uint32_t n) { return n ? (T*)EASTLAlloc(&mAllocator, n * sizeof(T), 4, 0) : 0; }
+    void DoFree(T* p, uint32_t n) { if (p) deallocate(p, n * sizeof(T)); }
+    static void deallocate(void* p, uint32_t) { if (*((uint32_t*)p - 1)) FreeBlock(p); }
+    static void FreeBlock(void* p) { void* pBlock = p; EASTLFree(pBlock); }
+    ~vector_s004c_d1b0();
+};
+}
+namespace eastl {
+template <class T1, class T2> struct pair_s004c_d1b0 {
+    T1 first;
+    T2 second;
+    pair_s004c_d1b0() : first(T1()), second(T2()) {}
+};
+}
+namespace eastl {
+typedef pair_s004c_d1b0<int, int> IntFloat;   // pair of two 32-bit integers
+}
+namespace eastl {
+struct Rec38 {
+    uint32_t data[14];
+    Rec38() {}
+    Rec38(const Rec38& x);                            // 0x0047BB70
+};
+}
+namespace eastl {
+struct FixedU32Vector {
+    uint32_t* mpBegin;
+    uint32_t* mpEnd;
+    uint32_t* mpCapacity;
+    sp_vector_allocator_s004c_d1b0 mAllocator;
+    FixedU32Vector();                                 // 0x004CE9D0
+    ~FixedU32Vector() {
+        for (uint32_t* p = mpBegin; p < mpEnd; ++p)
+            ;
+        ScratchSlots<3>();
+        DoFree();
+    }
+    void DoFree();                                    // 0x004C0B80
+};
+}
+namespace eastl {
+struct Elem34 {
+    uint32_t mHeader[3];
+    FixedU32Vector mValues;                           // 0x0C
+    uint32_t mPad[5];
+    Elem34() { ScratchSlots<3>(); }
+    Elem34& operator=(const Elem34& x) { ScratchSlots<5>(); return Assign(x); }
+    Elem34& Assign(const Elem34& x);                  // 0x004D1030
+    static void operator delete(void* p) { EASTLFree(p); }
+};
+}
+namespace eastl {
+template <class T> __forceinline void destruct_s004c_d1b0(T* first, T* last)
+{
+    for (; first < last; ++first)
+        first->~T();
+}
+}
+namespace eastl {
+template <class Bi1, class Bi2>
+__forceinline Bi2 copy_backward_impl(Bi1 first, Bi1 last, Bi2 result)
+{
+    while (last != first)
+        *--result = *--last;
+    return result;
+}
+}
+namespace eastl {
+template <class Bi1, class Bi2>
+__forceinline Bi2 copy_backward(Bi1 first, Bi1 last, Bi2 result)
+{
+    const bool bIsMove = false;
+    const bool bCanMemmove = false;
+    const bool bIsPod = false;
+    return copy_backward_impl(first, last, result);
+}
+}
+namespace eastl {
+Rec38* uninitialized_copy_ptr(Rec38* first, Rec38* last, Rec38* result);   // 0x004C1D80
+}
+namespace eastl {
+class fixed_pool_with_overflow_s004c_d1b0 : public fixed_pool_base { public:
+    void* mpPoolBegin;
+    void* mpCapacity;
+    uint32_t mnNodeSize;
+    __forceinline fixed_pool_with_overflow_s004c_d1b0(void* pMemory) {
+        mpHead = 0;
+        init(pMemory, 0x100, 0x10, 4, 0);
+        mpPoolBegin = pMemory;
+        mpCapacity = (char*)pMemory + 0x100;
+        mnNodeSize = 0x10;
+    }
+    void deallocate(void* p) {
+        if ((p >= mpPoolBegin) && (p < mpCapacity)) {
+            ((Link*)p)->mpNext = mpHead;
+            mpHead = (Link*)p;
+        } else
+            OverflowFree(p, mnNodeSize);
+    }
+    static void OverflowFree(void* p, uint32_t n) { (void)&n; void* const pMemory = p; EASTLFree(pMemory); }
+};
+}
+namespace eastl {
+class fixed_hashtable_allocator_s004c_d1b0 { public:
+    fixed_pool_with_overflow_s004c_d1b0 mPool;
+    void* mpBucketBuffer;
+    fixed_hashtable_allocator_s004c_d1b0(void* pNodeBuffer, void* pBucketBuffer) : mPool(pNodeBuffer), mpBucketBuffer(pBucketBuffer) {}
+    fixed_hashtable_allocator_s004c_d1b0(const fixed_hashtable_allocator_s004c_d1b0& x);
+    void deallocate(void* p, uint32_t) {
+        if (p != mpBucketBuffer) {
+            if ((p >= mPool.mpPoolBegin) && (p < mPool.mpCapacity)) {
+                ((Link*)p)->mpNext = mPool.mpHead;
+                mPool.mpHead = (Link*)p;
+            } else
+                fixed_pool_with_overflow_s004c_d1b0::OverflowFree(p, mPool.mnNodeSize);
+        }
+    }
+};
+}
+namespace eastl {
+struct MappedPair {
+    int mIndex;
+    float mWeight;
+    MappedPair() : mIndex(-1), mWeight(-1.0f) {}
+};
+}
+namespace eastl {
+struct HashNode_s004c_d1b0 {
+    uint32_t mKey;
+    MappedPair mValue;
+    HashNode_s004c_d1b0* mpNext;
+};
+}
+namespace eastl {
+template <class T> struct hash_s004c_d1b0 { uint32_t operator()(T val) const { return (uint32_t)val; } };
+}
+namespace eastl {
+template <class T> struct equal_to_s004c_d1b0 { bool operator()(const T& a, const T& b) const { return a == b; } };
+}
+namespace eastl {
+template <class P> struct use_first_s004c_d1b0 {};
+}
+namespace eastl {
+struct prime_rehash_policy_s004c_d1b0 {
+    float mfMaxLoadFactor;
+    float mfGrowthFactor;
+    uint32_t mnNextResize;
+    prime_rehash_policy_s004c_d1b0(float fMaxLoadFactor = 1.f) : mfMaxLoadFactor(fMaxLoadFactor), mfGrowthFactor(2.f), mnNextResize(0) {}
+    static uint32_t GetPrevBucketCountOnly(uint32_t nBucketCountHint);   // 0x00921340
+    uint32_t GetNextBucketCount(uint32_t nBucketCountHint) const;        // 0x00921360
+    uint32_t GetBucketCount(uint32_t nElementCount) const;               // 0x009213C0
+};
+}
+namespace eastl {
+struct hashtable_iterator_base_s004c_d1b0 {
+    HashNode_s004c_d1b0* mpNode;
+    HashNode_s004c_d1b0** mpBucket;
+    hashtable_iterator_base_s004c_d1b0(HashNode_s004c_d1b0* pNode, HashNode_s004c_d1b0** pBucket) : mpNode(pNode), mpBucket(pBucket) {}
+};
+}
+namespace eastl {
+struct hashtable_iterator_s004c_d1b0 : public hashtable_iterator_base_s004c_d1b0 {
+    hashtable_iterator_s004c_d1b0(HashNode_s004c_d1b0* pNode = 0, HashNode_s004c_d1b0** pBucket = 0) : hashtable_iterator_base_s004c_d1b0(pNode, pBucket) {}
+    hashtable_iterator_s004c_d1b0(HashNode_s004c_d1b0** pBucket) : hashtable_iterator_base_s004c_d1b0(*pBucket, pBucket) {}
+    hashtable_iterator_s004c_d1b0(const hashtable_iterator_s004c_d1b0& x) : hashtable_iterator_base_s004c_d1b0(x.mpNode, x.mpBucket) {}
+    bool operator!=(const hashtable_iterator_s004c_d1b0& x) const { return mpNode != x.mpNode; }
+};
+}
+namespace eastl {
+struct insert_return_type_s004c_d1b0 {
+    hashtable_iterator_s004c_d1b0 first;
+    bool second;
+};
+}
+namespace eastl {
+struct value_pair {
+    uint32_t first;
+    MappedPair second;
+    value_pair(const uint32_t& x, const MappedPair& y) : first(x), second(y) {}
+};
+}
+namespace eastl {
+class hashtable_s004c_d1b0 {
+public:
+    typedef hashtable_iterator_s004c_d1b0 iterator;
+
+    hashtable_s004c_d1b0(uint32_t nBucketCount, const hash_s004c_d1b0<uint32_t>& h1, const mod_range_hashing& h2, const default_ranged_hash& h,
+              const equal_to_s004c_d1b0<uint32_t>& eq, const use_first_s004c_d1b0<value_pair>& ek, const fixed_hashtable_allocator_s004c_d1b0& allocator);
+    ~hashtable_s004c_d1b0();
+
+    iterator end() { return iterator(mpBucketArray + mnBucketCount); }
+    iterator find(const uint32_t& k);
+    insert_return_type_s004c_d1b0 DoInsertValue(const value_pair& value, true_type);    // 0x004CDBD0
+    insert_return_type_s004c_d1b0 insert(const value_pair& value) { return DoInsertValue(value, true_type()); }
+    void set_max_load_factor(float fMaxLoadFactor);
+    void rehash_policy(const prime_rehash_policy_s004c_d1b0& rehashPolicy) {
+        mRehashPolicy = rehashPolicy;
+        const uint32_t nBuckets = rehashPolicy.GetBucketCount((uint32_t)mnElementCount);
+        if (nBuckets > mnBucketCount)
+            DoRehash(nBuckets);
+    }
+
+    void reset() {
+        ScratchSlots<1>();
+        mnBucketCount = 1;
+        mpBucketArray = (HashNode_s004c_d1b0**)&gpEmptyBucketArray[0];
+        mnElementCount = 0;
+        mRehashPolicy.mnNextResize = 0;
+    }
+    void clear() {
+        DoFreeNodes(mpBucketArray, mnBucketCount);
+        mnElementCount = 0;
+    }
+    void DoFreeBuckets(HashNode_s004c_d1b0** pBucketArray, uint32_t n) {
+        if (n > 1)
+            mAllocator.deallocate(pBucketArray, (n + 1) * sizeof(HashNode_s004c_d1b0*));
+    }
+    void DoFreeNodes(HashNode_s004c_d1b0** pBucketArray, uint32_t n);   // 0x004D0430
+    HashNode_s004c_d1b0** DoAllocateBuckets(uint32_t n);                 // 0x004CE7E0
+    void DoRehash(uint32_t nBucketCount);                     // 0x004CE8B0
+    uint32_t get_hash_code(const uint32_t& key) const { return (uint32_t)m_h1(key); }
+    uint32_t bucket_index(const uint32_t&, uint32_t c, uint32_t n) const { return (uint32_t)m_h2(c, n); }
+    bool compare(const uint32_t& k, uint32_t, HashNode_s004c_d1b0* pNode) const { return m_equal(k, pNode->mKey); }
+    HashNode_s004c_d1b0* DoFindNode(HashNode_s004c_d1b0* pNode, const uint32_t& k, uint32_t c) const {
+        for (; pNode; pNode = pNode->mpNext) {
+            if (compare(k, c, pNode))
+                return pNode;
+        }
+        return 0;
+    }
+
+    use_first_s004c_d1b0<value_pair> m_extract;                 // 0x00 (hash_code_base: empty functors)
+    equal_to_s004c_d1b0<uint32_t> m_equal;                      // 0x01
+    hash_s004c_d1b0<uint32_t> m_h1;                             // 0x02
+    mod_range_hashing m_h2;                          // 0x03
+    HashNode_s004c_d1b0** mpBucketArray;                        // 0x04
+    uint32_t mnBucketCount;                          // 0x08
+    uint32_t mnElementCount;                         // 0x0C
+    prime_rehash_policy_s004c_d1b0 mRehashPolicy;               // 0x10
+    fixed_hashtable_allocator_s004c_d1b0 mAllocator;            // 0x1C
+};
+}
+namespace eastl {
+class hash_map_s004c_d1b0 : public hashtable_s004c_d1b0 {
+public:
+    hash_map_s004c_d1b0(uint32_t nBucketCount, const hash_s004c_d1b0<uint32_t>& hashFunction, const equal_to_s004c_d1b0<uint32_t>& predicate,
+             const fixed_hashtable_allocator_s004c_d1b0& allocator);
+    MappedPair& operator[](const uint32_t& key);
+};
+}
+namespace eastl {
+struct fixed_vector_u8 {
+    uint8_t* mpBegin;
+    uint8_t* mpEnd;
+    uint8_t* mpCapacity;
+    struct allocator {
+        uint32_t mOverflow;
+        void* mpPoolBegin;
+        void deallocate(void* p, uint32_t n) {
+            if (p != mpPoolBegin)
+                EASTLFreeBlock(p, n);
+        }
+        static void EASTLFreeBlock(void* p, uint32_t) { void* pBlock = p; EASTLFree(pBlock); }
+    } mAllocator;
+    ~fixed_vector_u8();
+};
+}
+struct VertexDescriptor { uint8_t pad[0xF]; uint8_t mStride; };
+extern VertexDescriptor* gpActiveVertexDescriptor;   // 0x016F65A0
+void* LockVertexBuffer(uint32_t handle);             // 0x011FD7E0
+struct VertexRange {
+    uint32_t mIndex;
+    uint8_t* mpCurrent;
+    uint8_t* mpData;
+};
+// ---- items of slice s004cd1b0 end
+
+// ---- items of slice s004ce310 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* memmove(void* dst, const void* src, unsigned int count);  // @ 0x013cc480
+extern void* EASTL_Allocate(void* allocator, unsigned int n, int align, int flags);  // @ 0x0042dee0
+extern void  ElemFree(void* p);                                                      // @ 0x00f47380
+extern void* Elem8Copy(void* first, void* last, void* dst);                          // @ 0x004554f0
+extern void  Elem8FillN(void* dst, unsigned int n, void* value, int* flag);          // @ 0x0052c8f0
+extern void* MovePtr8(void* first, void* last, void* dst);                           // @ 0x004d0960
+extern void  MoveTail8(int* holder, void* first, void* last, void* dst, int flag);   // @ 0x00541450
+extern void  E34_dtorA(void* p);                                                     // @ 0x004098a0
+extern void  E34_dtorB(void* p);                                                     // @ 0x004d08c0
+extern void* E34_MoveHead(void* first, void* pos, void* dst);                        // @ 0x004d0a40
+extern void  E34_FillN(void* dst, unsigned int n, void* value, int* flag);           // @ 0x004d0d40
+extern void* E34_MoveStart(void* pos, void* end, void* dst);                         // @ 0x004d10b0
+extern void  E34_MoveCommit(void* pos, void* end, void* dst);                        // @ 0x004d1130
+extern void  E34_MoveTail(void* holder, void* first, void* last, void* dst, int flag); // @ 0x004d0c90
+extern void* E34_MoveBack(void* first, void* last, void* dst);                       // @ 0x004d0a00
+extern void  E34_Assign(void* dst, void* src);                                       // @ 0x004d1030
+extern void  E34_SubDtor(void* p);                                                   // @ 0x0041d140
+struct Elem8 {
+    int a;              // +0x00
+    int b;              // +0x04
+};
+typedef char Elem34_s004c_e310[0x34];
+struct VecF32 {
+    float* mpBegin;     // +0x00
+    float* mpEnd;       // +0x04
+    float* mpCapacity;  // +0x08
+    int    mAlloc;      // +0x0c
+    float* mpInline;    // +0x10
+    void DoInsertValueF32(float* position, float const& value);
+};
+struct VecU8 {
+    unsigned char* mpBegin;     // +0x00
+    unsigned char* mpEnd;       // +0x04
+    unsigned char* mpCapacity;  // +0x08
+    int    mAlloc;              // +0x0c
+    unsigned char* mpInline;    // +0x10
+    void DoInsertValueU8(unsigned char* position, unsigned char const& value);
+};
+struct VecE8 {
+    Elem8* mpBegin;     // +0x00
+    Elem8* mpEnd;       // +0x04
+    Elem8* mpCapacity;  // +0x08
+    int    mAlloc;      // +0x0c
+    Elem8* mpInline;    // +0x10
+    void DoInsertValuesE8(Elem8* position, unsigned int n, Elem8 const& value);
+};
+struct VecE34 {
+    Elem34_s004c_e310* mpBegin;      // +0x00
+    Elem34_s004c_e310* mpEnd;        // +0x04
+    Elem34_s004c_e310* mpCapacity;   // +0x08
+    int     mAlloc;       // +0x0c
+    Elem34_s004c_e310* mpInline;     // +0x10
+    void DoInsertValuesE34(Elem34_s004c_e310* position, unsigned int n, Elem34_s004c_e310 const& value);
+};
+// ---- items of slice s004ce310 end
+
+// ---- items of slice s004ce770 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* EASTL_allocator_allocate(unsigned int n, const char* pName, int flags, unsigned int debugFlags,
+                               const char* pFile, int line);
+struct EASTLAllocator {
+    inline void* allocate(unsigned int n, int flags = 0) {
+        void* p = EASTL_allocator_allocate(n, "Editor", flags, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+            0xd1);
+        return p;
+    }
+    inline void deallocate(void* p, unsigned int n) { delete[] (char*)p; }
+};
+struct HashValue { unsigned int first, second, third; };
+struct HashNode_s004c_e770 { HashValue mValue; HashNode_s004c_e770* mpNext; };
+struct PoolLink { PoolLink* mpNext; };
+struct FixedPool {
+    PoolLink* mpHead;
+    PoolLink* mpNext;
+    void* mpPoolBegin;
+    void* mpCapacity;
+    unsigned int mnNodeSize;
+    static EASTLAllocator mOverflowAllocator;
+
+    void* allocate();
+    inline void deallocate(void* p) {
+        if ((p >= mpPoolBegin) && (p < mpCapacity)) {
+            ((PoolLink*)p)->mpNext = mpHead;
+            mpHead = (PoolLink*)p;
+        } else
+            mOverflowAllocator.deallocate(p, mnNodeSize);
+    }
+};
+struct FixedHashtableAllocator {
+    FixedPool mPool;
+    void* mpBucketBuffer;
+
+    inline void* allocate(unsigned int n, int flags = 0) {
+        int unused[3];  // stand-in for three dead stack slots in the original
+        if (n == sizeof(HashNode_s004c_e770))
+            return mPool.allocate();
+        return mpBucketBuffer;
+    }
+    inline void deallocate(void* p, unsigned int n) {
+        if (p != mpBucketBuffer)
+            mPool.deallocate(p);
+    }
+};
+void* allocate_memory(FixedHashtableAllocator& a, unsigned int n, unsigned int alignment,
+                      unsigned int alignmentOffset);
+inline unsigned int hash_uint32(unsigned int k) { return k; }
+inline unsigned int mod_range_hashing_s004c_e770(unsigned int r, unsigned int n) { return r % n; }
+struct Hashtable {
+    void* mpPad0;
+    HashNode_s004c_e770** mpBucketArray;
+    unsigned int mnBucketCount;
+    unsigned int mnElementCount;
+    char mRehashPolicy[0xc];
+    FixedHashtableAllocator mAllocator;
+
+    HashNode_s004c_e770* DoAllocateNode(const HashValue& value);
+    HashNode_s004c_e770** DoAllocateBuckets(unsigned int n);
+    inline void DoFreeBuckets(HashNode_s004c_e770** pBucketArray, unsigned int n) {
+        if (n > 1)
+            mAllocator.deallocate(pBucketArray, (n + 1) * sizeof(HashNode_s004c_e770*));
+    }
+    void DoRehash(unsigned int nNewBucketCount);
+};
+struct FixedVectorAllocator {
+    int mOverflowAllocator;
+    void* mpPoolBegin;
+    FixedVectorAllocator(void* pNodeBuffer) : mpPoolBegin(pNodeBuffer) {}
+    FixedVectorAllocator(const FixedVectorAllocator& x) { mpPoolBegin = x.mpPoolBegin; }
+};
+struct FixedVectorBase {
+    void** mpBegin;
+    void** mpEnd;
+    void** mpCapacity;
+    FixedVectorAllocator mAllocator;
+    int mPad14;
+    FixedVectorBase(const FixedVectorAllocator& allocator)
+        : mpBegin(0), mpEnd(0), mpCapacity(0), mAllocator(allocator) {}
+};
+struct FixedVectorPtr4 : FixedVectorBase {
+    void* mBuffer[4];
+    FixedVectorPtr4();
+};
+void* allocate_memory(void* a, unsigned int n, unsigned int alignment, unsigned int alignmentOffset);
+// ---- items of slice s004ce770 end
+
+// ---- items of slice s004cf770 begin (TODO(rewrite): local stubs, replace by canonical classes)
+
+namespace eastl {
+template <class T> struct has_trivial_relocate : public false_type {};
+}
+namespace eastl {
+struct Vec4_s004c_f770 {                                   // movss copy ctor / assignment (SSE module)
+    float x, y, z, w;
+    Vec4_s004c_f770(const Vec4_s004c_f770& v) : x(v.x), y(v.y), z(v.z), w(v.w) {}
+    Vec4_s004c_f770& operator=(const Vec4_s004c_f770& v) { x = v.x; y = v.y; z = v.z; w = v.w; return *this; }
+};
+}
+namespace eastl {
+struct X87Vec4 {                                // out-of-line copy ctor (x87), 0x00501290
+    float x, y, z, w;
+    X87Vec4(const X87Vec4& v);                  // 0x00501290
+};
+}
+namespace eastl {
+struct Rec14 {                                  // 0x14: key + X87Vec4
+    uint32_t mKey;
+    X87Vec4 mValue;
+    Rec14(const Rec14& x) : mKey(x.mKey), mValue(x.mValue) {}
+};
+}
+namespace eastl {
+struct Word32 { uint32_t mValue; };
+}
+namespace eastl {
+struct EASTLAllocator_s004c_f770 { const char* mpName; EASTLAllocator_s004c_f770() {} };
+}
+namespace eastl {
+template <class T> class generic_iterator { public:
+    T mIterator;
+    explicit generic_iterator(const T& x) : mIterator(x) {}
+    const T& base() const { return mIterator; }
+};
+}
+namespace eastl {
+template <class T> struct value_of;
+}
+namespace eastl {
+template <class T> struct value_of<T*> { typedef T type; };
+}
+namespace eastl {
+template <class T> struct value_of<const T*> { typedef T type; };
+}
+namespace eastl {
+template <class In, class Out>
+generic_iterator<Out> uninitialized_copy_impl(generic_iterator<In> first, generic_iterator<In> last,
+                                              generic_iterator<Out> dest, false_type);
+}
+namespace eastl {
+template <class It, class T>
+void uninitialized_fill_n_impl(generic_iterator<It> first, uint32_t n, const T& value, false_type);
+}
+namespace eastl {
+template <class First, class Last, class Result>
+inline Result uninitialized_copy_ptr_s004c_f770(First first, Last last, Result result)
+{
+    const generic_iterator<Result> i(uninitialized_copy_impl(generic_iterator<First>(first),
+                                                             generic_iterator<Last>(last),
+                                                             generic_iterator<Result>(result),
+                                                             has_trivial_relocate<typename value_of<Result>::type>()));
+    return i.base();
+}
+}
+namespace eastl {
+template <class T>
+inline void uninitialized_fill_n_ptr(T* first, uint32_t n, const T& value)
+{
+    uninitialized_fill_n_impl(generic_iterator<T*>(first), n, value, has_trivial_relocate<T>());
+}
+}
+namespace eastl {
+template <class T> T* uninitialized_move(T* first, T* last, T* dest);        // out of line
+}
+namespace eastl {
+template <class T> T* uninitialized_move_start(T* first, T* last, T* dest);  // out of line
+}
+namespace eastl {
+template <class T> T* copy_backward_ool(T* first, T* last, T* resultEnd);         // out of line (Vec4)
+}
+namespace eastl {
+template <class T> T* uninitialized_copy_ool2(T* first, T* last, T* dest);    // out of line (0x00477200 for Word32)
+}
+namespace eastl {
+template <class T> T* uninitialized_copy_ool(T* first, T* last, T* dest);     // out of line (0x004D0A80 for Rec14)
+}
+namespace eastl {
+template <class T> struct move_impl;
+}
+namespace eastl {
+template <class T>
+inline T* uninitialized_move_commit5(T* first, T* last, T* dest)
+{
+    const bool bHasTrivialMove = false;
+    uint32_t unusedFrame[5];
+    return move_impl<T>::do_move_commit(first, last, dest);
+}
+}
+namespace eastl {
+template <class T>
+inline T* uninitialized_move_inl(T* first, T* last, T* dest)
+{
+    T* result = uninitialized_move_start(first, last, dest);
+    uninitialized_move_commit5(first, last, dest);
+    return result;
+}
+}
+namespace eastl {
+template <class T> struct move_impl {
+    static T* do_move_start(T* first, T* last, T* dest);        // out of line
+    static T* do_move_commit(T* first, T* last, T* dest)
+    {
+        for (; first != last; ++first, ++dest)
+            first->~T();
+        return dest;
+    }
+};
+}
+namespace eastl {
+template <class T>
+inline T* uninitialized_move_start_w(T* first, T* last, T* dest)
+{
+    const bool bHasTrivialMove = false;
+    return move_impl<T>::do_move_start(first, last, dest);
+}
+}
+namespace eastl {
+template <class T>
+inline T* uninitialized_move_commit_w(T* first, T* last, T* dest)
+{
+    const bool bHasTrivialMove = false;
+    uint32_t unusedFrame;
+    return move_impl<T>::do_move_commit(first, last, dest);
+}
+}
+namespace eastl {
+template <class T>
+inline T* uninitialized_move_inl0(T* first, T* last, T* dest)
+{
+    T* result = uninitialized_move_start_w(first, last, dest);
+    uninitialized_move_commit_w(first, last, dest);
+    return result;
+}
+}
+namespace eastl {
+template <class Bi1, class Bi2>
+inline Bi2 copy_backward_impl_s004c_f770(Bi1 first, Bi1 last, Bi2 resultEnd)
+{
+    while (last != first)
+        *--resultEnd = *--last;
+    return resultEnd;
+}
+}
+namespace eastl {
+template <class T>
+inline T* copy_backward_inl(T* first, T* last, T* resultEnd)
+{
+    const bool bIsMove = false;
+    const bool bCanMemmove = false;
+    const bool bIsPod = false;
+    return copy_backward_impl_s004c_f770(first, last, resultEnd);
+}
+}
+namespace eastl {
+template <class T>
+inline void fill(T* first, T* last, const T& value)
+{
+    for (; first != last; ++first)
+        *first = value;
+}
+}
+namespace eastl {
+template <class T> class vector_s004c_f770 { public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    EASTLAllocator_s004c_f770 mAllocator;
+
+    inline uint32_t GetNewCapacity(uint32_t currentCapacity) { return (currentCapacity > 0) ? (2 * currentCapacity) : 1; }
+    inline T* DoAllocate(uint32_t n) { return n ? (T*)EASTLAlloc(&mAllocator, n * sizeof(T), 4, 0) : 0; }
+    inline void DoFree(T* p, uint32_t n) { if (p) deallocate(p, n * sizeof(T)); }
+    static void deallocate(void* p, uint32_t) { if (*((uint32_t*)p - 1)) FreeBlock(p); }
+    static void FreeBlock(void* p) { void* pBlock = p; EASTLFree(pBlock); }
+    void DoInsertValues(T* position, uint32_t n, const T& value);
+    T* DoRealloc(uint32_t n, const T* first, const T* last);                 // 0x0042E5B0
+    template <class II> void DoAssignFromIterator(II first, II last, random_access_iterator_tag);
+};
+}
+namespace eastl {
+Word32* uninitialized_copy_ext(const Word32* first, const Word32* last, Word32* result);   // 0x00511F70
+}
+namespace eastl {
+template <class T> __forceinline void destruct_s004c_f770(T* first, T* last)
+{
+    for (; first < last; ++first)
+        ;
+}
+}
+namespace eastl {
+__forceinline Word32* copy(const Word32* first, const Word32* last, Word32* result)
+{
+    const bool bIsMove = false;
+    const bool bCanMemmove = false;
+    const bool bIsPod = true;
+    return (Word32*)memmove(result, first, (unsigned int)((uint32_t)last - (uint32_t)first)) + (last - first);
+}
+}
+namespace eastl {
+struct fixed_word_vector {                       // vector<Word32, fixed_vector_allocator>
+    Word32* mpBegin;
+    Word32* mpEnd;
+    Word32* mpCapacity;
+    EASTLAllocator_s004c_f770 mAllocator;
+    void* mpPoolBegin;
+
+    inline uint32_t GetNewCapacity(uint32_t currentCapacity) { return (currentCapacity > 0) ? (2 * currentCapacity) : 1; }
+    inline Word32* DoAllocate(uint32_t n) { return n ? (Word32*)EASTLAlloc(&mAllocator, n * sizeof(Word32), 2, 0) : 0; }
+    inline void DoFree(Word32* p, uint32_t n) { if (p) deallocate(p, n * sizeof(Word32)); }
+    inline void deallocate(void* p, uint32_t) { if (p != mpPoolBegin) FreeBlock(p); }
+    static void FreeBlock(void* p) { void* pBlock = p; EASTLFree(pBlock); }
+    void DoInsertValues(Word32* position, uint32_t n, const Word32& value);
+};
+}
+namespace eastl {
+template <class In, class Out>
+generic_iterator<Out> uninitialized_copy_impl(generic_iterator<In> first, generic_iterator<In> last,
+                                              generic_iterator<Out> dest, false_type)
+{
+    typedef typename value_of<Out>::type value_type;
+    generic_iterator<Out> currentDest(dest);
+    for (; first.mIterator != last.mIterator; ++first.mIterator, ++currentDest.mIterator)
+        ::new (currentDest.mIterator) value_type(*first.mIterator);
+    return currentDest;
+}
+}
+namespace eastl {
+template <class It, class T>
+void uninitialized_fill_n_impl(generic_iterator<It> first, uint32_t n, const T& value, false_type)
+{
+    generic_iterator<It> currentDest(first);
+    for (; n > 0; --n, ++currentDest.mIterator)
+        ::new (currentDest.mIterator) T(value);
+}
+}
+namespace eastl {
+template <class T> T* uninitialized_move(T* first, T* last, T* dest)
+{
+    T* result = uninitialized_move_start(first, last, dest);
+    uninitialized_move_commit5(first, last, dest);
+    return result;
+}
+}
+namespace eastl {
+template <class T> T* uninitialized_move_start(T* first, T* last, T* dest)
+{
+    const bool bHasTrivialMove = false;
+    for (; first != last; ++first, ++dest)
+        ::new (dest) T(*first);
+    return dest;
+}
+}
+namespace eastl {
+template <class T> T* uninitialized_copy_ool(T* first, T* last, T* dest)
+{
+    for (; first != last; ++first, ++dest)
+        ::new (dest) T(*first);
+    return dest;
+}
+}
+namespace eastl {
+template Rec14* uninitialized_copy_ool(Rec14*, Rec14*, Rec14*);
+}
+namespace eastl {
+template Rec14* uninitialized_move(Rec14*, Rec14*, Rec14*);
+}
+namespace eastl {
+template Rec14* uninitialized_move_start(Rec14*, Rec14*, Rec14*);
+}
+namespace eastl {
+template generic_iterator<Rec14*> uninitialized_copy_impl(generic_iterator<const Rec14*>, generic_iterator<const Rec14*>, generic_iterator<Rec14*>, false_type);
+}
+namespace eastl {
+template void uninitialized_fill_n_impl(generic_iterator<Rec14*>, uint32_t, const Rec14&, false_type);
+}
+namespace eastl {
+struct HashNode_s004c_f770 {
+    uint32_t mValue[3];
+    HashNode_s004c_f770* mpNext;                                // 0x0C
+};
+}
+namespace eastl {
+struct FixedPool_s004c_f770 {
+    void* mpHead;
+    void* mpNext;
+    void* mpPoolBegin;
+    void* mpCapacity;
+    uint32_t mnNodeSize;
+    void* allocate();                                // 0x004CE850
+};
+}
+namespace eastl {
+struct FixedHashtableAllocator_s004c_f770 {
+    FixedPool_s004c_f770 mPool;
+    void* mpBucketBuffer;                            // 0x14
+    inline void* allocate(uint32_t n, int flags = 0)
+    {
+        uint32_t unused[3];
+        if (n == sizeof(HashNode_s004c_f770))
+            return mPool.allocate();
+        return mpBucketBuffer;
+    }
+};
+}
+namespace eastl {
+class hashtable_s004c_f770 {
+public:
+    uint32_t mFunctors;                              // 0x00
+    HashNode_s004c_f770** mpBucketArray;                        // 0x04
+    uint32_t mnBucketCount;                          // 0x08
+    uint32_t mnElementCount;                         // 0x0C
+    uint32_t mRehashPolicy[3];                       // 0x10
+    FixedHashtableAllocator_s004c_f770 mAllocator;              // 0x1C
+    void DoFreeNode(HashNode_s004c_f770* pNode);                // 0x004D0C20
+    void DoFreeNodes(HashNode_s004c_f770** pNodeArray, uint32_t n);
+};
+}
+// ---- items of slice s004cf770 end
+
+// @ 0x004cd240
+namespace eastl {
+MappedPair& hash_map_s004c_d1b0::operator[](const uint32_t& key)
+{
+    ScratchSlots<13>();   // frame of the out-of-line insert() helper, reserved ahead of the end() temps
+    const iterator it = find(key);
+    if (it != end())
+        return (*it.mpNode).mValue;
+    return (*insert(value_pair(key, MappedPair())).first.mpNode).mValue;
+}
+}  // namespace eastl
+
+// @ 0x004cd2f0
+namespace eastl {
+hash_map_s004c_d1b0::hash_map_s004c_d1b0(uint32_t nBucketCount, const hash_s004c_d1b0<uint32_t>& hashFunction, const equal_to_s004c_d1b0<uint32_t>& predicate, const fixed_hashtable_allocator_s004c_d1b0& allocator)
+: hashtable_s004c_d1b0(nBucketCount, hashFunction, mod_range_hashing(), default_ranged_hash(), predicate,
+                use_first_s004c_d1b0<value_pair>(), allocator)
+{
+}
+}  // namespace eastl
+
+// @ 0x004cd340
+namespace eastl {
+void hashtable_s004c_d1b0::set_max_load_factor(float fMaxLoadFactor)
+{
+    hashtable_s004c_d1b0* const pThis = this;
+    pThis->rehash_policy(prime_rehash_policy_s004c_d1b0(fMaxLoadFactor));
+}
+}  // namespace eastl
+
+// @ 0x004cd3c0
+namespace eastl {
+template <> void vector_s004c_d1b0<void*>::resize(uint32_t n)
+{
+    if (n > size())
+        insert(mpEnd, n - size(), (void*)0);
+    else
+        erase(mpBegin + n, mpEnd);
+    ScratchSlots<4>();
+}
+}  // namespace eastl
+
+// @ 0x004cd440
+namespace eastl {
+template <> void vector_s004c_d1b0<IntFloat>::resize(uint32_t n)
+{
+    if (n > size())
+        insert(mpEnd, n - size(), IntFloat());
+    else
+        erase(mpBegin + n, mpEnd);
+    ScratchSlots<6>();
+}
+}  // namespace eastl
+
+// @ 0x004cd4c0
+namespace eastl {
+template <> void vector_s004c_d1b0<Rec38>::push_back()
+{
+    if (mpEnd < mpCapacity)
+        ::new (mpEnd++) Rec38;
+    else
+        DoInsertValue(mpEnd, Rec38());
+}
+}  // namespace eastl
+
+// @ 0x004cd530
+namespace eastl {
+template <> vector_s004c_d1b0<Elem34>::~vector_s004c_d1b0()
+{
+    destruct_s004c_d1b0(mpBegin, mpEnd);
+    ScratchSlots<3>();
+    DoFree();
+}
+}  // namespace eastl
+
+// @ 0x004cd5b0
+namespace eastl {
+template <> void vector_s004c_d1b0<Elem34>::resize(uint32_t n)
+{
+    if (n > size())
+        insert(mpEnd, n - size(), Elem34());
+    else
+        erase(mpBegin + n, mpEnd);
+    ScratchSlots<17>();
+}
+}  // namespace eastl
+
+// @ 0x004cd710
+namespace eastl {
+template <> void vector_s004c_d1b0<Vec4>::resize(uint32_t n, const Vec4& value)
+{
+    if (n > size())
+        insert(mpEnd, n - size(), value);
+    else
+        erase(mpBegin + n, mpEnd);
+    ScratchSlots<5>();
+}
+}  // namespace eastl
+
+// @ 0x004cd790
+namespace eastl {
+template <> void vector_s004c_d1b0<Word32>::resize(uint32_t n)
+{
+    if (n > size())
+        insert(mpEnd, n - size(), Word32());
+    else
+        erase(mpBegin + n, mpEnd);
+    ScratchSlots<6>();
+}
+}  // namespace eastl
+
+// @ 0x004cd810
+namespace eastl {
+template <> void vector_s004c_d1b0<float>::push_back(const float& value)
+{
+    if (mpEnd < mpCapacity)
+        ::new (mpEnd++) float(value);
+    else
+        DoInsertValue(mpEnd, value);
+}
+}  // namespace eastl
+
+// @ 0x004cd880
+namespace eastl {
+fixed_vector_u8::~fixed_vector_u8()
+{
+    destruct_s004c_d1b0(mpBegin, mpEnd);
+    if (mpBegin)
+        mAllocator.deallocate(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+}
+}  // namespace eastl
+
+// @ 0x004cd960
+namespace eastl {
+hashtable_s004c_d1b0::hashtable_s004c_d1b0(uint32_t nBucketCount, const hash_s004c_d1b0<uint32_t>& h1, const mod_range_hashing& h2, const default_ranged_hash& h, const equal_to_s004c_d1b0<uint32_t>& eq, const use_first_s004c_d1b0<value_pair>& ek, const fixed_hashtable_allocator_s004c_d1b0& allocator)
+: mnBucketCount(0), mnElementCount(0), mRehashPolicy(), mAllocator(allocator)
+{
+    if (nBucketCount < 2)
+        reset();
+    else {
+        mnBucketCount = (uint32_t)mRehashPolicy.GetNextBucketCount((uint32_t)nBucketCount);
+        mpBucketArray = DoAllocateBuckets(mnBucketCount);
+    }
+}
+}  // namespace eastl
+
+// @ 0x004cda30
+namespace eastl {
+hashtable_s004c_d1b0::~hashtable_s004c_d1b0()
+{
+    clear();
+    DoFreeBuckets(mpBucketArray, mnBucketCount);
+}
+}  // namespace eastl
+
+// @ 0x004cdad0
+namespace eastl {
+hashtable_s004c_d1b0::iterator hashtable_s004c_d1b0::find(const uint32_t& k)
+{
+    const uint32_t c = get_hash_code(k);
+    const uint32_t n = (uint32_t)bucket_index(k, c, (uint32_t)mnBucketCount);
+    HashNode_s004c_d1b0* const pNode = DoFindNode(mpBucketArray[n], k, c);
+    return pNode ? iterator(pNode, mpBucketArray + n) : iterator(mpBucketArray + mnBucketCount);
+}
+}  // namespace eastl
+
+// @ 0x004cdd70
+int LockVertexRange(uint32_t handle, VertexRange* range)
+{
+    uint8_t* data = (uint8_t*)LockVertexBuffer(handle);
+    if (data) {
+        range->mpData = data;
+        uint8_t stride = gpActiveVertexDescriptor->mStride;
+        range->mpCurrent = stride * range->mIndex + range->mpData;
+        return 1;
+    }
+    return 0;
+}
+#pragma pack(pop)
+
+namespace eastl {
+template <class In, class Out>
+__forceinline Out copy_impl_s004c_d1b0(In first, In last, Out result)
+{
+    for (; first != last; ++result, ++first)
+        *result = *first;
+    return result;
+}
+template <class In, class Out>
+__forceinline Out copy_s004c_d1b0(In first, In last, Out result)
+{
+    const bool bIsMove = false;
+    const bool bCanMemmove = false;
+    const bool bIsPod = false;
+    return copy_impl_s004c_d1b0(first, last, result);
+}
+Vec4* copy_vec4_ool(Vec4* first, Vec4* last, Vec4* result);   // 0x00424770 (out of line)
+}  // namespace eastl
+
+// @ 0x004ce110
+namespace eastl {
+template <> Elem34* vector_s004c_d1b0<Elem34>::erase(Elem34* first, Elem34* last)
+{
+    Elem34* const position = eastl::copy_s004c_d1b0(last, mpEnd, first);
+    destruct_s004c_d1b0(position, mpEnd);
+    mpEnd -= (last - first);
+    return first;
+}
+}  // namespace eastl
+
+// @ 0x004ce200
+namespace eastl {
+template <> Vec4* vector_s004c_d1b0<Vec4>::erase(Vec4* first, Vec4* last)
+{
+    Vec4* const position = eastl::copy_vec4_ool(last, mpEnd, first);
+    ScratchSlots<3>();
+    destruct_s004c_d1b0(position, mpEnd);
+    mpEnd -= (last - first);
+    return first;
+}
+}  // namespace eastl
+
+// @ 0x004ce270
+namespace eastl {
+template <> Word32* vector_s004c_d1b0<Word32>::erase(Word32* first, Word32* last)
+{
+    Word32* const position = eastl::copy_s004c_d1b0(last, mpEnd, first);
+    destruct_s004c_d1b0(position, mpEnd);
+    mpEnd -= (last - first);
+    return first;
+}
+}  // namespace eastl
+
+// @ 0x004cde10
+namespace eastl {
+fixed_hashtable_allocator_s004c_d1b0::fixed_hashtable_allocator_s004c_d1b0(const fixed_hashtable_allocator_s004c_d1b0& x)
+: mPool(x.mPool.mpHead), mpBucketBuffer(x.mpBucketBuffer)
+{
+}
+}  // namespace eastl
+
+// @ 0x004cde80
+namespace eastl {
+template <> void vector_s004c_d1b0<Rec38>::DoInsertValue(Rec38* position, const Rec38& value)
+{
+    if (mpEnd != mpCapacity) {
+        const Rec38* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        ::new (mpEnd) Rec38(*(mpEnd - 1));
+        ScratchSlots<2>();
+        eastl::copy_backward(position, mpEnd - 1, mpEnd);
+        *position = *pValue;
+        ++mpEnd;
+    } else {
+        const uint32_t nPrevSize = uint32_t(mpEnd - mpBegin);
+        const uint32_t nNewSize = (nPrevSize > 0) ? (2 * nPrevSize) : 1;
+        Rec38* const pNewData = DoAllocate(nNewSize);
+        Rec38* pNewEnd = eastl::uninitialized_copy_ptr(mpBegin, position, pNewData);
+        ::new (pNewEnd) Rec38(value);
+        pNewEnd = eastl::uninitialized_copy_ptr(position, mpEnd, ++pNewEnd);
+        ScratchSlots<30>();   // eastl::destruct(mpBegin, mpEnd): trivial for Rec38
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+}  // namespace eastl
+
+// @ 0x004ce310
+void VecF32::DoInsertValueF32(float* position, float const& value)
+{
+    if (mpEnd != mpCapacity) {
+        const float* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        *(float*)mpEnd = *(float*)(mpEnd - 1);
+        memmove((void*)(mpEnd - ((((char*)(mpEnd - 1) - (char*)position) >> 2) << 2)),
+                position, (unsigned int)((char*)(mpEnd - 1) - (char*)position));
+        *position = *pValue;
+        ++mpEnd;
+        return;
+    }
+
+    unsigned int nPrevSize = (unsigned int)(mpEnd - mpBegin);
+    unsigned int nNewSize = (nPrevSize == 0) ? 1u : (nPrevSize << 1);
+    float* pNewData;
+    if (nNewSize == 0)
+        pNewData = 0;
+    else
+        pNewData = (float*)EASTL_Allocate(&mAlloc, nNewSize << 2, 4, 0);
+
+    float* begin = mpBegin;
+    void* p = memcpy(pNewData, begin, (unsigned int)((char*)position - (char*)begin));
+    float* pNewEnd = (float*)((char*)p + (((char*)position - (char*)begin) >> 2) * 4);
+    if (pNewEnd != 0)
+        *pNewEnd = value;
+
+    float* end = mpEnd;
+    void* r = memcpy(pNewEnd + 1, position, (unsigned int)((char*)end - (char*)position));
+    float* pNewEnd2 = (float*)((char*)r + ((((char*)end - (char*)position) >> 2) * 4));
+
+    if (mpBegin != 0 && mpBegin != mpInline)
+        ElemFree(mpBegin);
+
+    mpBegin = pNewData;
+    mpEnd = pNewEnd2;
+    mpCapacity = pNewData + nNewSize;
+}
+
+// @ 0x004ce550
+void VecU8::DoInsertValueU8(unsigned char* position, unsigned char const& value)
+{
+    if (mpEnd != mpCapacity) {
+        const unsigned char* pValue = &value;
+        if ((pValue >= position) && (pValue < mpEnd))
+            ++pValue;
+        *(unsigned char*)mpEnd = *(unsigned char*)(mpEnd - 1);
+        memmove((void*)(mpEnd - (((char*)(mpEnd - 1) - (char*)position))),
+                position, (unsigned int)((char*)(mpEnd - 1) - (char*)position));
+        *position = *pValue;
+        ++mpEnd;
+        return;
+    }
+
+    unsigned int nPrevSize = (unsigned int)(mpEnd - mpBegin);
+    unsigned int nNewSize = (nPrevSize == 0) ? 1u : (nPrevSize << 1);
+    unsigned char* pNewData;
+    if (nNewSize == 0)
+        pNewData = 0;
+    else
+        pNewData = (unsigned char*)EASTL_Allocate(&mAlloc, nNewSize, 1, 0);
+
+    unsigned char* begin = mpBegin;
+    void* p = memcpy(pNewData, begin, (unsigned int)((char*)position - (char*)begin));
+    unsigned char* pNewEnd = (unsigned char*)((char*)p + ((char*)position - (char*)begin));
+    if (pNewEnd != 0)
+        *pNewEnd = value;
+
+    unsigned char* end = mpEnd;
+    void* r = memcpy(pNewEnd + 1, position, (unsigned int)((char*)end - (char*)position));
+    unsigned char* pNewEnd2 = (unsigned char*)((char*)r + ((char*)end - (char*)position));
+
+    if (mpBegin != 0 && mpBegin != mpInline)
+        ElemFree(mpBegin);
+
+    mpBegin = pNewData;
+    mpEnd = pNewEnd2;
+    mpCapacity = pNewData + nNewSize;
+}
+
+// @ 0x004ce770
+HashNode_s004c_e770* Hashtable::DoAllocateNode(const HashValue& value)
+{
+    HashNode_s004c_e770* const pNode = (HashNode_s004c_e770*)allocate_memory(mAllocator, sizeof(HashNode_s004c_e770), 4, 0);
+    ::new(&pNode->mValue) HashValue(value);
+    pNode->mpNext = 0;
+    return pNode;
+}
+
+// @ 0x004ce7e0
+HashNode_s004c_e770** Hashtable::DoAllocateBuckets(unsigned int n)
+{
+    HashNode_s004c_e770** const pBucketArray = (HashNode_s004c_e770**)mAllocator.allocate((n + 1) * sizeof(HashNode_s004c_e770*));
+    memset(pBucketArray, 0, n * sizeof(HashNode_s004c_e770*));
+    pBucketArray[n] = (HashNode_s004c_e770*)(unsigned int)~0;
+    return pBucketArray;
+}
+
+// @ 0x004ce850
+void* FixedPool::allocate()
+{
+    void* p;
+    if (mpHead) {
+        p = mpHead;
+        mpHead = mpHead->mpNext;
+    } else
+        p = mOverflowAllocator.allocate(mnNodeSize);
+    return p;
+}
+
+// @ 0x004ce8b0
+void Hashtable::DoRehash(unsigned int nNewBucketCount)
+{
+    HashNode_s004c_e770** const pBucketArray = DoAllocateBuckets(nNewBucketCount);
+    HashNode_s004c_e770* pNode;
+    for (unsigned int i = 0; i < mnBucketCount; ++i) {
+        while ((pNode = mpBucketArray[i]) != 0) {
+            const unsigned int nNewBucketIndex = mod_range_hashing_s004c_e770(hash_uint32(pNode->mValue.first), nNewBucketCount);
+            mpBucketArray[i] = pNode->mpNext;
+            pNode->mpNext = pBucketArray[nNewBucketIndex];
+            pBucketArray[nNewBucketIndex] = pNode;
+        }
+    }
+    DoFreeBuckets(mpBucketArray, mnBucketCount);
+    mnBucketCount = nNewBucketCount;
+    mpBucketArray = pBucketArray;
+}
+
+// @ 0x004ce9d0
+FixedVectorPtr4::FixedVectorPtr4()
+: FixedVectorBase(FixedVectorAllocator(mBuffer)) {
+    mpBegin = mpEnd = (void**)&mBuffer[0];
+    mpCapacity = mpBegin + 4;
+}
+
+// @ 0x004cea40
+namespace vp_e770 {
+__declspec(dllimport) void* __cdecl ImportedMemmove(void* dst, const void* src, unsigned int n);   // the CRT import (string.h memmove under /MD)
+typedef void* VecT;
+
+struct true_type { true_type() {} };
+
+struct generic_iterator {
+    VecT* mIterator;
+    generic_iterator(VecT* const& x) : mIterator(x) {}
+    VecT* base() const { return mIterator; }
+};
+
+generic_iterator copy_generic_iterator_do_copy(generic_iterator first, generic_iterator last,
+                                               generic_iterator result);  // 0x004D1240
+generic_iterator fill_n(generic_iterator first, unsigned int n, const VecT& value);  // 0x004AB450
+
+struct VectorAllocator {
+    inline void deallocate(void* p, unsigned int n) {
+        if (((void**)p)[-1])
+            delete[] (char*)p;
+    }
+};
+
+inline generic_iterator copy(generic_iterator first, generic_iterator last, generic_iterator result) {
+    const bool bInputIsGenericIterator = true;
+    const bool bOutputIsGenericIterator = true;
+    return copy_generic_iterator_do_copy(first, last, result);
+}
+inline generic_iterator uninitialized_copy_impl(generic_iterator first, generic_iterator last,
+                                                generic_iterator result, const true_type&) {
+    return copy(first, last, result);
+}
+inline VecT* uninitialized_copy_generic(VecT* first, VecT* last, VecT* result) {
+    const generic_iterator i(uninitialized_copy_impl(generic_iterator(first), generic_iterator(last),
+                                                     generic_iterator(result), true_type()));
+    return i.base();
+}
+inline void uninitialized_fill_n_impl(generic_iterator first, unsigned int n, const VecT& value, const true_type&) {
+    fill_n(first, n, value);
+}
+inline void uninitialized_fill_n_ptr(VecT* first, unsigned int n, const VecT& value) {
+    uninitialized_fill_n_impl(generic_iterator(first), n, value, true_type());
+}
+inline VecT* copy_backward(VecT* first, VecT* last, VecT* resultEnd) {
+    const bool bInputIsGenericIterator = false;
+    const bool bOutputIsGenericIterator = false;
+    const bool bHasTrivialCopy = true;
+    return (VecT*)ImportedMemmove(resultEnd - (last - first), first, (unsigned int)((char*)last - (char*)first));
+}
+inline VecT* copy_memcpy(VecT* first, VecT* last, VecT* result) {
+    return (VecT*)memcpy(result, first, (unsigned int)((char*)last - (char*)first)) + (last - first);
+}
+inline VecT* uninitialized_copy_ptr(VecT* first, VecT* last, VecT* result) {
+    const bool bA = true;
+    VecT* p = copy_memcpy(first, last, result);
+    const bool bB = true;
+    return p;
+}
+inline void fill(VecT* first, VecT* last, const VecT& value) {
+    for (const VecT temp = value; first != last; ++first)
+        *first = temp;
+}
+
+struct VectorPtr {
+    VecT* mpBegin;
+    VecT* mpEnd;
+    VecT* mpCapacity;
+    static VectorAllocator sAllocator;
+    char mAllocator[4];
+
+    inline unsigned int GetNewCapacity(unsigned int currentCapacity) {
+        return (currentCapacity > 0) ? (2 * currentCapacity) : 1;
+    }
+    inline VecT* DoAllocate(unsigned int n) {
+        return n ? (VecT*)allocate_memory(&mAllocator, n * sizeof(VecT), 4, 0) : 0;
+    }
+    inline void DoFree(VecT* p, unsigned int n) {
+        if (p)
+            sAllocator.deallocate(p, n * sizeof(VecT));
+    }
+    void DoInsertValues(VecT* position, unsigned int n, const VecT& value);
+};
+
+void VectorPtr::DoInsertValues(VecT* position, unsigned int n, const VecT& value) {
+    if (n <= (unsigned int)(mpCapacity - mpEnd)) {
+        if (n > 0) {
+            const VecT temp = value;
+            const unsigned int nExtra = (unsigned int)(mpEnd - position);
+            VecT* const pEnd = mpEnd;
+            if (n < nExtra) {
+                uninitialized_copy_generic(mpEnd - n, mpEnd, mpEnd);
+                mpEnd += n;
+                copy_backward(position, pEnd - n, pEnd);
+                fill(position, position + n, temp);
+            } else {
+                uninitialized_fill_n_ptr(mpEnd, n - nExtra, temp);
+                mpEnd += n - nExtra;
+                uninitialized_copy_generic(position, pEnd, mpEnd);
+                mpEnd += nExtra;
+                fill(position, pEnd, temp);
+            }
+        }
+    } else {
+        const unsigned int nPrevSize = (unsigned int)(mpEnd - mpBegin);
+        const unsigned int nGrowSize = GetNewCapacity(nPrevSize);
+        const unsigned int nNewSize = nGrowSize > (nPrevSize + n) ? nGrowSize : (nPrevSize + n);
+        VecT* const pNewData = DoAllocate(nNewSize);
+        VecT* pNewEnd = uninitialized_copy_ptr(mpBegin, position, pNewData);
+        uninitialized_fill_n_ptr(pNewEnd, n, value);
+        pNewEnd = uninitialized_copy_ptr(position, mpEnd, pNewEnd + n);
+        DoFree(mpBegin, (unsigned int)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+}  // namespace vp_e770
+
+// @ 0x004cef00
+void VecE8::DoInsertValuesE8(Elem8* position, unsigned int n, Elem8 const& value)
+{
+    if (((unsigned int)(mpCapacity - mpEnd)) < n) {
+        unsigned int nPrevSize = (unsigned int)(mpEnd - mpBegin);
+        unsigned int nNewSize = (nPrevSize == 0) ? 1u : (nPrevSize << 1);
+        unsigned int nWant = (nPrevSize + n < nNewSize) ? nNewSize : (nPrevSize + n);
+
+        Elem8* pNewData;
+        if (nWant == 0)
+            pNewData = 0;
+        else
+            pNewData = (Elem8*)EASTL_Allocate(&mAlloc, nWant << 3, 4, 0);
+
+        Elem8* p = (Elem8*)Elem8Copy(mpBegin, position, pNewData);
+        Elem8FillN(p, n, (void*)&value, 0);
+        Elem8* pNewEnd = (Elem8*)Elem8Copy(position, mpEnd, &p[n]);
+
+        if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+            ElemFree(mpBegin);
+
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nWant;
+        return;
+    }
+
+    if (n == 0)
+        return;
+
+    Elem8 tmp;
+    tmp.a = value.a;
+    tmp.b = value.b;
+
+    unsigned int tail = (unsigned int)(mpEnd - position);
+    Elem8* end = mpEnd;
+
+    if (n < tail) {
+        int holder;
+        MoveTail8(&holder, end - n, end, end, 0);
+        mpEnd = end + n;
+        Elem8* d = end;
+        Elem8* s = end - n;
+        while (s != position) {
+            *--d = *--s;
+        }
+        for (Elem8* it = position; it != position + n; ++it) {
+            it->a = tmp.a;
+            it->b = tmp.b;
+        }
+    } else {
+        Elem8FillN(mpEnd, n - tail, &tmp, 0);
+        mpEnd = mpEnd + (n - tail);
+        MovePtr8(position, end, mpEnd);
+        mpEnd = mpEnd + tail;
+        for (Elem8* it = position; it != end; ++it) {
+            it->a = tmp.a;
+            it->b = tmp.b;
+        }
+    }
+}
+
+#pragma function(memcpy)   // the slice calls memcpy out of line here; the file-wide intrinsic would inline the 12-byte copy
+// @ 0x004cf2c0
+void VecE34::DoInsertValuesE34(Elem34_s004c_e310* position, unsigned int n, Elem34_s004c_e310 const& value)
+{
+    if (((unsigned int)(mpCapacity - mpEnd)) < n) {
+        unsigned int nPrevSize = (unsigned int)(mpEnd - mpBegin);
+        unsigned int nNewSize = (nPrevSize == 0) ? 1u : (nPrevSize << 1);
+        unsigned int nWant = (nPrevSize + n < nNewSize) ? nNewSize : (nPrevSize + n);
+
+        Elem34_s004c_e310* pNewData;
+        if (nWant == 0)
+            pNewData = 0;
+        else
+            pNewData = (Elem34_s004c_e310*)EASTL_Allocate(&mAlloc, nWant * 0x34, 4, 0);
+
+        Elem34_s004c_e310* p = (Elem34_s004c_e310*)E34_MoveHead(mpBegin, position, pNewData);
+        E34_FillN(p, n, (void*)&value, 0);
+        Elem34_s004c_e310* mid = &p[n];
+        Elem34_s004c_e310* end = mpEnd;
+        Elem34_s004c_e310* pNewEnd = (Elem34_s004c_e310*)E34_MoveStart(position, end, mid);
+        E34_MoveCommit(position, end, mid);
+
+        if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0)
+            ElemFree(mpBegin);
+
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nWant;
+        return;
+    }
+
+    if (n == 0)
+        return;
+
+    E34_dtorA((void*)&value);
+    E34_dtorB((void*)((char*)&value + 0x0c));
+
+    unsigned int tail = (unsigned int)(mpEnd - position);
+    Elem34_s004c_e310* end = mpEnd;
+
+    if (n < tail) {
+        char holder[4];
+        E34_MoveTail(holder, end - n, end, end, 0);
+        mpEnd = end + n;
+        Elem34_s004c_e310* d = end;
+        Elem34_s004c_e310* s = end - n;
+        while (s != position) {
+            memcpy((char*)d - 0x34, (char*)s - 0x34, 0x0c);
+            E34_SubDtor((char*)s - 0x28);
+            --d;
+            --s;
+        }
+        for (Elem34_s004c_e310* it = position; it != position + n; ++it) {
+            E34_Assign(it, (void*)&value);
+        }
+    } else {
+        E34_FillN(mpEnd, n - tail, (void*)&value, 0);
+        mpEnd = mpEnd + (n - tail);
+        E34_MoveBack(position, end, mpEnd);
+        mpEnd = mpEnd + tail;
+        for (Elem34_s004c_e310* it = position; it != end; ++it) {
+            E34_Assign(it, (void*)&value);
+        }
+    }
+
+    (void)E34_dtorA;
+}
+#pragma intrinsic(memcpy)
+
+// @ 0x004cf770
+namespace eastl {
+template <> void vector_s004c_f770<Rec14>::DoInsertValues(Rec14* position, uint32_t n, const Rec14& value)
+{
+    if (n <= (uint32_t)(mpCapacity - mpEnd)) {
+        if (n > 0) {
+            const Rec14 temp(value);
+            ScratchSlots<1>();
+            const uint32_t nExtra = (uint32_t)(mpEnd - position);
+            Rec14* const pEnd = mpEnd;
+            if (n < nExtra) {
+                uninitialized_copy_ptr_s004c_f770(mpEnd - n, mpEnd, mpEnd);
+                mpEnd += n;
+                copy_backward_inl(position, pEnd - n, pEnd);
+                fill(position, position + n, temp);
+            } else {
+                uninitialized_fill_n_ptr(mpEnd, n - nExtra, temp);
+                mpEnd += n - nExtra;
+                uninitialized_copy_ool(position, pEnd, mpEnd);
+                ScratchSlots<12>();
+                mpEnd += nExtra;
+                fill(position, pEnd, temp);
+            }
+        }
+    } else {
+        const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+        const uint32_t nGrowSize = GetNewCapacity(nPrevSize);
+        const uint32_t nNewSize = nGrowSize > (nPrevSize + n) ? nGrowSize : (nPrevSize + n);
+        Rec14* const pNewData = DoAllocate(nNewSize);
+        Rec14* pNewEnd = uninitialized_move(mpBegin, position, pNewData);
+        ScratchSlots<8>();
+        uninitialized_fill_n_ptr(pNewEnd, n, value);
+        pNewEnd = uninitialized_move_inl(position, mpEnd, pNewEnd + n);
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+}  // namespace eastl
+
+// @ 0x004cfc00
+namespace eastl {
+template <> void vector_s004c_f770<Vec4_s004c_f770>::DoInsertValues(Vec4_s004c_f770* position, uint32_t n, const Vec4_s004c_f770& value)
+{
+    if (n <= (uint32_t)(mpCapacity - mpEnd)) {
+        if (n > 0) {
+            const Vec4_s004c_f770 temp(value);
+            const uint32_t nExtra = (uint32_t)(mpEnd - position);
+            Vec4_s004c_f770* const pEnd = mpEnd;
+            if (n < nExtra) {
+                uninitialized_copy_ptr_s004c_f770(mpEnd - n, mpEnd, mpEnd);
+                mpEnd += n;
+                copy_backward_ool(position, pEnd - n, pEnd);
+                ScratchSlots<3>();
+                fill(position, position + n, temp);
+            } else {
+                uninitialized_fill_n_ptr(mpEnd, n - nExtra, temp);
+                mpEnd += n - nExtra;
+                uninitialized_copy_ool(position, pEnd, mpEnd);
+                ScratchSlots<12>();
+                mpEnd += nExtra;
+                fill(position, pEnd, temp);
+            }
+        }
+    } else {
+        const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+        const uint32_t nGrowSize = GetNewCapacity(nPrevSize);
+        const uint32_t nNewSize = nGrowSize > (nPrevSize + n) ? nGrowSize : (nPrevSize + n);
+        Vec4_s004c_f770* const pNewData = DoAllocate(nNewSize);
+        Vec4_s004c_f770* pNewEnd = uninitialized_move(mpBegin, position, pNewData);
+        ScratchSlots<8>();
+        uninitialized_fill_n_ptr(pNewEnd, n, value);
+        pNewEnd = uninitialized_move_inl0(position, mpEnd, pNewEnd + n);
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+}  // namespace eastl
+
+// @ 0x004d0080
+namespace eastl {
+void fixed_word_vector::DoInsertValues(Word32* position, uint32_t n, const Word32& value)
+{
+    if (n <= (uint32_t)(mpCapacity - mpEnd)) {
+        if (n > 0) {
+            const Word32 temp(value);
+            const uint32_t nExtra = (uint32_t)(mpEnd - position);
+            Word32* const pEnd = mpEnd;
+            if (n < nExtra) {
+                uninitialized_copy_ptr_s004c_f770(mpEnd - n, mpEnd, mpEnd);
+                mpEnd += n;
+                copy_backward_inl(position, pEnd - n, pEnd);
+                fill(position, position + n, temp);
+            } else {
+                uninitialized_fill_n_ptr(mpEnd, n - nExtra, temp);
+                mpEnd += n - nExtra;
+                uninitialized_copy_ool(position, pEnd, mpEnd);
+                ScratchSlots<11>();
+                mpEnd += nExtra;
+                fill(position, pEnd, temp);
+            }
+        }
+    } else {
+        const uint32_t nPrevSize = (uint32_t)(mpEnd - mpBegin);
+        const uint32_t nGrowSize = GetNewCapacity(nPrevSize);
+        const uint32_t nNewSize = nGrowSize > (nPrevSize + n) ? nGrowSize : (nPrevSize + n);
+        Word32* const pNewData = DoAllocate(nNewSize);
+        Word32* pNewEnd = uninitialized_copy_ool2(mpBegin, position, pNewData);
+        ScratchSlots<8>();
+        uninitialized_fill_n_ptr(pNewEnd, n, value);
+        pNewEnd = uninitialized_copy_ool2(position, mpEnd, pNewEnd + n);
+        ScratchSlots<8>();
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = pNewEnd;
+        mpCapacity = pNewData + nNewSize;
+    }
+}
+}  // namespace eastl
+
+// @ 0x004d0430
+namespace eastl {
+void hashtable_s004c_f770::DoFreeNodes(HashNode_s004c_f770** pNodeArray, uint32_t n)
+{
+    for (uint32_t i = 0; i < n; ++i) {
+        HashNode_s004c_f770* pNode = pNodeArray[i];
+        while (pNode) {
+            HashNode_s004c_f770* const pTempNode = pNode;
+            pNode = pNode->mpNext;
+            DoFreeNode(pTempNode);
+            ScratchSlots<3>();
+        }
+        pNodeArray[i] = 0;
+    }
+}
+}  // namespace eastl
+
+// @ 0x004d04a0
+namespace eastl {
+void* allocate_memory(FixedHashtableAllocator_s004c_f770& a, uint32_t n, uint32_t alignment, uint32_t alignmentOffset)
+{
+    if (alignment <= 8)
+        return a.allocate(n);
+    return a.allocate(n);
+}
+}  // namespace eastl
+
+// @ 0x004d04f0
+namespace eastl {
+template <> template <> void vector_s004c_f770<Word32>::DoAssignFromIterator<const Word32*>(const Word32* first, const Word32* last, random_access_iterator_tag)
+{
+    const uint32_t n = (uint32_t)(last - first);
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        Word32* const pNewData = DoRealloc(n, first, last);
+        ScratchSlots<14>();
+        eastl::destruct_s004c_f770(mpBegin, mpEnd);
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = mpBegin + n;
+        mpCapacity = mpEnd;
+    } else if (n <= (uint32_t)(mpEnd - mpBegin)) {
+        Word32* const position = eastl::copy(first, last, mpBegin);
+        eastl::destruct_s004c_f770(position, mpEnd);
+        mpEnd = position;
+    } else {
+        const Word32* position = first + (mpEnd - mpBegin);
+        eastl::copy(first, position, mpBegin);
+        mpEnd = eastl::uninitialized_copy_ext(position, last, mpEnd);
+        ScratchSlots<17>();
+    }
+}
+}  // namespace eastl
+
+// Explicit instantiations of EASTL algorithm helpers from slice s004d06e0 (names carry the slice suffix).
+namespace eastl {
+template <class T> struct has_trivial_relocate_s004d_06e0 : public false_type {};
+
+template <class InputIterator, class ForwardIterator>
+inline ForwardIterator uninitialized_copy_impl_s004d_06e0(InputIterator first, InputIterator last, ForwardIterator dest, false_type)
+{
+    typedef typename iterator_traits<ForwardIterator>::value_type value_type;
+    ForwardIterator currentDest(dest);
+    for (; first != last; ++first, ++currentDest)
+        ::new (&*currentDest) value_type(*first);
+    return currentDest;
+}
+
+template <class First, class Last, class Result>
+inline Result uninitialized_copy_ptr_s004d_06e0(First first, Last last, Result result)
+{
+    typedef typename iterator_traits<generic_iterator_s004d_06e0<Result, void> >::value_type value_type;
+    const generic_iterator_s004d_06e0<Result, void> i(uninitialized_copy_impl_s004d_06e0(generic_iterator_s004d_06e0<First, void>(first),
+                                                                   generic_iterator_s004d_06e0<Last, void>(last),
+                                                                   generic_iterator_s004d_06e0<Result, void>(result),
+                                                                   has_trivial_relocate_s004d_06e0<value_type>()));
+    return i.base();
+}
+
+template <class ForwardIterator, class Count, class T>
+inline void uninitialized_fill_n_impl_s004d_06e0(ForwardIterator first, Count n, const T& value, false_type)
+{
+    typedef typename iterator_traits<ForwardIterator>::value_type value_type;
+    ForwardIterator currentDest(first);
+    for (; n > 0; --n, ++currentDest)
+        ::new (&*currentDest) value_type(value);
+}
+
+template <class ForwardIterator, class ForwardIteratorDest>
+inline ForwardIteratorDest uninitialized_move_start_s004d_06e0(ForwardIterator first, ForwardIterator last, ForwardIteratorDest dest)
+{
+    const bool bHasTrivialMove = false;
+    return uninitialized_move_impl<false, ForwardIterator, ForwardIteratorDest>::do_move_start(first, last, dest);
+}
+
+template <class ForwardIterator, class ForwardIteratorDest>
+inline ForwardIteratorDest uninitialized_move_commit_s004d_06e0(ForwardIterator first, ForwardIterator last, ForwardIteratorDest dest)
+{
+    const bool bHasTrivialMove = false;
+    return uninitialized_move_impl<false, ForwardIterator, ForwardIteratorDest>::do_move_commit(first, last, dest);
+}
+
+template <class ForwardIterator, class ForwardIteratorDest>
+inline ForwardIteratorDest uninitialized_move_s004d_06e0(ForwardIterator first, ForwardIterator last, ForwardIteratorDest dest)
+{
+    ForwardIteratorDest result = uninitialized_move_start_s004d_06e0(first, last, dest);
+    uninitialized_move_commit_s004d_06e0(first, last, dest);
+    return result;
+}
+
+template <class Bi1, class Bi2>
+inline Bi2 copy_backward_impl_s004d_06e0(Bi1 first, Bi1 last, Bi2 resultEnd)
+{
+    while (last != first)
+        *--resultEnd = *--last;
+    return resultEnd;
+}
+
+template <class Bi1, class Bi2>
+inline Bi2 copy_backward_s004d_06e0(Bi1 first, Bi1 last, Bi2 resultEnd)
+{
+    const bool bIsMove = false;
+    const bool bCanMemmove = false;
+    const bool bIsPod = false;
+    return copy_backward_impl_s004d_06e0(first, last, resultEnd);
+}
+
+template <class T>
+inline T* copy_memmove_s004d_06e0(const T* first, const T* last, T* result)
+{
+    const bool bCanMemmove = true;
+    return (T*)memmove(result, first, (unsigned int)((uint32_t)last - (uint32_t)first)) + (last - first);
+}
+
+template <class InputIterator, class OutputIterator>
+inline OutputIterator copy_s004d_06e0(InputIterator first, InputIterator last, OutputIterator result)
+{
+    return OutputIterator(copy_memmove_s004d_06e0(first.base(), last.base(), result.base()));
+}
+
+template <class T> class vector_s004d_06e0 { public:
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    fixed_vector_allocator mAllocator;
+
+    T* DoRealloc(uint32_t n, const T* first, const T* last);         // 0x00426950
+    void DoFree(T* p, uint32_t n) { if (p) deallocate(p, n * sizeof(T)); }
+    static void deallocate(void* p, uint32_t) { if (*((uint32_t*)p - 1)) FreeBlock(p); }
+    static void FreeBlock(void* p) { void* pBlock = p; EASTLFree(pBlock); }
+    template <class II> void DoAssignFromIterator(II first, II last, random_access_iterator_tag);
+};
+
+uint8_t* uninitialized_copy_ptr_u8_s004d_06e0(const uint8_t* first, const uint8_t* last, uint8_t* result);   // 0x00475BD0
+
+template <class T> __forceinline void destruct_s004d_06e0(T* first, T* last)
+{
+    for (; first < last; ++first)
+        ;
+}
+
+__forceinline uint8_t* copy_u8_s004d_06e0(const uint8_t* first, const uint8_t* last, uint8_t* result)
+{
+    const bool bIsMove = false;
+    const bool bCanMemmove = false;
+    const bool bIsPod = true;
+    return (uint8_t*)memmove(result, first, (unsigned int)(last - first)) + (last - first);
+}
+}  // namespace eastl
+
+// @ 0x004d06e0
+namespace eastl {
+template <> template <> void vector_s004d_06e0<uint8_t>::DoAssignFromIterator<const uint8_t*>(const uint8_t* first, const uint8_t* last, random_access_iterator_tag)
+{
+    const uint32_t n = (uint32_t)(last - first);
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        uint8_t* const pNewData = DoRealloc(n, first, last);
+        ScratchSlots<14>();   // frame of the out-of-line DoRealloc
+        eastl::destruct_s004d_06e0(mpBegin, mpEnd);
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        mpBegin = pNewData;
+        mpEnd = mpBegin + n;
+        mpCapacity = mpEnd;
+    } else if (n <= (uint32_t)(mpEnd - mpBegin)) {
+        uint8_t* const position = eastl::copy_u8_s004d_06e0(first, last, mpBegin);
+        eastl::destruct_s004d_06e0(position, mpEnd);
+        mpEnd = position;
+    } else {
+        const uint8_t* position = first + (mpEnd - mpBegin);
+        eastl::copy_u8_s004d_06e0(first, position, mpBegin);
+        mpEnd = eastl::uninitialized_copy_ptr_u8_s004d_06e0(position, last, mpEnd);
+        ScratchSlots<17>();   // frame of the out-of-line uninitialized_copy_ptr
+    }
+}
+}  // namespace eastl
+
+// @ 0x004d0960
+namespace eastl {
+template IntFloat* uninitialized_copy_ptr_s004d_06e0<IntFloat*, IntFloat*, IntFloat*>(IntFloat*, IntFloat*, IntFloat*);
+}
+// @ 0x004d0b90
+namespace eastl {
+template Word32* uninitialized_copy_ptr_s004d_06e0<Word32*, Word32*, Word32*>(Word32*, Word32*, Word32*);
+}
+// @ 0x004d0c90
+namespace eastl {
+template generic_iterator_s004d_06e0<Elem34_s004d_06e0*> uninitialized_copy_impl_s004d_06e0(generic_iterator_s004d_06e0<const Elem34_s004d_06e0*>, generic_iterator_s004d_06e0<const Elem34_s004d_06e0*>, generic_iterator_s004d_06e0<Elem34_s004d_06e0*>, false_type);
+}
+// @ 0x004d0dd0
+namespace eastl {
+template generic_iterator_s004d_06e0<Rec14_s004d_06e0*> uninitialized_copy_impl_s004d_06e0(generic_iterator_s004d_06e0<const Rec14_s004d_06e0*>, generic_iterator_s004d_06e0<const Rec14_s004d_06e0*>, generic_iterator_s004d_06e0<Rec14_s004d_06e0*>, false_type);
+}
+// @ 0x004d0f60
+namespace eastl {
+template generic_iterator_s004d_06e0<Word32*> uninitialized_copy_impl_s004d_06e0(generic_iterator_s004d_06e0<const Word32*>, generic_iterator_s004d_06e0<const Word32*>, generic_iterator_s004d_06e0<Word32*>, false_type);
+}
+// @ 0x004d0d40
+namespace eastl {
+template void uninitialized_fill_n_impl_s004d_06e0(generic_iterator_s004d_06e0<Elem34_s004d_06e0*>, uint32_t, const Elem34_s004d_06e0&, false_type);
+}
+// @ 0x004d0e90
+namespace eastl {
+template void uninitialized_fill_n_impl_s004d_06e0(generic_iterator_s004d_06e0<Rec14_s004d_06e0*>, uint32_t, const Rec14_s004d_06e0&, false_type);
+}
+// @ 0x004d0fd0
+namespace eastl {
+template void uninitialized_fill_n_impl_s004d_06e0(generic_iterator_s004d_06e0<Word32*>, uint32_t, const Word32&, false_type);
+}
+// @ 0x004d0a40
+namespace eastl {
+template Elem34_s004d_06e0* uninitialized_move_s004d_06e0(Elem34_s004d_06e0*, Elem34_s004d_06e0*, Elem34_s004d_06e0*);
+}
+// @ 0x004d0ac0
+namespace eastl {
+template Rec14_s004d_06e0* uninitialized_move_s004d_06e0(Rec14_s004d_06e0*, Rec14_s004d_06e0*, Rec14_s004d_06e0*);
+}
+// @ 0x004d0f30
+namespace eastl {
+template Rec14_s004d_06e0* uninitialized_move_start_s004d_06e0(Rec14_s004d_06e0*, Rec14_s004d_06e0*, Rec14_s004d_06e0*);
+}
+// @ 0x004d0b20
+namespace eastl {
+template Vec4_s004d_06e0* copy_backward_s004d_06e0(Vec4_s004d_06e0*, Vec4_s004d_06e0*, Vec4_s004d_06e0*);
+}
+// @ 0x004d1240
+namespace eastl {
+template generic_iterator_s004d_06e0<Word32*> copy_s004d_06e0(generic_iterator_s004d_06e0<const Word32*>, generic_iterator_s004d_06e0<const Word32*>, generic_iterator_s004d_06e0<Word32*>);
+}
+
+// @ 0x004d0c20
+namespace eastl {
+void hashtable_s004d_06e0::DoFreeNode(HashNode_s004d_06e0* pNode)
+{
+    mAllocator.deallocate(pNode, 0x10);
+}
+}  // namespace eastl
+
+// @ 0x004d1030
+namespace eastl {
+Elem34_s004d_06e0& Elem34_s004d_06e0::operator=(const Elem34_s004d_06e0& x)
+{
+    mHeader = x.mHeader;
+    mValues = x.mValues;
+    return *this;
+}
+}  // namespace eastl
+
+// @ 0x004d12a0
+float GetSkinLevelValue(int level)
+{
+    level &= (level < 0) - 1;
+    float value = 100.0f;
+    switch (level) {
+    case 0: value = kSkinLevelValues[0]; break;
+    case 1: value = kSkinLevelValues[1]; break;
+    case 2: value = kSkinLevelValues[2]; break;
+    case 3: value = kSkinLevelValues[3]; break;
+    case 4: value = kSkinLevelValues[4]; break;
+    case 5: value = kSkinLevelValues[5]; break;
+    case 6: value = kSkinLevelValues[6]; break;
+    }
+    return value;
+}
+
+// @ 0x004d1370
+uint32_t GetEditorConfigValue(uint32_t modelType)
+{
+    uint32_t nID = RemapTypeId(modelType);
+    App::PropertyListPtr_s004d_06e0 pProp;
+    PropertyManager_s004d_06e0()->GetPropertyList(nID, gEditorConfigGroup, pProp.reset_get());
+    if (pProp) {
+        const uint32_t kID = 0x5deb6a5;
+        uint32_t val;
+        if (App::GetUInt32_s004d_06e0(pProp.get(), kID, val))
+            return val;
+    }
+    return 0;
+}
 
 // @ 0x004d1470
 bool GetPaintUV(cSkinPaintTable* table, uint32_t id, float* u, float* v)
@@ -2256,6 +4420,26 @@ bool GetPaintUV(cSkinPaintTable* table, uint32_t id, float* u, float* v)
     *u = 0.0f;
     return false;
 }
+
+// @ 0x004d1510
+bool GetBounds(uint32_t a, uint32_t b, BBox* box)
+{
+    int pointCount = 0;
+    Vector3i* pointList = 0;
+    if (GetBoundsPoints(a, b, &pointCount, &pointList)) {
+        if (pointCount == 1) {
+            box->mMin = pointList[0];
+            box->mMax = pointList[0];
+            return true;
+        } else if (pointCount > 1) {
+            box->mMin = pointList[0];
+            box->mMax = pointList[1];
+            return true;
+        }
+    }
+    return false;
+}
+#pragma pack(pop)
 
 // @ 0x004d15c0
 namespace SP {
@@ -3647,6 +5831,64 @@ int cSPEditorSpeciesManager_s004d_f2d0::GetMatchingPlantProfiles(ProfileVector& 
 }
 }  // namespace SP
 
+// @ 0x004dff50
+namespace SP {
+int cSPEditorSpeciesManager_s004d_f2d0::GetMatchingCreatureKeys(ProfileVector& out, uint32_t archetypeId, int count, int a, bool b)
+{
+    eastl::ArchetypeMap::iterator it = mArchetypes.find(archetypeId);
+    ScratchSlots<14>();
+    if (it != mArchetypes.end()) {
+        cSpeciesArchetype_s004d_f2d0* pArchetype = &it.mpNode->mValue;
+        return GetMatchingCreatureKeys(out, pArchetype, count, a, b);
+    }
+    return 0;
+}
+}  // namespace SP
+
+// @ 0x004dfff0
+namespace SP {
+int cSPEditorSpeciesManager_s004d_f2d0::GetMatchingCreatureKeys(ProfileVector& out, cSpeciesArchetype_s004d_f2d0* pArchetype, int count, int a, bool b)
+{
+    ConstraintVector constraints;
+    int n;        // unused locals: they reproduce the original frame
+    int result;
+    ScratchSlots<5>();
+    return FindMatchingCreatures(out, pArchetype, count, a, b, constraints);
+}
+}  // namespace SP
+
+// @ 0x004e0050
+namespace SP {
+cSpeciesArchetype_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetSpeciesArchetype(uint32_t id, uint32_t level)
+{
+    ScratchSlots<12>();
+    cSpeciesArchetype_s004d_f2d0* pResult = 0;
+    eastl::ArchetypeMap::iterator it = mArchetypes.find(id);
+    if (it != mArchetypes.end()) {
+        pResult = &it.mpNode->mValue;
+        if (level > 0) {
+            uint32_t idx = level - 1;
+            if (idx < pResult->mParentIds.size()) {
+                ScratchSlots<14>();
+                uint32_t parentId = pResult->mParentIds.mpBegin[idx];
+                it = mArchetypes.find(parentId);
+                if (it != mArchetypes.end())
+                    pResult = &it.mpNode->mValue;
+            }
+        }
+    }
+    return pResult;
+}
+}  // namespace SP
+
+// @ 0x004e01b0
+namespace SP {
+cSpeciesArchetype_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetDefaultArchetype()
+{
+    return GetSpeciesArchetype(0xaed08dd4, 0);
+}
+}  // namespace SP
+
 // @ 0x004e01d0
 namespace SP {
 void cEditorEventQueue::QueueEvent(cEditorEvent* pEvent)
@@ -3679,6 +5921,36 @@ void cEditorEventQueue::QueueEvent(cEditorEvent* pEvent)
         break;
     }
     }
+}
+}  // namespace SP
+
+// @ 0x004e0370
+eastl::fixed_hash_map_PartLayout::fixed_hash_map_PartLayout(const hash_s004e_01d0<uint32_t>& hashFunction, const equal_to_s004e_01d0<uint32_t>& predicate)
+: PartLayoutMap(prime_rehash_policy_s004e_01d0::GetPrevBucketCountOnly(33), hashFunction, predicate,
+                    fixed_hashtable_allocator(mNodeBuffer, 0x380, 0x1c, mBucketBuffer))
+{
+    ScratchSlots<5>();
+    set_max_load_factor(10000.f);
+}
+
+// @ 0x004e0750
+namespace eastl {
+template <class K, class V, class H, class A> void hashtable_s004e_01d0<K, V, H, A>::set_max_load_factor(float fMaxLoadFactor)
+{
+    hashtable_s004e_01d0* const pThis = this;
+    pThis->rehash_policy(prime_rehash_policy_s004e_01d0(fMaxLoadFactor));
+}
+}  // namespace eastl
+
+// @ 0x004e0850
+namespace SP {
+string& string::sprintf(const char* pFormat, ...)
+{
+    va_list arguments;
+    va_start(arguments, pFormat);
+    sprintf_va_list(pFormat, arguments);
+    va_end(arguments);
+    return *this;
 }
 }  // namespace SP
 
@@ -3757,6 +6029,40 @@ bool LoadCollectableItems(App::PropertyList_s005b_eaf0* list, Simulator::cCollec
     }
   }
   return ok;
+}
+
+// @ 0x005bf3a0
+bool CopyEditorPropertyList(const EA::ResourceMan::Key_s005b_eaf0& dst, const EA::ResourceMan::Key_s005b_eaf0& src, App::PropertyList_s005b_eaf0** result, EA::ResourceMan::IDatabase* db)
+{
+  bool ok = false;
+  App::IPropertyManager* pm = SP::PropertyManager_s005b_eaf0();
+  EA::AutoRefCount_s005b_eaf0<App::PropertyList_s005b_eaf0> srcList;
+  if (pm) {
+    if (pm->GetPropertyList(src.mInstance, src.mGroup, srcList.mpObject)) {
+      EA::AutoRefCount_s005b_eaf0<Editor::cPropertyList> list(new ("Editor/cPropertyList", 0, 0, 0, 0) Editor::cPropertyList());
+      list->SetParent(srcList);
+      ok = SaveEditorPropertyList(dst, list, 0, db);
+      if (ok && result) {
+        *result = list;
+        list->AddRef();
+      }
+    }
+  }
+  return ok;
+}
+
+// @ 0x005bf470
+int AddToIntProperty(App::PropertyList_s005b_eaf0* list, uint32_t id, int delta)
+{
+  int value = 0;
+  Property_s005b_eaf0* prop;
+  if (list && list->GetProperty(id, prop) && prop->mType == 9)
+    value = *prop->GetInt();
+  value += delta;
+  EA::Variant_s005b_eaf0 v;
+  v = value;
+  list->SetProperty(id, v);
+  return value;
 }
 
 // @ 0x005bf500
