@@ -222,9 +222,11 @@ void* canvas_findtext(int* out, void* x)
 }
 
 // @ 0x00a4a600
-void glist_getname(t_symbol* out, t_glist* g)
+t_symbol* glist_getname(t_symbol* __restrict out, t_glist* g)
 {
-    *out = *(t_symbol*)((char*)g + 0x64);
+    out->s_name = g->gl_name_a;
+    out->s_thing = g->gl_name_b;
+    return out;
 }
 
 // @ 0x00a4a620
