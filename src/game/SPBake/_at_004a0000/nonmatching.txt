@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-004ab280 99 complete copy-construct range (stride 0x24); /Od slot/loop shape differ flags: /Od /Ob1 /MD /Gy /TP
 004ab450 51 complete fill loop (while(n--) *dst++=v); local slot order differs flags: /Od /Ob1 /MD /Gy /TP
 004ab530 72 complete copy range (stride 0x3c) with nested assign flags: /Od /Ob1 /MD /Gy /TP
 004ab5b0 73 complete Item range copy (x87 float member copies); V3 copy flavour + pointer temps differ flags: /Od /Ob1 /MD /Gy /TP

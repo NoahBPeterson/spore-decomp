@@ -3161,6 +3161,9 @@ Bits* Bits::Flip()
     unsigned int i;
     for (i = 0; i < 4; i++)
         w[i] = ~w[i];
+    // Keep the bitset<128> high-bit cleanup expression emitted by the original template.
+    if ((128 & 31) || (128 == 0))
+        w[3] &= ~(~static_cast<uint32_t>(0) << (128 & 31));
     return this;
 }
 

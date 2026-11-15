@@ -672,7 +672,19 @@ public:
     void AttachEffect(void* pEffect);
     void ClearEffectState();
 };
-void* CastOrnamentBase(void* pObject);
+// Retail interface-query views: these three owners share their primary base.
+// IDs are full-width values; the generated InterfaceId enum has a narrower range.
+namespace RetailSolarHitSphere {
+class cOrnament {
+public:
+    void* AsInterface(uint32_t type); // 0x00c6f6e0, thiscall, ret 4
+};
+class cHitSphere : public cOrnament {};
+class cSolarHitSphere : public cHitSphere {
+public:
+    void* AsInterface(uint32_t type);
+};
+}
 void RemoveOwnerExtra();
 void operator_delete__(void* pMemory);
 void ResetOrnamentList(void* pOwner);
@@ -1571,11 +1583,11 @@ void cInteractableObject::SetEffectId(int nEffectId)
 }
 
 // @ 0x00c3f1d0
-void* cGameplayMarkerCast(void* pObject, int nType)
+void* RetailSolarHitSphere::cSolarHitSphere::AsInterface(uint32_t type)
 {
-    if (nType != 0x32f9777 && nType != 0x2e71a5a)
-        return CastOrnamentBase(pObject);
-    return pObject;
+    if (type == 0x032f9777u)
+        return this;
+    return type == 0x02e71a5au ? this : cOrnament::AsInterface(type);
 }
 
 // @ 0x00c3f1f0

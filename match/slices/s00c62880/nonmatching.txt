@@ -1,6 +1,5 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00c62880   44  cMissionUseTool ctor: complete (vptr 0x1470970/0x1470960/0x1470950, state/fields zeroed); base-ctor call and vptr store schedule. difftest PASS (351 valid, 100% coverage)
-00c639a0   47  interface adjustor (this in ecx, id at [esp+4], ret 4): complete; branch order 0x1186577/0x7a309fb, fallback tail-calls 0xb18460 with this still in ecx. difftest PASS (400 valid, 60.0% coverage)
 00c639d0   54  interface adjustor: complete; identity cases 0x76c67df/0x7a309fb grouped, 0x1186577 returns this+0x34 (null-guarded), fallback tail-calls 0xb18460. difftest PASS (400 valid, 64.7% coverage)
 00c63a20   54  interface adjustor: complete; identity cases 0x771ad6a/0x7a309fb grouped, 0x1186577 returns this+0x34, fallback tail-calls 0xb18460. difftest PASS (400 valid, 64.7% coverage)
 00c62990  324  GetTagString override: complete property-list lookup, WString range init, out assignment and cache cleanup; base fallback retained. difftest WEAK (400 valid, 29.3% coverage; property/WString helpers opaque)

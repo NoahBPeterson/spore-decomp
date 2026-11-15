@@ -546,7 +546,7 @@ void MoveBack(Entry20* first, Entry20* last, Entry20* dstEnd);                  
 // ---- items of slice s0053c6f0 end
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
-void** UninitCopy20(void** out, Entry20* first, Entry20* last, Entry20* dst, uint8_t /*isPod*/);   // defined at 0x0053d1a0, called earlier in the TU
+Entry20** UninitCopy20(Entry20** out, Entry20* first, Entry20* last, Entry20* dst, uint8_t /*isPod*/);   // defined at 0x0053d1a0, called earlier in the TU
 void* UninitFill20(Entry20* dst, int n, const Entry20* value, uint8_t /*isPod*/);   // defined at 0x0053d230, called earlier in the TU
 
 // @ 0x00538e90
@@ -1240,7 +1240,7 @@ template <> void SimpleVector<Entry20>::insert(Entry20* position, uint32_t n, co
         Entry20* oldEnd = mpEnd;
         if (n < tail) {
             Entry20* out;
-            UninitCopy20((void**)&out, mpEnd - n, mpEnd, mpEnd, 0);
+            UninitCopy20(&out, mpEnd - n, mpEnd, mpEnd, 0);
             mpEnd = mpEnd + n;
             Entry20* src = oldEnd - n;
             Entry20* dst = oldEnd;
@@ -1262,17 +1262,22 @@ template <> void SimpleVector<Entry20>::insert(Entry20* position, uint32_t n, co
     }
 }
 
+inline Entry20& Entry20IteratorValue(Entry20* const& iterator)
+{
+    return *iterator;
+}
+
+inline bool Entry20IteratorsDiffer(Entry20* const& first, Entry20* const& last)
+{
+    return first != last;
+}
+
 // @ 0x0053d1a0
-void** UninitCopy20(void** out, Entry20* first, Entry20* last, Entry20* dst, uint8_t /*isPod*/)
+Entry20** UninitCopy20(Entry20** out, Entry20* first, Entry20* last, Entry20* dst, uint8_t /*isPod*/)
 {
     Entry20* d = dst;
-    for (; first != last; ++first) {
-        if (d) {
-            d->m[0] = first->m[0]; d->m[1] = first->m[1]; d->m[2] = first->m[2]; d->m[3] = first->m[3];
-            d->mA = first->mA; d->mB = first->mB; d->mC = first->mC; d->mD = first->mD;
-        }
-        ++d;
-    }
+    for (; Entry20IteratorsDiffer(first, last); ++first, ++d)
+        new (&Entry20IteratorValue(d)) Entry20(*first);
     *out = d;
     return out;
 }

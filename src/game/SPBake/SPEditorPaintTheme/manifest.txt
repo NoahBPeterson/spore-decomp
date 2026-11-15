@@ -12,3 +12,4 @@
 ../src/game/SPBake/SPEditorPaintTheme.cpp  ?DestroyRange@DeletablePtrRange@@QAEXPAUDeletablePtr@@0@Z  004b5fb0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorPaintTheme.cpp  ?FUN_004bbe90@@YA_NI@Z  004bbe90  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorPaintTheme.cpp  ?FUN_004bbed0@@YA_NI@Z  004bbed0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorPaintTheme.cpp  ?Reset@cSPEditorPaintTheme_s004b_2320@SP@@QAEXXZ  004b2710  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

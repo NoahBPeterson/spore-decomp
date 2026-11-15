@@ -18,3 +18,4 @@
 ../src/game/SPGonzago/_at_00c30000.cpp  ?FUN_00c3e350@@YIXPAD@Z  00c3e350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c30000.cpp  ?FUN_00c3e460@@YIMPAD@Z  00c3e460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c30000.cpp  ?FUN_00c3ea80@@YAPAXXZ  00c3ea80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?AsInterface@cSolarHitSphere@RetailSolarHitSphere@@QAEPAXI@Z  00c3f1d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
