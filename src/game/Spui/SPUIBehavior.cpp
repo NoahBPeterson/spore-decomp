@@ -645,7 +645,13 @@ struct AB {                       // cSPUIBehaviorActionBase
 };
 struct Stopwatch {
     unsigned __int64 mnStartTime;         // +0x00
-    unsigned __int64 mnTotalElapsedTime;  // +0x08
+    union {
+        unsigned __int64 mnTotalElapsedTime; // +0x08
+        struct {
+            unsigned mnElapsedLow;          // +0x08
+            unsigned mnElapsedHigh;         // +0x0c
+        };
+    };
     int   mnUnits;                        // +0x10
     float mfCoefficient;                  // +0x14
     void Init(int a, int b);              // 0x93a560 (ctor; args units, start)
@@ -1940,13 +1946,16 @@ Interp::Interp()
     sw->Init(5, 0);
     ((TC_7fd200*)this)->FUN_007fd200(0x80, 1);
     ((TC_7fd200*)this)->FUN_007fd200(0x100, 1);
+    // Explicit words preserve the retail reset's store schedule in VC2008.
     if (sw->mnUnits == 1) {
         sw->mnStartTime = __rdtsc();
-        sw->mnTotalElapsedTime = 0;
+        sw->mnElapsedHigh = 0;
+        sw->mnElapsedLow = 0;
     } else {
         Li li;
         QueryPerformanceCounter(&li);
-        sw->mnTotalElapsedTime = 0;
+        sw->mnElapsedHigh = 0;
+        sw->mnElapsedLow = 0;
         sw->mnStartTime = li.Quad;
     }
 }

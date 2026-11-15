@@ -2718,14 +2718,13 @@ int64_t Meta::FUN_005508a0()
 void* Meta::FUN_00550910(unsigned idx)
 {
     char** v = (char**)((char*)this + 0x98);
-    void* result;
     if (idx < (unsigned)(((char*)v[1] - (char*)v[0]) >> 4)) {
         void** p = (void**)(*(char**)((char*)this + 0x98) + (idx << 4));
-        result = *p;
+        void* result = *p;
+        return result;
     } else {
-        result = DAT_013ec47c;
+        return DAT_013ec47c;
     }
-    return result;
 }
 
 // @ 0x005509e0

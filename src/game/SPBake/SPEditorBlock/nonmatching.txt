@@ -36,7 +36,6 @@
 00447030 183 complete behaviour; /Od name-hash frame layout, scratch-ctor loop and obj temp differ
 00448380 180 GetEffectsMaskScale - /Od frame/slot layout differs (retail declares the float result first, a/b after it, and keeps the mField33c test in a pointer slot); equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
 00448690 358 AddToEffectsMask - complete but retail inlines a two-branch mGroups set-bit (or/and form, +159 bytes) and copies pos through cSPVector3::operator[]; /Od frame differs; equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
-00448a80 16 RemoveFromEffectsMask - complete; /Od frame is 8 bytes larger in retail (two unnamed operator= temps) and the mEffectsMaskObject condition copy sits in the higher slot; equiv PASS flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS-
 00448fa0 821 complete; /Od frame layout (inline AutoRefCount operator-> temp slots, uninit copy pattern) not reproduced; difftest PASS (78% coverage) after mapping the two operator* overloads by mangled name in symbols/slices/s00448fa0.txt flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 00449420 90 complete; /Od frame holes and the by-value Matrix3 dest-pointer temp slot not reproduced flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 00449d40 215 complete; /Od inline operator-> junk-copy temps (3 extra slots) not reproduced flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy

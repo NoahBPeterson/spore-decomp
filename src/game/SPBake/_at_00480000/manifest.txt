@@ -38,3 +38,4 @@
 ../src/game/SPBake/_at_00480000.cpp  ?CollectLimbJoints@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEXPAVcSPEditorLimbJoint_s0048_a4e0@2@PAU?$vector_s0048_a4e0@PAVcSPEditorLimbJoint_s0048_a4e0@SP@@@@@Z  0048b200  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/_at_00480000.cpp  ?FindJoint@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEPAVcSPEditorLimbJoint_s0048_a4e0@2@PAVcSPEditorBlock_s0048_a4e0@2@@Z  0048b2c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/_at_00480000.cpp  ?FindJoint@cSPEditorLimbStructure_s0048_a4e0@SP@@QAEPAVcSPEditorLimbJoint_s0048_a4e0@2@PAVcSPEditorBlock_s0048_a4e0@2@PAV32@@Z  0048b2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00480000.cpp  ?SetScale@cSPEditorHandleRotationBall@SP@@UAEXM@Z  00483cc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
