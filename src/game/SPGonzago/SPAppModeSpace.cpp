@@ -3932,10 +3932,11 @@ void __thiscall cAppModeSpace::SetPlanetTimeOnFirstEntry()
             return;
     }
     cPlayerInventory* pInv = (cPlayerInventory*)((cSelf*)FUN_00ffbe50())->FUN_00a1ad60();
+    __assume(pInv != 0);
     V2cp* pBody = (V2cp*)&pInv->mBody;
     float f = ((cBC30*)FUN_00bc30b0())->m24;
     void* pos = pBody->GetPosition();
-    ((cSelf*)FUN_00bc30b0())->FUN_00bc2f00(f * DAT_01471064, pos);
+    ((cSelf*)FUN_00bc30b0())->FUN_00bc2f00(f * 0.5f, pos);
 }
 }  // namespace SP
 
