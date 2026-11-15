@@ -827,16 +827,37 @@ extern "C" void FUN_68F5D0(ListNode* h)
     }
 }
 
+// ---- items of slice s0068e670 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  FUN_00743b50(void* p);                     // 0x00743b50
+struct EA_Semaphore_s0068f600 {
+    char raw[0x10];
+    EA_Semaphore_s0068f600() {}                            // no-op wrapper ctor
+    EA_Semaphore_s0068f600(int n);                         // 0x00922880 (external)
+    ~EA_Semaphore_s0068f600();                             // external
+};
+struct ClsF600 {
+    uint32_t f0;            // +0x00
+    uint32_t f4;            // +0x04
+    void*    listNext;      // +0x08 (self-referential list head)
+    void*    listPrev;      // +0x0c
+    EA_Semaphore_s0068f600 sem;     // +0x10
+    char     vec[0x10];     // +0x20
+    ClsF600* last;          // +0x30 (reset by the ctor, see 0x0068f600)
+    ClsF600();
+};
+ClsF600::ClsF600() : sem(0) {
+    f0 = 0;
+    f4 = 0;
+    listNext = 0;
+    listPrev = 0;
+    last = 0;
+    listNext = &listNext;
+    listPrev = &listNext;
+    FUN_00743b50(vec);
+}
 // @ 0x0068f600
-extern "C" void* FUN_68F600(void* p)
-{
-    *(uint32_t*)((char*)p + 4) = 0;
-    *(uint32_t*)((char*)p + 0) = 0;
-    char* s = (char*)p + 8;
-    *(uint32_t*)(s + 4) = 0;
-    *(uint32_t*)(s + 0) = 0;
-    *(void**)(s) = s;
-    *(void**)(s + 4) = s;
+ClsF600* CreateJobThread_s0068f600(ClsF600* p) {
+    p->ClsF600::ClsF600();
     return p;
 }
 

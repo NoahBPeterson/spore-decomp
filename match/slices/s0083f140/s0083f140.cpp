@@ -402,10 +402,14 @@ int** __fastcall RefAssign(int** self, int, int** other) {
 // @ 0x0083f990
 void** __fastcall PairCtorRef(void** self, int, void** src) {
     self[0] = 0; self[1] = 0; self[2] = 0;
-    char* s = (char*)src[0];
-    unsigned n = (unsigned)((char*)src[1] - s);
-    ((eastl::string8*)self)->RangeInitialize(n + 1);
-    ((eastl::string8*)self)->assign(*(eastl::string8*)src);
+    eastl::string8* d = (eastl::string8*)self;
+    eastl::string8* s = (eastl::string8*)src;
+    const char* first = s->mpBegin;
+    const char* last = s->mpEnd;
+    d->RangeInitialize((unsigned)(last - first) + 1);
+    memcpy(d->mpBegin, first, (unsigned)(last - first));
+    d->mpEnd = d->mpBegin + (last - first);
+    *d->mpEnd = 0;
     int* o = (int*)src[4];
     self[4] = o;
     if (o)
@@ -434,11 +438,15 @@ void __fastcall HashNodeDtorRef(int* self) {
 // @ 0x0083fa80
 void** __fastcall PairCtorRefPtr(void** self, int, void** src, int* val) {
     self[0] = 0; self[1] = 0; self[2] = 0;
-    char* s = (char*)src[0];
-    unsigned n = (unsigned)((char*)src[1] - s);
-    ((eastl::string8*)self)->RangeInitialize(n + 1);
-    ((eastl::string8*)self)->assign(*(eastl::string8*)src);
-    int* o = (int*)val;
+    eastl::string8* d = (eastl::string8*)self;
+    eastl::string8* s = (eastl::string8*)src;
+    const char* first = s->mpBegin;
+    const char* last = s->mpEnd;
+    d->RangeInitialize((unsigned)(last - first) + 1);
+    memcpy(d->mpBegin, first, (unsigned)(last - first));
+    d->mpEnd = d->mpBegin + (last - first);
+    *d->mpEnd = 0;
+    int* o = *(int**)val;
     self[4] = o;
     if (o)
         (*(int*)((char*)o + 0x240))++;
@@ -451,10 +459,14 @@ void** __fastcall PairCtorRefPtr(void** self, int, void** src, int* val) {
 // @ 0x0083fae0
 void** __fastcall InputFileSpecCopy(void** self, int, void** src) {
     self[0] = 0; self[1] = 0; self[2] = 0;
-    char* s = (char*)src[0];
-    unsigned n = (unsigned)((char*)src[1] - s);
-    ((eastl::string8*)self)->RangeInitialize(n + 1);
-    ((eastl::string8*)self)->assign(*(eastl::string8*)src);
+    eastl::string8* d = (eastl::string8*)self;
+    const eastl::string8* s = (const eastl::string8*)src;
+    const char* last = s->mpEnd;
+    const char* first = s->mpBegin;
+    d->RangeInitialize((unsigned)(last - first) + 1);
+    memcpy(d->mpBegin, first, (unsigned)(last - first));
+    d->mpEnd = d->mpBegin + (last - first);
+    *d->mpEnd = 0;
     *(uint16*)(self + 4) = *(uint16*)(src + 4);
     return self;
 }

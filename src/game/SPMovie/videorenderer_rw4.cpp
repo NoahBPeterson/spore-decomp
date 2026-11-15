@@ -17,6 +17,7 @@ extern u32   DAT_01485720;    // 1.0f
 extern float DAT_016077c4;
 extern float DAT_016077c8;
 extern u8    DAT_01493dcc[];  // "VideoRenderable data buffer"
+extern char  DAT_01493dc0[];  // "Generic2D"
 void* __cdecl  FUN_0067dd70();                       // SP::MaterialManager
 void* __cdecl  FUN_0067dd60();                       // 0x0067dd60
 void* __cdecl  FUN_011e58c0();                       // 0x011e58c0
@@ -207,7 +208,6 @@ void Vid::f96d0()
 // @ 0x00fd9750
 void Vid::f9750(int param_2, int param_3, int param_4)
 {
-    (void)param_2;
     char* s = (char*)this;
     *(int*)(s + 0x2c) = param_3;
     *(int*)(s + 0x30) = param_4;
@@ -218,10 +218,11 @@ void Vid::f9750(int param_2, int param_3, int param_4)
     *(int*)(s + 0x34) = param_3;
     *(int*)(s + 0x38) = param_4;
     void* mat = FUN_0067dd70();
-    u32 h = FUN_00932e80("Generic2D", 0x811c9dc5, 1);
+    u32 h = FUN_00932e80(DAT_01493dc0, 0x811c9dc5, 1);
     void* r = ((void*(__thiscall*)(void*, u32))VTP(mat)[0x28 / 4])(mat, h);
     *(void**)(s + 4) = r;
 }
+
 
 // @ 0x00fd97c0
 void Vid::f97c0(void* param_2)

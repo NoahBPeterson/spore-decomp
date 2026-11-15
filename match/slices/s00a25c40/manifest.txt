@@ -1,2 +1,5 @@
 # s00a25c40 (EA::Audio::System / Text::StyleManager hash-owner, SPAudio) — no byte-exact functions yet.
 # Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Map_266e0@AudioSystem@@QAE_NIM@Z  00a266e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Map_262a0@AudioSystem@@QAE_NII@Z  00a262a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Map_26300@AudioSystem@@QAE_NII@Z  00a26300  /O2 /MD /Gy /EHsc /TP /arch:SSE

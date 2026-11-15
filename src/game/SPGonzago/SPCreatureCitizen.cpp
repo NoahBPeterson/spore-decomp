@@ -27,6 +27,7 @@
 #include "SP/cTribe.h"
 #include <math.h>
 #include <string.h>
+#include "sse_helpers.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern float g_1687A00;   // 0x01687a00
@@ -358,6 +359,13 @@ public:
 // ---- items of slice s00c22fc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float gLeaderScaleBonus;
 extern float gFollowerScaleBonus;
+class cSpeciesProfile_s00c2_2fc0;
+class cScaleContext {
+public:
+    float GetCreatorScaleModifier(cSpeciesProfile_s00c2_2fc0* pProfile);
+};
+extern cScaleContext gSpeciesScaleContext;       // 0x01581208
+float FUN_00c0b440(int nLevel);                  // 0x00c0b440
 extern void* gCreatureToolContext;
 extern float gMaxFloat;
 typedef int intptr_t;
@@ -426,22 +434,34 @@ class cToolOwner {
 public:
     void* GetOwnerCreature();
     Vec3* GetColor();
+    void FUN_00bd7ed0();
 };
+class cPendingObject {
+public:
+    bool FUN_00acd410(void* pObject);
+};
+class cToolTable {
+public:
+    int FindSlotByKey(int nKey);
+};
+void* SP_PendingObject();
 class cCreatureBase : public cSpatialObject {
 public:
     Vec3* GetIdentityColor();
     Vec3* GetActiveToolColor();
     void* GetToolById(int nToolId);
     void* GetActiveTool();
+    char FUN_00c0b770();
+    float FUN_00c0c1c0(char c);
     void SetToolTarget(float fX, float fY, float fZ);
     void SetCasted(bool bCasted);
-    float CalculateScale();
+    float CalculateScale(int nUnused);
     char ApplyAttack(void* pTarget, void* pAttack, void* pContext);
 
     uint8_t mPad04[0x30];                       // 0x04
     cSpatialObject* mpSpatialObject;            // 0x34
     uint8_t mPad38[0x3d];                       // 0x38
-    uint8_t mbCastedFlag;                       // 0x75
+    uint8_t mField75;                           // 0x75
     uint8_t mPad76[0x4a];                       // 0x76
     uint8_t* mpIdentityColorSource;             // 0xc0
     uint8_t mPadC4[0x0c];                       // 0xc4
@@ -449,14 +469,20 @@ public:
     cSpeciesProfile_s00c2_2fc0* mpSpeciesProfile;          // 0x110
     uint8_t mPad114[0x80c];                     // 0x114
     void* mpToolTable;                          // 0x920
-    uint8_t mPad924[0x6de];                     // 0x924
+    uint8_t mPad924[0x1fc];                     // 0x924
+    cToolTable* mpToolTableObj;                 // 0xb20
+    uint8_t mPadb24[0x3f];                      // 0xb24
+    uint8_t mbCastedFlag;                       // 0xb63
+    uint8_t mPadb64[0x03];                      // 0xb64
+    uint8_t mFieldb67;                          // 0xb67
+    uint8_t mPadb68[0x49a];                     // 0xb68
     uint8_t mbIsCastTarget;                     // 0x1002
     uint8_t mPad1003;                           // 0x1003
     float mfToolTargetX;                        // 0x1004
     float mfToolTargetY;                        // 0x1008
     float mfToolTargetZ;                        // 0x100c
-    void* mpActiveTool;                         // 0x1010
-    void* mpPendingTool;                        // 0x1014
+    cToolOwner* mpActiveTool;                   // 0x1010
+    cToolOwner* mpPendingTool;                  // 0x1014
     uint8_t mPad1018[0x14];                     // 0x1018
     void* mpInteractionState;                   // 0x102c
 };
@@ -525,6 +551,7 @@ void* GetCreatureChain(void* pCreature);
 void RunCreatureAttackEffect(void* pCreature);
 void PlayToolEffect(int a, void* pTarget, void* pOwner);
 extern uint8_t gDefaultIdentityColor[0x10];
+void* FUN_00c0bbc0();                            // 0x00c0bbc0 (GetDefaultIdentityColor)
 // ---- items of slice s00c22fc0 end
 
 // ---- items of slice s00c23f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -556,7 +583,7 @@ extern f32   gF_0158121c;                        // 0x0158121c
 extern u32   gU_0168dbb0;                        // 0x0168dbb0
 extern u32   gU_0168dbb4;                        // 0x0168dbb4
 extern u32   gU_0168dbb8;                        // 0x0168dbb8
-void  __stdcall FUN_009ff7c0(u32 a1, u32 a2);          // 0x009ff7c0
+void  __cdecl FUN_009ff7c0(u32 a1, u32 a2, void* a3);  // 0x009ff7c0 (ret 0, caller-clean; a3 ignored)
 void  __cdecl FUN_00bca810(u32 a1, u32 a2, void* a3, f32 a4, void* a5, u32 a6); // 0x00bca810
 void  __cdecl FUN_00bca040(u32 a1);                  // 0x00bca040
 void* __cdecl FUN_00b3d280();                        // 0x00b3d280  GetCameraCtl
@@ -575,7 +602,7 @@ void __cdecl FUN_00c24110(cCreatureBase_s00c2_3f80* param_1);   // 0x00c24110
 struct COps
 {
     void* FUN_00c00650();                            // 0x00c00650 (GetMember)
-    u32   FUN_00c0e040(u32* out);                    // 0x00c0e040
+    u32   FUN_00c0e040();                            // 0x00c0e040
     void* FUN_00c0f9b0(u32 a, u32* b);               // 0x00c0f9b0 (FindSlotByKey)
     void* FUN_00c0f4f0();                            // 0x00c0f4f0
     u8    FUN_00c0b770();                            // 0x00c0b770
@@ -585,8 +612,8 @@ struct COps
     void* FUN_00bc97f0(u32 a, u32 b, f32 c, u32 d);  // 0x00bc97f0
     void* FUN_00bc9980(f32 a);                       // 0x00bc9980
     void  FUN_00c15bd0(u32 a, u32 b, u32 c);         // 0x00c15bd0
-    void  FUN_00ac79d0();                            // 0x00ac79d0
-    void  FUN_00ac7de0(void* a);                     // 0x00ac7de0
+    void* FUN_00ac79d0();                            // 0x00ac79d0
+    void  FUN_00ac7de0(void* a, void* b);            // 0x00ac7de0
     void  FUN_00b137d0(void* a);                     // 0x00b137d0 (GetTargetOrientation)
     void  FUN_00c3f160(u32 a);                       // 0x00c3f160 (SetEffectId)
     void  FUN_00b225d0(void* a);                     // 0x00b225d0 (RemoveNoun)
@@ -620,7 +647,10 @@ struct COps
 };
 struct cCreatureBase_s00c2_3f80
 {
-    u8     pad0[0x24];                               // 0x0000
+    void   FUN_00c24380(void* item);                 // 0x00c24380
+    u8     pad0[0x18];                               // 0x0000
+    void*  mpObj18;                                  // 0x0018
+    u8     pad1c[0x24 - 0x1c];                       // 0x001c
     u32    mField24;                                 // 0x0024
     u8     pad28[0x34 - 0x28];
     void*  mpObj34;                                  // 0x0034
@@ -2003,24 +2033,24 @@ Vec3* cSPCreatureCitizen::GetBundlePosition(Vec3* pOut)
 Vec3* cCreatureBase::GetIdentityColor()
 {
     if (mpActiveTool != nullptr)
-        return ((cToolOwner*)mpActiveTool)->GetColor();
+        return mpActiveTool->GetColor();
     if (mpPendingTool != nullptr) {
         Vec3* pColor = (Vec3*)(intptr_t)GetCreatureToolByKey(*(uint32_t*)((uint8_t*)mpPendingTool + 0x234));
         return pColor;
     }
-    return (Vec3*)&gDefaultIdentityColor[0];
+    return (Vec3*)FUN_00c0bbc0();
 }
 
 // @ 0x00c23230
 void* cCreatureBase::GetToolById(int nToolId)
 {
-    int nIndex = GetCreatureActionState(&nToolId);
+    int nIndex = mpToolTableObj->FindSlotByKey(nToolId);
     if (nIndex != -1)
-        return *(void**)((uint32_t*)mpToolTable + nIndex);
+        return *(void**)(*(uint32_t**)((uint8_t*)mpToolTableObj + 0x6d4) + nIndex);
 
-    if (mpInteractionState != nullptr) {
-        void* pSlot = GetCreatureToolSlot((int)(intptr_t)mpInteractionState, 0, 0, 0);
-        void* pEntry = *(void**)((uint8_t*)pSlot + 0x24);
+    int nState = *(int*)((uint8_t*)this + 0x102c);
+    if (nState != 0) {
+        void* pEntry = *(void**)((uint8_t*)FUN_00c9cec0(nState) + 0x24);
         if (pEntry != nullptr && *(int*)((uint8_t*)pEntry + 8) == nToolId)
             return pEntry;
     }
@@ -2133,22 +2163,20 @@ void cCreatureBase::SetCasted(bool bCasted)
     if (!bCasted)
         return;
 
-    if (mpInteractionState != nullptr) {
-        (**(void (__stdcall***)(void*))(*(uint8_t**)mpInteractionState + 0xa0))(this);
+    if (mpPendingTool != nullptr) {
+        (*(void (__thiscall**)(void*, void*))(*(uint8_t**)mpPendingTool + 0xa0))(mpPendingTool, this);
         return;
     }
-    if (mbCastedFlag == 0) {
-        if (mpIdentityColorSource != nullptr) {
-            PlayToolEffect(0, nullptr, nullptr);
+    if (mFieldb67 != 0) {
+        if (((cPendingObject*)SP_PendingObject())->FUN_00acd410(this))
+            return;
+    } else {
+        if (mpActiveTool != nullptr) {
+            mpActiveTool->FUN_00bd7ed0();
             return;
         }
-    } else {
-        RunCreatureAttackEffect(this);
-        if (IsCreatureVisibleInUI(this))
-            return;
     }
-    cGameNounManager* pNouns = (cGameNounManager*)NounManager();
-    pNouns->RemoveNoun(this);
+    ((cGameNounManager*)NounManager())->RemoveNoun(this);
 }
 
 // @ 0x00c235e0
@@ -2207,7 +2235,10 @@ bool cSPCreatureCitizen::HasSpecializedTool(int nToolId)
     cToolOwner* pTool = (cToolOwner*)mpActiveTool;
     if (pTool == nullptr)
         pTool = (cToolOwner*)mpPendingTool;
-    if (pTool != nullptr && pTool->GetOwnerCreature() == this) {
+    bool bOwner = false;
+    if (pTool != nullptr)
+        bOwner = pTool->GetOwnerCreature() == this;
+    if (bOwner) {
         switch (nToolId) {
         case 1:
         case 2:
@@ -2219,7 +2250,7 @@ bool cSPCreatureCitizen::HasSpecializedTool(int nToolId)
             break;
         }
     }
-    return *(int*)((uint8_t*)&mpToolTable + 0x08) == nToolId;
+    return *(int*)((uint8_t*)this + 0x102c) == nToolId;
 }
 
 // @ 0x00c23750
@@ -2364,22 +2395,23 @@ void UpdateCreatureToolInteractions(void* pManager)
 }
 
 // @ 0x00c23cf0
-float cCreatureBase::CalculateScale()
+float cCreatureBase::CalculateScale(int nUnused)
 {
-    float fScale = GetRandomFloat(0.0f, 1.0f);
-    if (mpIdentityColorSource != nullptr || mpSpeciesProfile == nullptr)
+    (void)nUnused;
+    float fScale = FUN_00c0c1c0(0);
+    if (mpActiveTool != nullptr || mpToolTableObj == nullptr)
         return fScale;
 
-    fScale = GetCreatorScaleModifier(mpSpeciesProfile) * fScale;
-    if (IsCitizenLeader(this)) {
-        if (IsCreatureLeader(this))
+    fScale = gSpeciesScaleContext.GetCreatorScaleModifier((cSpeciesProfile_s00c2_2fc0*)mpToolTableObj) * fScale;
+    if (FUN_00c0b770()) {
+        if (((cSPCreatureCitizen*)this)->IsLeader())
             fScale = gLeaderScaleBonus * fScale;
         else
             fScale = GetRandomFloat(gFollowerScaleBonus, gLeaderScaleBonus) * fScale;
     }
-    int nBrainLevel = GetCreatureActionState(this);
-    fScale = ApplyCreatureScale(nBrainLevel, fScale);
-    return fScale * GetCreatureObjectScale(this);
+    int nBrainLevel = (*(int (__thiscall**)(void*))(*(uint8_t**)this + 0xd8))(this);
+    fScale = FUN_00c0b440(nBrainLevel) * fScale;
+    return fScale;
 }
 
 // @ 0x00c23da0
@@ -2444,15 +2476,14 @@ u32 cCreatureBase_s00c2_3f80::FUN_00c23f80(u32 param_2, u32 param_3, u32 param_4
     void* s = MOPS(this)->FUN_00c0f9b0(param_4, &slot);
     if (s)
     {
-        *(u32*)((u8*)s + 0x10) = param_3;
         *(u32*)((u8*)s + 0x04) = param_2;
+        *(u32*)((u8*)s + 0x10) = param_3;
         if (param_5)
         {
             *(u32*)((u8*)s + 0x08) = param_5;
             void* animWorld = mpAnimWorld_b54;
             u32 guid = 0;
-            u32 ret = MOPS(this)->FUN_00c0e040(&guid);
-            FUN_009ff7c0(*(u32*)((u8*)animWorld + 0x184), ret);
+            FUN_009ff7c0(*(u32*)((u8*)animWorld + 0x184), MOPS(this)->FUN_00c0e040(), &guid);
             struct { u32 a, b, c; u32 pad[5]; } msg;
             msg.a = slot;
             msg.b = guid;
@@ -2470,17 +2501,15 @@ void cCreatureBase_s00c2_3f80::FUN_00c24040(u32 param_2)
     void* s = MOPS(this)->FUN_00c0f9b0(param_2, &slot);
     if (!s)
         return;
-    u8* base = (u8*)mpOrderMgr_b48;
-    u32 i = 0;
-    while (i < 8)
+    u8* e = (u8*)mpOrderMgr_b48;
+    for (u32 i = 0; i < 8; i++)
     {
-        u8* e = base + i * 0x44;
         if (*(u32*)(e + 0x24) == 5 && *(u32*)(e + 0x28) == 0 && *(u32*)e == slot)
         {
             FUN_00bca040(*(u16*)(e + 0x20) | (i << 0x10));
             break;
         }
-        i++;
+        e += 0x44;
     }
     void* obj = *(void**)((u8*)s + 0x20);
     u32 r = 0;
@@ -2494,8 +2523,8 @@ void cCreatureBase_s00c2_3f80::FUN_00c24040(u32 param_2)
     if (r)
     {
         void* out = FUN_00b3d2b0();
-        MOPS(out)->FUN_00ac79d0();
-        MOPS(FUN_00b3d2b0())->FUN_00ac7de0((void*)r);
+        void* v = MOPS(out)->FUN_00ac79d0();
+        MOPS(FUN_00b3d2b0())->FUN_00ac7de0((void*)r, v);
         ((void (__thiscall*)(void*))VT(r)[1])((void*)r);
     }
 }
@@ -2595,23 +2624,23 @@ void cCreatureBase_s00c2_3f80::FUN_00c242b0(u32 param_2)
 }
 
 // @ 0x00c24380
-void FUN_00c24380(cCreatureBase_s00c2_3f80* self, void* item)
+void cCreatureBase_s00c2_3f80::FUN_00c24380(void* item)
 {
-    MOPS(self)->FUN_00c0d340((u32)item);
-    void* sub = (u8*)self - 0x34;
+    MOPS(this)->FUN_00c0d340((u32)item);
+    void* sub = (u8*)this - 0x34;
     void* cur = (void*)((void* (__thiscall*)(void*))VT(sub)[0x30 / 4])(sub);
-    void* old = self->mpObj58;
+    void* old = mpObj18;
     if (cur != old)
     {
         if (cur)
             ((void (__thiscall*)(void*))VT(cur)[0])(cur);
-        self->mpObj58 = cur;
+        mpObj18 = cur;
         if (old)
             ((void (__thiscall*)(void*))VT(old)[1])(old);
     }
     MOPS(sub)->FUN_00c23300((u32)item, 0xffffffff);
     if (*(u32*)((u8*)item + 0x12c) == 5)
-        MOPS(self->mpFieldb14)->FUN_00bca810(0, 2, sub, gF_0146aa40, 0, 0);
+        MOPS(mpFieldb14)->FUN_00bca810(0, 2, sub, gF_0146aa40, 0, 0);
 }
 
 // @ 0x00c24400
@@ -2982,12 +3011,7 @@ void __fastcall FUN_00c24e80(void* self_, int, float param_3)
     void* obj = self + 0xc0;
     char ok = ((FnCharThis)(*(void***)obj)[0x16])(obj);
     if (ok != 0)
-    {
-        float v = param_3 * 0.5f;
-        if (v < 3.0f) v = 3.0f;
-        if (v > 5.0f) v = 5.0f;
-        param_3 = v;
-    }
+        param_3 = SseClamp(param_3 * 0.5f, 3.0f, 5.0f);
     ((cCreatureBaseOps*)self_)->SpawnEffect(0, 0x10000, 0, 0x10000, param_3, 0, 0x10, 0, 0, 0, 0);
 }
 

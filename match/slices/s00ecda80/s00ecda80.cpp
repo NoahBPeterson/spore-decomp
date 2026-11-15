@@ -1,6 +1,7 @@
 // Slice s00ecda80 (bfs3 slice 23) -- SP editor palette/swatch UI + scenario helpers.
 // Module flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
+#include <intrin.h>
 
 // ---- vtable call helpers (__thiscall in a cast is legal; free __thiscall decls are not)
 #define C0(p, off)      ((void(__thiscall*)(void*))(((void**)(p))[(off) / 4]))(p)
@@ -49,6 +50,10 @@ extern char vtbl_cSPScenarioSwatchItemUI[];
 extern char vtbl_PaintSystem[];
 extern char vtbl_cEditorResource[];
 extern char vtbl_cContentValidationSummarizer[];
+// vtable pointers this constructor installs (constructor of cSPScenarioSwatchItemUI
+// and its sub-objects; exact class names unknown).
+extern char vtbl_148962c[], vtbl_148961c[], vtbl_14896d8[], vtbl_14896c4[];
+extern char vtbl_1489694[], vtbl_1489678[], vtbl_1489668[], vtbl_1489660[];
 
 // ---- callees
 int* __cdecl GetSystemAT();
@@ -161,34 +166,32 @@ void  __cdecl FUN_00435ed0(int id, int value);         // 0x00435ed0
 // @ 0x00ecda80
 void FUN_00ecda80_fn(int param_1)
 {
-    int u = 0;
+    int p1 = param_1;
     int* at = GetSystemAT();
-    if (at)
-        u = K0(at, 0x20);
+    int u = at ? ((int(__thiscall*)(void*))VTB(at, 0x20))(at) : 0;
     at = GetSystemAT();
     if (at) {
-        C1(at, 0x38, 0x3475365);
-        C2(at, 0x40, 0x3475381, 0x72d342a9);
-        C2(at, 0x40, 0x3475385, u);
-        C0(at, 0x58);
+        ((void(__thiscall*)(void*, int))VTB(at, 0x38))(at, 0x3475365);
+        ((void(__thiscall*)(void*, int, int))VTB(at, 0x40))(at, 0x3475381, 0x72d342a9);
+        ((void(__thiscall*)(void*, int, int))VTB(at, 0x40))(at, 0x3475385, u);
+        ((void(__thiscall*)(void*))VTB(at, 0x58))(at);
     }
     int* p = FUN_00efc910();
-    if (p == 0 || *p != param_1) {
-        C1(g_15ad298, 0x20, 0);
-        FUN_00f00380(param_1);
+    if (p == 0 || *p != p1) {
+        ((void(__thiscall*)(void*, int))VTB(g_15ad298, 0x20))(g_15ad298, 0);
+        ((void(__thiscall*)(void*, int))FUN_00f00380)((void*)0x015ad328, p1);
     }
-    int tmp = param_1;
+    int tmp = p1;
     int* ms = SP_MessageServer();
-    C3(ms, 0x14, 0x7465518, (int)&tmp, 0);
+    ((void(__thiscall*)(void*, int, int*, int))VTB(ms, 0x14))(ms, 0x7465518, &tmp, 0);
 }
 
 // ============================================================ 0x00ecdb30
 // @ 0x00ecdb30
 void __fastcall FUN_00ecdb30(int* p)
 {
-    int a = 0, b = 0, c = 0;
-    C1(p, 0x30, (int)&a);
-    (void)b; (void)c;
+    int local[3] = {0, 0, 0};
+    ((void(__thiscall*)(void*, int*))VTB(p, 0x30))(p, local);
 }
 
 // ============================================================ 0x00ecdb50
@@ -236,7 +239,7 @@ void Obj_ecdc20::FUN_00ecdc20(int param_2)
     int* p = (int*)this;
     p[5] = *(int*)(param_2 + 0x14);
     p[3] = *(int*)(param_2 + 0xc);
-    C1(p, 0x1c, *(int*)(param_2 + 0x10));
+    ((void(__thiscall*)(void*, int))VTB(p, 0x1c))(p, *(int*)(param_2 + 0x10));
 }
 
 // ============================================================ 0x00ecdc70
@@ -281,15 +284,15 @@ void __fastcall FUN_00ecdcc0(int param_1)
 // @ 0x00ecdd70
 void __fastcall FUN_00ecdd70(int* p)
 {
-    if ((int*)p[0x18]) C1((int*)p[0x18], 4, 0);
-    if ((int*)p[0x17]) C1((int*)p[0x17], 4, 0);
-    if ((int*)p[0x16]) C1((int*)p[0x16], 4, 0);
-    if ((int*)p[0x15]) C1((int*)p[0x15], 4, 0);
-    if ((int*)p[0x14]) C1((int*)p[0x14], 8, 0);
-    if ((int*)p[0x13]) C1((int*)p[0x13], 4, 0);
-    if ((int*)p[0x12]) C1((int*)p[0x12], 8, 0);
+    if ((int*)p[0x18]) ((void(__thiscall*)(void*))VTB((int*)p[0x18], 4))((int*)p[0x18]);
+    if ((int*)p[0x17]) ((void(__thiscall*)(void*))VTB((int*)p[0x17], 4))((int*)p[0x17]);
+    if ((int*)p[0x16]) ((void(__thiscall*)(void*))VTB((int*)p[0x16], 4))((int*)p[0x16]);
+    if ((int*)p[0x15]) ((void(__thiscall*)(void*))VTB((int*)p[0x15], 4))((int*)p[0x15]);
+    if ((int*)p[0x14]) ((void(__thiscall*)(void*))VTB((int*)p[0x14], 8))((int*)p[0x14]);
+    if ((int*)p[0x13]) ((void(__thiscall*)(void*))VTB((int*)p[0x13], 4))((int*)p[0x13]);
+    if ((int*)p[0x12]) ((void(__thiscall*)(void*))VTB((int*)p[0x12], 8))((int*)p[0x12]);
     p[0x11] = (int)vtbl_PaintSystem;
-    FUN_005c6c50();
+    ((void(__thiscall*)(void*))FUN_005c6c50)(p + 9);
     p[2] = (int)vtbl_cEditorResource;
     p[0] = (int)vtbl_cContentValidationSummarizer;
 }
@@ -326,33 +329,35 @@ __declspec(noinline) int CastObj::Cast(int id)
 void __fastcall FUN_00ecde60_fn(int param_1)
 {
     SP_cSPPaletteItemUI_Shutdown();
-    int iVar2 = (param_1 == 0x24) ? 0 : param_1 + 0x20;
+    int iVar2 = 0;
+    if (param_1 != 0x24)
+        iVar2 = param_1 + 0x20;
     int* srv = EA_Messaging_GetServer();
-    C3(srv, 0x2c, iVar2, 0x72304d0, 0xffffd8f1);
-    iVar2 = *(int*)(param_1 + 0x28);
-    if (iVar2) {
-        FUN_00401020();
-        FUN_005f0a60(iVar2);
+    ((void(__thiscall*)(void*, int, int, int))VTB(srv, 0x2c))(srv, iVar2, 0x72304d0, 0xffffd8f1);
+    int v = *(int*)(param_1 + 0x28);
+    if (v) {
+        void* mgr = ((void*(__stdcall*)(int))FUN_00401020)(v);
+        ((void(__thiscall*)(void*))FUN_005f0a60)(mgr);
     }
     if (*(int**)(param_1 + 0x2c))
-        cSPUILayout_Shutdown(*(void**)(param_1 + 0x2c), 1);
+        ((void(__thiscall*)(void*, int))cSPUILayout_Shutdown)(*(void**)(param_1 + 0x2c), 1);
     int* p;
     p = *(int**)(param_1 + 0x24);
-    if (p) { *(int*)(param_1 + 0x24) = 0; C1(p, 8, 0); }
+    if (p) { *(int*)(param_1 + 0x24) = 0; ((void(__thiscall*)(void*))VTB(p, 8))(p); }
     p = *(int**)(param_1 + 0x2c);
-    if (p) { *(int*)(param_1 + 0x2c) = 0; C1(p, 8, 0); }
+    if (p) { *(int*)(param_1 + 0x2c) = 0; ((void(__thiscall*)(void*))VTB(p, 8))(p); }
     p = *(int**)(param_1 + 0x28);
-    if (p) { *(int*)(param_1 + 0x28) = 0; C1(p, 4, 0); }
+    if (p) { *(int*)(param_1 + 0x28) = 0; ((void(__thiscall*)(void*))VTB(p, 4))(p); }
     p = *(int**)(param_1 + 0x34);
-    if (p) { *(int*)(param_1 + 0x34) = 0; C1(p, 4, 0); }
+    if (p) { *(int*)(param_1 + 0x34) = 0; ((void(__thiscall*)(void*))VTB(p, 4))(p); }
     p = *(int**)(param_1 + 0x38);
-    if (p) { *(int*)(param_1 + 0x38) = 0; C1(p, 4, 0); }
+    if (p) { *(int*)(param_1 + 0x38) = 0; ((void(__thiscall*)(void*))VTB(p, 4))(p); }
     p = *(int**)(param_1 + 0x3c);
-    if (p) { *(int*)(param_1 + 0x3c) = 0; C1(p, 4, 0); }
+    if (p) { *(int*)(param_1 + 0x3c) = 0; ((void(__thiscall*)(void*))VTB(p, 4))(p); }
     p = *(int**)(param_1 + 0x30);
-    if (p) { *(int*)(param_1 + 0x30) = 0; C1(p, 4, 0); }
-    // ctor/dtor tail emitted via FUN_00ecdd70 chain in the real code
-    FUN_00ecdd70((int*)param_1);
+    if (p) { *(int*)(param_1 + 0x30) = 0; ((void(__thiscall*)(void*))VTB(p, 4))(p); }
+    int local[3] = {0, 0, 0};
+    ((void(__thiscall*)(void*, int*))VTB((int*)(param_1 - 0x24), 0x30))((int*)(param_1 - 0x24), local);
 }
 
 // ============================================================ 0x00ecdf60
@@ -504,14 +509,14 @@ void PaletteItemUI_ece200::DoMessage(void* msg, PaletteMessage* data)
 void __fastcall FUN_00ece270(int* p)
 {
     int local[3] = {0, 0, 0};
-    C1(p, 0x30, (int)&local);
+    ((void(__thiscall*)(void*, int*))VTB(p, 0x30))(p, local);
     FUN_008068d0(p[0x16], p[0x15], 0);
-    int a = 0, b = 0;
-    C2(p, 0x38, (int)&a, 1);
-    int* q = 0;
-    C2(p, 0x3c, (int)&q, 1);
-    C1(p, 0x40, (int)&g_13ec468);
-    FUN_00ece140(0);
+    local[0] = 0; local[1] = 0; local[2] = 0;
+    ((void(__thiscall*)(void*, int*, int))VTB(p, 0x38))(p, local, 1);
+    local[0] = 0; local[1] = 0; local[2] = 0;
+    ((void(__thiscall*)(void*, int*, int))VTB(p, 0x3c))(p, local, 1);
+    ((void(__thiscall*)(void*, float*))VTB(p, 0x40))(p, &g_13ec468);
+    ((void(__thiscall*)(void*, int))FUN_00ece140)(p, 0);
 }
 
 // ============================================================ 0x00ece300
@@ -743,13 +748,13 @@ void __fastcall FUN_00ece790(int* p)
 // @ 0x00ece7f0
 bool __fastcall FUN_00ece7f0(int param_1)
 {
-    int* i = g_pGameMgr_16c7aa4->pOwner_74->FUN_00f3e8a0(*(int*)(param_1 + 0x10));
-    if (i == 0)
-        return false;
-    char* b = (char*)i;
-    if (b[0x1c] == 0 && b[0x44] == 0 && b[0x6c] == 0)
-        return 0;
-    return true;
+    LookupOwner* o = g_pGameMgr_16c7aa4->pOwner_74;
+    int* i = o->FUN_00f3e8a0(*(int*)(param_1 + 0x10));
+    if (i != 0) {
+        char* b = (char*)i;
+        return b[0x1c] != 0 || b[0x44] != 0 || b[0x6c] != 0;
+    }
+    return false;
 }
 
 // ============================================================ 0x00ece870
@@ -814,21 +819,24 @@ int* __fastcall FUN_00ece990(int* param_1)
 {
     param_1[1] = 0;
     param_1[2] = (int)vtbl_BakeSprites;
-    param_1[0] = (int)vtbl_cSPScenarioSwatchItemUI;
-    param_1[2] = (int)vtbl_PaintSystem;
+    _ReadWriteBarrier();
+    param_1[0] = (int)vtbl_148962c;
+    param_1[2] = (int)vtbl_148961c;
     param_1[3] = -1;
     param_1[4] = -1;
     param_1[5] = (int)0x867a9ee9;
     param_1[6] = 0;
     param_1[7] = 0;
     param_1[8] = 0;
-    SP_cSPPaletteItemUI_ctor((void*)(param_1 + 9));
+    ((void(__thiscall*)(void*))SP_cSPPaletteItemUI_ctor)(param_1 + 9);
     param_1[0x11] = (int)vtbl_PaintSystem;
-    param_1[0] = (int)vtbl_PaintSystem;
-    param_1[2] = (int)vtbl_PaintSystem;
-    param_1[0xc] = (int)vtbl_PaintSystem;
-    param_1[0xd] = (int)vtbl_PaintSystem;
-    param_1[0x11] = (int)vtbl_PaintSystem;
+    _ReadWriteBarrier();
+    param_1[0] = (int)vtbl_14896d8;
+    param_1[2] = (int)vtbl_14896c4;
+    param_1[9] = (int)vtbl_1489694;
+    param_1[0xc] = (int)vtbl_1489678;
+    param_1[0xd] = (int)vtbl_1489668;
+    param_1[0x11] = (int)vtbl_1489660;
     param_1[0x12] = 0;
     param_1[0x13] = 0;
     param_1[0x14] = 0;
@@ -837,6 +845,6 @@ int* __fastcall FUN_00ece990(int* param_1)
     param_1[0x17] = 0;
     param_1[0x18] = 0;
     *(char*)(param_1 + 0x1a) = 0;
-    param_1[0x19] = (int)0xbf800000;
+    *(float*)(param_1 + 0x19) = -1.0f;
     return param_1;
 }

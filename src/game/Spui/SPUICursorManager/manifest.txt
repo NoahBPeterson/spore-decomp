@@ -9,3 +9,4 @@
 ../src/game/Spui/SPUICursorManager.cpp  ?NukeSubtree@MapBase@@QAEXPAX@Z  00801ef0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUICursorManager.cpp  ?Shutdown@CurMgr@@QAE_NXZ  00802680  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUICursorManager.cpp  ?Set@C_801980@@QAEX_N@Z  00801980  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?f_801450@@YGXPAH0@Z  00801450  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

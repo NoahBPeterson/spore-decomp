@@ -461,7 +461,7 @@ void* toggle_new(void* a, void* b, int argc, t_atom* argv)
 
 // @ 0x00a60df0
 namespace EA { namespace Audio { namespace Eapd {
-void __fastcall toggle_output(Toggle* x)
+void toggle_output(Toggle* x)
 {
     float v = x->mState ? x->mValue : 0.0f;
 
@@ -550,7 +550,7 @@ void* slider_new(t_symbol_s00a6_0ef0 s1, t_symbol_s00a6_0ef0 s2, int argc, t_ato
         return x;
     *(float*)((char*)x + 0x40) = atom_getfloat_at(2, argc, argv);
     *(float*)((char*)x + 0x44) = atom_getfloat_at(3, argc, argv);
-    *(byte*)((char*)x + 0x28) = atom_getfloat_at(5, argc, argv) != 0.0f;
+    *(byte*)((char*)x + 0x28) = 0.0f != atom_getfloat_at(5, argc, argv);
     *(t_symbol_s00a6_0ef0*)((char*)x + 0x2c) = *atom_getsymbol_at(&s1, 6, argc, argv);
     *(t_symbol_s00a6_0ef0*)((char*)x + 0x34) = *atom_getsymbol_at(&s2, 7, argc, argv);
     float f = atom_getfloat_at(0x10, argc, argv);
@@ -603,7 +603,7 @@ void slider_setfloat(TX* x, float v)
     } else {
         lim = *(float*)((char*)x + 0x40);
         if (v < lim)
-            *(float*)((char*)x + 0x3c) = *(float*)((char*)x + 0x44);
+            *(float*)((char*)x + 0x3c) = lim;
     }
     slider_float(x);
 }

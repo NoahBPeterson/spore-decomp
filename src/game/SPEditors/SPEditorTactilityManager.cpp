@@ -10,6 +10,7 @@
 #include "SP/cSPUIFeedListItem.h"
 #include "cSPUILayout.h"
 #include <string.h>
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl memcpy(void* dst, const void* src, unsigned int n);
@@ -642,13 +643,16 @@ CtorAf::CtorAf(int p2, Vec3* p3)
   m4 = 0;
   vt = (void*)0x1400620;
   m8 = p2;
-  mC.m0066aec0((int)(p3->end - p3->begin), (void*)((char*)p3 + 0xc));
+  Vec3& c = mC;
+  c.m0066aec0((int)(p3->end - p3->begin), (void*)((char*)p3 + 0xc));
   // uninitialized_copy_impl returns the new end through its hidden first argument; the trailing tag
   // argument is a by-value empty false_type, so retail pushes whatever was left in the register
   // (p2, which is dead by then) and never reads it.
   void* out;
-  FUN_01022c60(&out, p3->begin, p3->end, mC.begin, p2);
-  mC.end = (int*)out;
+  FUN_01022c60(&out, p3->begin, p3->end, c.begin, p2);
+  c.end = (int*)out;
+  // retail stores mC.end before the flag stores below; without this cl sinks it past them
+  _ReadWriteBarrier();
   m20 = false;
   m24 = 0;
   m21 = true;

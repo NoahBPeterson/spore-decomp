@@ -484,6 +484,7 @@ class sp_vector_s005b_85d0 {
   T* mpEnd;
   T* mpCapacity;
   int mAllocator[2];
+  sp_vector_s005b_85d0() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
   ~sp_vector_s005b_85d0() {
     if (mpBegin && ((int*)mpBegin)[-1] != 0)
       EASTL_allocator_deallocate(mpBegin);
@@ -494,11 +495,15 @@ class sp_vector_s005b_85d0 {
 };
 }
 namespace eastl {
+struct true_type {};
+}
+namespace eastl {
 struct rbtree_node_base_s005b_85d0 {
   rbtree_node_base_s005b_85d0* mpNodeRight;
   rbtree_node_base_s005b_85d0* mpNodeLeft;
   rbtree_node_base_s005b_85d0* mpNodeParent;
   char mColor;
+  rbtree_node_base_s005b_85d0() : mpNodeLeft(0), mpNodeParent(0), mColor(0) {}
 };
 }
 namespace eastl {
@@ -631,7 +636,9 @@ class AutoRefCount_s005b_85d0<SP::cSPEditorSkinPart_s005b_85d0> {
     if (mpObject) mpObject->mRef.AddRef();
   }
   ~AutoRefCount_s005b_85d0() {
-    if (mpObject) mpObject->mRef.Release();
+    // The map owns the reference: DoNukeSubtree (0x005b8250) releases the node's value.  A local
+    // handle in this TU is only ever built empty (FindOrCreate), so its destruction is a no-op and
+    // retail emits no Release call for it.
   }
   AutoRefCount_s005b_85d0& operator=(SP::cSPEditorSkinPart_s005b_85d0* p) {
     if (p != mpObject) {
@@ -664,6 +671,7 @@ namespace eastl {
 struct rbtree_iterator_s005b_85d0 {
   rbtree_node_s005b_85d0* mpNode;
   rbtree_iterator_s005b_85d0(rbtree_node_s005b_85d0* p) : mpNode(p) {}
+  rbtree_iterator_s005b_85d0(const rbtree_iterator_s005b_85d0& x) : mpNode(x.mpNode) {}
 };
 }
 namespace eastl {
@@ -674,6 +682,9 @@ class BlockLimbMap_s005b_85d0 {
   unsigned int mnSize;       // +0x14
   allocator_s005b_85d0 mAllocator;      // +0x18
 
+  BlockLimbMap_s005b_85d0() {
+    reset();
+  }
   ~BlockLimbMap_s005b_85d0() { DoNukeSubtree((rbtree_node_s005b_85d0*)mAnchor.mpNodeParent); }
 
   void reset() {
@@ -692,8 +703,9 @@ class BlockLimbMap_s005b_85d0 {
   }
   rbtree_iterator_s005b_85d0 DoInsertValueImpl(rbtree_node_base_s005b_85d0* pNodeParent, const BlockLimbPair_s005b_85d0& value, bool bForceToLeft);
   // The hinted insert FindOrCreate actually calls: it re-validates the hint against the root
-  // and the anchor and then forwards to DoInsertValueImpl with the side it computed.
-  rbtree_iterator_s005b_85d0 DoInsertValueWithHint(rbtree_node_base_s005b_85d0* pHint, const BlockLimbPair_s005b_85d0& value, bool bForceToLeft);  // 0x005b8340
+  // and the anchor and then forwards to DoInsertValueImpl with the side it computed.  Its third
+  // argument is the eastl::true_type tag (an empty object), which it never reads.
+  rbtree_iterator_s005b_85d0 DoInsertValue(rbtree_iterator_s005b_85d0 position, const BlockLimbPair_s005b_85d0& value, true_type);  // 0x005b8340
   void DoNukeSubtree(rbtree_node_s005b_85d0* pNode);
   EA::AutoRefCount_s005b_85d0<cSPEditorSkinPart_s005b_85d0>* FindOrCreate(cSPEditorBlock_s005b_85d0* const& key);
 };
@@ -712,7 +724,7 @@ class cSPEditorManipulationObject_s005b_85d0 {
 };
 }
 namespace SP {
-class cSPEditorManipulationSpineResize_s005b_85d0 : public cSPEditorManipulationObject_s005b_85d0, public EA::RefCountVTemplate_s005b_85d0<int> {
+class cSPEditorManipulationSpineResize_s005b_85d0 : public cSPEditorManipulationObject, public EA::RefCountVTemplate_s005b_85d0<int> {
  public:
   cSPEditorBlock_s005b_85d0* mBlock;                               // +0x1c
   cSPVector3_s005b_85d0 mMouseOffset;                              // +0x20
@@ -1037,7 +1049,7 @@ cSPEditorManipulationSpineResize::~cSPEditorManipulationSpineResize()
 namespace SP {
 cSPEditorManipulationSpineResize_s005b_85d0::cSPEditorManipulationSpineResize_s005b_85d0()
 : mBlock(0), mMouseOffset(0.0f, 0.0f, 0.0f), mSpine(0), mEconomy(0), mHasRoutes(false),
-      mFrontAnchor(0.0f), mBackAnchor(0.0f), mColorTimer(0.0f), mFrameDelay(0.0f),
+      mColorTimer(0.0f), mFrameDelay(0.0f),
       mHasPlanePoint(false), mUnk8c(1.0f / 250.0f) {
   mChangedObject = false;
   mUseDeadZone = false;
@@ -1118,25 +1130,25 @@ void cSPEditorManipulationSpineResize_s005b_85d0::Shutdown()
 namespace eastl {
 EA::AutoRefCount_s005b_85d0<SP::cSPEditorSkinPart_s005b_85d0>* BlockLimbMap_s005b_85d0::FindOrCreate(SP::cSPEditorBlock_s005b_85d0* const& key)
 {
-  rbtree_node_base_s005b_85d0* pNode = mAnchor.mpNodeParent;
+  rbtree_node_s005b_85d0* pNode = (rbtree_node_s005b_85d0*)mAnchor.mpNodeParent;
   rbtree_node_base_s005b_85d0* pLower = &mAnchor;
-  if (pNode) {
-    do {
-      if (((rbtree_node_s005b_85d0*)pNode)->mValue.first >= key) {
-        pLower = pNode;
-        pNode = pNode->mpNodeLeft;
-      } else {
-        pNode = pNode->mpNodeRight;
-      }
-    } while (pNode);
+  while (pNode) {
+    if (pNode->mValue.first >= key) {
+      pLower = pNode;
+      pNode = (rbtree_node_s005b_85d0*)pNode->mpNodeLeft;
+    } else {
+      pNode = (rbtree_node_s005b_85d0*)pNode->mpNodeRight;
+    }
   }
-  if (pLower != &mAnchor && !(key < ((rbtree_node_s005b_85d0*)pLower)->mValue.first))
-    return &((rbtree_node_s005b_85d0*)pLower)->mValue.second;
-  BlockLimbPair_s005b_85d0 kv = { key };
-  // The third argument is never read by 0x5b8340 (it computes the insertion side itself); it is
-  // only pushed because the template signature carries it.
-  rbtree_iterator_s005b_85d0 it = DoInsertValueWithHint(pLower, kv, false);
-  return &it.mpNode->mValue.second;
+  bool bInsert = (pLower == &mAnchor) || (key < ((rbtree_node_s005b_85d0*)pLower)->mValue.first);
+  if (bInsert) {
+    rbtree_iterator_s005b_85d0 position((rbtree_node_s005b_85d0*)pLower);
+    BlockLimbPair_s005b_85d0 kv = { key };
+    // The hinted insert takes the eastl::true_type tag by value; the callee never reads it.
+    rbtree_iterator_s005b_85d0 it = DoInsertValue(position, kv, true_type());
+    return &it.mpNode->mValue.second;
+  }
+  return &((rbtree_node_s005b_85d0*)pLower)->mValue.second;
 }
 }  // namespace eastl
 

@@ -265,18 +265,19 @@ void* __cdecl PNGREAD_malloc(png_structp png, png_uint_32 size)
 // @ 0x0084e7a0
 int __stdcall PNG_wopen(int** out, int io, int a3, int a4)
 {
-    int* h = (int*)galloc(0x18);
+    int ok = 0;
+    PngHandle* h = (PngHandle*)galloc(sizeof(PngHandle));
     if (h != 0) {
-        h[0] = 0;
-        h[1] = 0;
-        h[2] = 0;
-        h[5] = 0;
-        h[3] = 0;
-        h[4] = io;
-        *out = h;
-        return 1;
+        h->magic = 0;
+        h->size_ = 0;
+        h->ok = 0;
+        h->pair = 0;
+        h->used = ok;
+        h->io = (png_voidp)(size_t)io;
+        *out = (int*)h;
+        ok = 1;
     }
-    return 0;
+    return ok;
 }
 
 // @ 0x0084e7e0

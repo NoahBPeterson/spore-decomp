@@ -96,6 +96,7 @@ bool W20::SetThing(void *p)
         a = 0;
     else
         a = ((int (__thiscall *)(void *, int))(*(void ***)this)[0xc / 4])(this, 0xee3f516e);
+
     ((uint32_t (__thiscall *)(void *, void *, int))(*(void ***)q)[0x1c / 4])(q, (void *)&FUN_00830080, a);
     return false;
 }

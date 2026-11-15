@@ -138,6 +138,9 @@ struct IVectorItem : public IRefCounted {
     Vec3* GetPosition(Vec3* pOut);   // 0x2c
 };
 void* NounManager();
+struct TextView {
+    int GetLineCount(void* pTool, void* pObject); // 0x01054350 (ret 8)
+};
 class cSPToolStrategy {
 public:
     virtual void v00();
@@ -2380,13 +2383,19 @@ int cSPToolStrategy::SetErrorEvent(int nEventType, bool bPost)
 }
 
 // @ 0x01052880
+struct ScanResultList {
+    void* Erase(void* pItem);   // 0x00b3d390
+};
+struct ScanResultInfo {
+    int GetSize();              // 0x00b3d3a0
+};
 void AppendScanResult(void* pList, int* pOut)
 {
     if (pOut == nullptr)
         return;
-    // The list drops its previous front element, then reports the new size.
-    *(int*)pList = *(int*)pList;
-    *pOut = *(int*)pList;
+    ScanResultList* pResults = (ScanResultList*)pList;
+    void* pItem = pOut;
+    (*pOut) = ((ScanResultInfo*)pResults->Erase(pItem))->GetSize();
 }
 
 // @ 0x01052f00
@@ -2532,27 +2541,41 @@ int cSPEnergyRepairToolStrategy::AdjustCostPercent(int nBaseCost)
 }
 
 // @ 0x01053650
+static bool StopToolBody(cSPToolStrategy* pTool)
+{
+    pTool->mbActive = 0;
+    pTool->mTimer.Stop();
+    return true;
+}
 bool cSPToolStrategy::StopTool()
 {
-    mbActive = 0;
-    mTimer.Stop();
-    return true;
+    return StopToolBody(this);
 }
 
 // @ 0x010536e0
+static IRefCounted* QueryAnimalCargo(IItemHolder* pHolder)
+{
+    IRefCounted* pItem = pHolder->mpItem;
+    if (pItem != nullptr) {
+        IQueryable* pSecondary = (IQueryable*)((uint8_t*)pItem + 0xc);
+        return pSecondary->Query((const void*)0x30fc270b);
+    }
+    return nullptr;
+}
 IRefCounted* CastToAnimalCargoInfo(IItemHolder* pHolder)
 {
-    if (pHolder->mpItem == nullptr)
-        return nullptr;
-    return pHolder->mpSecondary->Query((const void*)0x30fc270b);
+    return QueryAnimalCargo(pHolder);
 }
 
 // @ 0x01053700
 IRefCounted* CastToPlantCargoInfo(IItemHolder* pHolder)
 {
-    if (pHolder->mpItem == nullptr)
-        return nullptr;
-    return pHolder->mpSecondary->Query((const void*)0x70a2863c);
+    IRefCounted* pItem = pHolder->mpItem;
+    if (pItem != nullptr) {
+        IQueryable* pSecondary = (IQueryable*)((uint8_t*)pItem + 0xc);
+        return pSecondary->Query((const void*)0x70a2863c);
+    }
+    return nullptr;
 }
 
 // @ 0x010537e0
@@ -2604,12 +2627,8 @@ char cSPToolStrategy::CanUseToolAtLocation(int nToolId, int nTarget, int a3)
 // @ 0x01053bb0
 void cSPToolStrategy::UpdatePassive()
 {
-    if (mpActiveObject != nullptr && !mpActiveObject->IsAlive()) {
-        IRefCounted* pOld = mpActiveObject;
-        mpActiveObject = nullptr;
-        pOld->AddRef();
-        mEventType = mEventType;
-    }
+    if (mpActiveObject != nullptr && !mpActiveObject->IsAlive())
+        ((TextView*)NounManager())->GetLineCount(this, mpActiveObject);
 }
 
 // @ 0x01053be0
@@ -2744,6 +2763,10 @@ bool cSPDefaultBeamTool::UpdateBeam()
 // @ 0x01053ee0
 bool cSPDefaultAoETool::StopTool()
 {
+    IRefCounted* pArea = mpAreaEffect;
+    if (pArea == nullptr)
+        return true;
+    ((SP::cDefaultAoEArea*)pArea)->StopArea();
     if (mpAreaEffect != nullptr) {
         IRefCounted* pOld = mpAreaEffect;
         mpAreaEffect = nullptr;
@@ -2790,29 +2813,46 @@ bool cSPScanToolStrategy::ActivateTool(int nToolId)
 // @ 0x01053ff0
 bool cSPScanToolStrategy::StopTool()
 {
+    cSPSpaceInventoryItem* pHeld = nullptr;
     cSPSpaceInventory* pInventory = SpaceGameGet()->GetPlayerInventory();
-    (void)pInventory;
+    if (pInventory != nullptr)
+        pHeld = (cSPSpaceInventoryItem*)((uint8_t*)pInventory + 0x34);
 
     IRefCounted* pOld = mpEffectRef;
+    ((SP::cDefaultBeamProjectile*)mpBeamProjectile)->StopBeam();
     mpEffectRef = nullptr;
     if (pOld != nullptr)
         pOld->AddRef();
 
-    if (mpBeamProjectile != nullptr) {
-        IRefCounted* pProjectile = mpBeamProjectile;
+    IRefCounted* pProjectile = mpBeamProjectile;
+    if (pProjectile != nullptr) {
         mpBeamProjectile = nullptr;
         pProjectile->AddRef();
     }
     AddToolCharge(0);
-    return true;
+    if (pHeld != nullptr && pHeld == mpTargetItem) {
+        IRefCounted* pPosted = (IRefCounted*)this->SetErrorEvent(0x016e1b14, true);
+        if (pPosted != nullptr)
+            (void)pPosted;
+    }
+    return this->StopTool();
 }
 
 // @ 0x01054080
+static char CanUseToolAtLocationBody(cSPToolStrategy* pTool, int nToolId, int nTarget, int a3);
+
 bool cSPScanToolStrategy::UseTool(int nToolId, int nTarget)
 {
-    if (mpEffectRef != nullptr)
+    if (mpEffectRef != nullptr) {
         return true;
-    return CanUseToolAtLocation(nToolId, nTarget, 0);
+    } else {
+        return CanUseToolAtLocationBody(this, nToolId, nTarget, 0);
+    }
+}
+
+static char CanUseToolAtLocationBody(cSPToolStrategy* pTool, int nToolId, int nTarget, int a3)
+{
+    return pTool->CanUseToolAtLocation(nToolId, nTarget, a3);
 }
 
 // @ 0x010540b0

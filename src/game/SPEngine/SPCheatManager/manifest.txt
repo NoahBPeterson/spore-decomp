@@ -15,3 +15,8 @@
 ../src/game/SPEngine/SPCheatManager.cpp  ?NukeSub@StrTree@@QAEXPAUNode@@@Z  0067f670  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPCheatManager.cpp  ??1CheatMgr@@UAE@XZ  0067f910  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPCheatManager.cpp  ?CheckFlagB@CheatReporter@@QAEHABVLogRecord@Trace@EA@@@Z  0067e190  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ??0HistoryCommand@@QAE@PAVcCheatManager@@@Z  0067e310  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ??0ClearConsoleCommand@@QAE@PAVcCheatManager@@@Z  0067e3f0  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ??0HelpCommand@@QAE@PAVcCheatManager@@PAUICmd@EA@@@Z  0067e220  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ??0CheatReporter@@QAE@HPAUIU01@EA@@@Z  0067e100  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ??0ConsoleStream@@QAE@PAUIU01@EA@@@Z  0067e9a0  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include

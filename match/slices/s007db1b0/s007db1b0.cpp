@@ -84,7 +84,8 @@ void* PtrVec::At(int index)
 // ---------------------------------------------------------------------------
 // 0x007db8b0  free the pack-info pointers held by a vector.
 // ---------------------------------------------------------------------------
-void SP_cString_Dtor(void*);                 // 0x006b5240
+// @ 0x007db8b0
+struct SPCStringDtor { void Dtor(); };       // 0x006b5240  (~SP::cString)
 void  __cdecl SP_VecDoInsert(void*, void*, int);  // 0x011e0744
 void  __cdecl EFree(void*);                  // 0x00f47380
 
@@ -98,19 +99,19 @@ struct cPackInfoVec {
 
 bool cPackInfoVec::Clear()
 {
-    int n = (int)((char*)mpEnd - (char*)mpBegin) >> 2;
-    for (int i = 0; i < n; ++i) {
+    for (unsigned i = 0; i < (unsigned)(mpEnd - mpBegin); ++i) {
         char* p = (char*)mpBegin[i];
         if (p) {
-            SP_cString_Dtor(p + 0x24);
+            ((SPCStringDtor*)(p + 0x24))->Dtor();
             EFree(p);
         }
     }
     void* end = mpEnd;
     void* begin = mpBegin;
-    SP_VecDoInsert(begin, end, 0);
-    int m = (int)((char*)mpEnd - (char*)mpBegin) >> 2;
-    mpEnd = (void**)((char*)mpEnd - m * 4);
+    // Third argument is 0 (end == mpEnd); spelled as a difference so cl keeps the mov/sub rather
+    // than folding it to `push 0` (retail does the same).
+    SP_VecDoInsert(begin, end, (int)((char*)end - (char*)mpEnd));
+    mpEnd = (void**)((char*)mpEnd + ((int)((char*)end - (char*)begin) >> 2) * -4);
     return true;
 }
 

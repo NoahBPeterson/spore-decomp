@@ -5,8 +5,6 @@
 0083cef0  86   complete: pair<string,AutoRefCount> ctor; zero-init + RangeInitialize + memcpy(buffer, s->mpBegin, len) + mpRef store then ++obj[1]; written as a real constructor so the epilogue is eax=this; equiv: PASS (404/900 valid, 100% coverage); src/game/UTFSpore_Win32/Expression.cpp copy also PASS (404 valid)
 0083d020  84   complete: pair<string,AutoRefCount> copy ctor; same body from the source pair, mpRef read as ((const PairCtorStub*)src)->mpRef; written as a real constructor (eax=this); equiv: PASS (424/900 valid, 100% coverage); src/game copy also PASS (424 valid)
 0083d080  39   complete: pair<string,cExprFunction> dtor; branch layout differs
-0083d240  45   complete: EvalBoolParentheses (expect char + throw)
-0083d290  95   complete: EvalContinueChar (expect char + throw)
 0083d2f0  209  complete: EvalRealParentheses; float returns and throw frames differ; equiv: UNSUPPORTED (0/1200 valid: _CxxThrowException discards)
 0083d140  53  hashtable<string, pair<string,AutoRefCount<cExprFunction>>>::insert(value, true_type): complete, EASTL-shaped; div operand form (mov ecx,[esi+8] first) and node-link store scheduling differ [equiv: UNSUPPORTED, 0/400 valid: pointer-chasing inputs fault]
 0083ca00  153  complete: cExpression::FindExprValue (thiscall); inline string8 key copy + hashtable::find; alloc/memcpy call shapes and key-copy register allocation differ; equiv: WEAK (173/400 valid, 100% coverage)

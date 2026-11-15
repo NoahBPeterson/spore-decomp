@@ -15,3 +15,4 @@ slices/s0112be40/s0112be40.cpp  ?IsCommandComplete@AudioObject@@QAEXIM@Z  0112cc
 slices/s0112be40/s0112be40.cpp  ?audio_createObject@@YAPAEPAEIPAUFactory@@PBUInitData@@E@Z  0112cc10  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s0112be40/s0112be40.cpp  ?freeSelf@AllocNode@@QAEXXZ  0112cdf0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s0112be40/s0112be40.cpp  ?getOrCreate@VoiceList@@QAEPAXXZ  0112ce00  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0112be40/s0112be40.cpp  ?convertClassVersion1Inplace@hkPackfileReader@@SAXPAVhkClass@@@Z  0112be40  /O2 /MD /Gy /EHsc /TP /arch:SSE

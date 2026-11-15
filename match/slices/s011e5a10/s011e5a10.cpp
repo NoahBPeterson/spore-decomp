@@ -38,19 +38,48 @@ static inline void st8(void* base, u32 off, u8 v) { *(u8*)((char*)base + off) = 
 // ---- image globals ---------------------------------------------------------
 extern u32 g_rwFsAllocator;              // 0x016f4b10  ?g_rwFsAllocator@@3PAXA
 extern u32 g_rwFsStream;                 // 0x016f4b0c  the singleton StreamImpl
-extern u32 g_requestIdCounter;            // request id counter (incremented by 0x100)
+extern u32 g_requestIdCounter;            // 0x016f4b14  request id counter (incremented by 0x100)
 extern u32 g_driveList[32];               // 0x016f4b88  ?g_driveList@@3PADA
+
+// The absolute-timeout word EA::Thread::Mutex::Lock / ThreadObj::Wait take a pointer to.  Each
+// translation unit has its own: the StreamImpl mutexes use 0x014f6518, the filesys request queue
+// (Mutex at +4) uses 0x014f6558.
+extern const int g_timeout_14f6518;       // 0x014f6518
+extern const int g_timeout_14f6558;       // 0x014f6558
 
 // ---- callees (no recovered mangled names; named by address) ----------------
 void* StreamImpl_new(u32 size);                              // 0x011e6d20
 void  __fastcall filesys_init(void* self);                   // 0x011e5a10
 void  StreamImpl_ctor(void* p, void* a, void* b, void* c);   // 0x011e6d20 (0x30 form)
-void  Mutex_Lock(void* m);                                   // 0x011ec170
-void  Mutex_Unlock(void* m);                                 // 0x011ec230
+// EA::Thread::Mutex (this in ecx, the timeout pointer on the stack) and the condvar object whose
+// Wait/Signal the request queues use (this in ecx, one stack argument).
+struct EAMutex {
+    void Lock(const int* pTimeout);                          // 0x011ec170
+    void Unlock();                                           // 0x011ec230
+};
+struct EAWaitObj {
+    int  Wait(void* pMutex, const int* pTimeout);            // 0x011ec410
+    void Signal(u32 a);                                      // 0x011ec4e0
+};
+// The intrusive request list at StreamImpl+8 and the StreamImpl request queue itself: both are
+// thiscall (this in ecx, the arguments on the stack).
+struct RequestList {
+    u8   unlink(void* node, void* hint);                     // 0x011e5e00
+};
+struct StreamQueue {
+    void* insertRequest(void* node);                         // 0x011e60b0
+    void  startWorker();                                     // 0x011e62b0
+    void  queueRequest(void* node);                          // 0x011e6340
+};
+// The IResourceAllocator the stream keeps at +0x120; slot 10 (vtable +0x28) maps a request chunk
+// to its absolute position in the async window.
+struct IResourceAllocator {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03(); virtual void v04();
+    virtual void v05(); virtual void v06(); virtual void v07(); virtual void v08(); virtual void v09();
+    virtual u64  windowBase(u32 chunk);                      // vtable +0x28
+};
 void  Mutex_ctor0(void* m, int a, int b);                    // 0x011ec260
 void  ThreadObj_ctor(void* t, int a, int b);                 // 0x011ec390
-void  ThreadObj_condSignal(void* t, int a);                  // 0x011ec4e0
-int   ThreadObj_condWait(void* t, void* m, void* t2);        // 0x011ec410
 u32   GetThreadTime(void);                                   // 0x011ec7f0
 void  SleepEx1(u32 ms);                                      // 0x011ec7e0  SleepEx(*p,1)
 u32   CreateThreadHelper(void* a, void* b, void* c, void* d); // 0x011ecc20
@@ -68,8 +97,11 @@ void  CriticalSection_dele(void* cs);                        // 0x011ecde0
 u32   FUN_011ebd30(void);                                    // drive-letter enumeration
 void  ArenaPathHolder_Split(const char* path);               // 0x011e5900
 u32   FUN_011e58f0(void);                                    // global filesys context accessor
-void* FUN_011e8770(void);                                    // async open
+void* __fastcall FUN_011e8770(void* ctx);                    // 0x011e8770  (this in ecx)
 u64   AsyncOp_GetSize(void* op);                             // 0x011ea7c0
+struct AsyncOp {
+    void setPriority(u32 prio);                              // 0x011e8710  (this in ecx)
+};
 struct AsyncOpTarget { void Open(void* a, void* cb, void* b, void* c, void* d); }; // 0x011e8a40
 u32   FUN_011e8bd0(void* a, void* b);                        // 0x011e8bd0
 char* FUN_011e8c60(const char* s, int c);                    // 0x011e8c60  strchr
@@ -279,33 +311,33 @@ void* __fastcall DeviceDriver_ctor(void* self, int, const char* name)
 void StreamImpl_waitForOp(void* self, void* slot, u32* deadline)
 {
     void* mtx = (char*)self + 0x9c;
-    Mutex_Lock(mtx);
+    ((EAMutex*)mtx)->Lock(&g_timeout_14f6518);
     while (ld32(slot, 4) == 0) {
         u32 now = GetThreadTime();
         if (now >= *deadline)
             break;
-        ThreadObj_condWait((char*)self + 0xc8, mtx, deadline);
+        ((EAWaitObj*)((char*)self + 0xc8))->Wait(mtx, (const int*)deadline);
     }
-    Mutex_Unlock(mtx);
+    ((EAMutex*)mtx)->Unlock();
 }
 
 // ===========================================================================
 // 0x011e5e00 -- unlink a request record from an intrusive singly-linked list.
 // ===========================================================================
 // @ 0x011e5e00
-u8 __fastcall request_list_unlink(void* self, int, void* node, void* hint)
+u8 RequestList::unlink(void* node, void* hint)
 {
-    void* head = (void*)ld32(self, 0);
+    void* head = (void*)ld32(this, 0);
     u8 r = 0;
     if (node == head) {
-        st32(self, 8, ld32(self, 8) - 1);
-        if (node == (void*)ld32(self, 4)) {
-            st32(self, 4, 0);
-            st32(self, 0, 0);
+        st32(this, 8, ld32(this, 8) - 1);
+        if (node == (void*)ld32(this, 4)) {
+            st32(this, 4, 0);
+            st32(this, 0, 0);
             st32(node, 0, 0);
             return 1;
         }
-        st32(self, 0, ld32(node, 0));
+        st32(this, 0, ld32(node, 0));
         st32(node, 0, 0);
         return 1;
     }
@@ -319,11 +351,11 @@ u8 __fastcall request_list_unlink(void* self, int, void* node, void* hint)
                 prev = cur;
             } while (ld32(cur, 0) != 0);
             if ((void*)ld32(prev, 0) != 0 && (void*)ld32(prev, 0) == node) {
-                st32(self, 8, ld32(self, 8) - 1);
+                st32(this, 8, ld32(this, 8) - 1);
                 st32(prev, 0, ld32(node, 0));
                 r = 1;
-                if (node == (void*)ld32(self, 4))
-                    st32(self, 4, (u32)prev);
+                if (node == (void*)ld32(this, 4))
+                    st32(this, 4, (u32)prev);
                 st32(node, 0, 0);
             }
         }
@@ -365,7 +397,7 @@ void StreamImpl_shutdown(void* self)
     if (ld8(self, 4)) {
         if (ld8(self, 6) == 0) {
             st8(self, 5, 1);
-            ThreadObj_condSignal((char*)self + 0x40, 0);
+            ((EAWaitObj*)((char*)self + 0x40))->Signal(0);
             while (ld8(self, 4)) {
                 u32 one = 1;
                 SleepEx1(one);
@@ -432,40 +464,40 @@ void* filesys_resolvePath(const char* path, char relativeToCurrent)
 // position in the active list, updating the 64-bit window, then re-link.
 // ===========================================================================
 // @ 0x011e60b0
-void* __fastcall StreamImpl_insertRequest(void* self, int, void* node)
+void* StreamQueue::insertRequest(void* node)
 {
     if (ld8(node, 9) == 0)
         return node;
     if (*(u32*)((char*)FUN_011e58f0() + 0x28) != 1)
         return node;
 
-    void* alloc = (void*)ld32(self, 0x120);
-    u64 wndBase = ((u64(*)(u32))(*(void***)alloc)[10])(ld32((void*)ld32(node, 0x10), 8));
+    void* alloc = (void*)ld32(this, 0x120);
+    u64 wndBase = ((IResourceAllocator*)alloc)->windowBase(ld32((void*)ld32(node, 0x10), 8));
     u64 reqKey = wndBase + *(u64*)((char*)node + 0x20);
 
-    u64 limit = *(u64*)((char*)self + 0x128);
+    u64 limit = *(u64*)((char*)this + 0x128);
     if ((limit != 0) && (reqKey < limit)) {
-        void* cur = (void*)ld32(self, 8);
+        void* cur = (void*)ld32(this, 8);
         void* prev = 0;
         while (cur != 0) {
             if (ld8(cur, 9) == 0 || ld32(cur, 0xc) != ld32(node, 0xc))
                 break;
-            u64 base2 = ((u64(*)(u32))(*(void***)alloc)[10])(ld32((void*)ld32(cur, 0x10), 8));
+            u64 base2 = ((IResourceAllocator*)alloc)->windowBase(ld32((void*)ld32(cur, 0x10), 8));
             u64 key2 = base2 + *(u64*)((char*)cur + 0x20);
-            if (key2 > *(u64*)((char*)self + 0x128))
+            if (key2 > *(u64*)((char*)this + 0x128))
                 break;
             prev = cur;
             cur = (void*)ld32(cur, 0);
         }
-        st32(node, 0, ld32(self, 8));
-        st32(self, 8, (u32)node);
-        st32(self, 0x10, ld32(self, 0x10) + 1);
+        st32(node, 0, ld32(this, 8));
+        st32(this, 8, (u32)node);
+        st32(this, 0x10, ld32(this, 0x10) + 1);
         if (ld32(node, 0) == 0)
-            st32(self, 0xc, (u32)node);
+            st32(this, 0xc, (u32)node);
         (void)wndBase; (void)limit;
         return node;
     }
-    *(u64*)((char*)self + 0x128) = reqKey;
+    *(u64*)((char*)this + 0x128) = reqKey;
     return node;
 }
 
@@ -474,15 +506,15 @@ void* __fastcall StreamImpl_insertRequest(void* self, int, void* node)
 // request, and wait on the condvar until the shutdown flag is set.
 // ===========================================================================
 // @ 0x011e61d0
-u32 __fastcall StreamImpl_worker(void* self, int)
+u32 __cdecl StreamImpl_worker(void* self)
 {
     st8(self, 4, 1);
-    Mutex_Lock((char*)self + 0x14);
+    ((EAMutex*)((char*)self + 0x14))->Lock(&g_timeout_14f6518);
     for (;;) {
         void* node = (void*)ld32(self, 8);
         if (node == 0) {
         wait:
-            if (ThreadObj_condWait((char*)self + 0x14, (char*)self + 0x14, 0) != 0)
+            if (((EAWaitObj*)((char*)self + 0x40))->Wait((char*)self + 0x14, &g_timeout_14f6518) != 0)
                 break;
         } else {
             if (node == (void*)ld32(self, 0xc)) {
@@ -495,22 +527,22 @@ u32 __fastcall StreamImpl_worker(void* self, int)
             st32(node, 0, 0);
             if (node == 0)
                 goto wait;
-            u32 r = (u32)StreamImpl_insertRequest(self, 0, node);
-            Mutex_Unlock((char*)self + 0x14);
+            u32 r = (u32)((StreamQueue*)self)->insertRequest(node);
+            ((EAMutex*)((char*)self + 0x14))->Unlock();
             u32 res = ((u32(*)(void*))(*(void***)r)[0x44 / 4])((void*)r);
             if (res != 0) {
-                Mutex_Lock((char*)self + 0x9c);
+                ((EAMutex*)((char*)self + 0x9c))->Lock(&g_timeout_14f6518);
                 st32((void*)r, 4, res);
                 ((void(*)(void*))(*(void***)r)[0x18 / 4])((void*)r);
-                ThreadObj_condSignal((char*)self + 0x9c, 1);
-                Mutex_Unlock((char*)self + 0x9c);
+                ((EAWaitObj*)((char*)self + 0xc8))->Signal(1);
+                ((EAMutex*)((char*)self + 0x9c))->Unlock();
             }
-            Mutex_Lock((char*)self + 0x14);
+            ((EAMutex*)((char*)self + 0x14))->Lock(&g_timeout_14f6518);
         }
         if (ld8(self, 5))
             break;
     }
-    Mutex_Unlock((char*)self + 0x14);
+    ((EAMutex*)((char*)self + 0x14))->Unlock();
     st8(self, 4, 0);
     return 0;
 }
@@ -519,12 +551,12 @@ u32 __fastcall StreamImpl_worker(void* self, int)
 // 0x011e62b0 -- start the worker thread (or flag it started if already up).
 // ===========================================================================
 // @ 0x011e62b0
-void __fastcall StreamImpl_startWorker(void* self)
+void StreamQueue::startWorker()
 {
-    void* op = (void*)ld32(self, 0x120);
+    void* op = (void*)ld32(this, 0x120);
     ((void(*)(void*))(*(void***)op)[1])(op);
-    if (ld8(self, 6)) {
-        st8(self, 4, 1);
+    if (ld8(this, 6)) {
+        st8(this, 4, 1);
         return;
     }
     char ctx[8];
@@ -534,8 +566,8 @@ void __fastcall StreamImpl_startWorker(void* self)
     st8(ctx, 0x10, 0);
     u32 tag = RefCounted_tag();
     u32 ms = 1;
-    CreateThreadHelper((void*)StreamImpl_worker, self, ctx, (void*)tag);
-    while (ld8(self, 4) == 0) {
+    CreateThreadHelper((void*)StreamImpl_worker, this, ctx, (void*)tag);
+    while (ld8(this, 4) == 0) {
         ms = 1;
         SleepEx1(ms);
     }
@@ -546,33 +578,33 @@ void __fastcall StreamImpl_startWorker(void* self)
 // position in the active list under the lock, then signal the worker.
 // ===========================================================================
 // @ 0x011e6340
-void __fastcall StreamImpl_queueRequest(void* self, int, void* node)
+void StreamQueue::queueRequest(void* node)
 {
-    Mutex_Lock((char*)self + 0x14);
-    if (ld8(self, 4) == 0)
-        StreamImpl_startWorker(self);
+    ((EAMutex*)((char*)this + 0x14))->Lock(&g_timeout_14f6518);
+    if (ld8(this, 4) == 0)
+        startWorker();
 
     u64 base = 0;
     void* prev = 0;
     if (ld8(node, 9)) {
-        void* alloc = (void*)ld32(self, 0x120);
-        base = ((u64(*)(u32))(*(void***)alloc)[10])(ld32((void*)ld32(node, 0x10), 8));
+        void* alloc = (void*)ld32(this, 0x120);
+        base = ((IResourceAllocator*)alloc)->windowBase(ld32((void*)ld32(node, 0x10), 8));
         base += *(u64*)((char*)node + 0x20);
     }
 
-    void* cur = (void*)ld32(self, 8);
+    void* cur = (void*)ld32(this, 8);
     if (cur != 0) {
         for (;;) {
             void* last = cur;
-            if (ld32(node, 0xc) > ld32(last, 0xc))
+            if ((i32)ld32(node, 0xc) > (i32)ld32(last, 0xc))
                 break;
             if (ld32(node, 0xc) == ld32(last, 0xc)) {
                 if (*(u32*)((char*)FUN_011e58f0() + 0x28) == 1 &&
                     ld8(node, 9) && ld8(last, 9)) {
-                    void* alloc = (void*)ld32(self, 0x120);
-                    u64 b2 = ((u64(*)(u32))(*(void***)alloc)[10])(ld32((void*)ld32(last, 0x10), 8));
+                    void* alloc = (void*)ld32(this, 0x120);
+                    u64 b2 = ((IResourceAllocator*)alloc)->windowBase(ld32((void*)ld32(last, 0x10), 8));
                     u64 k2 = b2 + *(u64*)((char*)last + 0x20);
-                    if (base > k2)
+                    if (base < k2)
                         break;
                 }
             }
@@ -584,21 +616,21 @@ void __fastcall StreamImpl_queueRequest(void* self, int, void* node)
     }
 
     if (prev == 0) {
-        st32(node, 0, ld32(self, 8));
-        st32(self, 8, (u32)node);
-        st32(self, 0x10, ld32(self, 0x10) + 1);
+        st32(node, 0, ld32(this, 8));
+        st32(this, 8, (u32)node);
+        st32(this, 0x10, ld32(this, 0x10) + 1);
         if (ld32(node, 0) == 0)
-            st32(self, 0xc, (u32)node);
+            st32(this, 0xc, (u32)node);
     } else {
         if (ld32(prev, 0) == 0)
-            st32(self, 0xc, (u32)node);
+            st32(this, 0xc, (u32)node);
         st32(node, 0, ld32(prev, 0));
         st32(prev, 0, (u32)node);
-        st32(self, 0x10, ld32(self, 0x10) + 1);
+        st32(this, 0x10, ld32(this, 0x10) + 1);
     }
 
-    Mutex_Unlock((char*)self + 0x14);
-    ThreadObj_condSignal((char*)self + 0x40, 0);
+    ((EAMutex*)((char*)this + 0x14))->Unlock();
+    ((EAWaitObj*)((char*)this + 0x40))->Signal(0);
 }
 
 // ===========================================================================
@@ -607,12 +639,12 @@ void __fastcall StreamImpl_queueRequest(void* self, int, void* node)
 // @ 0x011e6450
 void __fastcall StreamImpl_cancelRequest(void* self, int, void* node, u32 reason)
 {
-    Mutex_Lock((char*)self + 0x14);
-    if (request_list_unlink((char*)self + 8, 0, node, 0)) {
+    ((EAMutex*)((char*)self + 0x14))->Lock(&g_timeout_14f6518);
+    if (((RequestList*)((char*)self + 8))->unlink(node, 0)) {
         st32(node, 0xc, reason);
-        StreamImpl_queueRequest(self, 0, node);
+        ((StreamQueue*)self)->queueRequest(node);
     }
-    Mutex_Unlock((char*)self + 0x14);
+    ((EAMutex*)((char*)self + 0x14))->Unlock();
 }
 
 // ===========================================================================
@@ -711,29 +743,24 @@ u32 __cdecl StreamImpl_validateSize(u32, u32 size, u32, u32, u32, u32, u32* out)
 }
 
 // ===========================================================================
-// 0x011e6600 -- rw::core::filesys::decbufferusage: release `bytes` from the
-// shared async window, waking the waiting request if it can now proceed.
+// 0x011e6600 -- rw::core::filesys::decbufferusage: give `bytes` back to the
+// request window at +0x7c and, when the window drops below the low-water mark
+// at +0x74, flag +0x78 and re-prioritise the stream's AsyncOp.
 // ===========================================================================
 // @ 0x011e6600
-void __fastcall decbufferusage(void* self, int, u64 bytes)
+void __fastcall decbufferusage(void* self, int, u32 bytes)
 {
-    u64 used = *(u64*)((char*)self + 0x80);
-    used -= bytes;
-    *(u64*)((char*)self + 0x80) = used;
+    ((EAMutex*)((char*)self + 4))->Lock(&g_timeout_14f6558);
+    u32 old = ld32(self, 0x7c);
+    u32 left = old - bytes;
+    st32(self, 0x7c, left);
+    ((EAMutex*)((char*)self + 4))->Unlock();
 
-    void* node = (void*)ld32(self, 0x90);
-    while (node != 0) {
-        if (ld8(node, 8) == 0)
-            break;
-        u64 need = *(u64*)((char*)node + 0x80);
-        if (used >= need)
-            break;
-        node = (void*)ld32(node, 0x6c);
-    }
-    if (node != 0) {
-        Mutex_Lock((char*)self + 4);
-        ThreadObj_condSignal((char*)self + 0x40, 1);
-        Mutex_Unlock((char*)self + 4);
+    u32 limit = ld32(self, 0x74);
+    if ((i32)old >= (i32)limit && (i32)left < (i32)limit) {
+        st8(self, 0x78, 1);
+        if (ld32(self, 0x68) == 1)
+            ((AsyncOp*)((char*)self + 0x1b0))->setPriority(ld32(self, 0x70));
     }
 }
 
@@ -742,12 +769,12 @@ void __fastcall decbufferusage(void* self, int, u64 bytes)
 // the free list, stamping a fresh id into its low byte.
 // ===========================================================================
 // @ 0x011e6660
-u32* getfreerequest(void* self)
+u32* __fastcall getfreerequest(void* self)
 {
-    Mutex_Lock((char*)self + 4);
+    ((EAMutex*)((char*)self + 4))->Lock(&g_timeout_14f6558);
     u32* r = (u32*)ld32(self, 0x98);
     if (r == 0) {
-        Mutex_Unlock((char*)self + 4);
+        ((EAMutex*)((char*)self + 4))->Unlock();
         return 0;
     }
     st32(self, 0x98, ld32(r, 0xc));
@@ -755,7 +782,7 @@ u32* getfreerequest(void* self)
     if (g_requestIdCounter == 0)
         g_requestIdCounter = 0x100;
     *r = (*r & 0xff) | g_requestIdCounter;
-    Mutex_Unlock((char*)self + 4);
+    ((EAMutex*)((char*)self + 4))->Unlock();
     return r;
 }
 
@@ -764,19 +791,23 @@ u32* getfreerequest(void* self)
 // list and mark it queued.
 // ===========================================================================
 // @ 0x011e66d0
-void __fastcall queuerequest(void* self, int, void* request)
+void __fastcall queuerequest(void* self, void* request)
 {
-    Mutex_Lock((char*)self + 4);
     st32(request, 4, 1);
-    u32 prev = ld32(self, 0x8c);
-    st32(request, 8, prev);
     st32(request, 0xc, 0);
-    if (prev != 0)
-        st32((void*)prev, 0xc, (u32)request);
-    st32(self, 0x8c, (u32)request);
-    if (ld32(self, 0x88) == 0)
-        st32(self, 0x88, (u32)request);
-    Mutex_Unlock((char*)self + 4);
+    ((EAMutex*)((char*)self + 4))->Lock(&g_timeout_14f6558);
+    u32 tail = ld32(self, 0x94);
+    if (tail == 0) {
+        st32(request, 8, 0);
+        st32(self, 0x8c, (u32)request);
+        st32(self, 0x90, (u32)request);
+        st32(self, 0x94, (u32)request);
+    } else {
+        st32(request, 8, tail);
+        st32((void*)ld32(self, 0x94), 0xc, (u32)request);
+        st32(self, 0x94, (u32)request);
+    }
+    ((EAMutex*)((char*)self + 4))->Unlock();
 }
 
 // ===========================================================================
@@ -784,7 +815,7 @@ void __fastcall queuerequest(void* self, int, void* request)
 // pending list and push it onto the free list.
 // ===========================================================================
 // @ 0x011e6730
-void __fastcall freerequest(void* self, int, void* request)
+void __fastcall freerequest(void* self, void* request)
 {
     if (request == (void*)ld32(self, 0x8c)) {
         st32(self, 0x8c, ld32(request, 0xc));
@@ -815,25 +846,25 @@ void __fastcall freerequest(void* self, int, void* request)
 void opencallback(void* ctx)
 {
     void* impl = (void*)ld32((char*)ctx, 0x14);
-    u32 op = (u32)FUN_011e8770();
+    u32 op = (u32)FUN_011e8770(ctx);
     st32(impl, 0x1a4, op);
-    if (op != 0) {
+    if (op == 0) {
+        ((EAMutex*)((char*)impl + 4))->Lock(&g_timeout_14f6558);
+        st8(impl, 0xa4, 0);
+        if (ld32(impl, 0x68) == 1)
+            st32(impl, 0x68, 0);
+        freerequest(impl, (void*)ld32(impl, 0x90));
+        ((EAMutex*)((char*)impl + 4))->Unlock();
+        if (ld8(impl, 0x78))
+            startnextrequest(impl, ld32(impl, 0x70));
+        else
+            startnextrequest(impl, ld32(impl, 0x6c));
+    } else {
         u64 sz = AsyncOp_GetSize((void*)op);
-        st32(impl, 0x208, (u32)sz);
         st32(impl, 0x20c, (u32)(sz >> 32));
+        st32(impl, 0x208, (u32)sz);
         restartstream(impl, ld32(impl, 0x70));
-        return;
     }
-    Mutex_Lock((char*)impl + 4);
-    st8(impl, 0xa4, 0);
-    if (ld32(impl, 0x68) == 1)
-        st32(impl, 0x68, 0);
-    freerequest(impl, 0, (void*)ld32(impl, 0x90));
-    Mutex_Unlock((char*)impl + 4);
-    if (ld8(impl, 0x78))
-        startnextrequest(impl, ld32(impl, 0x70));
-    else
-        startnextrequest(impl, ld32(impl, 0x6c));
 }
 
 // ===========================================================================

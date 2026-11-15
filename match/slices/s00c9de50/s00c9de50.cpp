@@ -586,11 +586,13 @@ cVehicle* cVehicle::Find(uint32_t id)
 // @ 0x00c9e690
 bool cLoco::IsLocalPlayer()
 {
-    if (GetCurrentGameMode() == &gModeTen)
+    const uint8_t* pMode = (const uint8_t*)GetCurrentGameMode();
+    if (pMode == &gModeTen)
         return false;
+    int empire = NounManager()->GetPlayerEmpireOrMinus1();
     // mLoco sits at +0x34 of the complete vehicle object.
     cVehicle* pOwner = (cVehicle*)((char*)this - 0x34);
-    return pOwner->Slot4c() == NounManager()->GetPlayerEmpireOrMinus1();
+    return pOwner->Slot4c() == empire;
 }
 
 // @ 0x00c9e6d0

@@ -31,7 +31,7 @@ extern int FUN_00b3d230(void);                                                  
 extern void* FUN_00bcaf70(void* pTable, int iPlanIndex, int iFlag);              // 0x00bcaf70
 extern void FUN_00bcaf40(void* pNoun);                                           // 0x00bcaf40
 extern void ForceOrdersUpdate(void* pCitizen);                        // cSPCreatureCitizen
-extern void EraseRange(void* pBegin, void* pEnd);                                // eastl::vector::erase
+extern void FUN_00e25bd0(void* pVector, void* pBegin, void* pEnd);             // 0x00e25bd0 eastl::vector::erase (thiscall, ret 8)
 extern void RestartTimer(void* pTimer);                                          // SP::cSPTimer::Restart
 extern void* GetSystemAT(void);                                                  // EA::Audio::GetSystemAT
 extern void __cdecl operator_delete(void* pBlock);
@@ -152,8 +152,7 @@ struct PlanEntry {
 };
 struct cAIFlags;
 struct cCitizen {
-    virtual bool IsBusy();          // +0x2c
-    uint32_t mPad04[0x4c];          // +0x04 .. +0x133
+    uint32_t mPad00[0x4d];          // +0x00 .. +0x133 (vtable pointer at +0x00, IsBusy in slot 0x2c)
     uint8_t  mByte134;              // +0x134
     uint8_t  mByte135;              // +0x135
     uint8_t  mPad136[0xa16];        // +0x136 .. +0xb4b
@@ -200,22 +199,26 @@ struct FrameContext {
     int*     mpRef;                 // +0x14
     cTribePlanner* mpPlanner;       // +0x18
 };
+#pragma pack(push, 1)
 struct cOrderObject {
     uint32_t mPad00[0x13];          // +0x00 .. +0x4b
     uint8_t  mPad4c;                // +0x4c
-    Variant  mTargetVariant;        // +0x4d
+    Variant  mTargetVariant;        // +0x4d (packed: the variant is not 4-aligned in retail)
 };
+#pragma pack(pop)
 struct cPlanRecord {
     uint32_t mPad00[6];             // +0x00 .. +0x17
     uint32_t mValue18;              // +0x18
     uint32_t mValue1c;              // +0x1c
 };
+#pragma pack(push, 1)
 struct cPlanTimer {
     uint32_t mPad00[0xe];           // +0x00 .. +0x37
     uint8_t  mbActive;              // +0x38
     Variant  mValue39;              // +0x39
     Variant  mValue4d;              // +0x4d
 };
+#pragma pack(pop)
 struct Vec3 {
     float x;    // +0x00
     float y;    // +0x04
@@ -286,6 +289,7 @@ extern bool     g_bool_01581374;    // 0x01581374
 extern float    g_zero;             // 0x01485378
 extern float    g_two;              // 0x01470f1c
 extern float    g_f_01473c70;       // 0x01473c70
+extern float    g_f_01485720;       // 0x01485720 (1.0f)
 extern float    g_fltMax;           // 0x01477928
 #pragma pack(push, 1)
 #pragma pack(pop)
@@ -1187,22 +1191,17 @@ extern T g_01580de0, g_01580e1c, g_01580e58, g_01580e94, g_01580ed0,
 // ---- items of slice s0135d100 end
 
 // @ 0x00cdfea0
-bool FUN_00cdfea0(cCitizen* pMember)
+bool __stdcall FUN_00cdfea0(cCitizen* pMember)
 {
-    if (!pMember)
-        return false;
-    if (pMember->IsBusy())
-        return false;
-    if (pMember->mByte135 == 0)
-        return false;
-    if (pMember->mByteB5e != 0)
-        return false;
-    if ((pMember->mpAIFlags->mFlags1cc & 0x2000000) != 0)
-        return false;
-    return true;
+    return pMember != 0
+           && !((IBool11*)pMember)->IsBusy()
+           && pMember->mByte135 != 0
+           && pMember->mByteB5e == 0
+           && (pMember->mpAIFlags->mFlags1cc & 0x2000000) == 0;
 }
 
 // @ 0x00cdfef0
+// The node keeps its owner at +4, the owner keeps the plan data at +0x10 and the list host sits at +0x1d0 inside it.
 long double FUN_00cdfef0(int iNode, int iUnused1, int iUnused2, int iUnused3, void* pStimuli, bool* pbOut, int iUnused5, int* pParams)
 {
     if (pStimuli)
@@ -1210,8 +1209,10 @@ long double FUN_00cdfef0(int iNode, int iUnused1, int iUnused2, int iUnused3, vo
 
     *pbOut = true;
 
+    // retail reads the filter from the byte at +0x2d of the last parameter and stores the flag before walking iNode
+    int iFilter = *(int*)((char*)pParams + 0x2d);
     void* pObject = (void*)(*(int*)(*(int*)(iNode + 4) + 0x10) + 0x1d0);
-    void* pList = FUN_00d99420(pObject, pParams[0x2d / 4]);
+    void* pList = FUN_00d99420(pObject, iFilter);
     FUN_00d996e0(pList, pStimuli);
     return 1.0;
 }
@@ -1297,12 +1298,19 @@ void LoadTuning(cTribePlanConfiguration_s00cd_fea0* pThis)
 }
 
 // @ 0x00ce09b0
-long double FUN_00ce09b0()
+float FUN_00ce09b0(cTribePlannerContext* pContext)
 {
-    cOrderObject* pOrder = (cOrderObject*)FUN_00bca2c0();
+    // retail walks context -> planner -> order manager (thiscall) and tests the target variant
+    typedef cOrderObject* (__thiscall* FirstPendingFn)(void* pOrderManager);
+    cOrderObject* pOrder = ((FirstPendingFn)FUN_00bca2c0)(pContext->mpTribePlanner->mpOrderManager);
     if (!pOrder)
-        return 0.0;
-    return (VariantInt(&pOrder->mTargetVariant) == 3) ? 1.0 : 0.0;
+        return 0.0f;
+    // retail reads through GetUInt(): &g_defaultUInt for a variant that is not a uint
+    Variant* pValue = &pOrder->mTargetVariant;
+    unsigned uValue = g_defaultUInt;
+    if (pValue->mType == kVariantTypeUInt || pValue->mType == kVariantTypeNull)
+        uValue = VariantIsInline(*pValue) ? pValue->mValue.u : *(unsigned*)pValue->mValue.p;
+    return (uValue == 3) ? g_f_01485720 : 0.0f;
 }
 
 // @ 0x00ce0a20
@@ -1397,7 +1405,7 @@ int FUN_00ce0d90(char* pBegin, char* pEnd, char* pOut)
 }
 
 // @ 0x00ce0e00
-void FUN_00ce0e00(char* pBegin, char* pEnd)
+void __stdcall FUN_00ce0e00(char* pBegin, char* pEnd)
 {
     for (; pBegin < pEnd; pBegin += 0x58) {
         cTribePlanData* pData = (cTribePlanData*)pBegin;
@@ -1409,7 +1417,7 @@ void FUN_00ce0e00(char* pBegin, char* pEnd)
         }
         void* pBlock = pData->mWorkers.mpBegin;
         if (pBlock && *(int*)((char*)pBlock - 4) != 0)
-            operator_delete((char*)pBlock - 4);
+            operator_delete_array(pBlock);
     }
 }
 
@@ -1454,21 +1462,30 @@ int FUN_00ce0ed0(PlanTable* pTable, const PlanEntry* pOrder)
 }
 
 // @ 0x00ce0f70
+// erase is a thiscall member of the vector; the filter is Pass (0xcdfea0, thiscall, unused this)
+typedef void (__thiscall* EraseRangeThunk)(void* pVector, void* pBegin, void* pEnd);
+typedef bool (__stdcall* PassFn)(cCitizen* pMember);
+typedef bool (__thiscall* PassThunk)(void* pFilter, cCreature* pWorker);
 void __fastcall FUN_00ce0f70(cTribePlanData* pData)
 {
-    int** ppIter = (int**)&pData->mWorkers.mpBegin;
-    int** ppEnd = (int**)&pData->mWorkers.mpEnd;
-    if (ppIter != ppEnd) {
-        if (!FUN_00cdfea0((cCitizen*)*ppIter))
-            FUN_00cdff70((int***)&pData->mWorkers.mpBegin);
-        while (pData->mWorkers.mpBegin != pData->mWorkers.mpEnd) {
-            cCitizen* pWorker = (cCitizen*)*(int*)pData->mWorkers.mpBegin;
-            FUN_00bcaf40(pWorker);
-            ForceOrdersUpdate(pWorker);
-            FUN_00cdff70((int***)&pData->mWorkers.mpBegin);
-        }
+    // retail iterates a local WorkerIter (Init inlined: the filter check, then Advance in the loop) and erases
+    // every worker through the container at the end
+    typedef void (__thiscall* NounThunk)(void* pNoun);
+    WorkerList_s00ce_1390* pWorkers = (WorkerList_s00ce_1390*)&pData->mWorkers;
+    WorkerIter it;
+    it.mCur = pWorkers->mpBegin;
+    it.mEnd = pWorkers->mpEnd;
+    if (it.mCur != it.mEnd) {
+        if (!((PassThunk)(PassFn)FUN_00cdfea0)(&it.mFilter, *it.mCur))
+            it.Advance();
     }
-    EraseRange(pData->mWorkers.mpBegin, pData->mWorkers.mpEnd);
+    while (it.mCur != it.mEnd) {
+        cCreature* pWorker = *it.mCur;
+        ((NounThunk)FUN_00bcaf40)(pWorker->mpOrderManager);
+        ((NounThunk)ForceOrdersUpdate)(pWorker);
+        it.Advance();
+    }
+    ((EraseRangeThunk)FUN_00e25bd0)(pWorkers, pWorkers->mpBegin, pWorkers->mpEnd);
 }
 
 // @ 0x00ce0ff0
@@ -1488,55 +1505,64 @@ cPlanTimer* FUN_00ce0ff0(int iUnused, PlanTable* pTable, uint32_t uKey, uint32_t
     return pCreated;
 }
 
+// retail's plan-data lookup is a thiscall member of the planner; the timer restart is a plain cdecl call
+typedef PlanTableEntry* (__cdecl* RawGetPlanDataFn)(PlanTable*, uint32_t, uint32_t);
+typedef cTribePlanData* (__thiscall* GetPlanDataThunk)(void* pPlanner, uint32_t uPlanId, uint32_t uIndex);
+typedef cPlanTimer* (__cdecl* PlanTimerThunk)(void* pContext, uint32_t uPlanId, uint32_t uIndex, int iKind,
+                                              void* pTarget);
+
 // @ 0x00ce1060
-bool FUN_00ce1060(PlanTable* pTable, int iUnused1, int iUnused2, int iUnused3, uint32_t* pOut, cPlanRecord* pRecord)
+bool FUN_00ce1060(cTribePlannerContext* pContext, int iUnused1, int iUnused2, int iUnused3, int iUnused4,
+                  uint32_t* pOut, cPlanRecord* pRecord)
 {
     uint32_t uId = pRecord->mValue18;
     pOut[0] = uId;
     uint32_t uState = pRecord->mValue1c;
     pOut[1] = uState;
 
-    cTribePlanData* pData = (cTribePlanData*)FUN_00ce0e60(pTable, uId, uState);
+    cTribePlanData* pData = ((GetPlanDataThunk)(RawGetPlanDataFn)FUN_00ce0e60)(pContext->mpTribePlanner, uId, uState);
     if (!pData)
         return false;
 
-    EraseRange(pData->mWorkers.mpBegin, pData->mWorkers.mpEnd);
-    FUN_00ce0ff0((int)pTable, pTable, pOut[0], pOut[1], (int)pTable->mpEntries[pTable->mEntryIndex]);
+    FUN_00e25bd0(&pData->mWorkers, pData->mWorkers.mpBegin, pData->mWorkers.mpEnd);
+    ((PlanTimerThunk)FUN_00ce0ff0)(pContext, uId, uState, 2, pContext->mpTarget);
     return true;
 }
 
 // @ 0x00ce10c0
-bool FUN_00ce10c0(PlanTable* pTable, int iUnused1, int iUnused2, int iUnused3, uint32_t* pOut, cPlanRecord* pRecord)
+bool FUN_00ce10c0(cTribePlannerContext* pContext, int iUnused1, int iUnused2, int iUnused3, int iUnused4,
+                  uint32_t* pOut, cPlanRecord* pRecord)
 {
     uint32_t uId = pRecord->mValue18;
     pOut[0] = uId;
     uint32_t uState = pRecord->mValue1c;
     pOut[1] = uState;
-    pOut[2] = 0;
+    *(float*)&pOut[2] = 0.0f;
 
-    cTribePlanData* pData = (cTribePlanData*)FUN_00ce0e60(pTable, uId, uState);
+    cTribePlanData* pData = ((GetPlanDataThunk)(RawGetPlanDataFn)FUN_00ce0e60)(pContext->mpTribePlanner, uId, uState);
     if (!pData)
         return false;
 
-    FUN_00ce0ff0((int)pTable, pTable, uId, uState, 4);
-    EraseRange(pData->mWorkers.mpBegin, pData->mWorkers.mpEnd);
+    FUN_00e25bd0(&pData->mWorkers, pData->mWorkers.mpBegin, pData->mWorkers.mpEnd);
+    ((PlanTimerThunk)FUN_00ce0ff0)(pContext, uId, uState, 4, pContext->mpTarget);
     return true;
 }
 
 // @ 0x00ce1130
-bool FUN_00ce1130(PlanTable* pTable, int iUnused1, int iUnused2, int iUnused3, uint32_t* pOut, cPlanRecord* pRecord)
+bool FUN_00ce1130(cTribePlannerContext* pContext, int iUnused1, int iUnused2, int iUnused3, int iUnused4,
+                  uint32_t* pOut, cPlanRecord* pRecord)
 {
     uint32_t uId = pRecord->mValue18;
     pOut[0] = uId;
     uint32_t uState = pRecord->mValue1c;
     pOut[1] = uState;
-    pOut[2] = 0;
+    *(float*)&pOut[2] = 0.0f;
 
-    cTribePlanData* pData = (cTribePlanData*)FUN_00ce0e60(pTable, uId, uState);
+    cTribePlanData* pData = ((GetPlanDataThunk)(RawGetPlanDataFn)FUN_00ce0e60)(pContext->mpTribePlanner, uId, uState);
     if (!pData)
         return false;
 
-    FUN_00ce0ff0((int)pTable, pTable, uId, uState, 4);
+    ((PlanTimerThunk)FUN_00ce0ff0)(pContext, uId, uState, 4, pContext->mpTarget);
     return true;
 }
 
@@ -2817,8 +2843,12 @@ void* FUN_00ce4e10(void* pFirst, void* pLast, void* pDest)
 // @ 0x00ce4ed0
 cTribePlanner_s00ce_4e10::~cTribePlanner_s00ce_4e10()
 {
+    // the behavior-tree release is a thiscall with an unused this; the vector destroy is the stdcall helper 0xce2c70
+    // called with the vector as ecx (retail keeps only the two stack arguments)
+    typedef void (__thiscall* BtReleaseThunk)(void* pThis);
+    typedef void (__thiscall* DoDestroyThunk)(void* pVector, PlannerGroup* pFirst, PlannerGroup* pLast);
     if (mpBehaviorTreeData) {
-        FUN_00bcae90(mpBehaviorTreeData, 0);
+        ((BtReleaseThunk)FUN_00bcae90)(mpBehaviorTreeData);
         operator_delete_array(mpBehaviorTreeData);
     }
     if (mpTribe) {
@@ -2830,9 +2860,8 @@ cTribePlanner_s00ce_4e10::~cTribePlanner_s00ce_4e10()
         if (((int32_t*)pTimesBegin)[-1] != 0)
             operator_delete_array(pTimesBegin);
     }
-    PlannerGroupVector* pPlans = (PlannerGroupVector*)&mpPlansBegin;
-    pPlans->DoDestroyValues(mpPlansBegin, mpPlansEnd);
-    PlannerGroup_s00ce_4e10* pPlansBegin = pPlans->mpBegin;
+    ((DoDestroyThunk)FUN_00ce2c70)(&mpPlansBegin, (PlannerGroup*)mpPlansBegin, (PlannerGroup*)mpPlansEnd);
+    PlannerGroup_s00ce_4e10* pPlansBegin = mpPlansBegin;
     if (pPlansBegin)
         operator_delete_array(pPlansBegin);
 }

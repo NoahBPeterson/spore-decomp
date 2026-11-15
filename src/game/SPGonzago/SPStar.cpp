@@ -172,20 +172,23 @@ struct WString {
   void append(const wchar_t* text);              // 0x005c3d90
   void assign(const u16* first, const u16* last);  // 0x00423650
 };
-struct cString {                 // SP::cString
-  u16* mpBegin_00;
+struct cString {                 // SP::cString (retail size 0x14; stand-in has no destructor so the
+  u16* mpBegin_00;               //  caller runs the teardown explicitly, as retail does)
   u16* mpEnd_04;
   u16* mpCap_08;
-  cString(u32 table, u32 text, const wchar_t* def);  // 0x006b5770
-  const wchar_t* GetText();                          // 0x006b55c0
-  ~cString();                                        // 0x006b5240
+  u32  mPad_0c;
+  u32  mPad_10;
+  void ctor(u32 table, u32 text, const wchar_t* def);  // 0x006b5770
+  const wchar_t* GetText();                            // 0x006b55c0
+  void sub_6b5240();                                   // 0x006b5240  (retail ~cString)
 };
-struct cTextRef {                // SP::cTextRef (localized text reference)
+struct cTextRef {                // SP::cTextRef (localized text reference); retail size 0x10
   u16* mpBegin_00;
-  u16* mpEnd_04;
-  u16* mpCap_08;
-  cTextRef* Make(cTextRef* self, u32 key);       // 0x004010a0
+  u16* mField_04;
+  u16* mpEnd_08;
+  u16* mField_0c;
   WString*  GetString();                         // 0x005ecf80
+  cTextRef* Make(cTextRef* self, u32 key);       // 0x004010a0
 };
 struct cStar {
   void**     mpVtbl_00;          // 0x00
@@ -284,7 +287,11 @@ struct cStar_s00c8_aa60 {
     cStar_s00c8_aa60();
     bool Read(int param);        // 0x00c8b3e0
 };
-struct cSolarSystem { char pad[0x54]; };
+struct cSolarSystem {
+    char pad[0x54];
+    cSolarSystem* ctor();            // thiscall, returns this in eax
+    void sub_c86760(void* owner);    // 0x00c86760
+};
 struct Owner40 {
     char pad_00[0x40];
     cSolarSystem* mpSolar;       // +0x40
@@ -467,14 +474,14 @@ void Owner40::sub_b700()
 {
     if (mpSolar) return;
     void* p = operator_new(0x54, "Simulator/cSolarSystem", 0, 0, 0, 0);
-    cSolarSystem* n = p ? (cSolarSystem*)cSolarSystem_ctor(p) : 0;
+    cSolarSystem* n = p ? ((cSolarSystem*)p)->ctor() : 0;
     cSolarSystem* old = mpSolar;
     if (n != old) {
         if (n) ((void(__thiscall*)(void*))(*(void***)n)[4 / 4])(n);
         mpSolar = n;
         if (old) ((void(__thiscall*)(void*))(*(void***)old)[8 / 4])(old);
     }
-    sub_c86760(this);
+    mpSolar->sub_c86760(this);
 }
 
 // @ 0x00c8b790
@@ -505,7 +512,7 @@ void Obj48::sub_b7d0()
 bool Obj48::sub_b7e0()
 {
     int k = mp48->sub_801920();
-    if (k != 0) { unsigned int v = (unsigned int)(k - 7); return v <= 5u; }
+    if (k != 0) { unsigned int v = (unsigned int)(k - 7); bool r = v <= 5u; return r; }
     return false;
 }
 
@@ -513,7 +520,7 @@ bool Obj48::sub_b7e0()
 bool Obj48::sub_b800()
 {
     int k = mp48->sub_801920();
-    if (k != 0) { unsigned int v = (unsigned int)(k - 1); return v > 2u; }
+    if (k != 0) { unsigned int v = (unsigned int)(k - 1); bool r = v > 2u; return r; }
     return false;
 }
 
@@ -758,19 +765,18 @@ float FUN_00c8bee0(FloatMap* map, s32 count, s32* outKey)
 // @ 0x00c8bff0
 void SP_GenerateNewStarName(cStar* star)
 {
+  cTextRef ref;    // case 2
+  cTextRef ref2;   // cases 3..12
+  cString  text;   // case 1
+  // (a `text.ctor(...)` call on the stack stand-in instead of a real C++ constructor lets the explicit
+  //  teardown call run, so the frame has no MSVC 2008 /EHsc object-state cookie, as in the original)
   switch (star->GetNameKind()) {
-  case 1: {
-    cString text(0x2db6dad3, 0x591bd91, 0);
-    star->mName_60.append(text.GetText());
-    text.~cString();
-    return;
-  }
   case 2: {
-    cTextRef ref;
     WString* name = ref.Make(&ref, 0xdeb2d943)->GetString();
     if (name != &star->mName_60)
       star->mName_60.assign(name->mpBegin_00, name->mpEnd_04);
-    if ((((u32)ref.mpEnd_04 - (u32)ref.mpBegin_00) & ~1u) > 2 && ref.mpBegin_00)
+    int n = (int)((u32)ref.mpEnd_08 - (u32)ref.mpBegin_00);
+    if ((n & ~1) > 2 && ref.mpBegin_00)
       operator_delete_array(ref.mpBegin_00);
     return;
   }
@@ -784,12 +790,18 @@ void SP_GenerateNewStarName(cStar* star)
   case 10:
   case 11:
   case 12: {
-    cTextRef ref;
-    WString* name = ref.Make(&ref, 0x7cab064c)->GetString();
+    WString* name = ref2.Make(&ref2, 0x7cab064c)->GetString();
     if (name != &star->mName_60)
       star->mName_60.assign(name->mpBegin_00, name->mpEnd_04);
-    if ((((u32)ref.mpEnd_04 - (u32)ref.mpBegin_00) & ~1u) > 2 && ref.mpBegin_00)
-      operator_delete_array(ref.mpBegin_00);
+    int n = (int)((u32)ref2.mpEnd_08 - (u32)ref2.mpBegin_00);
+    if ((n & ~1) > 2 && ref2.mpBegin_00)
+      operator_delete_array(ref2.mpBegin_00);
+    return;
+  }
+  case 1: {
+    text.ctor(0x2db6dad3, 0x591bd91, 0);
+    star->mName_60.append(text.GetText());
+    text.sub_6b5240();
     return;
   }
   }

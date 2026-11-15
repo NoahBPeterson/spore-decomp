@@ -399,13 +399,26 @@ struct AutoRefStrategy {
 struct IStream { virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
     virtual void v04(); virtual void v05(); virtual void* v06(); virtual void v07(); virtual void* v08();
     virtual void v09(); virtual void v10(); virtual void v11(); virtual void v12(); };
+// Field-description table (cDataSerializerGeneric, 0x3c bytes each) that 0x00692f90 walks; 0x015b6d4c holds the
+// list of field descriptions the serializer writes (mpWriteFunc at +0x00, mpReadFunc at +0x04, and fields further
+// on) terminated by a null mpWriteFunc.
+struct cDataSerializerGeneric {
+    void* mpWriteFunc;                                                    // +0x00
+    void* mpReadFunc;                                                     // +0x04
+    void* mpAccessFunc;                                                   // +0x08
+    void* mpUnloadFunc;                                                   // +0x0c
+    void* mpBinderContext;                                                // +0x10
+    const char* mpStaticFieldName;                                        // +0x14
+    unsigned mId;                                                         // +0x18
+    unsigned char pad1c[0x20];
+};
 struct cVarListSerializer {
     unsigned char mData[0xa14];
-    cVarListSerializer(void* owner, const char* name, unsigned id);       // 0x00692f90
-    void Serialize(void* stream);                                         // 0x00692900
+    cVarListSerializer(void* owner, cDataSerializerGeneric* list, unsigned sig);  // 0x00692f90
+    int Serialize(IStream* stream);                                       // 0x00692900
 };
 void EA_IO_WriteUint32(void* stream, void* buf, int count, int flags);   // 0x0093aa70
-extern const char g_sFieldName_015b6d4c[];                                // 0x015b6d4c
+extern cDataSerializerGeneric g_sFieldList_015b6d4c;                       // 0x015b6d4c
 
 struct cSPSimulatorWalkAround : cGonzagoSimulator {
     unsigned char   mIsWalkingAround;                                     // +0x10
@@ -458,7 +471,7 @@ void cSPSimulatorWalkAround::Write(IStream* s)
     unsigned v = 0x2f404e9u;
     void* b = a->v06();
     EA_IO_WriteUint32(b, &v, 1, 0);
-    cVarListSerializer ser((void*)((char*)this - 8), g_sFieldName_015b6d4c, 0x1a80d26u);
+    cVarListSerializer ser((void*)((char*)this - 8), &g_sFieldList_015b6d4c, 0x1a80d26u);
     ser.Serialize(s);
 }
 

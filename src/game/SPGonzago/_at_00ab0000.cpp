@@ -479,22 +479,27 @@ cInteraction* cInteractionStack::FindActive()
 {
     tBlockVector4& vec = mObjects;
     cInteraction** pSlot = vec.mpEnd;
-    while (pSlot != vec.mpBegin)
+    cInteraction** pBegin = vec.mpBegin;
+    cInteraction** pLastBlock = vec.mpLastBlock;
+    cInteraction*** pLastSlot = vec.mpLastBlockSlot;
+    while (pSlot != pBegin)
     {
-        cInteraction** pBlockEnd = vec.mpLastBlockEnd;
-        cInteraction*** ppLastSlot = vec.mpLastBlockSlot;
+        cInteraction** pLastBlockEnd = vec.mpLastBlockEnd;
         cInteraction** pCur = pSlot;
-        if (pCur == vec.mpLastBlock)
-            pCur = ppLastSlot[-1] + 64;
+        if (pCur == pLastBlock)
+            pCur = pLastSlot[-1] + 64;
         cInteraction* pObject = pCur[-1];
-        if (pObject->mn6c != 0)
+        if (pObject->mn6c == 0)
             return pObject;
-        if (pSlot == vec.mpLastBlock)
+        if (pSlot == pLastBlock)
         {
-            vec.mpLastBlock = ppLastSlot[-1];
-            vec.mpLastBlockSlot = ppLastSlot - 1;
-            vec.mpLastBlockEnd = vec.mpLastBlock + 64;
-            pSlot = vec.mpLastBlockEnd;
+            pLastBlock = pLastSlot[-1];
+            pLastSlot = pLastSlot - 1;
+            vec.mpLastBlock = pLastBlock;
+            vec.mpLastBlockSlot = pLastSlot;
+            pLastBlockEnd = pLastBlock + 64;
+            vec.mpLastBlockEnd = pLastBlockEnd;
+            pSlot = pLastBlockEnd;
         }
         --pSlot;
     }

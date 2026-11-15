@@ -15,16 +15,25 @@ struct WStr {
 struct Owner { void Destroy(); };
 
 // @ 0x004fddb0
+static __inline const float& ElemAt(const float* p, int i)
+{
+    return p[i];
+}
+
 int MaxIndex(const float* p)
 {
-    if (p[0] <= p[1]) {
-        if (p[1] <= p[2])
+    if (ElemAt(p, 0) > ElemAt(p, 1)) {
+        if (ElemAt(p, 0) > ElemAt(p, 2)) {
+            return 0;
+        } else {
             return 2;
-        return 1;
+        }
     } else {
-        if (p[0] <= p[2])
+        if (ElemAt(p, 1) > ElemAt(p, 2)) {
+            return 1;
+        } else {
             return 2;
-        return 0;
+        }
     }
 }
 

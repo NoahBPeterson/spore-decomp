@@ -85,6 +85,39 @@ struct RandomState {
 }
 namespace SP {
 namespace Audio {
+// eastl::hashtable_iterator<...>: the node and the bucket it was found in.  begin() scans forward
+// to the first non-empty bucket; operator++ walks the chain and then the next non-empty bucket.
+// Both loops end at the node stored one past the bucket array (mpBucketArray[mnBucketCount]).
+struct ChannelIterator {
+    ChannelNode* mpNode;
+    ChannelNode** mpBucket;
+    ChannelIterator() {}
+    ChannelIterator(ChannelNode* n, ChannelNode** b) : mpNode(n), mpBucket(b) {}
+    ChannelIterator(ChannelNode** b) : mpNode(*b), mpBucket(b) {}
+    void increment_bucket() {                       // eastl::hashtable_iterator_base::increment_bucket
+        ++mpBucket;
+        while (*mpBucket == 0)
+            ++mpBucket;
+        mpNode = *mpBucket;
+    }
+    ChannelIterator& operator++() {
+        mpNode = mpNode->mpNext;
+        while (mpNode == 0) {
+            ++mpBucket;
+            mpNode = *mpBucket;
+        }
+        return *this;
+    }
+};
+}
+}
+namespace SP {
+namespace Audio {
+inline bool operator!=(const ChannelIterator& a, const ChannelIterator& b) { return a.mpNode != b.mpNode; }
+}
+}
+namespace SP {
+namespace Audio {
 struct ChannelMap {
     void* mpVtable;                 // +0x00
     ChannelNode** mpBucketArray;    // +0x04
@@ -93,6 +126,16 @@ struct ChannelMap {
     char mAllocator[0x10];          // +0x10
 
     void FreeNodes(ChannelNode** buckets, uint32_t count);   // 0x00693230
+    void find(void** out, const uint32_t* key);              // 0x00645ed0 (thiscall, ret 8)
+
+    ChannelIterator begin() {
+        ChannelIterator it(mpBucketArray);
+        if (it.mpNode == 0)
+            it.increment_bucket();
+        return it;
+    }
+    ChannelIterator end() { return ChannelIterator(mpBucketArray + mnBucketCount); }
+
     ChannelNode* FindNode(uint32_t key);
     ChannelNode* InsertNode(uint32_t key);
 };
@@ -149,7 +192,7 @@ namespace Audio {
 class cNPCCityMusicManager {
 public:
     void ClearChannelMaps();                            // 0x00eab520
-    ChannelNode* AcquireChannel(uint32_t id);           // 0x00eab560
+    uint32_t AcquireChannel(uint32_t id);               // 0x00eab560
     void AddChannelRef(uint32_t id, void* key);         // 0x00eab650
     void ReleaseChannel(uint32_t id, void* key);        // 0x00eab690
     void InitGonzagoSubsystem();                        // 0x00eab6e0
@@ -206,29 +249,26 @@ void cNPCCityMusicManager::ClearChannelMaps()
 
 // @ 0x00eab560
 namespace SP { namespace Audio {
-ChannelNode* cNPCCityMusicManager::AcquireChannel(uint32_t id)
+uint32_t cNPCCityMusicManager::AcquireChannel(uint32_t id)
 {
     ChannelMap& map = mChannels[id];
     int best = 0x7fffffff;
     int ties = 0;
-    for (uint32_t bucket = 0; bucket < map.mnBucketCount; ++bucket) {
-        for (ChannelNode* node = map.mpBucketArray[bucket]; node; node = node->mpNext) {
-            int count = node->mRefCount;
-            if (count == best) {
-                ++ties;
-            } else if (count < best) {
-                best = count;
-                ties = 1;
-            }
+    for (ChannelIterator it = map.begin(), e = map.end(); it != e; ++it) {
+        int count = it.mpNode->mRefCount;
+        if (count == best) {
+            ++ties;
+        } else if (count < best) {
+            best = count;
+            ties = 1;
         }
     }
     uint32_t pick = mRandom.Range((uint32_t)ties);
-    for (uint32_t bucket = 0; bucket < map.mnBucketCount; ++bucket) {
-        for (ChannelNode* node = map.mpBucketArray[bucket]; node; node = node->mpNext) {
-            if (node->mRefCount == best) {
-                if (pick == 0)
-                    return node;
-                --pick;
+    for (ChannelIterator it = map.begin(), e = map.end(); it != e; ++it) {
+        if (it.mpNode->mRefCount == best) {
+            if (pick-- == 0) {
+                ++it.mpNode->mRefCount;
+                return it.mpNode->mKey;
             }
         }
     }
@@ -240,12 +280,13 @@ ChannelNode* cNPCCityMusicManager::AcquireChannel(uint32_t id)
 namespace SP { namespace Audio {
 void cNPCCityMusicManager::AddChannelRef(uint32_t id, void* key)
 {
+    if (id == 0xffffffffu)
+        return;
     ChannelMap& map = mChannels[id];
-    uint32_t value = (uint32_t)key;
-    ChannelNode* node = map.FindNode(value);
-    if (!node)
-        node = map.InsertNode(value);
-    ++node->mRefCount;
+    ChannelIterator it;
+    map.find((void**)&it, (const uint32_t*)&key);
+    if (map.mpBucketArray[map.mnBucketCount] != it.mpNode)
+        ++it.mpNode->mRefCount;
 }
 }}  // namespace SP::Audio
 
@@ -253,9 +294,16 @@ void cNPCCityMusicManager::AddChannelRef(uint32_t id, void* key)
 namespace SP { namespace Audio {
 void cNPCCityMusicManager::ReleaseChannel(uint32_t id, void* key)
 {
-    ChannelNode* node = mChannels[id].FindNode((uint32_t)key);
-    if (node && node->mRefCount > 0)
-        --node->mRefCount;
+    if (id == 0xffffffffu)
+        return;
+    ChannelMap& map = mChannels[id];
+    ChannelIterator it;
+    map.find((void**)&it, (const uint32_t*)&key);
+    if (map.mpBucketArray[map.mnBucketCount] != it.mpNode) {
+        int count = it.mpNode->mRefCount;
+        if (count > 0)
+            it.mpNode->mRefCount = count - 1;
+    }
 }
 }}  // namespace SP::Audio
 

@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "sse_helpers.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  __fastcall FUN_00fb7b30(void* self, int dummy);                    // 0x00fb7b30 QuadSetSplit
@@ -59,6 +60,14 @@ virtual void v3();
 virtual void v4();
 virtual void v5();
     virtual void m(int a);
+};
+struct CPlanetModel { void UpdateMinimap(int x, int y, int z); };  // 0x00b8c330
+struct CTriggerImpl {                                       // object embedded at TriggerMgr+4
+    virtual void v0();  virtual void v1();  virtual void v2();  virtual void v3();
+    virtual void v4();  virtual void v5();  virtual void v6();  virtual void v7();
+    virtual void v8();  virtual void v9();  virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13();
+    virtual void Update(int a, int b);                      // +0x38
 };
 struct B0    { void FUN_00ad7df0(); };
 struct B1    { int FUN_00b26710(); };
@@ -118,11 +127,11 @@ bool cGameCinematicsAppMode::OnKeyDown(int k, int v)
 namespace SP {
 void cGameCinematicsAppMode::HandleSimulationUpdate(float a, float b)
 {
-    int iVar1 = (int)(b * 1000.0f);
-    int iVar2 = FUN_00b3d4d0();
-    (*(void(**)(int,int))(*(int*)(iVar2 + 4) + 0x38))(iVar1, (int)(a * 1000.0f));
-    int* p = (int*)FUN_00b3d350(iVar1, 0, 0);
-    (*(void(**)(void))(*p + 0x38))();
+    int iVar1 = SseRoundToInt(b * 1000.0f);
+    int iVar2 = SseRoundToInt(a * 1000.0f);
+    int trigger = FUN_00b3d4d0();
+    ((CTriggerImpl*)(trigger + 4))->Update(iVar1, iVar2);
+    ((CPlanetModel*)PLANETMODEL())->UpdateMinimap(iVar1, 0, 0);
 }
 }  // namespace SP
 

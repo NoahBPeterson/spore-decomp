@@ -945,13 +945,13 @@ namespace G7
     G7NOINLINE void __stdcall EraseIt(Node** out, Node* it)
     {
         it = it->pNext;
+        *out = it;
         Node* node = it->pPrev;
         node->pPrev->pNext = node->pNext;
         node->pNext->pPrev = node->pPrev;
         if (node->pObj)
             ObjRelease(node->pObj);
         operator delete[](node);
-        *out = it;
     }
 
 // @ 0x00ba2110

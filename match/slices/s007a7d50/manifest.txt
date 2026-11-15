@@ -9,3 +9,4 @@ slices/s007a7d50/s007a7d50.cpp  ?SetFontSize@cTextRenderer@@QAEXM@Z  007a85a0  /
 slices/s007a7d50/s007a7d50.cpp  ?ScalarDelete@TextRenderWare@@QAEPAXE@Z  007a88b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s007a7d50/s007a7d50.cpp  ?SetColor@cTextRenderer@@QAEXPBM@Z  007a85e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s007a7d50/s007a7d50.cpp  ?SetStyleScale@cTextRenderer@@QAEXM@Z  007a82d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007a7d50/s007a7d50.cpp  ?FreeDevice@cTextRenderer@@QAE_NPAX@Z  007a8700  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

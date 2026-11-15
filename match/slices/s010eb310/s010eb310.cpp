@@ -350,18 +350,20 @@ struct hkCollisionDispatcher::Agent3Funcs
 // @ 0x010ebb30
 void hkAgent3Bridge::registerBridgeAgent3(hkCollisionDispatcher* dispatcher)
 {
-	hkCollisionDispatcher::Agent3Funcs funcs = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, hkBool(false), hkBool(false) };
-	funcs.m_createFunc = &hkAgent3Bridge::create;
-	funcs.m_destroyFunc = &hkAgent3Bridge::destroy;
+	// The assignment order matters: cc1 13.10 emits the stores in this order, and the retail build has it.
+	hkCollisionDispatcher::Agent3Funcs funcs;
+	funcs.m_reserved = hkBool(false);
+	funcs.m_sepNormalFunc = 0;
 	funcs.m_cleanupFunc = 0;
-	funcs.m_removePointFunc = &hkAgent3Bridge::removePoint;
 	funcs.m_commitPotentialFunc = &hkAgent3Bridge::commitPotential;
 	funcs.m_createZombieFunc = &hkAgent3Bridge::createZombie;
+	funcs.m_removePointFunc = &hkAgent3Bridge::removePoint;
+	funcs.m_createFunc = &hkAgent3Bridge::create;
+	funcs.m_processFunc = &hkAgent3Bridge::process;
+	funcs.m_destroyFunc = &hkAgent3Bridge::destroy;
 	funcs.m_updateFilterFunc = &hkAgent3Bridge::updateFilter;
 	funcs.m_invalidateTimFunc = &hkAgent3Bridge::invalidateTim;
 	funcs.m_warpTimeFunc = &hkAgent3Bridge::warpTime;
-	funcs.m_sepNormalFunc = 0;
-	funcs.m_processFunc = &hkAgent3Bridge::process;
 	funcs.m_isPredictive = hkBool(true);
 	dispatcher->registerAgent3(funcs, -1, -1);
 }

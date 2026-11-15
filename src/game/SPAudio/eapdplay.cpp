@@ -192,6 +192,8 @@ class Play { public:
     void StartVoice(void* a1, void* a2, float t);
     void ParamEvent(Symbol key, ParamPair* atom);
     unsigned GetParam(void* outAtom, Symbol key);
+
+    static Symbol sPlayLocation;   // 0x1675554 (the group location last selected)
 };
 }
 }
@@ -314,6 +316,27 @@ namespace EA {
 namespace Audio {
 namespace Eapd {
 inline bool operator==(const PgSymbol& a, const PgSymbol& b) { return a.mHash == b.mHash; }
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+// the instance's group table (ObjectHashMap::GetGroup, 0xa64cb0): thiscall, the symbol passed by value
+class ObjectHashMap { public:
+    void* GetGroup(PgSymbol sym);        // 0xa64cb0
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+// a group object: thiscall, the sample/location written through the out pointer
+class PgGroup { public:
+    void* Sample(void* out, unsigned idx);     // 0xa52bc0
+    void* Location(void* out);                 // 0xa529c0
+};
 }
 }
 }
@@ -853,15 +876,17 @@ void Play_s00a5_3f90::Start(float time)
 namespace EA { namespace Audio { namespace Eapd {
 void Play_s00a5_3f90::StartSelect(unsigned group, float time)
 {
-    void* g = Instance_GetGroup(mInstance, mName.mHash, mName.mpName);
+    void* g = ((ObjectHashMap*)mInstance)->GetGroup(mName);
     if (!g)
         return;
-    PgSymbol sample = *(PgSymbol*)Group_Sample(&sample, g, group);
+    Symbol sample;
+    ((PgGroup*)g)->Sample(&sample, group);
     if (sample.mHash == gEmptySymbol.mHash)
         return;
-    PgSymbol loc = *(PgSymbol*)Group_Location(&loc, g);
-    gPlaySymbol = loc;
-    Play_Dispatch(mpObject, sample.mHash, sample.mpName, time);
+    Symbol loc;
+    Symbol* lp = (Symbol*)((PgGroup*)g)->Location(&loc);
+    Play::sPlayLocation = *lp;
+    ((Play*)this)->StartVoice((void*)sample.mHash, (void*)sample.mpName, time);
     mnLastGroupID = group;
 }
 }}}  // namespace EA::Audio::Eapd

@@ -7,6 +7,8 @@
 // Absolute data addresses are accessed through reinterpret_cast<T*>(0x...),
 // matching the convention used elsewhere in this project.
 
+#include <intrin.h>
+
 typedef unsigned char  uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int   uint32_t;
@@ -322,25 +324,25 @@ void SimSavedGameHandler2(void* p)
 // ===========================================================================
 // @ 0x00b274e0  factory: allocate + construct a 0x68-byte saved-game header
 // ===========================================================================
-void* CreateSavedGameHeader()
+void* __stdcall CreateSavedGameHeader(int, int)
 {
     uint8_t* o = (uint8_t*)EAAllocate(0x68, (const char*)0x0145fb0c, 0, 0, 0, 0);
     if (o != 0) {
         *(uint32_t*)(o + 8) = 0;
-        *(void**)(o + 4) = (void*)0x013ec458;
+        *(void* volatile*)(o + 4) = (void*)0x013ec458;
         *(void**)(o) = (void*)0x0145faa8;
         *(void**)(o + 4) = (void*)0x0145fa98;
+        _ReadWriteBarrier();
 
         uint8_t* c = o + 0x18;
-        uint32_t z = 0;
-        *(uint32_t*)(c + 4) = z;
-        *(uint32_t*)(c + 8) = z;
-        *(uint32_t*)(c + 0xc) = z;
+        struct Zero12 { uint32_t a, b, d; };
+        *(Zero12*)(c + 4) = Zero12();
         *(uint32_t*)(o + 0x20) = 0;
         o[0x24] = 0;
         *(uint32_t*)(o + 0x28) = 0;
         *(uint32_t*)(c) = (uint32_t)(int)c;
         *(uint32_t*)(o + 0x1c) = (uint32_t)(int)c;
+        _ReadWriteBarrier();
         *(uint32_t*)(o + 0x5c) = 0;
         *(uint32_t*)(o + 0x60) = 0;
         *(uint32_t*)(o + 0x64) = 0;
