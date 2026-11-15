@@ -1,5 +1,4 @@
 # va diff reason
-007fbbc0 8 initialiser — complete; local-name slot assignment for the two sub-object pointers and the 4-iteration slot loop differs
 007fbf40 205 cSPUIBehaviorEventBase ctor — complete (sub-object ctor, 7 vtable stores, string ctor, two 4-slot clear loops); the eastl string tag temporary and helper frames differ
 007fc200 13 cSPUIBehaviorEventBase dtor — complete; the inlined Release/RemoveAll/FreeBuffer helpers leave four extra reserved frame slots in the original [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp]
 007fc2a0 10 UI::BehaviorMessage ctor — complete; one reserved frame slot (inlined base ctor) missing [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
