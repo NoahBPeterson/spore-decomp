@@ -718,6 +718,10 @@ struct cItemRange {
 };
 }
 namespace SP {
+struct cDeliveryItemRange {
+    tItemInfo* mpBegin;
+    tItemInfo* mpEnd;
+};
 struct cPickupRange {
     tPickupInfo*  mpBegin;                                 // +0x00
     tPickupInfo*  mpEnd;                                   // +0x04
@@ -728,6 +732,7 @@ bool __cdecl EA_WriteUint32(void* pStream, const void* pValue, int32_t count, in
 }
 namespace SP {
 IArchiver& __cdecl operator<<(IArchiver& archiver, const tItemInfo_s00c5_7570& item);             // 0x00c56e60
+IArchiver& __cdecl operator<<(IArchiver& archiver, const tItemInfo& item); // 0x00c56e60
 IArchiver& __cdecl operator<<(IArchiver& archiver, const tPickupInfo& item);                      // 0x00c56e00
 inline uint32_t EA_STLSequenceCount(const cItemRange* pRange)
 {
@@ -1168,14 +1173,24 @@ void cSPMissionMultiDelivery_s00c5_62b0::SetItemPropertyList()
 }
 }  // namespace SP
 
+namespace SP {
+inline void WriteItemSequenceCount(IArchiveWriter* writer, uint32_t count)
+{
+    void* stream = writer->GetStream();
+    EA_WriteUint32(stream, &count, 1, 0);
+}
+}
+
 // @ 0x00c57570
 namespace SP {
-void __cdecl WriteSTLSequence_tItemInfo(IArchiver* pArchiver, cItemRange* pRange)
+void __cdecl WriteSTLSequence_tItemInfo(IArchiver* pArchiver, cDeliveryItemRange* pRange)
 {
-    uint32_t count = EA_STLSequenceCount(pRange);
-    EA_WriteUint32(pArchiver->GetWriter()->GetStream(), &count, 1, 0);
-    tItemInfo_s00c5_7570* pEnd = pRange->mpEnd;
-    for (tItemInfo_s00c5_7570* p = pRange->mpBegin; p != pEnd; ++p)
+    uint32_t itemCount = ((char*)pRange->mpEnd - (char*)pRange->mpBegin) / (int)sizeof(tItemInfo);
+    IArchiveWriter* writer = pArchiver->GetWriter();
+    WriteItemSequenceCount(writer, itemCount);
+    tItemInfo* p = pRange->mpBegin;
+    tItemInfo* pEnd = pRange->mpEnd;
+    for (; p != pEnd; ++p)
         operator<<(*pArchiver, *p);
     pArchiver->EndRead();
 }

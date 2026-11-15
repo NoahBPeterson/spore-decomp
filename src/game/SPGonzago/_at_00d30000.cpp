@@ -263,19 +263,19 @@ int HashTable::Erase(u32* key)
 // @ 0x00d38080
 void** X_FUN_00d38080(void** first, void** last, void** value)
 {
-    if (first == last)
-        return first;
-
-    void* v = *value;
-    do
-    {
-        if (*first == v)
-            break;
-        ++first;
-    } while (first != last);
-
     if (first != last)
-        return (void**)X_FUN_00b6f4f0(first + 1, last, first, value);
+    {
+        void* v = *value;
+        do
+        {
+            if (*first == v)
+                break;
+            ++first;
+        } while (first != last);
+
+        if (first != last)
+            return (void**)X_FUN_00b6f4f0(first + 1, last, first, value);
+    }
     return first;
 }
 

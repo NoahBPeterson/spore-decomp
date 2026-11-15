@@ -90,13 +90,19 @@ void* Sub_41DCA0(void* out, void* table, const float* key);  // 0041DCA0
 }
 // ---- items of slice s0043a460 end
 
+template<int N> inline void ReserveBlockLengthInlineFrame()
+{
+    // Preserve the original unused inline-callee storage in these /Od wrappers.
+    uint32_t slots[N];
+}
+
 // @ 0x0043a460
 namespace SP {
 float cSPEditorBlock_s0043_a460::Length1()
 {
     Vec3 v;
-    GetVec1(&v);
-    return VectorLength(&v);
+    ReserveBlockLengthInlineFrame<7>();
+    return VectorLength(GetVec1(&v));
 }
 }  // namespace SP
 
@@ -120,8 +126,8 @@ namespace SP {
 float cSPEditorBlock_s0043_a460::Length2()
 {
     Vec3 v;
-    GetVec2(&v);
-    return VectorLength(&v);
+    ReserveBlockLengthInlineFrame<7>();
+    return VectorLength(GetVec2(&v));
 }
 }  // namespace SP
 
