@@ -1,6 +1,6 @@
-00e00760 SP::cSPUIGlobalUIRootWinProc::ShowContextSporepedia  # context sporepedia
-00e008e0 SP::cSPUIGlobalUIRootWinProc::cSPUIGlobalUIRootWinProc  # manager ctor
-00e00970 SP::cSPUIGlobalUIRootWinProc::~cSPUIGlobalUIRootWinProc  # manager dtor
+00e00760 ?ShowContextSporepedia@CtxObj@@QAEXPAX@Z  # CtxObj::ShowContextSporepedia migrated from s00e00760 (verbatim, slice spelling)
+00e008e0 ?Ctor@MgrObj@@QAEPAXXZ  # MgrObj::Ctor migrated from s00e00760 (verbatim, slice spelling)
+00e00970 ?Dtor@MgrObj@@QAEXXZ  # MgrObj::Dtor migrated from s00e00760 (verbatim, slice spelling)
 00e009f0 ?on_ban_content_button@@YAXXZ  # on_ban_content_button migrated from s00e00760 (verbatim, slice spelling)
 00e00a40 ?IsGameModeAllowed@@YADXZ  # IsGameModeAllowed migrated from s00e00760 (verbatim, slice spelling)
 00e00aa0 ?MenuKind@@YAHXZ  # MenuKind migrated from s00e00760 (verbatim, slice spelling)

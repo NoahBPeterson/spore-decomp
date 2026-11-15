@@ -1,1 +1,6 @@
-00df6db0 cGameUIData::SetUIState  # PDB name; switch on UI state 1..5 toggling windows by id, KillSetiEffects, planet/creature panel fill in state 1
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s00df6db0, named from the dev publics; slice address comment)
+00df6db0 ?SetUIState@cGameUIData@?A0x61b0d455@@QAE_NH@Z  # SetUIState migrated from s00df6db0 (verbatim, slice spelling)
+00df76c0 ?SetLayout@cGameUIData@?A0x61b0d455@@QAE_NPB_WPAX@Z  # SetLayout migrated from s00df6db0 (verbatim, slice spelling)
+00df7830 ?DoMessage@cGalaxyGameEntryImpl_s00df_6db0@@QAE_NIPAUcMessage@@@Z  # cGalaxyGameEntryImpl_s00df_6db0::DoMessage migrated from s00df6db0 (verbatim, slice spelling)
+00df7af0 ?SetPendingGame@cGalaxyGameEntryImpl_s00df_6db0@@QAEXPAVcGalaxyGameEntry@@D@Z  # cGalaxyGameEntryImpl_s00df_6db0::SetPendingGame migrated from s00df6db0 (verbatim, slice spelling)
+00df7c20 ?SetDisplayedEntry@cGalaxyGameEntryImpl_s00df_6db0@@QAEXPAVcGalaxyGameEntry@@@Z  # cGalaxyGameEntryImpl_s00df_6db0::SetDisplayedEntry migrated from s00df6db0 (verbatim, slice spelling)
