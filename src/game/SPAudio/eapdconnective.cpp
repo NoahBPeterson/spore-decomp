@@ -1283,8 +1283,9 @@ void* pdsymbol_new(uint32_t a, uint32_t b, uint32_t c)
     {
         PdPayload* p = (PdPayload*)((char*)o + 0x28);
         p->at28 = b;
+        _ReadWriteBarrier();
         p->at2c = c;
-        EA::Audio::Eapd::outlet_new(o, g_gSymbolSymbol.s_name, g_gSymbolSymbol2);
+        EA::Audio::Eapd::outlet_new(o, g_gSymbolSymbol.s_name, g_gSymbolSymbol.s_name2);
         EA::Audio::Eapd::symbolinlet_new(o, (char*)o + 0x28);
         g_gpNewestObject = o;
     }

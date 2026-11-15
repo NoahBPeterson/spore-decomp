@@ -26,7 +26,6 @@
 00a59b00  pdfloat_new2        UNSUP  float constructor (explicit creator)
 00a59b50  FUN_00a59b50        ART    float handler; FAIL is a live-register/callee artifact
 00a59bb0  pdfloat_setup       UNSUP  pdfloat class registration
-00a59c50  pdsymbol_new        UNSUP  symbol constructor (pd_new + outlet_new + symbolinlet_new)
 00a59cc0  pdsymbol_anything   ART    symbol/anything handler; calls outlet_symbol
 00a59cf0  pdsymbol_setup      UNSUP  pdsymbol class registration
 00a59dc0  bang_setup          UNSUP  bang class registration (7-arg class_new)
