@@ -125,7 +125,6 @@ struct cGameData {
     void Write(void* stream);      // 0x00b18590  (external)
     void Read(void* stream);       // 0x00b18600  (external)
 };
-void* __stdcall FUN_00b18460(int tag);              // 0x00b18460  tag cast helper
 void* __cdecl FUN_0059aed0(float* out, const float* def, void* m); // 0x0059aed0
 int   __cdecl WriteUint32(void* s, const void* p, int n, int f);   // 0x0093aa70
 int   __cdecl ReadInt32(void* s, void* p, int n, int f);           // 0x0093a780
@@ -181,7 +180,6 @@ struct cRotationObj {
     void*     mp_130;             // +0x130
 };
 struct cRotationBall : cRotationObj {
-    void* Cast(int tag);
     char  Write(void* stream);
     char  Read(void* stream);
     void* GetDefaultVec();
@@ -197,7 +195,6 @@ struct cRotationBall : cRotationObj {
     void  GetWorldPos(float* out);
 };
 struct cRotationRing : cRotationObj {
-    void* Cast(int tag);
     char  Write(void* stream);
     void* GetDefaultVec2();
     void* SetThing6c(void* v);
@@ -327,14 +324,35 @@ void __stdcall FUN_00d15090(void* pArg)
     }
 }
 
+// Retail query views: native construction places cSpatialObject at +0x34,
+// after cGameData. Only the spatial vptr prefix is represented here; these
+// views are never constructed or used to access fields. IDs keep all 32 bits.
+namespace RetailRotationQuery {
+class cGameData {
+    uint32_t mStorage[0x34 / 4];
+public:
+    void* AsInterface(uint32_t type); // 0x00b18460, thiscall, ret 4
+};
+class cSpatialObject {
+    const void* mVTable;
+};
+class cRotationBall : public cGameData, public cSpatialObject {
+public:
+    void* AsInterface(uint32_t type);
+};
+class cRotationRing : public cGameData, public cSpatialObject {
+public:
+    void* AsInterface(uint32_t type);
+};
+}
+
 // @ 0x00d1d4d0
-void* cRotationBall::Cast(int tag)
+void* RetailRotationQuery::cRotationBall::AsInterface(uint32_t type)
 {
-    if (tag == 0x7292112)
+    if (type == 0x07292112u)
         return this;
-    if (tag == 0x1186577)
-        return this ? (void*)((char*)this + 0x34) : 0;
-    return FUN_00b18460(tag);
+    return type == 0x01186577u ? static_cast<cSpatialObject*>(this)
+                             : cGameData::AsInterface(type);
 }
 
 // @ 0x00d1d540
@@ -497,13 +515,12 @@ void cRotationRing::SetNameFromCStr(const char* s)
 }
 
 // @ 0x00d1db10
-void* cRotationRing::Cast(int tag)
+void* RetailRotationQuery::cRotationRing::AsInterface(uint32_t type)
 {
-    if (tag == 0x2ee8eeb)
+    if (type == 0x02ee8eebu)
         return this;
-    if (tag == 0x1186577)
-        return this ? (void*)((char*)this + 0x34) : 0;
-    return FUN_00b18460(tag);
+    return type == 0x01186577u ? static_cast<cSpatialObject*>(this)
+                             : cGameData::AsInterface(type);
 }
 
 // @ 0x00d1db40

@@ -803,6 +803,7 @@ struct WStr {
     uint16_t* mpCapacity;
     int       mAlloc;
     void Append(const void* a, const void* b);   // 0x429580
+    WStr* Format(const wchar_t* format, ...); // 0x0041e050, cdecl member varargs; returns this
 };
 void WStr_Format(void* out, const void* fmt, int arg);   // 0x41e050 cdecl
 struct Meta_s0055_0bd0 {
@@ -816,7 +817,6 @@ struct Meta_s0055_0bd0 {
                      uint16_t* param_7, void* param_8, uint16_t* param_9, uint16_t* param_10,
                      uint16_t* param_11, int param_12, void* param_13, char param_14);
     void FUN_005519d0(uint16_t* a, uint16_t* b, int c);  // 0x005519d0 (Meta::FUN_005519d0)
-    void FUN_00551af0(int a, int b);  // 0x00551af0 (Meta::FUN_00551af0)
 };
 // ---- items of slice s00550bd0 end
 
@@ -1616,8 +1616,17 @@ struct HT {
     int  EraseKey3(uint32_t* key);
     int  ErasePair(uint32_t* key);
 };
-struct El { void Dtor(); };
+struct El {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    uint32_t mAllocator;
+    El* Destroy(unsigned flags); // 0x00429410, scalar deletion thunk; zero keeps element storage
+};
 struct Vec16 {
+    El* mpBegin;
+    El* mpEnd;
+    El* mpCapacity;
     void FUN_00553b90();
     void FUN_00553be0(unsigned n);
     void DestroyStorage();                        // 0x00554B10
@@ -3074,15 +3083,37 @@ void Meta_s0055_0bd0::FUN_005519d0(uint16_t* param_2, uint16_t* param_3, int par
     }
 }
 
+namespace SP { namespace Pollen {
+class IAuthManagerForMetadata {
+public:
+    virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3();
+    virtual void slot4(); virtual void slot5(); virtual void slot6(); virtual void slot7();
+    virtual void slot8(); virtual void slot9(); virtual void slot10(); virtual void slot11();
+    virtual void slot12(); virtual void slot13();
+    virtual const eastl::string& GetScreenName(); // +0x38, 0x00a09f50
+    virtual void slot15();
+    virtual uint64_t GetUserEAId(); // +0x40, 0x00606d70
+};
+IAuthManagerForMetadata* AuthManagerForMetadata(); // 0x00607a60
+struct cAssetMetadataAuthView {
+    uint32_t pad00[6];
+    uint64_t mnAssetID; // +0x18
+    uint32_t pad20[14];
+    WStr mAuthorStr; // +0x58, retail layout differs from the generated header
+    uint64_t mnServerAuthorID; // +0x68
+    void SetID(uint64_t id);
+};
+}}
+extern const wchar_t gMetadataAuthorFormat[]; // 0x013f3da0, L"%hs"
+
 // @ 0x00551af0
-void Meta_s0055_0bd0::FUN_00551af0(int a, int b)
+void SP::Pollen::cAssetMetadataAuthView::SetID(uint64_t id)
 {
-    *(int*)((char*)this + 0x18) = a;
-    *(int*)((char*)this + 0x1c) = b;
-    int* am = (int*)FUN_00607a60();
-    int* p = (int*)((int(__thiscall*)(void*))((*(void***)am)[0x38 / 4]))(am);
-    WStr_Format((void*)((char*)this + 0x58), (void*)&DAT_013f3da0, *p);
-    *(int64_t*)((char*)this + 0x68) = ((int64_t(__thiscall*)(void*))((*(void***)am)[0x40 / 4]))(am);
+    mnAssetID = id;
+    IAuthManagerForMetadata* am = AuthManagerForMetadata();
+    const eastl::string& p = am->GetScreenName();
+    mAuthorStr.Format(gMetadataAuthorFormat, p.c_str());
+    mnServerAuthorID = am->GetUserEAId();
 }
 
 // @ 0x00551b60
@@ -3476,14 +3507,18 @@ IterR Tbl32F::Find(const uint32_t& k)
                  : IterR((void**)(mpBucketArray + mnBucketCount));
 }
 
+inline void DestroyStringElements(El* first, El* last)
+{
+    ScratchSlots<3>();
+    for (; first < last; ++first)
+        first->Destroy(0);
+}
+
 // @ 0x00553b90
 void Vec16::FUN_00553b90()
 {
-    char* s = (char*)this;
-    uint32_t end = *(uint32_t*)(s + 4);
-    for (uint32_t p = *(uint32_t*)s; p < end; p = p + 0x10) {
-        ((El*)p)->Dtor();
-    }
+    DestroyStringElements(mpBegin, mpEnd);
+    ScratchSlots<3>();
     DestroyStorage();
 }
 
