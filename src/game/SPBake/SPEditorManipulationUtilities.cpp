@@ -1589,6 +1589,7 @@ extern double FUN_0040ae50(void* in);
 extern void FUN_00449cc0(void* out);
 struct V3_s004a_89e0 {
     float x, y, z;
+    void Set(float a, float b, float c) { x = a; y = b; z = c; }
     float& operator[](int i) { return ((float*)this)[i]; }
 };
 struct cSPEditorBlock_s004a_89e0;
@@ -4225,12 +4226,7 @@ HavokTransform* __fastcall GetHavokTransformFromMatrix(HavokTransform* t)
 // @ 0x00481f00
 bool IsNAN(const float* v)
 {
-    int n35;
-    if (IsNaNF(v[0]) || IsNaNF(v[1]) || IsNaNF(v[2]))
-        n35 = 1;
-    else
-        n35 = 0;
-    return n35;
+    return IsNaNF(v[0]) || IsNaNF(v[1]) || IsNaNF(v[2]);
 }
 
 // @ 0x0048d010
@@ -8833,9 +8829,9 @@ void* BuildSomeMatrix(void* param_1, void* param_2, void* param_3)
 // @ 0x004a8d70
 M3::M3(float a, float b, float c, float d, float e, float f, float g, float h, float i)
 {
-    m[0].x = a; m[0].y = b; m[0].z = c;
-    m[1].x = d; m[1].y = e; m[1].z = f;
-    m[2].x = g; m[2].y = h; m[2].z = i;
+    m[0].Set(a, b, c);
+    m[1].Set(d, e, f);
+    m[2].Set(g, h, i);
 }
 
 // @ 0x004a8e10

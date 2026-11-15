@@ -68,3 +68,4 @@
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?ForEach@TreeWalker_00753540@@QAEXMM@Z  00753540  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Init@CspElem_753770@@QAEPAXPAX0@Z  00753770  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?FinalRelease@cModelWorld_753c50@@QAEXPAPAXD@Z  00753c50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Release@AutoRef@@QAEPAU1@XZ  007454f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

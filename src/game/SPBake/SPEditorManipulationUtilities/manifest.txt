@@ -85,3 +85,5 @@
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_004986d0@@YA_NPAUBlock@@@Z  004986d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?Find@D961@@QAEPAHPAHH@Z  00496140  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00492de0@@YA_NPAUcSPEditorBlock_s0049_28d0@@@Z  00492de0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?IsNAN@@YA_NPBM@Z  00481f00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ??0M3@@QAE@MMMMMMMMM@Z  004a8d70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

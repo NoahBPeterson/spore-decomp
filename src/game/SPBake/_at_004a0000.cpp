@@ -660,13 +660,14 @@ void DequeBase::DequeAlloc(unsigned int n)
 }
 
 // @ 0x004ab450
-uint32_t** FillU32(uint32_t** out, uint32_t* param_dst, int param_count, uint32_t* param_src)
+uint32_t** FillU32(uint32_t** out, uint32_t* param_dst, uint32_t param_count, uint32_t* param_src)
 {
-    int count = param_count;
-    uint32_t* dst = param_dst;
+    uint32_t z = param_count;
+    uint32_t* n = param_dst;
     uint32_t v = *param_src;
-    while (count--) *dst++ = v;
-    *out = dst;
+    for (; z-- > 0; ++n)
+        *n = v;
+    *out = n;
     return out;
 }
 
