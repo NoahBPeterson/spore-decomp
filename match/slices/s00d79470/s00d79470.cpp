@@ -9,6 +9,8 @@
 // gets no EH frame).
 #include <math.h>
 #include "types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 void operator delete[](void* p);   // 0x00f47380
 
@@ -545,14 +547,12 @@ float CanStartEditorAction(cEditorGameObject* p, uint32_t a, uint32_t b, uint32_
 float IsD51660BitClear()
 {
     cD51660Result* result = LookupD51660();
-    if (result == 0)
-        goto return_zero;
-    uint32_t shifted = result->mFlags6c >> 1;
-    shifted &= 1;
-    if (shifted != 0)
-        goto return_zero;
-    return 1.0f;
-return_zero:
+    if (result) {
+        uint32_t shifted = result->mFlags6c >> 1;
+        _ReadWriteBarrier();
+        bool isSet = (shifted & 1) != 0;
+        if (!isSet) return 1.0f;
+    }
     return 0.0f;
 }
 
