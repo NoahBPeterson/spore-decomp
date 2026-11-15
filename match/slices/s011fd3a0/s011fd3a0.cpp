@@ -79,7 +79,7 @@ struct Ctl
     void  SetFormat(u32 fmt);
     int   Init(u32 size, u32 desc, u32 hasData);
     void  Evaluate(void);
-    bool  Bind(void* handle);
+    int   Bind(void* handle);
     int   InitSimple(u32 size, u32 desc, u32 hasData);
     int   BuildKeys(u32 handle);
     int   Advance2(float dt);
@@ -866,16 +866,16 @@ u32 __fastcall ControllerSize(void* self)
 
 // 011fdff0 -- attach a keyframe table handle to the controller
 // @ 0x011fdff0
-bool Ctl::Bind(void* handle)
+int Ctl::Bind(void* handle)
 {
     u8* s = (u8*)this;
     void* r = FUN_011ffa40(handle);
     if (r == NULL)
-        return false;
+        return 0;
     *(u32*)(s + 0x34) = (u32)handle;
     *(u32*)(s + 0x2c) = *(u32*)((u8*)r + 4);
     *(u32*)(s + 0x30) = *(u32*)((u8*)r + 8);
-    return true;
+    return 1;
 }
 
 // 011fe030 -- the controller handle

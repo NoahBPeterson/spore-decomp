@@ -425,7 +425,7 @@ bool PFIndexModifiable::func24h(HoleTable* holes, u32 a, u32 b, u32 c, u32 d)
 // ---------------------------------------------------------------------------
 u32 StreamSub::GetSize(int type)
 {
-    u8 flags = mStreamFlags;
+    u8 flags = *(volatile u8*)&mStreamFlags;
     if (flags == 0) {
         switch (type) {
         case 0: return mnPosition;
