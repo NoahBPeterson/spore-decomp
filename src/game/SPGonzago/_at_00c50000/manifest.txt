@@ -6,3 +6,4 @@
 ../src/game/SPGonzago/_at_00c50000.cpp  ?Init@cMissionMakeAlly@SP@@QAE_NXZ  00c56ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c50000.cpp  ?HandleMessage@cMsgHandler@SP@@UAEXIPAX@Z  00c56b20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c50000.cpp  ??0MissionScan@@QAE@XZ  00c5e740  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00c50000.cpp  ?RefreshTargetPlanet@cMissionPlanetRefresher@@QAEXXZ  00c5b130  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

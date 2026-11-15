@@ -78,3 +78,4 @@
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetCreatorType@@YA_NPBUResourceKey@@@Z  00641900  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_49ec40@@YAXPAUcSPEditorBlock_s0049_de30@@PAUcSPVector3_s0049_de30@@PAUcSPMatrix3_s0049_de30@@2_N@Z  0049ec40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetOrientationFromNormal@@YA?AUMatrix3_s0049_b340@@PAUcSPEditorBlock_s0049_b340@@UVector3_s0049_b340@@@Z  0049c140  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetFirstFootBlock@@YAPAUcSPEditorBlock_s004a_89e0@@PAU1@@Z  004a9840  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

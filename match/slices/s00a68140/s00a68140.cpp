@@ -110,6 +110,7 @@ void AssignPtrs(RefObj** first, RefObj** last, RefObj** src)
                 int n = (*(volatile int*)&q->mnRefCount += -1);
                 if (n == 0) {
                     q->mnRefCount = 1;
+                    _ReadWriteBarrier();
                     q->ScalarDtor(1);
                 }
             }

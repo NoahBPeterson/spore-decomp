@@ -3304,6 +3304,7 @@ RefPair* __cdecl copy_backward_ref(RefPair* first, RefPair* last, RefPair* resul
     while (last != first) {
         --last; --result;
         result->value = last->value;
+        _ReadWriteBarrier();
         RC_s0073_f320* p = last->p;
         RC_s0073_f320* old = result->p;
         if (p != old) {
