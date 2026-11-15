@@ -976,6 +976,15 @@ def _tree_rows():
     mod = {int(v, 16): (m or {}).get("module") for v, m in MM["functions"].items()}
     gaps = sorted((int(g["lo"], 16), int(g["hi"], 16), g.get("before"), g.get("after")) for g in MM.get("gaps", []))
     los = [g[0] for g in gaps]
+    # The site's module map (tools/site/modules.json, tools/site/make_module_map.py) places most of the rest in a
+    # top-level group (ModAPI names, namespace strings, call graph, open-source libraries, compiler-generated code)
+    # but not in an object: those functions join their group in a box of their own instead of "Not placed".
+    try:
+        SM = json.load(open(W("tools", "site", "modules.json")))
+        site_lo = [int(v, 16) for v, _ in SM["runs"]]
+        site_mod = [SM["modules"][i] for _, i in SM["runs"]]
+    except (OSError, ValueError, KeyError):
+        site_lo, site_mod = [], []
     rows = []
     for a in sorted(game):
         m = mod.get(a)
@@ -983,10 +992,17 @@ def _tree_rows():
             i = bisect.bisect_right(los, a) - 1
             if i >= 0 and gaps[i][0] <= a <= gaps[i][1] and gaps[i][2] and gaps[i][2] == gaps[i][3]:
                 m = gaps[i][2]
+        sg = None
+        if not m and site_lo:
+            j = bisect.bisect_right(site_lo, a) - 1
+            sg = site_mod[j] if j >= 0 and site_mod[j] != "Not yet attributed" else None
         if m:
             top = m.split("/")[0] if "/" in m else m
             group = "EA sound library" if top in SOUND_DIRS else top
             box = m.rsplit("/", 1)[-1].replace(".obj", "")
+        elif sg:
+            group = "EA sound library" if sg in SOUND_DIRS else sg
+            box = "object not known yet" if sg not in ("Compiler-generated code", "Open-source libraries") else sg
         elif a in KG:
             group, box = UNPLACED, "globals' initializers, compiler stubs"
         else:
@@ -1176,11 +1192,12 @@ def treemap(path):
                labelcolor=INK, ncol=2, handlelength=1.1, handleheight=0.9)
     fig.suptitle("Spore (SporeApp.exe): %s game functions, %.2f MB - area = code bytes, colour = verdict"
                  % (human(tot_n), tot_b / 2**20), x=0.012, ha="left", fontsize=12, color=INK)
-    fig.text(0.012, 0.945, "Group (top directory of the dev build) -> object file -> one block per verdict -> one cell per function; area = "
-             "function size in bytes. Objects come from work/migrate/modmap.json; functions it does "
-             "not place in an object (so not migratable yet) are grouped by kind.\nThird-party libraries (OpenSSL, libpng, zlib, libjpeg, CRT) are excluded, "
-             "as in docs/STATUS.md. Verdicts: the equivalence sweep at %s (tools/difftest/verdicts.py)."
-             % (VERDICT_WHEN or "- (none yet)"), fontsize=8.2, color=MUTED, va="top")
+    fig.text(0.012, 0.945, "Group (top directory of the dev build) -> object file -> one block per verdict -> one cell per function; "
+             "area = function size in bytes. Objects come from work/migrate/modmap.json.\nA function it does not place in an "
+             "object (so not migratable yet) joins its group from the site's module map (tools/site/modules.json) in an "
+             "\"object not known yet\" box; the rest are under \"Not placed\" by kind.\nThird-party libraries (OpenSSL, "
+             "libpng, zlib, libjpeg, CRT) are excluded, as in docs/STATUS.md. Verdicts: the equivalence sweep at %s "
+             "(tools/difftest/verdicts.py)." % (VERDICT_WHEN or "- (none yet)"), fontsize=8.2, color=MUTED, va="top")
     fig.savefig(path, facecolor=SURFACE)
     print("wrote %s (%s functions in %d objects, %d labels)" % (os.path.relpath(path, ROOT), human(tot_n), len(boxes),
                                                                placed))
