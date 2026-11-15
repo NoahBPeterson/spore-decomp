@@ -1,5 +1,7 @@
+00c22010 ?FUN_00c22010@cCombatant_s00c2_2010@@QAEHXZ  # cCombatant_s00c2_2010::FUN_00c22010 migrated from s00c22010 (verbatim, slice spelling)
 00c22210 ?FUN_00c22210@cSPCreatureBase_s00c2_2010@@QAEXH@Z  # cSPCreatureBase_s00c2_2010::FUN_00c22210 migrated from s00c22010 (verbatim, slice spelling)
 00c22240 ?FUN_00c22240@cSPCreatureBase_s00c2_2010@@QAEXXZ  # cSPCreatureBase_s00c2_2010::FUN_00c22240 migrated from s00c22010 (verbatim, slice spelling)
+00c222f0 ?FUN_00c222f0@cSPCreatureBase_s00c2_2010@@QAEXPAVcSpeciesProfile_s00c2_2010@@@Z  # cSPCreatureBase_s00c2_2010::FUN_00c222f0 migrated from s00c22010 (verbatim, slice spelling)
 00c22470 ?FUN_00c22470@cSPCreatureBase_s00c2_2010@@QAE_NPAX@Z  # cSPCreatureBase_s00c2_2010::FUN_00c22470 migrated from s00c22010 (verbatim, slice spelling)
 00c22530 ?FUN_00c22530@cInteractionAgent@@QAEMXZ  # cInteractionAgent::FUN_00c22530 migrated from s00c22010 (verbatim, slice spelling)
 00c22560 ?GetBundleCapacity@cInteractionAgent@@UAEMI@Z  # cInteractionAgent::GetBundleCapacity migrated from s00c22010 (verbatim, slice spelling)

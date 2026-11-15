@@ -1,0 +1,3 @@
+009be850 ??4Copy108c@@QAEAAU0@ABU0@@Z  # Copy108c::operator= migrated from s009be260 (verbatim, slice spelling)
+009bea50 ??0Body2bc@@QAE@ABU0@@Z  # Body2bc::Body2bc migrated from s009be260 (verbatim, slice spelling)
+009befa0 ??4Copy108@@QAEAAU0@ABU0@@Z  # Copy108::operator= migrated from s009be260 (verbatim, slice spelling)

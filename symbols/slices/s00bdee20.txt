@@ -1,17 +1,17 @@
-00bdee20 ?insert@ElevVec@@QAEXPAUElevRecord@@ABU2@@Z  # eastl::vector<ElevRecord(0x1c),sp_vector_allocator>::insert(pos,value)
-00bdefa0 ?insert@WordVec@@QAEXPAI00@Z  # eastl::vector<bool,fixed_vector_allocator>::insert(pos,first,last)
-00bdf170 ?CopyAssignRange80@@YAXPAUCElement@@0PBU1@@Z  # CElement range copy-assign (stride 0x80)
-00bdf1a0 ?CopyConstructRange80@@YAXPAUCElement@@IPBU1@@Z  # CElement range copy-construct (stride 0x80, count)
-00bdf1f0 ?Write@CityWrite@@QAEXPAX@Z  # SP::cCity::Write (Simulator serializable write path)
-00bdf380 ?BuildRelationshipString@RelCity@@QAEXPAX@Z  # build the "City\nRelationship To Player" string
-00bdf3e0 ?push_back@BubbleVec@@QAEXXZ  # eastl::vector<cEmptyBubble(0x14)>::push_back
-00bdf430 ?erase_last@RefElemVec@@QAEPAXPAX@Z  # eastl::vector<T(0xc)>::erase-last, releases two refcounted ptrs
-00bdf480 ?insert@RefVec2@@QAEXPAURefVecElem@@ABU2@@Z  # eastl::vector<T(0xc),sp_vector_allocator>::insert(pos,value)
-00bdf6d0 ?AddUniqueId@IdHost@@QAEII@Z  # append an id to the vector at +0x1e0 if not present
-00bdf750 ?Flatten5a4@CityFlatten@@QAEXPAUPairVec@@@Z  # flatten the RB-tree at +0x5a4 into a pair vector
-00bdf7e0 ?Flatten5c0@CityFlatten@@QAEXPAUPairVec@@@Z  # flatten the RB-tree at +0x5c0 (skip value==0)
-00bdf880 ?Flatten5dc@CityFlatten@@QAEXPAUPairVec@@@Z  # flatten the RB-tree at +0x5dc (skip value==0)
-00bdf920 ?RemoveByPointer@CreatureHost@@QAEXPAX@Z  # remove-by-pointer from the +0x55c vector and tear down
-00bdf9e0 ?RemoveById@CreatureHost@@QAEPAXI@Z  # remove-by-id from the +0x55c vector, returns the object
-00bdfb00 ?DamageCombatantsInRadius@@YIIPAX00@Z  # pick a combatant in radius and emit a surface transform
-00bdf600 ?do_assign@LogReporterVec@@QAEXPAPAX0Ufalse_type@@@Z  # eastl::vector<AutoRefCount<ILogReporter>*>::assign (first,last)
+00bdee20 ?insert@ElevVec@@QAEXPAUElevRecord@@ABU2@@Z  # ElevVec::insert migrated from s00bdee20 (verbatim, slice spelling)
+00bdefa0 ?insert@WordVec@@QAEXPAI00@Z  # WordVec::insert migrated from s00bdee20 (verbatim, slice spelling)
+00bdf170 ?CopyAssignRange80@@YAXPAUCElement_s00bd_ee20@@0PBU1@@Z  # CopyAssignRange80 migrated from s00bdee20 (verbatim, slice spelling)
+00bdf1a0 ?CopyConstructRange80@@YAXPAUCElement_s00bd_ee20@@IPBU1@@Z  # CopyConstructRange80 migrated from s00bdee20 (verbatim, slice spelling)
+00bdf1f0 ?Write@CityWrite@@QAEXPAX@Z  # CityWrite::Write migrated from s00bdee20 (verbatim, slice spelling)
+00bdf380 ?BuildRelationshipString@RelCity@@QAEXPAX@Z  # RelCity::BuildRelationshipString migrated from s00bdee20 (verbatim, slice spelling)
+00bdf3e0 ?push_back@BubbleVec@@QAEXXZ  # BubbleVec::push_back migrated from s00bdee20 (verbatim, slice spelling)
+00bdf430 ?erase_last@RefElemVec@@QAEPAXPAX@Z  # RefElemVec::erase_last migrated from s00bdee20 (verbatim, slice spelling)
+00bdf480 ?insert@RefVec2@@QAEXPAURefVecElem@@ABU2@@Z  # RefVec2::insert migrated from s00bdee20 (verbatim, slice spelling)
+00bdf600 ?do_assign@LogReporterVec@@QAEXPAPAX0Ufalse_type@@@Z  # LogReporterVec::do_assign migrated from s00bdee20 (verbatim, slice spelling)
+00bdf6d0 ?AddUniqueId@IdHost@@QAEII@Z  # IdHost::AddUniqueId migrated from s00bdee20 (verbatim, slice spelling)
+00bdf750 ?Flatten5a4@CityFlatten@@QAEXPAUPairVec@@@Z  # CityFlatten::Flatten5a4 migrated from s00bdee20 (verbatim, slice spelling)
+00bdf7e0 ?Flatten5c0@CityFlatten@@QAEXPAUPairVec@@@Z  # CityFlatten::Flatten5c0 migrated from s00bdee20 (verbatim, slice spelling)
+00bdf880 ?Flatten5dc@CityFlatten@@QAEXPAUPairVec@@@Z  # CityFlatten::Flatten5dc migrated from s00bdee20 (verbatim, slice spelling)
+00bdf920 ?RemoveByPointer@CreatureHost@@QAEXPAX@Z  # CreatureHost::RemoveByPointer migrated from s00bdee20 (verbatim, slice spelling)
+00bdf9e0 ?RemoveById@CreatureHost@@QAEPAXI@Z  # CreatureHost::RemoveById migrated from s00bdee20 (verbatim, slice spelling)
+00bdfb00 ?DamageCombatantsInRadius@@YIIPAX00@Z  # DamageCombatantsInRadius migrated from s00bdee20 (verbatim, slice spelling)

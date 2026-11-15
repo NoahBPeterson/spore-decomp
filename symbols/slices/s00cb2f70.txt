@@ -1,4 +1,6 @@
 00c43c10 ?Read@cLocomotiveObject@SP@@UAE_NAAVcIObjectDatabaseIStream@2@@Z  # SP::cLocomotiveObject::Read (callee of s00cb2f70, named from the dev publics; slice address comment)
+00cb2f70 ?FUN_00cb2f70@@YAXPAUNavObj@@@Z  # FUN_00cb2f70 migrated from s00cb2f70 (verbatim, slice spelling)
+00cb34d0 ?FUN_00cb34d0@Sim34d0@@QAEXPAUNavObj@@@Z  # Sim34d0::FUN_00cb34d0 migrated from s00cb2f70 (verbatim, slice spelling)
 00cb36e0 ?SP_PathPrefsForTool@@YAHPAUcSPSpaceToolData@@@Z  # SP_PathPrefsForTool migrated from s00cb2f70 (verbatim, slice spelling)
 00cb3760 ?Cast@CObj3760@@QAEPAXH@Z  # CObj3760::Cast migrated from s00cb2f70 (verbatim, slice spelling)
 00cb37d0 ?Write@CArtilleryProjectile@@QAE_NPAUIStream@@@Z  # CArtilleryProjectile::Write migrated from s00cb2f70 (verbatim, slice spelling)

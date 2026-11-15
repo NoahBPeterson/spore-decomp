@@ -1,0 +1,7 @@
+00cacf40 ?Update@Agent34@@QAEXXZ  # Agent34::Update migrated from s00cacf40 (verbatim, slice spelling)
+00cad7e0 ?AddTarget@SimObject@@QAEXPAUSimTarget@@@Z  # SimObject::AddTarget migrated from s00cacf40 (verbatim, slice spelling)
+00cadb00 ?Shutdown@SimPanel@@QAEXXZ  # SimPanel::Shutdown migrated from s00cacf40 (verbatim, slice spelling)
+00cadb50 ?SimPanelReset@@YAXPAUSimPanel@@@Z  # SimPanelReset migrated from s00cacf40 (verbatim, slice spelling)
+00cadb90 ?ScaleNormalizedVec@@YAXPAUVec3_s00ca_cf40@@PBU1@PAUNormCtx@@@Z  # ScaleNormalizedVec migrated from s00cacf40 (verbatim, slice spelling)
+00cadc20 ?SimTrySpawn@@YA_NPAUSimSpawnOut@@PAUSimObjA@@PBUVec3_s00ca_cf40@@PAUSimSpawnSrc@@@Z  # SimTrySpawn migrated from s00cacf40 (verbatim, slice spelling)
+00cadd50 ?SimPathUpdate@@YAXPAUSimStepProvider@@PAUSimObjA@@PAUSimObjB@@_NM@Z  # SimPathUpdate migrated from s00cacf40 (verbatim, slice spelling)

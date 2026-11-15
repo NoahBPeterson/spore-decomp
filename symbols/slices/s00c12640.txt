@@ -1,1 +1,1 @@
-00c12640 SP::cSPCreatureBase::UpdateRangedAttacks  # PDB candidate name; walks bitset<88> @+0xc04 over 4 cRangedAttack (0x34) records @+0xeb0, PDB record layout matches every field use
+00c12640 ?UpdateRangedAttacks@cCreatureBase_s00c1_2640@@QAEXM@Z  # cCreatureBase_s00c1_2640::UpdateRangedAttacks migrated from s00c12640 (verbatim, slice spelling)

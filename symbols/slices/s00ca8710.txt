@@ -1,0 +1,7 @@
+00ca8710 ?ValidateDebugList@@YA_NPAUDebugListOwner@@PBDPAUDebugRange@@@Z  # ValidateDebugList migrated from s00ca8710 (verbatim, slice spelling)
+00ca89b0 ?UpdateClosest@@YAXPAPAURefCounted@@00UVec4@@@Z  # UpdateClosest migrated from s00ca8710 (verbatim, slice spelling)
+00ca8b10 ?Update@cPathLocomotion_s00ca_8710@@QAEXPAULocoUpdateParams@@@Z  # cPathLocomotion_s00ca_8710::Update migrated from s00ca8710 (verbatim, slice spelling)
+00ca95c0 ?GetDebugToolTip@cVehicle_s00ca_8710@@QAEXPAUEastlString_s00ca_8710@@@Z  # cVehicle_s00ca_8710::GetDebugToolTip migrated from s00ca8710 (verbatim, slice spelling)
+00ca96b0 ?UpdateCrowdTimers@cVehicle_s00ca_8710@@QAEXXZ  # cVehicle_s00ca_8710::UpdateCrowdTimers migrated from s00ca8710 (verbatim, slice spelling)
+00ca9770 ?Forward@ILocomotion_s00ca_8710@@QAE_NHMM@Z  # ILocomotion_s00ca_8710::Forward migrated from s00ca8710 (verbatim, slice spelling)
+00ca97a0 ?MoveWithFlag@cVehicle_s00ca_8710@@QAEXHMM@Z  # cVehicle_s00ca_8710::MoveWithFlag migrated from s00ca8710 (verbatim, slice spelling)

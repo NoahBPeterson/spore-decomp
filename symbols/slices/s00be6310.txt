@@ -1,0 +1,5 @@
+00be6310 ??0cCity_s00be_6310@@QAE@XZ  # cCity_s00be_6310::cCity migrated from s00be6310 (verbatim, slice spelling)
+00be6900 ?FUN_00be6900@cCity_s00be_6310@@QAEXD@Z  # cCity_s00be_6310::FUN_00be6900 migrated from s00be6310 (verbatim, slice spelling)
+00be6d90 ?FUN_00be6d90@cCity_s00be_6310@@QAEMXZ  # cCity_s00be_6310::FUN_00be6d90 migrated from s00be6310 (verbatim, slice spelling)
+00be6f40 ?FUN_00be6f40@cCity_s00be_6310@@QAEXXZ  # cCity_s00be_6310::FUN_00be6f40 migrated from s00be6310 (verbatim, slice spelling)
+00be6f60 ?FUN_00be6f60@cSpatialObject_s00be_6310@@QAEXXZ  # cSpatialObject_s00be_6310::FUN_00be6f60 migrated from s00be6310 (verbatim, slice spelling)

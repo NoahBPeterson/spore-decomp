@@ -1,26 +1,26 @@
-00c0ce80 ?ce80@CCB@@QAEMHH@Z  # CCB::ce80 callee (0x00c0ce80, left in the slice); bound so the migrated cf50/cfa0/d050/d0c0 resolve it in the module TU instead of UNSUPPORTED (harness binds the original callee)
+00c0ce80 ?ce80@CCB_s00c0_ce80@@QAEMHH@Z  # CCB_s00c0_ce80::ce80 migrated from s00c0ce80 (verbatim, slice spelling)
 00c0cf50 ?cf50@CCB@@QAEXXZ  # CCB::cf50 migrated from s00c0ce80 (verbatim, slice spelling)
 00c0cfa0 ?cfa0@CCB@@QAEMHD@Z  # CCB::cfa0 migrated from s00c0ce80 (verbatim, slice spelling)
-00c0cff0 ?cff0@CCB@@QAEXH@Z  # CCB::cff0 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0cff0 ?cff0@CCB_s00c0_ce80@@QAEXH@Z  # CCB_s00c0_ce80::cff0 migrated from s00c0ce80 (verbatim, slice spelling)
 00c0d050 ?d050@CCB@@QAEHM@Z  # CCB::d050 migrated from s00c0ce80 (verbatim, slice spelling)
-00c0d0c0 ?d0c0@CCB@@QAEXID@Z  # CCB::d0c0 migrated from s00c0ce80 (verbatim, slice spelling)
-00c0d1e0 ?d1e0@CCB@@QAEXH@Z  # CCB::d1e0 migrated from s00c0ce80 (verbatim, slice spelling)
-00c0d200 ?d200@CCB@@QAEXHH@Z  # CCB::d200 migrated from s00c0ce80 (verbatim, slice spelling)
-00c0d240 ?d240@CCB@@QAEXXZ  # CCB::d240 migrated from s00c0ce80 (verbatim, slice spelling)
-00c0d310 copy orientation vector
-00c0d340 ?d340@CCB@@QAEXH@Z  # CCB::d340 migrated from s00c0ce80 (verbatim, slice spelling)
-00c0d3a0 time-scaled terrain callback
-00c0d440 Simulator::cCreatureBase::UpdateHunger
-00c0d560 proximity check (distance vs threshold)
-00c0d660 compute target position (between/offset)
-00c0d860 compute forward-offset position
-00c0d950 set identity/skin flag byte
-00c0d970 Simulator::cCreatureBase::SetIdentityColor
-00c0d9b0 apply stride/leg vector
-00c0dac0 pick action id (0x25/0x54/0x4d chain)
-00c0db10 pick action id (0x1e/0x3e/0x4a chain)
-00c0db60 get active portal/creature id
-00c0db80 scale from terrain properties
-00c0dcb0 size from terrain property
-00c0dd40 ?dd40@CCB@@QAEXPAM@Z  # CCB::dd40 migrated from s00c0ce80 (verbatim, slice spelling)
-00c0dd70 set creature heading + pitch
+00c0d0c0 ?d0c0@CCB_s00c0_ce80@@QAEXID@Z  # CCB_s00c0_ce80::d0c0 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d1e0 ?d1e0@CCB_s00c0_ce80@@QAEXH@Z  # CCB_s00c0_ce80::d1e0 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d200 ?d200@CCB_s00c0_ce80@@QAEXHH@Z  # CCB_s00c0_ce80::d200 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d240 ?d240@CCB_s00c0_ce80@@QAEXXZ  # CCB_s00c0_ce80::d240 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d310 ?d310@CCB_s00c0_ce80@@QAEPAMPAMH@Z  # CCB_s00c0_ce80::d310 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d340 ?d340@CCB_s00c0_ce80@@QAEXH@Z  # CCB_s00c0_ce80::d340 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d3a0 ?FUN_00c0d3a0@@YAXH@Z  # FUN_00c0d3a0 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d440 ?UpdateHunger@CCB_s00c0_ce80@@QAEXM@Z  # CCB_s00c0_ce80::UpdateHunger migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d560 ?d560@CCB_s00c0_ce80@@QAE_NHMM@Z  # CCB_s00c0_ce80::d560 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d660 ?d660@CCB_s00c0_ce80@@QAEXPAM@Z  # CCB_s00c0_ce80::d660 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d860 ?d860@CCB_s00c0_ce80@@QAEXPAM@Z  # CCB_s00c0_ce80::d860 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d950 ?d950@CCB_s00c0_ce80@@QAEXD@Z  # CCB_s00c0_ce80::d950 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d970 ?d970@CCB_s00c0_ce80@@QAEXPAM@Z  # CCB_s00c0_ce80::d970 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d9b0 ?d9b0@CCB_s00c0_ce80@@QAEXXZ  # CCB_s00c0_ce80::d9b0 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0dac0 ?dac0@CCB_s00c0_ce80@@QAEHXZ  # CCB_s00c0_ce80::dac0 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0db10 ?db10@CCB_s00c0_ce80@@QAEHXZ  # CCB_s00c0_ce80::db10 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0db60 ?db60@CCB_s00c0_ce80@@QAEHXZ  # CCB_s00c0_ce80::db60 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0db80 ?FUN_00c0db80@@YAMMH@Z  # FUN_00c0db80 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0dcb0 ?FUN_00c0dcb0@@YAMM@Z  # FUN_00c0dcb0 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0dd40 ?dd40@CCB_s00c0_ce80@@QAEXPAM@Z  # CCB_s00c0_ce80::dd40 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0dd70 ?dd70@CCB_s00c0_ce80@@QAEXPAMM@Z  # CCB_s00c0_ce80::dd70 migrated from s00c0ce80 (verbatim, slice spelling)

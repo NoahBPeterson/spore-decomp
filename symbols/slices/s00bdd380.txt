@@ -1,9 +1,9 @@
-00bdd380  CElement::CopyConstructFrom(src) -> CElement*  # this=dest, ecx; installs base/derived sub vtables, copies 8 dwords, byte @0x20, floats, both 0x20-byte subs, refcounted @0x70/@0x78 with AddRef-before-Release; byte-exact
-00bdd470  CElement::CopyAssignFrom(src) -> CElement*  # same field set as copy-construct but assigns existing refcounted slots (AddRef(new) then Release(old)); byte-exact
-00bdd580  FUN_00bdd580(cursor, first, last, dest) -> cursor  # *cursor=dest then range copy-construct; NOT byte-exact, see nonmatching.txt
-00bdd5c0  FUN_00bdd5c0(first, last, dest) -> dest  # forward range copy-construct (stride 0x80), null-dest tolerant; byte-exact
-00bdd600  FUN_00bdd600(first, last, dest) -> dest  # forward range copy-assign (stride 0x80); byte-exact
-00bdd640  FUN_00bdd640(first, last, dest) -> dest  # backward range copy-assign (stride 0x80); byte-exact
-00bdd680  FUN_00bdd680(self) -> void  # CDerivedGameData destructor: release @0x11c, free arrays @0x108/@0xf8 when ((end-begin)&~1)>2, vector dtors @0xe4/@0xd0, timer @0xb0, vector @0x84 via DoInsertValue, free @0x70/@0x58/@0x3c, tail-jump to cGameData dtor 0xb184c0; byte-exact
-00bdd780  FUN_00bdd780(self) -> void  # SP::cCity destructor: vtables @0x00/@0x04/@0x34/@0x120/@0x1f4/@0x20c, release/free all members in retail order, PaintSystem + cSpatialObject sub-destructors, tail-jump to 00bdd680; NOT byte-exact, see nonmatching.txt
+00bdd380 ?CopyConstructFrom@CElement@@QAEPAU1@ABU1@@Z  # CElement::CopyConstructFrom migrated from s00bdd380 (verbatim, slice spelling)
+00bdd470 ?CopyAssignFrom@CElement@@QAEPAU1@ABU1@@Z  # CElement::CopyAssignFrom migrated from s00bdd380 (verbatim, slice spelling)
+00bdd580 ?FUN_00bdd580@@YAPAPAUCElement@@PAPAU1@PAU1@11@Z  # FUN_00bdd580 migrated from s00bdd380 (verbatim, slice spelling)
+00bdd5c0 ?FUN_00bdd5c0@@YAPAUCElement@@PAU1@00@Z  # FUN_00bdd5c0 migrated from s00bdd380 (verbatim, slice spelling)
+00bdd600 ?FUN_00bdd600@@YAPAUCElement@@PAU1@00@Z  # FUN_00bdd600 migrated from s00bdd380 (verbatim, slice spelling)
+00bdd640 ?FUN_00bdd640@@YAPAUCElement@@PAU1@00@Z  # FUN_00bdd640 migrated from s00bdd380 (verbatim, slice spelling)
+00bdd680 ?FUN_00bdd680@@YIXPAUCDerivedGameData@@@Z  # FUN_00bdd680 migrated from s00bdd380 (verbatim, slice spelling)
+00bdd780 ?FUN_00bdd780@@YIXPAUCCity@@@Z  # FUN_00bdd780 migrated from s00bdd380 (verbatim, slice spelling)
 00bddda0 ?FUN_00bddda0@CCity@@QAEHHHHHHH@Z  # CCity::FUN_00bddda0 migrated from s00bdd380 (verbatim, slice spelling)

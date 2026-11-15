@@ -1,0 +1,5 @@
+00be6f90 ?Fn6f90@City@@QAEXXZ  # City::Fn6f90 migrated from s00be6f90 (verbatim, slice spelling)
+00be7370 ?OverwriteNounsFromNounManager@City@@QAEII@Z  # City::OverwriteNounsFromNounManager migrated from s00be6f90 (verbatim, slice spelling)
+00be73d0 ?F73d0@City@@QAEXIE@Z  # City::F73d0 migrated from s00be6f90 (verbatim, slice spelling)
+00be7470 ?HandleMessage@CityListener@@QAE_NIPAUMsg@@@Z  # CityListener::HandleMessage migrated from s00be6f90 (verbatim, slice spelling)
+00be7aa0 ?Insert@InfoRecVec@@QAEXPAUInfoRec_s00be_6f90@@0@Z  # InfoRecVec::Insert migrated from s00be6f90 (verbatim, slice spelling)

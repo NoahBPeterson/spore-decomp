@@ -1,4 +1,18 @@
-# slice s00bda190 (gold8) - names inferred from the cards and PDB candidates
-#   cCulturalTarget  Simulator object: cGameData + a secondary vptr at +4, cCombatant at +0x38,
-#                    cSpatialObject at +0x100, attack bookkeeping at +0x1d4..+0x214
-00bdab60  Simulator::cCulturalTarget::cCulturalTarget() -> void  # constructor: base ctors, four vptrs, gate/political ids, empty vectors
+00bda6d0 ?DestroyRefPairs@@YGXPAUcAutoRef12@@0@Z  # DestroyRefPairs migrated from s00bda190 (verbatim, slice spelling)
+00bda710 ?DestroyCultureTargetInfo@@YGXPAUtCultureTargetInfo_s00bd_a190@@0@Z  # DestroyCultureTargetInfo migrated from s00bda190 (verbatim, slice spelling)
+00bda760 ?AssignRefPairObj@cRefOps@@QAEPAU1@PBUcAutoRef12@@@Z  # cRefOps::AssignRefPairObj migrated from s00bda190 (verbatim, slice spelling)
+00bda7d0 ?CopyTransform50Obj@cRefOps@@QAEXPBX@Z  # cRefOps::CopyTransform50Obj migrated from s00bda190 (verbatim, slice spelling)
+00bda850 ?CopyBucket20@@YAXPAE00@Z  # CopyBucket20 migrated from s00bda190 (verbatim, slice spelling)
+00bda8d0 ?CopyRefPairs@@YAPAUcAutoRef12@@PAU1@00@Z  # CopyRefPairs migrated from s00bda190 (verbatim, slice spelling)
+00bda930 ?DestroyRefPairsReturn@@YAPAUcAutoRef12@@PAU1@00@Z  # DestroyRefPairsReturn migrated from s00bda190 (verbatim, slice spelling)
+00bda980 ?AssignRefPairRange@@YAPAUcAutoRef12@@PAU1@00@Z  # AssignRefPairRange migrated from s00bda190 (verbatim, slice spelling)
+00bdaa90 ?CopyBucket28@@YAXPAE00@Z  # CopyBucket28 migrated from s00bda190 (verbatim, slice spelling)
+00bdaae0 ?AssignRefPairRangeBackward@@YAPAUcAutoRef12@@PAU1@00@Z  # AssignRefPairRangeBackward migrated from s00bda190 (verbatim, slice spelling)
+00bdab60 ??0cCulturalTarget_s00bd_a190@Simulator@@QAE@XZ  # cCulturalTarget_s00bd_a190::cCulturalTarget migrated from s00bda190 (verbatim, slice spelling)
+00bdace0 ??1cCulturalTarget_s00bd_a190@@QAE@XZ  # cCulturalTarget_s00bd_a190::~cCulturalTarget migrated from s00bda190 (verbatim, slice spelling)
+00bdad60 ?RemoveAttacker@cCulturalTarget_s00bd_a190@@QAE_NPAUcGameData_s00bd_a190@@@Z  # cCulturalTarget_s00bd_a190::RemoveAttacker migrated from s00bda190 (verbatim, slice spelling)
+00bdaea0 ?UpdateAggregationRadius@cSimObject@@QAEXXZ  # cSimObject::UpdateAggregationRadius migrated from s00bda190 (verbatim, slice spelling)
+00bdaf50 ?FillCulturalTargetPoints@cSimObject@@QAEXXZ  # cSimObject::FillCulturalTargetPoints migrated from s00bda190 (verbatim, slice spelling)
+00bdb0b0 ?EmitCulturalEffect@cSimObject@@QAEXXZ  # cSimObject::EmitCulturalEffect migrated from s00bda190 (verbatim, slice spelling)
+00bdb200 ?HasTradePartnerCiv@cCity_s00bd_a190@@QAE_NH@Z  # cCity_s00bd_a190::HasTradePartnerCiv migrated from s00bda190 (verbatim, slice spelling)
+00bdb280 ?FindTradePartnerCity@cCity_s00bd_a190@@QAEPAU1@H@Z  # cCity_s00bd_a190::FindTradePartnerCity migrated from s00bda190 (verbatim, slice spelling)
