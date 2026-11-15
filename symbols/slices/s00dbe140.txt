@@ -1,9 +1,9 @@
-00dbe140 SP::SlotVector::Reserve  # Claude-coined; EASTL vector reserve over 0x250-byte slot entries (cGroupMovement object pool)
-00dbe200 SP::SlotVector::Insert  # Claude-coined; EASTL vector insert/grow for slot entries, aliasing value pointer shifted by one slot
-00dbe380 SP::SlotVector::PushDefault  # Claude-coined; append a header-only default slot, destroying the temp payload if its header says constructed
-00dbe3e0 SP::SlotVector::CreateSlot  # Claude-coined; pop the free list (or grow), clear/set the slot flags and copy the 0x24c payload
-00dbe4e0 SP::cResizableObjectPoolT<SP::cGroupMovement>::CreateObject  # PDB-style; default-constructs a cGroupMovement and returns CreateSlot(id)|0x40000000
-00dbe520 SP::MOVE_Activate  # PDB candidate (caller-scored); cdecl (creature, 3 unused, flags, result block, move params); creates the pooled move state and fills the result block
+00dbe140 ?Reserve@SlotVector@@QAEXI@Z  # SlotVector::Reserve migrated from s00dbe140 (verbatim, slice spelling)
+00dbe200 ?Insert@SlotVector@@QAEXPAUSlotEntry@@PBU2@@Z  # SlotVector::Insert migrated from s00dbe140 (verbatim, slice spelling)
+00dbe380 ?PushDefault@SlotVector@@QAEXXZ  # SlotVector::PushDefault migrated from s00dbe140 (verbatim, slice spelling)
+00dbe3e0 ?CreateSlot@SlotVector@@QAEIPBUGmObj@@@Z  # SlotVector::CreateSlot migrated from s00dbe140 (verbatim, slice spelling)
+00dbe4e0 ?CreateObject@GroupMovementPool@@QAEIXZ  # GroupMovementPool::CreateObject migrated from s00dbe140 (verbatim, slice spelling)
+00dbe520 ?FUN_00dbe520@@YA_NPAUCreature_s00db_e140@@HHHIPAUMoveResult@@PAUMoveParams@@@Z  # FUN_00dbe520 migrated from s00dbe140 (verbatim, slice spelling)
 00dbec30 ?FUN_00dbec30@@YAMXZ  # FUN_00dbec30 migrated from s00dbe140 (verbatim, slice spelling)
 00dbec60 ?FUN_00dbec60@@YAMXZ  # FUN_00dbec60 migrated from s00dbe140 (verbatim, slice spelling)
 00dbeca0 ?FUN_00dbeca0@@YAMPAUUfoBehaviour@@@Z  # FUN_00dbeca0 migrated from s00dbe140 (verbatim, slice spelling)

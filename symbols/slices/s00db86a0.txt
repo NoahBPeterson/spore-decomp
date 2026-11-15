@@ -1,0 +1,4 @@
+00db86a0 ?Update@cGroupFollower@@QAEXM@Z  # cGroupFollower::Update migrated from s00db86a0 (verbatim, slice spelling)
+00db90c0 ?FUN_00db90c0@@YAXM@Z  # FUN_00db90c0 migrated from s00db86a0 (verbatim, slice spelling)
+00db9130 ?EnterWalk@IdleBlock@@QAEXXZ  # IdleBlock::EnterWalk migrated from s00db86a0 (verbatim, slice spelling)
+00db9280 ?FUN_00db9280@@YA_NPAUCreature_s00db_86a0__b@@HHIHPAUIdleBlock@@HM@Z  # FUN_00db9280 migrated from s00db86a0 (verbatim, slice spelling)

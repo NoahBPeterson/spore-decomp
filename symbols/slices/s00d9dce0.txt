@@ -1,4 +1,4 @@
-00d9dce0 ?RunCombatBehavior@@YADPAVcSimCreature@@PAX111PAUcBehaviorTask@@@Z  # char RunCombatBehavior(cSimCreature*, void*, void*, void*, void*, cBehaviorTask*)
+00d9dce0 ?RunCombatBehavior@@YADPAVcSimCreature@@PAX111PAUcBehaviorTask@@@Z  # RunCombatBehavior migrated from s00d9dce0 (verbatim, slice spelling)
 00d9e420 ?FinishBehaviorTask@@YAXPAVcSimCreature@@PAX111PAUcBehaviorCallback@@@Z  # FinishBehaviorTask migrated from s00d9dce0 (verbatim, slice spelling)
 00d9e460 ?PickLeader@cGroupMovement@@QAEDPAVcSimCreature@@PAX111PAUcLeaderChoice@@@Z  # cGroupMovement::PickLeader migrated from s00d9dce0 (verbatim, slice spelling)
 00d9e570 ?RunTargetBehavior@@YADPAVcSimCreature@@PAX111PAUcBehaviorTask@@@Z  # RunTargetBehavior migrated from s00d9dce0 (verbatim, slice spelling)
