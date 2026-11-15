@@ -15,6 +15,7 @@
 #include <string.h>
 #include <math.h>
 #include <float.h>
+#include <intrin.h>
 #include "SP/cJob.h"
 #include "EA/Allocator/FixedAllocatorBase.h"
 #include "EA/ArgScript/cIParser.h"
@@ -3963,6 +3964,8 @@ AutoRef* AutoRef::Release()
         int n = (*(volatile int*)&p->mRef += -1);
         if (n == 0) {
             *(volatile int*)&p->mRef = 1;
+            // Complete the count reset before reading the virtual dispatch target.
+            _ReadWriteBarrier();
             p->v0(1);
         }
     }

@@ -1583,6 +1583,7 @@ void* cSPEditorSkinManager_s004c_4650::GetSkin(uint32_t which)
     case 0: {
         cSPEditorSkinPart_s004c_4650* p = mTorsoSkin;
         return p;
+        break;
     }
     case 1: {
         cSPEditorSkinPart_s004c_4650* p = mCompleteSkin;

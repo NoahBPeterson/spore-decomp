@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00453250 294 complete; original has a plain "push ebp; and esp,-16" frame with esp-relative locals, our cl emits the ebx-based aligned frame (all stores otherwise the same)
-00481f00 90 IsNAN: comparison/short-circuit shape matches, but /Od local slot order (float params vs result) differs [equiv WEAK (97.8% cov) after marker fix]
 0048d010 693 /Od /Oy; complete. MoveBlockLowAngleStacking: same 22 calls/vslots/constants in order, frame 0x390 equal; diffs: inlined setInterpolate4 lacks the this/t slots, fabs return-slot copy, ToSPVector3 temp slots, uninit shape-ptr copies emulated
 0048db60 29 /Od; complete. init +0x30/+0x2c/+4; constant-indexed array store not reproduced
 0048dcd0 1455 flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oy ; complete. Havok linear-cast lowering, same 29 callees in the same order; frame 0x270 vs 0x260 and slot layout differ, setInterpolate4 this/t slots absent
@@ -62,7 +61,6 @@
 004a6f10 1696 SP::EditorUtils::DeleteInvalidBlocks: complete; same 53 ordered calls, frame 0x278 vs 0x30c (/Od name-hash slot order and declined-inline holes), Place() this-pointer evaluated before the by-value copies, message-param array indexing form
 004a7c90 169 complete behavior; best /Od frame differs (original 0x44 frame vs mine 0x20; inlined eastl push_back temps and local hash order)
 004a88f0 259 complete behavior (XformMsg post to EffectsManager); /GS cookie and vector-copy shape differ; equiv: UNSUPPORTED (0/1200 inputs valid: fake-arity/read faults on EffectsManager vtable calls)
-004a8d70 125 complete 9-float matrix constructor; original spills `this` at ebp-0xc and uses operator[] pointer temps
 004a96d0 327 complete flag/children walk; /Od inlined-flag + element temp slots differ
 004a9840 105 complete SP::EditorUtils::GetFirstFootBlock; /Od element/ref temp slot ordering differs
 004928d0  -  complete draft carried over from s004928d0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 1208, retail 1293
