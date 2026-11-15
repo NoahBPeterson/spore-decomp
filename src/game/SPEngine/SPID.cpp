@@ -694,8 +694,9 @@ wchar_t* GetExplicitIdStartW(wchar_t* first, wchar_t* last, uint8 flag3, uint8 f
 {
     wchar_t* start = first;
     if (flag3 != 0) {
+        start = first;
+        wchar_t* p = last;
         if (last != first) {
-            wchar_t* p = last;
             do {
                 --p;
                 if (*p == 0x5f) {

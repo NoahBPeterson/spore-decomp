@@ -3012,8 +3012,7 @@ struct SixDwords {
 };
 extern "C" int   __cdecl IsWorldLayoutFlagSet_s00e3_dca0(int flag);                             // 0x00685520
 extern "C" void* __cdecl GetGameModeHash_s00e3_dca0();                                          // 0x00e36c80
-extern "C" void* __stdcall FUN_0067de90(int n, SixDwords v);                         // 0x0067de90
-struct Builder { void Init(); };                                                     // 0x00e3d9e0 __thiscall
+struct Builder { void Init(int n, SixDwords v); };                                   // 0x00e3d9e0 __thiscall, ret 0x1c
 extern "C" void* __cdecl WStr_Ctor(void* pOut, const char16* pSrc);                  // 0x0041df50
 struct RandomLCG { uint32_t RandomUint32Uniform(uint32_t n); };                      // 0x00a68fb0 __thiscall
 extern "C" void  __cdecl SpVector_DoInsertKey(KeyTriple* pos, KeyTriple* value);      // 0x004e3e10
@@ -5410,8 +5409,7 @@ void ForwardTriples(Triple* p1, Triple* p2)
     v.a = p1->a; v.b = p1->b; v.c = p1->c;
     v.d = p2->a; v.e = p2->b; v.f = p2->c;
 
-    Builder* b = (Builder*)FUN_0067de90(0xc, v);
-    b->Init();
+    ((Builder*)FUN_0067de90())->Init(0xc, v);
 }
 
 // @ 0x00e3ea70

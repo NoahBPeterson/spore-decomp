@@ -6,6 +6,8 @@
 // the 4th/5th argument slots.
 #include "types.h"
 #include <string.h>
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 namespace EA {
 namespace Audio {
@@ -68,7 +70,6 @@ bool   class_addsymbol(void* c, void* fn);                       // 0xa47f50
 unsigned Fn921340(unsigned n);                                   // 0x921340
 
 extern t_symbol  gListSymbol;        // 0x16758ac
-extern t_symbol  gListSender;        // 0x16758b0
 extern int       gOutletCount;       // 0x167545c
 extern uint32_t  gCollReadClass;     // 0x1675610
 extern uint32_t  gCollWriteClass;    // 0x167561c
@@ -166,20 +167,23 @@ CollObject* CollReadNew(unsigned a, unsigned b)
     CollObject* x = (CollObject*)pd_new((void*)gCollReadClass);
     if (x) {
         x->mKeyA = a;
+        _ReadWriteBarrier();
         x->mKeyB = b;
-        outlet_new(x, gListSymbol.mHash, gListSender.mHash);
+        outlet_new(x, gListSymbol.mHash, (uint32_t)gListSymbol.mpName);
     }
     return x;
 }
 
 // @ 0x00a57700
-void CollWriteNew(unsigned a, unsigned b)
+CollObject* CollWriteNew(unsigned a, unsigned b)
 {
     CollObject* x = (CollObject*)pd_new((void*)gCollWriteClass);
     if (x) {
         x->mKeyA = a;
+        _ReadWriteBarrier();
         x->mKeyB = b;
     }
+    return x;
 }
 
 // @ 0x00a57730
@@ -413,7 +417,7 @@ void Float_(void* x, float f, uint32_t b)
                 outlet_float(n->target, f);
         }
         --gOutletCount;
-        outlet_list(r->mOutlets2, gListSymbol.mHash, gListSender.mHash, outA, (void*)outB);
+        outlet_list(r->mOutlets2, gListSymbol.mHash, (uint32_t)gListSymbol.mpName, outA, (void*)outB);
     }
 }
 
@@ -424,7 +428,7 @@ void Symbol_(void* x, uint32_t a, uint32_t b)
     int outA, outB;
     if (r->LookupKey(2, a, b, &outA, &outB)) {
         outlet_symbol(r->mOutlets, a, b);
-        outlet_list(r->mOutlets2, gListSymbol.mHash, gListSender.mHash, outA, (void*)outB);
+        outlet_list(r->mOutlets2, gListSymbol.mHash, (uint32_t)gListSymbol.mpName, outA, (void*)outB);
     }
 }
 
@@ -479,7 +483,7 @@ void DoInt(void* x, t_symbol s, int argc, void* atoms)
     uint32_t buf[3];
     int idx = atom_getint((char*)atoms + 0xc, buf);
     if (r->LookupIndex(a[0], a[1], a[2], idx, buf))
-        outlet_list(r->mOutlets2, gListSymbol.mHash, gListSender.mHash, 1, buf);
+        outlet_list(r->mOutlets2, gListSymbol.mHash, (uint32_t)gListSymbol.mpName, 1, buf);
 }
 
 // @ 0x00a57f20
@@ -508,7 +512,7 @@ void Output(void* x)
         key.sym = n->sym;
         int outA = 0, outB = 0;
         r->LookupKey(n->type, n->value, n->sym, &outA, &outB);
-        outlet_list(r->mOutlets2, gListSymbol.mHash, gListSender.mHash, outA, (void*)outB);
+        outlet_list(r->mOutlets2, gListSymbol.mHash, (uint32_t)gListSymbol.mpName, outA, (void*)outB);
         n = (ListItem*)n->next;
     }
 }
@@ -526,7 +530,7 @@ void PdFloat_(void* x, float f)
         int outA = 0, outB = 0;
         if (r->LookupKey(1, fbits, u, &outA, &outB))
             outlet_list(*(void**)((char*)x + 0xc), gListSymbol.mHash,
-                        gListSender.mHash, outA, (void*)outB);
+                        (uint32_t)gListSymbol.mpName, outA, (void*)outB);
     }
 }
 
@@ -540,7 +544,7 @@ void PdSymbol_(void* x, uint32_t a, uint32_t b)
         int outA = 0, outB = 0;
         if (r->LookupKey(2, a, b, &outA, &outB))
             outlet_list(*(void**)((char*)x + 0xc), gListSymbol.mHash,
-                        gListSender.mHash, outA, (void*)outB);
+                        (uint32_t)gListSymbol.mpName, outA, (void*)outB);
     }
 }
 
@@ -595,7 +599,7 @@ void PdNth(void* x, t_symbol s, int argc, void* atoms)
     int idx = atom_getint((char*)atoms + 0xc, buf);
     if (r->LookupIndex(a[0], a[1], a[2], idx, buf))
         outlet_list(*(void**)((char*)x + 0xc), gListSymbol.mHash,
-                    gListSender.mHash, 1, buf);
+                    (uint32_t)gListSymbol.mpName, 1, buf);
 }
 
 // @ 0x00a582f0

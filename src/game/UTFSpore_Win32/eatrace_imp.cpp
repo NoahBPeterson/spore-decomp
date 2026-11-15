@@ -310,10 +310,14 @@ struct TraceHelperTable_s0092_5770 {
 }
 namespace EA {
 namespace Trace {
-struct HelperTablePtr {
-    int w0, w4, w8, wc;
+struct TraceHelperTable_s0092_5770;
+TraceHelperTable_s0092_5770* CreateHelperTable();
+struct TablePtr {
     TraceHelperTable_s0092_5770* mpTable;
-    HelperTablePtr* Init();                   // 0x00925b00
+    __forceinline void Init() {
+        mpTable = 0;
+        setTable(CreateHelperTable());
+    }
     __forceinline void setTable(TraceHelperTable_s0092_5770* n) {
         TraceHelperTable_s0092_5770* old = mpTable;
         if (n != old) {
@@ -322,6 +326,11 @@ struct HelperTablePtr {
             if (old) old->Release();
         }
     }
+};
+struct HelperTablePtr {
+    int w0, w4, w8, wc;
+    TablePtr mTable;
+    HelperTablePtr* Init();                   // 0x00925b00
 };
 }
 }
@@ -786,9 +795,9 @@ TraceHashtable_s0092_5770* TraceHashtable_s0092_5770::Init(unsigned a1, unsigned
 namespace EA { namespace Trace {
 HelperTablePtr* HelperTablePtr::Init()
 {
-    w4 = w0 = 0;
-    mpTable = 0;
-    setTable(CreateHelperTable());
+    w4 = 0;
+    w0 = 0;
+    mTable.Init();
     return this;
 }
 }}  // namespace EA::Trace

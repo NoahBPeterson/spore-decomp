@@ -18,3 +18,4 @@
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ?deleting_dtor@SimAbility@@QAEPAXI@Z  0051d5f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ?erase@PtrVector@@QAEPAURefPtr_s0042_5240@@PAU2@0@Z  004259e0  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ?FUN_004c6ae0@@YAPAPADPAPADPADI1@Z  004c6ae0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?FUN_0051a8a0@SkinJob@@QAEPAXXZ  0051a8a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

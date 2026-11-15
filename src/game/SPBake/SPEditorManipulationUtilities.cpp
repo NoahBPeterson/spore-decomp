@@ -1586,9 +1586,11 @@ struct V3_s004a_89e0 {
 };
 struct cSPEditorBlock_s004a_89e0;
 struct BlockVec_s004a_89e0 {
-    cSPEditorBlock_s004a_89e0** mpBegin;
-    cSPEditorBlock_s004a_89e0** mpEnd;
-    void** mpCapacity;
+    EA::AutoRefCount<cSPEditorBlock_s004a_89e0>* mpBegin;
+    EA::AutoRefCount<cSPEditorBlock_s004a_89e0>* mpEnd;
+    EA::AutoRefCount<cSPEditorBlock_s004a_89e0>* mpCapacity;
+    int size() const { return mpEnd - mpBegin; }
+    EA::AutoRefCount<cSPEditorBlock_s004a_89e0>& operator[](int index) { return mpBegin[index]; }
 };
 struct cSPEditorBlock_s004a_89e0 {
     char pad0[0x340];
@@ -8925,15 +8927,14 @@ cSPEditorBlock_s004a_89e0* GetFirstFootBlock(cSPEditorBlock_s004a_89e0* param_1)
 {
     if (param_1 == 0) return 0;
     if (param_1->IsFlagSet(0x2d)) return param_1;
-    BlockVec_s004a_89e0& v = param_1->mChildren;
-    int i = 0;
-    int n = v.mpEnd - v.mpBegin;
-    for (; i < n; ++i) {
-        cSPEditorBlock_s004a_89e0* elem = v.mpBegin[i];
-        cSPEditorBlock_s004a_89e0* r = GetFirstFootBlock(elem);
-        if (r != 0) return r;
+    else {
+        BlockVec_s004a_89e0& v = param_1->mChildren;
+        for (int i = 0, n = v.size(); i < n; ++i) {
+            cSPEditorBlock_s004a_89e0* r = GetFirstFootBlock(v[i]);
+            if (r != 0) return r;
+        }
+        return 0;
     }
-    return 0;
 }
 
 // @ 0x004a9920

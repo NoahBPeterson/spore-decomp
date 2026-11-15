@@ -1601,9 +1601,9 @@ void* C_7fbbc0::Ctor()
   void** x = (void**)((char*)this + 4);
   x[0] = (void*)pb_b;
   x[1] = 0;
-  void** y = (void**)((char*)this + 0xc);
-  y[0] = (void*)pb_c;
-  y[0] = (void*)pb_d;
+  void** m = (void**)((char*)this + 0xc);
+  m[0] = (void*)pb_c;
+  m[0] = (void*)pb_d;
   *(void**)this = (void*)pb_e;
   *(void**)((char*)this + 4) = (void*)pb_f;
   *(void**)((char*)this + 0xc) = (void*)pb_g;
@@ -1614,7 +1614,9 @@ void* C_7fbbc0::Ctor()
   *(void**)((char*)this + 0x18) = (void*)((char*)this + 0x28);
   *(void**)((char*)this + 0x1c) = (void*)((char*)this + 0x2c);
   *(void**)((char*)this + 0x20) = (void*)((char*)this + 0x30);
-  for (int m = 0; m < 4; m++) *(void**)GetSlot(m) = 0;
+  // The enclosing scope and names preserve the native /Od local layout.
+  int y;
+  for (y = 0; y < 4; y++) *(void**)GetSlot(y) = 0;
   return this;
 }
 

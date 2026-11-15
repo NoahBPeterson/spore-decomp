@@ -41,3 +41,7 @@
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ?ReadAbilityData@SP@@YA_NPAUcCreatureAbility_s004d_92b0@@PAUPropertyList_s004d_92b0@@@Z  004d92b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ?FindField8@SpeciesDB@@QAEIH@Z  004d46d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorSpeciesManager.cpp  ?FindField10@SpeciesDB@@QAEIH@Z  004d4750  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetVariantB@SpeciesProfile@@QAEPAXPAX@Z  004d8f10  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetVariantC@SpeciesProfile@@QAEPAXPAX@Z  004d8f90  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?Destroy@PaintSystem@@QAEXXZ  004db3e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetValidatedSpeciesKey@@YAPAUResourceKey@@PAU1@I_N@Z  004da3d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
