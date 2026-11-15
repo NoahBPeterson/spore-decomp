@@ -4,7 +4,7 @@
 00a59b00 10 UNSUP  float constructor (explicit creator) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a59b50 67 ART    float handler; FAIL is a live-register/callee artifact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a59bb0 52 UNSUP  pdfloat class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00a59c50 10 UNSUP  symbol constructor (pd_new + outlet_new + symbolinlet_new) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00a59c50 10 UNSUP  symbol constructor (pd_new + outlet_new + symbolinlet_new) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast [R40 active draft claim: terra07]
 00a59cc0 26 ART    symbol/anything handler; calls outlet_symbol flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a59cf0 38 UNSUP  pdsymbol class registration flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00a59dc0 95 UNSUP  bang class registration (7-arg class_new) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
