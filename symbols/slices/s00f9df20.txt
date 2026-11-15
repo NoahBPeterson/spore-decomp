@@ -1,0 +1,11 @@
+007c4dd0 ?Init@cSPEditorPhysicsWorld@SP@@QAEXXZ  # SP::cSPEditorPhysicsWorld::Init (callee of s00f9df20, named from the dev publics; slice address comment)
+00f9df20 ?UpdateScatter@cTerrainSphere7@@QAEXPAUcScatterViewer@@PAURaster_s00f9_df20@@PBXI@Z  # cTerrainSphere7::UpdateScatter migrated from s00f9df20 (verbatim, slice spelling)
+00f9e120 ?InitScatterTexture@cTerrainSphere@SP@@SAXXZ  # SP::cTerrainSphere::InitScatterTexture migrated from s00f9df20
+00f9e1f0 ?ShutdownScatterTexture1@@YAXXZ  # ShutdownScatterTexture1 migrated from s00f9df20 (verbatim, slice spelling)
+00f9e280 ?InitScatterTexture2@cScatterSphere@@QAEXXZ  # cScatterSphere::InitScatterTexture2 migrated from s00f9df20 (verbatim, slice spelling)
+00f9e350 ?ShutdownScatterTexture2@@YAXXZ  # ShutdownScatterTexture2 migrated from s00f9df20 (verbatim, slice spelling)
+00f9e3a0 ?RebuildEffects@cScatterHost@@QAEXXZ  # cScatterHost::RebuildEffects migrated from s00f9df20 (verbatim, slice spelling)
+00f9e4d0 ?Run@PlanetPass@@QAEXIIII@Z  # PlanetPass::Run migrated from s00f9df20 (verbatim, slice spelling)
+00f9eda0 ?RefreshTerraform@cTerrainSphere8@@QAEXXZ  # cTerrainSphere8::RefreshTerraform migrated from s00f9df20 (verbatim, slice spelling)
+011ef750 ?Lock@Raster@graphics@rw@@QAEPAV123@IEAAULocked@123@@Z  # rw::graphics::Raster::Lock (callee of s00f9df20, named from the dev publics; slice address comment)
+011ef880 ?Unlock@Raster@graphics@rw@@QAEPAV123@AAULocked@123@@Z  # rw::graphics::Raster::Unlock (callee of s00f9df20, named from the dev publics; slice address comment)

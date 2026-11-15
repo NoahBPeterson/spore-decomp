@@ -1,4 +1,4 @@
-00f9c470 FUN_00f9c470  # free function; drives the terrain face-record table and viewer basis
-00f9c660 BuildSurfaceOrientation  # SP::cTerrainSphere::BuildSurfaceOrientation
-00f9c960 BuildSurfaceOrientationV  # SP::cTerrainSphere::BuildSurfaceOrientationV
-00f9cc50 BuildPitchedSurfaceOrientation  # SP::cTerrainSphere::BuildPitchedSurfaceOrientation
+00f9c470 ?FUN_00f9c470@@YGXHH@Z  # FUN_00f9c470 migrated from s00f9c470 (verbatim, slice spelling)
+00f9c660 ?BuildSurfaceOrientation@cTS143@@QAE?AUQuat@@ABUVec3@@0@Z  # cTS143::BuildSurfaceOrientation migrated from s00f9c470 (verbatim, slice spelling)
+00f9c960 ?BuildSurfaceOrientationV@cTS143@@QAE?AUQuat@@ABUVec3@@ABU2@@Z  # cTS143::BuildSurfaceOrientationV migrated from s00f9c470 (verbatim, slice spelling)
+00f9cc50 ?BuildPitchedSurfaceOrientation@cTS143@@QAE?AUQuat@@PBUVec3@@PBU2@M@Z  # cTS143::BuildPitchedSurfaceOrientation migrated from s00f9c470 (verbatim, slice spelling)
