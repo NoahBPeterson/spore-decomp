@@ -384,6 +384,9 @@ def build(out, prs_path, repo):
              'destructors of global objects, exception-handling stubs); "Open-source libraries" are the published '
              'libraries the game links. "Not yet attributed" is code whose module is not known yet, most of it added '
              'with Galactic Adventures after the development build the module map comes from.</p>')
+    # Only pull requests that are credited with functions are listed and counted: tools, notes-only and reverted pull
+    # requests (and ones whose work a later merge removed) add nothing to the totals.
+    prs = [p for p in prs if p["f"] or p["b"]]
     if prs:
         who = collections.defaultdict(lambda: [0, 0, 0])
         for p in prs:
