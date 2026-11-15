@@ -121,6 +121,47 @@ class BasicFactory_RotateEffect { public:
 
 // ---------------------------------------------------------------- WinScrollbar
 class WinScrollbar;
+// Retail IWindow prefix through Invalidate (slot36, table0x014445d0).
+// Declaration-only dispatch view: no instances, defined virtuals, vtable or RTTI emitted.
+struct ScrollbarWindowInvalidation {
+    virtual void slot0();
+    virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
+    virtual void slot5();
+    virtual void slot6();
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void slot23();
+    virtual void slot24();
+    virtual void slot25();
+    virtual void slot26();
+    virtual void slot27();
+    virtual void slot28();
+    virtual void slot29();
+    virtual void slot30();
+    virtual void slot31();
+    virtual void slot32();
+    virtual void slot33();
+    virtual void slot34();
+    virtual void slot35();
+    virtual void Invalidate();
+};
 struct SBMsg { int w0, w1; uint32_t type; uint32_t src; int from; int to; int pad; };
 
 class IWinScrollbar { public:
@@ -556,9 +597,9 @@ bool WinScrollbar::OnMouseUp(float x, float y, int a3, int flags) {
 bool WinScrollbar::OnFocusChange(int state, void* w) {
     if (state == 1) {
         void* iwv = this ? (char*)this + 4 : 0;
-        if (w != iwv && sb.hlComp != 0xff) {
+        if (w != iwv && static_cast<signed char>(sb.hlComp) != -1) {
             sb.hlComp = 0xff;
-            VSLOT(void(__thiscall*)(void*), iwv, 0x90)(iwv);
+            ((ScrollbarWindowInvalidation*)((char*)this + 4))->Invalidate();
         }
     }
     return true;
