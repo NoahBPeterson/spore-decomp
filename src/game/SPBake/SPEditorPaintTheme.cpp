@@ -33,7 +33,6 @@ extern void* g_vtbl_BakeSprites;
 extern void* g_vtbl_ContentValidator;
 extern void* g_vtbl_PaintTheme0;
 extern void* g_vtbl_PaintTheme1;
-extern uint32_t DAT_015d6e2c, DAT_015d6e30, DAT_015d6e34;
 extern uint32_t DAT_015d6b98, DAT_015d6b9c, DAT_015d6ba0;
 extern uint32_t DAT_015d6cc8, DAT_015d6f64;
 extern "C" void* FUN_004bb860(void* a);
@@ -42,6 +41,7 @@ extern "C" void  FUN_004553b0(void* out, void* key);
 inline void* operator new(unsigned int, void* p) { return p; }
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
 struct cSPColorRGB_s004b_2320 { uint32_t x, y, z; };
+extern cSPColorRGB_s004b_2320 gDefaultSkinResetColor; // 0x015d6e2c, complete three-word color
 struct PropObj;
 struct PropMgr;
 extern "C" void  FUN_006a0ae0(PropObj* list, uint32_t name, void* a, void* b);
@@ -1140,9 +1140,7 @@ void SP::cSPEditorPaintTheme_s004b_2320::Reset()
     mPropTheme.Clear();
     mPropThemeID = 0;
     for (int i = 0; i < 3; i++) {
-        mSkinColors[i].x = DAT_015d6e2c;
-        mSkinColors[i].y = DAT_015d6e30;
-        mSkinColors[i].z = DAT_015d6e34;
+        mSkinColors[i] = gDefaultSkinResetColor;
         mSkinEffects[i] = 0;
         mSkinEffectSeeds[i] = 0x4d2;
     }

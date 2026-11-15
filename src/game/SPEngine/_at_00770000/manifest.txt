@@ -48,3 +48,4 @@
 ../src/game/SPEngine/_at_00770000.cpp  ?DrawLayer@ShadowEffectsLayer_s0077f020@@UAEXIIQBQBVcViewer@SP@@PAUcRenderStats@3@@Z  0077f020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_00770000.cpp  ?assignTo@Mat44@@QBEXPAU1@@Z  007779e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_00770000.cpp  ?CopyWire@WireObj@@QAEPAU1@PBU1@@Z  0077d450  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00770000.cpp  ?sort_range@@YAXPAUSortElem@@0P6A_NABU1@1@Z@Z  007749e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -324,10 +324,26 @@ struct MissionBase {
   void SetSerializer();              // 0xc2e4e0
 };
 struct Adj {
-  void* Adjust0(void* id);
   void* Adjust1(void* id);
   void* Adjust2(void* id);
 };
+// Retail interface-query view: cMorphHandle's constructor puts the spatial
+// base after the 0x34-byte game-data base. Only its vptr prefix is needed here.
+// Numeric interface IDs retain all 32 bits without a generated-enum cast.
+namespace RetailMorphHandle {
+class cGameData {
+    uint32_t mStorage[0x34 / 4];
+public:
+    void* AsInterface(uint32_t type); // 0x00b18460, thiscall, ret 4
+};
+class cSpatialObject {
+    const void* mVTable;
+};
+class cMorphHandle : public cGameData, public cSpatialObject {
+public:
+    void* AsInterface(uint32_t type);
+};
+}
 struct WString12 { void* mBegin; void* mEnd; void* mCap; };
 struct CString16 { uint8_t mData[0x10]; };
 struct MissionWar {
@@ -2147,11 +2163,11 @@ void __fastcall M_C637b0(void* self, int _e, int msg, void* data)
 }
 
 // @ 0x00c639a0
-void* Adj::Adjust0(void* id)
+void* RetailMorphHandle::cMorphHandle::AsInterface(uint32_t type)
 {
-  if (id == (void*)0x1186577) return this ? (char*)this + 0x34 : 0;
-  if (id == (void*)0x7a309fb) return this;
-  return ((NounIdHelper*)this)->Dispatch(id);
+    if (type != 0x01186577u)
+        return type != 0x07a309fbu ? cGameData::AsInterface(type) : this;
+    return static_cast<cSpatialObject*>(this);
 }
 
 // @ 0x00c639d0

@@ -163,7 +163,6 @@ public:
 
     cHitSphere();
     bool Write(void* pData);
-    void* Cast(void* pType);
     int GetDelegateLowerBound(int nOffset);
 };
 class cInteractableObject : public cGameData {
@@ -208,7 +207,24 @@ public:
 };
 void* EffectsManager();
 bool ReadInteractableSubobject(void* pData);
-void* CastSpatialObjectBase(void* pObject);
+// Retail query views. Native construction puts the spatial base at +0x34;
+// the generated class layout still places it at +0x2c. Only base conversion
+// and the direct game-data query are needed here. The spatial view represents
+// its vptr prefix only; no constructor, field access or sizeof uses this view.
+namespace RetailInteractableObject {
+class cGameData {
+    uint32_t mStorage[0x34 / 4];
+public:
+    void* AsInterface(uint32_t type); // 0x00b18460, thiscall, ret 4
+};
+class cSpatialObject {
+    const void* mVTable;
+};
+class cInteractableObject : public cGameData, public cSpatialObject {
+public:
+    void* AsInterface(uint32_t type);
+};
+}
 void SetModelVariant(cSpatialObject* pObject, int nVariant, int bA, int bB);
 void ShutdownMarkerExtras();
 void FreeOrnamentMembers();
@@ -218,16 +234,11 @@ extern const void* sInteractableFields;
 // ---- items of slice s00c3ee20 end
 
 // @ 0x00c3f850
-void* cHitSphere::Cast(void* pType)
+void* RetailInteractableObject::cInteractableObject::AsInterface(uint32_t type)
 {
-    if (pType == (void*)0x1186577) {
-        if (this != nullptr)
-            return (uint8_t*)this + 0x34;
-        return nullptr;
-    }
-    if (pType != (void*)0x398420d)
-        return CastSpatialObjectBase(this);
-    return this;
+    if (type != 0x01186577u)
+        return type != 0x0398420du ? cGameData::AsInterface(type) : this;
+    return static_cast<cSpatialObject*>(this);
 }
 
 // @ 0x00c3f890

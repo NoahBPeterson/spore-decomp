@@ -23,3 +23,4 @@
 ../src/game/SPBake/_at_004a0000.cpp  ?SetSkinEffectSeed@cSPEditorModel_s004a_d550@SP@@QAEXHI@Z  004add10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPBake/_at_004a0000.cpp  ?SetSkinColor@cSPEditorModel_s004a_d550@SP@@QAEXHUcSPColorRGB_s004a_d550@@@Z  004add30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPBake/_at_004a0000.cpp  ?FillU32@@YAPAPAIPAPAIPAII1@Z  004ab450  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/_at_004a0000.cpp  ?CopyM36Range@@YAPAUM36@@PAU1@00@Z  004ab280  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
