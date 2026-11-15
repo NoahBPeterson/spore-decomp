@@ -339,7 +339,7 @@ void AudioSystem::RemoveFromList(void* item) {
 // ---------------------------------------------------------------- 0xa25ff0
 // @ 0x00a25ff0
 bool AudioSystem::Lookup_25ff0(uint key, uint* out) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_33d4.find(it, &key);
     if (mMap_33d4.NotFound((void*)(size_t)it[0])) return false;
     *out = *(uint*)((uchar*)(size_t)it[0] + 4);
@@ -362,7 +362,7 @@ uint AudioSystem::RemovePrimitiveFromUpdate(void* p) {
 // ---------------------------------------------------------------- 0xa260c0
 // @ 0x00a260c0
 uint AudioSystem::Lookup_260c0(uint key) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_11a3d8.find(it, &key);
     if (mMap_11a3d8.NotFound((void*)(size_t)it[0])) return 0;
     return *(uint*)((uchar*)(size_t)it[0] + 4);
@@ -456,7 +456,7 @@ bool AudioSystem::Map_26300(uint key, uint arg) {
 // ---------------------------------------------------------------- 0xa26360
 // @ 0x00a26360
 uint AudioSystem::Lookup_26360(uint key) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_119bb8.find(it, &key);
     if (mMap_119bb8.NotFound((void*)(size_t)it[0])) return 0;
     return *(uint*)((uchar*)(size_t)it[0] + 4);
@@ -517,7 +517,7 @@ void AudioSystem::Map_26530() {
 // ---------------------------------------------------------------- 0xa26570
 // @ 0x00a26570
 uint AudioSystem::Lookup_26570(uint key) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_157440.find(it, &key);
     if (mMap_157440.NotFound((void*)(size_t)it[0])) return 0;
     return *(uint*)((uchar*)(size_t)it[0] + 4);
@@ -526,7 +526,7 @@ uint AudioSystem::Lookup_26570(uint key) {
 // ---------------------------------------------------------------- 0xa265b0
 // @ 0x00a265b0
 uint AudioSystem::Lookup_265b0(uint key) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_404.find(it, &key);
     if (mMap_404.NotFound((void*)(size_t)it[0])) return 0;
     return *(uint*)((uchar*)(size_t)it[0] + 4);
@@ -559,7 +559,7 @@ void AudioSystem::Map_265f0(float a, uint b) {
 // @ 0x00a26680
 bool AudioSystem::Map_26680(uint key, void** out) {
     if (!out) return false;
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_13f4.find(it, &key);
     void* node = (void*)(size_t)it[0];
     if (mMap_13f4.NotFound(node)) return false;
@@ -585,7 +585,7 @@ bool AudioSystem::Map_266e0(uint key, float f) {
 // @ 0x00a26730
 bool AudioSystem::Map_26730(uint key, void** out) {
     if (!out) return false;
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_23e4.find(it, &key);
     void* node = (void*)(size_t)it[0];
     if (mMap_23e4.NotFound(node)) return false;
@@ -599,7 +599,7 @@ bool AudioSystem::Map_26730(uint key, void** out) {
 // @ 0x00a26790
 bool AudioSystem::Map_26790(uint arg) {
     void* end = mMap_128ae0.End();
-    uint it[2] = {0, 0};
+    uint it[2];
     uint* p = mMap_128ae0.find2(it, &arg);
     return *(void**)p != end;
 }
