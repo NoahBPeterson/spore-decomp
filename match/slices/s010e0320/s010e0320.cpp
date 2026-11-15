@@ -504,49 +504,8 @@ void hkShapeCollectionAgent::updateShapeCollectionFilter(const hkCdBody& bodyA, 
 	} while (--remaining != 0);
 }
 
-// @ 0x010e1090  hkShapeCollectionAgent::hkShapeCollectionAgent
-hkShapeCollectionAgent::hkShapeCollectionAgent(const hkCdBody& bodyA, const hkCdBody& bodyB, const hkCollisionInput& input, hkContactMgr* mgr)
-{
-	m_contactMgr = mgr;
-	m_children.m_data = m_inlineStorage;
-	m_children.m_size = 0;
-	m_children.m_capacityAndFlags = 0x80000004;
-	const hkShapeCollection* collection = (const hkShapeCollection*)bodyA.m_shape;
-	int numChild = collection->getNumChildShapes();
-	if (m_children.getCapacity() < numChild)
-	{
-		int newCap = m_children.getCapacity() * 2;
-		if (newCap <= numChild)
-			newCap = numChild;
-		hkArrayUtil::_reserveExactly(&m_children, newCap, 8);
-	}
-	if (numChild > 0)
-	{
-		hkShapeBuffer buffer;
-		hkShapeKey key = collection->getFirstKey();
-		int remaining = numChild;
-		do
-		{
-			const hkShape* child = collection->getChildShape(key, buffer);
-			if (input.m_filter->isCollisionEnabled(input, bodyB, bodyA, *collection, key))
-			{
-				Child& entry = m_children.m_data[m_children.m_size];
-				m_children.m_size = m_children.m_size + 1;
-				hkCollisionDispatcher* dispatcher = input.m_dispatcher;
-				const uint8_t (*table)[32] = input.m_createPredictiveAgents ? dispatcher->m_agent2TypesPredictive : dispatcher->m_agent2Types;
-				uint8_t agentType = table[child->getType()][bodyB.m_shape->getType()];
-				hkCdBody childBody;
-				childBody.m_shape = child;
-				childBody.m_shapeKey = key;
-				childBody.m_motion = bodyA.m_motion;
-				childBody.m_parent = &bodyA;
-				entry.m_agent = dispatcher->m_agent2Func[agentType].m_createFunc(childBody, bodyB, input, mgr);
-				entry.m_key = key;
-			}
-			key = collection->getNextKey(key);
-		} while (--remaining != 0);
-	}
-}
+// Constructor 0x010e1090 is defined beside its implicit destructor in s010e1340.
+
 
 // @ 0x010e1220  hkSymmetricAgent<hkShapeCollectionAgent>::getPenetrations
 void hkSymmetricAgent_hkShapeCollectionAgent::getPenetrations(const hkCdBody& bodyA, const hkCdBody& bodyB, const hkCollisionInput& input, hkCdBodyPairCollector& collector)

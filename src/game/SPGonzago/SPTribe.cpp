@@ -5766,16 +5766,21 @@ char* __cdecl FUN_00c92f80(char* first, char* last, char* out)
 }
 
 // @ 0x00c93640
-void __cdecl FUN_00c93640(int** first, int** last, int** blockptr)
+int** __cdecl FUN_00c93640(int** first, int** last, int** blockptr)
 {
-    for (; first != last; ++first) {
-        char* b = (char*)*blockptr;
-        int* end = b ? (int*)(b + 0xc0) : 0;
-        if (*first == end)
-            break;
-    }
     if (first != last)
-        FUN_00c92c70(first + 1, last, first, blockptr);
+    {
+        do {
+            char* b = (char*)*blockptr;
+            int* end = b ? (int*)(b + 0xc0) : 0;
+            if (*first == end)
+                break;
+            ++first;
+        } while (first != last);
+        if (first != last)
+            return FUN_00c92c70(first + 1, last, first, blockptr);
+    }
+    return first;
 }
 
 // @ 0x00c93690

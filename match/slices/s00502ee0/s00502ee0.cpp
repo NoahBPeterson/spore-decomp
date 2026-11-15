@@ -115,10 +115,11 @@ inline void DeleteElemConditional(void* p, int flags)
 // @ 0x00503be0
 E48* destroy_E48(E48* first, E48* last, E48* result)
 {
-    ScratchSlots<3>();
+    uint32_t* p;
+    uint32_t scratch[3];
     for (; first != last; ++first, ++result) {
         FixedVec& v = first->vec;
-        for (uint32_t* p = v.mpBegin; p < v.mpEnd; ++p) {}
+        for (p = v.mpBegin; p < v.mpEnd; ++p) {}
         v.Destroy();
         DeleteElemConditional(first, 0);
     }

@@ -85,7 +85,7 @@ extern "C" StreamChunk* rw_Stream_GetChunk(void* stream);   // 0x11e6b50
 extern "C" void        rw_Chunk_Release(StreamChunk* c);    // 0x11e7c70
 extern "C" void        util_Copy16(u8*, u8*, int);          // 0x11ea910
 struct Vp6Ext {
-    void Ctor3c0();
+    Vp6Ext* Ctor3c0();
     void Ctor940(int p2);
     void CtorDE80();
     void Ctor3E0(int p2, int p3, int p4);
@@ -251,7 +251,7 @@ bool IsSCChunk(const char* data)
 }}  // namespace rw::movie
 
 // @ 0x00fcd3c0
-void Vp6Ext::Ctor3c0()
+Vp6Ext* Vp6Ext::Ctor3c0()
 {
     int* self = (int*)this;
     self[0] = 0;
@@ -259,6 +259,7 @@ void Vp6Ext::Ctor3c0()
     self[2] = 0;
     self[3] = -1;
     self[4] = -1;
+    return this;
 }
 
 // @ 0x00fcd3e0
