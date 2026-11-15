@@ -2169,6 +2169,7 @@ struct AutoRefCount_s0044_8380 {
     T* operator->() const { return mpObject; }
     operator T*() const { return mpObject; }
     AutoRefCount_s0044_8380& operator=(T* p) {
+        SP::ScratchSlots<2>(); // Reserved inline assignment frame in the original /Od build.
         if (p != mpObject) {
             T* old = mpObject;
             if (p) p->AddRef();
@@ -2241,7 +2242,7 @@ struct cMWModel_s0044_8380 {
     char pad58[0x64 - 0x58];
     AutoRefCount_s0044_8380<cSPTransformOps> mOwner;       // +0x64
     void AddRef() { mRefCount++; }
-    void Release();                             // 0x0040f360
+    int Release();                              // 0x0040f360; returns remaining refcount
 };
 }
 namespace SP {
@@ -7239,7 +7240,8 @@ void cSPEditorBlock_s0044_8380::AddToEffectsMask(cSPVector3 pos, bool /*flag*/)
 namespace SP {
 void cSPEditorBlock_s0044_8380::RemoveFromEffectsMask()
 {
-    if (mEffectsMaskObject != 0) {
+    cMWModel_s0044_8380* model = mEffectsMaskObject;
+    if (model != 0) {
         cMWModel_s0044_8380* pModel = mEffectsMaskObject;
         pModel->mpWorld->SetInWorld(pModel, 0);
         mEffectsMaskObject = 0;

@@ -14,7 +14,7 @@ extern "C" long _InterlockedExchangeAdd(long volatile*, long);
 
 // ---- items of slice s0051d300 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
-void  Memset32(void* dst, int value, int count);                   // 0x0092cb00
+void* Memset32(void* dst, int value, int count);                   // 0x0092cb00; returns dst
 extern void* g_vtblSimCreatureAbility;   // 0x013ef094
 extern void* g_vtblF1c6c;                // 0x013f1c6c
 extern void* g_vtblBca4;                 // 0x013ebca4
@@ -214,6 +214,7 @@ Bitmap::Bitmap(int w, int h, int fill)
     *(void**)((char*)this + 0x28) = buf;
     *(int*)((char*)this + 0x24) = 2;
     Memset32(*(void**)((char*)this + 0x28), fill, w * h);
+    ScratchSlots<3>(); // Preserve the original three unused /Od inline slots.
 }
 
 // @ 0x0051d720
