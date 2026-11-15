@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
+#include "EA/RefCountVTemplate.h"
 #include "eastl/allocator.h"
 #include "eastl/vector.h"
 
@@ -14,13 +15,13 @@ namespace SP {
 
 // dev size 0x1c -> retail size 0x20 (re-laid from the PDB, unverified in retail)
 #pragma pack(push, 4)
-class cSPSpaceEconomyTuning : public EA::COM::RefCountVTemplate<int> /* +0x0 */ {
+class cSPSpaceEconomyTuning : public EA::RefCountVTemplate<int> /* +0x0 */ {
  public:
   // vtable retail address unknown ((retail vtable not located)): 4 retail slots, 4 dev slots
   virtual ~cSPSpaceEconomyTuning();                                      // slot 0, (no retail slot), dtor body dev only
-  virtual int AddRef();                                                  // slot 1, (no retail slot), inherited from EA::COM::RefCountVTemplate<int>
-  virtual int Release();                                                 // slot 2, (no retail slot), inherited from EA::COM::RefCountVTemplate<int>
-  virtual int GetRefCount() const;                                       // slot 3, (no retail slot), inherited from EA::COM::RefCountVTemplate<int>
+  virtual int AddRef();                                                  // slot 1, (no retail slot), inherited from EA::RefCountVTemplate<int>
+  virtual int Release();                                                 // slot 2, (no retail slot), inherited from EA::RefCountVTemplate<int>
+  virtual int GetRefCount() const;                                       // slot 3, (no retail slot), inherited from EA::RefCountVTemplate<int>
 
   int GetTradeCaptureOfferPrice(int) const;                              // 0x0102fa30
   float GetSpiceProductionHomeworldMultiplier() const;                   // 0x0102fa80

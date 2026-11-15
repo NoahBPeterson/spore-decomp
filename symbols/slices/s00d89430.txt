@@ -1,1 +1,11 @@
+00d89430 ?FIND_STUFF_Activate@SP@@YA_NPAVcSPCreatureBase_s00d8_9430@1@HHHIPAUFindStuffBlock@1@PAPAVcOrderNodeDesc@1@@Z  # FIND_STUFF_Activate migrated from s00d89430 (verbatim, slice spelling)
 00d896f0 FUN_00d896f0  # creature update step (cdecl, one arg): SetStealthed(false,false), locomotion vslot 0x37 record call, FUN_00bcb430 on +0xb4c, Hover(false); name left as Ghidra's, role unconfirmed
+00d897f0 ?DECORATE_NEST_Activate@SP@@YA_NPAVcSPCreatureBase_s00d8_9430@1@HHHHPAUDecorateNestBlock@1@@Z  # DECORATE_NEST_Activate migrated from s00d89430 (verbatim, slice spelling)
+00d89a80 ?FUN_00d89a80@SP@@YAXPAVcSPCreatureBase_s00d8_9430@1@HHHHPAUDecorateNestBlock@1@@Z  # FUN_00d89a80 migrated from s00d89430 (verbatim, slice spelling)
+00d89ac0 ?FUN_00d89ac0@SP@@YA_NPAVcSPCreatureBase_s00d8_9430@1@HHHHPAUHitSelfWithItemBlock@1@@Z  # FUN_00d89ac0 migrated from s00d89430 (verbatim, slice spelling)
+00d89b70 ?FUN_00d89b70@SP@@YA_NPAVcSPCreatureBase_s00d8_9430@1@HHHHPAUDropItemsBlock@1@@Z  # FUN_00d89b70 migrated from s00d89430 (verbatim, slice spelling)
+00d89c00 ?FUN_00d89c00@SP@@YAXPAVcSPCreatureBase_s00d8_9430@1@HHHHPAUDropItemsBlock@1@@Z  # FUN_00d89c00 migrated from s00d89430 (verbatim, slice spelling)
+00d89c50 ?OFFER_ITEM_Activate@SP@@YA_NPAVcSPCreatureBase_s00d8_9430@1@HHHHPAUOfferItemBlock@1@@Z  # OFFER_ITEM_Activate migrated from s00d89430 (verbatim, slice spelling)
+00d89f30 ?OFFER_ITEM_Deactivate@SP@@YAXPAVcSPCreatureBase_s00d8_9430@1@HHHHPAUOfferItemBlock@1@@Z  # OFFER_ITEM_Deactivate migrated from s00d89430 (verbatim, slice spelling)
+00d89fb0 ?FUN_00d89fb0@SP@@YA_NPAVcSPCreatureBase_s00d8_9430@1@HHHHPAUReceiveItemBlock@1@@Z  # FUN_00d89fb0 migrated from s00d89430 (verbatim, slice spelling)
+00d8a220 ?FUN_00d8a220@SP@@YAXPAVcSPCreatureBase_s00d8_9430@1@HHHHPAUReceiveItemBlock@1@@Z  # FUN_00d8a220 migrated from s00d89430 (verbatim, slice spelling)

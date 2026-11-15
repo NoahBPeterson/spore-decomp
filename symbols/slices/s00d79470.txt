@@ -1,15 +1,15 @@
 00d79470 ?Action@cTribeGameBehaviorParty_s00d7_9470@SP@@UAEHXZ  # cTribeGameBehaviorParty_s00d7_9470::Action migrated from s00d79470 (verbatim, slice spelling)
 00d79fd0 ?Destroy@cEditorGameObject@SP@@QAEXXZ  # cEditorGameObject::Destroy migrated from s00d79470 (verbatim, slice spelling)
 00d7a020 ?InitEditorParams@SP@@YAXIIIIII@Z  # InitEditorParams migrated from s00d79470 (verbatim, slice spelling)
-00d7a070 SP::UpdateEditorSelection  # newly claimed; nonmatching
-00d7a260 SP::IsDanceFinisher  # newly claimed; nonmatching
-00d7a320 SP::IsSub58FlagSet  # newly claimed; byte-exact
-00d7a360 SP::CanUseEditorAction  # newly claimed; nonmatching
-00d7a3a0 SP::IsC04590FlagSet  # newly claimed; nonmatching
-00d7a3e0 SP::IsPartyModeReady  # newly claimed; nonmatching
-00d7a440 SP::CanStartEditorAction  # newly claimed; nonmatching
-00d7a470 SP::IsD51660BitClear  # newly claimed; nonmatching
-00d7a490 SP::IsEditorObjectBitClear  # newly claimed; nonmatching
-00d7a4d0 SP::IsLookupBFlagSet  # newly claimed; nonmatching
-00d7a530 SP::IsEditorActionAvailableValue  # newly claimed; partial
-00d7a560 SP::GetEditorSelection  # newly claimed; nonmatching
+00d7a070 ?UpdateEditorSelection@SP@@YAXPAVcEditorGameObject@1@I@Z  # UpdateEditorSelection migrated from s00d79470 (verbatim, slice spelling)
+00d7a260 ?IsDanceFinisher@SP@@YAMPAVcEditorGameObject@1@@Z  # IsDanceFinisher migrated from s00d79470 (verbatim, slice spelling)
+00d7a320 ?IsSub58FlagSet@SP@@YAMPAVcEditorGameObject@1@@Z  # IsSub58FlagSet migrated from s00d79470 (verbatim, slice spelling)
+00d7a360 ?CanUseEditorAction@SP@@YAMPAVcEditorGameObject@1@@Z  # CanUseEditorAction migrated from s00d79470 (verbatim, slice spelling)
+00d7a3a0 ?IsC04590FlagSet@SP@@YAMPAVcEditorGameObject@1@@Z  # IsC04590FlagSet migrated from s00d79470 (verbatim, slice spelling)
+00d7a3e0 ?IsPartyModeReady@SP@@YAMPAVcEditorGameObject@1@@Z  # IsPartyModeReady migrated from s00d79470 (verbatim, slice spelling)
+00d7a440 ?CanStartEditorAction@SP@@YAMPAVcEditorGameObject@1@III@Z  # CanStartEditorAction migrated from s00d79470 (verbatim, slice spelling)
+00d7a470 ?IsD51660BitClear@SP@@YAMXZ  # IsD51660BitClear migrated from s00d79470 (verbatim, slice spelling)
+00d7a490 ?IsEditorObjectBitClear@SP@@YAMPAVcEditorGameObject@1@@Z  # IsEditorObjectBitClear migrated from s00d79470 (verbatim, slice spelling)
+00d7a4d0 ?IsLookupBFlagSet@SP@@YAMPAVcEditorGameObject@1@@Z  # IsLookupBFlagSet migrated from s00d79470 (verbatim, slice spelling)
+00d7a530 ?IsEditorActionAvailableValue@SP@@YAMPAVcEditorGameObject@1@@Z  # IsEditorActionAvailableValue migrated from s00d79470 (verbatim, slice spelling)
+00d7a560 ?GetEditorSelection@SP@@YAMPAVcEditorGameObject@1@IIIPAVcEditorOutput@1@PAE@Z  # GetEditorSelection migrated from s00d79470 (verbatim, slice spelling)

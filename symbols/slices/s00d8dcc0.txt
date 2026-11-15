@@ -1,0 +1,1 @@
+00d8dcc0 ?LOUNGE_Tick@SP@@YA_NPAUcSPCreatureBase_s00d8_dcc0@@IIIIPAULOUNGE_memory_block_s00d8_dcc0@@@Z  # LOUNGE_Tick migrated from s00d8dcc0 (verbatim, slice spelling)

@@ -1,0 +1,3 @@
+00d8f7a0 ?LOCATING_CALL_Activate@SP@@YAXPAUcSPCreatureBase_s00d8_f7a0@@@Z  # LOCATING_CALL_Activate migrated from s00d8f7a0 (verbatim, slice spelling)
+00d8fbe0 ?LOCATING_CALL_RESPOND_Activate@SP@@YAHPAUcSPCreatureBase_s00d8_f7a0@@HH0PAULocatingAction@1@@Z  # LOCATING_CALL_RESPOND_Activate migrated from s00d8f7a0 (verbatim, slice spelling)
+00d8fdf0 ?GROWL_TIMER_Activate@SP@@YAHPAUcSPCreatureBase_s00d8_f7a0@@HHHPAUGrowlTimer@1@PAUGrowlInput@1@PAM@Z  # GROWL_TIMER_Activate migrated from s00d8f7a0 (verbatim, slice spelling)

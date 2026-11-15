@@ -1,3 +1,8 @@
-00d80a50 MOVE_WITHIN_RANGE_Tick  # PDB candidate (caller-scored), behavior-tree tick walking a creature to its target
-00d81220 creature move-toward-target tick  # validity/vtable check, state 0 steering + near-goal transition, state 1 animation + AnimationFinished, defaults
-00d81340 SP::ALERT_Tick  # four-state alert sequence: alert animation, idle countdown, detach effect, wait for completion
+00d80a50 ?MOVE_WITHIN_RANGE_Tick@@YA_NPAXNIIPAUbehavior_memory_block_s00d8_0a50@nSPBehaviorTree@@1M@Z  # MOVE_WITHIN_RANGE_Tick migrated from s00d80a50 (verbatim, slice spelling)
+00d81220 ?FUN_00d81220@@YA_NPAXHHHHPAUMoveMem@@HM@Z  # FUN_00d81220 migrated from s00d80a50 (verbatim, slice spelling)
+00d81340 ?ALERT_Tick@@YA_NPAXHHHHPAUAlertMem@@HM@Z  # ALERT_Tick migrated from s00d80a50 (verbatim, slice spelling)
+00d81670 ?FUN_00d81670@@YAMPAXHHH0PA_NH0@Z  # FUN_00d81670 migrated from s00d80a50 (verbatim, slice spelling)
+00d81700 ?FUN_00d81700@@YAMPAXHHH0PA_NH0@Z  # FUN_00d81700 migrated from s00d80a50 (verbatim, slice spelling)
+00d817b0 ?FUN_00d817b0@@YAMPAXHHH0PA_NH0@Z  # FUN_00d817b0 migrated from s00d80a50 (verbatim, slice spelling)
+00d81820 ?FUN_00d81820@@YAMPAXHHH0PA_NH0@Z  # FUN_00d81820 migrated from s00d80a50 (verbatim, slice spelling)
+00d818b0 ?FUN_00d818b0@@YAMPAXHHH0PA_NH0@Z  # FUN_00d818b0 migrated from s00d80a50 (verbatim, slice spelling)
