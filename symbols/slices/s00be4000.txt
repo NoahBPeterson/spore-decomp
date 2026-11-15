@@ -1,0 +1,3 @@
+00be41b0 ?FUN_00be41b0@S@@QAEXXZ  # S::FUN_00be41b0 migrated from s00be4000 (verbatim, slice spelling)
+00be4400 ?FUN_00be4400@S@@QAEXXZ  # S::FUN_00be4400 migrated from s00be4000 (verbatim, slice spelling)
+00be4b30 ?FUN_00be4b30@S@@QAEXPAX@Z  # S::FUN_00be4b30 migrated from s00be4000 (verbatim, slice spelling)
