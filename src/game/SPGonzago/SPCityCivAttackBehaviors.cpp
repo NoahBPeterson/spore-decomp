@@ -194,7 +194,6 @@ struct WeaponData                                           // the turret's copy
     uint32_t     mValues[7];                                // +0x10
 
     WeaponData(const WeaponData& src);                      // 0x00d54780
-    WeaponData(void* const* ppObject, const WeaponSource& src);     // 0x00d548e0
 };
 }
 namespace SP {
@@ -476,6 +475,7 @@ struct Target {
     virtual void v0c();
     virtual void v10();
     virtual void Release();          // vtable +0x14
+    virtual void AddRef();           // vtable +0x18
 };
 struct cSpaceTurretStateInfo {
     int32_t  mState;                 // +0x00
@@ -484,6 +484,18 @@ struct cSpaceTurretStateInfo {
     uint64_t mNextBeamTime;          // +0x10
     uint64_t mBeamCutoffTime;        // +0x18
     int32_t  mBehaviorIndex;         // +0x20
+
+    cSpaceTurretStateInfo() {}
+    cSpaceTurretStateInfo(const cSpaceTurretStateInfo& src)
+        : mState(src.mState), mpTarget(src.mpTarget)
+    {
+        if (mpTarget)
+            mpTarget->AddRef();
+        mNextMissileTime = src.mNextMissileTime;
+        mNextBeamTime = src.mNextBeamTime;
+        mBeamCutoffTime = src.mBeamCutoffTime;
+        mBehaviorIndex = src.mBehaviorIndex;
+    }
 };
 struct RBNodeBase {
     RBNodeBase* mpNodeRight;         // +0x00
@@ -500,7 +512,7 @@ struct StatePair {
     int32_t mKey;                    // +0x00
     int32_t mPad04;                  // +0x04
     cSpaceTurretStateInfo mValue;    // +0x08
-    StatePair* Construct(const int* key, const cSpaceTurretStateInfo* src);   // 0x00d548e0
+    StatePair(const int& key, const cSpaceTurretStateInfo& src);             // 0x00d548e0
 };
 struct InsertTag { unsigned char mValue; InsertTag() : mValue(0) {} };
 struct StateMap {
@@ -848,20 +860,9 @@ void SP::cBehaviorSpaceTurret_s00d5_3b50::UpdateWeaponData()
 }
 
 // @ 0x00d548e0
-SP::WeaponData::WeaponData(void* const* ppObject, const SP::WeaponSource& src)
-: mpObject(*ppObject)
+StatePair::StatePair(const int& key, const cSpaceTurretStateInfo& src)
+    : mKey(key), mValue(src)
 {
-    mpTemplate = src.mpObject;
-    mpRef = src.mpRef;
-    if (mpRef)
-        mpRef->AddRef();
-    mValues[0] = src.mValues[0];
-    mValues[1] = src.mValues[1];
-    mValues[2] = src.mValues[2];
-    mValues[3] = src.mValues[3];
-    mValues[4] = src.mValues[4];
-    mValues[5] = src.mValues[5];
-    mValues[6] = src.mValues[6];
 }
 
 // @ 0x00d54940
@@ -1206,8 +1207,7 @@ cSpaceTurretStateInfo& StateMap::GetOrInsert(const int& key)
         src.mBeamCutoffTime = 0;
         src.mBehaviorIndex = 0;
 
-        StatePair pair;
-        pair.Construct(&key, &src);
+        StatePair pair(key, src);
         StateNode* result = 0;
         Insert(&result, (StateNode*)pos, &pair, InsertTag());
         if (pair.mValue.mpTarget)

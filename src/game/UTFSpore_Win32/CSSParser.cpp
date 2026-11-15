@@ -2420,13 +2420,12 @@ char CharStream::Fn8f3a10(int)
 // @ 0x008f3a40
 void CharStream::Fn8f3a40(int)
 {
-    if (scanPos < scanEnd) {
-        do {
-            wchar16 ch = *scanPos;
-            if ((unsigned)(ch - 0x30) > 9) break;
-            ((WStr2*)((char*)this + 0x10))->push_back(ch);
-            scanPos = scanPos + 1;
-        } while (scanPos < scanEnd);
+    while (scanPos < scanEnd) {
+        wchar16 ch = *scanPos;
+        int t = ch;
+        if (t < 0x30 || t > 0x39) break;
+        ((WStr2*)((char*)this + 0x10))->push_back(ch);
+        scanPos = scanPos + 1;
     }
 }
 
