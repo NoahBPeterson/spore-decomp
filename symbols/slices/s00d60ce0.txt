@@ -1,4 +1,6 @@
-00d60f00 SP::cCityVisualizer::SetCity  # PDB candidate (caller-scored); swaps the visualised city (city at retail +0xaf0)
+00d60ce0 ?UpdateSlotCircles@Viz_s00d6_0ce0@@QAEXXZ  # Viz_s00d6_0ce0::UpdateSlotCircles migrated from s00d60ce0 (verbatim, slice spelling)
+00d60f00 ?SetCity@Viz_s00d6_0ce0@@QAEXPAUCity_s00d6_0ce0@@@Z  # Viz_s00d6_0ce0::SetCity migrated from s00d60ce0 (verbatim, slice spelling)
+00d61880 ?LayoutChanged@Viz_s00d6_0ce0@@QAEXXZ  # Viz_s00d6_0ce0::LayoutChanged migrated from s00d60ce0 (verbatim, slice spelling)
 00d61b20 ?FUN_00d61b20@@YAXPAUCreature@@@Z  # FUN_00d61b20 migrated from s00d60ce0 (verbatim, slice spelling)
 00d61b50 ?FUN_00d61b50@@YAMH@Z  # FUN_00d61b50 migrated from s00d60ce0 (verbatim, slice spelling)
 00d61b80 ?FUN_00d61b80@@YAXPAUCreatureB@@HHHHPAH@Z  # FUN_00d61b80 migrated from s00d60ce0 (verbatim, slice spelling)

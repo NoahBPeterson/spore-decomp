@@ -1,3 +1,6 @@
+00ac8d00 ?FUN_00ac8d00@CT@@QAEXHH@Z  # CT::FUN_00ac8d00 migrated from s00ac8d00 (verbatim, slice spelling)
+00ac8d40 ?FUN_00ac8d40@CT@@QAEXH@Z  # CT::FUN_00ac8d40 migrated from s00ac8d00 (verbatim, slice spelling)
+00ac8d60 ?FUN_00ac8d60@CT@@QAE_NH@Z  # CT::FUN_00ac8d60 migrated from s00ac8d00 (verbatim, slice spelling)
 00ac8d80 ?FUN_00ac8d80@CT@@QAE_NPAM@Z  # CT::FUN_00ac8d80 migrated from s00ac8d00 (verbatim, slice spelling)
 00ac8df0 ?FUN_00ac8df0@CT@@QAE_NPAM@Z  # CT::FUN_00ac8df0 migrated from s00ac8d00 (verbatim, slice spelling)
 00ac8e90 ?FUN_00ac8e90@CT@@QAEXXZ  # CT::FUN_00ac8e90 migrated from s00ac8d00 (verbatim, slice spelling)

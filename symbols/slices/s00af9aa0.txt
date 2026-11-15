@@ -9,8 +9,8 @@
 00af9e20 ?FUN_00af9e20@@YAOMH@Z  # FUN_00af9e20 migrated from s00af9aa0 (verbatim, slice spelling)
 00af9ee0 ?IsNonDefault@cActionCircle_s00af_9aa0@SP@@QBEHXZ  # cActionCircle_s00af_9aa0::IsNonDefault migrated from s00af9aa0 (verbatim, slice spelling)
 00af9f30 ?FindFreeSlot@cActionCircle_s00af_9aa0@SP@@QAEPAVtSlot@12@XZ  # cActionCircle_s00af_9aa0::FindFreeSlot migrated from s00af9aa0 (verbatim, slice spelling)
-00af9f60  SP::cActionCircle::CountFreeSlots() -> int  # length of mSlots via 0x2aaaaaab magic /0x18 elem
-00af9fa0  SP::cActionCircle::CountOccupiedSlots() -> int  # size() - free count (magic-divide repeated)
+00af9f60 ?CountFreeSlots@cActionCircle_s00af_9aa0@SP@@QAEHXZ  # cActionCircle_s00af_9aa0::CountFreeSlots migrated from s00af9aa0 (verbatim, slice spelling)
+00af9fa0 ?CountOccupiedSlots@cActionCircle_s00af_9aa0@SP@@QAEHXZ  # cActionCircle_s00af_9aa0::CountOccupiedSlots migrated from s00af9aa0 (verbatim, slice spelling)
 00af9ff0 ?SlotAt@cActionCircle_s00af_9aa0@SP@@QAEPAVtSlot@12@I@Z  # cActionCircle_s00af_9aa0::SlotAt migrated from s00af9aa0 (verbatim, slice spelling)
 00afa030 ?Reserve@tSlot@cActionCircle_s00af_9aa0@SP@@QAEXPAVcGameData_s00af_9aa0@3@@Z  # Reserve migrated from s00af9aa0 (verbatim, slice spelling)
 00afa070 ?ReserveId@tSlot@cActionCircle_s00af_9aa0@SP@@QAEXI@Z  # ReserveId migrated from s00af9aa0 (verbatim, slice spelling)

@@ -1,5 +1,5 @@
 00d2f9a0 ?GetCivilization@cCity@SP@@QBEPAVcCivilization@2@XZ  # SP::cCity::GetCivilization (callee of s00d5d880, named from the dev publics; slice address comment)
-00d5d880 ?AllegianceUpdate@cCityVisualizer@@QAEXXZ  # void SP::cCityVisualizer::AllegianceUpdate()
-00d5de40 ?UpdateArtifacts@cCityVisualizer@@QAEXXZ  # void SP::cCityVisualizer::UpdateArtifacts()
-00d5e0c0 ?SpaceOnlyTick@cCityVisualizer@@QAEHXZ  # int SP::cCityVisualizer::SpaceOnlyTick()
+00d5d880 ?AllegianceUpdate@cCityVisualizer_s00d5_d880@@QAEXXZ  # cCityVisualizer_s00d5_d880::AllegianceUpdate migrated from s00d5d880 (verbatim, slice spelling)
+00d5de40 ?UpdateArtifacts@cCityVisualizer_s00d5_d880@@QAEXXZ  # cCityVisualizer_s00d5_d880::UpdateArtifacts migrated from s00d5d880 (verbatim, slice spelling)
+00d5e0c0 ?SpaceOnlyTick@cCityVisualizer_s00d5_d880@@QAEHXZ  # FUN_00d5e0c0 migrated from s00d5d880 (verbatim, slice spelling)
 00d5e5c0 ?Insert@SlotVector@@QAEXPAVCitySlot@@PBV2@@Z  # SlotVector::Insert migrated from s00d5d880 (verbatim, slice spelling)

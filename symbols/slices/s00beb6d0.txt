@@ -19,6 +19,8 @@
 00bec0f0 ?PointInsideWall@cCityWalls_s00be_b6d0@@QAEIABUVector3_s00be_b6d0@@@Z  # cCityWalls_s00be_b6d0::PointInsideWall migrated from s00beb6d0 (verbatim, slice spelling)
 00bec140 ?PointInsideInnerWall@cCityWalls@@QAEIABUVector3@@@Z  # cCityWalls::PointInsideInnerWall migrated from s00beb6d0 (verbatim, slice spelling)
 00bec190 ?GetCenter@cCityWalls@@QAE?AUVector3@@XZ  # cCityWalls::GetCenter migrated from s00beb6d0 (verbatim, slice spelling)
+00bec1c0 ?GetInnerGatePosition@cCityWalls@@QAE?AUVector3_s00be_b6d0@@H@Z  # cCityWalls::GetInnerGatePosition migrated from s00beb6d0 (verbatim, slice spelling)
+00bec2d0 ?GetGatePosition@cCityWalls@@QAE?AUVector3_s00be_b6d0@@H@Z  # cCityWalls::GetGatePosition migrated from s00beb6d0 (verbatim, slice spelling)
 00bec460 ?RequestGatePosition@cCityWalls@@QAEPAUVector3@@PAU2@HH@Z  # cCityWalls::RequestGatePosition migrated from s00beb6d0 (verbatim, slice spelling)
 00bec660 ?FindNearestPosition@cCityWalls@@QAEPAUVector3@@PAU2@PBU2@H@Z  # cCityWalls::FindNearestPosition migrated from s00beb6d0 (verbatim, slice spelling)
 00bec790 ?UpdateGatePosition@cCityWalls@@QAEXH@Z  # cCityWalls::UpdateGatePosition migrated from s00beb6d0 (verbatim, slice spelling)

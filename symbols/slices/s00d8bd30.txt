@@ -1,2 +1,7 @@
-00d8bd30 SP::CAN_EAT_FRUIT_Decide  # PDB candidate (caller-scored); cdecl float Decide(creature, p2, p3, flags): idle-anim fruit / held fruit / fruit lists / planet-surface fruit, claims via stimulus set
 00c034d0 ?Test@cPred@@QAE_NPAUcFruitRec1@@@Z  # fruit-record predicate functor (thiscall on empty functor, 1 arg)
+00d8bd30 ?Decide@@YAMPAUcCreature_s00d8_bd30@@HHI@Z  # Decide migrated from s00d8bd30 (verbatim, slice spelling)
+00d8c3e0 ?FUN_00d8c3e0@@YAMPAUcAICreature@@HHIPAUcStimuli_s00d8_bd30@@PAE@Z  # FUN_00d8c3e0 migrated from s00d8bd30 (verbatim, slice spelling)
+00d8c780 ?FUN_00d8c780@@YAMPAUcAICreature@@HHHPAUcStimuli_s00d8_bd30@@PAE@Z  # FUN_00d8c780 migrated from s00d8bd30 (verbatim, slice spelling)
+00d8c850 ?FUN_00d8c850@@YAMPAUcAICreature@@HHHPAUcStimuli_s00d8_bd30@@PAE@Z  # FUN_00d8c850 migrated from s00d8bd30 (verbatim, slice spelling)
+00d8c9c0 ?FUN_00d8c9c0@@YAMPAUcAICreature@@HHHPAUcStimuli_s00d8_bd30@@PAE@Z  # FUN_00d8c9c0 migrated from s00d8bd30 (verbatim, slice spelling)
+00d8cab0 ?FUN_00d8cab0@@YAMPAUcAICreature@@HHHPAUcStimuli_s00d8_bd30@@PAE@Z  # FUN_00d8cab0 migrated from s00d8bd30 (verbatim, slice spelling)
