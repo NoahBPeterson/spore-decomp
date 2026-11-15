@@ -2455,8 +2455,8 @@ struct Stopwatch {
 };
 struct LimitStopwatch : Stopwatch {
     uint64_t mnEndTime;
-    void SetTimeLimit(uint64_t limit);                                    // 0x0093a480
-    LimitStopwatch(int units, bool start) : Stopwatch(units, start) { SetTimeLimit(0); }
+    void SetTimeLimit(unsigned limit, bool startTimer);                   // 0x0093a480 (ret 8: two dword args)
+    LimitStopwatch(int units, bool start) : Stopwatch(units, start) { SetTimeLimit(0, 0); }
 };
 struct MessageHandlerRef {
     int mHandler;
