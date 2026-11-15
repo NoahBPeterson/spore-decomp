@@ -1396,6 +1396,103 @@ struct AnimCommandB {         // cAnimCommand variant (vtable 0x1448d10)
     void OnEndBlock(char flag);                           // 0x00a0e840
 };
 extern uint __cdecl FNV1_String16(const wchar_t* s, uint seed, int mode); // 0x00932f30
+struct ArgScriptParser {
+    virtual void p0();                                    // +0x00
+    virtual void p1();                                    // +0x04
+    virtual void p2();                                    // +0x08
+    virtual void p3();                                    // +0x0c
+    virtual void p4(void* ctx);                           // +0x10
+    virtual void p5(const char* name, void* cmd);         // +0x14
+virtual void p6();
+virtual void p7();
+virtual void p8();
+virtual void p9();
+    virtual void p10(int a, int b);                       // +0x28
+virtual void p11();
+virtual void p12();
+virtual void p13();
+virtual void p14();
+virtual void p15();
+virtual void p16();
+virtual void p17();
+virtual void p18();
+    virtual void p19(IFile* f);                           // +0x4c
+};
+struct cCommandBase { void Construct(); };                // 0x0083c800
+struct AppPropsFields { void Construct(); };              // 0x0083cdd0
+struct ResourceMan {
+virtual void r0();
+virtual void r1();
+virtual void r2();
+virtual void r3();
+virtual void r4();
+virtual void r5();
+virtual void r6();
+virtual void r7();
+virtual void r8();
+virtual void r9();
+virtual void r10();
+virtual void r11();
+virtual void r12();
+virtual void r13();
+    virtual int FindList(void* vec, const void* key, int flag); // +0x38
+virtual void r15();
+virtual void r16();
+virtual void r17();
+virtual void r18();
+virtual void r19();
+virtual void r20();
+virtual void r21();
+    virtual void* GetResource(const void* key);           // +0x58
+};
+struct IResourceObj {
+virtual void o0();
+virtual void o1();
+virtual void o2();
+virtual void o3();
+virtual void o4();
+virtual void o5();
+virtual void o6();
+virtual void o7();
+virtual void o8();
+virtual void o9();
+virtual void o10();
+virtual void o11();
+    virtual void o12();
+    virtual bool Load(const void* key, void** out, int a, int b, int c, int d); // +0x34
+};
+struct ILoadedResource {
+virtual void h0();
+virtual void h1();
+    virtual void Release();                               // +0x08
+virtual void h3();
+virtual void h4();
+virtual void h5();
+    virtual IFile* GetStream();                           // +0x18
+virtual void h7();
+virtual void h8();
+    virtual void Close();                                 // +0x24
+};
+struct ResourceKey_s00a0_e4c0 { uint mType; uint mInstance; };
+struct ResKeyEntry { uint m0, m1, m2; };                  // 0x0c (EA::ResourceMan::Key)
+struct KeyVec {
+    ResKeyEntry* mpBegin; ResKeyEntry* mpEnd; ResKeyEntry* mpCapacity; int mAlloc[2];
+    ~KeyVec() {
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            operator_delete__(mpBegin);
+    }
+};
+extern ArgScriptParser* __cdecl CreateParser();           // 0x008408d0
+extern void* __cdecl AllocCommand(uint size);             // 0x006abeb0
+extern ResourceMan* __cdecl GetResourceManager();         // 0x0067dcd0
+extern void __cdecl ThreadSleep(const int* ms);           // 0x00921df0
+extern uint8_t gVtblPriorityCommand[];                    // 0x01448bcc
+extern uint8_t gVtblAnimCommand[];                        // 0x01448be4
+extern uint8_t gVtblAnim2Command[];                       // 0x01448d10
+extern const char* gNamePriority;                         // 0x01551810
+extern const char* gNameAnim;                             // 0x01551818
+extern const char* gNameAnim2;                            // 0x015517e8
+extern uint32_t gAnimListLoaded;                          // 0x01551a7c
 // ---- items of slice s00a0e4c0 end
 
 // ---- items of slice s00a0f350 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1526,7 +1623,7 @@ struct AnimMgr {
     virtual void v12(); virtual void v13(); virtual void v14();
     virtual void SetAppMode(u32 mode);                 // +0x3c
 
-    void ReadAnimList(int);                            // 0xa0f080
+    bool ReadAnimList(char);                         // 0xa0f080
     bool Init(bool flag);
 };
 struct Msg { u8 pad[8]; u32 mSel; u8 pad2[0xc]; void* mData; };
@@ -9316,6 +9413,93 @@ bool __stdcall ReadAnimTable(IFile* f)
     }
     return true;
     }
+    return false;
+}
+
+// @ 0x00a0f080
+bool AnimMgr::ReadAnimList(char force)
+{
+    if (gAnimListLoaded != 0 && !force) return true;
+
+    KeyVec vec;
+    vec.mpBegin = 0;
+    vec.mpEnd = 0;
+    vec.mpCapacity = 0;
+    ResourceKey_s00a0_e4c0 key;
+    key.mType = 0x13eb428;
+    key.mInstance = 0x4aeb6bc6;
+    ResourceMan* mgr = GetResourceManager();
+    if (!mgr->FindList(&vec, &key, 0)) {
+        PrintError("No AnimLists found", "AnimList parsing error!");
+        return false;
+    }
+
+    gEntryMap.DoNukeSubtree(gEntryMap.anchor.parent);
+    gEntryMap.anchor.right = &gEntryMap.anchor;
+    gEntryMap.anchor.left = &gEntryMap.anchor;
+    gEntryMap.anchor.parent = 0;
+    gEntryMap.anchor.color = 0;
+    gEntryMap.size = 0;
+    gAnimListLoaded = 0;
+
+    {
+        AnimParseContext ctx(&gEntryMap);
+        ArgScriptParser* parser = CreateParser();
+        if (parser) parser->p0();
+        parser->p2();
+        parser->p4(&ctx);
+        parser->p10(5, 10);
+
+        cCommandBase* cmd1 = (cCommandBase*)AllocCommand(0x10);
+        if (cmd1) { cmd1->Construct(); *(const void**)cmd1 = gVtblPriorityCommand; }
+        else cmd1 = 0;
+        parser->p5(gNamePriority, cmd1);
+
+        AppPropsFields* cmd2 = (AppPropsFields*)AllocCommand(0x34);
+        if (cmd2) { cmd2->Construct(); *(const void**)cmd2 = gVtblAnimCommand; }
+        else cmd2 = 0;
+        parser->p5(gNameAnim, cmd2);
+
+        AppPropsFields* cmd3 = (AppPropsFields*)AllocCommand(0x34);
+        if (cmd3) { cmd3->Construct(); *(const void**)cmd3 = gVtblAnim2Command; }
+        else cmd3 = 0;
+        parser->p5(gNameAnim2, cmd3);
+
+        for (ResKeyEntry* elem = vec.mpBegin; elem != vec.mpEnd; elem++) {
+            int retries = 0;
+            for (;;) {
+                ResourceMan* rm = GetResourceManager();
+                IResourceObj* res = (IResourceObj*)rm->GetResource(elem);
+                ILoadedResource* handle = 0;
+                if (!res || !res->Load(elem, (void**)&handle, 1, 6, 1, 0)) {
+                    if (handle) handle->Release();
+                    if (retries >= 5) {
+                        PrintError("Failed to open an AnimList", "AnimList parsing error!");
+                        break;
+                    }
+                    retries++;
+                    int ms = 200;
+                    ThreadSleep(&ms);
+                    continue;
+                }
+                IFile* stream = handle->GetStream();
+                int magic;
+                ReadInt32(stream, &magic, 1, 0);
+                stream->v10(0, 0);
+                if (magic == 0x74736c61)
+                    ReadAnimTable(stream);
+                else
+                    parser->p19(stream);
+                handle->Close();
+                handle->Release();
+                break;
+            }
+        }
+
+        parser->p3();
+        parser->p1();
+    }
+
     return false;
 }
 
