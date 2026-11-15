@@ -7749,15 +7749,9 @@ void Blk_s0044_bcf0::Abcf0()
 // @ 0x0044c050
 int Blk_s0044_bcf0::C050()
 {
-    float f = mVec[0];
-    float r;
-    if (f < -g_eps) {
-        r = -1.0f;
-    } else {
-        r = (f > g_eps) ? 1.0f : 0.0f;
-    }
-    int n = (int)r;
-    return n;
+    float value = mVec[0];
+    int rounded = (int)(value < -g_eps ? -1.0f : (value > g_eps ? 1.0f : 0.0f));
+    return rounded;
 }
 
 // @ 0x0044c0e0
@@ -8619,9 +8613,8 @@ void* Block2::GetSub38()
         SubInner* q = &mSub18c->inner;
         void* result = q->field;
         return result;
-    } else {
-        return 0;
     }
+    return 0;
 }
 
 // @ 0x00451ed0

@@ -323,7 +323,5 @@ PaintSystemObj::PaintSystemObj()
 int RefHolder::AddRef()
 {
     AtomicRefCounted& r = mRef;
-    int n = r.mCount + 1;
-    r.mCount = r.mCount + 1;
-    return n;
+    return r.mCount++ + 1;
 }
