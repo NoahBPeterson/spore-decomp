@@ -1,1 +1,3 @@
+00caded0 ??0cFlyingLocomotion_s00ca_ded0@Simulator@@QAE@XZ  # cFlyingLocomotion_s00ca_ded0::cFlyingLocomotion migrated from s00caded0 (verbatim, slice spelling)
 00cadf50 ?TurnTowards@@YA?AUVector3@@ABU1@0MM@Z  # TurnTowards migrated from s00caded0 (verbatim, slice spelling)
+00cae0e0 ?ProjectToFlightSurface@@YA?AUVector3_s00ca_ded0@@ABU1@PAUcCreatureFlyer@@@Z  # ProjectToFlightSurface migrated from s00caded0 (verbatim, slice spelling)

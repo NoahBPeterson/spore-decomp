@@ -1,0 +1,9 @@
+00ca9820 ?FUN_00ca9820@@YAXXZ  # FUN_00ca9820 migrated from s00ca9820 (verbatim, slice spelling)
+00ca9b00 ?Erase@cSlotVector24@@QAEPAUtSlot24@@PAU2@0@Z  # cSlotVector24::Erase migrated from s00ca9820 (verbatim, slice spelling)
+00ca9b70 ?FUN_00ca9b70@@YAXXZ  # FUN_00ca9b70 migrated from s00ca9820 (verbatim, slice spelling)
+00ca9cc0 ?Erase@cSlotVector16@@QAEPAUtSlot16@@PAU2@0@Z  # cSlotVector16::Erase migrated from s00ca9820 (verbatim, slice spelling)
+00ca9d20 ?FUN_00ca9d20@@YAXXZ  # FUN_00ca9d20 migrated from s00ca9820 (verbatim, slice spelling)
+00ca9e90 ?FUN_00ca9e90@@YAXXZ  # FUN_00ca9e90 migrated from s00ca9820 (verbatim, slice spelling)
+00caa0c0 ?FUN_00caa0c0@@YAXXZ  # FUN_00caa0c0 migrated from s00ca9820 (verbatim, slice spelling)
+00caa1c0 ?FUN_00caa1c0@@YAXXZ  # FUN_00caa1c0 migrated from s00ca9820 (verbatim, slice spelling)
+00caa360 ?DestroyVehicle@cVehicle@SP@@QAEX_NI@Z  # SP::cVehicle::DestroyVehicle migrated from s00ca9820

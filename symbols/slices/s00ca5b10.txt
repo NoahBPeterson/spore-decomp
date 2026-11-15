@@ -1,1 +1,1 @@
-00ca5b10 cPathLocomotion::Turn  # called from cPathLocomotion::Update (s00ca8710) as Turn(dir, dt); sibling of cPathLocomotion::Steer 0x00ca4f90 (same frame/angle/quaternion code)
+00ca5b10 ?Turn@cPathLocomotion_s00ca_5b10@@QAEXUVector3_s00ca_5b10@@M@Z  # cPathLocomotion_s00ca_5b10::Turn migrated from s00ca5b10 (verbatim, slice spelling)

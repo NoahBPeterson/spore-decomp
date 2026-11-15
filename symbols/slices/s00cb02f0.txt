@@ -1,1 +1,1 @@
-00cb02f0 Simulator::cFlyingLocomotion::Update  # vtable slot 3 of vtbl_Simulator::cFlyingLocomotion (0x01475124); flight steering along cLocomotionRequest; method name descriptive
+00cb02f0 ?Update@cFlyingLocomotion_s00cb_02f0@@QAEXPAULocoSteerParams@@@Z  # cFlyingLocomotion_s00cb_02f0::Update migrated from s00cb02f0 (verbatim, slice spelling)

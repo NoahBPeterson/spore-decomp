@@ -1,0 +1,1 @@
+00ca42c0 ?Clear@cOwner@@QAEXXZ  # cOwner::Clear migrated from s00ca3f20 (verbatim, slice spelling)
