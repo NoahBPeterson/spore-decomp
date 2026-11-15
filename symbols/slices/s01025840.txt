@@ -31,5 +31,4 @@
 00ecdba0 ?GetName@cPlanetRecord@SP@@QBEABV?$basic_string@_WVallocator@eastl@@@eastl@@XZ  # SP::cPlanetRecord::GetName (callee of s01025840, named from the dev publics; slice address comment)
 00ffbe50 SP::GetUFOSimulator  # dev call-site alignment (energy)
 00ffbfc0 SP::cSPSimulatorPlayerUFO::GetMaxTravelDistance  # dev call-site alignment (testTravel)
-01025840 ?Execute@cCommandRaidCheat@@QAEXPAUcArguments@@@Z  # Execute migrated from s01025840 (verbatim, slice spelling)
 0103a480 SP::cSPSpaceTrading::CreateCommodityFromID  # dev call-site alignment (addCargo rare)
