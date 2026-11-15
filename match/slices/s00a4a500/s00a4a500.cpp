@@ -212,8 +212,8 @@ void* canvas_realizedollar(void** out, void* env, void* a3, const char* s)
 // @ 0x00a4a5d0
 void* canvas_findtext(int* __restrict out, void* x)
 {
-    while (*(int*)((char*)x + 0x74) == 0)
-        x = *(void**)((char*)x + 0x2c);
+    while (((t_glist*)x)->gl_symtag == 0)
+        x = ((t_glist*)x)->gl_owner;
     const t_symbol* p = (const t_symbol*)((t_glist*)x)->gl_symtag;
     t_symbol* result = (t_symbol*)out;
     *result = *p;
