@@ -1,1 +1,3 @@
 00a31170 ?InitAT@cSystem@@QAE_NXZ  # cSystem::InitAT migrated from s00a31170 (verbatim, slice spelling)
+00a31800 ?ShutdownAT@cSystem@@QAE_NXZ  # cSystem::ShutdownAT migrated from s00a31170 (verbatim, slice spelling)
+00a31dc0 ?FUN_00a31dc0@cSystem@@QAE_NIPAX@Z  # cSystem::FUN_00a31dc0 migrated from s00a31170 (verbatim, slice spelling)

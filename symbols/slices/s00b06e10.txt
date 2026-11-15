@@ -1,0 +1,2 @@
+00b07140 ?Erase@cBigVector@@QAEXPAX0@Z  # cBigVector::Erase migrated from s00b06e10 (verbatim, slice spelling)
+00b072d0 ?CopyGlyphRuns@@YAXPAUcGlyphRun@@0PBU1@@Z  # CopyGlyphRuns migrated from s00b06e10 (verbatim, slice spelling)

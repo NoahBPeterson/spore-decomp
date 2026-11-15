@@ -1,5 +1,6 @@
 0106ada0 ?FUN_0106ada0@cSPUISpace_s0106_ada0@@QAEXXZ  # cSPUISpace_s0106_ada0::FUN_0106ada0 migrated from s0106ada0 (verbatim, slice spelling)
 0106b220 ?FUN_0106b220@cSPUISpace_s0106_ada0@@QAEXPAX@Z  # cSPUISpace_s0106_ada0::FUN_0106b220 migrated from s0106ada0 (verbatim, slice spelling)
+0106b310 ?ManageSeti@cSPUISpace_s0106_ada0@@QAEXPAXH@Z  # cSPUISpace_s0106_ada0::ManageSeti migrated from s0106ada0 (verbatim, slice spelling)
 0106b500 ?FUN_0106b500@cSPUISpace_s0106_ada0@@QAEXPAX@Z  # cSPUISpace_s0106_ada0::FUN_0106b500 migrated from s0106ada0 (verbatim, slice spelling)
 0106b630 ?FUN_0106b630@cSPUISpace_s0106_ada0@@QAEXXZ  # cSPUISpace_s0106_ada0::FUN_0106b630 migrated from s0106ada0 (verbatim, slice spelling)
 0106b7e0 ?FUN_0106b7e0@@YGDPAX0@Z  # FUN_0106b7e0 migrated from s0106ada0 (verbatim, slice spelling)

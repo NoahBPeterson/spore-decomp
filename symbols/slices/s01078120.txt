@@ -1,4 +1,5 @@
-01078120 SP::cSPPropLayoutPanel::Init  # Ghidra PDB candidate (caller-scored), unverified
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s01078120, named from the dev publics; slice address comment)
+01078120 ?Init@cSPPropLayoutPanel@@QAE_NXZ  # cSPPropLayoutPanel::Init migrated from s01078120 (verbatim, slice spelling)
 01078820 PropPanelAnim::FUN_01078820  # panel set-up: swap the layout ref, seed the resource key, subscribe to the message server
 010788d0 PropPanelAnim::FUN_010788d0  # per-frame tick: interpolate the window between two layout cells, refresh entry children
 01078b80 PropPanelAnim::FUN_01078b80  # move the window to (x,z) instantly or with the stopwatch running (BYTE-EXACT)

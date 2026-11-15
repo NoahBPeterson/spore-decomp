@@ -9,6 +9,7 @@
 00a17890 ?Attach@ResourceConfiguration_s00a1_7690@@QAEXPAPAXPAXPBID@Z  # ResourceConfiguration_s00a1_7690::Attach migrated from s00a17690 (verbatim, slice spelling)
 00a17910 ?dtor@ResourceConfiguration_s00a1_7690@@QAEXXZ  # ResourceConfiguration_s00a1_7690::dtor migrated from s00a17690 (verbatim, slice spelling)
 00a17a00 ?FUN_00a17a00@@YG_NPAXPAUEAString@@@Z  # FUN_00a17a00 migrated from s00a17690 (verbatim, slice spelling)
+00a17be0 ??0ResourceConfiguration@Audio@EA@@QAE@XZ  # EA::Audio::ResourceConfiguration::ResourceConfiguration migrated from s00a17690
 00a17c70 ?CreateResource@FactoryConfiguration_s00a1_7690@@QAE_NPAXPAPAXII@Z  # FactoryConfiguration_s00a1_7690::CreateResource migrated from s00a17690 (verbatim, slice spelling)
 00a17da0 ?WriteResource@FactoryConfiguration_s00a1_7690@@QAE_NPAX0II@Z  # FactoryConfiguration_s00a1_7690::WriteResource migrated from s00a17690 (verbatim, slice spelling)
 00a18470 ?FUN_00a18470@@YAXPAUElem12@@0000@Z  # FUN_00a18470 migrated from s00a17690 (verbatim, slice spelling)

@@ -11,10 +11,10 @@
 00b18660  ??0cGameData_s00b1_81d0@SP@@QAE@XZ  # cGameData ctor migrated from s00b181d0 (verbatim, slice spelling)
 00b186b0  SP::cGameData scalar deleting destructor
 00b18760  creature-tag check  # vtable slot 3 lookup of 0xd0036e08 then cCreatureBase test
-00b188b0  trait/kind hash switch  # switch over vtable-slot 0x38 kind hash
+00b188b0 ?KindIsActive@@YAEPAUIObj@@@Z  # KindIsActive migrated from s00b181d0 (verbatim, slice spelling)
 00b18960  MessageServer notify on +0x68
 00b189a0  SP::cGameData::NotifyDirty  # if !b call vtable slot 7
-00b189c0  SP::cGameData large serialization routine
+00b189c0 ?KeyDownHandler@@YG_NHH@Z  # KeyDownHandler migrated from s00b181d0 (verbatim, slice spelling)
 00b18d50  GameData/SpaceGame check
 00b18d90  message send helper (0x8d36f0)
 00b18db0  container teardown (+0xc0)
