@@ -114,7 +114,7 @@ virtual void v4();
 virtual void v6();
 virtual void v7();
 virtual void v8();
-    virtual void GetHandlePosition(Vec3* out);     // slot 9 (+0x24)
+    virtual Vec3* GetHandlePosition(Vec3* out);    // slot 9 (+0x24), 0x0047f960
 virtual void v10();
 virtual void v11();
 virtual void v12();
@@ -138,6 +138,8 @@ struct cSPEditorBlock_s0047_f520 {
     void* mp10;                            // +0x10
     char pad14[4];
     void* mp18;                            // +0x18
+    char pad1c[0x48 - 0x1c];
+    Vec3 mPosition;                        // +0x48
     void GetTransform(cSPTransformOps* out);   // 0x4362a0
 };
 struct BallConnectorIface { void* QueryInterface(u32 id); };
@@ -247,17 +249,18 @@ void __fastcall cSPEditorHandle_UpdateModelTransforms(cSPEditorHandle_s0047_f520
 }
 
 // @ 0x0047f960
-Vec3* __fastcall cSPEditorHandle_GetBlockOffset(cSPEditorHandle_s0047_f520* self, int /*edx*/, Vec3* out)
+Vec3* cSPEditorHandle_s0047_f520::GetHandlePosition(Vec3* out)
 {
-    if (self->mBlock) {
-        out->x = *(float*)((char*)self->mBlock + 0x48);
-        out->y = *(float*)((char*)self->mBlock + 0x4c);
-        out->z = *(float*)((char*)self->mBlock + 0x50);
-    } else {
-        out->x = kDefaultHandleOffset[0];
-        out->y = kDefaultHandleOffset[1];
-        out->z = kDefaultHandleOffset[2];
+    if (mBlock) {
+        const Vec3* position = &mBlock->mPosition;
+        out->x = position->x;
+        out->y = position->y;
+        out->z = position->z;
+        return out;
     }
+    out->x = kDefaultHandleOffset[0];
+    out->y = kDefaultHandleOffset[1];
+    out->z = kDefaultHandleOffset[2];
     return out;
 }
 

@@ -42,10 +42,10 @@ struct IVtbl {
     PV4 PV2 PV                                   // 0xb8..0xd0
     virtual char  SlotD4();                      // 0xd4
 };
-typedef int (__cdecl *Slot8Vfn)(int);
-struct VtblTable { void* mSlots[0x100]; };
 struct IVtblSlot8 {
-    VtblTable* mpVtbl;                        // 0x00
+    virtual void Slot0();
+    virtual void Slot4();
+    virtual void* Slot8();                   // 0x08, no stack arguments
 };
 struct NounMgr {
     void* GetPlayerTribe();                      // 0x00bfc5f0
@@ -137,7 +137,6 @@ struct AvatarProfile {
     uint8_t   pad00[0x6d4];
     uint32_t* mpIds;                                   // +0x6d4
 };
-float __cdecl FUN_00d99ac0(void* loco, int sel);    // 0x00d99ac0
 void* __cdecl SP_GetCurrentGameMode();              // 0x00b5b800
 char  __cdecl FUN_00c0e8d0(void* a, int b);         // 0x00c0e8d0
 void* __cdecl SP_NounManager();                     // 0x00b3d300
@@ -372,8 +371,7 @@ int __cdecl FUN_00d1e4b0(TuningObj* param_1, cCreature* param_2, IVtbl* param_3)
 {
     if (gByte1582df5 != 1) {
         Loco* loco = param_2 ? &param_2->mLoco : 0;
-        int sel = ((Slot8Vfn)((IVtblSlot8*)param_3)->mpVtbl->mSlots[2])(1);
-        float v = FUN_00d99ac0(loco, sel);
+        float v = FUN_00d99ac0(loco, ((IVtblSlot8*)param_3)->Slot8(), 1);
         bool flag = ((param_2->mFlagsB58 >> 9) & 1u) != 0;
         float bound = param_1->GetBound(flag);
         if (v < bound)

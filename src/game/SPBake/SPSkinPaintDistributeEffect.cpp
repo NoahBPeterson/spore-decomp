@@ -41,6 +41,7 @@ struct VectorAutoRef {
     uint32_t mAlloc[2];
     VectorAutoRef() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
     ~VectorAutoRef();
+    void clear();
     cIVisualEffect** erase(cIVisualEffect** first, cIVisualEffect** last);   // 0x00533500
 };
 void* GetPaintSystem();     // 0x00401080
@@ -375,6 +376,12 @@ struct cSPSkinPaintDistributeEffect_s0053_1510 {
 // ---- items of slice s00532f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef int ptrdiff_t;
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
+
+inline void VectorAutoRef::clear()
+{
+    ScratchSlots<7>(); // Reserved inline frame before the vector receiver.
+    erase(mpBegin, mpEnd);
+}
 inline void* operator new(size_t, void* p) { return p; }
 void* operator new[](size_t size, const char* name, int flags, unsigned debugFlags, const char* file, int line); // 0xf473a0
 inline void* operator new(size_t size, const char* name, int flags, unsigned debugFlags, const char* file, int line)
@@ -642,7 +649,7 @@ void cSPSkinPaintDistributeEffect::SetWorld(void* world, void* b, void* c)
 // @ 0x00531380
 void cSPSkinPaintDistributeEffect::Clear()
 {
-    mEffectsList.erase(mEffectsList.mpBegin, mEffectsList.mpEnd);
+    mEffectsList.clear();
     mpWorld = 0;
 }
 

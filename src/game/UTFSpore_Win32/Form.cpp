@@ -528,8 +528,8 @@ void Element::Dtor1()
 {
     Element* self = this;
     void* pf = (void*)g_vtbl_element3;
-    ((void (__thiscall*)(void*))Fn620230)((char*)self + 0x20);
     *(void* volatile*)&self->vftable = pf;
+    ((void (__thiscall*)(void*))Fn620230)((char*)self + 0x20);
     ((void (__thiscall*)(void*))Fn620230)((char*)self + 0x18);
     ((void (__thiscall*)(void*))Fn8e52e0)(self);
 }

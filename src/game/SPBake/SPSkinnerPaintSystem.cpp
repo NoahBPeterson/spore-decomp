@@ -126,7 +126,9 @@ static inline bool JobDone(JobMgr* m) { return (1 << m->ContinueJob() & 0x3c) !=
 extern "C" double __cdecl fabs(double);
 #pragma intrinsic(fabs)
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
-void* FUN_00507c70(void* p);              // 0x00507c70
+struct SkinnerAlloc {
+    void* Init(void* source);            // 0x00507c70, allocated object in ecx
+};
 // The converter takes the destination first and the RGB triple by value;
 // the old one-argument declaration dropped the 12-byte argument.
 struct PaintReq {
@@ -1065,6 +1067,7 @@ TickState& TickState::Assign(const TickState& o)
     D.p34 = S.p34;
 #undef D
 #undef S
+    ScratchSlots<2>(); // Two unused dwords in the original /Od assignment frame.
     return *this;
 }
 
@@ -1420,12 +1423,7 @@ void cPaintSystem_s0052_2800::SetCreatureSkin(cSkinObject* skin, bool keepMesh)
 void* Factory::Make()
 {
     void* mem = EA_alloc(0x1d0, "Skinner", 0, 0, 0, 0);
-    void* result;
-    if (mem != 0)
-        result = FUN_00507c70(this);
-    else
-        result = 0;
-    return result;
+    return mem ? ((SkinnerAlloc*)mem)->Init(this) : 0;
 }
 
 // @ 0x005235c0

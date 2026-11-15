@@ -255,6 +255,8 @@ struct cSPSpaceToolData_s0104_bcc0 {
     u8   FUN_0104bff0();                                       // 0x0104bff0
     u8   FUN_0104c010();                                       // 0x0104c010
     bool func48h();                                            // 0x0104ca20
+    bool UsesAmmo() const { return (mFlags174 >> 5) & 1; }
+    bool NeedsCharges();                                      // 0x0104e320
     bool IsInContext();                                        // 0x0104cb70
     void FUN_0104cbd0(i32 delta);                              // 0x0104cbd0
     void FUN_0104cc00(i32 amount);                             // 0x0104cc00
@@ -522,7 +524,6 @@ public:
     void SetPropertyList(uint32_t nPropertyKey);
     void TryDeselectAfterUse();  // 0x0104e260 (cSPSpaceToolData::TryDeselectAfterUse)
     void ReloadItemEffects();
-    bool NeedsCharges();  // 0x0104e320 (cSPSpaceToolData::NeedsCharges)
     void FreeEffectBuffers();  // 0x0104e6f0 (cSPSpaceToolData::FreeEffectBuffers)
 
     uint8_t mPadE4[0x24];                       // 0xe4
@@ -1196,16 +1197,25 @@ struct cGameModeState {
 };
 cGameModeState* GameModeState();            // 0x00b3d4d0
 void TriggerAdventureEvent(const char* name, uint32_t id, int flag);   // 0x01041c50 (cdecl)
-struct cPlanetObjectData {   // 0x2c bytes
-    uint32_t pad[0x2c / 4];
-    cPlanetObjectData(int type, const Vector3& pos);       // 0x0104e290
+// Retail cToolObjectData view; the generated header lacks this two-argument constructor.
+// The native caller uses the unnamed flag value 7, within eToolObjectFlags' 0..7 domain.
+struct cToolObjectData_s0104_e290 {
+    uint32_t mObjectType;                 // +0x00
+    Vector3 mObjectPosition;              // +0x04
+    uint16_t mAmmo;                       // +0x10
+    uint8_t mArtifactType;                // +0x12
+    float mHealth;                        // +0x14
+    uint32_t mLootDropTimeS;               // +0x18
+    ResourceKeyZ mKey;                    // +0x1c
+    uint8_t mFlags;                       // +0x28
+    cToolObjectData_s0104_e290(SP::cToolObjectData::eToolObjectFlags type, const Vector3& pos); // 0x0104e290
 };
 struct PlanetObjectVector {
-    cPlanetObjectData* mpBegin;
-    cPlanetObjectData* mpEnd;
-    cPlanetObjectData* mpCapacity;
+    cToolObjectData_s0104_e290* mpBegin;
+    cToolObjectData_s0104_e290* mpEnd;
+    cToolObjectData_s0104_e290* mpCapacity;
     uint32_t mAllocator[2];
-    void push_back_planetobj(const cPlanetObjectData& v);   // 0x00acbbe0 (vector::push_back)
+    void push_back_planetobj(const cToolObjectData_s0104_e290& v);   // 0x00acbbe0 (vector::push_back)
 };
 struct cPlantProfile {
     uint32_t pad[0x504 / 4];
@@ -1816,16 +1826,11 @@ void cSPSpaceToolData_s0104_e060::TryDeselectAfterUse()
 }
 
 // @ 0x0104e290
-void SetEffectConfig(cEffectConfig* pConfig, uint32_t nChannel, const Vec3* pColor)
+cToolObjectData_s0104_e290::cToolObjectData_s0104_e290(SP::cToolObjectData::eToolObjectFlags type, const Vector3& pos)
 {
-    pConfig->mPhase3 = 0;
-    pConfig->mPhase4 = 0;
-    pConfig->mPhase5 = 0;
-    pConfig->mChannelMask = (uint8_t)(1 << (nChannel & 0x1f));
-    pConfig->mColor.mX = pColor->mX;
-    pConfig->mColor.mY = pColor->mY;
-    pConfig->mColor.mZ = pColor->mZ;
-    pConfig->mPhase2 = 0;
+    mFlags = (uint8_t)(1u << type);
+    mObjectPosition = pos;
+    mLootDropTimeS = 0;
 }
 
 // @ 0x0104e2f0
@@ -1837,11 +1842,9 @@ uint32_t cSpaceInventoryItem_GetItemCount(cSpaceInventoryItemData* pItem, uint32
 }
 
 // @ 0x0104e320
-bool cSPSpaceToolData_s0104_e060::NeedsCharges()
+bool SP::cSPSpaceToolData_s0104_bcc0::NeedsCharges()
 {
-    if (((mFlags >> 5) & 1) != 0 && mnCharges < 1)
-        return true;
-    return false;
+    return UsesAmmo() && mAmmo7c <= 0;
 }
 
 // @ 0x0104e340
@@ -3346,7 +3349,7 @@ bool cToolManager::HandleMessage(uint32_t messageID, void* pMessage)
                 ornament->SetModelKey(0x0345bd5d, -1, 0x1a4f418e);
                 ornament->mSpatial.SetPosition(field_290);
                 ornament->mSpatial.SetOrientation(PlanetModel_s0105_1850()->BuildSurfaceOrientation(field_290));
-                cPlanetObjectData data(7, field_290);
+                cToolObjectData_s0104_e290 data((SP::cToolObjectData::eToolObjectFlags)7, field_290);
                 GetActivePlanet()->mpPlanetRecord->mPlanetObjects.push_back_planetobj(data);
             }
             field_290 = kInvalidPosition;

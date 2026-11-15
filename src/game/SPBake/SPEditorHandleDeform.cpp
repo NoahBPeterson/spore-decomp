@@ -13,8 +13,17 @@
 #include "SP/cSPEditorTrianglePinningInfo.h"
 #include "cSPTransform.h"
 
+// Retail key offsets and property IDs from LoadTuningValues (0x005dbd20).
+// The generated cSPEditorTuning layout does not describe this retail version.
+struct EditorTuningKeys {
+    char pad0[0x6c];
+    EA::ResourceMan::Key mKey050fc287; // +0x6c
+    EA::ResourceMan::Key mKeyb8e88bec; // +0x78
+    EA::ResourceMan::Key mKey3042e156; // +0x84
+};
+
 // unnamed retail callees and globals (address in the comment)
-extern void* EditorTuning();                       // 0x00401070 tuning struct, Vec3 members at +0x6c.. +0x90
+extern void* EditorTuning();                       // 0x00401070 retail editor tuning
 extern void  __fastcall Transform_Ctor(void* t);              // 0x409930 (ecx = &mTransform)
 extern void  __fastcall TrianglePinningInfo_Ctor(void* p);    // FUN_004e8f70 (ecx = this)
 extern void  __fastcall TrianglePinningInfo_Dtor(void* p);    // FUN_004ae250 (ecx = this)
@@ -138,6 +147,7 @@ struct cSPEditorHandleDeform : cSPEditorHandle {
     u8 mIsHiddenHandle;                        // +0x1d4
     u8 mDoNotPlaceHandle;                      // +0x1d5
 
+    EA::ResourceMan::Key* GetPropListKey(EA::ResourceMan::Key* out); // 0x00480280
     void SetFade(float f);                                        // 0x4809a0
     void SetData(const cModelDeformationHandle* data, bool flag); // 0x47fd30
     void UpdateDirection(bool flag);                              // 0x47fe20
@@ -367,14 +377,20 @@ Vec3* Mat3_TransformDir_(Vec3* out, char* mat, void* v)
 }
 
 // @ 0x00480280
-Vec3* __fastcall Deform_GetTuningVec(char* self, int /*edx*/, Vec3* out)
+EA::ResourceMan::Key* cSPEditorHandleDeform::GetPropListKey(EA::ResourceMan::Key* out)
 {
-    char* t = (char*)EditorTuning();
-    u32 k = *(u32*)(self + 0x8c);
-    if (k == 0x503283aa)      *out = *(Vec3*)(t + 0x78);
-    else if (k == 0xe20e2032) *out = *(Vec3*)(t + 0x84);
-    else                      *out = *(Vec3*)(t + 0x6c);
-    return out;
+    const EditorTuningKeys* tuning = (const EditorTuningKeys*)EditorTuning();
+    switch (mData.mField3c) { // mAnimationID in cModelDeformationHandle
+    case 0x503283aa:
+        *out = tuning->mKeyb8e88bec;
+        return out;
+    case 0xe20e2032:
+        *out = tuning->mKey3042e156;
+        return out;
+    default:
+        *out = tuning->mKey050fc287;
+        return out;
+    }
 }
 
 // @ 0x00480320

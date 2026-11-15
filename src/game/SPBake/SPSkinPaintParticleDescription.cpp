@@ -1200,11 +1200,19 @@ EA::IO::IStream_s0053_b930* ReadIntVec(EA::IO::IStream_s0053_b930* s, int** vec)
 // @ 0x0053bd00
 EA::IO::IStream_s0053_b930* WriteIntVec(EA::IO::IStream_s0053_b930* s, int** vec)
 {
-    uint32_t n = (uint32_t)(vec[1] - vec[0]) >> 2;
-    WriteUInt32(s, &n, 1, 0);
-    for (uint32_t i = 0; i < n; ++i) {
-        uint32_t v = (uint32_t)(*vec)[i];
-        WriteUInt32(s, &v, 1, 0);
+    uint32_t count = (uint32_t)(vec[1] - vec[0]);
+    uint32_t index;
+    {
+        uint32_t copy = count;
+        WriteUInt32(s, &copy, 1, 0);
+    }
+    for (index = 0; index < count; ++index) {
+        uint32_t value;
+        {
+            uint32_t element = (uint32_t)(*vec)[index];
+            value = element;
+        }
+        WriteUInt32(s, &value, 1, 0);
     }
     return s;
 }

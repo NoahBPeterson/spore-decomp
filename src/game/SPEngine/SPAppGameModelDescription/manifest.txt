@@ -14,3 +14,4 @@
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ?ReadIntVector@@YAPAXPAX0@Z  007d27d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ?ReadAnimationCurves@@YAPAUIStream_s007d_3930@@PAU1@PAUAnimVec@@@Z  007d40f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ?Func@Wrapper@@QAEXXZ  007d44a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?Insert@RBTreeW@@QAEPAXPAX0PAHD@Z  007d05b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

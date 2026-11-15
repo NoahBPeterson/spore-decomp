@@ -2171,6 +2171,7 @@ struct AutoRefCount_s0044_8380 {
     T* operator->() const { return mpObject; }
     operator T*() const { return mpObject; }
     AutoRefCount_s0044_8380& operator=(T* p) {
+        SP::ScratchSlots<2>(); // Reserved inline assignment frame in the original /Od build.
         if (p != mpObject) {
             T* old = mpObject;
             if (p) p->AddRef();
@@ -2243,7 +2244,7 @@ struct cMWModel_s0044_8380 {
     char pad58[0x64 - 0x58];
     AutoRefCount_s0044_8380<cSPTransformOps> mOwner;       // +0x64
     void AddRef() { mRefCount++; }
-    void Release();                             // 0x0040f360
+    int Release();                              // 0x0040f360; returns remaining refcount
 };
 }
 namespace SP {
@@ -7239,7 +7240,8 @@ void cSPEditorBlock_s0044_8380::AddToEffectsMask(cSPVector3 pos, bool /*flag*/)
 namespace SP {
 void cSPEditorBlock_s0044_8380::RemoveFromEffectsMask()
 {
-    if (mEffectsMaskObject != 0) {
+    cMWModel_s0044_8380* model = mEffectsMaskObject;
+    if (model != 0) {
         cMWModel_s0044_8380* pModel = mEffectsMaskObject;
         pModel->mpWorld->SetInWorld(pModel, 0);
         mEffectsMaskObject = 0;
@@ -7478,23 +7480,29 @@ bool Blk_s0044_9ed0::A4a9a0(Blk_s0044_9ed0* other)
 {
     int count = 0;
     while (other != 0 && other != this && count < 100) {
-        other = other->mParent;
+        Blk_s0044_9ed0* parent = other->mParent;
+        other = parent;
         count = count + 1;
     }
     if (count > 100)
         return false;
-    return other == this;
+    if (other == this)
+        return true;
+    else
+        return false;
 }
 
 // @ 0x0044aa10
 int Blk_s0044_9ed0::A4aa10(int i)
 {
-    if (i < 0 || i >= 3)
-        return 0;
-    int x = mArr[i];
-    if (x == 0)
-        return 0;
-    return mArr[i];
+    if (i >= 0 && i < 3) {
+        int x = mArr[i];
+        if (x != 0) {
+            int result = mArr[i];
+            return result;
+        }
+    }
+    return 0;
 }
 
 // @ 0x0044aaa0
@@ -7624,15 +7632,19 @@ M3_s0044_ae00* Blk_s0044_ae00::B590(M3_s0044_ae00* out)
 // @ 0x0044b5c0
 float Blk_s0044_ae00::GetDefaultScale()
 {
-    if (mPropList) {
-        float r = 1.0f;
-        PropList* pl = mPropList.p;
-        if (pl) {
-            Prop* p;
-            if (pl->GetProp(0x536c50c, &p) && p->type == 0xd)
-                r = *p->GetFloat();
+    SP::ScratchSlots<1>(); // Preserve the unused /Od inline slot.
+    PropList* propertyList;
+    float scale;
+    propertyList = mPropList;
+    if (propertyList) {
+        scale = 1.0f;
+        PropList* list = mPropList.p;
+        if (list) {
+            Prop* property;
+            if (list->GetProp(0x536c50c, &property) && property->type == 0xd)
+                scale = *property->GetFloat();
         }
-        return r;
+        return scale;
     }
     return 1.0f;
 }
@@ -7747,15 +7759,9 @@ void Blk_s0044_bcf0::Abcf0()
 // @ 0x0044c050
 int Blk_s0044_bcf0::C050()
 {
-    float f = mVec[0];
-    float r;
-    if (f < -g_eps) {
-        r = -1.0f;
-    } else {
-        r = (f > g_eps) ? 1.0f : 0.0f;
-    }
-    int n = (int)r;
-    return n;
+    float value = mVec[0];
+    int rounded = (int)(value < -g_eps ? -1.0f : (value > g_eps ? 1.0f : 0.0f));
+    return rounded;
 }
 
 // @ 0x0044c0e0
@@ -8609,9 +8615,8 @@ void* Block2::GetSub38()
         SubInner* q = &mSub18c->inner;
         void* result = q->field;
         return result;
-    } else {
-        return 0;
     }
+    return 0;
 }
 
 // @ 0x00451ed0

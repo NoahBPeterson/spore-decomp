@@ -153,10 +153,10 @@ cPaintVarEvalList_s0053_4cf0::cPaintVarEvalList_s0053_4cf0(const cPaintVarEvalLi
 Vec16::Vec16(const Vec16& x)
 {
     uint32_t n = (uint32_t)(x.mpEnd - x.mpBegin);
-    Elem16* p = (n == 0) ? 0 : (Elem16*)EASTL_Allocate(mAlloc, n * 16, 4, 0);
-    mpBegin = p;
-    mpEnd = p;
-    mpCapacity = p + n;
+    ScratchSlots<12>();
+    mpBegin = n ? (Elem16*)EASTL_Allocate(mAlloc, n * 16, 4, 0) : 0;
+    mpEnd = mpBegin;
+    mpCapacity = mpBegin + n;
     mpEnd = (Elem16*)uninitialized_copy16(x.mpBegin, x.mpEnd, mpBegin);
 }
 

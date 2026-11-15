@@ -1,3 +1,2 @@
 # <va>  <diff-bytes>  <reason>
-00523570  8   /Od slot order only: retail assigns mem/this/result to -4/-8/-0xc, our compiler always gives result/mem/this; thiscall fix removed the stray `add esp,4`. Complete alloc factory
 00522b40  1959  /Od frame: retail reserves three extra slots per inlined AutoRefCount::operator= (matched for CancelPaintRequest, but SetCreatureSkin has several such inlines and the compensation overshoots); complete SetCreatureSkin, same calls in order (fabs inline needs /Oi)

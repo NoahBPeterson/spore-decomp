@@ -562,6 +562,7 @@ struct cPlanetModel_s00b8_d190 {
     void  FUN_00b8d950(bool flag);                         // 0x00b8d950
     void  FUN_00b8d980(bool flag);                         // 0x00b8d980
     int32_t FUN_00b8d9b0();                                // 0x00b8d9b0
+    bool IsFlag8Set() const { return (mField2C >> 8) & 1; }
     bool  FUN_00b8d9f0();                                  // 0x00b8d9f0
     int32_t FUN_00b8da70();                                // 0x00b8da70
     cKey3* FUN_00b8dd60(cKey3* out);                       // 0x00b8dd60
@@ -1087,23 +1088,10 @@ int32_t cPlanetModel_s00b8_d190::FUN_00b8d9b0()
 // @ 0x00b8d9f0
 bool cPlanetModel_s00b8_d190::FUN_00b8d9f0()
 {
-    if (mField28 == 0) {
-        return false;
-    }
-    if (mField28 == 1) {
-        return false;
-    }
-    uint32_t state = (mField2C >> 8) & 1;
-    if (state != 0) {
-        return false;
-    }
-    if (FUN_00b8d9b0() != 0) {
-        return false;
-    }
-    if (mField2C & 0x800) {
-        return false;
-    }
-    return true;
+    if (mField28 != 0 && mField28 != 1 && !IsFlag8Set()
+        && FUN_00b8d9b0() == 0 && (mField2C & 0x800) == 0)
+        return true;
+    return false;
 }
 
 // @ 0x00b8da70
