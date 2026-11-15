@@ -1088,12 +1088,12 @@ void __fastcall FUN_00e21530(void* self_, void*, int id, void* layout, void* ext
 }
 
 // @ 0x00e21590
-const wchar_t* __stdcall FUN_00e21590(int idx)
+u32 __stdcall FUN_00e21590(int idx)
 {
   switch (idx) {
-  case 1:  return (const wchar_t*)0x3d99184;
-  case 0:
-  default: return (const wchar_t*)0x3d99162;
+  case 0: return 0x3d99162;
+  case 1: return 0x3d99184;
+  default: return 0x3d99162;
   }
 }
 

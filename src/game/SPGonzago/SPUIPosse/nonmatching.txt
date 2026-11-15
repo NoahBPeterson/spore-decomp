@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00e213f0 253 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL xmm1 clobber (register-ABI external callee) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e21590 16 /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e215d0 46 /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK equivalence weak/discarded inputs flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e21640 161 /O2 /MD /Gy /TP /arch:SSE /fp:fast FAIL execution mismatch (register-ABI external callee) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e217c0 77 /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS behaviourally equivalent, not byte-exact flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
