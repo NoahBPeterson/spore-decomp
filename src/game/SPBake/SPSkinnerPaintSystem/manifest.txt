@@ -15,3 +15,4 @@
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?push_back@VectorElem38@@QAEXXZ  00525f40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?push_back@VectorVec2_s0052_5360@@QAEXABUcSPVector2_s0052_5360@@@Z  00525ff0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?pop_front@DequeElem48@@QAEXXZ  005263f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintSystem.cpp  ?Assign@TickState@@QAEAAU1@ABU1@@Z  005218e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include

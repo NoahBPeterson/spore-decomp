@@ -38,3 +38,4 @@
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?FUN_00bf07c0@CStub@@QAEXXZ  00bf07c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?ContainsMap@StarTree@@QAE_NH@Z  00bf2c80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?StarMapContainsMap2@cGameData@@QAE_NH@Z  00bf2cb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00bf0000.cpp  ?FUN_00bf4350@Map6C@@QAEPAV1@PAX@Z  00bf4350  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

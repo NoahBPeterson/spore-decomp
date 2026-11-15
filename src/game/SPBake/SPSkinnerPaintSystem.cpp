@@ -1064,6 +1064,7 @@ TickState& TickState::Assign(const TickState& o)
     D.p34 = S.p34;
 #undef D
 #undef S
+    ScratchSlots<2>(); // Two unused dwords in the original /Od assignment frame.
     return *this;
 }
 

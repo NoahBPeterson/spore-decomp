@@ -427,7 +427,7 @@ struct RBNode {
 };
 struct RBSink {
     RBNode* mNode;         // +0
-    void Init(void* node); // 0x00566c50
+    RBSink* Init(void* node); // 0x00566c50; returns this, ret 4
     int* Payload();        // 0x00564f50  (returns node + 0x10)
 };
 inline bool KeyLess(int a, int b) { return a < b; }
@@ -446,7 +446,7 @@ struct RBTree {
     int      pad10;   // +0x10
     int      mCount;  // +0x14
 
-    void*   LowerBound(RBSink* out, int* key);                                      // @ 0x004e89c0
+    RBSink* LowerBound(RBSink* out, int* key);                                      // @ 0x004e89c0
     int     FindOrInsert(const int* key);                                           // @ 0x004e88a0
     void*   InsertUnique(void* result, RBNode* pos, const Key5* value, int unused); // @ 0x004e8a80
     RBSink* InsertNode(RBSink* result, RBNode* pos, const Key5* value, char flag);  // @ 0x004e8be0
@@ -899,20 +899,20 @@ int RBTree::FindOrInsert(const int* key)
 }
 
 // @ 0x004e89c0
-void* RBTree::LowerBound(RBSink* out, int* key)
+RBSink* RBTree::LowerBound(RBSink* out, int* key)
 {
-    RBNode* current = mRoot;
-    RBNode* candidate = (RBNode*)&mAnchor;
+    RBNode* node = mRoot;
+    RBNode* bound = (RBNode*)&mAnchor;
     void* unused;
-    while (current != 0) {
-        if (KeyLess(current->mKey, *key)) {
-            current = current->mLeft;
+    while (node != 0) {
+        if (!KeyLess(node->mKey, *key)) {
+            bound = node;
+            node = node->mRight;
         } else {
-            candidate = current;
-            current = current->mRight;
+            node = node->mLeft;
         }
     }
-    out->Init(candidate);
+    out->Init(bound);
     return out;
 }
 

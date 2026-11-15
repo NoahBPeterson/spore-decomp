@@ -4318,10 +4318,7 @@ void* HkObj::F_48db10(unsigned flags)
 // @ 0x0048db60
 void HkObj::F_48db60()
 {
-    mField30 = 0;
-    float k = *(float*)0x13ef4f8;
-    mArray[3] = k;
-    mField4 = *(float*)0x13ef4f8;
+    ((hkClosestCdPointCollector_s0048_dcd0*)this)->resetInline();
 }
 
 // @ 0x0048dbb0
