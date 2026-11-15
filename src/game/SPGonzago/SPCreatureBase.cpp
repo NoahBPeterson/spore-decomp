@@ -8428,9 +8428,9 @@ bool __thiscall CCM_s00c0_ddb0::e070(int param_2)
 }
 
 // @ 0x00c0e0c0
-bool __thiscall CCM_s00c0_ddb0::e0c0(int param_2)
+bool __thiscall CCM::e0c0(int param_2)
 {
-    CCMInner* c = mpInner_b54;
+    char* c = *(char**)((char*)this + 0xb54);
     if (c == 0) return 0;
     uint32_t local_4 = 0;
     void* vt = *(void**)c;
