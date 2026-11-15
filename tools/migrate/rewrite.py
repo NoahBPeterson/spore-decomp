@@ -962,8 +962,11 @@ def parse_preamble(pre):
         # too: before fix pass 2 the line fell through to the statement path and the item was named after its last base
         # `class IWinGrid { public:` (an access label on the header line, 2026-11-14 Grid s00970570: 47 methods of
         # WinGrid/IWinGrid were never class members to the rewrite, so none landed)
-        m = re.match(r"^(struct|class|union)\s+(\w+)\s*(?::\s*((?:(?:public|private|protected|virtual)\s+)*[\w:<>, ]+?))?\s*\{?\s*(?:(?:public|private|protected)\s*:\s*)?(//.*)?$", s)
-        one = re.match(r"^(struct|class|union)\s+(\w+)\s*(?::\s*((?:(?:public|private|protected|virtual)\s+)*[\w:<>, ]+?))?\s*\{(.*)\}\s*;\s*(//.*)?$", s)
+        # an alignment macro or __declspec between the keyword and the name (`struct HK_ALIGN16 hkVector4`, Havok's
+        # hk31_b005.h): the name is the identifier after it (mig38c: the item was named HK_ALIGN16, so hkVector4 counted
+        # as undefined and its uses broke, C2146 on 5 Havok slices)
+        m = re.match(r"^(struct|class|union)\s+(?:__declspec\s*\([^)]*\)\s*|[A-Z][A-Z0-9_]+\s+)?(\w+)\s*(?::\s*((?:(?:public|private|protected|virtual)\s+)*[\w:<>, ]+?))?\s*\{?\s*(?:(?:public|private|protected)\s*:\s*)?(//.*)?$", s)
+        one = re.match(r"^(struct|class|union)\s+(?:__declspec\s*\([^)]*\)\s*|[A-Z][A-Z0-9_]+\s+)?(\w+)\s*(?::\s*((?:(?:public|private|protected|virtual)\s+)*[\w:<>, ]+?))?\s*\{(.*)\}\s*;\s*(//.*)?$", s)
         if one:             # struct Key { uint32_t inst, type, group; };
             body = []
             for decl in one.group(4).split(";"):

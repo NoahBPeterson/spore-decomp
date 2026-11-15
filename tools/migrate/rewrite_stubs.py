@@ -465,12 +465,12 @@ def item_names(kind, text):
             is_cls = mi.startswith(("struct", "class", "union", "enum")) or \
                 bool(re.match(r"template\s*<(?:[^<>]|<[^<>]*>)*>\s*(?:struct|class|union)\b", mi))
             return item_names("struct" if is_cls else "other", inner)
-        return re.findall(r"\b(?:struct|class|union|enum)\s+(?:__declspec\s*\((?:[^()]|\([^()]*\))*\)\s*)?(\w+)\s*(?::[^{;]*)?\{", m)
+        return re.findall(r"\b(?:struct|class|union|enum)\s+(?:__declspec\s*\((?:[^()]|\([^()]*\))*\)\s*|[A-Z][A-Z0-9_]+\s+(?=[A-Za-z_]\w*\s*(?:[:{]|$)))?(\w+)\s*(?::[^{;]*)?\{", m)
     if kind == "define":
         mm = re.match(r"\s*#\s*define\s+(\w+)", m)
         return [mm.group(1)] if mm else []
     if kind == "struct":
-        mm = re.match(r"\s*(?:template\s*<(?:[^<>]|<[^<>]*>)*>\s*)?(?:struct|class|union)\s+(?:__declspec\s*\((?:[^()]|\([^()]*\))*\)\s*)?(\w+)", m)
+        mm = re.match(r"\s*(?:template\s*<(?:[^<>]|<[^<>]*>)*>\s*)?(?:struct|class|union)\s+(?:__declspec\s*\((?:[^()]|\([^()]*\))*\)\s*|[A-Z][A-Z0-9_]+\s+(?=[A-Za-z_]\w*\s*(?:[:{]|$)))?(\w+)", m)
         return [mm.group(1)] if mm else []
     if kind == "typedef":
         # function-pointer typedef: `(*Name)(` or `(__thiscall *Name)(` (the calling convention comes first), or a calling-
@@ -481,7 +481,7 @@ def item_names(kind, text):
         mm = re.search(r"(\w+)\s*(?:\[[^\]]*\])?\s*;\s*$", m.strip())
         return [mm.group(1)] if mm else []
     if kind in ("extern", "other"):
-        mc = re.match(r"\s*(?:template\s*<(?:[^<>]|<[^<>]*>)*>\s*)?(?:struct|class|union)\s+(?:__declspec\s*\((?:[^()]|\([^()]*\))*\)\s*)?(\w+)[^;{()]*\{", m)
+        mc = re.match(r"\s*(?:template\s*<(?:[^<>]|<[^<>]*>)*>\s*)?(?:struct|class|union)\s+(?:__declspec\s*\((?:[^()]|\([^()]*\))*\)\s*|[A-Z][A-Z0-9_]+\s+(?=[A-Za-z_]\w*\s*(?:[:{]|$)))?(\w+)[^;{()]*\{", m)
         if mc:                                  # a class definition the struct parser did not take (several bases, template)
             return [mc.group(1)]
         mo = re.search(r"\boperator\s*(new|delete)\b(\s*\[\s*\])?\s*\(", m.split("{")[0])
