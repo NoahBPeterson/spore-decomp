@@ -186,13 +186,14 @@ void F_0113f8f0(int index, int p2, int p3)
     if (o != 0 && p2 == (int)*(char*)(o + 0x42)) {
         *(int*)(o + 0x4c) = *(int*)(o + 0x4c) - p3;
         if (*(int*)(o + 0x54) != 0) {
-            int n = (int)A32(0x16e7cc8);
-            *(unsigned short*)(0x16e7ccc + n * 8 + 0) = 0;
-            *(unsigned short*)(0x16e7ccc + n * 8 + 2) = (unsigned short)index;
-            *(unsigned*)(0x16e7ccc + n * 8 + 4) = (unsigned)p3;
-            A32(0x16e7cc8) = A32(0x16e7cc8) + 1;
+            unsigned char* rec = (unsigned char*)(0x16e7ccc + A32(0x16e7cc8) * 8);
+            *(unsigned short*)(rec + 0) = 0;
+            *(unsigned short*)(rec + 2) = (unsigned short)index;
+            *(unsigned*)(rec + 4) = (unsigned)p3;
+            ++*(int*)(0x16e7cc8);
         }
     }
+    return;
 }
 
 // @ 0x0113f940

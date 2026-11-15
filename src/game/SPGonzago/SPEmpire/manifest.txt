@@ -33,3 +33,4 @@
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c34e70@cEmpire_s00c3_49e0@@QAEXPAUObj_s00c3_49e0@@@Z  00c34e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?FUN_00c352f0@cEmpire_s00c3_49e0@@QAEPAXPAX@Z  00c352f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPEmpire.cpp  ?Ret_01065360@cEmpireC@@QAE_NHPAX@Z  01065360  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPEmpire.cpp  ?cEmpireHasDemandForTributeExpired@@YI_NPAUcEmpire@@@Z  00c30b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

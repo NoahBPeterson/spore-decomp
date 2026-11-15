@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
-00816b20 112 cString local + GetPropertyAsText/FindWindowByID schedule not byte-exact flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-00816cb0 77 CalloutMessageBox ctor MI vtable/secondary stores not byte-exact flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+00816cb0 77 schedule: fixed the logic (base vtable +4 = 0x13ec458, +8 = 0, dword zero at +0x34, stopwatch ctor/set-limit thiscall with their bool args, separate ascending f60..f6c stores, return this; b5c and f60..f6c stores pinned in place). Only difference left is scheduler placement: retail emits push edi after the +8 store, ours emits it after the +4 store (everything after that, including calls, stores and pop edi, is identical). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE fix1: quick check PASS (emulator found no mismatch; not a proof)

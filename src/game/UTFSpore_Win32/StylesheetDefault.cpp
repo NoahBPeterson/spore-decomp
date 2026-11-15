@@ -2,6 +2,7 @@
 // Object file: UTFSpore_Win32/StylesheetDefault.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "EA/Allocator/StackAllocator.h"
 #include "EA/XHTML/Style/Stylesheet.h"
@@ -179,7 +180,12 @@ namespace Style {
 class NameListProp : public NameListPropBase {
 public:
     NameListProp(void* a, void* b, void* c, void* d) {
-        m0 = a; m1 = b; m2 = c; m3 = d; mCount = 0;
+        _ReadWriteBarrier();
+        m0 = a; _ReadWriteBarrier();
+        m1 = b; _ReadWriteBarrier();
+        m2 = c; _ReadWriteBarrier();
+        m3 = d; _ReadWriteBarrier();
+        mCount = 0;
     }
     void* m0;                  // +0x8
     void* m1;                  // +0xc

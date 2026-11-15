@@ -1,6 +1,5 @@
 00733400    99  COMPLETE vector reserve/zero-fill (0x1c elems); rep-movsd/register scheduling differs. FUN_006fa770 is the vector's thiscall DoAllocate(n,flags) (ret 8); made it a VecHolder member so the caller does not add esp,8 too. [equiv: PASS]
 00733510   149  COMPLETE merge of two keyed ranges; mask load hoisting and memcpy tail differ.
-007335c0    42  COMPLETE resource ctor (vtable stores + base ctor); no EH unwind frame.
 00733640    84  COMPLETE resource ctor (count + base ctor); no EH unwind frame.
 007336e0    42  COMPLETE resource ctor; no EH unwind frame.
 00733760    75  COMPLETE resource ctor (zero-fill array); no EH unwind frame.

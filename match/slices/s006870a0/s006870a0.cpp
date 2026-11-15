@@ -452,7 +452,7 @@ void Vec28::Reserve(uint32_t n) {
 // =====================================================================
 extern "C" int SetCount(int n) {
     if (n > g_count) {
-        ((Vec28*)&g_array)->Reserve((uint32_t)(n + 1));
+        ((Vec28*)(void*)&g_array)->Reserve((uint32_t)(n + 1));
         g_count = n;
     }
     if (n == 2) return -1;

@@ -166,6 +166,42 @@ struct cRTTManager {
     void RTTBigJob(int* out, int a3, int a4, int a5, uint32_t flags, int a7, int a8); // 0x0076f280
 };
 
+struct Cheat {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6();
+    virtual void RemoveProperty(const void* name);   // slot 7 (+0x1c)
+};
+struct MsgSrv {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10();
+    virtual void Send(void* base, int id, int val);  // slot 0xb (+0x2c)
+};
+// 0x0067de20 / 0x0067dcc0 return the existing singletons. Named as their own TU (s007c6750) names them, so both
+// refer to the same symbols the image has.
+extern "C" void* SP_CheatManager();     // 0x0067de20
+extern "C" void* SP_MessageServer();    // 0x0067dcc0
+
+// @ 0x0076f210
+bool cRTTManager::Shutdown()
+{
+    if (mInitialized) {
+        PageVec* pages = &mTexturePages;
+        mInitialized = false;
+        pages->erase(pages->mBegin, pages->mEnd);
+        Cheat* cheat = (Cheat*)SP_CheatManager();
+        if (cheat) {
+            cheat->RemoveProperty(reinterpret_cast<const void*>(0x0140e2d8));   // "RTT"
+            cheat->RemoveProperty(reinterpret_cast<const void*>(0x0140e2d0));   // "RTTDump"
+        }
+        MsgSrv* srv = (MsgSrv*)SP_MessageServer();
+        if (srv)
+            srv->Send(&mField04, 0x3d037f1, 0xffffd8f1);
+        return true;
+    }
+    return false;
+}
+
 // @ 0x0076ed90
 PageInfo* PageVec::erase(PageInfo* first, PageInfo* last)
 {
@@ -174,40 +210,6 @@ PageInfo* PageVec::erase(PageInfo* first, PageInfo* last)
     mEnd -= last - first;
     return first;
 }
-
-struct Cheat {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5(); virtual void v6();
-    virtual void RemoveProperty(const char* name);   // slot 7 (+0x1c)
-};
-struct MsgSrv {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
-    virtual void v8(); virtual void v9(); virtual void v10();
-    virtual void Send(void* base, int id, int val);  // slot 0xb (+0x2c)
-};
-extern "C" Cheat* CheatManager();
-extern "C" MsgSrv* MessageServer();
-
-// @ 0x0076f210
-bool cRTTManager::Shutdown()
-{
-    if (mInitialized) {
-        mInitialized = false;
-        mTexturePages.erase(mTexturePages.mBegin, mTexturePages.mEnd);
-        Cheat* cheat = CheatManager();
-        if (cheat) {
-            cheat->RemoveProperty("RTT");
-            cheat->RemoveProperty("RTTDump");
-        }
-        MsgSrv* srv = MessageServer();
-        if (srv)
-            srv->Send(&mField04, 0x3d037f1, 0xffffd8f1);
-        return true;
-    }
-    return false;
-}
-
 // ------------------------------------------------------------------ cRTTCheat
 namespace EA { namespace ArgScript {
 class cArgumentSpec { public:
@@ -343,13 +345,13 @@ bool cRTTManager::RTTCheatInit()
         AllocateNewPage(-1, w, w, 0x15, &rec);
         mTexturePages.AppendPage(&rec);
     }
-    Cheat* cheat = CheatManager();
+    Cheat* cheat = (Cheat*)SP_CheatManager();
     if (cheat) {
         void* mem = EASTL_allocator_allocate(0xdc, "Graphics", 0, 0, 0, 0);
         if (mem)
             ((cRTTCheatObj*)mem)->Construct(this);
     }
-    MsgSrv* srv = (MsgSrv*)MessageServer();
+    MsgSrv* srv = (MsgSrv*)SP_MessageServer();
     if (srv)
         srv->Send(&mField04, 0x3d037f1, 0);
     return true;

@@ -1,10 +1,19 @@
 // RenderWare 4 rwaudio core: System built-in registration, StreamPool, Voice and the
 // stream/chunk pump (prebuilt MSVC library code inside SporeApp.exe).
-// Built with VC .NET 2003 (cl 13.10) + /LTCG; object-heavy, so behaviour-equivalent
-// source, not byte-exact.
-// compile with /vc71 /O2 /MD /Gy /TP
+// Mostly VC .NET 2003 (cl 13.10), so rows carry /vc71; a few functions in this file
+// (e.g. Voice_StartDecay 0x0112e450 and Voice::Release 0x0112e600) are VS2005 (cl 15)
+// and their manifest rows carry no /vc71. The other flags are /O2 /MD /Gy /TP.
 #include "types.h"
 #include <string.h>
+
+// _ReadWriteBarrier is a compiler fence that emits no code. It exists from VS2005 on; VC7.1 (the
+// other compiler this slice uses) has no <intrin.h>, so it is compiled away there.
+#if _MSC_VER >= 1400
+#include <intrin.h>
+#define VOICE_COMPILER_FENCE() _ReadWriteBarrier()
+#else
+#define VOICE_COMPILER_FENCE() ((void)0)
+#endif
 
 // The original's grow path calls the CRT memcpy (E8 to 0x11e0744); with /O2 the compiler
 // would inline it as `rep movsd`, dropping the call from the observable trace.
@@ -210,7 +219,14 @@ void  FUN_011e7c70(void* p);                                                   /
 // Stream::ReleaseChunk is a __thiscall method (ecx = stream, one stack arg).
 struct Stream { void ReleaseChunk(void* chunk); };                             // 0x011e7c70
 void* FUN_0112cc10(void*, void*, void*, void*, unsigned char);                 // 0x0112cc10
-class PlugIn { public: void Initialize(); };  // 0x0112dbb0 (thiscall: ecx = plug-in)
+class PlugIn
+{ public:
+    virtual void ReleaseEvent();                    // vtable slot 0 (+0x00)
+    virtual void EventEvent(int, void*);            // vtable slot 1 (+0x04)
+    virtual unsigned int GetPpuTicksEvent() const;  // vtable slot 2 (+0x08)
+    virtual ~PlugIn();                              // vtable slot 3 (+0x0c, scalar-deleting dtor)
+    void Initialize();                              // 0x0112dbb0 (thiscall: ecx = plug-in)
+};
 void  FUN_0112dbb0(void* plugIn);                                              // 0x0112dbb0
 void __fastcall FUN_011e7b70(void* p);                                         // 0x011e7b70
 void  FUN_0112e380(void);                                                      // 0x0112e380
@@ -543,16 +559,16 @@ void Voice::Release(char param_2)
 {
     int v = (int)this;
     int i = 0;
-    if (*(u8*)(v + 0x44) != 0)
+    if ((int)*(u8*)(v + 0x44) > 0)
     {
         int* pp = (int*)(v + 0x4c);
         do
         {
             if (*pp != 0)
             {
-                int plug = *pp;
-                ((void(__fastcall*)(void*, void*))(*(void***)plug)[0])((void*)plug, 0);
-                ((void(__fastcall*)(void*, void*, int))(*(int*)(*(int*)plug + 0xc)))((void*)plug, 0, 0);
+                VOICE_COMPILER_FENCE();
+                (*(PlugIn**)pp)->ReleaseEvent();
+                (*(PlugIn**)pp)->~PlugIn();
             }
             ++i;
             ++pp;
@@ -561,14 +577,15 @@ void Voice::Release(char param_2)
     if (param_2 == 0 && !RemoveFromActive())
     {
         int s = *(int*)(v + 0x10);
-        int* head = (int*)(s + 0x10);
-        int* node = (int*)(v + 0x1c);
-        if (node == head)
-            *(int*)(s + 0x10) = *head;
-        if (*(int**)(v + 0x20) != 0)
-            **(int**)(v + 0x20) = *node;
-        if (*(int*)node != 0)
-            *(int*)(*node + 4) = *(int*)(v + 0x20);
+        ListDNode** head = (ListDNode**)(s + 0x10);
+        ListDNode* first = *head;
+        ListDNode* node = (ListDNode*)(v + 0x1c);
+        if (node == first)
+            *head = first->pnext;
+        if (node->pprev != 0)
+            node->pprev->pnext = node->pnext;
+        if (node->pnext != 0)
+            node->pnext->pprev = node->pprev;
     }
     (*(System**)(v + 0x10))->Free((void*)v, 0);
 }

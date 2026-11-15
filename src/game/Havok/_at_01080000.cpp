@@ -3230,9 +3230,13 @@ int hkConstraintConstructionKit::setLinearDofWorld(const hkVector4_s0108_8960& d
 {
     m_scheme->m_commands.pushBack(CMD_SET_LINEAR_DOF_WORLD);
     m_scheme->m_commands.pushBack(index);
-    int dataIndex = m_scheme->m_data.m_size;
-    hkVector4_s0108_8960 v; copyVec4(&v, &dof);
-    m_scheme->m_data.pushBack(v);
+    hkArray_s0108_8960<hkVector4_s0108_8960>& arr = m_scheme->m_data;
+    int dataIndex = arr.m_size;
+    if (arr.m_size == (arr.m_capacityAndFlags & HK_ARRAY_FLAG_MASK))
+        hkArrayUtil::_reserveMore(&arr, 0x10);
+    hkVector4_s0108_8960* slot = &arr.m_data[arr.m_size];
+    arr.m_size = arr.m_size + 1;
+    copyVec4(slot, &dof);
     m_linearDofSpecifiedA[index] = 1;
     m_linearDofSpecifiedB[index] = 1;
     return dataIndex;
@@ -3293,9 +3297,13 @@ int hkConstraintConstructionKit::setPivotA(const hkVector4_s0108_8960& pivot)
 int hkConstraintConstructionKit::setPivotB(const hkVector4_s0108_8960& pivot)
 {
     m_scheme->m_commands.pushBack(CMD_SET_PIVOT_B);
-    int dataIndex = m_scheme->m_data.m_size;
-    hkVector4_s0108_8960 v; copyVec4(&v, &pivot);
-    m_scheme->m_data.pushBack(v);
+    hkArray_s0108_8960<hkVector4_s0108_8960>& arr = m_scheme->m_data;
+    int dataIndex = arr.m_size;
+    if (arr.m_size == (arr.m_capacityAndFlags & HK_ARRAY_FLAG_MASK))
+        hkArrayUtil::_reserveMore(&arr, 0x10);
+    hkVector4_s0108_8960* slot = &arr.m_data[arr.m_size];
+    arr.m_size = arr.m_size + 1;
+    copyVec4(slot, &pivot);
     m_pivotSpecifiedB = 1;
     return dataIndex;
 }
@@ -3358,7 +3366,7 @@ void __stdcall hkGenericConstraint_buildLinearDof(int** commands, int, int, hkGe
 }
 
 // @ 0x01089870
-float hkGenericConstraint_calcAngle(int axis, const hkVector4_s0108_8960* rows)
+float __fastcall hkGenericConstraint_calcAngle(int axis, const hkVector4_s0108_8960* rows)
 {
     int a = s_mod3[axis + 1];
     int b = s_mod3[axis + 2];
@@ -4200,7 +4208,7 @@ void* hkAabbPhantom::scalarDeletingDestructor(unsigned int flags)
         ((hkThreadMemory_s0108_e080*)tls)->deallocateChunk(m_overlappingCollidables.m_data,
                                        (m_overlappingCollidables.m_capacityAndFlags & 0x3fffffff) << 2, 0x14);
     }
-    this->~hkAabbPhantom();
+    this->hkPhantom_s0108_e080::~hkPhantom_s0108_e080();
     if (flags & 1) {
         hkMemory_s0108_e080* mem = hkMemory_instance;
         mem->deallocate(this, m_memSizeAndFlags, 0x2e);

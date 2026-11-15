@@ -2,6 +2,7 @@
 // eastl fixed_pool / RBTreeIncrement and a couple of float range mappers.
 #include "types.h"
 #include "sse_helpers.h"
+#include <intrin.h>
 
 typedef unsigned int size_t;
 
@@ -27,6 +28,7 @@ void FUN_009223a0(int a, void* b);      // 0x9223a0 lock
 void FUN_00922480();                    // 0x922480 unlock
 struct EapdLock {
     int  mLockWord;                      // +0
+    void Init(int count, int intra);     // 0x922500
     int  Lock(int reason, void* name);   // 0x9223a0
     void Unlock();                       // 0x922480
 };
@@ -461,7 +463,7 @@ struct EapdSymbolTable {
     SymbolHashTable symbols;     // +0x108
     char            pad124[4];   // +0x124
     HashTable       groups;      // +0x128
-    void ctor();                                       // @ 009206d0
+    EapdSymbolTable* ctor();                           // @ 009206d0
     bool LoadSymbols(EapdStream* stream);              // @ 00920780
     bool LoadGroups(EapdStream* stream, void* owner);  // @ 00920b30
 };
@@ -553,20 +555,26 @@ HashIter HashTable::insert(const HashValue& value, bool bFlag) {
 }
 
 // @ 0x009206d0
-void EapdSymbolTable::ctor() {
-    FUN_00922500(0, 1);
-    *(unsigned*)((char*)this + 0x118) = 0x3f800000;
-    *(unsigned*)((char*)this + 0x11c) = 0x40000000;
+EapdSymbolTable* EapdSymbolTable::ctor() {
+    *(void**)((char*)this + 0) = (void*)0x143d824;
+    mLock.Init(0, 1);
+    *(float*)((char*)this + 0x118) = 1.0f;
+    *(float*)((char*)this + 0x11c) = 2.0f;
+    _ReadWriteBarrier();
     *(unsigned*)((char*)this + 0x114) = 0;
     *(unsigned*)((char*)this + 0x120) = 0;
     *(unsigned*)((char*)this + 0x110) = 1;
+    _ReadWriteBarrier();
     *(void**)((char*)this + 0x10c) = (void*)0x154df28;
-    *(unsigned*)((char*)this + 0x138) = 0x3f800000;
-    *(unsigned*)((char*)this + 0x13c) = 0x40000000;
+    _ReadWriteBarrier();
+    *(float*)((char*)this + 0x138) = 1.0f;
+    *(float*)((char*)this + 0x13c) = 2.0f;
+    _ReadWriteBarrier();
     *(unsigned*)((char*)this + 0x134) = 0;
     *(unsigned*)((char*)this + 0x140) = 0;
     *(void**)((char*)this + 0x12c) = (void*)0x154df28;
     *(unsigned*)((char*)this + 0x130) = 1;
+    return this;
 }
 
 // @ 0x00920780

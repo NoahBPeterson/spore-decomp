@@ -653,13 +653,20 @@ bool Registry::Unregister(void* vkey, void* vobj)
 }
 
 // @ 0x006acfe0
+struct RegistryVt {
+    void* pad[2];
+    bool (__thiscall* Register)(void* self, void* obj, void* key);
+};
+
 bool FUN_006acfe0(uint32_t* a, char* b)
 {
     *(uint32_t*)(b + 8)  = a[0];
     *(uint32_t*)(b + 0xc) = a[1];
     *(uint32_t*)(b + 0x10) = a[2];
-    if (sRegistry)
-        return sRegistry->Register(a, b);
+    if (sRegistry) {
+        const RegistryVt* vt = (const RegistryVt*)*(void**)sRegistry;
+        return (vt->Register)(sRegistry, b, a);
+    }
     return false;
 }
 

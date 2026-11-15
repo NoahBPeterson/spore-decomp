@@ -4,3 +4,4 @@ slices/s00bd0510/s00bd0510.cpp  ?SetBuildingName@SP_BLD@@YGXPAUStr8@1@@Z  00bd10
 slices/s00bd0510/s00bd0510.cpp  ?GetBuildingSingleton@SP_BLD@@YAPAIXZ  00bd1690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00bd0510/s00bd0510.cpp  ?PropGetA@SP_BLD@@YA_NPAUPropBinder@1@PAPAUPropObject@1@@Z  00bd1780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s00bd0510/s00bd0510.cpp  ?PropGetB@SP_BLD@@YA_NPAUPropBinder@1@PAPAUPropObject@1@@Z  00bd17b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00bd0510/s00bd0510.cpp  ?Dtor@cBuildingCityHall@SP_BLD@@QAEXXZ  00bd1100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

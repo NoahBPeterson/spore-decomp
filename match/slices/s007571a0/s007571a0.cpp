@@ -8,20 +8,31 @@
 #include <intrin.h>
 
 // ---------------------------------------------------------------------------
-// intrusive reference-count protocol (refcount is the int at object+4)
+// intrusive reference-count protocol (refcount is the int at object+4).  The object's
+// virtual destructor in slot 0 is reached as `delete p` (scalar deleting destructor, arg 1).
 // ---------------------------------------------------------------------------
 struct RCObj;
-struct RCObj { void* vptr; long refcount; };
+struct RCObj {
+    virtual ~RCObj() {}
+    void AddRef() { _InterlockedIncrement(&refcount); }
+    void Release() {
+        long c = _InterlockedDecrement(&refcount);
+        if (c == 0) {
+            _InterlockedExchange(&refcount, 1);
+            delete this;
+        }
+    }
+    volatile long refcount;                    // +0x04
+};
 
 static inline void RCAddRef(RCObj* p) {
     if (p) _InterlockedIncrement(&p->refcount);
 }
 static inline void RCRelease(RCObj* p) {
-    if (p && _InterlockedExchangeAdd(&p->refcount, -1) == 1) {
-        *((long*)&p->refcount) = 1;
-        ((void (__thiscall*)(RCObj*, int))p->vptr)(p, 1);
-    }
+    if (p) p->Release();
 }
+
+extern int g_vtbl_13ef094[];
 
 // one refcounted vector slot (this == &slot[0])
 struct RCSlot {
@@ -38,13 +49,28 @@ struct RCArray {
     void Insert(RCObj** pos, RCObj** src);    // 0x00424430
 };
 
-// The big job/model object.
-struct C0755 {
-    void* vptr;      // +0x00
-    void* vptr2;     // +0x04
+// The big job/model object.  A base at +4 (its destructor restores the base vtable) and two
+// intrusive-pointer members at +0xc / +0x10 whose destructors run the Release protocols.
+struct C0755base0 { unsigned m00; };                     // +0x00
+struct C0755base4 {                                      // +0x04
+    void* mpVtbl;
+    ~C0755base4() { mpVtbl = (void*)&g_vtbl_13ef094; }
+};
+struct C0755ref {                                        // +0x0c: object released through slot 1
+    void* mpObject;
+    ~C0755ref() {
+        if (mpObject) ((void (__thiscall*)(void*))(*(void***)mpObject)[1])(mpObject);
+    }
+};
+struct C0755rc {                                         // +0x10: EA-style refcounted pointer
+    RCObj* mpObject;
+    ~C0755rc() { if (mpObject) mpObject->Release(); }
+};
+
+struct C0755 : C0755base0, C0755base4 {
     void* mp08;      // +0x08
-    void* mp0c;      // +0x0c
-    RCObj* mp10;     // +0x10
+    C0755ref m0c;    // +0x0c
+    C0755rc  m10;    // +0x10
     char pad14[0x84 - 0x14];
     RCArray mVec;    // +0x84
     char pad90[0x98 - 0x90];
@@ -59,6 +85,7 @@ struct C0755 {
     RCObj* mp104;    // +0x104
     RCObj* mp108;    // +0x108
     bool EnsureFront(void* arg);
+    ~C0755();
 };
 
 // small 0x58 value produced by the two paths of FUN_007571a0.
@@ -129,7 +156,6 @@ extern "C" void  __cdecl eh_vec_dtor(void* p, unsigned sz, unsigned n, void* dto
 // ---------------------------------------------------------------------------
 // @ 0x00757d10
 // ---------------------------------------------------------------------------
-extern int g_vtbl_13ef094[];
 extern int g_vtbl_13eb8d0[];
 void __fastcall FUN_00757d10(int* self) {
     self[1] = (int)g_vtbl_13ef094;
@@ -173,7 +199,7 @@ Val7e20* Val7e20::Ctor(Val7e20* src, RCObj* a2, RCObj* a3) {
     M3Assign(&this->m4c, &src->m14);
     this->i70 = -1;
     this->p74 = a2;
-    if (a2) ((void (__thiscall*)(RCObj*))a2->vptr)(a2);
+    if (a2) ((void (__thiscall*)(RCObj*))(*(void**)a2))(a2);
     this->p78 = a3;
     if (a3) ++a3->refcount;
     return this;
@@ -199,7 +225,7 @@ Val7ff0* Val7ff0::Ctor(RCObj* a2, int* a3) {
     this->vptr0 = g_vtbl_140da78;
     this->vptr4 = g_vtbl_140da74;
     this->p0c = a2;
-    if (a2) ((void (__thiscall*)(RCObj*))((void**)a2->vptr)[0])(a2);
+    if (a2) ((void (__thiscall*)(RCObj*))(*(void***)a2)[0])(a2);
     RCObj* r = (RCObj*)a3[0];
     this->p10 = r;
     if (r) _InterlockedIncrement(&r->refcount);
@@ -224,27 +250,23 @@ C0755b* __cdecl FUN_007580a0(C0755b* self) {
     RCObj* p1 = *(RCObj**)(e + 0x1c);
     void** p2 = *(void***)(e + 0x14);
     int v = *(int*)(e + 0x10);
-    if (p1) ((void (__thiscall*)(RCObj*))((void**)p1->vptr)[0])(p1);
+    if (p1) ((void (__thiscall*)(RCObj*))(*(void***)p1)[0])(p1);
     if (v) {
         int r = (*(int (__thiscall**)(void*, void*))(*(int*)mm + 0x28))(mm, *p2);
         if (r) {
             int out = *(int*)(r + 4);
-            if (p1) ((void (__thiscall*)(RCObj*))((void**)p1->vptr)[1])(p1);
+            if (p1) ((void (__thiscall*)(RCObj*))(*(void***)p1)[1])(p1);
             return (C0755b*)out;
         }
     }
-    if (p1) ((void (__thiscall*)(RCObj*))((void**)p1->vptr)[1])(p1);
+    if (p1) ((void (__thiscall*)(RCObj*))(*(void***)p1)[1])(p1);
     return 0;
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x007581a0   destructor
 // ---------------------------------------------------------------------------
-void __fastcall FUN_007581a0(C0755* self) {
-    RCRelease(self->mp10);
-    if (self->mp0c) ((void (__thiscall*)(void*))(*(void***)self->mp0c)[1])(self->mp0c);
-    self->vptr2 = g_vtbl_13ef094;
-}
+C0755::~C0755() {}
 
 // ---------------------------------------------------------------------------
 // @ 0x00757d20   SP::GetRwModelAsGameMeshesNoCache

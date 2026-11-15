@@ -23,7 +23,7 @@ struct tsiMemObject {
     int32 flag8c;           // +0x8c
     int32 flag90;           // +0x90
 };
-typedef int (*PF_READ_TO_RAM)(void* id, uint8* dest, int32 offset, int32 numBytes);
+typedef int (*PF_READ_TO_RAM)(void* id, uint8* dest, uint32 offset, uint32 numBytes);
 struct InputStream {
     uint8* privateBase;            // +0x000
     PF_READ_TO_RAM ReadToRamFunc;  // +0x004
@@ -119,6 +119,7 @@ uint32 end, int* errCode);                         // 0x008cc4b0
 extern "C" void Rewind_InputStream(InputStream* in);                                             // 0x008cc550
 extern "C" T2KMemHeader* New_T2KMemHeader(tsiMemObject* mem, InputStream* in, int32 count);      // 0x008cbf10
 extern "C" uint32 ReadUnsignedNumber(InputStream* in);                                           // 0x008cc670
+extern "C" void tsi_Error(tsiMemObject* mem, int32 errCode);                                     // 0x008d10c0
 
 // @ 0x008cbf10
 T2KMemHeader* New_T2KMemHeader(tsiMemObject* mem, InputStream* in, int32 count)
@@ -169,15 +170,13 @@ T2KMemHeader* New_T2KMemHeader(tsiMemObject* mem, InputStream* in, int32 count)
 // @ 0x008cc040
 void PreLoadT2KInputStream(InputStream* in, int32 length)
 {
-    PF_READ_TO_RAM func = in->ReadToRamFunc;
-    if (func != 0) {
-        uint32 pos = in->pos;
+    if (in->ReadToRamFunc != 0) {
         int32 got = 0x200;
         if (length < got)
             got = length;
         in->pendingCount = (uint32)(length - got);
         in->privateBase = in->tmp_ch + 1;
-        int r = func(in->nonRamID, in->privateBase, (int32)pos, got);
+        int r = in->ReadToRamFunc(in->nonRamID, in->privateBase, in->pos, (uint32)got);
         if (r < 0)
             tsi_Error(in->mem, T2K_ERR_TRANS_FAIL);
         in->cacheCount = (uint32)got;

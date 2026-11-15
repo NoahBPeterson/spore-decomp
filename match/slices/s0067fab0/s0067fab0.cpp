@@ -288,13 +288,13 @@ void __stdcall FUN_00680560(unsigned* pBits, IOStream* pStream) {
   unsigned i = 0;
   unsigned bit = 1;
   do {
-    unsigned char b = 0;
+    unsigned char b;
     pStream->Read(&b, 1);
     if (i < 0x9a) {
-      if (b == 0)
-        pBits[i >> 5] &= ~bit;
-      else
+      if (b != 0)
         pBits[i >> 5] |= bit;
+      else
+        pBits[i >> 5] &= ~bit;
     }
     ++i;
     bit = (bit << 1) | (bit >> 31);

@@ -359,20 +359,22 @@ int __fastcall FUN_00922a90(void** p)
 // @ 0x00922ab0
 bool EA::Thread::Thread::SetPriority(int prio)
 {
-    if (mpData == 0)
-        return false;
-    HANDLE h = (HANDLE)mpData->mhThread;
-    if (!SetThreadPriority(h, prio)) {
-        while (prio < 0xf) {
+    if (mpData != 0) {
+        bool ok = SetThreadPriority(mpData->mhThread, prio) != 0;
+        if (!ok) {
+        loop:
+            if (prio >= 0xf)
+                return SetThreadPriority(mpData->mhThread, 0xf) != 0;
             if (prio <= -0xf)
-                return SetThreadPriority(h, -0xf) != 0;
-            if (SetThreadPriority(h, prio))
-                return true;
+                return SetThreadPriority(mpData->mhThread, -0xf) != 0;
+            ok = SetThreadPriority(mpData->mhThread, prio) != 0;
             ++prio;
+            if (!ok)
+                goto loop;
         }
-        return SetThreadPriority(h, 0xf) != 0;
+        return ok;
     }
-    return true;
+    return false;
 }
 
 // @ 0x00922b30
@@ -387,7 +389,10 @@ void EA::Thread::Thread::SetName(const char* name)
             info.b = mpData->mName;
             info.c = mpData->mnThreadId;
             info.d = 0;
-            RaiseException(0x406d1388, 0, 4, (ULONG_PTR*)&info);
+            __try {
+                RaiseException(0x406d1388, 0, 4, (ULONG_PTR*)&info);
+            } __except (EXCEPTION_CONTINUE_EXECUTION) {
+            }
         }
     }
 }

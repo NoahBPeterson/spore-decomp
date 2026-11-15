@@ -16,6 +16,7 @@
 #define nullptr 0
 class IRefCounted {
 public:
+    IRefCounted();                              // out of line
     virtual void AddRef();                      // 0x00
     virtual void Release();                     // 0x04
     virtual void v08();
@@ -24,20 +25,32 @@ public:
 };
 class cEffectInfo : public IRefCounted {
 public:
+    void CreateEffectRef(uint32_t id, int a, uint32_t group);
+    void SetEffectScale(uint32_t id, float scale);
     uint8_t mPad14[0x10];
 };
 class cSpatialObjectView : public IRefCounted {
 public:
-    cSpatialObjectView();
+    cSpatialObjectView() {}
     ~cSpatialObjectView();
-    void SetObject(void* pObject);                  // 0x24
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void SetObject(void* pObject);          // 0x24
     int UpdateState();
     void HandleSimulationUpdate(int a, int b);
     void CreateEffect(uint32_t id, int a);          // wrapper over the effect list
 
-    uint8_t mPad04[0x10];           // 0x04
+    uint8_t mPad04[0x08];           // 0x04
+    cEffectInfo* mpEffect;          // 0x0c
+    uint8_t mPad10[0x04];           // 0x10
     void* mpObject;                 // 0x14
     uint8_t mPad18[0x1c];           // 0x18
+};
+class cDefaultBeamProjectileView : public cSpatialObjectView {
+public:
+    cDefaultBeamProjectileView();
     cEffectInfo* mpEffectInfo;      // 0x34
     uint8_t mFlag38;                // 0x38
     uint8_t mFlag39;                // 0x39
@@ -47,19 +60,21 @@ public:
     uint8_t mFlag3d;                // 0x3d
     uint8_t mPad3e[0x02];           // 0x3e
     int mViewState;                 // 0x40
-};
-class cDefaultBeamProjectileView : public cSpatialObjectView {
-public:
-    cDefaultBeamProjectileView();
     bool mbLoadingModel;            // 0x44
     bool mbAnimationsStarted;       // 0x45
 };
 void* operator_new(size_t nSize, const char* pName, int a, int b, int c, int d);
 void* operator_new(size_t nSize, const char* pName, int a);
 void* operator_new(size_t nSize, const char* pName, int a, int b);
+inline void* operator new(size_t nSize, const char* pName, int a, int b, int c, int d)
+{
+    return operator_new(nSize, pName, a, b, c, d);
+}
 uint32_t GetTrailEffectId();
-void CreateEffectRef(uint32_t id, int a, uint32_t group);
-void SetEffectScale(uint32_t id, uint32_t fScaleBits);
+struct FlakData {
+    uint8_t mPad[0x518];
+    void* mpEffect;                 // 0x518
+};
 // ---- items of slice s00cc22c0 end
 
 // ---- items of slice s00ccdd70 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -253,26 +268,24 @@ cDefaultBeamProjectileView::cDefaultBeamProjectileView()
 }
 
 // @ 0x00cc28f0
-cSpatialObjectView* MakeFlakProjectileView(void* pObject)
+cSpatialObjectView* __stdcall MakeFlakProjectileView(void* pObject)
 {
     cSpatialObjectView* pView =
-        (cSpatialObjectView*)operator_new(0x34, "Simulator/cFlakProjectileView", 0, 0, 0, 0);
-    if (pView == nullptr)
-        pView = nullptr;
-    else
-        pView->SetObject(nullptr);
+        new ("Simulator/cFlakProjectileView", 0, 0, 0, 0) cSpatialObjectView();
 
     pView->SetObject(pObject);
 
-    void* pData = nullptr;
+    void* pData;
     if (pObject != nullptr)
         pData = ((IRefCounted*)pObject)->Query((const void*)0x240e3b7);
+    else
+        pData = nullptr;
 
-    if (*(void**)((uint8_t*)pData + 0x518) != nullptr) {
+    if (((FlakData*)pData)->mpEffect != nullptr) {
         uint32_t nEffectId = GetTrailEffectId();
-        CreateEffectRef(nEffectId, 0, 0);
+        pView->mpEffect->CreateEffectRef(nEffectId, 0, 0);
     }
-    SetEffectScale(0, 0x45000000u);
+    pView->mpEffect->SetEffectScale(0, 2048.0f);
     return pView;
 }
 

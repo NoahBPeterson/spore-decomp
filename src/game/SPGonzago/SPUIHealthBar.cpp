@@ -67,15 +67,17 @@ struct ISubWindow {
 };
 class cSPUILayout_s00e0_6220 {
 public:
+    cSPUILayout_s00e0_6220();                                   // 0x00810000
     bool Init(const wchar_t* pName, uint32_t nID, bool bDeep, uint32_t nFlags);   // 0x00812160
     IWindow* FindWindowByID(uint32_t nID, bool bDeep);          // 0x008105b0
     void Shutdown(uint32_t nFlags);                             // 0x00811ad0
     bool IsVisible();                                           // 0x00810070
 
     IWindow* m_pRoot;                            // +0x00
+    uint8_t m_pad004[0x14];                      // +0x04
 };
-cSPUILayout_s00e0_6220* __cdecl CreateLayout(uint32_t nSize, const char* pName, int32_t a, int32_t b,
-                                  int32_t c, int32_t d);    // 0x00810000
+void* __cdecl operator new(uint32_t nSize, const char* pName, int32_t a, int32_t b,
+                           int32_t c, int32_t d);           // 0x00f473a0
 class cCivilization {
 public:
     virtual void AddRef();                       // +0x00
@@ -443,25 +445,18 @@ void cSPUILoyaltyMeter::SetModel(int32_t nModel, int32_t nExtra)
 // @ 0x00e06730
 void cSPUILoyaltyMeter::SetRange(float fLow, float fHigh)
 {
-    m_fLow = fLow;
-    m_fHigh = fHigh;
+    *(uint32_t*)&m_fLow = *(uint32_t*)&fLow;
+    *(uint32_t*)&m_fHigh = *(uint32_t*)&fHigh;
     m_bRangeSet = true;
     OnValueChanged();
 }
 
 // @ 0x00e06790
 cSPUIMeter::cSPUIMeter(int32_t nRootID, uint32_t nFlags, const wchar_t* pName, uint32_t nLayoutFlags)
+: m_nFlags08(0), m_bRangeType(false), mLayout(nullptr), m_pSource(nullptr),
+  m_nRootID(nRootID), m_nLayoutFlags(nFlags), m_nStart(0), m_nNext(0)
 {
-    m_nFlags08 = 0;
-    m_bRangeType = false;
-    mLayout = nullptr;
-    m_pSource = nullptr;
-    m_nRootID = nRootID;
-    m_nLayoutFlags = nFlags;
-    m_nStart = 0;
-    m_nNext = 0;
-
-    cSPUILayout_s00e0_6220* pNew = CreateLayout(0x18, "Simulator/cUIMeter", 0, 0, 0, 0);
+    cSPUILayout_s00e0_6220* pNew = new ("Simulator/cUIMeter", 0, 0, 0, 0) cSPUILayout_s00e0_6220();
     cSPUILayout_s00e0_6220* pOld = mLayout;
     if (pNew != pOld) {
         if (pNew != nullptr)
@@ -472,7 +467,7 @@ cSPUIMeter::cSPUIMeter(int32_t nRootID, uint32_t nFlags, const wchar_t* pName, u
     }
     mLayout->Init(pName, 0x40464100, true, nLayoutFlags);
 
-    IWindow* pOwner = mLayout->FindWindowByID(nRootID, true);
+    IWindow* pOwner = mLayout->FindWindowByID(m_nRootID, true);
     if (pOwner != nullptr)
         pOwner->AttachOwner(this);
 }
@@ -548,9 +543,7 @@ void cSPUIMeter::UpdateFromSource()
         return;
 
     float* pArea = pWindow->GetArea();
-    float fLow = pArea[1];
-    float fHigh = pArea[3];
-    pWindow->SetProgress(afRange[0], (fHigh - fLow) * 2.0f + afRange[1]);
+    pWindow->SetProgress(afRange[0], (pArea[3] - pArea[1]) * 2.0f + afRange[1]);
 }
 
 // @ 0x00e06a10

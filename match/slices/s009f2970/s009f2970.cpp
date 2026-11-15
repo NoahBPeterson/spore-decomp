@@ -63,7 +63,8 @@ struct IKContext {
     IKWorld* world;               // +0x00
     void __thiscall Update(IKParticle* p);   // 0x009f1990
     void __thiscall UpdateBone(IKParticle* p);               // 0x009ecac0
-    void __thiscall WriteParticles(IKBody** ppBody);         // 0x009f2970
+    void __thiscall WriteParticles(IKBody** ppBody);         // 0x009f2970 (defined below as a
+                                                             // TU-local static: the context arrives in EDI)
 };
 
 extern int   g_holdEnabled;       // DAT_01550ad4
@@ -205,11 +206,18 @@ void __stdcall IKSolveParticles(IKContext* ctx, IKParticle* root)
 // ---------------------------------------------------------------------------------------------
 // 0x009f2970: refresh every child particle of one body, then re-fit the chain splines.
 //
-// The solver object is *not* an argument: the retail body never initialises EDI, it only reads
-// `[edi]` (the world) and hands EDI on as the `this` of UpdateBone and as the ScaleOwner of
-// FUN_009eddc0.  So the caller passes the IKContext in EDI (a custom convention; see the
-// papercut) and the only stack argument is the body handle.  Modelled here as an ordinary
-// member function, i.e. cl takes the context from ECX.
+// The solver object is *not* a stack argument: the retail body never initialises EDI, it only
+// reads `[edi]` (the world) and hands EDI on as the `this` of UpdateBone and as the owner of
+// FUN_009eddc0, so the caller passes the IKContext in EDI.  That is cl's TU-local register
+// convention for a `static` helper (docs/codegen.md 6.3), so the body is written as one, with a
+// same-TU stand-in caller below that makes cl emit it: it then really does keep the context in
+// EDI with no prologue copy, like the original.
+//
+// Residual (6 bytes, 137 vs 143): cl also promotes the second argument, the body handle, into EAX
+// (`mov ebx, eax`), where the original reads it from the stack (`mov ebx, [esp + 8]`) and pops it
+// (`ret 4`, ours `ret`).  Every shape tried (member function, `__stdcall`/`__fastcall` with a
+// dummy middle parameter, a reference parameter, a `volatile` argument, one/two callers) either
+// copied `this` from ECX (member) or promoted the handle as well (static).
 // ---------------------------------------------------------------------------------------------
 
 struct SplineCtx {                 // one chain spline, 0x10c bytes
@@ -221,25 +229,24 @@ struct SplineCtx {                 // one chain spline, 0x10c bytes
 void __stdcall FUN_009eddc0(IKContext* owner, SplineCtx* ctx);   // 0x009eddc0
 
 // @ 0x009f2970
-void IKContext::WriteParticles(IKBody** ppBody)
+static void __stdcall WriteParticlesImpl(IKContext* self, IKBody** ppBody)
 {
     // the child count is latched, but the handle itself is re-read every iteration
     uint32_t const count = (*ppBody)->childCount;
-    uint32_t i = 0;
-    if (count != 0) {
-        do {
-            UpdateBone((IKParticle*)(world->particlesBegin + ((*ppBody)->childStart + i) * 700));
-            ++i;
-        } while (i < count);
-    }
+    for (uint32_t i = 0; i < count; ++i)
+        self->UpdateBone((IKParticle*)(self->world->particlesBegin + ((*ppBody)->childStart + i) * 700));
 
-    int n = (int)(world->splineCtxEnd - world->splineCtxBegin);
-    int idx = 0;
-    while (n != 0) {
-        SplineCtx* ctx = world->splineCtxBegin + idx;   // re-read: the callee may grow the array
-        if (ctx->rescale & 1)
-            FUN_009eddc0(this, ctx);
-        ++idx;
-        --n;
+    int n = (int)(self->world->splineCtxEnd - self->world->splineCtxBegin);
+    if (n != 0) {
+        int idx = 0;
+        do {
+            SplineCtx* ctx = self->world->splineCtxBegin + idx;   // re-read: the callee may grow the array
+            if (ctx->rescale & 1)
+                FUN_009eddc0(self, ctx);
+            ++idx;
+        } while (--n != 0);
     }
 }
+
+// Reconstruction-only caller so the static helper above is emitted (the real caller is not in this batch).
+void IKContext_WriteParticles(IKContext* self, IKBody** ppBody) { WriteParticlesImpl(self, ppBody); }

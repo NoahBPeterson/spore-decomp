@@ -11,8 +11,8 @@ typedef short hkInt16;
 
 #define HK_ALIGN16 __declspec(align(16))
 
-extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
-extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(unsigned long, void*);
+extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long) throw();
+extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(unsigned long, void*) throw();
 #include <intrin.h>
 
 extern unsigned long g_hkThreadMemoryTls;    // 0x016e4174
@@ -24,7 +24,7 @@ void  FUN_0107db10(void* p, int nbytes, int cl); // hkThreadMemory::deallocateCh
 
 class hkThreadMemory { public:
     void* allocateChunk(int nbytes, int alignment);            // 0x0107daa0
-    void  deallocateChunk(void* p, int nbytes, int alignment);  // 0x0107db10
+    void  deallocateChunk(void* p, int nbytes, int alignment) throw();  // 0x0107db10
 };
 
 // ---------------------------------------------------------------------------
@@ -105,27 +105,27 @@ class hkStatisticsCollector
     virtual void endObject();                                                           // +0x18
 };
 
-class hkReferencedObject
+class __declspec(novtable) hkReferencedObject
 { public:
-    virtual ~hkReferencedObject(); // 0x013ef094
+    virtual ~hkReferencedObject() {} // 0x013ef094
     virtual void calcStatistics(hkStatisticsCollector* c) const;
     hkInt16 m_memSizeAndFlags;   // +4
     hkInt16 m_referenceCount;    // +6
 };
 
-class hkShape : public hkReferencedObject { public:
+class __declspec(novtable) hkShape : public hkReferencedObject { public:
     int m_userData;              // +8
     virtual int getType() const;
     virtual void getAabb(const hkTransform& t, float tol, hkAabb& out) const;
     virtual float getMaximumProjection(const hkVector4& dir) const;
     virtual void castRay(const void* input, void* output) const;
 };
-class hkSphereRepShape : public hkShape { public:};
-class hkConvexShape : public hkSphereRepShape { public: float m_radius; };  // +0xc
+class __declspec(novtable) hkSphereRepShape : public hkShape { public:};
+class __declspec(novtable) hkConvexShape : public hkSphereRepShape { public: float m_radius; };  // +0xc
 
 struct FourVectors { hkVector4 m_x, m_y, m_z; };
 
-class hkConvexVerticesShape : public hkConvexShape { public:
+class __declspec(novtable) hkConvexVerticesShape : public hkConvexShape { public:
     hkVector4 m_aabbHalfExtents;              // +0x10
     hkVector4 m_aabbCenter;                   // +0x20
     hkArray<FourVectors> m_rotatedVertices;   // +0x30
@@ -143,7 +143,7 @@ class hkConvexVerticesShape : public hkConvexShape { public:
     ~hkConvexVerticesShape();
 };
 
-class hkCapsuleShape : public hkConvexShape { public:
+class __declspec(novtable) hkCapsuleShape : public hkConvexShape { public:
     hkVector4 m_vertexA;   // +0x10
     hkVector4 m_vertexB;   // +0x20
 
@@ -437,13 +437,15 @@ hkConvexVerticesShape* hkConvexVerticesShape::f1fe0(const void* a, int numVertic
 // @ 0x010c21c0  hkConvexVerticesShape::~hkConvexVerticesShape
 hkConvexVerticesShape::~hkConvexVerticesShape()
 {
-    if ((int)((hkUint32)m_planeEquations.m_capacityAndFlags) >= 0)
+    if ((m_planeEquations.m_capacityAndFlags & 0x80000000) == 0)
     {
-        FUN_0107db10(m_planeEquations.m_data, m_planeEquations.getCapacity() << 4, 0x14);
+        hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
+        mem->deallocateChunk(m_planeEquations.m_data, m_planeEquations.getCapacity() << 4, 0x14);
     }
-    if ((int)((hkUint32)m_rotatedVertices.m_capacityAndFlags) >= 0)
+    if ((m_rotatedVertices.m_capacityAndFlags & 0x80000000) == 0)
     {
-        FUN_0107db10(m_rotatedVertices.m_data, m_rotatedVertices.getCapacity() * 0x30, 0x14);
+        hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTls);
+        mem->deallocateChunk(m_rotatedVertices.m_data, m_rotatedVertices.getCapacity() * 0x30, 0x14);
     }
     *(void**)this = (void*)0x13ef094;
 }
@@ -589,8 +591,11 @@ hkCapsuleShape::hkCapsuleShape(const hkVector4& a, const hkVector4& b, float rad
     m_referenceCount = 1;
     m_userData = 0;
     *(void**)this = (void*)0x14a2888;
-    m_vertexA = a;
-    m_vertexB = b;
+    // the original copies all four words of each vertex (w included) and only then overwrites w with the
+    // radius; copying the second w through an uint pun keeps cl from deleting the store as dead
+    m_vertexA.x = a.x; m_vertexA.y = a.y; m_vertexA.z = a.z; m_vertexA.w = a.w;
+    m_vertexB.x = b.x; m_vertexB.y = b.y; m_vertexB.z = b.z;
+    *(hkUint32*)&m_vertexB.w = *(const hkUint32*)&b.w;
     m_vertexA.w = radius;
     m_vertexB.w = radius;
 }
@@ -602,15 +607,21 @@ void hkCapsuleShape::getSupportingVertex(const hkVector4& dir, hkCdVertex& out) 
     float d = (m_vertexB.x - m_vertexA.x) * dir.x
             + ((m_vertexB.y - m_vertexA.y) * dir.y
              + (m_vertexB.z - m_vertexA.z) * dir.z);
-    // both branches copy a vertex and then store the raw w word (0.5f, and 0.5f | 0x10 for B)
+    // both branches copy the whole vertex and then overwrite the w word (0.5f, 0.5f | 0x10 for B)
     if (d < 0.0f)
     {
-        out.m_pos = m_vertexA;
+        out.m_pos.x = m_vertexA.x;
+        out.m_pos.y = m_vertexA.y;
+        out.m_pos.z = m_vertexA.z;
+        out.m_pos.w = m_vertexA.w;
         *(hkUint32*)&out.m_pos.w = 0x3f000000;
     }
     else
     {
-        out.m_pos = m_vertexB;
+        out.m_pos.x = m_vertexB.x;
+        out.m_pos.y = m_vertexB.y;
+        out.m_pos.z = m_vertexB.z;
+        out.m_pos.w = m_vertexB.w;
         *(hkUint32*)&out.m_pos.w = 0x3f000010;
     }
 }

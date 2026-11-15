@@ -23,10 +23,11 @@ extern "C" void __cdecl operator_delete__(void* p, const char* tag,
                                           int a, int b, int c, int d);       // 0x00f47410
 extern "C" void __cdecl operator_delete_00926060(void* p, const char* tag,
                                                  int a, int b, int c, int d); // 0x00926060
-extern "C" void __cdecl free_two_00c2e4e0(void* a, void* b);                 // 0x00c2e4e0
+extern "C" void __cdecl free_two_00c2e4e0(void* b, void* a);                 // 0x00c2e4e0
 
 // type-name tags passed to the tagged deallocators
 extern "C" const char g_tag13ebc58[];   // 0x013ebc58
+extern "C" const char g_tag13f1fdc[];   // 0x013f1fdc
 extern "C" const char g_tag1412ecc[];   // 0x01412ecc
 extern "C" const char g_tag1412ea8[];   // 0x01412ea8
 extern "C" const char g_tag1412e84[];   // 0x01412e84
@@ -107,9 +108,16 @@ struct T_429480 { void d(); };   // 0x00429480
 struct T_5477e0 { void d(); };   // 0x005477e0
 struct T_83f8f0 { void d(); };   // 0x0083f8f0
 struct T_6b5240 { void d(); };   // 0x006b5240
+struct T_52ec00 { void d(); };   // 0x0052ec00
 
 // the frame pointer handed to a cleanup funclet by the EH machinery
 typedef void* Frame;
+
+// the `mov eax,<FuncInfo>; jmp __CxxFrameHandler3` record that follows a funclet's last cleanup.  Every funclet in
+// this slice ends with one; it is not part of the cleanup chain, so it is recorded per function and checked on its
+// own (Unwind_<va>_handler below).
+extern "C" void Handler_FuncInfo(int funcinfo);
+extern "C" uint32_t* const g_pEhFlags0163a2ac = (uint32_t*)0x0163a2ac;   // 0x0163a2ac
 
 // read one compiler-assigned slot of the owning frame (negative = local,
 // positive = incoming argument)
@@ -137,11 +145,21 @@ void Unwind_01215e20(Frame fp)
     CleanPtrAdd<T_4e1bf0>(fp, -0x10, 0x64);
     CleanPtrAdd<T_4e1bf0>(fp, -0x10, 0xa0);
 }
+// the `mov eax,0x01503d94; jmp __CxxFrameHandler3` record after the two thunks
+void Unwind_01215e20_handler()
+{
+    Handler_FuncInfo(0x01503d94);
+}
 
 // @ 0x01215ef0  (two-pointer free, FuncInfo 0x01503e7c)
 void Unwind_01215ef0(Frame fp)
 {
     free_two_00c2e4e0(Slot(fp, -0x10), Slot(fp, 0x0c));
+}
+// the `mov eax,0x01503e7c; jmp __CxxFrameHandler3` record after the free
+void Unwind_01215ef0_handler()
+{
+    Handler_FuncInfo(0x01503e7c);
 }
 
 // @ 0x01215f30  (four tagged deletes, four destructor thunks, FuncInfo 0x01503ecc and 0x01503f28)
@@ -161,10 +179,25 @@ void Unwind_01216090(Frame fp)
 {
     Clean<T_530670>(fp, -0xc0);
     Clean<T_a21380>(fp, -0xa8);
+}
+// the `mov eax,0x01504068; jmp __CxxFrameHandler3` record that follows it: 0x01216090 + 0x0f
+void Unwind_01216090_handler0()
+{
+    Handler_FuncInfo(0x01504068);
+}
+// the second funclet of the block (`lea ecx,[ebp-0x40]; jmp 0x004e1bf0`)
+void Unwind_01216090_cleanup0(Frame fp)
+{
     Clean<T_4e1bf0>(fp, -0x40);
 }
+// the `mov eax,0x01504094; jmp __CxxFrameHandler3` record that ends that block
+void Unwind_01216090_handler()
+{
+    Handler_FuncInfo(0x01504094);
+}
 
-// @ 0x01216110  (three destructor thunks and a tagged delete, FuncInfo 0x01504130)
+// @ 0x01216110  (three destructor thunks and a tagged delete; the record 0x01504130 follows the delete, so retail
+// is two funclets of one EAX block)
 void Unwind_01216110(Frame fp)
 {
     Clean<T_540520>(fp, -0x20);
@@ -183,6 +216,11 @@ void Unwind_01216170(Frame fp)
     Clean<T_4e1bf0>(fp, -0x48);
     Clean<T_4e1bf0>(fp, -0x20);
     Clean<T_4e1bf0>(fp, -0x34);
+}
+// the `mov eax,0x01504188; jmp __CxxFrameHandler3` record after the seven thunks
+void Unwind_01216170_handler()
+{
+    Handler_FuncInfo(0x01504188);
 }
 
 // @ 0x012161c0  (seven destructor thunks, FuncInfo 0x015041e4)
@@ -343,13 +381,25 @@ void Unwind_01216a90(Frame fp)
     CleanPtrAdd<T_530670>(fp, -0x10, 0x1a4);
 }
 
-// @ 0x01216c00  (four destructor thunks, FuncInfo 0x01504a30)
+// @ 0x01216c00  (four destructor thunks; the record 0x01504a30 follows them, so the block is two funclets)
 void Unwind_01216c00(Frame fp)
 {
     Clean<T_933960>(fp, -0x3c);
     Clean<T_933960>(fp, -0x2c);
     Clean<T_933960>(fp, -0x1c);
     Clean<T_530670>(fp, -0x1c);
+}
+// the `mov eax,0x01504a30; jmp __CxxFrameHandler3` record after the four thunks
+void Unwind_01216c00_handler()
+{
+    Handler_FuncInfo(0x01504a30);
+}
+
+// @ 0x01216c30  (the record `mov eax,0x01504a54; jmp __CxxFrameHandler3` that ends the 0x01216c00..0x01216c30 block;
+// this slice records the block's first record with the cleanup at 0x01216c00)
+void Unwind_01216c30_handler()
+{
+    Handler_FuncInfo(0x01504a54);
 }
 
 // @ 0x01216c30  (eleven destructor thunks, FuncInfo 0x01504a54)
@@ -393,6 +443,11 @@ void Unwind_01216df0(Frame fp)
     Clean<T_6b5240>(fp, -0x20);
     Clean<T_933960>(fp, -0x44);
 }
+// the `mov eax,0x01504be0; jmp __CxxFrameHandler3` record after the six thunks
+void Unwind_01216df0_handler()
+{
+    Handler_FuncInfo(0x01504be0);
+}
 
 // @ 0x01216e30  (three tagged deletes and two destructor thunks, FuncInfo 0x01504c34)
 void Unwind_01216e30(Frame fp)
@@ -404,19 +459,37 @@ void Unwind_01216e30(Frame fp)
     Del(fp, 0x04, g_tag13ebc58);
 }
 
-// @ 0x01216ea0  (two destructor thunks then one more, FuncInfo 0x01504c90 and 0x01504cbc)
+// @ 0x01216ea0  (two destructor thunks; the record 0x01504c90 follows them, so retail is two funclets)
 void Unwind_01216ea0(Frame fp)
 {
     Clean<T_933960>(fp, -0x248);
     Clean<T_931e70>(fp, -0x238);
+}
+void Unwind_01216ea0_handler0()
+{
+    Handler_FuncInfo(0x01504c90);
+}
+void Unwind_01216ea0_cleanup0(Frame fp)
+{
     CleanPtr<T_7eb7b0>(fp, -0x10);
 }
+void Unwind_01216ea0_handler()
+{
+    Handler_FuncInfo(0x01504cbc);
+}
 
-// @ 0x01216ee0  (one tagged delete and a destructor thunk, FuncInfo 0x01504cf0)
+// @ 0x01216ee0  (one tagged delete and a destructor thunk; the handler record
+// 0x01504cf0 sits between them, so retail is two funclets of one EAX block)
 void Unwind_01216ee0(Frame fp)
 {
     Del(fp, -0x50, g_tag13ebc58);
     Clean<T_421cf0>(fp, -0x4c);
+}
+
+// the `mov eax,0x01504cf0; jmp __CxxFrameHandler3` record that split 0x01216ee0
+void Unwind_01216ee0_handler()
+{
+    Handler_FuncInfo(0x01504cf0);
 }
 
 // @ 0x01216fe0  (eleven tagged deletes of the first argument, FuncInfo 0x01504e20)
@@ -435,6 +508,19 @@ void Unwind_01216fe0(Frame fp)
     Del(fp, 0x08, g_tag141447c);
 }
 
+// @ 0x012171f0  (tagged delete of [ebp-0x10], FuncInfo 0x01504fa8)
+void Unwind_012171f0(Frame fp)
+{
+    Del(fp, -0x10, g_tag13f1fdc);
+}
+
+// @ 0x01217220  (one destructor thunk, FuncInfo 0x01504fd4)
+void Unwind_01217220(Frame fp)
+{
+    CleanPtr<T_52ec00>(fp, -0x10);
+}
+
+
 // @ 0x01217240  (five tagged deletes of the first argument, FuncInfo 0x01504ff8)
 void Unwind_01217240(Frame fp)
 {
@@ -445,11 +531,22 @@ void Unwind_01217240(Frame fp)
     Del(fp, 0x08, g_tag14147e0);
 }
 
-// @ 0x01217330  (clears bit 0 of the global at 0x0163a2ac, FuncInfo 0x015050ac)
-extern uint32_t g_ehFlags0163a2ac;   // 0x0163a2ac
+// the handler record that ends 0x01217240 (`mov eax,0x01504ff8; jmp __CxxFrameHandler3`)
+void Unwind_01217240_handler()
+{
+    Handler_FuncInfo(0x01504ff8);
+}
+
+// @ 0x01217330  (clears bit 0 of the global at 0x0163a2ac; first funclet of the block whose handler record 0x015050ac follows it)
 void Unwind_01217330(Frame)
 {
-    g_ehFlags0163a2ac &= ~1u;
+    *g_pEhFlags0163a2ac &= ~1u;
+}
+
+// the handler record that ends 0x01217330 (`mov eax,0x015050ac; jmp __CxxFrameHandler3`)
+void Unwind_01217330_handler()
+{
+    Handler_FuncInfo(0x015050ac);
 }
 
 // @ 0x01217470  (twelve destructor thunks and one two-pointer free, FuncInfo 0x0150524c)
@@ -467,6 +564,14 @@ void Unwind_01217470(Frame fp)
     free_two_00c2e4e0(Slot(fp, -0xe0), Slot(fp, -0xbc));
     Clean<T_530670>(fp, -0x2c);
     Clean<T_530670>(fp, -0x94);
+}
+
+// @ 0x01217570  (the handler record after 0x01217570: `mov eax,0x0150536c; jmp __CxxFrameHandler3`; the analysis
+// rejected it as a function start, so it has no fingerprint, but it is the per-funclet record the rest of this slice
+// models this way)
+void Unwind_01217570_handler()
+{
+    Handler_FuncInfo(0x0150536c);
 }
 
 // @ 0x01217570  (one tagged delete and five destructor thunks, FuncInfo 0x015053c4)

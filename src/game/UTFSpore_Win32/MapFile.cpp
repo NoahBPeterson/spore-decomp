@@ -205,17 +205,19 @@ typedef unsigned short u16;
 typedef unsigned int   u32;
 struct Vec12;
 struct Vec16;
-void* EAAllocate(u32 size, int a, int b, int c, const char* tag, const char* path); // 0x00f473a0
+void* EAAllocate(u32 size, const char* tag, int a, int b, const char* path, int line); // 0x00f473a0
 void* OpDelete(void* p);                                    // 0x00f47380
-void  MemCopy(void* d, const void* s, unsigned n);          // 0x011e073e
+void  MemCopy(void* d, int c, unsigned n);                  // 0x011e073e (memset)
 void  MemMove(void* d, const void* s, unsigned n);          // 0x011e0744
 void  StrRangeInit(void* s, unsigned n);                    // 0x00475ab0
 struct StrObj {
     char* a; char* b; char* c;
-    void Init(const char* p);                       // 0x0057cb10
+    void* Init(const char* p);                      // 0x0057cb10
     void  AssignRange(const char* b, const char* e); // 0x00942e50
 };
-void  RBTreeInsert(void* node, void* header, void* parent, int side); // 0x009216a0
+void  RBTreeInsert(void* node, void* parent, void* header, int side); // 0x009216a0
+struct RbtreeVal { u32 mKey; void* mData; u32 mExtra; };
+void* RBTreeInsertValue(u8* self, u8** out, u8* parent, const u32* value, int side); // 0x0091bf80
 void  StackAllocCtor(void* s, void* p, u32 n, void* a, void* b, void* c); // 0x00928cd0
 struct MapNode { void* vtable; char pad[4]; void* DoCreateNode(const void* src); }; // 0x0091c140
 extern "C" u16  g_emptyW16[];          // 0x01667bac
@@ -292,23 +294,25 @@ u32* LowerBoundPair(u32* first, u32* last, const u32* key)
 }
 
 // @ 0x0091bf80
-void* RBTreeInsertValue(u8* self, u8* parent, int side, const u32* value)
+void* RBTreeInsertValue(u8* self, u8** out, u8* parent, const u32* value, int side)
 {
     int dir = 0;
-    if (side == 0 && (u8*)parent != self + 4 && *(u32*)value >= *(u32*)(parent + 0x10))
-        dir = 1;
-    u8* node = (u8*)EAAllocate(0x1c, 0, 0, 0xd1, g_s_eastl, g_s_srcpath);
+    if (side == 0 && parent != self + 4) {
+        if (*value >= *(u32*)(parent + 0x10))
+            dir = 1;
+    }
+    u8* node = (u8*)EAAllocate(0x1c, g_s_eastl, 0, 0, g_s_srcpath, 0xd1);
     u8* slot = node + 0x10;
     if (slot != 0) {
         *(u32*)slot = value[0];
         *(u32*)(slot + 4) = value[1];
         *(u32*)(slot + 8) = value[2];
     }
-    RBTreeInsert(node, self + 4, parent, dir);
+    RBTreeInsert(node, parent, self + 4, dir);
     ++*(u32*)(self + 0x14);
-    return node;
+    *out = node;
+    return out;
 }
-
 // @ 0x0091c0a0
 void* MapFile::CtorEmpty()
 {
@@ -384,7 +388,7 @@ u8* MapCtorBig(u8* self)
     *(void**)(self + 8) = e0;
     *(void**)(self + 0xc) = e0;
     *(void**)(self + 0x10) = e1;
-    u8* mem = (u8*)EAAllocate(0x40000, 0, 0, 0xd1, g_s_eastl, g_s_srcpath);
+    u8* mem = (u8*)EAAllocate(0x40000, g_s_eastl, 0, 0, g_s_srcpath, 0xd1);
     *(u8**)(self + 0x20) = mem + 0x40000;
     *(u8**)(self + 0x18) = mem;
     *(u8**)(self + 0x1c) = mem;
@@ -432,15 +436,16 @@ void* MapFile::RbtreeValCtor(u32* key, const void* src)
 void* MapFile::ListPushString(const char* s)
 {
     u8* p = (u8*)this;
-    u8* n = (u8*)EAAllocate(0x18, 0, 0, 0xd1, g_s_eastl, g_s_srcpath);
+    u8* n = (u8*)EAAllocate(0x18, g_s_eastl, 0, 0, g_s_srcpath, 0xd1);
     u8* str = (u8*)n + 8;
+    void* r = (void*)n;
     if (str != 0)
-        ((StrObj*)str)->Init(s);
+        r = ((StrObj*)str)->Init(s);
     *(void**)n = p;
     *(u32*)(n + 4) = *(u32*)(p + 4);
     **(u32**)(p + 4) = (u32)n;
     *(u32*)(p + 4) = (u32)n;
-    return n;
+    return r;
 }
 
 // @ 0x0091c380
@@ -505,7 +510,7 @@ void* StrStub::AllocCopy(u32 n, const char* src)
     u8* p = (u8*)this;
     u8* buf;
     if (n != 0)
-        buf = (u8*)EAAllocate(n, 0, 0, 0xd1, g_s_eastl, g_s_srcpath);
+        buf = (u8*)EAAllocate(n, g_s_eastl, 0, 0, g_s_srcpath, 0xd1);
     else
         buf = 0;
     *(u8**)p = buf;
@@ -513,7 +518,7 @@ void* StrStub::AllocCopy(u32 n, const char* src)
     *(u8**)(p + 8) = buf + n;
     char c = *src;
     if (n > 0)
-        MemCopy(buf, (const void*)(u32)(u8)c, n);
+        MemCopy(buf, c, n);
     *(u8**)(p + 4) = *(u8**)p + n;
     return p;
 }

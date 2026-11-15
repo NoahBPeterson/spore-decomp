@@ -3,3 +3,9 @@ slices/s00a61f50/s00a61f50.cpp  ?fx_array_fill@@YAXPAUFXTableBase@@M@Z  00a620e0
 slices/s00a61f50/s00a61f50.cpp  ?fx_set_accum@@YAXPAUFXTableBase@@M@Z  00a623f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a61f50/s00a61f50.cpp  ?fx_alloc_insert@@YAPAXII@Z  00a626e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a61f50/s00a61f50.cpp  ?fx_alloc_insert2@@YAPAXII@Z  00a62a10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a61f50/s00a61f50.cpp  ?fx_array_resize_and_set@@YAXPAUFXTableBase@@IIHPBX@Z  00a62080  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a61f50/s00a61f50.cpp  ?fx_alloc_sound@@YAPAXII@Z  00a62b60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a61f50/s00a61f50.cpp  ?fx_base_addop@@YAXPAUFXTableBase@@IIII@Z  00a62b20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a61f50/s00a61f50.cpp  ?fx_dump@@YAXPAUFXTableBase@@@Z  00a62690  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a61f50/s00a61f50.cpp  ?fx_sound_notify@@YAXPAUFXTableBase@@M@Z  00a62ad0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a61f50/s00a61f50.cpp  ?fx_meta_particles_cb@@YAXPAXIPBDIIM@Z  00a62c50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

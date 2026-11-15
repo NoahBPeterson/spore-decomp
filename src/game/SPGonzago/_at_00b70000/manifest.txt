@@ -45,3 +45,5 @@
 ../src/game/SPGonzago/_at_00b70000.cpp  ?PieMenuAcceptCallback@@YAXHHD@Z  00b7c750  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00b70000.cpp  ?cSPPieMenu_ContainsWindow@@YA_NPAX@Z  00b7c870  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00b70000.cpp  ?GetPosition@cPieMenuScreenPosition@@QAE_NPAM0@Z  00b7cb00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?SetItemTextColor@ButtonVec@@QAEXHH@Z  00b7c890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?newNode@NodeFactory@@QAEPAXPAURefPair@@@Z  00b715c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

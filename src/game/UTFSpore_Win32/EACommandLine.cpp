@@ -21,11 +21,13 @@ void  WStr_Append(void* s, const wchar_t* first, const wchar_t* last); // 0x4295
 void  WStr_PushBack(void* s, wchar_t c);     // 0x4f6510
 void  WStr_RangeInitialize(void* s, const wchar_t* p); // 0x579a90
 void* WStr_Find(const void* s, const wchar_t* sub, int start); // 0x608340
+struct CommandLineBVtbl;
 struct WString {
     wchar_t* mpBegin;    // +0
     wchar_t* mpEnd;      // +4
     wchar_t* mpCapacity; // +8
     void* mAlloc;        // +0xc
+    void Reset() { mpBegin = mpEnd = (wchar_t*)0x1667bac; mpCapacity = (wchar_t*)0x1667bae; }
     WString() { mpBegin = mpEnd = (wchar_t*)0x1667bac; mpCapacity = (wchar_t*)0x1667bae; }
     void assign(const wchar_t* first, const wchar_t* last) { WString_Assign(this, first, last); }
     void append(const wchar_t* first, const wchar_t* last) { WStr_Append(this, first, last); }
@@ -38,8 +40,9 @@ struct WStringVector {
     WString* mpCap;
     WString* Erase(WString* pos);
 };
+
 struct CommandLine {
-    virtual void c0();   // +0 vtable
+    virtual ~CommandLine(); // +0 vtable slot 0
     WString* mpBegin;    // +4
     WString* mpEnd;      // +8
     WString* mpCapacity; // +0xc
@@ -53,9 +56,31 @@ struct CommandLine {
     unsigned FindSwitch(const wchar_t* sw, bool exact, WString* out, unsigned start); // @ 0092b300
     void InsertArgument(const wchar_t* arg, unsigned index); // @ 0092b7b0
 };
+
+// CommandLineB installs its own vtable at +0 after the base's part is built.
+// The un-named `this` store on purpose: a `mpVtbl` spelled as a member keeps
+// the object's vfptr identity, and cl rejects such a store (C4589 / a /vmg
+// vtordisp lands at +0x38 instead). Everything else the base's construction
+// wipes is left as retail leaves it.
+struct CommandLineBVtbl;
 struct CommandLineB : CommandLine {
     CommandLineB();        // @ 0092b690
 };
+struct CommandLineBVtbl {
+    void (*mDtor)(CommandLineB*); // slot 0
+};
+
+// The vtable the construction stores at +0.
+static CommandLineBVtbl g_CommandLineBVtbl = { 0 };
+
+// @ 0x0092b690
+CommandLineB::CommandLineB()
+{
+    const CommandLineBVtbl* const* pv = (const CommandLineBVtbl* const*)&g_CommandLineBVtbl;
+    *(const CommandLineBVtbl* const**)this = pv;
+    msCommandLine.Reset();
+    msOther.Reset();
+}
 // ---- items of slice s0092abb0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
@@ -109,20 +134,6 @@ int GetCurrentAppPath(WString* out)
         }
     }
     return (int)((char*)out->mpEnd - (char*)out->mpBegin) >> 1;
-}
-
-// @ 0x0092b690
-CommandLineB::CommandLineB()
-{
-    mpBegin = 0;
-    mpEnd = 0;
-    mpCapacity = 0;
-    msCommandLine.mpBegin = (wchar_t*)0x1667bac;
-    msCommandLine.mpEnd = (wchar_t*)0x1667bac;
-    msCommandLine.mpCapacity = (wchar_t*)0x1667bae;
-    msOther.mpBegin = (wchar_t*)0x1667bac;
-    msOther.mpEnd = (wchar_t*)0x1667bac;
-    msOther.mpCapacity = (wchar_t*)0x1667bae;
 }
 
 // @ 0x0092b700

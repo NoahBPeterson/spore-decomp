@@ -4,3 +4,4 @@
 ../src/game/UTFSpore_Win32/EAClipboard.cpp  ?FUN_0092ac90@@YAPAXPAX@Z  0092ac90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAClipboard.cpp  ?DestroyPlatform@Clipboard_s0092_abb0@@QAE_NXZ  0092ad10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAClipboard.cpp  ?CreateTextData@Clipboard@EA@@YAPAVDataText16@12@PB_WH@Z  0092ab60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EAClipboard.cpp  ?WriteText@Win32Clipboard@Clipboard@EA@@QAE_NPB_WH@Z  0092aa20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

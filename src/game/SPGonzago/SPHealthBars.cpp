@@ -21,6 +21,11 @@ template <typename T>
 class RefCountVTemplate_s0059_d300 {
 public:
     RefCountVTemplate_s0059_d300() : mnRefCount(0) {}
+    // The reference-counted base as the original builds it: an interlocked store into the counter.
+    RefCountVTemplate_s0059_d300(T refCount)
+    {
+        _InterlockedExchange((long*)&mnRefCount, (long)refCount);
+    }
     virtual ~RefCountVTemplate_s0059_d300() {}
     virtual int AddRef() { return ++mnRefCount; }
     virtual int Release()
@@ -80,7 +85,16 @@ public:
 
 // @ 0x0059d960
 SP::cSPEditorAnimatedEventInfo_s0059_d300::cSPEditorAnimatedEventInfo_s0059_d300()
-: mAnimatedCreatureID(0), mSourceBlock(0), mSourceModel(0), mEvent(SP::kAnimatedEvent0),
-      mIsBaby(false), mDelayTime(0.0f), mDoLoop(false), mAnimID(0xffffffff), mAnimSpeed(1.0f)
+: IMessageRC_s0059_d300(), EA::RefCountVTemplate_s0059_d300<int>(0)
 {
+    mAnimatedCreatureID = 0;
+    mSourceBlock = 0;
+    mSourceModel = 0;
+    mEvent = SP::kAnimatedEvent0;
+    mIsBaby = false;
+    mDelayTime = 0.0f;
+    mDoLoop = false;
+    mAnimID = 0xffffffff;
+    mAnimSpeed = 1.0f;
 }
+

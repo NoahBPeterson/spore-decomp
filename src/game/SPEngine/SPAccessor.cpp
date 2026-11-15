@@ -26,7 +26,11 @@ void  __cdecl  VisitTree(void*, void*, void*);    // 0x807d30 SPUIHelpers::Visit
 // ---- items of slice s0080d670 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
-u8 __cdecl FUN_0080d6b0(void* p, u8* p2);  // 0x0080d6b0 (stays in the slice: not this object's)
+u8 __cdecl FUN_0080d6b0(void* p, u8* p2)  // 0x0080d6b0 (stays in the slice: not this object's)
+{
+    VisitTree(p, 0, (void*)*(int*)(p2 + 4));
+    return *p2;
+}
 
 // @ 0x004da3a0
 void ResourceManager(uint32_t param)
@@ -36,10 +40,10 @@ void ResourceManager(uint32_t param)
 }
 
 // @ 0x0080d710
-void __stdcall FUN_0080d710(void* a, void* b, u8 c)
+void __stdcall FUN_0080d710(void* a, int b, u8 c)
 {
     u8 local[8];
     local[0] = c;
-    *(void**)(local + 4) = b;
+    *(int*)(local + 4) = b;
     VisitTree(a, (void*)FUN_0080d6b0, local);
 }

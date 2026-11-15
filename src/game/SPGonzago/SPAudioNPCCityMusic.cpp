@@ -658,3 +658,4 @@ cNPCCityMusic* cNPCCityMusic::Destroy(int flags)
     return this;
 }
 }}  // namespace SP::Audio
+

@@ -1167,8 +1167,8 @@ static inline void ReleaseSlot(char* base, int off) {
 struct Pair16 { u16 lo, hi; };
 static inline int MakeKey(int a, int b) {
     Pair16 k;
-    if (a < b) { k.hi = (u16)a; k.lo = (u16)b; }
-    else       { k.hi = (u16)b; k.lo = (u16)a; }
+    if ((unsigned)a < (unsigned)b) { k.hi = (u16)a; k.lo = (u16)b; }
+    else                           { k.hi = (u16)b; k.lo = (u16)a; }
     return *(int*)&k;
 }
 struct Mat3 { float m[9]; void Assign(const void* src); };  // 0x0041cb40
@@ -3086,8 +3086,8 @@ int FUN_00e4efb0(void* self, int arg)
         (self, arg, 2, (int*)0x016b3c28, (int*)0x015a7c4c, 1);
     if (r) {
         (*(void(__thiscall**)(void*, int, int, int))((char*)Vt(self) + 0x40))(self, r, 0, 1);
-        FUN_00a04ce0(1);
-        FUN_00a04d00(1);
+        ((void(__thiscall*)(void*, int))FUN_00a04ce0)((void*)r, arg);
+        ((void(__thiscall*)(void*, int))FUN_00a04d00)((void*)r, 1);
     }
     return r;
 }
@@ -10033,17 +10033,20 @@ bool __fastcall FUN_00e7b540(cCellMessage* m, int a, float t)
     return true;
 }
 
+extern "C" void __fastcall FUN_00743b50_s00e7_b5d0(void* p);   // 0x00743b50 (ecx handle init)
+extern "C" void __fastcall FUN_00e82130_s00e7_b5d0(void* p);   // 0x00e82130 (ecx handle release)
+
 // @ 0x00e7b5d0
 void FUN_00e7b5d0(void* a, void* b)
 {
     if (B_s00e7_b0a0(a, 0x112) == 1 || B_s00e7_b0a0(a, 0x113) == 1)
         return;
     {
-        char buf[0x18];
-        FUN_00743b50(buf);
-        FUN_00e4cc40(I(b, 0x108), buf);
+        int handle;
+        FUN_00743b50_s00e7_b5d0(&handle);
+        FUN_00e4cc40(I(b, 0x108), &handle);
         FUN_00e780a0(I(b, 0), 1, 0.0f, 0);
-        FUN_00e82130(buf);
+        FUN_00e82130_s00e7_b5d0(&handle);
     }
 }
 

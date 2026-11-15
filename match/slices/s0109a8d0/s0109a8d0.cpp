@@ -317,9 +317,12 @@ struct StepObj {
 void __stdcall FUN_0109ae00(StepRec** param_1)
 {
     StepRec* a = param_1[0];
-    if (a->m_kind == 3) {
+    hkUint8 kind = a->m_kind;
+    if (kind == 3) {
         StepRec* b = param_1[1];
-        if (b->m_kind != 3) {
+        if (b->m_kind == kind)
+            return;
+        if (a->m_kind == kind) {
             hkUint8* ap = (hkUint8*)a + a->m_off5;
             StepObj* ao = (StepObj*)(*(hkUint32*)(ap + 0x10) + (hkUint32)ap);
             ao->v20((hkUint8*)b + b->m_off5);

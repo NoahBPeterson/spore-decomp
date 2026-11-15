@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPHealthBars.cpp  ??0cSPEditorAnimatedEventInfo_s0059_d300@SP@@QAE@XZ  0059d960  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

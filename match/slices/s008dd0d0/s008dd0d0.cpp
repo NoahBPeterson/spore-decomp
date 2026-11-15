@@ -65,7 +65,7 @@ extern "C" void  __cdecl FUN_00429580(void* self, const wchar_t* a, const wchar_
 extern "C" char  __cdecl FUN_0093a780(void* a, void* out, int n, void* b);  // 0x93a780
 extern "C" void* __cdecl FUN_008d8770(void* self, void* out);               // 0x8d8770 GetKeyListSortedByPosition
 
-extern "C" unsigned __cdecl towlower(unsigned c);
+extern "C" __declspec(dllimport) int __cdecl towlower(int c);
 extern "C" int      __cdecl iswctype(unsigned c, unsigned t);
 extern "C" void*    __cdecl memmove(void* d, const void* s, unsigned n);
 
@@ -392,11 +392,8 @@ extern "C" int FUN_008dd510(const wchar_t* path)
 extern "C" unsigned FUN_008dd7d0(const unsigned short* s, int count)
 {
     unsigned h = 0x811c9dc5;
-    while (count != 0) {
-        --count;
-        unsigned c = (unsigned short)towlower(*s);
-        h = h * 0x1000193 ^ c;
-        ++s;
+    while (count-- != 0) {
+        h = h * 0x1000193 ^ (unsigned short)towlower(*s++);
     }
     return h;
 }

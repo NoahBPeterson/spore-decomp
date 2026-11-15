@@ -50,7 +50,9 @@ struct IQuery0C {
 };
 // cNoun handed to AddSubsystem: AsInterface sits in vtable+0x04.
 struct IQuery04 {
+    virtual void v0();                            // +0x00
     virtual void* AsInterface(const void* iid);   // +0x04
+    virtual void v8();                            // +0x08
     virtual int  AddRef();                        // +0x0c
 };
 
@@ -90,7 +92,20 @@ struct VecTB {
     IRefB** mpEnd;
     IRefB** mpCapacity;
 
-    void push_back(IRefB* const& value);
+    void push_back(IRefB* const& value)
+    {
+        IRefB** p = mpEnd;
+        if (p < mpCapacity) {
+            mpEnd = p + 1;
+            if (p != 0) {
+                *p = value;
+                if (*p != 0)
+                    (*p)->AddRef();
+            }
+        } else {
+            Insert(p, &value);
+        }
+    }
     void erase(IRefB** first, IRefB** last);
     void Insert(IRefB** pos, IRefB* const* value);    // 0x00ae6ed0
 };
@@ -149,6 +164,7 @@ void PostTrigger(cTriggerMgr*, const wchar_t* name, int a, int b, int c, int d, 
 struct cGameNounManager {
     int* GetGameDataVector(void* key, void* fn1, void* fn2, void* fn3, void* extra);  // 0x00b21340
     int* GetSubsystemVec(void* extra);                                                // 0x00ae7200
+    void RemoveNoun(void* noun);                                                      // 0x00b225d0
 };
 inline int* GDV(void* gdm, void* key, void* fn1, void* fn2, void* extra)
 {
@@ -174,7 +190,6 @@ void  NounStep3(void*);                                    // 0x00bff7a0
 void  TerraformReset(void*);                               // 0x00bc08d0
 void* CivModeStrategy();                                   // 0x00cf74c0
 void  CivModeNotify(void*);                                // 0x00cf9310
-void  RemoveNoun(void* gdm, void* noun);                   // 0x00b225d0
 void* GetCivilizationList(void* gdm);                      // 0x00b25ca0
 void* cVarList_Construct(void* self, void* obj, const void* field, unsigned id);   // 0x00692f90
 bool  cVarList_Serialize(void* self, void* stream);        // 0x00693e10
@@ -222,6 +237,7 @@ struct cCitySimulator {
     VecT   mV0;             // +0x14
     char   mPad20[0x08];    // +0x20
     VecT   mV1;             // +0x28
+    char   mPad34[0x04];    // +0x34
     SimClock mSimClock;     // +0x38
     CityClock mCityClock;   // +0x78
     void*  mpName;          // +0x98
@@ -341,9 +357,9 @@ const wchar_t* cCitySimulator::GetName(int kind)
         return str_city_simulator;
     int* const data = GDV(NounManager(), (void*)0xcd7d10, (void*)0xd3d420,
                           (void*)0xacdff0, (void*)0x18c43e8);
-    const int n = (data[2] - data[1]) >> 2;
-    const unsigned __int64 t = mSimClock.GetElapsedTime();
-    WStr_Format(&mpName, str_cities_fmt, n, (int)(unsigned int)t);
+    int* const begin = data + 1;
+    const int n = (begin[1] - begin[0]) >> 2;
+    WStr_Format(&mpName, str_cities_fmt, n, (int)(unsigned int)mSimClock.GetElapsedTime());
     return (const wchar_t*)mpName;
 }
 
@@ -432,7 +448,7 @@ VecT* VecT::assign(const VecT* src)
         return self;
     }
     const int cap = (int)(self->mpEnd - self->mpBegin);
-    if (n > cap) {
+    if ((unsigned)n > (unsigned)cap) {
         vec_copy_assign(src->mpBegin, src->mpBegin + cap, self->mpBegin);
         IRefA** mid = self->mpBegin + cap;
         vec_copy_construct(&mid, src->mpBegin + cap, src->mpEnd, self->mpEnd);
@@ -461,14 +477,12 @@ void VecT::erase(IRefA** first, IRefA** last)
 // @ 0x00ae6e70
 void VecTB::erase(IRefB** first, IRefB** last)
 {
-    IRefB** const pLast = last;
-    IRefB** const pFirst = first;
-    IRefB** p = vec_copy_assign_b(pLast, mpEnd, pFirst);
+    IRefB** p = vec_copy_assign_b(last, mpEnd, first);
     IRefB** const end = mpEnd;
     for (; p < end; ++p)
         if (*p != 0)
             (*p)->Release();
-    mpEnd += pFirst - pLast;
+    mpEnd -= last - first;
 }
 
 // @ 0x00ae7020
@@ -510,18 +524,16 @@ void CollectSubsystemA(void* db, IQuery0C* noun)
 // @ 0x00ae7100
 void cCitySimulator::AddSubsystem(IQuery04* noun)
 {
-    if (mpName == 0 && *((char*)this + 0x3c) == 0)
-        return;
-    if (*((char*)this + 0x3c) == 0) {
-        RemoveNoun(NounManager(), noun ? noun->AsInterface(iid_noun) : 0);
+    if (*((char*)this + 0x3c) != 0) {
+        IRefA* tmp = (IRefA*)noun;
+        if (noun != 0)
+            noun->AddRef();
+        mV1.push_back(tmp);
+        if (noun != 0)
+            ((IRefA*)noun)->Release();
         return;
     }
-    if (noun != 0)
-        noun->AddRef();
-    IRefA* tmp = (IRefA*)noun;
-    mV1.push_back(tmp);
-    if (noun != 0)
-        ((IRefA*)noun)->Release();
+    ((cGameNounManager*)NounManager())->RemoveNoun(noun ? noun->AsInterface(iid_noun) : 0);
 }
 
 // Prefix view of the noun interface used by the city noun-event payload.
@@ -582,11 +594,15 @@ void VecTB_clear_cb(void* db)
 // @ 0x00ae7250
 void CollectSubsystemB(void* db, IQuery0C* noun)
 {
-    IRefB* obj = noun ? (IRefB*)noun->AsInterface(iid_subsystem_b) : 0;
+    IRefB* obj;
+    if (noun != 0)
+        obj = (IRefB*)noun->AsInterface(iid_subsystem_b);
+    else
+        obj = 0;
+    IRefB* tmp = obj;
     if (obj != 0)
         obj->AddRef();
     VecTB* const v = (VecTB*)((char*)db + 4);
-    IRefB* tmp = obj;
     v->push_back(tmp);
     if (obj != 0)
         obj->Release();

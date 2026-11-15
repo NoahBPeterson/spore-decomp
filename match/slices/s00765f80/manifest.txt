@@ -5,3 +5,4 @@ slices/s00765f80/s00765f80.cpp  ??0ResE@@QAE@XZ  00766220
 slices/s00765f80/s00765f80.cpp  ?UnionDestroy@@YAXPAXH@Z  007668c0
 slices/s00765f80/s00765f80.cpp  ?push_back@VPtr@@QAEXABI@Z  00766910
 slices/s00765f80/s00765f80.cpp  ?ReadDecalBlock@Reader@@QAE_NH@Z  00766e10
+slices/s00765f80/s00766250.cpp  ??1ResE@@UAE@XZ  00766250  /O2 /MD /Gy /EHsc /TP /GS-
