@@ -14,18 +14,16 @@ typedef unsigned long  DWORD;
 typedef long           LONG;
 
 // --- kernel32 imports used by the semaphore code -----------------------------
-// Spore calls every one of these through the IAT (call dword ptr [0x13cc1xx]),
-// so they are declared as imported function pointers, not as plain functions.
 extern "C" {
     extern HANDLE (__stdcall *CreateSemaphoreA)(void* sa, LONG max, LONG initial, const char* name);
-    extern DWORD (__stdcall *WaitForSingleObject)(HANDLE h, DWORD ms);
-    extern BOOL (__stdcall *ReleaseSemaphore)(HANDLE h, LONG count, LONG* prev);
+    DWORD  __stdcall WaitForSingleObject(HANDLE h, DWORD ms);
+    BOOL   __stdcall ReleaseSemaphore(HANDLE h, LONG count, LONG* prev);
     extern BOOL (__stdcall *CloseHandle)(HANDLE h);
-    extern LONG (__stdcall *InterlockedIncrement)(volatile LONG* p);
-    extern LONG (__stdcall *InterlockedDecrement)(volatile LONG* p);
-    extern LONG (__stdcall *InterlockedExchange)(volatile LONG* p, LONG v);
-    extern LONG (__stdcall *InterlockedExchangeAdd)(volatile LONG* p, LONG v);
-    extern LONG (__stdcall *InterlockedCompareExchange)(volatile LONG* p, LONG exch, LONG comp);
+    LONG   __stdcall InterlockedIncrement(volatile LONG* p);
+    LONG   __stdcall InterlockedDecrement(volatile LONG* p);
+    LONG   __stdcall InterlockedExchange(volatile LONG* p, LONG v);
+    LONG   __stdcall InterlockedExchangeAdd(volatile LONG* p, LONG v);
+    LONG   __stdcall InterlockedCompareExchange(volatile LONG* p, LONG exch, LONG comp);
 }
 extern "C" int __cdecl strncpy_s_dummy(void);
 
@@ -38,7 +36,7 @@ char* ConvertU32ToBase(char* buf, uint value, uint base);         // 0x011ecff0
 char* ConvertU64ToBase(char* buf, int lo, int hi, uint base, uint a5); // 0x011ed020
 char* ConvertU32ToHexUpper(char* buf, uint value);                // 0x011ed070
 char* ConvertU32ToHexLower(char* buf, uint value);                // 0x011ed0b0
-char* ConvertIToA(uint value, char* buf, int base);               // 0x011ed0f0
+char* ConvertIToA(uint value, char* buf, uint base);              // 0x011ed0f0
 char* ConvertI64ToA(int lo, int hi, char* buf, int base, int a5); // 0x011ed190
 char* ConvertU32ToStr(uint value, char* buf, int asHex);          // 0x011ed230
 ushort* CopyAtoW(ushort* dst, const char* src);                   // 0x011ed270
@@ -97,15 +95,17 @@ char* rw::core::stdc::ConvertU32ToA(char* buf, int value)
 // 0x011ecfa0: rw::core::stdc::ConvertI64ToA_rec
 // ---------------------------------------------------------------------------
 // @ 0x011ecfa0
+extern "C" long long __cdecl _alldvrm_helper(int lo, int hi, int d, int a4);
+
 char* rw::core::stdc::ConvertI64ToA_rec(char* buf, int lo, int hi)
 {
-    if (hi < 0 || (hi == 0 && (uint)lo <= 0))
+    if (hi < 0)
         return buf;
-    long long v = ((long long)hi << 32) | (unsigned)lo;
-    long long q = v / 10;
-    int r = (int)(v % 10);
+    if (hi == 0 && (uint)lo <= 0)
+        return buf;
+    long long q = _alldvrm_helper(lo, hi, 10, 0);
     char* p = ConvertI64ToA_rec(buf, (int)q, (int)(q >> 32));
-    *p = (char)r + '0';
+    *p = (char)((q >> 32) & 0xff) + '0';
     return p + 1;
 }
 
@@ -127,15 +127,15 @@ char* rw::core::stdc::ConvertU32ToBase(char* buf, uint value, uint base)
 // 0x011ed020: rw::core::stdc::ConvertU64ToBase
 // ---------------------------------------------------------------------------
 // @ 0x011ed020
+extern "C" long long __cdecl _aulldvrm_helper(int lo, int hi, uint d, uint a4);
+
 char* rw::core::stdc::ConvertU64ToBase(char* buf, int lo, int hi, uint base, uint a5)
 {
-    if ((uint)hi == 0 && (uint)lo == 0)
+    if (lo == 0 && hi == 0)
         return buf;
-    unsigned long long v = ((unsigned long long)(uint)hi << 32) | (uint)lo;
-    unsigned long long q = v / base;
-    uint r = (uint)(v % base);
+    long long q = _aulldvrm_helper(lo, hi, base, 0);
     char* p = ConvertU64ToBase(buf, (int)q, (int)(q >> 32), base, a5);
-    *p = (char)r + '0';
+    *p = (char)((q >> 32) & 0xff) + '0';
     return p + 1;
 }
 
@@ -147,11 +147,11 @@ char* rw::core::stdc::ConvertU32ToHexUpper(char* buf, uint value)
 {
     if (value > 0) {
         char* p = ConvertU32ToHexUpper(buf, value >> 4);
-        if ((value & 0xf) < 10) {
-            *p = (byte)(value & 0xf) + 0x30;
+        if (((byte)value & 0xf) < 10) {
+            *p = ((byte)value & 0xf) + 0x30;
             return p + 1;
         }
-        *p = (byte)(value & 0xf) + 0x37;
+        *p = ((byte)value & 0xf) + 0x37;
         return p + 1;
     }
     return buf;
@@ -165,11 +165,11 @@ char* rw::core::stdc::ConvertU32ToHexLower(char* buf, uint value)
 {
     if (value > 0) {
         char* p = ConvertU32ToHexLower(buf, value >> 4);
-        if ((value & 0xf) < 10) {
-            *p = (byte)(value & 0xf) + 0x30;
+        if (((byte)value & 0xf) < 10) {
+            *p = ((byte)value & 0xf) + 0x30;
             return p + 1;
         }
-        *p = (byte)(value & 0xf) + 0x57;
+        *p = ((byte)value & 0xf) + 0x57;
         return p + 1;
     }
     return buf;
@@ -179,7 +179,7 @@ char* rw::core::stdc::ConvertU32ToHexLower(char* buf, uint value)
 // 0x011ed0f0: rw::core::stdc::ConvertIToA
 // ---------------------------------------------------------------------------
 // @ 0x011ed0f0
-char* rw::core::stdc::ConvertIToA(uint value, char* buf, int base)
+char* rw::core::stdc::ConvertIToA(uint value, char* buf, uint base)
 {
     char* start = buf;
     int v = (int)value;
@@ -198,15 +198,15 @@ char* rw::core::stdc::ConvertIToA(uint value, char* buf, int base)
     }
     if (base == 10) {
         if (v > 0) {
-            char* q = ConvertU32ToA(buf, v / base);
-            *q = (char)(v % base) + '0';
-            buf = q + 1;
+            char* q = ConvertU32ToA(buf, v / 10);
+            *q = (char)(v % 10) + '0';
+            q[1] = 0;
         }
     } else {
-        if ((uint)v > 0) {
+        if (v > 0) {
             char* q = ConvertU32ToBase(buf, (uint)v / base, base);
-            *q = (char)((uint)v % base) + '0';
-            buf = q + 1;
+            *q++ = (char)((uint)v % base) + '0';
+            buf = q;
         }
     }
     *buf = 0;
@@ -220,17 +220,20 @@ char* rw::core::stdc::ConvertIToA(uint value, char* buf, int base)
 char* rw::core::stdc::ConvertI64ToA(int lo, int hi, char* buf, int base, int a5)
 {
     char* start = buf;
-    if (hi < 0 && base == 10 && a5 == 0) {
+    if (hi < 1 && (hi < 0 || (uint)lo >= 0x80000000u) && base == 10 && a5 == 0) {
         if (lo == 0 && hi == (int)0x80000000) {
             StringCopyBounded(buf, "-9223372036854775808");
             return buf;
         }
         *buf++ = '-';
-        long long v = -(((long long)hi << 32) | (unsigned)lo);
-        lo = (int)v;
-        hi = (int)(v >> 32);
+        uint u = (uint)lo;
+        uint h = (uint)hi;
+        uint n = -(u + (h != 0));
+        hi = -(int)(h + (u != 0));
+        lo = (int)n;
+        (void)hi;
     }
-    if ((lo | hi) == 0) {
+    if (lo == 0 && hi == 0) {
         *buf = '0';
         buf[1] = 0;
         return start;
@@ -253,7 +256,7 @@ char* rw::core::stdc::ConvertU32ToStr(uint value, char* buf, int asHex)
 {
     if (value == 0) {
         *buf = '0';
-        buf[1] = (char)value;
+        buf[1] = 0;
         return buf;
     }
     if (asHex == 0) {
@@ -378,13 +381,13 @@ byte rw::core::thread::Semaphore::Init(const void* p)
                 mSemaphoreData.mnCount = 0;
             byte intra = *(const byte*)(pp + 4);
             mSemaphoreData.mbIntraProcess = intra;
-            if (intra != 0) {
-                mSemaphoreData.mhSemaphore = CreateSemaphoreA(0, 0x3fffffff, 0, 0);
-            } else {
+            if (intra == 0) {
                 const char* nm = pp + 5;
                 const char* name = (*nm != 0) ? nm : 0;
                 mSemaphoreData.mhSemaphore =
                     CreateSemaphoreA(0, 0x3fffffff, mSemaphoreData.mnCount, name);
+            } else {
+                mSemaphoreData.mhSemaphore = CreateSemaphoreA(0, 0x3fffffff, 0, 0);
             }
             result = mSemaphoreData.mhSemaphore != 0;
         }

@@ -369,7 +369,6 @@ void FUN_00e64e10() {
 
 // ------------------------------------------------------------------
 // 0x00e64fc0  KeyMap::erase
-// @ 0x00e64fc0
 int KeyMap::erase(KPair* key) {
   KPair* end = mpEnd;
   KPair* e = (KPair*)FUN_00b41ea0(mpBegin, end, key, mbFlag);
@@ -478,7 +477,6 @@ alloc_done:
 
 // ------------------------------------------------------------------
 // 0x00e653a0  cCellGfx::pushObj (intrusive ptr, refcount at +0x40)
-// @ 0x00e653a0
 void cCellGfx::pushObj(void* p) {
   if (p) *(int*)((char*)p + 0x40) += 1;
   void** endp = (void**)*(void**)((char*)this + 4);

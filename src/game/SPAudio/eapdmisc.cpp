@@ -86,11 +86,11 @@ byte loadbang_setup()
     t_symbol* s = gensym(&local, "loadbang");
     g_loadbangClass_16756a8 = class_new(s->s_name, s->s_thing, (void*)loadbang_new,
                                         0, 0x28, 8, 0);
-    byte ok = (g_loadbangClass_16756a8 != 0) & 1;
+    byte ok = g_loadbangClass_16756a8 != 0;
     t_symbol* s2 = gensym(&local, "loadbang");
-    ok = ok & class_addmethod(g_loadbangClass_16756a8, (void*)loadbang_bang,
-                              (void*)s2->s_name, s2->s_thing, 0);
-    return ok;
+    byte added = class_addmethod(g_loadbangClass_16756a8, (void*)loadbang_bang,
+                                 (void*)s2->s_name, s2->s_thing, 0);
+    return (byte)(added & ok);
 }
 
 // @ 0x00a5d690
@@ -137,9 +137,9 @@ byte serial_setup()
     t_symbol local;
     t_symbol* s = gensym(&local, "serial");
     g_serialClass_16756a0 = class_new(s->s_name, s->s_thing, (void*)serial_new, 0, 0x30, 0, 5, 0);
-    byte ok = (g_serialClass_16756a0 != 0) & 1;
-    ok = ok & class_doaddfloat(g_serialClass_16756a0, (void*)serial_float);
-    return ok;
+    byte ok = g_serialClass_16756a0 != 0;
+    byte added = class_doaddfloat(g_serialClass_16756a0, (void*)serial_float);
+    return (byte)(added & ok);
 }
 
 // @ 0x00a5d7f0
@@ -217,12 +217,12 @@ byte cputime_setup()
     t_symbol local;
     t_symbol* s = gensym(&local, "cputime");
     g_cputimeClass_167569c = class_new(s->s_name, s->s_thing, (void*)cputime_new, 0, 0x40, 0, 0);
-    byte ok = (g_cputimeClass_167569c != 0) & 1;
-    ok = ok & class_addbang(g_cputimeClass_167569c, (void*)cputime_bang);
+    byte ok = g_cputimeClass_167569c != 0;
+    byte b1 = class_addbang(g_cputimeClass_167569c, (void*)cputime_bang);
     t_symbol* s2 = gensym(&local, "bang2");
-    ok = ok & class_addmethod(g_cputimeClass_167569c, (void*)cputime_bang2,
+    byte b2 = class_addmethod(g_cputimeClass_167569c, (void*)cputime_bang2,
                               (void*)s2->s_name, s2->s_thing, 0);
-    return ok;
+    return (byte)(b2 & ok & b1);
 }
 
 // @ 0x00a5da10

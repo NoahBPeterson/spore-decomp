@@ -752,9 +752,9 @@ void* XmlReaderState::StrDup(const wchar_t* s)
     }
     int n = (int)(p - q);
     unsigned size = ((unsigned)(n * 2 + 9)) & 0xfffffff8u;
+
     char* base = (char*)this + 4;
-    char* available = *(char**)(base + 0x0c);
-    if ((int)(*(int*)((char*)this + 0x0c) - (int)size - (int)available) < 0) {
+    if ((int)(*(int*)((char*)this + 0x0c) - (int)size - *(int*)(base + 0x0c)) < 0) {
         if (!((StackAllocator_s0099_a050*)base)->AllocateNewBlock((int)size))
             return 0;
     }

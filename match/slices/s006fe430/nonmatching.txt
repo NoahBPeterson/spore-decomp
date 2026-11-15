@@ -1,5 +1,6 @@
 # va  diff-bytes  reason
 006fe430  187  fragment-declaration serializer: complete (the p[-0x28..] interior-pointer walk, both 0x1c-stride loops, all IO calls) but cl rebases the loop pointer (p+0x14) instead of keeping 0x162477c.
+006fe830  19   cVertexFragmentInfo destructor: complete; cl keeps `this` in esi and the +0x24 sub-address in edi (original the other way round).
 006fe890  36   two-vector insert/rollback helper: complete; cl schedules the global loads/pointer arithmetic differently.
 006fe960  127  AddFragmentDeclarations: complete; cl materializes the fragment-table base in esi (original indexes via [idx*0x44+base] and keeps ebp for the record). [equiv FAIL-KEPT register ecx: on the empty-vector path the original leaves ecx at the caller value while cl materializes the table base there; return value/memory identical]
 006feee0  27   SP::LoadAndSelectVS: complete; cl inlined the local FUN_006fec40 stub (no call emitted) so the else-branch returned 0 instead of the generated shader; FUN_006fec40 is now __declspec(noinline) and the call reaches 0x6fec40 (replay identical; equiv WEAK 185 valid, no mismatch, 54.5% cov).

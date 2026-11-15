@@ -19,8 +19,6 @@
 //   0xa18720  ResourceConfiguration::GetPropertyAsChar8Ptr
 //   0xa18760  ResourceConfiguration::GetPropertyIDs
 #include "types.h"
-extern "C" long _InterlockedExchange(volatile long*, long);
-#pragma intrinsic(_InterlockedExchange)
 
 // =====================================================================================
 // Foreign callees / globals.
@@ -307,34 +305,31 @@ bool __stdcall FUN_00a17a00(void* reader, EAString* str) {
 }
 
 // @ 0x00A17BE0
-// EA::ResourceMan::Resource base ctor (vptr, interlocked refcount = 0, the three-word
-// Key) then the EA::Audio::IConfiguration sub-object ctor (its vptr), both inlined.
 void ResourceConfiguration::ctor() {
-    uint8_t* const h = (uint8_t*)this;
-    *(void**)(h + 0) = (void*)0x13ebcdc;
-    _InterlockedExchange((volatile long*)(h + 4), 0);
-    *(uint32_t*)(h + 8) = 0;
-    *(uint32_t*)(h + 0xc) = 0;
-    *(uint32_t*)(h + 0x10) = 0;
-    *(void**)(h + 0x14) = (void*)0x1449248;
-    *(void**)(h + 0) = (void*)0x14523e8;
-    *(void**)(h + 0x14) = (void*)0x1452398;
-    *(uint8_t*)(h + 0x20) = 0;
-    *(uint32_t*)(h + 0x24) = 0;
-    *(uint32_t*)(h + 0x28) = 0;
-    *(uint32_t*)(h + 0x2c) = 0;
-    *(uint32_t*)(h + 0x3c) = 0;
-    *(void**)(h + 0x44) = (void*)((uint32_t)this + 0x40);
-    *(void**)(h + 0x40) = (void*)((uint32_t)this + 0x40);
-    *(uint16_t*)(h + 0x58) = 0;
-    *(uint16_t*)(h + 0x5a) = 0;
-    *(uint16_t*)(h + 0x6c) = 0;
-    *(uint16_t*)(h + 0x6e) = 0;
-    *(uint32_t*)(h + 0x70) = 0;
-    *(uint32_t*)(h + 0x74) = 0;
-    *(uint32_t*)(h + 0x78) = 0;
-    *(uint32_t*)(h + 0x1c) = 0;
-    *(uint32_t*)(h + 0x18) = 0;
+    *(void**)(m + 0) = (void*)0x13ebcdc;
+    *(uint32_t*)(m + 4) = 0;
+    *(uint32_t*)(m + 8) = 0;
+    *(uint32_t*)(m + 0xc) = 0;
+    *(uint32_t*)(m + 0x10) = 0;
+    *(void**)(m + 0x14) = (void*)0x1449248;
+    *(void**)(m + 0) = (void*)0x14523e8;
+    *(void**)(m + 0x14) = (void*)0x1452398;
+    *(uint8_t*)(m + 0x20) = 0;
+    *(uint32_t*)(m + 0x24) = 0;
+    *(uint32_t*)(m + 0x28) = 0;
+    *(uint32_t*)(m + 0x2c) = 0;
+    *(uint32_t*)(m + 0x3c) = 0;
+    *(void**)(m + 0x44) = m + 0x40;
+    *(void**)(m + 0x40) = m + 0x40;
+    *(uint16_t*)(m + 0x58) = 0;
+    *(uint16_t*)(m + 0x5a) = 0;
+    *(uint16_t*)(m + 0x6c) = 0;
+    *(uint16_t*)(m + 0x6e) = 0;
+    *(uint32_t*)(m + 0x70) = 0;
+    *(uint32_t*)(m + 0x74) = 0;
+    *(uint32_t*)(m + 0x78) = 0;
+    *(uint32_t*)(m + 0x1c) = 0;
+    *(uint32_t*)(m + 0x18) = 0;
 }
 
 // @ 0x00A17C70

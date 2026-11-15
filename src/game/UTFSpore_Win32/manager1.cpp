@@ -92,13 +92,11 @@ Manager* spManagerForDial;   // 0x0166AA74
 struct DatagramSocket {
     char  mPad08[8];
     void* mpVtbl08;      // +8
-    char  mPadRest[0x84 - 0xc];          // +0xc..+0x84
     DatagramSocket();                    // 0x0094E920
 };
 struct StreamSocket {
     char  mPad08[8];
     void* mpVtbl08;      // +8
-    char  mPadRest[0x88 - 0xc];          // +0xc..+0x88
     StreamSocket();                      // 0x0094E9A0
 };
 // ---- items of slice s0094bb50 end
@@ -208,17 +206,19 @@ bool EA::Sockets::Manager::IsNetworkConnected(char const * p, bool q)
 // @ 0x0094c490
 void* Manager::CreateSocket(int type)
 {
-    void* s = 0;
+    void* s;
     if (type == 2) {
-        s = operator_new(sizeof(DatagramSocket), "UTF/Sockets", 0, 0, 0, 0);
+        s = operator_new(0x84, "UTF/Sockets", 0, 0, 0, 0);
         if (s == 0)
             return 0;
         new (s) DatagramSocket();
     } else if (type == 3) {
-        s = operator_new(sizeof(StreamSocket), "UTF/Sockets", 0, 0, 0, 0);
+        s = operator_new(0x88, "UTF/Sockets", 0, 0, 0, 0);
         if (s == 0)
             return 0;
         new (s) StreamSocket();
+    } else {
+        return 0;
     }
     if (s != 0)
         ((void(__thiscall*)(void*))((*(void***)((char*)s + 8))[0]))((char*)s + 8);
@@ -297,22 +297,25 @@ bool Manager::GetManualDialupNameAndPassword(char* name, char* user, char* pass,
 }
 
 // @ 0x0094c730
-enum { kRasDialMsgCompleted = 0x15783921 };
 void __stdcall Sockets_RasDialFunc(unsigned int unMsg, int rascs, unsigned int dwError)
 {
     (void)dwError;
     if (unMsg != 0xcccd)
         return;
     if (rascs == 3) {
-        if (spManagerForDial != 0) {
-            Manager* m = spManagerForDial;
-            if (m->mpDialupCallbackFunction != 0)
-                m->mpDialupCallbackFunction(kRasDialMsgCompleted, m, 1);
+        Manager* m = spManagerForDial;
+        if (m != 0) {
+            DialupCallback cb = m->mpDialupCallbackFunction;
+            if (cb != 0)
+                cb(0x15783921, m, 1);
         }
     } else if (rascs == 0x2000 || rascs == 0x2001) {
         Manager* m = spManagerForDial;
-        if (m != 0)
-            ((void(__thiscall*)(void*, bool))((void**)*(void***)m)[15])(m, rascs == 0x2000 ? true : false);
+        if (m != 0) {
+            typedef void (__thiscall* Vtfn)(void*, int);
+            Vtfn fn = *(Vtfn*)((char*)*(void**)m + 0x3c);
+            fn(m, rascs == 0x2000);
+        }
     }
 }
 

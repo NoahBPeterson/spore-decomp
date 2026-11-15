@@ -29,5 +29,3 @@
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?FUN_00ba9400@@YAXPAX@Z  00ba9400  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?FUN_00ba9470@@YAXPAX@Z  00ba9470  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?EraseKey@cFeedbackTree@@QAEHI@Z  00baa110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/_at_00ba0000.cpp  ?Lookup@HashOwner@@QAEPAXPAX@Z  00ba81b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/SPGonzago/_at_00ba0000.cpp  ?Run_00ba2590@W@@QAEXPAX@Z  00ba2590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

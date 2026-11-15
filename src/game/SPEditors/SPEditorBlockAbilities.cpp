@@ -428,15 +428,7 @@ cSPUILayout_s0059_f510* UninitMove(cSPUILayout_s0059_f510** out, cSPUILayout_s00
                         cSPUILayout_s0059_f510* dest, const cSPUILayout_s0059_f510* tag);                      // 0x0059ef30
 cSPUILayout_s0059_f510* UninitFillN(cSPUILayout_s0059_f510* first, uint32_t n, const cSPUILayout_s0059_f510* value);      // 0x0059ef70
 AbilityRec* FindAbilitySlot(AbilityRec* a, AbilityRec* b, AbilityRec* c);  // 0x0059f740
-// resource key passed by value to AbilityBase; it has a constructor, so a temporary built from
-// it reaches the base constructor through the "copy to the stack" path (0x0059f9e0), where a
-// plain zero-initialized aggregate is copied with three register-to-register dword stores.
-class Key3_s0059_f9e0_key {
-public:
-    Key3_s0059_f9e0_key() : instanceID(0), typeID(0), groupID(0) {}
-    uint32_t instanceID, typeID, groupID;
-};
-typedef Key3_s0059_f9e0_key Key3;
+struct Key3 { uint32_t instanceID, typeID, groupID; };
 struct AbilityBase {
     void* vptr0;      // +0x0
     void* vptr1;      // +0x4

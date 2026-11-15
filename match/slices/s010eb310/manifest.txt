@@ -12,4 +12,3 @@ slices/s010eb310/s010eb310.cpp  ?createZombie@hkAgent3Bridge@@SAXPAUhkAgentEntry
 slices/s010eb310/s010eb310.cpp  ?addCdBodyPair@hkSymmetricAgentFlipBodyCollector@@UAEXABVhkCdBody@@0@Z  010ebc50  /vc71 /O2 /MD /Gy /TP
 slices/s010eb310/s010eb310.cpp  ?addCdPoint@hkSymmetricAgentFlipCollector@@UAEXABUhkCdPoint@@@Z  010ebbb0  /vc71 /O2 /MD /Gy /TP
 slices/s010eb310/s010eb310.cpp  ?addCdPoint@hkSymmetricAgentFlipCastCollector@@UAEXABUhkCdPoint@@@Z  010ebc00  /vc71 /O2 /MD /Gy /TP
-slices/s010eb310/s010eb310.cpp  ?registerBridgeAgent3@hkAgent3Bridge@@SAXPAVhkCollisionDispatcher@@@Z  010ebb30  /vc71 /O2 /MD /Gy /TP

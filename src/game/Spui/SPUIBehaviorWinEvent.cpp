@@ -3,7 +3,6 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
-#include "EA/UTFWin/SerTypeInfo.h"
 #include <cstddef>
 #include <math.h>
 
@@ -39,7 +38,6 @@ void* EA_Messaging_GetServer();   // 0x00883860 (equiv t2)
 void  FUN_00951330(void* p);      // 0x00951330 (MultiHeapObject::operator delete)
 struct C_7fc200 { void Dtor(); };// 0x007fc200 (thiscall, no args)
 struct SerItem { void* type; void* base; unsigned count; void* extra; };
-extern EA::UTFWin::SerTypeInfo gBoolStateEventSerTypeInfo; // 0x014161f4: bool state event type record
 struct Sec5 {
     virtual void s0(); virtual void s1(); virtual void s2();
     virtual void s3(); virtual void s4(); virtual void s5(); // +0x14
@@ -65,7 +63,7 @@ struct WinEvent {
     void SetMessageWinId(unsigned id);
 };
 struct BoolEvent {
-    char Pred(char a, char b);
+    bool Pred(char a, char b);
 };
 // ---- items of slice s007fd840 end
 
@@ -90,20 +88,21 @@ bool WinEvent::IsThisType()
 }
 
 // @ 0x007fe7d0
-char BoolEvent::Pred(char a, char b)
+bool BoolEvent::Pred(char a, char b)
 {
     void* self = this;
+    bool result = false;
     int counter = -1;
     if (FUN_007fa520((char*)self + 0x1c, 4, &counter)) {
         void* w = (char*)self + 0x18;
         switch (*(unsigned*)((char*)self + 0x8c)) {
-        case 0: if (a == 0 || b != 0) { VCallI1(w, 0x48, a == 0); return (char)(a == 0); } return 0;
-        case 1: if (a != 0 || b != 0) { VCallI1(w, 0x48, a != 0); return a; } return 0;
-        case 2: VCallI1(w, 0x48, a == 0); return 1;
-        case 3: VCallI1(w, 0x48, a != 0); return 1;
+        case 0: if (a == 0 || b != 0) { VCallI1(w, 0x48, a == 0); return a == 0; } break;
+        case 1: if (a != 0 || b != 0) { VCallI1(w, 0x48, a != 0); return a != 0; } break;
+        case 2: result = true; VCallI1(w, 0x48, a == 0); break;
+        case 3: VCallI1(w, 0x48, a != 0); return true;
         }
     }
-    return 0;
+    return result;
 }
 
 // @ 0x007fe8c0
@@ -157,7 +156,7 @@ bool SerReadB(SerItem* out, void* src)
     ((Sec5*)((char*)p + 4))->s5();
     out->base = p;
     out->count = 1;
-    out->type = &gBoolStateEventSerTypeInfo;
+    out->type = 0;
     return true;
 }
 

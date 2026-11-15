@@ -15,5 +15,3 @@ slices/s00bd70b0/s00bd70b0.cpp  ?FUN_00bd7ea0@@YIXPAD@Z  00bd7ea0  /O2 /MD /Gy /
 slices/s00bd70b0/s00bd70b0.cpp  ?FUN_00bd7ab0@@YIXH@Z  00bd7ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bd70b0/s00bd70b0.cpp  ?FUN_00bd80d0@@YAMPAH@Z  00bd80d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00bd70b0/s00bd70b0.cpp  ?FUN_00bd7fc0@Sim@@QAE_NH@Z  00bd7fc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s00bd70b0/s00bd70b0.cpp  ?FUN_00bd8000@@YIXH@Z  00bd8000  /O2 /MD /Gy /TP /arch:SSE /fp:fast
-slices/s00bd70b0/s00bd70b0.cpp  ?FUN_00bd70b0@@YIXPAH@Z  00bd70b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

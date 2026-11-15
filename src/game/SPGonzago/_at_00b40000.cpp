@@ -658,10 +658,9 @@ extern "C" void  FUN_0041cb40(void*, void*);                       // 0x0041cb40
 extern "C" int   FUN_00b3f6c0(void*);                              // 0x00b3f6c0
 extern "C" int   FUN_00b3fe40(void*, float, void*, void*, int, void*); // 0x00b3fe40 SphereVsBoxContact
 extern "C" void  FUN_00b645ed0(void*, void*, void*);               // 0x00645ed0 hashtable::find
-struct Iter { void* node; void* bucket; };
 extern "C" void  FUN_00bbc330(int, int);                           // 0x00bbc330
 extern "C" void  FUN_00b72260(int);                                // 0x00b72260
-extern "C" void  FUN_01068380(void*, Iter);                        // 0x01068380 deque erase/clear (iterator by value)
+extern "C" void  FUN_01068380(void*, void*);                       // 0x01068380 deque erase/clear
 typedef unsigned int  u32;
 struct X {
     void FUN_00b43290();                 // thiscall: compose two bases into this+0xa4 / +0xf8
@@ -744,7 +743,6 @@ struct cHash16 {
     void SetBuckets(void* buckets, int count); // 0x00693230
     void FreeNodes(void* buckets, int count);  // 0x007611f0
     void Find(void* out, void* key);           // 0x00645ed0
-    Iter Erase(Iter it);                       // 0x01068380
 };
 struct cHash30 {
     int       mPad00;         // 0x00
@@ -1458,24 +1456,9 @@ struct cSim_s00b4_8110 {
                float* pMin, float* pMax, Vec3* pNegDir, Vec3* pPosDir); // 0x00b47200
 };
 struct cUpdateObj {
-    virtual void d00() {} virtual void d01() {} virtual void d02() {} virtual void d03() {}
-    virtual void d04() {} virtual void d05() {} virtual void d06() {} virtual void d07() {}
-    virtual void d08() {} virtual void d09() {} virtual void d10() {} virtual void d11() {}
-    virtual void d12() {} virtual void d13() {} virtual void d14() {} virtual void d15() {}
-    virtual void d16() {} virtual void d17() {} virtual void d18() {} virtual void d19() {}
-    virtual void d20() {} virtual void d21() {} virtual void d22() {} virtual void d23() {}
-    virtual void d24() {} virtual void d25() {} virtual void d26() {} virtual void d27() {}
-    virtual void d28() {} virtual void d29() {} virtual void d30() {} virtual void d31() {}
-    virtual void d32() {} virtual void d33() {} virtual void d34() {} virtual void d35() {}
-    virtual void d36() {} virtual void d37() {} virtual void d38() {} virtual void d39() {}
-    virtual void d40() {} virtual void d41() {} virtual void d42() {} virtual void d43() {}
-    virtual void d44() {} virtual void d45() {} virtual void d46() {} virtual void d47() {}
-    virtual void d48() {} virtual void d49() {} virtual void d50() {} virtual void d51() {}
-    virtual void d52() {} virtual void d53() {} virtual void d54() {} virtual void d55() {}
-    virtual void d56() {} virtual void d57() {} virtual void d58() {} virtual void d59() {}
-    virtual void Update();                                       // vtable +0xf0
-    char  mPad04[0x71];                                          // +0x04
-    uchar mFlag75;                                               // +0x75
+    char  mPad00[0x76];                                          // +0x00
+    uchar mFlag76;                                               // +0x76
+    void  Update();                                              // vtable +0xf0
 };
 struct cWorldObj {
     char   mPad00[0x58];                                         // +0x00
@@ -2003,6 +1986,7 @@ extern uchar  g_1569ab8;        // 0x01569ab8
 extern uchar  g_15acb40;        // 0x015acb40
 extern uint   g_167eccc;        // 0x0167eccc
 extern uint   g_167ecc8;        // 0x0167ecc8
+struct Iter { void* node; void* bucket; };
 struct HT {
     char   pad0[4];
     void** arr;                 // +0x04
@@ -3245,18 +3229,22 @@ void X::FUN_00b43290()
 // @ 0x00b43710
 void __cdecl FUN_00b43710(u32 key)
 {
-    Iter it;
-    ((cHash16*)(g_167eb70 + 0x58))->Find(&it, &key);      // find(&it, &key)
+    char* w = g_167eb70;
+    char* ht = w + 0x58;                                  // hashtable at +0x58
+    void* arr   = *(void**)(ht + 4);
+    int   count = *(int*)(ht + 8);
 
-    cHash16* ht = (cHash16*)(g_167eb70 + 0x58);
+    void* it_node = 0;
+    FUN_00b645ed0(ht, &it_node, &key);                    // find(&it, &key)
 
-    if (it.node != ht->mBuckets[ht->mBucketCount]) {
-        int* pair = *(int**)((char*)it.node + 4);
-        FUN_00bbc330(*(int*)(g_167eb70 + 4), pair[2]);
+    if (it_node != *(void**)((char*)arr + (u32)count * 4)) {
+        int* pair = *(int**)((char*)it_node + 4);
+        FUN_00bbc330(*(int*)(w + 4), pair[2]);
         FUN_00b72260(pair[0]);
-        it = ((cHash16*)(g_167eb70 + 0x58))->Erase(it);
+        FUN_01068380(w + 0x58, &it_node);
     }
 }
+
 // @ 0x00b43790
 void __cdecl FUN_00b43790(void* a, void* b, float* out)
 {
@@ -3467,50 +3455,44 @@ void cObj452xx::Dispatch(void* p2, void* p3, void* p4)
 // @ 0x00b453a0
 void cObj452xx::Mode0A(void* p2)
 {
-    switch (mMode20)
+    int m = mMode20;
+
+    if (m == 0)
     {
-    case 0:
         FUN_00b544c0(p2, 0);
         return;
+    }
+    if (m - 1 != 0) return;
 
-    case 1:
-        {
-            cHash16* ht = (cHash16*)((char*)gHashOwner + 0x58);
-            void* node[2];
-            void* key = p2;
-            ht->Find(node, &key);
-            if (node[0] != ht->mBuckets[ht->mBucketCount])
-            {
-                cVal* v = (cVal*)((cValNode*)node[0])->mValue;
-                v->mField38 = v->mField3c;
-            }
-        }
-        return;
+    cHash16* ht = (cHash16*)((char*)gHashOwner + 0x58);
+    void* node = 0;
+    ht->Find(&node, &p2);
+    if (node != ht->mBuckets[ht->mBucketCount])
+    {
+        cVal* v = (cVal*)((cValNode*)node)->mValue;
+        v->mField38 = v->mField3c;
     }
 }
 
 // @ 0x00b45410
 void cObj452xx::Mode0B(void* p2)
 {
-    switch (mMode20)
+    int m = mMode20;
+
+    if (m == 0)
     {
-    case 0:
         FUN_00b544f0(p2, 0);
         return;
+    }
+    if (m - 1 != 0) return;
 
-    case 1:
-        {
-            cHash16* ht = (cHash16*)((char*)gHashOwner + 0x58);
-            void* node[2];
-            void* key = p2;
-            ht->Find(node, &key);
-            if (node[0] != ht->mBuckets[ht->mBucketCount])
-            {
-                cVal* v = (cVal*)((cValNode*)node[0])->mValue;
-                v->mField38 = 0;
-            }
-        }
-        return;
+    cHash16* ht = (cHash16*)((char*)gHashOwner + 0x58);
+    void* node = 0;
+    ht->Find(&node, &p2);
+    if (node != ht->mBuckets[ht->mBucketCount])
+    {
+        cVal* v = (cVal*)((cValNode*)node)->mValue;
+        v->mField38 = 0;
     }
 }
 
@@ -3518,32 +3500,23 @@ void cObj452xx::Mode0B(void* p2)
 unsigned cObj452xx::GetFlag(void* p2)
 {
     int m = mMode20;
-    unsigned r;
 
-    switch (m)
+    if (m == 0) return FUN_00b54520(p2);
+
+    unsigned r = (unsigned)(m - 1);
+
+    if (r == 0)
     {
-    case 0:
-        return FUN_00b54520(p2);
-
-    case 1:
+        cHash16* ht = (cHash16*)((char*)gHashOwner + 0x58);
+        void* node = 0;
+        ht->Find(&node, &p2);
+        if (node != ht->mBuckets[ht->mBucketCount])
         {
-            cHash16* ht = (cHash16*)((char*)gHashOwner + 0x58);
-            void* node[2];
-            void* key = p2;
-            ht->Find(node, &key);
-            if (node[0] != ht->mBuckets[ht->mBucketCount])
-            {
-                cVal* v = (cVal*)((cValNode*)node[0])->mValue;
-                float s = v->mF1c * v->mF1c + v->mF20 * v->mF20 + v->mF24 * v->mF24;
-                return (s > 1.52587890625e-05f) ? 1u : 0u;
-            }
-            r = (unsigned)node[0];
+            cVal* v = (cVal*)((cValNode*)node)->mValue;
+            float s = v->mF1c * v->mF1c + v->mF20 * v->mF20 + v->mF24 * v->mF24;
+            return (s > 1.52587890625e-05f) ? 1u : 0u;
         }
-        break;
-
-    default:
-        r = (unsigned)(m - 1);
-        break;
+        r = (unsigned)node;
     }
 
     return r & 0xffffff00u;
@@ -3694,35 +3667,42 @@ bool cObj45540::Build(void* p2, void* p3, float* p4, float* p5, cFOut* p6)
 // @ 0x00b45ab0
 int cHash30::Remove(void* keyPtr)
 {
-    int before = mNodeCount;
+    int   before = mNodeCount;
+    void* key    = *(void**)keyPtr;
 
-    void** slot = &mBuckets[*(unsigned*)keyPtr % (unsigned)mBucketCount];
+    void** slot = &mBuckets[(unsigned)key % (unsigned)mBucketCount];
+    void*  node = *slot;
 
-    while (*slot != 0 && *(void**)keyPtr != ((cHtNode*)*slot)->mKey)
-        slot = &((cHtNode*)*slot)->mNext;
-
-    while (*slot != 0 && *(void**)keyPtr == ((cHtNode*)*slot)->mKey)
+    while (node != 0)
     {
-        cHtNode* n = (cHtNode*)*slot;
+        cHtNode* n = (cHtNode*)node;
 
-        *slot = n->mNext;
-
-        if (n->mKey != 0) ((cKeyObj*)n->mKey)->Destroy();
-
-        if ((void*)n != mSentinel)
+        if (n->mKey == key)
         {
-            if ((void*)n < mPoolLo || (void*)n >= mPoolHi)
+            *slot = n->mNext;
+
+            if (n->mKey != 0) ((cKeyObj*)n->mKey)->Destroy();
+
+            if (node != mSentinel)
             {
-                FUN_00f47380(n);
+                if (node < mPoolLo || node >= mPoolHi)
+                {
+                    FUN_00f47380(node);
+                }
+                else
+                {
+                    n->mKey     = mFreeList;
+                    mFreeList   = node;
+                }
             }
-            else
-            {
-                n->mKey   = mFreeList;
-                mFreeList = n;
-            }
+
+            mNodeCount--;
+            node = *slot;
+            continue;
         }
 
-        mNodeCount--;
+        slot = &n->mNext;
+        node = *slot;
     }
 
     return before - mNodeCount;
@@ -3787,10 +3767,9 @@ void* cVec3c::InitCopy(const cVec3c* src)
     mBegin = mem;
     mEnd   = mem;
 
-    // the out value lives in the (dead) src argument's stack slot, as the original does
-    void** out = (void**)&src;
-    FUN_00b3f260(out, src->mBegin, src->mEnd, mem, (void*)src);
-    mEnd = *out;
+    void* out = (void*)src;
+    FUN_00b3f260(&out, src->mBegin, src->mEnd, mem, (void*)src);
+    mEnd = out;
 
     return this;
 }
@@ -4640,7 +4619,7 @@ void cSim_s00b4_8110::Fn_00b48920()
 
     while (mObjIndex < nLimit) {
         cUpdateObj* p = (cUpdateObj*)mpObjBegin[mObjIndex];
-        if (p->mFlag75)
+        if (p->mFlag76)
             p->Update();
         ++mObjIndex;
     }
@@ -5621,19 +5600,17 @@ int __cdecl FUN_00b4bae0(uint a, uint b)
 // @ 0x00b4bba0
 int __cdecl FUN_00b4bba0(uint a, uint b)
 {
-    // the key is built in the (dead) first argument's stack slot, as the original does
-    uint* pair = &a;
-
     void* rec = FUN_00b72160((char*)g_167eb70_s00b4_b590 + 8);
     int node = (int)FUN_00b72210((char*)g_167eb70_s00b4_b590 + 8, 0, rec);
     *(uint*)(node + 4)  = a;
     *(uint*)(node + 8)  = b;
     *(float*)(node + 0x24) = 0.0f;
 
-    if (a < b) { ((uint16_t*)pair)[1] = (uint16_t)a; ((uint16_t*)pair)[0] = (uint16_t)b; }
-    else       { ((uint16_t*)pair)[1] = (uint16_t)b; ((uint16_t*)pair)[0] = (uint16_t)a; }
+    union { uint u; struct { uint16_t lo, hi; } s; } pair;
+    if (a < b) { pair.s.hi = (uint16_t)a; pair.s.lo = (uint16_t)b; }
+    else       { pair.s.hi = (uint16_t)b; pair.s.lo = (uint16_t)a; }
 
-    uint* v = (uint*)FUN_00b4b7f0((char*)g_167eb70_s00b4_b590 + 0x24, 0, (int*)pair);
+    uint* v = (uint*)FUN_00b4b7f0((char*)g_167eb70_s00b4_b590 + 0x24, 0, (int*)&pair.u);
     *v = (uint)rec;
     return node;
 }

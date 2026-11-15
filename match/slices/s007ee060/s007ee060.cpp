@@ -172,30 +172,22 @@ extern "C" int VolumeEffectUpdate(int* self, float dt) {
   return 0;
 }
 
-struct EffectObject {
-  EffectObject(void* record);  // 0x007EE400, ecx = the new object
-  char mData[0x44];            // +0x00
-  void* mRecord;               // +0x44
-};
-
-// @ 0x007EE3E0  VolumeEffectSetup  allocate + construct a volume-effect object
-// A `new` expression with the six-argument Swarm allocator: cl keeps the allocation in the EH
-// frame's slot, sets the try level before the null check and calls the constructor (0x007EE400)
-// only when the allocation succeeded.  The constructor's result is the function's result, and a
-// failed allocation gives 0.
-void* VolumeEffectSetup(void* record, void* arg, void* param, unsigned int flags) {
-  (void)arg;
-  (void)param;
-  (void)flags;
-  return new ("Swarm", 0, 0u, (const char*)0, 0) EffectObject(record);
+// @ 0x007EE3E0  allocate + construct a volume-effect object
+extern "C" void* AllocVolumeEffect(void* manager, void* arg) {
+  char* p = (char*)operator new(0x48, "Swarm", 0, 0, 0, 0);
+  if (p) {
+    extern void* EffectObjectCtor(void*, void*);
+    return EffectObjectCtor(p, arg);
+  }
+  return 0;
 }
 
 // @ 0x007EE450  register the volume-effect factory
-extern void* g_1676498;  // 0x01676498: the factory's resource-creation callback
+extern void* g_1676498;
 extern void* g_167649c;
 extern uint32_t g_16764a8, g_16764ac;
 extern "C" void RegisterVolumeFactory() {
-  g_1676498 = (void*)&VolumeEffectSetup;
+  g_1676498 = (void*)&AllocVolumeEffect;
   extern void FUN_007edbc0();
   g_167649c = (void*)&FUN_007edbc0;
   g_16764a8 = 1;

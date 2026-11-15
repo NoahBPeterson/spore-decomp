@@ -52,8 +52,8 @@ PgSymbol* gensym(PgSymbol* out, const char* s);                       // 0x00a67
 namespace EA {
 namespace Audio {
 namespace Eapd {
-t_class*  class_new_m1(PgSymbol name, void* newmethod, void* freemethod,
-                       int size, int flags, void* t0);                // 0x00a48e50
+t_class*  class_new7(PgSymbol name, int size, void* freemethod, void* newmethod,
+                     int a1, int a2, int a3);                         // 0x00a48ea0
 }
 }
 }
@@ -96,7 +96,7 @@ bool x_thisinstance_setup()
     PgSymbol s;
     bool ok;
 
-    gpInstanceClass = class_new_m1(*gensym(&s, "thisinstance"), (void*)instance_new, 0, 0x2c, 0, 0);
+    gpInstanceClass = class_new7(*gensym(&s, "thisinstance"), 0x2c, (void*)instance_new, 0, 0, 0, 0);
     ok = gpInstanceClass != 0;
     ok &= class_addmethod1(gpInstanceClass, (void*)busy_float, *gensym(&s, "busy"), 1, 0);
     return ok;

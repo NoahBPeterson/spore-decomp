@@ -510,35 +510,35 @@ namespace SP {
 extern "C" long __cdecl _InterlockedExchange(volatile long* target, long value);
 }
 namespace SP {
-struct MessageData {
-  MessageData() : mID(0) {}
-  long mRefCount;     // +0x4
-  uint32_t mData[10];
-  uint32_t mID;       // +0x30
-  uint32_t mPad34;
+struct AtomicInt {
+  volatile long mValue;
+  AtomicInt() { _InterlockedExchange(&mValue, 0); }
 };
 }
 namespace SP {
-struct BehaviorMessage : public MessageData {
-  BehaviorMessage() { _InterlockedExchange(&mRefCount, 0); }
-  virtual ~BehaviorMessage();  // SlotMessage::Destruct (0x00421cf0)
+class BehaviorMessage {
+ public:
+  BehaviorMessage() {}
+  virtual void v0();
+  AtomicInt mRefCount;  // +0x4
 };
 }
 namespace SP {
-struct PaintMessageFields {
-  uint32_t pad[2];
-  uint32_t mItemID;                // +0x8
+class cPaintMessage : public BehaviorMessage {
+ public:
+  cPaintMessage() : mMessageID(0), mFlags(0) {}
+  ~cPaintMessage();  // SlotMessage::Destruct (0x00421cf0)
+  virtual void v0();
+  uint32_t mItemID;     // +0x8
   uint32_t pad0c;
-  uint32_t mGroup;                 // +0x10
+  uint32_t mGroup;      // +0x10
   uint32_t pad14;
   IWindow_s005c_0c00* mpWindow;    // +0x18
-};
-}
-namespace SP {
-struct cPaintMessage : public BehaviorMessage {
-  cPaintMessage(uint32_t id) : mField38(0) { mID = id; }
-  uint32_t mField38;  // +0x38
-  uint32_t mPad3c;
+  uint32_t pad1c[5];
+  uint32_t mMessageID;  // +0x30
+  uint32_t pad34;
+  uint32_t mFlags;      // +0x38
+  uint32_t pad3c;
 };
 }
 // ---- items of slice s005c0c00 end
@@ -720,11 +720,11 @@ void cSPEditorPaintLikeThis_s005c_0c00::SendPaletteItemMessage()
 namespace SP {
 void cSPEditorPaintLikeThis_s005c_0c00::SendPaintMessage()
 {
-  cPaintMessage msg(0x5090434);
-  PaintMessageFields* pData = (PaintMessageFields*)&msg;
-  pData->mItemID = GetPaletteItem()->mID;
-  pData->mGroup = mPaintGroupId;
-  pData->mpWindow = mWinThumbnail;
-  MessageServer()->PostMSG(msg.mID, &msg, 0);
+  cPaintMessage msg;
+  msg.mMessageID = 0x5090434;
+  msg.mItemID = GetPaletteItem()->mID;
+  msg.mGroup = mPaintGroupId;
+  msg.mpWindow = mWinThumbnail;
+  MessageServer()->PostMSG(msg.mMessageID, &msg, 0);
 }
 }  // namespace SP

@@ -523,22 +523,18 @@ float FUN_00d9af20(char* self)
 }
 
 // @ 0x00d9af60
-bool FUN_00d9af60(Creature_s00d9_af60* self, void* param2, void* param3, void* param4, void* param5, uint* out)
+bool FUN_00d9af60(Creature_s00d9_af60* self, void* param2, uint* out)
 {
     AnimHandle* h = self->mpBehaviorTreeData->mStimuli.Play(0x10000, 0);
     int r = (int)FUN_00d999d0((int)h);
-    if (r != 0)
-    {
-        typedef void (__thiscall *LocoFn)(void*);
-        void* loco = (void*)((char*)self + 0xc0);
-        ((LocoFn)(*(void***)loco)[0xec / 4])(loco);
-        void* target = (void*)(r + 0x5a8);
-        typedef void (__thiscall *SetTargetFn)(Creature_s00d9_af60*, void*, int, int);
-        ((SetTargetFn)(*(void***)self)[0x84 / 4])(self, target, 1, 0);
-        uint v = (uint)self->InterruptAnim(0x6496897, -1, 0);
-        *out = v;
-        (void)param2;
-        return true;
-    }
-    return false;
+    if (r == 0) return false;
+    typedef void (__thiscall *LocoFn)(void*);
+    void* loco = (void*)((char*)self + 0xc0);
+    ((LocoFn)(*(void***)loco)[0xec / 4])(loco);
+    typedef void (__thiscall *SetTargetFn)(Creature_s00d9_af60*, void*, int, int);
+    ((SetTargetFn)(*(void***)self)[0x84 / 4])(self, (void*)(r + 0x5a8), 1, 0);
+    uint v = (uint)self->InterruptAnim(0x6496897, -1, 0);
+    *out = v;
+    (void)param2;
+    return true;
 }

@@ -416,10 +416,11 @@ void* makenote_new(float f1, float f2)
     void* x = pd_new(g_makenoteClass_16756b8);
     if (x != 0)
     {
+        void* f2inlet = (char*)x + 0x2c;
         *(float*)((char*)x + 0x28) = f1;
-        *(float*)((char*)x + 0x2c) = f2;
+        *(float*)f2inlet = f2;
         floatinlet_new(x, (char*)x + 0x28);
-        floatinlet_new(x, (char*)x + 0x2c);
+        floatinlet_new(x, f2inlet);
         *(void**)((char*)x + 0x30) = outlet_new(x, g_floatSymbol_16758c4.s_name,
                                                 g_floatSymbol_16758c4.s_thing);
         *(void**)((char*)x + 0x34) = outlet_new(x, g_floatSymbol_16758c4.s_name,

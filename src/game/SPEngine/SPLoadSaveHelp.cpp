@@ -259,12 +259,8 @@ struct Str16_s0069_4210 {
 };
 struct Hdr15 { u32 v[15]; };
 struct Obj60 { Hdr15 h; u32 x; Str16_s0069_4210 s1; Str16_s0069_4210 s2; };
-struct StrBuf {
-    char* begin; char* end; char* cap; void* pad;
-    ~StrBuf() { if ((cap - begin) > 1 && begin) operator_delete_arr(begin); }
-    void assign(const char* b, const char* e);
-};
-extern "C" StrBuf EA_ConvertToString8(void* v);
+struct StrBuf { char* begin; char* end; char* cap; void assign(const char* b, const char* e); void dtor(); };
+extern "C" StrBuf* EA_ConvertToString8(StrBuf* out, void* v);
 struct VStream {                       // IO stream: Read(buf, size) at vtable +0x30
     virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c(); virtual void s10();
     virtual void s14(); virtual void s18(); virtual void s1c(); virtual void s20(); virtual void s24();
@@ -733,7 +729,7 @@ void RegList_Resolve()
             void* q = (void*)FUN_00920090();
             if (q) {
                 void* r = (void*)FUN_00920090();
-                bool v = ((bool(__thiscall*)(void*, cRegNode*, void*))(((void**)(*(void***)r))[1]))(r, p, p->mpData);
+                bool v = ((bool(*)(cRegNode*, void*))(((void**)r)[1]))(p, p->mpData);
                 p->mState = v;
             }
         }
@@ -748,7 +744,7 @@ void RegList_Release()
             void* q = (void*)FUN_00920090();
             if (q) {
                 void* r = (void*)FUN_00920090();
-                bool v = ((bool(__thiscall*)(void*, cRegNode*))(((void**)(*(void***)r))[2]))(r, p);
+                bool v = ((bool(*)(cRegNode*))(((void**)r)[2]))(p);
                 p->mState = (v == 0);
             }
         }
@@ -817,8 +813,9 @@ void ParseULong(const char** src, unsigned long* out)
 // @ 0x006930b0
 void ParseFloat(const char** src, float* out)
 {
-    const char* s = src[0];
-    out[0] = (float)strtod(s, (char**)&src);
+    char* end;
+    double v = strtod(src[0], &end);
+    out[0] = (float)v;
 }
 
 // @ 0x006930d0
@@ -1424,11 +1421,16 @@ extern "C" void FUN_00694bf0(CString_s0069_4210* dst, CString_s0069_4210* src)
 }
 
 // @ 0x00694c10
-void FUN_00694c10(StrBuf* dst, void* v)
+extern "C" void FUN_00694c10(StrBuf* dst, void* v)
 {
-    StrBuf tmp = EA_ConvertToString8(v);
-    if (&tmp != dst)
-        dst->assign(tmp.begin, tmp.end);
+    StrBuf tmp;
+    tmp.begin = 0;
+    tmp.end = 0;
+    tmp.cap = 0;
+    StrBuf* r = EA_ConvertToString8(&tmp, v);
+    if (r != dst)
+        dst->assign(r->begin, r->end);
+    tmp.dtor();
 }
 
 // @ 0x00694d00

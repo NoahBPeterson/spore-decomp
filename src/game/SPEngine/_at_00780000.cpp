@@ -739,9 +739,8 @@ char* Func_00782800(char* self, char* first, char* last)
 // @ 0x00782b00
 void __fastcall FUN_00782B00(int p)
 {
-    char* self = (char*)p + 0x2c;
-    FUN_007806a0((void*)p);
-    ((char* (__fastcall*)(char*, int, int))Func_00782800)(self, *(int*)(p + 0x34), *(int*)(p + 0x38));
+    FUN_007806a0((char*)p - 8);
+    FUN_00782800(*(int*)(p + 0x30), *(int*)(p + 0x34));
     (*(void(__thiscall**)(int))(*(int*)(p + 8) + 0x24))(p + 8);
 }
 
@@ -778,35 +777,37 @@ float FUN_00782bb0(int n)
 }
 
 // @ 0x00782c90
-void FUN_00782c90(__m128* out, const __m128* m, const float* v)
+void FUN_00782c90(float* out, const float* m, const float* v)
 {
-    // out = mColumn1 * v.y + mColumn0 * v.x + mColumn2 * v.z, one packed __m128 per matrix column
-    __m128 r = _mm_mul_ps(_mm_set_ps1(v[1]), m[1]);
-    __m128 t = _mm_mul_ps(_mm_set_ps1(v[0]), m[0]);
-    r = _mm_add_ps(r, t);
-    __m128 u = _mm_mul_ps(_mm_set_ps1(v[2]), m[2]);
-    r = _mm_add_ps(r, u);
-    *out = r;
+    float vy = v[1];
+    float vx = v[0];
+    float vz = v[2];
+    out[0] = (vy * m[4] + vx * m[0]) + vz * m[8];
+    out[1] = (vy * m[5] + vx * m[1]) + vz * m[9];
+    out[2] = (vy * m[6] + vx * m[2]) + vz * m[10];
+    out[3] = (vy * m[7] + vx * m[3]) + vz * m[11];
 }
 
 // @ 0x00782ce0
-void FUN_00782ce0(__m128* out, int n, const __m128* m, const float* w)
+void FUN_00782ce0(float* out, int n, const float* m, const float* w)
 {
-    // weighted sum of n 4-vectors: sum over i of m[i] * w[i], one packed __m128 at a time
-    __m128 r = _mm_mul_ps(_mm_set_ps1(w[0]), m[0]);
     n = n - 1;
-    *out = r;
+    float w0 = w[0];
+    float r0 = w0 * m[0], r1 = w0 * m[1], r2 = w0 * m[2], r3 = w0 * m[3];
+    out[0] = r0; out[1] = r1; out[2] = r2; out[3] = r3;
     if (0 < n) {
-        __m128 acc = r;
         do {
-            __m128 ws = _mm_set_ps1(w[1]);
-            __m128 c = m[1];
+            float wi = w[1];
+            const float* c = m + 4;
+            m = m + 4;
             w = w + 1;
-            m = m + 1;
             n = n - 1;
-            acc = _mm_add_ps(_mm_mul_ps(ws, c), acc);
+            r0 = wi * c[0] + r0;
+            r1 = wi * c[1] + r1;
+            r2 = wi * c[2] + r2;
+            r3 = wi * c[3] + r3;
         } while (0 < n);
-        *out = acc;
+        out[0] = r0; out[1] = r1; out[2] = r2; out[3] = r3;
     }
 }
 

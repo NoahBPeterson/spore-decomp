@@ -321,9 +321,6 @@ void* __cdecl FUN_00a527f0(int sym, int a)
   return p;
 }
 
-typedef void (__cdecl* set_fn_00a528b0)(char*, int, int, int, int*);
-void __cdecl FUN_00a52840(char* obj, int a, int b, int argc, int* argv);
-
 // @ 0x00a52840
 void __cdecl FUN_00a52840(char* obj, int a, int b, int argc, int* argv)
 {

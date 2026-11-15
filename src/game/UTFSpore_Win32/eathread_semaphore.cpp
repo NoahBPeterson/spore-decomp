@@ -114,19 +114,18 @@ void __fastcall FUN_00922610(void** p)
 bool EA::Thread::Semaphore_s0092_2500::Init(int* pData)
 {
     if (pData != 0 && mSemaphoreData.mhSemaphore == 0) {
-        SemaphoreData* src = (SemaphoreData*)pData;
         int count = *pData;
         mSemaphoreData.mnCount = count;
         if (count < 0)
             mSemaphoreData.mnCount = 0;
-        mSemaphoreData.mbIntraProcess = src->mbIntraProcess;
+        mSemaphoreData.mbIntraProcess = *(char*)((char*)pData + 4) != 0;
         const char* name;
         int initCount;
         if (mSemaphoreData.mbIntraProcess) {
             name = 0;
             initCount = 0;
         } else {
-            name = src->mName[0] ? src->mName : 0;
+            name = *(char*)((char*)pData + 5) ? (char*)pData + 5 : 0;
             initCount = mSemaphoreData.mnCount;
         }
         mSemaphoreData.mhSemaphore = CreateSemaphoreA(0, initCount, 0x3fffffff, name);

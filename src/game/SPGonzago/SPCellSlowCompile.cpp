@@ -11,8 +11,8 @@
 extern char gFieldL_01654c01;             // 0x01654c01
 int   FUN_00e932e80(int a, int b, int c);   // 0x00e932e80
 int*  FUN_00a206f0();                        // 0x00a206f0
-void  KillSetiEffects(int a, int b);                 // 0x00435ed0
-void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);   // 0x00f473a0 (tagged allocator)
+void  Start3dSoundByName(int a, int b, int c, int d, int e);   // 0x00571f80
+void  KillSetiEffects();                     // 0x00435ed0
 void* GameInputManager();                 // 0x00b3d250
 void* NounManager();                      // 0x00b3d300
 int   __fastcall GetCurrentTerrainSphere(void* ed);  // 0x00f67d90
@@ -118,16 +118,11 @@ struct cVec3 {
 };
 }
 namespace SP {
-// 0x009cb300: creature_instance_data_full::AllocateEffect(key, bFlag, pOut), __thiscall ret 0xc
-struct cCreatureEffect {
-    void Init(uint32_t resource, uint32_t a, uint32_t b);              // 0x009caa40, __thiscall ret 0xc
-};
 struct cLayoutData {
     uint8_t  pad00[0x18];
     cVec3    mPosition;                                 // +0x18
     uint8_t  pad24[0x2c0];
     void*    mpEntries;                                 // +0x2e4 -> cLayoutEntryList
-    cCreatureEffect* AllocateEffect(uint32_t key, bool bFlag, void* pOut);  // 0x009cb300
 };
 }
 namespace SP {
@@ -137,7 +132,7 @@ struct cLayoutOwner {
 };
 }
 namespace SP {
-void* __cdecl FUN_0067caf0(cVec3 key, int a, int worldId, float ox, float oy, float oz, int c, int d);
+void* __cdecl FUN_0067caf0(cVec3 key, int a, int worldId, cVec3 offset, int c, int d);
 }
 namespace SP {
 struct cLayoutPlacement {
@@ -422,34 +417,20 @@ unsigned FUN_00e82520(float a, float b)
 }
 
 // @ 0x00e82620
-namespace SP {
-struct cSetiSoundSystem {
-    virtual void s00();
-    virtual void s04();
-    virtual void s08();
-    virtual void s0c();
-    virtual void s10();
-    virtual void s14();
-    virtual void s18();
-    virtual void s1c();
-    virtual int  GetSoundId();                          // +0x20
-};
-void Start3dSoundByName(int a, int b, float x, float y, float z);   // 0x00571f80
-}
-int FUN_00e82620(int param_1, SP::cVec3* param_2)
+int FUN_00e82620(int param_1, int* param_2)
 {
     int uVar1 = FUN_00e932e80(param_1, 0x811c9dc5, 1);
-    SP::cSetiSoundSystem* piVar2 = (SP::cSetiSoundSystem*)FUN_00a206f0();
+    int* piVar2 = (int*)FUN_00a206f0();
     int uVar3;
-    if (piVar2 != 0)
-        uVar3 = piVar2->GetSoundId();
-    else
+    if (piVar2 == 0)
         uVar3 = 0;
+    else
+        uVar3 = (*(int(**)(void))(*piVar2 + 0x20))();
     if (param_2 != 0) {
-        SP::Start3dSoundByName(uVar1, uVar3, param_2->mX, param_2->mY, param_2->mZ);
+        Start3dSoundByName(uVar1, uVar3, param_2[0], param_2[1], param_2[2]);
         return uVar3;
     }
-    KillSetiEffects(uVar1, uVar3);
+    KillSetiEffects();
     return uVar3;
 }
 
@@ -694,15 +675,16 @@ void __cdecl FUN_00e82d30()
 
 // @ 0x00e82d50
 namespace SP {
-extern float f_013eb1bc;                                // 0x013eb1bc (-1.0f)
-void* __cdecl FUN_0067caf0();                           // 0x0067caf0
-struct cPlacementManager {
-    void Build(cVec3 key, int a, int b, float ox, float oy, float oz, int c, int d);   // 0x0067aaf0 (ret 0x28)
-};
 void __cdecl FUN_00e82d50(cVec3* pKey, int worldId)
 {
-    ((cPlacementManager*)FUN_0067caf0())->Build(*pKey, worldId, 0,
-        (float)(double)f_013eb1bc, (float)(double)f_013eb1bc, 0.0f, 0, 0);
+    cVec3 offset;
+    offset.mX = -1.0f;
+    offset.mY = -1.0f;
+    offset.mZ = 0.0f;
+
+    cLayoutPlacement* pPlacement =
+        (cLayoutPlacement*)FUN_0067caf0(*pKey, 0, worldId, offset, 0, 0);
+    pPlacement->Commit();
 }
 }  // namespace SP
 
@@ -717,7 +699,7 @@ void __cdecl FUN_00e82de0(uint32_t a, uint32_t b)
 
 // @ 0x00e82e00
 namespace SP {
-__declspec(noinline) void __cdecl FUN_00e82e00(cEditorState* pState, cEditorState* pOther, int mode)
+void __cdecl FUN_00e82e00(cEditorState* pState, cEditorState* pOther, int mode)
 {
     if (!pState || !pOther)
         return;
@@ -730,7 +712,7 @@ __declspec(noinline) void __cdecl FUN_00e82e00(cEditorState* pState, cEditorStat
 
 // @ 0x00e83040
 namespace SP {
-__declspec(noinline) void __cdecl FUN_00e83040(cEditorState* pState, int mode)
+void __cdecl FUN_00e83040(cEditorState* pState, int mode)
 {
     if (!pState)
         return;
@@ -741,14 +723,12 @@ __declspec(noinline) void __cdecl FUN_00e83040(cEditorState* pState, int mode)
 
 // @ 0x00e831a0
 namespace SP {
-// The two callees are large routines in retail (560 and 339 bytes) and were never inlined into this forwarder;
-// these stand-in bodies are tiny, so noinline keeps the two direct calls the original has.
-__declspec(noinline) void __cdecl FUN_00e82e00(cEditorState* pState, cEditorState* pOther, int mode);
-__declspec(noinline) void __cdecl FUN_00e83040(cEditorState* pState, int mode);
+void __cdecl FUN_00e82e00(cEditorState* pState, cEditorState* pOther, int mode);
+void __cdecl FUN_00e83040(cEditorState* pState, int mode);
 void __cdecl FUN_00e831a0(tLayoutKey* pKey, uint32_t id, uint32_t group)
 {
-    FUN_00e82e00((cEditorState*)pKey->mId, (cEditorState*)pKey->mGroup, (int)group);
-    FUN_00e83040((cEditorState*)pKey->mName, (int)id);
+    ((void (__cdecl*)(uint32_t, uint32_t, uint32_t))FUN_00e82e00)(pKey->mId, pKey->mGroup, group);
+    ((void (__cdecl*)(uint32_t, uint32_t))FUN_00e83040)(pKey->mName, id);
 }
 }  // namespace SP
 
@@ -771,15 +751,13 @@ uint32_t __cdecl FUN_00e831d0(int mode)
 
 // @ 0x00e83350
 namespace SP {
-cVec3* __cdecl FUN_00e83350(cVec3* pOut, cLayoutOwner* pOwner)
+void __cdecl FUN_00e83350(cVec3* pOut, cLayoutOwner* pOwner)
 {
-    cVec3* pSrc = &pOwner->mpLayout->mPosition;
     cVec3* pDst = pOut;
-    _ReadWriteBarrier();
+    cVec3* pSrc = &pOwner->mpLayout->mPosition;
     pDst->mX = pSrc->mX;
     pDst->mY = pSrc->mY;
     pDst->mZ = pSrc->mZ;
-    return pDst;
 }
 }  // namespace SP
 
@@ -793,83 +771,53 @@ struct cLayoutEntry {
     float    mB;                                        // +0x10
 };
 struct cLayoutEntryList {
-    uint32_t      mPad000[0x28];                        // +0x000
+    uint8_t       mPad000[0xa0];                        // +0x000
     int32_t       mCount;                               // +0x0a0
     cLayoutEntry  mItems[1];                            // +0x0a4
 };
-#pragma float_control(precise, on, push)
 bool __cdecl FUN_00e83380(cLayoutOwner* pOwner, uint32_t mode, float* pOut)
 {
     cLayoutEntryList* pList = (cLayoutEntryList*)pOwner->mpLayout->mpEntries;
-    int32_t* pCount = &pList->mCount;
-    int32_t count = pCount[0];
-    for (int32_t i = 0; i < count; i++) {
-        const cLayoutEntry* pItem = (const cLayoutEntry*)(pCount + 1) + i;
+    int32_t count = pList->mCount;
+    cLayoutEntry* pItem = pList->mItems;
+    for (int32_t i = 0; i < count; i++, pItem++) {
         if (pItem->mId == mode) {
-            double d = pItem->mB + 1e-8;
-            *pOut = (float)((double)pItem->mA / d);
+            *pOut = pItem->mA / (pItem->mB + 1e-8);
             return true;
         }
     }
     *pOut = 0.0f;
     return false;
 }
-#pragma float_control(pop)
 }  // namespace SP
 
 // @ 0x00e833f0
 namespace SP {
-extern uint32_t gLayoutEffectId;                        // 0x016c4580 (placement/effect id counter)
 void __cdecl FUN_00e833f0(uint32_t a, uint32_t b, uint32_t c)
 {
-    cCreatureEffect* pEffect;
-    uint32_t id = gLayoutEffectId++;
-    cLayoutData* pLayout = ((cLayoutOwner*)b)->mpLayout;
-    pEffect = pLayout->AllocateEffect(id, 0, 0);
-    pEffect->Init(a, c, 0);
+    cSPUILayoutManager* pManager = GetLayoutManager();
+    pManager->DoLayout(a, b != 0);
+    pManager->DoLayout(c, b != 0);
 }
 }  // namespace SP
 
 // @ 0x00e83430
 namespace SP {
-struct cStarManager {
-    uint8_t pad000[0x220];
-    void*   mpVerbManager;                              // +0x220
-};
-cStarManager* __cdecl StarManager();                    // 0x00b3d2a0
-struct cVerbManager {
-    void UnlockVerb(u64 key, i32 extra);                // 0x00596da0 (3 dwords on the stack)
-};
-void __cdecl FUN_00e83430(cEditorWorld* pWorld)
+int __cdecl FUN_00e83430(cEditorWorld* pWorld)
 {
-    cStarManager* pStarManager = StarManager();
-    void** ppManager = &pStarManager->mpVerbManager;
-    cVerbManager* pManager = (cVerbManager*)*ppManager;
-    if (pManager)
-        pManager->UnlockVerb(FUN_00593980(gVerbBaseA, (u32)pWorld), 0);
+    if (!pWorld)
+        return 0;
+    return pWorld->mbVisible ? 1 : 0;
 }
 }  // namespace SP
 
 // @ 0x00e83470
 namespace SP {
-struct cEntryVector {
-    uint8_t pad000[0x384];
-    char*   mpBegin;                                    // +0x384
-    char*   mpEnd;                                      // +0x388
-};
-struct cEntryVectorOwner {
-    cEntryVector* mpVector;                             // +0x00
-};
 int __cdecl FUN_00e83470(cEditorWorld* pWorld, int mode)
 {
-    cEntryVector* pVector = *(cEntryVector**)*(void**)((u8*)pWorld + 0x17c);
-    int count = (int)(pVector->mpEnd - pVector->mpBegin) / 0x468;
-    for (int idx = 0; idx < count; idx++) {
-        i32* pEntry = (i32*)(pVector->mpBegin + 0x21c + idx * 0x468);
-        if (*pEntry == mode)
-            return idx;
-    }
-    return 0;
+    if (!pWorld || !pWorld->mbVisible)
+        return 0;
+    return (int)pWorld->mMode == mode;
 }
 }  // namespace SP
 
@@ -884,92 +832,26 @@ void __cdecl FUN_00e834d0(cEditorState* pState, int mode, int flag)
 }
 }  // namespace SP
 
-namespace SP {
-struct cRefCounted {
-    virtual void v00();                                 // +0x00
-    uint32_t mField04;                                  // +0x04
-    volatile long mRefCount;                            // +0x08
-    int Release()
-    {
-        _InterlockedDecrement(&mRefCount);
-        if (_InterlockedExchangeAdd(&mRefCount, 0) < 1) {
-            _InterlockedIncrement(&mRefCount);
-            return 1;
-        }
-        return _InterlockedExchangeAdd(&mRefCount, 0);
-    }
-};
-template <class T>
-struct cAutoRef {
-    T* mpObject;
-    cAutoRef& operator=(T* p)
-    {
-        if (mpObject != p) {
-            T* old = mpObject;
-            mpObject = p;
-            if (old)
-                old->Release();
-        }
-        return *this;
-    }
-};
-struct cRefTriple {
-    cAutoRef<cRefCounted> mRef0;                        // +0x00
-    cAutoRef<cRefCounted> mRef4;                        // +0x04
-    cAutoRef<cRefCounted> mRef8;                        // +0x08
-};
 // @ 0x00e83590
-void __cdecl FUN_00e83590(cRefTriple* pState)
+namespace SP {
+void __cdecl FUN_00e83590(cEditorState* pState)
 {
-    pState->mRef0 = 0;
-    pState->mRef4 = 0;
-    pState->mRef8 = 0;
+    if (!pState)
+        return;
+    pState->mPosition.mId = 0;
+    pState->mPosition.mGroup = 0;
+    pState->mPosition.mName = 0;
+    pState->mbFlag = 0;
 }
 }  // namespace SP
 
 // @ 0x00e83640
-// @ 0x00e83640
 namespace SP {
-extern char DAT_013f09b4[];                             // 0x013f09b4 "Simulator"
-struct cStateItem {
-    void*    mpVtbl;                                    // +0x00 (0x01453948)
-    uint16_t mField04;                                  // +0x04 (0x236)
-    uint16_t mField06;                                  // +0x06 (4)
-    float*   mpValue;                                   // +0x08 (points at mField0C)
-    float    mField0C;                                  // +0x0c
-    cStateItem()
-    {
-        mField04 = 0x236;
-        mField06 = 4;
-        mpVtbl = (void*)0x1453948;
-        mpValue = &mField0C;
-    }
-};
-struct cStateEntry {
-    void*        mpVtbl;                                // +0x00
-    int          mRefCount;                             // +0x04
-    cStateItem** mpBegin;                               // +0x08
-    cStateItem** mpEnd;                                 // +0x0c
-    cStateItem** mpCap;                                 // +0x10
-    uint32_t     mField14;                              // +0x14
-    uint32_t     mField18;                              // +0x18
-    cStateEntry();                                      // 0x77d1d0
-    void PushBack(cStateItem* p);                       // 0x77d970
-};
-// @ 0x00e83640
-void __cdecl FUN_00e83640(void* pOwner, uint32_t key, float value)
+void __cdecl FUN_00e83640(cEditorState* pState, uint32_t value)
 {
-    cStateEntry* pEntry = (cStateEntry*)((void* (__thiscall*)(void*, uint32_t, int))
-        ((void**)*(void***)pOwner)[0xa8 / 4])(pOwner, key, -1);
-    if (!pEntry) {
-        pEntry = new (DAT_013f09b4, 0, 0, 0, 0) cStateEntry();
-        cStateItem* pItem = new (DAT_013f09b4, 0, 0, 0, 0) cStateItem();
-        pEntry->PushBack(pItem);
-        ((void (__thiscall*)(void*, uint32_t, cStateEntry*, int))
-            ((void**)*(void***)pOwner)[0xa4 / 4])(pOwner, key, pEntry, -1);
-    }
-    cStateItem* pItem = pEntry->mpBegin[0];
-    *pItem->mpValue = value;
+    if (!pState)
+        return;
+    pState->mTarget = value;
 }
 }  // namespace SP
 

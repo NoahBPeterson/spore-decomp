@@ -89,13 +89,6 @@ struct PairUW {
   WStr str;
   PairUW(const unsigned* k, const WStr& src);
   PairUW(const PairUW& o);
-  // the EASTL node type's allocator, and the placement form the node's constructor uses
-  static void* operator new(unsigned int n) { return ::operator new(n); }
-  static void* operator new(unsigned int n, void* p, int) { return p; }
-  static void* operator new(unsigned int n, const char* pName, int flags, unsigned debugFlags,
-                            const char* pFile, int line) {
-    return ::operator new(n, pName, flags, debugFlags, pFile, line);
-  }
 };
 
 // vector<wstring> as used here (begin/end/cap + stateless allocator)
@@ -313,12 +306,12 @@ PairUW::PairUW(const unsigned* k, const WStr& src) : key(*k), str(src.mpBegin, s
 struct BigPair {
   char pad[0x10];
   PairUW pair;
+  BigPair(const BigPair& o);
 };
+__declspec(noinline) BigPair::BigPair(const BigPair& o) : pair(o.pair) {}
 // @ 0x006887c0
-BigPair* CloneBigPair(const PairUW& o) {
-  BigPair* p = (BigPair*)PairUW::operator new(0x24, "App", 0, 0, g_allocFile, 0xd1);
-  new((void*)&p->pair, 0) PairUW(o);
-  return p;
+BigPair* CloneBigPair(const BigPair& o) {
+  return new("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) BigPair(o);
 }
 
 // ======================= map operator[] =======================

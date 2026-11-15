@@ -1,29 +1,16 @@
 // Slice s004ba150: Editor resource constructors / AsInterface thunks plus two large editor
 // paint/validity bodies. Unoptimized editor module: /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast.
 #include "types.h"
-#include <intrin.h>
 
-// Reserves N dead dwords in the /Od frame (the original's inlined base copy
-// constructors each own frame slots); same idiom as slice s00469bb0.
-template <int N> inline void ScratchSlots() { uint32_t s[N]; }
-
-// Base-class vtables stored while the cEditorResource copy walks its bases:
-// GmeEditorResBase -> cILayer -> RefObj -> B750 -> cEditorResource.
-extern void* g_vtblBase;    // 0x013eb938  GmeEditorResBase
-extern void* g_vtblLayer;   // 0x013f1ab0  cILayer
-extern void* g_vtblRef;     // 0x013ebcdc  RefObj
-extern void* g_vtbl750;     // 0x013ebcc8  B750
-extern void* g_vtblEditor;  // 0x013ef8d4  cEditorResource
+extern void* g_vtbl;
 
 extern "C" {
     void  FUN_004f3de0(void* a, void* b, int c, int d, int e, int f, char g);
     void* SP_cResourceBase_AsInterface(void* self, int type);
-    void  FUN_0046a7c0(void*);                                  // 0x0046a7c0
-    void  FUN_004b00a0(void*);                                  // 0x004b00a0
+    void  FUN_0046a7c0(void* a);
+    void  FUN_004b00a0(void* a);
     void  FUN_0041eb80(void);
     void  FUN_0041e640(void);
-    void  FUN_00404f90(void*);   // 0x00404f90 Resource::ThreadedObject::Release
-    void  FUN_0040f360(void*);   // 0x0040f360 EA::Counted::Release
     void  FUN_004e8a30(void* a);
     void* ResourceMgr();
 }
@@ -49,23 +36,25 @@ public:
 };
 
 // @ 0x4bab30
-struct ResKey { int mInstance, mType, mGroup; };
-
 cEditorResource::cEditorResource(int* src)
 {
-    ScratchSlots<16>();
-    mpVtbl0 = &g_vtblBase;
-    mpVtbl0 = &g_vtblLayer;
-    mpVtbl0 = &g_vtblRef;
-    long* pRef = (long*)((char*)this + 4);
-    _InterlockedExchange(pRef, 0);
-    *(ResKey*)((char*)this + 8) = *(ResKey*)((char*)src + 8);
-    mpVtbl0 = &g_vtbl750;
+    mpVtbl0 = &g_vtbl;
+    mpVtbl0 = &g_vtbl;
+    mpVtbl0 = &g_vtbl;
+    mRefCount = 0;
+    *(int*)((char*)this + 8) = *(int*)((char*)src + 8);
+    *(int*)((char*)this + 0xc) = *(int*)((char*)src + 0xc);
+    *(int*)((char*)this + 0x10) = *(int*)((char*)src + 0x10);
+    mpVtbl0 = &g_vtbl;
     *(int*)((char*)this + 0x14) = *(int*)((char*)src + 0x14);
-    mpVtbl0 = &g_vtblEditor;
-    ((void(__thiscall*)(void*, void*))FUN_0046a7c0)((char*)this + 0x18, (char*)src + 0x18);
-    ((void(__thiscall*)(void*, void*))FUN_004b00a0)((char*)this + 0x98, (char*)src + 0x98);
+    mpVtbl0 = &g_vtbl;
+    FUN_0046a7c0((char*)src + 0x18);
+    FUN_004b00a0((char*)src + 0x98);
 }
+
+extern void* g_vtbl;
+
+extern void* g_vtbl;
 
 // @ 0x4babe0
 void* __fastcall FUN_004babe0(void* self, void* unused, void* a, char c)
@@ -109,22 +98,19 @@ void* cRuntimeCreatureResource::zero()
 }
 
 // @ 0x4bad50
-// Resource destructor: destroy the two vector subobjects, release the
-// ThreadedObject at +8 and the EA::Counted at +4, then release *p virtually.
 void __fastcall FUN_004bad50(int* p)
 {
-    ((void(__thiscall*)(void*))FUN_0041eb80)((char*)p + 0x20);
-    ((void(__thiscall*)(void*))FUN_0041e640)((char*)p + 0xc);
-    int* q = p + 2;
-    if (*q != 0) {
-        ((void(__thiscall*)(void*))FUN_00404f90)((void*)*q);
+    FUN_0041eb80();
+    FUN_0041e640();
+    if (p[2] != 0) {
+        extern void ThreadedObject_Release(void*);
+        ThreadedObject_Release((void*)p[2]);
     }
-    int* r = p + 1;
-    if (*r != 0) {
-        ((void(__thiscall*)(void*))FUN_0040f360)((void*)*r);
+    if (p[1] != 0) {
+        extern void AutoRefCount_assign(void);
     }
     if (*p != 0)
-        (*(void(__thiscall**)(int))(*((int*)*p) + 4))(*p);
+        (*(void(__thiscall**)(int))(*p + 4))(*p);
 }
 
 // ---------------------------------------------------------------------------

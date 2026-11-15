@@ -71,16 +71,6 @@ class Symbol { public:                 // 8 bytes
     const char* mpName;         // +0x04
 };
 
-// The _atom half of a ParamPair (PDB: an atom tag plus its payload).
-struct AtomValue {              // 0x0c
-    unsigned a_type;            // +0x00
-    union {
-        float       a_float;    // +0x04
-        const char* a_sym;      // +0x04
-    };
-    const char* a_sym2;         // +0x08
-};
-
 struct ParamPair {              // pair<Symbol const, _atom> = 0x14
     Symbol   first;             // +0x00
     unsigned a_type;            // +0x08
@@ -96,8 +86,6 @@ struct ParamNode {
     ParamNode*  mpNext;         // +0x14
 };
 
-struct BucketTag {};              // empty tag argument (eastl policy/functor)
-
 struct ParamTable {
     void*        mpVftable;       // +0x00
     ParamNode**  mpBucketArray;   // +0x04
@@ -110,12 +98,9 @@ struct ParamTable {
     ~ParamTable();
     void FreeBuckets(ParamNode** buckets, unsigned n);
     ParamNode* AllocNode(const ParamPair* v);
-    void Bucket(void** out, const Symbol* key, BucketTag t, void* a4);
+    void Bucket(void** out, const Symbol* key, void* a3, void* a4);
     unsigned Find(Symbol* key, ParamPair* out);
     ParamPair* LocateOrInsert(const Symbol* key);
-    struct DoInsertTrueType {};                           // eastl::true_type (empty)
-    void HashFind(void* out, const void* key);            // 0xa3b2c0 eastl hashtable::find (ECX = table)
-    void HashInsert(void* outPair, const void* v, DoInsertTrueType t); // 0xa65bb0 eastl DoInsertValue (ECX = table)
 };
 
 struct ParamIter {
@@ -128,7 +113,7 @@ struct ParamIter {
     // +0x18
 
     ParamIter(ParamTable* t);
-    bool Next(Symbol* out, AtomValue* value);
+    unsigned Next(Symbol* out, ParamPair* value);
 };
 
 // ---------------------------------------------------------------------------
@@ -157,7 +142,7 @@ class Play { public:
     void SetPaused(bool b);
     void StartVoice(void* a1, void* a2, float t);
     void ParamEvent(Symbol key, ParamPair* atom);
-    bool GetParam(unsigned key, ParamPair* out);
+    unsigned GetParam(void* outAtom, Symbol key);
 };
 
 struct t_play {                 // PDB size 0xec

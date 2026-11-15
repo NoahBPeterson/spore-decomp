@@ -980,8 +980,6 @@ bool cSPMissionMultiDelivery_s00c5_62b0::Validate()
 }
 }  // namespace SP
 
-extern "C" void _ReadWriteBarrier(void);
-#pragma intrinsic(_ReadWriteBarrier)
 // @ 0x00c56fe0
 namespace SP {
 bool cSPMissionMultiDelivery_s00c5_62b0::PickFetchItem()
@@ -990,22 +988,21 @@ bool cSPMissionMultiDelivery_s00c5_62b0::PickFetchItem()
         return false;
 
     cProperty_s00c5_62b0* pProperty = mpMissionPropList->GetPropertyRef(0x781900a6);
-    int32_t kind = pProperty->mFlags & 0x30;
+    uint16_t kind = pProperty->mFlags & 0x30;
+    if (kind == 0 && pProperty->mType == 0)
+        return false;
 
     int32_t count;
+    tItemInfo* pItems;
     if (kind) {
         count = pProperty->mCount;
         if (count <= 0)
             return false;
+        pItems = (tItemInfo*)pProperty->mpData;
     } else {
-        if (pProperty->mType == 0)
-            return false;
         count = 1;
+        pItems = pProperty->mType ? (tItemInfo*)pProperty : 0;
     }
-
-    _ReadWriteBarrier();
-    tItemInfo* pItems = kind ? (tItemInfo*)pProperty->mpData
-                             : (pProperty->mType ? (tItemInfo*)pProperty : 0);
 
     uint32_t index = g_spRandom.RandomUint32Uniform((uint32_t)count);
     mpItemDefinition = pItems[index].mpPlanet.mpObject;

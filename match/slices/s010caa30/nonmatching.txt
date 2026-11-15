@@ -4,4 +4,8 @@
 010cb490 46 UNSUPPORTED difftest: fake-arity/fault(read); cl CSEs the stream reload the original re-issues; size 53 vs 55
 010cb4d0 333 UNSUPPORTED difftest: fault(read) child getAabb unemulatable; size 327 vs 346
 010cb6a0 192 UNSUPPORTED difftest: fake-arity (collector vtable unemulatable); size 169 vs 192
+010cb7b0 43 FAIL difftest: memory-pool mismatch @40020000 (fake filter callee returns 0); size 81 vs 78
+010cb800 43 FAIL difftest: ours faults where orig succeeds (fake filter callee); size 95 vs 92
+010cb860 43 FAIL difftest: ours faults where orig succeeds (fake filter callee); size 85 vs 82
+010cb8c0 43 FAIL difftest: memory-pool mismatch @40020000 (fake filter callee returns 0); size 81 vs 78
 010cb9a0 84 WEAK difftest: WEAK 172 valid inputs, 70.0% coverage; size 156 vs 168

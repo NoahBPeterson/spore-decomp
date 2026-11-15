@@ -454,48 +454,7 @@ bool __stdcall FactoryInstrumentBank_ReadResource(void* obj, InstOut* out, int, 
 // @ 0x00a2be10  EA::Audio::System::StopAllSounds
 // @ 0x00a2bf30  intrusive list insert
 // ---------------------------------------------------------------------------
-struct DbgObject {
-    virtual void d00();
-    virtual void d04();
-    virtual void d08();
-    virtual bool CreateObject(int* a, void** out, int c, int d, int e, int f); // +0x0c
-    virtual void d10();
-    virtual void d14();
-    virtual void d18();
-    virtual void d1c();
-    virtual void d20();
-    virtual void d24();
-    virtual void d28();
-    virtual void d2c();
-    virtual void d30();
-    virtual void d34();
-};
-
-// EASTL allocator::allocate on the debug object's core allocator (cdecl).
-void* __cdecl operator new(size_t n, const char* name, int b, int c, const char* file, int line);
-
-// Node of the intrusive sound list.  mpNext doubles as the free-list link
-// (a freed node is popped through node->mpNext into the head's +0x08 slot).
-struct SoundNode {
-    SoundNode* mpNext;                            // +0x00 next / free-list link
-    SoundNode* mpPrev;                            // +0x04 previous node
-    char       mPad[8];
-};
-
-struct ListHead {
-    SoundNode* mpNext;                            // +0x00 first real node
-    SoundNode* mpPrev;                            // +0x04 last real node
-};
-
-struct SoundList {
-    ListHead   mHead;                             // +0x00 sentinel (its address is the terminator)
-    SoundNode* mpFree;                            // +0x08 free-list head
-    char       mPad0c[0x0c];
-    unsigned   mnNodeSize;                        // +0x18
-};
-
 struct System {
-    static DbgObject* GetObjectError();          // 0x008de1a0
     void StopAllSounds(int param);
     void InsertSound(void* item);
 };
@@ -542,19 +501,16 @@ void System::InsertSound(void* item)
     if (!item) return;
     ((void(__thiscall*)(void*))VFN(item, 0))(item);
 
-    SoundList* list = (SoundList*)((char*)this + 0x157c60);
-    SoundNode* node = list->mpFree;
-    if (node) {
-        list->mpFree = node->mpNext;
-    } else {
-        unsigned nNodeSize = list->mnNodeSize;
-        node = (SoundNode*)::operator new(nNodeSize, "EASTL", 0, 0,
-                                          EASTL_FILE, 0xd1);
-    }
-    void** body = (void**)((char*)node + 8);
+    void** node = *(void***)((char*)this + 0x157c68);
+    char*  list = (char*)this + 0x157c60;
+    if (node)
+        *(void**)(list + 8) = *node;
+    else
+        node = (void**)eaNew(*(u32*)((char*)this + 0x157c78), "EASTL", 0, 0, EASTL_FILE, 0xd1);
+    void** body = node + 2;
     if (body) *body = item;
-    node->mpNext = (SoundNode*)&list->mHead;      // next = sentinel address
-    node->mpPrev = list->mHead.mpPrev;
-    list->mHead.mpPrev->mpNext = node;            // old last -> new node
-    list->mHead.mpPrev = node;
+    node[0] = list;
+    node[1] = *(void**)(list + 4);
+    *(void**)*(void**)(list + 4) = node;
+    *(void**)(list + 4) = node;
 }

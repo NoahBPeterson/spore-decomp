@@ -22,8 +22,6 @@ extern "C" void*   SP_MessageServer(); // 0x0067dcc0
 extern "C" void*   SP_CheatManager();
 extern "C" void* __cdecl memcpy(void*, const void*, size_t);   // 0x011e0744
 extern "C" void* __cdecl memset(void*, int, size_t);
-extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(int64_t*);  // 0x013cc2b8
-extern "C" int64_t __fastcall FUN_0093a510(void* self);                            // 0x0093a510 (timer GetDelta, this in ECX)
 
 // ---- items of slice s008124a0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Mouse;
@@ -275,40 +273,30 @@ struct LayoutMap {
     ~LayoutMap();
 };
 inline LayoutMap::~LayoutMap() { DoNukeSubtree(mRoot); }
-struct __declspec(novtable) CmdBaseCtor {   // 0x0083c800  EA::ArgScript::cCommandBase ctor
-    virtual void base_slot();
-    char pad04[0xc];
-    CmdBaseCtor() { Construct(); }
-    void Construct();
+class cSPUILayoutCheat_s0081_24a0 : public cCommandBase_s0081_24a0 { public:
+    LayoutMap mLayouts;                 // +0x10
+    cSPUILayoutCheat_s0081_24a0();
+    void Execute(cArguments_s0081_24a0* args);  // 0x008124a0 (cSPUILayoutCheat::Execute)
 };
-struct RbAnchor_s0081_24a0 { void* mpRight; void* mpLeft; void* mpParent; unsigned char mColor; };
-struct LayoutMapTree_s0081_24a0 {
-    unsigned char       mCompare;   // +0x10
-    char                pad0[3];
-    RbAnchor_s0081_24a0 mAnchor;    // +0x14
-    int                 mnSize;     // +0x24
-    int                 mAllocator; // +0x28
-    LayoutMapTree_s0081_24a0() : mAnchor() {
-        mAnchor.mpRight = (void*)&mAnchor;
-        mAnchor.mpLeft  = (void*)&mAnchor;
-        mAnchor.mpParent = 0;
-        mAnchor.mColor = 0;
-        mnSize = 0;
-    }
-};
-class cSPUILayoutCheat_s0081_24a0 : public CmdBaseCtor { public:
-    LayoutMapTree_s0081_24a0 mLayouts;          // +0x10 (eastl::map)
-    virtual void Execute(cArguments_s0081_24a0* args);  // 0x008124a0 (cSPUILayoutCheat::Execute)
-};
+cSPUILayoutCheat_s0081_24a0::cSPUILayoutCheat_s0081_24a0() {
+    mParser = 0;
+    mRefCount = 0;
+    mState = 0;
+    *(void**)((char*)this + 0x14) = (char*)this + 0x14;
+    *(void**)((char*)this + 0x18) = (char*)this + 0x14;
+    *(int*)((char*)this + 0x1c) = 0;
+    *(uint8_t*)((char*)this + 0x20) = 0;
+    *(int*)((char*)this + 0x24) = 0;
+}
 // ---- items of slice s008124a0 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern "C" Canvas* SP_Canvas();        // 0x0067dcf0
 
 // ---- items of slice s00815dd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* SP_WindowManager();                                   // 0x0067caa0
-extern "C" void  SPUIHelpers_BeginModal(void*, void*, int);            // 0x008099a0
-extern "C" void  SPUIHelpers_AnchorWindowToWindow(void*, void*, int, int); // 0x00807340
+extern "C" void* SP_WindowManager();
+extern "C" void  SPUIHelpers_BeginModal(void*, void*, int);
+extern "C" void  SPUIHelpers_AnchorWindowToWindow(void*, void*, int, int);
 typedef unsigned int      u32;
 typedef unsigned char     u8;
 extern "C" void  SPUIHelpers_SetWindowSPMaterial(void*, void*, u8);
@@ -375,7 +363,7 @@ struct CalloutMessageBox {
     u8          b70;
 
     bool  sub816990();
-    bool  sub816a20(int, int, int, int);
+    void  sub816a20(int, int, int, int);
     void  sub816b20(int id, int owner);
     bool  sub816b90(int id, void* msg);
     void* sub816ca0();
@@ -384,7 +372,7 @@ struct CalloutMessageBox {
 // ---- items of slice s00815dd0 end
 
 // ---- items of slice s00816d40 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void* SP_MovieSystem();            // 0x0067cb10
+extern "C" void* SP_MovieSystem();
 extern "C" void* FUN_0067de40();
 extern "C" void  EA_Messaging_RemoveHandler(int, int, int, int, int);
 extern "C" void* Property_GetBool();
@@ -454,9 +442,9 @@ struct MsgBoxE {
 struct MsgBoxF {
     char pad_00[0x30];
     u8   b30;   // +0x30
-    bool setMovieState(u32 id, u32 arg);
+    bool setMovieState(u32 id);
 };
-struct Helper817670 { void Fn(int arg); };  // 0x00817670
+struct Helper817670 { void Fn(int arg); };
 struct CellNameSrc {
     char     pad_00[0x30];
     EString* f30;  // +0x30
@@ -587,11 +575,10 @@ extern void Mark1();
 extern void Mark2();
 extern void Mark3();
 #pragma intrinsic(wcslen)
-struct PopupButtonBase { void Construct(); };  // 0x00966f90 UI::WinButton::WinButton
 struct ItemWinCtor {
   char pad[0x888];
   int mChildIndex;
-  ItemWinCtor* Ctor();
+  void Ctor();
 };
 // ---- items of slice s0081a790 end
 
@@ -627,7 +614,7 @@ struct ImgColor { unsigned r, g, b, a; };
 // @ 0x008129c0
 void RegisterLayoutCheat()
 {
-    cSPUILayoutCheat_s0081_24a0* p = new ((const char*)0x13f6b3c, 0, 0, 0, 0) cSPUILayoutCheat_s0081_24a0();
+    cSPUILayoutCheat_s0081_24a0* p = new cSPUILayoutCheat_s0081_24a0();
     (void)p;
     SP_CheatManager();
 }
@@ -669,32 +656,18 @@ bool Zoom::Init(ZoomWin* p)
 }
 
 // @ 0x00812b70
-extern char  Zoom_vt_1418518[];   // 0x01418518
-extern char  Zoom_vt_1418500[];   // 0x01418500
-extern char  Zoom_vt_14184e4[];   // 0x014184e4
-extern float Zoom_one_1485720;    // 0x01485720  (1.0f)
 Zoom::Zoom()
 {
     *(uint32_t*)((char*)this + 0x4) = 0x13fa72c;
     *(int*)((char*)this + 0x8) = 0;
     *(uint32_t*)((char*)this + 0xc) = 0x14426a0;
-    _ReadWriteBarrier();
-    *(void**)((char*)this + 0x0) = (void*)&Zoom_vt_1418518;
-    *(void**)((char*)this + 0x4) = (void*)&Zoom_vt_1418500;
-    *(void**)((char*)this + 0xc) = (void*)&Zoom_vt_14184e4;
-    m10 = 0.0f;
-    m14 = 0.0f;
-    m18 = 0.0f;
-    m1c = 0.0f;
-    m20 = 0.0f;
-    m24 = 0.0f;
-    m28 = 0.0f;
-    m2c = 0.0f;
-    m30 = 0.0f;
-    m34 = 0.0f;
-    float one = Zoom_one_1485720;
-    m38 = one;
-    m3c = one;
+    *(uint32_t*)((char*)this + 0x0) = 0x1418518;
+    *(uint32_t*)((char*)this + 0x4) = 0x1418500;
+    *(uint32_t*)((char*)this + 0xc) = 0x14184e4;
+    m10 = m14 = m18 = m1c = 0.0f;
+    m20 = m24 = m28 = m2c = 0.0f;
+    m30 = m34 = 0.0f;
+    m38 = m3c = 1.0f;
     mpMyWindow = 0;
 }
 
@@ -743,10 +716,10 @@ void __stdcall GetScaledMouse(float* p1, float* p2)
     l1 -= q1[0];
     Canvas* c2 = SP_Canvas();
     int* q2 = (int*)c2->c15(&r);
-    int d2 = l2 - q2[1];
+    l2 -= q2[1];
     float fx = (float)l1 * sMouseXScale;
     *(float*)p1 = fx;
-    float fy = (float)d2 * sMouseYScale;
+    float fy = (float)l2 * sMouseYScale;
     *(float*)p2 = fy;
 }
 
@@ -807,18 +780,15 @@ void MatEffect::sub8167d0(IObj* p, float f)
 }
 
 // @ 0x00816860
-struct FadeEffectBase { void Ctor(); };   // 0x00963db0  FadeEffect base ctor
 MatEffect* MatEffect::ctor816860()
 {
-    ((FadeEffectBase*)this)->Ctor();
+    ((void(__thiscall*)(void*))0x963db0)(this);   // FadeEffect base ctor
     *(void**)((char*)this + 0x00) = (void*)0x1418d00;
     *(void**)((char*)this + 0x04) = (void*)0x1418ce4;
     *(void**)((char*)this + 0x0c) = (void*)0x1418ca8;
-    f60 = 0x1667bac;
-    f64 = 0x1667bac;
+    f60 = f64 = 0x1667bac;
     f68 = 0x1667bae;
-    f70 = 0x1667bac;
-    f74 = 0x1667bac;
+    f70 = f74 = 0x1667bac;
     f78 = 0x1667bae;
     p80 = 0;
     b84 = 0;
@@ -840,22 +810,9 @@ void MatEffect::dtor816910()
 }
 
 // @ 0x00816a20
-bool CalloutMessageBox::sub816a20(int, int, int, int)
+void CalloutMessageBox::sub816a20(int, int, int, int)
 {
-    {
-        char* timer = (char*)this + 0x38;
-        if (FUN_0093a510(timer) > 0) {
-            if (*(uint64_t*)timer == 0) {
-                if (*(int*)(timer + 0x10) == 1) {
-                    *(uint64_t*)timer = __rdtsc();
-                } else {
-                    int64_t now;
-                    QueryPerformanceCounter(&now);
-                    *(int64_t*)timer = now;
-                }
-            }
-        }
-    }
+    layout.FindWindowByID(0x6318e78, 1);
     mResult = 0x1510d07;
     void* win = layout.FindWindowByID(0x6318e78, 1);
     void* wm = SP_WindowManager();
@@ -872,7 +829,6 @@ bool CalloutMessageBox::sub816a20(int, int, int, int)
         if (!Vi1(wm, 0x80, (int)win))
             SPUIHelpers_BeginModal(win, mpCallback, 0);
     }
-    return true;
 }
 
 // @ 0x008175a0
@@ -906,18 +862,15 @@ void MsgBoxB::teardown()
 void MsgBoxC::setVisible(int on)
 {
     if ((char)on) {
-        void* props = *(void**)0x15fd918;
-        if (props) {
-            Prop* p;
-            if (Vb2(props, 0x24, 0x641021a, (int)&p) && p->mType == 1)
-                b35 = *p->GetBool();
-            char al = 0;
-            if (Vb2(props, 0x24, 0x456f97a, (int)&p) && p->mType == 1)
-                al = *p->GetBool();
-            if (al == 0 && b35 == 0)
-                return;
+        if (*(void**)0x15fd918 == 0) goto show;
+        {
+            void* props = *(void**)0x15fd918;
+            char ok = Vb2(props, 0x24, 0x641021a, (int)&on);
+            if (ok && Property_GetBool()) b35 = *(u8*)Property_GetBool();
         }
+        goto show;
     }
+show:
     Vv2(mW1, 0x7c, 1, on);
     Vv2(mW2, 0x7c, 1, on);
     Vv2(mW3, 0x7c, 1, on);
@@ -949,7 +902,7 @@ void FUN_008177e0(MsgBoxE* self, void* layout, bool flag)
 }
 
 // @ 0x00817840
-bool MsgBoxF::setMovieState(u32 id, u32)
+bool MsgBoxF::setMovieState(u32 id)
 {
     if (id > 0x62ff413) {
         if (id >= 0x62ff414 && id <= 0x62ff415) {
@@ -1113,14 +1066,12 @@ void PieMenuTimeText::UpdateTimeText()
 }
 
 // @ 0x0081aa00
-ItemWinCtor* ItemWinCtor::Ctor()
+void ItemWinCtor::Ctor()
 {
-  ((PopupButtonBase*)this)->Construct();
   *(void**)this = (void*)&Mark1;
   *(void**)((char*)this + 4) = (void*)&Mark2;
   *(void**)((char*)this + 0x20c) = (void*)&Mark3;
   mChildIndex = -1;
-  return this;
 }
 
 // @ 0x0081d510

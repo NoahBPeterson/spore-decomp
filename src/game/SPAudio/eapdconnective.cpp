@@ -5,7 +5,6 @@
 #include "game/types.h"
 #include <string.h>
 #include <malloc.h>
-#include <intrin.h>
 
 // ---- items of slice s00a59690 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int   uintptr_t;
@@ -234,7 +233,7 @@ struct PdPayload
 void* FUN_00a598f0(float f);
 void  FUN_00a59940(PdObject* o);
 void  FUN_00a599a0(PdObject* o, float v);
-void* pdfloat_new(void* cls, float f, ...);
+void* pdfloat_new(float f, ...);
 void* pdfloat_new2(float f);
 void  FUN_00a59b50(PdObject* o, float v);
 void* pdsymbol_new(uint32_t a, uint32_t b, uint32_t c);
@@ -254,7 +253,7 @@ void* receive_new(uint32_t a, uint32_t b);
 void* FUN_00a598f0(float f);
 void FUN_00a59940(PdObject* o);
 void FUN_00a599a0(PdObject* o, float v);
-void* pdfloat_new(void* cls, float f, ...);
+void* pdfloat_new(float f, ...);
 void* pdfloat_new2(float f);
 void FUN_00a59b50(PdObject* o, float v);
 void* pdsymbol_new(uint32_t a, uint32_t b, uint32_t c);
@@ -1190,20 +1189,20 @@ extern t_symbol_s00a5_c460 gFloatSymbol_s00a5_c460;                             
 namespace EA {
 namespace Audio {
 namespace Eapd {
-byte pdint_setup()
+bool pdint_setup()
 {
     t_symbol sym;
 
     t_symbol* sp = EA::Audio::Eapd::gensym(&sym, "int");
     g_spPdintClass = EA::Audio::Eapd::class_new(sp->s_name, sp->s_name2, (void*)&FUN_00a598f0,
                                                 0, 0x2c, 0, 5, 0);
-    byte ok = (byte)((g_spPdintClass != 0) & 1);
+    bool ok = (g_spPdintClass != 0);
 
     sp = EA::Audio::Eapd::gensym(&sym, "int");
-    ok &= (byte)EA::Audio::Eapd::class_addcreator((void*)&FUN_00a598f0, sp->s_name, sp->s_name2, 5, 0);
+    ok &= (EA::Audio::Eapd::class_addcreator((void*)&FUN_00a598f0, sp->s_name, sp->s_name2, 5, 0) != 0);
 
-    ok &= (byte)EA::Audio::Eapd::class_addbang(g_spPdintClass, (void*)&FUN_00a59940);
-    ok &= (byte)EA::Audio::Eapd::class_doaddfloat(g_spPdintClass, (void*)&FUN_00a599a0);
+    ok &= (EA::Audio::Eapd::class_addbang(g_spPdintClass, (void*)&FUN_00a59940) != 0);
+    ok &= (EA::Audio::Eapd::class_doaddfloat(g_spPdintClass, (void*)&FUN_00a599a0) != 0);
     return ok;
 }
 }
@@ -1211,13 +1210,12 @@ byte pdint_setup()
 }  // namespace EA::Audio::Eapd
 
 // @ 0x00a59ab0
-void* pdfloat_new(void* cls, float f, ...)
+void* pdfloat_new(float f, ...)
 {
     void* o = EA::Audio::Eapd::pd_new(g_spPdfloatClass);
     if (o != 0)
     {
         *(float*)((char*)o + 0x28) = f;
-        _ReadWriteBarrier();
         EA::Audio::Eapd::outlet_new(o, g_gFloatSymbol.s_name, g_gFloatSymbol2);
         EA::Audio::Eapd::floatinlet_new(o, (char*)o + 0x28);
         g_gpNewestObject = o;
@@ -1255,20 +1253,20 @@ void FUN_00a59b50(PdObject* o, float v)
 namespace EA {
 namespace Audio {
 namespace Eapd {
-byte pdfloat_setup()
+bool pdfloat_setup()
 {
     t_symbol sym;
 
     t_symbol* sp = EA::Audio::Eapd::gensym(&sym, "float");
     g_spPdfloatClass = EA::Audio::Eapd::class_new(sp->s_name, sp->s_name2, (void*)&pdfloat_new,
                                                   0, 0x2c, 0, 1, 0);
-    byte ok = (byte)((g_spPdfloatClass != 0) & 1);
+    bool ok = (g_spPdfloatClass != 0);
 
     sp = EA::Audio::Eapd::gensym(&sym, "float");
-    ok &= (byte)EA::Audio::Eapd::class_addcreator((void*)&pdfloat_new2, sp->s_name, sp->s_name2, 5, 0);
+    ok &= (EA::Audio::Eapd::class_addcreator((void*)&pdfloat_new2, sp->s_name, sp->s_name2, 5, 0) != 0);
 
-    ok &= (byte)EA::Audio::Eapd::class_addbang(g_spPdfloatClass, (void*)0x00a5c400);
-    ok &= (byte)EA::Audio::Eapd::class_doaddfloat(g_spPdfloatClass, (void*)&FUN_00a59b50);
+    ok &= (EA::Audio::Eapd::class_addbang(g_spPdfloatClass, (void*)0x00a5c400) != 0);
+    ok &= (EA::Audio::Eapd::class_doaddfloat(g_spPdfloatClass, (void*)&FUN_00a59b50) != 0);
     return ok;
 }
 }
@@ -1486,7 +1484,6 @@ bool forward_setup()
 void FUN_00a5a140(PdObject* o, void* a, void* b)
 {
     EA::Audio::Eapd::outlet_symbol(o->pOb, a, b);
-    _ReadWriteBarrier();
 }
 
 // @ 0x00a5a160
@@ -1552,7 +1549,6 @@ void sel1_symbol(PdObject* o, int sym, void* b)
         return;
     }
     EA::Audio::Eapd::outlet_symbol(*(void**)((char*)o + 0x38), (void*)(uintptr_t)sym, b);
-    _ReadWriteBarrier();
 }
 
 // @ 0x00a5a330
@@ -2465,16 +2461,17 @@ void switch_float(char* x, float f)
 
 // @ 0x00a5bcf0
 namespace EA { namespace Audio { namespace Eapd {
-byte switch_setup(void)
+bool switch_setup(void)
 {
     t_symbol_s00a5_b510 s;
     t_symbol_s00a5_b510* sym;
+    bool ok = true;
 
     sym = gensym(&s, "switch");
     spSwitchClass = class_new_t3(*sym, (void*)switch_new, (void*)switch_free, 0x34, 8, 5, 5, 0);
-    byte ok = (byte)((spSwitchClass != 0) & 1);
+    ok = ok && (spSwitchClass != 0);
 
-    ok &= class_doaddfloat(spSwitchClass, (void*)switch_float);
+    ok = class_doaddfloat(spSwitchClass, (void*)switch_float) && ok;
     return ok;
 }
 }}}  // namespace EA::Audio::Eapd
@@ -2563,36 +2560,37 @@ void until_bang2(char* x)
 
 // @ 0x00a5bfb0
 namespace EA { namespace Audio { namespace Eapd {
-byte until_setup(void)
+bool until_setup(void)
 {
     t_symbol_s00a5_b510 s;
     t_symbol_s00a5_b510* sym;
+    bool ok = true;
 
     sym = gensym(&s, "until");
     spUntilClass = class_new_t1(*sym, (void*)0xa5bea0, 0, 0x30, 0, 0);
-    byte ok = (byte)((spUntilClass != 0) & 1);
+    ok = ok && (spUntilClass != 0);
 
-    ok &= class_addbang(spUntilClass, (void*)until_bang);
-    ok &= class_doaddfloat(spUntilClass, (void*)until_float);
+    ok = class_addbang(spUntilClass, (void*)until_bang) && ok;
+    ok = class_doaddfloat(spUntilClass, (void*)until_float) && ok;
 
     sym = gensym(&s, "bang2");
-    ok &= class_addmethod1(spUntilClass, (void*)until_bang2, *sym, 0);
+    ok = class_addmethod1(spUntilClass, (void*)until_bang2, *sym, 0) && ok;
     return ok;
 }
 }}}  // namespace EA::Audio::Eapd
 
 // @ 0x00a5c040
 namespace EA { namespace Audio { namespace Eapd {
-char* makefilename_new(t_symbol_s00a5_b510 s)
+char* makefilename_new(t_symbol_s00a5_b510 s, int hasFormat)
 {
     char* x = (char*)pd_new(spMakefilenameClass);
     if (x != 0) {
-        if (s.mpName == 0) {
+        if (hasFormat == 0) {
             t_symbol_s00a5_b510 tmp;
             t_symbol_s00a5_b510* p = gensym(&tmp, "file.%d");
             s = *p;
         }
-        EA::Audio::Eapd::outlet_new(x, g_gSymbolSymbol.s_name, g_gSymbolSymbol2);
+        outlet_new(x, gSymbolSymbol_s00a5_b510, *(t_symbol_s00a5_b510*)&gSymbolSymbol_s00a5_b510 /*DAT_01675898*/);
         *(t_symbol_s00a5_b510*)(x + 0x28) = s;
     }
     return x;
@@ -2625,20 +2623,21 @@ void makefilename_symbol(char* x, t_symbol_s00a5_b510 s)
 
 // @ 0x00a5c150
 namespace EA { namespace Audio { namespace Eapd {
-byte makefilename_setup(void)
+bool makefilename_setup(void)
 {
     t_symbol_s00a5_b510 s;
     t_symbol_s00a5_b510* sym;
+    bool ok = true;
 
     sym = gensym(&s, "makefilename");
     spMakefilenameClass = class_new_t2(*sym, (void*)makefilename_new, 0, 0x30, 0, 6, 0);
-    byte ok = (byte)((spMakefilenameClass != 0) & 1);
+    ok = ok && (spMakefilenameClass != 0);
 
-    ok &= class_doaddfloat(spMakefilenameClass, (void*)makefilename_float);
-    ok &= class_addsymbol_s00a5_b510(spMakefilenameClass, (void*)makefilename_symbol);
+    ok = class_doaddfloat(spMakefilenameClass, (void*)makefilename_float) && ok;
+    ok = class_addsymbol_s00a5_b510(spMakefilenameClass, (void*)makefilename_symbol) && ok;
 
     sym = gensym(&s, "set");           // 0x13f2ce4
-    ok &= class_addmethod2(spMakefilenameClass, (void*)0xa57730, *sym, 2, 0);
+    ok = class_addmethod2(spMakefilenameClass, (void*)0xa57730, *sym, 2, 0) && ok;
     return ok;
 }
 }}}  // namespace EA::Audio::Eapd
@@ -2682,20 +2681,21 @@ void swap_float(char* x, float f)
 namespace EA {
 namespace Audio {
 namespace Eapd {
-byte swap_setup()
+bool swap_setup()
 {
     t_symbol_s00a5_b510 s;
     t_symbol_s00a5_b510* sym;
+    bool ok = true;
 
     sym = gensym(&s, "swap");          // 0x1455238
     spSwapClass = class_new_t2(*sym, (void*)swap_new, 0, 0x34, 0, 5, 0);
-    byte ok = (byte)((spSwapClass != 0) & 1);
+    ok = ok && (spSwapClass != 0);
 
     sym = gensym(&s, "fswap");         // 0x1455230
-    ok &= class_addcreator((void*)swap_new, *sym, 5, 0);
+    ok = class_addcreator((void*)swap_new, *sym, 5, 0) && ok;
 
-    ok &= class_addbang(spSwapClass, (void*)swap_bang);
-    ok &= class_doaddfloat(spSwapClass, (void*)swap_float);
+    ok = class_addbang(spSwapClass, (void*)swap_bang) && ok;
+    ok = class_doaddfloat(spSwapClass, (void*)swap_float) && ok;
     return ok;
 }
 }

@@ -7,4 +7,3 @@
 ../src/game/UTFSpore_Win32/FileParser.cpp  ?SetShareMode@FileWatcher@@QAE_NI@Z  0092fac0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/FileParser.cpp  ?Destroy@FileWatcher@@QAEXXZ  0092fc50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/FileParser.cpp  ?DestroyScalar@FileWatcher@@QAEPAU1@E@Z  0092fc80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
-../src/game/UTFSpore_Win32/FileParser.cpp  ?DoFreeNodesFileNotify@@YGXPAPADI@Z  0083fee0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

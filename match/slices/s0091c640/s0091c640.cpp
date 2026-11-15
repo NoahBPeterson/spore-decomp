@@ -14,7 +14,6 @@ void* operator new(unsigned size, const char* name, int flags, unsigned debugFla
 void operator delete(void* p);                  // 0x00f47380
 
 extern char gEmptyString;  // 0x01667bac (eastl empty-string sentinel, 2 bytes)
-extern wchar_t gEmptyString16;  // 0x01667bac (eastl wide empty-string sentinel)
 
 namespace {
 
@@ -56,12 +55,6 @@ struct StringW {
     wchar_t* mpEnd;
     wchar_t* mpCapacity;
     unsigned mAlloc;
-    StringW()
-    {
-        mpCapacity = &gEmptyString16 + 1;
-        mpBegin = &gEmptyString16;
-        mpEnd = &gEmptyString16;
-    }
     StringW& assign(const wchar_t* first, const wchar_t* last);  // 0x00423650
 };
 
@@ -146,15 +139,6 @@ struct SymbolMap {  // eastl::map<unsigned, Symbol>
     RBNodeBase mAnchor;       // +0x04
     unsigned mnSize;          // +0x14
     unsigned mAlloc;          // +0x18
-    SymbolMap() : mAnchor(), mnSize(0) { reset(); }
-    void reset()
-    {
-        mAnchor.mpNodeRight = &mAnchor;
-        mAnchor.mpNodeLeft = &mAnchor;
-        mAnchor.mpNodeParent = 0;
-        mAnchor.mColor = 0;
-        mnSize = 0;
-    }
     InsertResult* insert(InsertResult* out, const SymbolPair& v);  // 0x0091cc30
     void DoNukeSubtree(SymbolNode* node);                          // 0x0091ca40
 };
@@ -170,15 +154,6 @@ struct FileLineMap {  // eastl::map<unsigned, pair<String*, int>>
     RBNodeBase mAnchor;       // +0x04
     unsigned mnSize;          // +0x14
     unsigned mAlloc;          // +0x18
-    FileLineMap() : mAnchor(), mnSize(0) { reset(); }
-    void reset()
-    {
-        mAnchor.mpNodeRight = &mAnchor;
-        mAnchor.mpNodeLeft = &mAnchor;
-        mAnchor.mpNodeParent = 0;
-        mAnchor.mColor = 0;
-        mnSize = 0;
-    }
     FileLineEntry& operator[](const unsigned& key);  // 0x0091c9b0
     FileLineEntry& insertNode(RBNodeBase* position, unsigned key,
                               const FileLineEntry& value);  // 0x0091c3c0
@@ -194,11 +169,6 @@ struct StringList {  // eastl::list<String>
     StringNode* mpNext;
     StringNode* mpPrev;
     unsigned mnSize;
-    StringList()
-    {
-        mpNext = (StringNode*)this;
-        mpPrev = (StringNode*)this;
-    }
     void Destroy();                   // 0x0091c380 (eastl::list<String> destructor)
     void push_back(const String& s);  // 0x0091c330
 };
@@ -211,12 +181,6 @@ struct GroupVector {
     Group* mpEnd;
     Group* mpCapacity;
     unsigned mAlloc;
-    GroupVector()
-    {
-        mpBegin = 0;
-        mpEnd = 0;
-        mpCapacity = 0;
-    }
     void push_back(const Group& g);  // 0x0091c490
 };
 struct UIntVector {
@@ -224,12 +188,6 @@ struct UIntVector {
     unsigned* mpEnd;
     unsigned* mpCapacity;
     unsigned mAlloc[2];
-    UIntVector()
-    {
-        mpBegin = 0;
-        mpEnd = 0;
-        mpCapacity = 0;
-    }
     void resize(unsigned n, const unsigned& value);  // 0x004746c0
 };
 
@@ -587,22 +545,21 @@ bool MapFileGCC3::Shutdown()
 // @ 0x0091c900
 int MapFileGCC3::GetAddressRep(unsigned flags, unsigned address, GccAddressRep* out, unsigned)
 {
-    int result = 0;
     if (!mbLoadAttempted)
         Load();
-    if (flags & 2) {
-        EntryPairKey key;
-        key.mAddress = address;
-        key.mPad = 0;
-        EntryPair* it = LowerBoundKey(mEntryPairArray.mpBegin, mEntryPairArray.mpEnd, &key, 0);
-        if (it != mEntryPairArray.mpBegin) {
-            EntryPair* found = it - 1;
-            out->mSymbol.assignCStr(found->mpSymbol);
-            out->mOffset = (int)(address - (unsigned)found->mAddress);
-            result = 2;
-        }
-    }
-    return result;
+    if ((flags & 2) == 0)
+        return 0;
+    EntryPairKey key;
+    key.mAddress = address;
+    key.mPad = 0;
+    EntryPair* begin = mEntryPairArray.mpBegin;
+    EntryPair* it = LowerBoundKey(begin, mEntryPairArray.mpEnd, &key, 0);
+    if (it == begin)
+        return 0;
+    EntryPair* found = it - 1;
+    out->mSymbol.assignCStr(found->mpSymbol);
+    out->mOffset = (int)(address - (unsigned)found->mAddress);
+    return 2;
 }
 
 // @ 0x0091c9b0
@@ -756,10 +713,31 @@ MapFileMSVC::~MapFileMSVC()
 
 // @ 0x0091d480
 MapFileMSVC::MapFileMSVC()
-    : vtable((void*)0x0143ce8c)
-    , mbLoadAttempted(false)
-    , mBaseAddress(0)
 {
+    vtable = (void*)0x0143ce8c;
+    mbLoadAttempted = false;
+    msMapFilePath.mpCapacity = &gEmptyString16 + 1;
+    msMapFilePath.mpBegin = &gEmptyString16;
+    msMapFilePath.mpEnd = &gEmptyString16;
+    mBaseAddress = 0;
+    mAddressToSymbolMap.mAnchor.mpNodeRight = &mAddressToSymbolMap.mAnchor;
+    mAddressToSymbolMap.mAnchor.mpNodeLeft = &mAddressToSymbolMap.mAnchor;
+    mAddressToSymbolMap.mAnchor.mpNodeParent = 0;
+    mAddressToSymbolMap.mAnchor.mColor = 0;
+    mAddressToSymbolMap.mnSize = 0;
+    mLineFilenameList.mpNext = (StringNode*)&mLineFilenameList;
+    mLineFilenameList.mpPrev = (StringNode*)&mLineFilenameList;
+    mAddressToFileLineMap.mAnchor.mpNodeRight = &mAddressToFileLineMap.mAnchor;
+    mAddressToFileLineMap.mAnchor.mpNodeLeft = &mAddressToFileLineMap.mAnchor;
+    mAddressToFileLineMap.mAnchor.mpNodeParent = 0;
+    mAddressToFileLineMap.mAnchor.mColor = 0;
+    mAddressToFileLineMap.mnSize = 0;
+    mSectionArray.mpBegin = 0;
+    mSectionArray.mpEnd = 0;
+    mSectionArray.mpCapacity = 0;
+    mGroupArray.mpBegin = 0;
+    mGroupArray.mpEnd = 0;
+    mGroupArray.mpCapacity = 0;
 }
 
 // @ 0x0091d520

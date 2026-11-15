@@ -175,12 +175,12 @@ class Vec {
   void push_back(void* end, void* const& value);   // 0x005c8480
 };
 struct MapU {
-    unsigned& operator[](const unsigned& k);   // 0x00643a40
-    void DoNukeSubtree(void* node);   // 0x009a9600
+    unsigned* operator[](const unsigned& k);
 };
 extern MapU gMapU;        // 0x01527b8c
 struct ObjA { char pad0[0xc]; void* c; };
 struct ObjB { char pad0[0xc]; void* c; };
+void __cdecl DoNukeSubtreeStub(void* p);
 void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
                    int file, int line);   // 0x00f473a0 (EA allocator, 6 args)
 struct SpHandler {                          // refcounted handler: [vt][refcount](+field)
@@ -561,15 +561,20 @@ unsigned CmpAd::operator()(int a, int b)
 }
 
 // @ 0x0066afd0
-int __stdcall FUN_0066afd0(ObjA* a, ObjB* b)
+int __cdecl FUN_0066afd0(ObjA* a, ObjB* b)
 {
-    if (a->c && b->c) {
-        unsigned va = gMapU[((FnIntV)VT(a->c)[9])(a->c)];
-        unsigned vb = gMapU[((FnIntV)VT(b->c)[9])(b->c)];
-        if (va == vb) return 0;
-        return (va < vb) ? -1 : 1;
+    void* ca = a->c;
+    if (ca) {
+        if (b->c) {
+            unsigned ka = ((FnIntV)VT(ca)[9])(ca);
+            unsigned va = *gMapU[ka];
+            unsigned kb = ((FnIntV)VT(b->c)[9])(b->c);
+            unsigned vb = *gMapU[kb];
+            if (va == vb) return 0;
+            return (va < vb) ? -1 : 1;
+        }
+        return -1;
     }
-    if (a->c) return -1;
     return b->c != 0;
 }
 
@@ -593,16 +598,19 @@ void __cdecl FUN_0066b050(void* p)
 }
 
 // @ 0x0066b0c0
-void __cdecl FUN_0066b0c0(unsigned** vec)
+void __cdecl FUN_0066b0c0(int* vec)
 {
-    gMapU.DoNukeSubtree(gTreeRoot);
+    DoNukeSubtreeStub(gTreeRoot);
     gTreeHead = &gTreeHead;
     gTreeHead2 = &gTreeHead;
     gTreeRoot = 0;
     gB9c = 0;
     gBA0 = 0;
-    for (unsigned i = 0; i < (unsigned)(vec[1] - vec[0]); ++i)
-        gMapU[vec[0][i]] = i;
+    unsigned n = (unsigned)((vec[1] - vec[0]) >> 2);
+    for (unsigned i = 0; i < n; ++i) {
+        unsigned key = *(unsigned*)(vec[0] + i * 4);
+        *gMapU[key] = i;
+    }
 }
 
 // @ 0x0066b480

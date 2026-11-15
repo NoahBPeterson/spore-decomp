@@ -591,7 +591,8 @@ void hkSimpleConstraintContactMgr::calcStatistics(hkStatisticsCollector* c) cons
 hkSimpleConstraintContactMgr::hkSimpleConstraintContactMgr(hkWorld* world, hkEntity* bodyA, hkEntity* bodyB)
     : m_contactConstraintData(&m_constraint), m_constraint(1)
 {
-    // the vptr store and m_referenceCount = 1 are emitted by the compiler (hkReferencedObject ctor)
+    m_referenceCount = 1;
+    // the vptr store is emitted by the compiler
     m_constraint.m_data = &m_contactConstraintData;
     m_constraint.m_entityA = bodyA;
     m_constraint.m_entityB = bodyB;
@@ -857,10 +858,10 @@ void hkAabbPhantom::calcStatistics(hkStatisticsCollector* c) const
 {
     c->beginObject("AabbPhantom", 2, this);
     calcContentStatistics(c);
-    if ((m_overlappingCollidables.m_capacityAndFlags & 0x80000000) == 0)
+    if (m_overlappingCollidables.m_capacityAndFlags >= 0)
         c->addArray("OvrlpCollPtr", 8, m_overlappingCollidables.m_data,
                     m_overlappingCollidables.m_size << 2,
-                    (m_overlappingCollidables.m_capacityAndFlags & 0x3fffffff) * 4);
+                    (m_overlappingCollidables.m_capacityAndFlags & 0x3fffffff) << 2);
     c->endObject();
 }
 

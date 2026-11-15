@@ -241,17 +241,15 @@ struct cSPUIMessageBoxW {
 
 // ---- items of slice s00815dd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* SP_WindowManager();
-extern "C" void  cSPUILayout_ctor(void*);                    // 0x00810000
+extern "C" void  cSPUILayout_ctor(void*);
 extern "C" void  SPUIHelpers_EndModal(void*, void*, int);
 extern "C" void  SPUIHelpers_UpdateMouseFocus(int);
-extern "C" bool  SP_GetPropertyAsText(int id, int owner, void* out); // 0x006a1360
-extern "C" const wchar_t* cString_GetText(void*);            // 0x006b55c0
-extern "C" void  cString_ctor(void*);                        // 0x006b5060
-extern "C" void  cString_dtor(void*);                        // 0x006b5240
-extern "C" void  EA_Stopwatch_ctor(void*, int);              // 0x0093a560
-extern "C" void  EA_LimitStopwatch_SetTimeLimit(void*, int, int); // 0x0093a480
-struct CStr14_816b20 { u32 m0, m1, m2, m3, m4; };
-static inline u32 ZeroBarrier816cb0() { _ReadWriteBarrier(); return 0; }
+extern "C" int   SP_GetPropertyAsText(int id, int owner, void* out);
+extern "C" const wchar_t* cString_GetText(void*);
+extern "C" void  cString_ctor(void*);
+extern "C" void  cString_dtor(void*);
+extern "C" void  EA_Stopwatch_ctor(void*, int);
+extern "C" void  EA_LimitStopwatch_SetTimeLimit(void*, int, int);
 struct Helper815310 { void Fn(void* arg); };
 static inline void  Vv1(void* p, int off, int a) {
     ((void(__thiscall*)(void*, int))(*(void***)p)[off / 4])(p, a);
@@ -293,7 +291,7 @@ struct CalloutMessageBox {
     void  sub816b20(int id, int owner);
     bool  sub816b90(int id, void* msg);
     void* sub816ca0();
-    CalloutMessageBox* ctor816cb0(int cb);
+    void  ctor816cb0(int cb);
 };
 // ---- items of slice s00815dd0 end
 
@@ -320,18 +318,17 @@ bool CalloutMessageBox::sub816990()
 // @ 0x00816b20
 void CalloutMessageBox::sub816b20(int id, int owner)
 {
-    CStr14_816b20 str;
-    ((void(__thiscall*)(void*))cString_ctor)(&str);
-    if (SP_GetPropertyAsText(owner, id, &str)) {
+    char str[0x14];
+    cString_ctor(str);
+    if (SP_GetPropertyAsText(id, owner, str)) {
         void* win = layout.FindWindowByID(id, 1);
         if (win) {
             Vv2(win, 0x7c, 1, 1);
-            void** vt = *(void***)win;
-            const wchar_t* txt = ((const wchar_t*(__thiscall*)(void*))cString_GetText)(&str);
-            ((void(__thiscall*)(void*, int))vt[0x80 / 4])(win, (int)txt);
+            const wchar_t* txt = cString_GetText(str);
+            Vv1(win, 0x80, (int)txt);
         }
     }
-    ((void(__thiscall*)(void*))cString_dtor)(&str);
+    cString_dtor(str);
 }
 
 // @ 0x00816ca0
@@ -341,30 +338,22 @@ void* CalloutMessageBox::sub816ca0()
 }
 
 // @ 0x00816cb0
-CalloutMessageBox* CalloutMessageBox::ctor816cb0(int cb)
+void CalloutMessageBox::ctor816cb0(int cb)
 {
-    *(void* volatile*)((char*)this + 0x04) = (void*)0x13ec458;
-    u32 zero = ZeroBarrier816cb0();
-    *(u32 volatile*)((char*)this + 0x08) = zero;
-    _ReadWriteBarrier();
     *(void**)((char*)this + 0x00) = (void*)0x1418dd4;
     *(void**)((char*)this + 0x04) = (void*)0x1418dc4;
-    ((void(__thiscall*)(void*))cSPUILayout_ctor)(&layout);
+    cSPUILayout_ctor(&layout);
     mEnterBtn = -1;
     mEscBtn = -1;
     b2c = 0;
     mResult = 0x1510d07;
-    *(u32*)((char*)this + 0x34) = 0;
-    ((void(__thiscall*)(void*, int, bool))EA_Stopwatch_ctor)(stopwatch, 4, false);
-    ((void(__thiscall*)(void*, int, bool))EA_LimitStopwatch_SetTimeLimit)(stopwatch, 0, false);
+    b34 = 0;
+    EA_Stopwatch_ctor(stopwatch, 4);
+    EA_LimitStopwatch_SetTimeLimit(stopwatch, 0, 0);
     mpCallback = (void*)cb;
-    *(u8 volatile*)((char*)this + 0x5c) = 1;
-    *(u32 volatile*)((char*)this + 0x60) = 0;
-    *(u32 volatile*)((char*)this + 0x64) = 0;
-    *(u32 volatile*)((char*)this + 0x68) = 0;
-    *(u32 volatile*)((char*)this + 0x6c) = 0;
+    b5c = 1;
+    f60 = f64 = f68 = f6c = 0;
     b70 = 0;
-    return this;
 }
 
 // @ 0x00816d40

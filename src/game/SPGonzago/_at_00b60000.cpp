@@ -20,7 +20,6 @@
 #include "SP/cCivData.h"
 #include "SP/cEmpire.h"
 #include "SP/cStringTokenTranslator.h"
-#include "sse_helpers.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern char gSig2;   // 0x0156ad88
@@ -72,7 +71,7 @@ struct Obj63BD0 {
     char  pad04[0x1118];
     MapU32 mapA;              // +0x1118
     MapU32 mapB;              // +0x1138
-    Obj63BD0* Init();         // 0x00b63bd0
+    void Init();              // 0x00b63bd0
 };
 extern void* gVtbl63BD0;   // 0x0145e9a8
 extern void* gMapEmpty;    // 0x0154df28
@@ -814,7 +813,7 @@ void  __cdecl FUN_00b686a0(IV* p);                                              
 int   __cdecl FUN_00b675a0(int a);                                                 // 0x00b675a0
 int   __cdecl FUN_00b67530(int a, char b);                                         // 0x00b67530
 int   __cdecl FUN_00b674d0(int a);                                                 // 0x00b674d0
-void  __cdecl FUN_00b67440(float a, const void* color, IV* ui);                    // 0x00b67440
+void  __cdecl FUN_00b67440(IV* ui, int color, float a);                            // 0x00b67440
 void  __cdecl FUN_00b693b0(void* src, IV* ui, float a);                            // 0x00b693b0
 void  __cdecl FUN_00b6a720(Label* l, const float* pair, int v, int b1, int b2);    // 0x00b6a720
 void  __cdecl SetNumberString(int value, int hi, wchar_t* buf, int count);         // 0x00881ae0
@@ -1921,23 +1920,21 @@ void Obj63B60::F()
 }
 
 // @ 0x00b63bd0
-Obj63BD0* __thiscall Obj63BD0::Init()
+void __thiscall Obj63BD0::Init()
 {
-    Obj63BD0* self = this;
-    *(void**)self = &gVtbl63BD0;
-    *(float*)((char*)self + 0x1128) = 1.0f;
-    *(float*)((char*)self + 0x112c) = 2.0f;
-    *(uint*)((char*)self + 0x1120) = 1;
-    *(uint*)((char*)self + 0x1124) = 0;
-    *(uint*)((char*)self + 0x1130) = 0;
-    *(void**)((char*)self + 0x111c) = &gMapEmpty;
-    *(float*)((char*)self + 0x1148) = 1.0f;
-    *(float*)((char*)self + 0x114c) = 2.0f;
-    *(uint*)((char*)self + 0x1140) = 1;
-    *(void**)((char*)self + 0x113c) = &gMapEmpty;
-    *(uint*)((char*)self + 0x1144) = 0;
-    *(uint*)((char*)self + 0x1150) = 0;
-    return self;
+    *(void**)this = &gVtbl63BD0;
+    *(float*)((char*)this + 0x1128) = 1.0f;
+    *(float*)((char*)this + 0x112c) = 2.0f;
+    *(uint*)((char*)this + 0x1120) = 1;
+    *(uint*)((char*)this + 0x1124) = 0;
+    *(uint*)((char*)this + 0x1130) = 0;
+    *(void**)((char*)this + 0x111c) = &gMapEmpty;
+    *(float*)((char*)this + 0x1148) = 1.0f;
+    *(float*)((char*)this + 0x114c) = 2.0f;
+    *(uint*)((char*)this + 0x1140) = 1;
+    *(void**)((char*)this + 0x113c) = &gMapEmpty;
+    *(uint*)((char*)this + 0x1144) = 0;
+    *(uint*)((char*)this + 0x1150) = 0;
 }
 
 // @ 0x00b63c70
@@ -2661,8 +2658,7 @@ bool __cdecl FUN_00b673c0(void* obj)
 }
 
 // @ 0x00b67440
-extern "C" unsigned int __cdecl FUN_00458a40(const void* rgb);   // 0x00458a40 SP::ColorRGBToU32
-void __cdecl FUN_00b67440(float alpha, const void* color, void* self)
+void __cdecl FUN_00b67440(u32 color, float alpha, void* self)
 {
     void*** vt = (void***)self;
     if (alpha == 0.0f) {
@@ -2671,10 +2667,10 @@ void __cdecl FUN_00b67440(float alpha, const void* color, void* self)
     }
     u32 rgba;
     if (color == 0) {
-        rgba = ((u32)SseRoundToInt(alpha * 255.0f) << 24) | 0xffffff;
+        rgba = ((u32)(int)(alpha * 255.0f) << 24) | 0xffffff;
     } else {
-        rgba = ((u32)SseRoundToInt(alpha * 255.0f) << 24) |
-               (FUN_00458a40(color) & 0xffffff);
+        rgba = ((u32)(int)(alpha * 255.0f) << 24) |
+               (*(u32(__cdecl**)(u32))0x00458a40)(color) & 0xffffff;
     }
     ((void(__thiscall*)(void*, u32))(*vt)[0x5c / 4])(self, rgba);
     ((void(__thiscall*)(void*, int, int))(*vt)[0x7c / 4])(self, 1, 1);
@@ -3852,7 +3848,7 @@ void FUN_00b6a720(Label* l, const float* pair, int v, int b1, int b2)
     }
     if (l->p5c)
         ((void(__thiscall*)(IV*, int))VT(l->p5c, 0x80))(l->p5c, v);
-    FUN_00b67440(1.0f, pair, l->p60);
+    FUN_00b67440(l->p60, (int)(unsigned int)pair, 1.0f);
     if (l->p70 && !l->b34) {
         FUN_00b693b0(l->p64, l->p70, 1.0f);
         FUN_00b693b0(l->p68, l->p70, 1.0f);

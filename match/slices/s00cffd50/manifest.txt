@@ -11,4 +11,3 @@ slices/s00cffd50/s00cffd50.cpp  ?FUN_00d00b40@@YGMHPAVcEmpire@@@Z  00d00b40  /O2
 slices/s00cffd50/s00cffd50.cpp  ?FUN_00d00c00@@YA_NPAVcVarListSerializer@@PAVcRBMap@@@Z  00d00c00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00cffd50/s00cffd50.cpp  ?FUN_00d00d00@@YAMPAX0@Z  00d00d00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00cffd50/s00cffd50.cpp  ?RelationshipBetween@cRelationshipManager@@QAEMPAVcInterface@@0PAX@Z  00d00d60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-slices/s00cffd50/s00cffd50.cpp  ?Write@cSPCivMissionManager@@UAE_NPAX@Z  00d00600  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

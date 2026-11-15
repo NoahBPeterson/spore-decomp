@@ -6,6 +6,8 @@
 00922880  50   Semaphore ctor: complete; local SemaphoreData layout/schedule differs
 009228c0  50   Semaphore::Create: complete; local SemaphoreData layout/schedule differs
 00922900  32   thread-data init: complete; eax=this restored with an asm shim; equiv PASS (400 valid, 100% cov)
+00922ab0  101  SetThreadPriority retry loop: complete; loop/branch inversion differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 memory]
+00922b30  119  Thread::SetName: complete EH function; /EHsc frame + RaiseException arg layout differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 ebx, ret#2 edi]
 00922c20  35   SmartPtr copy+AddRef: complete; eax=this restored with an asm shim; equiv PASS (244 valid, 100% cov)
 00922c40  0    SetThreadIdealProcessor: complete; now member (ecx); equiv WEAK (737 valid, 12.7% coverage, GetSystemInfo import discards); processor-count atomic/div schedule differs
 00922da0  66   thread-data release/free: complete; void return now preserves the callee/CloseHandle eax, range check + atomic clear schedule differs; equiv WEAK (187 valid, 42.1% cov)

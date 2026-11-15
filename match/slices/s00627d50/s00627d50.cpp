@@ -178,9 +178,8 @@ void cCreatureCameraDepends::OnKeyDown_SendMessage(int key, int unused)
 // @ 0x006281c0
 cCreatureCameraDepends::cCreatureCameraDepends()
 {
-    cSPBoundingBox& ext = mAvatar.mLocalExtents;
-    ext.mMin = MakeVec(FLT_MAX, FLT_MAX, FLT_MAX);
-    ext.mMax = MakeVec(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    mAvatar.mLocalExtents.mMin = MakeVec(FLT_MAX, FLT_MAX, FLT_MAX);
+    mAvatar.mLocalExtents.mMax = MakeVec(-FLT_MAX, -FLT_MAX, -FLT_MAX);
     mAnimCreature = 0;
 }
 
@@ -628,8 +627,7 @@ float cSPPlayMode::SetMomCelebrationAnim(bool* pOut)
             *pOut = true;
         }
     }
-    unsigned id = mpState->mCreatureId;
-    float r = mAnimation.PlayAnim(id, anim, 0, 1, 0);
+    float r = mAnimation.PlayAnim(mpState->mCreatureId, anim, 0, 1, 0);
     mAnimation.PlayAnim(mpState->mCreatureId, 0x4330667, 1, 0, 0);
     return r;
 }

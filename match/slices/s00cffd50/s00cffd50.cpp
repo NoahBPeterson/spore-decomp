@@ -84,11 +84,6 @@ namespace EA { namespace IO {
     bool ReadInt32(void* stream, void* value, int count, int flags);
 }}
 
-static __forceinline bool WriteVersion32(void* s, unsigned v)
-{
-    return EA::IO::WriteUint32(s, &v, 1, 0);
-}
-
 class cVarListSerializer {
 public:
     int mData[0xa14 / 4];
@@ -276,7 +271,9 @@ cMissionManagerFactory* cMissionManagerFactory::Destroy(unsigned char flags)
 bool cSPCivMissionManager::Write(void* stream)
 {
     cSaveStreamObject* w = ((cSaveStream*)stream)->GetWriter();
-    WriteVersion32(w->GetStream(), 0x58b3212);
+    unsigned value = 0x58b3212;
+    void* s = w->GetStream();
+    EA::IO::WriteUint32(s, &value, 1, 0);
     bool ok = cSPMissionManagerBase::Write(stream);
     cVarListSerializer ser((char*)this - 8, g_str_01581ec8, 0x1a80d26);
     if (ok && ser.Serialize(stream))

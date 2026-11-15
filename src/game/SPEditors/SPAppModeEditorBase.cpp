@@ -6661,7 +6661,7 @@ class cSPEditorBlock_s005b_94b0;
 namespace SP {
 class cSPEditorManipulationObject_s005b_94b0 {
  public:
-  __declspec(noinline) cSPEditorManipulationObject_s005b_94b0();   // 0x005b0f80
+  __declspec(noinline) cSPEditorManipulationObject_s005b_94b0();
   virtual ~cSPEditorManipulationObject_s005b_94b0() {}
   bool mChangedObject;         // +0x4
   bool mUseDeadZone;           // +0x5
@@ -6702,6 +6702,9 @@ class cSPEditorManipulation56 : public cSPEditorManipulationObject_s005b_94b0, p
 }
 namespace SP {
 volatile int g_s56_sink;
+}
+namespace SP {
+__declspec(noinline) cSPEditorManipulationObject_s005b_94b0::cSPEditorManipulationObject_s005b_94b0() { g_s56_sink = 1; }
 }
 // ---- items of slice s005b94b0 end
 

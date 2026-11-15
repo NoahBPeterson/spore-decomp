@@ -210,15 +210,14 @@ class AnimationPath2DFactory {
 bool InitArray8(int* out, int src, int, int* allocator)
 {
     int* obj = *(int**)(src + 4);
-    out[2] = ((int(__thiscall*)(void*))((void**)*(void**)obj)[0x18 / 4])(obj);
-    void* p = ((void*(__thiscall*)(void*, unsigned, int))((void**)*(void**)allocator)[0])(allocator, out[2] * 8, 4);
+    int count = ((int(__thiscall*)(void*))((void**)*(void**)obj)[0x18 / 4])(obj);
+    out[2] = count;
+    void* p = ((void*(__thiscall*)(void*, unsigned, int))((void**)*(void**)allocator)[0])(allocator, count * 8, 4);
     out[1] = (int)(size_t)p;
     out[0] = 0x1440200;
-    if (out[2] != 0) {
-        if (p != 0)
-            ((void(__thiscall*)(void*, void*, int))((void**)*(void**)obj)[0x28 / 4])(obj, p, out[2]);
-        else
-            return false;
+    if (count != 0) {
+        if (p == 0) return false;
+        ((void(__thiscall*)(void*, void*, int))((void**)*(void**)obj)[0x28 / 4])(obj, p, count);
     }
     return true;
 }
@@ -247,15 +246,14 @@ bool ForwardCall514d0(int* a, int* b)
 bool InitArray12(int* out, int src, int, int* allocator)
 {
     int* obj = *(int**)(src + 4);
-    out[2] = ((int(__thiscall*)(void*))((void**)*(void**)obj)[0x18 / 4])(obj);
-    void* p = ((void*(__thiscall*)(void*, unsigned, int))((void**)*(void**)allocator)[0])(allocator, out[2] * 0xc, 4);
+    int count = ((int(__thiscall*)(void*))((void**)*(void**)obj)[0x18 / 4])(obj);
+    out[2] = count;
+    void* p = ((void*(__thiscall*)(void*, unsigned, int))((void**)*(void**)allocator)[0])(allocator, count * 0xc, 4);
     out[1] = (int)(size_t)p;
     out[0] = 0x1440250;
-    if (out[2] != 0) {
-        if (p != 0)
-            ((void(__thiscall*)(void*, void*, int))((void**)*(void**)obj)[0x28 / 4])(obj, p, out[2]);
-        else
-            return false;
+    if (count != 0) {
+        if (p == 0) return false;
+        ((void(__thiscall*)(void*, void*, int))((void**)*(void**)obj)[0x28 / 4])(obj, p, count);
     }
     return true;
 }

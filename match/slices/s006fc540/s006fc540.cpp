@@ -87,6 +87,11 @@ bool FragRec::Read(IO* io, uint32_t version) {
 extern "C" void  FUN_00f47380(void* p);                                  // 0x00f47380 operator delete
 extern "C" void* FUN_00f473a0(unsigned int n, const char* name, int flags, unsigned debugFlags,
                               const char* file, int line);               // 0x00f473a0 eastl allocator
+extern "C" void __stdcall FUN_011e0b22(void* p, int count, int size, void (*dtor)(void*));
+extern "C" void __stdcall FUN_011e0b85(void* p, int count, int size, void (*ctor)(void*),
+                                       void (*dtor)(void*));
+extern "C" void  FUN_007a41a0();                                         // 0x007a41a0 slot dtor
+extern "C" void  FUN_006e5790();                                         // 0x006e5790 slot ctor
 extern "C" void  FUN_011f4200();                                         // 0x011f4200 Shader::Release
 extern "C" void* FUN_0067dd60();                                         // 0x0067dd60 shader-data manager
 extern "C" int   FUN_00777a10();                                         // 0x00777a10 shader count
@@ -131,16 +136,12 @@ static void* AllocGraphics(unsigned int n) {
 }
 
 // ------------------------------------------------------------------------------------------
-// One shader-slot record plus its ctor / dtor: the two 16-element arrays below are arrays of *objects*, which is
-// what makes the class constructor and destructor go through the CRT's EH vector iterator helpers.
 struct ShaderSlot {          // 0x14 bytes
   FragRec* mpBegin;          // +0x00
   FragRec* mpEnd;            // +0x04
   FragRec* mpCap;            // +0x08
   uint32_t mField0C;         // +0x0c
   uint32_t mField10;         // +0x10
-  ShaderSlot();              // 0x006e5790 (zeroes +0x0c and +0x10) - the iterator's ctor argument
-  ~ShaderSlot();             // 0x007a41a0 (empty) - the iterator's dtor argument
 };
 
 struct Vec25 {
@@ -191,8 +192,6 @@ struct CFragDecl {           // 0x1c bytes (elements of the +0x24 region vector)
 };
 
 struct cFragmentShader {
-  cFragmentShader();           // 0x006fd280: zeroes +0x38..+0x44, then constructs both slot arrays
-  ~cFragmentShader();          // 0x006fd1b0: destroys both slot arrays, +0x188 first
   uint8_t    mPad00[0x38];     // +0x00..+0x37
   uint32_t   mField38;         // +0x38
   uint32_t   mRefCount;        // +0x3c
@@ -201,6 +200,8 @@ struct cFragmentShader {
   ShaderSlot mSlotsA[0x10];    // +0x48
   ShaderSlot mSlotsB[0x10];    // +0x188
   bool Write(IO* io);          // 0x006fcf90
+  __declspec(noinline) void DestroyArrays();        // 0x006fd1b0
+  void* ConstructArrays();     // 0x006fd280
   int  Release();              // 0x006fd300
 };
 
@@ -534,18 +535,23 @@ bool cFragmentShader::Write(IO* io) {
 }
 
 // ------------------------------------------------------------------------------------------
-// Both 16-element ShaderSlot arrays are members of the class, so the compiler's own member handling emits the
-// retail's `eh vector constructor / destructor iterator` calls: the constructor sweeps +0x48 then +0x188 with
-// 0x006e5790/0x007a41a0, the destructor sweeps +0x188 then +0x48, each inside one fs:[0] region whose unwind
-// action is the other array. The member initialisers are what put the four zero stores ahead of the first
-// iterator call. `/GS-`: the retail frames carry no stack cookie.
-// @ 0x006fd280
-cFragmentShader::cFragmentShader()
-    : mField38(0), mRefCount(0), mField40(0), mField44(0) {
+// @ 0x006fd1b0
+void cFragmentShader::DestroyArrays() {
+  FUN_011e0b22((char*)this + 0x188, 0x14, 0x10, (void(*)(void*))FUN_007a41a0);
+  FUN_011e0b22((char*)this + 0x48, 0x14, 0x10, (void(*)(void*))FUN_007a41a0);
 }
 
-// @ 0x006fd1b0
-cFragmentShader::~cFragmentShader() {
+// @ 0x006fd280
+void* cFragmentShader::ConstructArrays() {
+  mField38 = 0;
+  mRefCount = 0;
+  mField40 = 0;
+  mField44 = 0;
+  FUN_011e0b85((char*)this + 0x48, 0x14, 0x10, (void(*)(void*))FUN_006e5790,
+               (void(*)(void*))FUN_007a41a0);
+  FUN_011e0b85((char*)this + 0x188, 0x14, 0x10, (void(*)(void*))FUN_006e5790,
+               (void(*)(void*))FUN_007a41a0);
+  return this;
 }
 
 // @ 0x006fd300
@@ -553,7 +559,7 @@ int cFragmentShader::Release() {
   int ref = (int)mRefCount - 1;
   ((void(__thiscall*)(void*))FUN_011f4200)(this);
   if (ref == 0) {
-    this->~cFragmentShader();
+    DestroyArrays();
     FUN_00f47380(this);
   }
   return ref;

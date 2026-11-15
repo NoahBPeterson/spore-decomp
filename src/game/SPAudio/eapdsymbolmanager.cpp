@@ -414,16 +414,8 @@ public:
     void DestroyAllocator();                                         // 0xa67d30
 };
 struct HashNode { uint32_t mKey; void* mValue; HashNode* mpNext; };
-struct HashIter { HashNode* mpNode; HashNode** mpBucket; };
-// eastl's hashtable::find (0x645ed0) stores only the two iterator fields in the caller's by-value result slot; the
-// third dword of that slot is whatever the frame already held (the key, in every retail caller), and a pointer walk
-// continues there -- the heap-iterator idiom -- before it re-reads *bucket. Static disassembly alone cannot tell
-// whether `find` also writes an end node: 0xa66de0 is the clean caller (it compares the node against
-// mpBucketArray[mnBucketCount] with the raw compare, never the slot).
-struct HashFind { HashNode* mpNode; HashNode** mpBucket; uint32_t mUninit; };
-// the walk's two locals: the node and its bucket
-struct HeapIter { HashNode* mpNode; HashNode** mpBucket; };
-struct HashRange { HashIter first; HashIter second; };
+struct HashIter { HashNode* mpNode; HashNode** mpBucket; HashNode* mpEnd; };
+struct HashFind { HashNode* mpNode; HashNode** mpBucket; };
 class Hashtable {
 public:
     uint32_t   mFunctors;                 // +0x00
@@ -438,14 +430,11 @@ public:
     Hashtable* Construct(void* name);                                 // 0xa665f0
     void      Destruct();                                             // 0xa66550
     void      ClearBuckets(HashNode** arr, uint32_t n);               // 0xa660e0
-    HeapIter  find(const uint32_t& key);                              // 0x645ed0
-    // eastl's equal_range (0x9a6dd0) returns its 16-byte range in a hidden destination (the result pointer is the
-    // first stack argument, [esp+4]); the caller's `this` (ecx) and key follow it. Every retail caller passes only a
-    // result pointer and a key, and the range it reads is the same pointer.
-    HashRange EqualRange(const uint32_t& key);                        // 0x9a6dd0
     HashIter  erase(HashIter it);                                     // 0xa66cc0
     void      Rehash(uint32_t n);                                     // 0xa66b40
 };
+HashFind HashTableFind(Hashtable* self, const uint32_t* key);         // 0xa3b2c0
+HashIter HashTableEqualRange(Hashtable* self, const uint32_t* key);   // 0x9a6dd0
 class SymbolManager {
 public:
     void*          mpVtbl;                   // +0x00
@@ -457,14 +446,14 @@ public:
     uint32_t     (__cdecl *mHashFunction)(const char*);  // +0xd4
     void* Hash(const char* s);                                   // 0xa66970 (free fn EapdHashString)
     uint32_t HashCall(uint32_t a);                               // 0xa669b0
-    bool  ClearClasses();                                        // 0xa66d60
+    void  ClearClasses();                                        // 0xa66d60
     bool  FindSym(uint32_t key, EA::Audio::Eapd::t_symbol* out);                  // 0xa66de0
     bool  Unbind(uint32_t key, void* value);                     // 0xa66e30
     void* BindX(uint32_t key, uint32_t b);                       // 0xa66ec0
     void* FindByClass(uint32_t key, void* a2, void* a3);         // 0xa66f10
     void  SendBang(uint32_t key, uint32_t a2);                   // 0xa66f70
     void  SendFloat(uint32_t key, uint32_t a2, float f);         // 0xa66fd0
-    void  SendSymbol(uint32_t key, uint32_t b, uint32_t c, uint32_t d); // 0xa67040
+    void  SendSymbol(uint32_t key, void* a2, void* a3);          // 0xa67040
 };
 class EapdRec {
 public:
@@ -502,7 +491,7 @@ public:
 uint32_t EapdPrimeBelow(uint32_t n);                              // 0x921340
 void  OutletBang(void* atom);                                     // 0xa49560
 void  OutletFloat(void* atom, float f);                           // 0xa49570
-void  OutletSymbol(void* atom, EA::Audio::Eapd::t_symbol name);   // 0xa49590
+void  OutletSymbol(void* atom, void* name);                       // 0xa49590
 void  EapdClearBucketsRaw(Hashtable* self, HashNode** arr, uint32_t n);  // 0xa66bf0
 // ---- items of slice s00a65f90 end
 
@@ -617,8 +606,8 @@ public:
     HashNode** AllocateBuckets(uint32_t n);                        // 0xa67ee0
     void  RehashTo(uint32_t n);                                    // 0xa67f60
     bool  Init(uint32_t a, uint32_t b, uint32_t c);                // 0xa67440
-    HeapIter  find(const uint32_t& key);                      // 0x645ed0
-    HashRange EqualRange(const uint32_t& key);                 // 0x9a6dd0
+    Iterator find(const uint32_t& key);                            // 0x645ed0
+    Iterator equal_range(const uint32_t& key);                     // 0x9a6dd0
     Iterator* DoInsertValue(Iterator* sret, const KeyValue* value, const uint32_t* key); // 0xa67370
 };
 class SymbolManager_s00a6_70b0 {
@@ -1355,8 +1344,8 @@ void EapdRec::GetC8(uint32_t* a, uint32_t* b, uint32_t* c)
 // @ 0x00a66cc0
 HashIter Hashtable::erase(HashIter it)
 {
+    HashNode* p = it.mpEnd;
     HashNode* node = it.mpNode;
-    HashNode* p = node;
     HashNode** bucket = it.mpBucket;
     HashIter out;
     out.mpNode = node->mpNext;
@@ -1391,7 +1380,7 @@ HashIter Hashtable::erase(HashIter it)
 }
 
 // @ 0x00a66d60
-bool SymbolManager::ClearClasses()
+void SymbolManager::ClearClasses()
 {
     Hashtable& h = mSymbols;
     HashNode* node = *h.mpBucketArray;
@@ -1408,11 +1397,11 @@ bool SymbolManager::ClearClasses()
         HashIter it;
         it.mpNode = node;
         it.mpBucket = bucket;
+        it.mpEnd = node;
         HashIter r = h.erase(it);
         node = r.mpNode;
         bucket = r.mpBucket;
     }
-    return true;
 }
 
 // @ 0x00a66de0
@@ -1420,7 +1409,7 @@ bool SymbolManager::FindSym(uint32_t key, EA::Audio::Eapd::t_symbol* out)
 {
     Hashtable* h = &mSymbols;
     bool found = false;
-    HeapIter t = h->find(key);
+    HashFind t = HashTableFind(h, &key);
     if (h->mpBucketArray[h->mnBucketCount] != t.mpNode) {
         out->mpName = (const char*)t.mpNode->mValue;
         out->mHash = key;
@@ -1433,12 +1422,14 @@ bool SymbolManager::FindSym(uint32_t key, EA::Audio::Eapd::t_symbol* out)
 bool SymbolManager::Unbind(uint32_t key, void* value)
 {
     Hashtable& h = mBindings;
-    HashRange r;
-    r = h.EqualRange(key);
-    HashIter it = r.first;
-    while (it.mpNode != r.second.mpNode) {
+    HashIter it = HashTableEqualRange(&h, &key);
+    while (it.mpNode != it.mpEnd) {
         if (it.mpNode->mValue == value) {
-            h.erase(it);
+            HashIter dummy;
+            dummy.mpNode = it.mpNode;
+            dummy.mpBucket = it.mpBucket;
+            dummy.mpEnd = it.mpNode;
+            h.erase(dummy);
             return true;
         }
         it.mpNode = it.mpNode->mpNext;
@@ -1452,13 +1443,12 @@ bool SymbolManager::Unbind(uint32_t key, void* value)
 void* SymbolManager::BindX(uint32_t key, uint32_t b)
 {
     Hashtable& h = mBindings;
-    HashRange range;
-    range = h.EqualRange(key);
-    if (range.first.mpNode == range.second.mpNode)
+    HashIter it = HashTableEqualRange(&h, &key);
+    if (it.mpNode == it.mpEnd)
         return 0;
-    void* r = range.first.mpNode->mValue;
-    if (range.first.mpNode->mpNext == 0) {
-        while (!*++range.first.mpBucket)
+    void* r = it.mpNode->mValue;
+    if (it.mpNode->mpNext == 0) {
+        while (!*++it.mpBucket)
             ;
     }
     (void)b;
@@ -1469,11 +1459,10 @@ void* SymbolManager::BindX(uint32_t key, uint32_t b)
 void* SymbolManager::FindByClass(uint32_t key, void* a2, void* a3)
 {
     Hashtable& h = mBindings;
-    HashRange t;
-    t = h.EqualRange(key);
-    HashNode*  node   = t.first.mpNode;
-    HashNode** bucket = t.first.mpBucket;
-    HashNode*  end    = t.second.mpNode;
+    HashIter t = HashTableEqualRange(&h, &key);
+    HashNode*  node   = t.mpNode;
+    HashNode** bucket = t.mpBucket;
+    HashNode*  end    = t.mpEnd;
     void* found = 0;
     while (node != end) {
         void* val = node->mValue;
@@ -1492,11 +1481,10 @@ void* SymbolManager::FindByClass(uint32_t key, void* a2, void* a3)
 void SymbolManager::SendBang(uint32_t key, uint32_t a2)
 {
     Hashtable& h = mBindings;
-    HashRange t;
-    t = h.EqualRange(key);
-    HashNode*  node   = t.first.mpNode;
-    HashNode** bucket = t.first.mpBucket;
-    HashNode*  end    = t.second.mpNode;
+    HashIter t = HashTableEqualRange(&h, &key);
+    HashNode*  node   = t.mpNode;
+    HashNode** bucket = t.mpBucket;
+    HashNode*  end    = t.mpEnd;
     while (node != end) {
         OutletBang(node->mValue);
         node = node->mpNext;
@@ -1510,11 +1498,10 @@ void SymbolManager::SendBang(uint32_t key, uint32_t a2)
 void SymbolManager::SendFloat(uint32_t key, uint32_t a2, float f)
 {
     Hashtable& h = mBindings;
-    HashRange t;
-    t = h.EqualRange(key);
-    HashNode*  node   = t.first.mpNode;
-    HashNode** bucket = t.first.mpBucket;
-    HashNode*  end    = t.second.mpNode;
+    HashIter t = HashTableEqualRange(&h, &key);
+    HashNode*  node   = t.mpNode;
+    HashNode** bucket = t.mpBucket;
+    HashNode*  end    = t.mpEnd;
     while (node != end) {
         OutletFloat(node->mValue, f);
         node = node->mpNext;
@@ -1525,24 +1512,20 @@ void SymbolManager::SendFloat(uint32_t key, uint32_t a2, float f)
 }
 
 // @ 0x00a67040
-void SymbolManager::SendSymbol(uint32_t key, uint32_t b, uint32_t c, uint32_t d)
+void SymbolManager::SendSymbol(uint32_t key, void* a2, void* a3)
 {
     Hashtable& h = mBindings;
-    HashRange t;
-    t = h.EqualRange(key);
-    HashNode*  node   = t.first.mpNode;
-    HashNode** bucket = t.first.mpBucket;
-    HashNode*  end    = t.second.mpNode;
-    EA::Audio::Eapd::t_symbol s;
-    s.mHash = c;
-    s.mpName = (const char*)d;
+    HashIter t = HashTableEqualRange(&h, &key);
+    HashNode*  node   = t.mpNode;
+    HashNode** bucket = t.mpBucket;
+    HashNode*  end    = t.mpEnd;
     while (node != end) {
-        OutletSymbol(node->mValue, s);
+        OutletSymbol(node->mValue, a2);
         node = node->mpNext;
         while (!node)
             node = *++bucket;
     }
-    (void)b;
+    (void)a3;
 }
 
 // @ 0x00a670b0
@@ -1552,17 +1535,15 @@ void SymbolManager_s00a6_70b0::BindingsListDispatch(uint32_t a, uint32_t b, uint
     s.mHash = c;
     s.mpName = (const char*)d;
     Hashtable_s00a6_70b0* h = &mBindings;
-    HashRange r;
-    r = h->EqualRange(a);
-    HashIter it = r.first;
-    HashNode* end = r.second.mpNode;
-    if (it.mpNode != end) {
+    Iterator it = h->equal_range(a);
+    HashNode** end = h->mpBucketArray + h->mnBucketCount;
+    if (it.mpNode != *end) {
         do {
             pd_list_s00a6_70b0((EA::Audio::Eapd::t_pd*)it.mpNode->mValue, s, (int)e, (EA::Audio::Eapd::t_atom*)f);
             it.mpNode = it.mpNode->mpNext;
             while (!it.mpNode)
                 it.mpNode = *++it.mpBucket;
-        } while (it.mpNode != end);
+        } while (it.mpNode != *end);
     }
 }
 
@@ -1573,17 +1554,15 @@ void SymbolManager_s00a6_70b0::BindingsTypedmessDispatch(uint32_t a, uint32_t b,
     s.mHash = c;
     s.mpName = (const char*)d;
     Hashtable_s00a6_70b0* h = &mBindings;
-    HashRange r;
-    r = h->EqualRange(a);
-    HashIter it = r.first;
-    HashNode* end = r.second.mpNode;
-    if (it.mpNode != end) {
+    Iterator it = h->equal_range(a);
+    HashNode** end = h->mpBucketArray + h->mnBucketCount;
+    if (it.mpNode != *end) {
         do {
             pd_typedmess_s00a6_70b0((EA::Audio::Eapd::t_pd*)it.mpNode->mValue, s, (int)e, (EA::Audio::Eapd::t_atom*)f);
             it.mpNode = it.mpNode->mpNext;
             while (!it.mpNode)
                 it.mpNode = *++it.mpBucket;
-        } while (it.mpNode != end);
+        } while (it.mpNode != *end);
     }
 }
 
@@ -1748,7 +1727,7 @@ bool SymbolManager_s00a6_70b0::InsertSymbol(uint32_t hash, const char* name, EA:
 bool SymbolManager_s00a6_70b0::GetSymbolFromName(const char* name, EA::Audio::Eapd::t_symbol* out)
 {
     uint32_t h = mHashFunction(name);
-    HeapIter it = mSymbols.find(h);
+    Iterator it = mSymbols.find(h);
     if (mSymbols.mpBucketArray[mSymbols.mnBucketCount] != it.mpNode) {
         out->mHash = h;
         out->mpName = (const char*)it.mpNode->mValue;
@@ -1770,12 +1749,13 @@ EA::Audio::Eapd::t_symbol* gensym(EA::Audio::Eapd::t_symbol* out, const char* na
 // @ 0x00a67620
 bool pd_bind(void* x, EA::Audio::Eapd::t_symbol s)
 {
-    SymbolManager_s00a6_70b0* mgr = GetSymbolManager();
+    GetSymbolManager();
     KeyValue kv;
     kv.mKey = s.mHash;
     kv.mValue = x;
     Iterator it;
-    mgr->mBindings.DoInsertValue(&it, &kv, (const uint32_t*)((uint32_t)x & 0xffffff00u));
+    uint32_t key = (uint32_t)x & 0xffffff00u;
+    GetSymbolManager()->mBindings.DoInsertValue(&it, &kv, &key);
     return true;
 }
 

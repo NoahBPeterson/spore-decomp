@@ -261,7 +261,6 @@ struct RCObj {
 };
 static inline void rc_release(RCObj* p)
 {
-    if (p == 0) return;
     int n = p->mRef;
     p->mRef = --n;
     if (n == 0) {
@@ -335,7 +334,7 @@ void* cRotationBall::Cast(int tag)
         return this;
     if (tag == 0x1186577)
         return this ? (void*)((char*)this + 0x34) : 0;
-    return ((void* (__thiscall*)(void*, int))FUN_00b18460)(this, tag);
+    return FUN_00b18460(tag);
 }
 
 // @ 0x00d1d540
@@ -504,7 +503,7 @@ void* cRotationRing::Cast(int tag)
         return this;
     if (tag == 0x1186577)
         return this ? (void*)((char*)this + 0x34) : 0;
-    return ((void* (__thiscall*)(void*, int))FUN_00b18460)(this, tag);
+    return FUN_00b18460(tag);
 }
 
 // @ 0x00d1db40
@@ -616,11 +615,10 @@ cRefObj* cRefObj::Init(void* o)
     mpVtbl_00 = (void*)0x147a2b0;
     mp_04 = 0;
     mp_08 = 0;
-    void* old = *(void* const volatile*)&mp_08;
-    void* nw = o;
-    if (nw != old) {
-        if (nw) (*(VFn0)VSLOT(nw, 0))(nw);
-        mp_08 = nw;
+    void* old = mp_08;
+    if (o != old) {
+        if (o) (*(VFn0)VSLOT(o, 0))(o);
+        mp_08 = o;
         if (old) (*(VFn0)VSLOT(old, 4))(old);
     }
     return this;

@@ -14,13 +14,8 @@ class hkVector4 { public:
 
 int   hkFloatToInt(float f);                       // 0x0120ad30 ?hkFloatToInt@hkMath@@YAHM@Z
 void  hkMemCpy(void* dst, const void* src, uint n);// 0x0107f440 hkString::memCpy
-extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(uint idx);  // kernel32, IAT 0x013cc2bc
-
-// hkThreadMemory::deallocateChunk (0x0107db10): __thiscall, the thread memory in ecx.
-class hkThreadMemory {
-public:
-    void deallocateChunk(void* p, int numBytes, int align);
-};
+void  hkThreadDeallocateChunk(void* mem, void* p, int size, int align); // 0x0107db10
+void* TlsGetValue(void* key);                      // kernel32!TlsGetValue
 
 extern void* g_hkThreadMemoryTls;                  // 0x016e4174
 extern void* g_hkMemoryInstance;                   // 0x016e4178
@@ -47,9 +42,6 @@ inline float SqrtF(float f) { return sqrtf(f); }
 //   +0x34 ... second scratch array
 // ---------------------------------------------------------------------------
 struct hkLinearParametricCurve {
-    // The two buffers are hkArrays: a data pointer + a size word, and the array's own
-    // capacity/flags word lives elsewhere in the object (a negative word means "do not
-    // free"; the low 30 bits are the capacity).
     char pad0[8];
     float m08;                  // +0x08
     char pad1[0x10 - 0x0c];
@@ -57,10 +49,11 @@ struct hkLinearParametricCurve {
     char pad2[0x20 - 0x14];
     hkVector4* mpPoints;        // +0x20
     int   mPointCount;          // +0x24
-    int   m28;                  // +0x28  points capacity/flags
+    char pad4[0x2c - 0x28];
     float* mpLengths;           // +0x2c
     char pad5[0x34 - 0x30];
-    int   m34;                  // +0x34  lengths capacity/flags    char pad6[0x3c - 0x38];
+    int   m34;                  // +0x34
+    char pad6[0x3c - 0x38];
     int   m38;                  // +0x38
     int   m3c;                  // +0x3c
 
@@ -189,25 +182,18 @@ void hkLinearParametricCurve::getPointsToDraw(void* out)
     (void)out;
 }
 
-// hkArrayUtil::deallocate: hands a buffer back to the thread memory (hkMemory class 0x14).
-static void hkArrayUtil_deallocate(hkThreadMemory* mem, void* data, int numBytes)
-{
-    mem->deallocateChunk(data, numBytes, 0x14);
-}
-
 // @ 0x01095af0
 hkLinearParametricCurve::~hkLinearParametricCurve()
 {
-    // m_lengths and m_points are hkArrays: free each buffer unless its flags say not to.
     if (m34 >= 0) {
-        hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue((uint)(int)g_hkThreadMemoryTls);
-        hkArrayUtil_deallocate(mem, mpLengths, (m34 & 0x3fffffff) * 4);
+        void* mem = TlsGetValue(g_hkThreadMemoryTls);
+        hkThreadDeallocateChunk(mem, mpLengths, (m34 & 0x3fffffff) << 2, 0x14);
     }
-    if (m28 >= 0) {
-        hkThreadMemory* mem = (hkThreadMemory*)TlsGetValue((uint)(int)g_hkThreadMemoryTls);
-        hkArrayUtil_deallocate(mem, mpPoints, (m28 & 0x3fffffff) * 16);
+    if (m38 >= 0) {
+        void* mem = TlsGetValue(g_hkThreadMemoryTls);
+        hkThreadDeallocateChunk(mem, mpPoints, (m38 & 0x3fffffff) << 4, 0x14);
     }
-    *(void**)this = &g_hkRefCountVtbl;
+    *(void**)this = g_hkRefCountVtbl;
 }
 
 // ---------------------------------------------------------------------------

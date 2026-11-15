@@ -714,7 +714,7 @@ struct cSPEditorBlockStub {
 };
 }
 namespace SP {
-void* Sub_41DAF0(void* out, void* v, void* matrix);   // 0x0041DAF0: v * m, out by value return
+void* Sub_41DAF0(void* out, void* v);
 }
 namespace SP {
 template <int N> inline void ScratchSlots() { uint32_t slots[N]; }
@@ -5642,12 +5642,8 @@ bool cSPEditorBlock_s0043_d690::SetMorphHandleWeight(int index, float weight, in
 namespace SP {
 Vec3* cSPEditorBlockStub::F3e080(Vec3* out)
 {
-    // socket connector position = (mSocketConnectorOffset(+0x40C) * mUniformScale(+0x1D8)) * orientation(+0x60)
-    Vec3 rotated;  // the scaled offset turned by the block's orientation
-    Vec3 scaled;   // the socket connector offset scaled by the block's uniform scale
-    Vec3* p = (Vec3*)Sub_41DAF0(&rotated,
-                                Sub_41DCA0(&scaled, &v40c, (const float*)((char*)this + 0x1D8)),
-                                (char*)this + 0x60);
+    void* r = Sub_41DCA0(&v40c, (char*)this + 0x1D8, &v40c.x);
+    Vec3* p = (Vec3*)Sub_41DAF0(out, r);
     out->x = p->x;
     out->y = p->y;
     out->z = p->z;

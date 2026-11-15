@@ -45,8 +45,7 @@ void FUN_00960020(int cursor);                                  // 0x00960020  S
 void FUN_0093a560(void* stopwatch, int units, bool a);          // 0x0093a560  Stopwatch ctor
 unsigned int __stdcall GetDoubleClickTime();                    // 0x011765e8
 void FUN_00962740(void* p);                                     // 0x00962740
-void* __fastcall FUN_00962a10(void* p);                         // 0x00962a10  base Window ctor (this in ecx)
-struct IWinSub { void SetFlag(unsigned int flag, unsigned char on); };  // 0x00961760  Window::SetFlag
+void* FUN_00962a10(void* p);                                    // 0x00962a10
 void FUN_0095bc10_begin2d(void* ctx, void* mode);
 void FUN_0095bb20_end2d(void* ctx);
 
@@ -223,7 +222,7 @@ class TreeNode : public TreeNodeBase, public eastl::intrusive_list_node { public
     void ChildRemoveAll();                                      // 0x00991600
 };
 
-struct __declspec(novtable) IWindow {
+struct IWindow {
     virtual void w0(); virtual void w1(); virtual void w2(); virtual void w3();
     virtual void w4();
     virtual void* w5();                                         // +0x14
@@ -372,11 +371,7 @@ struct TreeNodeListMarshaller {
 };
 
 // WatchGraph: a window that plots per-channel history.
-// Modelled non-polymorphically: the primary vfptr at +0 is stored by hand (the
-// original sets it once after the base ctor), so the compiler must not emit its
-// own vfptr initialisation for the object.
-class WatchGraph { public:
-    void* mpVtbl;                                               // +0x0
+class WatchGraph : public CustomWindowBase { public:
     IWindow mWindow;                                            // +0x4
     unsigned int pad0[0x81];                                    // +0x8 .. 0x20c
     eastl::intrusive_list_node mChannels;                       // +0x20c
@@ -818,17 +813,18 @@ WinTreeView::~WinTreeView()
 void WatchGraph::Clear()
 {
     eastl::intrusive_list_node* anchor = &mChannels;
-    while (anchor->mpPrev != anchor) {
-        eastl::intrusive_list_node* obj = anchor->mpNext ? (eastl::intrusive_list_node*)((char*)anchor->mpNext - 4) : 0;
-        FUN_00f47380(*(void**)((char*)obj + 0x14));
-        eastl::intrusive_list_node* first = anchor->mpNext;
-        first->mpNext->mpPrev = anchor;
-        anchor->mpNext = anchor->mpNext->mpNext;
-        if (first != anchor) {
-            first->mpPrev = 0;
-            first->mpNext = 0;
+    eastl::intrusive_list_node* it = anchor->mpNext;
+    while (it != anchor) {
+        eastl::intrusive_list_node* next = it->mpNext;
+        FUN_00f47380(*(void**)((char*)it + 0x14));
+        next->mpPrev = anchor;
+        anchor->mpNext = next;
+        if (it != anchor) {
+            it->mpPrev = 0;
+            it->mpNext = 0;
         }
-        (*(void(__thiscall**)(void*, int))(*(void**)obj))(obj, 1);
+        (*(IUnknown32**)&it)->u0();
+        it = next;
     }
 }
 
@@ -839,16 +835,14 @@ WatchGraph::WatchGraph()
     *(void**)this = &g_vtbl_1446078;
     *(void**)((char*)this + 4) = &g_vtbl_1445f58;
     eastl::intrusive_list_node* anchor = &mChannels;
-    anchor->mpPrev = anchor;
     anchor->mpNext = anchor;
+    anchor->mpPrev = anchor;
     mSample0 = 0.0f;
     mSample1 = 0.0f;
     mbAutoScale = false;
     mbClip = true;
     mHistorySize = 0;
     mHistoryCount = 0;
-    ((IWinSub*)((char*)this + 4))->SetFlag(0x10, 1);
-    ((IWinSub*)((char*)this + 4))->SetFlag(8, 1);
 }
 
 // @ 0x00992080

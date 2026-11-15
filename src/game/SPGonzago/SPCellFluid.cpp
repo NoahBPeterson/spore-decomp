@@ -11,13 +11,19 @@ extern float g_15a7b90, g_15a7b94, g_15a7b8c, g_15a7b9c, g_15a7ba0;
 extern float g_1483ba4, g_1483ba8, g_1483bac, g_1483bb4, g_1483bb8, g_1483bbc;
 #include <intrin.h>
 #include <xmmintrin.h>
-#include "sse_helpers.h"
 #include "SP/cSPFluidParticles.h"
 
 // ---- items of slice s00e4d920 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int   g_16b39a8;        // 0x016b39a8
 extern int   g_16b39ac;        // 0x016b39ac
 extern int   g_16b39b0;        // 0x016b39b0
+static int floor_f(float x)
+{
+    int v = _mm_cvtss_si32(_mm_set_ss(x));
+    if (x < (float)v)
+        v = v - 1;
+    return v;
+}
 // ---- items of slice s00e4d920 end
 
 // ---- items of slice s00e4e8d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -66,11 +72,9 @@ int __cdecl FUN_00e4dbc0(void* selfv, int* pa, int* pb, int a4, int a5)
 // @ 0x00e4dc90
 int __fastcall SP_sPositionToCellIndex(float* p)
 {
-    float a = p[0];
-    float b = p[1];
-    int x = SseFloorToInt((a - g_cellX) * g_15a7b9c);
-    int y = SseFloorToInt((b - g_cellY) * g_15a7ba0);
-    if ((unsigned)x <= 0x13 && (unsigned)y <= 0xe)
+    int x = floor_f((p[0] - g_cellX) * g_15a7b9c);
+    int y = floor_f((p[1] - g_cellY) * g_15a7ba0);
+    if (x < 0x14 && y < 0xf)
         return y * 0x14 + x;
     return -1;
 }

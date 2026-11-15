@@ -11,7 +11,6 @@
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast  (scalar SSE, no /EHsc).
 #include "types.h"
 #include <xmmintrin.h>
-#include <intrin.h>
 #include <new>
 
 extern "C" char* strstr(const char* s, const char* sub);
@@ -54,8 +53,8 @@ struct cArgEval {
 
 using namespace EA::ArgScript;
 
-// eastl::SimpleVector<float> / SpVector<float>: the original's class is at global scope
-// (?resize@?$SpVector@M@@QAEXH@Z), not in SP::, so a member call binds to 0x004afc80.
+namespace SP {
+// eastl::SimpleVector<float> / SpVector<float>
 template <class T> struct SpVector {
   T*  mpBegin;
   T*  mpEnd;
@@ -63,8 +62,6 @@ template <class T> struct SpVector {
   void resize(int n);                  // 0x004afc80
   void DoInsertValue(T* end, const T& v) { (void)end; (void)v; }
 };
-
-namespace SP {
 void BitDoInsertFloat(float* begin, float* end, int count);   // 0x011e0744
 }  // namespace SP
 
@@ -97,7 +94,7 @@ struct Desc {
       at<float*>(endOff) = end + 1;
       if (end) *end = v;
     } else {
-      SpVector<float> vec;
+      SP::SpVector<float> vec;
       vec.mpBegin = at<float*>(endOff - 4);
       vec.mpEnd = end;
       vec.mpCapacity = at<float*>(capOff);
@@ -263,13 +260,12 @@ void cCommand::ExecuteSingleColor(cArguments* args)
 {
   const char** main = args->MainArguments(1);
 
-  ((SpVector<float>*)(mDesc->p + 0x70))->resize(1);
+  ((SP::SpVector<float>*)(mDesc->p + 0x70))->resize(1);
   float* dst = mDesc->at<float*>(0x70);
   *dst = mEval->Evaluate(main[0]);
 
   mDesc->at<uint32_t>(0x10) |= 1;
   mDesc->at<float>(0x84) = 0.01f;
-  _ReadWriteBarrier();          // the original re-reads mDesc for the +0x88 store
   mDesc->at<uint16_t>(0x88) = 1;
 
   FUN_00aa3040(args, (int)(mDesc->p + 8), mEval);

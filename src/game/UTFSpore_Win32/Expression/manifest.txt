@@ -8,8 +8,3 @@
 ../src/game/UTFSpore_Win32/Expression.cpp  ?EvalIntExpression@cExpression@ArgScript@EA@@QAEHAAPBD@Z  0083eb00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?ParseInt@cExpression@ArgScript@EA@@QAEHPBD@Z  0083edc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?ReleaseRefCount@ExprFunctionRef@@QAEXXZ  0083ced0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ?EvalExpectCharThrow@@YGXPAPBDD@Z  0083d240  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ?EvalContinueChar@@YGEPAPBDD@Z  0083d290  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ?EvalRealParentheses2@cExpression@@QAEMPAPBD@Z  0083e560  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ?EvalChar@cExpression_s0083_f140@ArgScript@EA@@QAEHPAPBD@Z  0083f480  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Expression.cpp  ?ParseBool@cExpression_s0083_f140@ArgScript@EA@@QAE_NPBD@Z  0083f510  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

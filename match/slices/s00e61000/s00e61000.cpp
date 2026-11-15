@@ -1,7 +1,6 @@
 // Slice s00e61000 -- SP::cCellMode / cell-stage helpers (cell game update + transforms).
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
-#include <intrin.h>
 
 // ---------------------------------------------------------------- external data (addresses are masked relocations)
 extern float  g_16b3dd0;
@@ -574,24 +573,21 @@ BigMode::~BigMode()
     if ((int)c > 2 && a != 0)
         EA_Free((void*)a);
     ((Obj9c*)o9c)->Destroy();
-    IEffect* e98 = *(IEffect**)((char*)this + 0x98);
-    if (e98 != 0)
-        e98->Release();
+    if (*(void**)((char*)this + 0x98) != 0)
+        (*(IEffect**)((char*)this + 0x98))->Release();
     {
         char* rc = *(char**)((char*)this + 0x94);
         if (rc != 0) {
-            int n = *(int*)(rc + 4);
-            *(int*)(rc + 4) = n - 1;
-            if (n - 1 == 0) {
+            int n = *(int*)(rc + 4) - 1;
+            *(int*)(rc + 4) = n;
+            if (n == 0) {
                 *(int*)(rc + 4) = 1;
-                _ReadWriteBarrier();
                 (*(void(__thiscall**)(char*, int))(*(void***)rc))(rc, 1);
             }
         }
     }
-    char* p90 = *(char**)((char*)this + 0x90);
-    if (p90 != 0)
-        ((void(__thiscall*)(char*))(*(void***)p90)[2])(p90);
+    if (*(void**)((char*)this + 0x90) != 0)
+        (*(void(__thiscall**)(char*))((*(char***)((char*)this + 0x90))[2]))(*(char**)((char*)this + 0x90));
 }
 
 // ================================================================ 0x00e61b90
