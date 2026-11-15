@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 00f46630  443  SP::cEditor activate handler (verb-icon tray over 4 image resources); complete (ours 612B, orig 607B) but register/scheduling shapes differ; equiv WEAK (400 valid inputs, 9.7% coverage, no mismatch)
-00f468c0  6  SP::cSPUIAssetComments::DoMessage predicate; complete (ours 93B, orig 93B) but one register/flag materialisation differs; equiv WEAK (400 valid inputs, 47.2% coverage, no mismatch) [R37: claimed for matching work]
 00f46920  123  SP::cOnlineTab::Shutdown / RegisterHandler; complete (ours 273B, orig 277B) but closure and register allocation differ; equiv WEAK (99 valid inputs, 36.4% coverage, no mismatch)
 00f46ab0  40  cOnlineTab frame setup (GetFrame, secondary-base vtable call, two HandleLocationChange calls, window vtable dispatch); complete (ours 146B, orig 147B) but register allocation differs; equiv WEAK (265 valid inputs, 59.0% coverage, no mismatch) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 target]
 00f46b50  71  cOnlineTab constructor; complete (ours 119B, orig 133B) but the immediate-store scheduling/encoding of the vtable pointers differs; equiv PASS (326 valid inputs, 100% coverage)
