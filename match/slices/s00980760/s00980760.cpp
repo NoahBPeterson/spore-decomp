@@ -196,9 +196,121 @@ class IWinScrollbar { public:
     void SetPageOverlap(int v);                                        // 00981200
 };
 
-class WinScrollbar { public:
-    void* vt0;                                                         // +0x000
-    void* vtIW;                                                        // +0x004
+// Call-only retail prefix views: no objects, vtables or RTTI are emitted.
+// This AL view consumes native IsActive's proven int0/1 result; its original return type is unknown.
+struct ScrollbarActiveCall {
+    virtual void active0();
+    virtual void active1();
+    virtual void active2();
+    virtual void active3();
+    virtual void active4();
+    virtual void active5();
+    virtual void active6();
+    virtual void active7();
+    virtual void active8();
+    virtual void active9();
+    virtual void active10();
+    virtual void active11();
+    virtual void active12();
+    virtual void active13();
+    virtual void active14();
+    virtual void active15();
+    virtual void active16();
+    virtual void active17();
+    virtual void active18();
+    virtual void active19();
+    virtual void active20();
+    virtual void active21();
+    virtual void active22();
+    virtual void active23();
+    virtual void active24();
+    virtual void active25();
+    virtual void active26();
+    virtual void active27();
+    virtual void active28();
+    virtual void active29();
+    virtual void active30();
+    virtual void active31();
+    virtual void active32();
+    virtual void active33();
+    virtual void active34();
+    virtual bool IsActive();
+};
+struct ScrollbarPrimaryCalls {
+    virtual void primary0();
+    virtual void primary1();
+    virtual void primary2();
+    virtual void primary3();
+    virtual void primary4();
+    virtual void primary5();
+    virtual void primary6();
+    virtual void primary7();
+    virtual void primary8();
+    virtual void primary9();
+    virtual void primary10();
+    virtual void primary11();
+    virtual void primary12();
+    virtual void primary13();
+    virtual void primary14();
+    virtual void primary15();
+    virtual void primary16();
+    virtual void primary17();
+    virtual void primary18();
+    virtual void primary19();
+    virtual void primary20();
+    virtual void primary21();
+    virtual void primary22();
+    virtual void primary23();
+    virtual void primary24();
+    virtual void primary25();
+    virtual void primary26();
+    virtual void primary27();
+    virtual void primary28();
+    virtual void primary29();
+    virtual void primary30();
+    virtual void primary31();
+    virtual void primary32();
+    virtual void primary33();
+    virtual void primary34();
+    virtual int IsActive();
+    virtual void SetRefreshFlag(char on);
+    virtual void SetRefresh(char on);
+};
+struct ScrollbarSecondaryCalls {
+    virtual void secondary0();
+    virtual void secondary1();
+    virtual void secondary2();
+    virtual void secondary3();
+    virtual void secondary4();
+    virtual void secondary5();
+    virtual void secondary6();
+    virtual void secondary7();
+    virtual void secondary8();
+    virtual void secondary9();
+    virtual void secondary10();
+    virtual void secondary11();
+    virtual void secondary12();
+    virtual void secondary13();
+    virtual void secondary14();
+    virtual void secondary15();
+    virtual void secondary16();
+    virtual void secondary17();
+    virtual void secondary18();
+    virtual void secondary19();
+    virtual void secondary20();
+    virtual void secondary21();
+    virtual void secondary22();
+    virtual void secondary23();
+    virtual void secondary24();
+    virtual void secondary25();
+    virtual void secondary26();
+    virtual void secondary27();
+    virtual void secondary28();
+    virtual void secondary29();
+    virtual void secondary30();
+    virtual void SetFlag(unsigned mask, bool on);
+};
+class WinScrollbar : public ScrollbarPrimaryCalls, public ScrollbarSecondaryCalls { public:
     char  pad008[0x34 - 8];
     void* winMgr;                                                      // +0x034
     char  pad038[0x80 - 0x38];
@@ -680,9 +792,7 @@ void WinScrollbar::SetRefreshFlag(char on) {
 void WinScrollbar::SetRefresh(char on) {
     if (sb.refresh == (uint8_t)on) return;
     sb.refresh = (uint8_t)on;
-    void* iwv = (char*)this + 4;
-    char active = (char)VSLOT(int(__thiscall*)(void*), this, 0x8c)(this);
-    VSLOT(void(__thiscall*)(void*, int, int), iwv, 0x7c)(iwv, 8, (uint8_t)active);
+    SetFlag(8, ((ScrollbarActiveCall*)this)->IsActive());
 }
 
 // ================================================================ ScrollbarDrawable
