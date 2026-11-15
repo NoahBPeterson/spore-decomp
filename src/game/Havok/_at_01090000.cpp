@@ -923,7 +923,7 @@ class hkTransform_s0109_8e50
 typedef hkVector4_s0109_8e50 hkQuaternion_s0109_8e50;
 extern hkUint32 g_hkMonitorStreamCurrentTls;          // 0x016e42a4
 extern hkUint32 g_hkMonitorStreamEndTls;              // 0x016e42a8
-extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(hkUint32 index, void* value);
+extern "C" __declspec(dllimport) int   __stdcall TlsSetValue(unsigned long index, void* value);
 static inline hkUint32 hkRdtscLow()
 {
 #if defined(_MSC_VER)
