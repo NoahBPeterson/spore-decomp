@@ -1,1 +1,6 @@
 00b08670 ItemManager::Update  # guessed name; per-frame update of the item vector at +0x1b905c (thiscall, uint dt, ret 4); items hold a cSpatialObject at +0x34 and a state machine at +0x16c
+00b08e90 ?FUN_00b08e90@ItemManager@@QAEPAUItem_s00b0_8670@@XZ  # ItemManager::FUN_00b08e90 migrated from s00b08670 (verbatim, slice spelling)
+00b09070 ?FUN_00b09070@cQueryMgr@@QAEXIMPAUSPVec@@H@Z  # cQueryMgr::FUN_00b09070 migrated from s00b08670 (verbatim, slice spelling)
+00b091d0 ?FUN_00b091d0@cCreatureHitBoxes@@QAEXXZ  # cCreatureHitBoxes::FUN_00b091d0 migrated from s00b08670 (verbatim, slice spelling)
+00b09340 ?FUN_00b09340@cBigList@@QAEXPAUVector3_s00b0_8670@@MPAUSPVec@@_N0@Z  # cBigList::FUN_00b09340 migrated from s00b08670 (verbatim, slice spelling)
+00b09510 ?FUN_00b09510@cEffectPool@@QAEPAU1@H@Z  # cEffectPool::FUN_00b09510 migrated from s00b08670 (verbatim, slice spelling)

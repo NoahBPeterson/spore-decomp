@@ -39,7 +39,7 @@ u32   SP_cHierGrid_CreateEntry(void* self, const void* v, float f);      // 0x00
 void  SP_HierGridStub_Remove(void* self, u32 i);                         // 0x00702da0
 void  FUN_00e5c780(void* tree, const u32* key, u32* out);               // 0x00e5c780 rbtree::find
 // eastl rbtree find: __thiscall (this = tree, 2 stack args: key, out).
-struct CRBTreeFind { void find(const u32* key, u32* out); };             // 0x00e5c780
+struct CRBTreeFind { void find(u32* out, const u32* key); };            // 0x00e5c780
 #define RBF(p) ((CRBTreeFind*)(p))
 void  FUN_00a887b0(u32 a, u32 b);                                        // 0x00a887b0
 void  FUN_00a057f0(void* a, const void* b);                              // 0x00a057f0

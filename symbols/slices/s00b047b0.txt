@@ -1,22 +1,22 @@
-00b047b0 FUN_00b047b0(void**, void**, void**, float, float, float) ; 0x00b047b0  heap-sort pop helper (squared-distance order)
-00b048f0 FUN_00b048f0(int, int, int)                          ; 0x00b048f0  destructor sweep over a leaf range (0x19a8-byte leaves)
-00b04aa0 SimObj::fillSlot(SimEnt*)                            ; 0x00b04aa0  thiscall: fill a species-dependent slot
-00b04ba0 SimObj::findSlot(unsigned int, int)                  ; 0x00b04ba0  thiscall: lower-bound + species-keyed field select
-00b04c20 SimObj::slotAt(unsigned int, int, unsigned int)      ; 0x00b04c20  thiscall: slot lookup then index into its vector  byte-exact (MATCH)
-00b04c50 VVec::reserve(unsigned int)                          ; 0x00b04c50  thiscall: vector reserve (0x38-byte elements)  byte-exact (MATCH)
-00b04e00 FUN_00b04e00(void*, int*, void*)                     ; 0x00b04e00  __stdcall: deserialize a vector of ints off a stream
-00b04ed0 RBTree::eraseRange(int*, void*, void*)               ; 0x00b04ed0  thiscall: erase a [first,last) node range, recycle to pool
-00b04f70 RBTree::insert(int*, unsigned int*, unsigned int)    ; 0x00b04f70  thiscall: lower-bound descent + AllocNode + RBTreeInsert
-00b05000 RBTree::copyNode(PoolElem*, PoolElem*)               ; 0x00b05000  thiscall: deep-copy a tiny binary tree into the pool
-00b051f0 FUN_00b051f0(unsigned int, unsigned int)             ; 0x00b051f0  destructor sweep over a count of leaves
+00b047b0 ?FUN_00b047b0@@YAPAXPAPAX00MMM@Z  # FUN_00b047b0 migrated from s00b047b0 (verbatim, slice spelling)
+00b048f0 ?FUN_00b048f0@@YAHHHH@Z  # FUN_00b048f0 migrated from s00b047b0 (verbatim, slice spelling)
+00b04aa0 ?fillSlot@SimObj@@QAEXPAUSimEnt@@@Z  # SimObj::fillSlot migrated from s00b047b0 (verbatim, slice spelling)
+00b04ba0 ?findSlot@SimObj@@QAEPAXIH@Z  # SimObj::findSlot migrated from s00b047b0 (verbatim, slice spelling)
+00b04c20 ?slotAt@SimObj@@QAEPAXIHI@Z  # SimObj::slotAt migrated from s00b047b0 (verbatim, slice spelling)
+00b04c50 ?reserve@VVec@@QAEXI@Z  # VVec::reserve migrated from s00b047b0 (verbatim, slice spelling)
+00b04e00 ?FUN_00b04e00@@YGXPAXPAH0@Z  # FUN_00b04e00 migrated from s00b047b0 (verbatim, slice spelling)
+00b04ed0 ?eraseRange@RBTree@@QAEXPAHPAX1@Z  # RBTree::eraseRange migrated from s00b047b0 (verbatim, slice spelling)
+00b04f70 ?insert@RBTree@@QAEXPAHPAII@Z  # RBTree::insert migrated from s00b047b0 (verbatim, slice spelling)
+00b05000 ?copyNode@RBTree@@QAEPAXPAUPoolElem@@0@Z  # RBTree::copyNode migrated from s00b047b0 (verbatim, slice spelling)
+00b051f0 ?FUN_00b051f0@@YAXII@Z  # FUN_00b051f0 migrated from s00b047b0 (verbatim, slice spelling)
 00b05410 ?FUN_00b05410@@YAXHHHH@Z  # FUN_00b05410 migrated from s00b047b0 (verbatim, slice spelling)
 00b054a0 ?FUN_00b054a0@@YAXHHHHMMM@Z  # FUN_00b054a0 migrated from s00b047b0 (verbatim, slice spelling)
 00b055c0 ?FUN_00b055c0@@YAXHHHHMMM@Z  # FUN_00b055c0 migrated from s00b047b0 (verbatim, slice spelling)
-00b056e0 FUN_00b056e0(int**, int*, int*, int*)                ; 0x00b056e0  construct a range of pool elements at *out
-00b05730 FUN_00b05730(int*, unsigned int, int, void*)         ; 0x00b05730  construct n pool elements at p, copying src
-00b05770 FUN_00b05770(int*, int*, int*, int)                  ; 0x00b05770  construct pool elements at dest, copying [srcBegin,srcEnd)  byte-exact (MATCH)
-00b057b0 FUN_00b057b0(int*)                                   ; 0x00b057b0  clear pooled objects then erase the vector range  byte-exact (MATCH)
+00b056e0 ?FUN_00b056e0@@YAPAPAHPAPAHPAH11@Z  # FUN_00b056e0 migrated from s00b047b0 (verbatim, slice spelling)
+00b05730 ?FUN_00b05730@@YAXPAHIHPAX@Z  # FUN_00b05730 migrated from s00b047b0 (verbatim, slice spelling)
+00b05770 ?FUN_00b05770@@YAPAHPAH00H@Z  # FUN_00b05770 migrated from s00b047b0 (verbatim, slice spelling)
+00b057b0 ?FUN_00b057b0@@YAXPAH@Z  # FUN_00b057b0 migrated from s00b047b0 (verbatim, slice spelling)
 00b05800 ?reset@SimObj@@QAEXXZ  # SimObj::reset migrated from s00b047b0 (verbatim, slice spelling)
-00b058a0 SimObj::curEntry(void)                               ; 0x00b058a0  thiscall: look up an element by index  byte-exact (MATCH)
-00b058f0 SimObj::curEntryBits(void)                           ; 0x00b058f0  thiscall: bit count of an entry looked up by index  byte-exact (MATCH)
+00b058a0 ?curEntry@SimObj@@QAEPAXXZ  # SimObj::curEntry migrated from s00b047b0 (verbatim, slice spelling)
+00b058f0 ?curEntryBits@SimObj@@QAEIXZ  # SimObj::curEntryBits migrated from s00b047b0 (verbatim, slice spelling)
 ;          alloc source string 0x013f09b4, allocator table 0x013ebb38
