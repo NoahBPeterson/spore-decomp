@@ -91,3 +91,5 @@
 ../src/game/SPBake/SPEditorBlock.cpp  ?B590@Blk_s0044_ae00@@QAEPAUM3_s0044_ae00@@PAU2@@Z  0044b590  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?RemoveFromEffectsMask@cSPEditorBlock_s0044_8380@SP@@QAEXXZ  00448a80  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /GS- /Isrc/game/include
 ../src/game/SPBake/SPEditorBlock.cpp  ?GetDefaultScale@Blk_s0044_ae00@@QAEMXZ  0044b5c0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?A4a9a0@Blk_s0044_9ed0@@QAE_NPAU1@@Z  0044a9a0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include
+../src/game/SPBake/SPEditorBlock.cpp  ?A4aa10@Blk_s0044_9ed0@@QAEHH@Z  0044aa10  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy /Isrc/game/include

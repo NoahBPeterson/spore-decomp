@@ -1545,8 +1545,17 @@ struct LookupDB70 {
 struct VecSet70 {
     void* mpBegin; void* mpEnd; void* mpCapacity;
     void* Insert(void* out, void* val);                 // 0x00554020
-    void  EqualRange(void* out, void* key);             // 0x00555980
+    void* EqualRange(void* out, void* key);             // 0x00555980, returns out
     void  EraseOne(void* it);                           // 0x0048c720
+    void* End() { return mpEnd; }
+    void* Find(void* key) {
+        void* pairIts[2];
+        EqualRange(pairIts, key);
+        ScratchSlots<5>();
+        if (pairIts[0] != pairIts[1])
+            return pairIts[0];
+        return End();
+    }
 };
 struct EcxStub70 {
     bool FUN_0055f7a0(void* job);
@@ -5674,16 +5683,13 @@ bool EcxStub70::FUN_0055fa20(void* key, char flag)
 namespace SP {
 bool EcxStub70::FUN_0055fb30(void* key)
 {
-    void* this_ = this;
-    int index = ((LookupDB70*)this_)->FindAssetIndex(key);
+    int index = ((LookupDB70*)this)->FindAssetIndex(key);
     if (index != -1) {
-        void* itpair[2];
-        ((VecSet70*)((char*)this_ + 0x64))->EqualRange(itpair, &index);
-        void* it = (itpair[0] != itpair[1]) ? itpair[0] : *(void**)((char*)this_ + 0x68);
-        if (it != *(void**)((char*)this_ + 0x68))
-            return 1;
+        if (((VecSet70*)((char*)this + 0x64))->Find(&index) !=
+            ((VecSet70*)((char*)this + 0x64))->End())
+            return true;
     }
-    return 0;
+    return false;
 }
 }  // namespace SP
 

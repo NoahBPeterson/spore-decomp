@@ -109,8 +109,6 @@ public:
 
     bool Read(void* pData);                 // 0x00c5b210
     void UpdateFromPlanet();                // 0x00c5b280
-    uint32_t GetOwnerEmpireId();            // 0x00c5b340
-    void SetTarget(int nTarget);            // 0x00c5b370
     void SetPlanetPosition(int a, int b, int c);   // 0x00c5b3a0
 };
 class cSPRaidEvent : public cSPMission {
@@ -291,6 +289,7 @@ struct cRelMgr {
   u8   FUN_00d01ff0(void* a, u32 b);                 // 0x00d01ff0
 };
 struct cStarMgr {
+  SP::cStarRecord* GetStarRecordFromKey(u32 key);    // 0x00ba6d80, thiscall ret4
   cCivObject* GetEmpireByID(u32 id);                 // 0x00ba9370
   void*       FUN_00bb0e90(void* q);                 // 0x00bb0e90
 };
@@ -411,6 +410,8 @@ struct cSPMission_s00c5_b9c0 {
   void  HandlerFail();                          // 0x00c469f0
 };
 struct cRaidEvent : cSPMission_s00c5_b9c0 {
+  SP::cStarRecord* GetTargetStarRecord();           // 0x00c5b340
+  void SetTargetEmpire(SP::cEmpire* empire);        // 0x00c5b370
   void* p1f0;
   u32   f1f4, f1f8, f1fc, f200, f204, f208;
   float f20c, f210;
@@ -929,20 +930,19 @@ void cPlanetMission::UpdateFromPlanet()
 }
 
 // @ 0x00c5b340
-uint32_t cPlanetMission::GetOwnerEmpireId()
+SP::cStarRecord* cRaidEvent::GetTargetStarRecord()
 {
-    uint32_t nEmpire = GetTargetPlanet();
-    if (nEmpire == 0)
-        return 0;
-    IsPlanetValid(nEmpire);
-    return (uint32_t)(intptr_t)GetPlanetEmpire(nEmpire);
+    uint32_t key = f1f4;
+    if (key != 0)
+        return StarManager()->GetStarRecordFromKey(key);
+    return nullptr;
 }
 
 // @ 0x00c5b370
-void cPlanetMission::SetTarget(int nTarget)
+void cRaidEvent::SetTargetEmpire(SP::cEmpire* empire)
 {
-    if (nTarget != 0)
-        mTargetId = *(int*)((uint8_t*)this + 0x84);
+    if (empire != nullptr)
+        f230 = empire->mPoliticalID;
 }
 
 // @ 0x00c5b3a0

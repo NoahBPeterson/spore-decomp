@@ -83,3 +83,5 @@
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00496b60@@YAXPAUHolderA@@M@Z  00496b60  /Od /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?Intersects@BoundingBox@@QBE_NABU1@@Z  00490330  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_004986d0@@YA_NPAUBlock@@@Z  004986d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?Find@D961@@QAEPAHPAHH@Z  00496140  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00492de0@@YA_NPAUcSPEditorBlock_s0049_28d0@@@Z  00492de0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -40,8 +40,6 @@
 00449d40 215 complete; /Od inline operator-> junk-copy temps (3 extra slots) not reproduced flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 00449ed0 200 Blk::A49ed0 complete; AutoRefCount operator-> temps and frame layout differ; difftest PASS (347 valid, 74.2% coverage) after the GetScale annotation became a // 0x004adaa0 line comment flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044a0e0 1263 Blk::A4a0e0 (SetOrientation) complete; /Od frame layout and inline temps differ flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
-0044a9a0 42 complete behaviour; /Od frame/slot order differs flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
-0044aa10 54 complete behaviour; /Od frame/slot order differs flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044aaa0 335 Blk::A4aaa0 (GetBounds by value) complete; inline bool helpers / switch layout differ flags: /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044ae00 1442 complete GetBBox; /Od hole/slot layout differs (frame 0x108 vs 0x168), instruction shapes otherwise close
 0044ba20 567 complete recursive visibility/flags update; /Od named-local slot order and inline-set this temps differ; difftest FAIL is a checker artifact: the generated vtable slot m3ec->vtbl[0x30] holds 0x44bc01 (a jump target inside the original Ba20, harvested from its immediates), so both sides jump into the middle of the original body, which reads the original's own frame slots; seed 2 gives PASS (324 valid, 69.8% coverage)

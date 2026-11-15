@@ -10,11 +10,9 @@
 004904a0 227 complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
 004905d0 200 complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
 00491900 387 complete vector-insert-with-refcount routine; logic and all calls present, but the /Od frame (0x7c vs 0x30) and the intermediate pointer locals differ
-00492de0  76  complete: tracker offset check; only /Od local-slot assignment differs (frame 0x34 vs 0x30) and the bb.mx[2] offset flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00492e70  1284  complete: all 22 calls in original order (size 0.967x); /Od local-slot layout and a few spill temps differ (frame 0x194 vs 0x1ec); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Oi
 00493ce0 814 MoveBlockAndTranslateSnappedBlocks complete (flag bits, basis build, Cross/Normalize, direction-index flips, Matrix3 copy-out); /Od frame slot order not fitted (frame 0xe8 vs 0x14c), f1 local coalesced with the test() temp [equiv: PASS]
 004942b0 3496 SP::EditorUtils::GetRotationAndPositionBasedOnBehavior: complete (same 71 direct calls in order, all field offsets match); /Od Vector3 copy flavours (movss/int/fld) and local slot layout differ, 4219 vs 5113 bytes; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-00496140 128 complete fixed-stride find(); matches the loop but the /Od frame (0x14 vs 0x10) and member slots differ
 004961d0 424 complete transform-save routine (copy 0x48->0x54 and three 9-float matrices for the object and each vector element); not byte-exact
 00496bb0 187 complete bone/handle lookup; logic present, intermediate locals and vtable-call shape differ flags: /O2 /MD /Gy /EHsc /TP
 00496d30 1431 complete: two opposed ray casts + hit-point/length evals; /Od slot order and out-of-line W-copy arg temps differ

@@ -7480,23 +7480,29 @@ bool Blk_s0044_9ed0::A4a9a0(Blk_s0044_9ed0* other)
 {
     int count = 0;
     while (other != 0 && other != this && count < 100) {
-        other = other->mParent;
+        Blk_s0044_9ed0* parent = other->mParent;
+        other = parent;
         count = count + 1;
     }
     if (count > 100)
         return false;
-    return other == this;
+    if (other == this)
+        return true;
+    else
+        return false;
 }
 
 // @ 0x0044aa10
 int Blk_s0044_9ed0::A4aa10(int i)
 {
-    if (i < 0 || i >= 3)
-        return 0;
-    int x = mArr[i];
-    if (x == 0)
-        return 0;
-    return mArr[i];
+    if (i >= 0 && i < 3) {
+        int x = mArr[i];
+        if (x != 0) {
+            int result = mArr[i];
+            return result;
+        }
+    }
+    return 0;
 }
 
 // @ 0x0044aaa0
