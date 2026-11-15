@@ -11,7 +11,6 @@
 00cb4d40
 00cb5090
 00cb5140
-00cb52c0 [R38: archived backlog retry under review.]
 00cb5330
 00cb5770 338 large complex function; register allocation and scheduling diverge throughout
 00cb5980 13 pointer load folds to [eax+0x114]; original materializes eax + add eax,imm (not source-forceable)
