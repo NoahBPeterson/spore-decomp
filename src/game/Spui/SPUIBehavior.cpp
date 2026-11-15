@@ -645,7 +645,13 @@ struct AB {                       // cSPUIBehaviorActionBase
 };
 struct Stopwatch {
     unsigned __int64 mnStartTime;         // +0x00
-    unsigned __int64 mnTotalElapsedTime;  // +0x08
+    union {
+        unsigned __int64 mnTotalElapsedTime; // +0x08
+        struct {
+            unsigned mnElapsedLow;          // +0x08
+            unsigned mnElapsedHigh;         // +0x0c
+        };
+    };
     int   mnUnits;                        // +0x10
     float mfCoefficient;                  // +0x14
     void Init(int a, int b);              // 0x93a560 (ctor; args units, start)
@@ -918,13 +924,31 @@ bool Cont::RemoveB(void* obj)
     return false;
 }
 
+// Retail predicate interface view: the generated interface's unnamed slots
+// currently append duplicate entries, placing SetEvent at 0x60 instead of 0x30.
+struct BehaviorPredicateCalls {
+    virtual int AddRef();
+    virtual int Release();
+    virtual ~BehaviorPredicateCalls();
+    virtual void* AsInterface(EA::COM::InterfaceId);
+    virtual void GetSerializationInfo(EA::UTFWin::SerInfo&);
+    virtual unsigned int GetClassId() const;
+    virtual bool Evaluate();
+    virtual void SetCombineMode(int);
+    virtual int GetCombineMode() const;
+    virtual void SetNotMode(bool);
+    virtual bool GetNotMode() const;
+    virtual cISPUIBehaviorEvent* GetEvent() const;
+    virtual bool SetEvent(cISPUIBehaviorEvent*);
+};
+
 // @ 0x007f9d00
 bool Cont::RemoveAllB()
 {
     for (int i = 0; i < 4; ++i) {
         if (*SlotB(i) != 0) {
-            VCall1((void*)*SlotB(i), 0x30, 0);
-            VCallR((void*)*SlotB(i), 4);
+            ((BehaviorPredicateCalls*)*SlotB(i))->SetEvent(0);
+            ((BehaviorPredicateCalls*)*SlotB(i))->Release();
             *SlotB(i) = 0;
         }
     }
@@ -1669,6 +1693,8 @@ int C_7fbe70::GetClassId()
 // @ 0x007fc2a0
 void* C_7fc2a0::Ctor()
 {
+  // Retain the reserved local from the inlined base construction at /Od.
+  ScratchSlots<1>();
   void* p = (char*)this + 8;
   *(void**)((char*)p + 0x28) = 0;
   BaseCtor();
@@ -1942,13 +1968,16 @@ Interp::Interp()
     sw->Init(5, 0);
     ((TC_7fd200*)this)->FUN_007fd200(0x80, 1);
     ((TC_7fd200*)this)->FUN_007fd200(0x100, 1);
+    // Explicit words preserve the retail reset's store schedule in VC2008.
     if (sw->mnUnits == 1) {
         sw->mnStartTime = __rdtsc();
-        sw->mnTotalElapsedTime = 0;
+        sw->mnElapsedHigh = 0;
+        sw->mnElapsedLow = 0;
     } else {
         Li li;
         QueryPerformanceCounter(&li);
-        sw->mnTotalElapsedTime = 0;
+        sw->mnElapsedHigh = 0;
+        sw->mnElapsedLow = 0;
         sw->mnStartTime = li.Quad;
     }
 }

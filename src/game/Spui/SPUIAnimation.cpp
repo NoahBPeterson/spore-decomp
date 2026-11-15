@@ -970,8 +970,9 @@ void* F6F80(void* first, void* last, char* dst)
 void* TargetAssign::Assign(void* src)
 {
     void* self = this;
-    *(void**)((char*)self + 4) = *(void**)((char*)src + 4);
-    void* old = *(void**)((char*)self + 0xc);
+    // Preserve the field-store/old-reference-load order without a full compiler barrier.
+    *(void* volatile*)((char*)self + 4) = *(void**)((char*)src + 4);
+    void* old = *(void* volatile*)((char*)self + 0xc);
     void* q = *(void**)((char*)src + 0xc);
     if (q != old) {
         if (q)

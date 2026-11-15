@@ -1966,6 +1966,7 @@ Elem* __cdecl FUN_004c69b0(Elem* first, Elem* last, Elem* dst)
 {
     bool flag = false;
     (void)flag;
+    ScratchSlots<2>();
     return FUN_004c69e0(first, last, dst);
 }
 

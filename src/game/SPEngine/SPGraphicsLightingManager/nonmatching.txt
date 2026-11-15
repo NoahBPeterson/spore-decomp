@@ -6,7 +6,6 @@
 00705a20 276 complete SetAtmosphereModel; x87 sqrt normalize and phase copy differ
 00705af0 66 complete 0x144-stride linear search; register allocation differs
 00705c40 53 complete forward copy with destination end-report; first spilled to param slot
-00705ec0 16 complete fill-n with null check; only loop back-edge (dec/test/ja) differs
 00706170 1354 complete EnvLW::UpdateEnvLightSample (SSE/x87 mix, 10 calls, same call/vtable sequence); Query vtable call fixed to (float* scratch, const Vec3f* pos) returning float* (original reads the returned pointer from eax); register allocation, frame size and clamp/dir-pointer scheduling differ; slice/hybrid equiv WEAK 156 valid, 96.8% coverage, no mismatch; replay faults in the original at 0x706550 (null Query result) and ours reproduces the same null read at its relocated eip, so replay reports status differs by design flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706920 74 complete slot-vector next scan (stride 0xc4); register/evaluation order differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706980 74 complete slot-vector next scan (stride 0x1f0); register/evaluation order differs [equiv: PASS 681 valid, 100% cov] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
