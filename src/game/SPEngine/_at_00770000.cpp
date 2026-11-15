@@ -1688,16 +1688,22 @@ void VecM34::InsertN(Mat34* position, unsigned n, const Mat34& value)
     INSERT_N_BODY(Mat34)
 }
 
+// EASTL's depth helper keeps the iterator difference's signed type.
+template <typename Size>
+inline Size SortLog2(Size n)
+{
+    int i;
+    for (i = 0; n; ++i)
+        n >>= 1;
+    return i - 1;
+}
+
 // @ 0x007749e0
 void sort_range(SortElem* first, SortElem* last, SortCompare compare)
 {
     if (first != last) {
-        const int nSize = (int)(last - first);
-        int nDepth = 0;
-        for (int i = nSize; i > 0; i >>= 1)
-            ++nDepth;
-        introsort_loop(first, last, (nDepth * 2) - 2, compare);
-        if (nSize > 0x1c) {
+        introsort_loop(first, last, 2 * SortLog2(last - first), compare);
+        if ((last - first) > 0x1c) {
             insertion_sort(first, first + 0x1c, compare);
             unguarded_insertion_sort(first + 0x1c, last, compare);
         } else {
@@ -3156,8 +3162,9 @@ WireObj* WireObj::CopyWire(const WireObj* src)
         const WireElem* s = &src->elems[i];
         WireElem* d = &this->elems[i];
         d->field0 = s->field0;
-        WireRef* op = d->ref;
+        _ReadWriteBarrier(); // Keep the field copy before both reference loads.
         WireRef* np = s->ref;
+        WireRef* op = d->ref;
         if (np != op) {
             if (np)
                 _InterlockedIncrement(&np->refcount);

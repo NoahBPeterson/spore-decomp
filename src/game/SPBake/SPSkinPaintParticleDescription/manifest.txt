@@ -3,3 +3,5 @@
 ../src/game/SPBake/SPSkinPaintParticleDescription.cpp  ?AutoRefCountAssign@AutoRefSlot@@QAEPAU1@PAX@Z  0053b160  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinPaintParticleDescription.cpp  ??4EvalList@@QAEAAU0@ABU0@@Z  0053a420  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinPaintParticleDescription.cpp  ??4BrushDesc_s0053_9d70@@QAEAAU0@ABU0@@Z  0053a2b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinPaintParticleDescription.cpp  ?WriteIntVec@@YAPAUIStream_s0053_b930@IO@EA@@PAU123@PAPAH@Z  0053bd00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinPaintParticleDescription.cpp  ?UninitCopy20@@YAPAPAUEntry20@@PAPAU1@PAU1@11E@Z  0053d1a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

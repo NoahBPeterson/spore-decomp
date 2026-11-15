@@ -123,16 +123,14 @@ static inline bool JobDone(JobMgr* m) { return (1 << m->ContinueJob() & 0x3c) !=
 // ---- items of slice s005218e0 end
 
 // ---- items of slice s00522800 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern float g_userColors[3];             // 0x015df0f0
-extern float g_userColors2[3];            // 0x015df204
 extern "C" double __cdecl fabs(double);
 #pragma intrinsic(fabs)
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
-void* FUN_00507c70(void* p);              // 0x00507c70
+struct SkinnerAlloc {
+    void* Init(void* source);            // 0x00507c70, allocated object in ecx
+};
 // The converter takes the destination first and the RGB triple by value;
 // the old one-argument declaration dropped the 12-byte argument.
-struct V3 { float x, y, z; };
-void* FUN_00529d30(float* out, V3 rgb);    // 0x00529d30
 struct PaintReq {
     void Set(int a2, int a3, int a4, int a5, char a6, char a7, char a8);
 };
@@ -147,6 +145,11 @@ struct Vector3 {
     Vector3& Set(const Vector3& o);                       // 0x004098a0
 };
 }
+// The retail tables contain indexed Vector3 entries. Their total extents are
+// not required by this setter; incomplete extern arrays avoid an invented bound.
+extern nSPSkinner::Vector3 g_userColors[];  // 0x015df0f0
+extern nSPSkinner::Vector3 g_userColors2[]; // 0x015df204
+nSPSkinner::Vector3 FUN_00529d30(nSPSkinner::Vector3 rgb); // 0x00529d30, hidden output buffer returned in EAX
 namespace nSPSkinner {
 struct Matrix3 { float m[9]; };
 }
@@ -1064,6 +1067,7 @@ TickState& TickState::Assign(const TickState& o)
     D.p34 = S.p34;
 #undef D
 #undef S
+    ScratchSlots<2>(); // Two unused dwords in the original /Od assignment frame.
     return *this;
 }
 
@@ -1271,22 +1275,10 @@ void FUN_00522800(void* self)
 { (void)self; }
 
 // @ 0x005229c0
-void FUN_005229c0(int idx, float* v)
+void FUN_005229c0(int idx, const nSPSkinner::Vector3* v)
 {
-    int* g1 = (int*)((char*)g_userColors + idx * 0xc);
-    g1[0] = *(int*)&v[0];
-    g1[1] = *(int*)&v[1];
-    g1[2] = *(int*)&v[2];
-    float hsv[3];
-    V3 rgb;
-    rgb.x = v[0];
-    rgb.y = v[1];
-    rgb.z = v[2];
-    int* r = (int*)FUN_00529d30(hsv, rgb);
-    int* g2 = (int*)((char*)g_userColors2 + idx * 0xc);
-    g2[0] = r[0];
-    g2[1] = r[1];
-    g2[2] = r[2];
+    g_userColors[idx] = *v;
+    g_userColors2[idx] = FUN_00529d30(*v);
 }
 
 // @ 0x00522a40
@@ -1431,12 +1423,7 @@ void cPaintSystem_s0052_2800::SetCreatureSkin(cSkinObject* skin, bool keepMesh)
 void* Factory::Make()
 {
     void* mem = EA_alloc(0x1d0, "Skinner", 0, 0, 0, 0);
-    void* result;
-    if (mem != 0)
-        result = FUN_00507c70(this);
-    else
-        result = 0;
-    return result;
+    return mem ? ((SkinnerAlloc*)mem)->Init(this) : 0;
 }
 
 // @ 0x005235c0

@@ -1526,7 +1526,7 @@ struct Iter70 {
     void  Increment();                                  // 0x00422c50
 };
 struct DateVal70 {
-    int mLow; int mHigh;
+    __int64 mnSeconds; // EA::DateTime::DateTime seconds and 8-byte alignment.
     void Set(int mode);                                 // 0x0092e3d0
 };
 struct CJob70 {
@@ -1537,6 +1537,7 @@ struct CJob70 {
 };
 struct LookupDB70 {
     void OnIndexComplete();                             // 0x00563e10
+    void FUN_00561cc0();                                 // no-argument thiscall
     int  FindAssetIndex(const void* key);               // 0x005631e0
     void DecreasePopulation(int index);                 // 0x00561970
     void UpdateGroupMembership(int index);              // 0x00561850
@@ -1544,8 +1545,17 @@ struct LookupDB70 {
 struct VecSet70 {
     void* mpBegin; void* mpEnd; void* mpCapacity;
     void* Insert(void* out, void* val);                 // 0x00554020
-    void  EqualRange(void* out, void* key);             // 0x00555980
+    void* EqualRange(void* out, void* key);             // 0x00555980, returns out
     void  EraseOne(void* it);                           // 0x0048c720
+    void* End() { return mpEnd; }
+    void* Find(void* key) {
+        void* pairIts[2];
+        EqualRange(pairIts, key);
+        ScratchSlots<5>();
+        if (pairIts[0] != pairIts[1])
+            return pairIts[0];
+        return End();
+    }
 };
 struct EcxStub70 {
     bool FUN_0055f7a0(void* job);
@@ -3453,7 +3463,30 @@ struct ResourceKey_s0055_fc10 {
     uint32_t mGroupID;
 };
 namespace SP {
-void FUN_00564960(void* out, void* val);
+struct PopulationPair {
+    unsigned first;
+    unsigned second;
+};
+struct PopulationInsertResult {
+    PopulationPair* iterator;
+    bool inserted;
+};
+struct PopulationMap {
+    PopulationPair* begin;
+    PopulationPair* end;
+    PopulationPair* capacity;
+    unsigned allocator[2];
+    unsigned compare;
+    PopulationInsertResult* Insert(PopulationInsertResult* out, const PopulationPair& value); // 0x00564960, returns out
+    unsigned& Get(const unsigned& key); // 0x00564a10, returns mapped value reference
+};
+struct PopulationDB {
+    unsigned char reserved[0xac];
+    PopulationMap mapAc;
+    PopulationMap mapC4;
+    void UpdatePopulation(unsigned key, unsigned value); // 0x0055fe60
+};
+
 }
 namespace SP {
 int __fastcall FUN_005631e0(void* self, int dummy, void* key);   // thiscall: FindAssetIndex(key) -> int
@@ -3509,6 +3542,7 @@ struct UIntSet {
     eastl::sp_vector_allocator_s0055_fc10 mAllocator;   // 0x0c
     uint32_t mComparePad;                    // 0x14
     uint32_t* FUN_004769b0(uint32_t* first, uint32_t* last);       // erase
+    void clear() { ScratchSlots<4>(); FUN_004769b0(mpBegin, mpEnd); }
     void FUN_00554020(void* pResult, const uint32_t& value);       // insert
 };
 }
@@ -5626,11 +5660,12 @@ void* PaintStub::FUN_0055eae0(int* first, int count)
 namespace SP {
 void EcxStub70::FUN_0055f9e0()
 {
-    void* this_ = this;
-    if (*(char*)((char*)this_ + 0x40) == 0) {
-        void* obj = *(void**)((char*)this_ + 0x44);
-        if (obj != 0)
-            ((CJob70*)obj)->Wait();
+    if (*(unsigned char*)((char*)this + 0x40) == 0) {
+        CJob70* pending = *(CJob70**)((char*)this + 0x44);
+        if (pending != 0) {
+            CJob70* job = *(CJob70**)((char*)this + 0x44);
+            job->Wait();
+        }
     }
 }
 }  // namespace SP
@@ -5671,16 +5706,13 @@ bool EcxStub70::FUN_0055fa20(void* key, char flag)
 namespace SP {
 bool EcxStub70::FUN_0055fb30(void* key)
 {
-    void* this_ = this;
-    int index = ((LookupDB70*)this_)->FindAssetIndex(key);
+    int index = ((LookupDB70*)this)->FindAssetIndex(key);
     if (index != -1) {
-        void* itpair[2];
-        ((VecSet70*)((char*)this_ + 0x64))->EqualRange(itpair, &index);
-        void* it = (itpair[0] != itpair[1]) ? itpair[0] : *(void**)((char*)this_ + 0x68);
-        if (it != *(void**)((char*)this_ + 0x68))
-            return 1;
+        if (((VecSet70*)((char*)this + 0x64))->Find(&index) !=
+            ((VecSet70*)((char*)this + 0x64))->End())
+            return true;
     }
-    return 0;
+    return false;
 }
 }  // namespace SP
 
@@ -5688,15 +5720,17 @@ bool EcxStub70::FUN_0055fb30(void* key)
 namespace SP {
 bool EcxStub70::FUN_0055fbb0(void* key)
 {
-    void* this_ = this;
-    int index = ((LookupDB70*)this_)->FindAssetIndex(key);
-    if (index == -1)
-        return 0;
-    DateVal70 now;
-    now.Set(1);
-    char* asset = (char*)(index * 0x50 + *(int*)((char*)this_ + 0x14));
-    *(DateVal70*)(asset + 0x48) = now;
-    return 1;
+    int index = ((LookupDB70*)this)->FindAssetIndex(key);
+    if (index != -1) {
+        DateVal70 now;
+        now.Set(1);
+        {
+            __int64 seconds = now.mnSeconds;
+            ((DateVal70*)(index * 0x50 + *(char**)((char*)this + 0x14) + 0x48))->mnSeconds = seconds;
+        }
+        return true;
+    }
+    return false;
 }
 }  // namespace SP
 
@@ -5748,25 +5782,25 @@ void DBMethods::slot25(unsigned int maxCount, AssetPtrVec* pOut, int param4)
 
 // @ 0x0055fe60
 namespace SP {
-void FUN_0055fe60(void* this_, unsigned key, unsigned value)
+void PopulationDB::UpdatePopulation(unsigned key, unsigned value)
 {
-    char tmp[8];
-    unsigned two[2];
-    two[0] = key;
-    two[1] = 0;
-    FUN_00564960(tmp, two);
-    eastl::vector_map_s0055_fc10<uint32_t, uint32_t>* map_s0055_fc10 =
-        (eastl::vector_map_s0055_fc10<uint32_t, uint32_t>*)((char*)this_ + 0xc4);
-    map_s0055_fc10->operator[](key) = value;
+    unsigned result[16]; // Unused storage retained from the native inline frame.
+    PopulationInsertResult second; // insert result; only its written fields are used by the callee.
+    unsigned intermediate = 0; // default population for the first map.
+    unsigned inlineSlots = key; // key snapshot for the pair construction.
+    PopulationPair pair = { inlineSlots, intermediate };
+    PopulationPair first = pair; // native pair return/copy lifetime.
+    mapAc.Insert(&second, first);
+    mapC4.Get(key) = value;
+    { unsigned inlineReserve[1]; }
 }
 }  // namespace SP
 
 // @ 0x0055fed0
 void SP::cSPObjectTemplateDB::slot_26()
 {
-    void* this_ = this;
-    FUN_004769b0((char*)this_ + 0x64, 0, *(void**)((char*)this_ + 0x64), *(void**)((char*)this_ + 0x68));
-    FUN_00561cc0(this_, 0);
+    ((UIntSet*)((char*)this + 0x64))->clear();
+    ((LookupDB70*)this)->FUN_00561cc0();
 }
 
 // @ 0x0055ff10
@@ -5899,13 +5933,13 @@ bool DBMethods::FUN_00560470()
 namespace SP {
 bool EcxStubFc::FUN_00560880(void* key, unsigned* out)
 {
-    void* this_ = this;
-    int index = FUN_005631e0(this_, 0, key);
-    if (index == -1)
-        return false;
-    char* asset = (char*)(index * 0x50 + *(int*)((char*)this_ + 0x14));
-    *out = *(unsigned*)(asset + 0xc);
-    return true;
+    int index = ((LookupDB70*)this)->FindAssetIndex(key);
+    if (index != -1) {
+        char* asset = index * 0x50 + *(char**)((char*)this + 0x14);
+        *out = *(unsigned*)(asset + 0xc);
+        return true;
+    }
+    return false;
 }
 }  // namespace SP
 

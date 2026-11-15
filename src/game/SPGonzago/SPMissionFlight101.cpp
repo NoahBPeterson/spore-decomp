@@ -5,6 +5,8 @@
 #include "game/types.h"
 #include "SP/cHerd.h"
 
+namespace SP { class cPlanetRecord; }
+
 // unnamed retail callees and globals (address in the comment)
 extern void* gVtableFlight101;
 extern void* gVtableFlight101Unk;
@@ -93,7 +95,6 @@ public:
     void HandleMessage(int nMessage, void* pParam);
     void Update(void* pParam);
     void SetContactGrob();
-    char BindTarget();
 
     void* mpVftable;                            // 0x00
     void* mpVftable2;                           // 0x04
@@ -111,7 +112,6 @@ public:
     int32_t mnNumAliensFound;                   // 0x1f8
     bool mbContactGrob;                         // 0x1fc
 };
-void BaseOnSubMissionComplete();  // 0x00c558f0 (defined below; used by a stub's inline body)
 class cSPMissionFlight101 {
 public:
     cSPMissionFlight101();
@@ -143,7 +143,9 @@ public:
     void BasePostLoad();
     void BaseOnReject();
     void BaseOnAccept();
-    void BaseOnSubMissionComplete();
+    void Fulfill();                              // 0x00c558f0
+    void BaseFulfill();                          // 0x00c59dc0
+    bool BindTarget();                           // 0x00c557c0
     void BaseDestroy();
     void* GetText(uint32_t nPropertyId, void* pParam);
     void* GetSubMissionMediumText(void* pParam);
@@ -206,7 +208,6 @@ void* SpaceGameGet();
 void* GetMissionManager();
 void* GetMissionManager(uint32_t nMissionId);
 void* GetPlanetRecordFromTargetType(void* pMission, uint32_t nType);
-uint32_t ReadTargetPlanetType();
 void AddDiseaseEffect(void* pSpecies, uint32_t nEffect, int nValue);
 void MarkSpeciesScanned(void* pSpecies);
 void CollectSpecies(void* pSpecies);
@@ -214,24 +215,47 @@ void* GetHerdEntry(void* pSpecies);
 char CheckHerdsComplete();
 char SetMissionState(void* pMission);
 void HandleMissionMessage(void* pMission, int nMessage, void* pParam);
-void SetMissionFlag(void* pTarget, int nValue);
 void PlayMissionEvent(uint32_t nEvent);
 void AddInfectedAnimalsToHerd(void* pOwner, void* pHerd, int nCount, int nMissionId,
                               uint32_t nEffect);
 uint32_t RandomUint32Uniform(int32_t nRange);
 void operator_delete__(void* pMemory);
+struct MissionTargetBinding {
+    uint32_t ReadTargetPlanetType() const;        // 0x00c45b40
+    SP::cPlanetRecord* GetPlanetRecordFromTargetType(uint32_t type); // 0x00c474b0
+    void SetTargetPlanet(SP::cPlanetRecord* record); // 0x00c47180
+};
+// Flight101's retail slot 0x18c is the no-argument bool setup method.
+struct Flight101VTable {
+    void* precedingSlots[0x18c / 4];
+    bool (__thiscall* SetupHerds)(cSPMissionFlight101* self);
+};
+namespace Flight101Native {
+struct Inventory {
+    void FUN_00ff46e0();
+};
+struct SpaceGame {
+    Inventory* GetPlayerInventory();             // 0x00a1ad60
+};
+struct MissionManager {
+    void FUN_00feba60(bool enabled);
+};
+SpaceGame* SpaceGameGet();                       // 0x01002bd0
+MissionManager* GetMissionManager();             // 0x00feb9f0
+}
 // ---- items of slice s00c54f90 end
 
 // @ 0x00c557c0
-char cMissionFindAliens::BindTarget()
+bool cSPMissionFlight101::BindTarget()
 {
-    uint32_t nType = ReadTargetPlanetType();
-    void* pRecord = GetPlanetRecordFromTargetType(this, nType);
-    if (pRecord == nullptr)
-        return 0;
-    SetMissionFlag(pRecord, 1);
-    ((cDispatchObject*)this)->Call(0x18c);
-    return 1;
+    MissionTargetBinding* mission = (MissionTargetBinding*)this;
+    uint32_t type = mission->ReadTargetPlanetType();
+    SP::cPlanetRecord* record = mission->GetPlanetRecordFromTargetType(type);
+    if (record == nullptr)
+        return false;
+    mission->SetTargetPlanet(record);
+    ((Flight101VTable*)mpVftable)->SetupHerds(this);
+    return true;
 }
 
 // @ 0x00c557f0
@@ -242,13 +266,13 @@ void cSPMissionFlight101::Shutdown()
 }
 
 // @ 0x00c558f0
-void BaseOnSubMissionComplete()
+void cSPMissionFlight101::Fulfill()
 {
-    void* pInventory = ((cDispatchObject*)SpaceGameGet())->Call(0x00);
-    if (pInventory != nullptr) {
-        ((cDispatchObject*)pInventory)->Call(0x00);
-    }
-    ((cDispatchObject*)GetMissionManager())->Call1(0x00, 1);
+    BaseFulfill();
+    Flight101Native::Inventory* inventory = Flight101Native::SpaceGameGet()->GetPlayerInventory();
+    if (inventory != nullptr)
+        inventory->FUN_00ff46e0();
+    Flight101Native::GetMissionManager()->FUN_00feba60(true);
 }
 
 // @ 0x00c55920

@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0044c050  10   instruction sequence identical; only the hidden this-home slot and the result slot are swapped
 0044bcf0 755 complete: recursive unblocked walk (Blk::Abcf0; child-id vector iteration, RuntimeFlag(9,1), Paint and flag gates, child recursion); difftest PASS (309 valid, 67.8% coverage); /Od register/stack layout differs; flags /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044c0e0 348 complete: fills (kind, primary, secondary) for the block's next surface selection (flags 0x13/0x28 and 0x11); difftest PASS (400 valid, 94.9% coverage); /Od frame/register layout differs; flags /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
 0044c270 381 complete: sign of a selected axis of the supplied direction matrix (flag 0x30 gate, primary/secondary rows, 0.001 threshold); difftest PASS (400 valid, 97.5% coverage); /Od frame/register layout differs; flags /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy

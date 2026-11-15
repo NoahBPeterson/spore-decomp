@@ -751,7 +751,7 @@ void  FUN_00555980(void* out, void* k);
 void  FUN_00552af0(void* v, void* k);
 void  FUN_005531b0(void* v, void* k);
 char  FUN_0054e460(int a, int b, void* c);            // GetLocalKey
-int64_t FUN_005418c0(int a);
+uint64_t FUN_005418c0(const char* text); // 0x005418c0, parses a Spore asset ID
 int*  ObjectError(int a);                             // 0x8de1a0
 struct Meta {
     char pad[0x400];
@@ -761,10 +761,9 @@ struct Meta {
     void* FUN_00550910(unsigned idx);
     unsigned FUN_005509e0(unsigned idx);
     unsigned FUN_00550a60(unsigned idx);
-    bool FUN_00550aa0(void* key);
+    bool FUN_00550aa0(uint32_t key);
     void FUN_00550b00(int key);
     void FUN_00550b30(int key);
-    char FUN_00550b60(int key);
     Meta* Cast(int type);
 };
 struct CD {
@@ -809,7 +808,6 @@ struct WStr {
 void WStr_Format(void* out, const void* fmt, int arg);   // 0x41e050 cdecl
 struct Meta_s0055_0bd0 {
     char pad[0x400];
-    char FUN_00550b60(int key);  // 0x00550b60 (Meta::FUN_00550b60)
     char FUN_00550bd0(uint16_t* str);  // 0x00550bd0 (Meta::FUN_00550bd0)
     void FUN_00550cf0(WStr* out);  // 0x00550cf0 (Meta::FUN_00550cf0)
     char FUN_00550da0(int* param_2, int* param_3, int* param_4);  // 0x00550da0 (Meta::FUN_00550da0)
@@ -1433,13 +1431,25 @@ struct InsertResult {                        // pair<iterator, bool>
 };
 }
 namespace eastl {
+struct EqualRangeU32 { uint32_t* first; uint32_t* second; };
 struct vector_set_u32 {
     uint32_t* mpBegin;
     uint32_t* mpEnd;
     uint32_t* mpCapacity;
     sp_vector_allocator_s0054_c780 mAllocator;
     InsertResult insert(const uint32_t& value);   // 0x00554020
-    void equal_range(void* out, void* key);       // 0x00555980
+    uint8_t mCompare;                            // +0x14, empty comparison functor storage
+    EqualRangeU32* equal_range(EqualRangeU32* out, const uint32_t& key); // 0x00555980, returns out
+    uint32_t* end() { return mpEnd; }
+    uint32_t* find(const uint32_t& key) {
+        EqualRangeU32 range;
+        // Preserve the unread inline lookup frame after the returned pair.
+        { uint32_t unused[5]; }
+        equal_range(&range, key);
+        if (range.first != range.second)
+            return range.first;
+        return end();
+    }
 };
 }
 namespace SP {
@@ -2727,14 +2737,13 @@ int64_t Meta::FUN_005508a0()
 void* Meta::FUN_00550910(unsigned idx)
 {
     char** v = (char**)((char*)this + 0x98);
-    void* result;
     if (idx < (unsigned)(((char*)v[1] - (char*)v[0]) >> 4)) {
         void** p = (void**)(*(char**)((char*)this + 0x98) + (idx << 4));
-        result = *p;
+        void* result = *p;
+        return result;
     } else {
-        result = DAT_013ec47c;
+        return DAT_013ec47c;
     }
-    return result;
 }
 
 // @ 0x005509e0
@@ -2760,20 +2769,10 @@ unsigned Meta::FUN_00550a60(unsigned idx)
 }
 
 // @ 0x00550aa0
-bool Meta::FUN_00550aa0(void* key)
+bool Meta::FUN_00550aa0(uint32_t key)
 {
-    char* s = (char*)this;
-    int range[2];
-    ((eastl::vector_set_u32*)(s + 0xc0))->equal_range(&range[0], &key);
-    int local_c = range[0];
-    int local_8 = range[1];
-    int local_2c;
-    if (local_c == local_8) {
-        local_2c = *(int*)(s + 0xc4);
-    } else {
-        local_2c = local_c;
-    }
-    return local_2c != *(int*)(s + 0xc4);
+    return ((eastl::vector_set_u32*)((char*)this + 0xc0))->find(key)
+        != ((eastl::vector_set_u32*)((char*)this + 0xc0))->end();
 }
 
 // @ 0x00550b00
@@ -2791,17 +2790,19 @@ void Meta::FUN_00550b30(int key)
     ((Map5*)((char*)this + 0xc0))->F40d0(&key);
 }
 
-// @ 0x00550b60
-char Meta::FUN_00550b60(int key)
+inline const uint64_t& AssetIDForValidation(const SP::Pollen::cAssetMetadata* metadata)
 {
-    char* s = (char*)this;
-    int64_t v = FUN_005418c0(key);
-    *(int64_t*)(s + 0x18) = v;
-    if (((*(unsigned*)(s + 0x18) & *(unsigned*)(s + 0x1c)) != 0xffffffff)
-        && (*(int*)(s + 0x18) != 0 || *(int*)(s + 0x1c) != 0)) {
-        return 1;
-    }
-    return 0;
+    return metadata->mnAssetID;
+}
+
+// @ 0x00550b60
+bool SP::Pollen::cAssetMetadata::ParseSporeAssetIDInternal(const char* text)
+{
+    bool result = false;
+    mnAssetID = FUN_005418c0(text);
+    result = AssetIDForValidation(this) != static_cast<uint64_t>(-1)
+        && AssetIDForValidation(this) != 0;
+    return result;
 }
 
 // @ 0x00550bd0
@@ -2857,8 +2858,8 @@ char Meta_s0055_0bd0::FUN_00550da0(int* param_2, int* param_3, int* param_4)
     char* s = (char*)this;
     char result = 0;
     if (param_3 != 0) {
-        int local_50 = param_3[0];
-        if (FUN_00550b60(local_50) != 0) {
+        const char* local_50 = reinterpret_cast<const char*>(param_3[0]);
+        if (reinterpret_cast<SP::Pollen::cAssetMetadata*>(this)->ParseSporeAssetIDInternal(local_50)) {
             *(int*)(s + 0x20) = param_2[0];
             *(int*)(s + 0x24) = param_2[1];
             *(int*)(s + 0x28) = param_2[2];

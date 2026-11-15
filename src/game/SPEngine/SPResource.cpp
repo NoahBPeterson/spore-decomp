@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include "EA/Allocator/FixedAllocatorBase.h"
+#include "EA/ResourceMan/Resource.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern char sNullCache;            // 0x0152f7bc
@@ -653,13 +654,11 @@ bool Registry::Unregister(void* vkey, void* vobj)
 }
 
 // @ 0x006acfe0
-bool FUN_006acfe0(uint32_t* a, char* b)
+bool FUN_006acfe0(EA::ResourceMan::Key* key, EA::ResourceMan::Resource* resource)
 {
-    *(uint32_t*)(b + 8)  = a[0];
-    *(uint32_t*)(b + 0xc) = a[1];
-    *(uint32_t*)(b + 0x10) = a[2];
+    resource->mKey = *key;
     if (sRegistry)
-        return sRegistry->Register(a, b);
+        return sRegistry->Register(key, resource);
     return false;
 }
 
@@ -868,11 +867,11 @@ void SP::FlushCache(int x)
 // @ 0x006ad800
 void FUN_006ad800(int n)
 {
-    int c = n;
-    if (c > 0) {
+    if (n > 0) {
+        int c = n;
         do {
             void* p = g_pRegistry;
-            ((void(__thiscall*)(void*, int))VFN(0x28))(p, 0);
+            ((void(__thiscall*)(void*, IFilter*))VFN(0x28))(p, 0);
             cLRUCache* q = (cLRUCache*)g_caches;
             do {
                 q->Clear();

@@ -9,6 +9,7 @@
 #include "cSPUILayout.h"
 #include "SP/cCommunity.h"
 #include "SP/cString.h"
+#include <string.h>
 
 // ---- items of slice s00e06220 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define nullptr 0
@@ -443,8 +444,9 @@ void cSPUILoyaltyMeter::SetModel(int32_t nModel, int32_t nExtra)
 // @ 0x00e06730
 void cSPUILoyaltyMeter::SetRange(float fLow, float fHigh)
 {
-    m_fLow = fLow;
-    m_fHigh = fHigh;
+    // Preserve the parameter representations, including NaN payloads.
+    memcpy(&m_fLow, &fLow, sizeof(fLow));
+    memcpy(&m_fHigh, &fHigh, sizeof(fHigh));
     m_bRangeSet = true;
     OnValueChanged();
 }

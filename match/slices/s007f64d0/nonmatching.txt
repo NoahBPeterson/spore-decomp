@@ -8,7 +8,6 @@
 007f6df0  86  complete; element copy / refcount addref order differs [equiv PASS (100% coverage)]
 007f6ee0  127  complete; range copy loop layout differs
 007f6f80  87  complete; range destroy loop layout differs
-007f6ff0  72  complete; byte copy loop shape differs [equiv PASS (100% coverage)]
 007f7050  133  complete; reference-slot setup register/frame differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 ebp]
 007f7100  133  complete; reference-slot setup register/frame differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#2 ebp]
 007f71b0  44  complete; phase2 vector build/order differs

@@ -436,7 +436,7 @@ template<class T> struct vector_s0048_6910 {
     T* end() { return mpEnd; }
     bool empty() const;                          // @ 0x526430
     void push_back(const T& v);                  // @ 0x454860
-    void eraseOne(T* it);                        // @ 0x48c720
+    T* eraseOne(T* it);                          // @ 0x48c720, returns it
 };
 template<int N> struct bitset_s0048_6910 {
     uint32_t mWord[(N + 31) / 32];
@@ -483,6 +483,7 @@ class cSPEditorBlock_s0048_6910 { public:
     float GetRadius();                                                   // @ 0x43f250
     void RefreshLinks(cSPEditorBlock_s0048_6910* e);                                // @ 0x438700
     void RefreshLinked(cSPEditorBlock_s0048_6910* e);                               // @ 0x438a40
+    cSPEditorBlock_s0048_6910* GetLink() { return mLink33c; }
     void F_43f5b0(cSPVector3_s0048_6910* out, cSPVector3_s0048_6910 pos, cSPEditorLimbJoint_s0048_6910* invalid); // @ 0x43f5b0
 };
 }
@@ -771,7 +772,7 @@ template<class T> struct vector_s0048_9530 {
     T* begin() { return mpBegin; }
     T* end() { return mpEnd; }
     bool empty() const;                          // @ 0x526430
-    void erase(T* first, T* last);               // @ 0x454280 (erase(first,last))
+    T* erase(T* first, T* last);                 // @ 0x454280, returns first
 };
 template<int N> struct bitset_s0048_9530 {
     uint32_t mWord[(N + 31) / 32];
@@ -865,7 +866,7 @@ class cSPEditorLimbStructure_s0048_9530 { public:
 };
 }
 namespace SP {
-void BuildPileList(cSPEditorBlock_s0048_9530* block, cSPEditorLimbStructure_s0048_9530* limb, int depth); // @ 0x48c790
+void BuildPileList(cSPEditorBlock_s0048_9530* block, cSPEditorLimbStructure_s0048_9530* limb, bool includeLinked); // @ 0x48c790
 }
 // ---- items of slice s00489530 end
 
@@ -1100,13 +1101,17 @@ void RotationBall_s0048_34d0::Update()
     PLAY_ANIM(mgr, this->mModel, 4, alpha, this->mAnimateInTime, 1);
 }
 
+inline void cSPTransform::SetScale(float s)
+{
+    mScale = s;
+    ++mModificationCount;
+}
+
 // @ 0x00483cc0
 void SP::cSPEditorHandleRotationBall::SetScale(float s)
 {
     if (this->mModel) {
-        cSPTransform& x = this->mModel->mTransform;
-        x.mScale = s;
-        ++x.mModificationCount;
+        this->mModel->mTransform.SetScale(s);
     }
 }
 
@@ -1231,17 +1236,30 @@ void cSPEditorLimbJoint_s0048_6910::AddLowerJoint(cSPEditorLimbJoint_s0048_6910*
 }
 }  // namespace SP
 
+inline void LowerJointEraseFrame()
+{
+    // Retain the unused inlined erase scope without reading its storage.
+    uint32_t unused[3];
+}
+
+template<class Iterator, class T>
+inline Iterator FindLowerJoint(Iterator first, Iterator last, const T& value)
+{
+    Iterator cursor = first;
+    while (cursor != last && *cursor != value) ++cursor;
+    return cursor;
+}
+
 // @ 0x00487090
 namespace SP {
 void cSPEditorLimbJoint_s0048_6910::RemoveLowerJoint(cSPEditorLimbJoint_s0048_6910* child)
 {
-    cSPEditorLimbJoint_s0048_6910** pEnd = mLowerJoints.end();
-    cSPEditorLimbJoint_s0048_6910** it = mLowerJoints.begin();
-    while (it != pEnd && *it != child) ++it;
+    cSPEditorLimbJoint_s0048_6910** it = FindLowerJoint(mLowerJoints.begin(), mLowerJoints.end(), child);
     if (it != mLowerJoints.end()) {
+        LowerJointEraseFrame();
         mLowerJoints.eraseOne(it);
-        if (child->mJointBlock->mLink33c)
-            child->mJointBlock->mLink33c->RefreshLinked(child->mJointBlock);
+        if (child->mJointBlock->GetLink())
+            child->mJointBlock->GetLink()->RefreshLinked(child->mJointBlock);
         child->mUpperJoint = 0;
     }
 }
@@ -1519,7 +1537,9 @@ void cSPEditorLimbStructure_s0048_9530::Rebuild(cSPEditorBlock_s0048_9530* block
 {
     CollectBlocks(block);
     UpdateLimbScale();
-    mPileList.erase(mPileList.begin(), mPileList.end());
+    // Preserve the unread clear frame; load both range fields directly.
+    uint32_t clearFrame[7];
+    mPileList.erase(mPileList.mpBegin, mPileList.mpEnd);
     BuildPileList(mBaseBlock, this, 0);
     Refresh(true);
 }

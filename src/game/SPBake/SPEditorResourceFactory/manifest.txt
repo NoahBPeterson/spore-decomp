@@ -41,3 +41,4 @@
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?GetReferenceCount@ResourceObject@@QAEHXZ  004c0190  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?Init@XmlTextWriter@@QAEPAHXZ  004c01b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorResourceFactory.cpp  ?ExportMeshEnd@cExportHelper@@QAEXXZ  00501200  /Od /Ob1 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorResourceFactory.cpp  ?Init8@EditorBlock@@QAEPAU1@XZ  004b0040  /Od /Ob1 /MD /Gy /TP /Isrc/game/include

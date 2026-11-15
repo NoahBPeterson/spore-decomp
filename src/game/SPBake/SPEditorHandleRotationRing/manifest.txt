@@ -15,3 +15,4 @@
 ../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?AnimateOn@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXXZ  004856d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?SetModelScale@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXM@Z  00485850  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?Shutdown@cSPEditorHandleRotationRing_s0048_4e40@SP@@QAEXXZ  004858b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorHandleRotationRing.cpp  ?GetHandlePosition@RotationRing_s0048_3f10@@QAEPAUVector3@@PAU2@@Z  004845d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
