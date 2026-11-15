@@ -10724,6 +10724,14 @@ bool CollectAndDestroy(unsigned int a, unsigned int b)
     return v.Collect(a, b);
 }
 
+// Byte buffer for 0x0041aaa0: the slice (which declares no operator new[]) lowers new[]/delete[]
+// to the scalar ??2/??3 calls; the module's operator new[] overloads would pick ??_U/??_V.
+struct RawByte_s0041_aaa0 {
+    unsigned char b;
+    static void* operator new[](size_t n) { return ::operator new(n); }
+    static void operator delete[](void* p) { ::operator delete(p); }
+};
+
 // @ 0x0041aaa0
 bool ParamSweep::Build(void* object, IWriter* out)
 {
@@ -10787,7 +10795,7 @@ bool ParamSweep::Build(void* object, IWriter* out)
                     for (int k = 0; k < 8; k++) pk[k] = (unsigned char)counts[k];
                     out->Write(hdr, 0x24);
 
-                    unsigned char* buf = new unsigned char[total * 3];
+                    unsigned char* buf = (unsigned char*)new RawByte_s0041_aaa0[total * 3];
                     unsigned char* w = buf;
                     for (int k = 0; k < total; k++) {
                         Vec3_s0041_aaa0 a, b, ta, tb;
@@ -10799,7 +10807,7 @@ bool ParamSweep::Build(void* object, IWriter* out)
                         w += 3;
                     }
                     out->Write(buf, total * 3);
-                    delete[] buf;
+                    delete[] (RawByte_s0041_aaa0*)buf;
                     Cleanup1();
                     return true;
                 }

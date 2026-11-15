@@ -44,5 +44,5 @@
 00419690 165 /Od /Ob1 /arch:SSE; frame has 0xb0 unused local space and slot order of inlined temps not reproduced
 00419780 1705 frame: /Od function with ~0xec bytes of dead inline-expansion stack slots (smart-pointer/vector helper temps) that were not reproduced; control flow and calls are equivalent, frame layout and offsets differ flags: /Od /Ob1 /MD /Gy /TP /arch:SSE
 0041a0c0 1495 /Od frame; locals/stack slot order differ from original (0x1c4 frame, many inline temps), cleanup/smart-pointer shape not reproduced flags: /Od /Ob1 /MD /Gy /TP /GS-
-0041aaa0 2538 4776-byte /Od function (/Od /Ob1 /MD /Gy /EHsc); behaviorally approximate, structure differs (orig 4776 bytes vs ours ~2845 with diffs from early prologue onward: inlined min/max/ceil and stack layout not reproduced) flags: /Od /Ob1 /MD /Gy /EHsc
+0041aaa0 2400 4776-byte /Od function (/Od /Ob1 /MD /Gy /EHsc); behaviorally approximate, structure differs (orig 4776 bytes vs ours ~2845 with diffs from early prologue onward: inlined min/max/ceil and stack layout not reproduced) flags: /Od /Ob1 /MD /Gy /EHsc
 0041c1d0 1848 COMPLETE /Od DumpBlockDescriptions (all paths and callees written; frame layout 0x1730 vs 0x17c0, local slot order and dead rec/out release branches not reproduced; 72 vs 70 calls) [equiv: UNSUPPORTED: 13 unresolved refs]
