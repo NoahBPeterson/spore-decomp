@@ -1,3 +1,4 @@
+# Bounded 2026-11-15 claim for 0x007864c0: coefficient/x87 investigation in progress; no new MATCH claimed.
 # va  diff-bytes  reason   (none)
 00783590 1109 complete: full SH normalisation apply for degrees 0..4; original vectorises each 4-float group into SIMD
 00783830 1431 complete: full SH normalisation remove for degrees 0..4; same vectorisation difference
