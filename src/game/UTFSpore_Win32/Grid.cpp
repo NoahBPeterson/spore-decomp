@@ -16,6 +16,12 @@
 #include "EA/UTFWin/IWindow.h"
 #include "EA/UTFWin/CustomWindow.h"
 #include <string.h>
+#include "EA/UTFWinControls/IWinGrid.h"
+#include "EA/Text/LineLayout.h"
+#include "EA/Text/TextStyle.h"
+#include "EA/Text/Typesetter.h"
+#include "EA/UTFWinControls/IScrollbarDrawable.h"
+#include "EA/UTFWin/IDrawable.h"
 inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // ---- items of slice s0096f3f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1020,21 +1026,6 @@ struct WinGridIface {                    // IWinGrid subobject
     bool SetCellWindow(int col, int row, void* w, bool b1, bool b2, int flag);
 };
 }
-// ---- items of slice s0097cea0 end
-
-// ---- items of slice s00970570 begin (TODO(rewrite): local stubs, replace by canonical classes)
-namespace EA {
-namespace UTFWinControls {
-struct CRect {
-    int left, top, right, bottom;
-    void NormalizeRect();
-};
-}
-}
-// ---- items of slice s00970570 end
-
-// ---- items of slice s00970f30 begin (TODO(rewrite): local stubs, replace by canonical classes)
-#define PV_s0097_0f30(n) virtual void pv##n()
 namespace EA {
 namespace UTFWinControls {
 struct RectF {
@@ -1043,6 +1034,351 @@ struct RectF {
 };
 }
 }
+// ---- items of slice s0097cea0 end
+
+// ---- items of slice s00970570 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PV_s0097_0570(n) virtual void pv##n()
+namespace EA {
+namespace UTFWinControls {
+struct CRect {
+    int left, top, right, bottom;
+    void NormalizeRect();
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IWindow_s0097_0570 {
+PV_s0097_0570(0);
+PV_s0097_0570(1);
+PV_s0097_0570(2);
+PV_s0097_0570(3);
+PV_s0097_0570(4);
+PV_s0097_0570(5);
+PV_s0097_0570(6);
+PV_s0097_0570(7);
+PV_s0097_0570(8);
+PV_s0097_0570(9);
+PV_s0097_0570(10);
+PV_s0097_0570(11);
+PV_s0097_0570(12);
+PV_s0097_0570(13);
+PV_s0097_0570(14);
+PV_s0097_0570(15);
+PV_s0097_0570(16);
+PV_s0097_0570(17);
+PV_s0097_0570(18);
+PV_s0097_0570(19);
+PV_s0097_0570(20);
+PV_s0097_0570(21);
+PV_s0097_0570(22);
+PV_s0097_0570(23);
+PV_s0097_0570(24);
+PV_s0097_0570(25);
+PV_s0097_0570(26);
+PV_s0097_0570(27);
+PV_s0097_0570(28);
+PV_s0097_0570(29);
+    PV_s0097_0570(30);
+    virtual void SetFlag(unsigned flag, int value);        // +0x7c  slot 31
+PV_s0097_0570(32);
+PV_s0097_0570(33);
+PV_s0097_0570(34);
+PV_s0097_0570(35);
+    virtual void Invalidate();                             // +0x90  slot 36
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct Win_s0097_0570 {
+PV_s0097_0570(0);
+PV_s0097_0570(1);
+PV_s0097_0570(2);
+PV_s0097_0570(3);
+PV_s0097_0570(4);
+PV_s0097_0570(5);
+PV_s0097_0570(6);
+PV_s0097_0570(7);
+PV_s0097_0570(8);
+PV_s0097_0570(9);
+    virtual void SerUpdate();                              // 0x009614a0
+    virtual bool DoMessage(int* pMsg);                     // 0x00950bb0
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IDrawableRect {
+PV_s0097_0570(0);
+PV_s0097_0570(1);
+PV_s0097_0570(2);
+PV_s0097_0570(3);
+PV_s0097_0570(4);
+PV_s0097_0570(5);
+PV_s0097_0570(6);
+PV_s0097_0570(7);
+PV_s0097_0570(8);
+PV_s0097_0570(9);
+PV_s0097_0570(10);
+PV_s0097_0570(11);
+PV_s0097_0570(12);
+PV_s0097_0570(13);
+    virtual RectF* GetArea();                              // +0x38  slot 14
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IScrollBar {
+PV_s0097_0570(0);
+PV_s0097_0570(1);
+PV_s0097_0570(2);
+PV_s0097_0570(3);
+    virtual IDrawableRect* GetContent();                   // +0x10  slot 4
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ICellData { PV_s0097_0570(0); PV_s0097_0570(1); PV_s0097_0570(2); virtual void* GetValue(int id); };
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IUserData { PV_s0097_0570(0); PV_s0097_0570(1); PV_s0097_0570(2); virtual void* GetValue(int id); };
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct DropShadowDescriptor_s0097_0570 {
+    int mMode1;                                            // +0x00
+    int mMode2;                                            // +0x04
+    void SetMode1(int mode);                               // 0x00830280
+    void SetMode2(int mode);                               // 0x00830150
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class WinGrid_s0097_0570;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class IWinGrid_s0097_0570 { public:
+    // --- 135-slot vtable; only the slots exercised by this slice are named ---
+PV_s0097_0570(0);
+PV_s0097_0570(1);
+PV_s0097_0570(2);
+PV_s0097_0570(3);
+PV_s0097_0570(4);
+PV_s0097_0570(5);
+PV_s0097_0570(6);
+    virtual bool GetGridArea(RectF* pOut);                        // +0x01c  slot 7
+PV_s0097_0570(8);
+PV_s0097_0570(9);
+PV_s0097_0570(10);
+    virtual void SetGridFlag(unsigned flag, int value);           // +0x02c  slot 11
+PV_s0097_0570(12);
+PV_s0097_0570(13);
+PV_s0097_0570(14);
+PV_s0097_0570(15);
+PV_s0097_0570(16);
+PV_s0097_0570(17);
+PV_s0097_0570(18);
+PV_s0097_0570(19);
+PV_s0097_0570(20);
+PV_s0097_0570(21);
+PV_s0097_0570(22);
+PV_s0097_0570(23);
+PV_s0097_0570(24);
+PV_s0097_0570(25);
+PV_s0097_0570(26);
+PV_s0097_0570(27);
+PV_s0097_0570(28);
+PV_s0097_0570(29);
+    virtual bool ScrollCellsVertically(int nCells);               // +0x078  slot 30
+    virtual bool ScrollCellsHorizontally(int nCells);             // +0x07c  slot 31
+    virtual bool ScrollPagesVertically(int nPages);                // +0x080  slot 32
+    virtual bool ScrollPagesHorizontally(int nPages);              // +0x084  slot 33
+    virtual void ScrollToColumn(int col);                         // +0x088  slot 34
+    virtual void ScrollToRow(int row);                            // +0x08c  slot 35
+PV_s0097_0570(36);
+PV_s0097_0570(37);
+PV_s0097_0570(38);
+PV_s0097_0570(39);
+PV_s0097_0570(40);
+PV_s0097_0570(41);
+PV_s0097_0570(42);
+PV_s0097_0570(43);
+PV_s0097_0570(44);
+    virtual void ClearSelection();                                // +0x0b4  slot 45
+PV_s0097_0570(46);
+PV_s0097_0570(47);
+PV_s0097_0570(48);
+PV_s0097_0570(49);
+PV_s0097_0570(50);
+    virtual bool IsColumnWithinBounds(int col);                   // +0x0cc  slot 51
+    virtual bool IsRowWithinBounds(int row);                      // +0x0d0  slot 52
+    virtual bool IsCellWithinBounds(int col, int row);            // +0x0d4  slot 53
+PV_s0097_0570(54);
+PV_s0097_0570(55);
+PV_s0097_0570(56);
+PV_s0097_0570(57);
+PV_s0097_0570(58);
+PV_s0097_0570(59);
+PV_s0097_0570(60);
+PV_s0097_0570(61);
+PV_s0097_0570(62);
+PV_s0097_0570(63);
+PV_s0097_0570(64);
+PV_s0097_0570(65);
+PV_s0097_0570(66);
+PV_s0097_0570(67);
+PV_s0097_0570(68);
+PV_s0097_0570(69);
+PV_s0097_0570(70);
+PV_s0097_0570(71);
+PV_s0097_0570(72);
+PV_s0097_0570(73);
+PV_s0097_0570(74);
+PV_s0097_0570(75);
+PV_s0097_0570(76);
+PV_s0097_0570(77);
+PV_s0097_0570(78);
+PV_s0097_0570(79);
+    virtual char GetColCellFormatExtra(int col, void* pOut);      // +0x140  slot 80 0x00974860
+    virtual char GetRowCellFormatExtra(int row, void* pOut);      // +0x144  slot 81 0x009748f0
+PV_s0097_0570(82);
+PV_s0097_0570(83);
+PV_s0097_0570(84);
+PV_s0097_0570(85);
+PV_s0097_0570(86);
+PV_s0097_0570(87);
+PV_s0097_0570(88);
+PV_s0097_0570(89);
+PV_s0097_0570(90);
+PV_s0097_0570(91);
+PV_s0097_0570(92);
+PV_s0097_0570(93);
+PV_s0097_0570(94);
+PV_s0097_0570(95);
+PV_s0097_0570(96);
+PV_s0097_0570(97);
+PV_s0097_0570(98);
+PV_s0097_0570(99);
+PV_s0097_0570(100);
+PV_s0097_0570(101);
+PV_s0097_0570(102);
+PV_s0097_0570(103);
+PV_s0097_0570(104);
+PV_s0097_0570(105);
+PV_s0097_0570(106);
+PV_s0097_0570(107);
+PV_s0097_0570(108);
+PV_s0097_0570(109);
+PV_s0097_0570(110);
+PV_s0097_0570(111);
+    virtual void SetCellExtraData(int col, int row, void* pData); // +0x1c0  slot 112
+    virtual void* GetCellExtraData(int col, int row);             // +0x1c4  slot 113 0x00974bf0
+
+    // --- data ---
+    unsigned mGridFlags;                   // +0x004
+    char     mbRecalculateAllNeeded;       // +0x008
+    char     _pad009[3];                   // +0x009
+    int      mnRecalculationPauseCount;    // +0x00c
+    RectF    mGutter;                      // +0x010
+    RectF    mCellGutter;                  // +0x020
+    float    mColumnHeadingHeight;         // +0x030
+    float    mRowHeadingWidth;             // +0x034
+    float    mUnknown038[4];               // +0x038
+    int      mnFirstVisibleColumn;         // +0x048
+    int      mnFirstVisibleRow;            // +0x04c
+    float    mVisibleColumnCount;          // +0x050
+    float    mVisibleRowCount;             // +0x054
+    int      mnColumnCount;                // +0x058
+    int      mnRowCount;                   // +0x05c
+    float    mDefaultColumnWidth;          // +0x060
+    float    mDefaultRowHeight;            // +0x064
+    int      mOutlineColor;                // +0x068
+    int      mColumnGridColor;             // +0x06c
+    int      mRowGridColor;                // +0x070
+    int      mUnknown074;                  // +0x074
+    int      mUnknown078;                  // +0x078
+    int      mnMostRecentlyAddedColumn;    // +0x07c
+    int      mnMostRecentlyAddedRow;       // +0x080
+    int      mUnknown084;                  // +0x084
+    char     mStopwatch[0x14];             // +0x088
+    int      mExtraDataType;               // +0x09c
+    int      mnSelectionRule;              // +0x0a0
+    int      mnMaxSelectionCount;          // +0x0a4
+    char     _pad0a8[0x144 - 0x0a8];       // +0x0a8
+    int      mDefaultTextStyle;            // +0x144
+    int      mDefaultTextColor[8];         // +0x148
+    char     _pad168[0x19c - 0x168];       // +0x168
+    int      mUnknown19c;                  // +0x19c
+    char     _pad1a0[0x1e8 - 0x1a0];       // +0x1a0
+    void*    mpExtraData;                  // +0x1e8
+    IScrollBar* mpScrollBarVertical;       // +0x1ec
+    IScrollBar* mpScrollBarHorizontal;     // +0x1f0
+    char     _pad1f4[0x1fc - 0x1f4];       // +0x1f4
+    int      mSoundIDs[3];                 // +0x1fc
+
+    // --- methods (plain members here; their vtable slots are not needed by this slice) ---
+    bool  GetDefaultTextStyle(int* pOut);
+    bool  SetDefaultTextColor(int color, unsigned index);
+    bool  GetDefaultTextColor(int* pOut, unsigned index);
+    bool  GetGutters(float* a, float* b, float* c, float* d);
+    bool  GetCellGutters(float* a, float* b, float* c, float* d);
+    void  SetOutlineUse(int iUse, int iColor);
+    int   PauseRecalculations(bool bPause);
+    void  ScrollToCell(int col, int row);
+    bool  GetSelectionRules(int* pRule, int* pMaxCount);
+    bool  SetSelectionRules(int rule, int maxCount);
+    void  EnableFixedRanges(bool bColumns, bool bRows);
+    bool  GetCellLimits(int* pCol, int* pRow);
+    bool  GetCellVisibleRange(int* pOut);
+    bool  GetMostRecentlyAddedCell(int* pCol, int* pRow);
+    bool  SetGridColors(int colColor, int rowColor);
+    void  GetGridColors(int* pCol, int* pRow);
+    bool  EnableHeadings(int bColumnHeadings, int bRowHeadings);
+    bool  GetHeadingSizes(float* pColHeight, float* pRowWidth);
+    bool  IsCellVisible(int col, int row);
+    bool  GetFirstVisibleCell(int* pCol, int* pRow);
+    bool  GetVisibleColumnAndRowCount(float* pCols, float* pRows);
+    bool  GetColRowCellFormatExtra(int col, int row, void* pOut);
+    bool  SetExtraData(void* pData);
+    void* GetCellExtraDataObject(int col, int row, int id);
+    bool  SetCellExtraDataObject(int col, int row, void* pData);
+    void* GetExtraDataObject(int id);
+    bool  SetExtraDataObject(void* pData);
+    bool  SetSoundID(int index, int soundID);
+    bool  GetCellArea(RectF* pOut);
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class WinGrid_s0097_0570 : public Win_s0097_0570, public IWindow_s0097_0570 { public:
+    char _pad008[0x88 - 0x08];                        // +0x008
+    RectF mArea;                                      // +0x088
+    char _pad098[0x20c - 0x098];                      // +0x098
+    IWinGrid_s0097_0570 mGrid;                                   // +0x20c
+    char _padGrid[0xa64 - 0x20c - sizeof(IWinGrid_s0097_0570)];  // after mGrid
+    DropShadowDescriptor_s0097_0570 mDropShadow;                 // +0xa64
+
+    bool OnFocusChange(int iReason, IWindow_s0097_0570* pWindow);  // 0x00970570 (EA::UTFWinControls::WinGrid::OnFocusChange)
+    void FUN_970c50(int value);
+    void SerUpdate();  // 0x00970d20 (EA::UTFWinControls::WinGrid::SerUpdate)
+    bool DoMessage(int* pMsg);  // 0x00970d70 (EA::UTFWinControls::WinGrid::DoMessage)
+};
+}
+}
+// ---- items of slice s00970570 end
+
+// ---- items of slice s00970f30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PV_s0097_0f30(n) virtual void pv##n()
 namespace EA {
 namespace UTFWinControls {
 struct CRect_s0097_0f30 {
@@ -1058,6 +1394,13 @@ struct Batch2D;
 namespace EA {
 namespace UTFWinControls {
 struct RenderContext_s0097_0f30;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+namespace Text {
+struct StyleManager;
+}
 }
 }
 namespace EA {
@@ -1155,6 +1498,22 @@ struct TextBuffer {
 namespace EA {
 namespace UTFWinControls {
 namespace Text {
+struct StyleManager {
+    TextStyle* GetStyle(unsigned styleId, TextStyle* pIn);
+};
+}
+}
+}
+namespace EA {
+namespace UTFWinControls {
+namespace Text {
+StyleManager* GetStyleManager(bool bArg);
+}
+}
+}
+namespace EA {
+namespace UTFWinControls {
+namespace Text {
 struct LineLayout {
     char _data[0x2c];
     void Clear(int bArg);
@@ -1207,6 +1566,48 @@ namespace EA {
 namespace UTFWinControls {
 struct RenderContext_s0097_0f30 {
     Batch2D* Begin2D(void* pRenderMode);  // 0x0095bc10 (EA::UTFWinControls::RenderContext::Begin2D)
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ITextFormatter {
+PV_s0097_0f30(0);
+PV_s0097_0f30(1);
+PV_s0097_0f30(2);
+PV_s0097_0f30(3);
+PV_s0097_0f30(4);
+PV_s0097_0f30(5);
+PV_s0097_0f30(6);
+PV_s0097_0f30(7);
+PV_s0097_0f30(8);
+PV_s0097_0f30(9);
+PV_s0097_0f30(10);
+PV_s0097_0f30(11);
+PV_s0097_0f30(12);
+PV_s0097_0f30(13);
+PV_s0097_0f30(14);
+PV_s0097_0f30(15);
+PV_s0097_0f30(16);
+PV_s0097_0f30(17);
+PV_s0097_0f30(18);
+PV_s0097_0f30(19);
+PV_s0097_0f30(20);
+PV_s0097_0f30(21);
+PV_s0097_0f30(22);
+PV_s0097_0f30(23);
+PV_s0097_0f30(24);
+PV_s0097_0f30(25);
+PV_s0097_0f30(26);
+PV_s0097_0f30(27);
+PV_s0097_0f30(28);
+PV_s0097_0f30(29);
+PV_s0097_0f30(30);
+PV_s0097_0f30(31);
+PV_s0097_0f30(32);
+PV_s0097_0f30(33);
+PV_s0097_0f30(34);
+    virtual char pv35();                                      // +0x8c slot 35
 };
 }
 }
@@ -1348,7 +1749,7 @@ PV_s0097_0f30(37);
 PV_s0097_0f30(38);
 PV_s0097_0f30(39);
 PV_s0097_0f30(40);
-    virtual bool GetSelection(int& col, int& row);            // +0x0a4 slot 41
+    virtual bool GetSelection(int& col, int& row);            // +0x0a4 slot 41 0x00974400
 PV_s0097_0f30(42);
 PV_s0097_0f30(43);
 PV_s0097_0f30(44);
@@ -1356,7 +1757,7 @@ PV_s0097_0f30(45);
 PV_s0097_0f30(46);
     virtual void SetCellLimits(int col, int row);             // +0x0bc slot 47
     PV_s0097_0f30(48);
-    virtual bool GetCellUsedRange(CRect_s0097_0f30& out);                // +0x0c4 slot 49
+    virtual bool GetCellUsedRange(CRect_s0097_0f30& out);                // +0x0c4 slot 49 0x00974510
 PV_s0097_0f30(50);
 PV_s0097_0f30(51);
 PV_s0097_0f30(52);
@@ -1514,6 +1915,449 @@ class WinGrid_s0097_0f30 : public Win, public Window { public:
 // ---- items of slice s00970f30 end
 
 // ---- items of slice s00971eb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PV_s0097_1eb0(n) virtual void pv##n()
+namespace EA {
+namespace UTFWinControls {
+struct CRect_s0097_1eb0 {
+    int left, top, right, bottom;
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct CellFormat_s0097_1eb0 {
+    char  mUnknown00[0x0c];
+    int   mUnknown0c;                                  // +0x0c
+    int   mUnknown10;                                  // +0x10
+    int   mUnknown14;                                  // +0x14
+    int   mUnknown18;                                  // +0x18
+    int   mUnknown1c;                                  // +0x1c
+    int   mUnknown20;                                  // +0x20
+    char  mUnknown24;                                  // +0x24
+    char  mAlignH;                                     // +0x25
+    char  mAlignV;                                     // +0x26
+    char  mUnknown27;                                  // +0x27
+    int   mUnknown28;                                  // +0x28
+    int   mUnknown2c;                                  // +0x2c
+    int   mUnknown30;                                  // +0x30
+    int   mUnknown34;                                  // +0x34
+    int   mUnknown38;                                  // +0x38
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class IScrollbarDrawable_s0097_1eb0;
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class IScrollbarDrawable_s0097_1eb0 { public:
+PV_s0097_1eb0(0);
+PV_s0097_1eb0(1);
+PV_s0097_1eb0(2);
+    virtual IScrollbarDrawable_s0097_1eb0* GetDrawableByType(unsigned type); // +0x0c slot 3
+PV_s0097_1eb0(4);
+PV_s0097_1eb0(5);
+PV_s0097_1eb0(6);
+PV_s0097_1eb0(7);
+PV_s0097_1eb0(8);
+PV_s0097_1eb0(9);
+PV_s0097_1eb0(10);
+PV_s0097_1eb0(11);
+PV_s0097_1eb0(12);
+PV_s0097_1eb0(13);
+    virtual RectF* GetRect();                                     // +0x38 slot 14
+PV_s0097_1eb0(15);
+PV_s0097_1eb0(16);
+PV_s0097_1eb0(17);
+PV_s0097_1eb0(18);
+PV_s0097_1eb0(19);
+PV_s0097_1eb0(20);
+PV_s0097_1eb0(21);
+PV_s0097_1eb0(22);
+PV_s0097_1eb0(23);
+    virtual void SetRect(const RectF* pRect);                     // +0x60 slot 24
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ScrollBarBase {
+    PV_s0097_1eb0(0);
+    virtual void Release();                                    // +0x04 slot 1
+    PV_s0097_1eb0(2);
+    virtual IScrollbarDrawable_s0097_1eb0* GetDrawableByType(unsigned t);// +0x0c slot 3
+    virtual void* GetWindow();                                 // +0x10 slot 4
+PV_s0097_1eb0(5);
+PV_s0097_1eb0(6);
+PV_s0097_1eb0(7);
+PV_s0097_1eb0(8);
+    virtual void SetValue(int v, bool notify);                 // +0x24 slot 9
+    PV_s0097_1eb0(10);
+    virtual void SetMinimumValue(int v, bool notify);          // +0x2c slot 11
+    PV_s0097_1eb0(12);
+    virtual void SetMaximumValue(int v, bool notify);          // +0x34 slot 13
+    PV_s0097_1eb0(14);
+    virtual void SetVisibleRange(int v, bool notify);          // +0x3c slot 15
+PV_s0097_1eb0(16);
+PV_s0097_1eb0(17);
+PV_s0097_1eb0(18);
+PV_s0097_1eb0(19);
+PV_s0097_1eb0(20);
+PV_s0097_1eb0(21);
+PV_s0097_1eb0(22);
+PV_s0097_1eb0(23);
+    virtual IScrollbarDrawable_s0097_1eb0* GetDrawable();                 // +0x60 slot 24
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct ICellWindow {
+PV_s0097_1eb0(0);
+PV_s0097_1eb0(1);
+PV_s0097_1eb0(2);
+PV_s0097_1eb0(3);
+PV_s0097_1eb0(4);
+PV_s0097_1eb0(5);
+PV_s0097_1eb0(6);
+PV_s0097_1eb0(7);
+PV_s0097_1eb0(8);
+PV_s0097_1eb0(9);
+PV_s0097_1eb0(10);
+PV_s0097_1eb0(11);
+PV_s0097_1eb0(12);
+PV_s0097_1eb0(13);
+    virtual RectF* GetArea();                                  // +0x38 slot 14
+PV_s0097_1eb0(15);
+PV_s0097_1eb0(16);
+PV_s0097_1eb0(17);
+PV_s0097_1eb0(18);
+PV_s0097_1eb0(19);
+PV_s0097_1eb0(20);
+PV_s0097_1eb0(21);
+PV_s0097_1eb0(22);
+PV_s0097_1eb0(23);
+    virtual void SetArea(const RectF* pRect);                  // +0x60 slot 24
+PV_s0097_1eb0(25);
+PV_s0097_1eb0(26);
+PV_s0097_1eb0(27);
+PV_s0097_1eb0(28);
+PV_s0097_1eb0(29);
+PV_s0097_1eb0(30);
+    virtual void SetVisible(bool bVisible, int flag);          // +0x7c slot 31
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct WindowBase {
+PV_s0097_1eb0(0);
+PV_s0097_1eb0(1);
+PV_s0097_1eb0(2);
+PV_s0097_1eb0(3);
+PV_s0097_1eb0(4);
+PV_s0097_1eb0(5);
+PV_s0097_1eb0(6);
+PV_s0097_1eb0(7);
+PV_s0097_1eb0(8);
+PV_s0097_1eb0(9);
+PV_s0097_1eb0(10);
+PV_s0097_1eb0(11);
+PV_s0097_1eb0(12);
+PV_s0097_1eb0(13);
+PV_s0097_1eb0(14);
+PV_s0097_1eb0(15);
+PV_s0097_1eb0(16);
+PV_s0097_1eb0(17);
+PV_s0097_1eb0(18);
+PV_s0097_1eb0(19);
+PV_s0097_1eb0(20);
+PV_s0097_1eb0(21);
+PV_s0097_1eb0(22);
+PV_s0097_1eb0(23);
+PV_s0097_1eb0(24);
+PV_s0097_1eb0(25);
+    virtual void SetSize(float w, float h);                    // +0x68 slot 26
+PV_s0097_1eb0(27);
+PV_s0097_1eb0(28);
+PV_s0097_1eb0(29);
+PV_s0097_1eb0(30);
+    virtual void SetFlag(unsigned flag, int value);            // +0x7c slot 31
+PV_s0097_1eb0(32);
+PV_s0097_1eb0(33);
+PV_s0097_1eb0(34);
+PV_s0097_1eb0(35);
+    virtual void Invalidate();                                 // +0x90 slot 36
+PV_s0097_1eb0(37);
+PV_s0097_1eb0(38);
+PV_s0097_1eb0(39);
+PV_s0097_1eb0(40);
+PV_s0097_1eb0(41);
+PV_s0097_1eb0(42);
+PV_s0097_1eb0(43);
+PV_s0097_1eb0(44);
+PV_s0097_1eb0(45);
+PV_s0097_1eb0(46);
+PV_s0097_1eb0(47);
+PV_s0097_1eb0(48);
+PV_s0097_1eb0(49);
+PV_s0097_1eb0(50);
+PV_s0097_1eb0(51);
+PV_s0097_1eb0(52);
+PV_s0097_1eb0(53);
+PV_s0097_1eb0(54);
+PV_s0097_1eb0(55);
+    virtual void RemoveChild(ICellWindow* pChild);             // +0xe0 slot 56
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class IWinGrid_s0097_1eb0 { public:
+    struct CellCoordinates {
+        int mnColumn;                                     // +0x00
+        int mnRow;                                        // +0x04
+    };
+
+    struct CellData_s0097_1eb0 {
+        int mnColumn;                                     // +0x00
+        int mnRow;                                        // +0x04
+        int mUnknown08;                                   // +0x08
+        int _pad0c;                                       // +0x0c
+        int mSortKey;                                     // +0x10
+        int _pad14;                                       // +0x14
+        char _pad18[0x1c - 0x18];                         // +0x18
+        unsigned mKey;                                    // +0x1c
+    };
+
+    struct SelNode {
+        SelNode* mpNext;                                  // +0x00
+        SelNode* mpPrev;                                  // +0x04
+        int      mnColumn;                                // +0x08
+        int      mnRow;                                   // +0x0c
+    };
+
+    // --- vtable; only the slots exercised by this slice are named ---
+    // slot N lives at byte offset N*4.
+PV_s0097_1eb0(0);
+PV_s0097_1eb0(1);
+PV_s0097_1eb0(2);
+PV_s0097_1eb0(3);
+PV_s0097_1eb0(4);
+    virtual bool IsReady();                                   // +0x014 slot 5
+    PV_s0097_1eb0(6);
+    virtual bool GetGridArea(RectF& pOut);                    // +0x01c slot 7
+    virtual bool GetCellArea(RectF& pOut);                    // +0x020 slot 8
+PV_s0097_1eb0(9);
+PV_s0097_1eb0(10);
+PV_s0097_1eb0(11);
+PV_s0097_1eb0(12);
+PV_s0097_1eb0(13);
+PV_s0097_1eb0(14);
+PV_s0097_1eb0(15);
+PV_s0097_1eb0(16);
+PV_s0097_1eb0(17);
+PV_s0097_1eb0(18);
+PV_s0097_1eb0(19);
+PV_s0097_1eb0(20);
+PV_s0097_1eb0(21);
+PV_s0097_1eb0(22);
+PV_s0097_1eb0(23);
+PV_s0097_1eb0(24);
+PV_s0097_1eb0(25);
+    virtual void SetColumnLimits(int a, int b, float c, float d); // +0x068 slot 26
+PV_s0097_1eb0(27);
+PV_s0097_1eb0(28);
+PV_s0097_1eb0(29);
+PV_s0097_1eb0(30);
+PV_s0097_1eb0(31);
+PV_s0097_1eb0(32);
+PV_s0097_1eb0(33);
+PV_s0097_1eb0(34);
+PV_s0097_1eb0(35);
+PV_s0097_1eb0(36);
+PV_s0097_1eb0(37);
+PV_s0097_1eb0(38);
+PV_s0097_1eb0(39);
+PV_s0097_1eb0(40);
+PV_s0097_1eb0(41);
+PV_s0097_1eb0(42);
+PV_s0097_1eb0(43);
+PV_s0097_1eb0(44);
+    virtual void InvalidateGrid45();                          // +0x0b4 slot 45
+PV_s0097_1eb0(46);
+PV_s0097_1eb0(47);
+PV_s0097_1eb0(48);
+    virtual bool GetCellUsedRange(CRect_s0097_1eb0& out);                // +0x0c4 slot 49 0x00974510
+PV_s0097_1eb0(50);
+PV_s0097_1eb0(51);
+PV_s0097_1eb0(52);
+PV_s0097_1eb0(53);
+PV_s0097_1eb0(54);
+PV_s0097_1eb0(55);
+PV_s0097_1eb0(56);
+PV_s0097_1eb0(57);
+    virtual void SetColumnWidth(int col, int mode, float w);  // +0x0e8 slot 58
+    PV_s0097_1eb0(59);
+    virtual void SetRowHeight(int row, int mode, float h);    // +0x0f0 slot 60
+PV_s0097_1eb0(61);
+PV_s0097_1eb0(62);
+    virtual void SetColumnCount(int n, int grow);             // +0x0fc slot 63
+    virtual void SetRowCount(int n, int grow);                // +0x100 slot 64
+PV_s0097_1eb0(65);
+PV_s0097_1eb0(66);
+PV_s0097_1eb0(67);
+PV_s0097_1eb0(68);
+PV_s0097_1eb0(69);
+    virtual void SetHeadingFormat(const void* pFormat);       // +0x11c slot 71
+PV_s0097_1eb0(71);
+PV_s0097_1eb0(72);
+PV_s0097_1eb0(73);
+PV_s0097_1eb0(74);
+PV_s0097_1eb0(75);
+PV_s0097_1eb0(76);
+    virtual void GetCellFormat(int col, int row, CellFormat_s0097_1eb0* pOut); // +0x134 slot 77 0x009745f0
+PV_s0097_1eb0(78);
+PV_s0097_1eb0(79);
+PV_s0097_1eb0(80);
+PV_s0097_1eb0(81);
+PV_s0097_1eb0(82);
+PV_s0097_1eb0(83);
+PV_s0097_1eb0(84);
+PV_s0097_1eb0(85);
+PV_s0097_1eb0(86);
+PV_s0097_1eb0(87);
+PV_s0097_1eb0(88);
+    virtual void SetCellData(int col, int row, const void* p); // +0x164 slot 89
+    virtual bool ClearCellRect(int col, int row, int w, int h); // +0x168 slot 90
+    virtual bool ClearAllCells();                             // +0x16c slot 91
+PV_s0097_1eb0(92);
+PV_s0097_1eb0(93);
+PV_s0097_1eb0(94);
+PV_s0097_1eb0(95);
+PV_s0097_1eb0(96);
+PV_s0097_1eb0(97);
+PV_s0097_1eb0(98);
+    virtual bool GetCellRect(int col, int row, RectF& out);   // +0x18c slot 99
+    PV_s0097_1eb0(100);
+    virtual bool SetFirstVisibleCell(int col, int row);       // +0x194 slot 101
+PV_s0097_1eb0(102);
+PV_s0097_1eb0(103);
+PV_s0097_1eb0(104);
+PV_s0097_1eb0(105);
+PV_s0097_1eb0(106);
+PV_s0097_1eb0(107);
+PV_s0097_1eb0(108);
+PV_s0097_1eb0(109);
+PV_s0097_1eb0(110);
+PV_s0097_1eb0(111);
+PV_s0097_1eb0(112);
+PV_s0097_1eb0(113);
+PV_s0097_1eb0(114);
+PV_s0097_1eb0(115);
+PV_s0097_1eb0(116);
+PV_s0097_1eb0(117);
+PV_s0097_1eb0(118);
+PV_s0097_1eb0(119);
+PV_s0097_1eb0(120);
+PV_s0097_1eb0(121);
+PV_s0097_1eb0(122);
+PV_s0097_1eb0(123);
+PV_s0097_1eb0(124);
+PV_s0097_1eb0(125);
+PV_s0097_1eb0(126);
+PV_s0097_1eb0(127);
+PV_s0097_1eb0(128);
+PV_s0097_1eb0(129);
+    virtual IScrollbarDrawable_s0097_1eb0* GetScrollBarDrawableVertical();   // +0x208 slot 130
+    virtual IScrollbarDrawable_s0097_1eb0* GetScrollBarDrawableHorizontal(); // +0x20c slot 131
+
+    // --- data ---
+    unsigned mGridFlags;                   // +0x004
+    char     mbRecalculateAllNeeded;       // +0x008
+    char     _pad009[3];                   // +0x009
+    int      mnRecalculationPauseCount;    // +0x00c
+    RectF    mGutter;                      // +0x010
+    RectF    mCellGutter;                  // +0x020
+    float    mColumnHeadingHeight;         // +0x030
+    float    mRowHeadingWidth;             // +0x034
+    float    mVisibleGridAreaWidth;        // +0x038
+    float    mVisibleGridAreaHeight;       // +0x03c
+    float    mVisibleCellAreaWidth;        // +0x040
+    float    mVisibleCellAreaHeight;       // +0x044
+    int      mnFirstVisibleColumn;         // +0x048
+    int      mnFirstVisibleRow;            // +0x04c
+    float    mVisibleColumnCount;          // +0x050
+    float    mVisibleRowCount;             // +0x054
+    int      mnColumnCount;                // +0x058
+    int      mnRowCount;                   // +0x05c
+    float    mDefaultColumnWidth;          // +0x060
+    float    mDefaultRowHeight;            // +0x064
+    int      mOutlineColor;                // +0x068
+    int      mColumnGridColor;             // +0x06c
+    int      mRowGridColor;                // +0x070
+    float    mColumnGridOffset;            // +0x074
+    float    mRowGridOffset;               // +0x078
+    int      mnMostRecentlyAddedColumn;    // +0x07c
+    int      mnMostRecentlyAddedRow;       // +0x080
+    int      mUnknown084;                  // +0x084
+    char     mStopwatch[0x14];             // +0x088
+    int      mExtraDataType;               // +0x09c
+    int      mnSelectionRule;              // +0x0a0
+    int      mnMaxSelectionCount;          // +0x0a4
+    SelNode  mSelectionList;               // +0x0a8
+    char     _pad0b8[0x144 - 0x0b8];       // +0x0b8
+    int      mDefaultTextStyle;            // +0x144
+    int      mDefaultTextColor[8];         // +0x148
+    char     _pad168[1];                   // +0x168
+    char     mAlign169;                    // +0x169
+    char     mAlign16a;                    // +0x16a
+    char     _pad16b[0x1e8 - 0x16b];       // +0x16b
+    void*    mpExtraData;                  // +0x1e8
+    ScrollBarBase* mpScrollBarA;           // +0x1ec
+    ScrollBarBase* mpScrollBarB;           // +0x1f0
+    IScrollbarDrawable_s0097_1eb0* mpScrollBarFallback; // +0x1f4
+    IScrollbarDrawable_s0097_1eb0* mpScrollBarFallbackH;// +0x1f8
+    char     _pad1fc[0x208 - 0x1fc];       // +0x1fc
+
+    // --- cell layout helpers (this slice) ---
+    void AutoSize(unsigned int w, unsigned int h, float a, float b);
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class WinGrid_s0097_1eb0 { public:
+    int mUnknown000;                                   // +0x000
+    WindowBase mWindow;                                // +0x004  (vptr at +4)
+    char  _pad008[0x214 - 0x008];                      // +0x008
+    char  mbPendingUpdate;                             // +0x214
+    char  _pad22c[0x22c - 0x215];                      // +0x215
+    float mCellGutterLeft;                             // +0x22c
+    float mCellGutterTop;                              // +0x230
+    float mCellGutterRight;                            // +0x234
+    float mCellGutterBottom;                           // +0x238
+    char  _pad280[0x280 - 0x23c];                      // +0x23c
+    char  mbFlag280;                                   // +0x280
+    char  _pad284;                                     // +0x284
+    char  mbFlag284;                                   // +0x285
+    char  _pad3f8[0x3f8 - 0x286];                      // +0x286
+    ScrollBarBase* mpScrollBarA;                       // +0x3f8
+    ScrollBarBase* mpScrollBarB;                       // +0x3fc
+
+    void PlaceCellWindow(int col, int row, void* pInfo, ICellWindow* pCellWindow);  // 0x009720a0 (EA::UTFWinControls::WinGrid::PlaceCellWindow)
+    bool RemoveScrollBar(bool bHorizontal, bool bVertical);  // 0x00972600 (EA::UTFWinControls::WinGrid::RemoveScrollBar)
+    bool SetScrollBarValues();  // 0x009726c0 (EA::UTFWinControls::WinGrid::SetScrollBarValues)
+    bool SetScrollBarPositions();  // 0x00972910 (EA::UTFWinControls::WinGrid::SetScrollBarPositions)
+
+    // The IWinGrid sub-object: methods taking `this` as the grid view use this.
+    IWinGrid_s0097_1eb0* Grid() { return (IWinGrid_s0097_1eb0*)((char*)this + 0x208); }
+    WindowBase* Window() { return (WindowBase*)((char*)this + 4); }
+};
+}
+}
 namespace EA {
 namespace UTFWinControls {
 struct CellNode {
@@ -1584,11 +2428,11 @@ struct RBTree_s0097_3dd0 {
     RBNode anchor;
     int size;
     void    Find(RBNode** out, const void* key);
-    void DoInsertValueImpl_1c(RBNode** out, RBNode* parent, const V28* value, char force);
-    void DoInsertValueImpl_40(RBNode** out, RBNode* parent, const V40* value, char force);
-    void DoInsertValueImpl_0c(RBNode** out, RBNode* parent, const V0c* value, char force);
-    RBNode* DoCopySubtree_40(const RBNode* src, RBNode* parent);
-    RBNode* DoCopySubtree_0c(const RBNode* src, RBNode* parent);
+    void DoInsertValueImpl_1c(RBNode** out, RBNode* parent, const V28* value, char force);  // 0x00973dd0 (RBTree::DoInsertValueImpl_1c)
+    void DoInsertValueImpl_40(RBNode** out, RBNode* parent, const V40* value, char force);  // 0x00973e60 (RBTree::DoInsertValueImpl_40)
+    void DoInsertValueImpl_0c(RBNode** out, RBNode* parent, const V0c* value, char force);  // 0x00973ef0 (RBTree::DoInsertValueImpl_0c)
+    RBNode* DoCopySubtree_40(const RBNode* src, RBNode* parent);  // 0x00973f80 (RBTree::DoCopySubtree_40)
+    RBNode* DoCopySubtree_0c(const RBNode* src, RBNode* parent);  // 0x00974050 (RBTree::DoCopySubtree_0c)
 };
 struct SparseMatrix_s0097_3dd0 {
     RBTree_s0097_3dd0 t;
@@ -1672,6 +2516,54 @@ virtual void p46();
 virtual void p47();
 virtual void p48();
     virtual void s0xc4(int*);
+};
+struct VSelf {                        // ecx = IWinGrid
+virtual void p00();
+virtual void p01();
+virtual void p02();
+virtual void p03();
+virtual void p04();
+virtual void p05();
+virtual void p06();
+virtual void p07();
+virtual void p08();
+virtual void p09();
+virtual void p10();
+virtual void p11();
+virtual void p12();
+virtual void p13();
+virtual void p14();
+virtual void p15();
+virtual void p16();
+virtual void p17();
+virtual void p18();
+virtual void p19();
+virtual void p20();
+virtual void p21();
+virtual void p22();
+virtual void p23();
+virtual void p24();
+virtual void p25();
+virtual void p26();
+virtual void p27();
+virtual void p28();
+virtual void p29();
+virtual void p30();
+virtual void p31();
+virtual void p32();
+virtual void p33();
+virtual void p34();
+virtual void p35();
+virtual void p36();
+virtual void p37();
+virtual void p38();
+virtual void p39();
+virtual void p40();
+virtual void p41();
+virtual void p42();
+    virtual void s0xac(int, int, int);
+    virtual bool s0xb0(int, int);
+    virtual void s0xb4();
 };
 struct VWin {                         // ecx = WinGrid+4 (CustomWindow)
 virtual void p00();
@@ -1825,7 +2717,7 @@ struct Alloc {                        // eastl allocator interface
 struct HatIter { void* node; };
 struct HatTable { HatIter* find(HatIter* out, const unsigned& key); };   // 0xa3b2c0
 struct WinGrid_s0097_3dd0 {
-    bool OnKeyDown(int, unsigned, unsigned);
+    bool OnKeyDown(int, unsigned, unsigned);  // 0x009741c0 (WinGrid::OnKeyDown)
     void DoArrowKey(unsigned, unsigned);  // 0x00972e90 (WinGrid::DoArrowKey)
     void DoWindowRemoval(int nRow, int nCol, void* pWindow);  // 0x00974a60 (WinGrid::DoWindowRemoval)
     void PlaceAllCellWindows();  // 0x00974b00 (WinGrid::PlaceAllCellWindows)
@@ -1880,6 +2772,14 @@ static inline RBNode* FindInt(RBTree_s0097_3dd0* t, int key)
 // ---- items of slice s00973dd0 end
 
 // ---- items of slice s00974c60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define PV_s0097_4c60(n) virtual void pv##n()
+namespace EA {
+namespace UTFWinControls {
+struct CRect_s0097_4c60 {
+    int left, top, right, bottom;
+};
+}
+}
 namespace EA {
 namespace UTFWinControls {
 struct CellData_s0097_4c60 {
@@ -1890,6 +2790,50 @@ struct CellData_s0097_4c60 {
     int   _pad10;                                      // +0x10
     int   mUnknown14;                                  // +0x14
     int   mUnknown18;                                  // +0x18
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+struct IWindowBase {
+PV_s0097_4c60(0);
+PV_s0097_4c60(1);
+PV_s0097_4c60(2);
+PV_s0097_4c60(3);
+PV_s0097_4c60(4);
+PV_s0097_4c60(5);
+PV_s0097_4c60(6);
+PV_s0097_4c60(7);
+PV_s0097_4c60(8);
+PV_s0097_4c60(9);
+PV_s0097_4c60(10);
+PV_s0097_4c60(11);
+PV_s0097_4c60(12);
+PV_s0097_4c60(13);
+PV_s0097_4c60(14);
+PV_s0097_4c60(15);
+PV_s0097_4c60(16);
+PV_s0097_4c60(17);
+PV_s0097_4c60(18);
+PV_s0097_4c60(19);
+PV_s0097_4c60(20);
+PV_s0097_4c60(21);
+PV_s0097_4c60(22);
+PV_s0097_4c60(23);
+PV_s0097_4c60(24);
+PV_s0097_4c60(25);
+PV_s0097_4c60(26);
+PV_s0097_4c60(27);
+PV_s0097_4c60(28);
+PV_s0097_4c60(29);
+PV_s0097_4c60(30);
+    virtual void SetFlag(unsigned flag, int value);            // +0x7c slot 31
+PV_s0097_4c60(32);
+PV_s0097_4c60(33);
+PV_s0097_4c60(34);
+PV_s0097_4c60(35);
+    virtual void Invalidate();                                 // +0x90 slot 36
+    PV_s0097_4c60(37);
 };
 }
 }
@@ -1908,7 +2852,7 @@ namespace UTFWinControls {
 struct SparseMatrix_s0097_4c60 {
     void** FirstUsed(SparseMatrixIter* pOut);          // 0x973cc0
     bool GetCellPtr(int col, int row, void*** ppOut);  // 0x973a90
-    bool GetMinMaxUsedColForRow(int row, int* pMin, int* pMax);
+    bool GetMinMaxUsedColForRow(int row, int* pMin, int* pMax);  // 0x00975350 (EA::UTFWinControls::SparseMatrix::GetMinMaxUsedColForRow)
 };
 }
 }
@@ -1941,7 +2885,190 @@ struct CellList_s0097_4c60 {
     CellListNode* mpHead;                              // +0x00
     CellListNode* mpTail;                              // +0x04
 
-    void push_back(const int* pValue);
+    void push_back(const int* pValue);  // 0x00975300 (EA::UTFWinControls::CellList::push_back)
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class IWinGrid_s0097_4c60 { public:
+    struct CellCoordinates {
+        int mnColumn;
+        int mnRow;
+    };
+
+    // vtable; slot 0x1c (GetGridArea) etc.  Only the used slots are named.
+PV_s0097_4c60(0);
+PV_s0097_4c60(1);
+PV_s0097_4c60(2);
+PV_s0097_4c60(3);
+PV_s0097_4c60(4);
+PV_s0097_4c60(5);
+PV_s0097_4c60(6);
+    virtual bool GetCellArea(int* pArea);                      // +0x20 slot 8
+    PV_s0097_4c60(9);
+PV_s0097_4c60(10);
+PV_s0097_4c60(11);
+PV_s0097_4c60(12);
+PV_s0097_4c60(13);
+PV_s0097_4c60(14);
+PV_s0097_4c60(15);
+PV_s0097_4c60(16);
+PV_s0097_4c60(17);
+PV_s0097_4c60(18);
+PV_s0097_4c60(19);
+PV_s0097_4c60(20);
+PV_s0097_4c60(21);
+PV_s0097_4c60(22);
+PV_s0097_4c60(23);
+PV_s0097_4c60(24);
+PV_s0097_4c60(25);
+PV_s0097_4c60(26);
+PV_s0097_4c60(27);
+PV_s0097_4c60(28);
+PV_s0097_4c60(29);
+PV_s0097_4c60(30);
+PV_s0097_4c60(31);
+PV_s0097_4c60(32);
+PV_s0097_4c60(33);
+PV_s0097_4c60(34);
+PV_s0097_4c60(35);
+PV_s0097_4c60(36);
+PV_s0097_4c60(37);
+PV_s0097_4c60(38);
+PV_s0097_4c60(39);
+    PV_s0097_4c60(40);
+    virtual bool GetLastUsedCell(int* pCol, int* pRow);        // +0xa4 slot 41
+PV_s0097_4c60(42);
+PV_s0097_4c60(43);
+    virtual bool IsCellSelected(int col, int row);             // +0xb0 slot 44
+    virtual void GetLastUsedCellRow();                         // +0xb4 slot 45
+PV_s0097_4c60(46);
+PV_s0097_4c60(47);
+PV_s0097_4c60(48);
+    virtual bool GetCellUsedRange(CRect_s0097_4c60& out);                 // +0xc4 slot 49 0x00974510
+    PV_s0097_4c60(50);
+PV_s0097_4c60(51);
+PV_s0097_4c60(52);
+PV_s0097_4c60(53);
+PV_s0097_4c60(54);
+PV_s0097_4c60(55);
+PV_s0097_4c60(56);
+PV_s0097_4c60(57);
+PV_s0097_4c60(58);
+PV_s0097_4c60(59);
+PV_s0097_4c60(60);
+PV_s0097_4c60(61);
+PV_s0097_4c60(62);
+PV_s0097_4c60(63);
+PV_s0097_4c60(64);
+PV_s0097_4c60(65);
+PV_s0097_4c60(66);
+PV_s0097_4c60(67);
+PV_s0097_4c60(68);
+PV_s0097_4c60(69);
+PV_s0097_4c60(70);
+PV_s0097_4c60(71);
+PV_s0097_4c60(72);
+PV_s0097_4c60(73);
+PV_s0097_4c60(74);
+PV_s0097_4c60(75);
+PV_s0097_4c60(76);
+PV_s0097_4c60(77);
+PV_s0097_4c60(78);
+PV_s0097_4c60(79);
+PV_s0097_4c60(80);
+PV_s0097_4c60(81);
+PV_s0097_4c60(82);
+PV_s0097_4c60(83);
+PV_s0097_4c60(84);
+PV_s0097_4c60(85);
+PV_s0097_4c60(86);
+PV_s0097_4c60(87);
+PV_s0097_4c60(88);
+PV_s0097_4c60(89);
+    PV_s0097_4c60(90);
+    virtual void ClearAllCells();                              // +0x16c slot 91 0x00971fe0
+PV_s0097_4c60(92);
+PV_s0097_4c60(93);
+PV_s0097_4c60(94);
+PV_s0097_4c60(95);
+PV_s0097_4c60(96);
+PV_s0097_4c60(97);
+PV_s0097_4c60(98);
+PV_s0097_4c60(99);
+PV_s0097_4c60(100);
+PV_s0097_4c60(101);
+PV_s0097_4c60(102);
+PV_s0097_4c60(103);
+PV_s0097_4c60(104);
+PV_s0097_4c60(105);
+PV_s0097_4c60(106);
+PV_s0097_4c60(107);
+    virtual void InvalidateGrid108();                          // +0x1b0 slot 108
+PV_s0097_4c60(109);
+PV_s0097_4c60(110);
+PV_s0097_4c60(111);
+PV_s0097_4c60(112);
+PV_s0097_4c60(113);
+PV_s0097_4c60(114);
+PV_s0097_4c60(115);
+PV_s0097_4c60(116);
+    virtual void InvalidateGrid117();                          // +0x1d4 slot 117
+PV_s0097_4c60(118);
+PV_s0097_4c60(119);
+PV_s0097_4c60(120);
+PV_s0097_4c60(121);
+PV_s0097_4c60(122);
+PV_s0097_4c60(123);
+PV_s0097_4c60(124);
+PV_s0097_4c60(125);
+PV_s0097_4c60(126);
+PV_s0097_4c60(127);
+PV_s0097_4c60(128);
+PV_s0097_4c60(129);
+    virtual void* GetScrollBarDrawableVertical();               // +0x208 slot 130 0x009725a0
+    virtual void* GetScrollBarDrawableHorizontal();             // +0x20c slot 131 0x009725d0
+
+    // --- data ---
+    unsigned mGridFlags;                   // +0x004
+    char     mbRecalculateAllNeeded;       // +0x008
+    char     _pad009[3];                   // +0x009
+    int      mnRecalculationPauseCount;    // +0x00c
+    RectF    mGutter;                      // +0x010
+    RectF    mCellGutter;                  // +0x020
+    float    mColumnHeadingHeight;         // +0x030
+    float    mRowHeadingWidth;             // +0x034
+    float    mVisibleGridAreaWidth;        // +0x038
+    float    mVisibleGridAreaHeight;       // +0x03c
+    float    mVisibleCellAreaWidth;        // +0x040
+    float    mVisibleCellAreaHeight;       // +0x044
+    int      mnFirstVisibleColumn;         // +0x048
+    int      mnFirstVisibleRow;            // +0x04c
+    float    mVisibleColumnCount;          // +0x050
+    float    mVisibleRowCount;             // +0x054
+    int      mnColumnCount;                // +0x058
+    int      mnRowCount;                   // +0x05c
+    float    mDefaultColumnWidth;          // +0x060
+    float    mDefaultRowHeight;            // +0x064
+    int      mOutlineColor;                // +0x068
+    int      mColumnGridColor;             // +0x06c
+    int      mRowGridColor;                // +0x070
+    float    mColumnGridOffset;            // +0x074
+    float    mRowGridOffset;               // +0x078
+    int      mnMostRecentlyAddedColumn;    // +0x07c
+    int      mnMostRecentlyAddedRow;       // +0x080
+    int      mUnknown084;                  // +0x084
+    char     mStopwatch[0x14];             // +0x088
+    int      mExtraDataType;               // +0x09c
+    int      mnSelectionRule;              // +0x0a0
+    int      mnMaxSelectionCount;          // +0x0a4
+    CellList_s0097_4c60 mSelectionList;               // +0x0a8
+    char     _pad0c0[0x114 - 0x0c0];       // +0x0c0
+    SparseMatrix_s0097_4c60 mCellMatrix;              // +0x114
+
+    bool ActLikeAListbox(int width, int height, bool bMulti);
+    bool AddCellToSelection(int col, int row, bool bSelect);
 };
 }
 }
@@ -1965,10 +3092,61 @@ struct CellRbtree_s0097_4c60 {
     CellRbtNode* mHeaderRight;                         // +0x08
     CellRbtNode* mpRoot;                               // +0x0c
 
-    void* DoInsertValue(void** pOut, const CellData_s0097_4c60* pValue, bool bTag);
+    void* DoInsertValue(void** pOut, const CellData_s0097_4c60* pValue, bool bTag);  // 0x009753f0 (EA::UTFWinControls::CellRbtree::DoInsertValue)
     void  DoInsertValueImpl(const CellData_s0097_4c60** ppValue, CellRbtNode* pPos,
                             const CellData_s0097_4c60* pValue2, char b);
 };
+}
+}
+namespace EA {
+namespace UTFWinControls {
+class WinGrid_s0097_4c60 { public:
+    int mUnknown000;                                   // +0x000
+    IWindowBase mWindow;                               // +0x004
+    char  _pad008[0x22c - 0x008];                      // +0x008
+    float mCellGutterLeft;                             // +0x22c
+    float mCellGutterTop;                              // +0x230
+    float mCellGutterRight;                            // +0x234
+    float mCellGutterBottom;                           // +0x238
+    char  _pad23c[0x26c - 0x23c];                      // +0x23c
+    float mColumnGridThickness;                        // +0x26c
+    float mRowGridThickness;                           // +0x270
+    char  _pad274[0x3f8 - 0x274];                      // +0x274
+    void* mpScrollBarA;                                // +0x3f8
+    void* mpScrollBarB;                                // +0x3fc
+    char  _pad400[0x484 - 0x400];                      // +0x400
+    char  mTypesetter[0x20];                           // +0x484
+    char  mTextLayout[0x30];                           // +0x4a4
+    char  _pad4d4[0x9b4 - 0x4d4];                      // +0x4d4
+    char  mLineLayout[0x8c];                           // +0x9b4
+
+    IWinGrid_s0097_4c60* Grid() { return (IWinGrid_s0097_4c60*)((char*)this + 0x20c); }
+
+    bool AddCellToSelection(int col, int row, bool bSelect);  // 0x00975b30 (EA::UTFWinControls::WinGrid::AddCellToSelection)
+    bool DisposeOfCellData(int col, int row, CellData_s0097_4c60** ppData, bool bDelete);  // 0x00975c50 (EA::UTFWinControls::WinGrid::DisposeOfCellData)
+    void DoWindowRemoval(int col, int row, void* pWin);  // 0x00974a60 (EA::UTFWinControls::WinGrid::DoWindowRemoval)
+    float CalculateCellHeight(int col, int row, CellData_s0097_4c60** ppData);  // 0x00974fc0 (EA::UTFWinControls::WinGrid::CalculateCellHeight)
+    float CalculateCellWidth(int col, int row, CellData_s0097_4c60** ppData);  // 0x00975180 (EA::UTFWinControls::WinGrid::CalculateCellWidth)
+    bool TestForPossibleScrollBarAdditionOrRemoval();
+    bool SearchCellsForText(const unsigned short* pText, int textLen,
+                            int colStart, int colSpan, int rowStart, int rowSpan,
+                            int* pOutCol, int* pOutRow, bool bExactLength);
+    bool ProcessCellAction(int action, unsigned arg, float a, float b, int* pCell);
+    bool AddScrollBar(bool bHorizontal, bool bVertical);  // 0x00973490 (EA::UTFWinControls::WinGrid::AddScrollBar)
+    void RemoveScrollBar(bool bHorizontal, bool bVertical);  // 0x00972600 (EA::UTFWinControls::WinGrid::RemoveScrollBar)
+    void SetScrollBarValues();  // 0x009726c0 (EA::UTFWinControls::WinGrid::SetScrollBarValues)
+    void SetScrollBarPositions();  // 0x00972910 (EA::UTFWinControls::WinGrid::SetScrollBarPositions)
+};
+}
+}
+namespace EA {
+namespace UTFWinControls {
+unsigned StringLength(const unsigned short* pStr, int a, int maxLen);
+}
+}
+namespace EA {
+namespace UTFWinControls {
+inline SparseMatrix_s0097_4c60* CellMatrix(WinGrid_s0097_4c60* p) { return (SparseMatrix_s0097_4c60*)((char*)p + 0x320); }
 }
 }
 struct EColIterB {
@@ -2956,6 +4134,319 @@ void WinGrid_s0096_f3f0::OnMouseWheel(int, int, int, int delta)
 }
 }}  // namespace EA::UTFWinControls
 
+// @ 0x00970570
+bool EA::UTFWinControls::WinGrid_s0097_0570::OnFocusChange(int iReason, EA::UTFWinControls::IWindow_s0097_0570* pWindow)
+{
+    if (iReason == 0) {
+        if (mGrid.mGridFlags & 1) {
+            ((EA::UTFWinControls::IWindow_s0097_0570*)((char*)this + 4))->Invalidate();
+            return true;
+        }
+    }
+    else if (iReason == 1) {
+        if (pWindow != static_cast<EA::UTFWinControls::IWindow_s0097_0570*>(this)) {
+            mGrid.mUnknown19c = 0;
+            ((EA::UTFWinControls::IWindow_s0097_0570*)((char*)this + 4))->Invalidate();
+        }
+    }
+    return true;
+}
+
+// @ 0x00970610
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetDefaultTextStyle(int* pOut)
+{
+    *pOut = mDefaultTextStyle;
+    return true;
+}
+
+// @ 0x00970630
+bool EA::UTFWinControls::IWinGrid_s0097_0570::SetDefaultTextColor(int color, unsigned index)
+{
+    if (index < 8) {
+        mDefaultTextColor[index] = color;
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00970650
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetDefaultTextColor(int* pOut, unsigned index)
+{
+    if (index < 8) {
+        *pOut = mDefaultTextColor[index];
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00970680
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetGutters(float* a, float* b, float* c, float* d)
+{
+    *a = mGutter.left;
+    *b = mGutter.top;
+    *c = mGutter.right;
+    *d = mGutter.bottom;
+    return true;
+}
+
+// @ 0x009706b0
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetCellGutters(float* a, float* b, float* c, float* d)
+{
+    *a = mCellGutter.left;
+    *b = mCellGutter.top;
+    *c = mCellGutter.right;
+    *d = mCellGutter.bottom;
+    return true;
+}
+
+// @ 0x009706e0
+void EA::UTFWinControls::IWinGrid_s0097_0570::SetOutlineUse(int iUse, int iColor)
+{
+    SetGridFlag(0x200, iUse);
+    mOutlineColor = iColor;
+}
+
+// @ 0x00970720
+int EA::UTFWinControls::IWinGrid_s0097_0570::PauseRecalculations(bool bPause)
+{
+    if (bPause) {
+        mnRecalculationPauseCount = mnRecalculationPauseCount + 1;
+        return mnRecalculationPauseCount;
+    }
+    mnRecalculationPauseCount = mnRecalculationPauseCount - 1;
+    return mnRecalculationPauseCount;
+}
+
+// @ 0x00970740
+bool EA::UTFWinControls::IWinGrid_s0097_0570::ScrollPagesVertically(int nPages)
+{
+    return ScrollCellsVertically(nPages * 4);
+}
+
+// @ 0x00970760
+bool EA::UTFWinControls::IWinGrid_s0097_0570::ScrollPagesHorizontally(int nPages)
+{
+    return ScrollCellsHorizontally(nPages * 4);
+}
+
+// @ 0x00970780
+void EA::UTFWinControls::IWinGrid_s0097_0570::ScrollToCell(int col, int row)
+{
+    ScrollToColumn(col);
+    ScrollToRow(row);
+}
+
+// @ 0x009707b0
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetSelectionRules(int* pRule, int* pMaxCount)
+{
+    *pRule = mnSelectionRule;
+    *pMaxCount = mnMaxSelectionCount;
+    return true;
+}
+
+// @ 0x009707d0
+bool EA::UTFWinControls::IWinGrid_s0097_0570::SetSelectionRules(int rule, int maxCount)
+{
+    mnSelectionRule = rule;
+    mnMaxSelectionCount = maxCount;
+    ClearSelection();
+    return true;
+}
+
+// @ 0x00970800
+void EA::UTFWinControls::IWinGrid_s0097_0570::EnableFixedRanges(bool bColumns, bool bRows)
+{
+    if (bColumns) {
+        SetGridFlag(0x2000, 1);
+    }
+    else {
+        SetGridFlag(0x2000, 0);
+        mnColumnCount = -1;
+    }
+    if (bRows) {
+        SetGridFlag(0x4000, 1);
+        return;
+    }
+    SetGridFlag(0x4000, 0);
+    mnRowCount = -1;
+}
+
+// @ 0x00970860
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetCellLimits(int* pCol, int* pRow)
+{
+    *pCol = mnColumnCount;
+    *pRow = mnRowCount;
+    return *pCol != -1 && *pRow != -1;
+}
+
+// @ 0x00970890
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetCellVisibleRange(int* pOut)
+{
+    pOut[0] = mnFirstVisibleColumn;
+    pOut[1] = mnFirstVisibleRow;
+    pOut[2] = mnFirstVisibleColumn + (int)mVisibleColumnCount;
+    pOut[3] = mnFirstVisibleRow + (int)mVisibleRowCount;
+    return true;
+}
+
+// @ 0x009708c0
+bool EA::UTFWinControls::IWinGrid_s0097_0570::IsColumnWithinBounds(int col)
+{
+    return mnColumnCount == 0 || mnColumnCount == -1
+        || (col >= 0 && col < mnColumnCount);
+}
+
+// @ 0x009708f0
+bool EA::UTFWinControls::IWinGrid_s0097_0570::IsRowWithinBounds(int row)
+{
+    return mnRowCount == 0 || mnRowCount == -1
+        || (row >= 0 && row < mnRowCount);
+}
+
+// @ 0x00970920
+bool EA::UTFWinControls::IWinGrid_s0097_0570::IsCellWithinBounds(int col, int row)
+{
+    return IsColumnWithinBounds(col) && IsRowWithinBounds(row);
+}
+
+// @ 0x00970960
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetMostRecentlyAddedCell(int* pCol, int* pRow)
+{
+    *pCol = mnMostRecentlyAddedColumn;
+    *pRow = mnMostRecentlyAddedRow;
+    return *pCol != -1;
+}
+
+// @ 0x00970990
+bool EA::UTFWinControls::IWinGrid_s0097_0570::SetGridColors(int colColor, int rowColor)
+{
+    mColumnGridColor = colColor;
+    mRowGridColor = rowColor;
+    return true;
+}
+
+// @ 0x009709b0
+void EA::UTFWinControls::IWinGrid_s0097_0570::GetGridColors(int* pCol, int* pRow)
+{
+    *pCol = mColumnGridColor;
+    *pRow = mRowGridColor;
+}
+
+// @ 0x009709e0
+bool EA::UTFWinControls::IWinGrid_s0097_0570::EnableHeadings(int bColumnHeadings, int bRowHeadings)
+{
+    SetGridFlag(8, bColumnHeadings);
+    SetGridFlag(0x10, bRowHeadings);
+    return false;
+}
+
+// @ 0x00970a10
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetHeadingSizes(float* pColHeight, float* pRowWidth)
+{
+    *pColHeight = mColumnHeadingHeight;
+    *pRowWidth = mRowHeadingWidth;
+    return true;
+}
+
+// @ 0x00970a30
+bool EA::UTFWinControls::IWinGrid_s0097_0570::IsCellVisible(int col, int row)
+{
+    return col >= mnFirstVisibleColumn
+        && (float)col < (float)mnFirstVisibleColumn + mVisibleColumnCount
+        && row >= mnFirstVisibleRow
+        && (float)row < (float)mnFirstVisibleRow + mVisibleRowCount;
+}
+
+// @ 0x00970a80
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetFirstVisibleCell(int* pCol, int* pRow)
+{
+    *pCol = mnFirstVisibleColumn;
+    *pRow = mnFirstVisibleRow;
+    return true;
+}
+
+// @ 0x00970aa0
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetVisibleColumnAndRowCount(float* pCols, float* pRows)
+{
+    *pCols = mVisibleColumnCount;
+    *pRows = mVisibleRowCount;
+    return true;
+}
+
+// @ 0x00970ac0
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetColRowCellFormatExtra(int col, int row, void* pOut)
+{
+    if (GetColCellFormatExtra(col, pOut))
+        return true;
+    return GetRowCellFormatExtra(row, pOut);
+}
+
+// @ 0x00970b10
+bool EA::UTFWinControls::IWinGrid_s0097_0570::SetExtraData(void* pData)
+{
+    mExtraDataType = 1;
+    mpExtraData = pData;
+    return true;
+}
+
+// @ 0x00970b40
+void* EA::UTFWinControls::IWinGrid_s0097_0570::GetCellExtraDataObject(int col, int row, int id)
+{
+    mExtraDataType = 1;
+    EA::UTFWinControls::ICellData* pData = (EA::UTFWinControls::ICellData*)GetCellExtraData(col, row);
+    mExtraDataType = 2;
+    if (pData)
+        return pData->GetValue(id);
+    return 0;
+}
+
+// @ 0x00970b90
+bool EA::UTFWinControls::IWinGrid_s0097_0570::SetCellExtraDataObject(int col, int row, void* pData)
+{
+    mExtraDataType = 2;
+    if (IsCellWithinBounds(col, row)) {
+        mExtraDataType = 1;
+        SetCellExtraData(col, row, pData);
+        mExtraDataType = 2;
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00970bf0
+void* EA::UTFWinControls::IWinGrid_s0097_0570::GetExtraDataObject(int id)
+{
+    EA::UTFWinControls::IUserData* pData = (EA::UTFWinControls::IUserData*)mpExtraData;
+    if (pData)
+        return pData->GetValue(id);
+    return 0;
+}
+
+// @ 0x00970c10
+bool EA::UTFWinControls::IWinGrid_s0097_0570::SetExtraDataObject(void* pData)
+{
+    mpExtraData = pData;
+    mExtraDataType = 2;
+    return true;
+}
+
+// @ 0x00970c30
+bool EA::UTFWinControls::IWinGrid_s0097_0570::SetSoundID(int index, int soundID)
+{
+    if (index < 3) {
+        mSoundIDs[index] = soundID;
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00970c50
+void EA::UTFWinControls::WinGrid_s0097_0570::FUN_970c50(int value)
+{
+    mGrid.mbRecalculateAllNeeded = (char)value;
+    ((EA::UTFWinControls::IWindow_s0097_0570*)((char*)this + 4))->SetFlag(8, value);
+}
+
 // @ 0x00970c70
 void EA::UTFWinControls::CRect::NormalizeRect()
 {
@@ -2968,6 +4459,440 @@ void EA::UTFWinControls::CRect::NormalizeRect()
         int t = top;
         top = bottom;
         bottom = t;
+    }
+}
+
+// @ 0x00970d20
+void EA::UTFWinControls::WinGrid_s0097_0570::SerUpdate()
+{
+    mGrid.mbRecalculateAllNeeded = 1;
+    ((EA::UTFWinControls::IWindow_s0097_0570*)((char*)this + 4))->SetFlag(8, 1);
+    mDropShadow.SetMode1(mDropShadow.mMode1);
+    mDropShadow.SetMode2(mDropShadow.mMode2);
+    EA::UTFWinControls::Win_s0097_0570::SerUpdate();
+}
+
+// @ 0x00970d70
+bool EA::UTFWinControls::WinGrid_s0097_0570::DoMessage(int* pMsg)
+{
+    if (pMsg[2] == (int)0x8ef0c8dd) {
+        switch (pMsg[3]) {
+        case 0x1a7c4510:
+            if (pMsg[5] == mGrid.mnFirstVisibleColumn)
+                return true;
+            mGrid.mnFirstVisibleColumn = pMsg[5];
+            break;
+        case 0x1a7c4511:
+            if (pMsg[5] == mGrid.mnFirstVisibleRow)
+                return true;
+            mGrid.mnFirstVisibleRow = pMsg[5];
+            break;
+        default:
+            return true;
+        }
+        mGrid.mbRecalculateAllNeeded = 1;
+        ((EA::UTFWinControls::IWindow_s0097_0570*)((char*)this + 4))->SetFlag(8, 1);
+        return true;
+    }
+    return EA::UTFWinControls::Win_s0097_0570::DoMessage(pMsg);
+}
+
+// @ 0x00970de0
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetGridArea(EA::UTFWinControls::RectF* pOut)
+{
+    EA::UTFWinControls::WinGrid_s0097_0570* pGrid = (EA::UTFWinControls::WinGrid_s0097_0570*)((char*)this - 0x20c);
+    pOut->left = mGutter.left;
+    pOut->top = mGutter.top;
+    pOut->right = pGrid->mArea.right - pGrid->mArea.left - mGutter.right;
+    pOut->bottom = pGrid->mArea.bottom - pGrid->mArea.top - mGutter.bottom;
+    return pOut->right - pOut->left > 1.1920929e-07f
+        && pOut->bottom - pOut->top > 1.1920929e-07f;
+}
+
+// @ 0x00970e50
+bool EA::UTFWinControls::IWinGrid_s0097_0570::GetCellArea(EA::UTFWinControls::RectF* pOut)
+{
+    GetGridArea(pOut);
+    if (mGridFlags & 8)
+        pOut->top += mColumnHeadingHeight;
+    if (mGridFlags & 0x10)
+        pOut->left += mRowHeadingWidth;
+    EA::UTFWinControls::IScrollBar* pBarVert = mpScrollBarVertical;
+    if (pBarVert) {
+        EA::UTFWinControls::IDrawableRect* pDrawable = pBarVert->GetContent();
+        EA::UTFWinControls::RectF* pArea = pDrawable->GetArea();
+        pOut->right -= (pArea->right - pArea->left);
+    }
+    EA::UTFWinControls::IScrollBar* pBarHorz = mpScrollBarHorizontal;
+    if (pBarHorz) {
+        EA::UTFWinControls::IDrawableRect* pDrawable = pBarHorz->GetContent();
+        EA::UTFWinControls::RectF* pArea = pDrawable->GetArea();
+        pOut->bottom -= (pArea->bottom - pArea->top);
+    }
+    return pOut->right - pOut->left > 1.1920929e-07f
+        && pOut->bottom - pOut->top > 1.1920929e-07f;
+}
+
+// @ 0x00970f30
+void EA::UTFWinControls::WinGrid_s0097_0f30::FUN_00970f30()
+{
+    mGrid.ScrollCellsVertically((int)-mGrid.mVisibleRowCount);
+}
+
+// @ 0x00970f60
+void EA::UTFWinControls::WinGrid_s0097_0f30::FUN_00970f60()
+{
+    mGrid.ScrollCellsVertically((int)mGrid.mVisibleRowCount);
+}
+
+// @ 0x00970f80
+void EA::UTFWinControls::WinGrid_s0097_0f30::FUN_00970f80()
+{
+    mGrid.ScrollCellsHorizontally((int)-mGrid.mVisibleColumnCount);
+}
+
+// @ 0x00970fb0
+void EA::UTFWinControls::WinGrid_s0097_0f30::FUN_00970fb0()
+{
+    mGrid.ScrollCellsHorizontally((int)mGrid.mVisibleColumnCount);
+}
+
+// @ 0x00970fd0
+bool EA::UTFWinControls::IWinGrid_s0097_0f30::DoCursorHitTest(float x, float y, int& result, EA::UTFWinControls::CRect_s0097_0f30& coords)
+{
+    result = 0;
+    coords.left = 0;
+    coords.top = 0;
+
+    RectF gridArea;
+    GetGridArea(gridArea);
+    if (x < gridArea.left || y < gridArea.top || x > gridArea.right || y > gridArea.bottom) {
+        result = 0;
+        return result != 0;
+    }
+
+    RectF cellArea;
+    GetCellArea(cellArea);
+    if (!(x >= cellArea.left && y >= cellArea.top
+          && x <= cellArea.right && y <= cellArea.bottom)) {
+        if ((mGridFlags & 8) && (mGridFlags & 0x10)) {
+            char bCol = (y >= mGutter.top && y < mColumnHeadingHeight);
+            char bRow = (x >= mGutter.left && x < mRowHeadingWidth);
+            if (bCol) {
+                if (bRow) {
+                    result = 4;
+                    return result != 0;
+                }
+                result = 3;
+            }
+            else if (bRow) {
+                result = 2;
+            }
+        }
+        if (result != 5 && result != 3 && result != 2)
+            return result != 0;
+    }
+    else {
+        result = 5;
+    }
+
+    int nColEnd = mnFirstVisibleColumn + (int)(float)ceil((double)mVisibleColumnCount);
+    coords.left = nColEnd;
+    int nRowEnd = mnFirstVisibleRow + (int)(float)ceil((double)mVisibleRowCount);
+    coords.top = nRowEnd;
+
+    RectF r;
+    for (int i = mnFirstVisibleColumn; i < nColEnd; ++i) {
+        GetCellRect(i, 0, r);
+        if (r.right > x) {
+            coords.left = i;
+            break;
+        }
+    }
+    for (int j = mnFirstVisibleRow; j < nRowEnd; ++j) {
+        GetCellRect(0, j, r);
+        if (r.bottom > y) {
+            coords.top = j;
+            break;
+        }
+    }
+
+    if (result == 3) {
+        coords.top = 0;
+        return result != 0;
+    }
+    if (result == 2) {
+        coords.left = 0;
+    }
+    return result != 0;
+}
+
+// @ 0x00971250
+void EA::UTFWinControls::WinGrid_s0097_0f30::DrawText(EA::UTFWinControls::TextBuffer* pText, EA::UTFWinControls::RectF* pRect, EA::UTFWinControls::OwnerDrawInfo_s0097_0f30* pInfo)
+{
+    EA::UTFWinControls::CellFormat_s0097_0f30* pFormat = pInfo->pCellFormat;
+    if (pFormat == 0)
+        return;
+
+    unsigned styleId = pFormat->nTextStyle;
+    Text::StyleManager* pMgr = Text::GetStyleManager(true);
+    EA::UTFWinControls::TextStyle* pStyle = pMgr->GetStyle(styleId, 0);
+    if (pStyle == 0)
+        return;
+
+    unsigned saved250 = pStyle->field250;
+    if (pFormat->nWrapping == 0)
+        pStyle->field250 = 0;
+
+    unsigned saved224 = pStyle->field224;
+    unsigned saved228 = pStyle->field228;
+    unsigned color;
+    if (pInfo->bCellSelected) {
+        saved224 = pFormat->nColor[6];
+        saved228 = pFormat->nColor[7];
+    }
+    else if (pInfo->bCellHighlighted) {
+        saved224 = pFormat->nColor[4];
+        saved228 = pFormat->nColor[5];
+    }
+    else if (pInfo->bGridEnabled) {
+        saved224 = pFormat->nColor[0];
+        saved228 = pFormat->nColor[1];
+    }
+    else {
+        saved224 = pFormat->nColor[2];
+        saved228 = pFormat->nColor[3];
+    }
+    color = saved224;
+    pStyle->field228 = saved228;
+
+    unsigned saved244 = pStyle->field244;
+    if (pFormat->nHAlignment == 2)
+        pStyle->field244 = 0;
+    else if (pFormat->nHAlignment == 3)
+        pStyle->field244 = 1;
+    else if (pFormat->nHAlignment == 4)
+        pStyle->field244 = 2;
+
+    unsigned saved248 = pStyle->field248;
+    if (pFormat->nVAlignment == 5)
+        pStyle->field248 = 0;
+    else if (pFormat->nVAlignment == 6)
+        pStyle->field248 = 1;
+    else if (pFormat->nVAlignment == 7)
+        pStyle->field248 = 2;
+
+    if (pInfo->pRenderContext != 0) {
+        EA::UTFWinControls::Batch2D* pBatch = pInfo->pRenderContext->Begin2D(0);
+        pBatch->SetColor(color);
+        EA::UTFWinControls::RectF local;
+        char c = pBatch->GetX3(&local);
+        pBatch->X5((unsigned)pInfo->pRectCellClip);
+        mLineLayout.Clear(1);
+        void* pLayout = mTypesetter.LayoutParagraph(pText->mpBegin,
+                                                    (int)(pText->mpEnd - pText->mpBegin),
+                                                    pRect->left, pRect->top,
+                                                    pRect->right, pRect->bottom,
+                                                    pStyle, &mLineLayout, 0x14);
+        EA::UTFWinControls::ITextFormatter* pFmt2 = (EA::UTFWinControls::ITextFormatter*)((EA::UTFWinControls::IWindow*)((char*)this + 4))->pv5();
+        char b = pFmt2->pv35();
+        mDropShadow.DrawCellText(pBatch, mp9e0, mpA08, pLayout, color,
+                                 *pText->mpBegin, b);
+        pBatch->X4(c, &local);
+    }
+
+    pStyle->field224 = saved224;
+    pStyle->field228 = saved228;
+    pStyle->field244 = saved244;
+    pStyle->field248 = saved248;
+    pStyle->field250 = saved250;
+}
+
+// @ 0x00971490
+void EA::UTFWinControls::WinGrid_s0097_0f30::DrawCellBackground(EA::UTFWinControls::OwnerDrawInfo_s0097_0f30* pInfo)
+{
+    float l = pInfo->pRectCell->left;
+    float t = pInfo->pRectCell->top;
+    float r = pInfo->pRectCell->right;
+    float b = pInfo->pRectCell->bottom;
+
+    if ((mGrid.mGridFlags & 0x20) && mGrid.mColumnGridColor != 0)
+        l += mGrid.mColumnGridOffset;
+    if ((mGrid.mGridFlags & 0x40) && mGrid.mRowGridColor != 0)
+        t += mGrid.mRowGridOffset;
+
+    if (pInfo->pRectCellClip) {
+        const EA::UTFWinControls::RectF* pClip = pInfo->pRectCellClip;
+        float cl = pClip->left;
+        float ct = pClip->top;
+        float cr = pClip->right;
+        float cb = pClip->bottom;
+        if (!(cl < r && l < cr && ct < b && t < cb)) {
+            l = 0.0f;
+            t = 0.0f;
+            r = 0.0f;
+            b = 0.0f;
+        }
+        else {
+            if (!(l > cl))
+                l = cl;
+            if (!(t > ct))
+                t = ct;
+            if (!(cr > r))
+                r = cr;
+            if (!(cb > b))
+                b = cb;
+        }
+    }
+
+    EA::UTFWinControls::RenderContext_s0097_0f30* pCtx = pInfo->pRenderContext;
+    if (pCtx == 0)
+        return;
+
+    EA::UTFWinControls::Batch2D* pBatch = pCtx->Begin2D(0);
+    if (pInfo->bCellSelected) {
+        unsigned c = pInfo->pCellFormat->nColor[7];
+        if (c != 0 && !(mGrid.mGridFlags & 0x80000))
+            pBatch->SetColor(c);
+    }
+    else if (pInfo->bCellHighlighted) {
+        unsigned c = pInfo->pCellFormat->nColor[5];
+        if (c != 0 && !(mGrid.mGridFlags & 0x80000))
+            pBatch->SetColor(c);
+    }
+    else {
+        unsigned c = pInfo->pCellFormat->nColor[1];
+        if (c != 0)
+            pBatch->SetColor(c);
+    }
+    pBatch->DrawRect(l, t, r, b);
+}
+
+// @ 0x00971600
+void EA::UTFWinControls::WinGrid_s0097_0f30::DrawCell(EA::UTFWinControls::OwnerDrawInfo_s0097_0f30* pInfo)
+{
+    float l = pInfo->pRectCell->left;
+    float t = pInfo->pRectCell->top;
+    float r = pInfo->pRectCell->right;
+    float b = pInfo->pRectCell->bottom;
+
+    if ((mGrid.mGridFlags & 0x20) && mGrid.mColumnGridColor != 0)
+        l += mGrid.mColumnGridOffset;
+    if ((mGrid.mGridFlags & 0x40) && mGrid.mRowGridColor != 0)
+        t += mGrid.mRowGridOffset;
+
+    float bl = l, bt = t, br = r, bb = b;
+    if (pInfo->pRectCellClip) {
+        float cl = pInfo->pRectCellClip->left;
+        if (!(cl < r && l < pInfo->pRectCellClip->right
+              && pInfo->pRectCellClip->top < b && t < pInfo->pRectCellClip->bottom)) {
+            bl = 0.0f;
+            bt = 0.0f;
+            br = 0.0f;
+            bb = 0.0f;
+        }
+        else {
+            if (!(l > cl))
+                bl = cl;
+            if (!(t > pInfo->pRectCellClip->top))
+                bt = pInfo->pRectCellClip->top;
+            if (!(pInfo->pRectCellClip->right > r))
+                br = pInfo->pRectCellClip->right;
+            if (!(pInfo->pRectCellClip->bottom > b))
+                bb = pInfo->pRectCellClip->bottom;
+        }
+    }
+
+    if (pInfo->pRenderContext) {
+        EA::UTFWinControls::Batch2D* pBatch = pInfo->pRenderContext->Begin2D(0);
+        if (!(mGrid.mGridFlags & 0x20000)) {
+            unsigned c;
+            if (pInfo->bCellSelected)
+                c = pInfo->pCellFormat->nColor[7];
+            else if (pInfo->bCellHighlighted)
+                c = pInfo->pCellFormat->nColor[5];
+            else
+                c = pInfo->pCellFormat->nColor[1];
+            if (c != 0 && !(mGrid.mGridFlags & 0x80000))
+                pBatch->SetColor(c);
+            pBatch->DrawRect(bl, bt, br, bb);
+        }
+    }
+
+    float ax = l, ay = t, az = r, aw = b;
+    ax = ax + mGrid.mCellGutter.left;
+    ay = mGrid.mCellGutter.top + ay;
+    az = az - mGrid.mCellGutter.right;
+    aw = aw - mGrid.mCellGutter.bottom;
+
+    EA::UTFWinControls::CellData_s0097_0f30* pData = pInfo->pCellData;
+    if (pData == 0)
+        return;
+
+    if (pData->nCellType == 2) {
+        if (pData->pCellData) {
+            EA::UTFWinControls::RectF textRect;
+            textRect.left = ax;
+            textRect.top = ay;
+            textRect.right = az;
+            textRect.bottom = aw;
+            DrawText((EA::UTFWinControls::TextBuffer*)pData->pCellData, &textRect, pInfo);
+        }
+        return;
+    }
+    if (pData->nCellType != 4)
+        return;
+
+    EA::UTFWinControls::Bitmap* pBmp = (EA::UTFWinControls::Bitmap*)pData->pCellData;
+    if (pBmp == 0)
+        return;
+
+    EA::UTFWinControls::RectF dest;
+    EA::UTFWinControls::RectF src;
+    dest.left = ax;
+    dest.top = ay;
+    dest.right = az;
+    dest.bottom = aw;
+    src.left = 0.0f;
+    src.top = 0.0f;
+    src.right = 1.0f;
+    src.bottom = 1.0f;
+
+    if (!(mGrid.mGridFlags & 0x200000)) {
+        int bw = pBmp->mnWidth;
+        int bh = pBmp->mnHeight;
+        EA::UTFWinControls::CellFormat_s0097_0f30* pFmt = pInfo->pCellFormat;
+        if (pFmt->nHAlignment == 3) {
+            float cx = (az - ax) * 0.5f - (float)(bw / 2) + ax;
+            dest.left = cx;
+            dest.right = (float)bw + cx;
+        }
+        else if (pFmt->nHAlignment == 4) {
+            dest.right = az;
+            dest.left = az - (float)bw;
+        }
+        else {
+            dest.left = ax;
+            dest.right = (float)bw + ax;
+        }
+        if (pFmt->nVAlignment == 6) {
+            float cy = (aw - ay) * 0.5f - (float)(bh / 2) + ay;
+            dest.top = cy;
+            dest.bottom = (float)bh + cy;
+        }
+        else if (pFmt->nVAlignment == 7) {
+            dest.bottom = aw;
+            dest.top = aw - (float)bh;
+        }
+        else {
+            dest.top = ay;
+            dest.bottom = (float)bh + ay;
+        }
+    }
+
+    if (pInfo->pRenderContext) {
+        EA::UTFWinControls::Batch2D* pBatch = pInfo->pRenderContext->Begin2D(0);
+        pBatch->DrawBitmap(&dest, pBmp, &src);
     }
 }
 
@@ -2990,6 +4915,545 @@ void EA::UTFWinControls::Window::InvalidateLayout()
     pWin->mGrid.mVisibleCellAreaHeight = cellArea.bottom - cellArea.top;
     ((EA::UTFWinControls::IWindow*)this)->SetFlag(8, 1);
     pWin->mGrid.mbRecalculateAllNeeded = 1;
+}
+
+// @ 0x00971a40
+bool EA::UTFWinControls::IWinGrid_s0097_0f30::SetDefaultTextStyle(unsigned style)
+{
+    int* pStyle = &mDefaultTextStyle;
+    *pStyle = style;
+    mbRecalculateAllNeeded = 1;
+    ((EA::UTFWinControls::IWindow*)((char*)this - 0x208))->SetFlag(8, 1);
+    return true;
+}
+
+// @ 0x00971a70
+bool EA::UTFWinControls::IWinGrid_s0097_0f30::SetDefaultTextWrapping(bool bWrap)
+{
+    if (bWrap != GetGridFlag(0x800)) {
+        SetGridFlag(0x800, bWrap);
+        mbRecalculateAllNeeded = 1;
+        ((EA::UTFWinControls::IWindow*)((char*)this - 0x208))->SetFlag(8, 1);
+    }
+    return true;
+}
+
+// @ 0x00971ac0
+bool EA::UTFWinControls::IWinGrid_s0097_0f30::SetGutters(float a, float b, float c, float d)
+{
+    float* p = &mGutter.left;
+    p[0] = a;
+    p[1] = b;
+    p[2] = c;
+    p[3] = d;
+    mbRecalculateAllNeeded = 1;
+    ((EA::UTFWinControls::IWindow*)((char*)this - 0x208))->SetFlag(8, 1);
+    return true;
+}
+
+// @ 0x00971b10
+bool EA::UTFWinControls::IWinGrid_s0097_0f30::SetCellGutters(float a, float b, float c, float d)
+{
+    float* p = &mCellGutter.left;
+    p[0] = a;
+    p[1] = b;
+    p[2] = c;
+    p[3] = d;
+    mbRecalculateAllNeeded = 1;
+    ((EA::UTFWinControls::IWindow*)((char*)this - 0x208))->SetFlag(8, 1);
+    return true;
+}
+
+// @ 0x00971b60
+void EA::UTFWinControls::IWinGrid_s0097_0f30::ScrollToColumn(int col)
+{
+    if (col == mnFirstVisibleColumn)
+        return;
+    if (mnColumnCount > 0 && mnColumnCount != -1 && (mGridFlags & 0x8000)) {
+        if (col >= mnColumnCount)
+            col = mnColumnCount - 1;
+    }
+    else if (!(mGridFlags & 0x8000)) {
+        EA::UTFWinControls::CRect_s0097_0f30 r = { 0, 0, 0, 0 };
+        GetCellUsedRange(r);
+        if (col >= r.right + 1)
+            col = r.right;
+    }
+    mnFirstVisibleColumn = col;
+    ((EA::UTFWinControls::IWindow*)((char*)this - 0x208))->Invalidate();
+}
+
+// @ 0x00971be0
+void EA::UTFWinControls::IWinGrid_s0097_0f30::ScrollToRow(int row)
+{
+    if (row == mnFirstVisibleRow)
+        return;
+    if (mnRowCount > 0 && mnRowCount != -1 && (mGridFlags & 0x10000)) {
+        if (row >= mnRowCount)
+            row = mnRowCount - 1;
+    }
+    else if (!(mGridFlags & 0x10000)) {
+        EA::UTFWinControls::CRect_s0097_0f30 r = { 0, 0, 0, 0 };
+        GetCellUsedRange(r);
+        if (row >= r.right + 1)
+            row = r.right;
+    }
+    mnFirstVisibleRow = (row > 0) ? row : 0;
+    ((EA::UTFWinControls::IWindow*)((char*)this - 0x208))->Invalidate();
+}
+
+// @ 0x00971c70
+bool EA::UTFWinControls::IWinGrid_s0097_0f30::GetSelection(int& col, int& row)
+{
+    if (mSelectionList.mpNext != &mSelectionList) {
+        col = mSelectionList.mpNext->mnColumn;
+        row = mSelectionList.mpNext->mnRow;
+        return true;
+    }
+    return false;
+}
+
+// @ 0x00971ca0
+void EA::UTFWinControls::IWinGrid_s0097_0f30::SetCellLimits(int col, int row)
+{
+    if (col == mnColumnCount && row == mnRowCount)
+        return;
+    mnRowCount = row;
+    mnColumnCount = col;
+    mbRecalculateAllNeeded = 1;
+    ((EA::UTFWinControls::IWindow*)((char*)this - 0x208))->SetFlag(8, 1);
+}
+
+// @ 0x00971ce0
+bool EA::UTFWinControls::IWinGrid_s0097_0f30::SetDefaultAlignment(int hAlign, int vAlign)
+{
+    if (mAlign16a != 0 || mAlign169 != 0) {
+        char b = *(volatile char*)&vAlign;
+        char a = (char)hAlign;
+        mAlign169 = a;
+        mAlign16a = b;
+        mbRecalculateAllNeeded = 1;
+        ((EA::UTFWinControls::IWindow*)((char*)this - 0x208))->SetFlag(8, 1);
+    }
+    return true;
+}
+
+// @ 0x00971d30
+bool EA::UTFWinControls::IWinGrid_s0097_0f30::GetColumnHeadingArea(int col, EA::UTFWinControls::RectF& out)
+{
+    bool bResult = false;
+    if (mGridFlags & 8) {
+        if (col == -1) {
+            EA::UTFWinControls::WinGrid_s0097_0f30* pWin = (EA::UTFWinControls::WinGrid_s0097_0f30*)((char*)this - 0x20c);
+            out.left = mGutter.left;
+            out.top = mGutter.top;
+            out.right = pWin->mArea.right - pWin->mArea.left - mGutter.right;
+            out.bottom = mColumnHeadingHeight + mGutter.top;
+            bResult = true;
+        }
+        else if (GetCellRect(col, 0, out)) {
+            out.top = mGutter.top;
+            out.bottom = mColumnHeadingHeight + mGutter.top;
+            bResult = true;
+        }
+    }
+    return bResult;
+}
+
+// @ 0x00971dd0
+bool EA::UTFWinControls::IWinGrid_s0097_0f30::GetRowHeadingArea(int row, EA::UTFWinControls::RectF& out)
+{
+    bool bResult = false;
+    if (mGridFlags & 0x10) {
+        if (row == -1) {
+            EA::UTFWinControls::WinGrid_s0097_0f30* pWin = (EA::UTFWinControls::WinGrid_s0097_0f30*)((char*)this - 0x20c);
+            out.left = mGutter.left;
+            out.top = mGutter.top;
+            out.right = mColumnHeadingHeight + mGutter.left;
+            out.bottom = pWin->mArea.bottom - pWin->mArea.top - mGutter.bottom;
+            bResult = true;
+        }
+        else if (GetCellRect(0, row, out)) {
+            float g = mGutter.left;
+            out.left = g;
+            out.right = mRowHeadingWidth + g;
+            bResult = true;
+        }
+    }
+    return bResult;
+}
+
+// @ 0x00971e70
+bool EA::UTFWinControls::IWinGrid_s0097_0f30::SetHeadingSizes(float colHeight, float rowWidth)
+{
+    float* p = &mColumnHeadingHeight;
+    p[0] = colHeight;
+    p[1] = rowWidth;
+    mbRecalculateAllNeeded = 1;
+    ((EA::UTFWinControls::IWindow*)((char*)this - 0x208))->SetFlag(8, 1);
+    return true;
+}
+
+// @ 0x00971eb0
+void EA::UTFWinControls::IWinGrid_s0097_1eb0::SetHeadingFormat(const void* pFormat)
+{
+    unsigned long* pDst = (unsigned long*)&mVisibleColumnCount;
+    const unsigned long* pSrc = (const unsigned long*)pFormat;
+    for (unsigned i = 0; i < 12; ++i)
+        *pDst++ = *pSrc++;
+    mbRecalculateAllNeeded = 1;
+    ((EA::UTFWinControls::WindowBase*)((char*)this - 0x208))->SetFlag(8, 1);
+}
+
+// @ 0x00971ef0
+bool EA::UTFWinControls::IWinGrid_s0097_1eb0::ClearCellRect(int col, int row, int width, int height)
+{
+    if (width < 1 || height < 1)
+        return true;
+
+    EA::UTFWinControls::CRect_s0097_1eb0 used;
+    GetCellUsedRange(used);
+
+    if (used.left > col)
+        col = used.left;
+    int nCols = width;
+    if (used.right + 1 < col + width)
+        nCols = used.right - col + 1;
+    if (nCols <= 0)
+        return false;
+
+    if (used.top > row)
+        row = used.top;
+    int nRows = height;
+    if (used.bottom + 1 < row + height)
+        nRows = used.bottom - row + 1;
+    if (nRows <= 0)
+        return false;
+
+    const int colEnd = col + nCols;
+    const int rowEnd = row + nRows;
+    for (int c = col; c < colEnd; ++c)
+        for (int r = row; r < rowEnd; ++r)
+            SetCellData(c, r, 0);
+    ((EA::UTFWinControls::WindowBase*)((char*)this - 0x208))->SetFlag(8, 1);
+    return true;
+}
+
+// @ 0x00971fe0
+bool EA::UTFWinControls::IWinGrid_s0097_1eb0::ClearAllCells()
+{
+    EA::UTFWinControls::CRect_s0097_1eb0 used = { 0, 0, 0, 0 };
+    if (GetCellUsedRange(used)) {
+        ClearCellRect(used.left, used.top, used.right - used.left + 1,
+                      used.bottom - used.top + 1);
+        InvalidateGrid45();
+        ((EA::UTFWinControls::WindowBase*)((char*)this - 0x208))->Invalidate();
+    }
+    return true;
+}
+
+// @ 0x00972060
+bool EA::UTFWinControls::IWinGrid_s0097_1eb0::SetFirstVisibleCell(int col, int row)
+{
+    if (mnFirstVisibleColumn != col || mnFirstVisibleRow != row) {
+        mnFirstVisibleRow = row;
+        mnFirstVisibleColumn = col;
+        mbRecalculateAllNeeded = 1;
+        ((EA::UTFWinControls::WindowBase*)((char*)this - 0x208))->SetFlag(8, 1);
+    }
+    return true;
+}
+
+// @ 0x009720a0
+void EA::UTFWinControls::WinGrid_s0097_1eb0::PlaceCellWindow(int col, int row, void* pInfo, EA::UTFWinControls::ICellWindow* pCellWindow)
+{
+    if (!pCellWindow)
+        return;
+
+    EA::UTFWinControls::IWinGrid_s0097_1eb0* pGrid = Grid();
+
+    EA::UTFWinControls::RectF cellArea;
+    pGrid->GetCellArea(cellArea);
+    if (col < (int)cellArea.left || row < (int)cellArea.top)
+        goto hide;
+    if (col >= (int)cellArea.right || row >= (int)cellArea.bottom)
+        goto hide;
+
+    {
+        EA::UTFWinControls::CellFormat_s0097_1eb0 fmt;
+        fmt.mUnknown0c = 0;
+        fmt.mUnknown10 = 0;
+        fmt.mUnknown14 = 0;
+        fmt.mUnknown18 = 0;
+        fmt.mUnknown1c = 0;
+        fmt.mUnknown20 = 0;
+        fmt.mAlignH = 0xff;
+        fmt.mAlignV = 0;
+        fmt.mUnknown27 = 0;
+        fmt.mUnknown28 = 0;
+        fmt.mUnknown2c = 0;
+        fmt.mUnknown30 = 0;
+        fmt.mUnknown34 = 0;
+        fmt.mUnknown38 = 0;
+        (void)pInfo;
+        pGrid->GetCellFormat(col, row, &fmt);
+
+        EA::UTFWinControls::RectF cellRect;
+        pGrid->GetCellRect((int)fmt.mUnknown38, row, cellRect);
+
+        EA::UTFWinControls::RectF winRect;
+        winRect.left   = cellRect.left + mCellGutterLeft;
+        winRect.top    = cellRect.top + mCellGutterTop;
+        winRect.right  = cellRect.right - mCellGutterRight;
+        winRect.bottom = cellRect.bottom - mCellGutterBottom;
+
+        EA::UTFWinControls::RectF* pWinArea = pCellWindow->GetArea();
+        const float winW = pWinArea->right - pWinArea->left;
+        EA::UTFWinControls::RectF* pWinArea2 = pCellWindow->GetArea();
+        const float winH = pWinArea2->bottom - pWinArea2->top;
+
+        EA::UTFWinControls::RectF out;
+        out.left = winRect.left;
+        out.top = winRect.top;
+        out.right = winW + winRect.left;
+        out.bottom = winH + winRect.top;
+
+        const float half = 0.5f;
+        if (!*(char*)((char*)this + 0x280) && !*(char*)((char*)this + 0x284)) {
+            const char hAlign = fmt.mAlignH;
+            const char vAlign = fmt.mAlignV;
+            if (hAlign == 3) {
+                out.left = (winRect.right - winW) * half + winRect.left;
+                out.right = out.left + winW;
+            }
+            else if (hAlign == 4) {
+                out.right = winRect.right;
+                out.left = out.right - winW;
+            }
+            if (vAlign == 6) {
+                out.top = (winRect.bottom - winH) * half + winRect.top;
+                out.bottom = out.top + winH;
+            }
+            else if (vAlign == 7) {
+                out.bottom = winRect.bottom;
+                out.top = out.bottom - winH;
+            }
+        }
+        pCellWindow->SetArea(&out);
+        pCellWindow->SetVisible(true, 1);
+        return;
+    }
+
+hide:
+    pCellWindow->SetVisible(false, 1);
+}
+
+// @ 0x00972330
+void EA::UTFWinControls::IWinGrid_s0097_1eb0::AutoSize(unsigned int w, unsigned int h, float a, float b)
+{
+    if (!IsReady())
+        return;
+
+    EA::UTFWinControls::CRect_s0097_1eb0 used;
+    if (!GetCellUsedRange(used))
+        return;
+
+    int nCols = used.right - used.left + 1;
+    if ((unsigned)nCols > w)
+        SetColumnCount(used.left, w);
+    else
+        SetColumnCount(used.left, nCols);
+    const float fColW0 = a + mGutter.left + mGutter.right;
+
+    int nRows = used.bottom - used.top + 1;
+    if ((unsigned)nRows > h)
+        SetRowCount(used.top, h);
+    else
+        SetRowCount(used.top, nRows);
+    const float fRowH0 = b + mGutter.top + mGutter.bottom;
+
+    {
+        EA::UTFWinControls::WindowBase* pWin = (EA::UTFWinControls::WindowBase*)((char*)this - 0x208);
+        pWin->SetSize(fColW0, fRowH0);
+    }
+    (void)IsReady();
+
+    float fRowH = fRowH0;
+    float fColW = fColW0;
+
+    if (mpScrollBarB) {
+        IScrollbarDrawable_s0097_1eb0* p = mpScrollBarB->GetDrawable();
+        RectF* pRect = p->GetRect();
+        fRowH = (pRect->bottom - pRect->top) + fRowH;
+    }
+    if (mpScrollBarA) {
+        IScrollbarDrawable_s0097_1eb0* p = mpScrollBarA->GetDrawable();
+        RectF* pRect = p->GetRect();
+        fColW = (pRect->right - pRect->left) + fColW;
+    }
+
+    if (mVisibleColumnCount < fColW) {
+        const float cols = (float)ceil((double)mVisibleColumnCount);
+        SetColumnCount(mnFirstVisibleColumn, (int)(cols - 1));
+        SetColumnWidth(mnFirstVisibleColumn, 1, fColW - mVisibleColumnCount);
+        mVisibleColumnCount = fColW;
+    }
+    if (mVisibleRowCount < fRowH) {
+        const float rows = (float)ceil((double)mVisibleRowCount);
+        SetRowCount(mnFirstVisibleRow, (int)(rows - 1));
+        SetRowHeight(mnFirstVisibleRow, 1, fRowH - mVisibleRowCount);
+        mVisibleRowCount = fRowH;
+    }
+
+    ((EA::UTFWinControls::WindowBase*)((char*)this - 0x208))->SetSize(mVisibleColumnCount, mVisibleRowCount);
+}
+
+// @ 0x009725a0
+EA::UTFWinControls::IScrollbarDrawable_s0097_1eb0* EA::UTFWinControls::IWinGrid_s0097_1eb0::GetScrollBarDrawableVertical()
+{
+    EA::UTFWinControls::IScrollbarDrawable_s0097_1eb0* pResult;
+    EA::UTFWinControls::ScrollBarBase* pBar = mpScrollBarA;
+    if (pBar != 0) {
+        EA::UTFWinControls::IScrollbarDrawable_s0097_1eb0* pDrawable = pBar->GetDrawable();
+        if (pDrawable != 0)
+            pResult = pDrawable->GetDrawableByType(0xeef3af8c);
+        else
+            pResult = 0;
+    }
+    else
+        pResult = mpScrollBarFallback;
+    return pResult;
+}
+
+// @ 0x009725d0
+EA::UTFWinControls::IScrollbarDrawable_s0097_1eb0* EA::UTFWinControls::IWinGrid_s0097_1eb0::GetScrollBarDrawableHorizontal()
+{
+    EA::UTFWinControls::IScrollbarDrawable_s0097_1eb0* pResult;
+    EA::UTFWinControls::ScrollBarBase* pBar = mpScrollBarB;
+    if (pBar != 0) {
+        EA::UTFWinControls::IScrollbarDrawable_s0097_1eb0* pDrawable = pBar->GetDrawable();
+        if (pDrawable != 0)
+            pResult = pDrawable->GetDrawableByType(0xeef3af8c);
+        else
+            pResult = 0;
+    }
+    else
+        pResult = mpScrollBarFallbackH;
+    return pResult;
+}
+
+// @ 0x00972600
+bool EA::UTFWinControls::WinGrid_s0097_1eb0::RemoveScrollBar(bool bHorizontal, bool bVertical)
+{
+    bool bChanged = false;
+
+    if (bHorizontal && mpScrollBarA) {
+        EA::UTFWinControls::WindowBase* pWin = Window();
+        pWin->RemoveChild((EA::UTFWinControls::ICellWindow*)mpScrollBarA->GetWindow());
+        bChanged = true;
+        if (mpScrollBarA) {
+            EA::UTFWinControls::ScrollBarBase* pBar = mpScrollBarA;
+            mpScrollBarA = 0;
+            pBar->Release();
+        }
+    }
+
+    if (bVertical && mpScrollBarB) {
+        EA::UTFWinControls::WindowBase* pWin = Window();
+        pWin->RemoveChild((EA::UTFWinControls::ICellWindow*)mpScrollBarB->GetWindow());
+        if (mpScrollBarB) {
+            EA::UTFWinControls::ScrollBarBase* pBar = mpScrollBarB;
+            mpScrollBarB = 0;
+            pBar->Release();
+        }
+    }
+    else if (!bChanged) {
+        return true;
+    }
+
+    {
+        EA::UTFWinControls::WindowBase* pWin = Window();
+        mbPendingUpdate = 1;
+        pWin->SetFlag(8, 1);
+    }
+    return true;
+}
+
+// @ 0x009726c0
+bool EA::UTFWinControls::WinGrid_s0097_1eb0::SetScrollBarValues()
+{
+    EA::UTFWinControls::IWinGrid_s0097_1eb0* pGrid = Grid();
+    EA::UTFWinControls::ScrollBarBase* pVertical = *(EA::UTFWinControls::ScrollBarBase**)((char*)this + 0x3f8);
+    if (pVertical && pGrid->mVisibleRowCount > 0.0f) {
+        int nRows = pGrid->mnRowCount;
+        if (nRows == 0 || nRows < 0)
+            nRows = (pGrid->mGridFlags & 0x10000) ? (int)pGrid->mVisibleRowCount : 0;
+        else if (pGrid->mGridFlags & 0x10000)
+            nRows = (int)pGrid->mVisibleRowCount;
+        else {
+            EA::UTFWinControls::CRect_s0097_1eb0 used;
+            pGrid->GetCellUsedRange(used);
+            nRows = used.bottom + 1;
+        }
+        pVertical->SetMinimumValue(0, false);
+        pVertical->SetMaximumValue(nRows, false);
+        pVertical->SetVisibleRange((int)pGrid->mVisibleRowCount, false);
+        pVertical->SetValue(pGrid->mnFirstVisibleRow, false);
+    }
+
+    EA::UTFWinControls::ScrollBarBase* pHorizontal = *(EA::UTFWinControls::ScrollBarBase**)((char*)this + 0x3fc);
+    if (pHorizontal && pGrid->mVisibleColumnCount > 0.0f) {
+        int nCols = pGrid->mnColumnCount;
+        if (nCols == 0 || nCols < 0)
+            nCols = (pGrid->mGridFlags & 0x8000) ? (int)pGrid->mVisibleColumnCount : 0;
+        else if (pGrid->mGridFlags & 0x8000)
+            nCols = (int)pGrid->mVisibleColumnCount;
+        else {
+            EA::UTFWinControls::CRect_s0097_1eb0 used;
+            pGrid->GetCellUsedRange(used);
+            nCols = used.right + 1;
+        }
+        pHorizontal->SetMinimumValue(0, false);
+        pHorizontal->SetMaximumValue(nCols, false);
+        pHorizontal->SetVisibleRange((int)pGrid->mVisibleColumnCount, false);
+        pHorizontal->SetValue(pGrid->mnFirstVisibleColumn, false);
+    }
+    return true;
+}
+
+// @ 0x00972910
+bool EA::UTFWinControls::WinGrid_s0097_1eb0::SetScrollBarPositions()
+{
+    EA::UTFWinControls::IWinGrid_s0097_1eb0* pGrid = Grid();
+    const float one = 1.0f;
+
+    EA::UTFWinControls::ScrollBarBase* pVertical = *(EA::UTFWinControls::ScrollBarBase**)((char*)this + 0x3f8);
+    if (pVertical) {
+        EA::UTFWinControls::IScrollbarDrawable_s0097_1eb0* pDraw = pVertical->GetDrawable();
+        if (pDraw) {
+            EA::UTFWinControls::RectF vert;
+            vert.left = 0.0f;
+            vert.top = 0.0f;
+            vert.right = one;
+            vert.bottom = 0.0f;
+            pDraw->SetRect(&vert);
+        }
+    }
+
+    EA::UTFWinControls::ScrollBarBase* pHorizontal = *(EA::UTFWinControls::ScrollBarBase**)((char*)this + 0x3fc);
+    if (pHorizontal) {
+        EA::UTFWinControls::IScrollbarDrawable_s0097_1eb0* pDraw = pHorizontal->GetDrawable();
+        if (pDraw) {
+            EA::UTFWinControls::RectF horiz;
+            horiz.left = 0.0f;
+            horiz.top = 0.0f;
+            horiz.right = 0.0f;
+            horiz.bottom = one;
+            pDraw->SetRect(&horiz);
+        }
+    }
+    (void)pGrid;
+    return true;
 }
 
 // @ 0x00972d30
@@ -3710,6 +6174,33 @@ bool IWinGrid::GetSelection(CellCoordinates* out, int* count)
     return true;
 }
 
+// @ 0x00974460
+bool IWinGrid::SetSelection(int col, int row)
+{
+    if (FLD(int, this, 0xa4) > 0) {
+        bool skip = false;
+        if (((VSelf*)this)->s0xb0(col, row)) {
+            RBNode* head = (RBNode*)((char*)this + 0xa8);
+            int n = 0;
+            if (head->right != head) {
+                RBNode* p = head->right;
+                do { p = p->right; n++; } while (p != head);
+                if (n == 1) skip = true;
+            }
+        }
+        if (!skip) {
+            ((VSelf*)this)->s0xb4();
+            ((VSelf*)this)->s0xac(col, row, 1);
+            ((VWin*)((char*)this - 0x208))->s0x90();
+            FLD(int, this, 0x190) = 0;
+            FLD(int, this, 0x194) = -1;
+            FLD(int, this, 0x198) = -1;
+            return true;
+        }
+    }
+    return false;
+}
+
 // @ 0x00974510
 bool IWinGrid::GetCellUsedRange(Rect_s0097_3dd0* rect)
 {
@@ -3894,6 +6385,190 @@ int __cdecl Comparator(CellData_s0097_3dd0* a, CellData_s0097_3dd0* b)
     return ((ComparatorStr*)pa)->fn(*(const wchar_t**)pb);
 }
 
+// @ 0x00974c60
+bool EA::UTFWinControls::WinGrid_s0097_4c60::SearchCellsForText(const unsigned short* pText, int textLen, int colStart, int colSpan, int rowStart, int rowSpan, int* pOutCol, int* pOutRow, bool bExactLength)
+{
+    if (pText == 0)
+        return false;
+
+    if (textLen == -1 || textLen == 0) {
+        const unsigned short* p = pText;
+        do { ++p; } while (p[-1] != 0);
+        textLen = (int)(p - (pText + 1));
+    }
+
+    EA::UTFWinControls::SparseMatrixIter it;
+    it.mpNode = 0;
+    it.mpOwner = 0;
+    EA::UTFWinControls::CellMatrix(this)->FirstUsed(&it);
+
+    while (it.mpNode != (char*)this + 0x118 || it.mpOwner != 0) {
+        EA::UTFWinControls::CellData_s0097_4c60* pData = *(EA::UTFWinControls::CellData_s0097_4c60**)((char*)it.mpOwner + 0x18);
+        if (pData != 0) {
+            int c = *(int*)((char*)pData + 4);
+            int r = *(int*)((char*)pData + 8);
+            if (c >= colStart &&
+                (colSpan == 0x7fffffff || c < colStart + colSpan) &&
+                r >= rowStart &&
+                (rowSpan == 0x7fffffff || r < rowStart + rowSpan) &&
+                pData->mType == 2) {
+                void* pStr = pData->mpText;
+                if (pStr != 0 &&
+                    (!bExactLength || ((*(int*)((char*)pStr + 4) - *(int*)pStr) >> 1) == textLen)) {
+                    unsigned len = EA::UTFWinControls::StringLength(pText, 0, textLen);
+                    if (len < (unsigned)((*(int*)((char*)pStr + 4) - *(int*)pStr) >> 1)) {
+                        *pOutCol = c;
+                        *pOutRow = r;
+                        return true;
+                    }
+                }
+            }
+        }
+        ++it;
+    }
+    return false;
+}
+
+// @ 0x00974d80
+bool EA::UTFWinControls::WinGrid_s0097_4c60::TestForPossibleScrollBarAdditionOrRemoval()
+{
+    EA::UTFWinControls::IWinGrid_s0097_4c60* pGrid = Grid();
+
+    // --- vertical scroll bar (flag bit 4) ---
+    if ((pGrid->mGridFlags & 4) != 0) {
+        int nFirst = *(int*)((char*)this + 0x268);
+        bool bNeed;
+        if (nFirst != -1 && nFirst != 0) {
+            bNeed = true;
+        }
+        else {
+            bNeed = (*(unsigned*)((char*)this + 0x2c) & 0x10000) != 0;
+            if (!bNeed) {
+                if ((pGrid->mGridFlags & 0x10000) == 0) {
+                    EA::UTFWinControls::CRect_s0097_4c60 used = { 0, 0, 0, 0 };
+                    pGrid->GetCellUsedRange(used);
+                    nFirst = used.bottom + 1;
+                }
+                bNeed = (float)nFirst > *(float*)((char*)this + 0x260);
+            }
+        }
+        if (bNeed) {
+            if (mpScrollBarA == 0)
+                AddScrollBar(true, false);
+        }
+        else if (mpScrollBarA != 0) {
+            RemoveScrollBar(true, false);
+        }
+    }
+    else if (mpScrollBarA != 0) {
+        RemoveScrollBar(true, false);
+    }
+
+    // --- horizontal scroll bar (flag bit 2) ---
+    if ((pGrid->mGridFlags & 2) != 0) {
+        int nFirst = *(int*)((char*)this + 0x268);
+        bool bNeed;
+        if (nFirst != -1 && nFirst != 0) {
+            bNeed = true;
+        }
+        else {
+            bNeed = (*(unsigned*)((char*)this + 0x2c) & 0x10000) != 0;
+            if (!bNeed) {
+                if ((pGrid->mGridFlags & 0x10000) == 0) {
+                    EA::UTFWinControls::CRect_s0097_4c60 used = { 0, 0, 0, 0 };
+                    pGrid->GetCellUsedRange(used);
+                    nFirst = used.right + 1;
+                }
+                bNeed = (float)nFirst > *(float*)((char*)this + 0x25c);
+            }
+        }
+        if (bNeed) {
+            if (mpScrollBarB == 0)
+                AddScrollBar(false, true);
+        }
+        else if (mpScrollBarB != 0) {
+            RemoveScrollBar(false, true);
+        }
+    }
+    else if (mpScrollBarB != 0) {
+        RemoveScrollBar(false, true);
+    }
+
+    if (mpScrollBarA != 0 || mpScrollBarB != 0) {
+        SetScrollBarValues();
+        SetScrollBarPositions();
+    }
+    return true;
+}
+
+// @ 0x00974fc0
+float EA::UTFWinControls::WinGrid_s0097_4c60::CalculateCellHeight(int col, int row, EA::UTFWinControls::CellData_s0097_4c60** ppData)
+{
+    float result = mRowGridThickness;
+    EA::UTFWinControls::CellData_s0097_4c60* pData = ppData ? *ppData : 0;
+
+    if (pData == 0) {
+        void** pOut = 0;
+        if (!EA::UTFWinControls::CellMatrix(this)->GetCellPtr(col, row, &pOut))
+            return Grid()->mVisibleCellAreaWidth + Grid()->mVisibleGridAreaWidth + result;
+        pData = (EA::UTFWinControls::CellData_s0097_4c60*)pOut;
+        if (pData == 0)
+            return Grid()->mVisibleCellAreaWidth + Grid()->mVisibleGridAreaWidth + result;
+    }
+
+    if (pData->mType == 1) {
+        if (pData->mpText) {
+            EA::UTFWinControls::RectF* pRect = (EA::UTFWinControls::RectF*)(*(void*(**)(void*))(*(unsigned*)pData->mpText + 0x38))(pData->mpText);
+            result = pRect->bottom - pRect->top;
+        }
+    }
+    else if (pData->mType == 2) {
+        void* pText = pData->mpText;
+        if (pText && ((*(int*)((char*)pText + 4) - *(int*)pText) & 0xfffffffe) != 0) {
+            result = *(float*)((char*)this + 0xa54) - *(float*)((char*)this + 0xa58);
+        }
+    }
+    else if (pData->mType == 4 && pData->mpText) {
+        result = (float)*(int*)((char*)pData->mpText + 0x20);
+    }
+
+    return Grid()->mVisibleCellAreaWidth + Grid()->mVisibleGridAreaWidth + result;
+}
+
+// @ 0x00975180
+float EA::UTFWinControls::WinGrid_s0097_4c60::CalculateCellWidth(int col, int row, EA::UTFWinControls::CellData_s0097_4c60** ppData)
+{
+    float result = mColumnGridThickness;
+    EA::UTFWinControls::CellData_s0097_4c60* pData = ppData ? *ppData : 0;
+
+    if (pData == 0) {
+        void** pOut = 0;
+        if (!EA::UTFWinControls::CellMatrix(this)->GetCellPtr(col, row, &pOut))
+            return Grid()->mVisibleGridAreaHeight + Grid()->mRowHeadingWidth + result;
+        pData = (EA::UTFWinControls::CellData_s0097_4c60*)pOut;
+        if (pData == 0)
+            return Grid()->mVisibleGridAreaHeight + Grid()->mRowHeadingWidth + result;
+    }
+
+    if (pData->mType == 1) {
+        if (pData->mpText) {
+            EA::UTFWinControls::RectF* pRect = (EA::UTFWinControls::RectF*)(*(void*(**)(void*))(*(unsigned*)pData->mpText + 0x38))(pData->mpText);
+            result = pRect->right - pRect->left;
+        }
+    }
+    else if (pData->mType == 2) {
+        void* pText = pData->mpText;
+        if (pText && ((*(int*)((char*)pText + 4) - *(int*)pText) & 0xfffffffe) != 0) {
+            result = *(float*)((char*)this + 0xa4c);
+        }
+    }
+    else if (pData->mType == 4 && pData->mpText) {
+        result = (float)*(int*)((char*)pData->mpText + 0x1c);
+    }
+
+    return Grid()->mVisibleGridAreaHeight + Grid()->mRowHeadingWidth + result;
+}
+
 // @ 0x00975300
 void EA::UTFWinControls::CellList_s0097_4c60::push_back(const int* pValue)
 {
@@ -3977,6 +6652,155 @@ insert:
     *(void**)pOut = pPrev;
     *(char*)((char*)pOut + 4) = 0;
     return pOut;
+}
+
+// @ 0x00975680
+bool EA::UTFWinControls::WinGrid_s0097_4c60::ProcessCellAction(int action, unsigned arg, float a, float b, int* pCell)
+{
+    EA::UTFWinControls::IWinGrid_s0097_4c60* pGrid = Grid();
+
+    if ((pGrid->mGridFlags & 0x400000) == 0 && (action & 0xfffffffc) != 8)
+        return false;
+
+    int area[4] = { 0, 0, 0, 0 };
+    pGrid->GetCellArea(area);
+
+    int kind = *(int*)((char*)pCell + 0);
+    (void)kind;
+
+    // Simplified: dispatch on the action kind.
+    if ((action & 1) != 0) {
+        pGrid->ClearAllCells();
+    }
+
+    return true;
+}
+
+// @ 0x00975a80
+bool EA::UTFWinControls::IWinGrid_s0097_4c60::ActLikeAListbox(int width, int height, bool bMulti)
+{
+    unsigned flags = mGridFlags & 0xfffc2ba6;
+    flags |= 0x2ba6;
+    mnColumnCount = width;
+    mGridFlags = flags;
+    mnRowCount = -1;
+    mnSelectionRule = 1;
+    mnMaxSelectionCount = height;
+    if (bMulti) {
+        mGridFlags = flags | 0x1000;
+        return true;
+    }
+
+    if (height < 1) {
+        GetLastUsedCellRow();
+    }
+    else {
+        int row = 0;
+        int col = 0;
+        if (!GetLastUsedCell(&col, &row)) {
+            int value[2] = { 0, 0 };
+            mSelectionList.push_back(value);
+        }
+    }
+    return true;
+}
+
+// @ 0x00975b30
+bool EA::UTFWinControls::IWinGrid_s0097_4c60::AddCellToSelection(int col, int row, bool bSelect)
+{
+    bool bChanged = false;
+    if (IsCellSelected(col, row) != bSelect) {
+        unsigned count = 0;
+        for (EA::UTFWinControls::CellListNode* p = mSelectionList.mpHead;
+             p != (EA::UTFWinControls::CellListNode*)&mSelectionList; p = p->mpNext)
+            ++count;
+
+        if (bSelect) {
+            if (count < (unsigned)mnMaxSelectionCount) {
+                int value[2] = { col, row };
+                mSelectionList.push_back(value);
+                bChanged = true;
+            }
+        }
+        else {
+            EA::UTFWinControls::CellListNode* pFound = 0;
+            if (mnSelectionRule == 0) {
+                for (EA::UTFWinControls::CellListNode* p = mSelectionList.mpHead;
+                     p != (EA::UTFWinControls::CellListNode*)&mSelectionList; p = p->mpNext) {
+                    if (p->mValueA == col) { pFound = p; break; }
+                }
+            }
+            else if (mnSelectionRule == 1) {
+                for (EA::UTFWinControls::CellListNode* p = mSelectionList.mpHead;
+                     p != (EA::UTFWinControls::CellListNode*)&mSelectionList; p = p->mpNext) {
+                    if (p->mValueB == row) { pFound = p; break; }
+                }
+            }
+            else {
+                for (EA::UTFWinControls::CellListNode* p = mSelectionList.mpHead;
+                     p != (EA::UTFWinControls::CellListNode*)&mSelectionList; p = p->mpNext) {
+                    if (p->mValueA == col && p->mValueB == row) { pFound = p; break; }
+                }
+            }
+            if (pFound) {
+                pFound->mpPrev->mpNext = pFound->mpNext;
+                pFound->mpNext->mpPrev = pFound->mpPrev;
+                ::operator delete(pFound);
+                bChanged = true;
+            }
+        }
+    }
+
+    ((EA::UTFWinControls::IWindowBase*)((char*)this - 0x208))->Invalidate();
+    return bChanged;
+}
+
+// @ 0x00975c50
+bool EA::UTFWinControls::WinGrid_s0097_4c60::DisposeOfCellData(int col, int row, EA::UTFWinControls::CellData_s0097_4c60** ppData, bool bDelete)
+{
+    EA::UTFWinControls::CellData_s0097_4c60* pData = ppData ? *ppData : 0;
+    if (pData == 0) {
+        void** pOut = 0;
+        if (!EA::UTFWinControls::CellMatrix(this)->GetCellPtr(col, row, &pOut))
+            return false;
+        pData = (EA::UTFWinControls::CellData_s0097_4c60*)pOut;
+        if (pData == 0)
+            return false;
+    }
+
+    switch (pData->mType) {
+    case 1:
+        if (pData->mpText)
+            DoWindowRemoval(col, row, pData->mpText);
+        break;
+    case 2:
+        if (pData->mpText) {
+            unsigned* p = (unsigned*)pData->mpText;
+            unsigned first = p[0];
+            if ((int)((p[2] - first) & 0xfffffffe) > 2 && first != 0)
+                ::operator delete((void*)first);
+            ::operator delete(pData->mpText);
+        }
+        break;
+    case 4:
+        if (pData->mpText)
+            (*(void(**)(void*))(*(unsigned*)pData->mpText + 4))(pData->mpText);
+        break;
+    default:
+        break;
+    }
+    pData->mpText = 0;
+
+    if (pData->_pad10) {
+        ::operator delete((void*)pData->_pad10);
+        pData->_pad10 = 0;
+    }
+    if (pData->mUnknown14)
+        pData->mUnknown14 = 0;
+
+    if (bDelete)
+        ::operator delete(pData);
+    return true;
 }
 
 // @ 0x00975e00
