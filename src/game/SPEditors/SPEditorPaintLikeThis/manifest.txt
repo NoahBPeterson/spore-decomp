@@ -11,4 +11,3 @@
 ../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?Shutdown@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  005c1130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?OnAssetBrowserSelection@cSPEditorPaintLikeThis_s005c_0c00@SP@@UAEXABUKey_s005c_0c00@ResourceMan@EA@@@Z  005c1340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?SendPaletteItemMessage@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  005c13b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPEditorPaintLikeThis.cpp  ?SendPaintMessage@cSPEditorPaintLikeThis_s005c_0c00@SP@@QAEXXZ  005c14f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

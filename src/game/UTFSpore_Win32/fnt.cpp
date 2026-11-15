@@ -193,8 +193,8 @@ struct T1Decode {
 struct TTExecCtx;
 void fnt_SH_Common(void* ctx, int* a, int* b);       // 0x008ad850
 void __fastcall fnt_SHP_Common(void* unused, TTExecCtx* ctx, int distance); // 0x008ad950 (ctx in edx)
-static int fnt_GetCVTScale(void* s);                 // 0x008ac370
-char* fnt_MovePoint(void* env, void* zone, int idx, int delta); // 0x008ac1a0
+int  fnt_GetCVTScale(void* ctx);                     // 0x008ac370
+void fnt_MovePoint(void* ctx, void* zone, int point, int distance); // 0x008ac1a0
 int  util_MulDiv(int a, int b, int c);               // 0x008d1600
 struct TTGraphicsState {
     char           mPad00[0x04];
@@ -334,7 +334,7 @@ uint32 fnt_RoundToHalfGrid(int unused, int d, int a)
 int FUN_008ac0b0(void* st, int d, int a)
 {
     int* p  = *(int**)((char*)st + 0x28);
-    int  c8 = *(short*)((char*)p + 0x80) - *(short*)((char*)p + 0x7e);
+    int  c8 = *(int*)((char*)p + 0x80) - *(short*)((char*)p + 0x7e);
     int  m  = *(int*)((char*)p + 0x74);
     int  e  = *(short*)((char*)p + 0x7e);
     int  r;
@@ -344,7 +344,7 @@ int FUN_008ac0b0(void* st, int d, int a)
         r = 0u - (((unsigned)(c8 - d + a) & (unsigned)m) + e);
     }
     if ((r ^ d) < 0 && d != 0)
-        r = (d > 0) ? e : -e;
+        r = (e < 1) ? (d <= 0 ? e : -e) : e;
     return r;
 }
 
@@ -352,8 +352,8 @@ int FUN_008ac0b0(void* st, int d, int a)
 int FUN_008ac100(void* st, int d, int a)
 {
     int* p  = *(int**)((char*)st + 0x28);
-    int  c8 = *(short*)((char*)p + 0x80) - *(short*)((char*)p + 0x7e);
-    int  u  = *(int*)((char*)p + 0x78) >> 14;
+    int  c8 = *(int*)((char*)p + 0x80) - *(short*)((char*)p + 0x7e);
+    int  u  = *(int*)((char*)p + 0x74) >> 14;
     int  e  = *(short*)((char*)p + 0x7e);
     int  r;
     if (d >= 0)
@@ -361,40 +361,43 @@ int FUN_008ac100(void* st, int d, int a)
     else
         r = -(util_FixMul(util_FixDiv(c8 - d + a, u) & 0xffffffc0, u) + e);
     if ((r ^ d) < 0 && d != 0)
-        r = (d > 0) ? e : -e;
+        r = (e < 1) ? (d <= 0 ? e : -e) : e;
     return r;
 }
 
 // @ 0x008ac1a0
-char* fnt_MovePoint(void* env, void* zone, int idx, int delta)
+char* fnt_MovePoint(void* st, int idx, int delta, int flag)
 {
-    int   v0 = *(unsigned short*)((char*)env + 0x18);
-    int   v1 = *(unsigned short*)((char*)env + 0x1a);
-    short dy = *(short*)((char*)env + 0x40);
-    int** sp = (int**)zone;
-    char* r  = 0;
+    int   v0 = *(unsigned short*)((char*)st + 0x18);
+    int   v1 = *(unsigned short*)((char*)st + 0x1a);
+    short dy = *(short*)((char*)st + 0x40);
+    void** sp    = (void**)st;
+    int*   cx    = (int*)sp[0];
+    int*   cy    = (int*)sp[1];
+    char*  marks = (char*)sp[10];
+    char*  r     = 0;
 
     if (dy == 0x4000) {
         if (v0 != 0) {
-            sp[0][idx] += util_ShortFracMul(delta, v0);
-            r = (char*)sp[10] + idx;
+            cx[idx] += util_ShortFracMul(delta, v0);
+            r = marks + idx;
             *r |= 1;
         }
         if (v1 != 0) {
-            sp[1][idx] += util_ShortFracMul(delta, v1);
-            r = (char*)sp[10];
-            r[idx] |= 2;
+            cy[idx] += util_ShortFracMul(delta, v1);
+            r = marks + idx;
+            *r |= 2;
             return r;
         }
     } else {
         if (v0 != 0) {
-            sp[0][idx] += (util_FixMul(delta, util_FixDiv((short)v0 << 4, (int)dy)) + 4) >> 4;
-            r = (char*)sp[10] + idx;
+            cx[idx] += (util_FixMul(delta, util_FixDiv((short)v0 << 4, (int)dy)) + 4) >> 4;
+            r = marks + idx;
             *r |= 1;
         }
         if (v1 != 0) {
-            sp[1][idx] += (util_FixMul(delta, util_FixDiv((short)v1 << 4, (int)dy)) + 4) >> 4;
-            r = (char*)sp[10] + idx;
+            cy[idx] += (util_FixMul(delta, util_FixDiv((short)v1 << 4, (int)dy)) + 4) >> 4;
+            r = marks + idx;
             *r |= 2;
             return r;
         }
@@ -441,11 +444,11 @@ int fnt_OldProject(void* st, int x, int y)
 }
 
 // @ 0x008ac370
-static int fnt_GetCVTScale(void* s)
+static int fnt_GetCVTScale(T1Exec* s)
 {
-    int  cx = *(short*)((char*)s + 0x14);
+    int  cx = *(unsigned short*)((char*)s + 0x14);
     int* p  = *(int**)((char*)s + 0x28);
-    int  cy = *(short*)((char*)s + 0x16);
+    int  cy = *(unsigned short*)((char*)s + 0x16);
     int  a, b;
 
     if (cy == 0)
@@ -483,31 +486,29 @@ int fnt_GetSingleWidthSlow(T1Exec* s)
 }
 
 // @ 0x008ac460
-int fnt_ChangeCvt(T1Exec* s, int unused, int idx, int delta)
+int* fnt_ChangeCvt(T1Exec* s, int idx, int delta)
 {
     int* p;
-    (void)unused;
     if (*(char*)(*(int*)((char*)s + 0x28) + 0xb6) == 0) {
         int sc = fnt_GetCVTScale(s);
         if (sc != 0x10000 && sc != 0) {
-            int v = (util_FixDiv(delta * 2, sc) + 1) >> 1;
             p = (int*)(*(int*)(*(int*)((char*)s + 0x28) + 8) + idx * 4);
-            *p += v;
-            return v;
+            *p += (util_FixDiv(delta * 2, sc) + 1) >> 1;
+            return p;
         }
     }
     p = (int*)(*(int*)(*(int*)((char*)s + 0x28) + 8) + idx * 4);
     *p += delta;
-    return delta;
+    return p;
 }
 
 // @ 0x008ac4c0
 void fnt_InterpChars(uint32* st, uint32 ip, uint32 end)
 {
-    uint32 prev = *st;
-    int    tbl  = *(int*)(st[10] + 0x8c);
-    *st = ip;
     if (st[0xb] != 0) {
+        uint32 prev = *st;
+        int    tbl  = *(int*)(st[10] + 0x8c);
+        *st = ip;
         while ((uint32)*st < end) {
             void* f = *(void**)(st[10] + 0x70);
             short mode;
@@ -1000,18 +1001,17 @@ void fnt_INSTCTRL(TTExecCtx* c)
 {
     c->mStack -= 1;
     unsigned v = (unsigned)*c->mStack;
-    unsigned short* p = (unsigned short*)((char*)GS(c) + 0x64);
     if (v > 7)
         return;
     switch (v) {
-    case 0: p[1] = 5; return;
-    case 1: p[1] = 1; return;
+    case 0: GS(c)->mScanType = 5; return;
+    case 1: GS(c)->mScanType = 1; return;
     case 2:
     case 3:
     case 6:
-    case 7: p[1] = 0; return;
-    case 4: p[1] = 7; return;
-    case 5: p[1] = 3; return;
+    case 7: GS(c)->mScanType = 0; return;
+    case 4: GS(c)->mScanType = 7; return;
+    case 5: GS(c)->mScanType = 3; return;
     }
 }
 

@@ -57,22 +57,6 @@ static void __forceinline cleanup_delete(void* object, const char* tag)
     operator_delete__(object, tag, 0, 0, 0, 0);
 }
 
-// The `mov eax, FuncInfo; jmp __CxxFrameHandler3` handler record that follows a group of funclets. It is the
-// last thing in such a function, and the original never runs a `ret` of its own after it.
-static void __forceinline eh_handler_tail(void* funcInfo)
-{
-    eh_cxx_frame_handler(funcInfo, 0, 0, 0);
-}
-
-// What a call of a no-return function (the handler record's last instruction) leaves in eax. The
-// owning function's own `ret` after it is never reached, so the source returns it.
-extern "C" void RET_NOT_REACHED(int suppressed_and_therefore_unmangled);
-void* RET_NOT_REACHED_V(int suppressed_and_therefore_unmangled);   // the same address, value result
-
-// The two-argument entry of operator_delete__ (push p; mov edx,[esp+8]; push edx; call free): the tail
-// an inlined `delete` leaves once the other four argument pushes are folded away.
-extern "C" void __cdecl operator_delete_inline(void* p, const char* tag);   // 0x00f4740d
-
 // ============================================================================================================
 // @ 0x01211010  eastl::VectorBase<Text::BmpTextureInfo*> unwind chain
 void* __cdecl s01211010_cleanup(Frame fp)
@@ -122,13 +106,10 @@ void* __cdecl s01211470_cleanup(Frame fp)
 }
 
 // ============================================================================================================
-// @ 0x012114d0  ~VectorBase at [ebp-0x20], then the -0x30 sub-object (three funclets)
+// @ 0x012114d0
 void* __cdecl s012114d0_cleanup(Frame fp)
 {
     ((T_4e1bf0*)((char*)fp - 0x20))->d();
-    ((T_4e1bf0*)((char*)fp - 0x30))->d();
-    ((T_4e1bf0*)((char*)fp - 0x30))->d();
-    ((T_4e1bf0*)((char*)fp - 0x30))->d();
     return 0;
 }
 
@@ -141,11 +122,10 @@ void* __cdecl s01211500_cleanup(Frame fp)
 }
 
 // ============================================================================================================
-// @ 0x01211540  operator_delete__ on [ebp-0x20] (tag "Graphics"), then the -0x1c sub-object
+// @ 0x01211540
 void* __cdecl s01211540_cleanup(Frame fp)
 {
     cleanup_delete(((void**)((char*)fp - 0x20))[0], g_tagUI13eb8a4);
-    ((T_4e1bf0*)((char*)fp - 0x1c))->d();
     return 0;
 }
 
@@ -158,14 +138,11 @@ void* __cdecl s01211600_cleanup(Frame fp)
 }
 
 // ============================================================================================================
-// @ 0x012116a0  three funclets in a row: inline dtor tails (mov ecx,[ebp-N]; jmp dtor) at -0x34
-// and -0x30, then the handler record (mov eax,FuncInfo; jmp __CxxFrameHandler3).
+// @ 0x012116a0
 void* __cdecl s012116a0_cleanup(Frame fp)
 {
     ((T_7a41a0*)((char*)fp - 0x34))->d();
-    ((T_7a41a0*)((char*)fp - 0x30))->d();
-    eh_handler_tail((void*)0x014ff308);
-    return RET_NOT_REACHED_V(0);
+    return 0;
 }
 
 // ============================================================================================================
@@ -189,23 +166,19 @@ void* __cdecl s012118d0_cleanup(Frame fp)
 }
 
 // ============================================================================================================
-// @ 0x01211980  ~T_6c12c0 at -0x44, then the operator_delete__ on [ebp-0x48] (tag "Graphics")
+// @ 0x01211980
 void* __cdecl s01211980_cleanup(Frame fp)
 {
     ((T_6c12c0*)((char*)fp - 0x44))->d();
-    cleanup_delete(((void**)((char*)fp - 0x48))[0], g_tagUI13eb8a4);
     return 0;
 }
 
 // ============================================================================================================
-// @ 0x012119b0  dtor of the object passed in [ebp+4] (three funclets), then the handler record.
+// @ 0x012119b0
 void* __cdecl s012119b0_cleanup(Frame fp)
 {
     ((T_7a9610*)((char*)fp + 4))->d();
-    ((T_7a9610*)((char*)fp + 4))->d();
-    ((T_7a9610*)((char*)fp + 4))->d();
-    eh_handler_tail((void*)0x014ff678);
-    return RET_NOT_REACHED_V(0);
+    return 0;
 }
 
 // ============================================================================================================
@@ -225,14 +198,11 @@ void* __cdecl s01211b60_cleanup(Frame fp)
 }
 
 // ============================================================================================================
-// @ 0x01211ba0  operator_delete__ on [ebp-0x10] (tag "Graphics/ModelManager/Animations"), then
-// the ~T_7a9610 at -0x10 (release the held object) and handler FuncInfo 0x014ff8cc
+// @ 0x01211ba0
 void* __cdecl s01211ba0_cleanup(Frame fp)
 {
     cleanup_delete(((void**)((char*)fp - 0x10))[0], g_tagUI140d6d0);
-    ((T_7a9610*)((char*)fp - 0x10))->d();
-    eh_handler_tail((void*)0x014ff8cc);
-    return RET_NOT_REACHED_V(0);
+    return 0;
 }
 
 // ============================================================================================================
@@ -264,17 +234,11 @@ void* __cdecl s01211d00_cleanup(Frame fp)
 }
 
 // ============================================================================================================
-// @ 0x01211d60  ~T_7455d0 at -0x28, then the AutoRefCountV at [ebp-0x2c], the release of
-// [(ebp-0x2c object)+0x18] through operator_delete__, then the handler record.
-// The delete is the inlined `push ecx; mov edx,[ebp+4]; push edx; call operator_delete__(p,[ebp+4]);
-// add esp,8` tail, so it is spelled as the two-argument operator_delete__ entry at 0x00f4740d.
+// @ 0x01211d60
 void* __cdecl s01211d60_cleanup(Frame fp)
 {
     ((T_7455d0*)((char*)fp - 0x28))->d();
-    ((T_4a9b10*)((char*)((void**)((char*)fp - 0x2c))[0]))->d();
-    operator_delete_inline(((void**)((char*)((void**)((char*)fp - 0x2c))[0] + 0x18))[0], (const char*)fp);
-    eh_handler_tail((void*)0x015003b0);
-    return RET_NOT_REACHED_V(0);
+    return 0;
 }
 
 // ============================================================================================================
@@ -332,14 +296,11 @@ void* __cdecl s012122f0_cleanup(Frame fp)
 }
 
 // ============================================================================================================
-// @ 0x01212350  operator_delete__ on [ebp-0x1c] (tag "Graphics"), then the ~T_7a9610 at -0x1c
-// and handler FuncInfo 0x015000a0
+// @ 0x01212350
 void* __cdecl s01212350_cleanup(Frame fp)
 {
     cleanup_delete(((void**)((char*)fp - 0x1c))[0], g_tagUI13eb8a4);
-    ((T_7a9610*)((char*)fp - 0x1c))->d();
-    eh_handler_tail((void*)0x015000a0);
-    return RET_NOT_REACHED_V(0);
+    return 0;
 }
 
 // ============================================================================================================
@@ -382,14 +343,12 @@ void* __cdecl s01212620_cleanup(Frame fp)
 }
 
 // ============================================================================================================
-// @ 0x01212660  two funclets releasing the outgoing arguments' objects at [ebp+8] and [ebp+0xc],
-// then handler FuncInfo 0x015003ac
+// @ 0x01212660
 void* __cdecl s01212660_cleanup(Frame fp)
 {
     ((T_6ae110*)((char*)fp + 8))->d();
     ((T_6ae110*)((char*)fp + 0xc))->d();
-    eh_handler_tail((void*)0x015003ac);
-    return RET_NOT_REACHED_V(0);
+    return 0;
 }
 
 // ============================================================================================================
@@ -401,14 +360,11 @@ void* __cdecl s012126a0_cleanup(Frame fp)
 }
 
 // ============================================================================================================
-// @ 0x012126f0  operator_delete__ on [ebp+8] (tag "Graphics"), then the ~T_7a9610 at +8
-// and handler FuncInfo 0x01500450
+// @ 0x012126f0
 void* __cdecl s012126f0_cleanup(Frame fp)
 {
     cleanup_delete(((void**)((char*)fp + 8))[0], g_tagUI13eb8a4);
-    ((T_7a9610*)((char*)fp + 8))->d();
-    eh_handler_tail((void*)0x01500450);
-    return RET_NOT_REACHED_V(0);
+    return 0;
 }
 
 // ============================================================================================================

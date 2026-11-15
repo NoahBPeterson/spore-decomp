@@ -424,15 +424,13 @@ void* hkConvexListShape::scalarDeletingDtor(hkUint32 flags)
 hkBool hkCollisionFilterList::isCollisionEnabled(const hkCollidable& a, const hkCollidable& b)
 {
     struct F0 { virtual void d0(); virtual hkBool f(const hkCollidable&, const hkCollidable&); };
-    hkBool out;
     int n = *(int*)((char*)this + 0x14);
     for (int i = n - 1; i >= 0; --i) {
         char* filter = ((char**)(*(void**)((char*)this + 0x10)))[i];
-        hkBool r;
-        r = ((F0*)((char*)filter + 8))->f(a, b);
-        if (r.m_bool == 0) { out.m_bool = 0; return out; }
+        hkBool r = ((F0*)((char*)filter + 8))->f(a, b);
+        if (r.m_bool == 0) { hkBool out; out.m_bool = 0; return out; }
     }
-    out.m_bool = 1; return out;
+    hkBool out; out.m_bool = 1; return out;
 }
 
 // @ 0x010cb800
@@ -442,15 +440,13 @@ hkBool hkCollisionFilterList::isCollisionEnabled2(const hkCollisionInput& a, con
 {
     struct F { virtual hkBool f(const hkCollisionInput&, const hkCdBody&,
                                 const hkCollisionFilterList&, const hkShapeCollection&, hkUint32); };
-    hkBool out;
     int n = *(int*)((char*)this + 0x10);
     for (int i = n - 1; i >= 0; --i) {
         char* filter = ((char**)(*(void**)((char*)this + 0xc)))[i];
-        hkBool r;
-        r = ((F*)((char*)filter + 0xc))->f(a, b, c, d, e);
-        if (r.m_bool == 0) { out.m_bool = 0; return out; }
+        hkBool r = ((F*)((char*)filter + 0xc))->f(a, b, c, d, e);
+        if (r.m_bool == 0) { hkBool out; out.m_bool = 0; return out; }
     }
-    out.m_bool = 1; return out;
+    hkBool out; out.m_bool = 1; return out;
 }
 
 // @ 0x010cb860
@@ -458,30 +454,26 @@ hkBool hkCollisionFilterList::isCollisionEnabled3(const hkShapeRayCastInput& a,
                                                   const hkShapeCollection& b, hkUint32 c)
 {
     struct F { virtual hkBool f(const hkShapeRayCastInput&, const hkShapeCollection&, hkUint32); };
-    hkBool out;
     int n = *(int*)((char*)this + 0xc);
     for (int i = n - 1; i >= 0; --i) {
         char* filter = ((char**)(*(void**)((char*)this + 8)))[i];
-        hkBool r;
-        r = ((F*)((char*)filter + 0x10))->f(a, b, c);
-        if (r.m_bool == 0) { out.m_bool = 0; return out; }
+        hkBool r = ((F*)((char*)filter + 0x10))->f(a, b, c);
+        if (r.m_bool == 0) { hkBool out; out.m_bool = 0; return out; }
     }
-    out.m_bool = 1; return out;
+    hkBool out; out.m_bool = 1; return out;
 }
 
 // @ 0x010cb8c0
 hkBool hkCollisionFilterList::isCollisionEnabled4(const hkWorldRayCastInput& a, const hkCollidable& b)
 {
     struct F0 { virtual void d0(); virtual hkBool f(const hkWorldRayCastInput&, const hkCollidable&); };
-    hkBool out;
     int n = *(int*)((char*)this + 8);
     for (int i = n - 1; i >= 0; --i) {
         char* filter = ((char**)(*(void**)((char*)this + 4)))[i];
-        hkBool r;
-        r = ((F0*)((char*)filter + 0x14))->f(a, b);
-        if (r.m_bool == 0) { out.m_bool = 0; return out; }
+        hkBool r = ((F0*)((char*)filter + 0x14))->f(a, b);
+        if (r.m_bool == 0) { hkBool out; out.m_bool = 0; return out; }
     }
-    out.m_bool = 1; return out;
+    hkBool out; out.m_bool = 1; return out;
 }
 
 // @ 0x010cb9a0  hkCollisionFilterList::~hkCollisionFilterList

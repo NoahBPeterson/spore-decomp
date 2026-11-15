@@ -14,8 +14,6 @@
 #include <math.h>
 #include "EA/Random/RandomLinearCongruential.h"
 
-extern "C" void _ReadWriteBarrier();
-
 // unnamed retail callees and globals (address in the comment)
 extern float g_flt10000;                        // 0x013f0620
 extern float g_flt2;                            // 0x01470f1c
@@ -63,13 +61,11 @@ struct Elem34
     void InitTree()
     {
         void** h = &mpBegin;
-        h[1] = 0;
-        h[2] = 0;
-        h[3] = 0;
-        _ReadWriteBarrier();
-        h[0] = h;
-        mpEnd = (void*)h;
+        mpBegin = 0;
+        mpEnd = 0;
         mpCap = 0;
+        h[0] = h;
+        h[1] = h;
         mFlag = 0;
         mVal = 0;
     }
@@ -896,8 +892,8 @@ struct CursorProvider {
     HashTable table;                      // +0x0c
 
     char* FindByField10(uint key, int match);
-    char* FindFirst10(uint key, int a, int b, int c);
-    char* FindFirst24(uint key, int a, int b, int c);
+    char* FindFirst10(uint* key, int a, int b, int c);
+    char* FindFirst24(uint* key, int a, int b, int c);
     char* FindByField24(uint key, int match);
     void UpdateEntry(uint key, int a, int b, int c, int d, int e, int f);
 };
@@ -1129,7 +1125,7 @@ struct TypeTagger {
     void SetIfType(void* typeTag);   // 0x00ba8160
 };
 struct LookupObj {
-    void* Hash();               // 0x00bb9de0 (declared, not defined)
+    void* Hash(void* k);        // 0x00bb9de0 (declared, not defined)
 };
 bool  FUN_006ab760(void* a, const wchar_t* b);// 0x006ab760
 struct HashOwner {
@@ -2101,14 +2097,11 @@ void __thiscall W::Run_00ba2590(void* obj)
 {
   void* self = this;
   if (obj) (*(void(__thiscall*)(void*))((*(void***)obj)[1]))(obj);
-  void* head = (char*)self + 0x34;
   void* node = operator_new(0xc, "Simulator", 0, 0,
      "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-  void** slot = (void**)((char*)node + 8);
-  if (slot != 0) {
-    *slot = obj;
-    if (obj) (*(void(__thiscall*)(void*))((*(void***)obj)[1]))(obj);
-  }
+  void* head = (char*)self + 0x34;
+  *(void**)((char*)node + 8) = obj;
+  if (obj) (*(void(__thiscall*)(void*))((*(void***)obj)[1]))(obj);
   *(void**)node = head;
   *(void**)((char*)node + 4) = *(void**)((char*)head + 4);
   **(void***)((char*)head + 4) = node;
@@ -2691,10 +2684,14 @@ int Goal::Field0c(const void* key)
 // @ 0x00ba43b0
 void* __thiscall VBlk::InsertAt(char* pos, const WKey* key)
 {
-    char* at = (pos != this->end && WKeyLess(key, (const WKey*)pos)) ? this->begin : pos;
-    at = (char*)LowerBound16(at, this->end, key, this->flag);
-    if (at == this->end || WKeyLess((const WKey*)at, key))
-        at = (char*)((Vec16*)this)->InsertSorted(at, (void*)key);
+    VBlk* self = this;
+    char* end = self->end;
+    char* at = pos;
+    if (pos != end && WKeyLess(key, (const WKey*)pos))
+        at = self->begin;
+    at = (char*)LowerBound16(at, end, key, self->flag);
+    if (at == end || WKeyLess((const WKey*)at, key))
+        at = (char*)((Vec16*)self)->InsertSorted(at, (void*)key);
     return at;
 }
 
@@ -3087,13 +3084,13 @@ char* CursorProvider::FindByField10(uint key, int match)
 }
 
 // @ 0x00ba5470
-char* CursorProvider::FindFirst10(uint key, int a, int b, int c)
+char* CursorProvider::FindFirst10(uint* key, int a, int b, int c)
 {
     CursorProvider* self = this;
     MapNode* found[2];
     char* result = 0;
     HashTable* t = &self->table;
-    t->Find(found, &key);
+    t->Find(found, key);
     MapNode** buckets = t->buckets;
     if (found[0] != buckets[t->bucketCount]) {
         MapNode* head = (MapNode*)((char*)found[0] + 4);
@@ -3106,13 +3103,13 @@ char* CursorProvider::FindFirst10(uint key, int a, int b, int c)
 }
 
 // @ 0x00ba54f0
-char* CursorProvider::FindFirst24(uint key, int a, int b, int c)
+char* CursorProvider::FindFirst24(uint* key, int a, int b, int c)
 {
     CursorProvider* self = this;
     MapNode* found[2];
     char* result = 0;
     HashTable* t = &self->table;
-    t->Find(found, &key);
+    t->Find(found, key);
     MapNode** buckets = t->buckets;
     if (found[0] != buckets[t->bucketCount]) {
         MapNode* head = (MapNode*)((char*)found[0] + 4);
@@ -3581,21 +3578,16 @@ void InsertionSortSimpleC(ElemC* first, ElemC* last, bool (*compare)(const ElemC
 }
 
 // @ 0x00ba7920
-Elem16* UninitMove16(Elem16* first, Elem16* last, Elem16* dst)
+void UninitMove16(Elem16* first, Elem16* last, Elem16* dst)
 {
-    if (first != last) {
+    for (; first != last; ++first, ++dst) {
         if (dst != 0) {
-            while (first != last) {
-                dst->a = first->a;
-                dst->b = first->b;
-                dst->c = first->c;
-                dst->d = first->d;
-                ++first;
-                ++dst;
-            }
+            dst->a = first->a;
+            dst->b = first->b;
+            dst->c = first->c;
+            dst->d = first->d;
         }
     }
-    return dst;
 }
 
 // @ 0x00ba7960
@@ -3856,17 +3848,19 @@ void TypeTagger::SetIfType(void* typeTag)
 // @ 0x00ba81b0
 void* HashOwner::Lookup(void* key)
 {
+    void* k = key;
     void** p = mp0c8;
     if (p != mp0cc) {
         do {
             void** e = (void**)*p;
-            if (e != (void**)p[1]) {
+            void** eEnd = (void**)p[1];
+            if (e != eEnd) {
                 do {
                     void* obj = *e;
-                    if (FUN_006ab760(((LookupObj*)obj)->Hash(), (const wchar_t*)key))
+                    if (FUN_006ab760(((LookupObj*)obj)->Hash(k), (const wchar_t*)k))
                         return obj;
                     ++e;
-                } while (e != (void**)p[1]);
+                } while (e != eEnd);
             }
             p += 5;
         } while (p != mp0cc);
@@ -3901,16 +3895,20 @@ void __stdcall DestroyBucketRange(char* first, char* last)
 }
 
 // @ 0x00ba8550
-void ElemCMakeHeap(ElemC* first, ElemC* last, bool (*compare)(const ElemC*, const ElemC*))
+int ElemCMakeHeap(ElemC* first, ElemC* last, bool (*compare)(const ElemC*, const ElemC*))
 {
     int n = (int)((char*)last - (char*)first) / 0xc;
     if (n >= 2) {
         int position = ((n - 2) >> 1) + 1;
+        ElemC* p = first + position;
         do {
             --position;
-            ElemCAdjustHeap(first, (uint)position, n, position, first[position], compare);
+            --p;
+            ElemC value = *p;
+            ElemCAdjustHeap(first, (uint)position, n, position, value, compare);
         } while (position != 0);
     }
+    return n;
 }
 
 // @ 0x00ba85c0
@@ -4243,20 +4241,18 @@ int* FUN_00ba95f0(int* begin, int* end, int* value)
 }
 
 // @ 0x00ba96e0
-int* FUN_00ba96e0(RefObj** first, RefObj** last, RefObj* value)
+int* FUN_00ba96e0(int* first, int* last, int* thresh)
 {
+    int pivot = *(int*)((char*)thresh + 0x28);
     for (;;) {
-        int pivot = value->m28;
-        while (RecKey((int*)*first) < pivot) first += 1;
-        do {
-            last -= 1;
-        } while (pivot < RecKey((int*)*last));
+        while (RecKey(*(int**)first) < pivot) ++first;
+        while (pivot < RecKey(*(int**)(last - 1))) --last;
         if (first >= last) break;
-        FUN_00b2af00((int*)first, (int*)last);
-        first += 1;
+        FUN_00b2af00(first, last - 1);
+        ++first;
     }
-    StarBody_Release(value);
-    return (int*)first;
+    RefRelease(thresh);
+    return first;
 }
 
 // @ 0x00ba9740
@@ -4285,7 +4281,7 @@ void FUN_00ba9740(int* a, int* b, int* c, void* d)
 void SortTriples_Finalize(cSortTriple* pBegin, cSortTriple* pMiddle, cSortTriple* pEnd, char (*pPred)(const cSortTriple*, const cSortTriple*))
 {
     FUN_00ba8550(pBegin, pMiddle, (void*)pPred);
-    for (cSortTriple* pCur = pMiddle; pCur < pEnd; ++pCur) {
+    for (cSortTriple* pCur = pMiddle; pCur < pEnd; pCur++) {
         if (pPred(pCur, pBegin)) {
             cSortTriple saved = *pCur;
             *pCur = *pBegin;

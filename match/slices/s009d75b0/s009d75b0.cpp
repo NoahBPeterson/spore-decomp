@@ -73,7 +73,7 @@ struct Item {
     Item(const Item& o);                                // 0x9d7dd0
 };
 
-Item** __cdecl UninitCopyOut(Item** out, Item* first, Item* last, Item* dst, u32 n);   // 0x9d7ea0
+void* __cdecl UninitCopyOut(Item** out, Item* first, Item* last, Item* dst, u32 tag);   // 0x9d7ea0
 void __cdecl SortRangeA(void* first, void* last, u32 pred);   // 0x9d7a40
 void __cdecl SortRangeB(void* first, void* last, u32 pred);   // 0x9d79d0
 void __cdecl SortRangeC(void* first, void* last, u32 pred);   // 0x9d7ab0
@@ -571,9 +571,7 @@ void __fastcall GaitSorter_SortAll(GaitSorter* self)
 }
 
 // @ 0x9d8660
-// __stdcall (ret 0xc) and the last argument read through a volatile lvalue: the original re-reads the count
-// parameter from its home slot at the join (cl otherwise rematerializes it into eax right after the alloc call).
-Item* __stdcall AllocCopyItems(u32 n, Item* first, Item* last)
+Item* __cdecl AllocCopyItems(u32 n, Item* first, Item* last)
 {
     Item* p;
     if (n)
@@ -582,7 +580,7 @@ Item* __stdcall AllocCopyItems(u32 n, Item* first, Item* last)
                               0xd1);
     else
         p = 0;
-    UninitCopyOut((Item**)&n, first, last, p, *(volatile u32*)&n);
+    UninitCopyOut((Item**)&n, first, last, p, n);
     return p;
 }
 

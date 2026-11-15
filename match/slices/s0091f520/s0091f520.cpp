@@ -474,44 +474,23 @@ struct HTable {
     HTNode* Insert(HTNode** out, uint32_t* key, int unused);
 };
 struct HTPre { void PreRehash(void*, uint32_t, uint32_t, int); }; // 0x00921440 (ecx = table+0x10)
-// A second hashtable flavour stored at +0x108: same field layout, different DoFreeNodes.
-struct HTMap {                 // 0x14 bytes of interest
-    uint32_t pad0;             // +0x00
-    HTNode** buckets;          // +0x04
-    uint32_t bucketCount;      // +0x08
-    uint32_t count;            // +0x0c
-    void DoFreeNodes(HTNode** bucketArray, uint32_t bucketCount); // 0x007611f0
-};
-struct HTMap2 {                // table at +0x108
-    uint32_t pad0;             // +0x00
-    void**   buckets;          // +0x04
-    uint32_t bucketCount;      // +0x08
-    uint32_t count;            // +0x0c
-    void DoFreeNodes(void** bucketArray, uint32_t bucketCount);   // 0x0093dc70
-};
-// EA::Thread::RWMutex (size 0x100); only the destructor is needed here.
-struct EARWMutexData { char pad[0x100]; };
-class RWMutex {
-public:
-    EARWMutexData mRWMutexData;
-    ~RWMutex();                                    // 0x00922310
-};
+extern "C" void __cdecl EastlHashDoFreeNodes(void*, void*);            // 0x007611f0
+extern "C" void __cdecl Sub_93dc70(void*, void*);                      // 0x0093dc70
+extern "C" void __cdecl Sub_922310(void*);                             // 0x00922310
 
 // @ 0x00920410
 void __fastcall HT_Destroy(HTNode** self)
 {
     self[0] = (HTNode*)0x0143d824;
-    HTMap* a = (HTMap*)((char*)self + 0x128);
-    a->DoFreeNodes(a->buckets, a->bucketCount);
-    a->count = 0;
-    if (a->bucketCount > 1)
-        op_delete(a->buckets);
-    HTMap2* b = (HTMap2*)((char*)self + 0x108);
-    b->DoFreeNodes(b->buckets, b->bucketCount);
-    b->count = 0;
-    if (b->bucketCount > 1)
-        op_delete(b->buckets);
-    ((RWMutex*)((char*)self + 8))->~RWMutex();
+    EastlHashDoFreeNodes(self[0x4b], self[0x4c]);
+    self[0x4d] = 0;
+    if ((uint32_t)self[0x4c] > 1)
+        op_delete(self[0x4b]);
+    Sub_93dc70(self[0x43], self[0x44]);
+    self[0x45] = 0;
+    if ((uint32_t)self[0x44] > 1)
+        op_delete(self[0x43]);
+    Sub_922310((char*)self + 8);
 }
 
 // @ 0x00920490

@@ -1784,18 +1784,10 @@ struct cGonzagoTimer {
     int   m10;     // +0x10
     int   m14;     // +0x14
     char  m18;     // +0x18
-    char  mPad19[3]; // +0x19 (the real class is naturally aligned: 0x20 bytes)
     int   m1c;     // +0x1c
-    void Init();    // @ 0x00b63890
-    void Destroy(); // @ 0x00b638b0
 };
-// the teardown helper retail calls __thiscall on a Variant (payload in ecx, the flags pushed)
-struct OrderVariant {           // 0x14 bytes, in this file's pack(1) region
-    uint32_t mPayload[4];       // +0x00 storage the helper works on
-    uint16_t mFlags;            // +0x10 bit 2: the payload is a heap copy that must be released
-    uint16_t mTypeId;           // +0x12
-    void Destruct(int flags);   // @ 0x0093db80
-};
+void cGonzagoTimer_ctor(cGonzagoTimer* t);   // @ 0x00b63890
+void cGonzagoTimer_dtor(cGonzagoTimer* t);   // @ 0x00b638b0
 struct IRefCount_s00bc_a040 {
     virtual void AddRef();                      // vtbl+0x00
     virtual void Release();                     // vtbl+0x04
@@ -1833,10 +1825,10 @@ struct cAgentOrder {
     float         mF1;        // +0x30
     float         mF2;        // +0x34
     char          mFlag;      // +0x38
-    OrderVariant  mVariant0;  // +0x39 .. payload 0x39, tag 0x49
-    OrderVariant  mVariant1;  // +0x4d .. payload 0x4d, tag 0x5d
-    OrderVariant  mVariant2;  // +0x61 .. payload 0x61, tag 0x71
-    OrderVariant  mVariant3;  // +0x75 .. payload 0x75, tag 0x85
+    char          mVariant0[0x14];  // +0x39 .. payload 0x39, tags 0x49/0x4b
+    char          mVariant1[0x14];  // +0x4d .. payload 0x4d, tags 0x5d/0x5f
+    char          mVariant2[0x14];  // +0x61 .. payload 0x61, tags 0x71/0x73
+    char          mVariant3[0x14];  // +0x75 .. payload 0x75, tags 0x85/0x87
 
     cAgentOrder();
     ~cAgentOrder();
@@ -1882,11 +1874,15 @@ struct cAgentOrderManager {
     int   IsSourceEmpty();
     cAgentOrder* FirstPending();
     void  Tick(float dt);
-    cAgentOrder* FindNode(int key, bool (*pred)(void*, void*), void* ctx);
+    cAgentOrder* FindNode(int key, int (*pred)(void*, void*), void* ctx);
     u32   Activate(int tmplIdx, int type, IRefCount_s00bc_a040* p1,
                    float timeLeft, void* header, IRefCount_s00bc_a040* p2);
     void  SaveList2(cOutStream* s, char* list);
     void  FreeAll();
+    void ReleaseNode(char** out, char* node);
+    void  AllocNode();
+    void  ClearList();
+    void  AllocLink();
     void  DoInsertValues(char* pos, u32 n, void* val);
     ~cAgentOrderManager();
     void  PopFront();
@@ -1952,21 +1948,6 @@ struct FixedAllocatorBase {
     ~FixedAllocatorBase();                                                      // 0x00926640
     bool AddCore(void* p, unsigned n);                                          // 0x00926650
 };
-// the manager's order pool at this+8 is the same allocator; retail calls AddCore/mpFree through its members
-struct OrderPool {
-    char     mPad00[0x10];                            // +0x00
-    char*    mpFree;                                  // +0x10
-    bool __thiscall AddCore(void* p, unsigned n);     // 0x00926650
-};
-// an intrusive list of cAgentOrder nodes: root at +0x00, the node pool at +0x08 (free head at +0x18)
-struct OrderList {
-    char*     mpHead;                                 // +0x00
-    char*     mpTail;                                 // +0x04
-    OrderPool mAlloc;                                 // +0x08
-    void ClearList();                                 // 0x00bcab00
-    void AllocLink();                                 // 0x00bcac60
-    void ReleaseNode(char** out, char* node);         // 0x00bcaa50
-};
 typedef void (__thiscall* FnThis0)(void*);
 struct ListEntry {
     void** vptr;                // +0x000
@@ -1977,7 +1958,6 @@ struct ListEntry {
     uint32_t m14;               // +0x014
     uint32_t mValue;            // +0x018
     uint8_t m1c;                // +0x01c
-    uint8_t mPad1d[3];          // +0x01d (the real class is naturally aligned: m20 starts at +0x20)
     uint32_t m20[0x180 / 4];    // +0x020
     uint32_t m1a0;              // +0x1a0
     uint32_t m1a4[0x80 / 4];    // +0x1a4
@@ -3131,12 +3111,13 @@ Node* Reg_s00bc_4730::newNode()
     p = mAlloc.mpFree;
     mAlloc.mpFree = p->mpNext;
 construct:
-    NodeRoot* const root = &mRoot;
-    Entry_s00bc_4730* const e = p->mEntry.init();
-    p->mpNext = (Node*)(void*)root;
-    p->mpPrev = root->mpPrev;
-    root->mpPrev->mpNext = p;
-    root->mpPrev = p;
+    Entry_s00bc_4730* e = 0;
+    if (p != 0)
+        e = p->mEntry.init();
+    p->mpNext = (Node*)(void*)&mRoot;
+    p->mpPrev = mRoot.mpPrev;
+    mRoot.mpPrev->mpNext = p;
+    mRoot.mpPrev = p;
     return (Node*)(void*)e;
 }
 
@@ -5106,6 +5087,7 @@ bool __cdecl WalkTree(float f1, double t, Node_s00bc_8ff0* node, int p4, Cursor*
 // @ 0x00bc9980
 uint32_t* Stimuli::UpdateStimuli(float dt)
 {
+	float zero = 0.0f;
 	for (uint32_t i = 0; i < 8; i++)
 	{
 		Stimulus* s = &slot[i];
@@ -5116,21 +5098,21 @@ uint32_t* Stimuli::UpdateStimuli(float dt)
 		{
 			float d = s->duration - dt;
 			s->duration = d;
-			if (0.0f >= d)
+			if (d > zero)
+				continue;
+			mMask1 &= ~m;
+			mMask0 &= ~id;
+			s->id = 0;
+			s->mask = 0;
+			s->duration = zero;
+			_ReadWriteBarrier();
+			IRefCounted* old = s->object;
+			if (old)
 			{
-				mMask1 &= ~m;
-				mMask0 &= ~id;
-				s->id = 0;
-				s->mask = 0;
-				s->duration = 0.0f;
-				_ReadWriteBarrier();
-				IRefCounted* old = s->object;
-				if (old)
-				{
-					s->object = 0;
-					old->Release();
-				}
+				s->object = 0;
+				old->Release();
 			}
+			zero = 0.0f;
 		}
 	}
 	return &mMask0;
@@ -5466,27 +5448,23 @@ u32 cAgentOrderManager::FindSlot(int a, int b, int c, int d)
 // @ 0x00bca120
 cAgentOrder::~cAgentOrder()
 {
-    OrderVariant* v3 = &mVariant3;
-    if (v3->mFlags & 4) {
-        v3->Destruct(0);
+    char* self = (char*)this;
+    if (self[0x85] & 4) {
+        FUN_0093db80(self + 0x75, 0);
     }
-    OrderVariant* v2 = &mVariant2;
-    if (v2->mFlags & 4) {
-        v2->Destruct(0);
+    if (self[0x71] & 4) {
+        FUN_0093db80(self + 0x61, 0);
     }
-    OrderVariant* v1 = &mVariant1;
-    if (v1->mFlags & 4) {
-        v1->Destruct(0);
+    if (self[0x5d] & 4) {
+        FUN_0093db80(self + 0x4d, 0);
     }
-    OrderVariant* v0 = &mVariant0;
-    if (v0->mFlags & 4) {
-        v0->Destruct(0);
+    if (self[0x49] & 4) {
+        FUN_0093db80(self + 0x39, 0);
     }
-    IRefCount_s00bc_a040* src = mSource;
-    if (src != 0) {
-        src->Release();
+    if (mSource != 0) {
+        mSource->Release();
     }
-    mTimer.Destroy();
+    cGonzagoTimer_dtor(&mTimer);
 }
 
 // @ 0x00bca180
@@ -5629,30 +5607,35 @@ cAgentOrder* cAgentOrder::Assign(cAgentOrder const& o)
 cAgentOrder::cAgentOrder()
 {
     mId = -1;
-    mTimer.Init();
+    cGonzagoTimer_ctor(&mTimer);
     mSource = 0;
     mTimeLeft = gOrderDef0;
     mF1 = gOrderDef1;
     mF2 = gOrderDef2;
     mFlag = 0;
-    mVariant0.mFlags = 0;
-    mVariant0.mTypeId = 0;
-    mVariant1.mTypeId = 0;
-    mVariant1.mFlags = 0;
-    mVariant2.mFlags = 0;
-    mVariant2.mTypeId = 0;
-    mVariant3.mFlags = 0;
-    mVariant3.mTypeId = 0;
+    char* self = (char*)this;
+    *(u16*)(self + 0x49) = 0;
+    *(u16*)(self + 0x4b) = 0;
+    *(u16*)(self + 0x5f) = 0;
+    *(u16*)(self + 0x5d) = 0;
+    *(u16*)(self + 0x71) = 0;
+    *(u16*)(self + 0x73) = 0;
+    *(u16*)(self + 0x85) = 0;
+    *(u16*)(self + 0x87) = 0;
 }
 
 // @ 0x00bca620
-cAgentOrder* cAgentOrderManager::FindNode(int key, bool (*pred)(void*, void*), void* ctx)
+cAgentOrder* cAgentOrderManager::FindNode(int key, int (*pred)(void*, void*), void* ctx)
 {
-    for (char* node = *(char**)this; node != (char*)this; node = *(char**)node) {
-        cAgentOrder* order = (cAgentOrder*)(node + 8);
-        if (*(int*)(node + 0x10) == key && node[0x24] == 0 && (pred == 0 || pred(order, ctx))) {
-            return order;
+    char* self = (char*)this;
+    char* node = *(char**)self;
+    while (node != self) {
+        if (*(int*)(node + 0x10) == key && node[0x1c] == 0) {
+            if (pred == 0 || pred(node + 8, ctx)) {
+                return (cAgentOrder*)(node + 8);
+            }
         }
+        node = *(char**)node;
     }
     return 0;
 }
@@ -5854,53 +5837,53 @@ void cAgentOrderManager::FreeAll()
 }
 
 // @ 0x00bcaa50
-void OrderList::ReleaseNode(char** out, char* node)
+void cAgentOrderManager::ReleaseNode(char** out, char* node)
 {
-    char* link = *(char**)(*(char**)node + 4);
-    char* next = *(char**)link;
-    char* prev = *(char**)(link + 4);
+    char* self = (char*)this;
+    char* next = *(char**)node;
+    char* prev = *(char**)(node + 4);
     *(char**)prev = next;
     *(char**)(next + 4) = prev;
 
-    *(void**)(link + 8) = (void*)0x1466998;
-    IRefCount_s00bc_a040* r = *(IRefCount_s00bc_a040**)(link + 0x1a8);
+    *(void**)(node + 8) = (void*)0x1466998;
+    IRefCount_s00bc_a040* r = *(IRefCount_s00bc_a040**)(node + 0x1a8);
     if (r != 0) {
         r->Release();
     }
-    *(void**)(link + 8) = (void*)0x13ec458;
-    *(void**)link = *(void**)((char*)this + 0x18);
-    *(void**)((char*)this + 0x18) = link;
-    *out = *(char**)node;
+    *(void**)(node + 8) = (void*)0x13ec458;
+    *(void**)node = *(void**)((char*)self + 0x18);
+    *(void**)((char*)self + 0x18) = node;
+    *out = next;
 }
 
 // @ 0x00bcaab0
-ListNode* RawList::AllocNode()
+void cAgentOrderManager::AllocNode()
 {
-    OrderPool* pool = (OrderPool*)((char*)this + 8);
-    ListNode* p;
-    while (pool->mpFree == 0) {
-        if (!pool->AddCore(0, 0)) {
+    char* esi = (char*)this + 8;
+    char* p;
+    for (;;) {
+        if (*(char**)(esi + 0x10) != 0) {
+            p = *(char**)(esi + 0x10);
+            *(char**)(esi + 0x10) = *(char**)p;
+            break;
+        }
+        if (!FUN_00926650(esi, 0, 0)) {
             p = 0;
-            goto init;
+            break;
         }
     }
-    p = (ListNode*)pool->mpFree;
-    pool->mpFree = (char*)p->mpNext;
-init:
-    ListEntry* e = (ListEntry*)((char*)p + 8);
-    if (e != 0) {
-        e->m04 = 0;
-        e->vptr = (void**)0x1466998;
-        e->m1c = 0;
-        e->m1a0 = 0;
-        e->m224 = 0;
-        e->m228 = 0;
+    if (p != 0) {
+        *(u32*)(p + 4) = 0;
+        *(void**)p = (void*)0x1466998;
+        *(u8*)(p + 0x1c) = 0;
+        *(u32*)(p + 0x1a0) = 0;
+        *(u32*)(p + 0x224) = 0;
+        *(u32*)(p + 0x228) = 0;
     }
-    return p;
 }
 
 // @ 0x00bcab00
-void OrderList::ClearList()
+void cAgentOrderManager::ClearList()
 {
     char* self = (char*)this;
     char* node = *(char**)self;
@@ -5908,24 +5891,23 @@ void OrderList::ClearList()
         char* esi = node;
         char* next = *(char**)node;
         node = next;
-        cAgentOrder* order = (cAgentOrder*)(esi + 8);
-        if (order->mVariant3.mFlags & 4) {
-            order->mVariant3.Destruct(0);
+        if (esi[0x8d] & 4) {
+            FUN_0093db80(esi + 0x7d, 0);
         }
-        if (order->mVariant2.mFlags & 4) {
-            order->mVariant2.Destruct(0);
+        if (esi[0x79] & 4) {
+            FUN_0093db80(esi + 0x69, 0);
         }
-        if (order->mVariant1.mFlags & 4) {
-            order->mVariant1.Destruct(0);
+        if (esi[0x65] & 4) {
+            FUN_0093db80(esi + 0x55, 0);
         }
-        if (order->mVariant0.mFlags & 4) {
-            order->mVariant0.Destruct(0);
+        if (esi[0x51] & 4) {
+            FUN_0093db80(esi + 0x41, 0);
         }
-        IRefCount_s00bc_a040* r = order->mSource;
+        IRefCount_s00bc_a040* r = *(IRefCount_s00bc_a040**)(esi + 0x30);
         if (r != 0) {
             r->Release();
         }
-        order->mTimer.Destroy();
+        cGonzagoTimer_dtor((cGonzagoTimer*)(esi + 0x10));
         *(void**)esi = *(void**)(self + 0x18);
         *(void**)(self + 0x18) = esi;
     }
@@ -5973,30 +5955,29 @@ cAgentOrder* cAgentOrder::CopyConstruct(cAgentOrder const& o)
 }
 
 // @ 0x00bcac60
-void OrderList::AllocLink()
+void cAgentOrderManager::AllocLink()
 {
-    OrderPool* pool = &mAlloc;
+    char* self = (char*)this;
+    char* edi = self + 8;
     char* p;
     for (;;) {
-        if (pool->mpFree != 0) {
-            p = pool->mpFree;
-            pool->mpFree = *(char**)p;
+        if (*(char**)(edi + 0x10) != 0) {
+            p = *(char**)(edi + 0x10);
+            *(char**)(edi + 0x10) = *(char**)p;
             break;
         }
-        if (!pool->AddCore(0, 0)) {
+        if (!FUN_00926650(edi, 0, 0)) {
             p = 0;
             break;
         }
     }
-    cAgentOrder* order = (cAgentOrder*)(p + 8);
-    _ReadWriteBarrier();
-    if (order != 0) {
-        order->cAgentOrder::cAgentOrder();
+    if (p != 0) {
+        ((cAgentOrder*)(p + 8))->cAgentOrder::cAgentOrder();
     }
-    *(char**)p = (char*)this;
-    *(char**)(p + 4) = *(char**)((char*)this + 4);
-    **(char***)((char*)this + 4) = p;
-    *(char**)((char*)this + 4) = p;
+    *(char**)p = self;
+    *(char**)(p + 4) = *(char**)(self + 4);
+    **(char***)(self + 4) = p;
+    *(char**)(self + 4) = p;
 }
 
 // @ 0x00bcacb0
@@ -6006,7 +5987,7 @@ int FUN_00bcacb0(char* list, IRefCount_s00bc_a040* obj)
     while (node != list) {
         if ((IRefCount_s00bc_a040*)(node + 8) == obj) {
             char* next;
-            ((OrderList*)list)->ReleaseNode(&next, node);
+            ((cAgentOrderManager*)list)->ReleaseNode(&next, node);
             return 1;
         }
         node = *(char**)node;
@@ -6036,8 +6017,9 @@ cAgentOrderManager::~cAgentOrderManager()
     }
     FUN_00926640(self + 0x63c);
 
-    ((OrderList*)(self + 0x60c))->ClearList();
+    ClearList();
     FUN_00926640(self + 0x614);
+
     if (mSource != 0) {
         mSource->vtbl08();
     }
@@ -6080,26 +6062,24 @@ cAgentOrder* cAgentOrderManager::PushBack(void* a, IRefCount_s00bc_a040* b, char
     char* self = (char*)this;
     if (clear != 0) {
         char* lst = self + 0x60c;
-        ((OrderList*)lst)->ClearList();
+        ClearList();
         *(char**)lst = lst;
         *(char**)(lst + 4) = lst;
     }
-    OrderList* list = (OrderList*)(self + 0x60c);
-    list->AllocLink();
-    cAgentOrder* order = (cAgentOrder*)(*(char**)(self + 0x610) + 8);
-    *(void**)order = a;
-    _ReadWriteBarrier();
-    IRefCount_s00bc_a040* old = order->mSource;
+    AllocLink();
+    char* node = *(char**)(self + 0x610);
+    *(void**)(node + 8) = a;
+    IRefCount_s00bc_a040* old = *(IRefCount_s00bc_a040**)(node + 0x30);
     if (b != old) {
         if (b != 0) {
             b->AddRef();
         }
-        order->mSource = b;
+        *(IRefCount_s00bc_a040**)(node + 0x30) = b;
         if (old != 0) {
             old->Release();
         }
     }
-    return order;
+    return (cAgentOrder*)(node + 8);
 }
 
 // @ 0x00bcafe0

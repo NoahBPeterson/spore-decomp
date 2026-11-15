@@ -12,4 +12,3 @@ slices/s011b1520/s011b1520.cpp  ?ec_group_op_60@@YAHPAX0@Z  011b27e0  /vc71 /O2 
 slices/s011b1520/s011b1520.cpp  ?ec_group_op_64@@YAHPAX00@Z  011b2830  /vc71 /O2 /MD /Gy /TP
 slices/s011b1520/s011b1520.cpp  ?ec_group_op_68@@YAHPAX000@Z  011b2880  /vc71 /O2 /MD /Gy /TP
 slices/s011b1520/s011b1520.cpp  ?ec_group_op_6c@@YAHPAX00@Z  011b28e0  /vc71 /O2 /MD /Gy /TP
-slices/s011b1520/s011b1520.cpp  ?ec_key_new_method@@YAPAHPAH@Z  011b2140  /O2 /MD /Gy /TP

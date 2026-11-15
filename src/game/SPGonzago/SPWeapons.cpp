@@ -584,7 +584,7 @@ struct ArtilleryProjectile {
     int    mDamageType;              // +0x530
     void*  mTool;                    // +0x534
 
-    ArtilleryProjectile* ctor();
+    void   ctor();
 };
 struct ILoco {
 virtual void l00();
@@ -1275,7 +1275,7 @@ public:
     cSpatialObjectView();
     ~cSpatialObjectView();
     void SetObject(void* pObject);                  // 0x24
-    uint8_t UpdateState();
+    int UpdateState();
     void HandleSimulationUpdate(int a, int b);
     void CreateEffect(uint32_t id, int a);          // wrapper over the effect list
 
@@ -2936,8 +2936,9 @@ bool CArtilleryProjectileR::Read(IStream* s)
 void CFlakProjectile::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    void** it = *(void***)w;
-    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x240e3b7);
+    uint32_t id = 0x240e3b7;
+    void* v = WriterValue(w);
+    EA_IO_WriteUint32(v, &id, 1, 0);
     mGameData.Write(s);
     mLoco.Write(s);
     cVarListSerializer ser(this, &g_157d7d8, 0x1a80d26);
@@ -2969,8 +2970,9 @@ void* CObj3ad0::Cast(int type)
 void CCulturalProjectile::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    void** it = *(void***)w;
-    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x244d3c0);
+    uint32_t id = 0x244d3c0;
+    void* v = WriterValue(w);
+    EA_IO_WriteUint32(v, &id, 1, 0);
     mGameData.Write(s);
     mLoco.Write(s);
     cVarListSerializer ser(this, &g_157dd7c, 0x1a80d26);
@@ -2999,8 +3001,9 @@ void* CObj3c80::Cast(int type)
 void CResourceProjectile::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    void** it = *(void***)w;
-    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x24630ce);
+    uint32_t id = 0x24630ce;
+    void* v = WriterValue(w);
+    EA_IO_WriteUint32(v, &id, 1, 0);
     mGameData.Write(s);
     mSpatial.Write(s);
     cVarListSerializer ser(this, &g_157ddb8, 0x1a80d26);
@@ -3026,8 +3029,9 @@ void* CObj3e20::Cast(int type)
 void CDefaultAoEArea::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    void** it = *(void***)w;
-    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x4167194);
+    uint32_t id = 0x4167194;
+    void* v = WriterValue(w);
+    EA_IO_WriteUint32(v, &id, 1, 0);
     mGameData.Write(s);
     mSpatial.Write(s);
     cVarListSerializer ser(this, &g_157e358, 0x1a80d26);
@@ -3057,8 +3061,9 @@ void __cdecl FUN_00cb3f80(float* a, float* b, float* c, float* out1, float* out2
 void CCulturalProjectileW::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    void** it = *(void***)w;
-    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x4f76f08);
+    uint32_t id = 0x4f76f08;
+    void* v = WriterValue(w);
+    EA_IO_WriteUint32(v, &id, 1, 0);
     mGameData.Write(s);
     mLoco.Write(s);
     cVarListSerializer ser(this, &g_157e578, 0x1a80d26);
@@ -3069,8 +3074,9 @@ void CCulturalProjectileW::Write(IStream* s)
 void CResourceProjectileW2::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    void** it = *(void***)w;
-    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x5776a28);
+    uint32_t id = 0x5776a28;
+    void* v = WriterValue(w);
+    EA_IO_WriteUint32(v, &id, 1, 0);
     mGameData.Write(s);
     mLoco.Write(s);
     cVarListSerializer ser(this, &g_157e758, 0x1a80d26);
@@ -3451,7 +3457,7 @@ float* f00cb5140(int self, float* out)
 }
 
 // @ 0x00cb52c0
-int __fastcall f00cb52c0(int self)
+int f00cb52c0(int self)
 {
     if (FUN_0104cda0(*(void**)(self + 0x518)) == 0.0f)
         return 0;
@@ -4036,38 +4042,39 @@ void cDefaultAoEArea::FUN_00cb61d0()
 // @ 0x00cb6310
 u8 __cdecl FUN_00cb6310(void* a1, u8 a2)
 {
-    if (a1 != 0) {
-        void* c = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x13f94d4);
-        if (c != 0) {
-            u32 ds = MOPS(c)->FUN_008e7f80();
-            if (ds == 2)
-                return 0;
-            if (((cCombatantObj*)c)->mB_08 != 0)
-                return 0;
-            if (a2 == 0) {
-                u32 id = ((u32 (__thiscall*)(void*))VT(c)[0x10 / 4])(c);
-                if (id == gU_0169a40c)
-                    return 0;
-            }
-            return 1;
-        }
+    if (a1 == 0)
+        return 0;
 
-        void* p = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x3ed590d);
-        if (p != 0) {
-            u32 v = ((cCombatantObj*)p)->mU_88;
-            if (v == 0 || v == 1 || v == 2)
-                return 1;
+    void* c = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x13f94d4);
+    if (c != 0) {
+        u32 ds = MOPS(c)->FUN_008e7f80();
+        if (ds == 2)
             return 0;
-        }
+        if (((cCombatantObj*)c)->mB_08 != 0)
+            return 0;
+        if (a2 != 0)
+            return 1;
+        u32 id = ((u32 (__thiscall*)(void*))VT(c)[0x10 / 4])(c);
+        if (id == gU_0169a40c)
+            return 0;
+        return 1;
+    }
 
-        void* q = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x175cdc9);
-        if (q != 0) {
-            u32 v = ((cCombatantObj*)q)->mU_228;
-            if (v == 0x611a05e)
-                return 1;
-            if (v == 0x611a05f)
-                return 1;
-        }
+    void* p = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x3ed590d);
+    if (p != 0) {
+        u32 v = ((cCombatantObj*)p)->mU_88;
+        if (v == 0 || v == 1 || v == 2)
+            return 1;
+        return 0;
+    }
+
+    void* q = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x175cdc9);
+    if (q != 0) {
+        u32 v = ((cCombatantObj*)q)->mU_228;
+        if (v == 0x611a05e)
+            return 1;
+        if (v == 0x611a05f)
+            return 1;
     }
     return 0;
 }
@@ -4096,27 +4103,35 @@ void __cdecl FUN_00cb63e0(void* a1)
 // @ 0x00cb6400
 u8 __cdecl FUN_00cb6400(void* a1, u8 a2)
 {
-    if (a1 != 0) {
-        void* c = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x13f94d4);
-        if (c != 0) {
-            void* prop = (void*)((u32 (__thiscall*)(void*, u32))VT(c)[0x5c / 4])(c, 0xb033b403);
-            u32 ds = MOPS(c)->FUN_008e7f80();
-            if (ds != 2) {
-                if (((cCombatantObj*)c)->mB_08 == 0) {
-                    if (a2 == 0) {
-                        u32 id = ((u32 (__thiscall*)(void*))VT(c)[0x10 / 4])(c);
-                        if (id == gU_0169a40c)
-                            return 0;
-                    }
-                    if (!(gB_0169a408 != 0 && prop != 0 && ((cCombatantObj*)prop)->mS_714 == 3)) {
-                        if (FUN_00ae3370(c) != 0 || FUN_00bcd430(c) != 0 ||
-                            FUN_00c032a0(c) != 0 || FUN_00ae3350(c) != 0)
-                            return 1;
-                    }
-                }
-            }
-        }
+    if (a1 == 0)
+        return 0;
+
+    void* c = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x13f94d4);
+    if (c == 0)
+        return 0;
+
+    void* prop = (void*)((u32 (__thiscall*)(void*, u32))VT(c)[0x5c / 4])(c, 0xb033b403);
+    u32 ds = MOPS(c)->FUN_008e7f80();
+    if (ds == 2)
+        return 0;
+    if (((cCombatantObj*)c)->mB_08 != 0)
+        return 0;
+    if (a2 == 0) {
+        u32 id = ((u32 (__thiscall*)(void*))VT(c)[0x10 / 4])(c);
+        if (id == gU_0169a40c)
+            return 0;
     }
+    if (gB_0169a408 != 0 && prop != 0 && ((cCombatantObj*)prop)->mS_714 == 3)
+        return 0;
+
+    if (FUN_00ae3370(c) != 0)
+        return 1;
+    if (FUN_00bcd430(c) != 0)
+        return 1;
+    if (FUN_00c032a0(c) != 0)
+        return 1;
+    if (FUN_00ae3350(c) != 0)
+        return 1;
     return 0;
 }
 
@@ -4483,32 +4498,28 @@ void GameObject::SetForwardDir(void* arg)
 }
 
 // @ 0x00cb6ed0
-ArtilleryProjectile* ArtilleryProjectile::ctor()
+void ArtilleryProjectile::ctor()
 {
     ((void(__thiscall*)(void*)) FUN_00b18660)(this);
     ((void(__thiscall*)(void*)) FUN_00c43860)(&mpVtLoco);
 
     float zero = 0.0f;
     mpVt4 = (void*)g_vft_145dca8;
+    _ReadWriteBarrier();
     mTargetOffset[0] = zero;
     mTargetOffset[1] = zero;
     mTargetOffset[2] = zero;
-    _ReadWriteBarrier();
     mFlag = 0;
-    _ReadWriteBarrier();
     mpVt0 = (void*)g_vft_1475470;
     mpVt1 = (void*)g_vft_147545c;
     mpVtLoco = (void*)g_vft_1475360;
     mpVt3 = (void*)g_vft_1475354;
     mpVt4 = (void*)g_vft_147532c;
-    _ReadWriteBarrier();
     mpOwner = 0;
     mMinDamage = 0;
-    mDamageType = 0;
     mMaxDamage = 1;
-    _ReadWriteBarrier();
+    mDamageType = 0;
     mTool = 0;
-    return this;
 }
 
 // @ 0x00cb6fe0
@@ -7519,27 +7530,24 @@ int FindNearestCreature(float fX, float fY, float fZ, bool bGround, bool bAir)
 }
 
 // @ 0x00cc27f0
-uint8_t cSpatialObjectView::UpdateState()
+int cSpatialObjectView::UpdateState()
 {
-    void* pObject = mpObject;
-    if (pObject == nullptr)
+    if (mpObject == nullptr)
         return 0;
 
-    switch (mViewState) {
-    case 0:
-        ((Simulator::cGameData_s00cb_b020*)((uint8_t*)this - 0x504))->FUN_00cbb840();
-        break;
-    case 1: {
-        const ResourceKey* pKey = ((cSpaceToolData_s00cc_15b0*)pObject)->GetToolKey();
-        if (*pKey == kGravitationWaveTool || IsToolKey(pKey, &kPeaceBombTool) ||
-            IsToolKey(pKey, &kCashInfusionTool) || IsToolKey(pKey, &kPlanetConversionTool))
-            ((cDefaultToolProjectile_s00cc_15b0*)((uint8_t*)this - 0x504))->UpdateBombPhase1();
-        else
-            FUN_00cbbdc0((int)((uint8_t*)this - 0x504));
-        break;
-    }
-    case 2:
-        return f00cb52c0((int)((uint8_t*)this - 0x504));
+    int nState = mViewState;
+    if (nState == 0) {
+        UpdateMissileEffect(this, mpObject, 0);
+    } else if (nState == 1) {
+        Vec3_s00cc_22c0* pDirection = (Vec3_s00cc_22c0*)(*(void* (__thiscall*)(void*))(**(uint32_t**)mpObject + 0x18))(mpObject);
+        if (pDirection->mX != gDefaultOrientation || pDirection->mY != 0.0f ||
+            pDirection->mZ != 0.0f) {
+            if (!IsWaterSurface())
+                UpdateBeamEffect(this, mpObject, 0);
+        }
+        UpdateMissileEffect(this, mpObject, 1);
+    } else if (nState == 2) {
+        return (int)GetAoEKind();
     }
     return 1;
 }

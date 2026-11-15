@@ -245,17 +245,17 @@ void __cdecl SeedCitizenTool(CCitizen* pCitizen)
 
 // @ 0x00d577b0
 // Copies a range of 16-byte elements; each element is skipped when the destination is null.
-// The original walks a source pointer and a destination pointer, both starting at the arguments,
-// and skips an element by branching over the stores before the walk advances both.
 void __cdecl CopyElems16(const Elem16* pFirst, const Elem16* pLast, Elem16* pDest)
 {
-    for (; pFirst != pLast; ++pFirst, ++pDest) {
+    while (pFirst != pLast) {
         if (pDest != 0) {
             pDest->mnId = pFirst->mnId;
             pDest->mf0 = pFirst->mf0;
             pDest->mf1 = pFirst->mf1;
             pDest->mf2 = pFirst->mf2;
         }
+        ++pFirst;
+        ++pDest;
     }
 }
 

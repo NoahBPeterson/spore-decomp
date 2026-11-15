@@ -1258,20 +1258,23 @@ void Win::DestroyProc(void* proc)
 {
     char* a = (char*)this;
     Node* head = (Node*)(a + 0x64);
-    Node* p = head->next;
-    while (p != head && p->field8 != proc)
-        p = p->next;
+    Node* p = *(Node**)(a + 0x64);
     if (p == head)
         return;
+    while (p->field8 != proc) {
+        p = p->next;
+        if (p == head)
+            return;
+    }
     int local[3];
     local[0] = 0x1001;
     (*(void(__thiscall**)(void*, char*, int*))((char*)*(void**)proc + 0x18))(proc, a + 4, local);
     (*(void(__thiscall**)(void*))((char*)*(void**)proc + 4))(proc);
-    if (flag74 == 0) {
-        Node* t = p->next;
-        Node* q = p->prev;
-        q->next = t;
-        t->prev = q;
+    if (*(int*)(a + 0x74) == 0) {
+        Node* nx = p->next;
+        Node* pv = p->prev;
+        pv->next = nx;
+        nx->prev = pv;
         (*(void(__thiscall**)(void*, Node*, int))((char*)*(void**)alloc6c + 0xc))(alloc6c, p, 0x10);
         return;
     }

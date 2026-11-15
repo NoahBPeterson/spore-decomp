@@ -40,10 +40,6 @@ struct Vec2 {
     float x, y;
 };
 
-struct RectF {                      // a 16-byte float rect passed by value
-    float x0, y0, x1, y1;
-};
-
 // ---- XHTML node / layout object shapes used by this slice ----
 struct FloatEntry {                 // 0x74
     uint32_t mPad00[0x54 / 4];      // +0x00
@@ -95,37 +91,11 @@ void* __cdecl PageLayout_Build(void* self, void* layout, void* a, int b); // 0x0
 void  __cdecl ScrollVectorClear(void* a, void* b);               // 0x00e25bd0
 void  __fastcall Node_SetFlag(void* node, int, int flag);        // 0x00928c40
 
-// EA::Text::Typesetter: the sub-object at this+4 of both contexts.  One stub carries
-// every method this slice calls through it, so `this` arrives in ecx and the stack
-// arguments are pushed (the original's call sites show exactly that).
+// EA::Text::Typesetter (0x0089b250 = AddLineBreak, ret 8).
 class Typesetter {
 public:
-    void AddLineBreak(void* item, const void* pickBox);          // 0x0089b250
-    void AddTextRun(const wchar_t* s, unsigned n);               // 0x0089b1e0
-    void StyleAssign(void* v);                                   // 0x0089b360
-    int  ContentSize();                                          // 0x00897690
-    void* GetApp();                                              // 0x006e64f0
+    void AddLineBreak(void* item, const void* pickBox);
 };
-
-// An XHTML layout item (only the selection query this slice needs).
-struct LayoutItem {
-    char IntersectSelection(unsigned int* begin, unsigned int* end,
-                            unsigned int extra);                 // 0x008eaf30
-};
-
-// A document node (DocX) and the page objects called through `this`.
-struct DocumentNode {
-    char CheckFlag(char flag);                                   // 0x008e29e0
-};
-struct PageObject {
-    void NotifyImagesAbandoned();                                // 0x008eb7a0
-    void DestroyItem(void* item);                                // 0x008ebd50
-    void Reset(void* p);                                         // 0x00928c40
-};
-struct BlockVector {
-    void* f(void** begin, void** end);                           // 0x00e25bd0
-};
-
 char  __fastcall StyleSet(void* self, int, void* a);             // 0x008eaf30
 void  __fastcall StyleAssign(void* self, int, void* v);          // 0x0089b360
 void  __fastcall StyleAssign2(void* self, int, int a, int b);    // 0x0089b1e0
@@ -189,10 +159,10 @@ class PickingContext { public:                     // 0xb84
     PickingContext(const PickingContext& src);
     void RefreshMargins();
     void SetContextRect(const float* rect);
-    void SetContextRectRelative(RectF r);
+    void SetContextRectRelative(float x0, float y0, float x1, float y1);
     void PlaceFloat(FloatEntry* entry);
-    static TranslationEntry* lower_bound(TranslationEntry* first, TranslationEntry* last,
-                                         const int* value);
+    TranslationEntry* lower_bound(TranslationEntry* first, TranslationEntry* last,
+                                  const int* value);
     char Flush(void* arg);
     char FlushAll(void* arg);
     char PickTextItem(void* item, int a, int b);
@@ -222,16 +192,19 @@ class RenderingContext { public:
     float    mMarginX554;                   // +0x0554
     float    mMarginY558;                   // +0x0558
     float    mExtra55c;                     // +0x055c
-    uint32_t mCount560;                     // +0x0560
-    uint32_t mMax564;                       // +0x0564
-    uint32_t mVal568;                       // +0x0568
-    FloatEntry* mpFloatHead56c;             // +0x056c
+    int      mCount560;                     // +0x0560
+    TranslationEntry* mVecBegin564;         // +0x0564
+    TranslationEntry* mVecEnd568;           // +0x0568
+    TranslationEntry* mVecCap56c;           // +0x056c
     uint32_t mPad570;                       // +0x0570
     void*    mpInline574;                   // +0x0574
+    uint32_t mPad578[(0xb7c - 0x578) / 4];
+    FloatEntry* mpFloatHeadB7c;             // +0x0b7c
+    FloatEntry* mpFloatTailB80;             // +0x0b80
 
     RenderingContext(void* scroll, const float* screenRect, const float* marginRect);
     RenderingContext(const RenderingContext& src);
-    void Place(void* item, int style);
+    char Place(void* item, int a, int b);
     void RefreshMargins();
     int TestRect(float x0, float y0, float x1, float y1);
     void ScrollViewport(float x0, float y0, float x1, float y1);
@@ -265,11 +238,6 @@ class Page { public:
 
 using namespace EA::XHTML::Layout;
 
-// max that returns a reference: both operands stay addressable, which is how cl writes the
-// original's pointer-select (`lea`/`ja` over the member and a stack temp) instead of a cmov.
-template <typename T> inline const T& tmax(const T& a, const T& b) { return (a < b) ? b : a; }
-template <typename T> inline const T& tmin(const T& a, const T& b) { return (a < b) ? a : b; }
-
 // ============================ function bodies ============================
 
 // @ 0x008edc30
@@ -293,10 +261,10 @@ void Page::SetDocument(void* document)
 {
     if (mpNode24 == document)
         return;
-    ((PageObject*)this)->NotifyImagesAbandoned();
-    ((PageObject*)this)->DestroyItem(mpLayout3c);
-    ((BlockVector*)&mBlocks44)->f((void**)mBlocks44.mpBegin, (void**)mBlocks44.mpEnd);
-    ((PageObject*)this)->Reset(0);
+    Page_Reset(this, 0);
+    Page_DestroyLayout(this, 0, mpLayout3c);
+    ScrollVectorClear(mBlocks44.mpBegin, mBlocks44.mpEnd);
+    Node_SetFlag(this, 0, 0);
     void* old = mpNode24;
     if (document != old) {
         if (document)
@@ -308,7 +276,7 @@ void Page::SetDocument(void* document)
     mpLayout3c = 0;
     mVal260 = 0;
     mVal264 = 0;
-    if (mpNode24 && !((DocumentNode*)mpNode24)->CheckFlag(1))
+    if (mpNode24 && !Document_Destroy(mpNode24, 0, 1))
         CreatePageLayout();
 }
 
@@ -340,19 +308,21 @@ void __stdcall ScrollbarStyleGet(Vec2* out)
 // @ 0x008eddb0
 void PickingContext::RefreshMargins()
 {
-    mMarginX554 = mX544;
+    float base = mX544;
     mMarginY558 = mW54c;
     FloatEntry* e = mpFloatHeadB7c;
-    while (e) {
+    if (!e)
+        return;
+    do {
         if (e->mKind == 1) {
-            float v = e->mSizeOther + mX544;
-            mMarginX554 = tmax(mMarginX554, v);
+            float v = e->mSizeOther + base;
+            mMarginX554 = (v > mMarginX554) ? v : mMarginX554;
         } else {
-            float v = e->mSizeBig + mX544;
-            mMarginY558 = tmax(mMarginY558, v);
+            float v = e->mSizeBig + base;
+            mMarginY558 = (v > mMarginY558) ? v : mMarginY558;
         }
         e = e->mpNext;
-    }
+    } while (e);
 }
 
 // @ 0x008ede40
@@ -368,16 +338,14 @@ void PickingContext::SetContextRect(const float* rect)
 }
 
 // @ 0x008edeb0
-void PickingContext::SetContextRectRelative(RectF r)
+void PickingContext::SetContextRectRelative(float x0, float y0, float x1, float y1)
 {
-    r.x0 += mX544;
-    r.y0 += mY548;
-    r.x1 += mX544;
-    r.y1 += mY548;
-    mX544 = r.x0;
-    mY548 = r.y0;
-    mW54c = r.x1;
-    mH550 = r.y1;
+    float bx = mX544;
+    float by = mY548;
+    mX544 = x0 + bx;
+    mY548 = y0 + by;
+    mW54c = x1 + bx;
+    mH550 = y1 + by;
     RefreshMargins();
     mX538 = mX530 - mX544;
     mY53c = mY534 - mY548;
@@ -411,12 +379,13 @@ TranslationEntry* PickingContext::lower_bound(TranslationEntry* first, Translati
                                               const int* value)
 {
     int count = (int)((char*)last - (char*)first) / (int)sizeof(TranslationEntry);
+    int want = *value;
     while (count > 0) {
         int half = count >> 1;
         TranslationEntry* mid = first + half;
-        if ((unsigned int)mid->mExtra < (unsigned int)*value) {
+        if (mid->mExtra < want) {
             first = mid + 1;
-            count -= half + 1;
+            count += ~half;
         } else {
             count = half;
         }
@@ -621,7 +590,7 @@ void RenderingContext::SubStyleSet(void* a, void* b)
 // @ 0x008ee740  scrollbar style setter: copies the 8-byte Vec2 into the app through the sub-object at +4.
 void RenderingContext::SubStyleSetValue(const Vec2* value)
 {
-    char* p = (char*)((Typesetter*)((char*)this + 4))->GetApp() + 0xf8;
+    char* p = (char*)ScrollAppGet() + 0xf8;
     *(int*)(p + 0x250) = *(int*)&value->x;
     *(int*)(p + 0x244) = *(int*)&value->y;
 }
@@ -629,11 +598,11 @@ void RenderingContext::SubStyleSetValue(const Vec2* value)
 // @ 0x008ee770  scrollbar style getter: only the first component is read through +0xf8, like the original.
 void RenderingContext::SubStyleGet(Vec2* out)
 {
-    char* p = (char*)((Typesetter*)((char*)this + 4))->GetApp();
+    char* p = (char*)ScrollAppGet();
     int a = *(int*)(p + 0x348);
-    Vec2* q = (Vec2*)(p + 0xf8);
+    p += 0xf8;
     *(int*)&out->x = a;
-    *(int*)&out->y = *(int*)((char*)q + 0x244);
+    *(int*)&out->y = *(int*)(p + 0x244);
 }
 
 // @ 0x008ee7a0
@@ -670,9 +639,9 @@ RenderingContext::RenderingContext(void* scroll, const float* screenRect,
     mY548 = marginRect[1];
     mW54c = marginRect[2];
     mH550 = marginRect[3];
-    mMax564 = 0;
-    mVal568 = 0;
-    mpFloatHead56c = 0;
+    mVecBegin564 = 0;
+    mVecEnd568 = 0;
+    mVecCap56c = 0;
     mPad570 = 0;
     mpInline574 = 0;
     mMarginX554 = 0.0f;
@@ -694,9 +663,9 @@ RenderingContext::RenderingContext(const RenderingContext& src)
     mY548 = src.mY548;
     mW54c = src.mW54c;
     mH550 = src.mH550;
-    mMax564 = 0;
-    mVal568 = 0;
-    mpFloatHead56c = 0;
+    mVecBegin564 = 0;
+    mVecEnd568 = 0;
+    mVecCap56c = 0;
     mPad570 = 0;
     mpInline574 = 0;
     mMarginX554 = 0.0f;
@@ -706,51 +675,56 @@ RenderingContext::RenderingContext(const RenderingContext& src)
 }
 
 // @ 0x008ee990
-void RenderingContext::Place(void* item, int style)
+char RenderingContext::Place(void* item, int a, int b)
 {
-    unsigned int a, b;
-    if (((LayoutItem*)item)->IntersectSelection(&a, &b, *(unsigned int*)((char*)item + 0x1c))) {
-        int size = ((Typesetter*)((char*)this + 4))->ContentSize();
-        unsigned int e = a + (unsigned int)size;
-        mCount560 = tmin(e, mCount560);
-        unsigned int e2 = b + (unsigned int)size;
-        mMax564 = tmax(mMax564, e2);
+    float v[2];
+    if (StyleSet(item, 0, v)) {
+        int delta = Scroll_ContentSize((char*)this + 4, 0);
+        int e = (int)v[0] + delta;
+        int cur = mCount560;
+        mCount560 = (e < cur) ? cur : e;
+        int e2 = (int)v[1] + delta;
+        int cur2 = (int)(size_t)mVecBegin564;
+        mVecBegin564 = (TranslationEntry*)(size_t)((e2 < cur2) ? cur2 : e2);
     }
-    Typesetter* sub = (Typesetter*)((char*)this + 4);
-    sub->StyleAssign((void*)style);
-    sub->AddTextRun((const wchar_t*)*(int*)((char*)item + 0x18),
-                    *(unsigned int*)((char*)item + 0x1c));
+    StyleAssign((char*)this + 4, 0, (void*)a);
+    StyleAssign2((char*)this + 4, 0, *(int*)((char*)item + 0x18), *(int*)((char*)item + 0x1c));
+    (void)b;
+    return 0;
 }
 
 // @ 0x008eea30
 void RenderingContext::RefreshMargins()
 {
-    mMarginX554 = mY534;
+    float base = mY534;
     mMarginY558 = mY53c;
-    FloatEntry* e = mpFloatHead56c;
-    while (e) {
+    FloatEntry* e = mpFloatHeadB7c;
+    if (!e)
+        return;
+    do {
         if (e->mKind == 1) {
-            float v = e->mSizeOther + mY534;
-            mMarginX554 = tmax(mMarginX554, v);
+            float v = e->mSizeOther + base;
+            mMarginX554 = (v > mMarginX554) ? v : mMarginX554;
         } else {
-            float v = e->mSizeBig + mY534;
-            mMarginY558 = tmax(mMarginY558, v);
+            float v = e->mSizeBig + base;
+            mMarginY558 = (v > mMarginY558) ? v : mMarginY558;
         }
         e = e->mpNext;
-    }
+    } while (e);
 }
 
 // @ 0x008eeac0
 int RenderingContext::TestRect(float a, float b, float c, float d)
 {
-    float v[4];
-    v[0] = c + mY534;
-    v[1] = a + mY534;
-    v[2] = b + mX538;
-    v[3] = d + mX538;
-    if (v[0] > mX544 && mW54c > v[1] && v[3] > mY548 && mH550 > v[2])
-        return 1;
-    return 0;
+    if (c + mY534 <= mX544)
+        return 0;
+    if (mW54c <= a + mY534)
+        return 0;
+    if (d + mX538 <= mY548)
+        return 0;
+    if (mH550 <= b + mX538)
+        return 0;
+    return 1;
 }
 
 // @ 0x008eeb30

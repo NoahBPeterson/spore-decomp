@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
 00922570 50 EASemaphoreData::UpdateCancelCount: complete; CAS loop schedule differs
-00922620 65 inline: Semaphore::Init: complete; the logic is now the original's (mnCount/mbIntraProcess from the parameter, CreateSemaphoreA's initial count clamped to >= 0, name 0 for intra-process), but retail inlines an out-of-line EA `CreateSemaphore(const char*, int, int)` helper with default arguments: its `test cl,cl / je` jumps to a `push 0 / push <max> / push 0 / jmp` block inside the if (args already in registers), so CreateSemaphoreA's initial-count argument comes from a register; ours spells the call directly (xor edi,edi / xor ecx,ecx / jmp, then a separate `mov eax,[esi+4]` load). Clamping the parameter slot, booleans vs. char loads and reordering the field stores do not produce it. fix1: quick check DIFFERS
+00922620 65 Semaphore::Init: complete; CreateSemaphoreA arg/register schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 target, ret#1 eax]
 00922690 114 Semaphore::Wait: complete; intra-process fast path schedule differs
 00922740 70 Semaphore::Post: complete; cancel-count exchange schedule differs

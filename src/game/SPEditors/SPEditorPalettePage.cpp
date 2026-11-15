@@ -89,7 +89,6 @@ class Key_s005c_7500 {
 }
 }
 namespace eastl {
-struct NoInit_s005c_7500 {};
 template <typename T>
 class sp_vector0 {
  public:
@@ -97,7 +96,6 @@ class sp_vector0 {
   T* mpEnd;
   T* mpCapacity;
   sp_vector0() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
-  explicit sp_vector0(NoInit_s005c_7500) {}
   ~sp_vector0();
   T* begin() { return mpBegin; }
   T* end() { return mpEnd; }
@@ -196,24 +194,7 @@ class cSPPaletteItem_s005c_7500 : public EA::RefCountVTemplate_s005c_7500<int>, 
 };
 }
 namespace SP {
-// The layout id and the six float members live in an intermediate base so that their
-// stores are emitted before the derived class's vptr stores, as in the original.
-class cSPPalettePageBase_s005c_7500 : public EA::RefCountVTemplate_s005c_7500<int>, public EA::COM::IUnknown32_s005c_7500 {
- public:
-  cSPPalettePageBase_s005c_7500();
-
-  uint32_t mLayoutInstanceID;  // +0xc
-  int mField10;                // +0x10
-  float mFloat14;              // +0x14
-  float mFloat18;              // +0x18
-  float mFloat1c;              // +0x1c
-  float mFloat20;              // +0x20
-  float mFloat24;              // +0x24
-  float mFloat28;              // +0x28
-};
-}
-namespace SP {
-class cSPPalettePage_s005c_7500 : public cSPPalettePageBase_s005c_7500 {
+class cSPPalettePage_s005c_7500 : public EA::RefCountVTemplate_s005c_7500<int>, public EA::COM::IUnknown32_s005c_7500 {
  public:
   cSPPalettePage_s005c_7500();
   virtual ~cSPPalettePage_s005c_7500();
@@ -223,6 +204,14 @@ class cSPPalettePage_s005c_7500 : public cSPPalettePageBase_s005c_7500 {
                        const EA::ResourceMan::Key_s005c_7500& moduleName,
                        uint32_t thumbnailGroupID);  // 0x005c7ff0
 
+  uint32_t mLayoutInstanceID;  // +0xc
+  int mField10;                // +0x10
+  float mFloat14;              // +0x14
+  float mFloat18;              // +0x18
+  float mFloat1c;              // +0x1c
+  float mFloat20;              // +0x20
+  float mFloat24;              // +0x24
+  float mFloat28;              // +0x28
   bool mBool2c;                // +0x2c
   bool mBool2d;                // +0x2d
   char pad2e[0x48 - 0x2e];
@@ -263,37 +252,29 @@ class cSPPalettePage {
 
 // @ 0x005c7f50
 namespace SP {
-cSPPalettePageBase_s005c_7500::cSPPalettePageBase_s005c_7500() {
-  mFloat14 = 0.0f;
-  mFloat18 = 0.0f;
-  mFloat1c = 0.0f;
-  mFloat20 = 0.0f;
-  mFloat24 = 0.0f;
-  mFloat28 = 0.0f;
-}
-}  // namespace SP
-namespace SP {
-cSPPalettePage_s005c_7500::cSPPalettePage_s005c_7500() : mItems(eastl::NoInit_s005c_7500()) {
-  mLayoutInstanceID = 0xd8006607;
-  mField10 = 0;
-  mBool2c = false;
-  mBool2d = false;
-  mBool48 = false;
-  mBool49 = false;
-  mBool4a = false;
-  mFloat4c = g_one;
-  mnNumRows = 0;
-  mnNumColumns = 0;
-  mField58 = 0;
-  mField5c = 0;
-  mCategoryKey0 = -1;
-  mCategoryKey1 = 0;
-  mCategoryKey2 = 0;
-  mField6c = 0;
-  mItems.mpBegin = 0;
-  mItems.mpEnd = 0;
-  mItems.mpCapacity = 0;
-}
+cSPPalettePage_s005c_7500::cSPPalettePage_s005c_7500()
+: mLayoutInstanceID(0xd8006607),
+      mField10(0),
+      mFloat14(0.0f),
+      mFloat18(0.0f),
+      mFloat1c(0.0f),
+      mFloat20(0.0f),
+      mFloat24(0.0f),
+      mFloat28(0.0f),
+      mBool2c(false),
+      mBool2d(false),
+      mBool48(false),
+      mBool49(false),
+      mBool4a(false),
+      mFloat4c(g_one),
+      mnNumRows(0),
+      mnNumColumns(0),
+      mField58(0),
+      mField5c(0),
+      mCategoryKey0(-1),
+      mCategoryKey1(0),
+      mCategoryKey2(0),
+      mField6c(0) {}
 }  // namespace SP
 
 // @ 0x005c7ff0

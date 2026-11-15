@@ -1384,9 +1384,9 @@ bool SP::cGraphicsSystem_s007a_51d0::InitShadowBlurTexture()
 namespace SP {
 bool SP::cGraphicsSystem_s007a_51d0::InitSnapshotTexture()
 {
-    int* extent = (int*)GetViewportInfo()->GetExtent();
-    int width = extent[0];
-    int height = extent[1];
+    cViewportExtent* extent = GetViewportInfo()->GetExtent();
+    int width = (int)extent->mWidth | ((int)extent->mHeight << 16);
+    int height = (int)extent->mWidth2 | ((int)extent->mHeight2 << 16);
     cRenderTargetRectID_s007a_51d0 tmp;
     cRenderTargetRectID_s007a_51d0* rt =
         mRTTManager->CreateRenderTarget(&tmp, width, height, 0x15, 9, 0xffffffff, 0);
@@ -1399,8 +1399,7 @@ bool SP::cGraphicsSystem_s007a_51d0::InitSnapshotTexture()
         mSnapshotRectID.mPageID = pageID;
         mSnapshotRectID.mAllocID = allocID;
     }
-    bool ok = mSnapshotTexture.mpObject != 0;
-    return ok;
+    return mSnapshotTexture.mpObject != 0;
 }
 }  // namespace SP
 

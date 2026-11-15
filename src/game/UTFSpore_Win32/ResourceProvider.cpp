@@ -224,10 +224,6 @@ struct PIter {
     HNode** slot;
     uint8_t inserted;
 };
-struct HIter {          // PMap::find's out: the 8-byte iterator (node + bucket slot)
-    HNode* node;
-    HNode** slot;
-};
 struct RehashR {
     uint8_t rehash;
     unsigned newCount;
@@ -244,7 +240,7 @@ struct PMap {
     HNode* DoFindNode(HNode* head, SrcNode* key, uint32_t hash);  // 0x005d6a90
     HNode* AllocNode(SrcNode* s);                                  // 0x008fea30
     void DoRehash(unsigned n);                                     // 0x008fbac0
-    void find(HIter* out, const uint16_t* const* key);             // 0x008fbbf0
+    void find(PIter* out, const uint16_t* const* key);             // 0x008fbbf0
     PIter* DoInsertValue(PIter* out, SrcNode* key, TagT);
     unsigned erase(const uint16_t* const* key);
 };
@@ -1065,23 +1061,19 @@ void* HolderMap::Resolve(const uint16_t* s)
     const uint16_t* end = s + 0x40;
     const uint16_t* p = CharTypeFindFirstOf(s, end, gSep1, gSep2);
     if (p != end && *p == ':') {
-        union TagKey {          // the original reuses the alloc tag's slot for the map key
-            Alloc4 t;
-            const uint16_t* key;
-        } tk;
-        HIter it;
-        PMap& m = map;
-        WStr2 str(s, p, tk.t);
-        tk.key = str.b;
-        m.find(&it, &tk.key);
-        if (it.node == m.mBuckets[m.mBucketCount]) {
-            if (((int)((char*)str.c - (char*)tk.key) & ~1) > 2 && tk.key)
-                operator_delete__((void*)tk.key);
+        Alloc4 t;
+        WStr2 str(s, p, t);
+        const uint16_t* key = str.b;
+        PIter it;
+        map.find((PIter*)&it, &key);
+        if (it.node == map.mBuckets[map.mBucketCount]) {
+            if (((int)((char*)str.c - (char*)str.b) & ~1) > 2 && str.b)
+                operator_delete__(str.b);
             return 0;
         }
         void* r = it.node->p4;
-        if (((int)((char*)str.c - (char*)tk.key) & ~1) > 2 && tk.key)
-            operator_delete__((void*)tk.key);
+        if (((int)((char*)str.c - (char*)str.b) & ~1) > 2 && str.b)
+            operator_delete__(str.b);
         return r;
     }
     return 0;

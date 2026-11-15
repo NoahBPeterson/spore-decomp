@@ -185,7 +185,6 @@ struct LayerInfoVec {                 // eastl::vector<cLayerInfo, fixed_vector_
     void* x0c;        // +0xc
     void* inline_;    // +0x10
     void __thiscall dtor();   // 0x80ea80
-    void __thiscall AddLayer(void** obj, void* a, void* b);  // 0x80f360
 };
 class cSPUICustomRendererImpl { public:
     void** vtbl;         // +0   0x1417df8 / 0x1417e18
@@ -202,7 +201,6 @@ class cSPUICustomRendererImpl { public:
     void* __thiscall ctor();              // 0x80ebc0
     void* __thiscall VectorDtor(u8 flags);// 0x80ec40 (dtor w/ flag)
     void  __thiscall ScalarDtor();        // 0x80eca0
-    void __thiscall AddLayer(void** obj, void* a, void* b);  // 0x80f2e0
     void __thiscall MethodF380(void*);    // 0x80f380
 };
 struct UI_LayerManager {
@@ -237,6 +235,7 @@ struct PtrVec {
     void __thiscall Insert1(void** pos, void** val);   // 0x80efe0
     void __thiscall Insert12(void** pos, void** val);  // 0x80f140
 };
+void __fastcall FUN_0080f2e0(char* self, void** obj, void* a, void* b);
 // ---- items of slice s0080e6b0 end
 
 // ---- items of slice s0080f7c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1072,36 +1071,32 @@ void __thiscall PtrVec::Insert12(void** pos, void** val)
 }
 
 // @ 0x0080f2e0
-void __thiscall cSPUICustomRendererImpl::AddLayer(void** obj, void* a, void* b)
+void __fastcall FUN_0080f2e0(char* self, void** obj, void* a, void* b)
 {
-    void* o = (void*)obj;
-    void* entry[3];
-    entry[0] = o;
+    void* o = obj ? *obj : 0;
     if (o) ((VF0v)VT(o)[0])(o);
-    PtrVec* v = (PtrVec*)((char*)this + 0xc);
-    entry[1] = a;
-    entry[2] = b;
+    PtrVec* v = (PtrVec*)(self + 0xc);
     if (v->end < v->cap) {
         void** e = v->end;
-        v->end = (void**)((u8*)e + 0xc);
+        v->end = e + 3;
         if (e) {
-            e[0] = o;
-            if (o) ((VF0v)VT(o)[0])(o);
-            e[1] = a;
-            e[2] = b;
+            void* x = obj ? *obj : 0;
+            *e = x;
+            if (x) ((VF0v)VT(x)[0])(x);
+            e[1] = a; e[2] = b;
         }
     } else {
-        v->Insert12(v->end, entry);
-        o = entry[0];
+        v->Insert12(v->end, obj);
     }
-    if (o) ((VF0v)VT(o)[1])(o);
+    void* x = obj ? *obj : 0;
+    if (x) ((VF0v)VT(x)[1])(x);
 }
 
 // @ 0x0080f360
-void __thiscall LayerInfoVec::AddLayer(void** obj, void* a, void* b)
+void __fastcall FUN_0080f360(char* p, void** obj, void* a, void* b)
 {
-    cSPUICustomRendererImpl* q = this ? (cSPUICustomRendererImpl*)((char*)this - 0xc) : 0;
-    q->AddLayer(obj, a, b);
+    char* q = p ? p - 0xc : 0;
+    FUN_0080f2e0(q, obj, a, b);
 }
 
 // @ 0x0080f380

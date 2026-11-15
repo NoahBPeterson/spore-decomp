@@ -380,12 +380,10 @@ void cGameTimeManager::SetTimeFlowRate(float rate)
 // @ 0x00b323f0
 void cGameTimeManager::RegisterDefaultPauseGates()
 {
-    // retail pushes a literal 0 for the name argument (the 0x1460404 address that earlier notes
-    // mistook for a string is the ASCII "modal dialog" following the function's bytes)
-    RegisterPauseGate(0x04bf38a8, 7, 0);
-    RegisterPauseGate(0x04bf38a7, 3, 0);
-    RegisterPauseGate(0x04bf38a4, 3, 0);
-    RegisterPauseGate(0x04bf38a9, 3, 0);
+    RegisterPauseGate(0x04bf38a8, 7, "user toggle");
+    RegisterPauseGate(0x04bf38a7, 3, "gameplay");
+    RegisterPauseGate(0x04bf38a4, 3, "ui toggle");
+    RegisterPauseGate(0x04bf38a9, 3, "modal dialog");
 }
 
 // @ 0x00b32450

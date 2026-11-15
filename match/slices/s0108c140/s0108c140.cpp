@@ -351,13 +351,11 @@ void hkSimpleShapePhantom::addOverlappingCollidable(hkCollidable* c)
 void hkSimpleShapePhantom::calcStatistics(hkStatisticsCollector* c) const
 {
 	c->beginObject("SimplePhantm", 2, this);
-	hkShapePhantom::calcContentStatistics(c);
-	// report the overlap array only when it is really allocated (the sign bit set means "do not deallocate")
-	if ((m_collisionDetails.m_capacityAndFlags & hkArray<hkCollisionDetail>::DONT_DEALLOCATE_FLAG) == 0)
+	calcContentStatistics(c);
+	if (m_collisionDetails.m_capacityAndFlags >= 0)
 	{
-		c->addArray("OverlapPtr", 8, m_collisionDetails.m_data,
-		            m_collisionDetails.m_size * sizeof(hkCollidable*),
-		            (m_collisionDetails.m_capacityAndFlags & hkArray<hkCollisionDetail>::CAPACITY_MASK) * sizeof(hkCollidable*));
+		c->addArray("OverlapPtr", 8, m_collisionDetails.m_data, m_collisionDetails.m_size << 2,
+		            (m_collisionDetails.m_capacityAndFlags & hkArray<hkCollisionDetail>::CAPACITY_MASK) << 2);
 	}
 	c->endObject();
 }

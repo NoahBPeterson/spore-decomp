@@ -50,7 +50,7 @@ struct ShadowDescExt {
 };
 struct FactoryRegistry {
     void *vptr;   // +0
-    int *CreateInstance(int type, void **out, int a2, int a3);   // 0x008304c0
+    int *CreateInstance(int **out, int a1, int a2, int a3);   // 0x008304c0
 };
 struct ImageInfo {
     void    *vptr0;   // +0x00
@@ -126,19 +126,19 @@ struct DSub {
     char pad[0xc];
     int  GetFieldC(int index);    // 0x00830c60
     int  GetField14(int index);   // 0x00830c80
-    float *GetPair28(float *out, int index);  // 0x00830c90
-    float *GetPair30(float *out, int index);  // 0x00830cc0
+    void GetPair28(float *out, int index);  // 0x00830c90
+    void GetPair30(float *out, int index);  // 0x00830cc0
     int  GetField10(int index);   // 0x00830cf0
     int  GetField18(int index);   // 0x00830d10
     int  GetField20(int index);   // 0x00830d20
-    float *GetPair38(float *out, int index);  // 0x00830d30
-    float *GetPair40(float *out, int index);  // 0x00830d60
+    void GetPair38(float *out, int index);  // 0x00830d30
+    void GetPair40(float *out, int index);  // 0x00830d60
     void SetImage(int index, void *img);    // 0x008316b0
 };
-static __forceinline void *MakeInfoAt(void *def, void *slot)
+static __forceinline void *MakeInfoAt(Drawable_s0083_0c00 *self, unsigned index, void *slot)
 {
-    int *p = ((FactoryRegistry *)FUN_00920090())->CreateInstance(0x540037e, (void **)slot, 0, 0);
-    ((ImageInfo2 *)p)->CopyFrom((const ImageInfo2 *)def);
+    int *p = ((FactoryRegistry *)FUN_00920090())->CreateInstance((int **)slot, 0x540037e, 0, 0);
+    ((ImageInfo2 *)p)->CopyFrom((const ImageInfo2 *)((char *)self + 0x7c));
     return p;
 }
 // ---- items of slice s00830c00 end
@@ -177,11 +177,11 @@ void FillDefaults(ShadowDesc *dst, const ShadowDesc *src)
 }
 
 // @ 0x008304c0
-__declspec(noinline) int *FactoryRegistry::CreateInstance(int type, void **out, int a2, int a3)
+int *FactoryRegistry::CreateInstance(int **out, int a1, int a2, int a3)
 {
     int *p = (int *)((int (__thiscall *)(void *, int, int, int, int))(*(void ***)this)[0x20 / 4])
-                        (this, type, 0x5400186, a2, a3);
-    int *old = (int *)*out;
+                        (this, a1, 0x5400186, a2, a3);
+    int *old = *out;
     if (p == old)
         return old;
     if (p)
@@ -189,7 +189,7 @@ __declspec(noinline) int *FactoryRegistry::CreateInstance(int type, void **out, 
     *out = p;
     if (old) {
         ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
-        return (int *)*out;
+        return *out;
     }
     return p;
 }
@@ -374,21 +374,19 @@ int DSub::GetField14(int index)
 }
 
 // @ 0x00830c90
-float *DSub::GetPair28(float *out, int index)
+void DSub::GetPair28(float *out, int index)
 {
-    float *p = (float *)((char *)((Drawable_s0083_0c00 *)this)->GetImageInfo(index) + 0x28);
-    out[0] = p[0];
-    out[1] = p[1];
-    return out;
+    char *p = (char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index);
+    out[0] = *(float *)(p + 0x28);
+    out[1] = *(float *)(p + 0x2c);
 }
 
 // @ 0x00830cc0
-float *DSub::GetPair30(float *out, int index)
+void DSub::GetPair30(float *out, int index)
 {
-    float *p = (float *)((char *)((Drawable_s0083_0c00 *)this)->GetImageInfo(index) + 0x30);
-    out[0] = p[0];
-    out[1] = p[1];
-    return out;
+    char *p = (char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index);
+    out[0] = *(float *)(p + 0x30);
+    out[1] = *(float *)(p + 0x34);
 }
 
 // @ 0x00830cf0
@@ -412,21 +410,19 @@ int DSub::GetField20(int index)
 }
 
 // @ 0x00830d30
-float *DSub::GetPair38(float *out, int index)
+void DSub::GetPair38(float *out, int index)
 {
-    float *p = (float *)((char *)((Drawable_s0083_0c00 *)this)->GetImageInfo(index) + 0x38);
-    out[0] = p[0];
-    out[1] = p[1];
-    return out;
+    char *p = (char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index);
+    out[0] = *(float *)(p + 0x38);
+    out[1] = *(float *)(p + 0x3c);
 }
 
 // @ 0x00830d60
-float *DSub::GetPair40(float *out, int index)
+void DSub::GetPair40(float *out, int index)
 {
-    float *p = (float *)((char *)((Drawable_s0083_0c00 *)this)->GetImageInfo(index) + 0x40);
-    out[0] = p[0];
-    out[1] = p[1];
-    return out;
+    char *p = (char *)((Drawable_s0083_0c00 *)((char *)this - 0xc))->GetImageInfo(index);
+    out[0] = *(float *)(p + 0x40);
+    out[1] = *(float *)(p + 0x44);
 }
 
 // @ 0x00830d90
@@ -483,7 +479,7 @@ void Drawable_s0083_0c00::SetImageColor(int index, int color)
     char *info = (char *)GetImageInfo(index);
     if ((unsigned)index < 8 && info == (char *)this + 0x7c) {
         void *slot = (char *)this + 0x114 + index * 4;
-        info = (char *)MakeInfoAt((char *)this + 0x7c, slot);
+        info = (char *)MakeInfoAt(this, index, slot);
     }
     *(uint32_t *)(info + 0x14) = (uint32_t)color;
     if (mbHasUserDefaults == 0 && index != 8) {
@@ -499,7 +495,7 @@ void Drawable_s0083_0c00::SetField18At(int index, int v)
     char *info = (char *)GetImageInfo(index);
     if ((unsigned)index < 8 && info == (char *)this + 0x7c) {
         void *slot = (char *)this + 0x114 + index * 4;
-        info = (char *)MakeInfoAt((char *)this + 0x7c, slot);
+        info = (char *)MakeInfoAt(this, index, slot);
     }
     *(uint32_t *)(info + 0x18) = (uint32_t)v;
     if (mbHasUserDefaults == 0 && index != 8) {
@@ -515,7 +511,7 @@ void Drawable_s0083_0c00::SetField20At(int index, int v)
     char *info = (char *)GetImageInfo(index);
     if ((unsigned)index < 8 && info == (char *)this + 0x7c) {
         void *slot = (char *)this + 0x114 + index * 4;
-        info = (char *)MakeInfoAt((char *)this + 0x7c, slot);
+        info = (char *)MakeInfoAt(this, index, slot);
     }
     *(uint32_t *)(info + 0x20) = (uint32_t)v;
     if (mbHasUserDefaults == 0 && index != 8) {
@@ -531,7 +527,7 @@ void Drawable_s0083_0c00::SetPair38At(int index, float *v)
     char *info = (char *)GetImageInfo(index);
     if ((unsigned)index < 8 && info == (char *)this + 0x7c) {
         void *slot = (char *)this + 0x114 + index * 4;
-        info = (char *)MakeInfoAt((char *)this + 0x7c, slot);
+        info = (char *)MakeInfoAt(this, index, slot);
     }
     *(float *)(info + 0x38) = v[0];
     *(float *)(info + 0x3c) = v[1];
@@ -548,7 +544,7 @@ void Drawable_s0083_0c00::SetPair40At(int index, float *v)
     char *info = (char *)GetImageInfo(index);
     if ((unsigned)index < 8 && info == (char *)this + 0x7c) {
         void *slot = (char *)this + 0x114 + index * 4;
-        info = (char *)MakeInfoAt((char *)this + 0x7c, slot);
+        info = (char *)MakeInfoAt(this, index, slot);
     }
     *(float *)(info + 0x40) = v[0];
     *(float *)(info + 0x44) = v[1];
@@ -622,7 +618,7 @@ void Drawable_s0083_0c00::EnsureImageInfo0()
         return;
     void *def = (char *)this + 0x7c;
     if (mImageInfos[0] == 0) {
-        void *old = *(void *volatile *)&mImageInfos[0];
+        void *old = mImageInfos[0];
         if (def != old) {
             if (def)
                 ((void (__thiscall *)(void *))(*(void ***)def)[0])(def);
@@ -631,7 +627,7 @@ void Drawable_s0083_0c00::EnsureImageInfo0()
                 ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
         }
     }
-    ((ImageInfo2 *)def)->CopyFrom((ImageInfo2 *)mImageInfos[0]);
+    ((ImageInfo2 *)mImageInfos[0])->CopyFrom((ImageInfo2 *)def);
 }
 
 // @ 0x008316b0
@@ -639,10 +635,9 @@ void DSub::SetImage(int index, void *img)
 {
     Drawable_s0083_0c00 *self = (Drawable_s0083_0c00 *)((char *)this - 0xc);
     char *info = (char *)self->GetImageInfo(index);
-    void *def = (char *)this + 0x70;
-    if ((unsigned)index < 8 && info == (char *)def) {
-        void *slot = (char *)this + 0x108 + index * 4;
-        info = (char *)MakeInfoAt(def, slot);
+    if ((unsigned)index < 8 && info == (char *)self + 0x7c) {
+        void *slot = (char *)self + 0x114 + index * 4;
+        info = (char *)MakeInfoAt(self, index, slot);
     }
     void *old = *(void **)(info + 0xc);
     if (img != old) {
@@ -652,12 +647,12 @@ void DSub::SetImage(int index, void *img)
         if (old)
             ((void (__thiscall *)(void *))(*(void ***)old)[1])(old);
     }
-    int v;
-    if (((uint8_t *)this)[0x128] == 0 && index != 8)
+    uint8_t v;
+    if (self->mbHasUserDefaults == 0 && index != 8)
         v = 0;
     else
         v = 1;
-    ((uint8_t *)this)[0x128] = v;
+    self->mbHasUserDefaults = v;
     self->EnsureImageInfo0();
 }
 
@@ -667,7 +662,7 @@ void Drawable_s0083_0c00::SetImageIcon(int index, void *img)
     char *info = (char *)GetImageInfo(index);
     if ((unsigned)index < 8 && info == (char *)this + 0x7c) {
         void *slot = (char *)this + 0x114 + index * 4;
-        info = (char *)MakeInfoAt((char *)this + 0x7c, slot);
+        info = (char *)MakeInfoAt(this, index, slot);
     }
     void *old = *(void **)(info + 0x10);
     if (img != old) {
@@ -687,17 +682,16 @@ void Drawable_s0083_0c00::SetImageIcon(int index, void *img)
 }
 
 // @ 0x012fe300
-#pragma optimize("", off)
 void init_15476e4()
 {
     *(int*)0x15476e4 = 1;
     *(int*)0x15476e8 = 0;
-    *(void**)0x15476ec = (void*)0x141a690; *(int*)0x15476f0 = 0x54010a1; *(short*)0x15476f4 = 0x13; *(int*)0x15476f8 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[1]; *(int*)0x15476fc = 1; *(int*)0x1547700 = 0;
-    *(void**)0x1547704 = (void*)0x141a690; *(int*)0x1547708 = 0x54010a2; *(short*)0x154770c = 0x13; *(int*)0x1547710 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[2]; *(int*)0x1547714 = 1; *(int*)0x1547718 = 0;
-    *(void**)0x154771c = (void*)0x141a690; *(int*)0x1547720 = 0x54010a3; *(short*)0x1547724 = 0x13; *(int*)0x1547728 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[3]; *(int*)0x154772c = 1; *(int*)0x1547730 = 0;
-    *(void**)0x1547734 = (void*)0x141a690; *(int*)0x1547738 = 0x54010a4; *(short*)0x154773c = 0x13; *(int*)0x1547740 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[4]; *(int*)0x1547744 = 1; *(int*)0x1547748 = 0;
-    *(void**)0x154774c = (void*)0x141a690; *(int*)0x1547750 = 0x54010a5; *(short*)0x1547754 = 0x13; *(int*)0x1547758 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[5]; *(int*)0x154775c = 1; *(int*)0x1547760 = 0;
-    *(void**)0x1547764 = (void*)0x141a690; *(int*)0x1547768 = 0x54010a6; *(short*)0x154776c = 0x13; *(int*)0x1547770 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[6]; *(int*)0x1547774 = 1; *(int*)0x1547778 = 0;
-    *(void**)0x154777c = (void*)0x141a690; *(int*)0x1547780 = 0x54010a7; *(short*)0x1547784 = 0x13; *(int*)0x1547788 = (int)&((Drawable_s0083_0c00*)0)->mImageInfos[7]; *(int*)0x154778c = 1;
+    TypeRegEntry* e = (TypeRegEntry*)0x15476ec;
+    e[0].f0 = (void*)0x141a690; e[0].f1 = 0x54010a1; e[0].f2 = 0x13; e[0].f4 = 0x114 + 4; e[0].f5 = 1; e[0].f6 = 0;
+    e[1].f0 = (void*)0x141a690; e[1].f1 = 0x54010a2; e[1].f2 = 0x13; e[1].f4 = 0x114 + 8; e[1].f5 = 1; e[1].f6 = 0;
+    e[2].f0 = (void*)0x141a690; e[2].f1 = 0x54010a3; e[2].f2 = 0x13; e[2].f4 = 0x114 + 0xc; e[2].f5 = 1; e[2].f6 = 0;
+    e[3].f0 = (void*)0x141a690; e[3].f1 = 0x54010a4; e[3].f2 = 0x13; e[3].f4 = 0x114 + 0x10; e[3].f5 = 1; e[3].f6 = 0;
+    e[4].f0 = (void*)0x141a690; e[4].f1 = 0x54010a5; e[4].f2 = 0x13; e[4].f4 = 0x114 + 0x14; e[4].f5 = 1; e[4].f6 = 0;
+    e[5].f0 = (void*)0x141a690; e[5].f1 = 0x54010a6; e[5].f2 = 0x13; e[5].f4 = 0x114 + 0x18; e[5].f5 = 1; e[5].f6 = 0;
+    e[6].f0 = (void*)0x141a690; e[6].f1 = 0x54010a7; e[6].f2 = 0x13; e[6].f4 = 0x114 + 0x1c; e[6].f5 = 1;
 }
-#pragma optimize("", on)

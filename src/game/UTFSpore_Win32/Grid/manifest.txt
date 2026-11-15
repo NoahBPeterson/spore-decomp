@@ -40,5 +40,3 @@
 ../src/game/UTFSpore_Win32/Grid.cpp  ?OnTick@WinGrid_s0097_bfb0@Gr@@QAE_NXZ  0097c6f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Grid.cpp  ?MakeCellVisible@WinGridIface_s0097_bfb0@Gr@@QAE_NHH@Z  0097ca70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Grid.cpp  ?Refresh@WinGridRefreshThunk@@QAEXXZ  0097d080  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Grid.cpp  ?Shutdown@WinGrid_s0097_6f90@@QAE_NXZ  009777c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/UTFSpore_Win32/Grid.cpp  ?AllocateNode@CellRbtree@UTFWinControls@EA@@QAEPAUCellNode@23@PBUCellData_s0097_1eb0@23@PAX@Z  00972dd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

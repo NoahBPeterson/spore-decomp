@@ -2,6 +2,7 @@
 00fd71e0  82  no symbol of similar size; 5-arg cdecl, switch mapping + two vcalls
 00fd75a0  89  frame-count vs elapsed-time check; register/rounding
 00fd7660  162  RecordFrames loop [equiv: PASS]
+00fd7750  116  cMovieLetterbox::Init refcount assignment + layout Init
 00fd7800  441  Shutdown: 5 message posts + layout release [equiv: PASS]
 00fd79e0  124  StopMovie
 00fd7b30  297  cMovieSystem constructor [equiv: PASS]

@@ -14,14 +14,14 @@ void* __cdecl fx_alloc_sound(uint32 a, uint32 b);   // 0x00a62b60
 
 // ------------------------------------------------------------------ 0x00a61f50
 // Element-array bulk set: memcpy `count` elements from `src` over the front, then fill
-// the freshly-inserted [start, end) tail with `{state = 1, value = 0}` (SSE 4-wide).
+// the freshly-inserted [start, end) tail with `{state = 1, value = v}` (SSE 4-wide).
 // @ 0x00a61f50
-void __cdecl fx_array_set_range(FXTableBase* self, int start, int end, const void* src)
+void __cdecl fx_array_set_range(FXTableBase* self, int start, int end, const void* src, float v)
 {
     int count = end - start;
     if (start < 0)
         return;
-    if (self->count < end)
+    if (self->capacity < end)
         return;
     FUN_011e0744((char*)self->elems + start * 0xc, src, count * 0xc);
     if (start >= end)
@@ -30,7 +30,7 @@ void __cdecl fx_array_set_range(FXTableBase* self, int start, int end, const voi
         FXElem* e = (FXElem*)((char*)self->elems + i * 0xc);
         if (e->state != 1) {
             e->state = 1;
-            e->value = 0.0f;
+            e->value = v;
         }
     }
 }
@@ -49,12 +49,12 @@ void __cdecl fx_array_fill(FXTableBase* self, float v)
 }
 
 // @ 0x00a62080
-void __cdecl fx_array_resize_and_set(FXTableBase* self, uint32 a, uint32 b, int nf, const void* src)
+void __cdecl fx_array_resize_and_set(FXTableBase* self, float nf, const void* src)
 {
-    int n = (int)(float)nf;
-    if (n >= 1 && self->capacity >= n)
+    int n = (int)nf;
+    if (n >= 1 && n <= self->capacity)
         self->count = n;
-    fx_array_set_range(self, 0, nf, src);
+    fx_array_set_range(self, 0, (int)nf, src, nf);
 }
 
 // @ 0x00a620b0
@@ -139,19 +139,19 @@ void __cdecl fx_set_accum(FXTableBase* self, float v)
 bool __cdecl fx_register_sequence()
 {
     EapdInterned a, b;
-    FUN_00a675f0(&a, "kFXCmptSequence");
+    FUN_00a675f0("kFXCmptSequence", &a);
     void* cls = FUN_00a48ea0(a.name, a.id, (void*)0xa61c20, 0x40,
                                   0, 9, 0, (uint32)(void*)FUN_00a61e50);
     bool ok = cls != 0;
     g_fxCmptSeqA_1675838 = (uint32)cls;
     ok &= FUN_00a47f30(cls, (void*)FUN_00a61e50);
     FUN_00a47f70(cls, (void*)FUN_00a62050);
-    FUN_00a675f0(&b, "kFXCmptSound");
+    FUN_00a675f0("kFXCmptSound", &b);
     ok &= FUN_00a48a80(cls, (void*)FUN_00a61ec0, b.name, b.id, 1, 0, 0, 0);
-    FUN_00a675f0(&a, "kFXCmptShake");
+    FUN_00a675f0("kFXCmptShake", &a);
     ok &= FUN_00a48a80(cls, (void*)0xa62080, a.name, a.id, 9, 0, 0, 0);
     ok &= FUN_00a47f30(cls, (void*)fx_array_sum_pos);
-    FUN_00a675f0(&b, "kFXCmptDecal");
+    FUN_00a675f0("kFXCmptDecal", &b);
     ok &= FUN_00a48a80(cls, (void*)fx_array_resize_and_set, b.name, b.id, 1, 0, 0, 0);
     return ok;
 }
@@ -159,20 +159,18 @@ bool __cdecl fx_register_sequence()
 // @ 0x00a625f0
 void __cdecl fx_notify_value(FXTableBase* self, float nf)
 {
-    void* tbl = FUN_00a671f0(self->nameA, self->nameB, (uint32)g_fxCmptMeta_167583c);
+    void* tbl = FUN_00a671f0((uint32)g_fxCmptMeta_167583c, self->nameB, self->nameA);
     if (tbl == 0)
         return;
     int i = (int)nf;
     if (i < 0) i = 0;
     else if (i >= *(int*)((char*)tbl + 0x30)) i = *(int*)((char*)tbl + 0x30) - 1;
-    float v;
+    float v = 0.0f;
     if (*(int*)((char*)tbl + 0x30) != 0)
         v = *(float*)((char*)(*(void**)((char*)tbl + 0x38)) + i * 0xc + 4);
-    else
-        v = 0.0f;
     if (++g_refDepth_167545c < 1000) {
-        for (void* it = *(void**)((char*)(*(void**)((char*)self + 0xc)) + 8); it != 0; it = *(void**)it)
-            FUN_00a49570(*(void**)((char*)it + 4), v);
+        for (void* it = *(void**)((char*)self + 0xc + 8); it != 0; it = *(void**)it)
+            FUN_00a49570(it, v);
     }
     --g_refDepth_167545c;
 }
@@ -180,7 +178,7 @@ void __cdecl fx_notify_value(FXTableBase* self, float nf)
 // @ 0x00a62690
 void __cdecl fx_dump(FXTableBase* self)
 {
-    void* tbl = FUN_00a671f0(self->nameA, self->nameB, (uint32)g_fxCmptMeta_167583c);
+    void* tbl = FUN_00a671f0((uint32)g_fxCmptMeta_167583c, self->nameB, self->nameA);
     if (tbl == 0)
         return;
     FUN_00a49e40(*(uint32*)((char*)self + 0xc), g_eapdB_16758b0, g_eapdA_16758ac,
@@ -209,23 +207,24 @@ void* __cdecl fx_alloc_insert2(uint32 a, uint32 b)
 // @ 0x00a62720
 bool __cdecl fx_register_decal()
 {
-    EapdInterned a;
-    FUN_00a675f0(&a, "tabread");
+    EapdInterned a, b;
+    FUN_00a675f0("kFXCmptDecal", &a);
     void* cls = FUN_00a48ea0(a.name, a.id, (void*)fx_alloc_insert, 0x30,
                                   0, 6, 0, 0);
+    bool ok = cls != 0;
     g_fxCmptMeta2_1675844 = (uint32)cls;
-    bool ok = (cls != 0) & FUN_00a47f30(cls, (void*)fx_notify_value);
-    FUN_00a675f0(&a, "tolist");
-    ok &= FUN_00a48a30((void*)g_fxCmptMeta2_1675844, (void*)0xa62690, a.name, a.id, 0);
-    FUN_00a675f0(&a, "set");
-    ok &= FUN_00a48a80((void*)g_fxCmptMeta2_1675844, (void*)0xa57730, a.name, a.id, 2, 0, 0, 0);
+    ok &= FUN_00a47f30(cls, (void*)fx_notify_value);
+    FUN_00a675f0("kFXCmptShake", &b);
+    ok &= FUN_00a48a80(cls, (void*)0xa62690, b.name, b.id, 0, 0, 0, 0);
+    FUN_00a675f0("kFXCmptSound", &a);
+    ok &= FUN_00a48a80(cls, (void*)0xa57730, a.name, a.id, 2, 0, 0, 0);
     return ok;
 }
 
 // @ 0x00a627d0
 void __cdecl fx_decal_update(FXTableBase* self, float v)
 {
-    void* tbl = FUN_00a671f0(self->nameA, self->nameB, (uint32)g_fxCmptMeta_167583c);
+    void* tbl = FUN_00a671f0((uint32)g_fxCmptMeta_167583c, self->nameB, self->nameA);
     if (tbl == 0)
         return;
     if (*(int*)((char*)tbl + 0x30) >= 4)
@@ -241,96 +240,92 @@ void __cdecl fx_decal_update(FXTableBase* self, float v)
 // @ 0x00a62a50
 bool __cdecl fx_register_metaparticles()
 {
-    EapdInterned a;
-    FUN_00a675f0(&a, "tabread4");
+    EapdInterned a, b;
+    FUN_00a675f0("kFXCmptMetaParticles", &a);
     void* cls = FUN_00a48ea0(a.name, a.id, (void*)fx_alloc_insert2, 0x30,
                                   0, 6, 0, 0);
-    g_fxCmptMeta3_1675850 = (uint32)cls;
     bool ok = cls != 0;
+    g_fxCmptMeta3_1675850 = (uint32)cls;
     ok &= FUN_00a47f30(cls, (void*)fx_decal_update);
-    FUN_00a675f0(&a, g_fxEmptyStr_13f2ce4);
-    ok &= FUN_00a48a80((void*)g_fxCmptMeta3_1675850, (void*)0xa57730, a.name, a.id, 2, 0, 0, 0);
+    FUN_00a675f0(g_fxEmptyStr_13f2ce4, &b);
+    ok &= FUN_00a48a80(cls, (void*)0xa57730, b.name, b.id, 2, 0, 0, 0);
     return ok;
 }
 
 // @ 0x00a62ba0
 bool __cdecl fx_register_sound()
 {
-    EapdInterned a;
-    FUN_00a675f0(&a, "tabwrite");
+    EapdInterned a, b;
+    FUN_00a675f0("kFXCmptSound", &a);
     void* cls = FUN_00a48ea0(a.name, a.id, (void*)fx_alloc_sound, 0x34,
                                   0, 6, 0, 0);
     bool ok = cls != 0;
     g_fxCmptSoundMeta_1675840 = (uint32)cls;
     ok &= FUN_00a47f30(cls, (void*)0xa62ad0);
-    FUN_00a675f0(&a, "fromlist");
-    ok &= FUN_00a48a80((void*)g_fxCmptSoundMeta_1675840, (void*)0xa62b20, a.name, a.id, 9, 0, 0, 0);
-    FUN_00a675f0(&a, g_fxEmptyStr_13f2ce4);
-    ok &= FUN_00a48a80((void*)g_fxCmptSoundMeta_1675840, (void*)0xa57730, a.name, a.id, 2, 0, 0, 0);
+    FUN_00a675f0("kFXCmptShake", &b);
+    ok &= FUN_00a48a80(cls, (void*)0xa62b20, b.name, b.id, 9, 0, 0, 0);
+    FUN_00a675f0(g_fxEmptyStr_13f2ce4, &a);
+    ok &= FUN_00a48a80(cls, (void*)0xa57730, a.name, a.id, 2, 0, 0, 0);
     return ok;
 }
 
 // @ 0x00a62ad0
 void __cdecl fx_sound_notify(FXTableBase* self, float v)
 {
-    void* tbl = FUN_00a671f0(self->nameA, self->nameB, (uint32)g_fxCmptMeta_167583c);
+    void* tbl = FUN_00a671f0((uint32)g_fxCmptMeta_167583c, self->nameB, self->nameA);
     if (tbl == 0)
         return;
-    FUN_00a487f0((const char*)tbl, g_eapdA_16758ac, g_eapdB_16758b0, g_fxFmt_1432d80,
-                  (double)*(float*)((char*)self + 0x30), (double)v);
+    FUN_00a487f0(g_fxFmt_1432d80, (double)*(float*)((char*)self + 0x30), (double)v);
 }
 
 // @ 0x00a62b60
 void* __cdecl fx_alloc_sound(uint32 a, uint32 b)
 {
-    FXTableBase* obj = (FXTableBase*)FUN_00a49390((void*)g_fxCmptSoundMeta_1675840);
-    if (obj != 0) {
-        *(float*)&obj->count = 0.0f;
-        _ReadWriteBarrier();
-        obj->nameA = a;
-        _ReadWriteBarrier();
-        obj->nameB = b;
-        FUN_00a49a00(obj, (float*)&obj->count);
-    }
+    void* obj = FUN_00a49390((void*)g_fxCmptSoundMeta_1675840);
+    if (obj == 0)
+        return 0;
+    *(float*)((char*)obj + 0x30) = 0.0f;
+    *(uint32*)((char*)obj + 0x28) = a;
+    *(uint32*)((char*)obj + 0x2c) = b;
+    FUN_00a49a00(obj, obj, (float*)((char*)obj + 0x30));
     return obj;
 }
 
 // @ 0x00a62b20
-void __cdecl fx_base_addop(FXTableBase* self, uint32 a, uint32 b, uint32 c, uint32 d)
+void __cdecl fx_base_addop(FXTableBase* self, uint32 a, uint32 b, uint32 c)
 {
-    void* tbl = FUN_00a671f0(self->nameA, self->nameB, (uint32)g_fxCmptMeta_167583c);
-    if (tbl != 0)
-        FUN_00a48100(tbl, a, b, c, d);
-    _ReadWriteBarrier();
+    void* tbl = FUN_00a671f0((uint32)g_fxCmptMeta_167583c, self->nameB, self->nameA);
+    if (tbl == 0)
+        return;
+    FUN_00a487f0(g_fxFmt2_1432d80, a, b, c, 0);
 }
 
 // @ 0x00a62c50
-void __cdecl fx_meta_particles_cb(void* a, uint32 b, const char* c, uint32 d, uint32 e, float v)
+void __cdecl fx_meta_particles_cb(void* a, uint32 b, const char* c, uint32 d, float v)
 {
     EapdInterned s, t;
-    EapdInterned* ps = FUN_00a675f0(&s, g_fxTableStr_145454c);
-    EapdInterned* pt = FUN_00a675f0(&t, g_fxMetaStr_14546a4);
-    FUN_00a487f0((const char*)a, pt->name, pt->id, g_fxFmt3_1455518,
-                 0, 0, ps->name, ps->id, b, c, (double)v);
+    FUN_00a675f0(c, &s);
+    FUN_00a675f0(g_fxMetaStr_14546a4, &t);
+    FUN_00a487f0(g_fxFmt3_1455518, s.name, s.id, t.name, t.id, b, d, 0, 0, (double)v);
 }
 
 // @ 0x00a62cc0
 bool __cdecl fx_register_core()
 {
     EapdInterned a, b;
-    FUN_00a675f0(&a, g_fxCoreStr_1455520);
+    FUN_00a675f0(g_fxCoreStr_1455520, &a);
     g_fxCmptSeqB_1675848 = a.name;
     g_fxCmptSeqC_167584c = a.id;
-    FUN_00a675f0(&b, "kFXCmptShake");
+    FUN_00a675f0("kFXCmptShake", &b);
     void* cls = FUN_00a48ea0(b.name, b.id, (void*)0xa61c20, 0x40,
                                   0, 9, 0, (uint32)(void*)FUN_00a61e50);
     bool ok = cls != 0;
     g_fxCmptMeta_167583c = (uint32)cls;
     ok &= FUN_00a47f30(cls, (void*)FUN_00a61e50);
     FUN_00a47f70(cls, (void*)FUN_00a62050);
-    FUN_00a675f0(&a, "kFXCmptSound");
+    FUN_00a675f0("kFXCmptSound", &a);
     ok &= FUN_00a48a80(cls, (void*)0xa57730, a.name, a.id, 1, 0, 0, 0);
-    FUN_00a675f0(&b, g_fxCoreStr2_1409198);
+    FUN_00a675f0(g_fxCoreStr2_1409198, &b);
     ok &= FUN_00a48b30(cls, (void*)fx_meta_particles_cb, b.name, b.id,
                            2, 1, 2, 5, 0);
     return ok;

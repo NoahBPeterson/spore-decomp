@@ -378,22 +378,22 @@ static int PTRFASTCALL unknown_isInvalid_s0091_6960(const ENCODING_s0091_6960 *e
 static int unknown_encodingIndex(const char *name);                             // 0x00916cb0
 static int PTRCALL checkCharRefNumber_s0091_6960(int result)
 {
-  int r = result;
   switch (result >> 8) {
   case 0xD8: case 0xD9: case 0xDA: case 0xDB:
   case 0xDC: case 0xDD: case 0xDE: case 0xDF:
-    r = -1;
-    break;
+    return -1;
   case 0:
     if (latin1_type[result] == BT_NONXML)
-      r = -1;
+      return -1;
     break;
   case 0xFF:
-    if (result == 0xFFFE || result == 0xFFFF)
-      r = -1;
+    switch (result) {
+    case 0xFFFE: case 0xFFFF:
+      return -1;
+    }
     break;
   }
-  return r;
+  return result;
 }
 static int PTRFASTCALL unknown_isName_s0091_6960(const ENCODING_s0091_6960 *enc, const char *p)
 {
@@ -2700,9 +2700,16 @@ static int PTRCALL unknown_scanS_ns(const ENCODING_s0091_6960 *enc, const char *
 // @ 0x00916f70
 int XmlInitEncoding(init_encoding_s0091_6960 *p, ENCODING_s0091_6960 **encoding, const char *name)
 {
-  int i = unknown_encodingIndex(name);
-  if (name != 0 && i == -1)
-    return 0;
+  int i;
+  if (name == 0)
+    i = 6;
+  else {
+    for (i = 0; i < 6; ++i)
+      if (streqci((const char *)encodingNames[i], name))
+        break;
+    if (i == 6)
+      return 0;
+  }
   p->enc.isUtf8 = (char)i;
   p->enc.scanners[0] = (SCANNER_s0091_6960)unknown_scanS_default;
   p->enc.scanners[1] = (SCANNER_s0091_6960)unknown_scanS_ns;
@@ -2718,18 +2725,16 @@ const ENCODING_s0091_6960 *findEncodingDefault(const ENCODING_s0091_6960 *enc, c
   char name[128];
   char *nameEnd = name;
   enc->utf8Convert(enc, &ptr, end, &nameEnd, name + sizeof(name) - 1);
-  if (ptr != end)
-    return 0;
-  {
+  if (ptr == end) {
     int i;
     *nameEnd = 0;
     if (streqci(name, kUTF16Name) != 0 && enc->minBytesPerChar == 2)
       return enc;
     i = unknown_encodingIndex(name);
-    if (i == -1)
-      return 0;
-    return (const ENCODING_s0091_6960 *)encodingListDefault[i];
+    if (i != -1)
+      return (const ENCODING_s0091_6960 *)encodingListDefault[i];
   }
+  return 0;
 }
 
 // @ 0x00917080
@@ -2756,9 +2761,16 @@ static int PTRCALL unknown_scanPD_ns(const ENCODING_s0091_6960 *enc, const char 
 // @ 0x00917130
 int XmlInitEncodingNS(init_encoding_s0091_6960 *p, ENCODING_s0091_6960 **encoding, const char *name)
 {
-  int i = unknown_encodingIndex(name);
-  if (name != 0 && i == -1)
-    return 0;
+  int i;
+  if (name == 0)
+    i = 6;
+  else {
+    for (i = 0; i < 6; ++i)
+      if (streqci((const char *)encodingNames[i], name))
+        break;
+    if (i == 6)
+      return 0;
+  }
   p->enc.isUtf8 = (char)i;
   p->enc.scanners[0] = (SCANNER_s0091_6960)unknown_scanPD_default;
   p->enc.scanners[1] = (SCANNER_s0091_6960)unknown_scanPD_ns;
@@ -2774,18 +2786,16 @@ const ENCODING_s0091_6960 *findEncodingNS(const ENCODING_s0091_6960 *enc, const 
   char name[128];
   char *nameEnd = name;
   enc->utf8Convert(enc, &ptr, end, &nameEnd, name + sizeof(name) - 1);
-  if (ptr != end)
-    return 0;
-  {
+  if (ptr == end) {
     int i;
     *nameEnd = 0;
     if (streqci(name, kUTF16Name) != 0 && enc->minBytesPerChar == 2)
       return enc;
     i = unknown_encodingIndex(name);
-    if (i == -1)
-      return 0;
-    return (const ENCODING_s0091_6960 *)encodingListNS[i];
+    if (i != -1)
+      return (const ENCODING_s0091_6960 *)encodingListNS[i];
   }
+  return 0;
 }
 
 // @ 0x00917240
@@ -2908,7 +2918,6 @@ int PTRFASTCALL unknown_charRefNumber_utf16(const ENCODING_s0091_6960 *enc, cons
 {
   int result = 0;
   (void)enc;
-  ptr += 4;                       // skip "&#" (2 chars, 2 bytes each)
   if (ptr[0] == 0 && ptr[1] == 'x') {
     ptr += 2;
     for (;;) {
@@ -2916,7 +2925,7 @@ int PTRFASTCALL unknown_charRefNumber_utf16(const ENCODING_s0091_6960 *enc, cons
       if (ptr[0] == 0) {
         if (ptr[1] == ';')
           break;
-        c = (signed char)ptr[1];
+        c = (unsigned char)ptr[1];
       }
       else
         c = -1;
@@ -2931,8 +2940,10 @@ int PTRFASTCALL unknown_charRefNumber_utf16(const ENCODING_s0091_6960 *enc, cons
       case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
         result = result * 16 + c - 'a' + 10;
         break;
+      default:
+        return -1;
       }
-      if (result >= 0x110000)
+      if (result > 0x10FFFF)
         return -1;
       ptr += 2;
     }
@@ -2943,12 +2954,12 @@ int PTRFASTCALL unknown_charRefNumber_utf16(const ENCODING_s0091_6960 *enc, cons
       if (ptr[0] == 0) {
         if (ptr[1] == ';')
           break;
-        c = (signed char)ptr[1];
+        c = (unsigned char)ptr[1];
       }
       else
         c = -1;
       result = result * 10 + c - '0';
-      if (result >= 0x110000)
+      if (result > 0x10FFFF)
         return -1;
       ptr += 2;
     }

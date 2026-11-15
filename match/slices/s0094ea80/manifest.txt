@@ -16,4 +16,3 @@ slices/s0094ea80/s0094ea80.cpp  ?Fn0094f260@@YIHPAUStreamRef94@@@Z  0094f260  /O
 slices/s0094ea80/s0094ea80.cpp  ?Fn0094f850@@YAXPAUMutexNew94@@@Z  0094f850  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0094ea80/s0094ea80.cpp  ?OpenFile@FileSystemDefault@@QAEPAUIFileStream94@@PBDHH@Z  0094f720  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0094ea80/s0094ea80.cpp  ?RemoveSession@SSLManager@@QAEHXZ  0094f990  /O2 /MD /Gy /EHsc /TP /GS-
-slices/s0094ea80/s0094ea80.cpp  ?insert@SSLTree94@@QAEPAPAXPIAPAXPAXPAID@Z  0094fa60  /O2 /MD /Gy /EHsc /TP /GS-

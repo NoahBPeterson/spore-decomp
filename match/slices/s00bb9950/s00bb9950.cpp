@@ -50,7 +50,6 @@ struct String16 {         // eastl::basic_string<wchar_t>, 0x10 bytes
     uint32_t mpEnd;
     uint32_t mpCapacity;
     uint32_t mAllocator;
-    void assign(uint32_t first, uint32_t last);   // 0x423650
     bool empty() const { return mpBegin == mpEnd; }
 };
 
@@ -127,7 +126,6 @@ public:
     void SetBlownUp(bool on);                                  // 0xbb9c40  (bit 0x40)
     bool UpdateSETI();                                         // 0xbb9eb0
     bool HasMonolith();                                        // 0xbb9fb0
-    void* GetSolarSystem();                                    // 0xc8b770
     void SetName(const String16* s);                           // 0xbba4b0
     void* GetCitizenSpecies();                                 // 0xbba500
     void OnBan();                                              // 0xbba2a0
@@ -787,18 +785,19 @@ void cStarRecord::OnBan()
 void cStarRecord::SetName(const String16* s)
 {
     if (s->mpBegin != s->mpEnd) {
-        cStarRecord* focus = 0;
-        if (this == (cStarRecord*)FUN_01021240())
-            focus = (cStarRecord*)FUN_01021230();
-        if (focus != 0) {
-            void* solar = focus->GetSolarSystem();
-            if (solar != 0)
-                ((void(__thiscall*)(void*, const String16*))0xc85200)(solar, s);
+        if (this == (cStarRecord*)FUN_01021240()) {
+            cStarRecord* star = (cStarRecord*)FUN_01021230();
+            if (star != 0) {
+                void* solar = ((void*(__thiscall*)(void*))0xc8b770)(star);
+                if (solar != 0)
+                    ((void(__thiscall*)(void*, const String16*))0xc85200)(solar, s);
+            }
         }
         if (s != &mName)
             ((void(__thiscall*)(String16*, uint32_t, uint32_t))0x423650)(&mName, s->mpBegin, s->mpEnd);
     }
 }
+
 // ===========================================================================
 // @ 0x00bba500
 // ===========================================================================

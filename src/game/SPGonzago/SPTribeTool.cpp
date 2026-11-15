@@ -153,7 +153,6 @@ struct cSpatialObject {
     bool Read(Stream* s);                          // 0x00c88b00
     void FUN_00c8a420();                           // 0x00c8a420
     void FUN_00c8b2e0();                           // 0x00c8b2e0
-    void* Cast_00c884f0(int typeID);               // 0x00c884f0 (ret 4)
 };
 struct cSpatialObjectV {                           // no-argument +0x2c form
     PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
@@ -276,7 +275,7 @@ extern cTribeToolData* gTribeTools[12];              // 01699a14
 float   FUN_00bfc490(void* p);                      // 00bfc490
 void* FUN_00b18460(void* p);                         // 00b18460
 uint32_t FUN_011e0810(float f);                      // 011e0810
-cPlanetModel* PlanetModel_s00c9_c1b0();                         // 00b3d350
+void* PlanetModel_s00c9_c1b0();                                 // 00b3d350
 class cTribeTool_s00c9_c1b0 {
 public:
     // --- vtable (this+0x00)
@@ -353,7 +352,6 @@ virtual void     v19();
     uint32_t GetToolPosition(void* pOut);            // 00c9c5e0 0x00c9c5e0
     bool  HasToolNoun();                             // 00c9c2e0 0x00c9c2e0
     void  RefreshModelProps();                       // 00c9c680 0x00c9c680
-    void* GetBase_00b18460(void* pIID);              // 0x00b18460 (thiscall: ecx = this)
     void* AsInterface(void* pIID);                   // 00c9cee0 0x00c9cee0
     void  AddStrikePoint(bool b);                    // 00c9cf90
     uint32_t SpawnToolIcon();                        // 00c9cfd0
@@ -779,20 +777,36 @@ int GetTutorialToolPrice(PropertyHolder* pHolder, int key, int defaultValue)
 // @ 0x00c9cee0
 void* cTribeTool_s00c9_c1b0::AsInterface(void* pIID)
 {
-    switch ((int)pIID) {
-    case 0x13f94d4:
-        return this ? (void*)(mCombatant + (0x120 - 0x120)) : 0;
-    case (int)0xe89adf71:
-        return this ? (void*)(mCombatant + (0x1e8 - 0x120)) : 0;
-    case 0x0116d858:
+    if ((int)pIID <= (int)g_13f94d4) {
+        if (pIID == (void*)g_13f94d4) {
+            if (this != 0)
+                return mCombatant + (0x1e8 - 0x120);
+            return 0;
+        }
+        if (pIID == (void*)0xe89adf71) {
+            if (this != 0)
+                return mCombatant + (0x120 - 0x120);
+            return 0;
+        }
+        if (pIID != (void*)0x0116d858) {
+            void* p = FUN_00b18460(pIID);
+            if (p != 0)
+                return p;
+            return 0;
+        }
         return this;
-    case 0x102a041a:
-        return this ? (void*)(mSpatial + (0x108 - 0x34)) : 0;
     }
-    void* p = GetBase_00b18460(pIID);
-    if (p != 0)
-        return p;
-    return ((cSpatialObject*)((uint8_t*)this + 0x34))->Cast_00c884f0((int)pIID);
+    if (pIID == (void*)0x102a041a) {
+        if (this != 0)
+            return mSpatial + (0x108 - 0x34);
+        return 0;
+    }
+    {
+        void* p = FUN_00b18460(pIID);
+        if (p != 0)
+            return p;
+    }
+    return 0;
 }
 
 // @ 0x00c9cf70
@@ -834,9 +848,10 @@ void cTribeTool_s00c9_c1b0::ReleaseToolIcon()
 {
     IRefCounted* p = 0;
     if (PlanetModel_s00c9_c1b0() != 0)
-        p = (IRefCounted*)PlanetModel_s00c9_c1b0()->mp24;
+        p = *(IRefCounted**)((uint8_t*)PlanetModel_s00c9_c1b0() + 0x24);
     if (p != 0 && mpField248 != 0) {
-        ((Worm*)p)->vf58(mpField248, 1);
+        void* vt = *(void**)p;
+        ((void (*)(void*, int))(*(void**)((uint8_t*)vt + 0x58)))(mpField248, 1);
         mpField248 = 0;
     }
 }
@@ -876,8 +891,7 @@ float cTribeTool_s00c9_c1b0::GetTimeSinceCreation()
 {
     if (mTimer200.IsRunning()) {
         unsigned long long t = mTimer200.GetElapsedTime();
-        float f = (float)t;
-        return f * g_13f9428;
+        return (float)t * g_13f9428;
     }
     return g_14745d8;
 }
@@ -887,8 +901,7 @@ float cTribeTool_s00c9_c1b0::GetTimeSinceLastUse()
 {
     if (mTimer220.IsRunning()) {
         unsigned long long t = mTimer220.GetElapsedTime();
-        float f = (float)t;
-        return f * g_13f9428;
+        return (float)t * g_13f9428;
     }
     return 0.0f;
 }

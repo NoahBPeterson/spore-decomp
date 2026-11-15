@@ -254,25 +254,23 @@ void hkThreadMemory::replaceInstance(hkThreadMemory* p)
 }
 
 // @ 0x0107dc10
-void* hkThreadMemory::onStackOverflow(int stackSize)
+void* hkThreadMemory::onStackOverflow(int size)
 {
-    int n = stackSize + 0x400;
+    int n = size + 0x400;
     if (n < 0x1000)
         n = 0x1000;
-    hkThreadMemory* t = (hkThreadMemory*)TlsGetValue(g_tlsThreadMemory);
-    int* src = &mStackBase;
-    int* dst = (int*)t->allocateChunk(n + 0x10, 0x14);
-    int* handle;
-    dst[0] = src[0];
-    dst[1] = src[1];
-    dst[2] = src[2];
-    dst[3] = src[3];
-    handle = dst + 4;
-    src[0] = (int)handle + stackSize;
-    src[2] = (int)handle;
-    src[3] = (int)handle + n;
-    src[1] = (int)dst;
-    return handle;
+    hkThreadMemory* cur = (hkThreadMemory*)TlsGetValue(g_tlsThreadMemory);
+    int* hdr = (int*)cur->allocateChunk(n + 0x10, 0x14);
+    hdr[0] = mStackBase;
+    hdr[1] = mStackAlloc;
+    hdr[2] = mStackCurrent;
+    hdr[3] = mStackEnd;
+    int* data = hdr + 4;
+    mStackBase = (int)data + size;
+    mStackCurrent = (int)data;
+    mStackEnd = (int)data + n;
+    mStackAlloc = (int)hdr;
+    return data;
 }
 
 // @ 0x0107dc90

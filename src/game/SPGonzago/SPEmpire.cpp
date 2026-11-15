@@ -14,8 +14,6 @@
 #include "EA/Random/RandomLinearCongruential.h"
 #include "EA/ResourceMan/Key.h"
 
-extern float g_fMilliToSeconds;  // 0x013f9428  0.001f
-
 // ---- items of slice s00c2f830 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __stdcall FUN_00401090(void*);  // species profile lookup (setting)
 extern "C" void* FUN_004df550(void*);            // species profile lookup
@@ -184,7 +182,7 @@ public:
 };
 struct cSPTimer {
     uint8_t m18;                  // +0x18 running flag
-    unsigned __int64 GetElapsedTime();     // 0x00bc3190
+    int64_t GetElapsedTime();     // 0x00bc3190
     void    Stop();               // 0x00bc3110
     void    FUN_00bc3170();       // 0x00bc3170
 };
@@ -242,11 +240,11 @@ float  __cdecl FUN_00c317a0(void* self);               // 0x00c317a0 cEmpire::Ge
 void*  __cdecl FUN_00c31730(void* self);               // 0x00c31730 cEmpire::GetHomePlanet (thiscall)
 void*  __stdcall FUN_01029940(u32 level);              // 0x01029940 SP::GetSpaceCombatTuning
 float  __cdecl FUN_0102a780(void* self);               // 0x0102a780 GetTurretHealth (thiscall)
-extern EA::Random::RandomLinearCongruential sMathRandom;   // 0x01601760
+u32    __cdecl FUN_00a68fb0(void* self, u32 n);        // 0x00a68fb0 RandomUint32Uniform (ecx=0x1601760)
 void*  __cdecl FUN_01002bd0(void);                     // 0x01002bd0 SP::SpaceGameGet
 s32    __cdecl FUN_00c702f0(u32 key);                 // 0x00c702f0
 u32    __cdecl FUN_005c65e0(void* self);               // 0x005c65e0 SP::cCivData::GetCities (thiscall)
-bool   __fastcall FUN_00c31080(Vec3* pos, void* dummy, void* a, void* b);  // 0x00c31080
+char   __cdecl FUN_00c31080(void* a, void* b);         // 0x00c31080
 void*  __cdecl FUN_01021300(void);                     // 0x01021300
 void*  __cdecl FUN_00b3d300(u32 id);                   // 0x00b3d300 SP::NounManager
 void*  __cdecl FUN_00f67d90(void* self);               // 0x00f67d90 cTerrainEditor::GetCurrentTerrainSphere (thiscall)
@@ -1155,7 +1153,8 @@ bool __fastcall cEmpireIsHostileToPlayer(cEmpire* self)
 // @ 0x00c30b40
 bool __fastcall cEmpireHasDemandForTributeExpired(cEmpire* self)
 {
-    float t = (float)self->mRelationshipTimer.GetElapsedTime() * g_fMilliToSeconds;
+    int64_t elapsed = self->mRelationshipTimer.GetElapsedTime();
+    float t = (float)elapsed * 0.001f;
     return t > *(float*)((char*)SP_GetSpaceRelationshipTuning() + 0x98);
 }
 
@@ -1313,17 +1312,16 @@ void cEmpire::FUN_00c30fa0(const Vec3* p)
 }
 
 // @ 0x00c31080
-bool __fastcall cEmpireFUN_00c31080(Vec3* pos, void* dummy, cCivData* a, cCivData* b)
+bool __fastcall cEmpireFUN_00c31080(cEmpire* self, cCivData* a, cCivData* b)
 {
-    (void)dummy;
     Vec3* ca = cCivData_GetCities(a);
-    float ax = ca->x - pos->x;
-    float ay = ca->y - pos->y;
-    float az = ca->z - pos->z;
+    float ax = ca->x - self->mPosX;
+    float ay = ca->y - self->mPosY;
+    float az = ca->z - self->mPosZ;
     Vec3* cb = cCivData_GetCities(b);
-    float bx = cb->x - pos->x;
-    float by = cb->y - pos->y;
-    float bz = cb->z - pos->z;
+    float bx = cb->x - self->mPosX;
+    float by = cb->y - self->mPosY;
+    float bz = cb->z - self->mPosZ;
     return (ay * ay + ax * ax) + az * az < (bz * bz + by * by) + bx * bx;
 }
 
@@ -1595,7 +1593,7 @@ float __fastcall FUN_00c31990(void* self, void* dummy)
     return (float)v + (float)v;
   }
   s32 sum = 0;
-  void* home = ((TFVP)FUN_00c31730)(self);
+  void* home = FUN_00c31730(self);
   void* sg = FUN_01002bd0();
   int* end = (int*)(*(int*)((char*)sg + 0x30) + 0x2c);
   int* cur = (int*)*end;
@@ -1646,7 +1644,7 @@ void* __fastcall FUN_00c31a90(void* self, void* dummy, u8 filter)
   (void)dummy;
   int n = (int)((*(int*)((char*)self + 0x60) - *(int*)((char*)self + 0x5c)) >> 2);
   if (n <= 0) return 0;
-  u32 idx = sMathRandom.RandomUint32Uniform((u32)n);
+  u32 idx = FUN_00a68fb0((void*)0x01601760, (u32)n);
   int* begin = (int*)*(int*)((char*)self + 0x5c);
   void* cand = (void*)begin[idx];
   if (filter != 0) {
@@ -1654,7 +1652,7 @@ void* __fastcall FUN_00c31a90(void* self, void* dummy, u8 filter)
     while (((*(u32*)((char*)cand + 0x50) >> 6) & 1) != 0) {
       if (i == n) return 0;
       i++;
-      idx = (idx + 1) & (u32)(((s32)(idx + 1) >= n) - 1);
+      idx = (idx + 1) & (u32)(-((s32)(idx + 1) >= n));
       cand = (void*)begin[idx];
     }
     if (i == n) return 0;
@@ -1685,18 +1683,17 @@ void* __fastcall FUN_00c31b50(void* self, void* dummy, u8 filter)
 {
   (void)dummy;
   int n = (int)((*(int*)((char*)self + 0x74) - *(int*)((char*)self + 0x70)) >> 2);
-  if (n > 0) {
-    u32 idx = sMathRandom.RandomUint32Uniform((u32)n);
-    void* cand = (void*)(*(int**)((char*)self + 0x70))[idx];
-    if (filter != 0) {
-      if (cand == FUN_01021300()) {
-        if (n <= 1) return 0;
-        cand = (void*)(*(int**)((char*)self + 0x70))[(idx + 1) & (u32)(((s32)(idx + 1) >= n) - 1)];
-      }
+  if (n <= 0) return 0;
+  u32 idx = FUN_00a68fb0((void*)0x01601760, (u32)n);
+  int* begin = (int*)*(int*)((char*)self + 0x70);
+  void* cand = (void*)begin[idx];
+  if (filter != 0) {
+    if (cand == FUN_01021300()) {
+      if (n < 2) return 0;
+      cand = (void*)begin[(idx + 1) & (u32)(-((s32)(idx + 1) >= n))];
     }
-    return cand;
   }
-  return 0;
+  return cand;
 }
 
 // @ 0x00c31bc0
@@ -1840,14 +1837,13 @@ void** __cdecl FUN_00c32030(void** pa, void** pb, void** pc, float px, float py,
   float* cA = (float*)FUN_005c65e0(*pa);
   float f1 = cA[0], f2 = cA[1], f3 = cA[2];
   float* cB = (float*)FUN_005c65e0(cb0);
-  Vec3 pos = {px, py, pz};
   if (((cB[2] - pz) * (cB[2] - pz) + (cB[1] - py) * (cB[1] - py)) + (cB[0] - px) * (cB[0] - px) <=
       ((f3 - pz) * (f3 - pz) + (f2 - py) * (f2 - py)) + (f1 - px) * (f1 - px)) {
-    if (FUN_00c31080(&pos, 0, *pa, *pc)) return pa;
-    if (FUN_00c31080(&pos, 0, *pb, *pc)) return pb;
+    if (FUN_00c31080(*pa, *pc)) return pa;
+    if (FUN_00c31080(*pb, *pc)) return pb;
   } else {
-    if (FUN_00c31080(&pos, 0, *pb, *pc)) return pb;
-    if (FUN_00c31080(&pos, 0, *pa, *pc)) return pb;
+    if (FUN_00c31080(*pb, *pc)) return pb;
+    if (FUN_00c31080(*pa, *pc)) return pb;
     return pa;
   }
   return 0;
@@ -1981,7 +1977,7 @@ void __fastcall FUN_00c32610(void* self, void* dummy)
   }
   void* sg = FUN_01002bd0();
   FUN_0106ac90((char*)sg + 0x14, (u32)idx);
-  void* home = ((TFVP)FUN_00c31730)(self);
+  void* home = FUN_00c31730(self);
   void* ctx = FUN_00ce6950(home);
   void* cm = FUN_00b3d4a0(*(u32*)((char*)self + 0x84), ctx);
   FUN_00aeaa80(cm, 0x95bbbbfc, 0x7fc02fbc, (u32)ctx);
@@ -2032,7 +2028,7 @@ void __fastcall FUN_00c327a0(void* self, void* dummy, s32 id)
   int i = 0;
   if (n > 0) {
     int* p = (int*)*(int*)((char*)self + 0x5c);
-    while ((void*)*p != (void*)id) {
+    while (*(s32*)((char*)(void*)*p + 0x84) != id) {
       i++;
       p++;
       if (i >= n) return;
@@ -2063,7 +2059,7 @@ void __fastcall FUN_00c32830(void* self, void* dummy, s32 id)
   int i = 0;
   if (n > 0) {
     int* p = (int*)*(int*)((char*)self + 0x70);
-    while ((void*)*p != (void*)id) {
+    while (*(s32*)((char*)(void*)*p + 0x84) != id) {
       i++;
       p++;
       if (i >= n) return;

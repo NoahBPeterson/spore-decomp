@@ -1,5 +1,6 @@
 # <va>  <diff-bytes>  <reason>   (nonmatching: complete + behaviourally equivalent, but not byte-exact)
-00999b20 78 logic: fixed the allocation-failure path to fall through to the copy loop with a null destination (retail does not return early) and used wcslen for the length; remaining diff is register allocation of the copy loop (retail keeps d in eax and indexes [d-src+src]) and push scheduling. fix1: quick check PASS (emulator hint, no mismatch; angr unavailable)
-00999d30 23 schedule: key-copy/count order now matches retail (mLastKey struct copy, then count) via _ReadWriteBarrier; remaining diff is only the placement of the out-pointer load and pop edi. fix1: quick check UNSUPPORTED (emulator: 0 valid inputs, operator new faults; angr unavailable) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#5 edi]
+00999b20 78 complete StringTableXml::StrDup; length loop and allocator branch shape differ
+00999c50 25 complete StringTableXml ctor; member-init/argument scheduling differs; difftest PASS [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 memory]
+00999d30 23 complete FactoryStringTableXml::CreateResource; key-copy/count schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#5 edi]
 00999dd0 370 complete SpVec::insert(pos,n,value); register allocation and this-reload differ
 0099a010 17 complete StringTableXml::SetString; this/vector register allocation differs

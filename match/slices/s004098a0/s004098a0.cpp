@@ -25,8 +25,6 @@ struct Matrix3 {
     Vec3Data m[3];
     Matrix3() {}
     Matrix3(const Matrix3& o);  // 0x0041CB40
-    void Assign(const Matrix3& o);  // 0x0041CB40
-    Matrix3& operator=(const Matrix3& o) { Assign(o); return *this; }
     Vec3Data& operator[](int i) { return m[i]; }
     const Vec3Data& operator[](int i) const { return m[i]; }
 };
@@ -95,14 +93,10 @@ Vector3& MulMatrixAssign(Vector3& dst, const Matrix3& m)
     return dst;
 }
 
-template <int N> inline void PadN() { unsigned int s[N]; }
-
 // @ 0x00409930
 Transform::Transform()
-    : mFlags(0), mVersion(0), mPos(g_ZeroVector), mScale(1.0f)
+    : mFlags(0), mVersion(0), mPos(g_ZeroVector), mScale(1.0f), mRot(g_IdentityMatrix)
 {
-    PadN<11>();  // unused locals present in the original frame
-    mRot = g_IdentityMatrix;
 }
 
 // @ 0x004099B0

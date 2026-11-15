@@ -1,3 +1,1 @@
 # source  symbol  va  flags
-../src/game/SPGonzago/SPGameTimeManager.cpp  ?PushMatrix@cInterfaceState@@QAEXPBUcSPVector3@@@Z  00ddfb50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPGonzago/SPGameTimeManager.cpp  ?init@cCameraCtl@@QAEXPAXPBV?$Vector3Template@M$0A@@fpu@math@rw@@@Z  00dde2b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

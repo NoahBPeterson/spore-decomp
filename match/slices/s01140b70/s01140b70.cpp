@@ -716,19 +716,19 @@ extern "C" void FUN_011416b0(int32_t p)
 // ===========================================================================
 //  FUN_01141710   (invoke callbacks)
 // ===========================================================================
-// @ 0x01141710  -- the enabled flag is a guard around the loop, not a gate the loop body must
-// keep live: retail re-reads it as a memory operand on the `jle`, so nothing caches it.
+// @ 0x01141710
 extern "C" void FUN_01141710(void)
 {
-    if (g_cbEnabled == 0) {
-        int i = 0;
-        if (g_cbCount > 0) {
-            do {
-                g_callbacks[i]();
-                i++;
-            } while (i < g_cbCount);
-        }
-    }
+    if (g_cbEnabled == 0)
+        return;
+    int i = 0;
+    if (g_cbCount <= 0)
+        return;
+    do {
+        CbFn fn = g_callbacks[i];
+        fn();
+        i++;
+    } while (i < g_cbCount);
 }
 
 // ===========================================================================

@@ -587,7 +587,7 @@ struct RDD {
 // ---- items of slice s00a23360 end
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
-__declspec(noinline) RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent);   // defined at 0x00a245e0, called earlier in the TU
+RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent);   // defined at 0x00a245e0, called earlier in the TU
 
 // ---- items of slice s00a24e10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern const char g_lockName[];   // 0x01452970
@@ -1106,7 +1106,6 @@ typedef unsigned int uint;
 typedef unsigned char uchar;
 struct XF;           // generic stub for external __thiscall callees
 struct AudioSystem;
-struct LastInstr;
 struct XF {
     void* hashtable_find(void* out, void* key);      // 0x645ed0 (arg1 = out iterator, arg2 = key)
     void* rbtree_find(void* out, void* key);         // 0xe5c780
@@ -1327,11 +1326,6 @@ struct EventMsg {
     unsigned a, b, c, d;
     void* ref;
     EventMsg(unsigned a_, unsigned b_, unsigned c_, unsigned d_, void* r) : a(a_), b(b_), c(c_), d(d_), ref(r)
-    {
-        if (ref)
-            ObjAddRef(ref);
-    }
-    __forceinline EventMsg(const EventMsg& o) : a(o.a), b(o.b), c(o.c), d(o.d), ref(o.ref)
     {
         if (ref)
             ObjAddRef(ref);
@@ -3078,12 +3072,16 @@ void __stdcall erase_00a21310(void* a1, void* holder)
 // @ 0x00a21390
 bool EA::Audio::Submix::DisconnectFromSubmix()
 {
-    AudioLockGuard guard;
-    void* esi = (char*)this + 0x10;
+    void* self = this;
+    void* m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c600();
+    void* esi = (char*)self + 0x10;
     void* p = TH(esi)->m_00a34230(0x41695730);
     if (p != 0)
         TH(p)->m_0112ccc0(1, 0);
     TH(esi)->m_00a34890();
+    m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c620();
     return true;
 }
 
@@ -3131,35 +3129,26 @@ bool VoiceContainer_s00a2_1130::Connect4(int a1, int a2, int a3, int a4)
 void __fastcall disconnect_00a21590(char* self)
 {
     if (*(int*)(self + 0x15f4) == 0) return;
-    AudioLockGuard guard;
+    void* m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c600();
     TH(*(void**)(self + 0x15f4))->m_0112ccc0(1, 0);
     *(void**)(self + 0x15f4) = 0;
+    m = *(void**)0x16e61a8;
+    if (m != 0) TH(m)->m_0112c620();
 }
-
-struct IObj_00a21630 {
-    virtual void AddRef();
-    virtual void Release();
-    virtual void v2();
-    virtual void v3();
-    virtual void v4();
-    virtual void v5();
-    virtual void Send(int a, int b);   // +0x18
-};
-struct ObjRef_00a21630 {
-    IObj_00a21630* p;
-    ObjRef_00a21630(IObj_00a21630* raw) : p(raw) { if (raw) raw->AddRef(); }
-    ~ObjRef_00a21630() { if (p) p->Release(); }
-};
 
 // @ 0x00a21630
 bool MsgTarget_00a21630::Handle(int a1, int a2)
 {
     void* self = this;
     void* eax = *(void**)((char*)*(void**)self + 0x1d4);
-    IObj_00a21630* p = (IObj_00a21630*)((void* (__thiscall*)(void*, int))eax)(self, a1);
-    ObjRef_00a21630 ref(p);
-    if (p == 0) return false;
-    p->Send(2, a2);
+    void* p = ((void* (__thiscall*)(void*, int))eax)(self, a1);
+    void* esi = p;
+    if (esi != 0)
+        VPTR(void, esi, 0)(esi);
+    if (esi == 0) return false;
+    VPTR(void, esi, 0x18, int, int)(esi, 2, a2);
+    VPTR(void, esi, 4)(esi);
     return true;
 }
 
@@ -3479,24 +3468,20 @@ void HashA_00a21eb0::Rehash(unsigned a)
     *(unsigned*)(self + 8) = (unsigned)count;
 }
 
-struct Node_00a21f60 {
-    unsigned a, b, c;
-    void* ref;      // +0xc
-    unsigned m10;   // +0x10
-    Node_00a21f60(const Node_00a21f60& o) : a(o.a), b(o.b), c(o.c), ref(o.ref)
-    {
-        if (ref) VPTR(void, ref, 0)(ref);
-        m10 = 0;
-    }
-};
-
 // @ 0x00a21f60
 void* __stdcall allocRef_00a21f60(void* src)
 {
-    Node_00a21f60* p = (Node_00a21f60*)f_00f473a0(0x14, (void*)0x13f2150, 0, 0, (void*)0x13ebb38, 0xd1);
-    if (p != 0)
-        new (p) Node_00a21f60(*(const Node_00a21f60*)src);
-    return p;
+    unsigned char* esi = (unsigned char*)f_00f473a0(0x14, (void*)0x13f2150, 0, 0, (void*)0x13ebb38, 0xd1);
+    if (esi != 0) {
+        *(unsigned*)(esi + 0) = *(unsigned*)((char*)src + 0);
+        *(unsigned*)(esi + 4) = *(unsigned*)((char*)src + 4);
+        *(unsigned*)(esi + 8) = *(unsigned*)((char*)src + 8);
+        unsigned c = *(unsigned*)((char*)src + 0xc);
+        *(unsigned*)(esi + 0xc) = c;
+        if (c != 0) VPTR(void, (void*)c, 0)((void*)c);
+        *(unsigned*)(esi + 0x10) = 0;
+    }
+    return esi;
 }
 
 // @ 0x00a22060
@@ -3704,7 +3689,7 @@ AR* __cdecl ARCopy(AR* first, AR* last, AR* dst)
 
 // @ 0x00a227a0
 DrvBA22::DrvBA22(void* arg)
-: mArg(arg), RefBaseA22(), mZero(0) {}
+: mArg(arg), mZero(0) {}
 
 // @ 0x00a227d0
 ResourceDeviceDriver* MakeRDD()
@@ -4078,10 +4063,10 @@ RBNode_s00a2_3360* __thiscall RBTree::CloneNode(RBNode_s00a2_3360* src, RBNode_s
 }
 
 // @ 0x00a245e0
-__declspec(noinline) RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent)
+RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent)
 {
     RBNode_s00a2_3360* n = (RBNode_s00a2_3360*)operator new(0x18, "EASTL", 0, 0, EA_FILE, 0xd1);
-    if ((char*)n + 0x10) {
+    if (n) {
         n->key0 = src->key0;
         n->key1 = src->key1;
     }
@@ -5297,8 +5282,6 @@ bool AudioSystem::FUN_00a2d880(uint key, void* out)
 // @ 0x00a2d940
 void* AudioSystem::FUN_00a2d940(void* arg)
 {
-    // The retail body opens an EH scope around the member build (state -1 at [esp+0x14], handler
-    // 0x1218758) and calls 0x00a26fa0 through the IAT; plain C++ compiled with /O2 emits neither.
     *(void**)this = (void*)0x1452cb0;
     ((XF*)((uchar*)this + 4))->FUN_00a26fa0(arg);
     return this;
@@ -5373,22 +5356,18 @@ bool EA::Audio::System::DestroySubmixes()
     return true;
 }
 
-struct Ref4_s00a2_dfe0 {
-    void* p;
-    Ref4_s00a2_dfe0(const Ref4_s00a2_dfe0& o) : p(o.p)
-    {
-        if (p) ((void (__thiscall*)(void*))vc_s00a2_d790(p, 4))(p);
-    }
-};
-
 // @ 0x00a2dfe0
 void AudioSystem::FUN_00a2dfe0(void* p)
 {
     uchar* vec = (uchar*)this;
-    Ref4_s00a2_dfe0* cur = *(Ref4_s00a2_dfe0**)(vec + 4);
-    if (cur < *(Ref4_s00a2_dfe0**)(vec + 8)) {
-        *(Ref4_s00a2_dfe0**)(vec + 4) = cur + 1;
-        if (cur) new (cur) Ref4_s00a2_dfe0(*(const Ref4_s00a2_dfe0*)p);
+    void** cur = *(void***)(vec + 4);
+    if (cur < *(void***)(vec + 8)) {
+        *(void***)(vec + 4) = cur + 1;
+        if (cur) {
+            void* o = *(void**)p;
+            *cur = o;
+            if (o) ((void (__thiscall*)(void*))vc_s00a2_d790(o, 4))(o);
+        }
     } else {
         ((XF*)vec)->FUN_00a2ac20(cur, p);
     }
@@ -5418,39 +5397,28 @@ uint& AudioSystem::FUN_00a2e060(const uint& k)
     return n->value;
 }
 
-struct E0Sub_s00a2_e0e0 { void* sub; E0Sub_s00a2_e0e0* next; };
-struct E0Tree_s00a2_e0e0 { void DoNukeSubtree(void* n); };
-
 // @ 0x00a2e0e0
 int AudioSystem::FUN_00a2e0e0(uint* p)
 {
     uchar* ht = (uchar*)this;
     int before = *(int*)(ht + 0xc);
     uint idx = *p % *(uint*)(ht + 8);
-    uchar** bucket = (uchar**)(*(int*)(ht + 4) + idx * 4);
-    while (*bucket && *(uint*)*bucket != *p) {
-        uchar* n = *bucket;
-        bucket = (uchar**)(n + 0x24);
-    }
-    while (*bucket) {
-        uchar* node = *bucket;
-        if (*(uint*)node != *p) break;
-        *bucket = *(uchar**)(node + 0x24);
-        for (E0Sub_s00a2_e0e0* s = *(E0Sub_s00a2_e0e0**)(node + 0x14); s; ) {
-            ((E0Tree_s00a2_e0e0*)(node + 8))->DoNukeSubtree(s->sub);
-            E0Sub_s00a2_e0e0* nx = s->next;
-            EaDelete(s);
-            s = nx;
+    uint* bucket = (uint*)(*(int*)(ht + 4) + idx * 4);
+    if (*bucket) {
+        uint* node;
+        for (;;) {
+            node = (uint*)*bucket;
+            if (*p == *node) break;
+            bucket = node + 9;
+            if (!node[9]) break;
         }
-        if (node != *(uchar**)(ht + 0x30)) {
-            if (node >= *(uchar**)(ht + 0x24) && node < *(uchar**)(ht + 0x28)) {
-                *(uchar**)node = *(uchar**)(ht + 0x1c);
-                *(uchar**)(ht + 0x1c) = node;
-            } else {
-                EaDelete(node);
-            }
+        uint v = *bucket;
+        while (v != 0 && (node = (uint*)*bucket, *p == *node)) {
+            *bucket = node[9];
+            operator_delete(node);
+            *(int*)(ht + 0xc) -= 1;
+            v = *bucket;
         }
-        *(int*)(ht + 0xc) -= 1;
     }
     return before - *(int*)(ht + 0xc);
 }
@@ -5484,12 +5452,18 @@ void* AudioSystem::FUN_00a2e1b0(void* out, void* node, void* parent)
 // @ 0x00a2e260
 void AudioSystem::FUN_00a2e260(void* p)
 {
-    EventMsg* cur = *(EventMsg**)((uchar*)this + 4);
-    if (cur < *(EventMsg**)((uchar*)this + 8)) {
-        *(EventMsg**)((uchar*)this + 4) = cur + 1;
-        if (cur) new (cur) EventMsg(*(const EventMsg*)p);
+    uchar* vec = (uchar*)this;
+    uchar* cur = *(uchar**)(vec + 4);
+    if (cur < *(uchar**)(vec + 8)) {
+        *(uchar**)(vec + 4) = cur + 0x14;
+        if (cur) {
+            memcpy(cur, p, 0x10);
+            void* o = *(void**)((uchar*)p + 0x10);
+            *(void**)(cur + 0x10) = o;
+            if (o) ((void (__thiscall*)(void*))vc_s00a2_d790(o, 0))(o);
+        }
     } else {
-        ((XF*)this)->FUN_00a2af30(cur, p);
+        ((XF*)vec)->FUN_00a2af30(cur, p);
     }
 }
 
@@ -6235,31 +6209,20 @@ FixedHashMap::FixedHashMap(uint a, uint b)
         ((FHMapBase*)this)->Rehash(n);
 }
 
-struct HashTmpObj {
-    uint32_t t0, t1;
-    char rest[0x3f8];
-    HashTmpObj(uint32_t* src) { ((HashTmp*)this)->Ctor(src); }
-    ~HashTmpObj() { ((HashTmp*)this)->Dtor(); }
-};
-
-struct SwapTmp_00a32320 {
-    uint32_t pre;
-    HashTmpObj tmp;
-    SwapTmp_00a32320(uint32_t* src) : tmp(src) {}
-};
-
 // @ 0x00a32320
 void FUN_00a32320(uint32_t* x, uint32_t* y)
 {
-    SwapTmp_00a32320 w(x);
+    struct { uint32_t pre; uint32_t t0, t1; char rest[0x3f0]; } tmp;
+    ((HashTmp*)&tmp.t0)->Ctor(x);
     if (x != y) {
         ((HashDst*)x)->Clear(x[0], x[1]);
-        ((HashDst*)x)->Assign(y[0], y[1], w.pre);
+        ((HashDst*)x)->Assign(y[0], y[1], tmp.pre);
     }
-    if (y != &w.tmp.t0) {
+    if (y != &tmp.t0) {
         ((HashDst*)y)->Clear(y[0], y[1]);
-        ((HashDst*)y)->Assign(w.tmp.t0, w.tmp.t1, w.pre);
+        ((HashDst*)y)->Assign(tmp.t0, tmp.t1, tmp.pre);
     }
+    ((HashTmp*)&tmp.t0)->Dtor();
 }
 
 // @ 0x00a323e0

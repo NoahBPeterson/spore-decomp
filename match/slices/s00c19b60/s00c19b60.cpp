@@ -20,7 +20,6 @@
 //      impulse to the locomotive sub-object and switches the creature state (-0x2f8) to 3.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 #include "types.h"
-#include <intrin.h>
 
 typedef unsigned int size_t;
 inline void* operator new(size_t, void* p) { return p; }
@@ -279,9 +278,8 @@ void cCreatureCombatant::TakeDamage(float damage, uint32_t attackerPID, int dama
 struct AnimRow {
     uint8_t mData[0x3c];
 };
-// 0x00b3f260: fills a freshly allocated row buffer; the first argument is the address of the
-// caller's count (retail passes `lea edx,[esp+0x18]`, the count parameter's own home slot).
-void __cdecl FillAnimRows(int* pCount, int a2, int a3, void* rows, int count);
+// 0x00b3f260: fills a freshly allocated row buffer (count, a2, a3, buffer, count).
+void __cdecl FillAnimRows(int count, int a2, int a3, void* rows, int count2);
 
 struct CAnimTable {
     AnimRow* AllocRows(int count, int a2, int a3);     // 0x00c19cb0
@@ -295,10 +293,7 @@ AnimRow* CAnimTable::AllocRows(int count, int a2, int a3)
               "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
               0xd1)
         : 0;
-    // Retail reloads `count` from its home slot in the join block rather than keeping it live across the
-    // allocation; the barrier pins that (it emits nothing).
-    _ReadWriteBarrier();
-    FillAnimRows(&count, a2, a3, rows, count);
+    FillAnimRows(count, a2, a3, rows, count);
     return rows;
 }
 
@@ -364,28 +359,25 @@ bool __cdecl SpawnAnimEffect(CAnimOwner* self)
 {
     bool result = false;
     CRefNode* node = self->mpRef;
-    if (node) {
-        CBodyRef* ref = (CBodyRef*)node->v0c(0xce9f6639);
-        if (ref) {
-            // The original re-tests the pointer here even though it was dereferenced above (retail:
-            // `test esi,esi / je`); cl15 folds that test away because the dereference proves self != 0.
-            // Reading the parameter slot through a volatile pointer keeps the test (and so the original's
-            // behaviour when the dereference itself did not fault, e.g. a null self with page 0 mapped).
-            if (*(CAnimOwner* volatile*)&self && ref->mState >= 2) {
-                char* base = g_pAnimBase;
-                CBodyEffect* eff = ref->CreateBodyEffect(0, base, base + (int)self);
-                if (eff) {
-                    XformMsg msg;
-                    eff->v20(&msg);
-                    msg.mValue = ref->mClock.GetTime();
-                    msg.mCount++;
-                    eff->v18(&msg);
-                    result = true;
-                }
-            }
-        }
-    }
-    return result;
+    if (!node)
+        return result;
+    CBodyRef* ref = (CBodyRef*)node->v0c(0xce9f6639);
+    if (!ref)
+        return result;
+    if (!self)
+        return result;
+    if (ref->mState < 2)
+        return result;
+    char* base = g_pAnimBase;
+    CBodyEffect* eff = ref->CreateBodyEffect(0, base, base + (int)self);
+    if (!eff)
+        return result;
+    XformMsg msg;
+    eff->v20(&msg);
+    msg.mValue = ref->mClock.GetTime();
+    msg.mCount++;
+    eff->v18(&msg);
+    return true;
 }
 
 // ---- animation event dispatch ------------------------------------------------------------------

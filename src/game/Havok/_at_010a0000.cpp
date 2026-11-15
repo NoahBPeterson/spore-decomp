@@ -96,7 +96,6 @@ static __forceinline void hkMonitorStream_startTimer(const char* name)
     unsigned char* current = (unsigned char*)TlsGetValue(g_hkMonitorStreamCurrentTls);
     if (current < end)
     {
-        current = (unsigned char*)TlsGetValue(g_hkMonitorStreamCurrentTls);   // the original re-reads it for the store
         *(const char**)(current) = name;
         volatile uint32_t t = (uint32_t)__rdtsc();
         *(uint32_t*)(current + 4) = t;
@@ -109,7 +108,6 @@ static __forceinline void hkMonitorStream_endTimer(const char* marker)
     unsigned char* current = (unsigned char*)TlsGetValue(g_hkMonitorStreamCurrentTls);
     if (current < end)
     {
-        current = (unsigned char*)TlsGetValue(g_hkMonitorStreamCurrentTls);   // the original re-reads it for the store
         *(const char**)(current) = marker;
         volatile uint32_t t = (uint32_t)__rdtsc();
         *(uint32_t*)(current + 4) = t;
@@ -122,7 +120,6 @@ static __forceinline void hkMonitorStream_startTimerList(const char* name, const
     unsigned char* current = (unsigned char*)TlsGetValue(g_hkMonitorStreamCurrentTls);
     if (current < end)
     {
-        current = (unsigned char*)TlsGetValue(g_hkMonitorStreamCurrentTls);   // the original re-reads it for the store
         *(const char**)(current) = name;
         *(const char**)(current + 0xc) = firstSplit;
         volatile uint32_t t = (uint32_t)__rdtsc();
@@ -751,8 +748,7 @@ virtual void _v4();
 virtual void _v5();
 virtual void _v6();
 
-    // the virtuals above put the compiler's vfptr at +0; only the reference-count word that follows it belongs here
-    uint32_t m_memSizeAndFlags;                 // +4
+    uint32_t m_vptr_memSize[2];                 // +0
     void* m_broadPhaseHandle;                   // +8
     uint8_t m_pad0c[0x10 - 0xc];
     uintptr_t m_0x10;                           // +0x10
@@ -823,7 +819,7 @@ public:
     hkWorld_s010a_32c0* m_world;                   // +8
 };
 extern "C" void _hkAgentNnMachine_CreateAgent(hkAgentNnTrack_s010a_32c0* track, const void* a, const void* b, void* agentType, void* world, void* createArg);   // 0x010fbdb0
-extern "C" void _hkAgentNnMachine_DestroyAgent(hkAgentNnTrack_s010a_32c0* track, hkAgentNnEntry_s010a_32c0* entry, hkCollisionDispatcher_s010a_32c0* dispatcher);   // 0x010fbf80
+extern "C" void _hkAgentNnMachine_DestroyAgent(hkAgentNnTrack_s010a_32c0* track, hkAgentNnEntry_s010a_32c0* entry, int numContactPoints);   // 0x010fbf80
 void hkWorld_integrateIslandsEntityMotion(hkWorld_s010a_32c0* world, hkReal startTime, hkReal endTime, hkReal invDeltaTime);     // 0x01099690
 void hkWorld_performBroadphaseAndCollisionDetection(hkWorld_s010a_32c0* world, hkReal startTime, hkReal endTime, hkReal invDeltaTime);   // 0x0109a200
 void hkWorldCallbackUtil_firePostSimulationCallback(hkWorld_s010a_32c0* world, hkReal startTime, hkReal endTime, hkReal invDeltaTime);   // 0x0109f5a0
@@ -1754,48 +1750,42 @@ void hkEntityEntityBroadPhaseListener::addCollisionPair(const hkBroadPhasePair& 
     // Each handle's ownerOffset (a signed byte at +5) shifts it to an hkLinkedCollidable; +0 is its entity.
     hkLinkedCollidable_s010a_32c0* collA = (hkLinkedCollidable_s010a_32c0*)((const char*)pair.m_a + ((hkTypedBroadPhaseHandle_s010a_32c0*)pair.m_a)->m_ownerOffset);
     hkLinkedCollidable_s010a_32c0* collB = (hkLinkedCollidable_s010a_32c0*)((const char*)pair.m_b + ((hkTypedBroadPhaseHandle_s010a_32c0*)pair.m_b)->m_ownerOffset);
+    hkEntity_s010a_32c0* entityA = (hkEntity_s010a_32c0*)collA->m_entity;
+    hkEntity_s010a_32c0* entityB = (hkEntity_s010a_32c0*)collB->m_entity;
 
-    // The original walks world->m_collisionInput (+0x78); its first member is the dispatcher whose tail holds
-    // the quality table. The material index is the 16-bit layer at collidable+0x1a, and the selected agent type
-    // is written back into the collision input at +0xc (which is also what addAgent receives).
-    hkCollisionInputStub* input = (hkCollisionInputStub*)m_world->m_collisionInput;
-    hkCollisionDispatcher_s010a_32c0* dispatcher = *(hkCollisionDispatcher_s010a_32c0**)input;
-    const char quality = dispatcher->m_collisionQualityTable[*(const uint16_t*)((const char*)collA + 0x1a)]
-                            [*(const uint16_t*)((const char*)collB + 0x1a)];
+    hkCollisionDispatcher_s010a_32c0* dispatcher = m_world->m_collisionDispatcher;
+    const char quality = dispatcher->m_collisionQualityTable[entityB->m_material.m_data[0]]
+                            [dispatcher->calculateCombinedCollisionQuality(entityA->m_material.m_data[0])];
     if (quality != 0)
     {
-        const char* agentTypes = dispatcher->m_agentTypeForCombination;
-        ((char*)input)[0xc] = agentTypes[quality * 0x3c];
-        hkWorldAgentUtil_addAgent((hkAgentNnEntry_s010a_32c0*)collA, (hkAgentNnEntry_s010a_32c0*)collB,
-                                  (hkCollisionDispatcher_s010a_32c0*)input);
+        dispatcher->m_agentTypeForCombination[0] = dispatcher->m_agentTypeForCombination[quality * 0x3c];
+        hkWorldAgentUtil_addAgent((hkAgentNnEntry_s010a_32c0*)entityA, (hkAgentNnEntry_s010a_32c0*)entityB, dispatcher);
     }
 }
 
 // @ 0x010a3810
 hkSimulationIsland_s010a_32c0* hkWorldAgentUtil_getIslandFromAgentEntry(void* entry, hkSimulationIsland_s010a_32c0* islandA, hkSimulationIsland_s010a_32c0* islandB)
 {
-    // The original walks the island's agent track: its sector count is the size measure and the entry is
-    // looked for inside each sector (sector start <= entry < sector start + m_sectorSize).
-    const hkBool_s010a_32c0 aIsSmaller(islandA->m_agentTrack.m_numSectors <= islandB->m_agentTrack.m_numSectors);
+    const bool aIsSmaller = islandA->m_numEntities <= islandB->m_numEntities;
     hkSimulationIsland_s010a_32c0* island = aIsSmaller ? islandA : islandB;
-    hkBool_s010a_32c0 containsEntry(false);
+    bool containsEntry = false;
 
-    const int numSectors = island->m_agentTrack.m_numSectors;
-    if (numSectors > 0)
+    const int numEntities = island->m_numEntities;
+    if (numEntities > 0)
     {
-        char** sectors = island->m_agentTrack.m_sectorData;
-        for (int i = 0; i < numSectors; i++)
+        hkEntity_s010a_32c0** entities = island->m_entityData;
+        for (int i = 0; i < numEntities; i++)
         {
-            if ((uintptr_t)entry >= (uintptr_t)sectors[i]
-                && (uintptr_t)entry < (uintptr_t)sectors[i] + island->m_agentTrack.m_sectorSize)
+            if ((uintptr_t)entry >= (uintptr_t)entities[i]
+                && (uintptr_t)entry < (uintptr_t)entities[i] + island->m_agentTrack.m_sectorSize)
             {
-                containsEntry = hkBool_s010a_32c0(true);
+                containsEntry = true;
                 break;
             }
         }
     }
-    // the original returns islandB when (containsEntry != aIsSmaller), islandA otherwise
-    return (containsEntry != aIsSmaller) ? islandB : islandA;
+    // containsEntry != aIsSmaller -> keep the smaller island
+    return (containsEntry != aIsSmaller) ? island : ((island == islandA) ? islandB : islandA);
 }
 
 // @ 0x010a3920
@@ -1829,55 +1819,38 @@ void hkWorldAgentUtil_addAgent(hkAgentNnEntry_s010a_32c0* entryA, hkAgentNnEntry
     _hkAgentNnMachine_CreateAgent(&island->m_agentTrack, first, second, agentType, dispatcher, agent);
 }
 
-// hkContactMgr: only its vtable is needed; the original tail-calls slot 6 (vtable+0x18).
-class hkContactMgr_s010a_32c0
-{
-public:
-    virtual void c0();
-    virtual void c1();
-    virtual void c2();
-    virtual void c3();
-    virtual void c4();
-    virtual void c5();
-    virtual void destroy();          // +0x18
-};
-
 // @ 0x010a39f0
 void hkWorldAgentUtil_removeAgent(hkAgentNnEntry_s010a_32c0* entry)
 {
     hkLinkedCollidable_s010a_32c0* collA = entry->m_collidable[0];
     hkLinkedCollidable_s010a_32c0* collB = entry->m_collidable[1];
-    // m_entity is a byte offset from the collidable in this build: the original adds it to the collidable pointer.
-    hkEntity_s010a_32c0* entityA = (hkEntity_s010a_32c0*)((char*)collA + (intptr_t)collA->m_entity);
-    hkEntity_s010a_32c0* entityB = (hkEntity_s010a_32c0*)((char*)collB + (intptr_t)collB->m_entity);
+    hkEntity_s010a_32c0* entityA = (hkEntity_s010a_32c0*)collA->m_entity;
+    hkEntity_s010a_32c0* entityB = (hkEntity_s010a_32c0*)collB->m_entity;
 
-    // X87? no: the compiled class places m_simulationIsland at +0x5c; the original reads +0x5c too.
-    hkSimulationIsland_s010a_32c0* islandA = entityA->m_simulationIsland;
-    hkSimulationIsland_s010a_32c0* islandB = entityB->m_simulationIsland;
     hkSimulationIsland_s010a_32c0* island;
-    if (islandA == islandB)
+    if (entityA->m_simulationIsland == entityB->m_simulationIsland)
     {
-        island = islandA;
+        island = entityA->m_simulationIsland;
         island->m_splitCheckRequested.m_bool = 1;
     }
     else if (entityA->m_fixed)
     {
-        island = islandB;
+        island = entityB->m_simulationIsland;
     }
     else if (entityB->m_fixed)
     {
-        island = islandA;
+        island = entityA->m_simulationIsland;
     }
     else
     {
-        island = hkWorldAgentUtil_getIslandFromAgentEntry(entry, islandA, islandB);
-        islandA->m_splitCheckRequested.m_bool = 1;
-        islandB->m_splitCheckRequested.m_bool = 1;
+        island = hkWorldAgentUtil_getIslandFromAgentEntry(entry, entityA->m_simulationIsland, entityB->m_simulationIsland);
+        entityA->m_simulationIsland->m_splitCheckRequested.m_bool = 1;
+        entityB->m_simulationIsland->m_splitCheckRequested.m_bool = 1;
     }
 
-    _hkAgentNnMachine_DestroyAgent(&island->m_agentTrack, entry, island->m_world->m_collisionDispatcher);
-    // tail call: entry->m_contactMgr->vtable[6](), with m_contactMgr as `this`
-    ((hkContactMgr_s010a_32c0*)(uintptr_t)entry->m_contactMgr)->destroy();
+    _hkAgentNnMachine_DestroyAgent(&island->m_agentTrack, entry,
+        island->m_world->m_collisionDispatcher->m_numContactPoints);
+    (*(void(**)(void))entry->m_userData)();
 }
 
 // @ 0x010a3a90
@@ -2341,11 +2314,7 @@ __declspec(noinline) uint64_t hkConstraintSolverSetup_layoutBuffer(const hkSolve
 	if (out->m_buffer != 0)
 	{
 		hkUint8* acc = (hkUint8*)out->m_accumulators;
-		acc[0] = 1;
-		acc[0xc] = 1;
-		uint32_t* d = (uint32_t*)acc;
-		for (int i = 4; i < 32; ++i)
-			d[i] = 0;
+		hkVelocityAccumulator_setFixed(acc);
 		acc[(info->m_numAccumulators + 1) * 0x80] = 2;
 	}
 	return out->m_end;
@@ -2415,11 +2384,11 @@ void hkConstraintSolverSetup::oneStepIntegrate(const hkStepInfo_s010a_3ed0& step
 	{
 		hkMotion_s010a_3ed0* motion = (*p)->m_motion;
 		hkVelocityAccumulator* acc = (hkVelocityAccumulator*)((char*)base + motion->m_accumulatorOffset);
-		// copy the 8 floats at +0x10..+0x2f to +0x40..+0x5f (the original moves them as 8 dwords)
-		uint32_t* stored = (uint32_t*)acc->m_stored;
-		const uint32_t* vel = (const uint32_t*)acc->m_linearVelocity;
-		for (int i = 0; i < 8; ++i)
-			stored[i] = vel[i];
+		// copy the 8 floats at +0x10..+0x2f to +0x40..+0x5f
+		for (int i = 0; i < 4; ++i)
+			acc->m_stored[i] = acc->m_linearVelocity[i];
+		for (int i = 0; i < 4; ++i)
+			acc->m_stored[4 + i] = acc->m_angularVelocity[i];
 		motion->integrateFromAccumulator(stepInfo, acc);
 	}
 }

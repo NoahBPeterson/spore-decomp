@@ -90,17 +90,6 @@ extern "C" void* __cdecl FUN_00ba55d0(void* self, uint key, int a, int b, int c,
                                       int d, int e, int f);           // 0x00ba55d0
 void* __cdecl FUN_00ba57f0(int* coords, int modeType);                // 0x00ba57f0
 
-// The record store is the CursorProvider hash table (shared with slice s00ba47b0,
-// which defines these methods).  They are thiscall: this in ecx, key and match on the stack.
-struct CursorProvider {
-    char pad00[0xc];
-    char* FindByField10(uint key, int match);                          // 0x00ba5410
-    char* FindFirst10(uint* key, int a, int b, int c);                 // 0x00ba5470
-    char* FindFirst24(uint* key, int a, int b, int c);                 // 0x00ba54f0
-    char* FindByField24(uint key, int match);                          // 0x00ba5570
-    void  UpdateEntry(uint key, int a, int b, int c, int d, int e, int f); // 0x00ba55d0
-};
-
 // ---- the telemetry record --------------------------------------------------------------
 struct TelemetryRecord {
     int   mClock;      // +00
@@ -196,8 +185,8 @@ void* __cdecl FUN_00ba57a0(int* obj, int a)
 void* __cdecl FUN_00ba57f0(int* coords, int modeType)
 {
     void* prov = FUN_00ba5220();
-    void* rec = ((CursorProvider*)FUN_0067de90())
-                    ->FindFirst24((uint*)&prov, coords[0], coords[1], coords[2]);
+    void* rec = FUN_00ba54f0(FUN_0067de90((int)prov, coords[0], coords[1], coords[2]),
+                             (uint*)coords, coords[0], coords[1], coords[2]);
     if (rec == 0) {
         rec = FUN_007ec160((int)FUN_0067de90((int)prov, 0), 0);
         FUN_007eb820((int)rec, 0xc);
@@ -376,12 +365,14 @@ void __cdecl FUN_00ba5d30(int* obj)
         return;
     void* prov = FUN_00ba5220();
     int v = ((int (__thiscall*)(void*))((void**)*obj)[0x13])(obj);
-    void* rec = ((CursorProvider*)FUN_0067de90())->FindByField24((uint)prov, v);
+    int v2 = v;
+    void* rec = ((void*(__thiscall*)(void*, int))FUN_00ba5570)(FUN_0067de90(), v2);
     if (rec != 0) {
-        int emp = ((int (__thiscall*)(void*))FUN_00b1f9d0)(((void* (__stdcall*)())SP_NounManager)());
+        ((void (__stdcall*)(int))SP_NounManager)(1);
+        int emp = FUN_00b1f9d0();
+        void* rm = ((void* (__stdcall*)(int, int))SP_RelationshipManager)(v2, emp);
         *(int*)((char*)RecOf(rec) + 0x20) =
-            ((RelationshipManager*)((void* (__stdcall*)())SP_RelationshipManager)())
-                ->GetRelationLevel((void*)v, (void*)emp, 1);
+            ((int (__thiscall*)(void*, void*, int))rm)((void*)v2, (void*)emp, 1);
     }
 }
 
@@ -389,9 +380,9 @@ void __cdecl FUN_00ba5d30(int* obj)
 // @ 0x00ba5d90
 void __cdecl FUN_00ba5d90(int* a, int* b)
 {
-    CursorProvider* prov = (CursorProvider*)FUN_0067de90();
+    void* prov = FUN_0067de90();
     for (int i = 7; i <= 0xb; i++)
-        prov->UpdateEntry(i, a[0], a[1], a[2], b[0], b[1], b[2]);
+        FUN_00ba55d0(prov, i, a[0], a[1], a[2], b[0], b[1], b[2]);
 }
 
 // ---------------------------------------------------------------- 0x00ba5df0
@@ -464,21 +455,17 @@ int __cdecl FUN_00ba5ee0(int param)
 }
 
 // ---------------------------------------------------------------- 0x00ba5f80
-// FUN_00b8d8e0 is a thiscall returning this+0x1a4; the original still passes a
-// (dead) output pointer through a member call.
-struct VecSource {
-    int GetVec();                                                      // 0x00b8d8e0
-};
-
 // @ 0x00ba5f80
 void __cdecl FUN_00ba5f80(int obj)
 {
     void* g = FUN_00f48a80();
-    float tmp[5];
-    int v = ((VecSource*)obj)->GetVec();
-    ((void (__thiscall*)(void*, int, float*))((void**)g)[2])(g, v, tmp);
-    *(float*)(obj + 0xb0) = tmp[3];
-    *(float*)(obj + 0xb4) = tmp[2];
+    float tmp1;
+    float tmp2;
+    void* vt = *(void**)(char*)g;
+    int v = ((int (__thiscall*)(void*, void*))FUN_00b8d8e0)((void*)obj, &tmp1);
+    ((void (__thiscall*)(void*, int))((void**)vt)[2])(g, v);
+    *(float*)(obj + 0xb0) = tmp2;
+    *(float*)(obj + 0xb4) = tmp1;
 }
 
 // ---------------------------------------------------------------- 0x00ba5fd0
@@ -537,9 +524,9 @@ void __cdecl FUN_00ba6120(int obj)
 void __cdecl FUN_00ba61b0(int planetID, int* dst)
 {
     int o = (int)operator_new(0x1b0, "Simulator/cPlanetRecord", 0, 0, 0, 0);
-    o = o ? ((int (__thiscall*)(int))FUN_00b8e180)(o) : 0;
+    o = o ? FUN_00b8e180(o) : 0;
     *dst = o;
-    ((void (__thiscall*)(int, int))FUN_00b8da80)(o, planetID);
+    FUN_00b8da80(o, planetID);
     *(int*)(o + 8) = planetID;
     *(int*)(o + 0xc) = 0x05220cb8;
     *(int*)(o + 0x10) = 1;
@@ -630,17 +617,12 @@ void __stdcall FUN_00ba64a0(int obj, int star, int parent)
     case 3:
     case 4:
     case 5:
-        if (*(int*)((int (__thiscall*)(void*))FUN_00b8d8e0)((void*)obj) == 0)
+        if (((int (__thiscall*)(void*, void*))FUN_00b8d8e0)((void*)obj, (void*)0) == 0)
             FUN_00ba6120(obj);
         return;
     case 6:
-        if (*(int*)((int (__thiscall*)(void*))FUN_00b8d8e0)((void*)obj) == 0) {
-            int local[3] = { 0, 0, 0 };
-            void* gen = SP_IDGenerator();
-            ((void (__thiscall*)(void*, int*, int, int, int, int, int))((void**)*(void**)gen)[1])(
-                gen, local, 0xb1b104, 0x84, 0, 0xa2, 0);
-            ((void (__thiscall*)(void*, void*, int))FUN_00b8dde0)((void*)obj, local, 0);
-        }
+        if (((int (__thiscall*)(void*, void*))FUN_00b8d8e0)((void*)obj, (void*)0) == 0)
+            ((void (__thiscall*)(void*, void*, int))FUN_00b8dde0)((void*)obj, (void*)0, 0);
         FUN_00ba5f80(obj);
         *(int*)(obj + 0x28) = FUN_00fc2080(*(float*)(obj + 0xb0), *(float*)(obj + 0xb4)) + 2;
         return;
@@ -648,19 +630,12 @@ void __stdcall FUN_00ba64a0(int obj, int star, int parent)
 }
 
 // ---------------------------------------------------------------- 0x00ba65e0
-// The cVarListSerializer ctor is a thiscall whose `this` is the serialized object,
-// so the entry ecx (the member `this`) is the ctor's first stack argument.
-struct cVarListSerializerHost {
-    char FUN_00ba65e0(int* stream);                                       // 0x00ba65e0
-};
-
 // @ 0x00ba65e0
-char cVarListSerializerHost::FUN_00ba65e0(int* stream)
+char __stdcall FUN_00ba65e0(int a, int* stream)
 {
     char buf[0xa14];
-    ((void (__thiscall*)(void*, const void*, const void*, uint))cVarListSerializer_Construct)(
-        buf, (const void*)this, &g_fieldName, 0x1a80d26);
-    char ok = ((char (__thiscall*)(void*, void*))cVarListSerializer_Serialize)(buf, stream);
+    cVarListSerializer_Construct(buf, a, &g_fieldName, 0x1a80d26);
+    char ok = cVarListSerializer_Serialize(buf, stream);
     g_168964c = ((int (__thiscall*)(int*))((void**)*stream)[0xf])(stream);
     return ok;
 }

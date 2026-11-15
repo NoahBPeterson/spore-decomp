@@ -17,7 +17,6 @@
 #include "EA/Random/RandomLinearCongruential.h"
 #include "SP/cPlanetModel.h"
 #include <string.h>
-#include <intrin.h>
 #include "SP/cDefaultBeamProjectile.h"
 #include "SP/cSPSpaceToolData.h"
 #include "SP/cViewer.h"
@@ -2131,7 +2130,6 @@ class cSPUIPieMenuItemWinProc { public:
 
     void Hide();                // 0x00818330
     bool ContainsWindow(void* hwnd); // 0x00818370
-    void SetItemTextColor(int id, int color); // 0x00b7c8d0
 };
 union Vec3_s00b7_bd50 { float f[3]; int i[3]; u32_s00b7_bd50 u[3]; };
 struct SpTransform {            // cSPTransform, 0x20 bytes
@@ -2701,15 +2699,14 @@ void* NodeFactory::newNode(RefPair* pair)
         0x18, "Simulator", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
         0xd1);
-    void** refs = &node->m_ref10;
-    if (refs != 0) {
-        refs[0] = pair->m_first;
-        if (refs[0] != 0)
-            ((void (__thiscall*)(void*))VTFN(refs[0], 0xbc / 4))(refs[0]);
+    if (node != 0) {
+        node->m_ref10 = pair->m_first;
+        if (node->m_ref10 != 0)
+            ((void (__thiscall*)(void*))VTFN(node->m_ref10, 0xbc / 4))(node->m_ref10);
 
-        refs[1] = pair->m_second;
-        if (refs[1] != 0)
-            ((void (__thiscall*)(void*))VTFN(refs[1], 0))(refs[1]);
+        node->m_ref14 = pair->m_second;
+        if (node->m_ref14 != 0)
+            ((void (__thiscall*)(void*))VTFN(node->m_ref14, 0))(node->m_ref14);
     }
     return node;
 }
@@ -3673,7 +3670,7 @@ void cObstacle::SetFlag(bool b)
     if (b)
         m34 |= 1;
     else
-        m34 &= 0xfffffffe;
+        m34 &= ~1u;
     if (m54) {
         float f = b ? 0.0f : g_one;
         ((cRc54*)m54)->SetValue(m5c, f);
@@ -3681,13 +3678,11 @@ void cObstacle::SetFlag(bool b)
     }
     if (m70) {
         if (b) {
-            *(int*)((char*)m70 + 4) |= 1;
-            Rc* o = (Rc*)m70;
-            ((RcFn)o->vt->tbl->fn[0x16c / 4])((void*)o->vt, (int)o->vt->tbl, m70, 1);
+            *(int*)((char*)m70 + 4) &= ~1u;
+            RcCall(m70, 0x16c, 0);
         } else {
-            *(int*)((char*)m70 + 4) &= 0xfffffffe;
-            Rc* o = (Rc*)m70;
-            ((RcFn)o->vt->tbl->fn[0x16c / 4])((void*)o->vt, (int)o->vt->tbl, m70, 0);
+            *(int*)((char*)m70 + 4) |= 1;
+            RcCall(m70, 0x16c, 1);
         }
     }
 }
@@ -3821,8 +3816,7 @@ void __fastcall FUN_00b74130(int self)
 void* __fastcall FUN_00b74370(int self)
 {
     void* result;
-    int count = (*(int*)(self + 0x40f4) - *(int*)(self + 0x40f0)) >> 2;
-    if (count != 0) {
+    if (((*(int*)(self + 0x40f4) - *(int*)(self + 0x40f0)) >> 2) != 0) {
         int* top = *(int**)(*(int*)(self + 0x40f4) - 4);
         result = 0;
         if (top != 0) {
@@ -3833,7 +3827,6 @@ void* __fastcall FUN_00b74370(int self)
         int* obj = *(int**)(*(int*)(self + 0x40f4));
         if (obj != 0)
             (*(void(__thiscall**)(int*))(*(int*)obj + 4))(obj);
-        _ReadWriteBarrier();
     } else {
         void* m = SP_NounManager(0x3ed8573);
         result = SP_cGameNounManager_CreateNoun(m, 0x3ed8573);
@@ -3966,7 +3959,7 @@ int* Hashtable3::Find(int* out, unsigned int* key)
     if (node != 0) {
         unsigned int* p = *(unsigned int**)((char*)node + 0xc70);
         while (p != 0 && *key == p[0] && key[1] == p[1] && k2 == p[2])
-            p = *(unsigned int**)((char*)p + 0xc70);
+            p = *(unsigned int**)((char*)p + 0x31c);
         int* slot = bucket;
         if (p == 0) {
             slot = bucket + 1;
@@ -4204,16 +4197,14 @@ int ObstacleMgr::Lookup(unsigned int* key)
 // @ 0x00b75f70
 Vec3_s00b7_5f70* __cdecl FUN_00b75f70(Vec3_s00b7_5f70* first, Vec3_s00b7_5f70* last, Vec3_s00b7_5f70 pivot, bool (__cdecl* comp)(const Vec3_s00b7_5f70*, const Vec3_s00b7_5f70*))
 {
-    Vec3_s00b7_5f70* l = last;
-    Vec3_s00b7_5f70* f = first;
     for (;;) {
-        while (comp(f, &pivot)) ++f;
-        do { --l; } while (comp(&pivot, l));
-        if (f >= l) return f;
-        Vec3_s00b7_5f70 tmp = *f;
-        *f = *l;
-        *l = tmp;
-        ++f;
+        while (comp(first, &pivot)) ++first;
+        do { --last; } while (comp(&pivot, last));
+        if (first >= last) return first;
+        Vec3_s00b7_5f70 tmp = *first;
+        *first = *last;
+        *last = tmp;
+        ++first;
     }
 }
 
@@ -6378,14 +6369,14 @@ void* HashTable_s00b7_bd50::sub_b7c1b0(const void* key)
     ScreenValue value;
     value.mKey = *(const u32_s00b7_bd50*)key;
     value.mValue.sub_b778b0(&tmp);
+    HashIter ins;
     // EASTL insert(&out, &value, bool): the original materialises the bool into a byte slot
     // and the compiler passes that dword slot including its stale upper bytes, so equiv sees
     // the stack residue there; the source-level flag is simply false.
-    bool flag = false;
-    sub_b79680(&it, &value, *(int*)&flag);
+    sub_b79680(&ins, &value, 0);
     FreeValueBuffer(&value.mValue);
     FreeValueBuffer(&tmp);
-    return (char*)it.node + 4;
+    return (char*)ins.node + 4;
 }
 
 // @ 0x00b7c290
@@ -6540,17 +6531,17 @@ bool __cdecl cSPPieMenu_ContainsWindow(void* hwnd)
 void ButtonVec::SetItemTextColor(int id, int color)
 {
     PieButton* it = mpBegin;
-    while (it != mpEnd) {
-        PieButton* cur = it;
-        it = (PieButton*)((char*)it + 0x18);
-        if (cur->mId == id) {
-            cur->mColor = color;
-            cSPUIPieMenuItemWinProc* p = g_pPieWinProc;
-            if (p) {
-                p->SetItemTextColor(id, color);
+    if (it != mpEnd) {
+        do {
+            if (it->mId == id) {
+                it->mColor = color;
+                if (g_pPieWinProc) {
+                    cSPUIPieMenu_SetItemTextColor(id, color);
+                }
+                return;
             }
-            return;
-        }
+            it = (PieButton*)((char*)it + 0x18);
+        } while (it != mpEnd);
     }
 }
 

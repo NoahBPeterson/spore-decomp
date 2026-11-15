@@ -32,7 +32,7 @@ void  __cdecl  Key_FillConstruct(void* at, unsigned n, void* value);            
 void  __cdecl  Key_Copy(void* first, void* last);                                     // eastl::copy do_copy
 void  __cdecl  Ptr_FillConstruct(void* at, unsigned n, void* value);                  // 0x4566e0
 void  __cdecl  Ptr_Copy(void* first, void* last);                                     // 0x4769b0
-Vector3* __cdecl Vec3_Normalized(Vector3* out, void* in);                             // 0x455c00
+void  __cdecl  Vec3_Normalized(Vector3* out, void* in);                               // 0x455c00
 float __cdecl  Vec3_Dot(const Vector3* a, const Vector3* b);                          // 0x455c50
 void* __cdecl  FUN_006bb640(void* variant);                                           // 0x6bb640
 extern "C" void* __cdecl FUN_11e0744_memcpy(void*, const void*, unsigned int);        // 0x011e0744
@@ -275,9 +275,10 @@ cRefCounted** PtrRange_Remove(cRefCounted** first, cRefCounted** last, cRefCount
 float __cdecl Vec3_AngleBetween(void* a, void* b)
 {
     Vector3 na, nb, t1, t2;
-    na = *Vec3_Normalized(&t1, a);
-    nb = *Vec3_Normalized(&t2, b);
-    return (float)acos(Vec3_Dot(&na, &nb));
+    Vec3_Normalized(&t1, a); na = t1;
+    Vec3_Normalized(&t2, b); nb = t2;
+    float d = Vec3_Dot(&na, &nb);
+    return (float)acos(d);
 }
 
 // @ 0x00454b10  EA::VariantTypeTraits<EA::ResourceMan::Key>::GetTPTR

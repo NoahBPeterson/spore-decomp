@@ -281,12 +281,12 @@ void cComponentBaseSub::Destruct() {
 
 // @ 0x00a83fd0  EA::Swarm::cEffectParams::FloatStore
 bool cEffectParams::FloatStore(int index, const float* data, int count) {
-    uint16_t n = mFloatParams[index].mCount;
+    int n = mFloatParams[index].mCount;
     if (n == 0) {
         int off = (int)((char*)mFloatParamStorage.mpEnd - (char*)mFloatParamStorage.mpBegin) >> 2;
         mFloatParams[index].mOffset = (uint16_t)off;
         mFloatParams[index].mCount = (uint16_t)count;
-        mFloatParamStorage.resize(mFloatParams[index].mOffset + count);
+        mFloatParamStorage.resize(off + count);
     } else if (count != n) {
         return false;
     }
@@ -296,16 +296,16 @@ bool cEffectParams::FloatStore(int index, const float* data, int count) {
 
 // @ 0x00a84040  EA::Swarm::cEffectParams::IntStore
 bool cEffectParams::IntStore(int index, const int* data, int count) {
-    uint16_t n = mIntParams[index].mCount;
+    int n = mIntParams[index + 1].mCount;
     if (n == 0) {
         int off = (int)((char*)mIntParamStorage.mpEnd - (char*)mIntParamStorage.mpBegin) >> 2;
-        mIntParams[index].mOffset = (uint16_t)off;
-        mIntParams[index].mCount = (uint16_t)count;
-        mIntParamStorage.resize(mIntParams[index].mOffset + count);
+        mIntParams[index + 1].mOffset = (uint16_t)off;
+        mIntParams[index + 1].mCount = (uint16_t)count;
+        mIntParamStorage.resize(off + count);
     } else if (count != n) {
         return false;
     }
-    FUN_011e0744(mIntParamStorage.mpBegin + mIntParams[index].mOffset, data, count * 4);
+    FUN_011e0744(mIntParamStorage.mpBegin + mIntParams[index + 1].mOffset, data, count * 4);
     return true;
 }
 

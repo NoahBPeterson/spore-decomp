@@ -375,25 +375,23 @@ extern System* g_audioSystem;   // @ 0x16e61a8
 // =====================================================================================
 // 0112be40  hkPackfileReader::convertClassVersion1Inplace
 // =====================================================================================
-// The hkClass descriptor of the hkClass type itself: the member offsets are looked
-// up there once, then applied to every object along the instance's parent chain.
-extern hkClass g_0171e714;   // @ 0x171e714
 // @ 0x112be40
 void hkPackfileReader::convertClassVersion1Inplace(hkClass* cls)
 {
-    u32 off = g_0171e714.getMemberByName("hasVtable")->m_offset;
+    u32 off = cls->getMemberByName("hasVtable")->m_offset;
 
     hkClass* p = cls;
-    while (p->getParent())
+    hkClass* q = p->getParent();
+    while (q)
     {
         *(u32*)((char*)p + off) = 0;
-        p = p->getParent();
+        p = q;
+        q = p->getParent();
     }
     if (*(u8*)((char*)p + off) != 0)
     {
-        hkClassMember* m = g_0171e714.getMemberByName("numImplementedInterfaces");
-        u32 nOff = m->m_offset;
-        ++*(int*)((char*)p + nOff);
+        hkClassMember* m = p->getMemberByName("numImplementedInterfaces");
+        ++*(int*)((char*)p + m->m_offset);
     }
     *(u32*)((char*)p + off) = 0;
 }

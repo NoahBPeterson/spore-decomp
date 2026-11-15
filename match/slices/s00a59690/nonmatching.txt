@@ -21,8 +21,11 @@
 00a598f0  FUN_00a598f0        UNSUP  pdint constructor (pd_new + outlet_new + floatinlet_new)
 00a59940  FUN_00a59940        PASS   bang handler: outlet count guard + outlet_float fan-out
 00a599a0  FUN_00a599a0        PASS   float handler: store + outlet count guard + fan-out
+00a59a10  pdint_setup         UNSUP  pdint class registration
+00a59ab0  pdfloat_new         UNSUP  float constructor (variadic creator)
 00a59b00  pdfloat_new2        UNSUP  float constructor (explicit creator)
 00a59b50  FUN_00a59b50        ART    float handler; FAIL is a live-register/callee artifact
+00a59bb0  pdfloat_setup       UNSUP  pdfloat class registration
 00a59c50  pdsymbol_new        UNSUP  symbol constructor (pd_new + outlet_new + symbolinlet_new)
 00a59cc0  pdsymbol_anything   ART    symbol/anything handler; calls outlet_symbol
 00a59cf0  pdsymbol_setup      UNSUP  pdsymbol class registration
@@ -31,8 +34,10 @@
 00a59f30  send_setup          UNSUP  send class registration
 00a5a050  forward_new         UNSUP  forward constructor (symbolinlet_new failure path)
 00a5a0a0  forward_setup       UNSUP  forward class registration
+00a5a140  FUN_00a5a140        ART    receive symbol handler; calls outlet_symbol
 00a5a160  receive_new         UNSUP  receive constructor (pd_bind + outlet_new)
 00a5a1b0  receive_setup       UNSUP  receive class registration
 00a5a280  FUN_00a5a280        PASS   select-1 float handler
+00a5a2f0  sel1_symbol         ART    select-1 symbol handler; calls outlet_symbol
 00a5a330  sel2_float          PASS   select-2 float handler (table scan + fan-out)
 00a5a410  select_new          UNSUP  select/select2 constructor; largest function in the slice

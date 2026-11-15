@@ -2,7 +2,6 @@
 // Object file: UTFSpore_Win32/Element.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
-#include <intrin.h>
 #include "game/types.h"
 #include "EA/XHTML/DOM/Document.h"
 #include "EA/XHTML/DOM/IFormControlMgr.h"
@@ -32,7 +31,6 @@ extern "C" const u16* g_pAttrHref;      // 0x0154c60c  -> L"href"
 extern "C" const u16* g_pAttrTarget;    // 0x0154c610  -> L"target"
 extern "C" int __cdecl wcscmp(const wchar_t*, const wchar_t*);
 void* Fn8e25d0(void* p, void* s, int f);                 // 0x008e25d0
-void* Fn8e2650(void* self, void* a, void* b, int convert); // 0x008e2650
 u32   Fnfc7e50(void* n);                                 // 0x00fc7e50  Node::Type (free spelling)
 void  Fn8e52e0(void* node);                              // 0x008e52e0  Node::~Node (thiscall)
 void  Fn620230(void* list);                              // 0x00620230  IntrusiveList::~IntrusiveList (thiscall)
@@ -111,10 +109,10 @@ struct Element : Node {       // sizeof 0x44
     };
 
     __declspec(noinline) void HandleEvent(void* ev, int phase); // 0x008e4310
-    Element* AppendChild(Element* child);              // 0x008e4350
+    void    AppendChild(Element* child);               // 0x008e4350
     void*   AppendAttr(Attr* attr);                    // 0x008e4380
     void*   ScalarDeletingDtor(u8 flags);              // 0x008e4450
-    Element* FindChildNodeByName(const u16* name, Node* start); // 0x008e4480
+    Element* FindChildNodeByName(const u16* name);     // 0x008e4480
     Attr*   GetAttr(const u16* name);                  // 0x008e4530
     __declspec(noinline) u16* GetAttrValue(const u16* name); // 0x008e45b0
     int     SetAttrValue(const u16*, const u16*, u8);  // 0x008e45d0
@@ -132,7 +130,7 @@ struct Element : Node {       // sizeof 0x44
     void    Dtor1();                                   // 0x008e4bd0
     void    GatherValues(void* a, void* b);            // 0x008e4f00
     Element* Ctor1(void* doc, const u16* tag);         // 0x008e4940
-    Element* Ctor2(void* doc, void* tag, void* className); // 0x008e4400
+    Element* Ctor2(void* doc, void* tag);              // 0x008e4400
 };
 struct Attr {                 // sizeof 0x20
     void* vftable;            // 0x00
@@ -174,19 +172,19 @@ void Element::HandleEvent(void* ev, int phase)
 }
 
 // @ 0x008e4350
-Element* Element::AppendChild(Element* child)
+void Element::AppendChild(Element* child)
 {
     Element* self = this;
     *(u8*)((char*)self->mpDocument + 0x2c) = 1;
+    void* p = child;
     void* s = (char*)self + 0x18;
     void* prev = *(void**)((char*)s + 4);
-    *(void**)((char*)child + 8) = prev;
-    void* link = (char*)child + 4;
+    *(void**)((char*)p + 8) = prev;
+    void* link = (char*)p + 4;
     *(void**)link = s;
     *(void**)((char*)s + 4) = link;
-    *(void**)*(void**)((char*)child + 8) = link;
-    *(void**)((char*)child + 0x14) = self;
-    return child;
+    *(void**)*(void**)((char*)p + 8) = link;
+    *(void**)((char*)p + 0x14) = self;
 }
 
 // @ 0x008e4380
@@ -212,27 +210,22 @@ void* Element::AppendAttr(Attr* attr)
 }
 
 // @ 0x008e4400
-Element* Element::Ctor2(void* doc, void* tag, void* className)
+Element* Element::Ctor2(void* doc, void* tag)
 {
     Element* self = this;
     ((void (__thiscall*)(void*, void*, int))Fn8e52b0)(self, doc, 1);
-    void* t = *(void* volatile*)&tag;
-    void* c = *(void* volatile*)&className;
-    *(void**)self = (void*)g_vtbl_element;
-    _ReadWriteBarrier();
-    char* p = (char*)self + 0x18;
-    *(void**)(p + 4) = p;
-    *(void**)p = p;
-    p = (char*)self + 0x20;
-    *(void**)(p + 4) = p;
-    *(void**)p = p;
+    self->vftable = (void*)g_vtbl_element;
+    *(void**)((char*)self + 0x1c) = (char*)self + 0x18;
+    *(void**)((char*)self + 0x18) = (char*)self + 0x18;
+    *(void**)((char*)self + 0x24) = (char*)self + 0x20;
+    *(void**)((char*)self + 0x20) = (char*)self + 0x20;
     self->mFlags30 = 0;
     self->mpIdValue = 0;
     self->mpNameValue = 0;
     self->mpExtra40 = 0;
-    self->mpTagName = (const u16*)t;
+    self->mpTagName = (const u16*)tag;
     self->mnAttrId = -1;
-    self->mpClassName = (const u16*)c;
+    self->mpClassName = (const u16*)doc;
     return self;
 }
 
@@ -249,19 +242,29 @@ void* Element::ScalarDeletingDtor(u8 flags)
 }
 
 // @ 0x008e4480
-Element* Element::FindChildNodeByName(const u16* name, Node* start)
+Element* Element::FindChildNodeByName(const u16* name)
 {
     Element* self = this;
     void* end = (char*)self + 0x18;
     IntList* list = (IntList*)end;
-    Node* n = ListHead(list);
-    if (start != 0)
-        n = ListNext(start);
-    for (; n != ListEndP(end); n = ListNext(n)) {
-        if (((u32 (__thiscall*)(void*))Fnfc7e50)(n) == 1) {
+    for (Node* n = ListHead(list); n != ListEndP(end); n = ListNext(n)) {
+        if (Fnfc7e50(n) == 1) {
             Element* e = (Element*)n;
-            if (wcscmp((const wchar_t*)name, (const wchar_t*)e->mpName) == 0)
-                return e->AsElement();
+            const u16* a = e->mpTagName;
+            const u16* b = name;
+            int d;
+            for (;;) {
+                u16 c0 = *b;
+                if (c0 != *a) { d = 1; goto done; }
+                if (c0 == 0) { d = 0; goto done; }
+                u16 c1 = b[1];
+                if (c1 != a[1]) { d = 1; goto done; }
+                b += 2; a += 2;
+                if (c1 == 0) { d = 0; goto done; }
+            }
+        done:
+            if (d == 0)
+                return e;
         }
     }
     return 0;
@@ -306,52 +309,44 @@ u16* Element::GetAttrValue(const u16* name)
 int Element::SetAttrValue(const u16* name, const u16* value, u8 removeOrAdd)
 {
     Element* self = this;
-    u32 removeOrAdd32 = *(u32*)(void*)&removeOrAdd;
     Attr* a = self->GetAttr( name);
     if (value == 0) {
         if (a == 0)
-            goto dirtyOnly;
+            return 0;
         *(u8*)((char*)self->mpDocument + 0x2c) = 1;
         ((void (__thiscall*)(Element*, u16*, u16*))(*(void***)self)[0x30 / 4])(self, a->mpName, a->mpValue);
-        void* l1 = *(void**)((char*)a + 8);
-        void* l0 = *(void**)((char*)a + 4);
-        *(void**)l1 = l0;
-        *(void**)((char*)l0 + 4) = l1;
+        *(void**)* (void**)((char*)a + 8) = *(void**)((char*)a + 4);
+           *(void**)(*(u32*)((char*)a + 4) + 4) = *(void**)((char*)a + 8);
         *(u32*)((char*)a + 4) = 0;
         *(u32*)((char*)a + 8) = 0;
-        ((void (__thiscall*)(void*))Fn1154f90)(a);
-        goto common;
+        Fn1154f90(a);
+        return 0;
     }
     if (a != 0) {
-        if (wcscmp((const wchar_t*)a->mpValue, (const wchar_t*)value) == 0)
-            goto returnOnly;
+        const u16* t = a->mpValue;
+        const u16* q = value;
+        int d;
+        for (;;) {
+            u16 c0 = *q;
+            if (c0 != *t) { d = 1; goto done; }
+            if (c0 == 0) { d = 0; goto done; }
+            u16 c1 = q[1];
+            if (c1 != t[1]) { d = 1; goto done; }
+            q += 2; t += 2;
+            if (c1 == 0) { d = 0; goto done; }
+        }
+    done:
+        if (d == 0)
+            return 0;
         if (removeOrAdd != 0) {
             void* doc = self->mpDocument;
-            value = (const u16*)((void* (__thiscall*)(void*, void*, int))Fn8e25d0)(doc, (void*)value, -1);
+            value = (const u16*)Fn8e25d0(doc, (void*)value, -1);
         }
-        if (value != 0) {
-            ((void (__thiscall*)(void*, void*))Fn10829f0)(self->mpDocument, a->mpValue);
-            a->mpValue = (u16*)value;
-        }
-        goto common;
-    } else {
-        a = (Attr*)((void* (__thiscall*)(void*, void*, void*, int))Fn8e2650)(self->mpDocument, (void*)name, (void*)value, removeOrAdd32);
-        if (a == 0)
-            goto dirtyOnly;
-        void* prev = self->mAttributes.link1;
-        void* sentinel = (char*)self + 0x20;
-        void* link = (char*)a + 4;
-        *(void**)((char*)a + 8) = prev;
-        *(void**)link = sentinel;
-        *(void**)((char*)sentinel + 4) = link;
-        *(void**)*(void**)((char*)a + 8) = link;
+        if (value == 0)
+            return 0;
+        Fn10829f0(self->mpDocument, a->mpValue);
     }
-common:
-    ((void (__thiscall*)(Element*, u16*, u16*))(*(void***)self)[0x30 / 4])(self, a->mpName, a->mpValue);
-dirtyOnly:
-    *(u8*)((char*)self->mpDocument + 0x2c) = 1;
-returnOnly:
-    return (int)a;
+    return 0;
 }
 
 // @ 0x008e46e0

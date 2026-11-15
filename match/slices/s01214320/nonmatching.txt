@@ -9,35 +9,35 @@
 # synthesise, so the ORIGINAL faults on every generated input (checked on 01214580, 012144d0).
 01214320  42  complete EH cleanup funclet; not reproducible from standalone C++; difftest UNSUPPORTED (0/400 valid, fault(read))
 01214420  74  complete EH funclet (??_M vector dtor iterator); compiler-generated; difftest UNSUPPORTED
-012144d0  20  logic: fixed; funclets run on a base that is the owning function's EH registration node (ebp set by the emitter), so [ebp+0xc] is the object; the Del block deletes frame+0x0c and makes TWO T_7a9610 cleanups (one was missing). Only the funclet shape differs: no source spelling gives bare `lea ecx,[ebp+N]; jmp` thunks or the trailing `mov eax,<FuncInfo>; jmp __CxxFrameHandler3` record; difftest UNSUPPORTED (0/400 valid, fault(read)). fix1: quick check DIFFERS
-01214580  17  logic: fixed; offsets/target/order already right. difftest UNSUPPORTED (0/400 valid, fault(read)); retail is two bare `lea ecx,[ebp+8]/[ebp+4]; jmp 0x576620` thunks (8 B each) followed by the FuncInfo record (`mov eax,0x150247c; jmp 0x11e090c`) - the record bytes are fingerprint-compared even though cl only emits them for the owning function. fix1: quick check DIFFERS
-012145c0  26  logic: fixed; first cleanup is T_6ae110(frame+0x04) (`lea ecx,[ebp+4]; jmp 0x6ae110`), not a counted-reference release; then T_7a9610(-0x14), T_7a9610(-0x10); only the funclet shape and FuncInfo 0x15024e4 differ; difftest UNSUPPORTED. fix1: quick check DIFFERS
+012144d0  20  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED (0/400 valid, fault(read))
+01214580  17  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED (0/400 valid, fault(read)); retail is two bare `lea ecx,[ebp+8]/[ebp+4]; jmp 0x576620` thunks (8 B each) followed by the FuncInfo record (`mov eax,0x150247c; jmp 0x11e090c`) - the record bytes are fingerprint-compared even though cl only emits them for the owning function
+012145c0  26  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01214650  48  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01214850 178  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
 01214970 176  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
-01214c50  28  logic: fixed; source already matches retail (delete frame-0x50 "Graphics", dtor frame-0x54, dtor frame-0x1c); only the funclet shape (bare `lea ecx; jmp` thunks + FuncInfo 0x1502bf4 record) differs; difftest UNSUPPORTED. fix1: quick check DIFFERS
-01214c90  20  logic: fixed; operator_delete__(*(frame+4),"Graphics",0,0,0,0) (frame+4, not 0x0c) then dtor of frame-0x38; only the funclet shape and FuncInfo 0x1503804 record differ; difftest UNSUPPORTED. fix1: quick check DIFFERS
+01214c50  28  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01214c90  20  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01214cc0  32  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
-01214d30  26  logic: fixed; first cleanup is T_7a9610(frame-0x48) (`lea ecx,[ebp-0x48]; jmp 0x7a9610`), not a counted-reference release; then T_69d350(-0x44), T_69d350(+0x04); only the funclet shape and FuncInfo 0x1502cbc differ; difftest UNSUPPORTED. fix1: quick check DIFFERS
+01214d30  26  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01214d60  66  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
 01214df0  47  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
 01214e50  70  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
 01214ee0  41  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
 01214f50  34  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01214fa0  34  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
-01214ff0  25  logic: fixed; retail chain T_7a9610(-0x58), T_7a9610(-0x4c), T_69d350(-0x48), T_69d350(+0x0c) matches the source; only the funclet shape (bare `lea ecx; jmp` thunks + FuncInfo record) differs; difftest UNSUPPORTED. fix1: quick check DIFFERS
-01215020  25  logic: fixed; retail chain T_7a9610(-0x4c), T_7a9610(-0x48), T_69d350(-0x44), T_69d350(-0x50) matches the source; only the funclet shape (bare `lea ecx; jmp` thunks + FuncInfo record) differs; difftest UNSUPPORTED. fix1: quick check DIFFERS
+01214ff0  25  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
+01215020  25  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 012150f0  95  complete EH cleanup funclet chain (RefVector/Elem24Vec/free_holder); compiler-generated; difftest UNSUPPORTED
 01215150 115  complete EH cleanup funclet (9x delete "Graphics"); compiler-generated; difftest UNSUPPORTED
 01215230  70  complete EH cleanup funclet chain; compiler-generated; difftest UNSUPPORTED
 012152a0  32  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01215350  28  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
-01215390  26  logic: fixed; first cleanup is T_7a9610(frame+0x04) (`lea ecx,[ebp+4]; jmp 0x7a9610`), not a counted-reference release; then two T_933960(-0x1c) thunks; only the funclet shape and FuncInfo 0x150338c differ; difftest UNSUPPORTED. fix1: quick check DIFFERS
+01215390  26  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01215450 166  complete EH cleanup funclet (6x delete "ArgScript/Option*"); compiler-generated; difftest UNSUPPORTED
 01215530 146  complete EH cleanup funclet (10x delete ArgScript); compiler-generated; difftest UNSUPPORTED
 01215680  71  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01215710  30  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
-01215770  12  logic: fixed; retail is `mov ecx,[ebp+4]; add ecx,0xc; jmp 0x7c8490` (frame+0x0c, not +0x04) + FuncInfo 0x15036b4 record; the differing bytes are the funclet frame model (`ebp` from the EH registration node, not the C argument) and the trailing `mov eax,<FuncInfo>; jmp __CxxFrameHandler3` pair that cl only emits for the owning function; difftest UNSUPPORTED. fix1: quick check DIFFERS
+01215770  12  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED; retail: `mov ecx,[ebp+4]; add ecx,0xc; jmp 0x7c8490` (8 B) + FuncInfo 0x15036b4 record; the 12 differing bytes are the trailing `mov eax,<FuncInfo>; jmp __CxxFrameHandler3` pair that cl only emits for the owning function
 01215790  34  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 012158f0  43  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED
 01215950  68  complete EH cleanup funclet; compiler-generated; difftest UNSUPPORTED

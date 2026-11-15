@@ -171,17 +171,17 @@ struct FactoryStringTableXml_s0099_a050 {
 wchar_t* StringTableXml::StrDup(const wchar_t* src)
 {
   if (src == 0) return 0;
-  uint bytes = ((uint)wcslen(src) * 2 + 9) & 0xfffffff8;
+  const wchar_t* p = src;
+  do { } while (*p++);
+  uint bytes = ((uint)(p - (src + 1)) * 2 + 9) & 0xfffffff8;
   StackAllocator* a = &mAllocator;
-  wchar_t* d;
-  if ((int)(a->mpCurrentBlockEnd - a->mpCurrentObjectBegin) - (int)bytes < 0
-      && !((EA::Allocator::StackAllocator_s0092_8b00*)a)->AllocateNewBlock(bytes)) {
-    d = 0;
-  } else {
-    d = (wchar_t*)a->mpCurrentObjectBegin;
-    a->mpCurrentObjectBegin = (char*)d + bytes;
-    a->mpCurrentObjectEnd = (char*)d + bytes;
+  if ((int)(a->mpCurrentBlockEnd - a->mpCurrentObjectBegin) - (int)bytes < 0) {
+    if (!((EA::Allocator::StackAllocator_s0092_8b00*)a)->AllocateNewBlock(bytes))
+      return 0;
   }
+  wchar_t* d = (wchar_t*)a->mpCurrentObjectBegin;
+  a->mpCurrentObjectBegin = (char*)d + bytes;
+  a->mpCurrentObjectEnd = (char*)d + bytes;
   wchar_t* result = d;
   while ((*d++ = *src++) != 0) {}
   return result;
@@ -210,7 +210,9 @@ FactoryStringTableXml::FactoryStringTableXml()
 // @ 0x00999c50
 StringTableXml::StringTableXml(const Key& k, const wchar_t* name)
 : mAllocator(0, -1, 0, 0, 0) {
-  mFirstKey = k;
+  mFirstKey.mInstance = k.mInstance;
+  mFirstKey.mType = k.mType;
+  mFirstKey.mGroup = k.mGroup;
   mFirstKey.mType = 0x4f72d78a;
   mAllocator.Init(0, 0, 0, 0, 0);
   mpTableName = StrDup(name);
@@ -232,7 +234,6 @@ bool FactoryStringTableXml2::CreateResource(void* src, void** out, const wchar_t
   char ok = VF(this, 0x24, char(__thiscall*)(void*, void*, void*, const wchar_t*, uint))(this, src, t, name, a4);
   if (ok) {
     t->mLastKey = t->mFirstKey;
-    _ReadWriteBarrier();
     t->mLastKey.mInstance += (uint)(t->mStrings.mpStringEnd - t->mStrings.mpStringBegin);
     *out = t;
     return true;

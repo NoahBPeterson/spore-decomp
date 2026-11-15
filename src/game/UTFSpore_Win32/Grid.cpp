@@ -1965,7 +1965,7 @@ struct CellRbtree_s0097_4c60 {
     CellRbtNode* mHeaderRight;                         // +0x08
     CellRbtNode* mpRoot;                               // +0x0c
 
-    void* DoInsertValue(void** pOut, const CellData_s0097_4c60* pValue, bool bTag);
+    void* DoInsertValue(const CellData_s0097_4c60* pValue, void* pOut);
     void  DoInsertValueImpl(const CellData_s0097_4c60** ppValue, CellRbtNode* pPos,
                             const CellData_s0097_4c60* pValue2, char b);
 };
@@ -1981,7 +1981,7 @@ struct EColIterB {
     char  _pad15[3];                                   // +0x15
     int   mUnknown18;                                  // +0x18
 
-    EColIterB* Init(int row);
+    void Init(int row);
 };
 EA::UTFWinControls::CellRbtNode* RBTreeDecrement(const EA::UTFWinControls::CellRbtNode* pNode);
 // ---- items of slice s00974c60 end
@@ -2042,7 +2042,7 @@ extern "C" void* __cdecl EAAllocate(unsigned size, const char* tag, int a, int b
 extern "C" void  __cdecl EaFree(void* p);                                   // 0x00f47380 (operator delete)
 namespace EA {
 namespace UTFWinControls {
-void RBTreeInsert(RBN* node, RBN* hint, RBN* anchor, int bSide);           // 0x009216a0
+void RBTreeInsert(RBN* node, RBN* hint, RBN* anchor, bool bSide);           // 0x009216a0
 }
 }
 namespace EA {
@@ -2156,13 +2156,13 @@ struct RowTreeCD {
     char  alloc[4];              // +0x00
     EA::UTFWinControls::RBN   anchor;                // +0x04
     int   mnSize;                // +0x14
-    PairRowCD** InsertValue(PairRowCD** out, EA::UTFWinControls::RBN* hint, const PairRowCD* value, bool bHint);  // 0x009764c0, ret 0x10
+    void InsertValue(PairRowCD** out, EA::UTFWinControls::RBN* hint, const PairRowCD* value, bool bHint);  // 0x009764c0, ret 0x10
 };
 struct RowTreeCF {
     char  alloc[4];
     EA::UTFWinControls::RBN   anchor;
     int   mnSize;
-    PairRowCF** InsertValue(PairRowCF** out, EA::UTFWinControls::RBN* hint, const PairRowCF* value, bool bHint);  // 0x00976550, ret 0x10
+    void InsertValue(PairRowCF** out, EA::UTFWinControls::RBN* hint, const PairRowCF* value, bool bHint);  // 0x00976550, ret 0x10
 };
 struct CellSet {
     char  alloc[4];              // +0x00
@@ -2271,7 +2271,7 @@ struct WinGrid_s0097_5ea0 {
     void DisposeOfCellData(int col, int row, EA::UTFWinControls::CellData_s0097_5ea0* p, bool bParam);          // 0x00975c50, ret 0x10
     void DoWindowAddition(int col, int row, void* pWindow, int a4, int a5);      // 0x00975ea0, ret 0x14
     bool CopyCellData(int c1, int r1, EA::UTFWinControls::CellData_s0097_5ea0* src, int c2, int r2, EA::UTFWinControls::CellData_s0097_5ea0* dst); // 0x00976010, ret 0x18
-    bool DisposeOfAllCellData();                                                 // 0x00976d20
+    void DisposeOfAllCellData();                                                 // 0x00976d20
 };
 struct FmtExtra {                // 0x38-byte CellFormatExtra value
     int f[0xe];
@@ -3035,9 +3035,11 @@ void EA::UTFWinControls::CellRbtree::find(EA::UTFWinControls::CellNode** pOut, c
 EA::UTFWinControls::CellNode* EA::UTFWinControls::CellRbtree::AllocateNode(const EA::UTFWinControls::CellData_s0097_1eb0* pData, void* pArg)
 {
     EA::UTFWinControls::CellNode* pNode = (EA::UTFWinControls::CellNode*)EA::UTFWinControls::EAAllocate(0x50, "EASTL", 0, 0, "rbtree.cpp", 0xd1);
-    char* pDst = (char*)pNode + 0x10;
-    if (pDst) {
-        memcpy(pDst, (const char*)pData + 0x10, 0x40);
+    if (pNode) {
+        unsigned* pDst = (unsigned*)((char*)pNode + 0x10);
+        const unsigned* pSrc = (const unsigned*)((const char*)pData + 0x10);
+        for (unsigned i = 0; i < 0x10u; ++i)
+            pDst[i] = pSrc[i];
     }
     pNode->mpLeft = 0;
     pNode->mpRight = 0;
@@ -3912,24 +3914,25 @@ void EA::UTFWinControls::CellList_s0097_4c60::push_back(const int* pValue)
 // @ 0x00975350
 bool EA::UTFWinControls::SparseMatrix_s0097_4c60::GetMinMaxUsedColForRow(int row, int* pMin, int* pMax)
 {
-    bool bFound = false;
     *pMin = 0x7fffffff;
     *pMax = 0x80000000;
+    bool bFound = false;
 
-    EA::UTFWinControls::RBN* pNode;
-    ((EA::UTFWinControls::TreeHdr*)this)->Find(&pNode, &row);
-    if (pNode != (EA::UTFWinControls::RBN*)((char*)this + 4)) {
-        EA::UTFWinControls::CellRecord* pRec = *(EA::UTFWinControls::CellRecord**)((char*)pNode + 0x20);
-        *pMin = pRec->mUnknown14;
-        *pMax = *(int*)((char*)::RBTreeDecrement(
-            (EA::UTFWinControls::CellRbtNode*)((char*)pNode + 0x1c)) + 0x14);
-        bFound = true;
+    EA::UTFWinControls::SparseMatrixIter it;
+    it.mpNode = 0;
+    it.mpOwner = 0;
+    FirstUsed(&it);
+    if (it.mpNode != (char*)this + 4) {
+        EA::UTFWinControls::CellRecord* pRec = *(EA::UTFWinControls::CellRecord**)((char*)it.mpNode + 0x20);
+        *pMin = *(int*)((char*)pRec + 0x14);
+        *pMax = *(int*)((char*)pRec + 0x14);
+        return true;
     }
     return bFound;
 }
 
 // @ 0x009753c0
-EColIterB* EColIterB::Init(int row)
+void EColIterB::Init(int row)
 {
     EColIterB* self = this;
     self->mRow = row;
@@ -3937,22 +3940,21 @@ EColIterB* EColIterB::Init(int row)
     pSentinel[1] = 0;
     pSentinel[2] = 0;
     pSentinel[3] = 0;
-    self->mpListHead = pSentinel;
-    self->mpListTail = pSentinel;
-    self->mpListSentinel2 = 0;
-    self->mbFlag = 0;
-    self->mUnknown18 = 0;
-    return self;
+    mpListHead = pSentinel;
+    mpListTail = pSentinel;
+    mpListSentinel2 = 0;
+    mbFlag = 0;
+    mUnknown18 = 0;
 }
 
 // @ 0x009753f0
-void* EA::UTFWinControls::CellRbtree_s0097_4c60::DoInsertValue(void** pOut, const EA::UTFWinControls::CellData_s0097_4c60* pValue, bool bTag)
+void* EA::UTFWinControls::CellRbtree_s0097_4c60::DoInsertValue(const EA::UTFWinControls::CellData_s0097_4c60* pValue, void* pOut)
 {
-    EA::UTFWinControls::CellRbtNode* pNode = mpRoot;
     EA::UTFWinControls::CellRbtNode* pHeader = (EA::UTFWinControls::CellRbtNode*)&mHeaderLeft;
     EA::UTFWinControls::CellRbtNode* pPos = pHeader;
     bool bLeft = true;
 
+    EA::UTFWinControls::CellRbtNode* pNode = mpRoot;
     if (pNode != 0) {
         do {
             pPos = pNode;
@@ -3967,15 +3969,16 @@ void* EA::UTFWinControls::CellRbtree_s0097_4c60::DoInsertValue(void** pOut, cons
             goto insert;
         pPrev = RBTreeDecrement(pPos);
     }
-    if (*(const unsigned*)((const char*)pValue + 0xc) > pPrev->mKey) {
-insert:
-        DoInsertValueImpl(&pValue, pPos, pValue, 0);
-        *(void**)pOut = (void*)pValue;
-        *(char*)((char*)pOut + 4) = 1;
+    if (*(const unsigned*)((const char*)pValue + 0xc) <= pPrev->mKey) {
+        *(void**)pOut = pPrev;
+        *(char*)((char*)pOut + 4) = 0;
         return pOut;
     }
-    *(void**)pOut = pPrev;
-    *(char*)((char*)pOut + 4) = 0;
+
+insert:
+    DoInsertValueImpl(&pValue, pPos, pValue, 0);
+    *(void**)pOut = (void*)pValue;
+    *(char*)((char*)pOut + 4) = 1;
     return pOut;
 }
 
@@ -4212,38 +4215,42 @@ void CellsMatrix::DoNukeSubtree(EA::UTFWinControls::RBN* node)
 }
 
 // @ 0x009764c0
-PairRowCD** RowTreeCD::InsertValue(PairRowCD** out, EA::UTFWinControls::RBN* hint, const PairRowCD* value, bool bHint)
+void RowTreeCD::InsertValue(PairRowCD** out, EA::UTFWinControls::RBN* hint, const PairRowCD* value, bool bHint)
 {
-    int bContinue = (!bHint && (EA::UTFWinControls::RBN*)hint != &anchor &&
-        value->key >= ((KeyNode_s0097_5ea0*)hint)->key) ? 1 : 0;
+    bool bContinue;
+    if (!bHint && (EA::UTFWinControls::RBN*)hint != &anchor && value->key >= ((KeyNode_s0097_5ea0*)hint)->key)
+        bContinue = true;
+    else
+        bContinue = false;
 
     EA::UTFWinControls::RBN* node = (EA::UTFWinControls::RBN*)EAAllocate(0x34, "EASTL", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
         0xd1);
     RowNode* rn = (RowNode*)node;
-    if (&rn->key) {
-        const PairRowCD* v = value;
-        rn->key = v->key;
-        rn->pad14 = v->pad;
-        rn->row.CtorFrom((const int*)&v->row);
+    if (rn) {
+        rn->key = value->key;
+        rn->pad14 = value->pad;
+        rn->row.CtorFrom((const int*)&value->row);
     }
     EA::UTFWinControls::RBTreeInsert(node, hint, &anchor, bContinue);          // 0x009216a0
     ++mnSize;
     *out = (PairRowCD*)node;
-    return out;
 }
 
 // @ 0x00976550
-PairRowCF** RowTreeCF::InsertValue(PairRowCF** out, EA::UTFWinControls::RBN* hint, const PairRowCF* value, bool bHint)
+void RowTreeCF::InsertValue(PairRowCF** out, EA::UTFWinControls::RBN* hint, const PairRowCF* value, bool bHint)
 {
-    int bContinue = (!bHint && (EA::UTFWinControls::RBN*)hint != &anchor &&
-        value->key >= ((KeyNode_s0097_5ea0*)hint)->key) ? 1 : 0;
+    bool bContinue;
+    if (!bHint && (EA::UTFWinControls::RBN*)hint != &anchor && value->key >= ((KeyNode_s0097_5ea0*)hint)->key)
+        bContinue = true;
+    else
+        bContinue = false;
 
     EA::UTFWinControls::RBN* node = (EA::UTFWinControls::RBN*)EAAllocate(0x34, "EASTL", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
         0xd1);
     RowNode* rn = (RowNode*)node;
-    if (&rn->key) {
+    if (rn) {
         rn->key = value->key;
         rn->pad14 = value->pad;
         ((MatrixRowC*)&rn->row)->CtorFrom((const int*)&value->row);
@@ -4251,7 +4258,6 @@ PairRowCF** RowTreeCF::InsertValue(PairRowCF** out, EA::UTFWinControls::RBN* hin
     EA::UTFWinControls::RBTreeInsert(node, hint, &anchor, bContinue);
     ++mnSize;
     *out = (PairRowCF*)node;
-    return out;
 }
 
 // @ 0x009765e0
@@ -4475,16 +4481,16 @@ bool IWinGridIface::ClearCellFormat(int col, int row)
 }
 
 // @ 0x00976d20
-bool WinGrid_s0097_5ea0::DisposeOfAllCellData()
+void WinGrid_s0097_5ea0::DisposeOfAllCellData()
 {
-    CellEntry* list = new ("UTFWin/Grid", 0, 0, 0, 0) CellEntry[mIface.mCells.mnTotalCells];
+    unsigned n = (unsigned)mIface.mCells.mnMaxCol * 0xc;
+    EA::UTFWinControls::CellData_s0097_5ea0** list = (EA::UTFWinControls::CellData_s0097_5ea0**)EAAllocate(n, "UTFWin/Grid", 0, 0, 0, 0);
     if (list) {
-        int count = mIface.mCells.GetCellsInRange(0, 0, 0x7fffffff, 0x7fffffff,
-            (EA::UTFWinControls::CellData_s0097_5ea0**)list);
+        int count = mIface.mCells.GetCellsInRange(0, 0, 0x7fffffff, 0x7fffffff, list);
         if (count > 0) {
-            int* p = (int*)list + 1;
+            EA::UTFWinControls::CellData_s0097_5ea0** p = list + 1;
             do {
-                DisposeOfCellData(p[-1], p[0], (EA::UTFWinControls::CellData_s0097_5ea0*)p[1], true);
+                DisposeOfCellData(p[-1] ? (int)p[-1] : 0, (int)p[0], p[1], true);
                 p += 3;
             } while (--count);
         }
@@ -4492,12 +4498,12 @@ bool WinGrid_s0097_5ea0::DisposeOfAllCellData()
     }
     mIface.mCells.DoNukeSubtree(mIface.mCells.anchor.parent);
     mIface.mCells.anchor.left = &mIface.mCells.anchor;
+    mIface.mCells.anchor.right = &mIface.mCells.anchor;
     mIface.mCells.anchor.parent = 0;
     mIface.mCells.mnSize = 0;
     mIface.mCells.mnTotalCells = 0;
     mIface.mCells.anchor.color = 0;
-    mIface.mCells.anchor.right = &mIface.mCells.anchor;
-    return true;
+    mIface.mCells.mnMaxCol = 0;
 }
 
 // @ 0x00976dd0
@@ -4609,25 +4615,42 @@ bool WinGrid_s0097_6f90::Shutdown()
 {
     DisposeOfAllCellData();
 
+    void** vt;
+
     if (mSound[0]) {
         void* p = mSound[0];
         mSound[0] = 0;
-        ((void(__thiscall*)(void*))((void**)*(void***)p)[1])(p);
+        vt = *(void***)p;
+        (*(void(__thiscall**)(void*))vt[1])(p);
     }
     if (mSound[1]) {
         void* p = mSound[1];
         mSound[1] = 0;
-        ((void(__thiscall*)(void*))((void**)*(void***)p)[1])(p);
+        vt = *(void***)p;
+        (*(void(__thiscall**)(void*))vt[1])(p);
     }
     if (mSound[2]) {
         void* p = mSound[2];
         mSound[2] = 0;
-        ((void(__thiscall*)(void*))((void**)*(void***)p)[1])(p);
+        vt = *(void***)p;
+        (*(void(__thiscall**)(void*))vt[1])(p);
     }
     if (mSound[3]) {
         void* p = mSound[3];
         mSound[3] = 0;
-        ((void(__thiscall*)(void*))((void**)*(void***)p)[1])(p);
+        vt = *(void***)p;
+        (*(void(__thiscall**)(void*))vt[1])(p);
+    }
+
+    if (*(void**)(B(this) + 0x3d8)) {
+        void* h = *(void**)(B(this) + 0x3d8);
+        *(void**)(B(this) + 0x3d8) = 0;
+        *(void**)(B(this) + 0x3dc) = 0;
+        *(void**)(B(this) + 0x3e0) = 0;
+        *(void**)(B(this) + 0x3e4) = 0;
+        *(void**)(B(this) + 0x3e8) = 0;
+        vt = *(void***)h;
+        (*(void(__thiscall**)(void*))vt[1])(h);
     }
 
     return WindowShutdown();
@@ -5052,9 +5075,7 @@ bool WinGridView::SetCellExtraData(int col, int row, void* extra)
         CellData** pp;
         if (mCells.GetCellPtr(col, row, &pp) && *pp) {
             (*pp)->pExtraData = extra;
-            return true;
-        }
-        if (extra != 0) {
+        } else if (extra != 0) {
             CellData* cd = NEW_G2(CellData, extra);
             if (cd) mCells.Set(col, row, &cd, 0);
         }

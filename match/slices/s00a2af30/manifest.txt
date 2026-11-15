@@ -1,2 +1,1 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-slices/s00a2af30/s00a2af30.cpp  ?InsertSound@System@@QAEXPAX@Z  00a2bf30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

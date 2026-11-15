@@ -570,20 +570,18 @@ bool ISocket::Connect(bool* ok, void* stream) {
 // @ 0x0094E560
 unsigned ISocket::WaitForWrite() {
     int s = *(int*)((char*)this - 0x74);
-    unsigned result = 0;
-    if (s != -1) {
-        fd_set_t fds;
-        timeval_t tv;
-        tv.tv_sec = 0;
-        tv.tv_usec = 0;
-        fds.fd_array[0] = s;
-        fds.fd_count = 1;
-        if (select(1, &fds, 0, 0, &tv) == -1)
-            ((Primary*)((char*)this - 0x80))->DoError(WSAGetLastError(), 0);
-        else
-            result = 2;
-    }
-    return result;
+    if (s == -1)
+        return 0;
+    fd_set_t fds;
+    timeval_t tv;
+    fds.fd_array[0] = s;
+    fds.fd_count = 1;
+    tv.tv_sec = 0;
+    tv.tv_usec = 0;
+    if (select(1, &fds, 0, 0, &tv) != -1)
+        return 2;
+    ((Primary*)((char*)this - 0x80))->DoError(WSAGetLastError(), 0);
+    return 0;
 }
 
 // @ 0x0094E5E0

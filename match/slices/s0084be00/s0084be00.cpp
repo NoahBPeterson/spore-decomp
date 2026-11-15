@@ -621,10 +621,11 @@ int __stdcall GIF_open(GIFInfo** ppInfo, int param2, int param3, int param4)
     *ppInfo = info;
     GifFileType* g = (GifFileType*)GIFgetinfo((void*)param2, 0, 0, 0);
     if (g) {
-        info->f08 = g->ImageCount;
-        if (DGifCloseFile(g) != 0)
-            return info->f08;
-        return 0;
+        int cnt = g->ImageCount;
+        info->f08 = cnt;
+        if (DGifCloseFile(g) == 0)
+            return 0;
+        return cnt;
     }
     return 0;
 }

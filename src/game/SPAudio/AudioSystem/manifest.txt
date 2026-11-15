@@ -66,5 +66,3 @@
 ../src/game/SPAudio/AudioSystem.cpp  ?resetHead_00a21290@@YIPAPAXPAPAX@Z  00a21290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?nodeToPayload_00a21c70@@YIPAPAXPAX0PAPAX@Z  00a21c70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?nodeToPayload_00a21c90@@YIPAPAXPAX0PAPAX@Z  00a21c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPAudio/AudioSystem.cpp  ?DisconnectFromSubmix@Submix@Audio@EA@@QAE_NXZ  00a21390  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
-../src/game/SPAudio/AudioSystem.cpp  ?disconnect_00a21590@@YIXPAD@Z  00a21590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -257,12 +257,12 @@ void AudioObj::F_d00()
 // @ 0x01138d40  Snd9Service::UpdateSnd9SampleRate
 void __stdcall FUN_01138d40(float rate)
 {
-    struct Desc { int value; u8 f4; u8 f5; u8 pad6[2]; void* cb; int f0c; } d;
+    struct Desc { int value; u8 f4; u8 f5; u8 pad6[2]; void* cb; u8 f0c; u8 pad0d[3]; } d;
     FUN_01142690();
     d.value = _mm_cvtss_si32(_mm_load_ss(&rate));
     d.f4 = g_sndCfg02;
     d.f5 = (u8)(g_sndCfg00 + g_sndCfg01);
-    d.cb = (void*)&FUN_01142690;   /* 0x01142690: original takes the address of the first call */
+    d.cb = (void*)&SNDVOICEI_free;
     d.f0c = 0;
     MIX_create(&d);
 }

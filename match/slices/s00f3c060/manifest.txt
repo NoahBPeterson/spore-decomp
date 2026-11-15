@@ -7,4 +7,3 @@ slices/s00f3c060/s00f3c060.cpp  ?CallD@@YAXXZ  00f3c1b0  /O2 /MD /Gy /EHsc /TP /
 slices/s00f3c060/s00f3c060.cpp  ?FUN_00f3c1d0@@YAXPAIPAM11@Z  00f3c1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00f3c060/s00f3c060.cpp  ?GetAt@W@@QAEHPAH@Z  00f3cb30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f3c060/s00f3c060.cpp  ?dtor@cContentValidationSummarizer@@QAEPAU1@I@Z  00f3cd10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-slices/s00f3c060/s00f3c060.cpp  ?FUN_00f3c120@W@@QAEPAPAXPAPAXH@Z  00f3c120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

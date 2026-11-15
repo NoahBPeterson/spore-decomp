@@ -7,9 +7,7 @@
 // table (crypto/ecdsa/ecs_lib.c), an ASN.1 date helper, the EC_EX_DATA chain
 // helper and a multi-precision multiply-accumulate routine.
 //
-// Build: /vc71 /O2 /MD /Gy /TP, except ec_key_new_method (0x011b2140), which is
-// only byte-exact built with the VC9 compiler (/O2 /MD /Gy /TP): its cmp/mov
-// fold of the +0x24 null test and the ecx-held indirect call are cl 15 codegen.
+// Build: /vc71 /O2 /MD /Gy /TP.
 #include "types.h"
 
 // ---- OpenSSL error reporting / allocation -------------------------------
@@ -376,7 +374,7 @@ int* ec_key_new_method(int* meth)
         ERR_put_error(0x10, 0x79, 0x43, 0, 0);
         return 0;
     }
-    if (((int**)*meth)[9] == 0) {        // method->init (slot at +0x24)
+    if (*(int*)((char*)*meth + 0x24) == 0) {
         ERR_put_error(0x10, 0x79, 0x42, 0, 0);
         return 0;
     }

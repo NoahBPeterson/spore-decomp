@@ -208,14 +208,9 @@ extern Vec3z g_default12;                                                // 0x01
 Bitmap::Bitmap(int w, int h, int fill)
 : BitmapBase(w, h)
 {
-    void* buf;
     *(void**)this = &g_vtblBca4;
     *(void**)((char*)this + 0x18) = &g_vtblBcb8;
-    {   // /Od scratch locals: keep the retail frame (this at ebp-0x14, buf at ebp-4).
-        int pad1, pad2, pad3;
-        (void)pad1; (void)pad2; (void)pad3;
-    }
-    buf = EA_alloc((unsigned)(w * h * 4), "Graphics", 0, 0, 0, 0);
+    void* buf = EA_alloc((unsigned)(w * h * 4), "Graphics", 0, 0, 0, 0);
     *(void**)((char*)this + 0x28) = buf;
     *(int*)((char*)this + 0x24) = 2;
     Memset32(*(void**)((char*)this + 0x28), fill, w * h);

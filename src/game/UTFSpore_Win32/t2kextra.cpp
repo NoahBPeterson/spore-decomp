@@ -71,13 +71,7 @@ extern "C" int util_FixMul(int a, int b);              // 0x008d1590
 // ---- items of slice s008c2540 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
-void FUN_008c3120(int self);
-
-// @ 0x008c3570
-void FUN_008c3570(int self)
-{
-	FUN_008c3120(self);
-}
+void FUN_008c3120(int self);  // 0x008c3120 (stays in the slice: not this object's)
 
 // @ 0x008c2c80
 void T2K_CreateBorderedCharacter(T2KObj* t, TVEffect* fx)
@@ -216,3 +210,8 @@ void T2K_CreateBorderedCharacter(T2KObj* t, TVEffect* fx)
     }
 }
 
+// @ 0x008c3570
+void FUN_008c3570(int self)
+{
+	FUN_008c3120(self);
+}

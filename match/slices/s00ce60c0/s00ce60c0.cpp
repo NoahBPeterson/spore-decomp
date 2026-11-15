@@ -2,7 +2,6 @@
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
-#include <intrin.h>
 
 namespace SP {
 
@@ -67,18 +66,15 @@ double SP::cTribeTokenTranslator::GetValue19c(int index)
 }
 
 // @ 0x00ce6a40
-// The original was built as one /GL module with its cdecl callee ComputeDensity and linked with /LTCG, which
-// lets it keep `this` in ecx and `arg` in edx across that call (the callee provably leaves both alone). A
-// single-object compile must preserve both across a cdecl call, so it spills them to esi/edi and cannot be
-// byte-exact here; the logic below is the original's.
-double __fastcall ComputeMass(SP::cTribeTokenTranslator* self, int, SP::cMassArg* arg)
+double SP::cTribeTokenTranslator::ComputeMass(SP::cMassArg* arg)
 {
     double density = SP::ComputeDensity(arg);
-    const float* pValue = &self->mValue0c;
-    if (SP::gMassThreshold > self->mValue0c)
+    const float* pValue = &mValue0c;
+    if (SP::gMassThreshold > mValue0c)
         pValue = &SP::gMassThreshold;
-    float a = arg->mValue554;
-    float b = arg->mValue558;
-    double radial = sqrt(a * a + b * b);
+    double a = arg->mValue554;
+    double b = arg->mValue558;
+    double radial = 0.0;
+    radial = sqrt(a * a + b * b);
     return ((density * SP::gMassScale) * *pValue) * radial * SP::gMassHalf;
 }

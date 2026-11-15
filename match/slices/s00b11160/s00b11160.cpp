@@ -154,17 +154,15 @@ void FUN_00b11580(Vec4f* dst, unsigned count, Vec4f* src)
 // @ 0x00b115c0
 void FUN_00b115c0(Vec4f* f, Vec4f* to, Vec4f* d)
 {
-    if (f != to) {
-        do {
-            if (d != 0) {
-                d->x = f->x;
-                d->y = f->y;
-                d->z = f->z;
-                d->w = f->w;
-            }
-            f += 1;
-            d += 1;
-        } while (f != to);
+    while (f != to) {
+        if (d != 0) {
+            d->x = f->x;
+            d->y = f->y;
+            d->z = f->z;
+            d->w = f->w;
+        }
+        f += 1;
+        d += 1;
     }
 }
 

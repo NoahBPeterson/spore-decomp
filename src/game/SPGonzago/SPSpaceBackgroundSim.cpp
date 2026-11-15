@@ -316,21 +316,22 @@ void FUN_01021d40()
 }
 
 // @ 0x01021e50
-void** PartitionPlanets(void** ppFirst, void** ppLast, void* pPivot, cPointerCompare pCompare)
+void** PartitionPlanets(void** ppFirst, void** ppUnused, void** ppLast, cDispatchObject* pPivot, cPointerCompare pCompare)
 {
+    void** ppLow = ppFirst;
     for (;;) {
-        while (pCompare(*ppFirst, pPivot) != 0)
-            ++ppFirst;
+        while (pCompare(pPivot, *ppLow) != 0)
+            ++ppLow;
         while (pCompare(pPivot, *--ppLast) != 0)
             ;
-        if (ppFirst >= ppLast)
+        if (ppLow >= ppLast)
             break;
-        SwapPlanetSlots(ppFirst, ppLast);
-        ++ppFirst;
+        SwapPlanetSlots(ppLow, ppLast);
+        ++ppLow;
     }
     if (pPivot != nullptr)
-        ((void (__thiscall*)(void*))(*(void***)pPivot)[0xc0 / 4])(pPivot);
-    return ppFirst;
+        pPivot->CallVoid(0xc0);
+    return ppLow;
 }
 
 // @ 0x01021ed0
@@ -360,20 +361,21 @@ void SortPlanetPartition(void** ppFirst, void** ppLast, void** ppUnused, cPointe
 }
 
 // @ 0x01021fd0
-void QuickSortPlanets(void** ppFirst, void** ppLast, int32_t nDepth, cPointerCompare pCompare)
+void QuickSortPlanets(void** ppFirst, void** ppLast, void** ppUnused, int32_t nDepth, cPointerCompare pCompare)
 {
     for (;;) {
-        if (ppLast - ppFirst <= 0x1c)
+        if (((uint32_t)((uint8_t*)ppLast - (uint8_t*)ppFirst) & 0xfffffffc) <= 0x70)
             break;
         if (nDepth <= 0)
             break;
-        void** ppMiddle = SelectMedianPlanet(ppFirst, ppFirst + (ppLast - ppFirst) / 2,
+        void** ppMiddle = SelectMedianPlanet(ppFirst, ppFirst + ((ppLast - ppFirst) >> 1),
                                              ppLast - 1, pCompare);
         void* pPivot = *ppMiddle;
         if (pPivot != nullptr)
-            ((void (__thiscall*)(void*))(*(void***)pPivot)[0xbc / 4])(pPivot);
-        void** ppSplit = PartitionPlanets(ppFirst, ppLast, pPivot, pCompare);
-        QuickSortPlanets(ppSplit, ppLast, --nDepth, pCompare);
+            ((cDispatchObject*)pPivot)->CallVoid(0xbc);
+        void** ppSplit = PartitionPlanets(ppFirst, ppLast, ppLast,
+                                          (cDispatchObject*)pPivot, pCompare);
+        QuickSortPlanets(ppSplit, ppLast, ppLast, nDepth - 1, pCompare);
         ppLast = ppSplit;
     }
     if (nDepth == 0)

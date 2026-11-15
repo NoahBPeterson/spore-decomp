@@ -111,15 +111,16 @@ public:
     virtual void v4();
 };
 
-// hkContactPoint (0x20: position at +0, separating normal at +0x10).
+// hkContactPoint (0x30 with the separating normal at +0x10).
 class hkContactPoint
 { public:
     hkVector4 m_position;           // +0
     hkVector4 m_separatingNormal;   // +0x10 (w = distance)
+    hkVector4 m_pad;                // +0x20
     void setFlipped(const hkContactPoint& other);    // 0x010cecf0
 };
 
-struct hkProcessCdPoint { hkContactPoint m_contact; uint32_t m_extra[4]; };  // 0x30 bytes
+struct hkProcessCdPoint { hkContactPoint m_contact; };  // 0x30 bytes (contact is 0x30)
 
 typedef float hkTime;
 
@@ -132,10 +133,9 @@ struct hkProcessCollisionInput
 struct hkProcessCollisionOutput
 {
     hkProcessCdPoint* m_firstFreeContactPoint;  // +0
-    uint32_t          m_pad0[3];                // +4
+    char              m_pad0[0x10 - 4];
     hkContactPoint    m_toiContact;             // +0x10
     hkProcessCdPoint  m_contactPoints[256];     // +0x30
-    uint32_t          m_toiProperties;          // +0x3030
     hkTime            m_toiTime;                // +0x3034
 };
 
@@ -246,23 +246,16 @@ public:
                                   hkProcessCollisionOutput& output);      // 0x010d53d0
 };
 
-class hkSymmetricSphereBoxAgent : public hkSphereBoxAgent
-{
-public:
-    void processCollision(const hkCdBody& bodyA, const hkCdBody& bodyB,
-                          const hkProcessCollisionInput& input,
-                          hkProcessCollisionOutput& output);   // 0x010d6420
-};
-
 // @ 0x010d6420
-void hkSymmetricSphereBoxAgent::processCollision(const hkCdBody& bodyA, const hkCdBody& bodyB,
+void hkSymmetricSphereBoxAgent__processCollision(hkCollisionAgent* self,
+                                                 const hkCdBody& bodyA, const hkCdBody& bodyB,
                                                  const hkProcessCollisionInput& input,
                                                  hkProcessCollisionOutput& output)
 {
     hkProcessCdPoint* pp = output.m_firstFreeContactPoint;
     hkTime oldToi = output.m_toiTime;
 
-    hkSphereBoxAgent::processCollision(bodyB, bodyA, input, output);
+    ((hkSphereBoxAgent*)self)->hkSphereBoxAgent::processCollision(bodyB, bodyA, input, output);
 
     for (; pp < output.m_firstFreeContactPoint; pp++)
     {

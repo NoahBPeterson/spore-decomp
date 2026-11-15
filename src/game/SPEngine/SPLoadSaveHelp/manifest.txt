@@ -48,6 +48,3 @@
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Execute@cVarListSerializer_s0069_5140@SP@@QAEHPAUFieldReport@@@Z  00695770  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?WriteBlob32@@YAEPAXPAUBlobRange@@@Z  00692e00  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?WriteBlob16@@YAEPAXPAUBlobRange@@@Z  00692e50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLoadSaveHelp.cpp  ?RegList_Resolve@@YAXXZ  00692ee0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLoadSaveHelp.cpp  ?RegList_Release@@YAXXZ  00692f20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseFloat@@YAXPAPBDPAM@Z  006930b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
