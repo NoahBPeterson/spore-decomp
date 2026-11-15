@@ -107,12 +107,12 @@ protected:
 };
 
 struct hkShapeCollectionKeyAgentPair { unsigned int m_key; hkCollisionAgent* m_agent; };   // 8 bytes
+class hkShapeCollectionAgentArray : public hkInplaceArray<hkShapeCollectionKeyAgentPair, 4> { public: ~hkShapeCollectionAgentArray(); };
 
 class hkShapeCollectionAgent : public hkCollisionAgent           // vtable 0x014A4D24, size 0x38
 {
 public:
 	hkShapeCollectionAgent(const hkCdBody& a, const hkCdBody& b, const hkCollisionInput& input, hkContactMgr* mgr);   // 0x010E1090
-	virtual ~hkShapeCollectionAgent();                           // 0 (scalar deleting destructor 0x010E1380, shared with hkMultiSphereAgent)
 	virtual void getPenetrations(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkCdBodyPairCollector&);           // 0x010E0C30
 	virtual void getClosestPoints(const hkCdBody&, const hkCdBody&, const hkCollisionInput&, hkCdPointCollector&);              // 0x010E0730
 	virtual void linearCast(const hkCdBody&, const hkCdBody&, const hkLinearCastCollisionInput&, hkCdPointCollector&, hkCdPointCollector*);   // 0x010E09B0
@@ -125,7 +125,7 @@ public:
 	static hkCollisionAgent* createListAAgent(const hkCdBody& a, const hkCdBody& b, const hkCollisionInput& input, hkContactMgr* mgr);   // 0x010E1340
 	static hkCollisionAgent* createListBAgent(const hkCdBody& a, const hkCdBody& b, const hkCollisionInput& input, hkContactMgr* mgr);   // 0x010E14D0
 
-	hkInplaceArray<hkShapeCollectionKeyAgentPair, 4> m_agents;    // +0xc (data, size, capacity, 4 inline pairs)
+	hkShapeCollectionAgentArray m_agents; // +0xc owned array and four inline pairs
 };
 
 // ---- MOPP / BV tree -----------------------------------------------------------------------------------------
@@ -133,8 +133,8 @@ class hkShapeCollection : public hkShape
 {
 public:
 	virtual int getNumChildShapes() const = 0;                                                // 7 (+0x1c, 0x010E7F80)
-	virtual void shapeCollectionSlot8();                                                      // 8
-	virtual void shapeCollectionSlot9();                                                      // 9
+	virtual unsigned int getFirstKey() const;                                                      // 8
+	virtual unsigned int getNextKey(unsigned int) const;                                                      // 9
 	virtual const hkShape* getChildShape(unsigned int key, void* shapeBuffer) const = 0;      // 10 (+0x28)
 };
 struct hkShapeBuffer { uint8_t m_data[0x200]; };      // child-shape scratch buffer (524 bytes of stack in the binary)

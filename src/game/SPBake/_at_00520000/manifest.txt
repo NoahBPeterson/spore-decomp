@@ -14,3 +14,4 @@
 ../src/game/SPBake/_at_00520000.cpp  ?partial_sort@eastl@@YAXPAU?$pair_s0052_c230@HM@1@00USecondGreater@1@@Z  0052ccd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/_at_00520000.cpp  ?make_heap@eastl@@YAXPAU?$pair_s0052_c230@HM@1@0USecondGreater@1@@Z  0052cf00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/_at_00520000.cpp  ?adjust_heap@eastl@@YAXPAU?$pair_s0052_c230@HM@1@HHHU21@USecondGreater@1@@Z  0052cf80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/_at_00520000.cpp  ?erase@VectorElem38@@QAEPAUElem38_s0052_66f0@@PAU2@0@Z  005266f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

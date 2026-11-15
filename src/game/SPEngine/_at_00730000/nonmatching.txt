@@ -18,5 +18,4 @@
 00734660 61 vector emplace (fast-path + insert fallback): complete behaviour; equiv WEAK (218 valid, 60.0% cov, no mismatch, after ecx/member fix); /0xc magic and the copy shape differ flags: /O2 /MD /Gy /TP /arch:SSE /GS-
 007348a0 176 vector assign-from-vector: complete behaviour; equiv WEAK (521 valid, 42.0% cov, no mismatch, after ecx/member fix); EASTL branch order and the copy/memcpy tails differ flags: /O2 /MD /Gy /TP /arch:SSE /GS-
 007353c0 100 COMPLETE swap-or-assign of a 0x24-byte-element vector: SSO fast path swaps the three dwords, else copy-ctor tmp + assign both ways + free tmp. Residual diff is cl's EH-funclets/state setup vs the original's explicit frame. [equiv: WEAK 127 valid / 59.6% cov, 0 mismatch] flags: /O2 /MD /Gy /EHsc /TP
-0073a7a0 19 MatOwner::GetMat: complete; copy addressing/schedule differs flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0073a850 117 ScaleMat: returns int (the original leaves the last copied word, src->tzBits, in eax) and keeps tx/ty/tz as float/int unions; schedule of the 3x3 scale differs [equiv: PASS 600 inputs 100% cov, flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast]

@@ -2733,9 +2733,10 @@ float FUN_004f1ff0(int a)
 bool FUN_004f21e0(int a, int b)
 {
     float f = FUN_004f1ff0(a);
-    if (f <= (float)b)
+    if (f > (float)b)
+        return false;
+    else
         return true;
-    return false;
 }
 
 // @ 0x004f2210
