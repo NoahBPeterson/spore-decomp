@@ -287,8 +287,14 @@ struct PaintTheme
 // ---- items of slice s004b4930 end
 
 // ---- items of slice s004ba150 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void  FUN_004f3de0(void* a, void* b, int c, int d, int e, int f, char g);
-extern int DAT_015da860, DAT_015da864, DAT_015da868, DAT_015da86c;
+struct EditorValidityBits { uint32_t words[4]; };
+struct EditorResourceValidity {
+    EditorValidityBits* GetValidity(EditorValidityBits* out, bool stopOnFirstFailure); // 0x004babe0
+};
+extern EditorValidityBits gDefaultValidityTests; // 0x015da860, complete 128-bit test mask
+EditorValidityBits* __cdecl CalculateEditorValidity(EditorValidityBits* out, EditorResourceValidity* resource,
+    EditorValidityBits tests, bool stopOnFirstFailure); // 0x004f3de0
+
 namespace SP {
 struct Vector3 {
     float x, y, z;
@@ -1810,10 +1816,10 @@ void DeletablePtrRange::DestroyRange(DeletablePtr* first, DeletablePtr* last)
 }
 
 // @ 0x004babe0
-void* __fastcall FUN_004babe0(void* self, void* unused, void* a, char c)
+EditorValidityBits* EditorResourceValidity::GetValidity(EditorValidityBits* out, bool stopOnFirstFailure)
 {
-    FUN_004f3de0(a, self, DAT_015da860, DAT_015da864, DAT_015da868, DAT_015da86c, c);
-    return a;
+    CalculateEditorValidity(out, this, gDefaultValidityTests, stopOnFirstFailure);
+    return out;
 }
 
 // @ 0x004badd0

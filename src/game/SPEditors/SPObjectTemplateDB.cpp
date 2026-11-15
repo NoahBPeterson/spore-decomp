@@ -3453,7 +3453,30 @@ struct ResourceKey_s0055_fc10 {
     uint32_t mGroupID;
 };
 namespace SP {
-void FUN_00564960(void* out, void* val);
+struct PopulationPair {
+    unsigned first;
+    unsigned second;
+};
+struct PopulationInsertResult {
+    PopulationPair* iterator;
+    bool inserted;
+};
+struct PopulationMap {
+    PopulationPair* begin;
+    PopulationPair* end;
+    PopulationPair* capacity;
+    unsigned allocator[2];
+    unsigned compare;
+    PopulationInsertResult* Insert(PopulationInsertResult* out, const PopulationPair& value); // 0x00564960, returns out
+    unsigned& Get(const unsigned& key); // 0x00564a10, returns mapped value reference
+};
+struct PopulationDB {
+    unsigned char reserved[0xac];
+    PopulationMap mapAc;
+    PopulationMap mapC4;
+    void UpdatePopulation(unsigned key, unsigned value); // 0x0055fe60
+};
+
 }
 namespace SP {
 int __fastcall FUN_005631e0(void* self, int dummy, void* key);   // thiscall: FindAssetIndex(key) -> int
@@ -5748,16 +5771,17 @@ void DBMethods::slot25(unsigned int maxCount, AssetPtrVec* pOut, int param4)
 
 // @ 0x0055fe60
 namespace SP {
-void FUN_0055fe60(void* this_, unsigned key, unsigned value)
+void PopulationDB::UpdatePopulation(unsigned key, unsigned value)
 {
-    char tmp[8];
-    unsigned two[2];
-    two[0] = key;
-    two[1] = 0;
-    FUN_00564960(tmp, two);
-    eastl::vector_map_s0055_fc10<uint32_t, uint32_t>* map_s0055_fc10 =
-        (eastl::vector_map_s0055_fc10<uint32_t, uint32_t>*)((char*)this_ + 0xc4);
-    map_s0055_fc10->operator[](key) = value;
+    unsigned result[16]; // Unused storage retained from the native inline frame.
+    PopulationInsertResult second; // insert result; only its written fields are used by the callee.
+    unsigned intermediate = 0; // default population for the first map.
+    unsigned inlineSlots = key; // key snapshot for the pair construction.
+    PopulationPair pair = { inlineSlots, intermediate };
+    PopulationPair first = pair; // native pair return/copy lifetime.
+    mapAc.Insert(&second, first);
+    mapC4.Get(key) = value;
+    { unsigned inlineReserve[1]; }
 }
 }  // namespace SP
 
