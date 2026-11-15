@@ -21,6 +21,8 @@
 #include "EA/COM/IUnknown32.h"
 #include "EA/IO/MemoryStream.h"
 #include <string.h>
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl memset_pf(void* dst, int val, unsigned n);   // 0x11e073e
@@ -691,7 +693,16 @@ virtual void f03();
     void Construct(const char* path);           // 0x931da0
 };
 struct PFRecordRead {
-    char raw[0x70];
+    union {
+        char raw[0x70];
+        struct {
+            uint32_t mPadding00[12];
+            void* mpBuffer30;
+            uint32_t mPadding34[13];
+            unsigned char mState68;
+            unsigned char mTail69[7];
+        };
+    };
     void  EnsureLoaded();                        // 0x8dc510
     char  ReadSpan(void* dst, unsigned pos, unsigned len); // 0x8dc3f0
     void* GetBuffer();                           // 0x8dc5e0
@@ -3114,9 +3125,10 @@ loaded:
 void* PFRecordRead::GetBuffer()
 {
     EnsureLoaded();
-    unsigned char flags = *(unsigned char*)(raw + 0x68);
+    unsigned char flags = mState68;
+    _ReadWriteBarrier();
     if (flags == 3)
-        return *(void**)(raw + 0x30);
+        return mpBuffer30;
     return 0;
 }
 
