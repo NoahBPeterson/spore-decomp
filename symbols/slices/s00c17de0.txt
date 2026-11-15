@@ -1,0 +1,3 @@
+00c17de0 ?LookAtUpdate@cSPCreatureBase_s00c1_7de0@@QAEXM@Z  # cSPCreatureBase_s00c1_7de0::LookAtUpdate migrated from s00c17de0 (verbatim, slice spelling)
+00c18370 ?UpdateNetDirection@cSPCreatureBase_s00c1_7de0@@QAEXXZ  # cSPCreatureBase_s00c1_7de0::UpdateNetDirection migrated from s00c17de0 (verbatim, slice spelling)
+00c18740 ?UpdateWaveMotion@cSPCreatureBase_s00c1_7de0@@QAEXMI@Z  # cSPCreatureBase_s00c1_7de0::UpdateWaveMotion migrated from s00c17de0 (verbatim, slice spelling)

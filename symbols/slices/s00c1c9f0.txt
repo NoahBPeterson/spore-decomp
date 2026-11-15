@@ -1,11 +1,11 @@
-00c1c9f0 SP::cSPCreatureBase::FUN_00c1c9f0(char)          ; 0x00c1c9f0  thiscall ret 4: FLEE deactivate reset (vtable +0x2c call, SetStealthed/SetSprinting(0), +0xbec..+0x0c0c clears, ability-record weight stamp, +0x0e7c release, InterruptAnimation 0x02481de5)
-00c1cc80 Simulator::cCreatureBase::funcACh(char)          ; 0x00c1cc80  thiscall ret 4: bool ability-list rebuild -- profile-sequence gate (+0x53c vs +0x0b24), vB0() count, +0x0c28 vector erase/clear, push fresh 1.0f-weight records, copy sequence/energy to +0x0b24/+0x0e58/+0x0e5c
+00c1c9f0 ?FUN_00c1c9f0@cSPCreatureBase_s00c1_c9f0@@QAEXD@Z  # cSPCreatureBase_s00c1_c9f0::FUN_00c1c9f0 migrated from s00c1c9f0 (verbatim, slice spelling)
+00c1cc80 ?FUN_00c1cc80@cSPCreatureBase_s00c1_c9f0@@QAE_ND@Z  # cSPCreatureBase_s00c1_c9f0::FUN_00c1cc80 migrated from s00c1c9f0 (verbatim, slice spelling)
 00c1cdd0 ?FUN_00c1cdd0@cSPCreatureBase_s00c1_c9f0@@QAEXH@Z  # cSPCreatureBase_s00c1_c9f0::FUN_00c1cdd0 migrated from s00c1c9f0 (verbatim, slice spelling)
-00c1cf20 Simulator::cCreatureBase::funcBCh(void)          ; 0x00c1cf20  thiscall: teardown of the +0x0cc8/+0x0d68 hash tables (release +0x04 at vtbl+0xc, FreeBuckets) and the +0x0e08 rbtree, then tail jmp 0x00c151b0
-00c1d120 SP::cSPCreatureBase::FUN_00c1d120(uint,uint)     ; 0x00c1d120  thiscall ret 8: effect spawn via EffectsManager (+0x2c slot), +0xb76460(+0x0cc8) key, Matrix33::Assign(+0x168d964), quaternion from sub-object +0x0c0, key handed to vtbl+0x18, vtbl+0x04 release
-00c1d290 SP::cSPCreatureBase::FUN_00c1d290(uint)          ; 0x00c1d290  thiscall ret 4: same effect spawn as FUN_00c1d120, single-argument form
-00c1d400 SP::cSPCreatureBase::FUN_00c1d400(uint,uint)     ; 0x00c1d400  thiscall ret 8: FUN_00c1d120(a,b) then vtbl+0x08(0) on the result  byte-exact (MATCH)
-00c1d430 SP::cSPCreatureBase::FUN_00c1d430(uint)          ; 0x00c1d430  thiscall ret 4: FUN_00c1d290(a) then vtbl+0x08(0) on the result  byte-exact (MATCH)
-00c1d460 SP::cSPCreatureBase::FUN_00c1d460(uint,uint)     ; 0x00c1d460  thiscall ret 8: effect spawn using the +0x0d68 table; ends with vtbl+0x08(0) then vtbl+0x04
-00c1d5e0 SP::cSPCreatureBase::FUN_00c1d5e0(char,uint,uint); 0x00c1d5e0  thiscall ret 0xc: tool/effect gate -- flag clear -> +0xc17350(c,0), else +0xc14e70(c) vtbl+0x10 test, then +0xc17350(c,0) and tail FUN_00c1d460(b,c)
+00c1cf20 ?FUN_00c1cf20@cSPCreatureBase_s00c1_c9f0@@QAEXXZ  # cSPCreatureBase_s00c1_c9f0::FUN_00c1cf20 migrated from s00c1c9f0 (verbatim, slice spelling)
+00c1d120 ?FUN_00c1d120@cSPCreatureBase_s00c1_c9f0@@QAEPAVcVObj@@II@Z  # cSPCreatureBase_s00c1_c9f0::FUN_00c1d120 migrated from s00c1c9f0 (verbatim, slice spelling)
+00c1d290 ?FUN_00c1d290@cSPCreatureBase_s00c1_c9f0@@QAEPAVcVObj@@I@Z  # cSPCreatureBase_s00c1_c9f0::FUN_00c1d290 migrated from s00c1c9f0 (verbatim, slice spelling)
+00c1d400 ?FUN_00c1d400@cSPCreatureBase_s00c1_c9f0@@QAEPAVcVObj@@II@Z  # cSPCreatureBase_s00c1_c9f0::FUN_00c1d400 migrated from s00c1c9f0 (verbatim, slice spelling)
+00c1d430 ?FUN_00c1d430@cSPCreatureBase_s00c1_c9f0@@QAEPAVcVObj@@I@Z  # cSPCreatureBase_s00c1_c9f0::FUN_00c1d430 migrated from s00c1c9f0 (verbatim, slice spelling)
+00c1d460 ?FUN_00c1d460@cSPCreatureBase_s00c1_c9f0@@QAEPAVcVObj@@II@Z  # cSPCreatureBase_s00c1_c9f0::FUN_00c1d460 migrated from s00c1c9f0 (verbatim, slice spelling)
+00c1d5e0 ?FUN_00c1d5e0@cSPCreatureBase_s00c1_c9f0@@QAEHDII@Z  # cSPCreatureBase_s00c1_c9f0::FUN_00c1d5e0 migrated from s00c1c9f0 (verbatim, slice spelling)
 ;         +0x0cc8/+0x0d68 cPHTable, +0x0e08 cRBTree, +0x0e24/+0x0e98 two-pointer ranges, +0x0e58/0e5c floats, +0x0e7c cDetach, +0x0e8c/0e90/0e94 state, +0x0eac

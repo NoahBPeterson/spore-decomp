@@ -1,5 +1,6 @@
   (fld1 / fldz, MSVC returns in st0).  Common prologue:
   0,4,6 -> 0xec0f17 = return 1        (also the `ja` out-of-range target!)
+00bc96a0 ?Find@Stimuli@@QAEPAXII@Z  # Stimuli::Find migrated from s00ec0a40 (verbatim, slice spelling)
 00bc97f0 ?Add@Stimuli_s00ec_0a40@@QAEPAUStimulus_s00ec_0a40@@IIMPAUIRefCounted_s00ec_0a40@@@Z  # Stimuli_s00ec_0a40::Add migrated from s00ec0a40 (verbatim, slice spelling)
 00ec0d00 dispatch (switch on *e, jump table at 0x00ec0f20, 9 entries)
   0x008e7f80  GetFileCount() -> int (ret 0)

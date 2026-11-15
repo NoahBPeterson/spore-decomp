@@ -1,6 +1,6 @@
 00c0fa70 ?fa70@CAN@@QAEPAXIPAI@Z  # CAN::fa70 migrated from s00c0fa70 (verbatim, slice spelling)
-00c0fae0 clear animation binding and release (0x24-byte object)
-00c0fb40 release animation binding handle (+0x1c)
+00c0fae0 ?fae0@CAN@@QAEXH@Z  # CAN::fae0 migrated from s00c0fa70 (verbatim, slice spelling)
+00c0fb40 ?fb40@CAN@@QAEXH@Z  # CAN::fb40 migrated from s00c0fa70 (verbatim, slice spelling)
 00c0fb80 ?fb80@CAN@@QAEXHH@Z  # CAN::fb80 migrated from s00c0fa70 (verbatim, slice spelling)
 00c0fba0 ?FUN_00c0fba0@@YAXPAH0@Z  # FUN_00c0fba0 migrated from s00c0fa70 (verbatim, slice spelling)
 00c0fc10 ?FUN_00c0fc10@@YADHPAH@Z  # FUN_00c0fc10 migrated from s00c0fa70 (verbatim, slice spelling)

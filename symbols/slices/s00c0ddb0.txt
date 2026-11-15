@@ -1,26 +1,26 @@
-00c0ddb0 ?ddb0@CCM@@QAEXPAM@Z  # CCM::ddb0 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0ddb0 ?ddb0@CCM_s00c0_ddb0@@QAEXPAM@Z  # CCM_s00c0_ddb0::ddb0 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0de30 ?de30@CCM@@QAEDXZ  # CCM::de30 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0de60 ?SetGraspedEffectOffsets@cSPCreatureCitizen@SP@@QAEXPBUcreature_body_static_data@nSPCreatureAnim@@PAUcreature_effect@4@@Z  # SP::cSPCreatureCitizen::SetGraspedEffectOffsets migrated from s00c0ddb0
 00c0dee0 ?dee0@CCM@@QAE_NHPAHD@Z  # CCM::dee0 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0dfb0 find creature by id -> +0x17c lookup
-00c0dfd0 find creature by id -> +0x8c result
-00c0e000 set creature animation slot +8
+00c0dfb0 ?dfb0@CCM_s00c0_ddb0@@QAEPAXH@Z  # CCM_s00c0_ddb0::dfb0 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0dfd0 ?dfd0@CCM_s00c0_ddb0@@QAEPAXH@Z  # CCM_s00c0_ddb0::dfd0 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e000 ?e000@CCM_s00c0_ddb0@@QAEDHH@Z  # CCM_s00c0_ddb0::e000 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0e040 ?e040@CCM@@QAEPAXXZ  # CCM::e040 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e070 ?e070@CCM@@QAE_NH@Z  # CCM::e070 returns bool (predicate)
-00c0e0c0 ?e0c0@CCM@@QAE_NH@Z  # CCM::e0c0 returns bool (predicate)
-00c0e120 ?e120@CCM@@QAEDH@Z  # CCM::e120 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e170 animation motion-state gate (current)
-00c0e2c0 animation motion-state gate (by guid)
+00c0e070 ?e070@CCM_s00c0_ddb0@@QAE_NH@Z  # CCM_s00c0_ddb0::e070 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e0c0 ?e0c0@CCM_s00c0_ddb0@@QAE_NH@Z  # CCM_s00c0_ddb0::e0c0 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e120 ?e120@CCM_s00c0_ddb0@@QAEDH@Z  # CCM_s00c0_ddb0::e120 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e170 ?e170@CCM_s00c0_ddb0@@QAEDH@Z  # CCM_s00c0_ddb0::e170 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e2c0 ?e2c0@CCM_s00c0_ddb0@@QAEDH@Z  # CCM_s00c0_ddb0::e2c0 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0e370 ?e370@CCM@@QAEPAXXZ  # CCM::e370 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e3a0 ?e3a0@CCM@@QAEMXZ  # CCM::e3a0 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e3d0 ?e3d0@CCM@@QAEDXZ  # CCM::e3d0 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e420 ?e420@CCM@@QAEDXZ  # CCM::e420 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e3a0 ?e3a0@CCM_s00c0_ddb0@@QAEMXZ  # CCM_s00c0_ddb0::e3a0 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e3d0 ?e3d0@CCM_s00c0_ddb0@@QAEDXZ  # CCM_s00c0_ddb0::e3d0 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e420 ?e420@CCM_s00c0_ddb0@@QAEDXZ  # CCM_s00c0_ddb0::e420 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0e480 ?GetTime@cSPCreatureBase@SP@@SANXZ  # SP::cSPCreatureBase::GetTime migrated from s00c0ddb0
 00c0e4f0 ?e4f0@CCM@@QAEMXZ  # CCM::e4f0 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e580 forward vector or entity position
-00c0e5f0 ?e5f0@CCM@@QAEXM@Z  # CCM::e5f0 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e640 ?e640@CCM@@QAEXH@Z  # CCM::e640 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e580 ?e580@CCM_s00c0_ddb0@@QAEPAXXZ  # CCM_s00c0_ddb0::e580 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e5f0 ?e5f0@CCM_s00c0_ddb0@@QAEXM@Z  # CCM_s00c0_ddb0::e5f0 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e640 ?e640@CCM_s00c0_ddb0@@QAEXH@Z  # CCM_s00c0_ddb0::e640 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0e660 ?e660@CCM@@QAEHXZ  # CCM::e660 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e680 ?e680@CCM@@QAEHH@Z  # CCM::e680 migrated from s00c0ddb0 (verbatim, slice spelling)
-00c0e6a0 SP::cSPCreatureBase::GetSocialGoal
+00c0e680 ?e680@CCM_s00c0_ddb0@@QAEHH@Z  # CCM_s00c0_ddb0::e680 migrated from s00c0ddb0 (verbatim, slice spelling)
+00c0e6a0 ?e6a0@CCM_s00c0_ddb0@@QAEHXZ  # CCM_s00c0_ddb0::e6a0 migrated from s00c0ddb0 (verbatim, slice spelling)
 00c0e8d0 relation/can-attack predicate
