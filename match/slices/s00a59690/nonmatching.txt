@@ -23,7 +23,6 @@
 00a599a0  FUN_00a599a0        PASS   float handler: store + outlet count guard + fan-out
 00a59a10  pdint_setup         UNSUP  pdint class registration
 00a59ab0  pdfloat_new         UNSUP  float constructor (variadic creator)
-00a59b00  pdfloat_new2        UNSUP  float constructor (explicit creator)
 00a59b50  FUN_00a59b50        ART    float handler; FAIL is a live-register/callee artifact
 00a59bb0  pdfloat_setup       UNSUP  pdfloat class registration
 00a59cc0  pdsymbol_anything   ART    symbol/anything handler; calls outlet_symbol

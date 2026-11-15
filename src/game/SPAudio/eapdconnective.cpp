@@ -1232,6 +1232,7 @@ void* pdfloat_new2(float f)
     if (o != 0)
     {
         *(float*)((char*)o + 0x28) = f;
+        _ReadWriteBarrier();
         EA::Audio::Eapd::outlet_new(o, g_gFloatSymbol.s_name, g_gFloatSymbol2);
         EA::Audio::Eapd::floatinlet_new(o, (char*)o + 0x28);
         g_gpNewestObject = o;
