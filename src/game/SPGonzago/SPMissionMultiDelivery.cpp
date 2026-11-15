@@ -725,6 +725,7 @@ struct cPickupRange {
 }
 namespace SP {
 bool __cdecl EA_WriteUint32(void* pStream, const void* pValue, int32_t count, int32_t flag); // 0x0093aa70
+bool __cdecl EA_WriteBool8(void* pStream, const bool* pValue, int32_t count); // 0x0093a9a0
 }
 namespace SP {
 IArchiver& __cdecl operator<<(IArchiver& archiver, const tItemInfo_s00c5_7570& item);             // 0x00c56e60
@@ -1181,15 +1182,32 @@ void __cdecl WriteSTLSequence_tItemInfo(IArchiver* pArchiver, cItemRange* pRange
 }
 }  // namespace SP
 
+namespace SP {
+inline void WritePickupSequenceCount(IArchiveWriter* writer, uint32_t count)
+{
+    void* stream = writer->GetStream();
+    EA_WriteUint32(stream, &count, 1, 0);
+}
+}
+
 // @ 0x00c575e0
 namespace SP {
 void __cdecl WriteSTLSequence_tPickupInfo(IArchiver* pArchiver, cPickupRange* pRange)
 {
-    uint32_t count = EA_STLSequenceCount(pRange);
-    EA_WriteUint32(pArchiver->GetWriter()->GetStream(), &count, 1, 0);
+    uint32_t itemCount = ((char*)pRange->mpEnd - (char*)pRange->mpBegin) / (int)sizeof(tPickupInfo);
+    IArchiveWriter* writer = pArchiver->GetWriter();
+    WritePickupSequenceCount(writer, itemCount);
+    tPickupInfo* p = pRange->mpBegin;
     tPickupInfo* pEnd = pRange->mpEnd;
-    for (tPickupInfo* p = pRange->mpBegin; p != pEnd; ++p)
-        operator<<(*pArchiver, *p);
+    for (; p != pEnd; ++p) {
+        IArchiveWriter* itemWriter = pArchiver->GetWriter();
+        uint8_t pickedUp = *(uint8_t*)&p->mbPickedUp;
+        void* itemStream = itemWriter->GetStream();
+        bool value = pickedUp != 0;
+        EA_WriteBool8(itemStream, &value, 1);
+        cPlanet_s00c5_62b0* planet = p->mpPlanet.mpObject;
+        pArchiver->SerializeObject(planet ? (char*)planet + 0xd4 : 0);
+    }
     pArchiver->EndRead();
 }
 }  // namespace SP

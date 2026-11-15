@@ -16,3 +16,4 @@
 ../src/game/SPGonzago/_at_00410000.cpp  ??1?$Vec@UElem8c@@@@QAE@XZ  0041f8e0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00410000.cpp  ?Destroy@HashTable@@QAEXXZ  0041fac0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00410000.cpp  ?PushBackDefault@TripleVec@@QAEXXZ  0041ffc0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00410000.cpp  ??1ElemList@@QAE@XZ  0041f9b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include

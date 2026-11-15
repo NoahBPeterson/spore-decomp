@@ -1797,7 +1797,8 @@ public:
 
 // ---- items of slice s00b25c30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern uint32_t g_uiModeToken;                 // 0x0167e04c (set to 6 when a UI mode is entered)
-extern int32_t  g_modeArg;                     // 0x0167dfa8 (passed by address to the mode switch)
+struct TimelineModeArguments;
+extern TimelineModeArguments g_modeArg;        // 0x0167dfa8 (constructed by 0x00b26d00)
 extern const uint32_t g_timelineEvents[];      // 0x0145f82c (three registered event ids)
 extern uint32_t g_classRegistryGuard;          // 0x0167c3c0 (one bit per lazily built registry)
 extern "C" unsigned __int64 __rdtsc(void);
@@ -2110,9 +2111,8 @@ virtual void v02();
 virtual void v03();
     virtual void SetModeArgument(void* pArgument);                // +0x10
 };
-class cTimelineModeStarter {
+class cTimelineModeStarter : public cModeOwner {
 public:
-    cModeOwner* mpModeOwner;                                     // +0x00
     void FUN_00b26710();
 };
 // ---- items of slice s00b25c30 end
@@ -3949,6 +3949,6 @@ void cGameNounManager_s00b2_5c30::FUN_00b26600()
 // @ 0x00b26710
 void cTimelineModeStarter::FUN_00b26710()
 {
-    mpModeOwner->SetModeArgument(&g_modeArg);
+    SetModeArgument(&g_modeArg);
     g_uiModeToken = 6;
 }

@@ -856,9 +856,15 @@ void Method1b60()
     {
         float f = *(float*)0x1582f88 * *(float*)0x1470f1c;
         ((Mate*)dm->mp14)->Activate(f);
+        dm = g_sDramaInstance;
     }
 
-    dm = GetDramaInstance();
+    if (dm == 0)
+    {
+        dm = (DramaManager*)G7_NEW(0x70);
+        dm = dm ? dm->Ctor() : 0;
+        g_sDramaInstance = dm;
+    }
     void* p = dm->mp14;
     if (p != 0)
     {

@@ -100,19 +100,19 @@ bool __stdcall FUN_006f4500(unsigned int id, void* unused, cImageHost* host) {
     (void)unused;
     if (id == 0x0F19D8D5) {
         void* mgr = FUN_0067dd40();
-        void* r = CallSlot0(mgr, 30);
+        void* r = ((void* (__thiscall*)(void*))(*(void***)mgr)[30])(mgr);
         host->GetImageResource(r);
         return true;
     }
     if (id == 0xFD9802C7) {
         void* mgr = FUN_0067dd40();
-        void* r = CallSlot0(mgr, 31);
+        void* r = ((void* (__thiscall*)(void*))(*(void***)mgr)[31])(mgr);
         host->GetImageResource(r);
         return true;
     }
     if (id == 0x9B304161) {
         void* mgr = FUN_0067dd40();
-        void* r = CallSlot0(mgr, 29);
+        void* r = ((void* (__thiscall*)(void*))(*(void***)mgr)[29])(mgr);
         host->GetImageResource(r);
         return true;
     }

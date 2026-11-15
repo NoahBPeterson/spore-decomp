@@ -5429,13 +5429,17 @@ bool BoundsLibrary::Query(unsigned int idLo, unsigned int idHi, float* weights, 
     return false;
 }
 
+static inline void PropertyLookupFrame()
+{
+    uint32_t slots[28]; // Unread slots from the original inlined lookup layers.
+}
+
 // @ 0x00415660
 PropertyList_s0041_4e30* PropertyListCache::Get(unsigned int instanceID, unsigned int groupID)
 {
     uint64_t key = instanceID | ((uint64_t)groupID << 32);
     PropertyListPtr_s0041_4e30* slot = map.Slot(&key);
-    uint32_t deadA[2];   // dead locals of the original inlined map lookup (frame size only)
-    uint32_t deadB[25];
+    PropertyLookupFrame();
     if (slot->get() == 0) {
         GetPropManager()->GetPropertyList(instanceID, groupID, slot->AsPointer());
     }
@@ -5786,22 +5790,22 @@ SubState::~SubState()
 // @ 0x00418440
 bool CheckMatchingProps(PropList_s0041_7d60* list)
 {
-    uint32_t* pKey = FindProp(list, 1, -1, 0, 14);
-    int idx1 = FindPropIndex(list, 9, -1, 0, 14);
-    if (idx1 < 0)
+    uint32_t* pValue = FindProp(list, 1, -1, 0, 14);
+    int firstIndex = FindPropIndex(list, 9, -1, 0, 14);
+    if (firstIndex < 0)
         return false;
-    PropEntry* pEntry1 = &list->mpEntries[idx1];
-    uint32_t keyA = *pKey;
-    uint32_t valA = pEntry1->mValue;
-    if (keyA != valA)
+    PropEntry* firstProp = &list->mpEntries[firstIndex];
+    uint32_t firstKey = *pValue;
+    uint32_t propertyValue = firstProp->mValue;
+    if (firstKey != propertyValue)
         return false;
-    int idx2 = FindPropIndex(list, 10, -1, 0, 14);
-    if (idx1 < 0)
+    int indexB = FindPropIndex(list, 10, -1, 0, 14);
+    if (firstIndex < 0)
         return true;
-    PropEntry* pEntry2 = &list->mpEntries[idx2];
-    uint32_t keyB = *pKey;
-    uint32_t valB = pEntry2->mValue;
-    if (keyB != valB)
+    PropEntry* entryB = &list->mpEntries[indexB];
+    uint32_t secondKey = *pValue;
+    uint32_t valueB = entryB->mValue;
+    if (secondKey != valueB)
         return false;
     return true;
 }
