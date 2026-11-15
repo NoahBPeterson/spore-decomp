@@ -2332,7 +2332,7 @@ bool __stdcall FUN_00bbce00(int param_1, int param_2);     // 0xbbce00
 // ---- items of slice s00bbca30 end
 
 // ---- items of slice s01065c30 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" float sqrtf(float);
+extern "C" float sqrtf_s0106_5c30(float);  // the CRT sqrtf; math.h declares sqrtf inline, which compiles differently
 extern "C" double atan2(double, double);
 extern float g_180;                  // 0x013eb17c
 extern float g_15b90e0;              // 0x015b90e0
@@ -4729,6 +4729,7 @@ void __cdecl operator_delete_eastl(int p);                                   // 
 void*    __stdcall FUN_01077ae0(IWin* win);          // 0x01077ae0 (ret 4)
 void     __cdecl FUN_010799d0(void* buf, const char* fmt, uint n);   // 0x010799d0
 void*    __cdecl FUN_010666a0();                    // 0x010666a0
+void*    __cdecl FUN_010666a0_s0107_9260();         // 0x010666a0 (same function; a second name keeps cl from inlining the same-TU definition into 0x0107a070)
 struct UIGameCtx {
     char  pad000[0x254];
     void* mp254;                                    // +0x254
@@ -6675,7 +6676,7 @@ float FUN_01066390(float* p, float s)
     FUN_00e50750(a, &x2, &y2);
     float dx = x2 - x1;
     float dy = y2 - y1;
-    float d = sqrtf(dx * dx + dy * dy);
+    float d = sqrtf_s0106_5c30(dx * dx + dy * dy);
     float area[4];
     float* r = (float*)GetMainWindowArea(area);
     float lim = r[3] * 0.25f;
@@ -6774,7 +6775,7 @@ void FUN_01066630(float* p1, float* p2, float* p3)
         g_16e2838 = g_180 / g_15b90e0;
         g_16e283c |= 1;
     }
-    *p2 = sqrtf(p1[0]*p1[0] + p1[1]*p1[1]) * g_149c1fc;
+    *p2 = sqrtf_s0106_5c30(p1[0]*p1[0] + p1[1]*p1[1]) * g_149c1fc;
     *p3 = (float)(atan2((double)p1[1], (double)p1[0]) + g_15b90e0) * g_16e2838;
 }
 
@@ -11623,6 +11624,15 @@ bool UIHandler::HandleMessage(uint msgID, void* msg)
     return false;
 }
 
+// same-TU callee of the 0x01074bb0 handler (lets cl keep ECX across the call); the retail function is
+// 0x01065e20, whose own row is above, so this copy carries no marker
+__declspec(noinline) bool UISpace_s0107_4bb0::F1065e20()
+{
+    int s = mState618;
+    if (s == 1 || s == 2 || s == 5 || s == 7) return true;
+    return false;
+}
+
 // @ 0x01077830
 bool SP::cSPUISpaceTrading::FUN_01077830(void* p)
 {
@@ -12423,14 +12433,14 @@ void UISpace::F107a070(ISpaceWin* win)
             INode* n2 = F1079d10(cur, (uint)sel);
             if (n2 != 0)
             {
-                n2->v050(((UIGameCtx*)FUN_010666a0())->F106edc0(win));
+                n2->v050(((UIGameCtx*)FUN_010666a0_s0107_9260())->F106edc0(win));
                 uint en = ((INode*)win)->v020();
                 n2->v054((-(uint)(en != 0) & 0x92ea67df) + 0x70648eae);
                 n2->v0b8(0x600db9c, &win->mp0c);
-                n2->v104(FUN_010666a0());
+                n2->v104(FUN_010666a0_s0107_9260());
                 uint out;
                 ((INode*)win)->v030(&out);
-                FUN_00807c70(n2, (uint)((UIGameCtx*)FUN_010666a0())->mp254, (int)out, -1);
+                FUN_00807c70(n2, (uint)((UIGameCtx*)FUN_010666a0_s0107_9260())->mp254, (int)out, -1);
                 uint v18, v14;
                 if (((INode*)win)->v034(&v18, &v14))
                     FUN_00806b20(n2, (int)v18, (int)v14);
