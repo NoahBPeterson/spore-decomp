@@ -297,41 +297,9 @@ int SP::cStringTableResourceFactory::GetSupportedTypes(uint32_t* pTypes, int cou
     return 0;
 }
 
-namespace App {
-struct TokenRecord { uint32_t hash; uint32_t offset; };
-#pragma pack(push, 1)
-struct TokenCursorState {
-    unsigned char initialized;
-    TokenRecord* next;
-};
-#pragma pack(pop)
-struct TokenCursor {
-    char pad00[0x18];
-    wchar_t* mBegin;
-    wchar_t* mEnd;
-    char pad20[0xc];
-    TokenRecord* mRecBegin;
-    TokenRecord* mRecEnd;
-    bool Next(TokenCursorState* state, wchar_t** text, uint32_t* hash);
-};
-}
-
 // @ 0x006b65d0
-bool App::TokenCursor::Next(TokenCursorState* state, wchar_t** text, uint32_t* hash)
-{
-    if (!state->initialized) {
-        state->initialized = 1;
-        state->next = mRecBegin;
-    }
-    TokenRecord* record = state->next;
-    if (record != mRecEnd) {
-        state->next = record + 1;
-        *hash = record->hash;
-        *text = mBegin + record->offset;
-        return record->offset < (uint32_t)(mEnd - mBegin);
-    }
-    return false;
-}
+void FUN_006b65d0()
+{}
 
 extern const unsigned gByteStreamReadChunkSize; // 0x01400f2c (512 bytes)
 namespace App {
