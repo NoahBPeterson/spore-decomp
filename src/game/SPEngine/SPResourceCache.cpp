@@ -617,32 +617,53 @@ void CAfe40::f(LN* node)
 void __fastcall FUN_006afe80(char* self)
 {
     struct Req { int f0; int f1; int f2; };
+    struct RecObj {
+        virtual void v0() {} virtual void v1() {} virtual void v2() {} virtual void v3() {}
+        virtual void v4() {} virtual void v5() {}
+        virtual unsigned M18() { return 0; }
+        virtual void v7() {} virtual void v8() {}
+        virtual void M24() {}
+    };
+    struct SinkVtbl {
+        virtual void s0() {} virtual void s1() {} virtual void s2() {} virtual void s3() {}
+        virtual void s4() {} virtual void s5() {} virtual void s6() {} virtual void s7() {}
+        virtual void s8() {} virtual void s9() {} virtual void s10() {} virtual void s11() {}
+        virtual void s12() {}
+        virtual char Request(void* req, void** out, int a, int b, int c, int d) { return 0; }
+    };
+    struct RecPtr {
+        void* p;
+        RecPtr() : p(0) {}
+        ~RecPtr() { if (p) ((void(__thiscall*)(void*))(*(void***)p)[8 / 4])(p); }
+        void Clear() {
+            if (p) {
+                void* t = p;
+                p = 0;
+                ((void(__thiscall*)(void*))(*(void***)t)[8 / 4])(t);
+            }
+        }
+        RecObj* operator->() { return (RecObj*)p; }
+        void** operator&() { return &p; }
+    };
+    RecPtr out;
     Req req;
     req.f0 = 0x2e5a9763;
     req.f1 = 0x2e5a9763;
     req.f2 = 0;
-    void* out = 0;
-    char* sink = *(char**)(self + 0xc);
-    char (__thiscall* sf)(void*, Req*, void**, int, int, int, int) =
-        (char(__thiscall*)(void*, Req*, void**, int, int, int, int))(*(void***)sink)[0x34 / 4];
-    if (sf(sink, &req, &out, 3, 4, 1, 0)) {
-        unsigned r = ((unsigned(__thiscall*)(void*))(*(void***)out)[0x18 / 4])(out);
+    SinkVtbl* sink = *(SinkVtbl**)(self + 0xc);
+    if (sink->Request(&req, &out, 3, 4, 1, 0)) {
+        unsigned r = out->M18();
         ((ThiscallExt*)self)->FUN_006af720((void*)r);
-        ((void(__thiscall*)(void*))(*(void***)out)[0x24 / 4])(out);
+        out->M24();
     } else {
-        if (out) {
-            void* t = out;
-            out = 0;
-            ((void(__thiscall*)(void*))(*(void***)t)[8 / 4])(t);
-        }
-        if (sf(sink, &req, &out, 3, 2, 1, 0)) {
-            unsigned r = ((unsigned(__thiscall*)(void*))(*(void***)out)[0x18 / 4])(out);
+        SinkVtbl* sink2 = *(SinkVtbl**)(self + 0xc);
+        out.Clear();
+        if (sink2->Request(&req, &out, 3, 2, 1, 0)) {
+            unsigned r = out->M18();
             ((ThiscallExt*)self)->FUN_006af720((void*)r);
-            ((void(__thiscall*)(void*))(*(void***)out)[0x24 / 4])(out);
+            out->M24();
         }
     }
-    if (out)
-        ((void(__thiscall*)(void*))(*(void***)out)[8 / 4])(out);
 }
 // ---- items of slice s006afa10 end
 
