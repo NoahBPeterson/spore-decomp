@@ -5,3 +5,4 @@ slices/s00bbaa80/s00bbaa80.cpp  ?StarGridResetFields@@YAXPAI@Z  00bbb0e0  /O2 /M
 slices/s00bbaa80/s00bbaa80.cpp  ?StarGridCount@@YAHPAI@Z  00bbb110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00bbaa80/s00bbaa80.cpp  ?StarGridSlotCmp0@@YA_NPAXIPAH1@Z  00bbafa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00bbaa80/s00bbaa80.cpp  ?StarGridSlotCmp1@@YA_NPAXIPAH1@Z  00bbb000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bbaa80/s00bbaa80.cpp  ?SetStarterWorldID@StarRecordState@@QAEXI_N@Z  00bbac80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

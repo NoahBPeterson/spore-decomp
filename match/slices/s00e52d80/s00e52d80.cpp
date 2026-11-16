@@ -120,6 +120,13 @@ struct cGfxObj17 {                         // gspCellGfx's render objects
   char  pad_161cc[0x161d0 - 0x161cc];
   void* mpB_161d0;
 };
+struct MissionWindow17 {
+  virtual void p0(); virtual void p1(); virtual void p2();
+  virtual MissionWindow17* QueryInterface(unsigned id); // +0x0c
+  virtual void p4(); virtual void p5(); virtual void p6();
+  virtual void p7(); virtual void p8(); virtual void p9();
+  virtual void SetFlag(int flag, int value); // +0x28
+};
 struct cPanel17 { void Fn_190c0(int a); }; // 0x00e190c0
 
 // SP::cString (localised text handle)
@@ -332,12 +339,11 @@ void FUN_00e53580() {
 void FUN_00e53860(char flag) {
   if (flag) {
     cSPUILayout17* layout = CellGfx17()->mpLayout_90;
-    void* w = layout->FindWindowByID(0x6244208, 1);
-    w = SubWindow(w);
+    MissionWindow17* w = (MissionWindow17*)layout->FindWindowByID(0x6244208, 1);
+    w = w ? w->QueryInterface(0x8ed27e7a) : 0;
     Vis(w, 1);
   }
-  void* o = FUN_00b3d3f0_get();
-  ((cPanel17*)o)->Fn_190c0(0);
+  ((cPanel17*)FUN_00b3d3f0_get())->Fn_190c0(0);
 }
 
 // @ 0x00e538b0
@@ -389,9 +395,9 @@ void FUN_00e539c0() {
 void FUN_00e53a20() {
   int mode = SP_GetCurrentGameMode();
   FUN_006035d0(mode);
-  cSPUILayout17* layout = ((cAlloc17*)(*(int*)(g_16b3c0c + 0x98)))->GetAllocator();
-  void* w = layout->FindWindowByID(0x43b72d0, 1);
-  w = SubWindow(w);
+  cSPUILayout17* layout = CellGfx17()->mpAlloc_98->GetAllocator();
+  MissionWindow17* w = (MissionWindow17*)layout->FindWindowByID(0x43b72d0, 1);
+  w = w ? w->QueryInterface(0x8ed27e7a) : 0;
   Vis(w, 1);
 }
 

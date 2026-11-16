@@ -13,6 +13,8 @@
 #include "SP/Audio/cEventModifierPrimitive.h"
 #include <ctype.h>
 #include <string.h>
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---- items of slice s00a38e40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define CAT2(a, b) a##b
@@ -984,7 +986,10 @@ void cEventModifier_s00a3_9ce0::ReadTuningValues(const ResourceKey* key)
         LoadEventModifiersMap();
     for (int i = 0; i < 0x18; i += 4) {
         cEventModifierPrimitive_s00a3_9ce0** p = (cEventModifierPrimitive_s00a3_9ce0**)((char*)mEventModifiers.mpBegin + i);
-        if (*p) (*p)->ReadTuningValues(key);
+        if (*p) {
+            _ReadWriteBarrier();
+            (*p)->ReadTuningValues(key);
+        }
     }
 }
 }}  // namespace SP::Audio
