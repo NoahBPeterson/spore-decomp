@@ -37,6 +37,7 @@ struct cStarManager {                              // returned by SP::StarManage
 };
 struct cEmpire {
     void  SetValue(i32 v);                         // 0x00c322f0
+    void SetCaptainKey(const EA::ResourceMan::Key& key); // 0x00c30fa0
 };
 void* __stdcall FUN_00b3d2a0(void*);                // 0x00b3d2a0 (SP::StarManager; one stack arg, caller pops)
 struct cDepthCounter {
@@ -471,7 +472,9 @@ public:
     SP::cGonzagoTimer mSoothingSongTimer;        // +0x1258, registered as mSoothingSongTimer
     float mSocialTraitProgress;                 // +0x1278, retail attribute registration
     float mCombatTraitProgress;                 // +0x127c, retail attribute registration
-    uint8_t mPad1280[0x129c - 0x1280];
+    EA::ResourceMan::Key mPirateUFOModelKey;     // +0x1280, retail attribute registration
+    uint32_t mTotalTimeInCVG;                    // +0x128c, retail attribute registration
+    EA::ResourceMan::Key mInitCaptainKey;        // +0x1290, retail attribute registration
     void* mpBlock129c;                          // +0x129c
     uint8_t mPad12a0[0x12ac - 0x12a0];
     void* mpBlock12ac;                          // +0x12ac
@@ -485,6 +488,8 @@ public:
     void  FUN_00c79b60();                                       // 0x00c79b60  destructor body
     bool IsSoothingSongActive();                               // 0x00c75650
     float GetTraitProgress(bool social) const;                  // 0x00c75680
+    void AddTraitProgress(float amount, bool social);           // 0x00c756a0
+    void ApplyInitialCaptainKey();                             // 0x00c75a50
 };
 // ---- items of slice s00c793e0 end
 
@@ -4966,4 +4971,22 @@ float cPlayer::GetTraitProgress(bool social) const
     if (social)
         return mSocialTraitProgress;
     return mCombatTraitProgress;
+}
+
+// @ 0x00c756a0
+void cPlayer::AddTraitProgress(float amount, bool social)
+{
+    if (social)
+        mSocialTraitProgress += amount;
+    else
+        mCombatTraitProgress += amount;
+}
+
+// @ 0x00c75a50
+void cPlayer::ApplyInitialCaptainKey()
+{
+    if (mInitCaptainKey.mInstance != 0) {
+        static_cast<cEmpire*>(SP::FUN_01021300())->SetCaptainKey(mInitCaptainKey);
+        mInitCaptainKey = EA::ResourceMan::Key();
+    }
 }
