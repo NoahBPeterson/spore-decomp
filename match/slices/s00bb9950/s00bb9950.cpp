@@ -17,6 +17,12 @@
 #include <stddef.h>
 #include <intrin.h>
 
+namespace EA { namespace IO {
+class IStream;
+bool ReadUint8(IStream* stream, uint8_t* data, uint32_t count); // 0x0093a6c0
+bool WriteUint8(IStream* stream, const uint8_t* data, uint32_t count); // 0x0093a9a0
+} }
+
 #pragma intrinsic(_ReadWriteBarrier)
 
 #pragma warning(disable: 4100)
@@ -431,7 +437,8 @@ bool AttrRead_00bb9cd0(void* pStream, uint8_t* pData)
 {
     int* a = (int*)(*(int(__thiscall**)(void*))(*(uint32_t**)pStream + 0x20 / 4))(pStream);
     uint32_t v = (*(uint32_t(__thiscall**)(int*))(*(uint32_t**)a + 0x18 / 4))(a);
-    return ((bool(__cdecl*)(uint32_t, uint8_t*, int))0x93a6c0)(v, pData, 1) ? true : false;
+    EA::IO::ReadUint8((EA::IO::IStream*)v, pData, 1);
+    return true;
 }
 
 // ===========================================================================
@@ -439,10 +446,11 @@ bool AttrRead_00bb9cd0(void* pStream, uint8_t* pData)
 // ===========================================================================
 bool AttrWrite_00bb9d00(void* pStream, uint8_t* pData)
 {
-    uint8_t tmp = *pData;
     int* a = (int*)(*(int(__thiscall**)(void*))(*(uint32_t**)pStream + 0x20 / 4))(pStream);
+    uint8_t tmp = *pData;
     uint32_t v = (*(uint32_t(__thiscall**)(int*))(*(uint32_t**)a + 0x18 / 4))(a);
-    return ((bool(__cdecl*)(uint32_t, uint8_t*, int))0x93a9a0)(v, &tmp, 1);
+    EA::IO::WriteUint8((EA::IO::IStream*)v, &tmp, 1);
+    return true;
 }
 
 // ===========================================================================
