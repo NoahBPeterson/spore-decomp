@@ -2,3 +2,4 @@ slices/s00b0d2a0/s00b0d2a0.cpp  ?GetActiveValue@cKeySlotList@@QAEIXZ  00b0d350  
 slices/s00b0d2a0/s00b0d2a0.cpp  ?Destroy@cSkinner@@QAEXXZ  00b0d610  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s00b0d2a0/s00b0d2a0.cpp  ?ReleaseSlot@cKeySlotList@@QAEXI@Z  00b0d2a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s00b0d2a0/s00b0d2a0.cpp  ?SerializeAgentReferences@@YAXPAUTransferWriter@@PAUTransferVec@@@Z  00b0d540  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00b0d2a0/s00b0d2a0.cpp  ?PushDefault@SlotVec@@QAEXXZ  00b0e2d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

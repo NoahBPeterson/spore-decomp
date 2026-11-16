@@ -872,8 +872,8 @@ void SlotVec::PushDefault()
         KeySlot tmp;
         tmp.mBits = 0x80000000u;
         self->Insert(p, &tmp);
-        u32 sign = tmp.mBits >> 31;
-        if (sign == 0 && tmp.mpObj != 0)
+        u8 sign = (u8)(tmp.mBits >> 31);
+        if ((sign & 1) == 0 && tmp.mpObj != 0)
             ((void(__fastcall*)(void*))(*(void***)tmp.mpObj)[1])(tmp.mpObj);
     }
 }
