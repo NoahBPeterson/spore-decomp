@@ -753,14 +753,13 @@ void MutexOwner::LockOrUnlock(bool lock)
     else      mMutex.Unlock();
 }
 
-// @ 0x006bbe80
-void __cdecl FUN_006bbe80(void* self)
-{ (void)self; }
-
-// @ 0x006bbf10
-void __cdecl FUN_006bbf10(void* self)
-{ (void)self; }
-
+// The v2 constructor takes a 64-bit record size; the allocated object size
+// remains the canonical PFRecordWrite size, 0x27c.
+class PFRecordWriteV2 : public EA::ResourceMan::PFRecordWrite {
+public:
+    PFRecordWriteV2(unsigned access, unsigned __int64 size, const EA::ResourceMan::Key&, EA::ResourceMan::DatabasePackedFile*); // 0x006c0c40
+    PFRecordWriteV2(unsigned char* data, unsigned size, bool ownsData, const EA::ResourceMan::Key&, EA::ResourceMan::DatabasePackedFile*); // 0x006c0db0
+};
 // Factory-only view: retail v2 read records allocate 0x78 bytes and use
 // the v2 constructors. No member layout beyond the canonical base is accessed.
 class PFRecordReadV2 : public EA::ResourceMan::PFRecordRead {
@@ -772,9 +771,27 @@ public:
 class DatabasePackedFileV2 : public EA::ResourceMan::DatabasePackedFile {
 public:
     virtual EA::ResourceMan::PFIndex* CreateIndex(int unused);
+    PFRecordWriteV2* CreateRecordWrite(int flags, unsigned access, unsigned __int64 size, const EA::ResourceMan::Key& key);
+    PFRecordWriteV2* CreateRecordWriteFromMemory(int flags, unsigned char* data, unsigned size, const EA::ResourceMan::Key& key);
     PFRecordReadV2* CreateRecordRead(int unused, const EA::ResourceMan::PFRecordRead& source, const EA::ResourceMan::Key& key);
     PFRecordReadV2* CreateRecordReadFromInfo(int unused, const EA::ResourceMan::PFRecordInfo& source, const EA::ResourceMan::Key& key);
 };
+
+// @ 0x006bbe80
+PFRecordWriteV2* DatabasePackedFileV2::CreateRecordWrite(int flags, unsigned access, unsigned __int64 size, const EA::ResourceMan::Key& key)
+{
+    if (flags & 2)
+        return new (mpAllocator, "Resource/PFRecordWrite") PFRecordWriteV2(access, size, key, this);
+    return 0;
+}
+
+// @ 0x006bbf10
+PFRecordWriteV2* DatabasePackedFileV2::CreateRecordWriteFromMemory(int flags, unsigned char* data, unsigned size, const EA::ResourceMan::Key& key)
+{
+    if (flags & 2)
+        return new (mpAllocator, "Resource/PFRecordWrite") PFRecordWriteV2(data, size, true, key, this);
+    return 0;
+}
 
 // @ 0x006bbfa0
 PFRecordReadV2* DatabasePackedFileV2::CreateRecordRead(int unused, const EA::ResourceMan::PFRecordRead& source, const EA::ResourceMan::Key& key)
