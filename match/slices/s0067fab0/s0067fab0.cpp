@@ -4,11 +4,25 @@
 // cCheatManager record destructors (0x6804a0..0x680b70).
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
+// Retail SP::cString layout, matching src/game/include/SP/cString.h.
+// A local declaration keeps existing slice compiler profiles independent of module include paths.
+namespace SP {
+class cString {
+public:
+  ~cString(); // 0x006b5240
+  void* mpTableResource;
+  void* mpLocalString;
+  wchar_t* mpSourceCStr;
+  unsigned mPlaceholderId;
+  bool mbHasTokens;
+  bool mField11;
+};
+}
 #include <xmmintrin.h>   // the float tail of HSL->RGB is SSE scalar in the retail build
 
 // ---------------------------------------------------------------- externals
 void* EAAlloc(unsigned size, const char* area, int a, int b, const char* file, int line);
-void  EAFree(void* p); // 0x00f47380
+void  EAFree(void* p) throw(); // 0x00f47380
 extern "C" void  StreamOpShift(void* stream, const void* data, int count);   // 0x0093a9a0
 extern "C" void  WriteUint32(void* pStream, const void* pData, int n, int);  // 0x0093aa70
 extern "C" double ValidateDouble(double v);                                  // 0x011e0906
@@ -32,11 +46,19 @@ struct Rec48 {
   Rec48* AssignFrom(const Rec48* src);  // @ 0x00680130
 };
 
-struct Vec48 {
-  Rec48* mpBegin;   // +0
-  Rec48* mpEnd;     // +4
-  Rec48* mpCap;     // +8
+struct Vec48Base {
+  Rec48* mpBegin;
+  Rec48* mpEnd;
+  Rec48* mpCap;
+  unsigned mAllocator[2];
+  ~Vec48Base();
 };
+
+struct Vec48 : Vec48Base {
+  ~Vec48();
+};
+
+__forceinline void __fastcall FUN_00680730(Vec48* value) { value->~Vec48(); }
 
 struct Vec60 {
   char* mpBegin;    // +0
@@ -57,6 +79,10 @@ struct IOStream {
 // ---------------------------------------------------------------- allocator helper
 static inline void FreeOwned(void* p) {
   if (p != 0 && *(int*)((char*)p - 4) != 0) EAFree(p);
+}
+
+inline Vec48Base::~Vec48Base() {
+  FreeOwned(mpBegin);
 }
 
 static inline void Copy48(Rec48* dst, const Rec48* src) {
@@ -192,11 +218,11 @@ void __fastcall FUN_006804a0(char* p) {
 }
 
 // @ 0x00680730
-void __fastcall FUN_00680730(Vec48* v) {
-  char* p = (char*)v->mpBegin;
-  char* end = (char*)v->mpEnd;
-  for (; p < end; p += 0x48) ((cString14*)(p + 0x28))->c_str();
-  FreeOwned(v->mpBegin);
+Vec48::~Vec48() {
+  Rec48* last = mpEnd;
+  Rec48* first = mpBegin;
+  for (; first < last; ++first)
+    reinterpret_cast<SP::cString*>(&first->str)->~cString();
 }
 
 // @ 0x00680800
@@ -239,11 +265,25 @@ void __fastcall FUN_006809a0(char* p) {
   if ((int)(*(int*)(p + 8) - (int)q) > 1 && q != 0) EAFree(q);
 }
 
+struct CheatNameStorage {
+  char* mpBegin;
+  char* mpEnd;
+  char* mpCapacity;
+  unsigned mAllocator;
+  ~CheatNameStorage() {
+    if (mpCapacity - mpBegin > 1 && mpBegin != 0)
+      EAFree(mpBegin);
+  }
+};
+
+struct CheatRecordList {
+  CheatNameStorage mName;
+  Vec48 mRecords;
+  ~CheatRecordList();
+};
+
 // @ 0x006809f0
-void __fastcall FUN_006809f0(char* p) {
-  FUN_00680730((Vec48*)(p + 0x10));
-  void* q = *(void**)p;
-  if ((int)(*(int*)(p + 8) - (int)q) > 1 && q != 0) EAFree(q);
+CheatRecordList::~CheatRecordList() {
 }
 
 // @ 0x00680b10
