@@ -787,8 +787,12 @@ bool cSPBadgeManager::FUN_00fe4180(uint32_t nBadge) const
 {
     tPairNode* pFound;
     tPairNode** ppFound = mEventCounts.find(&pFound, &nBadge);
-    if (*ppFound != mEventCounts.end() && (*ppFound)->mValue <= 1)
-        return true;
+    if (*ppFound != mEventCounts.end()) {
+        uint32_t value = (*ppFound)->mValue;
+        _ReadWriteBarrier();
+        if (value <= 1)
+            return true;
+    }
     return false;
 }
 
@@ -808,19 +812,20 @@ uint32_t cSPBadgeManager::GetReplacement(uint32_t nBadge) const
 // @ 0x00fe4230
 uint32_t cSPBadgeManager::FUN_00fe4230(uint32_t nBadge) const
 {
-    tVariant* pValue;
-    tPairNode* pFound;
-    tPairNode** ppFound = mBadgeMap.find(&pFound, &nBadge);
-    if (*ppFound == mBadgeMap.end())
-        return 0;
-    cPropertyList* pList = (cPropertyList*)(*ppFound)->mValue;
-    if (pList == 0)
-        return 0;
-    if (!pList->GetProperty(0x043333dd, &pValue))
-        return 0;
-    if (pValue->mType != 9)
-        return 0;
-    return *pValue->GetInt();
+    uint32_t result = 0;
+    tPairNode* node;
+    {
+        uint32_t key = nBadge;
+        tPairNode* found;
+        node = *mBadgeMap.find(&found, &key);
+    }
+    if (node != mBadgeMap.end()) {
+        cPropertyList* pList = (cPropertyList*)node->mValue;
+        tVariant* pValue;
+        if (pList && pList->GetProperty(0x043333dd, &pValue) && pValue->mType == 9)
+            result = *pValue->GetInt();
+    }
+    return result;
 }
 
 // @ 0x00fe42a0
