@@ -35,3 +35,4 @@
 ../src/game/SPGonzago/SPPlayer.cpp  ?AddTraitProgress@cPlayer@@QAEXM_N@Z  00c756a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?ApplyInitialCaptainKey@cPlayer@@QAEXXZ  00c75a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?FUN_00c75b60@@YAXPAXI00@Z  00c75b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?SetTheme@cPlayer@@QAEXI@Z  00c75580  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

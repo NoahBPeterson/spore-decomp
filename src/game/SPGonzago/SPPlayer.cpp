@@ -468,7 +468,9 @@ public:
     tPair28* mpPairEnd1218;                     // +0x1218
     uint8_t mPad121c[0x1228 - 0x121c];
     cRbTree1228 mRbTree;                        // +0x1228 .. +0x123f
-    uint8_t mPad1240c[0x1258 - 0x1240];
+    uint8_t mPad1240c[0x1244 - 0x1240];
+    uint32_t mThemeID;                          // +0x1244, retail attribute registration
+    uint8_t mPad1248[0x1258 - 0x1248];
     SP::cGonzagoTimer mSoothingSongTimer;        // +0x1258, registered as mSoothingSongTimer
     float mSocialTraitProgress;                 // +0x1278, retail attribute registration
     float mCombatTraitProgress;                 // +0x127c, retail attribute registration
@@ -490,6 +492,7 @@ public:
     float GetTraitProgress(bool social) const;                  // 0x00c75680
     void AddTraitProgress(float amount, bool social);           // 0x00c756a0
     void ApplyInitialCaptainKey();                             // 0x00c75a50
+    void SetTheme(uint32_t themeID);                            // 0x00c75580
 };
 // ---- items of slice s00c793e0 end
 
@@ -611,8 +614,8 @@ virtual void d40();
 virtual void d44();
 virtual void d48();
 virtual void d4c();
-    virtual void Register(void* owner);                                 // +0x50
-    virtual void Unregister();                                          // +0x54
+    virtual void SetTheme(uint32_t themeID);                             // +0x50
+    virtual void ClearTheme();                                          // +0x54
 };
 class cVarListSerializer {
 public:
@@ -4428,9 +4431,9 @@ bool cPlayer_s00c7_c0c0::Read(void* stream)
     cObjectTemplateDB* db = (cObjectTemplateDB*)ObjectTemplateDB();
     if (db != 0) {
         if (mp1244 == 0)
-            db->Unregister();
+            db->ClearTheme();
         else
-            db->Register(mp1244);
+            db->SetTheme(reinterpret_cast<uint32_t>(mp1244));
     }
 
     cPropertyManager* pm = (cPropertyManager*)PropertyManager();
@@ -5009,5 +5012,18 @@ void __cdecl FUN_00c75b60(void* pDst, uint32_t n, void* pValue, void* pPos)
         }
         --n;
         ++destination;
+    }
+}
+
+// @ 0x00c75580
+void cPlayer::SetTheme(uint32_t themeID)
+{
+    mThemeID = themeID;
+    cObjectTemplateDB* db = static_cast<cObjectTemplateDB*>(ObjectTemplateDB());
+    if (db) {
+        if (mThemeID != 0)
+            db->SetTheme(mThemeID);
+        else
+            db->ClearTheme();
     }
 }
