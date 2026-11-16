@@ -195,6 +195,8 @@ void f_013c4c10() {
     if (g_169d2a8) ((V2*)g_169d2a8)->b();
 }
 
+void terra02_link_pad_ret() {}
+
 // @ 0x013C4F20
 void f_013c4f20() {
     int d = g_15821d4 - g_15821cc;
@@ -221,6 +223,8 @@ void f_013c5790() {
 void f_013c6b00() {
     if (g_16a15f8) ((V2*)g_16a15f8)->b();
 }
+
+void terra04_link_pad_ret() {}
 
 // @ 0x013C6E20
 void f_013c6e20() {
@@ -268,6 +272,9 @@ void f_013c8f60() {
     if (((d & ~1) > 2) && g_15ace38 && g_15ace38 != g_15ace48) cdecl_free((void*)g_15ace38);
 }
 
+// Adjacent empty COMDAT reproduces the linked retail extent after f_013c8f60.
+void terra09_link_pad_ret() {}
+
 // @ 0x013C9030
 void f_013c9030() {
     char* p = (char*)g_16c7c14;
@@ -297,6 +304,9 @@ void f_013c9400() {
     int d = g_15ad7d4 - g_15ad7cc;
     if (((d & ~1) > 2) && g_15ad7cc && g_15ad7cc != g_15ad7dc) cdecl_free((void*)g_15ad7cc);
 }
+
+// Adjacent empty COMDAT reproduces the linked retail extent after f_013c9400.
+void terra10_link_pad_ret() {}
 
 // @ 0x013C9910
 void f_013c9910() {
