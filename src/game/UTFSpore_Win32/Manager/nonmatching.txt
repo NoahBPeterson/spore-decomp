@@ -1,8 +1,5 @@
 # va  diff-bytes  reason
-008de280 18 Manager::GetLoadedResource compressor-vector scan; register allocation differs (equiv PASS)
 008de310 68 Manager::FindDatabase database scan + virtual call; codegen differs (equiv WEAK)
-008de360 60 Manager::Fn8de360 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
-008de3b0 50 Manager::Fn8de3b0 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
 008de450 187 ChangeSet::LowerBound rbtree lower_bound; codegen differs (equiv PASS)
 008de530 86 HashBase::DoRehash1; memset/allocation sequence codegen differs
 008de5e0 86 HashBase::DoRehash2; memset/allocation sequence codegen differs
