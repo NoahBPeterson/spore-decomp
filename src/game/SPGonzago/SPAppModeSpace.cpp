@@ -118,7 +118,6 @@ public:
     void ShutdownGonzagoSubsystem();
     void SetPlanetTimeOnFirstEntry();
     void Write();
-    void* FUN_01046fc0(void* arg);                       // 0x01046fc0
     bool FUN_00fda1f0(float x, float y, int button);
     bool FUN_00fda2e0(void* v);
     void FUN_00fda480();
@@ -316,7 +315,7 @@ struct cSelf
     bool      FUN_00b5ca60();        // 0x00b5ca60
     bool      FUN_00c37170();        // 0x00c37170
     void      FUN_01050bb0();        // 0x01050bb0
-    bool      FUN_01046f30();        // 0x01046f30
+    bool      FUN_01046f30(void* arg);  // 0x01046f30
     void      FUN_01003c60(float x, float y); // 0x01003c60
     bool      FUN_01017300(void* arg); // 0x01017300
     void      FUN_00ffc6d0();        // 0x00ffc6d0  CalcMaxTravelDistance
@@ -867,6 +866,7 @@ void  FUN_01022510(void* vec);                                 // 0x01022510  so
 void  FUN_00bdaa40(void** cursorRef, void* first, void* last, void* init, void* extra);  // 0x00bdaa40
 void* FUN_010219b0(void* a, void* b);                          // 0x010219b0
 void* __stdcall FUN_01046fc0(int a);                           // 0x01046fc0
+void* FUN_01046fc0();                                          // 0x01046fc0 (no-arg cdecl lazy-singleton getter)
 bool  FUN_00c8bb00(void* a);                                   // 0x00c8bb00
 void* FUN_00ac86d0(int a);                                     // 0x00ac86d0
 void* FUN_0105c3d0(void* a, void* b, float f);                 // 0x0105c3d0
@@ -3933,10 +3933,11 @@ void __thiscall cAppModeSpace::SetPlanetTimeOnFirstEntry()
             return;
     }
     cPlayerInventory* pInv = (cPlayerInventory*)((cSelf*)FUN_00ffbe50())->FUN_00a1ad60();
+    __assume(pInv != 0);
     V2cp* pBody = (V2cp*)&pInv->mBody;
     float f = ((cBC30*)FUN_00bc30b0())->m24;
     void* pos = pBody->GetPosition();
-    ((cSelf*)FUN_00bc30b0())->FUN_00bc2f00(f * DAT_01471064, pos);
+    ((cSelf*)FUN_00bc30b0())->FUN_00bc2f00(f * 0.5f, pos);
 }
 }  // namespace SP
 
@@ -4089,8 +4090,7 @@ public:
 namespace SP {
 bool __thiscall cAppModeSpace::FUN_00fdab40(void* arg)
 {
-    void* p = FUN_01046fc0(arg);
-    bool b = ((cSelf*)p)->FUN_01046f30();
+    bool b = ((cSelf*)FUN_01046fc0())->FUN_01046f30(arg);
 
     void* modeMgr = ((V50*)FUN_0067dd10())->GetModeManager();
     void* q = ((V40q_s00fd_ab40*)modeMgr)->Get40((void*)0x1103192);
@@ -4102,7 +4102,9 @@ bool __thiscall cAppModeSpace::FUN_00fdab40(void* arg)
 
     cBigFrame_s00fd_ab40 frame((char*)this - 8, (void*)0x15b4148, (void*)0x1a80d26);
     bool ok = frame.Test(arg);
-    return ok && b;
+    if (ok && b)
+        return true;
+    return false;
 }
 }  // namespace SP
 
