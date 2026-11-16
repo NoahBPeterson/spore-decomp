@@ -992,15 +992,26 @@ struct cBitVector {
 };
 }
 namespace SP {
+struct FlagGridIterator {
+    int* current;
+    int* first;
+    int* last;
+    int** node;
+    void Advance() {
+        ++current;
+        if (current == last) {
+            ++node;
+            first = *node;
+            last = first + 0x40;
+            current = first;
+        }
+    }
+};
 struct cFlagEntry {
-    void* mpVtable;                    // +0x00
-    void SerializeInto(void* stream) {
-        ((void (__thiscall*)(cFlagEntry*, void*))((void**)mpVtable)[0x1c / 4])(this, stream);
-    }
-    void* GetName(const void* id) {
-        return ((void* (__thiscall*)(cFlagEntry*, const void*))
-            ((void**)mpVtable)[0x0c / 4])(this, id);
-    }
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void* GetName(const void* id); // +0x0c
+    virtual void slot4(); virtual void slot5(); virtual void slot6();
+    virtual void SerializeInto(void* stream); // +0x1c
 };
 }
 namespace SP {
@@ -1255,19 +1266,12 @@ void __cdecl SerializeFlagGrid(cIOStream* stream, const cFlagGrid* grid)
 namespace SP {
 bool __cdecl ForEachFlagEntry(void* stream, const cFlagGrid* grid)
 {
-    int* rowEnd = grid->mpRowEnd;
+    FlagGridIterator it = { grid->mpBegin, 0, grid->mpRowEnd, grid->mpRowBase };
     int* last = grid->mpEnd;
-    int* it = grid->mpBegin;
-    int** rowBase = grid->mpRowBase;
-    while (it != last) {
-        if (*it)
-            ((cFlagEntry*)*it)->SerializeInto(stream);
-        ++it;
-        if (it == rowEnd) {
-            it = rowBase[1];
-            ++rowBase;
-            rowEnd = it + 0x40;
-        }
+    while (it.current != last) {
+        if (*it.current)
+            ((cFlagEntry*)*it.current)->SerializeInto(stream);
+        it.Advance();
     }
     return true;
 }
