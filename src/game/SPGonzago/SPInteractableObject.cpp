@@ -210,6 +210,7 @@ void* EffectsManager();
 // the generated class layout still places it at +0x2c. Only base conversion
 // and direct game-data/spatial calls are needed here. The spatial view represents
 // its vptr prefix only; no constructor, field access or sizeof uses this view.
+typedef eastl::vector<SP::cField, eastl::sp_vector_allocator> InteractableFields;
 namespace RetailInteractableObject {
 class cGameData {
     uint32_t mStorage[0x34 / 4];
@@ -217,6 +218,7 @@ public:
     void* AsInterface(uint32_t type); // 0x00b18460, thiscall, ret 4
     bool Write(void* data); // 0x00b18590
     bool Read(void* data); // 0x00b18600
+    int GetFieldValues(InteractableFields& fields); // 0x00b18420
 };
 class cSpatialObject {
     const void* mVTable;
@@ -229,6 +231,7 @@ public:
     void* AsInterface(uint32_t type);
     bool Write(void* data);
     bool Read(void* data);
+    int GetFieldValues(InteractableFields& fields);
 };
 }
 void SetModelVariant(cSpatialObject* pObject, int nVariant, int bA, int bB);
@@ -317,6 +320,18 @@ struct InteractableArchive {
     virtual void slot6(); virtual void slot7();
     virtual InteractableStreamHolder* GetStreamHolder(); // slot 8
 };
+
+extern SP::cDataSerializerGeneric gInteractableSpatialSerializerList[]; // 0x0157a1f8
+
+// @ 0x00c3f920
+int RetailInteractableObject::cInteractableObject::GetFieldValues(InteractableFields& fields)
+{
+    SP::cVarListSerializer spatial((char*)this + sizeof(cGameData), gInteractableSpatialSerializerList, 0x1a80d26);
+    int count = spatial.GetFields(fields);
+    count += cGameData::GetFieldValues(fields);
+    SP::cVarListSerializer own(this, gInteractableSerializerList, 0x1a80d26);
+    return own.GetFields(fields) + count;
+}
 
 // @ 0x00c3fb00
 bool RetailInteractableObject::cInteractableObject::Write(void* data)
