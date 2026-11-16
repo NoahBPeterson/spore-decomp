@@ -62,7 +62,7 @@ struct SwatchQuery {
     virtual void slot08();
     virtual void slot09();
     virtual int GetQueryId();  // vtable +0x28
-    bool IsSelected();       // 0x00ecdb80
+    bool HasDefaultIndex();  // 0x00ecdb80: index at +0x10 equals -1
 };
 
 // 0x14-byte swatch record.
@@ -264,7 +264,7 @@ void* __stdcall FUN_00ed1f70(Entry** tab, int key)
     end = tab[1];
     for (; e < end; ++e) {
         SwatchQuery* item = (SwatchQuery*)e->a;
-        if (item->GetQueryId() == key && item->IsSelected())
+        if (item->GetQueryId() == key && item->HasDefaultIndex())
             return e;
     }
     return 0;
@@ -329,7 +329,7 @@ int __fastcall FUN_00ed20c0(Container* self, int* unused, int key)
     int count = 0;
     for (; e != self->vec0End; ++e) {
         SwatchQuery* item = (SwatchQuery*)e->a;
-        if (item->GetQueryId() == key && item->IsSelected())
+        if (item->GetQueryId() == key && item->HasDefaultIndex())
             ++count;
     }
     (void)unused;
