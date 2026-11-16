@@ -343,6 +343,7 @@ struct Tree {
     RBNode* AllocB(P_ecc0* src);
     RBNode* CopyB(RBNode* pNode, RBNode* pParent);
     void Nuke(RBNode* pNode);
+    void Clear();
 };
 struct P550 { int key; void* obj; };
 struct P_ecc0 { int a; int b; int c; char rest[0x28]; };
@@ -1160,14 +1161,17 @@ RBNode* Tree::CopyB(RBNode* pNode, RBNode* pParent)
     return pNew;
 }
 
+struct ClassTreeNode : RBNodeBase {
+    ClassPair mValue; // node+0x10; nested instance-ID map at node+0x1c
+};
+
 // @ 0x0069ee60
 void Tree::Nuke(RBNode* pNode)
 {
     while (pNode) {
         Nuke(pNode->mpNodeLeft);
         RBNode* pRight = pNode->mpNodeRight;
-        typedef void (__thiscall *NodeDtorFn)(void*, void*);
-        ((NodeDtorFn)0x00d0c930)((char*)pNode + 0x1c, *(void**)((char*)pNode + 0x28));
+        reinterpret_cast<ClassTreeNode*>(pNode)->mValue.~ClassPair();
         EASTL_allocator_deallocate(pNode);
         pNode = pRight;
     }
@@ -1189,29 +1193,38 @@ void CComSer::dtor()
     vt0 = g_vtbl_13ec458;
 }
 
+struct ClassInfoTreeCall {
+    void Nuke(RBNode* node); // 0x0069ee60
+};
+inline void Tree::Clear()
+{
+    reinterpret_cast<ClassInfoTreeCall*>(this)->Nuke(mpNodeParent);
+    RBNode* anchor = reinterpret_cast<RBNode*>(&mpNodeLeft);
+    mpNodeRight = anchor;
+    mpNodeParent = 0;
+    mColor = 0;
+    mnSize = 0;
+    mpNodeLeft = anchor;
+}
+struct DatabaseReference {
+    virtual void AddRef();
+    virtual void Release();
+};
+
 // @ 0x0069f160
 void CComSer::reset()
 {
     flag_c = 0;
-    mTree1.Nuke(mTree1.mpNodeParent);
-    mTree1.mpNodeLeft = (RBNode*)&mTree1.mpNodeLeft;
-    mTree1.mpNodeRight = (RBNode*)&mTree1.mpNodeLeft;
-    mTree1.mpNodeParent = 0;
-    mTree1.mColor = 0;
-    mTree1.mnSize = 0;
-    mTree2.Nuke(mTree2.mpNodeParent);
-    mTree2.mpNodeLeft = (RBNode*)&mTree2.mpNodeLeft;
-    mTree2.mpNodeRight = (RBNode*)&mTree2.mpNodeLeft;
-    mTree2.mpNodeParent = 0;
-    mTree2.mColor = 0;
-    mTree2.mnSize = 0;
+    mTree1.Clear();
+    mTree2.Clear();
     p48 = 0;
     b4c = 0;
     b4d = 0;
-    void* p = p50;
-    if (p) {
+    _ReadWriteBarrier();
+    DatabaseReference* previous = static_cast<DatabaseReference*>(p50);
+    if (previous) {
         p50 = 0;
-        ((void(__thiscall*)(void*))(*(void***)p)[4 / 4])(p);
+        previous->Release();
     }
 }
 
