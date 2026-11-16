@@ -94,6 +94,9 @@ void f_013cb780() {
 
 // @ 0x013CB7D0
 void f_013cb7d0() { ((Method*)g_170a6b9)->M(); }
+void terra03_link_pad_ret1() {}
+void terra03_link_pad_ret2() {}
+void terra03_link_pad_ret3() {}
 
 // @ 0x013CB850
 void f_013cb850() { ((Method*)g_170a79c)->M(); }
