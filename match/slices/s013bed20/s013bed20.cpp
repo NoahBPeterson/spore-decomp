@@ -123,6 +123,7 @@ extern int g_1668e9c;
 extern int g_1668ea4;
 extern int g_166b0f0;
 extern unsigned char g_166aa7c;
+extern HMODULE g_166aa80;
 extern int g_154ed20, g_154ed24;
 extern char g_154df80[];
 extern void* g_154df84;
@@ -343,6 +344,13 @@ void f_013c0f40() { FreeLibrary(g_1668f1c); }
 // @ 0x013C0FC0
 void f_013c0fc0() {
     if (g_166aa7c) WSACleanup();
+}
+
+void f_013c0fd0() {
+    if (g_166aa80) {
+        FreeLibrary(g_166aa80);
+        g_166aa80 = 0;
+    }
 }
 
 // @ 0x013C1060

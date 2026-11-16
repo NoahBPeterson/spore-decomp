@@ -5,3 +5,4 @@ slices/s011e6870/s011e6870.cpp  ?FUN_011e6c50@@YIIPAXH@Z  011e6c50  /vc71 /O2 /M
 slices/s011e6870/s011e6870.cpp  ?FUN_011e6c70@@YIHPAXH@Z  011e6c70  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s011e6870/s011e6870.cpp  ?FUN_011e6cc0@@YI_KPAXH@Z  011e6cc0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s011e6870/s011e6870.cpp  ?GetRequestState@StreamPrefix@@QBEIXZ  011e6c40  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011e6870/s011e6870.cpp  ?FUN_011e6c80@Stream_s011e6870@core@audio@rw@@QAEHH@Z  011e6c80  /vc71 /O2 /MD /Gy /EHsc /TP
