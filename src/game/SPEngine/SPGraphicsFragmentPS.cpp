@@ -98,6 +98,7 @@ struct Vec28 {
   Vec28(const void* other);              // 0x006fad40
   void CopyTail(const void*, const void*);   // 0x006fae30
   void InsertGrow(const void*, const void*);  // 0x006faea0
+  void PushBack(); // 0x006fb0e0
 };
 struct IStream_s006f_a2c0;
 namespace EA {
@@ -882,22 +883,25 @@ PixelFrag::~PixelFrag()
   }
 }
 
+// The vector stores 0x130-byte pixel-fragment records.
+struct PixelFragmentRecord { unsigned words[0x130 / sizeof(unsigned)]; };
+
+#pragma function(memset)
 // @ 0x006fb0e0
-void PixelFrag::PushBack()
+void Vec28::PushBack()
 {
-  Vec28* v = (Vec28*)((char*)this + 0x04);   // element vector lives at PixelFrag+0x04
-  char* e = (char*)v->end;
-  if (e < (char*)v->cap) {
-    v->end = e + 0x130;
-    if (e != 0) {
-      memset(e, 0, 0x130);
+    PixelFragmentRecord* position = static_cast<PixelFragmentRecord*>(end);
+    if (position < static_cast<PixelFragmentRecord*>(cap)) {
+        end = position + 1;
+        if (position)
+            memset(position, 0, sizeof(PixelFragmentRecord));
+        return;
     }
-    return;
-  }
-  char tmp[0x130];
-  memset(tmp, 0, 0x130);
-  v->InsertGrow(tmp, tmp);
+    PixelFragmentRecord value;
+    memset(&value, 0, sizeof(value));
+    InsertGrow(position, &value);
 }
+#pragma intrinsic(memset)
 
 // @ 0x006fb150
 void RegisterShaderTable()
