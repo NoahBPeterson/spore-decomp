@@ -148,10 +148,10 @@ static inline uint32_t CharStrlen(const wchar_t* p)
     return (uint32_t)(pEnd - p);
 }
 template <class T> static inline const T& min_alt(const T& a, const T& b) { return (a < b) ? a : b; }
-struct LocaleMsgBase {
+struct LocaleMsgBase { // native vtable 0x013eb918
     virtual ~LocaleMsgBase() {}
 };
-struct LocaleMsg : LocaleMsgBase {
+struct LocaleMsg : LocaleMsgBase { // native vtable 0x013fe50c
     uint32_t mSlots[0x2c / 4 - 1 + 1];   // placeholder up to +0x30 (slots are 8 bytes apiece from +8)
     ~LocaleMsg();
 };
@@ -854,8 +854,10 @@ LocaleMsg::~LocaleMsg()
     uint32_t mask = 1;
     IRefCount** slot = (IRefCount**)this + 2;
     for (int n = 32; n; --n) {
-        if ((((uint32_t*)this)[0x30 / 4] & mask) && *slot)
+        if ((((uint32_t*)this)[0x30 / 4] & mask) && *slot) {
+            _ReadWriteBarrier();
             (*slot)->Release();
+        }
         slot += 2;
         mask = _rotl(mask, 1);
     }
