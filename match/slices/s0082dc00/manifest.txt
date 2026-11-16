@@ -18,3 +18,4 @@ slices/s0082dc00/s0082dc00.cpp  ?LayerFrameInit@@YIXPADH0@Z  0082e550  /O2 /MD /
 slices/s0082dc00/s0082dc00.cpp  ?LayerPoolTick@@YIXPAX@Z  0082e6b0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 slices/s0082dc00/s0082dc00.cpp  ?LayerProcRelease@@YA_NPAULayerWinProc@@@Z  0082e6c0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 slices/s0082dc00/s0082dc00.cpp  ?RenderLayer@@YAXPAX@Z  0082e750  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?SetLayer@LayerWinProc@@QAE_NH@Z  0082e670  /O2 /MD /Gy /TP /fp:fast /arch:SSE2

@@ -468,8 +468,7 @@ cToolObject* __stdcall CreateToolObject(int owner)
 int __stdcall CopyToolSettings(int* p)
 {
     int srcId = p[0];
-    int ownerId = p[1];
-    cToolObject* created = CreateToolObject(ownerId);
+    cToolObject* created = CreateToolObject(p[1]);
     cFieldDst* dst = (cFieldDst*)ResolveObject(created);
     cFieldSrc* src = (cFieldSrc*)ResolveObject((void*)srcId);
     dst->SetA(src->GetA());

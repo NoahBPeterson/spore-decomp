@@ -2680,8 +2680,7 @@ void SkinTexExtractorB::Init()
     int hole;
     mConn.Init(SP_MessageServer(), (char*)this - 8, (void*)0x150cad8, 3);
     if (mInstance != 0) {
-        ServiceObj* svc = FUN_0067dd60_s0051_c470();
-        svc->SetInstance(mInstance, 0, 1, 0);
+        FUN_0067dd60_s0051_c470()->SetInstance(mInstance, 0, 1, 0);
     } else {
         mFlag = 1;
     }

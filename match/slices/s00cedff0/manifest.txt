@@ -17,3 +17,4 @@ slices/s00cedff0/s00cedff0.cpp  ?LoadFormulas@nCityGameFormulas@SP@@YAXXZ       
 slices/s00cedff0/s00cedff0.cpp  ?FUN_00ceefd0@@YGXMPAM0@Z                                   00ceefd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00cedff0/s00cedff0.cpp  ?FUN_00ceec50@@YGHPAX@Z                                     00ceec50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00cedff0/s00cedff0.cpp  ??1cGameBundleContainer@SP@@UAE@XZ  00cee7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /GR-
+slices/s00cedff0/s00cedff0.cpp  ?FUN_00cee2c0@@YIXPAUBundleObj@@PAX1IMMI@Z  00cee2c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

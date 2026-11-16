@@ -468,8 +468,7 @@ int ResolveManyToObject2(void* a, ResMgr1* mgr) {
 int SerializeArray(int out, int* src) {
     if (out == 0) out = src[2];
     rwArray* arr = (rwArray*)src[0];
-    u32 n = (u32)arr->m_count;
-    for (u32 i = 0; i < n; i++)
+    for (u32 i = 0; i < (u32)arr->m_count; i++)
         ((float*)out)[i] = *arr->Get((int)i);
     return 1;
 }
