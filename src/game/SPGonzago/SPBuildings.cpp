@@ -30,6 +30,24 @@
 #include "SP/cInteractionTarget.h"
 #include "EA/Random/RandomLinearCongruential.h"
 
+// Retail stream interfaces used by the building serializers.
+struct BuildingArchiveStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // +0x18
+};
+struct BuildingArchive {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual BuildingArchiveStreamHolder* GetStreamHolder(); // +0x20
+};
+extern SP::cDataSerializerGeneric gBuildingCityHallSerializerList[]; // 0x0156dab8
+
+extern SP::cDataSerializerGeneric gBuildingWrite2SerializerList[]; // 0x156db6c
+
+extern SP::cDataSerializerGeneric gBuildingWrite3SerializerList[]; // 0x156dba8
+
 // ---- items of slice s00bcc010 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define VF(obj, slot) (*(void**)((char*)*(void**)(obj) + (slot) * 4))
 void  __cdecl FUN_0093aa70(void* w, void* p, int n, int b);    // 0x0093aa70 EA::IO::WriteUint32
@@ -122,7 +140,6 @@ class cTribeTool : public cSerializableNoun {
 };
 class cVehicle : public cSerializableNoun {
  public:
-    void __thiscall Write1(void* s);                           // 0x00bcc8b0
     void __thiscall Read1(void* s);                            // 0x00bcc920
     void __thiscall Write2(void* s);                           // 0x00bcc9f0
     void __thiscall Read2(void* s);                            // 0x00bcca60
@@ -1608,16 +1625,16 @@ void __thiscall cTribeTool::bcc860(int unused)
 }
 
 // @ 0x00bcc8b0
-void __thiscall cVehicle::Write1(void* s)
+bool SP::cBuildingCityHall::Write(SP::cIObjectDatabaseOStream& stream) const
 {
-    void* x = ((void*(__thiscall*)(void*))VF(s, 8))(s);
-    int   ver = 0x1007ae63;
-    void* w = ((void*(__thiscall*)(void*))VF(x, 6))(x);
-    FUN_0093aa70(w, &ver, 1, 0);
-    ((cSerializableNoun*)this)->WriteBase(s);
-    cVarListSerializer vl;
-    vl.Construct(this, 0x156dab8, 0x1a80d26);
-    vl.Serialize(s);
+    BuildingArchiveStreamHolder* __restrict holder = reinterpret_cast<BuildingArchive*>(&stream)->GetStreamHolder();
+    uint32_t version = 0x1007ae63;
+    void* output = holder->GetStream();
+    FUN_0093aa70(output, &version, 1, 0);
+    ((cSerializableNoun*)this)->WriteBase(&stream);
+    SP::cVarListSerializer serializer(this, gBuildingCityHallSerializerList,
+                                     SP::cVarListSerializer::kSignature);
+    return serializer.Serialize(stream);
 }
 
 // @ 0x00bcc920
@@ -1636,14 +1653,14 @@ void __thiscall cVehicle::Read1(void* s)
 // @ 0x00bcc9f0
 void __thiscall cVehicle::Write2(void* s)
 {
-    void* x = ((void*(__thiscall*)(void*))VF(s, 8))(s);
-    int   ver = 0xecade42;
-    void* w = ((void*(__thiscall*)(void*))VF(x, 6))(x);
-    FUN_0093aa70(w, &ver, 1, 0);
+    BuildingArchiveStreamHolder* __restrict holder = static_cast<BuildingArchive*>(s)->GetStreamHolder();
+    uint32_t version = 0xecade42;
+    void* output = holder->GetStream();
+    FUN_0093aa70(output, &version, 1, 0);
     ((cSerializableNoun*)this)->WriteBase(s);
-    cVarListSerializer vl;
-    vl.Construct(this, 0x156db6c, 0x1a80d26);
-    vl.Serialize(s);
+    SP::cVarListSerializer serializer(this, gBuildingWrite2SerializerList,
+                                     SP::cVarListSerializer::kSignature);
+    serializer.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(s));
 }
 
 // @ 0x00bcca60
@@ -1662,14 +1679,14 @@ void __thiscall cVehicle::Read2(void* s)
 // @ 0x00bccb30
 void __thiscall cVehicle::Write3(void* s)
 {
-    void* x = ((void*(__thiscall*)(void*))VF(s, 8))(s);
-    int   ver = 0xff10521;
-    void* w = ((void*(__thiscall*)(void*))VF(x, 6))(x);
-    FUN_0093aa70(w, &ver, 1, 0);
+    BuildingArchiveStreamHolder* __restrict holder = static_cast<BuildingArchive*>(s)->GetStreamHolder();
+    uint32_t version = 0xff10521;
+    void* output = holder->GetStream();
+    FUN_0093aa70(output, &version, 1, 0);
     ((cSerializableNoun*)this)->WriteBase(s);
-    cVarListSerializer vl;
-    vl.Construct(this, 0x156dba8, 0x1a80d26);
-    vl.Serialize(s);
+    SP::cVarListSerializer serializer(this, gBuildingWrite3SerializerList,
+                                     SP::cVarListSerializer::kSignature);
+    serializer.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(s));
 }
 
 // @ 0x00bccba0
