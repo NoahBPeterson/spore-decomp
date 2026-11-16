@@ -9,7 +9,6 @@
 00cc3140 102 (/O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) cultural projectile view factory; the placement new, the effect ref and the noun colour pass are unresolved; equiv UNSUPPORTED (unresolved allocation and effect helpers) flags: /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00cc3490 77 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00cc3570 204 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
-00cc36d0 5 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- | R45: reserved for byte-exact matching.
 00cc3730 374 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00cc3c30 508 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 00cc3f40 252 flags: /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
