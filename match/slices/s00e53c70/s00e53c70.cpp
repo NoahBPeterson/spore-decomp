@@ -204,7 +204,9 @@ int FUN_00e54050(int id) {
   int i = 0;
   int* p = (int*)0x15a7bac;
   do {
-    if (p[-1] == id) {
+    if (p[-1] != id) {
+      i += *p;
+    } else {
       int n = *p;
       for (int j = 0; j < n; ++j) {
         if (((char*)0x16b4278)[i] == 0) {
@@ -213,8 +215,6 @@ int FUN_00e54050(int id) {
         }
         ++i;
       }
-    } else {
-      i += *p;
     }
     p += 3;
   } while ((int)p < 0x15a7bb8);

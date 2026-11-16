@@ -7,3 +7,4 @@
 ../src/game/SPEditors/_at_005c0000.cpp  ?GetCurrent@cUIMissionCard@@QAEPAVcFeedCategory@@XZ  005c9830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_005c0000.cpp  ??0cUIMissionCard@@QAE@XZ  005c9c70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_005c0000.cpp  ??1cUIMissionCard@@UAE@XZ  005c9d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_005c0000.cpp  ?CountPagesInCategory@cSPPaletteCategory_s005c_0c00@SP@@QAEHI@Z  005c1d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

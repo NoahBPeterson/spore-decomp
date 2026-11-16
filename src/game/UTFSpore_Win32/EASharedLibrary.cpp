@@ -531,8 +531,8 @@ bool EA::SharedLibraryRegistry::RemoveAllLibraries(bool flag)
 // @ 0x00936550
 unsigned int EA::SharedLibraryRegistry::ExecuteCommandAll(char const * a, void * b, void * c, void * d, void * e)
 {
-    mMutex.Lock(*(unsigned int const *)&gpRegistryMutexName);
     int count = 0;
+    mMutex.Lock(*(unsigned int const *)&gpRegistryMutexName);
     unsigned int n = (unsigned int)(((char*)mSharedLibraries.mpEnd - (char*)mSharedLibraries.mpBegin) >> 2);
     for (unsigned int i = 0; i < n; i++) {
         EA::SharedLibrary* lib = ((EA::SharedLibrary**)mSharedLibraries.mpBegin)[i];

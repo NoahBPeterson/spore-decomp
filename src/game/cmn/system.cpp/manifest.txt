@@ -8,3 +8,4 @@
 ../src/game/cmn/system.cpp.cpp  ?IsCommandComplete@AudioObject@@QAEXIM@Z  0112ccf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/cmn/system.cpp.cpp  ?freeSelf@AllocNode@@QAEXXZ  0112cdf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/cmn/system.cpp.cpp  ?getOrCreate@VoiceList@@QAEPAXXZ  0112ce00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/cmn/system.cpp.cpp  ?audio_allocNode@@YAPAIPAUSystem@@@Z  0112cdb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

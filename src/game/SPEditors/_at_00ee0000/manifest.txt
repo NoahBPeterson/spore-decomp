@@ -57,3 +57,4 @@
 ../src/game/SPEditors/_at_00ee0000.cpp  ?FUN_00ee6bd0@@YIXPAUPane@@@Z  00ee6bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?FUN_00ee7850@@YAPAHPAH@Z  00ee7850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ee0000.cpp  ?f00eed840@@YA_NH@Z  00eed840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ee0000.cpp  ?AddEntry@OBJ174@@QAEXPAULayoutRecord@@@Z  00ee95a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

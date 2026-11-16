@@ -3,6 +3,7 @@
 // cSPUISpace "seti" panel: object create/destroy, message handling, a 4-digit
 // clock display, a cCivTokenTranslator and its string members.  Module flags
 // /O2 /MD /Gy /TP.
+#include <intrin.h>
 #include "types.h"
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
@@ -899,6 +900,7 @@ void* __fastcall FUN_00f391c0(void* p)
 void __fastcall FUN_00f39220(int* p)
 {
     *(void**)p = kpTranslatorVtbl;
+    _ReadWriteBarrier();
     wchar_t* pBegin;
     pBegin = *(wchar_t**)((char*)p + 0x54);
     if (((*(char**)((char*)p + 0x5c) - (char*)pBegin) & ~1) > 2 && pBegin != 0) operator_del(pBegin);

@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-0084a540 13 SetCompositionWindow: arg0/arg1 register assignment and vtable-register schedule differ flags: /O2 /MD /Gy /TP
 0084a700 86 IMECompositionStringDataEx ctor: locale copy loop shape + member store order differ flags: /O2 /MD /Gy /TP
 0084a830 117 ConstructWStrings: inlined ctor/DoInsertValue register schedule differs flags: /O2 /MD /Gy /TP
 0084a8f0 119 ConstructWStringsN: per-iteration null guard now matches retail (lea/test/je); inlined ctor/DoInsertValue register schedule differs; chk diff 119; equiv PASS 207/500 valid (78.1% cov) flags: /O2 /MD /Gy /TP

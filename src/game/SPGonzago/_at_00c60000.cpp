@@ -1633,6 +1633,7 @@ void Mission::FUN_00c61390(int arg)
     ((Mission*)local)->FUN_00ba95a0((char*)vec + 4);
     int* begin = (int*)local[0];
     int* end = (int*)local[1];
+    _ReadWriteBarrier();
 
     for (int* it = begin; it != end; it++)
         if (*it)

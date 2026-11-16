@@ -17,3 +17,4 @@
 ../src/game/UTFSpore_Win32/Table.cpp  ?Walk7@ItemListOwner@@QAEXII@Z  008f0680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Table.cpp  ?Walk8@ItemListOwner@@QAEXII@Z  008f06e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Table.cpp  ?Init@StackingContext_s008e_fad0@@QAEPAU1@III@Z  008efba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Table.cpp  ?Fn8e69b0@Fn8e69b0Target@Layout@XHTML@EA@@QAEXPAVElement@DOM@34@IPAXPAV?$Point2DT@M@4@@Z  008e69b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

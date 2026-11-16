@@ -1,5 +1,6 @@
 // Slice s00c71bf0: SP::cPlanet / cVisiblePlanet (retail).
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast.
+#include <intrin.h>
 #include "types.h"
 #include <math.h>
 #include <string.h>
@@ -542,6 +543,7 @@ void* CPlanet::FUN_00c72470(int free)
     *(void**)this = (void*)0x1472480;
     *(void**)((char*)this + 0xd4) = (void*)0x1472428;
     *(void**)((char*)this + 0xd8) = (void*)0x1472414;
+    _ReadWriteBarrier();
     void* q = mpCommon;
     if (q != 0) ((void(__thiscall*)(void*))(*(void***)q)[0xc0 / 4])(q);
     ((void(__thiscall*)(void*))cGameData_dtor_00b184c0)((char*)this + 0xd4);

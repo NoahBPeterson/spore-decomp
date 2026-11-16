@@ -2298,6 +2298,7 @@ ObjC* ObjC::FUN_00e0bdc0(const ObjC& o)
     m8  = o.m8;
     mC  = o.mC;
     m10 = o.m10;
+    _ReadWriteBarrier();
     void* nv = o.mRef;
     if (nv != mRef) {
         void* old = mRef;

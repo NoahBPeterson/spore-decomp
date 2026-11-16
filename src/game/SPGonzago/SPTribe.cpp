@@ -2,6 +2,7 @@
 // Object file: SPGonzago/SPTribe.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "sse_helpers.h"
 #include "SP/cTotemPole.h"
@@ -5633,6 +5634,7 @@ void __thiscall Deque::FUN_00c92b70(void)
         mpp14 = arr;
         mp0c = (int*)*arr;
         mp10 = (int*)((char*)mp0c + 0x100);
+        _ReadWriteBarrier();
         mpp08 = (int**)mp0c;
     }
 }

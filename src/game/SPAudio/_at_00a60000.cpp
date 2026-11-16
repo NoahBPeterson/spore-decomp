@@ -2,6 +2,7 @@
 // Object file: SPAudio/_at_00a60000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include <new>
 
@@ -1335,6 +1336,7 @@ void* EapdMapBase::Insert28(void** out, void* hint, uint32_t* key, char isEnd)
     void** o = out;
     ++*(int*)((char*)this + 0x14);
     *o = node;
+    _ReadWriteBarrier();
     return o;
 }
 }}}  // namespace EA::Audio::Eapd

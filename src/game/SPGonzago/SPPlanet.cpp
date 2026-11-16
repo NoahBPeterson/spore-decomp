@@ -4849,6 +4849,7 @@ Simulator_cFruitGroup::~Simulator_cFruitGroup()
     self->vtbl34 = (void*)0x0145c71c;
     self->f4c = 0;
     self->f54 = 0;
+    _ReadWriteBarrier();
     void* p1 = (void*)self->f1d0;
     if (p1 != 0) {
         vcall0(p1, 4);

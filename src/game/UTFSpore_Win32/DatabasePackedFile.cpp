@@ -1610,6 +1610,7 @@ RbNode** RecMap::DoInsertValue(RbNode** out, RbNode* parent, const PFPair* v, bo
     RBTreeInsert(node, parent, Anchor(), side);
     ++mnSize;
     *out = node;
+    _ReadWriteBarrier();
     return out;
 }
 

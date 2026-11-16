@@ -10,3 +10,4 @@
 ../src/game/SPGonzago/SPUISpaceTrading.cpp  ?AddNPCItems@cSPUISpaceTrading_s0107_6540@@QAEXXZ  01076a00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUISpaceTrading.cpp  ?AddUserItems@cSPUISpaceTrading_s0107_6540@@QAEXXZ  01076a60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUISpaceTrading.cpp  ?Fn1076b00@cSPUISpaceTrading_s0107_6540@@QAEXXZ  01076b00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpaceTrading.cpp  ?Fn1075DB0@cSPUISpaceTrading@@QAEXXZ  01075db0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

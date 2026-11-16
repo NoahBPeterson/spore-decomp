@@ -1720,6 +1720,7 @@ cLocomotionRequest::cLocomotionRequest()
     *(float*)((char*)this + 0x54) = 0.0f;
     *(float*)((char*)this + 0x58) = 0.0f;
     *(float*)((char*)this + 0x60) = 2.0f;
+    _ReadWriteBarrier();
     *(float*)((char*)this + 0x64) = 0.9f;
     *(int*)((char*)this + 0x5c) = 0;
     *(float*)((char*)this + 0x68) = 3.402823466e38f;

@@ -1067,6 +1067,7 @@ void CS::FUN_00c7ecb0()
         RemoveHandler_00571db0(p, a2, a3, a4, a5);
     }
     h.mp4C = (void*)0;
+    _ReadWriteBarrier();
     if (h.mp2C != (void*)0) {
         void* q = h.mp2C;
         h.mp2C = (void*)0;

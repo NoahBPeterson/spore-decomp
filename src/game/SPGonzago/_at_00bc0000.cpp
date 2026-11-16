@@ -5449,8 +5449,8 @@ void cAgentOrderManager::DeactivateSlot(int id)
 // @ 0x00bca0c0
 u32 cAgentOrderManager::FindSlot(int a, int b, int c, int d)
 {
-    char* p = (char*)this + 0x28;
     u32 i = 0;
+    char* p = (char*)this + 0x28;
     do {
         if (*(int*)(p - 4) == a && *(int*)(p) == b &&
             (c == 0 || *(int*)(p + 0x14) == c) &&

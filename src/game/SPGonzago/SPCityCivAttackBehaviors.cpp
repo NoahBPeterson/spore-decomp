@@ -2,6 +2,7 @@
 // Object file: SPGonzago/SPCityCivAttackBehaviors.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "SP/cCombatant.h"
 #include "SP/cInteraction.h"
@@ -1224,6 +1225,7 @@ bool cBehaviorSpaceTurret_s00d5_57f0::AddAgent(cInteractionAgent* pAgent)
         mF0b8 = (mF0b8 == 0);
         cSpaceTurretStateInfo* info = &mMap.GetOrInsert(*(const int*)&pAgent);
         info->mState = 0;
+        _ReadWriteBarrier();
         Target* t = info->mpTarget;
         if (t) {
             info->mpTarget = 0;

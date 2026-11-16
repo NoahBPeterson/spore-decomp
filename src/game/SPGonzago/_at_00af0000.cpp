@@ -4094,6 +4094,7 @@ void cContactProxy::SetEntity(void* owner, D961* entity, const Vector4* pos)
     m_vec80.z = 0.0f;
     m_vec80.y = 0.0f;
     m_vec80.x = 0.0f;
+    _ReadWriteBarrier();
     m_vec70.w = 0.0f;
     m_vec70.z = 0.0f;
     m_vec70.y = 0.0f;
