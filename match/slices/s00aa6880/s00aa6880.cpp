@@ -132,24 +132,46 @@ struct cCommand {
   void BuildDescription(bool force);
 };
 
+struct FloatCurve
+{
+  float* mpBegin;
+  float* mpEnd;
+  float* mpCapacity;
+  void DoInsertValue(float* position, const float& value); // 0x00455660
+  __forceinline void erase(float* first, float* last)
+  {
+    SP::BitDoInsertFloat(first, last, (char*)mpEnd - (char*)last);
+    mpEnd += -(last - first);
+  }
+  __forceinline void push_back(const float& value)
+  {
+    float* end = mpEnd;
+    if (end < mpCapacity)
+    {
+      mpEnd = end + 1;
+      if (end) *end = value;
+    }
+    else DoInsertValue(end, value);
+  }
+};
+
 // ================================================================================
 // @ 0x00aa6880
-// Parses an optional colour list into the description's vector at +0x70 and then
-// runs the shared colour-atom parser over the description's +8 block (when any
-// main argument was present).
 void cCommand::ExecuteColorList(cArguments* args)
 {
-  int count = 0;
+  int count;
   const char** main = args->MainArguments(&count, 0, 0x7fffffff);
-  Desc* d = mDesc;
-
-  if (count > 0) {
-    d->clearFloat(0x70);
+  if (count > 0)
+  {
+    FloatCurve* curve = (FloatCurve*)(mDesc->p + 0x70);
+    curve->erase(curve->mpBegin, curve->mpEnd);
     for (int i = 0; i < count; ++i)
-      d->pushFloat(0x74, 0x78, mEval->Evaluate(main[i]));
+    {
+      float value = mEval->Evaluate(main[i]);
+      ((FloatCurve*)(mDesc->p + 0x70))->push_back(value);
+    }
   }
-
-  FUN_00aa3040(args, (int)(d->p + 8), mEval);
+  FUN_00aa3040(args, (int)(mDesc->p + 8), mEval);
 }
 
 // ================================================================================
