@@ -1,3 +1,7 @@
+#include <stddef.h>
+extern "C" size_t __cdecl wcslen(const wchar_t*);
+extern "C" wchar_t* __cdecl wcscpy(wchar_t*, const wchar_t*);
+#pragma intrinsic(wcscpy)
 // src/game/SPGonzago/MemoryMan.cpp -- migrated from slice(s) s00f46560, s009013e0, s00900410, s006ab3d0, s005fe1d0 by tools/migrate/rewrite.py
 // Object file: SPGonzago/MemoryMan.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -812,9 +816,7 @@ void FUN_006abeb0(void* p)
 // @ 0x00900900
 void* FUN_00900900(short* s, EA::Allocator::StackAllocator_s0090_0410* a)
 {
-    short* p = s;
-    do { } while (*p++ != 0);
-    uint32 n = ((uint32)((p - (s + 1)) * 2) + 9) & ~7u;
+    uint32 n = ((uint32)wcslen((const wchar_t*)s) * 2 + 9) & ~7u;
     char* dst;
     if ((int)((a->mpCurrentBlockEnd - a->mpCurrentObjectBegin) - n) < 0 && !a->AllocateNewBlock(n)) {
         dst = 0;
@@ -824,7 +826,7 @@ void* FUN_00900900(short* s, EA::Allocator::StackAllocator_s0090_0410* a)
         a->mpCurrentObjectEnd = dst + n;
     }
     short* d = (short*)dst;
-    while ((*d++ = *s++) != 0) { }
+    wcscpy((wchar_t*)d, (const wchar_t*)s);
     return dst;
 }
 

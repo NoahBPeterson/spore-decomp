@@ -2,6 +2,7 @@
 
 #include "types.h"
 #include <new>
+#include "eastl/map.h"
 
 // ---------------------------------------------------------------------------
 // shared elements
@@ -200,14 +201,19 @@ struct cNounList {
 // ---------------------------------------------------------------------------
 // external engine entry points
 // ---------------------------------------------------------------------------
-// 8-byte iterator handle passed by value.
-struct cIterator {
-    int32_t mIndex;                                         // +0x00
-    void*   mpNode;                                         // +0x04
+typedef eastl::map<uint32_t, void*> ObjectMap;
+struct ObjectIterator {
+    eastl::rbtree_node_base* mpNode;
+    explicit ObjectIterator(eastl::rbtree_node_base* node) : mpNode(node) {}
+    ObjectIterator(const ObjectIterator& other) : mpNode(other.mpNode) {}
 };
-
-void* __cdecl InsertRangeImpl(void* pDest, cIterator pos, void* pFirst, void* pLast);  // 0x00b2a880
-void __cdecl ForwardEvent(void* a, void* b, void* c, void* d, void* pChannel);   // 0x005939d0
+ObjectIterator FindMatchingObject(ObjectIterator first, ObjectIterator last, uint32_t idLow, uint32_t idHigh); // 0x00b2a880
+struct HashTableIterator {
+    void* mpNode;
+    void** mpBucket;
+};
+struct input_iterator_tag {};
+int IteratorDistanceImpl(HashTableIterator first, HashTableIterator last, input_iterator_tag); // 0x005939d0
 void* __fastcall NounManager();                             // 0x00b3d300
 void* __fastcall CreateNoun(void* pMgr);                    // 0x00b3d3b0
 void __fastcall RemoveNoun(void* pMgr, void* pNoun);        // 0x00b225d0
@@ -288,18 +294,11 @@ void HeapPushRange(AutoRef* pBegin, AutoRef* pEnd, float x, float y, float z)
 }
 
 // @ 0x00b2ac90
-void CopyAddRef(void** pDest, uint32_t count, void** pSrc)
+void CopyAddRef(AutoRef* pDest, uint32_t count, const AutoRef* pSrc)
 {
-    while (count > 0) {
-        if (pDest) {
-            IRefCounted* pObj = (IRefCounted*)*pSrc;
-            *pDest = pObj;
-            if (pObj)
-                pObj->AddRef();
-        }
-        --count;
-        ++pDest;
-    }
+    AutoRef* current = pDest;
+    for (; count > 0; --count, ++current)
+        new (current) AutoRef(*pSrc);
 }
 
 // @ 0x00b2acd0
@@ -360,10 +359,9 @@ void SwapRefs(AutoRef* pA, AutoRef* pB)
 }
 
 // @ 0x00b2af80
-void* InsertRange(void* pDest, void* pIter, void* pFirst, void* pLast)
+ObjectIterator FindObject(ObjectMap* objects, uint32_t idLow, uint32_t idHigh)
 {
-    InsertRangeImpl(pDest, *(cIterator*)((char*)pIter + 4), pFirst, pLast);
-    return pDest;
+    return FindMatchingObject(ObjectIterator(objects->mAnchor.mpNodeLeft), ObjectIterator(&objects->mAnchor), idLow, idHigh);
 }
 
 // Terrain-distribution owner.  These inline base destructors restore the
@@ -632,9 +630,10 @@ void cPairTable::Find(cPair** ppResult, const uint32_t* pKey)
 }
 
 // @ 0x00b2b6a0
-void __fastcall SendEvent(void* pChannel, void* a, void* b, void* c, void* d)
+int HashTableDistance(HashTableIterator first, HashTableIterator last)
 {
-    ForwardEvent(a, b, c, d, pChannel);
+    input_iterator_tag category;
+    return IteratorDistanceImpl(first, last, category);
 }
 
 // @ 0x00b2b6d0

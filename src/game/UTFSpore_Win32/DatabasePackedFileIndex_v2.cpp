@@ -29,7 +29,7 @@ struct HT {
 
     void   DoFreeNodes(uint32* buckets, uint32 count);   // 0x6be640
     uint32* eraseNode(uint32* out, uint32 node, uint32* buckets); // 0x6be820
-    void   lowerBound(uint32* out, uint32* key);          // 0x6be890
+    uint32* lowerBound(uint32* out, uint32* key);          // 0x6be890
     void   rehash(uint32 newBucketCount);                 // 0x6be8d0
     void   heapSiftDown(int, int, int, int);              // 0x6be980
 };
@@ -59,7 +59,6 @@ void FUN_006bf430(void* a);                          // 0x6bf430
 void FUN_006bf5d0(void* a, void* b, void* c, void* d); // 0x6bf5d0
 void* FUN_006bf7d0(void* a, void* b);                // 0x6bf7d0
 void FUN_006bf8f0(void* a, void* b, void* c, void* d); // 0x6bf8f0
-void* FUN_006bfc20(void* a, void* b, void* c);       // 0x6bfc20
 // ---- items of slice s006bede0 end
 
 // ---- items of slice s006bfda0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -215,10 +214,30 @@ uint32* HT::eraseNode(uint32* out, uint32 node, uint32* buckets)
 
 
 // @ 0x006be890
-void HT::lowerBound(uint32* out, uint32* key)
+uint32* HT::lowerBound(uint32* out, uint32* key)
 {
-    // TODO(partial).
-    *out = 0;
+    struct Node {
+        Node* right;
+        Node* left;
+        Node* parent;
+        uint32 color;
+        uint64 key;
+    };
+    Node* node = *(Node**)((char*)this + 0xc);
+    Node* result = (Node*)((char*)this + 4);
+    if (node) {
+        uint64 value = *(const uint64*)key;
+        do {
+            if (value < node->key) {
+                result = node;
+                node = node->left;
+            } else {
+                node = node->right;
+            }
+        } while (node);
+    }
+    *out = (uint32)result;
+    return out;
 }
 
 
@@ -391,10 +410,38 @@ void FUN_006bf430(void*)
 {}
 
 
+// The v2 index stores the 64-bit-position record layout. The shared
+// PFRecordInfo header describes the older 16-byte record; this one is 24 bytes.
+struct PFRecordInfoV2 {
+    uint64 mnPosition;
+    uint32 mnSize;
+    uint32 mnSizeDecompressed;
+    uint16_t mnCompressionType;
+    uint8 mbCommitted;
+};
+struct PFItemsMapV2 {
+    struct Iterator {
+        void* mpNode;
+        void** mpBucket;
+        Iterator() {}
+        Iterator(const Iterator& other) : mpNode(other.mpNode), mpBucket(other.mpBucket) {}
+    };
+    uint32 mFunctors;
+    void** mpBucketArray;
+    uint32 mnBucketCount;
+    void Find(Iterator* out, const EA::ResourceMan::Key& key); // 0x006befb0
+    void Erase(Iterator* out, Iterator position); // 0x006be820
+    PFRecordInfoV2* FindOrInsert(const EA::ResourceMan::Key& key); // 0x006bf7d0
+};
+
 // @ 0x006bf4e0
 EA::ResourceMan::PFRecordInfo * EA::ResourceMan::PFIndexModifiable::FindRecord(EA::ResourceMan::Key const & key)
 {
-    // TODO(partial): hashtable find + return &entry.info.
+    PFItemsMapV2* map = (PFItemsMapV2*)&mIndex;
+    PFItemsMapV2::Iterator it;
+    map->Find(&it, key);
+    if (it.mpNode != map->mpBucketArray[map->mnBucketCount])
+        return (EA::ResourceMan::PFRecordInfo*)((char*)it.mpNode + 0x10);
     return 0;
 }
 
@@ -402,7 +449,14 @@ EA::ResourceMan::PFRecordInfo * EA::ResourceMan::PFIndexModifiable::FindRecord(E
 // @ 0x006bf520
 bool EA::ResourceMan::PFIndexModifiable::DeleteRecord(EA::ResourceMan::Key const & key, EA::ResourceMan::PFRecordInfo & out)
 {
-    // TODO(partial): hashtable find + erase.
+    PFItemsMapV2* map = (PFItemsMapV2*)&mIndex;
+    PFItemsMapV2::Iterator it;
+    map->Find(&it, key);
+    if (it.mpNode != map->mpBucketArray[map->mnBucketCount]) {
+        *(PFRecordInfoV2*)&out = *(const PFRecordInfoV2*)((char*)it.mpNode + 0x10);
+        map->Erase(&it, it);
+        return true;
+    }
     return false;
 }
 
@@ -473,14 +527,25 @@ unsigned int EA::ResourceMan::PFIndexModifiable::GetKeysSortedByPosition(eastl::
 // @ 0x006bfbc0
 void EA::ResourceMan::PFIndexModifiable::AddRecord(EA::ResourceMan::Key const & key, EA::ResourceMan::PFRecordInfo const & info)
 {
-    // TODO(partial): insert-or-find then copy the record info.
-    return;
+    PFRecordInfoV2 value = *(const PFRecordInfoV2*)&info;
+    PFItemsMapV2* map = (PFItemsMapV2*)&mIndex;
+    *map->FindOrInsert(key) = value;
 }
 
 
+// Empty dispatch tag passed by value to the unique-key insertion overload.
+struct HoleInsertUniqueTag {};
+struct HoleTree {
+    void DoInsertValueHint(HoleNode** result, HoleNode* hint, const HoleRec* value, HoleInsertUniqueTag); // 0x006bf8f0
+    HoleNode** Insert(HoleNode** result, HoleNode* hint, const HoleRec* value);
+};
+
 // @ 0x006bfc20
-void* FUN_006bfc20(void* a, void*, void*)
-{ return a; }
+HoleNode** HoleTree::Insert(HoleNode** result, HoleNode* hint, const HoleRec* value)
+{
+    DoInsertValueHint(result, hint, value, HoleInsertUniqueTag());
+    return result;
+}
 
 
 // @ 0x006c0120

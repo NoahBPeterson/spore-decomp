@@ -1,3 +1,5 @@
+#include <string.h>
+#pragma intrinsic(strlen)
 // src/game/SPGonzago/SPVehicle.cpp -- migrated from slice(s) s01355f90, s01354df0, s01351ae0, s00cb2f70, s00cb1110, s00cb02f0, s00caded0, s00cacf40, s00ca9820, s00ca8710, s00ca75e0, s00ca6630, s00ca5b10, s00ca4f90, s00ca46c0, s00ca3f20, s00ca3030, s00ca2210, s00ca1310, s00c9ffd0, s00c9de50, s00c9ef20 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPVehicle.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -5206,20 +5208,13 @@ void* __fastcall FUN_00ca71d0(Object71d0* self)
 // @ 0x00ca7250
 void StringOwner::FUN_00ca7250(char* text)
 {
-    if (text == 0) {
+    if (text != 0) {
+        char* end = text + strlen(text);
+        ((EastlString*)&mString)->Assign(text, end);
+    } else {
         ((EastlString*)&mString)->Assign((const char*)0x013ec47c,
                                          (const char*)0x013ec47c);
-        return;
     }
-
-    char* next = text;
-    char* end;
-    do {
-        end = next;
-        next = end + 1;
-    } while (*end != 0);
-
-    ((EastlString*)&mString)->Assign(text, end);
 }
 
 // @ 0x00ca72a0

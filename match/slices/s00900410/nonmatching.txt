@@ -1,5 +1,4 @@
 00900800  185  XmlReader::ReadString: complete; cl assigns this to ebp and the text pointer to ebx (swapped from the original), re-encoding the whole body; difftest PASS
-00900900  82   wstring->stack-allocator append: complete; signed allocator-space check + return value; difftest PASS
 00900990  76   XmlReader ctor: complete; cl interleaves member construction / adds an EH frame vs the original
 00900b70  252  XmlTextReader dtor: complete; cl inline-expands the base dtor + EH frame vs the original's plain tail call; difftest PASS
 00900db0  112  expat start-element callback (flags&8): complete; cdecl free fn with explicit reader; register/frame schedule differs; difftest PASS
