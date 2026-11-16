@@ -54,6 +54,8 @@ extern SP::cDataSerializerGeneric gSerializableNounSerializerList[]; // 0x156d77
 
 extern SP::cDataSerializerGeneric gBuildingWrite5SerializerList[]; // 0x156dc20
 
+extern SP::cDataSerializerGeneric gBuildingGatedSerializerList[]; // 0x0156deb4
+
 // ---- items of slice s00bcc010 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define VF(obj, slot) (*(void**)((char*)*(void**)(obj) + (slot) * 4))
 void  __cdecl FUN_0093aa70(void* w, void* p, int n, int b);    // 0x0093aa70 EA::IO::WriteUint32
@@ -1852,40 +1854,30 @@ int __thiscall cVehicle::bcd250()
 // @ 0x00bcd2a0
 bool cGameData_s00bc_d2a0::Write(void* pArchive)
 {
-    void* v1 = ((void* (__thiscall*)(void*))vc(pArchive, 0x20))(pArchive);
-    u32 id = 0x70704db;
-    u32 handle = ((u32 (__thiscall*)(void*))vc(v1, 0x18))(v1);
-    FUN_0093aa70((void*)handle, &id, (void*)1, 0);
-
-    bool b = ((bool (__thiscall*)(void*))FUN_00bcc350)(pArchive) != 0;
-    if (b) {
-        b = ((bool (__thiscall*)(void*))FUN_00bcc350)(pArchive) != 0;
-    }
-    VarListSerializer ser;
-    FUN_00692f90(&ser, this, &PTR_s_field_name_0156deb4, (void*)0x1a80d26);
-    if (b) {
-        if (FUN_00692900(&ser, pArchive)) return true;
-    }
+    BuildingArchiveStreamHolder* __restrict holder = static_cast<BuildingArchive*>(pArchive)->GetStreamHolder();
+    uint32_t version = 0x070704db;
+    void* stream = holder->GetStream();
+    FUN_0093aa70(stream, &version, 1, 0);
+    bool ok = ((cSerializableNoun*)this)->WriteBase(pArchive) != 0 &&
+              ((cSerializableNoun*)this)->WriteBase(pArchive) != 0;
+    SP::cVarListSerializer serializer(this, gBuildingGatedSerializerList, SP::cVarListSerializer::kSignature);
+    if (ok && serializer.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(pArchive)))
+        return true;
     return false;
 }
 
 // @ 0x00bcd340
 bool cGameData_s00bc_d2a0::Read(void* pArchive)
 {
-    void* v1 = ((void* (__thiscall*)(void*))vc(pArchive, 0x20))(pArchive);
-    u32 id;
-    u32 handle = ((u32 (__thiscall*)(void*))vc(v1, 0x18))(v1);
-    FUN_0093a780((void*)handle, &id, (void*)1, 0);
-
-    bool b = ((bool (__thiscall*)(void*))FUN_00bcc400)(pArchive) != 0;
-    if (b) {
-        b = ((bool (__thiscall*)(void*))FUN_00bcc400)(pArchive) != 0;
-    }
-    VarListSerializer ser;
-    FUN_00692f90(&ser, this, &PTR_s_field_name_0156deb4, (void*)0x1a80d26);
-    if (b) {
-        if (FUN_00693e10(&ser, pArchive)) return true;
-    }
+    BuildingArchiveStreamHolder* __restrict holder = static_cast<BuildingArchive*>(pArchive)->GetStreamHolder();
+    uint32_t version;
+    void* stream = holder->GetStream();
+    FUN_0093a780(stream, &version, 1, 0);
+    bool ok = ((cSerializableNoun*)this)->ReadBase(pArchive) != 0 &&
+              ((cSerializableNoun*)this)->ReadBase(pArchive) != 0;
+    SP::cVarListSerializer serializer(this, gBuildingGatedSerializerList, SP::cVarListSerializer::kSignature);
+    if (ok && serializer.Serialize(*static_cast<SP::cIObjectDatabaseIStream*>(pArchive)))
+        return true;
     return false;
 }
 
