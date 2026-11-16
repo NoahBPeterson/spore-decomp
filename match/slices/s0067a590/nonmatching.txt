@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 0067a590  122  complete: register/frame scheduling and temp-slot placement differ (cl used a different loop/temp layout)
-0067ac80  35  complete: cl emits movzx byte loads for the masked args where the original uses and eax,0xff on dword loads
+0067ac80  35  complete: cl emits movzx byte loads for the masked args where the original uses and eax,0xff on dword loads | R45: reserved for byte-exact matching.
 0067af10  79  complete: predicate loop; element count is (end-begin) and the empty test is the pointer difference (not pointer equality); equiv PASS 577/600, 100% cov; register allocation (this in ebp, counter in edi) still differs
 0067af70  66  complete: same predicate loop; register allocation differs
 0067afd0  61  complete: three-way predicate composition; register/call scheduling differs

@@ -9,6 +9,6 @@
 013c43b0  29  body complete (hashtable free + inline-buffer guard); bounds extend over an unlisted int3 + ret thunk
 013c4f20  36  body complete (vector free + SSO guard); bounds extend over an unlisted int3 + ret thunk
 013c7db0  51  body complete (0x98-stride dtor loop); bounds extend over an unlisted int3 + ret thunk
-013c9c30  13  body complete (atomic refcount release); bounds extend over an unlisted int3 + ret thunk
+013c9c30  13  body complete (atomic refcount release); bounds extend over an unlisted int3 + ret thunk | R45: reserved for byte-exact matching.
 013c9c70  13  body complete (atomic refcount release); bounds extend over an unlisted int3 + ret thunk
 013c9cb0  13  body complete (atomic refcount release); bounds extend over an unlisted int3 + ret thunk
