@@ -26,3 +26,4 @@ slices/s00593840/s00593840.cpp  ?ReadItemList@SP@@YAXPAVISerializer@1@AAV?$list@
 slices/s00593840/s00593840.cpp  ?DoAllocateNode@?$hashtable@UcStaticItemInfo@@Vfixed_hashtable_allocator@eastl@@I@eastl@@QAEPAU?$hash_node@UcStaticItemInfo@@@2@ABUcStaticItemInfo@@@Z  005948d0  /O2 /MD /Gy /TP /GS-
 slices/s00593840/s00593840.cpp  ?DoAllocateNode@?$hashtable@UcItemSetRow@@Vfixed_hashtable_allocator@eastl@@I@eastl@@QAEPAU?$hash_node@UcItemSetRow@@@2@ABUcItemSetRow@@@Z  00594920  /O2 /MD /Gy /TP /GS-
 slices/s00593840/s00593840.cpp  ?DoAllocateNode@?$hashtable@UcItemSmall@@Vfixed_hashtable_allocator@eastl@@I@eastl@@QAEPAU?$hash_node@UcItemSmall@@@2@ABUcItemSmall@@@Z  00594980  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?Write@cCollectableItems@SP@@QAE_NPAVISerializer@2@@Z  00593890  /O2 /MD /Gy /TP /GS-

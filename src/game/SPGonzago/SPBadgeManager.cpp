@@ -77,11 +77,11 @@ public:
     void clear()                                                     // inline in the original
     {
         DoNukeSubtree(mAnchor.mpNodeParent);
+        mAnchor.mpNodeRight = &mAnchor;
         mAnchor.mpNodeLeft = &mAnchor;
         mAnchor.mpNodeParent = 0;
-        mAnchor.mColor = 0;
+        reinterpret_cast<eastl::rbtree_node_base*>(&mAnchor)->mColor = 0;
         mnSize = 0;
-        mAnchor.mpNodeRight = &mAnchor;
     }
 };
 class tBadgeTree {
@@ -238,6 +238,7 @@ virtual void v03();
 };
 class cSPBadgeManager : public cContentValidationSummarizer, public cISerializableObject {
 public:
+    virtual void Read(cOutStream* pStream); // 0x00fe40a0
     tBadgeTree  mBadgeMap;              // +0x10
     tU32Tree    mEventCounts;           // +0x2c
     tU32Tree    mPropList;              // +0x48
@@ -758,15 +759,17 @@ void FUN_00fe3fd0(tU32Tree* pMap, cOutStream* pStream)
 }
 
 // @ 0x00fe40a0
-void cISerializableObject::Read(cOutStream* pStream)
+void cSPBadgeManager::Read(cOutStream* pStream)
 {
     uint32_t nUnused;
-    EA::IO::ReadInt32(pStream->GetStream()->GetIStream(), &nUnused, 1, 0);
-    cSPBadgeManager* pOwner = (cSPBadgeManager*)((char*)this - 8);
-    pOwner->mEventCounts.clear();
-    pOwner->mHintMap.clear();
-    cVarListSerializer serializer((const char*)this - 8, g_serializedFieldName, 0x1a80d26);
-    serializer.Serialize(pStream);
+    EA::IO::IStream_s00fe_3b10* rawStream = pStream->GetStream()->GetIStream();
+    EA::IO::ReadInt32(rawStream, &nUnused, 1, 0);
+    mEventCounts.clear();
+    mHintMap.clear();
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>((char*)g_serializedFieldName),
+        SP::cVarListSerializer::kSignature);
+    serializer.Serialize(*reinterpret_cast<SP::cIObjectDatabaseIStream*>(pStream));
 }
 
 // @ 0x00fe4150

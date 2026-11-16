@@ -569,7 +569,7 @@ public:
 // @ 0x00593890
 bool cCollectableItems::Write(ISerializer* s)
 {
-    ISerializerStream* holder = s->GetStreamHolder();
+    ISerializerStream* __restrict holder = s->GetStreamHolder();
     uint32_t version = 0x03A3AA3A;
     EA::IO::IStream* stream = holder->GetStream();
     EA::IO::WriteUint32(stream, &version, 1, 0);
