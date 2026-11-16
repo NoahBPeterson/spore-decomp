@@ -975,7 +975,14 @@ bool cGameBundle::IsState0Or4()
 // @ 0x00c35d40
 bool cGameBundle::IsState234()
 {
-    return (uint32_t)(mField12c - 2) <= 2U;
+    switch (mField12c) {
+    case 2:
+    case 3:
+    case 4:
+        return true;
+    default:
+        return false;
+    }
 }
 
 // @ 0x00c35d90

@@ -29,3 +29,4 @@
 ../src/game/SPGonzago/_at_00c30000.cpp  ?Write@cGamePlant@@QBE_NAAVcIObjectDatabaseOStream@SP@@@Z  00c3e3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c30000.cpp  ?Read@cGamePlant@@QAE_NAAVcIObjectDatabaseIStream@SP@@@Z  00c3e9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c30000.cpp  ?Write@cHitSphere@@QAE_NPAX@Z  00c3f340  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?IsState234@cGameBundle@@QAE_NXZ  00c35d40  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
