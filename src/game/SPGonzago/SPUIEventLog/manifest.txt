@@ -15,3 +15,5 @@
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?RegisterCallback@cSPUIEventLog_s00dd_6a70@@QAEHI@Z  00dd6b20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?RegisterCloseCallback@cSPUIEventLog_s00dd_6a70@@QAE_NIH@Z  00dd6b70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPUIEventLog.cpp  ?clear_events@cSPUIEventLog_s00dd_6a70@@QAEXXZ  00dd6d70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?SetEventDuration@cSPUIEventLog_s00dd_6a70@@QAEXIM@Z  00dd6ac0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPUIEventLog.cpp  ?ModifyEventText@cSPUIEventLog_s00dd_6a70@@QAE_NIPB_W@Z  00dd6df0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

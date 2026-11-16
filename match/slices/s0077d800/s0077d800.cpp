@@ -182,26 +182,34 @@ void ElemVec_77d8c0::Dtor() {
   this->m00 = (void*)0x13ef094;                 // ??_7hkReferencedObject@@6B@
 }
 
-// @ 0x0077e260  (93 bytes) EH ctor: vector with a 0x100-byte inline buffer at +0x18.
-struct Inline100_77e260 {
-  char* begin;    // +0x00
-  char* end;      // +0x04
-  char* cap;      // +0x08
-  char  pad0c[4]; // +0x0c
-  char* inlineCap;// +0x10  == this+0x18
-  char  pad14[4]; // +0x14
-  char  buf[0x100]; // +0x18
-  void* Ctor(unsigned a, void* b);
+struct InlineVectorStorage100 {
+  char* begin;
+  char* end;
+  char* cap;
+  unsigned mAllocator;
+  char* inlineCap;
+  InlineVectorStorage100(char* storage) {
+    inlineCap = storage;
+  }
+  ~InlineVectorStorage100() {
+    if (begin && begin != inlineCap)
+      operator_delete__(begin);
+  }
+};
+struct Inline100_77e260 : InlineVectorStorage100 {
+  char pad14[4];
+  char buf[0x100];
+  Inline100_77e260(unsigned count, void* value);
 };
 
-void* Inline100_77e260::Ctor(unsigned a, void* b) {
-  char* inl = (char*)this + 0x18;
-  this->inlineCap = inl;
-  this->end = inl;
-  this->begin = inl;
-  this->cap = inl + 0x100;
-  ((Vec8Thing*)this)->FUN_0077d9c0(a, b);   // 0x0077d9c0 eastl_vector_Resize
-  return this;
+// @ 0x0077e260
+Inline100_77e260::Inline100_77e260(unsigned count, void* value)
+    : InlineVectorStorage100(buf) {
+  char* storage = inlineCap;
+  end = storage;
+  begin = storage;
+  cap = storage + sizeof(buf);
+  ((Vec8Thing*)this)->FUN_0077d9c0(count, value);
 }
 
 // @ 0x0077e2c0  (471 bytes) EH ctor: vector with a 0x40-byte inline buffer at +0x20, assign range.

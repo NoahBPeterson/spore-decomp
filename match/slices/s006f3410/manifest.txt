@@ -7,3 +7,4 @@ slices/s006f3410/s006f3410.cpp  ?ClearElements@cRenderInstanceSet@@QAEXXZ  006f4
 slices/s006f3410/s006f3410.cpp  ?SetColor@cRenderInstanceSet@@UAEXHPBMMH@Z  006f4100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s006f3410/s006f3410.cpp  ?IsRangeEmpty@cRenderInstanceSet@@QBE_NXZ  006f4170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s006f3410/s006f3410.cpp  ?Setup178@cRenderInstanceSet@@QAEPAUcViewer@@PAX@Z  006f3f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006f3410/s006f3410.cpp  ??1cModelInstanceSet@@QAE@XZ  006f3d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

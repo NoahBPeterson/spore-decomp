@@ -223,24 +223,65 @@ void __cdecl FUN_00eca1d0(void)
 }
 
 // ---------------------------------------------------------------- 0x00eca2f0
+// Relevant EA::UTFWin::Window slots: GetFlags +0x28, SetFlag +0x7c.
+struct PaletteRefreshWindow {
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void Slot2();
+    virtual void Slot3();
+    virtual void Slot4();
+    virtual void Slot5();
+    virtual void Slot6();
+    virtual void Slot7();
+    virtual void Slot8();
+    virtual void Slot9();
+    virtual unsigned GetFlags();
+    virtual void Slot11();
+    virtual void Slot12();
+    virtual void Slot13();
+    virtual void Slot14();
+    virtual void Slot15();
+    virtual void Slot16();
+    virtual void Slot17();
+    virtual void Slot18();
+    virtual void Slot19();
+    virtual void Slot20();
+    virtual void Slot21();
+    virtual void Slot22();
+    virtual void Slot23();
+    virtual void Slot24();
+    virtual void Slot25();
+    virtual void Slot26();
+    virtual void Slot27();
+    virtual void Slot28();
+    virtual void Slot29();
+    virtual void Slot30();
+    virtual void SetFlag(unsigned flag, bool enabled);
+};
+
+static __forceinline Region* PaletteRegionAt(int offset)
+{
+    return (Region*)(g_16c7584 + offset + 4);
+}
+
 // @ 0x00eca2f0
 void __cdecl FUN_00eca2f0(void)
 {
-    void* layout = *(void**)g_16c7584;
-    void* w = ((Layout*)layout)->Find((int)0x8de6958, 1);
-    if (((int(__thiscall*)(void*))(*(void***)w)[0x28 / 4])(w) & 1) {
-        void* w2 = ((Layout*)layout)->Find((int)0x8de6960, 1);
-        ((void(__thiscall*)(void*, int, int))(*(void***)w2)[0x7c / 4])(w2, 0x400, 1);
-        for (int i = 0; i < 0x140; i += 0x20) {
-            void* o = *(void**)((char*)g_16c7584 + i + 8);
-            ((void(__thiscall*)(void*, int, int))(*(void***)o)[0x7c / 4])(o, 1, 0);
-            *(char*)((char*)g_16c7584 + i + 4) = 0;
+    PaletteRefreshWindow* window = (PaletteRefreshWindow*)((cSPUILayout*)*(void**)g_16c7584)->FindWindowByID(0x8de6958, 1);
+    if (window->GetFlags() & 1) {
+        PaletteRefreshWindow* other = (PaletteRefreshWindow*)((cSPUILayout*)*(void**)g_16c7584)->FindWindowByID(0x8de6960, 1);
+        other->SetFlag(0x400, true);
+        for (int index = 0; index < 10; ++index) {
+            int offset = index * sizeof(Region);
+            PaletteRefreshWindow* regionWindow = (PaletteRefreshWindow*)PaletteRegionAt(offset)->window;
+            regionWindow->SetFlag(1, false);
+            PaletteRegionAt(offset)->enabled = 0;
         }
-        *g_16c757c = 0;
+        *(int*)g_16c757c = 0;
         ScenarioTutorials_GetActive();
         FUN_00ec98d0();
-        void* w3 = ((Layout*)layout)->Find((int)0x8de6958, 1);
-        ((void(__thiscall*)(void*, int, int))(*(void***)w3)[0x7c / 4])(w3, 1, 0);
+        PaletteRefreshWindow* updated = (PaletteRefreshWindow*)((cSPUILayout*)*(void**)g_16c7584)->FindWindowByID(0x8de6958, 1);
+        updated->SetFlag(1, false);
     }
 }
 

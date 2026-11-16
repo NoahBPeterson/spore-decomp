@@ -10,3 +10,4 @@ slices/s00eb8340/s00eb8340.cpp  ?ReleaseAll@Obj@@QAIXXZ  00eb8e70  /O2 /MD /Gy /
 slices/s00eb8340/s00eb8340.cpp  ?OnSetTitle@Obj@@QAEXPAX@Z  00eb8ff0  /O2 /MD /Gy /TP
 slices/s00eb8340/s00eb8340.cpp  ?MakeSmallView@Obj@@QAEXPAX@Z  00eb9170  /O2 /MD /Gy /TP
 slices/s00eb8340/s00eb8340.cpp  ?Ctor2@Obj@@QAIPAXXZ  00eb9200  /O2 /MD /Gy /TP
+slices/s00eb8340/s00eb8340.cpp  ?MakeLargeView@Obj@@QAEXPAX@Z  00eb90c0  /O2 /MD /Gy /TP

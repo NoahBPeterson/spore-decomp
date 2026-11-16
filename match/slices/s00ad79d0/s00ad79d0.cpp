@@ -83,6 +83,11 @@ struct C0d660 {
 };
 
 // ------------------------------------------------------------------ types
+struct CameraOrientation {
+    float x, y, z, w;
+    CameraOrientation() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
+};
+
 struct CamInfo {                       // 0x30 bytes: pos(3f) + quat(4f) + 4f + ptr
     float x, y, z;                     // +0x00
     float w0, w1, w2, w3;              // +0x0c
@@ -231,10 +236,8 @@ CamInfo* CamInfo::initDefault(void* owner)
     this->p2c = owner;
     if (owner)
         VFN(owner, 0xbc, TC_v0)(owner);
-    this->w0 = 0.0f;
-    this->w1 = 0.0f;
-    this->w2 = 0.0f;
-    this->w3 = 0.0f;
+    CameraOrientation orientation;
+    memcpy(&w0, &orientation, sizeof(orientation));
     return this;
 }
 

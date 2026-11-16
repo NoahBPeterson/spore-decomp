@@ -1,3 +1,4 @@
+#include <intrin.h>
 // s00bb5d80 -- SP cStarManager / cAppModeEditorBase gameplay helpers.
 //
 // Reconstructed from the disassembly in work/match/scratch_s00bb5d80_cards.txt.
@@ -406,22 +407,33 @@ void __fastcall FUN_00bb6390(cStarManager* self)
 // ---------------------------------------------------------------------------
 // 0x00bb6650 -- SP::cAppModeEditorBase::Redo
 // ---------------------------------------------------------------------------
+static inline bool ResetSaveDirectory(const wchar_t* path) {
+    return RemoveDirectoryRecursive(path, 1) && CreateDirectoryPath(path);
+}
+struct SavePathString {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    unsigned mAllocator;
+    SavePathString(const wchar_t* text) : mpBegin(0), mpEnd(0), mpCapacity(0) { Initialize(text); }
+    void Initialize(const wchar_t* text); // 0x00579a90
+};
+
 // @ 0x00bb6650
 bool __fastcall cAppModeEditorBase_Redo(cStarManager* self)
 {
     void* db = ObjectTemplateDB();
-    ((void (__fastcall*)(void*, int))VSLOT(db, 0x68))(db, 0);
+    ((void (__thiscall*)(void*))VSLOT(db, 0x68))(db);
     FUN_00bb6390(self);
     void* sa = SP_GetSaveArea(0x04729a47);
-    void* name = ((void* (__fastcall*)(void*, int))VSLOT(sa, 0x28))(sa, 0);
-    EString3 tmp;
-    RangeInitialize(&tmp, (const wchar_t*)name);
-    bool ok = false;
-    if (RemoveDirectoryRecursive(tmp.mpBegin, 1)) {
-        if (CreateDirectoryPath(tmp.mpBegin)) ok = true;
-    }
-    if ((((char*)tmp.mpEnd - (char*)tmp.mpBegin) & ~1u) > 2 && tmp.mpBegin)
-        operator delete[](tmp.mpBegin);
+    const wchar_t* name = ((const wchar_t* (__thiscall*)(void*))VSLOT(sa, 0x28))(sa);
+    SavePathString path(name);
+    const wchar_t* buffer = path.mpBegin;
+    _ReadWriteBarrier();
+    bool ok = ResetSaveDirectory(buffer);
+    int capacityBytes = (int)((char*)path.mpCapacity - (char*)buffer) & ~1;
+    if (capacityBytes > 2 && buffer)
+        operator delete[](const_cast<wchar_t*>(buffer));
     return ok;
 }
 

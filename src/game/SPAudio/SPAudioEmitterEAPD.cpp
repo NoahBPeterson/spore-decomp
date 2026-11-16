@@ -4,6 +4,9 @@
 
 #include <intrin.h>
 #include "game/types.h"
+#include "EA/Audio/ITickable.h"
+#include "EA/Audio/IEmitter.h"
+#include "EA/RefCountTemplate.h"
 #include "EA/Audio/IPrimitive.h"
 #include "EA/Audio/ResponseCurve.h"
 #include "EA/Audio/Sound.h"
@@ -72,18 +75,21 @@ extern "C" char  g_eapdRC_vtbl;     // 0x014532f0
 struct cEAPDVoiceMgr {
     void UnregisterInstanceGroup(u32 id);   // 0x00a46150
 };
-struct cEmitterEAPD {
-    void* vtbl0;        // +0x00 ITickable
-    void* vtbl1;        // +0x04 IEmitter
-    void* vtbl2;        // +0x08 refcount
-    int   mRefCount;    // +0x0c
+struct EmitterOwnedRef {
+    void* mpObject;
+    ~EmitterOwnedRef() {
+        if (mpObject)
+            ((void (__thiscall*)(void*))((*(void***)mpObject)[1]))(mpObject);
+    }
+};
+struct cEmitterEAPD : EA::Audio::ITickable, EA::Audio::IEmitter, EA::RefCountTemplate<int> {
     u32   mKey[3];      // +0x10
     u32   mhInstance;   // +0x1c
-    void* mpPatch;      // +0x20
+    EmitterOwnedRef mpPatch; // +0x20
     u32   mId;          // +0x24
     u32   mGroupId;     // +0x28
     u32   mFlags;       // +0x2c
-    u32   mConfig;      // +0x30
+    EmitterOwnedRef mConfig; // +0x30
     u8    mPaused;      // +0x34
 
     cEmitterEAPD();                     // 0xa37b10
@@ -273,17 +279,7 @@ bool EmitterSub::Shutdown()
 // @ 0x00a37c40
 cEmitterEAPD::~cEmitterEAPD()
 {
-    vtbl0 = &g_eapdTick_vtbl;
-    vtbl1 = &g_eapdEmit_vtbl;
-    vtbl2 = &g_eapdRC_vtbl;
     ((EmitterSub*)((char*)this + 4))->Shutdown();
-    if (mConfig) {
-        void* c = (void*)mConfig;
-        ((void (__thiscall*)(void*))((*(void***)c)[4 / 4]))(c);
-    }
-    if (mpPatch)
-        ((void (__thiscall*)(void*))((*(void***)mpPatch)[4 / 4]))(mpPatch);
-    vtbl2 = &g_gme_refcount;
 }
 
 // @ 0x00a37cc0
@@ -299,12 +295,12 @@ bool cEmitterEAPD::Load()
     bool ok = ((bool (__thiscall*)(void*, void*, void**))((*(void***)s)[0x18c / 4]))(
         s, &mKey[0], &local);
     if (ok) {
-        void* old = mpPatch;
+        void* old = mpPatch.mpObject;
         void* cur = local;
         if (cur != old) {
             if (cur)
                 ((void (__thiscall*)(void*))((*(void***)cur)[0 / 4]))(cur);
-            mpPatch = cur;
+            mpPatch.mpObject = cur;
             if (old)
                 ((void (__thiscall*)(void*))((*(void***)old)[4 / 4]))(old);
         }

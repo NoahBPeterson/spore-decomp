@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "nSPBehaviorTree/behavior_stimuli.h"
 #include "SP/cSPCreatureBase.h"
 #include "SP/cLocomotiveObject.h"
@@ -11,7 +12,7 @@
 extern float DAT_01582e04;   // 0x01582e04  broken-path radius 1
 extern float DAT_01582f8c;   // 0x01582f8c  broken-path radius 2
 extern void*        __cdecl   FUN_00b3d300();                                   // 0xb3d300 SP::NounManager
-extern void*        __cdecl   FUN_00d51660(void* mate);                         // 0xd51660
+extern void*        __cdecl   FUN_00d51660();                         // 0xd51660
 extern void*        __cdecl   FUN_00d99980(void* stim);                         // 0xd99980 SP::GetAnimalFromStimulus
 extern void*        __cdecl   FUN_00d40b40(int a);                              // 0xd40b40 SP::GetDesiredAvatarHerd
 extern int          __cdecl   FUN_00435e90();                                   // 0x435e90 GetRecorderState
@@ -20,6 +21,8 @@ extern void*        __cdecl   FUN_0067dd80();                                   
 extern void*        __cdecl   FUN_0067dcc0();                                   // 0x67dcc0 MessageServer
 extern void*        __stdcall FUN_00b3d310(void* a);                            // 0xb3d310
 extern void*        __stdcall FUN_00b3d4d0(int key);                            // 0xb3d4d0 GetTriggerMgr
+
+extern void* __cdecl GetNounSimulator(); // 0x00b3d310
 
 // ---- items of slice s00d6ca50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Vtbl { void* mSlots[0x120 / 4]; };
@@ -37,7 +40,7 @@ typedef void* (__thiscall *VFn_pii)(void*, int, int);
 extern float DAT_01582e04;   // 0x01582e04  broken-path radius 1
 extern float DAT_01582f8c;   // 0x01582f8c  broken-path radius 2
 extern void*        __cdecl   FUN_00b3d300();                                   // 0xb3d300 SP::NounManager
-extern void*        __cdecl   FUN_00d51660(void* mate);                         // 0xd51660
+extern void*        __cdecl   FUN_00d51660();                         // 0xd51660
 extern void*        __cdecl   FUN_00d99980(void* stim);                         // 0xd99980 SP::GetAnimalFromStimulus
 extern void*        __cdecl   FUN_00d40b40(int a);                              // 0xd40b40 SP::GetDesiredAvatarHerd
 extern int          __cdecl   FUN_00435e90();                                   // 0x435e90 GetRecorderState
@@ -54,7 +57,7 @@ struct Engine {
     float* FUN_00c6acc0();              // 0xc6acc0 cNearNoun::GetPosition
     void   FUN_00b48770(int a);         // 0xb48770
     void   FUN_00b45410();              // 0xb45410
-    void   FUN_00b453a0();              // 0xb453a0
+    void   FUN_00b453a0(void* spatialObject);              // 0xb453a0
     void   FUN_00ae09b0(void* target);  // 0xae09b0 cTriggerMgr::PostAction
     void   FUN_00bd0bcbc8(void* a, int b, int c);  // message-server slot 0x14
     void   FUN_00b5f950(void* p, int ref);         // 0xb5f950
@@ -78,6 +81,18 @@ struct BehaviorTree {
 struct MatingCallState { uint32_t mMode; float mTime; float mThreshold; };
 struct MateLeadState   { uint32_t mMode; uint32_t mPad04; uint8_t mFlag08; };
 struct StateD3c0       { uint32_t mMode; uint32_t mPad04; uint8_t mFlag08; uint8_t mPad09[3]; uint32_t mField0c; };
+// Position-query view of the retail spatial interface at the noun's +0x34 base.
+struct MatingSpatialView {
+    virtual void reserved00(); virtual void reserved04(); virtual void reserved08();
+    virtual void reserved0c(); virtual void reserved10(); virtual void reserved14();
+    virtual void reserved18(); virtual void reserved1c(); virtual void reserved20();
+    virtual void reserved24(); virtual void reserved28();
+    virtual float* GetPosition(); // slot +0x2c
+};
+struct MatingObjectRef {
+    virtual void AddRef();
+    virtual void Release();
+};
 struct AutoRefCount { void* mpObj; void operator=(void* p); };
 struct BehaviorState {
     uint32_t     mMode;     // +0x00
@@ -217,7 +232,7 @@ void __cdecl FUN_00d6cc30(void* c, int p2, int p3, int p4, int p5, void* state, 
     Creature* cr = (Creature*)c;
     int mate = (int)cr->FUN_00c0ee90();
     if (mate != 0 && ((MateLeadState*)state)->mFlag08 != 0) {
-        ((Engine*)FUN_00d51660((void*)mate))->FUN_00d4b180(mate);
+        ((Engine*)FUN_00d51660())->FUN_00d4b180(mate);
     }
     ((VFn_viii)VSLOT(c, 0x84))(c, 0, 0, 0);
     cr->mFlags.mBit4 = 0;
@@ -515,9 +530,8 @@ char __cdecl FUN_00d6d460(void* c, int p2, int p3, int p4, int p5, void* state, 
             void* member = herd->mpMember;
             if (member != 0) {
                 st->mMode = 0;
-                void* sub = (char*)member + 0x34;
-                float* pos = (float*)((VFn_p)VSLOT(sub, 0x2c))(sub);
-                cr->FUN_00c1c1d0(2, pos, 0.1f, 1.0f);
+                MatingSpatialView* sub = (MatingSpatialView*)((char*)member + 0x34);
+                cr->FUN_00c1c1d0(2, sub->GetPosition(), 0.1f, 1.0f);
                 void* prev = st->mpPrev;
                 if (member != prev) {
                     ((VFn_v)VSLOT(member, 0))(member);
@@ -527,11 +541,12 @@ char __cdecl FUN_00d6d460(void* c, int p2, int p3, int p4, int p5, void* state, 
                 }
             }
         }
+        _ReadWriteBarrier();
         return 1;
+    } else {
+        st->mMode = 0;
+        cr->FUN_00c1c1d0(2, ((Engine*)cr->FUN_00c04590())->FUN_00c6acc0(), 0.5f, 2.0f);
     }
-    st->mMode = 0;
-    void* nearNoun = cr->FUN_00c04590();
-    cr->FUN_00c1c1d0(2, ((Engine*)nearNoun)->FUN_00c6acc0(), 0.5f, 2.0f);
     return 1;
 }
 
@@ -544,14 +559,17 @@ void __cdecl FUN_00d6d530(void* c, int p2, int p3, int p4, int p5, void* state, 
     if (p5 == 1 && st->mEgg.mpObj != 0)
         ((StateNode*)st->mEgg.mpObj)->mField1f0 = 0x7fffffff;
     if (st->mEgg.mpObj != 0) {
+        _ReadWriteBarrier();
         ((StateNode*)st->mEgg.mpObj)->mFlagA5 = 0;
-        void* sub = (char*)st->mEgg.mpObj + 0x34;
-        ((Engine*)FUN_00b3d310(sub))->FUN_00b453a0();
+        void* sub = st->mEgg.mpObj ? (char*)st->mEgg.mpObj + 0x34 : 0;
+        ((Engine*)GetNounSimulator())->FUN_00b453a0(sub);
     }
     cr->FUN_00c0d240();
     ((VFn_viii)VSLOT(c, 0x84))(c, 0, 0, 0);
-    if (st->mpPrev != 0)
-        ((VFn_v)VSLOT(st->mpPrev, 4))(st->mpPrev);
-    if (st->mEgg.mpObj != 0)
-        ((VFn_v)VSLOT(st->mEgg.mpObj, 4))(st->mEgg.mpObj);
+    MatingObjectRef* previous = (MatingObjectRef*)st->mpPrev;
+    if (previous)
+        previous->Release();
+    MatingObjectRef* egg = (MatingObjectRef*)st->mEgg.mpObj;
+    if (egg)
+        egg->Release();
 }

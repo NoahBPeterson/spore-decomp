@@ -89,6 +89,7 @@ struct WString16 {
     wchar_t* begin;   // +0x00
     wchar_t* end;     // +0x04
     wchar_t* cap;     // +0x08
+    void* allocator; // +0x0c
 };
 
 // eastl::fixed_string<wchar_t,16,1>
@@ -694,7 +695,7 @@ void cTextureCheat::Execute(EA::ArgScript::cArguments* args)
         EA::ConvertToString16(&text, g_sEnglishTable[mIndex * 2], -1);
         void* sys = FUN_0067de40();
         ((void(__thiscall*)(void*, WString16*))(((void***)sys)[0][0x18 / 4]))(sys, &text);
-        if ((((int)(text.cap - text.begin)) & ~1) > 2 && text.begin)
+        if ((((int)((char*)text.cap - (char*)text.begin)) & ~1) > 2 && text.begin)
             operator_delete__(text.begin);
     } else {
         WString16 text;
@@ -702,10 +703,10 @@ void cTextureCheat::Execute(EA::ArgScript::cArguments* args)
         FixedWString16 fixed(text.begin);
         void* sys = FUN_0067de40();
         ((void(__thiscall*)(void*, FixedWString16*))(((void***)sys)[0][0x10 / 4]))(sys, &fixed);
-        if ((((int)(fixed.cap - fixed.begin)) & ~1) > 2 && fixed.begin &&
+        if ((((int)((char*)fixed.cap - (char*)fixed.begin)) & ~1) > 2 && fixed.begin &&
             fixed.begin != fixed.poolBegin)
             operator_delete__(fixed.begin);
-        if ((((int)(text.cap - text.begin)) & ~1) > 2 && text.begin)
+        if ((((int)((char*)text.cap - (char*)text.begin)) & ~1) > 2 && text.begin)
             operator_delete__(text.begin);
     }
 }

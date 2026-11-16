@@ -24,7 +24,6 @@
 #                variable is carried around the block, ours is a plain counted loop, and the
 #                &&-accumulation of the three sub-recs uses a different branch shape.
 #                equiv UNSUPPORTED: 0/400 inputs valid (the stream-reader stubs fault).
-00c37cc0  148  WarpToDestination(): returns true immediately when mUFOType == 1 or the resource manager
 #                reports the desired model missing; otherwise computes a destination vector from either
 #                the current terrain sphere (owner id == -1) or the owner's star system, applies it with
 #                FUN_00ba5df0, SetOffset(@+0x94) and the desired-model setter, returning true on every
