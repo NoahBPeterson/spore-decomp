@@ -1,5 +1,4 @@
 00bbaa80 388 Measure: tail value/string path missing, member offsets differ
-00bbac80 44 SetStar: ret 8 vs ret 4 and shr/test fold (semantics equal)
 00bbada0 489 StarGridMerge: divergent merge loop shape and buffer offsets
 00bbb060 70 StarIndex_Remove: prologue/register schedule (eax SAFE per callerdeps)
 00bbb120 230 StarGridInsert: field offsets and hidden eax result differ
