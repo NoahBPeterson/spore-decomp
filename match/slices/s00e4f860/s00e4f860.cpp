@@ -52,6 +52,33 @@ extern char* g_16b3c0c;  // 0x016b3c0c (pointer global)
 extern char* g_16b3c04;  // 0x016b3c04 (pointer global)
 extern void* g_150d6d8;
 
+// The app getter at virtual offset 0x58 returns the current viewer.
+struct ProjectionApp16 {
+  virtual void Slot0();
+  virtual void Slot1();
+  virtual void Slot2();
+  virtual void Slot3();
+  virtual void Slot4();
+  virtual void Slot5();
+  virtual void Slot6();
+  virtual void Slot7();
+  virtual void Slot8();
+  virtual void Slot9();
+  virtual void Slot10();
+  virtual void Slot11();
+  virtual void Slot12();
+  virtual void Slot13();
+  virtual void Slot14();
+  virtual void Slot15();
+  virtual void Slot16();
+  virtual void Slot17();
+  virtual void Slot18();
+  virtual void Slot19();
+  virtual void Slot20();
+  virtual void Slot21();
+  virtual cViewer16* GetViewer();
+};
+
 static inline void** Vt(void* p) { return *(void***)p; }
 
 // ---------------------------------------------------------------- guard getters
@@ -221,10 +248,7 @@ void FUN_00e4fcd0(char* p) {
 void FUN_00e50750(int a, float* outx, float* outy) {
   float local[3];
   float area[4];
-  void* app = SP_App();
-  float* dst = local;
-  float* src = (float*)a;
-  ((cViewer16*)(*(void*(__thiscall**)(void*))((char*)Vt(app) + 0x58))(app))->FUN_007c4180(dst, src);
+  static_cast<ProjectionApp16*>(SP_App())->GetViewer()->FUN_007c4180(local, reinterpret_cast<float*>(a));
   SPUI_GetMainWindowArea(area);
   *outx = ((local[0] + 1.0f) * area[2]) * 0.5f;
   *outy = ((1.0f - local[1]) * area[3]) * 0.5f;
