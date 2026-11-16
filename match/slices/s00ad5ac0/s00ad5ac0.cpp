@@ -337,6 +337,13 @@ void CmdActor::Execute(void* args) {
     ((cAppState*)mpAppState)->AddMessage(0, 0, 0);
 }
 
+static __forceinline int* InitAnimations(int* values) {
+    values[0] = 0;
+    values[1] = 0;
+    values[2] = 0;
+    return values;
+}
+
 // ===========================================================================
 // @ 0x00ad5d90
 // ===========================================================================
@@ -346,7 +353,7 @@ CmdActor::CmdActor() {
     mSpec.ConstructSpec(
         "Adds a controllable actor", ":positionType", (void*)0x15662e0,
         "<actor:cstring>", &mActorName, "actor name",
-        "<animations:int[]>", (mZero[0] = 0, mZero[1] = 0, mZero[2] = 0, mZero), "animations guids to play",
+        "<animations:int[]>", InitAnimations(mZero), "animations guids to play",
         "-noWait^", 0, "wait for animation to finish before moving on",
         "-target^ <targetType:positionType> <target:cstring> ", 1, &mStrF4, &mStrF8,
         "target context for animation",

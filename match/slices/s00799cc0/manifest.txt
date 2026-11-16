@@ -4,3 +4,4 @@ slices/s00799cc0/s00799cc0.cpp  ?c0@VCtor16@@QAEPAU1@PAH@Z  00799cc0  /O2 /MD /G
 slices/s00799cc0/s00799cc0.cpp  ?FUN_0079a5a0@@YAHHH@Z  0079a5a0  /O2 /MD /Gy /EHsc /TP /fp:fast
 slices/s00799cc0/s00799cc0.cpp  ?FUN_0079a630@@YAHHH@Z  0079a630  /O2 /MD /Gy /EHsc /TP /fp:fast
 slices/s00799cc0/s00799cc0.cpp  ?reserve@SplitElem8Vector@@QAEPAXI@Z  0079af80  /O2 /MD /Gy /EHsc /TP /fp:fast
+slices/s00799cc0/s00799cc0.cpp  ??1SplitRecord@@QAE@XZ  0079aeb0  /O2 /MD /Gy /EHsc /TP /fp:fast /GS-
