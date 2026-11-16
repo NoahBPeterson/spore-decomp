@@ -446,7 +446,13 @@ public:
     cHash69c mHash69c;                          // +0x0698 .. +0x06cb
     uint8_t mPad6cc[0x10e8 - 0x6cc];
     void* mpRef10e8;                            // +0x10e8
-    uint8_t mPad10ec[0x111c - 0x10ec];
+    uint8_t mPad10ec[0x10fc - 0x10ec];
+    int mCellConsequenceTrait;                  // +0x10fc, retail attribute registration
+    int mCreatureConsequenceTrait;              // +0x1100, retail attribute registration
+    int mTribeConsequenceTrait;                 // +0x1104, retail attribute registration
+    int mCivConsequenceTrait;                   // +0x1108, retail attribute registration
+    int mSpaceConsequenceTrait;                 // +0x110c, retail attribute registration
+    uint8_t mPad1110[0x111c - 0x1110];
     cHash1120 mHash1120;                        // +0x111c .. +0x112b
     uint8_t mPad112c[0x113c - 0x112c];
     cBanModeArray mBanModeTable;                // +0x113c .. +0x1143
@@ -493,6 +499,7 @@ public:
     void AddTraitProgress(float amount, bool social);           // 0x00c756a0
     void ApplyInitialCaptainKey();                             // 0x00c75a50
     void SetTheme(uint32_t themeID);                            // 0x00c75580
+    int GetConsequenceTrait(int stageID) const;                 // 0x00c756e0
     void NoteAdventureCompleted(SP::cEmpire* empire, uint32_t adventureID); // 0x00c75e30
 };
 // ---- items of slice s00c793e0 end
@@ -5135,4 +5142,17 @@ bool SP::cSpacePlayerWarData::Read(SP::cIObjectDatabaseIStream& stream)
         SP::cVarListSerializer::kSignature);
     bool result = serializer.Serialize(stream) ? true : false;
     return result;
+}
+
+// @ 0x00c756e0
+int cPlayer::GetConsequenceTrait(int stageID) const
+{
+    switch (stageID) {
+    case static_cast<int>(0xa426730b): return mCellConsequenceTrait;
+    case static_cast<int>(0xad56080c): return mCreatureConsequenceTrait;
+    case static_cast<int>(0xf71fa311): return mTribeConsequenceTrait;
+    case static_cast<int>(0xbeb528cb): return mCivConsequenceTrait;
+    case 0x2db6dad3: return mSpaceConsequenceTrait;
+    default: return 0;
+    }
 }
