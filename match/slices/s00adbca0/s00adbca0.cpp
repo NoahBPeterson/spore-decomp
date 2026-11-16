@@ -6,6 +6,7 @@
 // Retail layouts; offsets verified against the asm.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (movss, x87 call results; no EH frame).
 #include "types.h"
+#include <intrin.h>
 
 extern "C" double __cdecl sqrt(double);
 #pragma intrinsic(sqrt)
@@ -304,6 +305,7 @@ struct BigNode {                                 // 0x3c-byte payload node
 };
 struct IterA { BigNode* mpNode; BigNode** mpBucket; };
 
+struct NameInsertTag {}; // empty hashtable dispatch tag
 struct HTbl {
     uint32_t f00;                                // +0x00
     void*    mpBucketArray;                      // +0x04
@@ -313,7 +315,7 @@ struct HTbl {
     void   DoFreeNodes(void* nodes, unsigned count);                        // 0x007611f0
     void   FindSmall(FindSmallResult* out, const uint32_t* key);            // 0x00db4780
     void   InsertSmall(SmallNode** pos, const void* value, bool flag);      // 0x00ad9370
-    void   insertEntry(void* out, const void* value, bool flag);            // 0x00ad9090
+    void   insertEntry(void* out, const void* value, NameInsertTag tag);            // 0x00ad9090
     Iter*  erase(Iter* out, SimNode* node, SimNode** bucket);               // 0x00adc970
     IterA* eraseA(IterA* out, BigNode* node, BigNode** bucket);             // 0x00adc9f0
 
@@ -440,14 +442,14 @@ void NameTbl::Insert(uint32_t key, IRef* p, uint32_t slot)
     if (!p)
         return;
     p->mSlot = slot;
+    _ReadWriteBarrier();
     p->AddRef();
     NameKeyValue kv;
     kv.mpKey = key;
     kv.mpValue = p;
     p->AddRef();
     Iter it;
-    bool rehash = false;
-    mMap.insertEntry(&it, &kv, rehash);
+    mMap.insertEntry(&it, &kv, NameInsertTag());
     if (kv.mpValue)
         kv.mpValue->Release();
     p->Release();
