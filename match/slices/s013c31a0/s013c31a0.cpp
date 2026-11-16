@@ -135,6 +135,9 @@ void f_013c31a0() {
     DBGFREE(h->mBegin);
 }
 
+// The linked retail extent continues into this separate empty function.
+void r45_04_link_pad_ret() {}
+
 // @ 0x013C33A0
 void f_013c33a0() {
     char* base = g_168cb28;

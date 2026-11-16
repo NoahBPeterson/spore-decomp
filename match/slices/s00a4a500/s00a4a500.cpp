@@ -5,6 +5,7 @@
 // offsets. Callees, globals and vtable targets are masked relocations.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
+#include <stddef.h>
 
 typedef unsigned int uintptr_t;
 
@@ -506,15 +507,31 @@ void canvas_free(t_glist* g)
         canvas_takeofflist(g);
 }
 
+// The fields used by canvas_pop in the known prefix of a canvas.
+struct CanvasPopPrefix {
+    char padding[0x78];
+    unsigned flags;
+    char padding7c[4];
+    void* helperResult;
+};
+typedef char CanvasPopFlagsOffset[(offsetof(CanvasPopPrefix, flags) == 0x78) ? 1 : -1];
+typedef char CanvasPopHelperOffset[(offsetof(CanvasPopPrefix, helperResult) == 0x80) ? 1 : -1];
+
+class CanvasPopAssetManager {
+public:
+    void* NewEntryNode(void* canvas, void* callback); // 0x00a643b0
+};
+
 // @ 0x00a4ad10
 void canvas_pop(t_glist* g)
 {
     pd_popsym(g);
     canvas_resortinlets(g);
     canvas_resortoutlets(g);
-    *(unsigned*)((char*)g + 0x78) &= ~8u;
-    void* p = FUN_00a67ce0();
-    *(void**)((char*)g + 0x80) = FUN_00a643b0(p, g, (void*)0x00a4a6b0);
+    CanvasPopPrefix* canvas = (CanvasPopPrefix*)g;
+    canvas->flags &= ~8u;
+    CanvasPopAssetManager* manager = (CanvasPopAssetManager*)FUN_00a67ce0();
+    canvas->helperResult = manager->NewEntryNode(g, (void*)0x00a4a6b0);
 }
 
 // @ 0x00a4ad50

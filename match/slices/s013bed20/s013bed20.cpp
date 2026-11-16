@@ -425,6 +425,9 @@ void f_013c1ea0() {
     ((Method1*)g_1567e2c)->M((void*)g_1567e38);
 }
 
+// The retail extent includes the separate empty function at 0x013c1ec0.
+void r45_09_link_pad_ret() {}
+
 // @ 0x013C1F50
 void f_013c1f50() {
     if (g_167bef0 != (int)&g_167bef0) {

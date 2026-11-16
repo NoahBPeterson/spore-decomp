@@ -11,6 +11,7 @@
 
 #include "types.h"
 #include <string.h>
+#include <stddef.h>
 
 namespace eastl {
 
@@ -266,6 +267,7 @@ unsigned int ComputeStyleHash(const void* pStyle);  // 0x00894440
 bool TextStyle_Equals(const void* a, const void* b);  // 0x008942A0
 void* TextStyle_CopyCtor(void* pDst, const void* pSrc);  // 0x008945A0
 void IntrusiveList_Dtor(void* pList);      // 0x00620230 (eastl::intrusive_list_node::Destroy)
+struct IntrusiveListReceiver { void* next; void* prev; void Destroy(); }; // 0x00620230
 void* EAAllocate(unsigned int nSize, const char* pName, int a, int b, const char* pFile, int line);
 
 extern const wchar_t kStr_None[];        // 0x01437CE8
@@ -862,8 +864,10 @@ public:
     unsigned int mnSize;         // +0x0c
     uint32_t mAllocator0;        // +0x10
     uint32_t mAllocator1;        // +0x14
-    void* mListNext;             // +0x18
-    void* mpFreeList;            // +0x1c
+    union {
+        struct { void* mListNext; void* mpFreeList; };
+        IntrusiveListReceiver mList18; // +0x18
+    };
     uint32_t pad20;              // +0x20
     uint32_t pad24;              // +0x24
     void* mpPoolEnd;             // +0x28
@@ -873,6 +877,10 @@ public:
     uint32_t pad38[(0x5c - 0x38) / 4];
     void* mpSecondary;           // +0x5c
 };
+typedef char TextStyleHashtable_list_offset_check[(offsetof(TextStyleHashtable, mList18) == 0x18) ? 1 : -1];
+typedef char TextStyleHashtable_free_offset_check[(offsetof(TextStyleHashtable, mpFreeList) == 0x1c) ? 1 : -1];
+typedef char TextStyleHashtable_secondary_offset_check[(offsetof(TextStyleHashtable, mpSecondary) == 0x5c) ? 1 : -1];
+typedef char TextStyleHashtable_size_check[(sizeof(TextStyleHashtable) == 0x60) ? 1 : -1];
 
 }  // namespace Layout
 }  // namespace XHTML
@@ -951,7 +959,8 @@ void* TextStyleHashtable::Destroy(unsigned char flags)
 {
     if (mpSecondary && *(int*)((char*)mpSecondary - 4) != 0)
         operator delete[]((char*)mpSecondary);
-    IntrusiveList_Dtor((char*)this + 0x18);
+    mList18.Destroy();
+    mVptr = (void*)0x01437c00; // Block base vtable
     if (flags & 1)
         operator delete[](this);
     return this;
