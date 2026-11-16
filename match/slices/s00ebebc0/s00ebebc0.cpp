@@ -80,7 +80,7 @@ struct WinProc
 
 struct LayoutMgr
 {
-	int* __thiscall Next(int* cursor);                     // 0x00b72230 (free helper)
+	int* __thiscall Next(int* cursor);                     // 0x00b72230
 };
 
 struct Transform
@@ -116,10 +116,73 @@ struct ProjectionApp
 	virtual Transform* GetViewer();
 };
 
+// Value and copy semantics mirror EA::Point2DT<float> in the window interface.
+struct Point2D
+{
+    float x, y;
+    Point2D() {}
+    Point2D(float px, float py) : x(px), y(py) {}
+    Point2D(const Point2D& other) : x(other.x), y(other.y) {}
+};
+
 struct UiWindow
 {
-	void __thiscall MapPoint(void* out, float x, float y); // vtable +0xc8
-	bool __thiscall HitTest(float x, float y);             // vtable +0xbc
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void Slot2();
+    virtual void Slot3();
+    virtual void Slot4();
+    virtual void Slot5();
+    virtual void Slot6();
+    virtual void Slot7();
+    virtual void Slot8();
+    virtual void Slot9();
+    virtual void Slot10();
+    virtual void Slot11();
+    virtual void Slot12();
+    virtual void Slot13();
+    virtual void Slot14();
+    virtual void Slot15();
+    virtual void Slot16();
+    virtual void Slot17();
+    virtual void Slot18();
+    virtual void Slot19();
+    virtual void Slot20();
+    virtual void Slot21();
+    virtual void Slot22();
+    virtual void Slot23();
+    virtual void Slot24();
+    virtual void Slot25();
+    virtual void Slot26();
+    virtual void Slot27();
+    virtual void Slot28();
+    virtual void Slot29();
+    virtual void Slot30();
+    virtual void Slot31();
+    virtual void Slot32();
+    virtual void Slot33();
+    virtual void Slot34();
+    virtual void Slot35();
+    virtual void Slot36();
+    virtual void Slot37();
+    virtual void Slot38();
+    virtual void Slot39();
+    virtual void Slot40();
+    virtual void Slot41();
+    virtual void Slot42();
+    virtual void Slot43();
+    virtual void Slot44();
+    virtual void Slot45();
+    virtual void Slot46();
+    virtual bool IsPointInWindow(Point2D point);
+    virtual void Slot48();
+    virtual void Slot49();
+    virtual bool ScreenToWindow(Point2D point, Point2D& output);
+};
+
+struct UiLayout
+{
+    UiWindow* FindWindowByID(uint id, bool recursive); // 0x008105b0
 };
 
 // A generic engine object exposing a vtable.
@@ -138,28 +201,23 @@ static void* vtfn(void* o, int off)
 // @ 0x00ebebc0
 int FUN_00ebebc0()
 {
-	int* app = FUN_0067dd50();
-	void* rect = (*(void* (__thiscall*)(void*))(*(void***)app)[7])(app);
-	float fx = (float)*(int*)((byte*)rect + 8);
-	float fy = (float)*(int*)((byte*)rect + 0xc);
-
-	int cursor = ((WinProc*)DAT_016c744c)->GetPriority();
-
-	for (;;)
-	{
-		int* e = FUN_00b72230(&cursor);
-		if (e == 0)
-			return 0;
-
-		if (((e[6] - e[5]) & ~3) != 0)
-		{
-			void* win = (void*)cSPUILayout_FindWindowByID((void*)e[0xa], 0x100a0000, true);
-			float pos[2];
-			(*(void (__thiscall*)(void*, float*, float, float))(*(void***)win)[0x32])(win, pos, fx, fy);
-			if ((*(bool (__thiscall*)(void*, float, float))(*(void***)win)[0x2f])(win, pos[0], pos[1]))
-				return e[5];
-		}
-	}
+    int* app = FUN_0067dd50();
+    void* rect = (*(void* (__thiscall*)(void*))(*(void***)app)[7])(app);
+    Point2D screen((float)*(int*)((byte*)rect + 8), (float)*(int*)((byte*)rect + 0xc));
+    int cursor = ((WinProc*)DAT_016c744c)->GetPriority();
+    for (int* e = ((LayoutMgr*)DAT_016c744c)->Next(&cursor); e;
+         e = ((LayoutMgr*)DAT_016c744c)->Next(&cursor))
+    {
+        if (((e[6] - e[5]) & ~3) != 0)
+        {
+            UiWindow* win = ((UiLayout*)e[0xa])->FindWindowByID(0x100a0000, true);
+            Point2D pos;
+            win->ScreenToWindow(screen, pos);
+            if (win->IsPointInWindow(pos))
+                return *(int*)e[5];
+        }
+    }
+    return 0;
 }
 
 // ---------------------------------------------------------------------------
