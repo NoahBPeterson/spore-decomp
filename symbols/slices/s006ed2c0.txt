@@ -1,8 +1,8 @@
 006ed2c0 ?SetTextureParticleActive@cEffectsRenderer@@QAEXH_N@Z  # cEffectsRenderer::SetTextureParticleActive migrated from s006ed2c0 (verbatim, slice spelling)
 006ed340 ?RemoveParticleSet@cEffectsRenderer@@QAEXH@Z  # cEffectsRenderer::RemoveParticleSet migrated from s006ed2c0 (verbatim, slice spelling)
 006ed440 ?ActivateByKey@cEffectsKeyedList@@QAEHII@Z  # cEffectsKeyedList::ActivateByKey migrated from s006ed2c0 (verbatim, slice spelling)
-006ed5b0 DoInsertValue  # eastl::vector<cTextureParticleSet,sp_vector_allocator>::DoInsertValue
-006ed6f0 DoInsertValue  # eastl::vector<cModelParticleSet,sp_vector_allocator>::DoInsertValue
+006ed5b0 ?DoInsertValue@vectorCTex@@QAEXPAUcTextureParticleSet@@ABU2@@Z  # vectorCTex::DoInsertValue migrated from s006ed2c0 (verbatim, slice spelling)
+006ed6f0 ?DoInsertValue@vectorCMod@@QAEXPAUcModelParticleSet@@ABU2@@Z  # vectorCMod::DoInsertValue migrated from s006ed2c0 (verbatim, slice spelling)
 006ed8d0 ??0cEffectsModel@@QAE@IIIPBM@Z  # cEffectsModel::cEffectsModel migrated from s006ed2c0 (verbatim, slice spelling)
 006edaa0 ?AddResourceRef@cEffectsModel@@QAEXPAUIRefCounted@@@Z  # cEffectsModel::AddResourceRef migrated from s006ed2c0 (verbatim, slice spelling)
 006edb10 ?Reset@cEffectsModel@@QAEXXZ  # cEffectsModel::Reset migrated from s006ed2c0 (verbatim, slice spelling)
