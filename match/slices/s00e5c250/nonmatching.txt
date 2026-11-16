@@ -5,7 +5,6 @@
 00e5c4f0  23  cell quota + refresh: complete; original loads member into edi before the call (dead) and re-reads the global for the return; ours reloads the global for the return only (cl drops the dead edi load); tried return-local, reference, comma [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 00e5c5d0  104  read up to 13 ints: complete; the min(13,count) select and loop schedule differ
 00e5c660  53  write 13 ints: complete; schedule differs
-00e5c6e0  104  read up to 6 var-list slots: complete; cVarListSerializer buffer/args approximated
 00e5c780  63  rbtree<unsigned,...>::find: complete (tree walk); register allocation (eax/ecx vs original) differs; equiv: PASS (now returns the retptr in eax; void hid eax=0 on not-found: hybrid crash 2026-10-11)
 00e5c860  114  copy range of 0x2c-byte structs: complete; branch/element schedule differs
 00e5c8e0  146  spawn marker for a creature: complete; local struct/arg slots approximated [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, call#2 esp, call#3 esp, call#4 esp]
