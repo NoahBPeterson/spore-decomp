@@ -1188,6 +1188,23 @@ Vec3_s00f6_edc0 cTerrainEffectMapNormal::Normal(const float* dir)
     return *src;
 }
 
+// @ 0x00f6f1b0
+float cTerrainEffectMapNormal::Blend(const float* dir)
+{
+    FaceUv r;
+    FaceFromDir(dir, &r);
+
+    cTerrainEffectMapSet* m = mp0c;
+    if (m->mp10 == 0 || m->mp08 == 0)
+        return 0.0f;
+
+    float t = m->mp10->SampleBilinear(&r);
+    float k = m->m38;
+    float s = m->mp08->GetFloat(&r);
+
+    return mp10->Eval(s * k, t);
+}
+
 // @ 0x00f6f390
 float cTerrainEffectMapNormal::GetNormalized(const float* dir)
 {
@@ -1231,6 +1248,30 @@ float cTerrainEffectMapNormal::Test(const float* dir)
         if (mid < t)
             return 1.0f;
         return 0.0f;
+    }
+    return 0.0f;
+}
+
+// @ 0x00f6f7d0
+float cTerrainEffectMapNormal::GetRatio(const float* dir)
+{
+    cTerrainEffectMapSet* m = mp0c;
+    if (m->mp08 == 0 || m->mp0c == 0)
+        return 0.0f;
+
+    float k   = m->m38;
+    float hi  = (m->m44 + m->m3c) * m->m38;
+    float lo  = m->m3c * m->m38;
+    float b   = m->m48;
+
+    FaceUv r;
+    FaceFromDir(dir, &r);
+
+    float t = m->mp08->GetFloat(&r) * k;
+    if (lo <= t && t <= hi) {
+        float s = m->mp0c->GetFloat(&r) * k;
+        if (b > s)
+            return (t - lo) / (hi - lo);
     }
     return 0.0f;
 }
@@ -2885,3 +2926,4 @@ void CubeMapBuffer::SetSize(int size, int fill)
     v->Fit(0, 0);
     v->Fit((unsigned)(size * size * 6), (const char*)&fill);
 }
+
