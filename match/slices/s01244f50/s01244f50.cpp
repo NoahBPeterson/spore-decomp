@@ -384,13 +384,19 @@ void init_15e2a38()
     }
 }
 
+struct PointerRange_s0126dae0 { void* begin; void* end; void* capacity; };
+// Prefix view of native object 0x015e2e48, described as sAtomStartElementMap
+// and sStartHandlers in earlier reconstructions; original linkage name is unknown.
+extern PointerRange_s0126dae0 g_015e2e48;
+
 // @ 0x0126dae0
 void init_15e2e48()
 {
-    *(uint32_t*)0x15e2e48 = 0;
-    *(uint32_t*)0x15e2e4c = 0;
-    *(uint32_t*)0x15e2e50 = 0;
-    bool b = false;
+    g_015e2e48.begin = 0;
+    g_015e2e48.end = 0;
+    g_015e2e48.capacity = 0;
+    struct Tag {};
+    Tag b = Tag();
     atexit(&FUN_013bce80);
 }
 

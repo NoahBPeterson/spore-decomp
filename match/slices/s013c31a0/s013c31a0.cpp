@@ -351,11 +351,7 @@ void f_013c9c70() {
 
 // @ 0x013C9CB0
 void f_013c9cb0() {
-    if (g_16c9f5c) {
-        int* p = (int*)(g_16c9f5c + 8);
-        int n = (*(volatile int*)p += -1);
-        if (n < 1) *(volatile int*)p += 1;
-    }
+    if (g_16c9f5c) ((R45ScatterResource*)g_16c9f5c)->Release();
 }
 
 // @ 0x013C9DD0

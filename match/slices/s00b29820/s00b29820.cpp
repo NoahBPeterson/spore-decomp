@@ -733,13 +733,12 @@ void __stdcall FUN_00b2a6f0(SgEntry* e)
 void SgHandler750::FUN_00b2a750(uint32_t flags)
 {
     SgHandler750* self = this;
-    uint32_t f = flags & 0xf;
-    if (f)
+    if (flags & 0xf)
         g167e09c = 0;
     SgIface35e0* p = self->m3c;
     if ((flags & 8) && p)
         p->FUN_00ff35e0(1);
-    if (self->m40 && f)
+    if (self->m40 && (flags & 0xf))
         self->m40->FUN_00b2a110();
 }
 

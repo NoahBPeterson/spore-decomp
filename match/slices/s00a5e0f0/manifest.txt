@@ -12,3 +12,4 @@ slices/s00a5e0f0/s00a5e0f0.cpp  ?frandom_new@Eapd@Audio@EA@@YAPAXM@Z  00a5ed40  
 slices/s00a5e0f0/s00a5e0f0.cpp  ?spin_bang@Eapd@Audio@EA@@YAXPAD@Z  00a5efd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a5e0f0/s00a5e0f0.cpp  ?spin_stop@Eapd@Audio@EA@@YAXPAD@Z  00a5f000  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a5e0f0/s00a5e0f0.cpp  ?spin_float@Eapd@Audio@EA@@YAXPADM@Z  00a5f030  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a5e0f0/s00a5e0f0.cpp  ?random_seed@Eapd@Audio@EA@@YAXI@Z  00a5ecb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
