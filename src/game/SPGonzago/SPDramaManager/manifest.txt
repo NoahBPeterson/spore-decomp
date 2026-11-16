@@ -47,3 +47,6 @@
 ../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cDramaEventInstanceData_s00d4_d5c0@@QAE_NPAX@Z  00d4db50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cNightPredatorEvent_s00d4_d5c0@@QAE_NPAX@Z  00d4dbe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cUFOAbductionEvent@@QAE_NPAX@Z  00d4dc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cBabyGameEvent@@QAE_NPAX@Z  00d4dd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cRainStormEvent_s00d4_d5c0@@QAE_NPAX@Z  00d4dd90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPDramaManager.cpp  ?Write@cMeteorStrikeEvent_s00d4_f2e0@SP@@QAE_NPAX@Z  00d50260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

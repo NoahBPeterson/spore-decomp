@@ -2581,31 +2581,37 @@ bool cUFOAbductionEvent::Write(void* stream)
     return false;
 }
 
+extern SP::cDataSerializerGeneric gBabyGameEventSerializer; // 0x015839d4
+
 // @ 0x00d4dd00
 bool cBabyGameEvent::Write(void* stream)
 {
-    cVarListSerializer local;
-    OReader* reader = ((OStream*)stream)->v8();
+    OReader* __restrict reader = ((OStream*)stream)->v8();
     u32 key = 0x5599f2c;
     void* istream = reader->v6();
     FUN_0093aa70(istream, &key, 1, 0);
-    bool ok = ((cDramaEventInstanceData_s00d4_d5c0*)this)->WriteData(stream);
-    local.ctor_00692f90(this, (const char*)0x15839d4, 0x1a80d26);
-    if (ok && local.serialize_00692900(stream)) return true;
+    bool ok = ((::cDramaEventInstanceData_s00d4_d5c0*)this)->WriteData(stream);
+    SP::cVarListSerializer local(this, &gBabyGameEventSerializer,
+        SP::cVarListSerializer::kSignature);
+    if (ok && local.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream)))
+        return true;
     return false;
 }
+
+extern SP::cDataSerializerGeneric gRainStormEventSerializer; // 0x01583a10
 
 // @ 0x00d4dd90
 bool cRainStormEvent_s00d4_d5c0::Write(void* stream)
 {
-    cVarListSerializer local;
-    OReader* reader = ((OStream*)stream)->v8();
+    OReader* __restrict reader = ((OStream*)stream)->v8();
     u32 key = 0x5599f52;
     void* istream = reader->v6();
     FUN_0093aa70(istream, &key, 1, 0);
-    bool ok = ((cDramaEventInstanceData_s00d4_d5c0*)this)->WriteData(stream);
-    local.ctor_00692f90(this, (const char*)0x1583a10, 0x1a80d26);
-    if (ok && local.serialize_00692900(stream)) return true;
+    bool ok = ((::cDramaEventInstanceData_s00d4_d5c0*)this)->WriteData(stream);
+    SP::cVarListSerializer local(this, &gRainStormEventSerializer,
+        SP::cVarListSerializer::kSignature);
+    if (ok && local.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream)))
+        return true;
     return false;
 }
 
@@ -3204,21 +3210,20 @@ void* FUN_00d50040(u32 effectKey, const Vec3_s00d4_f2e0& pos, float radius, floa
     return holder;
 }
 
+extern SP::cDataSerializerGeneric gMeteorStrikeEventSerializer; // 0x01583998
+
 // @ 0x00d50260
 bool SP::cMeteorStrikeEvent_s00d4_f2e0::Write(void* stream)
 {
-    Stream* s = (Stream*)stream;
-    Reader* reader = s->v20();
+    Reader* __restrict reader = ((Stream*)stream)->v20();
     u32 key = 0x5599ef6;
     void* istream = reader->v18();
     FUN_0093aa70(istream, &key, 1, 0);
-    bool ok = ((WriteDataThunk)FUN_00d4da10)(this, stream);
-
-    cVarListSerializer_s00d4_f2e0 local;
-    local.ctor_00692f90(this, (const char*)0x1583998, 0x1a80d26);
-    if (ok) {
-        if (local.serialize_00692900(stream)) return true;
-    }
+    bool ok = ((::cDramaEventInstanceData_s00d4_d5c0*)this)->WriteData(stream);
+    SP::cVarListSerializer local(this, &gMeteorStrikeEventSerializer,
+        SP::cVarListSerializer::kSignature);
+    if (ok && local.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream)))
+        return true;
     return false;
 }
 
