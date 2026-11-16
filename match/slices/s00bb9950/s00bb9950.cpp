@@ -16,6 +16,13 @@
 #include "types.h"
 #include <stddef.h>
 #include <intrin.h>
+#include <wchar.h>
+
+#pragma intrinsic(wcscmp)
+#include "SP/cVarListSerializer.h"
+
+extern SP::cDataSerializerGeneric gStarRecordSerializerList[]; // 0x0156cb70
+extern const wchar_t* gDefaultStarName; // 0x0151ac94
 
 namespace EA { namespace IO {
 class IStream;
@@ -355,11 +362,9 @@ void* cStarManager::PickBannerForStar(uint32_t key)
 // ===========================================================================
 bool cStarRecord::Write(void* outStream)
 {
-    // cVarListSerializer on the stack (0xa14 bytes local)
-    char ser[0xa14];
-    *(uint32_t*)((char*)this + 0x80) = 0;
-    ((void(__thiscall*)(void*, cStarRecord*, uint32_t, uint32_t))0x692f90)(ser, this, 0x156cb70, 0x1a80d26);
-    return ((bool(__thiscall*)(void*, void*))0x692900)(ser, outStream);
+    mpSpeciesProfile_80 = 0;
+    SP::cVarListSerializer ser(this, gStarRecordSerializerList, 0x1a80d26);
+    return ser.Serialize(*(SP::cIObjectDatabaseOStream*)outStream);
 }
 
 // ===========================================================================
@@ -835,29 +840,20 @@ void* cStarRecord::GetCitizenSpecies()
 // ===========================================================================
 bool cStarRecord::Read(void* inStream)
 {
-    char ser[0xa14];
-    ((void(__thiscall*)(void*, cStarRecord*, uint32_t, uint32_t))0x692f90)(ser, this, 0x156cb70, 0x1a80d26);
-    bool ok = ((bool(__thiscall*)(void*, void*))0x693e10)(ser, inStream);
+    SP::cVarListSerializer ser(this, gStarRecordSerializerList, 0x1a80d26);
+    bool ok = ser.Serialize(*(SP::cIObjectDatabaseIStream*)inStream);
     mpSpeciesProfile_80 = 0;
-    ISpeciesManager* sm = (ISpeciesManager*)SP_GetSetting9();
-    if (sm->GetProfile(&mCitizenSpeciesKey) == 0)
+    if (((ISpeciesManager*)SP_GetSetting9())->GetProfile(&mCitizenSpeciesKey) == 0)
         field_50 = 1;
-    if (mName.mpBegin == mName.mpEnd)
+    String16* name = &mName;
+    if (name->empty())
         SP_GenerateNewStarName(this);
-    const wchar_t* empty = (const wchar_t*)0x151ac94;
-    {
-        const wchar_t* a = (const wchar_t*)mName.mpBegin;
-        while (*a == *empty) {
-            if (*a == 0) { a = 0; break; }
-            ++a; ++empty;
-            if (*a == 0) { a = 0; break; }
-        }
-        if (a != 0)
+    if (wcscmp((const wchar_t*)name->mpBegin, gDefaultStarName) == 0) {
+        SP_GenerateNewStarName(this);
+        if (name->empty())
             SP_GenerateNewStarName(this);
+        SetName(name);
     }
-    if (mName.mpBegin == mName.mpEnd)
-        SP_GenerateNewStarName(this);
-    SetName(&mName);
     return ok;
 }
 
