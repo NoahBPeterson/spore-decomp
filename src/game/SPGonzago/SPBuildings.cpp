@@ -48,6 +48,12 @@ extern SP::cDataSerializerGeneric gBuildingWrite2SerializerList[]; // 0x156db6c
 
 extern SP::cDataSerializerGeneric gBuildingWrite3SerializerList[]; // 0x156dba8
 
+extern SP::cDataSerializerGeneric gBuildingWrite4SerializerList[]; // 0x156dbe4
+
+extern SP::cDataSerializerGeneric gSerializableNounSerializerList[]; // 0x156d770
+
+extern SP::cDataSerializerGeneric gBuildingWrite5SerializerList[]; // 0x156dc20
+
 // ---- items of slice s00bcc010 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define VF(obj, slot) (*(void**)((char*)*(void**)(obj) + (slot) * 4))
 void  __cdecl FUN_0093aa70(void* w, void* p, int n, int b);    // 0x0093aa70 EA::IO::WriteUint32
@@ -1455,16 +1461,15 @@ void FUN_00bd40a0(void* p);   // 0x00bd40a0
 // @ 0x00bcc350
 char __thiscall cSerializableNoun::WriteBase(void* s)
 {
-    void* x = ((void*(__thiscall*)(void*))VF(s, 8))(s);
+    BuildingArchiveStreamHolder* __restrict holder = static_cast<BuildingArchive*>(s)->GetStreamHolder();
     int   ver = 0xe9cb8ba;
-    void* w = ((void*(__thiscall*)(void*))VF(x, 6))(x);
+    void* w = holder->GetStream();
     FUN_0093aa70(w, &ver, 1, 0);
     ((cGameData*)this)->Write(s);
     bool ok = ((cSpatialObject*)((char*)this + 0x34))->Write(s) != 0 &&
               ((cCombatant*)((char*)this + 0x120))->Write(s) != 0;
-    cVarListSerializer vl;
-    vl.Construct(this, 0x156d770, 0x1a80d26);
-    if (ok && vl.Serialize(s) != 0)
+    SP::cVarListSerializer vl(this, gSerializableNounSerializerList, SP::cVarListSerializer::kSignature);
+    if (ok && vl.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(s)) != 0)
         return 1;
     return 0;
 }
@@ -1705,15 +1710,14 @@ void __thiscall cVehicle::Read3(void* s)
 // @ 0x00bccc70
 bool __thiscall cVehicle::Write4(void* s)
 {
-    void* x = ((void*(__thiscall*)(void*))VF(s, 8))(s);
+    BuildingArchiveStreamHolder* __restrict holder = static_cast<BuildingArchive*>(s)->GetStreamHolder();
     int   ver = 0x1a55e4d;
-    void* w = ((void*(__thiscall*)(void*))VF(x, 6))(x);
+    void* w = holder->GetStream();
     FUN_0093aa70(w, &ver, 1, 0);
     bool ok = ((cSerializableNoun*)this)->WriteBase(s) != 0 &&
               ((cSerializableNoun*)this)->WriteBase(s) != 0;
-    cVarListSerializer vl;
-    vl.Construct(this, 0x156dbe4, 0x1a80d26);
-    if (ok && vl.Serialize(s) != 0)
+    SP::cVarListSerializer vl(this, gBuildingWrite4SerializerList, SP::cVarListSerializer::kSignature);
+    if (ok && vl.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(s)) != 0)
         return true;
     return false;
 }
@@ -1780,16 +1784,15 @@ void __thiscall cVehicle::bccf20()
 // @ 0x00bccf80
 bool __thiscall cVehicle::Write5(void* s)
 {
-    void* x = ((void*(__thiscall*)(void*))VF(s, 8))(s);
+    BuildingArchiveStreamHolder* __restrict holder = static_cast<BuildingArchive*>(s)->GetStreamHolder();
     int   ver = 0x436f315;
-    void* w = ((void*(__thiscall*)(void*))VF(x, 6))(x);
+    void* w = holder->GetStream();
     FUN_0093aa70(w, &ver, 1, 0);
     ((cGameData*)this)->Write(s);
     bool ok = ((cLocomotiveObject*)((char*)this + 0x34))->Write(s) != 0 &&
               ((cCombatant*)((char*)this + 0x588))->Write(s) != 0;
-    cVarListSerializer vl;
-    vl.Construct(this, 0x156dc20, 0x1a80d26);
-    if (ok && vl.Serialize(s) != 0)
+    SP::cVarListSerializer vl(this, gBuildingWrite5SerializerList, SP::cVarListSerializer::kSignature);
+    if (ok && vl.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(s)) != 0)
         return true;
     return false;
 }

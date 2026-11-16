@@ -52,3 +52,6 @@
 ../src/game/SPGonzago/SPBuildings.cpp  ?Write@cBuildingCityHall@SP@@UBE_NAAVcIObjectDatabaseOStream@2@@Z  00bcc8b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?Write2@cVehicle@@QAEXPAX@Z  00bcc9f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBuildings.cpp  ?Write3@cVehicle@@QAEXPAX@Z  00bccb30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?Write4@cVehicle@@QAE_NPAX@Z  00bccc70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?WriteBase@cSerializableNoun@@QAEDPAX@Z  00bcc350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBuildings.cpp  ?Write5@cVehicle@@QAE_NPAX@Z  00bccf80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
