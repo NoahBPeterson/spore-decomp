@@ -25,3 +25,4 @@
 ../src/game/SPEngine/SPObjectDatabase.cpp  ?ReadSerializableObject@cICOMSerializer@@QAEHPAUSerStream@@PAPAUISerializable@@D@Z  006a06a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPObjectDatabase.cpp  ?Nuke@Tree@@QAEXPAURBNode@@@Z  0069ee60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPObjectDatabase.cpp  ?reset@CComSer@@QAEXXZ  0069f160  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?Open@cObjectDatabase@SP@@UAE_N_N0@Z  0069df20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

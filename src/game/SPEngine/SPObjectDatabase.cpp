@@ -932,17 +932,17 @@ char Cded0::flush()
 }
 
 // @ 0x0069df20
-bool Cdf20::begin(char flag)
+bool SP::cObjectDatabase::Open(bool read, bool)
 {
-    f20 = 0.0f;
-    char mode = (char)((flag == 0) + 1);
-    char c1 = ((char(__thiscall*)(void*, int, int, int))(*(void***)p18)[0x18 / 4])(p18, mode, 4, 0);
-    if (c1) {
-        if (((char(__thiscall*)(void*, void*, int))(*(void***)p1c)[0x10 / 4])(p1c, this, mode))
+    mfPercentageCompletion0To100 = 0.0f;
+    int mode = (read == 0) + 1;
+    if (mpDatabase->Open(mode, 4, false)) {
+        if (((bool(__thiscall*)(void*, void*, int))(*(void***)mpCOMSerializer.get())[0x10 / 4])(mpCOMSerializer.get(), this, mode))
             return true;
     }
-    if (((int(__thiscall*)(void*))(*(void***)p4)[0x20 / 4])(p4))
-        ((void(__thiscall*)(void*))(*(void***)p4)[0x1c / 4])(p4);
+    EA::ResourceMan::Database* database = this;
+    if (database->GetAccessFlags())
+        database->Close();
     return false;
 }
 
