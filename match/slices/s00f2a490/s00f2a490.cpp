@@ -698,4 +698,3 @@ bool BigObj::check()
     }
     return ok;
 }
-
