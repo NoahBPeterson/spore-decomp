@@ -17,7 +17,6 @@
 0051aaa0 101 /Od refcount release pattern differs; complete Release reconstruction
 0051ab50 705 /Od int-iterator loop shape differs; complete PreloadTextures reconstruction
 0051c470 306 /Od MI vtable stores + EASTL member-init schedule differ; complete PaintSystem ctor. equiv PASS after: the Graphics::BakeSprites ctor (0x007b00f0) is a plain thiscall (this in ecx, no stack args) via BakeSprites::Construct(); the smart-pointer AddRef/Release call vtable[0]/vtable[1] directly; retail does not zero +0x48. flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
-0051c640 9 cSkinpaintTextureExtractor secondary-base init (96-byte head of the 2462-byte extent): complete; this/svc /Od slot order swapped [equiv: PASS 391 valid, 100% coverage] flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0051d010 71 /Od base-vtable restore differs; complete PaintSystem dtor. equiv PASS after: PendingBatch::Flush() (0x004039f0) is a thiscall on this+0x34 with no stack args. flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0051d270 91 /Od erase tag-arg slots / symbol size mismatch; complete AutoRefVector::erase flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 0051d300 554 complete fixed_vector<intrusive_ptr>::DoInsertValue; original inlines the move/uninitialized-copy helpers with extra flag locals (frame 0x84 vs mine) flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

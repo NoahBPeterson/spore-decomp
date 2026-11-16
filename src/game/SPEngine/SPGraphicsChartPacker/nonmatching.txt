@@ -18,8 +18,6 @@
 006df530 80 eastl::partial_sort<SortKeyObj**,SortKeyLess>; mirrored variant, same schedule difference flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006df5a0 271 eastl::partial_sort<cClusterRect*>; make_heap/adjust_heap/sort_heap calls all present, value-copy and call-argument schedule differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006df700 97 eastl::copy<RefPtr*>; intrusive-pointer element assign reproduced, schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-006df770 90 eastl::quick_sort_impl<SortKeyObj**,int,SortKeyGreater>; median-of-three/get_partition/recursion reproduced, pivot register assignment (eax/esi/ebp) differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-006df830 90 eastl::quick_sort_impl<SortKeyObj**,int,SortKeyLess>; mirrored variant, same register assignment difference flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006df8f0 46 eastl::get_partition<cClusterRect*>; pivot-by-value partition reproduced, pivot area cached and the pivot argument slots reused as the swap temp (rep movsd vs cl per-field block); equiv: PASS (376 valid inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006dfb00 181 eastl::quick_sort_impl<cClusterRect*,int,cRectAreaSort>; median/partition/recursion reproduced, value partition schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006dfc30 70 cluster-map add callback; area accumulation now reads the float bits and the grow path is the thiscall vector::DoInsertValue (ecx=vector); code schedule differs; equiv: PASS (229 valid inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

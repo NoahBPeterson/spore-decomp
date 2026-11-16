@@ -37,31 +37,24 @@ struct EffectInfo {
     int   mPad30;                // +0x30
     int   mPad34;                // +0x34
     Effect* mpEffect;            // +0x38
+
+    EffectInfo& operator=(const EffectInfo& other);  // 0x00c88c30 (retail copy-assign: field copies + mpEffect refcount swap)
 };
 typedef char EffectInfo_layout_check[(sizeof(EffectInfo) == 0x3c) ? 1 : -1];
 
-struct XformMsg;
-struct Effect;
-struct Matrix33 {
-    float m0, m1, m2, m3, m4, m5, m6, m7, m8;
-    void Assign(const float* src);   // 0x0041cb40
-    void CopyFrom(const Matrix33& o) {
-        m0 = o.m0; m1 = o.m1; m2 = o.m2;
-        m3 = o.m3; m4 = o.m4; m5 = o.m5;
-        m6 = o.m6; m7 = o.m7; m8 = o.m8;
+// eastl::move(first, last, dest) instance for EffectInfo: non-trivial T, so the
+// algorithm is a per-element assignment loop through the user operator=.
+// Retail's shared out-of-line instance is 0x00c88d10 (called from 0x00c8b220 and
+// UpdateEffects); at 0x00c8ad30 cl inlines it into vector::erase(position).
+inline void EffectVecMove(EffectInfo* first, EffectInfo* last, EffectInfo* dest) {
+    while (first != last) {
+        *dest = *first;
+        ++first;
+        ++dest;
     }
-};
+}
 
-// ---------------------------------------------------------------------------
-// eastl::vector<tEffectInfo>: the view stores it inline at +0xc0.
-// ---------------------------------------------------------------------------
-struct EffectVec {
-    EffectInfo* pBegin;      // +0x00
-    EffectInfo* pEnd;        // +0x04
-    EffectInfo* pCap;        // +0x08
-    void DoInsertValue(EffectInfo* pPos, const EffectInfo& value);  // 0x00c8a910
-    void push_back_default();                                       // 0x00c8add0
-};
+struct XformMsg;
 
 // A spawned effect handle (vtable offsets used by the view).
 struct Effect {
@@ -83,6 +76,40 @@ struct Effect {
     virtual void e3c();
     virtual void e40();
     virtual void e44(int, void*, int);  // +0x44
+};
+
+struct Matrix33 {
+    float m0, m1, m2, m3, m4, m5, m6, m7, m8;
+    void Assign(const float* src);   // 0x0041cb40
+    void CopyFrom(const Matrix33& o) {
+        m0 = o.m0; m1 = o.m1; m2 = o.m2;
+        m3 = o.m3; m4 = o.m4; m5 = o.m5;
+        m6 = o.m6; m7 = o.m7; m8 = o.m8;
+    }
+};
+
+// ---------------------------------------------------------------------------
+// eastl::vector<tEffectInfo>: the view stores it inline at +0xc0.
+// ---------------------------------------------------------------------------
+struct EffectVec {
+    EffectInfo* pBegin;      // +0x00
+    EffectInfo* pEnd;        // +0x04
+    EffectInfo* pCap;        // +0x08
+    void DoInsertValue(EffectInfo* pPos, const EffectInfo& value);  // 0x00c8a910
+    void push_back_default();                                       // 0x00c8add0
+
+    // eastl::vector::erase(position): shift the tail down one element, drop the
+    // end, and destroy the stale last element (releases its mpEffect). Inlined
+    // into 0x00c8ad30; the move loop comes from EffectVecMove above.
+    EffectInfo* erase(EffectInfo* position) {
+        EffectInfo* destPosition = position;
+        if ((position + 1) < pEnd)
+            EffectVecMove(destPosition + 1, pEnd, destPosition);
+        --pEnd;
+        Effect* de = pEnd->mpEffect;
+        if (de) de->e04();
+        return destPosition;
+    }
 };
 
 // Message passed to Effect::e18.
@@ -241,18 +268,7 @@ void cSpatialObjectView::sub_ad30(int param2, int id) {
                 it->mpEffect->e0c(id);
             }
         }
-        EffectInfo* last = mEffects.pEnd;
-        EffectInfo* dst = it;
-        EffectInfo* p = it + 1;
-        if (p < last) {
-            do {
-                ((EffectInfo* (__thiscall*)(EffectInfo*, const EffectInfo*))sub_c88c30)(dst, p);
-                ++p;
-                ++dst;
-            } while (p != last);
-        }
-        Effect* de = (--mEffects.pEnd)->mpEffect;
-        if (de) de->e04();
+        mEffects.erase(it);
         return;
     }
 }

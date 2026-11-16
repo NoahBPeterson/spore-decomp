@@ -3,6 +3,8 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+extern "C" size_t __cdecl wcslen(const wchar_t*);
+#pragma intrinsic(wcslen)
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" char    gTokStart[];         // 0x01667b04
@@ -1430,17 +1432,7 @@ PropNodeX* PropNodeX::F_8f24a0(int a, const uint16_t* str)
     mVtable = 0x01439a48;
     mField08 = (uint32_t)a;
     mField0c = (uint32_t)str;
-    if (str) {
-        const uint16_t* p = str + 1;
-        uint16_t c;
-        do {
-            c = *str;
-            ++str;
-        } while (c != 0);
-        mLength = (int)(str - p);
-    } else {
-        mLength = -1;
-    }
+    mLength = str ? (int)wcslen((const wchar_t*)str) : -1;
     return this;
 }
 }}}  // namespace EA::XHTML::Layout

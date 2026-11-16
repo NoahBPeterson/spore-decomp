@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPTribeGameBehaviorMate.cpp  ?TRIBE_MATE_Activate@SP@@YA_NPAUCreature@@HHHHPAUHolder@@@Z  00d77510  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

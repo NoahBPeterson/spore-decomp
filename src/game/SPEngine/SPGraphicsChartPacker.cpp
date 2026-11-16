@@ -899,8 +899,8 @@ RefPtr* CopyRefPtr(RefPtr* first, RefPtr* last, RefPtr* dest)
 void QuickSortImplKeyGT(SortKeyObj** first, SortKeyObj** last, int kRecursionCount, const SortKeyGreater& compare)
 {
     while (((last - first) > 28) && (kRecursionCount > 0)) {
-        SortKeyObj** mid = first + (last - first) / 2;
         SortKeyObj** lastm1 = last - 1;
+        SortKeyObj** mid = first + (last - first) / 2;
         SortKeyObj* const& pivot = Median3(*first, *mid, *lastm1, compare);
         SortKeyObj** position = GetPartitionKeyGT(first, last, pivot, compare);
         QuickSortImplKeyGT(position, last, --kRecursionCount, compare);
@@ -914,8 +914,8 @@ void QuickSortImplKeyGT(SortKeyObj** first, SortKeyObj** last, int kRecursionCou
 void QuickSortImplKeyLT(SortKeyObj** first, SortKeyObj** last, int kRecursionCount, const SortKeyLess& compare)
 {
     while (((last - first) > 28) && (kRecursionCount > 0)) {
-        SortKeyObj** mid = first + (last - first) / 2;
         SortKeyObj** lastm1 = last - 1;
+        SortKeyObj** mid = first + (last - first) / 2;
         SortKeyObj* const& pivot = Median3(*first, *mid, *lastm1, compare);
         SortKeyObj** position = GetPartitionKeyLT(first, last, pivot, compare);
         QuickSortImplKeyLT(position, last, --kRecursionCount, compare);

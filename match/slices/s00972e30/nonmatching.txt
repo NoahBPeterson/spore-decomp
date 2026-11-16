@@ -1,5 +1,4 @@
 00972e90 547 DoArrowKey: complete (both key switches, selection clear, notify, scrollbar update); regalloc/frame differ, uninitialized msg fields left as-is; flags /arch:SSE /fp:fast (original uses movss/cvtsi2ss/comiss/cvttss2si); col/row now one CellCoordinates struct (msg.pCur points at both, as in the original)
-00973100 27 SetGridFlags: complete; vptr load / dirty-flag store order differs in the tail
 00973160 150 GetCellIsSelected: complete (3 selection rules); compiler hoists the list head, original recomputes it per case
 00973200 43 ClearSelection: complete; 64-bit compare of +0x84 reproduced, store zeroing/-1 constants scheduled differently
 00973270 175 IsWindowACellWindow: complete (id lookup and window-ptr lookup); register allocation/push order differs

@@ -318,8 +318,7 @@ void ShadowMgr::readProperties(int, int)
     if (g_appProperties_15fd918 != 0) {
         cProperty* prop;
         typedef bool (__thiscall* Fn)(void*, u32, cProperty**);
-        Fn fn = *(Fn*)((char*)g_appProperties_15fd918->vt + 0x24);
-        if (fn(g_appProperties_15fd918, 0x539d9e5u, &prop) && prop->kind == 1) {
+        if ((*(Fn*)((char*)g_appProperties_15fd918->vt + 0x24))(g_appProperties_15fd918, 0x539d9e5u, &prop) && prop->kind == 1) {
             u8 v = *(u8*)prop->GetBool();
             this->flag = v;
         }

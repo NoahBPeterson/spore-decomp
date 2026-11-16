@@ -8,7 +8,6 @@
 00ec94d0   50  complete shutdown; refcount release scheduling differs; equiv: UNSUPPORTED (unresolved ref operator delete)
 00ec95f0   45  complete map pair lookup; id via map+4, map find with this=map+0x18; equiv: PASS
 00ec9640   45  complete map pair lookup; same body but map find with this=map+0x34; equiv: PASS
-00ec9690   59  complete pair iteration; map find with this=map+0x18 and 8-byte elements; equiv: WEAK (282 valid, 0 mismatch, 57% coverage)
 00ec9ae0   36  complete index-of search; map find with this=map+0x50 and 4-byte elements; equiv: PASS
 00ec8f40  115  complete queue-drain loop with virtual calls on the fetched object; equiv: WEAK (232 valid, 0 mismatch, 10.9% coverage; most random object pointers fault). flags /O2 /MD /Gy /EHsc /TP
 00ec92b0  433  complete behavior-dialog builder (layout lookup, window property calls, id label loop); equiv: UNSUPPORTED (unresolved refs ??2@YAPAXI@Z, ?cSPUILayout_FindWindowByID). flags /O2 /MD /Gy /EHsc /TP

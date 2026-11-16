@@ -7,3 +7,4 @@ slices/s00972e30/s00972e30.cpp  ?CountCellsInRange@SparseMatrix@@QAEHHHHH@Z  009
 slices/s00972e30/s00972e30.cpp  ?GetCellsInRange@SparseMatrix@@QAEHHHHHPAH@Z  00973b90
 slices/s00972e30/s00972e30.cpp  ?ListErase@@YGPAUListIter@@PAU1@U1@1@Z  00973d10
 slices/s00972e30/s00972e30.cpp  ?ListInsertRange@@YGXPAUListNode@@UListIter@@1H@Z  00973d60
+slices/s00972e30/s00972e30.cpp  ?SetGridFlags@WinGridView@@QAEXI@Z  00973100  /O2 /MD /Gy /EHsc /TP

@@ -9,3 +9,4 @@
 ../src/game/SPGonzago/SPTribeHut.cpp  ?SetOwnerIface@cTribeTool@@QAEXPAX@Z  00c9c250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeHut.cpp  ?HasToolNoun@cTribeTool@@QAE_NXZ  00c9c2e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribeHut.cpp  ?GetToolPosition@cTribeTool@@QAEIPAX@Z  00c9c5e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPTribeHut.cpp  ?UpdateEmpireColor@cTribeHut@@QAEXXZ  00c9bf30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

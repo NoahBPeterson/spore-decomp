@@ -2477,8 +2477,7 @@ float __thiscall cPlayer_s00c7_5e70::GetPlayerWarElapsedSeconds(cPlayer_s00c7_5e
     mWars.Find(&pFound, &nEnemyId);
     if (pFound != (cRBNodeBase*)&mWars.mAnchor) {
         cWarNode* pNode = (cWarNode*)pFound;
-        U64 nElapsed = pNode->mTimer.GetElapsedTime();
-        return (float)nElapsed * g_f0p001;
+        return (float)pNode->mTimer.GetElapsedTime() * g_f0p001;
     }
     return 0.0f;
 }

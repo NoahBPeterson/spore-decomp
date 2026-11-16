@@ -8894,8 +8894,7 @@ void cSPPlanetNoun::SetLog(void* r)
             map1[id] = v;
             ((PendingObj*)SP_PendingObject())->ac8cd0(this, 1);
         }
-        int v = VGETID(mpLog590);
-        ((void(__thiscall*)(cSPPlanetNoun*, int))((void**)*(void***)this)[0x48 / 4])(this, v);
+        ((void(__thiscall*)(cSPPlanetNoun*, int))((void**)*(void***)this)[0x48 / 4])(this, VGETID(mpLog590));
     }
 }
 

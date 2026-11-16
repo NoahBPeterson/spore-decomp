@@ -4948,6 +4948,7 @@ void* RefRecordOps::Assign(const void* src)
     *(u32*)(self + 8) = *(u32*)(s + 8);
     *(u32*)(self + 0xc) = *(u32*)(s + 0xc);
     void* p1 = *(void**)(s + 0x10);
+    _ReadWriteBarrier();
     void* old1 = *(void**)(self + 0x10);
     if (p1 != old1) {
         if (p1 != 0) {

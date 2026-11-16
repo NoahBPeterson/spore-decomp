@@ -2,6 +2,7 @@
 // Object file: SPGonzago/_at_00b30000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "SP/cPropertyList.h"
 #include "SP/cDirectPropertyList.h"
@@ -2735,6 +2736,7 @@ void cSpatialProxy::GetTransform(cSPTransform_s00b3_ef30* out)
         cSPTransform_s00b3_ef30* r = ((cSpatialObject*)*(void**)((char*)this + 0x40))->FUN_00b73e70();
         ((cSPTransformOps*)out)->Assign(r);
         uint8_t* p = (uint8_t*)((char*)*(void**)((char*)this + 0x40) + 0x34);
+        _ReadWriteBarrier();
         if (*p & 4)
         {
             ++out->mModCount;

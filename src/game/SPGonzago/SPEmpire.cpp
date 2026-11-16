@@ -1057,16 +1057,14 @@ int* Mission::FUN_00c30820(int key)
 void Mission::FUN_00c30860(int param)
 {
     int member = ((int*)this)[0x21];
-    void* sphere = GetCurrentTerrainSphere(SP_NounManager_s00c2_f830());
-    ((ThiscallStub*)sphere)->FUN_00c7bbc0(member, param);
+    ((ThiscallStub*)GetCurrentTerrainSphere(SP_NounManager_s00c2_f830()))->FUN_00c7bbc0(member, param);
 }
 
 // @ 0x00c30890
 void Mission::FUN_00c30890()
 {
     int member = ((int*)this)[0x21];
-    void* sphere = GetCurrentTerrainSphere(SP_NounManager_s00c2_f830());
-    ((ThiscallStub*)sphere)->FUN_00c7a7d0(member);
+    ((ThiscallStub*)GetCurrentTerrainSphere(SP_NounManager_s00c2_f830()))->FUN_00c7a7d0(member);
 }
 
 // @ 0x00c308b0
