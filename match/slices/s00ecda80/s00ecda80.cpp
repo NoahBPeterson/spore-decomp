@@ -524,8 +524,7 @@ void __fastcall FUN_00ece270(int* p)
 void __fastcall FUN_00ece300(int param_1)
 {
     int v = *(int*)(param_1 + 0x4c);
-    PaletteStore* s = (PaletteStore*)FUN_00401020_get();
-    s->Set(v, 5.0f);
+    ((PaletteStore*)FUN_00401020_get())->Set(v, 5.0f);
 }
 
 // ============================================================ 0x00ece320

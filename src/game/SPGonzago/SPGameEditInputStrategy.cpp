@@ -2719,6 +2719,7 @@ void SP::cGameEditInputStrategy_s00d1_5440::FUN_00d15a10(void* p)
         Obj* q = (Obj*)((Fn_p_pi)VTSLOT(g, 0xc))(g, (int)0x01186577);
         if (q != 0)
             ((Fn_v_pp)VTSLOT(q, 0x94))(q, p);
+            _ReadWriteBarrier();
     }
 
     int* it = DAT_0169dc68;

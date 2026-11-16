@@ -1348,8 +1348,7 @@ bool __thiscall WM::SendModifiedMsg(IWin* src, IWin* w, Msg* m)
     Win* t = static_cast<Win*>(w);
     Msg msg = *m;
     msg.src = src;
-    IWin* wi = t;
-    msg.dst = wi;
+    msg.dst = t;
     if (self->hook)
         self->hook->Notify(2, 0, &msg);
     bool r = false;

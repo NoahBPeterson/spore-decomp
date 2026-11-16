@@ -129,9 +129,8 @@ void Elem38Vector::DoInsertValue(Elem38* position, const Elem38& value) {
     Elem38* pNewData = (Elem38*)pNewDataV;
     Elem38* pNewEnd = UCopy(mpBegin, position, pNewData);
     if (pNewEnd) new (pNewEnd) Elem38(value);
-    Elem38* pOldEnd = mpEnd;
     Elem38* pTail = pNewEnd + 1;
-    pNewEnd = UCopy(position, pOldEnd, pTail);
+    pNewEnd = UCopy(position, mpEnd, pTail);
     Elem38Free(mpBegin);
     mpEnd = pNewEnd;
     mpBegin = pNewData;

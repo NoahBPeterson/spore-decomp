@@ -542,9 +542,9 @@ unsigned FUN_0099a380(const wchar_t* key)
 {
     struct NameEntry { const wchar_t* name; int value; };
     const NameEntry* const kNameTable = (const NameEntry*)0x15503d0;
-    int hi = 0x16;
     int lo;
     lo = 0;
+    int hi = 0x16;
     do {
         int mid = (hi + lo) / 2;
         int c = wcscmp(key, kNameTable[mid].name);

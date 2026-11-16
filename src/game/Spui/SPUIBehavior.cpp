@@ -1061,8 +1061,7 @@ void Ev::Call93a0()
 // @ 0x007fa150
 uint32_t Ev::Flags()
 {
-    bool c = *(bool*)((char*)this + 0x5c);
-    uint32_t part = -(uint32_t)(c != 0) & 2u;
+    uint32_t part = *(bool*)((char*)this + 0x5c) ? 2u : 0u;
     return (((EvSub*)this)->ExtFlags() & 0xfffffffd) | part;
 }
 

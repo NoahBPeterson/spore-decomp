@@ -1897,8 +1897,7 @@ const wchar_t* DatabaseDirectoryFiles::GetExtensionByType(unsigned int nType)
     EA::Thread::Mutex_s008d_5340* pMutex = &mMutex;
     pMutex->Lock(reinterpret_cast<void*>(0x01436624));
 
-    RBNode* pEnd = TreeAnchor(&mExtensionToTypeMap);
-    for (RBNode* pNode = mExtensionToTypeMap.mpBegin; pNode != pEnd;
+    for (RBNode* pNode = mExtensionToTypeMap.mpBegin; pNode != TreeAnchor(&mExtensionToTypeMap);
          pNode = static_cast<RBNode*>(RBTreeIncrement(pNode))) {
         if (*NodeExtValue(pNode) == nType) {
             const wchar_t* pExtension = NodeExtKey(pNode)->mpBegin;

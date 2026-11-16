@@ -9,8 +9,6 @@
 006df530  79  eastl::partial_sort<SortKeyObj**,SortKeyLess>; mirrored variant, same schedule difference
 006df5a0  282  eastl::partial_sort<cClusterRect*>; make_heap/adjust_heap/sort_heap calls all present, value-copy and call-argument schedule differ
 006df700  76  eastl::copy<RefPtr*>; intrusive-pointer element assign reproduced, schedule differs
-006df770  92  eastl::quick_sort_impl<SortKeyObj**,int,SortKeyGreater>; median-of-three/get_partition/recursion reproduced, pivot register assignment (eax/esi/ebp) differs
-006df830  92  eastl::quick_sort_impl<SortKeyObj**,int,SortKeyLess>; mirrored variant, same register assignment difference
 006df8f0  166  eastl::get_partition<cClusterRect*>; pivot-by-value partition reproduced, pivot area cached and the pivot argument slots reused as the swap temp (rep movsd vs cl per-field block); equiv: PASS (376 valid inputs, 100% coverage)
 006dfb00  183  eastl::quick_sort_impl<cClusterRect*,int,cRectAreaSort>; median/partition/recursion reproduced, value partition schedule differs
 006dfc30  71  cluster-map add callback; area accumulation now reads the float bits and the grow path is the thiscall vector::DoInsertValue (ecx=vector); code schedule differs; equiv: PASS (229 valid inputs, 100% coverage)
