@@ -268,6 +268,9 @@ void f_013c8f60() {
     if (((d & ~1) > 2) && g_15ace38 && g_15ace38 != g_15ace48) cdecl_free((void*)g_15ace38);
 }
 
+// Adjacent empty COMDAT reproduces the linked retail extent after f_013c8f60.
+void terra09_link_pad_ret() {}
+
 // @ 0x013C9030
 void f_013c9030() {
     char* p = (char*)g_16c7c14;

@@ -404,6 +404,9 @@ void f_013c1e00() {
     if (((d & ~1) > 2) && g_15671b0 && g_15671b0 != g_15671c0) cdecl_free((void*)g_15671b0);
 }
 
+// The retail fingerprint includes the next empty function after linker alignment.
+void terra07_link_pad_ret() {}
+
 // @ 0x013C1EA0
 void f_013c1ea0() {
     ((Method1*)g_1567e2c)->M((void*)g_1567e38);
