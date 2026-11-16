@@ -6,5 +6,5 @@
 006ed8d0 ??0cEffectsModel@@QAE@IIIPBM@Z  # cEffectsModel::cEffectsModel migrated from s006ed2c0 (verbatim, slice spelling)
 006edaa0 ?AddResourceRef@cEffectsModel@@QAEXPAUIRefCounted@@@Z  # cEffectsModel::AddResourceRef migrated from s006ed2c0 (verbatim, slice spelling)
 006edb10 ?Reset@cEffectsModel@@QAEXXZ  # cEffectsModel::Reset migrated from s006ed2c0 (verbatim, slice spelling)
-006edbc0 UpdateFromResource  # SP::cEffectsModel (PDB candidate); arena exported objects -> bbox
+006edbc0 ?UpdateFromResource@cEffectsModel@@QAEXPAH@Z  # cEffectsModel::UpdateFromResource migrated from s006ed2c0 (verbatim, slice spelling)
 006ee140 ?Update@cEffectsModel@@QAEDXZ  # cEffectsModel::Update migrated from s006ed2c0 (verbatim, slice spelling)
