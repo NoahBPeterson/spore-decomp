@@ -463,9 +463,7 @@ struct CombatantVt {
 };
 struct Elem18 {
     IRefV* obj;      // +0x00
-    uint32_t f04;    // +0x04
-    uint32_t f08;    // +0x08
-    uint32_t f0c;    // +0x0c
+    Vec3 position;  // +0x04
     int f10;         // +0x10
     int f14;         // +0x14
 };
@@ -495,7 +493,7 @@ struct VehicleExt {
     void FUN_00c9f7c0();
     void FUN_00cabe70();
     void FUN_00cac000(IRefV* p2, int p3, int p4);
-    void FUN_00cac0e0(uint32_t p2, uint32_t p3, uint32_t p4, uint32_t p5);
+    void FUN_00cac0e0(Vec3 position, uint32_t p5);
     void DebugChangeWeapons(uint32_t param);
 };
 struct Vec4 { float x, y, z, w; };
@@ -581,27 +579,26 @@ void VehicleExt::FUN_00cac000(IRefV* p2, int p3, int p4)
 }
 
 // @ 0x00cac0e0
-void VehicleExt::FUN_00cac0e0(uint32_t p2, uint32_t p3, uint32_t p4, uint32_t p5)
+void VehicleExt::FUN_00cac0e0(Vec3 position, uint32_t p5)
 {
     FUN_00caa900();
-
-    Vec18* l = &list;
-    Elem18* e = l->end;
-    if (e < l->cap) {
-        l->end = e + 1;
-        if (e != 0) e->obj = 0;
-    } else {
-        Elem18 tmp;
-        tmp.obj = 0;
-        l->FUN_00ca9b70(e, &tmp);
-        if (tmp.obj != 0) tmp.obj->v1();
+    {
+        Vec18* l = &list;
+        Elem18* e = l->end;
+        if (e < l->cap) {
+            l->end = e + 1;
+            if (e != 0) e->obj = 0;
+        } else {
+            Elem18 tmp;
+            tmp.obj = 0;
+            l->FUN_00ca9b70(e, &tmp);
+            if (tmp.obj != 0) tmp.obj->v1();
+        }
     }
-
-    l->end[-1].f04 = p2;
-    l->end[-1].f08 = p3;
-    l->end[-1].f0c = p4;
-    l->end[-1].f10 = 6;
-    l->end[-1].f14 = (int)((CombatantVt*)((char*)this + 0x508))->GetPoliticalID();
+    list.end[-1].position = position;
+    list.end[-1].f10 = 6;
+    Elem18* node = list.end - 1;
+    node->f14 = (int)combatant.GetPoliticalID();
     fieldbc8 = p5;
     FUN_00c9f7c0();
 }
