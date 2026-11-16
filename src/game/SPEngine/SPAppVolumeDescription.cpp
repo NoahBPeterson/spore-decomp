@@ -62,7 +62,7 @@ struct VolumeCorner {
 namespace EA {
 namespace Swarm {
 struct cDescription_s007e_e060 {
-  virtual ~cDescription_s007e_e060();
+  virtual ~cDescription_s007e_e060(); // 0x0052ec00, shared RefCountTemplate<int> base cleanup
   int mRefCount;
   cDescription_s007e_e060() : mRefCount(0) {}
 };  // namespace Swarm
@@ -70,6 +70,7 @@ struct cDescription_s007e_e060 {
 }
 namespace SP {
 struct cVolumeDescription : public EA::Swarm::cDescription_s007e_e060 {
+  // Retail vtable 0x01453948 (folded with other description types).
   Vec3f mSeedPoint;               // +0x8
   float mSliceSpacing;            // +0x14
   Vec3f mColor;                   // +0x18
@@ -77,6 +78,7 @@ struct cVolumeDescription : public EA::Swarm::cDescription_s007e_e060 {
   uint64_t mResourceID;           // +0x28
   VolumeCorner mCorners[8];       // +0x30
   cVolumeDescription();
+  cVolumeDescription(const cVolumeDescription& source); // 0x007ee9f0
 };  // namespace SP
 }
 // The live effect state edited by the volume ArgScript commands (VolumeCmd's +0x0c target).
@@ -108,7 +110,7 @@ struct VolumeCmd {
   uint32_t f28;
   uint32_t f2c;
   VolumeCorner corners[8];
-  void* Copy(int src);
+  void* Copy(int src); // 0x007ee9f0, legacy alias of the copy-constructor ABI
 };
 struct VolumeRegistrar {
   void Register(char flag);
@@ -262,27 +264,24 @@ extern "C" void CopyVolumeDescription(int dst, int src)
   for (int off = 8; off <= 0xe8; off += 4) *(uint32_t*)(dst + off) = *(uint32_t*)(src + off);
 }
 
+// Array-copy runtime helper and the native corner copy constructor callback.
+void FUN_007ee6d0(); // 0x007ee6d0: address-only thiscall callback (ecx=dst, stack=src)
+void __stdcall CopyVolumeCorners(void*, const void*, int, int, void*); // 0x00406540
+
 // @ 0x007ee9f0
-// 0x007EE6D0: the element-copy callback vector() invokes (thiscall, ecx=dst).
-void FUN_007ee6d0();
-void* MapDescription::Copy(int src)
+SP::cVolumeDescription::cVolumeDescription(const cVolumeDescription& source)
 {
-  MapDescription* self = this;
-  self->refcount = 0;
-  self->vt = (void*)0x01453948;
-  self->f08 = *(uint32_t*)(src + 8);
-  self->f0c = *(uint32_t*)(src + 0xc);
-  self->f10 = *(uint32_t*)(src + 0x10);
-  self->f14 = *(uint32_t*)(src + 0x14);
-  self->f18 = *(uint32_t*)(src + 0x18);
-  self->f1c = *(uint32_t*)(src + 0x1c);
-  self->f20 = *(uint32_t*)(src + 0x20);
-  self->f24 = *(uint32_t*)(src + 0x24);
-  self->f28 = *(uint32_t*)(src + 0x28);
-  self->f2c = *(uint32_t*)(src + 0x2c);
-  extern void __stdcall CopyArray(void*, void*, int, int, void*);
-  CopyArray(&self->corners, (void*)(src + 0x30), 0x18, 8, (void*)&FUN_007ee6d0);
-  return self;
+    mSeedPoint.x = source.mSeedPoint.x;
+    mSeedPoint.y = source.mSeedPoint.y;
+    mSeedPoint.z = source.mSeedPoint.z;
+    mSliceSpacing = source.mSliceSpacing;
+    mColor.x = source.mColor.x;
+    mColor.y = source.mColor.y;
+    mColor.z = source.mColor.z;
+    mAlpha = source.mAlpha;
+    mResourceID = source.mResourceID;
+    CopyVolumeCorners(mCorners, source.mCorners, sizeof(VolumeCorner), 8,
+                      reinterpret_cast<void*>(&FUN_007ee6d0));
 }
 
 // @ 0x007eea90
