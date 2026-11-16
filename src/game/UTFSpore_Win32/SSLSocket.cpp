@@ -323,14 +323,11 @@ int __cdecl Fn00950580(void* bio, int b, int c)
 // @ 0x009505c0
 int __cdecl Fn009505c0(void* bio, char* str)
 {
-    char* p = str;
-    char c;
-    do { c = *p; p++; } while (c != 0);
-    int len = (int)p - (int)(str + 1);
+    int len = (int)strlen(str);
     int r = 0;
     if (str != 0) {
-        void* t = (void*)(B(I32(bio, 0x20)) + 0x80);
-        r = ((Ext*)t)->e3f0((int)str, len, 0);
+        char* host = B(I32(bio, 0x20));
+        r = ((Ext*)(host + 0x80))->e3f0((int)str, len, 0);
         BIO_clear_flags(bio, 0xf);
     }
     return r;

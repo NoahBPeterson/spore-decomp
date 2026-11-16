@@ -9,6 +9,7 @@
 extern "C" int __cdecl wcscmp(const wchar_t*, const wchar_t*);
 #include <new>
 #include <wchar.h>
+#pragma intrinsic(wcslen, wcscpy)
 #include "EA/UTFWinTools/IDataBinder.h"
 #include "EA/UTFWinTools/SerCollection.h"
 #pragma intrinsic(wcscmp)
@@ -746,30 +747,19 @@ void XmlReaderState::Allocate(void* param_2, void* param_3)
 namespace EA { namespace UTFWinTools { namespace UTFWinToolsInternal {
 void* XmlReaderState::StrDup(const wchar_t* s)
 {
-    const wchar_t* p = s;
-    const wchar_t* q = s + 1;
-    while (*p++) {
-    }
-    int n = (int)(p - q);
+    int n = (int)wcslen(s);
     unsigned size = ((unsigned)(n * 2 + 9)) & 0xfffffff8u;
-    char* base = (char*)this + 4;
-    char* available = *(char**)(base + 0x0c);
-    if ((int)(*(int*)((char*)this + 0x0c) - (int)size - (int)available) < 0) {
-        if (!((StackAllocator_s0099_a050*)base)->AllocateNewBlock((int)size))
-            return 0;
+    EA::Allocator::StackAllocator* a = (EA::Allocator::StackAllocator*)((char*)this + 4);
+    char* dst;
+    if ((int)((int)a->mpCurrentBlockEnd - (int)size - (int)a->mpCurrentObjectBegin) < 0 &&
+        !((StackAllocator_s0099_a050*)a)->AllocateNewBlock((int)size)) {
+        dst = 0;
+    } else {
+        dst = a->mpCurrentObjectBegin;
+        a->mpCurrentObjectBegin = dst + size;
+        a->mpCurrentObjectEnd = dst + size;
     }
-    char* dst = *(char**)(base + 0x0c);
-    char* newEnd = dst + size;
-    *(char**)(base + 0x0c) = newEnd;
-    *(char**)(base + 0x10) = newEnd;
-
-    const wchar_t* r = s;
-    wchar_t* out = (wchar_t*)dst;
-    wchar_t c;
-    do {
-        c = *r++;
-        *out++ = c;
-    } while (c != 0);
+    wcscpy((wchar_t*)dst, s);
     return dst;
 }
 }}}  // namespace EA::UTFWinTools::UTFWinToolsInternal
