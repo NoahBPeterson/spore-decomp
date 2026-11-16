@@ -7,6 +7,8 @@
 // (an interior int3 or a second prologue), byte-exact matching is impossible from a
 // single C++ function; those are listed in nonmatching.txt.
 #include "types.h"
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---- imports (declared; relocations are masked) ----
 extern "C" __declspec(dllimport) void __stdcall DeleteCriticalSection(void*);
@@ -265,20 +267,23 @@ void f_013c0c50() { DeleteCriticalSection(g_16679d0); }
 // @ 0x013C0CE0
 void f_013c0ce0() {
     char ok = cdecl_f935ad0((void*)g_1667b24);
-    int v = g_1667b24;
-    if (ok && v) {
-        Ref* r = *(Ref**)(v + 0x10);
+    if (ok) {
+        int v = g_1667b24;
+        if (!g_1667b24) return;
+        Ref* r = *(Ref**)(g_1667b24 + 0x10);
         if (r) {
-            int n = r->count - 1;
-            r->count = n;
+            int n = (*(volatile int*)&r->count += -1);
             if (n == 0) {
                 r->count = 1;
+                _ReadWriteBarrier();
                 r->Release(1);
             }
         }
         cdecl_free((void*)v);
     }
 }
+
+void terra05_link_pad_ret() {}
 
 // @ 0x013C0D40
 void f_013c0d40() {
