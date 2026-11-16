@@ -2962,8 +2962,8 @@ void __thiscall cSPMission_s00c4_6ab0::FUN_00c46ab0()
     vec->resize(8);
     *(u32*)(vec->mData + 0x1c) = mMissionId;
     u32 shifted = mFlags >> 3;
-    _ReadWriteBarrier();
-    if ((shifted & 1) != 0) {
+    bool requiresCheck = (shifted & 1) != 0;
+    if (requiresCheck) {
         cSPMissionManager* mm = GetMissionManager((void*)(uintptr_t)mMissionId);
         mm->Event();
     }

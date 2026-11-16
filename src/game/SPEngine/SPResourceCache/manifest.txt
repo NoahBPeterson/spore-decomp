@@ -10,3 +10,4 @@
 ../src/game/SPEngine/SPResourceCache.cpp  ?B@Cache@@QAEXPAUKey12@@@Z  006b0d20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ?C@Cache@@QAEXPAUKey12@@@Z  006b0d60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ?Shutdown@Cache@@QAEXXZ  006b1860  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006afe80@@YIXPAD@Z  006afe80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

@@ -306,7 +306,7 @@ bool W::FUN_00f3c330(int* key)
     bool result = false;
     if (key[0] == 0) {
         if (key[1] != 0 || key[2] != 0)
-            return true;
+            result = true;
     } else {
         AutoRefCount<PropertyList> propList;
         if (!GetManager()->Find((unsigned*)key, propList.AsPPTypeParam(), 0, 0, 0, 0))

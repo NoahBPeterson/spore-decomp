@@ -150,8 +150,8 @@ void __cdecl FUN_00eca010(int param_1)
     if (*(int*)(g_16c7584 + 0x14c) != 0) count -= 1;
     vec->FUN_00ec8ed0(count);
 
-    for (int off = 0; off < 0x140; off += 0x20) {
-        Region* r = (Region*)(g_16c7584 + off + 4);
+    for (int k = 0; k < 10; ++k) {
+        Region* r = ((Region*)(g_16c7584 + 4)) + k;
         if (r->enabled != 0 && *(int*)(g_16c7584 + 0x14c) != (int)r) {
             Elem e = FUN_00ec9b30(r->args);
             *(Elem*)(vec->begin + (r->index << 3)) = e;
