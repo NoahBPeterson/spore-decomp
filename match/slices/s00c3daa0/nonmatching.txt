@@ -8,4 +8,3 @@
 00c3e800  132  cGamePlant::SetAnimatingCreature: complete; multi-pointer transform setup (add eax,0x364 reuse) and float packing schedule differ
 00c3e8e0  176  cGamePlant::SetSpeciesKey/setup: complete; profile lookup and buffer sign-flip schedule differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, call#2 esp, ret#3 esp]
 00c3eac0  127  cPlant-like assignment operator: complete; 0x22-dword copy plus sub-object field transfer schedule differs
-00c3ed20  248  cGameplayMarker::Write: complete; serializer + optional-ptr teardown and WriteUint16/Write tail differ
