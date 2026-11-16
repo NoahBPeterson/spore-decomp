@@ -761,13 +761,32 @@ void __cdecl FUN_006bbe80(void* self)
 void __cdecl FUN_006bbf10(void* self)
 { (void)self; }
 
+// Factory-only view: retail v2 read records allocate 0x78 bytes and use
+// the v2 constructors. No member layout beyond the canonical base is accessed.
+class PFRecordReadV2 : public EA::ResourceMan::PFRecordRead {
+    unsigned char mV2Storage[8];
+public:
+    PFRecordReadV2(const EA::ResourceMan::PFRecordRead&, const EA::ResourceMan::Key&, EA::ResourceMan::DatabasePackedFile*); // 0x006c09c0
+    PFRecordReadV2(const EA::ResourceMan::PFRecordInfo&, const EA::ResourceMan::Key&, EA::ResourceMan::DatabasePackedFile*); // 0x006c0b20
+};
+class DatabasePackedFileV2 : public EA::ResourceMan::DatabasePackedFile {
+public:
+    virtual EA::ResourceMan::PFIndex* CreateIndex(int unused);
+    PFRecordReadV2* CreateRecordRead(int unused, const EA::ResourceMan::PFRecordRead& source, const EA::ResourceMan::Key& key);
+    PFRecordReadV2* CreateRecordReadFromInfo(int unused, const EA::ResourceMan::PFRecordInfo& source, const EA::ResourceMan::Key& key);
+};
+
 // @ 0x006bbfa0
-void __cdecl FUN_006bbfa0(void* self)
-{ (void)self; }
+PFRecordReadV2* DatabasePackedFileV2::CreateRecordRead(int unused, const EA::ResourceMan::PFRecordRead& source, const EA::ResourceMan::Key& key)
+{
+    return new (mpAllocator, "Resource/PFRecordRead") PFRecordReadV2(source, key, this);
+}
 
 // @ 0x006bc020
-void __cdecl FUN_006bc020(void* self)
-{ (void)self; }
+PFRecordReadV2* DatabasePackedFileV2::CreateRecordReadFromInfo(int unused, const EA::ResourceMan::PFRecordInfo& source, const EA::ResourceMan::Key& key)
+{
+    return new (mpAllocator, "Resource/PFRecordRead") PFRecordReadV2(source, key, this);
+}
 
 // @ 0x006bc0a0
 void __cdecl FUN_006bc0a0(void* self)
@@ -776,11 +795,6 @@ void __cdecl FUN_006bc0a0(void* self)
 // @ 0x006bc0f0
 void __cdecl FUN_006bc0f0(void* self)
 { (void)self; }
-
-class DatabasePackedFileV2 : public EA::ResourceMan::DatabasePackedFile {
-public:
-    virtual EA::ResourceMan::PFIndex* CreateIndex(int unused);
-};
 
 // @ 0x006bc130
 EA::ResourceMan::PFIndex* DatabasePackedFileV2::CreateIndex(int unused)
