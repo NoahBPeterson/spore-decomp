@@ -250,7 +250,7 @@ extern uint8_t g_gameModeEntry;     // 0x01654c02  game-mode table entry (DAT_01
 extern wchar_t g_wstrEmpty[];       // 0x013f6254  shared empty wstring buffer
 extern wchar_t g_wstrBool[];        // 0x013f58a0  L"bool"
 void*  __cdecl FUN_00c771e0(void* pLast, void* pEnd, void* pFirst);            // 0x00c771e0 eastl copy_impl::do_copy
-void*  __cdecl FUN_00c75b60(void* pDst, uint32_t n, void* pValue, void* pPos); // 0x00c75b60 eastl uninitialized_fill_n
+void   __cdecl FUN_00c75b60(void* pDst, uint32_t n, void* pValue, void* pPos); // 0x00c75b60 eastl uninitialized_fill_n
 void*  __cdecl FUN_00c76740(void* pDst, void* pSrc, uint32_t nBytes);          // 0x00c76740 eastl uninitialized_move
 uint32_t __cdecl FUN_00c227e0();                                               // 0x00c227e0 get the ban-pick mode
 void   __cdecl FUN_00c227d0(uint32_t nMode);                                   // 0x00c227d0 set the ban-pick mode
@@ -4988,5 +4988,26 @@ void cPlayer::ApplyInitialCaptainKey()
     if (mInitCaptainKey.mInstance != 0) {
         static_cast<cEmpire*>(SP::FUN_01021300())->SetCaptainKey(mInitCaptainKey);
         mInitCaptainKey = EA::ResourceMan::Key();
+    }
+}
+
+// @ 0x00c75b60
+void __cdecl FUN_00c75b60(void* pDst, uint32_t n, void* pValue, void* pPos)
+{
+    (void)pPos;
+    tAutoRef* destination = static_cast<tAutoRef*>(pDst);
+    while (n > 0) {
+        if (destination) {
+            SP::cSpatialObject* object =
+                static_cast<SP::cSpatialObject*>(static_cast<tAutoRef*>(pValue)->mpObj);
+            destination->mpObj = object;
+            if (object) {
+                // The retail selection-object interface has AddRef at slot 47.
+                typedef int (__thiscall* AddRefFunction)(SP::cSpatialObject*);
+                reinterpret_cast<AddRefFunction*>(*reinterpret_cast<void***>(object))[47](object);
+            }
+        }
+        --n;
+        ++destination;
     }
 }
