@@ -2,7 +2,7 @@
 // SP::cCellMode / cell-game camera + input helpers (float math, bounds, source-level
 // selection, save/load glue). Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "types.h"
-#include "SP/cVarListSerializer.h"
+#include "../../../src/game/include/var_list_serializer.h"
 extern SP::cDataSerializerGeneric gObjectSerializerList[]; // 0x015a7e38
 #include <string.h>
 #include <math.h>

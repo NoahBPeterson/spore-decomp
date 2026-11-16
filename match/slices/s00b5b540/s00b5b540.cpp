@@ -3,7 +3,7 @@
 // starts with its original address.
 
 #include "s00b5b540.h"
-#include "SP/cVarListSerializer.h"
+#include "../../../src/game/include/var_list_serializer.h"
 extern SP::cDataSerializerGeneric gGonzagoSerializerList[]; // 0x0156a118
 
 extern "C" void* FUN_00b3d320();

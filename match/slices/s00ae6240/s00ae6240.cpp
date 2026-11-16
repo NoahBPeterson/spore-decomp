@@ -11,7 +11,7 @@
 //
 // Module flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
-#include "SP/cVarListSerializer.h"
+#include "../../../src/game/include/var_list_serializer.h"
 extern SP::cDataSerializerGeneric gCitySimulatorSerializerList[]; // 0x01566b98
 
 typedef unsigned int size_type;
