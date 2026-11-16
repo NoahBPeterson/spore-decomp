@@ -591,9 +591,11 @@ struct StarRecordVec {
     cStarRecordPtr* PushBack(const cStarRecordPtr& value);   // 0x00502dd0
 };
 
-// An eastl::deque<T, allocator, 64> view: two 12-byte iterators (begin at +0x08,
-// end at +0x14) followed by the node map {begin, end, capacity} at +0x20.
+// An eastl::deque<T, allocator, 64> view: map header at +0x00, followed by
+// two 16-byte iterators (begin at +0x08, end at +0x18).
 struct Deque64 {
+    void Clear(); // 0x00996460
+    void PushBack(cStarRecordPtr* value); // 0x00502dd0
     cStarRecordPtr** mpMap;          // +0x00
     unsigned int     mnMapSize;      // +0x04
     cStarRecordPtr*  mBeginCurrent;  // +0x08
@@ -766,7 +768,7 @@ struct ByteStream {
 
 extern "C" void EA_IO_WriteUint32(void* pStream, const void* pValue,
                                   int nCount, int a4);        // 0x0093aa70
-extern "C" void EA_IO_ReadInt32(void* pStream, void* pOut,
+extern "C" bool EA_IO_ReadInt32(void* pStream, void* pOut,
                                 int nCount, int a4);          // 0x0093a780
 void deque7027PushBack(Deque64* pDeque, cStarRecordPtr* pValue);  // 0x00502dd0
 void deque7027Clear(Deque64* pDeque);                         // 0x00996460
@@ -902,42 +904,43 @@ store:
     }
 }
 
+struct ByteReaderView {
+    virtual void Slot0(); virtual void Slot1(); virtual void Slot2();
+    virtual void Slot3(); virtual void Slot4(); virtual void Slot5();
+    virtual void* GetStream(); // +0x18
+};
+struct SaveReaderView {
+    virtual void Slot0(); virtual void Slot1(); virtual void Slot2();
+    virtual void Slot3(); virtual void Slot4(); virtual void Slot5();
+    virtual void Slot6();
+    virtual void Finish(); // +0x1c
+    virtual ByteReaderView* GetReader(); // +0x20
+};
+
 // @ 0x00bd16d0
-// Read the deque of cStarRecord_* out of the save stream (clear, count, then
-// elements pushed back through the deque grow helper).
-void __fastcall ReadStarRecordDeque(SaveWriter* pWriter, void* /*edx*/,
-                                    Deque64* pDeque)
+void __cdecl ReadStarRecordDeque(SaveReaderView* reader, Deque64& deque)
 {
-    deque7027Clear(pDeque);
-
-    unsigned int nCount = 0;
-    ByteStream* pStream = ((ByteStream* (__thiscall*)(void*))
-                           (*(void***)pWriter)[0x20 / 4])(pWriter);
-    void* pRaw = ((void* (__thiscall*)(ByteStream*))
-                  (*(void***)pStream)[0x18 / 4])(pStream);
-    EA_IO_ReadInt32(pRaw, &nCount, 1, 0);
-
-    for (unsigned int i = 0; i < nCount; ++i) {
-        ByteStream* pStream2 = ((ByteStream* (__thiscall*)(void*))
-                                (*(void***)pWriter)[0x20 / 4])(pWriter);
-        void* pRaw2 = ((void* (__thiscall*)(ByteStream*))
-                       (*(void***)pStream2)[0x18 / 4])(pStream2);
-        cStarRecordPtr value = 0;
-        EA_IO_ReadInt32(pRaw2, &value, 1, 0);
-
-        cStarRecordPtr* pCur = pDeque->mEndCurrent;
-        cStarRecordPtr* pNext = pCur + 1;
-        if (pNext != pDeque->mEndNodeEnd) {
-            pDeque->mEndCurrent = pNext;
-            if (pCur != 0)
-                *pCur = value;
+    Deque64* target = &deque;
+    target->Clear();
+    SaveReaderView* owner = reader;
+    unsigned count = 0;
+    void* stream = owner->GetReader()->GetStream();
+    EA_IO_ReadInt32(stream, &count, 1, 0);
+    for (unsigned i = 0; i < count; ++i) {
+        cStarRecordPtr value;
+        void* stream = owner->GetReader()->GetStream();
+        EA_IO_ReadInt32(stream, &value, 1, 0);
+        cStarRecordPtr* current = target->mEndCurrent;
+        cStarRecordPtr* next = current + 1;
+        if (next != target->mEndNodeEnd) {
+            target->mEndCurrent = next;
+            if (current != 0)
+                *current = value;
         } else {
-            deque7027PushBack(pDeque, &value);
+            target->PushBack(&value);
         }
     }
-
-    ((void (__thiscall*)(SaveWriter*))
-     (*(void***)pWriter)[0x1c / 4])(pWriter);
+    owner->Finish();
 }
 
 }  // namespace SP_BLD

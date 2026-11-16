@@ -1872,13 +1872,12 @@ static __forceinline unsigned int PackARGB(const Vec3& c) {
 // ---- items of slice s00b6e3d0 end
 
 // @ 0x00b63930
-uchar __thiscall cGonzagoTimer::Read(void* ser)
+bool SP::cGonzagoTimer::Read(SP::cIObjectDatabaseIStream& stream)
 {
-    cVarListSerializer s((char*)this, &gSig2, 0x1a80d26);
-    uchar r = s.SerializeB(ser);
-    long long b = ((long long(__thiscall*)(void*))mGetMs)(this);
-    mBase = b;
-    return r;
+    SP::cVarListSerializer serializer(this, reinterpret_cast<SP::cDataSerializerGeneric*>(&gSig2), SP::cVarListSerializer::kSignature);
+    bool result = serializer.Serialize(stream);
+    mBaseTime = mGetMillisecondTime();
+    return result;
 }
 
 // @ 0x00b639b0

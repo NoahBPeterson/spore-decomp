@@ -37,3 +37,4 @@
 ../src/game/SPEditors/SPEditorUI.cpp  ?SetMode@cSPEditorUI_s005d_cd80@SP@@QAEXH@Z  005dda30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorUI.cpp  ?FUN_005df8d0@EditorFrame@@QAEXXZ  005df8d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPEditorUI.cpp  ?FUN_005dfb30@EditorFrame2@@QAEXHH@Z  005dfb30  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?DoSaveAndExit@EditorUI2@@QAEXXZ  005dfb40  /O2 /MD /Gy /TP /GS- /Isrc/game/include

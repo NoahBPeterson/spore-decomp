@@ -230,10 +230,23 @@ bool __stdcall FUN_00c40d20(void* unused)
     return true;
 }
 
+// Typed views of the archive's stream-holder interfaces.
+struct RoadStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetIO(); // slot 6
+};
+struct RoadArchive {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual RoadStreamHolder* GetStreamHolder(); // slot 8
+};
+
 // @ 0x00c40d40
 bool cInterCityRoad::WriteRoad(void* stream)
 {
-    StreamSub* sub = ((StreamObj*)stream)->GetSub();
+    RoadStreamHolder* __restrict sub = ((RoadArchive*)stream)->GetStreamHolder();
     u32 tag = 0x2bca14b;
     void* io = sub->GetIO();
     EA_IO_WriteUint32(io, &tag, 1, 0);
@@ -252,8 +265,8 @@ bool cInterCityRoad::WriteRoad(void* stream)
 // @ 0x00c40de0
 bool cInterCityRoad::ReadRoad(void* stream)
 {
-    StreamSub* sub = ((StreamObj*)stream)->GetSub();
-    u32 tag = 0;
+    RoadStreamHolder* __restrict sub = ((RoadArchive*)stream)->GetStreamHolder();
+    u32 tag;
     void* io = sub->GetIO();
     EA_IO_ReadInt32(io, &tag, 1, 0);
     bool ok;

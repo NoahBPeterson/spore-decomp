@@ -261,49 +261,79 @@ bool Scenario::LoadFrom(void* stream)
     return false;
 }
 
+struct ScenarioObject {
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void Slot2();
+    virtual Scenario* QueryInterface(unsigned id);
+};
+struct ScenarioInput {
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void Slot2();
+    virtual void Slot3();
+    virtual void Slot4();
+    virtual void Slot5();
+    virtual void* GetStream();
+};
+
 // @ 0x00f300d0
-bool __cdecl Scenario_TryLoad(void* a, void* obj, void* c, unsigned id)
+bool __stdcall Scenario_TryLoad(ScenarioInput* input, ScenarioObject* object, void*, unsigned id)
 {
-    if (id == 0x191c3c61 || id == 0xe22261b7) return false;
-    if (!obj) return false;
-    void* h = (*(void*(__thiscall**)(void*, unsigned))vfn(obj, 0xc))(obj, 0xe742574a);
-    if (!h) return false;
-    void* stream = (*(void*(__thiscall**)(void*))vfn(obj, 0x18))(obj);
-    return ((Scenario*)h)->LoadFrom(stream);
+    if (id != 0x191c3c61 && id != 0xe22261b7) {
+        if (object) {
+            Scenario* handler = object->QueryInterface(0xe742574a);
+            if (handler) return handler->LoadFrom(input->GetStream());
+        }
+        return false;
+    }
+    return false;
 }
 
 // @ 0x00f301e0  -- AreaRect lives in s00f2f830_fast.cpp (needs /fp:fast).
 
-// @ 0x00f30210
+struct cCollisionInfo {
+    unsigned collisionType;
+    float data[0x19];
+    void* pGameDataA;
+    void* pGameDataB;
+    unsigned char tail[0xa];
+    cCollisionInfo(); // 0x00b3d8c0
+};
+struct PairRefStorage {
+    void* value;
+    PairRefStorage() : value(0) {}
+    operator void*() const { return value; }
+    void operator=(void* pointer) { value = pointer; }
+};
 struct PairBlock {
-    void* p0;                // +0x00
-    void* p1;                // +0x04
-    unsigned payload[0x1f];  // +0x08 .. +0x84
-    void __thiscall ctor(void* p0, void* p1, const void* src);
+    PairRefStorage p0;
+    PairRefStorage p1;
+    cCollisionInfo payload;
+    PairBlock(void* first, void* second, const cCollisionInfo& source);
     void __thiscall dtor();
+};
+struct PairReference {
+    virtual void AddRef();
+    virtual void Release();
 };
 
 // @ 0x00f30210
-void PairBlock::ctor(void* p0, void* p1, const void* src)
+PairBlock::PairBlock(void* first, void* second, const cCollisionInfo& source)
 {
-    this->p0 = 0;
-    this->p1 = 0;
-    ((B3D8C0*)((char*)this + 8))->init();
-    if (p0 != this->p0) {
-        if (p0) (*(void(__thiscall**)(void*))vfn(p0, 0))(p0);
-        void* old = this->p0;
-        this->p0 = p0;
-        if (old) (*(void(__thiscall**)(void*))vfn(old, 4))(old);
+    void* old = p0;
+    if (first != old) {
+        if (first) ((PairReference*)first)->AddRef();
+        p0 = first;
+        if (old) ((PairReference*)old)->Release();
     }
-    if (p1 != this->p1) {
-        if (p1) (*(void(__thiscall**)(void*))vfn(p1, 0))(p1);
-        void* old = this->p1;
-        this->p1 = p1;
-        if (old) (*(void(__thiscall**)(void*))vfn(old, 4))(old);
+    old = p1;
+    if (second != old) {
+        if (second) ((PairReference*)second)->AddRef();
+        p1 = second;
+        if (old) ((PairReference*)old)->Release();
     }
-    unsigned* d = this->payload;
-    const unsigned* s = (const unsigned*)src;
-    for (int i = 0x1f; i != 0; --i) *d++ = *s++;
+    payload = source;
 }
 
 // @ 0x00f307e0

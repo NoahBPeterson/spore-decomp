@@ -817,11 +817,12 @@ struct PtrRange {
     void** mpBegin;      // +0x00
     void** mpEnd;        // +0x04
     void** mpCapacity;   // +0x08
+    void erase(void** first, void** last) {
+        memcpy_(first, last, (unsigned int)((char*)mpEnd - (char*)last));
+        mpEnd -= last - first;
+    }
     void clear() {
-        void** end = mpEnd;
-        void** begin = mpBegin;
-        move_range(begin, end, end);
-        mpEnd += begin - end;
+        erase(mpBegin, mpEnd);
     }
 };
 struct EventNode {
@@ -834,9 +835,9 @@ struct EventList {
         EventNode* sentinel = &mSentinel;
         EventNode* p = sentinel->mpNext;
         while (p != sentinel) {
-            EventNode* next = p->mpNext;
-            operator_delete(p);
-            p = next;
+            EventNode* old = p;
+            p = p->mpNext;
+            operator_delete(old);
         }
         sentinel->mpNext = sentinel;
         sentinel->mpPrev = sentinel;
@@ -2236,21 +2237,21 @@ void do_fill_Music(ResMusic *pDst, ResMusic *pEnd, const ResMusic *pSrc)
 // @ 0x00eaf410
 ResMusic *do_copy_Music(ResMusic *pBegin, ResMusic *pEnd, ResMusic *pDst)
 {
-    if (pBegin == pEnd)
-        return pDst;
-    do {
-        pDst->mField08 = pBegin->mField08;
-        pDst->mField0c = pBegin->mField0c;
-        pDst->mField10 = pBegin->mField10;
-        pDst->mField14 = pBegin->mField14;
-        pDst->mField18 = pBegin->mField18;
-        Vec4fAssign(&pDst->mVec1c, &pBegin->mVec1c);
-        Vec4fAssign(&pDst->mVec30, &pBegin->mVec30);
-        Vec4fAssign(&pDst->mVec44, &pBegin->mVec44);
-        Vec4fAssign(&pDst->mVec58, &pBegin->mVec58);
-        pBegin = (ResMusic *)((char *)pBegin + 0x6c);
-        pDst = (ResMusic *)((char *)pDst + 0x6c);
-    } while (pBegin != pEnd);
+    if (pBegin != pEnd) {
+        do {
+            pDst->mField08 = pBegin->mField08;
+            pDst->mField0c = pBegin->mField0c;
+            pDst->mField10 = pBegin->mField10;
+            pDst->mField14 = pBegin->mField14;
+            pDst->mField18 = pBegin->mField18;
+            Vec4fAssign(&pDst->mVec1c, &pBegin->mVec1c);
+            Vec4fAssign(&pDst->mVec30, &pBegin->mVec30);
+            Vec4fAssign(&pDst->mVec44, &pBegin->mVec44);
+            Vec4fAssign(&pDst->mVec58, &pBegin->mVec58);
+            pBegin = (ResMusic *)((char *)pBegin + 0x6c);
+            pDst = (ResMusic *)((char *)pDst + 0x6c);
+        } while (pBegin != pEnd);
+    }
     return pDst;
 }
 
@@ -2935,6 +2936,8 @@ void __fastcall FUN_00eb0870(void* vec_, int, char* pos, u32 count, void* value)
     FUN_00ead6a0(local);
 }
 
+extern SP::cDataSerializerGeneric gPlayerCityMusicSerializer; // 0x015a9198
+
 // @ 0x00eb0a60
 bool cPlayerCityMusic_s00ea_ffc0::Read(int stream)
 {
@@ -2946,10 +2949,9 @@ bool cPlayerCityMusic_s00ea_ffc0::Read(int stream)
     m1cc.clear();
     m1e0.clear();
 
-    char buf[0xa14];
-    CVarListSerializer* ser = (CVarListSerializer*)buf;
-    ser->ctor(this, (void*)0x15a9198, 0x1a80d26);
-    bool ok = ser->Serialize((void*)stream);
+    SP::cVarListSerializer ser(this, &gPlayerCityMusicSerializer,
+        SP::cVarListSerializer::kSignature);
+    bool ok = ser.Serialize(*reinterpret_cast<SP::cIObjectDatabaseIStream*>(stream));
     FUN_00eb05a0();
     if (m10c != 0)
         Reset(1);

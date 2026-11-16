@@ -970,13 +970,14 @@ bool cSpaceInventory::CargoSlotIsFree(cSpaceInventoryItem* pSlot)
 // @ 0x00c874f0
 bool cSpaceInventory::Write(void* pStream)
 {
-    VObj174* pIo = ((VObj174*)pStream)->v020()->v018();
+    VObj174* __restrict holder = ((VObj174*)pStream)->v020();
     uint32_t type = 0xb075dec5;
+    VObj174* pIo = holder->v018();
     EA::IO::WriteUint32(pIo, &type, 1, 0);
     bool ok = cGameData::Write(pStream);
-    cVarListSerializer serializer(this, &kSpaceInventorySerializerList, 0x1a80d26);
+    SP::cVarListSerializer serializer(this, (SP::cDataSerializerGeneric*)&kSpaceInventorySerializerList, 0x1a80d26);
     if (ok) {
-        if (serializer.Serialize(pStream))
+        if (serializer.Serialize(*(SP::cIObjectDatabaseOStream*)pStream))
             return true;
     }
     return false;
@@ -985,12 +986,13 @@ bool cSpaceInventory::Write(void* pStream)
 // @ 0x00c87580
 bool cSpaceInventoryItem::Write(void* pStream)
 {
-    VObj174* pIo = ((VObj174*)pStream)->v020()->v018();
+    VObj174* __restrict holder = ((VObj174*)pStream)->v020();
     uint32_t type = 0x707459dd;
+    VObj174* pIo = holder->v018();
     EA::IO::WriteUint32(pIo, &type, 1, 0);
-    cSpaceInventoryItem* pItem = static_cast<cSpaceInventoryItem*>(static_cast<cItemSerializable*>(this));
-    cVarListSerializer serializer(pItem, &kItemSerializerList, 0x1a80d26);
-    return serializer.Serialize(pStream) != 0;
+    SP::cVarListSerializer serializer(this, (SP::cDataSerializerGeneric*)&kItemSerializerList, 0x1a80d26);
+    bool result = serializer.Serialize(*(SP::cIObjectDatabaseOStream*)pStream) ? true : false;
+    return result;
 }
 
 // @ 0x00c875f0

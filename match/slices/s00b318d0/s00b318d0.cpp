@@ -43,21 +43,22 @@ struct Stopwatch {
             }
         }
     }
-    // Returns the new total elapsed time (always 0), one return per arm; the
-    // QueryPerformanceCounter scratch is the caller's dead cycles slot.
-    __forceinline int RestartIfRunning(__int64* scratch)
+    __forceinline void RestartIfRunning()
     {
         if (mnStartTime != 0) {
             if (mnUnits == 1) {
                 mnStartTime = __rdtsc();
-                return 0;
+                mnTotalElapsedTime = 0;
+                return;
             }
-            QueryPerformanceCounter(scratch);
-            mnStartTime = (unsigned __int64)*scratch;
-            return 0;
+            __int64 counter;
+            QueryPerformanceCounter(&counter);
+            mnStartTime = (unsigned __int64)counter;
+            mnTotalElapsedTime = 0;
+            return;
         }
         mnStartTime = 0;
-        return 0;
+        mnTotalElapsedTime = 0;
     }
     __forceinline void Restart()
     {
@@ -80,7 +81,7 @@ struct IStreamObj { virtual void v0(); };
 extern "C" int __cdecl WriteUint32(void* stream, u32* p, unsigned n, int endian);   // 0093aa70
 
 struct cVarListSerializer {
-    char mData[0xa10];
+    u32 mData[0xa14 / 4];
     cVarListSerializer(void* obj, const void* desc, unsigned flags);   // 00692f90
     void Serialize(void* stream);                                      // 00692900
 };
@@ -209,18 +210,12 @@ void cGameTimeManager::UpdateTimeAtStartOfFrame()
 // @ 0x00b31ae0
 void cGameTimeManager::Serialize(void* stream)
 {
-    // d holds the raw cycle count first, then the rounded count (fistp is
-    // round-half-to-even; a C cast would go through __ftol2, truncating).
-    __declspec(align(8)) __int64 d = sBaseTimer.GetElapsedTimeFloat();
-    float f = (float)d * sBaseTimer.mfCoeff * mTimeFlowRate;
-    __asm {
-        fld dword ptr [f]
-        fistp qword ptr [d]
+    {
+        __declspec(align(8)) __int64 cycles = sBaseTimer.GetElapsedTimeFloat();
+        float elapsed = (float)cycles * sBaseTimer.mfCoeff * mTimeFlowRate;
+        mBaseTimeElapsed += X87RoundToInt64(elapsed);
     }
-    mBaseTimeElapsed += d;
-    // RestartIfRunning inlined, reusing d as the QueryPerformanceCounter temp
-    // (retail's QPC temp colours onto the dead cycles slot at [esp+8]).
-    sBaseTimer.mnTotalElapsedTime = (unsigned __int64)sBaseTimer.RestartIfRunning(&d);
+    sBaseTimer.RestartIfRunning();
     cVarListSerializer ser(this, (const void*)0x01569130, 0x01a80d26);
     ser.Serialize(stream);
 }

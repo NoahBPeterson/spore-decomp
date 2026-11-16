@@ -884,18 +884,16 @@ void AssetView::UpdateVerbIcon()
     if (!p)
         return;
     int v = (*(int(__thiscall**)(void*))((char*)*(void**)p + 0x38))(p);
-    if (v > 0x7fffffff)
-        return;
-    void* obj = *(void**)(s + 0x74);
     switch (v) {
-    case -2: FUN_00657e20(obj, 6); return;
+    case -2: FUN_00657e20(*(void**)(s + 0x74), 6); return;
     case -1: return;
-    case 0:  FUN_00657e20(obj, 0); return;
-    case 1:  FUN_00657e20(obj, 1); return;
-    case 2:  FUN_00657e20(obj, 5); return;
-    case 3:  FUN_00657e20(obj, 2); return;
-    case 4:  FUN_00657e20(obj, 3); return;
-    case 5:  FUN_00657e20(obj, 4); return;
+    case 0:  FUN_00657e20(*(void**)(s + 0x74), 0); return;
+    case 1:  FUN_00657e20(*(void**)(s + 0x74), 1); return;
+    case 2:  FUN_00657e20(*(void**)(s + 0x74), 5); return;
+    case 3:  FUN_00657e20(*(void**)(s + 0x74), 2); return;
+    case 4:  FUN_00657e20(*(void**)(s + 0x74), 3); return;
+    case 0x7fffffff:
+    case 5:  FUN_00657e20(*(void**)(s + 0x74), 4); return;
     default: return;
     }
 }

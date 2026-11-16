@@ -49,7 +49,14 @@ static inline void* CellById(int id) {
 __declspec(noinline) void FUN_00e53f70();                         // 0x00e53f70 allocate cell UI windows
 void RepositionWindows(void* a, void* b, int mode);  // 0x00e540b0 reposition two windows (cdecl)
 
+void* operator new(unsigned size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
+
 struct cSPUILayout18 {
+  virtual void v0();
+  virtual void AddRef();
+  virtual void Release();
+  char pad04[0x14];
+  cSPUILayout18();                         // 0x00810000
   void* FindWindowByID(int id, int flag);   // 0x8105b0
   void  SetVisibility(int v);               // 0x810590
   void  Init(void* a, int b, int c);        // 0x8120d0
@@ -223,24 +230,26 @@ int FUN_00e54050(int id) {
 
 // @ 0x00e53f70
 void FUN_00e53f70() {
-  if (*(int*)0x15a7bac <= 0) return;
-  int* slot = (int*)0x16b4178;
-  int n = *(int*)0x15a7bac;
-  for (int i = 0; i < n; ++i, ++slot) {
-    void* w = operator_new(0x18, "Simulator/Cell/UI", 0, 0, 0, 0);
-    void* w2 = w ? (*(void*(__thiscall**)(void*))((char*)Vt(w) + 4))(w) : 0;
-    if (w2 != (void*)*slot) {
-      if (w2) (*(void(__thiscall**)(void*, int))((char*)Vt(w2) + 4))(w2, 0);
-      *slot = (int)w2;
+  int slotIndex = 0;
+  for (int group = 0; group < 1; ++group) {
+    for (int i = 0; i < g_15a7bac; ++i) {
+      cSPUILayout18** slot = (cSPUILayout18**)&g_winSlots[slotIndex++];
+      cSPUILayout18* window = new ("Simulator/Cell/UI", 0, 0, 0, 0) cSPUILayout18;
+      cSPUILayout18* old = *slot;
+      if (window != old) {
+        if (window) window->AddRef();
+        *slot = window;
+        if (old) old->Release();
+      }
+      int args[3];
+      args[0] = g_15a7bb0;
+      args[1] = 0x510a95b;
+      args[2] = 0x40464100;
+      (*slot)->Init(args, 1, 0x2edd95ca);
+      (*slot)->SetVisibility(0);
     }
-    int args[3];
-    args[0] = g_15a7bb0;
-    args[1] = 0x510a95b;
-    args[2] = 0x40464100;
-    ((cSPUILayout18*)(*slot))->Init(args, 1, 0x2edd95ca);
-    ((cSPUILayout18*)(*slot))->SetVisibility(0);
   }
-  FUN_00e11e073e((void*)0x16b4278, 0, 0x40);
+  FUN_00e11e073e(g_winUsed, 0, sizeof(g_winUsed));
 }
 
 // @ 0x00e53e30  closest-point on 3D box -- x87 division, SSE midpoint/clamp

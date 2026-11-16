@@ -486,9 +486,9 @@ Ability* Ability::ctor2(IChild* a, IChild* b)
 // @ 0x00a10960
 bool Ability::q08(int x)
 {
-    if (childA && childA->q08(x)) return true;
-    if (childB && childB->q08(x)) return true;
-    return false;
+    IChild* first = childA;
+    IChild* second;
+    return (first && first->q08(x)) || ((second = childB) && second->q08(x));
 }
 
 // @ 0x00a109a0
@@ -546,13 +546,17 @@ bool Ability::q44(int a, int b, int c)
 // @ 0x00a10da0
 bool Ability::q48(int a, int b, int c)
 {
-    return (childA && childA->q48(a, b, c)) || (childB && childB->q48(a, b, c));
+    IChild* first = childA;
+    IChild* second;
+    return (first && first->q48(a, b, c)) || ((second = childB) && second->q48(a, b, c));
 }
 
 // @ 0x00a10e00
 bool Ability::q4c(int a, int b, int c)
 {
-    return (childA && childA->q4c(a, b, c)) || (childB && childB->q4c(a, b, c));
+    IChild* first = childA;
+    IChild* second;
+    return (first && first->q4c(a, b, c)) || ((second = childB) && second->q4c(a, b, c));
 }
 
 // @ 0x00a10e90

@@ -42,3 +42,4 @@
 ../src/game/Swarm/_at_00a70000.cpp  ?VanDerCorput@@YAMI@Z  00a7c280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/Swarm/_at_00a70000.cpp  ?RadicalInverse2@@YAMH@Z  00a7c300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/Swarm/_at_00a70000.cpp  ?cMapInfo_SortRect2@Swarm@EA@@YAXPAMPBM1@Z  00a753b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/Swarm/_at_00a70000.cpp  ?Init@cRWState@@QAEXPBUKeyDesc@@PBUVec3@@_N@Z  00a79430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

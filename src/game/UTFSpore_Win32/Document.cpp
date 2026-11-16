@@ -703,10 +703,10 @@ void DocX::SetChild(int v)
 void* DocX::FindBody()
 {
     void* c = *(void**)((char*)this + 0x40);
-    if (!c)
-        return c;
-    if (wcscmp(*(const wchar_t**)((char*)c + 0x34), L"html") == 0)
-        return ((Child40*)c)->FindChild(L"body", 0);
+    if (c) {
+        if (wcscmp(*(const wchar_t**)((char*)c + 0x34), L"html") == 0)
+            return ((Child40*)c)->FindChild(L"body", 0);
+    }
     return c;
 }
 

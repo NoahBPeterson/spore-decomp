@@ -208,23 +208,31 @@ Desc538::Desc538()
 struct Prim538 { virtual void p0(); int m4; };
 struct Sec538 { virtual void s0(); virtual void s1(); };
 struct Multi538 : Prim538, Sec538 { int mPad; };   // secondary vtable at +0x08
-struct Dtor538180 {
-    void* m0;                   // +0x00 (vtable 0x013f21d4)
-    void* m4;                   // +0x04 (secondary vtable)
+struct ParticleEffectBase538 {
+    void* m0;
+    void* m4;
     char pad[0x40];
-    Multi538* mp48;             // +0x48
-    int m4c;                    // +0x4c
+    ~ParticleEffectBase538() {
+        m0 = (void*)0x13f21d4;
+        m4 = (void*)0x13f2194;
+        m4 = (void*)0x13ef094;
+    }
+};
+struct ParticleComponentRef538 {
+    Multi538* mpObject;
+    ~ParticleComponentRef538() {
+        if (mpObject)
+            mpObject->s1();
+    }
+};
+struct Dtor538180 : ParticleEffectBase538 {
+    ParticleComponentRef538 mComponent;
+    int m4c;
     ~Dtor538180();
 };
 
 // @ 0x00538180
-Dtor538180::~Dtor538180()
-{
-    if (mp48)
-        mp48->s1();
-    m0 = (void*)0x13f21d4;
-    m4 = (void*)0x13f2194;
-    m4 = (void*)0x13ef094;
+Dtor538180::~Dtor538180() {
 }
 
 // @ 0x00538320

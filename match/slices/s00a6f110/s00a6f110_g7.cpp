@@ -47,8 +47,9 @@ struct HashTable {
 
     struct iterator {
         void* mpNode;
+        void** mpBucket;
         iterator() {}
-        iterator(const iterator& o) : mpNode(o.mpNode) {}
+        iterator(const iterator& o) : mpNode(o.mpNode), mpBucket(o.mpBucket) {}
         ~iterator() {}
         bool operator==(const iterator& o) const { return mpNode == o.mpNode; }
         bool operator!=(const iterator& o) const { return mpNode != o.mpNode; }
@@ -59,6 +60,7 @@ struct HashTable {
     {
         iterator it;
         it.mpNode = mpBucketArray[mnBucketCount];
+        it.mpBucket = mpBucketArray + mnBucketCount;
         return it;
     }
     void*  insert_node(HTInsertOut* out, const EString* key, u32 hash);  // 0xa6a810 ret 0xc
@@ -93,9 +95,15 @@ void** HashTable::FindOrInsert(const EString& key)
 // DescInstaller -- two parallel index -> HashTable maps plus the shared
 // case-insensitive name buffer.
 // ---------------------------------------------------------------------------
+struct DescriptionFactory {
+    virtual void p00(); virtual void p04(); virtual void p08(); virtual void p0c();
+    virtual void p10(); virtual void p14(); virtual void p18();
+    virtual void* CreateDescription(int index, int arg); // +0x1c
+};
+
 struct DescInstaller {
     char       pad0[0x20];
-    void*      mFactory;                                 // +0x20
+    DescriptionFactory* mFactory;                       // +0x20
     char       pad1[0x20];
     HashTable* mTablesA;                                 // +0x44
     char       pad2[0x30];
@@ -115,15 +123,14 @@ template <class R> inline R PV2(void* o, int off, int a, int b)
 // @ 0x00a6f9c0
 void DescInstaller::InstallA(const char* name, int index, int arg)
 {
-    HashTable::iterator it;
     mName.assign(name, name + strlen(name));
     MakeCaseInsensitive(&mName);
 
     HashTable* table = &mTablesA[index];
-    it = table->find(mName);
-    if (it == table->end()) {
-        int value = PV2<int>(mFactory, 0x1c, index, arg);
-        *table->FindOrInsert(mName) = (void*)value;
+    HashTable::iterator it = table->find(mName);
+    if (it.mpNode == table->mpBucketArray[table->mnBucketCount]) {
+        void* value = mFactory->CreateDescription(index, arg);
+        *table->FindOrInsert(mName) = value;
     }
 }
 

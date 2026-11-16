@@ -1,3 +1,4 @@
+#include <xmmintrin.h>
 // src/game/SPEditors/_at_00ee0000.cpp -- migrated from slice(s) s00eede20, s00eed3f0, s00eeb770, s00eea7c0, s00ee9840, s00ee8860, s00ee7990, s00ee6880, s00ee4390, s00ee3800, s00ee2860, s00ee16f0, s00ee0d70, s00edfed0 by tools/migrate/rewrite.py
 // Object file: SPEditors/_at_00ee0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -2296,7 +2297,7 @@ struct View {
     void     Dtor();                                     // 0xeea960
     uint8_t  DoMessage(uint32_t msgId, void* msg);       // 0xeeaa40
     void     GetEntryColor(float* pOut, void* id);       // 0xeeaa90
-    void*    Ctor();                                     // 0xeeab00
+    View();                                             // 0xeeab00
     void     SampleColor(float* pOut, float x);          // 0xeeab90
     void     Bake(void* pTarget);                        // 0xeeacc0
     void     ShutdownView();                             // 0xeeae70
@@ -5542,19 +5543,15 @@ u8 __thiscall SpuEd::OnMsg2(u32 msg, void* p)
     if (msg == 0x65ff54a && *(u32*)((char*)p + 0x10) == 0x40464100)
     {
         u32 v = *(u32*)((char*)p + 0x18);
-        switch (v)
-        {
-        case 0x7ec9d82e:
-        case 0x556c486:
-        case 0x3b0ac2c4:
-        case 0xd5521361:
-            break;
-        default:
+        if (v <= 0x7ec9d82e) {
+            if (v != 0x7ec9d82e && v != 0x556c486 && v != 0x3b0ac2c4)
+                return 1;
+        } else if (v != 0xd5521361) {
             return 1;
         }
         XLayout* lay = (XLayout*)o15c;
         u8 vis = lay->IsVisible();
-        XWin* w = (XWin*)lay->GetWin();
+        XWin* w = (XWin*)((XLayout*)o15c)->GetWin();
         if (w) ((VIN*)w)->n00();
         if (vis) ((VI*)((char*)this - 0xc))->v06(0);
         ((VI*)((char*)this - 0xc))->v05();
@@ -5751,8 +5748,9 @@ u8 __thiscall SpuEd::SetSource(void* src)
         }
         void* a = (void*)o00c;
         VI* pb = (VI*)o010;
-        void* r = ((XWin*)a)->w60(0xd68dd230, 1);
-        pb->v04((int)r);
+        typedef void (__thiscall *SetWindowFn)(VI*, int);
+        SetWindowFn* slot = reinterpret_cast<SetWindowFn*>(*reinterpret_cast<void***>(pb)) + 4;
+        (*slot)(pb, (int)((XWin*)a)->w60(0xd68dd230, 1));
     }
     return 1;
 }
@@ -6742,11 +6740,13 @@ void View::GetEntryColor(float* pOut, void* id)
 }
 
 // @ 0x00eeab00
-void* View::Ctor()
+View::View()
 {
     View* p = this;
+    __m128 zero = _mm_setzero_ps();
     p->mpVtbl1 = (void*)0x14426a0;   // base cSPScenarioModeSporepediaLargeAssetView
     p->mpVtbl2 = (void*)0x13ec458;   // RefCountVTemplate<int>
+    _ReadWriteBarrier();
     p->mUnk0c = 0;
     p->mpVtbl0 = (void**)0x148ad1c;
     p->mpVtbl1 = (void*)0x148ad00;
@@ -6766,9 +6766,8 @@ void* View::Ctor()
     p->mEntriesEnd = 0;
     p->mEntriesCap = 0;
     p->mLayout2 = 0;
-    p->mUnk54 = 0.0f;
-    p->mUnk58 = 0.0f;
-    return p;
+    _mm_store_ss(&p->mUnk54, zero);
+    _mm_store_ss(&p->mUnk58, zero);
 }
 
 // @ 0x00eeab90

@@ -3212,10 +3212,6 @@ struct VObj_s00ef_ee60 {
     void v40(float);
     void v58();                    // vtable slot +0x58
 };
-struct RefObj {
-    void v0();
-    void v4();
-};
 struct Handle {
     void* v0c(int);               // vtable slot 0xc
 };
@@ -9139,9 +9135,12 @@ bool UI_s00ef_ee60::f_eff1e0(int)
     return o->f64 > o->f60;
 }
 
+struct SelectionReference {
+    virtual void AddRef(); // slot 0
+    virtual void Release(); // slot 1
+};
+
 // @ 0x00eff230
-// The store of p into the slot sits between the two refcount virtuals (retail: call v0, store,
-// call the old object's +0x04), which the old source had the other way round.
 void UI_s00ef_ee60::f_eff230(void* p)
 {
     *(uint8_t*)((char*)g_mgr + 0x64) = 1;
@@ -9149,10 +9148,11 @@ void UI_s00ef_ee60::f_eff230(void* p)
     void** slot = (void**)((char*)g_mgr + 0xc);
     void* old = *slot;
     if (p != old) {
-        if (p) ((RefObj*)p)->v0();
-        if (old) ((RefObj*)old)->v4();
+        if (p) ((SelectionReference*)p)->AddRef();
         *slot = p;
-    }}
+        if (old) ((SelectionReference*)old)->Release();
+    }
+}
 
 // @ 0x00eff280
 void UI_s00ef_ee60::f_eff280(void* p)

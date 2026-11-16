@@ -2848,12 +2848,9 @@ void EditorUI2::DoSaveAndExit()
     void* a = m5c;
     char* b = *(char**)((char*)a + 0x7c);
     char* c = *(char**)(b + 0xc);
-    if (c[0x44]) {
-        void* base = *(void**)((char*)a + 0x78);
-        Widget_s005d_ec10* w = FindWindowRaw(base, 0x3f67620);
-        if ((w->Slot10() & 1) != 0)
-            return;
-    }
+    bool saveDialogVisible = c[0x44] ? (FindWindowRaw(*(void**)((char*)a + 0x78), 0x3f67620)->Slot10() & 1) : 0;
+    if (saveDialogVisible)
+        return;
     FUN_004a88d0(0xf515d2c3);
     mcc = 0x102;
     FUN_005df470(0x102, 1);

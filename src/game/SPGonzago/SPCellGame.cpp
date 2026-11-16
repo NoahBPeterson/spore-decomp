@@ -3,6 +3,8 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 #include "EA/COM/IFactory.h"
 #include "sse_helpers.h"
 #include <math.h>
@@ -5097,6 +5099,7 @@ bool FUN_00e61320(int param)
     cCellGame* g = gspCellGame_s00e6_1000;
     if (g->field_5190->field_0c == 0)
         return false;
+    _ReadWriteBarrier();
     switch (param) {
     case 0:
         FUN_00e611b0();

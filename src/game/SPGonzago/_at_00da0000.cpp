@@ -2,6 +2,7 @@
 // Object file: SPGonzago/_at_00da0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "nSPBehaviorTree/behavior_stimuli.h"
 #include "SP/cBehaviorTreeData.h"
@@ -776,6 +777,7 @@ bool __cdecl FUN_00da5cf0(cSPCreatureCitizen* c, void* a, void* b, void* d, void
     float k = 10.0f;
     out[0] = k;
     float x1 = g_f169f398;
+    _ReadWriteBarrier();
     float x2 = g_f169f39c;
     float x3 = g_f169f3a0;
     out[1] = x1 * k;

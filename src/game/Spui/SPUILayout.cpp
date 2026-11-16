@@ -69,7 +69,7 @@ extern void* __cdecl operator_new(u32, void*, int, int, const char*, int); // 0x
 extern u32   __cdecl eastl_RBTreeIncrement(void*);// 0x921580
 extern u8  g_b164cf58;
 struct WorldTree {
-    void __thiscall find(void* sret, const u32* key);
+    void __thiscall find(void* sret, const u32* key); // 0x00e5c780
 };
 struct WorldIter { void* node; };
 struct cSPUILayoutObjectCollection_s0080_f7c0 {
@@ -775,22 +775,28 @@ void* __thiscall cSPUILayoutObjectCollection_s0080_f7c0::VectorDtor(u8 flag)
 // @ 0x00810620
 void* __thiscall cSPUILayoutManager_s0080_f7c0::GetWorldMainWindow(u32 id)
 {
+    u32 key = id;
     WorldIter it;
-    it.node = this;
-    mTree.find(&it, &id);
-    if (it.node == (void*)((u8*)this + 0x10)) return 0;
-    if ((u8*)it.node + 0x14 == 0) return 0;
-    return *(void**)((u8*)it.node + 0x1c);
+    mTree.find(&it, &key);
+    if (it.node != (void*)((u8*)this + 0x10)) {
+        u8* world = (u8*)it.node + 0x14;
+        if (world)
+            return *(void**)(world + 8);
+    }
+    return 0;
 }
 
 // @ 0x00810660
 void __thiscall cSPUILayoutManager_s0080_f7c0::Method10660(u32 id, bool vis)
 {
+    u32 key = id;
     WorldIter it;
-    it.node = this;
-    mTree.find(&it, &id);
-    if (it.node != (void*)((u8*)this + 0x10) && (u8*)it.node + 0x14 != 0)
-        SetNodeVisibility((u8*)it.node + 0x14, (char)vis);
+    mTree.find(&it, &key);
+    if (it.node != (void*)((u8*)this + 0x10)) {
+        u8* world = (u8*)it.node + 0x14;
+        if (world)
+            SetNodeVisibility(world, (char)vis);
+    }
 }
 
 // @ 0x008106a0
@@ -825,12 +831,15 @@ bool __thiscall cSPUILayoutManager_s0080_f7c0::AnyWorldHidden()
 // @ 0x00810760
 bool __thiscall cSPUILayoutManager_s0080_f7c0::IsWorldVisible(u32 id)
 {
+    u32 key = id;
     WorldIter it;
-    it.node = this;
-    mTree.find(&it, &id);
-    if (it.node == (void*)((u8*)this + 0x10)) return false;
-    if ((u8*)it.node + 0x14 == 0) return false;
-    return *(int*)((u8*)it.node + 0x14 + 0xc) == 0;
+    mTree.find(&it, &key);
+    if (it.node != (void*)((u8*)this + 0x10)) {
+        u8* world = (u8*)it.node + 0x14;
+        if (world)
+            return *(int*)(world + 0xc) == 0;
+    }
+    return false;
 }
 
 // @ 0x008107d0

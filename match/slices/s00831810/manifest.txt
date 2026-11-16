@@ -2,3 +2,5 @@
 slices/s00831810/s00831810.cpp  ?Dtor2@DebugConsole@@QAEXXZ  00832710  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00831810/s00831810.cpp  ?SetTextProperty@DebugConsole@@QAE_NPAUPropOut@@HPBUStrVal@@@Z  00832010  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00831810/s00831810.cpp  ?Dtor@DebugConsole@@QAEXXZ  00832160  /O2 /MD /Gy /EHsc /TP /arch=SSE /fp=fast
+slices/s00831810/s00831810.cpp  ?CheckTimeout@DebugConsole@@QAE_NXZ  008321d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00831810/s00831810.cpp  ?StateCheck@DebugConsole@@QAE_NXZ  00832370  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

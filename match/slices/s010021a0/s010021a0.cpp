@@ -627,7 +627,7 @@ void __fastcall FUN_01003160(SimGame* self)
 bool SimSpace::Write(void* param_2)
 {
     SerContainer* ctx = (SerContainer*)param_2;
-    IOConnect* pl = ctx->GetConnect();
+    IOConnect* __restrict pl = ctx->GetConnect();
     uint32_t tag = 0xb03517bc;
     void* writer = pl->GetWriter();
     EA_IO_WriteUint32(writer, &tag, 1, 0);

@@ -548,13 +548,18 @@ void SpaceObj::f38ac0(char show)
 {
     int self = (int)this;
     if (show)
-        ((SpaceObj*)self)->f388b0(*(int*)(self + 0x1c));
+        f388b0(*(int*)(self + 0x1c));
     if (*(int*)(self + 0x28) != 0) {
-        int nSlot = show ? 0x104 : 0x108;
-        if (*(int**)(self + 0x18) != 0)
-            Slot<TV1p>(*(void**)(self + 0x18), nSlot)(*(void**)(self + 0x18), (void*)self);
-        if (*(int**)(self + 0x14) != 0)
-            Slot<TV1p>(*(void**)(self + 0x14), nSlot)(*(void**)(self + 0x14), (void*)self);
+        void* child = *(void**)(self + 0x18);
+        if (child) {
+            if (show) Slot<TV1p>(child, 0x104)(child, this);
+            else Slot<TV1p>(child, 0x108)(child, this);
+        }
+        child = *(void**)(self + 0x14);
+        if (child) {
+            if (show) Slot<TV1p>(child, 0x104)(child, this);
+            else Slot<TV1p>(child, 0x108)(child, this);
+        }
     }
 }
 

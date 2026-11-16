@@ -4395,26 +4395,25 @@ cPointerBlockIter* FUN_00c8ed90(cPointerBlockIter* pOut, V4 a, V4 b, V4 c, void*
 // @ 0x00c8ee40
 void** FUN_00c8ee40(void** pBegin, void** pEnd, void** pOut)
 {
-    if (pBegin == pEnd)
-        return pOut;
+    if (pBegin != pEnd) {
+        do {
+            cRefCountedNode* pSource = (*pBegin != nullptr)
+                                           ? (cRefCountedNode*)((uint8_t*)*pBegin + 0x34)
+                                           : nullptr;
+            cRefCountedNode* pOld = (cRefCountedNode*)*pOut;
+            if (pSource != pOld) {
+                if (pSource != nullptr)
+                    pSource->AddRef();
+                *pOut = pSource;
+                if (pOld != nullptr)
+                    pOld->Release();
+            }
 
-    do {
-        cRefCountedNode* pSource = (*pBegin != nullptr)
-                                       ? (cRefCountedNode*)((uint8_t*)*pBegin + 0x34)
-                                       : nullptr;
-        cRefCountedNode* pOld = (cRefCountedNode*)*pOut;
-        if (pSource != pOld) {
-            if (pSource != nullptr)
-                pSource->AddRef();
-            *pOut = pSource;
-            if (pOld != nullptr)
-                pOld->Release();
-        }
+            ++pBegin;
+            ++pOut;
+        } while (pBegin != pEnd);
 
-        ++pBegin;
-        ++pOut;
-    } while (pBegin != pEnd);
-
+    }
     return pOut;
 }
 

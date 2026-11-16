@@ -18,7 +18,7 @@ extern "C" void* __cdecl op_new6(int size, const char* file, int flags, int alig
 extern "C" void  __cdecl op_del_array(void* p);
 extern "C" void* __cdecl memcpy_(void* dst, const void* src, unsigned size);
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(long long* out);
-extern "C" bool  __cdecl EA_WriteUint32(void* stream, u32* value, int count, int flags);
+extern "C" bool  __cdecl EA_WriteUint32(void* stream, u32* value, int count, int flags); // 0x0093aa70
 
 struct KeySlot {
     u32   mBits;   // +0x00: bits 31/30 = link flags, low 30 = index
@@ -88,9 +88,37 @@ struct ListNode {
     void*     mpObj;
 };
 
+struct TransferObject {
+    virtual void AddRef();
+    virtual void Release();
+    virtual void* AsInterface(u32 id);
+};
+struct TransferOutput {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void slot02();
+    virtual void slot03();
+    virtual void slot04();
+    virtual void slot05();
+    virtual void* GetStream(); // +0x18
+};
+struct TransferWriter {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void slot02();
+    virtual void slot03();
+    virtual void slot04();
+    virtual void slot05();
+    virtual void slot06();
+    virtual void EndWrite(); // +0x1c
+    virtual TransferOutput* GetOutput(); // +0x20
+    virtual void slot24();
+    virtual void slot28();
+    virtual void WriteObject(void* object); // +0x2c
+};
 struct TransferVec {
-    int* mpBegin;
-    int* mpEnd;
+    TransferObject** mpBegin;
+    TransferObject** mpEnd;
 };
 
 struct cSkinner {
@@ -121,7 +149,6 @@ struct cSkinner {
 
     void* Construct();                                              // 0x00b0d8d0
     void  Destroy();                                                // 0x00b0d610
-    void  Serialize(void* stream, TransferVec* vec);                // 0x00b0d540
     void* FindMatchingSlot(void* profile, u32 arg3, u32 arg4,
                            u32 arg5);                               // 0x00b0d380
     void* CreateAgentLink(void* a1, void* a2, u32 a3, u32 a4);      // 0x00b0d9f0
@@ -322,25 +349,27 @@ void* cSkinner::FindMatchingSlot(void* profile, u32 arg3, u32 arg4, u32 arg5)
 // ===========================================================================
 // 0x00b0d540 -- serialize the agent id vector through the stream vtable.
 // ===========================================================================
-// @ 0x00b0d540
-void cSkinner::Serialize(void* stream, TransferVec* vec)
+inline void WriteReferenceCount(u32 count, TransferOutput* output)
 {
-    int* begin = vec->mpBegin;
-    int* end   = vec->mpEnd;
-    int  count = (int)(end - begin);
+    void* stream = output->GetStream();
+    EA_WriteUint32(stream, &count, 1, 0);
+}
 
-    void* io = ((void*(__fastcall*)(void*))(*(void***)this)[0x20 / 4])(this);
-    void* strm = ((void*(__fastcall*)(void*))(*(void***)io)[0x18 / 4])(io);
-    EA_WriteUint32(strm, (u32*)&count, 1, 0);
-
-    for (int* it = begin; it != end; ++it) {
-        u32 id = 0;
-        if (*it != 0)
-            id = ((u32(__fastcall*)(int, u32))(*(void***)*it)[2])(*it, 0x179c807);
-        ((void(__fastcall*)(void*, u32))(*(void***)this)[0x2c / 4])(this, id);
+// @ 0x00b0d540
+void SerializeAgentReferences(TransferWriter* writer, TransferVec* vec)
+{
+    u32 length = vec->mpEnd - vec->mpBegin;
+    TransferOutput* output = writer->GetOutput();
+    WriteReferenceCount(length, output);
+    TransferObject** it = vec->mpBegin;
+    TransferObject** end = vec->mpEnd;
+    for (; it != end; ++it) {
+        TransferObject* object = *it;
+        void* reference = 0;
+        if (object) reference = object->AsInterface(0x179c807);
+        writer->WriteObject(reference);
     }
-
-    ((void(__fastcall*)(void*))(*(void***)this)[0x1c / 4])(this);
+    writer->EndWrite();
 }
 
 // ===========================================================================
@@ -843,8 +872,8 @@ void SlotVec::PushDefault()
         KeySlot tmp;
         tmp.mBits = 0x80000000u;
         self->Insert(p, &tmp);
-        u32 sign = tmp.mBits >> 31;
-        if (sign == 0 && tmp.mpObj != 0)
+        u8 sign = (u8)(tmp.mBits >> 31);
+        if ((sign & 1) == 0 && tmp.mpObj != 0)
             ((void(__fastcall*)(void*))(*(void***)tmp.mpObj)[1])(tmp.mpObj);
     }
 }

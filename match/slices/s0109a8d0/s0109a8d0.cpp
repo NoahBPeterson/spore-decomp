@@ -282,8 +282,8 @@ hkUint32 hkDiscreteSimulation::recoverFromStepFailure(hkWorld* world, int failur
     if (failure == 1)
         return this->stepDeltaTime(world, 0, m_frameDelta);
 
-    hkReal start = world->m_field14;
     hkReal end   = world->m_field18;
+    hkReal start = world->m_field14;
     hkStepInfo info(start, end);
     (void)info;
 

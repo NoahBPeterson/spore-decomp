@@ -27,6 +27,7 @@ extern "C" int*  __fastcall Property_GetInt(void*);        // 0x0041e990
 #include <float.h>
 #include "SP/cSPTimer.h"
 #include "SP/cVarListSerializer.h"
+extern SP::cDataSerializerGeneric gCreatureMissionSerializerList[]; // 0x01572560
 
 // ---- items of slice s00c2f830 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int u32;
@@ -304,12 +305,11 @@ struct ImageKey { unsigned int mA; unsigned int mB; unsigned int mC; };
 // @ 0x00c2e420
 unsigned char MissionStub::FUN_00c2e420(int param_2)
 {
-    // cGameData::Read, then one cVarListSerializer pass over the mission var list.
     unsigned char a = ((unsigned char(__thiscall*)(void*, int))FUN_00b18600)(this, param_2);
-    cVarListSerializer ser;
-    ((void(__thiscall*)(void*, void*, int, int))FUN_00692f90)(&ser, this, (int)0x01572560, (int)0x01a80d26);
-    unsigned char b = ((unsigned char(__thiscall*)(void*, int))FUN_00693e10)(&ser, param_2);
-    return (unsigned char)(a & b);
+    SP::cVarListSerializer ser(this, gCreatureMissionSerializerList, 0x1a80d26);
+    unsigned char b = ser.Serialize(*(SP::cIObjectDatabaseIStream*)param_2);
+    a &= b;
+    return a;
 }
 
 // @ 0x00c2e4b0

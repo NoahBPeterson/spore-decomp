@@ -645,8 +645,8 @@ void cParticlesEffect::GenerateNewParticles(float deltaTime)
     }
 
     uint32_t flags = mDesc->mFlags.mWord[0];
-    int lodEmit = (flags >> 1) & 1;
-    if (lodEmit)
+    uint8_t lodEmit = (uint8_t)(flags >> 1);
+    if (lodEmit & 1)
         Emit(deltaTime);
     else if (flags & 1)
         AddRateCurveParticles(deltaTime);

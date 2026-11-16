@@ -35,8 +35,7 @@ class DebugMessage : public BaseA2 { public:
 int __fastcall FUN_006bb670(void* self)
 {
     int obj = (int)(size_t)self;
-    long* pc = (long*)((char*)obj + 0x14);
-    long n = _InterlockedDecrement((volatile long*)pc);
+    long n = _InterlockedDecrement((volatile long*)((char*)obj + 0x14));
     if (n == 0 && obj) ((void(__thiscall*)(int, int))(*(int**)obj)[0])(obj, 1);
     return n;
 }

@@ -2150,20 +2150,20 @@ Vec10* Vec10::init(int n, int unused)
 // @ 0x00706d60
 int FUN_00706d60(E144* first, E144* last, int result)
 {
-    if (first == last)
-        return result;
-    do {
-        void* p = first->pBC;
-        if (p != 0 && *(int*)((char*)p - 4) != 0)
-            sub_f47380(p);
-        p = first->pA8;
-        if (p != 0 && *(int*)((char*)p - 4) != 0)
-            sub_f47380(p);
-        if (first->p0 != 0)
-            ((IVoid*)first->p0)->v1();
-        first = (E144*)((char*)first + 0x144);
-        result += 0x144;
-    } while (first != last);
+    if (first != last) {
+        do {
+            void* p = first->pBC;
+            if (p != 0 && *(int*)((char*)p - 4) != 0)
+                sub_f47380(p);
+            p = first->pA8;
+            if (p != 0 && *(int*)((char*)p - 4) != 0)
+                sub_f47380(p);
+            if (first->p0 != 0)
+                ((IVoid*)first->p0)->v1();
+            first = (E144*)((char*)first + 0x144);
+            result += 0x144;
+        } while (first != last);
+    }
     return result;
 }
 

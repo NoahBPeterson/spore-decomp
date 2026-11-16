@@ -423,8 +423,23 @@ void __fastcall Ctor76b720(void* self, int, int a2, int a3, int* a4, void* a5, c
 }
 
 // ===========================================================================
+struct ViewerResource {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct ViewerResourceRef {
+    ViewerResource* object;
+    void Reset() {
+        _ReadWriteBarrier();
+        ViewerResource* old = object;
+        if (old) {
+            object = 0;
+            old->Release();
+        }
+    }
+};
+
 // @ 0x0076b840  release a viewer instance
-// ===========================================================================
 void __fastcall ReleaseViewer76b8(void* self) {
     char* s = (char*)self;
     void* p = *(void**)(s + 0x10);
@@ -433,14 +448,11 @@ void __fastcall ReleaseViewer76b8(void* self) {
         void* q = *(void**)(s + 0x10);
         if (q) { ((void(__thiscall*)(void*))PhysDel)(q); Dealloc(q); }
     }
-    void* r = *(void**)(s + 0xc);
-    if (r) {
-        *(void**)(s + 0xc) = 0;
-        ((void(__thiscall**)(void*))*(void***)r)[1](r);
-    }
+    ViewerResourceRef& resource = *reinterpret_cast<ViewerResourceRef*>(s + 0xc);
+    if (resource.object)
+        resource.Reset();
 }
 
-// ===========================================================================
 // @ 0x0076b890  render/serialize a viewer
 // ===========================================================================
 void __fastcall RenderViewer76b8(void* self, int, void* a2, void* a3, void* a4, void* a5) {

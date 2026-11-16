@@ -1,3 +1,4 @@
+#include <intrin.h>
 // Slice s00ec40b0 -- Spore UI: Sporepedia timeline card / asset view + the introsort + binary-heap
 // template family it instantiates over 8-byte {Key,Value} pairs.
 //
@@ -579,24 +580,61 @@ void* FUN_00ec4bb0(void* self)
     return self;
 }
 
+
+struct ModalLayout {
+    virtual void slot00();
+    virtual void slot04();
+    virtual void Release(); // +0x08
+    void* FindWindowByID(unsigned id, int recursive); // 0x008105b0
+    void Shutdown(bool releaseWindows); // 0x00811ad0
+};
+namespace SPUIHelpers { void EndModal(void* window, int result, bool close); } // 0x00809c50
+struct ModalMessageServer {
+    virtual void slot00(); virtual void slot04(); virtual void slot08();
+    virtual void slot0c(); virtual void slot10();
+    virtual void MessageSend(unsigned id, void* message, void* handler); // +0x14
+};
+extern char gMessageRCVtable[]; // 0x013eb90c
+extern char gBasicMessage5Vtable[]; // 0x013eb844
+struct ModalMessage {
+    void* vtable;
+    volatile long mRefCount;
+    struct Data { unsigned low, high; } mData[5];
+    unsigned mId;
+    unsigned pad34;
+    unsigned mRCFlags;
+    unsigned pad3c;
+    ModalMessage() {
+        mId = 0;
+        vtable = gMessageRCVtable;
+        _InterlockedExchange(&mRefCount, 0);
+        vtable = gBasicMessage5Vtable;
+        mRCFlags = 0;
+    }
+    ~ModalMessage(); // 0x00421cf0
+};
+struct TimelineView {
+    char pad00[0x74];
+    ModalLayout* mpLayout;
+    void Close();
+};
+
 // @ 0x00ec4c80
-void FUN_00ec4c80(void* self)
+void TimelineView::Close()
 {
-    if (*(void**)((char*)self + 0x74) != 0)
-    {
-        void* w = cSPUILayout::FindWindowByID(*(void**)((char*)self + 0x74), 0x7299020u, 1);
-        SPUIHelpers::EndModal(w);
-        cSPUILayout::Shutdown(*(void**)((char*)self + 0x74), 0);
-        void* lay = *(void**)((char*)self + 0x74);
-        if (lay)
-        {
-            *(void**)((char*)self + 0x74) = 0;
-            ((void(*)(void*))(*(void***)lay)[2])(lay);
+    if (mpLayout) {
+        SPUIHelpers::EndModal(mpLayout->FindWindowByID(0x7299020, 1), 0, true);
+        mpLayout->Shutdown(true);
+        ModalLayout* layout = mpLayout;
+        if (layout) {
+            mpLayout = 0;
+            layout->Release();
         }
     }
-    int* srv = (int*)SP_MessageServer();
-    typedef void (*Fn)(void*, unsigned int, void*, unsigned int);
-    ((Fn)((int*)*srv)[0x14 / 4])(srv, 0xcc0bf724u, 0, 0);
+    ModalMessage message;
+    message.mData[0].low = 10;
+    message.mData[1].low = (unsigned)-15;
+    ((ModalMessageServer*)SP_MessageServer())->MessageSend(0xcc0bf724, &message, 0);
 }
 
 // @ 0x00ec4d30  -- upper_bound over 8-byte records
@@ -729,7 +767,7 @@ void SporepediaAssetController::Reset(char notify, int param)
         char* e = *(char**)((char*)self + 0x34);
         *(char**)((char*)self + 0x38) = b + ((b - e) >> 3) * -8;
         if (*(void**)((char*)self + 0x74) != 0)
-            FUN_00ec4c80(self);
+            ((TimelineView*)self)->Close();
         *(uint32_t*)((char*)self + 0x78) = 0;
         *(uint32_t*)((char*)self + 0x7c) = 0;
         *(uint32_t*)((char*)self + 0x80) = 0;
@@ -771,7 +809,7 @@ void SporepediaAssetController::Reset(char notify, int param)
             ((Fn)((int*)*srv)[0x14 / 4])(srv, 0x068cd252u, msg, 0);
         }
         if (*(void**)((char*)self + 0x74) != 0)
-            FUN_00ec4c80(self);
+            ((TimelineView*)self)->Close();
         *(uint32_t*)((char*)self + 0x78) = 0;
         *(uint32_t*)((char*)self + 0x7c) = 0;
         *(uint32_t*)((char*)self + 0x80) = 0;

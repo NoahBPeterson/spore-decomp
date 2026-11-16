@@ -2,6 +2,7 @@
 // Reconstructed from the retail disassembly.
 // Build: /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast
 
+#include <string.h>
 #include "types.h"
 
 typedef unsigned char  u8;
@@ -326,14 +327,7 @@ template <class T> static inline const T& MinRef(const T& a, const T& b) { retur
 // @ 0x0091bec0
 u32 EStr::find_last_of(const char* s, u32 pos) const
 {
-    const char* e = s;
-    const char* e0 = e + 1;
-    char c;
-    do {
-        c = *e;
-        ++e;
-    } while (c != 0);
-    u32 n = (u32)(e - e0);
+    u32 n = (u32)strlen(s);
     const char* base = mpBegin;
     u32 len = (u32)(mpEnd - base);
     u32 p = pos;

@@ -3,6 +3,8 @@
 // starts with its original address.
 
 #include "s00b5b540.h"
+#include "../../../src/game/include/var_list_serializer.h"
+extern SP::cDataSerializerGeneric gGonzagoSerializerList[]; // 0x0156a118
 
 extern "C" void* FUN_00b3d320();
 extern "C" void* FUN_00b3d3a0();
@@ -626,11 +628,9 @@ struct S5be10 { void f(void* stream); };
 // @ 0x00b5be10
 void S5be10::f(void* stream)
 {
-    void* self = this;
     FUN_00b5ba30(1);
-    char buf[0xa14];
-    FUN_00692f90(buf, self, "cmp", 0x1a80d26);
-    FUN_00692900(buf, stream);
+    SP::cVarListSerializer ser(this, gGonzagoSerializerList, 0x1a80d26);
+    ser.Serialize(*(SP::cIObjectDatabaseOStream*)stream);
 }
 
 // 0x00b5be60 — read the planet/avatar keys out of a variable list and push

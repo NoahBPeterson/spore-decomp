@@ -83,3 +83,4 @@
 ../src/game/SPGonzago/SPCellGame.cpp  ?GetClassNameById@cCOMFactory_SimulatorCellSaveGame@SP@@UAEPBDW4ClassId@COM@EA@@@Z  00e4f650  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellGame.cpp  ?HandleSimulationUpdate@cCellMode@SP@@QAEXMM@Z  00e80980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e7b5d0@@YAXPAX0@Z  00e7b5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCellGame.cpp  ?FUN_00e61320@@YA_NH@Z  00e61320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

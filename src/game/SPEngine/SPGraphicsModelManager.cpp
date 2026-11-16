@@ -4404,27 +4404,56 @@ void cModelWorld_SetMaterialInfo(void* /*this*/, void* handle, void* info, int i
     }
 }
 
+struct MaterialCommitOwner {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct MaterialCommitInstance {
+    void Reset(int flags); // 0x007434b0
+    void Commit(void**, void**, unsigned*, void**, void**, void**, MaterialCommitOwner**); // 0x0073b980
+};
+struct MaterialCommitModel {
+    char pad[0x9c];
+    MaterialCommitInstance* instance;
+    char padA0[0xc];
+    MaterialCommitInstance* hull;
+};
+struct MaterialCommitTriplet { unsigned data[3]; };
+struct MaterialCommitInfo {
+    void* reserved;
+    void* sourceBegin;
+    unsigned count;
+    void* sourceEnd;
+    MaterialCommitTriplet* buffer;
+    void* source2Begin;
+    MaterialCommitOwner* owner;
+    unsigned newCount;
+    void* output;
+    void* source2End;
+};
+
 // @ 0x007462b0
-void FUN_007462b0(void* /*this*/, void* handle, VecField* v)
+void __fastcall FUN_007462b0(void* self, int unused, void* handle, MaterialCommitInfo* info)
 {
-    MWInternal_s0074_5ac0* p = handle ? (MWInternal_s0074_5ac0*)((char*)handle - 8) : 0;
-    void* src = 0;
-    if (p->mSlots[0] == 0 && p->mSlots[1] == 0 && p->mSlots[2] == 0 && p->mSlots[3] == 0) {
-        // no slots: still run the commit below
-    } else {
-        // find a live slot and detach its refcounted object at +0x18
-        void* q = (void*)v->mExtra;
-        if (q) {
-            v->mExtra = 0;
-            (*(void(__thiscall**)(void*))(*(void**)q))(q);
+    MaterialCommitModel* model = handle ? (MaterialCommitModel*)((char*)handle - 8) : 0;
+    MaterialCommitInstance* instance = model->hull;
+    if (!instance)
+        instance = model->instance;
+    if (instance) {
+        instance->Reset(0);
+        MaterialCommitOwner*& owner = info->owner;
+        MaterialCommitOwner* old = owner;
+        if (old) {
+            owner = 0;
+            old->Release();
         }
-        FUN_0073b980(&v->mStore, &v->mBegin, &v->mExtra, &v->mEnd, &v->mOther, &v->mCapacity, &v->mExtra);
+        instance->Commit(&info->output, &info->sourceBegin, &info->newCount,
+                         &info->sourceEnd, &info->source2End, &info->source2Begin, &owner);
     }
-    if (v->mEnd != v->mExtra) {
-        v->mEnd = v->mExtra;
-        EASTL_allocator_deallocate(v->mStore);
-        uint32_t n = (uint32_t)v->mEnd;
-        v->mStore = EASTL_allocator_allocate(n * 0xc, "Graphics", 0, 0, 0, 0);
+    if (info->count != info->newCount) {
+        info->count = info->newCount;
+        EASTL_allocator_deallocate(info->buffer);
+        info->buffer = new ("Graphics", 0, 0, 0, 0) MaterialCommitTriplet[info->count];
     }
 }
 

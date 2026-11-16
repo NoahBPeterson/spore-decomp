@@ -1,2 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00ab0590/s00ab0590.cpp  ?Stop@IStoppable@Swarm@EA@@UAEXH@Z  00ab0cf0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
+slices/s00ab0590/s00ab0590.cpp  ??1cParticlesEffect@Swarm@EA@@QAE@XZ  00ab0c30  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast

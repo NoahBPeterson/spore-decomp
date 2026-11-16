@@ -5716,6 +5716,7 @@ void* CGmeRefCount::Destroy(uint8_t flags)
         p->mRefCount = rc - 1;
         if (rc - 1 == 0) {
             p->mRefCount = 1;
+            _ReadWriteBarrier();
             p->Destroy(1);
         }
     }
@@ -5754,6 +5755,7 @@ void CGmeRefCount::Destroy2()
         p->mRefCount = rc - 1;
         if (rc - 1 == 0) {
             p->mRefCount = 1;
+            _ReadWriteBarrier();
             p->Destroy(1);
         }
     }
@@ -5763,6 +5765,7 @@ void CGmeRefCount::Destroy2()
         p->mRefCount = rc - 1;
         if (rc - 1 == 0) {
             p->mRefCount = 1;
+            _ReadWriteBarrier();
             p->Destroy(1);
         }
     }
@@ -10789,11 +10792,7 @@ void StrandMesh::RemoveStrand(uint32_t index)
 // @ 0x00facfc0
 void DecalHost::AttachDecal()
 {
-    FaceQuad** pFace = mpMesh->mFaces;
-    FaceQuad** pFaceEnd = pFace + 6;
-    do {
-        (*pFace)->AddDecal(this);
-        ++pFace;
-    } while (pFace < pFaceEnd);
+    for (int face = 0; face < 6; ++face)
+        mpMesh->mFaces[face]->AddDecal(this);
     mFlags |= 0x10;
 }

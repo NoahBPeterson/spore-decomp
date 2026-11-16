@@ -1,1 +1,2 @@
 slices/s00c035f0/s00c035f0.cpp  ?func3C20@CreatureBase@@QAEHH@Z  00c03c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+slices/s00c035f0/s00c035f0.cpp  ?Write@CreatureBase@@QAE_NPAX@Z  00c04220  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

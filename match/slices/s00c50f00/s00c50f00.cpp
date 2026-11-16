@@ -285,7 +285,7 @@ class cSPMission : public IMissionVtbl {
     bool     GetTagString(int tag, WString* out);          // 0x00c491c0
     void     OnAccept();                                   // 0x00c47a10
     void     ShutdownSystems();                            // 0x00c46590
-    void     HandleMessage(uint32_t message, void* data);  // 0x00c4a6b0
+
     int      Update(uint32_t delta);                       // 0x00c478b0
     void     Unk471c0();                                   // 0x00c471c0
     void     Unk472e0();                                   // 0x00c472e0
@@ -339,7 +339,7 @@ class cSPMissionExplore : public cSPMission {
     void     OnAccept();                                               // 0x00c51a10
     void     ShutdownSystems();                                        // 0x00c51aa0
     void     ReturnForRewards();                                       // 0x00c51ac0
-    void     HandleMessage(uint32_t message, void* data);              // 0x00c51b10
+
     int      Update(uint32_t delta);                                   // 0x00c51bb0
     void     AbortToRewardState();                                     // 0x00c51e40
     void     AddMessageHandlers();                                     // 0x00c51f90
@@ -750,25 +750,38 @@ void cSPMissionExplore::ReturnForRewards()
 }
 
 // ---------------------------------------------------------------------------------------------
-// 0x00c51b10 -- HandleMessage.  The original lives in the message-handler sub-object vtable, so it
-// is entered with this == cSPMissionExplore + 0x34 and steps back (lea edi,[esi-0x34]); it is
-// modelled here as a cSPMissionExplore member, which is ABI-equivalent for the fields it reads but
-// does not reproduce the pointer adjustment.
-// ---------------------------------------------------------------------------------------------
+// 0x00c51b10 -- the explore mission's embedded message-handler interface.
+// The handler is at mission+0x34; the base handler also receives that interface.
+struct MissionHandlerBase {
+    bool HandleMessage(uint32_t message, void* data); // 0x00c4a6b0
+};
+struct ExploreHandlerState {
+    char pad00[0x1c0];
+    bool mbVisitCities;
+};
 // @ 0x00c51b10
-void cSPMissionExplore::HandleMessage(uint32_t message, void* data)
+bool IMissionHandler::HandleMessage(uint32_t message, void* data)
 {
-    if (message == 0x248975f) {
-        if (mbVisitCities && cSPMission::GetTargetPlanet() == GetActivePlanet() && !GetUniverseContext())
-            InitCityEffects();
-    } else if (message == 0x2489760) {
-        if (mbVisitCities && cSPMission::GetTargetPlanet() == GetActivePlanet() && !GetUniverseContext()) {
-            DestroyCityEffects();
-            cSPMission::HandleMessage(message, data);
-            return;
+    switch ((int)message) {
+    case 0x248975f: {
+        if (((ExploreHandlerState*)this)->mbVisitCities) {
+            cSPMissionExplore* mission = (cSPMissionExplore*)((char*)this - 0x34);
+            if (GetActivePlanet() == mission->GetTargetPlanet() && !GetUniverseContext())
+                mission->InitCityEffects();
         }
+        break;
     }
-    cSPMission::HandleMessage(message, data);
+    case 0x2489760: {
+        if (((ExploreHandlerState*)this)->mbVisitCities) {
+            cSPMissionExplore* mission = (cSPMissionExplore*)((char*)this - 0x34);
+            if (GetActivePlanet() == mission->GetTargetPlanet() && !GetUniverseContext()) {
+                mission->DestroyCityEffects();
+            }
+        }
+        break;
+    }
+    }
+    return ((MissionHandlerBase*)this)->HandleMessage(message, data);
 }
 
 // ---------------------------------------------------------------------------------------------

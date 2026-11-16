@@ -11,7 +11,6 @@
 # (ours 0x30001054 vs the image's 0x01458df8, every other dword identical), and CreateEmittedParticle
 # cannot be given a valid stream/evaluator pair (all 400 inputs fault in both binaries).
 
-00aa2f00 110 CreateEmittedParticle: complete; EAAllocate(0x50,"Swarm",0,0,0,0) factory + inline cEmittedParticle ctor + ReadEmittedParticle(stream,flags,p) reproduce the original, including the interleaved int/float initialiser order and the runtime colour globals 0x1679158/5c/60. Differences: MSVC keeps the null pointer in esi instead of ebx and emits `test eax,eax` instead of `cmp eax,ebx` (159 vs 147 B). difftest verdict UNSUPPORTED (0/400 valid inputs: fault(write) 143, fake-arity 135, fault(pool-limit) 86 - the harness cannot build a valid stream/evaluator pair, in both binaries).
 
 00aa3040 406 ParseParticleState: complete; loop/single/sustain/hold/kill branch chain (mode = (argCount > 1) ? Int(argv[1]) : default), flags 4 / 0x10000000 / 0x08000000|flags2 1, then sizeScale(0x100)/areaScale(0x200)/volumeScale(0x400)/speedScale/delay/trigger parsing all reproduce the original. Differences: state/evaluator live in edi/esi swapped relative to the original and MSVC lays the cold `argCount <= 0` single-mode block out inline (599 vs 576 B). difftest verdict WEAK (206/400 valid inputs, 55.3% coverage, no mismatch).
 

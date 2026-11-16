@@ -445,9 +445,8 @@ int Obj13_findShort(Obj13* self, int idx, int key)
 {
     int* p = (int*)(self->mBase + idx * 0x8c + 0x14);
     const short* q = (const short*)p[0];
-    int n = (int)((p[1] - (int)q) >> 2);
     const short* ps = q;
-    for (int i = 0; i < n; ++i, ps += 2)
+    for (int i = 0; i < ((int)((p[1] - (int)q) >> 2)); ++i, ps += 2)
         if (*ps == key)
             return i;
     return -1;

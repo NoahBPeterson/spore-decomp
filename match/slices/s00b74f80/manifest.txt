@@ -4,3 +4,4 @@ slices/s00b74f80/s00b74f80.cpp  ?FreeTable@T59b0@@QAEXPAHI@Z  00b759b0  /O2 /MD 
 slices/s00b74f80/s00b74f80.cpp  ?f_00b75b80@@YGXPAPAHI@Z  00b75b80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b74f80/s00b74f80.cpp  ?f_00b75bf0@@YGXPAPAHI@Z  00b75bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b74f80/s00b74f80.cpp  ?f_00b75c60@@YAXPAUV3@@00P6AD00@Z@Z  00b75c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b74f80/s00b74f80.cpp  ?GetOrInsert@T5890@@QAEPAHPAI@Z  00b75890  /O2 /MD /Gy /TP /arch:SSE /fp:fast

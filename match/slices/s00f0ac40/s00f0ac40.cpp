@@ -5,6 +5,8 @@
 // savedA, savedB} entries, each index selecting a list of 0x44-byte records kept in
 // vector-like containers {begin, end, cap}.
 #include "types.h"
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 typedef unsigned int uint;
 
@@ -231,10 +233,11 @@ Rec* GetListRec(int index)
     Ctx* ctx = g->ctx;
     if (ctx == 0) {
         rec = 0;
-    } else if ((int)((ctx->recEnd - ctx->recBegin) / 0x4e0) > active) {
-        rec = ctx->recBegin + active * 0x4e0;
-    } else {
+    } else if ((int)((ctx->recEnd - ctx->recBegin) / 0x4e0) <= active) {
         rec = 0;
+    } else {
+        _ReadWriteBarrier();
+        rec = ctx->recBegin + active * 0x4e0;
     }
     switch (g->mode) {
     case 1: list = (RecVec*)(rec + 0x170); break;

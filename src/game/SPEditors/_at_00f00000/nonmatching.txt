@@ -25,7 +25,6 @@
 00f02e00 374 scene build: window path + VecBox temp schedule differs (equiv WEAK 400/400 valid, 5.4% cov)
 00f03010 16 list dtor: outer/inner callee-saved register swap (edi<->esi) only (equiv PASS 260/400 valid, 100% cov)
 00f030a0 184 scene commit: FUN_00f01140 vec copy + VecBox schedule differs (equiv WEAK 400/400 valid, 11.2% cov)
-00f031d0 123 refcounted copy + virtual slot call: call-argument setup and `&tmp` register differ (equiv WEAK) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, call#2 esp, call#3 esp, call#4 esp]
 00f03320 162 scenario check/commit: branch layout and call schedule differ (equiv WEAK)
 00f03440 437 window/handler setup: vcall slots and argument registers differ (equiv UNSUPPORTED: original faults on generated inputs)
 00f036f0 257 predicate/commit: branch and call schedule differ (equiv WEAK)

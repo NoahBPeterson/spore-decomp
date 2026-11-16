@@ -418,20 +418,25 @@ extern "C" void __fastcall FUN_00a151a0(void* ecx_p, void* edx_unused)
         gSystem->Free((void*)v, 0);
 }
 
+// Shared audio effect storage: six0xc-byte delay-buffer owners at+0x24.
+struct DelayLineStorage {
+    void* mpBuffer;
+    unsigned mPosition;
+    unsigned mSize;
+    ~DelayLineStorage(); // 0x00a151a0
+};
+struct DelayEffectBase {
+    void* mpVtable;
+    char mState[0x20];
+    ~DelayEffectBase() { mpVtable = (void*)0x014bc0fc; }
+};
+struct DelayEffectStorage : DelayEffectBase {
+    DelayLineStorage mLines[6];
+    ~DelayEffectStorage();
+};
+
 // @ 0x00a151d0
-// Destroys the 6-entry vector of Chorus lines (+0x24, stride 0xc) and installs the vftable. `p`
-// arrives in ecx and the original returns void. The original hands the array to the compiler's EH
-// vector-destructor iterator 0x011e0b22 (array, 0xc, 6, element destructor) inside a C++ scope-table
-// frame whose stack layout no source-level try/catch reproduces at /O2 (see nonmatching.txt), so the
-// same destruction is spelled out here with the vector's own line destructor, loop kept unrolled.
-extern "C" void __fastcall FUN_00a151d0(void* p, void*)
-{
-    char* line = (char*)p + 0x24;
-    for (int i = 6; i != 0; i--) {
-        FUN_00a151a0(line, 0);
-        line += 0xc;
-    }
-    *(void**)p = (void*)0x14bc0fc;
+DelayEffectStorage::~DelayEffectStorage() {
 }
 
 // @ 0x00a15890

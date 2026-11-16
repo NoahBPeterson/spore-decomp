@@ -326,21 +326,25 @@ extern "C" void* FUN_00695cf0(LocaleDatabaseRetail::Database** p)
     return 0;
 }
 
+struct LocaleResourceManager {
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual bool GetResource(void* key, void* resource, int flags, void* database, int, int); // +0x0c
+};
+
 // @ 0x00695d10
 void Ctl::addThing(void* a, void* b)
 {
-    void* m = GetManager();
-    bool ok = ((bool(__thiscall*)(void*, void*, void*, int, int, int, int))VFN(m, 0xc))
-                  (m, a, b, 0, 0, 0, 0);
-    if (!ok)
-    {
+    LocaleResourceManager* __restrict manager = (LocaleResourceManager*)GetManager();
+    bool ok = manager->GetResource(a, b, 0, 0, 0, 0);
+    if (!ok) {
         char* end = (char*)this + 0x60;
         void* n = *(void**)((char*)this + 0x60);
-        while (n != end && !ok)
-        {
-            m = GetManager();
-            ok = ((bool(__thiscall*)(void*, void*, void*, int, void*, int, int))VFN(m, 0xc))
-                     (m, a, b, 0, *(void**)((char*)n + 8), 0, 0);
+        while (n != end && !ok) {
+            LocaleResourceManager* __restrict current = (LocaleResourceManager*)GetManager();
+            void* database = *(void**)((char*)n + 8);
+            ok = current->GetResource(a, b, 0, database, 0, 0);
             n = *(void**)n;
         }
     }

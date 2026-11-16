@@ -8,6 +8,8 @@
 // field offsets the disassembly shows.
 
 #include "types.h"
+#include "SP/cStarManager.h"
+#include "SP/cPlanetRecord.h"
 
 #pragma warning(disable: 4100)
 
@@ -31,6 +33,19 @@ int   __cdecl FUN_00472fe0(void*, const char*, ...);   // 0x472fe0 eastl::basic_
 void* __cdecl FUN_0093c570(void* out, void* self, int* x); // 0x93c570 EA::ConvertToString8
 void* __cdecl FUN_00618890(void* out, void* rhs);      // 0x618890 eastl::operator+
 int   __cdecl qsort(void*, unsigned, unsigned, int(__cdecl*)(const void*, const void*));
+
+SP::cStarManager* GetStarManager(); // 0x00b3d2a0
+struct StarRecordState {
+    char prefix[0x58];
+    unsigned mStarterWorldID;
+    unsigned flags;
+    char pad60[0x24];
+    SP::cPlanetRecord** cachedPlanetRecords;
+    char pad88[0x24];
+    unsigned char planetCount;
+    void CachePlanetRecords(); // 0x00bba640
+    void SetStarterWorldID(unsigned id, bool update);
+};
 
 // The star key-index map: EASTL vector of 8-byte {key, value} records.
 struct StarIndex {
@@ -76,7 +91,6 @@ struct cStarManager {
     uint8_t   mMeasureFlag;     // +0xac
 
     bool Measure(cStarRecord* key);
-    void SetStar(cStarRecord* key);
 };
 
 // ===========================================================================
@@ -161,22 +175,17 @@ bool cStarManager::Measure(cStarRecord* key)
 }
 
 // ===========================================================================
-// @ 0x00bbac80  cStarManager::SetStar(cStarRecord*) : __thiscall, ret 8
+// @ 0x00bbac80  cStarRecord::SetStarterWorldID(unsigned, bool)
 // ===========================================================================
-void cStarManager::SetStar(cStarRecord* key)
+void StarRecordState::SetStarterWorldID(unsigned id, bool update)
 {
-    if (key != mStar) {
-        unsigned flags = mFlags;
-        unsigned bit = (flags >> 0xf) & 1;
-        if (mMeasureFlag != 0 && bit == 0) {
-            cStarRecord* local_c[3];
-            FUN_00bba640();
-            Thunk* cur = (Thunk*)*mGrid;
-            int* p = (int*)FUN_00b3d2a0(local_c, key, 1);
-            void* r = ((Thunk*)p)->do8010();
-            cur->doDde0(r);
+    if (id != mStarterWorldID) {
+        if (planetCount && !((unsigned char)(flags >> 15) & 1)) {
+            CachePlanetRecords();
+            SP::cPlanetRecord* planet = *cachedPlanetRecords;
+            planet->SetGeneratedTerrainKey(GetStarManager()->GenerateStarterWorldTerrain(id), true);
         }
-        mStar = key;
+        mStarterWorldID = id;
     }
 }
 

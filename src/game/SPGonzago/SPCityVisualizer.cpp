@@ -40,6 +40,19 @@ extern char sz_file_13ebb38[]; // 0x013ebb38 "...allocator.h"
 #include "SP/cLocomotiveObject.h"
 #include "cSPQuaternion.h"
 
+struct CastingArchiveStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // +0x18
+};
+struct CastingArchive {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual CastingArchiveStreamHolder* GetStreamHolder(); // +0x20
+};
+extern SP::cDataSerializerGeneric gCastingSerializerList[]; // 0x01565d68
+
 // ---- items of slice s00ac4060 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned int  uint;
 extern "C" void* __cdecl EASTL_allocator_allocate(unsigned, const char*, int, int, const char*, int); // 0x00f473a0
@@ -1742,6 +1755,9 @@ public:
     char     mSub12c[0x34];        // +0x12c
     char     mSub160[0x34];        // +0x160
 
+    bool Write(SP::cIObjectDatabaseOStream& archive) const;        // 0x00ac8550
+    bool Read(SP::cIObjectDatabaseIStream& archive);               // 0x00ad0b30
+    void Reset();                                                // 0x00ad08f0
     cCastingManager* Construct();                                  // 0x00acf230
     void  InsertTribe(cTribeEntry* pos, const cTribeEntry& value);  // (unused helper slot)
     void  CastNoun(NounObj3* pNoun, char bFlag);                   // 0x00acebd0
@@ -1759,7 +1775,7 @@ extern "C" void   __fastcall FUN_00c8fc50(void*, int, int);                 // 0
 extern "C" void   __fastcall FUN_00c0bf00(void*, int, int);                 // 0x00c0bf00
 extern "C" void   __fastcall FUN_00d5bb30(void*, int);                      // 0x00d5bb30
 extern "C" void*  __cdecl FUN_00copy_Rec20(void*, void*, void*);            // 0x00951bf0
-extern "C" int    __cdecl FUN_00b98c00(void*);                              // 0x00b98c00
+extern "C" bool   __cdecl FUN_00b98c00(void*);                              // 0x00b98c00
 extern "C" void*  __cdecl FUN_00acc2d0(void*, void*, void*);                // clear helper (tribe)
 extern "C" void*  __cdecl FUN_00ac9740(void*, void*, void*);                // destroy range
 extern int  g_167a378;        // 0x0167a378
@@ -2034,17 +2050,15 @@ void CVis::FUN_00ac84f0(IObj_s00ac_7ab0* p)
 }
 
 // @ 0x00ac8550
-bool FUN_00ac8550(void* self, IObj_s00ac_7ab0* p)
+bool cCastingManager::Write(SP::cIObjectDatabaseOStream& archive) const
 {
-    IObj_s00ac_7ab0* q = (IObj_s00ac_7ab0*)p->b20();
-    uint32 tag = 0x1f73e49;
-    void* stream = q->b18();
-    WriteUint32(stream, &tag, 1, 0);
-    char srl[0xa14];
-    SP_cVarListSerializer_ctor(srl, self, (void*)0x1565d68, 0x1a80d26);
-    if (SP_cVarListSerializer_Serialize(srl, p)) {
-        if (FUN_00b930c0(p)) return true;
-    }
+    CastingArchiveStreamHolder* __restrict holder = reinterpret_cast<CastingArchive*>(&archive)->GetStreamHolder();
+    uint32_t version = 0x01f73e49;
+    void* stream = holder->GetStream();
+    WriteUint32(stream, &version, 1, 0);
+    SP::cVarListSerializer serializer(this, gCastingSerializerList, SP::cVarListSerializer::kSignature);
+    if (serializer.Serialize(archive) && FUN_00b930c0(&archive))
+        return true;
     return false;
 }
 
@@ -2151,10 +2165,9 @@ void CVis::FUN_00ac8cd0(int a, int b)
 // @ 0x00ac8d00
 void CT::FUN_00ac8d00(int city, int a)
 {
-    void* g = mpA4;
-    if (g && *(int*)((char*)g + 0xaf0) == city) {
+    if ((mpA4) && *(int*)((char*)(mpA4) + 0xaf0) == city) {
         void* u = ((CCity*)city)->GetCivilization(a);
-        ((CGSub*)g)->FUN_00d57a60(u);
+        ((CGSub*)(mpA4))->FUN_00d57a60(u);
     }
 }
 
@@ -3596,21 +3609,17 @@ void __fastcall FUN_00ad08f0(cCityVisualizer_s00ad_0510* self, int)
 }
 
 // @ 0x00ad0b30
-bool __fastcall FUN_00ad0b30(cCityVisualizer_s00ad_0510* self, int, void* stream)
+bool cCastingManager::Read(SP::cIObjectDatabaseIStream& archive)
 {
-    if (self->registry.begin != self->registry.end)
-        FUN_00ad08f0(self, 0);
-
-    void* obj = VTC(stream, 0x20, TC_p0)(stream);
-    void* io  = VTC(obj, 0x18, TC_p0)(obj);
-    int count = 0;
-    ReadInt32_s00ad_0510(io, &count, 1, 0);
-
-    CVarListSerializer ser;
-    ser.ctor(self, (void*)0x01565d68, 0x1a80d26);
-    if (!ser.Read(stream))
-        return false;
-    return FUN_00b98c00(stream) != 0;
+    if (mField88 != mField8c)
+        Reset();
+    void* stream = reinterpret_cast<CastingArchive*>(&archive)->GetStreamHolder()->GetStream();
+    int version;
+    ReadInt32_s00ad_0510(stream, &version, 1, 0);
+    SP::cVarListSerializer serializer(this, gCastingSerializerList, SP::cVarListSerializer::kSignature);
+    if (serializer.Serialize(archive) && FUN_00b98c00(&archive))
+        return true;
+    return false;
 }
 
 // @ 0x00ad0bd0

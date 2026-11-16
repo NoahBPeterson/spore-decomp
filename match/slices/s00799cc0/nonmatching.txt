@@ -10,4 +10,3 @@
 0079ab90 102 complete factory dispatch; subtract-chain layout differs
 0079ac10 53 complete vtable/refcount constructor; lea/mov and branch layout differ
 0079ac70 83 complete destructor chain; EH cleanup schedule differs (ecx parity kept with a 1-instruction helper)
-0079aeb0 91 complete destructor with EH frame; SEH prolog/epilog not reproduced

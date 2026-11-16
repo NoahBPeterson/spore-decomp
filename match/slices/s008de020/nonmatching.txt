@@ -1,10 +1,7 @@
 # va  diff-bytes  reason
 008de020  89  swizzle of 64-bit value; shift/pack instruction schedule differs
 008de0c0  172 EA::ResourceMan::ReadKey; wcstoul/StrtoU6416 parse branch layout differs
-008de280  18  Manager::GetLoadedResource compressor-vector scan; register allocation differs (equiv PASS)
 008de310  68  Manager::FindDatabase database scan + virtual call; codegen differs (equiv WEAK)
-008de360  60  Manager::Fn8de360 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
-008de3b0  50  Manager::Fn8de3b0 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
 008de450  222 ChangeSet::LowerBound rbtree lower_bound: FIXED this session. The retail leaves `ppOut` in eax on both exits (`mov eax,[esp+0x10]` before each `ret 8`), so the source now returns `void**` (`return ppOut` on the `!less` exit and on the fallthrough) instead of `void`. The generated loop/blame structure already matched; the change is the recovered return value. equiv PASS on the frozen replay (first difference: None). Not byte-exact (222 diff, size 191 vs 156): returning changed the EH/register shape.
 008de530  86  HashBase::DoRehash1; memset/allocation sequence codegen differs
 008de5e0  86  HashBase::DoRehash2; memset/allocation sequence codegen differs

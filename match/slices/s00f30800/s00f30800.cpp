@@ -6,6 +6,7 @@
 // ctor/dtor, and two simulator AI/terraform routines.  Retail layout is reached
 // through raw byte offsets; direct callees are declared with their original VA.
 #include "types.h"
+#include <intrin.h>
 
 // --- direct callees (address comments; call targets are relocations) --------
 void  __cdecl FUN_00f30800_impl(void*, void*);                 // 0x00F30800 (payload copy, thiscall)
@@ -71,12 +72,12 @@ extern void*    g_1471064;           // 0x01471064  float constant (0.5f)
 extern void*    g_13f09b4;           // 0x013F09B4  "Simulator"
 extern void*    g_16c848c;           // 0x016C848C
 extern void*    g_1654c10;           // 0x01654C10
-extern char*    g_148cf14;           // 0x0148CF14  vtbl_Simulator::SimSingleton
-extern char*    g_148cef0;           // 0x0148CEF0
-extern char*    g_148cf54;           // 0x0148CF54
-extern char*    g_148cf30;           // 0x0148CF30
-extern char*    g_13ec458;           // 0x013EC458
-extern char*    g_13eb938;           // 0x013EB938
+extern char     g_148cf14[];           // 0x0148CF14  vtbl_Simulator::SimSingleton
+extern char     g_148cef0[];           // 0x0148CEF0
+extern char     g_148cf54[];           // 0x0148CF54
+extern char     g_148cf30[];           // 0x0148CF30
+extern char     g_13ec458[];           // 0x013EC458
+extern char     g_13eb938[];           // 0x013EB938
 extern void*    g_18eb45e;           // 0x018EB45E  class id constant
 
 // ---------------------------------------------------------------------------
@@ -268,6 +269,7 @@ void __fastcall SimSingleton_dtor(void* self)
 {
     *(char**)self = g_148cf54;
     *(char**)((char*)self + 8) = g_148cf30;
+    _ReadWriteBarrier();
     int p = *(int*)((char*)self + 0x10);
     if (p && *(int*)(p - 4)) operator_delete__((void*)p);
     *(char**)self = g_148cf14;
@@ -275,6 +277,7 @@ void __fastcall SimSingleton_dtor(void* self)
     SP_cGonzagoSimulator_b(self);
     if (g_168d824 == (int)self) g_168d824 = 0;
     *(char**)self = g_13ec458;
+    _ReadWriteBarrier();
     *(char**)((char*)self + 8) = g_13eb938;
 }
 

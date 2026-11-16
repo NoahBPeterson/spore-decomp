@@ -220,17 +220,18 @@ void* TC_8b0::FUN_00ecc8b0(unsigned short* str)
 }
 
 struct Iter { int* node; int pad; };
-struct TC_645ed0 { Iter* find(Iter* out, int* key); };
+struct TC_645ed0 { Iter* find(Iter* out, const int* key); };
 
 // @ 0x00ecc100
 int __cdecl FUN_00ecc100(int key)
 {
+    int value = 0;
     Iter it;
-    Iter* r = ((TC_645ed0*)0x15abdd4)->find(&it, &key);
-    int* node = *(int**)r;
+    Iter* result = ((TC_645ed0*)0x15abdd4)->find(&it, &key);
+    int* node = result->node;
     if (node != *(int**)(*(char**)0x15abdd8 + *(int*)0x15abddc * 4))
-        return node[1];
-    return 0;
+        value = node[1];
+    return value;
 }
 
 // @ 0x00ecc920
@@ -269,18 +270,46 @@ bool __fastcall FUN_00ecc880(S_c8* s)
     return 1;
 }
 
+struct AssetQueryInterface {
+    virtual void slot00();
+    virtual void slot04();
+    virtual void slot08();
+    virtual void* QueryAsset(u32 type);
+};
+struct CaptainAssetInterface {
+    virtual void slot00();
+    virtual void slot04();
+    virtual void slot08();
+    virtual void slot0c();
+    virtual void slot10();
+    virtual void slot14();
+    virtual void slot18();
+    virtual void slot1c();
+    virtual void slot20();
+    virtual void slot24();
+    virtual void slot28();
+    virtual void slot2c();
+    virtual void slot30();
+    virtual void slot34();
+    virtual void slot38();
+    virtual void slot3c();
+    virtual void slot40();
+    virtual void slot44();
+    virtual void slot48();
+    virtual void slot4c();
+    virtual void Initialize();
+};
+
 // @ 0x00ecc7d0
 void* __cdecl FUN_00ecc7d0(void* a1)
 {
     if (a1 != 0) {
-        char* o = (char*)a1 + 0x10;
-        void** vt = *(void***)o;
-        void* tgt = vt[3];
-        void* r = (*(void* (__thiscall*)(void*, int))tgt)(o, 0x13d55dc8);
-        if (r != 0) {
+        AssetQueryInterface* query = reinterpret_cast<AssetQueryInterface*>((char*)a1 + 0x10);
+        void* source = query->QueryAsset(0x13d55dc8);
+        if (source != 0) {
             void* mem = FUN_00f473a0(0x90, "Sporepedia/AssetData/cSPScenarioCaptainAssetData", 0, 0, 0, 0);
-            void* obj = (mem != 0) ? ((TC_780*)mem)->FUN_00ecc780(r) : 0;
-            (*(void(__thiscall**)(void*))(*(char**)obj + 0x50))(obj);
+            CaptainAssetInterface* obj = mem ? reinterpret_cast<CaptainAssetInterface*>(((TC_780*)mem)->FUN_00ecc780(source)) : 0;
+            obj->Initialize();
             return obj;
         }
     }

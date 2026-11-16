@@ -1,3 +1,5 @@
+extern "C" wchar_t* __cdecl wcscpy(wchar_t*, const wchar_t*);
+#pragma intrinsic(wcscpy)
 // src/game/UTFSpore_Win32/StringTableXml.cpp -- migrated from slice(s) s0099a050, s00999110 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/StringTableXml.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -183,7 +185,7 @@ wchar_t* StringTableXml::StrDup(const wchar_t* src)
     a->mpCurrentObjectEnd = (char*)d + bytes;
   }
   wchar_t* result = d;
-  while ((*d++ = *src++) != 0) {}
+  wcscpy(d, src);
   return result;
 }
 

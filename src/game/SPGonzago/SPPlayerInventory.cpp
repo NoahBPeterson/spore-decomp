@@ -740,8 +740,7 @@ void cSPPlayerInventory::FUN_00ff4310()
 // @ 0x00ff4470
 void cSPPlayerInventory::FUN_00ff4470(cInvItem* item)
 {
-    void* id = item->v18();
-    int i = w64(item->m14, id);
+    int i = w64(item->m14, item->v18());
     if (i < 0) return;
     cInvItem* tool = mInventoryItems.mBegin[i];
     cInvItem* target;
@@ -765,8 +764,7 @@ void cSPPlayerInventory::FUN_00ff4470(cInvItem* item)
 // @ 0x00ff4540
 void cSPPlayerInventory::FUN_00ff4540(cInvItem* item)
 {
-    void* id = item->v18();
-    int i = w64(item->m14, id);
+    int i = w64(item->m14, item->v18());
     if (i < 0) return;
     cInvItem* tool = mInventoryItems.mBegin[i];
     cInvItem* target;

@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "EA/IO/IStream.h"
 #include "SP/cString.h"
 #include <string.h>
 #include <intrin.h>
@@ -300,9 +301,46 @@ int SP::cStringTableResourceFactory::GetSupportedTypes(uint32_t* pTypes, int cou
 void FUN_006b65d0()
 {}
 
+extern const unsigned gByteStreamReadChunkSize; // 0x01400f2c (512 bytes)
+namespace App {
+struct ByteStream {
+    char pad00[8];
+    unsigned mPool;
+    int mCursor;
+    int mLimit;
+    unsigned char* mBase;
+    EA::IO::IStream* mSource;
+    unsigned char ReadByte();
+};
+}
+
 // @ 0x006b6620
-void FUN_006b6620()
-{}
+unsigned char App::ByteStream::ReadByte()
+{
+    unsigned char result = 0;
+    int cur = mCursor;
+    if (cur == mLimit) {
+        if (mPool != 0) {
+            _ReadWriteBarrier();
+            const unsigned& count = (mPool < 512) ? mPool : gByteStreamReadChunkSize;
+            int got = (int)mSource->Read(mBase, count);
+            mPool -= got;
+            mLimit = got;
+            mCursor = 0;
+            if (got < 1) {
+                mLimit = 0;
+                mPool = 0;
+            } else {
+                result = *mBase;
+                mCursor = 1;
+            }
+        }
+    } else {
+        result = mBase[cur];
+        mCursor = cur + 1;
+    }
+    return result;
+}
 
 // @ 0x006b6740
 void FUN_006b6740()

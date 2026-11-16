@@ -925,20 +925,20 @@ SomeDesc::~SomeDesc()
 // @ 0x007e1b00
 AutoRef* FUN_007e1b00(AutoRef* first, AutoRef* last, AutoRef* dst)
 {
-    if (first == last)
-        return dst;
-    do {
-        RefObj* src = first->p;
-        RefObj* oldp = dst->p;
-        if (src != oldp) {
-            AddRefObj(src);
-            dst->p = src;
-            ReleaseObj(oldp);
-        }
-        dst->field4 = first->field4;
-        ++first;
-        ++dst;
-    } while (first != last);
+    if (first != last) {
+        do {
+            RefObj* src = first->p;
+            RefObj* oldp = dst->p;
+            if (src != oldp) {
+                AddRefObj(src);
+                dst->p = src;
+                ReleaseObj(oldp);
+            }
+            dst->field4 = first->field4;
+            ++first;
+            ++dst;
+        } while (first != last);
+    }
     return dst;
 }
 

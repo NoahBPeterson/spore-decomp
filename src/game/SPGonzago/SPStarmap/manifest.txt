@@ -10,3 +10,5 @@
 ../src/game/SPGonzago/SPStarmap.cpp  ?FilterHelperAdd@cStarMap_s0104_88e0@SP@@QAEXI@Z  01048aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?FilterHelperRebuildAll@cStarMap_s0104_88e0@SP@@QAEXXZ  01048ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?FindEntryByLongId@cStarMap_s0104_4360@SP@@QAEIIII@Z  01045190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?SerializeSlots@cStarMap_s0104_4360@SP@@QAEXPAUcIOStream@2@@Z  01044a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?ForEachFlagEntry@SP@@YA_NPAXPBUcFlagGrid@1@@Z  01044f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

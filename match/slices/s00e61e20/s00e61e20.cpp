@@ -505,23 +505,38 @@ void sTickSelectedPart(float dt)
     }
 }
 
+struct BehaviorMessage {
+    void** vtable;
+    volatile long refCount;
+    u32 gameMode;
+    char reserved0c[0x30 - 0x0c];
+    u32 messageID;
+    u32 reserved34;
+    u32 field38;
+    u32 reserved3c;
+
+    static void* operator new(unsigned int size) {
+        return operator_new(size, S_App, 0, 0, 0, 0);
+    }
+    BehaviorMessage() {
+        messageID = 0;
+        vtable = (void**)VT_013eb90c;
+        _InterlockedExchange(&refCount, 0);
+        vtable = (void**)VT_013eb844;
+        field38 = 0;
+        _ReadWriteBarrier();
+    }
+};
+
 // @ 0x00e629a0
-extern char gAppNameTag;   // 0x01654c05  (DAT_01654c05)
 void sPostBehaviorMessage()
 {
-    u8* raw = (u8*)operator_new(0x40, S_App, 0, 0, 0, 0);
-    u8* msg = raw;
-    if (raw) {
-        *(u32*)(raw + 0x30) = 0;
-        *(void**)raw = VT_013eb90c;
-        _InterlockedExchange((volatile long*)(raw + 4), 0);
-        *(void**)raw = VT_013eb844;
-        *(u32*)(raw + 0x38) = 0;
-        ((TC_v0)(*(void***)raw)[1])(raw);
-    }
-    *(u32*)(msg + 0x30) = 0xe11332;
-    *(void**)(msg + 8) = &gAppNameTag;
+    BehaviorMessage* msg = new BehaviorMessage;
+    if (msg)
+        ((TC_v0)msg->vtable[1])(msg);
+    msg->messageID = 0xe11332;
+    msg->gameMode = 0x01654c05;
     void* server = MessageServer();
-    ((TC_iiiii)(*(void***)server)[6])(server, *(int*)(msg + 0x30), msg, 0, 0);
-    ((TC_v0)(*(void***)msg)[2])(msg);
+    ((TC_iiiii)(*(void***)server)[6])(server, msg->messageID, msg, 0, 0);
+    ((TC_v0)msg->vtable[2])(msg);
 }

@@ -3,7 +3,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no /EHsc: no unwind frames)
 //
 // The telemetry record is the "SP::cTelemetryRecord" bucket written through
-// FUN_0067de90(modeIndex, key0, key1, key2) -> provider*: the record lives at
+// FUN_0067de90() -> provider*: the record pointer lives at
 // +0x0c of the provider container, and its fields are
 //    +00 clock/1000  +04 key1  +08 key0  +0c key2  +10 modeType
 //    +14 commContext +18 eventKind +1c colorID +20 value +24 planetID
@@ -67,10 +67,83 @@ struct cGonzagoSubsystem {
     void PreGameModeTransition2(int a, int b);                        // 0x00ba6400
 };
 
+struct TelemetryCoordinates {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void slot02();
+    virtual void slot03();
+    virtual void slot04();
+    virtual void slot05();
+    virtual void slot06();
+    virtual void slot07();
+    virtual void slot08();
+    virtual void slot09();
+    virtual void slot0a();
+    virtual void slot0b();
+    virtual void slot0c();
+    virtual void slot0d();
+    virtual void slot0e();
+    virtual void slot0f();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot1a();
+    virtual void slot1b();
+    virtual void slot1c();
+    virtual void slot1d();
+    virtual void slot1e();
+    virtual void slot1f();
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void slot23();
+    virtual void slot24();
+    virtual void slot25();
+    virtual int* GetCoordinates(); // +0x98, no stack arguments
+};
+struct TelemetrySource {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void slot02();
+    virtual void slot03();
+    virtual void slot04();
+    virtual void slot05();
+    virtual void slot06();
+    virtual void slot07();
+    virtual void slot08();
+    virtual void slot09();
+    virtual void slot0a();
+    virtual void slot0b();
+    virtual void slot0c();
+    virtual void slot0d();
+    virtual void slot0e();
+    virtual void slot0f();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual int GetPlanetID(); // +0x4c
+    char pad04[0x30];
+    TelemetryCoordinates coordinates; // +0x34
+};
+struct NounManagerView { int GetEmpireID(); }; // 0x00b1f9d0
+NounManagerView* GetNounManager(); // 0x00b3d300, no arguments
+struct TelemetryKey { int x, y, z; };
+struct TelemetryKeyChange {
+    TelemetryKey from;
+    TelemetryKey to;
+};
+
 // RelationshipManager::GetRelationLevel(planetID, empireOrMinus1, mode): thiscall,
 // this in ecx, three stack args (mode last) -> ret 0xc.
 struct RelationshipManager {
-    int GetRelationLevel(void* a, void* b, int mode);                 // 0x00d00a70
+    int GetRelationLevel(int planetID, int empireID, int mode);                 // 0x00d00a70
 };
 void  __cdecl cVarListSerializer_Construct(void* self, int a, const void* p, uint tag); // 0x00692f90
 char  __cdecl cVarListSerializer_Serialize(void* self, void* stream); // 0x00693e10
@@ -98,7 +171,7 @@ struct CursorProvider {
     char* FindFirst10(uint* key, int a, int b, int c);                 // 0x00ba5470
     char* FindFirst24(uint* key, int a, int b, int c);                 // 0x00ba54f0
     char* FindByField24(uint key, int match);                          // 0x00ba5570
-    void  UpdateEntry(uint key, int a, int b, int c, int d, int e, int f); // 0x00ba55d0
+    void  UpdateEntry(uint key, TelemetryKeyChange change); // 0x00ba55d0
 };
 
 // ---- the telemetry record --------------------------------------------------------------
@@ -178,17 +251,15 @@ void* __cdecl FUN_00ba5650(int* coords, int modeType)
 
 // ---------------------------------------------------------------- 0x00ba57a0
 // @ 0x00ba57a0
-void* __cdecl FUN_00ba57a0(int* obj, int a)
+void* __cdecl FUN_00ba57a0(TelemetrySource* obj, int mode)
 {
-    if (obj == 0)
-        return 0;
-    int* v = (int*)((int (__thiscall*)(void*, int))((void**)*(void**)((char*)obj + 0x34))[0x26])((char*)obj + 0x34, a);
-    void* rec = FUN_00ba57f0(v, a);
-    if (rec != 0) {
-        int v2 = ((int (__thiscall*)(void*))((void**)*obj)[0x13])(obj);
-        *(int*)((char*)RecOf(rec) + 0x24) = v2;
+    if (!obj) return 0;
+    void* record = FUN_00ba57f0(obj->coordinates.GetCoordinates(), mode);
+    if (record) {
+        int planetID = obj->GetPlanetID();
+        RecOf(record)->mPlanetID = planetID;
     }
-    return rec;
+    return record;
 }
 
 // ---------------------------------------------------------------- 0x00ba57f0
@@ -258,7 +329,7 @@ void* __cdecl FUN_00ba58e0(int* obj, int modeType)
     r->mColorID = obj[0x8d];
     void* nm = SP_NounManager(1);
     int emp = FUN_00b1f9d0();
-    r->mValue = ((RelationshipManager*)SP_RelationshipManager((void*)v, emp))->GetRelationLevel((void*)v, (void*)emp, 1);
+    r->mValue = ((RelationshipManager*)SP_RelationshipManager((void*)v, emp))->GetRelationLevel(v, emp, 1);
     void* lst = ((int* (__thiscall*)(void*))((void**)*obj)[0x24])(obj);
     if (*(int*)lst != *(int*)((char*)lst + 4)) {
         void* p = *(void**)(*(int*)((char*)lst + 4) - 4);
@@ -311,7 +382,7 @@ void* __cdecl FUN_00ba5a60(int* obj, int modeType)
     r->mParam = -1.0f;
     void* nm = SP_NounManager(1);
     int emp = FUN_00b1f9d0();
-    r->mValue = ((RelationshipManager*)SP_RelationshipManager((void*)v, emp))->GetRelationLevel((void*)v, (void*)emp, 1);
+    r->mValue = ((RelationshipManager*)SP_RelationshipManager((void*)v, emp))->GetRelationLevel(v, emp, 1);
     r->mPlanetID = v;
     r->mFlags = 1;
     return rec;
@@ -360,7 +431,7 @@ void* __cdecl FUN_00ba5bc0(cEmpire* obj, int modeType)
     if (modeType != 7) {
         void* nm = SP_NounManager(1);
         int emp = FUN_00b1f9d0();
-        val = ((RelationshipManager*)SP_RelationshipManager((void*)field84, emp))->GetRelationLevel((void*)field84, (void*)emp, 1);
+        val = ((RelationshipManager*)SP_RelationshipManager((void*)field84, emp))->GetRelationLevel(field84, emp, 1);
     }
     r->mValue = val;
     r->mPlanetID = obj->mField84;
@@ -370,28 +441,28 @@ void* __cdecl FUN_00ba5bc0(cEmpire* obj, int modeType)
 
 // ---------------------------------------------------------------- 0x00ba5d30
 // @ 0x00ba5d30
-void __cdecl FUN_00ba5d30(int* obj)
+void __cdecl FUN_00ba5d30(TelemetrySource* obj)
 {
-    if (obj == 0)
-        return;
-    void* prov = FUN_00ba5220();
-    int v = ((int (__thiscall*)(void*))((void**)*obj)[0x13])(obj);
-    void* rec = ((CursorProvider*)FUN_0067de90())->FindByField24((uint)prov, v);
-    if (rec != 0) {
-        int emp = ((int (__thiscall*)(void*))FUN_00b1f9d0)(((void* (__stdcall*)())SP_NounManager)());
-        *(int*)((char*)RecOf(rec) + 0x20) =
-            ((RelationshipManager*)((void* (__stdcall*)())SP_RelationshipManager)())
-                ->GetRelationLevel((void*)v, (void*)emp, 1);
+    if (!obj) return;
+    uint providerKey = (uint)FUN_00ba5220();
+    int planetID = obj->GetPlanetID();
+    void* record = ((CursorProvider*)FUN_0067de90())->FindByField24(providerKey, planetID);
+    if (record) {
+        int value = ((RelationshipManager*)SP_RelationshipManager())->GetRelationLevel(
+            planetID, GetNounManager()->GetEmpireID(), 1);
+        RecOf(record)->mValue = value;
     }
 }
 
 // ---------------------------------------------------------------- 0x00ba5d90
 // @ 0x00ba5d90
-void __cdecl FUN_00ba5d90(int* a, int* b)
+void __cdecl FUN_00ba5d90(int* from, int* to)
 {
-    CursorProvider* prov = (CursorProvider*)FUN_0067de90();
-    for (int i = 7; i <= 0xb; i++)
-        prov->UpdateEntry(i, a[0], a[1], a[2], b[0], b[1], b[2]);
+    CursorProvider* provider = (CursorProvider*)FUN_0067de90();
+    for (int mode = 7; mode <= 0xb; ++mode) {
+        TelemetryKeyChange change = { *(const TelemetryKey*)from, *(const TelemetryKey*)to };
+        provider->UpdateEntry(mode, change);
+    }
 }
 
 // ---------------------------------------------------------------- 0x00ba5df0

@@ -156,6 +156,17 @@ struct RenderJob {
     int        pad;    // +0x0c
     unsigned int id;   // +0x10 (render-job id from sRenderJobId, compared as an integer)
 };
+struct RenderJobLinks {
+    RenderJobLinks* next;
+    RenderJobLinks* prev;
+    void Unlink() {
+        RenderJobLinks* previous = prev;
+        _ReadWriteBarrier();
+        RenderJobLinks* following = next;
+        previous->next = following;
+        next->prev = prev;
+    }
+};
 // ---- items of slice s0075ee90 end
 
 // ---- items of slice s0075ff50 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1033,50 +1044,50 @@ bool RegisterRenderProperties()
 // @ 0x0075f430
 Elem* CopyBackward(Elem* first, Elem* last, Elem* dest)
 {
-    if (last == first)
-        return dest;
-    do {
-        last--;
-        dest--;
-        RNode* np = last->p;
-        RNode* dp = dest->p;
-        if (np != dp) {
-            if (np != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
-            dest->p = np;
-            if (dp != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
-        }
-        dest->b = last->b;
-        dest->c = last->c;
-        dest->d = last->d;
-        dest->f = last->f;
-    } while (last != first);
+    if (last != first) {
+        do {
+            last--;
+            dest--;
+            RNode* np = last->p;
+            RNode* dp = dest->p;
+            if (np != dp) {
+                if (np != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
+                dest->p = np;
+                if (dp != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
+            }
+            dest->b = last->b;
+            dest->c = last->c;
+            dest->d = last->d;
+            dest->f = last->f;
+        } while (last != first);
+    }
     return dest;
 }
 
 // @ 0x0075f4a0
 Elem* CopyForward(Elem* first, Elem* last, Elem* dest)
 {
-    if (first == last)
-        return dest;
-    do {
-        RNode* np = first->p;
-        RNode* dp = dest->p;
-        if (np != dp) {
-            if (np != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
-            dest->p = np;
-            if (dp != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
-        }
-        dest->b = first->b;
-        dest->c = first->c;
-        dest->d = first->d;
-        dest->f = first->f;
-        first++;
-        dest++;
-    } while (first != last);
+    if (first != last) {
+        do {
+            RNode* np = first->p;
+            RNode* dp = dest->p;
+            if (np != dp) {
+                if (np != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
+                dest->p = np;
+                if (dp != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
+            }
+            dest->b = first->b;
+            dest->c = first->c;
+            dest->d = first->d;
+            dest->f = first->f;
+            first++;
+            dest++;
+        } while (first != last);
+    }
     return dest;
 }
 
@@ -1115,45 +1126,41 @@ void* DestroyRenderJobList(void* self)
 // @ 0x0075f8a0
 bool cRenderer_s0075_ee90::RemovePostRenderJob(unsigned int id)
 {
-    void* self = this;
-    char* sentinel = (char*)self + 0x324;
-    RenderJob* n = *(RenderJob**)((char*)self + 0x324);
-    if (n == (RenderJob*)sentinel)
-        return false;
-    while (n->id != id) {
+    RenderJob* sentinel = (RenderJob*)((char*)this + 0x324);
+    RenderJob* n = sentinel->next;
+    while (n != sentinel) {
+        if (n->id == id) {
+            n = n->next;
+            RenderJob* target = n->prev;
+            reinterpret_cast<RenderJobLinks*>(target)->Unlink();
+            RNode* object = target->obj;
+            if (object) object->Release();
+            EASTL_deallocate(target);
+            return true;
+        }
         n = n->next;
-        if (n == (RenderJob*)sentinel)
-            return false;
     }
-    RenderJob* target = n->next->prev;
-    target->prev->next = target->next;
-    target->next->prev = target->prev;
-    if (target->obj != 0)
-        ((void (__thiscall*)(void*))*(void**)(*(int*)target->obj + 4))(target->obj);
-    EASTL_deallocate(target);
-    return true;
+    return false;
 }
 
 // @ 0x0075f900
 bool cRenderer_s0075_ee90::RemovePreRenderJob(unsigned int id)
 {
-    void* self = this;
-    char* sentinel = (char*)self + 0x330;
-    RenderJob* n = *(RenderJob**)((char*)self + 0x330);
-    if (n == (RenderJob*)sentinel)
-        return false;
-    while (n->id != id) {
+    RenderJob* sentinel = (RenderJob*)((char*)this + 0x330);
+    RenderJob* n = sentinel->next;
+    while (n != sentinel) {
+        if (n->id == id) {
+            n = n->next;
+            RenderJob* target = n->prev;
+            reinterpret_cast<RenderJobLinks*>(target)->Unlink();
+            RNode* object = target->obj;
+            if (object) object->Release();
+            EASTL_deallocate(target);
+            return true;
+        }
         n = n->next;
-        if (n == (RenderJob*)sentinel)
-            return false;
     }
-    RenderJob* target = n->next->prev;
-    target->prev->next = target->next;
-    target->next->prev = target->prev;
-    if (target->obj != 0)
-        ((void (__thiscall*)(void*))*(void**)(*(int*)target->obj + 4))(target->obj);
-    EASTL_deallocate(target);
-    return true;
+    return false;
 }
 
 // @ 0x0075f960
