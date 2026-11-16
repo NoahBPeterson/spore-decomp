@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
 012fdc00  91  init_164e9f8: complete; operator-new / reload schedule differs
 012fff30  23  init_16519ac: complete; store/atexit schedule differs
-012fff90  8  init_1651994: complete; atexit argument push scheduling differs | R45: reserved for byte-exact matching.
 01300010  36  init_1549834: complete; mixed long/bool store schedule differs
