@@ -16,3 +16,4 @@ slices/s00b25c30/s00b25c30.cpp  ??1cSPUIStringConfig@@QAE@XZ  00b26db0  /O2 /MD 
 slices/s00b25c30/s00b25c30.cpp  ??0cSPUITimeline@@QAE@XZ  00b26e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b25c30/s00b25c30.cpp  ??1cSPUITimeline@@UAE@XZ  00b26ec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00b25c30/s00b25c30.cpp  ?FUN_00b26f40@@YGPAVcISerializableObject@@HH@Z  00b26f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b25c30/s00b25c30.cpp  ?FUN_00b26c20@cTimelineSerializer@@QAEXPAVcOutStream@@@Z  00b26c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
