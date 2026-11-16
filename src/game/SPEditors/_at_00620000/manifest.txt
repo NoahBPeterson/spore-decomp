@@ -21,3 +21,4 @@
 ../src/game/SPEditors/_at_00620000.cpp  ?StartPath@cSPCasual_Path@@QAE_NXZ  0062dbf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00620000.cpp  ?IsSendPhotoWinVisible@cSPPlayModePhotoBrowser@@QAEEXZ  0062fd60  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPEditors/_at_00620000.cpp  ?RFindFirstOf@@YAPBDPBD000@Z  0062ff90  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/_at_00620000.cpp  ?HandleLinkMessage@Pollen@SP@@YG_NPAXPBULinkMessage@12@@Z  00622f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
