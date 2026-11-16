@@ -9,4 +9,3 @@
 00950650 187 Sock::Sprintf (fixed_string::sprintf): complete (Vsnprintf8 grow-on-demand into fixed_string buffer); large control flow, regalloc differ; difftest PASS (273 valid, 60.8% coverage)
 00950740 29 StreamSSLSocket::~StreamSSLSocket: complete (reset 4 vtables, free name buffer, base dtor); regalloc/order differ; difftest PASS (289 valid, 100% coverage)
 00950870 77 StreamSSLSocket::StreamSSLSocket (ctor): complete (base ctor, 4 vtables, fields +0x8c..0x9c, inline name buffer); regalloc differ; difftest PASS (400 valid, 100% coverage)
-00950ad0 18 Sock::SetStr (fixed_string::assign): complete (if begin!=str: reset then copy [str,str+len) via 0x45f430); strlen idiom/regalloc differ; difftest PASS (397 valid, 100% coverage)
