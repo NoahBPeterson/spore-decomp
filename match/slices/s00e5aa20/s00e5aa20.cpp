@@ -2,6 +2,9 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 struct u32;
 typedef unsigned int u32x;
 
@@ -17,22 +20,32 @@ struct PlacementSource {
     u32x mField04;                              // +0x04
 };
 
+struct PlacementVector3
+{
+    float x, y, z;
+    PlacementVector3(float px, float py, float pz) : x(px), y(py), z(pz) {}
+};
+
 // @ 0x00e5aa20
 void __cdecl FUN_00e5aa20(u32x* pOut, const float* pPosition, const PlacementSource* pSource)
 {
-    u32x nProbe0;
-    u32x nProbe1;
     u32x nOffset0;
     u32x nOffset1;
 
     pOut[0] = pSource->mField04;
     SP::sLevelGetTextureCoord(pSource->mLevel, (float*)pPosition, &pOut[1], &pOut[3]);
 
-    float vDelta[3];
-    vDelta[0] = pPosition[3] - pPosition[0];
-    vDelta[1] = pPosition[4] - pPosition[1];
-    vDelta[2] = pPosition[5] - pPosition[2];
-    SP::sLevelGetTextureCoord(pSource->mLevel, vDelta, &nProbe0, &nProbe1);
+    // Keep the vector snapshot and subtraction together before storing the delta.
+    float x = pPosition[3];
+    float y = pPosition[4];
+    float z = pPosition[5];
+    _ReadWriteBarrier();
+    x -= pPosition[0];
+    y -= pPosition[1];
+    z -= pPosition[2];
+    _ReadWriteBarrier();
+    PlacementVector3 delta(x, y, z);
+    SP::sLevelGetTextureCoord(pSource->mLevel, &delta.x, &nOffset0, &nOffset1);
 
     pOut[2] = pOut[1] + nOffset0;
     pOut[4] = pOut[3] + nOffset1;
