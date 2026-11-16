@@ -798,7 +798,7 @@ public:
     bool  InitSnapshotTexture();                       // va 007a5900 0x007a5900
     bool  InitLargeThumbnailTexture();                 // va 007a5990 0x007a5990
     bool  InitThumbnailBoundsTexture();                // va 007a5a20 0x007a5a20
-    cTextureHandle* InitBakeBuffer(int index);         // va 007a5f70 0x007a5f70
+    void InitBakeBuffer(int index);         // va 007a5f70 0x007a5f70
     void  RecycleBakeBuffers();                        // va 007a5ef0 0x007a5ef0
     void  UpdateRendering(int delta);                  // va 007a5290 0x007a5290
     void  ReleaseGifExportTextures();                  // va 007a51d0
@@ -1059,30 +1059,121 @@ void cGraphicsSystem_s007a_41c0::GetBakeBuffer(u32* out, int index)
   out[1] = mBakeBufferRectIDs[index + 2].mAllocID;
 }
 
+struct RTTResultManager {
+    virtual void slot00(); virtual void slot04(); virtual void slot08(); virtual void slot0c();
+    virtual SP::cRenderTargetRectID_s007a_51d0* CreateRenderTarget(
+        SP::cRenderTargetRectID_s007a_51d0* result, int width, int height,
+        int format, int flags, int key, int extra);
+    virtual void ReleaseRenderTarget(SP::cRenderTargetRectID_s007a_51d0 rect);
+    virtual void slot18();
+    virtual void* GetRenderTargetImage(SP::cRenderTargetRectID_s007a_51d0 rect);
+    virtual void unusedIndex8();
+    virtual void unusedIndex9();
+    virtual void unusedIndex10();
+    virtual void unusedIndex11();
+    virtual void unusedIndex12();
+    virtual void unusedIndex13();
+    virtual void unusedIndex14();
+    virtual void unusedIndex15();
+    virtual void unusedIndex16();
+    virtual void unusedIndex17();
+    virtual void SetRenderTargetName(SP::cRenderTargetRectID_s007a_51d0 rect, const char* name);
+};
+
+struct BakeTextureKeyManager {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void slot02();
+    virtual void slot03();
+    virtual void slot04();
+    virtual void slot05();
+    virtual void slot06();
+    virtual void slot07();
+    virtual void slot08();
+    virtual void slot09();
+    virtual void slot0a();
+    virtual EA::ResourceMan::Key GetKeyFromTexture(void* texture); // retail +0x2c
+};
+struct BakeRectGraphics {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void slot02();
+    virtual void slot03();
+    virtual void slot04();
+    virtual void slot05();
+    virtual void slot06();
+    virtual void slot07();
+    virtual void slot08();
+    virtual void slot09();
+    virtual void slot0a();
+    virtual void slot0b();
+    virtual void slot0c();
+    virtual void slot0d();
+    virtual void slot0e();
+    virtual void slot0f();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot1a();
+    virtual void slot1b();
+    virtual void slot1c();
+    virtual void slot1d();
+    virtual void slot1e();
+    virtual void slot1f();
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void slot23();
+    virtual void slot24();
+    virtual void slot25();
+    virtual void slot26();
+    virtual void slot27();
+    virtual void slot28();
+    virtual void slot29();
+    virtual void slot2a();
+    virtual void GetNMapSpecRectID(SP::cRenderTargetRectID_s007a_51d0& rect);
+    virtual void GetBakeInfoRectID(SP::cRenderTargetRectID_s007a_51d0& rect);
+    virtual void GetFinalBakedRectID(SP::cRenderTargetRectID_s007a_51d0& rect);
+    virtual void GetGIFExportRectID(SP::cRenderTargetRectID_s007a_51d0& rect);
+    virtual void GetSmallFinalBakedRectID(SP::cRenderTargetRectID_s007a_51d0& rect);
+    char pad04[0x10];
+    BakeTextureKeyManager* mTextureManager;
+    SP::cRenderTargetManager* mRTTManager;
+};
+
 // @ 0x007a4f50
-void __fastcall FUN_007a4f50(void* thiz, u32 /*unused*/, u32 which)
+void __fastcall FUN_007a4f50(BakeRectGraphics* graphics, unsigned, unsigned which,
+                             EA::ResourceMan::Key* key)
 {
-  u32 rect[2] = { 0xffffffffu, 0xffffffffu };
-  char* const self = (char*)thiz;
-  u32* const vtbl = *(u32**)self;
-  switch (which) {
-    case 0: (*(void(**)(char*, u32*))(vtbl + (0xb0 / 4)))(self, rect); break;
-    case 1: (*(void(**)(char*, u32*))(vtbl + (0xac / 4)))(self, rect); break;
-    case 2: (*(void(**)(char*, u32*))(vtbl + (0xbc / 4)))(self, rect); break;
-    case 3: (*(void(**)(char*, u32*))(vtbl + (0xb4 / 4)))(self, rect); break;
-    case 4: (*(void(**)(char*, u32*))(vtbl + (0xb8 / 4)))(self, rect); break;
-    default: break;
-  }
-  char* const a = *(char**)(self + 0x18);
-  char* const b = *(char**)(self + 0x14);
-  char* const desc = (*(char*(**)(char*, u32, u32))(*(u32**)a + (0x1c / 4)))(
-      a, rect[0], rect[1]);
-  char* const out = (*(char*(**)(char*, u32*, char*))(*(u32**)b + (0x2c / 4)))(
-      b, rect, desc);
-  u32* const dst = *(u32**)(self + 0x24);
-  dst[0] = ((u32*)out)[0];
-  dst[1] = ((u32*)out)[1];
-  dst[2] = ((u32*)out)[2];
+    SP::cRenderTargetRectID_s007a_51d0 rect = { -1, -1 };
+    if (which == 0)
+        graphics->GetBakeInfoRectID(rect);
+    else if (which == 1)
+        graphics->GetNMapSpecRectID(rect);
+    else if (which == 2)
+        graphics->GetSmallFinalBakedRectID(rect);
+    else if (which == 4)
+        graphics->GetGIFExportRectID(rect);
+    else if (which == 3)
+        graphics->GetFinalBakedRectID(rect);
+    SP::cRenderTargetManager* rtt = graphics->mRTTManager;
+    BakeTextureKeyManager* textures = graphics->mTextureManager;
+    struct KeyResult { unsigned mInstance, mType, mGroup; };
+    typedef KeyResult* (__thiscall* GetTextureKey)(BakeTextureKeyManager*, KeyResult*, void*);
+    GetTextureKey& getKey = (*(GetTextureKey**)textures)[0x2c / 4];
+    KeyResult temporary;
+    const KeyResult* result = getKey(textures, &temporary,
+        rtt->GetRenderTargetImage(rect.mPageID, rect.mAllocID));
+    key->mInstance = result->mInstance;
+    key->mType = result->mType;
+    key->mGroup = result->mGroup;
 }
 
 // @ 0x007a5020
@@ -1160,16 +1251,13 @@ bool SP::cGraphicsSystem_s007a_51d0::InitAnimGifExportTexture()
     int h = gAppProperties->GetIntProperty(0x5893ee8);
     int size = h * w;
     cRenderTargetRectID_s007a_51d0 tmp;
-    cRenderTargetRectID_s007a_51d0* rt =
-        mRTTManager->CreateRenderTarget(&tmp, size, size, 0x15, 0, 0xffffffff, 0);
-    int pageID = rt->mPageID;
-    int allocID = rt->mAllocID;
-    mRTTManager->SetRenderTargetName(pageID, allocID, "AnimGIFExportRTT");
-    if (allocID != -1) {
-        void* image = mRTTManager->GetRenderTargetImage(pageID, allocID);
+    cRenderTargetRectID_s007a_51d0 rect =
+        *reinterpret_cast<RTTResultManager*>(mRTTManager)->CreateRenderTarget(&tmp, size, size, 0x15, 0, 0xffffffff, 0);
+    reinterpret_cast<RTTResultManager*>(mRTTManager)->SetRenderTargetName(rect, "AnimGIFExportRTT");
+    if (rect.mAllocID != -1) {
+        void* image = reinterpret_cast<RTTResultManager*>(mRTTManager)->GetRenderTargetImage(rect);
         mAnimGifExportTexture.SetImageResource(image);
-        mAnimGifExportRectID.mPageID = pageID;
-        mAnimGifExportRectID.mAllocID = allocID;
+        mAnimGifExportRectID = rect;
         return true;
     }
     return false;
@@ -1184,16 +1272,13 @@ bool SP::cGraphicsSystem_s007a_51d0::InitEditGifExportTexture()
     int h = gAppProperties->GetIntProperty(0x5893ee8);
     int size = h * w;
     cRenderTargetRectID_s007a_51d0 tmp;
-    cRenderTargetRectID_s007a_51d0* rt =
-        mRTTManager->CreateRenderTarget(&tmp, size, size, 0x15, 0, 0xffffffff, 0);
-    int pageID = rt->mPageID;
-    int allocID = rt->mAllocID;
-    mRTTManager->SetRenderTargetName(pageID, allocID, "EditGIFExportRTT");
-    if (allocID != -1) {
-        void* image = mRTTManager->GetRenderTargetImage(pageID, allocID);
+    cRenderTargetRectID_s007a_51d0 rect =
+        *reinterpret_cast<RTTResultManager*>(mRTTManager)->CreateRenderTarget(&tmp, size, size, 0x15, 0, 0xffffffff, 0);
+    reinterpret_cast<RTTResultManager*>(mRTTManager)->SetRenderTargetName(rect, "EditGIFExportRTT");
+    if (rect.mAllocID != -1) {
+        void* image = reinterpret_cast<RTTResultManager*>(mRTTManager)->GetRenderTargetImage(rect);
         mEditGifExportTexture.SetImageResource(image);
-        mEditGifExportRectID.mPageID = pageID;
-        mEditGifExportRectID.mAllocID = allocID;
+        mEditGifExportRectID = rect;
         return true;
     }
     return false;
@@ -1464,27 +1549,23 @@ void SP::cGraphicsSystem_s007a_51d0::RecycleBakeBuffers()
 
 // @ 0x007a5f70
 namespace SP {
-SP::cTextureHandle* SP::cGraphicsSystem_s007a_51d0::InitBakeBuffer(int index)
+void SP::cGraphicsSystem_s007a_51d0::InitBakeBuffer(int index)
 {
-    cTextureHandle* slot = &mBakeBuffers[index];
-    if (slot->mpObject == 0) {
-        int dim = mField170;
-        cRenderTargetRectID_s007a_51d0 tmp;
-        cRenderTargetRectID_s007a_51d0* rt =
-            mRTTManager->CreateRenderTarget(&tmp, dim, dim, 0x15, 0, 0xffffffff, 0);
-        int pageID = rt->mPageID;
-        int allocID = rt->mAllocID;
-        mRTTManager->SetRenderTargetName(pageID, allocID, "BakeBuffers");
-        if (pageID != -1) {
-            void* image = mRTTManager->GetRenderTargetImage(pageID, allocID);
-            slot->SetImageResource(image);
-            mBakeBufferRectIDs[index].mPageID = pageID;
-            mBakeBufferRectIDs[index].mAllocID = allocID;
+    if (mBakeBuffers[index].mpObject == 0) {
+        int dimension = mField170;
+        cRenderTargetRectID_s007a_51d0 temporary;
+        cRenderTargetRectID_s007a_51d0 rect =
+            *reinterpret_cast<RTTResultManager*>(mRTTManager)->CreateRenderTarget(
+                &temporary, dimension, dimension, 0x15, 0, -1, 0);
+        reinterpret_cast<RTTResultManager*>(mRTTManager)->SetRenderTargetName(rect, "BakeBuffers");
+        if (rect.mPageID != -1) {
+            void* image = reinterpret_cast<RTTResultManager*>(mRTTManager)->GetRenderTargetImage(rect);
+            mBakeBuffers[index].SetImageResource(image);
+            mBakeBufferRectIDs[index] = rect;
         }
     }
-    return slot;
 }
-}  // namespace SP
+}
 
 // @ 0x007a6010
 namespace SP {
