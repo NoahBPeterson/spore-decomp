@@ -477,7 +477,7 @@ public:
     EA::ResourceMan::Key mPirateUFOModelKey;     // +0x1280, retail attribute registration
     uint32_t mTotalTimeInCVG;                    // +0x128c, retail attribute registration
     EA::ResourceMan::Key mInitCaptainKey;        // +0x1290, retail attribute registration
-    void* mpBlock129c;                          // +0x129c
+    int* mAdventuresCompletedBegin;             // +0x129c, mAdventuresCompleted storage
     uint8_t mPad12a0[0x12ac - 0x12a0];
     void* mpBlock12ac;                          // +0x12ac
 
@@ -493,6 +493,7 @@ public:
     void AddTraitProgress(float amount, bool social);           // 0x00c756a0
     void ApplyInitialCaptainKey();                             // 0x00c75a50
     void SetTheme(uint32_t themeID);                            // 0x00c75580
+    void NoteAdventureCompleted(SP::cEmpire* empire, uint32_t adventureID); // 0x00c75e30
 };
 // ---- items of slice s00c793e0 end
 
@@ -3644,8 +3645,8 @@ void cPlayer::FUN_00c79b60()
         mpRef11f4 = 0;
         ((cRefObj_s00c7_93e0*)p)->Release();
     }
-    if (mpBlock129c != 0 && mpBlock129c != mpBlock12ac)
-        operator_delete_array(mpBlock129c);
+    if (mAdventuresCompletedBegin != 0 && mAdventuresCompletedBegin != mpBlock12ac)
+        operator_delete_array(mAdventuresCompletedBegin);
 
     mSoothingSongTimer.~cGonzagoTimer();
     mRbTree.DoNukeSubtree(mRbTree.mpRoot);
@@ -5025,5 +5026,21 @@ void cPlayer::SetTheme(uint32_t themeID)
             db->SetTheme(mThemeID);
         else
             db->ClearTheme();
+    }
+}
+
+// Select the current adventure key from the empire archetype's adventure list.
+bool __cdecl FUN_00c75940(SP::cEmpire* empire, int completedCount, uint32_t* adventureID);
+
+// @ 0x00c75e30
+void cPlayer::NoteAdventureCompleted(SP::cEmpire* empire, uint32_t adventureID)
+{
+    int archetype = empire->mArchetype;
+    if (archetype < 8) {
+        int& completedCount = mAdventuresCompletedBegin[archetype];
+        uint32_t nextAdventureID;
+        if (FUN_00c75940(empire, completedCount, &nextAdventureID) &&
+            nextAdventureID == adventureID)
+            ++completedCount;
     }
 }
