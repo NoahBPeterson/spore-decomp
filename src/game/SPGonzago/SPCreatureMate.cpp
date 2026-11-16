@@ -81,6 +81,14 @@ struct BehaviorTree {
 struct MatingCallState { uint32_t mMode; float mTime; float mThreshold; };
 struct MateLeadState   { uint32_t mMode; uint32_t mPad04; uint8_t mFlag08; };
 struct StateD3c0       { uint32_t mMode; uint32_t mPad04; uint8_t mFlag08; uint8_t mPad09[3]; uint32_t mField0c; };
+// Position-query view of the retail spatial interface at the noun's +0x34 base.
+struct MatingSpatialView {
+    virtual void reserved00(); virtual void reserved04(); virtual void reserved08();
+    virtual void reserved0c(); virtual void reserved10(); virtual void reserved14();
+    virtual void reserved18(); virtual void reserved1c(); virtual void reserved20();
+    virtual void reserved24(); virtual void reserved28();
+    virtual float* GetPosition(); // slot +0x2c
+};
 struct MatingObjectRef {
     virtual void AddRef();
     virtual void Release();
@@ -522,9 +530,8 @@ char __cdecl FUN_00d6d460(void* c, int p2, int p3, int p4, int p5, void* state, 
             void* member = herd->mpMember;
             if (member != 0) {
                 st->mMode = 0;
-                void* sub = (char*)member + 0x34;
-                float* pos = (float*)((VFn_p)VSLOT(sub, 0x2c))(sub);
-                cr->FUN_00c1c1d0(2, pos, 0.1f, 1.0f);
+                MatingSpatialView* sub = (MatingSpatialView*)((char*)member + 0x34);
+                cr->FUN_00c1c1d0(2, sub->GetPosition(), 0.1f, 1.0f);
                 void* prev = st->mpPrev;
                 if (member != prev) {
                     ((VFn_v)VSLOT(member, 0))(member);
@@ -534,11 +541,12 @@ char __cdecl FUN_00d6d460(void* c, int p2, int p3, int p4, int p5, void* state, 
                 }
             }
         }
+        _ReadWriteBarrier();
         return 1;
+    } else {
+        st->mMode = 0;
+        cr->FUN_00c1c1d0(2, ((Engine*)cr->FUN_00c04590())->FUN_00c6acc0(), 0.5f, 2.0f);
     }
-    st->mMode = 0;
-    void* nearNoun = cr->FUN_00c04590();
-    cr->FUN_00c1c1d0(2, ((Engine*)nearNoun)->FUN_00c6acc0(), 0.5f, 2.0f);
     return 1;
 }
 
