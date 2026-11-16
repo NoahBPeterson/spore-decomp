@@ -8381,20 +8381,19 @@ bool __cdecl FUN_00d7c1f0(cSPCreatureBase* pCreature)
 float __cdecl FUN_00d7c270(cSPCreatureBase* pCreature)
 {
     cSPCreatureBase* pAvatar = ((cGameNounManager_s00d7_b550*)NounManager())->GetAvatar();
-    if (pAvatar == 0 || pAvatar->mbB5e)
-        return 0.0f;
+    if (pAvatar != 0 && !pAvatar->mbB5e) {
+        if (pAvatar->mpBehaviorTree->mStimuli.Play(0, 0x1000000) != 0)
+            return 1.0f;
 
-    if (pAvatar->mpBehaviorTree->mStimuli.Play(0, 0x1000000) != 0)
-        return 1.0f;
-
-    if (pCreature->mbFB9)
-    {
-        if (((cAnimRequests*)pCreature->mp1624)->FUN_00bc9a00(0x80))
-            pCreature->mbFB9 = false;
+        if (pCreature->mbFB9)
+        {
+            if (((cAnimRequests*)pCreature->mp1624)->FUN_00bc9a00(0x80))
+                pCreature->mbFB9 = false;
+        }
+        if (!((cAnimRequests*)pCreature->mp1624)->FUN_00bc9a00(0x80) && pCreature->mbFB9 &&
+            pCreature->mpBehaviorTree->mStimuli.Play(0x4000000, 0) != 0)
+            return 1.0f;
     }
-    if (!((cAnimRequests*)pCreature->mp1624)->FUN_00bc9a00(0x80) && pCreature->mbFB9 &&
-        pCreature->mpBehaviorTree->mStimuli.Play(0x4000000, 0) != 0)
-        return 1.0f;
     return 0.0f;
 }
 

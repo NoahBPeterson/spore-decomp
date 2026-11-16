@@ -455,12 +455,11 @@ void hkWingedEdge::initializeWithTetrahedron(void* a, void* b, void* c)
 // @ 0x01120a00
 void hkConvexPenetrationUtil::addPointToSimplex(const hkWingedEdgeVertex& v)
 {
-    int n = *this->m_num;
-    hkVector4* w = this->m_w + n;
+    hkVector4* w = this->m_w + (*this->m_num);
     w->x = v.m_w.x; w->y = v.m_w.y; w->z = v.m_w.z; w->w = v.m_w.w;
-    hkVector4* a = this->m_a + n;
+    hkVector4* a = this->m_a + (*this->m_num);
     a->x = v.m_a.x; a->y = v.m_a.y; a->z = v.m_a.z; a->w = v.m_a.w;
-    hkVector4* b = this->m_b + n;
+    hkVector4* b = this->m_b + (*this->m_num);
     b->x = v.m_b.x; b->y = v.m_b.y; b->z = v.m_b.z; b->w = v.m_b.w;
     *this->m_num = *this->m_num + 1;
 }

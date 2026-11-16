@@ -24,3 +24,5 @@ slices/s00a550e0/s00a550e0.cpp  ?setFmod@@YAXPAUtOutNode@@M@Z  00a56180  /O2 /MD
 slices/s00a550e0/s00a550e0.cpp  ?setIntDiv@@YAXPAUtOutNode@@M@Z  00a56270  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00a550e0/s00a550e0.cpp  ?getShl@@YAXPAUtOutNode@@@Z  00a55d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00a550e0/s00a550e0.cpp  ?getShr@@YAXPAUtOutNode@@@Z  00a55e80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a550e0/s00a550e0.cpp  ?setShl@@YAXPAUtOutNode@@M@Z  00a55dc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a550e0/s00a550e0.cpp  ?setShr@@YAXPAUtOutNode@@M@Z  00a55ef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

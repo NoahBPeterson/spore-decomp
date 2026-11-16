@@ -12,3 +12,5 @@
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?GetDisplayName@@YGXH@Z  0075da90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?RemovePostRenderJob@cRenderer_s0075_ee90@@QAE_NI@Z  0075f8a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRenderer.cpp  ?RemovePreRenderJob@cRenderer_s0075_ee90@@QAE_NI@Z  0075f900  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?CopyForward@@YAPAUElem@@PAU1@00@Z  0075f4a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?CopyBackward@@YAPAUElem@@PAU1@00@Z  0075f430  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

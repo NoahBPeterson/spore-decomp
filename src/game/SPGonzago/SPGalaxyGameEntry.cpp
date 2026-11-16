@@ -17171,14 +17171,15 @@ void UI_s00df_a5c0::FUN_a930()
 // @ 0x00dfaa40
 int F_dfa40(int a, int b, int c)
 {
-    if (a == b) return c;
-    do {
-        int p = *(int*)(a + 0x10);
-        if ((2 < (int)(*(int*)(a + 0x18) - p & 0xfffffffeU)) && p != 0)
-            operator_delete_((void*)p);
-        a += 0x24;
-        c += 0x24;
-    } while (a != b);
+    if (a != b) {
+        do {
+            int p = *(int*)(a + 0x10);
+            if ((2 < (int)(*(int*)(a + 0x18) - p & 0xfffffffeU)) && p != 0)
+                operator_delete_((void*)p);
+            a += 0x24;
+            c += 0x24;
+        } while (a != b);
+    }
     return c;
 }
 

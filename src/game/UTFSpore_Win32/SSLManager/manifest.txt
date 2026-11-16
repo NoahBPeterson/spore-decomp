@@ -20,3 +20,4 @@
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?FUN_0117c300@@YAHHH@Z  0117c300  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?SSL_new@@YAPAUssl_st_s0117_c560@@PAUssl_ctx_st_s0117_c560@@@Z  0117c560  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?Fn0094efe0@@YAHPAUBIO94@@PAD@Z  0094efe0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLManager.cpp  ?THREAD_setup@@YAHXZ  0094fdc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

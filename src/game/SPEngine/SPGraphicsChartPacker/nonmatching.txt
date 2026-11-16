@@ -12,12 +12,9 @@
 006dede0 280 insertion sort of 0x34-byte records; block copy schedule differs; equiv WEAK (20.9% cov) flags: /O2 /MD /Gy /EHsc /TP
 006deee0 189 eastl::insertion_sort_simple<cClusterRect*>; same algorithm/shape, but cl copies the 52-byte value with rep movsd instead of the original per-field movss block and schedules the loop test differently flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006df170 77 eastl::make_heap<cClusterRect*>; identical make_heap/adjust_heap call shape, register assignment inside the parent loop differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-006df2d0 96 eastl::copy<Elem16*>; element-wise smart-pointer assign reproduced, helper scheduling/copy-ctor anchor differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-006df340 105 eastl::copy_backward<Elem16*>; same backwards assign loop, register/temp schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006df470 80 eastl::partial_sort<SortKeyObj**,SortKeyGreater>; make_heap/select/sort_heap shape matches, pointer register schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006df530 80 eastl::partial_sort<SortKeyObj**,SortKeyLess>; mirrored variant, same schedule difference flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006df5a0 271 eastl::partial_sort<cClusterRect*>; make_heap/adjust_heap/sort_heap calls all present, value-copy and call-argument schedule differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-006df700 97 eastl::copy<RefPtr*>; intrusive-pointer element assign reproduced, schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006df8f0 46 eastl::get_partition<cClusterRect*>; pivot-by-value partition reproduced, pivot area cached and the pivot argument slots reused as the swap temp (rep movsd vs cl per-field block); equiv: PASS (376 valid inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006dfb00 181 eastl::quick_sort_impl<cClusterRect*,int,cRectAreaSort>; median/partition/recursion reproduced, value partition schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 006dfc30 70 cluster-map add callback; area accumulation now reads the float bits and the grow path is the thiscall vector::DoInsertValue (ecx=vector); code schedule differs; equiv: PASS (229 valid inputs, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

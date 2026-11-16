@@ -418,10 +418,9 @@ cSPPaletteCategory_s005c_53c0* cSPPalette_s005c_53c0::FindCategory(int id)
 {
   cSPPaletteCategory_s005c_53c0** end = mCats.mEnd;
   for (cSPPaletteCategory_s005c_53c0** it = mCats.mBegin; it != end; ++it) {
-    cSPPaletteCategory_s005c_53c0* c = *it;
-    if (c->mId == id)
-      return c;
-    cSPPaletteCategory_s005c_53c0* r = c->FindSubCategory(id);
+    if ((*it)->mId == id)
+      return (*it);
+    cSPPaletteCategory_s005c_53c0* r = (*it)->FindSubCategory(id);
     if (r)
       return r;
   }

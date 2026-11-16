@@ -318,8 +318,7 @@ float RelCalc::A0ee0(Noun* a, Noun* b)
 // store through it without rewriting eax), so the function returns that pointer.
 RBNode** RelTree::find(RBNode** out, const uint32_t* key)
 {
-    RBNode* end = &anchor;
-    RBNode* best = end;
+    RBNode* best = (&anchor);
     RBNode* n = anchor.parent;
     while (n) {
         const uint32_t* nk = (const uint32_t*)((char*)n + 0x10);
@@ -330,10 +329,10 @@ RBNode** RelTree::find(RBNode** out, const uint32_t* key)
             n = n->right;
         }
     }
-    if (best != end && !PairLess(key, (const uint32_t*)((char*)best + 0x10)))
+    if (best != (&anchor) && !PairLess(key, (const uint32_t*)((char*)best + 0x10)))
         *out = best;
     else
-        *out = end;
+        *out = (&anchor);
     return out;
 }
 

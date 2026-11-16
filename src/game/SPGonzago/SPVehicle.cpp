@@ -2947,10 +2947,10 @@ void cVehicle::UpdateDamageState()
         return;
     if (!mLoco.Slot58())
         return;
-    if (kModeScaleA < mCombatant.GetValue())
-        return;
-    if (mCombatant.GetValue() > 0.0f)
-        NounManager()->GetPlayerCivilization()->mField430 = 1;
+    if (kModeScaleA >= mCombatant.GetValue()) {
+        if (mCombatant.GetValue() > 0.0f)
+            NounManager()->GetPlayerCivilization()->mField430 = 1;
+    }
 }
 
 // @ 0x00c9e760
@@ -4130,40 +4130,42 @@ E18* __cdecl FUN_00ca0e10(E18* first, E18* s, E18* d)
 // @ 0x00ca0e80
 E16* __cdecl FUN_00ca0e80(E16* s, E16* last, E16* d)
 {
-    if (s == last) return d;
-    do {
-        void* nw = s->p;
-        void* old = d->p;
-        if (nw != old) {
-            if (nw) (*(TFnV)VTFN(nw, 1))(nw);
-            d->p = nw;
-            if (old) (*(TFnV)VTFN(old, 2))(old);
-        }
-        d->u0 = s->u0;
-        d->u1 = s->u1;
-        d->b0 = s->b0;
-        s++; d++;
-    } while (s != last);
+    if (s != last) {
+        do {
+            void* nw = s->p;
+            void* old = d->p;
+            if (nw != old) {
+                if (nw) (*(TFnV)VTFN(nw, 1))(nw);
+                d->p = nw;
+                if (old) (*(TFnV)VTFN(old, 2))(old);
+            }
+            d->u0 = s->u0;
+            d->u1 = s->u1;
+            d->b0 = s->b0;
+            s++; d++;
+        } while (s != last);
+    }
     return d;
 }
 
 // @ 0x00ca0ef0
 E16* __cdecl FUN_00ca0ef0(E16* first, E16* s, E16* d)
 {
-    if (s == first) return d;
-    do {
-        s--; d--;
-        void* nw = s->p;
-        void* old = d->p;
-        if (nw != old) {
-            if (nw) (*(TFnV)VTFN(nw, 1))(nw);
-            d->p = nw;
-            if (old) (*(TFnV)VTFN(old, 2))(old);
-        }
-        d->u0 = s->u0;
-        d->u1 = s->u1;
-        d->b0 = s->b0;
-    } while (s != first);
+    if (s != first) {
+        do {
+            s--; d--;
+            void* nw = s->p;
+            void* old = d->p;
+            if (nw != old) {
+                if (nw) (*(TFnV)VTFN(nw, 1))(nw);
+                d->p = nw;
+                if (old) (*(TFnV)VTFN(old, 2))(old);
+            }
+            d->u0 = s->u0;
+            d->u1 = s->u1;
+            d->b0 = s->b0;
+        } while (s != first);
+    }
     return d;
 }
 

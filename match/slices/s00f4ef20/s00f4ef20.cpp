@@ -318,20 +318,19 @@ float cTerrainTool::SampleCurveValue()
 void cChannel::Advance(float dt)
 {
     float d = mStart - mCur;
-    if (d <= 0.0f)
-        return;
-
-    float v = mArg0 * dt * K_half + mParamA;
-    if (v != mTween) {
-        mPrev = mParamA;
-        mTween = v;
-        mFlag = 1;
+    if (d > 0.0f) {
+        float v = (mArg0 * dt) * K_half + mParamA;
+        if (v != mTween) {
+            mPrev = mParamA;
+            mTween = v;
+            mFlag = 1;
+        }
+        mParamB = mTween;
+        mStart = dt;
+        mArg1 = mArg1 * 0.0f;
+        mCur = 0.0f;
+        mFlag = 0;
     }
-    mParamB = mTween;
-    mStart = dt;
-    mArg1 = mArg1 * 0.0f;
-    mCur = 0.0f;
-    mFlag = 0;
 }
 
 // @ 0x00f4f5a0

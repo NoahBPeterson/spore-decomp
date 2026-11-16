@@ -600,12 +600,13 @@ Factory* Manager::FindFactory(uint32 nType, int nFilter)
     void* pNode = *ppNode;
     int filter = nFilter;
     if (nType == (uint32)filter) filter = -1;
-    if (pNode == pMap->mpBucketArray[pMap->mnBucketCount]) return 0;
-    AutoRefObj* pBegin = *(AutoRefObj**)((uint32*)pNode + 1);
-    AutoRefObj* pEnd = *(AutoRefObj**)((uint32*)pNode + 2);
-    for (; pBegin != pEnd; ++pBegin) {
-        Factory* pFac = (Factory*)pBegin->mpObject;
-        if (filter == -1 || ((FnVf30)(*(void***)pFac)[0x30 / 4])(pFac, nType, filter)) return pFac;
+    if (pNode != pMap->mpBucketArray[pMap->mnBucketCount]) {
+        AutoRefObj* pBegin = *(AutoRefObj**)((uint32*)pNode + 1);
+        AutoRefObj* pEnd = *(AutoRefObj**)((uint32*)pNode + 2);
+        for (; pBegin != pEnd; ++pBegin) {
+            Factory* pFac = (Factory*)pBegin->mpObject;
+            if (filter == -1 || ((FnVf30)(*(void***)pFac)[0x30 / 4])(pFac, nType, filter)) return pFac;
+        }
     }
     return 0;
 }

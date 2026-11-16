@@ -6,7 +6,6 @@
 00a69630 1078  Ctx::Serialize: complete; now declared `bool` (original sets al=1 before ret 4; pointer-only callers so caller-deps UNKNOWN); large serializer (two tables 0x01675ec0/0x01675a00), register/flow shape differs; flags /O2 /MD /Gy /EHsc /TP; difftest WEAK after fix (207 valid, 36.2% cov)
 00a69b20  163  StrRec::Ctor: complete; compiler merged the two EString constructions differently (ours 144 vs orig 187 bytes); flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (100% cov)
 00a69c80  103  Hashtable::find_as: complete; FNV-1a hash + DoFindNode equality call, register scheduling differs; flags /O2 /MD /Gy /EHsc /TP; difftest PASS (220 valid, 100% cov)
-00a69d60   68  DestroySlotRange: complete; 0x14-stride slot teardown, register/flow differs; flags /O2 /MD /Gy /EHsc /TP; difftest UNSUPPORTED (0/205 inputs valid)
 00a69db0  125  StrRecMoveBackward: complete; 0x24-stride move-backward, string assign/refcount shape differs; flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (8.5% cov)
 00a69e50  194  RefVec::assign: complete; grow/copy/insert paths, register allocation differs; flags /O2 /MD /Gy /EHsc /TP; difftest WEAK (41.3% cov)
 00a69f40   55  BigThing::Destroy: complete; vector at +0x44 / buffer at +0x1c teardown, register scheduling differs; flags /O2 /MD /Gy /EHsc /TP; difftest PASS (238 valid, 100% cov)

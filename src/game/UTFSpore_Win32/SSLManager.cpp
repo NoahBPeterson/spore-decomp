@@ -1020,10 +1020,9 @@ char SSLManager_s0094_fb80::RestoreClientSession(void* ssl, unsigned char* name)
 // @ 0x0094fdc0
 int __cdecl THREAD_setup()
 {
-    void* mgr = g_spSSLManager_s0094_fb80;
-    ICoreAllocator* alloc = (ICoreAllocator*)PTR(mgr, 0x10);
+    ICoreAllocator* alloc = (ICoreAllocator*)PTR((g_spSSLManager_s0094_fb80), 0x10);
     unsigned n = Fn01181150();
-    ((Ext*)(B(mgr) + 0x154))->fixedvec_resize(n);
+    ((Ext*)(B((g_spSSLManager_s0094_fb80)) + 0x154))->fixedvec_resize(n);
     for (unsigned i = 0; i < n; ++i) {
         void* m = alloc->AllocA(0x30, g_szUTFUp, 0, 8, 0);
         void* r;

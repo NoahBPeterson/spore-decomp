@@ -384,21 +384,21 @@ AutoRef* AutoRef::Reset()
 // @ 0x00ae97e0
 E12* copy_addref(E12* first, E12* last, E12* dest)
 {
-    if (first == last)
-        return dest;
-    do
-    {
-        if (dest)
+    if (first != last) {
+        do
         {
-            dest->a = first->a;
-            dest->b = first->b;
-            dest->p = first->p;
-            if (dest->p)
-                addref(dest->p);
-        }
-        first += 1;
-        dest += 1;
-    } while (first != last);
+            if (dest)
+            {
+                dest->a = first->a;
+                dest->b = first->b;
+                dest->p = first->p;
+                if (dest->p)
+                    addref(dest->p);
+            }
+            first += 1;
+            dest += 1;
+        } while (first != last);
+    }
     return dest;
 }
 

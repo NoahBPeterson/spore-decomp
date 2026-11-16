@@ -1044,50 +1044,50 @@ bool RegisterRenderProperties()
 // @ 0x0075f430
 Elem* CopyBackward(Elem* first, Elem* last, Elem* dest)
 {
-    if (last == first)
-        return dest;
-    do {
-        last--;
-        dest--;
-        RNode* np = last->p;
-        RNode* dp = dest->p;
-        if (np != dp) {
-            if (np != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
-            dest->p = np;
-            if (dp != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
-        }
-        dest->b = last->b;
-        dest->c = last->c;
-        dest->d = last->d;
-        dest->f = last->f;
-    } while (last != first);
+    if (last != first) {
+        do {
+            last--;
+            dest--;
+            RNode* np = last->p;
+            RNode* dp = dest->p;
+            if (np != dp) {
+                if (np != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
+                dest->p = np;
+                if (dp != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
+            }
+            dest->b = last->b;
+            dest->c = last->c;
+            dest->d = last->d;
+            dest->f = last->f;
+        } while (last != first);
+    }
     return dest;
 }
 
 // @ 0x0075f4a0
 Elem* CopyForward(Elem* first, Elem* last, Elem* dest)
 {
-    if (first == last)
-        return dest;
-    do {
-        RNode* np = first->p;
-        RNode* dp = dest->p;
-        if (np != dp) {
-            if (np != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
-            dest->p = np;
-            if (dp != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
-        }
-        dest->b = first->b;
-        dest->c = first->c;
-        dest->d = first->d;
-        dest->f = first->f;
-        first++;
-        dest++;
-    } while (first != last);
+    if (first != last) {
+        do {
+            RNode* np = first->p;
+            RNode* dp = dest->p;
+            if (np != dp) {
+                if (np != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
+                dest->p = np;
+                if (dp != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
+            }
+            dest->b = first->b;
+            dest->c = first->c;
+            dest->d = first->d;
+            dest->f = first->f;
+            first++;
+            dest++;
+        } while (first != last);
+    }
     return dest;
 }
 

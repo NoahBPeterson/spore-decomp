@@ -1,6 +1,4 @@
 # va  diff-bytes  reason
-00a55dc0  45  tOutNode::setShl: as getShl; the store of mValue is scheduled after the guard load instead of before it.  difftest PASS (360 valid, 100% cov).
-00a55ef0  45  tOutNode::setShr: as setShl (sar form).  difftest PASS (373 valid, 100% cov).
 00a55fb0  85  tOutNode::getMod: the original materialises the 0->1 divisor guard in edi and pushes edi, mine uses esi and shorter addressing; also the original re-tests the divisor after the branch.  difftest PASS (357 valid, 92.3% cov).
 00a56030  80  tOutNode::setMod: as getMod plus the store placement.  difftest PASS (348 valid, 92.7% cov).
 00a561f0  48  tOutNode::getIntDiv: the floor-fixup sequence uses edx for the negated divisor in the original and esi in mine; same math.  difftest PASS (372 valid, 100% cov).

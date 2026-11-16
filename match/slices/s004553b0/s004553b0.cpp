@@ -181,9 +181,8 @@ void* Vec14::Move14(void* param2, void* param3) {
 
 // @ 0x00455c00
 void* ParseVec3(void* out, const char* s) {
-    float f = FUN_004565f0((int)s);
     float local[3];
-    FUN_00456650(local, (int)s, f);
+    FUN_00456650(local, (int)s, (FUN_004565f0((int)s)));
     ((float*)out)[0] = local[0];
     ((float*)out)[1] = local[1];
     ((float*)out)[2] = local[2];

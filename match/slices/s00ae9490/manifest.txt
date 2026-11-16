@@ -11,3 +11,4 @@ slices/s00ae9490/s00ae9490.cpp  ?CloseCommEvent@CommManager@@QAEXXZ  00aea210  /
 slices/s00ae9490/s00ae9490.cpp  ?AssignString@SpaceTool@@QAEXPAUString64@@@Z  00aea230  /O2 /MD /Gy /EHsc /TP
 slices/s00ae9490/s00ae9490.cpp  ?Has@SpaceTool@@QAE_NHH@Z  00ae9c10  /O2 /MD /Gy /EHsc /TP
 slices/s00ae9490/s00ae9490.cpp  ?Differs@Entry@@QAE_NPAX@Z  00ae9d40  /O2 /MD /Gy /EHsc /TP
+slices/s00ae9490/s00ae9490.cpp  ?copy_addref@@YAPAUE12@@PAU1@00@Z  00ae97e0  /O2 /MD /Gy /EHsc /TP

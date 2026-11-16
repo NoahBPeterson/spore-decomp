@@ -1,5 +1,4 @@
 # va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
-007c24a0 109 cBumpMapTable ctor: complete; F2I was a struct (separate f/i members) so the fast-inverse-sqrt bit reinterpret read an uninitialized int and wrote garbage; made it a union and recorded /fp:fast, so replay matches and fresh PASS 400/100%; remaining diff is register/constant-load order (size 157 vs 160). flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 007c2730 78 expand_2_32: complete; cl keeps the table index as (src&0xc)>>2 with a scale-4 load instead of folding it into a scale-1 load, and assigns the loop registers differently flags: /O2 /MD /Gy /EHsc /TP
 007c2880 477 ConvertDXT1ToARGB8888: complete (553 = 553 bytes, same loop/branch structure); register allocation and spill slots differ (original keeps inner/outer counters and the shared A/B terms in stack slots, frame 0x24 vs 0x20) [equiv: PASS 250 inputs, 100% coverage] flags: /O2 /MD /Gy /EHsc /TP
 007c2ab0 930 complete DXT3->ARGB8888 decode (alpha nibbles + colour interp); different loop/register scheduling

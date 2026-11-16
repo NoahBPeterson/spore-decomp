@@ -2650,13 +2650,14 @@ int Goal::AddCount(const void* key, void* obj)
     int* e = (int*)this->map1.GetOrAdd1(key);
     e[2] = e[2] + 1;
     uint n = (uint)e[2];
-    if (obj == 0) return 3;
-    void* cm = (*(void*(__thiscall**)(void*, uint))((char*)*(void**)obj + 0xc))(obj, 0xd0036e08);
-    if (cm == 0) return 3;
-    if (n >= *(uint*)((char*)FUN_00c0c1a0(cm) + 0x40c)) return 6;
-    if (n >= *(uint*)((char*)FUN_00c0c1a0(cm) + 0x408)) return 4;
-    if (n < *(uint*)((char*)FUN_00c0c1a0(cm) + 0x404))
-        return this->Resolve(key, obj, 0);
+    if (obj != 0) {
+        void* cm = (*(void*(__thiscall**)(void*, uint))((char*)*(void**)obj + 0xc))(obj, 0xd0036e08);
+        if (cm == 0) return 3;
+        if (n >= *(uint*)((char*)FUN_00c0c1a0(cm) + 0x40c)) return 6;
+        if (n >= *(uint*)((char*)FUN_00c0c1a0(cm) + 0x408)) return 4;
+        if (n < *(uint*)((char*)FUN_00c0c1a0(cm) + 0x404))
+            return this->Resolve(key, obj, 0);
+    }
     return 3;
 }
 

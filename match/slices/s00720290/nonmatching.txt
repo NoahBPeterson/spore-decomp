@@ -8,7 +8,6 @@
 00720700  479  cMeshClusterer::CalcError: complete; original uses inline x87 Sqrt/Dot helpers, ours uses scalar SSE sqrtf
 00720920  553  MinMaxIndices: complete; original is 4x unrolled with min+max fused, ours is a simple loop
 00720b60  109  HashTable::Grow: complete; allocation/placement-new sequence and loop shape differ
-00720c20  95   DestroyRange68: complete; loop register allocation differs
 00720c90  115  UninitCopyFace28: complete; original skips mArea in the copy, register allocation differs
 00720d10  76   FillFace28: mArea copy added (9 floats + 3 ints); complete. difftest FAIL: only leftover eax differs (orig dst+0x14 base vs ours dst), any base-pointer shape that fixes eax clobbers edx/edi
 00720d70  70   UninitCopyDual18: complete; aggregate copy uses edi temp vs original edx

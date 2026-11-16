@@ -661,18 +661,19 @@ Big238* FUN_00f2d5e0(Big238* p, Big238* e, Big238* out)
 // @ 0x00f2cfa0
 char* FUN_00f2cfa0(char* first, char* last, char* out)
 {
-    if (last == first) return out;
-    do {
-        last -= 0x188;
-        out -= 0x188;
-        *(int*)(out + 0x00) = *(int*)(last + 0x00);
-        *(int*)(out + 0x04) = *(int*)(last + 0x04);
-        *(int*)(out + 0x08) = *(int*)(last + 0x08);
-        *(int*)(out + 0x0c) = *(int*)(last + 0x0c);
-        *(char*)(out + 0x10) = *(char*)(last + 0x10);
-        *(int*)(out + 0x14) = *(int*)(last + 0x14);
-        ((TC1)FUN_00dfcb00)(out + 0x18, last + 0x18);
-        *(int*)(out + 0x184) = *(int*)(last + 0x184);
-    } while (last != first);
+    if (last != first) {
+        do {
+            last -= 0x188;
+            out -= 0x188;
+            *(int*)(out + 0x00) = *(int*)(last + 0x00);
+            *(int*)(out + 0x04) = *(int*)(last + 0x04);
+            *(int*)(out + 0x08) = *(int*)(last + 0x08);
+            *(int*)(out + 0x0c) = *(int*)(last + 0x0c);
+            *(char*)(out + 0x10) = *(char*)(last + 0x10);
+            *(int*)(out + 0x14) = *(int*)(last + 0x14);
+            ((TC1)FUN_00dfcb00)(out + 0x18, last + 0x18);
+            *(int*)(out + 0x184) = *(int*)(last + 0x184);
+        } while (last != first);
+    }
     return out;
 }

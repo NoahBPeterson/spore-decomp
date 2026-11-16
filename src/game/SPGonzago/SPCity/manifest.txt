@@ -83,3 +83,4 @@
 ../src/game/SPGonzago/SPCity.cpp  ?FUN_0132cb50@@YAXXZ  0132cb50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?FUN_00be4a10@S@@QAEXPAX@Z  00be4a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?SetLog@cSPPlanetNoun@@QAEXPAX@Z  00be1150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?GetForeignCityMood@@YAMPAX@Z  00bd9a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

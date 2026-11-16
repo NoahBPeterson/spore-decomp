@@ -2057,18 +2057,18 @@ void HashTable::Grow(uint32_t newSize)
 // @ 0x00720c20
 Element68* __cdecl DestroyRange68(Element68* first, Element68* last, Element68* dst)
 {
-    if (first == last)
-        return dst;
-    do {
-        if (first->v48 != 0 && ((int*)first->v48)[-1] != 0)
-            EASTL_allocator_deallocate(first->v48);
-        if (first->v34 != 0 && ((int*)first->v34)[-1] != 0)
-            EASTL_allocator_deallocate(first->v34);
-        if (first->v14 != 0 && ((int*)first->v14)[-1] != 0)
-            EASTL_allocator_deallocate(first->v14);
-        first += 1;
-        dst += 1;
-    } while (first != last);
+    if (first != last) {
+        do {
+            if (first->v48 != 0 && ((int*)first->v48)[-1] != 0)
+                EASTL_allocator_deallocate(first->v48);
+            if (first->v34 != 0 && ((int*)first->v34)[-1] != 0)
+                EASTL_allocator_deallocate(first->v34);
+            if (first->v14 != 0 && ((int*)first->v14)[-1] != 0)
+                EASTL_allocator_deallocate(first->v14);
+            first += 1;
+            dst += 1;
+        } while (first != last);
+    }
     return dst;
 }
 
