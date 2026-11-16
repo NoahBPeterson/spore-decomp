@@ -2148,38 +2148,57 @@ void* __fastcall FUN_00c36e80(Ufo* self, void* dummy, u32 key)
   return self;
 }
 
+struct UFOWriter {
+  virtual void slot00();
+  virtual void slot04();
+  virtual void slot08();
+  virtual void slot0c();
+  virtual void slot10();
+  virtual void slot14();
+  virtual void* GetSink(); // +0x18
+};
+struct UFODatabaseStream {
+  virtual void slot00();
+  virtual void slot04();
+  virtual void slot08();
+  virtual void slot0c();
+  virtual void slot10();
+  virtual void slot14();
+  virtual void slot18();
+  virtual void slot1c();
+  virtual UFOWriter* GetWriter(); // +0x20
+};
+extern SP::cDataSerializerGeneric gUFOSerializerList; // 0x01573290
+inline u32 SerializedObjectID(void* object)
+{
+  if (object) return static_cast<Sub70*>(object)->f70;
+  return 0;
+}
+
 // @ 0x00c36ee0
 u8 __fastcall FUN_00c36ee0(Ufo* self, void* dummy, void* stream)
 {
-  (void)dummy;
-  void* w = ((TFp0)((void**)stream)[0x20 / 4])(stream);
-  w = ((TFp0)((void**)w)[0x18 / 4])(w);
+  UFODatabaseStream* context = static_cast<UFODatabaseStream*>(stream);
+  UFOWriter* __restrict writer = context->GetWriter();
   u32 ver = 0xb033b403u;
-  WriteUint32(w, &ver, 1, 0);
-
-  u8 ok = 0;
-  if (!((CGameData*)self)->Write(stream)) goto afterChain;
-  if (!self->combat.Write(stream)) goto afterChain;
-  if (!self->loco.Write(stream)) goto afterChain;
-  ok = 1;
-afterChain:
-  g_168df70 = (self->p7b0 != 0) ? ((Sub70*)self->p7b0)->f70 : 0;
-  g_168df6c = (self->p764 != 0) ? ((Sub70*)self->p764)->f70 : 0;
-
-  cVarListSerializer ser;
-  ser.Ctor(self, (void*)0x01573290, 0x1a80d26u);
-  if (ok) ok = ser.Serialize(stream);
-
-  void* p = ((TFp0)((void**)stream)[0x20 / 4])(stream);
+  void* sink = writer->GetSink();
+  WriteUint32(sink, &ver, 1, 0);
+  bool ok = reinterpret_cast<CGameData*>(self)->Write(stream)
+      && self->combat.Write(stream) && self->loco.Write(stream);
+  g_168df70 = SerializedObjectID(self->p7b0);
+  g_168df6c = SerializedObjectID(self->p764);
+  SP::cVarListSerializer ser(self, &gUFOSerializerList,
+      SP::cVarListSerializer::kSignature);
+  ok = ok && ser.Serialize(*reinterpret_cast<SP::cIObjectDatabaseOStream*>(stream));
   if (self->p6c8 != 0) {
-    void* ow = ((TFp0)((void**)p)[0x18 / 4])(p);
-    u8 one = 1;
-    StreamWrite(ow, &one, 1);
-    ((BehTree*)self->p6c8)->Write(stream);
+    void* output = context->GetWriter()->GetSink();
+    u8 present = 1;
+    StreamWrite(output, &present, 1);
+    static_cast<BehTree*>(self->p6c8)->Write(stream);
   } else {
-    void* ow = ((TFp0)((void**)p)[0x18 / 4])(p);
-    u8 zero = 0;
-    StreamWrite(ow, &zero, 1);
+    void* output = context->GetWriter()->GetSink();
+    u8 present = 0;
+    StreamWrite(output, &present, 1);
   }
   return ok;
 }

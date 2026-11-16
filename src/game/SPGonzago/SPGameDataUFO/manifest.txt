@@ -31,3 +31,4 @@
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_0105d180@@YIPAXPAUcSummarizerD180@@@Z  0105d180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_0105d1d0@@YIPAXPAUcSummarizerD1D0@@@Z  0105d1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGameDataUFO.cpp  ??1PaintSystemExt@@UAE@XZ  00c38c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGameDataUFO.cpp  ?FUN_00c36ee0@@YIEPAUUfo@@PAX1@Z  00c36ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
