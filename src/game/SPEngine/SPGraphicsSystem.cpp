@@ -1400,19 +1400,16 @@ namespace SP {
 bool SP::cGraphicsSystem_s007a_51d0::InitDepthTexture()
 {
     cViewportExtent* extent = GetViewportInfo()->GetExtent();
-    int width = extent->mWidth;
-    int height = extent->mWidth2;
+    unsigned short width = extent->mWidth;
+    unsigned short height = extent->mWidth2;
     cRenderTargetRectID_s007a_51d0 tmp;
-    cRenderTargetRectID_s007a_51d0* rt =
-        mRTTManager->CreateRenderTarget(&tmp, width, height, 0x15, 0, 0x9b304161, 0);
-    int pageID = rt->mPageID;
-    int allocID = rt->mAllocID;
-    mRTTManager->SetRenderTargetName(pageID, allocID, "DepthTexture");
-    if (allocID != -1) {
-        void* image = mRTTManager->GetRenderTargetImage(pageID, allocID);
+    cRenderTargetRectID_s007a_51d0 rect =
+        *reinterpret_cast<RTTResultManager*>(mRTTManager)->CreateRenderTarget(&tmp, width, height, 0x15, 0, 0x9b304161, 0);
+    reinterpret_cast<RTTResultManager*>(mRTTManager)->SetRenderTargetName(rect, "DepthTexture");
+    if (rect.mAllocID != -1) {
+        void* image = reinterpret_cast<RTTResultManager*>(mRTTManager)->GetRenderTargetImage(rect);
         mDepthTexture.SetImageResource(image);
-        mDepthRectID.mPageID = pageID;
-        mDepthRectID.mAllocID = allocID;
+        mDepthRectID = rect;
         return true;
     }
     return false;
@@ -1446,19 +1443,16 @@ namespace SP {
 bool SP::cGraphicsSystem_s007a_51d0::InitShadowBlurTexture()
 {
     cViewportExtent* extent = GetViewportInfo()->GetExtent();
-    int width = extent->mWidth;
-    int height = extent->mWidth2;
+    unsigned short width = extent->mWidth;
+    unsigned short height = extent->mWidth2;
     cRenderTargetRectID_s007a_51d0 tmp;
-    cRenderTargetRectID_s007a_51d0* rt =
-        mRTTManager->CreateRenderTarget(&tmp, width, height, 0x15, 9, 0xfd9802c7, 0);
-    int pageID = rt->mPageID;
-    int allocID = rt->mAllocID;
-    mRTTManager->SetRenderTargetName(pageID, allocID, "ShadowBlurTexture");
-    if (allocID != -1) {
-        void* image = mRTTManager->GetRenderTargetImage(pageID, allocID);
+    cRenderTargetRectID_s007a_51d0 rect =
+        *reinterpret_cast<RTTResultManager*>(mRTTManager)->CreateRenderTarget(&tmp, width, height, 0x15, 9, 0xfd9802c7, 0);
+    reinterpret_cast<RTTResultManager*>(mRTTManager)->SetRenderTargetName(rect, "ShadowBlurTexture");
+    if (rect.mAllocID != -1) {
+        void* image = reinterpret_cast<RTTResultManager*>(mRTTManager)->GetRenderTargetImage(rect);
         mShadowBlurTexture.SetImageResource(image);
-        mShadowBlurRectID.mPageID = pageID;
-        mShadowBlurRectID.mAllocID = allocID;
+        mShadowBlurRectID = rect;
         return true;
     }
     return false;
