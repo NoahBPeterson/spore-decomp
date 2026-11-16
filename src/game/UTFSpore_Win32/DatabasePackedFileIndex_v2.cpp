@@ -410,10 +410,32 @@ void FUN_006bf430(void*)
 {}
 
 
+// The v2 index stores the 64-bit-position record layout. The shared
+// PFRecordInfo header describes the older 16-byte record; this one is 24 bytes.
+struct PFRecordInfoV2 {
+    uint64 mnPosition;
+    uint32 mnSize;
+    uint32 mnSizeDecompressed;
+    uint16_t mnCompressionType;
+    uint8 mbCommitted;
+};
+struct PFItemsMapV2 {
+    struct Iterator { void* mpNode; void** mpBucket; };
+    uint32 mFunctors;
+    void** mpBucketArray;
+    uint32 mnBucketCount;
+    void Find(Iterator* out, const EA::ResourceMan::Key& key); // 0x006befb0
+    PFRecordInfoV2* FindOrInsert(const EA::ResourceMan::Key& key); // 0x006bf7d0
+};
+
 // @ 0x006bf4e0
 EA::ResourceMan::PFRecordInfo * EA::ResourceMan::PFIndexModifiable::FindRecord(EA::ResourceMan::Key const & key)
 {
-    // TODO(partial): hashtable find + return &entry.info.
+    PFItemsMapV2* map = (PFItemsMapV2*)&mIndex;
+    PFItemsMapV2::Iterator it;
+    map->Find(&it, key);
+    if (it.mpNode != map->mpBucketArray[map->mnBucketCount])
+        return (EA::ResourceMan::PFRecordInfo*)((char*)it.mpNode + 0x10);
     return 0;
 }
 
@@ -492,8 +514,9 @@ unsigned int EA::ResourceMan::PFIndexModifiable::GetKeysSortedByPosition(eastl::
 // @ 0x006bfbc0
 void EA::ResourceMan::PFIndexModifiable::AddRecord(EA::ResourceMan::Key const & key, EA::ResourceMan::PFRecordInfo const & info)
 {
-    // TODO(partial): insert-or-find then copy the record info.
-    return;
+    PFRecordInfoV2 value = *(const PFRecordInfoV2*)&info;
+    PFItemsMapV2* map = (PFItemsMapV2*)&mIndex;
+    *map->FindOrInsert(key) = value;
 }
 
 
