@@ -5030,7 +5030,7 @@ void cPlayer::SetTheme(uint32_t themeID)
 }
 
 // Select the current adventure key from the empire archetype's adventure list.
-bool __cdecl FUN_00c75940(SP::cEmpire* empire, int completedCount, uint32_t* adventureID);
+bool __cdecl GetArchetypeAdventure(SP::cEmpire* empire, int completedCount, uint32_t* adventureID);
 
 // @ 0x00c75e30
 void cPlayer::NoteAdventureCompleted(SP::cEmpire* empire, uint32_t adventureID)
@@ -5039,7 +5039,7 @@ void cPlayer::NoteAdventureCompleted(SP::cEmpire* empire, uint32_t adventureID)
     if (archetype < 8) {
         int& completedCount = mAdventuresCompletedBegin[archetype];
         uint32_t nextAdventureID;
-        if (FUN_00c75940(empire, completedCount, &nextAdventureID) &&
+        if (GetArchetypeAdventure(empire, completedCount, &nextAdventureID) &&
             nextAdventureID == adventureID)
             ++completedCount;
     }
@@ -5060,4 +5060,25 @@ void SP::cPlayer::DoPlayerWarVictory(unsigned int empireID)
     CommManager()->FUN_00aeb720(politicalID,
         reinterpret_cast<cStarRecordRef*>(empire->GetHomePlanet())->GetCommContext(),
         0xc8fbf7d7, 0xabd09746, 0, 0);
+}
+
+namespace SP {
+    cStarManager* __cdecl StarManager(); // 0x00b3d2a0
+}
+bool __cdecl GetPropertyKeyArray(SP::cPropertyList* properties, uint32_t propertyID,
+                                int* count, EA::ResourceMan::Key** keys); // 0x006a0ae0
+
+// @ 0x00c75940
+bool __cdecl GetArchetypeAdventure(SP::cEmpire* empire, int completedCount,
+                                  uint32_t* adventureID)
+{
+    int count;
+    EA::ResourceMan::Key* adventures;
+    SP::cPropertyList* properties = SP::StarManager()->GetEmpirePersonalityTuning(empire);
+    if (GetPropertyKeyArray(properties, 0x07674d19, &count, &adventures) &&
+        completedCount < count) {
+        *adventureID = adventures[completedCount].mInstance;
+        return true;
+    }
+    return false;
 }
