@@ -3394,6 +3394,7 @@ int cSPUITimeline::FUN_00e37780(void* p)
             if (node->IsMember((int)p))
                 break;
             VecContainer* cur = (VecContainer*)mpNodesBegin[i];
+            _ReadWriteBarrier();
             if (cur != 0 && TimelineKeyValid(*(int*)((char*)cur + 0x68)))
                 ++result;
         }

@@ -4,3 +4,4 @@ slices/s00961db0/s00961db0.cpp  ?f@S962530@@QAEXHH@Z  00962530
 slices/s00961db0/s00961db0.cpp  ?f@S962d10@@QAEXXZ  00962d10
 slices/s00961db0/s00961db0.cpp  ?f@S962da0@@QAE_NXZ  00962da0
 slices/s00961db0/s00961db0.cpp  ?f@S962f00@@QAEXXZ  00962f00
+slices/s00961db0/s00961db0.cpp  ?f@S9628f0@@QAEXPAX@Z  009628f0  /O2 /MD /Gy /EHsc /TP

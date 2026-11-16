@@ -1,5 +1,6 @@
 // slice s005cbfd0 -- SP sell-back rollover UI: window flag helpers, Init, ctor, and the
 // shopping-token translator ctor/dtor. Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+#include <intrin.h>
 #include <new>
 #include "types.h"
 
@@ -437,6 +438,7 @@ cSPEditorShoppingTokenTranslator::cSPEditorShoppingTokenTranslator() {
 // @ 0x005CCC00
 cSPEditorShoppingTokenTranslator::~cSPEditorShoppingTokenTranslator() {
   mpVftable = vtbl_013f8798;
+  _ReadWriteBarrier();
   if (((int)((char*)mStr3.mpCap - (char*)mStr3.mpBegin) & ~1) > 2 && mStr3.mpBegin)
     EASTL_allocator_deallocate(mStr3.mpBegin);
   if (((int)((char*)mStr2.mpCap - (char*)mStr2.mpBegin) & ~1) > 2 && mStr2.mpBegin)

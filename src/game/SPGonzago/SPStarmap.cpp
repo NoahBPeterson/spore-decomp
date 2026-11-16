@@ -2,6 +2,7 @@
 // Object file: SPGonzago/SPStarmap.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "SP/cStarRecord.h"
 #include <math.h>
@@ -1346,6 +1347,7 @@ uint32_t cStarMap_s0104_4360::FindEntryByLongId(uint32_t key, uint32_t lo, uint3
     mTree.equal_range(&range, &key);
     RBNode_s0104_4360* node = range.mpFirst;
     RBNode_s0104_4360* end = range.mpSecond;
+    _ReadWriteBarrier();
     if (node != end) {
         do {
             unsigned long long id = (unsigned long long)((cStarMapView*)node->mValue)->GetId();

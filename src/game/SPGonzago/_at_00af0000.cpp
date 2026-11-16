@@ -1978,6 +1978,7 @@ void __cdecl InitWorld2(World* dst, u32 a2, const Vec3* a3, const Vec3* a4, cons
     dst->f20 = a2;
     dst->f24 = 3;
     dst->p = *a3;
+    _ReadWriteBarrier();
     dst->q = *a4;
     dst->f54 = a8;
     dst->r5 = *a5;

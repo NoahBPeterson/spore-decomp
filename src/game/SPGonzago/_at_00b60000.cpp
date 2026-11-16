@@ -1927,9 +1927,11 @@ Obj63BD0* __thiscall Obj63BD0::Init()
     *(void**)self = &gVtbl63BD0;
     *(float*)((char*)self + 0x1128) = 1.0f;
     *(float*)((char*)self + 0x112c) = 2.0f;
+    _ReadWriteBarrier();
     *(uint*)((char*)self + 0x1120) = 1;
     *(uint*)((char*)self + 0x1124) = 0;
     *(uint*)((char*)self + 0x1130) = 0;
+    _ReadWriteBarrier();
     *(void**)((char*)self + 0x111c) = &gMapEmpty;
     *(float*)((char*)self + 0x1148) = 1.0f;
     *(float*)((char*)self + 0x114c) = 2.0f;
@@ -4194,6 +4196,7 @@ EStr* FUN_00b6ba50(EStr* result, void* obj)
 
     result->m10    = (wchar_t*)((char*)result + 0x14);
     wchar_t* base  = result->m10;
+    _ReadWriteBarrier();
     result->mCap   = base + 0x20;
     result->mEnd   = base;
     result->mBegin = base;

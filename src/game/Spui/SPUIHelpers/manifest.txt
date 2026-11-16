@@ -52,3 +52,5 @@
 ../src/game/Spui/SPUIHelpers.cpp  ?FixedFree@FixedAlloc@@QAEXPAXH@Z  008054b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_00807430@@YAXPAUW_s0080_68d0@@M@Z  00807430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?InitAlloc@@YAXXZ  008054f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00808190@@YAXPAUW_s0080_7840@@MM@Z  00808190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_008082f0@@YAXPAUW_s0080_7840@@MM@Z  008082f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

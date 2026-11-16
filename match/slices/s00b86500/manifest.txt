@@ -1,3 +1,4 @@
 # source  symbol  original VA  [flags override]
 slices/s00b86500/s00b86500.cpp  ?AddNode@cGraphEditor@@QAEHPBUGraphNodeValue@@_N@Z  00b86500  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00b86500/s00b86500.cpp  ?SelectNode@cGraphEditor@@QAEHPAXHPAVcGraphList@@@Z  00b86590  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b86500/s00b86500.cpp  ?AddEdgeB@cGraphEditor@@QAEXII@Z  00b866f0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

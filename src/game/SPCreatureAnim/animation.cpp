@@ -2427,6 +2427,7 @@ __declspec(noinline) void S9a3080::f(char p2)
   }
   self->fv[0] = 0.0f;  self->fv[1] = 0.0f;  self->fv[2] = 0.0f;  self->fv[3] = 0.0f;
   self->fv[4] = 0.0f;  self->fv[5] = 0.0f;  self->fv[6] = 0.0f;  self->fv[7] = 0.0f;
+  _ReadWriteBarrier();
   const float one = 1.0f;
   self->fv[8] = 0.0f;  self->fv[9] = 0.0f;  self->fv[10] = 0.0f; self->fv[11] = 0.0f;
   self->fv[12] = 0.0f; self->fv[13] = 0.0f; self->fv[14] = 0.0f; self->fv[15] = 0.0f;

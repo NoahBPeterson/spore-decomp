@@ -5,3 +5,4 @@
 ../src/game/Swarm/ShakeDescription.cpp  ?FUN_00abdb70@Eff@@QAEDHPAXH@Z  00abdb70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/ShakeDescription.cpp  ?FUN_00abe010@@YAPAXH@Z  00abe010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Swarm/ShakeDescription.cpp  ?FUN_00abe090@Eff@@QAEXPAUCTrans@@0@Z  00abe090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Swarm/ShakeDescription.cpp  ?FUN_00abda70@@YAPAMPAMH00@Z  00abda70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

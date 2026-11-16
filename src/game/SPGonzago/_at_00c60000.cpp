@@ -1970,6 +1970,7 @@ void Mission::FUN_00c62590(int msg, int arg)
 int Mission::FUN_00c62710()
 {
     int n = *(int*)((char*)this + 0x20c) - *(int*)((char*)this + 0x208);
+    _ReadWriteBarrier();
     int result = 0;
     int i = 0;
     if (n > 0) {

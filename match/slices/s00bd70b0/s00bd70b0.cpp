@@ -612,6 +612,7 @@ void __fastcall FUN_00bd7e40(char* this_)
     *(char*)(this_ + 0x2e1) = 0;
     int v = *(int*)(this_ + 0x29c);
     if (v < 0) return;
+    _ReadWriteBarrier();
     if (v >= 3) return;
     {
         void* t = FUN_00b3d4d0();

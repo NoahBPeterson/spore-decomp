@@ -693,7 +693,7 @@ bool __stdcall HandleLinkMessage(void* unused, const LinkMessage* msg)
 {
   if (msg->mEventType == 0x3326e8a) {
     const wchar_t** pp = msg->mppURL;
-    if (*pp && wcsncmp(*pp, gLinkPrefix, gLinkPrefixLen) == 0 && WStrLen(*pp) > gLinkPrefixLen) {
+    if (*pp && wcsncmp(*pp, gLinkPrefix, gLinkPrefixLen) == 0 && wcslen(*pp) > gLinkPrefixLen) {
       AppSystem()->OpenURL(*pp + gLinkPrefixLen);
       return true;
     }

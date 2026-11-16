@@ -4,3 +4,4 @@ slices/s009d63e0/s009d63e0.cpp  ?FUN_009d6a70@@YAXPAD0@Z  009d6a70  /O2 /MD /Gy 
 slices/s009d63e0/s009d63e0.cpp  ?FUN_009d6ae0@@YAXPAUSA@@0ULessFac@@@Z  009d6ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s009d63e0/s009d63e0.cpp  ?FUN_009d6ca0@@YAPAPAUSA@@PAPAU1@0000@Z  009d6ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s009d63e0/s009d63e0.cpp  ?FUN_009d6e00@@YAXPAUSA@@00ULessFac@@@Z  009d6e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s009d63e0/s009d63e0.cpp  ?FUN_009d6bb0@@YAPAPAUSA@@PAPAU1@0000@Z  009d6bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

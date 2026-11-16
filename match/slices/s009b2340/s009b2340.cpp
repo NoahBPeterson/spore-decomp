@@ -2,6 +2,7 @@
 // Dev PDB: ?EvaluateContextTargetQuery@nSPCreatureAnim@@YAKPAKKABUcreature_static_data@1@ABUcontext_target@1@K_N@Z
 // (context.obj).  Retail layouts differ from the 2008 PDB: offsets below are the retail ones read off the asm.
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast  (aligned frame; FloorToInt is the module asm helper)
+#include <intrin.h>
 #include "types.h"
 #include <float.h>
 #include <math.h>
@@ -351,6 +352,7 @@ creature_anim_state* creature_anim_state::Init() {
   m020.Init();
   m024.x = m024.y = m024.z = 0.0f;
   m030.x = m030.y = m030.z = 0.0f;
+  _ReadWriteBarrier();
   m03c.x = m03c.y = m03c.z = 0.0f;
   m048.x = m048.y = m048.z = 0.0f;
   m054.x = m054.y = m054.z = 0.0f;
