@@ -2530,45 +2530,54 @@ void cDramaEventInstanceData_s00d4_d5c0::ClearData()
     map->eraseGD_00621f50(map->mBegin, map->mEnd);
 }
 
+extern SP::cDataSerializerGeneric gDramaEventInstanceDataSerializer; // 0x015838e4
+
 // @ 0x00d4db50
 bool cDramaEventInstanceData_s00d4_d5c0::Write(void* stream)
 {
-    cVarListSerializer local;
-    OReader* reader = ((OStream*)stream)->v8();
+    OReader* __restrict reader = ((OStream*)stream)->v8();
     u32 key = 0x558fe09;
     void* istream = reader->v6();
     FUN_0093aa70(istream, &key, 1, 0);
     bool ok = WriteData(stream);
-    local.ctor_00692f90(this, (const char*)0x15838e4, 0x1a80d26);
-    if (ok && local.serialize_00692900(stream)) return true;
+    SP::cVarListSerializer local(this, &gDramaEventInstanceDataSerializer,
+        SP::cVarListSerializer::kSignature);
+    if (ok && local.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream)))
+        return true;
     return false;
 }
+
+extern SP::cDataSerializerGeneric gNightPredatorEventSerializer; // 0x01583920
 
 // @ 0x00d4dbe0
 bool cNightPredatorEvent_s00d4_d5c0::Write(void* stream)
 {
-    cVarListSerializer local;
-    OReader* reader = ((OStream*)stream)->v8();
+    OReader* __restrict reader = ((OStream*)stream)->v8();
     u32 key = 0x5599e34;
     void* istream = reader->v6();
     FUN_0093aa70(istream, &key, 1, 0);
     bool ok = ((cDramaEventInstanceData_s00d4_d5c0*)this)->WriteData(stream);
-    local.ctor_00692f90(this, (const char*)0x1583920, 0x1a80d26);
-    if (ok && local.serialize_00692900(stream)) return true;
+    SP::cVarListSerializer local(this, &gNightPredatorEventSerializer,
+        SP::cVarListSerializer::kSignature);
+    if (ok && local.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream)))
+        return true;
     return false;
 }
+
+extern SP::cDataSerializerGeneric gUFOAbductionEventSerializer; // 0x0158395c
 
 // @ 0x00d4dc70
 bool cUFOAbductionEvent::Write(void* stream)
 {
-    cVarListSerializer local;
-    OReader* reader = ((OStream*)stream)->v8();
+    OReader* __restrict reader = ((OStream*)stream)->v8();
     u32 key = 0x5599eb8;
     void* istream = reader->v6();
     FUN_0093aa70(istream, &key, 1, 0);
     bool ok = ((cDramaEventInstanceData_s00d4_d5c0*)this)->WriteData(stream);
-    local.ctor_00692f90(this, (const char*)0x158395c, 0x1a80d26);
-    if (ok && local.serialize_00692900(stream)) return true;
+    SP::cVarListSerializer local(this, &gUFOAbductionEventSerializer,
+        SP::cVarListSerializer::kSignature);
+    if (ok && local.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream)))
+        return true;
     return false;
 }
 
