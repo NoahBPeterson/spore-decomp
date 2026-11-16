@@ -19,3 +19,5 @@
 ../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8d9b0@cPlanetModel_s00b8_d190@@QAEHXZ  00b8d9b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8de60@cPlanetModel_s00b8_d190@@QAEXXZ  00b8de60  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8d9f0@cPlanetModel_s00b8_d190@@QAE_NXZ  00b8d9f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8fa40@S@@QAE_NPAX@Z  00b8fa40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b80000.cpp  ?FUN_00b8fad0@S@@QAE_NPAX@Z  00b8fad0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
