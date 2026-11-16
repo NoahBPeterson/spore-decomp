@@ -541,16 +541,16 @@ void Hashtable::find_as(void** out, const char** keyp, int a2, int a3)
 // @ 0x00a69d60
 RefVecSlot* __cdecl DestroySlotRange(RefVecSlot* first, RefVecSlot* last, RefVecSlot* out)
 {
-    if (first == last)
-        return out;
-    do {
-        ((RefVec*)first)->DestroyRange(((RefVec*)first)->mpBegin, ((RefVec*)first)->mpEnd);
-        RefObject** b = ((RefVec*)first)->mpBegin;
-        if (b && ((int*)b)[-1] != 0)
-            operator_delete__(b);
-        first = (RefVecSlot*)((char*)first + 0x14);
-        out = (RefVecSlot*)((char*)out + 0x14);
-    } while (first != last);
+    if (first != last) {
+        do {
+            ((RefVec*)first)->DestroyRange(((RefVec*)first)->mpBegin, ((RefVec*)first)->mpEnd);
+            RefObject** b = ((RefVec*)first)->mpBegin;
+            if (b && ((int*)b)[-1] != 0)
+                operator_delete__(b);
+            first = (RefVecSlot*)((char*)first + 0x14);
+            out = (RefVecSlot*)((char*)out + 0x14);
+        } while (first != last);
+    }
     return out;
 }
 

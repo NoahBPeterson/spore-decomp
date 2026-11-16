@@ -15,7 +15,6 @@
 00706b50 70 complete CfgPool::push over 0xb0-byte pool nodes (11-dword CfgRec snapshot before grow/alloc, then slot append); only MSVC store/`pop edi` scheduling differs (0x2c frame, regs, call sequence match) [equiv: PASS 278 valid, 100% cov] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706c80 89 complete forward copy of 9-dword elements; returns the first argument pointer in eax like the original; register allocation differs; slice/hybrid equiv WEAK 103 valid, 22.0% coverage, no mismatch; replay PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706d00 64 complete vector-of-0x10 allocator; parameter register allocation differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00706d60 96 complete array-of-0x144 destructor loop; register allocation differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706dd0 110 complete SP::cLightingConfig constructor (0x144-byte default env-lighting config); store order matches the original exactly, the three float4 defaults are copied as 12 dword moves; remaining delta is xmm register assignment (`1.0f`/`-1.0f`/triple/scale kept live in xmm1-3 vs rematerialised) and one `xorps` placement [equiv: PASS 400 valid, 100% cov] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 007070d0 209 cLightingWorld::UpdateLightPosition: complete reconstruction; vector RMW lane writes collapse to integer stores, register/frame schedule diverges
 00707270 258 cLightingWorld::RemoveLightFromList: complete reconstruction; list-array element moves and index bookkeeping differ in schedule

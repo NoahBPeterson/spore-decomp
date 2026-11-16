@@ -6,3 +6,6 @@
 ../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?GetPartitionKeyLT@@YAPAPAUSortKeyObj@@PAPAU1@0PAU1@ABUSortKeyLess@@@Z  006df4e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?DestroyRange58@@YGXPAUElem58@@0@Z  006df9d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?QuickSortCR@@YAXPAUcClusterRect_s006d_eee0@SP@@0UcRectAreaSort@@@Z  006dfd00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?CopyElem16@@YAPAUElem16@@PAU1@00@Z  006df2d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?CopyRefPtr@@YAPAURefPtr@@PAU1@00@Z  006df700  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?CopyBackwardElem16@@YAPAUElem16@@PAU1@00@Z  006df340  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -4,7 +4,6 @@
 00ac8550 133 approximate; cVarListSerializer wrapper (179 vs 134 bytes); difftest UNSUPPORTED (original reads ecx at entry) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ac8a80 199 approximate; behavior-flag setup, cc/schedule differ (214 vs 210 bytes); difftest FAIL 5/5, fault at 300000c5 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00ac8b60 203 approximate; tribe order roulette, float-compare schedule differs (361 vs 367 bytes); difftest FAIL 5/7, fault at 00c24563 flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-00ac8d00 34 complete; city civilization lookup + g->FUN_00d57a60, register schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (62.5% cov)
 00ac8d80 162 complete; SSE sphere-list point test, unrolled/hoist schedule differs (171 vs 111 bytes); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
 00accec0 56 complete; 0x20-range copy, element-ctor call schedule differs flags: /O2 /MD /Gy /EHsc /TP
 00accf20 67 complete; reverse 0x20-range copy, register schedule differs flags: /O2 /MD /Gy /EHsc /TP

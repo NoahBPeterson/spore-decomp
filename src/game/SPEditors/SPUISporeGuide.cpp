@@ -297,17 +297,18 @@ EString* EString::AssignFrom(EString* other)
 // @ 0x00672910
 void* FUN_00672910(void* first, void* last, void* dst)
 {
-  if (first == last) return dst;
-  do {
-    if (dst != first) {
-      unsigned short** d = (unsigned short**)dst;
-      if (d[0] != (unsigned short*)d[1]) { *d[0] = 0; d[1] = d[0]; }
-      unsigned short** f = (unsigned short**)first;
-      ((EString*)dst)->Assign(f[0], f[1]);
-    }
-    first = (char*)first + 0x54;
-    dst = (char*)dst + 0x54;
-  } while (first != last);
+  if (first != last) {
+    do {
+      if (dst != first) {
+        unsigned short** d = (unsigned short**)dst;
+        if (d[0] != (unsigned short*)d[1]) { *d[0] = 0; d[1] = d[0]; }
+        unsigned short** f = (unsigned short**)first;
+        ((EString*)dst)->Assign(f[0], f[1]);
+      }
+      first = (char*)first + 0x54;
+      dst = (char*)dst + 0x54;
+    } while (first != last);
+  }
   return dst;
 }
 

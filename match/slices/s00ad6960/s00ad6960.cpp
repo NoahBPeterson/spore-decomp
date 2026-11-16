@@ -484,17 +484,18 @@ void* PtrSlot::FUN_00ad7320(PtrSlot* p)
 // ===========================================================================
 void** FUN_00ad73a0(void** first, void** last, void** out)
 {
-    if (first == last) return out;
-    do {
-        void* a = *first;
-        void* b = *out;
-        if (a != b) {
-            if (a) ((CSub*)((char*)a + 8))->AddRef();
-            *out = a;
-            if (b) ((CSub*)((char*)b + 8))->Release();
-        }
-        ++first; ++out;
-    } while (first != last);
+    if (first != last) {
+        do {
+            void* a = *first;
+            void* b = *out;
+            if (a != b) {
+                if (a) ((CSub*)((char*)a + 8))->AddRef();
+                *out = a;
+                if (b) ((CSub*)((char*)b + 8))->Release();
+            }
+            ++first; ++out;
+        } while (first != last);
+    }
     return out;
 }
 

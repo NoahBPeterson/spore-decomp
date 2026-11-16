@@ -7685,24 +7685,24 @@ void* SL71::v0a520(void* a2)
 // @ 0x00a0a580
 int f0a580(unsigned* a1, unsigned* a2, int a3)
 {
-    if (a1 == a2)
-        return a3;
-    do
-    {
-        char* p = (char*)a1;
-        char* e = *(char**)(p + 4);
-        for (char* q = *(char**)p; q < e; q += 0x1c)
+    if (a1 != a2) {
+        do
         {
-            char* r = *(char**)(q + 0xc);
-            if (2 < (int)((*(char**)(q + 0x14) - r) & 0xfffffffeU) && r != 0)
-                FUN_00f47380(r);
-        }
-        char* base = *(char**)p;
-        if (base != 0 && *(int*)(base - 4) != 0)
-            FUN_00f47380(base);
-        a1 += 6;
-        a3 += 0x18;
-    } while (a1 != a2);
+            char* p = (char*)a1;
+            char* e = *(char**)(p + 4);
+            for (char* q = *(char**)p; q < e; q += 0x1c)
+            {
+                char* r = *(char**)(q + 0xc);
+                if (2 < (int)((*(char**)(q + 0x14) - r) & 0xfffffffeU) && r != 0)
+                    FUN_00f47380(r);
+            }
+            char* base = *(char**)p;
+            if (base != 0 && *(int*)(base - 4) != 0)
+                FUN_00f47380(base);
+            a1 += 6;
+            a3 += 0x18;
+        } while (a1 != a2);
+    }
     return a3;
 }
 

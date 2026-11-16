@@ -6569,13 +6569,13 @@ It10 Table10::erase(Node10* node, Bucket10* bucket)
 // @ 0x00b4fae0
 LinkNode* __stdcall FUN_00b4fae0(LinkNode* head, const Key3* key, int unused)
 {
-    if (!head)
-        return 0;
-    do {
-        if (key->m0 == (int)head->mKey0 && key->m4 == (int)head->mKey4 && key->m8 == (int)head->mKey8)
-            return head;
-        head = head->mNext;
-    } while (head);
+    if (head) {
+        do {
+            if (key->m0 == (int)head->mKey0 && key->m4 == (int)head->mKey4 && key->m8 == (int)head->mKey8)
+                return head;
+            head = head->mNext;
+        } while (head);
+    }
     return 0;
 }
 

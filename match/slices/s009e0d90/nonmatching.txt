@@ -7,7 +7,6 @@
 # behaviourally equivalent but the vector-helper / EASTL realloc_insert loop-rotation shapes and
 # the switch-dispatch scheduling do not reproduce cl 14.x output byte-for-byte.
 009e0d90  439  AddGait: complete switch-over-Record::kind dispatch; push_back-inlined per-kind slabs scheduled differently | difftest WEAK (324 valid, 11.7% cov)
-009e0f80  83   AddItem: complete; EASTL push_back inlined, branch layout differs | difftest WEAK (59 valid, 86.8% cov)
 009e1030  169  Gait::Gait(): complete default-id + three CopyX range inits; helper inlining/register allocation differs | difftest PASS (400 valid, 100% cov)
 009e1160  199  AssignItemsN: complete insertion-sort copy loop; cl rotates the inner loop | difftest PASS (201 valid, 77.3% cov)
 009e1260  236  Vec<Gait>::realloc_insert: complete node-growth clone; loop rotation + EH frame differ | difftest UNSUPPORTED (0 valid inputs: budget/pool-limit/write faults)

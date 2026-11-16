@@ -65,3 +65,6 @@
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_01352460@@YAXXZ  01352460  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_01357d00@@YAXXZ  01357d00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_01357eb0@@YAXXZ  01357eb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0e80@@YAPAUE16@@PAU1@00@Z  00ca0e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0ef0@@YAPAUE16@@PAU1@00@Z  00ca0ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?UpdateDamageState@cVehicle@@QAEXXZ  00c9e700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -2151,10 +2151,9 @@ void CVis::FUN_00ac8cd0(int a, int b)
 // @ 0x00ac8d00
 void CT::FUN_00ac8d00(int city, int a)
 {
-    void* g = mpA4;
-    if (g && *(int*)((char*)g + 0xaf0) == city) {
+    if ((mpA4) && *(int*)((char*)(mpA4) + 0xaf0) == city) {
         void* u = ((CCity*)city)->GetCivilization(a);
-        ((CGSub*)g)->FUN_00d57a60(u);
+        ((CGSub*)(mpA4))->FUN_00d57a60(u);
     }
 }
 

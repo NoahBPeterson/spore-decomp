@@ -2343,9 +2343,8 @@ void Outer::AddGait(void* arg)
 void Outer::AddItem(void* arg)
 {
     void** a = ((CArgs*)arg)->MainArguments(1);
-    Record* rec = (Record*)hC->val;
-    rec->item.b = ((float (__thiscall*)(void*, void*))(*(void***)eval)[0x98 / 4])(eval, a[0]);
-    rec->items.push_back(rec->item);
+    ((Record*)hC->val)->item.b = ((float (__thiscall*)(void*, void*))(*(void***)eval)[0x98 / 4])(eval, a[0]);
+    ((Record*)hC->val)->items.push_back(((Record*)hC->val)->item);
 }
 
 // @ 0x009e0ff0

@@ -6048,11 +6048,10 @@ void* cCity_s00bd_91e0::GetCivilizationData()
 // @ 0x00bd9a80
 float __cdecl GetForeignCityMood(void* pObject)
 {
-    cProtectorSource* pSource = (cProtectorSource*)pObject;
     float fValue;
-    cGameNounManager_s00bd_91e0* pNouns = pSource->GetNounManager();
+    cGameNounManager_s00bd_91e0* pNouns = ((cProtectorSource*)pObject)->GetNounManager();
     fValue = 0.0f;
-    if (pSource->GetCategory() == 5) {
+    if (((cProtectorSource*)pObject)->GetCategory() == 5) {
         if (pNouns->GetAvatar() != GetPlayerEmpireID()) {
             cStarEmpire* pEmpire = StarManager()->GetEmpireByID((int32_t)pNouns->GetAvatar());
             cGameData* pEmpireData = StarManager()->GetEmpireData(pEmpire);

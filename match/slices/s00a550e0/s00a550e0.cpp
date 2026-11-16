@@ -207,9 +207,8 @@ void __cdecl getShl(tOutNode* n)
 // @ 0x00a55dc0
 void __cdecl setShl(tOutNode* n, float v)
 {
-    int sh = (int)n->mOperand;
     n->mValue = v;
-    nodeBroadcast(n, (float)((int)v << sh));
+    nodeBroadcast(n, (float)((int)v << ((int)n->mOperand)));
 }
 
 // @ 0x00a55e80
@@ -222,9 +221,8 @@ void __cdecl getShr(tOutNode* n)
 // @ 0x00a55ef0
 void __cdecl setShr(tOutNode* n, float v)
 {
-    int sh = (int)n->mOperand;
     n->mValue = v;
-    nodeBroadcast(n, (float)((int)v >> sh));
+    nodeBroadcast(n, (float)((int)v >> ((int)n->mOperand)));
 }
 // =====================================================================
 // division / modulus
