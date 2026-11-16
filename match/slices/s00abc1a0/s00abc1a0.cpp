@@ -38,7 +38,7 @@ extern "C" void  __cdecl operator_delete_arr(void* p);                          
 extern "C" bool __cdecl ReadInt32(void* io, void* p, int n, int endian);      // 0x0093a780
 extern "C" bool __cdecl ReadUInt16(void* io, void* p, int n);                  // 0x0093a700
 extern "C" bool __cdecl ReadUInt8(void* io, void* p, int n);                  // 0x0093a6c0
-extern "C" bool __cdecl WriteInt32(void* io, void* p, int n, int endian);     // 0x0093a800
+extern "C" bool __cdecl ReadInt64(void* io, void* p, int n, int endian);     // 0x0093a800
 extern "C" bool __cdecl ReadFloatCurve(void* io, void* p);                    // 0x007d27d0
 extern "C" bool __cdecl ReadEmbed(void* io, void* p);                         // 0x007ed920
 
@@ -111,22 +111,21 @@ void Vec28::grow(uint index)
 }
 
 // =============================================================================================
-// 0x00abc240 -- read a list of 0x28-byte records (uint16, uint16, int, vec0x14) from the stream.
+// 0x00abc240 -- read 0x28-byte records: two byte fields, a 64-bit value, and an embedded byte vector.
 // @ 0x00abc240
-void* Read28List(void* io, void* self, uint count)
+void* Read28List(void* io, Vec28& records)
 {
-    uint16 tmp16;
+    uint count;
     ReadInt32(io, &count, 1, 0);
-    ReadUInt16(io, &tmp16, 1);
-    ((Vec28*)self)->grow(count);
+    records.grow(count);
     for (uint i = 0; i < count; ++i) {
-        E28* e = (E28*)((char*)((Vec28*)self)->mpBegin + i * 0x28);
+        E28* e = (E28*)((char*)records.mpBegin + i * 0x28);
         ReadUInt8(io, (char*)e + 0, 1);
         ReadUInt8(io, (char*)e + 1, 1);
-        WriteInt32(io, (char*)e + 8, 1, 0);
+        ReadInt64(io, (char*)e + 8, 1, 0);
         FUN_00abbe70(io, (char*)e + 0x10);
     }
-    return self;
+    return io;
 }
 
 // =============================================================================================
@@ -146,9 +145,9 @@ void ReadDesc(uint* out, void* io)
     ReadInt32(io, (char*)p + 0x50, 1, 0);
     ReadInt32(io, (char*)p + 0x54, 1, 0);
     ReadInt32(io, (char*)p + 0x58, 1, 0);
-    WriteInt32(io, (char*)p + 0x60, 1, 0);
+    ReadInt64(io, (char*)p + 0x60, 1, 0);
     ReadUInt16(io, (char*)p + 0x68, 1);
-    Read28List(io, (char*)p + 0x6c, 0);
+    Read28List(io, *(Vec28*)((char*)p + 0x6c));
     FUN_00abbb80(io, (char*)p + 0x6c + 0x14);
     ReadFloatCurve(io, (char*)p + 0x6c + 0x28);
     ReadEmbed(io, (char*)p + 0x6c + 0x3c);
