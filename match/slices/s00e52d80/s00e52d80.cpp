@@ -395,9 +395,9 @@ void FUN_00e539c0() {
 void FUN_00e53a20() {
   int mode = SP_GetCurrentGameMode();
   FUN_006035d0(mode);
-  cSPUILayout17* layout = ((cAlloc17*)(*(int*)(g_16b3c0c + 0x98)))->GetAllocator();
-  void* w = layout->FindWindowByID(0x43b72d0, 1);
-  w = SubWindow(w);
+  cSPUILayout17* layout = CellGfx17()->mpAlloc_98->GetAllocator();
+  MissionWindow17* w = (MissionWindow17*)layout->FindWindowByID(0x43b72d0, 1);
+  w = w ? w->QueryInterface(0x8ed27e7a) : 0;
   Vis(w, 1);
 }
 
