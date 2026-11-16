@@ -29,7 +29,7 @@ struct HT {
 
     void   DoFreeNodes(uint32* buckets, uint32 count);   // 0x6be640
     uint32* eraseNode(uint32* out, uint32 node, uint32* buckets); // 0x6be820
-    void   lowerBound(uint32* out, uint32* key);          // 0x6be890
+    uint32* lowerBound(uint32* out, uint32* key);          // 0x6be890
     void   rehash(uint32 newBucketCount);                 // 0x6be8d0
     void   heapSiftDown(int, int, int, int);              // 0x6be980
 };
@@ -214,10 +214,30 @@ uint32* HT::eraseNode(uint32* out, uint32 node, uint32* buckets)
 
 
 // @ 0x006be890
-void HT::lowerBound(uint32* out, uint32* key)
+uint32* HT::lowerBound(uint32* out, uint32* key)
 {
-    // TODO(partial).
-    *out = 0;
+    struct Node {
+        Node* right;
+        Node* left;
+        Node* parent;
+        uint32 color;
+        uint64 key;
+    };
+    Node* node = *(Node**)((char*)this + 0xc);
+    Node* result = (Node*)((char*)this + 4);
+    if (node) {
+        uint64 value = *(const uint64*)key;
+        do {
+            if (value < node->key) {
+                result = node;
+                node = node->left;
+            } else {
+                node = node->right;
+            }
+        } while (node);
+    }
+    *out = (uint32)result;
+    return out;
 }
 
 
