@@ -33,3 +33,4 @@
 ../src/game/SPAudio/_at_00a60000.cpp  ?Insert1c@EapdTree@Eapd@Audio@EA@@QAEPAPAXPAPAXPAUEapdTreeNode@234@PBUEapdValue1c@234@D@Z  00a63770  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/_at_00a60000.cpp  ?Insert18@EapdTree@Eapd@Audio@EA@@QAEPAPAXPAPAXPAUEapdTreeNode@234@PBUEapdValue18@234@D@Z  00a637f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/_at_00a60000.cpp  ?Insert28@EapdMapBase@Eapd@Audio@EA@@QAEPAXPAPAXPAXPAID@Z  00a636e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a60000.cpp  ?ClearAll@EapdMapBase@Eapd@Audio@EA@@QAE_NXZ  00a63b90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
