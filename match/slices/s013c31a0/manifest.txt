@@ -22,3 +22,4 @@ slices/s013c31a0/s013c31a0.cpp  ?f_013cab50@@YAXXZ  013cab50
 slices/s013c31a0/s013c31a0.cpp  ?f_013cb250@@YAXXZ  013cb250
 slices/s013c31a0/s013c31a0.cpp  ?f_013c3550@@YAXXZ  013c3550  /O2 /MD /Gy /EHsc /TP
 slices/s013c31a0/s013c31a0.cpp  ?f_013c8f60@@YAXXZ  013c8f60  /O2 /MD /Gy /EHsc /TP
+slices/s013c31a0/s013c31a0.cpp  ?f_013c9400@@YAXXZ  013c9400  /O2 /MD /Gy /EHsc /TP
