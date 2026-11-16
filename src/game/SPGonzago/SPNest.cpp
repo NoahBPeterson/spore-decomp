@@ -96,7 +96,7 @@ extern float gWaterSearchDist;   // 0x01582e8c  100.0f
 extern float gFiftyF;            // 0x01582f5c  50.0f
 extern float gViewerOrigin[3];   // 0x01693e50..0x01693e58
 extern int   gViewerGuard;       // 0x01693e4c
-extern void* gEggSerializerList; // 0x015778f0
+extern SP::cDataSerializerGeneric gEggSerializerList; // 0x015778f0
 #pragma warning(disable : 4100)
 
 namespace EA {
@@ -131,6 +131,9 @@ class ThisStubs
     void G();   // 0x00ac0450 cInteractionTarget clear
     void H();   // 0x00c8b2e0 cSpatialObject clear
     void I();   // 0x00bbc3f0 TerraformingManager footstep
+    bool WriteGameData(void* stream);   // 0x00b18590
+    bool WriteSpatial(void* stream);    // 0x00c88a90
+    bool WriteCombatant(void* stream);  // 0x00bfc4a0
 };
 }
 namespace SP {
@@ -202,6 +205,15 @@ class RefObj
   public:
     virtual void AddRef();              // +0x00
     virtual void Release();             // +0x04
+    virtual void slot08();
+    virtual void slot0c();
+    virtual void slot10();
+    virtual void slot14();
+    virtual void slot18();
+    virtual void slot1c();
+    virtual void slot20();
+    virtual void slot24();
+    virtual void slot28();
     virtual bool IsValid();             // +0x2c
 };
 }
@@ -798,25 +810,30 @@ bool cHerd::ShouldActivate()
 namespace SP {
 bool SP::cEgg_s00c6_a550::Write(SP::IOStream* stream)
 {
+    IWriter* __restrict writer = static_cast<IWriter*>(stream->GetWriter());
     u32 tag = 0x2a0349a;
-    IWriter* writer = (IWriter*)stream->GetWriter();
-    EA::IO::WriteUint32(writer->GetSink(), &tag, 1, 0);
-    if (!FUN_00b18590((void*)this, stream))
-        return false;
-    if (!FUN_00c88a90((char*)this + 0x34, stream))
-        return false;
-    bool ok = FUN_00bfc4a0((char*)this + 0x120, stream) != 0;
+    void* sink = writer->GetSink();
+    EA::IO::WriteUint32(sink, &tag, 1, 0);
+    bool ok = reinterpret_cast<ThisStubs*>(this)->WriteGameData(stream)
+        && reinterpret_cast<ThisStubs*>((char*)this + 0x34)->WriteSpatial(stream)
+        && reinterpret_cast<ThisStubs*>((char*)this + 0x120)->WriteCombatant(stream);
     if (mpHerd != 0 && mpHerd->IsValid()) {
-        mpHerd = 0;
-        mpHerd->Release();
+        RefObj* previous = mpHerd;
+        if (previous != 0) {
+            mpHerd = 0;
+            previous->Release();
+        }
     }
     if (mpToHatch != 0 && mpToHatch->IsValid()) {
-        mpToHatch = 0;
-        mpToHatch->Release();
+        RefObj* previous = mpToHatch;
+        if (previous != 0) {
+            mpToHatch = 0;
+            previous->Release();
+        }
     }
-    cVarListSerializer_s00c6_a550 ser;
-    FUN_00692f90(&ser, (void*)this, (void**)&gEggSerializerList, 0x1a80d26);
-    if (ok && FUN_00692900(&ser, stream))
+    SP::cVarListSerializer ser(this, &gEggSerializerList,
+        SP::cVarListSerializer::kSignature);
+    if (ok && ser.Serialize(*reinterpret_cast<SP::cIObjectDatabaseOStream*>(stream)))
         return true;
     return false;
 }
