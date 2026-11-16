@@ -20,6 +20,8 @@ struct PtrVec {
     void* Find(int key);        // 007db5e0
     void* At(int index);        // 007db620
 };
+
+// @ 0x007db5e0
 void* PtrVec::Find(int key)
 {
     int n = (int)(mpEnd - mpBegin);

@@ -1,0 +1,2 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPEngine/SPAppPackManager.cpp  ?Find@PtrVec@@QAEPAXH@Z  007db5e0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast /Isrc/game/include
