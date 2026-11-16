@@ -153,6 +153,20 @@ virtual void q38();
     virtual bool q48(int, int, int);         // 0x48
     virtual bool q4c(int, int, int);         // 0x4c
 };
+// the destructor's view of Ability: an interface at +0 (no destructor), a base at +4 whose destructor restores
+// vtable 0x13ef094, and the two children, released through vtable slot 1 in reverse order
+struct AbilityIface { virtual void Slot0(); };
+struct AbilityBase { virtual void Slot0(); ~AbilityBase() {} };
+struct AbilityChildRef {
+    IChild* mp;
+    ~AbilityChildRef() { if (mp) mp->Release(); }
+};
+struct __declspec(novtable) AbilityObj : AbilityIface, AbilityBase {
+    int ref;                 // 0x08
+    AbilityChildRef childA;  // 0x0c
+    AbilityChildRef childB;  // 0x10
+    ~AbilityObj();
+};
 struct Ability {
     void*   vtbl0;   // 0x00
     void*   vtbl1;   // 0x04
@@ -161,7 +175,6 @@ struct Ability {
     IChild* childB;  // 0x10
 
     void* ctor();                         // 0xa107a0
-    void  dtor();                         // 0xa10800
     Ability* ctor2(IChild*, IChild*);     // 0xa10860
     bool  q08(int);                       // 0xa10960
     void  q10(void*, int);                // 0xa109a0
@@ -462,11 +475,8 @@ void* Ability::ctor()
 }
 
 // @ 0x00a10800
-void Ability::dtor()
+AbilityObj::~AbilityObj()
 {
-    if (childB) childB->Release();
-    if (childA) childA->Release();
-    vtbl1 = (void*)0x13ef094;
 }
 
 // @ 0x00a10860

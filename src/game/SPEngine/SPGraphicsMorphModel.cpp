@@ -79,9 +79,19 @@ struct Holder841 {
     RCArray_s0075_8240 vec;
     void* p18;
     Holder841* Ctor(int* src);   // 0x007583e0
-    void Dtor();                 // 0x00758540
 };
 __declspec(noinline) Holder841* __cdecl FUN_007585c0(int* src);
+// the destructor's view of Holder841: an interface at +0 (no destructor of its own), a base at +4 whose destructor
+// restores vtable 0x13ef094, and the reference vector at +0xc, destroyed by its out-of-line destructor (0x0041eb80)
+struct Holder841Iface { virtual void Slot0(); };
+struct Holder841Base { virtual void Slot0(); ~Holder841Base() {} };
+struct Holder841Vector { void* mBegin; void* mEnd; void* mCap; ~Holder841Vector(); };
+struct Holder841Obj : Holder841Iface, Holder841Base {
+    void* p08;
+    Holder841Vector vec;
+    void* p18;
+    ~Holder841Obj();
+};
 struct C58480 { char pad[0xc]; int* mBegin; int* mEnd; bool Update(float* bounds, float* w); };
 struct IntVec {
     int* mBegin; int* mEnd; int* mCap;
@@ -351,12 +361,8 @@ bool C58480::Update(float* bounds, float* w)
 }
 
 // @ 0x00758540
-void Holder841::Dtor()
+Holder841Obj::~Holder841Obj()
 {
-    vt0 = &g_0140da88;
-    vt1 = &g_0140da84;
-    ((RefVectorDtor*)((char*)this + 0xc))->Destroy();
-    vt1 = &g_013ef094;
 }
 
 // @ 0x007585c0

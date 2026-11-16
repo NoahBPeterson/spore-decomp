@@ -906,6 +906,22 @@ struct RBSet {
 
     SetNode** Insert(SetNode** pOut, SetNode* pos, const int* val, char bAllow);
 };
+// the destructor's view of Coder: its own vtable (0x1403594) and two embedded rbtrees at +0x08 and +0x24, each
+// nuking its nodes from the root at +0x0c (0x009a9600)
+struct CoderTree {
+    u32   mAnchor[3];      // +0x00
+    void* mpRoot;          // +0x0c
+    u32   mRest[3];        // +0x10
+    void  DoNukeSubtree(void* node);   // 0x009a9600
+    ~CoderTree() { DoNukeSubtree(mpRoot); }
+};
+struct CoderObj {
+    virtual void Slot0();
+    u32       f04;         // +0x04
+    CoderTree mTree08;     // +0x08
+    CoderTree mTree24;     // +0x24
+    ~CoderObj();
+};
 struct Coder {
     u8* mBuf;          // +0x00
     u32 f04;           // +0x04
@@ -940,7 +956,6 @@ struct Coder {
     u32 f6c;           // +0x6c
 
     Coder();
-    ~Coder();
     void Init();        // 0x68e610
     void MaskInit();    // 0x68ddc0
     bool EncodeBit(u8 bit);       // 0x68de20
@@ -2357,12 +2372,8 @@ NameMapCtor::NameMapCtor()
 }
 
 // @ 0x0068dc90
-Coder::~Coder()
+CoderObj::~CoderObj()
 {
-    mBuf = (u8*)0x1403594;
-    // nuke two embedded rbtrees at +0x24 and +0x08
-    ((void(__thiscall*)(void*, void*))Nuke_9a9600)((char*)this + 0x24, *(void**)((char*)this + 0x30));
-    ((void(__thiscall*)(void*, void*))Nuke_9a9600)((char*)this + 0x08, *(void**)((char*)this + 0x14));
 }
 
 // @ 0x0068dd10

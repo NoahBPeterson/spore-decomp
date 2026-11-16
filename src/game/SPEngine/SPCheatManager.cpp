@@ -427,13 +427,30 @@ class StrNameMap {
 class PairB_s0067_d550 {
  public:
   PairB_s0067_d550(const PairB_s0067_d550& x);  // @ 0x0067e900
-  ~PairB_s0067_d550();               // @ 0x0067e830
 
   char* mpBegin;         // +0x00
   char* mpEnd;           // +0x04
   char* mpCapacity;      // +0x08
   uint32_t mAllocator;   // +0x0c
   EA::IU34* mpCommand;   // +0x10
+};
+// the destructor's view of PairB: an EASTL string (freed unless it is the one-byte empty buffer) and a command
+// reference released through vtable slot 1
+struct PairBString {
+  char* mpBegin;         // +0x00
+  char* mpEnd;           // +0x04
+  char* mpCapacity;      // +0x08
+  uint32_t mAllocator;   // +0x0c
+  ~PairBString() { if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin); }
+};
+struct PairBCommandRef {
+  EA::IU34* mp;
+  ~PairBCommandRef() { if (mp) mp->Release(); }
+};
+struct PairBObj {
+  PairBString mKey;          // +0x00
+  PairBCommandRef mpCommand; // +0x10
+  ~PairBObj();
 };
 static char gEmptyStr[2];
 class RCPlainBlock {
@@ -644,10 +661,8 @@ void cCheatManager::ActivateConsole(uint32_t param)
 }
 
 // @ 0x0067e830
-PairB_s0067_d550::~PairB_s0067_d550()
+PairBObj::~PairBObj()
 {
-  if (mpCommand) mpCommand->Release();
-  if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin);
 }
 
 // @ 0x0067e890

@@ -13,5 +13,4 @@
 0067c790 108 HideAllHints; complete, register allocation (this in esi vs edi) differs. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#6 esp]
 0067c830 82 cUIHints::ActivateHint; complete, equiv WEAK (no mismatch, under-covered); fixed decl-marker comment so the checker stops testing the wrong symbol. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 0067c8c0 117 cUIHints::SetHintState; complete, equiv WEAK (no mismatch, under-covered); fixed decl-marker comment so the checker stops testing the wrong symbol. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-0067c960 62 cUIHints::Update; complete; cl spills elapsed instead of keeping it in x87 across the branch (79 vs 72 bytes). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 0067c9b0 103 cUIHints::Refresh; complete, equiv WEAK (no mismatch, under-covered); fixed decl-marker comment so the checker stops testing the wrong symbol. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

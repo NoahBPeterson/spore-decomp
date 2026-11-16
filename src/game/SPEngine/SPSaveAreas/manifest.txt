@@ -8,3 +8,6 @@
 ../src/game/SPEngine/SPSaveAreas.cpp  ?SP_SomethingAllSaveAreas@@YAXXZ  006b2350  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPSaveAreas.cpp  ?FUN_006b3610@@YAXXZ  006b3610  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPSaveAreas.cpp  ?SP_RegisterSaveArea@@YAXIPAX0@Z  006b3760  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAreas.cpp  ??0RefPairObj@@QAE@PAURefA@@PAURefB@@@Z  006b1dc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAreas.cpp  ??1RefPairObj@@QAE@XZ  006b1e20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPSaveAreas.cpp  ??0RefPairCopy@@QAE@ABU0@@Z  006b1e90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

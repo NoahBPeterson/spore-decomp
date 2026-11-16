@@ -9,8 +9,6 @@
 00a9a7f0 75 flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00aa4a50  162  complete: ParticleSource Execute (pinToMap/bounce/death); cl15 258 vs 270 bytes, mState cached in esi vs retail reload and x87/SSE choice for the 0.0f bounce store flags: /O2 /MD /Gy /TP /GS-
 00aa4b60  99  complete: ParticleEmit Execute (scout/vertical/killHeight); same size, cl15 keeps mState in a register where retail reloads [esi+0xc] per store flags: /O2 /MD /Gy /TP /GS-
-00aa4cc0  31  complete: ParticleForce Execute; /O2 /MD /Gy /TP; only the default `strength` store differs (cl15 fld/fstp of the HK_REAL_ONE float vs retail movss from the constant) flags: /O2 /MD /Gy /TP /GS-
-00aa4d70  31  complete: ParticleWarp Execute; /O2 /MD /Gy /TP; only the default `strength` store differs (cl15 fld/fstp of the HK_REAL_ONE float vs retail movss from the constant) flags: /O2 /MD /Gy /TP /GS-
 00aa5810  165  complete: ParticleAlpha Execute (curve vector erase/push_back, vary range, /255 scaling); cl15 302 vs 297 bytes, vector element copy via SSE vs retail fld/fstp flags: /O2 /MD /Gy /TP /GS-
 00aa5ab0 197 complete cParticleSizeCommand::Execute (original 249, emitted 200): main args -> description size floats at +0x90/0x94/0x98, "vary" -> +0xa4   (mangled ?cParticleSizeExecute@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00aa5bb0 196 complete cParticleAspectCommand::Execute (original 249, emitted 200): main args -> aspect floats at +0xa8/0xac/0xb0, "vary" -> +0xbc   (mangled ?cParticleAspectExecute@cCommand@@QAEXPAUcArguments@ArgScript@EA@@@Z) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

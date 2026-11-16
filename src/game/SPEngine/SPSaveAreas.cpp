@@ -94,10 +94,30 @@ struct RefB { virtual void AddRef(); virtual void Release(); };
 struct RefPair {
   RefA* a;
   RefB* b;
-  RefPair* Ctor(RefA* x, RefB* y);               // 0x6b1dc0
-  void     Dtor();                               // 0x6b1e20
-  RefPair* CtorCopy(const RefPair* o);           // 0x6b1e90
   RefPair* Assign(const RefPair* o);             // 0x6b1ef0
+};
+// the constructors' and destructor's view of RefPair: two reference-holding members; constructing one adds a
+// reference, destroying one releases it, and a throw while building the second unwinds the first
+struct RefAHold {
+  RefA* p;
+  RefAHold(RefA* x) : p(x) { if (p != 0) { p->ref.AddRef(); } }
+  ~RefAHold() { if (p != 0) { p->ref.Release(); } }
+};
+struct RefBHold {
+  RefB* p;
+  RefBHold(RefB* y) : p(y) { if (p != 0) { p->AddRef(); } }
+  ~RefBHold() { if (p != 0) { p->Release(); } }
+};
+struct RefPairObj {
+  RefAHold a;
+  RefBHold b;
+  RefPairObj(RefA* x, RefB* y);                  // 0x6b1dc0
+  ~RefPairObj();                                 // 0x6b1e20
+};
+struct RefPairCopy {
+  RefAHold a;
+  RefBHold b;
+  RefPairCopy(const RefPairCopy& o);             // 0x6b1e90
 };
 struct EaHeader { uint32_t mRefCount; };            // 4 bytes in front of every EA allocation
 static inline void FreeOwned(void* p) {
@@ -476,43 +496,20 @@ void SP_SaveResource(void* p, uint32_t val, char flag)
 }
 
 // @ 0x006b1dc0
-RefPair* RefPair::Ctor(RefA* x, RefB* y)
+RefPairObj::RefPairObj(RefA* x, RefB* y)
+  : a(x), b(y)
 {
-  a = x;
-  if (x != 0) {
-    x->ref.AddRef();
-  }
-  b = y;
-  if (y != 0) {
-    y->AddRef();
-  }
-  return this;
 }
 
 // @ 0x006b1e20
-void RefPair::Dtor()
+RefPairObj::~RefPairObj()
 {
-  if (b != 0) {
-    b->Release();
-  }
-  if (a != 0) {
-    a->ref.Release();
-  }
-  _ReadWriteBarrier();
 }
 
 // @ 0x006b1e90
-RefPair* RefPair::CtorCopy(const RefPair* o)
+RefPairCopy::RefPairCopy(const RefPairCopy& o)
+  : a(o.a.p), b(o.b.p)
 {
-  a = o->a;
-  if (a != 0) {
-    a->ref.AddRef();
-  }
-  b = o->b;
-  if (b != 0) {
-    b->AddRef();
-  }
-  return this;
 }
 
 // @ 0x006b1ef0

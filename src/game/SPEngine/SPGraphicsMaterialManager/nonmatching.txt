@@ -19,8 +19,6 @@
 0070ec30 33 copy_backward weak-refcount; register assignment differs
 0070eea0 128 SP::cMaterialManager::WriteMaterials; stream/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
 0070efa0 146 SP::cMaterialManager::ReadShaders; io/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
-0070f320 44 vector<AutoRefCount> teardown; EH frame missing
-0070f390 44 vector<AutoRefCount> teardown; EH frame missing
 0070f520 27 atomic weak-release range; deferred-release sequence differs
 0070f8c0 176 SP::cMaterialManager::HasMaterial; map/mutex register shape differs
 0070fa60 33 vector::erase (RC3c); register assignment differs

@@ -6,3 +6,6 @@
 ../src/game/SPEngine/SPResourceAsync.cpp  ??0CtorResMgr@@QAE@XZ  006aedc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceAsync.cpp  ?FUN_006ae2f0@@YA_NPADPAX@Z  006ae2f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResourceAsync.cpp  ?IsComplete@cAsyncResourceRequest@SP@@UAE_NXZ  006ae280  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResourceAsync.cpp  ??1Node_6ae210@@QAE@XZ  006ae210  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResourceAsync.cpp  ??1Holder_6ae120@@QAE@XZ  006ae120  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResourceAsync.cpp  ??1Holder_6ae190@@QAE@XZ  006ae190  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

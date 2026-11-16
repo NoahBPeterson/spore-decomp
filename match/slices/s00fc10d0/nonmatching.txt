@@ -2,7 +2,6 @@
 00fc1780   20  fixed-vector holder destructor: complete (writes vtable 0x1490b80, frees the +0x2c buffer, VecBase::DestroyRange on +0x18/+0x1c, frees the begin buffer, optional delete); [equiv: PASS 237/237]
                register allocation (edi/esi are swapped) and the vtable-store/load order differ
                typed virtual calls replace the generic helper casts; scheduling and register order differ
-00fc1b60   17  zero-vector (__stdcall, 5 args): complete; cl assigns the xorps zero to [equiv: PASS 1200/1200, 100% cov]
                a different register than the original
 00fc1ba0   64  release terrain model: complete; ModelManager vcall chain schedule differs [equiv: UNSUPPORTED unresolved SP_ModelManager]
 00fc1c00   75  cTerrainSystem constructor: complete (two vtables, zeroed members, the sAppProperties global at 0x15fd918 with its vtable[0], tag 0x26b7d69, cPropertyInfo<float>::Set at 0x0075e6d0); [equiv: PASS 400/400]
