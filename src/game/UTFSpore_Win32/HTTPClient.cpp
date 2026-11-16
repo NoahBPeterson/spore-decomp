@@ -1251,6 +1251,7 @@ bool __stdcall HTTPClientAllocateSocket(int obj, void** out)
             if (sock != 0) {
                 void* r = (*(void*(__thiscall**)(void*))((char*)*(void**)sock + 4))(sock);
                 *out = r;
+                _ReadWriteBarrier();
                 return *out != 0;
             }
         }

@@ -47,4 +47,5 @@
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?SetPosition@PFRecordWriteIstream@@QAEXHH@Z  008dc820  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?Flush@PFRecordWriteIstream@@QAEXXZ  008dc860  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?InternalRead@DatabasePackedFile@ResourceMan@EA@@QAEIPAXI@Z  008d88d0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?SetIsSaved@PFIndexModifiable_s008d_aff0@@QAEXXZ  008db230  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?DoInsertValue@RecMap@@QAEPAPAURbNode@@PAPAU2@PAU2@PBUPFPair@@_N@Z  008d98f0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include

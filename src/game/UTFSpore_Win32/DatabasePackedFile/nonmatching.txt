@@ -22,7 +22,6 @@
 008daf40 42 complete: PFIndexModifiable::GetDataEnd (bucket-array iteration); register allocation differs (pBucket kept in edi instead of esi); difftest PASS (236 valid, 100% coverage)
 008dafa0 49 complete: PFIndexModifiable::GetTotalDiskSize (bucket-array iteration); peeled-scan/register-allocation differences; difftest PASS (261 valid, 100% coverage)
 008daff0 479 complete: PFIndexModifiable::Write (record/stream writer); full body reconstructed; buffer-building path differs
-008db230 73 complete: PFIndexModifiable::SetIsSaved (hashtable bucket walk); register allocation of (bucketArray,bucketCount) swapped vs retail
 008db280 104 complete: PFIndexModifiable::CheckFilesInRange (bucket-array scan); loop/register allocation differs
 008db310 94 complete: PFIndexModifiable::CheckFilesInSizeRange (bucket-array scan); loop/register allocation differs
 008db450 220 complete: HT::InsertUnique (hash-map insert w/ growth); bucket split/rehash reconstruction differs

@@ -1,6 +1,7 @@
 // Slice s01140b70: RenderWare 4 audio core (rw::audio) - SND voice allocation / SNDI patch
 // parsing / filter-node glue.  Built with VC .NET 2003 (cl 13.10) + /GL /LTCG.
 // Flags: /vc71 /O2 /MD /Gy /TP
+#include <intrin.h>
 #include "types.h"
 
 // _ReadWriteBarrier: MSVC intrinsic (compiler barrier, emits no code). VC .NET 2003's <intrin.h>
@@ -453,6 +454,7 @@ extern "C" void FUN_011411a0(int* list, int* node)
     if (list[0] != 0) {
         *(int**)(list[0] + 4) = node;
         list[2]++;
+        _ReadWriteBarrier();
         list[0] = (int)node;
     } else {
         list[2]++;
@@ -472,6 +474,7 @@ extern "C" void FUN_011411d0(int* list, int* node)
     if (list[1] != 0) {
         *(int**)(list[1]) = node;
         list[2]++;
+        _ReadWriteBarrier();
         list[1] = (int)node;
     } else {
         list[2]++;

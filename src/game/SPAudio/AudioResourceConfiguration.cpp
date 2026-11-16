@@ -348,10 +348,11 @@ bool RC::GetPropertyAsKey(u32 key, Key* out)
 // @ 0x00a17520
 bool RC::GetPropertyAsKeyInstance(u32 key, u32* out)
 {
-    Variant const* v;
-    if (GetProperty(key, v) && v->mTypeId == 0x20) {
-        const u32* src = (v->mFlags & 0x30) ? (const u32*)v->p : (const u32*)v;
-        *out = *src;
+    void* v;
+    if (((bool(__thiscall*)(void*, uint32_t, void**))(*(void***)this)[8])(this, key, &v)
+        && *(uint16_t*)((char*)v + 0x12) == 0x20) {
+        void* src = (*(uint8_t*)((char*)v + 0x10) & 0x30) ? *(void**)v : v;
+        *out = *(uint32_t*)src;
         return true;
     }
     return false;

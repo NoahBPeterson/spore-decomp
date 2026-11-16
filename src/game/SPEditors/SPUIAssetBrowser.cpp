@@ -2484,6 +2484,7 @@ Elem* cSPUIAssetBrowser::FUN_006461d0(Elem* first, Elem* last, Elem* dst)
         dst->a = last->a;
         dst->b = last->b;
         dst->c = last->c;
+        _ReadWriteBarrier();
         cRefCountA* newp = last->p;
         cRefCountA* oldp = dst->p;
         if (newp != oldp) {

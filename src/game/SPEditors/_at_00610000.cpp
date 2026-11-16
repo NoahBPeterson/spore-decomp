@@ -2,6 +2,7 @@
 // Object file: SPEditors/_at_00610000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "EA/UTFWin/CustomWinProc.h"
 #include "EA/UTFWin/ISerializable.h"
@@ -866,6 +867,7 @@ void PaintSystem::Dtor()
   volatile void** const vt = (volatile void**)this;
   vt[0] = V_13fcac4;
   ((volatile void**)this)[0x0e] = V_13fcabc;
+  _ReadWriteBarrier();
   if ((m70c - m70a) > 1) {
     if (m70a) EASTL_allocator_deallocate(m70a);
   }

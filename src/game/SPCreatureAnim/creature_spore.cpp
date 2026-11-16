@@ -2,6 +2,7 @@
 // Object file: SPCreatureAnim/creature_spore.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include <stdlib.h>
 #include <math.h>
@@ -2128,6 +2129,7 @@ void creature_effect_s009c_8a90::Clear(bool bAll)
     ref78 = 0;
     d7c = 0xffffffff;
     local_pos.x = 0.0f;
+    _ReadWriteBarrier();
     local_pos.y = 0.0f;
     local_pos.z = 0.0f;
     local_rot.x = 0.0f;

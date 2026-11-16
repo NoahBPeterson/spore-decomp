@@ -2,6 +2,7 @@
 // Object file: Spui/SPUIShader.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 
 // unnamed retail callees and globals (address in the comment)
@@ -617,6 +618,7 @@ void LayerWinProc::SetImage(unsigned i, void* r)
 int LayerWinProc::ReleaseRef()
 {
   int old = mRefCount;
+  _ReadWriteBarrier();
   int n = old - 1;
   mRefCount = n;
   if (n == 0 && g_layerFlag0d) DestroyLayerProc(this);

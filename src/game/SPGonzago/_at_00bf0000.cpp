@@ -3068,6 +3068,7 @@ void** StarTreeOps::MapInsert4(void** outIt, void* anchor, int* value, char hint
     RBTreeInsert(node, anchor, (char*)this + 4, side);
     ++*(int*)((char*)this + 0x14);
     *outIt = node;
+    _ReadWriteBarrier();
     return outIt;
 }
 

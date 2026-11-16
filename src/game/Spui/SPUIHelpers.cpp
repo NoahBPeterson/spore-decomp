@@ -2608,6 +2608,7 @@ void FUN_00808190(W_s0080_7840* w, float a, float b)
     }
     t->f14 = a;
     t->f18 = b;
+    _ReadWriteBarrier();
     w->v98();
 }
 
@@ -2647,6 +2648,7 @@ void FUN_008082f0(W_s0080_7840* w, float a, float b)
     }
     t->fC = a;
     t->f10 = b;
+    _ReadWriteBarrier();
     w->v98();
 }
 

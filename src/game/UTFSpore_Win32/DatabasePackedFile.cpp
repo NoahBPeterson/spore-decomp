@@ -2346,6 +2346,7 @@ bool PFIndexModifiable_s008d_aff0::Write(void** ppBuf, unsigned* pSize, unsigned
 void PFIndexModifiable_s008d_aff0::SetIsSaved()
 {
     HTNode** pb = mItemsMap.mpBucketArray;
+    _ReadWriteBarrier();
     HTNode* p = *pb;
     if (p == 0) {
         ++pb;

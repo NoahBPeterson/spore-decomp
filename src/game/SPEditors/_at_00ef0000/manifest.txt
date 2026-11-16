@@ -80,3 +80,4 @@
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00efc8f0@@YAHXZ  00efc8f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef7950@@YIXPAD@Z  00ef7950  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00efc530@@YA_NPAH@Z  00efc530  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ??0cScenarioTutorials@@QAE@XZ  00ef9d90  /O2 /MD /Gy /TP /Isrc/game/include

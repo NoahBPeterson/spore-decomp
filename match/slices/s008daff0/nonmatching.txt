@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 008daff0 514 complete: PFIndexModifiable::Write (record/stream writer); header/record serialisation matches retail; difftest PASS (548 valid @1200 inputs, 99.0% cov)
-008db230 73 complete: PFIndexModifiable::SetIsSaved (hashtable bucket walk); register allocation of (bucketArray,bucketCount) swapped vs retail
 008db280 135 complete: PFIndexModifiable::CheckFilesInRange (bucket-array scan); range condition corrected (mnPosition-a vs b-a); difftest PASS (350 valid, 100.0% cov)
 008db310 94 complete: PFIndexModifiable::CheckFilesInSizeRange (bucket-array scan); loop/register allocation differs
 008db450 292 complete: HT::InsertUnique (hash-map insert w/ growth); returns out (void*), rehash flag=byte[0]/count=[1]; difftest PASS (366 valid @800 inputs, 92.0% cov)

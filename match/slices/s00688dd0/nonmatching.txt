@@ -3,7 +3,7 @@
 00688ed0  28  indexed accessor (32 closure: `ret 4`, so it is a fastcall-curried thunk taking only the index): retail computes (cap-begin)>>4 into edx and only then loads begin into ecx from [ecx+4]; cl 15 always materialises begin first and keeps the count in ecx, so this slot is never edx. Tried: member call on `this`, array-index vs char-ptr difference vs /16, int vs uint32 count, if/else vs early return, hoisting begin/end into locals, `<<4` vs `*16`. If the real owner object (the +4 field) differs, cl may pick edx itself.
 00688f00  66  wide-string concat ctor: EASTL append/EH schedule
 00689510  41  x87 control-word write: block layout (mode==3 branch placement); equiv: PASS (1200 inputs, 100% coverage)
-00689590  5  x87 control-word read: missing movzx zero-extension; equiv: PASS (1200 inputs, 100% coverage)
+00689590  5  x87 control-word read: missing movzx zero-extension; equiv: PASS (1200 inputs, 100% coverage) [R42 2026-11-15: three guarded C++ spellings (second 0xffff mask, named-local mask, genuine ushort chain) all fold the movzx under vc9sp1 /O2; fnstcw has no MSVC intrinsic so any byte-exact form keeps __asm and needs the asm-override lane (X87RoundToInt64 precedent) or a vetted match/include helper; RTM-vs-SP1 A/B lead preserved in run R42 a6]
 00689810  80  derived destructor: base dtor inlining + vptr store order; equiv: UNSUPPORTED (our code stores address of its own vtable; map that symbol)
 00689b00  8  setter: compiler reuses one epilogue instead of duplicating it
 00689dc0  160  recursive rbtree walk: loop/register layout
