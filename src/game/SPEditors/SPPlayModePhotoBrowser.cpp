@@ -1740,30 +1740,32 @@ bool cSPPlayModePhotoBrowser_s0063_2780::LoadPhotoThumb(uint32_t idx)
 // @ 0x00633230
 bool cSPPlayModePhotoBrowser_s0063_2780::MarkPhotoTypeForGuid(uint32_t guid, int kind, ResourceKey key)
 {
-    uint32_t bits = 0;
-    ResourceKey k = { 0, 0, 0 };
+    PhotoTypeInfo info = { 0, { 0, 0, 0 } };
+    cSPPlayModePhotoBrowser_s0063_2780* volatile owner = this;
     PhotoTypeMapIterator found = mPhotoTypeMap.find(guid);
+    cSPPlayModePhotoBrowser_s0063_2780* lookupOwner = owner;
+    _ReadWriteBarrier();
     RBNode* it = found.mpNode;
-    if (it != (RBNode*)&mPhotoTypeMap.mAnchor) {
-        bits = it->value.bits;
-        k.instance = it->value.key[0];
-        k.type = it->value.key[1];
-        k.group = it->value.key[2];
+    if (it != (RBNode*)&lookupOwner->mPhotoTypeMap.mAnchor) {
+        info.bits = it->value.bits;
+        info.key[0] = it->value.key[0];
+        info.key[1] = it->value.key[1];
+        uint32_t group = it->value.key[2];
+        _ReadWriteBarrier();
+        info.key[2] = group;
     }
     switch (kind) {
     case 0x417b3a7:
-        bits |= 1;
+        info.bits |= 1;
         break;
     case 0x417b3bc:
-        k = key;
-        bits |= 2;
+        info.key[0] = key.instance;
+        info.key[1] = key.type;
+        info.key[2] = key.group;
+        info.bits |= 2;
         break;
     }
-    PhotoTypeInfo& slot = mPhotoTypeMap[guid];
-    slot.bits = bits;
-    slot.key[0] = k.instance;
-    slot.key[1] = k.type;
-    slot.key[2] = k.group;
+    mPhotoTypeMap[guid] = info;
     return true;
 }
 
