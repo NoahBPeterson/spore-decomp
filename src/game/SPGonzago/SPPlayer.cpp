@@ -1789,6 +1789,32 @@ bool SP::cPlayer_s00c7_7380::HasCheatFlagEx(const uint32_t* pKey)
 // ---- items of slice s00c77380 end
 
 // ---- items of slice s00c7a1f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cFlagPair {
+    uint32_t mKey;         // +0x00
+    uint8_t  mValue;       // +0x04
+};
+struct cMapNode {
+    cMapNode*  mLeft;      // +0x00
+    cMapNode*  mRight;     // +0x04
+    cMapNode*  mParent;    // +0x08
+    uint8_t    mPad0c[0x04]; // +0x0c
+    uint32_t   mKey;       // +0x10
+    uint32_t   mValue;     // +0x14
+};
+struct cTree {
+    uint8_t    mPad00[0x04]; // +0x00
+    cMapNode*  mEnd;       // +0x04
+    uint8_t    mPad08[0x04]; // +0x08
+    cMapNode*  mRoot;      // +0x0c
+
+    // 0x00c7a8f0
+    uint32_t* MapEntry(const uint32_t& key);
+    // 0x00abff10  the insert-or-assign helper is a __thiscall method of the tree itself
+    // (`ret 0x10`: it pops its four arguments), so it is a member and not a free function.
+    uint32_t* InsertOrAssign(uint32_t* hintOut, cMapNode* hint, uint32_t* query, uint32_t flag);
+    // 0x00e5c780
+    cMapNode** Find(cMapNode** out, const uint32_t* key);
+};
 struct cTimerElem {                    // eastl::pair<unsigned, SP::cGonzagoTimer>, stride 0x28
     uint32_t mKey;                     // +0x00
     uint32_t mPad04;                   // +0x04
@@ -1805,6 +1831,118 @@ struct cTimerElem {                    // eastl::pair<unsigned, SP::cGonzagoTime
     // cGonzagoTimer copy constructor (constructs this from src); __thiscall.
     void Construct(const cTimerElem* src);                              // 0x00c76f10
 };
+struct cNatElem {                      // 0x14 bytes
+    uint32_t mId;                      // +0x00
+    uint8_t  mPad04[0x10];             // +0x04
+};
+uint8_t* eastlCopyImpl(void* dst, void* src, void* last);                                 // 0x00c771e0
+struct cGonzagoTimer_s00c7_a1f0 { void Dtor(); };                                                     // 0x00b638b0
+struct cNatTarget {
+    void AssignElement(void* elem);        // 0x00db5b30
+    void ErasePair(void* begin, void* end); // 0x00b48e40
+};
+struct cStarRecordRefView {                                                              // SP::cStarRecordRef
+    int32_t  GetCommContext();                                                             // 0x00ce6950
+    void*    SortBanners();                                                                // 0x00b8de30
+    uint8_t  mPad08[0x68];                                                                 // +0x08
+    uint32_t mId;                                                                          // +0x70
+};
+struct cAvatarHost { void* GetAvatar(); };                                                 // 0x00b1fdb0
+struct cSPTimerView { uint64_t GetElapsedTime(); };                                       // 0x00bc3190
+void*    GetSpaceCombatTuning_s00c7_a1f0();                                                          // 0x01029940
+struct cTuningView { int32_t GetCaptureDecayTimeS(); };                                   // 0x01029c80
+void*    StarManager(uint32_t handle);                                                    // 0x00b3d2a0
+int32_t  BannerListFun(void* bannerList, uint32_t handle);                                // 0x00ba6d80
+void     FUN_00c8c9d0(int32_t value);                                                     // 0x00c8c9d0
+namespace SP {
+struct cPlayer_s00c7_a1f0 {
+    uint8_t    mPad0000[0x113c];       // +0x0000
+    cNatElem*  mNatTable;              // +0x113c  (0x14-stride element table)
+
+    uint8_t    mPad1140[0x11d8 - 0x1140]; // +0x1140
+    cFlagPair* mFlagMapRoot;           // +0x11d8
+    cFlagPair* mFlagMapEnd;            // +0x11dc
+    uint8_t    mPad11e0[0x11ec - 0x11e0]; // +0x11e0
+    uint8_t    mFlagCompareFlag;       // +0x11ec
+
+    uint8_t    mPad11ed[0x1214 - 0x11ed]; // +0x11ed
+    cTimerElem* mCaptureBegin;         // +0x1214
+    cTimerElem* mCaptureEnd;           // +0x1218
+
+    uint8_t    mPad121c[0x1228 - 0x121c]; // +0x121c
+    cTree      mCMap;                  // +0x1228
+
+    // 0x00c7a6c0  map flag bit 0
+    bool GetFlag0(uint32_t key);
+    // 0x00c7a710  map flag bit 1
+    bool GetFlag1(uint32_t key);
+    // 0x00c7a770  map flag bit 2
+    bool GetFlag2(uint32_t key);
+    // 0x00c7a7d0  map flag bit 3
+    bool GetFlag3(uint32_t key);
+    // 0x00c7a830  map flag bit 4
+    bool GetFlag4(uint32_t key);
+    // 0x00c7a890  map flag bit 5
+    bool GetFlag5(uint32_t key);
+    // 0x00c7ad00  nat-table dispatch
+    void NatOp(uint32_t index, void* arg);
+    // 0x00c7ad40  remove a star from the capture progress list
+    void RemoveStarFromPlayerCaptureProgressList(cStarRecordRefView* star);  // 0x00c7ad40 (SP::cPlayer::RemoveStarFromPlayerCaptureProgressList)
+    // 0x00c7ae80  ensure the embassy entry for a star
+    void FUN_00c7ae80(cStarRecordRefView* star);
+    // 0x00c7ada0  decay the capture progress list
+    void UpdatePlayerCaptureProgressDecay();
+};
+}
+namespace SP {
+void cPlayer_s00c7_a1f0::RemoveStarFromPlayerCaptureProgressList(cStarRecordRefView* star)
+{
+    cTimerElem* begin = mCaptureBegin;
+    cTimerElem* end   = mCaptureEnd;
+    if (begin == end) {
+        return;
+    }
+    uint32_t id = *(uint32_t*)((char*)star + 0x70);
+    do {
+        if (begin->mKey == id) {
+            goto found;
+        }
+        begin = (cTimerElem*)((char*)begin + 0x28);
+    } while (begin != end);
+    return;
+found:
+    if ((cTimerElem*)((char*)begin + 0x28) < mCaptureEnd) {
+        eastlCopyImpl((char*)begin + 0x28, mCaptureEnd, begin);
+    }
+    mCaptureEnd = (cTimerElem*)((char*)mCaptureEnd - 0x28);
+    ((cGonzagoTimer_s00c7_a1f0*)((char*)mCaptureEnd + 8))->Dtor();
+}
+}
+void SP::cPlayer_s00c7_a1f0::UpdatePlayerCaptureProgressDecay()
+{
+    cTimerElem* begin = mCaptureBegin;
+    if (begin == mCaptureEnd) {
+        return;
+    }
+    do {
+        cSPTimerView* timer = (cSPTimerView*)((char*)begin + 8);
+        uint64_t elapsed = timer->GetElapsedTime();
+        cTuningView* tuning = (cTuningView*)GetSpaceCombatTuning_s00c7_a1f0();
+        int32_t  decayTime = tuning->GetCaptureDecayTimeS();
+        float    seconds = (float)(int64_t)elapsed * 0.001f;
+        if (seconds <= (float)decayTime) {
+            return;
+        }
+        uint32_t handle = begin->mKey;
+        int32_t  value  = BannerListFun(StarManager(handle), handle);
+        FUN_00c8c9d0(value);
+        if ((cTimerElem*)((char*)begin + 0x28) < mCaptureEnd) {
+            eastlCopyImpl((char*)begin + 0x28, mCaptureEnd, begin);
+        }
+        mCaptureEnd = (cTimerElem*)((char*)mCaptureEnd - 0x28);
+        ((cGonzagoTimer_s00c7_a1f0*)((char*)mCaptureEnd + 8))->Dtor();
+    } while (begin != mCaptureEnd);
+}
 void ReadInt32(void* reader, int* out, int count, int flags);          // 0x0093a780
 class IStreamNode {
 public:
@@ -2464,6 +2602,31 @@ cSpacePlayerWarData* __thiscall cSpacePlayerWarData::ctor(const cSpacePlayerWarD
     mPlayerCaptured = src.mPlayerCaptured;
     mEnemyCaptured = src.mEnemyCaptured;
     return this;
+}
+
+// @ 0x00c77020
+CSubList** __cdecl FUN_00c77020(CSubList** ppOut, CSubList* pSrcBegin, CSubList* pSrcEnd, CSubList* pDst, CSubList* pEnd)
+{
+    *ppOut = pDst;
+    for (; pSrcBegin != pSrcEnd; ++pSrcBegin) {
+        CSubList* pItem = *ppOut;
+        if (pItem != 0) {
+            U32 nCount = (U32)(pSrcBegin->mpEnd - pSrcBegin->mpBegin);
+            U32* pNew;
+            if (nCount != 0)
+                pNew = (U32*)operator_new(nCount * 4, g_szSimulator_s00c7_5e70, 0, 0, g_szAllocator, 0xd1u);
+            else
+                pNew = 0;
+            pItem->mpBegin = pNew;
+            pItem->mpEnd = pNew;
+            pItem->mpCap = pNew + nCount;
+            U32* pNewEnd;
+            FUN_00bdaa40_s00c7_5e70(&pNewEnd, pSrcBegin->mpBegin, pSrcBegin->mpEnd, pNew, pSrcBegin);
+            pItem->mpEnd = pNewEnd;
+        }
+        *ppOut += 1;
+    }
+    return ppOut;
 }
 
 // @ 0x00c770d0
@@ -3713,6 +3876,33 @@ void cPlayer::FUN_00c7a160(cPlayerInner* pObj)
     pObj->FUN_00bb9b00(0x10000, 1);
 }
 
+// @ 0x00c7a8f0
+uint32_t* cTree::MapEntry(const uint32_t& key)
+{
+    cMapNode* node  = mRoot;
+    cMapNode* end   = (cMapNode*)&mEnd;   // the end iterator is the anchor node's address
+    cMapNode* found = end;
+    while (node != 0) {
+        if (node->mKey < key) {
+            node = node->mLeft;
+        } else {
+            found = node;
+            node = node->mRight;
+        }
+    }
+    if (found != end) {
+        if (found->mKey == key)
+            return &found->mValue;
+    }
+    uint32_t query[3];
+    query[0] = key;
+    query[1] = 0;
+    query[2] = 0;
+    uint32_t flag = 0;
+    InsertOrAssign((uint32_t*)&found, found, query, flag);
+    return (uint32_t*)((char*)found + 0x14);
+}
+
 // @ 0x00c7a970
 void FUN_00c7a970(IStreamNode* stream, U32Vector* vec)
 {
@@ -3789,6 +3979,35 @@ haveBuffer:
     mpBegin = buffer;
     mpCapacity = (cTimerElem*)((char*)buffer + newCapacity * 0x28);
 }
+
+// @ 0x00c7ad00
+namespace SP {
+void cPlayer_s00c7_a1f0::NatOp(uint32_t index, void* arg)
+{
+    cNatTarget* target = (cNatTarget*)arg;
+    if (index <= 9) {
+        target->AssignElement(&mNatTable[index]);
+        return;
+    }
+    target->ErasePair(*(void**)arg, *(void**)((char*)arg + 4));
+}
+}  // namespace SP
+
+// @ 0x00c7ae80
+namespace SP {
+void cPlayer_s00c7_a1f0::FUN_00c7ae80(cStarRecordRefView* star)
+{
+    uint32_t ctx = (uint32_t)star->GetCommContext();
+    cMapNode* probe;
+    cMapNode** iter = mCMap.Find(&probe, &ctx);
+    if ((char*)*iter == (char*)&mCMap.mEnd) {
+        uint32_t key2 = (uint32_t)star->GetCommContext();
+        uint32_t* entry = mCMap.MapEntry(key2);
+        entry[1] = 0;
+        *entry = (uint32_t)((cAvatarHost*)star->SortBanners())->GetAvatar();
+    }
+}
+}  // namespace SP
 
 // @ 0x00c7b120
 namespace SP {

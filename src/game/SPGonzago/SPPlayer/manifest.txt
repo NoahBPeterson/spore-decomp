@@ -20,6 +20,7 @@
 ../src/game/SPGonzago/SPPlayer.cpp  ?Destroy@cEmbassyList@@QAEXPAU1@@Z  00c77b10  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?HasEntryInSet@cPlayer_s00c7_7380@SP@@QAE_NPBI@Z  00c77c50  /O2 /Ob2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?FUN_00c79f20@cPlayer@@QAEXPAVcPlayerInner@@@Z  00c79f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?NatOp@cPlayer_s00c7_a1f0@SP@@QAEXIPAX@Z  00c7ad00  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?SetWarFlag1@cPlayer_s00c7_b120@SP@@QAEXH@Z  00c7bb60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?SetWarFlag2@cPlayer_s00c7_b120@SP@@QAEXH@Z  00c7bb80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?SetWarFlag4@cPlayer_s00c7_b120@SP@@QAEXH@Z  00c7bba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
