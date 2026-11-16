@@ -24,3 +24,4 @@
 ../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?Insert@RelationshipInsertionTree@@QAE?AUIter@@PAURBNode@@PBURelationshipNodePayload@@_N@Z  00d03ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?GetRel@RelBook@@QAEMIIH@Z  00d00a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?GetRelLevel@RelBook@@QAEHIIH@Z  00d00a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPRelationshipSimulator.cpp  ?A14e0@RelWriter@@QAEXPAUISerializer@@@Z  00d014e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

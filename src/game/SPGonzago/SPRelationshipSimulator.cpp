@@ -552,15 +552,28 @@ RelData* RelBook::FindRel(RelTree* t, uint32_t a, uint32_t b)
 // @ 0x00d014e0
 void RelWriter::A14e0(ISerializer* ser)
 {
-    PutU32(ser, 0x301b5d9f);
-    PutU32(ser, (uint32_t)(mEnd - mBegin) >> 5);
+    IStream* __restrict holder = ser->GetStream();
+    uint32_t value = 0x301b5d9f;
+    void* raw = holder->GetRaw();
+    WriteUint32(raw, &value, 1, 0);
+
+    uint32_t count = (mEnd - mBegin) >> 5;
+    IStream* __restrict countHolder = ser->GetStream();
+    value = count;
+    raw = countHolder->GetRaw();
+    WriteUint32(raw, &value, 1, 0);
+
+    char* it = mBegin;
     char* end = mEnd;
-    for (char* it = mBegin; it != end; it += 0x20) {
-        PutU32(ser, *(uint32_t*)it);
+    for (; it != end; it += 0x20) {
+        IStream* __restrict itemHolder = ser->GetStream();
+        value = *(uint32_t*)it;
+        raw = itemHolder->GetRaw();
+        WriteUint32(raw, &value, 1, 0);
         WriteVarMap(ser, (RelTree*)(it + 4));
     }
-    cVarListSerializer vs((char*)this - 0xc, kVarListDescB, 0x1a80d26);
-    vs.Serialize(ser);
+    SP::cVarListSerializer serializer((char*)this - 0xc, (SP::cDataSerializerGeneric*)kVarListDescB, 0x1a80d26);
+    serializer.Serialize(*(SP::cIObjectDatabaseOStream*)ser);
 }
 
 // @ 0x00d01bb0
