@@ -195,6 +195,8 @@ void f_013c4c10() {
     if (g_169d2a8) ((V2*)g_169d2a8)->b();
 }
 
+void terra02_link_pad_ret() {}
+
 // @ 0x013C4F20
 void f_013c4f20() {
     int d = g_15821d4 - g_15821cc;
