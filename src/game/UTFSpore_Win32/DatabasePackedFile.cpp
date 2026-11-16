@@ -777,9 +777,17 @@ void __cdecl FUN_006bc0a0(void* self)
 void __cdecl FUN_006bc0f0(void* self)
 { (void)self; }
 
+class DatabasePackedFileV2 : public EA::ResourceMan::DatabasePackedFile {
+public:
+    virtual EA::ResourceMan::PFIndex* CreateIndex(int unused);
+};
+
 // @ 0x006bc130
-void __cdecl FUN_006bc130(void* self)
-{ (void)self; }
+EA::ResourceMan::PFIndex* DatabasePackedFileV2::CreateIndex(int unused)
+{
+    return new (mpAllocator, "Resource/PFIndexModifiable")
+        EA::ResourceMan::PFIndexModifiable(mpAllocator);
+}
 
 // @ 0x008d81a0
 void * EA::ResourceMan::DatabasePackedFile::AsInterface(EA::COM::InterfaceId nType)

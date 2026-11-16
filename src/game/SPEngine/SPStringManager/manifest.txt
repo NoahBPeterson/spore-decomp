@@ -8,3 +8,4 @@
 ../src/game/SPEngine/SPStringManager.cpp  ?insert@?$SPVector@E@SP@@QAEXPAEABE@Z  006b6e80  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
 ../src/game/SPEngine/SPStringManager.cpp  ?resize@?$SPVector@G@SP@@QAEXI@Z  006b7380  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
 ../src/game/SPEngine/SPStringManager.cpp  ?resize@?$SPVector@E@SP@@QAEXI@Z  006b73e0  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
+../src/game/SPEngine/SPStringManager.cpp  ?ReadByte@ByteStream@App@@QAEEXZ  006b6620  /O2 /MD /Gy /EHsc /GS- /TP /Isrc/game/include
