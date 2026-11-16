@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/xmltok.cpp -- migrated from slice(s) s00916960, s0090dd30, s0090d100, s009159b0, s00911480 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/xmltok.cpp -- migrated from slice(s) s00916960, s0090dd30, s0090d100, s009159b0, s00911480, s0090c240, s0090e9f0, s0090f980, s009108d0, s00911f60, s00912e90, s00913ca0, s00914b70 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/xmltok.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,22 +6,33 @@
 #include <stddef.h>
 #include <string.h>
 
+
+// ---- expat 2.0.1 configuration of Spore's xmltok.obj (winconfig.h plus the build defines; see expat/README.md) ----
+#define XML_STATIC
+#define XML_UNICODE
+#define XML_NS 1
+#define XML_DTD 1
+#define XML_CONTEXT_BYTES 1024
+#define BYTEORDER 1234
+#define HAVE_MEMMOVE
+#include "expat/expat_external.h"
+#include "expat/internal.h"
+// the module defines XmlInitUnknownEncoding(NS) itself with its own ENCODING stand-in; keep the header's prototypes out of the way
+#define XmlInitUnknownEncoding expat_XmlInitUnknownEncoding
+#define XmlInitUnknownEncodingNS expat_XmlInitUnknownEncodingNS
+#include "expat/xmltok.h"
+#undef XmlInitUnknownEncoding
+#undef XmlInitUnknownEncodingNS
+#include "expat/xmltok_impl.h"
+#include "expat/ascii.h"
+
 // unnamed retail callees and globals (address in the comment)
 extern const unsigned char namePages[256];      // 0x143b428
 extern const unsigned char nmstrtPages[256];    // 0x143b328
 extern const unsigned int  namingBitmap[];      // 0x143ae28
 
 // ---- items of slice s00911480 begin (TODO(rewrite): local stubs, replace by canonical classes)
-enum {
-  BT_NONXML, BT_MALFORM, BT_LT, BT_AMP, BT_RSQB, BT_LEAD2, BT_LEAD3, BT_LEAD4,
-  BT_TRAIL, BT_CR, BT_LF, BT_GT, BT_QUOT, BT_APOS, BT_EQUALS, BT_QUEST,
-  BT_EXCL, BT_SOL, BT_SEMI, BT_NUM, BT_LSQB, BT_S, BT_NMSTRT, BT_COLON,
-  BT_HEX, BT_DIGIT, BT_NAME, BT_MINUS, BT_OTHER, BT_NONASCII, BT_PERCNT,
-  BT_LPAR, BT_RPAR, BT_AST, BT_PLUS, BT_COMMA, BT_VERBAR
-};
-#define ENC_TYPE(enc, c) (((const unsigned char*)(enc))[0x4c + (unsigned char)(c)])
-#define UCS2_GET_NAMING(pages, hi, lo) \
-   (namingBitmap[((pages)[(unsigned char)(hi)] << 3) + (((unsigned char)(lo)) >> 5)] & (1u << (((unsigned char)(lo)) & 0x1F)))
+// @ 0x0090fcb0
 static int unicode_byte_type(char hi, char lo)   // 0x90fcb0
 {
   switch ((unsigned char)hi) {
@@ -39,64 +50,13 @@ static int unicode_byte_type(char hi, char lo)   // 0x90fcb0
   }
   return BT_NONASCII;
 }
-static int byteType(const void* enc, const char* p) {
-  if (p[1] == 0)
-    return ENC_TYPE(enc, p[0]);
-  return unicode_byte_type(p[1], p[0]);
-}
 // ---- items of slice s00911480 end
 
 // ---- items of slice s009159b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-#ifndef NULL
-#define NULL 0
-#endif
-#define PTRCALL
-#define PTRFASTCALL
-#define FASTCALL
-#define XMLCALL __cdecl
-typedef unsigned long XML_Size;
-enum {
-  ASCII_0 = 0x30, ASCII_9 = 0x39, ASCII_A = 0x41, ASCII_Z = 0x5A,
-  ASCII_a = 0x61, ASCII_d = 0x64, ASCII_e = 0x65, ASCII_g = 0x67, ASCII_i = 0x69, ASCII_l = 0x6C,
-  ASCII_m = 0x6D, ASCII_n = 0x6E, ASCII_o = 0x6F, ASCII_p = 0x70, ASCII_q = 0x71, ASCII_r = 0x72,
-  ASCII_s = 0x73, ASCII_t = 0x74, ASCII_u = 0x75, ASCII_v = 0x76, ASCII_y = 0x79, ASCII_z = 0x7A,
-  ASCII_c = 0x63,
-  ASCII_SPACE = 0x20, ASCII_AMP = 0x26, ASCII_APOS = 0x27, ASCII_GT = 0x3E, ASCII_LT = 0x3C,
-  ASCII_QUOT = 0x22, ASCII_MINUS = 0x2D, ASCII_PERIOD = 0x2E, ASCII_EQUALS = 0x3D, ASCII_UNDERSCORE = 0x5F
-};
 #define UTF8_cval1 0x00
 #define UTF8_cval2 0xc0
 #define UTF8_cval3 0xe0
 #define UTF8_cval4 0xf0
-struct position_s0091_59b0 { XML_Size lineNumber; XML_Size columnNumber; };
-typedef struct position_s0091_59b0 POSITION;
-typedef struct { const char *name; const char *valuePtr; const char *valueEnd; char normalized; } ATTRIBUTE;
-struct encoding_s0091_59b0;
-typedef struct encoding_s0091_59b0 ENCODING;
-typedef int (PTRCALL *SCANNER)(const ENCODING *, const char *, const char *, const char **);
-struct encoding_s0091_59b0 {
-  SCANNER scanners[4];
-  SCANNER literalScanners[2];
-  int (PTRCALL *sameName)(const ENCODING *, const char *, const char *);
-  int (PTRCALL *nameMatchesAscii)(const ENCODING *, const char *, const char *, const char *);
-  int (PTRFASTCALL *nameLength)(const ENCODING *, const char *);
-  const char *(PTRFASTCALL *skipS)(const ENCODING *, const char *);
-  int (PTRCALL *getAtts)(const ENCODING *enc, const char *ptr, int attsMax, ATTRIBUTE *atts);
-  int (PTRFASTCALL *charRefNumber)(const ENCODING *enc, const char *ptr);
-  int (PTRCALL *predefinedEntityName)(const ENCODING *, const char *, const char *);
-  void (PTRCALL *updatePosition)(const ENCODING *, const char *ptr, const char *end, POSITION *);
-  int (PTRCALL *isPublicId)(const ENCODING *enc, const char *ptr, const char *end, const char **badPtr);
-  void (PTRCALL *utf8Convert)(const ENCODING *enc, const char **fromP, const char *fromLim, char **toP, const char *toLim);
-  void (PTRCALL *utf16Convert)(const ENCODING *enc, const char **fromP, const char *fromLim, unsigned short **toP, const unsigned short *toLim);
-  int minBytesPerChar;
-  char isUtf8;
-  char isUtf16;
-};
-typedef int (XMLCALL *CONVERTER)(void *userData, const char *p);
-#define XmlUtf8Convert(enc, fromP, fromLim, toP, toLim) \
-  (((enc)->utf8Convert)(enc, fromP, fromLim, toP, toLim))
-#define XmlNameMatchesAscii(enc, ptr1, end1, ptr2) \
-  (((enc)->nameMatchesAscii)(enc, ptr1, end1, ptr2))
 struct normal_encoding {
   ENCODING enc;
   unsigned char type[256];
@@ -121,14 +81,7 @@ extern const struct normal_encoding utf8_encoding;     // 0x143b6a0
 extern const struct normal_encoding latin1_encoding;   // 0x143bc60
 #define UCS2_GET_NAMING_s0091_59b0(pages, hi, lo) \
    (namingBitmap[((pages)[hi] << 3) + ((lo) >> 5)] & (1 << ((lo) & 0x1F)))
-#define MINBPC(enc) 2
-#define BYTE_TYPE(enc, p) \
-  ((p)[0] == 0 \
-   ? ((const struct normal_encoding *)(enc))->type[(unsigned char)(p)[1]] \
-   : unicode_byte_type((p)[0], (p)[1]))
-#define BYTE_TO_ASCII(enc, p) ((p)[0] == 0 ? (p)[1] : -1)
-#define CHAR_MATCHES(enc, p, c) ((p)[0] == 0 && (p)[1] == c)
-extern void PTRCALL normal_updatePosition(const ENCODING *enc, const char *ptr, const char *end, POSITION *pos); // 0x90f9b0
+static void PTRCALL normal_updatePosition(const ENCODING *enc, const char *ptr, const char *end, POSITION *pos); // 0x90f9b0 (defined below, with the normal_ instantiation)
 static int toAscii(const ENCODING *enc, const char *ptr, const char *end)
 {
   char buf[1];
@@ -1805,475 +1758,6 @@ int normalScanPast(NormalScanner* s, const byte* cur, const byte* end, unsigned 
     return -1;
 }
 
-// @ 0x00911ae0
-static int little2_scanPercent(const void* enc, const char* p, const char* e, const char** nextTokPtr)
-{
-  int t;
-  if (p == e)
-    return -22;
-  t = byteType(enc, p);
-  switch (t) {
-  case BT_LEAD2:
-    if (e - p < 2) return -2;
-    break;
-  case BT_LEAD3:
-    if (e - p < 3) return -2;
-    break;
-  case BT_LEAD4:
-    if (e - p < 4) return -2;
-    break;
-  case BT_TRAIL:
-  case BT_GT: case BT_QUOT: case BT_APOS: case BT_EQUALS: case BT_QUEST:
-  case BT_EXCL: case BT_SOL: case BT_SEMI: case BT_NUM: case BT_LSQB:
-  case BT_COLON: case BT_DIGIT: case BT_NAME: case BT_MINUS: case BT_OTHER:
-    break;
-  case BT_CR:
-  case BT_LF:
-  case BT_S:
-  case BT_PERCNT:
-    *nextTokPtr = p;
-    return 22;
-  case BT_NMSTRT:
-  case BT_HEX:
-    goto consumed;
-  case BT_NONASCII:
-    if (UCS2_GET_NAMING(nmstrtPages, p[1], p[0]))
-      goto consumed;
-    break;
-  default:
-    break;
-  }
-  *nextTokPtr = p;
-  return 0;
-
-consumed:
-  p += 2;
-  if (p == e)
-    return -1;
-  for (;;) {
-    t = byteType(enc, p);
-    switch (t) {
-    case BT_LEAD2:
-      if (e - p < 2) return -2;
-      goto invalid;
-    case BT_LEAD3:
-      if (e - p < 3) return -2;
-      goto invalid;
-    case BT_LEAD4:
-      if (e - p < 4) return -2;
-      goto invalid;
-    case BT_SEMI:
-      *nextTokPtr = p + 2;
-      return 28;
-    case BT_NMSTRT:
-    case BT_HEX:
-    case BT_DIGIT:
-    case BT_NAME:
-    case BT_MINUS:
-      break;
-    case BT_NONASCII:
-      if (!UCS2_GET_NAMING(namePages, p[1], p[0]))
-        goto invalid;
-      break;
-    default:
-      goto invalid;
-    }
-    p += 2;
-    if (p == e)
-      return -1;
-  }
-invalid:
-  *nextTokPtr = p;
-  return 0;
-}
-
-// @ 0x00911c90
-static int little2_scanPoundName(const void* enc, const char* p, const char* e, const char** nextTokPtr)
-{
-  int t;
-  if (p == e)
-    return -1;
-  t = byteType(enc, p);
-  switch (t) {
-  case BT_DIGIT: case BT_NAME: case BT_MINUS: case BT_NMSTRT: case BT_HEX:
-    break;
-  case BT_NONASCII:
-    if (!UCS2_GET_NAMING(nmstrtPages, p[1], p[0]))
-      goto notName;
-    break;
-  case BT_LEAD2:
-    if (e - p < 2) return -2;
-    goto notName;
-  case BT_LEAD3:
-    if (e - p < 3) return -2;
-    goto notName;
-  case BT_LEAD4:
-    if (e - p < 4) return -2;
-    goto notName;
-  default:
-    goto notName;
-  }
-  for (;;) {
-    p += 2;
-    if (p == e)
-      return -20;                               /* -XML_TOK_POUND_NAME */
-    t = byteType(enc, p);
-    switch (t) {
-    case BT_DIGIT: case BT_NAME: case BT_MINUS: case BT_NMSTRT: case BT_HEX:
-      break;
-    case BT_NONASCII:
-      if (!UCS2_GET_NAMING(namePages, p[1], p[0]))
-        goto notName;
-      break;
-    case BT_LEAD2:
-      if (e - p < 2) return -2;
-      goto notName;
-    case BT_LEAD3:
-      if (e - p < 3) return -2;
-      goto notName;
-    case BT_LEAD4:
-      if (e - p < 4) return -2;
-      goto notName;
-    default:
-      goto notName;
-    }
-  }
-
-notName:
-  *nextTokPtr = p;
-  return 20;                                    /* XML_TOK_POUND_NAME */
-}
-
-// @ 0x00911e40
-static int little2_scanLit(int open, const void* enc, const char* p, const char* e, const char** nextTokPtr)
-{
-  while (p != e) {
-    int t = byteType(enc, p);
-    switch (t) {
-    case BT_LEAD2:
-      if (e - p < 2) return -2;
-      goto invalid;
-    case BT_LEAD3:
-      if (e - p < 3) return -2;
-      goto invalid;
-    case BT_LEAD4:
-      if (e - p < 4) return -2;
-      goto invalid;
-    case BT_QUOT:
-    case BT_APOS:
-      p += 2;
-      if (t != open)
-        break;
-      if (p == e)
-        return -27;                             /* -XML_TOK_LITERAL */
-      *nextTokPtr = p;
-      switch (byteType(enc, p)) {
-      case BT_S: case BT_CR: case BT_LF:
-      case BT_GT: case BT_PERCNT: case BT_LSQB:
-        return 27;                              /* XML_TOK_OPEN_LIT */
-      default:
-        return 0;
-      }
-    case BT_LF:
-    case BT_CR:
-    case BT_GT:
-    case BT_PERCNT:
-    case BT_LSQB:
-      goto invalid;
-    default:
-      p += 2;
-      break;
-    }
-  }
-  return -27;
-
-invalid:
-  *nextTokPtr = p;
-  return 0;
-}
-
-// @ 0x009159b0
-int big2_getAtts(const ENCODING *enc, const char *ptr, int attsMax, ATTRIBUTE *atts)
-{
-  enum { other, inName, inValue } state = inName;
-  int nAtts = 0;
-  int open = 0;
-
-  for (ptr += MINBPC(enc);; ptr += MINBPC(enc)) {
-    switch (BYTE_TYPE(enc, ptr)) {
-#define START_NAME \
-  if (state == other) { \
-    if (nAtts < attsMax) { \
-      atts[nAtts].name = ptr; \
-      atts[nAtts].normalized = 1; \
-    } \
-    state = inName; \
-  }
-#define LEAD_CASE(n) \
-    case BT_LEAD ## n: START_NAME ptr += (n - MINBPC(enc)); break;
-    LEAD_CASE(2) LEAD_CASE(3) LEAD_CASE(4)
-#undef LEAD_CASE
-    case BT_NONASCII:
-    case BT_NMSTRT:
-    case BT_HEX:
-      START_NAME
-      break;
-#undef START_NAME
-    case BT_QUOT:
-      if (state != inValue) {
-        if (nAtts < attsMax)
-          atts[nAtts].valuePtr = ptr + MINBPC(enc);
-        state = inValue;
-        open = BT_QUOT;
-      }
-      else if (open == BT_QUOT) {
-        state = other;
-        if (nAtts < attsMax)
-          atts[nAtts].valueEnd = ptr;
-        nAtts++;
-      }
-      break;
-    case BT_APOS:
-      if (state != inValue) {
-        if (nAtts < attsMax)
-          atts[nAtts].valuePtr = ptr + MINBPC(enc);
-        state = inValue;
-        open = BT_APOS;
-      }
-      else if (open == BT_APOS) {
-        state = other;
-        if (nAtts < attsMax)
-          atts[nAtts].valueEnd = ptr;
-        nAtts++;
-      }
-      break;
-    case BT_AMP:
-      if (nAtts < attsMax)
-        atts[nAtts].normalized = 0;
-      break;
-    case BT_S:
-      if (state == inName)
-        state = other;
-      else if (state == inValue
-               && nAtts < attsMax
-               && atts[nAtts].normalized
-               && (ptr == atts[nAtts].valuePtr
-                   || BYTE_TO_ASCII(enc, ptr) != ASCII_SPACE
-                   || BYTE_TO_ASCII(enc, ptr + MINBPC(enc)) == ASCII_SPACE
-                   || BYTE_TYPE(enc, ptr + MINBPC(enc)) == open))
-        atts[nAtts].normalized = 0;
-      break;
-    case BT_CR: case BT_LF:
-      if (state == inName)
-        state = other;
-      else if (state == inValue && nAtts < attsMax)
-        atts[nAtts].normalized = 0;
-      break;
-    case BT_GT:
-    case BT_SOL:
-      if (state != inValue)
-        return nAtts;
-      break;
-    default:
-      break;
-    }
-  }
-}
-
-// @ 0x00915c50
-int big2_predefinedEntityName(const ENCODING *enc, const char *ptr, const char *end)
-{
-  switch ((end - ptr)/MINBPC(enc)) {
-  case 2:
-    if (CHAR_MATCHES(enc, ptr + MINBPC(enc), ASCII_t)) {
-      switch (BYTE_TO_ASCII(enc, ptr)) {
-      case ASCII_l:
-        return ASCII_LT;
-      case ASCII_g:
-        return ASCII_GT;
-      }
-    }
-    break;
-  case 3:
-    if (CHAR_MATCHES(enc, ptr, ASCII_a)) {
-      ptr += MINBPC(enc);
-      if (CHAR_MATCHES(enc, ptr, ASCII_m)) {
-        ptr += MINBPC(enc);
-        if (CHAR_MATCHES(enc, ptr, ASCII_p))
-          return ASCII_AMP;
-      }
-    }
-    break;
-  case 4:
-    switch (BYTE_TO_ASCII(enc, ptr)) {
-    case ASCII_q:
-      ptr += MINBPC(enc);
-      if (CHAR_MATCHES(enc, ptr, ASCII_u)) {
-        ptr += MINBPC(enc);
-        if (CHAR_MATCHES(enc, ptr, ASCII_o)) {
-          ptr += MINBPC(enc);
-          if (CHAR_MATCHES(enc, ptr, ASCII_t))
-            return ASCII_QUOT;
-        }
-      }
-      break;
-    case ASCII_a:
-      ptr += MINBPC(enc);
-      if (CHAR_MATCHES(enc, ptr, ASCII_p)) {
-        ptr += MINBPC(enc);
-        if (CHAR_MATCHES(enc, ptr, ASCII_o)) {
-          ptr += MINBPC(enc);
-          if (CHAR_MATCHES(enc, ptr, ASCII_s))
-            return ASCII_APOS;
-        }
-      }
-      break;
-    }
-  }
-  return 0;
-}
-
-// @ 0x00915d70
-int big2_sameName(const ENCODING *enc, const char *ptr1, const char *ptr2)
-{
-  for (;;) {
-    switch (BYTE_TYPE(enc, ptr1)) {
-#define LEAD_CASE(n) \
-    case BT_LEAD ## n: \
-      if (*ptr1++ != *ptr2++) \
-        return 0;
-    LEAD_CASE(4) LEAD_CASE(3) LEAD_CASE(2)
-#undef LEAD_CASE
-      /* fall through */
-      if (*ptr1++ != *ptr2++)
-        return 0;
-      break;
-    case BT_NONASCII:
-    case BT_NMSTRT:
-    case BT_COLON:
-    case BT_HEX:
-    case BT_DIGIT:
-    case BT_NAME:
-    case BT_MINUS:
-      if (*ptr2++ != *ptr1++)
-        return 0;
-      if (MINBPC(enc) > 1) {
-        if (*ptr2++ != *ptr1++)
-          return 0;
-        if (MINBPC(enc) > 2) {
-          if (*ptr2++ != *ptr1++)
-            return 0;
-          if (MINBPC(enc) > 3) {
-            if (*ptr2++ != *ptr1++)
-              return 0;
-          }
-        }
-      }
-      break;
-    default:
-      if (MINBPC(enc) == 1 && *ptr1 == *ptr2)
-        return 1;
-      switch (BYTE_TYPE(enc, ptr2)) {
-      case BT_LEAD2:
-      case BT_LEAD3:
-      case BT_LEAD4:
-      case BT_NONASCII:
-      case BT_NMSTRT:
-      case BT_COLON:
-      case BT_HEX:
-      case BT_DIGIT:
-      case BT_NAME:
-      case BT_MINUS:
-        return 0;
-      default:
-        return 1;
-      }
-    }
-  }
-}
-
-// @ 0x00915e90
-int big2_nameMatchesAscii(const ENCODING *enc, const char *ptr1, const char *end1, const char *ptr2)
-{
-  for (; *ptr2; ptr1 += MINBPC(enc), ptr2++) {
-    if (ptr1 == end1)
-      return 0;
-    if (!CHAR_MATCHES(enc, ptr1, *ptr2))
-      return 0;
-  }
-  return ptr1 == end1;
-}
-
-// @ 0x00915ed0
-int big2_nameLength(const ENCODING *enc, const char *ptr)
-{
-  const char *start = ptr;
-  for (;;) {
-    switch (BYTE_TYPE(enc, ptr)) {
-#define LEAD_CASE(n) \
-    case BT_LEAD ## n: ptr += n; break;
-    LEAD_CASE(2) LEAD_CASE(3) LEAD_CASE(4)
-#undef LEAD_CASE
-    case BT_NONASCII:
-    case BT_NMSTRT:
-    case BT_COLON:
-    case BT_HEX:
-    case BT_DIGIT:
-    case BT_NAME:
-    case BT_MINUS:
-      ptr += MINBPC(enc);
-      break;
-    default:
-      return (int)(ptr - start);
-    }
-  }
-}
-
-// @ 0x00915f60
-const char *big2_skipS(const ENCODING *enc, const char *ptr)
-{
-  for (;;) {
-    switch (BYTE_TYPE(enc, ptr)) {
-    case BT_LF:
-    case BT_CR:
-    case BT_S:
-      ptr += MINBPC(enc);
-      break;
-    default:
-      return ptr;
-    }
-  }
-}
-
-// @ 0x00915fb0
-void big2_updatePosition(const ENCODING *enc, const char *ptr, const char *end, POSITION *pos)
-{
-  while (ptr != end) {
-    switch (BYTE_TYPE(enc, ptr)) {
-#define LEAD_CASE(n) \
-    case BT_LEAD ## n: ptr += n; break;
-    LEAD_CASE(2) LEAD_CASE(3) LEAD_CASE(4)
-#undef LEAD_CASE
-    case BT_LF:
-      pos->columnNumber = (XML_Size)-1;
-      pos->lineNumber++;
-      ptr += MINBPC(enc);
-      break;
-    case BT_CR:
-      pos->lineNumber++;
-      ptr += MINBPC(enc);
-      if (ptr != end && BYTE_TYPE(enc, ptr) == BT_LF)
-        ptr += MINBPC(enc);
-      pos->columnNumber = (XML_Size)-1;
-      break;
-    default:
-      ptr += MINBPC(enc);
-      break;
-    }
-    pos->columnNumber++;
-  }
-}
-
 // @ 0x009160a0
 static void PTRCALL initUpdatePosition(const ENCODING *enc, const char *ptr, const char *end, POSITION *pos)
 {
@@ -2955,3 +2439,442 @@ int PTRFASTCALL unknown_charRefNumber_utf16(const ENCODING_s0091_6960 *enc, cons
   }
   return checkCharRefNumber_s0091_6960(result);
 }
+
+// ---- expat 2.0.1 xmltok.c: xmltok_impl.c instantiated for the normal, little2 and big2 encodings ----
+// xmltok.c itself is not included: the module already carries its own versions of the other xmltok.c functions.
+#ifdef XML_DTD
+#define IGNORE_SECTION_TOK_VTABLE , PREFIX(ignoreSectionTok)
+#else
+#define IGNORE_SECTION_TOK_VTABLE /* as nothing */
+#endif
+
+#define VTABLE1 \
+  { PREFIX(prologTok), PREFIX(contentTok), \
+    PREFIX(cdataSectionTok) IGNORE_SECTION_TOK_VTABLE }, \
+  { PREFIX(attributeValueTok), PREFIX(entityValueTok) }, \
+  PREFIX(sameName), \
+  PREFIX(nameMatchesAscii), \
+  PREFIX(nameLength), \
+  PREFIX(skipS), \
+  PREFIX(getAtts), \
+  PREFIX(charRefNumber), \
+  PREFIX(predefinedEntityName), \
+  PREFIX(updatePosition), \
+  PREFIX(isPublicId)
+
+#define VTABLE VTABLE1, PREFIX(toUtf8), PREFIX(toUtf16)
+
+#define UCS2_GET_NAMING(pages, hi, lo) \
+   (namingBitmap[(pages[hi] << 3) + ((lo) >> 5)] & (1 << ((lo) & 0x1F)))
+
+static int FASTCALL checkCharRefNumber(int);   // defined earlier in this file
+
+#define AS_NORMAL_ENCODING(enc)   ((const struct normal_encoding *) (enc))
+
+#define SB_BYTE_TYPE(enc, p) \
+  (((struct normal_encoding *)(enc))->type[(unsigned char)*(p)])
+/* minimum bytes per character */
+#define MINBPC(enc) 1
+#define BYTE_TYPE(enc, p) SB_BYTE_TYPE(enc, p)
+#define BYTE_TO_ASCII(enc, p) (*(p))
+#define IS_NAME_CHAR(enc, p, n) \
+ (AS_NORMAL_ENCODING(enc)->isName ## n(enc, p))
+#define IS_NMSTRT_CHAR(enc, p, n) \
+ (AS_NORMAL_ENCODING(enc)->isNmstrt ## n(enc, p))
+#define IS_INVALID_CHAR(enc, p, n) \
+ (AS_NORMAL_ENCODING(enc)->isInvalid ## n(enc, p))
+
+#define IS_NAME_CHAR_MINBPC(enc, p) (0)
+#define IS_NMSTRT_CHAR_MINBPC(enc, p) (0)
+/* c is an ASCII character */
+#define CHAR_MATCHES(enc, p, c) (*(p) == c)
+
+#define PREFIX(ident) normal_ ## ident
+// functions this include instantiates (marker per retail address):
+// @ 0x0090cb20 normal_scanComment (expat/xmltok_impl.c)
+// @ 0x0090cc60 normal_scanDecl (expat/xmltok_impl.c)
+// @ 0x0090cdd0 normal_scanAtts (expat/xmltok_impl.c)
+// @ 0x0090e9f0 normal_prologTok (expat/xmltok_impl.c)
+// @ 0x0090f080 normal_attributeValueTok (expat/xmltok_impl.c)
+// @ 0x0090f1a0 normal_entityValueTok (expat/xmltok_impl.c)
+// @ 0x0090f2c0 normal_ignoreSectionTok (expat/xmltok_impl.c)
+// @ 0x0090f430 normal_isPublicId (expat/xmltok_impl.c)
+// @ 0x0090f4d0 normal_getAtts (expat/xmltok_impl.c)
+// @ 0x0090f720 normal_predefinedEntityName (expat/xmltok_impl.c)
+// @ 0x0090f7b0 normal_sameName (expat/xmltok_impl.c)
+// @ 0x0090f8b0 normal_nameMatchesAscii (expat/xmltok_impl.c)
+// @ 0x0090f8f0 normal_nameLength (expat/xmltok_impl.c)
+// @ 0x0090f980 normal_skipS (expat/xmltok_impl.c)
+// @ 0x0090f9b0 normal_updatePosition (expat/xmltok_impl.c)
+#define XML_TOK_IMPL_C
+#include "expat/xmltok_impl.c"
+#undef XML_TOK_IMPL_C
+
+/* The functions xmltok.c reaches through its encoding tables (utf8_encoding, latin1_encoding, ascii_encoding and the little2/big2
+   ones) are the ones the original gives the standard calling convention.  The tables themselves sit at fixed addresses in the
+   retail data section, so one anchor per instantiation stands in for them here: it takes the address of every function the
+   real tables take, which keeps those functions (and the statics they call) in the object with the same conventions. */
+
+
+// @ 0x0090fa40
+static void PTRCALL
+utf8_toUtf8(const ENCODING *enc,
+            const char **fromP, const char *fromLim,
+            char **toP, const char *toLim)
+{
+  char *to;
+  const char *from;
+  if (fromLim - *fromP > toLim - *toP) {
+    /* Avoid copying partial characters. */
+    for (fromLim = *fromP + (toLim - *toP); fromLim > *fromP; fromLim--)
+      if (((unsigned char)fromLim[-1] & 0xc0) != 0x80)
+        break;
+  }
+  for (to = *toP, from = *fromP; from != fromLim; from++, to++)
+    *to = *from;
+  *fromP = from;
+  *toP = to;
+}
+
+// @ 0x0090fab0
+static void PTRCALL
+utf8_toUtf16(const ENCODING *enc,
+             const char **fromP, const char *fromLim,
+             unsigned short **toP, const unsigned short *toLim)
+{
+  unsigned short *to = *toP;
+  const char *from = *fromP;
+  while (from != fromLim && to != toLim) {
+    switch (((struct normal_encoding *)enc)->type[(unsigned char)*from]) {
+    case BT_LEAD2:
+      *to++ = (unsigned short)(((from[0] & 0x1f) << 6) | (from[1] & 0x3f));
+      from += 2;
+      break;
+    case BT_LEAD3:
+      *to++ = (unsigned short)(((from[0] & 0xf) << 12)
+                               | ((from[1] & 0x3f) << 6) | (from[2] & 0x3f));
+      from += 3;
+      break;
+    case BT_LEAD4:
+      {
+        unsigned long n;
+        if (to + 1 == toLim)
+          goto after;
+        n = ((from[0] & 0x7) << 18) | ((from[1] & 0x3f) << 12)
+            | ((from[2] & 0x3f) << 6) | (from[3] & 0x3f);
+        n -= 0x10000;
+        to[0] = (unsigned short)((n >> 10) | 0xD800);
+        to[1] = (unsigned short)((n & 0x3FF) | 0xDC00);
+        to += 2;
+        from += 4;
+      }
+      break;
+    default:
+      *to++ = *from++;
+      break;
+    }
+  }
+after:
+  *fromP = from;
+  *toP = to;
+}
+
+// @ 0x0090fbe0
+static void PTRCALL
+latin1_toUtf8(const ENCODING *enc,
+              const char **fromP, const char *fromLim,
+              char **toP, const char *toLim)
+{
+  for (;;) {
+    unsigned char c;
+    if (*fromP == fromLim)
+      break;
+    c = (unsigned char)**fromP;
+    if (c & 0x80) {
+      if (toLim - *toP < 2)
+        break;
+      *(*toP)++ = (char)((c >> 6) | UTF8_cval2);
+      *(*toP)++ = (char)((c & 0x3f) | 0x80);
+      (*fromP)++;
+    }
+    else {
+      if (*toP == toLim)
+        break;
+      *(*toP)++ = *(*fromP)++;
+    }
+  }
+}
+
+// @ 0x0090fc40
+static void PTRCALL
+latin1_toUtf16(const ENCODING *enc,
+               const char **fromP, const char *fromLim,
+               unsigned short **toP, const unsigned short *toLim)
+{
+  while (*fromP != fromLim && *toP != toLim)
+    *(*toP)++ = (unsigned char)*(*fromP)++;
+}
+
+// @ 0x0090fc80
+static void PTRCALL
+ascii_toUtf8(const ENCODING *enc,
+             const char **fromP, const char *fromLim,
+             char **toP, const char *toLim)
+{
+  while (*fromP != fromLim && *toP != toLim)
+    *(*toP)++ = *(*fromP)++;
+}
+
+extern const ENCODING normal_utf8_anchor = { VTABLE1, utf8_toUtf8, utf8_toUtf16, 1, 1, 0 };
+extern const ENCODING normal_latin1_anchor = { VTABLE1, latin1_toUtf8, latin1_toUtf16, 1, 0, 0 };
+extern const ENCODING normal_ascii_anchor = { VTABLE1, ascii_toUtf8, latin1_toUtf16, 1, 1, 0 };
+
+
+#undef MINBPC
+#undef BYTE_TYPE
+#undef BYTE_TO_ASCII
+#undef CHAR_MATCHES
+#undef IS_NAME_CHAR
+#undef IS_NAME_CHAR_MINBPC
+#undef IS_NMSTRT_CHAR
+#undef IS_NMSTRT_CHAR_MINBPC
+#undef IS_INVALID_CHAR
+
+#define DEFINE_UTF16_TO_UTF8(E) \
+static void  PTRCALL \
+E ## toUtf8(const ENCODING *enc, \
+            const char **fromP, const char *fromLim, \
+            char **toP, const char *toLim) \
+{ \
+  const char *from; \
+  for (from = *fromP; from != fromLim; from += 2) { \
+    int plane; \
+    unsigned char lo2; \
+    unsigned char lo = GET_LO(from); \
+    unsigned char hi = GET_HI(from); \
+    switch (hi) { \
+    case 0: \
+      if (lo < 0x80) { \
+        if (*toP == toLim) { \
+          *fromP = from; \
+          return; \
+        } \
+        *(*toP)++ = lo; \
+        break; \
+      } \
+      /* fall through */ \
+    case 0x1: case 0x2: case 0x3: \
+    case 0x4: case 0x5: case 0x6: case 0x7: \
+      if (toLim -  *toP < 2) { \
+        *fromP = from; \
+        return; \
+      } \
+      *(*toP)++ = ((lo >> 6) | (hi << 2) |  UTF8_cval2); \
+      *(*toP)++ = ((lo & 0x3f) | 0x80); \
+      break; \
+    default: \
+      if (toLim -  *toP < 3)  { \
+        *fromP = from; \
+        return; \
+      } \
+      /* 16 bits divided 4, 6, 6 amongst 3 bytes */ \
+      *(*toP)++ = ((hi >> 4) | UTF8_cval3); \
+      *(*toP)++ = (((hi & 0xf) << 2) | (lo >> 6) | 0x80); \
+      *(*toP)++ = ((lo & 0x3f) | 0x80); \
+      break; \
+    case 0xD8: case 0xD9: case 0xDA: case 0xDB: \
+      if (toLim -  *toP < 4) { \
+        *fromP = from; \
+        return; \
+      } \
+      plane = (((hi & 0x3) << 2) | ((lo >> 6) & 0x3)) + 1; \
+      *(*toP)++ = ((plane >> 2) | UTF8_cval4); \
+      *(*toP)++ = (((lo >> 2) & 0xF) | ((plane & 0x3) << 4) | 0x80); \
+      from += 2; \
+      lo2 = GET_LO(from); \
+      *(*toP)++ = (((lo & 0x3) << 4) \
+                   | ((GET_HI(from) & 0x3) << 2) \
+                   | (lo2 >> 6) \
+                   | 0x80); \
+      *(*toP)++ = ((lo2 & 0x3f) | 0x80); \
+      break; \
+    } \
+  } \
+  *fromP = from; \
+}
+
+#define DEFINE_UTF16_TO_UTF16(E) \
+static void  PTRCALL \
+E ## toUtf16(const ENCODING *enc, \
+             const char **fromP, const char *fromLim, \
+             unsigned short **toP, const unsigned short *toLim) \
+{ \
+  /* Avoid copying first half only of surrogate */ \
+  if (fromLim - *fromP > ((toLim - *toP) << 1) \
+      && (GET_HI(fromLim - 2) & 0xF8) == 0xD8) \
+    fromLim -= 2; \
+  for (; *fromP != fromLim && *toP != toLim; *fromP += 2) \
+    *(*toP)++ = (GET_HI(*fromP) << 8) | GET_LO(*fromP); \
+}
+
+#define SET2(ptr, ch) \
+  (((ptr)[0] = ((ch) & 0xff)), ((ptr)[1] = ((ch) >> 8)))
+#define GET_LO(ptr) ((unsigned char)(ptr)[0])
+#define GET_HI(ptr) ((unsigned char)(ptr)[1])
+
+// @ 0x0090fd30 little2_toUtf8 (DEFINE_UTF16_TO_UTF8)
+DEFINE_UTF16_TO_UTF8(little2_)
+// @ 0x0090ff70 little2_toUtf16 (DEFINE_UTF16_TO_UTF16)
+DEFINE_UTF16_TO_UTF16(little2_)
+
+#undef SET2
+#undef GET_LO
+#undef GET_HI
+
+#define SET2(ptr, ch) \
+  (((ptr)[0] = ((ch) >> 8)), ((ptr)[1] = ((ch) & 0xFF)))
+#define GET_LO(ptr) ((unsigned char)(ptr)[1])
+#define GET_HI(ptr) ((unsigned char)(ptr)[0])
+
+// @ 0x0090ffe0 big2_toUtf8 (DEFINE_UTF16_TO_UTF8)
+DEFINE_UTF16_TO_UTF8(big2_)
+// @ 0x00910220 big2_toUtf16 (DEFINE_UTF16_TO_UTF16)
+DEFINE_UTF16_TO_UTF16(big2_)
+
+#undef SET2
+#undef GET_LO
+#undef GET_HI
+
+#define LITTLE2_BYTE_TYPE(enc, p) \
+ ((p)[1] == 0 \
+  ? ((struct normal_encoding *)(enc))->type[(unsigned char)*(p)] \
+  : unicode_byte_type((p)[1], (p)[0]))
+#define LITTLE2_BYTE_TO_ASCII(enc, p) ((p)[1] == 0 ? (p)[0] : -1)
+#define LITTLE2_CHAR_MATCHES(enc, p, c) ((p)[1] == 0 && (p)[0] == c)
+#define LITTLE2_IS_NAME_CHAR_MINBPC(enc, p) \
+  UCS2_GET_NAMING(namePages, (unsigned char)p[1], (unsigned char)p[0])
+#define LITTLE2_IS_NMSTRT_CHAR_MINBPC(enc, p) \
+  UCS2_GET_NAMING(nmstrtPages, (unsigned char)p[1], (unsigned char)p[0])
+
+#undef PREFIX
+#define PREFIX(ident) little2_ ## ident
+#define MINBPC(enc) 2
+/* CHAR_MATCHES is guaranteed to have MINBPC bytes available. */
+#define BYTE_TYPE(enc, p) LITTLE2_BYTE_TYPE(enc, p)
+#define BYTE_TO_ASCII(enc, p) LITTLE2_BYTE_TO_ASCII(enc, p)
+#define CHAR_MATCHES(enc, p, c) LITTLE2_CHAR_MATCHES(enc, p, c)
+#define IS_NAME_CHAR(enc, p, n) 0
+#define IS_NAME_CHAR_MINBPC(enc, p) LITTLE2_IS_NAME_CHAR_MINBPC(enc, p)
+#define IS_NMSTRT_CHAR(enc, p, n) (0)
+#define IS_NMSTRT_CHAR_MINBPC(enc, p) LITTLE2_IS_NMSTRT_CHAR_MINBPC(enc, p)
+
+// functions this include instantiates (marker per retail address):
+// @ 0x00910290 little2_scanComment (expat/xmltok_impl.c)
+// @ 0x009103a0 little2_scanDecl (expat/xmltok_impl.c)
+// @ 0x009104f0 little2_checkPiTarget (expat/xmltok_impl.c)
+// @ 0x00910570 little2_scanPi (expat/xmltok_impl.c)
+// @ 0x00910890 little2_scanCdataSection (expat/xmltok_impl.c)
+// @ 0x009108d0 little2_cdataSectionTok (expat/xmltok_impl.c)
+// @ 0x00910ac0 little2_scanEndTag (expat/xmltok_impl.c)
+// @ 0x00910cd0 little2_scanHexCharRef (expat/xmltok_impl.c)
+// @ 0x00910d40 little2_scanCharRef (expat/xmltok_impl.c)
+// @ 0x00910dd0 little2_scanRef (expat/xmltok_impl.c)
+// @ 0x00910fa0 little2_scanAtts (expat/xmltok_impl.c)
+// @ 0x00911ae0 little2_scanPercent (expat/xmltok_impl.c)
+// @ 0x00911c90 little2_scanPoundName (expat/xmltok_impl.c)
+// @ 0x00911e40 little2_scanLit (expat/xmltok_impl.c)
+// @ 0x00911f60 little2_prologTok (expat/xmltok_impl.c)
+// @ 0x009125f0 little2_attributeValueTok (expat/xmltok_impl.c)
+// @ 0x00912750 little2_entityValueTok (expat/xmltok_impl.c)
+// @ 0x009128b0 little2_ignoreSectionTok (expat/xmltok_impl.c)
+// @ 0x009129f0 little2_isPublicId (expat/xmltok_impl.c)
+// @ 0x00912ad0 little2_getAtts (expat/xmltok_impl.c)
+// @ 0x00912d70 little2_predefinedEntityName (expat/xmltok_impl.c)
+// @ 0x00912e90 little2_sameName (expat/xmltok_impl.c)
+// @ 0x00912fa0 little2_nameMatchesAscii (expat/xmltok_impl.c)
+// @ 0x00912fe0 little2_nameLength (expat/xmltok_impl.c)
+// @ 0x00913060 little2_skipS (expat/xmltok_impl.c)
+// @ 0x009130a0 little2_updatePosition (expat/xmltok_impl.c)
+#define XML_TOK_IMPL_C
+#include "expat/xmltok_impl.c"
+#undef XML_TOK_IMPL_C
+
+#undef MINBPC
+#undef BYTE_TYPE
+#undef BYTE_TO_ASCII
+#undef CHAR_MATCHES
+#undef IS_NAME_CHAR
+#undef IS_NAME_CHAR_MINBPC
+#undef IS_NMSTRT_CHAR
+#undef IS_NMSTRT_CHAR_MINBPC
+#undef IS_INVALID_CHAR
+
+extern const ENCODING little2_anchor = { VTABLE1, little2_toUtf8, little2_toUtf16, 2, 0, 1 };
+
+#define BIG2_BYTE_TYPE(enc, p) \
+ ((p)[0] == 0 \
+  ? ((struct normal_encoding *)(enc))->type[(unsigned char)(p)[1]] \
+  : unicode_byte_type((p)[0], (p)[1]))
+#define BIG2_BYTE_TO_ASCII(enc, p) ((p)[0] == 0 ? (p)[1] : -1)
+#define BIG2_CHAR_MATCHES(enc, p, c) ((p)[0] == 0 && (p)[1] == c)
+#define BIG2_IS_NAME_CHAR_MINBPC(enc, p) \
+  UCS2_GET_NAMING(namePages, (unsigned char)p[0], (unsigned char)p[1])
+#define BIG2_IS_NMSTRT_CHAR_MINBPC(enc, p) \
+  UCS2_GET_NAMING(nmstrtPages, (unsigned char)p[0], (unsigned char)p[1])
+
+#undef PREFIX
+#define PREFIX(ident) big2_ ## ident
+#define MINBPC(enc) 2
+/* CHAR_MATCHES is guaranteed to have MINBPC bytes available. */
+#define BYTE_TYPE(enc, p) BIG2_BYTE_TYPE(enc, p)
+#define BYTE_TO_ASCII(enc, p) BIG2_BYTE_TO_ASCII(enc, p)
+#define CHAR_MATCHES(enc, p, c) BIG2_CHAR_MATCHES(enc, p, c)
+#define IS_NAME_CHAR(enc, p, n) 0
+#define IS_NAME_CHAR_MINBPC(enc, p) BIG2_IS_NAME_CHAR_MINBPC(enc, p)
+#define IS_NMSTRT_CHAR(enc, p, n) (0)
+#define IS_NMSTRT_CHAR_MINBPC(enc, p) BIG2_IS_NMSTRT_CHAR_MINBPC(enc, p)
+
+// functions this include instantiates (marker per retail address):
+// @ 0x00913150 big2_scanComment (expat/xmltok_impl.c)
+// @ 0x00913270 big2_scanDecl (expat/xmltok_impl.c)
+// @ 0x009133c0 big2_checkPiTarget (expat/xmltok_impl.c)
+// @ 0x00913440 big2_scanPi (expat/xmltok_impl.c)
+// @ 0x00913750 big2_scanCdataSection (expat/xmltok_impl.c)
+// @ 0x00913790 big2_cdataSectionTok (expat/xmltok_impl.c)
+// @ 0x00913980 big2_scanEndTag (expat/xmltok_impl.c)
+// @ 0x00913b90 big2_scanHexCharRef (expat/xmltok_impl.c)
+// @ 0x00913c10 big2_scanCharRef (expat/xmltok_impl.c)
+// @ 0x00913ca0 big2_scanRef (expat/xmltok_impl.c)
+// @ 0x00913e60 big2_scanAtts (expat/xmltok_impl.c)
+// @ 0x00914360 big2_scanLt (expat/xmltok_impl.c)
+// @ 0x00914760 big2_contentTok (expat/xmltok_impl.c)
+// @ 0x009149c0 big2_scanPercent (expat/xmltok_impl.c)
+// @ 0x00914b70 big2_scanPoundName (expat/xmltok_impl.c)
+// @ 0x00914d20 big2_scanLit (expat/xmltok_impl.c)
+// @ 0x00914e40 big2_prologTok (expat/xmltok_impl.c)
+// @ 0x009154e0 big2_attributeValueTok (expat/xmltok_impl.c)
+// @ 0x00915630 big2_entityValueTok (expat/xmltok_impl.c)
+// @ 0x00915790 big2_ignoreSectionTok (expat/xmltok_impl.c)
+// @ 0x009158d0 big2_isPublicId (expat/xmltok_impl.c)
+// @ 0x009159b0 big2_getAtts (expat/xmltok_impl.c)
+// @ 0x00915c50 big2_predefinedEntityName (expat/xmltok_impl.c)
+// @ 0x00915d70 big2_sameName (expat/xmltok_impl.c)
+// @ 0x00915e90 big2_nameMatchesAscii (expat/xmltok_impl.c)
+// @ 0x00915ed0 big2_nameLength (expat/xmltok_impl.c)
+// @ 0x00915f60 big2_skipS (expat/xmltok_impl.c)
+// @ 0x00915fb0 big2_updatePosition (expat/xmltok_impl.c)
+#define XML_TOK_IMPL_C
+#include "expat/xmltok_impl.c"
+#undef XML_TOK_IMPL_C
+
+#undef MINBPC
+#undef BYTE_TYPE
+#undef BYTE_TO_ASCII
+#undef CHAR_MATCHES
+#undef IS_NAME_CHAR
+#undef IS_NAME_CHAR_MINBPC
+#undef IS_NMSTRT_CHAR
+#undef IS_NMSTRT_CHAR_MINBPC
+#undef IS_INVALID_CHAR
+
+extern const ENCODING big2_anchor = { VTABLE1, big2_toUtf8, big2_toUtf16, 2, 0, 0 };
