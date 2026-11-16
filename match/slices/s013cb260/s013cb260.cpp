@@ -100,3 +100,6 @@ void terra03_link_pad_ret3() {}
 
 // @ 0x013CB850
 void f_013cb850() { ((Method*)g_170a79c)->M(); }
+void terra06_link_pad_ret1() {}
+void terra06_link_pad_ret2() {}
+void terra06_link_pad_ret3() {}

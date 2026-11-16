@@ -224,6 +224,8 @@ void f_013c6b00() {
     if (g_16a15f8) ((V2*)g_16a15f8)->b();
 }
 
+void terra04_link_pad_ret() {}
+
 // @ 0x013C6E20
 void f_013c6e20() {
     *(void**)g_15a4878 = vtbl_147f198;

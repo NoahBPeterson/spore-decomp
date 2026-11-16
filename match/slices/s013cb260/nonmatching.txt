@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
 013cb370  n/a  complete reconstruction of the compiler-generated array reset (store -1/0, memmove down 2 dwords, zero live count); not byte-exact and bounds span an unlisted int3 + ret thunk
-013cb850  n/a  body complete (mov ecx,imm; jmp dtor thunk); bounds extend over an unlisted int3 + ret thunk | R43 Terra low active claim; source unchanged.
