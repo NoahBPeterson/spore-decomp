@@ -11,7 +11,7 @@
 013c4f20  36  body complete (vector free + SSO guard); bounds extend over an unlisted int3 + ret thunk
 013c6b00  16  body complete (virtual release); bounds extend over an unlisted int3 + ret thunk
 013c7db0  51  body complete (0x98-stride dtor loop); bounds extend over an unlisted int3 + ret thunk
-013c8f60  8   body complete (vector free + SSO guard); bounds extend over an unlisted int3 + ret thunk
+013c8f60  8   body complete (vector free + SSO guard); bounds extend over an unlisted int3 + ret thunk | R43 Terra low active claim; source unchanged.
 013c9400  8   body complete (vector free + SSO guard); bounds extend over an unlisted int3 + ret thunk
 013c9c30  13  body complete (atomic refcount release); bounds extend over an unlisted int3 + ret thunk
 013c9c70  13  body complete (atomic refcount release); bounds extend over an unlisted int3 + ret thunk
