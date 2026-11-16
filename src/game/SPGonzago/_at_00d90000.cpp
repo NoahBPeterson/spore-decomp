@@ -1246,9 +1246,7 @@ float FUN_00d90bb0(cSPCreatureCitizen_s00d9_0640* p, void* a2, void* a3, uint32_
 {
     int a = p->mpB4C->mStimuli.Play(0, 0x80);
     int v = FUN_00d99a10(a);
-    if (v == 0) {
-        p->mpB4C->mStimuli.ClearAll(0, 0x80);
-    } else {
+    if (v != 0) {
         cGameObject* pObj = (cGameObject*)FUN_00d998f0(v);
         if (pObj != 0) {
             cGameObject* pChild = (cGameObject*)pObj->GetChild0c();
@@ -1260,6 +1258,8 @@ float FUN_00d90bb0(cSPCreatureCitizen_s00d9_0640* p, void* a2, void* a3, uint32_
                 return 1.0f;
             }
         }
+    } else {
+        p->mpB4C->mStimuli.ClearAll(0, 0x80);
     }
     return 0.0f;
 }
@@ -2293,6 +2293,7 @@ int S::FUN_00d9d840(int idx)
     ++idx;
     bool b31 = ((((unsigned)*p) >> 0x1f) & 1) != 0;
     if (!b31) return idx;
+    _ReadWriteBarrier();
     b30 = ((((unsigned)*p) >> 0x1e) & 1) != 0;
   } while (!b30);
   return 0x3fffffff;

@@ -7,3 +7,4 @@
 ../src/game/SPCreatureAnim/parts_caps.cpp  ?ElemHeapSiftUp@@YAXHHHUElem14@@P6A_NPAU1@1@Z@Z  009fc9c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/parts_caps.cpp  ?resize@CapVec@@QAEXI@Z  009fe2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/parts_caps.cpp  ?Execute@cSetThresholdCommand@@QAEXPAUArgArgs@@@Z  009fe350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/parts_caps.cpp  ?InsertIdx@RBTreeX@@QAEXPAPAXPAXPAID@Z  009fc4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

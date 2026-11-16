@@ -2617,8 +2617,8 @@ unsigned StrTable::erase(const WStr* key)
     p++;
     c = *p;
   }
-  StrNode** pp = &mBuckets[h % mBucketCount];
   int before = mSize;
+  StrNode** pp = &mBuckets[h % mBucketCount];
   if (*pp) {
     do {
       StrNode* n = *pp;

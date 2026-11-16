@@ -11,6 +11,7 @@
 //
 // @ 0x00b86a10
 
+#include <intrin.h>
 #include <string.h>
 #include <math.h>
 #include <xmmintrin.h>
@@ -288,6 +289,7 @@ void cGraphEditor::AddEdgeB(uint32_t a, uint32_t b)
     GraphEdgeVector& edgesA = mEdgesA;
     int i = 0;
     int count = (int)(edgesA.mpEnd - edgesA.mpBegin);
+    _ReadWriteBarrier();
     for (; i < count; ++i) {
         GraphEdge* e = edgesA.mpBegin + i;
         if (e->mLow == a && e->mHigh == b)

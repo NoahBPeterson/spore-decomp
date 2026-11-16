@@ -4,6 +4,7 @@
 //
 // Flags: /O2 /MD /Gy /TP
 
+#include <intrin.h>
 #include <new>
 
 typedef unsigned int   uint32_t;
@@ -208,6 +209,7 @@ void** RBTree::Insert(void** out, void* parent, const void* value, bool b)
     RBTreeInsert(node, parent, (char*)&mAnchor, t);
     mnSize++;
     *out = node;
+    _ReadWriteBarrier();
     return out;
 }
 

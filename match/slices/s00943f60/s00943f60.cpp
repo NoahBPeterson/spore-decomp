@@ -869,6 +869,7 @@ void HTTPResponse::Clear() {
     m434 = -1;
     m438 = -1;
     m43c = 0;
+    _ReadWriteBarrier();
     if (mStr440.mpBegin != mStr440.mpEnd) {
         *mStr440.mpBegin = 0;
         mStr440.mpEnd = mStr440.mpBegin;

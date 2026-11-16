@@ -2,6 +2,7 @@
 // Object file: Spui/SPUIPopupMenu.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include <wchar.h>
 #include "EA/Text/LineLayout.h"
@@ -769,6 +770,7 @@ void PMW::OnScrollButtonClicked(char down, int p3)
     HideMenuItems(0, p3);
     if (down) {
       curIndex--;
+      _ReadWriteBarrier();
       b8c3 = 0;
       SelectItem(0);
       return;

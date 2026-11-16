@@ -3068,6 +3068,7 @@ void** StarTreeOps::MapInsert4(void** outIt, void* anchor, int* value, char hint
     RBTreeInsert(node, anchor, (char*)this + 4, side);
     ++*(int*)((char*)this + 0x14);
     *outIt = node;
+    _ReadWriteBarrier();
     return outIt;
 }
 
@@ -6721,8 +6722,8 @@ void cCommunity_s00bf_d9f0::SetID(int v)
 // @ 0x00bfdf80
 void* cCommunity_s00bf_d9f0::GetNoun()
 {
-  int id = ((int(__thiscall*)(void*))(((void**)*(void**)this)[0x4c / 4]))(this);
   void* r = 0;
+  int id = ((int(__thiscall*)(void*))(((void**)*(void**)this)[0x4c / 4]))(this);
   if (id != -1) {
     r = (void*)((C_THISCALL*)FUN_00b3d300())->FUN_00b25f40(id);
   }
@@ -6754,8 +6755,8 @@ float cCommunity_s00bf_d9f0::GetProgress()
 // @ 0x00bfe0c0
 int cCommunity_s00bf_d9f0::HasNoun()
 {
-  int id = ((int(__thiscall*)(void*))(((void**)*(void**)this)[0x4c / 4]))(this);
   void* r = 0;
+  int id = ((int(__thiscall*)(void*))(((void**)*(void**)this)[0x4c / 4]))(this);
   if (id != -1) {
     r = (void*)((C_THISCALL*)FUN_00b3d300())->FUN_00b25f40(id);
   }

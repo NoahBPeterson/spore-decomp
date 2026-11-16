@@ -33,6 +33,7 @@ void FUN_007ace40(uint8_t* dest, int destStride, uint8_t* src, int srcStride, in
 // Vertical 2-tap average of a single byte column.
 void FUN_007aceb0(uint8_t* dest, int destStride, uint8_t* src, int srcStride, int rows)
 {
+    int n = rows;
     uint8_t* d = dest;
     uint8_t* s2 = src + srcStride;
     int step = srcStride * 2;
@@ -41,7 +42,7 @@ void FUN_007aceb0(uint8_t* dest, int destStride, uint8_t* src, int srcStride, in
         d += destStride;
         src += step;
         s2 += step;
-    } while (--rows);
+    } while (--n);
 }
 
 // ---------------------------------------------------------------------------

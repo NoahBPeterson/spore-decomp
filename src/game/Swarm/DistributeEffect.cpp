@@ -2864,6 +2864,7 @@ cDistributeSample::cDistributeSample(const cDistributeSample& src, int number)
     mColorAlpha.z = gDefaultSampleColor.z;
     mColorAlpha.w = gDefaultSampleColor.w;
     mNumber = number;
+    _ReadWriteBarrier();
 }
 
 // @ 0x00a89a00

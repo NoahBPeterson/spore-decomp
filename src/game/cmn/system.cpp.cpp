@@ -2,6 +2,7 @@
 // Object file: cmn/system.cpp.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "rw/audio/core/System.h"
 #include "EA/Allocator/ICoreAllocator.h"
@@ -560,6 +561,7 @@ __declspec(noinline) u32* audio_allocNode(System* sys)
         p[0] = 0;
         p[1] = 0;
         p[2] = 0;
+        _ReadWriteBarrier();
         p[3] = 0;
         *(u8*)(p + 5) = 0;
         p[4] = (u32)sys;

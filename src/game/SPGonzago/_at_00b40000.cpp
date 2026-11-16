@@ -4353,8 +4353,8 @@ void F_b47e00(void* a1, cObj* a2, void* a3)
             pParent = a1;
             bOwn = 0;
         } else {
-            pParent = a2;
             bOwn = 1;
+            pParent = a2;
         }
         Obj_s00b4_7600* r = F_b47730((uint32_t)a2, (Part25c*)pParent, bOwn, 1,
                           (PropHolder*)o, 0);

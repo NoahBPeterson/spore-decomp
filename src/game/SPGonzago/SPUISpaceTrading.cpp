@@ -2,6 +2,7 @@
 // Object file: SPGonzago/SPUISpaceTrading.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "cSPUILayout.h"
 #include "SP/cString.h"
@@ -1096,6 +1097,7 @@ void cSPUISpaceTrading::Fn1075DB0()
     mpVtbl0 = (void*)0x149c590;
     mpVtbl1 = (void*)0x149c580;
     mpVtbl2 = (void*)0x149c578;
+    _ReadWriteBarrier();
 
     if (mHandler != 0) {
         void* h = mHandler;

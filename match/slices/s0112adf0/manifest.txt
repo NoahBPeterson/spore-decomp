@@ -15,3 +15,4 @@ slices/s0112adf0/s0112adf0.cpp  ?getContents@hkBinaryPackfileReader@@UAEPAXPBD@Z
 slices/s0112adf0/s0112adf0.cpp  ?merge@hkFinishLoadedObjectRegistry@@UAEXABV1@@Z  0112bb40  /vc71 /O2 /MD /Gy /TP
 slices/s0112adf0/s0112adf0.cpp  ??0hkPackfileObjectUpdateTracker@@QAE@PAUhkPackfileData@@@Z  0112b460  /vc71 /O2 /MD /Gy /TP
 slices/s0112adf0/s0112adf0.cpp  ?replaceObject@hkPackfileObjectUpdateTracker@@UAEXPAX0PBVhkClass@@@Z  0112b570  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?getContentsWithRegistry@hkBinaryPackfileReader@@UAEPAXPBDPBVhkFinishLoadedObjectRegistry@@@Z  0112b390  /vc71 /O2 /MD /Gy /TP

@@ -3,7 +3,6 @@
 00e53d50  114  medal proximity flags: complete; named cell fields, float compares + jump-table case order differ
 00e53e30  478  closest-point on boxed 3D volume: complete (equivalence PASS, not byte-exact); x87 division/min + SSE midpoint/clamp, constant/schedule differs
 00e53f70  150  allocate cell UI windows + init: complete; operator_new + vtable ownership dance differs
-00e54050   52  window-slot lookup + mark used: complete; global table indexing differs
 00e54270  214  initialize cell HUD state + window tree (cdecl, 1 byte arg): complete; only SSE constant-load scheduling and a delete-call register swap differ
 00e540b0  167  reposition two windows by mode: complete (uint GetArea/SetArea/SetPosition + AutoSizeWindowForText, switch on mode 0/1/2); identical instruction stream modulo xmm store scheduling and frame-array placement (size 395 vs 436); difftest UNSUPPORTED (0/400 valid, fault(read): needs live window objects)
 00e548d0   71  cell HUD teardown: complete (window table release, options Destroy/Release, layout Shutdown/Release, ref-object teardown + refcount dtor, grid Destroy); only global-pointer register choice, one add/sub encoding and a load/store ordering differ (size 219 vs 221); difftest UNSUPPORTED (0/400 valid, fault(read): needs live cell UI globals)

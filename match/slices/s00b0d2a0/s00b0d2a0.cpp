@@ -207,6 +207,7 @@ void cKeySlotList::ReleaseSlot(u32 idx)
     if (obj != 0)
         ((void(__fastcall*)(void*))(*(void***)obj)[1])(obj);
     u32 last = mnLastReleased;
+    _ReadWriteBarrier();
     slot->mBits = (last & 0x3fffffffu) | (slot->mBits & 0xc0000000u) | 0x80000000u;
     mnLastReleased = idx;
     if (mnFreeHead == idx)

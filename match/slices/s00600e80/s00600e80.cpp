@@ -250,6 +250,7 @@ void SPUISettingsStub::RemoveTab(cUITab* tab)
   if (next < end)
     Memmove_11e0744(p, next, (char*)end - (char*)next);
   mTabEnd -= 1;
+  _ReadWriteBarrier();
   if (mpLayout) {
     IWindowS* win = (IWindowS*)mpLayout->FindWindowByID(0x46967c0, true);
     if (win && tab) {

@@ -9,7 +9,6 @@
 00a63350   40  x_thisinstance_setup: gensym/class_new7/class_addmethod call sequence; scheduling differs [equiv UNSUPPORTED 0/400 valid, fault(read)] [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 esp, call#2 esp, call#3 esp]
 00a634a0  245  InputParseSymbols: large multi-branch parser; register allocation + local buffer scheduling differ [equiv UNSUPPORTED 2 unresolved references: _memcpy_f, _strchr_f]
 00a635d0   18  GetGroupSymbol: only the three global-symbol load ordering (eax/edx/ecx) differs [equiv UNSUPPORTED 0/400 valid, fault(read)] [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
-00a636e0    7  Insert28: `mov eax,[esp+0x24]; inc [esi+0x14]` scheduling vs mine (inc first) [equiv PASS 274 valid, 100.0% cov]
 00a63860   87  EraseEvent: original keeps `this` in edi / bool in bl; register allocation artifact [equiv PASS 376 valid, 100.0% cov]
 00a63900   99  FindEventSample: multimap_equal_range walk; register allocation differs [equiv FAIL 5/11 valid, harness stack window too small for the extra locals (fault read at find entry)]
 00a63a50  209  FindOrInsert18: rbtree hint-insert; original uses ebp/esi/edi roles I cannot reproduce from source [equiv FAIL 5/5, harness fault]

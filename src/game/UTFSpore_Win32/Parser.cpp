@@ -766,6 +766,8 @@ void* __cdecl EAAllocate(uint32 n, const char* pName, int a, int b,
 void __cdecl MakeCaseInsensitiveChars(const char* pName, void* pTable);   // 0x00840cc0
 unsigned __cdecl ReadLine(void* pStream, char* pBuf, unsigned n);         // 0x0093a8b0
 void* __cdecl LogAppend(void* pDst, const char* pSrc);                    // 0x0061dea0
+extern "C" unsigned __cdecl strlen(const char*);
+#pragma intrinsic(strlen)
 inline unsigned CharStrlen_s0084_2620(const char* p)
 {
     const char* pBase = p + 1;
@@ -2741,7 +2743,7 @@ string8_s0084_2620& string8_s0084_2620::insert(unsigned pos, const string8_s0084
 // @ 0x008428b0
 void FindParentDir(const char* pPath, string8_s0084_2620* pOut)
 {
-    pOut->assign(pPath, pPath + CharStrlen_s0084_2620(pPath));
+    pOut->assign(pPath, pPath + strlen(pPath));
     int pos = pOut->find_last_of("/\\", 0xffffffffu);
     if (pos != -1)
         pOut->erase((unsigned)(pos + 1), 0xffffffffu);

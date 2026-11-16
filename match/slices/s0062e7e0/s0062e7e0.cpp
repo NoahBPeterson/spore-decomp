@@ -1,5 +1,6 @@
 // Slice s0062e7e0: SP::cSPPlayModeAnimation (panel/anim info loading, page navigation) and
 // SP::cSPPlayModeBGMgr (background hilite). Retail layouts, raw offsets where the PDB differs.
+#include <intrin.h>
 #include "types.h"
 
 struct ResourceKey;
@@ -312,6 +313,7 @@ void cSPPlayModeBGMgr::FUN_0062f2f0() {
       mChangingEnvironment = false;
       if (FUN_00401050(mCrossFadeEffectID)->FUN_0045b210()) {
         FUN_00401050(mCrossFadeEffectID)->FUN_0045b150();
+        _ReadWriteBarrier();
         return;
       }
     }

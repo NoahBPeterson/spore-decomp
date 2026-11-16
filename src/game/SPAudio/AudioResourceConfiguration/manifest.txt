@@ -16,3 +16,4 @@
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ?IncludesConfiguration@ResourceConfiguration_s00a1_7690@@QAEHI@Z  00a176c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ?SetParent@ResourceConfiguration@Audio@EA@@QAEXPAV123@@Z  00a17820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ?DoInsertValue@ConfigurationPropertySet@@QAEPAPAXPAPAXPAUConfigurationPropertyNodeBase@@PBI_N@Z  00a17890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsKeyInstance@RC@@QAE_NIPAI@Z  00a17520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

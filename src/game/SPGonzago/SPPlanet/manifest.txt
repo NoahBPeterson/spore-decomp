@@ -86,3 +86,4 @@
 ../src/game/SPGonzago/SPPlanet.cpp  ?InitPlantAttributes@Simulator@@YAXXZ  01317720  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?SimCivObject_GetPercentMaybe@@YAHPAUSimCivObject_c7@@@Z  00c70470  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?SimCivObject_SetPlanetTechLevel@@YAXPAUSimCivObject_c7@@H@Z  00c706d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ??1Simulator_cFruitGroup@@QAE@XZ  00b01a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

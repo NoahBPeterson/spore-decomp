@@ -1054,6 +1054,7 @@ cSPUIMovieRecordUI* __fastcall FUN_00817a40raw(cSPUIMovieRecordUI* p)
 void __fastcall FUN_00817b00raw(cSPUIMovieRecordUI* p)
 {
     cTokBase& base = *(cTokBase*)((char*)p + 8);
+    _ReadWriteBarrier();
     p->mVt0 = (void*)0x1418e70;
     p->mVt1 = (void*)0x1418e68;
     base.mVt = (void*)0x1418e50;

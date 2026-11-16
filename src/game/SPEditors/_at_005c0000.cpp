@@ -2,6 +2,7 @@
 // Object file: SPEditors/_at_005c0000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "EA/Messaging/AutoHandler.h"
 #include "EA/Messaging/IHandler.h"
@@ -777,6 +778,7 @@ int cSPPaletteCategory_s005c_0c00::CountPagesInCategory(uint32_t category)
 {
   int n = (int)(mPagesEnd - mPagesBegin);
   int count = 0;
+  _ReadWriteBarrier();
   for (int i = 0; i < n; i++) {
     if (mPagesBegin[i]->mCategory == category)
       count++;

@@ -519,8 +519,8 @@ void hkCachingShapePhantom::removeOverlappingCollidable(hkCollidable* c)
         }
         // not found: tell the overlap listeners that the collidable was never added
         hkCollidableRemovedEvent ev;
-        ev.m_phantom = this;
         ev.m_collidable = c;
+        ev.m_phantom = this;
         ev.m_collidableWasAdded = false;
         for (int j = m_overlapListeners.m_size - 1; j >= 0; --j)
         {

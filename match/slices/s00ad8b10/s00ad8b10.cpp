@@ -442,6 +442,7 @@ void* Self::FUN_00ad9010(void* other)
     *(float*)(s + 0x20) = *(float*)(o + 0x20);
     *(float*)(s + 0x24) = *(float*)(o + 0x24);
     *(float*)(s + 0x28) = *(float*)(o + 0x28);
+    _ReadWriteBarrier();
     void* a = *(void**)(o + 0x2c);
     void* b;
     if (a != (b = *(void**)(s + 0x2c))) {

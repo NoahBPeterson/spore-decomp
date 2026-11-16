@@ -2,6 +2,7 @@
 // Object file: SPAudio/_at_00a30000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include <string.h>
 #include <math.h>
@@ -1279,6 +1280,7 @@ int sendgame_new(int a, int b)
     if (r) {
         int* p = (int*)(r + 0x28);
         p[0] = a;
+        _ReadWriteBarrier();
         p[1] = b;
         EA::Audio::Eapd::symbolinlet_new((void*)r, (void*)p);
     }

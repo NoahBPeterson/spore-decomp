@@ -200,8 +200,8 @@ public:
         while (mCnt < 0x18) {
             u8 b = *mRead;
             mBits |= (u32)b << (0x18 - mCnt);
-            mCnt = mCnt + 8;
             mRead = mRead + 1;
+            mCnt = mCnt + 8;
         }
     }
 

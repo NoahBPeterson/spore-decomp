@@ -327,8 +327,8 @@ FileStream::FileStream(const char* path)
 FileStream::FileStream(const wchar_t* path)
 {
     mhFile = INVALID_HANDLE_VALUE;
-    mnSize = -1;
     mnRefCount = 0;
+    mnSize = -1;
     mnAccessFlags = 0;
     mnCD = 0;
     mnSharing = 0;

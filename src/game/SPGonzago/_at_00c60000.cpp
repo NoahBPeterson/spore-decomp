@@ -1633,6 +1633,7 @@ void Mission::FUN_00c61390(int arg)
     ((Mission*)local)->FUN_00ba95a0((char*)vec + 4);
     int* begin = (int*)local[0];
     int* end = (int*)local[1];
+    _ReadWriteBarrier();
 
     for (int* it = begin; it != end; it++)
         if (*it)
@@ -1970,6 +1971,7 @@ void Mission::FUN_00c62590(int msg, int arg)
 int Mission::FUN_00c62710()
 {
     int n = *(int*)((char*)this + 0x20c) - *(int*)((char*)this + 0x208);
+    _ReadWriteBarrier();
     int result = 0;
     int i = 0;
     if (n > 0) {

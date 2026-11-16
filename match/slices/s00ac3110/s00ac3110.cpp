@@ -278,8 +278,8 @@ struct HashCounter {
 // @ 0x00ac3ef0
 uint32_t HashCounter::Count(const uint32_t* key) {
   const uint32_t k = *key;
-  const uint32_t* node = mpBuckets[k % mBucketCount];
   int count = 0;
+  const uint32_t* node = mpBuckets[k % mBucketCount];
   for (; node != 0; node = (const uint32_t*)node[1]) {
     if (k == *node) ++count;
   }

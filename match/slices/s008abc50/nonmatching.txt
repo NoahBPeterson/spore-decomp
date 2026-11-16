@@ -7,7 +7,6 @@
 008ac370  88  complete; difftest UNSUPPORTED (original reads eax at entry: static register ABI). GetCVTScale scale blend (cx^2/cy^2 weighted by +0xb8/+0xbc); block layout + register allocation differ.
 008ac460  58  complete; difftest FAIL (eax). ChangeCvt (scaled delta when +0xb6==0).
 008ac4c0  189  complete; difftest FAIL (memory pool). fnt_InterpChars interpreter loop, including the 8-way rounding-mode dispatch written into word[st+0x3c].
-008ac5c0  26  complete; difftest PASS (281 valid, 63.3% cov). fnt_NoInterpChars interpreter loop; loop shape differs by two instructions.
 008ac600  380  complete; difftest PASS (323 valid, 63.4% cov). fnt_Execute. /Od-style 0xa0 frame building the T1Decode context, setjmp3(cblock,0), the interp vs no-interp loop selection via the callback. Byte layout cannot match a /O2 rebuild because the original is an /Od function inside an /O2 module.
 008ac7a0  13  complete; difftest UNSUPPORTED (original static register ABI: arg in eax). fnt_ComputeAndCheck_PF_Proj short-matrix projection + projection-scale snap; extra `mov ecx,edx` before the movzx.
 008ac800  39  complete; difftest PASS (400/400, 100% cov). identity vector state (0x10cca50 projection, 0x8ac2d0 point op); store ordering differs.

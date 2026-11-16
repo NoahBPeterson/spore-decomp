@@ -236,10 +236,8 @@ SA** __cdecl FUN_009d6bb0(SA** f1, SA** l1, SA** f2, SA** l2, SA** out)
         }
         ++out;
     }
-    int n1 = (int)((char*)l1 - (char*)f1);
-    out = (SA**)((char*)FUN_011e0744(out, f1, (unsigned)n1) + (n1 >> 2) * 4);
-    int n2 = (int)((char*)l2 - (char*)f2);
-    out = (SA**)((char*)FUN_011e0744(out, f2, (unsigned)n2) + (n2 >> 2) * 4);
+    out = (SA**)((char*)FUN_011e0744(out, f1, (unsigned)((char*)l1 - (char*)f1)) + (((int)((char*)l1 - (char*)f1)) >> 2) * 4);
+    out = (SA**)((char*)FUN_011e0744(out, f2, (unsigned)((char*)l2 - (char*)f2)) + (((int)((char*)l2 - (char*)f2)) >> 2) * 4);
     return out;
 }
 
