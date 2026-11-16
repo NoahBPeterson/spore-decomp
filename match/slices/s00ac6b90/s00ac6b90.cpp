@@ -17,6 +17,7 @@
 #include <math.h>
 #include <new>
 #include <intrin.h>
+#include "../../../src/game/include/SP/eBundleType.h"
 
 typedef unsigned int  uint;
 typedef unsigned char uchar;
@@ -99,6 +100,27 @@ struct VObj {
     virtual void m16(); virtual void m17(); virtual void m18();  virtual void m19();
     virtual void m20(int);
 };
+
+// Typed bundle contracts used by the ground-container helper.
+struct cSPVector3;
+namespace SP {
+struct cGameBundle {
+    void Init(eBundleType, float);                   // 0x00c35b20
+};
+struct cGameNounManager {
+    cGameBundle* CreateNoun(unsigned int classID);    // 0x00b20c60
+};
+cGameNounManager* GetNounManager();                  // 0x00b3d300
+struct cGameBundleContainer {
+    virtual ~cGameBundleContainer();
+    virtual cSPVector3 GetBundlePosition(cGameBundle*) const;
+    virtual void OnAddItem(cGameBundle*);
+    char mBundleListAndOwner[0x18];
+    int mContainerCapacity;
+    int GetItemCount() const;                        // 0x00cee370
+    void AddItem(cGameBundle*);                      // 0x00cee820
+};
+}
 
 // ------------------------------------------------------------------ types
 struct Matrix3 {                       // 0x24 bytes
@@ -516,20 +538,19 @@ cleanup:
 // ================================================================================================
 // 0x00ac7790 -- create the ground noun (free function; args on stack).
 // @ 0x00ac7790
-void* __stdcall createNoun_7790(void* self, float f, void* p)
+SP::cGameBundle* __stdcall createNoun_7790(SP::cGameBundleContainer* self,
+                                         float amount, SP::eBundleType type)
 {
-    if (*(int*)((char*)self + 0x1c) <= FUN_00cee370(self))
-        return 0;
-    void* mgr = NounManager((void*)0x18c431c);
-    void* noun = ((NounMgr*)mgr)->CreateNoun();
-    ((C35b20*)noun)->Call(p, f);
-    ((Cee820*)self)->Call(noun);
-    ((VObj*)self)->m02(noun);
-    return noun;
+    if (self->mContainerCapacity > self->GetItemCount()) {
+        SP::cGameBundle* noun = SP::GetNounManager()->CreateNoun(0x018c431c);
+        noun->Init(type, amount);
+        self->AddItem(noun);
+        self->OnAddItem(noun);
+        return noun;
+    }
+    return 0;
 }
 
-// ================================================================================================
-// 0x00ac78a0 -- cGroundEditorRes constructor (this in ecx, returns this).
 // @ 0x00ac78a0
 cGroundEditorRes* __fastcall cGroundEditorRes_ctor(cGroundEditorRes* p)
 {

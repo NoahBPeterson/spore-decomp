@@ -18,6 +18,8 @@
 
 #include "types.h"
 
+struct cSPVector3;
+
 namespace SP {
 
 // ===================== float helpers (x87, CRT) =====================
@@ -42,6 +44,20 @@ struct cCtx {
     void Pointer(int code, float a, float b, int pressed); // 0x00697af0
     void Move(int pressed, float x, float y);     // 0x00697b20
 };
+
+// Terrain interfaces used by the brush height query.  GetMapSet is a
+// no-argument virtual getter; the position belongs to GetHeightAt.
+struct cTerrainMapSet {
+    float GetHeightAt(const cSPVector3&) const;  // 0x00f927c0
+};
+struct cTerrainSphere {
+    virtual int AddRef();
+    virtual int Release();
+    virtual void* GetDefinition();
+    virtual cTerrainMapSet* GetMapSet();
+    float GetWaterHeight() const;               // 0x00f987f0
+};
+cTerrainSphere* GetActiveTerrainSphere();        // 0x00f48aa0
 
 // ===================== float constants =====================
 extern const float K_0f;            // 0x013eb8b0  -0.0f (also the xorps sign mask)
@@ -474,21 +490,20 @@ float* cTerrainTool::GetBrushVector()
 // @ 0x00f4fb00
 void cTerrainTool::UpdateBrushSize()
 {
-    int* p = Sub_f48aa0(this);
-    float v;
-    if (p) {
-        float t = Sub_f987f0(p);
-        int* vt = *(int**)p;
-        typedef void* (__thiscall *Fn)(void*, void*);
-        void* r = ((Fn)vt[3])(p, (char*)this + 0x6c);
-        float q = Sub_f927c0(r);
-        v = mParam2b4 + (t > q ? t : q);
+    cTerrainSphere* sphere = GetActiveTerrainSphere();
+    float value;
+    if (sphere) {
+        float waterHeight = sphere->GetWaterHeight();
+        float terrainHeight = sphere->GetMapSet()->GetHeightAt(
+            *reinterpret_cast<const cSPVector3*>(&mMat6c));
+        const float& height = waterHeight > terrainHeight ? waterHeight : terrainHeight;
+        value = mParam2b4 + height;
     } else {
-        v = 0.0f;
+        value = 0.0f;
     }
-    if (v != mMat30) {
+    if (value != mMat30) {
         mMat24 = mMat28;
-        mMat30 = v;
+        mMat30 = value;
         *(char*)&mMat18 = 1;
     }
 }
