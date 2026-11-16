@@ -1586,16 +1586,20 @@ bool fn27730(void* a)
 int StrObj::fn277f0()
 { return 0; }
 
+struct PlanetSimStatePredicate {
+  bool Test(); // 0x00f277f0
+};
+
 // @ 0x00f278b0
 bool StrObj::fn278b0()
 {
-  bool r = false;
   if (sub_eece20(this) == (int)0xcf56099a) {
-    uint t = f00;
-    if (t == 0x90c48d09 || t == 0x3144b430) r = true;
-    else if (fn277f0()) r = true;
+    uint type = f00;
+    if (type == 0x90c48d09 || type == 0x3144b430
+        || reinterpret_cast<PlanetSimStatePredicate*>(this)->Test())
+      return true;
   }
-  return r;
+  return false;
 }
 
 // @ 0x00f278f0
