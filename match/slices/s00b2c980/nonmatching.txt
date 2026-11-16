@@ -1,4 +1,3 @@
-00b2c980 122 intrusive-list push_front of a refcounted object (eastl::list node alloc + sentinel splice); reconstructed but register allocation / order of AddRef differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#3 esp]
 00b2ca30 44 vector::resize(n) over 4-byte elements; original keeps n in eax and begin in edx, ours assigns n->edx begin->edi (register allocation only)
 00b2ca80 126 rbtree::erase(first,last) with clear-all fast path; reconstructed via DoNuke/RBTreeIncrement/RBTreeErase; register allocation + block order differ; returns out; equiv=WEAK (32 valid, 32.8% cov; tree faults limit coverage)
 00b2d0f0 38 remove-all-nouns map walk then reset anchor; only the tail (anchor reset) block differs in register allocation / store order
