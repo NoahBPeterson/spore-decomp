@@ -2,3 +2,4 @@
 # No byte-exact functions.
 slices/s00aa6880/s00aa6880.cpp  ?ExecuteSingleColor@cCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  00aa7220  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00aa6880/s00aa6880.cpp  ?ExecuteColorList@cCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  00aa6880  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00aa6880/s00aa6880.cpp  ?ExecuteLoopBoxColor@cCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  00aa6960  /O2 /MD /Gy /TP /fp:fast
