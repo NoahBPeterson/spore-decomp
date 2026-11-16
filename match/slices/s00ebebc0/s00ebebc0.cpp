@@ -517,31 +517,46 @@ void FUN_00ebf290(int obj, int* cursor)
 	*(byte*)(e + 0xb) = 0;
 }
 
+static __forceinline void SwapEventPointers(int*& first, int*& second)
+{
+    int* temporary = first;
+    first = second;
+    second = temporary;
+}
+
+// The retail vector stores an eight-byte allocator slot after its three pointers.
+struct EventVector
+{
+    int* begin;
+    int* end;
+    int* capacity;
+    uint allocator[2];
+    EventVector(int count, const void* alloc); // 0x00b93c60
+    EventVector& operator=(const EventVector& other); // 0x00b8ef40
+    void swap(EventVector& other);
+};
+
 // ---------------------------------------------------------------------------
 // FUN_00ebf480 -- swap two layout event vectors
 // @ 0x00ebf480
-void FUN_00ebf480(int* a, int* b)
+void EventVector::swap(EventVector& other)
 {
-	int* av = (int*)a[0];
-	int* bv = (int*)b[0];
-	if ((av == 0 || av[-1] != 0) && (bv == 0 || bv[-1] != 0))
-	{
-		a[0] = (int)bv;
-		b[0] = (int)av;
-		int t = a[1]; a[1] = b[1]; b[1] = t;
-		t = a[2]; a[2] = b[2]; b[2] = t;
-		return;
-	}
-
-	FUN_00b93c60((a[1] - (int)av) >> 2, a + 3);
-	byte* tmp = (byte*)0;
-	int n = a[1] - a[0];
-	tmp = (byte*)eastl_vector_insert(tmp, (void*)a[0], n);
-	tmp += (n >> 2) * 4;
-	FUN_00b8ef40(b);
-	FUN_00b8ef40(&tmp);
-	if (tmp != 0 && *(int*)(tmp - 4) != 0)
-		operator_delete__(tmp);
+    int* av = begin;
+    if ((av == 0 || av[-1] != 0) && (other.begin == 0 || other.begin[-1] != 0))
+    {
+        SwapEventPointers(begin, other.begin);
+        SwapEventPointers(end, other.end);
+        SwapEventPointers(capacity, other.capacity);
+        return;
+    }
+    EventVector temporary(end - begin, allocator);
+    int bytes = (char*)end - (char*)begin;
+    int* storage = temporary.begin;
+    temporary.end = (int*)eastl_vector_insert(storage, begin, bytes) + (bytes >> 2);
+    *this = other;
+    other = temporary;
+    if (storage != 0 && storage[-1] != 0)
+        operator_delete__(storage);
 }
 
 // ---------------------------------------------------------------------------
