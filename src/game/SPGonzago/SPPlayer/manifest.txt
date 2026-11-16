@@ -37,3 +37,4 @@
 ../src/game/SPGonzago/SPPlayer.cpp  ?FUN_00c75b60@@YAXPAXI00@Z  00c75b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?SetTheme@cPlayer@@QAEXI@Z  00c75580  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?NoteAdventureCompleted@cPlayer@@QAEXPAVcEmpire@SP@@I@Z  00c75e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?DoPlayerWarVictory@cPlayer@SP@@QAEXI@Z  00c75520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

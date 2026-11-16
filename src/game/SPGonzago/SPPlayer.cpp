@@ -5044,3 +5044,20 @@ void cPlayer::NoteAdventureCompleted(SP::cEmpire* empire, uint32_t adventureID)
             ++completedCount;
     }
 }
+
+class cCommManager {
+public:
+    void FUN_00aeb720(uint32_t empireID, uint32_t context, uint32_t groupID,
+                      uint32_t eventID, void* mission, int flags); // 0x00aeb720
+};
+cCommManager* __cdecl CommManager(); // 0x00b3d4a0
+
+// @ 0x00c75520
+void SP::cPlayer::DoPlayerWarVictory(unsigned int empireID)
+{
+    SP::cEmpire* empire = reinterpret_cast<SP::cEmpire*>(StarManager()->GetEmpireByID(empireID));
+    uint32_t politicalID = empire->mPoliticalID;
+    CommManager()->FUN_00aeb720(politicalID,
+        reinterpret_cast<cStarRecordRef*>(empire->GetHomePlanet())->GetCommContext(),
+        0xc8fbf7d7, 0xabd09746, 0, 0);
+}
