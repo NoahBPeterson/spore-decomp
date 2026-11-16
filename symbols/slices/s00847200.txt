@@ -29,3 +29,5 @@
 00848100 ?GetMinClientArea@Canvas_s0084_7200@@QAEXPAI@Z  # Canvas_s0084_7200::GetMinClientArea migrated from s00847200 (verbatim, slice spelling)
 00848120 ?SetMinClientArea@Canvas_s0084_7200@@QAEXII@Z  # Canvas_s0084_7200::SetMinClientArea migrated from s00847200 (verbatim, slice spelling)
 00848190 ?GetClientArea@Canvas_s0084_7200@@QAEXPAJ@Z  # Canvas_s0084_7200::GetClientArea migrated from s00847200 (verbatim, slice spelling)
+00847200 ??1cParser_s0084_7200@ArgScript@EA@@QAE@XZ  # cParser_s0084_7200::~cParser_s0084_7200 migrated from s00847200 (verbatim, slice spelling)
+00847490 ??0cParser_s0084_7200@ArgScript@EA@@QAE@XZ  # cParser_s0084_7200::cParser_s0084_7200 migrated from s00847200 (verbatim, slice spelling)

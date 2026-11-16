@@ -1,6 +1,7 @@
-004cf770 eastl::vector<Rec14>::DoInsertValues  # EASTL insert(pos,n,value), 20-byte element, growth via DoAllocate
-004cfc00 eastl::vector<Vec4>::DoInsertValues  # same, 16-byte element
-004d0080 eastl::vector<Word32,fixed_vector_allocator>::DoInsertValues  # same, 4-byte element, fixed allocator free check
-004d0430 eastl::hashtable::DoFreeNodes  # frees every bucket chain, nulls the bucket
-004d04a0 eastl::allocate_memory<fixed_hashtable_allocator>  # alignment<=8 branch both call allocate()
+004cf770 ?DoInsertValues@?$vector_s004c_f770@URec14@eastl@@@eastl@@QAEXPAURec14@2@IABU32@@Z  # DoInsertValues migrated from s004cf770 (verbatim, slice spelling)
+004cfc00 ?DoInsertValues@?$vector_s004c_f770@UVec4_s004c_f770@eastl@@@eastl@@QAEXPAUVec4_s004c_f770@2@IABU32@@Z  # DoInsertValues migrated from s004cf770 (verbatim, slice spelling)
+004d0080 ?DoInsertValues@fixed_word_vector@eastl@@QAEXPAUWord32@2@IABU32@@Z  # fixed_word_vector::DoInsertValues migrated from s004cf770 (verbatim, slice spelling)
+004d0430 ?DoFreeNodes@hashtable_s004c_f770@eastl@@QAEXPAPAUHashNode_s004c_f770@2@I@Z  # hashtable_s004c_f770::DoFreeNodes migrated from s004cf770 (verbatim, slice spelling)
+004d04a0 ?allocate_memory@eastl@@YAPAXAAUFixedHashtableAllocator_s004c_f770@1@III@Z  # allocate_memory migrated from s004cf770 (verbatim, slice spelling)
 004d04f0 eastl::vector<Word32>::DoAssignFromIterator<const Word32*>  # three-way assign
+004d04f0 ??$DoAssignFromIterator@PBUWord32@eastl@@@?$vector_s004c_f770@UWord32@eastl@@@eastl@@QAEXPBUWord32@1@0Urandom_access_iterator_tag@1@@Z  # migrated from s004cf770 (agent-fixed)
