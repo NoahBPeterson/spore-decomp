@@ -335,18 +335,17 @@ OutputIterator fill_n(OutputIterator first, Size n, const T& value)
 }
 
 template <typename ForwardIterator, typename T>
-inline void fill_imp(ForwardIterator first, ForwardIterator last, const T value)
+inline void fill_imp(const T value, ForwardIterator first, ForwardIterator last)
 {
     for (; first != last; ++first)
         *first = value;
 }
 
-// NM 0x00594260: value halves loaded after the destination pointers (original loads value first)
 // @ 0x00594260 ??$fill@
 template <typename ForwardIterator, typename T>
 void fill(ForwardIterator first, ForwardIterator last, const T& value)
 {
-    fill_imp(first, last, value);
+    fill_imp(value, first, last);
 }
 
 template <typename ForwardIterator>
