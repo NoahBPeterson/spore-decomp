@@ -2,6 +2,8 @@
 // Real PDB names: SP::cTerrainSystem::Init, SP::GetTerraformPlanetType,
 // SP::cSetCloudTypeStep::Step.  Module flags /O2 /MD /Gy /TP.
 #include "types.h"
+#include <intrin.h>
+#pragma intrinsic(_ReadWriteBarrier)
 
 extern float kTerraformRadiusT1, kTerraformRadiusT2, _kTerraformRadiusT3;
 extern float kLavaThreshold;
@@ -537,24 +539,32 @@ float __stdcall FUN_00fc1ad0(int a, int b, int c, int d, int e) {
 // ===========================================================================
 // 0x00fc1ae0 -- cTerrainSystem destructor
 // ===========================================================================
+inline int ReleaseTerrainReference(RefCounted* object)
+{
+    int result = --*(volatile int*)&object->mRefCount;
+    if (result == 0) {
+        object->mRefCount = 1;
+        _ReadWriteBarrier();
+        object->Release(1);
+    }
+    return result;
+}
+
 // @ 0x00fc1ae0
 void __fastcall FUN_00fc1ae0(int* p) {
     cTerrainSystem* s = (cTerrainSystem*)p;
     s->mVtable0 = 0x1491318;
     s->mVtable1 = 0x1491314;
+    _ReadWriteBarrier();
     if (s->mProps1c) s->mProps1c->v1();
     if (s->mObj14) s->mObj14->v1();
     if (s->mObj10) {
         RefCounted* rc = &s->mObj10->mRef;
-        int n = rc->mRefCount - 1;
-        rc->mRefCount = n;
-        if (n == 0) {
-            rc->mRefCount = 1;
-            rc->Release(1);
-        }
+        ReleaseTerrainReference(rc);
     }
     if (s->mObj0c) s->mObj0c->v3();
     s->mVtable0 = 0x13eb938;
+    _ReadWriteBarrier();
     s->mVtable1 = 0x13ef094;
 }
 
