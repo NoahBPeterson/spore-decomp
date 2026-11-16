@@ -17,3 +17,4 @@
 ../src/game/SPGonzago/SPNest.cpp  ?FUN_00c6b410@@YI_NPAX0PAVcIModelWorld@SP@@@Z  00c6b410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?AsInterface@cNest_s00c6_a550@SP@@QAEPAXH@Z  00c6b390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPNest.cpp  ?FindWateringHole@cHerd_s00c6_a550@SP@@QAEXXZ  00c6b5b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPNest.cpp  ?Write@cEgg_s00c6_a550@SP@@QAE_NPAVIOStream@2@@Z  00c6a550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

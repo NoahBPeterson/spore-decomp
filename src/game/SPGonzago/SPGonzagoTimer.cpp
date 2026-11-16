@@ -7,7 +7,7 @@
 extern void __cdecl FUN_00b63880();
 extern void __cdecl FUN_005725a0();
 extern void* gGonzagoTimerVtbl;           // 0x01464450
-extern char gSig2;   // 0x0156ad88
+extern SP::cDataSerializerGeneric gGonzagoTimerSerializer; // 0x0156ad88
 
 typedef unsigned char uchar;
 struct CSBase {
@@ -55,14 +55,14 @@ void __thiscall cGonzagoTimer::AddElapsed(int v)
 }
 
 // @ 0x00b638d0
-void __thiscall cGonzagoTimer::Write(void* ser)
+bool SP::cGonzagoTimer::Write(SP::cIObjectDatabaseOStream& stream) const
 {
     if (IsRunning()) {
-        long long t = GetElapsedTime();
-        mElapsed = t;
-        long long b = ((long long(__thiscall*)(void*))mGetMs)(this);
-        mBase = b;
+        SP::cGonzagoTimer* timer = const_cast<SP::cGonzagoTimer*>(this);
+        timer->mElapsedTime = GetElapsedTime();
+        timer->mBaseTime = mGetMillisecondTime();
     }
-    cVarListSerializer s((char*)this, &gSig2, 0x1a80d26);
-    s.Serialize(ser);
+    SP::cVarListSerializer serializer(this, &gGonzagoTimerSerializer,
+        SP::cVarListSerializer::kSignature);
+    return serializer.Serialize(stream);
 }

@@ -467,7 +467,7 @@ void cSPSimulatorWalkAround::SetRescueDelay(float v)
 // @ 0x01015e30  SP::cSPSimulatorWalkAround::Write
 void cSPSimulatorWalkAround::Write(IStream* s)
 {
-    IStream* a = (IStream*)s->v08();
+    IStream* __restrict a = (IStream*)s->v08();
     unsigned v = 0x2f404e9u;
     void* b = a->v06();
     EA_IO_WriteUint32(b, &v, 1, 0);

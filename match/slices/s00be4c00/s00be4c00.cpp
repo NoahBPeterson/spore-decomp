@@ -4,6 +4,9 @@
 // Reconstructed from annotated disassembly + Ghidra decompiles.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 
+#include <wchar.h>
+#pragma intrinsic(wcscmp)
+
 typedef unsigned int       u32;
 typedef unsigned short     u16;
 typedef unsigned char      u8;
@@ -275,7 +278,7 @@ struct cRaidBeh : cRaidBehBase {
   void  FUN_00bda0a0();                           // 0x00bda0a0
   void  Read(void* stream);                       // 0x00b18600
   void  FUN_00c00530(void* stream);               // 0x00c00530
-  void  FUN_00bd8000(void* stream);               // 0x00bd8000
+  void  FUN_00bd8000();                           // 0x00bd8000
 };
 
 struct cObjFCC {
@@ -707,32 +710,49 @@ struct cTempWideStr {
   u32        pad0c;                                   // 0x0c
 };
 
-cTempWideStr* __cdecl FUN_004010a0(cTempWideStr* buf, u32 id);
-void __fastcall FUN_005ecf80(cTempWideStr* s, void* dummy);
-void __cdecl operator_delete_array(void* p);
-
-void __fastcall FUN_00bda710(void* vec, void* dummy, void* a, void* b);
+struct RaidNameGenerator {
+  void GetName(cTempWideStr* result, u32 id); // 0x005ecf80
+};
+RaidNameGenerator* RaidNameGeneratorInstance(); // 0x004010a0
+void __cdecl operator_delete_array(void* p); // 0x00f47380
 
 struct cSpeciesMgr {
   void* GetProfile(void* key);                        // 0x004df550
 };
-void* __cdecl FUN_00401090(void* key);                // 0x00401090
+cSpeciesMgr* __cdecl FUN_00401090();                // 0x00401090
 void* __cdecl RBTreeIncrement(void* node);            // 0x00921580
 
-struct cVarListSerializer {
-  u32 pad[0x288];                                     // 0xa20 bytes
-  cVarListSerializer(void* owner, void* name, u32 hash);
-  u8  Serialize(void* stream);
+struct RaidSerializationInfo {
+  u32 mId;
+  u32 mDataSize;
+  bool mbSerialized;
+  void* mpBinderContext;
+  void* mpSerializer;
 };
-
-static s32 WideCmp(const u16* a, const u16* b)
-{
-  while (*a != 0 && *a == *b) {
-    a++;
-    b++;
+struct cVarListSerializer {
+  RaidSerializationInfo mDataSerializationInfos[128];
+  int mSerializableVarCount;
+  int mSerializedVarCount;
+  u32 mSignature;
+  void* mpObject;
+  void* mpSerializerList;
+  cVarListSerializer(const void* owner, void* name, u32 hash); // 0x00692f90
+  u8 Serialize(void* stream); // 0x00693e10
+};
+struct RaidBlock { u32 mData[32]; };
+struct RaidBlockRange {
+  RaidBlock* begin;
+  RaidBlock* end;
+  void Destroy(RaidBlock* first, RaidBlock* last); // 0x00bda710
+  void Erase(RaidBlock* first, RaidBlock* last)
+  {
+    RaidBlock* newEnd = reinterpret_cast<RaidBlock*>(FUN_00bdd600(
+        reinterpret_cast<u32*>(last), reinterpret_cast<u32*>(end),
+        reinterpret_cast<u32*>(first)));
+    Destroy(newEnd, end);
+    end -= last - first;
   }
-  return (s32)*a - (s32)*b;
-}
+};
 
 // ---------------------------------------------------------------------------
 // 0x00be54c0 - load the raid behaviour state from a stream.
@@ -748,22 +768,22 @@ u8 __fastcall FUN_00be54c0(cRaidBeh* self, void* dummy, cStream* stream)
   self->v120.FUN_00c88b00(stream);
   self->FUN_00c00530(stream);
 
-  if (WideCmp(self->obj34.Chars(), *(const u16**)0x151ac94) == 0) {
+  if (wcscmp(reinterpret_cast<const wchar_t*>(self->obj34.Chars()),
+      *reinterpret_cast<const wchar_t**>(0x151ac94)) == 0) {
     cTempWideStr tmp;
-    FUN_005ecf80(FUN_004010a0(&tmp, 0x58f4c251), 0);
+    RaidNameGeneratorInstance()->GetName(&tmp, 0x58f4c251);
     self->obj34.Assign(tmp.begin);
-    if ((((s32)(tmp.end) - (s32)(tmp.begin)) & 0xfffffffe) > 2 && tmp.begin != 0)
+    if ((((s32)(tmp.end) - (s32)(tmp.begin)) & ~1) > 2 && tmp.begin != 0)
       operator_delete_array((void*)tmp.begin);
   }
 
-  u32* newEnd = (u32*)FUN_00bdd600(self->blocks.end, self->blocks.end,
-                                   self->blocks.begin);
-  FUN_00bda710(&self->blocks.begin, 0, newEnd, self->blocks.end);
-  self->blocks.end = newEnd;
+  RaidBlockRange* blocks = reinterpret_cast<RaidBlockRange*>(&self->blocks.begin);
+  blocks->Erase(blocks->begin, blocks->end);
 
-  if (self->p590 != 0) {
+  cNoun* previous = reinterpret_cast<cNoun*>(self->p590);
+  if (previous != 0) {
     self->p590 = 0;
-    ((cNoun*)self->p590)->v04();
+    previous->v04();
   }
   stream->v28(0x901f1362, &self->p590, 0);
 
@@ -784,8 +804,7 @@ u8 __fastcall FUN_00be54c0(cRaidBeh* self, void* dummy, cStream* stream)
   u8 ok = ser.Serialize(stream);
 
   if (self->blocks.p658 != 0) {
-    cSpeciesMgr* mgr = (cSpeciesMgr*)FUN_00401090(&self->blocks.p658);
-    self->blocks.p654 = (u32)mgr->GetProfile(&self->blocks.p658);
+    self->blocks.p654 = (u32)FUN_00401090()->GetProfile(&self->blocks.p658);
   }
 
   void* head = &self->p7bc;
@@ -793,6 +812,6 @@ u8 __fastcall FUN_00be54c0(cRaidBeh* self, void* dummy, cStream* stream)
   }
 
   self->v84();
-  self->FUN_00bd8000(stream);
+  self->FUN_00bd8000();
   return ok;
 }

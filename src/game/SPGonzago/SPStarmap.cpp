@@ -783,10 +783,16 @@ struct cSink {
 };
 }
 namespace SP {
-struct cVarListSerializer_s0104_4360 {
-    uint32_t mData[7];                                     // 0x1c bytes
-    void Init(void* owner, const void* list, uint32_t line); // 0x00692f90
-    bool Serialize(cIOStream* stream);                     // 0x00692900
+struct StarMapStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // +0x18
+};
+struct StarMapOutputStream {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual StarMapStreamHolder* GetStreamHolder(); // +0x20
 };
 }
 namespace SP {
@@ -986,15 +992,26 @@ struct cBitVector {
 };
 }
 namespace SP {
+struct FlagGridIterator {
+    int* current;
+    int* first;
+    int* last;
+    int** node;
+    void Advance() {
+        ++current;
+        if (current == last) {
+            ++node;
+            first = *node;
+            last = first + 0x40;
+            current = first;
+        }
+    }
+};
 struct cFlagEntry {
-    void* mpVtable;                    // +0x00
-    void SerializeInto(void* stream) {
-        ((void (__thiscall*)(cFlagEntry*, void*))((void**)mpVtable)[0x1c / 4])(this, stream);
-    }
-    void* GetName(const void* id) {
-        return ((void* (__thiscall*)(cFlagEntry*, const void*))
-            ((void**)mpVtable)[0x0c / 4])(this, id);
-    }
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void* GetName(const void* id); // +0x0c
+    virtual void slot4(); virtual void slot5(); virtual void slot6();
+    virtual void SerializeInto(void* stream); // +0x1c
 };
 }
 namespace SP {
@@ -1057,13 +1074,16 @@ namespace SP {
 void cStarMap_s0104_4360::SerializeSlots(cIOStream* stream)
 {
     for (int i = 0; i < 7; ++i) {
-        uint32_t value = mSlots[i];
-        cSink* sink = stream->GetSink();
-        WriteUint32(sink->GetStream(), &value, 1, 0);
+        uint32_t slot = mSlots[i];
+        StarMapStreamHolder* __restrict holder =
+            reinterpret_cast<StarMapOutputStream*>(stream)->GetStreamHolder();
+        uint32_t value = slot;
+        void* output = holder->GetStream();
+        WriteUint32(output, &value, 1, 0);
     }
-    cVarListSerializer_s0104_4360 serializer;
-    serializer.Init(this, &gSerializerList, 0x1a80d26);
-    serializer.Serialize(stream);
+    cVarListSerializer serializer(this,
+        (cDataSerializerGeneric*)&gSerializerList, cVarListSerializer::kSignature);
+    serializer.Serialize(*reinterpret_cast<cIObjectDatabaseOStream*>(stream));
 }
 }  // namespace SP
 
@@ -1246,19 +1266,12 @@ void __cdecl SerializeFlagGrid(cIOStream* stream, const cFlagGrid* grid)
 namespace SP {
 bool __cdecl ForEachFlagEntry(void* stream, const cFlagGrid* grid)
 {
-    int* rowEnd = grid->mpRowEnd;
+    FlagGridIterator it = { grid->mpBegin, 0, grid->mpRowEnd, grid->mpRowBase };
     int* last = grid->mpEnd;
-    int* it = grid->mpBegin;
-    int** rowBase = grid->mpRowBase;
-    while (it != last) {
-        if (*it)
-            ((cFlagEntry*)*it)->SerializeInto(stream);
-        ++it;
-        if (it == rowEnd) {
-            it = rowBase[1];
-            ++rowBase;
-            rowEnd = it + 0x40;
-        }
+    while (it.current != last) {
+        if (*it.current)
+            ((cFlagEntry*)*it.current)->SerializeInto(stream);
+        it.Advance();
     }
     return true;
 }

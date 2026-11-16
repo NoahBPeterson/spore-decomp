@@ -305,17 +305,6 @@ public:
     virtual void v1c();                                     // +0x1c
     virtual tStreamInner* v20();                            // +0x20
 };
-class cVarListSerializer {
-public:
-    uint32_t mPad00[0x05];                                          // +0x00
-    void Construct(void* pOwner, void* pVarList, int32_t nLine);    // 0x00692f90
-    bool Serialize(cOutStream* pStream);                            // 0x00692900
-};
-struct tVarListFrame {
-    uint32_t            mnValue;            // +0x000
-    cVarListSerializer  mSerializer;        // +0x004
-    uint32_t            mPad18[0x280];      // +0x018
-};
 bool __cdecl EA_IO_WriteUint32(tIStream* pStream, const uint32_t* pValue, int32_t nCount, int32_t nFlags); // 0x0093aa70
 // ---- items of slice s00ffb180 end
 
@@ -992,14 +981,14 @@ struct cSPSimulatorPlayerUFO_s00ff_c230 {
 // @ 0x00ffbe60
 bool cSPSimulatorPlayerUFO::Write(cOutStream* pStream)
 {
-    tVarListFrame frame;
-    void* a = pStream->v20();
-    void** vt = *(void***)a;
-    frame.mnValue = 0x02f011e8;
-    tIStream* pSink = ((tIStream* (__thiscall*)(void*))vt[6])(a);
-    EA_IO_WriteUint32(pSink, &frame.mnValue, 1, 0);
-    frame.mSerializer.Construct((void*)((char*)this - 8), g_varListUFO, 0x1a80d26);
-    return frame.mSerializer.Serialize(pStream);
+    tStreamInner* __restrict holder = pStream->v20();
+    uint32_t value = 0x02f011e8;
+    tIStream* sink = holder->v18();
+    EA_IO_WriteUint32(sink, &value, 1, 0);
+    SP::cVarListSerializer serializer((char*)this - 8,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(g_varListUFO),
+        SP::cVarListSerializer::kSignature);
+    return serializer.Serialize(*reinterpret_cast<SP::cIObjectDatabaseOStream*>(pStream));
 }
 
 // @ 0x00ffbf60

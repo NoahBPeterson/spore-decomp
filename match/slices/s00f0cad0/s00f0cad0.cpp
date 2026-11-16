@@ -24,6 +24,9 @@
 //
 // flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 #include "types.h"
+#include "SP/cVarListSerializer.h"
+#include "SP/cGameData.h"
+#include "SP/cSpatialObject.h"
 
 // ---------------------------------------------------------------------------
 // External helpers (real addresses of the sibling functions).
@@ -105,11 +108,7 @@ extern "C" void f_cSpatialObject_dtor(void* self);      // 0xc8a420
 extern "C" void f_cGameData_dtor(void* self);           // 0xb184c0
 extern "C" void f_FUN_00c8b2e0(void* self);             // 0xc8b2e0
 struct SpatialShutdown { void Shutdown(); };            // 0xc8b2e0 thiscall
-extern "C" char f_cGameData_Write(void* self, void* s);// 0xb18590
-extern "C" char f_cSpatialObject_Write(void* self, void* s); // 0xc88a90
 extern "C" char f_WriteUint32(void* stream, const unsigned* p, unsigned n, int a); // 0x93aa70
-extern "C" void* f_cVarListSerializer_Construct(void* a, void* b, unsigned c, ...); // 0x692f90
-extern "C" char f_cVarListSerializer_Serialize(void* self, void* s); // 0x692900
 extern "C" void f_operator_delete(void* p);             // 0xf47380
 
 extern uint8_t g_vtbl_cPlaceableEffect0[];      // 0x148bc50
@@ -157,6 +156,19 @@ struct IEffect2 {
     virtual void s24();
     virtual void s28();
     virtual void s2c();                     // +0x2c
+};
+
+extern char gPlaceableEffectSerializerList; // 0x015ad5ac
+struct PlaceableEffectStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // +0x18
+};
+struct PlaceableEffectOutputStream {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual PlaceableEffectStreamHolder* GetStreamHolder(); // +0x20
 };
 
 struct CPlaceableEffect {
@@ -764,18 +776,19 @@ void CPlaceableEffect::ReadProperties()
 // @ 0x00f0d6e0
 bool CPlaceableEffect::Write(void* stream)
 {
-    char* s = (char*)this;
+    PlaceableEffectStreamHolder* __restrict holder =
+        static_cast<PlaceableEffectOutputStream*>(stream)->GetStreamHolder();
     unsigned tag = 0x7b38ba7;
-    void** st = *(void***)stream;
-    void* inner = ((void* (*)(void*))st[0x20 / 4])(stream);
-    void** it = *(void***)inner;
-    void* wr = ((void* (*)(void*))it[0x18 / 4])(inner);
-    f_WriteUint32(wr, &tag, 1, 0);
+    void* output = holder->GetStream();
+    f_WriteUint32(output, &tag, 1, 0);
 
-    bool ok = f_cGameData_Write(this, stream) &&
-              f_cSpatialObject_Write(s + 0x34, stream);
-
-    if (ok)
-        return f_cVarListSerializer_Serialize(0, stream) != 0;
-    return false;
+    SP::cIObjectDatabaseOStream& archive =
+        *static_cast<SP::cIObjectDatabaseOStream*>(stream);
+    bool ok = reinterpret_cast<SP::cGameData*>(this)->SP::cGameData::Write(archive) &&
+        reinterpret_cast<SP::cSpatialObject*>((char*)this + 0x34)->SP::cSpatialObject::Write(archive);
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&gPlaceableEffectSerializerList),
+        SP::cVarListSerializer::kSignature);
+    bool result = ok && serializer.Serialize(archive) ? true : false;
+    return result;
 }

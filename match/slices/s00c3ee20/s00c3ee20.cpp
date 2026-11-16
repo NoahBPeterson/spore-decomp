@@ -584,15 +584,6 @@ void cInteractableObject::SetModelState(int nState, bool bForce)
 // ---------------------------------------------------------------------------
 // 0x00c3f920  cInteractableObject::GetFields
 // ---------------------------------------------------------------------------
-// @ 0x00c3f920
-int cInteractableObject::GetFieldValues(int nFlags)
-{
-    cVarListSerializer base(this, sInteractableFields, 0x1a80d26);
-    int nBase = base.GetFields(nFlags);
-    int nGameData = cGameData::GetFieldValues(nFlags);
-    cVarListSerializer own(this, sOrnamentFields, 0x1a80d26);
-    return own.GetFields(nFlags) + nBase + nGameData;
-}
 
 // ---------------------------------------------------------------------------
 // 0x00c3f9b0  cInteractableObject::cInteractableObject

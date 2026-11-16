@@ -229,7 +229,7 @@ struct SpatialView {
     void f00c8ad30(int a, int b);
     void f00c8b2e0();
     void f00c8a420();
-    bool Write(void* stream);
+    bool Write(void* stream);                               // 0x00c88a90
 };
 struct cGameNounManager { void* GetAvatar(); };
 struct cSpatialObject {
@@ -248,7 +248,7 @@ struct CommunityView { void func54h(const Vec3* p); };
 struct GameDataView {
     void ctor();
     void dtor();
-    bool Write(void* stream);
+    bool Write(void* stream);                               // 0x00b18590
 };
 struct cVarListSerializer {
     void Construct(void* owner, void* fieldName, uint32_t id);   // 0x00692f90
@@ -678,19 +678,20 @@ void cPlaceableSound::SetPosition(const Vec3* p)
         AudioSetListener3((void*)mE0, p->x, p->y, p->z);
 }
 
+extern SP::cDataSerializerGeneric gPlaceableSoundSerializer;  // 0x015a912c
+
 // @ 0x00eac360
 bool cPlaceableSound::Write(void* stream)
 {
-    void* a = ((VObj*)stream)->v20();
-    void* out = ((VObj*)a)->v18();
+    VObj* __restrict holder = static_cast<VObj*>(((VObj*)stream)->v20());
     uint32_t id = 0x74e0069;
-    _ReadWriteBarrier();  // the original keeps the id store ahead of the argument pushes
+    void* out = holder->v18();
     EA::IO::WriteUint32(out, &id, 1, 0);
     bool ok = ((GameDataView*)this)->Write(stream)
            && ((SpatialView*)((char*)this + 0x34))->Write(stream);
-    cVarListSerializer ser;
-    ser.Construct(this, (void*)0x15a912c, 0x1a80d26);
-    if (ok && ser.Serialize(stream))
+    SP::cVarListSerializer ser(this, &gPlaceableSoundSerializer,
+        SP::cVarListSerializer::kSignature);
+    if (ok && ser.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream)))
         return true;
     return false;
 }

@@ -341,22 +341,6 @@ __declspec(noinline) void __cdecl WriteVarMap(ISerializer* ser, RelTree* t);
 __declspec(noinline) void __cdecl WriteFloatMap(ISerializer* ser, RelTree* t);
 
 // ---------------------------------------------------------------------------
-// @ 0x00d00ff0  write a map<pair<uint,uint>, VarList>
-void __cdecl WriteVarMap(ISerializer* ser, RelTree* t)
-{
-    PutU32(ser, t->size);
-    RBNode* end = &t->anchor;
-    for (RBNode* it = t->anchor.left; it != end; it = (RBNode*)RBTreeIncrement(it)) {
-        PutU32(ser, *(uint32_t*)((char*)it + 0x10));
-        PutU32(ser, *(uint32_t*)((char*)it + 0x14));
-        ser->EndRecord();
-        cVarListSerializer vs((char*)it + 0x18, kVarListDescA, 0x1a80d26);
-        vs.Serialize(ser);
-        ser->EndRecord();
-    }
-    ser->EndRecord();
-}
-
 // ---------------------------------------------------------------------------
 // @ 0x00d01110  write a map<uint,float>
 void __cdecl WriteFloatMap(ISerializer* ser, RelTree* t)

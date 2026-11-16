@@ -555,17 +555,64 @@ bool __stdcall FUN_006751c0(unsigned* p)
     }
 }
 
+struct AchievementWriter {
+    virtual void slot00();
+    virtual void slot04();
+    virtual void slot08();
+    virtual void slot0c();
+    virtual void slot10();
+    virtual void slot14();
+    virtual void* GetSink(); // +0x18
+};
+struct AchievementStream {
+    virtual void slot00();
+    virtual void slot04();
+    virtual void slot08();
+    virtual void slot0c();
+    virtual void slot10();
+    virtual void slot14();
+    virtual void slot18();
+    virtual void slot1c();
+    virtual AchievementWriter* GetWriter(); // +0x20
+};
 // @ 0x00675260
 void CVarList::Serialize(int* io)
 {
-    WriteIntVal(io, 1);
-    WriteIntVal(io, (mpEnd - mpBegin) >> 4);
-    for (int* p = mpBegin; p != mpEnd; p += 4) {
-        WriteIntVal(io, p[0]);
-        WriteIntVal(io, p[2]);
+    AchievementStream* stream = reinterpret_cast<AchievementStream*>(io);
+    int value;
+    {
+        AchievementWriter* __restrict writer = stream->GetWriter();
+        value = 1;
+        void* sink = writer->GetSink();
+        EA_IO_WriteUint32(sink, &value, 1, 0);
     }
-    cVarListSerializer s((void*)this, &g_1529330, 0x1a80d26);
-    s.Serialize(io);
+    int count = ((char*)mpEnd - (char*)mpBegin) >> 4;
+    {
+        AchievementWriter* __restrict writer = stream->GetWriter();
+        value = count;
+        void* sink = writer->GetSink();
+        EA_IO_WriteUint32(sink, &value, 1, 0);
+    }
+    int* p = mpBegin;
+    int* end = mpEnd;
+    for (; p != end; p += 4) {
+        {
+            AchievementWriter* __restrict writer = stream->GetWriter();
+            value = p[0];
+            void* sink = writer->GetSink();
+            EA_IO_WriteUint32(sink, &value, 1, 0);
+        }
+        {
+            AchievementWriter* __restrict writer = stream->GetWriter();
+            value = p[2];
+            void* sink = writer->GetSink();
+            EA_IO_WriteUint32(sink, &value, 1, 0);
+        }
+    }
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&g_1529330),
+        SP::cVarListSerializer::kSignature);
+    serializer.Serialize(*reinterpret_cast<SP::cIObjectDatabaseOStream*>(io));
 }
 
 // @ 0x00675370
