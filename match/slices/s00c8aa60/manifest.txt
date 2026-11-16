@@ -12,3 +12,4 @@ slices/s00c8aa60/s00c8aa60.cpp  ?sub_b7d0@Obj48@@QAEXXZ                         
 slices/s00c8aa60/s00c8aa60.cpp  ?RemoveOwner@cGameData@@QAEXXZ                  00c8b790  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00c8aa60/s00c8aa60.cpp  ?c8b820@@YAXPAXH@Z                             00c8b820  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00c8aa60/s00c8aa60.cpp  ?Read@cStar@@QAE_NH@Z                          00c8b3e0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00c8aa60/s00c8aa60.cpp  ?sub_ad30@cSpatialObjectView@@QAEXHH@Z  00c8ad30  /O2 /MD /Gy /EHsc /TP /arch:SSE

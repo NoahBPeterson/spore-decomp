@@ -5488,8 +5488,7 @@ void AI::FUN_00bf71d0()
   mTick4b4 += 1;
   if (mTick4b4 >= 6) {
     mTick4b4 -= 6;
-    float f = FUN_00bf6fa0(1);
-    FUN_00befd80(f * 0.1f, 1);
+    FUN_00befd80(FUN_00bf6fa0(1) * 0.1f, 1);
   }
 }
 
