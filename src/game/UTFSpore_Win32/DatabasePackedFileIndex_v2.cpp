@@ -59,7 +59,6 @@ void FUN_006bf430(void* a);                          // 0x6bf430
 void FUN_006bf5d0(void* a, void* b, void* c, void* d); // 0x6bf5d0
 void* FUN_006bf7d0(void* a, void* b);                // 0x6bf7d0
 void FUN_006bf8f0(void* a, void* b, void* c, void* d); // 0x6bf8f0
-void* FUN_006bfc20(void* a, void* b, void* c);       // 0x6bfc20
 // ---- items of slice s006bede0 end
 
 // ---- items of slice s006bfda0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -478,9 +477,19 @@ void EA::ResourceMan::PFIndexModifiable::AddRecord(EA::ResourceMan::Key const & 
 }
 
 
+// Empty dispatch tag passed by value to the unique-key insertion overload.
+struct HoleInsertUniqueTag {};
+struct HoleTree {
+    void DoInsertValueHint(HoleNode** result, HoleNode* hint, const HoleRec* value, HoleInsertUniqueTag); // 0x006bf8f0
+    HoleNode** Insert(HoleNode** result, HoleNode* hint, const HoleRec* value);
+};
+
 // @ 0x006bfc20
-void* FUN_006bfc20(void* a, void*, void*)
-{ return a; }
+HoleNode** HoleTree::Insert(HoleNode** result, HoleNode* hint, const HoleRec* value)
+{
+    DoInsertValueHint(result, hint, value, HoleInsertUniqueTag());
+    return result;
+}
 
 
 // @ 0x006c0120
