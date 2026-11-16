@@ -3,5 +3,4 @@
 0062efb0  397  LoadPanelInfo: complete; local layout and register assignment differ (sorted insert of panel info)
 0062f1e0  149  LoadAllAnimInfo: complete; key filter object / vector locals laid out differently
 0062f2a0  35  Init: complete; orig reloads vector bounds after the store (alias) and loads args earlier
-0062f2f0  12  logic: fixed (removed the dropped-return early read: mChangingEnvironment is cleared straight after the first check, and the final FUN_0045b150() call is now the last statement, so the source returns instead of the retail tail call); instructions now line up except mine still re-loads mCrossFadeEffectID for the outer FUN_00401050 at the deepest block, giving one extra instruction and a tail call vs ret. fix1: quick check DIFFERS (emulator wall-clock, no verdict)
 0062f610  127  BGMgr UpdateBackground: complete; orig reloads vector begin/end from memory after stores

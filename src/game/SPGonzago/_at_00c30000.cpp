@@ -1028,6 +1028,7 @@ void cGameBundle::Dtor()
     mpVtbl2 = g_p146b984;
     *(void**)mSpatial  = g_p146b8c0;
     *(void**)mInteract = g_p146b8a0;
+    _ReadWriteBarrier();
     void* p128 = mpField128;
     if (p128)
         ((VObj*)p128)->v7();

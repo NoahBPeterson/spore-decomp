@@ -18,7 +18,6 @@
 00d7a4d0 34 IsLookupBFlagSet: complete 0x2000 lookup, 0xd999d0 resolve and bit-9 test; 60 vs 85 B; bit test and manager+8 scheduling differ; equiv WEAK (189 valid, 65.2% coverage) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00d7a560 10 GetEditorSelection: complete 0x800000 lookup, 0xd99980 resolve, +0xb5e gate, output clear, flag set and +0x5a8 payload pointer; 97 vs 95 B; pointer is formed with add rather than lea and manager+8 is scheduled earlier; equiv WEAK (276 valid, 52.9% coverage) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00d7a700 105 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: cl shrink-wraps the esi push and folds the two return-true blocks into setne; equiv PASS
-00d7a850 72 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation around the FUN_00ac80d0 chain; equiv WEAK (27% coverage)
 00d7a920 235 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: distance-call temp slots and register allocation differ; equiv FAIL reg-only ecx (untouched by the original, 5 valid inputs)
 00d7aa50 98 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: first FUN_00d38a30 result kept in the original, dropped as a dead store by ours; equiv PASS
 00d7ab10 166 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: (long long) cast calls __ftol2 while the original inlines fnstcw/fldcw/fistp; equiv WEAK (29% coverage)

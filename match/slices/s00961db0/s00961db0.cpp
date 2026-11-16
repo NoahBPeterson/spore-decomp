@@ -1,5 +1,6 @@
 // Slice s00961db0: EA::UTFWin::Window / cGetChildWindowCache and hash_map helpers.
 // Reconstructed from the annotated disassembly; real names where the 2008 PDB has them.
+#include <intrin.h>
 #include "types.h"
 
 // ---------------------------------------------------------------------------
@@ -545,6 +546,7 @@ void S9628f0::f(void* win) {
   *(int*)(p + 4) = n;
   *(int*)(obj + 8) = 0;
   *(int*)(obj + 0xc) = 0;
+  _ReadWriteBarrier();
   RefObj* r = (RefObj*)obj;
   *(int*)(obj + 0x38) = 0;
   r->Release();

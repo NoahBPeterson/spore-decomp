@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-008dd0d0 209 complete: PFRecordWrite ctor; constructors now thiscall on mMemStream/mFileStream, AddRef calls use their vtables, SetOption/SetData pass mMemStream in ECX; equiv PASS 218/600 valid, 100% cov
 008dd1c0 31 complete: EA::SharedLibrary::Release; interlocked refcount + virtual destroy; register/scheduling differs
 008dd1f0 34 complete: PFRecordWrite::_virtual_dtor; vtable store order differs
 008dd510 298 complete: Resource::FindEmbeddedPackageHeader; parse/scan flow reconstructed; buffer handling differs

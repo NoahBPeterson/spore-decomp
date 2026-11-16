@@ -6,6 +6,7 @@
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 
+#include <intrin.h>
 #include "types.h"
 #include <math.h>
 
@@ -510,6 +511,7 @@ void RBTree::Insert(void** out, void* parent, uint32_t* key, char flag)
     RBTreeInsert(n, parent, (char*)this + 4, (int)side);
     ++count;
     *out = n;
+    _ReadWriteBarrier();
 }
 
 // ---------------------------------------------------------------------------

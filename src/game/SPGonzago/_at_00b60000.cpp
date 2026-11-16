@@ -4196,6 +4196,7 @@ EStr* FUN_00b6ba50(EStr* result, void* obj)
 
     result->m10    = (wchar_t*)((char*)result + 0x14);
     wchar_t* base  = result->m10;
+    _ReadWriteBarrier();
     result->mCap   = base + 0x20;
     result->mEnd   = base;
     result->mBegin = base;

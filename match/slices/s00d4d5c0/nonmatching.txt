@@ -18,7 +18,6 @@
 #                mask via two tree walks.  Same logic, different callee-saved allocation and loop
 #                rotation (225 vs 206 bytes).  equiv UNSUPPORTED: 0/400 inputs valid (faults reading
 #                the unmodelled manager members).
-00d4d790   10  TriggerDramaEvent(uint,uint): equal_range on the multimap, then activate + dispatch the
 #                matching event.  Only difference: we load the loop bound through a scratch eax before
 #                copying it into ebx (original loads straight into ebx) so the loop-alignment nop is
 #                absent.  equiv PASS: 296/400 inputs valid, 100% coverage.

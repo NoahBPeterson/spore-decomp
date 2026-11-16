@@ -2,3 +2,4 @@
 # SP::cSPUISpace posse / minimap UI handlers.  VS2008-era (cl 15), /arch:SSE /fp:fast.
 slices/s00f0ea20/s00f0ea20.cpp  ?RemovePosseUIForUFO@cSPUISpace@@QAEXPAX@Z  00f0ef40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00f0ea20/s00f0ea20.cpp  ?RemovePosseMember@cSPUISpace@@QAEXPAX@Z  00f0f0a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f0ea20/s00f0ea20.cpp  ?Insert@RBTree@@QAEXPAPAXPAXPAID@Z  00f0f170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

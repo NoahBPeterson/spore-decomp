@@ -18,7 +18,6 @@
                (399 valid, 100% coverage); cl factors the second comparison
                into `sete` instead of the original's shared `mov eax,1` tail.
                flags /O2 /MD /Gy /TP /arch:SSE
-00fd9d90   14  universe-context graphics refresh: complete and equivalence
                WEAK (400 valid, no mismatch, 16% coverage); the else-block is
                laid out before the final return instead of after it.
                flags /O2 /MD /Gy /TP /arch:SSE

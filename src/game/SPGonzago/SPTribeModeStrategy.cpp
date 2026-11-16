@@ -6301,7 +6301,8 @@ int SP::cTribeModeStrategy_s00cd_bb10::FUN_00cdbb10()
 // @ 0x00cdbcc0
 cHut* SP::cTribeModeStrategy_s00cd_bb10::FindClosestNPCHut(uint32_t param)
 {
-    NounManagerData* data = NounManager_s00cd_bb10()->GetGameDataVector(
+    cGameNounManager_s00cd_bb10* nm = NounManager_s00cd_bb10();
+    NounManagerData* data = nm->GetGameDataVector(
         0xcd7d10, 0xd3d420, 0xaccbb0, 0xb1e500, 0x18c6d19);
     cTribe_s00cd_bb10* tribe = FindClosestNPC(&data->mVector, param, SP::IsNonEmptyNPCTribe);
     if (tribe)

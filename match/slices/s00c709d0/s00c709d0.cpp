@@ -605,6 +605,7 @@ void* VPlanet::FUN_00c71570()
     *(void**)((char*)this + 0xd4) = vtbl_VPlanet_gd_01472428;
     *(void**)((char*)this + 0xd8) = vtbl_VPlanet_d8_01472414;
     mpCommon = 0;
+    _ReadWriteBarrier();
     mFieldA6 = 0;
     return this;
 }

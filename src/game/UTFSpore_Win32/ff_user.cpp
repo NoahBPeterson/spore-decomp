@@ -19,6 +19,7 @@ void* ff_malloc(unsigned n)
 {
     if (g_ff_malloc == 0)
         __debugbreak();
+    _ReadWriteBarrier();
     return g_ff_malloc(n);
 }
 
@@ -27,6 +28,7 @@ void ff_free(void* p)
 {
     if (g_ff_free == 0)
         __debugbreak();
+    _ReadWriteBarrier();
     g_ff_free(p);
 }
 

@@ -2,6 +2,7 @@
 // Object file: SPEditors/SPUIAssetBrowser.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "SP/cSPUIAssetBrowser.h"
 #include "SP/cString.h"
@@ -2481,6 +2482,7 @@ Elem* cSPUIAssetBrowser::FUN_006461d0(Elem* first, Elem* last, Elem* dst)
         dst->a = last->a;
         dst->b = last->b;
         dst->c = last->c;
+        _ReadWriteBarrier();
         cRefCountA* newp = last->p;
         cRefCountA* oldp = dst->p;
         if (newp != oldp) {
