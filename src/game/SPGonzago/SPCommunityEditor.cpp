@@ -5678,10 +5678,49 @@ void __fastcall FUN_00d0c970(cMapInsert* this_, int unused, tTreeNode** ppResult
 
 // @ 0x00d0ca00
 namespace SP {
-void __fastcall FUN_00d0ca00(cMapInsert* this_, int unused, tTreeNode** ppResult, tMapValue* pKey, tTreeNode* pParentNode, bool sideKnown)
+// Tree insert for the second key type (8-byte signed lexicographic key, CopyValue payload).
+// Retail ABI: stack args are (ppResult, pParentNode, pKey, sideKnown) — the parent node is the
+// second stack argument and the key+payload the third, verified from the retail reads of
+// [esp+8]/[esp+0xc] (note: the 0x00d0c970 declaration below keeps the historical swapped names).
+tTreeNode** __fastcall FUN_00d0ca00(cMapInsert* this_, int unused, tTreeNode** ppResult, tTreeNode* pParentNode, tMapValue* pKey, bool sideKnown)
 {
     (void)unused;
-    FUN_00d0c970(this_, 0, ppResult, pKey, pParentNode, sideKnown);
+    struct Key2Value {
+        int32_t   mKeyA;
+        int32_t   mKeyB;
+        CopyValue mValue;
+
+        Key2Value(const Key2Value& other)
+            : mKeyA(other.mKeyA), mKeyB(other.mKeyB) { mValue.AssignFrom(&other.mValue); }
+    };
+    struct TreeNode2 {
+        TreeNode2* mpParent;
+        TreeNode2* mpLeft;
+        TreeNode2* mpRight;
+        uint32_t   mColor;
+        Key2Value  mValue;
+    };
+    TreeNode2* pParent2 = (TreeNode2*)pParentNode;
+    Key2Value* pKeyValue = (Key2Value*)pKey;
+
+    int right;
+    if (!sideKnown && pParent2 != (TreeNode2*)&this_->mHeader
+        && pKeyValue->mKeyA >= pParent2->mValue.mKeyA
+        && (pParent2->mValue.mKeyA < pKeyValue->mKeyA
+            || pKeyValue->mKeyB >= pParent2->mValue.mKeyB))
+        right = 1;
+    else
+        right = 0;
+
+    TreeNode2* pNode = (TreeNode2*)operator_new(
+        0x44, "Simulator", 0, 0, kEastlAllocatorHeader, 0xd1);
+    new (&pNode->mValue) Key2Value(*pKeyValue);
+
+    eastl_RBTreeInsert((tTreeNode*)pNode, (tTreeNode*)pParent2,
+                       (tTreeNode*)&this_->mHeader, right);
+    ++this_->mCount;
+    *ppResult = (tTreeNode*)pNode;
+    return ppResult;
 }
 }  // namespace SP
 

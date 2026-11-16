@@ -1,8 +1,6 @@
 # va  diff-bytes  reason
 00fd9d00 24 InputManager mode test: complete and equivalence PASSes (399 valid, 100% coverage); cl factors the second comparison into `sete` instead of the original's shared `mov eax,1` tail. flags /O2 /MD /Gy /TP /arch:SSE
 00fd9d90 13 universe-context graphics refresh: complete and equivalence WEAK (400 valid, no mismatch, 16% coverage); the else-block is laid out before the final return instead of after it. flags /O2 /MD /Gy /TP /arch:SSE
-00fda530 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 172 bytes - cAppModeSpace::SetPlanetTimeOnFirstEntry not reconstructed.
-00fdab40 1 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 162 bytes - space-mode helper not reconstructed.
 00fdade0 370 FUN_00fdade0: size 735 vs 742; equiv UNSUPPORTED (only 0/400 inputs valid, fault(read)=400) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00fdb0c0 223 FUN_00fdb0c0: size 360 vs 320; equiv WEAK (400 valid, coverage 16.7% < 60%) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00fdb230 53 FUN_00fdb230: size 68 vs 68; equiv FAIL (eax is caller-saved; function is void, original happens to leave `out` in eax, ours leaves `begin`; benign) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -216,26 +216,26 @@ void cSPTransform::InverseRotate(Vector3& v)
 // are emitted according to the mask `face` (0/1/2).
 void __cdecl SubtractEdges(int face, const float* verts, const float* ref, float* out)
 {
-  int i = 0;                          // edx
+  int vertex = 0;
   float* dst = out;                   // edi
-  const float* p = verts + 2;         // ecx, walks -8/-4/0 then +0xc
   do {
+    const float* p = verts + 3 * vertex;
+    int i = 2 * vertex;               // edx
     int n = 0;                        // eax
     if (face != 0) {
-      *dst = p[-2] - ref[0];
+      *dst = p[0] - ref[0];
       n = 1;
     }
     if (face != 1) {
-      out[i + n] = p[-1] - ref[1];
+      out[i + n] = p[1] - ref[1];
       n = n + 1;
     }
     if (face != 2) {
-      out[n + i] = p[0] - ref[2];
+      out[n + i] = p[2] - ref[2];
     }
-    i += 2;
-    p += 3;
+    ++vertex;
     dst += 2;
-  } while (i < 8);
+  } while (vertex < 4);
 }
 
 // @ 0x00a7cb80
