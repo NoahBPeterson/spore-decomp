@@ -783,10 +783,16 @@ struct cSink {
 };
 }
 namespace SP {
-struct cVarListSerializer_s0104_4360 {
-    uint32_t mData[7];                                     // 0x1c bytes
-    void Init(void* owner, const void* list, uint32_t line); // 0x00692f90
-    bool Serialize(cIOStream* stream);                     // 0x00692900
+struct StarMapStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // +0x18
+};
+struct StarMapOutputStream {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual StarMapStreamHolder* GetStreamHolder(); // +0x20
 };
 }
 namespace SP {
@@ -1057,13 +1063,16 @@ namespace SP {
 void cStarMap_s0104_4360::SerializeSlots(cIOStream* stream)
 {
     for (int i = 0; i < 7; ++i) {
-        uint32_t value = mSlots[i];
-        cSink* sink = stream->GetSink();
-        WriteUint32(sink->GetStream(), &value, 1, 0);
+        uint32_t slot = mSlots[i];
+        StarMapStreamHolder* __restrict holder =
+            reinterpret_cast<StarMapOutputStream*>(stream)->GetStreamHolder();
+        uint32_t value = slot;
+        void* output = holder->GetStream();
+        WriteUint32(output, &value, 1, 0);
     }
-    cVarListSerializer_s0104_4360 serializer;
-    serializer.Init(this, &gSerializerList, 0x1a80d26);
-    serializer.Serialize(stream);
+    cVarListSerializer serializer(this,
+        (cDataSerializerGeneric*)&gSerializerList, cVarListSerializer::kSignature);
+    serializer.Serialize(*reinterpret_cast<cIObjectDatabaseOStream*>(stream));
 }
 }  // namespace SP
 

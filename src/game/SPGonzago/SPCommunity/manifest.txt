@@ -6,3 +6,4 @@
 ../src/game/SPGonzago/SPCommunity.cpp  ?UpdateZone@ILaneObject@@QAEX_N@Z  00c01e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCommunity.cpp  ?ClearLanes@ILaneObject@@QAEXXZ  00c01e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCommunity.cpp  ?FUN_00c024f0@@YAXPAUISerializableObject@@PAULaneRecVec@@@Z  00c024f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCommunity.cpp  ?FUN_00c005b0@@YIXPAX00@Z  00c005b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
