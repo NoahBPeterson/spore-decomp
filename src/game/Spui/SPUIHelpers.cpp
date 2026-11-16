@@ -3456,11 +3456,15 @@ void SFV::Update(bool force)
   m1c.mpObject->m36();
 }
 
+struct ScrollFrameCreate {
+  bool Create(unsigned int id, bool first, bool second); // 0x0082a140
+};
+
 // @ 0x0082aa20
 bool SFV::CreateFromName(const unsigned short* name, bool a, bool b)
 {
   unsigned h = FNV1_String16(name, 0x811c9dc5, 1);
-  return Create((int)h, a, b);
+  return reinterpret_cast<ScrollFrameCreate*>(this)->Create(h, a, b);
 }
 
 // @ 0x00965670
