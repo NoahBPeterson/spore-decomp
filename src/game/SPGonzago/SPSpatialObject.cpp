@@ -539,7 +539,9 @@ bool cSO::func9C()
             if (b14 && !b18)
                 return true;
         } else {
-            return (v >> 14) & 1;
+            unsigned char bit = (unsigned char)(v >> 14);
+            bit &= 1;
+            return bit;
         }
     }
     return false;

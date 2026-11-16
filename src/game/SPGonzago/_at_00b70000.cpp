@@ -370,6 +370,7 @@ struct MapView
     TreeNode* m_end;             // +0x04 (sentinel address)
     TreeNode* m_begin;           // +0x08
 };
+typedef eastl::rbtree_iterator<eastl::pair<void*, void*> > FeedbackIterator;
 struct MotiveMap
 {
     int    m_pad0;               // +0x00
@@ -380,7 +381,7 @@ struct MotiveMap
     unsigned char m_pad11[3];    // +0x11
     int    m_size;               // +0x14
 
-    void  erase(void** out, TreeNode* node);      // 0x00b71730
+    FeedbackIterator erase(FeedbackIterator position); // 0x00b71730
     void  deleteTree(TreeNode* node);             // 0x00b71790
 };
 struct MotiveObjectTree
@@ -2667,28 +2668,33 @@ void cTuning_b708d0::SerializeObject(void* object)
 // @ 0x00b71510
 bool MotiveObjectTree::findEvent(void* event)
 {
-    if (event)
-        ((void (__thiscall*)(void*))VTFN(event, 0xbc / 4))(event);
+    void* key = event;
+    void* const retained = key;
+    if (retained)
+        ((void (__thiscall*)(void*))VTFN(retained, 0xbc / 4))(retained);
 
-    void* it = 0;
-    void** slot = ((RBTreeFind*)&m_map)->find(&it, &event);
-    bool found = *slot != (void*)&m_map.m_end;
+    void* const end = &m_map.m_end;
+    void* it;
+    void** slot = ((RBTreeFind*)&m_map)->find(&it, &key);
+    bool found = *slot != end;
 
-    if (event)
-        ((void (__thiscall*)(void*))VTFN(event, 0xc0 / 4))(event);
+    if (retained)
+        ((void (__thiscall*)(void*))VTFN(retained, 0xc0 / 4))(retained);
     return found;
 }
 
 // @ 0x00b71570
 bool __cdecl FUN_00b71570(void* arg, MapView* map)
 {
+    TreeNode* node = map->m_begin;
     TreeNode* const end = (TreeNode*)&map->m_end;
-    for (TreeNode* node = map->m_begin; node != end;
-         node = (TreeNode*)FUN_00921580(node)) {
-        if (node->m_ref10 != 0)
-            ((void (__thiscall*)(void*, void*))VTFN(node->m_ref10, 0x1c / 4))(node->m_ref10, arg);
-        if (node->m_ref14 != 0)
-            ((void (__thiscall*)(void*, void*))VTFN(node->m_ref14, 0x1c / 4))(node->m_ref14, arg);
+    for (; node != end; node = (TreeNode*)FUN_00921580(node)) {
+        void* ref = node->m_ref10;
+        if (ref)
+            ((void (__thiscall*)(void*, void*))VTFN(ref, 0x1c / 4))(ref, arg);
+        ref = node->m_ref14;
+        if (ref)
+            ((void (__thiscall*)(void*, void*))VTFN(ref, 0x1c / 4))(ref, arg);
     }
     return true;
 }
@@ -2716,14 +2722,15 @@ void* NodeFactory::newNode(RefPair* pair)
 // @ 0x00b71680
 void FUN_00b71680(void* serial, MotiveMap* map)
 {
-    uint32_t count = (uint32_t)map->m_size;
-    void* writer = ((void* (__thiscall*)(void*))VTFN(serial, 0x20 / 4))(serial);
-    void* stream = ((void* (__thiscall*)(void*))VTFN(writer, 0x18 / 4))(writer);
+    const uint32_t size = (uint32_t)map->m_size;
+    cDevice* __restrict writer = (cDevice*)((IStream*)serial)->Slot8();
+    uint32_t count = size;
+    void* stream = writer->GetStream();
     WriteUint32(stream, &count, 1, 0);
 
+    void* node = map->m_begin;
     void* const end = (char*)map + 4;
-    for (void* node = map->m_begin; node != end;
-         node = FUN_00921580(node)) {
+    for (; node != end; node = FUN_00921580(node)) {
         void* value = 0;
         void* ref = *(void**)((char*)node + 0x10);
         if (ref)
@@ -2742,19 +2749,22 @@ void FUN_00b71680(void* serial, MotiveMap* map)
 }
 
 // @ 0x00b71730
-void MotiveMap::erase(void** out, TreeNode* node)
+FeedbackIterator MotiveMap::erase(FeedbackIterator position)
 {
     m_size--;
-    TreeNode* next = (TreeNode*)FUN_00921580(node);
-    FUN_00921880(node, &m_end);
+    TreeNode* const erased = (TreeNode*)position.mpNode;
+    position.mpNode = (eastl::rbtree_node<eastl::pair<void*, void*> >*)FUN_00921580(erased);
+    FUN_00921880(erased, &m_end);
 
-    if (node->m_ref14 != 0)
-        ((void (__thiscall*)(void*))VTFN(node->m_ref14, 4 / 4))(node->m_ref14);
-    if (node->m_ref10 != 0)
-        ((void (__thiscall*)(void*))VTFN(node->m_ref10, 0xc0 / 4))(node->m_ref10);
+    void* ref = erased->m_ref14;
+    if (ref)
+        ((void (__thiscall*)(void*))VTFN(ref, 4 / 4))(ref);
+    ref = erased->m_ref10;
+    if (ref)
+        ((void (__thiscall*)(void*))VTFN(ref, 0xc0 / 4))(ref);
 
-    FUN_00f47380(node);
-    *out = next;
+    FUN_00f47380(erased);
+    return position;
 }
 
 // @ 0x00b71790
@@ -4006,9 +4016,10 @@ void FUN_00b749c0(float* a, float* b, float x, float y, float z)
 // @ 0x00b74a60
 void FUN_00b74a60(int* m, int* it)
 {
-    int* a = (*(int*(__thiscall**)(int*))(*(int*)m + 0x20))(m);
-    unsigned int k3 = (unsigned int)it[3];
-    int* ser = (int*)(*(int*(__thiscall**)(int*))(*(int*)a + 0x18))(a);
+    const unsigned int size = (unsigned int)it[3];
+    cDevice* __restrict writer = (cDevice*)((IStream*)m)->Slot8();
+    unsigned int k3 = size;
+    int* ser = (int*)writer->GetStream();
     WriteUint32_s00b7_3e70(ser, &k3, 1, 0);
     int* bucket = (int*)it[1];
     int* node = (int*)*bucket;
