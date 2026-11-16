@@ -1023,21 +1023,25 @@ cStringCommandGenerator::~cStringCommandGenerator()
     vtbl0 = &vtbl_Base0;
 }
 
+struct CommandInfoLookup {
+    void Find(CInfoNode** result, const unsigned int& id); // 0x00e5c780
+};
+
 // @ 0x0068a970
 bool SP::cCommandServer::RegisterCommandParameterInfo(unsigned int id, wchar_t const * param)
 {
-    eastl::map<unsigned int,EA::Variant,eastl::less<unsigned int>,eastl::allocator>* map = (eastl::map<unsigned int,EA::Variant,eastl::less<unsigned int>,eastl::allocator>*)((char*)this + 4);
-    CInfoNode* node = (CInfoNode*)map->find(id).mpNode;
-    if (node == (CInfoNode*)&mCommandInfoMap.mAnchor.mpNodeRight)
-        return false;
-    if (param && *param) {
-        node->mValue.msParam.AssignCStr(param);
+    CInfoNode* node;
+    reinterpret_cast<CommandInfoLookup*>(&mCommandInfoMap)->Find(&node, id);
+    if (node != (CInfoNode*)&mCommandInfoMap.mAnchor.mpNodeRight) {
+        if (param && *param) {
+            node->mValue.msParam.AssignCStr(param);
+            return true;
+        }
+        if (mbAutoBasicParameterInfoCreation)
+            node->mValue.msParam.Format(gLiteral1403384, node->mValue.msName.mpBegin);
         return true;
     }
-    if (mbAutoBasicParameterInfoCreation) {
-        node->mValue.msParam.Format(gLiteral1403384, node->mValue.msName.mpBegin);
-    }
-    return true;
+    return false;
 }
 
 // @ 0x0068a9e0
