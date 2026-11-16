@@ -88,6 +88,34 @@ struct Transform
 	void __thiscall xform(float* out, float* in);          // 0x007c4180
 };
 
+// The viewer getter takes no arguments; its caller supplies the projection inputs.
+struct ProjectionApp
+{
+	virtual void Slot0();
+	virtual void Slot1();
+	virtual void Slot2();
+	virtual void Slot3();
+	virtual void Slot4();
+	virtual void Slot5();
+	virtual void Slot6();
+	virtual void Slot7();
+	virtual void Slot8();
+	virtual void Slot9();
+	virtual void Slot10();
+	virtual void Slot11();
+	virtual void Slot12();
+	virtual void Slot13();
+	virtual void Slot14();
+	virtual void Slot15();
+	virtual void Slot16();
+	virtual void Slot17();
+	virtual void Slot18();
+	virtual void Slot19();
+	virtual void Slot20();
+	virtual void Slot21();
+	virtual Transform* GetViewer();
+};
+
 struct UiWindow
 {
 	void __thiscall MapPoint(void* out, float x, float y); // vtable +0xc8
@@ -139,19 +167,15 @@ int FUN_00ebebc0()
 // @ 0x00ebecc0
 void FUN_00ebecc0(float* out, int resource)
 {
-	void* res = FUN_00eeca30(resource);
-	void* app = SP_App();
-	int   id  = (*(int (__thiscall*)(void*))(*(void***)res)[0xb])(res);
-
-	float local[2];
-	void* xf = (*(void* (__thiscall*)(void*, float*, int))(*(void***)app)[0x16])(app, local, id);
-	((Transform*)xf)->xform(local, (float*)id);
-
-	float area[4];
-	SPUIHelpers_GetMainWindowArea(area);
-
-	out[0] = (local[0] + 1.0f) * area[2] * 0.5f;
-	out[1] = (1.0f - local[1]) * area[3] * 0.5f;
+    void* res = FUN_00eeca30(resource);
+    ProjectionApp* app = reinterpret_cast<ProjectionApp*>(SP_App());
+    float* position = (*(float* (__thiscall*)(void*))(*(void***)res)[0xb])(res);
+    float local[3];
+    app->GetViewer()->xform(local, position);
+    float area[4];
+    SPUIHelpers_GetMainWindowArea(area);
+    out[0] = (local[0] + 1.0f) * area[2] * 0.5f;
+    out[1] = (1.0f - local[1]) * area[3] * 0.5f;
 }
 
 // ---------------------------------------------------------------------------
