@@ -468,8 +468,10 @@ public:
     uint8_t mPad121c[0x1228 - 0x121c];
     cRbTree1228 mRbTree;                        // +0x1228 .. +0x123f
     uint8_t mPad1240c[0x1258 - 0x1240];
-    cGonzagoTimer mTimer1258;                   // +0x1258
-    uint8_t mPad1278[0x129c - 0x1278];
+    SP::cGonzagoTimer mSoothingSongTimer;        // +0x1258, registered as mSoothingSongTimer
+    float mSocialTraitProgress;                 // +0x1278, retail attribute registration
+    float mCombatTraitProgress;                 // +0x127c, retail attribute registration
+    uint8_t mPad1280[0x129c - 0x1280];
     void* mpBlock129c;                          // +0x129c
     uint8_t mPad12a0[0x12ac - 0x12a0];
     void* mpBlock12ac;                          // +0x12ac
@@ -481,6 +483,8 @@ public:
     void  FUN_00c7a160(cPlayerInner* pObj);                     // 0x00c7a160
     void  SetBanModePickPriorities(uint32_t nMode, tUintVec* pVec);  // 0x00c79e20
     void  FUN_00c79b60();                                       // 0x00c79b60  destructor body
+    bool IsSoothingSongActive();                               // 0x00c75650
+    float GetTraitProgress(bool social) const;                  // 0x00c75680
 };
 // ---- items of slice s00c793e0 end
 
@@ -3635,7 +3639,7 @@ void cPlayer::FUN_00c79b60()
     if (mpBlock129c != 0 && mpBlock129c != mpBlock12ac)
         operator_delete_array(mpBlock129c);
 
-    mTimer1258.~cGonzagoTimer();
+    mSoothingSongTimer.~cGonzagoTimer();
     mRbTree.DoNukeSubtree(mRbTree.mpRoot);
 
     for (uint32_t i = (uint32_t)mpPairBegin1214; i < (uint32_t)mpPairEnd1218; i += 0x28)
@@ -4946,4 +4950,20 @@ void FUN_01351e60(void)
     d.mFn38 = (void*)SE60_F38;
     d.mType = 0x3c;
     *(PropDesc*)0x1579984 = d;
+}
+
+// @ 0x00c75650
+bool cPlayer::IsSoothingSongActive()
+{
+    if (mSoothingSongTimer.GetElapsedTime() > 120000ULL)
+        mSoothingSongTimer.Stop();
+    return mSoothingSongTimer.IsRunning();
+}
+
+// @ 0x00c75680
+float cPlayer::GetTraitProgress(bool social) const
+{
+    if (social)
+        return mSocialTraitProgress;
+    return mCombatTraitProgress;
 }
