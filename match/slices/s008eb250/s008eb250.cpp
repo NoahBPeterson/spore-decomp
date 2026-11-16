@@ -848,6 +848,8 @@ namespace EA {
 namespace XHTML {
 namespace Layout {
 
+// Historical compatibility prefix. The deleting entry at 0x008ec1c0 is TableRow;
+// its native constructor also initializes fields beyond this 0x60-byte view.
 class TextStyleHashtable {
 public:
     void DoRehash(unsigned int nNewBucketCount);                     // 0x008EBB30
@@ -880,7 +882,7 @@ public:
 typedef char TextStyleHashtable_list_offset_check[(offsetof(TextStyleHashtable, mList18) == 0x18) ? 1 : -1];
 typedef char TextStyleHashtable_free_offset_check[(offsetof(TextStyleHashtable, mpFreeList) == 0x1c) ? 1 : -1];
 typedef char TextStyleHashtable_secondary_offset_check[(offsetof(TextStyleHashtable, mpSecondary) == 0x5c) ? 1 : -1];
-typedef char TextStyleHashtable_size_check[(sizeof(TextStyleHashtable) == 0x60) ? 1 : -1];
+typedef char TextStyleHashtable_prefix_size_check[(sizeof(TextStyleHashtable) == 0x60) ? 1 : -1];
 
 }  // namespace Layout
 }  // namespace XHTML
