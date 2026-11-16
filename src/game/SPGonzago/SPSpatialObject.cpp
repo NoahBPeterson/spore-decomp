@@ -413,8 +413,9 @@ Attribute gSpatialObjectAttributes[25];
 // @ 0x00c88a90
 void cSpatialObject::Write(void* pStream)
 {
+    VObj174* __restrict writer = ((VObj174*)pStream)->v020();
     uint32_t type = 0x1186577;
-    VObj174* pIo = ((VObj174*)pStream)->v020()->v018();
+    VObj174* pIo = writer->v018();
     EA::IO::WriteUint32(pIo, &type, 1, 0);
     cVarListSerializer serializer(this, &kSpatialObjectSerializerList, 0x1a80d26);
     serializer.Serialize(pStream);

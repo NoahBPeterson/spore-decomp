@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00c88a90 17 SP::cSpatialObject::Write: complete v020/v018 stream resolve + WriteUint32(type=0x1186577) + cVarListSerializer serialize; 102 vs 102 B; only the type constant's stack store is scheduled earlier (before the v018 vcall shadow) than the original; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid, fault(read))
 00c88e30 277 funcE30: complete; ray/sphere visibility test (sqrt lengths, NaN-tolerant `0 > disc` guards); value semantics now match the x87 float math. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. [equiv: PASS 226 valid, 100% cov, seed 3]
 00c89160 488 SetLocalExtents: complete; two-bbox scale/fit float math; length sums use float32 squares + x87 accumulate like the original, max-selection is NaN-tolerant. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. [equiv: PASS 480 valid, 98.1% cov, seed 3]
 00c893b0 10 func9C: complete; non-flag `return (v>>14)&1` compiles to `and eax,1` instead of `and al,1`. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest PASS (400/400).

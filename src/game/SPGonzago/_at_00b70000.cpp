@@ -2656,13 +2656,12 @@ void cTuning_b708d0::Load(uint32_t instanceID)
 // @ 0x00b714a0
 void cTuning_b708d0::SerializeObject(void* object)
 {
-    void* writer = ((void* (__thiscall*)(void*))VTFN(object, 0x20 / 4))(object);
-    void* stream = ((void* (__thiscall*)(void*))VTFN(writer, 0x18 / 4))(writer);
+    cDevice* __restrict writer = (cDevice*)((IStream*)object)->Slot8();
     uint32_t id = 0x6ef3ce7;
+    void* stream = writer->GetStream();
     WriteUint32(stream, &id, 1, 0);
-    cVarListSerializer serializer;
-    serializer.ctor(this, (void*)0x0156b308, 0x01a80d26);
-    serializer.Serialize(object);
+    SP::cVarListSerializer serializer(this, reinterpret_cast<SP::cDataSerializerGeneric*>(&DAT_0156b308), 0x01a80d26);
+    serializer.Serialize(*(SP::cIObjectDatabaseOStream*)object);
 }
 
 // @ 0x00b71510
@@ -2792,22 +2791,23 @@ void __fastcall FUN_00b71a30(MotiveObjectTree* self)
 // @ 0x00b71a60
 void cOwner::ReadFeedback(IStream* pStream)
 {
-    mFeedback.Purge((FeedbackNode*)mFeedback.mAnchor.mpNodeParent);
+    typedef eastl::map<uint32_t, void*> FeedbackMap;
+    FeedbackMap* feedback = reinterpret_cast<FeedbackMap*>(&mFeedback);
+    ((FeedbackTree*)feedback)->Purge((FeedbackNode*)feedback->mAnchor.mpNodeParent);
+    eastl::rbtree_node_base* anchor = &feedback->mAnchor;
+    feedback->mAnchor.mpNodeLeft = anchor;
+    feedback->mAnchor.mpNodeParent = 0;
+    feedback->mAnchor.mColor = 0;
+    feedback->mnSize = 0;
+    feedback->mAnchor.mpNodeRight = anchor;
 
-    eastl::nb* pAnchor = &mFeedback.mAnchor;
-    pAnchor->mpNodeRight  = pAnchor;
-    pAnchor->mpNodeLeft   = pAnchor;
-    pAnchor->mpNodeParent = 0;
-    pAnchor->mColor       = 0;
-    mFeedback.mnSize = 0;
-
-    int count;
+    int version;
     cDevice* pDevice = (cDevice*)pStream->Slot8();
     void* pRaw = pDevice->GetStream();
-    SP_ReadInt32(pRaw, &count, 1, 0);
+    SP_ReadInt32(pRaw, &version, 1, 0);
 
-    cVarListSerializer_s00b7_1a60 serializer(this, &DAT_0156b308, 0x1a80d26);
-    serializer.Serialize(*pStream);
+    SP::cVarListSerializer serializer(this, reinterpret_cast<SP::cDataSerializerGeneric*>(&DAT_0156b308), 0x1a80d26);
+    serializer.Serialize(*(SP::cIObjectDatabaseIStream*)pStream);
 }
 
 // @ 0x00b71af0
