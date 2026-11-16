@@ -5082,3 +5082,57 @@ bool __cdecl GetArchetypeAdventure(SP::cEmpire* empire, int completedCount,
     }
     return false;
 }
+
+// @ 0x00c75780
+bool SP::PlayerPlanetData::Write(SP::cIObjectDatabaseOStream& stream) const
+{
+    ISerializerStream* __restrict holder = reinterpret_cast<ISerializer*>(&stream)->GetStreamHolder();
+    uint32_t signature = 0x05626b93;
+    EA_IO_Stream* output = holder->GetStream();
+    IO_WriteUint32(output, &signature, 1, 0);
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&g_1579600),
+        SP::cVarListSerializer::kSignature);
+    bool result = serializer.Serialize(stream) ? true : false;
+    return result;
+}
+
+// @ 0x00c757f0
+bool SP::PlayerPlanetData::Read(SP::cIObjectDatabaseIStream& stream)
+{
+    EA_IO_Stream* input = reinterpret_cast<ISerializer*>(&stream)->GetStreamHolder()->GetStream();
+    uint32_t signature;
+    ReadInt32(input, &signature, 1, 0);
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&g_1579600),
+        SP::cVarListSerializer::kSignature);
+    bool result = serializer.Serialize(stream) ? true : false;
+    return result;
+}
+
+// @ 0x00c75860
+bool SP::cSpacePlayerWarData::Write(SP::cIObjectDatabaseOStream& stream) const
+{
+    ISerializerStream* __restrict holder = reinterpret_cast<ISerializer*>(&stream)->GetStreamHolder();
+    uint32_t signature = 0x05626b91;
+    EA_IO_Stream* output = holder->GetStream();
+    IO_WriteUint32(output, &signature, 1, 0);
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&g_1579858),
+        SP::cVarListSerializer::kSignature);
+    bool result = serializer.Serialize(stream) ? true : false;
+    return result;
+}
+
+// @ 0x00c758d0
+bool SP::cSpacePlayerWarData::Read(SP::cIObjectDatabaseIStream& stream)
+{
+    EA_IO_Stream* input = reinterpret_cast<ISerializer*>(&stream)->GetStreamHolder()->GetStream();
+    uint32_t signature;
+    ReadInt32(input, &signature, 1, 0);
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&g_1579858),
+        SP::cVarListSerializer::kSignature);
+    bool result = serializer.Serialize(stream) ? true : false;
+    return result;
+}

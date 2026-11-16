@@ -39,3 +39,7 @@
 ../src/game/SPGonzago/SPPlayer.cpp  ?NoteAdventureCompleted@cPlayer@@QAEXPAVcEmpire@SP@@I@Z  00c75e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?DoPlayerWarVictory@cPlayer@SP@@QAEXI@Z  00c75520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlayer.cpp  ?GetArchetypeAdventure@@YA_NPAVcEmpire@SP@@HPAI@Z  00c75940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?Write@PlayerPlanetData@SP@@UBE_NAAVcIObjectDatabaseOStream@2@@Z  00c75780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?Read@PlayerPlanetData@SP@@UAE_NAAVcIObjectDatabaseIStream@2@@Z  00c757f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?Write@cSpacePlayerWarData@SP@@UBE_NAAVcIObjectDatabaseOStream@2@@Z  00c75860  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlayer.cpp  ?Read@cSpacePlayerWarData@SP@@UAE_NAAVcIObjectDatabaseIStream@2@@Z  00c758d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
