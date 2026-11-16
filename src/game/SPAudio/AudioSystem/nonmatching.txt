@@ -40,7 +40,7 @@
 00a25190 194 complete; tmp AutoRefCount now in its own slot like the original (switch on id), but the original caches tmp.p in esi through the release while ours reloads it, and the shared operator new pushes are spelled with a zero register; difftest PASS after fixing the tmp slot (ours reused the dead param slot for tmp, so AutoRefCount::operator= got a this pointer outside our frame) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00a252b0 1368 complete (EA::Audio::System::Init); frame 4 bytes short, loop rotation/alignment and null test on handler differ flags: /O2 /MD /Gy /EHsc /TP /GS-
 00a25980 4 complete; eax/edx choice for string begin vs &out; difftest PASS (after annotating operator_delete__ and g_pfnString) flags: /O2 /MD /Gy /EHsc /TP /GS-
-00a25aa0 4 complete; ebx/ebp swap for args a and c flags: /O2 /MD /Gy /EHsc /TP /GS- | R44 GLM-Flash max active claim; baseline source unchanged.
+00a25aa0 4 complete; ebx/ebp swap for args a and c flags: /O2 /MD /Gy /EHsc /TP /GS-
 00a25c40 199 complete; AudioSystem::Update SEH frame + queue/stopwatch timing loop reproduced; 269 vs 651 bytes. [equiv: FAIL 5/7 valid, fault at 00a0f9b1] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00a25ed0 115 complete; RemoveFromList intrusive-list unlink/refcount body; 123 vs 281 bytes. [equiv: WEAK 94 valid, 16.7% coverage] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00a26040 78 schedule: the temporary is a 16-byte eastl::string {begin,end,cap,alloc} whose dtor frees when (cap-begin)>1, and the function returns the vtable[0xf4] result; source now builds that explicit destructor check and returns the id. /GS- keeps the frame right (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-); residual is the EH-state store slot and load order (130 vs 122 bytes). fix1: quick check UNSUPPORTED
