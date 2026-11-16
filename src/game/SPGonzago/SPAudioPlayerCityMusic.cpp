@@ -817,11 +817,12 @@ struct PtrRange {
     void** mpBegin;      // +0x00
     void** mpEnd;        // +0x04
     void** mpCapacity;   // +0x08
+    void erase(void** first, void** last) {
+        memcpy_(first, last, (unsigned int)((char*)mpEnd - (char*)last));
+        mpEnd -= last - first;
+    }
     void clear() {
-        void** end = mpEnd;
-        void** begin = mpBegin;
-        move_range(begin, end, end);
-        mpEnd += begin - end;
+        erase(mpBegin, mpEnd);
     }
 };
 struct EventNode {
@@ -834,9 +835,9 @@ struct EventList {
         EventNode* sentinel = &mSentinel;
         EventNode* p = sentinel->mpNext;
         while (p != sentinel) {
-            EventNode* next = p->mpNext;
-            operator_delete(p);
-            p = next;
+            EventNode* old = p;
+            p = p->mpNext;
+            operator_delete(old);
         }
         sentinel->mpNext = sentinel;
         sentinel->mpPrev = sentinel;
@@ -2935,6 +2936,8 @@ void __fastcall FUN_00eb0870(void* vec_, int, char* pos, u32 count, void* value)
     FUN_00ead6a0(local);
 }
 
+extern SP::cDataSerializerGeneric gPlayerCityMusicSerializer; // 0x015a9198
+
 // @ 0x00eb0a60
 bool cPlayerCityMusic_s00ea_ffc0::Read(int stream)
 {
@@ -2946,10 +2949,9 @@ bool cPlayerCityMusic_s00ea_ffc0::Read(int stream)
     m1cc.clear();
     m1e0.clear();
 
-    char buf[0xa14];
-    CVarListSerializer* ser = (CVarListSerializer*)buf;
-    ser->ctor(this, (void*)0x15a9198, 0x1a80d26);
-    bool ok = ser->Serialize((void*)stream);
+    SP::cVarListSerializer ser(this, &gPlayerCityMusicSerializer,
+        SP::cVarListSerializer::kSignature);
+    bool ok = ser.Serialize(*reinterpret_cast<SP::cIObjectDatabaseIStream*>(stream));
     FUN_00eb05a0();
     if (m10c != 0)
         Reset(1);
