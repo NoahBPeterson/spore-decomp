@@ -2,6 +2,8 @@
 // SP::cCellMode / cell-game camera + input helpers (float math, bounds, source-level
 // selection, save/load glue). Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "types.h"
+#include "SP/cVarListSerializer.h"
+extern SP::cDataSerializerGeneric gObjectSerializerList[]; // 0x015a7e38
 #include <string.h>
 #include <math.h>
 #include <xmmintrin.h>
@@ -378,17 +380,33 @@ int FUN_00e51250(void* owner, int a) {
   return 1;
 }
 
+struct ObjectStreamHolder {
+  virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3();
+  virtual void slot4(); virtual void slot5();
+  virtual void* GetStream(); // +0x18
+};
+struct ObjectSerializer {
+  virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3();
+  virtual void slot4(); virtual void slot5(); virtual void slot6(); virtual void slot7();
+  virtual ObjectStreamHolder* GetStreamHolder(); // +0x20
+};
+
+struct Obj51300 {
+  virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3();
+  virtual void slot4(); virtual void slot5(); virtual void slot6(); virtual void slot7();
+  virtual uint32_t GetType(); // +0x20
+  void Write(void* other);
+};
 // @ 0x00e51300
-struct Obj51300 { void Write(void* other); };
 void Obj51300::Write(void* other) {
   void* self = this;
-  uint32_t id = (uint32_t)((int(__thiscall*)(void*))Vt(self)[0x20 / 4])(self);
-  void* p = (void*)((int(__thiscall*)(void*))Vt(other)[0x20 / 4])(other);
-  void* stream = (void*)((int(__thiscall*)(void*))Vt(p)[0x18 / 4])(p);
+  uint32_t value = GetType();
+  ObjectStreamHolder* __restrict p = ((ObjectSerializer*)other)->GetStreamHolder();
+  uint32_t id = value;
+  void* stream = p->GetStream();
   EA_IO_WriteUint32(stream, &id, 1, 0);
-  char buf[0xa00];
-  ((cVarListSerializer*)buf)->Ctor((int)self, (void*)0x15a7e38, 0x1a80d26);
-  ((cVarListSerializer*)buf)->Serialize(other);
+  SP::cVarListSerializer ser(self, gObjectSerializerList, 0x1a80d26);
+  ser.Serialize(*(SP::cIObjectDatabaseOStream*)other);
 }
 
 __declspec(noinline) float FUN_00e513d0(float a, float b, float c, float lo, float hi);
