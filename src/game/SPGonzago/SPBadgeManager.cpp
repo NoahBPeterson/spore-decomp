@@ -630,10 +630,9 @@ struct EventMap {
 // @ 0x00fe3c40
 void cISerializableObject::Write(cOutStream* pStream)
 {
-    uint32_t nVersion;
-    cSaveStream* pSaveStream = pStream->GetStream();
+    cSaveStream* __restrict pSaveStream = pStream->GetStream();
+    uint32_t nVersion = 0x2cb0ede;
     EA::IO::IStream_s00fe_3b10* pIStream = pSaveStream->GetIStream();
-    nVersion = 0x2cb0ede;
     EA::IO::WriteUint32(pIStream, &nVersion, 1, 0);
     cVarListSerializer serializer((const char*)this - 8, g_serializedFieldName, 0x1a80d26);
     serializer.Serialize(pStream);
