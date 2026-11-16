@@ -459,6 +459,8 @@ struct S6 {
 // ---- items of slice s006ea030 end
 
 // ---- items of slice s006ed2c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_arenaBound[3];                         // 0x01618D1C
+extern float g_one;                                   // 0x01485720 (_HK_REAL_ONE)
 #define VTSLOT(o, off) (*(void**)((char*)(*(void**)o) + (off)))
 typedef char     (__thiscall *TFc_v)(void*);
 typedef char     (__thiscall *TFc_p)(void*, void*);
@@ -467,6 +469,9 @@ typedef void     (__thiscall *TFv_i)(void*, int);
 typedef void     (__thiscall *TFv_u)(void*, unsigned);
 typedef void     (__thiscall *TFv_p)(void*, void*);
 typedef unsigned (__thiscall *TFu_v)(void*);
+typedef void*    (__thiscall *TFp_i)(void*, int);
+typedef void*    (__thiscall *TFp_p)(void*, void*);
+typedef void*    (__thiscall *TFp_pp)(void*, void*, void*);
 struct IRefCounted {
     virtual void AddRef() = 0;   // vtable +0
     virtual void Release() = 0;  // vtable +4
@@ -529,6 +534,14 @@ struct Vector3 {
     Vector3 operator-() const { return Vector3(-x, -y, -z); }
 };
 struct DispatchData { void* p0; void* p1; void* p2; };
+struct Arena {
+    int  GetNumExportedObjects();                        // 0x011E23A0
+    void GetExportedObjectByIndex(int index, void* out);  // 0x011E28E0
+};
+struct ExportedObject {
+    int   mType;   // +0x00
+    void* mpData;  // +0x04
+};
 class cEffectsModel {
 public:
     void* mpVtable;                                  // +0x00
@@ -4880,6 +4893,115 @@ int cEffectsKeyedList::ActivateByKey(unsigned a, unsigned b)
     return -1;
 }
 
+// ---- out-of-line EASTL vector instantiations (migrated from slice s006ed2c0)
+void  FUN_006e9330(const void* p);                    // 0x006E9330
+void  FUN_006ebb00(void* a, void* b, void* c);        // 0x006EBB00
+void* FUN_006e9460(void* a, void* b, void* c);        // 0x006E9460
+void  FUN_006e94a0(void* a, void* b, void* c);        // 0x006E94A0
+void  FUN_006ebb40(void* a, void* b, void* c);        // 0x006EBB40
+void* FUN_006eba70(void* a, void* b, void* c);        // 0x006EBA70
+void  FUN_006e94f0(void* a, void* b, void* c);        // 0x006E94F0
+void  FUN_00f47380(void* p);                          // 0x00F47380
+struct vectorCTex {
+    cTextureParticleSet* mpBegin; cTextureParticleSet* mpEnd; cTextureParticleSet* mpCapacity;
+    void DoInsertValue(cTextureParticleSet* pos, const cTextureParticleSet& v);  // 6ed5b0
+};
+struct vectorCMod {
+    cModelParticleSet* mpBegin; cModelParticleSet* mpEnd; cModelParticleSet* mpCapacity;
+    void DoInsertValue(cModelParticleSet* pos, const cModelParticleSet& v);      // 6ed6f0
+};
+
+// @ 0x006ed5b0
+void vectorCTex::DoInsertValue(cTextureParticleSet* pos, const cTextureParticleSet& value)
+{
+    cTextureParticleSet* end = mpEnd;
+    if (end != mpCapacity) {
+        cTextureParticleSet* v = const_cast<cTextureParticleSet*>(&value);
+        if (v >= pos && v < end)
+            v += 1;
+        if (end)
+            FUN_006e9330(end - 1);
+        FUN_006ebb00(pos, end - 1, end);
+        pos->mabc0(*v);
+        mpEnd = end + 1;
+        return;
+    }
+    unsigned n = (unsigned)(end - mpBegin);
+    cTextureParticleSet* mem;
+    if (n == 0) {
+        n = 1;
+    } else {
+        n *= 2;
+        if (n == 0) {
+            mem = 0;
+            goto alloc_done;
+        }
+    }
+    mem = (cTextureParticleSet*)FUN_00f473a0(n * 0x70, "Graphics", 0, 0,
+            (int)"c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+alloc_done:
+    {
+        cTextureParticleSet* begin = mpBegin;
+        cTextureParticleSet* mid = (cTextureParticleSet*)FUN_006e9460(begin, pos, mem);
+        FUN_006e94a0(begin, pos, mem);
+        if (mid)
+            FUN_006e9330(&value);
+        cTextureParticleSet* newEnd = (cTextureParticleSet*)FUN_006e9460(pos, end, mid + 1);
+        FUN_006e94a0(pos, end, mid + 1);
+        if (begin && ((int*)begin)[-1] != 0)
+            FUN_00f47380(begin);
+        mpBegin = mem;
+        mpEnd = newEnd;
+        mpCapacity = mem + n;
+    }
+}
+
+// ---- 0x006ed6f0 --------------------------------------------------------------
+// @ 0x006ed6f0
+void vectorCMod::DoInsertValue(cModelParticleSet* pos, const cModelParticleSet& value)
+{
+    cModelParticleSet* end = mpEnd;
+    if (end != mpCapacity) {
+        cModelParticleSet* v = const_cast<cModelParticleSet*>(&value);
+        if (v >= pos && v < end)
+            v += 1;
+        if (end)
+            end->m6eb8c0(end - 1);
+        FUN_006ebb40(pos, end - 1, end);
+        pos->m6eac80(v);
+        mpEnd = end + 1;
+        return;
+    }
+    unsigned n = (unsigned)(end - mpBegin);
+    cModelParticleSet* mem;
+    if (n == 0) {
+        n = 1;
+    } else {
+        n *= 2;
+        if (n == 0) {
+            mem = 0;
+            goto alloc_done;
+        }
+    }
+    mem = (cModelParticleSet*)FUN_00f473a0(n * 0x68, "Graphics", 0, 0,
+            (int)"c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+alloc_done:
+    {
+        cModelParticleSet* begin = mpBegin;
+        cModelParticleSet* mid = (cModelParticleSet*)FUN_006eba70(begin, pos, mem);
+        FUN_006e94f0(begin, pos, mem);
+        if (mid)
+            mid->m6eb8c0((void*)&value);
+        cModelParticleSet* newEnd = (cModelParticleSet*)FUN_006eba70(pos, end, mid + 1);
+        FUN_006e94f0(pos, end, mid + 1);
+        if (begin && ((int*)begin)[-1] != 0)
+            FUN_00f47380(begin);
+        mpBegin = mem;
+        mpEnd = newEnd;
+        mpCapacity = mem + n;
+    }
+}
+
 // @ 0x006ed8d0
 cEffectsModel::cEffectsModel(unsigned a, unsigned b, unsigned c, const float* box)
 {
@@ -4923,6 +5045,75 @@ void cEffectsModel::Reset()
     mAsyncRequest.Release();
     mDispatchData.erase(mDispatchData.mpBegin, mDispatchData.mpEnd);
     mResourceRefs.erase(mResourceRefs.mpBegin, mResourceRefs.mpEnd);
+}
+
+// @ 0x006edbc0
+void cEffectsModel::UpdateFromResource(int* res)
+{
+    if (res == 0)
+        return;
+    int* obj = (int*)((TFp_i)VTSLOT(res, 0x0c))(res, 0x2f4e681b);
+    if (obj == 0) {
+        // material-copy path (tag 0xe6bce5)
+        int* mat = (int*)((TFp_i)VTSLOT(res, 0x0c))(res, 0xe6bce5);
+        if (mat == 0)
+            return;
+        AddResourceRef((IRefCounted*)mat);
+        int count = (int)((mat[0x1c / 4] - mat[0x18 / 4]) >> 2);
+        if (mat[0xf4 / 4] == mat[0xf8 / 4]) {
+            int* aa = (int*)mat[0x18 / 4];
+            int* bb = (int*)mat[0xb8 / 4];
+            for (int j = 0; j < count; ++j)
+                mdd0(aa[j], bb[j]);
+        } else {
+            int* aa = (int*)mat[0x18 / 4];
+            int* bb = (int*)mat[0xb8 / 4];
+            int* cc = (int*)mat[0xf4 / 4];
+            for (int j = 0; j < count; ++j)
+                me30(aa[j], bb[j], cc[j]);
+        }
+        int* src = (int*)((char*)mat + 0x11c);
+        mBoxMin = Vector3(((float*)src)[0], ((float*)src)[1], ((float*)src)[2]);
+        mBoxMax = Vector3(((float*)src)[3], ((float*)src)[4], ((float*)src)[5]);
+    } else {
+        // arena exported-object path (tag 0x2f4e681b)
+        Arena* arena = (Arena*)obj[0x18 / 4];
+        int n = arena->GetNumExportedObjects();
+        const float f = 3.402823466e38f;
+        mBoxMin = Vector3(f, f, f);
+        mBoxMax = Vector3(-f, -f, -f);
+        AddResourceRef((IRefCounted*)obj);
+        for (int i = 0; i < n; ++i) {
+            ExportedObject out;
+            arena->GetExportedObjectByIndex(i, &out);
+            if (out.mType == 0x2001a) {
+                float* d = (float*)out.mpData;
+                void* mm = FUN_0067dd70();
+                void* v = ((TFp_pp)VTSLOT(mm, 0x40))(mm, *(void**)&d[2], obj);
+                void* mm2 = FUN_0067dd70();
+                void* p = ((TFp_p)VTSLOT(mm2, 0x28))(mm2, v);
+                DispatchData dd;
+                dd.p0 = *(void**)&d[0];
+                dd.p1 = p;
+                dd.p2 = 0;
+                mDispatchData.push_back(dd);
+            } else if (out.mType == 0x80005) {
+                float* d = (float*)out.mpData;
+                if (mBoxMin.x > d[0]) mBoxMin.x = d[0];
+                if (d[4] > mBoxMax.x) mBoxMax.x = d[4];
+                if (mBoxMin.y > d[1]) mBoxMin.y = d[1];
+                if (d[5] > mBoxMax.y) mBoxMax.y = d[5];
+                if (mBoxMin.z > d[2]) mBoxMin.z = d[2];
+                if (d[6] > mBoxMax.z) mBoxMax.z = d[6];
+            }
+        }
+        if (mBoxMin.x == f) {
+            float one = g_one;
+            mBoxMin = Vector3(g_arenaBound[0] - one, g_arenaBound[1] - one, g_arenaBound[2] - one);
+            mBoxMax = Vector3(g_arenaBound[0] + one, g_arenaBound[1] + one, g_arenaBound[2] + one);
+        }
+    }
+    ComputeRadius();
 }
 
 // @ 0x006ee140
@@ -5104,6 +5295,113 @@ void cEffectsRenderer_s006e_e1f0::AddActive(unsigned int id)
     } else {
         mVec238.DoInsertValue(mVec238.mpEnd, id);
     }
+}
+
+// ---- 0x006ee6f0 (migrated from slice s006ee1f0); callees with no module declaration yet live in a local namespace
+namespace s006ee6f0 {
+    void  FUN_006ee140(void* model);                                // model Update
+    char  FUN_00700120(void* self, const void* sphere, void* planes, unsigned flags);
+    void  FUN_006e95a0(const void* sphere, void* out);              // cSphere from +0x50
+    void  FUN_00538000(void* dst, const void* src);                 // cSPTransform ctor
+    void  FUN_005291f0(void* matrix, unsigned mode);                // EffectsDispatch
+    void  FUN_006e7110(void* model, void* extra);                   // dispatch (no mat)
+    void  FUN_006e73d0(void* model, void* mat, void* extra);        // dispatch (mat)
+    void  FUN_006e7020(float f0, float f1, float f2, float f3, float f4, float f5,
+                       float f6, float f7, float f8, float f9, float f10,
+                       float f11, float f12, float* out);           // scaled-matrix writer
+}
+
+// @ 0x006ee6f0
+void cEffectsRenderer_s006e_e1f0::DispatchWithAdditionalMaterial(void* ctx, int mat, int extra)
+{
+    using namespace s006ee6f0;
+    void* viewer = *(void**)ctx;
+    if (!FUN_007c4fd0(viewer, 0))
+        return;
+
+    int count = (int)((f1bc - f1b8) / 0x68);
+    if (count <= 0) {
+        FUN_007c3c10(viewer, 0);
+        return;
+    }
+
+    int off = 0;
+    do {
+        uint8_t* rec = (uint8_t*)f1b8 + off;
+        void* model = *(void**)rec;
+        if (model != 0) {
+            FUN_006ee140(model);
+            if (*(uint8_t*)(rec + 0x50) != 0 &&
+                *(float*)(*(uint32_t*)((char*)g_15fd918 + 0x3c) + 0xe0) <
+                    *(float*)(rec + 0x10)) {
+                float sphere[6];
+                uint8_t* m = (uint8_t*)model;
+                sphere[0] = *(float*)(m + 0x50);
+                sphere[1] = *(float*)(m + 0x54);
+                sphere[2] = *(float*)(m + 0x58);
+                sphere[3] = *(float*)(m + 0x5c);
+                sphere[4] = *(float*)(m + 0x60);
+                sphere[5] = *(float*)(m + 0x64);
+
+                float xform[3];               // FUN_006e95a0(rec+0x18) -> 3 floats
+                FUN_006e95a0(rec + 0x18, xform);
+
+                float query[6];
+                query[0] = sphere[3];
+                query[1] = sphere[4];
+                query[2] = sphere[5];
+                query[3] = sphere[0];
+                query[4] = sphere[1];
+                query[5] = sphere[2];
+
+                char vis = FUN_00700120(mFrustumCull, xform, query, 0x200);
+                if ((vis & 0x40) == 0) {
+                    FUN_00777bf0();
+
+                    float color[4];
+                    color[0] = *(float*)(rec + 0x04);
+                    color[1] = *(float*)(rec + 0x08);
+                    color[2] = *(float*)(rec + 0x0c);
+                    color[3] = *(float*)(rec + 0x10);
+
+                    float transform[0x38 / 4];
+                    FUN_00538000(transform, rec + 0x18);
+
+                    int outMat[0x10];
+                    FUN_006e7020(*(float*)&transform[0], *(float*)&transform[1],
+                                 *(float*)&transform[2], *(float*)&transform[3],
+                                 *(float*)&transform[4], *(float*)&transform[5],
+                                 *(float*)&transform[6], *(float*)&transform[7],
+                                 *(float*)&transform[8], *(float*)&transform[9],
+                                 *(float*)&transform[10], *(float*)&transform[11],
+                                 *(float*)&transform[12], (float*)outMat);
+
+                    if (*(void**)(rec + 0x58) != 0)
+                        FUN_007789d0(*(void**)(rec + 0x58), 0);
+                    if (*(void**)(rec + 0x5c) != 0)
+                        FUN_00777ae0(0x219, *(int*)*(void**)(rec + 0x5c), 0);
+
+                    FUN_005291f0(outMat, 2);
+
+                    g_softStateDirty |= 0x10;
+                    *(uint32_t*)&g_16f96a8 = *(uint32_t*)(&color[0]);
+                    *(uint32_t*)&g_16f96ac = *(uint32_t*)(&color[1]);
+                    *(uint32_t*)&g_16f96b0 = *(uint32_t*)(&color[2]);
+                    *(uint32_t*)&g_16f96b4 = *(uint32_t*)(&color[3]);
+
+                    if (*(void**)(rec + 0x54) != 0)
+                        FUN_006e73d0(model, *(void**)(rec + 0x54), ctx);
+                    else
+                        FUN_006e7110(model, ctx);
+
+                    FUN_00777c10();
+                }
+            }
+        }
+        off += 0x68;
+    } while (--count != 0);
+
+    FUN_007c3c10(viewer, 0);
 }
 
 // @ 0x006eea80
