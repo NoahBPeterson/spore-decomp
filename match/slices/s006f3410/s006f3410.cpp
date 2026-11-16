@@ -49,7 +49,7 @@ struct ModelSetVector {
     void* mpEnd;
     void* mpCapacity;
     unsigned mAllocator[2];
-    ModelSetVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ModelSetVector() {}
     ~ModelSetVector() {
         if (mpBegin && ((int*)mpBegin)[-1])
             EASTL_allocator_deallocate(mpBegin);
@@ -91,10 +91,27 @@ static inline void  Call2(void* p, int slot, int a, int b) {
 }
 
 // @ 0x006f3d00
-cModelInstanceSet::cModelInstanceSet()
-    : mModelInstance(0), mModelGroup(0), mRenderer(0),
-      m38(-1), m3c(-1), m40(0), m41(0), m42(0), m43(0),
-      m44(0), m48(0.0f), m50(-1), m54(-1), mSetID(-1) {
+cModelInstanceSet::cModelInstanceSet() {
+    mModelInstance = 0;
+    mModelGroup = 0;
+    mTransforms.mpBegin = 0;
+    mTransforms.mpEnd = 0;
+    mTransforms.mpCapacity = 0;
+    mColors.mpBegin = 0;
+    mColors.mpEnd = 0;
+    mColors.mpCapacity = 0;
+    mRenderer = 0;
+    m38 = -1;
+    m3c = -1;
+    m40 = 0;
+    m41 = 0;
+    m42 = 0;
+    m43 = 0;
+    m44 = 0;
+    m48 = 0.0f;
+    m50 = -1;
+    m54 = -1;
+    mSetID = -1;
 }
 
 // @ 0x006f3d50
