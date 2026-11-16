@@ -420,11 +420,17 @@ struct PFRecordInfoV2 {
     uint8 mbCommitted;
 };
 struct PFItemsMapV2 {
-    struct Iterator { void* mpNode; void** mpBucket; };
+    struct Iterator {
+        void* mpNode;
+        void** mpBucket;
+        Iterator() {}
+        Iterator(const Iterator& other) : mpNode(other.mpNode), mpBucket(other.mpBucket) {}
+    };
     uint32 mFunctors;
     void** mpBucketArray;
     uint32 mnBucketCount;
     void Find(Iterator* out, const EA::ResourceMan::Key& key); // 0x006befb0
+    void Erase(Iterator* out, Iterator position); // 0x006be820
     PFRecordInfoV2* FindOrInsert(const EA::ResourceMan::Key& key); // 0x006bf7d0
 };
 
@@ -443,7 +449,14 @@ EA::ResourceMan::PFRecordInfo * EA::ResourceMan::PFIndexModifiable::FindRecord(E
 // @ 0x006bf520
 bool EA::ResourceMan::PFIndexModifiable::DeleteRecord(EA::ResourceMan::Key const & key, EA::ResourceMan::PFRecordInfo & out)
 {
-    // TODO(partial): hashtable find + erase.
+    PFItemsMapV2* map = (PFItemsMapV2*)&mIndex;
+    PFItemsMapV2::Iterator it;
+    map->Find(&it, key);
+    if (it.mpNode != map->mpBucketArray[map->mnBucketCount]) {
+        *(PFRecordInfoV2*)&out = *(const PFRecordInfoV2*)((char*)it.mpNode + 0x10);
+        map->Erase(&it, it);
+        return true;
+    }
     return false;
 }
 
