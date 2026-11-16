@@ -198,7 +198,7 @@ bool __cdecl f00edf370(int p1, int* p2, int p3)
 {
     if (*(int*)((char*)p2 + 8) == 0xc) {
         int v = *(int*)(*(int*)((char*)p3 + 0x4c) + 0x118);
-        if (v == 0 || (((*(u32*)(v + 4) >> 0xe) & 1) && !(((*(u32*)(v + 4) >> 0x12)) & 1)))
+        if (v == 0 || (((u8)(*(u32*)(v + 4) >> 0xe) & 1) && !((u8)(*(u32*)(v + 4) >> 0x12) & 1)))
             f00edf3c0(p1, p3, 0);
     }
     return false;
@@ -411,28 +411,29 @@ extern "C" int FUN_00f253e0(void*);
 // @ 0x00edfbf0
 void Ed::FBF0(int* param)
 {
-    int* self = (int*)this;
-    char* t = (char*)self;
+    char* t = (char*)this;
     MGR()->F45970();
-    int o = MGR()->F3e8a0(*(int*)(t + 8));
-    if (*(char*)(t + 0x14) == 0) {
+    Mgrs* manager = MGR();
+    Data* data = (Data*)manager->F3e8a0(*(int*)(t + 8));
+    char* o = (char*)data;
+    if (*(char*)(t + 0x14) != 0) {
+        *(int*)(o + 0x48) = 2;
+        *(int*)(o + 0x50) = param[0];
+        *(int*)(o + 0x54) = param[1];
+        *(int*)(o + 0x58) = param[2];
+        *(char*)(o + 0x6c) = 0;
+    } else {
         int old = *(int*)(o + 0x24);
         *(int*)(o + 0x24) = 2;
         *(int*)(o + 0x28) = param[0];
         *(int*)(o + 0x2c) = param[1];
         *(int*)(o + 0x30) = param[2];
         *(char*)(o + 0x44) = 0;
-        char c = (char)((Data*)o)->m00f27670();
+        char c = (char)data->m00f27670();
         if (c == 0)
-            c = (char)((Data*)o)->m00f253e0();
+            c = (char)data->m00f253e0();
         if (c != 0 && *(int*)(o + 0x48) == 0 && old == 0)
             *(int*)(o + 0x48) = 1;
-    } else {
-        *(int*)(o + 0x48) = 2;
-        *(int*)(o + 0x50) = param[0];
-        *(int*)(o + 0x54) = param[1];
-        *(int*)(o + 0x58) = param[2];
-        *(char*)(o + 0x6c) = 0;
     }
     RECBODY()->m00ed39a0(*(int*)(t + 8));
     MGR()->F41a10(*(int*)(t + 8));

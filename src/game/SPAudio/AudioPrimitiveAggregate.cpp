@@ -454,12 +454,18 @@ bool S106::vecRemove(u32 key)
     char* self = (char*)this;
     u32* p = *(u32**)(self + 0xc);
     u32* end = *(u32**)(self + 0x10);
-    while (p != end && *p != key) ++p;
-    if (p == end) return false;
-    if (p + 1 < end) copyImpl(p + 1, end, p);
-    *(u32**)(self + 0x10) = end - 1;
-    void* e = *(void**)(end - 1);
-    if (e) ((void(__thiscall*)(void*))VFN(e, 4))(e);
-    *(u8*)(self + 0x4c) = 1;
-    return true;
+    for (; p != end; ++p) {
+        if (*p == key) {
+            _ReadWriteBarrier();
+            u32* next = p + 1;
+            u32* last = *(u32**)(self + 0x10);
+            if (next < last) copyImpl(next, last, p);
+            --*(u32**)(self + 0x10);
+            EA::Audio::IPrimitive* e = **(EA::Audio::IPrimitive***)(self + 0x10);
+            if (e) e->Release();
+            *(u8*)(self + 0x4c) = 1;
+            return true;
+        }
+    }
+    return false;
 }

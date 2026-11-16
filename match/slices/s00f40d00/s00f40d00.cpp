@@ -40,9 +40,15 @@ void  __fastcall FUN_00dfb850(int, int, int, int);          // thiscall(this, a,
 char  __fastcall FUN_00f3ff70(int, int, int);               // thiscall(this, a)
 char  __cdecl  FUN_00f3b420();
 int   __cdecl  FUN_00eeca30(int);
-void  __cdecl  FUN_00f3fd90(int*);
+struct SurfaceNodeOwner { void RemoveNode(int* node); }; // RemoveNode: 0x00f3fd90
+struct SurfaceNodeSlots { void Recycle(int index); }; // Recycle: 0x00f410f0
 char  __fastcall FUN_00f3b9e0(int, int, int, int, int);     // thiscall(this, a, b, c)
-void* __cdecl  EA_Messaging_GetServer();
+void* __cdecl  EA_Messaging_GetServer(); // 0x00883860
+struct NodeMessageServer {
+    virtual void p0(); virtual void p1(); virtual void p2();
+    virtual void p3(); virtual void p4();
+    virtual void Post(int id, int value, int flags); // +0x14
+};
 char  __fastcall FUN_00f3bbd0(void*, int, void*, int);      // thiscall(this, noun, b)
 char  __fastcall FUN_00edfde0(void*, int);                  // thiscall(this)
 void  __fastcall FUN_00f3da90(void*, int, void*, int);      // thiscall(this, node, b)
@@ -177,17 +183,17 @@ char __fastcall FUN_00f41420(int self, int dummy, int a0, int a1, int a2, int a3
 void __fastcall FUN_00f41820(int self, int dummy, int* node) {
     (void)dummy;
     int id = *node;
-    FUN_00f3fd90(node);
+    ((SurfaceNodeOwner*)self)->RemoveNode(node);
     if (id == -2) {
-        int w = *(int*)(self + 0x10);
-        *(int*)(w + 0x150) = DAT_016c87f8;
-        *(int*)(w + 0x154) = DAT_016c87fc;
-        *(int*)(w + 0x158) = DAT_016c8800;
+        int* position = (int*)(*(int*)(self + 0x10) + 0x150);
+        position[0] = DAT_016c87f8;
+        position[1] = DAT_016c87fc;
+        position[2] = DAT_016c8800;
     } else {
-        FUN_00f410f0(0, 0, node[0x8a]);
+        ((SurfaceNodeSlots*)(*(int*)(self + 0x10) + 0x2c10))->Recycle(node[0x8a]);
     }
-    void* srv = EA_Messaging_GetServer();
-    vcv3(srv, 0x14, 0x7311ff7, id, 0);
+    NodeMessageServer* srv = (NodeMessageServer*)EA_Messaging_GetServer();
+    srv->Post(0x7311ff7, id, 0);
 }
 
 // ===========================================================================

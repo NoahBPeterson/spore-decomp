@@ -388,31 +388,38 @@ void* ElemPool24::ctor(unsigned count, void* tag)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00737E80 — construct an inline-buffered container (buffer at this+0x18, capacity 0x40).
+// Inline integer vector — construct an inline-buffered container (buffer at this+0x18, capacity 0x40).
 // ---------------------------------------------------------------------------
-struct InlineBuf {
-    void* f0;                   // +0x00
-    void* f4;                   // +0x04
-    void* f8;                   // +0x08
-    char padC[4];
-    void* f10;                  // +0x10
-    char pad14[4];
-    char buffer[0x40];          // +0x18
-    void GroupCtor(void* a, void* b);   // 0x00736090 (this in ecx)
-    void* ctor(unsigned a, unsigned b);
+struct InlineVectorStorage40 {
+    int* begin;
+    int* end;
+    int* cap;
+    unsigned mAllocator;
+    int* inlineBegin;
+    InlineVectorStorage40(int* storage) : inlineBegin(storage) {}
+    ~InlineVectorStorage40() {
+        if (begin && begin != inlineBegin)
+            EA_dealloc(begin);
+    }
 };
 
-void* InlineBuf::ctor(unsigned a, unsigned b)
+struct InlineBuf : InlineVectorStorage40 {
+    char pad14[4];
+    int buffer[16];
+    void Assign(unsigned count, const int& value); // 0x00736090
+    InlineBuf(unsigned count, int value);
+};
+
+// @ 0x00737e80
+InlineBuf::InlineBuf(unsigned count, int value)
+    : InlineVectorStorage40(buffer)
 {
-    char* bufBase = buffer;
-    f0 = bufBase;
-    f4 = bufBase;
-    f8 = bufBase + 0x40;
-    f10 = bufBase;
-    int local = 0;
-    GroupCtor((void*)a, &b);
-    (void)local;
-    return this;
+    int* storage = inlineBegin;
+    end = storage;
+    begin = storage;
+    cap = storage + 16;
+    int initialValue = value;
+    Assign(count, initialValue);
 }
 
 // ---------------------------------------------------------------------------

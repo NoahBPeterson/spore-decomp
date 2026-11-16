@@ -200,8 +200,7 @@ void __cdecl setAndL(tOutNode* n, float v)
 // @ 0x00a55d50
 void __cdecl getShl(tOutNode* n)
 {
-    int r = (int)n->mValue << (int)n->mOperand;
-    nodeBroadcast(n, (float)r);
+    nodeBroadcast(n, (float)((int)n->mValue << (int)n->mOperand));
 }
 
 // @ 0x00a55dc0
@@ -214,8 +213,7 @@ void __cdecl setShl(tOutNode* n, float v)
 // @ 0x00a55e80
 void __cdecl getShr(tOutNode* n)
 {
-    int r = (int)n->mValue >> (int)n->mOperand;
-    nodeBroadcast(n, (float)r);
+    nodeBroadcast(n, (float)((int)n->mValue >> (int)n->mOperand));
 }
 
 // @ 0x00a55ef0

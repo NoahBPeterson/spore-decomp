@@ -803,6 +803,13 @@ struct ObjCE70 {
     bool handler(int msgId, MsgCE70* msg);
 };
 
+inline unsigned HandlerAddress(ObjCE70* object)
+{
+    char* owner = (char*)object - 4;
+    if (owner) return (unsigned)object;
+    return 0;
+}
+
 // @ 0x00edce70
 bool ObjCE70::handler(int msgId, MsgCE70* msg)
 {
@@ -811,7 +818,7 @@ bool ObjCE70::handler(int msgId, MsgCE70* msg)
             ObjCE70Vt* owner = (ObjCE70Vt*)((char*)this - 4);
             owner->v1(&msg->data);
         }
-        unsigned handler = (this != (ObjCE70*)4) ? (unsigned)(size_t)this : 0;
+        unsigned handler = HandlerAddress(this);
         MessageServer* server = (MessageServer*)SP_MessageServer();
         server->Send((void*)handler, 0x30c11c7, -0x270f);
     }

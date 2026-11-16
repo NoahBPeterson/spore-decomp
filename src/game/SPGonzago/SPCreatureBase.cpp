@@ -8563,8 +8563,7 @@ char __thiscall CCM_s00c0_ddb0::e420()
     }
     char* r = (char*)((void*(__thiscall*)(void*, uint32_t))(*(void**)((char*)*(void**)lm + 0x40)))(
         lm, local_4);
-    if (r != 0 && *(char*)(r + 0x1c) != 0) return 1;
-    return 0;
+    return (r != 0 && *(char*)(r + 0x1c) != 0) ? 1 : 0;
 }
 
 // @ 0x00c0e480

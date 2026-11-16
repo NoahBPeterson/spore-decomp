@@ -371,11 +371,11 @@ void VecAutoRef::erase(void* first, void* last) {
 
 // @ 0x00663490
 void cSPUIFeedList::ShutdownCategories() {
-    char* p = (char*)this;
-    int n = (int)((*(char**)(p + 0x3c) - *(char**)(p + 0x38)) >> 2);
-    for (int i = 0; i < n; ++i)
-        cSPUIFeedListCategory_Shutdown(*(void**)(*(int*)(p + 0x38) + i * 4));
-    ((VecAutoRef*)(p + 0x38))->erase(*(void**)(p + 0x38), *(void**)(p + 0x3c));
+    VecAutoRef* categories = (VecAutoRef*)((char*)this + 0x38);
+    int count = ((char*)categories->end - (char*)categories->begin) >> 2;
+    for (int i = 0; i < count; ++i)
+        ((ThCategory**)categories->begin)[i]->Shutdown();
+    categories->erase(categories->begin, categories->end);
 }
 
 // @ 0x006634D0

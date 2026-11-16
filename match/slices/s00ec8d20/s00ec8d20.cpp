@@ -387,8 +387,7 @@ void FUN_00ec9690(int param_1, int param_2)
     int* p = ((TreeFind*)((char*)g_16c757c + 0x18))->FUN_00ec9530(&id);
     int iVar3 = *p;
     int i = 0;
-    int n = (p[1] - iVar3) >> 3;
-    while (i < n) {
+    while (i < (p[1] - iVar3) >> 3) {
         FUN_00ec7b90(param_2, iVar3 + i * 8);
         iVar3 = *p;
         ++i;

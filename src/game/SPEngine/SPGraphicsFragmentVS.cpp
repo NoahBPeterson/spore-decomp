@@ -623,17 +623,24 @@ void __fastcall FUN_006fe830(char* p)
     if ((int)(*(int*)(p + 0x0c) - (int)q) > 1 && q) EASTL_allocator_deallocate(q);
 }
 
+struct ShaderWordVector {
+    int* begin;
+    int* end;
+    int* capacity;
+    int* erase(int* first, int* last) {
+        FUN_011e0744(first, last, (end - last) * sizeof(int));
+        end -= last - first;
+        return first;
+    }
+};
+
 // @ 0x006fe890
 void __cdecl FUN_006fe890()
 {
-    int* b1 = g_v1_begin;
-    int* e1 = g_v1_end;
-    FUN_011e0744(b1, e1, 0);
-    g_v1_end = (int*)g_v1_end - (e1 - b1);
-    int* b2 = g_v2_begin;
-    int* e2 = g_v2_end;
-    FUN_011e0744(b2, e2, 0);
-    g_v2_end = (int*)g_v2_end - (e2 - b2);
+    ShaderWordVector& first = *reinterpret_cast<ShaderWordVector*>(&g_v1_begin);
+    first.erase(first.begin, first.end);
+    ShaderWordVector& second = *reinterpret_cast<ShaderWordVector*>(&g_v2_begin);
+    second.erase(second.begin, second.end);
 }
 
 // @ 0x006fe8f0

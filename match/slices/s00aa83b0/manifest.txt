@@ -1,0 +1,1 @@
+slices/s00aa83b0/s00aa83b0.cpp  ?FUN_00aa8840@HandleObj@@QAEXPAUHandleReference@@@Z  00aa8840  /O2 /MD /Gy /EHsc /TP /arch:SSE

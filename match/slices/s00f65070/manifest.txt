@@ -9,3 +9,4 @@ slices/s00f65070/s00f65070.cpp  ?Stop@cTerrainDistributeEffect@SP@@QAEXH@Z  00f6
 slices/s00f65070/s00f65070.cpp  ?SetFloatParams@cTerrainDistributeEffect@SP@@QAE_NHHH@Z  00f658c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00f65070/s00f65070.cpp  ?DeactivateCell@cDistGrid@SP@@QAEXPAUcCell@2@@Z  00f65a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00f65070/s00f65070.cpp  ?Start@cTerrainDistributeEffect@SP@@QAEXH@Z  00f65fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00f65070/s00f65070.cpp  ?pop_back@slot_deque@SP@@QAEXXZ  00f659a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

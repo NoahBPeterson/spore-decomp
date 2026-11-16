@@ -1,3 +1,6 @@
+#include <stddef.h>
+extern "C" size_t __cdecl wcslen(const wchar_t*);
+#pragma intrinsic(wcslen)
 // src/game/UTFSpore_Win32/_at_00870000.cpp -- migrated from slice(s) s0087bdc0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/_at_00870000.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -390,11 +393,9 @@ char Stream::OpenByNameA(const wchar_t* name, int* pResult)
     if (open || !file) return 0;
     if (*name == L'.') name++;
     int n = 0x104;
-    const wchar_t* p = name;
-    wchar_t c;
-    do { c = *p; p++; } while (c != 0);
+    int len = (int)wcslen(name);
     char buf[0x104];
-    EA::Text::ConvertEncoding(name, (int)(p - (name + 1)), 0x10, buf, &n, 4);
+    EA::Text::ConvertEncoding(name, len, 0x10, buf, &n, 4);
     void* f = FUN_0087cd10(buf);
     if (!f) return 0;
     fmt = f;
@@ -446,11 +447,9 @@ char Stream::OpenByNameB(const wchar_t* name, int arg)
     if (open || !file) return 0;
     if (*name == L'.') name++;
     int n = 0x104;
-    const wchar_t* p = name;
-    wchar_t c;
-    do { c = *p; p++; } while (c != 0);
+    int len = (int)wcslen(name);
     char buf[0x104];
-    EA::Text::ConvertEncoding(name, (int)(p - (name + 1)), 0x10, buf, &n, 4);
+    EA::Text::ConvertEncoding(name, len, 0x10, buf, &n, 4);
     void* f = FUN_0087cd80(buf);
     if (!f) return 0;
     fmt = f;

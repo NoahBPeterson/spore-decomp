@@ -11,3 +11,4 @@ slices/s00c50f00/s00c50f00.cpp  ?ReturnForRewards@cSPMissionExplore@SP@@QAEXXZ  
 slices/s00c50f00/s00c50f00.cpp  ?AbortToRewardState@cSPMissionExplore@SP@@QAEXXZ               00c51e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c50f00/s00c50f00.cpp  ?AddMessageHandlers@cSPMissionExplore@SP@@QAEXXZ               00c51f90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00c50f00/s00c50f00.cpp  ?RemoveMessageHandlers@cSPMissionExplore@SP@@QAEXXZ            00c52000  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c50f00/s00c50f00.cpp  ?HandleMessage@IMissionHandler@SP@@UAE_NIPAX@Z  00c51b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast

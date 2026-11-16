@@ -248,7 +248,7 @@ struct EapdMapBase {
     ~EapdMapBase();                                              // 0x00a63b40
     void  DestroyAll(void* node);                                // 0x00a63640
     bool  ClearAll();                                            // 0x00a63b90
-    bool  EraseEvent(uint32_t key, PgSymbol* out);               // 0x00a63860
+    __declspec(noinline) bool EraseEvent(uint32_t key, PgSymbol* out);               // 0x00a63860
     bool  HasKeyEvent(uint32_t key);                             // 0x00a63680
     bool  HasKeyField(uint32_t key, int arg);                    // 0x00a636b0
     void* Insert28(void** out, void* hint, uint32_t* key, char isEnd);   // 0x00a636e0

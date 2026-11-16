@@ -2052,10 +2052,7 @@ void cRWState::Init(const KeyDesc* d, const Vec3* dir, bool instant)
 {
     SphericalDir(dir, &phase, &pitch);
     frame = 0;
-    if (!instant) {
-        f0 = 0.0f;
-        Update(d);
-    } else {
+    if (instant) {
         f0 = (float)cConfigManagerUnnamedB90((float*)d);
         float v = (float)cConfigManagerUnnamedB90((float*)((const char*)d + 8));
         if (d->weight < 0.5f) {
@@ -2065,6 +2062,9 @@ void cRWState::Init(const KeyDesc* d, const Vec3* dir, bool instant)
             b = (1.0f - d->weight) * v * 2.0f;
             a = v;
         }
+    } else {
+        f0 = 0.0f;
+        Update(d);
     }
 }
 

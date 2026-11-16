@@ -1,1 +1,2 @@
 slices/s00f392b0/s00f392b0.cpp  ?FUN_00f3a120@@YAMI@Z  00f3a120  /O2 /MD /Gy /TP /GS-
+slices/s00f392b0/s00f392b0.cpp  ?Serialize@SerializerThunk@@QAEXPAVcOutStream@@@Z  00f39e80  /O2 /MD /Gy /TP /GS-

@@ -11,6 +11,8 @@
 //
 // Module flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
+#include "../../../src/game/include/var_list_serializer.h"
+extern SP::cDataSerializerGeneric gCitySimulatorSerializerList[]; // 0x01566b98
 
 typedef unsigned int size_type;
 typedef unsigned int uint32_t;
@@ -374,10 +376,9 @@ void cCitySimulator::PostMsg()
 // @ 0x00ae6610
 void cCitySimulator::SerializeStream(void* stream)
 {
-    char serializer[0xa14];
-    cVarList_Construct(serializer, (char*)this - 8, (const void*)0x1566b98, 0x1a80d26);
-    cVarList_Serialize(serializer, stream);
-    *((char*)this + 0x35) = 1;
+    SP::cVarListSerializer ser((char*)this - 8, gCitySimulatorSerializerList, 0x1a80d26);
+    ser.Serialize(*(SP::cIObjectDatabaseIStream*)stream);
+    mPad34[1] = 1;
 }
 
 // @ 0x00ae6670

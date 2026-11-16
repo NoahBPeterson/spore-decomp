@@ -970,6 +970,7 @@ inline uint64_t MakeItemIdInline(uint32_t hi, uint32_t lo) { return ((uint64_t)h
 }
 namespace SP {
 struct cItemSetValue {
+    struct IteratorTag {};
     uint64_t first;                      // +0x10 in node
     struct fixed_vec4 {
         uint64_t* mpBegin;               // +0x18
@@ -978,13 +979,14 @@ struct cItemSetValue {
         eastl::allocator_s0059_7230 mOverflowAllocator;
         uint64_t* mpPoolBegin;           // +0x28
         uint64_t mBuffer[4];             // +0x30
-        fixed_vec4() { mpBegin = mpEnd = mpPoolBegin = mBuffer; mpCapacity = mBuffer + 4; }
+        fixed_vec4() { mpBegin = mpEnd = mpPoolBegin = mBuffer; mpCapacity = mpBegin + 4; }
         ~fixed_vec4() { if (mpBegin && mpBegin != mpPoolBegin) mOverflowAllocator.deallocate(mpBegin); }
-        void DoAssignFromIterator(const uint64_t* first, const uint64_t* last, const void* tag);   // 0x005972F0
+        void DoAssignFromIterator(const uint64_t* first, const uint64_t* last, IteratorTag tag);   // 0x005972F0
     } second;
     cItemSetValue(const cItemSetValue& x) : first(x.first), second()
     {
-        second.DoAssignFromIterator(x.second.mpBegin, x.second.mpEnd, &x);
+        IteratorTag category;
+        second.DoAssignFromIterator(x.second.mpBegin, x.second.mpEnd, category);
     }
 };
 }

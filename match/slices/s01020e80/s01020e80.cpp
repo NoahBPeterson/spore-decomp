@@ -1,6 +1,8 @@
 // Slice s01020e80 -- SP::cSPLivingUniverse accessors + cSPBackgroundSimManager
 // (0x01020e80..0x01021e4c).  Module flags: /O2 /MD /Gy /TP /arch:SSE
 #include "types.h"
+#include "SP/cVarListSerializer.h"
+extern SP::cDataSerializerGeneric gLivingUniverseSerializerList[]; // 0x015b70d0
 
 typedef unsigned char  u8;
 typedef unsigned short u16;
@@ -148,14 +150,12 @@ void Cam::f21020() {
 }
 
 // ===========================================================================
-// 0x010210a0 SP::cSPLivingUniverse::Write  (approximate)
+// 0x010210a0 SP::cSPLivingUniverse::Write
 // ===========================================================================
 // @ 0x010210a0
-void __stdcall FUN_010210a0(int param) {
-    u8 buf[0xa14];
-    u32 g = (u32)(uintptr_t)DAT_016dda8c;
-    FUN_00e39ab0_ctor(buf, (void*)g, (void*)0x15b70d0, 0x1a80d26);
-    FUN_00e39ab0_serialize(buf, param);
+bool __stdcall FUN_010210a0(SP::cIObjectDatabaseOStream& stream) {
+    SP::cVarListSerializer ser(DAT_016dda8c, gLivingUniverseSerializerList, 0x1a80d26);
+    return ser.Serialize(stream);
 }
 
 // ===========================================================================

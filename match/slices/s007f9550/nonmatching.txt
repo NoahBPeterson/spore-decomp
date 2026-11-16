@@ -8,7 +8,6 @@
 007f9c10 50  complete slot add loop; /Od local slot order differs
 007f9fe0 66  complete remove-all-predicates loop; /Od local slot order / repeated getter calls differ
 007fa060 66  complete remove-all-actions loop; /Od local slot order / repeated getter calls differ
-007fa150 35  complete flags query; extra local for the external-call result differs
 007fa180 60  complete AsInterface; cl hoists the id compare before the branch vs original local-temp form
 007f9550 342  complete Eval clamp/scale routine; float branch scheduling differs
 007fa390 275  complete message broadcast; the id filter/conditional relay reconstruction differs

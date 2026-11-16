@@ -201,14 +201,32 @@ unsigned char __fastcall FileParser_HandleMessage(int* self, int, int msg, int)
     return 1;
 }
 
+struct FileParserInterface { virtual ~FileParserInterface(); };
+struct FileParserHandler {
+    virtual ~FileParserHandler();
+    virtual bool HandleMessage(unsigned message, void* data);
+    virtual int AddRef();
+    virtual int Release();
+    int referenceCount;
+};
+struct FileParserRegistration : FileParserInterface, FileParserHandler {
+    bool initialized; // +0xc; handler base at +4
+    bool Init();
+};
+struct FileParserMessageServer {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void RegisterHandler(FileParserHandler* handler, unsigned message); // slot8 (+0x20)
+};
+
 // @ 0x0083f630
-bool __fastcall FileParser_Init(int* self)
+bool FileParserRegistration::Init()
 {
-    if (*((unsigned char*)self + 0xc) == 0) {
-        *((unsigned char*)self + 0xc) = 1;
-        int* server = (int*)Messaging_GetServer();
+    if (!initialized) {
+        initialized = true;
+        FileParserMessageServer* server = (FileParserMessageServer*)Messaging_GetServer();
         if (server)
-            ((void(__thiscall*)(int*, int*, int))(*(void***)server)[8])(server, self + 1, 0x6f41f272);
+            server->RegisterHandler(this, 0x6f41f272);
         return true;
     }
     return false;
@@ -317,14 +335,27 @@ bool __fastcall FileParser_ParseFiles(int* self)
     return !failed;
 }
 
+struct FileChangeNotificationRef {
+    virtual ~FileChangeNotificationRef();
+    char mNotificationData[0x23c];
+    volatile int mRefCount; // +0x240
+
+    int Release()
+    {
+        int count = --mRefCount;
+        if (count == 0) {
+            mRefCount = 1;
+            delete this;
+        }
+        return count;
+    }
+};
+
 // @ 0x0083f8f0
 void __fastcall RefRelease(int** p)
 {
-    int* o = *p;
-    if (o && --*(int*)((char*)o + 0x240) == 0) {
-        *(int*)((char*)o + 0x240) = 1;
-        ((void(__thiscall*)(int*, int))(*(void***)o)[0])(o, 1);
-    }
+    FileChangeNotificationRef* object = (FileChangeNotificationRef*)*p;
+    if (object) object->Release();
 }
 
 // @ 0x0083f940

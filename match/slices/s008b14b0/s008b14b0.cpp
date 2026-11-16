@@ -5,6 +5,7 @@
 // esi/edi/eax, other arguments in eax/ecx/dx/di).  Those are written here as ordinary
 // functions that take the object/arguments explicitly, so the slice is behavior-complete
 // for them but not byte-identical.  The plain cdecl / thiscall ones are written to match.
+#include <string.h>
 
 typedef unsigned char  uint8;
 typedef unsigned short uint16;
@@ -352,15 +353,9 @@ char* GetPFRNameProperty(PFRClass* p)
     char* name = p->name;
     if (name == 0)
         return 0;
-    char* q = name;
-    char* q1 = name + 1;
-    char c;
-    do { c = *q++; } while (c);
-    int len = (int)(q - q1);
+    int len = (int)strlen(name);
     char* out = (char*)tsi_AllocMem(p->mem, len + 1);
-    char* src = name;
-    int delta = (int)(out - name);
-    do { c = *src; src[delta] = c; src++; } while (c);
+    strcpy(out, name);
     out[len] = 0;
     return out;
 }

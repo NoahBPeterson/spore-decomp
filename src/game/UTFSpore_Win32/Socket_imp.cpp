@@ -61,8 +61,6 @@ struct Socket {
     bool WaitReadable(unsigned timeout);                    // 0x0094d690
     bool WaitWritable(unsigned timeout);                    // 0x0094d730
     unsigned WaitMulti(unsigned mode, unsigned timeout);    // 0x0094d7d0
-    bool SetOptInt(unsigned char v);                       // 0x0094d960
-    bool SetOptInt2(unsigned char v);                      // 0x0094da20
     bool GetOptInt(unsigned char* out, unsigned* val);     // 0x0094da70
     bool SetLingerOpt(unsigned char on, unsigned short level); // 0x0094daf0
     bool GetNonBlocking(unsigned char* out);                // 0x0094db50
@@ -74,14 +72,7 @@ private:
         (void)scratch;
         ((void(__thiscall*)(void*, int))vt[1])((char*)this - 8, ec);
     }
-    void SetOpt(uint32_t optname, int value) {              // edx/ecx = hSocket
-        unsigned h = *(unsigned*)((char*)this + 4);
-        int r = setsockopt(h, 0xffff, (int)optname, (const char*)&value, 4);
-        (void)h;
-        if (r != 0) {
-            ReportError(0);
-        }
-    }
+
 };
 struct TimeVal { long tv_sec; long tv_usec; };
 struct FdSet  { unsigned fd_count; unsigned fd_array[64]; };
@@ -144,6 +135,8 @@ struct Primary {
 };
 struct PendingSocket;
 struct ISocket {
+    bool SetBroadcastOption(bool enabled);
+    bool SetDebugOption(bool enabled);
     virtual void v00();
     virtual void v01();
     virtual void v02();
@@ -573,18 +566,25 @@ int EA::Sockets::Socket::IsReadableAndOrWritable(EA::Sockets::IOType mode, unsig
     return result;
 }
 
-// @ 0x0094d960
-bool Socket::SetOptInt(unsigned char v)
+inline bool SetSocketIntegerOption(ISocket* socket, int option, int value)
 {
-    SetOpt(0x20, v);
+    if (setsockopt(socket->mSocketId, 0xffff, option, (const char*)&value, 4)) {
+        ((Primary*)((char*)socket - 8))->DoError(WSAGetLastError(), 0);
+        return false;
+    }
     return true;
 }
 
-// @ 0x0094da20
-bool Socket::SetOptInt2(unsigned char v)
+// @ 0x0094d960
+bool ISocket::SetBroadcastOption(bool enabled)
 {
-    SetOpt(1, v);
-    return true;
+    return SetSocketIntegerOption(this, 0x20, enabled);
+}
+
+// @ 0x0094da20
+bool ISocket::SetDebugOption(bool enabled)
+{
+    return SetSocketIntegerOption(this, 1, enabled);
 }
 
 // @ 0x0094da70

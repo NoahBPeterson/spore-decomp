@@ -1,5 +1,4 @@
 00abc1a0 137 Vec28::grow: retail keeps mpBegin in ebx live across the FUN_00abbf70 call and indexes' param is hoisted to esi; MSVC allocates esi/edi instead and materialises the temporary-block zeros via a zero register; equiv FAIL
-00abc240 147 Read28List: element loop + grow call reconstructed functionally; stream-read epilogue scheduling and record-field offsets differ from retail; equiv UNSUPPORTED
 00abc2c0 100 ReadDesc: descriptor record reader reconstructed but the call/scheduling pattern and stack temporaries differ from retail; equiv UNSUPPORTED
 00abc440 141 SetActive: near-miss schedule: int/SSE zero-store ordering and the refcount guard layout differ from retail; equiv WEAK
 00abc4e0 117 Activate: near-miss schedule: constant load hoist (`float one = DAT`) plus floating-point store order differ from retail; equiv FAIL

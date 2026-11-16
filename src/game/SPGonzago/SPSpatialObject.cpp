@@ -413,8 +413,9 @@ Attribute gSpatialObjectAttributes[25];
 // @ 0x00c88a90
 void cSpatialObject::Write(void* pStream)
 {
+    VObj174* __restrict writer = ((VObj174*)pStream)->v020();
     uint32_t type = 0x1186577;
-    VObj174* pIo = ((VObj174*)pStream)->v020()->v018();
+    VObj174* pIo = writer->v018();
     EA::IO::WriteUint32(pIo, &type, 1, 0);
     cVarListSerializer serializer(this, &kSpatialObjectSerializerList, 0x1a80d26);
     serializer.Serialize(pStream);
@@ -538,7 +539,9 @@ bool cSO::func9C()
             if (b14 && !b18)
                 return true;
         } else {
-            return (v >> 14) & 1;
+            unsigned char bit = (unsigned char)(v >> 14);
+            bit &= 1;
+            return bit;
         }
     }
     return false;

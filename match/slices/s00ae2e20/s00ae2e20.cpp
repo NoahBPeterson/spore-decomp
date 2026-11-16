@@ -647,12 +647,15 @@ bool Sim::Select(char flag, void* key)
 // @ 0x00ae3d40
 bool Sim::HasId(int id)
 {
-    int i = 0;
-    char* r = (char*)mpBegin + 0x38;
     int n = mDeclAc;
-    for (; i < n; ++i, r += 0x64) {
-        if (*(int*)r == id)
-            return false;
+    int i = 0;
+    if (i < n) {
+        char* record = (char*)mpBegin + 0x38;
+        do {
+            if (*(int*)record == id) return false;
+            ++i;
+            record += 0x64;
+        } while (i < n);
     }
     return true;
 }

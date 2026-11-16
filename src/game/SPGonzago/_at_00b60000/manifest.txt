@@ -31,3 +31,4 @@
 ../src/game/SPGonzago/_at_00b60000.cpp  ?UpdateUIContexts@@YAXM@Z  00b6c710  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b60000.cpp  ?Init@Obj63BD0@@QAEPAU1@XZ  00b63bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00b60000.cpp  ?FUN_00b6ba50@@YAPAUEStr@@PAU1@PAX@Z  00b6ba50  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b60000.cpp  ?Read@cGonzagoTimer@SP@@QAE_NAAVcIObjectDatabaseIStream@2@@Z  00b63930  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

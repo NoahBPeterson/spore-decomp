@@ -7,5 +7,4 @@
 00f4f7a0  133  cTerrainTool::OnPointer: complete; clamp/branch shape and the fabs gu.rd differ from the original's temp form
 00f4fa20   85  cTerrainTool::ReadFromScript: complete (equivalence PASS); cl schedules the vtbl slot load and the 0xd sub-code compare differently
 00f4faa0   41  cTerrainTool::GetBrushVector: complete (equivalence PASS); the frame-word latch branch and the xmm operand order differ
-00f4fb00  120  cTerrainTool::UpdateBrushSize: complete; the vtable-slot call plus max() selection is shaped differently by cl
 00f4fb80  167  cTerrainTool::DragUpdate: complete; the four clamp-and-tween blocks match but cl reassociates `mParam29c*dt*5.0f` and reorders the compares

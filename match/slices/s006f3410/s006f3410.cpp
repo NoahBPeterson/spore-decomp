@@ -6,7 +6,7 @@
 #include <math.h>
 
 // ---- external callees (bodies live elsewhere; addresses masked) -------------------------
-void  __cdecl EASTL_allocator_deallocate(void* p);                                  // 0xf47380
+void  __cdecl EASTL_allocator_deallocate(void* p) throw();                                  // 0xf47380
 void* __cdecl EASTL_allocator_allocate(unsigned size, const char* name, int a, int b,
                                        const char* file, int line);                 // 0xf473a0
 void  __cdecl memset_thunk(void* dst, int value, unsigned size);                    // 0x11e073e
@@ -44,6 +44,18 @@ struct V3 {
     V3(float a, float b, float c) : x(a), y(b), z(c) {}
 };
 
+struct ModelSetVector {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    unsigned mAllocator[2];
+    ModelSetVector() {}
+    ~ModelSetVector() {
+        if (mpBegin && ((int*)mpBegin)[-1])
+            EASTL_allocator_deallocate(mpBegin);
+    }
+};
+
 class cModelInstanceSet {
 public:
     virtual void v0(IVertexSink* pSink);         // 0x6f3410
@@ -51,16 +63,8 @@ public:
 
     unsigned int mModelInstance;                 // +0x4
     unsigned int mModelGroup;                    // +0x8
-    void* mTBegin;                               // +0xc
-    void* mTEnd;                                 // +0x10
-    void* mTCap;                                 // +0x14
-    int   m18;                                   // +0x18
-    void* mRBegin;                               // +0x1c
-    void* mREnd;                                 // +0x20
-    void* mRCap;                                 // +0x24
-    int   m28;                                   // +0x28
-    int   m2c;                                   // +0x2c
-    int   m30;                                   // +0x30
+    ModelSetVector mTransforms;                 // +0x0c
+    ModelSetVector mColors;                     // +0x20
     void* mRenderer;                             // +0x34
     int   m38;                                   // +0x38
     int   m3c;                                   // +0x3c
@@ -87,18 +91,32 @@ static inline void  Call2(void* p, int slot, int a, int b) {
 }
 
 // @ 0x006f3d00
-cModelInstanceSet::cModelInstanceSet()
-    : mModelInstance(0), mModelGroup(0), mTBegin(0), mTEnd(0), mTCap(0),
-      mREnd(0), mRCap(0), m28(0), mRenderer(0),
-      m38(-1), m3c(-1), m40(0), m41(0), m42(0), m43(0),
-      m44(0), m48(0.0f), m50(-1), m54(-1), mSetID(-1) {
+cModelInstanceSet::cModelInstanceSet() {
+    mModelInstance = 0;
+    mModelGroup = 0;
+    mTransforms.mpBegin = 0;
+    mTransforms.mpEnd = 0;
+    mTransforms.mpCapacity = 0;
+    mColors.mpBegin = 0;
+    mColors.mpEnd = 0;
+    mColors.mpCapacity = 0;
+    mRenderer = 0;
+    m38 = -1;
+    m3c = -1;
+    m40 = 0;
+    m41 = 0;
+    m42 = 0;
+    m43 = 0;
+    m44 = 0;
+    m48 = 0.0f;
+    m50 = -1;
+    m54 = -1;
+    mSetID = -1;
 }
 
 // @ 0x006f3d50
 cModelInstanceSet::~cModelInstanceSet() {
     if (mRenderer) (*(void (__thiscall**)(void*))(Vt(mRenderer) + 1))(mRenderer);
-    if (mREnd && ((int*)mREnd)[-1]) EASTL_allocator_deallocate(mREnd);
-    if (mTBegin && ((int*)mTBegin)[-1]) EASTL_allocator_deallocate(mTBegin);
 }
 
 // Update's per-instance bounds/radius accumulators. These are deliberately `noinline`: their
@@ -124,8 +142,8 @@ void cModelInstanceSet::Update() {
     b[0] = g_153415c; b[1] = g_153415c; b[2] = g_153415c;
     b[3] = -g_153415c; b[4] = -g_153415c; b[5] = -g_153415c;
     float radius = 0.0f;
-    float* p = (float*)mTBegin;
-    int n = (int)(((char*)mTEnd - (char*)mTBegin) / 0x38);
+    float* p = (float*)mTransforms.mpBegin;
+    int n = (int)(((char*)mTransforms.mpEnd - (char*)mTransforms.mpBegin) / 0x38);
     while (n-- > 0) {
         UpdateBounds(b, p);
         UpdateRadius(&radius, p);
@@ -187,11 +205,11 @@ static __forceinline void WriteInstance(char* dst, int matOff, int colOff, const
 // @ 0x006f3410  (expand the instance vector into vertices handed out by pSink, 4 at a time)
 void cModelInstanceSet::v0(IVertexSink* pSink) {
     int matOff = *(unsigned char*)&m5c;
-    int remaining = (int)(((char*)mTEnd - (char*)mTBegin) / 0x38);
-    const float* color = (const float*)mREnd;   // +0x20: optional per-instance RGBA array
+    int remaining = (int)(((char*)mTransforms.mpEnd - (char*)mTransforms.mpBegin) / 0x38);
+    const float* color = (const float*)mColors.mpBegin;   // +0x20: optional per-instance RGBA array
     int colOff = *((unsigned char*)&m5c + 1);
     float white[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    const sInstance* src = (const sInstance*)mTBegin;
+    const sInstance* src = (const sInstance*)mTransforms.mpBegin;
     while (remaining > 0) {
         char* dst;
         int stride;

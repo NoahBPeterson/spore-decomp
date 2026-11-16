@@ -8,8 +8,6 @@
 00e53460  184  mission slot transition: complete (sound + slot stores + inlined guard/==1/==2); arg arrives in EAX (custom register ABI) so prologue/schedule differs [equiv: UNSUPPORTED - original reads eax at entry]
 00e53580  137  mission panel teardown: complete (window, 3 gfx vtable[0xc], messaging); vcall schedule differs
 00e53660  370  mission-complete toggle: complete (cString load/tooltip, 3 gfx vtable[0xc], SetBoolProperty, messaging); frame + vcall schedule differs [equiv: UNSUPPORTED - derefs globals, 0/400 valid]
-00e53860   35  toggle window + FUN_00b3d3f0: complete; schedule differs [equiv: WEAK 105 valid inputs (need 200), 96% cov] [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#3 esp]
 00e538b0   80  OnKeyDown handler: complete (both message ids); FIND/schedule differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target, call#2 ecx]
-00e53a20   67  open settings + reset window: complete; allocator/FIND schedule differs
 00e53a80   41  reset window: complete; allocator/FIND schedule differs [equiv: WEAK 175 valid inputs (need 200), 72% cov]
 00e53b40   20  build medal HUD descriptor: complete field init + tail call; register schedule differs

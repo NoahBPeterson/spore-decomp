@@ -1,0 +1,1 @@
+slices/s00cab550/s00cab550.cpp  ?FUN_00cac0e0@VehicleExt@@QAEXUVec3@@I@Z  00cac0e0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast

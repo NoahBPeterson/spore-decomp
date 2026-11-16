@@ -1,3 +1,4 @@
+#include <string.h>
 // src/game/UTFSpore_Win32/HTTPClient.cpp -- migrated from slice(s) s00944f40, s00943f60, s00945ed0, s00942ff0, s00942290, s009413d0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/HTTPClient.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -1316,15 +1317,12 @@ int HTTPClient::SendCallback(const char* data, int len)
 {
     int self = (int)this;
     if (len == -1) {
-        const char* p = data;
-        do {
-        } while (*p++ != 0);
-        len = (int)(p - (data + 1));
+        len = (int)strlen(data);
     }
     if (*(int*)(self + 0x30) > 0) {
         void* obj = *(void**)(self + 0x58);
         void** vtbl = *(void***)obj;
-        volatile int cb = ((int(__thiscall*)(void*, const char*, int))vtbl[0x38 / 4])(obj, data, len);
+        int cb = ((int(__thiscall*)(void*, const char*, int))vtbl[0x38 / 4])(obj, data, len);
         return cb;
     }
     return len;

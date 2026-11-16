@@ -46,4 +46,3 @@
 0082a140 664 complete translation; local frame is 0x2c vs the retail 0x3c and the early-failure path/rect copy schedule differs flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 0082a450 128 complete translation; AutoRef release sequence codegen differs flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 0082a500 782 complete translation; retail 16-byte-aligns the frame and builds the rect corners with unary-negation xorps/movss pairs; cl emits movdqa copies and different stack offsets flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
-0082aa20 22 complete translation; callee schedule differs when the callee body is visible in the TU flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2

@@ -18,3 +18,4 @@
 ../src/game/SPEditors/SPUIAssetView.cpp  ?OnDetach@AssetView@@QAEXXZ  00657e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetView.cpp  ?FUN_00657e20@@YAXPAXH@Z  00657e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPUIAssetView.cpp  ?SporepediaVecClear@@YAXXZ  0065aeb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetView.cpp  ?UpdateVerbIcon@AssetView@@QAEXXZ  00657e60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

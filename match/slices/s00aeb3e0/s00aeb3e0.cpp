@@ -74,7 +74,7 @@ void* FUN_00aed4d0();                        // 0x00aed4d0
 void* FUN_00aeae10(void* first, void* last);          // 0x00aeae10 Vec12::erase
 void  FUN_00aeae90(E12* pos, E12* value);             // 0x00aeae90 Vec12::DoInsertValue
 void  FUN_0102df20(int* msg, int arg, int a4, int a5);// 0x0102df20 SP::DoSpaceCommAction
-void  FUN_00cfeeb0(int* msg, int a2, int a3, int a4); // 0x00cfeeb0 SP::DoCivCommAction
+void  FUN_00cfeeb0(int* msg, int target, int action); // 0x00cfeeb0 SP::DoCivCommAction
 struct Tgt {
     void* FUN_00ae9330(void* p);   // 0x00ae9330 thiscall
     void* FUN_00ae9000(void* p);   // 0x00ae9000 thiscall
@@ -118,7 +118,7 @@ struct SpaceTool {
     void  FUN_00aeb960(void* out, void* key);                    // 0x00aeb960
     void  FUN_00aeba50(void* stream);                            // 0x00aeba50
     void  FUN_00aebb30();                                        // 0x00aebb30 dtor
-    u32   FUN_00aebc10(int msgId, int arg);                      // 0x00aebc10
+    bool  FUN_00aebc10(int msgId, int arg);                      // 0x00aebc10
     void  FUN_00aebcd0(int index);                               // 0x00aebcd0
 
     // external thiscall neighbours reached with ecx == this
@@ -370,32 +370,45 @@ void SpaceTool::FUN_00aeb7b0(int* msg, int a3, int a4, int a5)
 // ===========================================================================
 // 0x00aeb890 -- civ-comm action dispatcher (CreateEntry variant, ret 0x10).
 // ===========================================================================
+struct CommPlanetRecord {
+    int GetCommContext(); // 0x00ce6950
+};
+struct CommActivePlanet {
+    char pad00[0x13c];
+    CommPlanetRecord* record;
+};
+struct CommObject {
+    virtual void slot00();
+    virtual void slot04();
+    virtual void slot08();
+    virtual int AsInterface(unsigned id);
+};
+
 // @ 0x00aeb890
 void SpaceTool::FUN_00aeb890(int* msg, int a2, int a3, int a4)
 {
-    int commCtx = (int)(size_t)FUN_00ce6950(FUN_01021260());
-    int v;
-    if (a4 != 0)
-        v = (*(int(__thiscall**)(int, int))((char*)*(void**)a4 + 0x0c))(a4, 0x17f243b);
-    else if (a2 != 0)
-        v = (*(int(__thiscall**)(int, int))((char*)*(void**)a2 + 0x0c))(a2, 0x17f243b);
+    int commCtx = ((CommActivePlanet*)FUN_01021260())->record->GetCommContext();
+    int target;
+    if (a3)
+        target = ((CommObject*)a3)->AsInterface(0x017f243b);
+    else if (a2)
+        target = ((CommObject*)a2)->AsInterface(0x017f243b);
     else
-        v = 0;
+        target = 0;
 
-    int id = msg[0];
-    if (id == (int)0xcaff0f72) {
-        void* dlg = FUN_00aeb240(v, 0, 1, (int)0x2ea8fb98, (int)0xc8fbf7d7, 0);
-        FUN_00aebe90(dlg);
-    } else if (id == 0x1994745) {
+    switch (msg[0]) {
+    case (int)0xcaff0f72:
+        FUN_00aebe90(FUN_00aeb240(target, a4, commCtx, (int)0xdbf385bf, (int)0x942bfb93, 0));
+        break;
+    case 0x1994745:
         FUN_00ae9f50();
         vt4(SP_MessageServer(), 0x18 / 4, 0x490d429, 0, 0, 0);
-    } else if (id == 0x2d5dcec) {
-        void* dlg = FUN_00aeb240(a3, a4, 1, msg[1], msg[3], 0);
-        FUN_00aebe90(dlg);
+        break;
+    case 0x2d5dcec:
+        FUN_00aebe90(FUN_00aeb240(target, a4, commCtx, msg[3], msg[1], 0));
+        break;
     }
-
-    FUN_00cfeeb0(msg, a2, a3, a4);
-    (void)commCtx;
+    FUN_00cfeeb0(msg, a2, a4);
 }
 
 // ===========================================================================
@@ -521,42 +534,39 @@ void SpaceTool::FUN_00aebb30()
 // ===========================================================================
 // 0x00aebc10 -- cSPUICommScreen message handler (ret 8).
 // ===========================================================================
+struct CommScreenView { void Hide(); }; // 0x00dd30d0
+CommScreenView* GetCommScreen(); // 0x00dd1ca0
+
 // @ 0x00aebc10
-u32 SpaceTool::FUN_00aebc10(int msgId, int arg)
+bool SpaceTool::FUN_00aebc10(int msgId, int arg)
 {
-    if (msgId == 0x153c326) {
-        void* lay = ctor_UILayout();
-        if (lay != 0) {
-            lay = ctor_UILayout();
-            vt0(lay, 0xdd30d0 / 4);   // SP::cSPUICommScreen::Hide
-        }
-        return 0;
-    }
-    if (msgId == 0x580d038) {
-        void* dlg = mp20;
-        if (dlg != 0) {
-            int a1 = *(int*)((char*)dlg + 0x14);
-            int a2 = *(int*)((char*)dlg + 0x0c);
+    switch (msgId) {
+    case 0x153c326:
+        if (GetCommScreen())
+            GetCommScreen()->Hide();
+        break;
+    case 0x580d038:
+        if (void* dlg = mp20) {
+            int a5 = *(int*)((char*)dlg + 0x20);
             int a3 = *(int*)((char*)dlg + 0x1c);
             int a4 = *(int*)((char*)dlg + 0x18);
-            int a5 = *(int*)((char*)dlg + 0x20);
-            (void)arg;
+            int a1 = *(int*)((char*)dlg + 0x14);
+            int a2 = *(int*)((char*)dlg + 0x0c);
             SpaceTool* cm = (SpaceTool*)SP_CommManager();
-            void* d = cm->FUN_00aeb160(a2, a1, a4, a3, a5, 0, 0);
-            cm->FUN_00aebe90(d);
-            void* sel = mp20;
-            if (sel != 0) {
+            void* created = cm->FUN_00aeb160(a2, a1, a4, a3, 0, a5, 0);
+            cm->FUN_00aebe90(created);
+            void* selected = mp20;
+            if (selected) {
                 mp20 = 0;
-                relref(sel);
+                relref(selected);
             }
         }
-        return 0;
-    }
-    if (msgId == 0x609f3d9) {
+        break;
+    case 0x609f3d9:
         *((u8*)this + 0x44) = 1;
-        return 0;
+        break;
     }
-    return 0;
+    return false;
 }
 
 // ===========================================================================

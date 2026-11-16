@@ -1,3 +1,4 @@
+#include <intrin.h>
 // Slice s00f94660 -- 0x00f94660 .. 0x00f95540 (17 functions).
 //
 // Swarm / terrain-script cluster:
@@ -574,30 +575,48 @@ extern "C" void* __fastcall FUN_00f952b0(char* self, int, int a2)
 // ===========================================================================
 // 0x00f95430 -- destructor of the GmeRefCount-derived component.
 // ===========================================================================
+struct ComponentRefObject {
+    virtual int AddRef();
+    virtual int Release();
+};
+struct ComponentResourceVector {
+    ComponentRefObject** mpBegin;
+    ComponentRefObject** mpEnd;
+    ComponentRefObject** mpCapacity;
+    uint32_t mAllocator[2];
+    void Destroy(); // 0x004b5440
+};
+struct TerrainScriptComponentView {
+    void* mComponentVTable;
+    void* mReferenceVTable;
+    char pad08[0x9c];
+    ComponentRefObject* mTransformTarget;
+    ComponentResourceVector mResources;
+    ComponentRefObject* mProperties;
+};
+extern void* gComponentVTable_f95430[]; // 0x01490308
+extern void* gComponentReferenceVTable_f95430[]; // 0x01490304
+extern void* gComponentBaseVTable_f95430[]; // 0x013f21d4
+extern void* gComponentReferenceBaseVTable_f95430[]; // 0x013ef094
+
 // @ 0x00f95430
-extern "C" void* __fastcall FUN_00f95430(char* self, int, uint8_t freeFlag)
+extern "C" void* __fastcall FUN_00f95430(TerrainScriptComponentView* self, int, uint8_t freeFlag)
 {
-    *(void**)(self + 0) = (void*)0x1490308;
-    *(void**)(self + 4) = (void*)0x1490304;
-    int p = *(int*)(self + 0xbc);
-    if (p) {
-        ((FnV)(*(void***)p)[4 / 4])((void*)p);
-    }
-    FUN_004b5440(self + 0xa8);
-    int q = *(int*)(self + 0xa4);
-    if (q) {
-        ((FnV)(*(void***)q)[4 / 4])((void*)q);
-    }
-    *(void**)(self + 0) = (void*)0x13f21d4;
-    *(void**)(self + 4) = (void*)0x13ef094;
+    self->mComponentVTable = gComponentVTable_f95430;
+    self->mReferenceVTable = gComponentReferenceVTable_f95430;
+    _ReadWriteBarrier();
+    if (self->mProperties)
+        self->mProperties->Release();
+    self->mResources.Destroy();
+    if (self->mTransformTarget)
+        self->mTransformTarget->Release();
+    self->mComponentVTable = gComponentBaseVTable_f95430;
+    self->mReferenceVTable = gComponentReferenceBaseVTable_f95430;
     if (freeFlag & 1)
         FUN_00f47380(self);
     return self;
 }
 
-// ===========================================================================
-// 0x00f95490 -- swap/attach the user-data component and notify list members.
-// ===========================================================================
 // @ 0x00f95490
 extern "C" void __fastcall FUN_00f95490(char* self, int, int newUd)
 {

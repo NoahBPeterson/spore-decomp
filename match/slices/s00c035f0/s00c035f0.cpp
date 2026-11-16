@@ -485,12 +485,26 @@ float CreatureBase::func4140(int boolFlag)
   return (r > one) ? r : one;
 }
 
+// Stream views used by the game-plant and hit-sphere serializers.
+class CreatureStreamHolder {
+public:
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // +0x18
+};
+class CreatureArchive {
+public:
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual CreatureStreamHolder* GetStreamHolder(); // +0x20
+};
 // @ 0x00c04220
 bool CreatureBase::Write(void* stream)
 {
-  void* p = (*(FnPtr)(*(char**)stream + 0x20))(stream);
+  CreatureStreamHolder* __restrict holder = ((CreatureArchive*)stream)->GetStreamHolder();
   unsigned tmp = 0xd0036e08u;
-  void* u = (*(FnPtr)(*(char**)p + 0x18))(p);
+  void* u = holder->GetStream();
   FUN_0093aa70(u, &tmp, 1, 0);
   bool bl = FUN_00c0bc20(stream);
   char* herd = *(char**)((char*)this + 0x1674);

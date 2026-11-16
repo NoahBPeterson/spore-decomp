@@ -305,20 +305,15 @@ bool FUN_00ec73c0(int param_1)
 // @ 0x00ec7490
 bool FUN_00ec7490(int* param_1, int param_2, char param_3)
 {
-    if (param_1 == 0)
-        return false;
-    char* wm = (char*)SP_WindowManager();
-    char* r = (char*)((FV_i)(*(void***)wm)[0x48 / 4])(wm, param_2);
-    if ((int*)r == param_1)
-        return true;
-    if (param_3 == 0)
-        return false;
-    if (((FBb_i)(*(void***)param_1)[0xf8 / 4])(param_1, (int)r))
-        return true;
+    if (param_1 != 0) {
+        char* wm = (char*)SP_WindowManager();
+        char* r = (char*)((FV_i)(*(void***)wm)[0x48 / 4])(wm, param_2);
+        return (param_1 == (int*)r ||
+                (param_3 != 0 && ((FBb_i)(*(void***)param_1)[0xf8 / 4])(param_1, (int)r))) ? 1 : 0;
+    }
     return false;
 }
 
-// ---------------------------------------------------------------- 0x00ec74e0
 // @ 0x00ec74e0
 bool FUN_00ec74e0(void)
 {

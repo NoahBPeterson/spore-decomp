@@ -148,40 +148,93 @@ float FUN_00b0f0c0(float a, float b, float t)
 // Serialization / render-queue manager
 // ===========================================================================
 
-// @ 0x00b0e560
-// Reads a count from the stream, resizes the slot vector, then for each slot
-// releases the old element and lets the host re-create it.
-void cRenderQueue::FUN_00b0e560(int host_, int vec_, uint32_t flags)
+struct QueueObject
 {
-    char* host = (char*)host_;
-    uint32_t* vec = (uint32_t*)vec_;
-    void* obj = vcall0<void*>(host, 0x20);
-    void* reader = vcall0<void*>(obj, 0x18);
-    int count = 0;
-    ReadInt32(reader, &count, 1, (int)flags);
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void Slot2();
+    virtual void Slot3();
+    virtual void Slot4();
+    virtual void Slot5();
+    virtual void Slot6();
+    virtual void Slot7();
+    virtual void Slot8();
+    virtual void Slot9();
+    virtual void Slot10();
+    virtual void Slot11();
+    virtual void Slot12();
+    virtual void Slot13();
+    virtual void Slot14();
+    virtual void Slot15();
+    virtual void Slot16();
+    virtual void Slot17();
+    virtual void Slot18();
+    virtual void Slot19();
+    virtual void Slot20();
+    virtual void Slot21();
+    virtual void Slot22();
+    virtual void Release();
+};
+struct QueueObjectVector
+{
+    QueueObject** begin;
+    QueueObject** end;
+    QueueObject** capacity;
+    void Insert(QueueObject** position, unsigned count, QueueObject* const& value); // 0x00b0d710
+    QueueObject** Erase(QueueObject** first, QueueObject** last); // 0x00b0dec0
+    QueueObject*& operator[](int index) { return begin[index]; }
+};
+struct QueueInputStream
+{
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void Slot2();
+    virtual void Slot3();
+    virtual void Slot4();
+    virtual void Slot5();
+    virtual void* GetStream();
+};
+struct QueueInputHost
+{
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void Slot2();
+    virtual void Slot3();
+    virtual void Slot4();
+    virtual void Slot5();
+    virtual void Slot6();
+    virtual void Slot7();
+    virtual QueueInputStream* GetStreamHolder();
+    virtual void Slot9();
+    virtual void ReadObject(uint32_t type, QueueObject** output, int flags);
+};
 
-    uint32_t beg = vec[0], end = vec[1];
-    int n = (int)(end - beg) >> 2;
-    if (n < count)
+// @ 0x00b0e560
+// Read and resize the pointer vector, then replace each owned object.
+void __cdecl ReadRenderQueueSlots(QueueInputHost* host, QueueObjectVector* vec, uint32_t type)
+{
+    int count;
+    void* reader = host->GetStreamHolder()->GetStream();
+    ReadInt32(reader, &count, 1, 0);
+    if ((unsigned)count > (unsigned)(vec->end - vec->begin))
     {
-        int zero = 0;
-        FUN_00b0d710((void*)end, count - n, &zero);
+        QueueObject* zero = 0;
+        vec->Insert(vec->end, count - (vec->end - vec->begin), zero);
     }
     else
     {
-        FUN_00b0dec0((void*)(beg + count * 4), (void*)end);
+        vec->Erase(vec->begin + count, vec->end);
     }
-
     for (int i = 0; i < count; ++i)
     {
-        char* slot = (char*)(vec[0] + i * 4);
-        void* p = *(void**)slot;
-        if (p)
+        QueueObject** slot = &(*vec)[i];
+        QueueObject* old = *slot;
+        if (old)
         {
-            *(void**)slot = 0;
-            vcall0<void>(p, 0x5c);
+            *slot = 0;
+            old->Release();
         }
-        vcall3<void, uint32_t, void*, int>(host, 0x28, flags, slot, 0);
+        host->ReadObject(type, slot, 0);
     }
 }
 

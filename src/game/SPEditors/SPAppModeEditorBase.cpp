@@ -9350,8 +9350,7 @@ bool __cdecl HasAnyResource(cSPEditorBlock_s0057_7130* block, ResKey3* key)
                 return false;
             }
             Block_s0057_7130* base = m->mpBegin;
-            int n = m->mpEnd - base;
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < m->mpEnd - base; i++) {
                 if (base[i].id == k0.a || base[i].id == k1.a || base[i].id == k2.a) {
                     ref.Drop();
                     return true;

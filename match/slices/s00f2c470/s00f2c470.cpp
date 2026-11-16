@@ -1,6 +1,9 @@
 // Slice s00f2c470.  Scenario-resource / building-data copy and serialization
 // helpers.  Built /O2 /MD /Gy /TP.
 
+#include <wchar.h>
+#pragma intrinsic(wcslen)
+
 typedef unsigned int uint;
 typedef unsigned int size_t;
 
@@ -40,6 +43,26 @@ struct Val {                      // 0x44
     int icon;                     // 0x40
 };
 struct SubOp { void copyFrom(const void* p); };   // 0xdfb280
+struct ScenarioRecordVector {
+    Rec* begin;
+    Rec* end;
+    Rec* capacity;
+    void Reserve(uint count); // 0x00f2c5d0
+    void DoInsertValue(Rec* position, const Rec& value); // 0x00f2c6a0
+    void PushBack(const Rec& value) {
+        Rec* slot = end;
+        if (slot < capacity) {
+            end = slot + 1;
+            if (slot) {
+                slot->kind = value.kind;
+                ((SubOp*)&slot->sub)->copyFrom(&value.sub);
+                slot->icon = value.icon;
+            }
+        } else {
+            DoInsertValue(slot, value);
+        }
+    }
+};
 
 // ---------------------------------------------------------------------------
 // Helpers resolved against the original image (targets are masked as relocs).
@@ -82,12 +105,31 @@ typedef char  (__thiscall *TC2rc)(void*, void*, int);
 typedef void  (__thiscall *TC1i)(void*, int);
 typedef void* (__thiscall *TC2p)(void*, void*);
 
-struct Ser {                      // cVarListSerializer
-    void ctor(void* a, void* b, uint tag);                       // 0x692f90
-    char Serialize(void* o);                                     // 0x693e10
+// Local canonical serializer declarations keep this legacy slice's existing include flags.
+namespace SP {
+struct cDataSerializerGeneric;
+class cIObjectDatabaseIStream;
+struct cDataSerializationInfo {
+    uint mId;
+    uint mDataSize;
+    bool mbSerialized;
+    void* mpBinderContext;
+    cDataSerializerGeneric* mpSerializer;
 };
-extern "C" void SCtor(Ser* self, void* a, void* b, uint tag);    // 0x692f90
-extern "C" char SSer(Ser* self, void* o);                        // 0x693e10
+class cVarListSerializer {
+public:
+    cDataSerializationInfo mDataSerializationInfos[128];
+    int mSerializableVarCount;
+    int mSerializedVarCount;
+    uint mSignature;
+    void* mpObject;
+    cDataSerializerGeneric* mpSerializerList;
+    cVarListSerializer(const void*, cDataSerializerGeneric*, uint); // 0x00692f90
+    bool Serialize(cIObjectDatabaseIStream&); // 0x00693e10
+};
+}
+extern char gScenarioRecordFields; // 0x015adae0
+extern char gScenarioResourceFields; // 0x015adf20
 extern "C" bool ReadInt32(void* stream, void* dst, int count, int b); // 0x93a780
 
 // Generic object with a full vtable (slots at the byte offsets the targets use).
@@ -132,6 +174,23 @@ struct VObj {
     virtual void s94();
     virtual bool V98(int a, int b);     // +0x98
 };
+
+struct ScenarioVersionView {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38();
+    virtual uint GetVersion(); // +0x3c
+};
+
+static inline void DestroyScenarioValue(Val& value)
+{
+    if ((((int)((char*)value.cs.mPtr34 - (char*)value.cs.mPtr2c)) & ~1) > 2 && value.cs.mPtr2c)
+        operator_delete__(value.cs.mPtr2c);
+    if ((((int)((char*)value.cs.mPtr1c - (char*)value.cs.mTableId)) & ~1) > 2 && value.cs.mTableId)
+        operator_delete__(value.cs.mTableId);
+    value.cs.Dtor();
+}
 
 struct Ctx2c60 { char pad[0x2c60]; };
 
@@ -286,30 +345,30 @@ void FUN_00f2c950(VObj* p, uint* v)
     uint b = v[0];
     uint e = v[1];
     void* r = FUN_00dfb930((void*)e, (void*)e, (void*)b);
-    ((TC3v)FUN_00dfaaf0)((void*)v, r, (void*)e);
-    v[1] = (uint)((int)e + (((int)(e - b) / 0x44) * 0x44));
+    ((TC3v)FUN_00dfaaf0)((void*)v, r, (void*)v[1]);
+    v[1] -= ((int)(e - b) / 0x44) * 0x44;
 
-    char frame[0xa60];
     uint count = 0;
     VObj* s = p->V20();
-    ReadInt32(s->V18(), &count, 1, 0);
-    FUN_00f2c5d0(v, 0, count);
+    void* input = s->V18();
+    ReadInt32(input, &count, 1, 0);
+    reinterpret_cast<ScenarioRecordVector*>(v)->Reserve(count);
     for (uint i = 0; i < count; ++i) {
         Val val;
         val.kind = 0;
-        val.icon = 0;
         val.cs.Ctor();
         val.cs.mTableId = &g_1667bac;
         val.cs.mInstanceId = &g_1667bac;
         val.cs.mPtr1c = &g_1667bae;
-        val.cs.mStr24 = 0;
-        val.cs.mStr28 = 0;
         val.cs.mPtr2c = &g_1667bac;
         val.cs.mPtr30 = &g_1667bac;
         val.cs.mPtr34 = &g_1667bae;
-        Ser ser;
-        SCtor(&ser, &val, (void*)0x15adae0, 0x1a80d26);
-        SSer(&ser, p);
+        val.cs.mStr24 = 0;
+        val.cs.mStr28 = 0;
+        val.icon = 0;
+        SP::cVarListSerializer serializer(&val,
+            reinterpret_cast<SP::cDataSerializerGeneric*>(&gScenarioRecordFields), 0x1a80d26);
+        serializer.Serialize(*reinterpret_cast<SP::cIObjectDatabaseIStream*>(p));
         Rec* pos = (Rec*)v[1];
         if (pos < (Rec*)v[2]) {
             v[1] = (uint)((char*)pos + 0x44);
@@ -319,10 +378,9 @@ void FUN_00f2c950(VObj* p, uint* v)
                 pos->icon = val.icon;
             }
         } else {
-            FUN_00f2c6a0(v, 0, pos, (Rec*)&val);
+            reinterpret_cast<ScenarioRecordVector*>(v)->DoInsertValue(pos, *(Rec*)&val);
         }
-        val.cs.Dtor();
-        (void)frame;
+        DestroyScenarioValue(val);
     }
     p->s1c();
 }
@@ -398,57 +456,46 @@ char* FUN_00f2ced0(char* first, char* last, char* out)
     return out;
 }
 
+static inline uint ScenarioTextLength(CS* text)
+{
+    if (text->mStr28 && text->mStr24)
+        return wcslen((const wchar_t*)text->GetText());
+    return (int)((char*)text->mInstanceId - (char*)text->mTableId) >> 1;
+}
+
 // @ 0x00f2d090
 char __fastcall FUN_00f2d090(char* p, int edx, VObj* obj)
 {
-    Ser s;
-    SCtor(&s, p, (void*)0x15adf20, 0x1a80d26);
-    char ret = SSer(&s, obj);
+    SP::cVarListSerializer serializer(p,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&gScenarioResourceFields), 0x1a80d26);
+    char ret = serializer.Serialize(*reinterpret_cast<SP::cIObjectDatabaseIStream*>(obj));
     uint* u = (uint*)p;
-    uint n;
-    if (u[0x470 / 4] && u[0x46c / 4]) {
-        char* t = (char*)u[0x46c / 4];
-        char* t0 = t + 2;
-        while (*(short*)t) t += 2;
-        n = (uint)(t - t0);
-    } else {
-        n = u[0x460 / 4] - u[0x45c / 4];
-    }
-    if ((int)(n >> 1) > 0)
-        ((TC1)FUN_00dfae00)((void*)(u[1] + 4), p + 0x448);
-    if ((uint)obj->V3c(0) <= 5) {
-        uint cnt = (u[8 / 4] - u[4 / 4]) / 0x44;
+    CS* text = (CS*)(p + 0x448);
+    if (ScenarioTextLength(text) > 0)
+        ((TC1)FUN_00dfae00)((void*)(u[1] + 4), text);
+    if (reinterpret_cast<ScenarioVersionView*>(obj)->GetVersion() <= 5) {
+        int cnt = (int)(u[8 / 4] - u[4 / 4]) / 0x44;
         if ((int)cnt > 0) {
             uint off = 0;
             uint left = cnt;
             do {
-                char* el = (char*)u[4 / 4] + off;
-                if (*(int*)el == 3) {
-                    char* v = (char*)u[0x174 / 4];
-                    if (v < (char*)u[0x178 / 4]) {
-                        u[0x174 / 4] = (uint)(v + 0x44);
-                        if (v) {
-                            *(int*)v = *(int*)el;
-                            ((SubOp*)(v + 4))->copyFrom(el + 4);
-                            *(int*)(v + 0x40) = *(int*)(el + 0x40);
-                        }
-                    } else {
-                        FUN_00f2c6a0(p + 0x170, 0, (Rec*)v, (Rec*)el);
-                    }
+                if (*(int*)((char*)u[1] + off) == 3) {
+                    const Rec& value = *(Rec*)((char*)u[1] + off);
+                    reinterpret_cast<ScenarioRecordVector*>(p + 0x170)->PushBack(value);
                     Val val;
                     val.kind = 0;
-                    val.icon = 0;
                     val.cs.Ctor();
                     val.cs.mTableId = &g_1667bac;
                     val.cs.mInstanceId = &g_1667bac;
                     val.cs.mPtr1c = &g_1667bae;
-                    val.cs.mStr24 = 0;
-                    val.cs.mStr28 = 0;
                     val.cs.mPtr2c = &g_1667bac;
                     val.cs.mPtr30 = &g_1667bac;
                     val.cs.mPtr34 = &g_1667bae;
-                    ((TC1)FUN_00dfb3c0)(el, &val);
-                    val.cs.Dtor();
+                    val.cs.mStr24 = 0;
+                    val.cs.mStr28 = 0;
+                    val.icon = 0;
+                    ((TC1)FUN_00dfb3c0)((char*)u[1] + off, &val);
+                    DestroyScenarioValue(val);
                 }
                 off += 0x44;
             } while (--left);

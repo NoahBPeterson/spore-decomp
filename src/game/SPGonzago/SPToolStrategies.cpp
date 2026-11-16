@@ -2861,13 +2861,19 @@ bool cSPGetOutOfUFOToolStrategy::CanUseToolAtLocation(int nToolId, int nTarget, 
     return cSPToolStrategy::CanUseToolAtLocation(nToolId, nTarget, a3);
 }
 
+// Declaration-only view keeps the retail base activation call out of line.
+struct ToolActivationBase {
+    bool ActivateTool(int nToolId); // 0x010537e0
+};
+
 // @ 0x010540d0
 bool cSPGetOutOfUFOToolStrategy::ActivateTool(int nToolId)
 {
-    if (!cSPToolStrategy::ActivateTool(nToolId))
-        return false;
-    ShowToolEventLog(nToolId, (const void*)0x16e1b14, 3, 0);
-    return true;
+    if (reinterpret_cast<ToolActivationBase*>(this)->ActivateTool(nToolId)) {
+        ShowToolEventLog(nToolId, (const void*)0x16e1b14, 3, 0);
+        return true;
+    }
+    return false;
 }
 
 // @ 0x01054110

@@ -171,18 +171,31 @@ void FUN_00e5da10() {
   FUN_00e394f0(key, *(int*)(g_16b3c04 + 0x5190) + 0x10, &a[6], &a[3], &a[0]);
 }
 
+struct LookupResource19 {
+  virtual int AddRef();
+  virtual int Release(); // +0x04
+};
+struct LookupManager19 {
+  virtual void p0(); virtual void p1(); virtual void p2();
+  virtual bool GetResource(int* key, LookupResource19** result, int, int, int, int); // +0x0c
+};
+
 // @ 0x00e5d500
 void FUN_00e5d500(int* out) {
-  void* local = 0;
-  void* mgr = FUN_0067dcd0();
-  char c = (*(char(__thiscall**)(void*, int*, void**, int, int, int, int))((char*)Vt(mgr) + 0xc))
-             (mgr, out, &local, 0, 0, 0, 0);
+  LookupResource19* local = 0;
+  LookupManager19* mgr = (LookupManager19*)FUN_0067dcd0();
+  if (local) {
+    LookupResource19* old = local;
+    local = 0;
+    old->Release();
+  }
+  bool c = mgr->GetResource(out, &local, 0, 0, 0, 0);
   if (c == 0) {
     out[0] = g_15a83a4;
     out[1] = g_15a83a8;
     out[2] = g_15a83ac;
   }
-  if (local) (*(void(__thiscall**)(void*, int))((char*)Vt(local) + 4))(local, 0);
+  if (local) local->Release();
 }
 
 // @ 0x00e5d2b0  random size within [lo,hi] * level size

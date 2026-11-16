@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00c6a550 239 Complete cEgg::Write serialisation; residual is call/stack scheduling + tag-constant setup order.
 00c6a6e0 102 Complete egg state machine; residual is SetState scheduling order (mov eax,[esi+0x1f4] before store).
 00c6a7f0 115 logic: e[2]/e[3] were swapped (retail puts ext[3] in e[3] and 0 in e[2]) and FUN_00c89160 was called as __cdecl with self on the stack; it is __thiscall (ecx=self, extents, flag). Residual x87 fabs/faddp ordering. fix1: quick check UNSUPPORTED
 00c6a870 23 Complete cNest ctor; residual is vtable-store interleaving vs tail stores.

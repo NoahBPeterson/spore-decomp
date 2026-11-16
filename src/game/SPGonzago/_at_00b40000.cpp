@@ -6076,8 +6076,7 @@ void __cdecl FUN_00b4e820(char* a1, char a2, char a3, float* a4)
         if (AudioSystem() != 0) {
             char* t;
             if (a1 != 0) {
-                FnGetByName getByName = (FnGetByName)(*(void**)(*(u32*)a1 + 0xc));
-                t = getByName(a1, (char*)0x1186577);
+                t = ((FnGetByName)(*(void**)(*(u32*)a1 + 0xc)))(a1, (char*)0x1186577);
             } else {
                 t = 0;
             }
@@ -6115,8 +6114,7 @@ void __cdecl FUN_00b4e980(char* a1, u32 a2, u32 a3, char a4, char a5, float* a6)
         if (AudioSystem() != 0) {
             char* t;
             if (a1 != 0) {
-                FnGetByName getByName = (FnGetByName)(*(void**)(*(u32*)a1 + 0xc));
-                t = getByName(a1, (char*)0x1186577);
+                t = ((FnGetByName)(*(void**)(*(u32*)a1 + 0xc)))(a1, (char*)0x1186577);
             } else {
                 t = 0;
             }

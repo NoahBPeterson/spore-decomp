@@ -270,8 +270,7 @@ void WinGridView::SetGridFlags(unsigned flags)
         if (diff & 6) {
             WinGrid* g = (WinGrid*)((char*)this - 0x20c);
             g->RemoveScrollBar(!((flags >> 2) & 1), !((flags >> 1) & 1));
-            VObj* win = (VObj*)((char*)g + 4);
-            win->s0x7c(8, FLD(char, g, 0x214) = 1);
+            ((VObj*)((char*)g + 4))->s0x7c(8, FLD(char, g, 0x214) = 1);
         }
     }
 }

@@ -527,19 +527,18 @@ void SP::slot_deque::pop_back()
     if (!used) {
         AutoRefCount<cIVisualEffect>* p = e->mData.mEffects + 8;
         for (int k = 7; k >= 0; --k) {
-            cIVisualEffect* obj = p[-1].mpObject;
+            cIVisualEffect* obj = (--p)->mpObject;
             if (obj)
                 obj->Release();
-            --p;
         }
     }
-    if (mBlocks.mBlockPos != 0) {
+    if (mBlocks.mBlockPos == 0) {
+        g_pBindPool->Free(mBlocks.mBlocks.mpEnd[-1]);
+        --mBlocks.mBlocks.mpEnd;
+        mBlocks.mBlockPos = 0x7f;
+    } else {
         --mBlocks.mBlockPos;
-        return;
     }
-    g_pBindPool->Free(mBlocks.mBlocks.mpEnd[-1]);
-    --mBlocks.mBlocks.mpEnd;
-    mBlocks.mBlockPos = 0x7f;
 }
 
 // @ 0x00f65a10

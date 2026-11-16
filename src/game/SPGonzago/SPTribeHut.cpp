@@ -920,8 +920,7 @@ void cTribeHut::UpdateEmpireColor()
     cGameData::Func80();
     if (GetCurrentGameMode() == &g_TribeGameMode)
         return;
-    const Vector3* pos = (const Vector3*)GetPosition();
-    if (!PlanetModel()->IsWaterPoint(pos))
+    if (!PlanetModel()->IsWaterPoint((const Vector3*)GetPosition()))
         return;
     mSub.k18(mf04, GetPlayerEmpireID(0, &g_01699998, 0));
 }

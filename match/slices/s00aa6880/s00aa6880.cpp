@@ -14,8 +14,14 @@
 #include <intrin.h>
 #include <new>
 
-extern "C" char* strstr(const char* s, const char* sub);
+extern "C" __declspec(dllimport) char* strstr(const char* s, const char* sub);
 static inline float sqrtf(float v) { return _mm_cvtss_f32(_mm_sqrt_ss(_mm_set_ss(v))); }
+
+struct LoopBoxColor
+{
+  float r, g, b;
+  LoopBoxColor(const LoopBoxColor& other) : r(other.r), g(other.g), b(other.b) {}
+};
 
 namespace EA {
 namespace ArgScript {
@@ -46,7 +52,7 @@ struct cArgEval {
   virtual void   e39(); virtual void e40(); virtual void e41();
   virtual float* EvaluateVector(float* out, const char* text);  // +0xa8
   virtual void   e43();
-  virtual float* EvaluateVectorOut(float* out, const char* text, float a, float b); // +0xb0
+  virtual LoopBoxColor EvaluateColor(const char* text); // +0xb0, hidden result buffer
 };
 
 }  // namespace ArgScript
@@ -132,56 +138,83 @@ struct cCommand {
   void BuildDescription(bool force);
 };
 
+struct FloatCurve
+{
+  float* mpBegin;
+  float* mpEnd;
+  float* mpCapacity;
+  void DoInsertValue(float* position, const float& value); // 0x00455660
+  __forceinline void erase(float* first, float* last)
+  {
+    SP::BitDoInsertFloat(first, last, (char*)mpEnd - (char*)last);
+    mpEnd += -(last - first);
+  }
+  __forceinline void push_back(const float& value)
+  {
+    float* end = mpEnd;
+    if (end < mpCapacity)
+    {
+      mpEnd = end + 1;
+      if (end) *end = value;
+    }
+    else DoInsertValue(end, value);
+  }
+};
+
 // ================================================================================
 // @ 0x00aa6880
-// Parses an optional colour list into the description's vector at +0x70 and then
-// runs the shared colour-atom parser over the description's +8 block (when any
-// main argument was present).
 void cCommand::ExecuteColorList(cArguments* args)
 {
-  int count = 0;
+  int count;
   const char** main = args->MainArguments(&count, 0, 0x7fffffff);
-  Desc* d = mDesc;
-
-  if (count > 0) {
-    d->clearFloat(0x70);
+  if (count > 0)
+  {
+    FloatCurve* curve = (FloatCurve*)(mDesc->p + 0x70);
+    curve->erase(curve->mpBegin, curve->mpEnd);
     for (int i = 0; i < count; ++i)
-      d->pushFloat(0x74, 0x78, mEval->Evaluate(main[i]));
+    {
+      float value = mEval->Evaluate(main[i]);
+      ((FloatCurve*)(mDesc->p + 0x70))->push_back(value);
+    }
   }
-
-  FUN_00aa3040(args, (int)(d->p + 8), mEval);
+  FUN_00aa3040(args, (int)(mDesc->p + 8), mEval);
 }
+
+struct LoopBoxColorCurve
+{
+  LoopBoxColor* begin;
+  LoopBoxColor* end;
+  LoopBoxColor* capacity;
+  LoopBoxColor* erase(LoopBoxColor* first, LoopBoxColor* last); // 0x009e0480
+  void Insert(LoopBoxColor* position, const LoopBoxColor& value); // 0x007ed1b0
+  __forceinline void push_back(const LoopBoxColor& value)
+  {
+    LoopBoxColor* p = end;
+    if (p < capacity)
+    {
+      end = p + 1;
+      if (p) new (p) LoopBoxColor(value);
+    }
+    else Insert(p, value);
+  }
+};
+extern float g_13eecd4; // 0x013eecd4: 1.0f / 255.0f
+void ScaleLoopBoxColors(float scale, LoopBoxColorCurve* curve); // 0x007ecc30
 
 // ================================================================================
 // @ 0x00aa6960
-// Loop-box colour: clears the colour curve at +0x18c, evaluates each main ColRGBA
-// argument (+0xb0), optionally rescales by 1/255 on "255", sets flag 0x40000000
-// and parses "orient".
 void cCommand::ExecuteLoopBoxColor(cArguments* args)
 {
-  int count = 0;
+  int count;
   const char** main = args->MainArguments(&count, 1, 0x7fffffff);
-  Desc* d = mDesc;
-
-  FUN_004afc80(0);   // erase the colour vector at +0x18c
-
-  for (int i = 0; i < count; ++i) {
-    float v[3];
-    float* r = mEval->EvaluateVectorOut(v, main[i], 0.0f, 0.0f);
-    float* end = d->at<float*>(0x190);
-    if (end < d->at<float*>(0x194)) {
-      d->at<float*>(0x190) = end + 3;
-      if (end) { end[0] = r[0]; end[1] = r[1]; end[2] = r[2]; }
-    } else {
-      EA_Swarm_ScaleCurve(end, r);
-    }
-  }
-
-  const char* a0 = (*args)[0];
-  if (a0 && strstr(a0, "255"))
-    FUN_007ecc30(0x3b808081, (int)(d->p + 0x18c));
-
-  d->at<uint32_t>(0x10) |= 0x40000000;
+  LoopBoxColorCurve* curve = (LoopBoxColorCurve*)(mDesc->p + 0x18c);
+  curve->erase(curve->begin, curve->end);
+  for (int i = 0; i < count; ++i)
+    ((LoopBoxColorCurve*)(mDesc->p + 0x18c))->push_back(mEval->EvaluateColor(main[i]));
+  const char* text = (*args)[0];
+  if (strstr(text, "255"))
+    ScaleLoopBoxColors(g_13eecd4, (LoopBoxColorCurve*)(mDesc->p + 0x18c));
+  mDesc->at<uint32_t>(0x10) |= 0x40000000;
   args->HasFlag("orient");
 }
 

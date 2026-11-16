@@ -437,8 +437,7 @@ float cMultiBlender::SumWeight()
         if (mBlending[i]) {
             Interp* p = (Interp*)(mInterpolators + i * (int)mInterpolatorStride);
             typedef float (__thiscall *VFn)(void*);
-            VFn f = *(VFn*)(*(int*)((char*)p + 4) + 0x10);
-            sum += f(p) * mWeights[i];
+            sum += (*(VFn*)(*(int*)((char*)p + 4) + 0x10))(p) * mWeights[i];
         }
     }
     return sum;

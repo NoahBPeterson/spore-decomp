@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "SP/cVarListSerializer.h"
 #include <intrin.h>
 #pragma intrinsic(_ReadWriteBarrier)
 #include "EA/Messaging/AutoHandler.h"
@@ -426,25 +427,9 @@ namespace Audio {
 cNPCCityMusicManager* GetMusicManager();               // 0x00b3d500
 }
 }
-namespace SP {
-namespace Audio {
-extern const char kMusicNamePrefix[];                  // 0x01a80d26
-}
-}
-namespace SP {
-namespace Audio {
-extern const char kMusicNameSuffix[];                  // 0x015a9018
-}
-}
-namespace SP {
-namespace Audio {
-struct MusicNameBuffer {
-    char mData[0xa14];
-    void Init(const void* owner, const char* a, const char* b);   // 0x00692f90
-    bool Parse(const char* name);                                 // 0x00693e10
-};
-}
-}
+
+
+
 namespace SP {
 namespace Audio {
 void __cdecl UpdateAudioPosition(void* handle, void* object, float x, float y, float z);  // 0x00571f80
@@ -472,7 +457,7 @@ public:
     cNPCCityMusic();                                    // 0x00eab4a0
     explicit cNPCCityMusic(uint32_t id);                // 0x00eab410
     cNPCCityMusic* Destroy(int flags);                  // 0x00eab4d0
-    bool Load(const char* name);                        // 0x00eab2e0
+    bool Read(SP::cIObjectDatabaseIStream& stream);      // 0x00eab2e0
     void SetPosition(const Vector3* position);          // 0x00eab340
     void ClearPosition();                               // 0x00eab390
     void SetEnabled(uint8_t enabled);                   // 0x00eab3b0
@@ -554,13 +539,17 @@ ChannelNode* ChannelMap::InsertNode(uint32_t key) {
 }
 // ---- items of slice s00eaa9a0 end
 
+namespace SP { namespace Audio {
+extern SP::cDataSerializerGeneric gNPCCityMusicSerializer;    // 0x015a9018
+}}
+
 // @ 0x00eab2e0
 namespace SP { namespace Audio {
-bool cNPCCityMusic::Load(const char* name)
+bool cNPCCityMusic::Read(SP::cIObjectDatabaseIStream& stream)
 {
-    MusicNameBuffer buffer;
-    buffer.Init(this, kMusicNameSuffix, kMusicNamePrefix);
-    bool ok = buffer.Parse(name);
+    SP::cVarListSerializer serializer(this, &gNPCCityMusicSerializer,
+        SP::cVarListSerializer::kSignature);
+    bool ok = serializer.Serialize(stream);
     if (ok)
         GetMusicManager()->AddChannelRef(mId, mHandle);
     return ok;
