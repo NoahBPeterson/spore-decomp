@@ -50,6 +50,21 @@ void* __cdecl FUN_00962a10(void*);                                 // 0x00962a10
 
 struct Container;
 
+struct SwatchQuery {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void slot02();
+    virtual void slot03();
+    virtual void slot04();
+    virtual void slot05();
+    virtual void slot06();
+    virtual void slot07();
+    virtual void slot08();
+    virtual void slot09();
+    virtual int GetQueryId();  // vtable +0x28
+    bool HasDefaultIndex();  // 0x00ecdb80: index at +0x10 equals -1
+};
+
 // 0x14-byte swatch record.
 struct Entry {
     void* a;         // +0x00
@@ -248,7 +263,8 @@ void* __stdcall FUN_00ed1f70(Entry** tab, int key)
     e = tab[0];
     end = tab[1];
     for (; e < end; ++e) {
-        if ((int)((FV_v)(*(void***)e->a)[0x28 / 4])(e->a) == key && ((char(__thiscall*)(void*))FUN_00ecdb80)(e->a) != 0)
+        SwatchQuery* item = (SwatchQuery*)e->a;
+        if (item->GetQueryId() == key && item->HasDefaultIndex())
             return e;
     }
     return 0;
@@ -303,8 +319,6 @@ void __fastcall FUN_00ed1fe0(Container* self, int* unused, char show)
 int __fastcall FUN_00ed20c0(Container* self, int* unused, int key)
 {
     Entry* e;
-    Entry* end;
-    int    count = 0;
 
     if (key == (int)0xd37c1045)
         key = (int)0x5b3d1d0d;
@@ -312,9 +326,10 @@ int __fastcall FUN_00ed20c0(Container* self, int* unused, int key)
         key = (int)0x6031c03a;
 
     e = self->vec0;
-    end = self->vec0End;
-    for (; e != end; ++e) {
-        if ((int)((FV_v)(*(void***)e->a)[0x28 / 4])(e->a) == key && ((char(__thiscall*)(void*))FUN_00ecdb80)(e->a) != 0)
+    int count = 0;
+    for (; e != self->vec0End; ++e) {
+        SwatchQuery* item = (SwatchQuery*)e->a;
+        if (item->GetQueryId() == key && item->HasDefaultIndex())
             ++count;
     }
     (void)unused;

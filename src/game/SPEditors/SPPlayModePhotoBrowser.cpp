@@ -148,10 +148,10 @@ static inline uint32_t CharStrlen(const wchar_t* p)
     return (uint32_t)(pEnd - p);
 }
 template <class T> static inline const T& min_alt(const T& a, const T& b) { return (a < b) ? a : b; }
-struct LocaleMsgBase {
+struct LocaleMsgBase { // native vtable 0x013eb918
     virtual ~LocaleMsgBase() {}
 };
-struct LocaleMsg : LocaleMsgBase {
+struct LocaleMsg : LocaleMsgBase { // native vtable 0x013fe50c
     uint32_t mSlots[0x2c / 4 - 1 + 1];   // placeholder up to +0x30 (slots are 8 bytes apiece from +8)
     ~LocaleMsg();
 };
@@ -854,8 +854,10 @@ LocaleMsg::~LocaleMsg()
     uint32_t mask = 1;
     IRefCount** slot = (IRefCount**)this + 2;
     for (int n = 32; n; --n) {
-        if ((((uint32_t*)this)[0x30 / 4] & mask) && *slot)
+        if ((((uint32_t*)this)[0x30 / 4] & mask) && *slot) {
+            _ReadWriteBarrier();
             (*slot)->Release();
+        }
         slot += 2;
         mask = _rotl(mask, 1);
     }
@@ -1740,30 +1742,32 @@ bool cSPPlayModePhotoBrowser_s0063_2780::LoadPhotoThumb(uint32_t idx)
 // @ 0x00633230
 bool cSPPlayModePhotoBrowser_s0063_2780::MarkPhotoTypeForGuid(uint32_t guid, int kind, ResourceKey key)
 {
-    uint32_t bits = 0;
-    ResourceKey k = { 0, 0, 0 };
+    PhotoTypeInfo info = { 0, { 0, 0, 0 } };
+    cSPPlayModePhotoBrowser_s0063_2780* volatile owner = this;
     PhotoTypeMapIterator found = mPhotoTypeMap.find(guid);
+    cSPPlayModePhotoBrowser_s0063_2780* lookupOwner = owner;
+    _ReadWriteBarrier();
     RBNode* it = found.mpNode;
-    if (it != (RBNode*)&mPhotoTypeMap.mAnchor) {
-        bits = it->value.bits;
-        k.instance = it->value.key[0];
-        k.type = it->value.key[1];
-        k.group = it->value.key[2];
+    if (it != (RBNode*)&lookupOwner->mPhotoTypeMap.mAnchor) {
+        info.bits = it->value.bits;
+        info.key[0] = it->value.key[0];
+        info.key[1] = it->value.key[1];
+        uint32_t group = it->value.key[2];
+        _ReadWriteBarrier();
+        info.key[2] = group;
     }
     switch (kind) {
     case 0x417b3a7:
-        bits |= 1;
+        info.bits |= 1;
         break;
     case 0x417b3bc:
-        k = key;
-        bits |= 2;
+        info.key[0] = key.instance;
+        info.key[1] = key.type;
+        info.key[2] = key.group;
+        info.bits |= 2;
         break;
     }
-    PhotoTypeInfo& slot = mPhotoTypeMap[guid];
-    slot.bits = bits;
-    slot.key[0] = k.instance;
-    slot.key[1] = k.type;
-    slot.key[2] = k.group;
+    mPhotoTypeMap[guid] = info;
     return true;
 }
 

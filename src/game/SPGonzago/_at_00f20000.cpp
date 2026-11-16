@@ -1310,6 +1310,7 @@ void __cdecl FUN_00f20cb0(void* key, void* p)
     if ((void*)node == (void*)end) return;
     do {
         if (node->value == key) {
+            _ReadWriteBarrier();
             void* old = node->value;
             if (p != old) {
                 if (p) ((RefObj*)p)->v0();

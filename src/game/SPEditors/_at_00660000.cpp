@@ -173,6 +173,7 @@ struct RefObj {
 class Vec {
  public:
   void push_back(void* end, void* const& value);   // 0x005c8480
+  void push_back(void* end, RefObj* const& value); // 0x005c8480
 };
 struct MapU {
     unsigned& operator[](const unsigned& k);   // 0x00643a40
@@ -576,6 +577,7 @@ int __stdcall FUN_0066afd0(ObjA* a, ObjB* b)
 // @ 0x0066b050
 void __cdecl FUN_0066b050(void* p)
 {
+    RefObj* value = (RefObj*)p;
     // Retail refcounts through vtable slot 1 (+0x04, twice: once for the caller's reference and
     // once for the vector's) and finishes with slot 2 (+0x08), which cl turns into a tail call.
     if (p) ((RefObj*)p)->Release();
@@ -587,7 +589,8 @@ void __cdecl FUN_0066b050(void* p)
             if (p) ((RefObj*)p)->Release();
         }
     } else {
-        ((Vec*)&gVecObj)->push_back(gVecEnd, p);
+        ((Vec*)&gVecObj)->push_back(gVecEnd, value);
+        p = value;
     }
     if (p) ((RefObj*)p)->Release2();
 }

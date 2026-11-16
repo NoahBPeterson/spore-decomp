@@ -805,7 +805,12 @@ int32_t FUN_00e4a8a0(int32_t type)
     if (type > 0xc)
         return ((const SP::cTypeDef_s00e4_9a40*)type)->mSize;
     switch (type) {
-    case 1: case 2: case 3: case 5: case 6: case 7: return 4;
+    case 1: return 4;
+    case 2: return 4;
+    case 3: return 4;
+    case 5: return 4;
+    case 6: return 4;
+    case 7: return 4;
     case 8:  return 0xc;
     case 10: return 0xa0;
     case 9:  return 0x24;

@@ -123,7 +123,7 @@ void StateObj::FUN_00b33d40(void* state)
         mRef = 0;
         r->Release();
     }
-    typedef void (__thiscall* Fn)(void*);
+    bool recognized;
     switch ((int)state) {
     case 0x1654c01:
     case 0x1654c02:
@@ -132,12 +132,14 @@ void StateObj::FUN_00b33d40(void* state)
     case 0x1654c06:
     case 0x1654c10:
     case 0x2ccd1d2:
-        (*(Fn*)(*(char**)this + 0x14))(this);
+        recognized = true;
         break;
     default:
-        (*(Fn*)(*(char**)this + 0x18))(this);
+        recognized = false;
         break;
     }
+    if (recognized) s05();
+    else s06();
     mState = state;
 }
 

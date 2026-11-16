@@ -6,6 +6,8 @@
 
 #include <string.h>
 #include <new>
+#include <intrin.h>
+#pragma intrinsic(_InterlockedExchangeAdd, _ReadWriteBarrier)
 
 typedef unsigned int   uint32;
 typedef int            int32;
@@ -46,6 +48,11 @@ struct WString {
     void* mpCap;    // +0x08
 
     WString* assign(const void* pBegin, const void* pEnd);   // 0x00423650
+};
+
+struct AtomicRefCountedObject {
+    void* mpVTable;
+    volatile long mnRefCount;
 };
 
 // An AutoRefCount<T> payload (pointer + user field), an 8-byte vector element.
@@ -597,21 +604,22 @@ bool Manager::ResetTypename(uint32 nType, const wchar_t* pName)
 // ===========================================================================
 AutoRefObj* AutoRefVec::pushBack(AutoRefObj* pPos, const AutoRefObj* pSrc)
 {
-    if (pPos == mpEnd && mpEnd != mpCap)
-    {
-        AutoRefObj* pSlot = mpEnd;
-        mpEnd = pSlot + 1;
-        if (pSlot != 0)
-        {
-            pSlot->mpObject = pSrc->mpObject;
-            if (pSlot->mpObject != 0)
-                (*(void (__thiscall**)(void*))((reinterpret_cast<uint8*>(*reinterpret_cast<void**>(pSlot->mpObject)) + 4)))(pSlot->mpObject);
-            pSlot->mField = pSrc->mField;
+    int index = pPos - mpBegin;
+    if (pPos == mpEnd && mpEnd != mpCap) {
+        AutoRefObj* slot = mpEnd++;
+        if (slot) {
+            slot->mpObject = pSrc->mpObject;
+            if (slot->mpObject) {
+                volatile long* count = &((AtomicRefCountedObject*)slot->mpObject)->mnRefCount;
+                _ReadWriteBarrier();
+                _InterlockedExchangeAdd(count, 1);
+            }
+            slot->mField = pSrc->mField;
         }
-        return mpBegin + (pPos - mpBegin);
+    } else {
+        insertAt(pPos, pSrc);
     }
-    insertAt(pPos, pSrc);
-    return mpBegin + (pPos - mpBegin);
+    return mpBegin + index;
 }
 
 // ===========================================================================
