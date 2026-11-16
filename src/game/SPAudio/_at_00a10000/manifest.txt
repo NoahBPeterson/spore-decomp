@@ -19,3 +19,6 @@
 ../src/game/SPAudio/_at_00a10000.cpp  ?FUN_00a14940@@YA_NPAX@Z  00a14940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/_at_00a10000.cpp  ??0tDelayLine@@QAE@XZ  00a14980  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/_at_00a10000.cpp  ??0Chorus@@QAE@XZ  00a149b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?q08@Ability@@QAE_NH@Z  00a10960  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?q48@Ability@@QAE_NHHH@Z  00a10da0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ?q4c@Ability@@QAE_NHHH@Z  00a10e00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
