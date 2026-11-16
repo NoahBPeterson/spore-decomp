@@ -1,0 +1,1 @@
+slices/s00d95600/s00d95600.cpp  ?Policeman_Activate@CitizenTree@SP@@YA_NPAUCreature@2@HHHHPAUPolicemanState@12@HH@Z  00d95600  /O2 /MD /Gy /TP /arch:SSE /fp:fast
