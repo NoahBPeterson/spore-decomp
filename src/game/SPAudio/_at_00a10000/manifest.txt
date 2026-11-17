@@ -24,3 +24,4 @@
 ../src/game/SPAudio/_at_00a10000.cpp  ?q4c@Ability@@QAE_NHHH@Z  00a10e00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPAudio/_at_00a10000.cpp  ??1AbilityObj@@QAE@XZ  00a10800  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/_at_00a10000.cpp  ??0AbilityCtorObj@@QAE@PAUIChild@@0@Z  00a10860  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a10000.cpp  ??1ChorusDtorView_a14a10@@UAE@XZ  00a14a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

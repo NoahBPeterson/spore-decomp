@@ -858,14 +858,15 @@ struct spvec {
 };
 template <typename T>
 struct spvec1 { spvec<T> v; uint32_t mAfter; };
+void SpFreeNt_71a930(void* p) throw();   // 0x00f47380, declared nothrow (no unwind state for its calls)
 struct T28_s0071_9e10 {
     int* mB0; int* mE0; int* mC0; uint32_t mA0;   // +0x00
     uint32_t mX;                                  // +0x10
     int* mB1; int* mE1; int* mC1; uint32_t mA1;   // +0x14
     uint32_t mY;                                  // +0x24
     T28_s0071_9e10() { mB0 = 0; mE0 = 0; mC0 = 0; mB1 = 0; mE1 = 0; mC1 = 0; }
-    ~T28_s0071_9e10() throw() { if (mB1 && ((uint32_t*)mB1)[-1]) SpFree(mB1);
-                     if (mB0 && ((uint32_t*)mB0)[-1]) SpFree(mB0); }
+    ~T28_s0071_9e10() { if (mB1 && ((uint32_t*)mB1)[-1]) SpFreeNt_71a930(mB1);
+                     if (mB0 && ((uint32_t*)mB0)[-1]) SpFreeNt_71a930(mB0); }
 };
 struct Vec28_s0071_9e10 {
     T28_s0071_9e10* mpBegin; T28_s0071_9e10* mpEnd; T28_s0071_9e10* mpCapacity; uint32_t mAlloc[1];
@@ -1366,6 +1367,7 @@ void AdapterList::Remove(void* item)
     int n = (int)((char*)mVec.mpEnd - (char*)mVec.mpBegin) >> 2;
     int i = 0;
     if (n > 0) {
+        _ReadWriteBarrier();
         char* p = (char*)mVec.mpBegin;
         do {
             if (*(void**)p == item)

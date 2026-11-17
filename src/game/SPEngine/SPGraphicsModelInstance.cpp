@@ -234,7 +234,7 @@ struct AbilityA : AbIface, AbRC {
     virtual void a1();
     HeldRef mHeld;      // +0xc
     int mVal;           // +0x10
-    ~AbilityA();
+    __declspec(noinline) ~AbilityA();
 };
 struct AbPtr {
     AbHeld* p;

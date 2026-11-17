@@ -58,10 +58,14 @@ struct EditorResBase {
     virtual ~EditorResBase() {}
     virtual void er1();
 };
+struct EditorResRef {                  // ref member released through vtable slot 1
+    void* p;
+    ~EditorResRef() { if (p) ((void(__thiscall*)(void*))(*(void***)p)[1])(p); }
+};
 struct EditorResDerived : EditorResBase {
     char  pad[0x1c];
-    void* m20;   // +0x20
-    void* m24;   // +0x24
+    EditorResRef m20;   // +0x20
+    void* m24;          // +0x24
     ~EditorResDerived();
 };
 // ---- items of slice s00688dd0 end
@@ -731,8 +735,6 @@ EditorResDerived::~EditorResDerived()
 {
     if (m24 != 0)
         ((void(__thiscall*)(void*))(*(void***)m24)[1])(m24);
-    if (m20 != 0)
-        ((void(__thiscall*)(void*))(*(void***)m20)[1])(m20);
 }
 
 // @ 0x00689920
@@ -1447,19 +1449,41 @@ void cCommandServer_s0068_b150::CmdMap::DestroyNodes(RbNode* node)
     }
 }
 
+// Destruction view of cCommandServer (0x0068bc50): the generator set (0xeb6280), the three dispatcher/generator refs
+// (released through slot 1) and the command map (0x68b9d0) are destroyed in reverse order, then the base vtable.
+struct CsRefObj_68bc50 { virtual void r0(); virtual void Release(); };
+struct CsRef_68bc50 {
+    CsRefObj_68bc50* mpObject;
+    ~CsRef_68bc50() { if (mpObject) mpObject->Release(); }
+};
+struct CsMap_68bc50 {
+    char  mAnchor[0xc];
+    void* mpRoot;                              // +0x0c
+    char  rest[8];
+    void DestroyNodes(void* node);             // 0x0068B9D0
+    ~CsMap_68bc50() { DestroyNodes(mpRoot); }
+};
+struct CsSet_68bc50 {
+    char  mAnchor[0xc];
+    void* mpRoot;                              // +0x0c
+    char  rest[8];
+    void DoNuke(void* node);                   // 0x00eb6280
+    ~CsSet_68bc50() { DoNuke(mpRoot); }
+};
+struct CsBase_68bc50 { virtual void v0(); ~CsBase_68bc50() { (void)this; } };
+struct cCommandServerView_68bc50 : CsBase_68bc50 {
+    CsMap_68bc50 mCommandInfoMap;              // +0x04
+    void*        m1c;                          // +0x1c
+    CsRef_68bc50 mpCommandDispatcher;          // +0x20
+    CsRef_68bc50 mpMessageCommandDispatcher;   // +0x24
+    CsRef_68bc50 mpStringCommandGenerator;     // +0x28
+    CsSet_68bc50 mCommandGeneratorSet;         // +0x2c
+    ~cCommandServerView_68bc50();
+};
+
 // @ 0x0068bc50
-cCommandServer_s0068_b150::~cCommandServer_s0068_b150()
+cCommandServerView_68bc50::~cCommandServerView_68bc50()
 {
-    *(void**)this = &gVtCmdSrv;
-    mCommandGeneratorSet.~GenSet();
-    if (mpStringCommandGenerator.mpObject)
-        ((IRefCounted*)mpStringCommandGenerator.mpObject)->Release();
-    if (mpMessageCommandDispatcher.mpObject)
-        ((IRefCounted*)mpMessageCommandDispatcher.mpObject)->Release();
-    if (mpCommandDispatcher.mpObject)
-        ((IRefCounted*)mpCommandDispatcher.mpObject)->Release();
-    mCommandInfoMap.~CmdMap();
-    *(void**)this = &gVtEditorRes;
 }
 
 // @ 0x0068bcf0

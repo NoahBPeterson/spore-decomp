@@ -3450,13 +3450,66 @@ cConfigScriptState_s007c_b590::cConfigScriptState_s007c_b590()
       mCurrentOptionID(0), mCurrentOptionSetting(0) {}
 }  // namespace SP
 
+// Destruction view of cConfigScriptState (0x007cc190): the number array, the string vector (elements destroyed by
+// 0x6a4950), the option vector (0x7cbd00) and three strings are freed in reverse order.
+void CssFree_7cc190(void* p) throw();   // 0xf47380
+struct CssStr_7cc190 {
+    char* mpBegin; char* mpEnd; char* mpCapacity; int mAlloc;
+    ~CssStr_7cc190() { if (mpCapacity - mpBegin > 1 && mpBegin) CssFree_7cc190(mpBegin); }
+};
+struct CssOptions_7cc190 { void* mpBegin; void* mpEnd; void* mpCapacity; int mAlloc[4]; ~CssOptions_7cc190() throw(); };  // 0x7cbd00
+struct CssStrVec_7cc190 {
+    void* mpBegin; void* mpEnd; void* mpCapacity; int mAlloc[2];
+    void DestroyRange(void* first, void* last);    // 0x6a4950
+    ~CssStrVec_7cc190() {
+        DestroyRange(mpBegin, mpEnd);
+        if (mpBegin && ((int*)mpBegin)[-1]) CssFree_7cc190(mpBegin);
+    }
+};
+struct CssNumbers_7cc190 {
+    float* mpBegin; float* mpEnd; float* mpCapacity;
+    ~CssNumbers_7cc190() { if (mpBegin && ((int*)mpBegin)[-1]) CssFree_7cc190(mpBegin); }
+};
+struct CssBase_7cc190 {               // the argument-script state base: two strings
+    char pad00[0x10];
+    CssStr_7cc190 mStr10;              // +0x10
+    CssStr_7cc190 mStr20;              // +0x20
+};
+struct cConfigScriptStateView_7cc190 : CssBase_7cc190 {
+    CssStr_7cc190 mStr30;              // +0x30
+    char pad40[4];
+    CssOptions_7cc190 mOptions;        // +0x44
+    CssStrVec_7cc190 mConfigStrings;   // +0x60
+    CssNumbers_7cc190 mConfigNumbers;  // +0x74
+    ~cConfigScriptStateView_7cc190();
+};
+
 // @ 0x007cc190
-SP::cConfigScriptState::~cConfigScriptState()
+cConfigScriptStateView_7cc190::~cConfigScriptStateView_7cc190()
 {}
 
-// @ 0x007cc260
+// Destruction view of cConfigManager (0x007cc260): a base with two vtables restored last, then the refs at +0x0c and
+// +0x10, the script state at +0x20 (~ 0x7cc190) and the ref at +0xb0, one unwind state each.
 namespace SP {
-cConfigManager_s007c_b590::~cConfigManager_s007c_b590()
+struct CMI0_7cc260 { virtual void i0(); };
+struct CMI1_7cc260 { virtual void i1(); };
+struct CMBase_7cc260 : CMI0_7cc260, CMI1_7cc260 { ~CMBase_7cc260() {} };
+struct CMRefCount_7cc260 { unsigned int v; ~CMRefCount_7cc260() { _ReadWriteBarrier(); } };
+struct CMState_7cc260 { char d[0x80]; ~CMState_7cc260(); };   // 0x7cc190
+struct cConfigManagerDtorView_7cc260 : CMBase_7cc260 {
+    CMRefCount_7cc260 mRefCount;                          // +0x08
+    EA::AutoRefCount_s007c_b590<IConfigUnknown> mpPad0c;  // +0x0c
+    EA::AutoRefCount_s007c_b590<IConfigUnknown> mpPad10;  // +0x10
+    unsigned int mPad14, mPad18;
+    int mPad1c;
+    CMState_7cc260 mState;                                // +0x20
+    char padA0[0xb0 - 0xa0];
+    EA::AutoRefCount_s007c_b590<IConfigUnknown> mpPadB0;  // +0xb0
+    ~cConfigManagerDtorView_7cc260();
+};
+
+// @ 0x007cc260
+cConfigManagerDtorView_7cc260::~cConfigManagerDtorView_7cc260()
 {}
 }  // namespace SP
 

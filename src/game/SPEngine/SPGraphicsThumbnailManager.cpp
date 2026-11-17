@@ -1036,6 +1036,7 @@ struct AbilityA : Base0 {
 };
 struct AtomicLong {
     volatile long mn;
+    long Add(long v) { return _InterlockedExchangeAdd(&mn, v); }
 };
 static inline long AtomicAdd(volatile long* p, long v) { return _InterlockedExchangeAdd(p, v); }
 struct RcObj { char pad[8]; AtomicLong rc; };
@@ -1044,10 +1045,10 @@ struct AtomicPtr {
     ~AtomicPtr() {
         if (p) {
             AtomicLong* c = &p->rc;
-            AtomicAdd(&c->mn, -1);
-            long v = AtomicAdd(&c->mn, 0);
-            if (v < 1) AtomicAdd(&c->mn, 1);
-            else AtomicAdd(&c->mn, 0);
+            _InterlockedDecrement(&c->mn);
+            long v = c->Add(0);
+            if (v < 1) c->Add(1);
+            else c->Add(0);
         }
     }
 };

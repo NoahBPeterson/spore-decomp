@@ -5,8 +5,6 @@
 0070e4e0  198   graphics resource rebuild; vector/call shape differs; equiv WEAK (712 valid, 18.2% cov)
 0070e5e0  91    graphics resource release; fine register/order differences
 0070e6b0  91    hash-node constructor; __stdcall (callee pops src); equiv PASS (358 valid, 100% cov); EH frame still smaller than orig
-0070e8c0  129   uninitialized_copy<AutoRefCount>; EH frame/order differs
-0070e9a0  115   uninitialized_fill_n<AutoRefCount>; EH frame/order differs
 0070ea70  61    uninitialized_copy with atomic refcount; returns out in eax; equiv WEAK (78 valid, 30.4% cov)
 0070eac0  89    fill with atomic refcount; deferred-release shape differs
 0070eb30  45    fill_n with atomic refcount; register allocation differs

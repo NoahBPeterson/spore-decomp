@@ -352,7 +352,19 @@ struct Track_s00a3_fde0 {          // 0x38
     TeString_s00a3_fde0 mName;     // +0x00
     VecTE_s00a3_fde0    mShufflers;// +0x10
     VecTE_s00a3_fde0    mRythms;   // +0x24
-    Track_s00a3_fde0() {}
+    Track_s00a3_fde0() {
+        mName.mpBegin = gEmptyString16;
+        mName.mpEnd = gEmptyString16;
+        mName.mpCapacity = gEmptyString16 + 1;
+        mShufflers.mpBegin = 0;
+        mShufflers.mpEnd = 0;
+        mShufflers.mpCapacity = 0;
+        mRythms.mpBegin = 0;
+        mRythms.mpEnd = 0;
+        mRythms.mpCapacity = 0;
+    }
+    static void* operator new(size_t, void* p) throw() { return p; }
+    static void operator delete(void*, void*) throw() {}
     Track_s00a3_fde0(const Track_s00a3_fde0& src);             // 0x00a3fb90
     ~Track_s00a3_fde0() throw();                    // 0x00a3f770
 };
@@ -821,29 +833,10 @@ void VecTrack_s00a3_fde0::PushBackDefault()
     Track_s00a3_fde0* e = mpEnd;
     if (e < mpCapacity) {
         mpEnd = e + 1;
-        if (e) {
-            e->mName.mpBegin = gEmptyString16;
-            e->mName.mpEnd = gEmptyString16;
-            e->mName.mpCapacity = gEmptyString16 + 1;
-            e->mShufflers.mpBegin = 0;
-            e->mShufflers.mpEnd = 0;
-            e->mShufflers.mpCapacity = 0;
-            e->mRythms.mpBegin = 0;
-            e->mRythms.mpEnd = 0;
-            e->mRythms.mpCapacity = 0;
-        }
+        new (e) Track_s00a3_fde0();
         return;
     }
     Track_s00a3_fde0 local;
-    local.mName.mpBegin = gEmptyString16;
-    local.mName.mpEnd = gEmptyString16;
-    local.mName.mpCapacity = gEmptyString16 + 1;
-    local.mShufflers.mpBegin = 0;
-    local.mShufflers.mpEnd = 0;
-    local.mShufflers.mpCapacity = 0;
-    local.mRythms.mpBegin = 0;
-    local.mRythms.mpEnd = 0;
-    local.mRythms.mpCapacity = 0;
     DoInsertValue(e, local);
 }
 

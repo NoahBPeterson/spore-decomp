@@ -10,4 +10,3 @@
 00a145c0 132 EA::Audio::Group ctor body / HTable28: complete; 101 diff, inline member-ctor argument stores differ; difftest PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00a146a0 30 Playlist::Choose: complete; 31 diff, rand scaling/remainder schedule differs (closest of 9 probed shapes); difftest PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 00a14810 192 MixChannel: complete; 192 diff, float/SSE conversion schedule and loop unrolling differ; difftest FAIL (5/284, rounding at pool @4d590004) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-00a14a10 32 Chorus dtor: complete; 38 diff, vector destructor iterator call and vptr store shape differ; difftest UNSUPPORTED (our base vtable is a local copy; map the symbol) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

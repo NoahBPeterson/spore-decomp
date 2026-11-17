@@ -733,7 +733,14 @@ Chorus::Chorus()
 {
 }
 
+// Destruction view of Chorus (0x00a14a10): the original stores no vtable of its own on entry (novtable); the delay
+// lines go through the eh vector destructor, then the effect base restores its vtable.
+struct __declspec(novtable) ChorusDtorView_a14a10 : AudioEffect {
+    tDelayLine mDelays[6];      // +0x24 .. +0x9c
+    ~ChorusDtorView_a14a10();
+};
+
 // @ 0x00a14a10
-Chorus::~Chorus()
+ChorusDtorView_a14a10::~ChorusDtorView_a14a10()
 {
 }

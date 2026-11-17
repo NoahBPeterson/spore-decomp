@@ -1003,14 +1003,43 @@ void SP::cTelemetry_s007e_b430::Flush(uint32_t id)
   }
 }
 
+// Destruction view of cTelemetry (0x007ebe70): the stream ref is released, the stats hashtable frees its nodes
+// (0x7eb950) and bucket array, then the two bases restore their vtables.
+struct TlmStream_7ebe70 { virtual void s0(); virtual void s1(); virtual void Release(); };
+struct TlmStreamRef_7ebe70 {
+  TlmStream_7ebe70* mpObject;
+  ~TlmStreamRef_7ebe70() { if (mpObject) mpObject->Release(); }
+};
+void TlmFree_7ebe70(void* p) throw();   // 0xf47380
+struct TlmMap_7ebe70 {
+  uint32_t mHash;                       // +0x0
+  void** mpBucketArray;                 // +0x4
+  uint32_t mnBucketCount;               // +0x8
+  uint32_t mnElementCount;              // +0xc
+  float mfMaxLoadFactor, mfGrowthFactor;
+  char rest[0x24 - 0x18];
+  void DoFreeNodes(void** buckets, uint32_t n) throw();   // 0x7eb950
+  ~TlmMap_7ebe70() {
+    DoFreeNodes(mpBucketArray, mnBucketCount);
+    uint32_t nBucketCount = mnBucketCount;
+    mnElementCount = 0;
+    if (nBucketCount > 1) TlmFree_7ebe70(mpBucketArray);
+  }
+};
+struct TlmB0_7ebe70 { virtual void a0(); int mRefCount; virtual ~TlmB0_7ebe70() {} };
+struct TlmB1_7ebe70 { virtual void b0(); virtual ~TlmB1_7ebe70() {} };
+class cTelemetryView_7ebe70 : public TlmB0_7ebe70, public TlmB1_7ebe70 {
+ public:
+  TlmMap_7ebe70 mStats;                 // +0xc
+  int64_t mSession;                     // +0x30
+  bool mbFileDump;                      // +0x38
+  TlmStreamRef_7ebe70 mpStream;         // +0x3c
+  ~cTelemetryView_7ebe70();
+};
+
 // @ 0x007ebe70
-SP::cTelemetry_s007e_b430::~cTelemetry_s007e_b430()
+cTelemetryView_7ebe70::~cTelemetryView_7ebe70()
 {
-  mpStream.~AutoRefCount_s007e_b430<EA::IO::MemoryStream_s007e_b430>();
-  mStats.DoFreeNodes(mStats.mpBucketArray, mStats.mnBucketCount);
-  uint32_t nBucketCount = mStats.mnBucketCount;
-  mStats.mnElementCount = 0;
-  if (nBucketCount > 1) operator delete(mStats.mpBucketArray);
 }
 
 // @ 0x007ebf20

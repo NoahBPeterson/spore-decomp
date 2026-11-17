@@ -36,3 +36,6 @@
 ../src/game/SPAudio/_at_00a60000.cpp  ?ClearAll@EapdMapBase@Eapd@Audio@EA@@QAE_NXZ  00a63b90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/_at_00a60000.cpp  ??1EapdMapBase@Eapd@Audio@EA@@QAE@XZ  00a63b40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/_at_00a60000.cpp  ??1OvfDtorView_a66830@@QAE@XZ  00a66830  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a60000.cpp  ??1InstanceManagerView_a66670@@QAE@XZ  00a66670  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a60000.cpp  ??1EamView_a63d20@@QAE@XZ  00a63d20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a60000.cpp  ?ReleaseEntryNode@EapdAssetManager_s00a6_3dd0@Eapd@Audio@EA@@QAEXPAUAssetEntry@234@@Z  00a64280  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

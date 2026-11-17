@@ -31,3 +31,7 @@
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ??1VecA@@QAE@XZ  0070f320  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ??1VecB@@QAE@XZ  0070f390  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?HasMaterial@MaterialManager3@@QAE_NI@Z  00712ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ??1ShaderState@@QAE@XZ  006e56b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?MMRefUninitCopy_70e8c0@@YA?AUMMRefIt_70e8c0@@U1@00@Z  0070e8c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?MMRefFillN_70e9a0@@YAXUMMRefIt_70e8c0@@IABUMMRef_70e8c0@@@Z  0070e9a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMaterialManager.cpp  ?push_back@VecSp@@QAEXXZ  00711170  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

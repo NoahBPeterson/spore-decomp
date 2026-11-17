@@ -4,3 +4,4 @@
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?Shutdown@cTelemetry_s007e_b430@SP@@QAE_NXZ  007ebf90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPAppTelemetry.cpp  ??0cTelemetryCtorView@SP@@QAE@XZ  007ec0a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?DoAllocateNode@ItemNodeAlloc_7eb8d0@@QAEPAUItemNode_7eb8d0@@ABUItemVal_7eb8d0@@@Z  007eb8d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ??1cTelemetryView_7ebe70@@UAE@XZ  007ebe70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

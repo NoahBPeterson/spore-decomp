@@ -108,5 +108,7 @@
 ../src/game/SPAudio/AudioSystem.cpp  ?CreateResource@FactoryVoiceTemplate@@QAE_NHPAPAUPropList_s00a2_6e10@@HH@Z  00a27170  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?FindVoice@AudioSys_00a21a80@@QAEPAXI@Z  00a21a80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?E20_a24750_UninitCopy@@YA?AUE20_a24750_It@@U1@00@Z  00a24750  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ??0FV11Copy_a310b0@@QAE@ABU0@@Z  00a310b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?DeletingDtor@SetHolderView_a2d9d0@@QAEPAXE@Z  00a2d9d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?FUN_00a2dfe0@AudioSystem@@QAEXPAX@Z  00a2dfe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?FUN_00a2e260@AudioSystem@@QAEXPAX@Z  00a2e260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

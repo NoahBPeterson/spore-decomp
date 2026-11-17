@@ -434,34 +434,48 @@ void IntVec::Insert(int* pos, unsigned n, int* val)
     }
 }
 
-// @ 0x00758860
-int* __cdecl FUN_00758860(int* out, int* first, int* last)
-{
-    *out = (int)first;
-    for (; first != last; first += 5) {
-        int* b = (int*)*out;
-        if (b) {
-            int n = (int)((char*)first[1] - (char*)*first) >> 2;
-            int* nb = n ? (int*)operator_new_graph(n * 4) : 0;
-            b[0] = (int)nb; b[1] = (int)nb; b[2] = (int)(nb + n);
-            b[1] = (int)xcopy((int*)*first, (int*)first[1], nb);
-        }
-        *out += 0x14;
+// Uninitialized copy / fill_n of int vectors (0x00758860 / 0x00758950), EASTL style: iterator objects and a placement
+// copy per vector; the vector copy constructor allocates and copies its elements inline.
+void* __cdecl EAAlloc_758950(unsigned n, const char* name, int a, int b, const char* file, int line);  // 0x00f473a0
+struct IVec_758950 {
+    int* mpBegin; int* mpEnd; int* mpCap; int mAlloc[2];
+    __forceinline IVec_758950(const IVec_758950& x)
+    {
+        int n = (int)(x.mpEnd - x.mpBegin);
+        int* p = n ? (int*)EAAlloc_758950(n * 4, "Graphics", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+        mpBegin = p;
+        mpEnd = p;
+        mpCap = p + n;
+        int bytes = (int)((char*)x.mpEnd - (char*)x.mpBegin);
+        mpEnd = (int*)memcpy(p, x.mpBegin, bytes) + (bytes >> 2);
     }
-    return out;
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct IVecIt_758950 {
+    IVec_758950* p;
+    IVecIt_758950(IVec_758950* q) : p(q) {}
+    IVec_758950& operator*() const { return *p; }
+    IVecIt_758950& operator++() { ++p; return *this; }
+    bool operator!=(const IVecIt_758950& o) const { return p != o.p; }
+};
+
+// @ 0x00758860
+IVecIt_758950 IVecUninitCopy_758860(IVecIt_758950 first, IVecIt_758950 last, IVecIt_758950 dest)
+{
+    IVecIt_758950 result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) IVec_758950(*first);
+    return result;
 }
 
 // @ 0x00758950
-void __cdecl FUN_00758950(Elem14* out, unsigned n, int* src)
+void IVecFillN_758950(IVecIt_758950 first, unsigned n, const IVec_758950& value)
 {
-    for (; n != 0; --n, out = (Elem14*)((char*)out + 0x14)) {
-        if (out) {
-            int c = (int)((char*)src[1] - (char*)*src) >> 2;
-            int* nb = c ? (int*)operator_new_graph(c * 4) : 0;
-            out->begin = nb; out->end = nb; out->cap = nb + c;
-            out->end = xcopy((int*)*src, (int*)src[1], nb);
-        }
-    }
+    IVecIt_758950 cur(first);
+    for (; 0 < n; --n, ++cur)
+        new (&*cur) IVec_758950(value);
 }
 
 // @ 0x00758a10

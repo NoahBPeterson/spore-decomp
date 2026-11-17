@@ -1598,18 +1598,33 @@ void* EapdAssetManager::Init(void* allocator)
 }
 }}}  // namespace EA::Audio::Eapd
 
+// Destruction view of EapdAssetManager (0x00a63d20): two maps (+0x10, +0x34) free their trees (0xa63640) and restore
+// their allocators' vtables, then the manager's own allocator at +4.
+struct EamAlloc_a63d20 {                     // EA::Allocator::ICoreAllocator-based named allocator
+    virtual void a0();
+    void* mpAllocator; const char* mpName;
+    ~EamAlloc_a63d20() { (void)this; }
+};
+struct EamMap_a63d20 {                       // rb-tree map, 0x24 bytes
+    char  mAnchor[0xc];
+    void* mpRoot;                            // +0x0c
+    char  pad10[8];
+    EamAlloc_a63d20 mAllocator;              // +0x18
+    void DestroyAll(void* root);             // 0xa63640
+    ~EamMap_a63d20() { DestroyAll(mpRoot); }
+};
+struct EamView_a63d20 {
+    virtual void v0();
+    EamAlloc_a63d20 mAllocator;              // +0x04
+    EamMap_a63d20 mBankMap;                  // +0x10
+    EamMap_a63d20 mResMap;                   // +0x34
+    ~EamView_a63d20();
+};
+
 // @ 0x00a63d20
-namespace EA { namespace Audio { namespace Eapd {
-EapdAssetManager::~EapdAssetManager()
+EamView_a63d20::~EamView_a63d20()
 {
-    mpvtable = (void*)0x1455618;
-    ((EapdMapBase*)((char*)this + 0x20))->DestroyAll(*(void**)((char*)this + 0x40));
-    *(void**)((char*)this + 0x4c) = (void*)0x1403934;
-    ((EapdMapBase*)this)->DestroyAll(*(void**)((char*)this + 0x1c));
-    *(void**)((char*)this + 0x2c) = (void*)0x1403934;
-    mpAllocVtbl = (void*)0x1403934;
 }
-}}}  // namespace EA::Audio::Eapd
 
 // @ 0x00a63dd0
 namespace EA { namespace Audio { namespace Eapd {
@@ -1663,11 +1678,9 @@ bool EapdAssetManager_s00a6_3dd0::Load(const char* data, unsigned size, PgSymbol
 namespace EA { namespace Audio { namespace Eapd {
 void EapdAssetManager_s00a6_3dd0::ReleaseEntryNode(AssetEntry* node)
 {
-    char* inner = (char*)node + 0x10;
-    ((MapDestroyFace*)inner)->Destroy(*(void**)(inner + 0xc));
-    *(void**)(inner + 0x18) = (void*)0x1403934;
-    void** vtbl = *(void***)this;
-    ((void (__thiscall*)(void*, void*))vtbl[3])(this, node);
+    // the entry's value is a map (destroyed inline: tree, then allocator vtable); the node goes back through slot 3
+    ((EamMap_a63d20*)((char*)node + 0x10))->~EamMap_a63d20();
+    ((void (__thiscall*)(void*, void*))(*(void***)this)[3])(this, node);
 }
 }}}  // namespace EA::Audio::Eapd
 
@@ -2093,13 +2106,26 @@ void Hashtable::Destruct()
     mAlloc.DestroyAllocator();
 }
 
+// Destruction view of InstanceManager (0x00a66670): the object at +0 has no own vtable store on entry (novtable); the
+// two hashtables are destroyed in reverse order, then the allocator base at +4 restores its vtable and destroys its
+// node pool (0xa531b0).
+struct IMPool_a66670 { char d[0x30]; ~IMPool_a66670(); };           // FixedPool, 0xa531b0
+struct IMSymbols_a66670 { char d[0x54]; ~IMSymbols_a66670(); };     // PatchMap, 0xa66550
+struct IMBindings_a66670 { char d[0x54]; ~IMBindings_a66670(); };   // InstanceMap, 0xa538e0
+struct IMObj_a66670 { virtual void o0(); };
+struct IMAlloc_a66670 { virtual void a0(); IMPool_a66670 mPool; ~IMAlloc_a66670() { (void)this; } };
+struct __declspec(novtable) InstanceManagerView_a66670 : IMObj_a66670, IMAlloc_a66670 {
+    uint32_t          mField38;      // +0x38
+    IMSymbols_a66670  mSymbols;      // +0x3c
+    IMBindings_a66670 mBindings;     // +0x90
+    uint32_t          mCurId;        // +0xe4
+    uint32_t          mCurId2;       // +0xe8
+    ~InstanceManagerView_a66670();
+};
+
 // @ 0x00a66670
-InstanceManager::~InstanceManager()
+InstanceManagerView_a66670::~InstanceManagerView_a66670()
 {
-    HashtableDtor90((char*)this + 0x90);
-    mSymbols.Destruct();
-    mField38 = (void*)0x1403934;
-    ((FixedPool*)((char*)this + 8))->~FixedPool();
 }
 
 // Destruction view of EapdSystemOverflow (0x00a66830): two allocator members (+0x04, +0x10) and the base each reset
