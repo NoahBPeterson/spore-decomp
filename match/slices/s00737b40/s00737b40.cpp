@@ -622,6 +622,7 @@ struct IntVec {
     int* end;
     int* cap;
     int alloc[2];               // 8-byte sp_vector_allocator
+    IntVec() : begin(0), end(0), cap(0) {}
     ~IntVec()
     {
         if (begin && *(int*)((char*)begin - 4))
@@ -633,8 +634,6 @@ struct IntVec {
 void AddAnimGroupsA(ModelOuter* self)
 {
     IntVec v;
-    v.begin = 0; v.end = 0; v.cap = 0;
-    _ReadWriteBarrier();
     IndexAdd5(self, &v, 5);
     IndexAdd5(self, &v, 6);
     IndexAdd5(self, &v, 9);
@@ -654,7 +653,6 @@ void AddAnimGroupsA(ModelOuter* self)
 void AddAnimGroupsB(ModelOuter* self)
 {
     IntVec v;
-    v.begin = 0; v.end = 0; v.cap = 0;
     IndexAddGroup(self, &v, 3, 0, 0xe);
     IndexAddGroup(self, &v, 0xe, 0, 0xe);
     IndexAddGroup(self, &v, 4, 0, 0xe);

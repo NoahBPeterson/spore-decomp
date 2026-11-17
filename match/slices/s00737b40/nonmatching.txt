@@ -3,5 +3,3 @@
 007383a0  532  part compaction (live-part map, pack, index renumber, vector resize): complete; equiv WEAK (38.1% coverage); bitmap/eastl-helper inlining differs from the retail inline sequence; flags /O2 /MD /Gy /EHsc /TP
 00737dc0  136  ElemPool24::ctor reconstruction; allocator + construction sequence differs from original | R49: reserved for byte-exact matching.
 00738610  455  PartInit reconstruction; early-returns for count <= 0 (original skips init/compact/rebuild); EASTL vector schedule differs [equiv: WEAK 260/260, 10.3% cov]
-007387f0  18   AddAnimGroupsA: complete; near miss, EH-state store placement only | R49: reserved for byte-exact matching.
-00738900  30   AddAnimGroupsB: complete; near miss, EH-state store placement only | R49: reserved for byte-exact matching.
