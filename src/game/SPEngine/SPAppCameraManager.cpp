@@ -138,10 +138,10 @@ struct cCameraManager_s007c_6750 {
 // @ 0x007c6110
 void cCameraManager::SetActiveController(void* name)
 {
-    char key[12] = {0};
+    int key[3] = {0, 0, 0};
     SPKeyFromName(key, name, 0, 0);
     void* vt = vftable;
-    ((void(__thiscall*)(void*, int))((void**)vt)[0x34 / 4])(this, *(int*)key);
+    ((void(__thiscall*)(void*, int))((void**)vt)[0x34 / 4])(this, key[0]);
 }
 
 // @ 0x007c6150
