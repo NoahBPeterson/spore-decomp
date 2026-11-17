@@ -1,0 +1,1 @@
+slices/s01052a40/s01052a40.cpp  ?GetTypeID@Object_1052a40@@QAEHPAIH@Z  01052a40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
