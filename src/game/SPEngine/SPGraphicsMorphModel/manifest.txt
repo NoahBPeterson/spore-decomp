@@ -4,3 +4,4 @@
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?Sum@C59e80@@QAEHXZ  00759e80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?CopyTo@C59e80@@QAE_NPAURCArray@@@Z  0075a4e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ??1Holder841Obj@@QAE@XZ  00758540  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?FUN_007585c0@@YAPAUHolder841@@PAH@Z  007585c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
