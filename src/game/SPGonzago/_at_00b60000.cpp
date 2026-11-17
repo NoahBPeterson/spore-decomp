@@ -4598,6 +4598,19 @@ void UpdateSimulatorUI(UICtx* pCtx, int a2, float* pOffset, int a4, float a5)
         RemoveUISlot(pCtx->mID);
 }
 
+// @ 0x00b6d160
+extern const float _HK_REAL_ONE;   // 0x01485720
+void FUN_00b6d160(int key, int index)
+{
+    UICtx* pCtx = ShowHealthBar(key);
+    if (!pCtx)
+        return;
+    float one = _HK_REAL_ONE;
+    pCtx->mIndex = index;
+    _ReadWriteBarrier();
+    pCtx->mTimer = one;
+}
+
 // @ 0x00b6d3c0
 void ProcessLabelEvents(float dt)
 {
