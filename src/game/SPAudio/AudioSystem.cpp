@@ -9557,12 +9557,28 @@ int AudioSystem::FUN_00a2d990(void* arg)
     return 0;
 }
 
+// Deleting destructor of a set holder (0x00a2d9d0): no own vtable store (novtable); the rb-tree set at +4 frees its
+// nodes (0x9a9600), the base restores its vtable, then the object is freed (nothrow).
+void SetHolderFree_a2d9d0(void* p) throw();   // 0xf47380
+struct SetTree_a2d9d0 {
+    char  mAnchor[0xc];
+    void* mpRoot;                              // +0x0c
+    char  rest[8];
+    void DoNukeSubtree(void* node);            // 0x009a9600
+    ~SetTree_a2d9d0() { DoNukeSubtree(mpRoot); }
+};
+struct SetHolderBase_a2d9d0 { virtual void v0(); ~SetHolderBase_a2d9d0() { (void)this; } };
+struct __declspec(novtable) SetHolderView_a2d9d0 : SetHolderBase_a2d9d0 {
+    SetTree_a2d9d0 mSet;                       // +0x04
+    ~SetHolderView_a2d9d0() {}
+    void* DeletingDtor(uchar flags);
+};
+
 // @ 0x00a2d9d0
-void* AudioSystem::FUN_00a2d9d0(uchar flags)
+void* SetHolderView_a2d9d0::DeletingDtor(uchar flags)
 {
-    ((XF*)((uchar*)this + 4))->DoNukeSubtree(*(void**)((uchar*)this + 0x10));
-    *(void**)this = (void*)0x13eb394;
-    if (flags & 1) operator_delete(this);
+    this->~SetHolderView_a2d9d0();
+    if (flags & 1) SetHolderFree_a2d9d0(this);
     return this;
 }
 
@@ -10506,16 +10522,32 @@ FixedVec11Obj::FixedVec11Obj(int param_2)
     fCount = 0;
 }
 
+// Copy-construction view of FixedVec11b (0x00a310b0): the vector base takes the inline pool and frees on unwind;
+// the elements are assigned through 0x00a2b2e0 with an uninitialized iterator tag.
+struct FV11Tag_a310b0 {};
+struct FV11Base_a310b0 {
+    u32* mpBegin;    // +0
+    u32* mpEnd;      // +4
+    u32* mpCap;      // +8
+    u32* f0c;        // +0xc
+    u32* f10;        // +0x10
+    explicit FV11Base_a310b0(u32* pool) { mpBegin = 0; mpEnd = 0; mpCap = 0; f10 = pool; }
+    ~FV11Base_a310b0();
+};
+struct FV11Copy_a310b0 : FV11Base_a310b0 {
+    u32* f14;            // +0x14
+    u32  storage[250];   // +0x18
+    FV11Copy_a310b0(const FV11Copy_a310b0& x);
+    void DoAssign(u32* first, u32* last, FV11Tag_a310b0 tag);   // 0x00a2b2e0
+};
+
 // @ 0x00a310b0
-FixedVec11b* FixedVec11b::ctor(u32* param_2)
+FV11Copy_a310b0::FV11Copy_a310b0(const FV11Copy_a310b0& x) : FV11Base_a310b0(storage)
 {
-    u32* p = storage;
-    f10 = p;
-    mpEnd = p;
-    mpBegin = p;
-    mpCap = p + 250;
-    InitRange(param_2[0], param_2[1], param_2);
-    return this;
+    mpBegin = mpEnd = storage;
+    mpCap = mpBegin + 250;
+    FV11Tag_a310b0 tag;
+    DoAssign(x.mpBegin, x.mpEnd, tag);
 }
 
 // @ 0x00a31170

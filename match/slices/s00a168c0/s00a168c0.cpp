@@ -713,12 +713,13 @@ struct SysGui : GuiBase {
     void* ScalarDeletingDtor(unsigned flags);
 };
 
+void __cdecl op_delete_nothrow_a168c0(void*) throw();   // 0x00f47380
 // @ 0x00a168c0
 void* SysGui::ScalarDeletingDtor(unsigned flags)
 {
     this->~SysGui();
     if (flags & 1)
-        op_delete(this);
+        op_delete_nothrow_a168c0(this);
     return this;
 }
 

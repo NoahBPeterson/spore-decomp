@@ -1234,13 +1234,28 @@ NOINLINE ParamTable::~ParamTable()
 }
 }}}  // namespace EA::Audio::Eapd
 
+// Destruction view of Play (0x00a53b20): the voice list destructor (Clear 0xa53450, then its node pool 0xa531b0)
+// is inlined here, the parameter table (0xa538e0) is called.
+struct PlayVoices_a53b20 {
+    char mNode[8];                // +0x00 sentinel
+    FixedPoolT mPool;             // +0x08
+    void Clear();                 // 0xa53450
+    ~PlayVoices_a53b20() { Clear(); }
+};
+struct PlayParams_a53b20 { char d[0x54]; ~PlayParams_a53b20(); };   // ParamTable, 0xa538e0
+struct PlayView_a53b20 {
+    PlayVoices_a53b20 mVoices;    // +0x00
+    PlayParams_a53b20 mParameters; // +0x38
+    char rest[0xb8 - 0x8c];
+    void UpdatePlaying();         // 0xa537e0
+    ~PlayView_a53b20();
+};
+
 // @ 0x00a53b20
-namespace EA { namespace Audio { namespace Eapd {
-NOINLINE Play::~Play()
+NOINLINE PlayView_a53b20::~PlayView_a53b20()
 {
     UpdatePlaying();
 }
-}}}  // namespace EA::Audio::Eapd
 
 // @ 0x00a67810
 SymbolManager::SymbolManager()

@@ -1,7 +1,6 @@
 # slice s00a63dd0 -- complete but not byte-exact (equivalence-checked)
 # flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 # <va> <diff> <reason incl. difftest verdict>
-00a64280 81  EapdAssetManager::ReleaseEntryNode: 81 diff bytes; the body matches instruction-for- instruction but the original is wrapped in an MSVC __ehhandler frame (scope-table prologue, 0/-1 try-level stores) that our source cannot trigger. difftest: WEAK (194/400 valid inputs, 100.0% coverage).
 00a642f0 79  EapdAssetManager::ReleaseNodeAt34: 79 diff; body matches (tree find via 0xe5c780 thiscall, RBTreeIncrement/Erase, allocator free at this+0x4c); only the 4-byte `push ecx` frame vs our 8-byte `sub esp,8` frame differs, plus the resulting local-slot offsets. difftest: WEAK (366/400 valid inputs, 49.3% coverage).
 00a643b0 23  EapdAssetManager::NewEntryNode: 23 diff (76 vs 74 bytes); the alloc-call and list splice now match, MSVC only reorders the four field stores around the head `lea` ([eax+0xc] before the two zero stores). difftest: UNSUPPORTED (0/400 valid inputs; unresolved ?NewEntryNode arity/fake-arity).
 00a64470 57  AssetSlot::Ctor: 57 diff; compiler reorders the constant-field stores; source order and register (ecx=this) match. Store-scheduling artifact. difftest: PASS.

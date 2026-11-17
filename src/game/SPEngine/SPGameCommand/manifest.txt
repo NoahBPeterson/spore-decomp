@@ -24,3 +24,5 @@
 ../src/game/SPEngine/SPGameCommand.cpp  ??1cCommandParameterSetObj@@QAE@XZ  0068a720  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGameCommand.cpp  ??1cStringCommandGeneratorObj@@QAE@XZ  0068a8d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGameCommand.cpp  ?FUN_0068a250@@YGPAUVMapNode@@PBUPairUV@@@Z  0068a250  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ??1EditorResDerived@@UAE@XZ  00689810  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ??1cCommandServerView_68bc50@@QAE@XZ  0068bc50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

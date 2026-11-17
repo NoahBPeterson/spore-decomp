@@ -1365,8 +1365,25 @@ void cGameModelSplitterCommand::Execute(EA::ArgScript::cArguments_s007d_19c0& ar
     }
 }
 
+// Destruction view of cGameModelEffectCommand (0x007d2490): no own vtable store on entry (novtable); the description
+// name is freed (nothrow), the game model description at +0x38 is destroyed (0x7d0f60), then the block command base.
+void GmecFree_7d2490(void* p) throw();   // 0xf47380
+struct GmecName_7d2490 {
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; int mAlloc;
+    ~GmecName_7d2490() { if ((char*)mpCapacity - (char*)mpBegin > 1 && mpBegin) GmecFree_7d2490(mpBegin); }
+};
+struct GmecDesc_7d2490 { char d[0xc8 - 0x38]; ~GmecDesc_7d2490(); };   // 0x7d0f60
+struct GmecBase_7d2490 { virtual void v0(); char d[0x2c]; ~GmecBase_7d2490(); };   // cBlockCommandBase, 0x83cd90
+struct __declspec(novtable) cGameModelEffectCommandView_7d2490 : GmecBase_7d2490 {
+    uint32_t        field30;          // +0x30
+    uint32_t        field34;          // +0x34
+    GmecDesc_7d2490 mDesc;            // +0x38
+    GmecName_7d2490 mDescName;        // +0xc8
+    ~cGameModelEffectCommandView_7d2490();
+};
+
 // @ 0x007d2490
-cGameModelEffectCommand::~cGameModelEffectCommand()
+cGameModelEffectCommandView_7d2490::~cGameModelEffectCommandView_7d2490()
 {
 }
 

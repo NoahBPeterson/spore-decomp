@@ -693,8 +693,18 @@ ConsoleStream::ConsoleStream(EA::IU01* pTarget)
   mpCapacity = gEmptyStr + 1;
 }
 
+// Destruction view of ConsoleStream (0x0067ea40): the original stores no vtable of its own on entry (novtable).
+class __declspec(novtable) ConsoleStreamDtorView_67ea40 : public EA::IO::IStream_s0067_d550, public RCPlainBlock {
+ public:
+  ~ConsoleStreamDtorView_67ea40();
+  EA::Arc01 mTarget;    // +0x0c
+  char* mpBegin;        // +0x10
+  char* mpEnd;          // +0x14
+  char* mpCapacity;     // +0x18
+};
+
 // @ 0x0067ea40
-ConsoleStream::~ConsoleStream()
+ConsoleStreamDtorView_67ea40::~ConsoleStreamDtorView_67ea40()
 {
   if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin);
 }

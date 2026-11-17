@@ -16,3 +16,4 @@
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ?Func@Wrapper@@QAEXXZ  007d44a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ?Insert@RBTreeW@@QAEPAXPAX0PAHD@Z  007d05b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ?MakeState@@YAPAXPAXH@Z  007d44c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ??1cGameModelEffectCommandView_7d2490@@QAE@XZ  007d2490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

@@ -572,34 +572,51 @@ void** ConfigurationPropertySet::DoInsertValue(void** out, ConfigurationProperty
     return result;
 }
 
-// @ 0x00a17910
-void ResourceConfiguration_s00a1_7690::dtor()
-{
-    *(void**)(m + 0) = (void*)0x14523e8;
-    *(void**)(m + 0x14) = (void*)0x1452398;
+// Destruction view of ResourceConfiguration (0x00a17910): the body unlinks the configuration from its owner's list,
+// then the members are destroyed in reverse order (vector and list nothrow), and the base restores its vtable.
+void RcFree_a17910(void* p) throw();   // 0xf47380
+struct RcVariant_a17910 {
+    char d[0x10];
+    uint16_t mFlags;                  // +0x10
+    uint16_t mTypeId;
+    void Destruct(bool b);            // 0x0093db80
+    ~RcVariant_a17910() { if (mFlags & 4) Destruct(false); }
+};
+struct RcList_a17910 { void* mpNext; void* mpPrev; ~RcList_a17910() throw(); };   // 0x00620230
+struct RcRefObj_a17910 { virtual void r0(); virtual void Release(); };
+struct RcRef_a17910 { RcRefObj_a17910* mpObject; ~RcRef_a17910() { if (mpObject) mpObject->Release(); } };
+struct RcMap_a17910 { char d[0x18]; ~RcMap_a17910(); };                          // 0x00685ed0
+struct RcVec_a17910 {
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    ~RcVec_a17910() { if (mpBegin && ((uint32_t*)mpBegin)[-1]) RcFree_a17910(mpBegin); }
+};
+struct RcBase0_a17910 { virtual void v0(); char pad04[0x10]; ~RcBase0_a17910() { (void)this; } };
+struct RcBase1_a17910 { virtual void w0(); };
+struct ResourceConfigurationView_a17910 : RcBase0_a17910, RcBase1_a17910 {
+    void* mpLinkPrev;                 // +0x18
+    void* mpLinkNext;                 // +0x1c
+    uint32_t m20;                     // +0x20
+    RcMap_a17910 mProperties;         // +0x24
+    RcRef_a17910 mpOwner;             // +0x3c
+    RcList_a17910 mChildren;          // +0x40
+    RcVariant_a17910 mVariantA;       // +0x48
+    RcVariant_a17910 mVariantB;       // +0x5c
+    RcVec_a17910 mIncludes;           // +0x70
+    ~ResourceConfigurationView_a17910();
+};
 
-    if (*(void**)(m + 0x3c) != 0) {
-        void* next = *(void**)(m + 0x1c);
-        void* prev = *(void**)(m + 0x18);
+// @ 0x00a17910
+ResourceConfigurationView_a17910::~ResourceConfigurationView_a17910()
+{
+    RcRefObj_a17910* owner = mpOwner.mpObject;
+    if (owner) {
+        void* next = mpLinkNext;
+        void* prev = mpLinkPrev;
         *(void**)next = prev;
         *(void**)((char*)prev + 4) = next;
-        *(void**)(m + 0x18) = 0;
-        *(void**)(m + 0x1c) = 0;
+        mpLinkPrev = 0;
+        mpLinkNext = 0;
     }
-
-    void* p70 = *(void**)(m + 0x70);
-    if (p70 != 0 && *(uint32_t*)((char*)p70 - 4) != 0) FUN_00f47380(p70);
-
-    if (*(uint8_t*)(m + 0x6c) & 4) ((Variant_s00a1_7690*)(m + 0x5c))->Destruct(false);
-    if (*(uint8_t*)(m + 0x58) & 4) ((Variant_s00a1_7690*)(m + 0x48))->Destruct(false);
-    ((IntrusiveList*)(m + 0x40))->Dtor();
-    {
-        void* p = *(void**)(m + 0x3c);
-        if (p != 0) ((void(__thiscall*)(void*))VtOf(p)[1])(p);
-    }
-    ((Helper5ed0*)(m + 0x24))->Call();
-
-    *(void**)(m + 0) = (void*)0x13eb938;
 }
 
 // @ 0x00a17a00
