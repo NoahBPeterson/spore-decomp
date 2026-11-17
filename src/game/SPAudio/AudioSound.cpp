@@ -530,11 +530,11 @@ struct Sound_s00a1_a590 : SoundAttenuation {
     uint8_t  padCE8[0x1104];
 
     bool   PausedIgnoring(uint32_t idx);  // 0x00a1ae00 (Sound::PausedIgnoring)
-    double RunningAttenuation();  // 0x00a1ae90 (Sound::RunningAttenuation)
+    float  RunningAttenuation();  // 0x00a1ae90 (Sound::RunningAttenuation)
     void   RequestStop(uint32_t reason, uint8_t flags);  // 0x00a1aef0 (Sound::RequestStop)
     bool   ShouldPauseForLowGain(float gain);  // 0x00a1af80 (Sound::ShouldPauseForLowGain)
     static double ComputeGainAttenuation(float a, float b, float c, float d, float e);  // 0x00a1afb0 (Sound::ComputeGainAttenuation)
-    void   Tick(uint32_t a, float dt);  // 0x00a1b230 (Sound::Tick)
+    void   Tick(float a, float dt);  // 0x00a1b230 (Sound::Tick)
 
     bool   IsFlag1();
     bool   ClearFlag1();  // 0x00a1acd0 (Sound::ClearFlag1)
@@ -969,13 +969,13 @@ double Sound_s00a1_a590::AttnHelper()
 }
 
 // @ 0x00a1ae90
-double Sound_s00a1_a590::RunningAttenuation()
+float Sound_s00a1_a590::RunningAttenuation()
 {
-    if (mbC0 == 0xf) {
-        typedef double (__thiscall* AttnFn)(void*, float, float, float, float, float);
-        return ((AttnFn)VtOf(this)[0xa8 / 4])(this, mf48, mf50, mf54, mf58, mf98);
-    }
-    return 1.0;
+    typedef float (__thiscall* AttnFn)(void*, float, float, float, float, float);
+    float r;
+    if (mbC0 == 0xf) r = ((AttnFn)(*(void***)this)[0xa8 / 4])(this, mf48, mf50, mf54, mf58, mf98);
+    else r = 1.0f;
+    return r;
 }
 
 // @ 0x00a1aef0
@@ -1123,29 +1123,29 @@ uint32_t SoundGraph::Dispatch(uint32_t a, uint32_t b)
 }
 
 // @ 0x00a1b230
-void Sound_s00a1_a590::Tick(uint32_t a, float dt)
+void Sound_s00a1_a590::Tick(float a, float dt)
 {
     *(float*)((char*)this + 0x324) = dt + *(float*)((char*)this + 0x324);
     ((Envelope*)((char*)this + 0xc94))->Update(dt);
 
     if ((mFlagsCE4 & 0x40) != 0) {
         if (*(int32_t*)((char*)this + 0xcac) == 6 ||
-            ((bool(__thiscall*)(void*, uint32_t, int))VtOf(this)[0x20 / 4])(this, 0xffffffffu, 1)) {
-            ((void(__thiscall*)(void*))VtOf(this)[0x8c / 4])(this);
+            ((bool(__thiscall*)(void*, uint32_t, int))(*(void***)this)[0x20 / 4])(this, 0xffffffffu, 1)) {
+            ((void(__thiscall*)(void*))(*(void***)this)[0x8c / 4])(this);
             return;
         }
     }
 
-    if (((bool(__thiscall*)(void*, float))VtOf(this)[0x70 / 4])(this, dt)) {
+    if (((bool(__thiscall*)(void*, float))(*(void***)this)[0x70 / 4])(this, dt)) {
         float p = mf98;
         float gain = mf58;
         if (p != 1.0f)
             gain = gain * p;
         if (mbC0 == 0xf && gain < mf48 && mba0 == 0) {
-            if (((bool(__thiscall*)(void*, int, int))VtOf(this)[0x20 / 4])(this, 2, 0))
+            if (((bool(__thiscall*)(void*, int, int))(*(void***)this)[0x20 / 4])(this, 2, 0))
                 return;
         }
-        ((void(__thiscall*)(void*, float, uint32_t, int))VtOf(this)[0x9c / 4])(this, dt, a, 0);
+        ((void(__thiscall*)(void*, float, float, int))(*(void***)this)[0x9c / 4])(this, a, dt, 0);
     }
     (void)a;
 }
