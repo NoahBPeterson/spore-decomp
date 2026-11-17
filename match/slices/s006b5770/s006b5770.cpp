@@ -131,8 +131,8 @@ struct SlotGuard {
     ~SlotGuard();
 };
 
-struct ITokenTranslator {
-    virtual void Slot00();                                                     // +0x00
+struct __declspec(novtable) ITokenTranslator {
+    virtual ~ITokenTranslator();                                               // +0x00
     virtual int  AddRef();                                                     // +0x04
     virtual int  Release();                                                    // +0x08
     virtual void* Cast(uint32_t typeID);                                       // +0x0c
@@ -140,6 +140,7 @@ struct ITokenTranslator {
     virtual void func14h(int);                                                 // +0x14
 
     int mnRefCount;   // +0x04
+    ITokenTranslator() : mnRefCount(0) {}
 };
 
 inline intrusive_ptr::intrusive_ptr(ITokenTranslator* p) : ptr(p)
@@ -182,6 +183,18 @@ struct SPCString {
     bool mbDirty;                // +0x11
 };
 
+// Same layout as TranslatorVector; owns its pointers (destructor releases them).
+struct TranslatorVectorD : TranslatorVector {
+    TranslatorVectorD() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; }
+    ~TranslatorVectorD();
+};
+
+// A generic-token string: constructor / destructor are the retail WString helpers.
+struct GenericToken : eastl::string16 {
+    GenericToken();    // 0x005e93a0
+    ~GenericToken();   // 0x00933960
+};
+
 struct cStringDetokenizer : ITokenTranslator {
     virtual void func18h();                                                    // +0x18
     virtual void AddTranslator(ITokenTranslator*);                             // +0x1c
@@ -196,12 +209,12 @@ struct cStringDetokenizer : ITokenTranslator {
     // Override of ITokenTranslator::TranslateToken (slot +0x10).
     virtual bool TranslateToken(const wchar16* pToken, eastl::string16& dst);
 
-    void ctor();                         // 0x006b6490 (thiscall constructor)
+    cStringDetokenizer();                // 0x006b6490
 
-    TranslatorVector mTranslators;       // +0x08 (begin/end/cap)
+    TranslatorVectorD mTranslators;      // +0x08 (begin/end/cap)
     uint32_t mPad14;                     // +0x14
     uint32_t mPad18;                     // +0x18
-    eastl::string16 mGenericTokens[4];   // +0x1c
+    GenericToken mGenericTokens[4];      // +0x1c
 };
 
 } // namespace App
@@ -357,7 +370,6 @@ struct ByteStream {
     void* mSource;    // +0x18 vtable-bearing source object
 };
 
-void ITokenTranslator::Slot00() {}
 int  ITokenTranslator::AddRef() { return 1; }
 int  ITokenTranslator::Release() { return 0; }
 void* ITokenTranslator::Cast(uint32_t) { return 0; }
@@ -682,47 +694,19 @@ bool App::cStringDetokenizer::TranslateToken(const wchar16* tok, eastl::string16
     }
 }
 
-// 0x006b6490: App::cStringDetokenizer::cStringDetokenizer (see definition below).
-void __cdecl WString_DeallocateSelf(void* p);       // 0x00933960
-void __cdecl WString_AllocateSelf(void* p);         // 0x005e93a0
 // 0x006b58c0: __thiscall member taking the table size on the stack (ecx = table).
 struct InitTableFn {
     void InitTable(int n);   // 0x006b58c0
 };
-void __stdcall __ehvec_ctor(void* ptr, unsigned size, int count,
-                             void (__thiscall* ctor)(void*), void (__thiscall* dtor)(void*));  // 0x011e0b85
 
-// SEH guard for the constructor: unwinds the four generic tokens when the table
-// init or func18h throws.
-struct DetokenizerCtorGuard {
-    eastl::string16* mpTokens;
-    ~DetokenizerCtorGuard();
-};
-__declspec(noinline) DetokenizerCtorGuard::~DetokenizerCtorGuard()
+__declspec(noinline) App::TranslatorVectorD::~TranslatorVectorD()
 {
-    for (int i = 0; i < 4; ++i) {
-        if (mpTokens[i].mpBegin && mpTokens[i].mpBegin != gEmptyStringRep)
-            eastl::operator_delete_array(mpTokens[i].mpBegin);
-    }
+    if (mpBegin) eastl::operator_delete_array(mpBegin);
 }
 
-// App::cStringDetokenizer::cStringDetokenizer: set the refcount to 0 and the
-// vtable, empty the translator vector at +8, run the eastl vector-constructor
-// iterator over the four string16 generic tokens at +0x1c, then add the default
-// translation table (10 entries) and finish with func18h.
-// @ 0x006b6490 App::cStringDetokenizer::ctor
-void App::cStringDetokenizer::ctor()
+// @ 0x006b6490 App::cStringDetokenizer::cStringDetokenizer
+App::cStringDetokenizer::cStringDetokenizer()
 {
-    DetokenizerCtorGuard guard;
-    guard.mpTokens = mGenericTokens;
-    mnRefCount = 0;
-    *(void**)this = (void*)0x1400f40;      // vtbl_App::cStringDetokenizer
-    mTranslators.mpBegin = 0;
-    mTranslators.mpEnd = 0;
-    mTranslators.mpCapacity = 0;
-    __ehvec_ctor((char*)this + 0x1c, 0x10, 4,
-                 (void(__thiscall*)(void*))WString_AllocateSelf,
-                 (void(__thiscall*)(void*))WString_DeallocateSelf);
     ((InitTableFn*)&mTranslators)->InitTable(10);
     func18h();
 }

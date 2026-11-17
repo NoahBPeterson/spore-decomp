@@ -411,20 +411,52 @@ struct LocaleNodeListD {
     void* mPrev;
     void* mAlloc;
     void* mZero;
+    LocaleNodeListD(void* alloc);
     ~LocaleNodeListD();
 };
+struct LocaleNodeListF {
+    void* mNext;
+    void* mPrev;
+    void* mAlloc;
+    void* mZero;
+    LocaleNodeListF(void* alloc);
+    ~LocaleNodeListF();
+};
 void __fastcall ClearLocaleNodeList(void* list);  // 0x695dc0
+inline LocaleNodeListF::LocaleNodeListF(void* alloc)
+{
+    mAlloc = alloc;
+    mZero = 0;
+    mNext = this;
+    mPrev = this;
+}
+inline LocaleNodeListF::~LocaleNodeListF() { ClearLocaleNodeList(this); }
 inline LocaleNodeListD::~LocaleNodeListD() { ClearLocaleNodeList(this); }
 
 class LocaleManagerDtorView : public EA::RefCountVTemplate_s0069_60f0<int> {
 public:
-    char mPad[0x10];
+    bool mbInit;
+    bool field9;
+    bool fieldA;
+    char padB;
+    int fieldC;
+    int field10;
+    int field14;
     eastl::FixedString16 mLocaleId;
     void* mpStringManager;
-    LocaleNodeListD mList50;
+    LocaleNodeListF mList50;
     LocaleNodeListD mList60;
+    LocaleManagerDtorView();
     virtual ~LocaleManagerDtorView();
 };
+
+inline LocaleNodeListD::LocaleNodeListD(void* alloc)
+{
+    mZero = 0;
+    mAlloc = alloc;
+    mNext = this;
+    mPrev = this;
+}
 
 // @ 0x00695e80
 LocaleManagerDtorView::~LocaleManagerDtorView()
@@ -584,21 +616,13 @@ cLocaleChangeMessage::cLocaleChangeMessage(const FixedString16& id)
 }  // namespace App
 
 // @ 0x00696420
-namespace SP {
-cLocaleManager::cLocaleManager()
+LocaleManagerDtorView::LocaleManagerDtorView()
 : mbInit(false), field9(false), fieldA(false), fieldC(0), field10(2), field14(2),
-      mLocaleId(L"**-**") {
-  mpStringManager = 0;
-  mList50.mAlloc = EA::Allocator::ICoreAllocator_s0069_60f0::GetDefaultAllocator();
-  mList50.mZero = 0;
-  mList50.mNext = &mList50;
-  mList50.mPrev = &mList50;
-  mList60.mAlloc = EA::Allocator::ICoreAllocator_s0069_60f0::GetDefaultAllocator();
-  mList60.mZero = 0;
-  mList60.mNext = &mList60;
-  mList60.mPrev = &mList60;
+      mLocaleId(L"**-**"), mpStringManager(0),
+      mList50(EA::Allocator::ICoreAllocator_s0069_60f0::GetDefaultAllocator()),
+      mList60(EA::Allocator::ICoreAllocator_s0069_60f0::GetDefaultAllocator())
+{
 }
-}  // namespace SP
 
 // @ 0x006964c0
 namespace SP {

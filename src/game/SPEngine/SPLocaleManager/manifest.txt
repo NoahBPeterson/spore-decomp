@@ -10,3 +10,4 @@
 ../src/game/SPEngine/SPLocaleManager.cpp  _FUN_00695cf0  00695cf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLocaleManager.cpp  ?addThing@Ctl@@QAEXPAX0@Z  00695d10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLocaleManager.cpp  ??1LocaleManagerDtorView@@UAE@XZ  00695e80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLocaleManager.cpp  ??0LocaleManagerDtorView@@QAE@XZ  00696420  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

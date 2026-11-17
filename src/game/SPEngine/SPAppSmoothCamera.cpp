@@ -177,11 +177,11 @@ struct tSavedCameraPosition_s007d_c1b0 {
 struct SmP0 { virtual ~SmP0() {} };
 struct SmP1 { virtual ~SmP1() {} };
 struct SmRC { virtual ~SmRC() {} int mnRefCount; };
-struct SmBase : SmP0, SmP1, SmRC { };
+struct SmBaseA : SmP0, SmP1 { };
 struct SmCfgPtr {
     void* mp;
 };
-struct cSmoothCameraController_s007d_c1b0 : SmBase {
+struct cSmoothCameraController_s007d_c1b0 : SmBaseA, SmRC {
     SmCfgPtr mConfig;
     Vec16 mEdgeConstraints; int mCurrentZoomLevel; float mContinuousZoomDistance;
     Vec16 mZoomLevels; Vec16 mNearClipPlanes; Vec16 mFarClipPlanes;
