@@ -2,3 +2,4 @@
 slices/s0074b170/s0074b170.cpp  ??1cLoadQueue@SP@@QAE@XZ  0074b2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s0074b170/s0074b170.cpp  ?heap_loop_b490@@YAXPAX00UCmp4b90@@@Z  0074b490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 slices/s0074b170/s0074b170.cpp  ?heap_loop_b510@@YAXPAX00UCmp4b510@@@Z  0074b510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0074b170/s0074b170.cpp  ?DoInsert@Vec1c@@QAEXPBUT1c@@@Z  0074b310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

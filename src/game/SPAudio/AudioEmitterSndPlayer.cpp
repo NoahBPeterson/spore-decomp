@@ -675,26 +675,24 @@ void EmitterSndPlayer2::Tick(int, float v)
         return;
     }
     bool bStreamedMode = (*(uint8_t*)(*(uint8_t**)(m + 0x388) + 0x47) == 2);
+    bool nz = true;
     if (!bStreamedMode) {
-        bool nz;
-        {
-            LockGuard guard;
-            float tmp[2];
-            tmp[0] = *(float*)(m + 0xdc0);
-            ((PlugIn*)*(void**)(m + 0xd68))->Send(2, tmp);
-            nz = (tmp[1] != 0.0f);
-        }
-        if (!nz) {
-            if (*(char*)(m + 0xd24) == 0 || *(char*)(m + 0xd25) != 0)
-                ((void(__thiscall*)(void*, float, int))((void**)*(void**)(m - 4))[0x70 / 4])(
-                    m - 4, v, 0);
-            return;
-        }
+        LockGuard guard;
+        float tmp[2];
+        tmp[0] = *(float*)(m + 0xdc0);
+        ((PlugIn*)*(void**)(m + 0xd68))->Send(2, tmp);
+        nz = (tmp[1] != 0.0f);
     }
-    void* sys = f_00a206f0_GetSystemAT();
-    ((void(__thiscall*)(void*, int, int, int, int, int))((void**)*(void**)sys)[0x128 / 4])(
-        sys, 0x3a0fd6e, *(int*)(m + 0xd08), 0, 0, 0);
-    ((void(__thiscall*)(void*))((void**)*(void**)(m - 4))[0x18 / 4])(m - 4);
+    if (nz) {
+        void* sys = f_00a206f0_GetSystemAT();
+        ((void(__thiscall*)(void*, int, int, int, int, int))((void**)*(void**)sys)[0x128 / 4])(
+            sys, 0x3a0fd6e, *(int*)(m + 0xd08), 0, 0, 0);
+        ((void(__thiscall*)(void*))((void**)*(void**)(m - 4))[0x18 / 4])(m - 4);
+        return;
+    }
+    if (*(char*)(m + 0xd24) == 0 || *(char*)(m + 0xd25) != 0)
+        ((void(__thiscall*)(void*, float, int))((void**)*(void**)(m - 4))[0x70 / 4])(
+            m - 4, v, 0);
 }
 
 // @ 0x00a11f50
