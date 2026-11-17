@@ -36,7 +36,6 @@
 00724700  -  complete draft carried over from s00724100 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 114, retail 177
 007247c0  -  complete draft carried over from s00724100 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 864, retail 548
 007280b0  -  complete draft carried over from s00728020 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 171, retail 267
-007281d0  -  complete draft carried over from s00728020 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 67, retail 118
 00728330  -  complete draft carried over from s00728020 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 122, retail 193
 00728400  -  complete draft carried over from s00728020 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 281, retail 410
 007285a0  -  complete draft carried over from s00728020 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 497, retail 1010

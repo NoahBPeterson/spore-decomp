@@ -597,6 +597,7 @@ struct cGameModelEffectCommand : EA::ArgScript::cBlockCommandBase {
 // ---- items of slice s007d2a30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* operator new[](size_t size);
 void* operator new(size_t size, const char* pName, int a, int b, const char* file, int line);  // 0xf473a0
+void  operator delete(void* p, const char* pName, int a, int b, const char* file, int line);  // matching delete for the EA new
 void  operator delete(void* p);                                                  // 0xf47380
 struct FloatVec {                       // eastl::vector<float, sp_vector_allocator>
     float* mpBegin; float* mpEnd; float* mpCapacity; void* mAlloc1; void* mAlloc2;

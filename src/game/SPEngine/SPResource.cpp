@@ -729,6 +729,13 @@ RegTableOwner::~RegTableOwner()
     }
 }
 
+// a temporary reference that starts out empty and is released when it goes out of scope
+struct IObjTempRef {
+    IObj* mp;
+    IObjTempRef() : mp(0) {}
+    ~IObjTempRef() { if (mp) mp->Release(); }
+};
+
 // @ 0x006ad180
 void IObjVec::PushNull()
 {
@@ -737,9 +744,8 @@ void IObjVec::PushNull()
         mpEnd = p + 1;
         if (p) *p = 0;
     } else {
-        IObj* tmp = 0;
-        DoInsertValue(p, &tmp);
-        if (tmp) tmp->Release();
+        IObjTempRef tmp;
+        DoInsertValue(p, &tmp.mp);
     }
 }
 

@@ -21,4 +21,3 @@
 0072c270 4664 complete (vertex/triangle counting, per-triangle AABBs for direct and element-indexed sections, KD build, procedural vertex/triangle fill, region map); /O2 /arch:SSE /GS- aligned frame 0x11b4 vs 0x1174, prim-type range check merged (lea/cmp 8) where original tests 0 and 10 separately flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 0072aaf0  -  complete draft carried over from s0072aaf0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 314, retail 285
 0072ac10  -  complete draft carried over from s0072aaf0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 62, retail 66
-0072ac60  -  complete draft carried over from s0072aaf0 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 71, retail 120

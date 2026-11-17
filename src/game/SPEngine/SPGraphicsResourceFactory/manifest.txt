@@ -44,3 +44,4 @@
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Start@AsyncReqA@@QAE_NPAUJobRefL@@@Z  007652c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Release763250@@YIHPAX@Z  00763250  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ??0GrfCtor@@QAE@XZ  007654f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ??0D765f10@@QAE@PAX@Z  00765f10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

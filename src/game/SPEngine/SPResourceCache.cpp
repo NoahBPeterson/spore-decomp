@@ -406,19 +406,35 @@ void __fastcall FUN_006af720(void* self, int, void* stream)
     IO_WriteUint32(stream, &pos, 1, 0);
 }
 
+// destructor views of two resource-cache entries: a reference released through vtable slot 2 (or 1) at +0x10 and an
+// owner reference released through the interface at its +4, over a base (or two) whose vtables are restored on exit
+struct IResCacheRel { virtual void Slot0(); virtual void Release1(); virtual void Release2(); };
+struct ResCacheRef2 { IResCacheRel* mp; ~ResCacheRef2() { if (mp) mp->Release2(); } };
+struct ResCacheRef1 { IResCacheRel* mp; ~ResCacheRef1() { if (mp) mp->Release1(); } };
+struct ResCacheOwnerRef {
+    char* mp;
+    ~ResCacheOwnerRef() { if (mp) ((IResCacheRel*)(mp + 4))->Release1(); }
+};
+struct ResCacheBase { virtual void Slot0(); ~ResCacheBase() {} };
+struct ResCacheEntry_6af8a0 : ResCacheBase {
+    char pad04[8];
+    ResCacheOwnerRef mOwner;   // +0x0c
+    ResCacheRef2     mRes;     // +0x10
+    ~ResCacheEntry_6af8a0();
+};
+struct ResCacheB0 { virtual void Slot0(); ~ResCacheB0() {} };
+struct ResCacheB1 { virtual void Slot0(); };
+struct ResCacheMid : ResCacheB0, ResCacheB1 { ~ResCacheMid() {} };
+struct ResCacheEntry_6afa10 : ResCacheMid {
+    char pad08[4];
+    ResCacheOwnerRef mOwner;   // +0x0c
+    ResCacheRef1     mRes;     // +0x10
+    ~ResCacheEntry_6afa10();
+};
+
 // @ 0x006af8a0
-void __fastcall FUN_006af8a0(void* self)
+ResCacheEntry_6af8a0::~ResCacheEntry_6af8a0()
 {
-    *(void**)self = &vtbl_14095f4;
-    void* p = *(void**)((char*)self + 0x10);
-    if (p)
-        ((void(__thiscall*)(void*))(*(void***)p)[2])(p);
-    void* q = *(void**)((char*)self + 0xc);
-    if (q) {
-        void* r = (char*)q + 4;
-        ((void(__thiscall*)(void*))(*(void***)r)[1])(r);
-    }
-    *(void**)self = &vtbl_13effb8;
 }
 
 // @ 0x006af940
@@ -454,21 +470,8 @@ C_006af960* C_006af960::ctor(void* a, void* b)
 }
 
 // @ 0x006afa10
-void __fastcall FUN_006afa10(void* self)
+ResCacheEntry_6afa10::~ResCacheEntry_6afa10()
 {
-    char* s = (char*)self;
-    *(void**)s = (void*)g_1409630;
-    *(void**)(s + 4) = (void*)g_140961c;
-    void* a = *(void**)(s + 0x10);
-    if (a)
-        ((void(__thiscall*)(void*))(*(void***)a)[1])(a);
-    void* b = *(void**)(s + 0xc);
-    if (b) {
-        void* c = (char*)b + 4;
-        ((void(__thiscall*)(void*))(*(void***)c)[1])(c);
-    }
-    *(void**)s = (void*)g_13effb8;
-    *(void**)(s + 4) = (void*)g_13eb938;
 }
 
 // @ 0x006afa90

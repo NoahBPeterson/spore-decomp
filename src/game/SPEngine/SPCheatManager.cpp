@@ -596,9 +596,9 @@ void StrNameMap::LowerBound(SetNode_s0067_d550** ppOut, const EA::Key& key)
 // @ 0x0067e610
 PairA* __stdcall NewPairA(const EA::Arc01& src)
 {
-  return new ("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\"
-                           "UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-               0xd1) PairA(src);
+  PairA* p = (PairA*)operator new(0x14, "App", 0, 0, EA_ALLOC_H, 0xd1);
+  ::new (&p->mpObject) EA::Arc01(src.mpObject);
+  return p;
 }
 
 // @ 0x0067e6f0
@@ -668,9 +668,9 @@ PairBObj::~PairBObj()
 // @ 0x0067e890
 KeyNode* __stdcall NewKeyNode(const char* pString)
 {
-  return new ("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\"
-                           "UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-               0xd1) KeyNode(pString);
+  KeyNode* p = (KeyNode*)operator new(0x20, "App", 0, 0, EA_ALLOC_H, 0xd1);
+  ::new (&p->key) EA::Key(pString);
+  return p;
 }
 
 // @ 0x0067e900

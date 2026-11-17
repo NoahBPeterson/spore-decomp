@@ -15,7 +15,7 @@ extern void* g_vecdtor4E1BF0;   // 0x4E1BF0 element destructor
 
 // ---- items of slice s00713e40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* __cdecl EastlNew(uint32_t n, const char* name, int flags, int dbg, const char* file, int line); // 0xF473A0
-void __cdecl EastlFree(void* p);                        // 0xF47380
+void __cdecl EastlFree(void* p) throw();                      // 0xF47380
 void __cdecl VectorDtorRange(void* first, uint32_t elemSize, uint32_t count, void (__cdecl* dtor)(void*)); // 0x11E0B22
 void* __cdecl GetMaterialManager();                     // 0x67DD70
 void __cdecl SPKeyFromName(void* out, const void* name, int a, int b); // 0x68D840
@@ -109,18 +109,23 @@ static void EastlFreeGuarded(void* p)
     if (p && *(int*)((char*)p - 4) != 0)
         EastlFree(p);
 }
+// four EASTL vectors (storage freed when it is a heap block) and two arrays of 0x14-byte elements with an
+// out-of-line destructor (0x4E1BF0), destroyed in reverse declaration order
+struct TeardownVec {
+    void* mpBegin;     // +0x00
+    char  pad04[0x10];
+    ~TeardownVec() { EastlFreeGuarded(mpBegin); }
+};
+struct AdapterElem14 { char data[0x14]; ~AdapterElem14(); };   // 0x4E1BF0
 struct AdapterTeardown {
     char pad0[8];
-    void* m8;          // +0x08
-    char pad0C[0x10];
-    void* m1c;         // +0x1c
-    char pad20[0x10];
-    char m30[0x50];    // +0x30  vector: begin/end/cap + 4 * 0x14 elements
-    char m80[0x28];    // +0x80  vector: begin/end/cap + 2 * 0x14 elements
-    void* ma8;         // +0xa8
-    char padAC[0x10];
-    void* mbc;         // +0xbc
-    void Destroy();
+    TeardownVec m8;           // +0x08
+    TeardownVec m1c;          // +0x1c
+    AdapterElem14 m30[4];    // +0x30
+    AdapterElem14 m80[2];    // +0x80
+    TeardownVec ma8;          // +0xa8
+    TeardownVec mbc;          // +0xbc
+    ~AdapterTeardown();
 };
 struct RecordCmp {
     const uint32_t** mpBase;                // +0x00  pointer to the record-array base pointer
@@ -1556,14 +1561,8 @@ uint32_t* MatrixTable::Set(uint32_t index, const uint32_t* mat)
 }
 
 // @ 0x007146c0
-void AdapterTeardown::Destroy()
+AdapterTeardown::~AdapterTeardown()
 {
-    EastlFreeGuarded(mbc);
-    EastlFreeGuarded(ma8);
-    VectorDtorRange(m80, 0x14, 2, (void (__cdecl*)(void*))&g_vecdtor4E1BF0);
-    VectorDtorRange(m30, 0x14, 4, (void (__cdecl*)(void*))&g_vecdtor4E1BF0);
-    EastlFreeGuarded(m1c);
-    EastlFreeGuarded(m8);
 }
 
 // @ 0x00714780

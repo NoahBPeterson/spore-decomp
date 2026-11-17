@@ -28,7 +28,6 @@
 0112c640  49  System::someCheck: predicate is identical; the original keeps the two voice
                counters in ecx/edx where ours spills/reloads them.
                flags /vc71 /O2 /MD /Gy /EHsc /TP
-0112c690  62  System::updateVoices: loop, SSE compares and movss store all match; only the
                rotated loop pre-test differs (original `xor eax,eax; cmp ax,[edi+0xf0]`,
                ours `cmp [edi+0xf0],si`) plus the resulting 1-byte loop-alignment nop.
                /vc71 is required for comiss (cl 15 compares floats with x87).

@@ -135,7 +135,28 @@ struct Cdf20 {
 };
 struct cObjectDatabase {
     VP vt0; VP vt4; VP vt8; VP pad_c; VP vt10; VP pad14; void* p18; void* p1c; float f20;
-    void dtor();
+};
+// the destructor's view of cObjectDatabase: four bases (vtables restored on exit, last base first), the owner
+// reference at +0x18 (released through the interface at its +4) and the reference at +0x1c (vtable slot 1)
+struct cObjectDatabaseBase0 { virtual void Slot0(); ~cObjectDatabaseBase0() {} };
+struct cObjectDatabaseBase1 { virtual void Slot0(); ~cObjectDatabaseBase1() {} };
+struct cObjectDatabaseBase2 { virtual void Slot0(); VP pad_c; ~cObjectDatabaseBase2() {} };
+struct cObjectDatabaseBase3 { virtual void Slot0(); VP pad14; };
+struct IObjectDatabaseRel { virtual void Slot0(); virtual void Release(); };
+struct cObjectDatabaseOwnerRef {
+    char* mp;
+    ~cObjectDatabaseOwnerRef() { if (mp) ((IObjectDatabaseRel*)(mp + 4))->Release(); }
+};
+struct cObjectDatabaseRef {
+    IObjectDatabaseRel* mp;
+    ~cObjectDatabaseRef() { if (mp) mp->Release(); }
+};
+struct cObjectDatabaseMid : cObjectDatabaseBase2, cObjectDatabaseBase3 { ~cObjectDatabaseMid() {} };
+struct cObjectDatabaseObj : cObjectDatabaseBase0, cObjectDatabaseBase1, cObjectDatabaseMid {
+    cObjectDatabaseOwnerRef p18;    // +0x18
+    cObjectDatabaseRef p1c;         // +0x1c
+    float f20;
+    ~cObjectDatabaseObj();
 };
 struct IOS;                                              // EA::IO stream (opaque)
 bool __cdecl StreamWrite(IOS*, void*, int);              // 0x93a9a0
@@ -363,8 +384,35 @@ struct CComSer {
     void* p54;              // +0x54
     void* p58;              // +0x58
     void* p5c;              // +0x5c
-    void dtor();
     void reset();
+};
+// the destructor's view of CComSer: two bases (vtables 0x13ec458 at +0 and 0x13eb938 at +8 restored on exit) and the
+// two class-ID trees, nuked from their roots when destroyed; the body frees the scratch buffer and drops the stream
+struct CComSerBase0 { virtual void Slot0(); int mRefCount; ~CComSerBase0() {} };
+struct CComSerBase8 { virtual void Slot0(); unsigned char flag_c; char pad0[3]; ~CComSerBase8() {} };
+struct CComSerTree {
+    void* pad0;             // +0
+    RBNode* mpNodeLeft;     // +4
+    RBNode* mpNodeRight;    // +8
+    RBNode* mpNodeParent;   // +0xc
+    unsigned int mColor;    // +0x10
+    unsigned int mnSize;    // +0x14
+    int pad2;               // +0x18
+    void Nuke(RBNode* node);   // 0x0069ee60
+    ~CComSerTree() { Nuke(mpNodeParent); }
+};
+struct CComSerObj : CComSerBase0, CComSerBase8 {
+    CComSerTree mTree1;     // +0x10
+    CComSerTree mTree2;     // +0x2c
+    void* p48;              // +0x48
+    unsigned char b4c;      // +0x4c
+    unsigned char b4d;      // +0x4d
+    char pad2[2];
+    void* p50;              // +0x50
+    void* p54;              // +0x54
+    void* p58;              // +0x58
+    void* p5c;              // +0x5c
+    ~CComSerObj();
 };
 struct F940 { bool f(); };
 bool F940::f()
@@ -870,28 +918,13 @@ bool W9d0::writeVariant(Variant* v)
 }
 
 // @ 0x0069dca0
-void cObjectDatabase::dtor()
+cObjectDatabaseObj::~cObjectDatabaseObj()
 {
-    vt0 = g_vtbl_14086e8;
-    vt4 = g_vtbl_1408698;
-    vt8 = g_vtbl_1408688;
-    vt10 = g_vtbl_1408678;
-    void* q = p1c;
+    IObjectDatabaseRel* q = p1c.mp;
     if (q) {
-        p1c = 0;
-        ((void(__thiscall*)(void*))(*(void***)q)[4 / 4])(q);
+        p1c.mp = 0;
+        q->Release();
     }
-    if (p1c) {
-        ((void(__thiscall*)(void*))(*(void***)p1c)[4 / 4])(p1c);
-    }
-    if (p18) {
-        void* b = (char*)p18 + 4;
-        ((void(__thiscall*)(void*))(*(void***)b)[4 / 4])(b);
-    }
-    vt10 = g_vtbl_13ec458;
-    vt8 = g_vtbl_13eb938;
-    vt4 = g_vtbl_13effb8;
-    vt0 = g_vtbl_13eb938;
 }
 
 // @ 0x0069ddc0
@@ -1178,19 +1211,13 @@ void Tree::Nuke(RBNode* pNode)
 }
 
 // @ 0x0069f0b0
-void CComSer::dtor()
+CComSerObj::~CComSerObj()
 {
-    vt0 = g_vtbl_1408750;
-    vt8 = g_vtbl_1408728;
     void* a = p54;
     if (a && *(int*)((char*)a - 4))
         EASTL_allocator_deallocate(a);
     if (p50)
         ((void(__thiscall*)(void*))(*(void***)p50)[4 / 4])(p50);
-    mTree2.Nuke(mTree2.mpNodeParent);
-    mTree1.Nuke(mTree1.mpNodeParent);
-    vt8 = g_vtbl_13eb938;
-    vt0 = g_vtbl_13ec458;
 }
 
 struct ClassInfoTreeCall {

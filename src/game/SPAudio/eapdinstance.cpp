@@ -271,11 +271,31 @@ struct ObjectHashMap {
     void*       mpAlloc1c;    // +0x1c
     uint32_t    mCount20;     // +0x20
     void        Resize(unsigned newCount);             // 0x00a64ad0
-    void        Dtor();                                // 0x00a64b70
     unsigned    Erase(uint32_t* key);                  // 0x00a64be0
     void        DisposeArray2(void** arr, unsigned n); // 0x00a64c50
     void*       Insert(void* out, void* a, void* b);   // 0x00a64cf0
     void*       GetGroup(PgSymbol sym);                // 0x00a64cb0
+};
+// the destructor's view of ObjectHashMap: the buckets are disposed and their array handed back to the internal
+// allocator at +0x1c, whose base vtable (0x1403934) is restored when the member is destroyed
+struct ObjectHashMapAlloc {
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void* Alloc(unsigned n);
+    virtual void Free(void* p);
+    uint32_t mCount;          // +0x04
+    ~ObjectHashMapAlloc() {}
+};
+struct ObjectHashMapObj {
+    void*       mpVtbl00;     // +0x00
+    void*       mpBuckets04;  // +0x04
+    unsigned    mNumBuckets08;// +0x08
+    unsigned    mSize0c;      // +0x0c
+    uint32_t    mField10;     // +0x10
+    uint32_t    mField14;     // +0x14
+    uint32_t    mField18;     // +0x18
+    ObjectHashMapAlloc mAlloc;// +0x1c
+    ~ObjectHashMapObj();
 };
 }
 }
@@ -798,16 +818,12 @@ void ObjectHashMap::Resize(unsigned newCount)
 
 // @ 0x00a64b70
 namespace EA { namespace Audio { namespace Eapd {
-void ObjectHashMap::Dtor()
+ObjectHashMapObj::~ObjectHashMapObj()
 {
     ((EapdAssetManager*)this)->DisposeArray((void**)mpBuckets04, mNumBuckets08);
     mSize0c = 0;
-    if (mNumBuckets08 > 1) {
-        void** a = *(void***)((char*)this + 0x1c);
-        void* f = a[3];
-        ((void (__thiscall*)(void*, void*))f)((char*)this + 0x1c, mpBuckets04);
-    }
-    *(void**)((char*)this + 0x1c) = (void*)0x1403934;
+    if (mNumBuckets08 > 1)
+        mAlloc.Free(mpBuckets04);
 }
 }}}  // namespace EA::Audio::Eapd
 

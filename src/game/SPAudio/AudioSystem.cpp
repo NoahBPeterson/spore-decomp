@@ -1653,7 +1653,6 @@ struct FixedVec11 {
     u32  fEnd;       // +0xfc0
     u32  fCount;     // +0xfc4
     void resize(int n);   // 0x0089cb60
-    FixedVec11* ctor(int param_2);
 };
 struct FixedVec11b {
     u32* mpBegin;    // +0
@@ -1665,6 +1664,32 @@ struct FixedVec11b {
     u32  storage[250];   // +0x18
     void InitRange(u32 a, u32 b, void* c);   // 0x00a2b2e0
     FixedVec11b* ctor(u32* param_2);
+};
+// the constructors' view of the fixed vectors: the storage base points the vector at its inline buffer, and frees a
+// heap block on unwind if filling the vector throws
+template <int N> struct FixedVecStorage11 {
+    u32* mpBegin;    // +0
+    u32* mpEnd;      // +4
+    u32* mpCap;      // +8
+    u32* f0c;        // +0xc
+    u32* f10;        // +0x10
+    u32* f14;        // +0x14
+    u32  storage[N]; // +0x18
+    FixedVecStorage11() {
+        u32* p = storage;
+        f10 = p;
+        mpEnd = p;
+        mpBegin = p;
+        mpCap = p + N;
+    }
+    ~FixedVecStorage11() { if (mpBegin != f10) f_00f47380(mpBegin); }
+};
+struct FixedVec11Obj : FixedVecStorage11<1001> {
+    u32  fStart;     // +0xfbc
+    u32  fEnd;       // +0xfc0
+    u32  fCount;     // +0xfc4
+    void resize(int n);   // 0x0089cb60
+    FixedVec11Obj(int param_2);
 };
 // ---- items of slice s00a30460 end
 
@@ -3159,6 +3184,20 @@ struct RBTree_s00a2_5c40 {  // 0x9a9600 / 0xa24210
     void AssignLess2(void* fn);
 };
 struct SubTree { void __thiscall DoNukeSubtree(void* n); };   // 0x9a9600-style
+// the destructor's view of the 0x00a26860 object: a base whose destructor restores vtable 0x13eb394, and an rbtree at
+// +4 that nukes its nodes from the root at +0x10 when destroyed
+struct SubTreeHolder {
+    uint  mAnchor[3];         // +0x00
+    void* mpRoot;             // +0x0c
+    uint  mRest[2];           // +0x10
+    void __thiscall DoNukeSubtree(void* n);
+    ~SubTreeHolder() { DoNukeSubtree(mpRoot); }
+};
+struct TreeOwnerBase_00a26860 { virtual void Slot0(); ~TreeOwnerBase_00a26860() {} };
+struct __declspec(novtable) TreeOwner_00a26860 : TreeOwnerBase_00a26860 {
+    SubTreeHolder mTree;      // +0x04
+    ~TreeOwner_00a26860();
+};
 struct fixed_pool_base_s00a2_5c40 {
     void* mpHead;
     void* mpNext;
@@ -3274,7 +3313,6 @@ class AudioSystem_s00a2_5c40 {
     bool  Map_26730(uint key, void** out);                      // 0xa26730
     bool  Map_26790(uint arg);                                  // 0xa26790
     void  Map_267d0(uint id);                                   // 0xa267d0
-    void  Dtor_26860();                                         // 0xa26860
     void  Shutdown_268b0();                                     // 0xa268b0
     void* InitPool_26990();                                     // 0xa26990
     void  Insert_26be0(void* ret, const uint* key, uint hash);  // 0xa26be0
@@ -6874,11 +6912,8 @@ void AudioSystem_s00a2_5c40::Map_267d0(uint id)
 }
 
 // @ 0x00a26860
-void AudioSystem_s00a2_5c40::Dtor_26860()
+TreeOwner_00a26860::~TreeOwner_00a26860()
 {
-    // The called sub-object lives at this+4; its root argument is this's slot at +0x10.
-    ((SubTree*)((uchar*)this + 4))->DoNukeSubtree(*(void**)((uchar*)this + 0x10));
-    mpVtbl = (void*)0x13eb394;
 }
 
 // @ 0x00a268b0
@@ -9438,14 +9473,19 @@ bool AudioSystem::FUN_00a2d880(uint key, void* out)
     return true;
 }
 
+// the constructor's view of the 0x00a2d940 object: a base (vtable 0x13eb394, restored if construction fails), its own
+// vtable, and the tree at +4 built from `arg` by its out-of-line constructor (0x00a26fa0)
+struct TreeObjBase_00a2d940 { virtual void Slot0(); ~TreeObjBase_00a2d940() {} };
+struct TreeObjTree_00a2d940 { char d[0x1c]; TreeObjTree_00a2d940(void* arg); ~TreeObjTree_00a2d940(); };
+struct TreeObj_00a2d940 : TreeObjBase_00a2d940 {
+    TreeObjTree_00a2d940 mTree;   // +4
+    TreeObj_00a2d940(void* arg);
+};
+
 // @ 0x00a2d940
-void* AudioSystem::FUN_00a2d940(void* arg)
+TreeObj_00a2d940::TreeObj_00a2d940(void* arg)
+    : mTree(arg)
 {
-    // The retail body opens an EH scope around the member build (state -1 at [esp+0x14], handler
-    // 0x1218758) and calls 0x00a26fa0 through the IAT; plain C++ compiled with /O2 emits neither.
-    *(void**)this = (void*)0x1452cb0;
-    ((XF*)((uchar*)this + 4))->FUN_00a26fa0(arg);
-    return this;
 }
 
 // @ 0x00a2d990
@@ -10401,18 +10441,12 @@ int NodeMap::eraseKey(u32* key)
 }
 
 // @ 0x00a31040
-FixedVec11* FixedVec11::ctor(int param_2)
+FixedVec11Obj::FixedVec11Obj(int param_2)
 {
-    u32* p = storage;
-    f10 = p;
-    mpEnd = p;
-    mpBegin = p;
-    mpCap = p + 1001;
     resize(param_2 + 1);
     fStart = (u32)mpBegin;
     fEnd = (u32)mpBegin;
     fCount = 0;
-    return this;
 }
 
 // @ 0x00a310b0

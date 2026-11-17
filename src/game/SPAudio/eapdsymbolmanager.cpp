@@ -611,7 +611,6 @@ public:
     FixedHashtableAllocator_s00a6_70b0 mAlloc;       // +0x1c
 
     Hashtable_s00a6_70b0(const char* name);                                    // 0xa67770
-    void  Destroy();                                               // 0xa672e0
     void  ClearBuckets(HashNode** arr, uint32_t n);                // 0xa66bf0
     void  Rehash(uint32_t n);                                      // 0xa66b40
     HashNode** AllocateBuckets(uint32_t n);                        // 0xa67ee0
@@ -620,6 +619,27 @@ public:
     HeapIter  find(const uint32_t& key);                      // 0x645ed0
     HashRange EqualRange(const uint32_t& key);                 // 0x9a6dd0
     Iterator* DoInsertValue(Iterator* sret, const KeyValue* value, const uint32_t* key); // 0xa67370
+};
+// the destructor's view of Hashtable: buckets cleared and their array returned to the pool (or the overflow
+// allocator), then the allocator member is destroyed by its out-of-line destructor (0xa67d30)
+class FixedHashtableAllocatorObj_s00a6_70b0 : public FixedPool_s00a6_70b0 {
+public:
+    uint32_t mnBucketCount;              // +0x30
+    void*    mpBucketBuffer;             // +0x34
+    ~FixedHashtableAllocatorObj_s00a6_70b0();   // 0xa67d30
+};
+class HashtableObj_s00a6_70b0 {
+public:
+    uint32_t   mFunctors;                 // +0x00
+    HashNode** mpBucketArray;             // +0x04
+    uint32_t   mnBucketCount;             // +0x08
+    uint32_t   mnElementCount;            // +0x0c
+    float      mfMaxLoadFactor;           // +0x10
+    uint32_t   mnGrowthFactor;            // +0x14
+    uint32_t   mnNextResize;              // +0x18
+    FixedHashtableAllocatorObj_s00a6_70b0 mAlloc;    // +0x1c
+    void  ClearBuckets(HashNode** arr, uint32_t n);  // 0xa66bf0
+    ~HashtableObj_s00a6_70b0();
 };
 class SymbolManager_s00a6_70b0 {
 public:
@@ -1636,12 +1656,13 @@ void pd_typedmess_bindings(uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint3
 }
 
 // @ 0x00a672e0
-void Hashtable_s00a6_70b0::Destroy()
+HashtableObj_s00a6_70b0::~HashtableObj_s00a6_70b0()
 {
     ClearBuckets(mpBucketArray, mnBucketCount);
     HashNode** b = mpBucketArray;
+    uint32_t n = mnBucketCount;
     mnElementCount = 0;
-    if (mnBucketCount > 1 && b != (HashNode**)mAlloc.mpBucketBuffer) {
+    if (n > 1 && b != (HashNode**)mAlloc.mpBucketBuffer) {
         --mAlloc.mnCurrentSize;
         if (b < (HashNode**)mAlloc.mpPoolBegin || b >= (HashNode**)mAlloc.mpPoolEnd) {
             AllocatorFree(&mAlloc.mOverflowAllocator, b);
@@ -1650,7 +1671,6 @@ void Hashtable_s00a6_70b0::Destroy()
             mAlloc.mpHead = b;
         }
     }
-    mAlloc.DestroyAllocator();
 }
 
 // @ 0x00a67370

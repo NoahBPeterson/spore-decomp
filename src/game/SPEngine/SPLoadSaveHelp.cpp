@@ -154,8 +154,26 @@ struct C3 {
     void* p8;     // +8
     int  bindA(void* obj, void* a, void* b, void* c);   // 0x6939b0
     int  bindB(void* obj, void* a, void* b, void* c);   // 0x693aa0
-    C3*  ctorA(void* a, void* b, void* c, void* d);     // 0x693cd0
-    C3*  ctorB(void* a, void* b, void* c, void* d);     // 0x693d60
+};
+// the constructors' view of C3: its vtable (0x1403970) and two reference members that start out empty, released on
+// unwind if binding throws; ctorA and ctorB bind through different helpers
+struct IC3Ref { virtual void Slot0(); virtual void Release(); };
+struct C3Ref {
+    IC3Ref* mp;
+    C3Ref() : mp(0) {}
+    ~C3Ref() { if (mp) mp->Release(); }
+};
+struct C3ObjA {
+    virtual void Slot0();
+    C3Ref p4;     // +4
+    C3Ref p8;     // +8
+    C3ObjA(void* a, void* b, void* c, void* d);   // 0x693cd0
+};
+struct C3ObjB {
+    virtual void Slot0();
+    C3Ref p4;     // +4
+    C3Ref p8;     // +8
+    C3ObjB(void* a, void* b, void* c, void* d);   // 0x693d60
 };
 struct FieldInfo {
     unsigned int   mData[4];  // inline value; for arrays: [0] data, [1] count, [2] stride
@@ -1065,23 +1083,15 @@ extern "C" bool FUN_00693c70(void* io, CString* str)
 }
 
 // @ 0x00693cd0
-C3* C3::ctorA(void* a, void* b, void* c, void* d)
+C3ObjA::C3ObjA(void* a, void* b, void* c, void* d)
 {
-    vtbl = g_vtbl_1403970;
-    p4 = 0;
-    p8 = 0;
-    bindA(a, b, d, c);
-    return this;
+    ((C3*)this)->bindA(a, b, d, c);
 }
 
 // @ 0x00693d60
-C3* C3::ctorB(void* a, void* b, void* c, void* d)
+C3ObjB::C3ObjB(void* a, void* b, void* c, void* d)
 {
-    vtbl = g_vtbl_1403970;
-    p4 = 0;
-    p8 = 0;
-    bindB(a, b, d, c);
-    return this;
+    ((C3*)this)->bindB(a, b, d, c);
 }
 
 // @ 0x00693dd0
