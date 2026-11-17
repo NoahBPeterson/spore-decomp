@@ -43,7 +43,7 @@
 007127d0 150 state object copy (9 dwords + fixed-vector ctor); field-copy schedule not reproduced
 00712850 140 state object copy (a[0] + b[1..8] + fixed-vector ctor); field-copy schedule not reproduced
 00712b20 41 hashtable<string>::DoFreeNodes wrapper (embedded hashtable at +4); register allocation differs
-00712ba0 8 cMaterialManager::HasMaterial; only the esi/edi register rotation differs
+00712ba0 8 cMaterialManager::HasMaterial; only the esi/edi register rotation differs | R48: reserved for byte-exact matching.
 00712cb0 122 cMaterialManager::GetMaterials; extra frame locals and loop register assignment differ
 00712e10 213 GetIDFromCompiledState: complete (find, id probe loop, insert); inlined hash lookup/EH shape differs; difftest WEAK after fixing the mutex-param argument (pass &gMutexParams, not its value), the fixed-vector layout (+8 bytes: allocator word and pad, mutex at +0x258), the find() iterator (two words; a one-word local let find overwrite the saved mutex pointer) and the not-found test (end() is mpBuckets[mnBuckets], not [mnNextResize])
 00712f50 228 RegisterMaterial: complete; eastl::copy and AutoRef push shape not byte-exact
