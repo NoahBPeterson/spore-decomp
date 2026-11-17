@@ -1005,7 +1005,7 @@ int DatabasePackedFile_s006b_d150::FUN_006bd4d0(Key* key)
     EA::Thread::AutoLock_s006b_d150 lock(mIndexMutex, &g_mutexParam);
     int count = 0;
     if (mnAccessFlags != 0) {
-        void* out = 0;
+        void* out;
         void** it = ((RBTreeHead*)((char*)this + 0x4f0))->find(&out, key);
         char* end = (char*)this + 0x4f4;
         for (char* n = *(char**)it;

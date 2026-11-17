@@ -1075,22 +1075,25 @@ Elem12** __cdecl FUN_0077fa70(Elem12** out, Elem12* first, Elem12* last, Elem12*
     return out;
 }
 
+struct Elem12Copy {
+    void* mObj; int mA; int mB;
+    Elem12Copy(const Elem12Copy& o)
+    {
+        mObj = o.mObj;
+        if (mObj != 0)
+            (**(void(__thiscall***)(void*))mObj)(mObj);   // add-ref through vtable[0]
+        mA = o.mA;
+        mB = o.mB;
+    }
+    static void* operator new(unsigned, void* p) { return p; }
+    static void operator delete(void*, void*) {}
+};
+
 // @ 0x0077fb10
 Elem12* __cdecl FUN_0077fb10(Elem12* first, Elem12* last, Elem12* dst)
 {
-    if (first == last)
-        return dst;
-    while (first != last) {
-        if (dst != 0) {
-            dst->mObj = first->mObj;
-            if (dst->mObj != 0)
-                (*(void(__thiscall**)(void*))dst->mObj)(dst->mObj);   // add-ref
-            dst->mA = first->mA;
-            dst->mB = first->mB;
-        }
-        ++first;
-        ++dst;
-    }
+    for (; first != last; ++first, ++dst)
+        new ((void*)dst) Elem12Copy(*(const Elem12Copy*)first);
     return dst;
 }
 
