@@ -3,4 +3,3 @@
 006ae2a0 56 AutoRefCount::operator= : lock xadd / xchg refcount shape not reproduced; equiv: FAIL (esp)
 006ae4c0 30 getter: duplicated tail / xor eax scheduling differs; equiv: PASS
 006ae510 20 Resource::Async ctor: EH prologue + InterlockedExchange zero store not reproduced; equiv: FAIL (esp)
-006aebd0 21 dtor: EH prologue + vtable stores not reproduced; equiv UNSUPPORTED: unresolved refs XRBTree::DoNukeSubtree, Mutex2::dtor

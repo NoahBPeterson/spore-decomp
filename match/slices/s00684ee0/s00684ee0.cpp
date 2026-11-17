@@ -9,7 +9,7 @@ inline void* operator new(unsigned int, void* p) { return p; }
 
 // ---------------------------------------------------------------- externals
 void* EAAlloc(unsigned size, const char* area, int a, int b, const char* file, int line); // 0x00f473a0
-void  EAFree(void* p); // 0x00f47380
+void  EAFree(void* p) throw(); // 0x00f47380
 void* ZoneNew(unsigned size, const char* area, int a, int b, int c, int d); // 0x00926020
 extern "C" void* GetManager();                       // 0x0067dcd0
 extern "C" bool  EA_IO_IsSubdirectory(void*, int, int);  // 0x00930ab0
@@ -587,10 +587,21 @@ void* S2::FUN_00685a60(void* src) {
   return d;
 }
 
+// a vector<Variant>: the storage base frees the block, the vector destroys its values first (0x00685a30)
+struct VariantVecStorage {
+  char* mpBegin;
+  char* mpEnd;
+  char* mpCapacity;
+  ~VariantVecStorage() { if (mpBegin != 0) EAFree(mpBegin); }
+};
+struct VariantVec : VariantVecStorage {
+  void DestroyValues(char* first, char* last);   // 0x00685a30
+  ~VariantVec();
+};
+
 // @ 0x00685ed0  destroy a vector<Variant>
-void __fastcall FUN_00685ed0(char* p) {
-  FUN_00685a30(*(char**)p, *(char**)(p + 4));
-  if (*(void**)p != 0) EAFree(*(void**)p);
+VariantVec::~VariantVec() {
+  DestroyValues(mpBegin, mpEnd);
 }
 
 // @ 0x00685770  DatabasePackedFile stream loader

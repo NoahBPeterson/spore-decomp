@@ -9,3 +9,4 @@
 ../src/game/SPEngine/SPResourceAsync.cpp  ??1Node_6ae210@@QAE@XZ  006ae210  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceAsync.cpp  ??1Holder_6ae120@@QAE@XZ  006ae120  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceAsync.cpp  ??1Holder_6ae190@@QAE@XZ  006ae190  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResourceAsync.cpp  ??1RCacheObj_6aebd0@@QAE@XZ  006aebd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

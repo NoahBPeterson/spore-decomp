@@ -164,6 +164,17 @@ struct VMapNode {
         mValue.Assign(&s.val);
     }
 };
+// a map node's value constructed in place: the key, then a copy of the variant
+struct VariantCopy : Variant {
+    VariantCopy(const Variant& o) { mFlags = 0; mTypeId = 0; Assign(&o); }
+};
+struct PairUVCopy {
+    u32 key;
+    VariantCopy val;
+    PairUVCopy(const PairUV& s) : key(s.key), val(s.val) {}
+    static void* operator new(size_t, void* p) { return p; }
+    static void operator delete(void*, void*) {}
+};
 struct VIter {
     VMapNode* mpNode;
     VIter() {}
@@ -249,11 +260,62 @@ struct cCommandParameterSet {
     Variant mDefaultVariant; // +0x28
 
     __declspec(noinline) cCommandParameterSet();
-    ~cCommandParameterSet();
     u32 GetNextParameterID(u32 id);
     void RemoveParameter(u32 id);
     void AdjustParameterCount(u32 n);
     bool ExecuteCommand(int cmd, void* a, void* b);
+};
+// the destructor's view of cCommandParameterSet: two bases (vtables restored on exit), the parameter map at +0x0c
+// (nuked from its root by the out-of-line DoNukeSubtree) and the default variant at +0x28 (destructed when it owns
+// a value, flag 4)
+struct cCommandParameterSetBase0 { virtual void Slot0(); ~cCommandParameterSetBase0() {} };
+struct cCommandParameterSetBase1 { virtual void Slot0(); ~cCommandParameterSetBase1() {} };
+struct ParameterMapHolder {
+    u32 pad0;                // +0x00
+    VMapNode* aRight;        // +0x04
+    VMapNode* aLeft;         // +0x08
+    VMapNode* aParent;       // +0x0c (root)
+    u32 aColorWord;          // +0x10
+    u32 mnSize;              // +0x14
+    u32 mAlloc;              // +0x18
+    void DoNukeSubtree(VMapNode* p);
+    ~ParameterMapHolder() { DoNukeSubtree(aParent); }
+};
+struct DefaultVariantHolder {
+    Variant v;
+    ~DefaultVariantHolder() { if (v.mFlags & 4) v.Destruct(0); }
+};
+struct cCommandParameterSetObj : cCommandParameterSetBase0, cCommandParameterSetBase1 {
+    u32 mRefCount;                       // +0x08
+    ParameterMapHolder mParameterMap;    // +0x0c
+    DefaultVariantHolder mDefaultVariant; // +0x28
+    ~cCommandParameterSetObj();
+};
+// the destructor's view of cStringCommandGenerator: two bases (vtables restored on exit), the vector of parameter
+// strings at +0x0c (values destroyed, then the heap block freed) and the empty-set reference at +0x20 (vtable slot 1)
+struct GenStringVec {
+    WStr* mpBegin;           // +0x00
+    WStr* mpEnd;             // +0x04
+    WStr* mpCap;             // +0x08
+    u32 mAlloc0;             // +0x0c
+    u32 mAlloc1;             // +0x10
+    void DestroyValues(WStr* first, WStr* last) throw();   // 0x0084aad0
+    ~GenStringVec() {
+        DestroyValues(mpBegin, mpEnd);
+        if (mpBegin && *(int*)((char*)mpBegin - 4) != 0)
+            EASTL_dealloc(mpBegin);
+    }
+};
+struct IGenEmptySet { virtual void Slot0(); virtual void Release(); };
+struct GenEmptySetRef {
+    IGenEmptySet* mp;
+    ~GenEmptySetRef() { if (mp) mp->Release(); }
+};
+struct cStringCommandGeneratorObj : cCommandParameterSetBase0, cCommandParameterSetBase1 {
+    u32 mRefCount;           // +0x08
+    GenStringVec mArr;       // +0x0c
+    GenEmptySetRef mpEmptySet; // +0x20
+    ~cStringCommandGeneratorObj();
 };
 struct cStringCommandGenerator {
     void* vtbl0;             // +0x00
@@ -266,7 +328,6 @@ struct cStringCommandGenerator {
     u32 mAlloc1;             // +0x1c
     void* mpEmptySet;        // +0x20
 
-    ~cStringCommandGenerator();
     cStringCommandGenerator();
     bool SetParameterCount(WStr* str, u32* outId, cCommandParameterSet** outSet);   // 0x0068B000
 };
@@ -870,9 +931,11 @@ u32 cCommandServer::FindCommandInfoByName(const wch* name)
 }
 
 // @ 0x0068a250
-extern "C" VMapNode* __stdcall FUN_0068a250(const PairUV* src)
+VMapNode* __stdcall FUN_0068a250(const PairUV* src)
 {
-    return new (gAllocTag, 0u, 0u, gEASTLFile, 0xd1u) VMapNode(*src);
+    VMapNode* n = (VMapNode*)operator new(0x28, gAllocTag, 0u, 0u, gEASTLFile, 0xd1u);
+    new (&n->mKey) PairUVCopy(*src);
+    return n;
 }
 
 // @ 0x0068a2e0
@@ -963,15 +1026,8 @@ vector::vector(u32 n, const EmptyAlloc& a)
 }
 
 // @ 0x0068a720
-cCommandParameterSet::~cCommandParameterSet()
+cCommandParameterSetObj::~cCommandParameterSetObj()
 {
-    vtbl0 = &vtbl_cCommandParameterSet;
-    vtbl1 = &vtbl_cCommandParameterSet2;
-    if (mDefaultVariant.mFlags & 4)
-        mDefaultVariant.Destruct(0);
-    mParameterMap.DoNukeSubtree(mParameterMap.aParent);
-    vtbl1 = &vtbl_Base1;
-    vtbl0 = &vtbl_Base0;
 }
 
 // @ 0x0068a7a0
@@ -1009,18 +1065,8 @@ void cCommandParameterSet::RemoveParameter(u32 id)
 }
 
 // @ 0x0068a8d0
-cStringCommandGenerator::~cStringCommandGenerator()
+cStringCommandGeneratorObj::~cStringCommandGeneratorObj()
 {
-    vtbl0 = &vtbl_cStringCommandGenerator;
-    vtbl1 = &vtbl_cStringCommandGenerator2;
-    if (mpEmptySet) {
-        ((void(__thiscall*)(void*))VFN(mpEmptySet, 4))(mpEmptySet);
-    }
-    ((void(__thiscall*)(void*, void*, void*))VecDestroyValues)(&mArrBegin, mArrBegin, mArrEnd);
-    if (mArrBegin && *(int*)((char*)mArrBegin - 4) != 0)
-        EASTL_dealloc(mArrBegin);
-    vtbl1 = &vtbl_Base1;
-    vtbl0 = &vtbl_Base0;
 }
 
 struct CommandInfoLookup {

@@ -9,3 +9,4 @@ slices/s00687c20/s00687c20.cpp  ?GetDir4a214a@@YAPB_WXZ  00688cd0  /O2 /MD /Gy /
 slices/s00687c20/s00687c20.cpp  ?GetDir4a2150@@YAPB_WXZ  00688cf0  /O2 /MD /Gy /TP /EHsc /GS-
 slices/s00687c20/s00687c20.cpp  ?Release@RefObj688d20@@UAEIXZ  00688d20  /O2 /MD /Gy /TP /EHsc /GS-
 slices/s00687c20/s00687c20.cpp  ?PostNewMessage6bbc90@@YAXPAX@Z  00688d50  /O2 /MD /Gy /TP /EHsc /GS-
+slices/s00687c20/s00687c20.cpp  ?CloneBigPair@@YGPAUBigPair@@ABUPairUW@@@Z  006887c0  /O2 /MD /Gy /TP /EHsc /GS-

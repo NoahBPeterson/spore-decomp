@@ -560,16 +560,21 @@ E36* Func_00781CB0(E36* first, E36* last, E36* dst)
     return dst;
 }
 
+// the E36 vector: the storage base frees the heap block, the vector destroys each element's inner vector first
+struct E36VecStorage {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCap;
+    ~E36VecStorage() { if (mpBegin && *(int*)(mpBegin - 4) != 0) EastlFree(mpBegin); }
+};
+struct E36Vec : E36VecStorage { ~E36Vec(); };
+
 // @ 0x00781cf0
-void __fastcall FUN_00781CF0(void* v)
+E36Vec::~E36Vec()
 {
-    char* begin = *(char**)v;
-    char* end = *(char**)((char*)v + 4);
-    for (; begin < end; begin += 0x24)
-        ((Vec12*)(begin + 4))->Destroy();
-    begin = *(char**)v;
-    if (begin && *(int*)(begin - 4) != 0)
-        EastlFree(begin);
+    char* end = mpEnd;
+    for (char* p = mpBegin; p < end; p += 0x24)
+        ((Vec12*)(p + 4))->Destroy();
 }
 
 // @ 0x00781d60
@@ -649,22 +654,42 @@ cShadowWorld_s0078_19d0* cShadowWorld_ctor(cShadowWorld_s0078_19d0* p)
     return p;
 }
 
+// the destructor's view of cShadowWorld: two bases (vtables 0x13ef094 at +0 and 0x13eb938 at +8 restored on exit)
+// and the members it tears down in reverse order: the reference at +0x18, the element vector at +0x1c (0x781b10), the
+// E36 vector at +0x30 (0x781cf0), the two rasterizer arrays (element destructor 0x576620) and the reference at +0x1bc
+struct cShadowWorldBase0 { virtual void Slot0(); int refcount; ~cShadowWorldBase0() {} };
+struct cShadowWorldBase8 { virtual void Slot0(); unsigned char b0c, b0d, b0e, b0f; ~cShadowWorldBase8() {} };
+struct cShadowWorldRef {
+    IRefObj* mp;
+    ~cShadowWorldRef() { if (mp) mp->Release(); }
+};
+struct cShadowWorldVec12 { E12* begin; E12* end; E12* cap; ~cShadowWorldVec12(); };   // 0x781b10
+struct cShadowWorldE36Vec { E36* b; E36* e; E36* c; int u0c; int u10; ~cShadowWorldE36Vec(); };   // 0x781cf0
+struct cShadowWorldRast { void* p; ~cShadowWorldRast(); };   // 0x576620
+struct __declspec(novtable) cShadowWorldObj : cShadowWorldBase0, cShadowWorldBase8 {
+    void*   p10;                    // +0x010
+    int     u14;                    // +0x014
+    cShadowWorldRef p18;            // +0x018
+    cShadowWorldVec12 vec1c;        // +0x01c
+    int     u28;                    // +0x028
+    int     u2c;                    // +0x02c
+    cShadowWorldE36Vec e36;         // +0x030
+    char    arr44[0xa4];            // +0x044
+    int     ue8;                    // +0x0e8
+    int     uec;                    // +0x0ec
+    int     uf0;                    // +0x0f0
+    cShadowWorldRast rastA[2];      // +0x0f4
+    int     iafc[4];                // +0x0fc
+    cShadowWorldRast rastB[8];      // +0x10c
+    int     ib12c[16];              // +0x12c
+    float   f16c[20];               // +0x16c
+    cShadowWorldRef i1bc;           // +0x1bc
+    ~cShadowWorldObj();
+};
+
 // @ 0x007821b0
-void cShadowWorld_dtor(cShadowWorld_s0078_19d0* p)
+cShadowWorldObj::~cShadowWorldObj()
 {
-    IRefObj* r1bc = *(IRefObj**)&p->i1bc;
-    if (r1bc)
-        r1bc->Release();
-
-    EhVecDtorIterator(p->rastB, 4, 8, &FUN_00576620);
-    EhVecDtorIterator(p->rastA, 4, 2, &FUN_00576620);
-    FUN_00781CF0(&p->e36b);
-    p->vec1c.Destroy();
-    if (p->p18)
-        p->p18->Release();
-
-    p->vtbl = (void*)0x13ef094;
-    p->vtbl2 = (void*)0x13eb938;
 }
 
 // @ 0x00782420
