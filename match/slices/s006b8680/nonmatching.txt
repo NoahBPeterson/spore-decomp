@@ -1,6 +1,5 @@
 006b8ca0 95 complete; drive hash wrapper, arg-shuffle/setne differ
 006b9050 150 complete; trig rotation, x87/SSE scheduling differs
-006b9190 20 complete; thiscall member Save; flags are copied to a local instead of mutating the struct equiv: PASS.
 006b9230 318 complete; thiscall member Load implemented (identity rows from 0x16063f8, f4/f8/mc globals, conditional reads) equiv: PASS.
 006b92d0 337 complete; basis normalization, x87 sum order
 006b9440 189 complete; thiscall member Build on the retail basis layout; out[14]=mc (was 1.0) equiv: PASS.
