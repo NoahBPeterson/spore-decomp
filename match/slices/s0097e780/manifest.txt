@@ -1,0 +1,1 @@
+slices/s0097e780/s0097e780.cpp  ?CallManager_97e780@@YAPAXXZ  0097e780  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
