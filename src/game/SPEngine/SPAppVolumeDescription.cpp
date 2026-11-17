@@ -19,6 +19,7 @@ void* operator new[](size_t size, const char* pName, int flags, unsigned debugFl
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags,
                    const char* file, int line); // 0x00f473a0
 inline void* operator new(size_t, void* p) throw() { return p; }
+void operator delete(void*, const char*, int, unsigned, const char*, int); // 0x00f473a0 matching delete
 namespace EA {
 namespace IO {
 void ReadInt32(void* r, void* d, int n, int f);
@@ -112,6 +113,7 @@ struct VolumeCmd {
   VolumeCorner corners[8];
   void* Copy(int src); // 0x007ee9f0, legacy alias of the copy-constructor ABI
 };
+struct DescInstaller { void Install(void*, int, void*); };  // 0x00a6f9c0
 struct VolumeRegistrar {
   void Register(char flag);
 };
@@ -305,10 +307,9 @@ void VolumeRegistrar::Register(char flag)
 {
   int self = (int)(size_t)this;
   if (flag == 0) {
-    char* p = (char*)operator new(0xf0, "Swarm", 0, 0, 0, 0);
-    void* v = p ? ((MapDescription*)p)->Copy(self + 0x40) : 0;
-    extern void FUN_00a6f9c0(int, int, void*);
-    FUN_00a6f9c0(*(int*)(self + 0x130), 0x28, v);
+    SP::cVolumeDescription* v =
+        new ("Swarm", 0, 0, 0, 0) SP::cVolumeDescription(*(const SP::cVolumeDescription*)(self + 0x40));
+    ((DescInstaller*)*(void**)(self + 0x30))->Install(*(void**)(self + 0x130), 0x28, v);
   }
 }
 

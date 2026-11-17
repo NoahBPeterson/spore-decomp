@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/ealayer31/ealayer3core.cpp.cpp  ??0EALayer3Core@core@audio@rw@@QAE@H@Z  01149f70  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

@@ -205,9 +205,25 @@ struct SizeProvider {
     virtual void* v6();
     virtual void* v7();                                 // +0x1c
 };
-class Host3 {
+struct Host3RefObj {
+    virtual ~Host3RefObj();
+    int refCount;        // +0x04
+};
+struct Host3RefBase {
+    RefObj* m00;         // +0x000 ref-counted
+    ~Host3RefBase() {
+        Host3RefObj* p = (Host3RefObj*)m00;
+        if (p != 0) {
+            int n = (*(volatile int*)&p->refCount += -1);
+            if (n == 0) {
+                p->refCount = 1;
+                delete p;
+            }
+        }
+    }
+};
+class Host3 : public Host3RefBase {
 public:
-    RefObj*  m00;        // +0x000 ref-counted
     uint32_t m04;
     void*    m08;        // +0x008 12-byte dispatch records (begin)
     void*    m0c;        // +0x00c ... end
@@ -288,7 +304,7 @@ public:
     void Method7da0();                                       // 0x006e7da0
     void Method7dd0(int, float*, float);                     // 0x006e7dd0
     void Method7ed0(int, uint32_t*, float);                 // 0x006e7ed0
-    void Method7f30();                                       // 0x006e7f30
+    ~Host3();                                                // 0x006e7f30
     int  Method7fa0(int index, int value);                   // 0x006e7fa0
     void Method8000(int index, float* v, float w);           // 0x006e8000
     void Method8090(int index, int a, float b);              // 0x006e8090
@@ -1658,7 +1674,6 @@ struct S8 {
     void mecc0();                                           // 0x6ec0c0 helper? (unused)
     void m260();                                            // placeholder
     void m4a0();                                            // 0x6ec4a0 (declared via VecC helper)
-    void m660(void* src);                                   // 0x6ec660
     S8*  m730();                                            // 0x6ec730
     void m840(int a, int b);                                // 0x6ec840
     void m8a0();                                            // 0x6ec8a0
@@ -2753,18 +2768,11 @@ void Host3::Method7ed0(int index, uint32_t* v, float w)
 }
 
 // @ 0x006e7f30
-void Host3::Method7f30()
+Host3::~Host3()
 {
-    if (m60 != 0) {
-        ((VObj*)m60)->v1();
-    }
-    if (m00 != 0) {
-        uint32_t n = m00->refCount - 1;
-        m00->refCount = n;
-        if (n == 0) {
-            m00->refCount = 1;
-            m00->v0(1);
-        }
+    VObj* o = (VObj*)m60;
+    if (o != 0) {
+        o->v1();
     }
 }
 
@@ -4549,18 +4557,34 @@ void f5b0(uint* p1, int p2, int p3, int p4)
         f_ac3fa0_s006e_c0c0(p1, (uint*)p2, p4);
 }
 
+struct WStrBase {
+    wchar_t* mpBegin;                  // +0x00
+    wchar_t* mpEnd;                    // +0x04
+    wchar_t* mpCap;                    // +0x08
+    int      mpad;                     // +0x0c
+    wchar_t* mpOverflow;               // +0x10
+    WStrBase(wchar_t* pool) : mpOverflow(pool) {}
+    ~WStrBase() {
+        if (mpBegin != mpOverflow)
+            FreeBlock(mpBegin);
+    }
+};
+struct WStrRange {
+    const wchar_t* b;
+    const wchar_t* e;
+};
+struct WStrFixed : WStrBase {
+    wchar_t mBuf[64];                  // +0x14
+    WStrFixed(const WStrRange* src);
+};
 // @ 0x006ec660
-void S8::m660(void* src)
+WStrFixed::WStrFixed(const WStrRange* src) : WStrBase(mBuf)
 {
-    char* d = (char*)this;
-    char* s = (char*)src;
-    char* q = d + 0x14;
-    *(void**)(d + 0x10) = q;
-    *(void**)(d + 4) = q;
-    *(void**)d = q;
-    *(void**)(d + 8) = d + 0x94;
-    *(ushort*)q = 0;
-    ((SmallStrObj*)d)->FUN_006ebd20(*(int*)s, *((int*)s + 1));
+    wchar_t* q = mBuf;
+    mpBegin = mpEnd = q;
+    mpCap = q + 64;
+    *q = 0;
+    ((SmallStrObj*)this)->FUN_006ebd20((int)src->b, (int)src->e);
 }
 
 // @ 0x006ec6d0

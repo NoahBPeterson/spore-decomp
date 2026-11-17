@@ -88,3 +88,5 @@
 ../src/game/SPGonzago/SPPlanet.cpp  ?SimCivObject_SetPlanetTechLevel@@YAXPAUSimCivObject_c7@@H@Z  00c706d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ??1Simulator_cFruitGroup@@QAE@XZ  00b01a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPPlanet.cpp  ?Assign@RefRecordOps@@QAEPAXPBX@Z  00b01cb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?make_heap_range@@YAXPAX0UHeapPos@@@Z  00b03d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanet.cpp  ?make_heap_range2@@YAXPAX0UHeapPos@@@Z  00b03e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

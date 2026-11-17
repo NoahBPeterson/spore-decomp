@@ -14,3 +14,4 @@
 ../src/game/Spui/SPUILayers.cpp  ?AddLayer@cSPUICustomRendererImpl@@QAEXPAPAXPAX1@Z  0080f2e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUILayers.cpp  ?RemoveAllModels@cSPUILayeredObject@@QAEXXZ  0080ea50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUILayers.cpp  ?RemoveAllObjects@cSPUILayerManager@@QAEXXZ  0080f8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUILayers.cpp  ?FUN_0080dcd0@@YGXPAXHE@Z  0080dcd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

@@ -8222,14 +8222,18 @@ void __thiscall CCB_s00c0_ce80::d950(char param_2)
 }
 
 // @ 0x00c0d970
+struct IdentityColorRGB { uint32_t r, g, b; };
+struct IdentityColorTarget {
+    char pad[0x74];
+    IdentityColorRGB color;   // +0x74
+    float alpha;              // +0x80
+};
 void __thiscall CCB_s00c0_ce80::d970(float* param_2)
 {
-    char* p = *(char**)((char*)this + 0xb54);
-    *(uint32_t*)(p + 0x74) = ((uint32_t*)param_2)[0];
-    *(uint32_t*)(p + 0x78) = ((uint32_t*)param_2)[1];
-    *(uint32_t*)(p + 0x7c) = ((uint32_t*)param_2)[2];
-    char* q = *(char**)((char*)this + 0xb54);
-    *(float*)(q + 0x80) = GF(0x1485720);
+    IdentityColorTarget* t = *(IdentityColorTarget**)((char*)this + 0xb54);
+    t->color = *(IdentityColorRGB*)param_2;
+    t = *(IdentityColorTarget**)((char*)this + 0xb54);
+    t->alpha = 1.0f;
 }
 
 // @ 0x00c0d9b0

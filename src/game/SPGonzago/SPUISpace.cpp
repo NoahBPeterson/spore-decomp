@@ -6775,8 +6775,10 @@ void FUN_01066630(float* p1, float* p2, float* p3)
         g_16e2838 = g_180 / g_15b90e0;
         g_16e283c |= 1;
     }
-    *p2 = sqrtf_s0106_5c30(p1[0]*p1[0] + p1[1]*p1[1]) * g_149c1fc;
-    *p3 = (float)(atan2((double)p1[1], (double)p1[0]) + g_15b90e0) * g_16e2838;
+    double x = p1[0];
+    double y = p1[1];
+    *p2 = (float)(sqrt(y * y + x * x) * g_149c1fc);
+    *p3 = (float)(atan2(y, x) + g_15b90e0) * g_16e2838;
 }
 
 // @ 0x010666a0

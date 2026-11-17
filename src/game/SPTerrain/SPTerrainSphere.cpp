@@ -34,6 +34,7 @@
 #include "SP/cJob.h"
 #include "SP/cITerrainSphere.h"
 #include "SP/cJobManager.h"
+#include "sse_helpers.h"
 
 // ---- items of slice s00f986f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 union W {
@@ -4730,19 +4731,21 @@ void cTerrainSphere_s00f9_55f0::RemoveFromEffectsSystem()
     f20(mgr, 0, 8);
 }
 
+struct cGridBounds {
+    float GetC();      // 0x0097ef00
+    int GetMinB();     // 0x00fb7bb0
+    int GetMinC();     // 0x00fb7bc0
+};
+
 // @ 0x00f967d0
 void* cGridTool::GetExtents(int* a, int* b, int* c)
 {
-    char* s = (char*)this;
-    float f = (float)SP::Sub_97ef00(*(void**)(s + 0x20c)) * SP::K_140;
-    int iv = (int)f;
-    int adj = iv;
-    if (f < (float)iv)
-        adj = iv - 1;
-    *a = adj;
-    *b = SP::Sub_fb7bb0(*(void**)(s + 0x20c));
-    *c = SP::Sub_fb7bc0(*(void**)(s + 0x20c));
-    return 0;
+    cGridBounds* bounds = *(cGridBounds**)((char*)this + 0x20c);
+    *a = SseFloorToInt(bounds->GetC() * SP::K_140);
+    *b = ((cGridBounds*)*(void**)((char*)this + 0x20c))->GetMinB();
+    int minC = ((cGridBounds*)*(void**)((char*)this + 0x20c))->GetMinC();
+    *c = minC;
+    return (void*)minC;
 }
 
 // @ 0x00f977c0

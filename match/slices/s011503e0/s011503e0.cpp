@@ -349,9 +349,10 @@ NOINLINE void __thiscall Arc4::Set(float a, float b)
     x = a;
     y = b;
     float sum = a * a + b * b;
+    const float one = _HK_REAL_ONE;
     len2 = sum;
-    if (sum > _HK_REAL_ONE) {
-        len2 = _HK_REAL_ONE;
+    if (sum > one) {
+        len2 = one;
         double inv = 1.0 / sqrt((double)sum);
         x = (float)(inv * (double)a);
         y = (float)((double)b * inv);

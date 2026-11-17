@@ -81,6 +81,12 @@ struct Holder841 {
     Holder841* Ctor(int* src);   // 0x007583e0
 };
 __declspec(noinline) Holder841* __cdecl FUN_007585c0(int* src);
+void* __cdecl operator new(unsigned size, const char* name, int, int, int, int);
+void  __cdecl operator delete(void* p, const char* name, int, int, int, int);
+struct Holder841New {
+    char storage[0x20];
+    Holder841New(int* src);   // 0x007583e0 (Holder841::Ctor)
+};
 // the destructor's view of Holder841: an interface at +0 (no destructor of its own), a base at +4 whose destructor
 // restores vtable 0x13ef094, and the reference vector at +0xc, destroyed by its out-of-line destructor (0x0041eb80)
 struct Holder841Iface { virtual void Slot0(); };
@@ -379,9 +385,7 @@ Holder841Obj::~Holder841Obj()
 // @ 0x007585c0
 Holder841* __cdecl FUN_007585c0(int* src)
 {
-    Holder841* p = (Holder841*)operator_new_graph6(0x20, g_GraphicsTag, 0, 0, 0, 0);
-    if (p) return p->Ctor(src);
-    return 0;
+    return (Holder841*)new (g_GraphicsTag, 0, 0, 0, 0) Holder841New(src);
 }
 
 // @ 0x00758680

@@ -724,9 +724,10 @@ void MatX::Rotate(float a)
 uint32_t BasisM::Save(void* io)
 {
     uint16_t f = flags;
-    if (m10 == 1.0f) f &= 0xfffe;
-    else             f |= 1;
-    uint32_t local = (uint32_t)(f | 8);
+    if (m10 != 1.0f) f |= 1;
+    else             f &= 0xfffe;
+    f |= 8;
+    uint32_t local = f;
     FUN_WriteUint16(io, &local, 1, 0);
     if (f & 1) {
         float v = m10;
