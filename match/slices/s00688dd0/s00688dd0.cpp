@@ -334,7 +334,8 @@ bool ParamWalker::Walk(char* node, uint32 flags, void* sink)
 // @ 0x00688DD0 / @ 0x00688E50  post a command-prototype notification
 // ===========================================================================
 void* operator new(unsigned size, const char* area, int a, int b, int c, int d);
-struct NewObj { NewObj(int param); };
+void operator delete(void* p, const char* area, int a, int b, int c, int d);
+struct NewObj { int mData[8]; NewObj(int param); };
 struct MsgSrv { void* vtbl; };
 MsgSrv* SP_MessageServer(); // 0x0067dcc0
 
