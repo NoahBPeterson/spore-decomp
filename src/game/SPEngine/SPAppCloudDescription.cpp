@@ -56,6 +56,47 @@ static float ArgToFloat(void* iface, void* arg) {
   typedef float(__thiscall * F0)(void*, void*);
   return ((F0)VSLOT(iface, 0x98))(iface, arg);
 }
+struct ArgConverter {
+  virtual void Slot00();
+  virtual void Slot01();
+  virtual void Slot02();
+  virtual void Slot03();
+  virtual void Slot04();
+  virtual void Slot05();
+  virtual void Slot06();
+  virtual void Slot07();
+  virtual void Slot08();
+  virtual void Slot09();
+  virtual void Slot10();
+  virtual void Slot11();
+  virtual void Slot12();
+  virtual void Slot13();
+  virtual void Slot14();
+  virtual void Slot15();
+  virtual void Slot16();
+  virtual void Slot17();
+  virtual void Slot18();
+  virtual void Slot19();
+  virtual void Slot20();
+  virtual void Slot21();
+  virtual void Slot22();
+  virtual void Slot23();
+  virtual void Slot24();
+  virtual void Slot25();
+  virtual void Slot26();
+  virtual void Slot27();
+  virtual void Slot28();
+  virtual void Slot29();
+  virtual void Slot30();
+  virtual void Slot31();
+  virtual void Slot32();
+  virtual void Slot33();
+  virtual void Slot34();
+  virtual void Slot35();
+  virtual void Slot36();
+  virtual void Slot37();
+  virtual float ToFloat(void* arg);  // vtable +0x98
+};
 static void* ArgToVec3_s007e_d1b0(void* iface, void* dst, void* arg) {
   typedef void*(__thiscall * F0)(void*, void*, void*);
   return ((F0)VSLOT(iface, 0xb0))(iface, dst, arg);
@@ -1213,7 +1254,7 @@ void BattleCommand::FloatListParentCommand(EA::ArgScript::cArguments_s007e_d1b0*
   FloatVec& pv = mDesc->mParentVec;
   pv.erase(pv.mpBegin, pv.mpEnd);
   for (int i = 0; i < count; ++i) {
-    float value = ArgToFloat(mIface, list[i]);
+    float value = ((ArgConverter*)mIface)->ToFloat(list[i]);
     mDesc->mParentVec.push_back(value);
   }
   if (args->HasFlag("parentScale"))
