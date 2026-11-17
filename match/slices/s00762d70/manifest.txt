@@ -7,3 +7,4 @@ slices/s00762d70/s00762d70.cpp  ?Shutdown@cGraphicsResourceFactory@SP@@QAE_NXZ  
 slices/s00762d70/s00762d70.cpp  ?GetSupportedTypes@cGraphicsResourceFactory@SP@@QAEIPAII@Z  00763550
 slices/s00762d70/s00762d70.cpp  ?IsRegType@@YG_NIH@Z                               00763580
 slices/s00762d70/s00762d70.cpp  ?ReadTriplets@@YG_NPAXHHH@Z                        007638a0
+slices/s00762d70/s00762d70.cpp  ??_GCEditorRes@@UAEPAXI@Z  007631f0  /O2 /MD /Gy /EHsc /TP /GS-

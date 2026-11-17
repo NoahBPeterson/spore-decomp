@@ -234,8 +234,10 @@ struct Resource {
     // the saved `this` slot, and the base vptr store after the member destruction.
     virtual ~Resource() {}
 };
+void __cdecl EditorResFree(void* p) throw();   // 0x00f47380
 struct CEditorRes : Resource {
     RefVec mRefs;             // +0x18
+    static void operator delete(void* p) throw() { EditorResFree(p); }
     CEditorRes();
     ~CEditorRes();
 };
