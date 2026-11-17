@@ -1,0 +1,1 @@
+slices/s00830a70/s00830a70.cpp  ?SetValue@Owner_830a70@@QAEXM@Z  00830a70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
