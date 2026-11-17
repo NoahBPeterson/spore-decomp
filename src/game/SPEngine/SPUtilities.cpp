@@ -14,7 +14,7 @@ extern const wchar_t DAT_01409f64[];                                // 0x1409f64
 typedef unsigned int UINT;
 typedef void* HWND;
 extern "C" __declspec(dllimport) int __stdcall MessageBoxA(HWND, const char*, const char*, UINT);
-void __cdecl EASTL_dealloc(void*);                                  // 0x00f47380
+void __cdecl EASTL_dealloc(void*) throw();                                // 0x00f47380
 extern const char    g_emptyStrC[];                                 // 0x1667bac
 extern const wchar_t gEmptyString16[];                              // 0x1667bac
 extern const wchar_t DAT_01409f64[];                                // 0x1409f64

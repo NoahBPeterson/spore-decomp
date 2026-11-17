@@ -32,6 +32,7 @@ struct JobHolder6 {
 extern JobHolder6 g_jobHolder6;   // 0x01604b48
 extern uint32_t  g_1604b80;
 inline void* operator new(uint32_t, void* p) { return p; }
+inline void operator delete(void*, void*) {}
 #define V6(n) virtual void v##n();
 struct IRefC { virtual void v0(); virtual void Release(); };
 struct SvcBase6 {
@@ -456,7 +457,9 @@ tail:
 void FUN_006b4730()
 {
   g_1604b80 = 1;
-  new (&g_jobHolder6) JobHolder6();
+  JobHolder6* p = &g_jobHolder6;
+  JobHolder6* q = new (p) JobHolder6();
+  (void)q;
 }
 
 // @ 0x006b4780
