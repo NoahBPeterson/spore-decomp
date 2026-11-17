@@ -2,10 +2,10 @@
 00799e70 0 complete switch dispatcher over DAT_0153b208; case-body layout differs (no same-size symbol)
 0079a0d0 417 complete transform-combine with scalar-SSE product + rep movsd matrix copies; branch layout and register allocation differ
 0079a4f0 105 complete EASTL vector reserve (20-byte); byte/20 capacity, DoInsertValue args and post-copy re-reads differ
-0079a710 0 complete vector-of-vectors copy with EH frame; SEH prolog/epilog not reproduced | R49: reserved for byte-exact matching.
-0079a800 0 complete vector-of-vectors copy with EH frame; SEH prolog/epilog not reproduced | R49: reserved for byte-exact matching.
-0079a8f0 0 complete vector-of-vectors fill with EH frame; SEH prolog/epilog not reproduced | R49: reserved for byte-exact matching.
-0079a9d0 0 complete vector-of-vectors fill with EH frame; SEH prolog/epilog not reproduced | R49: reserved for byte-exact matching.
+0079a710 0 regalloc: R49 (2026-11-17): copy ctor register roles and stack-slot src iterator after placement-new SplitVec8B ctor (5-arg FUN_00799290 with base=param_4); needs /GS-; tried placement new + forceinline ctor | Earlier note: complete vector-of-vectors copy with EH frame; SEH prolog/epilog not reproduced
+0079a800 0 regalloc: R49 (2026-11-17): inline element copy loop lacks retail induction-variable merge and register roles; needs /GS-; only baseline built, lever from 0x0079a8f0/0x0079a9d0 | Earlier note: complete vector-of-vectors copy with EH frame; SEH prolog/epilog not reproduced
+0079a8f0 0 regalloc: R49 (2026-11-17): retail merges the copy-loop induction variables (offset addressing) and register roles differ; needs /GS-; tried typed pairs, while loop, helper, ++order, ternary alloc | Earlier note: complete vector-of-vectors fill with EH frame; SEH prolog/epilog not reproduced
+0079a9d0 0 regalloc: R49 (2026-11-17): register roles (retail dst=esi, count=ebp) and hoisted zero constant after placement-new + forceinline ctor with 5-arg FUN_00799290 and uninit out; needs /GS- | Earlier note: complete vector-of-vectors fill with EH frame; SEH prolog/epilog not reproduced
 0079aaa0 79 complete 0x78-stride transform reverse copy; cSPTransform::operator= call schedule differs
 0079ab90 102 complete factory dispatch; subtract-chain layout differs
 0079ac10 53 complete vtable/refcount constructor; lea/mov and branch layout differ

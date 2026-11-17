@@ -4,7 +4,7 @@
 007d8230 56 SP::cApp::InitAppModes; complete loop over modes calling vtable+0x10, count/register shape differs
 007d8270 61 SP::cApp::AppMode(unsigned); complete linear search by mID, byte-diff count/register shape differs
 007d8360 93 SP::cApp::SetAppModeByName; complete _stricmp search + SetAppModeByIndex vcall, schedule differs
-007d8470 160 SP::cApp::SwitchMode; complete (leave mode, build/send 2 messages, clear index), message ctor/EH schedule differs | R49: reserved for byte-exact matching.
+007d8470 160 schedule: R49 (2026-11-17): a SlotMsg class gives the EH frame; 6 lines remain: retail stores the message ID after the argument pushes | Earlier note: SP::cApp::SwitchMode; complete (leave mode, build/send 2 messages, clear index), message ctor/EH schedule differs
 007d85b0 274 SP::cApp::ApplyAppMode; complete (leave old mode, set index, send 2 app-mode messages, enter new mode), MessageBasicRC/EH schedule differs
 007d8740 36 cAppModeInfo copy ctor (modeled as layout twin cAppModeInfoC); register allocation only (sb/n/d swap), complete [equiv: WEAK]
 007d8ab0 169 `anonymous namespace'::cAppModeCheat::Execute; complete (find-by-name, list flag, current-mode print + no-such-mode throw), vtable/EH schedule differs
