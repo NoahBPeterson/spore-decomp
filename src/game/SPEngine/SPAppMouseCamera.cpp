@@ -21,7 +21,16 @@ struct cAppHasState {
     char pad00[0x18];
     bool Check();                     // @ 0x007d9380
 };
-struct BaseObj { void SomeBaseDestructor(); };
+struct IMouseCamObj { virtual void v0(); virtual void Release(); };
+struct IMouseCamA { virtual ~IMouseCamA() {} };
+struct IMouseCamB { virtual ~IMouseCamB() {} };
+struct MouseCamIfaces : IMouseCamA, IMouseCamB {};
+struct MouseCamRefCount { int mRefCount; virtual ~MouseCamRefCount() {} };
+struct MouseCamBaseView : MouseCamIfaces, MouseCamRefCount {
+    char pad10[0x14];
+    IMouseCamObj* mpObject;   // +0x24
+    virtual ~MouseCamBaseView();
+};
 // ---- items of slice s007d85b0 end
 
 // ---- items of slice s007d9460 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -260,18 +269,10 @@ bool cAppHasState::Check()
 }
 
 // @ 0x007d93a0
-void BaseObj::SomeBaseDestructor()
+MouseCamBaseView::~MouseCamBaseView()
 {
-    void* self = this;
-    *(void**)self = (void*)0x014128a8;
-    *(void**)((char*)self + 4) = (void*)0x01412894;
-    *(void**)((char*)self + 8) = (void*)0x01412890;
-    void* p = *(void**)((char*)self + 0x24);
-    if (p != 0)
-        ((void(__thiscall*)(void*))(*(void***)p)[1])(p);
-    *(void**)((char*)self + 8) = (void*)0x013ef094;
-    *(void**)((char*)self + 4) = (void*)0x013eb394;
-    *(void**)self = (void*)0x013eb938;
+    if (mpObject)
+        mpObject->Release();
 }
 
 // @ 0x007d9460
