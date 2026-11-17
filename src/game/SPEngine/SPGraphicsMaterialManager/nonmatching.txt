@@ -8,7 +8,7 @@
 0070e430 19 eastl::copy_backward<AutoRefCount>; register assignment differs
 0070e4e0 123 graphics resource rebuild; vector/call shape differs; equiv WEAK (712 valid, 18.2% cov)
 0070e5e0 88 graphics resource release; fine register/order differences
-0070e6b0 41 hash-node constructor; EH frame missing
+0070e6b0 41 hash-node constructor; EH frame missing | R48: reserved for byte-exact matching.
 0070e8c0 72 uninitialized_copy<AutoRefCount>; EH frame/order differs
 0070e9a0 69 uninitialized_fill_n<AutoRefCount>; EH frame/order differs
 0070ea70 47 uninitialized_copy with atomic refcount; spill/order differs
@@ -39,7 +39,7 @@
 007123a0 59 cMaterialManager::Shutdown (complete: remove materials, clear fixed table, release file parser and invalid texture, clear 255 PS fragments twice); atomic refcount release block takes different registers (rc kept in ecx not eax) [equiv: WEAK]
 00712450 507 MaterialManagerBig2::Update (complete: stopwatch elapsed * scale, frame counter, 3 shader-constant writes, viewport dims and reciprocal clamps, registered-material walk with SetRaster + vector compaction, property-driven count, tail vtable+0x1c call); register allocation and indirect-call literal loads differ; equiv faults in the synthetic null-vtable scenario [equiv: FAIL]
 00712670 144 MaterialManagerBig2::Update2670 (complete: clamp mCount from the two property reads, optional RemoveAllRegisteredMaterials, package key lookup via manager vtable+0x58, three package checks, error log); register allocation and CSE shape differ [equiv: WEAK]
-00712760 39 fixed_vector copy ctor (inline buffer at +0x14/+0x18); buffer/pool stores and assign call shape off
+00712760 39 fixed_vector copy ctor (inline buffer at +0x14/+0x18); buffer/pool stores and assign call shape off | R48: reserved for byte-exact matching.
 007127d0 150 state object copy (9 dwords + fixed-vector ctor); field-copy schedule not reproduced
 00712850 140 state object copy (a[0] + b[1..8] + fixed-vector ctor); field-copy schedule not reproduced
 00712b20 41 hashtable<string>::DoFreeNodes wrapper (embedded hashtable at +4); register allocation differs
