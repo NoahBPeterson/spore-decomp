@@ -1228,8 +1228,10 @@ struct cLightingWorld_s0070_c040 {
 // ---- items of slice s0070ced0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 void* __cdecl EAlloc(size_t n, const char* name, int a, unsigned b, const char* file, int line); // 0x00f473a0
-void  __cdecl EFree(void* p);                                                                    // 0x00f47380
+void  __cdecl EFree(void* p) throw();                                                                    // 0x00f47380
 void* __cdecl GAlloc(size_t n, unsigned align, int a, const char* name, int b, int c, int d, int e); // 0x00f473d0
+void* operator new(size_t n, unsigned align, int a, const char* name, int b, int c, int d, int e); // 0x00f473d0
+void operator delete(void* p, unsigned align, int a, const char* name, int b, int c, int d, int e); // 0x00f47410
 void __cdecl   InitAtmBuffer(void* p, int zero, int n);          // 0x011e073e
 void* __cdecl  ConfigRangeOp1(void*, void*, void*);              // 0x00708ec0
 void* __cdecl   MessageServer(void);                             // 0x0067dcc0
@@ -1237,8 +1239,8 @@ struct HM { void Assign(const void*); };                          // 0x0041cb40
 struct HD3D { void Op(int); };                                    // 0x00705db0
 struct H63c { void Free(); };                                     // 0x0070a070
 struct H608 { void Free(); };                                     // 0x00702500
-struct H44c { void Free(); };                                     // 0x00706a40
-struct HList { void Dtor(); };                                    // 0x00620230
+struct H44c { void Free() throw(); };                                     // 0x00706a40
+struct HList { void Dtor() throw(); };                                    // 0x00620230
 struct HDeque { void Dtor(); };                                   // 0x0070c040
 struct HMap { void* Find(void* key); };                           // 0x0074f200
 struct HNuke { void Nuke(void* node); };                          // 0x00707690
@@ -3894,37 +3896,61 @@ cLightingWorld_s0070_ced0::cLightingWorld_s0070_ced0(char* debugName)
     InitAtmBuffer(p + 0xf0, 0, 0x150);
 }
 
+struct LWVec {
+    void* mp;
+    ~LWVec() { if (mp && ((int*)mp)[-1] != 0) EFree(mp); }
+};
+struct LWRelease1 {
+    VObj_s0070_ced0* mp;
+    ~LWRelease1() { if (mp) mp->f1(); }
+};
+struct LWRelease3 {
+    VObj_s0070_ced0* mp;
+    ~LWRelease3() { if (mp) mp->f3(); }
+};
+struct LWDeque { char d[0x20]; ~LWDeque() { ((HDeque*)this)->Dtor(); } };
+struct LW44c { char d[0x2c]; ~LW44c() { ((H44c*)this)->Free(); } };
+struct LWFixed {
+    int mpBegin; char d[0x0c]; int mpFixed;
+    ~LWFixed() { if (mpBegin != 0 && mpBegin != mpFixed) EFree((void*)mpBegin); }
+};
+struct LW608 { char d[0x20]; ~LW608() { ((H608*)this)->Free(); } };
+struct LWList { char d[8]; ~LWList() { ((HList*)this)->Dtor(); } };
+struct LW63c { char d[0x34]; ~LW63c() { ((H63c*)this)->Free(); } };
+struct LWVec2 {
+    LWVec first;
+    char pad[0x10];
+    LWVec second;
+};
+struct LWBase0 { virtual ~LWBase0() {} };
+struct LWBase1 { virtual ~LWBase1() {} };
+struct __declspec(novtable) LWDtorView : LWBase0, LWBase1 {
+    char pad08[0x4c - 8];
+    LWVec m4c;
+    char pad50[0x24c - 0x50];
+    LWRelease1 m24c;
+    char pad250[0x428 - 0x250];
+    LWDeque m428;
+    LWRelease3 m448;
+    LW44c m44c;
+    LWFixed m478;
+    char pad48c[0x594 - 0x48c];
+    LW608 m594;
+    LWVec m5b4;
+    char pad5b8[0x5d4 - 0x5b8];
+    LWVec2 m5d4;
+    char pad5ec[0x600 - 0x5ec];
+    LWList m600;
+    LW608 m608;
+    LWVec m628;
+    char pad62c[0x63c - 0x62c];
+    LW63c m63c;
+    ~LWDtorView();
+};
+
 // @ 0x0070d6d0
-cLightingWorld_s0070_ced0::~cLightingWorld_s0070_ced0()
+LWDtorView::~LWDtorView()
 {
-    unsigned char* p = _b;
-    ((H63c*)(p + 0x63c))->Free();
-    if ((*(int*)(p + 0x628) != 0) && (*(int*)(*(int*)(p + 0x628) - 4) != 0))
-        EFree(*(void**)(p + 0x628));
-    ((H608*)(p + 0x608))->Free();
-    ((HList*)(p + 0x600))->Dtor();
-    if ((*(int*)(p + 0x5e8) != 0) && (*(int*)(*(int*)(p + 0x5e8) - 4) != 0))
-        EFree(*(void**)(p + 0x5e8));
-    if ((*(int*)(p + 0x5d4) != 0) && (*(int*)(*(int*)(p + 0x5d4) - 4) != 0))
-        EFree(*(void**)(p + 0x5d4));
-    if ((*(int*)(p + 0x5b4) != 0) && (*(int*)(*(int*)(p + 0x5b4) - 4) != 0))
-        EFree(*(void**)(p + 0x5b4));
-    ((H608*)(p + 0x594))->Free();
-    {
-        int e = *(int*)(p + 0x478);
-        if ((e != 0) && (e != *(int*)(p + 0x488)))
-            EFree((void*)e);
-    }
-    ((H44c*)(p + 0x44c))->Free();
-    if (*(void**)(p + 0x448) != 0)
-        ((VObj_s0070_ced0*)*(void**)(p + 0x448))->f3();
-    ((HDeque*)(p + 0x428))->Dtor();
-    if (*(void**)(p + 0x24c) != 0)
-        ((VObj_s0070_ced0*)*(void**)(p + 0x24c))->f1();
-    if ((*(int*)(p + 0x4c) != 0) && (*(int*)(*(int*)(p + 0x4c) - 4) != 0))
-        EFree(*(void**)(p + 0x4c));
-    *(void**)(p + 0x04) = (void*)0x013ec458;
-    *(void**)(p + 0x00) = (void*)0x013eb938;
 }
 
 // @ 0x0070d850
@@ -3972,9 +3998,7 @@ unsigned cLightingWorld_AddLight(cLightingWorld_s0070_ced0* self, const float* c
 // @ 0x0070dc90
 cLightingWorld_s0070_ced0* cLightingManager::MakeWorld(int owner, int a3, void* arg4)
 {
-    cLightingWorld_s0070_ced0* world = (cLightingWorld_s0070_ced0*)GAlloc(0x670, 0x10, 0, "Graphics", 0, 0, 0, 0);
-    if (world != 0)
-        world = new (world) cLightingWorld_s0070_ced0((char*)owner);
+    cLightingWorld_s0070_ced0* world = new (0x10, 0, "Graphics", 0, 0, 0, 0) cLightingWorld_s0070_ced0((char*)this);
     ((HSmall*)world)->Op();
     if (arg4 != 0)
         ((VObj_s0070_ced0*)world)->f12(arg4);

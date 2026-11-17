@@ -18,3 +18,4 @@
 ../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?FUN_006fd7b0@@YAXXZ  006fd7b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?BinaryFindPixelShader@@YAHPBDPBUShaderBlob@@I@Z  006fdab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?PushBack@Vec28@@QAEXXZ  006fb0e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsFragmentPS.cpp  ?ClearPSFragment@SP@@YAXH@Z  006fc6a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include

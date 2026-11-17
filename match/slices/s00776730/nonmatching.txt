@@ -2,7 +2,6 @@
 00776920 277 complete cShaderPreviewB ctor; base ctor/EH-frame shape differs, needs /GS-; difftest PASS (after the same vtable mapping)
 00776a60 704 complete cShaderPreviewA::Draw; float/scheduling and frame layout differ; equiv: FAIL (checker artifact: only +0xf0/+0xf4 differ by 9 ulp; both input matrices to the second Inverse are identical, but the real matrix-multiply callee FUN_0045eac0 reads stack-address-dependent scratch; our frame is 0x54 vs retail 0x64 and padding variants gave 28 ulp/other diffs, so the exact retail stack layout cannot be reproduced from source)
 00776e60 176 complete cShaderPreviewB::Draw; register allocation differs; difftest WEAK (20% coverage: random viewers rarely pass Update)
-00776f40 226 complete cShaderPreviewA::Init; EH state for new/ctor differs; difftest PASS (after annotating operator_new 0xf473a0 and cViewer ctor 0x7c3f70)
 00777060 150 complete cShaderPreviewA::Shutdown; vector clear idiom differs; difftest PASS (after annotating ~cViewer 0x7c4000 and operator_delete__ 0xf47380)
 007771f0 79 complete cShaderPreviewB::Shutdown; clear idiom schedule differs
 00777290 232 complete cShaderBase::LoadTexture; refcount inline/EH shape differs
