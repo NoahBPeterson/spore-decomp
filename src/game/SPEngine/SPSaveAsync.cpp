@@ -7,6 +7,8 @@
 #include "SP/cString.h"
 #include "EA/Thread/Mutex.h"
 #include "SP/cJob.h"
+extern "C" long _InterlockedExchange(volatile long*, long);
+#pragma intrinsic(_InterlockedExchange)
 
 // unnamed retail callees and globals (address in the comment)
 extern uint32_t  g_1604b80;
@@ -245,7 +247,7 @@ virtual void nA();
 virtual void nB();
 virtual void nC();
 virtual void nD();
-    virtual bool Write(void* pData, int nSize);   // slot 0xe / +0x38
+    virtual char Write(void* pData, int nSize);   // slot 0xe / +0x38
 };
 struct ILocal {                // object produced by the resource provider
     virtual void l0();         // +0x00
@@ -273,7 +275,7 @@ virtual void p9();
 virtual void pA();
 virtual void pB();
     virtual void pC();
-    virtual bool Make(void* pKey, void** ppOut);      // slot 0xd / +0x34
+    virtual bool Make(void* pKey, void** ppOut, int a, int b, int c, int d);      // slot 0xd / +0x34
 };
 struct IResProv {              // param_3 in FUN_006b4b60
 virtual void q0();
@@ -298,6 +300,7 @@ virtual void s5();
     virtual void Flush();      // slot 6 / +0x18
     virtual int  Size();       // slot 7 / +0x1c
     GfarStream(void* pData, void* pUnused, const char* pName);  // 0x0093c270
+    ~GfarStream();                                              // 0x0093bde0
     void* GetData();                                            // 0x0093ba70
     void  SetProperty(int index, float value);                  // 0x0093bb40
     char mData[0x20];
@@ -309,9 +312,11 @@ virtual void a2();
 virtual void a3();
 virtual void a4();
 virtual void a5();
+    JobBaseA() {}
+    ~JobBaseA();               // 0x00a16a20
 };
 struct AsyncSave;
-struct JobBaseB {              // secondary base at +4 (BG6)
+struct JobBaseB0 {             // refcounted secondary base at +4: vptr and the +8 count
 virtual void b0();
 virtual void b1();
 virtual void b2();
@@ -322,12 +327,28 @@ virtual void b6();
 virtual void b7();
 virtual void b8();
     virtual bool Complete();       // slot 9 / +0x24; `this` is the +4 subobject
+    uint32_t m8;                   // +0x08 (reset with an interlocked exchange)
+    JobBaseB0() { volatile long* pCount = (volatile long*)&m8; _InterlockedExchange(pCount, 0); }
 };
+struct JobBaseB : JobBaseB0 {
+    virtual bool Complete();
+    ~JobBaseB();               // 0x006abf10
+};
+struct RefHold6 {              // target held through slot 0 / slot 1 of the interface
+    IRefC_s006b_47a0* p;
+    RefHold6(IRefC_s006b_47a0* t) : p(t) { if (p) p->v0(); }
+    ~RefHold6();               // 0x007a9610
+};
+struct ProvHold6 {             // provider held through its secondary interface at +4
+    IProv* p;
+    ProvHold6(void* t) : p((IProv*)t) { if (p) ((IRefC_s006b_47a0*)((char*)p + 4))->v0(); }
+    ~ProvHold6();              // 0x00615bb0
+};
+struct GfarStream;
 struct AsyncSave : JobBaseA, JobBaseB {
-    uint32_t   m8;         // +0x08
-    IRefC_s006b_47a0*     m0c;        // +0x0c
+    RefHold6   m0c;        // +0x0c
     Key3       m10;        // +0x10
-    IProv*     m1c;        // +0x1c (provider, secondary interface at +4)
+    ProvHold6  m1c;        // +0x1c (provider, secondary interface at +4)
     GfarStream mStrm;      // +0x20
     uint32_t   m44;        // +0x44 (refcount)
     uint32_t   m48;        // +0x48
@@ -500,16 +521,8 @@ void __cdecl FUN_006b4840()
 
 // @ 0x006b48d0
 AsyncSave::AsyncSave(IRefC_s006b_47a0* pTarget, void* pProvider, Key3* pKey)
-: mStrm(0, 0, "UTF/MemoryStream")
+: m0c(pTarget), m10(*pKey), m1c(pProvider), mStrm(0, 0, "UTF/MemoryStream")
 {
-    m8 = 0;
-    m0c = pTarget;
-    if (pTarget != 0)
-        pTarget->v0();
-    m10 = *pKey;
-    m1c = (IProv*)pProvider;
-    if (pProvider != 0)
-        ((IRefC_s006b_47a0*)((char*)pProvider + 4))->v0();
     m54 = 0;
     m44 = 1;
     m48 = 0;
@@ -521,34 +534,39 @@ AsyncSave::AsyncSave(IRefC_s006b_47a0* pTarget, void* pProvider, Key3* pKey)
     mStrm.SetProperty(3, 15000.0f);
 }
 
+struct LocalHold {
+    ILocal* p;
+    LocalHold() : p(0) {}
+    ~LocalHold() { if (p) p->Release(); }
+};
+
 // @ 0x006b4a10
 bool AsyncSave::Finish(cJob* c)
 {
     void* data = mStrm.GetData();
     int   size = mStrm.Size();
-    ILocal* obj = 0;
-    if (!m1c->Make(&m10, (void**)&obj)) {
-        if (obj)
-            obj->Release();
+    LocalHold obj;
+    if (!m1c.p->Make(&m10, (void**)&obj.p, 3, 2, 1, 0)) {
         return false;
     }
-    ILocal2* p = obj->Get();
+    ILocal2* p = obj.p->Get();
     bool w = p->Write(data, size);
-    bool chk = obj->Check();
+    bool chk = obj.p->Check();
     bool res = (chk && w);
     mStrm.Flush();
-    if (obj) {
-        obj->Release();
-        obj = 0;
+    if (obj.p) {
+        ILocal* o = obj.p;
+        obj.p = 0;
+        o->Release();
     }
-    if (m0c) {
-        IRefC_s006b_47a0* t = m0c;
-        m0c = 0;
+    if (m0c.p) {
+        IRefC_s006b_47a0* t = m0c.p;
+        m0c.p = 0;
         t->v1();
     }
-    if (m1c) {
-        IRefC_s006b_47a0* t = (IRefC_s006b_47a0*)((char*)m1c + 4);
-        m1c = 0;
+    if (m1c.p) {
+        IRefC_s006b_47a0* t = (IRefC_s006b_47a0*)((char*)m1c.p + 4);
+        m1c.p = 0;
         t->v1();
     }
     c->SetResult(0);
@@ -613,7 +631,7 @@ bool JobBaseB::Complete()
         mgr->Unlock();
         return false;
     }
-    uint32_t kind = self->m1c->GetKind();
+    uint32_t kind = self->m1c.p->GetKind();
     bool pair;
     if (kind == 0x2a43bd44 || kind == 0x6492c68)
         pair = true;
