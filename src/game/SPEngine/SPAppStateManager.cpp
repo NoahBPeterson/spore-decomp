@@ -833,20 +833,35 @@ void cForwarder::Forward(int a, int b)
     p160->v6(a, b);
 }
 
+AutoRef* FUN_007e17a0(AutoRef** out, const AutoRef* first, const AutoRef* last, AutoRef* dst);   // 0x007e17a0 (callers' view)
+// Uninitialized copy of 8-byte ref entries (0x007e17a0), EASTL style: iterator objects and a placement copy per entry
+// (the ref's AddRef is vtable slot 1).
+struct RefIface_7e17a0 { virtual void s0(); virtual void AddRef(); };
+struct RefPtr_7e17a0 {
+    RefIface_7e17a0* p;
+    RefPtr_7e17a0(const RefPtr_7e17a0& o) : p(o.p) { if (p) p->AddRef(); }
+};
+struct RefEntry_7e17a0 {
+    RefPtr_7e17a0 ref;    // +0
+    uint32_t field4;      // +4
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct RefEntryIt_7e17a0 {
+    RefEntry_7e17a0* p;
+    RefEntryIt_7e17a0(RefEntry_7e17a0* q) : p(q) {}
+    RefEntry_7e17a0& operator*() const { return *p; }
+    RefEntryIt_7e17a0& operator++() { ++p; return *this; }
+    bool operator!=(const RefEntryIt_7e17a0& o) const { return p != o.p; }
+};
+
 // @ 0x007e17a0
-AutoRef* FUN_007e17a0(AutoRef** out, const AutoRef* first, const AutoRef* last, AutoRef* dst)
+RefEntryIt_7e17a0 RefEntryUninitCopy_7e17a0(RefEntryIt_7e17a0 first, RefEntryIt_7e17a0 last, RefEntryIt_7e17a0 dest)
 {
-    *out = dst;
-    for (; first != last; ++first) {
-        if (dst) {
-            dst->p = first->p;
-            AddRefObj(first->p);
-            dst->field4 = first->field4;
-        }
-        ++dst;
-        *out = dst;
-    }
-    return (AutoRef*)out;
+    RefEntryIt_7e17a0 result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) RefEntry_7e17a0(*first);
+    return result;
 }
 
 // @ 0x007e1830

@@ -862,16 +862,29 @@ SP::TItemListCopyView::TItemListCopyView(const TItemListCopyView& x) : TItemList
   ((TItemList*)this)->CopyRange((TItemListNode*)this, x.mpNext, (TItemList*)&x, allocator);
 }
 
+// Node allocation of the telemetry item map (0x007eb8d0): the value (key + item list copied by 0x007eb870) is
+// copy-constructed in place, then the link cleared.
+extern "C" void* __cdecl EAAllocNode_7eb8d0(unsigned n, const char* name, int a, int b, const char* file, int line);  // 0x00f473a0
+struct ItemList_7eb8d0 {
+  ItemList_7eb8d0(const ItemList_7eb8d0& o);   // 0x007eb870
+  uint32_t d[3];
+};
+struct ItemVal_7eb8d0 {
+  uint32_t key;
+  ItemList_7eb8d0 list;
+  static void* operator new(size_t, void* q) throw() { return q; }
+  static void operator delete(void*, void*) throw() {}
+};
+struct ItemNode_7eb8d0 { ItemVal_7eb8d0 v; void* mpNext; };
+struct ItemNodeAlloc_7eb8d0 { ItemNode_7eb8d0* DoAllocateNode(const ItemVal_7eb8d0& v); };
+
 // @ 0x007eb8d0
-extern "C" SP::TItemMapNode* MakeItemMapNode(const uint32_t* pKey)
+ItemNode_7eb8d0* ItemNodeAlloc_7eb8d0::DoAllocateNode(const ItemVal_7eb8d0& v)
 {
-  SP::TItemMapNode* pNode = (SP::TItemMapNode*)EAAlloc(sizeof(SP::TItemMapNode));
-  if (pNode) {
-    pNode->mKey = *pKey;
-    new (&pNode->mList) SP::TItemList();
-  }
-  pNode->mpNext = 0;
-  return pNode;
+  ItemNode_7eb8d0* n = (ItemNode_7eb8d0*)EAAllocNode_7eb8d0(sizeof(ItemNode_7eb8d0), "EASTL", 0, 0, ALLOC_FILE, 0xd1);
+  new (&n->v) ItemVal_7eb8d0(v);
+  n->mpNext = 0;
+  return n;
 }
 
 // @ 0x007eb950

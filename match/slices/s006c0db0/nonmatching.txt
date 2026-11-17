@@ -1,5 +1,4 @@
 006c0db0  218  PFRecordWrite ctor from blob; complete, equiv PASS (250/400 valid, 100% coverage). The four MemoryStream/FileStream members are called with the receiver in ECX; the FileStream field is 0x22c bytes so mbTriedToCreateFile/mnOpenCount land at +0x274/+0x278. The original EH prolog/frame is not reproduced.
-006c0ed0  129  PFRecordWrite dtor; EH frame + member dtor order differ
 006c1180  252  arena pointer fixup; memmove/order scheduling differs
 006c12e0  52   vector<0x38> destructor-iterator helper; CRT helper call shape differs
 006c1380  101  vector<0x38> clear; EH frame + dealloc schedule differ; equiv: PASS (now Vec38::Clear member, 748 valid inputs)

@@ -767,10 +767,16 @@ bool C59e80::CopyTo(RCArray* out)
     return true;
 }
 
+// The 0x70-byte object New70 creates; its constructor (0x00759c80) takes the owner's +0xc member.
+struct MorphObj70_75a620 {
+    MorphObj70_75a620(void* owner);   // 0x00759c80
+    char d[0x70];
+    static void* operator new(size_t n, const char* name, int a, int b, int c, int d);    // 0x00f473a0
+    static void operator delete(void* p, const char* name, int a, int b, int c, int d);
+};
+
 // @ 0x0075a620
 void* ClassX::New70()
 {
-    void* p = operator_new_graph(0x70);
-    if (p) FUN_00759c80(p);
-    return p;
+    return new (g_GraphicsTag, 0, 0, 0, 0) MorphObj70_75a620((char*)this + 0xc);
 }

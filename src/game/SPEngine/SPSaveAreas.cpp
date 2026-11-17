@@ -844,18 +844,18 @@ bool __cdecl SP_cAppSystem_CreateHTTPServer(uint32_t id, const wchar_t* sub, IRe
     return false;
 }
 
+// Destruction view of the node value (RefPair5, ~ at 0x006b1e20) as Nuke inlines it: b is released, then a.
+struct RefAHold5 { RefA5* p; ~RefAHold5() { if (p) p->ref.Release(); } };
+struct RefBHold5 { RefB5* p; ~RefBHold5() { if (p) p->Release(); } };
+struct RefPairView5 { RefAHold5 a; RefBHold5 b; };
+
 // @ 0x006b2aa0
 void SaveMap5::Nuke(RBNode5* n)
 {
   while (n != 0) {
     Nuke(n->left);
     RBNode5* right = n->right;
-    if (n->val.b != 0) {
-      n->val.b->Release();
-    }
-    if (n->val.a != 0) {
-      n->val.a->ref.Release();
-    }
+    ((RefPairView5*)&n->val)->~RefPairView5();
     EFree5(n);
     n = right;
   }

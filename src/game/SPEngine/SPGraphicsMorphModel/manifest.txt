@@ -6,3 +6,4 @@
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ??1Holder841Obj@@QAE@XZ  00758540  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ??0Val7ff0Obj@@QAE@PAURCObj@@PAH@Z  00757ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?FUN_007585c0@@YAPAUHolder841@@PAH@Z  007585c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMorphModel.cpp  ?New70@ClassX@@QAEPAXXZ  0075a620  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

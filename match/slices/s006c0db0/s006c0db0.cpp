@@ -204,18 +204,33 @@ void* PFRecordWrite::Ctor(u32 a, u32 b, u32 c, u32* key, void* parent_)
     return this;
 }
 
+// Destruction view of PFRecordWrite (0x006c0ed0): two interface bases (vtables at +0x00 and +0x20), a memory stream
+// (+0x24, ~ 0x93bde0) and a file stream (+0x48, ~ 0x931e70); the body closes the record first.
+struct PFRWBaseA_6c0ed0 {
+    virtual void a0();
+    int   refcount;              // +0x04
+    u32   type;                  // +0x08
+    u32   keyInst, keyType, keyGroup; // +0x0c
+    void* parent;                // +0x18
+    int   access;                // +0x1c
+    ~PFRWBaseA_6c0ed0() {}
+};
+struct PFRWBaseB_6c0ed0 { virtual void b0(); ~PFRWBaseB_6c0ed0() {} };
+struct PFRWMem_6c0ed0 { char d[0x24]; ~PFRWMem_6c0ed0(); };     // 0x93bde0
+struct PFRWFile_6c0ed0 { char d[0x22c]; ~PFRWFile_6c0ed0(); };  // 0x931e70
+struct PFRWClose_6c0ed0 { void Close(); };                     // 0x8dcbf0
+struct PFRecordWriteDtorView_6c0ed0 : PFRWBaseA_6c0ed0, PFRWBaseB_6c0ed0 {
+    PFRWMem_6c0ed0  mem;         // +0x24
+    PFRWFile_6c0ed0 file;        // +0x48
+    ~PFRecordWriteDtorView_6c0ed0();
+};
+
 // @ 0x006c0ed0  PFRecordWrite destructor
-void PFRecordWrite::Dtor()
+PFRecordWriteDtorView_6c0ed0::~PFRecordWriteDtorView_6c0ed0()
 {
-    vtbl0 = (void*)0x140a364;
-    vtbl20 = (void*)0x140a328;
     if (access != 0)
         ((void(__thiscall*)(void*, void*))(*(void***)parent)[0x3c / 4])(parent, this);
-    sub_8dcbf0(this);
-    sub_931e70(file);
-    sub_93bde0(mem);
-    vtbl20 = (void*)0x13f3a68;
-    vtbl0 = (void*)0x13effb8;
+    ((PFRWClose_6c0ed0*)this)->Close();
 }
 
 // ---------------------------------------------------------------------------

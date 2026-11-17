@@ -16,3 +16,4 @@
 ../src/game/SPEngine/SPAppStateManager.cpp  ?FUN_007e4b20@@YIXPAUcAppStateCmd@@PAXPAVcArguments_s007e_4260@ArgScript@EA@@@Z  007e4b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ?FUN_007e1b00@@YAPAUAutoRef@@PAU1@00@Z  007e1b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppStateManager.cpp  ??1SomeDesc@@QAE@XZ  007e1a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppStateManager.cpp  ?RefEntryUninitCopy_7e17a0@@YA?AURefEntryIt_7e17a0@@U1@00@Z  007e17a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

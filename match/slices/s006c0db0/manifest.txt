@@ -15,3 +15,4 @@ slices/s006c0db0/s006c0db0.cpp  ?m1160@BlendShape@@QAEIH@Z  006c1160
 slices/s006c0db0/s006c0db0.cpp  ?CtorCopy@Vec38@@QAEII@Z  006c1320
 slices/s006c0db0/s006c0db0.cpp  ?DtorRange2@Vec38@@QAEXII@Z  006c1350
 slices/s006c0db0/s006c0db0.cpp  ?StateFromGlobal@@YAHPAI@Z  006c1c30
+slices/s006c0db0/s006c0db0.cpp  ??1PFRecordWriteDtorView_6c0ed0@@QAE@XZ  006c0ed0  /O2 /MD /Gy /EHsc /TP /GS-

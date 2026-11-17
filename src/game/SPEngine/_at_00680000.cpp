@@ -1327,14 +1327,20 @@ void MapC2::FreeNodes(Node1480* p)
     }
 }
 
+// The node value FreeChain2 destroys (a string, then the T28 at +0x10): one unwind state covers the string.
+struct NodeVal15View {
+    SStrB first;                // +0x00
+    char pad[0x10 - 12];
+    T28 second;                 // +0x10
+};
+
 // @ 0x00681500
 void MapC0::FreeChain2(Node15* p)
 {
     while (p) {
         FreeChain2(p->mpDown);
         Node15* next = (Node15*)p->mpNext;
-        p->m24.~T28();
-        p->m14.~SStrB();
+        ((NodeVal15View*)&p->m14)->~NodeVal15View();
         EASTL_dealloc(p);
         p = next;
     }

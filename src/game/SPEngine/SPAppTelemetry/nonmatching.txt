@@ -12,7 +12,6 @@
 007eb7d0 55 eastl list range transfer - register/loop schedule differs; equiv: PASS (407 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 007eb820 60 eastl::vector<int>::resize - tail erase call shape differs; equiv: PASS (1049 valid inputs) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 007eb870 29 schedule: R48 (2026-11-17): rebuilt as a view class (TItemListCopyView) with a list-head base: native frame and size (87 B); four instructions are scheduled differently: retail does xor eax,eax before the two sentinel stores and stores and pushes the 1-byte allocator temp before the EH state store. About nine allocator spellings tried. | Earlier note: eastl list copy-ctor - inlined range copy schedule differs flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
-007eb8d0 96 eastl hash-node allocate - placement-new/list ctor inlining differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 007eb950 69 eastl hashtable::DoFreeNodes - inlined list dtor differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 007eb9e0 107 eastl hashtable::erase - inlined list dtor/loop differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 007ebba0 238 SP::cTelemetry::PrepareFlush: complete source, bucket walk plus per-item WriteUint64(system time) / WriteUint32(key, type, element count) serialization then erase()/DoFreeNodes(); loop schedule differs; equiv WEAK 50.4% cov (362 valid) [/O2 /MD /Gy /EHsc /TP /arch:SSE2] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2

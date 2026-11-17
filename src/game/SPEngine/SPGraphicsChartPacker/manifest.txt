@@ -11,3 +11,5 @@
 ../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?CopyElem16@@YAPAUElem16@@PAU1@00@Z  006df2d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?CopyRefPtr@@YAPAURefPtr@@PAU1@00@Z  006df700  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?CopyBackwardElem16@@YAPAUElem16@@PAU1@00@Z  006df340  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?ChartUninitCopy_6de850@@YA?AUChartIt_6de850@@U1@00@Z  006de850  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsChartPacker.cpp  ?ChartFillN_6de8f0@@YAXUChartIt_6de850@@IABUChartElem_6de850@@@Z  006de8f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

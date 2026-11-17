@@ -2,7 +2,6 @@
 006deee0  208  eastl::insertion_sort_simple<cClusterRect*>; same algorithm/shape, but cl copies the 52-byte value with rep movsd instead of the original per-field movss block and schedules the loop test differently
 006df170  77  eastl::make_heap<cClusterRect*>; identical make_heap/adjust_heap call shape, register assignment inside the parent loop differs
 006df280  13  intrusive refptr operator=; lock xadd release plus _InterlockedExchange reset, cl folds the decrement flag-test and schedules the tail differently; equiv: PASS (734 valid inputs, 100% coverage)
-006df3b0  87  eastl::vector<Elem16>::~vector; release loop + allocator free, EH frame and helper scheduling differ
 006df470  79  eastl::partial_sort<SortKeyObj**,SortKeyGreater>; make_heap/select/sort_heap shape matches, pointer register schedule differs
 006df530  79  eastl::partial_sort<SortKeyObj**,SortKeyLess>; mirrored variant, same schedule difference
 006df5a0  282  eastl::partial_sort<cClusterRect*>; make_heap/adjust_heap/sort_heap calls all present, value-copy and call-argument schedule differ

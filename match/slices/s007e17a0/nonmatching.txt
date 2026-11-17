@@ -1,4 +1,3 @@
-007e17a0  138  eastl uninitialized_copy<AutoRef>: real signature is (AutoRef** out, first, last, dst) - it writes the advanced dst back through the out pointer; SEH frame + helper schedule differ. equiv: WEAK (89 valid, 39.6% coverage, no mismatch)
 007e1830  145  eastl uninitialized_move/copy<AutoRef>; helper-call/EH frame schedule differs
 007e1950  138  hashtable rehash; bucket-walk codegen differs
 007e2ce0  390  cTransitionCommand instance dispatch; vtable/loop codegen differs; equiv: WEAK (40% coverage, member fix)

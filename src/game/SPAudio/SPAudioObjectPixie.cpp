@@ -457,21 +457,33 @@ void TrackVec::DoInsertValue(int* pos, int* value)
     v[2] = (int)nd + n * 0xc;
 }
 
+// Uninitialized copy of 0x20-byte track entries (0x00a3d810), EASTL style: iterator objects and a placement copy per
+// entry (three words, then the member at +0xc copied by 0x00a3d5b0).
+struct TrackMember_a3d810 {
+    TrackMember_a3d810(const TrackMember_a3d810& o);   // 0x00a3d5b0
+    int d[5];
+};
+struct TrackEntry_a3d810 {
+    int a, b, c;
+    TrackMember_a3d810 m;   // +0xc
+    static void* operator new(unsigned int, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct TrackIt_a3d810 {
+    TrackEntry_a3d810* p;
+    TrackIt_a3d810(TrackEntry_a3d810* q) : p(q) {}
+    TrackEntry_a3d810& operator*() const { return *p; }
+    TrackIt_a3d810& operator++() { ++p; return *this; }
+    bool operator!=(const TrackIt_a3d810& o) const { return p != o.p; }
+};
+
 // @ 0x00a3d810
-int** FUN_00a3d810(int** out, int* first, int* last, int dst, int* src)
+TrackIt_a3d810 TrackUninitCopy_a3d810(TrackIt_a3d810 first, TrackIt_a3d810 last, TrackIt_a3d810 dest)
 {
-    *out = (int*)dst;
-    for (; first != last; first += 8) {
-        int* p = *out;
-        if (p) {
-            p[0] = first[0];
-            p[1] = first[1];
-            p[2] = first[2];
-            FUN_00a3d5b0(first + 3);
-        }
-        *out = (int*)((char*)*out + 0x20);
-    }
-    return out;
+    TrackIt_a3d810 result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) TrackEntry_a3d810(*first);
+    return result;
 }
 
 // @ 0x00a3d8a0

@@ -981,18 +981,30 @@ void __fastcall FUN_006add30(void* self, void* a)
     ((Sub970*)self)->Do(x, y, a);
 }
 
+// Node allocation of 0x006adda0: the 0x3c-byte value (a key and a member copied by 0x006add30) is copy-constructed in
+// place, then the link at +0x3c cleared.
+struct NodeMember_6adda0 {
+    NodeMember_6adda0(const NodeMember_6adda0& o);   // 0x006add30
+    unsigned d[14];
+};
+struct NodeVal_6adda0 {
+    unsigned key;
+    NodeMember_6adda0 m;
+    static void* operator new(unsigned, void* p) throw() { return p; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct Node_6adda0 { NodeVal_6adda0 v; unsigned next; };
+struct NodeAlloc_6adda0 { Node_6adda0* DoAllocateNode(const NodeVal_6adda0& v); };
+
 // @ 0x006adda0
-void* __fastcall FUN_006adda0(void* a)
+Node_6adda0* NodeAlloc_6adda0::DoAllocateNode(const NodeVal_6adda0& v)
 {
-    void* n = ea_eastl_alloc(
+    Node_6adda0* n = (Node_6adda0*)ea_eastl_alloc(
         0x40, &vtbl_14093bc, 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
         0xd1);
-    if (n) {
-        *(void**)n = *(void**)a;
-        ((void(__fastcall*)(void*, void*))FUN_006add30)((char*)n + 4, (char*)a + 4);
-    }
-    *(int*)((char*)n + 0x3c) = 0;
+    new (&n->v) NodeVal_6adda0(v);
+    n->next = 0;
     return n;
 }
 

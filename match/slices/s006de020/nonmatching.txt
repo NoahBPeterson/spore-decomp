@@ -7,8 +7,6 @@
 006de580 169  heap sift-up for 0x34-byte elements; 13-dword block copies scheduled differently; equiv PASS
 006de5e0 278  image best-fit packer (thiscall); control flow + register allocation differ; equiv WEAK (48.5% cov)
 006de710 226  image best-fit packer variant (thiscall); control flow + register allocation differ; equiv PASS
-006de850 91  construct run of 0x10-byte refcounted elements; EH/frame differs; equiv WEAK (66.7% cov)
-006de8f0 71  fill run of 0x10-byte refcounted elements; EH/frame differs; equiv PASS
 006de980 88  heap sift-down wrapper (unsigned); call/argument shape differs; equiv PASS
 006de9f0 86  heap sift-down wrapper (signed); call/argument shape differs; equiv PASS
 006dea60 247  heap sift-down wrapper for 0x34-byte elements; takes the 0x34-byte record by value and forwards it to the sift-up helper; equiv: PASS 333/600 valid, 100% cov
