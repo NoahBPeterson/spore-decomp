@@ -7082,7 +7082,8 @@ void* cCommunity_s00bf_d9f0::Front()
   View* v = (View*)this;
   int* a = v->a;
   if (a == v->b) return 0;
-  return (void*)*a;
+  eastl::deque<void*>* d = (eastl::deque<void*>*)((char*)this + 0x230);
+  return *d->mItBegin.mpCurrent;
 }
 
 // @ 0x00bfec30
