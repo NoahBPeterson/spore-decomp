@@ -9,7 +9,7 @@
 00a58570 263 CollLess::Less(a,b): key comparator (type@8, float/int@0xc, string@0x10) with swap logic; string loop and branch layout differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (200 valid, 58.8% coverage)
 00a587a0 185 flags: /O2 /MD /Gy /EHsc /TP
 00a58950 99 flags: /O2 /MD /Gy /EHsc /TP
-00a589e0 90 flags: /O2 /MD /Gy /EHsc /TP | reserved for single-pass six-function trial; file owner audio; one repair launch
+00a589e0 90 flags: /O2 /MD /Gy /EHsc /TP
 00a58a70 103 flags: /O2 /MD /Gy /EHsc /TP
 00a58b00 98 flags: /O2 /MD /Gy /EHsc /TP
 00a58ba0 206 flags: /O2 /MD /Gy /EHsc /TP
