@@ -183,10 +183,10 @@ void __cdecl DevStop1();
 void __cdecl DevStop2();
 void __cdecl DevStop3();
 void __cdecl timeEndPeriod_(int);
+extern const unsigned int kTimeoutNone;                 // @ 0x140dca0 (EA::Thread::kTimeoutNone, 0xffffffff)
 namespace EA {
 namespace Thread {
 struct Mutex_s0075_ff50 {
-    void Lock(const char* name);   // @ 0x9221b0
     void Lock(const unsigned int* pTimeout);   // @ 0x9221b0 (EA::Thread::Mutex::Lock(const ThreadTime*))
     void Unlock();                 // @ 0x922270
 };
@@ -227,7 +227,7 @@ void __cdecl copy_layers(cLayerInfo_s0075_ff50* first, cLayerInfo_s0075_ff50* la
 namespace SP {
 struct MutexLock {
     EA::Thread::Mutex_s0075_ff50* mMutex;
-    MutexLock(EA::Thread::Mutex_s0075_ff50* m) : mMutex(m) { mMutex->Lock("Renderer"); }
+    MutexLock(EA::Thread::Mutex_s0075_ff50* m) : mMutex(m) { mMutex->Lock(&kTimeoutNone); }
     ~MutexLock() { mMutex->Unlock(); }
 };
 }
