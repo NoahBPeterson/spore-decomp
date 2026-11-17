@@ -67,6 +67,24 @@ extern void* vtbl_14094d0;
 extern void* vtbl_14094cc;
 struct XRBTree { void DoNukeSubtree(void* n); };
 struct Mutex2 { void dtor(); };   // EA::Thread::Mutex::~Mutex (0x922130)
+// the 0x006aebd0 object: two bases (vtables 0x13eb938 / 0x13ef094 restored on exit), the mutex at +0x10 and the
+// tree at +0x40, nuked from its root at +0x4c
+struct RCacheB0 { virtual void Slot0(); ~RCacheB0() {} };
+struct RCacheB1 { virtual void Slot0(); ~RCacheB1() {} };
+struct RCacheMutex { char mData[0x30]; ~RCacheMutex(); };   // 0x922130
+struct RCacheTree {
+    void* mAnchor[3];
+    void* mpRoot;          // +0x0c
+    void* mRest[2];
+    void DoNukeSubtree(void* n);
+    ~RCacheTree() { DoNukeSubtree(mpRoot); }
+};
+struct RCacheObj_6aebd0 : RCacheB0, RCacheB1 {
+    char pad08[8];
+    RCacheMutex mMutex;    // +0x10
+    RCacheTree  mTree;     // +0x40
+    ~RCacheObj_6aebd0();
+};
 // ---- items of slice s006ae940 end
 
 // @ 0x006ae060
@@ -310,15 +328,8 @@ void FUN_006aea90()
 {}
 
 // @ 0x006aebd0
-void __fastcall FUN_006aebd0(void* self)
+RCacheObj_6aebd0::~RCacheObj_6aebd0()
 {
-    *(void**)self = &vtbl_14094d0;
-    *(void**)((char*)self + 4) = &vtbl_14094cc;
-    void* anchor = *(void**)((char*)self + 0x4c);
-    ((XRBTree*)((char*)self + 0x40))->DoNukeSubtree(anchor);
-    ((Mutex2*)((char*)self + 0x10))->dtor();
-    *(void**)((char*)self + 4) = &vtbl_13ef094;
-    *(void**)self = &vtbl_13eb938;
 }
 
 // @ 0x006aec60

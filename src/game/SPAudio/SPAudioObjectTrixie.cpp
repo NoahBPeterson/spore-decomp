@@ -17,7 +17,7 @@ extern char DAT_01409070[], DAT_01453aac[], DAT_01453a40[], DAT_01453aa4[], DAT_
 extern char DAT_01453b7c[], DAT_01453b90[];
 
 // ---- items of slice s00a40cd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void operator delete(void*);
+void operator delete(void*) throw();
 void operator delete[](void*);
 #define CAT2(a, b) a##b
 #define CAT(a, b) CAT2(a, b)
@@ -588,6 +588,22 @@ VecTE::VecTE(const VecTE& src)
     mpEnd = out;
 }
 
+// a default item built on the stack for the reallocating insert: its atom vector starts empty and frees its heap
+// block when the temporary goes away (also if the insert throws)
+struct tAtomVecTemp {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    int   mA1;
+    int   mA2;
+    tAtomVecTemp() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~tAtomVecTemp() { void* lb = mpBegin; if (lb != 0 && ((int*)lb)[-1] != 0) operator delete(lb); }
+};
+struct tItemTemp {
+    u32 a, b, c;
+    tAtomVecTemp v;     // +0x0c
+};
+
 // @ 0x00a3fb00
 void VecTItem::PushBackDefault()
 {
@@ -601,13 +617,8 @@ void VecTItem::PushBackDefault()
         }
         return;
     }
-    tItem local;
-    local.v.mpBegin = 0;
-    local.v.mpEnd = 0;
-    local.v.mpCapacity = 0;
-    DoInsertAtom(e, &local);
-    void* lb = local.v.mpBegin;
-    if (lb != 0 && ((int*)lb)[-1] != 0) operator delete(lb);
+    tItemTemp local;
+    DoInsertAtom(e, (const tItem*)&local);
 }
 
 // @ 0x00a3fb90

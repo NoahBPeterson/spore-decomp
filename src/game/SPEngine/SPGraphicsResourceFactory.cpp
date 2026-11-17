@@ -403,12 +403,17 @@ struct IUnknown32_s0076_4df0 {
 struct AtomicInt_s0076_4df0 { int v; int operator=(int x) { return _InterlockedExchange((volatile long*)&v, x); } };
 struct Resource_s0076_4df0 : IUnknown32_s0076_4df0 {
     AtomicInt_s0076_4df0 mRefCount; int k0, k1, k2;
-    Resource_s0076_4df0() { mRefCount = 0; k0 = 0; k1 = 0; k2 = 0; }
+    Resource_s0076_4df0() { volatile long* r = (volatile long*)&mRefCount.v; _InterlockedExchange(r, 0); k0 = 0; k1 = 0; k2 = 0; }
 };
-struct cResourceBase_s0076_4df0 : Resource_s0076_4df0 { int* cb; cResourceBase_s0076_4df0() { cb = 0; } };
+struct cResourceBase_s0076_4df0 : Resource_s0076_4df0 { int* cb; int f18; cResourceBase_s0076_4df0() { cb = 0; f18 = 0; } ~cResourceBase_s0076_4df0() {} };
+// the source reference at +0x1c: taken through vtable slot 0 as it is stored, dropped (slot 1) on unwind
+struct D765Ref {
+    IUnknown32_s0076_4df0* mp;
+    D765Ref(void* p) : mp((IUnknown32_s0076_4df0*)p) { if (p) mp->u0(); }
+    ~D765Ref() { if (mp) mp->u1(); }
+};
 struct D765f10 : cResourceBase_s0076_4df0 {
-    int f18;
-    void* f1c;
+    D765Ref f1c;
     D765f10(void* arg);
 };
 struct RefIface { virtual void AddRef(); virtual void Release(); };
@@ -2583,11 +2588,8 @@ bool AsyncReqC::Start(JobRefL* out)
 
 // @ 0x00765f10
 D765f10::D765f10(void* arg)
+    : f1c(arg)
 {
-    f18 = 0;
-    f1c = arg;
-    if (arg)
-        ((IUnknown32_s0076_4df0*)arg)->u0();
     f18 = 0;
 }
 

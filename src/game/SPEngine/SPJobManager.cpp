@@ -1199,13 +1199,19 @@ cJobLink* cJobManager::GetFreeLink()
     return pLink;
 }
 
+// a scoped lock on the job manager's mutex: locked on construction, unlocked when it goes out of scope (also on
+// unwind); FreeJobUnderLock takes the lock object itself
+struct JobMutexLock {
+    EA::Thread::Mutex_s0068_f670* mpMutex;
+    JobMutexLock(EA::Thread::Mutex_s0068_f670* p) : mpMutex(p) { mpMutex->Lock((unsigned int)&g_MutexFlags); }
+    ~JobMutexLock() { mpMutex->Unlock(); }
+};
+
 // @ 0x006900b0
 void cJobManager::GetJobStatus(cJobData* pJob)
 {
-    EA::Thread::Mutex_s0068_f670* pMutex = &mMutex;
-    pMutex->Lock((unsigned int)&g_MutexFlags);
-    FreeJobUnderLock(&pMutex, pJob);
-    pMutex->Unlock();
+    JobMutexLock lock(&mMutex);
+    FreeJobUnderLock(&lock.mpMutex, pJob);
 }
 
 // @ 0x00690120

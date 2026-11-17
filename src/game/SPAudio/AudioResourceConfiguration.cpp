@@ -167,7 +167,7 @@ extern bool  f_00692720(void* reader, void* dst, int z);
 extern bool  f_00692740(void* reader, void* dst, int z);
 extern bool  f_00692760(void* reader, void* dst, int z);
 extern void* f_00f473a0(int size, const char* name, int a, int b, const char* file, int line);
-extern void  f_00f47380(void* p);                                        // operator delete
+extern void  f_00f47380(void* p) throw();                                // operator delete
 extern void  f_00542b80(void* dst, void* src);                           // Variant::operator=
 extern void* f_008de1a0(void);                                           // Eapd::Debug::ObjectError
 extern void  __stdcall f_006a2b80(void* self, unsigned n);               // vector resize (ret 4)
@@ -228,8 +228,32 @@ struct FactoryConfiguration_s00a1_96f0 {
     void* mField64;     // 0x64
 
     FactoryConfiguration_s00a1_96f0();  // 0x00a19d60 (FactoryConfiguration::FactoryConfiguration_s00a1_96f0)
-    ~FactoryConfiguration_s00a1_96f0();  // 0x00a19d60 (FactoryConfiguration::FactoryConfiguration_s00a1_96f0)
     void AddLegacyPropertyTypes();  // 0x00a18d90 (FactoryConfiguration::AddLegacyPropertyTypes)
+};
+// the destructor's view of FactoryConfiguration: a base restoring vtable 0x13effb8, the mutex at +0x10, the
+// property-type tree at +0x40 (nuked from its root) and the name string at +0x5c
+struct FactoryConfigBase { virtual void Slot0(); void* mField04; void* mField08; char mPad[4]; ~FactoryConfigBase() {} };
+struct FactoryConfigMutex { char mData[0x30]; ~FactoryConfigMutex(); };
+struct FactoryConfigTree {
+    void* mNodeParent;       // +0x00
+    void* mAnchor;           // +0x04
+    void* mField08;          // +0x08
+    void* mpRoot;            // +0x0c
+    u8    mField10; char mPad[3];
+    void* mField14;          // +0x14
+    char  mPad2[4];
+    void  DoNukeSubtree(void* node);      // 0x009a9600
+    ~FactoryConfigTree() { DoNukeSubtree(mpRoot); }
+};
+struct FactoryConfigString {
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    ~FactoryConfigString() { if (((char*)mpCapacity - (char*)mpBegin) > 1 && mpBegin != 0) f_00f47380(mpBegin); }
+};
+struct __declspec(novtable) FactoryConfigurationObj : FactoryConfigBase {
+    FactoryConfigMutex  mMutex;   // 0x10
+    FactoryConfigTree   mTree;    // 0x40
+    FactoryConfigString mName;    // 0x5c
+    ~FactoryConfigurationObj();
 };
 extern void f_00a17820(ResConfig* self, void* p, void* q);
 extern void f_00a18910(ResConfig* self);
@@ -1345,15 +1369,8 @@ FactoryConfiguration_s00a1_96f0::FactoryConfiguration_s00a1_96f0()
 }
 
 // @ 0x00a19e00
-FactoryConfiguration_s00a1_96f0::~FactoryConfiguration_s00a1_96f0()
+FactoryConfigurationObj::~FactoryConfigurationObj()
 {
-    if (((char*)mField64 - (char*)mField5c) > 1 && mField5c != 0) {
-        f_00f47380(mField5c);
-    }
-    // eastl::rbtree<...>::DoNukeSubtree(mField4c) on the tree at +0x40
-    mTree.DoNukeSubtree(mField4c);
-    mMutex.dtor();
-    mVtbl = (void*)0x013effb8;
 }
 
 // @ 0x00a19e90

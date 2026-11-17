@@ -789,7 +789,26 @@ public:
     void*    mpBucketBuffer;             // +0x34
     bool Initialize(unsigned n, int a2, int a3);           // 0xa67d90
     bool InitTables(uint32_t a, uint32_t b, uint32_t c);   // 0xa669d0
-    void DestroyAllocator();                               // 0xa67d30
+};
+// the destructor's view of FixedHashtableAllocator: the fixed pool base (destroyed by its out-of-line destructor,
+// 0xa531b0) and the bucket buffer, returned to the init allocator first
+class FixedPoolView_s00a6_70b0 {
+public:
+    NamedAllocator mInitAllocator;       // +0x00
+    NamedAllocator mOverflowAllocator;   // +0x0c
+    uint32_t  mnNodeSize;                // +0x18
+    void*     mpPoolBegin;               // +0x1c
+    void*     mpPoolEnd;                 // +0x20
+    void*     mpHead;                    // +0x24
+    uint32_t  mnCurrentSize;             // +0x28
+    uint32_t  mnPeakSize;                // +0x2c
+    ~FixedPoolView_s00a6_70b0();         // 0xa531b0
+};
+class FixedHashtableAllocatorObj_s00a6_70b0 : public FixedPoolView_s00a6_70b0 {
+public:
+    uint32_t mnBucketCount;              // +0x30
+    void*    mpBucketBuffer;             // +0x34
+    ~FixedHashtableAllocatorObj_s00a6_70b0();
 };
 class Hashtable {
 public:
@@ -891,7 +910,21 @@ public:
     TaskNode_s00a6_70b0* mpTail;      // +0x04
     char      mAlloc;      // +0x08 (IInternalAllocator)
     char      pad0c[0x14 - 9];
-    void Destroy();        // 0xa67e80
+};
+// the destructor's view of TaskList: a circular node list whose nodes go back to the internal allocator at +8; the
+// allocator member restores its base vtable (0x1403934) when destroyed
+struct TaskListAllocator {
+    void*       mpVtbl;   // +0x00
+    int         mA;       // +0x04
+    const char* mpName;   // +0x08
+    ~TaskListAllocator() { mpVtbl = (void*)0x1403934; }
+};
+class TaskListObj_s00a6_70b0 {
+public:
+    TaskNode_s00a6_70b0* mpHead;      // +0x00
+    TaskNode_s00a6_70b0* mpTail;      // +0x04
+    TaskListAllocator    mAlloc;      // +0x08
+    ~TaskListObj_s00a6_70b0();
 };
 class System_s00a6_70b0 {
 public:
@@ -1372,12 +1405,11 @@ void* GetVoiceManager()
 }
 
 // @ 0x00a67d30
-void FixedHashtableAllocator_s00a6_70b0::DestroyAllocator()
+FixedHashtableAllocatorObj_s00a6_70b0::~FixedHashtableAllocatorObj_s00a6_70b0()
 {
     if (mpBucketBuffer) {
         AllocatorFree(this, mpBucketBuffer);
     }
-    Destroy();
 }
 
 // @ 0x00a67d90
@@ -1411,17 +1443,13 @@ bool FixedHashtableAllocator_s00a6_70b0::Initialize(unsigned n, int a2, int a3)
 }
 
 // @ 0x00a67e80
-void TaskList_s00a6_70b0::Destroy()
+TaskListObj_s00a6_70b0::~TaskListObj_s00a6_70b0()
 {
-    if (mpHead != (TaskNode_s00a6_70b0*)this) {
-        TaskNode_s00a6_70b0* n = mpHead;
-        do {
-            TaskNode_s00a6_70b0* next = n->mpNext;
-            AllocatorFree(&mAlloc, n);
-            n = next;
-        } while (n != (TaskNode_s00a6_70b0*)this);
+    for (TaskNode_s00a6_70b0* n = mpHead; n != (TaskNode_s00a6_70b0*)this; ) {
+        TaskNode_s00a6_70b0* cur = n;
+        n = n->mpNext;
+        AllocatorFree(&mAlloc, cur);
     }
-    *(void**)(&mAlloc) = (void*)0x1403934;
 }
 
 // @ 0x00a67f60

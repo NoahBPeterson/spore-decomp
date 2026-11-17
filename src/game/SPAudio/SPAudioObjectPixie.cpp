@@ -35,10 +35,32 @@ struct TrackVec {
     char padC[8];
     int  m14;        // +0x14
     TeString mStr;   // +0x18
-    TrackVec* Ctor(int a, const char* b);         // 0x00a3d630
     void DoInsertValue(int* pos, int* value);     // 0x00a3d6e0
     void Erase(int* a, int* b);                   // 0x011e0744 (eastl vector erase)
     void Dtor();                                  // 0x00a3d690
+};
+// the constructor's view of TrackVec: the track vector (destroyed on unwind if the name cannot be built), the
+// track kind, and the name string built from `b`
+struct TrackVecStorage {
+    int* mpBegin;    // +0x00
+    int* mpEnd;      // +0x04
+    int* mpCapacity; // +0x08
+    char padC[8];
+    TrackVecStorage() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~TrackVecStorage();
+};
+struct TrackName {
+    void* mpBegin;     // +0x00
+    void* mpEnd;       // +0x04
+    void* mpCapacity;  // +0x08
+    TrackName(const char* s) : mpBegin(0), mpEnd(0), mpCapacity(0) { ((TeString*)this)->RangeInitialize(s); }
+    ~TrackName();
+};
+struct TrackVecObj {
+    TrackVecStorage mVec;   // +0x00
+    int  m14;               // +0x14
+    TrackName mStr;         // +0x18
+    TrackVecObj(int a, const char* b);
 };
 // ---- items of slice s00a3cbb0 end
 
@@ -378,17 +400,9 @@ struct PdSys {
 // ---- items of slice s00a3ec00 end
 
 // @ 0x00a3d630
-TrackVec* TrackVec::Ctor(int a, const char* b)
+TrackVecObj::TrackVecObj(int a, const char* b)
+    : m14(a), mStr(b)
 {
-    mpBegin = 0;
-    mpEnd = 0;
-    mpCapacity = 0;
-    m14 = a;
-    mStr.mpBegin = 0;
-    mStr.mpEnd = 0;
-    mStr.mpCapacity = 0;
-    mStr.RangeInitialize(b);
-    return this;
 }
 
 // @ 0x00a3d6e0

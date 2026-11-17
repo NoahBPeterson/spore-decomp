@@ -21,3 +21,5 @@
 ../src/game/SPEngine/SPCheatManager.cpp  ??0CheatReporter@@QAE@HPAUIU01@EA@@@Z  0067e100  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPCheatManager.cpp  ??0ConsoleStream@@QAE@PAUIU01@EA@@@Z  0067e9a0  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPCheatManager.cpp  ??1PairBObj@@QAE@XZ  0067e830  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?NewKeyNode@@YGPAVKeyNode@@PBD@Z  0067e890  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPCheatManager.cpp  ?NewPairA@@YGPAVPairA@@ABUArc01@EA@@@Z  0067e610  /O2 /MD /Gy /GS- /EHsc /TP /Isrc/game/include

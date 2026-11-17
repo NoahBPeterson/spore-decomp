@@ -3,7 +3,6 @@
 0069ecc0 105 rbtree cClassInfo node allocation: complete; allocator call + thiscall 0x0069e880 value ctor (ecx=node+0x1c, src+0xc); equiv PASS (219 valid, 100% coverage)
 0069edb0 310 rbtree cClassInfo DoCopySubtree: complete (left spine + right iteration via thiscall AllocB); equiv WEAK (183 valid, 51.6% coverage)
 0069ec20 144  decode one blob entry through the virtual IO object: complete; thiscall resize on this+0x54, read into that buffer, CRC32 writes the out param [equiv: WEAK: 262 valid inputs, 19.4% coverage]
-0069f0b0  61  cCOMSerializer destructor body: complete behaviour (2 vptr stores, buffer free, smart-ref release, 2 tree nukes), but the compiler EH frame/state layout differs; equiv PASS: 669 valid inputs, 100% coverage
 0069e3a0  142  cObjectDatabase::OpenIStream complete (alloc+inline ctor, AddRef guard, virtual open, release); frame/regalloc differ: orig keeps `out` in memory with zero in ebx, ours enregisters out [equiv: PASS: 204 valid inputs, 90.8% coverage]
 0069e470  146  cObjectDatabase::OpenOStream complete, same shape as OpenIStream; regalloc/frame differ [equiv: WEAK: 193 valid inputs, 90.9% coverage]
 0069e5d0  97  cObjectDatabase::HasKey complete (vector GetKeys via db vslot 12, eastl::find, free buffer); orig caches vector begin/end in esi/edi across find, ours reloads [equiv: UNSUPPORTED: 0/400 inputs valid, db vtable chain faults]

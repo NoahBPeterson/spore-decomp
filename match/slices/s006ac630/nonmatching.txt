@@ -7,7 +7,6 @@
 006acc60  452  Registry::Register: complete; EH unwind states/inlined smartptr differ
 006ace70  304  Registry::Unregister: complete; EH unwind states differ
 006ad070  59  RemoveRegistrationCallback: complete; reg alloc differs
-006ad180  112  vector<AutoRef>::push_back(null): complete; DoInsertValue call shape differs
 006ad270  147  RegList::ReleaseAll: complete; mutex guard/EH shape differs; difftest PASS after fixing the RegList layout (4 bytes padding before the Mutex: it is at +0x120, not +0x11c)
 006ad350  98  RegList::Reset: complete; guard/EH shape differs; difftest WEAK after fixing the RegList layout (Mutex at +0x120, not +0x11c)
 006ad410  296  RegList::Add: complete; loop/register shape differs; difftest WEAK after fixing the RegList layout (Mutex at +0x120, not +0x11c)

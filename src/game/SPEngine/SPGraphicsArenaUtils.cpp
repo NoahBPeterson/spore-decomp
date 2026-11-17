@@ -57,12 +57,30 @@ struct EditorResource2 : EditorResource {
 };
 extern "C" long __cdecl _InterlockedExchange(long volatile* target, long value);
 #pragma intrinsic(_InterlockedExchange)
+// the property list's constructor view: a reference-counted base (vtable 0x13ebcdc, count cleared atomically, fields zeroed; destroyed
+// if the rest throws), then its own vtable and the owner reference at +0x1c taken through vtable slot 0
+struct PropertyListBase {
+    virtual void Slot0();
+    volatile long field04;   // +0x04 (atomic reference count)
+    u32   f08, f0c, f10, f14, f18; // +0x08
+    PropertyListBase() { volatile long* r = &field04; _InterlockedExchange(r, 0); f08 = 0; f0c = 0; f10 = 0; f14 = 0; f18 = 0; }
+    ~PropertyListBase() {}
+};
+struct IPropertyListOwner { virtual void AddRef(); virtual void Release(); };
+struct PropertyListOwnerRef {
+    IPropertyListOwner* mp;
+    PropertyListOwnerRef(void* p) : mp((IPropertyListOwner*)p) { if (p != 0) mp->AddRef(); }
+    ~PropertyListOwnerRef() { if (mp != 0) mp->Release(); }
+};
+struct PropertyListObj : PropertyListBase {
+    PropertyListOwnerRef field1c;  // +0x1c
+    PropertyListObj(void* p);
+};
 struct PropertyList {
     void* vtbl;              // +0x00
     volatile long field04;   // +0x04 (atomic reference count)
     u32   f08, f0c, f10, f14, f18; // +0x08
     void* field1c;           // +0x1c
-    PropertyList(void* p);
 };
 typedef void  (__thiscall* FixedVectorInsertFn)(void* vec, int* pos, const int* value);
 typedef void  (__thiscall* ArenaAddObjectFn)(void* arena, void* a, u32 handle, void* b);
@@ -154,15 +172,9 @@ EditorResource2::~EditorResource2()
 }
 
 // @ 0x006c2240
-PropertyList::PropertyList(void* p)
+PropertyListObj::PropertyListObj(void* p)
+    : field1c(p)
 {
-    vtbl = (void*)0x13ebcdc;
-    _InterlockedExchange(&field04, 0);
-    f08 = 0; f0c = 0; f10 = 0; f14 = 0; f18 = 0;
-    vtbl = (void*)0x140a5bc;
-    field1c = p;
-    if (p != 0)
-        ((void(__thiscall*)(void*))(*(void***)p)[0])(p);
     f18 = 0;
 }
 

@@ -4,3 +4,4 @@
 ../src/game/SPEngine/SPGraphicsArenaUtils.cpp  ?CivComm_GetStateIconName@@YAHH@Z  00e043c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsArenaUtils.cpp  ??1EditorResource@@QAE@XZ  006c2120  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsArenaUtils.cpp  ??1EditorResource2@@QAE@XZ  006c2170  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsArenaUtils.cpp  ??0PropertyListObj@@QAE@PAX@Z  006c2240  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
