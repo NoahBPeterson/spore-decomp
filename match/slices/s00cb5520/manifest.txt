@@ -1,0 +1,1 @@
+slices/s00cb5520/s00cb5520.cpp  ?SetObject@Owner_cb5520@@QAEXPAURefObject_cb5520@@@Z  00cb5520  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
