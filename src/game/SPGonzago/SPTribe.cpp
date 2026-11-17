@@ -4810,7 +4810,9 @@ void __thiscall cTribe_s00c8_fbb0::UpdateRoboTribeness()
 {
     if (mb334)
         return;
-    if ((uint32_t)FUN_00b5b800() + (-0x01654c01) <= 1)
+    int mode = (int)FUN_00b5b800();
+    bool inRange = (mode >= 0x1654c01) && (mode <= 0x1654c02);
+    if (inRange)
         return;
 
     int32_t count;
