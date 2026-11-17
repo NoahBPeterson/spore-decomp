@@ -42,18 +42,16 @@ struct Raster {
 
 // ---------------------------------------------------------------- shared types
 struct RefCountedAt8 {
-    virtual void r0();
-    int r1;
+    virtual void AddRef();             // +0x0
+    virtual void Release();            // +0x4
     int mRefCount;                     // +0x8
-    void AddRef();
-    void Release();
 };
 struct Elem3 {                         // 0xc, intrusive refcounted pointer + 2 words
     RefCountedAt8* p;                  // +0x0
     void* a;                           // +0x4
     void* b;                           // +0x8
     Elem3() {}
-    Elem3(const Elem3& o) : p(o.p), a(o.a), b(o.b) { if (p) p->AddRef(); }
+    Elem3(const Elem3& o) : p(o.p) { if (p) p->AddRef(); a = o.a; b = o.b; }
     ~Elem3() { if (p) p->Release(); }
 };
 struct Vec3 {
@@ -68,15 +66,13 @@ struct Vec3 {
 // @ 0x760ea0
 Elem3* Vec3::insert(Elem3* position, const Elem3& value)
 {
-    int idx = (int)((char*)position - (char*)mpBegin) / 0xc;
+    int idx = position - mpBegin;
     if (position == mpEnd && mpEnd != mpCapacity) {
-        mpEnd = (Elem3*)((char*)mpEnd + 0xc);
-        if (position)
-            new (position) Elem3(value);
+        new (mpEnd++) Elem3(value);
     } else {
         DoInsertValue(position, value);
     }
-    return (Elem3*)((char*)mpBegin + idx);
+    return mpBegin + idx;
 }
 
 // ------------------------------------------------------------------- 0x760f50 (dtor)

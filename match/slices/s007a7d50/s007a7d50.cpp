@@ -101,7 +101,7 @@ struct cTextRenderer {
     char  mCriticalSection[24];// +0x168
 
     void Init();               // 007a84d0
-    void CtorBody();           // 007a8390
+    cTextRenderer* CtorBody();           // 007a8390
     void Release();            // 007a8530
     void EnsureBuffers();      // 007a8310
     void SetStyle(int style);  // 007a82a0
@@ -156,22 +156,36 @@ void FUN_007a8360()
     }
 }
 
+struct GraphicsAllocBase {
+    static void* operator new(unsigned size, const char* name, int flags, unsigned debugFlags,
+                              const char* file, int line);   // 0x00f473a0
+    static void operator delete(void* p, const char* name, int flags, unsigned debugFlags,
+                                const char* file, int line); // 0x00f47410
+};
+struct CtorLayoutObj : GraphicsAllocBase {
+    char pad000[0x37c];
+    CtorLayoutObj();                                    // 0x00890f50
+};
+struct CtorImplObj : GraphicsAllocBase {
+    char pad000[0xa000];
+    CtorLayoutObj layout;                               // +0xa000
+    void* pad_a37c[2];
+};
+struct CtorStyleObj : GraphicsAllocBase {
+    char pad000[0x278];
+    CtorStyleObj();                                     // 0x008941d0
+};
+
 // @ 0x007a8390  SP::cTextRenderer::cTextRenderer
-void cTextRenderer::CtorBody()
+cTextRenderer* cTextRenderer::CtorBody()
 {
     cTextRenderer* self = this;
     self->mInitialized = false;
-    void* impl = EASTL_allocator_allocate(0xa384, "Graphics", 0, 0, 0, 0);
-    if (impl)
-        ((LayoutObj*)((char*)impl + 0xa000))->init_00890f50();
+    CtorImplObj* impl = new ("Graphics", 0, 0, 0, 0) CtorImplObj();
     self->mRenderImpl = (TextRenderWare*)impl;
-    void* layout = EASTL_allocator_allocate(0x37c, "Graphics", 0, 0, 0, 0);
-    if (layout)
-        ((LayoutObj*)layout)->init_00890f50();
+    CtorLayoutObj* layout = new ("Graphics", 0, 0, 0, 0) CtorLayoutObj();
     self->mLayout = (Layout*)layout;
-    void* style = EASTL_allocator_allocate(0x278, "Graphics", 0, 0, 0, 0);
-    if (style)
-        ((TextStyleObj*)style)->ctor_008941d0();
+    CtorStyleObj* style = new ("Graphics", 0, 0, 0, 0) CtorStyleObj();
     self->mTextStyle = (TextStyleStub*)style;
     self->mStyleChanged = true;
 
@@ -185,6 +199,7 @@ void cTextRenderer::CtorBody()
     self->mField08 = -1;
     self->mBuffer0 = 0;
     self->mBuffer1 = 0;
+    return self;
 }
 
 // @ 0x007a84d0

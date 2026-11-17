@@ -1,4 +1,3 @@
-00760ea0  138  Vec3::insert fast path: EH state + construct shape differ from the original vector::insert | R49: reserved for byte-exact matching.
 00760f50   84  destructor: base vtable stores / vector teardown now use the 0xc-stride Vec12 EraseRange/Destroy; store order fixed; equiv PASS | R49: reserved for byte-exact matching.
 00760fd0  204  setByKey: search + temp AutoRefCount assign shape | R49: reserved for byte-exact matching.
 00761240   43  V1240::set: local temp register allocation (esi vs edx lifetime)
