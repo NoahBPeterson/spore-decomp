@@ -1533,6 +1533,8 @@ struct EventMsg {
         if (ref)
             ObjRelease(ref);
     }
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
 };
 struct EventQueue {
     void Push(const EventMsg& m);  // 0x00a2e260
@@ -9636,19 +9638,24 @@ struct Ref4_s00a2_dfe0 {
     {
         if (p) ((void (__thiscall*)(void*))vc_s00a2_d790(p, 4))(p);
     }
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+
+struct Ref4Vec_a2dfe0 {
+    void* mAlloc;                               // +0x00
+    Ref4_s00a2_dfe0* mpEnd;                     // +0x04
+    Ref4_s00a2_dfe0* mpCapacity;                // +0x08
 };
 
 // @ 0x00a2dfe0
 void AudioSystem::FUN_00a2dfe0(void* p)
 {
-    uchar* vec = (uchar*)this;
-    Ref4_s00a2_dfe0* cur = *(Ref4_s00a2_dfe0**)(vec + 4);
-    if (cur < *(Ref4_s00a2_dfe0**)(vec + 8)) {
-        *(Ref4_s00a2_dfe0**)(vec + 4) = cur + 1;
-        if (cur) new (cur) Ref4_s00a2_dfe0(*(const Ref4_s00a2_dfe0*)p);
-    } else {
-        ((XF*)vec)->FUN_00a2ac20(cur, p);
-    }
+    Ref4Vec_a2dfe0* v = (Ref4Vec_a2dfe0*)this;
+    if (v->mpEnd < v->mpCapacity)
+        new (v->mpEnd++) Ref4_s00a2_dfe0(*(const Ref4_s00a2_dfe0*)p);
+    else
+        ((XF*)this)->FUN_00a2ac20(v->mpEnd, p);
 }
 
 // @ 0x00a2e060
@@ -9738,16 +9745,20 @@ void* AudioSystem::FUN_00a2e1b0(void* out, void* node, void* parent)
     return out;
 }
 
+struct EventMsgVec_a2e260 {
+    void* mAlloc;                               // +0x00
+    EventMsg* mpEnd;                            // +0x04
+    EventMsg* mpCapacity;                       // +0x08
+};
+
 // @ 0x00a2e260
 void AudioSystem::FUN_00a2e260(void* p)
 {
-    EventMsg* cur = *(EventMsg**)((uchar*)this + 4);
-    if (cur < *(EventMsg**)((uchar*)this + 8)) {
-        *(EventMsg**)((uchar*)this + 4) = cur + 1;
-        if (cur) new (cur) EventMsg(*(const EventMsg*)p);
-    } else {
-        ((XF*)this)->FUN_00a2af30(cur, p);
-    }
+    EventMsgVec_a2e260* v = (EventMsgVec_a2e260*)this;
+    if (v->mpEnd < v->mpCapacity)
+        new (v->mpEnd++) EventMsg(*(const EventMsg*)p);
+    else
+        ((XF*)this)->FUN_00a2af30(v->mpEnd, p);
 }
 
 // @ 0x00a2e2f0
