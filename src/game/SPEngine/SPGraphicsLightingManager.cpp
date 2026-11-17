@@ -14,6 +14,8 @@
 #include "SP/cLightingConfig.h"
 #include <string.h>
 #include "EA/Swarm/cIMap.h"
+#include "EA/Swarm/cIDecalManager.h"
+#include <stddef.h>
 #include "cSPColorRGB.h"
 #include "EA/Variant.h"
 #include "cSPVector3.h"
@@ -1228,7 +1230,7 @@ struct cLightingWorld_s0070_c040 {
 // ---- items of slice s0070ced0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 void* __cdecl EAlloc(size_t n, const char* name, int a, unsigned b, const char* file, int line); // 0x00f473a0
-void  __cdecl EFree(void* p);                                                                    // 0x00f47380
+void  __cdecl EFree(void* p) throw();                                                                    // 0x00f47380
 void* __cdecl GAlloc(size_t n, unsigned align, int a, const char* name, int b, int c, int d, int e); // 0x00f473d0
 void* operator new(size_t n, unsigned align, int a, const char* name, int b, int c, int d, int e); // 0x00f473d0
 void operator delete(void* p, unsigned align, int a, const char* name, int b, int c, int d, int e); // 0x00f47410
@@ -1239,8 +1241,8 @@ struct HM { void Assign(const void*); };                          // 0x0041cb40
 struct HD3D { void Op(int); };                                    // 0x00705db0
 struct H63c { void Free(); };                                     // 0x0070a070
 struct H608 { void Free(); };                                     // 0x00702500
-struct H44c { void Free(); };                                     // 0x00706a40
-struct HList { void Dtor(); };                                    // 0x00620230
+struct H44c { void Free() throw(); };                                     // 0x00706a40
+struct HList { void Dtor() throw(); };                                    // 0x00620230
 struct HDeque { void Dtor(); };                                   // 0x0070c040
 struct HMap { void* Find(void* key); };                           // 0x0074f200
 struct HNuke { void Nuke(void* node); };                          // 0x00707690
@@ -3931,37 +3933,132 @@ cLightingWorld_s0070_ced0::cLightingWorld_s0070_ced0(char* debugName)
     InitAtmBuffer(p + 0xf0, 0, 0x150);
 }
 
-// @ 0x0070d6d0
-cLightingWorld_s0070_ced0::~cLightingWorld_s0070_ced0()
-{
-    unsigned char* p = _b;
-    ((H63c*)(p + 0x63c))->Free();
-    if ((*(int*)(p + 0x628) != 0) && (*(int*)(*(int*)(p + 0x628) - 4) != 0))
-        EFree(*(void**)(p + 0x628));
-    ((H608*)(p + 0x608))->Free();
-    ((HList*)(p + 0x600))->Dtor();
-    if ((*(int*)(p + 0x5e8) != 0) && (*(int*)(*(int*)(p + 0x5e8) - 4) != 0))
-        EFree(*(void**)(p + 0x5e8));
-    if ((*(int*)(p + 0x5d4) != 0) && (*(int*)(*(int*)(p + 0x5d4) - 4) != 0))
-        EFree(*(void**)(p + 0x5d4));
-    if ((*(int*)(p + 0x5b4) != 0) && (*(int*)(*(int*)(p + 0x5b4) - 4) != 0))
-        EFree(*(void**)(p + 0x5b4));
-    ((H608*)(p + 0x594))->Free();
-    {
-        int e = *(int*)(p + 0x478);
-        if ((e != 0) && (e != *(int*)(p + 0x488)))
-            EFree((void*)e);
+// Retail lifetime view: the canonical header's relaid member offsets are not yet
+// verified. These offsets are shared by the retail constructor and destructor.
+// The two integer grids use the vector<int> cleanup (0x004e1bf0); the
+// directional-light pointer vector uses its folded cleanup at 0x007a41a0.
+template <typename T> struct LWVectorView {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    eastl::vector_allocator_slot<eastl::sp_vector_allocator, sizeof(eastl::sp_vector_allocator)> mAllocator;
+    ~LWVectorView() {
+        for (T* p = mpBegin; p < mpEnd; ++p)
+            p->~T();
+        if (mpBegin && ((int*)mpBegin)[-1] != 0)
+            EFree(mpBegin);
     }
-    ((H44c*)(p + 0x44c))->Free();
-    if (*(void**)(p + 0x448) != 0)
-        ((VObj_s0070_ced0*)*(void**)(p + 0x448))->f3();
-    ((HDeque*)(p + 0x428))->Dtor();
-    if (*(void**)(p + 0x24c) != 0)
-        ((VObj_s0070_ced0*)*(void**)(p + 0x24c))->f1();
-    if ((*(int*)(p + 0x4c) != 0) && (*(int*)(*(int*)(p + 0x4c) - 4) != 0))
-        EFree(*(void**)(p + 0x4c));
-    *(void**)(p + 0x04) = (void*)0x013ec458;
-    *(void**)(p + 0x00) = (void*)0x013eb938;
+};
+struct LWMapRef {
+    EA::Swarm::cIMap* mp;
+    ~LWMapRef() { if (mp) mp->Release(); }
+};
+struct LWDecalRef {
+    EA::Swarm::cIDecalManager* mp;
+    // Release is slot +0x0c; the generated interface has not named it yet.
+    ~LWDecalRef() { if (mp) mp->slot_3(); }
+};
+struct LWLocalLights { char d[0x20]; ~LWLocalLights() { ((HDeque*)this)->Dtor(); } };
+struct LWLightingInfoEntries { char d[0x2c]; ~LWLightingInfoEntries() { ((H44c*)this)->Free(); } };
+struct LWFreeLightingInfoEntries {
+    SP::cLightingInfoInternal** mpBegin;
+    SP::cLightingInfoInternal** mpEnd;
+    SP::cLightingInfoInternal** mpCapacity;
+    eastl::allocator mOverflowAllocator;
+    void* mpPoolBegin;
+    unsigned mUnknown14;
+    SP::cLightingInfoInternal* mBuffer[64];
+    ~LWFreeLightingInfoEntries() {
+        if (mpBegin != 0 && mpBegin != mpPoolBegin)
+            EFree(mpBegin);
+    }
+};
+template <typename Entry> struct LWLightingCache { char d[0x20]; ~LWLightingCache() { ((H608*)this)->Free(); } };
+struct LWGlobalSamples { char d[8]; ~LWGlobalSamples() { ((HList*)this)->Dtor(); } };
+struct LWLocalLightCells { char d[0x20]; ~LWLocalLightCells() { ((H63c*)this)->Free(); } };
+struct LWGlobalLights {
+    LWVectorView<SP::cSphereLight> mLightArray;
+    LWVectorView<unsigned> mIDs;
+    unsigned mModCount;
+};
+struct LWRefCountInterface {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual ~LWRefCountInterface() {}
+};
+// cILightingWorld is an abstract extension of IRefCount. Its empty destructor
+// reaches the three-slot IRefCount vtable, 0x013eb938 (0x00a16a20).
+struct __declspec(novtable) LWLightingWorldInterface : LWRefCountInterface {
+    virtual unsigned AddLight(const cSPVector3&, const cSPColorRGB&, float, float) = 0;
+    virtual void UpdateLightPosition(unsigned, const cSPVector3&) = 0;
+    virtual void RemoveLight(unsigned) = 0;
+    virtual SP::cLightingInfo* CreateLightingInfo(float, const cSPVector3&) = 0;
+    virtual void UpdateLightingInfo(float, const cSPVector3&, SP::cLightingInfo*) = 0;
+    virtual void DestroyLightingInfo(SP::cLightingInfo*) = 0;
+    virtual void ApplyGlobalState(const SP::cViewer*) = 0;
+    virtual void SetTransform(const cSPTransform&) = 0;
+    virtual void GetTransform(cSPTransform*) = 0;
+    virtual void SetLightingState(unsigned) = 0;
+    virtual unsigned GetLightingState() = 0;
+    virtual SP::cPropertyList* GetLightingStateConfig() = 0;
+    virtual void SetLightDecalManager(EA::Swarm::cIDecalManager*) = 0;
+    virtual const char* DebugName() = 0;
+};
+struct LWRefCountBase {
+    virtual ~LWRefCountBase() {}
+    virtual int AddRef();
+    virtual int Release();
+    virtual int GetRefCount() const;
+    int mRefCount;
+};
+struct __declspec(novtable) LWDtorView : LWLightingWorldInterface, LWRefCountBase {
+    char pad0c[0x4c - 0x0c];
+    LWVectorView<rw::graphics::Light*> mRWDirLights;
+    char pad60[0x24c - 0x60];
+    LWMapRef mGroundMap;
+    char pad250[0x428 - 0x250];
+    LWLocalLights mLocalLights;
+    LWDecalRef mDecalManager;
+    LWLightingInfoEntries mLightingInfoEntries;
+    LWFreeLightingInfoEntries mFreeLightingInfoEntries;
+    char pad590[4];
+    LWLightingCache<SP::cEnvLightingCacheEntry> mEnvLightingCache;
+    LWVectorView<int> mEnvGridMap;
+    char pad5c8[0x5d4 - 0x5c8];
+    LWGlobalLights mGlobalLights;
+    LWGlobalSamples mGlobalSamples;
+    LWLightingCache<SP::cLocalLightingCacheEntry> mLocalLightingCache;
+    LWVectorView<int> mLocalLightGrid;
+    LWLocalLightCells mLocalLightCells;
+    int mLastUpdatedLocalSample;
+    bool mLocalLightingUpdateNeeded;
+    char pad661[0x670 - 0x661];
+    virtual int AddRef();
+    virtual int Release();
+    ~LWDtorView();
+};
+typedef char LWVectorSizeCheck[sizeof(LWVectorView<int>) == 0x14 ? 1 : -1];
+typedef char LWGlobalLightsSizeCheck[sizeof(LWGlobalLights) == 0x2c ? 1 : -1];
+typedef char LWFixedSizeCheck[sizeof(LWFreeLightingInfoEntries) == 0x118 ? 1 : -1];
+typedef char LWWorldSizeCheck[sizeof(LWDtorView) == 0x670 ? 1 : -1];
+typedef char LWOffset_mRWDirLights[offsetof(LWDtorView, mRWDirLights) == 0x4c ? 1 : -1];
+typedef char LWOffset_mGroundMap[offsetof(LWDtorView, mGroundMap) == 0x24c ? 1 : -1];
+typedef char LWOffset_mLocalLights[offsetof(LWDtorView, mLocalLights) == 0x428 ? 1 : -1];
+typedef char LWOffset_mDecalManager[offsetof(LWDtorView, mDecalManager) == 0x448 ? 1 : -1];
+typedef char LWOffset_mLightingInfoEntries[offsetof(LWDtorView, mLightingInfoEntries) == 0x44c ? 1 : -1];
+typedef char LWOffset_mFreeLightingInfoEntries[offsetof(LWDtorView, mFreeLightingInfoEntries) == 0x478 ? 1 : -1];
+typedef char LWOffset_mEnvLightingCache[offsetof(LWDtorView, mEnvLightingCache) == 0x594 ? 1 : -1];
+typedef char LWOffset_mEnvGridMap[offsetof(LWDtorView, mEnvGridMap) == 0x5b4 ? 1 : -1];
+typedef char LWOffset_mGlobalLights[offsetof(LWDtorView, mGlobalLights) == 0x5d4 ? 1 : -1];
+typedef char LWOffset_mGlobalSamples[offsetof(LWDtorView, mGlobalSamples) == 0x600 ? 1 : -1];
+typedef char LWOffset_mLocalLightingCache[offsetof(LWDtorView, mLocalLightingCache) == 0x608 ? 1 : -1];
+typedef char LWOffset_mLocalLightGrid[offsetof(LWDtorView, mLocalLightGrid) == 0x628 ? 1 : -1];
+typedef char LWOffset_mLocalLightCells[offsetof(LWDtorView, mLocalLightCells) == 0x63c ? 1 : -1];
+
+
+// @ 0x0070d6d0
+LWDtorView::~LWDtorView()
+{
 }
 
 // @ 0x0070d850
