@@ -1,0 +1,1 @@
+slices/s00ad2670/s00ad2670.cpp  ?CastTo_ad2670@@YAPAXABURef_ad2670@@@Z  00ad2670  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
