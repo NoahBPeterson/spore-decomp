@@ -1,0 +1,1 @@
+slices/s00985c30/s00985c30.cpp  ?CallManager_985c30@@YAPAXXZ  00985c30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
