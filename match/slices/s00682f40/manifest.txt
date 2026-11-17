@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00682f40/s00682f40.cpp  ?AddRef@RefCounted@@QAEHXZ  00683f10  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00682f40/s00682f40.cpp  ?InsertPair@MapY@@QAEPAPAUNodeY@@PAPAU2@PAU2@PAHD@Z  00683500  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00682f40/s00682f40.cpp  ?FreeChain@ClsF@@QAEXPAUNodeF@@@Z  00683160  /O2 /MD /Gy /EHsc /TP /GS-

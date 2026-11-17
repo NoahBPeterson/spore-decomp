@@ -106,8 +106,8 @@ struct NodeF {
     NodeF* mpRight;     // +0x00
     NodeF* mpNext;      // +0x04
     uint32_t pad[3];    // +0x08
-    Buf mBuf;           // +0x14
-    MapC2 mMap;         // +0x24
+    struct Inner { Buf mBuf; MapC2 mMap; };
+    Inner mInner;       // +0x14
 };
 struct ClsF { void FreeChain(NodeF* p); };
 
@@ -238,7 +238,7 @@ void ClsF::FreeChain(NodeF* p) {
     while (p) {
         FreeChain(p->mpRight);
         NodeF* next = p->mpNext;
-        p->~NodeF();
+        p->mInner.~Inner();
         EASTL_dealloc(p);
         p = next;
     }
