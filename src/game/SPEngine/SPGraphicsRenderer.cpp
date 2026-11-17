@@ -825,94 +825,70 @@ void cRenderer_s0075_de80::SubRender(int a, int lo, int hi, void* extra, char fl
     }
 }
 
+struct LayerLock_s0075_de80 {
+    EA::Thread::Mutex_s0075_de80* mMutex;
+    LayerLock_s0075_de80(EA::Thread::Mutex_s0075_de80* m) : mMutex(m) { mMutex->Lock((const void*)0x140dca0); }
+    ~LayerLock_s0075_de80() { mMutex->Unlock(); }
+};
+
+__forceinline char* FindLayerEntry_s0075_de80(char* p, char* e, unsigned id)
+{
+    while (p != e && id > *(unsigned*)(p + 4))
+        p += 0x14;
+    return p;
+}
+
 // @ 0x0075e090
 void* cRenderer_s0075_de80::Layer(unsigned id)
 {
-    mMutex.Lock((const void*)0x140dca0);
-    char* p = LayerBegin(this);
+    LayerLock_s0075_de80 lock(&mMutex);
+    char* b = LayerBegin(this);
     char* e = LayerEnd(this);
-    if (p != e) {
-        while (*(unsigned*)(p + 4) < id) {
-            p += 0x14;
-            if (p == e)
-                break;
-        }
-        if (p != e && *(unsigned*)(p + 4) == id) {
-            void* r = *(void**)p;
-            mMutex.Unlock();
-            return r;
-        }
-    }
-    mMutex.Unlock();
-    return 0;
+    char* p = FindLayerEntry_s0075_de80(b, e, id);
+    if (p == LayerEnd(this) || id != *(unsigned*)(p + 4))
+        return 0;
+    return *(void**)p;
+
 }
 
 // @ 0x0075e130
 unsigned cRenderer_s0075_de80::SetInfoFlags(unsigned id, unsigned f)
 {
-    mMutex.Lock((const void*)0x140dca0);
-    char* p = LayerBegin(this);
+    LayerLock_s0075_de80 lock(&mMutex);
+    char* b = LayerBegin(this);
     char* e = LayerEnd(this);
-    if (p != e) {
-        while (*(unsigned*)(p + 4) < id) {
-            p += 0x14;
-            if (p == e)
-                break;
-        }
-        if (p != e && *(unsigned*)(p + 4) == id) {
-            unsigned old = *(unsigned*)(p + 0xc);
-            *(unsigned*)(p + 0xc) = old | f;
-            mMutex.Unlock();
-            return old;
-        }
-    }
-    mMutex.Unlock();
-    return 0;
+    char* p = FindLayerEntry_s0075_de80(b, e, id);
+    if (p == LayerEnd(this) || id != *(unsigned*)(p + 4))
+        return 0;
+    unsigned old = *(unsigned*)(p + 0xc);
+    *(unsigned*)(p + 0xc) = old | f;
+    return old;
 }
 
 // @ 0x0075e1e0
 unsigned cRenderer_s0075_de80::ClearInfoFlags(unsigned id, unsigned f)
 {
-    mMutex.Lock((const void*)0x140dca0);
-    char* p = LayerBegin(this);
+    LayerLock_s0075_de80 lock(&mMutex);
+    char* b = LayerBegin(this);
     char* e = LayerEnd(this);
-    if (p != e) {
-        while (*(unsigned*)(p + 4) < id) {
-            p += 0x14;
-            if (p == e)
-                break;
-        }
-        if (p != e && *(unsigned*)(p + 4) == id) {
-            unsigned old = *(unsigned*)(p + 0xc);
-            *(unsigned*)(p + 0xc) = old & ~f;
-            mMutex.Unlock();
-            return old;
-        }
-    }
-    mMutex.Unlock();
-    return 0;
+    char* p = FindLayerEntry_s0075_de80(b, e, id);
+    if (p == LayerEnd(this) || id != *(unsigned*)(p + 4))
+        return 0;
+    unsigned old = *(unsigned*)(p + 0xc);
+    *(unsigned*)(p + 0xc) = old & ~f;
+    return old;
 }
 
 // @ 0x0075e290
 unsigned cRenderer_s0075_de80::GetInfoFlags(unsigned id)
 {
-    mMutex.Lock((const void*)0x140dca0);
-    char* p = LayerBegin(this);
+    LayerLock_s0075_de80 lock(&mMutex);
+    char* b = LayerBegin(this);
     char* e = LayerEnd(this);
-    if (p != e) {
-        while (*(unsigned*)(p + 4) < id) {
-            p += 0x14;
-            if (p == e)
-                break;
-        }
-        if (p != e && *(unsigned*)(p + 4) == id) {
-            unsigned f = *(unsigned*)(p + 0xc);
-            mMutex.Unlock();
-            return f;
-        }
-    }
-    mMutex.Unlock();
-    return 0;
+    char* p = FindLayerEntry_s0075_de80(b, e, id);
+    if (p == LayerEnd(this) || id != *(unsigned*)(p + 4))
+        return 0;
+    return *(unsigned*)(p + 0xc);
 }
 
 // @ 0x0075e330
@@ -1192,11 +1168,10 @@ bool cRenderer_s0075_ff50::ClearLayer(unsigned int layerNumber)
     cLayerInfo_s0075_ff50* it = v->mpBegin;
     cLayerInfo_s0075_ff50* last = v->mpEnd;
     unsigned int n = layerNumber;
-    while (it != last) {
-        if (n <= it->mLayerNumber) break;
+    while (it != last && n > it->mLayerNumber)
         it = (cLayerInfo_s0075_ff50*)((char*)it + 0x14);
-    }
-    if (it != last && n == it->mLayerNumber) {
+    if (it != v->mpEnd && n == it->mLayerNumber) {
+        _ReadWriteBarrier();
         if ((char*)(it + 1) < (char*)v->mpEnd)
             copy_layers(it + 1, v->mpEnd, it);
         v->mpEnd = (cLayerInfo_s0075_ff50*)((char*)v->mpEnd - 0x14);
@@ -1214,9 +1189,7 @@ cLayerInfo_s0075_ff50* LayerVector::insert(cLayerInfo_s0075_ff50* position, cons
 {
     int idx = (int)(position - mpBegin);
     if (position == mpEnd && mpEnd != mpCapacity) {
-        mpEnd = mpEnd + 1;
-        if (position)
-            new (position) cLayerInfo_s0075_ff50(value);
+        ::new (mpEnd++) cLayerInfo_s0075_ff50(value);
     } else {
         DoInsertValue(position, value);
     }

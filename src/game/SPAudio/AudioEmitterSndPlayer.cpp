@@ -695,6 +695,37 @@ void EmitterSndPlayer2::Tick(int, float v)
             m - 4, v, 0);
 }
 
+struct VSlots_s00a1_14a0 {
+    virtual void slot0();
+    virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
+    virtual void slot5();
+    virtual void slot6();
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void slot23();
+    virtual void SetSlot60(float v);
+    virtual void SetSlot64(float v);
+    virtual void slot26();
+    virtual void SetSlot6c(float v);
+};
+
 // @ 0x00a11f50
 void EmitterSndPlayer_s00a1_14a0::UpdateParameters(float, bool force)
 {
@@ -725,17 +756,17 @@ void EmitterSndPlayer_s00a1_14a0::UpdateParameters(float, bool force)
             *(float*)(m + 0xd54) = *(float*)(m + 0xd50) * *(float*)(m + 0xd30);
         else
             *(float*)(m + 0xd54) = *(float*)(m + 0xd30);
-        ((void(__thiscall*)(void*, float))Vt()[0x64 / 4])(this, *(float*)(m + 0xd54));
+        ((VSlots_s00a1_14a0*)this)->SetSlot64(*(float*)(m + 0xd54));
     }
 
     if (force || (*(uint32_t*)(m + 0xd88) & 0xc)) {
         float x = (*(int*)(m + 0xd24) < 2) ? *(float*)(m + 0xd2c)
                                             : *(float*)(m + 0xd58) * *(float*)(m + 0xd2c);
-        ((void(__thiscall*)(void*, float))Vt()[0x60 / 4])(this, x);
+        ((VSlots_s00a1_14a0*)this)->SetSlot60(x);
     }
 
     if (force || (*(uint32_t*)(m + 0xd88) & 8))
-        ((void(__thiscall*)(void*, float))Vt()[0x6c / 4])(this, *(float*)(m + 0xd58));
+        ((VSlots_s00a1_14a0*)this)->SetSlot6c(*(float*)(m + 0xd58));
 }
 
 // @ 0x00a12120
