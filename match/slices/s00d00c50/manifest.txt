@@ -1,0 +1,1 @@
+slices/s00d00c50/s00d00c50.cpp  ?Wrapper_d00c50@@YA_NPAX0@Z  00d00c50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

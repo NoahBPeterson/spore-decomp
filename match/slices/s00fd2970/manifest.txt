@@ -1,0 +1,1 @@
+slices/s00fd2970/s00fd2970.cpp  ?SetValue_fd2970@@YAXI@Z  00fd2970  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

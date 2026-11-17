@@ -1,0 +1,1 @@
+slices/s00c32a40/s00c32a40.cpp  ?Wrapper_c32a40@@YA_NPAX0@Z  00c32a40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

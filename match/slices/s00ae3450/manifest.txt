@@ -1,0 +1,1 @@
+slices/s00ae3450/s00ae3450.cpp  ?Wrapper_ae3450@@YA_NPAX0@Z  00ae3450  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
