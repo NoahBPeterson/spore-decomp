@@ -496,18 +496,26 @@ void* Layered::MethodDC90()
 }
 
 // @ 0x0080dcd0
+struct LayerShiftRecord {
+    u8  mFlag;
+    i32 mValue;
+    i32 mLimit;
+};
+struct LayerApplyRecord {
+    u8  mFlag;
+    i32 mDelta;
+};
 void __stdcall FUN_0080dcd0(void* a, i32 b, u8 c)
 {
-    u8 local_c[8];
-    *(i32*)(local_c + 4) = 10000;
-    *(i32*)(local_c + 8) = 0xffffd8f0;
-    local_c[0] = 1;
-    VisitTree(a, (void*)FUN_0080d6d0, local_c);
-    i32 d = b - *(i32*)(local_c + 4);
-    u8 local14[8];
-    local14[0] = c;
-    *(i32*)(local14 + 4) = d;
-    if (d != 0) VisitTree(a, (void*)FUN_0080d670, local14);
+    LayerShiftRecord query;
+    query.mValue = 10000;
+    query.mLimit = 0xffffd8f0;
+    query.mFlag = 1;
+    VisitTree(a, (void*)FUN_0080d6d0, &query);
+    LayerApplyRecord apply;
+    apply.mFlag = c;
+    apply.mDelta = b - query.mValue;
+    if (apply.mDelta != 0) VisitTree(a, (void*)FUN_0080d670, &apply);
 }
 
 // @ 0x0080dd50

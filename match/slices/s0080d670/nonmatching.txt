@@ -6,7 +6,6 @@
 0080dbb0 151  complete; early-out gate on +0x258 added; virtual call register schedule differs
 0080dc50  49  complete; vtable slot 0x144/0x30 call schedule differs
 0080dc90  47  complete; vtable slot 0x144/0x34 call schedule differs
-0080dcd0  76  complete; two VisitWindowTreeDepthFirst passes / record layout differ
 0080dd50  75  complete; scalar local avoids /GS cookie; branch layout differs
 0080dda0  96  complete; refcount/vtable call schedule differs
 0080de20  61  complete; ModelManager call/bit-clear schedule differs
