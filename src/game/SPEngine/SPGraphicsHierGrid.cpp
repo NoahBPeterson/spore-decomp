@@ -1299,16 +1299,31 @@ void __thiscall HierGridStub::Remove(unsigned index)
 }
 
 // @ 0x00702f60
+// The temporary is a real hashtable object: copy-constructed (0x702a10), swapped in, then destroyed inline (nodes
+// freed by 0x702660, bucket array freed; both nothrow).
+void CellFree_702f60(void* p) throw();   // 0xf47380
+struct CellMapTmp_702f60 {
+    unsigned m0;             // +0x00
+    void**   mpBuckets;      // +0x04
+    unsigned mnBucketCount;  // +0x08
+    unsigned mnElementCount; // +0x0c
+    unsigned m10, m14, m18;  // +0x10..0x18
+    unsigned mAllocator;     // +0x1c
+    CellMapTmp_702f60(const CellMap& src);                    // 0x702a10
+    void DoFreeNodes(void** buckets, unsigned n) throw();     // 0x702660
+    ~CellMapTmp_702f60() {
+        DoFreeNodes(mpBuckets, mnBucketCount);
+        mnElementCount = 0;
+        if (mnBucketCount > 1)
+            CellFree_702f60(mpBuckets);
+    }
+};
+
 CellMap& __thiscall CellMap::Assign(const CellMap& src)
 {
     if (this != &src) {
-        CellMap tmp;
-        tmp.CopyConstruct(src);
+        CellMapTmp_702f60 tmp(src);
         ((SwapStub*)this)->swapWith((SwapStub*)&tmp);
-        HashTable_ClearBuckets((void**)tmp.mpBuckets, tmp.mnBucketCount);
-        tmp.m18 = 0;
-        if (tmp.mnBucketCount > 1)
-            operator delete(tmp.mpBuckets);
     }
     return *this;
 }

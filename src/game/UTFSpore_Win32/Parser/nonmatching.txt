@@ -12,7 +12,6 @@
 00843320 667 cParser::LookupName: complete (':' mTable8c lookup, mScopeOffsets loop through eastl_min, mTableAc bare fallback, mIncludeHandler->Resolve vcall; find() 0x842790 takes a string8* key because its callee dereferences the key, and the string8 empty sentinel is 0x1667bac). 672 diff / 809B vs 804B: ours materialises bFound/pResult and builds the range strings through an inline helper instead of the retail direct-return flow, so the frame is 0x3c vs 0x30 and the register colours differ. flags /O2 /MD /Gy /EHsc /TP /GS- [equiv: WEAK 172/400 valid, 52.7% coverage]
 00844270 615 SubstituteParameters: complete; allocation/string-build scheduling differs (inline string8 range ctor, throw paths); difftest WEAK (204 valid, 5.8% coverage: random text rarely contains a well-formed &name; no mismatch)
 00844780 120 cIfCommand::Execute: complete; vcall arg setup / BoolVec push_back scheduling differs
-00844860 53 cMacroDefinition ctor: complete; store order of string8 empty-init differs
 00844ac0 290 vector<char>::insert(range) 4-arg: complete; structure close but frame/branch layout differs
 00844c40 366 cDefineCommand::Execute: complete; name reloaded from MainArguments in original, inline ctor scheduling
 00844ec0 23 cParser::ParseEnd: complete; trailing eax load (mArgs field) scheduled earlier than original

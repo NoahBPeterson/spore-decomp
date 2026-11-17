@@ -14,4 +14,3 @@
 00a63a50  209  FindOrInsert18: rbtree hint-insert; original uses ebp/esi/edi roles I cannot reproduce from source [equiv FAIL 5/5, harness fault]
 00a63c30   42  EapdMapBase::Init (map ctor): only the a3/a4/a5 argument load ordering differs [equiv PASS 400 valid, 100.0% cov]
 00a63c90   94  EapdAssetManager::Init: large ctor; field write ordering/register allocation differ [equiv PASS 400 valid, 100.0% cov]
-00a63d20   81  EapdAssetManager dtor: nested DestroyAll + vftable stores; scheduling differs [equiv FAIL 5/5, harness/SEH frame fault]

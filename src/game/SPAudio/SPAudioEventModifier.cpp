@@ -206,7 +206,7 @@ struct RefCountBase {
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitive_s00a3_8e40 : RefCountBase, IEventModifier {
+struct __declspec(novtable) cEventModifierPrimitive_s00a3_8e40 : RefCountBase, IEventModifier {
     ResourceKey mKey;                 // +8
     AutoRefConfig mConfiguration;     // +0x14
     cEventModifierPrimitive_s00a3_8e40(const char* name);   // 0xa3a530
@@ -253,13 +253,14 @@ int cEventModifierPrimitive_s00a3_8e40::Release() { return --mRefCount; }
 }
 namespace SP {
 namespace Audio {
+void __cdecl PrimFree_a39710(void* p) throw();   // 0x00f47380 (operator delete[])
 struct PrimVector {
     cEventModifierPrimitive_s00a3_8e40** mpBegin;
     cEventModifierPrimitive_s00a3_8e40** mpEnd;
     cEventModifierPrimitive_s00a3_8e40** mpCapacity;
     int mAlloc;
     PrimVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
-    ~PrimVector() { if (mpBegin) operator delete[](mpBegin); }
+    ~PrimVector() { if (mpBegin) PrimFree_a39710(mpBegin); }
     void resize(unsigned n);   // 0xa39f30
     void DoInsertValue(cEventModifierPrimitive_s00a3_8e40** pos, unsigned n, cEventModifierPrimitive_s00a3_8e40** value); // 0xa39a40
 };
@@ -858,7 +859,7 @@ bool cEventModifier_s00a3_8e40::CommandResolve(Command_s00a3_8e40* cmd)
 }}  // namespace SP::Audio
 
 // @ 0x00a39710
-SP::Audio::cEventModifier::~cEventModifier()
+SP::Audio::cEventModifier_s00a3_8e40::~cEventModifier_s00a3_8e40()
 {}
 
 // @ 0x00a39770

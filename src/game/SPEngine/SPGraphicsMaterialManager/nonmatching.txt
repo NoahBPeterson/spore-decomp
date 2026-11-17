@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 006e5520 97 SP::DirectShaderDispatchCallback complete; register allocation and if/else branch order of the texture-bind loop differ; difftest PASS (g_spriteDispatch mapped to 0x16fa604) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
-006e56b0 126 ShaderState dtor complete; original reloads vs[i]/ps[i] after the null test (cmp mem,0) where mine keeps it in a register flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 006e5870 359 Float3 vector fill-insert complete (EASTL DoInsertValues); copy-helper arg scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
 006e5a30 273 flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS-; uint8 fixed_vector fill-insert complete; only ecx differs (original preserves the incoming ecx via an extra push/pop stack slot, ours clobbers it); difftest FAIL-KEPT register ecx, all calls/memory match; chk size 339 vs 408 with remaining branch/spill layout differences
 006e5bd0 156 ShaderState::Reset complete; erase loop is strength-reduced in mine, original keeps separate src/dst increments flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2
@@ -9,8 +8,6 @@
 0070e4e0 123 graphics resource rebuild; vector/call shape differs; equiv WEAK (712 valid, 18.2% cov)
 0070e5e0 88 graphics resource release; fine register/order differences
 0070e6b0 41 other: R48 (2026-11-17): MakeHashNode; a node type with a constructor plus an EAlloc placement new and matching placement delete reproduces the EH frame and both unwind slots (149 vs 120 B), but cl splits the null path into a second epilogue, uses immediate zeros where retail uses xor edi,edi, and orders the slots differently. | Earlier note: hash-node constructor; EH frame missing
-0070e8c0 72 uninitialized_copy<AutoRefCount>; EH frame/order differs
-0070e9a0 69 uninitialized_fill_n<AutoRefCount>; EH frame/order differs
 0070ea70 47 uninitialized_copy with atomic refcount; spill/order differs
 0070eac0 39 fill with atomic refcount; deferred-release shape differs
 0070eb30 33 fill_n with atomic refcount; register allocation differs
@@ -28,7 +25,6 @@
 007106d0 114 vector::assign(first,last); helper roles (ReallocRef/copy/move) guessed, slot order off
 00711070 63 vector::resize(uint32_t); inlined resize(n,value) / DoInsertValues call shape not reproduced
 007110f0 63 vector::resize(uint32_t) second instantiation; same shape mismatch
-00711170 28 vector::push_back() no-argument; grow path's temp + atomic release not reproduced
 00711220 69 vector::resize(uint32_t); inlined resize(n,value_type()) call shape and slot order not reproduced
 00711400 69 cMaterialManager::GetTexturesFromMaterial; atomic AutoRefCount assignment dance not reproduced
 00711630 104 cMaterialManager::GetExternalReferenceKeys; Key temp/loop counter live in memory in original (frame 4 bytes larger) [equiv: WEAK]

@@ -85,9 +85,10 @@ struct SprVec {
     }
     void clear() { erase(begin(), end()); }
 };
-struct Res {
-    void** vtbl;
-    void Release() { ((void(__stdcall*)(Res*))vtbl[2])(this); }
+struct Res {                       // COM resource (IDirect3D*): Release is vtable slot 2, __stdcall
+    virtual long __stdcall QueryInterface(const void* iid, void** out);
+    virtual unsigned long __stdcall AddRef();
+    virtual unsigned long __stdcall Release();
 };
 struct Stream_s006e_51b0 {
     void** vtbl;
@@ -419,9 +420,14 @@ template <class T> inline T* UninitializedMovePtr(T* first, T* last, T* dest)
 }
 struct RefObj8 {
     char pad0[8];
-    int32_t mnRefCount;                       // +0x08
+    volatile long mnRefCount;                 // +0x08 (EA::Thread::AtomicInt)
     void AddRef() { ++mnRefCount; }
-    void Release() { if (mnRefCount > 1) --mnRefCount; }
+    long AtomicAdd(long v) { return _InterlockedExchangeAdd(&mnRefCount, v); }
+    void Release() {
+        _InterlockedDecrement(&mnRefCount);
+        if (AtomicAdd(0) < 1) AtomicAdd(1);
+        else AtomicAdd(0);
+    }
 };
 struct AutoRef8 {
     RefObj8* mpObject;
@@ -1163,8 +1169,8 @@ int SP_DirectShaderDispatchCallback()
 ShaderState::~ShaderState()
 {
     for (int i = 0; i < 16; ++i) {
-        if (GetVS(i)) GetVS(i)->Release();
-        if (GetPS(i)) GetPS(i)->Release();
+        if (vs[i]) vs[i]->Release();
+        if (ps[i]) ps[i]->Release();
     }
 }
 
@@ -1556,28 +1562,28 @@ void __stdcall RangeWeakRelease(RC14** first, RC14** last)
     }
 }
 
+// Uninitialized copy of AddRef'd refs (0x0070e8c0), EASTL style: iterator objects and a placement copy per ref.
+struct MMRef_70e8c0 {
+    RC3c* p;
+    MMRef_70e8c0(const MMRef_70e8c0& o) : p(o.p) { if (p) p->AddRef(); }
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct MMRefIt_70e8c0 {
+    MMRef_70e8c0* p;
+    MMRefIt_70e8c0(MMRef_70e8c0* q) : p(q) {}
+    MMRef_70e8c0& operator*() const { return *p; }
+    MMRefIt_70e8c0& operator++() { ++p; return *this; }
+    bool operator!=(const MMRefIt_70e8c0& o) const { return p != o.p; }
+};
+
 // @ 0x0070e8c0
-void UninitCopyA2(void** out, void** first, void** last, void** dst)
+MMRefIt_70e8c0 MMRefUninitCopy_70e8c0(MMRefIt_70e8c0 first, MMRefIt_70e8c0 last, MMRefIt_70e8c0 dest)
 {
-    *out = dst;
-    void** result = dst;
-    try
-    {
-        for (; first != last; ++first, ++result)
-        {
-            void* s = *first;
-            *result = s;
-            if (s != 0)
-                ((RC3c*)s)->AddRef();
-        }
-    }
-    catch (...)
-    {
-        for (void** q = dst; q != result; ++q)
-            ((RC3c*)*q)->Release();
-        throw;
-    }
-    *out = result;
+    MMRefIt_70e8c0 result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) MMRef_70e8c0(*first);
+    return result;
 }
 
 // @ 0x0070e950
@@ -1600,25 +1606,11 @@ void FillA(void** first, void** last, void** value)
 }
 
 // @ 0x0070e9a0
-void UninitFillNA2(void** first, unsigned n, void** value)
+void MMRefFillN_70e9a0(MMRefIt_70e8c0 first, unsigned n, const MMRef_70e8c0& value)
 {
-    void** result = first;
-    try
-    {
-        for (; n != 0; --n, ++result)
-        {
-            void* s = *value;
-            *result = s;
-            if (s != 0)
-                ((RC3c*)s)->AddRef();
-        }
-    }
-    catch (...)
-    {
-        for (void** q = first; q != result; ++q)
-            ((RC3c*)*q)->Release();
-        throw;
-    }
+    MMRefIt_70e8c0 cur(first);
+    for (; 0 < n; --n, ++cur)
+        new (&*cur) MMRef_70e8c0(value);
 }
 
 // @ 0x0070ea20

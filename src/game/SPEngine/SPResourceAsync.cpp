@@ -253,20 +253,29 @@ bool Self::Get(void** out)
     return q != 0;
 }
 
+// Construction view of the async resource request (0x006ae510): the request base, then the atomic refcount base
+// (count zeroed by an interlocked exchange), each with an unwind state; the job ref member adds a reference.
+struct AsyncReqBase_6ae510 { virtual void v0(); ~AsyncReqBase_6ae510() { (void)this; } };
+struct AsyncRefCount_6ae510 {
+    virtual void r0();
+    volatile long mRefCount;                 // +0x08
+    AsyncRefCount_6ae510() { volatile long* r = &mRefCount; _InterlockedExchange(r, 0); }
+    ~AsyncRefCount_6ae510() { (void)this; }
+};
+struct AsyncJobRef_6ae510 {
+    Job2* mpJob;
+    AsyncJobRef_6ae510(const AsyncJobRef_6ae510& o) : mpJob(o.mpJob) { if (mpJob) mpJob->Add(); }
+};
+struct AsyncReqView_6ae510 : AsyncReqBase_6ae510, AsyncRefCount_6ae510 {
+    AsyncJobRef_6ae510 mJob;                 // +0x0c
+    AsyncReqView_6ae510(const AsyncJobRef_6ae510& job);
+    virtual void v0();
+};
+
 // @ 0x006ae510
-void* __fastcall FUN_006ae510(void* self, int unused, void* arg)
+AsyncReqView_6ae510::AsyncReqView_6ae510(const AsyncJobRef_6ae510& job)
+    : mJob(job)
 {
-    (void)unused;
-    *(void**)self = &vtbl_13fa72c;
-    *(void**)((char*)self + 4) = &vtbl_13ef094;
-    *(void**)((char*)self + 8) = 0;
-    *(void**)self = &vtbl_14094b4;
-    *(void**)((char*)self + 4) = &vtbl_14094b0;
-    int v = *(int*)arg;
-    *(int*)((char*)self + 0xc) = v;
-    if (v)
-        ((Job2*)v)->Add();
-    return self;
 }
 
 // @ 0x006ae590
@@ -292,26 +301,44 @@ void RBTree::DoNukeSubtree(RBNode* n)
     }
 }
 
-// @ 0x006ae660
-void* __fastcall FUN_006ae660(void* self, void* val)
+// Node allocation of the resource-key map (0x006ae660): pop the pool's free list or allocate a node, then copy the
+// value (three key words and a resource ref that is AddRef'd) into it.
+struct ResRefObj_6ae660 { virtual void AddRef(); };
+struct ResKeyValue_6ae660 {
+    uint32_t mInstance, mType, mGroup;
+    ResRefObj_6ae660* mpResource;
+    ResKeyValue_6ae660(const ResKeyValue_6ae660& o)
+        : mInstance(o.mInstance), mType(o.mType), mGroup(o.mGroup), mpResource(o.mpResource) {
+        if (mpResource) mpResource->AddRef();
+    }
+    static void* operator new(size_t, void* p) throw() { return p; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct ResKeyNode_6ae660 { char mLinks[0x10]; ResKeyValue_6ae660 mValue; };
+struct ResKeyPool_6ae660 {
+    char pad[0x18];
+    void* mpHead;                     // +0x18
+    char pad1c[0xc];
+    unsigned mnNodeSize;              // +0x28
+    ResKeyNode_6ae660* AllocNode(const ResKeyValue_6ae660& value);
+};
+inline ResKeyNode_6ae660* ResKeyPoolTake_6ae660(ResKeyPool_6ae660* pool)
 {
-    void* n = *(void**)((char*)self + 0x18);
+    ResKeyNode_6ae660* n = (ResKeyNode_6ae660*)pool->mpHead;
     if (n)
-        *(void**)((char*)self + 0x18) = *(void**)n;
+        pool->mpHead = *(void**)n;
     else
-        n = ea_eastl_alloc(*(unsigned*)((char*)self + 0x28), &vtbl_14093bc, 0, 0,
+        n = (ResKeyNode_6ae660*)ea_eastl_alloc(pool->mnNodeSize, "EASTL", 0, 0,
                            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
                            0xd1);
-    void* d = (char*)n + 0x10;
-    if (d) {
-        *(void**)d = *(void**)val;
-        *(void**)((char*)d + 4) = *(void**)((char*)val + 4);
-        *(void**)((char*)d + 8) = *(void**)((char*)val + 8);
-        *(void**)((char*)d + 0xc) = *(void**)((char*)val + 0xc);
-        void* r = *(void**)((char*)d + 0xc);
-        if (r)
-            (*(void(__thiscall**)(void*))(*(void***)r))(r);
-    }
+    return n;
+}
+
+// @ 0x006ae660
+ResKeyNode_6ae660* ResKeyPool_6ae660::AllocNode(const ResKeyValue_6ae660& value)
+{
+    ResKeyNode_6ae660* n = ResKeyPoolTake_6ae660(this);
+    new (&n->mValue) ResKeyValue_6ae660(value);
     return n;
 }
 

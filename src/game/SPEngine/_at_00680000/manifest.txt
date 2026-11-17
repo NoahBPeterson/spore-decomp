@@ -25,3 +25,5 @@
 ../src/game/SPEngine/_at_00680000.cpp  ?Attach@CJobHolder2@@QAE_NPAX@Z  0068f180  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ??1CoderObj@@QAE@XZ  0068dc90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00680000.cpp  ?FreeChain2@MapC0@@QAEXPAUNode15@@@Z  00681500  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ??1FactoryView_683f80@@QAE@XZ  00683f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00680000.cpp  ??0JobLockView_68f1d0@@QAE@PAUJlRecord_68f1d0@@PAX1@Z  0068f1d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

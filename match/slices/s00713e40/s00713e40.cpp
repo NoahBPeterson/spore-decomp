@@ -153,14 +153,22 @@ struct AdapterBase {
     void Destroy();
 };
 
+// Destruction view of AdapterBase (0x00713FD0): two interface bases restore their vtables (+0x04 first), the member
+// at +0x0c is destroyed out of line (0xa23920).
+// The interface destructors have a (code-free) body: cl then restores each interface's vtable on exit, as the original
+// does, and gives each base its own unwind state; an empty `{}` body does neither.
+struct ADI0_713fd0 { virtual void a0(); ~ADI0_713fd0() { (void)this; } };
+struct ADI1_713fd0 { virtual void b0(); ~ADI1_713fd0() { (void)this; } };
+struct ADSub_713fd0 { void* d[6]; ~ADSub_713fd0(); };   // 0xa23920
+struct AdapterBaseView_713fd0 : ADI0_713fd0, ADI1_713fd0 {
+    uint32_t m8;
+    ADSub_713fd0 mSub;    // +0x0c
+    ~AdapterBaseView_713fd0();
+};
+
 // @ 0x00713FD0  resource-adapter destructor (vtable reset + member dtor)
-void AdapterBase::Destroy()
+AdapterBaseView_713fd0::~AdapterBaseView_713fd0()
 {
-    mVt0 = (void*)0x140cca4;
-    mVt4 = (void*)0x140cca0;
-    mSub.~AdapterSub();
-    mVt4 = (void*)0x13ef094;
-    mVt0 = (void*)0x13eb938;
 }
 
 // intrusive refcounted handle: ctor AddRefs (vtable slot 0), dtor Releases (vtable slot 1)

@@ -32,3 +32,5 @@
 ../src/game/SPEngine/_at_00710000.cpp  ?resize@Vec50@@QAEXI@Z  00719d30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00710000.cpp  ?resize@VecInt@@QAEXI@Z  0071ef50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_00710000.cpp  ??1AdapterTeardown@@QAE@XZ  007146c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?resize@Vec28_s0071_9e10@@QAEXI@Z  0071a930  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_00710000.cpp  ?Remove@AdapterList@@QAEXPAX@Z  00714050  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

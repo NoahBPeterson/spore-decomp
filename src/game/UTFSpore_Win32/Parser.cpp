@@ -3477,8 +3477,8 @@ void cIfCommand::Execute(EA::ArgScript::cArguments_s0084_4270& args)
 
 // @ 0x00844860
 EA::ArgScript::cMacroDefinition::cMacroDefinition()
+    : mRefCount(0)
 {
-    mRefCount = 0;
     mStartLine = -1;
 }
 

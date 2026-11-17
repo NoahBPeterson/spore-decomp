@@ -3086,9 +3086,26 @@ void cLightingWorld_s0070_9cf0::DestroySlotDequeEh()
 {
 }
 
+// Construction view of the sample vector 0x0070a0d0 builds: the vector base takes the inline pool (+0x18) and frees
+// on unwind; the body sizes it through 0x00708e60.
+struct SampleVecBase_70a0d0 {
+    char* mpBegin; char* mpEnd; char* mpCap; int mc; char* mpPool;
+    explicit SampleVecBase_70a0d0(char* pool) { mpBegin = 0; mpEnd = 0; mpCap = 0; mpPool = pool; }
+    ~SampleVecBase_70a0d0();
+};
+struct SampleVec_70a0d0 : SampleVecBase_70a0d0 {
+    int  m14;
+    char mBuffer[0x80];          // +0x18
+    SampleVec_70a0d0(int n);
+    void Resize(int n);          // 0x00708e60
+};
+
 // @ 0x0070a0d0
-void cLightingWorld_s0070_9cf0::ConstructSampleVec(int)
+SampleVec_70a0d0::SampleVec_70a0d0(int n) : SampleVecBase_70a0d0(mBuffer)
 {
+    mpBegin = mpEnd = mBuffer;
+    mpCap = mpBegin + 0x80;
+    Resize(n);
 }
 
 // @ 0x0070a130
@@ -3611,10 +3628,28 @@ uint32_t SlotVecCellCreate(SlotVecCell*, const void*)
     return 0;
 }
 
+// Copy-construction view of the fixed vector built at 0x0070c3a0: the vector base takes the inline pool (+0x18) and frees
+// on unwind; the elements are assigned through 0x00708340 with an uninitialized iterator tag.
+struct FixVecCopy_70c3a0Tag {};
+struct FixVecCopy_70c3a0Base {
+    char* mpBegin; char* mpEnd; char* mpCap; int mc; char* mpPool;
+    explicit FixVecCopy_70c3a0Base(char* pool) { mpBegin = 0; mpEnd = 0; mpCap = 0; mpPool = pool; }
+    ~FixVecCopy_70c3a0Base();
+};
+struct FixVecCopy_70c3a0 : FixVecCopy_70c3a0Base {
+    int  m14;
+    char mBuffer[0x80];          // +0x18
+    FixVecCopy_70c3a0(const FixVecCopy_70c3a0& x);
+    void DoAssign(char* first, char* last, FixVecCopy_70c3a0Tag tag);   // 0x00708340
+};
+
 // @ 0x0070c3a0
-void FixedCellVectorCtor(void* self)
+FixVecCopy_70c3a0::FixVecCopy_70c3a0(const FixVecCopy_70c3a0& x) : FixVecCopy_70c3a0Base(mBuffer)
 {
-    (void)self;
+    mpBegin = mpEnd = mBuffer;
+    mpCap = mpBegin + 0x80;
+    FixVecCopy_70c3a0Tag tag;
+    DoAssign(x.mpBegin, x.mpEnd, tag);
 }
 
 // @ 0x0070c410

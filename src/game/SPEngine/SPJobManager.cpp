@@ -1014,13 +1014,51 @@ void ProfHashTable::DoRehash(unsigned int nNewBucketCount)
     mnBuckets = nNewBucketCount;
 }
 
+// Construction view of cJobData (0x0068fbe0): the job base owns the extra-object ref (released by its destructor),
+// so it and the two dependency lists each get an unwind state.
+struct JdNode_68fbe0 { void* mpNext; void* mpPrev; JdNode_68fbe0() { mpPrev = 0; mpNext = 0; } };
+struct JdRefObj_68fbe0 { virtual void r0(); virtual void Release(); };
+struct JdRef_68fbe0 {
+    JdRefObj_68fbe0* mpPtr;
+    JdRef_68fbe0() : mpPtr(0) {}
+    ~JdRef_68fbe0() { if (mpPtr) mpPtr->Release(); }
+};
+struct JdJob_68fbe0 {
+    void* mpCallback;                // +0x00
+    void* mpCallbackData;            // +0x04
+    JdRef_68fbe0 mpExtraObject;      // +0x08
+    char* mpDebugName;               // +0x0c
+    int mPriority;                   // +0x10
+    int mStatus;                     // +0x14
+    unsigned int mThreadAffinity;    // +0x18
+    int mSlot;                       // +0x1c
+    void* mpReturnValue;             // +0x20
+    void* mpCleanupReturnValue;      // +0x24
+};
+struct JdList_68fbe0 {
+    JdList_68fbe0* mpNext; JdList_68fbe0* mpPrev;
+    JdList_68fbe0() { mpPrev = this; mpNext = this; }
+    ~JdList_68fbe0();                // 0x00620230
+};
+struct cJobDataView_68fbe0 : JdNode_68fbe0, JdJob_68fbe0 {
+    cJobManager* mpManager;          // +0x30
+    bool mbSynchronousWait;          // +0x34
+    char mPad35[3];
+    JdList_68fbe0 mDependencies;     // +0x38
+    JdList_68fbe0 mDependents;       // +0x40
+    int mRealPriority;               // +0x48
+    int mRefCount;                   // +0x4c
+    cJobDataView_68fbe0();
+};
+
 // @ 0x0068fbe0
-cJobData::cJobData()
+cJobDataView_68fbe0::cJobDataView_68fbe0()
 {
     _InterlockedExchange((volatile long*)&mRefCount, 0);
     mpDebugName = sz_13ec47c;
+    _ReadWriteBarrier();
     if (mpExtraObject.mpPtr) {
-        IUnknown32* pExtra = (IUnknown32*)mpExtraObject.mpPtr;
+        JdRefObj_68fbe0* pExtra = mpExtraObject.mpPtr;
         mpExtraObject.mpPtr = 0;
         pExtra->Release();
     }
@@ -1028,8 +1066,42 @@ cJobData::cJobData()
     mpCleanupReturnValue = 0;
 }
 
+// Destruction view of cJobManager (0x0068fc60): the free lists and thread list unlink nothrow (0x620230), the two
+// vectors free nothrow, the job and ready list arrays go through the eh vector destructor, then the mutex (0x922130)
+// and the job manager interface base.
+void JmFree_68fc60(void* p) throw();   // 0xf47380
+struct JmList_68fc60 { void* mpNext; void* mpPrev; ~JmList_68fc60() throw(); };       // 0x00620230
+struct JmArrList_68fc60 { void* mpNext; void* mpPrev; ~JmArrList_68fc60(); };         // 0x00a65a90
+struct JmVec_68fc60 {
+    void** mpBegin; void** mpEnd; void** mpCapacity;
+    ~JmVec_68fc60() { if (mpBegin && ((int*)mpBegin)[-1]) JmFree_68fc60(mpBegin); }
+};
+struct JmMutex_68fc60 { char d[0x30]; ~JmMutex_68fc60(); };                          // 0x00922130
+struct JmBase_68fc60 { virtual void v0(); ~JmBase_68fc60() { (void)this; } };
+struct cJobManagerView_68fc60 : JmBase_68fc60 {
+    unsigned int mPad04;                     // +0x04
+    JmMutex_68fc60 mMutex;                   // +0x08
+    int mnLockCount;                         // +0x38
+    JmList_68fc60 mJobReadyCondition;        // +0x3c
+    JmList_68fc60 mJobReadyOrSyncCondition;  // +0x44
+    JmArrList_68fc60 mJobs[9];               // +0x4c
+    JmArrList_68fc60 mReadyList[32];         // +0x94
+    unsigned int mValidAffinities;           // +0x194
+    JmList_68fc60 mThreads;                  // +0x198
+    int mUnknown1a0;                         // +0x1a0
+    JmVec_68fc60 mWaitingThreads;            // +0x1a4
+    char mPad1b0[8];                         // +0x1b0
+    JmVec_68fc60 mWaitingPriorities;         // +0x1b8
+    char mPad1c4[8];                         // +0x1c4
+    void* mpSyncThread;                      // +0x1cc
+    JmList_68fc60 mFreeLinks;                // +0x1d0
+    JmList_68fc60 mFreeWaitNodes;            // +0x1d8
+    void* mInitThreadFunc;                   // +0x1e0
+    ~cJobManagerView_68fc60();
+};
+
 // @ 0x0068fc60
-cJobManager::~cJobManager()
+cJobManagerView_68fc60::~cJobManagerView_68fc60()
 {
 }
 

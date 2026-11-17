@@ -918,16 +918,20 @@ void __fastcall FreeArrayBlock(void** pp)
         operator_delete__(p);
 }
 
+// The draw object is created with a new-expression (zone allocator 0xf473a0, constructor 0x7a3df0); the placement
+// delete gives the expression its unwind state.
+struct cStaticBufferDrawNew_7a41c0 {
+  char mData[0x44];
+  cStaticBufferDrawNew_7a41c0();                                                     // 0x007a3df0
+  static void* operator new(size_t size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
+  static void operator delete(void* p, const char* name, int a, int b, int c, int d);
+};
+
 // @ 0x007a41c0
-void* __cdecl FUN_007a41c0(void* param_1)
+void __cdecl FUN_007a41c0(void* param_1)
 {
-  cStaticBufferDraw_s007a_41c0* p =
-      (cStaticBufferDraw_s007a_41c0*)EXT_f473a0(0x44, "Graphics/StaticBufferDraw",
-                                     0, 0, 0, 0, (const char*)param_1);
-  if (p != 0) {
-    EXT_7a3df0(p);
-  }
-  return p;
+  (void)param_1;
+  new ("Graphics/StaticBufferDraw", 0, 0, 0, 0) cStaticBufferDrawNew_7a41c0();
 }
 
 // @ 0x007a88b0

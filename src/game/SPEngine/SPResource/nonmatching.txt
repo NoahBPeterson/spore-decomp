@@ -15,4 +15,3 @@
 006ad350 111 RegList::Reset: complete; guard/EH shape differs; difftest WEAK after fixing the RegList layout (Mutex at +0x120, not +0x11c) flags: /O2 /MD /Gy /EHsc /TP /GS-
 006ad410 280 RegList::Add: complete; loop/register shape differs; difftest WEAK after fixing the RegList layout (Mutex at +0x120, not +0x11c) flags: /O2 /MD /Gy /EHsc /TP /GS-
 006ad890 41 ctor: EH prologue + /arch:SSE movss constant-pool loads not reproduced; equiv: FAIL (esp)
-006adbf0 27 scalar deleting dtor: old-style EH prolog not reproduced; equiv: FAIL (execution)
