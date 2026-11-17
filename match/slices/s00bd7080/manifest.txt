@@ -1,0 +1,1 @@
+slices/s00bd7080/s00bd7080.cpp  ?AddTo@Object_bd7080@@QAE_NPAUSerializer_bd7080@@@Z  00bd7080  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

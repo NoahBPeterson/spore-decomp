@@ -1,0 +1,1 @@
+slices/s00ba2040/s00ba2040.cpp  ?AddTo@Object_ba2040@@QAE_NPAUSerializer_ba2040@@@Z  00ba2040  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

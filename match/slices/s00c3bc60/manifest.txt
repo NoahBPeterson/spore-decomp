@@ -1,0 +1,1 @@
+slices/s00c3bc60/s00c3bc60.cpp  ?AddTo@Object_c3bc60@@QAE_NPAUSerializer_c3bc60@@@Z  00c3bc60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
