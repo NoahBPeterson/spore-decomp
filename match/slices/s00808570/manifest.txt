@@ -1,0 +1,1 @@
+slices/s00808570/s00808570.cpp  ?Cast@Object_808570@@QBEPAXI@Z  00808570  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

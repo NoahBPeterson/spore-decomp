@@ -1,0 +1,1 @@
+slices/s010536c0/s010536c0.cpp  ?CastTo_10536c0@@YAPAXPAUObject_10536c0@@@Z  010536c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

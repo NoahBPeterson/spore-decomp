@@ -1,0 +1,1 @@
+slices/s005c2570/s005c2570.cpp  ?CastTo_5c2570@@YAPAXABURef_5c2570@@@Z  005c2570  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
