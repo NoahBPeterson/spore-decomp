@@ -847,16 +847,23 @@ void cTextureManager::ReloadTexture(int a, int b)
     ((void(__thiscall*)(void*, TextureKey))((void**)this->vtbl)[0x60 / 4])(this, key);
 }
 
+// the texture manager's two job references, released in reverse order when the holder goes away: the async job at
+// +0x2c through cJob::Release (0x690120), the job interface at +0x24 through vtable slot 1
+struct TexMgrJob { int Release(); };   // 0x690120
+struct TexMgrJobRef { TexMgrJob* mp; ~TexMgrJobRef() { if (mp) mp->Release(); } };
+struct ITexMgrJob { virtual void Slot0(); virtual void Release(); };
+struct TexMgrIfaceRef { ITexMgrJob* mp; ~TexMgrIfaceRef() { if (mp) { mp->Release(); _ReadWriteBarrier(); } } };
+struct TexMgrJobs {
+    char pad00[0x24];
+    TexMgrIfaceRef mJob;     // +0x24
+    int  pad28;
+    TexMgrJobRef   mJob2;    // +0x2c
+    ~TexMgrJobs();
+};
+
 // @ 0x007a9620
-void cTextureManager::CleanupJob()
+TexMgrJobs::~TexMgrJobs()
 {
-    if (this->mJob2)
-        ((int(__thiscall*)(void*))FUN_00690_120_GetStatus)(this->mJob2);
-    if (this->mJob) {
-        void* job = this->mJob;
-        ((void(__thiscall*)(void*))(*(void***)job)[1])(job);
-        _ReadWriteBarrier();
-    }
 }
 
 // @ 0x007a9680

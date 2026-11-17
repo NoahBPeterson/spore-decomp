@@ -79,3 +79,4 @@
 ../src/game/SPGonzago/SPUISpace.cpp  ?FUN_0107abb0@cToolWidget@SP@@QAEXXZ  0107abb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUISpace.cpp  ?BuildBakeOffset@@YAXMMPAM@Z  01065a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01066180@@YAXPAXM@Z  01066180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01066630@@YAXPAM00@Z  01066630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

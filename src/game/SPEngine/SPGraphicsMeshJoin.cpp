@@ -1336,6 +1336,21 @@ struct UVGenJobInfo {
     UVGenJobInfo* Init(void* src, int mode, void* p4, void* p5);
     void Destroy();
 };
+// the destructor's view of UVGenJobInfo: two bases (vtables restored on exit, +4 first), the job reference vector at
+// +0x0c destroyed out of line (0x0041eb80), and two vectors whose heap blocks are freed
+struct UVGenJobBase0 { virtual void Slot0(); ~UVGenJobBase0() {} };
+struct UVGenJobBase1 { virtual void Slot0(); int mRefCount; ~UVGenJobBase1() {} };
+struct UVGenRefVec { void* mBegin; void* mEnd; void* mCap; int pad[3]; ~UVGenRefVec(); };   // 0x0041eb80
+struct UVGenVec {
+    void* mpBegin; int pad[4];
+    ~UVGenVec() { if (mpBegin && *((int*)mpBegin - 1) != 0) FUN_00723930(mpBegin); }
+};
+struct __declspec(novtable) UVGenJobInfoObj : UVGenJobBase0, UVGenJobBase1 {
+    UVGenRefVec mJobs;   // +0x0c
+    UVGenVec    m24;     // +0x24
+    UVGenVec    m38;     // +0x38
+    ~UVGenJobInfoObj();
+};
 // ---- items of slice s00728020 end
 
 // ---- items of slice s00726c20 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -4020,15 +4035,8 @@ UVGenJobInfo* UVGenJobInfo::Init(void* src, int mode, void* p4, void* p5)
 }
 
 // @ 0x007281d0
-void __fastcall FUN_007281d0(UVGenJobInfo* self)
+UVGenJobInfoObj::~UVGenJobInfoObj()
 {
-    if (self->mField38 && *((int*)self->mField38 - 1) != 0)
-        FUN_00723930(self->mField38);
-    if (self->mField24 && *((int*)self->mField24 - 1) != 0)
-        FUN_00723930(self->mField24);
-    FUN_0041eb80();
-    self->mVtbl1 = 0;
-    self->mVtbl0 = 0;
 }
 
 // @ 0x00728330

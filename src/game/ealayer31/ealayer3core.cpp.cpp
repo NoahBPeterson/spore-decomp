@@ -14,7 +14,6 @@
 namespace rw {
 namespace audio {
 namespace core {
-extern int   EALayer3Core_InitCoeffs(void* self, int n); // 0x1146d20  EALayer3Core::InitCoeffs(int), defined below
 }
 }
 }
@@ -25,15 +24,20 @@ namespace core {
 class CMpegBase {
 public:
     virtual ~CMpegBase();                 // vftable at +0x00
-    CMpegBase();                          // 0x1146ca0 (out of line, in its own translation unit)
     void AllocateSynth(int n);            // 0x1148cf0
+};
+
+class CMpegLayer3Base : public CMpegBase {
+public:
+    CMpegLayer3Base();                    // 0x1146ca0 (out of line, in its own translation unit)
+    int AllocateHybrid(int n);            // 0x1146d20 (out of line)
 };
 
 class EALayer3Core;
 
-class EALayer3Core : private CMpegBase {
+class EALayer3Core : private CMpegLayer3Base {
 public:
-    friend CMpegBase::CMpegBase();
+    friend CMpegLayer3Base::CMpegLayer3Base();
     virtual ~EALayer3Core();              // +0x00 (vftable)
     char mData[0x37c];                    // +0x04 .. +0x37f  (fields accessed by offset)
 
@@ -48,7 +52,6 @@ public:
     void UpdateCorrelation(int a2, int a3, float a4, float* a5);// 0114a970
     void AddToOutput(int a2, int a3, int a4, int a5, int a6, int a7, char a8); // 0114aa40
     void ResetSlots();                                          // 0114ad10
-    int  InitCoeffs(int n);                                     // 0x1146d20
     static int  SelectPath(EALayer3Core* self, int a2, int a3, int a4); // 0114ad50
 
     int   i32(int off) const { return *(const int*)((const char*)this + off); }
@@ -70,15 +73,7 @@ EALayer3Core::EALayer3Core(int n)
     *(void**)this = (void*)0x14ce590;
     // 0x1148cf0: CMpegBase::AllocateSynth(n), inherited from the base class
     AllocateSynth(n);
-    // 0x1146d20: EALayer3Core::InitCoeffs(n)
-    InitCoeffs(n);
-}
-}}}  // namespace rw::audio::core
-
-// @ 0x01146d20
-namespace rw { namespace audio { namespace core {
-int EALayer3Core::InitCoeffs(int n)
-{
-    return ::rw::audio::core::EALayer3Core_InitCoeffs(this, n);
+    // 0x1146d20: CMpegLayer3Base::AllocateHybrid(n), inherited
+    AllocateHybrid(n);
 }
 }}}  // namespace rw::audio::core

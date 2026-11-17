@@ -81,6 +81,12 @@ struct Holder841 {
     Holder841* Ctor(int* src);   // 0x007583e0
 };
 __declspec(noinline) Holder841* __cdecl FUN_007585c0(int* src);
+void* __cdecl operator new(unsigned size, const char* name, int, int, int, int);
+void  __cdecl operator delete(void* p, const char* name, int, int, int, int);
+struct Holder841New {
+    char storage[0x20];
+    Holder841New(int* src);   // 0x007583e0 (Holder841::Ctor)
+};
 // the destructor's view of Holder841: an interface at +0 (no destructor of its own), a base at +4 whose destructor
 // restores vtable 0x13ef094, and the reference vector at +0xc, destroyed by its out-of-line destructor (0x0041eb80)
 struct Holder841Iface { virtual void Slot0(); };
@@ -224,7 +230,27 @@ struct Val7ff0 {
     RCObj* p0c;    // +0x0c
     RCObj* p10;    // +0x10
     int    f14, f18, f1c, f20, f24;   // +0x14..+0x24
-    Val7ff0* Ctor(RCObj* a2, int* a3);
+};
+// the constructor's view of Val7ff0: an interface at +0, a base at +4 (vtable 0x13ef094, clears +8), a reference
+// taken through vtable slot 0 and an atomically counted reference; a throw while taking the second drops the first
+struct Val7ff0Iface { virtual void Slot0(); };
+struct Val7ff0Base { Val7ff0Base() : p08(0) {} virtual void Slot0(); int* p08; ~Val7ff0Base() {} };
+struct IVal7ff0Ref { virtual void AddRef(); virtual void Release(); };
+struct Val7ff0RefA {
+    IVal7ff0Ref* mp;
+    Val7ff0RefA(IVal7ff0Ref* p) : mp(p) { if (p) p->AddRef(); }
+    ~Val7ff0RefA() { if (mp) mp->Release(); }
+};
+struct Val7ff0RefB {
+    RCObj* mp;
+    Val7ff0RefB(RCObj* p) : mp(p) { if (p) _InterlockedIncrement(&p->refcount); }
+    ~Val7ff0RefB() { if (mp) _InterlockedDecrement(&mp->refcount); }
+};
+struct Val7ff0Obj : Val7ff0Iface, Val7ff0Base {
+    Val7ff0RefA p0c;   // +0x0c
+    Val7ff0RefB p10;   // +0x10
+    int    f14, f18, f1c, f20, f24;   // +0x14..+0x24
+    Val7ff0Obj(RCObj* a2, int* a3);
 };
 struct C0755b { void* vptr; char pad[0x10]; };
 // ---- items of slice s007571a0 end
@@ -255,23 +281,14 @@ Val7e20* Val7e20::Ctor(Val7e20* src, RCObj* a2, RCObj* a3)
 }
 
 // @ 0x00757ff0
-Val7ff0* Val7ff0::Ctor(RCObj* a2, int* a3)
+Val7ff0Obj::Val7ff0Obj(RCObj* a2, int* a3)
+    : p0c((IVal7ff0Ref*)a2), p10((RCObj*)a3[0])
 {
-    this->vptr4 = g_vtbl_13ef094;
-    this->p08 = 0;
-    this->vptr0 = g_vtbl_140da78;
-    this->vptr4 = g_vtbl_140da74;
-    this->p0c = a2;
-    if (a2) ((void (__thiscall*)(RCObj*))((void**)a2->vptr)[0])(a2);
-    RCObj* r = (RCObj*)a3[0];
-    this->p10 = r;
-    if (r) _InterlockedIncrement(&r->refcount);
-    this->f14 = a3[1];
-    this->f18 = a3[2];
-    this->f1c = a3[3];
-    this->f20 = a3[4];
-    this->f24 = a3[5];
-    return this;
+    f14 = a3[1];
+    f18 = a3[2];
+    f1c = a3[3];
+    f20 = a3[4];
+    f24 = a3[5];
 }
 
 // @ 0x007580a0
@@ -368,9 +385,7 @@ Holder841Obj::~Holder841Obj()
 // @ 0x007585c0
 Holder841* __cdecl FUN_007585c0(int* src)
 {
-    Holder841* p = (Holder841*)operator_new_graph6(0x20, g_GraphicsTag, 0, 0, 0, 0);
-    if (p) return p->Ctor(src);
-    return 0;
+    return (Holder841*)new (g_GraphicsTag, 0, 0, 0, 0) Holder841New(src);
 }
 
 // @ 0x00758680

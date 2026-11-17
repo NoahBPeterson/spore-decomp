@@ -13,3 +13,5 @@
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00755520@X_755520@@QAE_NPAUcJob_755520@@@Z  00755520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00755fe0@S_755fe0@@QAEXPAX@Z  00755fe0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_007565a0@@YA_NHHPAUcJobRef@@@Z  007565a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ??0CS553Obj@@QAE@PAX0@Z  007553c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ??1CS553Obj@@QAE@XZ  00755470  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include

@@ -10,3 +10,6 @@
 ../src/game/SPEngine/_at_00780000.cpp  ?Func_007827C0@@YIXH@Z  007827c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/_at_00780000.cpp  ?FUN_00782d40@@YAMHH@Z  00782d40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/_at_00780000.cpp  ??1Vec12Obj@@QAE@XZ  00781b10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ??1cShadowWorldObj@@QAE@XZ  007821b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ??1E36Vec@@QAE@XZ  00781cf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/_at_00780000.cpp  ?FUN_00782c90@@YAXPAT__m128@@PBT1@PBM@Z  00782c90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

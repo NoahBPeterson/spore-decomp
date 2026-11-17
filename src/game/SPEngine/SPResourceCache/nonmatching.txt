@@ -2,8 +2,6 @@
 006af5d0 139 comparison/assignment operator: vtable-slot shape and scheduling differ; equiv PASS (600 valid, 78.9% cov) flags: /O2 /MD /Gy /EHsc /TP
 006af670 98 record serializer: __thiscall with 1 stack arg; pre-loop writes match (0 mismatched), record loop unreachable (harness synthesizes empty containers); equiv WEAK (325 valid, 56.2% cov) flags: /O2 /MD /Gy /EHsc /TP
 006af720 355 "1URL" MemoryStream read/append: EH prologue + stream vtable slots differ; equiv UNSUPPORTED (0/400 valid: fault(read)=378, fake-arity=21) flags: /O2 /MD /Gy /EHsc /TP
-006af8a0 30 destructor: MSVC EH prologue not reproduced; vtable slot order matches; equiv PASS (508 valid, 100% cov) flags: /O2 /MD /Gy /EHsc /TP
-006afa10 32 dtor (vtable resets + two releases): complete. cl reorders the vtable stores and the two release calls. flags /O2 /MD /Gy /EHsc /TP. difftest PASS 301/400 valid (100.0% coverage).
 006afa90 50 QueryInterface: cl hoists `mov eax,ecx` and uses `add eax,-4` instead of `lea`; equiv WEAK (68.4% cov) flags: /O2 /MD /Gy /EHsc /TP
 006afc40 87 lock cmpxchg8b refcount bump (thiscall, node + 8-byte expected): complete; _InterlockedCompareExchange64 reproduces the lock cmpxchg8b / cdq / adc pair. flags /O2 /MD /Gy /EHsc /TP. difftest PASS 400/400 valid (100.0% coverage). [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'ret'] vs ['ret']]
 006afcb0 62 intrusive list teardown loop: complete (FUN_0068c140 read, head/tail stores, VirtualFree release). cl allocates registers differently. flags /O2 /MD /Gy /EHsc /TP. difftest PASS 258/400 valid (100.0% coverage).

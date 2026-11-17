@@ -2,7 +2,6 @@
 0069d3c0  32  RefCountVTemplate<int>::Release (lock xadd -1, reset to 1, deleteSelf callback at -4); complete behaviour, but cl emits sub for dec and reloads the callback pointer; equiv PASS: 1183 valid inputs, 100% coverage
 0069d4f0  49  two-refcount holder conditional vcall; complete behaviour, secondary-base this adjustment and register scheduling differ; equiv UNSUPPORTED: 0/1200 valid inputs (fake-arity/fault(read))
 0069d980  44  conditionalA write helper; complete behaviour, but the this/secondary-base register allocation (edi vs esi) and the fall-through store order (store-0 then xor vs xor then store-al) differ [equiv: WEAK 299 valid, 25.8% cov, 0 mismatch]
-0069dca0  119  SP::cObjectDatabase::~cObjectDatabase; complete behaviour (4 vptr stores + 3 releases), but the compiler EH frame/state layout is not reproduced; the +0x1c slot must be captured before zeroing it (retail loads ecx then stores 0) [equiv: PASS 345 valid, 93.3% cov]
 0069df90  32  two virtual predicates; complete behaviour, but cl makes the final bool branchless where the original uses branches; equiv UNSUPPORTED: 0/1200 valid inputs (fake-arity)
 0069d540  636  complete: Variant reader (all paths: bool/typed/flags 0x50 array/0x20 object, temp Variant EH); code order / eax-vs-al schedule and arg push order differ [equiv: WEAK, 0 mismatches over 1515 valid inputs, 8% coverage]
 0069d9d0  602  complete: WriteVariant (all paths); temp bool arg-slot reuse and flag/ok register schedule differ [equiv: WEAK, 0 mismatches over 1540 valid inputs, 8% coverage]

@@ -205,7 +205,7 @@ public:
 // ---- items of slice s00a41c40 end
 
 // ---- items of slice s00a459d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" int* __cdecl    Eapd_Debug_ObjectError();                   // 0x008de1a0
+int* __cdecl    Eapd_Debug_ObjectError();                   // 0x008de1a0
 void* operator new(unsigned, const char*, int, int, int, int);         // 0x00f473a0
 void  operator delete(void*, const char*, int, int, int, int);         // 0x00f47410
 struct ErrHost {
@@ -872,7 +872,7 @@ SP::Audio::cEmitterEAPD* ConstructcEmitterEAPD()
 }
 
 // @ 0x00a466d0
-extern "C" bool __cdecl Audio_RegisterErrorHandler()
+bool __cdecl Audio_RegisterErrorHandler()
 {
     int* p = Eapd_Debug_ObjectError();
     if (p) {

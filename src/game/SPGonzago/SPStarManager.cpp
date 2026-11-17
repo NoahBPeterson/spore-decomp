@@ -563,7 +563,24 @@ struct cPropertyList {
     uint32_t f34;               // +0x34
     bool Read(void* stream);    // 0x006a2f60
     cPropertyList();            // 0x006a1c40 (Editor::cPropertyList ctor, out of slice)
-    ~cPropertyList();
+};
+// the destructor's view of cPropertyList: the editor-resource base (vtable 0x13eb938 restored on exit), the property
+// hashtable at +0x18 destroyed by its out-of-line destructor (0x00685ed0), and the modification-count reference at
+// +0x30, released through vtable slot 1
+struct cPropertyListBase { virtual void Slot0(); ~cPropertyListBase() {} };
+struct cPropertyListMap { uint32_t mData[6]; ~cPropertyListMap(); };
+struct IPropertyModCount { virtual void Slot0(); virtual void Release(); };
+struct cPropertyListModRef {
+    IPropertyModCount* mp;
+    ~cPropertyListModRef() { if (mp != 0) mp->Release(); }
+};
+struct __declspec(novtable) cPropertyListObj : cPropertyListBase {
+    volatile int mRef;          // +0x04
+    uint32_t f08, f0c, f10, f14;
+    cPropertyListMap mPropertyMap;    // +0x18
+    cPropertyListModRef mModCount;    // +0x30
+    uint32_t f34;               // +0x34
+    ~cPropertyListObj();
 };
 // ---- items of slice s006860e0 end
 
@@ -1654,12 +1671,8 @@ void cDecalBuilder::Project(const Mesh& mesh, const DecalParams& params)
 }
 
 // @ 0x00686320
-cPropertyList::~cPropertyList()
+cPropertyListObj::~cPropertyListObj()
 {
-    if (mModCount != 0)
-        ((void (__thiscall*)(void*))VT(mModCount)[1])(mModCount);
-    mPropertyMap.FreeNodes();
-    vtbl = (void*)0x013eb938;   // Editor::cEditorResource vtable
 }
 
 // @ 0x01326120

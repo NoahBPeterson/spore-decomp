@@ -54,3 +54,4 @@
 ../src/game/SPAudio/eapdconnective.cpp  ?FUN_00a59f00@@YAPAXII@Z  00a59f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?pdsymbol_new@@YAPAXIII@Z  00a59c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdconnective.cpp  ?pdfloat_new2@@YAPAXM@Z  00a59b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdconnective.cpp  ?change_float@Eapd@Audio@EA@@YAXPADM@Z  00a5c400  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

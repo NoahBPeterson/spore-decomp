@@ -11,6 +11,8 @@
 ../src/game/SPEngine/SPResourceCache.cpp  ?C@Cache@@QAEXPAUKey12@@@Z  006b0d60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ?Shutdown@Cache@@QAEXXZ  006b1860  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006afe80@@YIXPAD@Z  006afe80  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResourceCache.cpp  ??1ResCacheEntry_6af8a0@@QAE@XZ  006af8a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResourceCache.cpp  ??1ResCacheEntry_6afa10@@QAE@XZ  006afa10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ??0RcObj_6aff70@@QAE@PAX0@Z  006aff70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ??0Obj_6af960@@QAE@PAX0@Z  006af960  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPResourceCache.cpp  ?FUN_006b00a0@@YAPAXHH@Z  006b00a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

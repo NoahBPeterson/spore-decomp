@@ -654,7 +654,7 @@ void FUN_006913c0(void*, void*);          // cJob::AddWeakDependency
 void* FUN_007004d0(void*);
 void FUN_0072c100(int, void*, int, int);
 void* operator_new_f473a0(unsigned, const char*, int, int, int, int);
-void operator_delete_f47380(void*);
+void operator_delete_f47380(void*) throw();
 struct Callee {
   void  v0();
   void  v1(void* a);
@@ -707,9 +707,50 @@ struct CS553 {
   void* m64;          // +0x64
   void* m68;          // +0x68
 
-  void ctor553(void* a1, void* a2);
-  void dtor554();
   void f55c80(void* job);
+};
+struct CS553Base0 { void* mpV; CS553Base0() { mpV = (void*)0x13f1ab0; } ~CS553Base0() { mpV = (void*)0x13eb938; } };
+struct CS553Base1 {
+  void* mpV;
+  int mAtom;
+  CS553Base1() { mpV = (void*)0x13ef094; volatile long* p = (volatile long*)&mAtom; _InterlockedExchange(p, 0); }
+  ~CS553Base1() { mpV = (void*)0x13ef094; }
+};
+struct CS553Vec {
+  void* mpBegin;
+  void* mpEnd;
+  void* mpCap;
+  void* m18;
+  void* m1c;
+  void* m20;
+  void* mInline[16];
+  CS553Vec(void* owner) {
+    ((CS553Base0*)owner)->mpV = (void*)0x140d9d8;
+    ((CS553Base1*)((char*)owner + 4))->mpV = (void*)0x140d9d4;
+    void** b = mInline; mpBegin = b; mpEnd = b; m20 = 0; mpCap = b + 16;
+  }
+  ~CS553Vec() { DestroyRange(mpBegin, mpEnd); FreeBuffer(mpBegin); }
+  void DestroyRange(void* b, void* e) throw();   // 0x0070f520
+};
+struct CS553RefBase { virtual void Slot0(); };
+struct CS553RefIface { virtual void AddRef(); virtual void Release(); };
+struct CS553RefHolder : CS553RefBase, CS553RefIface {};
+struct CS553Ref4 {
+  CS553RefHolder* mp;
+  CS553Ref4(CS553RefHolder* o) : mp(o) { if (o) o->AddRef(); }
+  ~CS553Ref4() { if (mp) mp->Release(); }
+};
+struct CS553Ref0 {
+  void* mp;
+  CS553Ref0(void* o) : mp(o) { Add0(o); }
+  ~CS553Ref0() { Rel0(mp); }
+};
+struct CS553Obj : CS553Base0, CS553Base1 {
+  CS553Vec mVec;     // +0x0c
+  CS553Ref4 m64;     // +0x64
+  CS553Ref0 m68;     // +0x68
+  CS553Obj(void* a1, void* a2);
+  ~CS553Obj();
 };
 class IFoo_755d40 {
  public:
@@ -2122,33 +2163,14 @@ GlyphVec& GlyphVec::Assign(const GlyphVec& x)
 }
 
 // @ 0x007553c0
-void CS553::ctor553(void* a1, void* a2)
+CS553Obj::CS553Obj(void* a1, void* a2)
+    : mVec(this), m64((CS553RefHolder*)a2), m68(a1)
 {
-  mpV0 = (void*)0x13f1ab0;
-  mpV1 = (void*)0x13ef094;
-  _InterlockedExchange((volatile long*)&mAtom, 0);
-  mpV0 = (void*)0x140d9d8;
-  mpV1 = (void*)0x140d9d4;
-  void* base = &mInline[0];
-  mpBegin = base;
-  mpEnd = base;
-  m20 = 0;
-  mpCap = (void*)((char*)this + 0x64);
-  m64 = a2;
-  Add4(a2);
-  m68 = a1;
-  Add0(a1);
 }
 
 // @ 0x00755470
-void CS553::dtor554()
+CS553Obj::~CS553Obj()
 {
-  Rel0(m68);
-  Rel4(m64);
-  ((Callee*)&mpBegin)->v2(mpBegin, mpEnd);
-  FreeBuffer(mpBegin);
-  mpV1 = (void*)0x13ef094;
-  mpV0 = (void*)0x13eb938;
 }
 
 // @ 0x00755520

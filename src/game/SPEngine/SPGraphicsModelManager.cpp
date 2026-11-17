@@ -2818,6 +2818,15 @@ extern FixedAllocatorBase_00926650 g_fixedAlloc_162ed28;                        
 void* __cdecl operator_new_753d10(unsigned size, const char* name, int, int, int, int); // 0x00f473a0
 struct CompactMap_74f200 { void** Subscript(const uint32_t& key); };            // 0x0074f200
 struct Ctor753900 { void* ctor(void* a, void* b); };                            // 0x00753900
+// the event object built by MwOwner_753d10::Create: allocated from the "Graphics" heap and constructed out of line
+// (0x00753900); the memory is released if the constructor throws
+struct MwEventObj_753900 {
+  char mData[0x8b8];
+  MwEventObj_753900(void* owner, void* a2);                                     // 0x00753900
+  static void* operator new(unsigned size, const char* name, int a, int b, int c, int d)
+  { return operator_new_753d10(size, name, a, b, c, d); }
+  static void operator delete(void* p, const char*, int, int, int, int);
+};
 struct MwModel_mw {
   virtual void mv0();
   virtual void mv1();
@@ -3917,15 +3926,22 @@ void cModelWorld_s0074_4ad0::FillColor(int* out)
     out[4] = *(int*)&w;
 }
 
+// the model world's two counted references (+0x64, +0x90), released in reverse order when they go away
+struct ModelWorldRef {
+    RCObj_s0074_4ad0* mp;
+    ~ModelWorldRef() { if (mp) mp->Release(); }
+};
+struct ModelWorldRefs {
+    char pad00[0x64];
+    ModelWorldRef m64;
+    char pad68[0x90 - 0x68];
+    ModelWorldRef m90;
+    ~ModelWorldRefs();
+};
+
 // @ 0x00745340
-void cModelWorld_s0074_4ad0::ReleaseRefs()
+ModelWorldRefs::~ModelWorldRefs()
 {
-    RCObj_s0074_4ad0* a = *(RCObj_s0074_4ad0**)((char*)this + 0x90);
-    if (a)
-        a->Release();
-    RCObj_s0074_4ad0* b = *(RCObj_s0074_4ad0**)((char*)this + 0x64);
-    if (b)
-        b->Release();
 }
 
 // @ 0x007453a0
@@ -7946,10 +7962,7 @@ void cModelWorld_753c50::FinalRelease(void** p2, char p3)
 void* MwOwner_753d10::Create(uint32_t key, void* unused, void* a2)
 {
   (void)unused;
-  void* mem = operator_new_753d10(0x8b8, "Graphics", 0, 0, 0, 0);
-  IEventObject_753d10* obj = 0;
-  if (mem != 0)
-    obj = (IEventObject_753d10*)((Ctor753900*)mem)->ctor(this, a2);
+  IEventObject_753d10* obj = (IEventObject_753d10*)new ("Graphics", 0, 0, 0, 0) MwEventObj_753900(this, a2);
   typedef void (__thiscall *Fn174)(void*);
   (*(Fn174*)((char*)(*(void***)obj) + 0x174))(obj);
   void** slot = mMap.Subscript(key);

@@ -1122,15 +1122,30 @@ HashIter* __thiscall HashTable_s0070_1a00::erase(HashIter* out, CellNode* node, 
     return out;
 }
 
+// a cell map entry copied in place into a freshly allocated node: the key, the cell info list and its octant
+// flags; the node's trailing link starts out empty
+struct CellInfoCopy {
+    char     mList[0xc];           // +0x00
+    unsigned char mOctantFlags;    // +0x0c
+    CellInfoCopy(const CellInfoCopy& o) {
+        ((ListStub*)mList)->CopyFrom((ListStub*)o.mList);
+        mOctantFlags = o.mOctantFlags;
+    }
+};
+struct CellEntryCopy {
+    unsigned mKey;                 // +0x00
+    CellInfoCopy mInfo;            // +0x04
+    CellEntryCopy(CellNode_s0070_2980* src)
+        : mKey(src->mKey), mInfo(*(const CellInfoCopy*)&src->mInfo.mHead) {}
+    static void* operator new(size_t, void* p) { return p; }
+    static void operator delete(void*, void*) {}
+};
+
 // @ 0x00702980
 void* __thiscall CellMap::CloneEntry(CellNode_s0070_2980* src)
 {
     void* node = operator new(0x18, "Graphics", 0, 0, ALLOC_FILE, 0xd1);
-    if (node) {
-        *(unsigned*)node = src->mKey;
-        ((ListStub*)((char*)node + 4))->CopyFrom((ListStub*)&src->mInfo.mHead);
-        *(unsigned char*)((char*)node + 0x10) = src->mInfo.mOctantFlags;
-    }
+    new (node) CellEntryCopy(src);
     *(unsigned*)((char*)node + 0x14) = 0;
     return node;
 }

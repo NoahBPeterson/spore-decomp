@@ -167,6 +167,20 @@ struct __declspec(novtable) AbilityObj : AbilityIface, AbilityBase {
     AbilityChildRef childB;  // 0x10
     ~AbilityObj();
 };
+// the two-child constructor's view of Ability: an interface at +0, a base at +4 (vtable 0x13ef094), and the two
+// children, each referenced as it is stored; a throw while referencing the second releases the first
+struct AbilityCtorIface { virtual void Slot0(); };
+struct AbilityCtorBase { AbilityCtorBase() : ref(0) {} virtual void Slot0(); int ref; ~AbilityCtorBase() {} };
+struct AbilityChildHold {
+    IChild* mp;
+    AbilityChildHold(IChild* p) : mp(p) { if (p) p->AddRef(); }
+    ~AbilityChildHold() { if (mp) mp->Release(); }
+};
+struct AbilityCtorObj : AbilityCtorIface, AbilityCtorBase {
+    AbilityChildHold childA;    // 0x0c
+    AbilityChildHold childB;    // 0x10
+    AbilityCtorObj(IChild* a, IChild* b);
+};
 struct Ability {
     void*   vtbl0;   // 0x00
     void*   vtbl1;   // 0x04
@@ -175,7 +189,6 @@ struct Ability {
     IChild* childB;  // 0x10
 
     void* ctor();                         // 0xa107a0
-    Ability* ctor2(IChild*, IChild*);     // 0xa10860
     bool  q08(int);                       // 0xa10960
     void  q10(void*, int);                // 0xa109a0
     void  q14(int);                       // 0xa109d0
@@ -480,17 +493,9 @@ AbilityObj::~AbilityObj()
 }
 
 // @ 0x00a10860
-Ability* Ability::ctor2(IChild* a, IChild* b)
+AbilityCtorObj::AbilityCtorObj(IChild* a, IChild* b)
+    : childA(a), childB(b)
 {
-    vtbl1 = (void*)0x13ef094;
-    ref = 0;
-    vtbl0 = (void*)0x14492a0;
-    vtbl1 = (void*)0x1449298;
-    childA = a;
-    if (a) a->AddRef();
-    childB = b;
-    if (b) b->AddRef();
-    return this;
 }
 
 // @ 0x00a10960

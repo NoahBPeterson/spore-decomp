@@ -31,3 +31,6 @@
 ../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf8b0@@YAMPAUBehaviour@@@Z  00dbf8b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf8f0@@YAMPAUBehaviour@@HHI@Z  00dbf8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf9a0@@YAMPAUBehaviour@@@Z  00dbf9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf7b0@@YAMPAUBehaviour@@@Z  00dbf7b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf840@@YAMPAUBehaviour@@@Z  00dbf840  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00db0000.cpp  ?f_00dbf760@@YAMPAUBehaviour@@@Z  00dbf760  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

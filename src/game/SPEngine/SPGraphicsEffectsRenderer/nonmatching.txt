@@ -15,7 +15,6 @@
 006e7d40 52 Method7d40 - element store; register scheduling of the range check/base pointer differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7dd0 203 Method7dd0: element setter copying vertex/weight vectors and driving the midpoint vtable slot (0x18/0x1c). [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e7ed0 72 Method7ed0 - element store; range-check register scheduling differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-006e7f30 53 Method7f30: EH destructor releasing +0x60 and the refcounted +0x00. The SEH frame is omitted (functional version); release logic matches. [equiv: PASS] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 006e7fa0 44 Method7fa0: the non-interface path now returns the original's magic-division low product (0x4ec4ec4f * (end-base)); index<0 still returns this, and the interface branch returns its call. [equiv: PASS 244 valid, 100% cov; src PASS; replay eax/edx match] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e8000 134 Method8000 - element setter; interface-call/branch layout differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 006e80d0 19 complete; only register/addressing-order differs (esi+ecx vs ecx+esi, edx/ecx arg regs) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
@@ -43,7 +42,6 @@
 006ebea0 81 complete; sort helper, register assignment/loop shape differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 006ebf50 137 ctor pointer-init + Vector3 splat; declared to return this (S7*) so eax matches the original's `mov eax,ecx`; equiv: PASS 400/400, 100% coverage flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 006ec5b0 143 complete; quicksort median-of-three driver, scheduling/register layout differs
-006ec660 38 complete; string setup + FUN_006ebd20 ctor, stack layout differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 eax]
 006ec730 99 complete; state ctor, register/temp ordering differs (extra esi zero reg) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 006ecdd0 69 complete; vector<Pair3> push_back, local temp placement/`add ecx,8` differs
 006ece30 57 complete; vector<Pair3> push_back(3 args), temp placement differs

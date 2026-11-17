@@ -542,8 +542,21 @@ struct PLBase32 {
 };
 struct PropWatcher32 {
   uint32_t f0; void* f4; void* f8; int fc;
-  PropWatcher32* ctor(void* list, void* owner, uint32_t value);
   void Read(void* p2);
+};
+// the constructor's view of PropWatcher32: the property list is referenced (vtable slot 0) as it is stored, and
+// released again if the initial read throws
+struct PropWatcherListRef {
+  PLBase32* mp;
+  PropWatcherListRef(void* list) : mp((PLBase32*)list) { if (list) mp->v00(); }
+  ~PropWatcherListRef() { if (mp) mp->v04(); }
+};
+struct PropWatcher32Obj {
+  uint32_t f0;
+  PropWatcherListRef f4;
+  void* f8;
+  int fc;
+  PropWatcher32Obj(void* list, void* owner, uint32_t value);
 };
 void* gAllocator_13ebc58;
 void* gVtbl_13eb90c;
@@ -1476,17 +1489,11 @@ int cAppSystemHandleMessage(cAppSystem* self, uint32_t msg, int data)
 }
 
 // @ 0x007e7260
-PropWatcher32* PropWatcher32::ctor(void* list, void* owner, uint32_t value)
+PropWatcher32Obj::PropWatcher32Obj(void* list, void* owner, uint32_t value)
+  : f0(value), f4(list), f8(owner), fc(0)
 {
-    f0 = value;
-    f4 = list;
-    if (list)
-        ((PLBase32*)list)->v00();
-    f8 = owner;
-    fc = 0;
-    if (list)
-        Read(list);
-    return this;
+  if (list)
+    ((PropWatcher32*)this)->Read(list);
 }
 
 // @ 0x007e72d0

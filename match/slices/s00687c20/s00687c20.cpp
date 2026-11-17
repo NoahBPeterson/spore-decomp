@@ -92,6 +92,7 @@ struct PairUW {
   // the EASTL node type's allocator, and the placement form the node's constructor uses
   static void* operator new(unsigned int n) { return ::operator new(n); }
   static void* operator new(unsigned int n, void* p, int) { return p; }
+  static void operator delete(void*, void*, int) {}
   static void* operator new(unsigned int n, const char* pName, int flags, unsigned debugFlags,
                             const char* pFile, int line) {
     return ::operator new(n, pName, flags, debugFlags, pFile, line);
@@ -315,7 +316,7 @@ struct BigPair {
   PairUW pair;
 };
 // @ 0x006887c0
-BigPair* CloneBigPair(const PairUW& o) {
+BigPair* __stdcall CloneBigPair(const PairUW& o) {
   BigPair* p = (BigPair*)PairUW::operator new(0x24, "App", 0, 0, g_allocFile, 0xd1);
   new((void*)&p->pair, 0) PairUW(o);
   return p;

@@ -2848,11 +2848,13 @@ PoolNode* Pool::NewNode(Obj** ppObj)
     PoolNode* node = mpFreeList;
     if (node)
         mpFreeList = (PoolNode*)node->mpObject;
-    else
+    else {
+        uint32_t nodeSize = mNodeSize;
         node = (PoolNode*)EAAllocate(
-            mNodeSize, "Simulator", 0, 0,
+            nodeSize, "Simulator", 0, 0,
             "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
             0xd1);
+    }
     if (node) {
         Obj* pObj = *ppObj;
         node->mpObject = pObj;

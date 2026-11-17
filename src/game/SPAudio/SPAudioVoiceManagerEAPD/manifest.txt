@@ -5,3 +5,4 @@
 ../src/game/SPAudio/SPAudioVoiceManagerEAPD.cpp  ?AudioCopyPtr@@YG_NHHPAPAX@Z  00a46040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/SPAudioVoiceManagerEAPD.cpp  ?erase@VMHash@@QAEIABI@Z  00a460d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/SPAudioVoiceManagerEAPD.cpp  ?IsVoicePlaying@SPAudioVoiceManagerEAPD@@QAE_NI@Z  00a460b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/SPAudioVoiceManagerEAPD.cpp  ??0SPAudioVoiceManagerEAPD@@QAE@XZ  00a465b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

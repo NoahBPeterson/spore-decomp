@@ -16,12 +16,36 @@ extern "C" int  Release_690120(void* job);         // 0x0690120  cJob::Release
 static inline void** VT(void* p) { return *(void***)p; }
 extern "C" int  Release_690120(void* job);         // 0x0690120  cJob::Release
 typedef int (__thiscall *FnRelease)(void*);
-struct JobLock {
-    void* vtbl0;            // +0x00
-    void* vtbl1;            // +0x04
-    volatile long mRef;     // +0x08 refcount (lock xchg/xadd)
-    void* mRefObj;          // +0x0c intrusive refcounted object
-    void* mJob;             // +0x10
+// two bases (vtables 0x13eb938 / 0x13ef094 restored on exit); the job (cJob::Release, 0x690120) and the intrusive
+// reference object, deleted through its virtual destructor when its count drops to zero
+struct JobLockBase0 { virtual void Slot0(); ~JobLockBase0() {} };
+struct JobLockBase1 { virtual void Slot0(); ~JobLockBase1() {} };
+struct JobLockRefObj {
+    virtual ~JobLockRefObj();
+    volatile long mRef;     // +0x04
+};
+inline void JobLockReleaseRef(JobLockRefObj* r)
+{
+    volatile long* rc = &r->mRef;
+    long n = _InterlockedDecrement(rc);
+    if (n == 0) {
+        _InterlockedExchange(rc, 1);
+        delete r;
+    }
+}
+struct JobLockRefHolder {
+    JobLockRefObj* mp;
+    ~JobLockRefHolder() { if (mp) JobLockReleaseRef(mp); }
+};
+struct JobLockJob { int Release(); };   // 0x0690120 cJob::Release
+struct JobLockJobHolder {
+    JobLockJob* mp;
+    ~JobLockJobHolder() { if (mp) mp->Release(); }
+};
+struct __declspec(novtable) JobLock : JobLockBase0, JobLockBase1 {
+    volatile long mRef;         // +0x08 refcount (lock xchg/xadd)
+    JobLockRefHolder mRefObj;   // +0x0c intrusive refcounted object
+    JobLockJobHolder mJob;      // +0x10
     JobLock(void* out, void* job, void* refObj);
     ~JobLock();
 };
@@ -30,16 +54,4 @@ struct JobLock {
 // @ 0x0068f2b0
 JobLock::~JobLock()
 {
-    if (mJob) ((FnRelease)Release_690120)(mJob);
-    void* r = mRefObj;
-    if (r) {
-        volatile long* rc = (volatile long*)((char*)r + 4);
-        long n = _InterlockedDecrement(rc);
-        if (n == 0) {
-            _InterlockedExchange(rc, 1);
-            ((void (__thiscall*)(void*, int))VT(r)[0])(r, 1);
-        }
-    }
-    vtbl0 = (void*)0x013eb938;
-    vtbl1 = (void*)0x013ef094;
 }
