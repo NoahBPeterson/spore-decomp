@@ -2023,14 +2023,20 @@ void FUN_00806ca0(W_s0080_68d0* w, float x, float y)
 }
 
 // @ 0x00806d10
+extern "C" double FUN_011e0906(double);                       // floor
 void Pollinator(W_s0080_68d0* w, float* r)
 {
     if (w == 0) return;
-    float* a = (float*)w->v38();
+    float* p = (float*)w->v38();
+    float a[4];
+    a[0] = p[0]; a[1] = p[1]; a[2] = p[2]; a[3] = p[3];
+    float a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3];
+    float r1 = r[1];
     float x = r[0];
-    float dy = (((r[3] - r[1]) - (a[3] - a[1])) * 0.5f + r[1]);
-    float dx = (((r[2] - x) - (a[2] - a[0])) * 0.5f + x);
-    (*(void(__thiscall**)(void*, float, float))VSlot(w, 0x64))(w, dx, dy);
+    char* vt = *(char**)w;
+    (*(void(__thiscall**)(void*, float, float))(vt + 0x64))(w,
+        (float)FUN_011e0906((double)((((r[2] - x) - (a2 - a0)) * DAT_01471064) + x)),
+        (float)FUN_011e0906((double)((((r[3] - r1) - (a3 - a1)) * DAT_01471064) + r1)));
 }
 
 // @ 0x00806db0
