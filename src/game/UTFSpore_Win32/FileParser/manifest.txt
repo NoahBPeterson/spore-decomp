@@ -10,3 +10,5 @@
 ../src/game/UTFSpore_Win32/FileParser.cpp  ?DoFreeNodesFileNotify@@YGXPAPADI@Z  0083fee0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/FileParser.cpp  ?RefRelease@@YIXPAPAH@Z  0083f8f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/FileParser.cpp  ?Init@FileParserRegistration@@QAE_NXZ  0083f630  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/FileParser.cpp  ?FileParser_dtor@@YIXPAH@Z  00840250  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/FileParser.cpp  ?FileParser_ctor@@YIPAHPAH@Z  00840700  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
