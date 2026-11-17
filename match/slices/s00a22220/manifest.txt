@@ -10,3 +10,4 @@ slices/s00a22220/s00a22220.cpp  ?SetPaused@Mgr@@QAE_NH_N@Z  00a22d50  /O2 /MD /G
 slices/s00a22220/s00a22220.cpp  ?FindObject@@YG_NHPAPAUIZ@@H@Z  00a22fa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a22220/s00a22220.cpp  ?FindObject2@Mgr@@QAE_NHPAPAUIZ@@H@Z  00a23090  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00a22220/s00a22220.cpp  ?FindByName@Mgr@@QAE_NPAUSnd@@PAPAU2@@Z  00a23160  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ?AttachEffect@Mgr@@QAE_NHHPAUIRC@@PAPAUIZ@@@Z  00a22df0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
