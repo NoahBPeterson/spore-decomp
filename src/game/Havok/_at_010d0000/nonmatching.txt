@@ -52,7 +52,7 @@
 010ddc30 247 havok-equivalent flags: /vc71 /O2 /MD /Gy /TP
 010df100 36 destroy: reset vptr to 0x013ef094 after the array deallocation and before the optional flags&1 deallocation (the store was missing; replay originally left 3f82063e at [this]); difftest PASS 222 valid inputs / 60.0% coverage; remaining diff is vc71 x87/register scheduling (size 82 vs 86). flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010df160 234 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
-010df280 58 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
+010df280 58 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP | R48: reserved for byte-exact matching.
 010df440 200 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010df500 40 havok-equivalent flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010df5d0 63 havok-equivalent; difftest PASS (1200 inputs, 100% cov) flags: /vc71 /O2 /MD /Gy /EHsc /TP
