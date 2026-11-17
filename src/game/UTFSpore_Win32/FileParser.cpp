@@ -4,6 +4,8 @@
 
 #include "game/types.h"
 #include "EA/Stopwatch.h"
+#include <stddef.h>
+#include "EA/ArgScript/cIParser.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, const char* file, int line); // 0x00f473a0
@@ -554,18 +556,143 @@ void* __fastcall VectorSpecInsert(int* self, int, void* pos, void* val)
     return pos;
 }
 
+void __cdecl operator delete[](void*) throw();
+extern void* gEmptyWatcherBuckets[];   // 0x0154df28
+
+struct FPRefMember {
+    EA::ArgScript::cIParser* mp;
+    FPRefMember() : mp(0) {}
+    ~FPRefMember() { if (mp) mp->Release(); }
+};
+struct FPInputFileSpec {
+    eastl::string8_s0083_f140 mPath;
+    unsigned short mFlags;
+    unsigned short mPad12;
+};
+struct FPSpecVec {
+    FPInputFileSpec* mpBegin;
+    FPInputFileSpec* mpEnd;
+    FPInputFileSpec* mpCapEnd;
+    unsigned char mAllocator[8]; // eastl::sp_vector_allocator, not outer padding
+    FPSpecVec() : mpBegin(0), mpEnd(0), mpCapEnd(0) {}
+    void DestroyRange(FPInputFileSpec* first, FPInputFileSpec* last) throw();   // per-element string dtor loop
+    ~FPSpecVec()
+    {
+        DestroyRange(mpBegin, mpEnd);
+        FPInputFileSpec* b = mpBegin;
+        if (b && ((unsigned*)b)[-1])
+            delete[] (char*)b;
+    }
+};
+struct FPWatcherMap {
+    void* mpAllocator;
+    void** mpBuckets;
+    unsigned mnBuckets;
+    unsigned mnElements;
+    float mfMaxLoadFactor;
+    float mfGrowthFactor;
+    unsigned mnNextResize;
+    FPWatcherMap()
+    {
+        mfMaxLoadFactor = 1.0f;
+        mfGrowthFactor = 2.0f;
+        mnBuckets = 1;
+        mpBuckets = gEmptyWatcherBuckets;
+        mnElements = 0;
+        mnNextResize = 0;
+    }
+    void FreeNodes(void** buckets, unsigned count);
+    ~FPWatcherMap()
+    {
+        FreeNodes(mpBuckets, mnBuckets);
+        unsigned n = mnBuckets;
+        mnElements = 0;
+        void** b = mpBuckets;
+        if (n > 1)
+            delete[] (char*)b;
+    }
+};
+// Stopwatch has no cleanup in retail; keep its canonical layout and constructor.
+inline EA::Stopwatch::~Stopwatch() {}
+// The generated messaging headers omit pure-virtual markers. These lifetime
+// views preserve the actual IHandlerRC -> IHandler chain and abstract tables:
+// constructor phase 0x013eb384; final IHandler phase 0x013eb394.
+struct FileParserHandlerView {
+    virtual ~FileParserHandlerView() {}
+    virtual bool HandleMessage(unsigned message, void* data) = 0;
+};
+struct FileParserHandlerRCView : FileParserHandlerView {
+    virtual ~FileParserHandlerRCView() {}
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+};
+
+// The canonical cIFileParser header still has unnamed, void-typed slots. This
+// view records the native twelve-slot contract without changing its consumers.
+// SetFilesModified/FilesModified are descriptive names inferred from +0x28.
+struct FileParserInterfaceView {
+    virtual int AddRef();
+    virtual int Release();
+    virtual bool Init();
+    virtual bool Shutdown();
+    virtual void SetParser(EA::ArgScript::cIParser* parser);
+    virtual EA::ArgScript::cIParser* Parser();
+    virtual void ClearFilePaths();
+    virtual void AddFilePath(const char* path, unsigned flags);
+    virtual bool ParseFiles();
+    virtual void SetFilesModified();
+    virtual bool FilesModified() const;
+    virtual void SetAutoParseEnabled(bool enabled);
+};
+struct FPDtorView : FileParserInterfaceView, FileParserHandlerRCView {
+    int mRefCount;
+    bool mActive;
+    char pad0d[3];
+    FPRefMember mParser;
+    FPSpecVec mSpecs;
+    unsigned char mFlag28;
+    unsigned char mFlag29;
+    char pad2a[0x2c - 0x2a];
+    FPWatcherMap mWatchers;
+    char pad48[0x50 - 0x48];
+    EA::Stopwatch mTimer;
+    __declspec(noinline) FPDtorView();
+    virtual int AddRef();
+    virtual int Release();
+    virtual bool Init();
+    virtual bool Shutdown();
+    virtual void SetParser(EA::ArgScript::cIParser* parser);
+    virtual EA::ArgScript::cIParser* Parser();
+    virtual void ClearFilePaths();
+    virtual void AddFilePath(const char* path, unsigned flags);
+    virtual bool ParseFiles();
+    virtual void SetFilesModified();
+    virtual bool FilesModified() const;
+    virtual void SetAutoParseEnabled(bool enabled);
+    virtual bool HandleMessage(unsigned message, void* data);
+    __declspec(noinline) virtual ~FPDtorView();
+};
+
+typedef char FPInputFileSpecSize[(sizeof(FPInputFileSpec) == 0x14) ? 1 : -1];
+typedef char FPSpecVecSize[(sizeof(FPSpecVec) == 0x14) ? 1 : -1];
+typedef char FPWatcherMapSize[(sizeof(FPWatcherMap) == 0x1c) ? 1 : -1];
+typedef char FPPrimaryInterfaceSize[(sizeof(FileParserInterfaceView) == 4) ? 1 : -1];
+typedef char FPHandlerInterfaceSize[(sizeof(FileParserHandlerRCView) == 4) ? 1 : -1];
+typedef char FPViewSize[(sizeof(FPDtorView) == 0x68) ? 1 : -1];
+// A four-byte primary interface followed by the four-byte handler occupies +0..7.
+typedef char FPHandlerEnd[(offsetof(FPDtorView, mRefCount) == 8) ? 1 : -1];
+typedef char FPParserOffset[(offsetof(FPDtorView, mParser) == 0x10) ? 1 : -1];
+typedef char FPSpecsOffset[(offsetof(FPDtorView, mSpecs) == 0x14) ? 1 : -1];
+typedef char FPModifiedOffset[(offsetof(FPDtorView, mFlag28) == 0x28) ? 1 : -1];
+typedef char FPAutoParseOffset[(offsetof(FPDtorView, mFlag29) == 0x29) ? 1 : -1];
+typedef char FPWatchersOffset[(offsetof(FPDtorView, mWatchers) == 0x2c) ? 1 : -1];
+typedef char FPTimerOffset[(offsetof(FPDtorView, mTimer) == 0x50) ? 1 : -1];
+
 // @ 0x00840250
-void __fastcall FileParser_dtor(int* self)
+FPDtorView::~FPDtorView()
 {
-    *(void**)self = 0;
-    *(void**)((char*)self + 4) = 0;
-    if (*((unsigned char*)self + 0xc))
-        FileParser_ShutdownStub((void*)self);
-    HashFreeNotifyStub(*(void**)((char*)self + 0x30), *(int*)((char*)self + 0x34));
-    *(int*)((char*)self + 0x38) = 0;
-    if (*(int*)((char*)self + 0x34) > 1)
-        EASTL_allocator_deallocate(*(void**)((char*)self + 0x30));
-    VectorFreeSpecsStub(self);
+    if (mActive)
+        Shutdown();
 }
 
 // @ 0x00840340
@@ -587,19 +714,10 @@ void __fastcall FileParser_AddFilePath(int* self, int, char* path, int flags)
 }
 
 // @ 0x00840700
-void __fastcall FileParser_ctor(int* self)
+FPDtorView::FPDtorView()
+    : mRefCount(0), mActive(false), mFlag28(0), mFlag29(0),
+      mTimer(EA::Stopwatch::kUnitsSeconds, false)
 {
-    *(void**)((char*)self + 4) = 0;
-    *(void**)self = 0;
-    self[2] = 0;                                   // mRefCount
-    *((unsigned char*)self + 0xc) = 0;
-    self[4] = 0;                                   // mParser
-    self[5] = 0; self[6] = 0; self[7] = 0;         // mInputFileSpecs
-    *((unsigned char*)self + 0x24) = 0;
-    *((unsigned char*)self + 0x25) = 0;
-    self[0x0e] = 0;                                // hash_map bucket array
-    self[0x0f] = 0;
-    self[0x10] = 0;
 }
 
 // @ 0x0092f650
