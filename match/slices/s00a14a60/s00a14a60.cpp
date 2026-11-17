@@ -5,6 +5,9 @@
 #include <string.h>
 #include <stddef.h>
 
+inline void* operator new(size_t, void* p) { return p; }
+void operator delete(void*, void*);
+
 namespace rw { namespace audio { namespace core {
 
 struct ChanBuf { char pad0[4]; float* data; char pad8[6]; uint16_t stride; };   // +4 data, +0xe stride (floats/row)
@@ -36,7 +39,7 @@ struct EffectOwner { char pad[0x28]; float mTailTime; };   // accumulated tail l
 // helpers are real functions here so the relocation resolves to the original's address.
 extern "C" void FUN_00a149b0(void* node);                 // 0x00a149b0, takes `this` in ecx
 #pragma inline_depth(0)
-extern "C" void* FUN_00a150e0(void* node, int size);      // 0x00a150e0: `this` in ecx, size on the stack
+__declspec(noinline) void __cdecl FUN_00a150e0(void* node, int size);      // 0x00a150e0: `this` in ecx, size on the stack
 extern "C" char FUN_00a15150(void* obj, int count);       // 0x00a15150
 extern "C" void __fastcall FUN_00a151a0(void* ecx_p, void* edx_unused);   // 0x00a151a0
 extern "C" void __fastcall FUN_00a151d0(void* p, void*);          // 0x00a151d0
@@ -372,26 +375,21 @@ int MultiDelay::Process(MultiDelay* fx, MixCtx* ctx)
 }
 
 // @ 0x00a150e0
-// Initialises the node in place (0x00a149b0 takes `this`=node in ecx and installs the vftable +
-// destructor vector at +0x24) and, when `size` is set, records the block end `node + size` at
-// node+0x0c; that block end, zero when there is none, is the return value. The original additionally
-// wraps the body in a C++ try/catch whose scope-table EH frame (/Oy, no framepointer) this toolchain
-// cannot emit from source at /O2 -- see nonmatching.txt. `optimize("g", off)` disables global
-// optimizations here so the node constructor is not inlined into this small body.
-#pragma optimize("g", off)
-extern "C" void* FUN_00a150e0(void* node, int size)
+// Placement-constructs the node (0x00a149b0 takes `this`=node in ecx and installs the vftable +
+// destructor vector at +0x24; the placement new keeps its EH frame) and, when `size` is set,
+// records the block end `node + size` at node+0x0c. Defined with C++ linkage: an extern "C"
+// definition is nothrow and loses the frame.
+struct BlockNode {
+    char pad00[0xc];
+    char* mpEnd;                  // +0x0c
+    BlockNode();                  // 0x00a149b0
+};
+void __cdecl FUN_00a150e0(void* node, int size)
 {
-    char* end = 0;
-    if (node != 0) {
-        FUN_00a149b0(node);
-        if (size != 0) {
-            end = (char*)node + size;
-            *(void**)((char*)node + 0xc) = end;
-        }
-    }
-    return end;
+    new (node) BlockNode;
+    if (size != 0)
+        ((BlockNode*)node)->mpEnd = (char*)node + size;
 }
-#pragma optimize("g", on)
 
 // @ 0x00a15150
 // Same shape as 0x00a15890 with the 0xa0-byte sub-object and 0x1e slots.

@@ -363,12 +363,12 @@ public:
     // @ 0x0075c070  (thiscall, 2 args, ret 8)
     void RebuildBlend(int param2, int* param3);
 
-    // @ 0x0075c9d0  (__cdecl, 7 args, EH frame) -- complete but not byte-exact
+    // 0x0075c9d0: __cdecl wrapper, 7 args, EH frame (see cMultiBlender_RebuildWrapper below)
     // @ 0x0075ca60  (thiscall, 0 args)
     void UpdateBlend();
 
     // callees (out of line, masked relocations)
-    int  SetupBlend(void* a, void* b, void* c, int d, void* e); // 0x0075b2c0
+    cMultiBlender_s0075_c070(void* a, void* b, void* c, int d, void* e); // 0x0075b2c0
     int  AllocSlot2();                                           // 0x0075a980
     Interp_s0075_c070* GetInterp(int i) { return (Interp_s0075_c070*)(mInterpolators + mInterpolatorStride * i); }
 };
@@ -1059,15 +1059,17 @@ void cMultiBlender_s0075_c070::RebuildBlend(int param2, int* param3)
 }
 }  // namespace SP
 
+inline void* operator new(size_t, void* p) { return p; }
+void operator delete(void*, void*);
+
 // @ 0x0075c9d0
 namespace SP {
-extern "C" int __cdecl cMultiBlender_RebuildWrapper(void** p, void* a, void* b, void* c, int flag, void* d, void* e)
+cMultiBlender_s0075_c070* __cdecl cMultiBlender_RebuildWrapper(void** p, void* a, void* b, void* c, int flag, void* d, void* e)
 {
     cMultiBlender_s0075_c070* obj = (cMultiBlender_s0075_c070*)*p;
-    if (obj != 0)
-        obj->SetupBlend(a, b, c, flag != 0, e);
+    new (obj) cMultiBlender_s0075_c070(a, b, c, flag != 0, e);
     obj->RebuildBlend(flag, (int*)d);
-    return (int)obj;
+    return obj;
 }
 }  // namespace SP
 

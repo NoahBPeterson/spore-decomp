@@ -50,7 +50,6 @@ struct cSplitControllerEffect : SplitEffectBase0, SplitEffectBase1 {
     float f68, f6c, f70;        // +0x68
 
     cSplitControllerEffect(void* owner);                         // 007e1010
-    ~cSplitControllerEffect();                                   // 007e0f70
     void UpdateInstances(int unused);                            // 007e0f00
     void AddInstance(int a, void* b);                            // 007e10c0
     void CopyFrom(void* src);                                    // 007e1450
@@ -333,19 +332,40 @@ void cSplitControllerEffect::UpdateInstances(int unused)
     }
 }
 
+// the destructor's view of cSplitControllerEffect: same layout, with the base and member destructors retail runs
+struct SplitDtorBase0 { virtual void e0(); virtual void e1(); };
+struct SplitDtorBase1 { virtual void w0(); virtual void w1(); virtual void w2(); };
+struct SplitDtorMid : SplitDtorBase0, SplitDtorBase1 { ~SplitDtorMid() {} };
+struct SplitStateObj {
+    virtual ~SplitStateObj() {}
+    int refCount;
+    void Release()
+    {
+        int n = refCount - 1;
+        refCount = refCount - 1;
+        if (n == 0) {
+            refCount = 1;
+            delete this;
+        }
+    }
+};
+struct SplitControllerDtorView : SplitDtorMid {
+    int field08;
+    void* mpOwner;
+    int field10;
+    char field14;
+    SplitStateObj* mpState;
+    void* vecBegin;
+    ~SplitControllerDtorView();
+};
+
 // @ 0x007e0f70
-cSplitControllerEffect::~cSplitControllerEffect()
+SplitControllerDtorView::~SplitControllerDtorView()
 {
     if (vecBegin && *(int*)((char*)vecBegin - 4))
         EFree(vecBegin);
-    if (mpState) {
-        int n = *(int*)((char*)mpState + 4) - 1;
-        *(int*)((char*)mpState + 4) = n;
-        if (n == 0) {
-            *(int*)((char*)mpState + 4) = 1;
-            ((void(__thiscall*)(void*, int))(*(void***)mpState)[0])(mpState, 1);
-        }
-    }
+    if (mpState)
+        mpState->Release();
 }
 
 // @ 0x007e1010
