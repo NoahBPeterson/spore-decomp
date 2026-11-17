@@ -4,7 +4,7 @@
 00700ff0 71 slot_vector_base::destroy, complete; register allocation (blocks in edx vs the original's esi) and loop-entry load order differ
 007010b0 60 list::insert(pos, first, last, tag) range copy, complete; callee-saved register use differs (original keeps pos in edi and value temp in esi)
 00701110 37 eastl hashtable bucket-nonempty / find, complete; the original materialises a two-word iterator local that is not reproduced
-00701170 18 object-list copy constructor, complete; EH frame and call-argument register setup differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 eax]
+00701170 18 object-list copy constructor, complete; EH frame and call-argument register setup differ [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, ret#1 eax] [EH200 single-pass trial reserved]
 007011d0 651 SP::cHierGrid::CullCellList, complete recursive reconstruction; register scheduling throughout differs
 007014c0 1124 SP::cHierGrid::QueryCells, complete cell-range/mask query reconstruction; inlined hashtable lookup and morton build differ
 00701a00 812 complete SP::cHierGrid range-query over two world-space endpoints; reconstruction is much smaller than the original because the original inlines more of the per-cell scan
@@ -20,8 +20,8 @@
 00702a10 226 CellMap copy constructor; complete, allocation/copy schedule differs
 00702af0 565 SP::cHierGrid::Clear; complete (slot free-list unlink, mask propagation, level trim) but register allocation and local-slot layout differ throughout. equiv WEAK: 695 valid, 25.5% coverage, no mismatch (exact source vs original, /O2 /MD /Gy /EHsc /TP /arch:SSE)
 00702da0 49 SP::cHierGrid::Remove; complete behaviour, register allocation differs
-007030a0 91 uninitialized_copy of cGrid range; complete, destination-pointer iteration differs
-00703160 89 fill_n of cGrid; complete, loop/register shape differs
+007030a0 91 uninitialized_copy of cGrid range; complete, destination-pointer iteration differs [EH200 single-pass trial reserved]
+00703160 89 fill_n of cGrid; complete, loop/register shape differs [EH200 single-pass trial reserved]
 007032e0 87 destroy range of cGrid; complete, register allocation differs
 00703360 253 CellMap::Index (find-or-insert); complete, size 300 vs 271: original has no /GS cookie and its bool literal is spilled to the dead incoming `key` argument slot then reloaded as a dword, so the original pushes (key & 0xffffff00) as Insert's 3rd argument where we push a clean 0 (the callee only tests the low byte). equiv FAIL: 5/5 valid inputs, first mismatch is that call #2 3rd argument value; no other divergence seen on 73.6% coverage
 00703470 228 slot_vector_base::create; complete, register allocation differs
@@ -31,5 +31,5 @@
 00703c80 78 assign-copy a cGrid range from one source; complete, mCells assignment inlining differs
 00703ce0 83 SP::cHierGrid constructor; complete, register selection (edx vs ecx for the zero/-1 fills) differs
 00704060 148 SP::cHierGrid::Shutdown; complete, vector erase/clear inlining differs
-00704140 147 vector<cGrid>::resize; complete, EH frame and grow path differ
+00704140 147 vector<cGrid>::resize; complete, EH frame and grow path differ [EH200 single-pass trial reserved]
 00704260 214 SP::cHierGrid::Init; complete, loop schedule and register allocation differ

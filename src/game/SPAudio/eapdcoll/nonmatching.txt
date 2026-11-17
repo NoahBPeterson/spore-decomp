@@ -9,15 +9,15 @@
 00a58570 263 CollLess::Less(a,b): key comparator (type@8, float/int@0xc, string@0x10) with swap logic; string loop and branch layout differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (200 valid, 58.8% coverage)
 00a587a0 185 flags: /O2 /MD /Gy /EHsc /TP
 00a58950 99 flags: /O2 /MD /Gy /EHsc /TP
-00a589e0 90 flags: /O2 /MD /Gy /EHsc /TP
+00a589e0 90 flags: /O2 /MD /Gy /EHsc /TP [EH200 single-pass trial reserved]
 00a58a70 103 flags: /O2 /MD /Gy /EHsc /TP
-00a58b00 98 flags: /O2 /MD /Gy /EHsc /TP
+00a58b00 98 flags: /O2 /MD /Gy /EHsc /TP [EH200 single-pass trial reserved]
 00a58ba0 206 flags: /O2 /MD /Gy /EHsc /TP
 00a58cf0 191 flags: /O2 /MD /Gy /EHsc /TP
 00a58ec0 60 flags: /O2 /MD /Gy /EHsc /TP
-00a58fa0 182 flags: /O2 /MD /Gy /EHsc /TP
+00a58fa0 182 flags: /O2 /MD /Gy /EHsc /TP [EH200 single-pass trial reserved]
 00a591c0 20 flags: /O2 /MD /Gy /EHsc /TP [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
-00a592f0 130 flags: /O2 /MD /Gy /EHsc /TP
+00a592f0 130 flags: /O2 /MD /Gy /EHsc /TP [EH200 single-pass trial reserved]
 00a593e0 315 flags: /O2 /MD /Gy /EHsc /TP
 00a59630 30 flags: /O2 /MD /Gy /EHsc /TP
 00a598d0 79 UNSUP  ANDs the three coll-registration sub-bootstraps flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,4 +1,4 @@
-00760f50   84  regalloc: R49 (2026-11-17): frame solved via virtual bases + member owner, 5 diff lines (mov edx,eax before push of begin); tried barrier+inline clear, erase wrapper, locals | Earlier note: destructor: base vtable stores / vector teardown now use the 0xc-stride Vec12 EraseRange/Destroy; store order fixed; equiv PASS
+00760f50   84  regalloc: R49 (2026-11-17): frame solved via virtual bases + member owner, 5 diff lines (mov edx,eax before push of begin); tried barrier+inline clear, erase wrapper, locals | Earlier note: destructor: base vtable stores / vector teardown now use the 0xc-stride Vec12 EraseRange/Destroy; store order fixed; equiv PASS [EH200 single-pass trial reserved]
 00760fd0  204  layout: R49 (2026-11-17): LayerSet outer object + temp Elem3 + operator= done (256/256) but loop is jump-threaded and temps use two slots; tried for/do-while loops, swapped branches | Earlier note: setByKey: search + temp AutoRefCount assign shape
 00761240   43  V1240::set: local temp register allocation (esi vs edx lifetime)
 00761b40  137  raster texture builder: abs-loop register allocation (ebx/ebp vs edi/ebx)

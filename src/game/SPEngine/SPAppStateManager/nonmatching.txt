@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 007e1710 60 cAppStateManager::StateOccurredPreviously; mpPrevBegin load CSE differs
-007e1830 65 eastl uninitialized_move/copy<AutoRef>; helper-call/EH frame schedule differs
+007e1830 65 eastl uninitialized_move/copy<AutoRef>; helper-call/EH frame schedule differs [EH200 single-pass trial reserved]
 007e1950 131 hashtable rehash; bucket-walk codegen differs
 007e29d0 187 hashtable insert (lookup + grow + relink + rehash); cl keeps key in ebp and reloads key->p/field4 in the walk while mine caches them (ebx/edi); h0 spill slot differs; equiv: PASS (91.6% coverage)
 007e2ae0 134 cAppStateManager copy ctor (2 vector copies + string copy + trailing int); MSVC EH/SEH frame (states 0/1/2) and register schedule differ; equiv: UNSUPPORTED (0 valid inputs; original SEH prologue faults under the harness)
@@ -8,8 +8,8 @@
 007e2fb0 70 cTransitionListCommand::Execute; int parse (v39) register schedule differs
 007e3030 89 cAppStateManager::StateIDFromName; hashtable find call/inline differs
 007e3160 173 eastl::vector<cActionMessage>::operator=; branch layout differs; equiv: FAIL (member fix)
-007e3d90 56 AMVecFull::push_back (vector<cActionMessage>); complete; capacity test, in-place temp AddRef/copy and the out-of-line grow call to the original 0x007e32c0 reproduced; equivalence PASS (295 valid, 100.0% coverage); not byte-exact - EH frame / branch schedule differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-007e40d0 98 cAppState::AddAction; complete; exit gate (args->HasFlag("onExit") || field80) evaluated before the temp AddRef, message type flag 0, thiscall push_back on +0x40 (exit) / +0x2c (main), temp released after push_back; equivalence WEAK (162 valid, 100.0% coverage; remaining inputs are discarded pointer faults); not byte-exact - temp/frame and instruction selection differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+007e3d90 56 AMVecFull::push_back (vector<cActionMessage>); complete; capacity test, in-place temp AddRef/copy and the out-of-line grow call to the original 0x007e32c0 reproduced; equivalence PASS (295 valid, 100.0% coverage); not byte-exact - EH frame / branch schedule differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [EH200 single-pass trial reserved]
+007e40d0 98 cAppState::AddAction; complete; exit gate (args->HasFlag("onExit") || field80) evaluated before the temp AddRef, message type flag 0, thiscall push_back on +0x40 (exit) / +0x2c (main), temp released after push_back; equivalence WEAK (162 valid, 100.0% coverage; remaining inputs are discarded pointer faults); not byte-exact - temp/frame and instruction selection differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [EH200 single-pass trial reserved]
 007e4190 106 cAppState::AddMessage; complete; exit gate adds the char argument, message type flag 1 in both branches, thiscall push_back on +0x40 (exit) / +0x2c (main), temp released after push_back; equivalence WEAK (164 valid, 100.0% coverage; remaining inputs are discarded pointer faults); not byte-exact - temp/frame and instruction selection differ flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 007e4260 83 cGotoStateCommand::Execute; BehaviorMessage ctor/vtable + InterlockedExchange init schedule differs
 007e4550 96 cKillEffectCommand::Execute; same + softStop flag arg order differs
