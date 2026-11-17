@@ -23,7 +23,7 @@
 007459c0 175 sort of 24-byte records: temp/compare schedule differs [equiv: UNSUPPORTED (0/220 valid inputs)]
 00745ac0 199 insertion-merge sort shape differs (register/scheduling)
 00745bb0 63 copy-20 shape differs (dead address guard)
-00745c20 38 rbtree-node allocation/EH frame shape differs
+00745c20 38 rbtree-node allocation/EH frame shape differs | reserved for single-pass six-function trial; file owner graphics; one repair launch
 00745cf0 143 adjust_heap<cOccluder*,...> value-pass copy flavour differs
 00745e00 66 adjust_heap pair (greater) value-copy/schedule differs
 00745e80 68 adjust_heap pair (less) value-copy/schedule differs
@@ -36,9 +36,9 @@
 007470c0 142 member release sequence shape differs; equiv: WEAK 81.8% cov
 00747190 53 entry copy-assign register shape differs; equiv: WEAK 90.2% cov
 00747270 90 cLoadingModel dtor shape differs; equiv: FAIL 5/5 mismatch (execution)
-00747720 121 deque< cLoadQueueEntry >::~deque shape differs
+00747720 121 deque< cLoadQueueEntry >::~deque shape differs | reserved for single-pass six-function trial; file owner graphics; one repair launch
 007477d0 215 deque< cLoadQueueEntry >::clear shape differs
-007478b0 57 vector< cLoadQueueEntry >::~vector shape differs
+007478b0 57 vector< cLoadQueueEntry >::~vector shape differs | reserved for single-pass six-function trial; file owner graphics; one repair launch
 00747920 73 deque pop_back shape differs; equiv: WEAK 67.5% cov
 00747ac0 112 0x38-record copy ctor register shape differs; equiv: PASS 1200 inputs 100% cov
 00747b70 179 uninitialized_copy of refcounted 0x3c elements shape differs
