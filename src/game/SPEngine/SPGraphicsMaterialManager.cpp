@@ -722,7 +722,7 @@ struct Mutex_s0071_1de0 {
 };
 struct MutexLock {
     Mutex_s0071_1de0* mpMutex;
-    MutexLock(Mutex_s0071_1de0& m, const void* pTimeout) : mpMutex(&m) { m.Lock(pTimeout); }
+    MutexLock(Mutex_s0071_1de0& m, const void* pTimeout) { mpMutex = &m; mpMutex->Lock(pTimeout); }
     ~MutexLock() { mpMutex->Unlock(); }
 };
 struct MatMap {
