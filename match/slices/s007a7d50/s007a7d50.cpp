@@ -25,7 +25,7 @@ extern "C" void  FUN_00704d80(void*);
 struct IResManager;
 extern "C" IResManager* FUN_0067dcd0_GetManager();
 extern "C" void* FUN_0067de10();
-extern "C" void  FUN_0067dfe0(void*);
+extern "C" void* FUN_0067dfe0(void*);
 extern "C" void* FUN_0067dd70_MaterialManager();
 extern "C" unsigned int FUN_00932e80(const char*, unsigned int, int);
 extern "C" void* FUN_00885ad0(int);
@@ -309,24 +309,35 @@ cTextRenderer::~cTextRenderer()
     EASTL_allocator_deallocate(this->mTextStyle);
 }
 
+struct RenderObj1a8 {
+    void* vtbl;                 // +0x00
+    char pad004[0x190 - 4];
+    void* mBegin;               // +0x190
+    void* mEnd;                 // +0x194
+    void* mCap;                 // +0x198
+    char pad19c[0x1a8 - 0x19c];
+    static void* operator new(unsigned size, const char* name, int flags, unsigned debugFlags,
+                              const char* file, int line);   // 0x00f473a0
+    static void operator delete(void* p, const char* name, int flags, unsigned debugFlags,
+                                const char* file, int line); // 0x00f47410
+    void init_0088ae10(void* arg);
+    RenderObj1a8()
+    {
+        init_0088ae10(0);
+        vtbl = (void*)&VT_TextRenderWareObject;
+        mBegin = 0;
+        mEnd = 0;
+        mCap = 0;
+    }
+};
+
 // @ 0x007a8810
-extern "C" void* FUN_007a8810()
+void* FUN_007a8810()
 {
-    void* p = EASTL_allocator_allocate(0x1a8, "Graphics", 0, 0, 0, 0);
-    if (p) {
-        ((GlyphCacheObj*)p)->init_0088ae10(0);
-        *(void**)p = (void*)&VT_TextRenderWareObject;
-        *(void**)((char*)p + 0x190) = 0;
-        *(void**)((char*)p + 0x194) = 0;
-        *(void**)((char*)p + 0x198) = 0;
-    }
-    else {
-        p = 0;
-    }
+    RenderObj1a8* p = new ("Graphics", 0, 0, 0, 0) RenderObj1a8();
     ((void(__thiscall*)(void*, int, int))((*(void***)p)[0x10 / 4]))(p, 2, 1);
     ((void(__thiscall*)(void*, int, int))((*(void***)p)[0x08 / 4]))(p, 1, 0);
-    FUN_0067dfe0(p);
-    return p;
+    return FUN_0067dfe0(p);
 }
 
 // @ 0x007a88b0  scalar deleting destructor of the 0x1a8-byte render object
@@ -436,7 +447,7 @@ extern "C" void  FUN_0067dfd0(void*);
 extern "C" void  FUN_0067e010(void*);
 extern "C" void  FUN_0067e020(void*);
 extern "C" IManager* FUN_007ac410();
-extern "C" void* FUN_007a8810();                 // CreateTextRenderWareObject
+void* FUN_007a8810();                 // CreateTextRenderWareObject
 struct Obj2c;
 extern "C" Obj2c* CreateObj2c_76e610();          // 0x0076e610
 extern "C" IManager* FUN_00713c40();
