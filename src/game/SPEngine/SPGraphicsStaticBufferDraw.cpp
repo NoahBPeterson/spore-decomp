@@ -173,15 +173,23 @@ cStaticBuffer::~cStaticBuffer()
   }
 }
 
+void FUN_006de350(void);
+void FUN_00f47380(void* p) throw();
+struct cStaticBufferDrawHolder;
+extern cStaticBufferDrawHolder* g_pStaticBufferDrawHolder;  // 0x15ddc84
+struct cStaticBufferDrawSlot {
+  ~cStaticBufferDrawSlot() { g_pStaticBufferDrawHolder = 0; }
+};
+struct cStaticBufferDrawHolder {
+  cStaticBufferDrawSlot mSlot;
+  ~cStaticBufferDrawHolder() { FUN_006de350(); }
+  static void operator delete(void* p) { FUN_00f47380(p); }
+};
+
 // @ 0x007a4320
 void __cdecl FUN_007a4320()
 {
-  cStaticBufferDraw_s007a_41c0* const p = g_pStaticBufferDraw;
-  if (p != 0) {
-    EXT_6de350(p);
-    g_pStaticBufferDraw = 0;
-    EXT_f47380(p);
-  }
+  delete g_pStaticBufferDrawHolder;
 }
 
 // @ 0x007a4380
