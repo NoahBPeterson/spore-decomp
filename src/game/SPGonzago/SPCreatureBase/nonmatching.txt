@@ -50,7 +50,6 @@
 00c0e120 8 UNSUPPORTED  slot array membership at +0xf4c; complete; 0 valid inputs (read fault) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0e170 232 UNSUPPORTED  motion-state gate; complete; 5 unresolved stub callees flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0e2c0 111 UNSUPPORTED  motion-state gate (by guid); complete; 4 unresolved stub callees flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00c0e3d0 20 PASS         animation flag via guid; complete; vtable cast + lm->vtable[0x40] deref fixed flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0e480 52 UNSUPPORTED  cSPCreatureBase::GetTime; complete; 0 valid inputs (import decode_pointer) flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0e580 10 UNSUPPORTED  forward vector or entity position; complete; unresolved stub F_a048a0 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00c0e6a0 129 UNSUPPORTED  cSPCreatureBase::GetSocialGoal; complete; unresolved stub F_d00a70 flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast

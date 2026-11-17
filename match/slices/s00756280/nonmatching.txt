@@ -8,4 +8,3 @@
 00756c70  262  CModelRegion::FUN_00756c70 part-holder resolve + F3 copy; complete, not byte-exact (EH frame; inline F3 copy vs call)  [equiv: WEAK 151 valid, 55.4% cov, 0 mismatches]
 00756d80  575  CModelRegion::FUN_00756d80 model resolve + Obj140 build; complete, not byte-exact (EH frame; virtual AddRef/Release)  [equiv: PASS 225 valid, 82.0% cov]
 00756fc0  417  FUN_00756fc0 ref-vector merge (resize + per-element ref swap); complete, not byte-exact (EH frame + register allocation)  [equiv: WEAK 186 valid, 22.3% cov, 0 mismatches]
-007565a0  170  complete behaviourally (EA placement new of a 0x6c-byte refcounted object with FUN_007564b0 start + vtable slot 2 on failure); no MSVC EH frame emitted, so bytes differ

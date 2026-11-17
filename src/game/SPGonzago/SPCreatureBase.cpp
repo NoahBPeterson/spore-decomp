@@ -8535,17 +8535,16 @@ float __thiscall CCM_s00c0_ddb0::e3a0()
 char __thiscall CCM_s00c0_ddb0::e3d0()
 {
     char* c = *(char**)((char*)this + 0xa94);
-    if (c != 0) {
-        uint32_t local_4 = 0;
-        void* vt = *(void**)c;
-        ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
-            c, &local_4, 0, 0, 0);
-        if (local_4 != 0) {
-            void* lm = FUN_0067cb20();
-            char* r = (char*)((void*(__thiscall*)(void*, uint32_t))(*(void**)((char*)*(void**)lm + 0x40)))(
-                lm, local_4);
-            if (r != 0) return *(char*)(r + 0x1d);
-        }
+    if (c == 0) return 1;
+    uint32_t local_4 = 0;
+    void* vt = *(void**)c;
+    ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
+        c, &local_4, 0, 0, 0);
+    if (local_4 != 0) {
+        void* lm = FUN_0067cb20();
+        char* r = (char*)((void*(__thiscall*)(void*, uint32_t))(*(void**)((char*)*(void**)lm + 0x40)))(
+            lm, local_4);
+        if (r != 0) return *(char*)(r + 0x1d);
     }
     return 1;
 }

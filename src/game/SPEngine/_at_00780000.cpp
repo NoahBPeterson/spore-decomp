@@ -338,7 +338,18 @@ struct Obj10 : Obj10Primary, Obj10RefCounted {
     virtual ~Obj10();
     static void* operator new(size_t s) { return EastlAllocate(s, "Graphics", 0, 0, 0, 0); }
 };
-void  EastlFree(void* p);
+void  EastlFree(void* p) throw();
+// the destructor's view of Vec12: the storage base frees the heap block, the vector releases each element first
+struct Vec12Storage {
+    E12* begin;                     // +0x0
+    E12* end;                       // +0x4
+    E12* cap;                       // +0x8
+    ~Vec12Storage() {
+        if (begin && *(int*)((char*)begin - 4) != 0)
+            EastlFree(begin);
+    }
+};
+struct Vec12Obj : Vec12Storage { ~Vec12Obj(); };
 void  FUN_00743b50(void* p);
 void  FUN_00576620(void* p);
 struct Sub14 { void FreeRange(void* a, void* b); };
@@ -500,16 +511,14 @@ Elem12* MoveBackward12(Elem12* first, Elem12* last, Elem12* dLast)
 }
 
 // @ 0x00781b10
-void Vec12::Destroy()
+Vec12Obj::~Vec12Obj()
 {
-    E12* p = begin;
     E12* e = end;
+    E12* p = begin;
     for (; p < e; p = (E12*)((char*)p + 0xc)) {
         if (p->p)
             p->p->Release();
     }
-    if (begin && *(int*)((char*)begin - 4) != 0)
-        EastlFree(begin);
 }
 
 // @ 0x00781b80

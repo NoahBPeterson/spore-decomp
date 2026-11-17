@@ -5,3 +5,4 @@
 ../src/game/SPGonzago/SPCreatureFightBehavior.cpp  ?ReleaseFightSlot@SP@@YAXI@Z  00d66db0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureFightBehavior.cpp  ?FUN_00d66e10@SP@@YAXPAVcSPCreatureBase_s00d6_61a0@1@I@Z  00d66e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureFightBehavior.cpp  ?Release@FightMem@SP@@QAEXXZ  00d670e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureFightBehavior.cpp  ?FUN_00d65530@@YAOMD@Z  00d65530  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

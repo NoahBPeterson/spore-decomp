@@ -602,7 +602,6 @@ struct cAbilityCmd {
     float  mx, my, mz;    // +0x18,+0x1c,+0x20
     int    mId;           // +0x24
 
-    void Destroy();
     void SetIface(int, int, int);
     void Activate(int);
     void Deactivate(int);
@@ -1587,17 +1586,26 @@ bool __stdcall FilterAbilityType(int type, int, int)
     }
 }
 
+// the destructor's view of cAbilityCmd: two bases (vtables restored to 0x13f21d4 at +0 and 0x13ef094 at +4) and
+// the interface at +0x10, released through vtable slot 1 when the command is destroyed
+struct cAbilityCmdBase0 { virtual void Slot0(); };
+struct cAbilityCmdBase1 { virtual void Slot0(); ~cAbilityCmdBase1() {} };
+struct IAbilityCmdIface { virtual void Slot0(); virtual void Release(); };
+struct cAbilityCmdIfaceRef {
+    IAbilityCmdIface* mp;
+    ~cAbilityCmdIfaceRef() { if (mp != 0) mp->Release(); }
+};
+struct cAbilityCmdBase : cAbilityCmdBase0, cAbilityCmdBase1 { ~cAbilityCmdBase() {} };
+struct cAbilityCmdObj : cAbilityCmdBase {
+    int    mUnk08;        // +0x08
+    void*  mDesc;         // +0x0c
+    cAbilityCmdIfaceRef mIface; // +0x10
+    ~cAbilityCmdObj();
+};
+
 // @ 0x007d7d00
-void cAbilityCmd::Destroy()
+cAbilityCmdObj::~cAbilityCmdObj()
 {
-    mBaseVtbl = (void**)0x01412458;
-    mAbilityVtbl = (void**)0x01412454;
-    if (mIface != 0) {
-        void** vt = *(void***)mIface;
-        ((void(__thiscall*)(void*))vt[1])(mIface);
-    }
-    mAbilityVtbl = (void**)0x013ef094;
-    mBaseVtbl = (void**)0x013f21d4;
 }
 
 // @ 0x007d7d70

@@ -293,7 +293,7 @@ struct RC3c {
 // ---- items of slice s0070efa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
     void AssignCopyA(...); // 0x0070e340
     void AssignCopyB(...); // 0x0070e390
-void  __cdecl EFree(void* p);                                                                    // 0x00f47380
+void  __cdecl EFree(void* p) throw();                                                                  // 0x00f47380
 struct RC3c_s0070_efa0 {  // refcount at +0x3c
     void AddRef();
     void Release();
@@ -308,13 +308,20 @@ struct VecBase {
     void** mpBegin; void** mpEnd; void** mpCap;
     void DestroyRange(void** first, void** last);   // 0x70f520
 };
-struct VecA {
+// vectors of reference-counted pointers: the storage base frees the heap block, each vector releases its elements first
+struct RefPtrVecStorage {
     void** mpBegin; void** mpEnd; void** mpCap;
+    ~RefPtrVecStorage() {
+        void* p = mpBegin;
+        if ((p != 0) && (*(int*)((char*)p - 4) != 0))
+            EFree(p);
+    }
+};
+struct VecA : RefPtrVecStorage {
     ~VecA();
     void Shrink(void** a, void** b);
 };
-struct VecB {
-    void** mpBegin; void** mpEnd; void** mpCap;
+struct VecB : RefPtrVecStorage {
     ~VecB();
     void Shrink(void** a, void** b);
 };
@@ -1903,31 +1910,25 @@ char cMaterialManager_WriteShaders(void* self, void* stream)
 // @ 0x0070f320
 VecA::~VecA()
 {
-    void** first = mpBegin;
     void** last = mpEnd;
+    void** first = mpBegin;
     for (; first < last; ++first)
     {
         if (*first != 0)
             ((RC3c_s0070_efa0*)*first)->Release();
     }
-    void* p = mpBegin;
-    if ((p != 0) && (*(int*)((char*)p - 4) != 0))
-        EFree(p);
 }
 
 // @ 0x0070f390
 VecB::~VecB()
 {
-    void** first = mpBegin;
     void** last = mpEnd;
+    void** first = mpBegin;
     for (; first < last; ++first)
     {
         if (*first != 0)
             ((RC3b_s0070_efa0*)*first)->Release();
     }
-    void* p = mpBegin;
-    if ((p != 0) && (*(int*)((char*)p - 4) != 0))
-        EFree(p);
 }
 
 // @ 0x0070f520

@@ -104,41 +104,49 @@ void __fastcall FUN_006ae110(void** p)
         q->f();
 }
 
+struct Base_6ae210_0 { virtual void v0(); ~Base_6ae210_0() {} };
+struct Base_6ae210_1 { virtual void v1(); ~Base_6ae210_1() {} };
+struct IRefRel_6ae120 { virtual void v0(); virtual void v1(); virtual void Release(); };
+struct RefPtr_6ae120 {
+    IRefRel_6ae120* p;
+    ~RefPtr_6ae120() { if (p) p->Release(); }
+};
+struct __declspec(novtable) Holder_6ae120 : Base_6ae210_0, Base_6ae210_1 {
+    void* m8;
+    RefPtr_6ae120 mc;
+    RefPtr_6ae120 m10;
+    ~Holder_6ae120();
+};
+
 // @ 0x006ae120
-void __fastcall FUN_006ae120(void* self)
+Holder_6ae120::~Holder_6ae120()
 {
-    void* p = *(void**)((char*)self + 0x10);
-    if (p)
-        ((void(__thiscall*)(void*))(*(void***)p)[2])(p);
-    void* q = *(void**)((char*)self + 0xc);
-    if (q)
-        ((void(__thiscall*)(void*))(*(void***)q)[2])(q);
-    *(void**)self = &vtbl_13eb938;
-    *(void**)((char*)self + 4) = &vtbl_13ef094;
 }
+
+struct Base_6ae190 { virtual void v0(); ~Base_6ae190() {} };
+struct __declspec(novtable) Holder_6ae190 : Base_6ae190 {
+    void* m4;
+    RefPtr_6ae120 m8;
+    RefPtr_6ae120 mc;
+    ~Holder_6ae190();
+};
 
 // @ 0x006ae190
-void __fastcall FUN_006ae190(void* self)
+Holder_6ae190::~Holder_6ae190()
 {
-    void* p = *(void**)((char*)self + 0xc);
-    if (p)
-        ((void(__thiscall*)(void*))(*(void***)p)[2])(p);
-    void* q = *(void**)((char*)self + 8);
-    if (q)
-        ((void(__thiscall*)(void*))(*(void***)q)[2])(q);
-    *(void**)self = &vtbl_13effb8;
 }
 
+struct Node_6ae210 : Base_6ae210_0, Base_6ae210_1 {
+    void* m8;
+    Job0* mpJob;
+    ~Node_6ae210();
+};
+
 // @ 0x006ae210
-void __fastcall FUN_006ae210(void* self)
+Node_6ae210::~Node_6ae210()
 {
-    *(void**)self = &vtbl_14094b4;
-    *(void**)((char*)self + 4) = &vtbl_14094b0;
-    void* p = *(void**)((char*)self + 0xc);
-    if (p)
-        ((Job0*)p)->GetStatus();
-    *(void**)self = &vtbl_13eb938;
-    *(void**)((char*)self + 4) = &vtbl_13ef094;
+    if (mpJob)
+        mpJob->GetStatus();
 }
 
 // @ 0x006ae280

@@ -510,10 +510,15 @@ struct EHTable {
     EInsertRes* DoInsertKey(EInsertRes* out, const int* pkey, u32 unused); // 0x00a23830
 };
 struct RefCounted { virtual void v00(); virtual void Release(); };
-struct RefVec {
+// a vector of reference-counted pointers: the base frees the storage (when it is a heap block), the vector releases
+// each element first
+struct RefVecStorage {
     RefCounted** mpBegin;   // +0
     RefCounted** mpEnd;     // +4
-    void Destroy();         // 0x00a23920
+    ~RefVecStorage();
+};
+struct RefVec : RefVecStorage {
+    ~RefVec();              // 0x00a23920
 };
 struct PHNode { int key; PHNode* next; };
 struct PHTable {
@@ -2753,7 +2758,7 @@ extern void* f_00a149a0(void);
 extern void* f_00a161b0(void);
 extern void* f_00a15d30(void);
 extern void* f_00a14800(void);
-extern void  f_00f47380(void* p);
+extern void  f_00f47380(void* p) throw();
 extern void* f_00f473a0(unsigned size, void* name, void* a3, void* a4, void* file, unsigned line);
 struct Callee_Th {
 void* m_0112ce00();
@@ -2776,7 +2781,15 @@ struct VoiceContainer_s00a2_1130 {
     bool Connect4(int a1, int a2, int a3, int a4);  // 0x00a214b0 (VoiceContainer::Connect4)
 };
 struct MsgTarget_00a21630 { bool Handle(int a1, int a2); };
-struct VoiceVec_00a21c00 { void Destroy(); };
+// a vector of voice pointers: the base frees the storage, the vector releases each voice (vtable slot 2) first
+struct IVoice_00a21c00 { virtual void Slot0(); virtual void Slot1(); virtual void Release(); };
+struct VoiceVecBase_00a21c00 {
+    IVoice_00a21c00** mpBegin;
+    IVoice_00a21c00** mpEnd;
+    IVoice_00a21c00** mpCapacity;
+    ~VoiceVecBase_00a21c00() { if (mpBegin != 0) f_00f47380(mpBegin); }
+};
+struct VoiceVec_00a21c00 : VoiceVecBase_00a21c00 { ~VoiceVec_00a21c00(); };
 struct RbTree_00a21dc0 { void* Find(void** out, void* key); };
 struct HashA_00a21eb0 { void Rehash(unsigned a); void* Alloc(unsigned n); };
 struct HashB_00a22060 { void Rehash(unsigned a); void* Alloc(unsigned n); };
@@ -5267,20 +5280,13 @@ void __fastcall command_00a21bd0(void* self, void* dummy, int a)
 }
 
 // @ 0x00a21c00
-void VoiceVec_00a21c00::Destroy()
+VoiceVec_00a21c00::~VoiceVec_00a21c00()
 {
-    int* self = (int*)this;
-    int* end = (int*)self[1];
-    int* it  = (int*)self[0];
-    while (it < end) {
-        void* p = (void*)*it;
-        if (p != 0)
-            VPTR(void, p, 8)(p);
-        ++it;
+    IVoice_00a21c00** end = mpEnd;
+    for (IVoice_00a21c00** it = mpBegin; it < end; ++it) {
+        if (*it != 0)
+            (*it)->Release();
     }
-    void* begin = (void*)self[0];
-    if (begin != 0)
-        f_00f47380(begin);
 }
 
 // @ 0x00a21c70
@@ -5889,19 +5895,23 @@ EInsertRes* EHTable::DoInsertKey(EInsertRes* out, const int* pkey, u32 unused)
 }
 
 // @ 0x00a23920
-void RefVec::Destroy()
+RefVec::~RefVec()
 {
-    RefCounted** it = mpBegin;
     RefCounted** end = mpEnd;
+    RefCounted** it = mpBegin;
     for (; it < end; ++it) {
         RefCounted* p = *it;
         if (p)
             p->Release();
     }
+}
+
+inline RefVecStorage::~RefVecStorage()
+{
     RefCounted** begin = mpBegin;
     if (begin) {
         if (*(int*)((char*)begin - 4) != 0)
-            operator_delete__(begin);
+            f_00f47380(begin);
     }
 }
 

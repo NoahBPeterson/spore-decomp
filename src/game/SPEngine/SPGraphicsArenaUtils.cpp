@@ -29,21 +29,31 @@ struct Arena {
     void Release();                                           // 0x011e40a0 (rw::core::arena::Arena::Release)
 };
 extern u32   sub_6c24b0(void*, void*, void*, int, int, int, const char*);
-struct EditorResource {
-    void* vtbl;
-    char pad04[0x18];
-    void* field1c;
-    void Cleanup();
+// editor resources: a base with a virtual interface (vtable 0x13eb938) and a reference to an object released through
+// vtable slot 1; the destructors unwind through the reference member and the base, so they build EH frames
+struct EditorResourceBase {
+    virtual void Slot0();
+    ~EditorResourceBase() {}
 };
-struct EditorResource2 {
-    void* vtbl;              // +0x00
+struct IEditorReleasable {
+    virtual void Slot0();
+    virtual void Release();
+};
+struct EditorResourceRef {
+    IEditorReleasable* mp;
+    ~EditorResourceRef() { if (mp != 0) mp->Release(); }
+};
+struct __declspec(novtable) EditorResource : EditorResourceBase {
     char pad04[0x14];
     void* field18;           // +0x18 arena
-    void* field1c;           // +0x1c
+    EditorResourceRef field1c; // +0x1c
+    ~EditorResource();
+};
+struct EditorResource2 : EditorResource {
     void* field20;           // +0x20
     u32   arr24[4];          // +0x24
     u32   arr34[4];          // +0x34
-    void Destroy();
+    ~EditorResource2();
 };
 extern "C" long __cdecl _InterlockedExchange(long volatile* target, long value);
 #pragma intrinsic(_InterlockedExchange)
@@ -127,17 +137,13 @@ void DestroySomeRenderObjects(u32* arr)
 }
 
 // @ 0x006c2120
-void EditorResource::Cleanup()
+EditorResource::~EditorResource()
 {
-    if (field1c != 0)
-        ((void(__thiscall*)(void*))(*(void***)field1c)[4 / 4])(field1c);
-    vtbl = (void*)0x13eb938;
 }
 
 // @ 0x006c2170
-void EditorResource2::Destroy()
+EditorResource2::~EditorResource2()
 {
-    vtbl = (void*)0x140a5a8;
     if (field18 != 0) {
         ((Arena*)field18)->Release();
     }
@@ -145,9 +151,6 @@ void EditorResource2::Destroy()
     if (field20 != 0)
         sub_11fb220((u32)field20);
     DestroyRenderObjects(arr34);
-    if (field1c != 0)
-        ((void(__thiscall*)(void*))(*(void***)field1c)[4 / 4])(field1c);
-    vtbl = (void*)0x13eb938;
 }
 
 // @ 0x006c2240

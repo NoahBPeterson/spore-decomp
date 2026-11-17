@@ -798,12 +798,7 @@ unsigned int SP::cCommandParameterSet::GetFirstParameterID() const
 // @ 0x00689dc0
 bool ParamWalker::Walk(char* node, uint32 flags, void* sink)
 {
-    if (node == 0) {
-        char* n = *(char**)((char*)this + 0xc);
-        char* end = (char*)this + 8;
-        for (; n != end; n = (char*)RBTreeIncrement(n))
-            Walk(n + 0x14, flags, sink);
-    } else {
+    if (node != 0) {
         if (sink != 0) {
             if ((char)flags != 0) {
                 ((void(__thiscall*)(void*, void*, void*, void*))
@@ -824,7 +819,12 @@ bool ParamWalker::Walk(char* node, uint32 flags, void* sink)
                 n = (char*)RBTreeIncrement(n);
             } while (n != end);
         }
+        return true;
     }
+    char* n = *(char**)((char*)this + 0xc);
+    char* end = (char*)this + 8;
+    for (; n != end; n = (char*)RBTreeIncrement(n))
+        Walk(n + 0x14, flags, sink);
     return true;
 }
 

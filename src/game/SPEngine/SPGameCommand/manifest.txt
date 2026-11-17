@@ -20,3 +20,4 @@
 ../src/game/SPEngine/SPGameCommand.cpp  ?DestroyNodes@CmdMap@cCommandServer_s0068_b150@@QAEXPAURbNode@@@Z  0068b9d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGameCommand.cpp  ?SetParameter@cCommandParameterSet_s0068_b150@@QAEXII@Z  0068c020  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGameCommand.cpp  ?RegisterCommandParameterInfo@cCommandServer@SP@@UAE_NIPB_W@Z  0068a970  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?Walk@ParamWalker@@QAE_NPADIPAX@Z  00689dc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

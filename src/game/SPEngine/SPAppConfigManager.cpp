@@ -57,7 +57,7 @@ extern void* g_CmdKey_floatProp2;           // 0x0153d1f8
 extern void* g_CmdKey_keyProp2;             // 0x0153d1fc
 extern void* g_CmdKey_card;                 // 0x0153d228
 void*    __cdecl EA_New(unsigned size, const char* name, int, int, const char*, int); // 0x00f473a0
-void     __cdecl EA_Free(void* p);                                               // 0x00f47380
+void     __cdecl EA_Free(void* p) throw();                                       // 0x00f47380
 void*    __cdecl CreateParser();                                                 // 0x008408d0
 void*    __cdecl CheatManager();                                                 // 0x0067de20
 void*    __cdecl GetSaveArea(const char* name);                                  // 0x006b1f90
@@ -132,13 +132,19 @@ struct cVendorCommand {
     cConfigScriptState* mState;     // +0x30
     void OnRegister(void*, void*);  // 0x007c84a0
 };
-struct AutoRefVec {
-    void** mpBegin;      // +0x00
-    void** mpEnd;        // +0x04
-    void** mpCap;        // +0x08
+// a fixed vector of auto-references: the base frees heap storage (not the inline buffer), the vector releases each
+// element (vtable slot 1) first
+struct IAutoRef { virtual void Slot0(); virtual void Release(); };
+struct AutoRefVecBase {
+    IAutoRef** mpBegin;      // +0x00
+    IAutoRef** mpEnd;        // +0x04
+    IAutoRef** mpCap;        // +0x08
     char   pad0C[4];
-    void*  mInline[4];   // +0x10
-    void Destroy();
+    void*  mInline[4];       // +0x10
+    ~AutoRefVecBase() { void* b = mpBegin; if (b != 0 && b != mInline[0]) EA_Free(b); }
+};
+struct AutoRefVec : AutoRefVecBase {
+    ~AutoRefVec();
 };
 struct cCmdArgs {
     char pad0[4];
@@ -2465,17 +2471,14 @@ found:
 }
 
 // @ 0x007c80c0
-void AutoRefVec::Destroy()
+AutoRefVec::~AutoRefVec()
 {
-    void** it = mpBegin;
-    void** e = mpEnd;
+    IAutoRef** e = mpEnd;
+    IAutoRef** it = mpBegin;
     for (; it < e; it++) {
         if (*it != 0)
-            ((VFn0)VSLOT(*it, 4))(*it);
+            (*it)->Release();
     }
-    void* b = mpBegin;
-    if (b != 0 && b != mInline[0])
-        EA_Free(b);
 }
 
 // @ 0x007c8160

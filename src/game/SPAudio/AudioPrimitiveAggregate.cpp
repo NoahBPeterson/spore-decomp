@@ -155,9 +155,19 @@ static float ElemValue(void* base, int i)
 struct S106 {
     char pad[0x100];
     void pushPair(void** v);            // 0xa35ef0
-    void dtor();                        // 0xa36a10
     void vecInsert(void** pos, void** value); // 0xa36ad0
     bool vecRemove(u32 key);            // 0xa36c80
+};
+// the destructor's view of S106: three bases (vtables restored to 0x13eb938, 0x13eb938 and 0x13ef094 at +0, +4, +8)
+// and the auto-ref vector at +0x10, destroyed by its out-of-line destructor (0x007c80c0)
+struct S106Base0 { virtual void Slot0(); ~S106Base0() {} };
+struct S106Base1 { virtual void Slot0(); ~S106Base1() {} };
+struct S106Base2 { virtual void Slot0(); ~S106Base2() {} };
+struct S106AutoRefVec { void* mBegin; void* mEnd; void* mCap; ~S106AutoRefVec(); };
+struct S106Obj : S106Base0, S106Base1, S106Base2 {
+    void* m0c;
+    S106AutoRefVec mVec;    // +0x10
+    ~S106Obj();
 };
 // ---- items of slice s00a35d20 end
 
@@ -384,16 +394,8 @@ void PrimitiveAggregate_s00a3_5d20::SetParam(float value, int param_3)
 }}  // namespace EA::Audio
 
 // @ 0x00a36a10
-void S106::dtor()
+S106Obj::~S106Obj()
 {
-    char* self = (char*)this;
-    *(void**)(self + 0) = &g_01453140;
-    *(void**)(self + 4) = &g_01453124;
-    *(void**)(self + 8) = &g_01453120;
-    DestroyAutoRefVec(self + 0x10);
-    *(void**)(self + 8) = &g_013ef094;
-    *(void**)(self + 4) = &g_013eb938;
-    *(void**)(self + 0) = &g_013eb938;
 }
 
 // @ 0x00a36ad0

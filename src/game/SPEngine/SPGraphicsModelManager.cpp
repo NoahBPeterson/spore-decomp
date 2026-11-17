@@ -2808,7 +2808,7 @@ extern float g_f1473c70;   // 0x01473c70
 extern float g_f1471064;   // 0x01471064 = 0.5
 extern float g_f1486110;   // 0x01486110
 extern float g_f1537b10, g_f1537b14, g_f1537b18, g_f1537b1c;
-void __cdecl operator_delete__(void* p);   // 0x00f47380 (CRT operator delete)
+void __cdecl operator_delete__(void* p) throw();   // 0x00f47380 (CRT operator delete)
 struct cSPTransform_s0075_3270 {
     uint32_t m[12];
     cSPTransform_s0075_3270& operator=(const cSPTransform_s0075_3270& o);
@@ -2851,11 +2851,16 @@ static void CModelWorld_ReleaseModel753270(MwModel_mw* m)
   else
     m->m40 = n - 1;
 }
+// a fixed vector's storage: frees a heap block, never the inline buffer that +0x10 points at
+struct MWGroupFixedVecStorage {
+  void* mpBegin;                         // +0x00
+  char pad_04[0xc];
+  void* mpInline;                        // +0x10
+  ~MWGroupFixedVecStorage();
+};
 struct cMWGroupInternal_00753580 {
   char pad_0[0x4c];
-  void* m4c;                             // +0x4c
-  char pad_50[0xc];
-  void* m5c;                             // +0x5c
+  MWGroupFixedVecStorage mVec;           // +0x4c
   __declspec(noinline) ~cMWGroupInternal_00753580();
 };
 struct QueueSlot_lq {
@@ -7683,8 +7688,12 @@ void TreeWalker_00753540::ForEach(float a, float b)
 cMWGroupInternal_00753580::~cMWGroupInternal_00753580()
 {
   ((SP::MWGroupDtorStub*)this)->F();
-  void* p = m4c;
-  if (p != 0 && p != m5c)
+}
+
+inline MWGroupFixedVecStorage::~MWGroupFixedVecStorage()
+{
+  void* p = mpBegin;
+  if (p != 0 && p != mpInline)
     operator_delete__(p);
 }
 

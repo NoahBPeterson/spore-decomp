@@ -12,3 +12,5 @@ slices/s006e6100/s006e6100.cpp  ?ResetCounter@ShaderHost@@QAEHXZ  006e6b40  /O2 
 slices/s006e6100/s006e6100.cpp  ?CallIface@ShaderHost@@QAEXH@Z  006e6c20  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s006e6100/s006e6100.cpp  ?IsDone@ShaderHost@@QAE_NXZ  006e6c60  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s006e6100/s006e6100.cpp  ?TailVirtual@ShaderHost@@QAEXXZ  006e6c80  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s006e6100/s006e6100.cpp  ?SetActiveColor@@YAXPBM@Z  006e6500  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006e6100/s006e6100.cpp  ?AbsArray9@@YAXPBMPAM@Z  006e6e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,7 +1,6 @@
 007e17a0  138  eastl uninitialized_copy<AutoRef>: real signature is (AutoRef** out, first, last, dst) - it writes the advanced dst back through the out pointer; SEH frame + helper schedule differ. equiv: WEAK (89 valid, 39.6% coverage, no mismatch)
 007e1830  145  eastl uninitialized_move/copy<AutoRef>; helper-call/EH frame schedule differs
 007e1950  138  hashtable rehash; bucket-walk codegen differs
-007e1a80  105  description dtor; member-destroy schedule differs (p20 at +0x20 released through vtable slot 1); equiv: PASS (363 valid, 100% coverage)
 007e2ce0  390  cTransitionCommand instance dispatch; vtable/loop codegen differs; equiv: WEAK (40% coverage, member fix)
 007e2fb0  56   cTransitionListCommand::Execute: the element is filled by materialising an AutoRef temp (p = parsed int, field4's low byte = parsed char) and copying its 8 bytes; equiv: WEAK (100 valid, 82.0% coverage, no mismatch)
 007e3030  91   cAppStateManager::StateIDFromName; hashtable find call/inline differs

@@ -504,10 +504,9 @@ void inlet_free(t_inlet* x)
     } else if (i) {
         while (i->i_next != x) {
             i = i->i_next;
-            if (!i) {
-                freebytes(x, 0x28);
-                return;
-            }
+            if (i) continue;
+            freebytes(x, 0x28);
+            return;
         }
         i->i_next = x->i_next;
     }
@@ -744,10 +743,9 @@ void outlet_free(t_outlet* x)
     } else if (o) {
         while (o->o_next != x) {
             o = o->o_next;
-            if (!o) {
-                freebytes(x, 0x1c);
-                return;
-            }
+            if (o) continue;
+            freebytes(x, 0x1c);
+            return;
         }
         o->o_next = x->o_next;
     }

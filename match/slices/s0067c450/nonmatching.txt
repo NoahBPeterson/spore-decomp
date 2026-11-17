@@ -2,7 +2,6 @@
 0067c790  n/a  HideAllHints; complete, register allocation (this in esi vs edi) differs. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#6 esp]
 0067c830  33  cUIHints::ActivateHint; complete, equiv WEAK (no mismatch, under-covered); fixed decl-marker comment so the checker stops testing the wrong symbol.
 0067c8c0  32  cUIHints::SetHintState; complete, equiv WEAK (no mismatch, under-covered); fixed decl-marker comment so the checker stops testing the wrong symbol.
-0067c960  n/a  cUIHints::Update; complete; cl spills elapsed instead of keeping it in x87 across the branch (79 vs 72 bytes).
 0067c9b0  32  cUIHints::Refresh; complete, equiv WEAK (no mismatch, under-covered); fixed decl-marker comment so the checker stops testing the wrong symbol.
 0067cc70  n/a  D3D9 register helper (unguarded variant); complete, 11-byte register-allocation diff (device/vtable in eax/ecx vs ecx/edx).
 0067ce00  n/a  D3D9 constant-upload helper; complete for this VA (first of two merged blocks), 12-float copy loop shape differs.

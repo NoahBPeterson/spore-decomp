@@ -4,7 +4,6 @@
 007c7b30 132 64-byte-aligned stack buffer / float-format call scheduling differs
 007c7cd0 76 CSE of mResBegin across the bounds check changes register allocation
 007c7d70 74 missing compiler EH frame around the AddRef'd uninitialized copy
-007c80c0 52 missing compiler EH frame around the element Release loop
 007c8160 49 binary-search register allocation differs; equiv: PASS (now returns the position in eax as the original does; void left garbage: hybrid crash 2026-10-12)
 007c8270 242 command registration new-expression/EH scheduling differs
 007c84a0 59 command registration new-expression/EH scheduling differs

@@ -94,3 +94,5 @@
 ../src/game/SPAudio/AudioSystem.cpp  ?DoFreeNodes@NodeAllocator@@QAEXPAPAUHashNode0@@I@Z  00a2f6e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?eraseKey@NodeMap@@QAEHPAI@Z  00a30f10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?GetAudioCount@cSPUIPosse@@QAEHXZ  00e23250  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ??1VoiceVec_00a21c00@@QAE@XZ  00a21c00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ??1RefVec@@QAE@XZ  00a23920  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

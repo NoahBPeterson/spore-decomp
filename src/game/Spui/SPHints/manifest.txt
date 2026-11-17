@@ -6,3 +6,4 @@
 ../src/game/Spui/SPHints.cpp  ?SetFlag@cUIHints@@QAEHDH@Z  0067c420  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/Spui/SPHints.cpp  ?FUN_0067ca40@@YIXPAUcUIHintsThunkTarget@@@Z  0067ca40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/Spui/SPHints.cpp  ?AddCondition@cUIHints_s0067_c450@@QAEXPAX@Z  0067ca50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/Spui/SPHints.cpp  ?Update@cUIHints_s0067_c450@@QAEXXZ  0067c960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
