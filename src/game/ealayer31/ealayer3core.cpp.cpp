@@ -77,4 +77,3 @@ EALayer3Core::EALayer3Core(int n)
     AllocateHybrid(n);
 }
 }}}  // namespace rw::audio::core
-
