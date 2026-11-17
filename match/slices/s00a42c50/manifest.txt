@@ -1,0 +1,1 @@
+slices/s00a42c50/s00a42c50.cpp  ?SetObject@Owner_a42c50@@QAEXPAURefObject_a42c50@@@Z  00a42c50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
