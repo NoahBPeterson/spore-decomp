@@ -335,7 +335,6 @@ struct CaptureJobMsg {
     int f1c, f20, f24, f28;
 };
 struct cRTTCheat {
-    void* Construct(int owner);
     void  Execute(void* args);
 };
 namespace EA {

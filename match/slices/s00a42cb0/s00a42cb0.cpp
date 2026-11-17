@@ -3,6 +3,10 @@
 // Module flags (guess, verify): /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 
+void* __cdecl operator new(unsigned int, const char*, int, int, const char*, int);
+inline void* __cdecl operator new(unsigned int, void* p) { return p; }
+inline void __cdecl operator delete(void*, void*) {}
+
 namespace SP {
 
 extern uint32_t gTuningGroupID;                 // 0x015541dc (no PDB name)
@@ -595,21 +599,24 @@ void* EastlNodeAlloc::AllocNode(void* src) {
 // ===========================================================================
 // 0x00a43790  eastl::fixed_pool::copy
 // ===========================================================================
+struct Node30Obj : Node30 {
+    Node30Obj(const Node30* s) {
+        m0 = s->m0;
+        m8 = s->m8;
+        m10 = s->m10;
+        m18 = s->m18;
+        m1c = s->m1c;
+        m20 = s->m20;
+        mp24 = s->mp24;
+        if (mp24 != 0)
+            (*(void (__thiscall**)(void*))*(void**)mp24)(mp24);
+    }
+};
+
 // @ 0x00a43790
 void* EastlNodeAlloc::CopyNode30(void* src) {
-    Node30* p = (Node30*)EAOperatorNew(0x30, gEaEastlName, 0, 0, gEaAllocatorFile, 0xd1);
-    if (p != 0) {
-        Node30* s = (Node30*)src;
-        p->m0 = s->m0;
-        p->m8 = s->m8;
-        p->m10 = s->m10;
-        p->m18 = s->m18;
-        p->m1c = s->m1c;
-        p->m20 = s->m20;
-        p->mp24 = s->mp24;
-        if (p->mp24 != 0)
-            (*(void (__thiscall**)(void*))*(void**)p->mp24)(p->mp24);
-    }
+    Node30* p = (Node30*)operator new(0x30, gEaEastlName, 0, 0, gEaAllocatorFile, 0xd1);
+    new (p) Node30Obj((const Node30*)src);
     p->m28 = 0;
     return p;
 }
