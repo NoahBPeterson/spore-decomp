@@ -1,0 +1,1 @@
+slices/s007a5000/s007a5000.cpp  ?Call@Owner_7a5000@@QAEPAXXZ  007a5000  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
