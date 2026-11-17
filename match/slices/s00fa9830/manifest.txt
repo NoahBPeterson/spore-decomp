@@ -1,0 +1,1 @@
+slices/s00fa9830/s00fa9830.cpp  ?Forward_fa9830@@YAPAXPAXPAUObject_fa9830@@@Z  00fa9830  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

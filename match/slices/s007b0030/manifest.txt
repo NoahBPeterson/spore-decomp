@@ -1,0 +1,1 @@
+slices/s007b0030/s007b0030.cpp  ?Forward_7b0030@@YAPAXPAXPAUObject_7b0030@@@Z  007b0030  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

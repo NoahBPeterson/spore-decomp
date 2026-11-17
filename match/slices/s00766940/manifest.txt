@@ -1,0 +1,1 @@
+slices/s00766940/s00766940.cpp  ?Forward_766940@@YAPAXPAXPAUObject_766940@@@Z  00766940  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
