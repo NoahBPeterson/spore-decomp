@@ -4,3 +4,4 @@
 ../src/game/UTFSpore_Win32/Commands.cpp  ?Release@cMetaCommandBase@@QAEHXZ  0083c7d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Commands.cpp  ??0cCommandBase@@QAE@XZ  0083c800  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/Commands.cpp  ??0cMetaCommandBase@@QAE@XZ  0083c840  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Commands.cpp  ?DoFreeNodesTable@@YGXPAXH@Z  0083cad0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

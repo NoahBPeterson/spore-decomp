@@ -2091,21 +2091,29 @@ bool WriteImageDataAsTexture(void* ppData, int a, int b, void** out)
     return true;
 }
 
+// Uninitialized copy of ref ranges (0x007b0040), EASTL style: iterator objects and a placement copy per AddRef'd ref.
+struct RefIface_7b0040 { virtual void AddRef(); virtual void Release(); };
+struct RefElem_7b0040 {
+    RefIface_7b0040* p;
+    RefElem_7b0040(const RefElem_7b0040& o) : p(o.p) { if (p) p->AddRef(); }
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct RefIt_7b0040 {
+    RefElem_7b0040* p;
+    RefIt_7b0040(RefElem_7b0040* q) : p(q) {}
+    RefElem_7b0040& operator*() const { return *p; }
+    RefIt_7b0040& operator++() { ++p; return *this; }
+    bool operator!=(const RefIt_7b0040& o) const { return p != o.p; }
+};
+
 // @ 0x007b0040
-void** CopyRefRange(void*** dstRef, void** first, void** last, void* fillValue)
+RefIt_7b0040 RefUninitCopy_7b0040(RefIt_7b0040 first, RefIt_7b0040 last, RefIt_7b0040 dest)
 {
-    *dstRef = (void**)fillValue;
-    for (; first != last; ++first) {
-        void* dst = *dstRef;
-        if (dst) {
-            void* p = *first;
-            *(void**)dst = p;
-            if (p)
-                (*(void (__thiscall**)(void*))*(void**)p)(p);
-        }
-        *dstRef = (void**)((char*)dst + 4);
-    }
-    return (void**)dstRef;
+    RefIt_7b0040 result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) RefElem_7b0040(*first);
+    return result;
 }
 
 // @ 0x007b00d0

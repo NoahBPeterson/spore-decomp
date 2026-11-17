@@ -1,5 +1,4 @@
 00a26530  36  complete; fixed_hashtable DoFreeNodes + count clears, register schedule differs
-00a26da0  97  complete; vector element release loop + block free, schedule differs
 00a25c40  581 complete; AudioSystem::Update SEH frame + queue/stopwatch timing loop reproduced; 269 vs 651 bytes. [equiv: FAIL 5/7 valid, fault at 00a0f9b1]
 00a25ed0  273 complete; RemoveFromList intrusive-list unlink/refcount body; 123 vs 281 bytes. [equiv: WEAK 94 valid, 16.7% coverage]
 00a26040  103  schedule: the temporary is a 16-byte eastl::string {begin,end,cap,alloc} whose dtor frees when (cap-begin)>1, and the function returns the vtable[0xf4] result; source now builds that explicit destructor check and returns the id. /GS- keeps the frame right (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-); residual is the EH-state store slot and load order (130 vs 122 bytes). fix1: quick check UNSUPPORTED

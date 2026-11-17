@@ -2,7 +2,6 @@
 # slice s006ad5c0 (resource manager / LRU cache module)
 # flags "/O2 /MD /Gy /EHsc /TP"; diff byte counts from `run_all.py`
 006add30   37  SList::Init: body byte-identical; the 3-DWORD fs:[0] EH prolog + `[esp+4]=esi` is missing (non-POD guard yields the /GS form instead)
-006adda0  92  pool node alloc: complete (operator new 0x40 in the "App" zone, *n = a[0], FUN_006add30(n+4, a+4) sub-list init, *(n+0x3c) = 0); the original's old-style fs:[0] SEH prolog is not reproduced and cl inlines the FUN_006add30 call; difftest WEAK 170 valid / 100% cov (inline-calls tolerated)
 006ad890   93  ctor: now __fastcall(self, unused, a) so `a` is the 1-stack-arg (ret 4) the original reads at [esp+0x14] and the ctor returns this in eax; EH prologue + /arch:SSE constant-pool (0x1485720/0x1470f1c) loads not reproduced; difftest PASS 1200 valid / 100% cov
 006adbf0   73  scalar deleting dtor: now __fastcall(self, unused, flag) so the delete flag comes from the stack (ret 4) instead of edx (old form read edx=0x13 and called zone_delete on a stack object) and the dtor returns this; old-style EH prolog not reproduced; difftest PASS 812 valid / 100% cov
 006ae060   39  4-IID test: cl 15 emits a linear compare chain instead of the original median tree

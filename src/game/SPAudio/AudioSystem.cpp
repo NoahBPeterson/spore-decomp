@@ -649,6 +649,27 @@ struct RDD {
     bool    Tick3(void* a, void* b, void* c);   // 0x00a24930
 };
 // ---- items of slice s00a23360 end
+// Construction view of RDD (0x00a247f0): the driver base and the vector have destructors; the mutex is built last.
+struct RDDDriverBase {
+    RDDDriverBase(const char* name);  // 0x011e5d80
+    virtual ~RDDDriverBase();
+    u8 pad04[0x14 - 4];
+};
+struct RDDPtrVec {
+    void** mpBegin; void** mpEnd; void** mpCapacity;
+    RDDPtrVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~RDDPtrVec();
+};
+struct RDDMutex : Mutex_s00a2_3360 {
+    RDDMutex() { ctor(0, 1); }
+    ~RDDMutex();
+};
+struct RDDCtorView : RDDDriverBase {
+    RDDPtrVec mVec;               // +0x14
+    u8        pad20[0x28 - 0x20];
+    RDDMutex  mMutex;             // +0x28
+    RDDCtorView();
+};
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
 __declspec(noinline) RBNode_s00a2_3360* __stdcall RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent);   // defined at 0x00a245e0, called earlier in the TU
@@ -1298,7 +1319,8 @@ struct XF {
     void  Noop();
 };
 void* __cdecl operator_new(uint, const char*, int, int, const char*, int);   // 0x00f473a0
-void  __cdecl operator_delete(void*);
+void  __cdecl operator_delete(void*) throw();
+struct IUnk_a26da0 { virtual void AddRef(); virtual void Release(); };
 void* __cdecl FUN_00a17090(uint size);
 void* __cdecl FUN_00a17100(void* p);
 void __cdecl FUN_00fccdd0(unsigned id);   // 0x00fccdd0
@@ -3577,21 +3599,21 @@ void vs120();
 
     char pad_[0x118a1c - 0x4];
     U32Table mActiveTable;        // +0x118a1c (buckets +0x118a20, count +0x118a24)
-    char pad2[0x118a3c - 0x118a2c];
+    char pad2[0x118a3c - (0x118a1c + sizeof(U32Table))];
     U32Table mLRUTable;           // +0x118a3c (buckets +0x118a40, count +0x118a44)
-    char pad3[0x118b90 - 0x118a4c];
+    char pad3[0x118b90 - (0x118a3c + sizeof(U32Table))];
     U32Table mVoiceMap;           // +0x118b90 (buckets +0x118b94, count +0x118b98)
-    char pad3b[0x118bb0 - 0x118ba0];
+    char pad3b[0x118bb0 - (0x118b90 + sizeof(U32Table))];
     U32Table mCounterA;           // +0x118bb0 (buckets +0x118bb4, count +0x118bb8)
-    char pad4[0x13795c - 0x118bc0];
+    char pad4[0x13795c - (0x118bb0 + sizeof(U32Table))];
     U32Table mSoundMap;           // +0x13795c
-    char pad5[0x137fe8 - 0x137964];
+    char pad5[0x137fe8 - (0x13795c + sizeof(U32Table))];
     U32Table mCounterMap;         // +0x137fe8 (buckets +0x137fec, count +0x137ff0)
-    char pad6[0x157440 - 0x137ff8];
+    char pad6[0x157440 - (0x137fe8 + sizeof(U32Table))];
     U32Table mKeyMap;             // +0x157440
-    char pad7[0x158f50 - 0x157450];
+    char pad7[0x158f50 - (0x157440 + sizeof(U32Table))];
     U32Table mObjMap;             // +0x158f50
-    char pad8[0x15b750 - 0x158f60];
+    char pad8[0x15b750 - (0x158f50 + sizeof(U32Table))];
     void* mLRUIterNode;           // +0x15b750
     void* mLRUIterBucket;         // +0x15b754
     int   mLRUBytes;              // +0x15b758
@@ -5046,14 +5068,11 @@ bool VoiceContainer_s00a2_1130::Connect(int a1, int a2)
     char* self = (char*)this;
     void* p = TH(self + 0x10)->m_00a34230(0x53747030);
     if (p == 0) return false;
-    void* m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c600();
-    char buf[8];
-    *(int*)(buf + 0) = a1;
-    *(int*)(buf + 4) = a2;
+    AutoAudioLock lock;
+    int buf[2];
+    buf[0] = a1;
+    buf[1] = a2;
     TH(p)->m_0112ccc0(2, buf);
-    m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c620();
     return true;
 }
 
@@ -5065,18 +5084,15 @@ bool VoiceContainer_s00a2_1130::Connect4(int a1, int a2, int a3, int a4)
     if (!cached)
         *(void**)(self + 0x15f4) = TH(self + 0x10)->m_00a34230(0x53747030);
     if (*(int*)(self + 0x15f4) == 0) return false;
-    void* m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c600();
+    AutoAudioLock lock;
     if (!cached) {
-        char buf[16];
-        *(int*)(buf + 0)  = a1;
-        *(int*)(buf + 4)  = a2;
-        *(int*)(buf + 8)  = a3;
-        *(int*)(buf + 12) = a4;
+        int buf[4];
+        buf[0] = a2;
+        buf[1] = a3;
+        buf[2] = a4;
+        buf[3] = a1;
         TH(*(void**)(self + 0x15f4))->m_0112ccc0(0, buf);
     }
-    m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c620();
     return true;
 }
 
@@ -5222,24 +5238,29 @@ void __fastcall forward_00a21a60(void* self)
     ((void (__thiscall*)(void*))fn)(q);
 }
 
+struct VoiceRef_a21a80 {
+    virtual void AddRef();
+    virtual void Release();
+    uchar pad04[0x970 - 4];
+    unsigned mTag;   // +0x970
+};
+struct VoicePtr_a21a80 {
+    VoiceRef_a21a80* p;
+    VoicePtr_a21a80(VoiceRef_a21a80* q) : p(q) { if (p) p->AddRef(); }
+    ~VoicePtr_a21a80() { p->Release(); }
+};
+
 // @ 0x00a21a80
 void* AudioSys_00a21a80::FindVoice(unsigned tag)
 {
     char* self = (char*)this;
     if (tag == 0) tag = 0xf1cc1687;
-    char* end = *(char**)(self + 0x119ba8);
-    char* it  = *(char**)(self + 0x119ba4);
-    if (it == end) return 0;
-    do {
-        void* v = *(void**)it;
-        if (v != 0) VPTR(void, v, 0)(v);
-        if (tag == *(unsigned*)((char*)v + 0x970)) {
-            VPTR(void, v, 4)(v);
-            return v;
-        }
-        VPTR(void, v, 4)(v);
-        it += 4;
-    } while (it != end);
+    VoiceRef_a21a80** end = *(VoiceRef_a21a80***)(self + 0x119ba8);
+    for (VoiceRef_a21a80** it = *(VoiceRef_a21a80***)(self + 0x119ba4); it != end; ++it) {
+        VoicePtr_a21a80 v(*it);
+        if (tag == v.p->mTag)
+            return v.p;
+    }
     return 0;
 }
 
@@ -6106,36 +6127,38 @@ __declspec(noinline) RBNode_s00a2_3360* __stdcall RB_AllocNode(const RBNode_s00a
     return n;
 }
 
+struct RefIface_a24750 { virtual void AddRef(); virtual void Release(); };
+// Uninitialized copy of Elem20 ranges (0x00a24750), EASTL style: iterator objects and a placement copy per element.
+struct E20_a24750_Ref {
+    RefIface_a24750* p;
+    E20_a24750_Ref(const E20_a24750_Ref& o) : p(o.p) { if (p) p->AddRef(); }
+};
+struct E20_a24750_Elem {
+    uint32_t d0, d1, d2, d3;
+    E20_a24750_Ref ref;   // +0x10
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct E20_a24750_It {
+    E20_a24750_Elem* p;
+    E20_a24750_It(E20_a24750_Elem* q) : p(q) {}
+    E20_a24750_Elem& operator*() const { return *p; }
+    E20_a24750_It& operator++() { ++p; return *this; }
+    bool operator!=(const E20_a24750_It& o) const { return p != o.p; }
+};
+
 // @ 0x00a24750
-Elem20* __cdecl CopyElems20(Elem20** out, Elem20* first, Elem20* last)
+E20_a24750_It E20_a24750_UninitCopy(E20_a24750_It first, E20_a24750_It last, E20_a24750_It dest)
 {
-    *out = last;
-    for (; first != last; first += 1) {
-        Elem20* dst = *out;
-        if (dst) {
-            dst->d0 = first->d0;
-            dst->d1 = first->d1;
-            dst->d2 = first->d2;
-            dst->d3 = first->d3;
-            void* v = first->ref;
-            dst->ref = v;
-            if (v)
-                vc<void>(v, 0);
-        }
-        *out += 1;
-    }
-    return *out;
+    E20_a24750_It result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) E20_a24750_Elem(*first);
+    return result;
 }
 
 // @ 0x00a247f0
-void RDD::Construct()
+RDDCtorView::RDDCtorView() : RDDDriverBase("resman:")
 {
-    ((DeviceDriver*)this)->ctor("resman:");
-    vftable = (void*)0x1452b00;
-    mpBegin = 0;
-    mpEnd = 0;
-    mpCapacity = 0;
-    mMutex.ctor(0, 1);
 }
 
 // @ 0x00a24850
@@ -6959,19 +6982,31 @@ void AudioSystem_s00a2_5c40::Insert_26be0(void* ret, const uint* key, uint hash)
     *(uint8_t*)((uchar*)ret + 8) = 1;
 }
 
+// Element vector at 0xa26da0: 0x14-byte entries whose ref at +0x10 is released; the fixed storage frees the block
+// unless it is the inline pool.
+struct RefElem14_a26da0 {
+    uchar pad[0x10];
+    IUnk_a26da0* mpRef;   // +0x10
+    ~RefElem14_a26da0() { IUnk_a26da0* r = mpRef; if (r) r->Release(); }
+};
+struct RefVecStorage_a26da0 {
+    RefElem14_a26da0* mpBegin;   // +0
+    RefElem14_a26da0* mpEnd;     // +4
+    RefElem14_a26da0* mpCap;     // +8
+    uint pad0c;
+    void* mpPool;                // +0x10
+    ~RefVecStorage_a26da0() { if (mpBegin && mpBegin != mpPool) operator_delete(mpBegin); }
+};
+struct RefVec_a26da0 : RefVecStorage_a26da0 {
+    ~RefVec_a26da0();
+};
+
 // @ 0x00a26da0
-void AudioSystem_s00a2_5c40::VecDtor_26da0()
+RefVec_a26da0::~RefVec_a26da0()
 {
-    // `this` is a vector {begin(+0), end(+4), cap(+8), allocator(+0x10)}
-    uchar* v = (uchar*)this;
-    uchar* begin = *(uchar**)v;
-    uchar* end = *(uchar**)(v + 4);
-    for (uchar* p = begin; p < end; p += 0x14) {
-        void* o = *(void**)(p + 0x10);
-        if (o) ((void(__thiscall*)(void*))vc_s00a2_5c40(o, 4))(o);
-    }
-    if (begin && begin != *(uchar**)(v + 0x10))
-        operator_delete(begin);
+    RefElem14_a26da0* end = mpEnd;
+    for (RefElem14_a26da0* p = mpBegin; p < end; ++p)
+        p->~RefElem14_a26da0();
 }
 
 // @ 0x00a26e10
@@ -7023,23 +7058,33 @@ void ResTable::DoFreeNodes(ResNode** buckets, uint32_t n)
     }
 }
 
+// Pool node of 0xa27010: the payload (three words and a ref) is copy-constructed in place at node + 0x10.
+struct PayloadRef_a27010 {
+    RefObj* p;
+    PayloadRef_a27010(const PayloadRef_a27010& o) : p(o.p) { if (p) p->AddRef(); }
+    ~PayloadRef_a27010();
+};
+struct PayloadVal_a27010 {
+    uint32_t a, b, c;
+    PayloadRef_a27010 obj;
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+inline void** NodePoolAlloc_a27010(NodePool* pool)
+{
+    void** node = pool->mpFree;
+    if (node)
+        pool->mpFree = (void**)*node;
+    else
+        node = (void**)eaNew(pool->mnNodeSize, "EASTL", 0, 0, EASTL_FILE, 0xd1);
+    return node;
+}
+
 // @ 0x00a27010
 void* NodePool::Alloc(const Payload* src)
 {
-    void** node = mpFree;
-    if (node) {
-        mpFree = (void**)*node;
-    } else {
-        node = (void**)eaNew(mnNodeSize, "EASTL", 0, 0, EASTL_FILE, 0xd1);
-    }
-    Payload* dst = (Payload*)(node + 4);
-    if (dst) {
-        dst->a = src->a;
-        dst->b = src->b;
-        dst->c = src->c;
-        dst->obj = src->obj;
-        if (src->obj) src->obj->AddRef();
-    }
+    void** node = NodePoolAlloc_a27010(this);
+    new (node + 4) PayloadVal_a27010(*(const PayloadVal_a27010*)src);
     return node;
 }
 
@@ -7054,19 +7099,23 @@ PropList_s00a2_6e10::~PropList_s00a2_6e10()
     // the two fixed vectors free their heap buffers in their own destructors (v2, then v1)
 }
 
+struct PropListRef_a27170 {
+    PropList_s00a2_6e10* p;
+    PropListRef_a27170(PropList_s00a2_6e10* q) : p(q) { if (p) p->AddRef(); }
+    ~PropListRef_a27170() { if (p) p->Release(); }
+};
+
 // @ 0x00a27170
 bool FactoryVoiceTemplate::CreateResource(int key, PropList_s00a2_6e10** out, int a, int b)
 {
     bool ok = false;
     if (out != 0 && key != 0) {
-        PropList_s00a2_6e10* res = new ("audio", 0, 0, 0, 0) PropList_s00a2_6e10();
-        if (res) res->AddRef();
-        if (InitResource(key, res, a, b)) {
-            res->AddRef();
-            *out = res;
+        PropListRef_a27170 res(new ("audio", 0, 0, 0, 0) PropList_s00a2_6e10());
+        if (InitResource(key, res.p, a, b)) {
+            res.p->AddRef();
+            *out = res.p;
             ok = true;
         }
-        if (res) res->Release();
     }
     return ok;
 }
@@ -7677,22 +7726,30 @@ bool Sys_s00a2_8120::GetOrRegisterVoice(unsigned key, Voice** out, int nLayers, 
     return true;
 }
 
+// Object map insert at 0xa28c60: a ref-counted key/value pair goes through the map's DoInsertValue (0x00a136f0).
+struct SndRef_a28c60 {
+    Snd_s00a2_8120* p;
+    SndRef_a28c60(Snd_s00a2_8120* q) : p(q) { if (p) p->AddRef(); }
+    SndRef_a28c60(const SndRef_a28c60& o) : p(o.p) { if (p) p->AddRef(); }
+    ~SndRef_a28c60() { if (p) p->Release(); }
+};
+struct SndPair_a28c60 {
+    Snd_s00a2_8120* key;
+    SndRef_a28c60 value;
+    SndPair_a28c60(Snd_s00a2_8120* k, const SndRef_a28c60& v) : key(k), value(v) {}
+};
+struct SndInsertRes_a28c60 { HIter_s00a2_8120 it; bool inserted; };
+struct TrueTag_a28c60 {};
+struct SndObjMap_a28c60 {
+    SndInsertRes_a28c60 DoInsertValue(const SndPair_a28c60& v, TrueTag_a28c60);   // 0x00a136f0
+};
+
 // @ 0x00a28c60
 void Sys_s00a2_8120::RegisterObj(Snd_s00a2_8120* p)
 {
-    if (p)
-        p->AddRef();
-    Key4_s00a2_8120 pair;
-    pair.a = (unsigned)p;
-    pair.b = 0;
-    pair.c = 0;
-    pair.d = (unsigned)p;
-    if (p)
-        p->AddRef();
-    HIter_s00a2_8120 it;
-    PairInsert(&mObjMap, &it, &pair, 0);
-    if (p)
-        p->Release();
+    SndRef_a28c60 ref(p);
+    SndPair_a28c60 pair(ref.p, ref);
+    ((SndObjMap_a28c60*)&mObjMap)->DoInsertValue(pair, TrueTag_a28c60());
 }
 
 // @ 0x00a28d10

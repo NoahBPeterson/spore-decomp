@@ -3,7 +3,6 @@
 006b2000 113 keyed save-area lookup; prologue schedule of the find args differs (esi saved later) flags: /O2 /MD /Gy /EHsc /TP /GS-
 006b2090 103 keyed save-area lookup; same find-arg scheduling difference as 006b2000 flags: /O2 /MD /Gy /EHsc /TP /GS-
 006b27f0 500 CreateHTTPServer complete; original keeps new-expression temp in the dead param slot and EH smart-ptr states, register alloc differs
-006b2aa0 70 recursive rbtree DoNukeSubtree; needs the EH-managed AutoRefCount pair dtor frame
 006b2b30 470 OpenPreCommitFile complete; same dead-param-slot temp / EH state layout difference
 006b2dc0 471 CreateCachedDirectorySave complete; same as OpenPreCommitFile
 006b3050 258 cDirectoriesCheat::Execute complete; frame is 4 bytes larger in the original (new-expression temp), prologue order differs

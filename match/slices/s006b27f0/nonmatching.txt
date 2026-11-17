@@ -1,5 +1,4 @@
 # Complete (all paths present) but not byte-exact.
-006b2aa0  57   recursive rbtree DoNukeSubtree; needs the EH-managed AutoRefCount pair dtor frame
 006b27f0  520  CreateHTTPServer complete; original keeps new-expression temp in the dead param slot and EH smart-ptr states, register alloc differs
 006b2b30  475  OpenPreCommitFile complete; same dead-param-slot temp / EH state layout difference
 006b2dc0  476  CreateCachedDirectorySave complete; same as OpenPreCommitFile

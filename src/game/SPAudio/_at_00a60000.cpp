@@ -2102,17 +2102,31 @@ InstanceManager::~InstanceManager()
     ((FixedPool*)((char*)this + 8))->~FixedPool();
 }
 
+// Destruction view of EapdSystemOverflow (0x00a66830): two allocator members (+0x04, +0x10) and the base each reset
+// their vtable as they go; the arena is freed through the first allocator.
+struct OvfAlloc_a66830 {
+    void*       mpVtbl;   // +0x00
+    uint32_t    mA;       // +0x04
+    const char* mpName;   // +0x08
+    void Free(void* p) { ((void (__thiscall*)(void*, void*))(*(void***)this)[3])(this, p); }
+    ~OvfAlloc_a66830() { mpVtbl = (void*)0x1403934; }
+};
+struct __declspec(novtable) OvfBase_a66830 {
+    virtual void Slot0();
+    ~OvfBase_a66830() { *(void**)this = (void*)0x1403934; }
+};
+struct OvfDtorView_a66830 : OvfBase_a66830 {
+    OvfAlloc_a66830 mAlloc;    // +0x04
+    OvfAlloc_a66830 mAlloc2;   // +0x10
+    void*           mpArena;   // +0x1c
+    ~OvfDtorView_a66830();
+};
+
 // @ 0x00a66830
-EapdSystemOverflow::~EapdSystemOverflow()
+OvfDtorView_a66830::~OvfDtorView_a66830()
 {
-    mpVtbl = (void*)&vtbl_EAPd_SystemOverflow;
-    if (mpArena) {
-        void* a = &mpAlloc;
-        ((void (__thiscall*)(void*, void*))(*(void***)a)[3])(a, mpArena);
-    }
-    mField10 = 0x1403934;
-    mpAlloc = (void*)0x1403934;
-    mpVtbl = (void*)0x1403934;
+    if (mpArena)
+        mAlloc.Free(mpArena);
 }
 
 // @ 0x00a66900

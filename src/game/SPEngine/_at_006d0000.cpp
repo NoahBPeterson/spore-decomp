@@ -1281,13 +1281,28 @@ RefPtr& RefPtr::AssignRefPtr(const RefPtr* x)
     return (*this = *x), *this;
 }
 
+// Destruction view of Elem16Vector (0x006df3b0, Elem16Vector::Destroy): the storage base frees the block unless it
+// is the inline buffer; the derived destructor releases each element's ref.
+struct Elem16VecStorage_6df3b0 {
+    Elem16* mpBegin;    // +0x00
+    Elem16* mpEnd;      // +0x04
+    Elem16* mpCapacity; // +0x08
+    void*   mpPad;      // +0x0c
+    void*   mpInline;   // +0x10
+    ~Elem16VecStorage_6df3b0() { if (mpBegin && mpBegin != (Elem16*)mpInline) FreeMem(mpBegin); }
+};
+struct RefCountObjRelease_6df3b0 { virtual void v0(); virtual void Release(); };
+struct Elem16VecView_6df3b0 : Elem16VecStorage_6df3b0 {
+    ~Elem16VecView_6df3b0();
+};
+
 // @ 0x006df3b0
-void Elem16Vector::Destroy()
+Elem16VecView_6df3b0::~Elem16VecView_6df3b0()
 {
-    for (Elem16* p = mpBegin; p < mpEnd; ++p) {
-        if (p->ref.mpObject)
-            p->ref.mpObject->Release();
+    Elem16* end = mpEnd;
+    for (Elem16* p = mpBegin; p < end; ++p) {
+        RefCountObjRelease_6df3b0* o = (RefCountObjRelease_6df3b0*)p->ref.mpObject;
+        if (o)
+            o->Release();
     }
-    if (mpBegin && mpBegin != (Elem16*)mpInline)
-        FreeMem(mpBegin);
 }

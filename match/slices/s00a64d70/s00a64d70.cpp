@@ -364,16 +364,6 @@ uint32_t GroupAdder::AddGroup(void* group)
 // ===========================================================================
 // GroupMap::~GroupMap (scalar deleting)
 // ===========================================================================
-// @ 0x00a65500
-GroupMap* GroupMap::ScalarDtor(uint32_t flags)
-{
-    mGroups.Dispose();
-    mpVtbl = (void*)0x1455648;
-    if (flags & 1)
-        OperatorDelete(this);
-    return this;
-}
-
 // ===========================================================================
 // FixedHashtableAllocator::InitBucketsEx -- size the bucket buffer from the
 // element count and hand a new buffer to the overflow allocator
@@ -409,6 +399,29 @@ bool FixedHashtableAllocator::InitBucketsEx(uint32_t size, uint32_t a1, uint32_t
 // ===========================================================================
 // Hashtable::Construct -- initialise the fields the small table ctor owns
 // ===========================================================================
+// The allocator InitNamed builds on the stack: its destructor (resetting the vtable) covers the Construct call.
+// Out-of-line entry points as other objects see them (bodies not visible to this caller).
+struct HashtableCalls_a65180 {
+    Hashtable* Construct(const void* nameSlot);                 // 0xa64f80
+    Hashtable* InitNamed(void* nameSlot, const char* name);    // 0xa65180
+};
+struct NamedAllocTemp_a65180 {
+    void*       mpVtbl;   // +0x00
+    int         mA;       // +0x04
+    const char* mpName;   // +0x08
+    NamedAllocTemp_a65180(const NamedAllocTemp_a65180& o, const char* name) : mpVtbl((void*)0x1454fac), mA(o.mA), mpName(name) {}
+    ~NamedAllocTemp_a65180() { mpVtbl = (void*)0x1403934; }
+};
+
+// @ 0x00a65180
+Hashtable* Hashtable::InitNamed(void* nameSlot, const char* name)
+{
+    const uint32_t* src = (const uint32_t*)nameSlot;
+    NamedAllocTemp_a65180 slot(*(const NamedAllocTemp_a65180*)src, name);
+    ((HashtableCalls_a65180*)this)->Construct(&slot);
+    return this;
+}
+
 // @ 0x00a64f80
 Hashtable* Hashtable::Construct(const void* nameSlot)
 {
@@ -430,33 +443,40 @@ Hashtable* Hashtable::Construct(const void* nameSlot)
 // ===========================================================================
 // Hashtable::InitNamed -- build a name slot and construct the table
 // ===========================================================================
-// @ 0x00a65180
-Hashtable* Hashtable::InitNamed(void* nameSlot, const char* name)
-{
-    const uint32_t* src = (const uint32_t*)nameSlot;
-    NamedAllocator slot;
-    slot.mpVtbl = (void*)0x1454fac;
-    slot.mA     = src[1];
-    slot.mpName = name;
-    Construct(&slot);
-    return this;
-}
-
 // ===========================================================================
 // Hashtable::Dispose -- release the bucket array and reset the allocator face
 // ===========================================================================
+// Destruction view of Hashtable (0x00a65000; callers reach it as Hashtable::Dispose): the bucket nodes are freed, then
+// the array through the allocator member, whose own destructor resets its vtable.
+struct HashPoolVt_a65000 {
+    void* s0; void* s1; void* s2;
+    void (__thiscall* Free)(void* self, void* p);   // +0xc
+};
+struct HashPool_a65000 {
+    HashPoolVt_a65000* vt;
+    uint32_t mA;
+    const char* mpName;
+    void Free(void* p) { vt->Free(this, p); }
+    ~HashPool_a65000() { vt = (HashPoolVt_a65000*)0x1403934; }
+};
+struct HashtableDtorView_a65000 {
+    uint32_t pad0;
+    void** mpBucketArray;     // +0x04
+    uint32_t mnBucketCount;   // +0x08
+    uint32_t mnElementCount;  // +0x0c
+    uint32_t pad10[3];
+    HashPool_a65000 mPool;    // +0x1c
+    void DoFreeBuckets(void** buckets, uint32_t n);   // 0x00a64c50
+    ~HashtableDtorView_a65000();
+};
+
 // @ 0x00a65000
-void Hashtable::Dispose()
+HashtableDtorView_a65000::~HashtableDtorView_a65000()
 {
-    DisposeArray2((void**)mpBucketArray, mnBucketCount);
+    DoFreeBuckets(mpBucketArray, mnBucketCount);
     mnElementCount = 0;
     if (mnBucketCount > 1)
-    {
-        /* free the bucket array through the embedded allocator face (slot 3) */
-        typedef void (__thiscall* FreeFn)(void*, void*);
-        ((FreeFn)(*(void***)&mPool)[3])(&mPool, mpBucketArray);
-    }
-    mPool.mpVtbl = (void*)0x1403934;
+        mPool.Free(mpBucketArray);
 }
 
 // ===========================================================================
@@ -549,11 +569,40 @@ uint32_t Hashtable::Erase(uint32_t* key)
 // `Hashtable::BaseDtor` definition that shared this address (and compiled to
 // Dispose() on `this`) was removed: retail disposes this+0x10.
 // ===========================================================================
+// Destruction view of GroupMap (0x00a651e0, GroupMap::DisposeInner): the table member is destroyed, then the base
+// resets the vtable.
+struct GroupMapBase_a651e0 {
+    void*      mpVtbl;     // +0x00
+    void*      mpSelf;     // +0x04
+    uint32_t   mField08;   // +0x08
+    uint32_t   mField0c;   // +0x0c
+    GroupMapBase_a651e0() : mpSelf((char*)this + 0x10), mField08(0), mField0c(0) {}
+    ~GroupMapBase_a651e0() { mpVtbl = (void*)0x1455648; }
+};
+struct GroupMapDtorView_a651e0 : GroupMapBase_a651e0 {
+    HashtableDtorView_a65000 mGroups;   // +0x10
+    ~GroupMapDtorView_a651e0();
+};
+
 // @ 0x00a651e0
-void GroupMap::DisposeInner()
+GroupMapDtorView_a651e0::~GroupMapDtorView_a651e0()
 {
-    mGroups.Dispose();
-    mpVtbl = (void*)0x1455648;
+}
+
+// GroupMap's deleting destructor (0x00a65500, GroupMap::ScalarDtor) with the destructor inlined.
+void OperatorDeleteNothrow_a65500(void* p) throw();   // 0xf47380
+struct GroupMapDelView_a65500 : GroupMapBase_a651e0 {
+    HashtableDtorView_a65000 mGroups;   // +0x10
+    GroupMapDelView_a65500* ScalarDtor(uint32_t flags);
+};
+
+// @ 0x00a65500
+GroupMapDelView_a65500* GroupMapDelView_a65500::ScalarDtor(uint32_t flags)
+{
+    this->~GroupMapDelView_a65500();
+    if (flags & 1)
+        OperatorDeleteNothrow_a65500(this);
+    return this;
 }
 
 // ===========================================================================
@@ -667,15 +716,17 @@ void Instance::FreeGroup(uint32_t key, uint32_t unused, void* group)
 // ===========================================================================
 // GroupMap::GroupMapCtor
 // ===========================================================================
+// Construction view of GroupMap (0x00a654a0, GroupMap::GroupMapCtor).
+struct GroupMapCtorView_a654a0 : GroupMapBase_a651e0 {
+    Hashtable mGroups;   // +0x10
+    GroupMapCtorView_a654a0(void* nameSlot);
+};
+
 // @ 0x00a654a0
-GroupMap* GroupMap::GroupMapCtor(void* nameSlot)
+GroupMapCtorView_a654a0::GroupMapCtorView_a654a0(void* nameSlot)
 {
-    mpSelf   = (GroupMap*)((char*)this + 0x10);
-    mField08 = 0;
-    mField0c = 0;
-    mpVtbl   = (void*)0x1455668;
-    mGroups.InitNamed(nameSlot, "EAPd/InputManager");
-    return this;
+    mpVtbl = (void*)0x1455668;
+    ((HashtableCalls_a65180*)&mGroups)->InitNamed(nameSlot, "EAPd/InputManager");
 }
 
 // ===========================================================================

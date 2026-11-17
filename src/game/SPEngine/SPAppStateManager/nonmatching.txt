@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 007e1710 60 cAppStateManager::StateOccurredPreviously; mpPrevBegin load CSE differs
-007e17a0 62 eastl uninitialized_copy<AutoRef>; helper-call/EH frame schedule differs
 007e1830 65 eastl uninitialized_move/copy<AutoRef>; helper-call/EH frame schedule differs
 007e1950 131 hashtable rehash; bucket-walk codegen differs
 007e29d0 187 hashtable insert (lookup + grow + relink + rehash); cl keeps key in ebp and reloads key->p/field4 in the walk while mine caches them (ebx/edi); h0 spill slot differs; equiv: PASS (91.6% coverage)

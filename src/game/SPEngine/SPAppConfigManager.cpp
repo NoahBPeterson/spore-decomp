@@ -75,6 +75,7 @@ typedef void* (__thiscall *VFnR)(void*);
 #define VSLOT(obj, byteoff) (*(void***)(obj))[(byteoff) / 4]
 inline void* operator new(size_t size, const char* pName, int flags, unsigned dbg, const char* file, int line)
 { return EA_New((unsigned)size, pName, flags, (int)dbg, file, line); }
+void operator delete(void* p, const char* pName, int flags, unsigned dbg, const char* file, int line);
 struct RC { virtual void AddRef(); virtual void Release(); };  // refcount interface
 struct AutoRefCount {
     uint32_t m0;
@@ -216,6 +217,25 @@ struct cOption_s007c_8940 {
     uint8_t* resEnd;
     char     pad[0xac - 0x14];
 };
+// Preference value (0x14 bytes); type 0xa is uint32. Flag 4 = owns storage, flags 0x30 = value held by pointer.
+struct CfgVariant_s007c {
+    uint32_t data[4];       // +0x00
+    uint16_t flags;         // +0x10
+    uint16_t type;          // +0x12
+    CfgVariant_s007c(const unsigned* v) : flags(0), type(0) { Store(v); }
+    CfgVariant_s007c(unsigned v) { data[0] = v; type = 0xa; flags = 0; }
+    void Store(const unsigned* v);
+    void Free(int a);                           // 0x0093db80
+    ~CfgVariant_s007c() { if (flags & 4) Free(0); }
+    uint32_t GetUInt32() const { return *((flags & 0x30) ? (const uint32_t*)data[0] : &data[0]); }
+};
+struct IPrefs_s007c {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
+    virtual void SetProperty(uint32_t id, const CfgVariant_s007c& v);       // +0x14
+    virtual void v18(); virtual void v1c(); virtual void v20();
+    virtual bool GetProperty(uint32_t id, CfgVariant_s007c*& out);          // +0x24
+};
+extern IPrefs_s007c* g_sAppPrefs_s007c;     // 0x015fd91c (g_sAppPreferences)
 struct cConfigManager_s007c_8940 {
     char pad00[0x64];
     cOption_s007c_8940* mOptionsBegin;   // +0x64
@@ -554,6 +574,7 @@ extern "C" bool __cdecl SPKeyFromName(void* pOutKey, const wchar_t* pName, int a
 typedef unsigned int uint32;
 typedef unsigned __int64 uint64;
 inline void* operator new(unsigned int, void* p) { return p; }
+inline void operator delete(void*, void*) {}
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags,
                    const char* file, int line);
 void* __cdecl EASTL_allocator_allocate(unsigned int size, const char* name, int flags,
@@ -1790,6 +1811,7 @@ struct vector_s007c_c5f0 : VectorBase_s007c_c5f0<T, A> {
     typedef T* iterator;
 
     vector_s007c_c5f0() { this->mpBegin = 0; this->mpEnd = 0; this->mpCapacity = 0; }
+    explicit vector_s007c_c5f0(void* pool) { this->mpBegin = 0; this->mpEnd = 0; this->mpCapacity = 0; this->mAllocator.mpPoolBegin = pool; }
     ~vector_s007c_c5f0();
 
     size_type size() const { return (size_type)(this->mpEnd - this->mpBegin); }
@@ -1924,13 +1946,11 @@ struct fixed_vector_s007c_c5f0 : vector_s007c_c5f0<T, fixed_vector_allocator<siz
         this->mpEnd = p;
         this->mpCapacity = p + N;
     }
-    fixed_vector_s007c_c5f0(const fixed_vector_s007c_c5f0& x) : base_type() {
-        T* p = buffer();
-        this->mAllocator.mpPoolBegin = p;
-        this->mpBegin = p;
-        this->mpEnd = p;
-        this->mpCapacity = p + N;
-        this->DoAssignFromIterator(x.mpBegin, x.mpEnd, std::random_access_iterator_tag());
+    fixed_vector_s007c_c5f0(const fixed_vector_s007c_c5f0& x) : base_type(mBuffer.mBuffer) {
+        this->mpBegin = this->mpEnd = buffer();
+        this->mpCapacity = this->mpBegin + N;
+        std::random_access_iterator_tag tag;
+        this->DoAssignFromIterator(x.mpBegin, x.mpEnd, tag);
     }
     fixed_vector_s007c_c5f0& operator=(const fixed_vector_s007c_c5f0& x) {
         if (this != &x) {
@@ -2118,10 +2138,13 @@ struct VPair {
     uint64_t first;
     AutoRef_s007c_e500<VirtualObj> pObj;
 };
-struct VVec {
+struct VVecStorage {
     VPair* mpBegin;   // +0
     VPair* mpEnd;     // +4
     VPair* mpEndCap;  // +8
+    ~VVecStorage() { if (mpBegin) EFree(mpBegin); }
+};
+struct VVec : VVecStorage {
     ~VVec();
 };
 // ---- items of slice s007ce500 end
@@ -2133,7 +2156,7 @@ struct VecCommon {
     void* mpBegin;   // +0
     void* mpEnd;     // +4
     void* mpCap;     // +8
-    void destructRange(void* first, void* last);   // 0x007cefd0  (thiscall, ret 8)
+    void destructRange(void* first, void* last) throw();   // 0x007cefd0  (thiscall, ret 8)
     void destroy();                                // 0x007cef60  (~vector)
 };
 struct Pair8   { uint32_t key, sub; };                 // 8-byte key view of a map element
@@ -2146,18 +2169,30 @@ struct V16 {
     void clear();
 };
 struct Vec64 { void dtor(); };                         // 0x004b5440 (thiscall, ~vector)
+struct Big2Block { void* p; ~Big2Block() { if (p) EFree(p); } };
+struct Big2Vec {
+    void* mpBegin;   // +0
+    void* mpEnd;     // +4
+    void* mpCap;     // +8
+    ~Big2Vec()
+    {
+        ((VecCommon*)this)->destructRange(mpBegin, mpEnd);
+        if (mpBegin)
+            EFree(mpBegin);
+    }
+};
+struct Big2Vec64 : Vec64 { ~Big2Vec64() { dtor(); } };
 struct Big2 {
     char   pad00[4];
-    void*  m04;          // +0x04
+    Big2Block m04;       // +0x04
     char   pad08[0x1c - 0x08];
-    V16    m1c;          // +0x1c
-    char   pad30[0x34 - 0x30];
-    void*  m34;          // +0x34
-    void*  m38;          // +0x38
-    char   pad3c[0x4c - 0x3c];
-    void*  m4c;          // +0x4c
+    VVec   m1c;          // +0x1c (~VVec is 0x007cef60)
+    char   pad28[0x34 - 0x28];
+    Big2Vec m34;         // +0x34
+    char   pad40[0x4c - 0x40];
+    Big2Block m4c;       // +0x4c
     char   pad50[0x64 - 0x50];
-    Vec64  m64;          // +0x64
+    Big2Vec64 m64;       // +0x64
     ~Big2();
 };
 struct MapV {
@@ -2370,22 +2405,33 @@ found:
     return true;
 }
 
+struct RefIface_7c7d70 { virtual void AddRef(); virtual void Release(); };
+// Uninitialized copy of AutoRefCount entries (0x007c7d70), EASTL style: iterator objects and a placement copy per element.
+struct AR_7c7d70_Ref {
+    RefIface_7c7d70* p;
+    AR_7c7d70_Ref(const AR_7c7d70_Ref& o) : p(o.p) { if (p) p->AddRef(); }
+};
+struct AR_7c7d70_Elem {
+    uint64_t key;
+    AR_7c7d70_Ref ref;   // +0x08
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct AR_7c7d70_It {
+    AR_7c7d70_Elem* p;
+    AR_7c7d70_It(AR_7c7d70_Elem* q) : p(q) {}
+    AR_7c7d70_Elem& operator*() const { return *p; }
+    AR_7c7d70_It& operator++() { ++p; return *this; }
+    bool operator!=(const AR_7c7d70_It& o) const { return p != o.p; }
+};
+
 // @ 0x007c7d70
-AutoRefCount** CopyConstructAutoRef(AutoRefCount** out, AutoRefCount* first, AutoRefCount* last, AutoRefCount* dest)
+AR_7c7d70_It AR_7c7d70_UninitCopy(AR_7c7d70_It first, AR_7c7d70_It last, AR_7c7d70_It dest)
 {
-    *out = dest;
-    for (; first != last; first++) {
-        AutoRefCount* d = *out;
-        if (d != 0) {
-            d->m0  = first->m0;
-            d->m4  = first->m4;
-            d->mRC = first->mRC;
-            if (d->mRC != 0)
-                ((VFn0)VSLOT(d->mRC, 0))(d->mRC);
-        }
-        *out = *out + 1;
-    }
-    return out;
+    AR_7c7d70_It result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) AR_7c7d70_Elem(*first);
+    return result;
 }
 
 // @ 0x007c7e10
@@ -2488,7 +2534,7 @@ uint32_t* LowerBoundPair(uint32_t* first, uint32_t* last, uint32_t* key)
     while (n > 0) {
         int half = n >> 1;
         uint32_t* mid = (uint32_t*)((char*)first + (half << 4));
-        if (mid[1] < key[1] || (mid[1] == key[1] && mid[0] < key[0])) {
+        if (*(unsigned __int64*)mid < *(unsigned __int64*)key) {
             first = (uint32_t*)((char*)mid + 0x10);
             n = n - 1 - half;
         } else {
@@ -2777,17 +2823,18 @@ void cConfigManager_s007c_8940::SetOption(int id, unsigned setting)
 {
     cOption_s007c_8940* p = mOptionsBegin;
     cOption_s007c_8940* e = mOptionsEnd;
-    if (p != e) {
-        while (p->id != (uint32_t)id) {
-            p++;
-            if (p == e)
-                return;
-        }
-        if ((unsigned)((p->resEnd - p->resBegin) >> 2) > setting) {
-            p->cur = setting;
-            if (g_sAppPreferences != 0)
-                ((void (__thiscall*)(void*, int, unsigned))0)(g_sAppPreferences, id, setting);
-            ApplyOption(p);
+    for (; p != e; p++) {
+        if (p->id == (uint32_t)id) {
+            if (setting < (unsigned)((p->resEnd - p->resBegin) >> 2)) {
+                p->cur = setting;
+                IPrefs_s007c* prefs = g_sAppPrefs_s007c;
+                if (prefs != 0) {
+                    CfgVariant_s007c v(&setting);
+                    prefs->SetProperty(id, v);
+                }
+                ApplyOption(p);
+            }
+            return;
         }
     }
 }
@@ -2795,29 +2842,33 @@ void cConfigManager_s007c_8940::SetOption(int id, unsigned setting)
 // @ 0x007c95d0
 void cConfigManager_s007c_8940::ResetToDefaults()
 {
-    cOption_s007c_8940* p = mOptionsBegin;
-    if (p != mOptionsEnd) {
-        do {
-            p->cur = p->def;
-            if (g_sAppPreferences != 0)
-                ((void (__thiscall*)(void*, int, unsigned))0)(g_sAppPreferences, p->id, p->def);
-            ApplyOption(p);
-            p++;
-        } while (p != mOptionsEnd);
+    IPrefs_s007c* prefs = g_sAppPrefs_s007c;
+    for (cOption_s007c_8940* p = mOptionsBegin; p != mOptionsEnd; p++) {
+        p->cur = p->def;
+        if (prefs != 0) {
+            CfgVariant_s007c v(p->cur);
+            prefs->SetProperty(p->id, v);
+        }
+        ApplyOption(p);
     }
 }
 
 // @ 0x007c9680
 void cConfigManager_s007c_8940::ApplyAllOptions()
 {
-    cOption_s007c_8940* p = mOptionsBegin;
-    if (p != mOptionsEnd) {
-        do {
-            if (g_sAppPreferences != 0)
-                ((void (__thiscall*)(void*, int, unsigned))0)(g_sAppPreferences, p->id, p->def);
-            ApplyOption(p);
-            p++;
-        } while (p != mOptionsEnd);
+    IPrefs_s007c* prefs = g_sAppPrefs_s007c;
+    for (cOption_s007c_8940* p = mOptionsBegin; p != mOptionsEnd; p++) {
+        if (prefs != 0) {
+            CfgVariant_s007c* prop;
+            if (prefs->GetProperty(p->id, prop) && prop->type == 0xa) {
+                p->cur = prop->GetUInt32();
+            } else {
+                p->cur = p->def;
+                CfgVariant_s007c v(p->cur);
+                prefs->SetProperty(p->id, v);
+            }
+        }
+        ApplyOption(p);
     }
 }
 
@@ -2833,48 +2884,51 @@ bool cConfigManager_s007c_8940::GetConfigString(unsigned i, Str16* out)
     return false;
 }
 
-// @ 0x007c97a0
-void* __cdecl UninitCopyAutoRef2(void* out, char* first, char* last, char* dest)
-{
-    *(char**)out = dest;
-    for (; first != last; first += 0x18) {
-        char* d = *(char**)out;
-        if (d) {
-            InsertAutoRef(d, first);
-            d[0x14] = first[0x14];
-        }
-        *(char**)out += 0x18;
-    }
-    return out;
-}
-
 typedef void* (__thiscall *InsertThiscall_s007c_8940)(void*, void*);
 static InsertThiscall_s007c_8940 volatile g_insertAutoRef_s007c_8940 = (InsertThiscall_s007c_8940)InsertAutoRef;
 
-// @ 0x007c9830
-void __cdecl FillAutoRef(char* first, unsigned n, char* src)
+// Element of the AutoRef vectors (0x18 bytes): the ref set is copy-constructed by 0x007c8af0, then the flag copied.
+struct AutoRefSet_s007c {
+    AutoRefSet_s007c(const AutoRefSet_s007c& o);   // 0x007c8af0
+    int d[5];
+};
+struct AutoRefElem_s007c {
+    AutoRefSet_s007c set;   // +0
+    char flag;              // +0x14
+    static void* operator new(size_t, void* p) throw() { return p; }
+    static void operator delete(void*, void*) throw() {}
+};
+
+struct AutoRefIt_s007c {
+    AutoRefElem_s007c* p;
+    AutoRefIt_s007c(AutoRefElem_s007c* q) : p(q) {}
+    AutoRefElem_s007c& operator*() const { return *p; }
+    AutoRefIt_s007c& operator++() { ++p; return *this; }
+    bool operator!=(const AutoRefIt_s007c& o) const { return p != o.p; }
+};
+
+// @ 0x007c97a0
+AutoRefIt_s007c __cdecl UninitCopyAutoRef2(AutoRefIt_s007c first, AutoRefIt_s007c last, AutoRefIt_s007c dest)
 {
-    char* volatile cur = first;
-    while (n--) {
-        if (cur) {
-            g_insertAutoRef_s007c_8940((char*)cur, src);
-            ((char*)cur)[0x14] = src[0x14];
-        }
-        cur = (char*)cur + 0x18;
-    }
+    AutoRefIt_s007c result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) AutoRefElem_s007c(*first);
+    return result;
+}
+
+// @ 0x007c9830
+void __cdecl FillAutoRef(AutoRefIt_s007c first, unsigned n, const AutoRefElem_s007c& val)
+{
+    AutoRefIt_s007c cur(first);
+    for (; 0 < n; --n, ++cur)
+        new (&*cur) AutoRefElem_s007c(val);
 }
 
 // @ 0x007c9910
-void* __cdecl CopyAutoRefRange(void* first, void* last, void* dest)
+AutoRefElem_s007c* __cdecl CopyAutoRefRange(const AutoRefElem_s007c* first, const AutoRefElem_s007c* last, AutoRefElem_s007c* dest)
 {
-    while (first != last) {
-        if (dest) {
-            InsertAutoRef(dest, first);
-            ((char*)dest)[0x14] = ((char*)first)[0x14];
-        }
-        first = (char*)first + 0x18;
-        dest = (char*)dest + 0x18;
-    }
+    for (; first != last; ++first, ++dest)
+        new (dest) AutoRefElem_s007c(*first);
     return dest;
 }
 
@@ -3535,24 +3589,14 @@ void cConfigManagerConfigure(void*)
 // @ 0x007cef60
 VVec::~VVec()
 {
-    for (VPair* p = mpBegin; p < mpEnd; p = (VPair*)((char*)p + 0x10))
+    VPair* end = mpEnd;
+    for (VPair* p = mpBegin; p < end; ++p)
         p->~VPair();
-    if (mpBegin)
-        EFree(mpBegin);
 }
 
 // @ 0x007cf4e0
 Big2::~Big2()
 {
-    m64.dtor();
-    if (m4c)
-        EFree(m4c);
-    ((VecCommon*)((char*)this + 0x34))->destructRange(m34, m38);
-    if (m34)
-        EFree(m34);
-    ((VecCommon*)((char*)this + 0x1c))->destroy();
-    if (m04)
-        EFree(m04);
 }
 
 // @ 0x007cfc70

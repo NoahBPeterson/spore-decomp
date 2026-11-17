@@ -6,11 +6,8 @@
 00a20eb0 248 emitter ordering predicate Less2: complete; tail-block placement and flag-bool materialization differ
 00a212b0 77 complete; eastl list splice (relink nodes); fixed wrong receiver (param_1 not node) and field +0x14, cdecl->__stdcall; equiv PASS (262 valid, 95.2% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00a21310 86 complete; eastl list erase; fixed bogus 3rd param 'target' -> a1, cdecl->__stdcall; equiv PASS (226 valid, 91.7% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
-00a21410 96 complete; voice connect (thiscall + EH frame); fixed f_0112ccc0 thiscall (ecx=plugin, args 2,&buf); equiv PASS (219 valid, 95.5% coverage); thiscall stub-class member flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
-00a214b0 146 complete; voice connect variant (4 stack args, thiscall + EH frame); fixed f_0112ccc0 thiscall (ecx=plugin, args 0,&buf); equiv PASS (343 valid, 94.9% coverage); thiscall stub-class member flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00a21630 59 complete; voice message handler (thiscall + EH frame, vtable factory); equiv UNSUPPORTED (fake-arity: 0/1200 valid inputs); now a thiscall stub-class member [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp, call#3 esp] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00a21710 790 complete; EA::Audio::System::HandleMessage (large vtable dispatch + EH + message-hash constants); fixed calling convention to thiscall (ecx=this, ret 8); equiv WEAK (399 valid, 26.5% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
-00a21a80 98 complete; find voice by id; fixed calling convention to thiscall (ecx=this, tag stack, ret 4); equiv PASS (225 valid, 100% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00a21cb0 59 complete; eastl list insert helper; fixed cdecl->__stdcall (ret 0xc) and return a1; equiv PASS (315 valid, 93.1% coverage) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00a21dc0 77 complete; eastl rbtree find; fixed swapped args (out=arg1, key=arg2) and return out pointer; equiv PASS (387 valid, 100% coverage); thiscall stub-class member flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00a21eb0 128 complete; voice hash-bucket rehash (node next at +0x10); fixed inverted tail free-list branch (inline-pool ptr pushed on free list, not delete()d); equiv WEAK (104 valid, 100% coverage); thiscall stub-class member flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
@@ -27,8 +24,6 @@
 00a23db0 122 RDD::FindById: difftest UNSUPPORTED (0/400 valid, read faults on random inputs); complete implementation flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a243e0 78 RBTree::AllocNode2: complete implementation; MSVC SEH frame / catch-scope omitted (104 vs 153 bytes), body identical flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a24530 140 RDD pool clone node: difftest UNSUPPORTED (unresolved operator new ??2@YAPAXIPBDHH0H@Z); complete implementation flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-00a24750 81 PHTable::EraseNode variant: difftest UNSUPPORTED (0/400 valid, write faults); complete implementation flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-00a247f0 25 EA::Audio::ResourceDeviceDriver::ResourceDeviceDriver: difftest PASS (400 valid inputs, 100.0% coverage); equivalent, non-exact codegen flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a24850 32 ParseResman: difftest UNSUPPORTED (0/400 valid, read faults); complete implementation flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a24bf0 15 RDD::FindAndCall3: complete behaviour; extra 8-byte frame reservation (fild temp placed in-frame vs original arg area); body byte-identical otherwise flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a24cb0 107 RDD::FindAndCall4: complete; ScopedTimer at +0x5c (ctor/dtor accumulate), FindById plus the two vtable calls reproduced; difftest WEAK (182 valid inputs, 71.9% coverage, no mismatch; rest discarded on the harness WaitForSingleObject import / pool-limit faults); non-exact codegen flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
@@ -54,10 +49,7 @@
 00a268b0 135 complete; Shutdown_268b0 profiler hash free + queue flush; 177 vs 224 bytes. [equiv: FAIL 5/5 valid, fault at 0068fb82] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00a26990 87 regalloc: the temp is a 20-byte fixed_pool_with_overflow (init + begin/cap/node-size), then the pool at this+8 is re-inited with tmp.mpHead and the fields stored; frame now matches (sub esp,0x14, ebx/edi). Residual: retail coalesces the three zero stores and the flag arg into one xor eax,eax (140 vs 129). fix1: quick check EQUIVALENT flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00a26be0 166 complete; Insert_26be0 hashtable insert; 198 vs 242 bytes. [equiv: UNSUPPORTED unresolved operator_new] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-00a26da0 52 complete; vector element release loop + block free, schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00a26e10 176 complete; original returns the InsertRes* (out) in eax at every ret, now returned too; DoInsertKey node order / register allocation differs; difftest WEAK under flags /O2 /MD /Gy /EHsc /TP /GS- (207 valid, 88.2% coverage, no mismatch)
-00a27010 79 complete; original has EH frame (node alloc unwind) not reproduced flags: /O2 /MD /Gy /EHsc /TP /GS-
-00a27170 131 complete; EH state/AutoRefCount temps not reproduced flags: /O2 /MD /Gy /EHsc /TP /GS-
 00a27340 112 complete; hashtable iterator by-value arg plumbing differs; difftest WEAK after making it a thiscall member StyleMgr::Remove (original takes this in ecx, ret 4); coverage 48% because the found path needs the real hashtable find to hit flags: /O2 /MD /Gy /EHsc /TP /GS-
 00a273d0 97 complete; iterator loop shape differs; difftest PASS after making it a thiscall member StyleMgr::RemoveAll (this in ecx) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00a27460 63 complete; AutoRefCount temp pattern not reproduced; difftest PASS after making it a thiscall member TexMgr::Find (this in ecx, ret 4) flags: /O2 /MD /Gy /EHsc /TP /GS-
@@ -75,7 +67,6 @@
 00a28810 339 complete; MaintainLRU - iterator/local layout and the inlined bucket erase differ; erase/iterator maintenance reproduced semantically only. difftest FAIL (5/5 valid inputs fault in the emulator on table pointers the harness cannot synthesize) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a28a20 84 complete; AddTextureRef - hit path reads the count as a plain dword at node+4; inlined table insert prologue differs. difftest FAIL (emulator fault on table state) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a28aa0 322 complete; GetOrRegisterVoice - Voice field init order, refcount scheduling and inlined insert differ; init order reproduced semantically only. difftest FAIL (emulator fault on running the voice init path) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-00a28c60 99 complete; RegisterObj - two AddRef / one Release schedule and inlined pair insert differ. difftest FAIL (emulator fault on object map state) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a28d10 38 complete; UnregisterObj - same size; hashtable iterator by-value arg and erase shapes differ. difftest FAIL (emulator fault on object map state) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a28d70 205 complete; GetCounterPlaylist - complete, but the pool allocator pairing (PoolAlloc(&local{owner+0x14},4) twice) is a reconstruction of the original's pool scratch, not byte-verified. difftest FAIL (emulator fault on the counter map / allocator path) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00a28e90 72 complete; AddCounter - counter value is a plain int at node+4; inlined insert prologue differs. difftest FAIL (emulator fault on counter map state) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

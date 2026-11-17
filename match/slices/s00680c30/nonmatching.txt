@@ -3,7 +3,6 @@
 00680e70  302  vector<N48>::operator=: source ref not homed to ebp like the original; realloc/assign branch scheduling differs; equiv: WEAK (462 valid, 44.4% cov)
 00680fc0  220  serializer loop: this-homing to ebp happens later than original; WriteUint32 slot reuse pattern not reproduced
 006812c0  224  loader loop: count/value locals homed into dead arg slots by the original; my locals land in different slots
-00681500  63   free-chain variant: original has an EH frame with states around the member dtor call that plain member dtor calls cannot induce
 00681700  197  Obj1700 copy ctor: 4-byte gap added after the 12-byte S8 so the vector block starts at +0x10 (the copied-from this/Reserve were off by 4); original reserves an 8-byte locals frame (ours 4) and homes the string length/end in different slots
 00681800  310  Obj1800 copy ctor: 0x60 plain copy emitted with different register rotation; same size, all copies present
 00681a10  80   ObjA copy ctor: vec copies match except lea/push scheduling and first arg register choice

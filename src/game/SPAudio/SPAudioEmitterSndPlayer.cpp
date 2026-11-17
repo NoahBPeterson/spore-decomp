@@ -42,6 +42,10 @@ struct AudioLockObj {
     void Unlock();   // 0x0112c620
 };
 extern AudioLockObj* gAudioLockObj;   // 0x016e61a8
+struct AudioLockGuard_s00a3 {
+    AudioLockGuard_s00a3() { if (gAudioLockObj) gAudioLockObj->Lock(); }
+    ~AudioLockGuard_s00a3() { if (gAudioLockObj) gAudioLockObj->Unlock(); }
+};
 namespace SP {
 namespace Audio {
 using namespace EA;
@@ -122,17 +126,15 @@ bool cEmitterSndPlayer::GetProperty(uint32_t key, float* out)
 {
     if (key != 0x6fa19f04) return EmitterSndPlayer::GetProperty(key, out);
     if (mpE00) {
-        if (gAudioLockObj) gAudioLockObj->Lock();
-        rw::audio::core::System_s00a3_8e40* s = (rw::audio::core::System_s00a3_8e40*)mpE00;
+        AudioLockGuard_s00a3 lock;
         if (md10 == 1) {
-            s->GetLevel(1, out);
+            ((rw::audio::core::System_s00a3_8e40*)mpE00)->GetLevel(1, out);
         } else {
             float a, b;
-            s->GetLevel(0, &a);
-            s->GetLevel(2, &b);
+            ((rw::audio::core::System_s00a3_8e40*)mpE00)->GetLevel(0, &a);
+            ((rw::audio::core::System_s00a3_8e40*)mpE00)->GetLevel(2, &b);
             *out = (b + a) * 0.5f;
         }
-        if (gAudioLockObj) gAudioLockObj->Unlock();
     }
     return true;
 }

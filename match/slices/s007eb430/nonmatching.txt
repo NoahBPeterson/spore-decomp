@@ -5,7 +5,6 @@
 007eb7d0 52 eastl list range transfer - register/loop schedule differs; equiv: PASS (407 valid inputs)
 007eb820 63 eastl::vector<int>::resize - tail erase call shape differs; equiv: PASS (1049 valid inputs)
 007eb870 58 eastl list copy-ctor - inlined range copy schedule differs
-007eb8d0 96 eastl hash-node allocate - placement-new/list ctor inlining differs
 007eb950 119 eastl hashtable::DoFreeNodes - inlined list dtor differs
 007eb9e0 145 eastl hashtable::erase - inlined list dtor/loop differs
 007ebba0 278 SP::cTelemetry::PrepareFlush: complete source, bucket walk plus per-item WriteUint64(system time) / WriteUint32(key, type, element count) serialization then erase()/DoFreeNodes(); loop schedule differs; equiv WEAK 50.4% cov (362 valid) [/O2 /MD /Gy /EHsc /TP /arch:SSE2]
