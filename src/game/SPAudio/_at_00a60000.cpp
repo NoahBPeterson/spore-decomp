@@ -212,7 +212,7 @@ struct EapdValue18 {
 };
 struct EapdNode18 : EapdTreeNode { EapdValue18 mValue; };
 struct EapdNamedAllocator {
-    virtual ~EapdNamedAllocator();
+    virtual ~EapdNamedAllocator() {}
     virtual void* AllocNamed(unsigned int size, const char* name);
     virtual void* Alloc(unsigned int size);
     virtual void Free(void* memory);
@@ -233,12 +233,13 @@ struct EapdMapBase {
     void*       mpvtable;      // +0x00
     void*       mpAllocVtbl;   // +0x04
     void*       mpAllocator;   // +0x08
-    const char* mpName;        // +0x0c
+    union {
+        void*       mpRoot;    // +0x0c  tree root (map instances)
+        const char* mpName;    // +0x0c  name (asset manager)
+    };
     uint8_t     mbFlag10;      // +0x10
     void*       mpSentinel18;  // +0x14  self-referential list sentinel
-    void*       mpHead;        // +0x18
-    void*       mpSize;        // +0x1c
-    uint8_t     mbFlag20;      // +0x20
+    EapdNamedAllocator mNodeAllocator; // +0x18 (vptr, core allocator, name)
     void*       mpCount;       // +0x24
     void*       mpVtbl28;      // +0x28
     void*       mpOwner2c;     // +0x2c
@@ -1490,8 +1491,7 @@ void* EapdMapBase::FindOrInsert18(void** out, uint32_t* key)
 namespace EA { namespace Audio { namespace Eapd {
 EapdMapBase::~EapdMapBase()
 {
-    DestroyAll(*(void**)((char*)this + 0xc));
-    *(void**)((char*)this + 0x18) = (void*)0x1403934;
+    DestroyAll(mpRoot);
 }
 }}}  // namespace EA::Audio::Eapd
 
@@ -1537,7 +1537,7 @@ void* EapdMapBase::Init(void* allocator, void* a3, void* a4, void* a5)
 {
     mpAllocVtbl = a3;
     mpAllocator = a4;
-    mpName = (const char*)a5;
+    mpRoot = a5;
     void* vtbl = *(void**)((char*)allocator + 4);
     *(void**)((char*)this) = 0;
     *(uint8_t*)((char*)this + 0x10) = 0;
