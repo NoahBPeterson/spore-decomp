@@ -62,8 +62,8 @@ namespace SP {
 struct RefObj {
     virtual void AddRef();
     virtual void Release();
-    volatile long mnRefCount;
-    RefObj() { volatile long* p = &mnRefCount; _InterlockedExchange(p, 0); }
+    int mnRefCount;
+    RefObj() { _InterlockedExchange((volatile long*)&mnRefCount, 0); }
 };
 }
 namespace SP {
