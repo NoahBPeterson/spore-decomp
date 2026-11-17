@@ -1,0 +1,1 @@
+slices/s00c70bf0/s00c70bf0.cpp  ?Call@Owner_c70bf0@@QAEPAXXZ  00c70bf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
