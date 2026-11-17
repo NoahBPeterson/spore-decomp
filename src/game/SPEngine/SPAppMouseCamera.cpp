@@ -227,9 +227,13 @@ static const float k0025    = 0.0024999999441206455f;
 static const float k01      = 0.10000000149011612f;
 static const float kRadToDeg = 57.295780181884766f;
 extern const cSPMatrix3_s007d_a2d0 g_identity3;      // 0x01637eb8
-void* EAllocApp(int size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
+void* operator new(unsigned int size, const char* pName, int flags, unsigned debugFlags,
+                   const char* pFile, int line);      // 0x00f473a0 EA 6-arg operator new
+void operator delete(void* p, const char* pName, int flags, unsigned debugFlags,
+                     const char* pFile, int line);
 struct ControllerCtor {
-    void* Init(void* arg);   // 0x007d9fb0
+    char mStorage[0x124];
+    ControllerCtor(void* arg);   // 0x007d9fb0
 };
 // ---- items of slice s007da2d0 end
 
@@ -528,12 +532,7 @@ cMouseCameraController::cMouseCameraController(cPropertyList* config)
 // @ 0x007da790
 void* SP_CreateMouseCameraController(void* arg)
 {
-    SP::cMouseCameraController_s007d_a2d0* p =
-        (SP::cMouseCameraController_s007d_a2d0*)EAllocApp(0x124, "App", 0, 0, 0, 0);
-    if (p) {
-        return ((ControllerCtor*)p)->Init(arg);
-    }
-    return 0;
+    return new ("App", 0, 0, 0, 0) ControllerCtor(arg);
 }
 
 // @ 0x007da910
