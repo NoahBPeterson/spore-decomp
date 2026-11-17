@@ -586,10 +586,8 @@ bool SP::cRotationRing::GetIsHighlightedManipulator() const
 double cRotationBall::GetRadius()
 {
     cGameModel* m = mpModel_108;
-    if (m)
-        return (*(VFnD)VSLOT(m, 0x74))(m) + g_c5_1486110;
-    float one = g_c1_1485720;
-    return one;
+    float r = m ? (float)((*(VFnD)VSLOT(m, 0x74))(m) + g_c5_1486110) : g_c1_1485720;
+    return r;
 }
 
 // @ 0x00d1ddb0
