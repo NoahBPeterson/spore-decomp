@@ -346,16 +346,45 @@ void FUN_00e56f80(char* p, float* to) {
   *(char*)(p + 4) = 0;
 }
 
+// same-TU copy of 0x00e4f9d0 (defined in s00e4f860); the static copy gives the native xmm0 return
+__declspec(noinline) static float FUN_00e4f9d0_local(int handle) {
+  Ref g; g.Init();
+  char* r = (char*)thunk_FUN_00e823a0(handle, &g);
+  Ref g2; g2.Init();
+  char* o = (char*)FUN_00e4ce40(&g2);
+  float v;
+  switch (*(int*)(r + 0xbc)) {
+    case 0:
+      switch (*(int*)(r + 0xb4)) {
+        case 1:  v = *(float*)(o + 0x58); break;
+        case 2: case 6: v = *(float*)(o + 0x5c); break;
+        case 3: case 5: case 7: v = *(float*)(o + 0x60); break;
+        case 4:  v = *(float*)(o + 100); break;
+        default: v = 1.0f; break;
+      }
+      break;
+    case 1: v = *(float*)(o + 0x60); break;
+    case 2: v = *(float*)(o + 100); break;
+    case 3: v = *(float*)(o + 0x5c); break;
+    case 4: v = *(float*)(o + 0x58); break;
+    default: v = 1.0f; break;
+  }
+  g2.Release();
+  g.Release();
+  return v;
+}
+
 // @ 0x00e57170  (id passed in EAX by the original)
-void FUN_00e57170_impl(int id, float scale) {
+static void FUN_00e57170_impl(int id, float scale) {
   char* e = (char*)CellsPool().Get(id);
-  float v = (SqrtF(3.0f) / (*(float*)(G + 0x514c) / *(float*)(G + 0x5150))) * scale;
-  *(float*)(e + 0xb4) = v;
-  float s = FUN_00e4f9d0(*(void**)(e + 0x108));
-  float r = (v * v) * s;
+  *(float*)(e + 0xb4) = (SqrtF(3.0f) / (*(float*)(G + 0x514c) / *(float*)(G + 0x5150))) * scale;
+  float s = FUN_00e4f9d0_local(*(int*)(e + 0x108));
+  float r = (*(float*)(e + 0xb4) * *(float*)(e + 0xb4)) * s;
   *(float*)(e + 0xb8) = r;
   *(float*)(e + 0xbc) = 1.0f / r;
 }
+// same-TU stand-in caller (codegen.md 6.3): keeps FUN_00e57170_impl a static with the EAX-register convention
+void FUN_00e57170_caller(int id, float scale) { FUN_00e57170_impl(id, scale); }
 
 // @ 0x00e571f0
 bool FUN_00e571f0(int id, int state) {
