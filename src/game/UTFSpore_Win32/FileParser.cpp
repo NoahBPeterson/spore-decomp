@@ -554,98 +554,18 @@ void* __fastcall VectorSpecInsert(int* self, int, void* pos, void* val)
     return pos;
 }
 
-void __cdecl operator delete[](void*) throw();
-extern void* gEmptyWatcherBuckets[];   // 0x0154df28
-
-struct FPRefObj {
-    virtual void AddRef();
-    virtual void Release();
-};
-struct FPRefMember {
-    FPRefObj* mp;
-    FPRefMember() : mp(0) {}
-    ~FPRefMember() { if (mp) mp->Release(); }
-};
-struct FPSpecVec {
-    int* mpBegin;
-    int* mpEnd;
-    int* mpCapEnd;
-    FPSpecVec() : mpBegin(0), mpEnd(0), mpCapEnd(0) {}
-    void DestroyRange(int* first, int* last) throw();   // per-element string dtor loop
-    ~FPSpecVec()
-    {
-        DestroyRange(mpBegin, mpEnd);
-        int* b = mpBegin;
-        if (b && b[-1])
-            delete[] (char*)b;
-    }
-};
-struct FPWatcherMap {
-    void* mpAllocator;
-    void** mpBuckets;
-    unsigned mnBuckets;
-    unsigned mnElements;
-    float mfMaxLoadFactor;
-    float mfGrowthFactor;
-    unsigned mnNextResize;
-    FPWatcherMap()
-    {
-        mfMaxLoadFactor = 1.0f;
-        mfGrowthFactor = 2.0f;
-        mnBuckets = 1;
-        mpBuckets = gEmptyWatcherBuckets;
-        mnElements = 0;
-        mnNextResize = 0;
-    }
-    void FreeNodes(void** buckets, unsigned count);
-    ~FPWatcherMap()
-    {
-        FreeNodes(mpBuckets, mnBuckets);
-        unsigned n = mnBuckets;
-        mnElements = 0;
-        void** b = mpBuckets;
-        if (n > 1)
-            delete[] (char*)b;
-    }
-};
-inline void* __cdecl operator new(unsigned, void* p, int) throw() { return p; }
-struct FPTimer {
-    unsigned mWords[6];
-    FPTimer() { Init(5, false); }
-    void Init(int mode, bool start);
-};
-struct FPBaseA {
-    virtual void a0();
-};
-struct FPBaseB {
-    virtual ~FPBaseB() {}
-};
-struct FPDtorView : FPBaseA, FPBaseB {
-    int mRefCount;
-    bool mActive;
-    char pad0d[3];
-    FPRefMember mParser;
-    FPSpecVec mSpecs;
-    char pad20[0x28 - 0x20];
-    unsigned char mFlag28;
-    unsigned char mFlag29;
-    char pad2a[0x2c - 0x2a];
-    FPWatcherMap mWatchers;
-    char pad48[0x50 - 0x48];
-    FPTimer mTimer;
-    __forceinline FPDtorView() : mRefCount(0), mActive(false), mFlag28(0), mFlag29(0) {}
-    void Shutdown();
-    __forceinline ~FPDtorView()
-    {
-        if (mActive)
-            Shutdown();
-    }
-};
-
 // @ 0x00840250
 void __fastcall FileParser_dtor(int* self)
 {
-    ((FPDtorView*)self)->FPDtorView::~FPDtorView();
+    *(void**)self = 0;
+    *(void**)((char*)self + 4) = 0;
+    if (*((unsigned char*)self + 0xc))
+        FileParser_ShutdownStub((void*)self);
+    HashFreeNotifyStub(*(void**)((char*)self + 0x30), *(int*)((char*)self + 0x34));
+    *(int*)((char*)self + 0x38) = 0;
+    if (*(int*)((char*)self + 0x34) > 1)
+        EASTL_allocator_deallocate(*(void**)((char*)self + 0x30));
+    VectorFreeSpecsStub(self);
 }
 
 // @ 0x00840340
@@ -667,10 +587,19 @@ void __fastcall FileParser_AddFilePath(int* self, int, char* path, int flags)
 }
 
 // @ 0x00840700
-int* __fastcall FileParser_ctor(int* self)
+void __fastcall FileParser_ctor(int* self)
 {
-    ((FPDtorView*)self)->FPDtorView::FPDtorView();
-    return self;
+    *(void**)((char*)self + 4) = 0;
+    *(void**)self = 0;
+    self[2] = 0;                                   // mRefCount
+    *((unsigned char*)self + 0xc) = 0;
+    self[4] = 0;                                   // mParser
+    self[5] = 0; self[6] = 0; self[7] = 0;         // mInputFileSpecs
+    *((unsigned char*)self + 0x24) = 0;
+    *((unsigned char*)self + 0x25) = 0;
+    self[0x0e] = 0;                                // hash_map bucket array
+    self[0x0f] = 0;
+    self[0x10] = 0;
 }
 
 // @ 0x0092f650

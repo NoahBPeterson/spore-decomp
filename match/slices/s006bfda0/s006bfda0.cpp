@@ -58,7 +58,6 @@ struct MemoryStream {
     bool  SetData(const void* p, u32 size, int a, int b, void* alloc); // 0x93be30
     void  Init(const char* name);                 // 0x93bd50 ret 4
     void  Destroy();                              // 0x93bde0 ret
-    void* GetPtr();                               // 0x93ba70 (thiscall, no stack args)
     int   Attach(const void* key, u32 pos);       // 0x93bf70 ret 8
     void  SetResize(int mode, float factor);      // 0x93bb40 ret 8
 };
@@ -178,6 +177,7 @@ struct PFRecordWrite {
     u32   field274;            // +0x274
     int   mnOpenCount;         // +0x278
 
+    PFRecordWrite(u32 a, u32 b, u32 size, u32* key, DatabasePackedFile* parent); // 0x6c0c40
     bool Release();            // 0x6c0980
 };
 
@@ -742,45 +742,30 @@ bool RecBridge::DoRead(u32 a, u32 b, u32 n)
     return bl;
 }
 
-struct RecA0 {
-    struct AtomicInt { volatile long n; AtomicInt() { _InterlockedExchange(&n, 0); } };
-    AtomicInt refcount;           // +0x04
-    virtual void RecA0Slot() = 0;
-    ~RecA0() {}
-};
-struct RecA1 : RecA0 {
-    u32 mPFRecordType;            // +0x08
-    u32 mKeyInstance, mKeyType, mKeyGroup;  // +0x0c..+0x14
-    DatabasePackedFile* parent;   // +0x18
-    int access;                   // +0x1c
-    RecA1(const u32* key, DatabasePackedFile* p, u32 type, int acc)
-        : mPFRecordType(type), mKeyInstance(key[0]), mKeyType(key[1]), mKeyGroup(key[2]),
-          parent(p), access(acc) {}
-};
-struct RecIStream {
-    virtual void RecIStreamSlot() = 0;
-    ~RecIStream() {}
-};
-struct RecMemOwner {
-    MemoryStream stream;
-    __forceinline ~RecMemOwner() { stream.Destroy(); }
-};
-struct BackgroundLoading : RecA1, RecIStream {
-    void* mpReadBuffer;           // +0x24
-    int   mnBufferOffset;         // +0x28
-    RecMemOwner mem;              // +0x2c
-    ~BackgroundLoading();
-    void RecA0Slot() {}
-    void RecIStreamSlot() {}
-};
-
 // ---------------------------------------------------------------------------
 // @ 0x006c0710
 // ---------------------------------------------------------------------------
-BackgroundLoading::~BackgroundLoading()
+struct BackgroundLoading {
+    void* vtbl0;                  // +0x00
+    int   refcount;               // +0x04
+    char  pad08[0x10];
+    DatabasePackedFile* parent;   // +0x18
+    int   access;                 // +0x1c
+    void* vtbl20;                 // +0x20
+    char  pad24[8];
+    MemoryStream stream;          // +0x2c
+    void Cleanup();               // 0x6c0710
+};
+
+void BackgroundLoading::Cleanup()
 {
+    vtbl0 = (void*)0x140a2b4;
+    vtbl20 = (void*)0x140a278;
     if (access != 0)
         ((void(__thiscall*)(void*, void*))(*(void***)parent)[0x3c / 4])(parent, this);
+    stream.Destroy();
+    vtbl20 = (void*)0x13f3a68;
+    vtbl0 = (void*)0x13effb8;
 }
 
 // ---------------------------------------------------------------------------
@@ -865,44 +850,37 @@ PFRecordRead* PFRecordRead::InitFromInfo(u32* info, u32* key, DatabasePackedFile
     return this;
 }
 
-struct RecMemOwnerW {
-    MemoryStream stream;
-    RecMemOwnerW(const char* name) { stream.Init(name); }
-    __forceinline ~RecMemOwnerW() { stream.Destroy(); }
-};
-struct RecFileOwner {
-    char file[0x22c];
-    RecFileOwner(int flags) { ((FileStream*)file)->Init(flags); }
-    ~RecFileOwner();
-};
-struct PFRecordWriteV : RecA1, RecIStream {
-    RecMemOwnerW mem;             // +0x24
-    RecFileOwner file;            // +0x48
-    u8  mbTriedToCreateFile;      // +0x274
-    u8  pad275[3];
-    int mnOpenCount;              // +0x278
-    PFRecordWriteV(u32 a, u32 b, u32 size, const u32* key, DatabasePackedFile* p);  // 0x6c0c40
-    void RecA0Slot() {}
-    void RecIStreamSlot() {}
-};
-
 // ---------------------------------------------------------------------------
 // @ 0x006c0c40
 // ---------------------------------------------------------------------------
-PFRecordWriteV::PFRecordWriteV(u32 a, u32 b, u32 size, const u32* key, DatabasePackedFile* p)
-    : RecA1(key, p, 0x6492fe5, 3), mem("ResourceMan/PFRecordWrite"), file(0)
+PFRecordWrite::PFRecordWrite(u32 a, u32 b, u32 size, u32* key, DatabasePackedFile* parent)
 {
+    vtbl0 = (void*)0x13effa8;
+    _InterlockedExchange((volatile long*)&mnRefCount, 0);
+    vtbl0 = (void*)0x140a2e0;
+    mPFRecordType = 0x6492fe5;
+    mKeyInstance = key[0];
+    mKeyType = key[1];
+    mKeyGroup = key[2];
+    mpParent = parent;
+    mnAccessFlags = 3;
+    vtblIStream = (void*)0x13f3a68;
+    vtbl0 = (void*)0x140a364;
+    vtblIStream = (void*)0x140a328;
+    mStreamMemory.Init("ResourceMan/PFRecordWrite");
+    ((FileStream*)mStreamFile)->Init(0);
     mbTriedToCreateFile = 0;
     _InterlockedExchange((volatile long*)&mnOpenCount, 1);
-    ((void(__thiscall*)(void*))(*(void***)&mem.stream)[4 / 4])(&mem.stream);
-    ((void(__thiscall*)(void*))(*(void***)file.file)[4 / 4])(file.file);
-    mem.stream.SetResize(1, 1.0f);
-    mem.stream.SetResize(2, 1.5f);
-    mem.stream.SetResize(3, 4.0f);
+    ((void(__thiscall*)(void*))(*(void***)&mStreamMemory)[4 / 4])(&mStreamMemory);
+    ((void(__thiscall*)(void*))(*(void***)mStreamFile)[4 / 4])(mStreamFile);
+    mStreamMemory.SetResize(1, 1.0f);
+    mStreamMemory.SetResize(2, 1.5f);
+    mStreamMemory.SetResize(3, 4.0f);
     if (size != 0) {
-        ICoreAllocator* alloc = ((ICoreAllocator*(__thiscall*)(void*))(*(void***)parent)[0x48 / 4])(parent);
-        if (mem.stream.SetData(0, size, 0, 1, alloc)) {
-            p->ReadFileSpan((u32)mem.stream.GetPtr(), a, b, size);
+        ICoreAllocator* alloc = DatabasePackedFile_GetAllocator(parent);
+        if (mStreamMemory.SetData(0, size, 0, 1, alloc)) {
+            void* p = sub_93ba70(a, b, size);
+            parent->ReadFileSpan((u32)p, a, b, size);
         }
     }
 }
