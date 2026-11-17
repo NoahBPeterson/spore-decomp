@@ -1,0 +1,1 @@
+slices/s00700490/s00700490.cpp  ?Copy_700490@@YAPAUElem_700490@@PBU1@0PAU1@@Z  00700490  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
