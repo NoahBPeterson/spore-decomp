@@ -10,3 +10,5 @@
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?CopyFrom@BigRecOps@@QAEHPAU1@@Z  0076e750  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?DestroyBigRecArray@@YGXPAUBigRec2@@0@Z  0076e7a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?erase@PageVec_s0076_ed30@@QAEPAUPageInfo_s0076_ed30@@PAU2@0@Z  0076ed90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ??0CheatCtorView@@QAE@H@Z  0076ea60  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRTTManager.cpp  ?CopyBigRecRange@@YAHPAUBigRec@@00@Z  0076e840  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- /Isrc/game/include

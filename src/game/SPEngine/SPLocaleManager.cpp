@@ -405,17 +405,62 @@ extern "C" int __fastcall FUN_00695e00(void* self)
     return node;
 }
 
-// @ 0x00695e80
-extern "C" void __fastcall FUN_00695e80(void* self)
+// Destructor's view of cLocaleManager: same layout, with the member destructors retail runs.
+struct LocaleNodeListD {
+    void* mNext;
+    void* mPrev;
+    void* mAlloc;
+    void* mZero;
+    LocaleNodeListD(void* alloc);
+    ~LocaleNodeListD();
+};
+struct LocaleNodeListF {
+    void* mNext;
+    void* mPrev;
+    void* mAlloc;
+    void* mZero;
+    LocaleNodeListF(void* alloc);
+    ~LocaleNodeListF();
+};
+void __fastcall ClearLocaleNodeList(void* list);  // 0x695dc0
+inline LocaleNodeListF::LocaleNodeListF(void* alloc)
 {
-    *(void**)self = g_vtbl_a;
-    FUN_00695dc0((char*)self + 0x60);
-    FUN_00695dc0((char*)self + 0x50);
-    char* p = *(char**)((char*)self + 0x18);
-    int d = (int)(*(char**)((char*)self + 0x20) - p) & 0xfffffffe;
-    if (d > 2 && p != 0 && p != *(char**)((char*)self + 0x28))
-        operator_delete_arr(p);
-    *(void**)self = g_vtbl_b;
+    mAlloc = alloc;
+    mZero = 0;
+    mNext = this;
+    mPrev = this;
+}
+inline LocaleNodeListF::~LocaleNodeListF() { ClearLocaleNodeList(this); }
+inline LocaleNodeListD::~LocaleNodeListD() { ClearLocaleNodeList(this); }
+
+class LocaleManagerDtorView : public EA::RefCountVTemplate_s0069_60f0<int> {
+public:
+    bool mbInit;
+    bool field9;
+    bool fieldA;
+    char padB;
+    int fieldC;
+    int field10;
+    int field14;
+    eastl::FixedString16 mLocaleId;
+    void* mpStringManager;
+    LocaleNodeListF mList50;
+    LocaleNodeListD mList60;
+    LocaleManagerDtorView();
+    virtual ~LocaleManagerDtorView();
+};
+
+inline LocaleNodeListD::LocaleNodeListD(void* alloc)
+{
+    mZero = 0;
+    mAlloc = alloc;
+    mNext = this;
+    mPrev = this;
+}
+
+// @ 0x00695e80
+LocaleManagerDtorView::~LocaleManagerDtorView()
+{
 }
 
 // @ 0x00695f00
@@ -571,21 +616,13 @@ cLocaleChangeMessage::cLocaleChangeMessage(const FixedString16& id)
 }  // namespace App
 
 // @ 0x00696420
-namespace SP {
-cLocaleManager::cLocaleManager()
+LocaleManagerDtorView::LocaleManagerDtorView()
 : mbInit(false), field9(false), fieldA(false), fieldC(0), field10(2), field14(2),
-      mLocaleId(L"**-**") {
-  mpStringManager = 0;
-  mList50.mAlloc = EA::Allocator::ICoreAllocator_s0069_60f0::GetDefaultAllocator();
-  mList50.mZero = 0;
-  mList50.mNext = &mList50;
-  mList50.mPrev = &mList50;
-  mList60.mAlloc = EA::Allocator::ICoreAllocator_s0069_60f0::GetDefaultAllocator();
-  mList60.mZero = 0;
-  mList60.mNext = &mList60;
-  mList60.mPrev = &mList60;
+      mLocaleId(L"**-**"), mpStringManager(0),
+      mList50(EA::Allocator::ICoreAllocator_s0069_60f0::GetDefaultAllocator()),
+      mList60(EA::Allocator::ICoreAllocator_s0069_60f0::GetDefaultAllocator())
+{
 }
-}  // namespace SP
 
 // @ 0x006964c0
 namespace SP {

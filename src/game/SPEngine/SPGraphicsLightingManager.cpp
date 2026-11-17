@@ -1230,6 +1230,8 @@ struct cLightingWorld_s0070_c040 {
 void* __cdecl EAlloc(size_t n, const char* name, int a, unsigned b, const char* file, int line); // 0x00f473a0
 void  __cdecl EFree(void* p);                                                                    // 0x00f47380
 void* __cdecl GAlloc(size_t n, unsigned align, int a, const char* name, int b, int c, int d, int e); // 0x00f473d0
+void* operator new(size_t n, unsigned align, int a, const char* name, int b, int c, int d, int e); // 0x00f473d0
+void operator delete(void* p, unsigned align, int a, const char* name, int b, int c, int d, int e); // 0x00f47410
 void __cdecl   InitAtmBuffer(void* p, int zero, int n);          // 0x011e073e
 void* __cdecl  ConfigRangeOp1(void*, void*, void*);              // 0x00708ec0
 void* __cdecl   MessageServer(void);                             // 0x0067dcc0
@@ -3972,9 +3974,7 @@ unsigned cLightingWorld_AddLight(cLightingWorld_s0070_ced0* self, const float* c
 // @ 0x0070dc90
 cLightingWorld_s0070_ced0* cLightingManager::MakeWorld(int owner, int a3, void* arg4)
 {
-    cLightingWorld_s0070_ced0* world = (cLightingWorld_s0070_ced0*)GAlloc(0x670, 0x10, 0, "Graphics", 0, 0, 0, 0);
-    if (world != 0)
-        world = new (world) cLightingWorld_s0070_ced0((char*)owner);
+    cLightingWorld_s0070_ced0* world = new (0x10, 0, "Graphics", 0, 0, 0, 0) cLightingWorld_s0070_ced0((char*)this);
     ((HSmall*)world)->Op();
     if (arg4 != 0)
         ((VObj_s0070_ced0*)world)->f12(arg4);

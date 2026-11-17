@@ -8,14 +8,17 @@
 typedef unsigned char u8;
 typedef unsigned int u32;
 
+void __cdecl FVec_free(void*) throw();   // 0x00f47380
+
 // Fixed-buffer vector; the buffer is heap-owned when the word before begin is non-zero.
 struct FVec {
     u32* mBegin;
     u32* mEnd;
     u32* mCap;
+    u32 mFixedBegin, mFixedEnd;   // +0x0c: fixed-buffer bookkeeping, not touched by Swap
     FVec(const FVec& o);         // 0x473140
     void assign(const FVec& o);  // 0x6f6770
-    ~FVec() { if (mBegin && ((int*)mBegin)[-1] != 0) delete[] (char*)mBegin; }
+    ~FVec() { if (mBegin && ((int*)mBegin)[-1] != 0) FVec_free(mBegin); }
     void Swap(FVec& o);
 };
 

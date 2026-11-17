@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/SPAudio/eapdplay.cpp  ?play_start@Eapd@Audio@EA@@YAXPAUt_play@123@M@Z  00a54520  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/eapdplay.cpp  ?StartSelect@Play_s00a5_3f90@Eapd@Audio@EA@@QAEXIM@Z  00a54200  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdplay.cpp  ?StartVoice@Play@Eapd@Audio@EA@@QAEXPAX0M@Z  00a53d20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

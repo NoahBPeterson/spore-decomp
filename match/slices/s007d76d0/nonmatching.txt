@@ -4,7 +4,6 @@
 007d7dc0  155  ability command Activate (query interface, compute altitude scale, create via virtual); complete, scheduling differs; equivalence PASS
 007d7ed0  58   ability command factory (size 0x28, 2 base vtables, member init); complete, null-path block layout and one masked push differ
 007d7f60  209  ability command SetTransform; complete (matrix copy, translation compare, virtual update), codegen differs; equivalence PASS
-007d8060  n/a  SP::cApp::Init; complete (camera manager, cheat command alloc, 3 message registrations), new-expression/EH schedule differs
 007d8180  99  SP::cApp::HandleMessage (IHandlerRC subobject); complete 3 message cases, register/call shape differs; equivalence WEAK (no mismatch, coverage-limited) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 007d81f0  42   SP::cApp::PreInitAppModes; complete loop over modes calling vtable+0xc, count/register shape differs
 007d8230  45   SP::cApp::InitAppModes; complete loop over modes calling vtable+0x10, count/register shape differs

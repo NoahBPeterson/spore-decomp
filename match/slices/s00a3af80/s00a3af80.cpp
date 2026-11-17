@@ -329,19 +329,29 @@ void cEventModifierPrimitiveMouthType::Rebuild(uint32 nInstance, int nMode) {
 }}
 
 // @ 0x00a3b890
+void __cdecl FreeNoThrow(void*) throw();   // 0x00f47380
+struct RebuildEntry { uint32 mId; uint32 mPad[2]; };          // stride 0xc
+struct RebuildVec {
+    RebuildEntry* mpBegin; RebuildEntry* mpEnd; RebuildEntry* mpCapacity;
+    uint32 mAllocator[2];
+    RebuildVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~RebuildVec() { if (mpBegin && *((int*)mpBegin - 1) != 0) FreeNoThrow(mpBegin); }
+};
+struct RebuildParamBase {
+    virtual ~RebuildParamBase() {}
+};
+struct RebuildParam : RebuildParamBase {
+    uint32 mGroup;
+    RebuildParam(uint32 g) : mGroup(g) {}
+};
 namespace SP { namespace Audio {
 bool cEventModifierPrimitiveMouthType::RebuildAll() {
-    struct Entry { uint32 mId; uint32 mPad[2]; };          // stride 0xc
-    struct Vec { Entry* mpBegin; Entry* mpEnd; Entry* mpCapacity; };
-    struct Param { void* mpUnknown; uint32 mGroup; };
-    Vec vec = { 0, 0, 0 };
-    Param param = { (void*)0x01402ee0, g_layoutManager };
+    RebuildVec vec;
+    RebuildParam param(g_layoutManager);
     EA::Audio::Eapd::Debug::ObjectError* pError = EA::Audio::Eapd::Debug::ObjectErrorFunc();
     pError->GetList(&vec, &param, 0);
-    for (Entry* p = vec.mpBegin; p != vec.mpEnd; ++p)
+    for (RebuildEntry* p = vec.mpBegin, *end = vec.mpEnd; p != end; ++p)
         Rebuild(p->mId, 1);
-    if (vec.mpBegin && *((int*)vec.mpBegin - 1) != 0)
-        operator delete[](vec.mpBegin);
     return true;
 }
 }}

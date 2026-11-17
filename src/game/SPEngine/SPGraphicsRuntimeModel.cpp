@@ -284,6 +284,20 @@ struct Elem20Full {
     unsigned short m8;    // +0x18
     unsigned short ma;    // +0x1a
     void* mpRef;          // +0x1c
+    __forceinline Elem20Full(Elem20* src)
+    {
+        h0 = 0x13;
+        h1 = 0;
+        h2 = 0xe;
+        h3 = 5;
+        m0 = src->m0;
+        m4 = src->m4;
+        m8 = src->m8;
+        ma = src->ma;
+        mpRef = src->mpRef;
+        if (mpRef != 0)
+            ((RefObject*)mpRef)->AddRef();
+    }
     ~Elem20Full() {
         if (mpRef != 0)
             ((RefObject*)mpRef)->Release();
@@ -554,20 +568,7 @@ bool BuildElementIndex(void* arg1, void* arg2)
 // @ 0x007756b0
 void PushElem20(void* self, Elem20* src)
 {
-    Elem20Full tmp;
-    tmp.h0 = 0x13;
-    tmp.h1 = 0;
-    tmp.h2 = 0xe;
-    tmp.h3 = 5;
-    tmp.m0 = src->m0;
-    tmp.m4 = src->m4;
-    tmp.m8 = src->m8;
-    tmp.ma = src->ma;
-    tmp.mpRef = src->mpRef;
-
-    if (tmp.mpRef != 0)
-        ((RefObject*)tmp.mpRef)->AddRef();
-
+    Elem20Full tmp(src);
     ((Vec20*)((char*)self + 8))->push_back(*(const Elem20*)&tmp);
 }
 

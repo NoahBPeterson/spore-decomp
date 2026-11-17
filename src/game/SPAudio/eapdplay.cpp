@@ -150,8 +150,11 @@ struct ParamTable {
 namespace EA {
 namespace Audio {
 namespace Eapd {
-struct ParamIter {
-    void*        mpVftable;      // +0x00
+struct ParamIterBase {
+    virtual void Reset();                        // vtable 0x014357e4 (base)
+    ~ParamIterBase() {}
+};
+struct ParamIter : ParamIterBase {
     ParamNode*   mpNode;         // +0x04
     ParamNode**  mpBucket;       // +0x08
     ParamNode*   mpLast;         // +0x0c
@@ -159,7 +162,8 @@ struct ParamIter {
     ParamTable*  mpTable;        // +0x14
     // +0x18
 
-    ParamIter(ParamTable* t);
+    ParamIter(ParamTable* t);                    // 0x00a53640
+    ~ParamIter() {}
     unsigned Next(Symbol* out, ParamPair* value);
 };
 }
@@ -235,6 +239,17 @@ namespace EA {
 namespace Audio {
 namespace Eapd {
 typedef void* VoiceManager;
+struct InstanceView {
+    void  Fetch(void* out);     // 0x00a649b0
+    void* Handle();             // 0x00a649a0
+};
+struct IVoiceMgr {
+    virtual void v0();
+    virtual void v1();
+    virtual bool Start(void* a1, void* a2, double start, struct ParamIter* it, struct InstanceDesc desc, unsigned* pId);   // slot 2
+    virtual void Stop(unsigned id);                    // slot 3
+    virtual void SetPaused(unsigned id, int paused);   // slot 4
+};
 }
 }
 }
@@ -784,34 +799,34 @@ namespace EA { namespace Audio { namespace Eapd {
 void Play::StartVoice(void* a1, void* a2, float time)
 {
     SetPlaying();
-    if (mnBusyVoices >= mnMaxVoices && !mbSteal)
+    if (!mbSteal && mnBusyVoices >= mnMaxVoices)
         return;
 
     double start = GetVoiceStartTime(time);
-    unsigned voiceId = 0;
     ParamIter it(&mParameters);
+    unsigned* pVoiceId = (unsigned*)&time;
+    struct { void* a; void* b; } pr;
+    ((InstanceView*)mInstance)->Fetch(&pr);
+    void* p1 = pr.a;
+    void* p2 = pr.b;
     InstanceDesc desc;
-    desc.p1 = 0;
-    desc.p2 = 0;
-    FUN_00a649b0(&desc.p1);
-    desc.p0 = FUN_00a649a0();
+    desc.p0 = ((InstanceView*)mInstance)->Handle();
+    desc.p1 = p1;
+    desc.p2 = p2;
 
-    VoiceManager vm = (VoiceManager)mVoiceManager;
-    if (!((bool (__thiscall*)(VoiceManager, void*, void*, void*, double, ParamIter*, InstanceDesc, unsigned*))
-          (*(void***)vm)[2])(vm, a1, a2, 0, start, &it, desc, &voiceId))
+    if (!((IVoiceMgr*)mVoiceManager)->Start(a1, a2, start, &it, desc, pVoiceId))
         return;
 
     if (mnBusyVoices == mnMaxVoices) {
         VoiceNode* first = (VoiceNode*)mVoices.mNode.mpNext;
-        ((void (__thiscall*)(VoiceManager, unsigned))(*(void***)vm)[3])(vm, first->mValue);
+        ((IVoiceMgr*)mVoiceManager)->Stop(first->mValue);
         mVoices.PopFront();
         --mnBusyVoices;
     }
-    mVoices.PushBack(&mVoices.mNode, &voiceId);
+    mVoices.PushBack(&mVoices.mNode, pVoiceId);
     ++mnBusyVoices;
     if (mbPaused) {
-        unsigned last = ((VoiceNode*)mVoices.mNode.mpPrev)->mValue;
-        ((void (__thiscall*)(VoiceManager, unsigned, int))(*(void***)vm)[4])(vm, last, 1);
+        ((IVoiceMgr*)mVoiceManager)->SetPaused(*pVoiceId, 1);
     }
 }
 }}}  // namespace EA::Audio::Eapd

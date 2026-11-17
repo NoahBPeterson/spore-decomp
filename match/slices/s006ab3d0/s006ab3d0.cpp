@@ -19,10 +19,11 @@ struct WString {
     void*    mAllocator; // +0xc
 
     WString() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; }
+    WString(const wchar_t* p) { mpBegin = 0; mpEnd = 0; mpCapacity = 0; range_initialize(p); }
     ~WString()
     {
         int n = (int)((char*)mpCapacity - (char*)mpBegin);
-        if ((n & 0xfffffffe) > 2 && mpBegin != 0)
+        if ((n & -2) > 2 && mpBegin != 0)
             EASTL_allocator_deallocate(mpBegin);
     }
 
@@ -511,7 +512,7 @@ int FUN_006abc90(void* hRoot, const wchar_t* subKey, WStrVector* out)
     WString* last = out->mpEnd;
     WString* r = CopyWStrings(last, last, first);
     out->DoDestroyValues(r, out->mpEnd);
-    out->mpEnd += out->mpBegin - out->mpEnd;
+    out->mpEnd -= (last - first);
 
     void* hKey = 0;
     if (RegOpenKeyExW(hRoot, subKey, 0, 8, &hKey) == 0) {
@@ -519,11 +520,10 @@ int FUN_006abc90(void* hRoot, const wchar_t* subKey, WStrVector* out)
         unsigned long index = 0;
         do {
             unsigned long size = 0x400;
-            WString temp;
             wchar_t buffer[0x402];
             long rc = RegEnumKeyExW(hKey, index, buffer, &size, 0, 0, 0, 0);
             if (rc == 0) {
-                temp.range_initialize(buffer);
+                WString temp(buffer);
                 out->push_back(temp);
             } else if (rc == 0x103) {
                 stop = true;

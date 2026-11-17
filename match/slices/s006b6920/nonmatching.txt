@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-006b6920  77   ~cStringManager complete; vcall method load scheduled before pushes; difftest PASS (cStringManager vtable mapped in symbols/slices/s006b6920.txt)
 006b6a00  45   LoadAll complete; mpBucketArray reloaded for end sentinel in original
 006b6bf0  6    StringTableResourceFactory::Create complete; only the inlined RefObj ctor's xchg register pair (eax/ecx) differs; difftest PASS with --inputs 2000 (WEAK at 400: type==0x2fac0b6 rarely generated) (operator new annotated 0x00f473a0, AddRef moved to AutoRefCount assignment, ResourceObjectST base + ResourceKey copy)
 006b6d10  177  cStringManager ctor complete; init store order/ctor inlining differs

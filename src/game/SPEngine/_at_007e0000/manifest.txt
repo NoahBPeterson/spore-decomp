@@ -11,3 +11,4 @@
 ../src/game/SPEngine/_at_007e0000.cpp  ?AdjustHeap@@YAXPAUHeapNode@@HHHU1@UEmptyCmp@@@Z  007ef4a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_007e0000.cpp  ?MakeHeap@@YAXPAUHeapNode@@0UEmptyCmp@@@Z  007ef5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_007e0000.cpp  ?resize@MyVector8@@QAEXI@Z  007e12b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007e0000.cpp  ??1SplitControllerDtorView@@QAE@XZ  007e0f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

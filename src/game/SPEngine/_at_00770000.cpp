@@ -537,6 +537,8 @@ extern "C" float __cdecl VectorLength(const float* v);         // 0x40ae50
 extern "C" void* __cdecl eastl_move_thunk(void* dst, const void* src, uint32_t n);      // 0x11e0744
 extern uint32_t g_rasterDelta;          // 0x16f8b00
 extern "C" void*             __cdecl operator_new(uint32_t sz, const char* name, int, int, int, int);   // 0xf473a0
+void* operator new(size_t sz, const char* name, int, int, int, int);       // 0xf473a0
+void operator delete(void* p, const char* name, int, int, int, int);       // 0xf47380
 extern "C" void              __cdecl operator_delete__(void* p);   // 0xf47380
 extern char g_matDesc[];                 // 0x1631058
 extern float g_xfInit[3];                // 0x1630df8
@@ -606,6 +608,7 @@ struct ShConst {
     void SetIndexed(int idx, float a, float b, float c, float d);  // 0x77ca20
 };
 struct cViewer {
+    char mData[0x174];
     cViewer();    // 0x7c3f70
     ~cViewer();   // 0x7c4000
     void Copy(uint32_t v, int a, int b);   // 0x7c50b0
@@ -2051,14 +2054,14 @@ void cShaderPreviewB::Draw(int unused, int unused2, cViewer** ppViewer, uint32_t
 bool cShaderPreviewA::Init()
 {
     BaseInit();
-    g.a.vec[0] = g_vec4[0]; g.a.vec[1] = g_vec4[1]; g.a.vec[2] = g_vec4[2]; g.a.vec[3] = g_vec4[3];
+    struct Dw4 { uint32_t v[4]; };
+    *(Dw4*)&g.a.vec[0] = *(const Dw4*)&g_vec4[0];
     g.a.has = 0;
     g.a.mode = 0;
     g.a.key[0] = 0xffffffff; g.a.key[1] = 0xffffffff;
     res1b0 = GetResSourceA();
     res1b4 = GetResSourceB();
-    void* mem = operator_new(0x174, "Graphics", 0, 0, 0, 0);
-    cViewer* v = mem ? new (mem) cViewer() : 0;
+    cViewer* v = new ("Graphics", 0, 0, 0, 0) cViewer();
     g.a.viewer = v;
     v->Init(0);
     slots.Init(10);

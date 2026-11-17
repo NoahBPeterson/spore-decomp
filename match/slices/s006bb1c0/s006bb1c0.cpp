@@ -523,8 +523,7 @@ FileVec::~FileVec()
         EA_Free2(mpBegin);
 }
 
-struct FileListMsg {
-    void*    mpVtable;      // +0x00
+struct FileListMsg : BaseA2 {
     FileVec  mFiles;        // +0x04
     void*    mpField10;     // +0x10
     void*    mpField14;     // +0x14
@@ -532,13 +531,14 @@ struct FileListMsg {
     void*    mpField1c;     // +0x1c
     FileListMsg(DropSource* src);       // 0x006bbc90
     FileListMsg* Destroy(char flags);   // 0x006bbd80
+    virtual ~FileListMsg() {}
 };
 
 extern void* g_vtbl_140a07c;     // 0x0140a07c FileListMsg vtable
 extern void* g_vtbl_13eb918;     // 0x013eb918 BaseA2 vtable
 
 // @ 0x006bbc90  drag/drop file-list message constructor
-FileListMsg::FileListMsg(DropSource* src) : mpVtable(&g_vtbl_140a07c)
+FileListMsg::FileListMsg(DropSource* src)
 {
     mField18 = 0;
     mpField1c = src;
@@ -548,10 +548,12 @@ FileListMsg::FileListMsg(DropSource* src) : mpVtable(&g_vtbl_140a07c)
     for (unsigned i = 0; i < count; ++i) {
         DragQueryFileW(src->mHDrop, i, buf, 0x208);
         FUN_006bbbf0(&mFiles);
+        Str16* last = mFiles.mpEnd - 1;
         const wchar16* p = buf;
         while (*p)
             ++p;
-        (mFiles.mpEnd - 1)->assign(buf, p);
+        unsigned len = (unsigned)(p - buf);
+        last->assign(buf, buf + len);
     }
 }
 
@@ -561,7 +563,7 @@ FileListMsg* FileListMsg::Destroy(char flags)
     mFiles.DoDestroyValues(mFiles.mpBegin, mFiles.mpEnd);
     if (mFiles.mpBegin && ((VecBlockPrefix*)mFiles.mpBegin)[-1].mField0 != 0)
         EA_Free2(mFiles.mpBegin);
-    mpVtable = &g_vtbl_13eb918;
+    *(void**)this = &g_vtbl_13eb918;
     if (flags & 1)
         EA_Free2(this);
     return this;

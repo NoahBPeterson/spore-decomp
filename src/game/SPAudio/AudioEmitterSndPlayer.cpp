@@ -675,27 +675,56 @@ void EmitterSndPlayer2::Tick(int, float v)
         return;
     }
     bool bStreamedMode = (*(uint8_t*)(*(uint8_t**)(m + 0x388) + 0x47) == 2);
+    bool nz = true;
     if (!bStreamedMode) {
-        bool nz;
-        {
-            LockGuard guard;
-            float tmp[2];
-            tmp[0] = *(float*)(m + 0xdc0);
-            ((PlugIn*)*(void**)(m + 0xd68))->Send(2, tmp);
-            nz = (tmp[1] != 0.0f);
-        }
-        if (!nz) {
-            if (*(char*)(m + 0xd24) == 0 || *(char*)(m + 0xd25) != 0)
-                ((void(__thiscall*)(void*, float, int))((void**)*(void**)(m - 4))[0x70 / 4])(
-                    m - 4, v, 0);
-            return;
-        }
+        LockGuard guard;
+        float tmp[2];
+        tmp[0] = *(float*)(m + 0xdc0);
+        ((PlugIn*)*(void**)(m + 0xd68))->Send(2, tmp);
+        nz = (tmp[1] != 0.0f);
     }
-    void* sys = f_00a206f0_GetSystemAT();
-    ((void(__thiscall*)(void*, int, int, int, int, int))((void**)*(void**)sys)[0x128 / 4])(
-        sys, 0x3a0fd6e, *(int*)(m + 0xd08), 0, 0, 0);
-    ((void(__thiscall*)(void*))((void**)*(void**)(m - 4))[0x18 / 4])(m - 4);
+    if (nz) {
+        void* sys = f_00a206f0_GetSystemAT();
+        ((void(__thiscall*)(void*, int, int, int, int, int))((void**)*(void**)sys)[0x128 / 4])(
+            sys, 0x3a0fd6e, *(int*)(m + 0xd08), 0, 0, 0);
+        ((void(__thiscall*)(void*))((void**)*(void**)(m - 4))[0x18 / 4])(m - 4);
+        return;
+    }
+    if (*(char*)(m + 0xd24) == 0 || *(char*)(m + 0xd25) != 0)
+        ((void(__thiscall*)(void*, float, int))((void**)*(void**)(m - 4))[0x70 / 4])(
+            m - 4, v, 0);
 }
+
+struct VSlots_s00a1_14a0 {
+    virtual void slot0();
+    virtual void slot1();
+    virtual void slot2();
+    virtual void slot3();
+    virtual void slot4();
+    virtual void slot5();
+    virtual void slot6();
+    virtual void slot7();
+    virtual void slot8();
+    virtual void slot9();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void slot23();
+    virtual void SetSlot60(float v);
+    virtual void SetSlot64(float v);
+    virtual void slot26();
+    virtual void SetSlot6c(float v);
+};
 
 // @ 0x00a11f50
 void EmitterSndPlayer_s00a1_14a0::UpdateParameters(float, bool force)
@@ -727,17 +756,17 @@ void EmitterSndPlayer_s00a1_14a0::UpdateParameters(float, bool force)
             *(float*)(m + 0xd54) = *(float*)(m + 0xd50) * *(float*)(m + 0xd30);
         else
             *(float*)(m + 0xd54) = *(float*)(m + 0xd30);
-        ((void(__thiscall*)(void*, float))Vt()[0x64 / 4])(this, *(float*)(m + 0xd54));
+        ((VSlots_s00a1_14a0*)this)->SetSlot64(*(float*)(m + 0xd54));
     }
 
     if (force || (*(uint32_t*)(m + 0xd88) & 0xc)) {
         float x = (*(int*)(m + 0xd24) < 2) ? *(float*)(m + 0xd2c)
                                             : *(float*)(m + 0xd58) * *(float*)(m + 0xd2c);
-        ((void(__thiscall*)(void*, float))Vt()[0x60 / 4])(this, x);
+        ((VSlots_s00a1_14a0*)this)->SetSlot60(x);
     }
 
     if (force || (*(uint32_t*)(m + 0xd88) & 8))
-        ((void(__thiscall*)(void*, float))Vt()[0x6c / 4])(this, *(float*)(m + 0xd58));
+        ((VSlots_s00a1_14a0*)this)->SetSlot6c(*(float*)(m + 0xd58));
 }
 
 // @ 0x00a12120

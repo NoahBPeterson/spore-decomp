@@ -15,15 +15,16 @@ extern "C" void _ReadWriteBarrier();
 
 typedef eastl::pair<uint64, EA::AutoRefCount<SP::cPropertyList> > PropPair;
 
+inline void operator delete(void*, void*) {}
+
 // ---------------------------------------------------------------- eastl pair helpers
 namespace eastl {
 // @ 0x007cd9d0
 template <>
 PropPair* uninitialized_copy_ptr<PropPair>(const PropPair* first, const PropPair* last, PropPair* result) {
-    PropPair* d = result;
-    for (; first != last; ++first, ++d)
-        ::new ((void*)d) PropPair(*first);
-    return d;
+    for (; first != last; ++first, ++result)
+        ::new ((void*)result) PropPair(*first);
+    return result;
 }
 // @ 0x007cde80
 template <> template <>

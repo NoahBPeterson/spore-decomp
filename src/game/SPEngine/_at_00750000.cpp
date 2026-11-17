@@ -101,6 +101,8 @@ struct CS755da0 {
 // ---- items of slice s00756280 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern const char CB24_vtbl;    // 0x0140d9b0
 extern const char CB24_vtbl2;   // 0x0140d9ac
+extern const char CB24Base_vtbl;    // 0x013f1ab0
+extern const char CB24Base_vtbl2;   // 0x013ef094
 #pragma intrinsic(_InterlockedExchangeAdd)
 #pragma intrinsic(_InterlockedExchange)
 void* operator new(unsigned int, const char*, int, unsigned int, unsigned int, int);   // 0x00f473a0
@@ -159,10 +161,13 @@ __forceinline void PartRelease(PartHolder* p) {
   }
 }
 struct cJobRef;
-struct CB24 {
-  void* mpVtbl;      // +0x00  (0x0140d9b0)
-  void* mpVtbl2;     // +0x04  (0x0140d9ac)
+struct CB24Base {
+  void* mpVtbl;      // +0x00
+  void* mpVtbl2;     // +0x04
   int   mRefCount;   // +0x08
+  CB24Base();
+};
+struct CB24 : CB24Base {
   void* m0c;         // +0x0c
   int   m10;         // +0x10
   int   m14;         // +0x14
@@ -174,8 +179,8 @@ struct CB24 {
 };
 struct CB24Ref {
   CB24* p;
-  CB24Ref(CB24* o) : p(o) { if (p) ((Ext*)p)->FUN_00768530(); }
-  ~CB24Ref() { if (p) ((Ext*)p)->FUN_0067da30(); }
+  CB24Ref(CB24* o) : p(o) { if (p) ((void(__thiscall*)(void*))(*(void***)p)[0])(p); }
+  ~CB24Ref() { if (p) ((void(__thiscall*)(void*))(*(void***)p)[1])(p); }
 };
 struct cJob {
   void (*mpCallback)(void*);    // +0x00
@@ -192,6 +197,14 @@ struct cJobRef {
     if (p) ((Ext*)p)->FUN_0068f950();
   }
   ~cJobRef() { if (p) ((Ext*)p)->FUN_00690120(); }
+  cJob** Out() {
+    if (p) {
+      cJob* o = p;
+      p = 0;
+      ((Ext*)o)->FUN_00690120();
+    }
+    return &p;
+  }
   cJobRef& operator=(const cJobRef& o) {
     cJob* t = o.p;
     if (t != p) {
@@ -335,11 +348,16 @@ virtual void v40();
 virtual void v41();
   virtual void* m42(int a, unsigned int b);   // +0xa8
 };
-CB24::CB24()
-    : m0c(0), m10(0), m14(0), m1c(0), m20(0) {
+CB24Base::CB24Base() {
+  mpVtbl = (void*)&CB24Base_vtbl;
+  mpVtbl2 = (void*)&CB24Base_vtbl2;
+  volatile long* rc = (volatile long*)&mRefCount;
+  _InterlockedExchange(rc, 0);
+}
+CB24::CB24() {
   mpVtbl = (void*)&CB24_vtbl;
   mpVtbl2 = (void*)&CB24_vtbl2;
-  _InterlockedExchange((volatile long*)&mRefCount, 0);
+  m0c = 0; m10 = 0; m14 = 0; m1c = 0; m20 = 0;
 }
 // ---- items of slice s00756280 end
 
@@ -394,11 +412,12 @@ bool X_7565a0::FUN_007564b0(cJobRef* out)
 {
   cJobRef job;
   IJobManager* mgr = FUN_0068f4d0();
-  if (!mgr->CreateJob((void**)&job.p)) {
+  if (!mgr->CreateJob((void**)job.Out())) {
     return false;
   }
-  job.p->mpCallback = (void (*)(void*))&FUN_00755d20;
-  job.p->mpCallbackData = this;
+  cJob* j = job.p;
+  j->mpCallback = (void (*)(void*))&FUN_00755d20;
+  j->mpCallbackData = this;
   job.p->mFlags = 1;
   ((Ext*)job.p)->FUN_0068f9b0(this);
   out->p = job.p;

@@ -820,23 +820,35 @@ ShadowWorldEditor* __fastcall FUN_0077f040(ShadowWorldEditor* self, void* world,
     return self;
 }
 
+struct SWBaseA {
+    virtual ~SWBaseA() {}
+};
+struct SWBaseB {
+    virtual ~SWBaseB() {}
+};
+struct SWElem : Element174 {
+    ~SWElem();                       // 0x007c4000
+};
+struct SWEditorView : SWBaseA, SWBaseB {
+    int mPad8;
+    SWElem mElems[2];                // +0x0c
+    void* mWorld;                    // +0x2f4
+    SWElem mOwner;                   // +0x2f8
+    unsigned char mFlag46c;
+    char pad46d[3];
+    int mCount;                      // +0x470
+    __forceinline ~SWEditorView()
+    {
+        for (int i = 0; i < mCount; ++i)
+            mElems[i].F_7c3ba0();
+        mOwner.F_7c3ba0();
+    }
+};
+
 // @ 0x0077f210
 void __fastcall FUN_0077f210(ShadowWorldEditor* self)
 {
-    self->mVT0 = (void*)0x140e954;
-    self->mVT4 = (void*)0x140e950;
-    if (self->mCount > 0) {
-        Element174* e = &self->mElems[0];
-        for (int i = 0; i < self->mCount; ++i) {
-            e->F_7c3ba0();
-            ++e;
-        }
-    }
-    self->mOwner.F_7c3ba0();
-    self->mOwner.F_7c4000();
-    F_11e0b22(&self->mElems[0], 0x174, 2, (void*)0x7c4000);
-    self->mVT4 = (void*)0x13ef094;
-    self->mVT0 = (void*)0x13eb938;
+    ((SWEditorView*)self)->SWEditorView::~SWEditorView();
 }
 
 // @ 0x0077f2c0
@@ -1075,22 +1087,25 @@ Elem12** __cdecl FUN_0077fa70(Elem12** out, Elem12* first, Elem12* last, Elem12*
     return out;
 }
 
+struct Elem12Copy {
+    void* mObj; int mA; int mB;
+    Elem12Copy(const Elem12Copy& o)
+    {
+        mObj = o.mObj;
+        if (mObj != 0)
+            (**(void(__thiscall***)(void*))mObj)(mObj);   // add-ref through vtable[0]
+        mA = o.mA;
+        mB = o.mB;
+    }
+    static void* operator new(unsigned, void* p) { return p; }
+    static void operator delete(void*, void*) {}
+};
+
 // @ 0x0077fb10
 Elem12* __cdecl FUN_0077fb10(Elem12* first, Elem12* last, Elem12* dst)
 {
-    if (first == last)
-        return dst;
-    while (first != last) {
-        if (dst != 0) {
-            dst->mObj = first->mObj;
-            if (dst->mObj != 0)
-                (*(void(__thiscall**)(void*))dst->mObj)(dst->mObj);   // add-ref
-            dst->mA = first->mA;
-            dst->mB = first->mB;
-        }
-        ++first;
-        ++dst;
-    }
+    for (; first != last; ++first, ++dst)
+        new ((void*)dst) Elem12Copy(*(const Elem12Copy*)first);
     return dst;
 }
 

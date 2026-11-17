@@ -70,6 +70,12 @@ struct Variant {
   Variant(const float& v);
   Variant(const bool& v);
   Variant& operator=(const Variant& o);  // 0x00542b80
+  Variant& AssignKey(const ResourceMan::Key& k);  // 0x00422f40
+  Variant(const ResourceMan::Key& k) {
+    mFlags = 0;
+    mTypeId = 0;
+    AssignKey(k);
+  }
   void Destruct(int flags);
   ~Variant() {
     if (mFlags & 4) Destruct(0);
@@ -86,8 +92,6 @@ struct Variant {
 };
 }  // namespace EA
 
-EA::Variant& __fastcall VariantAssignKey(EA::Variant* self, int reserved,
-                                         const EA::ResourceMan::Key& k);  // 0x00422f40
 EA::Variant& __fastcall VariantAssignCopy(EA::Variant* self, int reserved,
                                           const EA::Variant& o);  // 0x00542b80
 
@@ -163,7 +167,7 @@ template <class T> struct Vec {
 class cPropertyList : public cResourceBase {
 public:
   // vtable slot indices (byte offset / 4).
-  virtual void SetProperty(unsigned int key, EA::Variant* value);  // 5  (0x14)
+  virtual void SetProperty(unsigned int key, const EA::Variant& value);  // 5  (0x14)
   virtual void RemoveProperty(unsigned int key);                    // 6  (0x18)
   virtual void v7();                                               // 7  (0x1c)
   virtual bool GetPropertyA(unsigned int key, EA::Variant** out);  // 8  (0x20)
@@ -269,7 +273,7 @@ void cDirectPropertyList::Add(cPropertyList* src) {
   VariantPair* it = src->mPropertyMap.mpBegin;
   VariantPair* end = src->mPropertyMap.mpEnd;
   for (; it != end; ++it) {
-    SetProperty(it->first, &it->second);
+    SetProperty(it->first, it->second);
   }
   mModificationCount++;
 }
@@ -489,18 +493,17 @@ bool SP::cPropertyList::Write(EA::IO::IStream* stream) const {
 
 // @ 0x006A1710
 void SP::cPropertyList::SetParent(SP::cPropertyList* parent) {
-  if (parent != mParent) {
+  SP::cPropertyList* old = mParent;
+  if (parent != old) {
     if (parent) parent->AddRef();
-    SP::cPropertyList* old = mParent;
     mParent = parent;
     if (old) old->Release();
   }
-  if (parent == 0) {
-    RemoveProperty(0xb2cccb);
+  if (parent != 0) {
+    EA::Variant v(*(EA::ResourceMan::Key*)&parent->mKeyInstance);
+    SetProperty(0xb2cccb, v);
   } else {
-    EA::Variant v;
-    VariantAssignKey(&v, 0, *(EA::ResourceMan::Key*)&parent->mKeyInstance);
-    SetProperty(0xb2cccb, &v);
+    RemoveProperty(0xb2cccb);
   }
 }
 
@@ -510,8 +513,7 @@ void SP::cDirectPropertyList::SetBoolProperty(unsigned int index, bool value) {
     mDirectProps[index] = value;
     return;
   }
-  EA::Variant v(value);
-  SetProperty(index, &v);
+  SetProperty(index, EA::Variant(value));
 }
 
 // @ 0x006A1880
@@ -520,8 +522,7 @@ void SP::cDirectPropertyList::SetIntProperty(unsigned int index, int value) {
     mDirectProps[index] = value;
     return;
   }
-  EA::Variant v(value);
-  SetProperty(index, &v);
+  SetProperty(index, EA::Variant(value));
 }
 
 // @ 0x006A1910
@@ -530,8 +531,7 @@ void SP::cDirectPropertyList::SetFloatProperty(unsigned int index, float value) 
     ((float*)mDirectProps)[index] = value;
     return;
   }
-  EA::Variant v(value);
-  SetProperty(index, &v);
+  SetProperty(index, EA::Variant(value));
 }
 
 // @ 0x006A1BD0

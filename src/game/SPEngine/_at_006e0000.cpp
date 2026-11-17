@@ -16,7 +16,7 @@ extern void* PTR_FUN_0140a92c;   // 0x0140a92c: vtable for the vertex buffer che
 extern void* PTR_FUN_0140a9a8;   // 0x0140a9a8: vtable for the index buffer cheat object
 
 extern "C" void* operator_new(unsigned n, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
-extern "C" void* SP_CheatManager();     // 0x0067de20 (equiv t2)
+void* SP_CheatManager();     // 0x0067de20 (equiv t2)
 
 // Local stand-ins for the command classes. CreateBufferCheats is still non-matching and uses these shapes, so they stay.
 // TODO(rewrite): replace with EA::ArgScript::cICommand / cCommandBase once CreateBufferCheats matches.
@@ -30,10 +30,18 @@ struct cICommand {
     virtual void v6();
     virtual void Register(void* arg);   // +0x1c
 };
-struct cCommandBase {
-    cICommand base_cICommand;
+struct cCommandBase : cICommand {
+    cCommandBase();   // 0x0083c800
+    int mFields[3];
 };
-extern "C" void  cCommandBase_ctor(cCommandBase* p);   // 0x0083c800 (equiv t2)
+struct VertexBufferCheat : cCommandBase {
+    virtual void v8();   // vtable 0x0140a92c
+};
+struct IndexBufferCheat : cCommandBase {
+    virtual void v8();   // vtable 0x0140a9a8
+};
+void* operator new(unsigned n, const char* name, int a, int b, const char* file, int line);   // 0x00f473a0
+void operator delete(void* p, const char* name, int a, int b, const char* file, int line);
 
 // @ 0x006e0f90
 void VisitCharts()
@@ -85,16 +93,8 @@ void __stdcall CommandDumpIndex(EA::ArgScript::cArguments* args)
 // @ 0x006e10a0
 void CreateBufferCheats()
 {
-    cCommandBase* p = (cCommandBase*)operator_new(0x10, "Graphics/VertexBufferCheat", 0, 0, 0, 0);
-    if (p != 0) {
-        cCommandBase_ctor(p);
-        *(void**)p = PTR_FUN_0140a92c;
-    }
+    new ("Graphics/VertexBufferCheat", 0, 0, 0, 0) VertexBufferCheat;
     SP_CheatManager();
-    p = (cCommandBase*)operator_new(0x10, "Graphics/IndexBufferCheat", 0, 0, 0, 0);
-    if (p != 0) {
-        cCommandBase_ctor(p);
-        *(void**)p = PTR_FUN_0140a9a8;
-    }
+    new ("Graphics/IndexBufferCheat", 0, 0, 0, 0) IndexBufferCheat;
     SP_CheatManager();
 }

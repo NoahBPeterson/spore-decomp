@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPUtilities.cpp  ?SporeAlert@SP@@YAXPBDHH@Z  006baff0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

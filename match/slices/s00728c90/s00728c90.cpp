@@ -542,13 +542,15 @@ struct SingLock {
 SingLock* __cdecl FUN_0068f4d0();                              // 0x0068f4d0 singleton accessor
 void __cdecl FUN_0068f9b0(void* key, void* job);               // 0x0068f9b0
 
-// The 0x4c-byte job info FUN_007280b0 initialises.
+void* operator new(unsigned size, const char* name, int f, int df, void* file, int line);   // 0x00f473a0
+void operator delete(void* p, const char* name, int f, int df, void* file, int line);        // 0x00f47410
+
+// The 0x4c-byte job info whose constructor is 0x007280b0.
 struct UVGenJobInfo {
     void** vptr;                                               // +0x00
-    UVGenJobInfo* Init(void* a, float b, void* c, void* d);    // 0x007280b0 (this + 5 stack slots)
+    char   pad04[0x48];
+    UVGenJobInfo(int a1, float a2, int a6, int a7, int zero);  // 0x007280b0 (this + 5 stack slots)
 };
-
-void* __cdecl FUN_00f473a0(unsigned size, const char* name, int f, int df, void* file, int line);  // 0x00f473a0
 
 // The record the factory fills in: a thunk pointer plus the job object, and a
 // flag at +0x18.
@@ -557,35 +559,39 @@ struct JobRecord {
     UVGenJobInfo* mpJob;                                       // +0x04
     uint8_t      pad08[0x10];
     unsigned     mFlags;                                       // +0x18
+    void Attach(UVGenJobInfo* job);                            // 0x0068f9b0
+};
+
+struct ScopedSingLock {
+    SingLock* mpLock;
+    ScopedSingLock(SingLock* l) : mpLock(l) { mpLock->v20(); }
+    ~ScopedSingLock() { mpLock->v24(); }
+};
+
+struct JobHandle {
+    UVGenJobInfo* mpJob;
+    JobHandle(UVGenJobInfo* j) : mpJob(j) { if (mpJob) ((void(__thiscall*)(void*))mpJob->vptr[0])(mpJob); }
+    ~JobHandle() { if (mpJob) ((void(__thiscall*)(void*))mpJob->vptr[1])(mpJob); }
 };
 
 // @ 0x00729300  build one UV job and hand it to the consumer
 bool __cdecl FUN_00729300(int a1, float a2, JobRecord** a3, int a4, int a5, int a6, int a7)
 {
-    (void)a1; (void)a4; (void)a6;
+    (void)a4; (void)a5;
 
-    SingLock* lock = FUN_0068f4d0();
-    lock->v20();
+    ScopedSingLock lock(FUN_0068f4d0());
 
-    UVGenJobInfo* job = 0;
     if (FUN_0068f4d0()->v10(a3)) {
-        UVGenJobInfo* mem = (UVGenJobInfo*)FUN_00f473a0(0x4c, "Graphics", 0, 0, 0, 0);
-        if (mem != 0)
-            job = mem->Init(a3, a2, (void*)a5, (void*)a7);
-        if (job != 0)
-            ((void(__thiscall*)(void*))job->vptr[0])(job);      // AddRef
-        FUN_0068f9b0(a3, job);
+        UVGenJobInfo* job = new ("Graphics", 0, 0, 0, 0) UVGenJobInfo(a1, a2, a6, a7, 0);
+        JobHandle ref(job);
+        (*a3)->Attach(job);
         JobRecord* rec = *a3;
-        rec->mpThunk  = (void*)&FUN_007292f0;
-        rec->mpJob    = job;
-        rec->mFlags   = 0x80000000u;
-        if (job != 0)
-            ((void(__thiscall*)(void*))job->vptr[1])(job);     // Release
-        lock->v24();
+        rec->mpThunk = (void*)&FUN_007292f0;
+        rec->mpJob = job;
+        JobRecord* tail = *a3;
+        tail->mFlags = 0x80000000u;
         return true;
     }
-
-    lock->v24();
     return false;
 }
 

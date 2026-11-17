@@ -91,8 +91,9 @@ void* __cdecl SP_CreateRaster(int w, int h, int levels, int fmt, int flags)
         fmt &= 0xfffffdff;
     D1 d = FUN_011f0220(w, h, levels, fmt, flags);
     int local[4];
-    local[0] = (int)g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
+    void* mem = g_pSPMemPool->LockedAligned(d.v[0].a, d.v[0].b, 0, 0, 0, 0, 0, 0);
     local[1] = 0; local[2] = 0; local[3] = 0;
+    local[0] = (int)mem;
     return Raster_Initialize(local, w, h, levels, fmt, flags);
 }
 

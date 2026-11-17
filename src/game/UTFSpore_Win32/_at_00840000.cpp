@@ -42,7 +42,7 @@ struct WNDCLASSEXA {
 };
 extern "C" __declspec(dllimport) HICON __stdcall LoadIconA(HINSTANCE, LPCSTR);
 void* EAAllocate(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
-void operator delete(void* p);                                                   // 0x00f47380
+void operator delete(void* p) throw();                                                   // 0x00f47380
 namespace eastl {
 class allocator_s0084_7200 { public: unsigned char pad[4]; };
 }
@@ -543,6 +543,13 @@ char __cdecl FUN_008476b0(void*, void* a2)
     return result;
 }
 
+typedef void (__thiscall *PFN_REL)(void*);
+struct ObjRef {
+    void* p;
+    ObjRef() : p(0) {}
+    ~ObjRef() { if (p) ((PFN_REL)*(unsigned*)(*(unsigned*)p + 8))(p); }
+};
+
 // @ 0x00847810
 void __fastcall FUN_00847810(void* this_, void* dummy, EA::ArgScript::cArguments_s0084_7200* args)
 {
@@ -566,12 +573,6 @@ void __fastcall FUN_00847810(void* this_, void* dummy, EA::ArgScript::cArguments
     ctx[1] = (unsigned)*(void**)((char*)this_ + 0x14);
 
     void* parser = ((PFN_58)*(unsigned*)(*(unsigned*)err + 0x58))(err, ctx);
-    typedef void (__thiscall *PFN_REL)(void*);
-    struct ObjRef {
-        void* p;
-        ObjRef() : p(0) {}
-        ~ObjRef() { if (p) ((PFN_REL)*(unsigned*)(*(unsigned*)p + 8))(p); }
-    };
     ObjRef out;
     if (parser) {
         if (((PFN_34)*(unsigned*)(*(unsigned*)parser + 0x34))(parser, ctx, &out.p, 1, 6, 1, 0)) {

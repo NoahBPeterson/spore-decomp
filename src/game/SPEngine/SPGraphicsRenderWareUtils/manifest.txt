@@ -6,3 +6,4 @@
 ../src/game/SPEngine/SPGraphicsRenderWareUtils.cpp  ?FUN_007617a0@@YAPAXH@Z  007617a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRenderWareUtils.cpp  ?FUN_00761840@@YAPAXH@Z  00761840  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRenderWareUtils.cpp  ?FUN_00761c00@@YAPAXXZ  00761c00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderWareUtils.cpp  ?SP_CreateRaster@@YAPAXHHHHH@Z  00761420  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

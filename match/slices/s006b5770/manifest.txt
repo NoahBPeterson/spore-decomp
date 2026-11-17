@@ -11,3 +11,4 @@ slices/s006b5770/s006b5770.cpp  ?func30h@cStringDetokenizer@App@@UAE_NPAUSPCStri
 slices/s006b5770/s006b5770.cpp  ?TranslateToken@cStringDetokenizer@App@@UAE_NPBGAAUstring16@eastl@@@Z  006b6160  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s006b5770/s006b5770.cpp  ?Next@TokenCursor@App@@QAE_NPADPAH1@Z  006b65d0  /O2 /MD /Gy /EHsc /TP
 slices/s006b5770/s006b5770.cpp  ?ScalarDeletingDtor@Hashtable@@QAEPAXI@Z  006b68a0  /O2 /MD /Gy /EHsc /TP
+slices/s006b5770/s006b5770.cpp  ??0cStringDetokenizer@App@@QAE@XZ  006b6490  /O2 /MD /Gy /EHsc /TP /GS-

@@ -6,7 +6,6 @@
 007df780  -  cSafeDynamicKernelStorage::CreateRandomKernel; comprehensive rewrite (switch on mKernelType, per-type EAllocSwarm 0x10/0x10/0x1c, RandomLinearCongruential draws, x87 norm) [equiv: FAIL - 5/26 valid inputs, out[3]/out[6] = v*v computed in x87 extended precision where ours rounds the intermediate to float first; 1-ulp denormal (1.4e-45 vs 0) — sub-ULP x87 scheduling, not a logic error]
 007dfac0  -  cSafeDynamicKernelStorage::Serialize; complete (262 = 247 oracle bytes + EH) [equiv: PASS - 321 valid inputs, 100.0% coverage]
 007dfc20  -  cSafeDynamicKernelStorage::ConstructFrom; complete (364 vs 369) [equiv: PASS - 352 valid inputs, 92.6% coverage]
-007dfd90  -  cDescCtx::FUN_007dfd90 (SetKernelType helper); complete (228 vs 158: our SEH/__EHsc frame is larger than the original's compact one) [equiv: WEAK - 100 valid inputs (need 200), 82.1% coverage]
 007dfe80  -  ArgScript::SplitModelKernelEffect::SplitModelKernelEffect; complete (68 = 68 bytes) — differs only in store *scheduling* (the compiler emits [this]=vtbl and [+0x34]=imm immediately after the base ctor, then interleaves the zero-inits; ours groups them) [equiv: PASS - 400 valid inputs, 100.0% coverage]
 
 # --- non-target VAs in this slice's region ---
