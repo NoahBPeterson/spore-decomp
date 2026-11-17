@@ -2,4 +2,4 @@
 006bd430  112  complete; Close(); duplicated cleanup blocks merged differently by cl
 006bd4d0  137  complete; GetOpenCount rbtree walk; iterator/frame differences
 006bd580  91  complete; ratio check with x87; p6 passed as the pFlags pointer and unsigned conversions used; register/frame differs [equiv: PASS 203/203, 86.4% cov]
-006bdc50  357  complete; constructor (vtable chain, allocator selection, string16 sentinels, FileStream/Mutex/PFHoleTable construction, map anchor, ratios, AddRef/assign tail); EH frame and register allocation differ [equiv: PASS 381/381, 100.0% cov]
+006bdc50  357  complete; constructor (vtable chain, allocator selection, string16 sentinels, FileStream/Mutex/PFHoleTable construction, map anchor, ratios, AddRef/assign tail); EH frame and register allocation differ [equiv: PASS 381/381, 100.0% cov] | R49: reserved for byte-exact matching.

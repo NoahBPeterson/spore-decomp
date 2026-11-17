@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00761420 28 SP::CreateRaster: the 0xfffffdff mask applies to fmt, not flags; __thiscall LockedAligned via g_pSPMemPool; equiv PASS flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00761420 28 SP::CreateRaster: the 0xfffffdff mask applies to fmt, not flags; __thiscall LockedAligned via g_pSPMemPool; equiv PASS flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast | R49: reserved for byte-exact matching.
 00761500 296 SP::CreateTriangleKDTreeProcedural: full C++ (0x50 descriptor with a KDElem[4] non-trivial member, __thiscall LockedAligned via g_pSPMemPool, 0x38 out-node); size 385 vs 321, SEH frame layout and _eh_vector_destructor_iterator_ state differ; equiv WEAK (90/400 valid inputs, 100% coverage, no mismatch) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 007618e0 206 ResetGlobalState: full C++ (per-global |= chains, six 2-blocks, SSE 4x4 identity matrix from _HK_REAL_ONE); size 604 vs 599, `and esp,-16` alignment prologue and unpcklps matrix build ordering differ; equiv PASS (400/400) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 00761b40 149 raster texture builder: abs-loop register allocation (ebx/ebp vs edi/ebx) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

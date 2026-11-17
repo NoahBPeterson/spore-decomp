@@ -44,8 +44,8 @@
 0070ced0 324 eastl::vector<SP::cLightingConfig>::DoInsertValue; compare/order correct, cl EH state machine differs
 0070d080 451 eastl::vector<SP::cLightingConfig>::DoInsertValues; helper call shapes differ
 0070d2c0 699 SP::cLightingWorld::cLightingWorld; all field stores/calls reproduced, scheduling/SSE differ
-0070d6d0 205 SP::cLightingWorld::~cLightingWorld; member chain reproduced, register order differs
-0070dc90 156 SP::cLightingManager world factory; thiscast/register allocation differs
+0070d6d0 205 SP::cLightingWorld::~cLightingWorld; member chain reproduced, register order differs | R49: reserved for byte-exact matching.
+0070dc90 156 SP::cLightingManager world factory; thiscast/register allocation differs | R49: reserved for byte-exact matching.
 0070ddd0 113 SP::cLightingManager::Shutdown; range-clear + map teardown reproduced, registers differ
 0070e280 32 cLightingManager message registration; 0070e160 is __thiscall (this in ecx, no stack arg); equiv WEAK (331 valid, 32.1% cov) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 007831d0 231 complete: degree-7 SH polynomial evaluation; equiv: FAIL (2/1200 mismatched, memory) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

@@ -1,4 +1,4 @@
-0070e060  206   eastl::vector<SP::cLightingConfig> resize; helper inlining/temp differs
+0070e060  206   eastl::vector<SP::cLightingConfig> resize; helper inlining/temp differs | R49: reserved for byte-exact matching.
 0070e280  45    cLightingManager message registration; 0070e160 is __thiscall (this in ecx, no stack arg); equiv WEAK (331 valid, 32.1% cov)
 0070e3e0  19    eastl::copy_backward<AutoRefCount>; register assignment differs
 0070e430  19    eastl::copy_backward<AutoRefCount>; register assignment differs
