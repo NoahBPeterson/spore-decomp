@@ -1,0 +1,1 @@
+slices/s007fe970/s007fe970.cpp  ?CastTo_7fe970@@YAPAXPAUObject_7fe970@@@Z  007fe970  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

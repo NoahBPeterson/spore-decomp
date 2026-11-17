@@ -1,0 +1,1 @@
+slices/s00800590/s00800590.cpp  ?GetTypeID@Object_800590@@QAEHPAIH@Z  00800590  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
