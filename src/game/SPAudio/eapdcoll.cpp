@@ -448,7 +448,6 @@ struct CollRecv_s00a5_86d0 {
     void  FUN_00a589e0();                                        // table destroy
     bool  FUN_00a58b00(unsigned a, unsigned b, void* alloc);
     void  FUN_00a58ba0(Atom key, unsigned count, void* data);
-    void  FUN_00a59150();                                        // destructor
     CollRecv_s00a5_86d0* FUN_00a592f0(void* arg);                           // constructor
 };
 }
@@ -1231,12 +1230,21 @@ NOINLINE void CollList::FUN_00a58fa0(Atom key)
 
 // @ 0x00a59150
 namespace EA { namespace Audio { namespace Eapd {
-NOINLINE void CollRecv_s00a5_86d0::FUN_00a59150()
+struct CollPoolMember { char pad[0x30]; void Destroy(); ~CollPoolMember() { Destroy(); } };
+struct CollTableMember { char pad[0x54]; void Destroy(); ~CollTableMember() { Destroy(); } };
+struct CollListPlain { char pad[8]; void Destroy() throw(); __forceinline ~CollListPlain() { Destroy(); } };
+// the destructor's view of CollRecv_s00a5_86d0: the body clears, then list, table and pool are destroyed in reverse order
+struct CollRecvDtorView {
+    char pad0[0x120];
+    CollPoolMember mPool;
+    CollTableMember mTable;
+    CollListPlain mList;
+    void Clear();
+    ~CollRecvDtorView();
+};
+CollRecvDtorView::~CollRecvDtorView()
 {
-    FUN_00a587a0();
-    mList.Destroy();
-    FUN_00a589e0();
-    mPool.Destroy();
+    Clear();
 }
 }}}  // namespace EA::Audio::Eapd
 
@@ -1385,7 +1393,7 @@ void coll_free(t_coll * x)
     void* v = pd_findbyclass(gBindSymbolA, gBindSymbolB, gCollClass);
     if (v == x)
         sys_vgui((unsigned)(unsigned)x, gBindSymbolA, gBindSymbolB);
-    ((CollRecv_s00a5_86d0*)((char*)x + 0x30))->FUN_00a59150();
+    ((CollRecvDtorView*)((char*)x + 0x30))->~CollRecvDtorView();
 }
 }
 }
