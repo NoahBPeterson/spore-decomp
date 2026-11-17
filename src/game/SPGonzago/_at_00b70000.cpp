@@ -4072,7 +4072,8 @@ void* Simulator_cObstacle::AllocNode2(int* src)
     if (node != 0) {
         *(int**)((char*)this + 0x1c) = (int*)node->f0;
     } else {
-        node = (Node2View*)EAAllocate(*(int*)((char*)this + 0x2c), "Simulator", 0, 0, 0x13ebb38, 0xd1);
+        uint32_t nodeSize = *(uint32_t*)((char*)this + 0x2c);
+        node = (Node2View*)EAAllocate(nodeSize, "Simulator", 0, 0, 0x13ebb38, 0xd1);
     }
     if (node != 0) {
         node->f0 = src[0];

@@ -1117,10 +1117,12 @@ void cToolWindow::FUN_0107af00()
     p = *((void**)this + 0x51);
     if (p != 0)
         ((void(__thiscall*)(void*)) (*(void***)p)[4 / 4])(p);
-    void* h = Handler();
+    ToolHandlerState* state = &mHandler;
+    void* h = state->mpHandler;
     if (h != 0) {
-        SetHandler(0);
-        FUN_00571db0(h, HandlerArg(1), HandlerArg(2), HandlerArg(3), HandlerArg(4));
+        state->mpHandler = 0;
+        FUN_00571db0(h, state->mHandlerArg1, state->mHandlerArg2,
+                    state->mHandlerArg3, state->mHandlerArg4);
     }
     FUN_006b54c0(CStr());
     FUN_00e364d0(Tooltip());

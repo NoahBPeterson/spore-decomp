@@ -44,7 +44,6 @@
 00586b00 1546 complete; frame 0x2c vs 0x30 and register allocation differ
 00587270 1584 complete; branch layout / register allocation differ; difftest WEAK (335 valid, no mismatch, 4.3% coverage: guard this+0x38c in {0,6} rarely holds on random objects; fix: per-method callee annotations)
 00589ce0 836 complete; large function, frame/register allocation differs
-0058a350 2 complete; GetSkin result tested with test eax,eax instead of cmp eax,ebx
 0058a5a0 465 complete; extra spill of undo entry (frame 0x50 vs 0x4c), ebx/edi allocation; difftest WEAK (5% coverage: random editor state rarely gets past FUN_00576140 and the undo-list callees)
 0058be50 121 HandleSimulationUpdate: complete; same size 4238 B and 1194 insns, identical ordered call sequence (139 direct, 36 vcalls); /O2 stack-slot packing (0xa84 vs 0xa9c frame) and a few register choices differ. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 0058d430 46 complete (all 9 subcommands); not exact: frame 0x94 vs 0xc4, self-Release tail merging, timing Output tail duplication

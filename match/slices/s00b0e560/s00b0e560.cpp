@@ -137,11 +137,7 @@ float FUN_00b0f0c0(float a, float b, float t)
 {
     float d = b - a;
     float r = (float)fmod((double)d, (double)g_2pi);
-    if (r > g_pi)
-        r = r - g_2pi;
-    else if (r < -g_pi)
-        r = r + g_2pi;
-    return r * t + a;
+    return ((r > g_pi) ? r - g_2pi : ((r < -g_pi) ? r + g_2pi : r)) * t + a;
 }
 
 // ===========================================================================
