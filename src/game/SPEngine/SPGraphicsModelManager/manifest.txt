@@ -74,3 +74,4 @@
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ??1cMWGroupInternal_00753580@@QAE@XZ  00753580  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ??1ModelWorldRefs@@QAE@XZ  00745340  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Create@MwOwner_753d10@@QAEPAXIPAX0@Z  00753d10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?CreateNode18@@YGPAUNode18@@PBI@Z  00745c20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include /GS-

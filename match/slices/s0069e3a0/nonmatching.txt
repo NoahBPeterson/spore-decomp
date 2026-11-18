@@ -1,6 +1,4 @@
-0069e550  62  rbtree node copy-allocation (pair<key,AutoRefCount>): complete behaviour, but the original compiler EH frame/state around the allocator call is not reproduced; equiv PASS: 1013 valid inputs, 100% coverage
 0069e6c0  64  rbtree<...cFeedbackEvent...>::DoCopySubtree: complete behaviour (recursive copy of left spine + right iteration), but cl emits call/jump structure and EH differing from the original; equiv WEAK: 486 valid inputs, 82.3% coverage
-0069ecc0 105 rbtree cClassInfo node allocation: complete; allocator call + thiscall 0x0069e880 value ctor (ecx=node+0x1c, src+0xc); equiv PASS (219 valid, 100% coverage)
 0069edb0 310 rbtree cClassInfo DoCopySubtree: complete (left spine + right iteration via thiscall AllocB); equiv WEAK (183 valid, 51.6% coverage)
 0069ec20 144  decode one blob entry through the virtual IO object: complete; thiscall resize on this+0x54, read into that buffer, CRC32 writes the out param [equiv: WEAK: 262 valid inputs, 19.4% coverage]
 0069e3a0  142  cObjectDatabase::OpenIStream complete (alloc+inline ctor, AddRef guard, virtual open, release); frame/regalloc differ: orig keeps `out` in memory with zero in ebx, ours enregisters out [equiv: PASS: 204 valid inputs, 90.8% coverage]

@@ -4234,17 +4234,24 @@ E20* Copy20(E20* first, E20* last, E20* dest)
     return dest;
 }
 
+// The eight-byte value constructed after the tree node's sixteen-byte header.
+struct Node18ValueCopy {
+    uint32_t mKey;
+    void* mRef;
+    Node18ValueCopy(const Node18ValueCopy& value)
+        : mKey(value.mKey), mRef(value.mRef)
+    {
+        if (mRef)
+            (*(void(__thiscall**)(void*))(*(void**)mRef))(mRef);
+    }
+};
+
 // @ 0x00745c20
 Node18* __stdcall CreateNode18(const uint32_t* value)
 {
     Node18* p = (Node18*)EASTL_allocator_allocate(0x18, "Graphics", 0, 0,
                   "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-    if (p) {
-        p->mKey = *value;
-        p->mRef = (void*)value[1];
-        if (p->mRef)
-            (*(void(__thiscall**)(void*))(*(void**)p->mRef))(p->mRef);
-    }
+    ::new (&p->mKey) Node18ValueCopy(*(const Node18ValueCopy*)value);
     return p;
 }
 

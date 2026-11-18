@@ -1098,15 +1098,22 @@ bool S_e260::bind(Held* p, int a, char b)
     return flag = slot.p != 0;
 }
 
+struct ObjectDatabasePairCopy {
+    int key;
+    void* obj;
+    ObjectDatabasePairCopy(const P550& src) : key(src.key), obj(src.obj) {
+        if (obj)
+            ((void(__thiscall*)(void*))(*(void***)obj)[0])(obj);
+    }
+    static void* operator new(size_t, void* p) { return p; }
+    static void operator delete(void*, void*) {}
+};
+
 // @ 0x0069e550
 RBNode* Tree::AllocA(P550* src)
 {
     RBNode* n = (RBNode*)EASTL_allocator_allocate(0x18, "App", 0, 0, kEastlAllocH, 0xd1);
-    *(int*)((char*)n + 0x10) = src->key;
-    void* o = src->obj;
-    *(void**)((char*)n + 0x14) = o;
-    if (o)
-        ((void(__thiscall*)(void*))(*(void***)o)[0])(o);
+    new ((char*)n + 0x10) ObjectDatabasePairCopy(*src);
     return n;
 }
 
@@ -1157,15 +1164,23 @@ bool F_ec20::f(int* io, unsigned index, unsigned* outCRC)
     return ok;
 }
 
+struct ObjectDatabaseMapCopy {
+    int a;
+    int b;
+    int c;
+    RBMapBase map;
+    ObjectDatabaseMapCopy(const P_ecc0& src)
+        : a(src.a), b(src.b), c(src.c),
+          map(*(const RBMapBase*)src.rest) {}
+    static void* operator new(size_t, void* p) { return p; }
+    static void operator delete(void*, void*) {}
+};
+
 // @ 0x0069ecc0
 RBNode* Tree::AllocB(P_ecc0* src)
 {
     RBNode* n = (RBNode*)EASTL_allocator_allocate(0x38, "App", 0, 0, kEastlAllocH, 0xd1);
-    *(int*)((char*)n + 0x10) = src->a;
-    *(int*)((char*)n + 0x14) = src->b;
-    *(int*)((char*)n + 0x18) = src->c;
-    typedef void (__thiscall *ValueCtorFn)(void*, void*);
-    ((ValueCtorFn)0x0069e880)((char*)n + 0x1c, (void*)((char*)src + 0xc));
+    new ((char*)n + 0x10) ObjectDatabaseMapCopy(*src);
     return n;
 }
 
