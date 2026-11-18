@@ -119,7 +119,7 @@ def main():
             else:
                 st = F.check(fps[va], *F.extract(secs, syms, name))
                 if st == "PASS":
-                    tb = T.describe(T.check(fps[va], obj, name) or [])
+                    tb = T.describe(T.check(fps[va], obj, name, fps, src) or [])
             asm = asm_audit.transcribed(os.path.join(ROOT, "match", src)).get("%08x" % va)
             if asm and st == "PASS":
                 st = "assembly transcription, not decompiled (%s)" % asm

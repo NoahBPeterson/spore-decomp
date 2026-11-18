@@ -12,7 +12,8 @@ Name evidence only, never the retail instruction stream (that would make the aud
   crt       C runtime helpers from symbols/lib_names.txt
   hex-name  an address written into the name: FUN_00abcdef, g_156dc20, ..._0167a6d0
   annotation a '// 0x...' comment on the declaration (or a '// @ 0x' marker) in the row's own source
-  symbols   the exact mangled name in symbols/*.txt, symbols/slices/*.txt or a manifest row (unique)
+  symbols   the exact mangled name in symbols/*.txt or a src/game manifest, or in this slice's own symbols file or
+            manifest (unique); another slice's record of a stand-in name (Elem, Obj) is not evidence
   qualified the demangled qualified name in symbols/ (unique, and our object has no overload of it)
 RenderWare 4 rows built with /GL + link /LTCG against stub callees (gate.ltcg_stubs) are skipped: their linked
 layout is not the plain object's.
@@ -42,27 +43,17 @@ import gate                                           # noqa: E402
 import resolve as RS                                  # noqa: E402
 from coff import Coff, REL_DIR32, REL_REL32          # noqa: E402
 from resaudit import same_code                        # noqa: E402
+import targets as TG                                  # noqa: E402
 
 VA_RE = re.compile(r"^[0-9a-fA-F]{8}$")
-
-
-def manifest_names():
-    """mangled name -> {va} from every manifest row (the SymbolDB misses src/game's manifest.txt files)."""
-    out = defaultdict(set)
-    for m in gate.all_manifests():
-        for src, sym, va, _fl in RA.read_rows([m], ""):
-            if sym.startswith(("?", "_", "@")):
-                out[sym].add(va)
-    return out
 
 
 class Expect:
     def __init__(self, img):
         self.img = img
         self.res = RS.Resolver(img, RS.SymbolDB(img))
-        self.man = manifest_names()
 
-    def __call__(self, name, own=None, annots=(), quals=None):
+    def __call__(self, name, own=None, annots=(), quals=None, sid=None):
         """(expected address, method) or (None, None). `own`: the audited function's address; a name carrying it
         (U_01351e60_5_30, a placeholder for an unknown callee of 0x01351e60) is no evidence of its own target."""
         r = self.res
@@ -73,14 +64,16 @@ class Expect:
         va = r.by_crt(name)
         if va:
             return va, "crt"
-        va = r.by_hex_name(name, want_func)
-        if va and va != own:
+        va = TG.hex_claim(name, own)          # an address that ends the name (not H_572810_4-style placeholders)
+        if va and r.plausible(va, want_func):
             return va, "hex-name"
         if annots:
             va, how = r.by_annotation(name, annots, want_func)
             if va and va != own:     # the row's own '// @ 0x' marker names the function being defined
                 return va, "annotation"
-        vas = {v for v in set(r.db.mangled.get(name, ())) | self.man.get(name, set()) if r.plausible(v, want_func)}
+        # recorded names: global records and this slice's own (stand-ins like Elem are per slice), as CI does
+        vas = {v for v in set(TG.index().get(name, ())) | set(TG.index(sid).get(name, ()) if sid else ())
+               if r.plausible(v, want_func)}
         if len(vas) == 1:
             return next(iter(vas)), "symbols"
         if len(vas) > 1:
@@ -95,7 +88,7 @@ class Expect:
         return None, None
 
 
-def audit_row(exp, fp, coff, fname, va, annots=()):
+def audit_row(exp, fp, coff, fname, va, annots=(), sid=None):
     """[(offset, symbol, verdict, expected, actual, method)] for one function."""
     fsym = coff.by_name.get(fname)
     if fsym is None or not fsym.defined:
@@ -115,7 +108,7 @@ def audit_row(exp, fp, coff, fname, va, annots=()):
         else:   # REL32: target = S + A - (P + 4), A = our field
             disp = field - (1 << 32) if field & 0x80000000 else field
             actual = (va + off - lo + 4 + disp - ours) & 0xFFFFFFFF
-        want, how = exp(s.name, va, annots, quals)
+        want, how = exp(s.name, va, annots, quals, sid)
         if want is None:
             local = s.defined and not coff.sections[s.secno - 1].is_code
             verdict = "local" if local or s.name.startswith(("$SG", "??_C@", "__real@", "__xmm@", "$")) else \
@@ -175,7 +168,7 @@ def main():
         if src not in annots:
             path = os.path.join(ROOT, "match", src)
             annots[src] = RS.source_annotations([path] + gate_headers(path))
-        res = audit_row(exp, fps[va], coff, name, va, annots[src]) if name else None
+        res = audit_row(exp, fps[va], coff, name, va, annots[src], TG.slice_of(src)) if name else None
         if res is None:
             per_fn["symbol not found"] += 1
             continue

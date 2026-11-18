@@ -111,7 +111,7 @@ def main():
     if not stubs:
         # do the names point where retail points? (tools/ci/targets.py, #458; the bytes match with any address)
         import targets as TG
-        bad = TG.describe(TG.check(fp, obj, sym) or [])
+        bad = TG.describe(TG.check(fp, obj, sym, T.fingerprints(), src) or [])
         if bad:
             print("  but a name points somewhere other than retail does at that spot (the bytes match only because")
             print("  addresses are masked; the pull request check fails this):")
