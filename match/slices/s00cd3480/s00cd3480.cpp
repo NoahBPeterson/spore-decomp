@@ -354,7 +354,8 @@ void TM::F_cd4220(int a, float f1, float f2, int b)
 // @ 0x00cd43c0
 void TM::F_cd43c0(void* a)
 {
-    C9630* o = ((C9630*(__thiscall*)(void*, void*))(*(void***)this)[0x6c / 4])(this, a);
+    void* argument = *(void* volatile*)&a;
+    C9630* o = ((C9630*(__thiscall*)(void*, void*))(*(void***)this)[0x6c / 4])(this, argument);
     o->M();
 }
 

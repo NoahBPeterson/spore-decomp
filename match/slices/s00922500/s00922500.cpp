@@ -526,7 +526,7 @@ void C233e0::Set(unsigned short x)
     v = x;
 }
 
-// @ 0x009233f0
+// Legacy copy; byte-exact definition is in src/game/UTFSpore_Win32/ealog_imp.cpp.
 struct C233f0 { void** vtbl; void Call(void* arg); };
 void C233f0::Call(void* arg)
 {

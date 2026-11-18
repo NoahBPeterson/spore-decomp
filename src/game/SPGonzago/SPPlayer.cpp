@@ -1487,15 +1487,16 @@ struct cSpacePlayerWarData {
     cSpacePlayerWarData* __thiscall ctor(const cSpacePlayerWarData& src);   // 0x00c76f60
 };
 struct cHashSubD {
-    U32 mDummy;   // +0x00 (sub-object state, not touched by the thunks below)
+    U32 mDummy;       // +0x00 (sub-object state, not touched by the thunks below)
+    U32 mpBuckets;    // +0x04
+    U32 mnBuckets;    // +0x08
+    U32 mnElements;   // +0x0c
 
-    void __thiscall FUN_006b6740(U32* pKey);   // 0x006b6740
+    U32 __thiscall FUN_006b6740(U32* pKey);   // 0x006b6740, returns erased count
 };
 struct cHashTableD {
     U32       md000[0x111c / 4];   // +0x000
     cHashSubD mSub;                // +0x111c
-    U32       mpBuckets;           // +0x1120
-    U32       mnBuckets;           // +0x1124
 
     bool __thiscall Contains(U32 nKey);       // 0x00c772c0
     void __thiscall FUN_00c77300(U32 nKey);   // 0x00c77300
@@ -2734,7 +2735,7 @@ CElemTimer* __cdecl FUN_00c77250(const CElemTimer* pFirst, const CElemTimer* pLa
 bool __thiscall cHashTableD::Contains(U32 nKey)
 {
     int nCount = 0;
-    cHashNodeD* pNode = (cHashNodeD*)(*(U32*)(mpBuckets + (nKey % mnBuckets) * 4));
+    cHashNodeD* pNode = (cHashNodeD*)(*(U32*)(mSub.mpBuckets + (nKey % mSub.mnBuckets) * 4));
     while (pNode != 0) {
         if (nKey == pNode->mKey)
             ++nCount;
@@ -2746,7 +2747,8 @@ bool __thiscall cHashTableD::Contains(U32 nKey)
 // @ 0x00c77300
 void __thiscall cHashTableD::FUN_00c77300(U32 nKey)
 {
-    mSub.FUN_006b6740(&nKey);
+    U32 key = nKey;
+    mSub.FUN_006b6740(&key);
 }
 
 // @ 0x00c77380

@@ -54,3 +54,4 @@
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?CreateRecordReadFromInfo@DatabasePackedFileV2@@QAEPAVPFRecordReadV2@@HABUPFRecordInfo@ResourceMan@EA@@ABVKey@45@@Z  006bc020  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?CreateRecordWrite@DatabasePackedFileV2@@QAEPAVPFRecordWriteV2@@HI_KABVKey@ResourceMan@EA@@@Z  006bbe80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?CreateRecordWriteFromMemory@DatabasePackedFileV2@@QAEPAVPFRecordWriteV2@@HPAEIABVKey@ResourceMan@EA@@@Z  006bbf10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetBuffer@PFRecordRead@@QAEPAXXZ  008dc5e0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include

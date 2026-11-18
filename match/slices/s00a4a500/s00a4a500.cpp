@@ -211,21 +211,22 @@ void* canvas_realizedollar(void** out, void* env, void* a3, const char* s)
 }
 
 // @ 0x00a4a5d0
-void* canvas_findtext(int* out, void* x)
+void* canvas_findtext(int* __restrict out, void* x)
 {
-    while (*(int*)((char*)x + 0x74) == 0)
-        x = *(void**)((char*)x + 0x2c);
-    int* p = *(int**)((char*)x + 0x74);
-    int a = p[0];
-    out[1] = p[1];
-    out[0] = a;
-    return out;
+    while (((t_glist*)x)->gl_symtag == 0)
+        x = ((t_glist*)x)->gl_owner;
+    const t_symbol* p = (const t_symbol*)((t_glist*)x)->gl_symtag;
+    t_symbol* result = (t_symbol*)out;
+    *result = *p;
+    return result;
 }
 
 // @ 0x00a4a600
-void glist_getname(t_symbol* out, t_glist* g)
+t_symbol* glist_getname(t_symbol* __restrict out, t_glist* g)
 {
-    *out = *(t_symbol*)((char*)g + 0x64);
+    out->s_name = g->gl_name_a;
+    out->s_thing = g->gl_name_b;
+    return out;
 }
 
 // @ 0x00a4a620
