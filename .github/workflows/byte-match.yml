@@ -165,6 +165,8 @@ jobs:
       # what still differs) is fine; anything else must add a byte-exact function.
       - name: Require a new byte-exact function, unless only notes change
         run: |
+          # pipefail: without it the step takes tee's exit status, and the script's sys.exit(1) never failed a check.
+          set -o pipefail
           python3 - "$RUNNER_TEMP/keep.txt" byte-match.json "$RUNNER_TEMP/changed.txt" <<'EOF2' | tee -a "$GITHUB_STEP_SUMMARY"
           import json, os, sys
           keep = {l.split()[0].lower() for l in open(sys.argv[1]) if l.strip()}
