@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-009b3460 5 complete; recursive pointer-walk; outer/inner register allocation (eax vs ecx) differs
+009b3460 5 complete; recursive pointer-walk; outer/inner register allocation (eax vs ecx) differs [GLM easy-ten run reserved]
 009b4350  43  complete; CopyWigglesGuarded copy loop: the compiler's derived copy anchor differs (original esi/edi+0x24 with -0x20.. offsets, ours +0x18 with -0x14..) - copy-planner artifact, not controllable from source. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (72/400 valid, 17.2% coverage; most inputs discarded by pool-limit).
 009b43f0  62  complete; CopyWiggles forward copy loop; same copy-planner anchor artifact as 009b4350. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid, pool-limit).
 009b4490  6  complete; FillBoneXforms: only the order of `mov esi,edx` / `mov ecx,9` before `rep movsd` differs (instruction scheduling), same instructions and registers. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (50/400 valid, 31.0% coverage).
