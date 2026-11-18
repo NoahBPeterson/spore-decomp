@@ -4988,10 +4988,8 @@ void __fastcall FUN_00c905c0(cTribe_s00c8_fbb0* this_, int unused)
 // @ 0x00c908a0
 cPointerBlockIter* FUN_00c908a0(void* local, V4 a, V4 b, V4 c)
 {
-    void* extra = local;
-    cPointerBlockIter* p = (cPointerBlockIter*)local;
-    FUN_00c8ed90(p, a, b, c, extra);
-    return p;
+    FUN_00c8ed90((cPointerBlockIter*)local, a, b, c, local);
+    return (cPointerBlockIter*)local;
 }
 
 // @ 0x00c90920
