@@ -6,7 +6,7 @@ slices/s010dcd40/s010dcd40.cpp  ?getCollisionSpheres@hkConvexListConvexShape@@UB
 slices/s010dcd40/s010dcd40.cpp  ?invalidateTim@hkConvexListAgent@@UAEXAAUhkCollisionInput@@@Z  010dd0c0  /vc71 /O2 /MD /Gy /TP
 slices/s010dcd40/s010dcd40.cpp  ?warpTime@hkConvexListAgent@@UAEXMMAAUhkCollisionInput@@@Z  010dd0f0  /vc71 /O2 /MD /Gy /TP
 slices/s010dcd40/s010dcd40.cpp  ?removePoint@hkConvexListAgent@@UAEXG@Z  010dd120  /vc71 /O2 /MD /Gy /TP
-slices/s010dcd40/s010dcd40.cpp  ?removePoint@hkConvexListAgent@@UAEXG@Z  010dd140  /vc71 /O2 /MD /Gy /TP
-slices/s010dcd40/s010dcd40.cpp  ?removePoint@hkConvexListAgent@@UAEXG@Z  010dd160  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?commitPotential@hkConvexListAgent@@UAEXG@Z  010dd140  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?createZombie@hkConvexListAgent@@UAEXG@Z  010dd160  /vc71 /O2 /MD /Gy /TP
 slices/s010dcd40/s010dcd40.cpp  ?createConvexListAgent@hkConvexListAgent@@SAPAVhkCollisionAgent@@ABVhkCdBody@@0ABUhkCollisionInput@@PAUhkContactMgr@@@Z  010dd750  /vc71 /O2 /MD /Gy /TP
 slices/s010dcd40/s010dcd40.cpp  ?createListConvexAgent@hkConvexListAgent@@SAPAVhkCollisionAgent@@ABVhkCdBody@@0ABUhkCollisionInput@@PAUhkContactMgr@@@Z  010de010  /vc71 /O2 /MD /Gy /TP
