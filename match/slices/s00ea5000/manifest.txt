@@ -14,5 +14,5 @@ slices/s00ea5000/s00ea5000.cpp  ?Update3@Prim@@QAEXMI@Z  00ea5a60  /O2 /MD /Gy /
 slices/s00ea5000/s00ea5000.cpp  ?Update5@Prim@@QAEXMI@Z  00ea5d60  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast
 slices/s00ea5000/s00ea5000.cpp  ?Update6@Prim@@QAEXMI@Z  00ea5e40  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast
 slices/s00ea5000/s00ea5000.cpp  ?Update7@Prim@@QAEXMI@Z  00ea5f20  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast
-slices/s00ea5000/s00ea5000.cpp  ?Update7@Prim@@QAEXMI@Z  00ea5fe0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast
+slices/s00ea5000/s00ea5000.cpp  ?Update8@Prim@@QAEXMI@Z  00ea5fe0  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast
 slices/s00ea5000/s00ea5000.cpp  ?Update11@Prim@@QAEXMI@Z  00ea6340  /O2 /MD /Gy /TP /arch:SSE /GR- /fp:fast
