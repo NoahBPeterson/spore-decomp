@@ -1,0 +1,1 @@
+slices/s008005b0/s008005b0.cpp  ?GetDescription@Command_8005b0@@QBEPBDH@Z  008005b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
