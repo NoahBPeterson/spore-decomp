@@ -221,6 +221,7 @@ struct X {
     void  FUN_00bcafe0(int);
     void  FUN_00bc98f0(int, int);
     void  FUN_00b453a0();
+    void  FUN_00bc3130();   // 0x00bc3130 (cSPTimer::Restart)
     void  FUN_0067c8c0();
     void  FUN_00d9ff00();
     void  FUN_00da0070(int*);
@@ -516,7 +517,7 @@ void __cdecl FUN_00da06f0(int* param_1)
     int eax = *(int*)(*(int*)((char*)param_1 + 0xb4c) + 0x600);
     if (eax != 0)
         ((X*)&gPoolBase)->FUN_00d9eb70(*(int*)(eax + 0x1a8))->FUN_00da0120(param_1);
-    ((X*)((char*)param_1 + 0xfd0))->FUN_00b453a0();
+    ((X*)((char*)param_1 + 0xfd0))->FUN_00bc3130();
     ((X*)param_1)->FUN_00c17350(0x950a2438, 0);
     ((X*)(*(int*)((char*)param_1 + 0xb4c) + 8))->FUN_00bc98f0(0, 0x200000);
     ((X*)(*(int*)((char*)param_1 + 0xb4c) + 8))->FUN_00bc98f0(0, 0x2000000);
