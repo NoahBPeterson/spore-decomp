@@ -560,7 +560,7 @@ loaded:
 // ===========================================================================
 // 0x8dc5e0  PFRecordRead::GetBuffer
 // ===========================================================================
-// @ 0x008dc5e0
+// Legacy copy; byte-exact definition is in src/game/UTFSpore_Win32/DatabasePackedFile.cpp.
 void* PFRecordRead::GetBuffer()
 {
     EnsureLoaded();

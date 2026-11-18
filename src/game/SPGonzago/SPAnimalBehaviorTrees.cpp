@@ -7341,7 +7341,7 @@ float CanStartEditorAction(cEditorGameObject* p, uint32_t a, uint32_t b, uint32_
 }
 }  // namespace SP
 
-// @ 0x00d7a470
+// Legacy copy; byte-exact definition is in match/slices/s00d79470/s00d79470.cpp.
 namespace SP {
 float IsD51660BitClear()
 {
