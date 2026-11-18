@@ -55,17 +55,6 @@ float hkMath::max2<float>(float a, float b)
 	return (a > b) ? a : b;    // fcomp / test ah,0x41 / jne: unordered and equal return b
 }
 
-// @ 0x01082160
-float hkMath::acos(float x)
-{
-	// |x| < 1 (or NaN: fcomp / test ah,1) -> CRT acos (x87 _CIacos); otherwise 0 for x > 0, pi for x <= 0.
-	if (!(fabsf(x) >= 1.0f))
-		return (float)::acos((double)x);
-	if (x > 0.0f)
-		return 0.0f;
-	return 3.14159274101257324f;    // 0x40490fdb
-}
-
 // ---- hkMatrix3 --------------------------------------------------------------------------------------------------
 // @ 0x01081520
 void hkMatrix3::transpose()
