@@ -116,6 +116,7 @@ void FUN_01006600();
 void FUN_01008680();
 void FUN_0100a640();
 void FUN_010213f0();
+void FUN_00c3b930();
 void FUN_01021b70();
 
 // ---- 0139bde0 globals ------------------------------------------------------
@@ -471,14 +472,14 @@ void PropTableInit_1150()
     d.f18 = 0; d.f1c = 0;
     d.f20 = (void*)&FUN_00692ca0; d.f24 = (void*)&FUN_00572810;
     d.f28 = (void*)&FUN_00572840; d.f2c = (void*)&FUN_00692ff0;
-    d.f30 = (void*)&FUN_00693090; d.f34 = (void*)&FUN_00b1fbf0;
+    d.f30 = (void*)&FUN_00694ee0; d.f34 = (void*)&FUN_00b1fbf0;
     d.f38 = (void*)&FUN_0057cde0;
     d.offset = 0u;
     g_props_1150[0] = d;
 
     d.name = "mActivePlanet"; d.hash = 0x338a74au;
     d.f18 = 0; d.f1c = 0;
-    d.f20 = (void*)&FUN_00692ca0; d.f24 = (void*)&FUN_010213f0;
+    d.f20 = (void*)&FUN_00692ca0; d.f24 = (void*)&FUN_00c3b930;
     d.f28 = (void*)&FUN_00bdd350; d.f2c = (void*)&FUN_00c2e4e0;
     d.f30 = (void*)&FUN_00692fb0; d.f34 = (void*)&FUN_00b6f550;
     d.f38 = (void*)&FUN_00ac8050;
@@ -498,7 +499,7 @@ void PropTableInit_1150()
     d.f18 = 0; d.f1c = 0;
     d.f20 = (void*)&FUN_00692ca0; d.f24 = (void*)&FUN_00572810;
     d.f28 = (void*)&FUN_00572840; d.f2c = (void*)&FUN_00692ff0;
-    d.f30 = (void*)&FUN_00693090; d.f34 = (void*)&FUN_00b1fbf0;
+    d.f30 = (void*)&FUN_00694ee0; d.f34 = (void*)&FUN_00b1fbf0;
     d.f38 = (void*)&FUN_0057cde0;
     d.offset = 0x10u;
     g_props_1150[3] = d;
