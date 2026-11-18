@@ -260,7 +260,7 @@ void introsort_loop(SortElem* first, SortElem* last, int depthLimit, SortCompare
 struct Unk770320_s0077_3f60 {
     unsigned int Method(unsigned int param_2, int* param_3);  // 0x00770320 (Unk770320::Method)
 };
-extern Unk770320_s0077_3f60 g_770320;
+extern Unk770320_s0077_3f60 g_1630b68;
 struct Idx2 {
     int m0;
     int m1;
@@ -1632,7 +1632,7 @@ void partial_sort(SortElem* first, SortElem* middle, SortElem* last, SortCompare
 // @ 0x007740f0
 void FUN_007740f0(unsigned int param_1, int* param_2)
 {
-    g_770320.Method(param_1, param_2);
+    g_1630b68.Method(param_1, param_2);
 }
 
 // @ 0x00774290

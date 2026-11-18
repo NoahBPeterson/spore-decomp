@@ -107,10 +107,10 @@ void sort_range(SortElem* first, SortElem* last, SortCompare compare) {
 struct Unk770320 {
     unsigned int Method(unsigned int param_2, int* param_3);
 };
-extern Unk770320 g_770320;
+extern Unk770320 g_1630b68;
 
 void FUN_007740f0(unsigned int param_1, int* param_2) {
-    g_770320.Method(param_1, param_2);
+    g_1630b68.Method(param_1, param_2);
 }
 
 // ---------------------------------------------------------------------------
