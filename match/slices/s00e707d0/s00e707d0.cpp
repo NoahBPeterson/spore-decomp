@@ -41,7 +41,7 @@ struct cObjectPool {
     // 0x00b721d0: handle -> element pointer, 0 when the handle is stale. thiscall, `ret 4`.
     void* GetSafe(uint32 handle);
     // 0x00b72210: handle -> element pointer (assumes live). thiscall, `ret 4`.
-    void* Get(uint32 handle);
+    void* At(uint32 handle);
     // 0x00b72160: allocate an element, returns its handle. thiscall, no arguments.
     uint32 Alloc();
 };
@@ -241,12 +241,12 @@ void __cdecl FUN_00e707d0(cTimedHandles* self, float dt)
 void __cdecl FUN_00e70950(int* cell, int arg)
 {
     cObjectPool* cells = (cObjectPool*)((char*)GetCellGameAddr() + 0x1c);
-    cTimedHandles* obj = (cTimedHandles*)cells->Get(cell[0]);
+    cTimedHandles* obj = (cTimedHandles*)cells->At(cell[0]);
     float t = FUN_00e6d200(obj, 0, 0x15, *(int*)((char*)obj + 0x1b0));
     int id = cell[0];
 
     cObjectPool* cmds = (cObjectPool*)((char*)GetCellGameAddr() + 0x54);
-    cCellCmd* cmd = (cCellCmd*)cmds->Get(cmds->Alloc());
+    cCellCmd* cmd = (cCellCmd*)cmds->At(cmds->Alloc());
     cmd->mTime1c = t;
     cmd->mSrc28 = id;
     cmd->mTime20 = t;
@@ -292,7 +292,7 @@ void __cdecl FUN_00e70a90(int* cell, int a2, int a3, int a4)
         return;
     int id = cell[0];
     cObjectPool* cells = (cObjectPool*)((char*)GetCellGameAddr() + 0x1c);
-    cTimedHandles* obj = (cTimedHandles*)cells->Get(id);
+    cTimedHandles* obj = (cTimedHandles*)cells->At(id);
     float t = FUN_00e6d200(obj, 0, a3, *(int*)((char*)obj + 0x1b0));
     FUN_00e51ee0(0xb, t, cell[0], 0, a2, -1, a3, 0, 0.0f, 0.0f, a4, 0, 0, 0, 0, 0);
     FUN_00e57b50(cell[0], a2, a3, a4);
@@ -310,7 +310,7 @@ void __cdecl FUN_00e70b20(int* cell, int* other, int a3, int a4, int a5)
     int id = cell[0];
     char* base = GetCellGameAddr();
     cObjectPool* cells = (cObjectPool*)(base + 0x1c);
-    cTimedHandles* obj = (cTimedHandles*)cells->Get(id);
+    cTimedHandles* obj = (cTimedHandles*)cells->At(id);
     float t = FUN_00e6d200(obj, 0, a5, *(int*)((char*)obj + 0x1b0));
     FUN_00e51ee0(9, t, cell[0], other[0], a3, -1, a5, 0, 0.0f, 0.0f, a4, 0, 0, 0, 0, 0);
     FUN_00e57a60(cell[0], other[0], a3, a5, a4);
@@ -322,12 +322,12 @@ void __cdecl FUN_00e70b20(int* cell, int* other, int a3, int a4, int a5)
 void __cdecl FUN_00e70bc0(int* cell, int arg)
 {
     cObjectPool* cells = (cObjectPool*)((char*)GetCellGameAddr() + 0x1c);
-    cTimedHandles* obj = (cTimedHandles*)cells->Get(cell[0]);
+    cTimedHandles* obj = (cTimedHandles*)cells->At(cell[0]);
     float t = FUN_00e6d200(obj, 0, 0x16, *(int*)((char*)obj + 0x1b0));
     int id = cell[0];
 
     cObjectPool* cmds = (cObjectPool*)((char*)GetCellGameAddr() + 0x54);
-    cCellCmd* cmd = (cCellCmd*)cmds->Get(cmds->Alloc());
+    cCellCmd* cmd = (cCellCmd*)cmds->At(cmds->Alloc());
     cmd->mTime1c = t;
     cmd->mSrc28 = id;
     cmd->mTime20 = t;
