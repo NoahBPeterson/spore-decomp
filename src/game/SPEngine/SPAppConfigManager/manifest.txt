@@ -21,3 +21,21 @@
 ../src/game/SPEngine/SPAppConfigManager.cpp  ??0cOption_s007c_c5f0@SP@@QAE@ABU01@@Z  007cc6f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppConfigManager.cpp  ?FUN_00addd20@@YIXPAXH@Z  00addd20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPAppConfigManager.cpp  ?erase@?$vector_s007c_b590@U?$vector_map_s007c_b590@_KU?$AutoRefCount_s007c_b590@VcPropertyList_s007c_b590@SP@@@EA@@U?$less_s007c_b590@_K@eastl@@Uallocator_s007c_b590@4@U?$vector_s007c_b590@U?$pair_s007c_b590@_KU?$AutoRefCount_s007c_b590@VcPropertyList_s007c_b590@SP@@@EA@@@eastl@@Uallocator_s007c_b590@2@@4@@eastl@@V?$fixed_vector_allocator@$0BI@$03$03$0A@$00@2@@eastl@@QAEPAU?$vector_map_s007c_b590@_KU?$AutoRefCount_s007c_b590@VcPropertyList_s007c_b590@SP@@@EA@@U?$less_s007c_b590@_K@eastl@@Uallocator_s007c_b590@4@U?$vector_s007c_b590@U?$pair_s007c_b590@_KU?$AutoRefCount_s007c_b590@VcPropertyList_s007c_b590@SP@@@EA@@@eastl@@Uallocator_s007c_b590@2@@4@@2@PAU32@0@Z  007cbd60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?Reset@cConfigScriptState_s007c_c5f0@@QAEXXZ  007ccc30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ??4cOption@SP@@QAEAAU01@ABU01@@Z  007cc5f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?CopyAutoRef@@YAPAUAutoRefCount@@PAU1@00@Z  007c7e10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ??1AutoRefVec@@QAE@XZ  007c80c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?OnRegister@cVendorCommand@@QAEXPAX0@Z  007c84a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?RegisterConfigScriptCommands@@YAXPAX@Z  007c8530  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ??1VVec@@QAE@XZ  007cef60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ??1Big2@@QAE@XZ  007cf4e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?CopyAutoRefRange@@YAPAUAutoRefElem_s007c@@PBU1@0PAU1@@Z  007c9910  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?UninitCopyAutoRef2@@YA?AUAutoRefIt_s007c@@U1@00@Z  007c97a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?FillAutoRef@@YAXUAutoRefIt_s007c@@IABUAutoRefElem_s007c@@@Z  007c9830  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?SetOption@cConfigManager_s007c_8940@@QAEXHI@Z  007c94f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?insert@?$vector_s007c_a950@U?$pair_s007c_a950@_KU?$AutoRefCount_s007c_a950@VcPropertyList_s007c_a950@SP@@@EA@@@eastl@@Uallocator_s007c_a950@2@@eastl@@QAEPAU?$pair_s007c_a950@_KU?$AutoRefCount_s007c_a950@VcPropertyList_s007c_a950@SP@@@EA@@@2@PAU32@ABU32@@Z  007ca950  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ??0?$fixed_vector_s007c_c5f0@U?$AutoRefCount_s007c_c5f0@VcPropertyList_s007c_c5f0@SP@@@EA@@$03$00@eastl@@QAE@ABU01@@Z  007cb3e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?LowerBoundPair@@YAPAIPAI00@Z  007c8160  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ?AR_7c7d70_UninitCopy@@YA?AUAR_7c7d70_It@@U1@00@Z  007c7d70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ??1cConfigManagerDtorView_7cc260@SP@@QAE@XZ  007cc260  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppConfigManager.cpp  ??1cConfigScriptStateView_7cc190@@QAE@XZ  007cc190  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

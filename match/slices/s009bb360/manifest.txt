@@ -1,1 +1,2 @@
 # byte-exact functions for slice s009bb360 (none)
+slices/s009bb360/s009bb360.cpp  ?UpdateHitWiggles@creature_instance_data@nSPCreatureAnim@@QAEXHMMM@Z  009bb360  /O2 /MD /Gy /TP /arch:SSE /fp:fast

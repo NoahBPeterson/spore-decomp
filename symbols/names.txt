@@ -66,3 +66,4 @@
 00f473a0 EASTL_allocator_allocate                                # str: EASTL/allocator.h
 00f47380 EASTL_allocator_deallocate                              # dc
 0068c680 Resource::HashNameN                                      # dc: FNV-1 over towlower((short)(signed char)c), length-based; difftested
+00637f80 SP::cSPPlayModeUI::LayoutYouTubeUploadButton    # dc+str: only caller ShowMovieSavedDialogCustom 0x00638430; loads "YouTube Upload (PLACEHOLDER)" 0x7518573e and the movie-saved dialog windows; no dev-build counterpart (IDs absent there)

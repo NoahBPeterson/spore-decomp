@@ -1,4 +1,3 @@
-006c4c20    7  complete source; only Log2's counter/flag scheduling differs (near-miss)
 006c4ca0  770  complete source (byte colours, point transform); prebuilt SSE-scalar vs cl15 x87 plus SEH frames; fixed the thiscall block-handle assign (0x424f70) and its ref-counted release, SSE sqrt, and read the dy/dz offsets from the scale struct; equiv WEAK 180/400 valid, 100% cov, 0 mismatches
 006c4fd0  697  complete source (16-bit colours, 2 lanes, point transform); prebuilt SSE-scalar vs cl15 x87 plus SEH frames; same handle-assign and parameter-layout fixes; equiv WEAK 177/400 valid, 100% cov, 0 mismatches
 006c52c0  770  complete source (16-bit colours, 4 lanes, point transform); prebuilt SSE-scalar vs cl15 x87 plus SEH frames; same handle-assign and parameter-layout fixes; equiv WEAK 163/400 valid, 100% cov, 0 mismatches

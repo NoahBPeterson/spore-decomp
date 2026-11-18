@@ -1,3 +1,5 @@
+#include <string.h>
+#pragma intrinsic(strlen)
 // src/game/UTFSpore_Win32/SSLSocket.cpp -- migrated from slice(s) s0094fb80 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/SSLSocket.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -321,14 +323,11 @@ int __cdecl Fn00950580(void* bio, int b, int c)
 // @ 0x009505c0
 int __cdecl Fn009505c0(void* bio, char* str)
 {
-    char* p = str;
-    char c;
-    do { c = *p; p++; } while (c != 0);
-    int len = (int)p - (int)(str + 1);
+    int len = (int)strlen(str);
     int r = 0;
     if (str != 0) {
-        void* t = (void*)(B(I32(bio, 0x20)) + 0x80);
-        r = ((Ext*)t)->e3f0((int)str, len, 0);
+        char* host = B(I32(bio, 0x20));
+        r = ((Ext*)(host + 0x80))->e3f0((int)str, len, 0);
         BIO_clear_flags(bio, 0xf);
     }
     return r;
@@ -442,10 +441,7 @@ void Sock::SetStr(char* str)
             *begin = 0;
             fs->end = fs->begin;
         }
-        char* p = str;
-        char c;
-        do { c = *p; p++; } while (c != 0);
-        int len = (int)p - (int)(str + 1);
+        int len = (int)strlen(str);
         fs->append(str, str + len);
     }
 }

@@ -1136,8 +1136,7 @@ void SP::cSPEditorAnimatedCreatureManager_s0059_b4b0::Init(SP::cIModelWorld_s005
     mModelWorld = pModelWorld;
     void* pProps = FUN_0067cb20();
     typedef void* (__thiscall* GetEditorFn)(void*, const wchar_t*);
-    GetEditorFn getEditor = *(GetEditorFn*)(*(char**)pProps + 0x20);
-    mAnimWorld = (SP::cISPCreatureAnimWorld_s0059_b4b0*)getEditor(pProps, L"Editor");
+    mAnimWorld = (SP::cISPCreatureAnimWorld_s0059_b4b0*)(*(GetEditorFn*)(*(char**)pProps + 0x20))(pProps, L"Editor");
     if (!mAnimWorld)
         return;
     if (*(int*)(*(int*)(*(int*)0x015fd918 + 0x3c) + 0x118) != 0) {

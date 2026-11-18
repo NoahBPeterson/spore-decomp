@@ -160,7 +160,6 @@ class Directory { public:
 
 namespace App {
 using eastl::FixedString16;
-
 void SetStringManagerGlobal(void* p);   // 0x67e070
 
 class cStringManager { public:
@@ -174,13 +173,16 @@ class cLocaleChangeMessage : public EA::Messaging::IMessageRC, public EA::RefCou
  public:
   FixedString16 mLocaleId;  // +0xc
   cLocaleChangeMessage(const FixedString16& id);
+  ~cLocaleChangeMessage() throw();   // implicitly virtual; ??_G at 0x006963d0 inlines it
 };
 
 // @ 0x00696350
 cLocaleChangeMessage::cLocaleChangeMessage(const FixedString16& id) : mLocaleId(id) {}
 
-// Forces cl to emit the compiler-generated scalar deleting destructor (??_G).
-void DestroyLocaleChangeMessage(cLocaleChangeMessage* p) { delete p; }
+// @ 0x006963d0 is the compiler-generated scalar deleting destructor (??_G) of
+// cLocaleChangeMessage: it inlines the destructor below.
+
+cLocaleChangeMessage::~cLocaleChangeMessage() {}
 
 }  // namespace App
 

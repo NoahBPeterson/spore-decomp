@@ -5,3 +5,4 @@
 ../src/game/SPAudio/_at_00a00000.cpp  ?Swap@CmdQueue@@QAEXPAU1@@Z  00a0fee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/_at_00a00000.cpp  ?Grow@CmdQueue@@QAEXI@Z  00a0ff50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/_at_00a00000.cpp  ?Append@CmdQueue@@QAEXPBXI@Z  00a0fff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a00000.cpp  ?Swap@FVec@@QAEXAAU1@@Z  00a0fe20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

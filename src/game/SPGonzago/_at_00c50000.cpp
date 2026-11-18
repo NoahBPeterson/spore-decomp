@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
 #include "SP/cSPMission.h"
+#include "SP/eUniverseContext.h"
 #include "EA/Random/RandomLinearCongruential.h"
 #include "SP/cCity.h"
 #include "SP/cCivData.h"
@@ -500,6 +501,19 @@ public:
     virtual IOStream* GetStream();          // 0x20
     virtual uint32_t GetType();             // 0x3c
 };
+struct MissionArchiveStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual IOStream* GetStream(); // +0x18
+};
+struct MissionArchive {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual MissionArchiveStreamHolder* GetStreamHolder(); // +0x20
+};
+extern SP::cDataSerializerGeneric gMissionMultiStepSerializerList[]; // 0x01576840
+
 void ReadInt32(IOStream* pStream, void* pDest, int nCount, int bFlag);
 void WriteUint32(IOStream* pStream, void* pSource, int nCount, int bFlag);
 class cVarListSerializer {
@@ -584,8 +598,8 @@ public:
 cTerrainEditor* NounManager_s00c5_a580();
 Vec3_s00c5_a580* GetTerrainSpherePosition();
 void* GetSpaceTuning();
-void* GetUniverseContext();
-void* GetActivePlanet();
+int GetUniverseContext();                    // 0x01021080
+SP::cPlanet* GetActivePlanet();              // 0x01021260
 void CreateMissionSteps(void* pOwner);
 void ResetStepSchedule();
 void SetPlanetHighlight(uint32_t planetId);
@@ -901,23 +915,26 @@ cMissionMultiStep::cMissionMultiStep()
 // @ 0x00c5ae30
 bool cMissionMultiStep::Write(void* pData)
 {
-    IOStream* pStream = ((ISerializer*)pData)->GetStream();
-    uint32_t nType = 0x5626b91;
-    WriteUint32(pStream->GetStream(), &nType, 1, 0);
-
-    cVarListSerializer serializer(this, (const void*)0x01576840, 0x1a80d26);
-    return serializer.Serialize(pData) != 0;
+    MissionArchiveStreamHolder* __restrict holder = static_cast<MissionArchive*>(pData)->GetStreamHolder();
+    uint32_t version = 0x05626b91;
+    IOStream* stream = holder->GetStream();
+    WriteUint32(stream, &version, 1, 0);
+    SP::cVarListSerializer serializer(this, gMissionMultiStepSerializerList,
+                                     SP::cVarListSerializer::kSignature);
+    bool result = serializer.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(pData)) ? true : false;
+    return result;
 }
 
 // @ 0x00c5aea0
 bool cMissionMultiStep::Read(void* pData)
 {
-    IOStream* pStream = ((ISerializer*)pData)->GetStream();
-    uint32_t nType = 0;
-    ReadInt32(pStream->GetStream(), &nType, 1, 0);
-
-    cVarListSerializer serializer(this, (const void*)0x01576840, 0x1a80d26);
-    return serializer.Serialize(pData) != 0;
+    IOStream* stream = static_cast<MissionArchive*>(pData)->GetStreamHolder()->GetStream();
+    uint32_t version;
+    ReadInt32(stream, &version, 1, 0);
+    SP::cVarListSerializer serializer(this, gMissionMultiStepSerializerList,
+                                     SP::cVarListSerializer::kSignature);
+    bool result = serializer.Serialize(*static_cast<SP::cIObjectDatabaseIStream*>(pData)) ? true : false;
+    return result;
 }
 
 // @ 0x00c5b020
@@ -957,28 +974,39 @@ void cMissionMultiStep::UpdateFromTerrainSphereB()
         ClearMissionUI();
 }
 
+void FUN_0102c0c0(SP::cPlanet* planet);                          // 0x0102c0c0
+
+class cMissionPlanetRefresher : public SP::cSPMission {
+public:
+    void RefreshTargetPlanet();
+};
+
 // @ 0x00c5b130
-void RefreshTargetPlanet()
+void cMissionPlanetRefresher::RefreshTargetPlanet()
 {
-    cSPMission* pMission = nullptr;
-    uint32_t nPlanet = pMission->GetTargetPlanet();
-    SetPlanetHighlight(nPlanet);
-    RequestMissionRefresh();
+    FUN_0102c0c0(GetTargetPlanet());
+    SP::cSPMission::OnComplete();
 }
 
-// @ 0x00c5b150
-void RefreshTargetPlanetConditional(cSPMission* pMission)
-{
-    uint32_t nPlanet = pMission->GetTargetPlanet();
-    SetPlanetHighlight(nPlanet);
+void FUN_0102c0c0(SP::cPlanet* planet);                          // 0x0102c0c0
 
-    if (GetUniverseContext() == nullptr) {
-        if (pMission->GetTargetPlanet() == (uint32_t)(intptr_t)GetActivePlanet()) {
-            RequestMissionRefresh();
+class cMissionPlanetConditional : public SP::cSPMission {
+public:
+    void RefreshTargetPlanetConditional();
+};
+
+// @ 0x00c5b150
+void cMissionPlanetConditional::RefreshTargetPlanetConditional()
+{
+    FUN_0102c0c0(GetTargetPlanet());
+    if (GetUniverseContext() == SP::kUniverseContextPlanet) {
+        SP::cPlanet* target = GetTargetPlanet();
+        if (target == GetActivePlanet()) {
+            SP::cSPMission::OnComplete();
             return;
         }
     }
-    NotifyMissionEvent(0);
+    SP::cSPMission::OnFail();
 }
 
 // @ 0x00c5bc30

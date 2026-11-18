@@ -474,11 +474,10 @@ void inlet_float(t_inlet* x, float f)
 namespace EA { namespace Audio { namespace Eapd {
 void inlet_list(t_inlet* x, t_symbol s, int argc, t_atom* argv)
 {
-    t_symbol from = x->i_symfrom;
-
-    if (from == gListSymbol || from == gFloatSymbol || from == gSymbolSymbol)
+    if (x->i_symfrom == gListSymbol || x->i_symfrom == gFloatSymbol ||
+        x->i_symfrom == gSymbolSymbol)
         pd_typedmess(x->i_dest, x->u.i_symto, argc, argv);
-    else if (from == gEmptySymbol)
+    else if (x->i_symfrom == gEmptySymbol)
         pd_list(x->i_dest, s, argc, argv);
 }
 }}}  // namespace EA::Audio::Eapd
@@ -505,10 +504,9 @@ void inlet_free(t_inlet* x)
     } else if (i) {
         while (i->i_next != x) {
             i = i->i_next;
-            if (!i) {
-                freebytes(x, 0x28);
-                return;
-            }
+            if (i) continue;
+            freebytes(x, 0x28);
+            return;
         }
         i->i_next = x->i_next;
     }
@@ -745,10 +743,9 @@ void outlet_free(t_outlet* x)
     } else if (o) {
         while (o->o_next != x) {
             o = o->o_next;
-            if (!o) {
-                freebytes(x, 0x1c);
-                return;
-            }
+            if (o) continue;
+            freebytes(x, 0x1c);
+            return;
         }
         o->o_next = x->o_next;
     }
@@ -816,12 +813,13 @@ void obj_disconnect(t_object* source, int outno, t_object* sink, int inno)
     t_outlet* o = source->te_outlet;
     t_inlet* i;
 
-    if (o) {
-        for (; outno; outno--) {
-            if (!o)
-                return;
-            o = o->o_next;
-        }
+    while (o) {
+        if (outno == 0)
+            break;
+        if (!o)
+            return;
+        o = o->o_next;
+        outno--;
     }
     if (sink->g_pd->c_firstin) {
         if (!inno) {
@@ -833,11 +831,9 @@ void obj_disconnect(t_object* source, int outno, t_object* sink, int inno)
     i = sink->te_inlet;
     if (!i)
         return;
-    while (inno) {
+    while (i && inno) {
         i = i->i_next;
         inno--;
-        if (!i)
-            return;
     }
     if (!i)
         return;
@@ -847,9 +843,10 @@ remove:
         t_outconnect* oc2;
         if (!oc)
             return;
-        if ((oc2 = oc->oc_next)->oc_to == i) {
-            o->o_connections = oc2->oc_next;
-            freebytes(oc2, 8);
+        oc2 = oc->oc_next;
+        if (oc->oc_to == i) {
+            o->o_connections = oc2;
+            freebytes(oc, 8);
             return;
         }
         while (oc2) {

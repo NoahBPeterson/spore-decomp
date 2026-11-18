@@ -2,5 +2,4 @@
 00f0cce0 183 complete codegen differs: register allocation / branch layout in DoMessage; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv WEAK
 00f0ce60 1135 complete codegen differs: large SSE/x87 mixed function, reserve and UpdateEditedScript call scheduling; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv FAIL (3.2% cov, eax)
 00f0d450 166 complete codegen differs: ctor base-init ordering across GameDataBase/SpatialBase; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv UNSUPPORTED
-00f0d6e0 132 complete codegen differs: virtual-serializer call sequence and this-offset layout; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv UNSUPPORTED
 00f0d8b0 505 complete codegen differs: property-read call sequence and inlined helpers; /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; equiv UNSUPPORTED

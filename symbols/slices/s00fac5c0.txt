@@ -1,7 +1,7 @@
-00fac5c0 ?Build@StrandMesh@@QAEXXZ  # StrandMesh::Build (pre-existing committed reconstruction): one quad per strand segment, flushed into the six face trees
-00facef0 ?AddStrand@StrandMesh@@QAEIPAUStrand@@@Z  # strand slot allocator + store + BuildRibbon(index); AllocStrandIndex is 0x00fa3ba0
-00facf20 ?RemoveStrand@StrandMesh@@QAEXI@Z  # virtual 0xc4 lookup returns the strand record, its vertex vector and the record are released, slot zeroed, index pushed on the +0x2cc free vector, then Build()
-00facfc0 ?AttachDecal@DecalHost@@QAEXXZ  # six face quads at mpMesh(+0x78)->mFaces(+0x118) each get AddDecal(0x00fb4a50); sets +0xb8 bit 0x10
+00fac5c0 ?Build@StrandMesh@@QAEXXZ  # StrandMesh::Build migrated from s00fac5c0 (verbatim, slice spelling)
+00facef0 ?AddStrand@StrandMesh@@QAEIPAUStrand@@@Z  # StrandMesh::AddStrand migrated from s00fac5c0 (verbatim, slice spelling)
+00facf20 ?RemoveStrand@StrandMesh@@QAEXI@Z  # StrandMesh::RemoveStrand migrated from s00fac5c0 (verbatim, slice spelling)
+00facfc0 ?AttachDecal@DecalHost@@QAEXXZ  # DecalHost::AttachDecal migrated from s00fac5c0 (verbatim, slice spelling)
 00fad000 ?DetachDecal@DecalHost@@QAEXXZ  # DecalHost::DetachDecal migrated from s00fac5c0 (verbatim, slice spelling)
 00fad040 ?CopyBoxElemsChecked@@YAXPBUBoxElem@@0PAU1@@Z  # CopyBoxElemsChecked migrated from s00fac5c0 (verbatim, slice spelling)
 00fad0a0 ?CopyBoxElems@@YAXPBUBoxElem@@0PAU1@@Z  # CopyBoxElems migrated from s00fac5c0 (verbatim, slice spelling)

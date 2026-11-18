@@ -4,7 +4,6 @@
 00ba3ca0 410 PlayerPlanetData copy ctor; five vector-block copies inlined vs out-of-line, field order differs
 00ba3ef0 43 vtable/float ctor; equivalence-PASS, float loads scheduled differently, vtbl stores reordered by scheduler
 00ba3f90 776 goal-state resolver; large multi-branch fn, register pressure and branch layout diverge
-00ba4290 138 AddCount; equivalence-WEAK, nested thiscall accessor calls reordered
 00ba43b0 110 vector lower_bound+insert; WKeyLess inlined twice vs shared, induction var differs
 00ba4430 167 PlayerPlanetData assign; same inlining/order issues as copy ctor
 00ba4520 36 sorted-vector find-or-add; prologue register order + 16-byte temp frame differ (equiv FAIL: hash-mod sentinel path)

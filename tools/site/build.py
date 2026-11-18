@@ -162,11 +162,38 @@ def model_field(body):
     return k.group(1) if k else ""
 
 
+def present_before(sha, vas):
+    """The addresses of `vas` that already had byte-exact source in the merge's first parent: a manifest row of a slice
+    or a src/game module.  Rows of the generated manifests (match/synth/*, match/clones.txt) do not count: replacing a
+    template or clone match with written C++ is new work."""
+    if not vas:
+        return set()
+    args = ["grep", "-I", "-F"]
+    for v in vas:
+        args += ["-e", "%08x" % v]
+    try:
+        out = git(*args, "%s^" % sha, "--", "match", "src/game")
+    except subprocess.CalledProcessError:   # git grep exits 1 when nothing matches
+        return set()
+    found = set()
+    for line in out.splitlines():
+        _rev, path, text = line.split(":", 2)   # "<sha>^:<path>:<line>"
+        if MANIFEST_RE.match(path) and path.startswith(("match/slices/", "src/game/")):
+            found |= rows_vas(text)
+    try:   # rows listed but failing the fingerprint check (tools/ci/known_failures.txt) were not byte-exact yet
+        found -= known_vas(git("show", "%s^:tools/ci/known_failures.txt" % sha))
+    except subprocess.CalledProcessError:
+        pass
+    return found & vas
+
+
 def pr_credits(prs_path, fps):
     if not prs_path or not os.path.exists(prs_path):
         return []
-    out = []
-    for p in json.load(open(prs_path)):
+    # A function is credited to the first merged pull request that added it, until a later merge removes it: a reverted
+    # pull request loses its credit, and one that lands the same work again gets it.
+    owner, rows = {}, []
+    for p in sorted(json.load(open(prs_path)), key=lambda p: p.get("mergedAt") or ""):
         sha = (p.get("mergeCommit") or {}).get("oid")
         if not sha:
             continue
@@ -183,7 +210,18 @@ def pr_credits(prs_path, fps):
                     added |= rows_vas(line[1:])
                 elif line.startswith("-") and not line.startswith("---"):
                     removed |= rows_vas(line[1:])
+        for v in removed - added:
+            owner.pop(v, None)
         new = (added - removed) & set(fps)
+        # a function that was already byte-exact somewhere before the merge (a migration moving it from its slice's
+        # manifest into its module's, rows pushed before contributions opened) is not new work
+        new -= present_before(sha, new)
+        for v in new:
+            owner.setdefault(v, p["number"])
+        rows.append(p)
+    out = []
+    for p in rows:
+        new = [v for v, n in owner.items() if n == p["number"]]
         out.append({"n": p["number"], "who": (p.get("author") or {}).get("login", "?"), "when": (p.get("mergedAt") or "")[:10],
                     "f": len(new), "b": sum(fps[v] for v in new), "model": model_field(p.get("body"))[:48]})
     return sorted(out, key=lambda r: -r["n"])
@@ -375,6 +413,9 @@ def build(out, prs_path, repo):
              'destructors of global objects, exception-handling stubs); "Open-source libraries" are the published '
              'libraries the game links. "Not yet attributed" is code whose module is not known yet, most of it added '
              'with Galactic Adventures after the development build the module map comes from.</p>')
+    # Only pull requests that are credited with functions are listed and counted: tools, notes-only and reverted pull
+    # requests (and ones whose work a later merge removed) add nothing to the totals.
+    prs = [p for p in prs if p["f"] or p["b"]]
     if prs:
         who = collections.defaultdict(lambda: [0, 0, 0])
         for p in prs:

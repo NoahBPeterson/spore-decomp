@@ -1,1 +1,8 @@
+00f986f0 ?FUN_00f986f0@@YIHPAUTerrainSphere@@PAXH@Z  # FUN_00f986f0 migrated from s00f986f0 (verbatim, slice spelling)
+00f987f0 ?FUN_00f987f0@@YIMPAUTerrainSphere@@PAX@Z  # FUN_00f987f0 migrated from s00f986f0 (verbatim, slice spelling)
+00f98800 ?FUN_00f98800@@YIXPAUTerrainSphere@@PAXPAUVec3@@2@Z  # FUN_00f98800 migrated from s00f986f0 (verbatim, slice spelling)
+00f98890 ?FUN_00f98890@@YIXPAUTerrainSphere@@PAXHPAUVec3@@M@Z  # FUN_00f98890 migrated from s00f986f0 (verbatim, slice spelling)
+00f988f0 ?FUN_00f988f0@@YIXPAUTerrainSphere@@PAXH@Z  # FUN_00f988f0 migrated from s00f986f0 (verbatim, slice spelling)
 00f98970 ?Update@SkyState@@QAEXXZ  # SkyState::Update migrated from s00f986f0 (verbatim, slice spelling)
+00f992e0 ?FUN_00f992e0@@YIXPAUTerrainSphere@@PAX@Z  # FUN_00f992e0 migrated from s00f986f0 (verbatim, slice spelling)
+00f99520 ?FUN_00f99520@@YIXPAUTerrainSphere@@PAX@Z  # FUN_00f99520 migrated from s00f986f0 (verbatim, slice spelling)

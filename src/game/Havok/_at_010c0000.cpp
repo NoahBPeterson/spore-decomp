@@ -323,10 +323,34 @@ public:
     uint16_t m_referenceCount;    // +0x06
     void removeReference()
     {
-        if (m_memSizeAndFlags != 0 && --m_referenceCount == 0)
-            delete this;
+        if (m_memSizeAndFlags != 0) {
+            --m_referenceCount;
+            if (m_referenceCount == 0)
+                delete this;
+        }
     }
 };
+// hkReferencedObject::removeReference @0x010e0a90 (__thiscall copy inlined below)
+inline void hkReferencedObjectRemoveReference_s010c_44d0(hkReferencedObject_s010c_44d0* self)
+{
+    if (self->m_memSizeAndFlags != 0) {
+        --self->m_referenceCount;
+        if (self->m_referenceCount == 0) {
+            void** vt = *(void***)self;
+            ((void(__thiscall*)(hkReferencedObject_s010c_44d0*, int))vt[0])(self, 1);
+        }
+    }
+}
+// hkReferencedObject's own allocated-free tail of the deleting destructor (hkMemory::deallocate)
+inline void hkReferencedObjectDeallocate_s010c_44d0(hkReferencedObject_s010c_44d0* self)
+{
+    // hkReferencedObject::~hkReferencedObject: vptr = base table, then the instance is freed through
+    // hkMemory::deallocate(p, memSizeAndFlags, 0x24)
+    *(void**)self = (void*)0x014a3c78;
+    void** mem = *(void***)0x016e4178;
+    typedef void (__stdcall *FreeFn)(void*, unsigned, int);
+    ((FreeFn)mem[0x14 / 4])(self, (unsigned)*(unsigned short*)((char*)self + 4), 0x24);
+}
 class __declspec(align(16)) hkVector4_s010c_44d0 { public: float x, y, z, w; };
 class hkTransform_s010c_44d0 { public: hkVector4_s010c_44d0 m_rotation[3]; hkVector4_s010c_44d0 m_translation; };   // 0x40
 class hkAabb_s010c_44d0      { public: hkVector4_s010c_44d0 m_min, m_max; };                            // 0x20
@@ -1676,13 +1700,18 @@ hkBool_s010c_44d0 hkTriangleShape_s010c_44d0::castRay(const hkShapeRayCastInput_
     return hkBool_s010c_44d0(false);
 }
 
+// hkShapeCollection::hkShapeCollection @0x010e7fd0 (__thiscall): the base ctor the original calls first
+struct hkShapeCollectionCtor_s010c_44d0 { void ctor(); };
+
 // @ 0x010c4a20
 void hkTriangleShapeCtor(hkTriangleShape_s010c_44d0* self)
 {
-    // 0x010e7fd0 (hkShapeCollection/hkShape ctor) sets the base vptr; the retail
-    // sequence is: if (this) { baseCtor(this); this->vtbl = &hkTriangleShape::vtbl; }
-    if (self != 0)
-        *(void**)self = (void*)0x014a3c54;   // hkTriangleShape vtable
+    // 0x010e7fd0 is the base ctor; the retail sequence is:
+    // if (this) { baseCtor(this); this->vtbl = &hkTriangleShape::vtbl; }
+    if (self != 0) {
+        ((hkShapeCollectionCtor_s010c_44d0*)self)->ctor();
+        *(void**)self = (void*)0x014a3c54;   // hkTriangleShape vtable (relocated in the original image)
+    }
 }
 
 // @ 0x010c4a40
@@ -1736,9 +1765,21 @@ const hkShape_s010c_44d0* hkTriSampledHeightFieldCollection::getChildShape(uint3
 }
 
 // @ 0x010c4d40
+// hkTriSampledHeightFieldCollection scalar deleting destructor (`this` in ecx, delete flag on the stack: ret 4).
+// The original restores the base vtable, releases the heightfield through 0x010e0a90 (removeReference),
+// then repeats the base vtable store and frees the instance through hkMemory::deallocate.
 hkTriSampledHeightFieldCollection::~hkTriSampledHeightFieldCollection()
 {
-    m_heightfield->removeReference();
+    // the destructor stays empty: the scalar deleting destructor below does the work, and cl would
+    // fold any statement here into it
+}
+hkTriSampledHeightFieldCollection* __fastcall hkTriSampledHeightFieldCollection_scalarDeletingDtor(hkTriSampledHeightFieldCollection* self, int, char flags)
+{
+    *(void**)self = (void*)0x014a3c78;   // hkReferencedObject vtable (relocated in the original image)
+    hkReferencedObjectRemoveReference_s010c_44d0((hkReferencedObject_s010c_44d0*)self->m_heightfield);
+    if (flags & 1)
+        hkReferencedObjectDeallocate_s010c_44d0((hkReferencedObject_s010c_44d0*)self);
+    return self;
 }
 
 // @ 0x010c4d90
@@ -1761,7 +1802,13 @@ void hkTriSampledHeightFieldBvTreeShape::castRayWithCollector(const hkShapeRayCa
 // @ 0x010c4dd0
 hkTriSampledHeightFieldBvTreeShape::~hkTriSampledHeightFieldBvTreeShape()
 {
-    m_shapeCollection->removeReference();
+    // the original stores the hkReferencedObject vtable, releases the shape collection through
+    // hkReferencedObject::removeReference (0x010e0a90) and stores the same vtable value again.
+    // (Kept in this order so a reader can follow retail; cl folds the repeat store.)
+    hkShapeCollection_s010c_44d0* coll = m_shapeCollection;
+    *(void**)this = (void*)0x014a3c78;   // hkReferencedObject vtable (relocated in the original image)
+    hkReferencedObjectRemoveReference_s010c_44d0((hkReferencedObject_s010c_44d0*)coll);
+    *(void**)this = (void*)0x014a3c78;   // retail stores the base vtable again after the release
 }
 
 // @ 0x010c4e20
@@ -1884,15 +1931,31 @@ void hkTriSampledHeightFieldBvTreeShape::queryAabb(const hkAabb_s010c_44d0& aabb
     }
 }
 
+class hkStatisticsCollector_s010c_44d0 {
+public:
+    virtual void v00();                                                    // +0x00
+    virtual void addObject(const char* name, int id, const void* obj);     // +0x04
+    virtual void v08();                                                    // +0x08
+    virtual void v0c();                                                    // +0x0c
+    virtual void v10();                                                    // +0x10
+    virtual void v14();                                                    // +0x14
+    virtual void end();                                                    // +0x18
+};
+
 // @ 0x010c5470
-void hkTriSampledHeightFieldBvTreeShape_calcStatistics(const void* self, void* collector)
+// hkTriSampledHeightFieldBvTreeShape::calcStatistics(hkStatisticsCollector* c).  The retail body is
+// __thiscall: `this` arrives in ecx (and is read before the dispatch), the collector is the only
+// stack argument (it ends in `ret 4`).  It reports the object (slot +0x04), adds the shape collection
+// (slot +0x0c, this->m_shapeCollection at +0x0c) and ends (slot +0x18).
+void __fastcall hkTriSampledHeightFieldBvTreeShape_calcStatistics(const void* self, int,
+                                                                  const uint32_t* collector, signed char, unsigned short, unsigned short, unsigned short)
 {
-    uint8_t* p  = (uint8_t*)self;
+    const uint32_t* p  = (const uint32_t*)self;
     void** vt = *(void***)collector;
-    ((void(*)(void*, const char*, int, const void*))vt[1])(collector, "TransformShp", 1, self);
-    ((void(*)(void*, const char*, int, const void*))vt[3])(collector, "ChildShape", 1,
-                                                          *(void**)(p + 0x0c));
-    ((void(*)(void*))vt[6])(collector);
+    ((void(__thiscall*)(const uint32_t*, const char*, int, const uint32_t*))vt[1])(collector, "TransformShp", 1, p);
+    ((void(__thiscall*)(const uint32_t*, const char*, int, const uint32_t*))vt[3])(collector, "ChildShape", 1,
+                                                                                *(const uint32_t**)((const uint8_t*)p + 0x0c));
+    ((void(__thiscall*)(const uint32_t*))vt[6])(collector);
 }
 #pragma pack(pop)
 
@@ -2585,14 +2648,14 @@ void* FUN_010ceea0(int a, int b, int* c, int d)
     return p;
 }
 
+
 // @ 0x010cf090
 void __fastcall FUN_010cf090(MRayAgent* self, int)
 {
     int n = self->count;
     int i;
     for (i = 0; i < n; i++) {
-        unsigned short raw = self->map[i];
-        int id = raw;
+        int id = self->map[i];
         if (id != 0xffff)
             ((ContactMgr*)self->mgr)->release(id);
     }
@@ -2704,6 +2767,8 @@ void __fastcall FUN_010cf8d0(MRayAgent* self, int, int* bodyA, int* bodyB, int* 
 // @ 0x010cfc70
 void* FUN_010cfc70(int a, int b, int c, int d)
 {
+    // the original tests EAX (the allocation result) here, not this; it allocates through
+    // [HKMEM]->v10(0x20, 0x1c) and hands the block straight to FUN_010cf850
     MRayAgent* p = (MRayAgent*)HKMEM->alloc(0x20, 0x1c);
     *(unsigned short*)((char*)p + 4) = 0x20;
     return FUN_010cf850(p, 0, (int*)a, b, c, d);

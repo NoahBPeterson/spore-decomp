@@ -1,1 +1,6 @@
 00b0b3d0 SpawnerMgr::Update  # guessed name; per-frame update of the item vectors at +0x1b8e10/+0x1b8f40 against the entities gathered by 0xb09070; calls BeamMgr2::UpdateBeams (0xb0a6f0) and ItemManager::Update (0xb08670) on this-4
+00b0bb50 ??1PaintMgr@@QAE@XZ  # PaintMgr::~PaintMgr migrated from s00b0b3d0 (verbatim, slice spelling)
+00b0bd10 ?Resize@Elem24Vec@@QAEXI@Z  # Elem24Vec::Resize migrated from s00b0b3d0 (verbatim, slice spelling)
+00b0bdb0 ??0PaintMgr@@QAE@XZ  # PaintMgr::PaintMgr migrated from s00b0b3d0 (verbatim, slice spelling)
+00b0bfa0 ?InsertGrow@ScatterVec@@QAEXPAUScatterE_s00b0_b3d0@@ABU2@@Z  # ScatterVec::InsertGrow migrated from s00b0b3d0 (verbatim, slice spelling)
+00b0c110 ?Insert@ScatterVec@@QAEPAUScatterE_s00b0_b3d0@@PAU2@ABU2@@Z  # ScatterVec::Insert migrated from s00b0b3d0 (verbatim, slice spelling)

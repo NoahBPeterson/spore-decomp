@@ -10,7 +10,9 @@ typedef unsigned int hkUlong32;   // pointer-sized key in the 32-bit binary (hkP
 
 enum hkResult { HK_SUCCESS = 0, HK_FAILURE = 1 };
 
-class hkClass { public: const char* getName() const; };
+class hkClass { public: const char* getName() const;
+    const char* getFlagPtr(const hkClass** out) const;   // 0x01080450: *out = root class has-vtable flag, returns out
+};
 class hkTypeInfo { public: const char* m_name; void (*m_finishLoadedObject)(void*); const void* m_vtable; };
 
 // ---------------------------------------------------------------- memory
@@ -28,6 +30,7 @@ extern unsigned long g_hkThreadMemoryTlsIndex; // 0x016e4174
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 static inline hkThreadMemory* getThreadMemory() { return (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTlsIndex); }
 
+// ---------------------------------------------------------------- containers
 struct hkArrayUtil {
     static void _reserveMore(void* arr, int elemSize);
 };
@@ -53,7 +56,7 @@ class hkArray { public:
 // hkPointerMapBase<unsigned long>: keys then values in one allocation
 class hkPointerMapBase { public:
     hkUlong32* m_elem; int m_numElems; int m_hashMod;
-    hkPointerMapBase();   // 0x0107de00 (equiv t2)
+    hkPointerMapBase();   // 0x0107de00 (equiv t2) -- clears
     ~hkPointerMapBase();   // 0x0107de50 (equiv t2)
     hkUlong32 getWithDefault(hkUlong32 key, hkUlong32 def) const;   // 0x0107e540 (equiv t2)
     void insert(hkUlong32 key, hkUlong32 value);   // 0x0107de70 (equiv t2)
@@ -163,9 +166,14 @@ class hkObjectUpdateTracker : public hkReferencedObject { public:
 };
 
 struct hkPointerMapItem { void** pointer; int next; };
+struct hkPointerMapItemArray : hkArray<hkPointerMapItem> {
+    hkPointerMapItemArray() {
+        m_data = 0; m_size = 0; m_capacityAndFlags = HK_ARRAY_DONT_DEALLOCATE;
+    }
+};
 // hkPointerMultiMap<void*, void*>: items chained by 'next' (-1 ends), map holds the chain head index.
 struct hkPointerMultiMap {
-    hkArray<hkPointerMapItem> m_items;   // +0
+    hkPointerMapItemArray     m_items;   // +0
     hkPointerMapBase          m_map;     // +0xc
     void destruct();   // 0x0112b050, this in ECX
     ~hkPointerMultiMap() { m_map.~hkPointerMapBase(); m_items.quickFree(0x14); }
@@ -176,8 +184,6 @@ struct hkPointerMultiMap {
         m_map.insert(key, (hkUlong32)(m_items.m_size - 1));
     }
 };
-
-extern const char* hkClass_getFlagPtr(const hkClass* c, const hkClass** tmp);   // FUN_01080450 (class has-vtable style flag byte)
 
 struct hkPackfileObjectUpdateTracker : hkObjectUpdateTracker {
     hkPackfileData*   m_packfileData;     // +8
@@ -430,7 +436,10 @@ void* hkBinaryPackfileReader::getContentsWithRegistry(const char* className, con
 
     void* top;
     const char* name;
-    if (m_tracker == 0) {
+    if (m_tracker != 0) {
+        top = m_tracker->m_topLevelObject;
+        name = m_tracker->m_topLevelClassName;
+    } else {
         int s = m_header->m_contentsSectionIndex, o = m_header->m_contentsSectionOffset;
         if (s < 0 || o < 0)
             top = getSectionDataByIndex(getSectionIndex("__data__"), 0);
@@ -439,9 +448,6 @@ void* hkBinaryPackfileReader::getContentsWithRegistry(const char* className, con
         int cs = m_header->m_contentsClassNameSectionIndex, co = m_header->m_contentsClassNameSectionOffset;
         if (cs < 0 || co < 0) name = 0;
         else name = (const char*)getSectionDataByIndex(cs, co);
-    } else {
-        top = m_tracker->m_topLevelObject;
-        name = m_tracker->m_topLevelClassName;
     }
     if (className != 0 && name != 0) {
         if (hkString::strCmp(className, name) != 0)
@@ -452,10 +458,8 @@ void* hkBinaryPackfileReader::getContentsWithRegistry(const char* className, con
 
 // @ 0x0112b460
 hkPackfileObjectUpdateTracker::hkPackfileObjectUpdateTracker(hkPackfileData* d)
+    : m_packfileData(d)
 {
-    m_packfileData = d;
-    m_pointersTo.m_items.m_data = 0; m_pointersTo.m_items.m_size = 0;
-    m_pointersTo.m_items.m_capacityAndFlags = HK_ARRAY_DONT_DEALLOCATE;
     m_topLevelObject = 0;
     m_topLevelClassName = 0;
 }
@@ -465,7 +469,6 @@ void hkPackfileObjectUpdateTracker::addAllocation(void* p)
 {
     m_packfileData->m_memory.pushBack(p);
 }
-
 // @ 0x0112b520
 void hkPackfileData_addChunk(hkPackfileData* self, void* p, int n, int memClass)
 {
@@ -486,8 +489,8 @@ void hkPackfileObjectUpdateTracker::replaceObject(void* oldObject, void* newObje
         idx = (hkUlong32)m_pointersTo.m_items.m_data[(int)idx].next;
     }
     if (newClass != 0) {
-        const hkClass* tmp = newClass;
-        if (*hkClass_getFlagPtr(newClass, &tmp) != 0)
+        const hkClass* tmp;
+        if (*newClass->getFlagPtr(&tmp) != 0)
             addFinish(newObject, newClass->getName());
     }
 }

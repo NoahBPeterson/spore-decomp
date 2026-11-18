@@ -1,7 +1,6 @@
 # va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
 01020eb0  size  camera mouse-wheel: approximate; the /100 clamp and GameTimeManager
                gating are sketched, the switch body is stubbed.
-010210a0   29  cSPLivingUniverse::Write: approximate; the cVarListSerializer
                ctor/serialize call pair is present but the buffer local is unused.
 010210e0   24  FloodFillPlants: complete but difftest FAILs (our FUN_00c82f00
                receiver is resolved wrongly). flags /O2 /MD /Gy /TP /arch:SSE

@@ -40,7 +40,6 @@ struct string8_s0084_0250 {
 extern char gSprintfBuf[];      // 0x0164f780
 extern char gSprintfAppendBuf[];  // 0x0164fb80
 // ---- items of slice s00840250 end
-
 // @ 0x008409b0
 void __cdecl MakeCaseInsensitive(eastl::string8_s0084_0250* s)
 {
@@ -105,6 +104,7 @@ int __cdecl ParseRangedInt(int* expr, int lo, int hi)
     if (lo <= v && v <= hi)
         return v;
     throw cError("argument out of range: expecting [%d..%d], got %d", lo, hi, v);
+    return v;
 }
 
 // @ 0x00840e10

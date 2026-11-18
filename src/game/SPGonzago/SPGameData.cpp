@@ -552,7 +552,7 @@ void cGameData_s00b1_81d0::SetOwner(IRef* o)
 void cGameData_s00b1_81d0::Write(IStreamB* s)
 {
   unsigned magic;
-  IStreamW* ww = s->GetWriter();
+  IStreamW* __restrict ww = s->GetWriter();
   magic = 0x17f243b;
   void* w = ww->Get18();
   SP::WriteUint32(w, &magic, 1, 0);

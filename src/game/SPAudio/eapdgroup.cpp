@@ -25,12 +25,27 @@ struct IdxVec { const char* begin; const char* end; char* cap; void __thiscall G
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern t_symbol gEmptySymbol;       // 0x167589c
 
+// Destructor of an allocator-owned buffer (0x00a52af0): the data block goes back through the allocator's free slot
+// (slot 3), then the allocator member restores its base vtable (0x1403934).
+struct EapdAllocator_a52af0 {
+  virtual void v0();
+  virtual void v1();
+  virtual void v2();
+  virtual void Free(void* p);
+  ~EapdAllocator_a52af0() { (void)this; }
+};
+struct EapdBuffer_a52af0 {
+  void* mpData;                     // +0x00
+  int   m4, m8;
+  EapdAllocator_a52af0 mAllocator;  // +0x0c
+  ~EapdBuffer_a52af0();
+};
+
 // @ 0x00a52af0
-void __fastcall FUN_00a52af0(int* p)
+EapdBuffer_a52af0::~EapdBuffer_a52af0()
 {
-  if (*p != 0)
-    (*(void(__thiscall**)(void*))(p[3] + 0xc))(*(void**)p);
-  p[3] = (int)&gVtblA52b40;
+  if (mpData != 0)
+    mAllocator.Free(mpData);
 }
 
 // @ 0x00a52b40
@@ -69,9 +84,10 @@ void __thiscall IdxVec::Get(t_symbol* out, unsigned idx)
 {
   out->s_name = gEmptySymbol.s_name;
   out->s_thing = gEmptyA;
-  int n = (int)(end - begin) >> 3;
-  if (idx < (unsigned)n) {
-    out->s_name = *(const char**)(begin + idx * 8);
-    out->s_thing = *(int*)(begin + idx * 8 + 4);
+  unsigned n = (unsigned)((int)(end - begin) >> 3);
+  if (idx < n) {
+    const char* const* p = (const char* const*)begin;
+    out->s_name = p[idx * 2];
+    out->s_thing = (int)(size_t)p[idx * 2 + 1];
   }
 }

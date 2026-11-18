@@ -1,4 +1,4 @@
-// src/game/SPGonzago/SPTribeModeStrategy.cpp -- migrated from slice(s) s0135d100, s00cdef00, s00cde2f0, s00cdd500, s00cdab10, s00cd8e70, s00cd75f0, s00cd6680, s00cd5550, s00cd45c0, s00ccfc20 by tools/migrate/rewrite.py
+// src/game/SPGonzago/SPTribeModeStrategy.cpp -- migrated from slice(s) s00cdc8b0, s00cdbb10, s00cd9da0, s00cd3480, s00ccefb0, s00ccece0, s00ccdd70, s0135d100, s00cdef00, s00cde2f0, s00cdd500, s00cdab10, s00cd8e70, s00cd75f0, s00cd6680, s00cd5550, s00cd45c0, s00ccfc20 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPTribeModeStrategy.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -24,11 +24,28 @@
 #include "SP/cInputStrategy.h"
 #include "SP/cRelationshipManager.h"
 #include "SP/cSPTimer.h"
+#include "SP/cSPSwatch.h"
+#include "EA/Variant.h"
+#include "SP/cPlanetRecord.h"
+#include "SP/cTerrainSphere.h"
+#include "SP/cTribePlanner.h"
+#include "SP/cITerrainSphere.h"
 
 // ---- items of slice s00ccfc20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void*  GetGameTerrainCursor();                 // 0x00b30d70
+void*  FUN_00b3d240_s00cc_fc20();                         // 0x00b3d240
+void*  FUN_00b3d300();                         // 0x00b3d300  SP::NounManager
+void*  FUN_00b3d350();                         // 0x00b3d350  SP::PlanetModel
 uint32_t FUN_00ccefb0(void*, void*);           // 0x00ccefb0  GetTribeCursorID
 void   FUN_00ad92d0(void*);                    // 0x00ad92d0  eastl vector dtor
+void*  FUN_00bca2c0();                         // 0x00bca2c0  cAgentOrderManager::FirstPending
+void*  FUN_006bb5e0();                         // 0x006bb5e0
+void*  FUN_00a206f0();                                      // 0x00a206f0 EA::Audio::GetSystemAT
+void*  FUN_00bfc5f0(void*);                                 // 0x00bfc5f0 (thiscall)
+void*  FUN_00b82fc0(void*, void*);                          // 0x00b82fc0 (thiscall)
+void*  FUN_00b88590(void*, void*);                          // 0x00b88590 (thiscall)
+void*  FUN_00c275b0(void*, int, void*, void*);              // 0x00c275b0 (thiscall)
+void   FUN_006a3570(void*, void*);                          // 0x006a3570 (thiscall)
 unsigned char FUN_00cd4460(void*, uint32_t);                // 0x00cd4460 (thiscall)
 void   FUN_00cd6980(void*, uint32_t);                       // 0x00cd6980 (thiscall)
 struct StackVec {
@@ -46,6 +63,11 @@ struct StackVec {
         mpEnd   = &mBuf[0];
         mpCap   = &mBuf[16];
     }
+};
+struct HeapVec {
+    void** mpBegin;     // +0x00
+    void** mpEnd;       // +0x04
+    void** mpCap;       // +0x08
 };
 struct CInput {
     void F_ccfc20(void* arg);                            // 0x00ccfc20
@@ -206,7 +228,12 @@ struct cRefBase {
 // ---- items of slice s00cd5550 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern const float   g_fltmax;         // 0x01477430
 extern const float   g_flt_158133c;    // 0x0158133c
+extern const float   g_flt_1473c70;    // 0x01473c70
+extern const float   g_flt_1486110;    // 0x01486110
+extern const float   g_flt_15812dc;    // 0x015812dc
+extern float         g_1559bdc[];      // 0x01559bdc float table (stride 2 floats)
 extern void*         g_169b054;        // 0x0169b054 SimSingleton
+extern unsigned char g_rand_1601760[];  // 0x01601760 random LCG
 extern void*         g_157f290;        // 0x0157f290
 extern const char    g_StrSimulator[];     // 0x013f09b4 "Simulator"
 extern const char    g_StrSimSingleton[];  // 0x0145f924 "Simulator/SimSingleton"
@@ -251,6 +278,8 @@ virtual void v6();
 };
 struct cSPVector3_s00cd_5550 { float x, y, z; };
 extern unsigned char g_vt14774c4_s00cd_5550;      // 0x014774c4 element vtable
+extern const cSPVector3_s00cd_5550 g_v3_169b360;  // 0x0169b360
+extern const cSPVector3_s00cd_5550 g_v3_169b36c;  // 0x0169b36c
 bool  EA_IO_WriteUint32(void* inner, const uint32_t* p, int count, int flags); // 0x0093aa70
 void* EA_operator_new(uint32_t size, const char* tag, int a, int b, int c, int d); // 0x00f473a0
 void  EA_Messaging_RemoveHandler(void* h, void* a, void* b, void* c, void* d);  // 0x00571db0
@@ -262,6 +291,11 @@ void* FUN_01021230();                                // 0x01021230
 void* PlanetModel();                                 // 0x00b3d350
 void* Property_GetUInt(void* prop);                  // 0x0041ea00
 void* interface_cast_0xd1c610(void* p, int a);       // 0x00d1c610
+void* FUN_00d1e660();                                // 0x00d1e660
+float SP_GetPropertyT_float(void* props, uint32_t hash, float def); // 0x004e1c70
+void* FUN_0059aed0(float* out, const void* a, const void* b); // 0x0059aed0
+void* FUN_00b3d2b0(int a);                           // 0x00b3d2b0
+void* FUN_00ac7ab0(void* self, float f, void* container, int mode); // 0x00ac7ab0
 struct SimSingleton { void* Init(); };                  // 0x00cc5a70 ctor helper (returns this)
 struct C20Obj { void clear(); };                       // 0x007b1950 ?clear@C20
 struct cTribeDisplayStrategy { void Deactivate(); };   // 0x00ccd050
@@ -274,12 +308,17 @@ void* FUN_0067de90(int a);                           // 0x0067de90
 void* FUN_007eb100(void* self);                      // 0x007eb100
 unsigned char FUN_00c8e850(void* self);              // 0x00c8e850
 unsigned char FUN_00c8e870(void* self);              // 0x00c8e870
+void* SP_QuaternionToMatrix(float* out, const void* q); // 0x004a9b40
 class cVarListSerializer {
 public:
     uint32_t mData[0x26e];
     cVarListSerializer(void* varList, void* a, int b);  // 0x00692f90
     bool Serialize(Stream* s);                          // 0x00692900
 };
+void* FUN_00ac79d0(void* self);                      // 0x00ac79d0
+void  SP_NormalizedSafe(cSPVector3_s00cd_5550* out, const cSPVector3_s00cd_5550* in); // 0x00449c20
+void* SP_QuaternionToMatrix(void* out, const void* q); // 0x004a9b40
+void* SP_EffectsManager();                           // 0x0067ddd0
 struct cTribe {
     uint32_t GetAdultPopulation();   // 0x00c8f3a0  thiscall
     uint32_t GetMaxPopulation();     // 0x00c8eae0  thiscall
@@ -344,6 +383,55 @@ struct ElemRef {
     RefObj* volatile mp8;     // +8  (volatile reproduces cl's load ordering)
     unsigned char m0c;        // +0xc
 };
+struct cCommunity {
+    void* GetLeader();                       // 0x00c00650  thiscall, returns [this+0x11c]
+};
+struct LeaderSub {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+    virtual cSPVector3_s00cd_5550* GetPos();            // +0x2c
+    virtual float*      GetQuat();           // +0x30
+};
+struct LeaderObj { unsigned char mPad00[0xc0]; LeaderSub mSub; };   // sub-object at +0xc0
+struct RandLCG  { uint32_t Uniform(uint32_t range); };              // 0x00a68fb0  thiscall
+struct SysObj   { unsigned char mPad00[0x24]; void* mp24; };
+struct Holder   { unsigned char mPad00[0x130]; void* mp130; };
+struct FxSub {
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0c();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
+virtual void v30();
+virtual void v34();
+    virtual void Apply(cSPVector3_s00cd_5550* v);       // +0x38
+};
+struct FxObj {
+    unsigned char mPad00[0x34];
+    FxSub         mSub34;                    // +0x34
+    unsigned char mPad38[0x124 - 0x38];      // +0x38..+0x123
+    unsigned char mb124;                     // +0x124
+    unsigned char mPad125[3];                // +0x125..+0x127
+    void*         mp128;                     // +0x128
+    uint32_t      mPad12c;                   // +0x12c
+    uint32_t      m130;                      // +0x130
+};
 struct SettingObj { void Method(); };                              // 0x004df420
 struct MgrA       { void* Get(uint32_t hash, RefObj** out); };     // 0x00c8b370
 struct MgrB       { void* Get_713e0(); };                          // 0x00c713e0
@@ -373,6 +461,22 @@ virtual void v0c();
 virtual void v10();
 virtual void v14();
     virtual void Notify(RefObj* p, int v);       // +0x18
+};
+struct XformMsg {
+    uint16_t mFlags;    // +0x00
+    uint16_t mCount;    // +0x02
+    float    mX, mY, mZ; // +0x04
+    uint32_t mPad10;    // +0x10
+    float    mMatrix[9]; // +0x14
+    void ctor();
+};
+struct HashElem {
+    uint32_t pad0;          // +0x00
+    unsigned char* mp4;     // +0x04
+    unsigned char* mp8;     // +0x08
+    uint32_t m0c;           // +0x0c
+    void DoFreeNodes(unsigned char* a, unsigned char* b);  // 0x00a1b6c0 (thiscall)
+    void Clear();
 };
 // ---- items of slice s00cd5550 end
 
@@ -410,6 +514,13 @@ struct tGameDataVectorT {
 
 // ---- items of slice s00cd8e70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
+struct Vector3_s00cd_8e70 {
+    float x, y, z;
+    Vector3_s00cd_8e70() {}
+    Vector3_s00cd_8e70(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+};
+}
+namespace SP {
 struct cSPCreatureBase_s00cd_8e70;
 }
 namespace SP {
@@ -432,6 +543,11 @@ struct cTribe_s00cd_8e70 {
 namespace SP {
 struct cGameNounManager_s00cd_8e70 {
     cTribe_s00cd_8e70* GetPlayerTribe();                           // 0x00bfc5f0
+};
+}
+namespace SP {
+struct cSpeciesManager {
+    void* GetAvatarProfile();                           // 0x004df420
 };
 }
 namespace SP {
@@ -489,6 +605,30 @@ extern cTribeModeStrategy_s00cd_8e70* gpTribeModeStrategy;         // 0x0169b2c8
 }
 namespace SP {
 cGameNounManager_s00cd_8e70* __cdecl NounManager_s00cd_8e70();                // 0x00b3d300
+}
+namespace SP {
+cSpeciesManager*  __cdecl FUN_00401090_s00cd_8e70();               // 0x00401090
+}
+namespace SP {
+void __cdecl FUN_004010a0(void* out, uint32_t id);      // 0x004010a0
+}
+namespace SP {
+void* __cdecl FUN_005ecf80(void* in, uint32_t id);      // 0x005ecf80
+}
+namespace SP {
+void __cdecl FUN_00f47380(void* p);                     // 0x00f47380 operator delete[]
+}
+namespace SP {
+bool __cdecl FUN_0064f350(uint32_t group, uint32_t id, int mode);  // 0x0064f350
+}
+namespace SP {
+bool __cdecl GetPropertyAsUint32Array(uint32_t group, uint32_t id, uint32_t* count, uint32_t* list); // 0x00401100
+}
+namespace SP {
+struct FixedPoolDesc {                                  // fixed_pool_base scratch descriptor
+    uint32_t m00[7];
+    void Init(void* begin, int blockSize, int count, int align, int pad);   // 0x00921260
+};
 }
 namespace SP {
 void __fastcall cGonzagoSubsystem_ctor(void* p);        // 0x00b5b960
@@ -711,6 +851,18 @@ namespace SP {
 void* __cdecl FUN_00cd5a90(Elem16_s00cd_8e70* a, Elem16_s00cd_8e70* b, Elem16_s00cd_8e70* c);       // 0x00cd5a90
 }
 namespace SP {
+void  __cdecl FUN_00cd5af0(Elem16_s00cd_8e70* a, Elem16_s00cd_8e70* b, Elem16_s00cd_8e70* c);       // 0x00cd5af0
+}
+namespace SP {
+void* __cdecl FUN_00cd5a40(Elem16_s00cd_8e70* a, Elem16_s00cd_8e70* b, Elem16_s00cd_8e70* c);       // 0x00cd5a40
+}
+namespace SP {
+void  __cdecl FUN_00cd4540(Elem16_s00cd_8e70* a, Elem16_s00cd_8e70* b, Elem16_s00cd_8e70* c);       // 0x00cd4540
+}
+namespace SP {
+void* __cdecl FUN_00f40000(uint32_t size);                         // operator new (EASTL)
+}
+namespace SP {
 struct Vec16 {
     Elem16_s00cd_8e70* mpBegin;                                    // +0x00
     Elem16_s00cd_8e70* mpEnd;                                      // +0x04
@@ -753,8 +905,16 @@ struct COps {
     void  FUN_00ce0a20();                          // 0x00ce0a20 cTribePlanner::Shutdown
     u8    FUN_00c744e0(void*);                     // 0x00c744e0
 };
-void* __cdecl FUN_00b3d300();                       // 0x00b3d300 NounManager
 void* __cdecl FUN_00b3d330();                       // 0x00b3d330 SimTicker
+void* __cdecl FUN_00b3d4d0_s00cd_ab10();                       // 0x00b3d4d0 GetTriggerMgr
+void* __cdecl FUN_00675250(u32, u32);               // 0x00675250 Achievements::Controller
+void* __cdecl FUN_0067dcc0();                       // 0x0067dcc0 MessageServer
+void  __cdecl FUN_00cd98e0(u32);                    // 0x00cd98e0
+void  __cdecl FUN_00cd3f20(u32);                    // 0x00cd3f20 SetTerrainSphereParam
+void* __cdecl FUN_00b6f0c0(u32);                    // 0x00b6f0c0
+void  __cdecl FUN_00e398e0(u32, void*);             // 0x00e398e0
+void* __cdecl FUN_00b3d310(void*, u32);             // 0x00b3d310
+void  __cdecl FUN_00cd9660(void*);                  // 0x00cd9660
 void  __cdecl FUN_00f47380(void*);                  // 0x00f47380 operator_delete_array
 void* __cdecl FUN_00f473a0(u32, const char*, u32, u32, const char*, u32); // 0x00f473a0 operator_new
 void* __cdecl FUN_00b3d2c0();                       // 0x00b3d2c0 RelationshipManager
@@ -774,6 +934,11 @@ extern f32 gF_013f26dc;   // 0x013f26dc  ( 1/3)
 extern f32 gF_0140d0cc;   // 0x0140d0cc  (-1/3)
 extern f32 gF_013eb1bc;   // 0x013eb1bc  (-1.0)
 extern f32 gF_01485720;   // 0x01485720  ( 1.0)
+struct Global169b41c {
+    u8    pad000[0x1c];
+    void* mpObj;          // 0x1c
+};
+extern Global169b41c* gP_0169b41c;   // 0x0169b41c
 struct Rec16 {
     void* mpVtbl;         // 0x00
     void* mU_04;          // 0x04
@@ -799,6 +964,20 @@ struct TerrainSphere {
     u8  mPad0000[0x10f0];
     f32 mF_10f0;          // 0x10f0
     f32 mF_10f4;          // 0x10f4
+};
+struct TribeData_s00cd_ab10 {
+    u8   mPad000[0x108];
+    u32* mpIndexArray;    // 0x108
+    u8   mPad10c[0x11c - 0x10c];
+    u32* mpBegin;         // 0x11c
+    u32* mpEnd;           // 0x120
+};
+struct GameData {
+    u8   mPad000[0x11c];
+    u32* mpBegin;         // 0x11c
+    u32* mpEnd;           // 0x120
+    u8   mPad124[0x234 - 0x124];
+    void* mpTribe;        // 0x234
 };
 struct PtrVec {
     u32    mU_00;         // 0x00
@@ -848,6 +1027,7 @@ public:
 // ---- items of slice s00cdd500 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float gModelScale;                                        // 0x01485720
 extern float gMinTribeRadius;                                    // 0x01581268
+extern float gHotSpotDistance;                                   // 0x0158125c
 typedef unsigned short u16;
 struct Vec3 { float x, y, z; };
 struct Quat4 { float x, y, z, w; };
@@ -1060,6 +1240,7 @@ struct cTribe_s00cd_d500 {
     void ResetToolLayout();                                      // 0x00c951d0
     void ReserveToolsSlots(bool bReserve);                       // 0x00c998c0
 };
+void cTribe_SetupHotSpot(const Vec3* pPoint, s32 nKind);         // 0x00c9afb0
 struct cPlanetTree {
     u8 mPad_000[0xbc];
     Vec3* mpBegin_0bc;
@@ -1332,7 +1513,7 @@ void* FUN_00b969a0(void* first, void* last, void* dest);   // 0x00b969a0  _Unini
 void* FUN_00b3d230();                                       // 0x00b3d230
 void* FUN_00b3d320();                                       // 0x00b3d320
 void* FUN_00b3d340();                                       // 0x00b3d340
-void* FUN_00b3d350();                                       // 0x00b3d350
+
 void* FUN_00b3d380();                                       // 0x00b3d380
 void* FUN_00b3d410();                                       // 0x00b3d410
 void* FUN_00b3d440();                                       // 0x00b3d440
@@ -2140,6 +2321,1524 @@ extern T g_0157f290, g_0157f2cc, g_0157f308, g_0157f344, g_0157f380,
          g_0157f3bc, g_0157f3f8, g_0157f434, g_0157f470, g_0157f4ac;
 // ---- items of slice s0135d100 end
 
+// ---- items of slice s00ccdd70 begin (TODO(rewrite): local stubs, replace by canonical classes)
+template <class R> inline R V0(void* o, int off) { return ((R (__thiscall *)(void*))(*(void***)o)[off / 4])(o); }
+template <class R, class A> inline R V1(void* o, int off, A a) { return ((R (__thiscall *)(void*, A))(*(void***)o)[off / 4])(o, a); }
+template <class R, class A, class B> inline R V2(void* o, int off, A a, B b) { return ((R (__thiscall *)(void*, A, B))(*(void***)o)[off / 4])(o, a, b); }
+struct RefA { virtual void AddRef(); virtual void Release(); };                    // slots 0/1
+struct ModeStrategy : RefA {
+    ModeStrategy* Ctor();                                            // 0xe31320
+    void Setup();                                                    // 0xe31670
+    void SetFlag(int v);                                             // 0xe31160 ret 4
+    u8   GetFlag();                                                  // 0xe31170
+};
+struct TribeData { void* Fn(int idx); };
+struct Tribe { TribeData* GetThing(int); };                          // 0xc8e820 ret 4
+struct Orn2 : RefA {
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+    virtual int NounType();                                          // slot 8 (0x20)
+    char pad[0x84 - 4];
+    u32 flags;                                                       // +0x84
+    char pad2[0xa5 - 0x88];
+    u8 f_a5;
+    char pad3[3];
+    u8 f_a9;
+};
+struct NounMgr {
+    Orn2* Create(u32 noun, u32 kind, u32 z, const void* pos, const void* q);  // 0xb23650 ret 0x14
+    Tribe* GetPlayerTribe();                                         // 0xbfc5f0
+};
+NounMgr* NounManager_s00cc_dd70();                                              // 0xb3d300
+void* __cdecl GetCurrentGameMode();                                  // 0x00b5b800
+struct TerrainCursor                                                 // the hovered terrain cursor
+{
+    void SetMode(int mode);                                          // 0x00b2fba0 (ret 4)
+};
+TerrainCursor* __cdecl GetGameTerrainCursor_s00cc_dd70();                       // 0x00b30d70
+struct CameraCtl                                                     // SP::cTerrainCameraController
+{
+    char pad00[0x390];
+    u8   mMode390;                                                   // +0x390
+    void SetToggle(bool on);                                         // 0x00b0f950 (ret 4)
+};
+CameraCtl* __cdecl GetCameraCtl_s00cc_dd70();                                   // 0x00b3d280
+struct CardPanel                                                     // SP::cUIMissionCardPanel
+{
+    void SetCardsVisibility(int on);                                 // 0x00e14c10 (ret 4)
+};
+CardPanel* __cdecl GetCards();                                       // 0x00b3d400
+struct TcRefObj                                                      // refcounted helper (+0x5c, +0xc0)
+{
+    virtual void AddRef();                                           // +0x00
+    virtual void Release();                                          // +0x04
+    virtual void Slot8();                                            // +0x08
+    virtual void Release3();                                         // +0x0c
+    void Reset();                                                    // 0x00d12fc0
+};
+struct Stopwatch                                                     // EA::Stopwatch at +0xa8
+{
+    u32 mStart;                                                      // +0x00
+    u32 mStop;                                                       // +0x04
+    u32 mDelta;                                                      // +0x08
+    u32 mPad;                                                        // +0x0c
+    void Restart();                                                  // 0x00571e80
+};
+struct TcTerrain                                                     // the planet view at +0x40
+{
+    bool TerrainHasKey(u32 key);                                     // 0x00cd4460 (ret 4)
+};
+struct TcModeObject                                                  // result of view->vt[0x6c]
+{
+    u32 F00cc93b0(u32 v);                                            // 0x00cc93b0 (ret 4)
+    char          pad00[0x50];
+    ModeStrategy* mpMode;                                            // +0x50
+    u8            mFlag54;                                           // +0x54
+};
+struct PtrVec2 { void** mBegin; void** mEnd; };
+class cSPUITCCCursorStrategy
+{
+public:
+    void RegisterCursors();                                          // 0x00cce610 (PDB candidate: ctor)
+    void FUN_00cce5b0();                                             // 0x00cce5b0
+    void FUN_00cce5e0();                                             // 0x00cce5e0
+    void FUN_00cce940();                                             // 0x00cce940
+    void FUN_00ccea10(void* obj, bool flag);                         // 0x00ccea10 (ret 8)
+    u32  FUN_00cceae0(void* obj, u32 mode, void* arg3);              // 0x00cceae0 (ret 0xc)
+    u32  FUN_00ccebd0(void* obj, int flag, void* arg3);              // 0x00ccebd0 (ret 0xc)
+    void FUN_00ccec20(u32 flag);                                     // 0x00ccec20 (ret 4)
+    u32  FUN_00cceca0(void* a, void* b);                             // 0x00cceca0 (ret 8)
+
+    char       pad00[0x40];
+    TcTerrain* mpTerrain;                                            // +0x40
+    void*      mpHandler;                                            // +0x44
+    u32        mH48;                                                 // +0x48
+    u32        mH4c;                                                 // +0x4c
+    u32        mH50;                                                 // +0x50
+    u32        mH54;                                                 // +0x54
+    u32        mPad58;                                               // +0x58
+    TcRefObj*  mpRef5c;                                              // +0x5c
+    char       pad60[0xa0 - 0x60];
+    u32        mMode;                                                // +0xa0
+    char       padA4[0xa8 - 0xa4];
+    Stopwatch  mStop;                                                // +0xa8
+    char       padB8[0xc0 - 0xb8];
+    TcRefObj*  mpRefC0;                                              // +0xc0
+};
+// ---- items of slice s00ccdd70 end
+
+// ---- items of slice s00ccece0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char g_allocTag[];                 // 0x013ebc58  "App"
+extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
+#pragma intrinsic(_InterlockedExchange)
+void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);   // 0xf473a0
+#define VSLOT_s00cc_ece0(n) virtual void vslot##n()
+struct cMessageData {
+    u32 mData08;                                                          // +0x08
+    u32 mData0c;                                                          // +0x0c
+    u32 mData10;                                                          // +0x10
+    u32 mData14;                                                          // +0x14
+    u32 mData18;                                                          // +0x18
+    u32 mData1c;                                                          // +0x1c
+    u32 mData20;                                                          // +0x20
+    u32 mData24;                                                          // +0x24
+    u32 mData28;                                                          // +0x28
+    u32 mData2c;                                                          // +0x2c
+    u32 mMessageID;                                                       // +0x30
+    cMessageData(u32 id) : mMessageID(id) {}
+};
+struct RefBase {                              // vtable 0x013eb90c
+    virtual void v0();
+    virtual int AddRef();                                                 // +0x04
+    virtual int Release();                                                // +0x08
+    long rc;                                                              // +0x04
+    RefBase() { _InterlockedExchange(&rc, 0); }
+};
+struct cMessage : cMessageData, RefBase {     // vtable 0x013eb844
+    u32 mData34;                                                          // +0x34
+    u32 mFlags;                                                           // +0x38
+    u32 mData3c;                                                          // +0x3c
+    cMessage(u32 id) : cMessageData(id), mFlags(0) {}
+};
+struct cMessagePtr {
+    cMessage* mpMessage;
+    cMessagePtr(cMessage* p) : mpMessage(p) { if (p) p->AddRef(); }
+    ~cMessagePtr() { mpMessage->Release(); }
+    cMessage* operator->() const { return mpMessage; }
+};
+struct cMessageServer_s00cc_ece0 {
+VSLOT_s00cc_ece0(0);
+VSLOT_s00cc_ece0(1);
+VSLOT_s00cc_ece0(2);
+VSLOT_s00cc_ece0(3);
+VSLOT_s00cc_ece0(4);
+    virtual void SendMSG(u32 id, void* data, void* target);               // +0x14
+    virtual void PostMSG(u32 id, cMessage* msg, void* a, void* b);        // +0x18
+};
+cMessageServer_s00cc_ece0* MessageServer();              // 0x0067dcc0
+struct cTribeModeController { bool IsPlacing(); };   // 0x00d09660
+namespace SP {
+struct cTribeInputStrategy {
+    char pad[0x5c];
+    cTribeModeController* mpModeController;    // +0x5c
+
+    void RestorePlanner(int param_2);
+};  // namespace SP
+}
+// ---- items of slice s00ccece0 end
+
+// ---- items of slice s00ccefb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define VPAD(n) virtual void vpad##n()
+struct Vector3_s00cc_efb0 {
+    float x, y, z;
+    Vector3_s00cc_efb0() {}
+    Vector3_s00cc_efb0(const Vector3_s00cc_efb0& o) : x(o.x), y(o.y), z(o.z) {}
+    static const Vector3_s00cc_efb0 ZERO;                                          // 0169b1c8
+};
+bool operator!=(const Vector3_s00cc_efb0& a, const Vector3_s00cc_efb0& b);                    // 0041dd30
+struct cGameData {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+    virtual void* Cast(uint32_t typeID);                                // +0x0c
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+    virtual uint32_t GetNounID();                                       // +0x20
+VPAD(9);
+VPAD(10);
+VPAD(11);
+    virtual uint32_t GetModelKey();                                     // +0x30 (ornament model id)
+VPAD(13);
+VPAD(14);
+VPAD(15);
+VPAD(16);
+VPAD(17);
+VPAD(18);
+    virtual uint32_t GetPoliticalID();                                  // +0x4c
+};
+struct cSpatialPart {           // +0x34 / +0xc0 / +0x120 sub-objects
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+    virtual const Vector3_s00cc_efb0& GetPosition();                               // +0x2c
+VPAD(12);
+VPAD(13);
+VPAD(14);
+VPAD(15);
+VPAD(16);
+VPAD(17);
+VPAD(18);
+VPAD(19);
+    virtual bool IsMoving();                                            // +0x50
+    VPAD(21);
+    virtual bool IsUnderConstruction();                                 // +0x58 (flag/selectable test)
+};
+struct cCombatant {             // +0x120 of tools/huts
+    float GetHealthPercentage();                                        // 00bfc490
+    int GetDamageState();                                               // 008e7f80
+};
+struct cTimerLike {             // +0x5a8 of a citizen
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+VPAD(14);
+VPAD(15);
+VPAD(16);
+VPAD(17);
+VPAD(18);
+VPAD(19);
+VPAD(20);
+    VPAD(21);
+    virtual float GetValue();                                           // +0x58
+};
+struct cHerdInfo { uint32_t pad[0x1d8 / 4]; uint32_t mBehaviorID; };   // +0x1d8
+struct cTribe_s00cc_efb0;
+struct cCreatureCitizen : cGameData {
+    uint32_t pad04[(0xc0 - 4) / 4];
+    cSpatialPart mLocomotive;                                           // +0xc0
+    uint32_t pad0c4[(0x5a8 - 0xc4) / 4];
+    cTimerLike mTimer;                                                  // +0x5a8
+    uint32_t pad5ac[(0x5e0 - 0x5ac) / 4];
+    float mThreshold;                                                   // +0x5e0
+    uint32_t pad5e4[(0xb4c - 0x5e4) / 4];
+    cHerdInfo* mpHerd;                                                  // +0xb4c
+    uint32_t padb50[(0xb5c - 0xb50) / 4];
+    uint8_t mb5c, mb5d;
+    uint8_t mbBusy;                                                     // +0xb5e
+    cTribe_s00cc_efb0* GetTribe();                                                 // 00c22f50
+    int GetActivity();                                                  // 00c22dc0
+};
+struct cCreatureAnimal : cGameData {
+    uint32_t pad04[(0xc0 - 4) / 4];
+    cSpatialPart mLocomotive;                                           // +0xc0
+    uint32_t pad0c4[(0xb5c - 0xc4) / 4];
+    uint8_t mb5c, mb5d;
+    uint8_t mbBusy;                                                     // +0xb5e
+    bool IsFlagged();                                                   // 00c0c0e0
+};
+struct cTribe_s00cc_efb0 : cGameData {
+    uint32_t pad04[(0x120 - 4) / 4];
+    cSpatialPart mSpatial;                                              // +0x120
+    uint32_t pad124[(0x20c - 0x124) / 4];
+    uint32_t mFood[1];                                                  // +0x20c
+    uint32_t pad210[(0x554 - 0x210) / 4];
+    uint8_t mb554, mb555;
+    uint8_t mbDefeated;                                                 // +0x556
+    bool HasToolA();                                                    // 00c8e850
+    bool HasToolB();                                                    // 00c8e870
+    bool IsRaided();                                                    // 00c8eb90
+    bool IsAllied();                                                    // 00b1fbf0
+    cCreatureCitizen* GetLeader();                                      // 00c00650
+};
+struct cFoodStore { float GetAmount(); };                               // 00cee380
+struct cTribeTool : cGameData {
+    uint32_t pad04[(0x34 - 4) / 4];
+    cSpatialPart mSpatial;                                              // +0x34
+    uint32_t pad038[(0x120 - 0x38) / 4];
+    cCombatant mCombatant;                                              // +0x120
+VPAD(20);
+VPAD(21);
+    virtual int GetToolType();                                          // +0x58
+    cTribe_s00cc_efb0* GetTribe();                                                 // 00c9d9e0
+};
+struct cTribeHut : cGameData {
+    uint32_t pad04[(0x34 - 4) / 4];
+    cSpatialPart mSpatial;                                              // +0x34
+    uint32_t pad038[(0x120 - 0x38) / 4];
+    cCombatant mCombatant;                                              // +0x120
+VPAD(20);
+VPAD(21);
+    virtual cTribe_s00cc_efb0* GetTribe();                                         // +0x58
+};
+struct cTribeFoodMat : cGameData {
+    uint32_t pad04[(0x34 - 4) / 4];
+    cSpatialPart mSpatial;                                              // +0x34
+    uint32_t pad038[(0x10c - 0x38) / 4];
+    cTribe_s00cc_efb0* mpTribe;                                                    // +0x10c
+};
+struct cFruit : cGameData {
+    uint32_t pad04[(0x34 - 4) / 4];
+    cSpatialPart mSpatial;                                              // +0x34
+};
+struct cGameBundle : cGameData {
+    uint32_t pad04[(0x128 - 4) / 4];
+    uint32_t mOwnerID;                                                  // +0x128
+};
+struct cOrnament : cGameData {
+    uint32_t pad04[(0x228 - 4) / 4];
+    uint32_t mOrnamentType;                                             // +0x228
+};
+struct cOrnamentModel { uint32_t pad[0x2c0 / 4]; float mHeight; };    // +0x2c0
+void* object_cast(cGameData* p, uint32_t nounID);                       // 00ac80d0
+cGameData* ToGameData(cGameData* p);                                    // 00c9f060
+struct cPickInfo { uint32_t pad[4]; Vector3_s00cc_efb0 mPosition; };               // +0x10
+cPickInfo* GetPickInfo(cGameData* p);                                   // 00c22df0
+cTribe_s00cc_efb0* GetTribeByPoliticalID(uint32_t id);                            // 00ac7880
+cOrnamentModel* GetOrnamentModel(uint32_t key);                         // 00ac8730
+bool CanUseToolA(cGameData* p);                                         // 00dd18b0
+bool CanUseToolB(cGameData* p);                                         // 00e09ad0
+bool IsCitizenIdle(cCreatureCitizen* p);                                // 00da81f0
+enum {
+    kGameData = 0x17f243b, kTribeTool = 0x18c8f0c, kGameDataUFO = 0x18ebadc, kCreatureAnimal = 0x18eb45e,
+    kCreatureCitizen = 0x18eb4b7, kGameBundle = 0x18c431c, kOrnament = 0x18c88e4, kFruit = 0x2c9cc91,
+    kTribeHut = 0x1e4daae, kEgg = 0x2a034cd, kTribeFoodMat = 0x629bafe
+};
+struct SpatialRef { void* mpObject; };
+cCreatureCitizen* ToCitizen(const SpatialRef& r);                       // 00c9f000
+struct SpatialVector {          // eastl::vector<AutoRefCount<cSpatialObject>, sp_vector_allocator>
+    SpatialRef* mpBegin;
+    SpatialRef* mpEnd;
+    SpatialRef* mpCapacity;
+    uint32_t mAllocator[2];
+    ~SpatialVector();                                                   // 00ad92d0
+};
+template <int N>
+struct SpatialFixedVector : SpatialVector {
+    uint32_t mHeapFlag;
+    SpatialRef mBuffer[N];
+    SpatialFixedVector() {
+        mHeapFlag = 0;
+        mpBegin = mBuffer;
+        mpEnd = mBuffer;
+        mpCapacity = mBuffer + N;
+    }
+};
+struct cTribeInputStrategy_s00cc_efb0 {
+    uint32_t pad[0x5c / 4];
+    cTribeModeController* mpController;                                 // +0x5c
+    uint32_t pad60[(0xa0 - 0x60) / 4];
+    int mToolMode;                                                      // +0xa0
+    uint32_t pada4;
+    uint64_t mPendingAction;                                            // +0xa8
+};
+struct cTribeModeStrategy_s00cc_efb0 {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+VPAD(14);
+VPAD(15);
+VPAD(16);
+VPAD(17);
+VPAD(18);
+VPAD(19);
+VPAD(20);
+VPAD(21);
+VPAD(22);
+VPAD(23);
+VPAD(24);
+VPAD(25);
+VPAD(26);
+VPAD(27);
+    virtual cTribeInputStrategy_s00cc_efb0* GetInputStrategy();                    // +0x70
+    uint32_t pad[(0x390 - 4) / 4];
+    int mDifficulty;                                                    // +0x390
+    static cTribeModeStrategy_s00cc_efb0* Instance();                              // 00cd40b0 0x00cd40b0
+};
+struct cGameTerrainCursor {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+VPAD(14);
+VPAD(15);
+VPAD(16);
+VPAD(17);
+VPAD(18);
+VPAD(19);
+VPAD(20);
+VPAD(21);
+VPAD(22);
+    virtual void GetSelection(SpatialVector& out);                      // +0x5c
+VPAD(24);
+VPAD(25);
+VPAD(26);
+VPAD(27);
+    virtual int GetSelectionCount();                                    // +0x70
+VPAD(29);
+VPAD(30);
+VPAD(31);
+VPAD(32);
+VPAD(33);
+VPAD(34);
+VPAD(35);
+VPAD(36);
+VPAD(37);
+VPAD(38);
+VPAD(39);
+VPAD(40);
+VPAD(41);
+    virtual bool IsRectangleSelecting();                                // +0xa8
+};
+cGameTerrainCursor* GetGameTerrainCursor_s00cc_efb0();                             // 00b30d70
+struct IWindow {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+    virtual uint32_t GetControlID();                                    // +0x1c
+};
+struct IWindowManager {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+VPAD(14);
+VPAD(15);
+VPAD(16);
+VPAD(17);
+    virtual IWindow* GetMouseWindow(int);                               // +0x48
+};
+IWindowManager* WindowManager();                                        // 0067caa0
+struct cGameModeState_s00cc_efb0 { uint32_t pad[0x2c / 4]; int mState; };          // +0x2c
+cGameModeState_s00cc_efb0* GameModeState();                                        // 00b3d4d0
+struct cUIState { char IsMouseOverUI(); };                              // 00b5ca60
+cUIState* UIState();                                                    // 00b3d230
+struct cListLink { cListLink* mpNext; cListLink* mpPrev; };
+struct cTestSystem { uint32_t pad[0x70 / 4]; cListLink mTests; };       // +0x70
+extern cTestSystem* sTestSystem;                                        // 015fd928
+struct cViewer {
+VPAD(0);
+VPAD(1);
+VPAD(2);
+VPAD(3);
+VPAD(4);
+VPAD(5);
+VPAD(6);
+VPAD(7);
+VPAD(8);
+VPAD(9);
+VPAD(10);
+VPAD(11);
+VPAD(12);
+VPAD(13);
+    virtual Vector3_s00cc_efb0 GetCursorPosition(int, Vector3_s00cc_efb0 offset);             // +0x38
+};
+cViewer* Viewer();                                                      // 00b3d240
+struct cGameNounManager_s00cc_efb0 { cTribe_s00cc_efb0* GetPlayerTribe(); };                  // 00bfc5f0
+cGameNounManager_s00cc_efb0* NounManager_s00cc_efb0();                                        // 00b3d300
+struct cPlanetModel_s00cc_efb0 {
+    int GetRegion(const Vector3_s00cc_efb0& pos);                                  // 00b88590
+    bool IsLand(const Vector3_s00cc_efb0& pos);                                    // 00b7e3e0
+};
+cPlanetModel_s00cc_efb0* PlanetModel_s00cc_efb0();                                            // 00b3d350
+struct cRelationshipManager_s00cc_efb0 { int GetRelationship(uint32_t a, uint32_t b, int c); };  // 00d00a70
+cRelationshipManager_s00cc_efb0* RelationshipManager();                            // 00b3d2c0
+struct cPlayer_s00cc_efb0 { uint32_t GetPoliticalID(); };                          // 00ac79d0
+cPlayer_s00cc_efb0* Player();                                                      // 00b3d2b0
+void* GetActivePlanet();                                                // 01021260
+struct PropertyList;
+extern PropertyList* g_TribeProperties;                                 // 0158128c
+float GetPropertyFloat(PropertyList* list, uint32_t id, float def);     // 004e1c70
+// ---- items of slice s00ccefb0 end
+
+// ---- items of slice s00cd3480 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_vt147734c[];    // 0x0147734c
+extern void* g_vt1477328[];    // 0x01477328
+extern void* g_vt1477318[];    // 0x01477318
+extern void* g_vt154df28[];    // 0x0154df28
+extern void* g_vt14774b0[];    // 0x014774b0
+extern void* g_1581288;        // 0x01581288
+extern uint32_t g_169b27c;     // 0x0169b27c
+extern const char g_StrTRGMac[];    // 0x01477468
+extern const char g_StrTRG[];       // 0x01477458
+extern const char g_StrTRGBegin[];  // 0x014774a4
+extern const float g_fltOne;        // 0x01485720
+extern const float g_fltTwo;        // 0x01470f1c
+struct HashNode {
+    uint32_t  mKey;     // +0x00
+    void*     mValue;   // +0x04
+    HashNode* mNext;    // +0x08
+};
+struct HashIter { HashNode* mNode; void* mBucket; };
+struct HashTable {
+    void*      mp00;           // +0x00
+    HashNode** mppBuckets;     // +0x04
+    uint32_t   mnBucketCount;  // +0x08
+    uint32_t   mnElementCount; // +0x0c
+    void  F_00961d60(HashNode** buckets, uint32_t count);   // 0x961d60
+    void  find(HashIter* out, const uint32_t* key);         // 0x645ed0
+    void  insert(void* out, void* pair, int flag);          // 0xb6f940
+    void** operator[](const uint32_t* key);                 // 0xb6ff20
+};
+struct SPVector {
+    void* mBegin;  // +0x00
+    void* mEnd;    // +0x04
+    void* mCap;    // +0x08
+    void DoInsertPtr(void* pos, void* value);               // 0xaea5d0
+};
+void*         FUN_00b3d400(void);                            // 0x00b3d400
+void*         GetGameInputManager();                         // 0x00b3d250
+void*         GetTriggerMgr();                               // 0x00b3d4d0
+int           FNV1_String8(const char* s, uint32_t h, int a); // 0x00932e80
+unsigned char GetPropertyAsUint32Array(void* a, int b, void* c, void* d); // 0x006a0840
+void          WriteUint32(void* s, void* p, int a, int b);   // 0x0093aa70
+void*         GetCursorTable();                              // 0x0067cab0
+void*         AchievementsController();                      // 0x00675250
+struct CActTarget {
+    int mA, mB, mC, mD, mE, mF, mG, mH, mI, mJ, mK, mL;  // 0x30 bytes
+    void Ctor(void* t);                                            // 0xad7a30 (ret 4)
+    void Dtor();                                                   // 0xad7ad0
+};
+struct CTerrain {
+    char pad[0x1150];
+    int mCityHallPos[3];                                         // +0x1150
+    unsigned char F772c0(int key);       // 0x00c772c0
+    void F77300(int a);                  // 0x00c77300
+    void F77380(int key, int* out);      // 0x00c77380
+    void F77bf0(int a);                  // 0x00c77bf0
+    void F79f00(int key, int v);         // 0x00c79f00
+};
+struct CMgr {
+    CTerrain* GetCurrentTerrainSphere(); // 0x00f67d90
+    void* GetPlayerTribe();              // 0x00bfc5f0
+};
+struct CTribe {
+    unsigned int GetAdultPopulation();                                    // 0x00c8f370
+    void* GetToolOfType(int type);                                        // 0x00c8f6e0
+};
+struct CProps { unsigned char GetDesc(int id); }; // 0x006a25a0
+struct C9630 { void M(); };              // 0x00cc9630
+struct LocalInputState {
+    char mPad[0x10];                                             // +0x1e0 .. +0x1ef
+    void OnMouseDown(int button, float x, float y, int state);   // 0x00697ab0
+    void OnMouseUp(int button, float x, float y, int state);     // 0x00697af0
+    void OnMouseWheel(float x, float y, int button);             // 0x00697b20
+};
+struct CTrig {
+    void PostAction(int id, void* tgt, void* trigger);            // 0x00ae09b0 (ret 0xc)
+    void* PostTrigger(const char* name, int a, int b, int c, int d, int e); // 0x00ae0930 (ret 0x18)
+    void SetEnabled(int v);                                      // 0x00adf390
+    void ObjectMessage(int id, void* data, void* trigger);        // 0x00adde90 (ret 0xc)
+};
+struct CPanel {
+    unsigned char HasMissionCard(void* card);   // 0x00e15cd0 thiscall ret 4
+    void RemoveMissionCard(void* card);          // 0x00e17fb0 thiscall ret 4
+    void ExpandMissionCard(void* card);          // 0x00e15b90 thiscall ret 4
+    void AddMissionCard(void* card, int a, int b, int c); // 0x00e18200 thiscall ret 0x10
+    void SetupMissionCard(void* card, int a, int b, int c); // 0x00e18200 thiscall ret 0x10
+};
+struct CAch { void F(int a, int b, int c); };   // 0x00676ed0
+struct CGameNounMgr { void* CreateNoun(unsigned int id); };       // 0xb20c60
+struct CCitizen { void* GetTribe(); };                            // 0xc22f50
+struct CMission {
+    void* GetTribe();                                             // 0x00c2f680
+    void  SetTribe(void* tribe);                                  // 0x00c30270
+};
+struct Msg3 { int a, b, c; };
+struct Msg8 { int a; short b, c; };
+struct CursorTable { bool FindLocal(unsigned int id); };          // 0x801bb0
+struct TM {
+    char pad00[0x14];            // +0x000 .. +0x013
+    SPVector mVector;            // +0x014
+    char pad20[0x48];            // +0x020 .. +0x067
+    void* mp68;                  // +0x068
+    void* mp6c;                  // +0x06c
+    unsigned char m70;           // +0x070
+    char pad71[3];               // +0x071 .. +0x073
+    void* mp74;                  // +0x074
+    HashTable mTable;            // +0x078 (count @+0x80, elementCount @+0x84)
+    float mf88;                  // +0x088
+    float mf8c;                  // +0x08c
+    int32_t m90;                 // +0x090
+    char pad94[0x1e0 - 0x94];    // +0x094 .. +0x1df
+    LocalInputState mInput;      // +0x1e0 SP::cLocalInputState
+    char pad2[0x3a0 - 0x1f0];    // +0x1f0 .. +0x39f
+    unsigned char m3a0;          // +0x3a0
+
+    void M_b6f7d0();
+    void M_b6f650(int a, int b);
+    void M_b6f760();
+    void M_b70070();
+    void M_b6f820(void* a);
+    void M_b6f4e0(void* a);
+    void M_b705a0();
+    void M_b70820();
+
+    void F_cd35c0(int a, int b);
+    void F_cd3610();
+    void F_cd3650();
+    void F_cd3670(void* a);
+    void F_cd3760(int a);
+    TM* F_cd4070(int id);
+    void F_cd40f0(void* p);
+    unsigned char F_cd4160(void* p);
+    void F_cd4180(int a, float f1, float f2, int b);
+    void F_cd41d0(float f1, float f2, int a);
+    void F_cd4220(int a, float f1, float f2, int b);
+    void F_cd43c0(void* a);
+    bool F_cd4490();
+    unsigned int F_cd4460(int a);
+    unsigned int F_cd44a0();
+    unsigned int F_cd44e0(void* a, void* b);
+    // PostTerrainAction is a free cdecl function (see below).
+    void F_cd3e60();
+
+    // Tribe-mission / strategy members
+    unsigned char WriteTribe(void* stream);            // 0x00cd3480
+    unsigned char ReadTribe(void* stream);             // 0x00cd3530
+    ~TM();                                             // 0x00cd3ab0
+    TM();                                              // 0x00cd3b60
+    void SetMission(void* a);                          // 0x00cd3bf0
+    void StartTribe();                                 // 0x00cd4280
+    void RegisterCityHallAndStartCinematic(int* pos);  // 0x00cd43e0
+};
+void F_cd3f20(uint32_t idx);
+void F_cd3fb0(int a);
+void F_cd3fd0(int a);
+struct ThemeMgr { char pad[0x100]; ThemeMgr(); };
+// ---- items of slice s00cd3480 end
+
+// ---- items of slice s00cd9da0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern uint32_t gTribeConfigName;                               // 0x0167EA54
+extern float    gTribeF0;                                       // 0x01581280
+extern uint32_t gTribePropId;                                   // 0x01581288
+struct cMotiveTuning;
+struct cTribeModeStrategy_s00cd_9da0;
+void  cMotiveTuning_Init(cMotiveTuning* t, int hash);           // 0x00B71480
+float FUN_00ce68f0(int a);                                      // 0x00CE68F0
+void  FUN_00b316d0();                                           // 0x00B316D0
+void* GameInputManager_s00cd_9da0();                                       // 0x00B3D250
+void* FUN_0067de40();                                           // 0x0067DE40
+int   FUN_006ab760(void* /*IMultiLanguage*/, const wchar_t*);   // 0x006AB760
+unsigned FNVHash(const char*, unsigned);                        // 0x00932E80
+void* FUN_0067ddc0_s00cd_9da0();                                           // 0x0067DDC0
+void* ModelManager();                                           // 0x0067DD80
+void* FUN_0067de00(int);                                        // 0x0067DE00
+void  FUN_00b81720();                                           // 0x00B81720
+void* SetGameDataOwner2();                                      // 0x00BFC5F0
+void  FUN_00b146a0(void* a, int b, int c, void* d);             // 0x00B146A0
+void  FUN_00b10760(void* cam, float a, float b, float c);       // 0x00B10760
+void  FUN_00b11870(void* a, int b);                             // 0x00B11870
+void  FUN_00b84a60(void* out, int n);                           // 0x00B84A60
+void* GetCurrentTerrainSphere();                                // 0x00F67D90
+void  FUN_00a1ad10(void* a);                                    // 0x00A1AD10
+int   GetPropertyAsUint32Array(void* a, unsigned b, void* c, void* d, void* e); // 0x006A0840
+void  FUN_00ff03b0(void* a, int b);                             // 0x00FF03B0
+void  FUN_00c79f00(void* a, int b, int c);                      // 0x00C79F00
+class cTribeModeStrategy_s00cd_9da0 {
+public:
+    uint32_t pad_00[0xe8/4];                                    // 0x000..0x0e8
+    uint32_t mPosseInfos[0x74/4];                               // 0x0e8..0x15c
+    uint32_t pad_15c[0x1490/4 - 0x15c/4];                       // 0x15c..0x1490
+
+    void UpgradePlayerTribe();                                  // 0x00CDA370
+};
+void FUN_00cd9da0();                                            // 0x00CD9DA0
+static void  VC1(void* p, int slot, int a)                { ((void (__thiscall*)(void*, int))(((void**)*(void**)p)[slot/4]))(p, a); }
+static void  VC2(void* p, int slot, int a, int b)         { ((void (__thiscall*)(void*, int, int))(((void**)*(void**)p)[slot/4]))(p, a, b); }
+static void  VC3(void* p, int slot, int a, int b, int c)  { ((void (__thiscall*)(void*, int, int, int))(((void**)*(void**)p)[slot/4]))(p, a, b, c); }
+static void* VC0R(void* p, int slot)                      { return ((void* (__thiscall*)(void*))(((void**)*(void**)p)[slot/4]))(p); }
+static void* VC1R(void* p, int slot, int a)               { return ((void* (__thiscall*)(void*, int))(((void**)*(void**)p)[slot/4]))(p, a); }
+// ---- items of slice s00cd9da0 end
+
+// ---- items of slice s00cdbb10 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_DropFoodAmount_0158133c;
+extern const float kFoodEpsilon_01477434;
+extern const float kAnimBlend_01486110;
+#define VSLOT_s00cd_bb10(n) virtual void _v##n();
+struct Vector3_s00cd_bb10 {
+    float x, y, z;
+    Vector3_s00cd_bb10() {}
+    Vector3_s00cd_bb10(float a, float b, float c) : x(a), y(b), z(c) {}
+    Vector3_s00cd_bb10(const Vector3_s00cd_bb10& o) : x(o.x), y(o.y), z(o.z) {}
+};
+inline Vector3_s00cd_bb10 operator-(const Vector3_s00cd_bb10& a, const Vector3_s00cd_bb10& b) { return Vector3_s00cd_bb10(a.x - b.x, a.y - b.y, a.z - b.z); }
+struct Matrix3_s00cd_bb10 { float m[9]; };
+Vector3_s00cd_bb10* normalized_safe(Vector3_s00cd_bb10* out, const Vector3_s00cd_bb10& v);
+Matrix3_s00cd_bb10 Matrix3FromFacingAndUp(const Vector3_s00cd_bb10& facing, const Vector3_s00cd_bb10& up);
+struct XformMsg_s00cd_bb10 {
+    uint16_t flags;
+    uint16_t count;
+    Vector3_s00cd_bb10  pos;
+    float    scale;
+    Matrix3_s00cd_bb10  rot;
+    XformMsg_s00cd_bb10();
+    void SetPosition_00571d40(const Vector3_s00cd_bb10& v);
+    void SetRotation(const Matrix3_s00cd_bb10& m) { rot = m; flags |= 2; ++count; }
+    void SetScale(float s)             { scale = s; ++count; }
+};
+struct Variant {
+    uint32_t mData[4];
+    uint16_t mFlags;
+    uint16_t mType;
+    Variant(void* p);                    // 0x00b19c80
+    Variant(const int& v);               // 0x005bf350
+    Variant(const uint32_t* key);        // 0x00b19970 (ResourceKey)
+    void Destruct(bool reset);           // 0x0093db80
+    ~Variant() { if (mFlags & 4) Destruct(false); }
+};
+struct ResourceKey { uint32_t instance, type, group; };
+struct cGameObject {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6) VSLOT_s00cd_bb10(7) VSLOT_s00cd_bb10(8) VSLOT_s00cd_bb10(9) VSLOT_s00cd_bb10(10)
+    virtual const Vector3_s00cd_bb10& GetPosition();                                   // +0x2c
+    VSLOT_s00cd_bb10(12) VSLOT_s00cd_bb10(13) VSLOT_s00cd_bb10(14) VSLOT_s00cd_bb10(15) VSLOT_s00cd_bb10(16) VSLOT_s00cd_bb10(17) VSLOT_s00cd_bb10(18) VSLOT_s00cd_bb10(19) VSLOT_s00cd_bb10(20) VSLOT_s00cd_bb10(21)
+    VSLOT_s00cd_bb10(22) VSLOT_s00cd_bb10(23) VSLOT_s00cd_bb10(24) VSLOT_s00cd_bb10(25) VSLOT_s00cd_bb10(26) VSLOT_s00cd_bb10(27) VSLOT_s00cd_bb10(28) VSLOT_s00cd_bb10(29) VSLOT_s00cd_bb10(30) VSLOT_s00cd_bb10(31)
+    VSLOT_s00cd_bb10(32) VSLOT_s00cd_bb10(33) VSLOT_s00cd_bb10(34) VSLOT_s00cd_bb10(35) VSLOT_s00cd_bb10(36) VSLOT_s00cd_bb10(37) VSLOT_s00cd_bb10(38) VSLOT_s00cd_bb10(39) VSLOT_s00cd_bb10(40) VSLOT_s00cd_bb10(41)
+    VSLOT_s00cd_bb10(42) VSLOT_s00cd_bb10(43) VSLOT_s00cd_bb10(44) VSLOT_s00cd_bb10(45)
+    virtual void* Cast(uint32_t typeID);                                     // +0xb8
+    virtual int AddRef();                                                    // +0xbc
+    virtual int Release();                                                   // +0xc0
+};
+template <class T> __forceinline T* object_cast_s00cd_bb10(cGameObject* p) { return p ? (T*)p->Cast(T::TYPE) : 0; }
+struct cGameObjectPtr {
+    cGameObject* mpObject;
+    ~cGameObjectPtr() { if (mpObject) mpObject->Release(); }
+};
+struct sp_vector_allocator {
+    uint32_t mData[2];
+    void deallocate(void* p) { if (((uint32_t*)p)[-1]) delete[] (char*)p; }
+};
+template <class T> struct SPVector_s00cd_bb10 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator mAllocator;
+    SPVector_s00cd_bb10() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    static __forceinline void DoDestroyValues(T* first, T* last)
+    {
+        for (; first < last; ++first)
+            first->~T();
+    }
+    __forceinline ~SPVector_s00cd_bb10()
+    {
+        DoDestroyValues(mpBegin, mpEnd);
+        if (mpBegin)
+            mAllocator.deallocate(mpBegin);
+    }
+    T* begin() { return mpBegin; }
+    T* end() { return mpEnd; }
+};
+__declspec(align(16)) struct cObjectXform {
+    float mData[11];
+    cGameObject* mpObject;
+    cObjectXform(cGameObject* obj, int flags);
+    ~cObjectXform();
+};
+struct cAnimRequest { uint32_t pad[3]; uint32_t mAnimA; uint32_t mAnimB; };
+struct cAnimQueue { cAnimRequest* Play_00bc97f0(int a, int b, float blend, int c); };
+struct cAnimatedCreature { uint32_t pad[2]; cAnimQueue mQueue; uint32_t pad2[(0x1d8 - 0xc) / 4]; uint32_t mModelType; };
+struct cCreatureSub5a8 {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6) VSLOT_s00cd_bb10(7) VSLOT_s00cd_bb10(8) VSLOT_s00cd_bb10(9) VSLOT_s00cd_bb10(10)
+    virtual void SetEnabled(int);                                            // +0x2c
+};
+struct cCreatureBase0 { virtual void _c0(); uint32_t pad[(0x5a8 - 4) / 4]; };
+struct cCreature : cCreatureBase0, cCreatureSub5a8 {
+    enum { TYPE = 0x4f176642 };
+    uint32_t pad5ac[(0xb4c - 0x5ac) / 4];
+    cAnimatedCreature* mpAnimatedCreature;                                   // +0xb4c
+    bool IsIdle_00c24560();
+    void f_00c26d10();
+    void f_00c0b950();
+    void f_00c0ba10();
+};
+void FUN_00c0d3a0(cCreature* c);
+struct cTerrainCursor {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6) VSLOT_s00cd_bb10(7) VSLOT_s00cd_bb10(8) VSLOT_s00cd_bb10(9) VSLOT_s00cd_bb10(10)
+    VSLOT_s00cd_bb10(11) VSLOT_s00cd_bb10(12) VSLOT_s00cd_bb10(13) VSLOT_s00cd_bb10(14) VSLOT_s00cd_bb10(15) VSLOT_s00cd_bb10(16) VSLOT_s00cd_bb10(17) VSLOT_s00cd_bb10(18) VSLOT_s00cd_bb10(19) VSLOT_s00cd_bb10(20)
+    VSLOT_s00cd_bb10(21)
+    virtual void SetSelectionTarget(uint32_t target);                        // +0x58
+    virtual void GetSelection(SPVector_s00cd_bb10<cGameObjectPtr>& out);                // +0x5c
+};
+cTerrainCursor* GetGameTerrainCursor_s00cd_bb10();                                      // 0x00b30d70
+struct cAudioSystem { VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6) VSLOT_s00cd_bb10(7) virtual int GetState(); };
+cAudioSystem* GetAudioSystem();                                              // 0x00a206f0
+void KillSetiEffects(uint32_t id, int state);                                // 0x00435ed0
+int GetRecorderState();                                                      // 0x00435e90
+struct cPlanetRecord_s00cd_bb10 { uint32_t pad[0x504 / 4]; uint32_t mData504; };
+struct cHutBase0 { virtual void _h0(); uint32_t pad[12]; };
+struct cHut : cHutBase0, cGameObject {};
+struct cTribe_s00cd_bb10 {
+    virtual int AddRef();                                                    // +0x00
+    virtual int Release();                                                   // +0x04
+    VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6) VSLOT_s00cd_bb10(7) VSLOT_s00cd_bb10(8) VSLOT_s00cd_bb10(9) VSLOT_s00cd_bb10(10)
+    VSLOT_s00cd_bb10(11) VSLOT_s00cd_bb10(12) VSLOT_s00cd_bb10(13) VSLOT_s00cd_bb10(14) VSLOT_s00cd_bb10(15) VSLOT_s00cd_bb10(16) VSLOT_s00cd_bb10(17) VSLOT_s00cd_bb10(18) VSLOT_s00cd_bb10(19) VSLOT_s00cd_bb10(20)
+    VSLOT_s00cd_bb10(21) VSLOT_s00cd_bb10(22) VSLOT_s00cd_bb10(23) VSLOT_s00cd_bb10(24)
+    virtual const Vector3_s00cd_bb10& GetPosition();                                    // +0x64
+    VSLOT_s00cd_bb10(26) VSLOT_s00cd_bb10(27) VSLOT_s00cd_bb10(28) VSLOT_s00cd_bb10(29) VSLOT_s00cd_bb10(30) VSLOT_s00cd_bb10(31) VSLOT_s00cd_bb10(32) VSLOT_s00cd_bb10(33) VSLOT_s00cd_bb10(34) VSLOT_s00cd_bb10(35)
+    VSLOT_s00cd_bb10(36)
+    virtual uint32_t GetSelectedThing();                                     // +0x94
+    VSLOT_s00cd_bb10(38) VSLOT_s00cd_bb10(39) VSLOT_s00cd_bb10(40)
+    virtual int GetFoodAmount();                                             // +0xa4
+    VSLOT_s00cd_bb10(42)
+    virtual cHut* GetTribeHut();                                             // +0xac
+
+    uint32_t pad04[(0x120 - 4) / 4];
+    cGameObject mObject120;                                                  // +0x120
+    uint32_t pad124[(0x20c - 0x124) / 4];
+    uint32_t mTimer20c[9];                                                   // +0x20c
+    struct Sub230 { uint32_t mData0; uint32_t mData4; } mSub230;            // +0x230
+    Sub230* GetSub230() { return &mSub230; }
+
+    cPlanetRecord_s00cd_bb10* GetRecord_00c8e820(int index);
+    bool GetSpawnInfo_00c8eb50(ResourceKey* out);
+    cHut* GetToolOfType(int type);                                           // 0x00c8f6e0
+    cCreature* GetChieftain();                                               // 0x00c8fd30
+    uint32_t GetPopulation_00c8f3a0();
+    uint32_t GetMaxPopulation();                                             // 0x00c8eae0
+    void AddFood_00c94b50(float amount);
+};
+struct ISimBase {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6)
+    virtual void v7();                                                       // +0x1c
+};
+struct ISimTicker {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6) VSLOT_s00cd_bb10(7) VSLOT_s00cd_bb10(8) VSLOT_s00cd_bb10(9)
+    VSLOT_s00cd_bb10(10) VSLOT_s00cd_bb10(11) VSLOT_s00cd_bb10(12) VSLOT_s00cd_bb10(13) VSLOT_s00cd_bb10(14) VSLOT_s00cd_bb10(15) VSLOT_s00cd_bb10(16) VSLOT_s00cd_bb10(17) VSLOT_s00cd_bb10(18) VSLOT_s00cd_bb10(19)
+    virtual void v20(void* obj);                                             // +0x50
+};
+struct IStrategyVtbl {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6) VSLOT_s00cd_bb10(7) VSLOT_s00cd_bb10(8) VSLOT_s00cd_bb10(9)
+    VSLOT_s00cd_bb10(10) VSLOT_s00cd_bb10(11) VSLOT_s00cd_bb10(12) VSLOT_s00cd_bb10(13) VSLOT_s00cd_bb10(14) VSLOT_s00cd_bb10(15) VSLOT_s00cd_bb10(16) VSLOT_s00cd_bb10(17) VSLOT_s00cd_bb10(18) VSLOT_s00cd_bb10(19)
+    VSLOT_s00cd_bb10(20)
+    virtual void DispatchTribe(cTribe_s00cd_bb10* tribe);                               // +0x54
+};
+namespace Simulator {
+class SimSingleton100 {                                                      // 0x100-byte simulator singleton
+public:
+    SimSingleton100();                                                       // 0x00cc5a70
+    char mData[0x100];
+};
+}
+class cCitySimulator_s00cd_bb10 {
+public:
+    cCitySimulator_s00cd_bb10();                                                        // 0x00ae6a70
+    void AttachSubsystems();                                                 // 0x00ae7350
+    char mData[0x40];
+};
+void* operator new(size_t, const char*, int, int, int, int);                 // 0x00f473a0
+extern Simulator::SimSingleton100* g_pSimSingleton_0169b054;                 // 0x0169b054
+extern cCitySimulator_s00cd_bb10*             g_pCitySimulator_0167a690;               // 0x0167a690
+ISimBase* FUN_00d51660_s00cd_bb10();                                                    // 0x00d51660
+struct cTerrainSphere_s00cd_bb10 {
+    uint32_t pad[0x10f0 / 4];
+    float mf10f0;
+    float mf10f4;
+    uint32_t mKey10f8;
+    uint32_t pad10fc[2];
+    uint32_t mResult1104;                                                    // +0x1104
+    int GetState_00c75420();
+};
+struct NounVector {
+    cTribe_s00cd_bb10** mpBegin;                                                        // +0x00
+    cTribe_s00cd_bb10** mpEnd;                                                          // +0x04
+    cTribe_s00cd_bb10** mpCapacity;                                                     // +0x08
+};
+struct NounManagerData {
+    void*       mpUnused;                                                    // +0x00
+    NounVector  mVector;                                                     // +0x04
+};
+struct cGameNounManager_s00cd_bb10 {
+    cTerrainSphere_s00cd_bb10* GetCurrentTerrainSphere();                               // 0x00f67d90
+    cTribe_s00cd_bb10* GetPlayerTribe();                                                // 0x00bfc5f0
+    NounManagerData* GetGameDataVector(uint32_t, uint32_t, uint32_t,
+                                       uint32_t, uint32_t);                  // 0x00b21340
+};
+cTribe_s00cd_bb10* FindClosestNPC(NounVector* vec, uint32_t param,
+                       bool (__cdecl* filter)(cTribe_s00cd_bb10*));                     // 0x00cd5810
+cGameNounManager_s00cd_bb10* NounManager_s00cd_bb10();                                             // 0x00b3d300
+class cUIHints_s00cd_bb10 { public:
+    void UpdateHints(int a, int b);                                          // 0x0067c350
+    void ShowHint_0067c830(uint32_t id);
+};
+cUIHints_s00cd_bb10* UIHints();                                                         // 0x0067cac0
+struct cHintsB { void Set_0060d860(uint32_t id, ResourceKey* key); };
+cHintsB* GetHintsB();                                                        // 0x0067cb30
+struct cLayoutScripts {
+    void SetObject_00ae09b0(uint32_t id, const cObjectXform& obj);
+    void Run_00ae0930(const char* name, int a, int b, int c, int d, int e);
+    void Reset_00adf390(int a);
+};
+cLayoutScripts* LayoutScripts();                                             // 0x00b3d4d0
+struct cFoodSource { float Consume_00ac7d10(float amount, void* timer, int flags); };
+cFoodSource* GetFoodSource();                                                // 0x00b3d2b0
+struct cTerrainSource {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6) VSLOT_s00cd_bb10(7) VSLOT_s00cd_bb10(8) VSLOT_s00cd_bb10(9) VSLOT_s00cd_bb10(10)
+    VSLOT_s00cd_bb10(11) VSLOT_s00cd_bb10(12)
+    virtual void* GetTerrainObject();                                        // +0x34
+    VSLOT_s00cd_bb10(14)
+    virtual void GetKey(ResourceKey* out, int flags);                        // +0x3c
+};
+cTerrainSource* GetTerrainSource();                                          // 0x00b3d240
+struct cPropertyList_s00cd_bb10 {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6) VSLOT_s00cd_bb10(7)
+    virtual void SetValue(int index, const Variant& v);                      // +0x20
+};
+struct cPropListFactory {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5)
+    virtual void Create(cPropertyList_s00cd_bb10** out);                                // +0x18
+    VSLOT_s00cd_bb10(7) VSLOT_s00cd_bb10(8) VSLOT_s00cd_bb10(9) VSLOT_s00cd_bb10(10) VSLOT_s00cd_bb10(11) VSLOT_s00cd_bb10(12) VSLOT_s00cd_bb10(13) VSLOT_s00cd_bb10(14) VSLOT_s00cd_bb10(15) VSLOT_s00cd_bb10(16)
+    VSLOT_s00cd_bb10(17) VSLOT_s00cd_bb10(18) VSLOT_s00cd_bb10(19) VSLOT_s00cd_bb10(20)
+    virtual void Submit(uint32_t id, cPropertyList_s00cd_bb10* list, int flags);        // +0x54
+};
+cPropListFactory* PropListFactory();                                         // 0x006895b0
+struct cMessage_s00cd_bb10 {
+    VSLOT_s00cd_bb10(0)
+    virtual int AddRef();                                                    // +0x04
+    virtual int Release();                                                   // +0x08
+    uint32_t pad04;
+    uint32_t mData08;                                                        // +0x08
+    uint32_t pad0c[(0x30 - 0xc) / 4];
+    uint32_t mMessageID;                                                     // +0x30
+    uint32_t pad34[3];
+    cMessage_s00cd_bb10(int a);                                                         // 0x00421c80
+    void* operator new(size_t n, const char* name, int a, int b, int c, int d);
+};
+struct cMessagePtr_s00cd_bb10 {
+    cMessage_s00cd_bb10* mpMessage;
+    cMessagePtr_s00cd_bb10(cMessage_s00cd_bb10* p);                                                // 0x0061df40
+    ~cMessagePtr_s00cd_bb10() { mpMessage->Release(); }
+    cMessage_s00cd_bb10* operator->() const { return mpMessage; }
+};
+struct cMessageServer_s00cd_bb10 {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4)
+    virtual void SendMSG(uint32_t id, void* data, void* target);             // +0x14
+    virtual void PostMSG(uint32_t id, cMessage_s00cd_bb10* msg, void* a, void* b);      // +0x18
+};
+cMessageServer_s00cd_bb10* MessageServer_s00cd_bb10();                                             // 0x0067dcc0
+struct IVisualEffect {
+    VSLOT_s00cd_bb10(0)
+    virtual int Release();                                                   // +0x04
+    virtual void Start(int flags);                                           // +0x08
+    VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5)
+    virtual void SetTransform(const XformMsg_s00cd_bb10& xf);                           // +0x18
+};
+template <class T> struct AutoRefCount_s00cd_bb10 {
+    T* mpObject;
+    AutoRefCount_s00cd_bb10() : mpObject(0) {}
+    ~AutoRefCount_s00cd_bb10() { if (mpObject) mpObject->Release(); }
+    T** AsPPTypeParam();                                                     // 0x00a16f40
+    T* operator->() const { return mpObject; }
+};
+struct cEffectsManager_s00cd_bb10 {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6) VSLOT_s00cd_bb10(7) VSLOT_s00cd_bb10(8) VSLOT_s00cd_bb10(9) VSLOT_s00cd_bb10(10)
+    virtual bool CreateVisualEffect(uint32_t id, int flags, IVisualEffect** out);  // +0x2c
+};
+cEffectsManager_s00cd_bb10* EffectsManager();                                           // 0x0067ddd0
+struct InsertResult { void* node; void* bucket; bool second; };
+struct uint_hash_set {
+    InsertResult insert_00675b60(const uint32_t& key);
+    void clear();                                                            // 0x00675770
+};
+struct cAchievementData { uint32_t pad[0x60 / 4]; uint_hash_set mVisited; };
+struct cAchievementsController {
+    bool IsLocked_006766f0(uint32_t id);
+    void AwardAchievement(uint32_t id);                                      // 0x00676710
+    cAchievementData* GetData_00675370();
+    bool Has_00675e80(uint32_t id);
+    void AutoTest(uint32_t id, uint32_t value);                              // 0x00676e90
+};
+cAchievementsController* AchievementsController_s00cd_bb10();                           // 0x00675250
+struct cTribeCamera { void PlayIntro_00cd52e0(int kind, Vector3_s00cd_bb10 pos); };
+extern cTribeCamera* g_TribeCamera_0169b2c8;
+extern Vector3_s00cd_bb10 g_TribeCameraPos_0169b2cc;
+struct cTribePlanner_s00cd_bb10 {
+    void f_00cc8aa0(int);
+    void f_00cc93b0(int);
+};
+struct cToggleable { VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2) VSLOT_s00cd_bb10(3) VSLOT_s00cd_bb10(4) VSLOT_s00cd_bb10(5) VSLOT_s00cd_bb10(6) VSLOT_s00cd_bb10(7) VSLOT_s00cd_bb10(8) VSLOT_s00cd_bb10(9) virtual void SetActive(int); };
+bool IsVerbTrayCommand_00d49820(int cmd);
+bool VerbTray_HandleRebuild(void* window, uint32_t data);                    // 0x00d4a570
+void sToggleMinimap();                                                       // 0x00cd5200
+int GetTribeOutcome_00cdba50();
+void PlayEndSequence_00e398e0(uint32_t id, uint32_t* record, ResourceKey* pos, ResourceKey* dir, uint32_t data, int b, int c);
+bool IsValidKey_006419f0(ResourceKey* key);
+void SummarizeVehicle_00555f70(ResourceKey* key, uint32_t data);
+struct UTFWinMessage {
+    uint32_t pad[2];
+    uint32_t mEventType;                                                     // +0x08
+    int mCommandID;                                                          // +0x0c
+    uint32_t pad10[2];
+    uint32_t mData18;                                                        // +0x18
+};
+struct IWinProc {
+    VSLOT_s00cd_bb10(0) VSLOT_s00cd_bb10(1) VSLOT_s00cd_bb10(2)
+    virtual bool HandleUIMessage(void* window, const UTFWinMessage& message) = 0;
+};
+struct cStrategyBase0 { virtual void _s0(); };
+namespace SP {
+class cTribeModeStrategy_s00cd_bb10 : public cStrategyBase0, public IWinProc {
+public:
+    // offsets below are absolute (subobject IWinProc at +4)
+    uint32_t pad08[(0x78 - 8) / 4];
+    uint32_t mData78;                                                        // +0x78  (IWinProc +0x74)
+    uint32_t pad7c[(0x1a8 - 0x7c) / 4];
+    struct Timer { uint32_t d[8]; void Stop(); } mTimer;                    // +0x1a8  (IWinProc +0x1a4)
+    uint32_t pad1c8[(0x240 - 0x1c8) / 4];
+    cTribePlanner_s00cd_bb10* mpPlanner;                                                // +0x240  (IWinProc +0x23c)
+    uint32_t pad244[(0x390 - 0x244) / 4];
+    int mToolMode;                                                           // +0x390  (IWinProc +0x38c)
+    cToggleable* mpToolUI;                                                   // +0x394  (IWinProc +0x390)
+    uint32_t pad398[2];
+    uint8_t pad3a0[3];
+    bool mbFlag3a3;                                                          // +0x3a3  (IWinProc +0x39f)
+
+    void SetMode_00cd6390(int);
+    bool IsToolActive_00cd4460(uint32_t id);
+    bool HandleUIMessage(void* window, const UTFWinMessage& message);
+    int FUN_00cdbb10();
+    cHut* FindClosestNPCHut(uint32_t param);  // 0x00cdbcc0 (cTribeModeStrategy::FindClosestNPCHut)
+};
+}
+namespace SP {
+ISimTicker* SimTicker_s00cd_bb10();                                                     // 0x00b3d330
+}
+namespace SP {
+bool IsNonEmptyNPCTribe(cTribe_s00cd_bb10* tribe);                                      // 0x00cd40c0
+}
+using SP::cTribeModeStrategy_s00cd_bb10;
+static __forceinline int GetAudioState()
+{
+    cAudioSystem* audio = GetAudioSystem();
+    return audio ? audio->GetState() : 0;
+}
+// ---- items of slice s00cdbb10 end
+
+// ---- items of slice s00cdc8b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct CvgRec {                                        // 0x1c-byte timeline record
+    uint32_t mX;                                       // +0x00
+    uint32_t mY;                                       // +0x04
+    uint32_t mZ;                                       // +0x08
+    uint32_t mPad0c;                                   // +0x0c
+    float    mF10;                                     // +0x10 (only set for list entries)
+    void*    mHandle;                                  // +0x14
+    uint32_t mId;                                      // +0x18
+};
+struct CvgVec {                                        // begin/end of the 0x1c-stride vector
+    CvgRec* mpBegin;                                   // +0x00
+    CvgRec* mpEnd;                                     // +0x04
+    void InsertRange(CvgRec* first, CvgRec* last);     // 0x00cdb190
+    void Append();                                     // 0x00cdb430
+};
+struct CvgObj {
+    void**   mpVtbl;                                   // +0x000
+    char     mPad04[0x300];                            // +0x004
+    CvgVec   mTargets;                                 // +0x304
+    char     mPad30c[0x814];                           // +0x30c
+    uint32_t mB20;                                     // +0xb20
+    char     mPadB24[0x14];                            // +0xb24
+    uint32_t mB38;                                     // +0xb38
+    uint32_t mB3c;                                     // +0xb3c
+    uint32_t mB40;                                     // +0xb40
+};
+struct PtrVec_s00cd_c8b0 {
+    void** mpBegin;                                    // +0x00
+    void** mpEnd;                                      // +0x04
+};
+void* __fastcall FUN_00c0c1a0(CvgObj* o);                                                // 0x00c0c1a0
+typedef float (__fastcall* CvgSlot80)(CvgObj* o, int unused, int arg);
+static void cvg_swap(CvgRec* r, CvgObj* o)
+{
+    uint32_t t0 = r->mX;
+    r->mX = o->mB38;
+    o->mB38 = t0;
+    uint32_t t1 = r->mY;
+    r->mY = o->mB3c;
+    o->mB3c = t1;
+    uint32_t t2 = r->mZ;
+    r->mZ = o->mB40;
+    o->mB40 = t2;
+}
+// ---- items of slice s00cdc8b0 end
+
+// @ 0x00cceae0
+u32 cSPUITCCCursorStrategy::FUN_00cceae0(void* obj, u32 mode, void* arg3)
+{
+    bool flag = false;
+    switch (mode) {
+    case 0:
+        flag = true;
+        break;
+    case 1:
+        GetGameTerrainCursor_s00cc_dd70()->SetMode(2);
+        break;
+    case 2:
+        GetGameTerrainCursor_s00cc_dd70()->SetMode(0);
+        break;
+    case 3:
+        GetGameTerrainCursor_s00cc_dd70()->SetMode(1);
+        break;
+    }
+    if (!mpTerrain->TerrainHasKey(0x56d1871)) {
+        if (mpTerrain->TerrainHasKey(0x64be5ff)) {
+            void* tribe = NounManager_s00cc_dd70()->GetPlayerTribe();
+            if (tribe) {
+                PtrVec2* v = (PtrVec2*)V0<void*>(tribe, 0x94);
+                u32 n = (u32)(v->mEnd - v->mBegin);
+                for (u32 i = 0; i < n; ++i)
+                    V1<void>(v->mBegin[i], 0x54, 0);
+            }
+        }
+    }
+    TerrainCursor* cur = GetGameTerrainCursor_s00cc_dd70();
+    void* v = obj ? V1<void*>(obj, 0xc, (void*)0x1186577) : 0;
+    V2<void>(cur, 0xa0, flag, v);
+    return 0;
+}
+
+// @ 0x00ccec20
+void cSPUITCCCursorStrategy::FUN_00ccec20(u32 flag)
+{
+    if (GetCurrentGameMode() != (void*)0x1654c02)
+        return;
+    TcModeObject* mode = (TcModeObject*)V0<void*>(mpTerrain, 0x6c);
+    mode->F00cc93b0(flag);
+    if (GetCards())
+        GetCards()->SetCardsVisibility((int)flag);
+    if (mode->mpMode) {
+        if (flag != 0) {
+            if (mode->mFlag54)
+                mode->mpMode->SetFlag(1);
+        } else {
+            mode->mFlag54 = mode->mpMode->GetFlag();
+            mode->mpMode->SetFlag(0);
+        }
+    }
+}
+
+// @ 0x00cceca0
+u32 cSPUITCCCursorStrategy::FUN_00cceca0(void* a, void* b)
+{
+    CameraCtl* cam = GetCameraCtl_s00cc_dd70();
+    if (cam == 0)
+        return 0;
+    if ((mStop.mStart | mStop.mStop) != 0) {
+        cam->SetToggle(true);
+        return 0;
+    }
+    cam->SetToggle(false);
+    return 0;
+}
+
+// @ 0x00ccef10
+namespace SP {
+void cTribeInputStrategy::RestorePlanner(int param_2)
+{
+    cTribeModeController* c = mpModeController;
+    if (!c)
+        return;
+    if (c->IsPlacing())
+        return;
+    if (param_2 == -1)
+        return;
+    cMessagePtr msg(new (g_allocTag, 0, 0, 0, 0) cMessage(0));
+    msg->mMessageID = 0xb2699146;
+    msg->mData08 = param_2;
+    MessageServer()->PostMSG(msg->mMessageID, msg.mpMessage, 0, 0);
+}
+}  // namespace SP
+
+// @ 0x00ccefb0
+int GetTribeCursorID(cGameData* pObject, const Vector3_s00cc_efb0* pPickPos)
+{
+    cTribeInputStrategy_s00cc_efb0* input = cTribeModeStrategy_s00cc_efb0::Instance()->GetInputStrategy();
+    if (!input)
+        return 0;
+
+    int modeState = GameModeState()->mState;
+    if (modeState == 1 || modeState == 2)
+        return 2;
+
+    if (UIState()->IsMouseOverUI() == 1 &&
+        (!sTestSystem || sTestSystem->mTests.mpNext == &sTestSystem->mTests)) {
+        IWindow* window = WindowManager()->GetMouseWindow(1);
+        if (!window)
+            return 0;
+        if (window->GetControlID() == 0x36ad4a4 || window->GetControlID() == 0x625cd52)
+            return 0x26;
+        return 0;
+    }
+
+    if (input->mpController->IsPlacing()) {
+        if (!pObject)
+            return 0;
+        cGameData* data = (cGameData*)pObject->Cast(kGameData);
+        if (!data)
+            return 0;
+        if (data->GetNounID() != kTribeTool)
+            return 0;
+        cTribeTool* tool = (cTribeTool*)object_cast(data, kTribeTool);
+        if (!tool->mSpatial.IsUnderConstruction())
+            return 0;
+        if (tool->GetToolType() == 10)
+            return 0;
+        return 0x2f;
+    }
+
+    cGameTerrainCursor* cursor = GetGameTerrainCursor_s00cc_efb0();
+    if (cursor && cursor->IsRectangleSelecting())
+        return 0;
+
+    if (cTribeModeStrategy_s00cc_efb0::Instance()->GetInputStrategy()->mPendingAction != 0)
+        return 8;
+
+    if (input->mToolMode == 1) {
+        cGameData* data = ToGameData(pObject);
+        if (data && CanUseToolA(data))
+            return 4;
+        return 3;
+    }
+    if (input->mToolMode == 2) {
+        cGameData* data = ToGameData(pObject);
+        if (data && CanUseToolB(data))
+            return 6;
+        return 5;
+    }
+
+    if (cursor->GetSelectionCount() == 0) {
+        cGameData* data = ToGameData(pObject);
+        if (!data)
+            return 0;
+        uint32_t noun = data->GetNounID();
+        if (noun == kGameDataUFO)
+            return 0x30;
+        if (noun != kTribeHut)
+            return 0;
+        cTribeHut* hut = (cTribeHut*)object_cast(data, kTribeHut);
+        if (!hut->mSpatial.IsUnderConstruction())
+            return 0;
+        return 0x26;
+    }
+
+    cTribe_s00cc_efb0* tribe = NounManager_s00cc_efb0()->GetPlayerTribe();
+    cPlanetModel_s00cc_efb0* planet = PlanetModel_s00cc_efb0();
+    int tribeRegion = planet->GetRegion(tribe->mSpatial.GetPosition());
+
+    Vector3_s00cc_efb0 pos = pPickPos ? *pPickPos : Viewer()->GetCursorPosition(0, Vector3_s00cc_efb0::ZERO);
+    bool sameRegion = true;
+    if (pos != Vector3_s00cc_efb0::ZERO)
+        sameRegion = PlanetModel_s00cc_efb0()->GetRegion(pos) == tribeRegion;
+
+    cGameData* data = ToGameData(pObject);
+    if (!data) {
+        cPickInfo* pick = GetPickInfo(pObject);
+        if (pick) {
+            if (planet->GetRegion(pick->mPosition) != tribeRegion)
+                return 7;
+            if (tribe->HasToolA())
+                return 0x25;
+        }
+    } else {
+        GetActivePlanet();
+        switch (data->GetNounID()) {
+        case kGameDataUFO:
+            return 0x30;
+
+        case kOrnament: {
+            cOrnament* ornament = (cOrnament*)object_cast(data, kOrnament);
+            if (ornament->mOrnamentType == 0x356eb8a) {
+                if (pos != Vector3_s00cc_efb0::ZERO) {
+                    if (!PlanetModel_s00cc_efb0()->IsLand(pos))
+                        return 1;
+                    return tribe->IsAllied() ? 0x22 : 7;
+                }
+            } else if (ornament->mOrnamentType == 0x5b9a06e) {
+                float minHeight = GetPropertyFloat(g_TribeProperties, 0xd2078a9b, 10.0f);
+                cOrnamentModel* model = GetOrnamentModel(ornament->GetModelKey());
+                if (model && model->mHeight > minHeight)
+                    return 0x23;
+            }
+            break;
+        }
+
+        case kGameBundle: {
+            cGameBundle* bundle = (cGameBundle*)object_cast(data, kGameBundle);
+            uint32_t owner = bundle->mOwnerID;
+            if (owner == Player()->GetPoliticalID())
+                return 0x1b;
+            cTribe_s00cc_efb0* other = GetTribeByPoliticalID(bundle->mOwnerID);
+            if (!other)
+                break;
+            if (other == NounManager_s00cc_efb0()->GetPlayerTribe()) {
+                if (!other->HasToolB())
+                    return 0x1e;
+                return other->HasToolA() + 0x1f;
+            }
+            if (other->mbDefeated)
+                return 0x1b;
+            switch (cTribeModeStrategy_s00cc_efb0::Instance()->mDifficulty) {
+            case 0:
+                return (RelationshipManager()->GetRelationship(other->GetPoliticalID(), tribe->GetPoliticalID(), 1) >= 2) + 0xe;
+            case 1:
+                if (RelationshipManager()->GetRelationship(other->GetPoliticalID(), tribe->GetPoliticalID(), 1) < 4)
+                    return 0x21;
+                break;
+            }
+            break;
+        }
+
+        case kTribeTool: {
+            cTribeTool* tool = (cTribeTool*)object_cast(data, kTribeTool);
+            tool->GetTribe()->GetPoliticalID();
+            if (tool->mSpatial.IsUnderConstruction()) {
+                if (tool->mCombatant.GetHealthPercentage() < 1.0f) {
+                    if (tool->mCombatant.GetHealthPercentage() <= 0.0f)
+                        return 0;
+                    return 9;
+                }
+                switch (tool->GetToolType()) {
+                case 8:  return 0x11;
+                case 7:  return 0x12;
+                case 1:  return 0x13;
+                case 2:  return 0x14;
+                case 3:  return 0x15;
+                case 4:  return 0x16;
+                case 5:  return 0x17;
+                case 6:  return 0x18;
+                case 9:  return 0x19;
+                case 10: return 0x1a;
+                }
+                return 0;
+            }
+            if (cTribeModeStrategy_s00cc_efb0::Instance()->mDifficulty != 1)
+                return 0;
+            if (tool->GetToolType() == 10)
+                return 0;
+            if (tool->mCombatant.GetDamageState() == 2)
+                return 0;
+            return tool->GetTribe()->IsRaided() ? 0xc : 0x2a;
+        }
+
+        case kCreatureAnimal: {
+            cCreatureAnimal* animal = (cCreatureAnimal*)object_cast(data, kCreatureAnimal);
+            if (tribeRegion != planet->GetRegion(animal->mLocomotive.GetPosition()))
+                return 7;
+            if (!animal->mbBusy) {
+                switch (cTribeModeStrategy_s00cc_efb0::Instance()->mDifficulty) {
+                case 0:
+                    if (animal->IsFlagged())
+                        return 0;
+                    if (animal->GetPoliticalID() == tribe->GetPoliticalID())
+                        return 0;
+                    return 0x29;
+                case 1:
+                    return 0xb;
+                }
+            }
+            if (tribe->HasToolB())
+                return 0x1c;
+            break;
+        }
+
+        case kCreatureCitizen: {
+            cCreatureCitizen* citizen = (cCreatureCitizen*)object_cast(data, kCreatureCitizen);
+            if (citizen->mbBusy == 1)
+                return 0;
+            if (citizen->mLocomotive.IsUnderConstruction()) {
+                float threshold = citizen->mThreshold;
+                if (citizen->mTimer.GetValue() > threshold) {
+                    SpatialFixedVector<16> selection;
+                    GetGameTerrainCursor_s00cc_efb0()->GetSelection(selection);
+                    for (SpatialRef* it = selection.mpBegin; it != selection.mpEnd; ++it) {
+                        cCreatureCitizen* other = ToCitizen(*it);
+                        if (other && other != citizen && other->GetActivity() == 9)
+                            return 0x28;
+                    }
+                }
+                return 0x2e;
+            }
+            switch (cTribeModeStrategy_s00cc_efb0::Instance()->mDifficulty) {
+            case 0: {
+                if (citizen->GetTribe()->mbDefeated)
+                    return 0;
+                cTribe_s00cc_efb0* other = citizen->GetTribe();
+                if (RelationshipManager()->GetRelationship(other->GetPoliticalID(), tribe->GetPoliticalID(), 1) < 2)
+                    return IsCitizenIdle(citizen) ? 0x10 : 0xd;
+                if (citizen->mpHerd->mBehaviorID == 0x546e8804)
+                    return 0x2d;
+                cCreatureCitizen* leader = tribe->GetLeader();
+                if (leader && (!leader->mLocomotive.IsMoving() || leader->mbBusy))
+                    return 0x2b;
+                return 0x27;
+            }
+            case 1:
+                return citizen->GetTribe()->IsRaided() ? 0xa : 0x2a;
+            }
+            return 0;
+        }
+
+        case kFruit: {
+            cFruit* fruit = (cFruit*)object_cast(data, kFruit);
+            if (tribe->HasToolA() && planet->GetRegion(fruit->mSpatial.GetPosition()) == tribeRegion)
+                return 0x24;
+            break;
+        }
+
+        case kTribeHut: {
+            cTribeHut* hut = (cTribeHut*)object_cast(data, kTribeHut);
+            cTribe_s00cc_efb0* owner = hut->GetTribe();
+            owner->GetPoliticalID();
+            if (hut->mSpatial.IsUnderConstruction()) {
+                if (hut->mCombatant.GetHealthPercentage() < 1.0f) {
+                    if (hut->mCombatant.GetHealthPercentage() > 0.0f)
+                        return 9;
+                }
+                return 0x26;
+            }
+            if (owner->mbDefeated)
+                return 0;
+            if (hut->mCombatant.GetDamageState() == 2)
+                return 0;
+            switch (cTribeModeStrategy_s00cc_efb0::Instance()->mDifficulty) {
+            case 0:
+                return (RelationshipManager()->GetRelationship(owner->GetPoliticalID(), tribe->GetPoliticalID(), 1) >= 2) + 0xe;
+            case 1:
+                return hut->GetTribe()->IsRaided() ? 0xc : 0x2a;
+            }
+            break;
+        }
+
+        case kEgg:
+            if (cTribeModeStrategy_s00cc_efb0::Instance()->mDifficulty == 1)
+                return 0x1d;
+            break;
+
+        case kTribeFoodMat: {
+            cTribeFoodMat* mat = (cTribeFoodMat*)object_cast(data, kTribeFoodMat);
+            cTribe_s00cc_efb0* owner = mat->mpTribe;
+            mat->GetPoliticalID();
+            if (mat->mSpatial.IsUnderConstruction()) {
+                if (!tribe->HasToolB())
+                    return 0x1e;
+                return tribe->HasToolA() + 0x1f;
+            }
+            if (((cFoodStore*)owner->mFood)->GetAmount() <= 0.0f)
+                return 0;
+            switch (cTribeModeStrategy_s00cc_efb0::Instance()->mDifficulty) {
+            case 0:
+                if (owner->mbDefeated)
+                    return 0;
+                return (RelationshipManager()->GetRelationship(owner->GetPoliticalID(), tribe->GetPoliticalID(), 1) >= 2) + 0xe;
+            case 1:
+                if (RelationshipManager()->GetRelationship(owner->GetPoliticalID(), tribe->GetPoliticalID(), 1) < 4)
+                    return 0x21;
+                break;
+            }
+            break;
+        }
+        }
+    }
+    return sameRegion ? 0 : 7;
+}
+
 // @ 0x00cd0260
 unsigned char __stdcall FUN_00cd0260(void* arg)
 {
@@ -2155,6 +3854,95 @@ unsigned char __stdcall FUN_00cd0260(void* arg)
     default:
         return 0;
     }
+}
+
+// @ 0x00cd02d0
+void CInput::F_cd02d0(void* posf)
+{
+    float* pos = (float*)posf;
+    void* auth = FUN_00a206f0();
+    uint32_t uSound = 0;
+    if (auth != 0)
+        uSound = (uint32_t)((void*(__thiscall*)(void*)) (*(void***)auth)[0x20 / 4])(auth);
+
+    void* au = FUN_00a206f0();
+    if (au != 0) {
+        ((void(__thiscall*)(void*, uint32_t)) (*(void***)au)[0x38 / 4])(au, 0x3475365);
+        ((void(__thiscall*)(void*, uint32_t, uint32_t)) (*(void***)au)[0x40 / 4])(au, 0x3475381, 0xc45c1574);
+        ((void(__thiscall*)(void*, uint32_t, uint32_t)) (*(void***)au)[0x40 / 4])(au, 0x3475385, uSound);
+        ((void(__thiscall*)(void*)) (*(void***)au)[0x58 / 4])(au);
+    }
+
+    void* planet   = FUN_00b3d350();
+    void* someObj  = ((void*(__thiscall*)(void*, void*)) FUN_00b82fc0)(planet, posf);
+    void* someObj2 = ((void*(__thiscall*)(void*, void*)) FUN_00b88590)(planet, posf);
+    void* tribe    = ((void*(__thiscall*)(void*)) FUN_00bfc5f0)(FUN_00b3d300());
+    void* inner0   = (char*)tribe + 0x120;
+    void* id       = ((void*(__thiscall*)(void*)) (*(void***)inner0)[0x2c / 4])(inner0);
+    void* plr      = ((void*(__thiscall*)(void*, void*)) FUN_00b88590)(planet, id);
+
+    if (someObj == 0) {
+        if (FUN_00ccefb0(0, posf) != 7) {
+            HeapVec vec;
+            vec.mpBegin = 0;
+            vec.mpEnd = 0;
+            vec.mpCap = 0;
+            void* tc = GetGameTerrainCursor();
+            ((void(__thiscall*)(void*, void*)) (*(void***)tc)[0x5c / 4])(tc, &vec);
+
+            char first = 1;
+            for (void** it = vec.mpBegin; it != vec.mpEnd; ++it) {
+                void* citizen = 0;
+                if (*it != 0)
+                    citizen = ((void*(__thiscall*)(void*, uint32_t)) (*(void***)*it)[0xb8 / 4])(*it, 0x4f176642);
+
+                void* inner = (char*)citizen + 0xc0;
+                void* cid = ((void*(__thiscall*)(void*)) (*(void***)inner)[0x2c / 4])(inner);
+                void* cobj = ((void*(__thiscall*)(void*, void*)) FUN_00b88590)(planet, cid);
+
+                if (someObj == cobj
+                 || *((char*)cobj + *(int*)((char*)planet + 100)) == 0
+                 || someObj == someObj2) {
+                    if (first) {
+                        first = 0;
+                        void* m = FUN_00b3d240_s00cc_fc20();
+                        ((void(__thiscall*)(void*, uint32_t, void*)) (*(void***)m)[0x6c / 4])(m, 0x1d110a0, posf);
+                    }
+                    void* ord = FUN_00bca2c0();
+                    if (ord == 0 || *(int*)ord != 4 || *(short*)((char*)ord + 0x4b) != 0x31) {
+                        void* ord2 = ((void*(__thiscall*)(void*, int, void*, void*)) FUN_00c275b0)(citizen, 4, 0, 0);
+                        ((void(__thiscall*)(void*, void*)) FUN_006a3570)((char*)ord2 + 0x39, posf);
+                    } else {
+                        float* pf;
+                        short s = *(short*)((char*)ord + 0x4b);
+                        if (s == 0x31 || s == 0x10) {
+                            if ((*(unsigned char*)((char*)ord + 0x49) & 0x30) == 0)
+                                pf = (float*)((char*)ord + 0x39);
+                            else
+                                pf = *(float**)((char*)ord + 0x39);
+                        } else {
+                            pf = (float*)FUN_006bb5e0();
+                        }
+                        float dx = pf[0] - pos[0];
+                        float dy = pf[1] - pos[1];
+                        float dz = pf[2] - pos[2];
+                        if (dx*dx + dy*dy + dz*dz > 1.0f) {
+                            void* ord2 = ((void*(__thiscall*)(void*, int, void*, void*)) FUN_00c275b0)(citizen, 4, 0, 0);
+                            ((void(__thiscall*)(void*, void*)) FUN_006a3570)((char*)ord2 + 0x39, posf);
+                        }
+                    }
+                    ((void(__thiscall*)(void*, int)) (*(void***)citizen)[0xf0 / 4])(citizen, 4);
+                } else {
+                    void* m = FUN_00b3d240_s00cc_fc20();
+                    ((void(__thiscall*)(void*, uint32_t, void*)) (*(void***)m)[0x6c / 4])(m, 0xb062b167, posf);
+                }
+            }
+            ((void(__thiscall*)(void*)) FUN_00ad92d0)(&vec);
+            return;
+        }
+    }
+    void* m = FUN_00b3d240_s00cc_fc20();
+    ((void(__thiscall*)(void*, uint32_t, void*)) (*(void***)m)[0x6c / 4])(m, 0xb062b167, posf);
 }
 
 // @ 0x00cd0660
@@ -2197,6 +3985,359 @@ int CInput::F_cd0660(void* flags, void* pos, void* c)
 done0:
     ((void(__thiscall*)(void*)) FUN_00ad92d0)(&vec);
     return 0;
+}
+
+// @ 0x00cd3b60
+TM::TM()
+{
+    M_b70820();
+    *(void**)this = g_vt147734c;
+    *(void**)((char*)this + 8) = g_vt1477328;
+    *(void**)((char*)this + 0x10) = g_vt1477318;
+    *(int*)((char*)this + 0x74) = 0;
+    *(float*)((char*)this + 0x88) = g_fltOne;
+    *(float*)((char*)this + 0x8c) = g_fltTwo;
+    *(int*)((char*)this + 0x84) = 0;
+    *(int*)((char*)this + 0x90) = 0;
+    *(int*)((char*)this + 0x80) = 1;
+    *(void**)((char*)this + 0x7c) = g_vt154df28;
+    g_169b27c = (uint32_t)this;
+}
+
+// @ 0x00cd3bf0
+void TM::SetMission(void* a)
+{
+    void* panel = FUN_00b3d400();
+    if (a == 0) {
+        ((void(__thiscall*)(void*, int))(*(void***)this)[0x28 / 4])(this, 0);
+        return;
+    }
+    void* citizen = ((void*(__thiscall*)(void*, unsigned int))(*(void***)a)[0xc / 4])(a, 0xd0036e08);
+    void* c2 = ((void*(__thiscall*)(void*, unsigned int))(*(void***)a)[0xc / 4])(a, 0x4f176642);
+    void* tribe = ((void*(__thiscall*)(void*, unsigned int))(*(void***)a)[0xc / 4])(a, 0x4f396a66);
+    if (tribe == 0) {
+        if (c2 == 0) { ((void(__thiscall*)(void*, int))(*(void***)this)[0x28 / 4])(this, 0); return; }
+        tribe = ((CCitizen*)c2)->GetTribe();
+        if (tribe == 0) { ((void(__thiscall*)(void*, int))(*(void***)this)[0x28 / 4])(this, 0); return; }
+    }
+    uint32_t key = ((unsigned int(__thiscall*)(void*))(*(void***)tribe)[0x4c / 4])(tribe);
+    HashTable* t = (HashTable*)((char*)this + 0x78);
+    HashIter it;
+    t->find(&it, &key);
+    if (it.mNode == (HashNode*)t->mppBuckets[t->mnBucketCount]) {
+        void* noun = ((CGameNounMgr*)NounManager())->CreateNoun(0x5436411a);
+        ((CMission*)noun)->SetTribe(tribe);
+        void** slot = t->operator[](&key);
+        void* old = *slot;
+        if (noun != old) {
+            if (noun != 0)
+                ((void(__thiscall*)(void*))(*(void***)noun)[0])(noun);
+            *slot = noun;
+            if (old != 0)
+                ((void(__thiscall*)(void*))(*(void***)old)[0x4 / 4])(old);
+        }
+        void* ref = noun;
+        if (noun != 0)
+            ((void(__thiscall*)(void*))(*(void***)noun)[0])(noun);
+        {
+            SPVector* vec = (SPVector*)((char*)this + 0x14);
+            if ((char*)vec->mEnd >= (char*)vec->mCap) {
+                vec->DoInsertPtr(vec->mEnd, &ref);
+            } else {
+                char* pos = (char*)vec->mEnd;
+                vec->mEnd = pos + 4;
+                if (pos != 0) {
+                    *(void**)pos = ref;
+                    if (ref != 0)
+                        ((void(__thiscall*)(void*))(*(void***)ref)[0])(ref);
+                }
+            }
+        }
+        if (ref != 0)
+            ((void(__thiscall*)(void*))(*(void***)ref)[0x4 / 4])(ref);
+    }
+    if (*(void**)((char*)this + 0x74) != 0) {
+        void* r = ((CMission*)*(void**)((char*)this + 0x74))->GetTribe();
+        if (r == tribe)
+            goto tail;
+    }
+    if (*(void**)((char*)this + 0x74) != 0) {
+        if (panel != 0)
+            ((CPanel*)panel)->RemoveMissionCard(*(void**)((char*)this + 0x74));
+        void* p = *(void**)((char*)this + 0x74);
+        if (p != 0) {
+            *(void**)((char*)this + 0x74) = 0;
+            ((void(__thiscall*)(void*))(*(void***)p)[0x4 / 4])(p);
+        }
+    }
+    {
+        void** slot = t->operator[](&key);
+        void* nv = *slot;
+        void* old = *(void**)((char*)this + 0x74);
+        if (nv != old) {
+            if (nv != 0)
+                ((void(__thiscall*)(void*))(*(void***)nv)[0])(nv);
+            *(void**)((char*)this + 0x74) = nv;
+            if (old != 0)
+                ((void(__thiscall*)(void*))(*(void***)old)[0x4 / 4])(old);
+        }
+    }
+    {
+        void* m = *(void**)((char*)this + 0x74);
+        if (((unsigned int(__thiscall*)(void*))(*(void***)m)[0x60 / 4])(m) == 5)
+            goto tail;
+    }
+    if (panel != 0) {
+        if (!((CPanel*)panel)->HasMissionCard(*(void**)((char*)this + 0x74))) {
+            ((CPanel*)panel)->SetupMissionCard(*(void**)((char*)this + 0x74), 0, 1, 0);
+            ((CPanel*)panel)->ExpandMissionCard(*(void**)((char*)this + 0x74));
+        }
+    }
+tail:
+    ((void(__thiscall*)(void*, int))(*(void***)this)[0x28 / 4])(this, 0);
+}
+
+// @ 0x00cd3e60
+void TM::F_cd3e60()
+{
+    unsigned int r;
+    if (((CProps*)g_appProps)->GetDesc(0x061b67b6) != 0)
+        r = (unsigned int)FNV1_String8(g_StrTRGMac, 0x811c9dc5, 1);
+    else
+        r = (unsigned int)FNV1_String8(g_StrTRG, 0x811c9dc5, 1);
+    (void)r;
+}
+
+// @ 0x00cd3f20
+void F_cd3f20(uint32_t idx)
+{
+    int local_c = 0;
+    int local_8 = 0;
+    if (GetPropertyAsUint32Array(g_1581288, 0xf5bf4d8e, &local_c, &local_8)
+        && local_c > 0 && (uint32_t)local_c > idx) {
+        CTerrain* te = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
+        int v = *(int*)(local_8 + (int)idx * 4);
+        int local_4 = 0;
+        te->F77380(0x055d6335, &local_4);
+        te->F79f00(0x055d6335, local_4 + v);
+    }
+}
+
+// @ 0x00cd3fb0
+void F_cd3fb0(int a)
+{
+    CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
+    if (s != 0) {
+        s->F77bf0(a);
+        return;
+    }
+}
+
+// @ 0x00cd3fd0
+void F_cd3fd0(int a)
+{
+    CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
+    if (s != 0) {
+        s->F77300(a);
+        return;
+    }
+}
+
+// @ 0x00cd3ff0
+void PostTerrainAction(int kind, void* tgt)
+{
+    int id;
+    switch (kind) {
+    case 0: id = 0x4dbdc67d; break;
+    case 1: id = 0x4dbdc67e; break;
+    case 2: id = 0x4dbdc67f; break;
+    case 3: id = 0x4dbdc678; break;
+    case 4: id = 0x4dbdc679; break;
+    default: return;
+    }
+    CActTarget t;
+    t.Ctor(tgt);
+    CTrig* mgr = (CTrig*)GetTriggerMgr();
+    mgr->PostAction(id, &t, 0);
+    t.Dtor();
+}
+
+// @ 0x00cd4070
+TM* TM::F_cd4070(int id)
+{
+    TM* r = this;
+    if (id <= 0x116dd1b) {
+        if (id == 0x116dd1b)
+            return r;
+        if (id == (int)0xee3f516e)
+            goto tail;
+        if (id != 0x116d389)
+            r = 0;
+        return r;
+    }
+    if (id != 0x2f009dd0)
+        return 0;
+tail:
+    if (r == 0)
+        return 0;
+    return (TM*)((char*)r + 4);
+}
+
+// @ 0x00cd40f0
+void TM::F_cd40f0(void* p)
+{
+    void* base = (char*)p + 0x34;
+    void* o = ((void*(__thiscall*)(void*))(*(void***)base)[0x34 / 4])(base);
+    if (!((unsigned char(__thiscall*)(void*))(*(void***)o)[0x50 / 4])(o))
+        ((void(__thiscall*)(void*, int))(*(void***)this)[0xf0 / 4])(this, 0x29b);
+    void* o2 = ((void*(__thiscall*)(void*))(*(void***)base)[0x34 / 4])(base);
+    ((void(__thiscall*)(void*, int))(*(void***)o2)[0x54 / 4])(o2, 1);
+    void* cur = GetGameTerrainCursor();
+    ((void(__thiscall*)(void*))(*(void***)cur)[0x74 / 4])(cur);
+    cur = GetGameTerrainCursor();
+    ((void(__thiscall*)(void*))(*(void***)cur)[0xc8 / 4])(cur);
+}
+
+// @ 0x00cd4160
+unsigned char TM::F_cd4160(void* p)
+{
+    void* base = (char*)p + 0x34;
+    void* o = ((void*(__thiscall*)(void*))(*(void***)base)[0x34 / 4])(base);
+    return ((unsigned char(__thiscall*)(void*))(*(void***)o)[0x50 / 4])(o);
+}
+
+// @ 0x00cd4180
+void TM::F_cd4180(int a, float f1, float f2, int b)
+{
+    mInput.OnMouseDown(a, f1, f2, b);
+    void* m = GetGameInputManager();
+    ((void(__thiscall*)(void*, int, float, float, int))(*(void***)m)[0x54 / 4])(m, a, f1, f2, b);
+}
+
+// @ 0x00cd41d0
+void TM::F_cd41d0(float f1, float f2, int a)
+{
+    mInput.OnMouseWheel(f1, f2, a);
+    void* m = GetGameInputManager();
+    ((void(__thiscall*)(void*, float, float, int))(*(void***)m)[0x5c / 4])(m, f1, f2, a);
+}
+
+// @ 0x00cd4220
+void TM::F_cd4220(int a, float f1, float f2, int b)
+{
+    mInput.OnMouseUp(a, f1, f2, b);
+    void* m = GetGameInputManager();
+    ((void(__thiscall*)(void*, int, float, float, int))(*(void***)m)[0x58 / 4])(m, a, f1, f2, b);
+}
+
+// @ 0x00cd4280
+void TM::StartTribe()
+{
+    ((CTrig*)GetTriggerMgr())->SetEnabled(1);
+    void* tribe = ((CMgr*)NounManager())->GetPlayerTribe();
+    void* obj = ((void*(__thiscall*)(void*))(*(void***)tribe)[0xac / 4])(tribe);
+    void* tool = ((CTribe*)tribe)->GetToolOfType(10);
+    void* trig = ((CTrig*)GetTriggerMgr())->PostTrigger(g_StrTRGBegin, 1, 1, 0, 0, 0);
+    {
+        CActTarget t;
+        t.Ctor((char*)tribe + 0x120);
+        ((CTrig*)GetTriggerMgr())->PostAction(0x3d7f90a, &t, trig);
+        t.Dtor();
+    }
+    {
+        CActTarget t;
+        t.Ctor(obj != 0 ? (char*)obj + 0x34 : 0);
+        ((CTrig*)GetTriggerMgr())->PostAction(0xaa227986, &t, trig);
+        t.Dtor();
+    }
+    {
+        CActTarget t;
+        t.Ctor(tool != 0 ? (char*)tool + 0x34 : 0);
+        ((CTrig*)GetTriggerMgr())->PostAction(0x60ed02ef, &t, trig);
+        t.Dtor();
+    }
+    {
+        Msg3 msg;
+        msg.a = 0x200; msg.b = 0; msg.c = 0x934dcce7;
+        ((CTrig*)GetTriggerMgr())->ObjectMessage(0xe6311d5a, &msg, trig);
+    }
+    ((CAch*)AchievementsController())->F(0xd082675a, 4, 1);
+}
+
+// @ 0x00cd43c0
+void TM::F_cd43c0(void* a)
+{
+    C9630* o = ((C9630*(__thiscall*)(void*, void*))(*(void***)this)[0x6c / 4])(this, a);
+    o->M();
+}
+
+// @ 0x00cd43e0
+void TM::RegisterCityHallAndStartCinematic(int* pos)
+{
+    CTerrain* te = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
+    te->mCityHallPos[0] = pos[0];
+    te->mCityHallPos[1] = pos[1];
+    te->mCityHallPos[2] = pos[2];
+    Msg8 msg;
+    msg.a = 0x2ea8fb98; msg.b = 0; msg.c = 0;
+    void* o = FUN_00401010();
+    ((void(__thiscall*)(void*, int*, void*))(*(void***)o)[0x4c / 4])(o, pos, &msg);
+    ((CursorTable*)GetCursorTable())->FindLocal(0x1003);
+    *(unsigned char*)((char*)this + 0x3a0) = 1;
+}
+
+// @ 0x00cd4460
+unsigned int TM::F_cd4460(int a)
+{
+    CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
+    if (s != 0) {
+        if (s->F772c0(a))
+            return 1;
+    }
+    return 0;
+}
+
+// @ 0x00cd4490
+bool TM::F_cd4490()
+{
+    return *(int*)((char*)this + 0x22c) != 0xb;
+}
+
+// @ 0x00cd44a0
+unsigned int TM::F_cd44a0()
+{
+    CTerrain* s = ((CMgr*)NounManager())->GetCurrentTerrainSphere();
+    if (s != 0) {
+        if (s->F772c0(0x056d1871))
+            return 0;
+    }
+    return 1;
+}
+
+// @ 0x00cd44e0
+unsigned int TM::F_cd44e0(void* a, void* b)
+{
+    uint32_t v = *(uint32_t*)b;
+    void* p = ((void*(__thiscall*)(void*))(*(void***)a)[0x20 / 4])(a);
+    void* s = ((void*(__thiscall*)(void*))(*(void***)p)[0x18 / 4])(p);
+    WriteUint32(s, &v, 1, 0);
+    return 1;
+}
+
+// @ 0x00cd4580
+ThemeMgr::ThemeMgr()
+{
+    float m = g_fltmax;
+    *(int*)((char*)this + 4) = 0;
+    *(void**)this = g_vt14774b0;
+    int* p = (int*)((char*)this + 8);
+    int n = 0x17;
+    do {
+        *p = 0;
+        *(float*)(p + 1) = m;
+        p += 2;
+        --n;
+    } while (n >= 0);
 }
 
 // @ 0x00cd46d0
@@ -2830,6 +4971,27 @@ void WriteSTLSequenceT(Stream* s, unsigned char* vec)
     s->End_1c();
 }
 
+// @ 0x00cd5980
+void WritePairsT(Stream* s, unsigned char* vec)
+{
+    unsigned char* begin = *(unsigned char**)vec;
+    unsigned char* end = *(unsigned char**)(vec + 4);
+    uint32_t n = (uint32_t)((end - begin) >> 3);
+    StreamInner* inner = s->Get_20();
+    EA_IO_WriteUint32(inner->Write_18(), &n, 1, 0);
+    unsigned char* p = begin;
+    while (p != end) {
+        inner = s->Get_20();
+        EA_IO_WriteUint32(inner->Write_18(), (const uint32_t*)p, 1, 0);
+        s->End_1c();
+        inner = s->Get_20();
+        EA_IO_WriteUint32(inner->Write_18(), (const uint32_t*)(p + 4), 1, 0);
+        s->End_1c();
+        p += 8;
+    }
+    s->End_1c();
+}
+
 // @ 0x00cd5a40
 ElemRef* CopyCtorRange(ElemRef* first, ElemRef* last, ElemRef* dst)
 {
@@ -2889,6 +5051,52 @@ ElemRef* CopyBackwardRange(ElemRef* first, ElemRef* last, ElemRef* dst)
         dst->m0c = last->m0c;
     }
     return dst;
+}
+
+// @ 0x00cd5b80
+void FUN_00cd5b80()
+{
+    void* tribe = ((cGameNounManager*)NounManager())->GetPlayerTribe();
+    void* leader = ((cCommunity*)tribe)->GetLeader();
+    if (!leader)
+        return;
+    LeaderSub* leaderSub = &((LeaderObj*)leader)->mSub;
+    cSPVector3_s00cd_5550 pos = *leaderSub->GetPos();
+    float* qp = leaderSub->GetQuat();
+    float q[4];
+    q[0] = qp[0]; q[1] = qp[1]; q[2] = qp[2]; q[3] = qp[3];
+    unsigned char* sys = (unsigned char*)FUN_00d1e660();
+    void* holder = ((SysObj*)sys)->mp24;
+    void* props = ((Holder*)holder)->mp130;
+    float cnt = SP_GetPropertyT_float(props, 0xb2aa8e19, g_flt_1473c70);
+    float scale = SP_GetPropertyT_float(props, 0xed219018, g_flt_1486110);
+    int icnt = (int)cnt;
+    uint32_t r = ((RandLCG*)g_rand_1601760)->Uniform((uint32_t)(0x400 - icnt));
+    float v1[3], v2[3];
+    FUN_0059aed0(v1, &g_v3_169b360, q);
+    FUN_0059aed0(v2, &g_v3_169b36c, q);
+    if (cnt > 0.0f) {
+        float* tbl = &g_1559bdc[r * 2];      // g_1559bdc + r*8 bytes (stride 2 floats)
+        int i = 0;                           // loop index (doubles each pass: i = 2i+1)
+        do {
+            void* container = FUN_00ac79d0(FUN_00b3d2b0(3));
+            FxObj* obj = (FxObj*)FUN_00ac7ab0(FUN_00b3d2b0(3), g_flt_15812dc, container, 3);
+            if (obj) {
+                float ox = tbl[-1];
+                float oy = tbl[0];
+                cSPVector3_s00cd_5550 v;
+                v.x = oy * (v2[0] * scale) + (ox * (v1[0] * scale) + pos.x);
+                v.y = oy * (v2[1] * scale) + (ox * (v1[1] * scale) + pos.y);
+                v.z = oy * (v2[2] * scale) + (ox * (v1[2] * scale) + pos.z);
+                obj->mSub34.Apply(&v);
+                ((void(__thiscall*)(void*, FxObj*)) (*(void***)obj->mp128)[0x30 / 4])(obj->mp128, obj);
+                obj->m130 = (uint32_t)(i + 1);
+                obj->mb124 = (unsigned char)(i + 1);
+            }
+            i += i + 1;
+            tbl += 2;
+        } while ((float)i < cnt);
+    }
 }
 
 // @ 0x00cd5e40
@@ -3106,6 +5314,72 @@ void cTribeModeStrategy::F_cd6130(uint32_t id)
     }
 }
 
+// @ 0x00cd6390
+void cTribeModeStrategy::F_cd6390(unsigned char enable)
+{
+    if (enable == 0) {
+        if (mp_398 != 0) {
+            ((void(__thiscall*)(void*)) (*(void***)mp_398)[0xc / 4])(mp_398);
+            if (mp_398 != 0) {
+                RefObj* p = (RefObj*)mp_398;
+                mp_398 = 0;
+                p->AddRef();
+                return;
+            }
+        }
+        return;
+    }
+    if (mp_398 != 0)
+        F_cd6390(0);
+    void* tribe = ((cGameNounManager*)NounManager())->GetPlayerTribe();
+    if (tribe == 0)
+        return;
+    unsigned char* squad = (unsigned char*)((void*(__thiscall*)(void*)) (*(void***)tribe)[0xac / 4])(tribe);
+    if (squad == 0)
+        return;
+    void* fx = SP_EffectsManager();
+    if (mp_398 != 0) {
+        RefObj* p = (RefObj*)mp_398;
+        mp_398 = 0;
+        p->AddRef();
+    }
+    unsigned char ok = ((unsigned char(__thiscall*)(void*, uint32_t, int, void**)) (*(void***)fx)[0x2c / 4])(fx, 0x1a2cc3f0, 0, &mp_398);
+    if (!ok)
+        return;
+    unsigned char* base = squad + 0x34;
+    float* pos = (float*)((void*(__thiscall*)(void*)) (*(void***)base)[0x2c / 4])(base);
+    float px = pos[0], py = pos[1], pz = pos[2];
+    float* q = (float*)((void*(__thiscall*)(void*)) (*(void***)base)[0x68 / 4])(base);
+    float qw = q[0x14 / 4];
+    unsigned char* tmp = (unsigned char*)base;   // keep base live
+    (void)tmp;
+    cSPVector3_s00cd_5550 in, out;
+    in.x = px; in.y = py; in.z = pz;
+    in.z = qw;
+    SP_NormalizedSafe(&out, &in);
+    (void)qw;
+    XformMsg msg;
+    msg.ctor();
+    msg.mFlags |= 4;
+    msg.mCount++;
+    msg.mX = px;
+    msg.mY = py;
+    msg.mZ = pz;
+    void* qq = ((void*(__thiscall*)(void*)) (*(void***)base)[0x30 / 4])(base);
+    SP_QuaternionToMatrix(msg.mMatrix, qq);
+    msg.mFlags |= 2;
+    msg.mCount++;
+    ((void(__thiscall*)(void*, void*)) (*(void***)mp_398)[0x18 / 4])(mp_398, &msg);
+    ((void(__thiscall*)(void*, int)) (*(void***)mp_398)[8 / 4])(mp_398, 0);
+}
+
+// @ 0x00cd6610
+void HashElem::Clear()
+{
+    DoFreeNodes(mp4, mp8);
+    m0c = 0;
+}
+
 // @ 0x00cd6710
 cPosseInfo* DestroyRange(cPosseInfo* first, cPosseInfo* last, cPosseInfo* dst)
 {
@@ -3176,6 +5450,67 @@ Simulator::tGameDataVectorT* __cdecl CreateGameDataVector()
     return 0;
 }
 
+// @ 0x00cd8e70
+namespace SP {
+void __fastcall FUN_00cd8e70(cTribeModeStrategy_s00cd_8e70* self)
+{
+    cTribe_s00cd_8e70* tribe = NounManager_s00cd_8e70()->GetPlayerTribe();
+    void* profile = FUN_00401090_s00cd_8e70()->GetAvatarProfile();
+    uint32_t recordCount = (uint32_t)(self->mpRecordEnd - self->mpRecordBegin);
+    uint32_t found = 0;
+    CreatureList* list = ((CreatureList* (__thiscall*)(cTribe_s00cd_8e70*))
+        ((void**)tribe->mpVtable)[0x90 / 4])(tribe);
+    CreatureList* listEnd = ((CreatureList* (__thiscall*)(cTribe_s00cd_8e70*))
+        ((void**)tribe->mpVtable)[0x90 / 4])(tribe);
+    uint32_t creatureCount = (uint32_t)(listEnd->mpEnd - listEnd->mpBegin);
+    for (uint32_t i = 0; i < creatureCount; ++i) {
+        cSPCreatureBase_s00cd_8e70* c = list->mpBegin[i];
+        if (found < recordCount) {
+            TribeRecord* rec = self->mpRecordBegin + found;
+            while (found < recordCount) {
+                if (rec->mpProfile == profile) {
+                    uint32_t t;
+                    t = c->mNameBegin;    c->mNameBegin = rec->mNameBegin;    rec->mNameBegin = t;
+                    t = c->mNameEnd;      c->mNameEnd = rec->mNameEnd;        rec->mNameEnd = t;
+                    t = c->mNameCapacity; c->mNameCapacity = rec->mNameCapacity; rec->mNameCapacity = t;
+                    break;
+                }
+                ++found;
+                ++rec;
+            }
+        }
+        if (c->mNameBegin == c->mNameEnd) {
+            uint32_t tmp[3] = { 0, 0, 0 };
+            FUN_004010a0(tmp, 0x51aa76bb);
+            uint32_t* s = (uint32_t*)FUN_005ecf80(tmp, 0x51aa76bb);
+            s[1] = s[0];                       // eastl::wstring::assign(begin, end)
+            if (tmp[0] != 0) FUN_00f47380((void*)tmp[0]);
+        }
+    }
+
+    SelSet set;
+    set.Initialize();
+    {
+        void* pos = ((void* (__thiscall*)(cTribe_s00cd_8e70*))
+            ((void**)tribe->mpVtable)[0x4c / 4])(tribe);
+        Vector3_s00cd_8e70* v = ((Vector3_s00cd_8e70* (__thiscall*)(void*))
+            (*(void***)*(void**)pos)[0]) (pos);
+        (void)v;
+    }
+    TribeRecord* rec = self->mpRecordBegin;
+    uint32_t remaining = recordCount;
+    while (remaining != 0) {
+        --remaining;
+        if (rec->mpProfile != profile) {
+            cSPCreatureBase_s00cd_8e70* c = (cSPCreatureBase_s00cd_8e70*)0;
+            (void)c;
+        }
+        ++rec;
+    }
+    (void)set;
+}
+}  // namespace SP
+
 // @ 0x00cd91b0
 namespace SP {
 uint32_t cTribeModeStrategy_s00cd_8e70::GetSelectedCreatureCount()
@@ -3183,6 +5518,23 @@ uint32_t cTribeModeStrategy_s00cd_8e70::GetSelectedCreatureCount()
     SelSet set;
     GetSelectedCreatureSet(&set);
     return set.mCount;
+}
+}  // namespace SP
+
+// @ 0x00cd91e0
+namespace SP {
+TribeSub* TribeSub::Init(int arg1, int arg2)
+{
+    FixedPoolDesc desc;
+    desc.m00[0] = 0;
+    desc.Init(&mPoolBegin, 0x60, 0xc, 4, 0);
+    Configure(arg1, arg2, arg2, arg2, arg2, this);
+    m10 = 10000.0f;
+    m14 = 2.0f;
+    m18 = 0;
+    uint32_t n = PoolSize(m0c);
+    if (m08 < n) GrowTo(n);
+    return this;
 }
 }  // namespace SP
 
@@ -3200,6 +5552,30 @@ void Vec12::push_back(const Elem12& v)
 }
 }  // namespace SP
 
+// @ 0x00cd92f0
+namespace SP {
+uint8_t __fastcall FUN_00cd92f0(void** self, void* range, const uint32_t* str)
+{
+    uint8_t ok = 1;
+    if (str[0] != str[1]) {
+        uint32_t tmp[3];
+        if (range == 0) {
+            tmp[0] = tmp[1] = tmp[2] = 0;
+        } else {
+            FUN_005ecf80(tmp, (uint32_t)range);
+        }
+        void* text = (tmp[0] != 0) ? (void*)tmp[0] : (void*)0x013f6254;
+        ((void (__thiscall*)(void*, void*))(*(void***)self)[0])(self, text);
+        for (uint8_t* it = (uint8_t*)str[0]; it != (uint8_t*)str[1]; it += 8) {
+            ok = 0;
+        }
+        ((void (__thiscall*)(void*, void*))(*(void***)self)[1])(self, text);
+        if (tmp[0] != 0) FUN_00f47380((void*)tmp[0]);
+    }
+    return ok;
+}
+}  // namespace SP
+
 // @ 0x00cd9440
 namespace SP {
 void Vec16::DestroyRange(Elem16_s00cd_8e70* first, Elem16_s00cd_8e70* last)
@@ -3209,6 +5585,90 @@ void Vec16::DestroyRange(Elem16_s00cd_8e70* first, Elem16_s00cd_8e70* last)
         ((void (__thiscall*)(Elem16_s00cd_8e70*, int))(*(void***)it)[0])(it, 0);
     }
     mpEnd -= last - first;
+}
+}  // namespace SP
+
+// @ 0x00cd9490
+namespace SP {
+void Vec16::InsertOne(Elem16_s00cd_8e70* pos, Elem16_s00cd_8e70* v)
+{
+    if (mpEnd != mpCapacity) {
+        if (pos <= v && v < mpEnd) v += 1;
+        if (mpEnd) {
+            mpEnd->mpVtable = (void*)0x014774c4;
+            mpEnd->mp04 = mpEnd[-1].mp04;
+            mpEnd->mp08 = mpEnd[-1].mp08;
+            if (mpEnd->mp08) ((void (__thiscall*)(void*))(*(void***)mpEnd->mp08)[0])(mpEnd->mp08);
+            mpEnd->mb0c = mpEnd[-1].mb0c;
+        }
+        FUN_00cd5af0(pos, mpEnd - 1, mpEnd);
+        pos->mp04 = v->mp04;
+        if (v->mp08 != pos->mp08) {
+            if (v->mp08) ((void (__thiscall*)(void*))(*(void***)v->mp08)[0])(v->mp08);
+            pos->mp08 = v->mp08;
+        }
+        pos->mb0c = v->mb0c;
+        mpEnd += 1;
+        return;
+    }
+    uint32_t n = (uint32_t)(mpEnd - mpBegin);
+    uint32_t cap = (n == 0) ? 1 : n * 2;
+    Elem16_s00cd_8e70* buf = (Elem16_s00cd_8e70*)FUN_00f40000(cap * 0x10);
+    Elem16_s00cd_8e70* p = (Elem16_s00cd_8e70*)FUN_00cd5a40((Elem16_s00cd_8e70*)mpBegin, pos, buf);
+    FUN_00cd4540((Elem16_s00cd_8e70*)mpBegin, pos, buf);
+    if (p) {
+        p->mpVtable = (void*)0x014774c4;
+        p->mp04 = v->mp04;
+        p->mp08 = v->mp08;
+        if (p->mp08) ((void (__thiscall*)(void*))(*(void***)p->mp08)[0])(p->mp08);
+        p->mb0c = v->mb0c;
+    }
+    Elem16_s00cd_8e70* q = (Elem16_s00cd_8e70*)FUN_00cd5a40(pos, mpEnd, p + 1);
+    FUN_00cd4540(pos, mpEnd, p + 1);
+    if (mpBegin && ((uint32_t*)mpBegin)[-1] != 0) FUN_00f47380(mpBegin);
+    mpBegin = buf;
+    mpEnd = q;
+    mpCapacity = buf + cap;
+}
+}  // namespace SP
+
+// @ 0x00cd9660
+namespace SP {
+void __fastcall FUN_00cd9660(int arg1)
+{
+    cTribe_s00cd_8e70* tribe = NounManager_s00cd_8e70()->GetPlayerTribe();
+    cTribeModeStrategy_s00cd_8e70* self = gpTribeModeStrategy;
+    TribeSub* sub = &self->mSub;
+    (void)sub;
+    if (arg1 == 0) return;
+    if (!FUN_0064f350(0x01581288, 0x1ccfdbe6, 0)) return;
+}
+}  // namespace SP
+
+// @ 0x00cd9760
+namespace SP {
+void FUN_00cd9760()
+{
+    cTribe_s00cd_8e70* tribe = NounManager_s00cd_8e70()->GetPlayerTribe();
+    (void)tribe;
+    uint32_t recipe = 0;
+    uint32_t count = 0, list = 0;
+    GetPropertyAsUint32Array(0x01581288, recipe, &count, &list);
+}
+}  // namespace SP
+
+// @ 0x00cd98e0
+namespace SP {
+void __fastcall FUN_00cd98e0(uint32_t index)
+{
+    uint32_t count = 0;
+    uint32_t list = 0;
+    if (gpTribeModeStrategy->m19c == 0) return;
+    if (!GetPropertyAsUint32Array(0x01581288, 0x895b917a, &count, &list)) return;
+    if (count == 0 || index >= count) return;
+    for (uint32_t n = *(uint32_t*)(list + index * 4); n != 0; --n) {
+        FUN_00f47380((void*)n);
+    }
 }
 }  // namespace SP
 
@@ -3281,6 +5741,189 @@ SelSet* cTribeModeStrategy_s00cd_8e70::GetSelectedCreatureSet(SelSet* out)
     return out;
 }
 }  // namespace SP
+
+// @ 0x00cd9da0
+void FUN_00cd9da0()
+{
+    cMotiveTuning_Init((cMotiveTuning*)0x01687A00, (int)0xF71FA311u);
+    for (int i = 0; i < 4; ++i) {
+        float v = FUN_00ce68f0(i);
+        (void)v;
+    }
+    void* gtm = GameTimeManager();
+    FUN_00b316d0();
+    (void)gtm;
+
+    // install the tribe trigger configs
+    void* in = GameInputManager_s00cd_9da0();
+    VC3(in, 0x10, (int)"TriggerConfigTribeGame", 0, 1);
+    const char* wasd = "TriggerConfigWASD";
+    void* ml = FUN_0067de40();
+    if (FUN_006ab760(ml, L"fr-fr") != 0)
+        wasd = "TriggerConfigWASD_fr-fr";
+    in = GameInputManager_s00cd_9da0();
+    VC3(in, 0x10, (int)wasd, 0, 0);
+
+    unsigned name = FNVHash("Planet_Tribe", 0x811C9DC5u);
+    VC1((void*)gTribeConfigName, 0x30, (int)(size_t)name);
+
+    // create + configure the tribe planet model
+    void* model = FUN_0067ddc0_s00cd_9da0();
+    if (model != 0) {
+        VC1(model, 0x10, (int)gTribeConfigName);
+        VC2(model, 0x18, (int)GonzagoModelWorld(), 3);
+        void* mm = ModelManager();
+        void* state = VC1R(mm, 0x1C, (int)0x3FBAE24);
+        if (state != 0)
+            VC2(model, 0x18, (int)state, 0);
+        VC1(model, 0x1C, (int)FUN_0067de00(0x20007));
+        VC1(model, 0x28, 1);
+    }
+
+    void* cam = GetCameraCtl();
+    *(float*)((char*)cam + 0x380) = gTribeF0;
+    *(int*)((char*)cam + 0x384) = 0x3E9;
+    void* planet = PlanetModel();
+    FUN_00b81720();
+    (void)planet;
+
+    void* gd = SetGameDataOwner2();
+    if (gd != 0) {
+        void* v = VC0R((char*)gd + 0x120, 0x2C);
+        FUN_00b146a0(cam, 1, 1, v);
+    }
+    FUN_00b10760(cam, 0.0f, 0.0f, 0.0f);
+    FUN_00b11870(cam, (int)0xCF0A771B);
+    FUN_00b84a60(0, 0xd);
+}
+
+// @ 0x00cda370
+void cTribeModeStrategy_s00cd_9da0::UpgradePlayerTribe()
+{
+    void* sphere = GetCurrentTerrainSphere();
+    void* gd = SetGameDataOwner2();
+    int tier = 0;
+    if (gd != 0) {
+        FUN_00a1ad10(gd);
+        uint32_t arr = 0, n = 0;
+        if (GetPropertyAsUint32Array(gd, gTribePropId, &arr, &n, 0) != 0) {
+            int target = (int)*(float*)((char*)sphere + 0x10F0);
+            int count = (int)n;
+            tier = 0;
+            for (int i = 0; i < count; ++i) {
+                if ((unsigned)target >= ((unsigned*)arr)[i]) {
+                    tier = i;
+                    break;
+                }
+            }
+        }
+        FUN_00ff03b0(gd, tier);
+    }
+
+    if (sphere != 0) {
+        if (gd == 0)
+            return;
+        FUN_00c79f00(sphere, (int)0x575E6E1, 1);
+        FUN_00c79f00(sphere, (int)0x575E6E2, 1);
+        FUN_00c79f00(sphere, (int)0x575E6E3, 1);
+    }
+}
+
+// @ 0x00cdab10
+void cTribeModeStrategy_s00cd_ab10::FUN_00cdab10()
+{
+    MOPS((u8*)this + 0x58)->FUN_00bc3110();     // stop the goal timer
+
+    void* noun = FUN_00b3d300();
+    void* tribe = MOPS(noun)->FUN_00bfc5f0();
+    if (tribe == 0)
+        return;
+
+    Rec16* end = mpHistEnd;
+    if (mpHistBegin == end)
+        return;
+    Rec16* last = end - 1;
+    if (last->mB_0c != 0)
+        return;
+    last->mB_0c = 1;
+
+    u32 n = (u32)((u8*)end - (u8*)mpHistBegin) >> 4;
+    FUN_00cd98e0(n);
+    FUN_00cd3f20(n);
+
+    u32 goalId = (u32)last->mU_04;
+    void* tribeObj = last->mpObj;
+    GameData* gd = (GameData*)MOPS(tribe)->FUN_00c90460();
+    if (gd == 0)
+        return;
+
+    gP_0169b41c->mpObj = (tribeObj != 0) ? tribeObj : tribe;
+
+    u32 segCount = (u32)((u8*)gd->mpEnd - (u8*)gd->mpBegin) >> 2;
+
+    if (goalId == 1) {
+        void* seg = (tribeObj != 0) ? FUN_00b6f0c0(((u32*)tribeObj)[0x8d]) : (void*)0x0157ef60;
+        MOPS(gd)->FUN_00c8dc10(0, seg);
+        void* ctrl = FUN_00675250(0x8aa440ab, 1);
+        MOPS(ctrl)->FUN_00676e90(0x8aa440ab, 1);
+        if (tribeObj != 0) {
+            void* msg = FUN_0067dcc0();
+            ((void (__thiscall*)(void*, u32, u32, u32))VT(msg)[0x14 / 4])(msg, 0x6579712, 0x2ab05c28, 0);
+            void* g = MOPS(FUN_00b3d300())->FUN_00bfc5f0();
+            void* slot = MOPS(tribeObj)->FUN_00c8e820();
+            FUN_00e398e0(0x2a4cbb17, (u8*)slot + 0x504);
+            void* list = ((void* (__thiscall*)(void*))VT(tribeObj)[0xbc / 4])(tribeObj);
+            u32* lb = *(u32**)list;
+            u32* le = *(u32**)((u8*)list + 4);
+            for (u32* it = lb; it != le; it++) {
+                void* ent = (void*)*it;
+                u32 ds = ((u32 (__thiscall*)(void*))VT(ent)[0x58 / 4])(ent);
+                if (ds != 10) {
+                    u32 dmg = ((u32 (__thiscall*)(void*))VT(ent)[0x48 / 4])(ent);
+                    if (dmg != 2) {
+                        // feed the combatant position back into the goal record
+                        (void)segCount;
+                    }
+                }
+            }
+        }
+    } else if (goalId == 2) {
+        void* seg = (tribeObj != 0) ? FUN_00b6f0c0(((u32*)tribeObj)[0x8d]) : (void*)0x0157ef6c;
+        MOPS(gd)->FUN_00c8dc10(1, seg);
+        void* ctrl = FUN_00675250(0x7859c5da, 1);
+        MOPS(ctrl)->FUN_00676e90(0x7859c5da, 1);
+        if (tribeObj != 0) {
+            void* msg = FUN_0067dcc0();
+            ((void (__thiscall*)(void*, u32, u32, u32))VT(msg)[0x14 / 4])(msg, 0x6579712, 0x2ab05c28, 0);
+            void* g = MOPS(FUN_00b3d300())->FUN_00bfc5f0();
+            void* slot = MOPS(tribeObj)->FUN_00c8e820();
+            FUN_00e398e0(0xf9f6f3dd, (u8*)slot + 0x504);
+        }
+    }
+
+    // post the totem-pole trigger / action pair
+    void* trig = FUN_00b3d4d0_s00cd_ab10();
+    void* handle = MOPS(trig)->FUN_00ae0930(0x14777e4, 1, 1, 0, 0, 0);
+    u8 action[0x20];
+    MOPS(&action)->FUN_00ad7a30((u8*)tribe + 0x34, handle);
+    void* trig2 = FUN_00b3d4d0_s00cd_ab10();
+    MOPS(trig2)->FUN_00ae09b0(0xa69cf7a6, &action);
+    MOPS(&action)->FUN_00ad7ad0();
+    u8 ctx[0x20];
+    void* trig3 = FUN_00b3d4d0_s00cd_ab10();
+    MOPS(trig3)->FUN_00adde90(0x3468d1e3, &ctx, handle);
+
+    TribeData_s00cd_ab10* td = (TribeData_s00cd_ab10*)tribe;
+    if (td->mpBegin != td->mpEnd) {
+        u32 cnt = (u32)(td->mpEnd - td->mpBegin);
+        u32* item = (u32*)td->mpIndexArray[cnt - 1];
+        item[1] &= 0xfffffffe;
+    }
+
+    void* t2 = FUN_00b3d310(tribe, 1);
+    MOPS(t2)->FUN_00b48770(1);
+    FUN_00cd9660(tribeObj);
+}
 
 // @ 0x00cdafb0
 void cVec16::FUN_00cdafb0(Rec16* src)
@@ -3591,6 +6234,317 @@ void cTribeModeStrategy_s00cd_ab10::FUN_00cdba90()
     }
 }
 
+// @ 0x00cdbb10
+int SP::cTribeModeStrategy_s00cd_bb10::FUN_00cdbb10()
+{
+    ISimTicker* ticker = SP::SimTicker_s00cd_bb10();
+
+    Simulator::SimSingleton100* sim = g_pSimSingleton_0169b054;
+    if (!sim)
+    {
+        sim = new ("Simulator/SimSingleton", 0, 0, 0, 0) Simulator::SimSingleton100();
+        g_pSimSingleton_0169b054 = sim;
+    }
+    ((ISimBase*)sim)->v7();
+
+    sim = g_pSimSingleton_0169b054;
+    if (!sim)
+    {
+        sim = new ("Simulator/SimSingleton", 0, 0, 0, 0) Simulator::SimSingleton100();
+        g_pSimSingleton_0169b054 = sim;
+    }
+    ticker->v20(sim);
+
+    cCitySimulator_s00cd_bb10* city = g_pCitySimulator_0167a690;
+    if (!city)
+    {
+        city = new ("Simulator/SimSingleton", 0, 0, 0, 0) cCitySimulator_s00cd_bb10();
+        g_pCitySimulator_0167a690 = city;
+    }
+    city->AttachSubsystems();
+
+    city = g_pCitySimulator_0167a690;
+    if (!city)
+    {
+        city = new ("Simulator/SimSingleton", 0, 0, 0, 0) cCitySimulator_s00cd_bb10();
+        g_pCitySimulator_0167a690 = city;
+    }
+    ticker->v20(city);
+
+    ((ISimBase*)FUN_00d51660_s00cd_bb10())->v7();
+    ticker->v20(FUN_00d51660_s00cd_bb10());
+
+    cTribe_s00cd_bb10* tribe = NounManager_s00cd_bb10()->GetPlayerTribe();
+    if (tribe)
+    {
+        tribe->AddRef();
+
+        NounManagerData* data = NounManager_s00cd_bb10()->GetGameDataVector(
+            0xcd7d10, 0xd3d420, 0xaccbb0, 0xb1e500, 0x18c6d19);
+        NounVector* vec = &data->mVector;
+        cTribe_s00cd_bb10** begin = vec->mpBegin;
+        cTribe_s00cd_bb10** end = vec->mpEnd;
+        for (cTribe_s00cd_bb10** it = begin; it != end; ++it)
+        {
+            if (*it != tribe)
+                ((IStrategyVtbl*)this)->DispatchTribe(*it);
+        }
+
+        cTerrainCursor* cursor = GetGameTerrainCursor_s00cd_bb10();
+        uint32_t arg = tribe->GetSelectedThing();
+        cursor->SetSelectionTarget(arg);
+        return tribe->Release();
+    }
+    return 0;
+}
+
+// @ 0x00cdbcc0
+cHut* SP::cTribeModeStrategy_s00cd_bb10::FindClosestNPCHut(uint32_t param)
+{
+    cGameNounManager_s00cd_bb10* nm = NounManager_s00cd_bb10();
+    NounManagerData* data = nm->GetGameDataVector(
+        0xcd7d10, 0xd3d420, 0xaccbb0, 0xb1e500, 0x18c6d19);
+    cTribe_s00cd_bb10* tribe = FindClosestNPC(&data->mVector, param, SP::IsNonEmptyNPCTribe);
+    if (tribe)
+        return tribe->GetTribeHut();
+    return 0;
+}
+
+// @ 0x00cdbd20
+bool SP::cTribeModeStrategy_s00cd_bb10::HandleUIMessage(void* window, const UTFWinMessage& message)
+{
+    switch (message.mEventType) {
+    case 0xd:
+        if (VerbTray_HandleRebuild(window, message.mData18) == true)
+            return true;
+        break;
+    case 0x287259f6:
+        if (IsVerbTrayCommand_00d49820(message.mCommandID))
+            return true;
+
+    switch (message.mCommandID) {
+    case 0x4c61b50: {
+        KillSetiEffects(0x381d5506, GetAudioState());
+        mToolMode = 0;
+        if (mpToolUI)
+            mpToolUI->SetActive(0);
+        cTerrainCursor* cursor = GetGameTerrainCursor_s00cd_bb10();
+        if (cursor) {
+            SPVector_s00cd_bb10<cGameObjectPtr> selection;
+            cursor->GetSelection(selection);
+            for (cGameObjectPtr* it = selection.begin(); it != selection.end(); ++it) {
+                cCreature* creature = object_cast_s00cd_bb10<cCreature>(it->mpObject);
+                if (creature && creature->IsIdle_00c24560()) {
+                    cAnimRequest* req = creature->mpAnimatedCreature->mQueue.Play_00bc97f0(0, 8, kAnimBlend_01486110, 0);
+                    req->mAnimA = 0x55bb346;
+                    req->mAnimB = 0x55bb34b;
+                }
+            }
+        }
+        return true;
+    }
+    case 0x36ad4a4: {
+        mTimer.Stop();
+        SetMode_00cd6390(0);
+        if (IsToolActive_00cd4460(0x64be5ff) && !IsToolActive_00cd4460(0x56d1871))
+            return true;
+        cMessagePtr_s00cd_bb10 msg(new("App", 0, 0, 0, 0) cMessage_s00cd_bb10(0));
+        msg->mMessageID = 0xb2699146;
+        msg->mData08 = 0;
+        MessageServer_s00cd_bb10()->PostMSG(msg->mMessageID, msg.mpMessage, 0, 0);
+        return true;
+    }
+    case 0x4c61dd9: {
+        KillSetiEffects(0x99a5b10f, GetAudioState());
+        mToolMode = 1;
+        if (mpToolUI)
+            mpToolUI->SetActive(0);
+        cTerrainCursor* cursor = GetGameTerrainCursor_s00cd_bb10();
+        if (cursor) {
+            SPVector_s00cd_bb10<cGameObjectPtr> selection;
+            cursor->GetSelection(selection);
+            for (cGameObjectPtr* it = selection.begin(); it != selection.end(); ++it) {
+                cCreature* creature = object_cast_s00cd_bb10<cCreature>(it->mpObject);
+                if (creature && creature->IsIdle_00c24560()) {
+                    cAnimRequest* req = creature->mpAnimatedCreature->mQueue.Play_00bc97f0(0, 8, kAnimBlend_01486110, 0);
+                    req->mAnimA = 0x55bb337;
+                    req->mAnimB = 0x55bb341;
+                }
+            }
+        }
+        return true;
+    }
+    case 0x53f02b8: {
+        cPropListFactory* factory = PropListFactory();
+        cPropertyList_s00cd_bb10* list;
+        factory->Create(&list);
+        Variant terrain(GetTerrainSource()->GetTerrainObject());
+        list->SetValue(0, terrain);
+        int enable = 1;
+        list->SetValue(1, Variant(enable));
+        ResourceKey key;
+        GetTerrainSource()->GetKey(&key, 0);
+        list->SetValue(3, Variant(&key.instance));
+        factory->Submit(0x1aedf1e, list, 0);
+        return true;
+    }
+    case 0x53f02c0: {
+        cPropListFactory* factory = PropListFactory();
+        cPropertyList_s00cd_bb10* list;
+        factory->Create(&list);
+        Variant terrain(GetTerrainSource()->GetTerrainObject());
+        list->SetValue(0, terrain);
+        int enable = 0;
+        list->SetValue(1, Variant(enable));
+        ResourceKey key;
+        GetTerrainSource()->GetKey(&key, 0);
+        list->SetValue(3, Variant(&key.instance));
+        factory->Submit(0x1aedf1e, list, 0);
+        return true;
+    }
+    case 0x562a141:
+        sToggleMinimap();
+        return true;
+    case 0x625cd52: {
+        float amount = g_DropFoodAmount_0158133c;
+        cTribe_s00cd_bb10* tribe = NounManager_s00cd_bb10()->GetPlayerTribe();
+        int needed = (int)amount;
+        if (tribe->GetFoodAmount() < needed) {
+            UIHints()->ShowHint_0067c830(0x41e5e8bf);
+            return true;
+        }
+        if (tribe->GetPopulation_00c8f3a0() >= tribe->GetMaxPopulation())
+            return true;
+        if (amount > kFoodEpsilon_01477434) {
+            GetFoodSource()->Consume_00ac7d10(amount, tribe->mTimer20c, 0);
+            tribe->AddFood_00c94b50(-amount);
+        }
+        cHut* hut = tribe->GetTribeHut();
+        AutoRefCount_s00cd_bb10<IVisualEffect> effect;
+        cEffectsManager_s00cd_bb10* effects = EffectsManager();
+        if (effects->CreateVisualEffect(0xdb6f2233, 0, effect.AsPPTypeParam())) {
+            XformMsg_s00cd_bb10 xf;
+            xf.SetPosition_00571d40(hut->GetPosition());
+            Vector3_s00cd_bb10 up;
+            normalized_safe(&up, hut->GetPosition());
+            const Vector3_s00cd_bb10& hutPos = hut->GetPosition();
+            const Vector3_s00cd_bb10& tribePos = tribe->GetPosition();
+            Vector3_s00cd_bb10 facing;
+            normalized_safe(&facing, tribePos - hutPos);
+            xf.SetRotation(Matrix3FromFacingAndUp(facing, up));
+            xf.SetScale(1.0f);
+            effect->SetTransform(xf);
+            effect->Start(0);
+        }
+        KillSetiEffects(0x582f38c1, GetRecorderState());
+        mbFlag3a3 = false;
+        return true;
+    }
+    case 0x6454b47: {
+        cTerrainSphere_s00cd_bb10* sphere = NounManager_s00cd_bb10()->GetCurrentTerrainSphere();
+        const float& a = sphere->mf10f0;
+        const float& b = sphere->mf10f4;
+        const float& lo = (b < a) ? b : a;
+        if (!(lo / sphere->mf10f4 >= 1.0f))
+            return true;
+        UIHints()->UpdateHints(1, 1);
+
+        uint32_t sequence = 0x8133fb2e;
+        switch (GetTribeOutcome_00cdba50()) {
+        case 0xcac124d:
+            sequence = 0x6a9f2620;
+            break;
+        case 0x60a78928:
+            sequence = 0x2cfa39dd;
+            break;
+        }
+        {
+            ResourceKey dir = {0, 0, 0};
+            ResourceKey pos = {0, 0, 0};
+            PlayEndSequence_00e398e0(sequence,
+                                     &NounManager_s00cd_bb10()->GetPlayerTribe()->GetRecord_00c8e820(0)->mData504,
+                                     &pos, &dir, NounManager_s00cd_bb10()->GetPlayerTribe()->GetSub230()->mData4, 0, 0);
+        }
+
+        cAchievementsController* ach = AchievementsController_s00cd_bb10();
+        if (ach->IsLocked_006766f0(0xb598f829))
+            ach->AwardAchievement(0xb598f829);
+        cAchievementData* data = ach->GetData_00675370();
+        if (ach->Has_00675e80(0xa6c22573))
+            data->mVisited.clear();
+        else if (data->mVisited.insert_00675b60(sphere->mKey10f8).second == true)
+            ach->AutoTest(0xa6c22573, 1);
+        ach->AwardAchievement(0x4a7480ac);
+        ach->AutoTest(0xa784ec4a, mData78);
+        if (NounManager_s00cd_bb10()->GetCurrentTerrainSphere()->GetState_00c75420() == 2)
+            ach->AwardAchievement(0x8d82fac1);
+
+        g_TribeCamera_0169b2c8->PlayIntro_00cd52e0(5, g_TribeCameraPos_0169b2cc);
+
+        ResourceKey spawn = {0, 0, 0};
+        NounManager_s00cd_bb10()->GetPlayerTribe()->GetSpawnInfo_00c8eb50(&spawn);
+        GetHintsB()->Set_0060d860(0x8fd1273c, &spawn);
+        mpPlanner->f_00cc8aa0(0);
+        mpPlanner->f_00cc93b0(0);
+
+        cTribe_s00cd_bb10* tribe = NounManager_s00cd_bb10()->GetPlayerTribe();
+        cHut* hut = tribe->GetTribeHut();
+        cHut* tool = tribe->GetToolOfType(0xa);
+        LayoutScripts()->SetObject_00ae09b0(0x3d7f90a, cObjectXform(&tribe->mObject120, 0));
+        LayoutScripts()->SetObject_00ae09b0(0xaa227986, cObjectXform(hut, 0));
+        LayoutScripts()->SetObject_00ae09b0(0x60ed02ef, cObjectXform(tool, 0));
+        LayoutScripts()->Run_00ae0930("TRG2CVG_PreEditor", 1, 0, 0, 0, 0);
+        LayoutScripts()->Reset_00adf390(0);
+
+        cCreature* chief = tribe->GetChieftain();
+        if (chief->mpAnimatedCreature->mModelType == 0x5ca7fa7) {
+            FUN_00c0d3a0(chief);
+            chief->f_00c26d10();
+        }
+        chief->SetEnabled(1);
+        chief->f_00c0b950();
+        chief->f_00c0ba10();
+        sphere->mResult1104 = GetTribeOutcome_00cdba50();
+
+        ResourceKey key = {0, 0, 0};
+        if (!tribe->GetSpawnInfo_00c8eb50(&key))
+            return true;
+        if (!IsValidKey_006419f0(&key))
+            return true;
+        if (uint32_t result = NounManager_s00cd_bb10()->GetCurrentTerrainSphere()->mResult1104)
+            SummarizeVehicle_00555f70(&key, result);
+        MessageServer_s00cd_bb10()->SendMSG(0x73e46f6, &key, 0);
+        return true;
+    }
+    }
+        break;
+    }
+    return false;
+}
+
+// @ 0x00cdce40
+void __fastcall CvgObj_AppendTransitionTargets(CvgObj* self, int unused, PtrVec_s00cd_c8b0* list)
+{
+    CvgVec* vec = &self->mTargets;
+    vec->InsertRange(vec->mpBegin, vec->mpEnd);
+    vec->Append();
+    CvgRec* rec = vec->mpEnd - 1;
+    cvg_swap(rec, self);
+    rec->mHandle = FUN_00c0c1a0(self);
+    rec->mId = self->mB20;
+
+    int count = (int)(list->mpEnd - list->mpBegin);
+    for (int i = 0; i < count; ++i) {
+        CvgObj* o = (CvgObj*)list->mpBegin[i];
+        vec->Append();
+        CvgRec* e = vec->mpEnd - 1;
+        cvg_swap(e, o);
+        e->mHandle = FUN_00c0c1a0(o);
+        e->mId = o->mB20;
+        e->mF10 = ((CvgSlot80)o->mpVtbl[0x20])(o, 0, 0);
+    }
+}
+
 // @ 0x00cdd500
 void cTribeModeStrategy_s00cd_d500::PreGameModeTransition(u32 previousMode, u32 newMode)
 {
@@ -3794,6 +6748,29 @@ s32 FUN_00cdd9c0(bool bBuildInstances)
     if (pList != 0)
         pList->Release();
     return nCount;
+}
+
+// @ 0x00cddcf0
+void FUN_00cddcf0()
+{
+    struct HotSpotQuery { float mMaxDistance; Vec3 mPoint; };
+    HotSpotQuery query;
+    query.mMaxDistance = gHotSpotDistance;
+
+    NounVecOut<cNoun>* pVec =
+        (NounVecOut<cNoun>*)NounManager_s00cd_d500()->GetGameDataVector(F_cd7d10, F_d3d420, F_ace070, F_b1e500, 0x36be27e);
+    cNoun** pIt = pVec->mItems_04.mpBegin;
+    cNoun** const pEnd = pVec->mItems_04.mpEnd;
+    while (pIt != pEnd) {
+        cNoun* pNoun = *pIt;
+        if (pNoun->mNounType_108 == 0x57f09e5e) {
+            cPlanetModel* pModel = (cPlanetModel*)GetPlanetModel();
+            if (pModel->RayCast(pNoun->mPlacement_034.GetPosition(), query.mMaxDistance,
+                                &query.mPoint, 1.0f, 1, 5))
+                cTribe_SetupHotSpot(&query.mPoint, 1);
+        }
+        ++pIt;
+    }
 }
 
 // @ 0x00cddda0

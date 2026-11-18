@@ -1,3 +1,4 @@
+00dee450 ?FUN_00dee450@GalaxyUI@SP@@QAEDHPAX@Z  # GalaxyUI::FUN_00dee450 migrated from s00dee450 (verbatim, slice spelling)
 00dee770 ?FUN_00dee770@GalaxyUI@SP@@QAEXIPAX@Z  # GalaxyUI::FUN_00dee770 migrated from s00dee450 (verbatim, slice spelling)
 00dee800 ?FUN_00dee800@GalaxyUI@SP@@QAEXI@Z  # GalaxyUI::FUN_00dee800 migrated from s00dee450 (verbatim, slice spelling)
 00dee890 ?FUN_00dee890@@YGIPAX@Z  # FUN_00dee890 migrated from s00dee450 (verbatim, slice spelling)
@@ -6,10 +7,9 @@
 00deec00 ?FUN_00deec00@Wrapper@SP@@QAEXMMM@Z  # Wrapper::FUN_00deec00 migrated from s00dee450 (verbatim, slice spelling)
 00deed00 ?FUN_00deed00@Record@@QAE_NI@Z  # Record::FUN_00deed00 migrated from s00dee450 (verbatim, slice spelling)
 00deed40 ?FUN_00deed40@GalaxyUI@SP@@QAEXXZ  # GalaxyUI::FUN_00deed40 migrated from s00dee450 (verbatim, slice spelling)
+00deede0 ?FUN_00deede0@GalaxyUI@SP@@QAEXXZ  # GalaxyUI::FUN_00deede0 migrated from s00dee450 (verbatim, slice spelling)
 00deee80 ?FUN_00deee80@GalaxyUI@SP@@QAEDH@Z  # GalaxyUI::FUN_00deee80 migrated from s00dee450 (verbatim, slice spelling)
 00deef20 ?FUN_00deef20@GalaxyUI@SP@@QAEXIIPAX@Z  # GalaxyUI::FUN_00deef20 migrated from s00dee450 (verbatim, slice spelling)
 00deefb0 ?FUN_00deefb0@GalaxyUI@SP@@QAEII@Z  # GalaxyUI::FUN_00deefb0 migrated from s00dee450 (verbatim, slice spelling)
 00def020 ?FUN_00def020@Wrapper@SP@@QAEXXZ  # Wrapper::FUN_00def020 migrated from s00dee450 (verbatim, slice spelling)
-00dee450 ?FUN_00dee450@GalaxyUI@SP@@QAE_NAAUHandleMessage@@@Z  # GalaxyUI::FUN_00dee450 (HandleMessage switch: 0x625e26a/0x5b5c746/0x30c11c7) - PARTIAL
-00deede0 ?FUN_00deede0@GalaxyUI@SP@@QAEXXZ  # GalaxyUI::FUN_00deede0 apply the grid's current display name to the layout window
-00def050 ?FUN_00def050@@YAXPAVcUIWindow@@PAUFileName@@@Z  # in-place filename sanitation over an eastl::wstring - PARTIAL
+00def050 ?FUN_00def050@GalaxyUI@SP@@QAEDPAX@Z  # GalaxyUI::FUN_00def050 migrated from s00dee450 (verbatim, slice spelling)

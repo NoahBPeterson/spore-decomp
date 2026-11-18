@@ -1,0 +1,8 @@
+00be10d0 ?ResetLog@cSPPlanetNoun@@QAEXXZ  # cSPPlanetNoun::ResetLog migrated from s00be10d0 (verbatim, slice spelling)
+00be1150 ?SetLog@cSPPlanetNoun@@QAEXPAX@Z  # cSPPlanetNoun::SetLog migrated from s00be10d0 (verbatim, slice spelling)
+00be11f0 ?Tick1@cSPPlanetNoun@@QAEXXZ  # cSPPlanetNoun::Tick1 migrated from s00be10d0 (verbatim, slice spelling)
+00be1340 ?Activate@cSPPlanetNoun@@QAEHPAV1@H@Z  # cSPPlanetNoun::Activate migrated from s00be10d0 (verbatim, slice spelling)
+00be1820 ?OnNoun@cSPPlanetNoun@@QAEXH@Z  # cSPPlanetNoun::OnNoun migrated from s00be10d0 (verbatim, slice spelling)
+00be1e80 ?PushVec308@cSPPlanetNoun@@QAEXPAX@Z  # cSPPlanetNoun::PushVec308 migrated from s00be10d0 (verbatim, slice spelling)
+00be1ef0 ?PushVec340@cSPPlanetNoun@@QAEXPAXH@Z  # cSPPlanetNoun::PushVec340 migrated from s00be10d0 (verbatim, slice spelling)
+00be1fb0 ?MakeNoun@cSPPlanetNoun@@QAEPAXXZ  # cSPPlanetNoun::MakeNoun migrated from s00be10d0 (verbatim, slice spelling)

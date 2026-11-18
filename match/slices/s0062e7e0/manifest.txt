@@ -7,3 +7,4 @@ slices/s0062e7e0/s0062e7e0.cpp  ?UpdateBGHilite@cSPPlayModeBGMgr@@QAEXXZ  0062f4
 slices/s0062e7e0/s0062e7e0.cpp  ?UpdateBGCountText@cSPPlayModeBGMgr@@QAEXXZ  0062f540  /O2 /MD /Gy /TP /arch:SSE
 slices/s0062e7e0/s0062e7e0.cpp  ?FUN_0062f5c0@cSPPlayModeBGMgr@@QAEXXZ  0062f5c0  /O2 /MD /Gy /TP /arch:SSE
 slices/s0062e7e0/s0062e7e0.cpp  ?FUN_0062f6c0@cSPPlayModeBGMgr@@QAE_NXZ  0062f6c0  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062e7e0/s0062e7e0.cpp  ?FUN_0062f2f0@cSPPlayModeBGMgr@@QAEXXZ  0062f2f0  /O2 /MD /Gy /TP /arch:SSE

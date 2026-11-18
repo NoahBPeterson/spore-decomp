@@ -24,3 +24,6 @@
 ../src/game/SPGonzago/_at_00ac0000.cpp  ?FUN_00acb190@@YIXPAX@Z  00acb190  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00ac0000.cpp  ?FUN_00acbaf0@VO@@QAEPAXPAH@Z  00acbaf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00ac0000.cpp  ?FUN_00ac9dd0@@YAPAXPAUVec@@PBUVec3@@@Z  00ac9dd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00ac0000.cpp  ?FUN_00ac9510@@YAXPAD00@Z  00ac9510  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00ac0000.cpp  ?FUN_00ac9740@@YAPADPAD00@Z  00ac9740  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00ac0000.cpp  ??0cLocomotionRequest@@QAE@XZ  00ac9850  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

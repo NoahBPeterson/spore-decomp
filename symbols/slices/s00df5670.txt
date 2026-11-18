@@ -1,21 +1,22 @@
 008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00df5670, named from the dev publics; slice address comment)
 00df5670 ?FUN_00df5670@cDownloadDialog@@QAEXD@Z  # cDownloadDialog::FUN_00df5670 migrated from s00df5670 (verbatim, slice spelling)
 00df57d0 UI::cDownloadDialog::Shutdown  # EndModal + v108 detach + release +0xc/+0x30, layout Shutdown
-00df58f0 UI::cDownloadDialog::Shutdown2  # EndModal + v108 detach + release +0x24, layoutB Shutdown
-00df5940 UI::cDownloadDialog::cDownloadDialog  # ctor, vtable 0x147e9d0
-00df59c0 UI::cDownloadDialog::Init  # layout Init + FindWindowByID + v34 rect + set entry
-00df5aa0 UI::cDownloadDialog::SetActive  # +0x18 = 1 or calls 0xdf57d0
+00df5830 ?FUN_00df5830@cDownloadDialog@@QAE_NPAX@Z  # cDownloadDialog::FUN_00df5830 migrated from s00df5670 (verbatim, slice spelling)
+00df58f0 ?FUN_00df58f0@cDownloadDialog@@QAEXXZ  # cDownloadDialog::FUN_00df58f0 migrated from s00df5670 (verbatim, slice spelling)
+00df5940 ?cDownloadDialog_ctor_5940@@YIPAUcDownloadDialog@@PAU1@@Z  # cDownloadDialog_ctor_5940 migrated from s00df5670 (verbatim, slice spelling)
+00df59c0 ?FUN_00df59c0@cDownloadDialog@@QAE_NPAX@Z  # cDownloadDialog::FUN_00df59c0 migrated from s00df5670 (verbatim, slice spelling)
+00df5aa0 ?FUN_00df5aa0@cDownloadDialog@@QAEXD@Z  # cDownloadDialog::FUN_00df5aa0 migrated from s00df5670 (verbatim, slice spelling)
 00df5ac0 UI::cDownloadDialog::Update  # timer/progress update
-00df5c80 UI::cDownloadDialog::cDownloadDialog  # base ctor, vtable 0x147ea70
+00df5c80 ?cDownloadDialog_ctor_5c80@@YIPAUcDownloadDialog@@PAU1@@Z  # cDownloadDialog_ctor_5c80 migrated from s00df5670 (verbatim, slice spelling)
 00df5cd0 UI::cDownloadDialog::~cDownloadDialog  # dtor, vtable 0x147ea70/0x147ea54
 00df5d30 UI::cDownloadDialog::ScalarDeletingDtor  # vtable 0x147e9d0/0x147e9b4
 00df5d90 UI::cDownloadDialog::HandleMessage  # message id dispatch
 00df5ef0 ?FUN_00df5ef0@@YA_NXZ  # FUN_00df5ef0 migrated from s00df5670 (verbatim, slice spelling)
 00df5f10 ?FUN_00df5f10@@YAXXZ  # FUN_00df5f10 migrated from s00df5670 (verbatim, slice spelling)
-00df5f50 FUN_00df5f50  # random position in rect
+00df5f50 ?FUN_00df5f50@@YAPAMPAMPBM@Z  # FUN_00df5f50 migrated from s00df5670 (verbatim, slice spelling)
 00df6040 ?FUN_00df6040@cDownloadDialog@@QAEXXZ  # cDownloadDialog::FUN_00df6040 migrated from s00df5670 (verbatim, slice spelling)
 00df6140 ?FUN_00df6140@cDownloadDialog@@QAE_NPAUObj@@MM@Z  # cDownloadDialog::FUN_00df6140 migrated from s00df5670 (verbatim, slice spelling)
-00df6330 FUN_00df6330  # message/toggle handler
-00df64c0 FUN_00df64c0  # nearest entry to orientation
+00df6330 ?FUN_00df6330@cDownloadDialog@@QAEXIPAXI@Z  # cDownloadDialog::FUN_00df6330 migrated from s00df5670 (verbatim, slice spelling)
+00df64c0 ?FUN_00df64c0@cDownloadDialog@@QAEHMMM@Z  # cDownloadDialog::FUN_00df64c0 migrated from s00df5670 (verbatim, slice spelling)
 00df65e0 ?FUN_00df65e0@cDownloadDialog@@QAEXPAX0M@Z  # cDownloadDialog::FUN_00df65e0 migrated from s00df5670 (verbatim, slice spelling)
-00df66e0 FUN_00df66e0  # StarManager star vector size
+00df66e0 ?FUN_00df66e0@@YAHXZ  # FUN_00df66e0 migrated from s00df5670 (verbatim, slice spelling)

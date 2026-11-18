@@ -1,0 +1,4 @@
+004ce310 ?DoInsertValueF32@VecF32@@QAEXPAMABM@Z  # VecF32::DoInsertValueF32 migrated from s004ce310 (verbatim, slice spelling)
+004ce550 ?DoInsertValueU8@VecU8@@QAEXPAEABE@Z  # VecU8::DoInsertValueU8 migrated from s004ce310 (verbatim, slice spelling)
+004cef00 ?DoInsertValuesE8@VecE8@@QAEXPAUElem8@@IABU2@@Z  # VecE8::DoInsertValuesE8 migrated from s004ce310 (verbatim, slice spelling)
+004cf2c0 ?DoInsertValuesE34@VecE34@@QAEXPAY0DE@DIAAY0DE@$$CBD@Z  # VecE34::DoInsertValuesE34 migrated from s004ce310 (verbatim, slice spelling)

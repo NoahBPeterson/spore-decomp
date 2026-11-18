@@ -196,14 +196,14 @@ struct PgSymbol {              // t_symbol: by-value pair (hash, name pointer)
 namespace EA {
 namespace Audio {
 namespace Eapd {
-extern PgSymbol gFieldSymbol;        // 0x0167586c
+extern PgSymbol gEmptySymbol;        // 0x0167589c
 }
 }
 }
 namespace EA {
 namespace Audio {
 namespace Eapd {
-extern PgSymbol gEmptySymbol;        // 0x01675874
+extern PgSymbol gEmptySymbol_s00a6_2ec0;        // 0x01675874
 }
 }
 }
@@ -225,20 +225,6 @@ namespace EA {
 namespace Audio {
 namespace Eapd {
 PgSymbol* GetGroupSymbol(PgSymbol* out);                             // 0x00a635d0
-}
-}
-}
-namespace EA {
-namespace Audio {
-namespace Eapd {
-PgSymbol  gFieldSymbol;         // 0x0167586c
-}
-}
-}
-namespace EA {
-namespace Audio {
-namespace Eapd {
-PgSymbol  gEmptySymbol;         // 0x01675874
 }
 }
 }
@@ -285,11 +271,31 @@ struct ObjectHashMap {
     void*       mpAlloc1c;    // +0x1c
     uint32_t    mCount20;     // +0x20
     void        Resize(unsigned newCount);             // 0x00a64ad0
-    void        Dtor();                                // 0x00a64b70
     unsigned    Erase(uint32_t* key);                  // 0x00a64be0
     void        DisposeArray2(void** arr, unsigned n); // 0x00a64c50
     void*       Insert(void* out, void* a, void* b);   // 0x00a64cf0
     void*       GetGroup(PgSymbol sym);                // 0x00a64cb0
+};
+// the destructor's view of ObjectHashMap: the buckets are disposed and their array handed back to the internal
+// allocator at +0x1c, whose base vtable (0x1403934) is restored when the member is destroyed
+struct ObjectHashMapAlloc {
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void* Alloc(unsigned n);
+    virtual void Free(void* p);
+    uint32_t mCount;          // +0x04
+    ~ObjectHashMapAlloc() {}
+};
+struct ObjectHashMapObj {
+    void*       mpVtbl00;     // +0x00
+    void*       mpBuckets04;  // +0x04
+    unsigned    mNumBuckets08;// +0x08
+    unsigned    mSize0c;      // +0x0c
+    uint32_t    mField10;     // +0x10
+    uint32_t    mField14;     // +0x14
+    uint32_t    mField18;     // +0x18
+    ObjectHashMapAlloc mAlloc;// +0x1c
+    ~ObjectHashMapObj();
 };
 }
 }
@@ -394,6 +400,7 @@ public:
     void*    mpBucketBuffer;             // +0x34
     bool InitTables(uint32_t a, uint32_t b, uint32_t c, uint32_t d); // 0xa669d0
     void DestroyAllocator();                                         // 0xa67d30
+    void CopyFrom(const void* src);                                  // 0xa65ab0
 };
 struct HashNode { uint32_t mKey; void* mValue; HashNode* mpNext; };
 struct HashIter_s00a6_5f90 { HashNode* mpNode; HashNode** mpBucket; HashNode* mpEnd; };
@@ -404,12 +411,14 @@ public:
     uint32_t   mnBucketCount;             // +0x08
     uint32_t   mnElementCount;            // +0x0c
     float      mfMaxLoadFactor;           // +0x10
-    uint32_t   mnGrowthFactor;            // +0x14
+    float      mfGrowthFactor;            // +0x14
     uint32_t   mnNextResize;              // +0x18
     FixedHashtableAllocator mAlloc;       // +0x1c
 
     Hashtable_s00a6_5f90* Construct(void* name);                                 // 0xa665f0
     void      Destruct();                                             // 0xa66550
+    void      PatchMapInit(const char* name);                         // 0xa666e0
+    void      InstanceMapInit(const char* name);                      // 0xa66260
     void      ClearBuckets(HashNode** arr, uint32_t n);               // 0xa660e0
     HashIter_s00a6_5f90  erase(HashIter_s00a6_5f90 it);                                     // 0xa66cc0
     void      Rehash(uint32_t n);                                     // 0xa66b40
@@ -491,9 +500,6 @@ public:
     void RemoveAllFor(void* key, int unused);            // 0xa663e0
     void RemoveCurrentClass(CursorValue value);          // 0xa66410
 };
-void  PdPatchMapInit(void* self, const char* name);               // 0xa666e0
-void  PdInstanceMapInit(void* self, const char* name);            // 0xa66260
-void  PdClassResize(void* self, uint32_t a);                      // 0xa65ab0
 // ---- items of slice s00a65f90 end
 
 // @ 0x006859b0
@@ -545,24 +551,27 @@ extern "C" void EraseEntry(void* key)
 namespace EA { namespace Audio { namespace Eapd {
 PgSymbol* GetGroupSymbol(PgSymbol* out)
 {
-    uint32_t    emptyH = gEmptySymbol.mHash;
-    uint32_t    fieldH = gFieldSymbol.mHash;
-    const char* emptyN = gEmptySymbol.mpName;
-    out->mHash = emptyH;
-    out->mpName = emptyN;
-    if (emptyH != fieldH) {
+    PgSymbol    empty = gEmptySymbol;
+    uint32_t    fieldH = gEmptySymbol_s00a6_2ec0.mHash;
+    out->mHash = empty.mHash;
+    out->mpName = empty.mpName;
+    if (empty.mHash != fieldH) {
         out->mHash = fieldH;
-        out->mpName = gFieldSymbol.mpName;
-        gFieldSymbol.mHash = emptyH;
-        gFieldSymbol.mpName = emptyN;
+        const char* fieldN = gEmptySymbol_s00a6_2ec0.mpName;
+        _ReadWriteBarrier();
+        gEmptySymbol_s00a6_2ec0.mHash = empty.mHash;
+        out->mpName = fieldN;
+        gEmptySymbol_s00a6_2ec0.mpName = empty.mpName;
         return out;
     }
     void* canvas = canvas_getcurrent();
     if (canvas != 0) {
         PgSymbol tmp;
         PgSymbol* r = (PgSymbol*)canvas_realizedollar2(&tmp, canvas);
-        out->mHash = r->mHash;
-        out->mpName = r->mpName;
+        PgSymbol v;
+        v.mHash = r->mHash;
+        v.mpName = r->mpName;
+        *out = v;
     }
     return out;
 }
@@ -809,16 +818,12 @@ void ObjectHashMap::Resize(unsigned newCount)
 
 // @ 0x00a64b70
 namespace EA { namespace Audio { namespace Eapd {
-void ObjectHashMap::Dtor()
+ObjectHashMapObj::~ObjectHashMapObj()
 {
     ((EapdAssetManager*)this)->DisposeArray((void**)mpBuckets04, mNumBuckets08);
     mSize0c = 0;
-    if (mNumBuckets08 > 1) {
-        void** a = *(void***)((char*)this + 0x1c);
-        void* f = a[3];
-        ((void (__thiscall*)(void*, void*))f)((char*)this + 0x1c, mpBuckets04);
-    }
-    *(void**)((char*)this + 0x1c) = (void*)0x1403934;
+    if (mNumBuckets08 > 1)
+        mAlloc.Free(mpBuckets04);
 }
 }}}  // namespace EA::Audio::Eapd
 
@@ -1015,9 +1020,9 @@ Hashtable_s00a6_5f90* Hashtable_s00a6_5f90::Construct(void* name)
     mnBucketCount = 0;
     mnElementCount = 0;
     mfMaxLoadFactor = 1.0f;
-    mnGrowthFactor = 2;
+    mfGrowthFactor = 2.0f;
     mnNextResize = 0;
-    PdClassResize(&mAlloc, (uint32_t)name);
+    mAlloc.CopyFrom(name);
     mnElementCount = 0;
     mnNextResize = 0;
     mnBucketCount = 1;
@@ -1043,8 +1048,8 @@ void InstanceManager::Construct(void* a, void* b)
     mField34 = 0;
     mpVtbl4 = (void*)0x14556c0;
     mField38 = b;
-    PdPatchMapInit((char*)this + 0x3c, "EAPd/PatchMap");
-    PdInstanceMapInit((char*)this + 0x90, "EAPd/InstanceMap");
+    mSymbols.PatchMapInit("EAPd/PatchMap");
+    mBindings.InstanceMapInit("EAPd/InstanceMap");
     mCurId = 0;
     mCurId2 = 0xffffffff;
 }

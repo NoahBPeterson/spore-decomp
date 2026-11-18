@@ -4,10 +4,7 @@
 00e56c30  219  complete: 2 calls in original order; x87 tile math now matches (x floors the unrounded double product in[0]/tile and z floors the float-rounded fz; remainder is in[i]-tile*floor; NaN guard is !(ax>=ix) so tile==0 gives 0x7fffffff -> clamped 0x80); only reg-alloc differs [equiv PASS 400 valid, 100% cov]
 00e56d40  67   complete: 1 call in original order; idx*3/out reg-alloc (eax vs ecx) and load order differ, size 115 vs 114
 00e56f80  404  complete: 2 calls in original order; normalize/quaternion path now matches (up axis is the 3-float global at 0x15a7c40, and n/neg must be real arrays so the callee reads contiguous float[3]); only inlined-helper/reg-alloc differs [equiv PASS 247 valid, 77.9% cov]
-00e57170  71   complete: 2 calls in original order; original takes id in EAX by static ABI, ours uses a normal first param
 00e57340  65   complete: 1 call in original order; sGetSourceLevel(fastcall level in EDX) + level-table index reg-alloc differs
 00e573e0  73   complete: 2 calls in original order; two sGetSourceLevel sites; slot-clamp frame/reg-alloc differs, size 97 vs 120
 00e57460  184  complete: 9 calls in original order; Ref temp lifetime + FUN_00e823a0 chains, reg-alloc differs, size 265 vs 251
-00e57560  109  complete: 4 calls in original order; Ref temp + branch shape (cl bool) differs, size 134 vs 143 [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, call#2 esp]
-00e575f0  211  complete: 6 calls in original order; FUN_00e52910 twice + Ref temp, branch/layout differs, size 242 vs 244
 00e576f0  75   complete: 4 calls in original order; original takes `this` in ESI, ours uses a normal first param

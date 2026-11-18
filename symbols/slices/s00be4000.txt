@@ -1,0 +1,6 @@
+00be4000 ?FUN_00be4000@S@@QAEDPAHD@Z  # S::FUN_00be4000 migrated from s00be4000 (verbatim, slice spelling)
+00be41b0 ?FUN_00be41b0@S@@QAEXXZ  # S::FUN_00be41b0 migrated from s00be4000 (verbatim, slice spelling)
+00be4400 ?FUN_00be4400@S@@QAEXXZ  # S::FUN_00be4400 migrated from s00be4000 (verbatim, slice spelling)
+00be45b0 ?FUN_00be45b0@@YAXHH@Z  # FUN_00be45b0 migrated from s00be4000 (verbatim, slice spelling)
+00be4a10 ?FUN_00be4a10@S@@QAEXPAX@Z  # S::FUN_00be4a10 migrated from s00be4000 (verbatim, slice spelling)
+00be4b30 ?FUN_00be4b30@S@@QAEXPAX@Z  # S::FUN_00be4b30 migrated from s00be4000 (verbatim, slice spelling)

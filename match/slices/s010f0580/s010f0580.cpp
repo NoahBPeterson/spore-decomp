@@ -8,6 +8,11 @@
 #include <stddef.h>
 #include <math.h>
 
+// VC7.1 has no <intrin.h> declaration for the compiler fence; declare it explicitly
+// (accepted and emitted as a no-op intrinsic by cl 13.10).
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 
 inline void* operator new(unsigned int, void* p) throw() { return p; }
@@ -399,7 +404,9 @@ extern "C" void hkLs_copyVelocitiesToAccumulators(void* resources, hkArray<hkEnt
 {
 	for (int i = 0; i < entities.m_size; i++)
 	{
-		char* motion = *(char**)((char*)entities.m_data[i] + 0x58);
+		hkEntity* e = entities.m_data[i];
+		_ReadWriteBarrier();   // pins the entity load before the motion deref: cl 71 then reuses the dying m_data register (eax) for the entity, as retail does
+		char* motion = *(char**)((char*)e + 0x58);
 		char* acc = (char*)(*(int*)(motion + 8) + *(int*)((char*)resources + 0xc));
 
 		*(int*)(acc + 0x10) = *(int*)(motion + 0xd0);

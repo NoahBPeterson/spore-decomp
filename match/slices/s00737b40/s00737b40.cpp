@@ -388,31 +388,38 @@ void* ElemPool24::ctor(unsigned count, void* tag)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00737E80 — construct an inline-buffered container (buffer at this+0x18, capacity 0x40).
+// Inline integer vector — construct an inline-buffered container (buffer at this+0x18, capacity 0x40).
 // ---------------------------------------------------------------------------
-struct InlineBuf {
-    void* f0;                   // +0x00
-    void* f4;                   // +0x04
-    void* f8;                   // +0x08
-    char padC[4];
-    void* f10;                  // +0x10
-    char pad14[4];
-    char buffer[0x40];          // +0x18
-    void GroupCtor(void* a, void* b);   // 0x00736090 (this in ecx)
-    void* ctor(unsigned a, unsigned b);
+struct InlineVectorStorage40 {
+    int* begin;
+    int* end;
+    int* cap;
+    unsigned mAllocator;
+    int* inlineBegin;
+    InlineVectorStorage40(int* storage) : inlineBegin(storage) {}
+    ~InlineVectorStorage40() {
+        if (begin && begin != inlineBegin)
+            EA_dealloc(begin);
+    }
 };
 
-void* InlineBuf::ctor(unsigned a, unsigned b)
+struct InlineBuf : InlineVectorStorage40 {
+    char pad14[4];
+    int buffer[16];
+    void Assign(unsigned count, const int& value); // 0x00736090
+    InlineBuf(unsigned count, int value);
+};
+
+// @ 0x00737e80
+InlineBuf::InlineBuf(unsigned count, int value)
+    : InlineVectorStorage40(buffer)
 {
-    char* bufBase = buffer;
-    f0 = bufBase;
-    f4 = bufBase;
-    f8 = bufBase + 0x40;
-    f10 = bufBase;
-    int local = 0;
-    GroupCtor((void*)a, &b);
-    (void)local;
-    return this;
+    int* storage = inlineBegin;
+    end = storage;
+    begin = storage;
+    cap = storage + 16;
+    int initialValue = value;
+    Assign(count, initialValue);
 }
 
 // ---------------------------------------------------------------------------
@@ -615,6 +622,7 @@ struct IntVec {
     int* end;
     int* cap;
     int alloc[2];               // 8-byte sp_vector_allocator
+    IntVec() : begin(0), end(0), cap(0) {}
     ~IntVec()
     {
         if (begin && *(int*)((char*)begin - 4))
@@ -626,8 +634,6 @@ struct IntVec {
 void AddAnimGroupsA(ModelOuter* self)
 {
     IntVec v;
-    v.begin = 0; v.end = 0; v.cap = 0;
-    _ReadWriteBarrier();
     IndexAdd5(self, &v, 5);
     IndexAdd5(self, &v, 6);
     IndexAdd5(self, &v, 9);
@@ -647,7 +653,6 @@ void AddAnimGroupsA(ModelOuter* self)
 void AddAnimGroupsB(ModelOuter* self)
 {
     IntVec v;
-    v.begin = 0; v.end = 0; v.cap = 0;
     IndexAddGroup(self, &v, 3, 0, 0xe);
     IndexAddGroup(self, &v, 0xe, 0, 0xe);
     IndexAddGroup(self, &v, 4, 0, 0xe);

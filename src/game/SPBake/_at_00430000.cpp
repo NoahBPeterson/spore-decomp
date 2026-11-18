@@ -90,13 +90,19 @@ void* Sub_41DCA0(void* out, void* table, const float* key);  // 0041DCA0
 }
 // ---- items of slice s0043a460 end
 
+template<int N> inline void ReserveBlockLengthInlineFrame()
+{
+    // Preserve the original unused inline-callee storage in these /Od wrappers.
+    uint32_t slots[N];
+}
+
 // @ 0x0043a460
 namespace SP {
 float cSPEditorBlock_s0043_a460::Length1()
 {
     Vec3 v;
-    GetVec1(&v);
-    return VectorLength(&v);
+    ReserveBlockLengthInlineFrame<7>();
+    return VectorLength(GetVec1(&v));
 }
 }  // namespace SP
 
@@ -104,13 +110,13 @@ float cSPEditorBlock_s0043_a460::Length1()
 namespace SP {
 Vec3* cSPEditorBlock_s0043_a460::GetVec1(Vec3* out)
 {
-    float t = f1d8;
-    float key = t;
-    Vec3 tmp;
-    Vec3* r = (Vec3*)Sub_41DCA0(&tmp, tbl3f4, &key);
-    out->x = r->x;
-    out->y = r->y;
-    out->z = r->z;
+    float key = f1d8;
+    float value = key;
+    Vec3 vector;
+    Vec3* result = (Vec3*)Sub_41DCA0(&vector, tbl3f4, &value);
+    out->x = result->x;
+    out->y = result->y;
+    out->z = result->z;
     return out;
 }
 }  // namespace SP
@@ -120,8 +126,8 @@ namespace SP {
 float cSPEditorBlock_s0043_a460::Length2()
 {
     Vec3 v;
-    GetVec2(&v);
-    return VectorLength(&v);
+    ReserveBlockLengthInlineFrame<7>();
+    return VectorLength(GetVec2(&v));
 }
 }  // namespace SP
 
@@ -129,13 +135,13 @@ float cSPEditorBlock_s0043_a460::Length2()
 namespace SP {
 Vec3* cSPEditorBlock_s0043_a460::GetVec2(Vec3* out)
 {
-    float t = f1d8;
-    float key = t;
-    Vec3 tmp;
-    Vec3* r = (Vec3*)Sub_41DCA0(&tmp, tbl400, &key);
-    out->x = r->x;
-    out->y = r->y;
-    out->z = r->z;
+    float key = f1d8;
+    float value = key;
+    Vec3 vector;
+    Vec3* result = (Vec3*)Sub_41DCA0(&vector, tbl400, &value);
+    out->x = result->x;
+    out->y = result->y;
+    out->z = result->z;
     return out;
 }
 }  // namespace SP

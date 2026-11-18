@@ -124,9 +124,8 @@ IMessageServer* __cdecl MessageServer();                       // 0x0067dcc0
 // @ 0x007c24a0
 cBumpMapTable::cBumpMapTable(float param)
 {
-    float k = 1020.0f / param;
-    fastnorm[0] = k;
-    float kk = k * k;
+    fastnorm[0] = (1020.0f / param);
+    float kk = (1020.0f / param) * (1020.0f / param);
     for (int i = 0; i < 0x4000; ++i) {
         float v = (float)i * 64.0f + kk;
         F2I u;

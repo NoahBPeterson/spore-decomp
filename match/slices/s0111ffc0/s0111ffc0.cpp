@@ -13,6 +13,7 @@
 // Those points are marked per function.
 #include "s0111ffc0.h"
 #include <math.h>
+#include <string.h>
 
 // ---------------------------------------------------------------------------------------------------
 // Constants (float literals read from the original image)
@@ -312,9 +313,9 @@ float hkMoppCompilerSettingsBlock::costSpanB(MoppChainLeaf* leaf)
     return poly * this->m_f14;
 }
 
-// @ 0x01120660  split cost A: 011204d0(leaf) + virtual evalCost(leaf) + a small penalty term.
-// X87-PRECISION: 011204d0's result stays on the FPU stack while the virtual call runs, then the two
-// terms are added in FPU order (evalCost first, then the stored 011204d0 result).
+// @ 0x01120660  split cost A: virtual evalCost(leaf) + a penalty term + 011204d0(leaf).
+// X87-PRECISION: the penalty constant multiplies straight into the unrounded evalCost result on the
+// FPU stack; 011204d0's result is spilled and added last.
 float hkMoppCompilerSettingsBlock::costSplitA(MoppChainLeaf* leaf)
 {
     float a = this->costSpanA(leaf);
@@ -337,11 +338,12 @@ float hkMoppCompilerSettingsBlock::costSplitB(MoppChainLeaf* leaf)
 // [5]=t1, [6]=leaf->m_f08, [7]=leaf->m_f0c.  (thiscall, ret 8)
 void hkMoppCompilerSettingsBlock::costSplitInto(MoppChainLeaf* leaf, float* out)
 {
-    out[1] = this->costSpanA(leaf);
-    out[3] = this->costSpanB(leaf);
-    out[4] = this->costRange(leaf);
-    out[0] = (float)leaf->m_i30 * leaf->m_f1c * this->m_f08 * HK_5;
-    out[5] = (leaf->m_f38 - leaf->m_f20) * leaf->m_f10 * this->m_f0c;
+    hkMoppCompilerSettingsBlock* p = this;
+    out[1] = p->costSpanA(leaf);
+    out[3] = p->costSpanB(leaf);
+    out[4] = p->costRange(leaf);
+    out[0] = (float)leaf->m_i30 * leaf->m_f1c * p->m_f08 * HK_5;
+    out[5] = (leaf->m_f38 - leaf->m_f20) * leaf->m_f10 * p->m_f0c;
     out[6] = leaf->m_f08;
     out[7] = leaf->m_f0c;
 }
@@ -349,16 +351,15 @@ void hkMoppCompilerSettingsBlock::costSplitInto(MoppChainLeaf* leaf, float* out)
 // @ 0x01120610  constructor: install the vtable, run 0x01103830, then copy six dwords from the source.
 hkMoppCompilerSettingsBlock* hkMoppCompilerSettingsBlock::construct(const float* src)
 {
+    this->m_memSize = 1;                           // low half of the dword written as 0x00010001
     this->m_refCount = 1;
-    this->m_memSize = 1;
+    float* d = (float*)((char*)this + 8);
     *(uint32_t*)((char*)this) = 0x014a6128u;       // vtable
     hkFun_01103830(HK_SETTINGS_INIT);
-    this->m_f08 = src[0];
-    this->m_f0c = src[1];
-    this->m_f10 = src[2];
-    this->m_f14 = src[3];
-    this->m_f18 = src[4];
-    this->m_f1c = src[5];
+    float* out = &this->m_f08;
+    float* dst = out;
+    for (int i = 0; i < 6; ++i)
+        d[i] = src[i];
     return this;
 }
 
@@ -454,12 +455,11 @@ void hkWingedEdge::initializeWithTetrahedron(void* a, void* b, void* c)
 // @ 0x01120a00
 void hkConvexPenetrationUtil::addPointToSimplex(const hkWingedEdgeVertex& v)
 {
-    int n = *this->m_num;
-    hkVector4* w = this->m_w + n;
+    hkVector4* w = this->m_w + (*this->m_num);
     w->x = v.m_w.x; w->y = v.m_w.y; w->z = v.m_w.z; w->w = v.m_w.w;
-    hkVector4* a = this->m_a + n;
+    hkVector4* a = this->m_a + (*this->m_num);
     a->x = v.m_a.x; a->y = v.m_a.y; a->z = v.m_a.z; a->w = v.m_a.w;
-    hkVector4* b = this->m_b + n;
+    hkVector4* b = this->m_b + (*this->m_num);
     b->x = v.m_b.x; b->y = v.m_b.y; b->z = v.m_b.z; b->w = v.m_b.w;
     *this->m_num = *this->m_num + 1;
 }

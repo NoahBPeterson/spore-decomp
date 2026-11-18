@@ -511,6 +511,7 @@ cDistributeSimulator::cDistributeSimulator(uint32 desc)
     mParam84 = one;
     mpRef88 = 0;
     mpRef8c = 0;
+    _ReadWriteBarrier();
     mValueL = 0xffffffffffffffffLL;
     mHandle90 = 0;
 }

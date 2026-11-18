@@ -6,6 +6,7 @@
 //
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 
+#include <intrin.h>
 #include "types.h"
 #include <math.h>
 
@@ -44,8 +45,6 @@ void  RBTreeErase(void*, void*);                     // 0x00921880
 void* FUN_009512c0();                                // 0x009512c0
 void* FUN_009512d0(int, int, const char*, void*);    // 0x009512d0
 void* FUN_00d539d0();                                // 0x00d539d0
-uint  FUN_00d52e10(void*);                           // 0x00d52e10
-float FUN_00bfc490(int, int);                        // 0x00bfc490
 void* FUN_00b204d0(uint);                            // 0x00b204d0
 void* FUN_00f3be60(void*);                           // 0x00f3be60
 void* FUN_00f19660(void*, int);                      // 0x00f19660
@@ -151,6 +150,60 @@ struct RBTree
     uint32_t count;                                  // +0x14
 
     void Insert(void** out, void* parent, uint32_t* key, char flag);
+};
+
+extern float g_13ec4d0; // 0x013ec4d0: health percentage scale (100.0f)
+
+struct PosseItemRange
+{
+    uint64_t* begin;
+    uint64_t* end;
+    int size() const { return end - begin; }
+};
+
+struct PosseCombatant
+{
+    float GetHealthPointPercent() const; // 0x00bfc490
+};
+struct PosseCapacity
+{
+    uint GetCapacity(); // 0x00d52e10
+};
+struct PossePropertyItem
+{
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void Slot2();
+    virtual void Slot3();
+    virtual void Slot4();
+    virtual void Slot5();
+    virtual void Slot6();
+    virtual void Slot7();
+    virtual void Slot8();
+    virtual void Slot9();
+    virtual void Slot10();
+    virtual void Slot11();
+    virtual void Slot12();
+    virtual void Slot13();
+    virtual void Slot14();
+    virtual void Slot15();
+    virtual void Slot16();
+    virtual void Slot17();
+    virtual void Slot18();
+    virtual void Slot19();
+    virtual void Slot20();
+    virtual void Slot21();
+    virtual void Slot22();
+    virtual void Slot23();
+    virtual void Slot24();
+    virtual void Slot25();
+    virtual void Slot26();
+    virtual void Slot27();
+    virtual void Slot28();
+    virtual void Slot29();
+    virtual void Slot30();
+    virtual void Slot31();
+    virtual void SetFloat(uint id, float value, bool notify, bool update);
 };
 
 // the owner of the posse / minimap state
@@ -436,18 +489,22 @@ void cSPUISpace::RefreshGhostItems()
         return;
     cGameNounManager* nouns = (cGameNounManager*)SP_NounManager();
     uint32_t* v = (uint32_t*)nouns->GetItemID();
+    uint32_t* begin = (uint32_t*)*v;
+    _ReadWriteBarrier();
     uint32_t* end = (uint32_t*)v[1];
-    for (uint32_t* it = (uint32_t*)*v; it != end; ++it)
+    for (uint32_t* it = begin; it != end; ++it)
     {
-        void* p = this->posse->FindItem((void*)*it);
+        void* noun = (void*)*it;
+        void* p = this->posse->FindItem(noun);
         if (p != 0)
         {
-            float f = (float)(FUN_00bfc490(1, 1) * 100.0f);
-            (*(void (__thiscall**)(void*, int, float))(*(char**)p + 0x80))(p, 0x3d99162, f);
+            ((PossePropertyItem*)p)->SetFloat(0x3d99162,
+                (float)((double)((PosseCombatant*)((char*)noun + 0x5a8))->GetHealthPointPercent() * g_13ec4d0),
+                true, true);
         }
     }
-    int n = (*(int*)((char*)this->posse + 0xa8) - *(int*)((char*)this->posse + 0xa4)) >> 3;
-    uint32_t c = FUN_00d52e10(FUN_00d539d0());
+    int n = ((PosseItemRange*)&this->posse->itemsBegin)->size();
+    uint32_t c = ((PosseCapacity*)FUN_00d539d0())->GetCapacity();
     if ((uint32_t)n < c)
     {
         void* a = FUN_009512c0();
@@ -510,6 +567,7 @@ void RBTree::Insert(void** out, void* parent, uint32_t* key, char flag)
     RBTreeInsert(n, parent, (char*)this + 4, (int)side);
     ++count;
     *out = n;
+    _ReadWriteBarrier();
 }
 
 // ---------------------------------------------------------------------------

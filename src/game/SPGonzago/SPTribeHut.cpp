@@ -484,7 +484,7 @@ virtual void     v11();
     virtual uint32_t GetOwnerKey();                  // +0x4c
 virtual void     v14();
 virtual void     v15();
-    virtual uint32_t GetToolType();                  // +0x58
+    virtual bool     GetToolType();                  // +0x58
     virtual const void* GetModelKey();               // +0x5c
 virtual void     v18();
 virtual void     v19();
@@ -544,6 +544,10 @@ virtual void     v19();
     float GetTimeSinceCreation();                    // 00c9d160
     float GetTimeSinceLastUse();                     // 00c9d1c0
 };
+struct cToolNounOwner {
+    uint8_t    pad00[0x120];
+    cTribeTool mTool;                                // +0x120
+};
 struct cToolNounSpawner {
 virtual void n00();
 virtual void n01();
@@ -568,31 +572,7 @@ virtual void n13();
 virtual void n14();
 virtual void n15();
 virtual void n16();
-virtual void n17();
-virtual void n18();
-virtual void n19();
-virtual void n1a();
-virtual void n1b();
-virtual void n1c();
-virtual void n1d();
-virtual void n1e();
-virtual void n1f();
-virtual void n20();
-virtual void n21();
-virtual void n22();
-virtual void n23();
-virtual void n24();
-virtual void n25();
-virtual void n26();
-virtual void n27();
-virtual void n28();
-virtual void n29();
-virtual void n2a();
-virtual void n2b();
-virtual void n2c();
-virtual void n2d();
-virtual void n2e();
-virtual uint32_t GetOwnerNoun();
+virtual uint32_t GetOwnerNoun();                     // +0x5c
 };
 struct cByteBuffer {
     uint8_t* mpBegin;                                // +0x00
@@ -940,8 +920,7 @@ void cTribeHut::UpdateEmpireColor()
     cGameData::Func80();
     if (GetCurrentGameMode() == &g_TribeGameMode)
         return;
-    const Vector3* pos = (const Vector3*)GetPosition();
-    if (!PlanetModel()->IsWaterPoint(pos))
+    if (!PlanetModel()->IsWaterPoint((const Vector3*)GetPosition()))
         return;
     mSub.k18(mf04, GetPlayerEmpireID(0, &g_01699998, 0));
 }
@@ -1019,8 +998,8 @@ bool cTribeTool::HasToolNoun()
     if (mDamageMdP2 == 0)                            // +0x1fc (tool type)
         return false;
     cToolNounSpawner* spawner = (cToolNounSpawner*)((uint8_t*)this - 0x34);
-    uint32_t noun = spawner->GetOwnerNoun();         // vtable +0x5c
-    return ((cTribeTool*)noun)->GetToolType() != 0;  // vtable +0x58 on noun+0x120
+    cToolNounOwner* noun = (cToolNounOwner*)spawner->GetOwnerNoun();  // vtable +0x5c
+    return noun->mTool.GetToolType();                // vtable +0x58 on noun+0x120
 }
 
 // @ 0x00c9c310
@@ -1044,22 +1023,15 @@ bool cTribeTool::Serialize_Write(void* pStream)
 // @ 0x00c9c3c0
 bool cTribeTool::Serialize_Read(void* pStream)
 {
+    uint32_t version;
     IStreamWriter* pWriter = ((ISerializerStream*)pStream)->GetWriterSerializer();
     void* pIO = pWriter->GetWriter();
-    uint32_t version = 0;
     EA::IO::ReadInt32(pIO, &version, 1, 0);
     bool ok = ((cGameDataBase*)this)->Read(pStream)
            && ((cSpatialObjectBase*)mSpatial)->Read(pStream)
            && ((cCombatantBase*)mCombatant)->Read(pStream);
     cVarListSerializer vs(this, &gSerializableKey, 0x1a80d26);
-    if (ok) {
-        if (vs.Read(pStream)) {
-            ok = true;
-            goto done;
-        }
-    }
-    ok = false;
-done:
+    ok = ok && vs.Read(pStream);
     {
         void* pm = PlanetModel_s00c9_c1b0();
         if (*(void**)((uint8_t*)pm + 0x24) != 0) {
@@ -1096,8 +1068,9 @@ uint32_t cTribeTool::GetToolPosition(void* pOut)
 {
     uint32_t key = GetPositionKey();                 // vtable +0x30
     (void)key;
+    float tmp[3];
     float v[3];
-    float* p = (float*)FUN_0059aed0(&v[0], &gDefaultResourceKey, (void*)key);
+    float* p = (float*)FUN_0059aed0(&tmp[0], &gDefaultResourceKey, (void*)key);
     v[0] = p[0]; v[1] = p[1]; v[2] = p[2];
     float* dst = (float*)pOut;
     if (FUN_0059ab70(&v[0])) {
@@ -1107,7 +1080,7 @@ uint32_t cTribeTool::GetToolPosition(void* pOut)
         dst[1] = ((const float*)&gDefaultResourceKey)[1];
         dst[2] = ((const float*)&gDefaultResourceKey)[2];
     }
-    return 0;
+    return (uint32_t)dst;
 }
 
 // @ 0x00c9c680

@@ -1,0 +1,5 @@
+00df8730 ?Update@cGalaxyGameEntryScreen_s00df_8730@@UAEXM@Z  # cGalaxyGameEntryScreen_s00df_8730::Update migrated from s00df8730 (verbatim, slice spelling)
+00df9190 ?FUN_00df9190@@YAXPAUcGameUIDataBlock@@@Z  # FUN_00df9190 migrated from s00df8730 (verbatim, slice spelling)
+00df9230 ?BuildGames@cGalaxyGameEntryScreen_s00df_8730@@QAEXXZ  # cGalaxyGameEntryScreen_s00df_8730::BuildGames migrated from s00df8730 (verbatim, slice spelling)
+00df9510 ?ClearGames@cGalaxyGameEntryScreen_s00df_8730@@QAEXXZ  # cGalaxyGameEntryScreen_s00df_8730::ClearGames migrated from s00df8730 (verbatim, slice spelling)
+00df95d0 ?ResetGames@cGalaxyGameEntryScreen_s00df_8730@@QAEXXZ  # cGalaxyGameEntryScreen_s00df_8730::ResetGames migrated from s00df8730 (verbatim, slice spelling)

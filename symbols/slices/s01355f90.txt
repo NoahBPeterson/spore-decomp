@@ -1,1 +1,6 @@
+01355f90 ?FUN_01355f90@@YAXXZ  # FUN_01355f90 migrated from s01355f90 (verbatim, slice spelling)
 01356230 ?FUN_01356230@@YAXXZ  # FUN_01356230 migrated from s01355f90 (verbatim, slice spelling)
+013579e0 ?FUN_013579e0@@YAXXZ  # FUN_013579e0 migrated from s01355f90 (verbatim, slice spelling)
+01357ae0 ?FUN_01357ae0@@YAXXZ  # FUN_01357ae0 migrated from s01355f90 (verbatim, slice spelling)
+01357d00 ?FUN_01357d00@@YAXXZ  # FUN_01357d00 migrated from s01355f90 (verbatim, slice spelling)
+01357eb0 ?FUN_01357eb0@@YAXXZ  # FUN_01357eb0 migrated from s01355f90 (verbatim, slice spelling)

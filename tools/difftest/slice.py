@@ -577,6 +577,21 @@ def landed_symbol_name(va):
     return _landed_syms.get(va)
 
 
+_landed_addrs = None  # decorated name -> every address some symbols/slices/s*.txt binds it to
+
+
+def landed_addresses(name):
+    """Every address the symbols/slices/s*.txt files bind the decorated `name` to.  A name bound to two addresses is
+    wrong for at least one of them (issue #340: s01025840.txt gave 0x01025840 the name of 0x010251e0's function)."""
+    global _landed_addrs
+    if _landed_addrs is None:
+        _landed_addrs = {}
+        for path in sorted(glob.glob(os.path.join(ROOT, "symbols", "slices", "s*.txt"))):
+            for v, n in _landed_lines(open(path, encoding="utf-8", errors="replace").read()):
+                _landed_addrs.setdefault(n, set()).add(v)
+    return _landed_addrs.get(name, set())
+
+
 def base_ident(mangled):
     """Leading identifier of a symbol: '?f@C@@..'->'f', '??$f@..'->'f', '??0C@@'->'C', '_f'->'f'."""
     m = mangled
@@ -633,12 +648,16 @@ def find_symbol(coff, sid, va, src, orig_size=None):
             if len(c) == 1:
                 return c[0], "manifest"
     names = marker_names(src, va)
-    sn = slice_symbol_name(sid, va)
+    sn, how = slice_symbol_name(sid, va), "symbols/slices/%s.txt" % sid
     if not sn and not SID_RE.match(sid):
         # a module TU has no symbols/slices file of its own: the slice the function was landed from records its
         # decorated name (rewrite.py, "migrated from s..."), which separates overloads (mig23: hkBoxMotion::applyForce
         # 0x01098430 / 0x010984c0 were "ambiguous" and gated against nothing)
-        sn = landed_symbol_name(va)
+        sn, how = landed_symbol_name(va), "symbols/slices (name landed from a slice)"
+    if sn and names and not any(_name_matches(sn, nm) for nm in names) and len(landed_addresses(sn) - {va}) > 0:
+        # the recorded name is also bound to another address and the source marker names a different function: the
+        # record is wrong for one of them, so select by the marker instead (#340)
+        sn = None
     if sn and sn not in funcs:
         # the name is in rewrite.py's spelling (stub types renamed `hkVector4_s0109_8200`), the object may spell it the
         # other way: the slice source after its function was landed, or a module TU that uses the real type
@@ -648,7 +667,7 @@ def find_symbol(coff, sid, va, src, orig_size=None):
         # symbols/slices/<sid>.txt holds the exact decorated name (rewrite.py writes it from the compiled module TU): an
         # overload set (GetProperty(key) const / GetProperty(key, Variant const **) const / ...) must not fall back to the
         # loose name match below
-        return sn, "symbols/slices/%s.txt" % sid
+        return sn, how
     if sn:
         names.insert(0, sn)
 

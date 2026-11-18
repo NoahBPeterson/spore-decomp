@@ -348,8 +348,8 @@ void IMEServerWin32::SetCompositionWindow(unsigned short a, unsigned short b, in
         };
         Form form;
         form.f1 = 0;
-        form.f4 = 0;
         form.f3 = a;
+        form.f4 = 0;
         form.f5 = b;
         form.f0 = 4;
         form.f2 = 2;

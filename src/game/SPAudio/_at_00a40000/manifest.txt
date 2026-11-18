@@ -10,3 +10,5 @@
 ../src/game/SPAudio/_at_00a40000.cpp  ?conf_init@Eapd@Audio@EA@@YA_NXZ  00a495e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/_at_00a40000.cpp  ?FUN_00a49720@Eapd@Audio@EA@@YAXPAUt_inlet@123@Ut_symbol@123@@Z  00a49720  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/_at_00a40000.cpp  ?glist_retext@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_text@123@@Z  00a4d3e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ?Audio_RegisterErrorHandler@@YA_NXZ  00a466d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /GR- /Isrc/game/include
+../src/game/SPAudio/_at_00a40000.cpp  ??1AddRefObjView_a41710@@QAE@XZ  00a41710  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

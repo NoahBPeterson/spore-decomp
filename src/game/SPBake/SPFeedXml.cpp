@@ -1259,25 +1259,37 @@ void Obj43::FUN_00548b10(int param_2, int param_3)
 }
 
 // @ 0x005497e0
-short* FUN_005497e0(short* param_1, short* param_2, short* param_3, short* param_4)
+namespace eastl {
+const wchar_t* CharTypeStringFindFirstNotOf(const wchar_t* p1Begin, const wchar_t* p1End,
+                                          const wchar_t* p2Begin, const wchar_t* p2End)
 {
-    for (;;) {
-        if (param_1 == param_2) return param_2;
-        short* cur = param_3;
-        for (; cur != param_4 && *param_1 != *cur; cur = cur + 1) { }
-        if (cur == param_4) return param_1;
-        param_1 = param_1 + 1;
+    for (; p1Begin != p1End; ++p1Begin) {
+        const wchar_t* cur;
+        for (cur = p2Begin; cur != p2End; ++cur) {
+            if (*p1Begin == *cur)
+                break;
+        }
+        if (cur == p2End)
+            return p1Begin;
     }
+    return p1End;
 }
+} // namespace eastl
 
 // @ 0x00549840
-int FUN_00549840(int param_1, int param_2, short* param_3, short* param_4)
+namespace eastl {
+const wchar_t* CharTypeStringRFindFirstNotOf(const wchar_t* p1RBegin, const wchar_t* p1REnd,
+                                           const wchar_t* p2Begin, const wchar_t* p2End)
 {
-    for (;;) {
-        if (param_1 == param_2) return param_2;
-        short* cur = param_3;
-        for (; cur != param_4 && *(short*)(param_1 - 2) != *cur; cur = cur + 1) { }
-        if (cur == param_4) return param_1;
-        param_1 = param_1 - 2;
+    for (; p1RBegin != p1REnd; --p1RBegin) {
+        const wchar_t* cur;
+        for (cur = p2Begin; cur != p2End; ++cur) {
+            if (*(p1RBegin - 1) == *cur)
+                break;
+        }
+        if (cur == p2End)
+            return p1RBegin;
     }
+    return p1REnd;
 }
+} // namespace eastl

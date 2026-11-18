@@ -7,6 +7,8 @@
 // Absolute data addresses are accessed through reinterpret_cast<T*>(0x...),
 // matching the convention used elsewhere in this project.
 
+#include <intrin.h>
+
 typedef unsigned char  uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int   uint32_t;
@@ -65,7 +67,34 @@ struct SavedGameTree {
 };
 extern void* SP_GetSaveArea(uint32_t);                   // 0x006b1f90
 extern void  RangeInitialize(void*, const wchar_t*);     // 0x00579a90
-extern void  WString_Assign_CopyCtor(void*, const void*); // 0x0056e2d0
+struct SavedGameString {
+    wchar_t* begin;
+    wchar_t* end;
+    wchar_t* capacity;
+    void* allocator;
+    void CopyFrom(const SavedGameString* source); // 0x0056e2d0
+    void RangeInitialize(const wchar_t* text);   // 0x00579a90
+};
+struct SavedGamePath {
+    char prefix[0x34];
+    SavedGameString path;
+    bool hasPath;
+    SavedGameString* GetSavedGamePath(SavedGameString* out);
+};
+struct SaveAreaPath {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void slot02();
+    virtual void slot03();
+    virtual void slot04();
+    virtual void slot05();
+    virtual void slot06();
+    virtual void slot07();
+    virtual void slot08();
+    virtual void slot09();
+    virtual const wchar_t* GetPath(); // +0x28
+};
+
 extern void  FUN_00692f60(int);                          // 0x00692f60 (thiscall-ish)
 extern int   FUN_00ab30c0();                             // 0x00ab30c0
 extern void  FUN_00692850();                             // 0x00692850
@@ -322,25 +351,25 @@ void SimSavedGameHandler2(void* p)
 // ===========================================================================
 // @ 0x00b274e0  factory: allocate + construct a 0x68-byte saved-game header
 // ===========================================================================
-void* CreateSavedGameHeader()
+void* __stdcall CreateSavedGameHeader(int, int)
 {
     uint8_t* o = (uint8_t*)EAAllocate(0x68, (const char*)0x0145fb0c, 0, 0, 0, 0);
     if (o != 0) {
         *(uint32_t*)(o + 8) = 0;
-        *(void**)(o + 4) = (void*)0x013ec458;
+        *(void* volatile*)(o + 4) = (void*)0x013ec458;
         *(void**)(o) = (void*)0x0145faa8;
         *(void**)(o + 4) = (void*)0x0145fa98;
+        _ReadWriteBarrier();
 
         uint8_t* c = o + 0x18;
-        uint32_t z = 0;
-        *(uint32_t*)(c + 4) = z;
-        *(uint32_t*)(c + 8) = z;
-        *(uint32_t*)(c + 0xc) = z;
+        struct Zero12 { uint32_t a, b, d; };
+        *(Zero12*)(c + 4) = Zero12();
         *(uint32_t*)(o + 0x20) = 0;
         o[0x24] = 0;
         *(uint32_t*)(o + 0x28) = 0;
         *(uint32_t*)(c) = (uint32_t)(int)c;
         *(uint32_t*)(o + 0x1c) = (uint32_t)(int)c;
+        _ReadWriteBarrier();
         *(uint32_t*)(o + 0x5c) = 0;
         *(uint32_t*)(o + 0x60) = 0;
         *(uint32_t*)(o + 0x64) = 0;
@@ -352,19 +381,18 @@ void* CreateSavedGameHeader()
 // ===========================================================================
 // @ 0x00b27540  build the saved-game path string (copy ctor or save-area name)
 // ===========================================================================
-void* GetSavedGamePath(uint8_t* self, void* outv)
+SavedGameString* SavedGamePath::GetSavedGamePath(SavedGameString* out)
 {
-    uint8_t* out = (uint8_t*)outv;
-    if (self[0x44] != 0) {
-        WString_Assign_CopyCtor(out, self + 0x34);
+    if (hasPath) {
+        out->CopyFrom(&path);
         return out;
     }
-    void* area = SP_GetSaveArea(0x4729a47);
-    void* nm = ((void* (*)(void*))*(void**)(*(uint32_t*)area + 0x28))(area);
-    *(uint32_t*)out = 0;
-    *(uint32_t*)(out + 4) = 0;
-    *(uint32_t*)(out + 8) = 0;
-    RangeInitialize(out, (const wchar_t*)nm);
+    SaveAreaPath* area = (SaveAreaPath*)SP_GetSaveArea(0x4729a47);
+    const wchar_t* name = area->GetPath();
+    out->begin = 0;
+    out->end = 0;
+    out->capacity = 0;
+    out->RangeInitialize(name);
     return out;
 }
 
@@ -382,7 +410,7 @@ void ValidateSavedGameFile(void* self, void* a2, void* a3)
     // build the full saved-game path into a wide string
     RangeInitialize(p, 0);
     void* local_aa0 = 0; void* local_a9c = 0; int local_a98 = 0;
-    GetSavedGamePath(p, &local_aa0);
+    ((SavedGamePath*)p)->GetSavedGamePath((SavedGameString*)&local_aa0);
     void* src = local_aa0;
     int len = ((int)local_a9c - (int)local_aa0) >> 1;
 
@@ -471,7 +499,7 @@ void LoadSavedGameStream(void* self, void* a2)
 
     RangeInitialize(p, 0);
     void* local_aa0 = 0; void* local_a9c = 0; int local_a98 = 0;
-    GetSavedGamePath(p, &local_aa0);
+    ((SavedGamePath*)p)->GetSavedGamePath((SavedGameString*)&local_aa0);
     void* src = local_aa0;
     int len = ((int)local_a9c - (int)local_aa0) >> 1;
 

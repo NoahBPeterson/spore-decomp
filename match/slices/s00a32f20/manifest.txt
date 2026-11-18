@@ -1,2 +1,3 @@
 # Byte-exact functions for slice s00a32f20. None of the four VAs could be matched;
 # see nonmatching.txt. Rows (when any) are copied verbatim from chk.py.
+slices/s00a32f20/s00a32f20.cpp  ?CommitBoundProperties@VoiceContainer@Audio@EA@@QAEXXZ  00a33dc0  /O2 /MD /Gy /EHsc /TP /GS-

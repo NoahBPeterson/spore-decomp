@@ -9,3 +9,6 @@
 ../src/game/SPEngine/SPJobManager.cpp  ??0cJobManager@@QAE@XZ  00690210  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?Init@cJobManager@@QAE_NIH@Z  00690330  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?ThreadRun@cJobManager@SP@@SAHPAX@Z  0068f570  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?GetJobStatus@cJobManager@@QAEXPAUcJobData@@@Z  006900b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ??1cJobManagerView_68fc60@@QAE@XZ  0068fc60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ??0cJobDataView_68fbe0@@QAE@XZ  0068fbe0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

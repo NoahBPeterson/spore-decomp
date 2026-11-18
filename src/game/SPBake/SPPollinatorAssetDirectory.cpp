@@ -744,14 +744,14 @@ void  FUN_00553fb0(void* v);
 void  WString_FreeBuffer(void* self);                // 0x4237d0
 void  DoFreeNodes(void* a, void* b);                 // 0x5687d0
 struct Map5 {
-    void F4020(void* out, int* key);   // 0x554020
-    void F40d0(int* key);              // 0x5540d0
+    void* F4020(void* out, int* key);  // 0x554020: insert result buffer
+    unsigned F40d0(int* key);          // 0x5540d0: erased element count
 };
 void  FUN_00555980(void* out, void* k);
 void  FUN_00552af0(void* v, void* k);
 void  FUN_005531b0(void* v, void* k);
 char  FUN_0054e460(int a, int b, void* c);            // GetLocalKey
-int64_t FUN_005418c0(int a);
+uint64_t FUN_005418c0(const char* text); // 0x005418c0, parses a Spore asset ID
 int*  ObjectError(int a);                             // 0x8de1a0
 struct Meta {
     char pad[0x400];
@@ -761,10 +761,9 @@ struct Meta {
     void* FUN_00550910(unsigned idx);
     unsigned FUN_005509e0(unsigned idx);
     unsigned FUN_00550a60(unsigned idx);
-    bool FUN_00550aa0(void* key);
+    bool FUN_00550aa0(uint32_t key);
     void FUN_00550b00(int key);
     void FUN_00550b30(int key);
-    char FUN_00550b60(int key);
     Meta* Cast(int type);
 };
 struct CD {
@@ -804,11 +803,11 @@ struct WStr {
     uint16_t* mpCapacity;
     int       mAlloc;
     void Append(const void* a, const void* b);   // 0x429580
+    WStr* Format(const wchar_t* format, ...); // 0x0041e050, cdecl member varargs; returns this
 };
 void WStr_Format(void* out, const void* fmt, int arg);   // 0x41e050 cdecl
 struct Meta_s0055_0bd0 {
     char pad[0x400];
-    char FUN_00550b60(int key);  // 0x00550b60 (Meta::FUN_00550b60)
     char FUN_00550bd0(uint16_t* str);  // 0x00550bd0 (Meta::FUN_00550bd0)
     void FUN_00550cf0(WStr* out);  // 0x00550cf0 (Meta::FUN_00550cf0)
     char FUN_00550da0(int* param_2, int* param_3, int* param_4);  // 0x00550da0 (Meta::FUN_00550da0)
@@ -818,7 +817,6 @@ struct Meta_s0055_0bd0 {
                      uint16_t* param_7, void* param_8, uint16_t* param_9, uint16_t* param_10,
                      uint16_t* param_11, int param_12, void* param_13, char param_14);
     void FUN_005519d0(uint16_t* a, uint16_t* b, int c);  // 0x005519d0 (Meta::FUN_005519d0)
-    void FUN_00551af0(int a, int b);  // 0x00551af0 (Meta::FUN_00551af0)
 };
 // ---- items of slice s00550bd0 end
 
@@ -1433,13 +1431,25 @@ struct InsertResult {                        // pair<iterator, bool>
 };
 }
 namespace eastl {
+struct EqualRangeU32 { uint32_t* first; uint32_t* second; };
 struct vector_set_u32 {
     uint32_t* mpBegin;
     uint32_t* mpEnd;
     uint32_t* mpCapacity;
     sp_vector_allocator_s0054_c780 mAllocator;
     InsertResult insert(const uint32_t& value);   // 0x00554020
-    void equal_range(void* out, void* key);       // 0x00555980
+    uint8_t mCompare;                            // +0x14, empty comparison functor storage
+    EqualRangeU32* equal_range(EqualRangeU32* out, const uint32_t& key); // 0x00555980, returns out
+    uint32_t* end() { return mpEnd; }
+    uint32_t* find(const uint32_t& key) {
+        EqualRangeU32 range;
+        // Preserve the unread inline lookup frame after the returned pair.
+        { uint32_t unused[5]; }
+        equal_range(&range, key);
+        if (range.first != range.second)
+            return range.first;
+        return end();
+    }
 };
 }
 namespace SP {
@@ -1606,8 +1616,17 @@ struct HT {
     int  EraseKey3(uint32_t* key);
     int  ErasePair(uint32_t* key);
 };
-struct El { void Dtor(); };
+struct El {
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    uint32_t mAllocator;
+    El* Destroy(unsigned flags); // 0x00429410, scalar deletion thunk; zero keeps element storage
+};
 struct Vec16 {
+    El* mpBegin;
+    El* mpEnd;
+    El* mpCapacity;
     void FUN_00553b90();
     void FUN_00553be0(unsigned n);
     void DestroyStorage();                        // 0x00554B10
@@ -2718,14 +2737,13 @@ int64_t Meta::FUN_005508a0()
 void* Meta::FUN_00550910(unsigned idx)
 {
     char** v = (char**)((char*)this + 0x98);
-    void* result;
     if (idx < (unsigned)(((char*)v[1] - (char*)v[0]) >> 4)) {
         void** p = (void**)(*(char**)((char*)this + 0x98) + (idx << 4));
-        result = *p;
+        void* result = *p;
+        return result;
     } else {
-        result = DAT_013ec47c;
+        return DAT_013ec47c;
     }
-    return result;
 }
 
 // @ 0x005509e0
@@ -2751,48 +2769,40 @@ unsigned Meta::FUN_00550a60(unsigned idx)
 }
 
 // @ 0x00550aa0
-bool Meta::FUN_00550aa0(void* key)
+bool Meta::FUN_00550aa0(uint32_t key)
 {
-    char* s = (char*)this;
-    int range[2];
-    ((eastl::vector_set_u32*)(s + 0xc0))->equal_range(&range[0], &key);
-    int local_c = range[0];
-    int local_8 = range[1];
-    int local_2c;
-    if (local_c == local_8) {
-        local_2c = *(int*)(s + 0xc4);
-    } else {
-        local_2c = local_c;
-    }
-    return local_2c != *(int*)(s + 0xc4);
+    return ((eastl::vector_set_u32*)((char*)this + 0xc0))->find(key)
+        != ((eastl::vector_set_u32*)((char*)this + 0xc0))->end();
 }
 
 // @ 0x00550b00
 void Meta::FUN_00550b00(int key)
 {
-    char* s = (char*)this;
     char local_8[8];
-    ((Map5*)(s + 0xc0))->F4020(local_8, &key);
+    ScratchSlots<9>();
+    ((Map5*)((char*)this + 0xc0))->F4020(local_8, &key);
 }
 
 // @ 0x00550b30
 void Meta::FUN_00550b30(int key)
 {
-    char* s = (char*)this;
-    ((Map5*)(s + 0xc0))->F40d0(&key);
+    ScratchSlots<13>();
+    ((Map5*)((char*)this + 0xc0))->F40d0(&key);
+}
+
+inline const uint64_t& AssetIDForValidation(const SP::Pollen::cAssetMetadata* metadata)
+{
+    return metadata->mnAssetID;
 }
 
 // @ 0x00550b60
-char Meta::FUN_00550b60(int key)
+bool SP::Pollen::cAssetMetadata::ParseSporeAssetIDInternal(const char* text)
 {
-    char* s = (char*)this;
-    int64_t v = FUN_005418c0(key);
-    *(int64_t*)(s + 0x18) = v;
-    if (((*(unsigned*)(s + 0x18) & *(unsigned*)(s + 0x1c)) != 0xffffffff)
-        && (*(int*)(s + 0x18) != 0 || *(int*)(s + 0x1c) != 0)) {
-        return 1;
-    }
-    return 0;
+    bool result = false;
+    mnAssetID = FUN_005418c0(text);
+    result = AssetIDForValidation(this) != static_cast<uint64_t>(-1)
+        && AssetIDForValidation(this) != 0;
+    return result;
 }
 
 // @ 0x00550bd0
@@ -2848,8 +2858,8 @@ char Meta_s0055_0bd0::FUN_00550da0(int* param_2, int* param_3, int* param_4)
     char* s = (char*)this;
     char result = 0;
     if (param_3 != 0) {
-        int local_50 = param_3[0];
-        if (FUN_00550b60(local_50) != 0) {
+        const char* local_50 = reinterpret_cast<const char*>(param_3[0]);
+        if (reinterpret_cast<SP::Pollen::cAssetMetadata*>(this)->ParseSporeAssetIDInternal(local_50)) {
             *(int*)(s + 0x20) = param_2[0];
             *(int*)(s + 0x24) = param_2[1];
             *(int*)(s + 0x28) = param_2[2];
@@ -3073,15 +3083,37 @@ void Meta_s0055_0bd0::FUN_005519d0(uint16_t* param_2, uint16_t* param_3, int par
     }
 }
 
+namespace SP { namespace Pollen {
+class IAuthManagerForMetadata {
+public:
+    virtual void slot0(); virtual void slot1(); virtual void slot2(); virtual void slot3();
+    virtual void slot4(); virtual void slot5(); virtual void slot6(); virtual void slot7();
+    virtual void slot8(); virtual void slot9(); virtual void slot10(); virtual void slot11();
+    virtual void slot12(); virtual void slot13();
+    virtual const eastl::string& GetScreenName(); // +0x38, 0x00a09f50
+    virtual void slot15();
+    virtual uint64_t GetUserEAId(); // +0x40, 0x00606d70
+};
+IAuthManagerForMetadata* AuthManagerForMetadata(); // 0x00607a60
+struct cAssetMetadataAuthView {
+    uint32_t pad00[6];
+    uint64_t mnAssetID; // +0x18
+    uint32_t pad20[14];
+    WStr mAuthorStr; // +0x58, retail layout differs from the generated header
+    uint64_t mnServerAuthorID; // +0x68
+    void SetID(uint64_t id);
+};
+}}
+extern const wchar_t gMetadataAuthorFormat[]; // 0x013f3da0, L"%hs"
+
 // @ 0x00551af0
-void Meta_s0055_0bd0::FUN_00551af0(int a, int b)
+void SP::Pollen::cAssetMetadataAuthView::SetID(uint64_t id)
 {
-    *(int*)((char*)this + 0x18) = a;
-    *(int*)((char*)this + 0x1c) = b;
-    int* am = (int*)FUN_00607a60();
-    int* p = (int*)((int(__thiscall*)(void*))((*(void***)am)[0x38 / 4]))(am);
-    WStr_Format((void*)((char*)this + 0x58), (void*)&DAT_013f3da0, *p);
-    *(int64_t*)((char*)this + 0x68) = ((int64_t(__thiscall*)(void*))((*(void***)am)[0x40 / 4]))(am);
+    mnAssetID = id;
+    IAuthManagerForMetadata* am = AuthManagerForMetadata();
+    const eastl::string& p = am->GetScreenName();
+    mAuthorStr.Format(gMetadataAuthorFormat, p.c_str());
+    mnServerAuthorID = am->GetUserEAId();
 }
 
 // @ 0x00551b60
@@ -3475,14 +3507,18 @@ IterR Tbl32F::Find(const uint32_t& k)
                  : IterR((void**)(mpBucketArray + mnBucketCount));
 }
 
+inline void DestroyStringElements(El* first, El* last)
+{
+    ScratchSlots<3>();
+    for (; first < last; ++first)
+        first->Destroy(0);
+}
+
 // @ 0x00553b90
 void Vec16::FUN_00553b90()
 {
-    char* s = (char*)this;
-    uint32_t end = *(uint32_t*)(s + 4);
-    for (uint32_t p = *(uint32_t*)s; p < end; p = p + 0x10) {
-        ((El*)p)->Dtor();
-    }
+    DestroyStringElements(mpBegin, mpEnd);
+    ScratchSlots<3>();
     DestroyStorage();
 }
 

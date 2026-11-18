@@ -312,7 +312,8 @@ void cCloudSpeedCommand::Execute(cArguments& args)
 {
     const char** argv = args.MainArguments(1);
     mState->mCurve.resize(1);
-    mState->mCurve.mpBegin[0] = mParser->GetFloat(argv[0]);
+    float* curve = mState->mCurve.mpBegin;
+    curve[0] = mParser->GetFloat(argv[0]);
     mState->mFlags |= 1;
     mState->mScale = 0.01f;
     mState->mMode = 1;

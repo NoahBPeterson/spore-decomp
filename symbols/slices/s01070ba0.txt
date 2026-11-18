@@ -1,1 +1,2 @@
-01070ba0 SP::cSPUISpace::cSPUISpace  # ctor: inlined base vtables (RefCountVTemplate<int>, IHandler, IWinProc), 26+24 cString ctors, 49 cString::Load, animator and translator news
+01070ba0 ??0cSPUISpace_s0107_0ba0@SP@@QAE@XZ  # cSPUISpace_s0107_0ba0::cSPUISpace migrated from s01070ba0 (verbatim, slice spelling)
+01071570 ?Shutdown@cSPUISpace_s0107_0ba0@SP@@QAEXXZ  # cSPUISpace_s0107_0ba0::Shutdown migrated from s01070ba0 (verbatim, slice spelling)

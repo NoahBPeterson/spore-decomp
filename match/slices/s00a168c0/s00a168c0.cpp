@@ -572,19 +572,32 @@ void PResp::SetModificationSource(float value, int mod)
 }
 
 // ---- PResp::Destroy @ 0x00a17360 ----------------------------------------
+// Destruction view of PResp (0x00a17360, PResp::Destroy): the two interface bases reset their vtables last; the
+// response curve frees its table unless it is the inline buffer; the primitive ref is released first.
+void __cdecl op_delete_nothrow_a17360(void*) throw();   // 0x00f47380
+struct PRD_Prim_a17360 { virtual int p0(); ~PRD_Prim_a17360() {} };
+struct PRD_RC_a17360 { virtual int r0(); ~PRD_RC_a17360() {} int mRefCount; };
+struct PRD_Curve_a17360 {
+    void* mpBuf;            // +0x00 (+0x0c)
+    u8    pad04[0x10 - 4];
+    void* mpInline;         // +0x10 (+0x1c)
+    u8    pad14[0x364 - 0x14];
+    ~PRD_Curve_a17360() { if (mpBuf && mpBuf != mpInline) op_delete_nothrow_a17360(mpBuf); }
+};
+struct PRD_Ref_a17360 {
+    struct Obj { virtual void v0(); virtual void Release(); };
+    Obj* p;
+    ~PRD_Ref_a17360() { if (p) p->Release(); }
+};
+struct PRespDtorView_a17360 : PRD_Prim_a17360, PRD_RC_a17360 {
+    PRD_Curve_a17360 mCurve;        // +0x0c
+    PRD_Ref_a17360   mpPrimitive;   // +0x370
+    ~PRespDtorView_a17360();
+};
+
 // @ 0x00a17360
-void PResp::Destroy()
+PRespDtorView_a17360::~PRespDtorView_a17360()
 {
-    vtbl0 = &prVtbl0;
-    vtbl1 = &prVtbl1;
-    IPrimitive* p = (IPrimitive*)mpPrimitive;
-    if (p != 0)
-        p->v04();
-    void* buf = *(void**)((char*)this + 0xc);
-    if (buf != 0 && buf != *(void**)((char*)this + 0x1c))
-        op_delete(buf);
-    vtbl1 = &prBaseVtbl1;
-    vtbl0 = &prBaseVtbl0;
 }
 
 // ---------------------------------------------------------------------------
@@ -700,12 +713,13 @@ struct SysGui : GuiBase {
     void* ScalarDeletingDtor(unsigned flags);
 };
 
+void __cdecl op_delete_nothrow_a168c0(void*) throw();   // 0x00f47380
 // @ 0x00a168c0
 void* SysGui::ScalarDeletingDtor(unsigned flags)
 {
     this->~SysGui();
     if (flags & 1)
-        op_delete(this);
+        op_delete_nothrow_a168c0(this);
     return this;
 }
 

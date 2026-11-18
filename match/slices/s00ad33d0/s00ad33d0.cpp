@@ -270,6 +270,8 @@ struct EditorAction {
     virtual void* Cast(uint32_t typeId);                               // +0x0c
 };
 
+extern char gEditorFrameVtable[]; // 0x0145a69c
+
 struct EditorFrame {
     void* volatile mpVtable0;  // +0x00
     uint32_t mField04;         // +0x04
@@ -278,6 +280,7 @@ struct EditorFrame {
     uint32_t mField10;         // +0x10
     uint32_t mField14;         // +0x14
     uint32_t mField18;         // +0x18
+    EditorFrame() { mField04 = 0; mpVtable0 = gEditorFrameVtable; }
 };
 
 struct WorldManager {
@@ -285,22 +288,19 @@ struct WorldManager {
 };
 
 void* GetWorldManager();                                           // 0x0067DDB0
-void* __stdcall GonzagoModelWorld(EditorFrame* frame);             // 0x00B3D520
+void* __cdecl GonzagoModelWorld();             // 0x00B3D520
 
 // @ 0x00ad3b70
 int FUN_00ad3b70(EditorAction* action, bool enabled)
 {
-    if (action == 0)
-        return 1;
-    if (action->Cast(0x491fa87) == 0)
+    void* target = action ? action->Cast(0x491fa87) : 0;
+    if (target == 0)
         return 1;
     if (!enabled)
         return 0;
 
-    EditorFrame* frame = (EditorFrame*)operator new(0x1c, "Editor", 0, 0, 0, 0);
+    EditorFrame* frame = new ("Editor", 0, 0, 0, 0) EditorFrame;
     if (frame != 0) {
-        frame->mField04 = 0;
-        frame->mpVtable0 = (void*)0x145a69c;
         ((void (__thiscall*)(void*))((void**)frame->mpVtable0)[1])(frame);
     }
     frame->mField08 = 0x200;
@@ -310,8 +310,8 @@ int FUN_00ad3b70(EditorAction* action, bool enabled)
     frame->mField18 = 0;
     WorldManager* world = (WorldManager*)GetWorldManager();
     void* managerVtbl = world->mpVtable0;
-    void* gonzago = GonzagoModelWorld(frame);
-    ((void (__thiscall*)(void*, void*))((void**)managerVtbl)[0x28 / 4])(world, gonzago);
+    ((void (__thiscall*)(void*, void*, EditorFrame*))((void**)managerVtbl)[0x28 / 4])(
+        world, GonzagoModelWorld(), frame);
     ((void (__thiscall*)(void*))((void**)frame->mpVtable0)[2])(frame);
     return 0;
 }
@@ -463,7 +463,8 @@ public:
 // @ 0x00ad3e00
 cVignetteContext::cVignetteContext()
 {
-    mpVtable8 = (void*)0x13ec458;
+    void* volatile& baseVtable = mpVtable8;
+    baseVtable = (void*)0x13ec458;
     mField0c = 0;
     mpVtable0 = (void*)0x145a6e0;
     mpVtable8 = (void*)0x145a6d0;

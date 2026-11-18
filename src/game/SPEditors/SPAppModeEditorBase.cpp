@@ -6661,7 +6661,7 @@ class cSPEditorBlock_s005b_94b0;
 namespace SP {
 class cSPEditorManipulationObject_s005b_94b0 {
  public:
-  __declspec(noinline) cSPEditorManipulationObject_s005b_94b0();
+  __declspec(noinline) cSPEditorManipulationObject_s005b_94b0();   // 0x005b0f80
   virtual ~cSPEditorManipulationObject_s005b_94b0() {}
   bool mChangedObject;         // +0x4
   bool mUseDeadZone;           // +0x5
@@ -6702,9 +6702,6 @@ class cSPEditorManipulation56 : public cSPEditorManipulationObject_s005b_94b0, p
 }
 namespace SP {
 volatile int g_s56_sink;
-}
-namespace SP {
-__declspec(noinline) cSPEditorManipulationObject_s005b_94b0::cSPEditorManipulationObject_s005b_94b0() { g_s56_sink = 1; }
 }
 // ---- items of slice s005b94b0 end
 
@@ -7561,14 +7558,21 @@ void __cdecl SetCullBackfaces(int enable)
 // @ 0x00572110
 uint32_t __cdecl LookupByHash(uint32_t hash)
 {
-    switch (hash) {
-    case 0x3d97a8e4: return g_value74;
-    case 0x2399be55: return g_value7c;
-    case 0x24682294: return g_value80;
-    case 0x476a98c7: return g_value84;
-    case 0x438f6347: return g_value88;
+    if (hash <= 0x3d97a8e4) {
+        if (hash != 0x3d97a8e4) {
+            switch (hash) {
+            case 0x2399be55: return g_value7c;
+            case 0x24682294: return g_value80;
+            default: return g_value78;
+            }
+        }
+        return g_value74;
     }
-    return g_value78;
+    switch (hash) {
+    case 0x438f6347: return g_value88;
+    case 0x476a98c7: return g_value84;
+    default: return g_value78;
+    }
 }
 
 // @ 0x00572160
@@ -9346,8 +9350,7 @@ bool __cdecl HasAnyResource(cSPEditorBlock_s0057_7130* block, ResKey3* key)
                 return false;
             }
             Block_s0057_7130* base = m->mpBegin;
-            int n = m->mpEnd - base;
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < m->mpEnd - base; i++) {
                 if (base[i].id == k0.a || base[i].id == k1.a || base[i].id == k2.a) {
                     ref.Drop();
                     return true;
@@ -9366,6 +9369,7 @@ bool SP::cAppModeEditorBase_s0057_7130::LoadSomething(void* param)
     ResKey3 k1 = ((cSPEditorBlock_s0057_7130*)param)->GetMirroredKey(0, 0);
     ResKey3 k2 = ((cSPEditorBlock_s0057_7130*)param)->GetMirroredKey(1, 0);
     cSPPaletteCursor* cur = new ("Editor", 0, 0, 0, 0) cSPPaletteCursor();
+    _ReadWriteBarrier();
     if (cur)
         cur->AddRef();
     cur->SetPalette(Ref<void*>(this, 0x3b8));
@@ -12205,8 +12209,8 @@ void SP::cAppModeEditorBase_s0058_9ce0::LoadModel(int mode, int a, int b)
     if (M(uint8_t, 0x190)) ((EditorUIEx*)M(void*, 0x78))->Hide();
     M(uint, 0x198) = 0;
 
-    if (M(uint, 0x194) && M(void*, 0x360) && M(void*, 0x150)) {
-        SkinManager* skin = ((SkinManager*)M(void*, 0x150))->GetSkin(1);
+    if (M(uint, 0x194) && M(void*, 0x360)) {
+        SkinManager* skin = M(void*, 0x150) ? ((SkinManager*)M(void*, 0x150))->GetSkin(1) : 0;
         if (skin && mode != 2) {
             if (M(uint, 0x364) == 0) {
                 FUN_00582fe0(0, 0);

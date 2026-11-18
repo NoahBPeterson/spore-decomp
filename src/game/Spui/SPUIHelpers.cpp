@@ -89,7 +89,6 @@ virtual void s6();
 };
 static void* g_allocGPtr;
 struct VThunk8 { void CallVt8(int a, int b, int c, int d, int e); };
-void* g_alloc;
 // ---- items of slice s00804920 end
 
 // ---- items of slice s00805940 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -306,8 +305,9 @@ extern void* SYM_14178b0;
 extern void* SYM_1417874;
 extern void* SYM_141785c;
 extern void* SYM_141788c;
-extern int DAT_0164c4b8;
-extern char DAT_0164c598;
+extern void* DAT_0164c4b8;   // backing core allocator, 0x0164c4b8
+struct UIAllocatorObject;
+extern UIAllocatorObject DAT_0164c598; // 0x0164c598; constructed by 0x00807760
 extern int DAT_1440aec;                       // 0x01440aec (runtime member offset)
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #pragma intrinsic(fabs)
@@ -1421,9 +1421,8 @@ void FixedAlloc::FixedFree(void* p, int flags)
 // @ 0x008054f0
 void InitAlloc()
 {
-    g_alloc = GetDefaultAllocator();
-    *(void**)0x164c4b8 = g_alloc;
-    FUN_009512b0(&g_alloc);
+    DAT_0164c4b8 = GetDefaultAllocator();
+    FUN_009512b0(&DAT_0164c598);
 }
 
 // @ 0x00805510
@@ -2024,14 +2023,20 @@ void FUN_00806ca0(W_s0080_68d0* w, float x, float y)
 }
 
 // @ 0x00806d10
+extern "C" double FUN_011e0906(double);                       // floor
 void Pollinator(W_s0080_68d0* w, float* r)
 {
     if (w == 0) return;
-    float* a = (float*)w->v38();
+    float* p = (float*)w->v38();
+    float a[4];
+    a[0] = p[0]; a[1] = p[1]; a[2] = p[2]; a[3] = p[3];
+    float a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3];
+    float r1 = r[1];
     float x = r[0];
-    float dy = (((r[3] - r[1]) - (a[3] - a[1])) * 0.5f + r[1]);
-    float dx = (((r[2] - x) - (a[2] - a[0])) * 0.5f + x);
-    (*(void(__thiscall**)(void*, float, float))VSlot(w, 0x64))(w, dx, dy);
+    char* vt = *(char**)w;
+    (*(void(__thiscall**)(void*, float, float))(vt + 0x64))(w,
+        (float)FUN_011e0906((double)((((r[2] - x) - (a2 - a0)) * DAT_01471064) + x)),
+        (float)FUN_011e0906((double)((((r[3] - r1) - (a3 - a1)) * DAT_01471064) + r1)));
 }
 
 // @ 0x00806db0
@@ -2609,6 +2614,7 @@ void FUN_00808190(W_s0080_7840* w, float a, float b)
     }
     t->f14 = a;
     t->f18 = b;
+    _ReadWriteBarrier();
     w->v98();
 }
 
@@ -2648,6 +2654,7 @@ void FUN_008082f0(W_s0080_7840* w, float a, float b)
     }
     t->fC = a;
     t->f10 = b;
+    _ReadWriteBarrier();
     w->v98();
 }
 
@@ -3455,11 +3462,15 @@ void SFV::Update(bool force)
   m1c.mpObject->m36();
 }
 
+struct ScrollFrameCreate {
+  bool Create(unsigned int id, bool first, bool second); // 0x0082a140
+};
+
 // @ 0x0082aa20
 bool SFV::CreateFromName(const unsigned short* name, bool a, bool b)
 {
   unsigned h = FNV1_String16(name, 0x811c9dc5, 1);
-  return Create((int)h, a, b);
+  return reinterpret_cast<ScrollFrameCreate*>(this)->Create(h, a, b);
 }
 
 // @ 0x00965670

@@ -6,6 +6,7 @@
 #include "SP/cGameNounManager.h"
 #include "EA/Random/RandomLinearCongruential.h"
 #include "EA/Stopwatch.h"
+#include "sse_helpers.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" float sqrtf(float);
@@ -242,7 +243,7 @@ struct Ctx {
     void* getWorld();                // 0x006c0200 reads [ecx+0x18]
 };
 struct Mgr {
-    void  RemoveNoun();              // 0x00b225d0
+    void  RemoveNoun(void* noun);    // 0x00b225d0
     void* GetAvatar();               // 0x00b1fdb0
 };
 struct SimCtx {
@@ -252,6 +253,7 @@ struct SimCtx {
     void  b72080(int, int);          // 0x00b72080
 };
 struct V4   { virtual void p0(); virtual void* q(); };                    // +4
+struct RefObj { virtual void v0(); virtual void v1(); };                  // +4 void/void (AddRef/Release)
 struct V4F  { virtual void p0(); virtual void* q(float, void*); };        // +4 (float,void*)->void*
 struct V8   { virtual void p0(); virtual void p1(); virtual void* q(); }; // +8
 struct V0c  { virtual void p0(); virtual void p1(); virtual void p2();
@@ -385,7 +387,7 @@ struct Property {
     char    pad11[0x12 - 0x11];
     short   type;                    // +0x12
 };
-struct IdObj { char pad0[4]; int m4(); };
+struct IdObj { virtual void v0(); virtual int m4(); };
 struct World {
     char  pad0[0x1e8];
     float x1e8, y1ec, z1f0;
@@ -1223,7 +1225,7 @@ void __cdecl FUN_00f20a60(float* out, float* in)
     float radius = pm->GetRadiusAt();
     float f1 = *in;
     float s  = in[1] * in[1] + in[2] * in[2] + f1 * f1;
-    if (sqrtf(s) < radius) {
+    if (sqrtf(s) > radius) {
         float f3 = 1.0f / sqrtf(s + 1e-08f);
         out[0] = (f1 * f3) * radius;
         out[1] = (f3 * in[1]) * radius;
@@ -1300,19 +1302,20 @@ void* __cdecl FUN_00f20c60(void* out, int* self, int key)
 }
 
 // @ 0x00f20cb0
-void __cdecl FUN_00f20cb0(int key, void* p)
+void __cdecl FUN_00f20cb0(void* key, void* p)
 {
     TreeHeader* g = g_pEventLog;
     TreeNode* node = (TreeNode*)g->mpRoot;
     TreeHeader* end = (TreeHeader*)((char*)g + 4);
     if ((void*)node == (void*)end) return;
     do {
-        if (node->key == key) {
+        if (node->value == key) {
+            _ReadWriteBarrier();
             void* old = node->value;
             if (p != old) {
-                if (p) ((void(__cdecl*)(void*))(*(void***)p)[0])(p);
+                if (p) ((RefObj*)p)->v0();
                 node->value = p;
-                if (old) ((void(__cdecl*)(void*))(*(void***)old)[1])(old);
+                if (old) ((RefObj*)old)->v1();
             }
         }
         node = (TreeNode*)sub_rbtinc(node);
@@ -1345,7 +1348,7 @@ void __cdecl FUN_00f20d80(IdObj* self)
         int id = *(int*)((char*)node + 0x10);
         if (self->m4() == id) {
             int v = (int)node->value;
-            ((Mgr*)sub_b3d300_id(v))->RemoveNoun();
+            ((Mgr*)sub_b3d300_0())->RemoveNoun((void*)v);
         }
         node = (TreeNode*)sub_rbtinc(node);
         g = g_pEventLog;
@@ -1423,8 +1426,8 @@ void __cdecl FUN_00f21080(V0c* self, void** vec, void* arg3, float r, float scal
             float* a = (float*)((V2cP*)v)->q();
             float* b = (float*)((V2cP*)e)->q();
             float d = sqrtf((b[2]-a[2])*(b[2]-a[2]) + (b[1]-a[1])*(b[1]-a[1]) + (b[0]-a[0])*(b[0]-a[0])) / r;
-            if (d <= 0.0f) d = 0.0f;
-            if (1.0f <= d) d = 1.0f;
+            d = SseClamp01(d);
+            d = SseClamp01(d);
             d = (d - 1.0f) * -1.0f;
             t = (1.0f - (((3.0f - d * 2.0f) * d) * d) * 1.0f) * scale;
         }
@@ -1547,19 +1550,17 @@ void __cdecl FUN_00f217a0(EvtEntity* self)
 // @ 0x00f217c0
 int __cdecl FUN_00f217c0(int* self)
 {
-    if (self) {
-        CombatList* h = (CombatList*)((V0c*)self)->q(0xce9f6639);
-        if (h) {
-            int n = h->GetCount();
-            for (int i = 0; i < n; i++) {
-                int* o = (int*)h->GetAt(i);
-                if (o) {
-                    int r = (int)((Vb8P*)o)->q(0x3a25119);
-                    if (r && *(int*)((char*)r + 0x134) == 0xc) {
-                        int* q = (int*)sub_ac8fa0(*(void**)((char*)r + 0x148), g_evtPropKey_16c83cc, 0);
-                        if (q == self) return r;
-                    }
-                }
+    if (!self) return 0;
+    CombatList* h = (CombatList*)((V0c*)self)->q(0xce9f6639);
+    if (!h) return 0;
+    int n = h->GetCount();
+    for (int i = 0; i < n; i++) {
+        int* o = (int*)h->GetAt(i);
+        if (o) {
+            int r = (int)((Vb8P*)o)->q(0x3a25119);
+            if (r && *(int*)((char*)r + 0x134) == 0xc) {
+                int* q = (int*)sub_ac8fa0(*(void**)((char*)r + 0x148), g_evtPropKey_16c83cc, 0);
+                if (q == self) return r;
             }
         }
     }
@@ -1792,21 +1793,23 @@ unsigned int* EventTree::Insert(unsigned int* out, unsigned int* key, unsigned i
     unsigned int* pOut = out;
     *(int*)((char*)this + 0x14) = *(int*)((char*)this + 0x14) + 1;
     *pOut = uVar2;
+    _ReadWriteBarrier();
     return pOut;
 }
 
 // @ 0x00f24190
 void FUN_00f24190(int* a, int* b)
 {
-    AutoRef ra; ra.p = a;
+    AutoRef refs[2];
+    refs[0].p = a;
     if (a != 0)
         ((void(__thiscall*)(void*))*(void**)*a)(a);
-    AutoRef rb; rb.p = b;
+    refs[1].p = b;
     if (b != 0)
         ((void(__thiscall*)(void*))*(void**)*b)(b);
 
     unsigned int tag = 0;
-    ((EventTree*)DAT_016c8318)->Insert((unsigned int*)&ra, (unsigned int*)&rb, tag);
+    ((EventTree*)DAT_016c8318)->Insert((unsigned int*)&refs[0], (unsigned int*)&refs[1], tag);
 
     if (b != 0)
         ((void(__thiscall*)(void*))*(void**)(*b + 4))(b);
@@ -2140,7 +2143,7 @@ void Obj::fn25110(Vec3i* out, bool* flag)
 // @ 0x00f25160
 void Obj::fn25160(Vec3i* o)
 {
-  o->x = (int)f00; o->y = (int)f04; o->z = (int)f08;
+  *o = *(Vec3i*)this;
   if ((uint_s00f2_4b30)o->y == kTypeB1B104) o->z = (int)kType65928944;
   o->y = (int)kType2F7D0004;
 }
@@ -2331,13 +2334,17 @@ bool Obj::fn25560()
 bool Obj::fn25580()
 {
   int v = sub_eece20(this);
-  if (v > (int)0x6031c03a) {
-    if (v == (int)0x7998ce71) return true;
-    return false;
+  if (v <= (int)0x6031c03a) {
+    if (v == (int)0x6031c03a) {
+      if (sub_eecf10(this) == 0x167b1f54) return true;
+    } else if (v == (int)0xb10e526f) {
+      return true;
+    } else if (v == (int)0xcf56099a) {
+      return fn254d0() == false;
+    }
+  } else if (v == (int)0x7998ce71) {
+    return true;
   }
-  if (v == (int)0x6031c03a) return sub_eecf10(this) == 0x167b1f54;
-  if (v == (int)0xb10e526f) return true;
-  if (v == (int)0xcf56099a) return fn254d0() == false;
   return false;
 }
 

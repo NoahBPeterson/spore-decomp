@@ -4,3 +4,5 @@ slices/s013cb260/s013cb260.cpp  ?f_013cb300@@YAXXZ  013cb300  /O1 /MD /Gy /EHsc 
 slices/s013cb260/s013cb260.cpp  ?f_013cb320@@YAXXZ  013cb320  /O1 /MD /Gy /EHsc /TP
 slices/s013cb260/s013cb260.cpp  ?f_013cb780@@YAXXZ  013cb780  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s013cb260/s013cb260.cpp  ?f_013cb260@@YAXXZ  013cb260  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s013cb260/s013cb260.cpp  ?f_013cb7d0@@YAXXZ  013cb7d0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s013cb260/s013cb260.cpp  ?f_013cb850@@YAXXZ  013cb850  /vc71 /O2 /MD /Gy /EHsc /TP

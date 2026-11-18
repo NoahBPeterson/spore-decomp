@@ -77,7 +77,7 @@ extern "C" void  FUN_007e1a50(void* a, void* b);             // 0x007e1a50
 #undef CMDCLASS
 void* operator new(size_t size, const char* name, int a, int b, const char* file, int line);
 void* operator new[](size_t size);
-void  __cdecl EFree(void* p);                       // 0x00f47380
+void  __cdecl EFree(void* p) throw();               // 0x00f47380
 void* __cdecl EAlloc6(int size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
 namespace eastl {
 extern char gEmptyBuf[];
@@ -222,12 +222,15 @@ struct HashTable {
     void   rehash(int n);
 };
 void EAllocAndZero(void* dst, int zero, unsigned size);  // 0x011e073e
+// two EASTL strings and a reference released through vtable slot 1, destroyed in reverse order
+struct SomeDescRef {
+    RefObj* mp;
+    ~SomeDescRef() { if (mp) mp->r1(); }
+};
 struct SomeDesc {
-    char*  a0;  char* a1;    // +0x0  string1 (begin/end)
-    char*  a8;  char* ac;    // +0x8  string2
-    int    a10; void* a14; void* a18;   // +0x10 vector
-    void*  a1c;              // +0x1c (alignment hole)
-    void*  p20;              // +0x20
+    eastl::EString mName;    // +0x00
+    eastl::EString mValue;   // +0x10
+    SomeDescRef    p20;      // +0x20
     ~SomeDesc();
 };
 void* operator new(size_t, const char*, int, int, int, int);
@@ -830,20 +833,35 @@ void cForwarder::Forward(int a, int b)
     p160->v6(a, b);
 }
 
+AutoRef* FUN_007e17a0(AutoRef** out, const AutoRef* first, const AutoRef* last, AutoRef* dst);   // 0x007e17a0 (callers' view)
+// Uninitialized copy of 8-byte ref entries (0x007e17a0), EASTL style: iterator objects and a placement copy per entry
+// (the ref's AddRef is vtable slot 1).
+struct RefIface_7e17a0 { virtual void s0(); virtual void AddRef(); };
+struct RefPtr_7e17a0 {
+    RefIface_7e17a0* p;
+    RefPtr_7e17a0(const RefPtr_7e17a0& o) : p(o.p) { if (p) p->AddRef(); }
+};
+struct RefEntry_7e17a0 {
+    RefPtr_7e17a0 ref;    // +0
+    uint32_t field4;      // +4
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct RefEntryIt_7e17a0 {
+    RefEntry_7e17a0* p;
+    RefEntryIt_7e17a0(RefEntry_7e17a0* q) : p(q) {}
+    RefEntry_7e17a0& operator*() const { return *p; }
+    RefEntryIt_7e17a0& operator++() { ++p; return *this; }
+    bool operator!=(const RefEntryIt_7e17a0& o) const { return p != o.p; }
+};
+
 // @ 0x007e17a0
-AutoRef* FUN_007e17a0(AutoRef** out, const AutoRef* first, const AutoRef* last, AutoRef* dst)
+RefEntryIt_7e17a0 RefEntryUninitCopy_7e17a0(RefEntryIt_7e17a0 first, RefEntryIt_7e17a0 last, RefEntryIt_7e17a0 dest)
 {
-    *out = dst;
-    for (; first != last; ++first) {
-        if (dst) {
-            dst->p = first->p;
-            AddRefObj(first->p);
-            dst->field4 = first->field4;
-        }
-        ++dst;
-        *out = dst;
-    }
-    return (AutoRef*)out;
+    RefEntryIt_7e17a0 result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) RefEntry_7e17a0(*first);
+    return result;
 }
 
 // @ 0x007e1830
@@ -913,32 +931,25 @@ void cSetStateCommand::Execute(EA::ArgScript::cArguments_s007e_17a0& args)
 // @ 0x007e1a80
 SomeDesc::~SomeDesc()
 {
-    RefObj* p = (RefObj*)p20;
-    if (p)
-        ((void(__thiscall*)(RefObj*))(*(void***)p)[1])(p);
-    if ((int)((char*)a18 - (char*)a10) > 1 && a10)
-        EFree((void*)a10);
-    if ((int)((char*)a8 - (char*)a0) > 1 && a0)
-        EFree((void*)a0);
 }
 
 // @ 0x007e1b00
 AutoRef* FUN_007e1b00(AutoRef* first, AutoRef* last, AutoRef* dst)
 {
-    if (first == last)
-        return dst;
-    do {
-        RefObj* src = first->p;
-        RefObj* oldp = dst->p;
-        if (src != oldp) {
-            AddRefObj(src);
-            dst->p = src;
-            ReleaseObj(oldp);
-        }
-        dst->field4 = first->field4;
-        ++first;
-        ++dst;
-    } while (first != last);
+    if (first != last) {
+        do {
+            RefObj* src = first->p;
+            RefObj* oldp = dst->p;
+            if (src != oldp) {
+                AddRefObj(src);
+                dst->p = src;
+                ReleaseObj(oldp);
+            }
+            dst->field4 = first->field4;
+            ++first;
+            ++dst;
+        } while (first != last);
+    }
     return dst;
 }
 

@@ -548,8 +548,11 @@ f64 SP::cSPSpaceToolData::FUN_0104be30()
 // @ 0x0104bfa0
 i32 SP::cSPSpaceToolData::FUN_0104bfa0()
 {
-    long long v = (long long)(mField1f0 * 1000.0f);
-    return (int)v;
+    // The original converts the scaled value with the CRT __ftol2 sequence
+    // (`fnstcw`/`or 0xc00`/`fldcw`/`fistp qword`), which is what cl 15 emits for a
+    // float->unsigned conversion; the signed 64-bit form goes to the `_ftol2` helper.
+    unsigned v = (unsigned)(mField1f0 * 1000.0f);
+    return (i32)v;
 }
 
 // ===========================================================================

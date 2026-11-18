@@ -2,3 +2,5 @@
 ../src/game/SPEditors/SPEditorComplexityMeter.cpp  ??0cSPEditorComplexityMeter_s005a_6e60@SP@@QAE@XZ  005a6e60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorComplexityMeter.cpp  ??0cUIThing@@QAE@PAX@Z  005a74a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPEditorComplexityMeter.cpp  ??0cDualString@@QAE@XZ  005a7810  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorComplexityMeter.cpp  ?HandleMessage@cEditorPanel@@QAE_NHPAPAX@Z  005a7380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorComplexityMeter.cpp  ??1cSPEditorComplexityMeter_s005a_6e60@SP@@UAE@XZ  005a6ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

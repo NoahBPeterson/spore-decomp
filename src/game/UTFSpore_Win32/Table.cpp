@@ -2,6 +2,7 @@
 // Object file: UTFSpore_Win32/Table.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include <math.h>
 #include "EA/Text/Typesetter.h"
@@ -1858,6 +1859,7 @@ void Fn8e69b0Target::Fn8e69b0(DOM::Element* pNode, uint32_t arg2, void* arg3, Po
     self->mArg3 = arg3;
     self->mX = pPos->mX;
     self->mY = pPos->mY;
+    _ReadWriteBarrier();
     self->mpDocument = 0;
     while (pNode != 0) {
         if (pNode->Type() == 1) {

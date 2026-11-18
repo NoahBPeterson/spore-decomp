@@ -15,3 +15,4 @@ slices/s00713e40/s00713e40.cpp  ?DestroyRes50@@YAPAXPAX0PAD@Z  00714a20  /O2 /MD
 slices/s00713e40/s00713e40.cpp  ?DestroyRes28@@YAPAXPAX0PAD@Z  00714c70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00713e40/s00713e40.cpp  ?Reserve@Vec4@@QAEXI@Z  00714cd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00713e40/s00713e40.cpp  ??0AdapterCtor@@QAE@XZ  00714e10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00713e40/s00713e40.cpp  ??1AdapterBaseView_713fd0@@QAE@XZ  00713fd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

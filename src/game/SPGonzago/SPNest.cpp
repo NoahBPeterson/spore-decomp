@@ -55,12 +55,12 @@ struct cHerd {
 extern "C" void  __cdecl FUN_00c6a100(void* egg);                     // 0x00c6a100 egg effect refresh
 extern "C" void* __cdecl FUN_00b530e0(void* p, int a);                // 0x00b530e0
 extern "C" void* __cdecl FUN_00401090();                              // returns the species manager
-extern "C" void* __cdecl FUN_00b3d4c0(void* a, int b, int c);
+extern "C" void* __stdcall FUN_00b3d4c0(void* a, int b, int c);
 extern "C" int   __cdecl FUN_00ba3f90(void* a, int b, int c);
 extern "C" void* __cdecl PlanetModel();                               // 0x00b3d350
 extern "C" void* __cdecl TerraformingManager();                       // 0x00b3d430
 extern "C" void* __cdecl NounManager();                               // 0x00b3d300
-extern "C" void* __cdecl FUN_00b18460(int id);
+extern "C" void* __stdcall FUN_00b18460(int id);
 extern "C" void* __cdecl FUN_00d51660();                              // 0x00d51660
 extern "C" void* __cdecl FUN_00c099e0(void* a, int b, int c, int d, int e);
 extern "C" void  __cdecl FUN_00bc97f0(int a, int key, float f, int b);
@@ -96,7 +96,7 @@ extern float gWaterSearchDist;   // 0x01582e8c  100.0f
 extern float gFiftyF;            // 0x01582f5c  50.0f
 extern float gViewerOrigin[3];   // 0x01693e50..0x01693e58
 extern int   gViewerGuard;       // 0x01693e4c
-extern void* gEggSerializerList; // 0x015778f0
+extern SP::cDataSerializerGeneric gEggSerializerList; // 0x015778f0
 #pragma warning(disable : 4100)
 
 namespace EA {
@@ -131,6 +131,9 @@ class ThisStubs
     void G();   // 0x00ac0450 cInteractionTarget clear
     void H();   // 0x00c8b2e0 cSpatialObject clear
     void I();   // 0x00bbc3f0 TerraformingManager footstep
+    bool WriteGameData(void* stream);   // 0x00b18590
+    bool WriteSpatial(void* stream);    // 0x00c88a90
+    bool WriteCombatant(void* stream);  // 0x00bfc4a0
 };
 }
 namespace SP {
@@ -202,6 +205,15 @@ class RefObj
   public:
     virtual void AddRef();              // +0x00
     virtual void Release();             // +0x04
+    virtual void slot08();
+    virtual void slot0c();
+    virtual void slot10();
+    virtual void slot14();
+    virtual void slot18();
+    virtual void slot1c();
+    virtual void slot20();
+    virtual void slot24();
+    virtual void slot28();
     virtual bool IsValid();             // +0x2c
 };
 }
@@ -243,7 +255,7 @@ class cNest_s00c6_a550
     void AddFootprint();                        // 0xc6ab90
     bool LoadModel(void* modelWorld);           // 0xc6b410 (ret 4)
     void* AsInterface(int id);                  // 0xc6b390 (ret 4)
-    int  CanSpawn();                            // 0xc6aa50
+    bool CanSpawn();                            // 0xc6aa50
 
     ISpatial* Spatial() { return reinterpret_cast<ISpatial*>(reinterpret_cast<char*>(this) + 0x34); }
 
@@ -269,7 +281,7 @@ class cHerd_s00c6_a550
     void  SpawnAnimalsIfUnderfilled();                  // 0xc6b540
     void  SetEnabled(u8 on);                            // 0xc6ace0 (ret 4)
     bool  UnbrokenEggsInNest();                         // 0xc6ac40
-    void  ClearLocationStatus(int i);                   // 0xc6ac90 (ret 4)
+    int   ClearLocationStatus(int i);                   // 0xc6ac90 (ret 4)
     int   GetHerdAnimalFlag();                          // 0xc6aa10
 
     unsigned char pad000[0x40];
@@ -286,7 +298,7 @@ class cHerd_s00c6_a550
     int mHead;                                  // 0xf4
     int mTail;                                  // 0xf8
     unsigned char pad0fc[0x108 - 0xfc];
-    int mNumBabies;                             // 0x108
+    float mNumBabies;                           // 0x108
     unsigned char pad10c[0x15c - 0x10c];
     int mLocationState;                         // 0x15c
     void* mpNest;                               // 0x160
@@ -344,7 +356,7 @@ struct AnimalNoun
     ISpatial* spatialC0() { return reinterpret_cast<ISpatial*>(reinterpret_cast<char*>(this) + 0xc0); }
 };
 }
-extern "C" int   __cdecl FUN_00c8a550(void* so, void* modelWorld);     // cSpatialObject::LoadModel
+extern "C" bool  __cdecl FUN_00c8a550(void* so, void* modelWorld);     // cSpatialObject::LoadModel
 // ---- items of slice s00c6a550 end
 
 // ---- items of slice s00c6e710 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -798,25 +810,30 @@ bool cHerd::ShouldActivate()
 namespace SP {
 bool SP::cEgg_s00c6_a550::Write(SP::IOStream* stream)
 {
+    IWriter* __restrict writer = static_cast<IWriter*>(stream->GetWriter());
     u32 tag = 0x2a0349a;
-    IWriter* writer = (IWriter*)stream->GetWriter();
-    EA::IO::WriteUint32(writer->GetSink(), &tag, 1, 0);
-    if (!FUN_00b18590((void*)this, stream))
-        return false;
-    if (!FUN_00c88a90((char*)this + 0x34, stream))
-        return false;
-    bool ok = FUN_00bfc4a0((char*)this + 0x120, stream) != 0;
+    void* sink = writer->GetSink();
+    EA::IO::WriteUint32(sink, &tag, 1, 0);
+    bool ok = reinterpret_cast<ThisStubs*>(this)->WriteGameData(stream)
+        && reinterpret_cast<ThisStubs*>((char*)this + 0x34)->WriteSpatial(stream)
+        && reinterpret_cast<ThisStubs*>((char*)this + 0x120)->WriteCombatant(stream);
     if (mpHerd != 0 && mpHerd->IsValid()) {
-        mpHerd = 0;
-        mpHerd->Release();
+        RefObj* previous = mpHerd;
+        if (previous != 0) {
+            mpHerd = 0;
+            previous->Release();
+        }
     }
     if (mpToHatch != 0 && mpToHatch->IsValid()) {
-        mpToHatch = 0;
-        mpToHatch->Release();
+        RefObj* previous = mpToHatch;
+        if (previous != 0) {
+            mpToHatch = 0;
+            previous->Release();
+        }
     }
-    cVarListSerializer_s00c6_a550 ser;
-    FUN_00692f90(&ser, (void*)this, (void**)&gEggSerializerList, 0x1a80d26);
-    if (ok && FUN_00692900(&ser, stream))
+    SP::cVarListSerializer ser(this, &gEggSerializerList,
+        SP::cVarListSerializer::kSignature);
+    if (ok && ser.Serialize(*reinterpret_cast<SP::cIObjectDatabaseOStream*>(stream)))
         return true;
     return false;
 }
@@ -870,11 +887,11 @@ void __fastcall FUN_00c6a7f0(void* ecx_this, void* edx, const float* ext, int fl
     float e[6];
     e[0] = ext[0];
     e[1] = ext[1];
-    e[2] = ext[3];
-    e[3] = 0.0f;
+    e[2] = 0.0f;
+    e[3] = ext[3];
     e[4] = ext[4];
-    e[5] = (ext[2] < 0.0f ? -ext[2] : ext[2]) + ext[5];
-    FUN_00c89160(ecx_this, e, flag);
+    e[5] = (float)fabs(ext[2]) + ext[5];
+    ((void*(__thiscall*)(void*, const void*, int))FUN_00c89160)(ecx_this, e, flag);
     *(float*)((char*)ecx_this + 0x5c) = *(float*)((char*)ecx_this + 0x4c) * gHalf;
 }
 }  // namespace SP
@@ -945,16 +962,17 @@ u8 __fastcall FUN_00c6aa10(void* ecx_this, void* edx)
 
 // @ 0x00c6aa50
 namespace SP {
-int SP::cNest_s00c6_a550::CanSpawn()
+bool SP::cNest_s00c6_a550::CanSpawn()
 {
     cHerd_s00c6_a550* h = (cHerd_s00c6_a550*)mpOwner128;
     int prof = (int)((cSpeciesMgr*)FUN_00401090())->GetAvatarProfile();
-    if (h->mSpeciesKey != (u32)prof && !h->mb191 && !h->mbEnabled) {
-        void* p = FUN_00b3d4c0((char*)h + 0x98, 0, 0);
-        if (FUN_00ba3f90(p, 0, 0) != 4)
-            return 0;
+    if (h->mSpeciesKey != (u32)prof && !((cHerd_s00c6_a550*)mpOwner128)->mb191 &&
+        !((cHerd_s00c6_a550*)mpOwner128)->mbEnabled) {
+        void* p = FUN_00b3d4c0((char*)((cHerd_s00c6_a550*)mpOwner128) + 0x98, 0, 0);
+        if (((int(__thiscall*)(void*))FUN_00ba3f90)(p) != 4)
+            return false;
     }
-    return 1;
+    return true;
 }
 }  // namespace SP
 
@@ -1010,8 +1028,9 @@ void SP::cNest_s00c6_a550::AddFootprint()
 namespace SP {
 void* SP::cHerd_s00c6_a550::GetProfileForGeneration(unsigned gen)
 {
-    if ((int)gen < (mEvolvedKeysEnd - mEvolvedKeysBegin) / 0xc)
-        return ((cSpeciesMgr*)FUN_00401090())->GetProfile((const void*)(mEvolvedKeysBegin + (int)gen * 0xc));
+    unsigned count = (unsigned)((mEvolvedKeysEnd - mEvolvedKeysBegin) / 0xc);
+    if (gen < count)
+        return ((cSpeciesMgr*)FUN_00401090())->GetProfile((const void*)(mEvolvedKeysBegin + gen * 0xc));
     return 0;
 }
 }  // namespace SP
@@ -1037,10 +1056,11 @@ bool SP::cHerd_s00c6_a550::UnbrokenEggsInNest()
 
 // @ 0x00c6ac90
 namespace SP {
-void SP::cHerd_s00c6_a550::ClearLocationStatus(int i)
+int SP::cHerd_s00c6_a550::ClearLocationStatus(int i)
 {
-    if (i >= 0 && i < (int)(mLocationStatusEnd - mLocationStatus))
+    if (i >= 0 && i < mLocationStatusEnd - mLocationStatus)
         mLocationStatus[i] = 0;
+    return i;
 }
 }  // namespace SP
 
@@ -1167,19 +1187,22 @@ int __cdecl FUN_00c6af40(AnimalNoun* a, void* herdPtr)
         return 0;
     if (a->mbB5e)
         return 0;
-    if (!FUN_00c0b770(a))
+    if (!((int(__thiscall*)(void*))FUN_00c0b770)(a))
         return 0;
     if ((a->mFlagsB58 >> 8) & 1)
         return 0;
     if (a->mSpeciesKey != herd->mSpeciesKey)
         return 0;
     if ((a->mFlagsB58 >> 9) & 1) {
-        const Vec3* p1 = ((cNearNoun*)FUN_00c04590(a))->GetPosition();
+        const Vec3* p1 = ((cNearNoun*)((void*(__thiscall*)(void*))FUN_00c04590)(a))->GetPosition();
         const Vec3* p2 = a->spatialC0()->GetPosition();
         float dx = p2->x - p1->x;
         float dy = p2->y - p1->y;
         float dz = p2->z - p1->z;
-        if (gFiftyF * gFiftyF <= dx * dx + dy * dy + dz * dz)
+        float d2 = dx * dx;
+        d2 += dy * dy;
+        d2 += dz * dz;
+        if (gFiftyF * gFiftyF <= d2)
             return 0;
     }
     return 1;
@@ -1282,33 +1305,35 @@ void __fastcall FUN_00c6b350(void* ecx_this, void* edx, int a1, int a2, int a3, 
 namespace SP {
 void* SP::cNest_s00c6_a550::AsInterface(int id)
 {
-    if (id != 0x40ce1b1) {
-        if (id == 0x1b92b27)
-            return this;
-        void* p = FUN_00b18460(id);
-        if (!p) {
-            p = FUN_00c884f0((char*)this + 0x34, id);
-            if (!p)
-                p = FUN_00ac0320((char*)this + 0x108, id);
+    if (id == 0x40ce1b1) {
+        void* avatar = ((void*(__thiscall*)(void*))FUN_00b1fdb0)(NounManager());
+        if (avatar) {
+            int mine = mpOwner128 ? (int)((cHerd_s00c6_a550*)mpOwner128)->mSpeciesKey : 0;
+            if (mine == (int)((void*(__thiscall*)(void*))FUN_00c0bbd0)(avatar))
+                return this;
         }
-        return p;
+        return 0;
     }
-    void* avatar = FUN_00b1fdb0(NounManager());
-    if (avatar) {
-        int mine = mpOwner128 ? (int)((cHerd_s00c6_a550*)mpOwner128)->mSpeciesKey : 0;
-        if (mine == (int)FUN_00c0bbd0(avatar))
-            return this;
+    if (id == 0x1b92b27)
+        return this;
+    void* p = FUN_00b18460(id);
+    if (!p) {
+        p = ((void*(__thiscall*)(void*, int))FUN_00c884f0)((char*)this + 0x34, id);
+        if (!p)
+            p = ((void*(__thiscall*)(void*, int))FUN_00ac0320)((char*)this + 0x108, id);
     }
-    return 0;
+    return p;
 }
 }  // namespace SP
 
 // @ 0x00c6b410
-bool SP::cNest::LoadModel(SP::cIModelWorld * modelWorld)
+// cNest's LoadModel override is reached through its cSpatialObject sub-object, so the incoming ecx is
+// the cSpatialObject (cNest + 0x34); AddFootprint is the cNest method at ecx - 0x34.
+bool __fastcall FUN_00c6b410(void* spatialThis, void* edx, SP::cIModelWorld * modelWorld)
 {
-    bool ok = FUN_00c8a550((char*)this + 0x34, modelWorld) != 0;
+    bool ok = ((bool(__thiscall*)(void*, void*))FUN_00c8a550)(spatialThis, modelWorld);
     if (ok)
-        AddFootprint();
+        ((SP::cNest_s00c6_a550*)((char*)spatialThis - 0x34))->AddFootprint();
     return ok;
 }
 
@@ -1324,8 +1349,7 @@ void SP::cHerd_s00c6_a550::OnAnimalRemoved(void* animal)
             mCreaturePersonality = 0;
             o->Release();
         }
-        int count = (int)((char*)mpHerdEnd - (char*)mpHerdBegin) / 4;
-        for (int i = 0; i < count; ++i) {
+        for (int i = 0; i < mpHerdEnd - mpHerdBegin; ++i) {
             void* a = FUN_00d99500(mpHerdBegin[i]);
             if (a != animal && FUN_00c6af40((AnimalNoun*)a, this)) {
                 RefObj* cur = mCreaturePersonality;
@@ -1342,7 +1366,7 @@ void SP::cHerd_s00c6_a550::OnAnimalRemoved(void* animal)
         }
     }
     if (mpEggLayer == animal) {
-        FUN_00c02c20(animal, 0);
+        ((void(__thiscall*)(void*, int))FUN_00c02c20)(animal, 0);
         if (mpEggLayer) {
             RefObj* o = (RefObj*)mpEggLayer;
             mpEggLayer = 0;
@@ -1380,19 +1404,14 @@ void SP::cHerd_s00c6_a550::FindWateringHole()
     out.x = gViewerOrigin[0];
     out.y = gViewerOrigin[1];
     out.z = gViewerOrigin[2];
-    float dist = (float)mNumBabies;
-    if (!(dist > gEpsilon))
-        dist = gWaterSearchDist;
+    float dist = mNumBabies > gEpsilon ? mNumBabies : gWaterSearchDist;
     const Vec3* pos;
     if (mpNest)
         pos = ((ISpatial*)((char*)mpNest + 0x34))->GetPosition();
     else
         pos = (const Vec3*)((char*)this + 0x34);
-    if (FindClosestWater(planet, pos, dist, &out)) {
-        mWateringHolePosition.x = out.x;
-        mWateringHolePosition.y = out.y;
-        mWateringHolePosition.z = out.z;
-    }
+    if (((char(__thiscall*)(void*, const void*, float, void*))FindClosestWater)(planet, pos, dist, &out))
+        mWateringHolePosition = out;
 }
 }  // namespace SP
 
@@ -1444,7 +1463,7 @@ u8 __cdecl FUN_00c6bf20(void** serializer, int name, const void* vec2, int elem)
             FUN_0093c5a0(&B, name, -1);
         }
         WStr C;
-        FUN_0056e2d0(&C, &B);
+        ((void(__thiscall*)(void*, const void*))FUN_0056e2d0)(&C, &B);
         if (noName && ((char*)B.cap - (char*)B.begin & ~1) > 2 && B.begin)
             FUN_00f47380(B.begin);
         if (!noName && ((char*)B.cap - (char*)B.begin & ~1) > 2 && B.begin)
@@ -1498,12 +1517,12 @@ u8 __cdecl FUN_00c6c390(void** serializer, int name, void** list)
     WStr N;
     if (noName) {
         N.begin = 0; N.end = 0; N.cap = 0;
-        FUN_00579a90(&N, 0);
+        ((void(__thiscall*)(void*, int))FUN_00579a90)(&N, 0);
     } else {
         FUN_0093c5a0(&N, name, -1);
     }
     WStr C;
-    FUN_0056e2d0(&C, &N);
+    ((void(__thiscall*)(void*, const void*))FUN_0056e2d0)(&C, &N);
     if (noName && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
         FUN_00f47380(N.begin);
     if (!noName && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
@@ -1536,12 +1555,12 @@ u8 __cdecl FUN_00c6c4e0(void** serializer, int name, void** list)
     WStr N;
     if (noName) {
         N.begin = 0; N.end = 0; N.cap = 0;
-        FUN_00579a90(&N, 0);
+        ((void(__thiscall*)(void*, int))FUN_00579a90)(&N, 0);
     } else {
         FUN_0093c5a0(&N, name, -1);
     }
     WStr C;
-    FUN_0056e2d0(&C, &N);
+    ((void(__thiscall*)(void*, const void*))FUN_0056e2d0)(&C, &N);
     if (noName && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
         FUN_00f47380(N.begin);
     if (!noName && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
@@ -1576,11 +1595,11 @@ u8 __cdecl FUN_00c6c630(void** serializer, int name, void** list)
             flags = 1;
         } else {
             N.begin = 0; N.end = 0; N.cap = 0;
-            FUN_00579a90(&N, 0);
+            ((void(__thiscall*)(void*, int))FUN_00579a90)(&N, 0);
             flags = 2;
         }
         WStr C;
-        FUN_0056e2d0(&C, &N);
+        ((void(__thiscall*)(void*, const void*))FUN_0056e2d0)(&C, &N);
         if ((flags & 2) && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
             FUN_00f47380(N.begin);
         if ((flags & 1) && ((char*)N.cap - (char*)N.begin & ~1) > 2 && N.begin)
@@ -1591,8 +1610,7 @@ u8 __cdecl FUN_00c6c630(void** serializer, int name, void** list)
 
         char* end = (char*)list[1];
         for (char* it = (char*)list[0]; it != end; it += 4) {
-            if (ok)
-                ok = ok != 0;
+            ok = (ok != 0);
         }
         (*(void(__thiscall**)(void**, wchar_t*))(*(char**)serializer + 4))
             (serializer, (C.begin == C.end) ? (wchar_t*)0x13f58ac : C.begin);

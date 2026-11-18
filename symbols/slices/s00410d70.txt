@@ -1,0 +1,2 @@
+00410dd0 ?OnUpdate@EditorHost@@QAE_NH@Z  # EditorHost::OnUpdate migrated from s00410d70 (verbatim, slice spelling)
+00410f90 ?OnFrame@EditorHost2@@QAE_NH@Z  # EditorHost2::OnFrame migrated from s00410d70 (verbatim, slice spelling)

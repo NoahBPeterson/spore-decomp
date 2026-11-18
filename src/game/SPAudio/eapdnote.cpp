@@ -605,39 +605,33 @@ void* bag_new()
 namespace EA { namespace Audio { namespace Eapd {
 void bag_float(char* x, float f)
 {
+    t_bagelem *bagelem, *e2, *e3;
     if (*(float*)(x + 0x28) != 0.0f) {
-        t_bagelem* el = (t_bagelem*)getbytes(8, "EAPd/t_bagelem");
-        el->be_next  = 0;
-        el->be_value = f;
-        t_bagelem* p = *(t_bagelem**)(x + 0x2c);
-        if (!p) {
-            *(t_bagelem**)(x + 0x2c) = el;
+        bagelem = (t_bagelem*)getbytes(8, "EAPd/t_bagelem");
+        bagelem->be_next = 0;
+        bagelem->be_value = f;
+        if (!*(t_bagelem**)(x + 0x2c)) {
+            *(t_bagelem**)(x + 0x2c) = bagelem;
         } else {
-            t_bagelem* nxt;
-            while ((nxt = p->be_next) != 0)
-                p = nxt;
-            p->be_next = el;
+            for (e2 = *(t_bagelem**)(x + 0x2c); e3 = e2->be_next; e2 = e3)
+                ;
+            e2->be_next = bagelem;
         }
     } else {
-        t_bagelem* p = *(t_bagelem**)(x + 0x2c);
-        if (!p)
+        if (!*(t_bagelem**)(x + 0x2c))
             return;
-        if (p->be_value == f) {
-            *(t_bagelem**)(x + 0x2c) = p->be_next;
-            freebytes(p, 8);
+        if ((*(t_bagelem**)(x + 0x2c))->be_value == f) {
+            bagelem = *(t_bagelem**)(x + 0x2c);
+            *(t_bagelem**)(x + 0x2c) = (*(t_bagelem**)(x + 0x2c))->be_next;
+            freebytes(bagelem, 8);
             return;
         }
-        t_bagelem* prev = p;
-        t_bagelem* q = p->be_next;
-        while (q) {
-            if (q->be_value == f) {
-                prev->be_next = q->be_next;
-                freebytes(q, 8);
+        for (e2 = *(t_bagelem**)(x + 0x2c); e3 = e2->be_next; e2 = e3)
+            if (e3->be_value == f) {
+                e2->be_next = e3->be_next;
+                freebytes(e3, 8);
                 return;
             }
-            prev = q;
-            q = q->be_next;
-        }
     }
 }
 }}}  // namespace EA::Audio::Eapd

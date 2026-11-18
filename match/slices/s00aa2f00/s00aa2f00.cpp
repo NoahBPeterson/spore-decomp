@@ -5,6 +5,7 @@
 // helpers they use.
 
 #include "types.h"
+#include <intrin.h>
 
 namespace EA
 {
@@ -425,10 +426,7 @@ void* CreateParticlesEffectCommand(int flags)
 // @ 0x00aa2f00
 cEmittedParticle* CreateEmittedParticle(void* stream, int flags)
 {
-    cEmittedParticle* p = 0;
-    cEmittedParticle* o = new ("Swarm", 0, 0, 0, 0) cEmittedParticle();
-    if (o)
-        p = o;
+    cEmittedParticle* p = new ("Swarm", 0, 0, 0, 0) cEmittedParticle();
     ReadEmittedParticle(stream, flags, p);
     return p;
 }
@@ -574,14 +572,16 @@ cParticlesDescription::~cParticlesDescription()
 }
 
 cEmittedParticle::cEmittedParticle()
-    : mf08(0), mf18(kFloat1)
+    : mf08(0), mf18(1.0f)
 {
+    _ReadWriteBarrier();
     mRangeA[0] = -1;
     mRangeA[1] = -1;
     mEmitX = gEmitR;
     mEmitY = gEmitG;
     mEmitZ = gEmitB;
-    mf28 = kFloat1;
+    mf28 = 1.0f;
+    _ReadWriteBarrier();
     mf2c = 0;
     mf30 = 0;
     mf34 = 0;

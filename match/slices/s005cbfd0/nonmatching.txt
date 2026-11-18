@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-005ccc00  12    cSPEditorShoppingTokenTranslator::~cSPEditorShoppingTokenTranslator: complete (102 vs 104 bytes); only the vptr store position differs. difftest PASS (331 valid inputs, 100.0% coverage)

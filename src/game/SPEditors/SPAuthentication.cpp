@@ -1765,7 +1765,7 @@ void * SP::Pollen::cAuthManager::AsInterface(EA::COM::InterfaceId typeID)
   switch ((int)typeID) {
     case 0x40f7cee: return this;
     case 0x7201461:
-    case (int)0xee3f516e: return static_cast<IAuthenticationService*>(this);
+    case (int)0xee3f516e: return this ? (void*)((char*)this + 0x1c) : 0;
     case 0x2f009dd0: return this;
   }
   return 0;

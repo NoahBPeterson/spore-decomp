@@ -1,5 +1,9 @@
 # source  symbol  va  flags
+../src/game/SPBake/SPEditorBaker.cpp  ?ConvertObjectIdsToIndices@@YAXPAUBlockContainer@@@Z  00401990  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?IsOutsideReservedRange@@YA_NPBUPackedIdHolder@@@Z  00401d90  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??1ReferenceHolder@@QAE@XZ  00401f20  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ??0ResourceCollector@@QAE@XZ  00401ff0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??1ResourceCollector@@QAE@XZ  004020e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?AddResource@ResourceCollector@@QAEXUResourceKey@@@Z  004021a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?AddCreated@ResourceCollector@@QAEXIIPBX@Z  00402390  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Release@AtomicRefCounted@@QAEHXZ  00402420  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
@@ -23,20 +27,44 @@
 ../src/game/SPBake/SPEditorBaker.cpp  ?Description@BakerCommand_s0040_4480@@QAEXPAX@Z  00404630  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?IsValid@ResourceKeyFilter@@UAE_NABUResourceKey_s0040_4660@@@Z  00404f10  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Release@ThreadedObject_s0040_4660@Resource_s0040_4660@@UAEHXZ  00404f90  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0EditorLoadRequest@@QAE@ABU0@@Z  004063d0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??4EditorSnapshot@@QAEAAU0@ABU0@@Z  00406ac0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?TestAny@IPredicateTarget@@QAE_NPAX@Z  00406e90  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?IsFlagged@ResourceFlagQuery@@QAE_NABUResourceKey@@_N@Z  00406ef0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?GetBoolProperty@@YA_NPAVPropertyList_s0040_6ac0@@IAA_N@Z  00407190  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Apply@KeyRemapper@@QAEXAAU?$vector_s0040_6ac0@UKeyPair@@@@UResourceKey@@@Z  004071e0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0Vector3Copyable@@QAE@ABU0@@Z  004098a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?MulMatrixAssign@@YAAAUVector3@@AAU1@ABUMatrix3@@@Z  004098e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0Transform@@QAE@XZ  00409930  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?RotateY@Transform@@QAEXM@Z  004099b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Scale@Transform@@QAEXM@Z  00409b30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?GetCenter@BoundingBox@@QBEAAUVector3@@AAU2@@Z  00409b90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Reset@BoundingBox@@QAEXXZ  00409c00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?SetCenterRadius@BoundingBox@@QAEXABUVector3@@M@Z  00409ce0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?VectorLength@@YAMPBUVector3_s0040_a9c0@@@Z  0040ae50  /Od /Ob1 /Oi /fp:fast /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0ColorKey_s0040_ccb0@@QAE@XZ  0040cf60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0CreatureAbility_s0040_ccb0@@QAE@GGPAX@Z  0040cfd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0SlotAbility_s0040_ccb0@@QAE@XZ  0040d010  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0ListAbility_s0040_ccb0@@QAE@XZ  0040d160  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Handle@Dispatcher@@QAE_NIH@Z  0040e800  /Od /Ob1 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?OnClear@Obj@@QAE_NH@Z  0040e9c0  /Od /Ob1 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?OnReset@Obj@@QAE_NH@Z  0040eab0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?ProcessBatch@EditorPartList@@QAE_NXZ  0040eb70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Invert@PartTransform@@QAEXXZ  0040efa0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ??0PartHolder@@QAE@PBU0@@Z  0040f070  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Rescan@EditorPartList@@QAE_NXZ  0040f110  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??1BakeJobDtor@@QAE@XZ  00410d70  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?ComputeVector@@YAPAUVector3_s0041_3cc0@@PAU1@PBX1U1@@Z  00413cc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?MinComponent@@YAMPAUVector3_s0041_3cc0@@@Z  00413d60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Advance@ClipPlayer@@QAE_NPAUClip@@M_N@Z  004142e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Rewind@ClipPlayer@@QAEXH@Z  004143e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Step@ClipPlayer@@QAE_NPAUClip@@M@Z  00414420  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Start@ClipPlayer@@QAE_NPAUClip@@MPAPAULoadHandle_s0041_3cc0@@@Z  00414470  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?SetItem@PaletteEditor@@QAE_NPAUItemBase@@@Z  004145c0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?AddEntry@PaletteEditor@@QAE_NPAUDefRef@@PAUExtraInfo@@PAUIRefCounted_s0041_45c0@@@Z  004147b0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?GetField78@EditorObject@@QAEHXZ  00414e10  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?CellBounds@BoundsSampler@@QAEXIAAUVector3_s0041_4e30@@0@Z  004154b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Get@PropertyListCache@@QAEPAUPropertyList_s0041_4e30@@II@Z  00415660  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?FindModelKey@ConfigManager_s0041_4e30@@QAE_NIIPAUResourceKey_s0041_4e30@@@Z  00415730  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?HasHandler@EditorPanel@@QAE_NPAUResourceKey_s0041_6180@@H@Z  00416180  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?HasId@EditorPanel@@QAE_NH@Z  00416320  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
@@ -49,6 +77,7 @@
 ../src/game/SPBake/SPEditorBaker.cpp  ?GetActiveKey@EditorPanel_s0041_6990@@QAE_NPAUResourceKey_s0041_6990@@@Z  00416fb0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?GetSlotArea@EditorBlockData_s0041_7600@@QAEPADXZ  00417cf0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?CreateEditorBlockData@@YAPAUEditorBlockData_s0041_7600@@XZ  00417d10  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?CheckMatchingProps@@YA_NPAUPropList_s0041_7d60@@@Z  00418440  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?CreateEditorResource@@YAPAUEditorResource@@PAUEditorSource@@PAIPAPAULoadHandle_s0041_86c0@@@Z  004186c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ??0EditorResource@@QAE@XZ  00418870  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ??_GEditorResource@@UAEPAXI@Z  00418960  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
@@ -56,8 +85,28 @@
 ../src/game/SPBake/SPEditorBaker.cpp  ??1SubObject@@QAE@XZ  00418a10  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?NotifyA@EditorResource@@QAEXPAULoadHandle_s0041_86c0@@@Z  00418f90  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?NotifyB@EditorResource@@QAE_NPAULoadHandle_s0041_86c0@@@Z  00418fd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Dispatch@Updater@@QAEXPAX@Z  00419ff0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0D@@QAE@XZ  0041a980  /Od /Ob1 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Destroy@D@@UAEPAXI@Z  0041a9f0  /Od /Ob1 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?CollectAndDestroy@@YA_NII@Z  0041aa40  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Extend@BoundingBox_s0041_bd50@@QAEXABUVector3_s0041_bd50@@@Z  0041bd50  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?MaxComponent@@YAMPBUVector3_s0041_bd50@@@Z  0041bf30  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?MaxVec@@YA?AUVector3_s0041_bd50@@ABU1@0@Z  0041bfb0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?MinVec@@YA?AUVector3_s0041_bd50@@ABU1@0@Z  0041c0c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?DequeCopyImpl@@YA?AUDequeIter@@U1@00@Z  0042f720  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?DequeCopyBackwardImpl@@YA?AUDequeIter@@U1@00@Z  0042f780  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??4ThreadedHolder@@QAEAAU0@ABU0@@Z  0042f8b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?AssignRange@WString_s0042_f160@@QAEAAU1@PBG0@Z  0042f920  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?append@WideFixedBuf@@QAEAAU1@PB_W0@Z  0042f9d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?f@ThunkD_4036a0@@W3AEXXZ  0042fbb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?f@ThunkD_410d40@@W3AEXXZ  0042fbc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?f@ThunkD_41a9f0@@W3AEXXZ  0042fbd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ??_EDelObj@@W3AEPAXI@Z  0042fbe0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ??_EEditorResourceD@@W3AEPAXI@Z  0042fc20  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?BakeSpritesLoadAndBuild@@YA_NPAXIII0000@Z  0042fc40  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?BakeSpritesCreateThunk@@YAXPAURefVector@@III0PAUVector8@@PAUElem24Vec@@PAUTransformVec@@@Z  0042ff00  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Run@BakeSpritesResource@@QAEXH@Z  0042ff30  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?BakeSpritesCreate@@YA_NPAURefVector@@III0PAUVector8@@PAUElem24Vec@@PAUTransformVec@@@Z  0042ffb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0BakeSpritesResource@@QAE@XZ  004301e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??_GBakeSpritesResource@@UAEPAXI@Z  004302f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?f@CEditorResourceThunk@SP@@UAEHPAX@Z  00561150  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1583,6 +1583,7 @@ void* cSPEditorSkinManager_s004c_4650::GetSkin(uint32_t which)
     case 0: {
         cSPEditorSkinPart_s004c_4650* p = mTorsoSkin;
         return p;
+        break;
     }
     case 1: {
         cSPEditorSkinPart_s004c_4650* p = mCompleteSkin;
@@ -1887,15 +1888,26 @@ Elem* __fastcall FUN_004c6190(Vec8* self, int edx, Elem* pos, Elem* value)
     return pos;
 }
 
+inline Elem* CopyMoveRange(Elem* first, Elem* last, Elem* dst)
+{
+    bool isTrivial = false;
+    ScratchSlots<2>();
+    return FUN_004c69e0(first, last, dst);
+}
+
+inline void DestroyMoveRange(Elem* first, Elem* last, Elem* dst)
+{
+    bool isTrivial = false;
+    ScratchSlots<1>();
+    FUN_004c6a70(first, last, dst);
+}
+
 // @ 0x004c6520
 Elem* __cdecl FUN_004c6520(Elem* first, Elem* last, Elem* dst)
 {
-    bool flag1 = false;
-    Elem* r = FUN_004c69e0(first, last, dst);
-    bool flag2 = false;
-    FUN_004c6a70(first, last, dst);
-    (void)flag1; (void)flag2;
-    return r;
+    Elem* result = CopyMoveRange(first, last, dst);
+    DestroyMoveRange(first, last, dst);
+    return result;
 }
 
 // @ 0x004c6560
@@ -1954,6 +1966,7 @@ Elem* __cdecl FUN_004c69b0(Elem* first, Elem* last, Elem* dst)
 {
     bool flag = false;
     (void)flag;
+    ScratchSlots<2>();
     return FUN_004c69e0(first, last, dst);
 }
 

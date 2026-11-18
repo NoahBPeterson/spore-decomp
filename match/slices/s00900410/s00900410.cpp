@@ -10,6 +10,8 @@ typedef unsigned char uint8;
 
 extern "C" int __cdecl strcmp(const char*, const char*);
 #pragma intrinsic(strcmp)
+extern "C" int __cdecl wcscmp(const wchar_t*, const wchar_t*);
+#pragma intrinsic(wcscmp)
 
 // ---------------------------------------------------------------------------
 // EA::Allocator
@@ -358,19 +360,10 @@ int XmlReader::FUN_00900720(const uint16* s)
     XmlReader* t = this;
     Token* p = t->mpCurrentToken;
     if (p != 0 && p->mToken == 1) {
-        int n = p->mnEntryCount;
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < p->mnEntryCount; i++) {
             const uint16* a = (const uint16*)p->mpEntries[i * 2];
-            const uint16* b = s;
-            while (*a == *b) {
-                if (*a == 0)
-                    return p->mpEntries[i * 2 + 1];
-                if (a[1] != b[1])
-                    break;
-                a += 2; b += 2;
-                if (a[-1] == 0)
-                    break;
-            }
+            if (wcscmp((const wchar_t*)a, (const wchar_t*)s) == 0)
+                return p->mpEntries[i * 2 + 1];
         }
     }
     return 0;

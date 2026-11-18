@@ -10,10 +10,8 @@
 004ee9b0 1613 complete (SP::cSPEditorModelValidity::TestLimbs); /Od frame-slot layout (name-hash order of 5+ scoped locals, inline temp holes) not reproduced
 004ef190 1503 complete (SP::cSPEditorModelValidity::TestBounds); /Od frame-slot layout not reproduced
 004f01f0 895 complete (SP::cSPEditorModelValidity::TestSize: all 35 calls in order); /Od frame layout: function-scope name-hash slot order, a 0x90-byte reserved hole before the fabs slots and one extra fabs float temp not reproduced
-004f21e0 14 complete; float compare uses double-width comisd not comiss
 004f3b40 209 complete; bitset-test /Od expansion and signedness differ
 004f5720 1100 complete: /Od frame-slot order (hash of local names) and some inline-arg temps differ
 004f5c60 1791 complete: /Od frame-slot order (hash of local names) and some inline-arg temps differ; 2113 vs 2156 bytes
-004f65d0 7 complete; original keeps a dead w[3]&=0 block (size differs)
 004f68f0 11 slot order: the find() value temporary lands above the inlined find's first-param slot (orig below)
 004ef880  -  complete draft carried over from s004ef880 on 2026-11-13 (it was completed there after this module was migrated; the module had kept an older unfinished version); check.py: size 686, retail 671

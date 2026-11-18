@@ -15,3 +15,6 @@
 ../src/game/SPGonzago/_at_00d10000.cpp  ?FUN_00d1e140@@YIPAXPAUE207Obj@@PAXI@Z  00d1e140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d10000.cpp  ?FUN_00d1f2a0@@YAXXZ  00d1f2a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00d10000.cpp  ?FUN_00d1f3c0@@YAXXZ  00d1f3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d10000.cpp  ?AsInterface@cRotationBall@RetailRotationQuery@@QAEPAXI@Z  00d1d4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d10000.cpp  ?AsInterface@cRotationRing@RetailRotationQuery@@QAEPAXI@Z  00d1db10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00d10000.cpp  ?GetRadius@cRotationBall@@QAENXZ  00d1dd70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

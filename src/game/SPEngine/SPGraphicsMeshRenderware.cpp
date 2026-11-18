@@ -93,7 +93,21 @@ struct RefObj_s0072_aaf0 {
     volatile long mRef;  // +0x08
     char  mPayload[0x14];// +0x0c
     int   mField20;      // +0x20
-    RefObj_s0072_aaf0* Ctor(int arg);   // 0x0072ac60
+};
+// the constructor's view of RefObj_s0072_aaf0: a tracer base at +0, a reference-counted base at +4 (count cleared
+// atomically), its own vtables, and the payload at +0x0c built from the argument by its out-of-line constructor
+struct RefObjTracerBase { virtual void Slot0(); ~RefObjTracerBase() {} };
+struct RefObjCountBase {
+    virtual void Slot0();
+    volatile long mRef;      // +0x08
+    RefObjCountBase() { volatile long* r = &mRef; _InterlockedExchange(r, 0); }
+    ~RefObjCountBase() {}
+};
+struct RefObjPayload { char d[0x14]; RefObjPayload(int a, int* pa); ~RefObjPayload(); };   // 0x0072aa80
+struct RefObjView_s0072_aaf0 : RefObjTracerBase, RefObjCountBase {
+    RefObjPayload mPayload;  // +0x0c
+    int   mField20;          // +0x20
+    RefObjView_s0072_aaf0(int arg);
 };
 struct IRefObject {                       // virtual AddRef/Release (slots 0/1)
     virtual int AddRef();
@@ -1811,16 +1825,10 @@ SpanHolder* SpanHolder::Init(const int* sp)
 }
 
 // @ 0x0072ac60
-RefObj_s0072_aaf0* RefObj_s0072_aaf0::Ctor(int arg)
+RefObjView_s0072_aaf0::RefObjView_s0072_aaf0(int arg)
+    : mPayload(arg, &arg)
 {
-    mpVtbl0 = (void**)&vtbl_Init0;
-    mpVtbl1 = (void**)&vtbl_Init1;
-    _InterlockedExchange(&mRef, 0);
-    mpVtbl0 = (void**)&vtbl_Final0;
-    mpVtbl1 = (void**)&vtbl_Final1;
-    FUN_0072aa80(&mPayload[0], arg, &arg);
     mField20 = 0;
-    return this;
 }
 
 // @ 0x0072ace0

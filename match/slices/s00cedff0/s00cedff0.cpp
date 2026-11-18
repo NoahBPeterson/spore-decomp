@@ -349,8 +349,7 @@ void __fastcall FUN_00cee2c0(BundleObj *o, void *edx, void *obj, u32 a, float b,
     o->m_field20 = b;
     o->m_field1c = a;
     if (c > 0.0f) {
-        void *r = FUN_00b3d2b0();
-        ((void(__thiscall *)(void *, float, BundleObj *, u32))FUN_00ac7ab0)(r, c, o, d);
+        ((void(__thiscall *)(void *, float, BundleObj *, u32))FUN_00ac7ab0)(FUN_00b3d2b0(), c, o, d);
     }
 }
 

@@ -444,10 +444,10 @@ extern "C" hkUint8* hkPoweredChain_OverwriteVelocityWithExplicitImpulse(int cons
     hkReal* out = (hkReal*)(constraintIndex * 0x20 + (int)velocities);
     unsigned char state = (unsigned char)((info[0] >> ((unsigned char)motorIndex << 1)) & 3);
     if (state == 1) {
-        const hkReal& v = *(const hkReal*)(info + motorIndex * 0x18 + 4);
+        hkReal v = *(const volatile hkReal*)(info + motorIndex * 0x18 + 4);
         out[4 + motorIndex] = v;
     } else {
-        const hkReal& v = *(const hkReal*)(info + motorIndex * 0x18 + 8);
+        hkReal v = *(const volatile hkReal*)(info + motorIndex * 0x18 + 8);
         out[4 + motorIndex] = v;
     }
     return (hkUint8*)info;

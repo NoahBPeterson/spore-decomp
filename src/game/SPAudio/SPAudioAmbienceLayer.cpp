@@ -11,7 +11,7 @@ typedef unsigned char u8;
 typedef unsigned int   u32;
 void* __cdecl operator_new(u32 size, const char* tag, int a3, int a4,
                            const char* file, int line);
-void  __cdecl operator_delete__(void*);
+void  __cdecl operator_delete__(void*) throw();
 void* __cdecl EA_Audio_GetSystemAT(void);                    // 0x00a206f0
 void* __cdecl SP_App(void);                                  // SP::App
 void* __cdecl FUN_SP_AudioSystem(void);                      // 0x0067cb00
@@ -156,21 +156,32 @@ bool F_a34fa0::call(int a, int b)
 }
 
 // @ 0x00a34fd0
+struct AmbRef {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct AmbRefPair {
+    u32 first;
+    AmbRef* second;
+    AmbRefPair(const AmbRefPair& o) : first(o.first), second(o.second)
+    {
+        if (second)
+            second->AddRef();
+    }
+    ~AmbRefPair()
+    {
+        AmbRef* r = second;
+        if (r)
+            r->Release();
+    }
+};
+inline void* operator new(unsigned int, AmbRefPair* p) { return p; }
+inline void operator delete(void*, AmbRefPair*) {}
+
 void* __cdecl FUN_00a34fd0(void* p1, void* p2, void* p3)
 {
-    if (p1 == p2)
-        return p3;
-    do {
-        char* q1 = (char*)p1;
-        char* q3 = (char*)p3;
-        *(int*)q3 = *(int*)q1;
-        void* ref = *(void**)(q1 + 4);
-        *(void**)(q3 + 4) = ref;
-        if (ref != 0)
-            vt0<void>(ref, 0);
-        p1 = q1 + 8;
-        p3 = q3 + 8;
-    } while (p1 != p2);
+    for (; p1 != p2; p1 = (AmbRefPair*)p1 + 1, p3 = (AmbRefPair*)p3 + 1)
+        new ((AmbRefPair*)p3) AmbRefPair(*(AmbRefPair*)p1);
     return p3;
 }
 
@@ -340,17 +351,25 @@ void F_a35420::call(float dt)
     self[5] = self[5] + (inv * dz) * step;
 }
 
-// @ 0x00a35570
-void __fastcall FUN_00a35570(int* param_1)
-{
-    int e = param_1[1];
-    for (int p = *param_1; p < e; p += 8) {
-        int ref = *(int*)(p + 4);
-        if (ref != 0)
-            vt<void>((void*)ref, 4, 0);
+struct AmbRefPairStorage {
+    AmbRefPair* mBegin;
+    AmbRefPair* mEnd;
+    ~AmbRefPairStorage()
+    {
+        if (mBegin)
+            operator_delete__(mBegin);
     }
-    if (*param_1 != 0)
-        operator_delete__((void*)*param_1);
+};
+struct AmbRefPairVec : AmbRefPairStorage {
+    ~AmbRefPairVec();
+};
+
+// @ 0x00a35570
+AmbRefPairVec::~AmbRefPairVec()
+{
+    AmbRefPair* e = mEnd;
+    for (AmbRefPair* p = mBegin; p < e; ++p)
+        p->~AmbRefPair();
 }
 
 // @ 0x00a355e0
@@ -428,7 +447,7 @@ void __fastcall FUN_00a35720(int* param_1)
             param_1[0x2a] = (int)puVar2;
         }
     }
-    FUN_00a35570((int*)((char*)param_1 + 0x74));
+    ((AmbRefPairVec*)((char*)param_1 + 0x74))->~AmbRefPairVec();
     if (param_1[9] != 0)
         operator_delete__((void*)param_1[9]);
     int v2 = param_1[4];
@@ -683,17 +702,13 @@ void cAmbienceLayer::Update()
 // @ 0x00a35ef0
 void S106::pushPair(void** v)
 {
-    char* self = (char*)this;
-    void** end = *(void***)(self + 4);
-    if (end < *(void***)(self + 8)) {
-        *(void***)(self + 4) = end + 2;
-        if (end) {
-            end[0] = v[0];
-            end[1] = v[1];
-            if (end[1]) ((void(__thiscall*)(void*))VFN(end[1], 0))(end[1]);
-        }
+    AmbRefPair** pEnd = (AmbRefPair**)((char*)this + 4);
+    if (pEnd[0] < pEnd[1]) {
+        AmbRefPair* end = pEnd[0];
+        pEnd[0] = end + 1;
+        new (end) AmbRefPair(*(AmbRefPair*)v);
     } else {
-        fA358d0(self, 0, end, v);
+        ((F_a358d0*)this)->call((void**)pEnd[0], v);
     }
 }
 

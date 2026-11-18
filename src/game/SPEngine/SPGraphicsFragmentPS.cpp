@@ -98,6 +98,7 @@ struct Vec28 {
   Vec28(const void* other);              // 0x006fad40
   void CopyTail(const void*, const void*);   // 0x006fae30
   void InsertGrow(const void*, const void*);  // 0x006faea0
+  void PushBack(); // 0x006fb0e0
 };
 struct IStream_s006f_a2c0;
 namespace EA {
@@ -447,6 +448,32 @@ struct cPixelFragmentInfo {  // 0x64 bytes
   uint32_t mField58;         // +0x58
   uint32_t mField5C;         // +0x5c
   uint32_t mField60;         // +0x60
+  cPixelFragmentInfo() {
+    mFlags = 0;
+    mStr1Begin = 0x01667bac;
+    mStr1End = 0x01667bac;
+    mStr1Cap = 0x01667bad;
+    mStr2Begin = 0x01667bac;
+    mStr2End = 0x01667bac;
+    mStr2Cap = 0x01667bad;
+    mRegions.mpBegin = 0;
+    mRegions.mpEnd = 0;
+    mRegions.mpCap = 0;
+    mField38 = 0;
+    mField3C = 0;
+    mField40 = 0;
+    mField41 = 0;
+    mField44 = 0;
+    mField48 = 0;
+    mField4C = 0;
+    mField50 = 0;
+    mField54 = 0;
+    mField58 = 0;
+    mField5C = 0;
+    mField60 = 0;
+  }
+  cPixelFragmentInfo& operator=(const cPixelFragmentInfo& o);   // 0x006fbed0
+  ~cPixelFragmentInfo();     // 0x006fb040
 };
 struct CFragDecl {           // 0x1c bytes (elements of the +0x24 region vector)
   char*    mpBegin;          // +0x00
@@ -882,22 +909,25 @@ PixelFrag::~PixelFrag()
   }
 }
 
+// The vector stores 0x130-byte pixel-fragment records.
+struct PixelFragmentRecord { unsigned words[0x130 / sizeof(unsigned)]; };
+
+#pragma function(memset)
 // @ 0x006fb0e0
-void PixelFrag::PushBack()
+void Vec28::PushBack()
 {
-  Vec28* v = (Vec28*)((char*)this + 0x04);   // element vector lives at PixelFrag+0x04
-  char* e = (char*)v->end;
-  if (e < (char*)v->cap) {
-    v->end = e + 0x130;
-    if (e != 0) {
-      memset(e, 0, 0x130);
+    PixelFragmentRecord* position = static_cast<PixelFragmentRecord*>(end);
+    if (position < static_cast<PixelFragmentRecord*>(cap)) {
+        end = position + 1;
+        if (position)
+            memset(position, 0, sizeof(PixelFragmentRecord));
+        return;
     }
-    return;
-  }
-  char tmp[0x130];
-  memset(tmp, 0, 0x130);
-  v->InsertGrow(tmp, tmp);
+    PixelFragmentRecord value;
+    memset(&value, 0, sizeof(value));
+    InsertGrow(position, &value);
 }
+#pragma intrinsic(memset)
 
 // @ 0x006fb150
 void RegisterShaderTable()
@@ -1250,39 +1280,15 @@ void Vec25::set_capacity(unsigned n)
 namespace SP {
 void ClearPSFragment(int index)
 {
-  cPixelFragmentInfo tmp;
-  cPixelFragmentInfo* dst = (cPixelFragmentInfo*)(DAT_016198c0 + (unsigned)index * 0x64);
-  tmp.mFlags = 0;
-  tmp.mStr1Begin = 0x01667bac;
-  tmp.mStr1End = 0x01667bac;
-  tmp.mStr1Cap = 0x01667bad;
-  tmp.mField10 = 0;
-  tmp.mStr2Begin = 0x01667bac;
-  tmp.mStr2End = 0x01667bac;
-  tmp.mStr2Cap = 0x01667bad;
-  tmp.mField20 = 0;
-  tmp.mRegions.mpBegin = 0;
-  tmp.mRegions.mpEnd = 0;
-  tmp.mRegions.mpCap = 0;
-  tmp.mField30 = 0;
-  tmp.mField34 = 0;
-  tmp.mField38 = 0;
-  tmp.mField3C = 0;
-  tmp.mField40 = 0;
-  tmp.mField41 = 0;
-  tmp.mField44 = 0;
-  tmp.mField48 = 0;
-  tmp.mField4C = 0;
-  tmp.mField50 = 0;
-  tmp.mField54 = 0;
-  tmp.mField58 = 0;
-  tmp.mField5C = 0;
-  tmp.mField60 = 0;
-  ((void(__thiscall*)(void*, const void*))FUN_006fbed0)(dst, &tmp);
-  ((void(__thiscall*)(void*))FUN_006fb040)(&tmp);
-  ((void(__thiscall*)(void*, int))FUN_0047d240)((char*)dst + 4, 0);
-  ((void(__thiscall*)(void*, int))FUN_0047d240)((char*)dst + 0x14, 0);
-  ((Vec25*)((char*)dst + 0x24))->set_capacity(0);
+  unsigned off;
+  {
+    cPixelFragmentInfo tmp;
+    off = (unsigned)index * 0x64;
+    *(cPixelFragmentInfo*)(DAT_016198c0 + off) = tmp;
+  }
+  ((void(__thiscall*)(void*, int))FUN_0047d240)(DAT_016198c0 + off + 4, 0);
+  ((void(__thiscall*)(void*, int))FUN_0047d240)(DAT_016198c0 + off + 0x14, 0);
+  ((Vec25*)(DAT_016198c0 + off + 0x24))->set_capacity(0);
 }
 }  // namespace SP
 

@@ -172,10 +172,8 @@ void glyph_CloseContour(GlyphClass* g)
 {
     if (g->pointCount == 0) return;
     int16 pc = (int16)g->pointCount;
-    int16 cc = (int16)g->contourCount;
-    if (cc <= 0 || (int16)g->contourEnds[cc - 1] != pc - 1) {
-
-    glyph_AllocContours(g, (int16)(cc + 2));
+    if ((int16)g->contourCount <= 0 || (int16)g->contourEnds[(int16)g->contourCount - 1] != pc - 1) {
+    glyph_AllocContours(g, (int16)((int16)g->contourCount + 2));
     if ((int16)g->pointCount <= 0)
         g->contourEnds[(int16)g->contourCount] = 0;
     else

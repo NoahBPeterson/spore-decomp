@@ -3,7 +3,6 @@
 # Both are equivalence-only per symbols/renderware4_core.txt (prebuilt libraries, /GL+/LTCG),
 # so only leaves can be byte-exact.  Each row lists the flags it compiles cleanly with;
 # difftest verdicts are at the end of the file.
-0112be40  91  convertClassVersion1Inplace: version-dispatch switch is a genuine jump table in
                the original; ours emits an equivalent compare chain.  Semantics identical.
                flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
 0112bfa0 334  getMemberSize: 28-way type dispatch rebuilt from the original jump table; the
@@ -29,7 +28,6 @@
 0112c640  49  System::someCheck: predicate is identical; the original keeps the two voice
                counters in ecx/edx where ours spills/reloads them.
                flags /vc71 /O2 /MD /Gy /EHsc /TP
-0112c690  62  System::updateVoices: loop, SSE compares and movss store all match; only the
                rotated loop pre-test differs (original `xor eax,eax; cmp ax,[edi+0xf0]`,
                ours `cmp [edi+0xf0],si`) plus the resulting 1-byte loop-alignment nop.
                /vc71 is required for comiss (cl 15 compares floats with x87).
@@ -50,7 +48,6 @@
 0112cd60  57  NodeList::insert: list splice is exact; the original walks with the sentinel
                offset folded into the index register, ours subtracts 0x24 per iteration.
                flags /vc71 /O2 /MD /Gy /EHsc /TP
-0112cdb0  11  audio_allocNode: call, null test and all six stores exact; ours stores the
                back-pointer +0x10 first (releases esi early), the original stores it third.
                flags /O2 /MD /Gy /EHsc /TP
 
@@ -58,7 +55,6 @@
 # difftest verdicts (tools/difftest/equiv.py, default 400 inputs, per-row flags above)
 # PASS/WEAK = behaviourally equivalent; UNSUPPORTED = harness cannot generate a valid input.
 #   va        verdict      valid/coverage  note
-# 0112be40  UNSUPPORTED   0/400   0.0%    every input faults on the class-version read
 # 0112bfa0  WEAK        295/400  57.7%    jump-table semantics agree on all valid inputs
 # 0112c150  WEAK        400/400  21.2%    max-alignment loop agrees, low path coverage
 # 0112c220  UNSUPPORTED   0/400   0.0%    budget exhausted / faults in the member walk

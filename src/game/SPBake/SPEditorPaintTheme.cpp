@@ -33,7 +33,6 @@ extern void* g_vtbl_BakeSprites;
 extern void* g_vtbl_ContentValidator;
 extern void* g_vtbl_PaintTheme0;
 extern void* g_vtbl_PaintTheme1;
-extern uint32_t DAT_015d6e2c, DAT_015d6e30, DAT_015d6e34;
 extern uint32_t DAT_015d6b98, DAT_015d6b9c, DAT_015d6ba0;
 extern uint32_t DAT_015d6cc8, DAT_015d6f64;
 extern "C" void* FUN_004bb860(void* a);
@@ -42,6 +41,7 @@ extern "C" void  FUN_004553b0(void* out, void* key);
 inline void* operator new(unsigned int, void* p) { return p; }
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
 struct cSPColorRGB_s004b_2320 { uint32_t x, y, z; };
+extern cSPColorRGB_s004b_2320 gDefaultSkinResetColor; // 0x015d6e2c, complete three-word color
 struct PropObj;
 struct PropMgr;
 extern "C" void  FUN_006a0ae0(PropObj* list, uint32_t name, void* a, void* b);
@@ -287,8 +287,14 @@ struct PaintTheme
 // ---- items of slice s004b4930 end
 
 // ---- items of slice s004ba150 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void  FUN_004f3de0(void* a, void* b, int c, int d, int e, int f, char g);
-extern int DAT_015da860, DAT_015da864, DAT_015da868, DAT_015da86c;
+struct EditorValidityBits { uint32_t words[4]; };
+struct EditorResourceValidity {
+    EditorValidityBits* GetValidity(EditorValidityBits* out, bool stopOnFirstFailure); // 0x004babe0
+};
+extern EditorValidityBits gDefaultValidityTests; // 0x015da860, complete 128-bit test mask
+EditorValidityBits* __cdecl CalculateEditorValidity(EditorValidityBits* out, EditorResourceValidity* resource,
+    EditorValidityBits tests, bool stopOnFirstFailure); // 0x004f3de0
+
 namespace SP {
 struct Vector3 {
     float x, y, z;
@@ -1134,9 +1140,7 @@ void SP::cSPEditorPaintTheme_s004b_2320::Reset()
     mPropTheme.Clear();
     mPropThemeID = 0;
     for (int i = 0; i < 3; i++) {
-        mSkinColors[i].x = DAT_015d6e2c;
-        mSkinColors[i].y = DAT_015d6e30;
-        mSkinColors[i].z = DAT_015d6e34;
+        mSkinColors[i] = gDefaultSkinResetColor;
         mSkinEffects[i] = 0;
         mSkinEffectSeeds[i] = 0x4d2;
     }
@@ -1526,9 +1530,9 @@ void SP::cSPEditorPaintTheme_s004b_33e0::FUN_004b3c20(int model)
     if (model != 0) {
         int local = *(int*)(model + 0x1c);
         int local2 = local;
-        void* r = mModelTheme.FUN_004b5080(&local2);
-        ((SP::PaintVector_s004b_33e0*)r)->FUN_004b4fa0((void*)(model + 0x4c8));
+        ((SP::PaintVector_s004b_33e0*)mModelTheme.FUN_004b5080(&local2))->FUN_004b4fa0((void*)(model + 0x4c8));
     }
+    ScratchSlots<29>(); // Observed unused /Od frame after the two key temporaries.
 }
 
 // @ 0x004b3c70
@@ -1810,10 +1814,10 @@ void DeletablePtrRange::DestroyRange(DeletablePtr* first, DeletablePtr* last)
 }
 
 // @ 0x004babe0
-void* __fastcall FUN_004babe0(void* self, void* unused, void* a, char c)
+EditorValidityBits* EditorResourceValidity::GetValidity(EditorValidityBits* out, bool stopOnFirstFailure)
 {
-    FUN_004f3de0(a, self, DAT_015da860, DAT_015da864, DAT_015da868, DAT_015da86c, c);
-    return a;
+    CalculateEditorValidity(out, this, gDefaultValidityTests, stopOnFirstFailure);
+    return out;
 }
 
 // @ 0x004badd0

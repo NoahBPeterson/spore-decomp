@@ -944,6 +944,7 @@ void* cSPEditorSkinManager::AsInterface(EA::COM::InterfaceId id)
     switch (id) {
     case 0xcfeb4c03:
         return this;
+        break;
     case 0xee3f516e:
         return this;
     }
@@ -1291,12 +1292,13 @@ EPtr* EPtr::Copy6150(EPtr* o)
 void __fastcall FUN_004c64d0(Vec8* self)
 {
     if (self->mpBegin != 0) {
-        int nBytes = (char*)self->mpCap - (char*)self->mpBegin;
-        Elem* p = self->mpBegin;
-        if (p != self->mpBuffer) {
-            Elem* q = p;
-            operator delete(q);
-            (void)nBytes;
+        Elem* begin;
+        int capacity = (char*)self->mpCap - (char*)self->mpBegin;
+        Elem* allocation = self->mpBegin;
+        if (allocation != self->mpBuffer) {
+            begin = allocation;
+            operator delete(begin);
+            (void)capacity;
         }
     }
 }

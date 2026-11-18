@@ -2,8 +2,10 @@
 // Object file: SPEngine/SPAppCameraManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "SP/cCameraManager.h"
+#include "eastl/string.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void  SPKeyFromName(void* out, void* name, int, int);   // 0x0068d840 (equiv t2)
@@ -136,10 +138,10 @@ struct cCameraManager_s007c_6750 {
 // @ 0x007c6110
 void cCameraManager::SetActiveController(void* name)
 {
-    char key[12] = {0};
+    int key[3] = {0, 0, 0};
     SPKeyFromName(key, name, 0, 0);
     void* vt = vftable;
-    ((void(__thiscall*)(void*, int))((void**)vt)[0x34 / 4])(this, *(int*)key);
+    ((void(__thiscall*)(void*, int))((void**)vt)[0x34 / 4])(this, key[0]);
 }
 
 // @ 0x007c6150
@@ -214,6 +216,7 @@ void SP::cCameraManager::SetActiveControllerByIndex(int idx)
 {
     if (idx < 0) return;
     if (idx >= (int)((char*)mControllers.mpEnd - (char*)mControllers.mpBegin) >> 2) return;
+    _ReadWriteBarrier();
     void* old = mControllers.mpBegin[mActiveControllerIndex];
     ((void(__thiscall*)(void*))((void**)*(void**)old)[0x1c / 4])(old);
     mActiveControllerIndex = idx;
@@ -222,17 +225,23 @@ void SP::cCameraManager::SetActiveControllerByIndex(int idx)
     ((void(__thiscall*)(void*))((void**)*(void**)nw)[0x18 / 4])(nw);
 }
 
+extern wchar_t gEmptyString16[];                  // 0x01667bac
+extern eastl::string16 gDefaultCameraString;      // 0x01636248
+extern unsigned int gDefaultCameraStringInit;    // 0x01636258
+extern "C" void DestroyDefaultCameraString();    // 0x013bfff0
+extern "C" int __cdecl atexit(void (__cdecl* fn)()); // 0x011e07ef
+
 // @ 0x007c65a0
 void* VariantGetTPTR()
 {
-    static int once = 0;
-    static void* data[2];
-    if ((once & 1) == 0) {
-        once |= 1;
-        data[0] = (void*)1;
-        data[1] = (void*)1;
+    if ((gDefaultCameraStringInit & 1) == 0) {
+        gDefaultCameraStringInit |= 1;
+        gDefaultCameraString.mpBegin = gEmptyString16;
+        gDefaultCameraString.mpEnd = gEmptyString16;
+        gDefaultCameraString.mpCapacity = gEmptyString16 + 1;
+        atexit(DestroyDefaultCameraString);
     }
-    return data;
+    return &gDefaultCameraString;
 }
 
 // @ 0x007c6610

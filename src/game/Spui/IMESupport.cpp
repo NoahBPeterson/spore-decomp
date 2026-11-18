@@ -782,6 +782,7 @@ WideFixedBuf::WideFixedBuf(const wchar16* s)
 {
     wchar16* pFixed = mFixedBuf;
     mFixed = pFixed;
+    _ReadWriteBarrier();
     mCapacity = pFixed + 0x100;
     mEnd = pFixed;
     mBegin = pFixed;

@@ -188,6 +188,7 @@ extern void __fastcall VecDtorFn(void*);
 extern "C" void __cdecl EASTL_free(void*);
 extern const float kGridStep;  // 0x013fe21c  (1/63)
 extern const float kNegHalf;   // 0x013ec488  (-0.5)
+extern const float kAtTargetEps;  // 0x013fe220  (distance under which a point counts as reached)
 typedef void (__thiscall *TF0)(void*);
 struct Vec12 { void* a; void* b; void* c; };
 struct BlockPath { void BlockCircle(float x, float y, float z, int one); };
@@ -692,7 +693,7 @@ bool __stdcall HandleLinkMessage(void* unused, const LinkMessage* msg)
 {
   if (msg->mEventType == 0x3326e8a) {
     const wchar_t** pp = msg->mppURL;
-    if (*pp && wcsncmp(*pp, gLinkPrefix, gLinkPrefixLen) == 0 && WStrLen(*pp) > gLinkPrefixLen) {
+    if (*pp && wcsncmp(*pp, gLinkPrefix, gLinkPrefixLen) == 0 && wcslen(*pp) > gLinkPrefixLen) {
       AppSystem()->OpenURL(*pp + gLinkPrefixLen);
       return true;
     }
@@ -844,9 +845,10 @@ bool PlayModeCreature::AtFirstTarget(const Vec3* p)
   float d[2];
   d[0] = t->mTarget.x - p->x;
   d[1] = t->mTarget.y - p->y;
-  if (fabsf(d[0]) < 1.52587890625e-05f &&
-      fabsf(d[1]) < 1.52587890625e-05f)
+  if (fabsf(d[0]) < kAtTargetEps &&
+      fabsf(d[1]) < kAtTargetEps) {
     return true;
+  }
   return false;
 }
 

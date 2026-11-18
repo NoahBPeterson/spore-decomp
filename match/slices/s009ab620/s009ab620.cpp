@@ -2,7 +2,7 @@
 // Flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
 
-extern "C" float sqrtf(float);
+extern "C" double __cdecl sqrt(double);
 
 // EASTL named operator new[] / delete[] pair used for every allocation in this slice.
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
@@ -118,13 +118,15 @@ void __cdecl UnpackBytes(const uint8_t* in, float* out) {
   out[2] = ((float)in[2] * 0.0039370079f - 0.5f) * 2.0f;
 
   float q = 1.0f - out[0] * out[0] - out[1] * out[1] - out[2] * out[2];
+  float r;
   if (q > 0.0f) {
+    r = q;
     if (q > 1.0f)
-      q = 1.0f;
+      r = 1.0f;
   } else {
-    q = 0.0f;
+    r = 0.0f;
   }
-  out[3] = sqrtf(q);
+  out[3] = (float)sqrt((double)r);
 }
 
 // =============================================================================================
@@ -336,10 +338,10 @@ void __fastcall DestroyBakedAnimManager(nSPCreatureAnim::baked_anim_manager* sel
   ClearBakedAnimManager(self);
   if (self->mLastUpdatedKey.mSpecies)
     FUN_009c26a0(self->mLastUpdatedKey.mSpecies);
-  ((MgrHelper*)((char*)self + 4))
-      ->NukeBakedTree(self->mBakedAnimCache.mAnchor.mpNodeParent);
   ((MgrHelper*)((char*)self + 0x20))
       ->NukeSpeciesTree(self->mSpeciesInstances.mAnchor.mpNodeParent);
+  ((MgrHelper*)((char*)self + 4))
+      ->NukeBakedTree(self->mBakedAnimCache.mAnchor.mpNodeParent);
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -375,8 +377,7 @@ void* __fastcall RemoveSpeciesEntry(void* self, void* edxUnused, void* ppNode, u
     return (void*)(uint32_t)end;
 
   AnimDetach(node->val.mpAnimation, 0, 0);
-  if (g_animInstancePool)
-    VecPushBack(g_animInstancePool, 0, &node->val.mpAnimation);
+  VecPushBack(g_animInstancePool, 0, &node->val.mpAnimation);
   void* anim = node->val.mpAnimation;
   if (!anim)
     return &node->val.mpAnimation;

@@ -150,8 +150,11 @@ struct ParamTable {
 namespace EA {
 namespace Audio {
 namespace Eapd {
-struct ParamIter {
-    void*        mpVftable;      // +0x00
+struct ParamIterBase {
+    virtual void Reset();                        // vtable 0x014357e4 (base)
+    ~ParamIterBase() {}
+};
+struct ParamIter : ParamIterBase {
     ParamNode*   mpNode;         // +0x04
     ParamNode**  mpBucket;       // +0x08
     ParamNode*   mpLast;         // +0x0c
@@ -159,7 +162,8 @@ struct ParamIter {
     ParamTable*  mpTable;        // +0x14
     // +0x18
 
-    ParamIter(ParamTable* t);
+    ParamIter(ParamTable* t);                    // 0x00a53640
+    ~ParamIter() {}
     unsigned Next(Symbol* out, ParamPair* value);
 };
 }
@@ -192,6 +196,8 @@ class Play { public:
     void StartVoice(void* a1, void* a2, float t);
     void ParamEvent(Symbol key, ParamPair* atom);
     unsigned GetParam(void* outAtom, Symbol key);
+
+    static Symbol sPlayLocation;   // 0x1675554 (the group location last selected)
 };
 }
 }
@@ -233,6 +239,17 @@ namespace EA {
 namespace Audio {
 namespace Eapd {
 typedef void* VoiceManager;
+struct InstanceView {
+    void  Fetch(void* out);     // 0x00a649b0
+    void* Handle();             // 0x00a649a0
+};
+struct IVoiceMgr {
+    virtual void v0();
+    virtual void v1();
+    virtual bool Start(void* a1, void* a2, double start, struct ParamIter* it, struct InstanceDesc desc, unsigned* pId);   // slot 2
+    virtual void Stop(unsigned id);                    // slot 3
+    virtual void SetPaused(unsigned id, int paused);   // slot 4
+};
 }
 }
 }
@@ -314,6 +331,27 @@ namespace EA {
 namespace Audio {
 namespace Eapd {
 inline bool operator==(const PgSymbol& a, const PgSymbol& b) { return a.mHash == b.mHash; }
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+// the instance's group table (ObjectHashMap::GetGroup, 0xa64cb0): thiscall, the symbol passed by value
+class ObjectHashMap { public:
+    void* GetGroup(PgSymbol sym);        // 0xa64cb0
+};
+}
+}
+}
+namespace EA {
+namespace Audio {
+namespace Eapd {
+// a group object: thiscall, the sample/location written through the out pointer
+class PgGroup { public:
+    void* Sample(void* out, unsigned idx);     // 0xa52bc0
+    void* Location(void* out);                 // 0xa529c0
+};
 }
 }
 }
@@ -761,34 +799,34 @@ namespace EA { namespace Audio { namespace Eapd {
 void Play::StartVoice(void* a1, void* a2, float time)
 {
     SetPlaying();
-    if (mnBusyVoices >= mnMaxVoices && !mbSteal)
+    if (!mbSteal && mnBusyVoices >= mnMaxVoices)
         return;
 
     double start = GetVoiceStartTime(time);
-    unsigned voiceId = 0;
     ParamIter it(&mParameters);
+    unsigned* pVoiceId = (unsigned*)&time;
+    struct { void* a; void* b; } pr;
+    ((InstanceView*)mInstance)->Fetch(&pr);
+    void* p1 = pr.a;
+    void* p2 = pr.b;
     InstanceDesc desc;
-    desc.p1 = 0;
-    desc.p2 = 0;
-    FUN_00a649b0(&desc.p1);
-    desc.p0 = FUN_00a649a0();
+    desc.p0 = ((InstanceView*)mInstance)->Handle();
+    desc.p1 = p1;
+    desc.p2 = p2;
 
-    VoiceManager vm = (VoiceManager)mVoiceManager;
-    if (!((bool (__thiscall*)(VoiceManager, void*, void*, void*, double, ParamIter*, InstanceDesc, unsigned*))
-          (*(void***)vm)[2])(vm, a1, a2, 0, start, &it, desc, &voiceId))
+    if (!((IVoiceMgr*)mVoiceManager)->Start(a1, a2, start, &it, desc, pVoiceId))
         return;
 
     if (mnBusyVoices == mnMaxVoices) {
         VoiceNode* first = (VoiceNode*)mVoices.mNode.mpNext;
-        ((void (__thiscall*)(VoiceManager, unsigned))(*(void***)vm)[3])(vm, first->mValue);
+        ((IVoiceMgr*)mVoiceManager)->Stop(first->mValue);
         mVoices.PopFront();
         --mnBusyVoices;
     }
-    mVoices.PushBack(&mVoices.mNode, &voiceId);
+    mVoices.PushBack(&mVoices.mNode, pVoiceId);
     ++mnBusyVoices;
     if (mbPaused) {
-        unsigned last = ((VoiceNode*)mVoices.mNode.mpPrev)->mValue;
-        ((void (__thiscall*)(VoiceManager, unsigned, int))(*(void***)vm)[4])(vm, last, 1);
+        ((IVoiceMgr*)mVoiceManager)->SetPaused(*pVoiceId, 1);
     }
 }
 }}}  // namespace EA::Audio::Eapd
@@ -853,15 +891,17 @@ void Play_s00a5_3f90::Start(float time)
 namespace EA { namespace Audio { namespace Eapd {
 void Play_s00a5_3f90::StartSelect(unsigned group, float time)
 {
-    void* g = Instance_GetGroup(mInstance, mName.mHash, mName.mpName);
+    void* g = ((ObjectHashMap*)mInstance)->GetGroup(mName);
     if (!g)
         return;
-    PgSymbol sample = *(PgSymbol*)Group_Sample(&sample, g, group);
+    Symbol sample;
+    ((PgGroup*)g)->Sample(&sample, group);
     if (sample.mHash == gEmptySymbol.mHash)
         return;
-    PgSymbol loc = *(PgSymbol*)Group_Location(&loc, g);
-    gPlaySymbol = loc;
-    Play_Dispatch(mpObject, sample.mHash, sample.mpName, time);
+    Symbol loc;
+    Symbol* lp = (Symbol*)((PgGroup*)g)->Location(&loc);
+    Play::sPlayLocation = *lp;
+    ((Play*)this)->StartVoice((void*)sample.mHash, (void*)sample.mpName, time);
     mnLastGroupID = group;
 }
 }}}  // namespace EA::Audio::Eapd

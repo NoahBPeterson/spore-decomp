@@ -3,10 +3,16 @@
 //
 // The 2008 dev PDB's PFRecordRead/PFRecordWrite are 8..0x10 bytes smaller than
 // the retail objects; every offset below was read from the disassembly.  All
-// stub classes are data-only (no C++ virtuals) so the layout is exact and the
-// vtable calls can be emitted verbatim.
+// Flat views preserve the layouts of existing matches. The record lifetime
+// views below model the real base classes and virtual interfaces for EH cleanup.
 #include "types.h"
 #include <intrin.h>
+#include "../../../src/game/include/EA/IO/PositionType.h"
+
+namespace EA {
+namespace IO { class IStream; }
+namespace ResourceMan { class Key; class Database; }
+}
 
 typedef unsigned int   u32;
 typedef unsigned short u16;
@@ -14,7 +20,7 @@ typedef unsigned char  u8;
 typedef int            intptr_t;
 
 // ---------------------------------------------------------------------------
-// external helpers (masked relocations; only arity/convention matter)
+// External helpers (callee identity and calling conventions audited against retail)
 // ---------------------------------------------------------------------------
 extern void* sub_9215c0(void*);                     // RBTreeDecrement  (cdecl)
 extern void* sub_921580(void*);                     // RBTreeIncrement  (cdecl)
@@ -24,7 +30,7 @@ extern void  sub_9a9600(void*);                     // rbtree nuke subtree
 extern void  __fastcall sub_6be890(void*, int, void*, const void*); // lowerBound (set, out, key)
 extern void  __fastcall sub_8dae70(void*, int, void*, void*);       // Erase (set, out next, node)
 extern void  sub_11e0744(void*, void*, u32);        // memcpy thunk (cdecl)
-extern void* sub_93ba70(u32, u32, u32);             // make scratch
+extern void* sub_93ba70(u32, u32, u32);             // legacy flat-view declaration
 
 // rbtree set at HoleTable+8; find/insert are __thiscall(ret 8)/__thiscall(ret 0x10)
 struct RBTreeOps;
@@ -58,6 +64,7 @@ struct MemoryStream {
     bool  SetData(const void* p, u32 size, int a, int b, void* alloc); // 0x93be30
     void  Init(const char* name);                 // 0x93bd50 ret 4
     void  Destroy();                              // 0x93bde0 ret
+    void* GetPtr();                               // 0x93ba70 (thiscall, no stack args)
     int   Attach(const void* key, u32 pos);       // 0x93bf70 ret 8
     void  SetResize(int mode, float factor);      // 0x93bb40 ret 8
 };
@@ -177,7 +184,6 @@ struct PFRecordWrite {
     u32   field274;            // +0x274
     int   mnOpenCount;         // +0x278
 
-    PFRecordWrite(u32 a, u32 b, u32 size, u32* key, DatabasePackedFile* parent); // 0x6c0c40
     bool Release();            // 0x6c0980
 };
 
@@ -425,7 +431,7 @@ bool PFIndexModifiable::func24h(HoleTable* holes, u32 a, u32 b, u32 c, u32 d)
 // ---------------------------------------------------------------------------
 u32 StreamSub::GetSize(int type)
 {
-    u8 flags = mStreamFlags;
+    u8 flags = *(volatile u8*)&mStreamFlags;
     if (flags == 0) {
         switch (type) {
         case 0: return mnPosition;
@@ -742,30 +748,116 @@ bool RecBridge::DoRead(u32 a, u32 b, u32 n)
     return bl;
 }
 
+// Lifetime views follow the PDB chain: ZoneObject -> RefCounted -> Record ->
+// PFRecordBase. RefCounted's four-slot table is distinct from ZoneObject's
+// one-slot table, which is restored when the record base is destroyed.
+namespace RecordLifetime {
+struct ZoneObject {
+    virtual ~ZoneObject() {}
+    static void operator delete(void*); // ZoneObject::operator delete, 0x00926060
+};
+struct RefCounted : ZoneObject {
+    struct AtomicInt {
+        volatile long n;
+        AtomicInt() { _InterlockedExchange(&n, 0); }
+    };
+    AtomicInt refcount;           // +0x04
+    virtual int AddRef();
+    virtual int Release();
+    virtual int GetRefCount() const;
+};
+struct Record : RefCounted {
+    virtual const EA::ResourceMan::Key& GetKey() const = 0;
+    virtual void SetKey(const EA::ResourceMan::Key&) = 0;
+    virtual EA::IO::IStream* GetStream() = 0;
+    virtual EA::ResourceMan::Database* GetDatabase() = 0;
+    virtual bool RecordOpen() = 0;
+    virtual bool RecordClose() = 0;
+};
+struct PFRecordBase : Record {
+    u32 mPFRecordType;            // +0x08
+    u32 mKeyInstance, mKeyType, mKeyGroup;  // +0x0c..+0x14
+    DatabasePackedFile* parent;   // +0x18
+    int access;                  // +0x1c
+    virtual void DoPostClose() = 0;
+    PFRecordBase(const u32* key, DatabasePackedFile* p, u32 type, int acc)
+        : mPFRecordType(type), mKeyInstance(key[0]), mKeyType(key[1]), mKeyGroup(key[2]),
+          parent(p), access(acc) {}
+};
+struct IStream {
+    virtual ~IStream() {}
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual u32 GetType() const = 0;
+    virtual int GetAccessFlags() const = 0;
+    virtual int GetState() const = 0;
+    virtual bool Close() = 0;
+    virtual u32 GetSize() const = 0;
+    virtual bool SetSize(u32) = 0;
+    virtual long GetPosition(EA::IO::PositionType) const = 0;
+    virtual bool SetPosition(long, EA::IO::PositionType) = 0;
+    virtual u32 GetAvailable() const = 0;
+    virtual u32 Read(void*, u32) = 0;
+    virtual bool Flush() = 0;
+    virtual bool Write(const void*, u32) = 0;
+};
+}
+
+typedef char RecordZoneObjectSize[(sizeof(RecordLifetime::ZoneObject) == 4) ? 1 : -1];
+typedef char RecordRefCountedSize[(sizeof(RecordLifetime::RefCounted) == 8) ? 1 : -1];
+typedef char PFRecordBaseSize[(sizeof(RecordLifetime::PFRecordBase) == 0x20) ? 1 : -1];
+typedef char RecordIStreamSize[(sizeof(RecordLifetime::IStream) == 4) ? 1 : -1];
+
+struct MemoryStreamLifetime {
+    MemoryStream stream;
+    __forceinline ~MemoryStreamLifetime() { stream.Destroy(); }
+};
+struct BackgroundLoadingDtorView : RecordLifetime::PFRecordBase, RecordLifetime::IStream {
+    void* mpReadBuffer;           // +0x24
+    int   mnBufferOffset;         // +0x28
+    MemoryStreamLifetime mem;    // +0x2c
+    u32 mnChunkOffsetLo;         // +0x50
+    u32 mnChunkOffsetHi;         // +0x54
+    u32 mnCompressedSize;        // +0x58
+    u32 mnSizeDecompressed;      // +0x5c
+    u32 mnCompressionInfo;       // +0x60
+    u32 field64;                 // +0x64
+    u32 mnPosition;              // +0x68
+    u32 mnSize;                  // +0x6c
+    u8 mStreamFlags;             // +0x70
+    u8 pad71[3];
+    int mnOpenCount;             // +0x74
+    ~BackgroundLoadingDtorView();
+    int AddRef();
+    int Release();
+    const EA::ResourceMan::Key& GetKey() const;
+    void SetKey(const EA::ResourceMan::Key&);
+    EA::IO::IStream* GetStream();
+    EA::ResourceMan::Database* GetDatabase();
+    bool RecordOpen();
+    bool RecordClose();
+    void DoPostClose();
+    u32 GetType() const;
+    int GetAccessFlags() const;
+    int GetState() const;
+    bool Close();
+    u32 GetSize() const;
+    bool SetSize(u32);
+    long GetPosition(EA::IO::PositionType) const;
+    bool SetPosition(long, EA::IO::PositionType);
+    u32 GetAvailable() const;
+    u32 Read(void*, u32);
+    bool Flush();
+    bool Write(const void*, u32);
+};
+
 // ---------------------------------------------------------------------------
 // @ 0x006c0710
 // ---------------------------------------------------------------------------
-struct BackgroundLoading {
-    void* vtbl0;                  // +0x00
-    int   refcount;               // +0x04
-    char  pad08[0x10];
-    DatabasePackedFile* parent;   // +0x18
-    int   access;                 // +0x1c
-    void* vtbl20;                 // +0x20
-    char  pad24[8];
-    MemoryStream stream;          // +0x2c
-    void Cleanup();               // 0x6c0710
-};
-
-void BackgroundLoading::Cleanup()
+BackgroundLoadingDtorView::~BackgroundLoadingDtorView()
 {
-    vtbl0 = (void*)0x140a2b4;
-    vtbl20 = (void*)0x140a278;
     if (access != 0)
         ((void(__thiscall*)(void*, void*))(*(void***)parent)[0x3c / 4])(parent, this);
-    stream.Destroy();
-    vtbl20 = (void*)0x13f3a68;
-    vtbl0 = (void*)0x13effb8;
 }
 
 // ---------------------------------------------------------------------------
@@ -850,37 +942,68 @@ PFRecordRead* PFRecordRead::InitFromInfo(u32* info, u32* key, DatabasePackedFile
     return this;
 }
 
+typedef char BackgroundLoadingViewSize[(sizeof(BackgroundLoadingDtorView) == 0x78) ? 1 : -1];
+
+struct InitializedMemoryStream {
+    MemoryStream stream;
+    InitializedMemoryStream(const char* name) { stream.Init(name); }
+    __forceinline ~InitializedMemoryStream() { stream.Destroy(); }
+};
+struct FileStreamLifetime {
+    char file[0x22c];
+    FileStreamLifetime(int flags) { ((FileStream*)file)->Init(flags); }
+    ~FileStreamLifetime();
+};
+struct PFRecordWriteCtorView : RecordLifetime::PFRecordBase, RecordLifetime::IStream {
+    InitializedMemoryStream mem;             // +0x24
+    FileStreamLifetime file;            // +0x48
+    u8  mbTriedToCreateFile;      // +0x274
+    u8  pad275[3];
+    int mnOpenCount;              // +0x278
+    PFRecordWriteCtorView(u32 a, u32 b, u32 size, const u32* key, DatabasePackedFile* p);  // 0x6c0c40
+    ~PFRecordWriteCtorView(); // 0x006c0ed0: includes the write-record close path
+    int AddRef();
+    int Release();
+    const EA::ResourceMan::Key& GetKey() const;
+    void SetKey(const EA::ResourceMan::Key&);
+    EA::IO::IStream* GetStream();
+    EA::ResourceMan::Database* GetDatabase();
+    bool RecordOpen();
+    bool RecordClose();
+    void DoPostClose();
+    u32 GetType() const;
+    int GetAccessFlags() const;
+    int GetState() const;
+    bool Close();
+    u32 GetSize() const;
+    bool SetSize(u32);
+    long GetPosition(EA::IO::PositionType) const;
+    bool SetPosition(long, EA::IO::PositionType);
+    u32 GetAvailable() const;
+    u32 Read(void*, u32);
+    bool Flush();
+    bool Write(const void*, u32);
+};
+
+typedef char PFRecordWriteViewSize[(sizeof(PFRecordWriteCtorView) == 0x27c) ? 1 : -1];
+
 // ---------------------------------------------------------------------------
 // @ 0x006c0c40
 // ---------------------------------------------------------------------------
-PFRecordWrite::PFRecordWrite(u32 a, u32 b, u32 size, u32* key, DatabasePackedFile* parent)
+PFRecordWriteCtorView::PFRecordWriteCtorView(u32 a, u32 b, u32 size, const u32* key, DatabasePackedFile* p)
+    : RecordLifetime::PFRecordBase(key, p, 0x6492fe5, 3), mem("ResourceMan/PFRecordWrite"), file(0)
 {
-    vtbl0 = (void*)0x13effa8;
-    _InterlockedExchange((volatile long*)&mnRefCount, 0);
-    vtbl0 = (void*)0x140a2e0;
-    mPFRecordType = 0x6492fe5;
-    mKeyInstance = key[0];
-    mKeyType = key[1];
-    mKeyGroup = key[2];
-    mpParent = parent;
-    mnAccessFlags = 3;
-    vtblIStream = (void*)0x13f3a68;
-    vtbl0 = (void*)0x140a364;
-    vtblIStream = (void*)0x140a328;
-    mStreamMemory.Init("ResourceMan/PFRecordWrite");
-    ((FileStream*)mStreamFile)->Init(0);
     mbTriedToCreateFile = 0;
     _InterlockedExchange((volatile long*)&mnOpenCount, 1);
-    ((void(__thiscall*)(void*))(*(void***)&mStreamMemory)[4 / 4])(&mStreamMemory);
-    ((void(__thiscall*)(void*))(*(void***)mStreamFile)[4 / 4])(mStreamFile);
-    mStreamMemory.SetResize(1, 1.0f);
-    mStreamMemory.SetResize(2, 1.5f);
-    mStreamMemory.SetResize(3, 4.0f);
+    ((void(__thiscall*)(void*))(*(void***)&mem.stream)[4 / 4])(&mem.stream);
+    ((void(__thiscall*)(void*))(*(void***)file.file)[4 / 4])(file.file);
+    mem.stream.SetResize(1, 1.0f);
+    mem.stream.SetResize(2, 1.5f);
+    mem.stream.SetResize(3, 1024.0f);
     if (size != 0) {
-        ICoreAllocator* alloc = DatabasePackedFile_GetAllocator(parent);
-        if (mStreamMemory.SetData(0, size, 0, 1, alloc)) {
-            void* p = sub_93ba70(a, b, size);
-            parent->ReadFileSpan((u32)p, a, b, size);
+        ICoreAllocator* alloc = ((ICoreAllocator*(__thiscall*)(void*))(*(void***)parent)[0x48 / 4])(parent);
+        if (mem.stream.SetData(0, size, 0, 1, alloc)) {
+            p->ReadFileSpan((u32)mem.stream.GetPtr(), a, b, size);
         }
     }
 }

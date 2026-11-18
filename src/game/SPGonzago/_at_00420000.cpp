@@ -296,9 +296,9 @@ struct IntMap {
     IntNode* DoInsertValue(IntNode* pos, const IntNode& v);   // 0x00426cc0
     IntNode* lower_bound(const int& k)
     {
-        IntNode* last = mEnd;
-        IntNode* first = mBegin;
-        return LowerBound(first, last, &k, mFlag);
+        IntNode* rangeEnd = mEnd;
+        IntNode* rangeBegin = mBegin;
+        return LowerBound(rangeBegin, rangeEnd, &k, mFlag);
     }
     IntNode* end() { return mEnd; }
     int& operator[](const int& k);
@@ -832,17 +832,34 @@ struct Matrix3 {
     Vector3_s0042_3110& operator[](int i) { return rows[i]; }
     Matrix3& Assign(const Matrix3& m);   // @ 0x0041CB40 (other slice)
 };
-struct MessageBase {
-    virtual void Dummy0();
-    long mRefCount;     // +4
-    int mUnk8[8];       // +8..+0x28
-    int mUserData;      // +0x28
-};
-struct LocaleMessage : MessageBase {
-    LocaleMessage(int userData);
-    virtual void Dummy1();
-};
 // ---- items of slice s00423110 end
+
+// ---- items of slice s004226f0 begin (LocaleMessage: its two vftables (0x013eb918 at +0, 0x013eb90c at +8) are the
+//      message's name string storage, so a message holds that storage inline at +8 and the ctor reads (this + 8)
+//      as the message name. ctor order: [this+0x28] = userData, (this + 8) into a frame local, vptr 0x013eb918,
+//      vptr 0x013eb90c, the (+4) refcount interlocked exchange, then vptr 0x013eb90c again through that local.
+//      cl15 never writes a vptr twice in a ctor (a multiple-inheritance stub only adds compensating [this+0x2c]
+//      zeroing and [0x4] stores), so the stub below only covers what cl15 can emit.)
+struct NameStore {              // the message name: starts at +8
+    int mPad0c;         // +0xc
+    uint32_t mPad10;    // +0x10
+    uint32_t mPad14;    // +0x14
+    uint32_t mPad18;    // +0x18
+    uint32_t mPad1c;    // +0x1c
+    uint32_t mPad20;    // +0x20
+    uint32_t mPad24;    // +0x24
+};
+struct NamedMessage {
+    int mFields04;      // +4
+    void* mpName;       // +8: the message name the ctor takes (this + 8) of
+    NameStore mName;    // +0xc
+    int mUserData;      // +0x28
+    long mRefCount;     // +4
+};
+struct LocaleMessage : NamedMessage {
+    LocaleMessage(int userData);
+};
+// ---- items of slice s004226f0 end
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
 uint8_t Vector3Equal(const Vector3_s0042_3110* a, const Vector3_s0042_3110* b);   // defined at 0x004232c0, called earlier in the TU

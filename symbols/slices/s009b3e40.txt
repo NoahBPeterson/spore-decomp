@@ -1,0 +1,2 @@
+009b41e0 ??4xform12@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  # xform12::operator= migrated from s009b3e40 (verbatim, slice spelling)
+009b45b0 ??4blob_f4@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  # blob_f4::operator= migrated from s009b3e40 (verbatim, slice spelling)

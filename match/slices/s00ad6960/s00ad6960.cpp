@@ -484,17 +484,18 @@ void* PtrSlot::FUN_00ad7320(PtrSlot* p)
 // ===========================================================================
 void** FUN_00ad73a0(void** first, void** last, void** out)
 {
-    if (first == last) return out;
-    do {
-        void* a = *first;
-        void* b = *out;
-        if (a != b) {
-            if (a) ((CSub*)((char*)a + 8))->AddRef();
-            *out = a;
-            if (b) ((CSub*)((char*)b + 8))->Release();
-        }
-        ++first; ++out;
-    } while (first != last);
+    if (first != last) {
+        do {
+            void* a = *first;
+            void* b = *out;
+            if (a != b) {
+                if (a) ((CSub*)((char*)a + 8))->AddRef();
+                *out = a;
+                if (b) ((CSub*)((char*)b + 8))->Release();
+            }
+            ++first; ++out;
+        } while (first != last);
+    }
     return out;
 }
 
@@ -554,16 +555,16 @@ void CUID::FUN_00ad7470()
 // ===========================================================================
 // @ 0x00ad75c0
 // ===========================================================================
-extern "C" void FUN_00832790(void* p);                                // 0x832790
-extern "C" void FUN_00811ad0(void* p, int n);                         // 0x811ad0
+extern "C" void FUN_00832790(void* p);                                // 0x832790 (__thiscall: ecx = p)
+extern "C" void FUN_00811ad0(void* p, int n);                         // 0x811ad0 (__thiscall: ecx = p)
 void CUID::FUN_00ad75c0()
 {
     void* self = this;
     if (*(int*)((char*)self + 0x10) != 0) {
-        FUN_00832790(*(void**)((char*)self + 0x50));
+        ((void (__thiscall*)(void*))FUN_00832790)(*(void**)((char*)self + 0x50));
         SubObj* p = *(SubObj**)((char*)self + 0x50);
         if (p) { *(void**)((char*)self + 0x50) = 0; p->s08(); }
-        FUN_00811ad0(*(void**)((char*)self + 0x10), 1);
+        ((void (__thiscall*)(void*, int))FUN_00811ad0)(*(void**)((char*)self + 0x10), 1);
         SubObj* q = *(SubObj**)((char*)self + 0x10);
         if (q) { *(void**)((char*)self + 0x10) = 0; q->s08(); }
     }

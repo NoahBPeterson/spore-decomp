@@ -205,7 +205,7 @@ public:
 // ---- items of slice s00a41c40 end
 
 // ---- items of slice s00a459d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" int* __cdecl    Eapd_Debug_ObjectError();                   // 0x008de1a0
+int* __cdecl    Eapd_Debug_ObjectError();                   // 0x008de1a0
 void* operator new(unsigned, const char*, int, int, int, int);         // 0x00f473a0
 void  operator delete(void*, const char*, int, int, int, int);         // 0x00f47410
 struct ErrHost {
@@ -758,19 +758,38 @@ int __stdcall FUN_00a416e0(int* p, unsigned n)
     return 1;
 }
 
-// @ 0x00a41710
-void AddRefObj::Dtor()
-{
-    *(int*)this = (int)PTR_AddRef_01453c30;
-    if (*(int*)((char*)this + 0x14) != 0) {
+// Destruction view of AddRefObj (0x00a41710): the sound base (0x008dde10) is destroyed last; the voice release runs
+// under a scoped system lock.
+struct SysLock_a41710 {
+    SysLock_a41710()
+    {
         int* s = EA::Audio::GetSystemAT();
-        if (s) ((void(**)(int*))*((int**)s))[0xC0 / 4]((int*)s);
-        int* e = EA::Audio::Eapd::ISystem::GetSingletonPtr();
-        if (e) ((void(**)(int*, int))(*((int**)e)))[0x50 / 4]((int*)e, *(int*)((char*)this + 0x14));
-        s = EA::Audio::GetSystemAT();
-        if (s) ((void(**)(int*))*((int**)s))[0xC4 / 4]((int*)s);
+        if (s) ((void (__thiscall*)(int*))(*(void***)s)[0xC0 / 4])(s);
     }
-    ((EA::Audio::Sound_s00a4_0cd0*)this)->Dtor_8dde10();
+    ~SysLock_a41710()
+    {
+        int* s = EA::Audio::GetSystemAT();
+        if (s) ((void (__thiscall*)(int*))(*(void***)s)[0xC4 / 4])(s);
+    }
+};
+struct SoundBase_a41710 {
+    virtual void Slot0();
+    ~SoundBase_a41710();   // 0x008dde10
+};
+struct AddRefObjView_a41710 : SoundBase_a41710 {
+    char pad04[0x14 - 4];
+    int  mVoice;           // +0x14
+    ~AddRefObjView_a41710();
+};
+
+// @ 0x00a41710
+AddRefObjView_a41710::~AddRefObjView_a41710()
+{
+    if (mVoice != 0) {
+        SysLock_a41710 lock;
+        int* e = EA::Audio::Eapd::ISystem::GetSingletonPtr();
+        if (e) ((void (__thiscall*)(int*, int))(*(void***)e)[0x50 / 4])(e, mVoice);
+    }
 }
 
 // @ 0x00a417b0
@@ -853,7 +872,7 @@ SP::Audio::cEmitterEAPD* ConstructcEmitterEAPD()
 }
 
 // @ 0x00a466d0
-extern "C" bool __cdecl Audio_RegisterErrorHandler()
+bool __cdecl Audio_RegisterErrorHandler()
 {
     int* p = Eapd_Debug_ObjectError();
     if (p) {

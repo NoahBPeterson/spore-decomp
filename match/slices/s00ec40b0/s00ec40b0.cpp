@@ -1,3 +1,4 @@
+#include <intrin.h>
 // Slice s00ec40b0 -- Spore UI: Sporepedia timeline card / asset view + the introsort + binary-heap
 // template family it instantiates over 8-byte {Key,Value} pairs.
 //
@@ -110,6 +111,10 @@ extern "C" void* FUN_00ec40b0()
 // =====================================================================================================
 namespace UI
 {
+    struct CardDataBase
+    {
+        void reinit();                               // placeholder for the 0x00642100 base constructor
+    };
     class TimelineSporepediaCardData
     {
     public:
@@ -118,12 +123,14 @@ namespace UI
     void TimelineSporepediaCardData_ctor(void* self);   // 0x00642100 (base ctor)
 }
 
+// 0x00642100 is __thiscall (this in ecx) and returns `this` in eax. 0x00ec41e0 is its only in-slice caller and
+// cl inlined it there: the source is the base constructor's body, called as a member of the object.
+
 // @ 0x00ec41e0
-void FUN_00642100(void*);            // base ctor at 0x00642100
-UI::TimelineSporepediaCardData* UI_TimelineSporepediaCardData_ctor(UI::TimelineSporepediaCardData* self)
+UI::TimelineSporepediaCardData* __fastcall UI_TimelineSporepediaCardData_ctor(UI::TimelineSporepediaCardData* self, int /*unused*/)
 {
     void* p = self;
-    FUN_00642100(p);
+    ((UI::CardDataBase*)p)->reinit();
 
     uint8_t* b = (uint8_t*)p;
     b[0x78] = 0; b[0x79] = 0; b[0x7a] = 0; b[0x7b] = 0; b[0x7c] = 0;
@@ -133,9 +140,9 @@ UI::TimelineSporepediaCardData* UI_TimelineSporepediaCardData_ctor(UI::TimelineS
     w[0x10 / 4] = (void*)0x0148907c;
     w[0x14 / 4] = (void*)0x0148906c;
 
+    *(int*)(b + 0x80) = -1;
     *(int*)(b + 0x84) = 0x7fffffff;
     *(int*)(b + 0x88) = 0x7fffffff;
-    *(int*)(b + 0x80) = -1;
     return self;
 }
 
@@ -207,16 +214,29 @@ static inline bool equal_rec(const Rec& a, const Rec& b)
     return a.key == b.key && a.value == b.value;
 }
 
-// @ 0x00ec4430  -- find(first,last,val): returns matching record pointer or last
+// @ 0x00ec4430  -- find(first,last,val): the matching record's iterator, or last when none matches. The value's
+// two dwords are hoisted into registers before the loop; the empty-range test loads `last` on the spot (the
+// original's `mov edx,[esp+8]; cmp eax,edx; je done`) and returns it from the shared epilogue.
+template <class It, class T>
+static inline It find_rec(It first, It last, const T& val)
+{
+    for (; first != last; ++first)
+        if (equal_rec(*first, val))
+            return first;
+    return last;
+}
+
+// @ 0x00ec4430  -- find(first,last,val): the matching record's iterator, or last when none matches (STL find).
 Rec* FUN_00ec4430(Rec* first, Rec* last, const Rec* val)
 {
-    while (first != last)
+    const uint32_t key = val->key;
+    const uint32_t value = val->value;
+    for (; first != last; ++first)
     {
-        if (first->key == val->key && first->value == val->value)
+        if (first->key == key && first->value == value)
             return first;
-        ++first;
     }
-    return first;
+    return last;
 }
 
 // @ 0x00ec4460
@@ -560,24 +580,61 @@ void* FUN_00ec4bb0(void* self)
     return self;
 }
 
+
+struct ModalLayout {
+    virtual void slot00();
+    virtual void slot04();
+    virtual void Release(); // +0x08
+    void* FindWindowByID(unsigned id, int recursive); // 0x008105b0
+    void Shutdown(bool releaseWindows); // 0x00811ad0
+};
+namespace SPUIHelpers { void EndModal(void* window, int result, bool close); } // 0x00809c50
+struct ModalMessageServer {
+    virtual void slot00(); virtual void slot04(); virtual void slot08();
+    virtual void slot0c(); virtual void slot10();
+    virtual void MessageSend(unsigned id, void* message, void* handler); // +0x14
+};
+extern char gMessageRCVtable[]; // 0x013eb90c
+extern char gBasicMessage5Vtable[]; // 0x013eb844
+struct ModalMessage {
+    void* vtable;
+    volatile long mRefCount;
+    struct Data { unsigned low, high; } mData[5];
+    unsigned mId;
+    unsigned pad34;
+    unsigned mRCFlags;
+    unsigned pad3c;
+    ModalMessage() {
+        mId = 0;
+        vtable = gMessageRCVtable;
+        _InterlockedExchange(&mRefCount, 0);
+        vtable = gBasicMessage5Vtable;
+        mRCFlags = 0;
+    }
+    ~ModalMessage(); // 0x00421cf0
+};
+struct TimelineView {
+    char pad00[0x74];
+    ModalLayout* mpLayout;
+    void Close();
+};
+
 // @ 0x00ec4c80
-void FUN_00ec4c80(void* self)
+void TimelineView::Close()
 {
-    if (*(void**)((char*)self + 0x74) != 0)
-    {
-        void* w = cSPUILayout::FindWindowByID(*(void**)((char*)self + 0x74), 0x7299020u, 1);
-        SPUIHelpers::EndModal(w);
-        cSPUILayout::Shutdown(*(void**)((char*)self + 0x74), 0);
-        void* lay = *(void**)((char*)self + 0x74);
-        if (lay)
-        {
-            *(void**)((char*)self + 0x74) = 0;
-            ((void(*)(void*))(*(void***)lay)[2])(lay);
+    if (mpLayout) {
+        SPUIHelpers::EndModal(mpLayout->FindWindowByID(0x7299020, 1), 0, true);
+        mpLayout->Shutdown(true);
+        ModalLayout* layout = mpLayout;
+        if (layout) {
+            mpLayout = 0;
+            layout->Release();
         }
     }
-    int* srv = (int*)SP_MessageServer();
-    typedef void (*Fn)(void*, unsigned int, void*, unsigned int);
-    ((Fn)((int*)*srv)[0x14 / 4])(srv, 0xcc0bf724u, 0, 0);
+    ModalMessage message;
+    message.mData[0].low = 10;
+    message.mData[1].low = (unsigned)-15;
+    ((ModalMessageServer*)SP_MessageServer())->MessageSend(0xcc0bf724, &message, 0);
 }
 
 // @ 0x00ec4d30  -- upper_bound over 8-byte records
@@ -710,7 +767,7 @@ void SporepediaAssetController::Reset(char notify, int param)
         char* e = *(char**)((char*)self + 0x34);
         *(char**)((char*)self + 0x38) = b + ((b - e) >> 3) * -8;
         if (*(void**)((char*)self + 0x74) != 0)
-            FUN_00ec4c80(self);
+            ((TimelineView*)self)->Close();
         *(uint32_t*)((char*)self + 0x78) = 0;
         *(uint32_t*)((char*)self + 0x7c) = 0;
         *(uint32_t*)((char*)self + 0x80) = 0;
@@ -752,7 +809,7 @@ void SporepediaAssetController::Reset(char notify, int param)
             ((Fn)((int*)*srv)[0x14 / 4])(srv, 0x068cd252u, msg, 0);
         }
         if (*(void**)((char*)self + 0x74) != 0)
-            FUN_00ec4c80(self);
+            ((TimelineView*)self)->Close();
         *(uint32_t*)((char*)self + 0x78) = 0;
         *(uint32_t*)((char*)self + 0x7c) = 0;
         *(uint32_t*)((char*)self + 0x80) = 0;

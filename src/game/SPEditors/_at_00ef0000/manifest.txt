@@ -80,3 +80,7 @@
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00efc8f0@@YAHXZ  00efc8f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef7950@@YIXPAD@Z  00ef7950  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00efc530@@YA_NPAH@Z  00efc530  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ??0cScenarioTutorials@@QAE@XZ  00ef9d90  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ?f_eff230@UI_s00ef_ee60@@QAEXPAX@Z  00eff230  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00efc4c0@@YIMPADH@Z  00efc4c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ?f_eff1e0@UI_s00ef_ee60@@QAE_NH@Z  00eff1e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

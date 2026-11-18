@@ -3,6 +3,8 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+extern "C" size_t __cdecl wcslen(const wchar_t*);
+#pragma intrinsic(wcslen)
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" char    gTokStart[];         // 0x01667b04
@@ -49,7 +51,7 @@ struct CharStream {
     char  Fn8f3a10(int);         // match a digit
     void  Fn8f3a40(int);         // match digits while in range
     int   Fn8f3d20(int c);       // match a string up to terminator c
-    char  Fn8f3a80();            // MatchEscape (stub)
+    __declspec(noinline) char Fn8f3a80();            // MatchEscape (stub)
 };
 struct CSSParser {
     void* Fn8f3900(int p1, wchar16* begin, wchar16* end);
@@ -1430,17 +1432,7 @@ PropNodeX* PropNodeX::F_8f24a0(int a, const uint16_t* str)
     mVtable = 0x01439a48;
     mField08 = (uint32_t)a;
     mField0c = (uint32_t)str;
-    if (str) {
-        const uint16_t* p = str + 1;
-        uint16_t c;
-        do {
-            c = *str;
-            ++str;
-        } while (c != 0);
-        mLength = (int)(str - p);
-    } else {
-        mLength = -1;
-    }
+    mLength = str ? (int)wcslen((const wchar_t*)str) : -1;
     return this;
 }
 }}}  // namespace EA::XHTML::Layout
@@ -2420,13 +2412,12 @@ char CharStream::Fn8f3a10(int)
 // @ 0x008f3a40
 void CharStream::Fn8f3a40(int)
 {
-    if (scanPos < scanEnd) {
-        do {
-            wchar16 ch = *scanPos;
-            if ((unsigned)(ch - 0x30) > 9) break;
-            ((WStr2*)((char*)this + 0x10))->push_back(ch);
-            scanPos = scanPos + 1;
-        } while (scanPos < scanEnd);
+    while (scanPos < scanEnd) {
+        wchar16 ch = *scanPos;
+        int t = ch;
+        if (t < 0x30 || t > 0x39) break;
+        ((WStr2*)((char*)this + 0x10))->push_back(ch);
+        scanPos = scanPos + 1;
     }
 }
 

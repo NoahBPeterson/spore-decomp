@@ -41,7 +41,9 @@ struct Obj {
     void  m00ff03c0(float);
 };
 struct ObjMsgsvr {
-    void m_send(void*, int);
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void m_send(void*, int);                        // vtable +0x20
 };
 
 extern "C" void* __cdecl FUN_00bd6eb0(void*);
@@ -69,14 +71,17 @@ struct cGonzagoSubsystem { void Destroy(); };
 void __fastcall FUN_00bd70b0(int* this_)
 {
     this_[0] = 0x14683d0;
-    this_[1] = 0x1468380;
+    int* sub = this_ + 1;
+    sub[0] = 0x1468380;
     this_[2] = 0x146837c;
+    _ReadWriteBarrier();
     int h = this_[9];
     if (h != 0) {
         this_[9] = 0;
         FUN_00bd571db0(h, this_[10], this_[0xb], this_[0xc], this_[0xd]);
     }
-    ((cGonzagoSubsystem*)(this_ + 1))->Destroy();
+    ((cGonzagoSubsystem*)sub)->Destroy();
+    this_[0] = 0x13eb394;
 }
 
 // ===========================================================================
@@ -607,12 +612,12 @@ void __fastcall FUN_00bd7e40(char* this_)
     *(char*)(this_ + 0x2e1) = 0;
     int v = *(int*)(this_ + 0x29c);
     if (v < 0) return;
+    _ReadWriteBarrier();
     if (v >= 3) return;
     {
         void* t = FUN_00b3d4d0();
         if (*(int*)((char*)t + 0x2c) != 1 && *(int*)((char*)t + 0x2c) != 2) {
-            Obj* r = (Obj*)FUN_00b3d480p();
-            if (r->m00ac8d60(this_) == 0) return;
+            if (((Obj*)FUN_00b3d480p())->m00ac8d60(this_) == 0) return;
         }
         *(char*)(this_ + 0x6c0) = 0;
         ((cSPTimer*)(this_ + 0x6c8))->m00bc3130();

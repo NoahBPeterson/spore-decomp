@@ -20,7 +20,25 @@ struct cVehicle;
 struct cSimSingleton;
 struct ObjectTemplateDB_t;
 
-struct Constraint { uchar m[0x24]; };
+struct Constraint;
+struct ConstraintTail {
+    Constraint* mBegin;
+    Constraint* mEnd;
+    Constraint* mCapacity;
+    uchar mAllocator[8];
+    void DoDestroyValues(Constraint* first, Constraint* last); // 0x004e39a0
+};
+struct Constraint {
+    union {
+        uchar m[0x24]; // Existing unconverted helpers retain their byte view.
+        struct {
+            uint mParameter;
+            uint mType;
+            union { int mIntVal[2]; float mFloatVal[2]; };
+            ConstraintTail mTail;
+        };
+    };
+};
 
 // EASTL vector<Constraint, sp_vector_allocator> header (begin/end/capacity).
 struct ConstraintVector {
@@ -28,6 +46,7 @@ struct ConstraintVector {
     Constraint* mEnd;     // +0x04
     Constraint* mCap;     // +0x08
     void insert(Constraint* pos, uint count, const Constraint* value);  // 0x00bf8dd0
+    void erase(Constraint* first, Constraint* last);            // 0x00565b50
     void resize(uint count);                                            // 0x00bf9250
 };
 
@@ -83,7 +102,7 @@ void  FUN_004e4f60(void*, void*, void*);                               // 0x004e
 void  FUN_006066f0();                                                  // 0x006066f0
 void  FUN_00606730(void*, void*, void*);                               // 0x00606730
 void  FUN_00606880(void*);                                             // 0x00606880
-void* __fastcall FUN_005587f0(void*, int);                             // 0x005587f0  Constraint::Constraint()
+Constraint* __fastcall ConstructDefaultConstraint(Constraint*);                             // 0x005587f0  Constraint::Constraint()
 void  __fastcall FUN_00565b50(void*, int, void*, void*);               // 0x00565b50  vector::erase(first,last)
 void  Constraint_ctor(void*, uint, int, int);                          // 0x00558960
 
@@ -360,17 +379,15 @@ void ConstraintVector::insert(Constraint* pos, uint count, const Constraint* val
 // @ 0x00bf9250
 void ConstraintVector::resize(uint count)
 {
-    uint size = (uint)(((uchar*)mEnd - (uchar*)mBegin) / 0x24);
-    if (size < count) {
-        Constraint tmp;
-        Constraint* v = (Constraint*)FUN_005587f0(&tmp, 0);
-        insert(mEnd, count - size, v);
-        ConstraintVector* iv = (ConstraintVector*)((uchar*)&tmp + 0x10);
-        FUN_004e39a0(iv, 0, iv->mBegin, iv->mEnd);
-        if (iv->mBegin != 0 && *(int*)((uchar*)iv->mBegin - 4) != 0)
-            operator_delete__(iv->mBegin);
+    if (count > static_cast<uint>(mEnd - mBegin)) {
+        Constraint value;
+        const Constraint* initialized = ConstructDefaultConstraint(&value);
+        insert(mEnd, count - static_cast<uint>(mEnd - mBegin), initialized);
+        value.mTail.DoDestroyValues(value.mTail.mBegin, value.mTail.mEnd);
+        if (value.mTail.mBegin && reinterpret_cast<int*>(value.mTail.mBegin)[-1])
+            operator_delete__(value.mTail.mBegin);
     } else {
-        FUN_00565b50(this, 0, (uchar*)mBegin + count * 0x24, mEnd);
+        erase(mBegin + count, mEnd);
     }
 }
 

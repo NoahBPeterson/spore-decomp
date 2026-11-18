@@ -12,3 +12,4 @@
 00c061b0 ?FUN_00c061b0@@YIXPAX@Z  # FUN_00c061b0 migrated from s00c053b0 (verbatim, slice spelling)
 00c06320 ?GetRank@cGameBundleContainer@SP@@UAEMPAVcSPCreatureBase@2@@Z  # SP::cGameBundleContainer::GetRank migrated from s00c053b0
 00c06340 ?RankForward@CB@@QAEXH@Z  # CB::RankForward migrated from s00c053b0 (verbatim, slice spelling)
+00c06500 ?func6500@CB_s00c0_53b0@@QAEXXZ  # CB_s00c0_53b0::func6500 migrated from s00c053b0 (verbatim, slice spelling)

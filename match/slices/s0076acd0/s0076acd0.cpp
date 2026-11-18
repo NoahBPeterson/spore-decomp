@@ -262,6 +262,35 @@ bool __fastcall RefreshCubeMap(void* self, int, int unused) {
 // ===========================================================================
 struct B1_350 { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); };
 struct B2_350 { virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); };
+// destructor views of D350 / D660: two bases (vtables 0x13eb938 / 0x13ec458 restored on exit) and the
+// references they hold, released through vtable slot 1 (D350's job at +0x13c through cJob::Release, 0x690120)
+struct D76bBase0 { virtual void Slot0(); ~D76bBase0() {} };
+struct D76bBase1 { virtual void Slot0(); ~D76bBase1() {} };
+struct ID76bRef { virtual void Slot0(); virtual void Release(); };
+struct D76bRef {
+    ID76bRef* mp;
+    ~D76bRef() { if (mp) mp->Release(); }
+};
+struct D76bJob { void Release(); };   // 0x690120
+struct D76bJobRef {
+    D76bJob* mp;
+    ~D76bJobRef() { if (mp) mp->Release(); }
+};
+struct D350Obj : D76bBase0, D76bBase1 {
+    int m8;                   // +8
+    D76bRef mc, m10, m14;     // +0xc
+    int pad18;                // +0x18
+    int m1c, m20;             // +0x1c
+    char pad24[0x118];
+    D76bJobRef m13c;          // +0x13c
+    ~D350Obj();
+};
+struct D660Obj : D76bBase0, D76bBase1 {
+    int m8;                   // +8
+    D76bRef mc;               // +0xc
+    int m10, m14, m18;
+    ~D660Obj();
+};
 struct D350 {
     void* vtbl0;              // +0
     void* vtbl1;              // +4
@@ -284,17 +313,7 @@ D350::D350() {
     m13c = 0;
 }
 // @ 0x0076b3c0
-D350::~D350() {
-    if (m13c)
-        ((void(__thiscall*)(void*))JobRelease)((void*)m13c);
-    if (m14)
-        ((void(__thiscall**)(void*))*(void***)m14)[1]((void*)m14);
-    if (m10)
-        ((void(__thiscall**)(void*))*(void***)m10)[1]((void*)m10);
-    if (mc)
-        ((void(__thiscall**)(void*))*(void***)mc)[1]((void*)mc);
-    vtbl0 = vtbl_13eb938;
-    vtbl1 = vtbl_13ec458;
+D350Obj::~D350Obj() {
 }
 void DeleteD350(D350* p) { delete p; }
 
@@ -390,11 +409,7 @@ D660::D660() {
     m14 = -1; m18 = -1;
 }
 // @ 0x0076b6c0
-D660::~D660() {
-    if (mc)
-        ((void(__thiscall**)(void*))*(void***)mc)[1]((void*)mc);
-    vtbl0 = vtbl_13eb938;
-    vtbl1 = vtbl_13ec458;
+D660Obj::~D660Obj() {
 }
 void DeleteD660(D660* p) { delete p; }
 
@@ -423,8 +438,23 @@ void __fastcall Ctor76b720(void* self, int, int a2, int a3, int* a4, void* a5, c
 }
 
 // ===========================================================================
+struct ViewerResource {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct ViewerResourceRef {
+    ViewerResource* object;
+    void Reset() {
+        _ReadWriteBarrier();
+        ViewerResource* old = object;
+        if (old) {
+            object = 0;
+            old->Release();
+        }
+    }
+};
+
 // @ 0x0076b840  release a viewer instance
-// ===========================================================================
 void __fastcall ReleaseViewer76b8(void* self) {
     char* s = (char*)self;
     void* p = *(void**)(s + 0x10);
@@ -433,14 +463,11 @@ void __fastcall ReleaseViewer76b8(void* self) {
         void* q = *(void**)(s + 0x10);
         if (q) { ((void(__thiscall*)(void*))PhysDel)(q); Dealloc(q); }
     }
-    void* r = *(void**)(s + 0xc);
-    if (r) {
-        *(void**)(s + 0xc) = 0;
-        ((void(__thiscall**)(void*))*(void***)r)[1](r);
-    }
+    ViewerResourceRef& resource = *reinterpret_cast<ViewerResourceRef*>(s + 0xc);
+    if (resource.object)
+        resource.Reset();
 }
 
-// ===========================================================================
 // @ 0x0076b890  render/serialize a viewer
 // ===========================================================================
 void __fastcall RenderViewer76b8(void* self, int, void* a2, void* a3, void* a4, void* a5) {

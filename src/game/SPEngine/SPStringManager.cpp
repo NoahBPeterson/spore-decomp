@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "EA/IO/IStream.h"
 #include "SP/cString.h"
 #include <string.h>
 #include <intrin.h>
@@ -46,6 +47,12 @@ namespace SP {
 class cStringDetokenizer { public:
     cStringDetokenizer();                     // 0x006b6490
     virtual ~cStringDetokenizer();
+    char mPad[0x58];
+    static void* operator new(unsigned int n, const char* name, int a, int b, int c, int d) {
+        return EA_ZoneObject_new(n, name, a, b, c, d);
+    }
+    static void operator delete(void* p) { ::operator delete(p); }
+    static void operator delete(void*, const char*, int, int, int, int) {}
 };
 }
 namespace SP {
@@ -161,7 +168,7 @@ virtual void v13();
 virtual void v14();
 virtual void v15();
 virtual void v16();
-    virtual void RegisterFactory(int on, void* factory, int zero);   // +0x44
+    virtual int RegisterFactory(int on, void* factory, int zero);   // +0x44
 };
 }
 namespace SP {
@@ -196,6 +203,8 @@ virtual void f8();
     static void* operator new(unsigned int n, const char* name, int a, int b, int c, int d) {
         return EA_ZoneObject_new(n, name, a, b, c, d);
     }
+    static void operator delete(void* p) { ::operator delete(p); }
+    static void operator delete(void*, const char*, int, int, int, int) {}
     char Read();                    // 0x006b6620
     bool Create(IResKeySrc* pSrc, StringTable** ppOut, uint32_t arg3, uint32_t type);   // 0x006b6bf0
 };
@@ -206,6 +215,8 @@ struct InsertTag {};
 namespace SP {
 struct StringSetNode { cString_s006b_6920* value; StringSetNode* next; };
 }
+void __cdecl operator delete[](void*) throw();
+extern SP::StringSetNode* gEmptyBucketArray[];   // 0x0154df28
 namespace SP {
 struct StringSet {
     uint32_t mAlloc;                // +0x00
@@ -217,9 +228,18 @@ struct StringSet {
     uint32_t mnNextResize;          // +0x18
     uint32_t mPad;                  // +0x1c
 
+    StringSet()
+    {
+        mfMaxLoadFactor = 1.0f;
+        mfGrowthFactor = 2.0f;
+        mnBucketCount = 1;
+        mpBucketArray = gEmptyBucketArray;
+        mnElementCount = 0;
+        mnNextResize = 0;
+    }
     int erase(cString_s006b_6920** key);
     void insert(char* out, cString_s006b_6920** key, InsertTag tag);
-    void DoFreeNodes(StringSetNode** buckets, uint32_t nBuckets);   // 0x006b6570
+    void DoFreeNodes(StringSetNode** buckets, uint32_t nBuckets) throw();   // 0x006b6570
     ~StringSet() {
         DoFreeNodes(mpBucketArray, mnBucketCount);
         mnElementCount = 0;
@@ -234,6 +254,7 @@ struct AutoRefCount {
     T* mp;
     AutoRefCount() : mp(0) {}
     ~AutoRefCount() { if (mp) mp->Release(); }
+    operator T*() const { return mp; }
     AutoRefCount& operator=(T* p) {
         T* old = mp;
         if (p != old) {
@@ -259,7 +280,6 @@ class cStringManager { public:
     bool LoadAll();
 };
 }
-extern SP::StringSetNode* gEmptyBucketArray[];   // 0x0154df28
 namespace EA {
 namespace Text {
 int __cdecl GetCharacterAsUTF16(wchar16* dst, uint32_t dstCap, const char* src, int srcLen);   // 0x0093cf60
@@ -300,9 +320,46 @@ int SP::cStringTableResourceFactory::GetSupportedTypes(uint32_t* pTypes, int cou
 void FUN_006b65d0()
 {}
 
+extern const unsigned gByteStreamReadChunkSize; // 0x01400f2c (512 bytes)
+namespace App {
+struct ByteStream {
+    char pad00[8];
+    unsigned mPool;
+    int mCursor;
+    int mLimit;
+    unsigned char* mBase;
+    EA::IO::IStream* mSource;
+    unsigned char ReadByte();
+};
+}
+
 // @ 0x006b6620
-void FUN_006b6620()
-{}
+unsigned char App::ByteStream::ReadByte()
+{
+    unsigned char result = 0;
+    int cur = mCursor;
+    if (cur == mLimit) {
+        if (mPool != 0) {
+            _ReadWriteBarrier();
+            const unsigned& count = (mPool < 512) ? mPool : gByteStreamReadChunkSize;
+            int got = (int)mSource->Read(mBase, count);
+            mPool -= got;
+            mLimit = got;
+            mCursor = 0;
+            if (got < 1) {
+                mLimit = 0;
+                mPool = 0;
+            } else {
+                result = *mBase;
+                mCursor = 1;
+            }
+        }
+    } else {
+        result = mBase[cur];
+        mCursor = cur + 1;
+    }
+    return result;
+}
 
 // @ 0x006b6740
 void FUN_006b6740()
@@ -320,7 +377,7 @@ void FUN_006b68a0()
 SP::cStringManager::~cStringManager()
 {
     if (GetResourceManager())
-        GetResourceManager()->RegisterFactory(0, mpFactory.mp, 0);
+        GetResourceManager()->RegisterFactory(0, mpFactory, 0);
     mpFactory = 0;
     delete mpDetokenizer;
     // members (AutoRefCount, StringSet) are destroyed by the compiler-generated epilogue
@@ -433,15 +490,8 @@ bool SP::cStringTableResourceFactory_s006b_6920::Create(IResKeySrc* pSrc, String
 // @ 0x006b6d10
 SP::cStringManager::cStringManager()
 {
-    mStringList.mfMaxLoadFactor = 1.0f;
-    mStringList.mfGrowthFactor = 2.0f;
-    mStringList.mnBucketCount = 1;
-    mStringList.mpBucketArray = gEmptyBucketArray;
-    mStringList.mnElementCount = 0;
-    mStringList.mnNextResize = 0;
-    mpFactory.mp = 0;
     mpFactory = new ("UI/SP::cString", 0, 0, 0, 0) cStringTableResourceFactory_s006b_6920();
-    GetResourceManager()->RegisterFactory(1, mpFactory.mp, 0);
+    GetResourceManager()->RegisterFactory(1, mpFactory, 0);
     mpDetokenizer = new ("App/cStringDetokenizer", 0, 0, 0, 0) cStringDetokenizer();
 }
 

@@ -154,8 +154,26 @@ struct C3 {
     void* p8;     // +8
     int  bindA(void* obj, void* a, void* b, void* c);   // 0x6939b0
     int  bindB(void* obj, void* a, void* b, void* c);   // 0x693aa0
-    C3*  ctorA(void* a, void* b, void* c, void* d);     // 0x693cd0
-    C3*  ctorB(void* a, void* b, void* c, void* d);     // 0x693d60
+};
+// the constructors' view of C3: its vtable (0x1403970) and two reference members that start out empty, released on
+// unwind if binding throws; ctorA and ctorB bind through different helpers
+struct IC3Ref { virtual void Slot0(); virtual void Release(); };
+struct C3Ref {
+    IC3Ref* mp;
+    C3Ref() : mp(0) {}
+    ~C3Ref() { if (mp) mp->Release(); }
+};
+struct C3ObjA {
+    virtual void Slot0();
+    C3Ref p4;     // +4
+    C3Ref p8;     // +8
+    C3ObjA(void* a, void* b, void* c, void* d);   // 0x693cd0
+};
+struct C3ObjB {
+    virtual void Slot0();
+    C3Ref p4;     // +4
+    C3Ref p8;     // +8
+    C3ObjB(void* a, void* b, void* c, void* d);   // 0x693d60
 };
 struct FieldInfo {
     unsigned int   mData[4];  // inline value; for arrays: [0] data, [1] count, [2] stride
@@ -259,8 +277,12 @@ struct Str16_s0069_4210 {
 };
 struct Hdr15 { u32 v[15]; };
 struct Obj60 { Hdr15 h; u32 x; Str16_s0069_4210 s1; Str16_s0069_4210 s2; };
-struct StrBuf { char* begin; char* end; char* cap; void assign(const char* b, const char* e); void dtor(); };
-extern "C" StrBuf* EA_ConvertToString8(StrBuf* out, void* v);
+struct StrBuf {
+    char* begin; char* end; char* cap; void* pad;
+    ~StrBuf() { if ((cap - begin) > 1 && begin) operator_delete_arr(begin); }
+    void assign(const char* b, const char* e);
+};
+extern "C" StrBuf EA_ConvertToString8(void* v);
 struct VStream {                       // IO stream: Read(buf, size) at vtable +0x30
     virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c(); virtual void s10();
     virtual void s14(); virtual void s18(); virtual void s1c(); virtual void s20(); virtual void s24();
@@ -729,7 +751,7 @@ void RegList_Resolve()
             void* q = (void*)FUN_00920090();
             if (q) {
                 void* r = (void*)FUN_00920090();
-                bool v = ((bool(*)(cRegNode*, void*))(((void**)r)[1]))(p, p->mpData);
+                bool v = ((bool(__thiscall*)(void*, cRegNode*, void*))(((void**)(*(void***)r))[1]))(r, p, p->mpData);
                 p->mState = v;
             }
         }
@@ -744,7 +766,7 @@ void RegList_Release()
             void* q = (void*)FUN_00920090();
             if (q) {
                 void* r = (void*)FUN_00920090();
-                bool v = ((bool(*)(cRegNode*))(((void**)r)[2]))(p);
+                bool v = ((bool(__thiscall*)(void*, cRegNode*))(((void**)(*(void***)r))[2]))(r, p);
                 p->mState = (v == 0);
             }
         }
@@ -811,11 +833,12 @@ void ParseULong(const char** src, unsigned long* out)
 { const char* s = src[0]; out[0] = strtoul(s, 0, 10); }
 
 // @ 0x006930b0
-void ParseFloat(const char** src, float* out)
+void ParseFloat(const eastl::string8& source, void* out)
 {
     char* end;
-    double v = strtod(src[0], &end);
-    out[0] = (float)v;
+    const char* text = source.c_str();
+    double value = strtod(text, &end);
+    *static_cast<float*>(out) = (float)value;
 }
 
 // @ 0x006930d0
@@ -1060,23 +1083,15 @@ extern "C" bool FUN_00693c70(void* io, CString* str)
 }
 
 // @ 0x00693cd0
-C3* C3::ctorA(void* a, void* b, void* c, void* d)
+C3ObjA::C3ObjA(void* a, void* b, void* c, void* d)
 {
-    vtbl = g_vtbl_1403970;
-    p4 = 0;
-    p8 = 0;
-    bindA(a, b, d, c);
-    return this;
+    ((C3*)this)->bindA(a, b, d, c);
 }
 
 // @ 0x00693d60
-C3* C3::ctorB(void* a, void* b, void* c, void* d)
+C3ObjB::C3ObjB(void* a, void* b, void* c, void* d)
 {
-    vtbl = g_vtbl_1403970;
-    p4 = 0;
-    p8 = 0;
-    bindB(a, b, d, c);
-    return this;
+    ((C3*)this)->bindB(a, b, d, c);
 }
 
 // @ 0x00693dd0
@@ -1421,16 +1436,11 @@ extern "C" void FUN_00694bf0(CString_s0069_4210* dst, CString_s0069_4210* src)
 }
 
 // @ 0x00694c10
-extern "C" void FUN_00694c10(StrBuf* dst, void* v)
+void FUN_00694c10(StrBuf* dst, void* v)
 {
-    StrBuf tmp;
-    tmp.begin = 0;
-    tmp.end = 0;
-    tmp.cap = 0;
-    StrBuf* r = EA_ConvertToString8(&tmp, v);
-    if (r != dst)
-        dst->assign(r->begin, r->end);
-    tmp.dtor();
+    StrBuf tmp = EA_ConvertToString8(v);
+    if (&tmp != dst)
+        dst->assign(tmp.begin, tmp.end);
 }
 
 // @ 0x00694d00

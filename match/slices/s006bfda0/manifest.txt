@@ -4,3 +4,6 @@ slices/s006bfda0/s006bfda0.cpp  ?m4e@DualStream@@QAEXHH@Z  006c04e0
 slices/s006bfda0/s006bfda0.cpp  ?m52@DualStream@@QAEXXZ  006c0520
 slices/s006bfda0/s006bfda0.cpp  ?Cleanup@PFRecordRead@@QAEHXZ  006c0790
 slices/s006bfda0/s006bfda0.cpp  ?AddRef@PFRecordRead@@QAE_NXZ  006c07e0  /O2 /MD /Gy /EHsc /TP
+slices/s006bfda0/s006bfda0.cpp  ?GetSize@StreamSub@@QAEIH@Z  006c0220  /O2 /MD /Gy /EHsc /TP
+slices/s006bfda0/s006bfda0.cpp  ??1BackgroundLoadingDtorView@@UAE@XZ  006c0710  /O2 /MD /Gy /EHsc /TP /GS- /GR-
+slices/s006bfda0/s006bfda0.cpp  ??0PFRecordWriteCtorView@@QAE@IIIPBIPAUDatabasePackedFile@@@Z  006c0c40  /O2 /MD /Gy /EHsc /TP /GS- /GR-

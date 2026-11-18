@@ -6,3 +6,5 @@ slices/s00f9fef0/s00f9fef0.cpp  ?CopyFaceA@TerrainSphereLike@@QAE_NHPBM@Z  00fa0
 slices/s00f9fef0/s00f9fef0.cpp  ?CopyFaceB@TerrainSphereLike@@QAE_NHPBM@Z  00fa0070  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00f9fef0/s00f9fef0.cpp  ?CopyFaceC@TerrainSphereLike@@QAE_NHPBM@Z  00fa00d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00f9fef0/s00f9fef0.cpp  ?Dirty@DirtyFlag@@QAEXE@Z  00fa0e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f9fef0/s00f9fef0.cpp  ?ShutdownRTTSphere@@YAXXZ  00fa0360  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00f9fef0/s00f9fef0.cpp  ?PartitionElem16@@YAPAUElem16@@PAU1@0PAX1I@Z  00fa0670  /O2 /MD /Gy /TP /arch:SSE /fp:fast

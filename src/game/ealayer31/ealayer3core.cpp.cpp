@@ -14,15 +14,30 @@
 namespace rw {
 namespace audio {
 namespace core {
-extern int   InitCoeffs(int n);           // 0x1146d20
 }
 }
 }
 namespace rw {
 namespace audio {
 namespace core {
-class EALayer3Core {
+// 0x1146ca0: the inherited base. It installs its own vftable and calls itself this constructor's first callee.
+class CMpegBase {
 public:
+    virtual ~CMpegBase();                 // vftable at +0x00
+    void AllocateSynth(int n);            // 0x1148cf0
+};
+
+class CMpegLayer3Base : public CMpegBase {
+public:
+    CMpegLayer3Base();                    // 0x1146ca0 (out of line, in its own translation unit)
+    int AllocateHybrid(int n);            // 0x1146d20 (out of line)
+};
+
+class EALayer3Core;
+
+class EALayer3Core : private CMpegLayer3Base {
+public:
+    friend CMpegLayer3Base::CMpegLayer3Base();
     virtual ~EALayer3Core();              // +0x00 (vftable)
     char mData[0x37c];                    // +0x04 .. +0x37f  (fields accessed by offset)
 
@@ -56,9 +71,9 @@ namespace rw { namespace audio { namespace core {
 EALayer3Core::EALayer3Core(int n)
 {
     *(void**)this = (void*)0x14ce590;
-    ((int(*)(void*, int))InitCoeffs)(this, n);
-    // CMpegBase::AllocateSynth(n) — inherited member
-    extern int CMpegBase_AllocateSynth(void*, int);
-    CMpegBase_AllocateSynth(this, n);
+    // 0x1148cf0: CMpegBase::AllocateSynth(n), inherited from the base class
+    AllocateSynth(n);
+    // 0x1146d20: CMpegLayer3Base::AllocateHybrid(n), inherited
+    AllocateHybrid(n);
 }
 }}}  // namespace rw::audio::core

@@ -1,6 +1,7 @@
 // Slice s01140b70: RenderWare 4 audio core (rw::audio) - SND voice allocation / SNDI patch
 // parsing / filter-node glue.  Built with VC .NET 2003 (cl 13.10) + /GL /LTCG.
 // Flags: /vc71 /O2 /MD /Gy /TP
+#include <intrin.h>
 #include "types.h"
 
 // _ReadWriteBarrier: MSVC intrinsic (compiler barrier, emits no code). VC .NET 2003's <intrin.h>
@@ -453,6 +454,7 @@ extern "C" void FUN_011411a0(int* list, int* node)
     if (list[0] != 0) {
         *(int**)(list[0] + 4) = node;
         list[2]++;
+        _ReadWriteBarrier();
         list[0] = (int)node;
     } else {
         list[2]++;
@@ -472,6 +474,7 @@ extern "C" void FUN_011411d0(int* list, int* node)
     if (list[1] != 0) {
         *(int**)(list[1]) = node;
         list[2]++;
+        _ReadWriteBarrier();
         list[1] = (int)node;
     } else {
         list[2]++;
@@ -716,19 +719,19 @@ extern "C" void FUN_011416b0(int32_t p)
 // ===========================================================================
 //  FUN_01141710   (invoke callbacks)
 // ===========================================================================
-// @ 0x01141710
+// @ 0x01141710  -- the enabled flag is a guard around the loop, not a gate the loop body must
+// keep live: retail re-reads it as a memory operand on the `jle`, so nothing caches it.
 extern "C" void FUN_01141710(void)
 {
-    if (g_cbEnabled == 0)
-        return;
-    int i = 0;
-    if (g_cbCount <= 0)
-        return;
-    do {
-        CbFn fn = g_callbacks[i];
-        fn();
-        i++;
-    } while (i < g_cbCount);
+    if (g_cbEnabled == 0) {
+        int i = 0;
+        if (g_cbCount > 0) {
+            do {
+                g_callbacks[i]();
+                i++;
+            } while (i < g_cbCount);
+        }
+    }
 }
 
 // ===========================================================================

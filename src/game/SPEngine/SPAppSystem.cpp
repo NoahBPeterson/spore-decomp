@@ -229,13 +229,15 @@ struct CPropList { int GetModificationCount(); };
 struct PropWatcher {
   uint32_t f0;   // +0
   void*    f4;   // +4  (wraps the PropListBase)
-  void*    f8;   // +8  (owner passed to vf24)
-  int      fc;   // +0xc cached modification count
+  void*    f8;   // +8 property ID stored in 32 bits
+  uint32_t fc;   // +0xc cached modification count
   void* f10;     // +0x10 (property list at wrapper+0x30)
   bool Check();
   void Read(void* p2);
 };
-uint32_t* FUN_004e41c0();
+struct WatcherVariant {
+  const int32_t* GetInt32() const; // 0x004e41c0, no-argument thiscall accessor
+};
 struct JobManagerVtbl_ {
   virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
   virtual void v10(); virtual void v14(); virtual void v18();
@@ -540,8 +542,21 @@ struct PLBase32 {
 };
 struct PropWatcher32 {
   uint32_t f0; void* f4; void* f8; int fc;
-  PropWatcher32* ctor(void* list, void* owner, uint32_t value);
   void Read(void* p2);
+};
+// the constructor's view of PropWatcher32: the property list is referenced (vtable slot 0) as it is stored, and
+// released again if the initial read throws
+struct PropWatcherListRef {
+  PLBase32* mp;
+  PropWatcherListRef(void* list) : mp((PLBase32*)list) { if (list) mp->v00(); }
+  ~PropWatcherListRef() { if (mp) mp->v04(); }
+};
+struct PropWatcher32Obj {
+  uint32_t f0;
+  PropWatcherListRef f4;
+  void* f8;
+  int fc;
+  PropWatcher32Obj(void* list, void* owner, uint32_t value);
 };
 void* gAllocator_13ebc58;
 void* gVtbl_13eb90c;
@@ -1265,14 +1280,14 @@ bool PropWatcher::Check()
 {
     int* w = (int*)f4;
     if (w) {
-        int mc = (int)w[0xc] ? ((CPropList*)w[0xc])->GetModificationCount() : 0;
-        if ((int)fc != (int)w[0xd] + mc) {
-            int mc2 = (int)w[0xc] ? ((CPropList*)w[0xc])->GetModificationCount() : 0;
-            fc = (int)w[0xd] + mc2;
-            PropListBase* pb = (PropListBase*)w;
-            PropWatcher* local = this;
-            if (pb->vf24(f8, &local)) {
-                uint32_t v = *FUN_004e41c0();
+        uint32_t mc = (int)w[0xc] ? ((SP::cPropertyList*)w[0xc])->GetModificationCount() : 0;
+        if (fc != (uint32_t)w[0xd] + mc) {
+            uint32_t mc2 = (int)w[0xc] ? ((SP::cPropertyList*)w[0xc])->GetModificationCount() : 0;
+            fc = (uint32_t)w[0xd] + mc2;
+            const SP::cPropertyList* pb = (SP::cPropertyList*)w;
+            const EA::Variant* local;
+            if (pb->GetProperty((uint32_t)f8, &local)) {
+                uint32_t v = *((const WatcherVariant*)local)->GetInt32();
                 if (f0 != v) {
                     f0 = v;
                     return true;
@@ -1289,24 +1304,22 @@ void PropWatcher::Read(void* p2)
     PropListBase* pb = (PropListBase*)p2;
     if (pb->vf24(f8, &p2)) {
         int* q = (int*)p2;
-        short t = *(short*)((char*)q + 0x12);
+        uint16_t t = *(uint16_t*)((char*)q + 0x12);
         int* src;
         if (t == 9 || t == 0x10) {
-            if ((*(uint8_t*)((char*)q + 0x10) & 0x30) == 0)
-                src = (int*)(-(uint32_t)(t != 0) & (uint32_t)q);
-            else
+            if ((*(uint8_t*)((char*)q + 0x10) & 0x30) != 0)
                 src = (int*)*q;
+            else
+                // the original's `neg eax; sbb eax, eax` mask (0 or -1): the `? -1 : 0` spelling keeps that codegen
+                src = (int*)((uint32_t)q & (uint32_t)((t != 0) ? -1 : 0));
         } else {
             src = &gDefaultWatcherValue;
         }
         f0 = (uint32_t)*src;
     }
     int* w = (int*)f4;
-    if (w[0xc]) {
-        fc = (int)w[0xd] + ((CPropList*)w[0xc])->GetModificationCount();
-        return;
-    }
-    fc = (int)w[0xd];
+    int mc = w[0xc] ? ((CPropList*)w[0xc])->GetModificationCount() : 0;
+    fc = (int)w[0xd] + mc;
 }
 
 // @ 0x007e67a0
@@ -1476,17 +1489,11 @@ int cAppSystemHandleMessage(cAppSystem* self, uint32_t msg, int data)
 }
 
 // @ 0x007e7260
-PropWatcher32* PropWatcher32::ctor(void* list, void* owner, uint32_t value)
+PropWatcher32Obj::PropWatcher32Obj(void* list, void* owner, uint32_t value)
+  : f0(value), f4(list), f8(owner), fc(0)
 {
-    f0 = value;
-    f4 = list;
-    if (list)
-        ((PLBase32*)list)->v00();
-    f8 = owner;
-    fc = 0;
-    if (list)
-        Read(list);
-    return this;
+  if (list)
+    ((PropWatcher32*)this)->Read(list);
 }
 
 // @ 0x007e72d0
@@ -2127,7 +2134,7 @@ end:
 }
 
 // @ 0x011c88e0
-UI_STRING* general_allocate_prompt(UI* ui, const char* prompt, int prompt_freeable, int type, int result_buf, int min, int max)
+static UI_STRING* general_allocate_prompt(UI* ui, const char* prompt, int prompt_freeable, int type, int result_buf, int min, int max)
 {
     if (ui == 0)
     {

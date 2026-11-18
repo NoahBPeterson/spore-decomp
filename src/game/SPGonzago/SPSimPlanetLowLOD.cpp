@@ -938,24 +938,36 @@ void CS::FUN_00c7e780(int a2, void* cb, int a4, int a5)
     }
 }
 
+extern SP::cDataSerializerGeneric gSimPlanetLowLODSerializer; // 0x01579cd0
+
 // @ 0x00c7e8f0
 bool CS::FUN_00c7e8f0(void* s)
 {
-    for (int i = 0x60; i != 0; --i)
-        h.mCells[0x60 - i].FUN_00c7dfe0(s);
-    Ser ser;
-    ser.ctor(this, (void*)0x1579cd0, 0x1a80d26);
-    return ser.Serialize(s) != 0;
+    CubeCell* cell = h.mCells;
+    int count = 0x60;
+    do {
+        cell->FUN_00c7dfe0(s);
+        ++cell;
+    } while (--count != 0);
+    SP::cVarListSerializer ser(this, &gSimPlanetLowLODSerializer,
+        SP::cVarListSerializer::kSignature);
+    bool result = ser.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(s)) ? true : false;
+    return result;
 }
 
 // @ 0x00c7e950
 bool CS::FUN_00c7e950(void* s)
 {
-    for (int i = 0x60; i != 0; --i)
-        h.mCells[0x60 - i].FUN_00c7e0a0(s);
-    Ser ser;
-    ser.ctor(this, (void*)0x1579cd0, 0x1a80d26);
-    return ser.Read(s) != 0;
+    CubeCell* cell = h.mCells;
+    int count = 0x60;
+    do {
+        cell->FUN_00c7e0a0(s);
+        ++cell;
+    } while (--count != 0);
+    SP::cVarListSerializer ser(this, &gSimPlanetLowLODSerializer,
+        SP::cVarListSerializer::kSignature);
+    bool result = ser.Serialize(*static_cast<SP::cIObjectDatabaseIStream*>(s)) ? true : false;
+    return result;
 }
 
 // @ 0x00c7e9b0
@@ -1067,6 +1079,7 @@ void CS::FUN_00c7ecb0()
         RemoveHandler_00571db0(p, a2, a3, a4, a5);
     }
     h.mp4C = (void*)0;
+    _ReadWriteBarrier();
     if (h.mp2C != (void*)0) {
         void* q = h.mp2C;
         h.mp2C = (void*)0;

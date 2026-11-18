@@ -2,6 +2,7 @@
 // Object file: SPEditors/SPUIAssetBrowser.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "SP/cSPUIAssetBrowser.h"
 #include "SP/cString.h"
@@ -2267,7 +2268,14 @@ uint32_t Browser::Get_c()
 uint32_t Browser::Get_10()
 {
     VecEnt20& v = AT(VecEnt20, 0xcc);
-    if (!v.empty() && v.size() == 1) return (uint32_t)v.mpBegin->e;
+    Ent20* begin = v.mpBegin;
+    if (begin != v.mpEnd) {
+        _ReadWriteBarrier();
+        if ((uint32_t)(v.mpEnd - begin) == 1) {
+            _ReadWriteBarrier();
+            return (uint32_t)v.mpBegin->e;
+        }
+    }
     return 0;
 }
 
@@ -2428,6 +2436,7 @@ void cSPUIAssetBrowser::FUN_006460b0(Elem* first, Elem* last, Elem* src)
         first->a = src->a;
         first->b = src->b;
         first->c = src->c;
+        _ReadWriteBarrier();
         cRefCountA* newp = src->p;
         cRefCountA* oldp = first->p;
         if (newp != oldp) {
@@ -2452,6 +2461,7 @@ Elem* cSPUIAssetBrowser::FUN_00646140(Elem* first, Elem* last, Elem* dst)
         dst->a = first->a;
         dst->b = first->b;
         dst->c = first->c;
+        _ReadWriteBarrier();
         cRefCountA* newp = first->p;
         cRefCountA* oldp = dst->p;
         if (newp != oldp) {
@@ -2481,6 +2491,7 @@ Elem* cSPUIAssetBrowser::FUN_006461d0(Elem* first, Elem* last, Elem* dst)
         dst->a = last->a;
         dst->b = last->b;
         dst->c = last->c;
+        _ReadWriteBarrier();
         cRefCountA* newp = last->p;
         cRefCountA* oldp = dst->p;
         if (newp != oldp) {

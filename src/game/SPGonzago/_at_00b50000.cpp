@@ -27,7 +27,7 @@ extern void* g_vtblFB0;         // 0x01461390
 struct HkVec { char d[0x10]; };
 struct HkObj { void setTransformedPos(const void* a, HkVec* out); };  // 0x01081360
 struct Obj500E0 {
-    void F(const void* a, HkObj* b);   // 0x00b500e0
+    void F(const void* a, unsigned param2, HkObj* b);   // 0x00b500e0
 };
 struct Variant8 { uchar flag; float v; };
 struct IVarInvoke {
@@ -107,7 +107,17 @@ struct Obj50780 {
     SVec* mDst;       // +0x0c
     void F(unsigned param2, SVec* src);   // 0x00b50780
 };
-struct Obj507D0 { void F(unsigned param2, unsigned param3, uchar* out); };  // 0x00b507d0
+struct Obj507D0Src { char pad[0x14]; float f14; };
+struct IVarInvoke18 {
+virtual void j0();
+virtual void j1();
+virtual void j2();
+virtual void j3();
+virtual void j4();
+virtual void j5();
+    virtual void Invoke(unsigned a, unsigned b, void* variant);  // +0x18
+};
+struct Obj507D0 { void F(uchar* out, unsigned key, Obj507D0Src* src); };  // 0x00b507d0
 struct SweptSphere {
     Vec4  mStart;    // +0x00
     Vec4  mEnd;      // +0x10
@@ -508,7 +518,7 @@ struct Ext {
     u32_s00b5_1b00   FUN_00c763d0(u32_s00b5_1b00);
     int*  FUN_00b51780(void*, u32_s00b5_1b00);
     void  FUN_00833840(void*, void*);
-    void  FUN_00645ed0(void*, void*);
+    int*  FUN_00645ed0(void*, void*);
     void  FUN_00b4f930(void*, void*, void*);
     void  FUN_00b4f8a0(void*, void*, void*);
     u32_s00b5_1b00   FUN_00b576d0(void*);
@@ -740,8 +750,6 @@ struct C54640 {
 extern "C" void FUN_00b537f0(CObj* p, int a2, char a3, char a4);  // 0x00b537f0 (stays in the slice: not this object's)
 
 // ---- items of slice s00b547b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void __cdecl FUN_00b51bb0(void* out, const void* key);              // 0x00b51bb0
-extern "C" void __cdecl FUN_00b52120(void* dst, void* a, uint32_t flags);      // 0x00b52120
 extern "C" uint8_t* DAT_0167ed44;   // list begin (0x0167ed44)
 extern "C" uint8_t* DAT_0167ed48;   // list end   (0x0167ed48)
 extern "C" void* __cdecl FUN_00b3d310(...);                    // 0x00b3d310 (variadic)
@@ -829,7 +837,7 @@ public:
     int32_t  mnIndex;              // +0x08
     uint32_t* Lookup(const SPKeyPair* key);     // 0x00b54a40 (thiscall, ret 4), returns slot+8
 };
-struct LookupRec { uint32_t m00, m04, m08; };   // &local_18
+struct LookupRec { uint32_t m00, m04; float m08; };   // &local_18
 class cPairMap {
 public:
     void      Insert(uint32_t a, uint32_t b, float c);   // 0x00b54b40 (thiscall, ret 0xc)
@@ -850,7 +858,7 @@ struct CmdLink {
 };
 struct CmdChain { void Unlink(); };                 // 0x00b4d770 (thiscall)
 struct CmdTail  { void Run(); };                    // 0x00b545b0 (thiscall)
-struct Build830 { uint8_t b[0x84]; void* Build(int a, int b2); }; // 0x00b4f830 (thiscall)
+struct __declspec(align(16)) Build830 { uint32_t b[0x84 / 4]; void* Build(int a, int b2); }; // 0x00b4f830 (thiscall)
 struct ReqRec {                       // &local_110
     void*    mpA;                     // +0x00  (= uVar1)
     uint32_t m04;                     // +0x04  (= local_1b0)
@@ -1550,7 +1558,7 @@ static inline int eastl_block_owner(void* p)
 // ---- items of slice s00b5b540 end
 
 // @ 0x00b500e0
-void __thiscall Obj500E0::F(const void* a, HkObj* b)
+void __thiscall Obj500E0::F(const void* a, unsigned param2, HkObj* b)
 {
     float s = *(float*)((char*)this + 0x50) + *(float*)((char*)this + 0x4c);
     if (s != *(float*)((char*)this + 0x30)) {
@@ -1565,9 +1573,10 @@ void __thiscall Obj500E0::F(const void* a, HkObj* b)
         *(float*)((char*)this + 0x1c) = 0.0f;
         *(float*)((char*)this + 0x30) = s;
     }
-    HkObj* va = (HkObj*)a;
+    HkObj* va = b;
+    (void)param2;
     va->setTransformedPos(a, (HkVec*)((char*)this + 0x10));
-    b->setTransformedPos(a, (HkVec*)((char*)this + 0x20));
+    ((HkObj*)((char*)b + 0x10))->setTransformedPos(a, (HkVec*)((char*)this + 0x20));
 }
 
 // @ 0x00b50170
@@ -1680,15 +1689,15 @@ void __thiscall Obj50780::F(unsigned param2, SVec* src)
 }
 
 // @ 0x00b507d0
-void __thiscall Obj507D0::F(unsigned param2, unsigned param3, uchar* out)
+void __thiscall Obj507D0::F(uchar* out, unsigned key, Obj507D0Src* src)
 {
-    (void)param2;
-    struct Tmp { void* vt; uchar flag; float v; };
+    struct Tmp { void* vt; float v; uchar flag; void* obj; };
     Tmp t;
     t.vt = &g_vtblFB0;
     t.flag = 0;
-    t.v = *(float*)((char*)this + 0x14);
-    ((IVarInvoke*)this)->Invoke(param3, 0, *(Variant8*)((char*)&t + 4), 0);
+    t.v = src->f14;
+    t.obj = src;
+    ((IVarInvoke18*)this)->Invoke(key, 0, &t);
     *out = t.flag;
 }
 
@@ -2295,8 +2304,8 @@ int* __cdecl FUN_00b51e30(int* out, unsigned a)
     out[1] = p[1];
     out[2] = p[2];
     out[3] = p[3];
-    out[4] = 0;
-    out[5] = 0;
+    *(volatile int*)&out[4] = 0;
+    *(volatile int*)&out[5] = 0;
     out[4] = out[0];
     out[5] = out[1];
     return out;
@@ -2398,9 +2407,10 @@ void Big::M_b51ee0()
 void Big::M_b52020(int* p)
 {
     int it[2];
-    int key[2];
+    int key[3];
     key[0] = p[0];
     key[1] = 0;
+    key[2] = p[2];
 
     ((Ext*)0x1569cb8)->FUN_00833840(it, key);
 
@@ -2491,10 +2501,12 @@ int __cdecl FUN_00b521f0(void* a)
     int it[2];
     void* key = a;
     ((Ext*)0x16852e8)->FUN_00645ed0(it, &key);
+    int node = it[0];
+    _ReadWriteBarrier();
     int base = *(int*)0x16852ec;
     int count = *(int*)0x16852f0;
-    if (it[0] != *(int*)(base + count * 4))
-        return *(int*)(it[0] + 4);
+    if (node != *(int*)(base + count * 4))
+        return *(int*)(node + 4);
     return 0;
 }
 
@@ -3039,16 +3051,18 @@ cPoolHolderC* cPoolHolderC::Init(int a2, int a3)
 // @ 0x00b54a40
 uint32_t* cPairMapInner::Lookup(const SPKeyPair* key)
 {
+    LookupRec it;
     LookupRec local;
-    FUN_00b51bb0(&local, key);
+    ((Big*)this)->M_b51bb0((void**)&local, (int*)key);
     if (local.m00 == mpTable[mnIndex]) {
         local.m00 = key->lo;
         local.m04 = key->hi;
-        uint32_t flags = 0;
-        local.m08 = 0;
-        FUN_00b52120(&local, &local, flags);
+        local.m08 = 0.0f;
+        uint32_t extra;
+        *(uint8_t*)&extra = 0;
+        ((Big*)this)->M_b52120((int**)&it, (int*)&local, (int*)extra);
     }
-    return (uint32_t*)(local.m00 + 8);
+    return (uint32_t*)(it.m00 + 8);
 }
 
 // @ 0x00b54b40
@@ -3088,9 +3102,9 @@ void FUN_00b54b80(void)
 int* __cdecl FUN_00b54be0(int* param_1, int param_2)
 {
     Build830 scratch;
-    char flag = 0;
+    uint32_t flag = 0;
     void* u = scratch.Build(param_2, param_2);
-    FUN_00b51840(param_1, u, (uint32_t)flag);
+    ((TblA*)0x1569c98)->DoInsertValue(param_1, u, flag);
     CmdNode* node = (CmdNode*)*param_1;
     ((CmdLink*)node->mpBack)->mpField8 = &node->m10;
     void* o = FUN_00b3d310();

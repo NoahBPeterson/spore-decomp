@@ -67,12 +67,6 @@ struct Timer {
     void Restart();                                    // 0x00bc3130
     void Stop();                                       // 0x00bc3110
 };
-struct VarListSerializer {
-    char body[0xa00];
-    void Init(void* owner, void* table, int key);      // 0x00692f90 (ctor), ret 0xc
-    void Serialize(void* stream);                      // 0x00692900, ret 4
-    void Read(void* stream);                           // 0x00693e10, ret 4
-};
 struct VtObj {
     void** vt;                                         // +0x000
     bool NodePresent();                                // 0x00bfc3a0
@@ -114,8 +108,8 @@ struct Sim {
     void* arr_bc[3];                                   // +0x0bc
     void NodeApply(int value);                         // 0x00bfc430
     float NodeRatio();                                 // 0x00bfc490
-    void CombatantWrite(VtObj* stream);                // 0x00bfc4a0
-    void CombatantRead(VtObj* stream);                 // 0x00bfc540
+    bool CombatantWrite(VtObj* stream);                // 0x00bfc4a0
+    bool CombatantRead(VtObj* stream);                 // 0x00bfc540
     int TimedExpired();                                // 0x00bfc600
     void TimedAdd(unsigned int amount);                // 0x00bfc640
     void TimedStop();                                  // 0x00bfc6a0
@@ -387,37 +381,49 @@ float Sim::NodeRatio()
     return this->m_038 / ((float (__thiscall*)(void*))this->vt[22])(this);
 }
 
+extern SP::cDataSerializerGeneric gCombatantSerializerList[]; // 0x01570858
+struct CombatantStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // slot 6
+};
+struct CombatantArchive {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual CombatantStreamHolder* GetStreamHolder(); // slot 8
+};
+
 // @ 0x00bfc4a0
-void Sim::CombatantWrite(VtObj* stream)
+bool Sim::CombatantWrite(VtObj* stream)
 {
+    CombatantStreamHolder* __restrict holder = ((CombatantArchive*)stream)->GetStreamHolder();
     unsigned int value = 0x013f94d4;
-    void* sync = ((void* (__thiscall*)(void*))stream->vt[8])(stream);
-    void* writer = ((void* (__thiscall*)(void*))((VtObj*)sync)->vt[6])(sync);
+    void* writer = holder->GetStream();
     EA_IO_WriteUint32(writer, &value, 1, 0);
-    value = (unsigned int)this->m_034;
-    sync = ((void* (__thiscall*)(void*))stream->vt[8])(stream);
-    writer = ((void* (__thiscall*)(void*))((VtObj*)sync)->vt[6])(sync);
+    unsigned int fieldValue = (unsigned int)this->m_034;
+    CombatantStreamHolder* __restrict fieldHolder = ((CombatantArchive*)stream)->GetStreamHolder();
+    value = fieldValue;
+    writer = fieldHolder->GetStream();
     EA_IO_WriteUint32(writer, &value, 1, 0);
-    VarListSerializer s;
-    s.Init(this, (void*)0x01570858, 0x01a80d26);
-    s.Serialize(stream);
+    SP::cVarListSerializer serializer(this, gCombatantSerializerList, 0x01a80d26);
+    return serializer.Serialize(*(SP::cIObjectDatabaseOStream*)stream);
 }
 
 // @ 0x00bfc540
-void Sim::CombatantRead(VtObj* stream)
+bool Sim::CombatantRead(VtObj* stream)
 {
-    int first = 0;
-    int second = 0;
-    void* sync = ((void* (__thiscall*)(void*))stream->vt[8])(stream);
-    void* reader = ((void* (__thiscall*)(void*))((VtObj*)sync)->vt[6])(sync);
-    EA_IO_ReadInt32(reader, &first, 1, 0);
-    sync = ((void* (__thiscall*)(void*))stream->vt[8])(stream);
-    reader = ((void* (__thiscall*)(void*))((VtObj*)sync)->vt[6])(sync);
-    EA_IO_ReadInt32(reader, &second, 1, 0);
-    this->m_034 = second;
-    VarListSerializer s;
-    s.Init(this, (void*)0x01570858, 0x01a80d26);
-    s.Read(stream);
+    CombatantStreamHolder* __restrict holder = ((CombatantArchive*)stream)->GetStreamHolder();
+    int tag;
+    void* reader = holder->GetStream();
+    EA_IO_ReadInt32(reader, &tag, 1, 0);
+    holder = ((CombatantArchive*)stream)->GetStreamHolder();
+    int value;
+    reader = holder->GetStream();
+    EA_IO_ReadInt32(reader, &value, 1, 0);
+    this->m_034 = value;
+    SP::cVarListSerializer serializer(this, gCombatantSerializerList, 0x01a80d26);
+    return serializer.Serialize(*(SP::cIObjectDatabaseIStream*)stream);
 }
 
 // @ 0x00bfc600
@@ -936,24 +942,25 @@ HostileEntry* __fastcall FUN_00bfd3e0(HostileEntry* self, int, const HostileEntr
 }
 
 // @ 0x00bfd430
-void FUN_00bfd430(const HostileEntry* first, const HostileEntry* last, HostileEntry* out)
+HostileEntry* FUN_00bfd430(const HostileEntry* first, const HostileEntry* last, HostileEntry* out)
 {
-    if (out != 0 || first != last) {
-        for (; first != last; first += 1, out += 1) {
-            if (out != 0) {
-                out->vftable = (void*)0x1465d54;
-                out->mRefCount4 = 0;
-                out->mField08 = first->mField08;
-                out->mField0c = first->mField0c;
-                out->mField10 = first->mField10;
-                out->mField14 = first->mField14;
-                out->mByte18 = first->mByte18;
-                out->mField1c = first->mField1c;
-                out->vftable = (void*)0x1464450;
-                out->mField20 = first->mField20;
-            }
+    while (first != last) {
+        if (out != 0) {
+            out->vftable = (void*)0x1465d54;
+            out->mRefCount4 = 0;
+            out->mField08 = first->mField08;
+            out->mField0c = first->mField0c;
+            out->mField10 = first->mField10;
+            out->mField14 = first->mField14;
+            out->mByte18 = first->mByte18;
+            out->mField1c = first->mField1c;
+            out->vftable = (void*)0x1464450;
+            out->mField20 = first->mField20;
         }
+        ++first;
+        ++out;
     }
+    return out;
 }
 
 // @ 0x00bfd490

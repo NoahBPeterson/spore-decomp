@@ -46,10 +46,16 @@ struct AutoRef {
     void** AsPPTypeParam() { Reset(); return (void**)&mp; }
     ~AutoRef() { if (mp) mp->Release(); }
 };
-struct cVarListSerializer {
-    uint8_t mData[0xa14];
-    cVarListSerializer(void* object, const void* descriptor, uint32_t classId);
-    void Serialize(void* stream);
+struct CommunityStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // +0x18
+};
+struct CommunityOutputStream {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual CommunityStreamHolder* GetStreamHolder(); // +0x20
 };
 struct Elem20 {
     float f0, f1, f2, f3, f4, f5, f6;
@@ -329,9 +335,10 @@ int __fastcall FUN_00c00590(void* ecx_this, void* edx)
 // @ 0x00c005b0
 void __fastcall FUN_00c005b0(void* ecx_this, void* edx, void* stream)
 {
-    void* iface = ((FnVp)VT(stream, 0x20))(stream);
+    CommunityStreamHolder* __restrict holder =
+        static_cast<CommunityOutputStream*>(stream)->GetStreamHolder();
     uint32_t tag = 0x17f243b;
-    void* io = ((FnVp)VT(iface, 0x18))(iface);
+    void* io = holder->GetStream();
     EA_IO_WriteUint32(io, tag, 1, 0);
 
     void* p = *(void**)((char*)ecx_this + 0x11c);
@@ -343,12 +350,14 @@ void __fastcall FUN_00c005b0(void* ecx_this, void* edx, void* stream)
         }
     }
 
-    cVarListSerializer ser(ecx_this, &DAT_015710b8, 0x1a80d26);
-    ser.Serialize(stream);
+    SP::cVarListSerializer ser(ecx_this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&DAT_015710b8),
+        SP::cVarListSerializer::kSignature);
+    ser.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream));
 }
 
 // @ 0x00c00850
-void FUN_00c00850(Elem20* first, Elem20* last, Elem20* dst)
+Elem20* FUN_00c00850(Elem20* first, Elem20* last, Elem20* dst)
 {
     for (; first != last; ++first, ++dst) {
         if (dst) {
@@ -362,6 +371,7 @@ void FUN_00c00850(Elem20* first, Elem20* last, Elem20* dst)
             dst->u = first->u;
         }
     }
+    return dst;
 }
 
 // @ 0x00c008c0

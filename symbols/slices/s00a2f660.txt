@@ -1,0 +1,9 @@
+00a2f6e0 ?DoFreeNodes@NodeAllocator@@QAEXPAPAUHashNode0@@I@Z  # NodeAllocator::DoFreeNodes migrated from s00a2f660 (verbatim, slice spelling)
+00a2f730 ?LoadFromResman@Submix_s00a2_f660@@QAEIPBDII@Z  # Submix_s00a2_f660::LoadFromResman migrated from s00a2f660 (verbatim, slice spelling)
+00a2f960 ??0Submix_s00a2_f660@@QAE@XZ  # Submix_s00a2_f660::Submix migrated from s00a2f660 (verbatim, slice spelling)
+00a2fac0 ?Tick@Submix_s00a2_f660@@QAEXII@Z  # Submix_s00a2_f660::Tick migrated from s00a2f660 (verbatim, slice spelling)
+00a2fbe0 ?SetPerformanceData@Submix_s00a2_f660@@QAEIHPBXI@Z  # Submix_s00a2_f660::SetPerformanceData migrated from s00a2f660 (verbatim, slice spelling)
+00a2fe30 ?SetProperty@Submix_s00a2_f660@@QAEXII@Z  # Submix_s00a2_f660::SetProperty migrated from s00a2f660 (verbatim, slice spelling)
+00a2ffe0 ?ConnectPrimitive@Submix_s00a2_f660@@QAEIIPAUIPrimitive@@@Z  # Submix_s00a2_f660::ConnectPrimitive migrated from s00a2f660 (verbatim, slice spelling)
+00a301f0 ?DisconnectPrimitive@Submix_s00a2_f660@@QAEXIPAUIPrimitive@@@Z  # Submix_s00a2_f660::DisconnectPrimitive migrated from s00a2f660 (verbatim, slice spelling)
+00a30280 ??1Submix@Audio@EA@@UAE@XZ  # EA::Audio::Submix::~Submix migrated from s00a2f660

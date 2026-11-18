@@ -1,7 +1,7 @@
-0048c0f0 SP::cSPEditorLimbStructure::BuildJoints  # allocates cSPEditorLimbJoint, sets block/upper/positions, joint-type flags, recurses symmetric blocks
+0048c0f0 ?BuildJoints@cSPEditorLimbStructure_s0048_c0f0@SP@@QAEPAVcSPEditorLimbJoint_s0048_c0f0@2@PAVcSPEditorBlock_s0048_c0f0@2@PAV32@_N@Z  # cSPEditorLimbStructure_s0048_c0f0::BuildJoints migrated from s0048c0f0 (verbatim, slice spelling)
 0048c610 SP::cSPEditorLimbStructure::GetLimbOriginalPosition  # mEndBlock->mPosition else mLastBone->mPosition+F_43e080 else zero
 0048c720 vector<cSPEditorLimbJoint*>::eraseOne  # single-element vector erase
-0048c790 SP::BuildPileList  # recursive symmetric-block pile collection, optional 0x4956b0
+0048c790 ?BuildPileList@SP@@YAXPAVcSPEditorBlock_s0048_c0f0@1@PAU?$vector_s0048_c0f0@PAVcSPEditorBlock_s0048_c0f0@SP@@@@_N@Z  # BuildPileList migrated from s0048c0f0 (verbatim, slice spelling)
 0048c8d0 SP::GetSymmetricBlocks  # symmetric blocks AddRef/push/Release, recurse when bit 0xb clear
 0048ca10 SP::EditorUtils::CalculateModelSize  # sum bbox volume / sphere area over model parts
 0048cc20 SP::EditorUtils::CountModelParts  # count model parts matching resource-id/flag predicate

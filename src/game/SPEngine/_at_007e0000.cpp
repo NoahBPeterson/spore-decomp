@@ -50,7 +50,6 @@ struct cSplitControllerEffect : SplitEffectBase0, SplitEffectBase1 {
     float f68, f6c, f70;        // +0x68
 
     cSplitControllerEffect(void* owner);                         // 007e1010
-    ~cSplitControllerEffect();                                   // 007e0f70
     void UpdateInstances(int unused);                            // 007e0f00
     void AddInstance(int a, void* b);                            // 007e10c0
     void CopyFrom(void* src);                                    // 007e1450
@@ -80,6 +79,7 @@ struct MyVector8 {
     void resize(unsigned n);
     void DoInsertValue(void* pos, void* v);   // 0x007e1340
 };
+typedef void* (__thiscall* AddSplitInstanceFn)(void* self, void* out, int key, cSPTransform_s007e_06b0* t, int flag);
 void* AddSplitInstance(void* out, int key, cSPTransform_s007e_06b0* t, int flag);  // 0x007d7640
 struct VtblObj {
 virtual void v0();
@@ -147,13 +147,13 @@ struct PQ {
 };
 struct Matrix3 {
   float v[9];
-  void Assign(const void* p);
+  void Assign(const void* p) throw();
   Matrix3(const void* p) { Assign(p); }
   Matrix3() {}
 };
 struct VBaseA { virtual void va(); virtual ~VBaseA() throw() {} };
 struct VBaseB { virtual void vb(); virtual ~VBaseB() throw() {} int mB; VBaseB() : mB(0) {} };
-struct VBaseC { virtual void vc(); virtual ~VBaseC() throw() {} };
+struct VBaseC { virtual void vc(); };
 struct Buf {
   void* begin;  // +0
   void* end;    // +4
@@ -332,19 +332,40 @@ void cSplitControllerEffect::UpdateInstances(int unused)
     }
 }
 
+// the destructor's view of cSplitControllerEffect: same layout, with the base and member destructors retail runs
+struct SplitDtorBase0 { virtual void e0(); virtual void e1(); };
+struct SplitDtorBase1 { virtual void w0(); virtual void w1(); virtual void w2(); };
+struct SplitDtorMid : SplitDtorBase0, SplitDtorBase1 { ~SplitDtorMid() {} };
+struct SplitStateObj {
+    virtual ~SplitStateObj() {}
+    int refCount;
+    void Release()
+    {
+        int n = refCount - 1;
+        refCount = refCount - 1;
+        if (n == 0) {
+            refCount = 1;
+            delete this;
+        }
+    }
+};
+struct SplitControllerDtorView : SplitDtorMid {
+    int field08;
+    void* mpOwner;
+    int field10;
+    char field14;
+    SplitStateObj* mpState;
+    void* vecBegin;
+    ~SplitControllerDtorView();
+};
+
 // @ 0x007e0f70
-cSplitControllerEffect::~cSplitControllerEffect()
+SplitControllerDtorView::~SplitControllerDtorView()
 {
     if (vecBegin && *(int*)((char*)vecBegin - 4))
         EFree(vecBegin);
-    if (mpState) {
-        int n = *(int*)((char*)mpState + 4) - 1;
-        *(int*)((char*)mpState + 4) = n;
-        if (n == 0) {
-            *(int*)((char*)mpState + 4) = 1;
-            ((void(__thiscall*)(void*, int))(*(void***)mpState)[0])(mpState, 1);
-        }
-    }
+    if (mpState)
+        mpState->Release();
 }
 
 // @ 0x007e1010
@@ -364,7 +385,7 @@ cSplitControllerEffect::cSplitControllerEffect(void* owner)
     mTransform.mTranslation[1] = gZero3[1];
     mTransform.mTranslation[2] = gZero3[2];
     mTransform.mScale = gOne;
-    mTransform.mRotation = gIdentity33;
+    mTransform.mRotation.Assign(gIdentity33);
 }
 
 // @ 0x007e10c0
@@ -422,9 +443,8 @@ void MyVector8::resize(unsigned n)
             EFree(mpBegin);
         int count = ((int)mpEnd - (int)mpBegin) >> 3;
         char* cap = (char*)p + n * 8;
-        char* end = (char*)p + count * 8;
         mpBegin = p;
-        mpEnd = end;
+        mpEnd = (char*)p + count * 8;
         mpCapacity = cap;
     }
 }
@@ -506,9 +526,10 @@ void cSplitControllerEffect::Start(int unused)
         if (it != end) {
             do {
                 int pair[2];
-                AddSplitInstance(pair, *it, &mTransform, 0);
-                it[0] = pair[0];
-                it[1] = pair[1];
+                int key = *it;
+                int* r = (int*)((AddSplitInstanceFn)AddSplitInstance)(mpState, pair, key, &mTransform, 0);
+                it[0] = r[0];
+                it[1] = r[1];
                 it += 2;
             } while (it != end);
         }

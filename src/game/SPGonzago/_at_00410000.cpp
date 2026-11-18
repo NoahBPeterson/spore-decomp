@@ -203,7 +203,10 @@ struct PtrVec {
     void FreeStorage();                 // 0x004c0b80
     ~PtrVec()
     {
+        // Preserve the unused storage of the original inline helper layers.
+        PadN<6>();
         DestroyRange(mpBegin, mpEnd);
+        PadN<3>();
         FreeStorage();
     }
 };
@@ -469,10 +472,17 @@ Owner::~Owner()
 {
 }
 
+template<int N> inline void ReserveElemListInlineFrame()
+{
+    // Preserve the original destructor's unused inline-callee frame storage.
+    uint32_t slots[N];
+}
+
 // @ 0x0041f9b0
 ElemList::~ElemList()
 {
     DestroyElems(mpBegin, mpEnd);
+    ReserveElemListInlineFrame<3>();
 }
 
 // @ 0x0041fa20
@@ -483,6 +493,7 @@ UIntVec::UIntVec(const UIntVec& other)
     mpEnd = mpBegin;
     mpCap = mpBegin + n;
     mpEnd = CopyRange(other.mpBegin, other.mpEnd, mpBegin);
+    PadN<12>();
 }
 
 // @ 0x0041fac0

@@ -14,6 +14,7 @@
 // emitted, a random retrigger delay is subtracted from dt.
 // Names follow the dev PDB (cParticlesEffect / cParticlesDescription), offsets are the retail ones.
 #include "types.h"
+#include <intrin.h>
 #include <math.h>
 #include <xmmintrin.h>
 
@@ -111,12 +112,26 @@ extern const float kOne;                                    // 0x01485720
 extern const float kPoolStepThreshold;                      // 0x013ec478 (0.05)
 extern const float kRateEpsilon;                            // 0x013f11c8 (1e-6)
 
+extern void* gParticleEffectBase0Table[]; // 0x0145946c
+extern void* gParticleEffectBase1Table[]; // 0x01459468
+extern void* gParticleEffectComponentTable[]; // 0x0145942c
+extern void* gParticleEffectRefCountTable[]; // 0x01459428
+extern void* gComponentBaseTable[]; // 0x013f21d4
+extern void* gRefCountBaseTable[]; // 0x013ef094
+void operator delete(void* p); // 0x00f47380
+
 struct IStoppable
 {
     virtual void s0();
     virtual void s1();
     virtual void s2();
     virtual void Stop(int nStop);                           // slot 3 (0x00ab0cf0)
+    void* mpRefCountTable;
+    int mRefCount;
+    ~IStoppable() {
+        *(void***)this = gComponentBaseTable;
+        mpRefCountTable = gRefCountBaseTable;
+    }
 };
 
 // The effect is the complete object; IStoppable is its sub-object at +0x08 (Stop casts back down).
@@ -147,6 +162,22 @@ struct IRefCounted
     PV(0)
     virtual void Release();                                 // +0x04
 };
+struct ParticleSegmentRef {
+    IRefCounted* mpObject;
+    ParticleSegmentRef& operator=(IRefCounted* value) { mpObject = value; return *this; }
+    ~ParticleSegmentRef() { if (mpObject) mpObject->Release(); }
+};
+struct CountedParticleBuffer {
+    void* mpData;
+    CountedParticleBuffer& operator=(void* value) { mpData = value; return *this; }
+    ~CountedParticleBuffer() { if (mpData && ((int*)mpData)[-1]) operator delete(mpData); }
+};
+struct ParticleList {
+    cParticle* mpNext;
+    cParticle* mpPrev;
+    int mCount;
+    ~ParticleList(); // 0x00620230
+};
 struct RefVertex;
 template <class T>
 struct SpVector {                                           // eastl vector with the SP allocator
@@ -164,13 +195,10 @@ struct StopSinkHolder
 
 class cParticlesEffect : public CEffectBase0, public CEffectBase1, public IStoppable
 { public:
-    uint32_t               mPad0c[2];
     bool                   mStarted;                        // +0x14
     bool                   mDelayedStopActive;              // +0x15
     uint8_t                mPad16[2];
-    cParticle*             mParticlesNext;                  // +0x18 intrusive_list sentinel
-    cParticle*             mParticlesPrev;                  // +0x1c
-    int                    mParticleCount;                  // +0x20
+    ParticleList           mParticles;                      // +0x18 intrusive_list sentinel
     cParticlesDescription* mDesc;                           // +0x24
     void*                  mpOwner;                         // +0x28
     IAudioSource*          mpAudioSource;                   // +0x2c
@@ -193,14 +221,14 @@ class cParticlesEffect : public CEffectBase0, public CEffectBase1, public IStopp
     uint32_t               mPad144[(0x190 - 0x144) / 4];
     float                  mCurrentEmitRateScale;           // +0x190
     uint32_t               mPad194[(0x1b0 - 0x194) / 4];
-    IRefCounted*           mpSegmentA;                      // +0x1b0
-    IRefCounted*           mpSegmentB;                      // +0x1b4
-    IRefCounted*           mpSegmentC;                      // +0x1b8
+    ParticleSegmentRef    mpSegmentA;                      // +0x1b0
+    ParticleSegmentRef    mpSegmentB;                      // +0x1b4
+    ParticleSegmentRef    mpSegmentC;                      // +0x1b8
     uint32_t               mPad1bc[(0x1e4 - 0x1bc) / 4];
     SpVector<RefVertex>    mVertices;                       // +0x1e4
-    void*                  mpBufferA;                       // +0x1fc (counted buffer, header at -4)
+    CountedParticleBuffer  mpBufferA;                       // +0x1fc (counted buffer, header at -4)
     uint32_t               mPad200[(0x214 - 0x200) / 4];
-    void*                  mpBufferB;                       // +0x214
+    CountedParticleBuffer  mpBufferB;                       // +0x214
     uint32_t               mPad218[(0x228 - 0x218) / 4];
     StopSinkHolder*        mpStopSlot;                      // +0x228
     uint32_t               mPad22c;                         // +0x22c
@@ -227,9 +255,9 @@ cParticlesEffect::cParticlesEffect(cParticlesDescription* pDesc, void* pOwner)
     mDelayedStopActive = false;
     mPad16[0] = 1;                                          // +0x16: enabled
     mPad16[1] = 0;
-    mParticlesNext = (cParticle*)&mParticlesNext;           // intrusive list head
-    mParticlesPrev = (cParticle*)&mParticlesNext;
-    mParticleCount = 0;
+    mParticles.mpNext = (cParticle*)&mParticles.mpNext;           // intrusive list head
+    mParticles.mpPrev = (cParticle*)&mParticles.mpNext;
+    mParticles.mCount = 0;
     mDesc = pDesc;
     mpOwner = pOwner;
     mpAudioSource = 0;
@@ -262,20 +290,13 @@ cParticlesEffect::cParticlesEffect(cParticlesDescription* pDesc, void* pOwner)
 // @ 0x00ab0c30
 cParticlesEffect::~cParticlesEffect()
 {
+    *(void***)this = gParticleEffectBase0Table;
+    *(void***)((char*)this + 4) = gParticleEffectBase1Table;
+    *(void***)((char*)this + 8) = gParticleEffectComponentTable;
+    mpRefCountTable = gParticleEffectRefCountTable;
+    _ReadWriteBarrier();
     if (mpStopSlot)
-        mpStopSlot->mSink.Release();                        // vtable slot +0x38
-    if (mpBufferA)
-        operator delete(mpBufferA);
-    if (mpBufferB)
-        operator delete(mpBufferB);
-    // mVertices (SpVector<RefVertex>, dtor 0x00a8c440) and the particle list head (IntrusiveList,
-    // dtor 0x00620230) are destroyed by their own member destructors, then the base vptrs are reset.
-    if (mpSegmentC)
-        mpSegmentC->Release();
-    if (mpSegmentB)
-        mpSegmentB->Release();
-    if (mpSegmentA)
-        mpSegmentA->Release();
+        mpStopSlot->mSink.Release();
 }
 
 template <class T> static inline const T& Min(const T& a, const T& b) { return (b < a) ? b : a; }
@@ -415,11 +436,11 @@ void cParticlesEffect::Update(float dt)
             }
 
             if (alive) {
-                p->mpPrev = mParticlesPrev;
-                p->mpNext = (cParticle*)&mParticlesNext;
-                ((cParticle*)((char*)&mParticlesNext))->mpPrev = p;
+                p->mpPrev = mParticles.mpPrev;
+                p->mpNext = (cParticle*)&mParticles.mpNext;
+                ((cParticle*)((char*)&mParticles.mpNext))->mpPrev = p;
                 p->mpPrev->mpNext = p;
-                mParticleCount++;
+                mParticles.mCount++;
                 if (p->mPosition.x < mBoundsMin.x) mBoundsMin.x = p->mPosition.x;
                 if (p->mPosition.x > mBoundsMax.x) mBoundsMax.x = p->mPosition.x;
                 if (p->mPosition.y < mBoundsMin.y) mBoundsMin.y = p->mPosition.y;
@@ -448,7 +469,7 @@ void cParticlesEffect::Update(float dt)
 // @ 0x00ab0720
 void cParticlesEffect::StepFrame()
 {
-    cParticle* pHead = (cParticle*)&mParticlesNext;
+    cParticle* pHead = (cParticle*)&mParticles.mpNext;
     cParticle* p = pHead->mpNext;
     while (p != pHead) {
         cParticle* const pPrev = p->mpPrev;
@@ -457,7 +478,7 @@ void cParticlesEffect::StepFrame()
         pNext->mpPrev = pPrev;
         p->mpNext = 0;
         p->mpPrev = 0;
-        --mParticleCount;
+        --mParticles.mCount;
         DestroyParticle(p);
         p = pNext;
     }
@@ -484,7 +505,7 @@ void cParticlesEffect::Emit(float dt)
     int n = _mm_cvt_ss2si(_mm_set_ss(rate));
     if ((float)n < rate)
         ++n;
-    n -= mParticleCount;
+    n -= mParticles.mCount;
     for (; n > 0; --n) {
         cParticle* p;
         for (;;) {
@@ -502,11 +523,11 @@ void cParticlesEffect::Emit(float dt)
         }
 
         if (InitParticle(p) && StepParticle(p, dt)) {
-            p->mpPrev = mParticlesPrev;
-            p->mpNext = (cParticle*)&mParticlesNext;
-            ((cParticle*)((char*)&mParticlesNext))->mpPrev = p;
+            p->mpPrev = mParticles.mpPrev;
+            p->mpNext = (cParticle*)&mParticles.mpNext;
+            ((cParticle*)((char*)&mParticles.mpNext))->mpPrev = p;
             p->mpPrev->mpNext = p;
-            mParticleCount++;
+            mParticles.mCount++;
             if (p->mPosition.x < mBoundsMin.x) mBoundsMin.x = p->mPosition.x;
             if (p->mPosition.x > mBoundsMax.x) mBoundsMax.x = p->mPosition.x;
             if (p->mPosition.y < mBoundsMin.y) mBoundsMin.y = p->mPosition.y;
@@ -527,7 +548,7 @@ void IStoppable::Stop(int nStop)
 #define PE (*((cParticlesEffect*)((char*)this - 8)))
     if (!PE.mStarted)
         return;
-    if (PE.mpStopSlot && PE.mParticleCount == 0)
+    if (PE.mpStopSlot && PE.mParticles.mCount == 0)
         PE.mpStopSlot->mSink.OnStop(nStop);
     PE.mDelayedStopActive = (nStop == 0);
     if (PE.mDelayedStopActive)

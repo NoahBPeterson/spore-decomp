@@ -1,10 +1,10 @@
-00dfd5b0 Simulator::cEditorModeUI::Setup  # Claude-coined
-00dfd8a0 Simulator::cEditorModeUI::RebuildPanel  # Claude-coined
-00dfda50 Simulator::cEditorModeUI::QueryMissionFields  # Claude-coined
-00dfdc50 Simulator::cEditorModeUI::Setup2  # Claude-coined
-00dfde90 Simulator::cEditorModeUI::ResetPodSlots  # Claude-coined
-00dfdf10 eastl::pod_array<0x534>::~  # Claude-coined
-00dfdf70 eastl::pod_array<0x27e0>::~  # Claude-coined
-00dfdfe0 pod copy ctor (389B)  # Claude-coined
-00dfe170 variant-tagged object assignment  # Claude-coined
-00dfe220 SP::cSPUIMissions::UpdateMissionFieldsSpace  # PDB candidate (card)
+00dfd5b0 ?Setup@cEditorModeUI@Simulator@@QAEXXZ  # cEditorModeUI::Setup migrated from s00dfd5b0 (verbatim, slice spelling)
+00dfd8a0 ?RebuildPanel@cEditorModeUI@Simulator@@QAEXXZ  # cEditorModeUI::RebuildPanel migrated from s00dfd5b0 (verbatim, slice spelling)
+00dfda50 ?QueryMissionFields@cSPUIMissions@SP@@QAEPAHPAX@Z  # cSPUIMissions::QueryMissionFields migrated from s00dfd5b0 (verbatim, slice spelling)
+00dfdc50 ?Setup2@cEditorModeUI@Simulator@@QAEXXZ  # cEditorModeUI::Setup2 migrated from s00dfd5b0 (verbatim, slice spelling)
+00dfde90 ?F_de90@UI2@@QAEXXZ  # UI2::F_de90 migrated from s00dfd5b0 (verbatim, slice spelling)
+00dfdf10 ?F_df10@@YGXII@Z  # F_df10 migrated from s00dfd5b0 (verbatim, slice spelling)
+00dfdf70 ?F_df70@@YGXII@Z  # F_df70 migrated from s00dfd5b0 (verbatim, slice spelling)
+00dfdfe0 ??0UI2@@QAE@ABU0@@Z  # UI2::UI2 migrated from s00dfd5b0 (verbatim, slice spelling)
+00dfe170 ?F_e170@UI2@@QAEPAXPAH@Z  # UI2::F_e170 migrated from s00dfd5b0 (verbatim, slice spelling)
+00dfe220 ?UpdateMissionFieldsSpace@cSPUIMissions@SP@@QAEXXZ  # cSPUIMissions::UpdateMissionFieldsSpace migrated from s00dfd5b0 (verbatim, slice spelling)

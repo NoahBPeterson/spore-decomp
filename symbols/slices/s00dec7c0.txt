@@ -1,5 +1,6 @@
 00dec7c0 ?MakeNewAsset@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXI@Z  # cGalaxyGameEntryUIStateMachine_s00de_c7c0::MakeNewAsset migrated from s00dec7c0 (verbatim, slice spelling)
 00dec940 ?LoadAsset@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXI@Z  # cGalaxyGameEntryUIStateMachine_s00de_c7c0::LoadAsset migrated from s00dec7c0 (verbatim, slice spelling)
+00dec990 ?FUN_00dec990@@YAIPAVcEditorEntry@@@Z  # FUN_00dec990 migrated from s00dec7c0 (verbatim, slice spelling)
 00decad0 ?ShowAssetButtonsForLevel@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXH@Z  # cGalaxyGameEntryUIStateMachine_s00de_c7c0::ShowAssetButtonsForLevel migrated from s00dec7c0 (verbatim, slice spelling)
 00decd10 ?FUN_00decd10@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXH@Z  # cGalaxyGameEntryUIStateMachine_s00de_c7c0::FUN_00decd10 migrated from s00dec7c0 (verbatim, slice spelling)
 00dece10 ?SetupStartState@cGalaxyGameEntryUIStateMachine_s00de_c7c0@SP@@QAEXXZ  # cGalaxyGameEntryUIStateMachine_s00de_c7c0::SetupStartState migrated from s00dec7c0 (verbatim, slice spelling)

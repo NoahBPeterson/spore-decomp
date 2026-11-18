@@ -7,7 +7,7 @@
 00cce940 ?FUN_00cce940@cSPUITCCCursorStrategy@@QAEXXZ  # cSPUITCCCursorStrategy::FUN_00cce940 migrated from s00ccdd70 (verbatim, slice spelling)
 00cce9b0 ?FUN_00cce9b0@@YGIPAPAXPAX11@Z  # FUN_00cce9b0 migrated from s00ccdd70 (verbatim, slice spelling)
 00ccea10 ?FUN_00ccea10@cSPUITCCCursorStrategy@@QAEXPAX_N@Z  # cSPUITCCCursorStrategy::FUN_00ccea10 migrated from s00ccdd70 (verbatim, slice spelling)
-00cceae0 ?FUN_00cceae0@cSPUITCCCursorStrategy@@QAEIPAXI0@Z  # MATCH - cursor mode switch, tribe-wide slot refresh, cursor strategy mode set
+00cceae0 ?FUN_00cceae0@cSPUITCCCursorStrategy@@QAEIPAXI0@Z  # cSPUITCCCursorStrategy::FUN_00cceae0 migrated from s00ccdd70 (verbatim, slice spelling)
 00ccebd0 ?FUN_00ccebd0@cSPUITCCCursorStrategy@@QAEIPAXH0@Z  # cSPUITCCCursorStrategy::FUN_00ccebd0 migrated from s00ccdd70 (verbatim, slice spelling)
-00ccec20 ?FUN_00ccec20@cSPUITCCCursorStrategy@@QAEXI@Z  # nonmatching (8) - mission card / mode flag toggle
-00cceca0 ?FUN_00cceca0@cSPUITCCCursorStrategy@@QAEIPAX0@Z  # nonmatching (43) - camera toggle from the stopwatch state
+00ccec20 ?FUN_00ccec20@cSPUITCCCursorStrategy@@QAEXI@Z  # cSPUITCCCursorStrategy::FUN_00ccec20 migrated from s00ccdd70 (verbatim, slice spelling)
+00cceca0 ?FUN_00cceca0@cSPUITCCCursorStrategy@@QAEIPAX0@Z  # cSPUITCCCursorStrategy::FUN_00cceca0 migrated from s00ccdd70 (verbatim, slice spelling)

@@ -1,2 +1,6 @@
 004ab690 ??0cSPEditorModel_s004a_b690@SP@@QAE@XZ  # cSPEditorModel_s004a_b690::cSPEditorModel migrated from s004ab690 (verbatim, slice spelling)
 004aba00 ?ModelTeardown@cSPEditorModel_s004a_b690@SP@@QAEXXZ  # cSPEditorModel_s004a_b690::ModelTeardown migrated from s004ab690 (verbatim, slice spelling)
+004abaf0 ?AddBlock@cSPEditorModel_s004a_b690@SP@@QAEXPAVcSPEditorBlock_s004a_b690@2@_N@Z  # cSPEditorModel_s004a_b690::AddBlock migrated from s004ab690 (verbatim, slice spelling)
+004abbc0 ?GetNearestBlockPointToPoint@cSPEditorModel_s004a_b690@SP@@QAE?AUcSPVector3_s004a_b690@@U3@PAVcSPEditorBlock_s004a_b690@2@_N20@Z  # cSPEditorModel_s004a_b690::GetNearestBlockPointToPoint migrated from s004ab690 (verbatim, slice spelling)
+004abc50 ?GetBestBlockPointBasedOnDistance@cSPEditorModel_s004a_b690@SP@@QAE?AUcSPVector3_s004a_b690@@U3@PAVcSPEditorBlock_s004a_b690@2@0_N222@Z  # cSPEditorModel_s004a_b690::GetBestBlockPointBasedOnDistance migrated from s004ab690 (verbatim, slice spelling)
+004ac480 ?FindNearestFlag7Block@cSPEditorModel_s004a_b690@SP@@QAEPAVcSPEditorBlock_s004a_b690@2@UcSPVector3_s004a_b690@@@Z  # cSPEditorModel_s004a_b690::FindNearestFlag7Block migrated from s004ab690 (verbatim, slice spelling)

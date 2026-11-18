@@ -8,7 +8,6 @@
 00a28810  -  complete; MaintainLRU - iterator/local layout and the inlined bucket erase differ; erase/iterator maintenance reproduced semantically only. difftest FAIL (5/5 valid inputs fault in the emulator on table pointers the harness cannot synthesize)
 00a28a20  94  complete; AddTextureRef - hit path reads the count as a plain dword at node+4; inlined table insert prologue differs. difftest FAIL (emulator fault on table state)
 00a28aa0  -  complete; GetOrRegisterVoice - Voice field init order, refcount scheduling and inlined insert differ; init order reproduced semantically only. difftest FAIL (emulator fault on running the voice init path)
-00a28c60  193  complete; RegisterObj - two AddRef / one Release schedule and inlined pair insert differ. difftest FAIL (emulator fault on object map state)
 00a28d10  46  complete; UnregisterObj - same size; hashtable iterator by-value arg and erase shapes differ. difftest FAIL (emulator fault on object map state)
 00a28d70  -  complete; GetCounterPlaylist - complete, but the pool allocator pairing (PoolAlloc(&local{owner+0x14},4) twice) is a reconstruction of the original's pool scratch, not byte-verified. difftest FAIL (emulator fault on the counter map / allocator path)
 00a28e90  76  complete; AddCounter - counter value is a plain int at node+4; inlined insert prologue differs. difftest FAIL (emulator fault on counter map state)

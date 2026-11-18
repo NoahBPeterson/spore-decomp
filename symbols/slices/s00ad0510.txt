@@ -1,1 +1,9 @@
-00ad11f0 SP::cCityVisualizer::UpdateVignettes  # PDB name
+00ad0590 @FUN_00ad0590@16  # FUN_00ad0590 migrated from s00ad0510 (verbatim, slice spelling)
+00ad0710 ?FUN_00ad0710@@YAXPAXPAUTribeVec@@@Z  # FUN_00ad0710 migrated from s00ad0510 (verbatim, slice spelling)
+00ad08f0 ?FUN_00ad08f0@@YIXPAUcCityVisualizer_s00ad_0510@@H@Z  # FUN_00ad08f0 migrated from s00ad0510 (verbatim, slice spelling)
+00ad0b30 ?FUN_00ad0b30@@YI_NPAUcCityVisualizer_s00ad_0510@@HPAX@Z  # FUN_00ad0b30 migrated from s00ad0510 (verbatim, slice spelling)
+00ad0bd0 ?FUN_00ad0bd0@@YIXPAUcCityVisualizer_s00ad_0510@@H@Z  # FUN_00ad0bd0 migrated from s00ad0510 (verbatim, slice spelling)
+00ad0ca0 ?get@ElemVec@@QAEPAURegList_s00ad_0510@@PAH@Z  # ElemVec::get migrated from s00ad0510 (verbatim, slice spelling)
+00ad0d90 ?FUN_00ad0d90@@YAXPAXPAUElemVec@@@Z  # FUN_00ad0d90 migrated from s00ad0510 (verbatim, slice spelling)
+00ad1000 ?FUN_00ad1000@@YIXPAUcCityVisualizer_s00ad_0510@@HPAXH@Z  # FUN_00ad1000 migrated from s00ad0510 (verbatim, slice spelling)
+00ad11f0 ?UpdateVignettes@cCityVisualizer_s00ad_0510@@QAEPAXPAX@Z  # FUN_00ad11f0 migrated from s00ad0510 (verbatim, slice spelling)

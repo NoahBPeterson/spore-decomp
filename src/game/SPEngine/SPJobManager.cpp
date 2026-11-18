@@ -827,16 +827,37 @@ extern "C" void FUN_68F5D0(ListNode* h)
     }
 }
 
+// ---- items of slice s0068e670 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  FUN_00743b50(void* p);                     // 0x00743b50
+struct EA_Semaphore_s0068f600 {
+    char raw[0x10];
+    EA_Semaphore_s0068f600() {}                            // no-op wrapper ctor
+    EA_Semaphore_s0068f600(int n);                         // 0x00922880 (external)
+    ~EA_Semaphore_s0068f600();                             // external
+};
+struct ClsF600 {
+    uint32_t f0;            // +0x00
+    uint32_t f4;            // +0x04
+    void*    listNext;      // +0x08 (self-referential list head)
+    void*    listPrev;      // +0x0c
+    EA_Semaphore_s0068f600 sem;     // +0x10
+    char     vec[0x10];     // +0x20
+    ClsF600* last;          // +0x30 (reset by the ctor, see 0x0068f600)
+    ClsF600();
+};
+ClsF600::ClsF600() : sem(0) {
+    f0 = 0;
+    f4 = 0;
+    listNext = 0;
+    listPrev = 0;
+    last = 0;
+    listNext = &listNext;
+    listPrev = &listNext;
+    FUN_00743b50(vec);
+}
 // @ 0x0068f600
-extern "C" void* FUN_68F600(void* p)
-{
-    *(uint32_t*)((char*)p + 4) = 0;
-    *(uint32_t*)((char*)p + 0) = 0;
-    char* s = (char*)p + 8;
-    *(uint32_t*)(s + 4) = 0;
-    *(uint32_t*)(s + 0) = 0;
-    *(void**)(s) = s;
-    *(void**)(s + 4) = s;
+ClsF600* CreateJobThread_s0068f600(ClsF600* p) {
+    p->ClsF600::ClsF600();
     return p;
 }
 
@@ -993,13 +1014,51 @@ void ProfHashTable::DoRehash(unsigned int nNewBucketCount)
     mnBuckets = nNewBucketCount;
 }
 
+// Construction view of cJobData (0x0068fbe0): the job base owns the extra-object ref (released by its destructor),
+// so it and the two dependency lists each get an unwind state.
+struct JdNode_68fbe0 { void* mpNext; void* mpPrev; JdNode_68fbe0() { mpPrev = 0; mpNext = 0; } };
+struct JdRefObj_68fbe0 { virtual void r0(); virtual void Release(); };
+struct JdRef_68fbe0 {
+    JdRefObj_68fbe0* mpPtr;
+    JdRef_68fbe0() : mpPtr(0) {}
+    ~JdRef_68fbe0() { if (mpPtr) mpPtr->Release(); }
+};
+struct JdJob_68fbe0 {
+    void* mpCallback;                // +0x00
+    void* mpCallbackData;            // +0x04
+    JdRef_68fbe0 mpExtraObject;      // +0x08
+    char* mpDebugName;               // +0x0c
+    int mPriority;                   // +0x10
+    int mStatus;                     // +0x14
+    unsigned int mThreadAffinity;    // +0x18
+    int mSlot;                       // +0x1c
+    void* mpReturnValue;             // +0x20
+    void* mpCleanupReturnValue;      // +0x24
+};
+struct JdList_68fbe0 {
+    JdList_68fbe0* mpNext; JdList_68fbe0* mpPrev;
+    JdList_68fbe0() { mpPrev = this; mpNext = this; }
+    ~JdList_68fbe0();                // 0x00620230
+};
+struct cJobDataView_68fbe0 : JdNode_68fbe0, JdJob_68fbe0 {
+    cJobManager* mpManager;          // +0x30
+    bool mbSynchronousWait;          // +0x34
+    char mPad35[3];
+    JdList_68fbe0 mDependencies;     // +0x38
+    JdList_68fbe0 mDependents;       // +0x40
+    int mRealPriority;               // +0x48
+    int mRefCount;                   // +0x4c
+    cJobDataView_68fbe0();
+};
+
 // @ 0x0068fbe0
-cJobData::cJobData()
+cJobDataView_68fbe0::cJobDataView_68fbe0()
 {
     _InterlockedExchange((volatile long*)&mRefCount, 0);
     mpDebugName = sz_13ec47c;
+    _ReadWriteBarrier();
     if (mpExtraObject.mpPtr) {
-        IUnknown32* pExtra = (IUnknown32*)mpExtraObject.mpPtr;
+        JdRefObj_68fbe0* pExtra = mpExtraObject.mpPtr;
         mpExtraObject.mpPtr = 0;
         pExtra->Release();
     }
@@ -1007,8 +1066,42 @@ cJobData::cJobData()
     mpCleanupReturnValue = 0;
 }
 
+// Destruction view of cJobManager (0x0068fc60): the free lists and thread list unlink nothrow (0x620230), the two
+// vectors free nothrow, the job and ready list arrays go through the eh vector destructor, then the mutex (0x922130)
+// and the job manager interface base.
+void JmFree_68fc60(void* p) throw();   // 0xf47380
+struct JmList_68fc60 { void* mpNext; void* mpPrev; ~JmList_68fc60() throw(); };       // 0x00620230
+struct JmArrList_68fc60 { void* mpNext; void* mpPrev; ~JmArrList_68fc60(); };         // 0x00a65a90
+struct JmVec_68fc60 {
+    void** mpBegin; void** mpEnd; void** mpCapacity;
+    ~JmVec_68fc60() { if (mpBegin && ((int*)mpBegin)[-1]) JmFree_68fc60(mpBegin); }
+};
+struct JmMutex_68fc60 { char d[0x30]; ~JmMutex_68fc60(); };                          // 0x00922130
+struct JmBase_68fc60 { virtual void v0(); ~JmBase_68fc60() { (void)this; } };
+struct cJobManagerView_68fc60 : JmBase_68fc60 {
+    unsigned int mPad04;                     // +0x04
+    JmMutex_68fc60 mMutex;                   // +0x08
+    int mnLockCount;                         // +0x38
+    JmList_68fc60 mJobReadyCondition;        // +0x3c
+    JmList_68fc60 mJobReadyOrSyncCondition;  // +0x44
+    JmArrList_68fc60 mJobs[9];               // +0x4c
+    JmArrList_68fc60 mReadyList[32];         // +0x94
+    unsigned int mValidAffinities;           // +0x194
+    JmList_68fc60 mThreads;                  // +0x198
+    int mUnknown1a0;                         // +0x1a0
+    JmVec_68fc60 mWaitingThreads;            // +0x1a4
+    char mPad1b0[8];                         // +0x1b0
+    JmVec_68fc60 mWaitingPriorities;         // +0x1b8
+    char mPad1c4[8];                         // +0x1c4
+    void* mpSyncThread;                      // +0x1cc
+    JmList_68fc60 mFreeLinks;                // +0x1d0
+    JmList_68fc60 mFreeWaitNodes;            // +0x1d8
+    void* mInitThreadFunc;                   // +0x1e0
+    ~cJobManagerView_68fc60();
+};
+
 // @ 0x0068fc60
-cJobManager::~cJobManager()
+cJobManagerView_68fc60::~cJobManagerView_68fc60()
 {
 }
 
@@ -1178,13 +1271,19 @@ cJobLink* cJobManager::GetFreeLink()
     return pLink;
 }
 
+// a scoped lock on the job manager's mutex: locked on construction, unlocked when it goes out of scope (also on
+// unwind); FreeJobUnderLock takes the lock object itself
+struct JobMutexLock {
+    EA::Thread::Mutex_s0068_f670* mpMutex;
+    JobMutexLock(EA::Thread::Mutex_s0068_f670* p) : mpMutex(p) { mpMutex->Lock((unsigned int)&g_MutexFlags); }
+    ~JobMutexLock() { mpMutex->Unlock(); }
+};
+
 // @ 0x006900b0
 void cJobManager::GetJobStatus(cJobData* pJob)
 {
-    EA::Thread::Mutex_s0068_f670* pMutex = &mMutex;
-    pMutex->Lock((unsigned int)&g_MutexFlags);
-    FreeJobUnderLock(&pMutex, pJob);
-    pMutex->Unlock();
+    JobMutexLock lock(&mMutex);
+    FreeJobUnderLock(&lock.mpMutex, pJob);
 }
 
 // @ 0x00690120

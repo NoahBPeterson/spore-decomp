@@ -1,5 +1,3 @@
-0075ff50  131  ClearLayer: layer lower_bound/erase layout differs (load hoist + found-block placement); MutexLock used the kTimeout-arg Lock; equiv PASS
-00760030  107  LayerVector::insert: missing EH frame and fast-path store shape (137 vs 145 B); equiv WEAK
 007600d0  365  Shutdown: list clears abstracted to a helper (inlined 2-loop release/erase in original); equiv UNSUPPORTED (unresolved helper decls ClearJobList/DevStop1-3/CloseArena)
 007602a0  252  SetLayer: temp cLayerInfo/EH state layout and search shape; MutexLock used the kTimeout-arg Lock; equiv WEAK (100% coverage)
 00760c00    8  Poly2 ctor: derived vptr stores scheduled after base field zeroes instead of interleaved; equiv UNSUPPORTED (stores its own vtable address, not the image's)

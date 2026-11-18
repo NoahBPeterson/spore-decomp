@@ -13,3 +13,5 @@
 ../src/game/SPEngine/SPGraphicsMultiBlender.cpp  ?SetAnimating@cMultiBlender_s0075_b520@SP@@QAEXPAVKeyframeAnimation_s0075_b520@oldanimation@rw@@_N@Z  0075b6e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMultiBlender.cpp  ?SetBlending@cMultiBlender_s0075_b520@SP@@QAEXPAVKeyframeAnimation_s0075_b520@oldanimation@rw@@_N@Z  0075b790  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMultiBlender.cpp  ?Update@cMultiBlender_s0075_cf20@SP@@QAEXXZ  0075d440  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMultiBlender.cpp  ?SumWeight@cMultiBlender@@QAEMXZ  0075a820  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMultiBlender.cpp  ?cMultiBlender_RebuildWrapper@SP@@YAPAVcMultiBlender_s0075_c070@1@PAPAXPAX11H11@Z  0075c9d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

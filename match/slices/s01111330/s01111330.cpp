@@ -184,9 +184,8 @@ bool hkSimplexTable_FindRow(hkSimplexTable* pTable, const hkSimplexKey& key)
 {
     int idx;
     int numVertices;
-    const int count = pTable->m_count;
 
-    for (idx = 0; idx < count; ++idx)
+    for (idx = 0; idx < (pTable->m_count); ++idx)
     {
         const hkSimplexRow* pRow = &pTable->rows()[idx];
         if (key.m_ids[0] != pRow->m_ids[0] || key.m_ids[1] != pRow->m_ids[1])
@@ -205,7 +204,7 @@ bool hkSimplexTable_FindRow(hkSimplexTable* pTable, const hkSimplexKey& key)
 
     if (key.m_ids[0] == 1 || key.m_ids[1] == 1)
     {
-        for (idx = 0; idx < count; ++idx)
+        for (idx = 0; idx < (pTable->m_count); ++idx)
         {
             uint8_t* pRow = (uint8_t*)&pTable->rows()[idx];
             if (key.m_ids[0] == 1 && pRow[0] == 1 &&

@@ -1,4 +1,5 @@
 00da8630 ?FUN_00da8630@@YAXH@Z  # FUN_00da8630 migrated from s00da8630 (verbatim, slice spelling)
+00da8960 ?FUN_00da8960@@YAOHHHHPAXPAD@Z  # FUN_00da8960 migrated from s00da8630 (verbatim, slice spelling)
 00da8a40 ?FUN_00da8a40@@YAXH@Z  # FUN_00da8a40 migrated from s00da8630 (verbatim, slice spelling)
 00da8c40 ?FUN_00da8c40@@YAXH@Z  # FUN_00da8c40 migrated from s00da8630 (verbatim, slice spelling)
 00da8e20 ?FUN_00da8e20@@YAXH@Z  # FUN_00da8e20 migrated from s00da8630 (verbatim, slice spelling)

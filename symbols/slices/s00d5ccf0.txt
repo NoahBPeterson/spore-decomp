@@ -1,1 +1,6 @@
+00d5ccf0 ?FUN_00d5ccf0@@YAXXZ  # FUN_00d5ccf0 migrated from s00d5ccf0 (verbatim, slice spelling)
+00d5cfd0 ?FUN_00d5cfd0@@YAXXZ  # FUN_00d5cfd0 migrated from s00d5ccf0 (verbatim, slice spelling)
+00d5d360 ?FUN_00d5d360@@YAXXZ  # FUN_00d5d360 migrated from s00d5ccf0 (verbatim, slice spelling)
+00d5d430 ?FUN_00d5d430@@YAXXZ  # FUN_00d5d430 migrated from s00d5ccf0 (verbatim, slice spelling)
 00d5d4b0 ??4cActionCircle_s00d5_ccf0@@QAEAAU0@ABU0@@Z  # cActionCircle_s00d5_ccf0::operator= migrated from s00d5ccf0 (verbatim, slice spelling)
+00d5d5b0 ?FUN_00d5d5b0@@YAXXZ  # FUN_00d5d5b0 migrated from s00d5ccf0 (verbatim, slice spelling)

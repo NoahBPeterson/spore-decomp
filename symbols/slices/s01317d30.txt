@@ -1,3 +1,3 @@
-01317d30 Simulator::InitTreeSpawnerAttributes  # PDB $E423; nonmatching (complete): tree-spawner serializer attribute table initializer
+01317d30 ?InitTreeSpawnerAttributes@Simulator@@YAXXZ  # InitTreeSpawnerAttributes migrated from s01317d30 (verbatim, slice spelling)
 013184d0 ?InitTreeFruitAttributes@Simulator@@YAXXZ  # InitTreeFruitAttributes migrated from s01317d30 (verbatim, slice spelling)
 01318800 ?InitFruitAttributes@Simulator@@YAXXZ  # InitFruitAttributes migrated from s01317d30 (verbatim, slice spelling)

@@ -17,7 +17,7 @@ extern char DAT_01409070[], DAT_01453aac[], DAT_01453a40[], DAT_01453aa4[], DAT_
 extern char DAT_01453b7c[], DAT_01453b90[];
 
 // ---- items of slice s00a40cd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void operator delete(void*);
+void operator delete(void*) throw();
 void operator delete[](void*);
 #define CAT2(a, b) a##b
 #define CAT(a, b) CAT2(a, b)
@@ -352,7 +352,19 @@ struct Track_s00a3_fde0 {          // 0x38
     TeString_s00a3_fde0 mName;     // +0x00
     VecTE_s00a3_fde0    mShufflers;// +0x10
     VecTE_s00a3_fde0    mRythms;   // +0x24
-    Track_s00a3_fde0() {}
+    Track_s00a3_fde0() {
+        mName.mpBegin = gEmptyString16;
+        mName.mpEnd = gEmptyString16;
+        mName.mpCapacity = gEmptyString16 + 1;
+        mShufflers.mpBegin = 0;
+        mShufflers.mpEnd = 0;
+        mShufflers.mpCapacity = 0;
+        mRythms.mpBegin = 0;
+        mRythms.mpEnd = 0;
+        mRythms.mpCapacity = 0;
+    }
+    static void* operator new(size_t, void* p) throw() { return p; }
+    static void operator delete(void*, void*) throw() {}
     Track_s00a3_fde0(const Track_s00a3_fde0& src);             // 0x00a3fb90
     ~Track_s00a3_fde0() throw();                    // 0x00a3f770
 };
@@ -588,6 +600,22 @@ VecTE::VecTE(const VecTE& src)
     mpEnd = out;
 }
 
+// a default item built on the stack for the reallocating insert: its atom vector starts empty and frees its heap
+// block when the temporary goes away (also if the insert throws)
+struct tAtomVecTemp {
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    int   mA1;
+    int   mA2;
+    tAtomVecTemp() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~tAtomVecTemp() { void* lb = mpBegin; if (lb != 0 && ((int*)lb)[-1] != 0) operator delete(lb); }
+};
+struct tItemTemp {
+    u32 a, b, c;
+    tAtomVecTemp v;     // +0x0c
+};
+
 // @ 0x00a3fb00
 void VecTItem::PushBackDefault()
 {
@@ -601,13 +629,8 @@ void VecTItem::PushBackDefault()
         }
         return;
     }
-    tItem local;
-    local.v.mpBegin = 0;
-    local.v.mpEnd = 0;
-    local.v.mpCapacity = 0;
-    DoInsertAtom(e, &local);
-    void* lb = local.v.mpBegin;
-    if (lb != 0 && ((int*)lb)[-1] != 0) operator delete(lb);
+    tItemTemp local;
+    DoInsertAtom(e, (const tItem*)&local);
 }
 
 // @ 0x00a3fb90
@@ -810,29 +833,10 @@ void VecTrack_s00a3_fde0::PushBackDefault()
     Track_s00a3_fde0* e = mpEnd;
     if (e < mpCapacity) {
         mpEnd = e + 1;
-        if (e) {
-            e->mName.mpBegin = gEmptyString16;
-            e->mName.mpEnd = gEmptyString16;
-            e->mName.mpCapacity = gEmptyString16 + 1;
-            e->mShufflers.mpBegin = 0;
-            e->mShufflers.mpEnd = 0;
-            e->mShufflers.mpCapacity = 0;
-            e->mRythms.mpBegin = 0;
-            e->mRythms.mpEnd = 0;
-            e->mRythms.mpCapacity = 0;
-        }
+        new (e) Track_s00a3_fde0();
         return;
     }
     Track_s00a3_fde0 local;
-    local.mName.mpBegin = gEmptyString16;
-    local.mName.mpEnd = gEmptyString16;
-    local.mName.mpCapacity = gEmptyString16 + 1;
-    local.mShufflers.mpBegin = 0;
-    local.mShufflers.mpEnd = 0;
-    local.mShufflers.mpCapacity = 0;
-    local.mRythms.mpBegin = 0;
-    local.mRythms.mpEnd = 0;
-    local.mRythms.mpCapacity = 0;
     DoInsertValue(e, local);
 }
 

@@ -13,6 +13,8 @@
 #include "SP/Audio/cEventModifierPrimitive.h"
 #include <ctype.h>
 #include <string.h>
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 // ---- items of slice s00a38e40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define CAT2(a, b) a##b
@@ -204,7 +206,7 @@ struct RefCountBase {
 }
 namespace SP {
 namespace Audio {
-struct cEventModifierPrimitive_s00a3_8e40 : RefCountBase, IEventModifier {
+struct __declspec(novtable) cEventModifierPrimitive_s00a3_8e40 : RefCountBase, IEventModifier {
     ResourceKey mKey;                 // +8
     AutoRefConfig mConfiguration;     // +0x14
     cEventModifierPrimitive_s00a3_8e40(const char* name);   // 0xa3a530
@@ -251,13 +253,14 @@ int cEventModifierPrimitive_s00a3_8e40::Release() { return --mRefCount; }
 }
 namespace SP {
 namespace Audio {
+void __cdecl PrimFree_a39710(void* p) throw();   // 0x00f47380 (operator delete[])
 struct PrimVector {
     cEventModifierPrimitive_s00a3_8e40** mpBegin;
     cEventModifierPrimitive_s00a3_8e40** mpEnd;
     cEventModifierPrimitive_s00a3_8e40** mpCapacity;
     int mAlloc;
     PrimVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
-    ~PrimVector() { if (mpBegin) operator delete[](mpBegin); }
+    ~PrimVector() { if (mpBegin) PrimFree_a39710(mpBegin); }
     void resize(unsigned n);   // 0xa39f30
     void DoInsertValue(cEventModifierPrimitive_s00a3_8e40** pos, unsigned n, cEventModifierPrimitive_s00a3_8e40** value); // 0xa39a40
 };
@@ -856,7 +859,7 @@ bool cEventModifier_s00a3_8e40::CommandResolve(Command_s00a3_8e40* cmd)
 }}  // namespace SP::Audio
 
 // @ 0x00a39710
-SP::Audio::cEventModifier::~cEventModifier()
+SP::Audio::cEventModifier_s00a3_8e40::~cEventModifier_s00a3_8e40()
 {}
 
 // @ 0x00a39770
@@ -984,7 +987,10 @@ void cEventModifier_s00a3_9ce0::ReadTuningValues(const ResourceKey* key)
         LoadEventModifiersMap();
     for (int i = 0; i < 0x18; i += 4) {
         cEventModifierPrimitive_s00a3_9ce0** p = (cEventModifierPrimitive_s00a3_9ce0**)((char*)mEventModifiers.mpBegin + i);
-        if (*p) (*p)->ReadTuningValues(key);
+        if (*p) {
+            _ReadWriteBarrier();
+            (*p)->ReadTuningValues(key);
+        }
     }
 }
 }}  // namespace SP::Audio

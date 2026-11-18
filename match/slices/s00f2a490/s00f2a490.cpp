@@ -459,6 +459,9 @@ struct IntVec {
     uint32_t* mpBegin;
     uint32_t* mpEnd;
     uint32_t* mpCapacity;
+    uint32_t mAllocator[2];
+    IntVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~IntVec() { if (mpBegin && mpBegin[-1]) FUN_00f47380(mpBegin); }
     void reserve(int n);                                       // 0x00d01790
     void DoInsertKey4(uint32_t* pos, const uint32_t& value);   // 0x00b96600
 };
@@ -684,19 +687,14 @@ bool MatchObj::any(void* key)
 // @ 0x00f2b340
 bool BigObj::check()
 {
-    int* vec[3] = { 0, 0, 0 };
-    collect((int)vec, 0x30f0f, 0);
-    int* p = vec[0];
-    uint32_t n = (uint32_t)(vec[1] - vec[0]);
+    IntVec vec;
+    collect((int)&vec, 0x30f0f, 0);
+    uint32_t n = (uint32_t)(vec.mpEnd - vec.mpBegin);
     bool ok = true;
     for (uint32_t i = 0; i < n; ++i) {
-        int e = p[i];
-        if (!FUN_00f2ac30((DeclareParam*)e, (int*)(e + 0x10), 0)) {
-            if (!FUN_00f259b0((void*)e, (int*)(e + 0xc)))
-                ok = false;
-        }
+        uint32_t e = vec.mpBegin[i];
+        if (!FUN_00f2ac30((DeclareParam*)e, (int*)(e + 0x10), 0))
+            ok = FUN_00f259b0((void*)e, (int*)(e + 0xc)) && ok;
     }
-    if (p && ((int*)p)[-1] != 0)
-        FUN_00f47380((void*)p);
     return ok;
 }

@@ -1,2 +1,13 @@
 # s00a25c40 (EA::Audio::System / Text::StyleManager hash-owner, SPAudio) — no byte-exact functions yet.
 # Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Map_266e0@AudioSystem@@QAE_NIM@Z  00a266e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Map_262a0@AudioSystem@@QAE_NII@Z  00a262a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Map_26300@AudioSystem@@QAE_NII@Z  00a26300  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Lookup_25ff0@AudioSystem@@QAE_NIPAI@Z  00a25ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Lookup_260c0@AudioSystem@@QAEII@Z  00a260c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Lookup_26360@AudioSystem@@QAEII@Z  00a26360  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Lookup_26570@AudioSystem@@QAEII@Z  00a26570  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Lookup_265b0@AudioSystem@@QAEII@Z  00a265b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Map_26680@AudioSystem@@QAE_NIPAPAX@Z  00a26680  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Map_26730@AudioSystem@@QAE_NIPAPAX@Z  00a26730  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a25c40/s00a25c40.cpp  ?Map_26790@AudioSystem@@QAE_NI@Z  00a26790  /O2 /MD /Gy /EHsc /TP /arch:SSE

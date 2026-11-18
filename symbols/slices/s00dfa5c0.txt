@@ -1,24 +1,26 @@
-00dfa5c0 Simulator::cEditorModeUI::LaunchAssetBrowser  # Claude-coined
-00dfa710 Simulator::cEditorModeUI::TogglePodPanel1  # Claude-coined
-00dfa790 Simulator::cEditorModeUI::TogglePodPanel2  # Claude-coined
-00dfa810 Simulator::cEditorModeUI::ShowGalaxy  # Claude-coined
-00dfa930 Simulator::cEditorModeUI::SaveEditorProperty  # Claude-coined
-00dfaaf0 eastl::pod_array<nested,0x44>::~  # Claude-coined
-00dfab20 Simulator::cEditorModeUI::SetModeEnabled  # Claude-coined
-00dfaca0 Simulator::cEditorModeUI::EnterMode8  # Claude-coined
-00dfad50 Simulator::cEditorModeUI::EnterMode9  # Claude-coined
-00dfae00 SP::cString::operator= (slice)  # Claude-coined
-00dfae50 Simulator::cEditorModeUI::EnterMode10  # Claude-coined
-00dfae90 Simulator::cEditorModeUI::EnterMode11  # Claude-coined
-00dfaf80 Simulator::cEditorModeUI::SetCreatureName  # Claude-coined
-00dfb040 Simulator::cEditorModeUI::OnEscape  # Claude-coined
-00dfb0d0 Simulator::cEditorModeUI::Update  # Claude-coined
-00dfb130 eastl::pod_array copy ctor  # Claude-coined
-00dfb1b0 operator new[] for pod array  # Claude-coined
-00dfb240 eastl::pod_array<nested,0x24>::~  # Claude-coined
-00dfb280 pod copy ctor (2 wstrings)  # Claude-coined
-00dfb380 eastl::vector<0x44>::~  # Claude-coined
-00dfb3c0 pod assignment  # Claude-coined
-00dfb430 Simulator::cEditorModeUI::Hide  # Claude-coined
-00dfb450 Simulator::cEditorModeUI::Hide2  # Claude-coined
-00dfb470 Simulator::cEditorModeUI::EnterMode  # Claude-coined
+00dfa5c0 ?FUN_a5c0@UI_s00df_a5c0@@QAEXH@Z  # UI_s00df_a5c0::FUN_a5c0 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfa710 ?FUN_a710@UI_s00df_a5c0@@QAEXD@Z  # UI_s00df_a5c0::FUN_a710 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfa790 ?FUN_a790@UI_s00df_a5c0@@QAEXD@Z  # UI_s00df_a5c0::FUN_a790 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfa810 ?FUN_a810@UI_s00df_a5c0@@QAEXXZ  # UI_s00df_a5c0::FUN_a810 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfa930 ?FUN_a930@UI_s00df_a5c0@@QAEXXZ  # UI_s00df_a5c0::FUN_a930 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfaa40 ?F_dfa40@@YAHHHH@Z  # F_dfa40 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfaa90 ?F_dfa90@@YAHHHH@Z  # F_dfa90 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfaaf0 ?F_dfaf0@@YGXII@Z  # F_dfaf0 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfab20 ?FUN_ab20@UI_s00df_a5c0@@QAEX_N@Z  # UI_s00df_a5c0::FUN_ab20 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfaca0 ?FUN_aca0@UI_s00df_a5c0@@QAEXPAH@Z  # UI_s00df_a5c0::FUN_aca0 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfad50 ?FUN_ad50@UI_s00df_a5c0@@QAEXPAH@Z  # UI_s00df_a5c0::FUN_ad50 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfae00 ?FUN_ae00@UI_s00df_a5c0@@QAEPAU1@PAX@Z  # UI_s00df_a5c0::FUN_ae00 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfae50 ?FUN_ae50@UI_s00df_a5c0@@QAEXXZ  # UI_s00df_a5c0::FUN_ae50 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfae90 ?FUN_ae90@UI_s00df_a5c0@@QAEXXZ  # UI_s00df_a5c0::FUN_ae90 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfaf80 ?FUN_af80@UI_s00df_a5c0@@QAEXXZ  # UI_s00df_a5c0::FUN_af80 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfb040 ?FUN_b040@UI_s00df_a5c0@@QAEXHH@Z  # UI_s00df_a5c0::FUN_b040 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfb0d0 ?FUN_b0d0@UI_s00df_a5c0@@QAEXD@Z  # UI_s00df_a5c0::FUN_b0d0 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfb130 ?CopyCtor@TypeA_s00df_a5c0@@QAEPAU1@PBU1@@Z  # TypeA_s00df_a5c0::CopyCtor migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfb1b0 ?Vec38_AllocCopy@@YGPAUTypeC_s00df_a5c0@@HPBX0@Z  # Vec38_AllocCopy migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfb240 ?F_dfb240@@YGXII@Z  # F_dfb240 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfb280 ?CopyCtor@TypeC_s00df_a5c0@@QAEPAU1@PBU1@@Z  # TypeC_s00df_a5c0::CopyCtor migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfb380 ?Dtor@Vec44_s00df_a5c0@@QAEXXZ  # Vec44_s00df_a5c0::Dtor migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfb3c0 ?Assign@TypeD_s00df_a5c0@@QAEAAU1@ABU1@@Z  # TypeD_s00df_a5c0::Assign migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfb430 ?FUN_b430@UI_s00df_a5c0@@QAEXH@Z  # UI_s00df_a5c0::FUN_b430 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfb450 ?FUN_b450@UI_s00df_a5c0@@QAEXXZ  # UI_s00df_a5c0::FUN_b450 migrated from s00dfa5c0 (verbatim, slice spelling)
+00dfb470 ?FUN_b470@UI_s00df_a5c0@@QAEXH@Z  # UI_s00df_a5c0::FUN_b470 migrated from s00dfa5c0 (verbatim, slice spelling)

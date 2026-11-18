@@ -1873,34 +1873,36 @@ void __cdecl FUN_00e238b0(void* dst, u32 n, void* src)
 // @ 0x00e23900
 void* __cdecl FUN_00e23900(void* first, void* last, void* out)
 {
-  if (first == last) return out;
-  do {
-    if (out) {
-      Ref a = *(Ref*)first;
-      *(Ref*)out = a;
-      if (a) ((TFv)(*(void***)a)[0])(a);
-      Ref b = *(Ref*)((char*)first + 4);
-      *(Ref*)((char*)out + 4) = b;
-      if (b) ((TFv)(*(void***)b)[0])(b);
-    }
-    first = (char*)first + 8;
-    out = (char*)out + 8;
-  } while (first != last);
+  if (first != last) {
+    do {
+      if (out) {
+        Ref a = *(Ref*)first;
+        *(Ref*)out = a;
+        if (a) ((TFv)(*(void***)a)[0])(a);
+        Ref b = *(Ref*)((char*)first + 4);
+        *(Ref*)((char*)out + 4) = b;
+        if (b) ((TFv)(*(void***)b)[0])(b);
+      }
+      first = (char*)first + 8;
+      out = (char*)out + 8;
+    } while (first != last);
+  }
   return out;
 }
 
 // @ 0x00e23950
 void* __cdecl FUN_00e23950(void* first, void* last, void* out)
 {
-  if (first == last) return out;
-  do {
-    Ref b = *(Ref*)((char*)first + 4);
-    if (b) ((TFv)(*(void***)b)[1])(b);
-    Ref a = *(Ref*)first;
-    if (a) ((TFv)(*(void***)a)[1])(a);
-    first = (char*)first + 8;
-    out = (char*)out + 8;
-  } while (first != last);
+  if (first != last) {
+    do {
+      Ref b = *(Ref*)((char*)first + 4);
+      if (b) ((TFv)(*(void***)b)[1])(b);
+      Ref a = *(Ref*)first;
+      if (a) ((TFv)(*(void***)a)[1])(a);
+      first = (char*)first + 8;
+      out = (char*)out + 8;
+    } while (first != last);
+  }
   return out;
 }
 
@@ -2210,25 +2212,26 @@ void __cdecl FUN_00e24220(void* first, void* last, void* src)
 // @ 0x00e24290
 void* __cdecl FUN_00e24290(void* first, void* last, void* out)
 {
-  if (first == last) return out;
-  do {
-    Ref ns0 = *(Ref*)first;
-    Ref os0 = *(Ref*)out;
-    if (ns0 != os0) {
-      if (ns0) ((TFv)(*(void***)ns0)[0])(ns0);
-      *(Ref*)out = ns0;
-      if (os0) ((TFv)(*(void***)os0)[1])(os0);
-    }
-    Ref ns1 = *(Ref*)((char*)first + 4);
-    Ref os1 = *(Ref*)((char*)out + 4);
-    if (ns1 != os1) {
-      if (ns1) ((TFv)(*(void***)ns1)[0])(ns1);
-      *(Ref*)((char*)out + 4) = ns1;
-      if (os1) ((TFv)(*(void***)os1)[1])(os1);
-    }
-    first = (char*)first + 8;
-    out = (char*)out + 8;
-  } while (first != last);
+  if (first != last) {
+    do {
+      Ref ns0 = *(Ref*)first;
+      Ref os0 = *(Ref*)out;
+      if (ns0 != os0) {
+        if (ns0) ((TFv)(*(void***)ns0)[0])(ns0);
+        *(Ref*)out = ns0;
+        if (os0) ((TFv)(*(void***)os0)[1])(os0);
+      }
+      Ref ns1 = *(Ref*)((char*)first + 4);
+      Ref os1 = *(Ref*)((char*)out + 4);
+      if (ns1 != os1) {
+        if (ns1) ((TFv)(*(void***)ns1)[0])(ns1);
+        *(Ref*)((char*)out + 4) = ns1;
+        if (os1) ((TFv)(*(void***)os1)[1])(os1);
+      }
+      first = (char*)first + 8;
+      out = (char*)out + 8;
+    } while (first != last);
+  }
   return out;
 }
 

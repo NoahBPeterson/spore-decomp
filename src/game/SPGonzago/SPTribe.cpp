@@ -2,6 +2,7 @@
 // Object file: SPGonzago/SPTribe.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "sse_helpers.h"
 #include "SP/cTotemPole.h"
@@ -109,6 +110,7 @@ struct NounMgr {
     int*  GetCurrentTerrainSphere() const;    // 0x00f67d90 (thiscall, ret 0)
     int   ClassifyById(unsigned int nID) const; // 0x00b20790 (thiscall, ret 4)
     void  AddTribe(int* pTribe) const;        // 0x00b23560 (thiscall, ret 4)
+    void* CreateNoun(void* pDef) const;       // 0x00b20c60 (thiscall, ret 4)
 };
 struct StarMgr {
     int*  GetTerrainSphere() const;           // 0x00ba6630 (thiscall, ret 0)
@@ -1816,6 +1818,7 @@ template <class T> struct SpVector {
     void reserve(unsigned n);                       // out-of-line instance
     T* erase(T* first, T* last);                    // out-of-line instance (0x50f740 / 0xc83c90)
     void DoInsertValue(T* pos, const T& value);     // out-of-line instance
+    void DoInsertFill(T* pos, unsigned n, const T& value);  // out-of-line instance (0xc93e60)
     SpVector& operator=(const SpVector& x);
     void resize(unsigned n);
 
@@ -1921,7 +1924,7 @@ struct cEmptyBubble_s00c9_47d0 {                                // 20 bytes
     uint32_t mUnused;                                // +0x10
     cEmptyBubble_s00c9_47d0() : mAmount(0.0f), mUnused(0) {}
 };
-struct cTribeChatArea_s00c9_47d0 { uint32_t mData[5]; };         // 20 bytes
+struct cTribeChatArea_s00c9_47d0 { uint32_t mData[5]; cTribeChatArea_s00c9_47d0() {} };   // 20 bytes
 struct cLocaleSeparators {                           // cTribe + 0x18cc target
     uint32_t pad00[0x182];
     uint32_t mDecimalSep;                            // +0x608
@@ -2230,6 +2233,10 @@ struct CalleeSet {
     void  FUN_00afa0a0();                             // 0x00afa0a0
     void  FUN_00c95d70(void* a, u32 b);               // 0x00c95d70
     void  FUN_00c96a00(void* pKey);                   // 0x00c96a00
+    void  FUN_00aea5d0(void* a, void* b);             // 0x00aea5d0  DoInsertPtr (thiscall, ret 8)
+    int*  FUN_00cee330();                             // 0x00cee330
+    void* FUN_00ac79d0();                             // 0x00ac79d0
+    void  FUN_00ac7de0(void* a, void* b);             // 0x00ac7de0 (thiscall, ret 8)
 };
 #define SELF(o) ((CalleeSet*)(o))
 struct HashNode { u32 mKey; u8 mGap04[0x2c]; HashNode* pNext; };
@@ -2813,7 +2820,7 @@ namespace SP {
 void* __cdecl FUN_00c8f310();                     // 0xc8f310  cTribe::PickAPeon
 }
 namespace SP {
-void* __cdecl FUN_00c0b760();                     // 0xc0b760
+int   __fastcall FUN_00c0b760(void* pCreature);   // 0xc0b760  creature field at +0xb34
 }
 namespace SP {
 void  __cdecl FUN_00e1c7f0(void* a);              // 0xe1c7f0
@@ -2890,7 +2897,9 @@ void  __cdecl FUN_0067de30();                     // 0x67de30  PropertyManager
 namespace SP {
 class cTribe_s00c9_5980 {
  public:
-    uchar pad_000[0x120];              // 0x000..0x120  (cCommunity base)
+    uchar pad_000[0xe4];               // 0x000..0x0e4  (cCommunity base)
+    SVec  mInhabitants_e4;             // 0x0e4  begin / end(0xe8) / capacity(0xec)  (cCommunity::mInhabitants)
+    uchar pad_0f8[0x120 - 0x0f8];      // 0x0f8..0x120  (cCommunity base)
     uchar mSpatial_120[0x140];         // 0x120..0x260  (cSpatialObject sub-object)
     void* mpHandle_260;                // 0x260  creature-ish handle
     uchar pad_264[0x4];                // 0x264..0x268
@@ -4031,19 +4040,20 @@ int* __fastcall Tribe_CreateCreature(Tribe* pSelf, int, int nArg)
     if (pSelf->mb334 != 0 && pSelf->mb33c == 0) {
         return 0;
     }
-    int* pCreature = Sub_b20c60(Sub_b3d300(), (void*)0x018eb4b7);
+    int* pCreature = (int*)((NounMgr*)Sub_b3d300())->CreateNoun((void*)0x018eb4b7);
     ((void(__thiscall*)(int*, int, Tribe*, int, void*))(*(void***)pCreature)[0xe8 / 4])(pCreature, 0, pSelf, nArg, (void*)0x01695374);
     ((void(__thiscall*)(void*, int))(*(void***)((char*)pCreature + 0x5a8))[0x2c / 4])((char*)pCreature + 0x5a8, 1);
     {
+        void* pArg = (char*)pCreature + 0x58;
         int* pBM = Sub_b3d260();
-        ((void(__thiscall*)(int*, void*))(*(void***)pBM)[0x38 / 4])(pBM, (char*)pCreature + 0x58);
+        ((void(__thiscall*)(int*, void*))(*(void***)pBM)[0x38 / 4])(pBM, pArg);
     }
     if (nArg == 0) {
-        void* pOld = *(void**)((char*)pCreature + 0xc0);
+        void** pIface = (void**)((char*)pCreature + 0xc0);
         *(uint8_t*)((char*)pCreature + 0xbd) = 0;
         {
-            void* pNew = ((void*(__thiscall*)(void*, void*))(*(void***)pSelf->mpModelFactory_120)[0x2c / 4])(pSelf->mpModelFactory_120, (void*)0x01695374);
-            ((void(__thiscall*)(void*, void*))(*(void***)pOld)[0x38 / 4])(pOld, pNew);
+            void* pNew = ((void*(__thiscall*)(void*, void*))((void**)pSelf->mpModelFactory_120)[0x2c / 4])(&pSelf->mpModelFactory_120, (void*)0x01695374);
+            ((void(__thiscall*)(void*, void*))(*(void***)pIface)[0x38 / 4])(pIface, pNew);
         }
     }
     return pCreature;
@@ -4090,13 +4100,15 @@ void __fastcall Tribe_SetEditorMode(Tribe* pSelf, int, uint8_t bMode)
     if (bMode != pSelf->mbEditorMode_556) {
         if (bMode == 1) {
             int* pObj = Sub_b3d240();
-            void* pName = ((void*(__thiscall*)(void*, void*))(*(void***)pSelf->mpModelFactory_120)[0x2c / 4])(pSelf->mpModelFactory_120, (void*)0x0169543c);
-            ((void(__thiscall*)(int*, int, void*))(*(void***)pObj)[0x60 / 4])(pObj, 0x1046f5ef, pName);
-            int* pIter = Sub_cee330((char*)pSelf + 0x20c);
+            void** pSlot = (void**)((char*)*(void***)pObj + 0x60);
+            void* pName = ((void*(__thiscall*)(void*, void*))((void**)pSelf->mpModelFactory_120)[0x2c / 4])(&pSelf->mpModelFactory_120, (void*)0x0169543c);
+            ((void(__thiscall*)(int*, int, void*))*pSlot)(pObj, 0x1046f5ef, pName);
+            void* pOwner = (char*)pSelf + 0x20c;
+            int* pIter = SELF(pOwner)->FUN_00cee330();
             while (pIter != 0) {
-                void* pA = Sub_ac79d0(Sub_b3d2b0());
-                Sub_ac7de0((void*)pIter, pA);
-                pIter = Sub_cee330((char*)pSelf + 0x20c);
+                void* pA = SELF(Sub_b3d2b0())->FUN_00ac79d0();
+                SELF(Sub_b3d2b0())->FUN_00ac7de0((void*)pIter, pA);
+                pIter = SELF(pOwner)->FUN_00cee330();
             }
         }
         pSelf->mbEditorMode_556 = bMode;
@@ -4274,7 +4286,7 @@ bool __fastcall F8ec00(Tribe* pSelf, int, unsigned int nBit)
 }
 
 // @ 0x00c8ec60
-void FUN_00c8ec60(void** pBegin, void** pEnd, void** ppObject)
+void* FUN_00c8ec60(void** pBegin, void** pEnd, void** ppObject)
 {
     if (pBegin != pEnd) {
         void* pObject = *ppObject;
@@ -4285,13 +4297,14 @@ void FUN_00c8ec60(void** pBegin, void** pEnd, void** ppObject)
             ++pBegin;
         } while (pBegin != pEnd);
     }
+    return pBegin;
 }
 
 // @ 0x00c8ecb0
-void FUN_00c8ecb0(void** pOut, void** pCurrent, void** pBegin, void** pEnd, void** pBlockIt, void** pStop, void* pA7, void* pA8, void* pUnused9, void** ppValue)
+void** FUN_00c8ecb0(void** pOut, void** pCurrent, void** pBegin, void** pEnd, void** pBlockIt, void** pStop, void* pA7, void* pA8, void* pUnused9, void** ppValue)
 {
     if (pCurrent != pStop) {
-        for (;;) {
+        do {
             if (*pCurrent == *ppValue)
                 break;
 
@@ -4302,16 +4315,14 @@ void FUN_00c8ecb0(void** pOut, void** pCurrent, void** pBegin, void** pEnd, void
                 pEnd = pCurrent + 0x40;
                 pBegin = pCurrent;
             }
-
-            if (pCurrent == pStop)
-                break;
-        }
+        } while (pCurrent != pStop);
     }
 
     pOut[2] = pEnd;
     pOut[3] = pBlockIt;
     pOut[0] = pCurrent;
     pOut[1] = pBegin;
+    return pOut;
 }
 
 // @ 0x00c8ed30
@@ -4384,26 +4395,25 @@ cPointerBlockIter* FUN_00c8ed90(cPointerBlockIter* pOut, V4 a, V4 b, V4 c, void*
 // @ 0x00c8ee40
 void** FUN_00c8ee40(void** pBegin, void** pEnd, void** pOut)
 {
-    if (pBegin == pEnd)
-        return pOut;
+    if (pBegin != pEnd) {
+        do {
+            cRefCountedNode* pSource = (*pBegin != nullptr)
+                                           ? (cRefCountedNode*)((uint8_t*)*pBegin + 0x34)
+                                           : nullptr;
+            cRefCountedNode* pOld = (cRefCountedNode*)*pOut;
+            if (pSource != pOld) {
+                if (pSource != nullptr)
+                    pSource->AddRef();
+                *pOut = pSource;
+                if (pOld != nullptr)
+                    pOld->Release();
+            }
 
-    do {
-        cRefCountedNode* pSource = (*pBegin != nullptr)
-                                       ? (cRefCountedNode*)((uint8_t*)*pBegin + 0x34)
-                                       : nullptr;
-        cRefCountedNode* pOld = (cRefCountedNode*)*pOut;
-        if (pSource != pOld) {
-            if (pSource != nullptr)
-                pSource->AddRef();
-            *pOut = pSource;
-            if (pOld != nullptr)
-                pOld->Release();
-        }
+            ++pBegin;
+            ++pOut;
+        } while (pBegin != pEnd);
 
-        ++pBegin;
-        ++pOut;
-    } while (pBegin != pEnd);
-
+    }
     return pOut;
 }
 
@@ -4800,7 +4810,9 @@ void __thiscall cTribe_s00c8_fbb0::UpdateRoboTribeness()
 {
     if (mb334)
         return;
-    if ((uint32_t)FUN_00b5b800() + (-0x01654c01) <= 1)
+    int mode = (int)FUN_00b5b800();
+    bool inRange = (mode >= 0x1654c01) && (mode <= 0x1654c02);
+    if (inRange)
         return;
 
     int32_t count;
@@ -4917,8 +4929,8 @@ tVec3* __thiscall cTribe_s00c8_fbb0::GetClosestWater()
             float dx = out->x - p->x;
             float dy = out->y - p->y;
             float dz = out->z - p->z;
-            self->mDist = sqrtf(dx * dx + dy * dy + dz * dz);
-            return (tVec3*)out;
+            self->mDist = sqrtf((dx * dx + dz * dz) + dy * dy);
+            return (tVec3*)&self->mPos;
         }
         self->mDist = 0.f;
     }
@@ -5623,6 +5635,7 @@ void __thiscall Deque::FUN_00c92b70(void)
         mpp14 = arr;
         mp0c = (int*)*arr;
         mp10 = (int*)((char*)mp0c + 0x100);
+        _ReadWriteBarrier();
         mpp08 = (int**)mp0c;
     }
 }
@@ -5766,16 +5779,21 @@ char* __cdecl FUN_00c92f80(char* first, char* last, char* out)
 }
 
 // @ 0x00c93640
-void __cdecl FUN_00c93640(int** first, int** last, int** blockptr)
+int** __cdecl FUN_00c93640(int** first, int** last, int** blockptr)
 {
-    for (; first != last; ++first) {
-        char* b = (char*)*blockptr;
-        int* end = b ? (int*)(b + 0xc0) : 0;
-        if (*first == end)
-            break;
-    }
     if (first != last)
-        FUN_00c92c70(first + 1, last, first, blockptr);
+    {
+        do {
+            char* b = (char*)*blockptr;
+            int* end = b ? (int*)(b + 0xc0) : 0;
+            if (*first == end)
+                break;
+            ++first;
+        } while (first != last);
+        if (first != last)
+            return FUN_00c92c70(first + 1, last, first, blockptr);
+    }
+    return first;
 }
 
 // @ 0x00c93690
@@ -6364,14 +6382,16 @@ void __thiscall cTribe_s00c9_47d0::AddPanicBubble(const Vector3_s00c9_47d0& pos,
 // @ 0x00c955e0
 template <> void SpVector<cTribeChatArea_s00c9_47d0>::resize(unsigned n)
 {
-    const unsigned current = size();
-    if (current < n) {
-        InsertFillChatAreas(mpEnd, n - current, cTribeChatArea_s00c9_47d0());
-        return;
+    cTribeChatArea_s00c9_47d0* const pEnd = mpEnd;
+    cTribeChatArea_s00c9_47d0* const pBegin = mpBegin;
+    const unsigned current = (unsigned)(pEnd - pBegin);
+    if (n > current) {
+        DoInsertFill(pEnd, n - current, cTribeChatArea_s00c9_47d0());
+    } else {
+        cTribeChatArea_s00c9_47d0* const pNewEnd = pBegin + n;
+        copy_Rec20(pEnd, pEnd, pNewEnd);
+        mpEnd -= (pEnd - pNewEnd);
     }
-    cTribeChatArea_s00c9_47d0* const pNewEnd = mpBegin + n;
-    copy_Rec20(mpEnd, mpEnd, pNewEnd);
-    mpEnd = pNewEnd;
 }
 
 // @ 0x00c95660
@@ -6563,7 +6583,7 @@ void SP::cTribe_s00c9_5980::AddExistingCreatureInternal(void* pCreature)
     FUN_00e1c7f0(&held);
     if (held) ((void(__thiscall*)(void*))vc(held, 4))(held);
 
-    if (FUN_00c0b760()) {
+    if (FUN_00c0b760(pCreature)) {
         void* val = (void*)((uchar*)pCreature + 0xc0);
         void* hold = val;
         if (hold) ((void(__thiscall*)(void*))vc(hold, 0xbc))(hold);
@@ -6727,28 +6747,29 @@ void* SP::cTribe_s00c9_5980::GetStructures()
 // @ 0x00c967a0
 void* SP::cTribe_s00c9_5980::GetInhabitants()
 {
-    void** it = (void**)mCreatures_340.mpBegin;
-    void** end = (void**)mCreatures_340.mpEnd;
-    for (; it != end; ++it) {
+    SVec* out = &mInhabitants_e4;
+    SELF(out)->FUN_00e25bd0(out->mpBegin, out->mpEnd);
+
+    for (void** it = (void**)mCreatures_340.mpBegin; it != (void**)mCreatures_340.mpEnd; ++it) {
         void* cr = *it;
-        if (FUN_00c0b760()) {
+        if (FUN_00c0b760(cr)) {
             void* hold = cr;
             if (hold) ((void(__thiscall*)(void*))vc(hold, 0))(hold);
 
-            void** e2 = (void**)mChatAreaHandles_354.mpEnd;
-            if (e2 < (void**)mChatAreaHandles_354.mpCapacity) {
-                mChatAreaHandles_354.mpEnd = (uchar*)e2 + 4;
+            void** e2 = (void**)out->mpEnd;
+            if (e2 < (void**)out->mpCapacity) {
+                out->mpEnd = (uchar*)e2 + 4;
                 if (e2) {
                     *e2 = cr;
                     if (cr) ((void(__thiscall*)(void*))vc(cr, 0))(cr);
                 }
             } else {
-                FUN_00aea5d0(e2, &cr);
+                SELF(out)->FUN_00aea5d0(e2, &hold);
             }
-            if (cr) ((void(__thiscall*)(void*))vc(cr, 4))(cr);
+            if (hold) ((void(__thiscall*)(void*))vc(hold, 4))(hold);
         }
     }
-    return (void*)&mCreatures_340;
+    return (void*)out;
 }
 
 // @ 0x00c96840
@@ -7031,18 +7052,18 @@ Vec3* cTribe_s00c9_7220::RandomRegionPointAt(int, Vec3* out, uint32_t key)
 }
 
 // @ 0x00c97c40
-int cTribe_s00c9_7220::FindRegionIndex(uint32_t key, int)
+int cTribe_s00c9_7220::FindRegionIndex(uint32_t key, int key2)
 {
     uint32_t k = key;
     RegionSlot* slot = this->map4e4.Find(&k);
 
     uint32_t* it = slot->mpBegin;
-    uint32_t** buckets = slot->mpBuckets;
     uint32_t* bucketEnd = slot->mpBucketEnd;
+    uint32_t** buckets = slot->mpBuckets;
     uint32_t* end = slot->mpEnd;
     int idx = 0;
     while (it != end) {
-        if (*it == k)
+        if ((uint32_t)key2 == *it)
             return idx;
         ++it;
         if (it == bucketEnd) {

@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "EA/ResourceMan/Cache.h"
 #include "EA/ResourceMan/Manager.h"
 #include "EA/ResourceMan/Key.h"
 #include "EA/Thread/Mutex.h"
@@ -77,17 +78,17 @@ struct Manager_s008d_e020 {
     char pad0C[0x20];               // +0x0c .. +0x2b
     void* mDatabaseList;            // +0x2c (root of the database linked tree)
     char pad30[0x9c - 0x30];
-    void** mCompressorBegin;        // +0x9c
-    void** mCompressorEnd;          // +0xa0
+    void** mCacheBegin;        // +0x9c
+    void** mCacheEnd;          // +0xa0
     char padA4[0x148 - 0xa4];
     Thread::Mutex_s008d_e020 mNameMutex;       // +0x148
 
     char Fn8de230(int a, int b, int c, int d);  // 0x008de230 (EA::ResourceMan::Manager::Fn8de230)
-    bool GetLoadedResource(int a, int b);  // 0x008de280 (EA::ResourceMan::Manager::GetLoadedResource)
+    bool GetLoadedResource(const Key& key, Resource** resource);  // 0x008de280 (EA::ResourceMan::Manager::GetLoadedResource)
     bool IsDatabaseRegistered(int a, void** pOut);  // 0x008de2d0 (EA::ResourceMan::Manager::IsDatabaseRegistered)
     void* FindDatabase(int a);  // 0x008de310 (EA::ResourceMan::Manager::FindDatabase)
-    void* Fn8de360(int a);  // 0x008de360 (EA::ResourceMan::Manager::Fn8de360)
-    bool Fn8de3b0(int a, int b);  // 0x008de3b0 (EA::ResourceMan::Manager::Fn8de3b0)
+    Cache* FindCache(const Key& key);  // 0x008de360 (EA::ResourceMan::Manager::FindCache)
+    bool CacheResource(Resource* resource, bool replace);  // 0x008de3b0 (EA::ResourceMan::Manager::CacheResource)
     void Fn8de400(void* p, int a);  // 0x008de400 (EA::ResourceMan::Manager::Fn8de400)
     char CheckCacheInternal(CacheRes* p1, void* p2, void** ppOut, char flag);  // 0x008de9d0 (EA::ResourceMan::Manager::CheckCacheInternal)
     char Fn8dead0(void* pArg2, int a3, void* pArg4, void* pArg5, void* pArg6);
@@ -839,16 +840,13 @@ char EA::ResourceMan::Manager_s008d_e020::Fn8de230(int a, int b, int c, int d)
 }
 
 // @ 0x008de280
-bool EA::ResourceMan::Manager_s008d_e020::GetLoadedResource(int a, int b)
+bool EA::ResourceMan::Manager_s008d_e020::GetLoadedResource(const Key& key, Resource** resource)
 {
-    void** it = mCompressorBegin;
-    void** end = mCompressorEnd;
-    while (it != end) {
-        void* c = *it;
-        void** vt = *(void***)c;
-        typedef bool (__thiscall *Fn)(void*, int, int);
-        if (((Fn)vt[0x18 / 4])(c, a, b)) return true;
-        it += 2;
+    void** it = mCacheBegin;
+    void** end = mCacheEnd;
+    for (; it != end; it += 2) {
+        if (((Cache*)*it)->GetResource(key, resource))
+            return true;
     }
     return false;
 }
@@ -886,33 +884,34 @@ void* EA::ResourceMan::Manager_s008d_e020::FindDatabase(int a)
 }
 
 // @ 0x008de360
-void* EA::ResourceMan::Manager_s008d_e020::Fn8de360(int a)
+EA::ResourceMan::Cache* EA::ResourceMan::Manager_s008d_e020::FindCache(const Key& key)
 {
-    void** it = mCompressorBegin;
-    void** end = mCompressorEnd;
-    while (it != end) {
-        void* c = *it;
-        void** vt = *(void***)c;
-        typedef bool (__thiscall *Fn)(void*, int, int);
-        if (((Fn)vt[0x18 / 4])(c, a, 0)) return c;
-        it += 2;
+    void** end = mCacheEnd;
+    void** it = mCacheBegin;
+    Cache* result = 0;
+    for (; it != end; it += 2) {
+        Cache* cache = (Cache*)*it;
+        if (cache->GetResource(key, 0)) {
+            result = cache;
+            break;
+        }
     }
-    return 0;
+    return result;
 }
 
 // @ 0x008de3b0
-bool EA::ResourceMan::Manager_s008d_e020::Fn8de3b0(int a, int b)
+bool EA::ResourceMan::Manager_s008d_e020::CacheResource(Resource* resource, bool replace)
 {
-    void** it = mCompressorBegin;
-    void** end = mCompressorEnd;
-    while (it != end) {
-        void* c = *it;
-        void** vt = *(void***)c;
-        typedef bool (__thiscall *Fn)(void*, int, int);
-        if (((Fn)vt[0x1c / 4])(c, a, b)) return true;
-        it += 2;
+    void** it = mCacheBegin;
+    void** end = mCacheEnd;
+    bool result = false;
+    for (; it != end; it += 2) {
+        if (((Cache*)*it)->CacheResource(resource, replace)) {
+            result = true;
+            break;
+        }
     }
-    return false;
+    return result;
 }
 
 // @ 0x008de400
@@ -924,8 +923,8 @@ void EA::ResourceMan::Manager_s008d_e020::Fn8de400(void* p, int a)
         ((Fn)vt[0x28 / 4])(p, a);
         return;
     }
-    void** it = mCompressorBegin;
-    void** end = mCompressorEnd;
+    void** it = mCacheBegin;
+    void** end = mCacheEnd;
     if (it == end) return;
     do {
         void* c = *it;

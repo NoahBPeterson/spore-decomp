@@ -2455,8 +2455,8 @@ struct Stopwatch {
 };
 struct LimitStopwatch : Stopwatch {
     uint64_t mnEndTime;
-    void SetTimeLimit(uint64_t limit);                                    // 0x0093a480
-    LimitStopwatch(int units, bool start) : Stopwatch(units, start) { SetTimeLimit(0); }
+    void SetTimeLimit(unsigned limit, bool startTimer);                   // 0x0093a480 (ret 8: two dword args)
+    LimitStopwatch(int units, bool start) : Stopwatch(units, start) { SetTimeLimit(0, 0); }
 };
 struct MessageHandlerRef {
     int mHandler;
@@ -3211,10 +3211,6 @@ struct VObj_s00ef_ee60 {
     void v3c(void*);
     void v40(float);
     void v58();                    // vtable slot +0x58
-};
-struct RefObj {
-    void v0();
-    void v4();
 };
 struct Handle {
     void* v0c(int);               // vtable slot 0xc
@@ -7700,10 +7696,13 @@ bool CUI::f_efc120(int param_2, int param_3)
 float __fastcall FUN_00efc4c0(char* self, int pad)
 {
     (void)pad;
+    float t;
     if (*(float*)(self + 0x178) > *(float*)(self + 0x174))
-        return (*(float*)(self + 0x17c) - *(float*)(self + 0x174)) /
-               (*(float*)(self + 0x178) - *(float*)(self + 0x174));
-    return g_1485720;
+        t = (*(float*)(self + 0x17c) - *(float*)(self + 0x174)) /
+            (*(float*)(self + 0x178) - *(float*)(self + 0x174));
+    else
+        t = g_1485720;
+    return t;
 }
 
 // @ 0x00efc520
@@ -8084,19 +8083,18 @@ int __cdecl FUN_00efcd90()
 // @ 0x00efcde0
 void __fastcall FUN_00efcde0(void* p)
 {
-    int r;
+    void* r;
     if (p == 0)
         r = 0;
     else
-        r = ((FN0_i)((*(void***)p)[3]))(p);
-    if (*(int*)(r + 0x54) != 0) {
-        void* q = *(void**)(r + 0x54);
-        if (q != 0) {
-            int s = ((FN0_i)((*(void***)q)[3]))(q);
-            ((FN2_ii)((*(void***)s)[0x15]))((void*)s, 0, 0);
-            return;
-        }
-        FUN_00d20430(0);
+        r = (void*)((FN0_i)((*(void***)p)[3]))(p);
+    if (*(void**)((char*)r + 0x54) != 0) {
+        void* q = *(void**)((char*)r + 0x54);
+        if (q != 0)
+            q = (void*)((FN0_i)((*(void***)q)[3]))(q);
+        else
+            q = (void*)FUN_00d20430(0);
+        ((FN2_ii)((*(void***)q)[0x15]))(q, 0, 0);
     }
 }
 
@@ -8126,20 +8124,25 @@ void __fastcall FUN_00efce30(void* p)
 }
 
 // @ 0x00efcfb0
+// Retail tests the byte count with `test ecx, 0xffffffe0 / jle` (low 5 bits clear: a multiple of 32
+// that is non-zero) before the scan, so it walks the entries and stops only by finding the state.
 bool __cdecl FUN_00efcfb0(char* p)
 {
+    int i;
+    int n;
     if (p[0x4c8] != 0) {
-        int n = *(int*)(p + 0x4d0) - *(int*)(p + 0x4cc);
-        int i = 0;
-        if (n < 0x20)
+        n = *(unsigned int*)(p + 0x4d0) - *(unsigned int*)(p + 0x4cc);
+        if ((n & 0xffffffe0) == 0)
             return 0;
-        int* it = (int*)(*(int*)(p + 0x4cc) + 0x0c);
+        i = 0;
         while (1) {
-            if (*it == 2 || *it == 10)
+            char* e = (char*)(*(int*)(p + 0x4cc) + 0x0c) + (i << 5);
+            int st = *(int*)e;
+            if (st == 2 || st == 10)
                 break;
             i++;
-            it += 8;
-            if (i << 5 >= n)
+            int m = *(int*)(p + 0x4d0) - *(int*)(p + 0x4cc);
+            if (i >= (m >> 5))
                 return 0;
         }
     } else {
@@ -8432,18 +8435,18 @@ void ToolSnapUpdate()
 }
 
 // @ 0x00efde90
+// NOTE: retail compares byte +0x18 with 1 (see the instruction diff). The branch that skips the
+// COM-interface query when the selected object answers 0x137e8e0 (TAG_ANIM_TARGET) is kept.
 bool SelCtx::FUN_00efde90(int param_2)
 {
-    int* base = (int*)param_2;
-    int* p = *(int**)((char*)base + 0x20);
-    if (*(char*)((char*)p + 0x18) == 1) {
-        int* q = (int*)((char*)p + *(int*)((char*)p + 0x10));
-        if (q != 0) {
-            int* piVar1 = (int*)q[3];
-            if (piVar1 != 0 && *(char*)((char*)this + 4) != 0) {
-                if (((VObj_s00ef_d020*)piVar1)->s3(0x137e8e0) != 0)
-                    return false;
-            }
+    int* p = *(int**)((char*)param_2 + 0x20);
+    if (*(char*)((char*)p + 0x18) == 1)
+        p = (int*)((char*)p + *(int*)((char*)p + 0x10));
+    if (p != 0) {
+        int* piVar1 = (int*)p[3];
+        if (piVar1 != 0 && *(char*)((char*)this + 4) != 0) {
+            if (((VObj_s00ef_d020*)piVar1)->s3(0x137e8e0) != 0)
+                return false;
         }
     }
     return true;
@@ -9125,15 +9128,25 @@ void UI_s00ef_ee60::f_eff0c0()
 }
 
 // @ 0x00eff1e0
+extern float g_1485378;
 bool UI_s00ef_ee60::f_eff1e0(int)
 {
     void* a = *(void**)((char*)g_mgr + 4);
-    if (a == 0) return false;
-    void* r = pGame->F32790(a);
-    if (r == 0) return false;
-    OrientationState* o = ((PlacementView*)r)->p4;
-    return o->f64 > o->f60;
+    if (a != 0) {
+        void* r = pGame->F32790(a);
+        if (r != 0) {
+            OrientationState* o = ((PlacementView*)r)->p4;
+            if ((float)(o->f64 > o->f60) != g_1485378)
+                return true;
+        }
+    }
+    return false;
 }
+
+struct SelectionReference {
+    virtual void AddRef(); // slot 0
+    virtual void Release(); // slot 1
+};
 
 // @ 0x00eff230
 void UI_s00ef_ee60::f_eff230(void* p)
@@ -9143,9 +9156,9 @@ void UI_s00ef_ee60::f_eff230(void* p)
     void** slot = (void**)((char*)g_mgr + 0xc);
     void* old = *slot;
     if (p != old) {
-        if (p) ((RefObj*)p)->v0();
+        if (p) ((SelectionReference*)p)->AddRef();
         *slot = p;
-        if (old) ((RefObj*)old)->v4();
+        if (old) ((SelectionReference*)old)->Release();
     }
 }
 
@@ -9193,13 +9206,13 @@ void UI_s00ef_ee60::f_eff280(void* p)
 void UI_s00ef_ee60::f_eff360(void* p)
 {
     if (b5) {
-        void* u = *(void**)((char*)g_mgr + 4);
+        void* u = ((MgrState*)g_mgr)->handle;
         b5 = 0;
         f_eff230(u);
         return;
     }
     pGame->F33BF0();
-    pGame->F36450(0, 0, p);
+    pGame->F36450(0, 0, (void*)p);
     f_eff230(p);
 }
 

@@ -240,7 +240,7 @@ struct NounMgr {
     void  FUN_00b225d0(void* p);                  // +0xb225d0 (ret 4)
 };
 void*  GetSetting9_00401090();
-void*  FUN_00b3d420(int p);
+void*  FUN_00b3d420();
 void*  FUN_00b90410_00(void* mgr, int id);
 uint32_t* eastl_find_00ac0d80(uint32_t* first, uint32_t* last, uint32_t* key);
 void   FUN_00fc20e0(void* out, float a, float b);
@@ -346,16 +346,33 @@ bool VPlanet::FUN_00c70b50()
 // @ 0x00c70bc0
 void VPlanet::FUN_00c70bc0(int v) { if (mpPlanet != 0) mpPlanet->mField124 = v; }
 
+struct SpeciesKey {
+    uint32_t instance;
+    uint32_t type;
+    uint32_t group;
+};
+struct SpeciesKeyVector {
+    SpeciesKey* begin;
+    SpeciesKey* end;
+    SpeciesKey* capacity;
+    int size() const { return end - begin; }
+};
+struct PlantSpeciesManager {
+    void* GetSpeciesFromID_00b90410(const SpeciesKey* key);
+};
+struct SpeciesProfileManager {
+    void* GetProfile_004df550(const SpeciesKey* key);
+};
+
 // @ 0x00c70c10
 int VPlanet::FUN_00c70c10()
 {
-    PlanetData* pd = mpPlanet;
-    int n = (int)(pd->mpD4 - pd->mpD0) / 3;
+    int n = reinterpret_cast<SpeciesKeyVector*>(&mpPlanet->mpD0)->size();
     if (n > 0) {
         int idx = g_rng_01601760.RandomUint32Uniform(n);
-        uint32_t* e = pd->mpD0 + idx * 3;
-        if (e[0] != g_01693f08 || e[1] != g_01693f0c || e[2] != g_01693f10)
-            return (int)GetProfile_004df550(GetSetting9_00401090(), e);
+        SpeciesKey* key = reinterpret_cast<SpeciesKey*>(mpPlanet->mpD0) + idx;
+        if (key->instance != g_01693f08 || key->type != g_01693f0c || key->group != g_01693f10)
+            return (int)reinterpret_cast<SpeciesProfileManager*>(GetSetting9_00401090())->GetProfile_004df550(key);
     }
     return 0;
 }
@@ -363,13 +380,12 @@ int VPlanet::FUN_00c70c10()
 // @ 0x00c70c90
 int VPlanet::FUN_00c70c90()
 {
-    PlanetData* pd = mpPlanet;
-    int n = (int)(pd->mpC0 - pd->mpBC) / 3;
+    int n = reinterpret_cast<SpeciesKeyVector*>(&mpPlanet->mpBC)->size();
     if (n > 0) {
         int idx = g_rng_01601760.RandomUint32Uniform(n);
-        uint32_t* e = pd->mpBC + idx * 3;
-        if (e[0] != g_01693f08 || e[1] != g_01693f0c || e[2] != g_01693f10)
-            return (int)GetSpeciesFromID_00b90410(FUN_00b3d420((int)e), (int)e);
+        SpeciesKey* key = reinterpret_cast<SpeciesKey*>(mpPlanet->mpBC) + idx;
+        if (key->instance != g_01693f08 || key->type != g_01693f0c || key->group != g_01693f10)
+            return (int)reinterpret_cast<PlantSpeciesManager*>(FUN_00b3d420())->GetSpeciesFromID_00b90410(key);
     }
     return 0;
 }
@@ -605,6 +621,7 @@ void* VPlanet::FUN_00c71570()
     *(void**)((char*)this + 0xd4) = vtbl_VPlanet_gd_01472428;
     *(void**)((char*)this + 0xd8) = vtbl_VPlanet_d8_01472414;
     mpCommon = 0;
+    _ReadWriteBarrier();
     mFieldA6 = 0;
     return this;
 }

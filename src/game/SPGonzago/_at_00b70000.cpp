@@ -17,6 +17,7 @@
 #include "EA/Random/RandomLinearCongruential.h"
 #include "SP/cPlanetModel.h"
 #include <string.h>
+#include <intrin.h>
 #include "SP/cDefaultBeamProjectile.h"
 #include "SP/cSPSpaceToolData.h"
 #include "SP/cViewer.h"
@@ -369,6 +370,7 @@ struct MapView
     TreeNode* m_end;             // +0x04 (sentinel address)
     TreeNode* m_begin;           // +0x08
 };
+typedef eastl::rbtree_iterator<eastl::pair<void*, void*> > FeedbackIterator;
 struct MotiveMap
 {
     int    m_pad0;               // +0x00
@@ -379,7 +381,7 @@ struct MotiveMap
     unsigned char m_pad11[3];    // +0x11
     int    m_size;               // +0x14
 
-    void  erase(void** out, TreeNode* node);      // 0x00b71730
+    FeedbackIterator erase(FeedbackIterator position); // 0x00b71730
     void  deleteTree(TreeNode* node);             // 0x00b71790
 };
 struct MotiveObjectTree
@@ -2130,6 +2132,7 @@ class cSPUIPieMenuItemWinProc { public:
 
     void Hide();                // 0x00818330
     bool ContainsWindow(void* hwnd); // 0x00818370
+    void SetItemTextColor(int id, int color); // 0x00b7c8d0
 };
 union Vec3_s00b7_bd50 { float f[3]; int i[3]; u32_s00b7_bd50 u[3]; };
 struct SpTransform {            // cSPTransform, 0x20 bytes
@@ -2654,40 +2657,44 @@ void cTuning_b708d0::Load(uint32_t instanceID)
 // @ 0x00b714a0
 void cTuning_b708d0::SerializeObject(void* object)
 {
-    void* writer = ((void* (__thiscall*)(void*))VTFN(object, 0x20 / 4))(object);
-    void* stream = ((void* (__thiscall*)(void*))VTFN(writer, 0x18 / 4))(writer);
+    cDevice* __restrict writer = (cDevice*)((IStream*)object)->Slot8();
     uint32_t id = 0x6ef3ce7;
+    void* stream = writer->GetStream();
     WriteUint32(stream, &id, 1, 0);
-    cVarListSerializer serializer;
-    serializer.ctor(this, (void*)0x0156b308, 0x01a80d26);
-    serializer.Serialize(object);
+    SP::cVarListSerializer serializer(this, reinterpret_cast<SP::cDataSerializerGeneric*>(&DAT_0156b308), 0x01a80d26);
+    serializer.Serialize(*(SP::cIObjectDatabaseOStream*)object);
 }
 
 // @ 0x00b71510
 bool MotiveObjectTree::findEvent(void* event)
 {
-    if (event)
-        ((void (__thiscall*)(void*))VTFN(event, 0xbc / 4))(event);
+    void* key = event;
+    void* const retained = key;
+    if (retained)
+        ((void (__thiscall*)(void*))VTFN(retained, 0xbc / 4))(retained);
 
-    void* it = 0;
-    void** slot = ((RBTreeFind*)&m_map)->find(&it, &event);
-    bool found = *slot != (void*)&m_map.m_end;
+    void* const end = &m_map.m_end;
+    void* it;
+    void** slot = ((RBTreeFind*)&m_map)->find(&it, &key);
+    bool found = *slot != end;
 
-    if (event)
-        ((void (__thiscall*)(void*))VTFN(event, 0xc0 / 4))(event);
+    if (retained)
+        ((void (__thiscall*)(void*))VTFN(retained, 0xc0 / 4))(retained);
     return found;
 }
 
 // @ 0x00b71570
 bool __cdecl FUN_00b71570(void* arg, MapView* map)
 {
+    TreeNode* node = map->m_begin;
     TreeNode* const end = (TreeNode*)&map->m_end;
-    for (TreeNode* node = map->m_begin; node != end;
-         node = (TreeNode*)FUN_00921580(node)) {
-        if (node->m_ref10 != 0)
-            ((void (__thiscall*)(void*, void*))VTFN(node->m_ref10, 0x1c / 4))(node->m_ref10, arg);
-        if (node->m_ref14 != 0)
-            ((void (__thiscall*)(void*, void*))VTFN(node->m_ref14, 0x1c / 4))(node->m_ref14, arg);
+    for (; node != end; node = (TreeNode*)FUN_00921580(node)) {
+        void* ref = node->m_ref10;
+        if (ref)
+            ((void (__thiscall*)(void*, void*))VTFN(ref, 0x1c / 4))(ref, arg);
+        ref = node->m_ref14;
+        if (ref)
+            ((void (__thiscall*)(void*, void*))VTFN(ref, 0x1c / 4))(ref, arg);
     }
     return true;
 }
@@ -2699,14 +2706,15 @@ void* NodeFactory::newNode(RefPair* pair)
         0x18, "Simulator", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
         0xd1);
-    if (node != 0) {
-        node->m_ref10 = pair->m_first;
-        if (node->m_ref10 != 0)
-            ((void (__thiscall*)(void*))VTFN(node->m_ref10, 0xbc / 4))(node->m_ref10);
+    void** refs = &node->m_ref10;
+    if (refs != 0) {
+        refs[0] = pair->m_first;
+        if (refs[0] != 0)
+            ((void (__thiscall*)(void*))VTFN(refs[0], 0xbc / 4))(refs[0]);
 
-        node->m_ref14 = pair->m_second;
-        if (node->m_ref14 != 0)
-            ((void (__thiscall*)(void*))VTFN(node->m_ref14, 0))(node->m_ref14);
+        refs[1] = pair->m_second;
+        if (refs[1] != 0)
+            ((void (__thiscall*)(void*))VTFN(refs[1], 0))(refs[1]);
     }
     return node;
 }
@@ -2714,14 +2722,15 @@ void* NodeFactory::newNode(RefPair* pair)
 // @ 0x00b71680
 void FUN_00b71680(void* serial, MotiveMap* map)
 {
-    uint32_t count = (uint32_t)map->m_size;
-    void* writer = ((void* (__thiscall*)(void*))VTFN(serial, 0x20 / 4))(serial);
-    void* stream = ((void* (__thiscall*)(void*))VTFN(writer, 0x18 / 4))(writer);
+    const uint32_t size = (uint32_t)map->m_size;
+    cDevice* __restrict writer = (cDevice*)((IStream*)serial)->Slot8();
+    uint32_t count = size;
+    void* stream = writer->GetStream();
     WriteUint32(stream, &count, 1, 0);
 
+    void* node = map->m_begin;
     void* const end = (char*)map + 4;
-    for (void* node = map->m_begin; node != end;
-         node = FUN_00921580(node)) {
+    for (; node != end; node = FUN_00921580(node)) {
         void* value = 0;
         void* ref = *(void**)((char*)node + 0x10);
         if (ref)
@@ -2740,19 +2749,22 @@ void FUN_00b71680(void* serial, MotiveMap* map)
 }
 
 // @ 0x00b71730
-void MotiveMap::erase(void** out, TreeNode* node)
+FeedbackIterator MotiveMap::erase(FeedbackIterator position)
 {
     m_size--;
-    TreeNode* next = (TreeNode*)FUN_00921580(node);
-    FUN_00921880(node, &m_end);
+    TreeNode* const erased = (TreeNode*)position.mpNode;
+    position.mpNode = (eastl::rbtree_node<eastl::pair<void*, void*> >*)FUN_00921580(erased);
+    FUN_00921880(erased, &m_end);
 
-    if (node->m_ref14 != 0)
-        ((void (__thiscall*)(void*))VTFN(node->m_ref14, 4 / 4))(node->m_ref14);
-    if (node->m_ref10 != 0)
-        ((void (__thiscall*)(void*))VTFN(node->m_ref10, 0xc0 / 4))(node->m_ref10);
+    void* ref = erased->m_ref14;
+    if (ref)
+        ((void (__thiscall*)(void*))VTFN(ref, 4 / 4))(ref);
+    ref = erased->m_ref10;
+    if (ref)
+        ((void (__thiscall*)(void*))VTFN(ref, 0xc0 / 4))(ref);
 
-    FUN_00f47380(node);
-    *out = next;
+    FUN_00f47380(erased);
+    return position;
 }
 
 // @ 0x00b71790
@@ -2789,22 +2801,23 @@ void __fastcall FUN_00b71a30(MotiveObjectTree* self)
 // @ 0x00b71a60
 void cOwner::ReadFeedback(IStream* pStream)
 {
-    mFeedback.Purge((FeedbackNode*)mFeedback.mAnchor.mpNodeParent);
+    typedef eastl::map<uint32_t, void*> FeedbackMap;
+    FeedbackMap* feedback = reinterpret_cast<FeedbackMap*>(&mFeedback);
+    ((FeedbackTree*)feedback)->Purge((FeedbackNode*)feedback->mAnchor.mpNodeParent);
+    eastl::rbtree_node_base* anchor = &feedback->mAnchor;
+    feedback->mAnchor.mpNodeLeft = anchor;
+    feedback->mAnchor.mpNodeParent = 0;
+    feedback->mAnchor.mColor = 0;
+    feedback->mnSize = 0;
+    feedback->mAnchor.mpNodeRight = anchor;
 
-    eastl::nb* pAnchor = &mFeedback.mAnchor;
-    pAnchor->mpNodeRight  = pAnchor;
-    pAnchor->mpNodeLeft   = pAnchor;
-    pAnchor->mpNodeParent = 0;
-    pAnchor->mColor       = 0;
-    mFeedback.mnSize = 0;
-
-    int count;
+    int version;
     cDevice* pDevice = (cDevice*)pStream->Slot8();
     void* pRaw = pDevice->GetStream();
-    SP_ReadInt32(pRaw, &count, 1, 0);
+    SP_ReadInt32(pRaw, &version, 1, 0);
 
-    cVarListSerializer_s00b7_1a60 serializer(this, &DAT_0156b308, 0x1a80d26);
-    serializer.Serialize(*pStream);
+    SP::cVarListSerializer serializer(this, reinterpret_cast<SP::cDataSerializerGeneric*>(&DAT_0156b308), 0x1a80d26);
+    serializer.Serialize(*(SP::cIObjectDatabaseIStream*)pStream);
 }
 
 // @ 0x00b71af0
@@ -3670,7 +3683,7 @@ void cObstacle::SetFlag(bool b)
     if (b)
         m34 |= 1;
     else
-        m34 &= ~1u;
+        m34 &= 0xfffffffe;
     if (m54) {
         float f = b ? 0.0f : g_one;
         ((cRc54*)m54)->SetValue(m5c, f);
@@ -3678,11 +3691,13 @@ void cObstacle::SetFlag(bool b)
     }
     if (m70) {
         if (b) {
-            *(int*)((char*)m70 + 4) &= ~1u;
-            RcCall(m70, 0x16c, 0);
-        } else {
             *(int*)((char*)m70 + 4) |= 1;
-            RcCall(m70, 0x16c, 1);
+            Rc* o = (Rc*)m70;
+            ((RcFn)o->vt->tbl->fn[0x16c / 4])((void*)o->vt, (int)o->vt->tbl, m70, 1);
+        } else {
+            *(int*)((char*)m70 + 4) &= 0xfffffffe;
+            Rc* o = (Rc*)m70;
+            ((RcFn)o->vt->tbl->fn[0x16c / 4])((void*)o->vt, (int)o->vt->tbl, m70, 0);
         }
     }
 }
@@ -3816,7 +3831,8 @@ void __fastcall FUN_00b74130(int self)
 void* __fastcall FUN_00b74370(int self)
 {
     void* result;
-    if (((*(int*)(self + 0x40f4) - *(int*)(self + 0x40f0)) >> 2) != 0) {
+    int count = (*(int*)(self + 0x40f4) - *(int*)(self + 0x40f0)) >> 2;
+    if (count != 0) {
         int* top = *(int**)(*(int*)(self + 0x40f4) - 4);
         result = 0;
         if (top != 0) {
@@ -3827,6 +3843,7 @@ void* __fastcall FUN_00b74370(int self)
         int* obj = *(int**)(*(int*)(self + 0x40f4));
         if (obj != 0)
             (*(void(__thiscall**)(int*))(*(int*)obj + 4))(obj);
+        _ReadWriteBarrier();
     } else {
         void* m = SP_NounManager(0x3ed8573);
         result = SP_cGameNounManager_CreateNoun(m, 0x3ed8573);
@@ -3959,7 +3976,7 @@ int* Hashtable3::Find(int* out, unsigned int* key)
     if (node != 0) {
         unsigned int* p = *(unsigned int**)((char*)node + 0xc70);
         while (p != 0 && *key == p[0] && key[1] == p[1] && k2 == p[2])
-            p = *(unsigned int**)((char*)p + 0x31c);
+            p = *(unsigned int**)((char*)p + 0xc70);
         int* slot = bucket;
         if (p == 0) {
             slot = bucket + 1;
@@ -3999,9 +4016,10 @@ void FUN_00b749c0(float* a, float* b, float x, float y, float z)
 // @ 0x00b74a60
 void FUN_00b74a60(int* m, int* it)
 {
-    int* a = (*(int*(__thiscall**)(int*))(*(int*)m + 0x20))(m);
-    unsigned int k3 = (unsigned int)it[3];
-    int* ser = (int*)(*(int*(__thiscall**)(int*))(*(int*)a + 0x18))(a);
+    const unsigned int size = (unsigned int)it[3];
+    cDevice* __restrict writer = (cDevice*)((IStream*)m)->Slot8();
+    unsigned int k3 = size;
+    int* ser = (int*)writer->GetStream();
     WriteUint32_s00b7_3e70(ser, &k3, 1, 0);
     int* bucket = (int*)it[1];
     int* node = (int*)*bucket;
@@ -4054,7 +4072,8 @@ void* Simulator_cObstacle::AllocNode2(int* src)
     if (node != 0) {
         *(int**)((char*)this + 0x1c) = (int*)node->f0;
     } else {
-        node = (Node2View*)EAAllocate(*(int*)((char*)this + 0x2c), "Simulator", 0, 0, 0x13ebb38, 0xd1);
+        uint32_t nodeSize = *(uint32_t*)((char*)this + 0x2c);
+        node = (Node2View*)EAAllocate(nodeSize, "Simulator", 0, 0, 0x13ebb38, 0xd1);
     }
     if (node != 0) {
         node->f0 = src[0];
@@ -4197,14 +4216,16 @@ int ObstacleMgr::Lookup(unsigned int* key)
 // @ 0x00b75f70
 Vec3_s00b7_5f70* __cdecl FUN_00b75f70(Vec3_s00b7_5f70* first, Vec3_s00b7_5f70* last, Vec3_s00b7_5f70 pivot, bool (__cdecl* comp)(const Vec3_s00b7_5f70*, const Vec3_s00b7_5f70*))
 {
+    Vec3_s00b7_5f70* l = last;
+    Vec3_s00b7_5f70* f = first;
     for (;;) {
-        while (comp(first, &pivot)) ++first;
-        do { --last; } while (comp(&pivot, last));
-        if (first >= last) return first;
-        Vec3_s00b7_5f70 tmp = *first;
-        *first = *last;
-        *last = tmp;
-        ++first;
+        while (comp(f, &pivot)) ++f;
+        do { --l; } while (comp(&pivot, l));
+        if (f >= l) return f;
+        Vec3_s00b7_5f70 tmp = *f;
+        *f = *l;
+        *l = tmp;
+        ++f;
     }
 }
 
@@ -6369,14 +6390,14 @@ void* HashTable_s00b7_bd50::sub_b7c1b0(const void* key)
     ScreenValue value;
     value.mKey = *(const u32_s00b7_bd50*)key;
     value.mValue.sub_b778b0(&tmp);
-    HashIter ins;
     // EASTL insert(&out, &value, bool): the original materialises the bool into a byte slot
     // and the compiler passes that dword slot including its stale upper bytes, so equiv sees
     // the stack residue there; the source-level flag is simply false.
-    sub_b79680(&ins, &value, 0);
+    bool flag = false;
+    sub_b79680(&it, &value, *(int*)&flag);
     FreeValueBuffer(&value.mValue);
     FreeValueBuffer(&tmp);
-    return (char*)ins.node + 4;
+    return (char*)it.node + 4;
 }
 
 // @ 0x00b7c290
@@ -6531,17 +6552,17 @@ bool __cdecl cSPPieMenu_ContainsWindow(void* hwnd)
 void ButtonVec::SetItemTextColor(int id, int color)
 {
     PieButton* it = mpBegin;
-    if (it != mpEnd) {
-        do {
-            if (it->mId == id) {
-                it->mColor = color;
-                if (g_pPieWinProc) {
-                    cSPUIPieMenu_SetItemTextColor(id, color);
-                }
-                return;
+    while (it != mpEnd) {
+        PieButton* cur = it;
+        it = (PieButton*)((char*)it + 0x18);
+        if (cur->mId == id) {
+            cur->mColor = color;
+            cSPUIPieMenuItemWinProc* p = g_pPieWinProc;
+            if (p) {
+                p->SetItemTextColor(id, color);
             }
-            it = (PieButton*)((char*)it + 0x18);
-        } while (it != mpEnd);
+            return;
+        }
     }
 }
 

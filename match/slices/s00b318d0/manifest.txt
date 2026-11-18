@@ -12,3 +12,4 @@ slices/s00b318d0/s00b318d0.cpp  ?FUN_00b324b0@cTokenTranslator@@QAEPAXI@Z  00b32
 slices/s00b318d0/s00b318d0.cpp  ?UpdateTimeAtStartOfFrame@cGameTimeManager@@QAEXXZ  00b31a90  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00b318d0/s00b318d0.cpp  ?SetTimeFlowRate@cGameTimeManager@@QAEXM@Z  00b322c0  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00b318d0/s00b318d0.cpp  ??1cTokenTranslator@@UAE@XZ  00b32490  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?Serialize@cGameTimeManager@@QAEXPAX@Z  00b31ae0  /O2 /MD /Gy /TP /arch:SSE /GS-

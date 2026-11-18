@@ -970,7 +970,8 @@ void cCityInputStrategy::FUN_00cf0e20(u32 param_1, u32 param_2)
         void* gim = FUN_00b3d250();
         ((void (__thiscall*)(void*, u32, u32))VT(gim)[0x64 / 4])(gim, 0x4e540ed, 1);
     }
-    MOPS(FUN_00b3d380())->FUN_00b32250(0x4bf38a7);
+    void* timeManager = FUN_00b3d380();
+    MOPS(timeManager)->FUN_00b32250(0x4bf38a7);
     mField136 = 0;
 }
 
@@ -1235,12 +1236,10 @@ void cCityInputStrategy::FUN_00cf14d0()
 // @ 0x00cf1500
 void cCityInputStrategy::FUN_00cf1500(u32 param_1)
 {
-    if (FUN_00b5b800() == (u32)&gEditorCursor[0])
+    if (FUN_00b5b800() == 0x01654c04u)
     {
         MOPS(mFielde4)->FUN_00e34ea0((void*)param_1);
-        void* a = FUN_00cf74c0();
-        void* b = MOPS(a)->FUN_00cf7500();
-        MOPS(b)->FUN_00ce8ee0(param_1);
+        MOPS(MOPS(FUN_00cf74c0())->FUN_00cf7500())->FUN_00ce8ee0(param_1);
     }
 }
 

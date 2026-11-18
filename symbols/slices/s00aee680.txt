@@ -1,4 +1,4 @@
-00aee680 ?FilterAvoidanceRecords@@YAIPAVcBehaviorRange@@PBI@Z  # uint32_t FilterAvoidanceRecords
+00aee680 ?FilterAvoidanceRecords@@YAIPAVcBehaviorRange@@PBI@Z  # FilterAvoidanceRecords migrated from s00aee680 (verbatim, slice spelling)
 00aee830 ?CalculateAvoidanceDestination@cUFOLocomotion@@QAEPAIPAIPAX1H@Z  # cUFOLocomotion::CalculateAvoidanceDestination migrated from s00aee680 (verbatim, slice spelling)
 00aeebe0 ?FilterBehaviorResource@@YAXPAX@Z  # FilterBehaviorResource migrated from s00aee680 (verbatim, slice spelling)
 00aeec90 ?GetBehaviorVectorFromResource@@YAPAIPAIPAXHHH@Z  # GetBehaviorVectorFromResource migrated from s00aee680 (verbatim, slice spelling)

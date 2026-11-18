@@ -704,30 +704,31 @@ cTotemPoleView* __cdecl CreateTotemPoleView(cSimulatorObject* pOwner)
 // @ 0x00e8eb90
 bool __stdcall GetOrnamentModelKey(const cSimulatorObject* pObject, cModelKey* pOutKey)
 {
-    cModelKey key;
+    bool result = true;
     switch (pObject->mState) {
-    case 0:
-        key.mType = 0x1e42e0c6;
+    case 0: {
+        cModelKey key = { 0x1e42e0c6, 0, 0xf37c24e6 };
+        *pOutKey = key;
         break;
+    }
     case 1:
     case 2:
     case 3:
-    case 4:
-        key.mType = 0x1e42e0c5;
-        break;
-    case 5:
-        key.mType = 0;
-        key.mGroup = 0;
-        key.mInstance = 0;
+    case 4: {
+        cModelKey key = { 0x1e42e0c5, 0, 0xf37c24e6 };
         *pOutKey = key;
-        return true;
-    default:
-        return false;
+        break;
     }
-    key.mGroup = 0;
-    key.mInstance = 0xf37c24e6;
-    *pOutKey = key;
-    return true;
+    case 5: {
+        cModelKey key = { 0, 0, 0 };
+        *pOutKey = key;
+        break;
+    }
+    default:
+        result = false;
+        break;
+    }
+    return result;
 }
 
 // @ 0x00e8ec30

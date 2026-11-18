@@ -14,7 +14,21 @@ inline void* operator new(size_t size, const char* pName, int flags, unsigned de
 { return operator new[](size, pName, flags, debugFlags, file, line); }
 inline void* operator new(size_t, void* p) { return p; }
 void ea_free(void* p);
-void* Sub_7d5d50(void* p);                 // ctor
+struct CmdBase {
+    void* mpVtbl;
+    int mPad[3];
+    CmdBase();                             // 0x0083c800 cCommandBase ctor
+};
+struct CheatCmd : CmdBase {
+    void* mpApp;
+    CheatCmd(void* app)
+    {
+        mpVtbl = (void*)0x014124e8;        // cAppModeCheat vtable (masked)
+        mpApp = app;
+    }
+};
+inline void operator delete(void* p, const char*, int, unsigned, const char*, int)
+{ operator delete[](p); }
 void* GetMessageServer();   // 0x0067dcc0 (equiv t2)
 void* CheatManager();   // 0x0067de20 (equiv t2)
 void* CreateCameraManager();   // 0x007c7700 (equiv t2)
@@ -203,36 +217,32 @@ cAppModeInfo_s007d_85b0* cAppModeInfoAssignBackward(cAppModeInfo_s007d_85b0* fir
 // @ 0x007d8060
 bool SP::cApp::Init()
 {
-    if (mInitialized)
-        return false;
-    mInitialized = true;
-    void* mgr = CreateCameraManager();
-    void* old = mViewer;
-    if (mgr != old) {
-        if (mgr != 0)
-            ((void(__thiscall*)(void*))(*(void***)mgr)[2])(mgr);
-        mViewer = mgr;
-        if (old != 0)
-            ((void(__thiscall*)(void*))(*(void***)old)[3])(old);
-    }
-    if (mViewer != 0)
-        ((void(__thiscall*)(void*, const char*))(*(void***)mViewer)[4])(mViewer, "camera");
-    if (CheatManager() != 0) {
-        void* cmd = operator new(0x14, ALLOC_NAME, 0, 0, ALLOC_FILE, 0xd1);
-        if (cmd != 0) {
-            Sub_7d5d50(cmd);                       // cCommandBase ctor
-            *(void**)cmd = (void*)0x014124e8;      // cAppModeCheat vtable (masked)
-            *(void**)((char*)cmd + 0x10) = this;
+    if (!mInitialized) {
+        mInitialized = true;
+        void* mgr = CreateCameraManager();
+        void* old = mViewer;
+        if (mgr != old) {
+            if (mgr != 0)
+                ((void(__thiscall*)(void*))(*(void***)mgr)[2])(mgr);
+            mViewer = mgr;
+            if (old != 0)
+                ((void(__thiscall*)(void*))(*(void***)old)[3])(old);
         }
+        if (mViewer != 0)
+            ((void(__thiscall*)(void*, const char*))(*(void***)mViewer)[4])(mViewer, "camera");
+        if (CheatManager() != 0) {
+            new (ALLOC_NAME, 0, 0, 0, 0) CheatCmd(this);
+        }
+        void* handler = (char*)this + 4;
+        void* server = GetMessageServer();
+        ((void(__thiscall*)(void*, void*, int))(*(void***)server)[8])(server, handler, 0xd3c602);
+        server = GetMessageServer();
+        ((void(__thiscall*)(void*, void*, int))(*(void***)server)[8])(server, handler, 0xe11332);
+        server = GetMessageServer();
+        ((void(__thiscall*)(void*, void*, int))(*(void***)server)[8])(server, handler, 0xe11333);
+        return true;
     }
-    void* handler = (char*)this + 4;
-    void* server = GetMessageServer();
-    ((void(__thiscall*)(void*, void*, int))(*(void***)server)[8])(server, handler, 0xd3c602);
-    server = GetMessageServer();
-    ((void(__thiscall*)(void*, void*, int))(*(void***)server)[8])(server, handler, 0xe11332);
-    server = GetMessageServer();
-    ((void(__thiscall*)(void*, void*, int))(*(void***)server)[8])(server, handler, 0xe11333);
-    return true;
+    return false;
 }
 
 // @ 0x007d8180

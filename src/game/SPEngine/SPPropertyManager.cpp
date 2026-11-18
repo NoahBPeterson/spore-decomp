@@ -117,22 +117,23 @@ struct cCommandStateB {
     void OnRegister2(void* parser, int b);  // 0x0083c780 (external)
 };
 struct Float3 { float x, y, z; };
+void* operator new(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
+void  operator delete(void* p, const char* name, int a, int b, int c, int d);       // 0x00f47410
 struct cPropertyList {
-    void* vftable;           // +0
+    virtual void AddRef();          // +0
+    virtual void v1();              // +4
+    virtual void Release(int);      // +8
     void* mRef;              // +4
     uint32_t mKey0, mKey1, mKey2;  // +8,0xc,0x10
-    uint8_t pad[0x20];       // +0x14
-    void* vfn0_idx;          // placeholder
-    cPropertyList* Ctor(const char* name);
-    void Release(int);
-    void AddRef();
+    uint8_t pad[0x24];       // +0x14
+    cPropertyList(const char* name);   // 0x006a1b90
 };
 struct cPropertyManager2 {
     void* vftable;              // +0
     void* mBase;                // +4
     uint8_t pad[0x20];          // +8
     void* mFactoryVt;           // +0x24 area
-    bool CreateResource(int* info, int a, int b, int* out);
+    bool CreateResource(int* info, int* out, int a, int b);
 };
 struct FbMap {
     void** FindSlot(void* a, void* b);      // 0x00e5c780
@@ -349,6 +350,7 @@ void MakeCaseInsensitive(const char* src, char* dst);   // 0x00840cc0
 struct HashTable {
     void Find(void* out, const void* key);              // 0x007e2ea0
     void Find2(void* out, const void* key);             // 0x0041fb20
+    void Find2(const void* key);                        // 0x006a43b0 (one stack arg)
 };
 struct HashMapKey8 {
     void* operator[](const void* key);                 // 0x0041cd60
@@ -1366,18 +1368,25 @@ void cCommandStub::Forward(int a, int b)
 }
 
 // @ 0x006a3330
-bool cPropertyManager2::CreateResource(int* info, int a, int b, int* out)
+struct ResInfoView {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual uint32_t* GetKey();     // +0x10
+};
+struct ResMgrView {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+    virtual bool Create(ResInfoView* info, cPropertyList* pl, int a, int b);   // +0x24
+};
+bool cPropertyManager2::CreateResource(int* info, int* out, int a, int b)
 {
-    cPropertyList* pl = (cPropertyList*)EA_Alloc(0x38, "App/PropertyList/Create", 0, 0, 0, 0);
-    if (pl)
-        pl = pl->Ctor("CreateResource");
+    cPropertyList* pl = new ("App/PropertyList/Create", 0, 0, 0, 0) cPropertyList("CreateResource");
 
-    uint32_t* k = (uint32_t*)((int* (*)(int*))((void**)info)[0x10 / 4])(info);
+    uint32_t* k = ((ResInfoView*)info)->GetKey();
     pl->mKey0 = k[0];
     pl->mKey1 = k[1];
     pl->mKey2 = k[2];
 
-    bool ok = ((bool (__thiscall*)(void*, int*, void*, int, int))(((void**)this)[0x24 / 4]))(this, info, pl, a, b);
+    bool ok = ((ResMgrView*)this)->Create((ResInfoView*)info, pl, a, b);
     if (ok) {
         *out = (int)pl;
         pl->AddRef();
@@ -1644,14 +1653,24 @@ Vec38* Vec38::Init(int n, const void* alloc)
     return this;
 }
 
+struct EmptyStr16 {
+    char* mpBegin; char* mpEnd; char* mpCapacity; void* mAlloc;
+    EmptyStr16() { char* const p = (char*)0x01667bac; mpBegin = p; mpEnd = p; mpCapacity = (char*)0x01667bad; }
+    ~EmptyStr16() { if (mpCapacity - mpBegin > 1 && mpBegin) Fun_00f47380(mpBegin); }
+};
+struct ArgParserView {
+    void Tag(void* a, int tag);              // 0x0083d240
+    void EvalString(void* a, void* out);     // 0x0083dc00
+};
+unsigned int FnvHashEh(const char* s, unsigned int seed, int dummy);   // 0x00932e80 (C++ linkage: may throw)
 // @ 0x006a4190
-uint32_t FUN_006a4190(void* parser)
+unsigned int __stdcall FUN_006a4190(void* a, ArgParserView* p)
 {
-    static char buf[0x10];
-    char* s = buf;
-    // EvalString(parser, string) then hash
-    StringEvalString(parser, s);
-    return FNVHash(s, 0x811c9dc5u, 1);
+    EmptyStr16 s;
+    p->Tag(a, 0x28);
+    p->EvalString(a, &s);
+    p->Tag(a, 0x29);
+    return FnvHashEh(s.mpBegin, 0x811c9dc5u, 1);
 }
 
 // @ 0x006a4240
@@ -1753,10 +1772,9 @@ VecC* VecC::Init(unsigned n, const void* alloc)
     end = p;
     cap = p + bytes;
     unsigned cnt = n;
-    for (; cnt; --cnt) {
+    for (; cnt > 0; --cnt, p += 0xc) {
         if (p)
             *(E12*)p = zero;
-        p = (char*)p + 0xc;
     }
     end = (char*)begin + bytes;
     return this;
@@ -1987,18 +2005,22 @@ bool ArgMgr::FUN_006a58a0(int msg, int* v)
 }
 
 // @ 0x006a59f0
+struct IRelease59 { virtual void v0(); virtual void Release(); };
+struct HeldRef59 {
+    IRelease59* p;
+    HeldRef59() : p(0) {}
+    ~HeldRef59() { if (p) p->Release(); }
+};
 void ArgMgr::FUN_006a59f0(int* v)
 {
-    int tmp = 0;
-    char ok = (*(char (__thiscall**)(void*, int, int*))(**(int**)((char*)this + 0x18) + 0x14))(
-        *(void**)((char*)this + 0x18), (int)v + 8, &tmp);
+    HeldRef59 held;
+    int* args = (int*)((char*)v + 8);
+    char ok = (*(char (__thiscall**)(void*, int*, int**))(**(int**)((char*)this + 0x18) + 0x14))(
+        *(void**)((char*)this + 0x18), args, (int**)&held.p);
     if (ok)
-        VariantRelease(&tmp);
-    char key[0x10];
-    *(uint32_t*)key = *(uint32_t*)((char*)v + 0x10);
-    *(uint32_t*)(key + 4) = *(uint32_t*)((char*)v + 0x18);
-    ((HashTable*)((char*)this + 0x74))->Find2(&key[0], key);
-    VariantRelease(&tmp);
+        VariantRelease((int*)held.p);
+    unsigned long long key = (unsigned long long)(unsigned)args[0] | ((unsigned long long)(unsigned)args[2] << 32);
+    ((HashTable*)((char*)this + 0x74))->Find2(&key);
 }
 
 // @ 0x006a5a90

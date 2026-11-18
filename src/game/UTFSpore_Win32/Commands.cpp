@@ -208,20 +208,30 @@ void* HashFindExprValue(void* self, const char* key)
     return 0;
 }
 
+// Node value of the command table (0x0083cad0): a string, then a ref released through vtable slot 4.
+void  __cdecl CmdFree_83cad0(void* p);   // 0x00f47380
+struct CmdStr_83cad0 {
+    char* mpBegin; char* mpEnd; char* mpCapacity; int mAlloc;
+    ~CmdStr_83cad0() { if ((mpCapacity - mpBegin) > 1 && mpBegin) CmdFree_83cad0(mpBegin); }
+};
+struct CmdRefObj_83cad0 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void Release(); };
+struct CmdRef_83cad0 { CmdRefObj_83cad0* p; ~CmdRef_83cad0() { if (p) p->Release(); } };
+struct CmdNodeVal_83cad0 { CmdStr_83cad0 first; CmdRef_83cad0 second; };
+struct CmdNode_83cad0 { CmdNodeVal_83cad0 mValue; CmdNode_83cad0* mpNext; };
+
 // @ 0x0083cad0
 void __stdcall DoFreeNodesTable(void* bucketArray, int bucketCount)
 {
-    if (bucketCount > 1) {
-        for (int i = 0; i < bucketCount; ++i) {
-            char* node = *(char**)((char*)bucketArray + i * 4);
-            while (node) {
-                char* next = *(char**)(node + 0x14);
-                // node dtor + free is a separate helper; caller frees the array below
-                *(void**)(node + 0x14) = 0;
-                node = next;
-            }
+    CmdNode_83cad0** buckets = (CmdNode_83cad0**)bucketArray;
+    for (unsigned i = 0; i < (unsigned)bucketCount; ++i) {
+        CmdNode_83cad0* node = buckets[i];
+        while (node) {
+            CmdNode_83cad0* temp = node;
+            node = node->mpNext;
+            temp->mValue.~CmdNodeVal_83cad0();
+            CmdFree_83cad0(temp);
         }
-        (void)bucketArray;
+        buckets[i] = 0;
     }
 }
 
@@ -247,9 +257,9 @@ void CmdDtor::Dtor()
 {
     vtbl = (void*)&vtbl_AppProps;
     DoFreeNodesTable(mTable.mpBucketArray, mTable.mnBucketCount);
+    mTable.mnElementCount = 0;
     if (mTable.mnBucketCount > 1)
         EASTL_allocator_deallocate(mTable.mpBucketArray);
-    mTable.mnElementCount = 0;
 }
 
 // @ 0x0083ce20

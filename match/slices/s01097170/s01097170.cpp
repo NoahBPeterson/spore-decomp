@@ -7,7 +7,27 @@
 #include "s01097170.h"
 
 // Raw array view (no destructor): the binary frees these buffers by hand.
-template <typename T> struct hkArrayRaw { T* m_data; int m_size; int m_capacityAndFlags; };
+template <typename T> struct hkArrayRaw
+{
+    T* m_data; int m_size; int m_capacityAndFlags;
+    // Copy-assign of a pointer array as the binary does it (reserve exactly when too small, then copy dwords).
+    __forceinline void copyFrom(const hkArrayRaw& src)
+    {
+        if ((m_capacityAndFlags & 0x3fffffff) < src.m_size)
+        {
+            if (m_capacityAndFlags >= 0)
+                hkThreadMemory::getInstance().deallocateChunk(m_data, (m_capacityAndFlags & 0x3fffffff) * (int)sizeof(T), HK_MEMORY_CLASS_ARRAY);
+            m_data = (T*)hkThreadMemory::getInstance().allocateChunk(src.m_size * (int)sizeof(T), HK_MEMORY_CLASS_ARRAY);
+            m_capacityAndFlags = (m_capacityAndFlags & 0x40000000) | src.m_size;
+        }
+        int n = src.m_size;
+        T* d = m_data;
+        m_size = n;
+        const T* s = src.m_data;
+        for (int i = 0; i < n; ++i)
+            d[i] = s[i];
+    }
+};
 
 // ---- supporting types -----------------------------------------------------------------------------------------------
 class hkShape;
@@ -331,20 +351,6 @@ public:
 };
 
 // Copy-assign of a pointer array as the binary does it (reserve exactly when too small, then copy dwords).
-template <typename T>
-static __forceinline void hkArrayCopyAssign(hkArrayRaw<T>& dst, const hkArrayRaw<T>& src)
-{
-    if ((dst.m_capacityAndFlags & 0x3fffffff) < src.m_size)
-    {
-        if (dst.m_capacityAndFlags >= 0)
-            hkThreadMemory::getInstance().deallocateChunk(dst.m_data, (dst.m_capacityAndFlags & 0x3fffffff) * (int)sizeof(T), HK_MEMORY_CLASS_ARRAY);
-        dst.m_data = (T*)hkThreadMemory::getInstance().allocateChunk(src.m_size * (int)sizeof(T), HK_MEMORY_CLASS_ARRAY);
-        dst.m_capacityAndFlags = (dst.m_capacityAndFlags & 0x40000000) | src.m_size;
-    }
-    dst.m_size = src.m_size;
-    for (int i = 0; i < src.m_size; ++i)
-        dst.m_data[i] = src.m_data[i];
-}
 
 // =====================================================================================================================
 // hkFixedRigidMotion
@@ -398,7 +404,7 @@ void hkFixedRigidMotion::getPositionAndVelocities(hkRigidMotion* out)
 // @ 0x01097340
 void hkConstraintChainInstanceAction::getEntities(hkArray<hkEntity*>& out)
 {
-    hkArrayCopyAssign(*reinterpret_cast<hkArrayRaw<hkEntity*>*>(&out), m_constraintInstance->m_chainedEntities);
+    reinterpret_cast<hkArrayRaw<hkEntity*>*>(&out)->copyFrom(m_constraintInstance->m_chainedEntities);
 }
 
 // =====================================================================================================================
@@ -513,8 +519,8 @@ void hkCachingShapePhantom::removeOverlappingCollidable(hkCollidable* c)
         }
         // not found: tell the overlap listeners that the collidable was never added
         hkCollidableRemovedEvent ev;
-        ev.m_phantom = this;
         ev.m_collidable = c;
+        ev.m_phantom = this;
         ev.m_collidableWasAdded = false;
         for (int j = m_overlapListeners.m_size - 1; j >= 0; --j)
         {
@@ -602,10 +608,10 @@ hkPhantom* hkCachingShapePhantom::clone() const
 {
     hkCachingShapePhantom* c = new hkCachingShapePhantom(m_collidable.m_shape, m_motionState);   // class 0x2e, size 0x130
     c->m_collidable.m_collisionFilterInfo = m_collidable.m_collisionFilterInfo;
-    hkArrayCopyAssign(*reinterpret_cast<hkArrayRaw<hkPhantomOverlapListener*>*>(&c->m_overlapListeners),
-                      *reinterpret_cast<const hkArrayRaw<hkPhantomOverlapListener*>*>(&m_overlapListeners));
-    hkArrayCopyAssign(*reinterpret_cast<hkArrayRaw<hkPhantomListener*>*>(&c->m_phantomListeners),
-                      *reinterpret_cast<const hkArrayRaw<hkPhantomListener*>*>(&m_phantomListeners));
+    reinterpret_cast<hkArrayRaw<hkPhantomOverlapListener*>*>(&c->m_overlapListeners)->copyFrom(
+        *reinterpret_cast<const hkArrayRaw<hkPhantomOverlapListener*>*>(&m_overlapListeners));
+    reinterpret_cast<hkArrayRaw<hkPhantomListener*>*>(&c->m_phantomListeners)->copyFrom(
+        *reinterpret_cast<const hkArrayRaw<hkPhantomListener*>*>(&m_phantomListeners));
     c->copyProperties(this);
     return c;
 }
@@ -727,8 +733,7 @@ void hkBreakableConstraintData::buildJacobian(const hkConstraintQueryIn& in, hkC
 // @ 0x010980d0
 hkBreakableConstraintData::~hkBreakableConstraintData()
 {
-    if (m_constraintData != 0)
-        m_constraintData->removeReference();
+    m_constraintData->removeReference();      // no null test in the original
     // scalar deleting form: (flag & 1) -> hkMemory::deallocateChunk(this, memSize, 0x29)
 }
 

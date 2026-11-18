@@ -580,10 +580,14 @@ struct cVECreateOut {
     char           pad40[0x0c];
     void*          mBuffer;         // +0x4c
 };
+// Preserve this retail call-view's original four-byte alignment.
+#pragma pack(push, 4)
 struct cVisualEffect_s00a7_1a00 {
     char pad00[0x18];
-    int  m18;                     // +0x18
-    int  m1c;                     // +0x1c
+    union {
+        struct { int m18; int m1c; };
+        unsigned __int64 mEffectID; // retail +0x18, two-word ID as in canonical cVisualEffect
+    };
     union {
         int m20;                                          // +0x20 packed effect handle
         struct { char _pad20[3]; signed char mComponentType; };   // +0x23
@@ -605,6 +609,7 @@ struct cVisualEffect_s00a7_1a00 {
 
     void UpdateDescription(void* desc);   // 0x00a823e0
 };
+#pragma pack(pop)
 struct EffectsManager {
     char  pad00[0x2c];
     void** mTables;    // +0x2c array of description-table pointers
@@ -1488,10 +1493,11 @@ void cEffectsWorld_s00a7_1a00::UpdateVisualEffect(cVisualEffect_s00a7_1a00* effe
 // @ 0x00a71f90
 void cEffectsWorld_s00a7_1a00::ResetVisualEffectDescription(cVisualEffect_s00a7_1a00* effect)
 {
-    int a = effect->m18;
-    int b = effect->m1c;
+    unsigned __int64 id = effect->mEffectID;
+    int a = (int)id;
+    int b = (int)(id >> 32);
     effect->m20 = -1;
-    if ((a & b) != -1)
+    if (id != (unsigned __int64)-1)
         effect->m20 = mManager->ResolveEffectName(a, b);
 
     if (effect->m20 >= 0) {

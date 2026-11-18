@@ -1,0 +1,2 @@
+010727e0 ?ShowCreatureTooltip@cSPUISpace_s0107_27e0@SP@@QAEXPAXI@Z  # cSPUISpace_s0107_27e0::ShowCreatureTooltip migrated from s010727e0 (verbatim, slice spelling)
+01072d40 ?DoMessage@cSPUISpace_s0107_27e0@SP@@QAE_NPAXPAI@Z  # cSPUISpace_s0107_27e0::DoMessage migrated from s010727e0 (verbatim, slice spelling)

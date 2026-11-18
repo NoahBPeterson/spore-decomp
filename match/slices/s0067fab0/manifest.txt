@@ -7,3 +7,7 @@ slices/s0067fab0/s0067fab0.cpp  FUN_00680890@@  00680890  /O2 /MD /Gy /EHsc /TP 
 slices/s0067fab0/s0067fab0.cpp  FUN_006809a0@@  006809a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s0067fab0/s0067fab0.cpp  FUN_00680b10@@  00680b10  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s0067fab0/s0067fab0.cpp  FUN_00680b70@@  00680b70  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0067fab0/s0067fab0.cpp  ?FUN_00680560@@YGXPAIPAUIOStream@@@Z  00680560  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0067fab0/s0067fab0.cpp  ??1Vec48@@QAE@XZ  00680730  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+slices/s0067fab0/s0067fab0.cpp  ?FUN_00680930@@YIXPAD@Z  00680930  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+slices/s0067fab0/s0067fab0.cpp  ??1CheatRecordList@@QAE@XZ  006809f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

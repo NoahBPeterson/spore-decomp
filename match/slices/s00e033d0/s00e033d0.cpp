@@ -74,6 +74,7 @@ struct BanVec {
 
     BanEntry* __thiscall EraseLast(BanEntry* pos);                    // 0x00e03c30
     BanEntry* __thiscall Insert(BanEntry* pos, const BanEntry& val);  // 0x00e03ca0
+    void      __thiscall DestroyRange(BanEntry* first, BanEntry* last); // 0x00e02c60
 };
 
 // Derived string-token translator embedded in the ban content (this = translator base).
@@ -91,6 +92,8 @@ struct BanTranslator {
     BanVec   mList;      // +0x30
 
     bool __thiscall Format(const wchar_t* key, wchar_t* out);      // 0x00e03b80
+    void __thiscall DestroyTokens();                               // 0x005725a0
+    void __thiscall InitTokens();                                  // 0x006b5870 cStringTokenTranslator ctor
 };
 
 // Ban content sub-object (0x40 bytes), embedded in the UI at +0xc.
@@ -203,7 +206,6 @@ extern "C" void  __cdecl FUN_00e097c0();                        // 0x00e097c0
 extern "C" void  __cdecl FUN_00dd14b0();                        // 0x00dd14b0
 extern "C" void  __cdecl FUN_00dd12f0();                        // 0x00dd12f0
 extern "C" void  __cdecl FUN_00571db0(void*, void*, int, int, int); // 0x00571db0 RemoveHandler
-extern "C" void  __cdecl FUN_00e02c60(void*, void*);            // 0x00e02c60 vector clear
 extern "C" void* __cdecl FUN_00e038e0(void*, void*, void*);     // 0x00e038e0
 extern "C" void* __cdecl FUN_00e02cc0(void*, void*, void*);     // 0x00e02cc0
 extern "C" void  __cdecl FUN_00e02d30(void*, void*, void*);     // 0x00e02d30
@@ -444,22 +446,23 @@ BanEntry* BanEntry::CopyFrom(const BanEntry& src)
 void BanContent::Dtor()
 {
     this->mpVtbl = (void*)0x0147f27c;
+    BanVec* list = &this->mTokens.mList;
     this->mTokens.mpVtbl = (void*)0x0147f264;
 
-    FUN_00e02c60(this->mTokens.mList.mpBegin, this->mTokens.mList.mpEnd);
+    list->DestroyRange(list->mpBegin, list->mpEnd);
     BanEntry* p = this->mTokens.mList.mpBegin;
     if (p != 0 && *(int*)((char*)p - 4) != 0)
         cof_delete(p);
 
-    if ((((unsigned)((char*)this->mTokens.mExtra.mpCap - (char*)this->mTokens.mExtra.mpBegin)) & 0xfffffffe) > 2 &&
+    if ((((int)((char*)this->mTokens.mExtra.mpCap - (char*)this->mTokens.mExtra.mpBegin)) & ~1) > 2 &&
         this->mTokens.mExtra.mpBegin != 0)
         cof_delete(this->mTokens.mExtra.mpBegin);
 
-    if ((((unsigned)((char*)this->mTokens.mText.mpCap - (char*)this->mTokens.mText.mpBegin)) & 0xfffffffe) > 2 &&
+    if ((((int)((char*)this->mTokens.mText.mpCap - (char*)this->mTokens.mText.mpBegin)) & ~1) > 2 &&
         this->mTokens.mText.mpBegin != 0)
         cof_delete(this->mTokens.mText.mpBegin);
 
-    ((TC_V)0x005725a0)(&this->mTokens);
+    this->mTokens.DestroyTokens();
 }
 
 // ===========================================================================
@@ -513,26 +516,36 @@ bool CivPauseUI::OnMessage(int id, int arg)
 void* cSPUIGlobalUI::Construct()
 {
     this->mpVtbl = (void*)0x0147f288;
+    _ReadWriteBarrier();
     this->mpOptions = 0;
     this->mpLayout = 0;
 
-    ((TC_V)0x006b5870)(&this->mBan.mTokens);      // cStringTokenTranslator ctor
+    this->mBan.mTokens.InitTokens();              // cStringTokenTranslator ctor
     this->mBan.mTokens.mbActive = 0;
     this->mBan.mTokens.mbHold = 0;
+    _ReadWriteBarrier();
 
     this->mBan.mpVtbl = (void*)0x0147f27c;
     this->mBan.mTokens.mpVtbl = (void*)0x0147f264;
+    _ReadWriteBarrier();
 
     this->mBan.mTokens.mText.mpBegin = (wchar_t*)0x01667bac;
+    _ReadWriteBarrier();
     this->mBan.mTokens.mText.mpEnd = (wchar_t*)0x01667bac;
+    _ReadWriteBarrier();
     this->mBan.mTokens.mText.mpCap = (wchar_t*)0x01667bae;
+    _ReadWriteBarrier();
     this->mBan.mTokens.mExtra.mpBegin = (wchar_t*)0x01667bac;
+    _ReadWriteBarrier();
     this->mBan.mTokens.mExtra.mpEnd = (wchar_t*)0x01667bac;
+    _ReadWriteBarrier();
     this->mBan.mTokens.mExtra.mpCap = (wchar_t*)0x01667bae;
+    _ReadWriteBarrier();
 
     this->mBan.mTokens.mList.mpBegin = 0;
     this->mBan.mTokens.mList.mpEnd = 0;
     this->mBan.mTokens.mList.mpCap = 0;
+    _ReadWriteBarrier();
 
     this->mpHandler = 0;
     this->mpHandlerThis = 0;

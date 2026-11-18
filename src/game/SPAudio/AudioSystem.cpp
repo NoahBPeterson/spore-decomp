@@ -1,4 +1,4 @@
-// src/game/SPAudio/AudioSystem.cpp -- migrated from slice(s) s00a26e10, s00a21130, s00a0f350, s00a32f20, s00a31f20, s00a31170, s00a30460, s00a2e650, s00a2d790, s00a2c6c0, s00a2a020, s00a24e10, s00a23360, s00a22220, s00a20060, s00432830 by tools/migrate/rewrite.py
+// src/game/SPAudio/AudioSystem.cpp -- migrated from slice(s) s00e22860, s00a2f660, s00a2bfa0, s00a2af30, s00a290b0, s00a28120, s00a25c40, s00a17690, s00a26e10, s00a21130, s00a0f350, s00a32f20, s00a31f20, s00a31170, s00a30460, s00a2e650, s00a2d790, s00a2c6c0, s00a2a020, s00a24e10, s00a23360, s00a22220, s00a20060, s00432830 by tools/migrate/rewrite.py
 // Object file: SPAudio/AudioSystem.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -46,6 +46,12 @@
 #include "EA/ArgScript/cCommandBase.h"
 #include "EA/Audio/FactoryVoiceTemplate.h"
 #include <stdarg.h>
+#include "EA/Audio/ResourceConfiguration.h"
+#include "EA/Variant.h"
+#include <stdio.h>
+#include <float.h>
+#include "cSPUIAnimator.h"
+#include "cSPUILayout.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" long __cdecl _InterlockedExchange(long volatile* target, long value);
@@ -447,6 +453,7 @@ struct Query {
 extern "C" __declspec(dllimport) int __cdecl _strnicmp(const char*, const char*, unsigned int);
 extern float g_1485720;
 extern int   g_16e61a8;
+extern const char g_lockName[];   // 0x01452970
 #define EA_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 void* operator new(unsigned int, const char*, int, int, const char*, int);
 void  operator_delete__(void*);              // 0x00f47380
@@ -466,6 +473,7 @@ struct ISystem {
     virtual ~ISystem();
 };
 struct System : ISystem {
+    u8       pad_04[4];                // +0x04
     void*    mAutoMsg;                 // +0x08 (IHandlerRC subobject)
     u8       pad_0c[0x9a - 0x0c];
     u8       mbMuted;                  // +0x9a
@@ -484,6 +492,8 @@ struct System : ISystem {
 void __cdecl sub_112c600();                     // 0x0112c600
 void __cdecl sub_112c620();                     // 0x0112c620
 void __stdcall sub_112ccc0(int a, void* b);     // 0x0112ccc0
+struct MuteParams { double d0; float fParam; float fMute; float f3; };
+struct PluginIface { void Call112ccc0(int a, void* b); };    // 0x0112ccc0 (thiscall)
 struct VoiceContainer { void* FindPlugin(u32 id); };         // 0x00a34230
 struct EHNode { int key; void* value; EHNode* next; };
 struct EInsertRes;
@@ -500,10 +510,15 @@ struct EHTable {
     EInsertRes* DoInsertKey(EInsertRes* out, const int* pkey, u32 unused); // 0x00a23830
 };
 struct RefCounted { virtual void v00(); virtual void Release(); };
-struct RefVec {
+// a vector of reference-counted pointers: the base frees the storage (when it is a heap block), the vector releases
+// each element first
+struct RefVecStorage {
     RefCounted** mpBegin;   // +0
     RefCounted** mpEnd;     // +4
-    void Destroy();         // 0x00a23920
+    ~RefVecStorage();
+};
+struct RefVec : RefVecStorage {
+    ~RefVec();              // 0x00a23920
 };
 struct PHNode { int key; PHNode* next; };
 struct PHTable {
@@ -532,21 +547,61 @@ struct RBNode_s00a2_3360 {
     u32     key0;    // +0x10
     u32     key1;    // +0x14
 };
+struct Snd_s00a2_3360 {
+    u8    mPad00[0x10];   // +0x00 payload (not inspected by the sort)
+    SNode node;           // +0x10 { next, prev }
+    static Snd_s00a2_3360* FromNode(SNode* n) { return n ? (Snd_s00a2_3360*)((char*)n - 0x10) : 0; }
+    static SNode* ToNode(Snd_s00a2_3360* p) { return p ? (SNode*)((char*)p + 0x10) : 0; }
+};
+typedef bool (__cdecl* CompareFn)(Snd_s00a2_3360*, Snd_s00a2_3360*);
+struct ElemList {
+    SNode anchor;                                               // +0x00 { next, prev }
+    ElemList();                                                 // self-links the anchor
+    ~ElemList();                                                // unlinks what is left
+    void Assign(void* pCompare);                                // 0x00a24210 (merge sort)
+    Snd_s00a2_3360* begin() { return Snd_s00a2_3360::FromNode(anchor.next); }
+    // Out-of-slice intrusive-list helpers (the original passes the list in ecx).
+    void splice(Snd_s00a2_3360* pos, ElemList& x, Snd_s00a2_3360* first, Snd_s00a2_3360* last);  // 0x00a212b0
+    void spliceAll(Snd_s00a2_3360* pos, ElemList& x);                      // 0x00a21310
+    void merge(ElemList& x, CompareFn pCompare);                // 0x00a22410
+};
 struct RBTree {
-    void   Assign(void* arg);                   // 0x00a24210 (opaque rbtree assignment)
-    void*  AllocNode2(const void* src, void* parent); // 0x00a243e0
+    u8      pad00[0x1c];
+    void*   mpFreeList;                 // +0x1c
+    u8      pad20[0x2c - 0x20];
+    u32     mAllocator;                 // +0x2c
+    void*  AllocNode2(const void* src);         // 0x00a243e0
     RBNode_s00a2_3360* CloneNode(RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent);   // 0x00a24530
 };
-void __cdecl sub_00a212b0();
-void __cdecl sub_00a21310();
-void __cdecl sub_00a22410();
+inline ElemList::ElemList()
+{
+    anchor.next = &anchor;
+    anchor.prev = &anchor;
+}
+__forceinline ElemList::~ElemList()
+{
+    SNode* n = anchor.next;
+    while (n != &anchor) {
+        SNode* next = n->next;
+        n->prev = 0;
+        n->next = 0;
+        n = next;
+    }
+    anchor.next = 0;
+    anchor.prev = 0;
+}
 struct Elem20 { u32 d0, d1, d2, d3; void* ref; };
 struct DeviceDriver { void ctor(const char* name); };           // 0x011e5d80
 struct Mutex_s00a2_3360 {
     u32 a;
-    void ctor(int a, int b);     // 0x009222a0
-    int  Lock(void* p);          // 0x009221b0
-    int  Unlock();               // 0x00922270
+    void ctor(int a, int b);           // 0x009222a0
+    int  Lock(const void* name);       // 0x009221b0
+    int  Unlock();                     // 0x00922270
+};
+struct MutexGuard_s00a2_3360 {
+    Mutex_s00a2_3360* m;
+    MutexGuard_s00a2_3360(Mutex_s00a2_3360* mm, const char* n) : m(mm) { m->Lock(n); }
+    ~MutexGuard_s00a2_3360() { m->Unlock(); }
 };
 struct Stopwatch_s00a2_3360 {
     long long mnStartTime;         // +0
@@ -562,6 +617,15 @@ struct ProfileTimer {
     ProfileTimer(void* acc);       // 0x00a248a0
     void Accumulate();             // 0x00a24900
 };
+struct ScopedTimer {
+    Stopwatch_s00a2_3360 sw;                  // +0
+    float*    acc;                 // +0x18
+    ScopedTimer(float* a);         // 0x00a248a0
+    ~ScopedTimer()
+    {
+        *acc = (float)sw.GetElapsedTimeFloat() * sw.mfCyclesToUnitsCoefficient + *acc;
+    }
+};
 struct RDD {
     void*   vftable;               // +0
     u8      pad04[0x14 - 4];
@@ -575,22 +639,42 @@ struct RDD {
     ProfileTimer mTimer;           // +0x5c
 
     void    Construct();           // 0x00a247f0
-    void*   FindById(void* id, void* a, void* b, void* c);  // 0x00a24970
+    void*   FindById(void* id);                              // 0x00a24970
     void*   FindAndCall1(void* id, void* a, void* b, void* c, void* d); // 0x00a24a90
-    bool    FindAndCall2(void* id, void* a, void* b, void* c, void* d); // 0x00a24b40
-    int     FindAndCall3(void* id, void* a, void* b, void* c, void* d); // 0x00a24bf0
+    int     FindAndCall2(void* id, void* a, void* b, void* c, void* d); // 0x00a24b40
+    long long FindAndCall3(void* id, void* a, void* b, void* c, void* d, void* e); // 0x00a24bf0
     void*   FindAndCall4(void* id);  // 0x00a24cb0
     long long FindAndCall5(void* id); // 0x00a24d60
 
     bool    Tick3(void* a, void* b, void* c);   // 0x00a24930
 };
 // ---- items of slice s00a23360 end
+// Construction view of RDD (0x00a247f0): the driver base and the vector have destructors; the mutex is built last.
+struct RDDDriverBase {
+    RDDDriverBase(const char* name);  // 0x011e5d80
+    virtual ~RDDDriverBase();
+    u8 pad04[0x14 - 4];
+};
+struct RDDPtrVec {
+    void** mpBegin; void** mpEnd; void** mpCapacity;
+    RDDPtrVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~RDDPtrVec();
+};
+struct RDDMutex : Mutex_s00a2_3360 {
+    RDDMutex() { ctor(0, 1); }
+    ~RDDMutex();
+};
+struct RDDCtorView : RDDDriverBase {
+    RDDPtrVec mVec;               // +0x14
+    u8        pad20[0x28 - 0x20];
+    RDDMutex  mMutex;             // +0x28
+    RDDCtorView();
+};
 
 // forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
-RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent);   // defined at 0x00a245e0, called earlier in the TU
+__declspec(noinline) RBNode_s00a2_3360* __stdcall RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent);   // defined at 0x00a245e0, called earlier in the TU
 
 // ---- items of slice s00a24e10 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern const char g_lockName[];   // 0x01452970
 extern unsigned g_tid1;      // 0x0166d9f8
 extern unsigned g_tid2;      // 0x0166d9fc
 extern const unsigned g_msgIds[7];   // 0x01452b6c
@@ -602,12 +686,32 @@ struct Obj_s00a2_4e10 {
     virtual void Release();
     virtual void Free();
 };
+struct TObj {
+    virtual void v0();
+    virtual void AddRef();
+    virtual void Release();
+};
 struct ARC {
     Obj_s00a2_4e10* p;
     ARC() : p(0) {}
     ARC(Obj_s00a2_4e10* o) : p(o) { if (p) p->AddRef(); }
     ARC& assign(Obj_s00a2_4e10* o);        // 0x00b5f950 (out of line)
     ~ARC() { if (p) p->Release(); }
+};
+struct Stopwatch_s00a2_4e10 {
+    char  pad[0x14];
+    float coeff;
+    __int64 GetElapsedTimeFloat();    // 0x0093a3a0
+};
+struct ScopedTimer_s00a2_4e10 {
+    Stopwatch_s00a2_4e10 sw;
+    float*    acc;
+    int       pad;
+    ScopedTimer_s00a2_4e10(float* a);            // 0x00a248a0
+    ~ScopedTimer_s00a2_4e10()
+    {
+        *acc = (float)sw.GetElapsedTimeFloat() * sw.coeff + *acc;
+    }
 };
 struct Mutex_s00a2_4e10 {
     void Lock(const char* name);      // 0x009221b0
@@ -674,29 +778,89 @@ Str16 ConvertToString16(const char* s, int n);   // 0x0093c5a0
 struct StrOut { int a, b, c; };
 typedef void (__cdecl* StringFn)(StrOut*, int, int, int, int, int);
 extern StringFn g_pfnString;                     // 0x0154c464
+struct RbIter { int* n; RbIter() {} RbIter(const RbIter& o) { n = o.n; } };
+struct RbTree {
+    char pad[0x14];
+    int  size;      // tree object at owner+4: size at owner+0x18
+    RbIter find(const unsigned& key);    // 0x00e5c780
+};
+void RBTreeIncrement(void* n);                 // 0x00921580
+void RBTreeErase(void* n, void* anchor);       // 0x00921880
 struct Obj30 {
     Obj_s00a2_4e10* Init();                       // 0x00a22cf0
 };
 struct Obj30b {
     Obj_s00a2_4e10* Init();                       // 0x00a22cf0 (identical code folded)
 };
+struct Tracker {
+    char   pad0[0x14];
+    TObj**  mBegin;      // +0x14
+    TObj**  mEnd;        // +0x18
+    char   pad1[0x28 - 0x1c];
+    Mutex_s00a2_4e10  mMutex;      // +0x28
+    char   pad2[0x58 - 0x28 - 4];
+    float  mElapsed;    // +0x58
+    // ScopedTimer anchor value lives at +0x5c (arg to timer ctor)
+    char   pad3[4];
+
+    void  Remove(TObj* o);               // 00a24e10
+    void  Process(TObj* o);              // 00a24f50
+    TObj*  Find(TObj* o);                 // 00a24970
+};
+struct RcMap {
+    char   pad[4];
+    RbTree mTree;      // +4
+    void Release(unsigned key);         // 00a25000
+};
 struct Factory {
-    virtual void f00(); virtual void f01(); virtual void f02(); virtual void f03();
-    virtual void f04(); virtual void f05(); virtual void f06(); virtual void f07();
+virtual void f00();
+virtual void f01();
+virtual void f02();
+virtual void f03();
+virtual void f04();
+virtual void f05();
+virtual void f06();
+virtual void f07();
     virtual void f08();
     virtual bool Create(const char* a, Obj_s00a2_4e10* o, int c, int d);   // +0x24
     bool MakeProps(const char* a, Obj_s00a2_4e10** out, int c, int d);     // 00a25090
     bool MakeAudio(const char* a, ARC* out, int c, int id);     // 00a25190
 };
 struct Namer {
-    virtual void n00(); virtual void n01(); virtual void n02(); virtual void n03();
-    virtual void n04(); virtual void n05(); virtual void n06(); virtual void n07();
-    virtual void n08(); virtual void n09(); virtual void n0a(); virtual void n0b();
-    virtual void n0c(); virtual void n0d(); virtual void n0e(); virtual void n0f();
-    virtual void n10(); virtual void n11(); virtual void n12(); virtual void n13();
-    virtual void n14(); virtual void n15(); virtual void n16(); virtual void n17();
-    virtual void n18(); virtual void n19(); virtual void n1a(); virtual void n1b();
-    virtual void n1c(); virtual void n1d(); virtual void n1e(); virtual void n1f(); virtual void n20(); virtual void n21();
+virtual void n00();
+virtual void n01();
+virtual void n02();
+virtual void n03();
+virtual void n04();
+virtual void n05();
+virtual void n06();
+virtual void n07();
+virtual void n08();
+virtual void n09();
+virtual void n0a();
+virtual void n0b();
+virtual void n0c();
+virtual void n0d();
+virtual void n0e();
+virtual void n0f();
+virtual void n10();
+virtual void n11();
+virtual void n12();
+virtual void n13();
+virtual void n14();
+virtual void n15();
+virtual void n16();
+virtual void n17();
+virtual void n18();
+virtual void n19();
+virtual void n1a();
+virtual void n1b();
+virtual void n1c();
+virtual void n1d();
+virtual void n1e();
+virtual void n1f();
+virtual void n20();
+virtual void n21();
     virtual void Dispatch(wchar_t* name, int a, int b, double c);   // +0x88
     void Convert(const char* s, int a, int b, double c);            // 00a25980
 };
@@ -750,8 +914,14 @@ struct AudioSys {
     bool GetFloat(unsigned k1, unsigned k2, float* out);     // 00a25bd0
 };
 struct Server {
-    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
-    virtual void m4(); virtual void m5(); virtual void m6(); virtual void m7();
+virtual void m0();
+virtual void m1();
+virtual void m2();
+virtual void m3();
+virtual void m4();
+virtual void m5();
+virtual void m6();
+virtual void m7();
     virtual void m8();
     virtual void Register(void* handler, unsigned id);        // +0x24
 };
@@ -766,9 +936,17 @@ struct ISystem0 {
     virtual void i0();
 };
 struct Config {
-    virtual void c00(); virtual void c01(); virtual void c02(); virtual void c03();
-    virtual void c04(); virtual void c05(); virtual void c06(); virtual void c07();
-    virtual void c08(); virtual void c09(); virtual void c0a();
+virtual void c00();
+virtual void c01();
+virtual void c02();
+virtual void c03();
+virtual void c04();
+virtual void c05();
+virtual void c06();
+virtual void c07();
+virtual void c08();
+virtual void c09();
+virtual void c0a();
     virtual void Get(unsigned key, int* out);                 // +0x2c
 };
 struct DbgObj {
@@ -778,11 +956,22 @@ struct DbgObj {
     char pad[0x70];
 };
 struct ErrIf {
-    virtual void e0(); virtual void e1(); virtual void e2();
+virtual void e0();
+virtual void e1();
+virtual void e2();
     virtual bool Query(const void* iid, ARC* out, int a, int b, int c, int d);   // +0xc
-    virtual void e4(); virtual void e5(); virtual void e6(); virtual void e7();
-    virtual void e8(); virtual void e9(); virtual void e10(); virtual void e11();
-    virtual void e12(); virtual void e13(); virtual void e14(); virtual void e15();
+virtual void e4();
+virtual void e5();
+virtual void e6();
+virtual void e7();
+virtual void e8();
+virtual void e9();
+virtual void e10();
+virtual void e11();
+virtual void e12();
+virtual void e13();
+virtual void e14();
+virtual void e15();
     virtual void e16();
     virtual void Set(int a, DbgObj* o, int b);                                   // +0x44
 };
@@ -875,7 +1064,7 @@ struct System_s00a2_4e10 : ISystem0, IHandlerRC {
 
 // ---- items of slice s00a2a020 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #undef FIXED_CTOR
-void __cdecl FUN_00a136f0(void*, void*, void*);                  // 0x00a136f0
+void* operator new(unsigned int);
 struct HashBase {
     void ctorA(u32, void*, void*, void*, u32, void*, void*);   // 0x00a23570
     void ctorB(u32, void*, void*, void*, u32, void*, void*);   // 0x00a23620
@@ -931,8 +1120,8 @@ struct ZoneVec {
     void push_back(const Zone_s00a2_a020* v);
     void DoInsertValue(u8* pos, const Zone_s00a2_a020* val);   // 0x00a27b90
 };
-struct ArrOwner { void* FindInsertPos(void*, void*, void*); };  // 0x00a22730
-void* ARCopy(void* a, void* b, void* c);                        // 0x00a22730
+struct RBTreeStub { void DoNukeSubtree(void*); };   // 0x009a9600
+void* ARCopy(void* a, void* b, void* c);   // 0x00a22730
 // ---- items of slice s00a2a020 end
 
 // ---- items of slice s00a2c6c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1106,6 +1295,7 @@ typedef unsigned int uint;
 typedef unsigned char uchar;
 struct XF;           // generic stub for external __thiscall callees
 struct AudioSystem;
+struct LastInstr;
 struct XF {
     void* hashtable_find(void* out, void* key);      // 0x645ed0 (arg1 = out iterator, arg2 = key)
     void* rbtree_find(void* out, void* key);         // 0xe5c780
@@ -1129,9 +1319,12 @@ struct XF {
     void  Noop();
 };
 void* __cdecl operator_new(uint, const char*, int, int, const char*, int);   // 0x00f473a0
-void  __cdecl operator_delete(void*);
+void  __cdecl operator_delete(void*) throw();
+struct IUnk_a26da0 { virtual void AddRef(); virtual void Release(); };
 void* __cdecl FUN_00a17090(uint size);
 void* __cdecl FUN_00a17100(void* p);
+void __cdecl FUN_00fccdd0(unsigned id);   // 0x00fccdd0
+void FUN_00a26ce0();   // 0x00a26ce0 hashtable insert (thiscall, called through a cast)
 void* __cdecl copy_impl(void* first, void* last, void* dst);   // 0x006782c0
 struct AudioSystem {
     uchar pad[0x140000];
@@ -1330,11 +1523,18 @@ struct EventMsg {
         if (ref)
             ObjAddRef(ref);
     }
+    __forceinline EventMsg(const EventMsg& o) : a(o.a), b(o.b), c(o.c), d(o.d), ref(o.ref)
+    {
+        if (ref)
+            ObjAddRef(ref);
+    }
     ~EventMsg()
     {
         if (ref)
             ObjRelease(ref);
     }
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
 };
 struct EventQueue {
     void Push(const EventMsg& m);  // 0x00a2e260
@@ -1477,7 +1677,6 @@ struct FixedVec11 {
     u32  fEnd;       // +0xfc0
     u32  fCount;     // +0xfc4
     void resize(int n);   // 0x0089cb60
-    FixedVec11* ctor(int param_2);
 };
 struct FixedVec11b {
     u32* mpBegin;    // +0
@@ -1489,6 +1688,32 @@ struct FixedVec11b {
     u32  storage[250];   // +0x18
     void InitRange(u32 a, u32 b, void* c);   // 0x00a2b2e0
     FixedVec11b* ctor(u32* param_2);
+};
+// the constructors' view of the fixed vectors: the storage base points the vector at its inline buffer, and frees a
+// heap block on unwind if filling the vector throws
+template <int N> struct FixedVecStorage11 {
+    u32* mpBegin;    // +0
+    u32* mpEnd;      // +4
+    u32* mpCap;      // +8
+    u32* f0c;        // +0xc
+    u32* f10;        // +0x10
+    u32* f14;        // +0x14
+    u32  storage[N]; // +0x18
+    FixedVecStorage11() {
+        u32* p = storage;
+        f10 = p;
+        mpEnd = p;
+        mpBegin = p;
+        mpCap = p + N;
+    }
+    ~FixedVecStorage11() { if (mpBegin != f10) f_00f47380(mpBegin); }
+};
+struct FixedVec11Obj : FixedVecStorage11<1001> {
+    u32  fStart;     // +0xfbc
+    u32  fEnd;       // +0xfc0
+    u32  fCount;     // +0xfc4
+    void resize(int n);   // 0x0089cb60
+    FixedVec11Obj(int param_2);
 };
 // ---- items of slice s00a30460 end
 
@@ -1686,6 +1911,7 @@ struct SystemProps {
 // ---- items of slice s00a32f20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float g_vec3[3];         // 0x0166da00, copied twice into the listener positions
 extern const double g_cacheAge; // 0x01452f48
+extern "C" int atexit(void (*fn)());
 struct TagA { TagA() {} }; struct TagB { TagB() {} };   // empty hash / equal_to / allocator tag temporaries
 struct Th743
 {
@@ -1711,6 +1937,16 @@ struct Q0fd
 {
     Q0fd(); // 0xa0fdf0
     ~Q0fd(); uint32_t d;
+    bool FunF980();             // 0xa0f980  pending work?
+    bool FunF9a0();             // 0xa0f9a0  one dispatcher step
+    int  FunF990();             // 0xa0f990  shutdown state
+    void FunFdd0();             // 0xa0fdd0
+    void FunFdc0();             // 0xa0fdc0
+    void FunF940();             // 0xa0f940
+    void FunFee0(void* msg);    // 0xa0fee0  push a command
+    void* GetArg();             // 0x9892e0
+    void Fun102e0(uint32_t tag);                 // 0xa102e0
+    void Fun10120(uint32_t tag, uint32_t value); // 0xa10120
 };
 struct TA210
 {
@@ -1755,12 +1991,20 @@ struct T32220
 struct T570
 {
     T570(const TagA&, const TagB&); // 0xa2a570
-    ~T570(); uint32_t d;
+    ~T570();
+    uint32_t  m0;            // +0x0
+    uint32_t* mpBuckets;     // +0x4  bucket array
+    uint32_t  mBucket;       // +0x8  bucket index used as the end() marker
+    uint32_t  mOpCode;       // +0xc
+    void* Find(void* out, const uint32_t* key); // 0xa23ef0
+    void  Erase(const uint32_t* key);           // 0xa23d20
 };
 struct T1040
 {
     T1040(int n); // 0xa31040
-    ~T1040(); uint32_t d;
+    ~T1040();
+    void* mpFirst;           // +0x0  ring buffer begin
+    void* mpLimit;           // +0x4  ring buffer end
 };
 struct T1e320
 {
@@ -1780,12 +2024,19 @@ struct T770
 struct T26990
 {
     T26990(); // 0xa26990
-    ~T26990(); uint32_t d;
+    ~T26990();
+    T26990* pNext;           // +0x00  list next
+    T26990* pPrev;           // +0x04  list prev
+    void*   pObj;            // +0x08  bound audio object
 };
 struct TF410
 {
     TF410(const TagA&, const TagB&); // 0xa2f410
-    ~TF410(); uint32_t d;
+    ~TF410();
+    uint32_t  m0;            // +0x0
+    void**    mpBuckets;     // +0x4  node bucket array
+    uint32_t  mBucket;       // +0x8  bucket index used as the end() marker
+    void Begin(void** out);  // 0x594410
 };
 struct Channel
 {
@@ -1796,20 +2047,20 @@ struct ISystem_s00a3_2f20 {
     virtual void Init();
     virtual ~ISystem_s00a3_2f20();
 };
-struct IHandler {
-    IHandler() {}
+struct IHandler_s00a3_2f20 {
+    IHandler_s00a3_2f20() {}
     virtual void HandleMsg();
-    virtual ~IHandler();
+    virtual ~IHandler_s00a3_2f20();
 };
-struct IHandlerRC_s00a3_2f20 : IHandler {
+struct IHandlerRC_s00a3_2f20 : IHandler_s00a3_2f20 {
     IHandlerRC_s00a3_2f20() {}
     virtual void HandleMsg();
     virtual ~IHandlerRC_s00a3_2f20();
 };
-struct AutoHandler {
+struct AutoHandler_s00a3_2f20 {
     void* mpServer; void* mpHandler; uint32_t* mpIdArray; uint32_t mnIdArrayCount; uint32_t mnPriority;
-    AutoHandler() : mpServer(0), mpHandler(0), mpIdArray(0), mnIdArrayCount(0), mnPriority(0) {}
-    ~AutoHandler();
+    AutoHandler_s00a3_2f20() : mpServer(0), mpHandler(0), mpIdArray(0), mnIdArrayCount(0), mnPriority(0) {}
+    ~AutoHandler_s00a3_2f20();
 };
 struct CoreAllocator  { CoreAllocator()  {} virtual ~CoreAllocator();  };
 struct ResAllocator   { ResAllocator()   {} virtual ~ResAllocator();   };
@@ -1827,7 +2078,11 @@ public:
     virtual ~System_s00a3_2f20();  // 0x00a33600 (System::System_s00a3_2f20)
     virtual void HandleMsg();
 
-    AutoHandler       mAutoMsg;          // +0x08
+    void Update(void* ctx, float dt);       // 0x00a32f20
+    void MuteAll(bool muted, bool immediate); // 0x00a233b0
+    void MaintainLRU();                     // 0x00a28810
+
+    AutoHandler_s00a3_2f20       mAutoMsg;          // +0x08
     int               mRefCount;         // +0x1c
     Th743           mTickThread;       // +0x20
     uint32_t          padThr;
@@ -1905,17 +2160,20 @@ public:
     T32220          mSubscriptions;    // +0x1277b4
     PAD(pad_r, 0x1277b4 + 4, 0x128ae0);
     T570          mPolyA;            // +0x128ae0
-    PAD(pad_s, 0x128ae0 + 4, 0x12c9ac);
+    PAD(pad_s, 0x128ae0 + 0x10, 0x12c9ac);
     T1040          mPoolA;            // +0x12c9ac
-    PAD(pad_t, 0x12c9ac + 4, 0x12d974);
+    PAD(pad_t, 0x12c9ac + 8, 0x12d974);
     T570          mPolyB;            // +0x12d974
-    PAD(pad_u, 0x12d974 + 4, 0x131840);
+    PAD(pad_u, 0x12d974 + 0x10, 0x131840);
     T1040          mPoolB;            // +0x131840
-    PAD(pad_v, 0x131840 + 4, 0x132808);
+    PAD(pad_v, 0x131840 + 8, 0x1327fc);
+    uint32_t*         mIdRead;          // +0x1327fc
+    uint32_t*         mIdWrite;         // +0x132800
+    uint32_t          mIdDropped;       // +0x132804
     T570          mPolyC;            // +0x132808
-    PAD(pad_w, 0x132808 + 4, 0x1366d4);
+    PAD(pad_w, 0x132808 + 0x10, 0x1366d4);
     T1040          mPoolC;            // +0x1366d4
-    PAD(pad_x, 0x1366d4 + 4, 0x13769c);
+    PAD(pad_x, 0x1366d4 + 8, 0x13769c);
     uint32_t*         fv0;               // +0x13769c
     uint32_t*         fv1;               // +0x1376a0
     uint32_t*         fv2;               // +0x1376a4
@@ -1933,11 +2191,11 @@ public:
     TF310          mHT2b;             // +0x157440
     PAD(pad_ac, 0x157440 + 4, 0x157c60);
     T26990          mObj157c60;        // +0x157c60
-    PAD(pad_ad, 0x157c60 + 4, 0x158f48);
+    PAD(pad_ad, 0x157c60 + 0xc, 0x158f48);
     T26990*         pObj;              // +0x158f48
     uint32_t          z158f4c;
     TF410          mHT3;              // +0x158f50
-    PAD(pad_ae, 0x158f50 + 4, 0x15b6b0);
+    PAD(pad_ae, 0x158f50 + 0xc, 0x15b6b0);
     uint32_t          z6b0, z6b4, z6b8, z6bc;     // +0x15b6b0
     PAD(pad_af, 0x15b6bc + 4, 0x15b6d8);
     float             posA[3];           // +0x15b6d8
@@ -1962,6 +2220,125 @@ public:
     PAD(pad_aj, 0x15bbf0 + 4, 0x15bbf8);
     Env               env4;              // +0x15bbf8
 };
+#define AVS(p, off) (*(void**)((char*)(*(void**)(p)) + (off)))
+namespace EA {
+struct Stopwatch_s00a3_2f20
+{
+    Stopwatch_s00a3_2f20(int units, bool highRes);      // 0x0093a560
+    void Start();                            // inlined in the original
+    uint32_t mnUnits;                        // +0x00
+    uint32_t mnStartLo;                      // +0x04
+    uint32_t mnStartHi;                      // +0x08
+    uint32_t mnTotalLo;                      // +0x0c
+    uint32_t mnTotalHi;                      // +0x10
+};
+}
+namespace EA {
+struct LimitStopwatch_s00a3_2f20 : Stopwatch_s00a3_2f20
+{
+    LimitStopwatch_s00a3_2f20(int units, bool highRes); // 0x0093a560
+    void SetTimeLimit(uint32_t units, bool b);  // 0x0093a480
+    bool HasTimeLeft();                         // inlined in the original
+    uint32_t mnEndLo;                        // +0x14
+    uint32_t mnEndHi;                        // +0x18
+};
+}
+namespace rt {
+struct MsgObj            // object with a virtual command interface
+{
+    virtual void Slot0();
+    virtual void Slot4();
+    virtual void Slot18(int, int);
+    virtual void Slot24(uint32_t);
+};
+}
+namespace rt {
+struct cmdStub           // 0x0166d9f4: mixer/notification sink with two vtable slots
+{
+    virtual void SlotC0();
+    virtual void SlotC4();
+};
+}
+namespace rt {
+extern cmdStub* gpCmdStub;          // 0x0166d9f4
+}
+namespace rt {
+struct CmdRecord
+{
+    uint32_t mType;         // +0x00
+    uint32_t mArg1;         // +0x04
+    uint32_t mArg2;         // +0x08
+    uint32_t mArg3;         // +0x0c
+    uint32_t mArg4;         // +0x10
+};
+}
+namespace rt {
+struct CmdList
+{
+    uint32_t* mpBegin;      // +0x00
+    uint32_t* mpEnd;        // +0x04
+    uint32_t* mpGuard;      // +0x08
+    uint32_t* mpCap;        // +0x0c
+    void Assign(const uint32_t* begin, const uint32_t* end); // 0x00a32320
+    void EraseRange(uint32_t* begin, uint32_t* end);         // 0x00a2ae90
+};
+}
+namespace rt {
+extern CmdList   gDeferredCmds;     // 0x0166da90
+}
+namespace rt {
+extern uint32_t  gDeferredGuard;    // 0x0166de90
+}
+namespace rt {
+extern uint32_t  gDeferredStorage[];// 0x0166daa8
+}
+void DeferredListInit();            // 0x013c1810 (atexit target)
+namespace eastl {
+struct fixed_pool_base_s00a3_2f20
+{
+    void* mpHead;   // +0x00  first free node
+    void init(void* pMemory, uint32_t nSize, uint32_t nNodeSize, uint32_t nAlignment, uint32_t nOffset); // 0x00921260
+};
+}
+namespace eastl {
+struct node_pool_desc
+{
+    void*    mpMap;       // +0x00  map being constructed
+    uint8_t* mpNodes;     // +0x04  first node slot
+    uint8_t* mpNodesEnd;  // +0x08  one past the last node slot
+    uint32_t mnNodeSize;  // +0x0c  bytes per node
+};
+}
+namespace eastl {
+struct fixed_hash_map_u32_nested
+{
+    void*    mpBegin;                   // +0x000
+    void*    mpEnd;                     // +0x004
+    uint32_t mnBucketCount;             // +0x008  buckets currently allocated
+    void*    mpBucketArray;             // +0x00c
+    float    mLoadFactor;               // +0x010
+    float    mGrowthFactor;             // +0x014
+    uint32_t mnElementCount;            // +0x018
+    uint8_t  mPad1c[0x1cc - 0x1c];      // +0x01c  rest of the hashtable state
+    uint8_t  mNodeStorage[0xbea0];      // +0x1cc  100 slots * 0x1e8 bytes
+
+    fixed_hash_map_u32_nested(const struct hash_tag&, const struct equal_to_tag&); // 0x00a33500
+    void BaseInit(void* pAllocator, const node_pool_desc& desc);  // 0x00a23a40
+    void Rehash(uint32_t nBucketCount);                           // 0x00a22060
+};
+}
+namespace eastl {
+struct hash_tag {};
+}
+namespace eastl {
+struct equal_to_tag {};
+}
+namespace eastl {
+void* RequestPoolBookkeeping(uint32_t tag);
+}
+namespace eastl {
+uint32_t BucketCount(void* pBucketArray);
+}
 // ---- items of slice s00a32f20 end
 
 // ---- items of slice s00a31170 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1973,6 +2350,8 @@ extern const char g_audioName[];        // 0x0140a5a0 "Audio"
 extern int g_FsAllocatorManager;                            // 0x016f4b10
 extern char g_1552da0[];                // 0x01552da0
 extern const char g_systemName[];       // 0x01452d1c "system"
+extern uint32_t g_teardownFlag;             // 0x0166d9fc
+extern float kPromptReleaseTime;            // 0x013ef548
 #define V1(n) virtual void n();
 #define V4(n) V1(n##a) V1(n##b) V1(n##c) V1(n##d)
 #define V16(n) V4(n##a) V4(n##b) V4(n##c) V4(n##d)
@@ -2027,18 +2406,28 @@ public:
 void* __cdecl ZoneAlloc(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00926020
 struct IStream { private:
 public:
-    virtual void v0(); virtual void v4(); virtual void v8(); virtual void vc();
-    virtual void v10(); virtual void v14();
+virtual void v0();
+virtual void v4();
+virtual void v8();
+virtual void vc();
+virtual void v10();
+virtual void v14();
     virtual void Close();                                   // +0x18
     virtual uint32_t GetSize();                             // +0x1c
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+virtual void v20();
+virtual void v24();
+virtual void v28();
+virtual void v2c();
     virtual uint32_t Read(void* buf, uint32_t size);        // +0x30
 };
 class IResource {
 public:
-    virtual void v0(); virtual void v4();
+virtual void v0();
+virtual void v4();
     virtual int Release();                                  // +0x08
-    virtual void vc(); virtual void v10(); virtual void v14();
+virtual void vc();
+virtual void v10();
+virtual void v14();
     virtual IStream* OpenStream();                          // +0x18
     virtual uint32_t GetTypeID();                           // +0x1c
 };
@@ -2049,7 +2438,9 @@ public:
 };
 class IResourceType {                    // result of the manager's +0x58 lookup
 public:
-    virtual void v0(); virtual void v4(); virtual void v8();
+virtual void v0();
+virtual void v4();
+virtual void v8();
     virtual uint32_t GetTypeID();                           // +0x0c
 };
 class IResourceManager {
@@ -2057,7 +2448,10 @@ public:
     V16(m1)
     V1(m40)
     virtual void RegisterFactory(int kind, IFactory* factory, int flags);   // +0x44
-    virtual void m48(); virtual void m4c(); virtual void m50(); virtual void m54();
+virtual void m48();
+virtual void m4c();
+virtual void m50();
+virtual void m54();
     virtual IResourceType* GetResourceType(const ResKey* key);              // +0x58
     virtual void GetDatabases(DbList* out, const ResKey* key);              // +0x5c
 };
@@ -2074,8 +2468,11 @@ struct RWSystem {
     void* mpCallback;                                       // +0xa8
     void SetCallback(void* fn);                             // 0x0112c870
     void AddPlugin(IPluginParam* p);                        // 0x009879d0
+    void shutdown();                                        // 0x0112c880
 };
-struct StreamPool;
+struct StreamPool {
+    void QueueRelease();                                    // 0x0112e410
+};
 RWSystem* __cdecl CreateInstance(void* allocator, uint32_t size);                      // 0x0112c9e0
 StreamPool* __cdecl ReleaseHandler(uint32_t id, uint32_t a, uint32_t b, uint32_t c,
                                    RWSystem* rw, void* allocator, int d);              // 0x0112e290
@@ -2111,6 +2508,7 @@ struct AutoAudioLock {
 struct HashIter_s00a3_1170 {
     void* mpNode;
     void** mpBucket;
+    void Init(void* flag);              // 0x00a26fa0 (ret 4)
 };
 struct PolyPair {
     uint32_t first;
@@ -2124,34 +2522,113 @@ struct PolyphonyMap {                   // eastl::hash_map<uint32_t, int>
     uint32_t mAllocator;
     void** mpBucketArray;               // +0x04
     uint32_t mnBucketCount;             // +0x08
+    uint32_t mnNodeCount;               // +0x0c
     HashIter_s00a3_1170* find(HashIter_s00a3_1170* out, const uint32_t& key);                      // 0x00645ed0
     void insert(HashInsertResult* out, const PolyPair* value, bool b);       // 0x00a26ce0
+    void FreeNodes(void* first, void* last);                                 // 0x00a1b6c0
 };
 struct EmitterMap {                     // fixed_hash_map<uint32_t, IEmitter*(*)()>
-    uint32_t mData;
+    uint32_t mAllocator;                // +0x00
+    void* mpBegin;                      // +0x04
+    void* mpEnd;                        // +0x08
+    uint32_t mCount;                    // +0x0c
     void*& At(const uint32_t& key);     // 0x00a2a510 operator[]
+    void FreeNodes(void* first, void* last);                                 // 0x00a1b6c0
 };
 struct IdRing {                         // ring buffer of ids
-    uint32_t mData;
+    void* mpBegin;                      // +0x00
+    void* mpEnd;                        // +0x04
+    uint32_t mCount;                    // +0x08
     void push_back(const uint32_t& id); // 0x00a21d30
+    void Reset(void* base) { mpEnd = mpBegin = base; mCount = 0; }
 };
 struct IdPool {
     uint32_t mData[0xf0 / 4];
     void Init(unsigned capacity);       // 0x00a102a0
+    void Reset();                       // 0x00a0fdd0
+};
+struct IdPoolShort {                    // second id pool; its allocator block ends at +0x404
+    uint32_t mData[0x60 / 4];
+    void Init(unsigned capacity);       // 0x00a102a0
+};
+struct EaTable {                        // eastl node container: allocator word, {begin, end, count}
+    uint32_t mAllocator;                // +0x00
+    void* mpBegin;                      // +0x04
+    void* mpEnd;                        // +0x08
+    uint32_t mCount;                    // +0x0c
+    void DoFreeNodes(void* first, void* last);          // 0x00a1b6c0 (ret 8)
+    void FreeBuckets(void** buckets, uint32_t n);       // 0x00a24480 (ret 8)
+    void FreeSubNodes(void** nodes, uint32_t n);        // 0x00a276e0 (ret 8)
+    void FreeResNodes(void** nodes, uint32_t n);        // 0x00a26f30 (ret 8)
+    void FreeProfBuckets(void* first, uint32_t n);      // 0x0068fb70 (ret 8)
+    void FreeFloatNodes(void* first, void* last);       // 0x00a2f6e0 (ret 8)
+    void FreeMiscNodes(void* first, void* last);        // 0x00a2add0 (ret 8)
+    void FreeFdfNodes(void* first, void* last);         // 0x00b6fdf0 (ret 8)
+    void FindMisc(HashIter_s00a3_1170* out, const uint32_t& key);  // 0x00a23c10 (ret 8)
+    void FindInt(HashIter_s00a3_1170* out, const uint32_t& key);   // 0x00645ed0 (ret 8)
+    void* Sentinel() { return ((void**)mpBegin)[(int)(intptr_t)mpEnd]; }
+};
+struct EaVec {                          // eastl vector / id ring storage
+    void* mpBegin;                      // +0x00
+    void* mpEnd;                        // +0x04
+    void* mpCapacity;                   // +0x08
+};
+struct BitVec {                         // eastl::vector<bool> storage (4-byte word stride)
+    uint32_t* mpBegin;                  // +0x00
+    uint32_t* mpEnd;                    // +0x04
+    uint32_t* mpCapacity;               // +0x08
+    void EraseAll();                    // erase(begin(), end()) -> memcpy + restamped end
+};
+struct EaTree {                         // eastl::rbtree header
+    uint32_t mAllocator;                // +0x00
+    void* mpHeaderNode;                 // +0x04
+    void* mpRoot;                       // +0x08
+    void* mpNodeChain;                  // +0x0c
+    uint8_t mbFlag;                     // +0x10
+    uint8_t mPad11[3];
+    uint32_t mCount;                    // +0x14
+    uint32_t mPad18;                    // +0x18
+    void NukeSubtree(void* node);       // 0x009a9600 (ret 4)
+    void Clear()
+    {
+        NukeSubtree(mpNodeChain);
+        mpRoot = &mpHeaderNode;
+        mpNodeChain = 0;
+        mbFlag = 0;
+        mCount = 0;
+        mpHeaderNode = &mpHeaderNode;
+    }
+};
+struct EaList {                         // eastl::list anchor (no destructor, pool allocated)
+    ListNode_s00a3_1170* mpNext;                   // +0x00
+    ListNode_s00a3_1170* mpPrev;                   // +0x04
+    void FreeNodes();                   // 0x00a222c0
+    void Clear()
+    {
+        ListNode_s00a3_1170* node = mpNext;
+        while (node != (ListNode_s00a3_1170*)this) {
+            ListNode_s00a3_1170* next = node->mpNext;
+            node->mpPrev = 0;
+            node->mpNext = 0;
+            node = next;
+        }
+        mpNext = (ListNode_s00a3_1170*)this;
+        mpPrev = (ListNode_s00a3_1170*)this;
+    }
 };
 void* __cdecl ConstructEmitterSndPlayer();                  // 0x00a20700
-struct IntArrayRef {                    // {int* base; int index} at +0x118a20
-    int* mpBase;
-    int mIndex;
-};
 template<int N> struct Gap { uint32_t pad[N]; };
 class cSystem {
 public:
     V16(a)                              // slots 0x00..0x3c
-    V16(b)                              // 0x40..0x7c
-    V16(c)                              // 0x80..0xbc
+    V4(b1) V4(b2) V4(b3) V1(b13)        // 0x40..0x70
+    virtual void Hook74(void* pending);                         // +0x74
+    V1(b15) V1(b16)                     // 0x78, 0x7c
+    virtual void Hook80(int enable);                            // +0x80
+    V4(c1) V4(c2) V4(c3) V1(c4) V1(c5) V1(c6)                   // 0x84..0xbc
     V4(d)                               // 0xc0..0xcc
-    V4(e)                               // 0xd0..0xdc
+    V1(ea) V1(eb) V1(ec)                // 0xd0..0xd8
+    virtual void HookDC();                                      // +0xdc
     V4(f)                               // 0xe0..0xec
     V1(g)                               // 0xf0
     virtual uint32_t HashName(const char* name);                // +0xf4
@@ -2164,15 +2641,23 @@ public:
     V4(p) V4(q) V4(r)                   // 0x180..0x1ac
     V1(s)                               // 0x1b0
     virtual void Hook1b4();                                     // +0x1b4
-    V1(t)                               // 0x1b8
+    virtual void Hook1b8();                                     // +0x1b8
     virtual void Hook1bc(const char* p);                        // +0x1bc
     V1(u)                               // 0x1c0
     virtual void Hook1c4();                                     // +0x1c4
     virtual void Hook1c8();                                     // +0x1c8
-    V4(v) V4(w) V1(x)                   // 0x1cc..0x1ec
+    virtual void Hook1cc();                                     // +0x1cc
+    virtual void Hook1d0();                                     // +0x1d0
+    V1(v1) V1(v2) V4(w) V1(x)           // 0x1d4..0x1ec
     virtual void Hook1f0();                                     // +0x1f0
 
-    Gap<(0x90 - 4) / 4> pad04;
+    Gap<1> pad04;                       // +0x04
+    void* mpMessageHandler;             // +0x08
+    uint32_t mHandlerArg0;              // +0x0c
+    uint32_t mHandlerArg1;              // +0x10
+    uint32_t mHandlerArg2;              // +0x14
+    uint32_t mHandlerArg3;              // +0x18
+    Gap<(0x90 - 0x1c) / 4> pad1c;
     uint32_t mCommandBufferSize;        // +0x90
     uint8_t pad94[2];
     bool mbMutedForSilence;             // +0x96
@@ -2194,30 +2679,114 @@ public:
     Gap<(0x198 - 0xf8) / 4> mDebugChannel;      // +0xf8
     Gap<(0x200 - 0x198) / 4> mResourceDeviceDriver;   // +0x198
     int mPerformanceLevel;              // +0x200
-    Gap<(0x2b4 - 0x204) / 4> pad204;
+    Gap<(0x210 - 0x204) / 4> pad204;
+    float mFadeVolume;                  // +0x210
+    Gap<(0x2b4 - 0x214) / 4> pad214;
     IdPool mPoolA;                      // +0x2b4
-    IdPool mPoolB;                      // +0x3a4
-    Gap<(0x118a20 - 0x494) / 4> pad494;
-    IntArrayRef mIdArray;               // +0x118a20
-    Gap<(0x118a78 - 0x118a28) / 4> pad118a28;
+    IdPoolShort mPoolB;                 // +0x3a4
+    EaTable mHash404;                   // +0x404
+    Gap<(0x13f4 - 0x414) / 4> pad414;
+    EaTable mHash13f4;                  // +0x13f4
+    Gap<(0x23e4 - 0x1404) / 4> pad1404;
+    EaTable mHash23e4;                  // +0x23e4
+    Gap<(0x33d4 - 0x23f4) / 4> pad23f4;
+    EaTable mHash33d4;                  // +0x33d4
+    Gap<(0x80424 - 0x33e4) / 4> pad33e4;
+    EaTable mHash80424;                 // +0x80424
+    Gap<(0x1189fc - 0x80434) / 4> pad80434;
+    EaTable mFdf1189fc;                 // +0x1189fc
+    Gap<(0x118a1c - 0x118a0c) / 4> pad118a0c;
+    EaTable mIdTable;                   // +0x118a1c (mIdArray's base/index are its begin/end)
+    Gap<(0x118a3c - 0x118a2c) / 4> pad118a2c;
+    EaTable mFdf118a3c;                 // +0x118a3c
+    Gap<(0x118a5c - 0x118a4c) / 4> pad118a4c;
+    EaTree mTree118a5c;                 // +0x118a5c
     EmitterMap mEmitterMap;             // +0x118a78
-    Gap<(0x131840 - 0x118a7c) / 4> pad118a7c;
+    Gap<(0x118b90 - 0x118a88) / 4> pad118a88;
+    EaTable mRes118b90;                 // +0x118b90
+    Gap<(0x118bb0 - 0x118ba0) / 4> pad118ba0;
+    EaTable mHash118bb0;                // +0x118bb0
+    Gap<(0x119ba0 - 0x118bc0) / 4> pad118bc0;
+    void* mpLogReporterList;            // +0x119ba0
+    EaVec mReporterVec;                 // +0x119ba4
+    Gap<(0x119bb8 - 0x119bb0) / 4> pad119bb0;
+    EaTable mHash119bb8;                // +0x119bb8
+    Gap<(0x11a3d8 - 0x119bc8) / 4> pad119bc8;
+    EaTable mHash11a3d8;                // +0x11a3d8
+    Gap<(0x11b3c8 - 0x11a3e8) / 4> pad11a3e8;
+    EaTable mFloat11b3c8;               // +0x11b3c8
+    Gap<(0x1277b4 - 0x11b3d8) / 4> pad11b3d8;
+    EaTable mMisc1277b4;                // +0x1277b4
+    Gap<(0x128ae0 - 0x1277c4) / 4> pad1277c4;
+    EaTable mProf128ae0;                // +0x128ae0
+    Gap<(0x12c9ac - 0x128af0) / 4> pad128af0;
+    void* mpProfPool;                   // +0x12c9ac
+    Gap<(0x12d968 - 0x12c9b0) / 4> pad12c9b0;
+    EaVec mRing12d968;                  // +0x12d968
+    EaTable mProf12d974;                // +0x12d974
+    Gap<(0x131840 - 0x12d984) / 4> pad12d984;
     IdRing mIdRing;                     // +0x131840
-    Gap<(0x137fe8 - 0x131844) / 4> pad131844;
+    Gap<(0x1327fc - 0x13184c) / 4> pad13184c;
+    EaVec mRing1327fc;                  // +0x1327fc
+    EaTable mProf132808;                // +0x132808
+    Gap<(0x1366d4 - 0x132818) / 4> pad132818;
+    void* mpProfPool2;                  // +0x1366d4
+    Gap<(0x137690 - 0x1366d8) / 4> pad1366d8;
+    EaVec mRing137690;                  // +0x137690
+    BitVec mBits13769c;                 // +0x13769c
+    Gap<(0x13777c - 0x1376a8) / 4> pad1376a8;
+    EaTable mHash13777c;                // +0x13777c
+    Gap<(0x137fe8 - 0x13778c) / 4> pad13778c;
     PolyphonyMap mPolyphonyMap;         // +0x137fe8
-    Gap<(0x15b750 - 0x137ff4) / 4> pad137ff4;
+    Gap<(0x157438 - 0x137ff8) / 4> pad137ff8;
+    EaList mList157438;                 // +0x157438
+    EaTable mProf157440;                // +0x157440
+    Gap<(0x157c60 - 0x157450) / 4> pad157450;
+    EaList mPromptList;                 // +0x157c60
+    Gap<(0x158f48 - 0x157c68) / 4> pad157c68;
+    ListNode_s00a3_1170* mpPromptIter;             // +0x158f48
+    Gap<(0x15b750 - 0x158f4c) / 4> pad158f4c;
     uint32_t mIterValue;                // +0x15b750
     void* mIterPos;                     // +0x15b754
     uint32_t mIter8, mIterC, mIter10;   // +0x15b758..0x15b760
     Gap<(0x15b778 - 0x15b764) / 4> pad15b764;
     IFactory* mpFactoryB;               // +0x15b778
+    Gap<(0x15bb7c - 0x15b77c) / 4> pad15b77c;
+    BitVec mBits15bb7c;                 // +0x15bb7c
 
     void MuteAll(bool mute, bool immediate);        // 0x00a233b0
     void PreloadConfigurations();                   // 0x00a30940
     void FUN_a2ef60();                              // 0x00a2ef60
     void FUN_a2da30();                              // 0x00a2da30
     bool InitAT();
+    bool ShutdownAT();                              // 0x00a31800
+    void InsertMapped(HashIter_s00a3_1170* out, const PolyPair* value, uint8_t flag);  // 0x00a2f510
+    bool FUN_00a31dc0(uint32_t key, void* query);   // 0x00a31dc0
 };
+void __cdecl FUN_00571db0(void* handler, uint32_t a, uint32_t b, uint32_t c, uint32_t d);  // Messaging::RemoveHandler
+void __cdecl FUN_011e5d30();                                        // filesys_destroy
+void __cdecl FUN_00e25bd0(void* first, void* last);                 // eastl::vector::erase(first, last)
+void __cdecl FUN_00926410(void* p);                                 // list-node release
+void __cdecl FUN_011e0744(void* dst, const void* src, uint32_t n);  // memcpy
+struct KeyValue {
+    uint32_t mKey;                      // +0x00
+    uint32_t mValue;                    // +0x04
+    bool Remove(void* query);           // 0x00a27e60 (ret 4)
+};
+struct MapNode_s00a3_1170 {
+    void* mpNext;                       // +0x00
+    KeyValue mPair;                     // +0x04
+};
+struct IPrompt {
+    virtual void v0();
+    virtual void v4();
+    virtual void Release(float a, float b); // +0x08
+};
+void BitVec::EraseAll()
+{
+    FUN_011e0744(mpBegin, mpEnd, 0);
+    mpEnd -= mpEnd - mpBegin;
+}
 // ---- items of slice s00a31170 end
 
 // ---- items of slice s00a0f350 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -2238,7 +2807,7 @@ extern void* f_00a149a0(void);
 extern void* f_00a161b0(void);
 extern void* f_00a15d30(void);
 extern void* f_00a14800(void);
-extern void  f_00f47380(void* p);
+extern void  f_00f47380(void* p) throw();
 extern void* f_00f473a0(unsigned size, void* name, void* a3, void* a4, void* file, unsigned line);
 struct Callee_Th {
 void* m_0112ce00();
@@ -2250,22 +2819,33 @@ void* m_00a34230(unsigned tag);
 void m_00a34890();
 void m_0112c600();
 void m_0112c620();
-void m_0112ccc0(int a, void* b);
+    void m_0112ccc0(int a, void* b);
 };
 #define TH(p) ((Callee_Th*)(p))
 #define VPTR(ret, obj, slot, ...) \
     ((ret (__thiscall*)(void*, __VA_ARGS__))((void**)*(void**)obj)[(slot) / 4])
 struct AudioSystem_00a21170 { void RegisterBuiltInModules(); };
 struct VoiceContainer_s00a2_1130 {
-    bool Connect(int a1, int a2);
-    bool Connect4(int a1, int a2, int a3, int a4);
+    bool Connect(int a1, int a2);  // 0x00a21410 (VoiceContainer::Connect)
+    bool Connect4(int a1, int a2, int a3, int a4);  // 0x00a214b0 (VoiceContainer::Connect4)
 };
 struct MsgTarget_00a21630 { bool Handle(int a1, int a2); };
-struct VoiceVec_00a21c00 { void Destroy(); };
+// a vector of voice pointers: the base frees the storage, the vector releases each voice (vtable slot 2) first
+struct IVoice_00a21c00 { virtual void Slot0(); virtual void Slot1(); virtual void Release(); };
+struct VoiceVecBase_00a21c00 {
+    IVoice_00a21c00** mpBegin;
+    IVoice_00a21c00** mpEnd;
+    IVoice_00a21c00** mpCapacity;
+    ~VoiceVecBase_00a21c00() { if (mpBegin != 0) f_00f47380(mpBegin); }
+};
+struct VoiceVec_00a21c00 : VoiceVecBase_00a21c00 { ~VoiceVec_00a21c00(); };
 struct RbTree_00a21dc0 { void* Find(void** out, void* key); };
 struct HashA_00a21eb0 { void Rehash(unsigned a); void* Alloc(unsigned n); };
 struct HashB_00a22060 { void Rehash(unsigned a); void* Alloc(unsigned n); };
 struct HashC_00a22110 { void Rehash(unsigned a); void* Alloc(unsigned n); };
+struct AudioSys_00a21a80 { void* FindVoice(unsigned tag); };
+struct AudioSys_00a21b20 { bool Command(int a1, int a2, int a3, int a4, int a5); };
+struct AudioSys_00a21b90 { bool Command4(int a1, int a2, int a3, int a4, int a5); };
 __declspec(noinline) void __fastcall disconnect_00a21590(char* self);
 // ---- items of slice s00a21130 end
 
@@ -2520,6 +3100,21 @@ struct ZoneVector {
     Zone* mpCap;
     void DoInsertValue(Zone* pos, const Zone* value);
 };
+struct CountNode { char pad[0x14]; int count; };   // rbtree node: value.second at +0x14
+struct CountPair { uint32_t key; int count; CountPair(uint32_t k, int c) : key(k), count(c) {} };
+struct CountTrueType {};  // eastl::true_type: empty tag passed by value
+struct CountTree {
+    void find(HIter_s00a2_6e10* out, const uint32_t* key);                            // 0x00e5c780
+    HIter_s00a2_6e10 findv(const uint32_t& key) { HIter_s00a2_6e10 r; find(&r, &key); return r; }
+    HIter_s00a2_6e10 Insert(const CountPair& v, CountTrueType tag);                   // 0x00a246c0
+    HIter_s00a2_6e10 insert(const CountPair& v) { return Insert(v, CountTrueType()); }
+};
+struct CountMap {
+    char pad0[4];
+    CountTree mTree;        // +4
+    char pad_anchor[4];     // +8 is the tree anchor node address
+    bool AddRef(uint32_t key);
+};
 struct EStr {
     char* mpBegin; char* mpEnd; char* mpCap;
     struct Alloc {} mAllocator;         // eastl::allocator (empty)
@@ -2563,6 +3158,1396 @@ typedef bool (__thiscall* VCreate)(void*, uint32_t, uint32_t, void*, int, RefObj
 typedef void (__thiscall* VNotify)(void*, uint32_t, int);
 typedef bool (__thiscall* VFire)(void*, double);
 // ---- items of slice s00a26e10 end
+
+// ---- items of slice s00a25c40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* DAT_0166d9f4;
+extern const char kEastlAlloc[];   // "EASTL"
+struct XF_s00a2_5c40;   // generic stub for external __thiscall callees
+struct XF_s00a2_5c40 {
+    bool FUN_00a0f980();                 // 0xa0f980  predicate
+    bool FUN_00a0f9a0();                 // 0xa0f9a0  predicate
+    int  FUN_00a0f990();                 // 0xa0f990  count
+    void FUN_00a0fdc0();                 // 0xa0fdc0
+    void FUN_00a0fdd0();                 // 0xa0fdd0
+    void FUN_00a0fee0(void* p);          // 0xa0fee0
+    void FUN_009892e0();                 // (unused shape)
+};
+struct Mutex_s00a2_5c40 {  // 0x9221b0 / 0x922270
+    void Lock(uint name);
+    void Unlock();
+};
+struct HTable {
+    void*    mp0;              // 0x00
+    void**   mpBucketArray;    // 0x04
+    uint32_t mnBucketCount;    // 0x08
+    uint32_t mnElementCount;   // 0x0c
+    void*    mpPool;           // 0x10
+    void*    mpFreeList;       // 0x14  (fixed_pool head etc.)
+
+    void  find(void* itOut, const uint* key);                 // 0x645ed0
+    uint* find2(void* itOut, const uint* key);                // 0xa23ef0
+    void  Rehash(uint n);                                     // 0xa22370
+    void  EraseNode(void** itOut, void* node, void* prev);    // 0xa23db0
+    void  DoFreeNodes(void* a, void* b);                      // 0xa1b6c0
+    void* Insert(void* ret, const uint* key, uint hash);      // 0xa26be0
+    void  AssignLess2(void* fn);                              // 0xa24210
+
+    // The "end node": bucketArray[bucketCount].
+    void* End() const { return mpBucketArray[mnBucketCount]; }
+    bool  NotFound(const void* itNode) const { return itNode == End(); }
+};
+template <class T> struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+};
+struct RBTree_s00a2_5c40 {  // 0x9a9600 / 0xa24210
+    void* mpRoot;
+    void* mpNode;
+    void DoNukeSubtree(void* n);  // 0x006ae600 (RBTree::DoNukeSubtree)
+    void AssignLess2(void* fn);
+};
+struct SubTree { void __thiscall DoNukeSubtree(void* n); };   // 0x9a9600-style
+// the destructor's view of the 0x00a26860 object: a base whose destructor restores vtable 0x13eb394, and an rbtree at
+// +4 that nukes its nodes from the root at +0x10 when destroyed
+struct SubTreeHolder {
+    uint  mAnchor[3];         // +0x00
+    void* mpRoot;             // +0x0c
+    uint  mRest[2];           // +0x10
+    void __thiscall DoNukeSubtree(void* n);
+    ~SubTreeHolder() { DoNukeSubtree(mpRoot); }
+};
+struct TreeOwnerBase_00a26860 { virtual void Slot0(); ~TreeOwnerBase_00a26860() {} };
+struct __declspec(novtable) TreeOwner_00a26860 : TreeOwnerBase_00a26860 {
+    SubTreeHolder mTree;      // +0x04
+    ~TreeOwner_00a26860();
+};
+struct fixed_pool_base_s00a2_5c40 {
+    void* mpHead;
+    void* mpNext;
+    void init(void* pMemory, uint memorySize, uint nodeSize, uint alignment, uint alignmentOffset); // 0x921260
+};
+struct fixed_pool_with_overflow : fixed_pool_base_s00a2_5c40 {
+    void* mpPoolBegin;
+    void* mpCapacity;
+    uint  mnNodeSize;
+    fixed_pool_with_overflow(void* pMemory, uint size, uint nodeSize, uint align) {
+        mpHead = 0;
+        init(pMemory, size, nodeSize, align, 0);
+        mpPoolBegin = pMemory;
+        mpCapacity = (uchar*)pMemory + size;
+        mnNodeSize = nodeSize;
+    }
+};
+void* __cdecl operator_new(size_t sz, const char* name, int a, int b, const char* file, int line);
+void* __cdecl ConvertToString8Impl(void* out, const wchar_t* s, uint len);   // 0x93c440
+bool  __cdecl FUN_00ef6410();                                               // 0xef6410
+void  __cdecl FUN_00a16fd0(uint* node, float f);                            // 0xa16fd0
+struct MapValue_s00a2_5c40 { void __thiscall FUN_00a16fd0(float f); };                 // 0xa16fd0 (thiscall form)
+void  __cdecl FUN_00a21d30(void* ring, void* key);                          // 0xa21d30
+void  __cdecl Func_68fb70(void* a, void* b);                                // 0x68fb70
+class AudioSystem_s00a2_5c40 {
+ public:
+    void*    mpVtbl;                 // 0x000
+    void*    mpVtblRC;               // 0x004
+    uint32_t mAutoMsg[0x23];         // 0x008
+    uint8_t  mbInitialized;          // 0x094
+    uint8_t  pad_095[0x6];           // 0x095..0x09b
+    uint8_t  mbX_9b;                 // 0x09b
+    uint8_t  pad_09c[0x1c];          // 0x09c..0x0b8
+    uint8_t  mMutex[0x30];           // 0x0b8 (EA::Thread::Mutex)
+    uint8_t  pad_0e8[0x120];         // 0x0e8..0x208
+    void*    mpX_208;                // 0x208
+    uint8_t  pad_20c[0x8];           // 0x20c..0x214
+    XF_s00a2_5c40       mQueue_214;             // 0x214
+    uint8_t  pad_215[0x4f];          // 0x215..0x264
+    XF_s00a2_5c40       mQueue_264;             // 0x264
+    uint8_t  pad_265[0x9f];          // 0x265..0x304
+    XF_s00a2_5c40       mQueue_304;             // 0x304
+    uint8_t  pad_305[0x4f];          // 0x305..0x354
+    XF_s00a2_5c40       mQueue_354;             // 0x354
+    uint8_t  pad_355[0x4f];          // 0x355..0x3a4
+    XF_s00a2_5c40       mQueue_3a4;             // 0x3a4
+    uint8_t  pad_3a5[0x4f];          // 0x3a5..0x3f4
+    uint8_t  mbX_3f4;                // 0x3f4
+    uint8_t  mbX_3f5;                // 0x3f5
+    uint8_t  pad_3f6[0x6];           // 0x3f6..0x3fc
+    uint8_t  mbX_3fc;                // 0x3fc
+    uint8_t  pad_3fd[0x7];           // 0x3fd..0x404
+    HTable   mMap_404;               // 0x404
+    uint8_t  pad_41c[0xfd8];         // 0x41c..0x13f4
+    HTable   mMap_13f4;              // 0x13f4
+    uint8_t  pad_140c[0xfd8];        // 0x140c..0x23e4
+    HTable   mMap_23e4;              // 0x23e4
+    uint8_t  pad_23fc[0xfd8];        // 0x23fc..0x33d4
+    HTable   mMap_33d4;              // 0x33d4
+    uint8_t  pad_33ec[0x11568c];     // 0x33ec..0x118a78
+    HTable   mMap_118a78;            // 0x118a78
+    uint8_t  pad_118a90[0x120];      // 0x118a90..0x118bb0
+    HTable   mMap_118bb0;            // 0x118bb0
+    uint8_t  pad_118bc8[0xff0];      // 0x118bc8..0x119bb8
+    HTable   mMap_119bb8;            // 0x119bb8
+    uint8_t  pad_119bd0[0x808];      // 0x119bd0..0x11a3d8
+    HTable   mMap_11a3d8;            // 0x11a3d8
+    uint8_t  pad_11a3f0[0xe6f0];     // 0x11a3f0..0x128ae0
+    HTable   mMap_128ae0;            // 0x128ae0
+    uint8_t  pad_128af8[0x9d10];     // 0x128af8..0x132808
+    HTable   mMap_132808;            // 0x132808
+    uint8_t  pad_132820[0x3eb4];     // 0x132820..0x1366d4
+    uint8_t  mRing_1366d4[0xb8];     // 0x1366d4
+    uint8_t  pad_13678c[0x11d0];     // 0x13678c..0x13795c
+    HTable   mProfHash_13795c;       // 0x13795c
+    uint8_t  pad_137974[0x1fac4];    // 0x137974..0x157438
+    RBTree_s00a2_5c40   mTree_157438;           // 0x157438 (mpRoot,mpNode)
+    HTable   mMap_157440;            // 0x157440
+    uint8_t  pad_157448[0x7f8];      // 0x157448..0x157c50
+    RBTree_s00a2_5c40   mTree_157c50;           // 0x157c50 (mpRoot,mpNode)
+    uint8_t  pad_157c58[0x8];        // 0x157c58..0x157c60
+    uint8_t  mList_157c60[0x12b0];   // 0x157c60
+    uint8_t  pad_158f10[0x38];       // 0x158f10..0x158f48
+    void*    mpX_158f48;             // 0x158f48
+    uint8_t  pad_158f4c[0x8];        // 0x158f4c..0x158f54
+    HTable   mMap_158f54;            // 0x158f54
+    uint8_t  pad_158f6c[0x2744];     // 0x158f6c..0x15b6b0
+    uint32_t mX_15b6b0;              // 0x15b6b0
+    uint32_t mX_15b6b4;              // 0x15b6b4
+    uint32_t mX_15b6b8;              // 0x15b6b8
+    uint32_t mX_15b6bc;              // 0x15b6bc
+
+    // --- member functions (definitions below) ---
+    void  Update(float dt);                                     // 0xa25c40
+    void  RemoveFromList(void* item);                           // 0xa25ed0
+    bool  Lookup_25ff0(uint key, uint* out);                    // 0xa25ff0
+    uint  RemovePrimitiveFromUpdate(void* p);                   // 0xa26040
+    uint  Lookup_260c0(uint key);                              // 0xa260c0
+    bool  Map_26100(uint key, uint arg);                        // 0xa26100
+    void  Map_261c0(uint arg);                                  // 0xa261c0
+    void  Map_26230(uint a, uint b);                            // 0xa26230
+    bool  Map_262a0(uint key, uint arg);                        // 0xa262a0
+    bool  Map_26300(uint key, uint arg);                        // 0xa26300
+    uint  Lookup_26360(uint key);                               // 0xa26360
+    bool  Map_263a0(uint key, void** out);                      // 0xa263a0
+    void  UpdateSoundStates();                                  // 0xa26450
+    void  Map_26530();                                          // 0xa26530
+    uint  Lookup_26570(uint key);                              // 0xa26570
+    uint  Lookup_265b0(uint key);                               // 0xa265b0
+    void  Map_265f0(float, uint);                               // 0xa265f0
+    bool  Map_26680(uint key, void** out);                      // 0xa26680
+    bool  Map_266e0(uint key, float f);                         // 0xa266e0
+    bool  Map_26730(uint key, void** out);                      // 0xa26730
+    bool  Map_26790(uint arg);                                  // 0xa26790
+    void  Map_267d0(uint id);                                   // 0xa267d0
+    void  Shutdown_268b0();                                     // 0xa268b0
+    void* InitPool_26990();                                     // 0xa26990
+    void  Insert_26be0(void* ret, const uint* key, uint hash);  // 0xa26be0
+    void  VecDtor_26da0();                                      // 0xa26da0
+};
+static void* vc_s00a2_5c40(void* obj, int off) {
+    return ((void**)*(void**)obj)[off / 4];
+}
+// ---- items of slice s00a25c40 end
+
+// ---- items of slice s00a28120 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_voiceVT;                                                 // 0x01452bac
+struct Key4_s00a2_8120 { unsigned a, b, c, d; };
+struct Vec3_s00a2_8120 { float x, y, z; };
+struct SndA {
+    virtual void AddRef();                                    // slot 0
+    virtual void Release();                                   // slot 1
+virtual void s02();
+virtual void s03();
+virtual void s04();
+    virtual void SetGain(double v);                           // slot 5  (+0x14)
+virtual void s06();
+virtual void s07();
+virtual void s08();
+virtual void s09();
+virtual void s10();
+virtual void s11();
+virtual void s12();
+virtual void s13();
+virtual void s14();
+virtual void s15();
+virtual void s16();
+virtual void s17();
+virtual void s18();
+virtual void s19();
+virtual void s20();
+    virtual unsigned GetKey();                                // slot 21 (+0x54)
+    virtual bool IsPlaying();                                 // slot 22 (+0x58)
+    virtual bool GetLayers(void** out);                       // slot 23 (+0x5c)
+    virtual void s24();
+    virtual void Prop3(int type, unsigned value, unsigned extra); // slot 25 (+0x64)
+};
+struct SndB {                                                 // secondary base at +4
+virtual void b0();
+virtual void b1();
+virtual void b2();
+    virtual void PropF(int type, float value, int extra);     // slot 3 (+0xc)
+};
+struct Snd_s00a2_8120 : SndA, SndB {
+    char pad_[0x10 - 8];
+    Snd_s00a2_8120* listNext;                                            // +0x10
+    Snd_s00a2_8120* listPrev;                                            // +0x14
+};
+struct Command {
+    bool   GetUint32(unsigned hash, unsigned* out);           // 0x00a0fab0
+    char*  GetString8(unsigned hash);                         // 0x00a0fb60
+    bool   GetBool(unsigned hash, bool* out);                 // 0x00a0fa70
+    bool   GetVoidPtr(unsigned hash, void** out);             // 0x00a0fb90
+    void*  EnumParameter(void** value, unsigned* id2, unsigned* type, void** extra); // 0x00a0f880
+};
+struct IConfig {
+virtual void c00();
+virtual void c01();
+virtual void c02();
+virtual void c03();
+virtual void c04();
+virtual void c05();
+virtual void c06();
+virtual void c07();
+    virtual void c08();
+    virtual bool GetBool(unsigned hash, bool* out);           // slot 9  (+0x24)
+    virtual void c10();
+    virtual bool GetUint32(unsigned hash, unsigned* out);     // slot 11 (+0x2c)
+    virtual bool GetFloat(unsigned hash, float* out);         // slot 12 (+0x30)
+    virtual void c13();
+    virtual bool GetId(unsigned hash, unsigned* out);         // slot 14 (+0x38)
+};
+struct HIter_s00a2_8120 { void* node; void** bucket; };
+struct U32Table {
+    char     pad0[4];
+    void**   mpBuckets;      // +4
+    unsigned mnBuckets;      // +8
+    void  find(HIter_s00a2_8120* out, const void* key);                  // 0x00645ed0
+    void  erase(HIter_s00a2_8120 it, HIter_s00a2_8120* out);                        // 0x00d2c9f0
+};
+void  T4Find(U32Table* t, HIter_s00a2_8120* out, const void* key);                // 0x00a23ef0
+void  T4Op(U32Table* t, HIter_s00a2_8120* it, const void* key, int tag);          // 0x00a26be0
+void  T4Insert2(U32Table* t, HIter_s00a2_8120* it, const void* pair, int tag);    // 0x00a26b00
+void  T4Insert3(U32Table* t, HIter_s00a2_8120* it, const void* pair, int tag);    // 0x00a26ce0
+void  PairInsert(U32Table* t, HIter_s00a2_8120* it, const void* pair, int tag);   // 0x00a136f0
+HIter_s00a2_8120* PairErase(U32Table* t, void* node, void** bucket);              // 0x00a27660
+struct InsertRes_s00a2_8120 { void* node; void** bucket; };
+InsertRes_s00a2_8120* KInsert(InsertRes_s00a2_8120* out, const void* pair, int tag);         // 0x00a26e10
+struct ENode_s00a2_8120 { unsigned pad[3]; void* owner; ENode_s00a2_8120* next; void* prev; };
+struct KeyNode { unsigned pad[1]; void* value; };
+void* EAAllocate(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
+struct Voice {
+    virtual void AddRef();                                   // slot 0
+    virtual void Release2();                                 // slot 1 (+0x4) r=1
+virtual void v02();
+virtual void v03();
+virtual void v04();
+virtual void v05();
+virtual void v06();
+virtual void v07();
+virtual void v08();
+virtual void v09();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+    virtual bool IsPlaying();                                // slot 22 (+0x58)
+    virtual bool GetLayers(void** out);                      // slot 23 (+0x5c)
+virtual void v24();
+virtual void v25();
+virtual void v26();
+virtual void v27();
+virtual void v28();
+virtual void v29();
+virtual void v30();
+virtual void v31();
+virtual void v32();
+virtual void v33();
+virtual void v34();
+virtual void v35();
+virtual void v36();
+virtual void v37();
+virtual void v38();
+virtual void v39();
+virtual void v40();
+virtual void v41();
+virtual void v42();
+virtual void v43();
+virtual void v44();
+virtual void v45();
+virtual void v46();
+virtual void v47();
+virtual void v48();
+virtual void v49();
+virtual void v50();
+virtual void v51();
+virtual void v52();
+virtual void v53();
+virtual void v54();
+virtual void v55();
+virtual void v56();
+virtual void v57();
+virtual void v58();
+virtual void v59();
+virtual void v60();
+virtual void v61();
+virtual void v62();
+    virtual void DestroyV(int flag);                         // (operator delete, +0x8c)
+    int     rc;        // +0x04
+    void*   f08;
+    void*   f0c;
+    void*   f10;
+    void*   f14;
+    void*   f18;       // +0x18
+    void*   f1c;       // +0x1c (points at +0x20)
+    char    pad[0x98 - 0x20];
+    void*   f98;       // +0x98
+    void*   f9c;       // +0x9c
+    bool    Init();                                          // 0x00a147b0
+    void    AddLayer(void* layer);                           // 0x00a14780
+    void*   Reset();                                         // 0x00a14730
+};
+Voice** RefMapFindOrInsert(U32Table* t, const void* key);                // 0x00a27530
+void*   PoolAlloc(void* pool, int cb);                                   // 0x00a10ef0
+struct Sys_s00a2_8120 {
+virtual void vs0();
+void vs1();
+void vs2();
+void vs3();
+virtual void vs4();
+void vs5();
+void vs6();
+void vs7();
+virtual void vs8();
+void vs9();
+void vs10();
+void vs11();
+virtual void vs12();
+void vs13();
+void vs14();
+void vs15();
+virtual void vs16();
+void vs17();
+void vs18();
+void vs19();
+virtual void vs20();
+void vs21();
+void vs22();
+void vs23();
+virtual void vs24();
+void vs25();
+void vs26();
+void vs27();
+virtual void vs28();
+void vs29();
+void vs30();
+void vs31();
+virtual void vs32();
+void vs33();
+void vs34();
+void vs35();
+    virtual bool     StartSound(unsigned key, unsigned a2, void* data, Vec3_s00a2_8120* pos, Snd_s00a2_8120** out); // slot 36 (+0x94)
+    virtual bool     StopSound2(unsigned id, int a2);                           // slot 37 (+0x98)
+virtual void vs38();
+void vs39();
+void vs40();
+void vs41();
+virtual void vs42();
+void vs43();
+void vs44();
+void vs45();
+virtual void vs46();
+void vs47();
+void vs48();
+void vs49();
+virtual void vs50();
+void vs51();
+void vs52();
+void vs53();
+virtual void vs54();
+void vs55();
+void vs56();
+void vs57();
+virtual void vs58();
+void vs59();
+    virtual unsigned SymbolToId(char const* name);                              // slot 60 (+0xf4)
+virtual void vs61();
+void vs62();
+void vs63();
+void vs64();
+virtual void vs65();
+void vs66();
+void vs67();
+void vs68();
+virtual void vs69();
+void vs70();
+void vs71();
+void vs72();
+virtual void vs73();
+void vs74();
+void vs75();
+void vs76();
+virtual void vs77();
+void vs78();
+void vs79();
+void vs80();
+virtual void vs81();
+void vs82();
+void vs83();
+void vs84();
+    virtual void vs85();
+    virtual int      AddPlaylistRef(unsigned id, int a2);                       // slot 86 (+0x15c)
+virtual void vs87();
+void vs88();
+void vs89();
+    virtual bool     RegisterKey(void* key);                                    // slot 90 (+0x16c)
+    virtual bool     UnregisterKey(void* key);                                  // slot 91 (+0x170)
+virtual void vs92();
+void vs93();
+void vs94();
+void vs95();
+    virtual void vs96();
+    virtual bool     FindPlaylistTable(Key4_s00a2_8120* key, void* out);                   // slot 97 (+0x188)
+    virtual bool     GetPlaylistOwner(Key4_s00a2_8120* key, void* out);                    // slot 98 (+0x18c)
+    virtual bool     GetPlaylistOwner2(Key4_s00a2_8120* key, void* out);                   // slot 99 (+0x190)
+virtual void vs100();
+void vs101();
+void vs102();
+    virtual void vs103();
+    virtual int      ReleasePlaylistRef(unsigned id);                           // slot 104 (+0x1a4)
+virtual void vs105();
+void vs106();
+void vs107();
+void vs108();
+virtual void vs109();
+void vs110();
+void vs111();
+void vs112();
+virtual void vs113();
+void vs114();
+void vs115();
+    virtual Snd_s00a2_8120*     FindSound(unsigned id);                                    // slot 116 (+0x1d4)
+virtual void vs117();
+void vs118();
+void vs119();
+void vs120();
+
+    char pad_[0x118a1c - 0x4];
+    U32Table mActiveTable;        // +0x118a1c (buckets +0x118a20, count +0x118a24)
+    char pad2[0x118a3c - (0x118a1c + sizeof(U32Table))];
+    U32Table mLRUTable;           // +0x118a3c (buckets +0x118a40, count +0x118a44)
+    char pad3[0x118b90 - (0x118a3c + sizeof(U32Table))];
+    U32Table mVoiceMap;           // +0x118b90 (buckets +0x118b94, count +0x118b98)
+    char pad3b[0x118bb0 - (0x118b90 + sizeof(U32Table))];
+    U32Table mCounterA;           // +0x118bb0 (buckets +0x118bb4, count +0x118bb8)
+    char pad4[0x13795c - (0x118bb0 + sizeof(U32Table))];
+    U32Table mSoundMap;           // +0x13795c
+    char pad5[0x137fe8 - (0x13795c + sizeof(U32Table))];
+    U32Table mCounterMap;         // +0x137fe8 (buckets +0x137fec, count +0x137ff0)
+    char pad6[0x157440 - (0x137fe8 + sizeof(U32Table))];
+    U32Table mKeyMap;             // +0x157440
+    char pad7[0x158f50 - (0x157440 + sizeof(U32Table))];
+    U32Table mObjMap;             // +0x158f50
+    char pad8[0x15b750 - (0x158f50 + sizeof(U32Table))];
+    void* mLRUIterNode;           // +0x15b750
+    void* mLRUIterBucket;         // +0x15b754
+    int   mLRUBytes;              // +0x15b758
+    int   mLRUEnabled;            // +0x15b75c
+    char pad9[0x15b770 - 0x15b760];
+    int   mTexEnabled;            // +0x15b770
+    char pad10[0x15bbf4 - 0x15b774];
+    U32Table mTexTable;           // +0x15bbf4
+
+    bool StartSoundFromCommand(Command& cmd, unsigned id);          // 00a28120
+    bool TryStartSound(char* out, unsigned id, IConfig* cfg,
+                       Vec3_s00a2_8120* pos, unsigned a5);                     // 00a28450
+    void MaintainLRU();                                             // 00a28810
+    void AddTextureRef(Key4_s00a2_8120* key);                                  // 00a28a20
+    bool GetOrRegisterVoice(unsigned key, Voice** out, int nLayers, void* layers); // 00a28aa0
+    void RegisterObj(Snd_s00a2_8120* p);                                       // 00a28c60
+    bool UnregisterObj(unsigned key);                               // 00a28d10
+    int  GetCounterPlaylist(unsigned key);                          // 00a28d70
+    int  AddCounter(unsigned key, int delta);                       // 00a28e90
+    bool TrackPlayingKey(Snd_s00a2_8120* obj);                                 // 00a28f10
+    bool UntrackPlayingKey(Snd_s00a2_8120* obj);                               // 00a29000
+};
+struct ListenerObj {
+virtual void ls00();
+virtual void ls01();
+virtual void ls02();
+virtual void ls03();
+virtual void ls04();
+virtual void ls05();
+virtual void ls06();
+virtual void ls07();
+virtual void ls08();
+virtual void ls09();
+virtual void ls10();
+virtual void ls11();
+virtual void ls12();
+virtual void ls13();
+virtual void ls14();
+virtual void ls15();
+virtual void ls16();
+virtual void ls17();
+virtual void ls18();
+virtual void ls19();
+virtual void ls20();
+virtual void ls21();
+virtual void ls22();
+virtual void ls23();
+virtual void ls24();
+virtual void ls25();
+virtual void ls26();
+virtual void ls27();
+virtual void ls28();
+virtual void ls29();
+    virtual void* GetListenerTransform(unsigned surf);         // slot 30 (+0x7c)
+};
+extern ListenerObj* g_audioSys;                                          // 0x0166d9f4
+struct ResponseCurve {
+    char raw[0x30];
+    ResponseCurve();                                                     // 0x00a1aa50
+    bool InitFromConfiguration(unsigned hash, IConfig* cfg);             // 0x00a1a9d0
+    float GetOutputValue(float x);                                       // 0x00a1a110
+};
+// ---- items of slice s00a28120 end
+
+// ---- items of slice s00a290b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern unsigned g_keyA;    // 0x01552da0
+extern unsigned g_keyB;    // 0x01552da4
+extern unsigned g_keyC;    // 0x01552da8
+extern const wchar_t g_wMono[];    // 0x01452c80
+extern const wchar_t g_wStereo[];  // 0x01452c70
+extern const wchar_t g_wQuad[];    // 0x01452c68
+extern const wchar_t g_wSurround[];// 0x01452c60
+extern const float   g_fQuadVal;   // 0x01470f1c
+extern const float   g_fSurroundVal; // 0x013eb95c
+void* FUN_008d5d00();                                  // 0x008d5d00
+void* FUN_00a16f40(void* self, void* a, void* b, void* c, void* d, void* e);  // 0x00a16f40
+void* FUN_00a21d00(void* self, void* key, void* out);  // 0x00a21d00
+void  FUN_00a27500(void* out, void* val);              // 0x00a27500
+bool  WideEquals(void* ws, const wchar_t* lit);        // 0x006ab760
+struct Key12 { unsigned a, b, c; };
+struct Key16 { unsigned a, b, c, d; };
+struct PairU { unsigned first; void* second; };
+struct Tag { bool b; };
+struct HNode;
+struct HIter_s00a2_90b0 { void* node; HNode** bucket; };
+struct InsertRes_s00a2_90b0 { void* node; HNode** bucket; bool inserted; };
+struct HNode { unsigned key; void* value; HNode* next; };
+struct FactoryB;
+struct Obj_s00a2_90b0 {
+    virtual void AddRef();          // +0x00
+    virtual void Release();         // +0x04
+    virtual void v02();             // +0x08
+    virtual void v03();             // +0x0c
+    virtual void v04(FactoryB* f, void* r); // +0x10
+    virtual void v05();             // +0x14
+    virtual void v06();             // +0x18
+    virtual void v07();             // +0x1c
+    virtual void v08();             // +0x20
+    virtual void v09();             // +0x24
+    virtual void v10();             // +0x28
+    virtual void v11();             // +0x2c
+    virtual void v12();             // +0x30
+    virtual void v13();             // +0x34
+    virtual void v14();             // +0x38
+    virtual void v15();             // +0x3c
+};
+struct KeyObj {
+    virtual void k0();              // +0x00
+    virtual void k1();              // +0x04
+    virtual unsigned GetId8();      // +0x08
+    virtual void k3();              // +0x0c
+    virtual void k4();              // +0x10
+    virtual void k5();              // +0x14
+    virtual unsigned GetId18();     // +0x18
+};
+struct TexObj : Obj_s00a2_90b0 {
+    int     pad4;                   // +0x04
+    Key12   key;                    // +0x08
+    int     pad14;                  // +0x14
+    int     size;                   // +0x18
+    int     pad1c;                  // +0x1c
+    double  time;                   // +0x20
+};
+struct DbInfo {
+virtual void i0();
+virtual void i1();
+    virtual void i2();              // +0x08
+virtual void i3();
+virtual void i4();
+virtual void i5();
+virtual void i6();
+virtual void i7();
+virtual void i8();
+    virtual void i9();              // +0x24
+};
+struct DbObj {
+virtual void d0();
+virtual void d1();
+virtual void d2();
+virtual void d3();
+virtual void d4();
+virtual void d5();
+virtual void d6();
+virtual void d7();
+virtual void d8();
+virtual void d9();
+virtual void d10();
+virtual void d11();
+virtual void d12();
+    virtual bool Create(const void* key, void* out, int a, int b, int c, int d);  // +0x34
+};
+struct IConfig_s00a2_90b0 {
+virtual void c0();
+virtual void c1();
+virtual void c2();
+virtual void c3();
+virtual void c4();
+virtual void c5();
+virtual void c6();
+    virtual bool GetList1(unsigned hash, void** out);          // +0x1c
+    virtual void c8();
+    virtual bool GetBool(unsigned hash, bool* out);            // +0x24
+    virtual void c10();
+    virtual bool GetUint32(unsigned hash, unsigned* out);      // +0x2c
+    virtual bool GetFloat(unsigned hash, float* out);          // +0x30
+virtual void c13();
+virtual void c14();
+    virtual void* GetString(unsigned id);                      // +0x3c
+virtual void c16();
+virtual void c17();
+virtual void c18();
+    virtual bool GetList2(unsigned hash, void** out, void** out2);  // +0x4c
+};
+struct FactoryB {
+virtual void f0();
+virtual void f1();
+virtual void f2();
+virtual void f3();
+virtual void f4();
+virtual void f5();
+virtual void f6();
+    virtual bool Create(void* info, void* out, int a, unsigned b); // +0x1c
+};
+struct HTable_s00a2_90b0 {
+    int      pad0;          // +0x00
+    HNode**  mpBuckets;     // +0x04
+    unsigned mnBuckets;     // +0x08
+    unsigned mnElements;    // +0x0c
+
+    void  find(HIter_s00a2_90b0* out, const unsigned* key);                    // 0x00645ed0
+    void  findKey12(HIter_s00a2_90b0* out, const void* key);                   // 0x00833840
+    void  erase(HIter_s00a2_90b0 it, HIter_s00a2_90b0* out);                              // 0x00d2c9f0
+    HIter_s00a2_90b0* eraseNode(HIter_s00a2_90b0 node, HIter_s00a2_90b0* out);                       // 0x00a27660
+    void  FreeBuckets(HNode** buckets, unsigned count);             // 0x00a24480
+    void  InsertKey(InsertRes_s00a2_90b0* out, const unsigned* key, Tag t);    // 0x00a26be0
+    void  InsertPair(InsertRes_s00a2_90b0* out, const void* pair, Tag t);      // 0x00a26ce0
+    void  InsertPair16(InsertRes_s00a2_90b0* out, const void* pair, Tag t);    // 0x00a26b00
+};
+struct TexNode_s00a2_90b0 { Key12 key; TexObj* value; TexNode_s00a2_90b0* next; };
+struct IdRing_s00a2_90b0 {
+    unsigned* cBegin;       // +0x000
+    unsigned* cEnd;         // +0x004
+    char      pad[0xfbc - 8];
+    unsigned* mBegin;       // +0xfbc
+    unsigned* mEnd;         // +0xfc0
+    int       mSize;        // +0xfc4
+};
+struct PooledTable {
+    HTable_s00a2_90b0 table;                       // +0x0000
+    char   pad[0x3ecc - sizeof(HTable_s00a2_90b0)];
+    IdRing_s00a2_90b0 ring;                        // +0x3ecc
+};
+struct Stopwatch_s00a2_90b0 {
+    char pad[0x14];
+    float coeff;                        // +0x14
+    Stopwatch_s00a2_90b0(int a, bool b);           // 0x0093a560
+    void Restart();                     // 0x00571e80
+    __int64 GetElapsedTimeF();          // 0x0093a3a0
+};
+struct WString {
+    wchar_t* b; wchar_t* e; wchar_t* cap; int alloc;
+    void RangeInit(const wchar_t* first);   // 0x00579a90
+    ~WString()
+    {
+        if ((((char*)e - (char*)b) & ~1) > 2 && b)
+            operator_delete__(b);
+    }
+};
+struct StrList {
+    const void*    mpBegin;     // +0x00
+    unsigned       mnEnd;       // +0x04
+    unsigned       mnSize;      // +0x08
+    unsigned       mnCap;       // +0x0c
+    unsigned short mFlags;      // +0x10
+    unsigned short mInlineLen;  // +0x12
+};
+struct Str16_s00a2_90b0 { const char* mpStr; int b, c, d; };
+struct Sys_s00a2_90b0 {
+virtual void v000();
+virtual void v001();
+virtual void v002();
+virtual void v003();
+virtual void v004();
+virtual void v005();
+virtual void v006();
+virtual void v007();
+virtual void v008();
+virtual void v009();
+virtual void v010();
+virtual void v011();
+virtual void v012();
+virtual void v013();
+virtual void v014();
+virtual void v015();
+virtual void v016();
+virtual void v017();
+virtual void v018();
+virtual void v019();
+virtual void v020();
+virtual void v021();
+virtual void v022();
+virtual void v023();
+virtual void v024();
+virtual void v025();
+virtual void v026();
+virtual void v027();
+virtual void v028();
+virtual void v029();
+virtual void v030();
+virtual void v031();
+virtual void v032();
+virtual void v033();
+virtual void v034();
+virtual void v035();
+virtual void v036();
+virtual void v037();
+virtual void v038();
+virtual void v039();
+virtual void v040();
+virtual void v041();
+virtual void v042();
+virtual void v043();
+virtual void v044();
+virtual void v045();
+virtual void v046();
+virtual void v047();
+virtual void v048();
+virtual void v049();
+virtual void v050();
+    virtual double SystemTime();                                // +0xcc (slot 51)
+virtual void v052();
+virtual void v053();
+virtual void v054();
+virtual void v055();
+virtual void v056();
+virtual void v057();
+    virtual void v058(unsigned id, const char* name);           // +0xe8 (slot 58)
+virtual void v059();
+virtual void v060();
+    virtual unsigned SymbolToId(const char* name);              // +0xf4 (slot 61)
+    virtual void v062();
+    virtual void SetProperty(float value, unsigned hash);       // +0xfc (slot 63)
+virtual void v064();
+virtual void v065();
+virtual void v066();
+virtual void v067();
+virtual void v068();
+virtual void v069();
+virtual void v070();
+virtual void v071();
+    virtual void v072(unsigned id);                             // +0x120 (slot 72)
+virtual void v073();
+virtual void v074();
+virtual void v075();
+virtual void v076();
+virtual void v077();
+virtual void v078();
+virtual void v079();
+virtual void v080();
+virtual void v081();
+virtual void v082();
+virtual void v083();
+virtual void v084();
+virtual void v085();
+virtual void v086();
+virtual void v087();
+virtual void v088();
+virtual void v089();
+virtual void v090();
+virtual void v091();
+virtual void v092();
+virtual void v093();
+virtual void v094();
+virtual void v095();
+virtual void v096();
+    virtual void v097();
+    virtual void* FindDatabase(const void* key);                // +0x188 (slot 98)
+virtual void v099();
+virtual void v100();
+virtual void v101();
+virtual void v102();
+virtual void v103();
+virtual void v104();
+virtual void v105();
+virtual void v106();
+virtual void v107();
+virtual void v108();
+virtual void v109();
+virtual void v110();
+    virtual void v111();
+    virtual void Slot112();                                     // +0x1c0 (slot 112)
+
+    char     pad_ec[0xec - 8];
+    unsigned mStreamPoolNumStreams;    // +0x0ec
+    unsigned mStreamPoolBufferSize;    // +0x0f0
+    unsigned mStreamPoolMaxRequests;   // +0x0f4
+    char     pad_f8[0x1f8 - 0x0f8];
+    void*    mpConfiguration;          // +0x1f8
+    char     pad_1fc[0x200 - 0x1fc];
+    int      mPerformanceLevel;        // +0x200
+    unsigned mU204;                    // +0x204
+    unsigned mU208;                    // +0x208
+    unsigned mU20c;                    // +0x20c
+    char     pad_210[0x3fd - 0x210];
+    bool     mBool3fd;                 // +0x3fd
+    char     pad_3fe[0x400 - 0x3fe];
+    float    mFloat400;                // +0x400
+    HTable_s00a2_90b0   mPrimTable;               // +0x404
+    char     pad_414[0x13f4 - 0x414];
+    HTable_s00a2_90b0   mUnregTable;              // +0x13f4
+    char     pad_1404[0x23e4 - 0x1404];
+    HTable_s00a2_90b0   mClearTable;              // +0x23e4
+    char     pad_23f4[0x118a1c - 0x23f4];
+    HTable_s00a2_90b0   mActiveTable;             // +0x118a1c
+    char     pad_118a2c[0x118a3c - 0x118a2c];
+    HTable_s00a2_90b0   mLRUTable;                // +0x118a3c
+    char     pad_118a4c[0x128ae0 - 0x118a4c];
+    PooledTable mPoolA;                // +0x128ae0
+    PooledTable mPoolB;                // +0x12d974
+    PooledTable mPoolC;                // +0x132808
+    char     pad_1376a0[0x15b750 - (0x132808 + sizeof(PooledTable))];
+    TexNode_s00a2_90b0* mLRUIterNode;             // +0x15b750
+    TexNode_s00a2_90b0** mLRUIterBucket;          // +0x15b754
+    int      mCurrentBytes;            // +0x15b758
+    int      mCountMiss;               // +0x15b75c
+    int      mCountHit;                // +0x15b760
+    int      mTimeSliceUSec;           // +0x15b764
+    double   mRemoveOlderThanSec;      // +0x15b768
+    int      mCacheSizeLimit;          // +0x15b770
+    bool     mbDisableCache;           // +0x15b774
+    char     pad_15b775[0x15b778 - 0x15b775];
+    FactoryB* mpFactoryB;              // +0x15b778
+
+    void  AddTextureRef(Key12* key);                   // 0x00a28a20
+    bool  RegisterKey(void* key);                      // 00a290b0
+    bool  UnregisterKey(void* key);                    // 00a29140
+    void  ClearUnregTable();                           // 00a291b0
+    void  ClearClearTable();                           // 00a29230
+    unsigned PopIdA();                                 // 00a292d0
+    unsigned PopIdC();                                 // 00a29340
+    unsigned PopIdB();                                 // 00a293e0
+    bool  GetTexture(Key12* key, void** out);          // 00a29450
+    bool  GetTexture2(Key12* key, void** out2, void** out);   // 00a29690
+    void  RemoveTexture(TexObj* obj);                  // 00a298f0
+    void  SweepLRU();                                  // 00a29a50
+    bool  ReadTuningValues(const Key12* key);          // 00a29be0
+};
+// ---- items of slice s00a290b0 end
+
+// ---- items of slice s00a2af30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct ARef_s00a2_af30 {
+    IRef* p;
+    ARef_s00a2_af30() : p(0) {}
+    ARef_s00a2_af30(const ARef_s00a2_af30& o) : p(o.p) { if (p) p->AddRef(); }
+    ARef_s00a2_af30& operator=(const ARef_s00a2_af30& o);
+};
+struct AR_s00a2_af30 {
+    u32  a, b, c, d;
+    ARef_s00a2_af30 r;
+    AR_s00a2_af30() {}
+    AR_s00a2_af30(const AR_s00a2_af30& o) : a(o.a), b(o.b), c(o.c), d(o.d), r(o.r) {}
+    AR_s00a2_af30& operator=(const AR_s00a2_af30& o);
+};
+AR_s00a2_af30* __cdecl ARUninitCopy(AR_s00a2_af30* first, AR_s00a2_af30* last, AR_s00a2_af30* dst);     // 0x00a225d0
+AR_s00a2_af30* __cdecl ARCopyBackward(AR_s00a2_af30* first, AR_s00a2_af30* last, AR_s00a2_af30* dst);   // 0x00a226c0
+AR_s00a2_af30* __cdecl ARCopy(AR_s00a2_af30* first, AR_s00a2_af30* last, AR_s00a2_af30* dst);           // 0x00a22730
+AR_s00a2_af30* __cdecl CopyElems20(AR_s00a2_af30** out, AR_s00a2_af30* first, AR_s00a2_af30* last, AR_s00a2_af30* dst, AR_s00a2_af30* end);  // 0x00a24750
+AR_s00a2_af30* __cdecl ARDestroyRange(AR_s00a2_af30* first, AR_s00a2_af30* last, AR_s00a2_af30* out);   // 0x00a22680
+struct ARVector {
+    AR_s00a2_af30* mpBegin;        // +0
+    AR_s00a2_af30* mpEnd;          // +4
+    AR_s00a2_af30* mpCap;          // +8
+    u32 pad_c;
+    AR_s00a2_af30* mpFixed;        // +0x10
+    void DoInsertValue(AR_s00a2_af30* pos, const AR_s00a2_af30* value);   // 0xa2af30
+    void assign(const AR_s00a2_af30* first, const AR_s00a2_af30* last, const AR_s00a2_af30* last2);  // 0xa2b2e0
+    void Destroy(AR_s00a2_af30* first, AR_s00a2_af30* end);               // 0xa24500 (declared only)
+    AR_s00a2_af30*  DoAllocate(u32 n, const AR_s00a2_af30* first, const AR_s00a2_af30* last);   // 0xa27e00
+};
+#define VFN(p, off) ((*(void***)(p))[(off) / 4])
+#define BSWAP(x) ((u32)((((u32)(x) >> 24) | (((u32)(x) >> 8) & 0xff00) | \
+                         (((u32)(x) << 8) & 0xff0000) | ((u32)(x) << 24))))
+extern void* g_pSystem_s00a2_af30;                                       // 0x0166d9f4
+unsigned int __cdecl ReadLine(void* s, char* b, int n);       // 0x0093a8b0
+bool __cdecl TokLine(char* a, char* b, int d, char** x, char** y, char** z); // 0x0093d110
+u32  __cdecl FNV1_String8(const char* s, u32 seed, int len);  // 0x00932e80
+float __cdecl ParseFloat8(const char* s);                     // 0x00838740
+void* __cdecl ConvertToString8Impl(void* out, const void* w, int n); // 0x0093c440
+void* __cdecl cString8Assign(void* d, const void* s);         // 0x00579c60
+void  __cdecl eastlStringDtor(void* s);                       // 0x00530670
+void  __cdecl RelLocal(void* p);                              // 0x007a9610
+void  __cdecl fnA34d70(void* a, void* b);                     // 0x00a34d70
+void  __fastcall Disconnect(void* p);                         // 0x00a21590 (arg in ecx)
+struct EraseVecT { void erase(void* first, void* last); };    // 0x009e0480 (vector::erase)
+struct Vec12_s00a2_af30 { void pushEmpty(); };                           // 0x00a2ab40
+struct Vec18_s00a2_af30 { void pushEmpty(); };                           // 0x00a2ab80
+struct ZoneVec_s00a2_af30 { void push_back(const void* z); };            // 0x00a2abe0
+struct SimpleVec { void DoInsertValue(void** pos, void** value); }; // 0x00a80dd0
+struct PHTable_s00a2_af30 { void FreeBuckets(void** buckets, u32 n); };  // 0x00a24480
+struct SubTable_s00a2_af30 { void DoFreeNodes(void* a, void* b); };      // 0x00a1b6c0
+struct VoiceContainer_s00a2_af30 {
+    bool ConstructVoice(void* tmpl);                          // 0x00a12f90
+    bool Create(int flag);                                    // 0x00a342c0
+    void MaskPluginBindings(const void* p, int n);            // 0x00a340b0
+    void CommitBoundProperties();                             // 0x00a33dc0
+    void Destroy();                                           // 0x00a343e0
+};
+struct OutRes {
+    u32 pad0, pad1;          // +0/+4
+    u32 h0, h1, h2;          // +8/+0xc/+0x10
+    Vec12_s00a2_af30  vecA;             // +0x14  (12-byte elements)
+    u32    pad20[0x194 / 4 - 7];
+    Vec18_s00a2_af30  vecB;             // +0x194 (24-byte elements)
+};
+bool __stdcall FactoryVoiceTemplate_ReadResource(void* obj, OutRes* out, int, int);
+struct Submix_s00a2_af30 {
+    bool Init(void* param);  // 0x00a2b7d0 (Submix::Init)
+    bool Shutdown();
+};
+struct Zone_s00a2_af30 {
+    u8    pad[0x2c];
+    float f[6];              // +0x2c
+    u32   h[6];              // +0x44
+    u32   extra[3];          // +0x5c
+};
+struct InstOut {
+    u32 pad0, pad1;          // +0/+4
+    u32 h0, h1, h2;          // +8/+0xc/+0x10
+    int lastId;              // +0x14
+    ZoneVec_s00a2_af30 zones;           // +0x18
+};
+bool __stdcall FactoryInstrumentBank_ReadResource(void* obj, InstOut* out, int, int);
+struct DbgObject {
+    virtual void d00();
+    virtual void d04();
+    virtual void d08();
+    virtual bool CreateObject(int* a, void** out, int c, int d, int e, int f); // +0x0c
+    virtual void d10();
+    virtual void d14();
+    virtual void d18();
+    virtual void d1c();
+    virtual void d20();
+    virtual void d24();
+    virtual void d28();
+    virtual void d2c();
+    virtual void d30();
+    virtual void d34();
+};
+void* __cdecl operator new(size_t n, const char* name, int b, int c, const char* file, int line);
+struct SoundNode {
+    SoundNode* mpNext;                            // +0x00 next / free-list link
+    SoundNode* mpPrev;                            // +0x04 previous node
+    char       mPad[8];
+};
+struct ListHead {
+    SoundNode* mpNext;                            // +0x00 first real node
+    SoundNode* mpPrev;                            // +0x04 last real node
+};
+struct SoundList_s00a2_af30 {
+    ListHead   mHead;                             // +0x00 sentinel (its address is the terminator)
+    SoundNode* mpFree;                            // +0x08 free-list head
+    char       mPad0c[0x0c];
+    unsigned   mnNodeSize;                        // +0x18
+};
+struct System_s00a2_af30 {
+    static DbgObject* GetObjectError();          // 0x008de1a0
+    void StopAllSounds(int param);  // 0x00a2be10 (System::StopAllSounds)
+    void InsertSound(void* item);
+};
+struct VecP { void** begin; void** end; void** cap; };
+// ---- items of slice s00a2af30 end
+
+// ---- items of slice s00a2bfa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct Key_s00a2_bfa0 { u32 a, b, c; };                                  // EA::ResourceMan::Key (12 bytes)
+struct HTex {                                                 // this+0x1189fc
+    u32     f0;            // +0
+    void**  buckets;       // +4
+    u32     count;         // +8
+    void find(void* iterOut, const Key_s00a2_bfa0* key);                 // 0x00833840
+    void insert(void* iterOut, const void* pair, int flag);   // 0x00a26b00
+};
+struct HAudio {                                               // this+0x119bb8
+    u32     f0;            // +0
+    void**  buckets;       // +4
+    u32     count;         // +8
+    void find(void* iterOut, const u32* key);                 // 0x00645ed0
+    void* GetOrInsert(const u32* key);                        // 0x00a2a150
+};
+struct CtorT { void* ctor(u32 key); };
+struct Sys_s00a2_bfa0 {
+    u8      pad0[0x1189fc];
+    HTex    texTable;      // +0x1189fc
+    u8      pad1[0x119bb8 - (0x1189fc + 0xc)];
+    HAudio  audioTable;    // +0x119bb8
+    u8      pad2[0x157438 - (0x119bb8 + 0xc)];
+    void*   soundList;     // +0x157438 (intrusive list head)
+
+    bool GetTextureInstance(const Key_s00a2_bfa0* key, void** out);      // 0x00a2bfa0
+    void Update();                                            // 0x00a2c140
+    bool GetAudioA(u32 key, u32 param);                       // 0x00a2c450
+    bool GetAudioB(u32 key);                                  // 0x00a2c590
+    void NotifyTex(const Key_s00a2_bfa0* key);                           // 0x00a28a20 (thiscall)
+};
+void** g_vecBegin;                                            // 0x0166da14
+void** g_vecEnd;                                              // 0x0166da18
+void** g_vecCap;                                              // 0x0166da1c
+u32    g_vecInit;                                             // 0x0166da28
+void __cdecl vecBoolClear(void** begin, void** end, int v);   // 0x011e0744
+struct PtrVec { void DoInsertValue(void** pos, void** value); }; // 0x00a80dd0
+struct ObjFn { bool check(void); int check2(void); };
+void __cdecl _atexit(void (*)(void));                         // 0x011e07ef
+// ---- items of slice s00a2bfa0 end
+
+// ---- items of slice s00a2f660 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char  gEmptyString16[];              // 0x1667bac  eastl::gEmptyString16
+extern void* gAudioSystem;                  // 0x16e61a8  rw::audio::core::System*
+extern void* gEapdDebug;                    // 0x166d9f4
+extern void* FUN_008de1a0();                 // EA::Audio::Eapd::Debug::ObjectError
+extern void  FUN_00a248a0();                 // ProfileTimer::ProfileTimer(void*)
+extern void  FUN_00a24900();                 // ProfileTimer::Accumulate
+extern void  FUN_00594410(void*);            // send-plugin table begin
+extern void  FUN_00645ed0();                 // eastl::hashtable::find (ICF-merged)
+extern void  FUN_00a34760();                 // VoiceContainer constructor
+extern void  FUN_00a34620();                 // VoiceContainer::DtorTail
+extern void  FUN_00a343e0();                 // VoiceContainer::Destroy
+extern void  FUN_00a34890();                 // VoiceContainer::Disconnect
+extern void  FUN_00a34bf0();                 // VoiceContainer::Connect
+extern void  FUN_00a342c0();                 // VoiceContainer::Create
+extern void  FUN_00a340b0();                 // VoiceContainer::MaskPluginBindings
+extern void  FUN_00a144c0();                 // primitives table constructor
+extern void  FUN_00a24480();                 // PHTable::FreeBuckets
+extern void  FUN_00a2a870();                 // registers table constructor
+extern void  FUN_00a1b6c0();                 // registers table DoFreeNodes
+extern void  FUN_00a2a970();                 // send-plugin table constructor
+extern void  FUN_0068fb70();                 // ProfHashTable::FreeBuckets
+extern void  FUN_00a16a90(void*);            // release primitive
+extern void  FUN_00d2c9f0();                 // cNodeList::Erase
+extern void  FUN_00a2f660();                 // eastl::hash_node<...>::~hash_node
+typedef unsigned short u16;
+typedef unsigned __int64 u64;
+extern u8    FUN_00a24850(const char*, u8*); // ParseResman
+extern u32   FUN_00a2e4c0(u32);              // audio system helper
+extern u32   FUN_0093a3a0();                 // Stopwatch::GetElapsedTimeFloat (thiscall)
+extern u8    FUN_0112c640(u32);              // System predicate
+extern u32   FUN_0112ccc0(u32, void*);       // send-plugin table step
+extern u8    FUN_00a33dc0();                 // VoiceContainer::CommitBoundProperties
+extern u8    FUN_00a33ee0();                 // VoiceContainer::SetProperty
+extern void* FUN_00a16d00(u32);              // PAggC::PAggC(int)
+extern void* FUN_00a16ad0(u32);              // allocate PrimitiveAggregate
+extern void  FUN_00a136f0(void*, void*, u32);
+struct PtrString
+{
+	void* mpBegin;   // +0x00
+	void* mpEnd;     // +0x04
+	void* mpCap;     // +0x08
+	char  pad0c[4];  // +0x0c
+
+	PtrString()
+	{
+		mpBegin = gEmptyString16;
+		mpEnd   = gEmptyString16;
+		mpCap   = (char*)gEmptyString16 + 1;
+	}
+	~PtrString()
+	{
+		if ((char*)mpCap - (char*)mpBegin > 1 && mpBegin != 0)
+			operator_delete(mpBegin);
+	}
+};
+struct AllocTag { AllocTag() {} };
+struct FixedHashTable
+{
+	char   pad00[4];        // +0x00
+	void** mpBucketArray;   // +0x04
+	u32    mnBucketCount;   // +0x08
+	u32    mnElementCount;  // +0x0c
+	char   pad10[0xc];      // +0x10
+	void*  mpFreeList;      // +0x1c
+	char   pad20[4];        // +0x20
+	void*  mpPoolBegin;     // +0x24
+	void*  mpPoolEnd;       // +0x28
+	char   pad2c[4];        // +0x2c
+	void*  mpPoolTail;      // +0x30
+
+	// shared bucket-buffer release/rebind tail of the table destructor
+	void ReleaseBucketBuffer()
+	{
+		void** pBuckets = mpBucketArray;
+		mnElementCount = 0;
+		if (mnBucketCount > 1 && pBuckets != (void**)mpPoolTail) {
+			if (pBuckets < (void**)mpPoolBegin || pBuckets >= (void**)mpPoolEnd) {
+				operator_delete(pBuckets);
+			} else {
+				*pBuckets = mpFreeList;
+				mpFreeList = pBuckets;
+			}
+		}
+	}
+};
+struct PHTable_s00a2_f660 : FixedHashTable
+{
+	char pad34[0x438 - 0x34];
+	PHTable_s00a2_f660(const AllocTag&, const AllocTag&);
+	~PHTable_s00a2_f660();
+};
+PHTable_s00a2_f660::PHTable_s00a2_f660(const AllocTag& h, const AllocTag& e)
+{
+	((void(__thiscall*)(PHTable_s00a2_f660*, const AllocTag*, const AllocTag*))FUN_00a144c0)(this, &h, &e);
+}
+PHTable_s00a2_f660::~PHTable_s00a2_f660()
+{
+	((void(__thiscall*)(PHTable_s00a2_f660*, void**, u32))FUN_00a24480)(this, mpBucketArray, mnBucketCount);
+	ReleaseBucketBuffer();
+}
+struct RegTable : FixedHashTable
+{
+	char pad34[0x820 - 0x34];
+	RegTable(const AllocTag&, const AllocTag&);
+	~RegTable();
+};
+RegTable::RegTable(const AllocTag& h, const AllocTag& e)
+{
+	((void(__thiscall*)(RegTable*, const AllocTag*, const AllocTag*))FUN_00a2a870)(this, &h, &e);
+}
+RegTable::~RegTable()
+{
+	((void(__thiscall*)(RegTable*, void**, u32))FUN_00a1b6c0)(this, mpBucketArray, mnBucketCount);
+	ReleaseBucketBuffer();
+}
+struct PlugTable : FixedHashTable
+{
+	PlugTable(const AllocTag&, const AllocTag&);
+	~PlugTable();
+};
+PlugTable::PlugTable(const AllocTag& h, const AllocTag& e)
+{
+	((void(__thiscall*)(PlugTable*, const AllocTag*, const AllocTag*))FUN_00a2a970)(this, &h, &e);
+}
+PlugTable::~PlugTable()
+{
+	((void(__thiscall*)(PlugTable*, void**, u32))FUN_0068fb70)(this, mpBucketArray, mnBucketCount);
+	ReleaseBucketBuffer();
+}
+struct VoiceContainer_s00a2_f660
+{
+	char pad00[0x960];
+
+	VoiceContainer_s00a2_f660();
+	~VoiceContainer_s00a2_f660();
+
+	void Destroy()                    { ((void(__thiscall*)(VoiceContainer_s00a2_f660*))FUN_00a343e0)(this); }
+	void Disconnect()                 { ((void(__thiscall*)(VoiceContainer_s00a2_f660*))FUN_00a34890)(this); }
+	void Connect()                    { ((void(__thiscall*)(VoiceContainer_s00a2_f660*))FUN_00a34bf0)(this); }
+	void Create(u8 mode)              { ((void(__thiscall*)(VoiceContainer_s00a2_f660*, u8))FUN_00a342c0)(this, mode); }
+	void MaskPluginBindings(const void* a, u32 b)
+	                                  { ((void(__thiscall*)(VoiceContainer_s00a2_f660*, const void*, u32))FUN_00a340b0)(this, a, b); }
+	u8   CommitBoundProperties()      { return ((u8(__thiscall*)(VoiceContainer_s00a2_f660*))FUN_00a33dc0)(this); }
+	u8   SetProperty(u32 id, u32 v)   { return ((u8(__thiscall*)(VoiceContainer_s00a2_f660*, u32, u32))FUN_00a33ee0)(this, id, v); }
+};
+VoiceContainer_s00a2_f660::VoiceContainer_s00a2_f660() { ((void(__thiscall*)(VoiceContainer_s00a2_f660*))FUN_00a34760)(this); }
+VoiceContainer_s00a2_f660::~VoiceContainer_s00a2_f660() { ((void(__thiscall*)(VoiceContainer_s00a2_f660*))FUN_00a34620)(this); }
+struct Stopwatch_s00a2_f660 { u64 mStart; };
+struct ProfileTimer_s00a2_f660
+{
+	Stopwatch_s00a2_f660 mTimer;     // +0x00
+	float     mFactor;    // +0x08
+	char      pad0c[0xc]; // +0x0c
+	float*    mpTarget;   // +0x18
+
+	ProfileTimer_s00a2_f660(void* p);
+	~ProfileTimer_s00a2_f660();
+};
+ProfileTimer_s00a2_f660::ProfileTimer_s00a2_f660(void* p)
+{
+	((void(__thiscall*)(ProfileTimer_s00a2_f660*, void*))FUN_00a248a0)(this, p);
+}
+ProfileTimer_s00a2_f660::~ProfileTimer_s00a2_f660()
+{
+	const u64 elapsed = ((u64(__thiscall*)(Stopwatch_s00a2_f660*))FUN_0093a3a0)(&mTimer);
+	float* const pTarget = mpTarget;
+	*pTarget = (float)(int64_t)elapsed * mFactor + *pTarget;
+}
+struct IPrimitive;
+struct IPrimitiveNode
+{
+	u32          mKey;      // +0x00
+	IPrimitive*  mpValue;   // +0x04
+	IPrimitiveNode* mpNext; // +0x08
+};
+struct HTIter
+{
+	IPrimitiveNode*  mpNode;    // +0x00
+	IPrimitiveNode** mpBucket;  // +0x04
+};
+struct RefCountTemplate
+{
+	virtual void OnRefCountZero();
+	virtual ~RefCountTemplate() {}
+	int mRefCount;   // +0x04
+	RefCountTemplate() : mRefCount(0) {}
+};
+struct IMixable
+{
+	virtual void Mixable0();
+	virtual void Mixable1();
+	virtual void Mixable2();
+};
+struct SecondaryBase
+{
+	virtual void Secondary0();
+};
+struct ConstructorParams
+{
+	u32 mFlags0;   // +0x00
+	u32 mFlags1;   // +0x04
+	u8  mFlag2;    // +0x08
+	u8  mFlag3;    // +0x09
+	u16 pad0a;     // +0x0a
+	union { u32 mStamp; u8 mStampByte; };   // +0x0c
+	u8  mFlag4;    // +0x10
+	char pad11[3]; // +0x11
+	union { u32 mValue; u8 mValueByte; };   // +0x14
+
+	ConstructorParams()
+		: mFlags0(0), mFlags1(0), mFlag2(1), mFlag3(0)
+		, mStamp(0), mFlag4(0), mValue(0) {}
+};
+struct HashNode0
+{
+	char pad00[0x1e4];
+	HashNode0* mpNext;   // +0x1e4
+};
+struct NodeAllocator
+{
+	void DoFreeNodes(HashNode0** pNodeArray, u32 n);
+};
+struct Submix_s00a2_f660 : IMixable, SecondaryBase, RefCountTemplate
+{
+	VoiceContainer_s00a2_f660    mVoiceContainer;   // +0x10
+	u32               mId;               // +0x970
+	u32               mSendId;           // +0x974
+	PtrString         mSendName;         // +0x978
+	PtrString         mName;             // +0x988
+	u8                mbAddedToTick;     // +0x998
+	char              pad999[3];         // +0x999
+	PHTable_s00a2_f660           mPrimitives;       // +0x99c
+	RegTable          mRegisters;        // +0xdd4
+	ConstructorParams mParams;           // +0x15f4
+	PlugTable         mSendPlugins;      // +0x160c
+
+	Submix_s00a2_f660();
+	~Submix_s00a2_f660();
+
+	u32  LoadFromResman(const char* resName, u32 flags, u32 extra);
+	void Tick(u32, u32);
+	u32  SetPerformanceData(int level, const void* a, u32 b);
+	void SetProperty(u32 id, u32 value);
+	u32  ConnectPrimitive(u32 id, IPrimitive* p);
+	void DisconnectPrimitive(u32 id, IPrimitive* p);  // 0x00a301f0 (Submix::DisconnectPrimitive)
+};
+// ---- items of slice s00a2f660 end
+
+// ---- items of slice s00e22860 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cVec3 {
+    float x;                       // 0x00
+    float y;                       // 0x04
+    float z;                       // 0x08
+};
+struct cSPUIWindow;
+struct cSPUILayout_s00e2_2860 {
+    u8           mPad0000[0x18];
+    cSPUIWindow* FindWindowByID(int windowID, int recurse);   // 0x008105b0
+};
+struct cSPUIAnimator_s00e2_2860 {
+    void Update();                 // 0x007f63b0
+};
+struct cAudioObject;
+struct cAudioEntry {
+    int            mField0;        // 0x00
+    cAudioObject*  mpObject4;      // 0x04
+};
+struct cPossePart {
+    u8    mPad0000[0x10];
+    void* mpField10;               // 0x10
+};
+static inline int VT_BC_0(void* p)
+{
+    return ((int (__thiscall*)(void*))(*(void***)p)[0x2f])(p);
+}
+struct cSPUIPosse {
+    u8            mPad0000[0x50];
+    void*         mpField50;               // 0x50
+    u8            mPad0054[0x60 - 0x54];
+    int           mField60;                // 0x60
+    u8            mPad0064[0x6c - 0x64];
+    int           mField6c;                // 0x6c
+    cVec3         mRect70;                 // 0x70
+    cSPUILayout_s00e2_2860   mLayout7c;               // 0x7c
+    u8            mPad0094[0xa4 - 0x94];
+    cAudioEntry*  mpAudioBeginA4;          // 0xa4
+    cAudioEntry*  mpAudioEndA8;            // 0xa8
+    u8            mPad00ac[0xd4 - 0xac];
+    cPossePart*   mpPartD4;                // 0xd4
+    u8            mPad00d8[0x1bc - 0xd8];
+    cSPUILayout_s00e2_2860   mLayout1bc;              // 0x1bc
+    u8            mFlag1d4;                // 0x1d4
+    u8            mPad01d5[0x1d8 - 0x1d5];
+    float         mField1d8;               // 0x1d8
+    float         mField1dc;               // 0x1dc
+    u8            mPad01e0[0x1e4 - 0x1e0];
+    u8            mFlag1e4;                // 0x1e4
+    u8            mPad01e5[0x1e8 - 0x1e5];
+    float         mField1e8;               // 0x1e8
+    u8            mFlag1ec;                // 0x1ec
+    u8            mPad01ed[0x208 - 0x1ed];
+    cSPUIAnimator_s00e2_2860* mpAnimator208;          // 0x208
+
+    void  UpdateLayout(int mode);          // 0x00e22b50
+    void  SetToolWindowState(int a, int b);// 0x00e21bd0
+    void  RefreshToolWindow(int a);        // 0x00e21ca0
+
+    void  SnapToPosition();                // 0x00e22a60
+    void  SetScaleF(float scale);          // 0x00e23130
+    bool  SetVisibility(void* window);     // 0x00e231a0
+    void  SetScale(int scale);             // 0x00e23200
+    int   GetAudioCount();                 // 0x00e23250
+    void  SetWindowImages(void* image);    // 0x00e235e0
+    int   GetWindowImageCount();           // 0x00e23670
+    void  GetWindowImageRange(int* out);   // 0x00e23680
+    void  ClearToolWindow(int a, int b);   // 0x00e236a0
+    void  ClearToolWindowOne(int a);       // 0x00e236b0
+    void  SetWindowRect(const cVec3* rect, int unused);   // 0x00e236c0
+};
+// ---- items of slice s00e22860 end
 
 // @ 0x00432ad0
 void* Queryable::Cast(unsigned id)
@@ -2636,6 +4621,36 @@ AudioBlock* __stdcall AudioBlockAlloc(AudioBlock* out, const int* in, const char
 void __stdcall AudioFreeBlock(void** pp)
 {
     g_memPool->Free(*pp);
+}
+
+// @ 0x00a17be0
+EA::Audio::ResourceConfiguration::ResourceConfiguration()
+{
+    uint8_t* const h = (uint8_t*)this;
+    *(void**)(h + 0) = (void*)0x13ebcdc;
+    _InterlockedExchange((volatile long*)(h + 4), 0);
+    *(uint32_t*)(h + 8) = 0;
+    *(uint32_t*)(h + 0xc) = 0;
+    *(uint32_t*)(h + 0x10) = 0;
+    *(void**)(h + 0x14) = (void*)0x1449248;
+    *(void**)(h + 0) = (void*)0x14523e8;
+    *(void**)(h + 0x14) = (void*)0x1452398;
+    *(uint8_t*)(h + 0x20) = 0;
+    *(uint32_t*)(h + 0x24) = 0;
+    *(uint32_t*)(h + 0x28) = 0;
+    *(uint32_t*)(h + 0x2c) = 0;
+    *(uint32_t*)(h + 0x3c) = 0;
+    *(void**)(h + 0x44) = (void*)((uint32_t)this + 0x40);
+    *(void**)(h + 0x40) = (void*)((uint32_t)this + 0x40);
+    *(uint16_t*)(h + 0x58) = 0;
+    *(uint16_t*)(h + 0x5a) = 0;
+    *(uint16_t*)(h + 0x6c) = 0;
+    *(uint16_t*)(h + 0x6e) = 0;
+    *(uint32_t*)(h + 0x70) = 0;
+    *(uint32_t*)(h + 0x74) = 0;
+    *(uint32_t*)(h + 0x78) = 0;
+    *(uint32_t*)(h + 0x1c) = 0;
+    *(uint32_t*)(h + 0x18) = 0;
 }
 
 // @ 0x00a207a0
@@ -2918,6 +4933,12 @@ bool Less2(SoundOrd* a, SoundOrd* b)
     return false;
 }
 
+// @ 0x00a21070
+int __stdcall audioResult_00a21070(void* unused)
+{
+    return 5;
+}
+
 // @ 0x00a21080
 bool Sys::WithinRange(void* a, int b)
 {
@@ -3072,16 +5093,12 @@ void __stdcall erase_00a21310(void* a1, void* holder)
 // @ 0x00a21390
 bool EA::Audio::Submix::DisconnectFromSubmix()
 {
-    void* self = this;
-    void* m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c600();
-    void* esi = (char*)self + 0x10;
+    AudioLockGuard guard;
+    void* esi = (char*)this + 0x10;
     void* p = TH(esi)->m_00a34230(0x41695730);
     if (p != 0)
         TH(p)->m_0112ccc0(1, 0);
     TH(esi)->m_00a34890();
-    m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c620();
     return true;
 }
 
@@ -3091,14 +5108,11 @@ bool VoiceContainer_s00a2_1130::Connect(int a1, int a2)
     char* self = (char*)this;
     void* p = TH(self + 0x10)->m_00a34230(0x53747030);
     if (p == 0) return false;
-    void* m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c600();
-    char buf[8];
-    *(int*)(buf + 0) = a1;
-    *(int*)(buf + 4) = a2;
+    AutoAudioLock lock;
+    int buf[2];
+    buf[0] = a1;
+    buf[1] = a2;
     TH(p)->m_0112ccc0(2, buf);
-    m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c620();
     return true;
 }
 
@@ -3110,18 +5124,15 @@ bool VoiceContainer_s00a2_1130::Connect4(int a1, int a2, int a3, int a4)
     if (!cached)
         *(void**)(self + 0x15f4) = TH(self + 0x10)->m_00a34230(0x53747030);
     if (*(int*)(self + 0x15f4) == 0) return false;
-    void* m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c600();
+    AutoAudioLock lock;
     if (!cached) {
-        char buf[16];
-        *(int*)(buf + 0)  = a1;
-        *(int*)(buf + 4)  = a2;
-        *(int*)(buf + 8)  = a3;
-        *(int*)(buf + 12) = a4;
+        int buf[4];
+        buf[0] = a2;
+        buf[1] = a3;
+        buf[2] = a4;
+        buf[3] = a1;
         TH(*(void**)(self + 0x15f4))->m_0112ccc0(0, buf);
     }
-    m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c620();
     return true;
 }
 
@@ -3129,26 +5140,35 @@ bool VoiceContainer_s00a2_1130::Connect4(int a1, int a2, int a3, int a4)
 void __fastcall disconnect_00a21590(char* self)
 {
     if (*(int*)(self + 0x15f4) == 0) return;
-    void* m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c600();
+    AudioLockGuard guard;
     TH(*(void**)(self + 0x15f4))->m_0112ccc0(1, 0);
     *(void**)(self + 0x15f4) = 0;
-    m = *(void**)0x16e61a8;
-    if (m != 0) TH(m)->m_0112c620();
 }
+
+struct IObj_00a21630 {
+    virtual void AddRef();
+    virtual void Release();
+    virtual void v2();
+    virtual void v3();
+    virtual void v4();
+    virtual void v5();
+    virtual void Send(int a, int b);   // +0x18
+};
+struct ObjRef_00a21630 {
+    IObj_00a21630* p;
+    ObjRef_00a21630(IObj_00a21630* raw) : p(raw) { if (raw) raw->AddRef(); }
+    ~ObjRef_00a21630() { if (p) p->Release(); }
+};
 
 // @ 0x00a21630
 bool MsgTarget_00a21630::Handle(int a1, int a2)
 {
     void* self = this;
     void* eax = *(void**)((char*)*(void**)self + 0x1d4);
-    void* p = ((void* (__thiscall*)(void*, int))eax)(self, a1);
-    void* esi = p;
-    if (esi != 0)
-        VPTR(void, esi, 0)(esi);
-    if (esi == 0) return false;
-    VPTR(void, esi, 0x18, int, int)(esi, 2, a2);
-    VPTR(void, esi, 4)(esi);
+    IObj_00a21630* p = (IObj_00a21630*)((void* (__thiscall*)(void*, int))eax)(self, a1);
+    ObjRef_00a21630 ref(p);
+    if (p == 0) return false;
+    p->Send(2, a2);
     return true;
 }
 
@@ -3247,6 +5267,43 @@ bool __fastcall HandleMessage_00a21710(char* self, void* dummy, unsigned msg, vo
     return true;
 }
 
+// @ 0x00a21a60
+void __fastcall forward_00a21a60(void* self)
+{
+    void* p = *(void**)((char*)self + 0xc);
+    if (p == 0) return;
+    char* q = (char*)p + 4;
+    void* vt = *(void**)q;
+    void* fn = *(void**)((char*)vt + 4);
+    ((void (__thiscall*)(void*))fn)(q);
+}
+
+struct VoiceRef_a21a80 {
+    virtual void AddRef();
+    virtual void Release();
+    uchar pad04[0x970 - 4];
+    unsigned mTag;   // +0x970
+};
+struct VoicePtr_a21a80 {
+    VoiceRef_a21a80* p;
+    VoicePtr_a21a80(VoiceRef_a21a80* q) : p(q) { if (p) p->AddRef(); }
+    ~VoicePtr_a21a80() { p->Release(); }
+};
+
+// @ 0x00a21a80
+void* AudioSys_00a21a80::FindVoice(unsigned tag)
+{
+    char* self = (char*)this;
+    if (tag == 0) tag = 0xf1cc1687;
+    VoiceRef_a21a80** end = *(VoiceRef_a21a80***)(self + 0x119ba8);
+    for (VoiceRef_a21a80** it = *(VoiceRef_a21a80***)(self + 0x119ba4); it != end; ++it) {
+        VoicePtr_a21a80 v(*it);
+        if (tag == v.p->mTag)
+            return v.p;
+    }
+    return 0;
+}
+
 // @ 0x00a21b20
 bool __fastcall command_00a21b20(char* self, void* dummy, int a1, int a2, int a3, int a4, int a5)
 {
@@ -3284,20 +5341,13 @@ void __fastcall command_00a21bd0(void* self, void* dummy, int a)
 }
 
 // @ 0x00a21c00
-void VoiceVec_00a21c00::Destroy()
+VoiceVec_00a21c00::~VoiceVec_00a21c00()
 {
-    int* self = (int*)this;
-    int* end = (int*)self[1];
-    int* it  = (int*)self[0];
-    while (it < end) {
-        void* p = (void*)*it;
-        if (p != 0)
-            VPTR(void, p, 8)(p);
-        ++it;
+    IVoice_00a21c00** end = mpEnd;
+    for (IVoice_00a21c00** it = mpBegin; it < end; ++it) {
+        if (*it != 0)
+            (*it)->Release();
     }
-    void* begin = (void*)self[0];
-    if (begin != 0)
-        f_00f47380(begin);
 }
 
 // @ 0x00a21c70
@@ -3468,20 +5518,24 @@ void HashA_00a21eb0::Rehash(unsigned a)
     *(unsigned*)(self + 8) = (unsigned)count;
 }
 
+struct Node_00a21f60 {
+    unsigned a, b, c;
+    void* ref;      // +0xc
+    unsigned m10;   // +0x10
+    Node_00a21f60(const Node_00a21f60& o) : a(o.a), b(o.b), c(o.c), ref(o.ref)
+    {
+        if (ref) VPTR(void, ref, 0)(ref);
+        m10 = 0;
+    }
+};
+
 // @ 0x00a21f60
 void* __stdcall allocRef_00a21f60(void* src)
 {
-    unsigned char* esi = (unsigned char*)f_00f473a0(0x14, (void*)0x13f2150, 0, 0, (void*)0x13ebb38, 0xd1);
-    if (esi != 0) {
-        *(unsigned*)(esi + 0) = *(unsigned*)((char*)src + 0);
-        *(unsigned*)(esi + 4) = *(unsigned*)((char*)src + 4);
-        *(unsigned*)(esi + 8) = *(unsigned*)((char*)src + 8);
-        unsigned c = *(unsigned*)((char*)src + 0xc);
-        *(unsigned*)(esi + 0xc) = c;
-        if (c != 0) VPTR(void, (void*)c, 0)((void*)c);
-        *(unsigned*)(esi + 0x10) = 0;
-    }
-    return esi;
+    Node_00a21f60* p = (Node_00a21f60*)f_00f473a0(0x14, (void*)0x13f2150, 0, 0, (void*)0x13ebb38, 0xd1);
+    if (p != 0)
+        new (p) Node_00a21f60(*(const Node_00a21f60*)src);
+    return p;
 }
 
 // @ 0x00a22060
@@ -3689,7 +5743,7 @@ AR* __cdecl ARCopy(AR* first, AR* last, AR* dst)
 
 // @ 0x00a227a0
 DrvBA22::DrvBA22(void* arg)
-: mArg(arg), mZero(0) {}
+: mArg(arg), RefBaseA22(), mZero(0) {}
 
 // @ 0x00a227d0
 ResourceDeviceDriver* MakeRDD()
@@ -3798,12 +5852,19 @@ bool __stdcall LoadShared(IStream_* stream, Item* item, int, int)
 // @ 0x00a23360
 float System::GetPosDist(float* p)
 {
-    if (!b15bbf0)
-        return 0.0f;
-    float dx = pos[0] - p[0];
-    float dy = pos[1] - p[1];
-    float dz = pos[2] - p[2];
-    return (float)sqrt((double)(dy * dy + (dz * dz + dx * dx)));
+    float result;
+    if (b15bbf0) {
+        double dx = pos[0] - p[0];
+        double dy = pos[1] - p[1];
+        double dz = pos[2] - p[2];
+        double d = dx * dx;
+        d = d + dz * dz;
+        d = d + dy * dy;
+        result = (float)sqrt(d);
+    } else {
+        result = 0.0f;
+    }
+    return result;
 }
 
 // @ 0x00a233b0
@@ -3895,19 +5956,23 @@ EInsertRes* EHTable::DoInsertKey(EInsertRes* out, const int* pkey, u32 unused)
 }
 
 // @ 0x00a23920
-void RefVec::Destroy()
+RefVec::~RefVec()
 {
-    RefCounted** it = mpBegin;
     RefCounted** end = mpEnd;
+    RefCounted** it = mpBegin;
     for (; it < end; ++it) {
         RefCounted* p = *it;
         if (p)
             p->Release();
     }
+}
+
+inline RefVecStorage::~RefVecStorage()
+{
     RefCounted** begin = mpBegin;
     if (begin) {
         if (*(int*)((char*)begin - 4) != 0)
-            operator_delete__(begin);
+            f_00f47380(begin);
     }
 }
 
@@ -3977,57 +6042,81 @@ PHNode** PHTable::EraseNode(PHNode** out, PHNode* n, PHNode** pb)
 }
 
 // @ 0x00a24210
-void RBTree::Assign(void* arg)
+void ElemList::Assign(void* pCompare)
 {
-    // Opaque eastl rbtree range-copy helper: rebuild the tree from the source range.
-    (void)arg;
-    sub_00a212b0();
-    sub_00a21310();
-    sub_00a22410();
+    if (Snd_s00a2_3360::ToNode(Snd_s00a2_3360::FromNode(anchor.next)) == &anchor)
+        return;                                      // empty list
+    Snd_s00a2_3360* first = Snd_s00a2_3360::FromNode(anchor.next);
+    if (first == Snd_s00a2_3360::FromNode(anchor.prev))
+        return;                                      // single element
+
+    ElemList a, b;
+
+    // Middle walk: `mid` advances from the front while `end` retreats from the
+    // anchor, so [first, mid) holds ceil(n/2) elements and [mid, end) the rest.
+    Snd_s00a2_3360* mid = first;
+    Snd_s00a2_3360* end = Snd_s00a2_3360::FromNode(&anchor);
+    while (mid != end) {
+        mid = Snd_s00a2_3360::FromNode(mid->node.next);
+        if (mid == end)
+            break;
+        end = Snd_s00a2_3360::FromNode(end->node.prev);
+    }
+
+    b.splice(b.begin(), *this, first, mid);          // b = first half
+    a.spliceAll(a.begin(), *this);                   // a = second half
+    b.Assign(pCompare);
+    a.Assign(pCompare);
+    this->spliceAll(this->begin(), b);               // this = sorted first half
+    this->merge(a, (CompareFn)pCompare);             // + the sorted second half
 }
 
 // @ 0x00a243e0
-void* RBTree::AllocNode2(const void* src, void* parent)
+void* RBTree::AllocNode2(const void* src)
 {
-    (void)parent;
     struct Node20 { u32 d[5]; };
-    Node20* n = (Node20*)operator new(0x14, "EASTL", 0, 0, EA_FILE, 0xd1);
+    Node20* n;
+    if (mpFreeList) {
+        n = (Node20*)mpFreeList;
+        mpFreeList = (void*)n->d[0];
+    } else {
+        n = (Node20*)operator new(mAllocator, "EASTL", 0, 0, EA_FILE, 0xd1);
+    }
     if (n) {
         const u32* s = (const u32*)src;
         n->d[0] = s[0];
         n->d[1] = s[1];
         n->d[2] = s[2];
-        n->d[3] = s[3];
-        void* v = (void*)s[4];
-        n->d[4] = (u32)v;
-        if (v) {
-            void*** vt = (void***)v;
-            vc<void>(v, 0);
-            (void)vt;
-        }
+        void* v = (void*)s[3];
+        n->d[3] = (u32)v;
+        if (v)
+            vc<void>((char*)v + 4, 0);
     }
+    n->d[4] = 0;
     return n;
 }
 
 // @ 0x00a24480
 void PHTable::FreeBuckets(PHNode** buckets, u32 count)
 {
+    struct FNode { u32 freeLink; void* value; FNode* next; };
     for (u32 i = 0; i < count; ++i) {
-        PHNode* p = buckets[i];
-        while (p) {
-            PHNode* nxt = p->next;
-            if (p->key || p->next) {
-                // release the value pointer stored at +0 (the value is the node payload)
-            }
-            if (p != (PHNode*)mpInline) {
-                if ((void*)p < mpPoolBegin || (void*)p >= mpPoolEnd) {
-                    operator_delete__(p);
+        FNode* c;
+        FNode* n = (FNode*)buckets[i];
+        while (n) {
+            c = n;
+            n = c->next;
+            void* val = c->value;
+            if (val)
+                vc<void>(val, 4);
+            if (c != (FNode*)mpInline) {
+                if ((void*)c < mpPoolBegin || (void*)c >= mpPoolEnd) {
+                    operator_delete__(c);
                 } else {
-                    p->key = (int)mpFreeList;
-                    mpFreeList = p;
+                    c->freeLink = (u32)mpFreeList;
+                    mpFreeList = (PHNode*)c;
                 }
             }
-            p = nxt;
         }
         buckets[i] = 0;
     }
@@ -4063,12 +6152,13 @@ RBNode_s00a2_3360* __thiscall RBTree::CloneNode(RBNode_s00a2_3360* src, RBNode_s
 }
 
 // @ 0x00a245e0
-RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent)
+__declspec(noinline) RBNode_s00a2_3360* __stdcall RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00a2_3360* parent)
 {
     RBNode_s00a2_3360* n = (RBNode_s00a2_3360*)operator new(0x18, "EASTL", 0, 0, EA_FILE, 0xd1);
-    if (n) {
-        n->key0 = src->key0;
-        n->key1 = src->key1;
+    u32* kv = (u32*)((char*)n + 0x10);
+    if (kv) {
+        kv[0] = src->key0;
+        kv[1] = src->key1;
     }
     n->left = 0;
     n->right = 0;
@@ -4077,36 +6167,38 @@ RBNode_s00a2_3360* __cdecl RB_AllocNode(const RBNode_s00a2_3360* src, RBNode_s00
     return n;
 }
 
+struct RefIface_a24750 { virtual void AddRef(); virtual void Release(); };
+// Uninitialized copy of Elem20 ranges (0x00a24750), EASTL style: iterator objects and a placement copy per element.
+struct E20_a24750_Ref {
+    RefIface_a24750* p;
+    E20_a24750_Ref(const E20_a24750_Ref& o) : p(o.p) { if (p) p->AddRef(); }
+};
+struct E20_a24750_Elem {
+    uint32_t d0, d1, d2, d3;
+    E20_a24750_Ref ref;   // +0x10
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct E20_a24750_It {
+    E20_a24750_Elem* p;
+    E20_a24750_It(E20_a24750_Elem* q) : p(q) {}
+    E20_a24750_Elem& operator*() const { return *p; }
+    E20_a24750_It& operator++() { ++p; return *this; }
+    bool operator!=(const E20_a24750_It& o) const { return p != o.p; }
+};
+
 // @ 0x00a24750
-Elem20* __cdecl CopyElems20(Elem20** out, Elem20* first, Elem20* last)
+E20_a24750_It E20_a24750_UninitCopy(E20_a24750_It first, E20_a24750_It last, E20_a24750_It dest)
 {
-    *out = last;
-    for (; first != last; first += 1) {
-        Elem20* dst = *out;
-        if (dst) {
-            dst->d0 = first->d0;
-            dst->d1 = first->d1;
-            dst->d2 = first->d2;
-            dst->d3 = first->d3;
-            void* v = first->ref;
-            dst->ref = v;
-            if (v)
-                vc<void>(v, 0);
-        }
-        *out += 1;
-    }
-    return *out;
+    E20_a24750_It result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) E20_a24750_Elem(*first);
+    return result;
 }
 
 // @ 0x00a247f0
-void RDD::Construct()
+RDDCtorView::RDDCtorView() : RDDDriverBase("resman:")
 {
-    ((DeviceDriver*)this)->ctor("resman:");
-    vftable = (void*)0x1452b00;
-    mpBegin = 0;
-    mpEnd = 0;
-    mpCapacity = 0;
-    mMutex.ctor(0, 1);
 }
 
 // @ 0x00a24850
@@ -4166,6 +6258,141 @@ bool __thiscall RDD::Tick3(void* a, void* b, void* c)
     float* acc = (float*)local.mpAccumulator;
     *acc = (float)e * local.sw.mfCyclesToUnitsCoefficient + *acc;
     return false;
+}
+
+// @ 0x00a24970
+void* __thiscall RDD::FindById(void* id)
+{
+    ScopedTimer timer((float*)((char*)this + 0x5c));
+    MutexGuard_s00a2_3360 guard(&mMutex, g_lockName);
+    mfAccum = (float)timer.sw.GetElapsedTimeFloat() * timer.sw.mfCyclesToUnitsCoefficient + mfAccum;
+    void** it = mpBegin;
+    void** end = mpEnd;
+    void* r;
+    for (;;) {
+        if (it == end)
+            return 0;
+        r = *it;
+        if (id == r)
+            break;
+        ++it;
+    }
+    return r;
+}
+
+// @ 0x00a24a90
+void* __thiscall RDD::FindAndCall1(void* id, void* a, void* b, void* c, void* d)
+{
+    (void)c; (void)d;
+    ScopedTimer timer((float*)((char*)this + 0x5c));
+    void* p = FindById(id);
+    if (p != 0 && vc<void*>(p, 0x18) != 0)
+        p = vc<void*>(vc<void*>(p, 0x18), 0x30, a, b);
+    else
+        p = 0;
+    return p;
+}
+
+// @ 0x00a24b40
+int __thiscall RDD::FindAndCall2(void* id, void* a, void* b, void* c, void* d)
+{
+    (void)c; (void)d;
+    ScopedTimer timer((float*)((char*)this + 0x5c));
+    void* p = FindById(id);
+    int r;
+    if (p != 0 && vc<void*>(p, 0x18) != 0)
+        r = vc<bool>(vc<void*>(p, 0x18), 0x38, a, b);
+    else
+        r = 0;
+    return r;
+}
+
+// @ 0x00a24bf0
+long long __thiscall RDD::FindAndCall3(void* id, void* a, void* b, void* c, void* d, void* e)
+{
+    (void)b; (void)d; (void)e;
+    ScopedTimer timer((float*)((char*)this + 0x5c));
+    void* p = FindById(id);
+    return (p != 0 && vc<void*>(p, 0x18) != 0)
+        ? vc<bool>(vc<void*>(p, 0x18), 0x28, a, c) : 0;
+}
+
+// @ 0x00a24cb0
+void* __thiscall RDD::FindAndCall4(void* id)
+{
+    ScopedTimer timer((float*)((char*)this + 0x5c));
+    void* p = FindById(id);
+    void* r = 0;
+    if (p) {
+        void* q = vc<void*>(p, 0x18);
+        if (q)
+            r = vc<void*>(q, 0x1c);
+    }
+    return r;
+}
+
+// @ 0x00a24d60
+long long __thiscall RDD::FindAndCall5(void* id)
+{
+    ScopedTimer timer((float*)((char*)this + 0x5c));
+    void* p = FindById(id);
+    int r = 0;
+    if (p) {
+        void* q = vc<void*>(p, 0x18);
+        if (q)
+            r = vc<int>(q, 0x24, 0);
+    }
+    return (long long)r;
+}
+
+// @ 0x00a24e10
+void Tracker::Remove(TObj* o)
+{
+    ScopedTimer_s00a2_4e10 timer((float*)((char*)this + 0x5c));
+    MutexGuard guard(&mMutex, g_lockName);
+    mElapsed = (float)timer.sw.GetElapsedTimeFloat() * timer.sw.coeff + mElapsed;
+    TObj** it = mBegin;
+    for (; it != mEnd; ++it) {
+        if (o == *it) {
+            TObj* old = *it;
+            TObj* nw = mEnd[-1];
+            if (nw != old) {
+                if (nw) nw->AddRef();
+                *it = nw;
+                if (old) old->Release();
+            }
+            mEnd -= 1;
+            TObj* last = *mEnd;
+            if (last) last->Release();
+            return;
+        }
+    }
+}
+
+// @ 0x00a24f50
+void Tracker::Process(TObj* o)
+{
+    ScopedTimer_s00a2_4e10 timer((float*)((char*)this + 0x5c));
+    TObj* f = Find(o);
+    if (f) {
+        ((void (__thiscall*)(TObj*))(*(void***)f)[9])(f);
+        Remove(o);
+    }
+}
+
+// @ 0x00a25000
+void RcMap::Release(unsigned key)
+{
+    RbIter it = mTree.find(key);
+    int* node = it.n;
+    if ((int*)((char*)this + 8) != node) {
+        if ((*(volatile int*)&node[5] += -1) == 0) {
+            mTree.size += -1;
+            RBTreeIncrement(node);
+            RBTreeErase(node, (char*)&mTree + 4);
+            operator_delete__(node); // 0x00f47380
+        }
+    }
 }
 
 // @ 0x00a25090
@@ -4361,6 +6588,464 @@ bool AudioSys::GetFloat(unsigned k1, unsigned k2, float* out)
     return false;
 }
 
+// @ 0x00a25c40
+void AudioSystem_s00a2_5c40::Update(float dt)
+{
+    if (mQueue_304.FUN_00a0f980() && mbX_3f5) {
+        ((Mutex_s00a2_5c40*)mMutex)->Lock(0x1452970);
+        mbX_3f5 = 0;
+        mQueue_304.FUN_00a0fee0(&mQueue_354);
+        ((Mutex_s00a2_5c40*)mMutex)->Unlock();
+        mQueue_304.FUN_00a0fdc0();
+    }
+    if (!mQueue_304.FUN_00a0f980()) {
+        uint limit = *(uint*)&mpX_208;   // stopwatch time limit source
+        (void)limit;
+        // the original builds a scoped EA::LimitStopwatch here; the observable
+        // behaviour is the loop below.
+        uint it = 0;
+        for (;;) {
+            ++it;
+            if ((it & 3) == 0) {
+                // timing poll (no observable result beyond loop control)
+            }
+            if (!mQueue_304.FUN_00a0f9a0()) break;
+            void* vt = mpVtbl;
+            void* arg = (void*)&mRing_1366d4;   // placeholder for the queue token
+            (void)arg;
+            ((void(__thiscall*)(void*, void*))((void**)(*(void**)vt))[0x12c / 4])(this, arg);
+        }
+        if (mQueue_304.FUN_00a0f990() == 0)
+            mQueue_304.FUN_00a0fdd0();
+    }
+    ++mX_15b6b4;
+    if (!mQueue_214.FUN_00a0f980() && !mbX_3f4) {
+        uint it[2] = {0, 0};
+        uint key = (uint)(size_t)this;
+        mMap_13f4.find(it, &key);
+        (void)it;
+        ((Mutex_s00a2_5c40*)mMutex)->Lock(0x1452970);
+        mbX_3f4 = 1;
+        mQueue_264.FUN_00a0fee0(&mQueue_214);
+        ((Mutex_s00a2_5c40*)mMutex)->Unlock();
+    }
+}
+
+// @ 0x00a25ed0
+void AudioSystem_s00a2_5c40::RemoveFromList(void* item)
+{
+    if (!item) return;
+    void* header = mList_157c60;                 // intrusive list header
+    for (void* cur = header; cur != mList_157c60; cur = *(void**)cur) {
+        void* node = *(void**)((uchar*)cur + 8);
+        if (node) ((void(__thiscall*)(void*))vc_s00a2_5c40(node, 0))(node);
+        if (node == item) {
+            if (mpX_158f48 == cur) mpX_158f48 = *(void**)mpX_158f48;
+            void* n = *(void**)((uchar*)*(void**)cur + 4);
+            // unlink
+            void* a = *(void**)n;
+            *(void**)((uchar*)n + 4 ? 0 : 0) = 0; (void)a;
+            ((void(__thiscall*)(void*))vc_s00a2_5c40(item, 4))(item);
+            return;
+        }
+        if (node) ((void(__thiscall*)(void*))vc_s00a2_5c40(node, 4))(node);
+    }
+}
+
+// @ 0x00a25ff0
+bool AudioSystem_s00a2_5c40::Lookup_25ff0(uint key, uint* out)
+{
+    uint it[2];
+    mMap_33d4.find(it, &key);
+    if (mMap_33d4.NotFound((void*)(size_t)it[0])) return false;
+    *out = *(uint*)((uchar*)(size_t)it[0] + 4);
+    return true;
+}
+
+// @ 0x00a26040
+uint AudioSystem_s00a2_5c40::RemovePrimitiveFromUpdate(void* p)
+{
+    struct Str {
+        char* begin; char* end; char* cap; int mAlloc;
+        ~Str() { if ((cap - begin) > 1 && begin) operator_delete(begin); }
+    };
+    Str s;
+    ConvertToString8Impl(&s, (const wchar_t*)p, 0xffffffff);
+    uint id = ((uint(__thiscall*)(void*, char*))vc_s00a2_5c40(this, 0xf4))(this, s.begin);
+    return id;
+}
+
+// @ 0x00a260c0
+uint AudioSystem_s00a2_5c40::Lookup_260c0(uint key)
+{
+    uint it[2];
+    mMap_11a3d8.find(it, &key);
+    if (mMap_11a3d8.NotFound((void*)(size_t)it[0])) return 0;
+    return *(uint*)((uchar*)(size_t)it[0] + 4);
+}
+
+// @ 0x00a26100
+bool AudioSystem_s00a2_5c40::Map_26100(uint key, uint arg)
+{
+    uint it[2] = {0, 0};
+    mMap_119bb8.find(it, &key);
+    void* node = (void*)(size_t)it[0];
+    if (mMap_119bb8.NotFound(node)) return false;
+    void* obj = *(void**)((uchar*)node + 4);
+    void* hold = 0;
+    if (obj) { ((void(__thiscall*)(void*))vc_s00a2_5c40(obj, 0))(obj); hold = obj; }
+    bool r = ((bool(__thiscall*)(void*, uint))vc_s00a2_5c40(hold, 0x2c))(hold, arg);
+    ((void(__thiscall*)(void*))vc_s00a2_5c40(hold, 4))(hold);
+    return r;
+}
+
+// @ 0x00a261c0
+void AudioSystem_s00a2_5c40::Map_261c0(uint arg)
+{
+    void** ba = mMap_119bb8.mpBucketArray;
+    void* cur = *ba;
+    if (!cur) {
+        while (*++ba == 0) {}
+        cur = *ba;
+    }
+    void* end = mMap_119bb8.mpBucketArray[mMap_119bb8.mnBucketCount];
+    while (end != cur) {
+        void* obj = *(void**)((uchar*)cur + 4);
+        ((void(__thiscall*)(void*, uint))vc_s00a2_5c40(obj, 0x2c))(obj, arg);
+        cur = *(void**)((uchar*)cur + 8);
+        while (!cur) {
+            ++ba;
+            cur = *ba;
+        }
+    }
+}
+
+// @ 0x00a26230
+void AudioSystem_s00a2_5c40::Map_26230(uint a, uint b)
+{
+    void** ba = mMap_119bb8.mpBucketArray;
+    void* cur = *ba;
+    if (!cur) {
+        void** p = ba;
+        do { ++p; cur = *p; } while (!cur);
+    }
+    void* end = ba[mMap_119bb8.mnBucketCount];
+    while (cur != end) {
+        void* obj = *(void**)((uchar*)cur + 4);
+        ((void(__thiscall*)(void*, uint, uint))vc_s00a2_5c40(obj, 0x30))(obj, a, b);
+        cur = *(void**)((uchar*)cur + 8);
+        while (!cur) {
+            ++ba;
+            cur = *ba;
+        }
+    }
+}
+
+// @ 0x00a262a0
+bool AudioSystem_s00a2_5c40::Map_262a0(uint key, uint arg)
+{
+    uint it[2];
+    bool result = false;
+    mMap_404.find(it, &arg);
+    uint node = it[0];
+    if (mMap_404.End() != (void*)(size_t)node) {
+        uint val = *(uint*)((uchar*)(size_t)node + 4);
+        result = ((bool(__thiscall*)(void*, uint, uint))vc_s00a2_5c40(this, 0x108))(this, key, val);
+    }
+    return result;
+}
+
+// @ 0x00a26300
+bool AudioSystem_s00a2_5c40::Map_26300(uint key, uint arg)
+{
+    uint it[2];
+    bool result = false;
+    mMap_404.find(it, &arg);
+    uint node = it[0];
+    if (mMap_404.End() != (void*)(size_t)node) {
+        uint val = *(uint*)((uchar*)(size_t)node + 4);
+        result = ((bool(__thiscall*)(void*, uint, uint))vc_s00a2_5c40(this, 0x110))(this, key, val);
+    }
+    return result;
+}
+
+// @ 0x00a26360
+uint AudioSystem_s00a2_5c40::Lookup_26360(uint key)
+{
+    uint it[2];
+    mMap_119bb8.find(it, &key);
+    if (mMap_119bb8.NotFound((void*)(size_t)it[0])) return 0;
+    return *(uint*)((uchar*)(size_t)it[0] + 4);
+}
+
+// @ 0x00a263a0
+bool AudioSystem_s00a2_5c40::Map_263a0(uint key, void** out)
+{
+    uint it[2];
+    mMap_118a78.find(it, &key);
+    uint node = it[0];
+    if (mMap_118a78.End() == (void*)(size_t)node) return false;
+    void* fp = *(void**)((uchar*)(size_t)node + 4);
+    RefObj* obj = (RefObj*)((void* (__fastcall*)(void*))fp)(fp);
+    if (obj) {
+        AutoRefCount<RefObj> ref(obj);
+        obj->AddRef();
+        *out = obj;
+    }
+    return true;
+}
+
+// @ 0x00a26450
+void AudioSystem_s00a2_5c40::UpdateSoundStates()
+{
+    ((void(__thiscall*)(void*))vc_s00a2_5c40(this, 0x140))(this);
+    mTree_157438.AssignLess2((void*)0xa20eb0);
+    void* raw = mTree_157438.mpRoot;
+    void* first = raw ? (uchar*)raw - 0x10 : 0;
+    void* end = ((uchar*)&mTree_157438) - 0x10;
+    while (first != end) {
+        void* snd = first;
+        if (!((bool(__thiscall*)(void*, int))vc_s00a2_5c40(this, 0x14c))(this, 1)) {
+            if (FUN_00ef6410()) {
+                if (!((bool(__thiscall*)(void*, int, int))vc_s00a2_5c40(snd, 0x20))(snd, 3, 0))
+                    ((void(__thiscall*)(void*, int, int, float, int))vc_s00a2_5c40(snd, 0x1c))(snd, 1, 3, 1.0f, 1);
+            } else {
+                ((void(__thiscall*)(void*, int, int))vc_s00a2_5c40(snd, 0x80))(snd, 3, 1);
+            }
+        } else {
+            if (((bool(__thiscall*)(void*, int, int))vc_s00a2_5c40(snd, 0x20))(snd, 3, 0))
+                ((void(__thiscall*)(void*, int, int, float, int))vc_s00a2_5c40(snd, 0x1c))(snd, 0, 3, 1.0f, 1);
+        }
+        void* nxt = *(void**)((uchar*)snd + 0x10);
+        first = nxt ? (uchar*)nxt - 0x10 : 0;
+    }
+}
+
+// @ 0x00a26530
+void AudioSystem_s00a2_5c40::Map_26530()
+{
+    mMap_118bb0.DoFreeNodes(mMap_118bb0.mpBucketArray, (void*)(size_t)mMap_118bb0.mnBucketCount);
+    mMap_118bb0.mnElementCount = 0;
+    mX_15b6b8 = 0;
+    mX_15b6bc = 0;
+}
+
+// @ 0x00a26570
+uint AudioSystem_s00a2_5c40::Lookup_26570(uint key)
+{
+    uint it[2];
+    mMap_157440.find(it, &key);
+    if (mMap_157440.NotFound((void*)(size_t)it[0])) return 0;
+    return *(uint*)((uchar*)(size_t)it[0] + 4);
+}
+
+// @ 0x00a265b0
+uint AudioSystem_s00a2_5c40::Lookup_265b0(uint key)
+{
+    uint it[2];
+    mMap_404.find(it, &key);
+    if (mMap_404.NotFound((void*)(size_t)it[0])) return 0;
+    return *(uint*)((uchar*)(size_t)it[0] + 4);
+}
+
+// @ 0x00a265f0
+void AudioSystem_s00a2_5c40::Map_265f0(float a, uint b)
+{
+    if (mbX_9b) return;
+    void** ba = mMap_158f54.mpBucketArray;
+    mbX_9b = 1;
+    void* cur = *ba;
+    if (!cur) {
+        void** p = ba;
+        do { ++p; cur = *p; } while (!cur);
+    }
+    void* end = ba[mMap_158f54.mnBucketCount];
+    while (cur != end) {
+        void* obj = *(void**)((uchar*)cur + 4);
+        ((void(__thiscall*)(void*, float, uint))vc_s00a2_5c40(obj, 0x28))(obj, a, b);
+        cur = *(void**)((uchar*)cur + 8);
+        while (!cur) {
+            ++ba;
+            cur = *ba;
+        }
+    }
+}
+
+// @ 0x00a26680
+bool AudioSystem_s00a2_5c40::Map_26680(uint key, void** out)
+{
+    if (!out) return false;
+    uint it[2];
+    mMap_13f4.find(it, &key);
+    void* node = (void*)(size_t)it[0];
+    if (mMap_13f4.NotFound(node)) return false;
+    void* obj = *(void**)((uchar*)node + 4);
+    ((void(__thiscall*)(void*))vc_s00a2_5c40(obj, 0))(obj);
+    *out = obj;
+    return true;
+}
+
+// @ 0x00a266e0
+bool AudioSystem_s00a2_5c40::Map_266e0(uint key, float f)
+{
+    uint it[2];
+    mMap_23e4.find(it, &key);
+    void* node = (void*)(size_t)it[0];
+    if (mMap_23e4.NotFound(node)) return false;
+    uint* obj = *(uint**)((uchar*)node + 4);
+    ((MapValue_s00a2_5c40*)obj)->FUN_00a16fd0(f);
+    return true;
+}
+
+// @ 0x00a26730
+bool AudioSystem_s00a2_5c40::Map_26730(uint key, void** out)
+{
+    if (!out) return false;
+    uint it[2];
+    mMap_23e4.find(it, &key);
+    void* node = (void*)(size_t)it[0];
+    if (mMap_23e4.NotFound(node)) return false;
+    void* obj = *(void**)((uchar*)node + 4);
+    ((void(__thiscall*)(void*))vc_s00a2_5c40(obj, 0))(obj);
+    *out = obj;
+    return true;
+}
+
+// @ 0x00a26790
+bool AudioSystem_s00a2_5c40::Map_26790(uint arg)
+{
+    void* end = mMap_128ae0.End();
+    uint it[2];
+    uint* p = mMap_128ae0.find2(it, &arg);
+    return *(void**)p != end;
+}
+
+// @ 0x00a267d0
+void AudioSystem_s00a2_5c40::Map_267d0(uint id)
+{
+    if (id - 1 > 999) return;
+    uint it[2] = {0, 0};
+    mMap_132808.find2(it, &id);
+    void* node = (void*)(size_t)it[0];
+    if (mMap_132808.NotFound(node)) return;
+    void* bucket = (void*)(size_t)it[1];
+    mMap_132808.EraseNode((void**)it, node, bucket);
+    void* end = mMap_128ae0.End();
+    uint it2[2] = {0, 0};
+    uint* p = mMap_128ae0.find2(it2, &id);
+    if (*(void**)p == end) FUN_00a21d30(mRing_1366d4, &id);
+}
+
+// @ 0x00a26860
+TreeOwner_00a26860::~TreeOwner_00a26860()
+{
+}
+
+// @ 0x00a268b0
+void AudioSystem_s00a2_5c40::Shutdown_268b0()
+{
+    Func_68fb70(mProfHash_13795c.mp0, mProfHash_13795c.mpBucketArray);
+    mProfHash_13795c.mpPool = 0;
+    ++mX_15b6b0;
+    mbX_9b = 0;
+    if (!mbX_3f5) {
+        ((void(__thiscall*)(void*))vc_s00a2_5c40(this, 0x1e0))(this);
+        if (!mQueue_3a4.FUN_00a0f980()) {
+            if (DAT_0166d9f4)
+                ((void(__thiscall*)(void*))vc_s00a2_5c40(DAT_0166d9f4, 0xc0))(DAT_0166d9f4);
+            mQueue_3a4.FUN_00a0fee0(&mQueue_354);
+            mbX_3f5 = 1;
+            if (DAT_0166d9f4)
+                ((void(__thiscall*)(void*))vc_s00a2_5c40(DAT_0166d9f4, 0xc4))(DAT_0166d9f4);
+        }
+    }
+    if (mbX_3fc) {
+        mbX_3fc = 0;
+        ((void(__thiscall*)(void*))vc_s00a2_5c40(this, 0x6c))(this);
+    }
+}
+
+// @ 0x00a26990
+void* AudioSystem_s00a2_5c40::InitPool_26990()
+{
+    uchar* base = (uchar*)this;
+    fixed_pool_with_overflow tmp(base + 0x1c, 0x12c0, 0xc, 4);
+    void* mem = tmp.mpHead;
+    *(void**)base = 0;
+    *(void**)(base + 4) = 0;
+    fixed_pool_with_overflow* pool = (fixed_pool_with_overflow*)(base + 8);
+    pool->mpHead = 0;
+    pool->init(mem, 0x12c0, 0xc, 4, 0);
+    pool->mpPoolBegin = mem;
+    pool->mpCapacity = (uchar*)mem + 0x12c0;
+    pool->mnNodeSize = 0xc;
+    *(void**)base = base;
+    *(void**)(base + 4) = base;
+    return this;
+}
+
+// @ 0x00a26be0
+void AudioSystem_s00a2_5c40::Insert_26be0(void* ret, const uint* key, uint hash)
+{
+    // `hash` is unused by the original shape; the key value drives the bucket.
+    (void)hash;
+    uint k = *(uint*)key;
+    HTable* t = &mProfHash_13795c;
+    uint idx = k % t->mnBucketCount;
+    void** bucket = &t->mpBucketArray[idx];
+    void* node = *bucket;
+    while (node) {
+        if (k == *(uint*)node) {
+            *(void**)ret = node;
+            *(void**)((uchar*)ret + 4) = bucket;
+            *(uint8_t*)((uchar*)ret + 8) = 0;
+            return;
+        }
+        node = *(void**)((uchar*)node + 4);
+    }
+    // allocate a node
+    void* n = t->mpFreeList;
+    if (n) t->mpFreeList = *(void**)n;
+    else n = operator_new(0x1c, kEastlAlloc, 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    uint* n32 = (uint*)n;
+    if (n) n32[0] = k;
+    n32[1] = 0;
+    n32[1] = (uint)t->mpBucketArray[idx];
+    t->mpBucketArray[idx] = n;
+    ++t->mnElementCount;
+    *(void**)ret = n;
+    *(void**)((uchar*)ret + 4) = &t->mpBucketArray[idx];
+    *(uint8_t*)((uchar*)ret + 8) = 1;
+}
+
+// Element vector at 0xa26da0: 0x14-byte entries whose ref at +0x10 is released; the fixed storage frees the block
+// unless it is the inline pool.
+struct RefElem14_a26da0 {
+    uchar pad[0x10];
+    IUnk_a26da0* mpRef;   // +0x10
+    ~RefElem14_a26da0() { IUnk_a26da0* r = mpRef; if (r) r->Release(); }
+};
+struct RefVecStorage_a26da0 {
+    RefElem14_a26da0* mpBegin;   // +0
+    RefElem14_a26da0* mpEnd;     // +4
+    RefElem14_a26da0* mpCap;     // +8
+    uint pad0c;
+    void* mpPool;                // +0x10
+    ~RefVecStorage_a26da0() { if (mpBegin && mpBegin != mpPool) operator_delete(mpBegin); }
+};
+struct RefVec_a26da0 : RefVecStorage_a26da0 {
+    ~RefVec_a26da0();
+};
+
+// @ 0x00a26da0
+RefVec_a26da0::~RefVec_a26da0()
+{
+    RefElem14_a26da0* end = mpEnd;
+    for (RefElem14_a26da0* p = mpBegin; p < end; ++p)
+        p->~RefElem14_a26da0();
+}
+
 // @ 0x00a26e10
 InsertRes* KTable::Insert(InsertRes* out, const Key4* k, int)
 {
@@ -4410,23 +7095,33 @@ void ResTable::DoFreeNodes(ResNode** buckets, uint32_t n)
     }
 }
 
+// Pool node of 0xa27010: the payload (three words and a ref) is copy-constructed in place at node + 0x10.
+struct PayloadRef_a27010 {
+    RefObj* p;
+    PayloadRef_a27010(const PayloadRef_a27010& o) : p(o.p) { if (p) p->AddRef(); }
+    ~PayloadRef_a27010();
+};
+struct PayloadVal_a27010 {
+    uint32_t a, b, c;
+    PayloadRef_a27010 obj;
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+inline void** NodePoolAlloc_a27010(NodePool* pool)
+{
+    void** node = pool->mpFree;
+    if (node)
+        pool->mpFree = (void**)*node;
+    else
+        node = (void**)eaNew(pool->mnNodeSize, "EASTL", 0, 0, EASTL_FILE, 0xd1);
+    return node;
+}
+
 // @ 0x00a27010
 void* NodePool::Alloc(const Payload* src)
 {
-    void** node = mpFree;
-    if (node) {
-        mpFree = (void**)*node;
-    } else {
-        node = (void**)eaNew(mnNodeSize, "EASTL", 0, 0, EASTL_FILE, 0xd1);
-    }
-    Payload* dst = (Payload*)(node + 4);
-    if (dst) {
-        dst->a = src->a;
-        dst->b = src->b;
-        dst->c = src->c;
-        dst->obj = src->obj;
-        if (src->obj) src->obj->AddRef();
-    }
+    void** node = NodePoolAlloc_a27010(this);
+    new (node + 4) PayloadVal_a27010(*(const PayloadVal_a27010*)src);
     return node;
 }
 
@@ -4435,19 +7130,29 @@ PropList_s00a2_6e10::PropList_s00a2_6e10()
 {
 }
 
+// @ 0x00a27110   scalar deleting destructor of the property list
+PropList_s00a2_6e10::~PropList_s00a2_6e10()
+{
+    // the two fixed vectors free their heap buffers in their own destructors (v2, then v1)
+}
+
+struct PropListRef_a27170 {
+    PropList_s00a2_6e10* p;
+    PropListRef_a27170(PropList_s00a2_6e10* q) : p(q) { if (p) p->AddRef(); }
+    ~PropListRef_a27170() { if (p) p->Release(); }
+};
+
 // @ 0x00a27170
 bool FactoryVoiceTemplate::CreateResource(int key, PropList_s00a2_6e10** out, int a, int b)
 {
     bool ok = false;
     if (out != 0 && key != 0) {
-        PropList_s00a2_6e10* res = new ("audio", 0, 0, 0, 0) PropList_s00a2_6e10();
-        if (res) res->AddRef();
-        if (InitResource(key, res, a, b)) {
-            res->AddRef();
-            *out = res;
+        PropListRef_a27170 res(new ("audio", 0, 0, 0, 0) PropList_s00a2_6e10());
+        if (InitResource(key, res.p, a, b)) {
+            res.p->AddRef();
+            *out = res.p;
             ok = true;
         }
-        if (res) res->Release();
     }
     return ok;
 }
@@ -4680,6 +7385,18 @@ void ZoneVector::DoInsertValue(Zone* pos, const Zone* value)
     }
 }
 
+// @ 0x00a27e60
+bool CountMap::AddRef(uint32_t key)
+{
+    CountNode* n = (CountNode*)mTree.findv(key).node;
+    if ((char*)this + 8 == (char*)n) {
+        mTree.insert(CountPair(key, 1));
+        return true;
+    }
+    n->count++;
+    return true;
+}
+
 // @ 0x00a27ed0
 bool Submix_s00a2_6e10::ConnectToSubmix(Submix_s00a2_6e10* other)
 {
@@ -4719,6 +7436,927 @@ bool EvOwner::Register(uint32_t a1, uint32_t a2, void* a3, double a4)
     }
     if (created) created->Release();
     return false;
+}
+
+// @ 0x00a28120
+bool Sys_s00a2_8120::StartSoundFromCommand(Command& cmd, unsigned id)
+{
+    Snd_s00a2_8120* snd = 0;
+    Snd_s00a2_8120* found = 0;
+    {
+        Snd_s00a2_8120* cur = FindSound(id);
+        found = cur;
+        Snd_s00a2_8120* hold = FindSound(id);
+        while (found) {
+            found = hold;
+            Snd_s00a2_8120* nxt = found;
+            if (nxt)
+                nxt->AddRef();
+            if (cur)
+                cur->Release();
+            found = nxt;
+            break;
+        }
+    }
+    if (snd != found)
+        snd = found;
+    if (!snd) {
+        unsigned key = 0;
+        cmd.GetUint32(0x3475381, &key);
+        if (key == 0) {
+            char* name = cmd.GetString8(0x347537e);
+            if (!name)
+                return false;
+            key = SymbolToId(name);
+        }
+        void* last = 0;
+        HIter_s00a2_8120 it2;
+        {
+            void** buckets = mSoundMap.mpBuckets;
+            unsigned n = mSoundMap.mnBuckets;
+            last = buckets[n];
+            T4Find(&mSoundMap, &it2, &key);
+            if (it2.node != last)
+                return false;
+        }
+        int flag = 0;
+        {
+            unsigned a = 0, b = 0;
+            if (cmd.GetBool(0x3475391, (bool*)&a)) {
+                if (cmd.GetBool(0x3475395, (bool*)&b)) {
+                    flag = 1;
+                    if (!cmd.GetBool(0x3475398, (bool*)&a))
+                        flag = 0;
+                } else {
+                    flag = 0;
+                }
+            } else {
+                flag = 0;
+            }
+        }
+        void* data = 0;
+        cmd.GetVoidPtr(0x347539c, &data);
+        if (snd)
+            snd->Release();
+        snd = 0;
+        Vec3_s00a2_8120 pos;
+        if (!StartSound(key, id, data, flag ? &pos : 0, &snd)) {
+            T4Op(&mSoundMap, &it2, &key, 0);
+            StopSound2(id, 1);
+            if (data)
+                ((SndA*)data)->Release();
+            if (snd)
+                snd->Release();
+            return false;
+        }
+        if (data)
+            ((SndA*)data)->Release();
+    }
+    {
+        void* value = 0;
+        unsigned type = 0;
+        void* extra = 0;
+        unsigned id2 = 0;
+        void* node = cmd.EnumParameter(&value, &id2, &type, &extra);
+        while (node) {
+            if (type == 0) {
+                ((SndB*)((char*)snd + 4))->PropF(0, *(float*)&node, 1);
+            } else if (type == 5) {
+                snd->Prop3(5, (unsigned)node, id2);
+            }
+            node = cmd.EnumParameter(&value, &id2, &type, &extra);
+        }
+    }
+    float gain = 0.0f;
+    cmd.GetBool(0x12c65397, (bool*)&gain);
+    snd->SetGain((double)gain);
+    if (snd)
+        snd->Release();
+    return true;
+}
+
+// @ 0x00a28450
+bool Sys_s00a2_8120::TryStartSound(char* out, unsigned id, IConfig* cfg, Vec3_s00a2_8120* pos, unsigned a5)
+{
+    char* p = out;
+    *(unsigned*)(p + 0x14) = id;
+    *(unsigned*)(p + 0x18) = (unsigned)cfg;
+    cfg->GetBool(0x12d2a4d4, (bool*)(p + 0));
+    cfg->GetBool(0x6dd08218, (bool*)(p + 1));
+    cfg->GetBool(0xba134192, (bool*)(p + 2));
+    if (*(bool*)(p + 0)) {
+        float window = 0.0f;
+        if (!cfg->GetFloat(0xf616b72, (float*)(p + 8)))
+            return false;
+        if (!cfg->GetFloat(0x3593710, (float*)(p + 4)))
+            return false;
+        if (!pos)
+            return false;
+        unsigned surf = 0;
+        cfg->GetUint32(0xed1f36d5, &surf);
+        Vec3_s00a2_8120* listener = (Vec3_s00a2_8120*)g_audioSys->GetListenerTransform(surf);
+        float dx = pos->x - listener->x;
+        float dy = pos->y - listener->y;
+        float dz = pos->z - listener->z;
+        float dist = (float)sqrt((double)(dx * dx + dy * dy + dz * dz));
+        dist = (float)fabs((double)dist);
+        if (!*(bool*)(p + 1) && dist > *(float*)(p + 4))
+            return false;
+        float gain = *(float*)0x01485720;
+        cfg->GetFloat(0x2406a047, &gain);
+        float fmax = *(float*)0x01485720;
+        cfg->GetFloat(0x25df0108, &fmax);
+        if (*(float*)(p + 8) > dist)
+            window = gain * *(float*)0x01485720;
+        else if (gain == 0.0f)
+            window = *(float*)0x01485720;
+        else if (dist > *(float*)(p + 4))
+            window = *(float*)0x01485720;
+        else {
+            ResponseCurve curve;
+            if (curve.InitFromConfiguration(0x1e4db1eb, cfg))
+                window = gain * curve.GetOutputValue((dist - *(float*)(p + 8)) /
+                                                     (*(float*)(p + 4) - *(float*)(p + 8)));
+            else
+                window = *(float*)0x01485720;
+        }
+        *(float*)(p + 0xc) = window;
+    }
+    *(float*)(p + 0x10) = *(float*)0x01485720;
+    cfg->GetFloat(0x393f7f7d, (float*)(p + 0x10));
+    *(unsigned*)(p + 0x1c) = 1;
+    cfg->GetUint32(0xd9ec19d6, (unsigned*)(p + 0x1c));
+    *(unsigned*)(p + 0x24) = 0xee8347b0;
+    cfg->GetId(0x7f28acc, (unsigned*)(p + 0x24));
+    *(unsigned*)(p + 0x28) = (unsigned)AddPlaylistRef(a5, 0);
+    *(unsigned*)(p + 0x2c) = 2;
+    cfg->GetUint32(0xbaf7f4f9, (unsigned*)(p + 0x2c));
+    cfg->GetUint32(0x51997db2, (unsigned*)(p + 0x3c));
+    unsigned* owner = (unsigned*)(p + 0x20);
+    cfg->GetId(0x701ed91e, owner);
+    if (*owner == 0)
+        *owner = a5;
+    unsigned slot = *owner;
+    Key4_s00a2_8120 key;
+    key.a = 0;
+    key.b = slot;
+    key.c = 0x3055f61;
+    key.d = 0x21407ee;
+    *(unsigned*)(p + 0x30) = 0xffffffff;
+    if (FindPlaylistTable(&key, p + 0x38)) {
+        void* o = 0;
+        if (GetPlaylistOwner(&key, &o) && o)
+            *(unsigned*)(p + 0x30) = *(unsigned*)((char*)o + 0x14);
+        if (o)
+            ((SndA*)o)->Release();
+    } else {
+        *(unsigned*)(p + 0x30) = (unsigned)ReleasePlaylistRef(slot);
+    }
+    return true;
+}
+
+// @ 0x00a28810
+void Sys_s00a2_8120::MaintainLRU()
+{
+    HIter_s00a2_8120 res;
+    void** bucket = mLRUTable.mpBuckets;
+    void* node = *bucket;
+    if (!node) {
+        ++bucket;
+        while (!*bucket)
+            ++bucket;
+        node = *bucket;
+    }
+    void* last = mLRUTable.mpBuckets[mLRUTable.mnBuckets];
+    while (node != last) {
+        Snd_s00a2_8120* snd = (Snd_s00a2_8120*)((ENode_s00a2_8120*)node)->owner;
+        bool linked = false;
+        if (snd->IsPlaying()) {
+            void* layers = 0;
+            if (snd->GetLayers(&layers)) {
+                if (mTexEnabled) {
+                    void** act = mActiveTable.mpBuckets;
+                    HIter_s00a2_8120 it;
+                    T4Find(&mActiveTable, &it, (char*)layers + 8);
+                    void* expected = act[mActiveTable.mnBuckets];
+                    if (*(void**)it.node == expected) {
+                        mLRUBytes += *(int*)((char*)layers + 0x18);
+                        Key4_s00a2_8120 pair;
+                        pair.a = *(unsigned*)((char*)layers + 8);
+                        pair.b = *(unsigned*)((char*)layers + 0xc);
+                        pair.c = *(unsigned*)((char*)layers + 0x10);
+                        pair.d = (unsigned)layers;
+                        ((SndA*)layers)->AddRef();
+                        HIter_s00a2_8120 it2;
+                        T4Insert2(&mActiveTable, &it2, &pair, 0);
+                        if (layers)
+                            ((SndA*)layers)->Release();
+                        mLRUIterNode = mActiveTable.mpBuckets[mActiveTable.mnBuckets];
+                        mLRUIterBucket = &mActiveTable.mpBuckets[mActiveTable.mnBuckets];
+                    }
+                }
+                linked = true;
+            }
+        }
+        if (linked) {
+            res = *PairErase(&mLRUTable, node, bucket);
+            node = res.node;
+            bucket = res.bucket;
+        } else {
+            node = ((ENode_s00a2_8120*)node)->next;
+            if (!node) {
+                ++bucket;
+                while (!*bucket)
+                    ++bucket;
+                node = *bucket;
+            }
+        }
+    }
+}
+
+// @ 0x00a28a20
+void Sys_s00a2_8120::AddTextureRef(Key4_s00a2_8120* key)
+{
+    U32Table* map = &mTexTable;
+    HIter_s00a2_8120 it;
+    map->find(&it, key);
+    if (it.node != map->mpBuckets[map->mnBuckets]) {
+        ++((unsigned*)map->mpBuckets[map->mnBuckets])[3];
+        return;
+    }
+    InsertRes_s00a2_8120 res;
+    Key4_s00a2_8120 pair;
+    pair.a = key->a;
+    pair.b = key->b;
+    pair.c = key->c;
+    pair.d = 0;
+    map->mpBuckets[map->mnBuckets] = 0;
+    KInsert(&res, &pair, 1);
+}
+
+// @ 0x00a28aa0
+bool Sys_s00a2_8120::GetOrRegisterVoice(unsigned key, Voice** out, int nLayers, void* layers)
+{
+    Voice* v = 0;
+    HIter_s00a2_8120 it;
+    mVoiceMap.find(&it, &key);
+    if (it.node != mVoiceMap.mpBuckets[mVoiceMap.mnBuckets]) {
+        v = (Voice*)((KeyNode*)it.node)->value;
+        if (v)
+            ++v->rc;
+    } else {
+        Voice* nv = (Voice*)EAAllocate(0xa0, (char*)0x140a5a0, 0, 0, 0, 0);
+        if (nv) {
+            nv->rc = 0;
+            nv->f0c = (char*)nv + 0x20;
+            nv->f08 = (char*)nv + 0x20;
+            nv->f18 = (char*)nv + 0x20;
+            nv->f9c = nv->f0c;
+            nv->f98 = 0;
+            nv->f10 = (char*)nv->f98 + 0x78;
+            *(void**)nv = g_voiceVT;            ++nv->rc;
+            v = nv;
+        }
+        if (!v->Init()) {
+            if (v) {
+                if (--v->rc == 0) {
+                    v->rc = 1;
+                    v->DestroyV(1);
+                }
+            }
+            return false;
+        }
+        int n = nLayers;
+        if (n > 0) {
+            char* p = (char*)layers;
+            do {
+                v->AddLayer(*(void**)p);
+                p += 0xc;
+            } while (--n);
+        }
+        v->Reset();
+        Voice** slot = RefMapFindOrInsert(&mVoiceMap, &key);
+        Voice* old = *slot;
+        if (v != old) {
+            if (v)
+                ++v->rc;
+            *slot = v;
+            if (old) {
+                if (--old->rc == 0) {
+                    old->rc = 1;
+                    old->DestroyV(1);
+                }
+            }
+        }
+    }
+    if (out) {
+        if (v)
+            ++v->rc;
+        *out = v;
+    }
+    if (v) {
+        if (--v->rc == 0) {
+            v->rc = 1;
+            v->DestroyV(1);
+        }
+    }
+    return true;
+}
+
+// Object map insert at 0xa28c60: a ref-counted key/value pair goes through the map's DoInsertValue (0x00a136f0).
+struct SndRef_a28c60 {
+    Snd_s00a2_8120* p;
+    SndRef_a28c60(Snd_s00a2_8120* q) : p(q) { if (p) p->AddRef(); }
+    SndRef_a28c60(const SndRef_a28c60& o) : p(o.p) { if (p) p->AddRef(); }
+    ~SndRef_a28c60() { if (p) p->Release(); }
+};
+struct SndPair_a28c60 {
+    Snd_s00a2_8120* key;
+    SndRef_a28c60 value;
+    SndPair_a28c60(Snd_s00a2_8120* k, const SndRef_a28c60& v) : key(k), value(v) {}
+};
+struct SndInsertRes_a28c60 { HIter_s00a2_8120 it; bool inserted; };
+struct TrueTag_a28c60 {};
+struct SndObjMap_a28c60 {
+    SndInsertRes_a28c60 DoInsertValue(const SndPair_a28c60& v, TrueTag_a28c60);   // 0x00a136f0
+};
+
+// @ 0x00a28c60
+void Sys_s00a2_8120::RegisterObj(Snd_s00a2_8120* p)
+{
+    SndRef_a28c60 ref(p);
+    SndPair_a28c60 pair(ref.p, ref);
+    ((SndObjMap_a28c60*)&mObjMap)->DoInsertValue(pair, TrueTag_a28c60());
+}
+
+// @ 0x00a28d10
+bool Sys_s00a2_8120::UnregisterObj(unsigned key)
+{
+    U32Table* map = &mObjMap;
+    HIter_s00a2_8120 it;
+    map->find(&it, &key);
+    if (it.node == map->mpBuckets[map->mnBuckets])
+        return false;
+    map->erase(it, &it);
+    return true;
+}
+
+// @ 0x00a28d70
+int Sys_s00a2_8120::GetCounterPlaylist(unsigned key)
+{
+    U32Table* map = &mCounterMap;
+    HIter_s00a2_8120 it;
+    map->find(&it, &key);
+    if (it.node != map->mpBuckets[map->mnBuckets])
+        return *(int*)((char*)it.node + 4);
+    Key4_s00a2_8120 k;
+    k.c = 0x1a527db;
+    k.d = 0x21407ee;
+    k.a = 0;
+    k.b = key;
+    void* owner = 0;
+    int result = -1;
+    if (GetPlaylistOwner2(&k, &owner)) {
+        short* p = (short*)((char*)owner + 0x14);
+        void* p1 = &p[1];
+        p1 = PoolAlloc(&p1, 4);
+        void* p2 = 0;
+        p2 = PoolAlloc(&p1, 4);
+        result = (int)p2;
+        Key4_s00a2_8120 pair;
+        pair.a = (unsigned)p1;
+        pair.b = (unsigned)p2;
+        HIter_s00a2_8120 it2;
+        T4Insert3(&mCounterMap, &it2, &pair, 0);
+    }
+    if (owner)
+        ((SndA*)owner)->Release();
+    return result;
+}
+
+// @ 0x00a28e90
+int Sys_s00a2_8120::AddCounter(unsigned key, int delta)
+{
+    U32Table* map = &mCounterA;
+    HIter_s00a2_8120 it;
+    map->find(&it, &key);
+    if (it.node != map->mpBuckets[map->mnBuckets]) {
+        int* p = (int*)((char*)it.node + 4);
+        *p += delta;
+        return *p;
+    }
+    Key4_s00a2_8120 pair;
+    pair.a = key;
+    pair.b = 0;
+    pair.c = 0;
+    pair.d = delta;
+    HIter_s00a2_8120 it2;
+    T4Insert3(map, &it2, &pair, 0);
+    return delta;
+}
+
+// @ 0x00a28f10
+bool Sys_s00a2_8120::TrackPlayingKey(Snd_s00a2_8120* obj)
+{
+    if (!obj)
+        return false;
+    if (!obj->IsPlaying())
+        return false;
+    if (!RegisterKey((char*)obj + 4))
+        return false;
+    obj->AddRef();                          // local AutoRefCount
+    obj->AddRef();                          // pair's smart-pointer copy
+    unsigned key = obj->GetKey();
+    obj->AddRef();                          // map value's reference
+    Key4_s00a2_8120 pair;
+    pair.a = key;
+    pair.b = (unsigned)obj;
+    pair.c = 0;
+    pair.d = 0;
+    HIter_s00a2_8120 it;
+    PairInsert(&mKeyMap, &it, &pair, 0);
+    if (obj)
+        obj->Release();
+    if (obj)
+        obj->Release();
+    return true;
+}
+
+// @ 0x00a29000
+bool Sys_s00a2_8120::UntrackPlayingKey(Snd_s00a2_8120* obj)
+{
+    if (!obj)
+        return false;
+    unsigned k = obj->GetKey();
+    U32Table* map = &mKeyMap;
+    HIter_s00a2_8120 it;
+    map->find(&it, &k);
+    if (it.node == map->mpBuckets[map->mnBuckets])
+        return false;
+    UnregisterKey((char*)obj + 4);
+    map->erase(it, &it);
+    if (obj->listNext) {
+        if (obj->listPrev) {
+            obj->listPrev->listNext = obj->listNext;
+            obj->listNext->listPrev = obj->listPrev;
+            obj->listNext = 0;
+            obj->listPrev = 0;
+        }
+    }
+    obj->listNext = 0;
+    obj->listPrev = 0;
+    obj->Release();
+    return true;
+}
+
+// @ 0x00a290b0
+bool Sys_s00a2_90b0::RegisterKey(void* key)
+{
+    if (!key)
+        return false;
+    unsigned id = ((KeyObj*)key)->GetId8();
+    HIter_s00a2_90b0 it;
+    mPrimTable.find(&it, &id);
+    if (it.node != mPrimTable.mpBuckets[mPrimTable.mnBuckets])
+        return false;
+    PairU pair;
+    pair.first = ((KeyObj*)key)->GetId8();
+    pair.second = key;
+    InsertRes_s00a2_90b0 out;
+    Tag tag;
+    tag.b = false;
+    mPrimTable.InsertPair(&out, &pair, tag);
+    return true;
+}
+
+// @ 0x00a29140
+bool Sys_s00a2_90b0::UnregisterKey(void* key)
+{
+    if (!key)
+        return false;
+    unsigned id = ((KeyObj*)key)->GetId18();
+    HIter_s00a2_90b0 it;
+    mUnregTable.find(&it, &id);
+    if (it.node == mUnregTable.mpBuckets[mUnregTable.mnBuckets])
+        return false;
+    mUnregTable.erase(it, &it);
+    return true;
+}
+
+// @ 0x00a291b0
+void Sys_s00a2_90b0::ClearUnregTable()
+{
+    HTable_s00a2_90b0* t = &mUnregTable;
+    HNode** bucket = (HNode**)t->mpBuckets;
+    HNode* node = *bucket;
+    if (!node) {
+        ++bucket;
+        while (!*bucket)
+            ++bucket;
+        node = *bucket;
+    }
+    HNode* end = (HNode*)t->mpBuckets[t->mnBuckets];
+    while (node != end) {
+        ((Obj_s00a2_90b0*)node->value)->v05();
+        node = node->next;
+        if (!node) {
+            ++bucket;
+            while (!*bucket)
+                ++bucket;
+            node = *bucket;
+        }
+    }
+    t->FreeBuckets(t->mpBuckets, t->mnBuckets);
+    t->mnElements = 0;
+}
+
+// @ 0x00a29230
+void Sys_s00a2_90b0::ClearClearTable()
+{
+    HTable_s00a2_90b0* t = &mClearTable;
+    HNode** bucket = (HNode**)t->mpBuckets;
+    HNode* node = *bucket;
+    if (!node) {
+        ++bucket;
+        while (!*bucket)
+            ++bucket;
+        node = *bucket;
+    }
+    HNode* end = (HNode*)t->mpBuckets[t->mnBuckets];
+    while (node != end) {
+        Obj_s00a2_90b0* obj = (Obj_s00a2_90b0*)node->value;
+        node->value = 0;
+        obj->v05();
+        obj->Release();
+        node = node->next;
+        if (!node) {
+            ++bucket;
+            while (!*bucket)
+                ++bucket;
+            node = *bucket;
+        }
+    }
+    mUnregTable.FreeBuckets(mUnregTable.mpBuckets, mUnregTable.mnBuckets);
+    mUnregTable.mnElements = 0;
+}
+
+// @ 0x00a292d0
+unsigned Sys_s00a2_90b0::PopIdA()
+{
+    IdRing_s00a2_90b0* r = &mPoolA.ring;
+    if (r->mBegin == r->mEnd)
+        return 0;
+    unsigned v = *r->mBegin;
+    r->mBegin += 1;
+    if (r->mBegin == r->cEnd)
+        r->mBegin = r->cBegin;
+    r->mSize -= 1;
+    InsertRes_s00a2_90b0 out;
+    Tag tag;
+    tag.b = false;
+    mPoolA.table.InsertKey(&out, &v, tag);
+    return v;
+}
+
+// @ 0x00a29340
+unsigned Sys_s00a2_90b0::PopIdC()
+{
+    IdRing_s00a2_90b0* r = &mPoolC.ring;
+    if (r->mBegin == r->mEnd)
+        return 0;
+    unsigned v = *r->mBegin;
+    r->mBegin += 1;
+    if (r->mBegin == r->cEnd)
+        r->mBegin = r->cBegin;
+    r->mSize -= 1;
+    InsertRes_s00a2_90b0 out;
+    Tag tag;
+    tag.b = false;
+    mPoolC.table.InsertKey(&out, &v, tag);
+    tag.b = false;
+    mPoolA.table.InsertKey(&out, &v, tag);
+    return v;
+}
+
+// @ 0x00a293e0
+unsigned Sys_s00a2_90b0::PopIdB()
+{
+    IdRing_s00a2_90b0* r = &mPoolB.ring;
+    if (r->mBegin == r->mEnd)
+        return 0;
+    unsigned v = *r->mBegin;
+    r->mBegin += 1;
+    if (r->mBegin == r->cEnd)
+        r->mBegin = r->cBegin;
+    r->mSize -= 1;
+    InsertRes_s00a2_90b0 out;
+    Tag tag;
+    tag.b = false;
+    mPoolB.table.InsertKey(&out, &v, tag);
+    return v;
+}
+
+// @ 0x00a29450
+bool Sys_s00a2_90b0::GetTexture(Key12* key, void** out)
+{
+    if (mCacheSizeLimit != 0) {
+        HIter_s00a2_90b0 it;
+        mActiveTable.findKey12(&it, key);
+        if (it.node != mActiveTable.mpBuckets[mActiveTable.mnBuckets]) {
+            TexObj* obj = ((TexNode_s00a2_90b0*)it.node)->value;
+            obj->time = SystemTime();
+            if (out) {
+                AddTextureRef(key);
+                obj->AddRef();
+                *out = obj;
+            }
+            mCountHit += 1;
+            return true;
+        }
+    }
+    mCountMiss += 1;
+    TexObj* obj = 0;
+    void* created = 0;
+    DbObj* db = (DbObj*)FindDatabase(key);
+    if (db) {
+        void* info = 0;
+        if (db->Create(key, &info, 1, 6, 1, 0)) {
+            if (mpFactoryB->Create(info, &created, 0, key->b)) {
+                obj = (TexObj*)created;
+                obj->AddRef();
+                obj->key = *key;
+            }
+        }
+        if (info)
+            ((DbInfo*)info)->i9();
+        if (created)
+            ((Obj_s00a2_90b0*)created)->Release();
+        if (info)
+            ((DbInfo*)info)->i2();
+    }
+    if (!obj)
+        return false;
+    obj->time = SystemTime();
+    if (mCacheSizeLimit != 0) {
+        mCurrentBytes += obj->size;
+        Key16 pair;
+        pair.a = key->a;
+        pair.b = key->b;
+        pair.c = key->c;
+        pair.d = (unsigned)obj;
+        obj->AddRef();
+        InsertRes_s00a2_90b0 out2;
+        Tag tag;
+        tag.b = false;
+        mActiveTable.InsertPair16(&out2, &pair, tag);
+        obj->Release();
+        mLRUIterNode = (TexNode_s00a2_90b0*)mActiveTable.mpBuckets[mActiveTable.mnBuckets];
+        mLRUIterBucket = (TexNode_s00a2_90b0**)&mActiveTable.mpBuckets[mActiveTable.mnBuckets];
+    }
+    if (out) {
+        AddTextureRef(key);
+        obj->AddRef();
+        *out = obj;
+    }
+    obj->Release();
+    return true;
+}
+
+// @ 0x00a29690
+bool Sys_s00a2_90b0::GetTexture2(Key12* key, void** out2, void** out)
+{
+    void* result = 0;
+    TexObj* obj = 0;
+    if (mCacheSizeLimit != 0) {
+        HIter_s00a2_90b0 it;
+        mActiveTable.findKey12(&it, key);
+        if (it.node != mActiveTable.mpBuckets[mActiveTable.mnBuckets]) {
+            obj = ((TexNode_s00a2_90b0*)it.node)->value;
+            obj->time = SystemTime();
+            if (out2)
+                *out2 = 0;
+            if (out) {
+                AddTextureRef(key);
+                obj->AddRef();
+                *out = obj;
+            }
+            mCountHit += 1;
+            if (result)
+                ((Obj_s00a2_90b0*)result)->Release();
+            return true;
+        }
+    }
+    {
+        HIter_s00a2_90b0 jt;
+        mLRUTable.findKey12(&jt, key);
+        if (jt.node != mLRUTable.mpBuckets[mLRUTable.mnBuckets]) {
+            if (out2) {
+                void* v = ((TexNode_s00a2_90b0*)jt.node)->value;
+                *out2 = v;
+                ((Obj_s00a2_90b0*)v)->AddRef();
+            }
+            if (result)
+                ((Obj_s00a2_90b0*)result)->Release();
+            return true;
+        }
+    }
+    mCountMiss += 1;
+    void* p = FUN_008d5d00();
+    if (p) {
+        DbObj* db = (DbObj*)FindDatabase(key);
+        if (db) {
+            void* info = 0;
+            if (db->Create(key, &info, 1, 6, 1, 0)) {
+                void* holder = 0;
+                void* effect = FUN_00a16f40(&holder, 0, info, 0, key, 0);
+                ((Obj_s00a2_90b0*)p)->v04(mpFactoryB, effect);
+                ((DbInfo*)info)->i9();
+                void* holder2 = 0;
+                void* r = FUN_00a21d00(&holder2, key, &result);
+                void* res[4];
+                FUN_00a27500(res, r);
+                if (out) {
+                    *out = result;
+                    ((Obj_s00a2_90b0*)result)->AddRef();
+                }
+            }
+            if (info)
+                ((DbInfo*)info)->i2();
+        }
+    }
+    if (result)
+        ((Obj_s00a2_90b0*)result)->Release();
+    return false;
+}
+
+// @ 0x00a298f0
+void Sys_s00a2_90b0::RemoveTexture(TexObj* obj)
+{
+    if (mCacheSizeLimit != 0) {
+        HIter_s00a2_90b0 it;
+        mActiveTable.findKey12(&it, &obj->key);
+        if (it.node == mActiveTable.mpBuckets[mActiveTable.mnBuckets]) {
+            mCurrentBytes += obj->size;
+            obj->AddRef();
+            Key16 pair;
+            pair.a = obj->key.a;
+            pair.b = obj->key.b;
+            pair.c = obj->key.c;
+            pair.d = (unsigned)obj;
+            obj->AddRef();
+            InsertRes_s00a2_90b0 out;
+            Tag tag;
+            tag.b = false;
+            mActiveTable.InsertPair16(&out, &pair, tag);
+            if (pair.d)
+                obj->Release();
+            obj->Release();
+            mLRUIterNode = (TexNode_s00a2_90b0*)mActiveTable.mpBuckets[mActiveTable.mnBuckets];
+            mLRUIterBucket = (TexNode_s00a2_90b0**)&mActiveTable.mpBuckets[mActiveTable.mnBuckets];
+        }
+        HIter_s00a2_90b0 jt;
+        mLRUTable.findKey12(&jt, &obj->key);
+        if (jt.node != mLRUTable.mpBuckets[mLRUTable.mnBuckets])
+            mLRUTable.eraseNode(jt, &jt);
+    }
+}
+
+// @ 0x00a29a50
+void Sys_s00a2_90b0::SweepLRU()
+{
+    if (mActiveTable.mnElements == 0)
+        return;
+    if (mCacheSizeLimit == 0)
+        return;
+    Stopwatch_s00a2_90b0 sw(3, false);
+    sw.Restart();
+    if ((unsigned)mCurrentBytes <= (unsigned)mCacheSizeLimit)
+        return;
+    do {
+        if (mLRUIterNode == (TexNode_s00a2_90b0*)mActiveTable.mpBuckets[mActiveTable.mnBuckets]) {
+            TexNode_s00a2_90b0** b = (TexNode_s00a2_90b0**)mActiveTable.mpBuckets;
+            TexNode_s00a2_90b0* n = *b;
+            if (!n) {
+                ++b;
+                while (!*b)
+                    ++b;
+                n = *b;
+            }
+            mLRUIterNode = n;
+            mLRUIterBucket = (TexNode_s00a2_90b0**)b;
+        }
+        TexObj* obj = mLRUIterNode->value;
+        if (SystemTime() - obj->time <= mRemoveOlderThanSec) {
+            TexNode_s00a2_90b0* n = mLRUIterNode->next;
+            mLRUIterNode = n;
+            while (!n) {
+                mLRUIterBucket += 1;
+                n = *mLRUIterBucket;
+                mLRUIterNode = n;
+            }
+        } else {
+            mCurrentBytes -= obj->size;
+            HIter_s00a2_90b0 it;
+            it.node = mLRUIterNode;
+            it.bucket = (HNode**)mLRUIterBucket;
+            HIter_s00a2_90b0 tmp;
+            HIter_s00a2_90b0* res = mActiveTable.eraseNode(it, &tmp);
+            mLRUIterNode = (TexNode_s00a2_90b0*)res->node;
+            mLRUIterBucket = (TexNode_s00a2_90b0**)res->bucket;
+        }
+        __int64 elapsed = sw.GetElapsedTimeF();
+        if ((double)elapsed * sw.coeff > (double)(unsigned)mTimeSliceUSec)
+            break;
+    } while ((unsigned)mCurrentBytes > (unsigned)mCacheSizeLimit);
+}
+
+// @ 0x00a29be0
+bool Sys_s00a2_90b0::ReadTuningValues(const Key12* key)
+{
+    if (key->a != g_keyA || key->b != g_keyB || key->c != g_keyC)
+        return true;
+    IConfig_s00a2_90b0* cfg = (IConfig_s00a2_90b0*)mpConfiguration;
+    if (!cfg)
+        return false;
+
+    cfg->GetBool(0x7188e63e, &mBool3fd);
+    cfg->GetFloat(0xe8bc4932, &mFloat400);
+    Slot112();
+
+    StrList* strList = 0;
+    if (cfg->GetList1(0x4b2a3424, (void**)&strList) && strList) {
+        unsigned count;
+        const char** base;
+        if (strList->mFlags & 0x30) {
+            count = strList->mnSize;
+            base = (const char**)strList->mpBegin;
+        } else {
+            count = strList->mInlineLen != 0 ? 1 : 0;
+            base = strList->mInlineLen != 0 ? (const char**)strList : 0;
+        }
+        for (unsigned i = 0; i < count; ++i) {
+            const char* s = ((Str16_s00a2_90b0*)base)[i].mpStr;
+            v058(SymbolToId(s), s);
+        }
+    }
+
+    unsigned* list2 = 0;
+    unsigned count2 = 0;
+    if (cfg->GetList2(0x7cb81a35, (void**)&list2, (void**)&count2)) {
+        for (unsigned i = 0; i < count2; ++i)
+            v072(list2[i * 3]);
+    }
+
+    unsigned modeId = SymbolToId("dacoutputmode");
+    void* modeStr = cfg->GetString(modeId);
+    if (modeStr) {
+        WString ws;
+        ws.RangeInit((const wchar_t*)modeStr);
+        float v;
+        if (WideEquals(&ws, g_wMono))
+            v = 0.0f;
+        else if (WideEquals(&ws, g_wStereo))
+            v = 1.0f;
+        else if (WideEquals(&ws, g_wQuad))
+            v = g_fQuadVal;
+        else if (WideEquals(&ws, g_wSurround))
+            v = g_fSurroundVal;
+        else
+            v = 1.0f;
+        SetProperty(v, 0x435b383);
+    }
+
+    float fv;
+    if (cfg->GetFloat(0x6a371e0, &fv))
+        SetProperty(fv, 0x6a371e0);
+
+    SetProperty((float)mPerformanceLevel, 0x6df5822d);
+
+    unsigned u;
+    u = SymbolToId("streampoolnumstreams");
+    cfg->GetUint32(u, &mStreamPoolNumStreams);
+    u = SymbolToId("streampoolbuffersize");
+    cfg->GetUint32(u, &mStreamPoolBufferSize);
+    u = SymbolToId("streampoolmaxrequests");
+    cfg->GetUint32(u, &mStreamPoolMaxRequests);
+    u = SymbolToId("RemoveMostFrequentlyUnusedTimeSliceUSec");
+    cfg->GetUint32(u, (unsigned*)&mTimeSliceUSec);
+
+    u = SymbolToId("RemoveIfOlderThanSeconds");
+    if (cfg->GetFloat(u, &fv))
+        mRemoveOlderThanSec = (double)fv;
+
+    u = SymbolToId("BinaryResourceCacheSizeMB");
+    unsigned cacheMB;
+    if (cfg->GetUint32(u, &cacheMB))
+        mCacheSizeLimit = (int)(cacheMB << 20);
+    if (mbDisableCache)
+        mCacheSizeLimit = 0;
+
+    cfg->GetUint32(0xed9f3a3d, &mU20c);
+    cfg->GetUint32(0xdcdf5a2d, &mU204);
+    cfg->GetUint32(0xe25ce39d, &mU208);
+    return true;
 }
 
 // @ 0x00a2a020
@@ -4839,6 +8477,87 @@ void ZoneVec::push_back(const Zone_s00a2_a020* v)
     }
 }
 
+// @ 0x00a2ac20
+int* SmallStubs::VecIntInsert(int* param_2, int* param_3)
+{
+    int* self = (int*)this;
+    int* piVar1 = (int*)self[1];
+    if (piVar1 != (int*)self[2]) {
+        if (param_2 <= param_3 && param_3 < piVar1)
+            param_3 = param_3 + 1;
+        if (piVar1 != 0) {
+            int* piVar2 = (int*)piVar1[-1];
+            *piVar1 = (int)piVar2;
+            if (piVar2 != 0)
+                ((void (__thiscall*)(void*))(*(void***)piVar2)[1])(piVar2);
+        }
+        memmove(param_2, (char*)self[1] - 4, (char*)self[1] - (char*)param_2);
+        param_3 = (int*)*param_3;
+        piVar1 = (int*)*param_2;
+        if (param_3 != piVar1) {
+            if (param_3 != 0)
+                ((void (__thiscall*)(void*))(*(void***)param_3)[1])(param_3);
+            *param_2 = (int)param_3;
+            if (piVar1 != 0)
+                ((void (__thiscall*)(void*))(*(void***)piVar1)[2])(piVar1);
+        }
+        self[1] = self[1] + 4;
+        return param_2;
+    }
+    int local_14 = (int)piVar1 - *self >> 2;
+    if (local_14 == 0) {
+        local_14 = 1;
+    } else {
+        local_14 = local_14 * 2;
+    }
+    void* local_18 = 0;
+    if (local_14 != 0)
+        local_18 = operator new(local_14 * 4);
+    int size = (int)param_2 - *self;
+    char* pv = (char*)local_18 + size;
+    if (pv != 0) {
+        int* q = (int*)*param_3;
+        *(int*)pv = (int)q;
+        if (q != 0)
+            ((void (__thiscall*)(void*))(*(void***)q)[1])(q);
+    }
+    int iVar3 = self[1];
+    memmove((char*)pv + 4, param_2, iVar3 - (int)param_2);
+    self[1] = (int)(pv + 4 + (iVar3 - (int)param_2));
+    *self = (int)local_18;
+    self[2] = (int)((char*)local_18 + local_14 * 4);
+    return (int*)pv;
+}
+
+// @ 0x00a2add0
+void SmallStubs::DestroyBuckets(int param_2, u32 param_3)
+{
+    for (u32 i = 0; i < param_3; i++) {
+        void* puVar1 = *(void**)(param_2 + i * 4);
+        while (puVar1) {
+            void* puVar4 = puVar1;
+            puVar1 = *(void**)((char*)puVar4 + 0x24);
+            void* puVar3 = *(void**)((char*)puVar4 + 0x14);
+            while (puVar3) {
+                ((RBTreeStub*)((char*)puVar4 + 8))->DoNukeSubtree(*(void**)puVar3);
+                void* next = *(void**)((char*)puVar3 + 4);
+                operator_delete__(puVar3);
+                puVar3 = next;
+            }
+            if (puVar4 != *(void**)((char*)this + 0x30)) {
+                if (puVar4 < *(void**)((char*)this + 0x24) ||
+                    *(void**)((char*)this + 0x28) <= puVar4) {
+                    operator_delete__(puVar4);
+                } else {
+                    *(void**)puVar4 = *(void**)((char*)this + 0x1c);
+                    *(void**)((char*)this + 0x1c) = puVar4;
+                }
+            }
+        }
+        *(void**)(param_2 + i * 4) = 0;
+    }
+}
+
 // @ 0x00a2ae90
 int SmallStubs::EraseRange(int param_2, int param_3)
 {
@@ -4857,6 +8576,540 @@ int SmallStubs::EraseRange(int param_2, int param_3)
     }
     *(int*)((char*)this + 4) -= ((param_3 - param_2) / 0x14) * 0x14;
     return param_2;
+}
+
+// @ 0x00a2af30
+void ARVector::DoInsertValue(AR_s00a2_af30* pos, const AR_s00a2_af30* value)
+{
+    if (mpEnd != mpCap) {
+        const AR_s00a2_af30* pv = value;
+        if (pv >= pos && pv < mpEnd) ++pv;
+        ::new (mpEnd) AR_s00a2_af30(*(mpEnd - 1));
+        ARCopyBackward(pos, mpEnd - 1, mpEnd);
+        *pos = *pv;
+        ++mpEnd;
+    } else {
+        size_t nPrev = mpEnd - mpBegin;
+        size_t nNew = nPrev ? nPrev * 2 : 1;
+        AR_s00a2_af30* pNew = nNew ? (AR_s00a2_af30*)eaNew(nNew * sizeof(AR_s00a2_af30), "EASTL", 0, 0, EASTL_FILE, 0xd1) : 0;
+        AR_s00a2_af30* pNewEnd = ARUninitCopy(mpBegin, pos, pNew);
+        ARDestroyRange(mpBegin, pos, pNew);
+        ::new (pNewEnd) AR_s00a2_af30(*value);
+        pNewEnd = ARUninitCopy(pos, mpEnd, pNewEnd + 1);
+        ARDestroyRange(pos, mpEnd, pNewEnd);
+        if (mpBegin && mpBegin != mpFixed) operator_delete(mpBegin);
+        mpEnd = pNewEnd;
+        mpBegin = pNew;
+        mpCap = pNew + nNew;
+    }
+}
+
+// @ 0x00a2b2e0
+void ARVector::assign(const AR_s00a2_af30* first, const AR_s00a2_af30* last, const AR_s00a2_af30* last2)
+{
+    (void)last2;
+    size_t n = (size_t)(last - first);
+    if (n > (size_t)(mpCap - mpBegin)) {
+        AR_s00a2_af30* pNew = DoAllocate((u32)n, (AR_s00a2_af30*)first, (AR_s00a2_af30*)last);
+        Destroy(mpBegin, mpEnd);
+        if (mpBegin && mpBegin != mpFixed) operator_delete(mpBegin);
+        mpBegin = pNew;
+        mpEnd = pNew + n;
+        mpCap = pNew + n;
+        return;
+    }
+    size_t size = (size_t)(mpEnd - mpBegin);
+    if (n <= size) {
+        AR_s00a2_af30* pNewEnd = ARCopy((AR_s00a2_af30*)first, (AR_s00a2_af30*)last, mpBegin);
+        Destroy(pNewEnd, mpEnd);
+        mpEnd = pNewEnd;
+        return;
+    }
+    AR_s00a2_af30* mid = (AR_s00a2_af30*)first + size;
+    ARCopy((AR_s00a2_af30*)first, mid, mpBegin);
+    AR_s00a2_af30* out;
+    CopyElems20(&out, mid, (AR_s00a2_af30*)last, mpEnd, (AR_s00a2_af30*)last);
+    mpEnd = out;
+}
+
+// @ 0x00a2b3e0
+bool __stdcall FactoryVoiceTemplate_ReadResource(void* obj, OutRes* out, int, int)
+{
+    if (!obj || !out) return false;
+    int stream = ((int(__thiscall*)(void*))VFN(obj, 0x18))(obj);
+    if (!stream) return false;
+    void* sys = g_pSystem_s00a2_af30;
+    if (!sys) return false;
+
+    u32* hdr = (u32*)((void*(__thiscall*)(void*))VFN(obj, 0x10))(obj);
+    out->h0 = hdr[0];
+    out->h1 = hdr[1];
+    out->h2 = hdr[2];
+
+    char buf[1024];
+    if (!ReadLine((void*)stream, buf, 0x400)) return false;
+    if (atol(buf) != 1) return false;
+    int len = (int)ReadLine((void*)stream, buf, 0x400);
+    if (!len) return false;
+
+    char *tb = 0, *te = 0, *cur = buf;
+    char* end = buf + len;
+    if (TokLine(buf, end, ' ', &tb, &te, &cur)) {
+        do {
+            ((Vec12_s00a2_af30*)((char*)out + 0x14))->pushEmpty();
+            u8* rec = *(u8**)((char*)out + 0x18) - 0xc;
+            int n = (int)(te - tb);
+            char tmp[1024];
+            strncpy(tmp, tb, n);
+            tmp[n] = 0;
+            *(u32*)(rec + 4) = (u32)((int(__thiscall*)(void*, char*))VFN(sys, 0xf4))(sys, tmp);
+            u32 k;
+            memcpy(&k, tb, 4);
+            k = BSWAP(k);
+            *(u32*)(rec + 0) = k;
+            *(u32*)(rec + 8) = 0;
+            if (k == 0x53656e30u && (int)(te - tb) > 6) {
+                int n2 = (int)(te - tb) - 6;
+                strncpy(tmp, tb + 5, n2);
+                tmp[n2] = 0;
+                *(u32*)(rec + 8) = (u32)((int(__thiscall*)(void*, char*))VFN(sys, 0xf4))(sys, tmp);
+            }
+        } while (TokLine(cur, end, ' ', &tb, &te, &cur));
+    }
+
+    len = (int)ReadLine((void*)stream, buf, 0x400);
+    while (len > 0) {
+        char* e2 = buf + len;
+        if (!TokLine(buf, e2, '=', &tb, &te, &cur)) return true;
+        u32 hash;
+        {
+            u8 c = (u8)*te; *te = 0;
+            hash = FNV1_String8(tb, 0x811c9dc5u, 1);
+            *te = (char)c;
+        }
+        cur += 1;
+        if (!TokLine(cur, e2, ':', &tb, &te, &cur)) return true;
+        char tmp[1024];
+        int n = (int)(te - tb);
+        strncpy(tmp, tb, n);
+        tmp[n] = 0;
+        u32 id = (u32)((int(__thiscall*)(void*, char*))VFN(sys, 0xf4))(sys, tmp);
+        u32 key;
+        memcpy(&key, tmp, 4);
+        key = BSWAP(key);
+        cur += 1;
+        if (!TokLine(cur, e2, ',', &tb, &te, &cur)) return true;
+        u32 num;
+        {
+            u8 c = (u8)*te; *te = 0;
+            num = (u32)atol(tb);
+            *te = (char)c;
+        }
+        ((Vec18_s00a2_af30*)((char*)out + 0x194))->pushEmpty();
+        u8* rec = *(u8**)((char*)out + 0x198) - 0x18;
+        *(u32*)(rec + 0x00) = hash;
+        *(u32*)(rec + 0x04) = num;
+        *(u32*)(rec + 0x08) = key;
+        *(u32*)(rec + 0x0c) = id;
+        cur += 1;
+        if (TokLine(cur, e2, ',', &tb, &te, &cur)) {
+            u8 c = (u8)*te; *te = 0;
+            *(float*)(rec + 0x10) = ParseFloat8(tb);
+            *(u32*)(rec + 0x14) |= 1;
+            *te = (char)c;
+        }
+        len = (int)ReadLine((void*)stream, buf, 0x400);
+    }
+    return true;
+}
+
+// @ 0x00a2b7d0
+bool Submix_s00a2_af30::Init(void* param)
+{
+    char* self = (char*)this;
+    if (!g_pSystem_s00a2_af30) return false;
+    char* esi = (char*)param + 0x14;
+    if (!((bool(__thiscall*)(void*, int))VFN(esi, 0x18))(esi, 0x544e850b)) return false;
+    if (!((bool(__thiscall*)(void*, int))VFN(esi, 0x18))(esi, 0x2f8b3bf4)) return false;
+
+    void* v = ((void*(__thiscall*)(void*))VFN(g_pSystem_s00a2_af30, 0xbc))(g_pSystem_s00a2_af30);
+    if (((bool(__thiscall*)(void*, int))VFN(esi, 0x18))(esi, 0xed4c265f))
+        ((void(__thiscall*)(void*, int, void*))VFN(esi, 0x28))(esi, 0xed4c265f, &v);
+    ((void(__thiscall*)(void*, int, void*))VFN(esi, 0x28))(esi, 0xb2550953, self + 0x15f8);
+    ((void(__thiscall*)(void*, int, void*))VFN(esi, 0x24))(esi, 0x6b16ae3d, self + 0x15fc);
+
+    void* ws = ((void*(__thiscall*)(void*, int))VFN(esi, 0x3c))(esi, 0x2f8b3bf4);
+    if (ws) {
+        u32 tmp[4];
+        ConvertToString8Impl(tmp, ws, -1);
+        cString8Assign(self + 0x988, tmp);
+        eastlStringDtor(tmp);
+        *(u32*)(self + 0x970) =
+            ((int(__thiscall*)(void*, void*))VFN(g_pSystem_s00a2_af30, 0xf4))(g_pSystem_s00a2_af30, *(void**)(self + 0x988));
+    }
+
+    if (((bool(__thiscall*)(void*, int))VFN(esi, 0x18))(esi, 0x2fe09c83)) {
+        void* sid = ((void*(__thiscall*)(void*, int))VFN(esi, 0x3c))(esi, 0x2fe09c83);
+        if (sid) {
+            u32 tmp[4];
+            ConvertToString8Impl(tmp, sid, -1);
+            cString8Assign(self + 0x978, tmp);
+            eastlStringDtor(tmp);
+            *(u32*)(self + 0x974) =
+                ((int(__thiscall*)(void*, void*))VFN(g_pSystem_s00a2_af30, 0xf0))(g_pSystem_s00a2_af30, sid);
+        }
+    }
+
+    u32 arr[3] = { 0, 0, 0 };
+    ((void(__thiscall*)(void*, int, void*))VFN(esi, 0x34))(esi, 0x544e850b, arr);
+    arr[1] = 0x29e333b;
+    arr[2] = 0x21407ee;
+
+    void* q = 0;
+    void* err = ObjectError();
+    bool ok = ((bool(__thiscall*)(void*, void**, u32*, int, int, int, int))VFN(err, 0xc))
+                  (err, &q, arr, 0, 0, 0, 0);
+    if (q) {
+        void* r = q;
+        q = 0;
+        ((void(__thiscall*)(void*))VFN(r, 4))(r);
+    }
+    if (!ok) return false;
+
+    VoiceContainer_s00a2_af30* vc = (VoiceContainer_s00a2_af30*)(self + 0x10);
+    if (!vc->ConstructVoice(v)) {
+        RelLocal(&q);
+        return false;
+    }
+    if (*(void**)(self + 0x18) == *(void**)(self + 0x1c)) {
+        RelLocal(&q);
+        return false;
+    }
+    {
+        u32 name = *(u32*)(self + 0x988);
+        char* slot = self + 0x1978;
+        *(u32*)slot = name;
+        *(void**)(*(void**)(self + 0x18)) = slot;
+    }
+    fnA34d70(vc, *(void**)(self + 0x974));
+    if (((bool(__thiscall*)(void*, int))VFN(esi, 0x18))(esi, 0x8a69beee))
+        ((void(__thiscall*)(void*, int, void*))VFN(esi, 0x2c))(esi, 0x8a69beee, self + 0x1608);
+    vc->Create(*(u8*)(self + 0x1608));
+    if (*(void**)(self + 0x10) == 0) {
+        RelLocal(&q);
+        return false;
+    }
+
+    void* plugins[2] = { 0, 0 };
+    ((void(__thiscall*)(void*, int, void**))VFN(g_pSystem_s00a2_af30, 0x184))(g_pSystem_s00a2_af30, 0, plugins);
+    vc->MaskPluginBindings(plugins[0], (int)plugins[1]);
+    vc->CommitBoundProperties();
+    ((void(__thiscall*)(void*, void*))VFN(g_pSystem_s00a2_af30, 0x70))(g_pSystem_s00a2_af30, self + 4);
+    *(u8*)(self + 0x998) = 1;
+    RelLocal(&q);
+    return true;
+}
+
+// @ 0x00a2bb30
+bool EA::Audio::Submix::Shutdown()
+{
+    char* self = (char*)this;
+    if (g_pSystem_s00a2_af30 && *(u8*)(self + 0x998))
+        ((void(__thiscall*)(void*, void*))VFN(g_pSystem_s00a2_af30, 0x74))(g_pSystem_s00a2_af30, self + 4);
+    *(u8*)(self + 0x998) = 0;
+    ((EA::Audio::VoiceContainer*)(self + 0x10))->Destroy();
+    ((EraseVecT*)(self + 0x18))->erase(*(void**)(self + 0x18), *(void**)(self + 0x1c));
+    *(u32*)(self + 0x14) = 0;
+    *(u32*)(self + 0x10) = 0;
+    *(u32*)(self + 0x970) = 0;
+    Disconnect(self);
+
+    {
+        int* buckets = *(int**)(self + 0x9a0);
+        u32 n = *(u32*)(self + 0x9a4);
+        int* p = buckets;
+        int node = *p;
+        if (node == 0) { do { ++p; node = *p; } while (node == 0); }
+        int endNode = buckets[n];
+        while (node != endNode) {
+            void* obj = *(void**)(node + 4);
+            if (((void*(__thiscall*)(void*))VFN(obj, 0x30))(obj) == self)
+                ((void(__thiscall*)(void*))VFN(obj, 0x14))(obj);
+            node = *(int*)(node + 8);
+            while (node == 0) { ++p; node = *p; }
+        }
+    }
+
+    ((PHTable_s00a2_af30*)(self + 0x99c))->FreeBuckets((void**)*(void**)(self + 0x9a0), *(u32*)(self + 0x9a4));
+    *(u32*)(self + 0x99c + 0xc) = 0;
+    ((SubTable_s00a2_af30*)(self + 0xdd4))->DoFreeNodes(*(void**)(self + 0xdd4 + 4), *(void**)(self + 0xdd4 + 8));
+    *(u32*)(self + 0xde0) = 0;
+    return true;
+}
+
+// @ 0x00a2bc40
+bool __stdcall FactoryInstrumentBank_ReadResource(void* obj, InstOut* out, int, int)
+{
+    if (!obj || !out) return false;
+    int stream = ((int(__thiscall*)(void*))VFN(obj, 0x18))(obj);
+    if (!stream) return false;
+
+    u32* hdr = (u32*)((void*(__thiscall*)(void*))VFN(obj, 0x10))(obj);
+    out->h0 = hdr[0];
+    out->h1 = hdr[1];
+    out->h2 = hdr[2];
+
+    char buf[1024];
+    if (!ReadLine((void*)stream, buf, 0x400)) return false;
+    if (atol(buf) != 1) return false;
+    int len = (int)ReadLine((void*)stream, buf, 0x400);
+    while (len > 0) {
+        if (buf[0] != '#') {
+            Zone_s00a2_af30 z;
+            sscanf(buf, "%f %f %f %f %f %f %x %x %x %x %x %x",
+                   &z.f[0], &z.f[1], &z.f[2], &z.f[3], &z.f[4], &z.f[5],
+                   &z.h[0], &z.h[1], &z.h[2], &z.h[3], &z.h[4], &z.h[5]);
+            z.extra[0] = z.h[0];
+            z.extra[1] = 0x1a527db;
+            z.extra[2] = 0x21407ee;
+            if (((bool(__thiscall*)(void*, Zone_s00a2_af30*))VFN(g_pSystem_s00a2_af30, 0x188))(g_pSystem_s00a2_af30, &z)) {
+                int r = ((int(__thiscall*)(void*, u32))VFN(g_pSystem_s00a2_af30, 0x1a4))(g_pSystem_s00a2_af30, z.h[0]);
+                if (out->lastId == -1 && r != -1)
+                    out->lastId = r;
+            }
+            out->zones.push_back(&z);
+        }
+        len = (int)ReadLine((void*)stream, buf, 0x400);
+    }
+    return true;
+}
+
+// @ 0x00a2be10
+void EA::Audio::System::StopAllSounds(bool param)
+{
+    char* self = (char*)this;
+    VecP v;
+    v.begin = 0;
+    v.end   = 0;
+    v.cap   = 0;
+
+    void** anchor = (void**)(self + 0x157438);
+    char* raw  = (char*)*anchor;         // first node (+0x10 into object)
+    char* stop = (char*)anchor;          // sentinel node link address
+    while (raw != stop) {
+        char* obj = raw - 0x10;
+        if (v.end < v.cap) {
+            *v.end++ = obj;
+        } else {
+            ((SimpleVec*)&v)->DoInsertValue(v.end, (void**)&obj);
+        }
+        raw = *(char**)raw;              // link field == stored node pointer
+    }
+
+    void** it = v.end;
+    while (it != v.begin) {
+        void* obj = *--it;
+        if (obj) {
+            ((void(__thiscall*)(void*))VFN(obj, 0))(obj);
+            ((void(__thiscall*)(void*, int, int))VFN(obj, 0x18))(obj, 3, param);
+            ((void(__thiscall*)(void*))VFN(obj, 4))(obj);
+        }
+    }
+    if (v.begin && ((u32*)v.begin)[-1]) operator_delete(v.begin);
+}
+
+// @ 0x00a2bf30
+void System_s00a2_af30::InsertSound(void* item)
+{
+    if (!item) return;
+    ((void(__thiscall*)(void*))VFN(item, 0))(item);
+
+    SoundList_s00a2_af30* list = (SoundList_s00a2_af30*)((char*)this + 0x157c60);
+    SoundNode* node = list->mpFree;
+    if (node) {
+        list->mpFree = node->mpNext;
+    } else {
+        unsigned nNodeSize = list->mnNodeSize;
+        node = (SoundNode*)::operator new(nNodeSize, "EASTL", 0, 0,
+                                          EASTL_FILE, 0xd1);
+    }
+    void** body = (void**)((char*)node + 8);
+    if (body) *body = item;
+    node->mpNext = (SoundNode*)&list->mHead;      // next = sentinel address
+    node->mpPrev = list->mHead.mpPrev;
+    list->mHead.mpPrev->mpNext = node;            // old last -> new node
+    list->mHead.mpPrev = node;
+}
+
+// @ 0x00a2bfa0
+bool Sys_s00a2_bfa0::GetTextureInstance(const Key_s00a2_bfa0* key, void** out)
+{
+    void* iter[2];
+    texTable.find(iter, key);
+    if (iter[0] != texTable.buckets[texTable.count]) {
+        void* val = *(void**)((char*)iter[0] + 0xc);
+        if (!val) return false;
+        if (out) {
+            NotifyTex(key);
+            ((void(__thiscall*)(void*))VFN(val, 0))(val);
+            *out = val;
+        }
+        return true;
+    }
+
+    void* tmp = 0;
+    void* err = ObjectError();
+    if (tmp) ((void(__thiscall*)(void*))VFN(tmp, 4))(tmp);
+    bool ok = ((bool(__thiscall*)(void*, const Key_s00a2_bfa0*, void**, int, int, int, int))VFN(err, 0xc))
+                  (err, key, &tmp, 0, 0, 0, 0);
+
+    struct Pair { Key_s00a2_bfa0 k; void* v; } pair;
+    pair.k = *key;
+    pair.v = tmp;
+    if (tmp) ((void(__thiscall*)(void*))VFN(tmp, 0))(tmp);
+    u32 ins[2];
+    texTable.insert(ins, &pair, 0);
+    if (tmp) ((void(__thiscall*)(void*))VFN(tmp, 4))(tmp);
+
+    if (!ok) {
+        if (tmp) ((void(__thiscall*)(void*))VFN(tmp, 4))(tmp);
+        return false;
+    }
+    if (out) {
+        NotifyTex(key);
+        ((void(__thiscall*)(void*))VFN(tmp, 0))(tmp);
+        *out = tmp;
+    }
+    if (tmp) ((void(__thiscall*)(void*))VFN(tmp, 4))(tmp);
+    return true;
+}
+
+// @ 0x00a2c140
+void Sys_s00a2_bfa0::Update()
+{
+    char* self = (char*)this;
+    char* obj  = *(void**)(self + 0x157438) ? (char*)(*(void**)(self + 0x157438)) - 0x10 : 0;
+    char* stop = self + 0x157438 - 0x10;
+
+    while (obj != stop) {
+        if (((*(u8*)(obj + 0xce4) & 0x10) != 0) &&
+            ((ObjFn*)obj)->check() &&
+            ((ObjFn*)obj)->check2() == 0) {
+            if (!g_vecInit) {
+                g_vecInit = 1;
+                g_vecBegin = 0; g_vecEnd = 0; g_vecCap = 0;
+                _atexit(0);                                   // 0x013c17f0
+            }
+            void** first = *(void***)(obj + 0xc7c);
+            void** last  = *(void***)(obj + 0xc80);
+            for (void** it = first; it != last; ++it) {
+                void* e = *it;
+                if (e) ((void(__thiscall*)(void*))VFN(e, 0))(e);
+                bool keep = !((bool(__thiscall*)(void*, void*))VFN(e, 0xc4))(e, obj);
+                if (keep) {
+                    if (g_vecEnd < g_vecCap) {
+                        *g_vecEnd++ = e;
+                    } else {
+                        ((PtrVec*)&g_vecBegin)->DoInsertValue(g_vecEnd, &e);
+                    }
+                }
+                if (e) ((void(__thiscall*)(void*))VFN(e, 4))(e);
+            }
+            for (void** it = g_vecBegin; it != g_vecEnd; ++it) {
+                void* e = *it;
+                if (e) ((void(__thiscall*)(void*))VFN(e, 0))(e);
+                ((void(__thiscall*)(void*))VFN(e, 0xc0))(e);
+                if (e) ((void(__thiscall*)(void*))VFN(e, 4))(e);
+            }
+            vecBoolClear(g_vecBegin, g_vecEnd, 0);
+            g_vecEnd -= (g_vecEnd - g_vecBegin);
+
+            void* tmp = 0;
+            if (((bool(__thiscall*)(void*, void**))VFN(this, 0x150))(this, &tmp)) {
+                if (((*(u8*)(obj + 0xce4) & 0x20) != 0) && *(void**)(obj + 0x44)) {
+                    void* p = *(void**)(obj + 0x44);
+                    ((void(__thiscall*)(void*))VFN(p, 0x18))(p);
+                    ((void(__thiscall*)(void*, int))VFN(p, 0x38))(p, 0);
+                    if (p) { *(void**)(obj + 0x44) = 0;
+                             ((void(__thiscall*)(void*))VFN(p, 4))(p); }
+                    *(u32*)(obj + 0xce4) &= ~0x20u;
+                }
+                if ((*(u8*)(obj + 0xce4) & 8) != 0) {
+                    *(u32*)(obj + 0xce4) &= ~8u;
+                    ((void(__thiscall*)(void*, void*))VFN(this, 0x74))(this, obj);
+                }
+                void** f2 = *(void***)(obj + 0xc7c);
+                void** l2 = *(void***)(obj + 0xc80);
+                for (void** it = f2; it != l2; ++it) {
+                    void* e = *it;
+                    if (e) ((void(__thiscall*)(void*))VFN(e, 0))(e);
+                    ((void(__thiscall*)(void*, int))VFN(e, 0xd4))(e, 0);
+                    ((void(__thiscall*)(void*, void*))VFN(this, 0xb8))(this, e);
+                    ((void(__thiscall*)(void*))VFN(e, 4))(e);
+                }
+                vecBoolClear(*(void***)(obj + 0xc7c), *(void***)(obj + 0xc80), 0);
+                *(u32*)(obj + 0xc80) -= (*(u32*)(obj + 0xc80) - *(u32*)(obj + 0xc7c));
+                ((void(__thiscall*)(void*, void*))VFN(tmp, 0xb8))(tmp, obj);
+            }
+            if (tmp) ((void(__thiscall*)(void*))VFN(tmp, 4))(tmp);
+        }
+        obj = *(void**)(obj + 0x10) ? (char*)(*(void**)(obj + 0x10)) - 0x10 : 0;
+    }
+}
+
+// @ 0x00a2c450
+bool Sys_s00a2_bfa0::GetAudioA(u32 key, u32 param)
+{
+    void* iter[2];
+    audioTable.find(iter, &key);
+    void* val = 0;
+    if (iter[0] != audioTable.buckets[audioTable.count]) {
+        val = *(void**)((char*)iter[0] + 4);
+        if (val) ((void(__thiscall*)(void*))VFN(val, 0))(val);
+    } else {
+        void* mem = eaNew(0x1874, "Audio", 0, 0, 0, 0);
+        void* nw = mem ? ((CtorT*)mem)->ctor(key) : 0;
+        if (nw) {
+            ((void(__thiscall*)(void*))VFN(nw, 0))(nw);
+            val = nw;
+        }
+        ((void(__thiscall*)(void*))VFN(val, 0x20))(val);
+        void** slot = (void**)audioTable.GetOrInsert(&key);
+        void* old = *slot;
+        if (val != old) {
+            ((void(__thiscall*)(void*))VFN(val, 0))(val);
+            *slot = val;
+            if (old) ((void(__thiscall*)(void*))VFN(old, 4))(old);
+        }
+        ((void(__thiscall*)(void*, void*))VFN(this, 0x16c))(this, val);
+    }
+    u8 r = ((u8(__thiscall*)(void*, u32))VFN(val, 0x28))(val, param);
+    ((void(__thiscall*)(void*))VFN(val, 4))(val);
+    return r != 0;
+}
+
+// @ 0x00a2c590
+bool Sys_s00a2_bfa0::GetAudioB(u32 key)
+{
+    void* iter[2];
+    audioTable.find(iter, &key);
+    if (iter[0] != audioTable.buckets[audioTable.count])
+        return false;
+
+    void* mem = eaNew(0x1874, "Audio", 0, 0, 0, 0);
+    void* nw = mem ? ((CtorT*)mem)->ctor(key) : 0;
+    if (nw) ((void(__thiscall*)(void*))VFN(nw, 0))(nw);
+    ((void(__thiscall*)(void*))VFN(nw, 0x20))(nw);
+    void** slot = (void**)audioTable.GetOrInsert(&key);
+    void* old = *slot;
+    if (nw != old) {
+        ((void(__thiscall*)(void*))VFN(nw, 0))(nw);
+        *slot = nw;
+        if (old) ((void(__thiscall*)(void*))VFN(old, 4))(old);
+    }
+    ((void(__thiscall*)(void*, void*))VFN(this, 0x16c))(this, nw);
+    ((void(__thiscall*)(void*))VFN(nw, 4))(nw);
+    return true;
 }
 
 // @ 0x00a2c6c0
@@ -5279,12 +9532,19 @@ bool AudioSystem::FUN_00a2d880(uint key, void* out)
     return true;
 }
 
+// the constructor's view of the 0x00a2d940 object: a base (vtable 0x13eb394, restored if construction fails), its own
+// vtable, and the tree at +4 built from `arg` by its out-of-line constructor (0x00a26fa0)
+struct TreeObjBase_00a2d940 { virtual void Slot0(); ~TreeObjBase_00a2d940() {} };
+struct TreeObjTree_00a2d940 { char d[0x1c]; TreeObjTree_00a2d940(void* arg); ~TreeObjTree_00a2d940(); };
+struct TreeObj_00a2d940 : TreeObjBase_00a2d940 {
+    TreeObjTree_00a2d940 mTree;   // +4
+    TreeObj_00a2d940(void* arg);
+};
+
 // @ 0x00a2d940
-void* AudioSystem::FUN_00a2d940(void* arg)
+TreeObj_00a2d940::TreeObj_00a2d940(void* arg)
+    : mTree(arg)
 {
-    *(void**)this = (void*)0x1452cb0;
-    ((XF*)((uchar*)this + 4))->FUN_00a26fa0(arg);
-    return this;
 }
 
 // @ 0x00a2d990
@@ -5299,12 +9559,28 @@ int AudioSystem::FUN_00a2d990(void* arg)
     return 0;
 }
 
+// Deleting destructor of a set holder (0x00a2d9d0): no own vtable store (novtable); the rb-tree set at +4 frees its
+// nodes (0x9a9600), the base restores its vtable, then the object is freed (nothrow).
+void SetHolderFree_a2d9d0(void* p) throw();   // 0xf47380
+struct SetTree_a2d9d0 {
+    char  mAnchor[0xc];
+    void* mpRoot;                              // +0x0c
+    char  rest[8];
+    void DoNukeSubtree(void* node);            // 0x009a9600
+    ~SetTree_a2d9d0() { DoNukeSubtree(mpRoot); }
+};
+struct SetHolderBase_a2d9d0 { virtual void v0(); ~SetHolderBase_a2d9d0() { (void)this; } };
+struct __declspec(novtable) SetHolderView_a2d9d0 : SetHolderBase_a2d9d0 {
+    SetTree_a2d9d0 mSet;                       // +0x04
+    ~SetHolderView_a2d9d0() {}
+    void* DeletingDtor(uchar flags);
+};
+
 // @ 0x00a2d9d0
-void* AudioSystem::FUN_00a2d9d0(uchar flags)
+void* SetHolderView_a2d9d0::DeletingDtor(uchar flags)
 {
-    ((XF*)((uchar*)this + 4))->DoNukeSubtree(*(void**)((uchar*)this + 0x10));
-    *(void**)this = (void*)0x13eb394;
-    if (flags & 1) operator_delete(this);
+    this->~SetHolderView_a2d9d0();
+    if (flags & 1) SetHolderFree_a2d9d0(this);
     return this;
 }
 
@@ -5356,21 +9632,30 @@ bool EA::Audio::System::DestroySubmixes()
     return true;
 }
 
+struct Ref4_s00a2_dfe0 {
+    void* p;
+    Ref4_s00a2_dfe0(const Ref4_s00a2_dfe0& o) : p(o.p)
+    {
+        if (p) ((void (__thiscall*)(void*))vc_s00a2_d790(p, 4))(p);
+    }
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+
+struct Ref4Vec_a2dfe0 {
+    void* mAlloc;                               // +0x00
+    Ref4_s00a2_dfe0* mpEnd;                     // +0x04
+    Ref4_s00a2_dfe0* mpCapacity;                // +0x08
+};
+
 // @ 0x00a2dfe0
 void AudioSystem::FUN_00a2dfe0(void* p)
 {
-    uchar* vec = (uchar*)this;
-    void** cur = *(void***)(vec + 4);
-    if (cur < *(void***)(vec + 8)) {
-        *(void***)(vec + 4) = cur + 1;
-        if (cur) {
-            void* o = *(void**)p;
-            *cur = o;
-            if (o) ((void (__thiscall*)(void*))vc_s00a2_d790(o, 4))(o);
-        }
-    } else {
-        ((XF*)vec)->FUN_00a2ac20(cur, p);
-    }
+    Ref4Vec_a2dfe0* v = (Ref4Vec_a2dfe0*)this;
+    if (v->mpEnd < v->mpCapacity)
+        new (v->mpEnd++) Ref4_s00a2_dfe0(*(const Ref4_s00a2_dfe0*)p);
+    else
+        ((XF*)this)->FUN_00a2ac20(v->mpEnd, p);
 }
 
 // @ 0x00a2e060
@@ -5397,28 +9682,39 @@ uint& AudioSystem::FUN_00a2e060(const uint& k)
     return n->value;
 }
 
+struct E0Sub_s00a2_e0e0 { void* sub; E0Sub_s00a2_e0e0* next; };
+struct E0Tree_s00a2_e0e0 { void DoNukeSubtree(void* n); };
+
 // @ 0x00a2e0e0
 int AudioSystem::FUN_00a2e0e0(uint* p)
 {
     uchar* ht = (uchar*)this;
     int before = *(int*)(ht + 0xc);
     uint idx = *p % *(uint*)(ht + 8);
-    uint* bucket = (uint*)(*(int*)(ht + 4) + idx * 4);
-    if (*bucket) {
-        uint* node;
-        for (;;) {
-            node = (uint*)*bucket;
-            if (*p == *node) break;
-            bucket = node + 9;
-            if (!node[9]) break;
+    uchar** bucket = (uchar**)(*(int*)(ht + 4) + idx * 4);
+    while (*bucket && *(uint*)*bucket != *p) {
+        uchar* n = *bucket;
+        bucket = (uchar**)(n + 0x24);
+    }
+    while (*bucket) {
+        uchar* node = *bucket;
+        if (*(uint*)node != *p) break;
+        *bucket = *(uchar**)(node + 0x24);
+        for (E0Sub_s00a2_e0e0* s = *(E0Sub_s00a2_e0e0**)(node + 0x14); s; ) {
+            ((E0Tree_s00a2_e0e0*)(node + 8))->DoNukeSubtree(s->sub);
+            E0Sub_s00a2_e0e0* nx = s->next;
+            EaDelete(s);
+            s = nx;
         }
-        uint v = *bucket;
-        while (v != 0 && (node = (uint*)*bucket, *p == *node)) {
-            *bucket = node[9];
-            operator_delete(node);
-            *(int*)(ht + 0xc) -= 1;
-            v = *bucket;
+        if (node != *(uchar**)(ht + 0x30)) {
+            if (node >= *(uchar**)(ht + 0x24) && node < *(uchar**)(ht + 0x28)) {
+                *(uchar**)node = *(uchar**)(ht + 0x1c);
+                *(uchar**)(ht + 0x1c) = node;
+            } else {
+                EaDelete(node);
+            }
         }
+        *(int*)(ht + 0xc) -= 1;
     }
     return before - *(int*)(ht + 0xc);
 }
@@ -5449,22 +9745,20 @@ void* AudioSystem::FUN_00a2e1b0(void* out, void* node, void* parent)
     return out;
 }
 
+struct EventMsgVec_a2e260 {
+    void* mAlloc;                               // +0x00
+    EventMsg* mpEnd;                            // +0x04
+    EventMsg* mpCapacity;                       // +0x08
+};
+
 // @ 0x00a2e260
 void AudioSystem::FUN_00a2e260(void* p)
 {
-    uchar* vec = (uchar*)this;
-    uchar* cur = *(uchar**)(vec + 4);
-    if (cur < *(uchar**)(vec + 8)) {
-        *(uchar**)(vec + 4) = cur + 0x14;
-        if (cur) {
-            memcpy(cur, p, 0x10);
-            void* o = *(void**)((uchar*)p + 0x10);
-            *(void**)(cur + 0x10) = o;
-            if (o) ((void (__thiscall*)(void*))vc_s00a2_d790(o, 0))(o);
-        }
-    } else {
-        ((XF*)vec)->FUN_00a2af30(cur, p);
-    }
+    EventMsgVec_a2e260* v = (EventMsgVec_a2e260*)this;
+    if (v->mpEnd < v->mpCapacity)
+        new (v->mpEnd++) EventMsg(*(const EventMsg*)p);
+    else
+        ((XF*)this)->FUN_00a2af30(v->mpEnd, p);
 }
 
 // @ 0x00a2e2f0
@@ -5791,6 +10085,318 @@ HNodeV* NodePool_s00a2_e650::Alloc(const SrcPair* src)
     return n;
 }
 
+// @ 0x00a2f6e0
+void NodeAllocator::DoFreeNodes(HashNode0** pNodeArray, u32 n)
+{
+	for (u32 i = 0; i < n; ++i) {
+		HashNode0* pNode = pNodeArray[i];
+		while (pNode != 0) {
+			HashNode0* const pTmp = pNode;
+			pNode = pNode->mpNext;
+			((void(__thiscall*)(NodeAllocator*, HashNode0*))FUN_00a2f660)(this, pTmp);
+		}
+		pNodeArray[i] = 0;
+	}
+}
+
+// @ 0x00a2f730
+u32 Submix_s00a2_f660::LoadFromResman(const char* resName, u32 flags, u32 extra)
+{
+	ProfileTimer_s00a2_f660 timer((char*)this + 0x5c);
+	void* const pDebug = FUN_008de1a0();
+	if (pDebug == 0)
+		return 0;
+
+	u8 params[0xc] = { 0 };
+	if (FUN_00a24850(resName, params) == 0)
+		return 0;
+
+	void* const pHook = (*(void*(__thiscall**)(void*, void*))(*(char**)pDebug + 0x58))(pDebug, params);
+
+	void* pRef = 0;
+	if (pHook != 0) {
+		(*(void(__thiscall**)(void*))(*(char**)pHook + 0x00))(pHook);
+
+		u32 nKind = 0;
+		if (flags == 0)
+			nKind = 1;
+		else if ((flags & 1) != 0)
+			nKind = 3;
+
+		if ((*(u8(__thiscall**)(void*, u32*, u32, u32, u32, u32))(*(char**)pHook + 0x34))
+				(pHook, &extra, nKind, 6, 1, 0) != 0) {
+			pRef = pHook;
+			if (FUN_00a2e4c0(0) != 0) {
+				(*(void(__thiscall**)(void*))(*(char**)pHook + 0x04))(pHook);
+				FUN_00a24900();
+				return 1;
+			}
+		}
+	}
+
+	if (pRef != 0)
+		(*(void(__thiscall**)(void*))(*(char**)pRef + 0x04))(pRef);
+
+	return 0;
+}
+
+// @ 0x00a2f960
+Submix_s00a2_f660::Submix_s00a2_f660()
+: mId(0), mSendId(0), mbAddedToTick(0)
+	, mPrimitives(AllocTag(), AllocTag())
+	, mRegisters(AllocTag(), AllocTag())
+	, mSendPlugins(AllocTag(), AllocTag())
+{
+}
+
+// @ 0x00a2fac0
+void Submix_s00a2_f660::Tick(u32, u32)
+{
+	if (mParams.mStampByte != 0 && FUN_0112c640(mParams.mFlag2) != 0) {
+		mParams.mFlag2 = 0;
+		mParams.mStampByte = 0;
+		mVoiceContainer.Destroy();
+	}
+
+	IPrimitiveNode** pBucket = (IPrimitiveNode**)mPrimitives.mpBucketArray;
+	IPrimitiveNode* pNode = *pBucket;
+	if (pNode == 0) {
+		do {
+			++pBucket;
+			pNode = *pBucket;
+		} while (pNode == 0);
+	}
+
+	IPrimitiveNode* const pEnd =
+		*(IPrimitiveNode**)((char*)mPrimitives.mpBucketArray + mPrimitives.mnBucketCount * 4);
+
+	while (pNode != pEnd) {
+		IPrimitive* const pPrim = pNode->mpValue;
+		const u32 nId = pNode->mKey;
+		if (pPrim != 0)
+			(*(void(__thiscall**)(IPrimitive*))(*(char**)pPrim + 0x00))(pPrim);
+
+		if ((*(u8(__thiscall**)(IPrimitive*, u32))(*(char**)pPrim + 0x20))(pPrim, 0) != 0) {
+			const float fVal = (float)(*(double(__thiscall**)(IPrimitive*))(*(char**)pPrim + 0x1c))(pPrim);
+			u32 v; *(float*)&v = fVal;
+			mVoiceContainer.SetProperty(nId, v);
+		}
+		(*(void(__thiscall**)(IPrimitive*))(*(char**)pPrim + 0x04))(pPrim);
+
+		pNode = pNode->mpNext;
+		while (pNode == 0) {
+			++pBucket;
+			pNode = *pBucket;
+		}
+	}
+}
+
+// @ 0x00a2fbe0
+u32 Submix_s00a2_f660::SetPerformanceData(int level, const void* a, u32 b)
+{
+	mVoiceContainer.MaskPluginBindings(a, b);
+
+	const bool bUnderThreshold = level < (int)mParams.mFlags1;
+	u32 nActive = (u32)bUnderThreshold;
+
+	if (bUnderThreshold) {
+		if (mParams.mFlag3 != 0)
+			return nActive;
+
+		if (mParams.mFlag2 != 0) {
+			int* pInst = (int*)(*(void*(__thiscall**)(u32))(*(char**)gEapdDebug + 0x17c))(mSendId);
+			if (pInst != 0) {
+				void* pSend = *(void**)(pInst + 0x14);
+				if (gAudioSystem != 0)
+					FUN_0112c600();
+				if (gAudioSystem != 0) {
+					void* it;
+					FUN_00594410(&it);
+					IPrimitiveNode* const pItEnd = *(IPrimitiveNode**)
+						((char*)mSendPlugins.mpBucketArray + mSendPlugins.mnBucketCount * 4);
+					while ((IPrimitiveNode*)it != pItEnd) {
+						FUN_0112ccc0(0, &pSend);
+						it = *(void**)((char*)it + 4);
+						while (it == 0) {
+							it = *(void**)((char*)it + 4);
+						}
+					}
+					FUN_0112c620();
+				}
+			}
+		}
+		mVoiceContainer.Disconnect();
+		mParams.mStamp = *(u32*)((char*)gAudioSystem + 0xe0);
+		mParams.mFlag4 = 1;
+		mParams.mFlag3 = 1;
+		return 1;
+	}
+
+	if (mParams.mFlag3 == 0)
+		return nActive;
+
+	mVoiceContainer.Create(mParams.mValueByte);
+	mVoiceContainer.Connect();
+	nActive = mVoiceContainer.CommitBoundProperties();
+	if (mParams.mFlag2 != 0) {
+		if (gAudioSystem != 0)
+			FUN_0112c600();
+		if (gAudioSystem != 0) {
+			void* it;
+			FUN_00594410(&it);
+			IPrimitiveNode* const pItEnd = *(IPrimitiveNode**)
+				((char*)mSendPlugins.mpBucketArray + mSendPlugins.mnBucketCount * 4);
+			while ((IPrimitiveNode*)it != pItEnd) {
+				void* pPrim = *(void**)&nActive;
+				nActive = FUN_0112ccc0(0, &pPrim);
+				it = *(void**)((char*)it + 4);
+				while (it == 0) {
+					it = *(void**)((char*)it + 4);
+				}
+			}
+			FUN_0112c620();
+		}
+	}
+	mParams.mFlag4 = 0;
+	mParams.mFlag3 = 0;
+	return nActive;
+}
+
+// @ 0x00a2fe30
+void Submix_s00a2_f660::SetProperty(u32 id, u32 value)
+{
+	if ((value & 0x7fffffff) == 0
+			|| (((value - 0x800000) & 0x7f800000) < 0x7f000000)
+			|| (((value & 0x7fffffff) - 1) < 0x7fffff)) {
+		void* const pPrim = (*(void*(__thiscall**)(u32))(*(char**)gEapdDebug + 0xf8))(id);
+		if (pPrim == 0) {
+			mVoiceContainer.SetProperty(id, value);
+			return;
+		}
+
+		IPrimitiveNode* pFound;
+		((void(__thiscall*)(RegTable*, u32*, IPrimitiveNode**))FUN_00645ed0)(&mRegisters, &id, &pFound);
+
+		IPrimitive* pCreated = 0;
+		IPrimitiveNode* const pEnd =
+			*(IPrimitiveNode**)((char*)mRegisters.mpBucketArray + mRegisters.mnBucketCount * 4);
+
+		if (pFound == pEnd) {
+			IPrimitiveNode* const pStorage = (IPrimitiveNode*)FUN_00a17090(0x1c);
+			if (pStorage != 0)
+				pCreated = (IPrimitive*)FUN_00a17100(this);
+			if (pCreated != 0)
+				(*(void(__thiscall**)(IPrimitive*))(*(char**)pCreated + 0x00))(pCreated);
+
+			FUN_00fccdd0(id);
+			((void(__thiscall*)(IPrimitive*, u32))(void*)FUN_00a16fd0)(pCreated, value);
+			((void(__thiscall*)(RegTable*, IPrimitiveNode*, u32))FUN_00a26ce0)
+				(&mRegisters, (IPrimitiveNode*)&pStorage, value & 0xffffff00);
+			(*(void(__thiscall**)(Submix_s00a2_f660*, u32, IPrimitive*))(*(char**)this + 0x18))(this, id, pCreated);
+		} else {
+			IPrimitive* const pValue = pFound->mpValue;
+			if (pValue != 0) {
+				(*(void(__thiscall**)(IPrimitive*))(*(char**)pValue + 0x00))(pValue);
+				pCreated = pValue;
+			}
+			((void(__thiscall*)(IPrimitive*, u32))(void*)FUN_00a16fd0)(pCreated, value);
+		}
+
+		if (pCreated != 0)
+			(*(void(__thiscall**)(IPrimitive*))(*(char**)pCreated + 0x04))(pCreated);
+	}
+}
+
+// @ 0x00a2ffe0
+u32 Submix_s00a2_f660::ConnectPrimitive(u32 id, IPrimitive* p)
+{
+	IPrimitiveNode* pFound;
+	((void(__thiscall*)(PHTable_s00a2_f660*, u32*, IPrimitiveNode**))FUN_00645ed0)(&mPrimitives, &id, &pFound);
+
+	IPrimitiveNode* const pEnd =
+		*(IPrimitiveNode**)((char*)mPrimitives.mpBucketArray + mPrimitives.mnBucketCount * 4);
+
+	if (pFound == pEnd) {
+		if (p != 0)
+			(*(void(__thiscall**)(IPrimitive*))(*(char**)p + 0x00))(p);
+		IPrimitive* const pNew = p;
+		if (pNew != 0)
+			(*(void(__thiscall**)(IPrimitive*))(*(char**)pNew + 0x00))(pNew);
+		FUN_00a136f0((void*)&pFound, (void*)&pFound, id & 0xffffff00);
+		if (pNew != 0)
+			(*(void(__thiscall**)(IPrimitive*))(*(char**)pNew + 0x04))(pNew);
+		if (p != 0)
+			(*(void(__thiscall**)(IPrimitive*))(*(char**)p + 0x04))(p);
+		return 1;
+	}
+
+	void* const pPrim = (*(void*(__thiscall**)(u32))(*(char**)gEapdDebug + 0xf8))(id);
+	if (pPrim == 0)
+		return 0;
+
+	IPrimitive* pExisting = pFound->mpValue;
+	IPrimitive* pMatch = 0;
+	if (pExisting != 0)
+		pMatch = (IPrimitive*)(*(void*(__thiscall**)(IPrimitive*, u32))(*(char**)pExisting + 0x0c))(pExisting, 0x4e73a43a);
+
+	if (pMatch == 0
+			|| (*(int(__thiscall**)(IPrimitive*))(*(char**)pMatch + 0x30))(pMatch) != (int)(long)this) {
+		void* const pMem = FUN_00a16ad0(0x6c);
+		IPrimitive* pAgg = 0;
+		if (pMem != 0)
+			pAgg = (IPrimitive*)FUN_00a16d00((u32)(long)this);
+		if (pAgg != 0)
+			(*(void(__thiscall**)(IPrimitive*))(*(char**)pAgg + 0x00))(pAgg);
+
+		((void(__thiscall*)(IPrimitive*, void*))FUN_00a16a90)(pExisting, pPrim);
+		(*(void(__thiscall**)(IPrimitive*, IPrimitive*))(*(char**)pExisting + 0x10))(pExisting, pExisting);
+		(*(void(__thiscall**)(IPrimitive*, IPrimitive*))(*(char**)pAgg + 0x10))(pAgg, pAgg);
+		(*(void(__thiscall**)(IPrimitive*))(*(char**)pAgg + 0x10))(pAgg);
+		(*(void(__thiscall**)(IPrimitive*, u32))(*(char**)pAgg + 0x2c))(pAgg, 1);
+
+		pExisting = pFound->mpValue;
+		if (pAgg != pExisting) {
+			(*(void(__thiscall**)(IPrimitive*))(*(char**)pAgg + 0x00))(pAgg);
+			pFound->mpValue = pAgg;
+			if (pExisting != 0)
+				(*(void(__thiscall**)(IPrimitive*))(*(char**)pExisting + 0x04))(pExisting);
+		}
+		(*(void(__thiscall**)(IPrimitive*))(*(char**)pAgg + 0x04))(pAgg);
+	} else {
+		(*(void(__thiscall**)(IPrimitive*, u32))(*(char**)pMatch + 0x10))(pMatch, id);
+	}
+	return 1;
+}
+
+// @ 0x00a301f0
+void Submix_s00a2_f660::DisconnectPrimitive(u32 id, IPrimitive* p)
+{
+	PHTable_s00a2_f660& tbl = mPrimitives;
+	HTIter it;
+	((void(__thiscall*)(PHTable_s00a2_f660*, IPrimitiveNode**, u32*))FUN_00645ed0)(&tbl, (IPrimitiveNode**)&it, &id);
+
+	if (it.mpNode == (IPrimitiveNode*)tbl.mpBucketArray[tbl.mnBucketCount])
+		return;
+
+	IPrimitive* const pExisting = it.mpNode->mpValue;
+	if (pExisting != 0) {
+		IPrimitive* const pMatch =
+			(IPrimitive*)(*(void*(__thiscall**)(IPrimitive*, u32))(*(char**)pExisting + 0x0c))(pExisting, 0x4e73a43a);
+		if (pMatch != 0) {
+			(*(void(__thiscall**)(IPrimitive*, IPrimitive*))(*(char**)pMatch + 0x14))(pMatch, p);
+			return;
+		}
+	}
+	if (pExisting == p) {
+		((void(__thiscall*)(PHTable_s00a2_f660*, HTIter, HTIter*))FUN_00d2c9f0)(&tbl, it, &it);
+	}
+}
+
+// @ 0x00a30280
+EA::Audio::Submix::~Submix()
+{
+}
+
 // @ 0x00a30460
 void EA::Audio::System::SetProperty(unsigned int key, float value)
 {
@@ -5919,37 +10525,47 @@ int NodeMap::eraseKey(u32* key)
 }
 
 // @ 0x00a31040
-FixedVec11* FixedVec11::ctor(int param_2)
+FixedVec11Obj::FixedVec11Obj(int param_2)
 {
-    u32* p = storage;
-    f10 = p;
-    mpEnd = p;
-    mpBegin = p;
-    mpCap = p + 1001;
     resize(param_2 + 1);
     fStart = (u32)mpBegin;
     fEnd = (u32)mpBegin;
     fCount = 0;
-    return this;
 }
 
+// Copy-construction view of FixedVec11b (0x00a310b0): the vector base takes the inline pool and frees on unwind;
+// the elements are assigned through 0x00a2b2e0 with an uninitialized iterator tag.
+struct FV11Tag_a310b0 {};
+struct FV11Base_a310b0 {
+    u32* mpBegin;    // +0
+    u32* mpEnd;      // +4
+    u32* mpCap;      // +8
+    u32* f0c;        // +0xc
+    u32* f10;        // +0x10
+    explicit FV11Base_a310b0(u32* pool) { mpBegin = 0; mpEnd = 0; mpCap = 0; f10 = pool; }
+    ~FV11Base_a310b0();
+};
+struct FV11Copy_a310b0 : FV11Base_a310b0 {
+    u32* f14;            // +0x14
+    u32  storage[250];   // +0x18
+    FV11Copy_a310b0(const FV11Copy_a310b0& x);
+    void DoAssign(u32* first, u32* last, FV11Tag_a310b0 tag);   // 0x00a2b2e0
+};
+
 // @ 0x00a310b0
-FixedVec11b* FixedVec11b::ctor(u32* param_2)
+FV11Copy_a310b0::FV11Copy_a310b0(const FV11Copy_a310b0& x) : FV11Base_a310b0(storage)
 {
-    u32* p = storage;
-    f10 = p;
-    mpEnd = p;
-    mpBegin = p;
-    mpCap = p + 250;
-    InitRange(param_2[0], param_2[1], param_2);
-    return this;
+    mpBegin = mpEnd = storage;
+    mpCap = mpBegin + 250;
+    FV11Tag_a310b0 tag;
+    DoAssign(x.mpBegin, x.mpEnd, tag);
 }
 
 // @ 0x00a31170
 bool cSystem::InitAT()
 {
     mbMuteApplied = false;
-    int* slot = &mIdArray.mpBase[mIdArray.mIndex];
+    int* slot = &((int*)mIdTable.mpBegin)[(int)mIdTable.mpEnd];
     mIterValue = *slot;
     mIterPos = slot;
     mIter8 = 0;
@@ -6109,6 +10725,187 @@ bool cSystem::InitAT()
     return true;
 }
 
+// @ 0x00a31800
+bool cSystem::ShutdownAT()
+{
+    mPoolA.Reset();
+    Hook1b8();
+    HookDC();
+    Hook80(1);
+
+    if (mPromptList.mpNext != (ListNode_s00a3_1170*)&mPromptList) {
+        for (mpPromptIter = mPromptList.mpNext; mpPromptIter != (ListNode_s00a3_1170*)&mPromptList; )
+        {
+            ListNode_s00a3_1170* node = mpPromptIter;
+            ((IPrompt*)node->mpData)->Release(kPromptReleaseTime, kPromptReleaseTime);
+            mpPromptIter = node->mpNext;
+        }
+    }
+
+    mFadeVolume = 0.0f;
+    Hook1d0();
+    Hook1cc();
+
+    if (mpMessageHandler) {
+        void* handler = mpMessageHandler;
+        mpMessageHandler = 0;
+        FUN_00571db0(handler, mHandlerArg0, mHandlerArg1, mHandlerArg2, mHandlerArg3);
+    }
+
+    if (mpStreamPoolDefault) {
+        {
+            AutoAudioLock lock;
+            mpStreamPoolDefault->QueueRelease();
+            mpStreamPoolDefault = 0;
+        }
+    }
+
+    if (mpRWAC) {
+        unsigned int ctrl = _controlfp(0, 0);
+        bool restore = (ctrl & 0x30000) != 0x10000;
+        if (restore)
+            _controlfp(0x10000, 0x30000);
+        mpRWAC->shutdown();
+        mpRWAC = 0;
+        if (restore)
+            _controlfp(ctrl, 0x30000);
+    }
+
+    FUN_011e5d30();
+
+    if (mPromptList.mpNext != (ListNode_s00a3_1170*)&mPromptList) {
+        for (mpPromptIter = mPromptList.mpNext; mpPromptIter != (ListNode_s00a3_1170*)&mPromptList; )
+        {
+            ListNode_s00a3_1170* node = mpPromptIter;
+            Hook74(node->mpData);
+            mpPromptIter = node->mpNext;
+        }
+        mPromptList.FreeNodes();
+        mPromptList.mpNext = (ListNode_s00a3_1170*)&mPromptList;
+        mPromptList.mpPrev = (ListNode_s00a3_1170*)&mPromptList;
+    }
+
+    mHash404.DoFreeNodes(mHash404.mpBegin, mHash404.mpEnd);
+    mHash404.mCount = 0;
+    mHash13f4.FreeBuckets((void**)mHash13f4.mpBegin, (uint32_t)(intptr_t)mHash13f4.mpEnd);
+    mHash13f4.mCount = 0;
+    mHash23e4.DoFreeNodes(mHash23e4.mpBegin, mHash23e4.mpEnd);
+    mHash23e4.mCount = 0;
+    mHash33d4.DoFreeNodes(mHash33d4.mpBegin, mHash33d4.mpEnd);
+    mHash33d4.mCount = 0;
+    mHash80424.FreeSubNodes((void**)mHash80424.mpBegin, (uint32_t)(intptr_t)mHash80424.mpEnd);
+    mHash80424.mCount = 0;
+    mFdf1189fc.FreeFdfNodes(mFdf1189fc.mpBegin, mFdf1189fc.mpEnd);
+    mFdf1189fc.mCount = 0;
+    mIdTable.FreeFdfNodes(mIdTable.mpBegin, mIdTable.mpEnd);
+    mIdTable.mCount = 0;
+    mTree118a5c.Clear();
+    mEmitterMap.FreeNodes(mEmitterMap.mpBegin, mEmitterMap.mpEnd);
+    mEmitterMap.mCount = 0;
+    mRes118b90.FreeResNodes((void**)mRes118b90.mpBegin, (uint32_t)(intptr_t)mRes118b90.mpEnd);
+    mRes118b90.mCount = 0;
+    mHash118bb0.DoFreeNodes(mHash118bb0.mpBegin, mHash118bb0.mpEnd);
+    mHash118bb0.mCount = 0;
+
+    if (mpLogReporterList) {
+        FUN_00926410(mpLogReporterList);
+        operator_delete_array(mpLogReporterList);
+    }
+    mpLogReporterList = 0;
+    FUN_00e25bd0(mReporterVec.mpBegin, mReporterVec.mpEnd);
+
+    mHash119bb8.FreeBuckets((void**)mHash119bb8.mpBegin, (uint32_t)(intptr_t)mHash119bb8.mpEnd);
+    mHash119bb8.mCount = 0;
+    mHash11a3d8.DoFreeNodes(mHash11a3d8.mpBegin, mHash11a3d8.mpEnd);
+    mHash11a3d8.mCount = 0;
+    mFloat11b3c8.FreeFloatNodes(mFloat11b3c8.mpBegin, mFloat11b3c8.mpEnd);
+    mFloat11b3c8.mCount = 0;
+    mMisc1277b4.FreeMiscNodes(mMisc1277b4.mpBegin, mMisc1277b4.mpEnd);
+    mMisc1277b4.mCount = 0;
+    mProf128ae0.FreeProfBuckets(mProf128ae0.mpBegin, (uint32_t)(intptr_t)mProf128ae0.mpEnd);
+    mProf128ae0.mCount = 0;
+
+    mRing12d968.mpBegin = mpProfPool;
+    mRing12d968.mpEnd = mpProfPool;
+    mRing12d968.mpCapacity = 0;
+    mProf12d974.FreeProfBuckets(mProf12d974.mpBegin, (uint32_t)(intptr_t)mProf12d974.mpEnd);
+    mProf12d974.mCount = 0;
+
+    mRing1327fc.mpBegin = mIdRing.mpBegin;
+    mRing1327fc.mpEnd = mIdRing.mpBegin;
+    mRing1327fc.mpCapacity = 0;
+    mProf132808.FreeProfBuckets(mProf132808.mpBegin, (uint32_t)(intptr_t)mProf132808.mpEnd);
+    mProf132808.mCount = 0;
+
+    mRing137690.mpBegin = mpProfPool2;
+    mRing137690.mpEnd = mpProfPool2;
+    mRing137690.mpCapacity = 0;
+    mBits13769c.EraseAll();
+
+    mList157438.Clear();
+    mProf157440.FreeProfBuckets(mProf157440.mpBegin, (uint32_t)(intptr_t)mProf157440.mpEnd);
+    mProf157440.mCount = 0;
+
+    mBits15bb7c.EraseAll();
+
+    mFdf118a3c.FreeFdfNodes(mFdf118a3c.mpBegin, mFdf118a3c.mpEnd);
+    mFdf118a3c.mCount = 0;
+    mHash13777c.DoFreeNodes(mHash13777c.mpBegin, mHash13777c.mpEnd);
+    mHash13777c.mCount = 0;
+
+    if (mpFactoryB) {
+        IFactory* old = mpFactoryB;
+        mpFactoryB = 0;
+        old->Release();
+    }
+
+    mPolyphonyMap.FreeNodes(mPolyphonyMap.mpBucketArray, (void*)(intptr_t)mPolyphonyMap.mnBucketCount);
+    mPolyphonyMap.mnNodeCount = 0;
+
+    g_teardownFlag = 0;
+    return true;
+}
+
+// @ 0x00a31dc0
+bool cSystem::FUN_00a31dc0(uint32_t key, void* query)
+{
+    bool removed = false;
+    HashIter_s00a3_1170 it;
+
+    mMisc1277b4.FindMisc(&it, key);
+    if (it.mpNode != mMisc1277b4.Sentinel())
+        return ((MapNode_s00a3_1170*)it.mpNode)->mPair.Remove(query);
+
+    mHash404.FindInt(&it, key);
+    if (it.mpNode == mHash404.Sentinel())
+        return removed;
+
+    KeyValue* kv = &((MapNode_s00a3_1170*)it.mpNode)->mPair;
+    uint32_t value = kv->mValue;
+
+    EaTree temp;
+    temp.mAllocator = 0;
+    temp.mpHeaderNode = &temp;
+    temp.mpRoot = &temp;
+    temp.mpNodeChain = 0;
+    temp.mbFlag = 0;
+    temp.mCount = 0;
+
+    removed = kv->Remove(query);
+    if (removed) {
+        PolyPair pair;
+        HashIter_s00a3_1170 out;
+        uint8_t flag = 0;
+        pair.first = key;
+        pair.second = value;
+        out.Init(&flag);                        // 0x00a26fa0
+        InsertMapped(&out, &pair, flag);        // 0x00a2f510
+        temp.NukeSubtree(temp.mpNodeChain);
+    }
+    temp.NukeSubtree(temp.mpNodeChain);
+    return removed;
+}
+
 // @ 0x00a31f20
 bool System_s00a3_1f20::DoCommandMainThread(EA::Audio::Command_s00a3_1f20* cmd)
 {
@@ -6209,20 +11006,31 @@ FixedHashMap::FixedHashMap(uint a, uint b)
         ((FHMapBase*)this)->Rehash(n);
 }
 
+struct HashTmpObj {
+    uint32_t t0, t1;
+    char rest[0x3f8];
+    HashTmpObj(uint32_t* src) { ((HashTmp*)this)->Ctor(src); }
+    ~HashTmpObj() { ((HashTmp*)this)->Dtor(); }
+};
+
+struct SwapTmp_00a32320 {
+    uint32_t pre;
+    HashTmpObj tmp;
+    SwapTmp_00a32320(uint32_t* src) : tmp(src) {}
+};
+
 // @ 0x00a32320
 void FUN_00a32320(uint32_t* x, uint32_t* y)
 {
-    struct { uint32_t pre; uint32_t t0, t1; char rest[0x3f0]; } tmp;
-    ((HashTmp*)&tmp.t0)->Ctor(x);
+    SwapTmp_00a32320 w(x);
     if (x != y) {
         ((HashDst*)x)->Clear(x[0], x[1]);
-        ((HashDst*)x)->Assign(y[0], y[1], tmp.pre);
+        ((HashDst*)x)->Assign(y[0], y[1], w.pre);
     }
-    if (y != &tmp.t0) {
+    if (y != &w.tmp.t0) {
         ((HashDst*)y)->Clear(y[0], y[1]);
-        ((HashDst*)y)->Assign(tmp.t0, tmp.t1, tmp.pre);
+        ((HashDst*)y)->Assign(w.tmp.t0, w.tmp.t1, w.pre);
     }
-    ((HashTmp*)&tmp.t0)->Dtor();
 }
 
 // @ 0x00a323e0
@@ -6365,6 +11173,179 @@ void SystemProps::SetOutputProperty(uint32_t id, uint32_t prop, float value)
     ((InnerInsert*)m)->Insert((uint32_t*)out, kv, prop);
 }
 
+// @ 0x00a32f20
+void System_s00a3_2f20::Update(void* ctx, float dt)
+{
+    EA::Stopwatch_s00a3_2f20 watch(4, false);
+    watch.Start();
+
+    if (q2.FunF980() && s3f4) {
+        if (rt::gpCmdStub)
+            ((void (__thiscall*)(void*))AVS(rt::gpCmdStub, 0xc0))(rt::gpCmdStub);
+        s3f4 = 0;
+        q2.FunFee0(&q1);
+        if (rt::gpCmdStub)
+            ((void (__thiscall*)(void*))AVS(rt::gpCmdStub, 0xc4))(rt::gpCmdStub);
+        q2.FunFdc0();
+    }
+
+    if (!q2.FunF980()) {
+        uint32_t spins = 0;
+        EA::LimitStopwatch_s00a3_2f20 dispatchTimer(3, false);
+        dispatchTimer.SetTimeLimit(cq0, true);
+        do {
+            ++spins;
+            if ((spins & 3) == 0 && !dispatchTimer.HasTimeLeft())
+                break;
+            if (!q2.FunF9a0())
+                break;
+            ((void (__thiscall*)(System_s00a3_2f20*, void*))AVS(this, 0x130))(this, q2.GetArg());
+        } while (true);
+        if (q2.FunF990() == 0) {
+            q2.FunFdd0();
+            ++s3f8;
+        }
+    }
+
+    bool muted = (mbMutedForSilence || mbMuted || mbMutedForFocus || mbMutedByProperty);
+    if (muted != (b9a != 0))
+        MuteAll(muted, false);
+
+    if (mObj157c60.pNext != (void*)&mObj157c60) {
+        float delta = dt - cqName;
+        if (delta < 0.0f)
+            delta = 0.0f;
+
+        if (pObj == (T26990*)&mObj157c60) {
+            ((void (__thiscall*)(System_s00a3_2f20*, float, uint32_t))AVS(this, 0x208))(this, delta, z6b0);
+            cqName = dt;
+            pObj = (T26990*)mObj157c60.pNext;
+        }
+
+        uint32_t spins = 0;
+        EA::LimitStopwatch_s00a3_2f20 bindTimer(3, false);
+        bindTimer.SetTimeLimit(cq2, true);
+        do {
+            ++spins;
+            if ((spins & 3) == 0 && !bindTimer.HasTimeLeft())
+                break;
+            if (pObj == (T26990*)&mObj157c60)
+                break;
+            T26990* pCur = pObj;
+            ((void (__thiscall*)(void*, float, float))AVS(pCur->pObj, 8))(pCur->pObj, dt, delta);
+            if (pObj == pCur)
+                pObj = (T26990*)pCur->pNext;
+        } while (true);
+
+        if (pObj == (T26990*)&mObj157c60) {
+            void* it[2];
+            mHT3.Begin(it);
+            void* pEnd = mHT3.mpBuckets[mHT3.mBucket];
+            void* pNode = it[0];
+            void** ppBucket = (void**)it[1];
+            while (pNode != pEnd) {
+                void* pValue = *(void**)((char*)pNode + 4);
+                ((void (__thiscall*)(void*, uint32_t))AVS(pValue, 0x24))(pValue, z6b0);
+                pNode = *(void**)((char*)pNode + 8);
+                while (pNode == 0) {
+                    pNode = *++ppBucket;
+                }
+            }
+            ((void (__thiscall*)(System_s00a3_2f20*))AVS(this, 0x13c))(this);
+            MaintainLRU();
+            ((void (__thiscall*)(System_s00a3_2f20*))AVS(this, 0x20c))(this);
+        }
+    }
+
+    ((void (__thiscall*)(System_s00a3_2f20*))AVS(this, 0x204))(this);
+
+    while (rb0 != rb1) {
+        if (!(rt::gDeferredGuard & 1)) {
+            rt::gDeferredGuard |= 1;
+            rt::gDeferredCmds.mpBegin = rt::gDeferredStorage;
+            rt::gDeferredCmds.mpEnd = rt::gDeferredStorage;
+            rt::gDeferredCmds.mpCap = rt::gDeferredStorage;
+            rt::gDeferredCmds.mpGuard = &rt::gDeferredGuard;
+            atexit(DeferredListInit);
+        }
+        rt::gDeferredCmds.Assign(rb0, rb1);
+
+        uint32_t* pRec = rt::gDeferredCmds.mpBegin;
+        uint32_t* pEnd = rt::gDeferredCmds.mpEnd;
+        if (pRec != pEnd) {
+            do {
+                rt::CmdRecord* pCmd = (rt::CmdRecord*)pRec;
+                if (pCmd->mType == 0x3a0fd6e) {
+                    rt::MsgObj* pObj2 = (rt::MsgObj*)((void* (__thiscall*)(System_s00a3_2f20*, uint32_t))AVS(this, 0x1d4))(this, pCmd->mArg1);
+                    if (pObj2)
+                        ((void (__thiscall*)(rt::MsgObj*))AVS(pObj2, 0))(pObj2);
+                    if (pObj2)
+                        ((void (__thiscall*)(rt::MsgObj*, int, int))AVS(pObj2, 0x18))(pObj2, 0, 1);
+                    if (pObj2)
+                        ((void (__thiscall*)(rt::MsgObj*))AVS(pObj2, 4))(pObj2);
+                } else if (pCmd->mType == 0x3a129ee) {
+                    if (pCmd->mArg1 >= 0x7d1 && pCmd->mArg1 <= 0xbb8) {
+                        void* found;
+                        mPolyB.Find(&found, &pCmd->mArg1);
+                        if (found != (void*)mPolyB.mpBuckets[mPolyB.mBucket]) {
+                            mPolyB.Erase(&pCmd->mArg1);
+                            *mIdWrite++ = pCmd->mArg1;
+                            if (mIdWrite == (uint32_t*)mPoolB.mpLimit)
+                                mIdWrite = (uint32_t*)mPoolB.mpFirst;
+                            if (mIdWrite == mIdRead) {
+                                if (++mIdRead == (uint32_t*)mPoolB.mpLimit)
+                                    mIdRead = (uint32_t*)mPoolB.mpFirst;
+                            } else {
+                                ++mIdDropped;
+                            }
+                        }
+                    }
+                } else if (pCmd->mType == 0x63e3de7) {
+                    if (pCmd->mArg3) {
+                        ((void (__thiscall*)(void*, uint32_t, int))AVS((void*)pCmd->mArg3, 0x18))((void*)pCmd->mArg3, pCmd->mArg2, pCmd->mArg2 != 0);
+                        void* pRelease = (void*)pCmd->mArg3;
+                        pCmd->mArg3 = 0;
+                        ((void (__thiscall*)(void*))AVS(pRelease, 4))(pRelease);
+                    }
+                }
+                q5.Fun102e0(0x3a0fcce);
+                q5.Fun10120(0x3a0fce5, pCmd->mType);
+                q5.Fun10120(0x3475385, pCmd->mArg1);
+                q5.Fun10120(0x39e3c9f, pCmd->mArg2);
+                q5.Fun10120(0x39e3ca6, pCmd->mArg3);
+                q5.FunF940();
+                pRec += 5;
+            } while (pRec != pEnd);
+        }
+        rt::gDeferredCmds.EraseRange(rt::gDeferredCmds.mpBegin, rt::gDeferredCmds.mpEnd);
+    }
+}
+
+// @ 0x00a33500
+namespace eastl {
+fixed_hash_map_u32_nested::fixed_hash_map_u32_nested(const hash_tag&, const equal_to_tag&)
+{
+    fixed_pool_base_s00a3_2f20 pool;
+    pool.mpHead = 0;
+    pool.init(mNodeStorage, sizeof(mNodeStorage), 0x1e8, 4, 0);
+
+    node_pool_desc desc;
+    desc.mpMap      = this;
+    desc.mpNodes    = mNodeStorage;
+    desc.mpNodesEnd = mNodeStorage + sizeof(mNodeStorage);
+    desc.mnNodeSize = 0x1e8;
+    BaseInit(RequestPoolBookkeeping(0x65), desc);
+
+    mLoadFactor    = 10000.0f;
+    mGrowthFactor  = 2.0f;
+    mnElementCount = 0;
+
+    uint32_t nBucketCount = BucketCount(mpBucketArray);
+    if (mnBucketCount < nBucketCount)
+        Rehash(nBucketCount);
+}
+}  // namespace eastl
+
 // @ 0x00a33600
 System_s00a3_2f20::System_s00a3_2f20()
 : mAutoMsg(),
@@ -6450,8 +11431,14 @@ System_s00a3_2f20::System_s00a3_2f20()
     for (int i = 0; i < 9; ++i) { mat1[i] = (i % 4 == 0) ? 1.0f : 0.0f; }
 }
 
-// @ 0x00a21070
-int __stdcall audioResult_00a21070(void* unused)
+// @ 0x00e23250
+int cSPUIPosse::GetAudioCount()
 {
-    return 5;
+    int count = 0;
+    for (cAudioEntry* it = mpAudioBeginA4; it < mpAudioEndA8; ++it) {
+        cAudioObject* obj = it->mpObject4;
+        if (VT_BC_0(obj) == 2 || VT_BC_0(obj) == 4)
+            ++count;
+    }
+    return count;
 }

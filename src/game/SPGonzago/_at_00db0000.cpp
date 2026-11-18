@@ -310,6 +310,8 @@ void*  __cdecl f_00cc15b0(char* entity, void* calc);  // 0x00cc15b0
 void*  __cdecl f_00ffbe50();                          // 0x00ffbe50 SP::GetUFOSimulator
 void*  __cdecl f_00ffc320(void* sim);                 // 0x00ffc320
 struct Rng { double Uniform(); };
+extern float g_f159d5fc;                              // 0x0159d5fc (0.2f)
+extern float g_f159d600;                              // 0x0159d600 (0.85f)
 extern Rng g_1601760;                                 // 0x01601760
 struct HandleLess {
     char pad[0x120];
@@ -743,7 +745,7 @@ float f_00dbf760(Behaviour* self)
     if (c != 0) {
         CombatObj* o = (CombatObj*)c->Cast(0xee9b2232);
         if (o != 0) {
-            if (o->DamageTest(0) || 0.0f < o->mHull)
+            if (o->DamageTest(0) || !(o->mHull <= 0.0f))
                 return 0.0f;
         }
     }
@@ -753,13 +755,7 @@ float f_00dbf760(Behaviour* self)
 // @ 0x00dbf7b0
 float f_00dbf7b0(Behaviour* self)
 {
-    if (self->kind != 4) {
-        if (self->mSelf.Metric() <= 0.2f) {
-            if (g_1601760.Uniform() < 0.85f)
-                return 1.0f;
-        }
-    }
-    return 0.0f;
+    return (self->kind != 4 && self->mSelf.Metric() <= g_f159d5fc && g_1601760.Uniform() < g_f159d600) ? 1.0f : 0.0f;
 }
 
 // @ 0x00dbf810
@@ -775,9 +771,7 @@ float f_00dbf840(Behaviour* self)
         if (((TargetObj*)self->mpTarget)->Active(1))
             return 0.0f;
     }
-    if (self->mpTarget != 0)
-        return 1.0f;
-    return 0.0f;
+    return self->mpTarget != 0 ? 1.0f : 0.0f;
 }
 
 // @ 0x00dbf890

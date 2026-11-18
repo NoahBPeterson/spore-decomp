@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include <string.h>
+#include <new>
 
 // ---- items of slice s004b0490 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct V3 { float x, y, z; };
@@ -243,6 +244,13 @@ inline void uninitialized_fill_n_outer(generic_iterator<uint32_t*> first, uint32
 
 // ---- items of slice s004b2320 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct RefCounted { virtual void V0(); virtual void V1(); };
+struct ConstructedRef {
+    RefCounted* mp;
+    ConstructedRef(const ConstructedRef& other) : mp(other.mp) {
+        if (mp)
+            mp->V1();
+    }
+};
 // ---- items of slice s004b2320 end
 
 // @ 0x004b0490
@@ -538,16 +546,15 @@ void FillAutoRef(AutoRef_s004b_11f0* first, AutoRef_s004b_11f0* last, void** val
     }
 }
 
+inline void* RefStorageAddress(void* storage)
+{
+    void* result = storage;
+    return result;
+}
+
 // @ 0x004b2320
 void ConstructArray(RefCounted** p, unsigned int n, RefCounted** src)
 {
-    while (n != 0) {
-        if (p != 0) {
-            *p = *src;
-            if (*p != 0)
-                (*p)->V1();
-        }
-        --n;
-        ++p;
-    }
+    for (ConstructedRef* cursor = (ConstructedRef*)p; n > 0; --n, ++cursor)
+        new (RefStorageAddress(cursor)) ConstructedRef(*(ConstructedRef*)src);
 }

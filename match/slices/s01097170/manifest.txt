@@ -2,3 +2,4 @@ slices/s01097170/s01097170.cpp  ?getRuntimeInfo@hkBreakableConstraintData@@UBEXV
 slices/s01097170/s01097170.cpp  ?getPositionAndVelocities@hkFixedRigidMotion@@UAEXPAVhkRigidMotion@@@Z  01097280  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s01097170/s01097170.cpp  ?isOverlappingCollidableAdded@hkCachingShapePhantom@@UAE?AVhkBool@@PAVhkCollidable@@@Z  01097780  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s01097170/s01097170.cpp  ?setMass@hkBoxMotion@@UAEXM@Z  01098120  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01097170/s01097170.cpp  ?removeOverlappingCollidable@hkCachingShapePhantom@@UAEXPAVhkCollidable@@@Z  010977d0  /vc71 /O2 /MD /Gy /EHsc /TP

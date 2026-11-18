@@ -15,3 +15,10 @@
 ../src/game/SPEngine/SPResource.cpp  ?FUN_006adc60@@YAXHH@Z  006adc60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResource.cpp  ?AddRegistrationCallback@SP@@YAXIPAX@Z  006adfe0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPResource.cpp  ?SetCachingType@@YA_NHPAX@Z  006ac040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResource.cpp  ?FUN_006ad800@@YAXH@Z  006ad800  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPResource.cpp  ?FUN_006acfe0@@YA_NPAVKey@ResourceMan@EA@@PAVResource@23@@Z  006acfe0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResource.cpp  ?PushNull@IObjVec@@QAEXXZ  006ad180  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResource.cpp  ?DoAllocateNode@NodeAlloc_6adda0@@QAEPAUNode_6adda0@@ABUNodeVal_6adda0@@@Z  006adda0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResource.cpp  ??0FixVecCopy_6add30@@QAE@ABU0@@Z  006add30  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResource.cpp  ?DeletingDtor@RegistryView_6adbf0@@QAEPAXE@Z  006adbf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPResource.cpp  ?DoCreateNode@ResNodeList_6ac3c0@@QAEPAUResNode_6ac3c0@@ABUResNodeRef_6ac3c0@@@Z  006ac3c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

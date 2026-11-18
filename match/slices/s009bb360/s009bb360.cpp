@@ -13,6 +13,7 @@
 // Offsets follow slice s009ba4c0's retail stub (position +0x18, orientation +0x3c,
 // Bodies +0x2e4); the wiggle block at +0x1670 is read off these three functions.
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
+#include <intrin.h>
 #include "types.h"
 
 extern "C" double sqrt(double);
@@ -130,6 +131,7 @@ void creature_instance_data::UpdateHitWiggles(int nSteps, float dt, float t, flo
                     root_time = 0.0f;
                     if (hold_time > 0.0f) {
                         hold_time -= step;
+                        _ReadWriteBarrier();
                         float k = hit_len / g_01550ad0 * g_01550ac8 * step;
                         vector_3 dv;
                         dv.x = hit_dir.x * k;

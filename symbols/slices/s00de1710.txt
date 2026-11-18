@@ -1,0 +1,6 @@
+00de1a90 ?FUN_00de1a90@SG@@QAEXH@Z  # SG::FUN_00de1a90 migrated from s00de1710 (verbatim, slice spelling)
+00de1ae0 ?FUN_00de1ae0@SG@@QAE_NHPAX@Z  # SG::FUN_00de1ae0 migrated from s00de1710 (verbatim, slice spelling)
+00de1e50 ?FUN_00de1e50@SG@@QAEXMMH@Z  # SG::FUN_00de1e50 migrated from s00de1710 (verbatim, slice spelling)
+00de20e0 ?FUN_00de20e0@SG@@QAEXH@Z  # SG::FUN_00de20e0 migrated from s00de1710 (verbatim, slice spelling)
+00de2180 ?FUN_00de2180@SG@@QAEXMMH@Z  # SG::FUN_00de2180 migrated from s00de1710 (verbatim, slice spelling)
+00de2350 _FUN_00de2350@8  # FUN_00de2350 migrated from s00de1710 (verbatim, slice spelling)

@@ -2,11 +2,15 @@
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
 #include <intrin.h>
 #pragma intrinsic(fabs)
 #pragma intrinsic(_ReadWriteBarrier)
 
 inline float AbsF(float v) { return (float)fabs(v); }
+
+extern const float kPaletteOne; // 0x01485720
+extern const float kPaletteHalf; // 0x01471064
 
 // ---------------------------------------------------------------- globals
 extern void*         g_16c7584;      // 0x016c7584 (object pointer; [g] = layout)
@@ -610,6 +614,9 @@ void PaletteItemUI::Update(int)
 PaletteItemUI* __fastcall FUN_00ecba50(PaletteItemUI* self)
 {
     FUN_005c6bf0(self);
+    __m128 zero = _mm_setzero_ps();
+    _ReadWriteBarrier();
+    float one = kPaletteOne;
     _ReadWriteBarrier();
     self->vt20 = (void*)0x13eb384;
     self->vt00 = (void*)0x1489350;
@@ -631,16 +638,18 @@ PaletteItemUI* __fastcall FUN_00ecba50(PaletteItemUI* self)
     self->p4c = 0;
     self->p50 = 0;
     self->p54 = 0;
-    self->f58 = 0.0f;
-    self->f5c = 1.0f;
-    self->f60 = 0.0f;
-    self->f64 = 1.0f;
+    _mm_store_ss(&self->f58, zero);
+    self->f5c = one;
+    _mm_store_ss(&self->f60, zero);
+    float half = kPaletteHalf;
+    self->f64 = one;
+    _ReadWriteBarrier();
     self->f68 = 0;
     self->f6a = 0;
     self->f69 = 1;
-    self->f6c = 0.5f;
-    self->f70 = 0.5f;
-    self->f74 = 1.0f;
+    self->f6c = half;
+    self->f70 = half;
+    self->f74 = one;
     return self;
 }
 

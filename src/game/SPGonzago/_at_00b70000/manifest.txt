@@ -45,3 +45,13 @@
 ../src/game/SPGonzago/_at_00b70000.cpp  ?PieMenuAcceptCallback@@YAXHHD@Z  00b7c750  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00b70000.cpp  ?cSPPieMenu_ContainsWindow@@YA_NPAX@Z  00b7c870  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00b70000.cpp  ?GetPosition@cPieMenuScreenPosition@@QAE_NPAM0@Z  00b7cb00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?SetItemTextColor@ButtonVec@@QAEXHH@Z  00b7c890  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?newNode@NodeFactory@@QAEPAXPAURefPair@@@Z  00b715c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?SerializeObject@cTuning_b708d0@@QAEXPAX@Z  00b714a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?ReadFeedback@cOwner@@QAEXPAUIStream@@@Z  00b71a60  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b74a60@@YAXPAH0@Z  00b74a60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b71680@@YAXPAXPAUMotiveMap@@@Z  00b71680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?FUN_00b71570@@YA_NPAXPAUMapView@@@Z  00b71570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?findEvent@MotiveObjectTree@@QAE_NPAX@Z  00b71510  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?erase@MotiveMap@@QAE?AU?$rbtree_iterator@U?$pair@PAXPAX@eastl@@@eastl@@U23@@Z  00b71730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ?AllocNode2@Simulator_cObstacle@@QAEPAXPAH@Z  00b74bc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

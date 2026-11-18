@@ -135,11 +135,13 @@ typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
 u32   Fnfc7e50(void* n);                                 // 0x00fc7e50  Node::Type (free spelling)
-void* Fn8e3fa0(void** a, u16* b, u16* c);                // 0x008e3fa0
 void  Fn429580(void* wstr, const u16* b, const u16* e);  // 0x00429580  WStr::Append
 struct Node;
 struct Element;
 struct Attr;
+class WStr256;                // the wide string Fn8e3fa0 fills (0x008e3fa0)
+typedef bool (__thiscall* FnWStrResolve)(WStr256* self, const u16* base, const u16* rel);
+void* Fn8e3fa0(void** a, u16* b, u16* c);                // 0x008e3fa0
 struct Node {                 // sizeof 0x18
     void* vftable;            // 0x00
     void* link0;              // 0x04
@@ -1410,10 +1412,11 @@ u8 Element::AddSubElement(const u16* name)
     void* doc = self->mpDocument;
     if (doc == 0)
         return 0;
-    void* p = *(void**)((char*)doc + 0x4c);
-    void* q;
-    if (p != 0) q = p; else q = *(void**)((char*)doc + 0x48);
-    Fn8e3fa0((void**)q, (u16*)self, (u16*)v);
+    // the reference is the document's base URI, or its own URI when there is no base
+    void* q = *(void**)((char*)doc + 0x4c);
+    if (q == 0) q = *(void**)((char*)doc + 0x48);
+    // resolves the element's "src" against that reference
+    Fn8e3fa0((void**)name, (u16*)v, (u16*)q);
     return 1;
 }
 

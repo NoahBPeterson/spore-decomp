@@ -3468,7 +3468,7 @@ struct sp_vector_allocator_s0047_2b80 {
     uint32_t mDummy;
     void deallocate(void* p, uint32_t) { void* q = p; EASTL_allocator_deallocate(q); }
 };
-struct Counted { void Release(); };                                  // 0x40f360
+struct Counted { int Release(); };                                   // 0x40f360
 struct AutoRefCount_s0047_2b80 {
     Counted* mpObject;
     AutoRefCount_s0047_2b80() : mpObject(0) {}
@@ -6270,13 +6270,18 @@ CharVec::CharVec(const CharVec& x)
 template void vector_s0047_2b80<AutoRefCount_s0047_2b80, 4>::resize(uint32_t)
 ;
 
+inline void DestroyElems29(Elem29c* first, Elem29c* last)
+{
+    ScratchSlots_s0047_2b80<2>();
+    for (; first < last; ++first)
+        first->~Elem29c();
+}
+
 // @ 0x00473300
 Vec29::~Vec29()
 {
-    ScratchSlots_s0047_2b80<5>();
-    Elem29c* const end = mpEnd;
-    for (Elem29c* it = mpBegin; it < end; ++it)
-        it->~Elem29c();
+    DestroyElems29(mpBegin, mpEnd);
+    ScratchSlots_s0047_2b80<3>();
     DoFreeSelf();
 }
 

@@ -49,6 +49,7 @@ struct CleanupBlockApi {
 };
 struct ArenaTypeRegistryApi {
     void* FUN_011eb0a0(int type);  // 0x011eb0a0 ArenaTypeRegistry::Find
+    void* FUN_011eb110(int type);  // 0x011eb110 ArenaTypeRegistry::Add
 };
 
 // ---------------------------------------------------------------------------
@@ -115,24 +116,7 @@ void __cdecl crt_report_gsfailure_stub() { }
 // ---------------------------------------------------------------------------
 // RenderWare arena.
 // ---------------------------------------------------------------------------
-struct AlignInfo {
-    uint32_t current;
-    uint32_t alignment;
-    void AlignUpTo(const AlignInfo* other);
-    void Advance(const AlignInfo* other);
-};
-
-// @ 0x011e20a0
-void AlignInfo::AlignUpTo(const AlignInfo* other)
-{
-    uint32_t cur = this->current;
-    uint32_t a = other->alignment;
-    if (a > 1)
-        cur = (cur + a - 1) & ~(a - 1);
-    this->current = cur;
-    if (this->alignment < other->alignment)
-        this->alignment = other->alignment;
-}
+#include "align_info.h"
 
 // @ 0x011e20d0
 void AlignInfo::Advance(const AlignInfo* other)
@@ -206,6 +190,10 @@ void* rw_FindTypeReg(int type)
 }
 
 // @ 0x011e21e0
+struct UnfixTypeEntry {
+    int typeId;                            // +0x00
+    void (__cdecl* fn)(void*, void*);      // +0x04
+};
 struct UnfixContext {
     void* m_arena;              // +0x00
     char pad[0x18 - 4];
@@ -216,15 +204,15 @@ struct UnfixContext {
 void UnfixContext::Serialize(void* param)
 {
     int i = 0;
-    int n = ArenaSectionManifest_Types(*(void**)((char*)this->m_arena + 0x34));
-    while (**(int**)(n + 8) != *(int*)((char*)param + 0x14)) {
+    int n = (int)(intptr_t)(*(ArenaManifestApi**)((char*)this->m_arena + 0x34))->FUN_011e4600();
+    while (((UnfixTypeEntry**)*(int*)(n + 8))[i]->typeId != *(int*)((char*)param + 0x14)) {
         ++i;
-        n = ArenaSectionManifest_Types(*(void**)((char*)this->m_arena + 0x34));
+        n = (int)(intptr_t)(*(ArenaManifestApi**)((char*)this->m_arena + 0x34))->FUN_011e4600();
     }
     this->m_baseObjectPtr = *(void**)param;
-    n = ArenaSectionManifest_Types(*(void**)((char*)this->m_arena + 0x34));
-    int entry = *(int*)(*(int*)(n + 8) + i * 4);
-    ((void(__cdecl*)(void*, void*))*(void**)(entry + 4))(*(void**)param, this);
+    n = (int)(intptr_t)(*(ArenaManifestApi**)((char*)this->m_arena + 0x34))->FUN_011e4600();
+    UnfixTypeEntry* entry = ((UnfixTypeEntry**)*(int*)(n + 8))[i];
+    entry->fn(*(void**)param, this);
 }
 
 // @ 0x011e22a0 / @ 0x011e22b0
@@ -243,15 +231,15 @@ void __fastcall rw_arena_manifest_22b0(void* p)
 }
 
 // @ 0x011e22c0
-void* __fastcall rw_ArenaTypeRegGetType(int type)
+void* __cdecl rw_ArenaTypeRegGetType(int type)
 {
     ArenaManager mgr;
     mgr.vftable = &PTR_FUN_0140a578;
-    void** data = (void**)((void*(__cdecl*)(ArenaManager*))FUN_0140a57c)(&mgr);
+    void** data = (void**)((void*(__thiscall*)(ArenaManager*))FUN_0140a57c)(&mgr);
     void* reg = *data;
-    void* r = rw_ArenaTypeRegistry_Find(reg, type);
+    void* r = ((ArenaTypeRegistryApi*)reg)->FUN_011eb0a0(type);
     if (r == 0)
-        r = rw_ArenaTypeRegistry_Add(reg, type);
+        r = ((ArenaTypeRegistryApi*)reg)->FUN_011eb110(type);
     return r;
 }
 
@@ -332,13 +320,19 @@ int UnfixContext::FindExistingSubObject(void* target, int* outIndex)
 }
 
 // @ 0x011e2630
-void __fastcall rw_free_block_30(void* self)
+struct BlockOwner {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void Release(void* block);      // vtable slot 2
+};
+struct BlockArena { char pad[0xe0]; BlockOwner* owner; };
+__declspec(noinline) void __fastcall rw_free_block_30(void* self)
 {
     int* p = (int*)((char*)self + 0x30);
-    for (int i = 0; i < 4; ++i) {
+    for (unsigned i = 0; i < 4; ++i) {
         if (p[i] != 0) {
-            void* owner = *(void**)((char*)self + 0xd4);
-            ((void(__thiscall*)(void*, void*))((*(void***)owner)[2]))(owner, p);
+            BlockArena* arena = self ? (BlockArena*)((char*)self - 0xc) : 0;
+            arena->owner->Release(p);
             return;
         }
     }
@@ -348,19 +342,16 @@ void __fastcall rw_free_block_30(void* self)
 void __fastcall rw_cleanup_2690(void* self)
 {
     int* p = (int*)((char*)self + 0x124);
-    for (int i = 0; i < 4; ++i) {
+    for (unsigned i = 0; i < 4; ++i) {
         if (p[i] != 0) {
-            void* owner = *(void**)((char*)self + 0xe0);
-            ((void(__thiscall*)(void*, void*))((*(void***)owner)[2]))(owner, p);
+            BlockOwner* owner = *(BlockOwner**)((char*)self + 0xe0);
+            owner->Release(p);
             break;
         }
     }
     ((CleanupBlockApi*)((char*)self + 0xb0))->FUN_011eab70();
     ((CleanupBlockApi*)((char*)self + 0xe4))->FUN_011eb180();
-    if (self == 0)
-        rw_free_block_30(0);
-    else
-        rw_free_block_30((char*)self + 0xc);
+    rw_free_block_30(self ? (char*)self + 0xc : 0);
 }
 
 // @ 0x011e26f0
@@ -572,13 +563,15 @@ void Arena::WriteDictionary(Arena* self, ArenaStream* stream)
 
     stream->position = (stream->position + 3) & ~3u;
     stream->fieldC0 = (stream->fieldC0 + 3) & ~3u;
-    if (stream->alignment < 4)
-        stream->alignment = 4;
+    uint32_t a = stream->alignment;
+    if (a <= 4)                     // retail stores 4 even when the alignment is already 4
+        a = 4;
+    stream->alignment = a;
     uint32_t bytes = self->numUsed * 0x18;
     stream->position += bytes;
-    uint32_t a = stream->alignment;
     uint32_t used = stream->fieldC0;
-    if (a < 2)
+    a = stream->alignment;
+    if (a <= 1)                     // retail stores 1 even when the alignment is already 1
         a = 1;
     stream->alignment = a;
     stream->fieldC0 = used + bytes;

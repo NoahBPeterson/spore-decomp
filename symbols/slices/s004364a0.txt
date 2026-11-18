@@ -1,2 +1,3 @@
-00436ca0 Vector3_Ctor3  # stores three floats to this[0..2], thiscall ret 0xc
-00436ce0 Vector3_Normalize  # v / sqrt(dot(v,v))
+00436ca0 ??0Vector3_s0043_64a0@@QAE@MMM@Z  # Vector3_s0043_64a0::Vector3 migrated from s004364a0 (verbatim, slice spelling)
+00436ce0 ?Vector3_Normalize@@YAPAUVector3_s0043_64a0@@PAU1@PBU1@@Z  # Vector3_Normalize migrated from s004364a0 (verbatim, slice spelling)
+004364a0 ?ComputeDirection@DirectionController_s0043_64a0@@QAEPAUVector3_s0043_64a0@@PAU2@@Z  # DirectionController::ComputeDirection migrated from s004364a0 (verbatim, slice spelling)

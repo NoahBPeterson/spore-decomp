@@ -9,3 +9,4 @@ slices/s00e61000/s00e61000.cpp  ?lower_bound@@YAPAUCollPair@@PAU1@0PBH@Z 00e6183
 slices/s00e61000/s00e61000.cpp  ?CopyCellFwd@@YAPAUCellXform@@PAU1@00@Z  00e618c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00e61000/s00e61000.cpp  ?CopyCellBwd@@YAPAUCellXform@@PAU1@00@Z  00e61930  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00e61000/s00e61000.cpp  ??0CellXform@@QAE@XZ                    00e619a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e61000/s00e61000.cpp  ??1BigMode@@QAE@XZ  00e61b00  /O2 /MD /Gy /EHsc /TP /arch:SSE

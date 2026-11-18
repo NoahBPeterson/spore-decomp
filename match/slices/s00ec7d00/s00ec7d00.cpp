@@ -4,6 +4,7 @@
 //
 // Flags: /O2 /MD /Gy /TP
 
+#include <intrin.h>
 #include <new>
 
 typedef unsigned int   uint32_t;
@@ -202,10 +203,13 @@ void** RBTree::Insert(void** out, void* parent, const void* value, bool b)
         t = 0;
     RBNode* node = (RBNode*)operator_new(0x28, "Simulator", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-    ((Key*)((char*)node + 0x10))->FUN_00ec7ca0(value);
+    Key* key = (Key*)((char*)node + 0x10);
+    if (key)
+        key->FUN_00ec7ca0(value);
     RBTreeInsert(node, parent, (char*)&mAnchor, t);
     mnSize++;
     *out = node;
+    _ReadWriteBarrier();
     return out;
 }
 

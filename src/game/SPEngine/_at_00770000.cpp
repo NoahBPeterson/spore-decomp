@@ -537,6 +537,8 @@ extern "C" float __cdecl VectorLength(const float* v);         // 0x40ae50
 extern "C" void* __cdecl eastl_move_thunk(void* dst, const void* src, uint32_t n);      // 0x11e0744
 extern uint32_t g_rasterDelta;          // 0x16f8b00
 extern "C" void*             __cdecl operator_new(uint32_t sz, const char* name, int, int, int, int);   // 0xf473a0
+void* operator new(size_t sz, const char* name, int, int, int, int);       // 0xf473a0
+void operator delete(void* p, const char* name, int, int, int, int);       // 0xf47380
 extern "C" void              __cdecl operator_delete__(void* p);   // 0xf47380
 extern char g_matDesc[];                 // 0x1631058
 extern float g_xfInit[3];                // 0x1630df8
@@ -606,6 +608,7 @@ struct ShConst {
     void SetIndexed(int idx, float a, float b, float c, float d);  // 0x77ca20
 };
 struct cViewer {
+    char mData[0x174];
     cViewer();    // 0x7c3f70
     ~cViewer();   // 0x7c4000
     void Copy(uint32_t v, int a, int b);   // 0x7c50b0
@@ -1688,16 +1691,22 @@ void VecM34::InsertN(Mat34* position, unsigned n, const Mat34& value)
     INSERT_N_BODY(Mat34)
 }
 
+// EASTL's depth helper keeps the iterator difference's signed type.
+template <typename Size>
+inline Size SortLog2(Size n)
+{
+    int i;
+    for (i = 0; n; ++i)
+        n >>= 1;
+    return i - 1;
+}
+
 // @ 0x007749e0
 void sort_range(SortElem* first, SortElem* last, SortCompare compare)
 {
     if (first != last) {
-        const int nSize = (int)(last - first);
-        int nDepth = 0;
-        for (int i = nSize; i > 0; i >>= 1)
-            ++nDepth;
-        introsort_loop(first, last, (nDepth * 2) - 2, compare);
-        if (nSize > 0x1c) {
+        introsort_loop(first, last, 2 * SortLog2(last - first), compare);
+        if ((last - first) > 0x1c) {
             insertion_sort(first, first + 0x1c, compare);
             unguarded_insertion_sort(first + 0x1c, last, compare);
         } else {
@@ -2045,14 +2054,14 @@ void cShaderPreviewB::Draw(int unused, int unused2, cViewer** ppViewer, uint32_t
 bool cShaderPreviewA::Init()
 {
     BaseInit();
-    g.a.vec[0] = g_vec4[0]; g.a.vec[1] = g_vec4[1]; g.a.vec[2] = g_vec4[2]; g.a.vec[3] = g_vec4[3];
+    struct Dw4 { uint32_t v[4]; };
+    *(Dw4*)&g.a.vec[0] = *(const Dw4*)&g_vec4[0];
     g.a.has = 0;
     g.a.mode = 0;
     g.a.key[0] = 0xffffffff; g.a.key[1] = 0xffffffff;
     res1b0 = GetResSourceA();
     res1b4 = GetResSourceB();
-    void* mem = operator_new(0x174, "Graphics", 0, 0, 0, 0);
-    cViewer* v = mem ? new (mem) cViewer() : 0;
+    cViewer* v = new ("Graphics", 0, 0, 0, 0) cViewer();
     g.a.viewer = v;
     v->Init(0);
     slots.Init(10);
@@ -3156,8 +3165,9 @@ WireObj* WireObj::CopyWire(const WireObj* src)
         const WireElem* s = &src->elems[i];
         WireElem* d = &this->elems[i];
         d->field0 = s->field0;
-        WireRef* op = d->ref;
+        _ReadWriteBarrier(); // Keep the field copy before both reference loads.
         WireRef* np = s->ref;
+        WireRef* op = d->ref;
         if (np != op) {
             if (np)
                 _InterlockedIncrement(&np->refcount);

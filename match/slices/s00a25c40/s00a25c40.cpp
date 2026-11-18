@@ -56,19 +56,65 @@ struct HTable {
     bool  NotFound(const void* itNode) const { return itNode == End(); }
 };
 
+// Refcounted object used by the 0xa263a0 map value factory.
+struct RefObj {
+    virtual void AddRef();      // vtable slot 0
+    virtual void Release();     // vtable slot 4
+};
+template <class T> struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
+};
+
 // eastl::rbtree header subset (only DoNukeSubtree used here).
 struct RBTree { void* mpRoot; void* mpNode; void DoNukeSubtree(void* n); void AssignLess2(void* fn); }; // 0x9a9600 / 0xa24210
 
-// EA::fixed_pool_base::init
-extern "C" void __stdcall fixed_pool_init(void* pool, void* mem, uint size, uint align, uint size2, int flag); // 0x921260
+// The sub-container at offset +4 of the small object destructed at 0xa26860.
+struct SubTree { void __thiscall DoNukeSubtree(void* n); };   // 0x9a9600-style
+
+// EA::fixed_pool_base::init  (thiscall, 5 args, ret 0x14)
+struct fixed_pool_base {
+    void* mpHead;
+    void* mpNext;
+    void init(void* pMemory, uint memorySize, uint nodeSize, uint alignment, uint alignmentOffset); // 0x921260
+};
+// fixed_pool_with_overflow: init(...) then records begin/capacity/node size (0x14 bytes).
+struct fixed_pool_with_overflow : fixed_pool_base {
+    void* mpPoolBegin;
+    void* mpCapacity;
+    uint  mnNodeSize;
+    fixed_pool_with_overflow(void* pMemory, uint size, uint nodeSize, uint align) {
+        mpHead = 0;
+        init(pMemory, size, nodeSize, align, 0);
+        mpPoolBegin = pMemory;
+        mpCapacity = (uchar*)pMemory + size;
+        mnNodeSize = nodeSize;
+    }
+};
 
 // external free functions
 void* __cdecl operator_new(size_t sz, const char* name, int a, int b, const char* file, int line);
 void  __cdecl operator_delete(void* p);
+
+// Minimal eastl string used by the temporary in RemovePrimitiveFromUpdate.
+namespace eastl {
+extern char gEmptyString8[1];          // 0x01667bac-style empty string
+class string {
+ public:
+    char* mpBegin;
+    char* mpEnd;
+    char* mpCapacity;
+    string() : mpBegin(gEmptyString8), mpEnd(gEmptyString8), mpCapacity(gEmptyString8 + 1) {}
+    ~string() { if ((mpCapacity - mpBegin) > 1 && mpBegin) operator_delete(mpBegin); }
+};
+}
+
 void  __cdecl operator_delete_i(void* p, uint sz);
 void* __cdecl ConvertToString8Impl(void* out, const wchar_t* s, uint len);   // 0x93c440
 bool  __cdecl FUN_00ef6410();                                               // 0xef6410
 void  __cdecl FUN_00a16fd0(uint* node, float f);                            // 0xa16fd0
+struct MapValue { void __thiscall FUN_00a16fd0(float f); };                 // 0xa16fd0 (thiscall form)
 void  __cdecl FUN_00a21d30(void* ring, void* key);                          // 0xa21d30
 void  __cdecl Func_68fb70(void* a, void* b);                                // 0x68fb70
 extern "C" int QueryPerformanceCounter(void* counter);
@@ -133,7 +179,9 @@ class AudioSystem {
     uint8_t  pad_137974[0x1fac4];    // 0x137974..0x157438
     RBTree   mTree_157438;           // 0x157438 (mpRoot,mpNode)
     HTable   mMap_157440;            // 0x157440
-    uint8_t  pad_157458[0x808];      // 0x157458..0x157c60
+    uint8_t  pad_157448[0x7f8];      // 0x157448..0x157c50
+    RBTree   mTree_157c50;           // 0x157c50 (mpRoot,mpNode)
+    uint8_t  pad_157c58[0x8];        // 0x157c58..0x157c60
     uint8_t  mList_157c60[0x12b0];   // 0x157c60
     uint8_t  pad_158f10[0x38];       // 0x158f10..0x158f48
     void*    mpX_158f48;             // 0x158f48
@@ -149,7 +197,7 @@ class AudioSystem {
     void  Update(float dt);                                     // 0xa25c40
     void  RemoveFromList(void* item);                           // 0xa25ed0
     bool  Lookup_25ff0(uint key, uint* out);                    // 0xa25ff0
-    void  RemovePrimitiveFromUpdate(void* p);                   // 0xa26040
+    uint  RemovePrimitiveFromUpdate(void* p);                   // 0xa26040
     uint  Lookup_260c0(uint key);                              // 0xa260c0
     bool  Map_26100(uint key, uint arg);                        // 0xa26100
     void  Map_261c0(uint arg);                                  // 0xa261c0
@@ -162,7 +210,7 @@ class AudioSystem {
     void  Map_26530();                                          // 0xa26530
     uint  Lookup_26570(uint key);                              // 0xa26570
     uint  Lookup_265b0(uint key);                               // 0xa265b0
-    void  Map_265f0(uint, float);                               // 0xa265f0
+    void  Map_265f0(float, uint);                               // 0xa265f0
     bool  Map_26680(uint key, void** out);                      // 0xa26680
     bool  Map_266e0(uint key, float f);                         // 0xa266e0
     bool  Map_26730(uint key, void** out);                      // 0xa26730
@@ -204,6 +252,7 @@ CHECK_OFF(mRing_1366d4, 0x1366d4);
 CHECK_OFF(mProfHash_13795c, 0x13795c);
 CHECK_OFF(mTree_157438, 0x157438);
 CHECK_OFF(mMap_157440, 0x157440);
+CHECK_OFF(mTree_157c50, 0x157c50);
 CHECK_OFF(mList_157c60, 0x157c60);
 CHECK_OFF(mpX_158f48, 0x158f48);
 CHECK_OFF(mMap_158f54, 0x158f54);
@@ -290,7 +339,7 @@ void AudioSystem::RemoveFromList(void* item) {
 // ---------------------------------------------------------------- 0xa25ff0
 // @ 0x00a25ff0
 bool AudioSystem::Lookup_25ff0(uint key, uint* out) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_33d4.find(it, &key);
     if (mMap_33d4.NotFound((void*)(size_t)it[0])) return false;
     *out = *(uint*)((uchar*)(size_t)it[0] + 4);
@@ -299,18 +348,21 @@ bool AudioSystem::Lookup_25ff0(uint key, uint* out) {
 
 // ---------------------------------------------------------------- 0xa26040
 // @ 0x00a26040
-void AudioSystem::RemovePrimitiveFromUpdate(void* p) {
-    uint str = 0;
-    ConvertToString8Impl(&str, (const wchar_t*)p, 0xffffffff);
-    uint id = ((uint(__thiscall*)(void*, uint))vc(this, 0xf4))(this, str);
-    (void)id;
-    operator_delete((void*)str);
+uint AudioSystem::RemovePrimitiveFromUpdate(void* p) {
+    struct Str {
+        char* begin; char* end; char* cap; int mAlloc;
+        ~Str() { if ((cap - begin) > 1 && begin) operator_delete(begin); }
+    };
+    Str s;
+    ConvertToString8Impl(&s, (const wchar_t*)p, 0xffffffff);
+    uint id = ((uint(__thiscall*)(void*, char*))vc(this, 0xf4))(this, s.begin);
+    return id;
 }
 
 // ---------------------------------------------------------------- 0xa260c0
 // @ 0x00a260c0
 uint AudioSystem::Lookup_260c0(uint key) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_11a3d8.find(it, &key);
     if (mMap_11a3d8.NotFound((void*)(size_t)it[0])) return 0;
     return *(uint*)((uchar*)(size_t)it[0] + 4);
@@ -337,11 +389,11 @@ void AudioSystem::Map_261c0(uint arg) {
     void** ba = mMap_119bb8.mpBucketArray;
     void* cur = *ba;
     if (!cur) {
-        void** p = ba;
-        do { ++p; cur = *p; } while (!cur);
+        while (*++ba == 0) {}
+        cur = *ba;
     }
-    void* end = ba[mMap_119bb8.mnBucketCount];
-    while (cur != end) {
+    void* end = mMap_119bb8.mpBucketArray[mMap_119bb8.mnBucketCount];
+    while (end != cur) {
         void* obj = *(void**)((uchar*)cur + 4);
         ((void(__thiscall*)(void*, uint))vc(obj, 0x2c))(obj, arg);
         cur = *(void**)((uchar*)cur + 8);
@@ -376,27 +428,35 @@ void AudioSystem::Map_26230(uint a, uint b) {
 // ---------------------------------------------------------------- 0xa262a0
 // @ 0x00a262a0
 bool AudioSystem::Map_262a0(uint key, uint arg) {
-    uint it[2] = {0, 0};
-    mMap_404.find(it, &key);
-    if (mMap_404.NotFound((void*)(size_t)it[0])) return false;
-    uint val = *(uint*)((uchar*)(size_t)it[0] + 4);
-    return ((bool(__thiscall*)(void*, uint, uint))vc(this, 0x108))(this, arg, val);
+    uint it[2];
+    bool result = false;
+    mMap_404.find(it, &arg);
+    uint node = it[0];
+    if (mMap_404.End() != (void*)(size_t)node) {
+        uint val = *(uint*)((uchar*)(size_t)node + 4);
+        result = ((bool(__thiscall*)(void*, uint, uint))vc(this, 0x108))(this, key, val);
+    }
+    return result;
 }
 
 // ---------------------------------------------------------------- 0xa26300
 // @ 0x00a26300
 bool AudioSystem::Map_26300(uint key, uint arg) {
-    uint it[2] = {0, 0};
-    mMap_404.find(it, &key);
-    if (mMap_404.NotFound((void*)(size_t)it[0])) return false;
-    uint val = *(uint*)((uchar*)(size_t)it[0] + 4);
-    return ((bool(__thiscall*)(void*, uint, uint))vc(this, 0x110))(this, arg, val);
+    uint it[2];
+    bool result = false;
+    mMap_404.find(it, &arg);
+    uint node = it[0];
+    if (mMap_404.End() != (void*)(size_t)node) {
+        uint val = *(uint*)((uchar*)(size_t)node + 4);
+        result = ((bool(__thiscall*)(void*, uint, uint))vc(this, 0x110))(this, key, val);
+    }
+    return result;
 }
 
 // ---------------------------------------------------------------- 0xa26360
 // @ 0x00a26360
 uint AudioSystem::Lookup_26360(uint key) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_119bb8.find(it, &key);
     if (mMap_119bb8.NotFound((void*)(size_t)it[0])) return 0;
     return *(uint*)((uchar*)(size_t)it[0] + 4);
@@ -405,15 +465,17 @@ uint AudioSystem::Lookup_26360(uint key) {
 // ---------------------------------------------------------------- 0xa263a0
 // @ 0x00a263a0
 bool AudioSystem::Map_263a0(uint key, void** out) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_118a78.find(it, &key);
-    if (mMap_118a78.NotFound((void*)(size_t)it[0])) return false;
-    void* node = (void*)(size_t)it[0];
-    void* obj = ((void*(__thiscall*)(void*))vc(node, 4))(node);
-    if (obj) ((void(__thiscall*)(void*))vc(obj, 0))(obj);
-    ((void(__thiscall*)(void*))vc(obj, 0))(obj);
-    *out = obj;
-    ((void(__thiscall*)(void*))vc(obj, 4))(obj);
+    uint node = it[0];
+    if (mMap_118a78.End() == (void*)(size_t)node) return false;
+    void* fp = *(void**)((uchar*)(size_t)node + 4);
+    RefObj* obj = (RefObj*)((void* (__fastcall*)(void*))fp)(fp);
+    if (obj) {
+        AutoRefCount<RefObj> ref(obj);
+        obj->AddRef();
+        *out = obj;
+    }
     return true;
 }
 
@@ -455,7 +517,7 @@ void AudioSystem::Map_26530() {
 // ---------------------------------------------------------------- 0xa26570
 // @ 0x00a26570
 uint AudioSystem::Lookup_26570(uint key) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_157440.find(it, &key);
     if (mMap_157440.NotFound((void*)(size_t)it[0])) return 0;
     return *(uint*)((uchar*)(size_t)it[0] + 4);
@@ -464,7 +526,7 @@ uint AudioSystem::Lookup_26570(uint key) {
 // ---------------------------------------------------------------- 0xa265b0
 // @ 0x00a265b0
 uint AudioSystem::Lookup_265b0(uint key) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_404.find(it, &key);
     if (mMap_404.NotFound((void*)(size_t)it[0])) return 0;
     return *(uint*)((uchar*)(size_t)it[0] + 4);
@@ -472,7 +534,7 @@ uint AudioSystem::Lookup_265b0(uint key) {
 
 // ---------------------------------------------------------------- 0xa265f0
 // @ 0x00a265f0
-void AudioSystem::Map_265f0(uint a, float b) {
+void AudioSystem::Map_265f0(float a, uint b) {
     if (mbX_9b) return;
     void** ba = mMap_158f54.mpBucketArray;
     mbX_9b = 1;
@@ -484,7 +546,7 @@ void AudioSystem::Map_265f0(uint a, float b) {
     void* end = ba[mMap_158f54.mnBucketCount];
     while (cur != end) {
         void* obj = *(void**)((uchar*)cur + 4);
-        ((void(__thiscall*)(void*, float, uint))vc(obj, 0x28))(obj, b, a);
+        ((void(__thiscall*)(void*, float, uint))vc(obj, 0x28))(obj, a, b);
         cur = *(void**)((uchar*)cur + 8);
         while (!cur) {
             ++ba;
@@ -497,7 +559,7 @@ void AudioSystem::Map_265f0(uint a, float b) {
 // @ 0x00a26680
 bool AudioSystem::Map_26680(uint key, void** out) {
     if (!out) return false;
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_13f4.find(it, &key);
     void* node = (void*)(size_t)it[0];
     if (mMap_13f4.NotFound(node)) return false;
@@ -510,12 +572,12 @@ bool AudioSystem::Map_26680(uint key, void** out) {
 // ---------------------------------------------------------------- 0xa266e0
 // @ 0x00a266e0
 bool AudioSystem::Map_266e0(uint key, float f) {
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_23e4.find(it, &key);
     void* node = (void*)(size_t)it[0];
     if (mMap_23e4.NotFound(node)) return false;
     uint* obj = *(uint**)((uchar*)node + 4);
-    FUN_00a16fd0(obj, f);
+    ((MapValue*)obj)->FUN_00a16fd0(f);
     return true;
 }
 
@@ -523,7 +585,7 @@ bool AudioSystem::Map_266e0(uint key, float f) {
 // @ 0x00a26730
 bool AudioSystem::Map_26730(uint key, void** out) {
     if (!out) return false;
-    uint it[2] = {0, 0};
+    uint it[2];
     mMap_23e4.find(it, &key);
     void* node = (void*)(size_t)it[0];
     if (mMap_23e4.NotFound(node)) return false;
@@ -537,7 +599,7 @@ bool AudioSystem::Map_26730(uint key, void** out) {
 // @ 0x00a26790
 bool AudioSystem::Map_26790(uint arg) {
     void* end = mMap_128ae0.End();
-    uint it[2] = {0, 0};
+    uint it[2];
     uint* p = mMap_128ae0.find2(it, &arg);
     return *(void**)p != end;
 }
@@ -561,7 +623,8 @@ void AudioSystem::Map_267d0(uint id) {
 // ---------------------------------------------------------------- 0xa26860
 // @ 0x00a26860
 void AudioSystem::Dtor_26860() {
-    mTree_157438.DoNukeSubtree(*(void**)((uchar*)&mTree_157438 + 0x0));
+    // The called sub-object lives at this+4; its root argument is this's slot at +0x10.
+    ((SubTree*)((uchar*)this + 4))->DoNukeSubtree(*(void**)((uchar*)this + 0x10));
     mpVtbl = (void*)0x13eb394;
 }
 
@@ -593,16 +656,17 @@ void AudioSystem::Shutdown_268b0() {
 // @ 0x00a26990
 void* AudioSystem::InitPool_26990() {
     uchar* base = (uchar*)this;
-    // first fixed_pool at base+0x0 spanning base+0x1c..; second at base+0x8
-    fixed_pool_init(&mpX_208, base + 0x1c, 0x12c0, 0xc, 4, 0);
-    void* mem = mpX_208;
-    mpVtbl = 0;                  // *this = 0  (first dword)
-    mpVtblRC = 0;                // [this+4] = 0
-    fixed_pool_init(base + 8, mem, 0x12c0, 0xc, 4, 0);
-    *(void**)(base + 8 + 8) = mem;
-    *(void**)(base + 8 + 0xc) = (uchar*)mem + 0x12c0;
-    *(uint*)(base + 8 + 0x10) = 0xc;
-    *(void**)(base + 0) = base;  // self-linked list header
+    fixed_pool_with_overflow tmp(base + 0x1c, 0x12c0, 0xc, 4);
+    void* mem = tmp.mpHead;
+    *(void**)base = 0;
+    *(void**)(base + 4) = 0;
+    fixed_pool_with_overflow* pool = (fixed_pool_with_overflow*)(base + 8);
+    pool->mpHead = 0;
+    pool->init(mem, 0x12c0, 0xc, 4, 0);
+    pool->mpPoolBegin = mem;
+    pool->mpCapacity = (uchar*)mem + 0x12c0;
+    pool->mnNodeSize = 0xc;
+    *(void**)base = base;
     *(void**)(base + 4) = base;
     return this;
 }

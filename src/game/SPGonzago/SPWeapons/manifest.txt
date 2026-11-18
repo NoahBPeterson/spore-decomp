@@ -51,3 +51,15 @@
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb9b90@TObj@@QAEPAXE@Z  00cb9b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?TakeHit@cCombatant_s00cb_a050@SP@@QAEXMHHHH@Z  00cba4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cbcb70@@YIHH@Z  00cbcb70  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?CheckSpaceToolTarget@cGameData_s00cb_b020@Simulator@@QAE_NXZ  00cb52c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Write@CFlakProjectile@@QAEXPAUIStream@@@Z  00cb3940  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Write@CCulturalProjectile@@QAEXPAUIStream@@@Z  00cb3b70  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Write@CResourceProjectile@@QAEXPAUIStream@@@Z  00cb3d20  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Write@CDefaultAoEArea@@QAEXPAUIStream@@@Z  00cb3e90  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Write@CCulturalProjectileW@@QAEXPAUIStream@@@Z  00cb41c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Write@CResourceProjectileW2@@QAEXPAUIStream@@@Z  00cb4350  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?UpdateState@cSpatialObjectView@@QAEEXZ  00cc27f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb6310@@YAEPAXE@Z  00cb6310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?FUN_00cb6400@@YAEPAXE@Z  00cb6400  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?ctor@ArtilleryProjectile@@QAEPAU1@XZ  00cb6ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPWeapons.cpp  ?Write@CArtilleryProjectile@@QAE_NPAUIStream@@@Z  00cb37d0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

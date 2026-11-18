@@ -8,6 +8,7 @@
 #include "EA/Audio/ResponseCurve.h"
 #include <intrin.h>
 #include <string.h>
+#include <new>
 #include "EA/Thread/Mutex.h"
 #include "EA/Variant.h"
 #include "EA/Audio/IConfiguration.h"
@@ -166,7 +167,7 @@ extern bool  f_00692720(void* reader, void* dst, int z);
 extern bool  f_00692740(void* reader, void* dst, int z);
 extern bool  f_00692760(void* reader, void* dst, int z);
 extern void* f_00f473a0(int size, const char* name, int a, int b, const char* file, int line);
-extern void  f_00f47380(void* p);                                        // operator delete
+extern void  f_00f47380(void* p) throw();                                // operator delete
 extern void  f_00542b80(void* dst, void* src);                           // Variant::operator=
 extern void* f_008de1a0(void);                                           // Eapd::Debug::ObjectError
 extern void  __stdcall f_006a2b80(void* self, unsigned n);               // vector resize (ret 4)
@@ -227,8 +228,32 @@ struct FactoryConfiguration_s00a1_96f0 {
     void* mField64;     // 0x64
 
     FactoryConfiguration_s00a1_96f0();  // 0x00a19d60 (FactoryConfiguration::FactoryConfiguration_s00a1_96f0)
-    ~FactoryConfiguration_s00a1_96f0();  // 0x00a19d60 (FactoryConfiguration::FactoryConfiguration_s00a1_96f0)
     void AddLegacyPropertyTypes();  // 0x00a18d90 (FactoryConfiguration::AddLegacyPropertyTypes)
+};
+// the destructor's view of FactoryConfiguration: a base restoring vtable 0x13effb8, the mutex at +0x10, the
+// property-type tree at +0x40 (nuked from its root) and the name string at +0x5c
+struct FactoryConfigBase { virtual void Slot0(); void* mField04; void* mField08; char mPad[4]; ~FactoryConfigBase() {} };
+struct FactoryConfigMutex { char mData[0x30]; ~FactoryConfigMutex(); };
+struct FactoryConfigTree {
+    void* mNodeParent;       // +0x00
+    void* mAnchor;           // +0x04
+    void* mField08;          // +0x08
+    void* mpRoot;            // +0x0c
+    u8    mField10; char mPad[3];
+    void* mField14;          // +0x14
+    char  mPad2[4];
+    void  DoNukeSubtree(void* node);      // 0x009a9600
+    ~FactoryConfigTree() { DoNukeSubtree(mpRoot); }
+};
+struct FactoryConfigString {
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    ~FactoryConfigString() { if (((char*)mpCapacity - (char*)mpBegin) > 1 && mpBegin != 0) f_00f47380(mpBegin); }
+};
+struct __declspec(novtable) FactoryConfigurationObj : FactoryConfigBase {
+    FactoryConfigMutex  mMutex;   // 0x10
+    FactoryConfigTree   mTree;    // 0x40
+    FactoryConfigString mName;    // 0x5c
+    ~FactoryConfigurationObj();
 };
 extern void f_00a17820(ResConfig* self, void* p, void* q);
 extern void f_00a18910(ResConfig* self);
@@ -290,8 +315,6 @@ struct ResourceConfiguration_s00a1_7690 {
     bool GetPropertyAsInt(uint32_t key, int32_t* out);       // 0xa17730
     bool GetPropertyAsUint32(uint32_t key, uint32_t* out);   // 0xa17770
     bool GetPropertyAsFloat(uint32_t key, float* out);       // 0xa177b0
-    void SetChild(void* p);                                  // 0xa17820
-    void Attach(void** out, void* parent, const uint32_t* key, char flag);  // 0xa17890
     bool GetProperty(uint32_t key, void** out);              // 0xa18620
     void* GetPropertyAsChar16Ptr(uint32_t key);              // 0xa186e0
     void* GetPropertyAsChar8Ptr(uint32_t key);               // 0xa18720
@@ -349,10 +372,11 @@ bool RC::GetPropertyAsKey(u32 key, Key* out)
 // @ 0x00a17520
 bool RC::GetPropertyAsKeyInstance(u32 key, u32* out)
 {
-    Variant const* v;
-    if (GetProperty(key, v) && v->mTypeId == 0x20) {
-        const u32* src = (v->mFlags & 0x30) ? (const u32*)v->p : (const u32*)v;
-        *out = *src;
+    void* v;
+    if (((bool(__thiscall*)(void*, uint32_t, void**))(*(void***)this)[8])(this, key, &v)
+        && *(uint16_t*)((char*)v + 0x12) == 0x20) {
+        void* src = (*(uint8_t*)((char*)v + 0x10) & 0x30) ? *(void**)v : v;
+        *out = *(uint32_t*)src;
         return true;
     }
     return false;
@@ -481,73 +505,118 @@ template void eastl::fill_imp<0>::do_fill<EA::Text::AnalysisInfo_s00a1_7690*, EA
 ;
 
 // @ 0x00a17820
-void ResourceConfiguration_s00a1_7690::SetChild(void* p)
+void EA::Audio::ResourceConfiguration::SetParent(ResourceConfiguration* parent)
 {
-    if (*(void**)(m + 0x3c) != 0) {
-        void* next = *(void**)(m + 0x1c);
-        void* prev = *(void**)(m + 0x18);
-        *(void**)next = prev;
-        *(void**)((char*)prev + 4) = next;
-        *(void**)(m + 0x18) = 0;
-        *(void**)(m + 0x1c) = 0;
+    if (mParent.mpObject != 0) {
+        eastl::intrusive_list_node* prev = mpPrev;
+        eastl::intrusive_list_node* next = mpNext;
+        prev->mpNext = next;
+        next->mpPrev = prev;
+        mpNext = 0;
+        mpPrev = 0;
     }
-    void* old = *(void**)(m + 0x3c);
-    if (p != old) {
-        if (p != 0) ((void(__thiscall*)(void*))VtOf(p)[0])(p);
-        *(void**)(m + 0x3c) = p;
-        if (old != 0) ((void(__thiscall*)(void*))VtOf(old)[1])(old);
+    ResourceConfiguration* old = mParent.mpObject;
+    if (parent != old) {
+        if (parent != 0)
+            parent->AddRef();
+        mParent.mpObject = parent;
+        if (old != 0)
+            old->Release();
     }
-    void* np = *(void**)(m + 0x3c);
-    if (np != 0) {
-        *(void**)(m + 0x1c) = *(void**)((char*)np + 0x44);
-        void* head = (char*)np + 0x40;
-        void* node = m + 0x18;
-        *(void**)node = head;
-        *(void**)((char*)head + 4) = node;
-        *(void**)(*(void**)(m + 0x1c)) = node;
+    if (mParent.mpObject != 0) {
+        eastl::intrusive_list_node& head = mParent->mChildren.mAnchor;
+        mpPrev = head.mpPrev;
+        mpNext = &head;
+        head.mpPrev = this;
+        mpPrev->mpNext = this;
     }
 }
+
+// Retail set<unsigned int> node and tree prefix used by GetPropertyIDs.
+struct ConfigurationPropertyNodeBase {
+    ConfigurationPropertyNodeBase* mpNodeRight;
+    ConfigurationPropertyNodeBase* mpNodeLeft;
+    ConfigurationPropertyNodeBase* mpNodeParent;
+    unsigned char mColor;
+    unsigned char mPadding[3];
+};
+struct ConfigurationPropertyNode : ConfigurationPropertyNodeBase {
+    uint32_t mValue;
+};
+struct ConfigurationPropertySet {
+    unsigned char mCompareAndPadding[4];
+    ConfigurationPropertyNodeBase mAnchor; // +0x04
+    uint32_t mnSize;                       // +0x14
+
+    void** DoInsertValue(void** out, ConfigurationPropertyNodeBase* parent,
+                         const uint32_t* key, bool forceLeft);
+};
 
 // @ 0x00a17890
-void ResourceConfiguration_s00a1_7690::Attach(void** out, void* parent, const uint32_t* key, char flag)
+void** ConfigurationPropertySet::DoInsertValue(void** out, ConfigurationPropertyNodeBase* parent,
+                                              const uint32_t* key, bool forceLeft)
 {
-    int side = (flag == 0 && parent != (void*)(m + 4) && *key >= *(uint32_t*)((char*)parent + 0x10)) ? 1 : 0;
-    void* node = FUN_00f473a0(0x14, "EASTL", 0, 0, kFile_A17890, 0xd1);
-    uint32_t* dst = (uint32_t*)((char*)node + 0x10);
-    if (dst != 0) *dst = *key;
-    FUN_009216a0(node, parent, m + 4, side);
-    *(uint32_t*)(m + 0x14) += 1;
-    *out = node;
+    int side = (!forceLeft && parent != &mAnchor &&
+                *key >= static_cast<ConfigurationPropertyNode*>(parent)->mValue) ? 1 : 0;
+    ConfigurationPropertyNode* node = new (FUN_00f473a0(sizeof(ConfigurationPropertyNode),
+        "EASTL", 0, 0, kFile_A17890, 0xd1)) ConfigurationPropertyNode;
+    uint32_t* value = &node->mValue;
+    if (value != 0)
+        new (value) uint32_t(*key);
+    FUN_009216a0(node, parent, &mAnchor, side);
+    void** volatile& output = out;
+    void** result = output;
+    volatile uint32_t& size = mnSize;
+    ++size;
+    *result = node;
+    return result;
 }
 
-// @ 0x00a17910
-void ResourceConfiguration_s00a1_7690::dtor()
-{
-    *(void**)(m + 0) = (void*)0x14523e8;
-    *(void**)(m + 0x14) = (void*)0x1452398;
+// Destruction view of ResourceConfiguration (0x00a17910): the body unlinks the configuration from its owner's list,
+// then the members are destroyed in reverse order (vector and list nothrow), and the base restores its vtable.
+void RcFree_a17910(void* p) throw();   // 0xf47380
+struct RcVariant_a17910 {
+    char d[0x10];
+    uint16_t mFlags;                  // +0x10
+    uint16_t mTypeId;
+    void Destruct(bool b);            // 0x0093db80
+    ~RcVariant_a17910() { if (mFlags & 4) Destruct(false); }
+};
+struct RcList_a17910 { void* mpNext; void* mpPrev; ~RcList_a17910() throw(); };   // 0x00620230
+struct RcRefObj_a17910 { virtual void r0(); virtual void Release(); };
+struct RcRef_a17910 { RcRefObj_a17910* mpObject; ~RcRef_a17910() { if (mpObject) mpObject->Release(); } };
+struct RcMap_a17910 { char d[0x18]; ~RcMap_a17910(); };                          // 0x00685ed0
+struct RcVec_a17910 {
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    ~RcVec_a17910() { if (mpBegin && ((uint32_t*)mpBegin)[-1]) RcFree_a17910(mpBegin); }
+};
+struct RcBase0_a17910 { virtual void v0(); char pad04[0x10]; ~RcBase0_a17910() { (void)this; } };
+struct RcBase1_a17910 { virtual void w0(); };
+struct ResourceConfigurationView_a17910 : RcBase0_a17910, RcBase1_a17910 {
+    void* mpLinkPrev;                 // +0x18
+    void* mpLinkNext;                 // +0x1c
+    uint32_t m20;                     // +0x20
+    RcMap_a17910 mProperties;         // +0x24
+    RcRef_a17910 mpOwner;             // +0x3c
+    RcList_a17910 mChildren;          // +0x40
+    RcVariant_a17910 mVariantA;       // +0x48
+    RcVariant_a17910 mVariantB;       // +0x5c
+    RcVec_a17910 mIncludes;           // +0x70
+    ~ResourceConfigurationView_a17910();
+};
 
-    if (*(void**)(m + 0x3c) != 0) {
-        void* next = *(void**)(m + 0x1c);
-        void* prev = *(void**)(m + 0x18);
+// @ 0x00a17910
+ResourceConfigurationView_a17910::~ResourceConfigurationView_a17910()
+{
+    RcRefObj_a17910* owner = mpOwner.mpObject;
+    if (owner) {
+        void* next = mpLinkNext;
+        void* prev = mpLinkPrev;
         *(void**)next = prev;
         *(void**)((char*)prev + 4) = next;
-        *(void**)(m + 0x18) = 0;
-        *(void**)(m + 0x1c) = 0;
+        mpLinkPrev = 0;
+        mpLinkNext = 0;
     }
-
-    void* p70 = *(void**)(m + 0x70);
-    if (p70 != 0 && *(uint32_t*)((char*)p70 - 4) != 0) FUN_00f47380(p70);
-
-    if (*(uint8_t*)(m + 0x6c) & 4) ((Variant_s00a1_7690*)(m + 0x5c))->Destruct(false);
-    if (*(uint8_t*)(m + 0x58) & 4) ((Variant_s00a1_7690*)(m + 0x48))->Destruct(false);
-    ((IntrusiveList*)(m + 0x40))->Dtor();
-    {
-        void* p = *(void**)(m + 0x3c);
-        if (p != 0) ((void(__thiscall*)(void*))VtOf(p)[1])(p);
-    }
-    ((Helper5ed0*)(m + 0x24))->Call();
-
-    *(void**)(m + 0) = (void*)0x13eb938;
 }
 
 // @ 0x00a17a00
@@ -1317,15 +1386,8 @@ FactoryConfiguration_s00a1_96f0::FactoryConfiguration_s00a1_96f0()
 }
 
 // @ 0x00a19e00
-FactoryConfiguration_s00a1_96f0::~FactoryConfiguration_s00a1_96f0()
+FactoryConfigurationObj::~FactoryConfigurationObj()
 {
-    if (((char*)mField64 - (char*)mField5c) > 1 && mField5c != 0) {
-        f_00f47380(mField5c);
-    }
-    // eastl::rbtree<...>::DoNukeSubtree(mField4c) on the tree at +0x40
-    mTree.DoNukeSubtree(mField4c);
-    mMutex.dtor();
-    mVtbl = (void*)0x013effb8;
 }
 
 // @ 0x00a19e90

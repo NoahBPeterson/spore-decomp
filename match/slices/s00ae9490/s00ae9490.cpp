@@ -384,21 +384,21 @@ AutoRef* AutoRef::Reset()
 // @ 0x00ae97e0
 E12* copy_addref(E12* first, E12* last, E12* dest)
 {
-    if (first == last)
-        return dest;
-    do
-    {
-        if (dest)
+    if (first != last) {
+        do
         {
-            dest->a = first->a;
-            dest->b = first->b;
-            dest->p = first->p;
-            if (dest->p)
-                addref(dest->p);
-        }
-        first += 1;
-        dest += 1;
-    } while (first != last);
+            if (dest)
+            {
+                dest->a = first->a;
+                dest->b = first->b;
+                dest->p = first->p;
+                if (dest->p)
+                    addref(dest->p);
+            }
+            first += 1;
+            dest += 1;
+        } while (first != last);
+    }
     return dest;
 }
 
@@ -618,24 +618,21 @@ u8 FUN_00ae9c90(int eventId)
 // @ 0x00ae9d40
 bool Entry::Differs(void* other)
 {
-    if (!other)
-        return false;
-    int t = *(int*)(m + 0x0c);
-    bool different = t != *(int*)((char*)other + 0x0c);
-    if (!different)
+    if (!other) return false;
     {
-        if (t == 0)
-            return *(int*)(m + 0x18) != *(int*)((char*)other + 0x18);
-        if (t == 1)
-        {
-            if (*(int*)(m + 0x18) == *(int*)((char*)other + 0x18) &&
-                *(int*)(m + 0x20) == *(int*)((char*)other + 0x20) &&
-                *(int*)(m + 0x24) == *(int*)((char*)other + 0x24))
-                return false;
-            different = true;
+        int type = *(int*)(m + 0xc);
+        bool different = type != *(int*)((char*)other + 0xc);
+        if (!different) {
+            if (type == 0) {
+                different = *(int*)(m + 0x18) != *(int*)((char*)other + 0x18);
+            } else if (type == 1) {
+                different = *(int*)(m + 0x18) != *(int*)((char*)other + 0x18) ||
+                    *(int*)(m + 0x20) != *(int*)((char*)other + 0x20) ||
+                    *(int*)(m + 0x24) != *(int*)((char*)other + 0x24);
+            }
         }
+        return different;
     }
-    return different;
 }
 
 // ===========================================================================

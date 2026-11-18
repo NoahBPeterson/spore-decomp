@@ -718,6 +718,10 @@ struct cItemRange {
 };
 }
 namespace SP {
+struct cDeliveryItemRange {
+    tItemInfo* mpBegin;
+    tItemInfo* mpEnd;
+};
 struct cPickupRange {
     tPickupInfo*  mpBegin;                                 // +0x00
     tPickupInfo*  mpEnd;                                   // +0x04
@@ -725,9 +729,11 @@ struct cPickupRange {
 }
 namespace SP {
 bool __cdecl EA_WriteUint32(void* pStream, const void* pValue, int32_t count, int32_t flag); // 0x0093aa70
+bool __cdecl EA_WriteBool8(void* pStream, const bool* pValue, int32_t count); // 0x0093a9a0
 }
 namespace SP {
 IArchiver& __cdecl operator<<(IArchiver& archiver, const tItemInfo_s00c5_7570& item);             // 0x00c56e60
+IArchiver& __cdecl operator<<(IArchiver& archiver, const tItemInfo& item); // 0x00c56e60
 IArchiver& __cdecl operator<<(IArchiver& archiver, const tPickupInfo& item);                      // 0x00c56e00
 inline uint32_t EA_STLSequenceCount(const cItemRange* pRange)
 {
@@ -980,6 +986,8 @@ bool cSPMissionMultiDelivery_s00c5_62b0::Validate()
 }
 }  // namespace SP
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 // @ 0x00c56fe0
 namespace SP {
 bool cSPMissionMultiDelivery_s00c5_62b0::PickFetchItem()
@@ -988,21 +996,22 @@ bool cSPMissionMultiDelivery_s00c5_62b0::PickFetchItem()
         return false;
 
     cProperty_s00c5_62b0* pProperty = mpMissionPropList->GetPropertyRef(0x781900a6);
-    uint16_t kind = pProperty->mFlags & 0x30;
-    if (kind == 0 && pProperty->mType == 0)
-        return false;
+    int32_t kind = pProperty->mFlags & 0x30;
 
     int32_t count;
-    tItemInfo* pItems;
     if (kind) {
         count = pProperty->mCount;
         if (count <= 0)
             return false;
-        pItems = (tItemInfo*)pProperty->mpData;
     } else {
+        if (pProperty->mType == 0)
+            return false;
         count = 1;
-        pItems = pProperty->mType ? (tItemInfo*)pProperty : 0;
     }
+
+    _ReadWriteBarrier();
+    tItemInfo* pItems = kind ? (tItemInfo*)pProperty->mpData
+                             : (pProperty->mType ? (tItemInfo*)pProperty : 0);
 
     uint32_t index = g_spRandom.RandomUint32Uniform((uint32_t)count);
     mpItemDefinition = pItems[index].mpPlanet.mpObject;
@@ -1168,28 +1177,55 @@ void cSPMissionMultiDelivery_s00c5_62b0::SetItemPropertyList()
 }
 }  // namespace SP
 
+namespace SP {
+inline void WriteItemSequenceCount(IArchiveWriter* writer, uint32_t count)
+{
+    void* stream = writer->GetStream();
+    EA_WriteUint32(stream, &count, 1, 0);
+}
+}
+
 // @ 0x00c57570
 namespace SP {
-void __cdecl WriteSTLSequence_tItemInfo(IArchiver* pArchiver, cItemRange* pRange)
+void __cdecl WriteSTLSequence_tItemInfo(IArchiver* pArchiver, cDeliveryItemRange* pRange)
 {
-    uint32_t count = EA_STLSequenceCount(pRange);
-    EA_WriteUint32(pArchiver->GetWriter()->GetStream(), &count, 1, 0);
-    tItemInfo_s00c5_7570* pEnd = pRange->mpEnd;
-    for (tItemInfo_s00c5_7570* p = pRange->mpBegin; p != pEnd; ++p)
+    uint32_t itemCount = ((char*)pRange->mpEnd - (char*)pRange->mpBegin) / (int)sizeof(tItemInfo);
+    IArchiveWriter* writer = pArchiver->GetWriter();
+    WriteItemSequenceCount(writer, itemCount);
+    tItemInfo* p = pRange->mpBegin;
+    tItemInfo* pEnd = pRange->mpEnd;
+    for (; p != pEnd; ++p)
         operator<<(*pArchiver, *p);
     pArchiver->EndRead();
 }
 }  // namespace SP
 
+namespace SP {
+inline void WritePickupSequenceCount(IArchiveWriter* writer, uint32_t count)
+{
+    void* stream = writer->GetStream();
+    EA_WriteUint32(stream, &count, 1, 0);
+}
+}
+
 // @ 0x00c575e0
 namespace SP {
 void __cdecl WriteSTLSequence_tPickupInfo(IArchiver* pArchiver, cPickupRange* pRange)
 {
-    uint32_t count = EA_STLSequenceCount(pRange);
-    EA_WriteUint32(pArchiver->GetWriter()->GetStream(), &count, 1, 0);
+    uint32_t itemCount = ((char*)pRange->mpEnd - (char*)pRange->mpBegin) / (int)sizeof(tPickupInfo);
+    IArchiveWriter* writer = pArchiver->GetWriter();
+    WritePickupSequenceCount(writer, itemCount);
+    tPickupInfo* p = pRange->mpBegin;
     tPickupInfo* pEnd = pRange->mpEnd;
-    for (tPickupInfo* p = pRange->mpBegin; p != pEnd; ++p)
-        operator<<(*pArchiver, *p);
+    for (; p != pEnd; ++p) {
+        IArchiveWriter* itemWriter = pArchiver->GetWriter();
+        uint8_t pickedUp = *(uint8_t*)&p->mbPickedUp;
+        void* itemStream = itemWriter->GetStream();
+        bool value = pickedUp != 0;
+        EA_WriteBool8(itemStream, &value, 1);
+        cPlanet_s00c5_62b0* planet = p->mpPlanet.mpObject;
+        pArchiver->SerializeObject(planet ? (char*)planet + 0xd4 : 0);
+    }
     pArchiver->EndRead();
 }
 }  // namespace SP

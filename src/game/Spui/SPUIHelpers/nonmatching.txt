@@ -4,7 +4,6 @@
 008051b0 50 FindByKey; original passes the receiver in EDI (static-helper register convention); equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
 00805310 167 CreditsTabInit; layout ctor/init call reconstruction, register scheduling; equiv UNSUPPORTED: 5 unresolved reference(s): ?LayoutCtor@@YAXPAD@Z, ?LayoutInit@@YA_NPADHHH@Z, ?LayoutDtor@@
 00805400 4 FreeCoreBlock; originally push/call/pop ecx, compiler emitted add esp,4; equiv PASS: 659 valid inputs, 100.0% coverage (all insns)
-008054f0 10 InitAlloc; global store/arg order; equiv UNSUPPORTED: our code stores the address of its own copy of an object/vtable/constant where the origina
 00805ef0 84 complete; loop layout + merged epilogue (do-while not reproduced exactly)
 008060d0 126 complete; register allocation/argument scheduling differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#4 esp]
 00806370 256 complete; rect-temp scheduling and frame differs
@@ -31,9 +30,7 @@
 00807dc0 109 complete; shader refcount/loop scheduling differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp, call#1 esp, ret#3 esp]
 00807f50 185 complete; rotation switch/register differences
 00808050 158 complete; transform update SSE schedule differs
-00808190 24 complete; only vtable-load scheduling differs
 00808230 92 complete; float compare schedule differs
-008082f0 23 complete; only vtable-load scheduling differs
 00808370 337 complete: recursive union-of-bounds walk (v28/v38/vtable 0xcc/0xd0 + FUN_0064e6b0 empty-rect test + min/max merge); original batches all four addss before the compare chain, ours interleaves; equiv: UNSUPPORTED 0/400 valid inputs (needs a live window + child list)
 008085d0 52 complete; ctor field-store/register differences
 00808660 172 complete; property/stream loop register differences
@@ -49,4 +46,3 @@
 0082a140 664 complete translation; local frame is 0x2c vs the retail 0x3c and the early-failure path/rect copy schedule differs flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 0082a450 128 complete translation; AutoRef release sequence codegen differs flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
 0082a500 782 complete translation; retail 16-byte-aligns the frame and builds the rect corners with unary-negation xorps/movss pairs; cl emits movdqa copies and different stack offsets flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2
-0082aa20 22 complete translation; callee schedule differs when the callee body is visible in the TU flags: /O2 /MD /Gy /TP /fp:fast /arch:SSE2

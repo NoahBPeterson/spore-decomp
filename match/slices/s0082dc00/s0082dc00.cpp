@@ -1,6 +1,7 @@
 // Slice s0082dc00 (batch w2g7, slice 30).
 // UTFWin cSPUILayerIdWinProc / layer helpers plus assorted renderer and
 // allocator helpers.
+#include <intrin.h>
 #include "types.h"
 #include <math.h>
 
@@ -112,6 +113,7 @@ bool LayerWinProc::SetLayer(int v) {
     mLayer = v;
     if (v >= 0) {
       if (v < 0xf) ++sLayerRCs[v];
+      _ReadWriteBarrier();
     }
   }
   return true;

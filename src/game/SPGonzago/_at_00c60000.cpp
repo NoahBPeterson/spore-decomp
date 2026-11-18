@@ -324,10 +324,25 @@ struct MissionBase {
   void SetSerializer();              // 0xc2e4e0
 };
 struct Adj {
-  void* Adjust0(void* id);
-  void* Adjust1(void* id);
   void* Adjust2(void* id);
 };
+// Retail interface-query view: cMorphHandle's constructor puts the spatial
+// base after the 0x34-byte game-data base. Only its vptr prefix is needed here.
+// Numeric interface IDs retain all 32 bits without a generated-enum cast.
+namespace RetailMorphHandle {
+class cGameData {
+    uint32_t mStorage[0x34 / 4];
+public:
+    void* AsInterface(uint32_t type); // 0x00b18460, thiscall, ret 4
+};
+class cSpatialObject {
+    const void* mVTable;
+};
+class cMorphHandle : public cGameData, public cSpatialObject {
+public:
+    void* AsInterface(uint32_t type);
+};
+}
 struct WString12 { void* mBegin; void* mEnd; void* mCap; };
 struct CString16 { uint8_t mData[0x10]; };
 struct MissionWar {
@@ -1618,6 +1633,7 @@ void Mission::FUN_00c61390(int arg)
     ((Mission*)local)->FUN_00ba95a0((char*)vec + 4);
     int* begin = (int*)local[0];
     int* end = (int*)local[1];
+    _ReadWriteBarrier();
 
     for (int* it = begin; it != end; it++)
         if (*it)
@@ -1955,6 +1971,7 @@ void Mission::FUN_00c62590(int msg, int arg)
 int Mission::FUN_00c62710()
 {
     int n = *(int*)((char*)this + 0x20c) - *(int*)((char*)this + 0x208);
+    _ReadWriteBarrier();
     int result = 0;
     int i = 0;
     if (n > 0) {
@@ -2147,19 +2164,41 @@ void __fastcall M_C637b0(void* self, int _e, int msg, void* data)
 }
 
 // @ 0x00c639a0
-void* Adj::Adjust0(void* id)
+void* RetailMorphHandle::cMorphHandle::AsInterface(uint32_t type)
 {
-  if (id == (void*)0x1186577) return this ? (char*)this + 0x34 : 0;
-  if (id == (void*)0x7a309fb) return this;
-  return ((NounIdHelper*)this)->Dispatch(id);
+    if (type != 0x01186577u)
+        return type != 0x07a309fbu ? cGameData::AsInterface(type) : this;
+    return static_cast<cSpatialObject*>(this);
+}
+
+// Retail query view: native cTargetMorphHandle construction retains the
+// cMorphHandle game-data prefix and spatial base at +0x34. Only that spatial
+// vptr prefix is represented; no view is constructed or used for field access.
+namespace RetailTargetMorphQuery {
+class cGameData {
+    uint32_t mStorage[0x34 / 4];
+public:
+    void* AsInterface(uint32_t type); // 0x00b18460, thiscall, ret 4
+};
+class cSpatialObject {
+    const void* mVTable;
+};
+class cMorphHandle : public cGameData, public cSpatialObject {};
+class cTargetMorphHandle : public cMorphHandle {
+public:
+    void* AsInterface(uint32_t type);
+};
 }
 
 // @ 0x00c639d0
-void* Adj::Adjust1(void* id)
+void* RetailTargetMorphQuery::cTargetMorphHandle::AsInterface(uint32_t type)
 {
-  if (id == (void*)0x76c67df || id == (void*)0x7a309fb) return this;
-  if (id == (void*)0x1186577) return this ? (char*)this + 0x34 : 0;
-  return ((NounIdHelper*)this)->Dispatch(id);
+    if (type != 0x076c67dfu) {
+        if (type != 0x01186577u)
+            return type != 0x07a309fbu ? cGameData::AsInterface(type) : this;
+        return static_cast<cSpatialObject*>(this);
+    }
+    return this;
 }
 
 // @ 0x00c63a10

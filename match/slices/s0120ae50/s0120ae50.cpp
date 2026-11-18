@@ -38,18 +38,18 @@ class hkArray
 
 class hkEntity
 { public:
-    virtual ~hkEntity();
+    virtual ~hkEntity() throw();
     void addReference();                // 0x01082590
     void removeReference() throw();     // 0x0109ae60
 };
 
 class hkReferencedObject
 { public:
+    hkReferencedObject() { m_referenceCount = 1; }
     virtual ~hkReferencedObject() {}
     virtual void calcStatistics(void*) const {}
     short m_memSizeAndFlags;   // +4
     short m_referenceCount;    // +6
-    hkReferencedObject() { m_referenceCount = 1; }
 };
 
 class hkWorld;
@@ -178,7 +178,7 @@ __declspec(noinline) void __cdecl f_0120bc40(char* buf, unsigned int size, const
 // Havok hkMatrix6 float kernels.  hkMatrix6 is a 0xc0-byte (48 float) matrix.
 // ---------------------------------------------------------------------------
 
-struct hkMatrix6;
+class hkMatrix6;
 struct hkMatrix6Ctor { void ctor(const hkMatrix6 *src); };   // 0x010ad140
 
 // @ 0x0120ae50
@@ -333,7 +333,7 @@ extern "C" void _hkMatrix6SetTranspose(int *param_1, const int *param_2)
     param_1[0x2d] = param_2[0x2a];
 }
 
-struct hkMatrix6
+class hkMatrix6
 {
     int m[0x30];
     void setInvert(const hkMatrix6 &src);
@@ -573,6 +573,12 @@ struct T_6804a0 {
 };  // 0x006804a0
 
 typedef void* Frame;
+
+// Each functlet below is an /EHsc cleanup entry MSVC generated for a function
+// outside this slice. Retail emits it without a prologue, addressing the owning
+// function's frame as [ebp+N] (`mov ecx,[ebp+N]` / `lea ecx,[ebp+N]; jmp dtor`,
+// always through EBP itself). The frame base is therefore a parameter and is
+// read exactly as the original reads it: the owning function's EBP.
 
 template <class T> static inline void Clean(Frame fp, int off)          // lea ecx,[ebp+N]; jmp dtor
 { ((T*)((char*)fp + off))->d(); }

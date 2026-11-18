@@ -241,13 +241,12 @@ void PeakingIir2::CalculateFilterCoefficients(f32 omega, f32 gain, f32 q)
     const f32 A = sqrtf(gain);
     const f32 alpha = sOver2Q / A;
     const f32 k = 1.0f / (alpha + 1.0f);
-    const f32 v13 = A * sOver2Q;
 
     mfA1 = k * (c * -2.0f);
     mfA2 = (1.0f - alpha) * k;
-    mfB0 = (1.0f + v13) * k;
+    mfB0 = (1.0f + (A * sOver2Q)) * k;
     mfB1 = k * (c * -2.0f);
-    mfB2 = (1.0f - v13) * k;
+    mfB2 = (1.0f - (A * sOver2Q)) * k;
 }
 
 // @ 0x0114f100

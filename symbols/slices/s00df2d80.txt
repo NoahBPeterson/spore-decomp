@@ -1,6 +1,6 @@
 00df2d80 ?PickRandomVehicle@StateMachine@@QAEXXZ  # StateMachine::PickRandomVehicle migrated from s00df2d80 (verbatim, slice spelling)
 00df2e20 ?TestEditorToGame@Impl@@QAEXPAH@Z  # Impl::TestEditorToGame migrated from s00df2d80 (verbatim, slice spelling)
-00df2ea0  ?FUN_00df2ea0@@YGXXZ  # SP::cGalaxyGameEntryUIStateMachine::SetLevel - no source (partial)
-00df32d0  ?FUN_00df32d0@@YGXXZ  # SP::cGalaxyGameEntryUIStateMachine::Init - no source (partial)
+00df2ea0 ?SetLevel@StateMachine@@QAEXH@Z  # StateMachine::SetLevel migrated from s00df2d80 (verbatim, slice spelling)
+00df32d0 ?Init@StateMachine@@QAEXH@Z  # StateMachine::Init migrated from s00df2d80 (verbatim, slice spelling)
 00df3a70 ?FUN_00df3a70@@YIXPAUHolder@@@Z  # FUN_00df3a70 migrated from s00df2d80 (verbatim, slice spelling)
 00df3ab0 ?PickRandomAssets@StateMachine@@QAEXD@Z  # StateMachine::PickRandomAssets migrated from s00df2d80 (verbatim, slice spelling)

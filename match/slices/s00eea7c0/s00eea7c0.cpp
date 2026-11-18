@@ -310,6 +310,7 @@ void View::Dtor()
     v[0] = (void*)0x148ad1c;
     v[1] = (void*)0x148ad00;
     v[2] = (void*)0x148acf0;
+    _ReadWriteBarrier();
     if (this->mLayout2 != 0) {
         ((IRefObj*)this->mLayout2)->Release();
     }

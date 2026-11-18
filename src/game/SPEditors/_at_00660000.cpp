@@ -173,14 +173,15 @@ struct RefObj {
 class Vec {
  public:
   void push_back(void* end, void* const& value);   // 0x005c8480
+  void push_back(void* end, RefObj* const& value); // 0x005c8480
 };
 struct MapU {
-    unsigned* operator[](const unsigned& k);
+    unsigned& operator[](const unsigned& k);   // 0x00643a40
+    void DoNukeSubtree(void* node);   // 0x009a9600
 };
 extern MapU gMapU;        // 0x01527b8c
 struct ObjA { char pad0[0xc]; void* c; };
 struct ObjB { char pad0[0xc]; void* c; };
-void __cdecl DoNukeSubtreeStub(void* p);
 void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
                    int file, int line);   // 0x00f473a0 (EA allocator, 6 args)
 struct SpHandler {                          // refcounted handler: [vt][refcount](+field)
@@ -561,26 +562,22 @@ unsigned CmpAd::operator()(int a, int b)
 }
 
 // @ 0x0066afd0
-int __cdecl FUN_0066afd0(ObjA* a, ObjB* b)
+int __stdcall FUN_0066afd0(ObjA* a, ObjB* b)
 {
-    void* ca = a->c;
-    if (ca) {
-        if (b->c) {
-            unsigned ka = ((FnIntV)VT(ca)[9])(ca);
-            unsigned va = *gMapU[ka];
-            unsigned kb = ((FnIntV)VT(b->c)[9])(b->c);
-            unsigned vb = *gMapU[kb];
-            if (va == vb) return 0;
-            return (va < vb) ? -1 : 1;
-        }
-        return -1;
+    if (a->c && b->c) {
+        unsigned va = gMapU[((FnIntV)VT(a->c)[9])(a->c)];
+        unsigned vb = gMapU[((FnIntV)VT(b->c)[9])(b->c)];
+        if (va == vb) return 0;
+        return (va < vb) ? -1 : 1;
     }
+    if (a->c) return -1;
     return b->c != 0;
 }
 
 // @ 0x0066b050
 void __cdecl FUN_0066b050(void* p)
 {
+    RefObj* value = (RefObj*)p;
     // Retail refcounts through vtable slot 1 (+0x04, twice: once for the caller's reference and
     // once for the vector's) and finishes with slot 2 (+0x08), which cl turns into a tail call.
     if (p) ((RefObj*)p)->Release();
@@ -592,25 +589,23 @@ void __cdecl FUN_0066b050(void* p)
             if (p) ((RefObj*)p)->Release();
         }
     } else {
-        ((Vec*)&gVecObj)->push_back(gVecEnd, p);
+        ((Vec*)&gVecObj)->push_back(gVecEnd, value);
+        p = value;
     }
     if (p) ((RefObj*)p)->Release2();
 }
 
 // @ 0x0066b0c0
-void __cdecl FUN_0066b0c0(int* vec)
+void __cdecl FUN_0066b0c0(unsigned** vec)
 {
-    DoNukeSubtreeStub(gTreeRoot);
+    gMapU.DoNukeSubtree(gTreeRoot);
     gTreeHead = &gTreeHead;
     gTreeHead2 = &gTreeHead;
     gTreeRoot = 0;
     gB9c = 0;
     gBA0 = 0;
-    unsigned n = (unsigned)((vec[1] - vec[0]) >> 2);
-    for (unsigned i = 0; i < n; ++i) {
-        unsigned key = *(unsigned*)(vec[0] + i * 4);
-        *gMapU[key] = i;
-    }
+    for (unsigned i = 0; i < (unsigned)(vec[1] - vec[0]); ++i)
+        gMapU[vec[0][i]] = i;
 }
 
 // @ 0x0066b480

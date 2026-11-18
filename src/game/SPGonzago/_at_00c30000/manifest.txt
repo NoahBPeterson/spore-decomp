@@ -18,3 +18,15 @@
 ../src/game/SPGonzago/_at_00c30000.cpp  ?FUN_00c3e350@@YIXPAD@Z  00c3e350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c30000.cpp  ?FUN_00c3e460@@YIMPAD@Z  00c3e460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c30000.cpp  ?FUN_00c3ea80@@YAPAXXZ  00c3ea80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?SetSphere@cHitSphere@@QAEXABUcSPVector3@@M@Z  00c3f160  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?Shutdown@cHitSphere@@QAEXXZ  00c3f310  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?AsInterface@cSolarHitSphere@RetailSolarHitSphere@@QAEPAXI@Z  00c3f1d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?Shutdown@cInteractableObject@@QAEXXZ  00c3f250  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?Destroy@cGameplayMarker@@QAEPAXH@Z  00c3f1f0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?WriteAsText@cGameData@@QAEHPAX@Z  00c3e490  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?GetDelegateLowerBound@cHitSphere@@QAEHXZ  00c3f560  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?Dtor@cGameBundle@@QAEXXZ  00c35f70  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?Write@cGamePlant@@QBE_NAAVcIObjectDatabaseOStream@SP@@@Z  00c3e3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?Read@cGamePlant@@QAE_NAAVcIObjectDatabaseIStream@SP@@@Z  00c3e9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?Write@cHitSphere@@QAE_NPAX@Z  00c3f340  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c30000.cpp  ?IsState234@cGameBundle@@QAE_NXZ  00c35d40  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

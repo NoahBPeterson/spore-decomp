@@ -48,7 +48,6 @@
                 size/align arithmetic are exact, register assignment differs
 011fdfc0   19  ControllerSize: complete; the 8-dword scratch buffer is stack-allocated and the
                 call to ControllerLayout is a direct call (original tail-jmps)
-011fdff0   29  Ctl::Bind: complete; the null check of FUN_011ffa40's result and the two stores
                 differ in registers
 011fe050   99  Ctl::InitSimple: complete; same shape as 011fdc70 with the 0x015d0968 vtable [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 esp]
 011fe100  112  Ctl::BuildKeys: complete; the indirect emitter (s+0x30) call site, the

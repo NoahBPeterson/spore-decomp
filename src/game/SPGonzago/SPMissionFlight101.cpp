@@ -5,6 +5,8 @@
 #include "game/types.h"
 #include "SP/cHerd.h"
 
+namespace SP { class cPlanetRecord; }
+
 // unnamed retail callees and globals (address in the comment)
 extern void* gVtableFlight101;
 extern void* gVtableFlight101Unk;
@@ -50,7 +52,12 @@ public:
     virtual void* HasKey(uint32_t nKey);        // 0x0c
     uint32_t GetDiseaseEffectID();
 
-    uint8_t mPad14[0x1dc];                      // 0x014
+    // virtual slot 0xf8 (thiscall, no stack arguments): the sub mission's completion test
+    char IsComplete() {
+        return ((char (__thiscall*)(cSubMission*))(*(void***)this)[0xf8 / 4])(this);
+    }
+
+    uint8_t mPad14[0x1ec];                      // 0x004
     int32_t mnState;                            // 0x1f0
 };
 struct cSubMissionVector {
@@ -93,7 +100,6 @@ public:
     void HandleMessage(int nMessage, void* pParam);
     void Update(void* pParam);
     void SetContactGrob();
-    char BindTarget();
 
     void* mpVftable;                            // 0x00
     void* mpVftable2;                           // 0x04
@@ -111,7 +117,6 @@ public:
     int32_t mnNumAliensFound;                   // 0x1f8
     bool mbContactGrob;                         // 0x1fc
 };
-void BaseOnSubMissionComplete();  // 0x00c558f0 (defined below; used by a stub's inline body)
 class cSPMissionFlight101 {
 public:
     cSPMissionFlight101();
@@ -143,15 +148,24 @@ public:
     void BasePostLoad();
     void BaseOnReject();
     void BaseOnAccept();
-    void BaseOnSubMissionComplete();
+    void Fulfill();                              // 0x00c558f0
+    void BaseFulfill();                          // 0x00c59dc0
+    bool BindTarget();                           // 0x00c557c0
     void BaseDestroy();
     void* GetText(uint32_t nPropertyId, void* pParam);
     void* GetSubMissionMediumText(void* pParam);
     void* GetSubMissionLongText(void* pParam);
 
+    // the message handler is a method of the mission subobject that sits 0x34 bytes into the object
+    cSPMissionFlight101* MissionFromHandler() {
+        return (cSPMissionFlight101*)((uint8_t*)this - 0x34);
+    }
+
     void* mpVftable;                            // 0x00
     void* mpVftable2;                           // 0x04
-    uint8_t mPad08[0x2c];                       // 0x08
+    uint8_t mPad08[0x1c];                       // 0x08
+    void* mpHerdTargetKey;                      // 0x24
+    uint8_t mPad28[0x0c];                       // 0x28
     void* mpVftable3;                           // 0x34
     uint8_t mPad38[0x40];                       // 0x38
     int32_t mMissionId;                         // 0x078
@@ -177,6 +191,7 @@ public:
     char VerifyTargetPlanet(void* pTarget, void* pOut);
     char SetupHerds();
     void* GetTargetPlanet();
+    char CheckHerdsComplete();                  // 0x00c46790
 
     uint8_t mPad000[0x16c];                     // 0x000
     void* mpSelectedHerd;                       // 0x16c
@@ -195,9 +210,24 @@ extern void* gVtableFlight101Extra;
 extern void* gHerdKeyDefaults[3];
 class cMissionTarget {
 public:
+    char AcceptHerdEntry(void* pEntry);         // 0x00c73ea0
     void* SetupHerdList(uint32_t nFlagA, uint32_t nFlagB, void* pHerdKeys);
     cDispatchObject mObject;                    // 0x00
+    uint8_t mPad004[0x138];                     // 0x04
+    struct cHerdEntryList* mpHerdEntryList;     // 0x13c
 };
+// the 12-byte records the target keeps at mpHerdEntryList (0xd0..0xd4)
+struct cHerdEntryList {
+    uint8_t mPad000[0xd0];                      // 0x000
+    uint32_t* mpBegin;                          // 0x0d0
+    uint32_t* mpEnd;                            // 0x0d4
+};
+// the global herd-entry table the lookup runs on
+class cHerdEntryTable {
+public:
+    void* Lookup(void* pEntry);                 // 0x004df550
+};
+cHerdEntryTable* GetHerdEntryTable();           // 0x00401090
 int32_t GetUniverseContext();
 void* GetActivePlanet();
 void* GetTargetPlanet(void* pMission);
@@ -206,7 +236,6 @@ void* SpaceGameGet();
 void* GetMissionManager();
 void* GetMissionManager(uint32_t nMissionId);
 void* GetPlanetRecordFromTargetType(void* pMission, uint32_t nType);
-uint32_t ReadTargetPlanetType();
 void AddDiseaseEffect(void* pSpecies, uint32_t nEffect, int nValue);
 void MarkSpeciesScanned(void* pSpecies);
 void CollectSpecies(void* pSpecies);
@@ -214,24 +243,67 @@ void* GetHerdEntry(void* pSpecies);
 char CheckHerdsComplete();
 char SetMissionState(void* pMission);
 void HandleMissionMessage(void* pMission, int nMessage, void* pParam);
+uint32_t ReadTargetPlanetType();
+// the species a herd holds (retail calls these thiscall on the species object)
+class cSpeciesObject {
+public:
+    void* GetPlanetRecord();                              // 0x00c03180
+    void AddDiseaseEffect(uint32_t nEffect, int nValue);  // 0x00c17350
+};
+// the scan record MarkSpeciesScanned returns, on which the collection runs
+class cSpeciesScan {
+public:
+    void CollectSpecies();                                // 0x00aca360
+};
+cSpeciesScan* MarkSpeciesScanned(cSpeciesObject* pSpecies);  // 0x00b3d480
+void ReleaseHerdVector(void* pBegin, void* pEnd);             // 0x00e25bd0
+// the mission base's HandleMessage (0x00c4a6b0): a thiscall method of the mission object
+class cMissionBase {
+public:
+    bool HandleMessage(int nMessage, void* pParam);
+};
 void SetMissionFlag(void* pTarget, int nValue);
 void PlayMissionEvent(uint32_t nEvent);
 void AddInfectedAnimalsToHerd(void* pOwner, void* pHerd, int nCount, int nMissionId,
                               uint32_t nEffect);
 uint32_t RandomUint32Uniform(int32_t nRange);
 void operator_delete__(void* pMemory);
+struct MissionTargetBinding {
+    uint32_t ReadTargetPlanetType() const;        // 0x00c45b40
+    SP::cPlanetRecord* GetPlanetRecordFromTargetType(uint32_t type); // 0x00c474b0
+    void SetTargetPlanet(SP::cPlanetRecord* record); // 0x00c47180
+};
+// Flight101's retail slot 0x18c is the no-argument bool setup method.
+struct Flight101VTable {
+    void* precedingSlots[0x18c / 4];
+    bool (__thiscall* SetupHerds)(cSPMissionFlight101* self);
+};
+namespace Flight101Native {
+struct Inventory {
+    void FUN_00ff46e0();
+};
+struct SpaceGame {
+    Inventory* GetPlayerInventory();             // 0x00a1ad60
+};
+struct MissionManager {
+    void FUN_00feba60(bool enabled);
+};
+SpaceGame* SpaceGameGet();                       // 0x01002bd0
+MissionManager* GetMissionManager();             // 0x00feb9f0
+}
 // ---- items of slice s00c54f90 end
 
 // @ 0x00c557c0
-char cMissionFindAliens::BindTarget()
+bool cSPMissionFlight101::BindTarget()
 {
-    uint32_t nType = ReadTargetPlanetType();
-    void* pRecord = GetPlanetRecordFromTargetType(this, nType);
-    if (pRecord == nullptr)
-        return 0;
-    SetMissionFlag(pRecord, 1);
-    ((cDispatchObject*)this)->Call(0x18c);
-    return 1;
+    MissionTargetBinding* mission = (MissionTargetBinding*)this;
+    uint32_t type = mission->ReadTargetPlanetType();
+    SP::cPlanetRecord* record = mission->GetPlanetRecordFromTargetType(type);
+    if (record == nullptr)
+        return false;
+    mission->SetTargetPlanet(record);
+    ((Flight101VTable*)mpVftable)->SetupHerds(this);
+    return true;
 }
 
 // @ 0x00c557f0
@@ -242,13 +314,13 @@ void cSPMissionFlight101::Shutdown()
 }
 
 // @ 0x00c558f0
-void BaseOnSubMissionComplete()
+void cSPMissionFlight101::Fulfill()
 {
-    void* pInventory = ((cDispatchObject*)SpaceGameGet())->Call(0x00);
-    if (pInventory != nullptr) {
-        ((cDispatchObject*)pInventory)->Call(0x00);
-    }
-    ((cDispatchObject*)GetMissionManager())->Call1(0x00, 1);
+    BaseFulfill();
+    Flight101Native::Inventory* inventory = Flight101Native::SpaceGameGet()->GetPlayerInventory();
+    if (inventory != nullptr)
+        inventory->FUN_00ff46e0();
+    Flight101Native::GetMissionManager()->FUN_00feba60(true);
 }
 
 // @ 0x00c55920
@@ -359,14 +431,15 @@ char cSPMissionFetch::SetupHerds()
     pHerdKeys[1] = gHerdKeyDefaults[1];
     pHerdKeys[2] = gHerdKeyDefaults[2];
 
-    cHerd* pHerdList = (cHerd*)GetTargetPlanet();
-    int32_t nCount = (int32_t)(pHerdList->mpSpeciesEnd - pHerdList->mpSpeciesBegin);
+    cHerdEntryList* pList = ((cMissionTarget*)GetTargetPlanet())->mpHerdEntryList;
+    int32_t nCount =
+        (int32_t)((uint8_t*)pList->mpEnd - (uint8_t*)pList->mpBegin) / 0xc;
 
     for (int32_t i = 0; i < nCount; ++i) {
-        void* pSpecies = pHerdList->mpSpeciesBegin[i];
-        if (SetMissionState(pSpecies))
+        void* pEntry = (uint8_t*)pList->mpBegin + i * 0xc;
+        if (((cMissionTarget*)GetTargetPlanet())->AcceptHerdEntry(pEntry))
             continue;
-        mpSelectedHerd = GetHerdEntry(pSpecies);
+        mpSelectedHerd = GetHerdEntryTable()->Lookup(pEntry);
         break;
     }
 
@@ -377,10 +450,11 @@ char cSPMissionFetch::SetupHerds()
         pHerdKeys[2] = pEntry->mpKeyC;
         return 1;
     }
-    if (!CheckHerdsComplete())
-        return 0;
-    ((cMissionTarget*)GetTargetPlanet())->SetupHerdList(0, 0, mHerdKeys);
-    return 1;
+    if (CheckHerdsComplete()) {
+        ((cMissionTarget*)GetTargetPlanet())->SetupHerdList(0, 0, mHerdKeys);
+        return 1;
+    }
+    return 0;
 }
 
 // @ 0x00c55ca0
@@ -433,7 +507,7 @@ void cSPMissionFlight101::GetUIMediumDescription(void* pParam)
 {
     cSubMission* pHerd = GetHerdSubMission();
     if (GetCurrSubMission() == pHerd) {
-        if (((cDispatchObject*)pHerd)->CallChar(0xf8) == 0) {
+        if (pHerd->IsComplete() == 0) {
             if (pHerd->mnState == 1) {
                 GetText(0xa391d92c, pParam);
                 return;
@@ -450,7 +524,7 @@ void cSPMissionFlight101::GetUILongDescription(void* pParam)
 {
     cSubMission* pHerd = GetHerdSubMission();
     if (GetCurrSubMission() == pHerd) {
-        if (((cDispatchObject*)pHerd)->CallChar(0xf8) == 0) {
+        if (pHerd->IsComplete() == 0) {
             if (pHerd->mnState == 1) {
                 GetText(0xfa62ca8f, pParam);
                 return;
@@ -510,38 +584,40 @@ void* cSPMissionFlight101::Destroy(char bDelete)
 void cSPMissionFlight101::CollectMissionHerds()
 {
     NounManager();
-    for (cHerd** pEntry = mHerds.mpBegin; pEntry != mHerds.mpEnd; ++pEntry) {
+    cHerd** pEnd = mHerds.mpEnd;
+    for (cHerd** pEntry = mHerds.mpBegin; pEntry != pEnd; ++pEntry) {
         cHerd* pHerd = *pEntry;
         int32_t nCount = (int32_t)(pHerd->mpSpeciesEnd - pHerd->mpSpeciesBegin);
         for (int32_t i = 0; i < nCount; ++i) {
-            void* pSpecies = pHerd->mpSpeciesBegin[i];
-            if (pSpecies != nullptr &&
-                GetPlanetRecordFromTargetType(pSpecies, 0) == (void*)mnHerdTargetKey) {
-                AddDiseaseEffect(pSpecies, (uint32_t)mnDiseaseEffectID, 1);
-                MarkSpeciesScanned(pSpecies);
-                CollectSpecies(pSpecies);
+            cSpeciesObject* pSpecies = (cSpeciesObject*)pHerd->mpSpeciesBegin[i];
+            if (pSpecies != nullptr && pSpecies->GetPlanetRecord() == mpHerdTargetKey) {
+                pSpecies->AddDiseaseEffect((uint32_t)mnDiseaseEffectID, 1);
+                MarkSpeciesScanned(pSpecies)->CollectSpecies();
             }
         }
     }
-    mHerds.Clear();
+    ReleaseHerdVector(mHerds.mpBegin, mHerds.mpEnd);
 }
 
 // @ 0x00c560c0
 void cSPMissionFlight101::HandleMessage(int nMessage, void* pParam)
 {
-    if (nMessage == 0x2489760) {
-        if (GetActivePlanet() == GetTargetPlanet() && GetUniverseContext() == 0) {
-            CollectMissionHerds();
+    if (nMessage != 0x2489760) {
+        if (nMessage == 0x5e37a53) {
+            if (GetActivePlanet() == MissionFromHandler()->GetTargetPlanet() &&
+                GetUniverseContext() == 0 && *(int32_t*)((uint8_t*)this + 0x1d0) > 0) {
+                MissionFromHandler()->SetupEradicateObjects();
+                ((cMissionBase*)this)->HandleMessage(0x5e37a53, pParam);
+                return;
+            }
         }
-    } else if (nMessage == 0x5e37a53) {
-        if (GetActivePlanet() == GetTargetPlanet() && GetUniverseContext() == 0 &&
-            mHerds.mpEnd != nullptr) {
-            SetupEradicateObjects();
-            HandleMissionMessage(this, 0x5e37a53, pParam);
-            return;
+    } else {
+        if (GetActivePlanet() == MissionFromHandler()->GetTargetPlanet() &&
+            GetUniverseContext() == 0) {
+            MissionFromHandler()->CollectMissionHerds();
         }
     }
-    HandleMissionMessage(this, nMessage, pParam);
+    ((cMissionBase*)this)->HandleMessage(nMessage, pParam);
 }
 
 // @ 0x00c56170

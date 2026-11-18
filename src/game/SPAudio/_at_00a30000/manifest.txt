@@ -18,3 +18,4 @@
 ../src/game/SPAudio/_at_00a30000.cpp  ?Dtor@TrackVec@@QAEXXZ  00a3d690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/_at_00a30000.cpp  ?sendgame_anything@@YAXHHHHPAH@Z  00a3ef30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/_at_00a30000.cpp  ?FindByName@TrackList@@QAEPAUTrack@@PAX@Z  00a3f050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/_at_00a30000.cpp  ?sendgame_new@@YAHHH@Z  00a3eef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

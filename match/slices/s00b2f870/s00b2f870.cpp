@@ -2,6 +2,7 @@
 // Reconstructed from the Ghidra decompilation + disassembly. No assembly is transcribed.
 
 #include <math.h>
+#include "SP/cVarListSerializer.h"
 
 typedef void* (__thiscall *TCP0)(void*);
 typedef void* (__thiscall *TCP1)(void*, int);
@@ -333,52 +334,78 @@ int S::FUN_00b2ffb0() {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00b30010  ISimulatorSerializable::Write
-// ---------------------------------------------------------------------------
-char S::FUN_00b30010(void* param_2) {
-  int* piVar4 = (int*)((TCP0)(VTO(param_2))[0x20 / 4])(param_2);
-  void* local = (void*)0x14a4edc;
-  void* uVar5 = ((TCP0)(VTO(piVar4))[0x18 / 4])(piVar4);
-  FUN_0093aa70(uVar5, &local, 1, 0);
-  char cVar2 = ((S*)this)->FUN_00b18590(param_2);
-  char cVar3 = ((S*)((char*)this + 0x34))->FUN_00c88a90(param_2);
-  bool bv = !(cVar3 == 0 || cVar2 == 0);
+struct CursorStreamHolder {
+  virtual void slot0();
+  virtual void slot1();
+  virtual void slot2();
+  virtual void slot3();
+  virtual void slot4();
+  virtual void slot5();
+  virtual void* GetStream();                          // slot6, +0x18
+};
+struct CursorObjectDatabaseStream {
+  virtual void slot0();
+  virtual void slot1();
+  virtual void slot2();
+  virtual void slot3();
+  virtual void slot4();
+  virtual void slot5();
+  virtual void slot6();
+  virtual void slot7();
+  virtual CursorStreamHolder* GetStreamHolder();       // slot8, +0x20
+};
+extern SP::cDataSerializerGeneric gGameTerrainCursorSerializer; // 0x01568e18
 
-  CVLS cvs;
-  ((S*)&cvs)->FUN_00692f90(this, (void*)0x1568e18, 0x1a80d26);
-  char cVar4 = ((S*)&cvs)->FUN_00692900(param_2);
-  if (cVar4 != 0 && bv) return 1;
+// @ 0x00b30010  ISimulatorSerializable::Write
+char S::FUN_00b30010(void* stream) {
+  CursorStreamHolder* __restrict holder = static_cast<CursorObjectDatabaseStream*>(stream)->GetStreamHolder();
+  unsigned int tag = 0x14a4edc;
+  void* out = holder->GetStream();
+  FUN_0093aa70(out, &tag, 1, 0);
+  char baseOk = FUN_00b18590(stream);
+  char spatialOk = ((S*)((char*)this + 0x34))->FUN_00c88a90(stream);
+  bool ok = !(spatialOk == 0 || baseOk == 0);
+  SP::cVarListSerializer serializer(this, &gGameTerrainCursorSerializer,
+      SP::cVarListSerializer::kSignature);
+  char serialized = serializer.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream));
+  if (serialized != 0 && ok) return 1;
   return 0;
 }
 
-// ---------------------------------------------------------------------------
-// @ 0x00b300c0  ISimulatorSerializable::Read
-// ---------------------------------------------------------------------------
-char S::FUN_00b300c0(void* param_2) {
-  void* p = param_2;
-  int* piVar5 = (int*)((TCP0)(VTO(p))[0x20 / 4])(p);
-  int local;
-  void* uVar6 = ((TCP0)(VTO(piVar5))[0x18 / 4])(piVar5);
-  FUN_0093a780(uVar6, &local, 1, 0);
-  char ok = this->FUN_00b18600(p);
-  char cVar4 = ((S*)((char*)this + 0x34))->FUN_00c88b00(p);
-  if (cVar4 == 0 || ok == 0) ok = 0; else ok = 1;
+struct CursorRefObject {
+  virtual void AddRef();
+  virtual void Release();
+};
+struct CursorAutoRef {
+  CursorRefObject* mpObject;
+  void Assign(CursorRefObject* object) {
+    if (object != mpObject) {
+      CursorRefObject* previous = mpObject;
+      if (object) object->AddRef();
+      mpObject = object;
+      if (previous) previous->Release();
+    }
+  }
+};
+extern CursorAutoRef gCurrentGameTerrainCursor; // 0x0167e7a4
 
-  CVLS cvs;
-  ((S*)&cvs)->FUN_00692f90(this, (void*)0x1568e18, 0x1a80d26);
-  char cVar5 = ((S*)&cvs)->FUN_00693e10(p);
-  if (cVar5 == 0 || ok == 0) ok = 0; else ok = 1;
-  int* prev = DAT_0167e7a4;
-  if ((void*)this != (void*)prev) {
-    if (this != 0)
-      ((TCV0)(VTO(this))[0x00 / 4])(this);   // AddRef
-    DAT_0167e7a4 = (int*)this;
-    if (prev != 0)
-      ((TCV0)(VTO(prev))[0x04 / 4])(prev);   // Release
-  }  return ok;
+// @ 0x00b300c0  ISimulatorSerializable::Read
+char S::FUN_00b300c0(void* stream) {
+  CursorStreamHolder* holder = static_cast<CursorObjectDatabaseStream*>(stream)->GetStreamHolder();
+  int tag;
+  void* in = holder->GetStream();
+  FUN_0093a780(in, &tag, 1, 0);
+  char ok = FUN_00b18600(stream);
+  char spatialOk = ((S*)((char*)this + 0x34))->FUN_00c88b00(stream);
+  if (spatialOk == 0 || ok == 0) ok = 0; else ok = 1;
+  SP::cVarListSerializer serializer(this, &gGameTerrainCursorSerializer,
+      SP::cVarListSerializer::kSignature);
+  char serialized = serializer.Serialize(*static_cast<SP::cIObjectDatabaseIStream*>(stream));
+  if (serialized == 0 || ok == 0) ok = 0; else ok = 1;
+  gCurrentGameTerrainCursor.Assign(reinterpret_cast<CursorRefObject*>(this));
+  return ok;
 }
 
-// ---------------------------------------------------------------------------
 // @ 0x00b301c0
 // ---------------------------------------------------------------------------
 char __stdcall FUN_00b301c0(int param_1, void* param_2) {

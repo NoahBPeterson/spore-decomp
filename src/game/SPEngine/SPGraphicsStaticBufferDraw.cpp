@@ -91,19 +91,32 @@ struct MeshVector {
   MeshElement* mpEnd;       // +0x04
   MeshElement* mpCapacity;  // +0x08
 
+  MeshVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+  ~MeshVector() { if (mpBegin) EXT_f47380(mpBegin); }
   void grow(MeshElement* at, MeshElement* src);  // 0x007a44b0
   void push_back(MeshElement* src);              // 0x007a4600
 };
-struct cStaticBuffer {
+struct cStaticBufferRefCount {
   virtual void sb00();  // +0x00
-  virtual void sb01();  // +0x04  scalar deleting destructor
-
+  virtual void sb01();  // +0x04
   u32         mUnk04;             // +0x04
+  cStaticBufferRefCount() : mUnk04(0) {}
+  ~cStaticBufferRefCount() {}
+};
+struct cStaticBufferVectorA {
   u32         mUnk08;             // +0x08  element count of vector A
   u32         mUnk0c;             // +0x0c  vector A data pointer
   u32         mUnk10;             // +0x10  pending cursor
   u32         mUnk14;             // +0x14
   u32         mUnk18;             // +0x18
+  cStaticBufferVectorA() : mUnk08(0), mUnk0c(0), mUnk10(0) {}
+  ~cStaticBufferVectorA() { if (mUnk0c) EXT_f47380((void*)mUnk0c); }
+};
+struct cStaticBuffer : cStaticBufferRefCount {
+  virtual void sb00();  // +0x00
+  virtual void sb01();  // +0x04  scalar deleting destructor
+
+  cStaticBufferVectorA mVecA;     // +0x08 .. +0x18
   MeshVector  mVertexBuffers;     // +0x1c .. +0x24
   u32         mUnk28;             // +0x28
   u32         mUnk2c;             // +0x2c  vector B data pointer
@@ -113,7 +126,8 @@ struct cStaticBuffer {
   u32         mUnk44;             // +0x44
   u32         mUnk48;             // +0x48
 
-  cStaticBuffer* Ctor(u32 param_1, u32 param_2);   // 0x007a4380
+  cStaticBuffer(u32 param_1, u32 param_2);         // 0x007a4380
+  void SetVertexFormat(int fmt);                   // 0x007a3ce0
   ~cStaticBuffer();                                // 0x007a4220
   void Flush();                                    // 0x007a4710
   u32  GetVertexBuffer(u32 numVertices, u32* outCount, u32* outStride);  // 0x007a47c0
@@ -173,34 +187,31 @@ cStaticBuffer::~cStaticBuffer()
   }
 }
 
+void FUN_006de350(void);
+void FUN_00f47380(void* p) throw();
+struct cStaticBufferDrawHolder;
+extern cStaticBufferDrawHolder* g_pStaticBufferDrawHolder;  // 0x15ddc84
+struct cStaticBufferDrawSlot {
+  ~cStaticBufferDrawSlot() { g_pStaticBufferDrawHolder = 0; }
+};
+struct cStaticBufferDrawHolder {
+  cStaticBufferDrawSlot mSlot;
+  ~cStaticBufferDrawHolder() { FUN_006de350(); }
+  static void operator delete(void* p) { FUN_00f47380(p); }
+};
+
 // @ 0x007a4320
 void __cdecl FUN_007a4320()
 {
-  cStaticBufferDraw_s007a_41c0* const p = g_pStaticBufferDraw;
-  if (p != 0) {
-    EXT_6de350(p);
-    g_pStaticBufferDraw = 0;
-    EXT_f47380(p);
-  }
+  delete g_pStaticBufferDrawHolder;
 }
 
 // @ 0x007a4380
-cStaticBuffer* cStaticBuffer::Ctor(u32 param_1, u32 param_2)
+cStaticBuffer::cStaticBuffer(u32 param_1, u32 param_2)
 {
-  mUnk04 = 0;
-  mUnk08 = 0;
-  mUnk0c = 0;
-  mUnk10 = 0;
-  mVertexBuffers.mpBegin = 0;
-  mVertexBuffers.mpEnd = 0;
-  mVertexBuffers.mpCapacity = 0;
-  mDrawVector.mpBegin = 0;
-  mDrawVector.mpEnd = 0;
-  mDrawVector.mpCapacity = 0;
   mUnk44 = 0;
   mUnk48 = param_1;
-  EXT_7a3ce0(this, param_2);
-  return this;
+  SetVertexFormat((int)param_2);
 }
 
 // @ 0x007a4420
@@ -210,7 +221,7 @@ void cStaticBufferDraw_s007a_41c0::Ctor(u32 param_1, u32 param_2, u32 param_3, u
   cStaticBuffer* p =
       (cStaticBuffer*)EXT_f473a0(0x4c, "Graphics/StaticBufferDraw", 0, 0, 0, 0);
   if (p != 0) {
-    p->Ctor(param_2, param_3);
+    new (p) cStaticBuffer(param_2, param_3);
   }
   buffer.mDrawVector.mpCapacity = (MeshElement*)p;
   p->sb01();
@@ -296,8 +307,8 @@ void MeshVector::push_back(MeshElement* src)
 void cStaticBuffer::SnapshotPending()
 {
   cStaticBuffer* const d = &g_pStaticBufferDraw->buffer;
-  u32 cursor = (u32)((char*)mUnk0c - (char*)mUnk08);
-  u32 countA = (u32)((char*)mUnk10 - (char*)mUnk14);
+  u32 cursor = (u32)((char*)mVecA.mUnk0c - (char*)mVecA.mUnk08);
+  u32 countA = (u32)((char*)mVecA.mUnk10 - (char*)mVecA.mUnk14);
   u32 countB;
   u32 stride;
   u32 start;
@@ -311,9 +322,9 @@ void cStaticBuffer::SnapshotPending()
     start = 0xffffffffu;
     countB = 0;
   }
-  mUnk18 = 0;
+  mVecA.mUnk18 = 0;
   d->mUnk40 = 0;
-  d->mUnk14 = d->mUnk10;
+  d->mVecA.mUnk14 = d->mVecA.mUnk10;
   d->mDrawVector.mpBegin = (MeshElement*)d->mUnk2c;
 
   if (countA != 0 && ((int)stride < 0 || start != 0)) {
@@ -344,18 +355,18 @@ void cStaticBuffer::Flush()
       (d->mUnk40 != 0)) {
     SnapshotPending();
   }
-  if (mUnk0c != 0) {
+  if (mVecA.mUnk0c != 0) {
     EXT_11f36a0();
     if (mVertexBuffers.mpEnd < mVertexBuffers.mpCapacity) {
-      *(u32*)mVertexBuffers.mpEnd = mUnk0c;
+      *(u32*)mVertexBuffers.mpEnd = mVecA.mUnk0c;
       mVertexBuffers.mpEnd = (MeshElement*)((char*)mVertexBuffers.mpEnd + 4);
     } else {
-      EXT_6ec4a0(mVertexBuffers.mpEnd, &mUnk0c);
+      EXT_6ec4a0(mVertexBuffers.mpEnd, &mVecA.mUnk0c);
     }
-    mUnk0c = 0;
-    mUnk14 = 0;
-    mUnk10 = 0;
-    mUnk08 = 0;
+    mVecA.mUnk0c = 0;
+    mVecA.mUnk14 = 0;
+    mVecA.mUnk10 = 0;
+    mVecA.mUnk08 = 0;
   }
   if (mUnk28 != 0) {
     EXT_11f4fd0(&mDrawVector.mpEnd);
@@ -378,26 +389,26 @@ u32 cStaticBuffer::GetVertexBuffer(u32 numVertices, u32* outCount, u32* outStrid
   cStaticBuffer* const s = &g_pStaticBufferDraw->buffer;
   u32 have = s->mUnk04;   // currently reserved capacity
   u32 want = numVertices;
-  if ((int)s->mUnk08 < (int)(s->mUnk10 + numVertices)) {
+  if ((int)s->mVecA.mUnk08 < (int)(s->mVecA.mUnk10 + numVertices)) {
     if ((int)have >= 1) {
-      u32 room = s->mUnk08 - s->mUnk10;
+      u32 room = s->mVecA.mUnk08 - s->mVecA.mUnk10;
       if ((int)room < 0x31) {
         Flush();
         want = numVertices;
       }
     }
   }
-  if (s->mUnk0c == 0) {
+  if (s->mVecA.mUnk0c == 0) {
     if ((mUnk04 == 3) && (0x1ff8 < (int)want)) {
       want = 0x1ff8;
     }
     if ((int)have <= (int)want) {
       have = want;
     }
-    s->mUnk08 = have;
+    s->mVecA.mUnk08 = have;
     u32* const vb = (u32*)FUN_00762b70(mUnk44, have, 0, 0);
-    s->mUnk0c = (u32)vb;
-    u32 stride = s->mUnk08;
+    s->mVecA.mUnk0c = (u32)vb;
+    u32 stride = s->mVecA.mUnk08;
     if (stride == 0) {
       stride = vb[3];
     }
@@ -406,9 +417,9 @@ u32 cStaticBuffer::GetVertexBuffer(u32 numVertices, u32* outCount, u32* outStrid
     if (u == 0) {
       want = 0;
     } else {
-      s->mUnk10 = 0;
-      s->mUnk14 = 0;
-      s->mUnk18 = (u32)*(u8*)(*(u32*)s->mUnk0c + 0xf);
+      s->mVecA.mUnk10 = 0;
+      s->mVecA.mUnk14 = 0;
+      s->mVecA.mUnk18 = (u32)*(u8*)(*(u32*)s->mVecA.mUnk0c + 0xf);
       s->mUnk28 = (u32)u;
     }
   }
@@ -426,9 +437,9 @@ u32 cStaticBuffer::GetVertexBuffer(u32 numVertices, u32* outCount, u32* outStrid
     default:
       break;
   }
-  *outStride = s->mUnk18;
-  *outCount = s->mUnk10 * s->mUnk18 + s->mUnk28;
-  s->mUnk10 += want;
+  *outStride = s->mVecA.mUnk18;
+  *outCount = s->mVecA.mUnk10 * s->mVecA.mUnk18 + s->mUnk28;
+  s->mVecA.mUnk10 += want;
   s->mUnk40 = 1;
   return want;
 }

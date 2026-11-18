@@ -1,19 +1,29 @@
 #!/usr/bin/env python3
-"""Map Spore-ModAPI's function addresses onto this build (SporeApp.exe of 2024-09-30), for module attribution.
+"""Map Spore-ModAPI's function addresses onto this build (SporeBin/SporeApp.exe of 2024-10-01), for module attribution.
 
 ModAPI (github.com/Spore-Community/Spore-ModAPI, SourceCode/DLL/Addresses*.cpp) names about 2,600 functions as
-`DefineAddress(Name, SelectAddress(<disk>, <March 2017 Steam>))` inside `namespace Addresses(<Class>)`.  Our build is a
-later relink of the 2017 Steam code, so its addresses differ by a piecewise-constant shift.  The shift is learned from
-name anchors: ModAPI functions whose `Class::Name` matches exactly one function named through the development build's
-debug database (symbols/pdb_names.json).  A ModAPI address is then mapped when
+`DefineAddress(Name, SelectAddress(<disk>, <March 2017 Steam>))` inside `namespace Addresses(<Class>)`.  ModAPI runs in
+Galactic Adventures' executable (SporebinEP1/SporeApp.exe), and its "March 2017" column also serves the 2024 build of it
+("Addresses didn't shift in the oct2024 version", Spore-ModAPI #78).  We rebuild the other executable, SporeBin's, which
+shares 99.6% of its functions with Galactic Adventures' byte for byte, at other addresses.
+
+With work/ga_map.json (tools/ga_map.py, from both executables) a ModAPI address is placed on the base function the map
+pairs with it: 2,500 of 2,658 rows on 2026-11-15, on 2,121 functions (the linker folded identical small functions,
+so one address often carries several ModAPI names); 150 of the rest are global variables, not functions.
+Without it, a piecewise-constant address shift is learned from name anchors: ModAPI functions whose `Class::Name`
+matches exactly one function named through the development build's debug database (symbols/pdb_names.json).  A ModAPI
+address is then mapped when
 
   bracket:  the anchors just below and just above it have the same shift, and that shift lands on a function start, or
   support:  among the shifts of anchors within 0x40000, one lands this address and at least four other ModAPI
             addresses within 0x2000 on function starts, two more than any other shift.
 
-Leave-one-out over the 149 anchors (2026-11-14): bracket 82 right / 5 wrong, support 119 / 12.
+Leave-one-out over the 149 anchors (2026-11-14): bracket 82 right / 5 wrong, support 119 / 12.  The shift method
+places 929 rows; the map places 2,500 and puts 176 of the rows the shift method placed in the same class on a nearby
+different function, e.g. cAppSystem::PreInit on the function the debug database names SP::cAppSystem::PreInit.
 
-Maintainer tool input: a copy of ModAPI's SourceCode/DLL in work/modapi/DLL (not in the repository).
+Maintainer tool input: a copy of ModAPI's SourceCode/DLL in work/modapi/DLL (not in the repository), and optionally
+work/ga_map.json.
 
   .venv/bin/python tools/site/modapi_addr.py [DLL dir]     prints the counts
 """
@@ -21,6 +31,7 @@ import bisect, collections, glob, gzip, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DLL = os.path.join(ROOT, "work", "modapi", "DLL")
+GA_MAP = os.path.join(ROOT, "work", "ga_map.json")
 
 
 def rows(dll=DLL):
@@ -47,6 +58,9 @@ def mapping(fstarts, dll=DLL):
     R = rows(dll)
     if not R:
         return {}
+    if os.path.exists(GA_MAP):
+        inv = {int(p[0], 16): int(b, 16) for b, p in json.load(open(GA_MAP))["pairs"].items()}
+        return {inv[r["steam"]]: (r["file"], r["ns"]) for r in R if inv.get(r["steam"]) in fstarts}
     named = collections.defaultdict(list)
     for va, e in json.load(open(os.path.join(ROOT, "symbols", "pdb_names.json"))).items():
         parts = (e.get("name") or "").split("::")

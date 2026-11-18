@@ -5,7 +5,5 @@
 00edcc90 41  window-enumeration loop: layout/iterator call shape differs. flags /O2 /MD /Gy /TP /arch:SSE; equiv: WEAK 241 valid inputs, 41.2% coverage
 00edcce0 40  id-list search: inner-loop register schedule differs. flags /O2 /MD /Gy /TP /arch:SSE; equiv: PASS 230 valid inputs, 100.0% coverage
 00edcd30 74  message-handler register/unregister: our member form omits the original's `this != 0` test (MSVC proves a member this non-null and folds it to a dead `mov edi,edi`), the vtable-id walk uses scaled-index addressing instead of the original's `[edi + g_msgIds]` byte-offset form, size 149 vs 151. flags /O2 /MD /Gy /TP /arch:SSE; equiv: WEAK 297 valid inputs, 45.6% coverage
-00edce70 32  message handler: the original computes the null-checked handler before calling MessageServer, MSVC hoists the call and keeps `this` in esi instead of edi, and the vtable slot-1 dispatch uses a different register schedule. flags /O2 /MD /Gy /TP /arch:SSE; equiv: PASS 400 valid inputs, 100.0% coverage
 00edcec0 40  index lookup: compare/return block layout differs. flags /O2 /MD /Gy /TP /arch:SSE; equiv: PASS 332 valid inputs, 100.0% coverage
 00edcf30 35  FIXED id test: bool return, because the original's null path clears only al and leaves the incoming eax upper bits (a full-width int return zeroed them); chk size 43 (schedule). flags /O2 /MD /Gy /TP /arch:SSE; equiv: PASS 256 valid inputs, 100.0% coverage
-00edcf60 34  slider set: cvtsi2ss/cvttss2si rounding shape differs. flags /O2 /MD /Gy /TP /arch:SSE; equiv: WEAK 169 valid inputs, 11.4% coverage

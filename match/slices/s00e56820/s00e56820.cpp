@@ -51,7 +51,7 @@ extern "C" void  __cdecl toggle_0e53660(int a, int b);              // 0x00e5366
 extern "C" float __cdecl curve_0e56700(const void* tbl, int n, float x, float z); // 0x00e56700
 extern "C" int   __cdecl FUN_00e87260(int a, int b, float c, int* out, int max, int fl); // 0x00e87260
 extern "C" float __cdecl FUN_00e4f9d0(void* guard);                 // 0x00e4f9d0
-extern "C" char* __cdecl FUN_00e52910(void* e);                     // 0x00e52910
+__declspec(noinline) int* __cdecl FUN_00e52910(void* e);           // 0x00e52910
 extern "C" float __cdecl FUN_00e837c0(int a, float b);              // 0x00e837c0
 extern "C" float __cdecl FUN_00e513d0(float a, float b, float c, float d, float e); // 0x00e513d0
 extern "C" void* __cdecl QuaternionFromFacingAndUp(float* a, float* b, void* c);    // 0x0069b600
@@ -346,16 +346,45 @@ void FUN_00e56f80(char* p, float* to) {
   *(char*)(p + 4) = 0;
 }
 
+// same-TU copy of 0x00e4f9d0 (defined in s00e4f860); the static copy gives the native xmm0 return
+__declspec(noinline) static float FUN_00e4f9d0_local(int handle) {
+  Ref g; g.Init();
+  char* r = (char*)thunk_FUN_00e823a0(handle, &g);
+  Ref g2; g2.Init();
+  char* o = (char*)FUN_00e4ce40(&g2);
+  float v;
+  switch (*(int*)(r + 0xbc)) {
+    case 0:
+      switch (*(int*)(r + 0xb4)) {
+        case 1:  v = *(float*)(o + 0x58); break;
+        case 2: case 6: v = *(float*)(o + 0x5c); break;
+        case 3: case 5: case 7: v = *(float*)(o + 0x60); break;
+        case 4:  v = *(float*)(o + 100); break;
+        default: v = 1.0f; break;
+      }
+      break;
+    case 1: v = *(float*)(o + 0x60); break;
+    case 2: v = *(float*)(o + 100); break;
+    case 3: v = *(float*)(o + 0x5c); break;
+    case 4: v = *(float*)(o + 0x58); break;
+    default: v = 1.0f; break;
+  }
+  g2.Release();
+  g.Release();
+  return v;
+}
+
 // @ 0x00e57170  (id passed in EAX by the original)
-void FUN_00e57170_impl(int id, float scale) {
+static void FUN_00e57170_impl(int id, float scale) {
   char* e = (char*)CellsPool().Get(id);
-  float v = (SqrtF(3.0f) / (*(float*)(G + 0x514c) / *(float*)(G + 0x5150))) * scale;
-  *(float*)(e + 0xb4) = v;
-  float s = FUN_00e4f9d0(*(void**)(e + 0x108));
-  float r = (v * v) * s;
+  *(float*)(e + 0xb4) = (SqrtF(3.0f) / (*(float*)(G + 0x514c) / *(float*)(G + 0x5150))) * scale;
+  float s = FUN_00e4f9d0_local(*(int*)(e + 0x108));
+  float r = (*(float*)(e + 0xb4) * *(float*)(e + 0xb4)) * s;
   *(float*)(e + 0xb8) = r;
   *(float*)(e + 0xbc) = 1.0f / r;
 }
+// same-TU stand-in caller (codegen.md 6.3): keeps FUN_00e57170_impl a static with the EAX-register convention
+void FUN_00e57170_caller(int id, float scale) { FUN_00e57170_impl(id, scale); }
 
 // @ 0x00e571f0
 bool FUN_00e571f0(int id, int state) {
@@ -473,56 +502,58 @@ bool FUN_00e57460(char* a, char* b) {
   return false;
 }
 
+static inline int* SelectedEater19(char* def)
+{
+  int which = *(int*)(*(char**)(G + 0x5190) + 0x7c);
+  int* candidate;
+  switch (which) {
+    case 0: candidate = (int*)(def + 0x248); break;
+    case 1: goto fallback;
+    case 2: candidate = (int*)(def + 0x194); break;
+    default: return (int*)(def + 0xe0);
+  }
+  if (*candidate == -1) {
+fallback:
+    return (int*)(def + 0xe0);
+  }
+  return candidate;
+}
+
 // @ 0x00e57560
 bool FUN_00e57560(char* p) {
   Ref t; t.Init();
   char* def = (char*)thunk_FUN_00e823a0(*(int*)(p + 0x108), &t);
-  int which = *(int*)(*(char**)(G + 0x5190) + 0x7c);
-  int* q;
-  if (which == 0) {
-    q = (int*)(def + 0x248);
-    if (*q == -1) q = (int*)(def + 0xe0);
-  } else if (which == 2) {
-    q = (int*)(def + 0x194);
-    if (*q == -1) q = (int*)(def + 0xe0);
-  } else {
-    q = (int*)(def + 0xe0);
+  int* q = SelectedEater19(def);
+  if (*q == 0 && *(int*)p != *(int*)(G + 0x411c)) {
+    t.Release();
+    return false;
   }
-  bool r;
-  if (*q == 0 && *(int*)p != *(int*)(G + 0x411c)) r = false;
-  else r = true;
   t.Release();
-  return r;
+  return true;
 }
+
+// Keep the verified selector visible for its register-preservation contract,
+// while retaining the native call boundary via the noinline declaration above.
+#include "../s00e52910/s00e52910.cpp"
 
 // @ 0x00e575f0
 void FUN_00e575f0(char* p, int v) {
   Ref t; t.Init();
   char* def = (char*)thunk_FUN_00e823a0(*(int*)(p + 0x108), &t);
-  int which = *(int*)(*(char**)(G + 0x5190) + 0x7c);
-  char* q;
-  if (which == 0) {
-    q = def + 0x248;
-    if (*(int*)q == -1) q = def + 0xe0;
-  } else if (which == 2) {
-    q = def + 0x194;
-    if (*(int*)q == -1) q = def + 0xe0;
-  } else {
-    q = def + 0xe0;
-  }
+  char* q = (char*)SelectedEater19(def);
   if (q[0x91] == 1) {
-    char* s = FUN_00e52910(def);
+    char* s = (char*)FUN_00e52910(def);
     *(float*)(p + 0x21c) = *(float*)(s + 0x7c);
     *(int*)(p + 0x220) = v;
     *(int*)(p + 0x22c) = 0;
     *(float*)(p + 0x230) = 0.0f;
   } else {
-    char* s = FUN_00e52910(def);
+    char* s = (char*)FUN_00e52910(def);
     if (s[0x8c] != 1) {
       t.Release();
       return;
     }
-    char* s2 = FUN_00e52910(def);
+    char* s2 = (char*)FUN_00e52910(def);
     *(float*)(p + 0x230) = *(float*)(s2 + 0x84);
     *(int*)(p + 0x22c) = v;
     *(int*)(p + 0x220) = 0;

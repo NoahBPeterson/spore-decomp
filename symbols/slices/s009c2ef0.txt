@@ -1,0 +1,4 @@
+009c2ef0 ?Resize@IKVec@@QAEXI@Z  # IKVec::Resize migrated from s009c2ef0 (verbatim, slice spelling)
+009c3040 ?Resize@WiggleVec@@QAEXI@Z  # WiggleVec::Resize migrated from s009c2ef0 (verbatim, slice spelling)
+009c3210 ?Init@FixedVec@@QAEPAU1@PAX0@Z  # FixedVec::Init migrated from s009c2ef0 (verbatim, slice spelling)
+009c3240 ?DestroyValues@PhaseGroupVec@@QAEXPAUPhaseGroup@@0@Z  # PhaseGroupVec::DestroyValues migrated from s009c2ef0 (verbatim, slice spelling)

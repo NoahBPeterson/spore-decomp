@@ -72,7 +72,7 @@ class cSPEditorVerbIconTray : public EA::UTFWin::IWinProc /* +0x0 */, public EA:
   eastl::basic_string<wchar_t, eastl::allocator> GetTrayName(bool);      // 0x005e6a60
   void SetLevelText(float);                                              // 0x005e7030, protected
   void SetVerbIconList(eastl::vector<EA::AutoRefCount<SP::cSPEditorVerbIconData>, eastl::sp_vector_allocator> *); // 0x005e8470
-  bool IsMaxValue(float);                                                // 0x006b55c0, protected
+  bool IsMaxValue(float);                                                // protected
   void SetCollectionID(EA::COM::IUnknown32 *);                           // dev only
   void SetImageGroup(unsigned int);                                      // dev only
   void SetRolloverLayout(EA::ResourceMan::Key);                          // dev only

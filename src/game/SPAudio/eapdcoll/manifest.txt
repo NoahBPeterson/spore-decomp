@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/SPAudio/eapdcoll.cpp  ?FUN_00a58e00@Eapd@Audio@EA@@YAXPAXIPBDHPAUAtom@123@@Z  00a58e00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/eapdcoll.cpp  ?FUN_00a58e70@Eapd@Audio@EA@@YAXPAXIPBDHPAUAtom@123@@Z  00a58e70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPAudio/eapdcoll.cpp  ??1CollRecvDtorView@Eapd@Audio@EA@@QAE@XZ  00a59150  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

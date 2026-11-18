@@ -1,1 +1,5 @@
+00b0a590 ?UpdateState@BeamMgr2@@QAEXXZ  # BeamMgr2::UpdateState migrated from s00b0a590 (verbatim, slice spelling)
 00b0a6f0 BeamMgr2::UpdateBeams  # per-frame update of paired beam lights around aim target; sibling of 00b7a880; asm + Ghidra
+00b0aee0 ?erase@PoolVec@@QAEPAUPoolElem_s00b0_a590@@PAU2@0@Z  # PoolVec::erase migrated from s00b0a590 (verbatim, slice spelling)
+00b0af40 ?insert@PoolVec@@QAEXPAUPoolElem_s00b0_a590@@IPBU2@@Z  # PoolVec::insert migrated from s00b0a590 (verbatim, slice spelling)
+00b0b150 ?Init@BeamMgr2@@QAEXXZ  # BeamMgr2::Init migrated from s00b0a590 (verbatim, slice spelling)

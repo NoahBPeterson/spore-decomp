@@ -8,3 +8,4 @@ slices/s0091b5d0/s0091b5d0.cpp  ?FreeStringsA@MapFile@@QAEXXZ           0091c0c0
 slices/s0091b5d0/s0091b5d0.cpp  ?FreeStringsB@MapFile@@QAEXXZ           0091c100
 slices/s0091b5d0/s0091b5d0.cpp  ?RbtreeValCtor@MapFile@@QAEPAXPAIPBX@Z  0091c310
 slices/s0091b5d0/s0091b5d0.cpp  ?Push@Vec12@@QAEXPBI@Z                  0091c490
+slices/s0091b5d0/s0091b5d0.cpp  ?find_last_of@EStr@@QBEIPBDI@Z  0091bec0  /O2 /MD /Gy /EHsc /TP

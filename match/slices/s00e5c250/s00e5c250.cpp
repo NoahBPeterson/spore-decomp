@@ -3,6 +3,7 @@
 // Cell-game creature-key random selection, save/load glue, predicate helpers, rb-tree find,
 // struct copy and a fluid-particle ray cast. Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "types.h"
+#include "SP/cVarListSerializer.h"
 #include <string.h>
 #include <math.h>
 
@@ -249,22 +250,49 @@ int FUN_00e5c660(void* stream, int* src) {
   return 1;
 }
 
+struct SlotStreamHolder {
+  virtual void slot0();
+  virtual void slot1();
+  virtual void slot2();
+  virtual void slot3();
+  virtual void slot4();
+  virtual void slot5();
+  virtual void* GetStream();                          // slot6, +0x18
+};
+struct SlotObjectDatabaseStream {
+  virtual void slot0();
+  virtual void slot1();
+  virtual void slot2();
+  virtual void slot3();
+  virtual void slot4();
+  virtual void slot5();
+  virtual void slot6();
+  virtual void slot7();
+  virtual SlotStreamHolder* GetStreamHolder();         // slot8, +0x20
+};
+static inline const int& MinSlotCount(const int& a, const int& b) {
+  return a > b ? b : a;
+}
+extern SP::cDataSerializerGeneric gCellSlotSerializer; // 0x015a7d48
+
 // @ 0x00e5c6e0
-int FUN_00e5c6e0(void* stream, int a) {
-  void* p = (void*)((int(__thiscall*)(void*))Vt(stream)[0x20 / 4])(stream);
-  void* io = (void*)((int(__thiscall*)(void*))Vt(p)[0x18 / 4])(p);
+bool FUN_00e5c6e0(void* stream, int a) {
+  SlotStreamHolder* holder = static_cast<SlotObjectDatabaseStream*>(stream)->GetStreamHolder();
+  void* io = holder->GetStream();
   int n;
   EA_IO_ReadInt32(io, &n, 1, 0);
-  if (n > 6) n = 6;
-  for (int i = 0; i < n; ++i) {
-    char buf[0xa00];
-    ((cVarListSerializer*)buf)->Ctor(a, (void*)0x15a7d48, 0x1a80d26);
-    ((cVarListSerializer*)buf)->Read(stream);
-    a += 0x10;
+  int count = MinSlotCount(n, 6);
+  char* slot = reinterpret_cast<char*>(a);
+  if (count > 0) {
+    do {
+      SP::cVarListSerializer serializer(slot, &gCellSlotSerializer,
+          SP::cVarListSerializer::kSignature);
+      serializer.Serialize(*static_cast<SP::cIObjectDatabaseIStream*>(stream));
+      slot += 0x10;
+    } while (--count != 0);
   }
-  return 1;
+  return true;
 }
-
 // @ 0x00e5c780
 // rbtree::find returning an iterator through a hidden return pointer: the original returns that
 // pointer in eax on both paths and callers read through eax. Declared void, our not-found path

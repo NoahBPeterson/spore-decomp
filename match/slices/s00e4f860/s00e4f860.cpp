@@ -5,6 +5,7 @@
 // 0xe4cc40 (thunk_FUN_00e823a0) looks an object up from a handle.
 #include "types.h"
 #include <xmmintrin.h>
+#include "sse_helpers.h"
 
 // float -> int using the current SSE rounding mode (cvtss2si), matching the
 // original's argument computation for the alpha byte.
@@ -20,6 +21,7 @@ extern "C" {
   void      __cdecl FUN_00e83430(int id);
   void      __cdecl FUN_00c2fd20(unsigned key);
   void      __cdecl FUN_007c4180(void*, void*);
+  struct cViewer16 { void FUN_007c4180(float* out, float* in); }; // 0x007c4180 thiscall ret 8
   void      __cdecl FUN_00e82d50(void*, void*);
   void      __cdecl FUN_00809db0(void*, void*);
   void*     __cdecl SP_ConfigManager();   // 0x0067dd30
@@ -35,7 +37,7 @@ extern "C" {
   void*     __cdecl FUN_00e11e073e(void*, int, unsigned);
   void*     __cdecl FUN_00b3d400(void*);
   void      __cdecl FUN_00e18200(void*, int, int, int);
-  void      __cdecl FUN_00b3d4d0(int);
+  void*     __cdecl FUN_00b3d4d0();
   void      __cdecl FUN_00ad7e40(void*);
   unsigned  __cdecl FUN_00593980(void* mgr, ...);
   void      __cdecl FUN_00596da0(unsigned, int);
@@ -46,9 +48,36 @@ extern "C" {
   void      __cdecl FUN_005942e0(void*);
 }
 
-extern char g_16b3c0c[];
-extern char g_16b3c04[];
+extern char* g_16b3c0c;  // 0x016b3c0c (pointer global)
+extern char* g_16b3c04;  // 0x016b3c04 (pointer global)
 extern void* g_150d6d8;
+
+// The app getter at virtual offset 0x58 returns the current viewer.
+struct ProjectionApp16 {
+  virtual void Slot0();
+  virtual void Slot1();
+  virtual void Slot2();
+  virtual void Slot3();
+  virtual void Slot4();
+  virtual void Slot5();
+  virtual void Slot6();
+  virtual void Slot7();
+  virtual void Slot8();
+  virtual void Slot9();
+  virtual void Slot10();
+  virtual void Slot11();
+  virtual void Slot12();
+  virtual void Slot13();
+  virtual void Slot14();
+  virtual void Slot15();
+  virtual void Slot16();
+  virtual void Slot17();
+  virtual void Slot18();
+  virtual void Slot19();
+  virtual void Slot20();
+  virtual void Slot21();
+  virtual cViewer16* GetViewer();
+};
 
 static inline void** Vt(void* p) { return *(void***)p; }
 
@@ -107,7 +136,7 @@ unsigned FUN_00e507d0(float a, float b) {
 }
 
 // @ 0x00e4fde0
-unsigned FUN_00e4fde0(int kind) {
+__declspec(noinline) unsigned FUN_00e4fde0(int kind) {
   switch (kind) {
     case 1: return 0x77d5cbac;
     case 4: return FNV1_String8("Cell_EatAnimal", 0x811c9dc5, 1);
@@ -188,12 +217,14 @@ void FUN_00e4fbb0(int* table) {
 }
 
 // @ 0x00e4fe50
+// The entry is a Mission object (SP::Mission::Init @ 0xc2fd20, this in ECX).
+struct cMission16 { char mUnk00[0x90]; int mLevel; void Init(unsigned id); };
 void FUN_00e4fe50() {
-  char* p = (char*)0x16b3de8;
   int i = 0;
+  char* p = (char*)0x16b3de8;
   do {
     *(int*)(p + 0x90) = i;
-    FUN_00c2fd20(FUN_00e4fde0(i));
+    ((cMission16*)p)->Init(FUN_00e4fde0(i));
     p += 0x98;
     ++i;
   } while ((int)p < 0x16b4178);
@@ -215,11 +246,9 @@ void FUN_00e4fcd0(char* p) {
 
 // @ 0x00e50750
 void FUN_00e50750(int a, float* outx, float* outy) {
-  float local[1];
-  void* app = SP_App();
-  (*(void(__thiscall**)(void*, float*, int))((char*)Vt(app) + 0x58))(app, local, a);
-  FUN_007c4180(local, (void*)a);
+  float local[3];
   float area[4];
+  static_cast<ProjectionApp16*>(SP_App())->GetViewer()->FUN_007c4180(local, reinterpret_cast<float*>(a));
   SPUI_GetMainWindowArea(area);
   *outx = ((local[0] + 1.0f) * area[2]) * 0.5f;
   *outy = ((1.0f - local[1]) * area[3]) * 0.5f;
@@ -260,35 +289,34 @@ bool FUN_00e50620(char* self, int key, int* out) {
 
 // ---------------------------------------------------------------- large / partial
 // @ 0x00e4f860  collectable visibility refresh
+static __forceinline void Hide16(int* v) {
+  (*(void(__thiscall**)(int*, int))(Vt(v) + 3))(v, 0);
+}
+static __forceinline void ShowIfHidden16(int* v) {
+  if (!(*(bool(__thiscall**)(int*))(Vt(v) + 4))(v))
+    (*(void(__thiscall**)(int*, int))(Vt(v) + 2))(v, 0);
+}
 void FUN_00e4f860(char* obj, int arg2) {
   cGuard16 g;
   char* list = (char*)FUN_00e823a0(*(int*)(obj + 0x14), &g);
-  int count = *(int*)(list + 0x18);
-  if (count > 0) {
-    int* out = (int*)(obj + 0x2c);
-    for (int i = 0, off = 0; i < count; ++i, off += 0x28) {
-      char* e = *(char**)(list + 0x14) + off;
-      if (*(int*)(e + 4) != 1) continue;
-      int a = *(int*)(e + 0x18);
-      int b = *(int*)(e + 0x14);
-      int* v = (int*)out[i];
-      void** vt = Vt(v);
-      if (b < 0) {
-        if (a >= 0 && a < arg2)
-          (*(void(__thiscall**)(int*, int))(vt + 3))(v, 0);
-        else if ((*(bool(__thiscall**)(int*))(vt + 4))(v))
-          (*(void(__thiscall**)(int*, int))(vt + 2))(v, 0);
-      } else if (a < 0) {
-        if (b > arg2) {
-          if (!(*(bool(__thiscall**)(int*))(vt + 4))(v))
-            (*(void(__thiscall**)(int*, int))(vt + 3))(v, 0);
+  int i = 0;
+  if (*(int*)(list + 0x18) > 0) {
+    do {
+      char* e = *(char**)(list + 0x14) + i * 0x28;
+      if (*(int*)(e + 4) == 1) {
+        int a = *(int*)(e + 0x18);
+        int b = *(int*)(e + 0x14);
+        int* v = (int*)((int*)(obj + 0x2c))[i];
+        if ((b < 0 && !(a >= 0 && a < arg2)) ||
+            (b >= 0 && a < 0 && arg2 >= b) ||
+            (b >= 0 && a >= 0 && b < arg2 && arg2 <= a)) {
+          ShowIfHidden16(v);
+        } else {
+          Hide16(v);
         }
-      } else if (b < arg2 || arg2 <= a) {
-        (*(void(__thiscall**)(int*, int))(vt + 3))(v, 0);
-      } else if (!(*(bool(__thiscall**)(int*))(vt + 4))(v)) {
-        (*(void(__thiscall**)(int*, int))(vt + 2))(v, 0);
       }
-    }
+      ++i;
+    } while (i < *(int*)(list + 0x18));
   }
 }
 
@@ -323,16 +351,14 @@ void FUN_00e50680(int handle, int idx) {
 }
 
 // @ 0x00e4f9d0  select a level float by (state,b)
-float FUN_00e4f9d0(int handle) {
+static float FUN_00e4f9d0(int handle) {
   cGuard16 g;
   char* r = (char*)FUN_00e823a0(handle, &g);
-  int hi = *(int*)(r + 0xbc);
-  int lo = *(int*)(r + 0xb4);
   cGuard16 g2;
   char* o = (char*)FUN_00e4ce40(&g2);
-  switch (hi) {
+  switch (*(int*)(r + 0xbc)) {
     case 0:
-      switch (lo) {
+      switch (*(int*)(r + 0xb4)) {
         case 1:  return *(float*)(o + 0x58);
         case 2: case 6: return *(float*)(o + 0x5c);
         case 3: case 5: case 7: return *(float*)(o + 0x60);
@@ -346,6 +372,7 @@ float FUN_00e4f9d0(int handle) {
     default: return 1.0f;
   }
 }
+extern "C" float FUN_00e4f9d0_standin(int h) { return FUN_00e4f9d0(h); }
 
 // @ 0x00e4fac0  configure collectable items for the current state
 void FUN_00e4fac0(char* self, int* state) {
@@ -426,14 +453,14 @@ struct QuitDialog { void Close(); }; // 0x007ebce0
 void SP_sOnQuitDesktopButtonClick() {
   void* t = FUN_0067de90(-1);
   ((QuitDialog*)t)->Close();
-  if ((*(char**)g_16b3c04)[0x51da] == 0) { CellConfirmDialog((void*)0x15a83e8, (void*)0x15a83d0); return; }
+  if (g_16b3c04[0x51da] == 0) { CellConfirmDialog((void*)0x15a83e8, (void*)0x15a83d0); return; }
   void* cm = SP_CheatManager();
   (*(void(__thiscall**)(void*, const char*))((char*)Vt(cm) + 0x20))(cm, "quit");
 }
 
 // @ 0x00e501f0
 void FUN_00e501f0() {
-  if ((*(char**)g_16b3c04)[0x51da] == 0) { CellConfirmDialog((void*)0x15a83f4, (void*)0x15a83d0); return; }
+  if (g_16b3c04[0x51da] == 0) { CellConfirmDialog((void*)0x15a83f4, (void*)0x15a83d0); return; }
   void* cm = FUN_0067dd20();
   (*(void(__thiscall**)(void*))((char*)Vt(cm) + 0x40))(cm);
 }
@@ -493,15 +520,15 @@ float FUN_00e50220(float t, float* cp) {
 }
 
 // @ 0x00e4f920  snap each component to a multiple of the period
-void __fastcall FUN_00e4f920(void* unused, float* v, float period) {
-  (void)unused;
+static void FUN_00e4f920(int unused, float* v, float a, float b, float c, float period) {
+  (void)unused; (void)a; (void)b; (void)c;
   float inv = 1.0f / period;
-  for (int i = 0; i < 3; ++i) {
-    float f = v[i] * inv;
-    int n = (int)f;
-    if (f < (float)n) n--;
-    v[i] = (float)n * period;
-  }
+  v[0] = (float)SseFloorToInt(v[0] * inv) * period;
+  v[1] = (float)SseFloorToInt(v[1] * inv) * period;
+  v[2] = (float)SseFloorToInt(v[2] * inv) * period;
+}
+extern "C" void FUN_00e4f920_standin(int u, float* v, float a, float b, float c, float p) {
+  FUN_00e4f920(u, v, a, b, c, p);
 }
 
 // @ 0x00e4fd30  fill 13 bytes from a fixed 1/0 pattern
@@ -524,14 +551,15 @@ int FUN_00e4fd30(unsigned char* p) {
 }
 
 // @ 0x00e50400  reset collectables mode (self arrives in ESI)
-void __fastcall FUN_00e50400(void* self, int /*edx*/, char flag) {
-  FUN_00b3d4d0(0);
-  FUN_00ad7e40(0);
+struct cTriggerMgr16 { void setModal(int); };
+static void FUN_00e50400(void* self, char flag) {
+  ((cTriggerMgr16*)FUN_00b3d4d0())->setModal(0);
   g_16b3c0c[0x936] = 0;
   g_16b3c04[0x51db] = 0;
   if (flag) (*(void(__thiscall**)(void*, int))((char*)Vt(self) + 0xc))(self, 1);
   (*(void(__thiscall**)(void*))((char*)Vt(self) + 4))(self);
 }
+extern "C" void FUN_00e50400_standin(void* self, char flag) { FUN_00e50400(self, flag); }
 // --- equivalence checker address annotations
 
 // --- jump-table pigeonholes (tail bytes of the original FUN_00e4fd30 switch) ---

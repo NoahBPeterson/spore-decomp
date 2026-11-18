@@ -759,7 +759,12 @@ namespace G7
     }
 
     void CopyRange(Node** out, Node* first, Node* last, Node* dst, Obj** skip);
-    void __stdcall EraseRange(Node** out, Node* first, Node* last);
+    struct Iterator {
+        Node* mpNode;
+        Iterator(Node* node) : mpNode(node) {}
+        Iterator(const Iterator& other) : mpNode(other.mpNode) {}
+    };
+    Iterator __stdcall EraseRange(Iterator first, Iterator last);
 
 // @ 0x00ba2170
     void DeserializeList(Owner* owner, List* list)
@@ -910,8 +915,7 @@ namespace G7
         if (n != end) {
             Node* dst = n;
             CopyRange(&dst, n->pNext, end, n, &none);
-            Node* dummy = 0;
-            EraseRange(&dummy, dst, end);
+            EraseRange(Iterator(dst), Iterator(end));
         }
         mCommitted = 0;
     }
@@ -945,29 +949,30 @@ namespace G7
     G7NOINLINE void __stdcall EraseIt(Node** out, Node* it)
     {
         it = it->pNext;
+        *out = it;
         Node* node = it->pPrev;
         node->pPrev->pNext = node->pNext;
         node->pNext->pPrev = node->pPrev;
         if (node->pObj)
             ObjRelease(node->pObj);
         operator delete[](node);
-        *out = it;
     }
 
 // @ 0x00ba2110
-    G7NOINLINE void __stdcall EraseRange(Node** out, Node* first, Node* last)
+    G7NOINLINE Iterator __stdcall EraseRange(Iterator first, Iterator last)
     {
-        if (first != last) {
+        if (first.mpNode != last.mpNode) {
             do {
-                first = first->pNext;
-                Node* node = first->pPrev;
+                Node* next = first.mpNode->pNext;
+                Node* node = next->pPrev;
                 node->pPrev->pNext = node->pNext;
                 node->pNext->pPrev = node->pPrev;
                 if (node->pObj)
                     ObjRelease(node->pObj);
                 operator delete[](node);
-            } while (first != last);
+                first.mpNode = next;
+            } while (first.mpNode != last.mpNode);
         }
-        *out = last;
+        return last;
     }
 }

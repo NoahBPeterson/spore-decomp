@@ -645,7 +645,13 @@ struct AB {                       // cSPUIBehaviorActionBase
 };
 struct Stopwatch {
     unsigned __int64 mnStartTime;         // +0x00
-    unsigned __int64 mnTotalElapsedTime;  // +0x08
+    union {
+        unsigned __int64 mnTotalElapsedTime; // +0x08
+        struct {
+            unsigned mnElapsedLow;          // +0x08
+            unsigned mnElapsedHigh;         // +0x0c
+        };
+    };
     int   mnUnits;                        // +0x10
     float mfCoefficient;                  // +0x14
     void Init(int a, int b);              // 0x93a560 (ctor; args units, start)
@@ -918,13 +924,31 @@ bool Cont::RemoveB(void* obj)
     return false;
 }
 
+// Retail predicate interface view: the generated interface's unnamed slots
+// currently append duplicate entries, placing SetEvent at 0x60 instead of 0x30.
+struct BehaviorPredicateCalls {
+    virtual int AddRef();
+    virtual int Release();
+    virtual ~BehaviorPredicateCalls();
+    virtual void* AsInterface(EA::COM::InterfaceId);
+    virtual void GetSerializationInfo(EA::UTFWin::SerInfo&);
+    virtual unsigned int GetClassId() const;
+    virtual bool Evaluate();
+    virtual void SetCombineMode(int);
+    virtual int GetCombineMode() const;
+    virtual void SetNotMode(bool);
+    virtual bool GetNotMode() const;
+    virtual cISPUIBehaviorEvent* GetEvent() const;
+    virtual bool SetEvent(cISPUIBehaviorEvent*);
+};
+
 // @ 0x007f9d00
 bool Cont::RemoveAllB()
 {
     for (int i = 0; i < 4; ++i) {
         if (*SlotB(i) != 0) {
-            VCall1((void*)*SlotB(i), 0x30, 0);
-            VCallR((void*)*SlotB(i), 4);
+            ((BehaviorPredicateCalls*)*SlotB(i))->SetEvent(0);
+            ((BehaviorPredicateCalls*)*SlotB(i))->Release();
             *SlotB(i) = 0;
         }
     }
@@ -1037,8 +1061,7 @@ void Ev::Call93a0()
 // @ 0x007fa150
 uint32_t Ev::Flags()
 {
-    bool c = *(bool*)((char*)this + 0x5c);
-    uint32_t part = -(uint32_t)(c != 0) & 2u;
+    uint32_t part = *(bool*)((char*)this + 0x5c) ? 2u : 0u;
     return (((EvSub*)this)->ExtFlags() & 0xfffffffd) | part;
 }
 
@@ -1601,9 +1624,9 @@ void* C_7fbbc0::Ctor()
   void** x = (void**)((char*)this + 4);
   x[0] = (void*)pb_b;
   x[1] = 0;
-  void** y = (void**)((char*)this + 0xc);
-  y[0] = (void*)pb_c;
-  y[0] = (void*)pb_d;
+  void** m = (void**)((char*)this + 0xc);
+  m[0] = (void*)pb_c;
+  m[0] = (void*)pb_d;
   *(void**)this = (void*)pb_e;
   *(void**)((char*)this + 4) = (void*)pb_f;
   *(void**)((char*)this + 0xc) = (void*)pb_g;
@@ -1614,7 +1637,9 @@ void* C_7fbbc0::Ctor()
   *(void**)((char*)this + 0x18) = (void*)((char*)this + 0x28);
   *(void**)((char*)this + 0x1c) = (void*)((char*)this + 0x2c);
   *(void**)((char*)this + 0x20) = (void*)((char*)this + 0x30);
-  for (int m = 0; m < 4; m++) *(void**)GetSlot(m) = 0;
+  // The enclosing scope and names preserve the native /Od local layout.
+  int y;
+  for (y = 0; y < 4; y++) *(void**)GetSlot(y) = 0;
   return this;
 }
 
@@ -1667,6 +1692,8 @@ int C_7fbe70::GetClassId()
 // @ 0x007fc2a0
 void* C_7fc2a0::Ctor()
 {
+  // Retain the reserved local from the inlined base construction at /Od.
+  ScratchSlots<1>();
   void* p = (char*)this + 8;
   *(void**)((char*)p + 0x28) = 0;
   BaseCtor();
@@ -1940,13 +1967,16 @@ Interp::Interp()
     sw->Init(5, 0);
     ((TC_7fd200*)this)->FUN_007fd200(0x80, 1);
     ((TC_7fd200*)this)->FUN_007fd200(0x100, 1);
+    // Explicit words preserve the retail reset's store schedule in VC2008.
     if (sw->mnUnits == 1) {
         sw->mnStartTime = __rdtsc();
-        sw->mnTotalElapsedTime = 0;
+        sw->mnElapsedHigh = 0;
+        sw->mnElapsedLow = 0;
     } else {
         Li li;
         QueryPerformanceCounter(&li);
-        sw->mnTotalElapsedTime = 0;
+        sw->mnElapsedHigh = 0;
+        sw->mnElapsedLow = 0;
         sw->mnStartTime = li.Quad;
     }
 }

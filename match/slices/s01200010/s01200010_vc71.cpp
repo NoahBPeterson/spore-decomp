@@ -9,6 +9,9 @@
 // loads-then-tests and calls through memory. They live in their own translation unit because the rest
 // of the serializer slice uses intrinsics and __thiscall that cl 13.10 rejects.
 //
+// The Rel3 unbase 0x01200890 also uses this file: retail keeps the +0x20 relocation base in a register
+// (`push esi; mov esi,[edx+0x20]; sub edx,esi`) where cl 15 folds it into `sub ecx,[edx+0x20]`.
+//
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
 
 #include <xmmintrin.h>
@@ -49,6 +52,15 @@ struct Base20Ctx
 	unsigned char pad00[0x20];
 	int* mpBase;                     // +0x20
 };
+
+// @ 0x01200890
+void Unbase3(Rel3* p, Base20Ctx* ctx)
+{
+	int d = (int)p - (int)ctx->mpBase;
+	p->mV2 = p->mV2 - d;
+	p->mV0 = p->mV0 - d;
+	p->mV1 = p->mV1 - d;
+}
 
 // @ 0x01200fb0
 Base20Ctx* RebaseOneReversed(int* p, Base20Ctx* ctx)

@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPGonzagoPhysics.cpp  ?Matrix3_Abs@@YAXABUMatrix3@@AAU1@@Z  0040a0f0  /Od /Oi /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include

@@ -9,7 +9,6 @@
 
 // unnamed retail callees and globals (address in the comment)
 extern void* EASTL_Allocate(void* alloc, int size, int align, int flags); // 0x42dee0
-extern void  FUN_0040ce80(void* p);
 #include <new>
 #include "EA/ResourceMan/Key.h"
 #include "SP/cISPEditorNameProvider.h"
@@ -20,7 +19,10 @@ extern void  FUN_0040ce80(void* p);
 #include "cSPColorRGB.h"
 
 // ---- items of slice s004aa760 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct V3 { float x, y, z; V3(const V3& src); };            // copy ctor 0x4098a0
+struct V3 {
+    float x, y, z;
+    V3(const V3& src) : x(src.x), y(src.y), z(src.z) {} // inline form of 0x004098a0
+};
 struct Item { float a; V3 b; };
 struct DequeIt {
     uint8_t* cur;    // +0x0
@@ -44,9 +46,19 @@ struct DequeBase {
 };
 extern void* EASTL_Allocate(void* alloc, int size, int align, int flags); // 0x42dee0
 extern void  FUN_0040ce80(void* p);
-extern void FUN_004ab5b0(Item* begin, Item* end, Item* out);
-struct Big34 { uint32_t d[0xf]; };
-struct M36 { char pad[0x24]; };
+struct Big34 {
+    uint32_t key;
+    cSPTransform transform;
+    Big34(const Big34& other) : key(other.key), transform(other.transform) {
+        // Preserve the unread frame of the declined inline transform copy.
+        uint32_t unused[14];
+    }
+};
+struct Matrix36 { float m[9]; Matrix36(const Matrix36& other); }; // 0x0041cb40
+struct M36 : Matrix36 {
+    // The retail derived copy retains this unused inline frame after its base copy.
+    M36(const M36& other) : Matrix36(other) { uint32_t unused[11]; }
+};
 static inline const unsigned int& max_alt(const unsigned int& a, const unsigned int& b)
 {
     return a < b ? b : a;
@@ -54,7 +66,7 @@ static inline const unsigned int& max_alt(const unsigned int& a, const unsigned 
 // ---- items of slice s004aa760 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
-extern void FUN_004ab5b0(Item* begin, Item* end, Item* out);
+extern Item* FUN_004ab5b0(Item* begin, Item* end, Item* out);
 
 // ---- items of slice s004ab690 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern wchar_t gEmptyString16[];                                         // 0x01667bac
@@ -614,21 +626,38 @@ class cSPEditorModel_s004a_d550 { public:
 }
 // ---- items of slice s004ad550 end
 
-// @ 0x004ab280
-M36* CopyM36Range(M36* param_1, M36* param_2, M36* param_3)
+inline M36* MoveM36StartImpl(M36* first, M36* last, M36* dst)
 {
-    M36* local_44 = param_3;
-    for (M36* local_40 = param_1; local_40 != param_2;
-         local_40 = (M36*)((char*)local_40 + 0x24)) {
-        if (local_44 != 0) {
-            *(M36*)local_44 = *(M36*)local_40;
-        }
-        local_44 = (M36*)((char*)local_44 + 0x24);
-    }
-    for (M36* local_4c = param_1; local_4c != param_2;
-         local_4c = (M36*)((char*)local_4c + 0x24)) {
-    }
-    return local_44;
+    for (; first != last; ++first, ++dst)
+        new (dst) M36(*first);
+    return dst;
+}
+
+inline M36* MoveM36Start(M36* first, M36* last, M36* dst)
+{
+    bool trivialMove = false;
+    return MoveM36StartImpl(first, last, dst);
+}
+
+inline M36* MoveM36CommitImpl(M36* first, M36* last, M36* dst)
+{
+    for (; first != last; ++first, ++dst)
+        first->~M36();
+    return dst;
+}
+
+inline M36* MoveM36Commit(M36* first, M36* last, M36* dst)
+{
+    bool trivialMove = false;
+    return MoveM36CommitImpl(first, last, dst);
+}
+
+// @ 0x004ab280
+M36* CopyM36Range(M36* first, M36* last, M36* dst)
+{
+    M36* result = MoveM36Start(first, last, dst);
+    MoveM36Commit(first, last, dst);
+    return result;
 }
 
 // @ 0x004ab320
@@ -660,13 +689,14 @@ void DequeBase::DequeAlloc(unsigned int n)
 }
 
 // @ 0x004ab450
-uint32_t** FillU32(uint32_t** out, uint32_t* param_dst, int param_count, uint32_t* param_src)
+uint32_t** FillU32(uint32_t** out, uint32_t* param_dst, uint32_t param_count, uint32_t* param_src)
 {
-    int count = param_count;
-    uint32_t* dst = param_dst;
+    uint32_t z = param_count;
+    uint32_t* n = param_dst;
     uint32_t v = *param_src;
-    while (count--) *dst++ = v;
-    *out = dst;
+    for (; z-- > 0; ++n)
+        *n = v;
+    *out = n;
     return out;
 }
 
@@ -677,30 +707,25 @@ void CopyItemsWrapper(Item* a, Item* b, Item* c)
     FUN_004ab5b0(a, b, c);
 }
 
-// @ 0x004ab530
-Big34* CopyBig34Range(Big34* param_1, Big34* param_2, Big34* param_3)
+inline Big34* CopyBig34Impl(Big34* first, Big34* last, Big34* dest)
 {
-    Big34* local_4c = param_3;
-    for (Big34* local_48 = param_1; local_48 != param_2;
-         local_48 = (Big34*)((char*)local_48 + 0x3c)) {
-        if (local_4c != 0) {
-            local_4c->d[0] = local_48->d[0];
-            FUN_0040ce80((char*)local_48 + 4);
-        }
-        local_4c = (Big34*)((char*)local_4c + 0x3c);
-    }
-    return local_4c;
+    for (; first != last; ++first, ++dest)
+        new (dest) Big34(*first);
+    return dest;
+}
+
+// @ 0x004ab530
+Big34* CopyBig34Range(Big34* first, Big34* last, Big34* dest)
+{
+    bool trivialCopy = false;
+    return CopyBig34Impl(first, last, dest);
 }
 
 // @ 0x004ab5b0
 Item* CopyItems(Item* begin, Item* end, Item* out)
 {
-    for (; begin != end; ++begin, ++out) {
-        if (out != 0) {
-            out->a = begin->a;
-            out->b = begin->b;
-        }
-    }
+    for (; begin != end; ++begin, ++out)
+        new (out) Item(*begin);
     return out;
 }
 

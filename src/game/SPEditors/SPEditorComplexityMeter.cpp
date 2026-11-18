@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "EA/UTFWin/IWindow.h"
 #include "SP/cPropertyManager.h"
 #include "cSPColorRGB.h"
@@ -108,8 +109,8 @@ public:
 class cSPVerbIconRollover_s005a_6e60 {
 public:
     virtual void AddRef();                         // 0x00
-    PV(1) PV(2) PV(3)                              // 0x04..0x0c
-    virtual void Release();                        // 0x10
+    virtual void Release();                        // 0x04
+    PV(2) PV(3) PV(4)                              // 0x08..0x10
     PV(5) PV(6) PV(7)                              // 0x14..0x1c
     virtual void Show();                           // 0x20
     cSPVerbIconRollover_s005a_6e60();
@@ -122,8 +123,8 @@ public:
 };
 class IRolloverTarget {
 public:
-    PV(0)                                          // 0x00
-    virtual void* FindByID(uint32_t id);           // 0x04
+    PV(0) PV(1) PV(2)                              // 0x00..0x08
+    virtual void* FindByID(uint32_t id);           // 0x0c
 };
 class cUIThing {
 public:
@@ -135,21 +136,21 @@ public:
 };
 class cDualString {
 public:
-    SP::cString_s005a_6e60 mName;    // +0x0
-    SP::cString_s005a_6e60 mName2;   // +0x14
+    SP::cString mName;    // +0x0
+    SP::cString mName2;   // +0x14
     uint32_t m28;         // +0x28
     void* m2c;            // +0x2c
     bool m30;             // +0x30
-    cDualString();
+    __declspec(noinline) cDualString();
 };
 namespace SP {
-class cMeterB1 { public: virtual int v0(); };
+class cMeterB1 { public: virtual int v0(); ~cMeterB1() { _ReadWriteBarrier(); } };
 }
 namespace SP {
-class cMeterB2 { public: virtual int v0(); };
+class cMeterB2 { public: virtual int v0(); ~cMeterB2() { _ReadWriteBarrier(); } };
 }
 namespace SP {
-class cMeterB3 { public: cMeterB3() : mC(0) {} virtual int v0(); int mC; };
+class cMeterB3 { public: cMeterB3() : mC(0) {} virtual int v0(); int mC; ~cMeterB3() { _ReadWriteBarrier(); } };
 }
 namespace SP {
 class cSPEditorComplexityMeter_s005a_6e60 : public cMeterB1, public cMeterB2, public cMeterB3 {
@@ -210,6 +211,7 @@ SP::cSPEditorComplexityMeter_s005a_6e60::cSPEditorComplexityMeter_s005a_6e60()
 // @ 0x005a6ee0
 SP::cSPEditorComplexityMeter_s005a_6e60::~cSPEditorComplexityMeter_s005a_6e60()
 {
+    _ReadWriteBarrier();
     if (f44 != 0) {
         void* server = f44;
         f44 = 0;
@@ -217,10 +219,13 @@ SP::cSPEditorComplexityMeter_s005a_6e60::~cSPEditorComplexityMeter_s005a_6e60()
     }
     if (f40 != 0)
         f40->Release();
-    if (f20 != 0) {
-        if (--f20->mRefCount == 0) {
-            f20->mRefCount = 1;
-            f20->Destroy(1);
+    cRefCountValue* value = f20;
+    if (value != 0) {
+        int count = (*reinterpret_cast<volatile int*>(&value->mRefCount) += -1);
+        if (count == 0) {
+            value->mRefCount = 1;
+            _ReadWriteBarrier();
+            value->Destroy(1);
         }
     }
     if (f1c != 0)
@@ -398,7 +403,8 @@ tick:
 // @ 0x005a7380
 bool cEditorPanel::HandleMessage(int msgId, void** payload)
 {
-    if (msgId == 0x522f9cd) {
+    switch (msgId) {
+    case 0x522f9cd:
         if (*payload != 0) {
             IRolloverTarget* target = (IRolloverTarget*)*payload;
             void* obj = target->FindByID(0x31e56741);
@@ -406,16 +412,15 @@ bool cEditorPanel::HandleMessage(int msgId, void** payload)
                 cDualString str;
                 void* found = f1c->GetChildAt((char*)obj + 0x40, 0);
                 f38 = (found == (void*)3);
-                (void)str;
             }
         }
         return true;
-    }
-    if (msgId == 0x522f9ce) {
+    case 0x522f9ce:
         f38 = false;
         return true;
+    default:
+        return false;
     }
-    return false;
 }
 
 // @ 0x005a7410

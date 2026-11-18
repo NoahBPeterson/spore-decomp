@@ -1,3 +1,6 @@
+00a24e10 ?Remove@Tracker@@QAEXPAUTObj@@@Z  # Tracker::Remove migrated from s00a24e10 (verbatim, slice spelling)
+00a24f50 ?Process@Tracker@@QAEXPAUTObj@@@Z  # Tracker::Process migrated from s00a24e10 (verbatim, slice spelling)
+00a25000 ?Release@RcMap@@QAEXI@Z  # RcMap::Release migrated from s00a24e10 (verbatim, slice spelling)
 00a25090 ?MakeProps@Factory@@QAE_NPBDPAPAUObj_s00a2_4e10@@HH@Z  # Factory::MakeProps migrated from s00a24e10 (verbatim, slice spelling)
 00a25190 ?MakeAudio@Factory@@QAE_NPBDPAUARC@@HH@Z  # Factory::MakeAudio migrated from s00a24e10 (verbatim, slice spelling)
 00a252b0 ?Init@System_s00a2_4e10@@QAE_NXZ  # System_s00a2_4e10::Init migrated from s00a24e10 (verbatim, slice spelling)

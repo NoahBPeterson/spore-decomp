@@ -3,7 +3,10 @@
 // cSPUISpace "seti" panel: object create/destroy, message handling, a 4-digit
 // clock display, a cCivTokenTranslator and its string members.  Module flags
 // /O2 /MD /Gy /TP.
+#include <intrin.h>
 #include "types.h"
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
 
 typedef unsigned int   uint32_t;
 typedef unsigned short uint16_t;
@@ -545,13 +548,18 @@ void SpaceObj::f38ac0(char show)
 {
     int self = (int)this;
     if (show)
-        ((SpaceObj*)self)->f388b0(*(int*)(self + 0x1c));
+        f388b0(*(int*)(self + 0x1c));
     if (*(int*)(self + 0x28) != 0) {
-        int nSlot = show ? 0x104 : 0x108;
-        if (*(int**)(self + 0x18) != 0)
-            Slot<TV1p>(*(void**)(self + 0x18), nSlot)(*(void**)(self + 0x18), (void*)self);
-        if (*(int**)(self + 0x14) != 0)
-            Slot<TV1p>(*(void**)(self + 0x14), nSlot)(*(void**)(self + 0x14), (void*)self);
+        void* child = *(void**)(self + 0x18);
+        if (child) {
+            if (show) Slot<TV1p>(child, 0x104)(child, this);
+            else Slot<TV1p>(child, 0x108)(child, this);
+        }
+        child = *(void**)(self + 0x14);
+        if (child) {
+            if (show) Slot<TV1p>(child, 0x104)(child, this);
+            else Slot<TV1p>(child, 0x108)(child, this);
+        }
     }
 }
 
@@ -631,6 +639,7 @@ BigAssetView* __fastcall FUN_00f38c70(BigAssetView* p)
 {
     *(void* volatile*)&p->mpVtbl4 = kpBigBaseVtbl4;   // base-class constructor vptrs
     *(void* volatile*)&p->mpVtbl8 = kpBaseVtbl4;
+    _ReadWriteBarrier();
     void* pNull = 0;
     *(int*)p->mPad0c = (int)pNull;
     p->mpVtbl0 = kpBigVtbl0;
@@ -896,6 +905,7 @@ void* __fastcall FUN_00f391c0(void* p)
 void __fastcall FUN_00f39220(int* p)
 {
     *(void**)p = kpTranslatorVtbl;
+    _ReadWriteBarrier();
     wchar_t* pBegin;
     pBegin = *(wchar_t**)((char*)p + 0x54);
     if (((*(char**)((char*)p + 0x5c) - (char*)pBegin) & ~1) > 2 && pBegin != 0) operator_del(pBegin);

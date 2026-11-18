@@ -1,3 +1,4 @@
+00cdab10 ?FUN_00cdab10@cTribeModeStrategy_s00cd_ab10@@QAEXXZ  # cTribeModeStrategy_s00cd_ab10::FUN_00cdab10 migrated from s00cdab10 (verbatim, slice spelling)
 00cdafb0 ?FUN_00cdafb0@cVec16@@QAEXPAURec16@@@Z  # cVec16::FUN_00cdafb0 migrated from s00cdab10 (verbatim, slice spelling)
 00cdb000 ?FUN_00cdb000@@YAXPAX0@Z  # FUN_00cdb000 migrated from s00cdab10 (verbatim, slice spelling)
 00cdb1f0 ?FUN_00cdb1f0@cVec1c@@QAEXPAURec1c@@0@Z  # cVec1c::FUN_00cdb1f0 migrated from s00cdab10 (verbatim, slice spelling)

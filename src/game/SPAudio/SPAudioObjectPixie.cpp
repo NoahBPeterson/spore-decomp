@@ -35,10 +35,32 @@ struct TrackVec {
     char padC[8];
     int  m14;        // +0x14
     TeString mStr;   // +0x18
-    TrackVec* Ctor(int a, const char* b);         // 0x00a3d630
     void DoInsertValue(int* pos, int* value);     // 0x00a3d6e0
     void Erase(int* a, int* b);                   // 0x011e0744 (eastl vector erase)
     void Dtor();                                  // 0x00a3d690
+};
+// the constructor's view of TrackVec: the track vector (destroyed on unwind if the name cannot be built), the
+// track kind, and the name string built from `b`
+struct TrackVecStorage {
+    int* mpBegin;    // +0x00
+    int* mpEnd;      // +0x04
+    int* mpCapacity; // +0x08
+    char padC[8];
+    TrackVecStorage() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~TrackVecStorage();
+};
+struct TrackName {
+    void* mpBegin;     // +0x00
+    void* mpEnd;       // +0x04
+    void* mpCapacity;  // +0x08
+    TrackName(const char* s) : mpBegin(0), mpEnd(0), mpCapacity(0) { ((TeString*)this)->RangeInitialize(s); }
+    ~TrackName();
+};
+struct TrackVecObj {
+    TrackVecStorage mVec;   // +0x00
+    int  m14;               // +0x14
+    TrackName mStr;         // +0x18
+    TrackVecObj(int a, const char* b);
 };
 // ---- items of slice s00a3cbb0 end
 
@@ -378,17 +400,9 @@ struct PdSys {
 // ---- items of slice s00a3ec00 end
 
 // @ 0x00a3d630
-TrackVec* TrackVec::Ctor(int a, const char* b)
+TrackVecObj::TrackVecObj(int a, const char* b)
+    : m14(a), mStr(b)
 {
-    mpBegin = 0;
-    mpEnd = 0;
-    mpCapacity = 0;
-    m14 = a;
-    mStr.mpBegin = 0;
-    mStr.mpEnd = 0;
-    mStr.mpCapacity = 0;
-    mStr.RangeInitialize(b);
-    return this;
 }
 
 // @ 0x00a3d6e0
@@ -443,21 +457,33 @@ void TrackVec::DoInsertValue(int* pos, int* value)
     v[2] = (int)nd + n * 0xc;
 }
 
+// Uninitialized copy of 0x20-byte track entries (0x00a3d810), EASTL style: iterator objects and a placement copy per
+// entry (three words, then the member at +0xc copied by 0x00a3d5b0).
+struct TrackMember_a3d810 {
+    TrackMember_a3d810(const TrackMember_a3d810& o);   // 0x00a3d5b0
+    int d[5];
+};
+struct TrackEntry_a3d810 {
+    int a, b, c;
+    TrackMember_a3d810 m;   // +0xc
+    static void* operator new(unsigned int, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct TrackIt_a3d810 {
+    TrackEntry_a3d810* p;
+    TrackIt_a3d810(TrackEntry_a3d810* q) : p(q) {}
+    TrackEntry_a3d810& operator*() const { return *p; }
+    TrackIt_a3d810& operator++() { ++p; return *this; }
+    bool operator!=(const TrackIt_a3d810& o) const { return p != o.p; }
+};
+
 // @ 0x00a3d810
-int** FUN_00a3d810(int** out, int* first, int* last, int dst, int* src)
+TrackIt_a3d810 TrackUninitCopy_a3d810(TrackIt_a3d810 first, TrackIt_a3d810 last, TrackIt_a3d810 dest)
 {
-    *out = (int*)dst;
-    for (; first != last; first += 8) {
-        int* p = *out;
-        if (p) {
-            p[0] = first[0];
-            p[1] = first[1];
-            p[2] = first[2];
-            FUN_00a3d5b0(first + 3);
-        }
-        *out = (int*)((char*)*out + 0x20);
-    }
-    return out;
+    TrackIt_a3d810 result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) TrackEntry_a3d810(*first);
+    return result;
 }
 
 // @ 0x00a3d8a0

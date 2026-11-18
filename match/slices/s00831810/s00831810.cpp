@@ -30,23 +30,25 @@ struct ImageInfo2 {
     void CopyFrom(const ImageInfo2 *src);   // 0x008310a0 (other TU)
 };
 
-struct Stopwatch {
-    double GetElapsed();                    // 0x0093a3a0
-};
 struct Animator  {
     void Dtor();                            // 0x007f8c20
 };
 
 // The console's timer slot (+0x10): the low/high pair is tested as a unit and the
-// same object provides the restart / property-flush helpers the retail code calls.
+// same object provides the restart / stop helpers the retail code calls.
 struct ConsoleTimer {
-    uint32_t mLow;                  // +0x00
-    uint32_t mHigh;                 // +0x04
+    union {
+        struct { uint32_t mLow, mHigh; };
+        long long mStarted;
+    };
     uint32_t mExtra8;               // +0x08
     uint32_t mExtraC;               // +0x0c
+    unsigned mUnits;                // +0x10
+    float mScale;                   // +0x14
     void Start();                   // 0x00435480
-    void SetBoolProperty();         // 0x0093a2e0
+    void Stop();         // 0x0093a2e0
     long long GetElapsedTicks();    // 0x0093a3a0
+    double GetElapsed() { return (double)GetElapsedTicks() * mScale; }
 };
 
 // Rect view handed out by a view root (only the left/right edges are read here).
@@ -217,9 +219,7 @@ struct DebugConsole {
     void    *vptr4;        // +0x004
     uint32_t r8;           // +0x008
     void    *mpAlloc;      // +0x00c
-    ConsoleTimer mTimer;   // +0x010..+0x020
-    char     pad20[4];     // +0x020
-    float    fAnimScale;   // +0x024
+    ConsoleTimer mTimer;   // +0x010..+0x028
     char     pad28[8];     // +0x028..+0x030
     float    fDuration;    // +0x030
     float    f34;          // +0x034
@@ -347,35 +347,28 @@ void DebugConsole::Dtor()
 // @ 0x008321d0
 bool DebugConsole::CheckTimeout()
 {
-    void *pi = (void *)((int (__thiscall *)(void *))(*(void ***)f64)[0x10 / 4])(f64);
-    char *r = (char *)((int (__thiscall *)(void *))(*(void ***)pi)[0x38 / 4])(pi);
-    if (*(float *)(r + 0xc) >= 0.0f) {
-        double t = ((Stopwatch *)((char *)this + 0x10))->GetElapsed();
-        if ((float)t * *(float *)((char *)this + 0x24) <= *(float *)((char *)this + 0x30))
-            return false;
-    }
-    return true;
+    ViewRect* rect = ((IConsoleTarget*)f64)->GetRoot()->GetRect();
+    return 0.0f > rect->mRight || mTimer.GetElapsed() > fDuration ? 1 : 0;
 }
 
 // ---------------------------------------------------------------- 0x00832370
 // A live timer value means the console is already armed; otherwise re-run the
 // layout check, restart the timer when it reports work, and when the timer still
-// reads zero flush the property and drop the running animation.
+// reads zero stop the timer and drop the running animation.
 // @ 0x00832370
 bool DebugConsole::StateCheck()
 {
     ConsoleTimer *timer = &mTimer;
-    if ((timer->mLow | timer->mHigh) != 0)
+    if (timer->mStarted != 0)
         return true;
     if (LayoutCheck(1))
         timer->Start();
-    if ((timer->mLow | timer->mHigh) == 0) {
-        timer->SetBoolProperty();
+    if (timer->mStarted == 0) {
+        timer->Stop();
         reinterpret_cast<AnimatorS *>(mAnimator)->RemoveAnimation(f64, 0x61ee327);
     }
-    if (timer->mLow | timer->mHigh)
-        return true;
-    return false;
+    _ReadWriteBarrier();
+    return timer->mStarted ? 1 : 0;
 }
 
 // ---------------------------------------------------------------- 0x008326c0
@@ -637,7 +630,7 @@ bool DebugConsole::LayoutCheck(int animate)
         return false;
 
     // remaining time scaled by the console's animation speed
-    float remaining = fDuration - (float)mTimer.GetElapsedTicks() * fAnimScale;
+    float remaining = fDuration - (float)mTimer.GetElapsedTicks() * mTimer.mScale;
 
     IConsoleTarget *target = reinterpret_cast<IConsoleTarget *>(f64);
     IViewRoot *root = target->GetRoot();
@@ -676,7 +669,7 @@ void DebugConsole::RefreshValues()
         if (!CheckTimeout())
             reinterpret_cast<AnimatorS *>(mAnimator)->RemoveAnimation(f64, 0x61ee329);
     }
-    timer->SetBoolProperty();
+    timer->Stop();
     reinterpret_cast<AnimatorS *>(mAnimator)->RemoveAnimation(f64, 0x61ee327);
     timer->mLow = 0;
     timer->mHigh = 0;
@@ -721,7 +714,7 @@ void DebugConsole::ApplyPending()
 
     AnimatorS *anim = reinterpret_cast<AnimatorS *>(mAnimator);
     anim->RemoveAnimation(f64, 0x61ee328);
-    mTimer.SetBoolProperty();
+    mTimer.Stop();
     anim->RemoveAnimation(f64, 0x61ee327);
     if (mbFlag39)
         StateCheck();

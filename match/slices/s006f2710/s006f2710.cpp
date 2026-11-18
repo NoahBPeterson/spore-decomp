@@ -2,6 +2,8 @@
 // /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE.
 #include "types.h"
 #include <intrin.h>
+#include "../../../src/game/include/tFXResourceType.h"
+#include "../../../src/game/include/EA/Swarm/tBufferFormat.h"
 
 #pragma intrinsic(_InterlockedIncrement, _InterlockedDecrement, _InterlockedExchange)
 
@@ -275,6 +277,64 @@ void Owner33d0::ReleaseIf()
     }
 }
 
+// Retail layouts of the two owned maps in EA::Swarm::cResourcesBase.
+struct SurfaceTable : HtTable {
+    float mMaxLoadFactor, mGrowthFactor;
+    unsigned mNextResize, mAllocator;
+    void FreeChains(void**, unsigned); // 0x006f2270, thiscall
+    ~SurfaceTable() {
+        FreeChains(mBuckets, mBucketCount);
+        mElementCount = 0;
+        if (mBucketCount > 1)
+            EASTL_allocator_deallocate(mBuckets);
+    }
+};
+struct MapTable : HtTable {
+    float mMaxLoadFactor, mGrowthFactor;
+    unsigned mNextResize, mAllocator;
+    void FreeChains(void**, unsigned); // 0x006f22c0, thiscall
+    ~MapTable() {
+        FreeChains(mBuckets, mBucketCount);
+        unsigned count = mBucketCount;
+        mElementCount = 0;
+        void** buckets = mBuckets;
+        if (count > 1)
+            EASTL_allocator_deallocate(buckets);
+    }
+};
+namespace EA { namespace Swarm {
+class cIResourceInfo;
+class cICollection;
+class cISurface;
+class cIMap;
+struct cMaterialDescription;
+class cResourcesBase {
+public:
+    // The complete18-slot resource interface, as declared in the canonical header.
+    virtual void slot_0();
+    virtual void slot_1();
+    virtual cIResourceInfo* ResourceInfo();
+    virtual void InvalidateResources();
+    virtual cICollection* GetCollection(unsigned __int64);
+    virtual bool CreateImageData(tFXResourceType, unsigned __int64, int*);
+    virtual int GetImageData(int, int*, int*, void**);
+    virtual void ReleaseImageData(int);
+    virtual bool AddMaterial(unsigned __int64, const cMaterialDescription&);
+    virtual tBufferFormat GetPreferredMaterialFormat(unsigned __int64, tBufferFormat);
+    virtual cISurface* GetSurface(unsigned __int64) const;
+    virtual cIMap* GetMap(unsigned __int64) const;
+    virtual void RegisterSurface(unsigned __int64, cISurface*);
+    virtual void RegisterMap(unsigned __int64, cIMap*);
+    virtual ~cResourcesBase();
+    virtual cICollection* CreateCollection();
+    virtual bool WriteCollection(unsigned __int64, cICollection*);
+    virtual int GetParamType(unsigned __int64, unsigned __int64);
+    SurfaceTable mSurfaces;
+    MapTable mMaps;
+    cResourcesBase();
+};
+} }
+
 // ---- 0x006f2fb0 -------------------------------------------------------------
 // @ 0x006f2fb0
 cEffectsResources* __fastcall Ctor2fb0(cEffectsResources* this_)
@@ -295,20 +355,12 @@ cEffectsResources* __fastcall Ctor2fb0(cEffectsResources* this_)
     return this_;
 }
 
-// ---- 0x006f2e80 -------------------------------------------------------------
-__declspec(noinline) void __fastcall BaseDtor2e80(cEffectsResources* this_);
 // @ 0x006f2e80
-void __fastcall BaseDtor2e80(cEffectsResources* this_)
-{
-    this_->mpVtbl = g_baseVtable;
-    FreeChainsB(this_->mTableB.mBuckets, this_->mTableB.mBucketCount);
-    this_->mTableB.mElementCount = 0;
-    if (this_->mTableB.mBucketCount > 1)
-        EASTL_allocator_deallocate(this_->mTableB.mBuckets);
-    FreeChainsA(this_->mTableA.mBuckets, this_->mTableA.mBucketCount);
-    this_->mTableA.mElementCount = 0;
-    if (this_->mTableA.mBucketCount > 1)
-        EASTL_allocator_deallocate(this_->mTableA.mBuckets);
+EA::Swarm::cResourcesBase::~cResourcesBase() {
+}
+
+__forceinline void __fastcall BaseDtor2e80(cEffectsResources* value) {
+    reinterpret_cast<EA::Swarm::cResourcesBase*>(value)->EA::Swarm::cResourcesBase::~cResourcesBase();
 }
 
 // ---- 0x006f2f70 -------------------------------------------------------------

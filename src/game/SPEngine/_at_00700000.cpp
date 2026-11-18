@@ -19,7 +19,7 @@ void  __cdecl FUN_00f47410(int a);                                 // 0x00f47410
 void  __cdecl FUN_00762a00(int a);                                 // 0x00762a00
 void  __cdecl FUN_00762a30(int a);                                 // 0x00762a30
 void  __cdecl FUN_00761130(int a);                                 // 0x00761130
-void  __cdecl EASTL_allocator_deallocate(void* p);                 // 0x00f47380
+void  __cdecl EASTL_allocator_deallocate(void* p) throw();               // 0x00f47380
 void* __cdecl operator_new(unsigned size, int align, int flags, const char* name,
                            int a, int b, int c, int d);           // 0x00f473d0
 void* __cdecl FUN_006df700(void* a, void* b, void* c);             // 0x006df700 CopyRefPtr
@@ -148,7 +148,6 @@ struct cCellList {
     IObject*       f13c;
     cCellList* Construct();
     void Clear();
-    ~cCellList();
 };
 struct Vec4b {
     int* begin;   // +0x00
@@ -368,26 +367,48 @@ void cCellList::Clear()
     _ReadWriteBarrier();
 }
 
+// the destructor's view of cCellList: a base with the reference count (vtable 0x13eb938 restored on exit), five
+// fixed byte vectors and a pointer vector whose heap blocks are freed, two record vectors destroyed out of line
+// (0x41eb80, 0x41f270) and the two object references; the body clears the cells first
+struct cCellListBase {
+    virtual void Slot0();
+    volatile long  f004;      // 0x004
+    int            f008, f00c, f010, f014;
+    ~cCellListBase() {}
+};
+struct cCellListByteVec {
+    unsigned char* begin;
+    unsigned char* end;
+    unsigned char* cap;
+    int            f0c, f10, f14;
+    unsigned char  buf[16];
+    ~cCellListByteVec() { FreeVecBuf(begin); }
+};
+struct cCellListPtrVec {
+    void* begin; void* end; void* cap; int pad[2];
+    ~cCellListPtrVec() { FreeVecBuf(begin); }
+};
+struct cCellListRecVecA { void* begin; void* end; void* cap; int pad[2]; ~cCellListRecVecA(); };   // 0x41eb80
+struct cCellListRecVecB { void* begin; void* end; void* cap; int pad[2]; ~cCellListRecVecB(); };   // 0x41f270
+struct cCellListRef {
+    IObject* mp;
+    ~cCellListRef() { if (mp != 0) mp->Release(); }
+};
+struct cCellListObj : cCellListBase {
+    cCellListByteVec v018, v040, v068, v090, v0b8;   // 0x018
+    cCellListPtrVec  v0e0;                          // 0x0e0
+    cCellListRecVecA v0f4;                          // 0x0f4
+    cCellListRecVecB v108;                          // 0x108
+    Vec3f            mMin;                          // 0x11c
+    Vec3f            mMax;                          // 0x128
+    float            f134;
+    cCellListRef     f138;
+    cCellListRef     f13c;
+    ~cCellListObj();
+};
+
 // @ 0x00700a30
-cCellList::~cCellList()
+cCellListObj::~cCellListObj()
 {
-    vt = (void*)0x140c464;
-    Clear();
-    if (f13c != 0) {
-        IObject* q = f13c;
-        q->Release();
-    }
-    if (f138 != 0) {
-        IObject* q = f138;
-        q->Release();
-    }
-    ((ThiscallVoid)0x41f270)((char*)this + 0x108);
-    ((ThiscallVoid)0x41eb80)((char*)this + 0xf4);
-    FreeVecBuf(v0e0.begin);
-    FreeVecBuf(v0b8.begin);
-    FreeVecBuf(v090.begin);
-    FreeVecBuf(v068.begin);
-    FreeVecBuf(v040.begin);
-    FreeVecBuf(v018.begin);
-    vt = (void*)0x13eb938;
+    ((cCellList*)this)->Clear();
 }

@@ -16,6 +16,19 @@
 #include "types.h"
 #include <stddef.h>
 #include <intrin.h>
+#include <wchar.h>
+
+#pragma intrinsic(wcscmp)
+#include "SP/cVarListSerializer.h"
+
+extern SP::cDataSerializerGeneric gStarRecordSerializerList[]; // 0x0156cb70
+extern const wchar_t* gDefaultStarName; // 0x0151ac94
+
+namespace EA { namespace IO {
+class IStream;
+bool ReadUint8(IStream* stream, uint8_t* data, uint32_t count); // 0x0093a6c0
+bool WriteUint8(IStream* stream, const uint8_t* data, uint32_t count); // 0x0093a9a0
+} }
 
 #pragma intrinsic(_ReadWriteBarrier)
 
@@ -50,6 +63,7 @@ struct String16 {         // eastl::basic_string<wchar_t>, 0x10 bytes
     uint32_t mpEnd;
     uint32_t mpCapacity;
     uint32_t mAllocator;
+    void assign(uint32_t first, uint32_t last);   // 0x423650
     bool empty() const { return mpBegin == mpEnd; }
 };
 
@@ -126,6 +140,7 @@ public:
     void SetBlownUp(bool on);                                  // 0xbb9c40  (bit 0x40)
     bool UpdateSETI();                                         // 0xbb9eb0
     bool HasMonolith();                                        // 0xbb9fb0
+    void* GetSolarSystem();                                    // 0xc8b770
     void SetName(const String16* s);                           // 0xbba4b0
     void* GetCitizenSpecies();                                 // 0xbba500
     void OnBan();                                              // 0xbba2a0
@@ -347,11 +362,9 @@ void* cStarManager::PickBannerForStar(uint32_t key)
 // ===========================================================================
 bool cStarRecord::Write(void* outStream)
 {
-    // cVarListSerializer on the stack (0xa14 bytes local)
-    char ser[0xa14];
-    *(uint32_t*)((char*)this + 0x80) = 0;
-    ((void(__thiscall*)(void*, cStarRecord*, uint32_t, uint32_t))0x692f90)(ser, this, 0x156cb70, 0x1a80d26);
-    return ((bool(__thiscall*)(void*, void*))0x692900)(ser, outStream);
+    mpSpeciesProfile_80 = 0;
+    SP::cVarListSerializer ser(this, gStarRecordSerializerList, 0x1a80d26);
+    return ser.Serialize(*(SP::cIObjectDatabaseOStream*)outStream);
 }
 
 // ===========================================================================
@@ -429,7 +442,8 @@ bool AttrRead_00bb9cd0(void* pStream, uint8_t* pData)
 {
     int* a = (int*)(*(int(__thiscall**)(void*))(*(uint32_t**)pStream + 0x20 / 4))(pStream);
     uint32_t v = (*(uint32_t(__thiscall**)(int*))(*(uint32_t**)a + 0x18 / 4))(a);
-    return ((bool(__cdecl*)(uint32_t, uint8_t*, int))0x93a6c0)(v, pData, 1) ? true : false;
+    EA::IO::ReadUint8((EA::IO::IStream*)v, pData, 1);
+    return true;
 }
 
 // ===========================================================================
@@ -437,10 +451,11 @@ bool AttrRead_00bb9cd0(void* pStream, uint8_t* pData)
 // ===========================================================================
 bool AttrWrite_00bb9d00(void* pStream, uint8_t* pData)
 {
-    uint8_t tmp = *pData;
     int* a = (int*)(*(int(__thiscall**)(void*))(*(uint32_t**)pStream + 0x20 / 4))(pStream);
+    uint8_t tmp = *pData;
     uint32_t v = (*(uint32_t(__thiscall**)(int*))(*(uint32_t**)a + 0x18 / 4))(a);
-    return ((bool(__cdecl*)(uint32_t, uint8_t*, int))0x93a9a0)(v, &tmp, 1);
+    EA::IO::WriteUint8((EA::IO::IStream*)v, &tmp, 1);
+    return true;
 }
 
 // ===========================================================================
@@ -785,19 +800,18 @@ void cStarRecord::OnBan()
 void cStarRecord::SetName(const String16* s)
 {
     if (s->mpBegin != s->mpEnd) {
-        if (this == (cStarRecord*)FUN_01021240()) {
-            cStarRecord* star = (cStarRecord*)FUN_01021230();
-            if (star != 0) {
-                void* solar = ((void*(__thiscall*)(void*))0xc8b770)(star);
-                if (solar != 0)
-                    ((void(__thiscall*)(void*, const String16*))0xc85200)(solar, s);
-            }
+        cStarRecord* focus = 0;
+        if (this == (cStarRecord*)FUN_01021240())
+            focus = (cStarRecord*)FUN_01021230();
+        if (focus != 0) {
+            void* solar = focus->GetSolarSystem();
+            if (solar != 0)
+                ((void(__thiscall*)(void*, const String16*))0xc85200)(solar, s);
         }
         if (s != &mName)
             ((void(__thiscall*)(String16*, uint32_t, uint32_t))0x423650)(&mName, s->mpBegin, s->mpEnd);
     }
 }
-
 // ===========================================================================
 // @ 0x00bba500
 // ===========================================================================
@@ -826,29 +840,20 @@ void* cStarRecord::GetCitizenSpecies()
 // ===========================================================================
 bool cStarRecord::Read(void* inStream)
 {
-    char ser[0xa14];
-    ((void(__thiscall*)(void*, cStarRecord*, uint32_t, uint32_t))0x692f90)(ser, this, 0x156cb70, 0x1a80d26);
-    bool ok = ((bool(__thiscall*)(void*, void*))0x693e10)(ser, inStream);
+    SP::cVarListSerializer ser(this, gStarRecordSerializerList, 0x1a80d26);
+    bool ok = ser.Serialize(*(SP::cIObjectDatabaseIStream*)inStream);
     mpSpeciesProfile_80 = 0;
-    ISpeciesManager* sm = (ISpeciesManager*)SP_GetSetting9();
-    if (sm->GetProfile(&mCitizenSpeciesKey) == 0)
+    if (((ISpeciesManager*)SP_GetSetting9())->GetProfile(&mCitizenSpeciesKey) == 0)
         field_50 = 1;
-    if (mName.mpBegin == mName.mpEnd)
+    String16* name = &mName;
+    if (name->empty())
         SP_GenerateNewStarName(this);
-    const wchar_t* empty = (const wchar_t*)0x151ac94;
-    {
-        const wchar_t* a = (const wchar_t*)mName.mpBegin;
-        while (*a == *empty) {
-            if (*a == 0) { a = 0; break; }
-            ++a; ++empty;
-            if (*a == 0) { a = 0; break; }
-        }
-        if (a != 0)
+    if (wcscmp((const wchar_t*)name->mpBegin, gDefaultStarName) == 0) {
+        SP_GenerateNewStarName(this);
+        if (name->empty())
             SP_GenerateNewStarName(this);
+        SetName(name);
     }
-    if (mName.mpBegin == mName.mpEnd)
-        SP_GenerateNewStarName(this);
-    SetName(&mName);
     return ok;
 }
 

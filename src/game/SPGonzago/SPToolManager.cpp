@@ -98,6 +98,30 @@ struct cIface {
     { return ((void* (__thiscall*)(void*, u32))mpVftbl[byteOff / 4])(this, a); }
 };
 typedef cIface cOutStream;
+class cToolStreamHolder {
+public:
+    virtual void slot_0();
+    virtual void slot_1();
+    virtual void slot_2();
+    virtual void slot_3();
+    virtual void slot_4();
+    virtual void slot_5();
+    virtual void* GetStream();                                // slot 6, +0x18
+};
+class cToolObjectDatabaseStream {
+public:
+    virtual void slot_0();
+    virtual void slot_1();
+    virtual void slot_2();
+    virtual void slot_3();
+    virtual void slot_4();
+    virtual void slot_5();
+    virtual void slot_6();
+    virtual void slot_7();
+    virtual cToolStreamHolder* GetStreamHolder();              // slot 8, +0x20
+};
+extern SP::cDataSerializerGeneric gSpaceToolDataSerializer;    // 0x015b8850
+
 struct cMessagingServer {
     void** mpVftbl;                                             // +0x00
     __forceinline void RegisterEvent(void* self, u32 evt)       // vtable +0x24
@@ -255,6 +279,8 @@ struct cSPSpaceToolData_s0104_bcc0 {
     u8   FUN_0104bff0();                                       // 0x0104bff0
     u8   FUN_0104c010();                                       // 0x0104c010
     bool func48h();                                            // 0x0104ca20
+    bool UsesAmmo() const { return (mFlags174 >> 5) & 1; }
+    bool NeedsCharges();                                      // 0x0104e320
     bool IsInContext();                                        // 0x0104cb70
     void FUN_0104cbd0(i32 delta);                              // 0x0104cbd0
     void FUN_0104cc00(i32 amount);                             // 0x0104cc00
@@ -522,7 +548,6 @@ public:
     void SetPropertyList(uint32_t nPropertyKey);
     void TryDeselectAfterUse();  // 0x0104e260 (cSPSpaceToolData::TryDeselectAfterUse)
     void ReloadItemEffects();
-    bool NeedsCharges();  // 0x0104e320 (cSPSpaceToolData::NeedsCharges)
     void FreeEffectBuffers();  // 0x0104e6f0 (cSPSpaceToolData::FreeEffectBuffers)
 
     uint8_t mPadE4[0x24];                       // 0xe4
@@ -640,6 +665,7 @@ extern const float g_f16e12d4;   // 0x016e12d4
 extern const float g_f1485720;   // 0x01485720 == 1.0f
 extern const float g_f1470f1c;   // 0x01470f1c == 2.0f
 struct CPropertyList;
+struct CToolObject;
 struct CStrategyMap
 {
     /* 000h */ uint8_t  mPad_000[0x38];
@@ -648,6 +674,7 @@ struct CStrategyMap
     /* 040h */ uint32_t mBucketCount_040;
     /* 044h */ uint32_t mCount_044;
     CPropertyList* Find(uint32_t nID);   // 0x0104f850
+    bool ActivateTool(CToolObject* pTool);                     // 0x0104fbb0
 };
 struct CToolObject
 {
@@ -1196,16 +1223,25 @@ struct cGameModeState {
 };
 cGameModeState* GameModeState();            // 0x00b3d4d0
 void TriggerAdventureEvent(const char* name, uint32_t id, int flag);   // 0x01041c50 (cdecl)
-struct cPlanetObjectData {   // 0x2c bytes
-    uint32_t pad[0x2c / 4];
-    cPlanetObjectData(int type, const Vector3& pos);       // 0x0104e290
+// Retail cToolObjectData view; the generated header lacks this two-argument constructor.
+// The native caller uses the unnamed flag value 7, within eToolObjectFlags' 0..7 domain.
+struct cToolObjectData_s0104_e290 {
+    uint32_t mObjectType;                 // +0x00
+    Vector3 mObjectPosition;              // +0x04
+    uint16_t mAmmo;                       // +0x10
+    uint8_t mArtifactType;                // +0x12
+    float mHealth;                        // +0x14
+    uint32_t mLootDropTimeS;               // +0x18
+    ResourceKeyZ mKey;                    // +0x1c
+    uint8_t mFlags;                       // +0x28
+    cToolObjectData_s0104_e290(SP::cToolObjectData::eToolObjectFlags type, const Vector3& pos); // 0x0104e290
 };
 struct PlanetObjectVector {
-    cPlanetObjectData* mpBegin;
-    cPlanetObjectData* mpEnd;
-    cPlanetObjectData* mpCapacity;
+    cToolObjectData_s0104_e290* mpBegin;
+    cToolObjectData_s0104_e290* mpEnd;
+    cToolObjectData_s0104_e290* mpCapacity;
     uint32_t mAllocator[2];
-    void push_back_planetobj(const cPlanetObjectData& v);   // 0x00acbbe0 (vector::push_back)
+    void push_back_planetobj(const cToolObjectData_s0104_e290& v);   // 0x00acbbe0 (vector::push_back)
 };
 struct cPlantProfile {
     uint32_t pad[0x504 / 4];
@@ -1448,14 +1484,14 @@ extern PropDesc g_015b8850, g_015b888c, g_015b88c8, g_015b8904, g_015b8940, g_01
 // @ 0x0104bcc0
 u8 SP::cSPSpaceToolData_s0104_bcc0::Write(cOutStream* stream)
 {
-    cIface* a = (cIface*)stream->Call(0x20);
+    cToolStreamHolder* __restrict holder = reinterpret_cast<cToolObjectDatabaseStream*>(stream)->GetStreamHolder();
     u32 tag = 0x707459f0;
-    cIface* b = (cIface*)a->Call(0x18);
-    WriteUint32(b, &tag, 1, 0);
+    void* out = holder->GetStream();
+    WriteUint32(out, &tag, 1, 0);
     u8 ok = FUN_00c87580(stream);
-    cVarListSerializer_s0104_bcc0 ser;
-    ser.ctorRaw((u8*)this - 0xc, 0x15b8850, 0x1a80d26);
-    u8 serOk = ser.Serialize(stream);
+    SP::cVarListSerializer ser((u8*)this - 0xc, &gSpaceToolDataSerializer,
+        SP::cVarListSerializer::kSignature);
+    u8 serOk = ser.Serialize(*reinterpret_cast<SP::cIObjectDatabaseOStream*>(stream));
     if (serOk != 0 && ok != 0) return 1;
     return 0;
 }
@@ -1816,16 +1852,11 @@ void cSPSpaceToolData_s0104_e060::TryDeselectAfterUse()
 }
 
 // @ 0x0104e290
-void SetEffectConfig(cEffectConfig* pConfig, uint32_t nChannel, const Vec3* pColor)
+cToolObjectData_s0104_e290::cToolObjectData_s0104_e290(SP::cToolObjectData::eToolObjectFlags type, const Vector3& pos)
 {
-    pConfig->mPhase3 = 0;
-    pConfig->mPhase4 = 0;
-    pConfig->mPhase5 = 0;
-    pConfig->mChannelMask = (uint8_t)(1 << (nChannel & 0x1f));
-    pConfig->mColor.mX = pColor->mX;
-    pConfig->mColor.mY = pColor->mY;
-    pConfig->mColor.mZ = pColor->mZ;
-    pConfig->mPhase2 = 0;
+    mFlags = (uint8_t)(1u << type);
+    mObjectPosition = pos;
+    mLootDropTimeS = 0;
 }
 
 // @ 0x0104e2f0
@@ -1837,11 +1868,9 @@ uint32_t cSpaceInventoryItem_GetItemCount(cSpaceInventoryItemData* pItem, uint32
 }
 
 // @ 0x0104e320
-bool cSPSpaceToolData_s0104_e060::NeedsCharges()
+bool SP::cSPSpaceToolData_s0104_bcc0::NeedsCharges()
 {
-    if (((mFlags >> 5) & 1) != 0 && mnCharges < 1)
-        return true;
-    return false;
+    return UsesAmmo() && mAmmo7c <= 0;
 }
 
 // @ 0x0104e340
@@ -2552,44 +2581,29 @@ void* __fastcall FUN_0104fcd0(void* pThis, int, void** ppArg)
     return (char*)pPos + 0x14;
 }
 
+class cToolDataReadBase {
+public:
+    bool Read(void* stream);                                  // 0x00c879a0
+};
+void ReadToolVersion(void* stream, int32_t* value, int count, int flags); // 0x0093a780
+
 // @ 0x0104fd70
 bool __fastcall FUN_0104fd70(char* pThis, int, void* pObj)
 {
-    void* pA = ((void*(__thiscall*)(void*))
-        (*(void***)pObj)[0x20 / 4])(pObj);
-    void* pReader = ((void*(__thiscall*)(void*))
-        (*(void***)pA)[0x18 / 4])(pA);
-
-    int32_t value = 0;
-    ((void(__cdecl*)(void*, void*, int, int))FUN_0093a780)(
-        pReader, &value, 1, 0);
-
-    bool bPre = ((bool(__thiscall*)(char*, void*))FUN_00c879a0)(pThis, pObj);
-
-    struct CVarListSerializer
-    {
-        double  mAlign;
-        uint8_t mData[0xa0c];
-    } serializer;
-
+    cToolStreamHolder* __restrict holder = static_cast<cToolObjectDatabaseStream*>(pObj)->GetStreamHolder();
+    int32_t value;
+    void* reader = holder->GetStream();
+    ReadToolVersion(reader, &value, 1, 0);
+    bool bPre = reinterpret_cast<cToolDataReadBase*>(pThis)->Read(pObj);
     char* pOwner = pThis - 0xc;
-    ((void(__thiscall*)(void*, char*, void*, uint32_t))FUN_00692f90)(
-        &serializer, pOwner, (void*)0x15b8850, 0x1a80d26u);
-
-    bool bRead = ((bool(__thiscall*)(void*, void*))FUN_00693e10)(
-        &serializer, pObj);
-
+    SP::cVarListSerializer serializer(pOwner, &gSpaceToolDataSerializer,
+        SP::cVarListSerializer::kSignature);
+    bool bRead = serializer.Serialize(*static_cast<SP::cIObjectDatabaseIStream*>(pObj));
     bool bResult = bRead && bPre;
-
     ((void(__thiscall*)(void*))
         (*(void***)pOwner)[0x4c / 4])(pOwner);
-
     if (pThis[0x1c] != 0)
-    {
-        GetToolStrategyMap();
-        FUN_0104fbb0((CToolObject*)pOwner);
-    }
-
+        GetToolStrategyMap()->ActivateTool(reinterpret_cast<CToolObject*>(pOwner));
     return bResult;
 }
 
@@ -3346,7 +3360,7 @@ bool cToolManager::HandleMessage(uint32_t messageID, void* pMessage)
                 ornament->SetModelKey(0x0345bd5d, -1, 0x1a4f418e);
                 ornament->mSpatial.SetPosition(field_290);
                 ornament->mSpatial.SetOrientation(PlanetModel_s0105_1850()->BuildSurfaceOrientation(field_290));
-                cPlanetObjectData data(7, field_290);
+                cToolObjectData_s0104_e290 data((SP::cToolObjectData::eToolObjectFlags)7, field_290);
                 GetActivePlanet()->mpPlanetRecord->mPlanetObjects.push_back_planetobj(data);
             }
             field_290 = kInvalidPosition;

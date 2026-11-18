@@ -1,2 +1,1 @@
-00496140  120  complete fixed-stride find(); matches the loop but the /Od frame (0x14 vs 0x10) and member slots differ
 004961d0  150  complete transform-save routine (copy 0x48->0x54 and three 9-float matrices for the object and each vector element); not byte-exact

@@ -107,14 +107,40 @@ public:
     Vec3* GetPosition(Vec3* pOut);       // 0x2c
     Vec3* GetDirection(Vec3* pOut);      // 0x30
 };
+class cSPShipCargoSlot {
+public:
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual float GetCargoCapacity();   // 0x58
+    uint8_t mPad04[0x34];
+    float mCargoMax;                    // 0x38
+};
 class cSPSpaceInventory {
 public:
     uint8_t mPad00[0x34];
     cSPSpaceInventoryItem* mpHeldItem;   // 0x34
     uint8_t mPad38[0x4d0];
-    cSPSpaceInventoryItem* mpShipItem;   // 0x508
-    uint8_t mPad50c[0x34];
-    float mCargoMax;                     // 0x540
+    cSPShipCargoSlot mShipSlot;          // 0x508
     uint8_t mPad544[0x2b0];
     float mEnergyCurrent;                // 0x7f4
     float mEnergyMax;                    // 0x7f8
@@ -138,6 +164,9 @@ struct IVectorItem : public IRefCounted {
     Vec3* GetPosition(Vec3* pOut);   // 0x2c
 };
 void* NounManager();
+struct TextView {
+    int GetLineCount(void* pTool, void* pObject); // 0x01054350 (ret 8)
+};
 class cSPToolStrategy {
 public:
     virtual void v00();
@@ -224,17 +253,23 @@ int ScanColony(cSPSimulatorSpaceGame* pGame);               // 0x010533d0
 int ScanAllSpecies(cPlanet* pPlanet);                       // 0x010534c0
 void AddToolCharge(int nAmount);
 int gSpaceToolFlags[8];
-class IQueryable {
+// Retail view: the generated InterfaceId enum only contains -1, 0 and 1,
+// but AsInterface accepts full 32-bit IDs. Keep the observed interface contract
+// and the canonical base order; construction puts cISerializableObject at +0xc.
+namespace RetailCargo {
+class cISerializableObject {
 public:
-    virtual void v00();
-    virtual void v04();
-    virtual void v08();
-    virtual IRefCounted* Query(const void* pType);  // 0x0c
+    virtual int AddRef();
+    virtual int Release();
+    virtual ~cISerializableObject();
+    virtual void* AsInterface(uint32_t interfaceId);
 };
+class cSPSpaceInventoryItem : public EA::RefCountVTemplate<int>,
+    public EA::Messaging::IHandler, public cISerializableObject {};
+}
+// The holder stores one item pointer; the serializable interface belongs to the item.
 struct IItemHolder {
-    IRefCounted* mpItem;      // 0x00
-    uint32_t mPad04[2];       // 0x04
-    IQueryable* mpSecondary;  // 0x0c
+    RetailCargo::cSPSpaceInventoryItem* mpItem;
 };
 // ---- items of slice s010527f0 end
 
@@ -2380,13 +2415,19 @@ int cSPToolStrategy::SetErrorEvent(int nEventType, bool bPost)
 }
 
 // @ 0x01052880
+struct ScanResultList {
+    void* Erase(void* pItem);   // 0x00b3d390
+};
+struct ScanResultInfo {
+    int GetSize();              // 0x00b3d3a0
+};
 void AppendScanResult(void* pList, int* pOut)
 {
     if (pOut == nullptr)
         return;
-    // The list drops its previous front element, then reports the new size.
-    *(int*)pList = *(int*)pList;
-    *pOut = *(int*)pList;
+    ScanResultList* pResults = (ScanResultList*)pList;
+    void* pItem = pOut;
+    (*pOut) = ((ScanResultInfo*)pResults->Erase(pItem))->GetSize();
 }
 
 // @ 0x01052f00
@@ -2525,34 +2566,43 @@ int cSPEnergyRepairToolStrategy::AdjustCost(int nBaseCost)
 int cSPEnergyRepairToolStrategy::AdjustCostPercent(int nBaseCost)
 {
     cSPSpaceInventory* pInventory = GetActiveSpaceGame()->GetPlayerInventory();
-    float fCargo = pInventory->mCargoMax;
+    cSPShipCargoSlot* pSlot = &pInventory->mShipSlot;
+    float fCargo = pSlot->mCargoMax;
     pInventory = GetActiveSpaceGame()->GetPlayerInventory();
-    float fMax = (float)(pInventory->mpShipItem != nullptr ? 1.0f : 0.0f);
+    float fMax = pInventory->mShipSlot.GetCargoCapacity();
     return (int)(((fMax - fCargo) / fMax) * (float)nBaseCost);
 }
 
 // @ 0x01053650
+static bool StopToolBody(cSPToolStrategy* pTool)
+{
+    pTool->mbActive = 0;
+    pTool->mTimer.Stop();
+    return true;
+}
 bool cSPToolStrategy::StopTool()
 {
-    mbActive = 0;
-    mTimer.Stop();
-    return true;
+    return StopToolBody(this);
 }
 
 // @ 0x010536e0
-IRefCounted* CastToAnimalCargoInfo(IItemHolder* pHolder)
+void* CastToAnimalCargoInfo(IItemHolder* pHolder)
 {
-    if (pHolder->mpItem == nullptr)
-        return nullptr;
-    return pHolder->mpSecondary->Query((const void*)0x30fc270b);
+    RetailCargo::cSPSpaceInventoryItem* item = pHolder->mpItem;
+    if (item) {
+        return static_cast<RetailCargo::cISerializableObject*>(item)->AsInterface(0x30fc270b);
+    }
+    return nullptr;
 }
 
 // @ 0x01053700
-IRefCounted* CastToPlantCargoInfo(IItemHolder* pHolder)
+void* CastToPlantCargoInfo(IItemHolder* pHolder)
 {
-    if (pHolder->mpItem == nullptr)
-        return nullptr;
-    return pHolder->mpSecondary->Query((const void*)0x70a2863c);
+    RetailCargo::cSPSpaceInventoryItem* item = pHolder->mpItem;
+    if (item) {
+        return static_cast<RetailCargo::cISerializableObject*>(item)->AsInterface(0x70a2863c);
+    }
+    return nullptr;
 }
 
 // @ 0x010537e0
@@ -2604,12 +2654,8 @@ char cSPToolStrategy::CanUseToolAtLocation(int nToolId, int nTarget, int a3)
 // @ 0x01053bb0
 void cSPToolStrategy::UpdatePassive()
 {
-    if (mpActiveObject != nullptr && !mpActiveObject->IsAlive()) {
-        IRefCounted* pOld = mpActiveObject;
-        mpActiveObject = nullptr;
-        pOld->AddRef();
-        mEventType = mEventType;
-    }
+    if (mpActiveObject != nullptr && !mpActiveObject->IsAlive())
+        ((TextView*)NounManager())->GetLineCount(this, mpActiveObject);
 }
 
 // @ 0x01053be0
@@ -2744,6 +2790,10 @@ bool cSPDefaultBeamTool::UpdateBeam()
 // @ 0x01053ee0
 bool cSPDefaultAoETool::StopTool()
 {
+    IRefCounted* pArea = mpAreaEffect;
+    if (pArea == nullptr)
+        return true;
+    ((SP::cDefaultAoEArea*)pArea)->StopArea();
     if (mpAreaEffect != nullptr) {
         IRefCounted* pOld = mpAreaEffect;
         mpAreaEffect = nullptr;
@@ -2790,29 +2840,46 @@ bool cSPScanToolStrategy::ActivateTool(int nToolId)
 // @ 0x01053ff0
 bool cSPScanToolStrategy::StopTool()
 {
+    cSPSpaceInventoryItem* pHeld = nullptr;
     cSPSpaceInventory* pInventory = SpaceGameGet()->GetPlayerInventory();
-    (void)pInventory;
+    if (pInventory != nullptr)
+        pHeld = (cSPSpaceInventoryItem*)((uint8_t*)pInventory + 0x34);
 
     IRefCounted* pOld = mpEffectRef;
+    ((SP::cDefaultBeamProjectile*)mpBeamProjectile)->StopBeam();
     mpEffectRef = nullptr;
     if (pOld != nullptr)
         pOld->AddRef();
 
-    if (mpBeamProjectile != nullptr) {
-        IRefCounted* pProjectile = mpBeamProjectile;
+    IRefCounted* pProjectile = mpBeamProjectile;
+    if (pProjectile != nullptr) {
         mpBeamProjectile = nullptr;
         pProjectile->AddRef();
     }
     AddToolCharge(0);
-    return true;
+    if (pHeld != nullptr && pHeld == mpTargetItem) {
+        IRefCounted* pPosted = (IRefCounted*)this->SetErrorEvent(0x016e1b14, true);
+        if (pPosted != nullptr)
+            (void)pPosted;
+    }
+    return this->StopTool();
 }
 
 // @ 0x01054080
+static char CanUseToolAtLocationBody(cSPToolStrategy* pTool, int nToolId, int nTarget, int a3);
+
 bool cSPScanToolStrategy::UseTool(int nToolId, int nTarget)
 {
-    if (mpEffectRef != nullptr)
+    if (mpEffectRef != nullptr) {
         return true;
-    return CanUseToolAtLocation(nToolId, nTarget, 0);
+    } else {
+        return CanUseToolAtLocationBody(this, nToolId, nTarget, 0);
+    }
+}
+
+static char CanUseToolAtLocationBody(cSPToolStrategy* pTool, int nToolId, int nTarget, int a3)
+{
+    return pTool->CanUseToolAtLocation(nToolId, nTarget, a3);
 }
 
 // @ 0x010540b0
@@ -2821,13 +2888,19 @@ bool cSPGetOutOfUFOToolStrategy::CanUseToolAtLocation(int nToolId, int nTarget, 
     return cSPToolStrategy::CanUseToolAtLocation(nToolId, nTarget, a3);
 }
 
+// Declaration-only view keeps the retail base activation call out of line.
+struct ToolActivationBase {
+    bool ActivateTool(int nToolId); // 0x010537e0
+};
+
 // @ 0x010540d0
 bool cSPGetOutOfUFOToolStrategy::ActivateTool(int nToolId)
 {
-    if (!cSPToolStrategy::ActivateTool(nToolId))
-        return false;
-    ShowToolEventLog(nToolId, (const void*)0x16e1b14, 3, 0);
-    return true;
+    if (reinterpret_cast<ToolActivationBase*>(this)->ActivateTool(nToolId)) {
+        ShowToolEventLog(nToolId, (const void*)0x16e1b14, 3, 0);
+        return true;
+    }
+    return false;
 }
 
 // @ 0x01054110

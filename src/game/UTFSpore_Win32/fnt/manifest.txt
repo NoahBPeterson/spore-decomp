@@ -22,3 +22,5 @@
 ../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_INSTRCTRL_OFF@@YAXPAUTTExecCtx@@@Z  008ae870  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_POP_NOOP@@YAXPAUTTExecCtx@@@Z  008ae880  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/fnt.cpp  _fnt_RoundToHalfGrid  008ac070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_INSTCTRL@@YAXPAUTTExecCtx@@@Z  008ae040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/fnt.cpp  ?fnt_NoInterpChars@@YAXPAIII@Z  008ac5c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -80,21 +80,19 @@ void HK_CALL hkPredGskAgent3_removePoint(hkAgentEntry* entry, void* agentData, h
 {
 	(void)entry;
 	hkGskManifold* manifold = (hkGskManifold*)agentData;
-	unsigned short* pointId = (unsigned short*)((char*)manifold + 0x12);
-	const int n = manifold->m_numManifoldPoints;
+	unsigned char* base = (unsigned char*)manifold;
+	unsigned short* p = (unsigned short*)base + 4;
+	int n = manifold->m_numManifoldPoints;
 	int i = 0;
-	if (n <= 0)
-		return;
-	for (;;)
+	for (; i < n; ++i)
 	{
-		if (*pointId == id)
-			break;
-		++i;
-		pointId += 4;
-		if (i >= n)
+		if (*p == id)
+		{
+			hkGskManifold::removePoint(manifold, i);
 			return;
+		}
+		p += 4;
 	}
-	hkGskManifold::removePoint(manifold, i);
 }
 
 // =========================================================================================================

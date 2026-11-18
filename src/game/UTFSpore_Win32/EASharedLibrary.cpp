@@ -459,11 +459,7 @@ int EA::SharedLibrary::Release()
 bool EA::SharedLibrary::CanUnload() const
 {
     void* p = 0;
-    if (IsLoaded()) {
-        if (!ExecuteCommand("CanSharedLibraryUnload", &p, 0, 0, 0) || p == 0)
-            return false;
-    }
-    return true;
+    return !IsLoaded() || (ExecuteCommand("CanSharedLibraryUnload", &p, 0, 0, 0) && p != 0);
 }
 
 // @ 0x00936380
@@ -535,8 +531,8 @@ bool EA::SharedLibraryRegistry::RemoveAllLibraries(bool flag)
 // @ 0x00936550
 unsigned int EA::SharedLibraryRegistry::ExecuteCommandAll(char const * a, void * b, void * c, void * d, void * e)
 {
-    mMutex.Lock(*(unsigned int const *)&gpRegistryMutexName);
     int count = 0;
+    mMutex.Lock(*(unsigned int const *)&gpRegistryMutexName);
     unsigned int n = (unsigned int)(((char*)mSharedLibraries.mpEnd - (char*)mSharedLibraries.mpBegin) >> 2);
     for (unsigned int i = 0; i < n; i++) {
         EA::SharedLibrary* lib = ((EA::SharedLibrary**)mSharedLibraries.mpBegin)[i];
@@ -710,8 +706,10 @@ EA::SharedLibrary_s0093_6090::~SharedLibrary_s0093_6090()
     if (mHandlerBegin != 0 && ((int*)mHandlerBegin)[-1] != 0)
         FreeMem(mHandlerBegin);
     wchar_t* p = mpPathBegin;
-    if ((((char*)mpPathCap - (char*)p) & 0xfffffffe) > 2 && p != 0)
+    int d = (int)((int)((int)mpPathCap - (int)p) & 0xfffffffeU);
+    if (d > 2 && p != 0)
         FreeMem(p);
+    *(void**)this = (void*)0x13f65b4;   // ILibraryCommand vftable
 }
 
 // @ 0x00936e10

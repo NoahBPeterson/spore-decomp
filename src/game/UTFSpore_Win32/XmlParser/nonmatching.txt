@@ -1,4 +1,3 @@
 # va  diff-bytes  reason
-008e59a0 89 XmlParser::FlushText; codegen differs (equiv WEAK: 22% coverage)
-008e5c50 11 EndElementHandler; tail-call/virtual dispatch differ (equiv UNSUPPORTED: unresolved externs)
+008e59a0 89 logic: the text length must be unsigned, not int - retail tests it with jbe/ja, so a negative (wrapped) count now runs the trim and flush instead of skipping them; also restored retail's separate length guard before the count. That guard makes cl reload both pointers, which needs _ReadWriteBarrier() between the guard and the count. Still differs: cl folds the dead guard length into test eax,0xFFFFFFFE where retail has sar eax,1 (+2 bytes), so the loop head misses its 1-byte alignment nop. fix1: quick check WEAK
 008e5e50 36 SkippedEntityHandler; inlined entity lookup/arg arrange differ (equiv PASS)

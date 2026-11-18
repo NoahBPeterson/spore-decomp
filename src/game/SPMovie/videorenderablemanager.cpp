@@ -13,10 +13,11 @@ extern const char g_mutexName[];                        // 0x149219c
 
 // ---- items of slice s00fcd210 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void EA_Thread_Mutex_dtor(void*);   // 0x922130
-struct EAThreadMutex {
-    void  Lock(const char* name);
-    void  Unlock();
-};
+
+// retail keeps two frame lists guarded by the mutex at +0x18: slot +0x04 holds frame 0,
+// slot +0x08 holds frame 1, both rw::SList instances whose vtable slots +0x3c/+0x44/+0x68
+// are the list's Count/PushBack/set-item calls.
+typedef unsigned int  u32;
 struct RVRenderable {
     void ShutdownAll();
     void SetFrame0(int p2);
@@ -78,7 +79,7 @@ public:
     virtual void  s5c();                                     // +0x5c
     virtual void  s60();                                     // +0x60
     virtual void  s64();                                     // +0x64
-    virtual void  s68();                                     // +0x68
+    virtual void  s68(void* node, void* value, int a);       // +0x68
     virtual void  s6c();                                     // +0x6c
     virtual void  s70();                                     // +0x70
     virtual void  Remove(void* node, int a);                 // +0x74
@@ -144,19 +145,19 @@ void RVRenderable::ShutdownAll()
 // @ 0x00fce0a0
 void RVRenderable::SetFrame0(int p2)
 {
-    EAThreadMutex* mtx = (EAThreadMutex*)((char*)this + 0x18);
-    mtx->Lock(g_mutexName);
+    EA::Thread::Mutex* mtx = (EA::Thread::Mutex*)((char*)this + 0x18);
+    mtx->Lock(*(const unsigned int*)g_mutexName);
     int local = p2;
-    ((void (*)(int*, int))((void**)*(void**)((char*)this + 0x04))[0x44 / 4])(&local, 0);
+    ((rw::SList*)*(void**)((char*)this + 0x04))->PushBack(&local, 0);
     mtx->Unlock();
 }
 
 // @ 0x00fce0e0
 int RVRenderable::GetFrame0()
 {
-    EAThreadMutex* mtx = (EAThreadMutex*)((char*)this + 0x18);
-    mtx->Lock(g_mutexName);
-    int r = ((int (*)(void))((void**)*(void**)((char*)this + 0x04))[0x3c / 4])();
+    EA::Thread::Mutex* mtx = (EA::Thread::Mutex*)((char*)this + 0x18);
+    mtx->Lock(*(const unsigned int*)g_mutexName);
+    int r = (int)((rw::SList*)*(void**)((char*)this + 0x04))->Count();
     mtx->Unlock();
     return r;
 }
@@ -164,24 +165,24 @@ int RVRenderable::GetFrame0()
 // @ 0x00fce110
 void RVRenderable::SetFrame1(int p2)
 {
-    EAThreadMutex* mtx = (EAThreadMutex*)((char*)this + 0x18);
-    mtx->Lock(g_mutexName);
+    EA::Thread::Mutex* mtx = (EA::Thread::Mutex*)((char*)this + 0x18);
+    mtx->Lock(*(const unsigned int*)g_mutexName);
     int local = p2;
-    ((void (*)(int*, char*, int))((void**)*(void**)((char*)this + 0x08))[0x68 / 4])(&local, (char*)this + 0x48, 0);
+    ((rw::SList*)*(void**)((char*)this + 0x08))->s68(&local, (char*)this + 0x48, 0);
     mtx->Unlock();
 }
 
 // @ 0x00fce150
 int RVRenderable::GetFrame1(int p2)
 {
-    EAThreadMutex* mtx = (EAThreadMutex*)((char*)this + 0x18);
-    mtx->Lock(g_mutexName);
+    EA::Thread::Mutex* mtx = (EA::Thread::Mutex*)((char*)this + 0x18);
+    mtx->Lock(*(const unsigned int*)g_mutexName);
     unsigned int n = ((unsigned int (*)(void))((void**)*(void**)((char*)this + 0x08))[0x3c / 4])();
     if (n <= (unsigned int)p2) {
         mtx->Unlock();
         return 0;
     }
-    void* p = (void*)((void* (*)(int))((void**)*(void**)((char*)this + 0x08))[0x30 / 4])(p2);
+    void* p = (void*)((void* (*)(unsigned int))((void**)*(void**)((char*)this + 0x08))[0x30 / 4])(n = (unsigned int)p2);
     int* q = (int*)((int (*)(void*))((void**)p)[0])(p);
     int r = *q;
     mtx->Unlock();
@@ -191,9 +192,9 @@ int RVRenderable::GetFrame1(int p2)
 // @ 0x00fce1b0
 int RVRenderable::GetFrame2()
 {
-    EAThreadMutex* mtx = (EAThreadMutex*)((char*)this + 0x18);
-    mtx->Lock(g_mutexName);
-    int r = ((int (*)(void))((void**)*(void**)((char*)this + 0x08))[0x3c / 4])();
+    EA::Thread::Mutex* mtx = (EA::Thread::Mutex*)((char*)this + 0x18);
+    mtx->Lock(*(const unsigned int*)g_mutexName);
+    int r = (int)((rw::SList*)*(void**)((char*)this + 0x08))->Count();
     mtx->Unlock();
     return r;
 }
@@ -326,7 +327,6 @@ u32 VideoRenderableManager::GetFromDecoderList(u32 index)
         goto fail;
     {
         u32 frame = item->GetFrame()[0];
-        mSentToDecoderList->Remove(item, 0);
         mListMutex.Unlock();
         return frame;
     }

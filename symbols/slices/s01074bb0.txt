@@ -1,4 +1,4 @@
-01074bb0 SP::cSPUISpace::HandleMessage  # IHandlerRC::HandleMessage(msgID, msg), this = cSPUISpace+0xc; PDB candidate was RefreshActiveToolUI
+01074bb0 ?HandleMessage@UIHandler@@QAE_NIPAX@Z  # UIHandler::HandleMessage migrated from s01074bb0 (verbatim, slice spelling)
 01075450 ?F1075450@cTrading@@QAEHXZ  # cTrading::F1075450 migrated from s01074bb0 (verbatim, slice spelling)
 01075490 ?F1075490@cTrading@@QAEXXZ  # cTrading::F1075490 migrated from s01074bb0 (verbatim, slice spelling)
 01075510 ?F1075510@cTrading@@QAEXXZ  # cTrading::F1075510 migrated from s01074bb0 (verbatim, slice spelling)

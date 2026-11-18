@@ -10,3 +10,13 @@
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe54d0@cSPBadgeManager_s00fe_4be0@SP@@QAEIPAVProperty@@@Z  00fe54d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe5430@cSPBadgeManager_s00fe_4be0@SP@@QAEXIH@Z  00fe5430  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?GetBadgeImageKey@cSPBadgeManager_s00fe_4be0@SP@@QAEPAUResourceKey@@PAU3@I@Z  00fe5520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?GetBadgeName@cSPBadgeManager@@QBEXIAAVeastlWString@@@Z  00fe4710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?Write@cISerializableObject@@UAEXPAVcOutStream@@@Z  00fe3c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?Read@cSPBadgeManager@@UAEXPAVcOutStream@@@Z  00fe40a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe4180@cSPBadgeManager@@QBE_NI@Z  00fe4180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe4230@cSPBadgeManager@@QBEII@Z  00fe4230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe46a0@cSPBadgeManager@@QBE_NI@Z  00fe46a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?GetBadgeDescription@cSPBadgeManager@@QBEXIAAVeastlWString@@@Z  00fe47a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe4900@cSPBadgeManager@@QBEXIAAVeastlWString@@@Z  00fe4900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3e80@@YAXPAVcOutStream@@PAVtU32Tree@@@Z  00fe3e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3fd0@@YAXPAVcOutStream@@PAVtU32Tree@@@Z  00fe3fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

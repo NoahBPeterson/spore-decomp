@@ -163,7 +163,6 @@ public:
 
     cHitSphere();
     bool Write(void* pData);
-    void* Cast(void* pType);
     int GetDelegateLowerBound(int nOffset);
 };
 class cInteractableObject : public cGameData {
@@ -207,8 +206,34 @@ public:
     void AttachEffect(void* pEffect);
 };
 void* EffectsManager();
-bool ReadInteractableSubobject(void* pData);
-void* CastSpatialObjectBase(void* pObject);
+// Retail query views. Native construction puts the spatial base at +0x34;
+// the generated class layout still places it at +0x2c. Only base conversion
+// and direct game-data/spatial calls are needed here. The spatial view represents
+// its vptr prefix only; no constructor, field access or sizeof uses this view.
+typedef eastl::vector<SP::cField, eastl::sp_vector_allocator> InteractableFields;
+namespace RetailInteractableObject {
+class cGameData {
+    uint32_t mStorage[0x34 / 4];
+public:
+    void* AsInterface(uint32_t type); // 0x00b18460, thiscall, ret 4
+    bool Write(void* data); // 0x00b18590
+    bool Read(void* data); // 0x00b18600
+    int GetFieldValues(InteractableFields& fields); // 0x00b18420
+};
+class cSpatialObject {
+    const void* mVTable;
+public:
+    bool Write(void* data); // 0x00c88a90
+    bool Read(void* data); // 0x00c88b00
+};
+class cInteractableObject : public cGameData, public cSpatialObject {
+public:
+    void* AsInterface(uint32_t type);
+    bool Write(void* data);
+    bool Read(void* data);
+    int GetFieldValues(InteractableFields& fields);
+};
+}
 void SetModelVariant(cSpatialObject* pObject, int nVariant, int bA, int bB);
 void ShutdownMarkerExtras();
 void FreeOrnamentMembers();
@@ -218,16 +243,11 @@ extern const void* sInteractableFields;
 // ---- items of slice s00c3ee20 end
 
 // @ 0x00c3f850
-void* cHitSphere::Cast(void* pType)
+void* RetailInteractableObject::cInteractableObject::AsInterface(uint32_t type)
 {
-    if (pType == (void*)0x1186577) {
-        if (this != nullptr)
-            return (uint8_t*)this + 0x34;
-        return nullptr;
-    }
-    if (pType != (void*)0x398420d)
-        return CastSpatialObjectBase(this);
-    return this;
+    if (type != 0x01186577u)
+        return type != 0x0398420du ? cGameData::AsInterface(type) : this;
+    return static_cast<cSpatialObject*>(this);
 }
 
 // @ 0x00c3f890
@@ -288,37 +308,68 @@ void cInteractableObject::ClearEffectState()
     }
 }
 
-// @ 0x00c3fb00
-bool cInteractableObject::Write(void* pData)
+extern SP::cDataSerializerGeneric gInteractableSerializerList[]; // 0x01573ee8
+struct InteractableStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual IOStream* GetStream(); // slot 6
+};
+struct InteractableArchive {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual InteractableStreamHolder* GetStreamHolder(); // slot 8
+};
+
+extern SP::cDataSerializerGeneric gInteractableSpatialSerializerList[]; // 0x0157a1f8
+
+// @ 0x00c3f920
+int RetailInteractableObject::cInteractableObject::GetFieldValues(InteractableFields& fields)
 {
-    IOStream* pStream = ((ISerializer*)pData)->GetStream();
-    uint32_t nType = 0x398420d;
-    WriteUint32(pStream->GetStream(), &nType, 1, 0);
+    SP::cVarListSerializer spatial((char*)this + sizeof(cGameData), gInteractableSpatialSerializerList, 0x1a80d26);
+    int count = spatial.GetFields(fields);
+    count += cGameData::GetFieldValues(fields);
+    SP::cVarListSerializer own(this, gInteractableSerializerList, 0x1a80d26);
+    return own.GetFields(fields) + count;
+}
 
-    bool bOk = cSpatialObject::Write(pData);
-    if (bOk)
-        bOk = cGameData::Write(pData);
-
-    cVarListSerializer serializer(this, sInteractableFields, 0x1a80d26);
-    if (bOk)
-        return serializer.Serialize(pData);
+// @ 0x00c3fb00
+bool RetailInteractableObject::cInteractableObject::Write(void* data)
+{
+    InteractableStreamHolder* __restrict holder = ((InteractableArchive*)data)->GetStreamHolder();
+    uint32_t type = 0x398420d;
+    IOStream* stream = holder->GetStream();
+    WriteUint32(stream, &type, 1, 0);
+    bool ok;
+    if (cSpatialObject::Write(data) && cGameData::Write(data))
+        ok = true;
+    else
+        ok = false;
+    SP::cVarListSerializer serializer(this, gInteractableSerializerList, 0x1a80d26);
+    if (ok) {
+        if (serializer.Serialize(*(SP::cIObjectDatabaseOStream*)data))
+            return true;
+    }
     return false;
 }
 
 // @ 0x00c3fba0
-bool cInteractableObject::Read(void* pData)
+bool RetailInteractableObject::cInteractableObject::Read(void* data)
 {
-    IOStream* pStream = ((ISerializer*)pData)->GetStream();
-    uint32_t nType = 0;
-    ReadInt32(pStream->GetStream(), &nType, 1, 0);
-
-    bool bOk = ReadInteractableSubobject(pData);
-    if (bOk)
-        bOk = cGameData::Read(pData);
-
-    cVarListSerializer serializer(this, sInteractableFields, 0x1a80d26);
-    if (bOk)
-        return serializer.Serialize(pData);
+    InteractableStreamHolder* __restrict holder = ((InteractableArchive*)data)->GetStreamHolder();
+    uint32_t type;
+    IOStream* stream = holder->GetStream();
+    ReadInt32(stream, &type, 1, 0);
+    bool ok;
+    if (cSpatialObject::Read(data) && cGameData::Read(data))
+        ok = true;
+    else
+        ok = false;
+    SP::cVarListSerializer serializer(this, gInteractableSerializerList, 0x1a80d26);
+    if (ok) {
+        if (serializer.Serialize(*(SP::cIObjectDatabaseIStream*)data))
+            return true;
+    }
     return false;
 }
 

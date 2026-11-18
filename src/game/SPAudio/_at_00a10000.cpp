@@ -153,6 +153,34 @@ virtual void q38();
     virtual bool q48(int, int, int);         // 0x48
     virtual bool q4c(int, int, int);         // 0x4c
 };
+// the destructor's view of Ability: an interface at +0 (no destructor), a base at +4 whose destructor restores
+// vtable 0x13ef094, and the two children, released through vtable slot 1 in reverse order
+struct AbilityIface { virtual void Slot0(); };
+struct AbilityBase { virtual void Slot0(); ~AbilityBase() {} };
+struct AbilityChildRef {
+    IChild* mp;
+    ~AbilityChildRef() { if (mp) mp->Release(); }
+};
+struct __declspec(novtable) AbilityObj : AbilityIface, AbilityBase {
+    int ref;                 // 0x08
+    AbilityChildRef childA;  // 0x0c
+    AbilityChildRef childB;  // 0x10
+    ~AbilityObj();
+};
+// the two-child constructor's view of Ability: an interface at +0, a base at +4 (vtable 0x13ef094), and the two
+// children, each referenced as it is stored; a throw while referencing the second releases the first
+struct AbilityCtorIface { virtual void Slot0(); };
+struct AbilityCtorBase { AbilityCtorBase() : ref(0) {} virtual void Slot0(); int ref; ~AbilityCtorBase() {} };
+struct AbilityChildHold {
+    IChild* mp;
+    AbilityChildHold(IChild* p) : mp(p) { if (p) p->AddRef(); }
+    ~AbilityChildHold() { if (mp) mp->Release(); }
+};
+struct AbilityCtorObj : AbilityCtorIface, AbilityCtorBase {
+    AbilityChildHold childA;    // 0x0c
+    AbilityChildHold childB;    // 0x10
+    AbilityCtorObj(IChild* a, IChild* b);
+};
 struct Ability {
     void*   vtbl0;   // 0x00
     void*   vtbl1;   // 0x04
@@ -161,8 +189,6 @@ struct Ability {
     IChild* childB;  // 0x10
 
     void* ctor();                         // 0xa107a0
-    void  dtor();                         // 0xa10800
-    Ability* ctor2(IChild*, IChild*);     // 0xa10860
     bool  q08(int);                       // 0xa10960
     void  q10(void*, int);                // 0xa109a0
     void  q14(int);                       // 0xa109d0
@@ -462,33 +488,22 @@ void* Ability::ctor()
 }
 
 // @ 0x00a10800
-void Ability::dtor()
+AbilityObj::~AbilityObj()
 {
-    if (childB) childB->Release();
-    if (childA) childA->Release();
-    vtbl1 = (void*)0x13ef094;
 }
 
 // @ 0x00a10860
-Ability* Ability::ctor2(IChild* a, IChild* b)
+AbilityCtorObj::AbilityCtorObj(IChild* a, IChild* b)
+    : childA(a), childB(b)
 {
-    vtbl1 = (void*)0x13ef094;
-    ref = 0;
-    vtbl0 = (void*)0x14492a0;
-    vtbl1 = (void*)0x1449298;
-    childA = a;
-    if (a) a->AddRef();
-    childB = b;
-    if (b) b->AddRef();
-    return this;
 }
 
 // @ 0x00a10960
 bool Ability::q08(int x)
 {
-    if (childA && childA->q08(x)) return true;
-    if (childB && childB->q08(x)) return true;
-    return false;
+    IChild* first = childA;
+    IChild* second;
+    return (first && first->q08(x)) || ((second = childB) && second->q08(x));
 }
 
 // @ 0x00a109a0
@@ -546,13 +561,17 @@ bool Ability::q44(int a, int b, int c)
 // @ 0x00a10da0
 bool Ability::q48(int a, int b, int c)
 {
-    return (childA && childA->q48(a, b, c)) || (childB && childB->q48(a, b, c));
+    IChild* first = childA;
+    IChild* second;
+    return (first && first->q48(a, b, c)) || ((second = childB) && second->q48(a, b, c));
 }
 
 // @ 0x00a10e00
 bool Ability::q4c(int a, int b, int c)
 {
-    return (childA && childA->q4c(a, b, c)) || (childB && childB->q4c(a, b, c));
+    IChild* first = childA;
+    IChild* second;
+    return (first && first->q4c(a, b, c)) || ((second = childB) && second->q4c(a, b, c));
 }
 
 // @ 0x00a10e90
@@ -714,7 +733,14 @@ Chorus::Chorus()
 {
 }
 
+// Destruction view of Chorus (0x00a14a10): the original stores no vtable of its own on entry (novtable); the delay
+// lines go through the eh vector destructor, then the effect base restores its vtable.
+struct __declspec(novtable) ChorusDtorView_a14a10 : AudioEffect {
+    tDelayLine mDelays[6];      // +0x24 .. +0x9c
+    ~ChorusDtorView_a14a10();
+};
+
 // @ 0x00a14a10
-Chorus::~Chorus()
+ChorusDtorView_a14a10::~ChorusDtorView_a14a10()
 {
 }

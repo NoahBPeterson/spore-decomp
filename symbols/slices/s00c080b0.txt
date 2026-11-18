@@ -1,2 +1,2 @@
-00c080b0 func8Ch       # Simulator::cCreatureBase::func8Ch attack/idle state reset
-00c08270 RemoveOwner   # Simulator::cGameData::RemoveOwner
+00c080b0 ?func8Ch@cCreatureBase_s00c0_80b0@@QAEXXZ  # cCreatureBase_s00c0_80b0::func8Ch migrated from s00c080b0 (verbatim, slice spelling)
+00c08270 ?RemoveOwner@cGameData_s00c0_80b0@@QAEXXZ  # cGameData_s00c0_80b0::RemoveOwner migrated from s00c080b0 (verbatim, slice spelling)

@@ -334,7 +334,8 @@ bool ParamWalker::Walk(char* node, uint32 flags, void* sink)
 // @ 0x00688DD0 / @ 0x00688E50  post a command-prototype notification
 // ===========================================================================
 void* operator new(unsigned size, const char* area, int a, int b, int c, int d);
-struct NewObj { NewObj(int param); };
+void operator delete(void* p, const char* area, int a, int b, int c, int d);
+struct NewObj { int mData[8]; NewObj(int param); };
 struct MsgSrv { void* vtbl; };
 MsgSrv* SP_MessageServer(); // 0x0067dcc0
 
@@ -681,10 +682,8 @@ struct GmeRC {
 };
 
 struct Slot0c { int x; Slot0c() {} ~Slot0c() {} };
-struct GmeEditorResBase2 : IDispBase, GmeRC {
-};
 
-struct CMessageCommandDispatcher : GmeEditorResBase2 {
+struct CMessageCommandDispatcher : IDispBase, GmeRC {
     Slot0c           mUnk0c;     // +0x0c
     EditorResDerived mMessage;   // +0x10
     ArcRef           mpIn;       // +0x38
@@ -724,10 +723,6 @@ void ParamSetStatus::SetStatusParameterValue(int id)
 // ===========================================================================
 // (see marker at definition) ~cMessageCommandDispatcher
 // ===========================================================================
-// @ 0x00689880
-CMessageCommandDispatcher::~CMessageCommandDispatcher()
-{
-}
 
 // ===========================================================================
 // (see marker at definition) SP::cMessageCommandDispatcher::ExecuteCommand

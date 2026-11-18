@@ -1363,16 +1363,17 @@ void cSPMissionManager::FUN_00feba50()
     mDebugDraw = (mDebugDraw == 0);
 }
 
+extern SP::cDataSerializerGeneric gMissionManagerSerializerList[]; // 0x015b4b90
+
 // @ 0x00febb90
 u8 cSPMissionManager::Write(void* stream)
 {
-    void* a = (*(void* (__thiscall**)(void*))((char*)vtbl(stream) + 0x20))(stream);
-    void* b = (*(void* (__thiscall**)(void*))((char*)vtbl(a) + 0x18))(a);
+    cOutStream* __restrict holder = ((cOutStream*)stream)->v20();
     u32 key = 0x2aa56c7;
-    FUN_0093aa70(b, &key, 1, 0);
-    cVarListSerializer ser;
-    ser.FUN_00692f90((void*)((char*)this - 8), (void*)0x15b4b90, 0x1a80d26);
-    return ser.FUN_00692900(stream);
+    void* output = holder->v18();
+    FUN_0093aa70(output, &key, 1, 0);
+    SP::cVarListSerializer serializer((char*)this - 8, gMissionManagerSerializerList, 0x1a80d26);
+    return serializer.Serialize(*(SP::cIObjectDatabaseOStream*)stream);
 }
 
 // @ 0x00febc70
@@ -1846,22 +1847,25 @@ void cSPMissionManager_s00fe_c590::FUN_00feca20(cSPMission* pMission)
     }
 }
 
+extern SP::cDataSerializerGeneric gMissionNodeSerializerList[]; // 0x015b49b0
+
 // @ 0x00feca80
 void __cdecl FUN_00feca80(cOutStream* pOut, tSerializeNode* pList)
 {
-    uint32_t nCount = 0;
-    for (tSerializeNode* p = pList->mpNext; p != pList; p = p->mpNext)
-        ++nCount;
+    {
+        uint32_t nCount = 0;
+        for (tSerializeNode* p = pList->mpNext; p != pList; p = p->mpNext)
+            ++nCount;
 
-    cOutStream* pStream = pOut->v20();
-    void* pHandle = pStream->v18();
-    uint32_t nValue = nCount;
-    WriteUint32(pHandle, &nValue, 1, 0);
+        cOutStream* __restrict pStream = pOut->v20();
+        uint32_t nValue = nCount;
+        void* pHandle = pStream->v18();
+        WriteUint32(pHandle, &nValue, 1, 0);
 
-    for (tSerializeNode* p = pList->mpNext; p != pList; p = p->mpNext) {
-        cVarListSerializer_s00fe_c590 ser;
-        ser.Construct(&p->mPayload, 0x15b49b0, 0x1a80d26);
-        ser.Serialize(pOut);
+        for (tSerializeNode* p = pList->mpNext; p != pList; p = p->mpNext) {
+            SP::cVarListSerializer serializer(&p->mPayload, gMissionNodeSerializerList, 0x1a80d26);
+            serializer.Serialize(*(SP::cIObjectDatabaseOStream*)pOut);
+        }
     }
     return pOut->v1c();
 }

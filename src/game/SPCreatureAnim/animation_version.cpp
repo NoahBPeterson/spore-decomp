@@ -2,6 +2,7 @@
 // Object file: SPCreatureAnim/animation_version.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+#include <intrin.h>
 #include "game/types.h"
 #include "nSPCreatureAnim/latest_version/animation_static_data.h"
 
@@ -57,6 +58,7 @@ void nSPCreatureAnim::converters::ConvertEvent_v11_v12(uint32_t* param_1, uint32
     param_1[10] = 0;
     param_2[0x11] = param_1[0xb];
     param_2[0x13] = 0; param_2[0x14] = 0; param_2[0x15] = 0; param_2[0x16] = 0; param_2[0x17] = 0;
+    _ReadWriteBarrier();
     *param_2 = *param_2 & 0xffffa7ff;
     if ((*param_1 & 0x800) != 0) *param_2 = *param_2 | 0x4800;
     if ((*param_1 & 0x1800) != 0) *param_2 = *param_2 | 0x1000;

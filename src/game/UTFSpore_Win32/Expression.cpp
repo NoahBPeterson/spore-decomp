@@ -23,7 +23,8 @@
 extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" __declspec(dllimport) int   __cdecl isspace(int);
 extern char gEmptyString[];
-
+extern void* g_TI_cError;                                     // 0x014f9174 (ThrowInfo of cError)
+__declspec(noreturn) void  __cdecl CxxThrowException(void* obj, void* throwInfo);   // 0x011e0912 (_CxxThrowException)
 // ---- items of slice s0083c900 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace eastl {
 struct allocator_s0083_c900 { unsigned char pad[4]; };
@@ -122,7 +123,7 @@ struct string8_s0083_d3d0 {
 void  __cdecl DiscardWhiteSpace(const char** p);            // 0x0083ce90
 void  __stdcall DoFreeNodesExpr(void* bucketArray, int n);  // 0x0083dd00
 int   __cdecl EvalIntExpression(void* self, const char** p); // 0x0083eb00
-void  __cdecl EvalExpectChar(const char** p, char c);       // 0x0083d240
+void  __stdcall EvalExpectChar(const char** p, char c);     // 0x0083d240
 namespace EA {
 namespace ArgScript {
 struct cExprFunction_s0083_d3d0 { virtual float Eval(const char** p, void* expr) = 0; };
@@ -290,7 +291,11 @@ bool operator==(const string8_s0083_f140& s, const char* lit);   // 0x00555020
 }
 namespace EA {
 namespace ArgScript {
-struct cExpression_s0083_f140 { int EvalChar(const char** p); };   // 0x0083f480 (stub receiver)
+struct cExpression_s0083_f140 {
+    int  EvalChar(const char** p);                     // 0x0083f480 (stub receiver)
+    int  EvalBoolExpression(const char** p);           // 0x0083f2e0 (member of cExpression)
+    bool ParseBool(const char* s);                     // 0x0083f510
+};
 }
 }
 // ---- items of slice s0083f140 end
@@ -397,19 +402,19 @@ ExprInsertResult ExprHashtable::insert(const eastl::string8_s0083_c900& value, T
 }
 
 // @ 0x0083d240
-void EvalExpectCharThrow(const char** p, char c)
+void __stdcall EvalExpectCharThrow(const char** p, char c)
 {
     DiscardWhiteSpace(p);
     if (**p != c) {
         char buf[16];
         ThrowCError(buf, "Expected '%c'", (int)c);
-        _CxxThrowException(buf, (_ThrowInfo*)0);
+        CxxThrowException(buf, &g_TI_cError);
     }
     ++*p;
 }
 
 // @ 0x0083d290
-unsigned char EvalContinueChar(const char** p, char c)
+unsigned char __stdcall EvalContinueChar(const char** p, char c)
 {
     DiscardWhiteSpace(p);
     char ch = **p;
@@ -418,7 +423,7 @@ unsigned char EvalContinueChar(const char** p, char c)
     if (ch != c) {
         char buf[16];
         ThrowCError(buf, "Expected '%c'", (int)c);
-        _CxxThrowException(buf, (_ThrowInfo*)0);
+        CxxThrowException(buf, &g_TI_cError);
     }
     ++*p;
     return 1;
@@ -752,13 +757,19 @@ float EA::ArgScript::cExpression::ParseReal(char const * s)
 float cExpression::EvalRealParentheses2(const char** p)
 {
     DiscardWhiteSpace(p);
-    if (**p != '(')
-        throw cError("Expected '%c'", '(');
+    if (**p != '(') {
+        char buf[16];
+        ThrowCError(buf, "Expected '%c'", 0x28);
+        CxxThrowException(buf, &g_TI_cError);
+    }
     ++*p;
     float v = EvalRealExpression(p);
     DiscardWhiteSpace(p);
-    if (**p != ')')
-        throw cError("Expected '%c'", ')');
+    if (**p != ')') {
+        char buf[16];
+        ThrowCError(buf, "Expected '%c'", 0x29);
+        CxxThrowException(buf, &g_TI_cError);
+    }
     ++*p;
     return v;
 }
@@ -1059,24 +1070,36 @@ int __cdecl EvalBoolExpression(const char** p)
 int EA::ArgScript::cExpression_s0083_f140::EvalChar(const char** p)
 {
     DiscardWhiteSpace(p);
-    if (**p != '(')
-        throw cError("Expected '%c'", '(');
+    if (**p != '(') {
+        char buf[16];
+        ThrowCError(buf, "Expected '%c'", 0x28);
+        CxxThrowException(buf, &g_TI_cError);
+    }
     ++*p;
-    int v = EvalBoolExpression(p);
+    int v = this->EvalBoolExpression(p);
     DiscardWhiteSpace(p);
-    if (**p != ')')
-        throw cError("Expected '%c'", ')');
+    if (**p != ')') {
+        char buf[16];
+        ThrowCError(buf, "Expected '%c'", 0x29);
+        CxxThrowException(buf, &g_TI_cError);
+    }
     ++*p;
     return v;
 }
 
 // @ 0x0083f510
-bool __cdecl ParseBool(const char* s)
+bool EA::ArgScript::cExpression_s0083_f140::ParseBool(const char* s)
 {
-    if (*s == 0)
-        throw cError("empty expression");
+    if (*s == 0) {
+        char buf[16];
+        ThrowCError(buf, "empty expression");
+        CxxThrowException(buf, &g_TI_cError);
+    }
     int v = EvalBoolExpression(&s);
-    if (*s != 0)
-        throw cError("Garbage at end of bool expression");
+    if (*s != 0) {
+        char buf[16];
+        ThrowCError(buf, "Garbage at end of bool expression");
+        CxxThrowException(buf, &g_TI_cError);
+    }
     return v != 0;
 }

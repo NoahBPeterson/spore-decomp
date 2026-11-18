@@ -245,12 +245,19 @@ bool __stdcall HasSomething(int id)
     return FUN_00f32790(id) != 0;
 }
 
+// Clamp lo<=v<=hi with the scalar SSE min/max the retail body uses (maxss then minss).  Taking the
+// bounds by value forces them into stack slots.
+static __forceinline float ClampFloat(float v, float lo, float hi)
+{
+    __m128 t = _mm_load_ss(&v);
+    _mm_store_ss(&v, _mm_min_ss(_mm_max_ss(t, _mm_load_ss(&lo)), _mm_load_ss(&hi)));
+    return v;
+}
+
 // @ 0x00f33580
 void cSphere::SetScale(float value)
 {
-    float v = _mm_cvtss_f32(_mm_min_ss(_mm_max_ss(_mm_set_ss(value), _mm_setzero_ps()),
-                                       _mm_set_ss(1.0f)));
-    mD4[0] = v;
+    mD4[0] = ClampFloat(value, 0.0f, 1.0f);
     Update(1);
 }
 
@@ -461,8 +468,7 @@ cToolObject* __stdcall CreateToolObject(int owner)
 int __stdcall CopyToolSettings(int* p)
 {
     int srcId = p[0];
-    int ownerId = p[1];
-    cToolObject* created = CreateToolObject(ownerId);
+    cToolObject* created = CreateToolObject(p[1]);
     cFieldDst* dst = (cFieldDst*)ResolveObject(created);
     cFieldSrc* src = (cFieldSrc*)ResolveObject((void*)srcId);
     dst->SetA(src->GetA());

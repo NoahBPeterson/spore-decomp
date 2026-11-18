@@ -11,13 +11,16 @@ extern "C" void __cdecl eastl_dealloc(void*);
 extern "C" void* __cdecl eastl_alloc(uint32_t size, const char* name, int a, int b, const char* file, int line);
 
 // ---------------------------------------------------------------------------
-// @ 0x0074B310  vector<T>::DoInsertValue (element size 0x1c, EH)
+// vector<T>::DoInsertValue (element size 0x1c, EH)
 // ---------------------------------------------------------------------------
 struct T1c {
     uint32_t b[7];                 // 0x1c bytes
     T1c(const T1c&);
     void CopyFrom(const T1c& v);   // @ 0x743b60 retail copy constructor
 };
+
+inline void* __cdecl operator new(unsigned int, T1c* p) { return p; }
+inline void __cdecl operator delete(void*, T1c*) {}
 
 struct Vec1c {
     char pad[0x18];
@@ -28,72 +31,73 @@ struct Vec1c {
     void DoInsert(const T1c* v);
 };
 
+// @ 0x0074B310
 void Vec1c::DoInsert(const T1c* val)
 {
-    T1c* e = end;
-    if ((char*)e + 0x1c == (char*)cap) {
-        Grow(val);
-        volatile int done = 1;     // keep the call non-tail (matches retail call site)
+    if (end + 1 != cap) {
+        T1c* e = end++;
+        new (e) T1c(*val);
     } else {
-        end = (T1c*)((char*)e + 0x1c);
-        if (e) {
-            e->CopyFrom(*val);
-            volatile int done = 1; // keep the call non-tail (matches retail call site)
-        }
+        Grow(val);
     }
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x0074B490  heap-swap loop (element 8 bytes, float key at +4)
 // ---------------------------------------------------------------------------
-extern "C" void __cdecl FUN_00748010(void*, void*, void*);
-extern "C" void __cdecl FUN_00748060(void*, void*, void*);
-extern "C" void __cdecl FUN_00745e00(void*, int, int, int, uint32_t, uint32_t, void*);
+struct HeapElem4b90 { float x, y; };
+struct Cmp4b90 { uint32_t v; };
 
-void heap_loop_b490(void* a, void* b, void* c, void* d)
+extern "C" void __cdecl FUN_00748010(void*, void*, Cmp4b90);
+extern "C" void __cdecl FUN_00748060(void*, void*, Cmp4b90);
+extern "C" void __cdecl FUN_00745e00(void*, int, int, int, HeapElem4b90, Cmp4b90);
+
+void heap_loop_b490(void* a, void* b, void* c, Cmp4b90 d)
 {
-    FUN_00748010(a, b, d);
-    char* p = (char*)b;
-    while (p < (char*)c) {
-        float key = *(float*)(p + 4);
-        if (key > *(float*)((char*)a + 4)) {
-            uint32_t k = *(uint32_t*)(p + 4);
-            uint32_t o = *(uint32_t*)p;
-            uint32_t k0 = *(uint32_t*)a;
-            uint32_t k1 = *(uint32_t*)((char*)a + 4);
-            *(uint32_t*)p = k0;
-            *(uint32_t*)(p + 4) = k1;
-            FUN_00745e00(a, 0, (int)((char*)b - (char*)a) >> 3, 0, o, k, d);
+    HeapElem4b90* first = (HeapElem4b90*)a;
+    HeapElem4b90* middle = (HeapElem4b90*)b;
+    HeapElem4b90* last = (HeapElem4b90*)c;
+    FUN_00748010(first, middle, d);
+    uint32_t compare = d.v;
+    Cmp4b90 cc;
+    cc.v = compare;
+    for (HeapElem4b90* i = middle; i < last; ++i) {
+        if (i->y > first->y) {
+            HeapElem4b90 temp = *i;
+            *i = *first;
+            FUN_00745e00(first, 0, (int)(middle - first), 0, temp, cc);
         }
-        p += 8;
     }
-    FUN_00748060(a, b, d);
+    FUN_00748060(first, middle, cc);
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x0074B510  heap-swap loop (comparator reversed)
 // ---------------------------------------------------------------------------
-extern "C" void __cdecl FUN_007480c0(void*, void*, void*);
-extern "C" void __cdecl FUN_00748110(void*, void*, void*);
-extern "C" void __cdecl FUN_00745e80(void*, int, int, int, uint32_t, uint32_t, void*);
+struct HeapElem4b510 { float x, y; };
+struct Cmp4b510 { uint32_t v; };
 
-void heap_loop_b510(void* a, void* b, void* c, void* d)
+extern "C" void __cdecl FUN_007480c0(void*, void*, Cmp4b510);
+extern "C" void __cdecl FUN_00748110(void*, void*, Cmp4b510);
+extern "C" void __cdecl FUN_00745e80(void*, int, int, int, HeapElem4b510, Cmp4b510);
+
+void heap_loop_b510(void* a, void* b, void* c, Cmp4b510 d)
 {
-    FUN_007480c0(a, b, d);
-    char* p = (char*)b;
-    while (p < (char*)c) {
-        if (*(float*)((char*)a + 4) > *(float*)(p + 4)) {
-            uint32_t k = *(uint32_t*)(p + 4);
-            uint32_t o = *(uint32_t*)p;
-            uint32_t k0 = *(uint32_t*)a;
-            uint32_t k1 = *(uint32_t*)((char*)a + 4);
-            *(uint32_t*)p = k0;
-            *(uint32_t*)(p + 4) = k1;
-            FUN_00745e80(a, 0, (int)((char*)b - (char*)a) >> 3, 0, o, k, d);
+    HeapElem4b510* first = (HeapElem4b510*)a;
+    HeapElem4b510* middle = (HeapElem4b510*)b;
+    HeapElem4b510* last = (HeapElem4b510*)c;
+    FUN_007480c0(first, middle, d);
+    uint32_t compare = d.v;
+    Cmp4b510 cc;
+    cc.v = compare;
+    for (HeapElem4b510* i = middle; i < last; ++i) {
+        if (first->y > i->y) {
+            HeapElem4b510 temp = *i;
+            *i = *first;
+            FUN_00745e80(first, 0, (int)(middle - first), 0, temp, cc);
         }
-        p += 8;
     }
-    FUN_00748110(a, b, d);
+    FUN_00748110(first, middle, cc);
 }
 
 // ---------------------------------------------------------------------------

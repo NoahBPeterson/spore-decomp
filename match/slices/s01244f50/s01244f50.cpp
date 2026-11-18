@@ -256,35 +256,43 @@ void init_15da884()
     atexit(&FUN_013bcc70);
 }
 
+// A packed color word: 8-bit channels with a 2-bit tag in the top bits.  The
+// tag has to be set through the constructor from field values: a plain
+// constant field assignment makes cl fold the mask/shift into the merged
+// value, while the constructor's 32-bit field parameters keep the
+// per-field `and r,0xff; shl r,N` insert the original emits.
 struct PackedColor {
-    uint32_t low : 8;    // bits 0-7
-    uint32_t g : 8;      // bits 8-15
-    uint32_t r : 8;      // bits 16-23
-    uint32_t hi : 8;     // bits 24-31
+    uint32_t low : 8;      // bits 0-7
+    uint32_t g : 8;        // bits 8-15
+    uint32_t r : 8;        // bits 16-23
+    uint32_t unused : 6;   // bits 24-29
+    uint32_t kind : 2;     // bits 30-31
+
+    PackedColor(uint32_t rv, uint32_t gv)
+    {
+        *(uint32_t*)this = 0;
+        kind = 1;
+        r = rv;
+        g = gv;
+    }
 };
 
 // @ 0x01250330
 void init_15dacc8()
 {
-    uint32_t v = 0;
-    v = (v & 0x3fffffffu) | 0x40000000u;
-    ((PackedColor&)v).r = 0x62;
-    ((PackedColor&)v).g = 0x60;
+    PackedColor c(0x62, 0x60);
     *(uint32_t*)0x15dacc8 = 0xa077208c;
     *(uint32_t*)0x15daccc = 0;
-    *(uint32_t*)0x15dacd0 = v;
+    *(uint32_t*)0x15dacd0 = *(uint32_t*)&c;
 }
 
 // @ 0x012503b0
 void init_15dabcc()
 {
-    uint32_t v = 0;
-    v = (v & 0x3fffffffu) | 0x40000000u;
-    ((PackedColor&)v).r = 0x62;
-    ((PackedColor&)v).g = 0x60;
+    PackedColor c(0x62, 0x60);
     *(uint32_t*)0x15dabcc = 0x6b2c0771;
     *(uint32_t*)0x15dabd0 = 0;
-    *(uint32_t*)0x15dabd4 = v;
+    *(uint32_t*)0x15dabd4 = *(uint32_t*)&c;
 }
 
 // @ 0x01259610
@@ -308,11 +316,8 @@ void init_15de138()
 // @ 0x0125dbc0
 void init_15de57c()
 {
-    uint32_t v = 0;
-    v = (v & 0x3fffffffu) | 0x40000000u;
-    ((PackedColor&)v).r = 0;
-    ((PackedColor&)v).g = 0x22;
-    *(uint32_t*)0x15de57c = v;
+    PackedColor c(0, 0x22);
+    *(uint32_t*)0x15de57c = *(uint32_t*)&c;
 }
 
 // @ 0x0125dc40

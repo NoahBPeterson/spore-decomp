@@ -1,4 +1,3 @@
-005c5df0 32  cSPPalette::FindCategory: complete; loop var kept in eax instead of ecx
 005c53c0 914  cSPPaletteCategoryUI::Init: complete; vcall register choice (eax/edx swap), 4-byte frame difference
 005c5c50 53  cSPPalette::CountItems: complete; param slot reuse for the unassigned-count local
 005c5cc0 227  cSPPalette::AllItemsListed: complete; register allocation of page/key pointer

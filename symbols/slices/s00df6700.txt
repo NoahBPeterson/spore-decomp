@@ -1,2 +1,6 @@
+00df6700 ?FUN_00df6700@WinA@@QAEXPAX@Z  # WinA::FUN_00df6700 migrated from s00df6700 (verbatim, slice spelling)
+00df6740 ?FUN_00df6740@WinA@@QAEXXZ  # WinA::FUN_00df6740 migrated from s00df6700 (verbatim, slice spelling)
 00df6850 ?FUN_00df6850@WinA@@QAE_NPAURefVt@@@Z  # WinA::FUN_00df6850 migrated from s00df6700 (verbatim, slice spelling)
 00df68c0 ?FUN_00df68c0@WinA@@QAE_NIPAX@Z  # WinA::FUN_00df68c0 migrated from s00df6700 (verbatim, slice spelling)
+00df6980 ?FUN_00df6980@WinB@@QAEXXZ  # WinB::FUN_00df6980 migrated from s00df6700 (verbatim, slice spelling)
+00df6c40 ?FUN_00df6c40@WinB@@QAEXXZ  # WinB::FUN_00df6c40 migrated from s00df6700 (verbatim, slice spelling)

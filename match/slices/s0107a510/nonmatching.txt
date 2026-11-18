@@ -1,5 +1,4 @@
 0107a5b0 250 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 250 bytes - tool widget helper not reconstructed.
 0107ac90 339 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 339 bytes - tool widget helper not reconstructed.
-0107af00 152 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 152 bytes - tool widget helper not reconstructed.
 0107afa0 377 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 377 bytes - tool widget helper not reconstructed.
 0107b120 317 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 317 bytes - cSPUITools::GetToolAvailability not reconstructed.

@@ -1163,8 +1163,7 @@ bool cSimulatorUniverse::RemoveRaid(int param1, int pNoun, int pEmpire)
     if (!mgr)
         return false;
     if (pNoun) {
-        cGameNounManager* nouns = ((cGameNounOwner*)pNoun)->GetNounManager();
-        void* avatar = nouns->GetAvatar();
+        void* avatar = ((cGameNounOwner*)pNoun)->GetNounManager()->GetAvatar();
         cStarManager* stars = StarManager(avatar);
         void* empire = stars->GetEmpireByID();
         IMission* mission = ((cSPMissionManager*)mgr)->CreateMissionFromID(0xa4b0a2df, pNoun, empire, 0);

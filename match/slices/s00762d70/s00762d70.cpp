@@ -220,29 +220,32 @@ void Map762fa0::Append(const void* key) {
 
 // ===========================================================================
 // @ 0x00763100  ctor: base vptr + zeroed fields, then derived vptr
-struct IUnknown32 {
-    virtual void u0(); virtual void u1(); virtual void u2();
-};
 struct AtomicInt {
     int v;
     int operator=(int x) { return _InterlockedExchange((volatile long*)&v, x); }
 };
-struct Resource : IUnknown32 {
+struct Resource {
+    virtual void u0(); virtual void u1(); virtual void u2();
     AtomicInt mRefCount;      // +0x4
     int mKey0, mKey1, mKey2;  // +0x8
-    Resource() { mRefCount = 0; mKey0 = 0; mKey1 = 0; mKey2 = 0; }
-};
-struct cResourceBase : Resource {
     int* mReleaseCallback;    // +0x14
-    cResourceBase() { mReleaseCallback = 0; }
+    Resource() { mRefCount = 0; mKey0 = 0; mKey1 = 0; mKey2 = 0; mReleaseCallback = 0; }
+    // The base's destructor is virtual: that is what gives the derived destructor its EH frame,
+    // the saved `this` slot, and the base vptr store after the member destruction.
+    virtual ~Resource() {}
 };
-struct CEditorRes : cResourceBase {
+void __cdecl EditorResFree(void* p) throw();   // 0x00f47380
+struct CEditorRes : Resource {
     RefVec mRefs;             // +0x18
+    static void operator delete(void* p) throw() { EditorResFree(p); }
     CEditorRes();
-    ~CEditorRes() {}
+    ~CEditorRes();
 };
 CEditorRes::CEditorRes() {}
+CEditorRes::~CEditorRes() {}
+// @ 0x007631f0  CEditorRes compiler-generated scalar deleting destructor (??_G)
 void DeleteEditorRes(CEditorRes* p) { delete p; }
+
 
 // ===========================================================================
 // @ 0x00763250  interlocked refcount release with deferred deletion
@@ -272,6 +275,7 @@ int __fastcall Release763250(void* self) {
     }
     return n;
 }
+
 
 // ===========================================================================
 // @ 0x007632f0

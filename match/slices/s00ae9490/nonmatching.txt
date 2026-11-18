@@ -11,7 +11,6 @@
 00ae9680 101  E12::Write: complete.  Equiv UNSUPPORTED (harness cannot construct a valid
                stream object: 398/400 inputs fault on read).  No behavioural mismatch seen.
 00ae9700 109  E12::Read: complete.  Equiv UNSUPPORTED (394/400 inputs fault on read).
-00ae97e0  55  copy_addref: complete.  Equiv WEAK 29.4% coverage (31 valid inputs), no mismatch.
 00ae9870  79  move_assign: complete.  Equiv UNSUPPORTED (all inputs fault: the generated
                source range is not a mapped E12 array).
 00ae98d0  86  move_backward: complete.  Equiv UNSUPPORTED (all inputs fault, as above).
@@ -20,7 +19,6 @@
 00ae9b90   6  SpaceTool::Select: complete; only branch layout and the count computation
                differ.  Equiv WEAK 26.8% coverage.
 00ae9c90  27  FUN_00ae9c90: complete.  Equiv UNSUPPORTED (all inputs fault on read).
-00ae9d40  81  Entry::Differs: complete.  Equiv PASS, 62.9% coverage, no mismatch.
 00ae9e60  47  write_vec: complete.  Equiv UNSUPPORTED (stream/vector inputs fault).
 00ae9f10  44  SpaceTool::MatchesCiv: complete.  Equiv WEAK 33.3% coverage.
 00ae9f50 386  SpaceTool::OnShutdown0: complete (kept noinline).  Equiv WEAK 7.1% coverage

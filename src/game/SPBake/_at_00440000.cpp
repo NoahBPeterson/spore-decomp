@@ -316,11 +316,11 @@ void cSPEditorBlock_s0044_8380::UpdateEffectsMask()
 namespace SP {
 void cSPEditorBlock_s0044_8380::InitDeformAnimationsA()
 {
-    void* pModel = mModel;
+    void* model = mModel;
     Key3 key = { 0, 0, 0 };
     key.a = (int)mInstance;
     key.c = (int)mGroup;
-    sub_458f60(pModel, mModelWorld, key, 1);
+    sub_458f60(model, mModelWorld, key, 1);
 }
 }  // namespace SP
 

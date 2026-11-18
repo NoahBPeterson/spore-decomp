@@ -66,10 +66,14 @@ struct W2820 {
     void set(Pair*, Pair*, Pair*, Pair*, float);
 };
 struct IObj2 { virtual int AddRef(); virtual int Release(); };
-struct B2890 { virtual int AddRef(); virtual int Release(); };
+struct B2890 { virtual int AddRef(); virtual int Release(); ~B2890() {} };
+struct D2890Ref {
+    IObj2* mp;
+    ~D2890Ref() { if (mp) mp->Release(); }
+};
 struct D2890 : B2890 {
-    void* mObj;                                     // +0x10? (relative to +0x10 of full object)
     char pad[0xc];
+    D2890Ref mObj;                                  // +0x10
     virtual int AddRef();
     virtual ~D2890();
 };
@@ -1032,6 +1036,7 @@ struct AbilityA : Base0 {
 };
 struct AtomicLong {
     volatile long mn;
+    long Add(long v) { return _InterlockedExchangeAdd(&mn, v); }
 };
 static inline long AtomicAdd(volatile long* p, long v) { return _InterlockedExchangeAdd(p, v); }
 struct RcObj { char pad[8]; AtomicLong rc; };
@@ -1040,10 +1045,10 @@ struct AtomicPtr {
     ~AtomicPtr() {
         if (p) {
             AtomicLong* c = &p->rc;
-            AtomicAdd(&c->mn, -1);
-            long v = AtomicAdd(&c->mn, 0);
-            if (v < 1) AtomicAdd(&c->mn, 1);
-            else AtomicAdd(&c->mn, 0);
+            _InterlockedDecrement(&c->mn);
+            long v = c->Add(0);
+            if (v < 1) c->Add(1);
+            else c->Add(0);
         }
     }
 };
@@ -1315,6 +1320,24 @@ struct RefVec_s007b_87f0 {  // 0041eb80 = ~RefVector
     void Destroy();
 };
 struct IRel { virtual void v0(); virtual void Release(); };
+// the destructor's view of cFilterRes: two bases (vtables 0x13eb938 / 0x13ec458 restored on exit), two released
+// references at +0xa4 / +0xa8 and the reference vector at +0xac, destroyed by its out-of-line destructor
+struct cFilterResBase0 { virtual void Slot0(); ~cFilterResBase0() {} };
+struct cFilterResBase1 { virtual void Slot0(); ~cFilterResBase1() {} };
+struct cFilterResRef {
+    IRel* mp;
+    ~cFilterResRef() { if (mp) mp->Release(); }
+};
+struct cFilterResVec { void* mBegin; void* mEnd; void* mCap; ~cFilterResVec(); };
+struct cFilterResObj : cFilterResBase0, cFilterResBase1 {
+    int m08, m0c, m10;
+    char pad14[0x94 - 0x14];
+    int m94, m98, m9c, ma0;
+    cFilterResRef ma4;                  // +0xa4
+    cFilterResRef ma8;                  // +0xa8
+    cFilterResVec mac;                  // +0xac
+    ~cFilterResObj();
+};
 struct cFilterRes {
     void** vtbl0;                       // +0
     void** vtbl1;                       // +4
@@ -1330,7 +1353,6 @@ struct cFilterRes {
     char padc5[0xd8 - 0xc5];
     char md8;
     cFilterRes* Ctor();
-    void Dtor();
 };
 struct cViewer_s007b_87f0 {
     char pad[0x174];
@@ -4666,7 +4688,8 @@ void W2820::set(Pair* pa, Pair* pb, Pair* pc, Pair* pd, float v)
 
 // @ 0x007b2890
 D2890::~D2890()
-{ if (mObj) ((IObj2*)mObj)->Release(); }
+{
+}
 
 // @ 0x007b2900
 D2900::~D2900()
@@ -5869,15 +5892,8 @@ cFilterRes* cFilterRes::Ctor()
 }
 
 // @ 0x007b8be0
-void cFilterRes::Dtor()
+cFilterResObj::~cFilterResObj()
 {
-    vtbl0 = g_vtbl_1410024;
-    vtbl1 = g_vtbl_1410014;
-    mac.Destroy();
-    if (ma8) ma8->Release();
-    if (ma4) ma4->Release();
-    vtbl0 = g_vtbl_13eb938;
-    vtbl1 = g_vtbl_13ec458;
 }
 
 // @ 0x007b8cb0

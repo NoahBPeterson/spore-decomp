@@ -5,3 +5,4 @@ slices/s010e1340/s010e1340.cpp  ?cleanup@hkBvTreeAgent@@UAEXXZ  010e1d30  /vc71 
 slices/s010e1340/s010e1340.cpp  ?invalidateTim@hkBvTreeAgent@@UAEXAAUhkCollisionInput@@@Z  010e1d70  /vc71 /O2 /MD /Gy /TP
 slices/s010e1340/s010e1340.cpp  ?getPenetrations@?$hkSymmetricAgent@VhkMoppAgent@@@@UAEXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdBodyPairCollector@@@Z  010e1aa0  /vc71 /O2 /MD /Gy /TP
 slices/s010e1340/s010e1340.cpp  ??1hkBvTreeAgent@@UAE@XZ  010e1a50  /vc71 /O2 /MD /Gy /TP
+slices/s010e1340/s010e1340.cpp  ??_GhkShapeCollectionAgent@@UAEPAXI@Z  010e1380  /vc71 /O2 /MD /Gy /TP

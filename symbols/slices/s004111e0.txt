@@ -1,2 +1,2 @@
-004111e0 EditorPanel_PostSelectionMessages  # posts msgs 0x4d18324/0x695e243 via "Editor" allocs
-00411890 EditorPanel_CommitAndReset  # posts 0x695e243 msg then resets preloader/state
+004111e0 ?PostSelectionMessages@Panel_s0041_11e0@SendSel@@QAEXPAUParams@2@MM@Z  # Panel_s0041_11e0::PostSelectionMessages migrated from s004111e0 (verbatim, slice spelling)
+00411890 ?CommitAndReset@Panel_s0041_11e0@ResetSel@@QAEX_N@Z  # Panel_s0041_11e0::CommitAndReset migrated from s004111e0 (verbatim, slice spelling)

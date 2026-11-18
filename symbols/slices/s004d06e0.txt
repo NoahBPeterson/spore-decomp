@@ -5,7 +5,7 @@
 004d0ac0 eastl::uninitialized_move<Rec14*>  # byte-exact
 004d0b20 eastl::copy_backward<Vec4*>  # byte-exact
 004d0b90 eastl::uninitialized_copy_ptr<Word32*>  # byte-exact
-004d0c20 eastl::hashtable::DoFreeNode  # fixed_hashtable_allocator::deallocate inlined; byte-exact
+004d0c20 ?DoFreeNode@hashtable_s004d_06e0@eastl@@QAEXPAUHashNode_s004d_06e0@2@@Z  # hashtable_s004d_06e0::DoFreeNode migrated from s004d06e0 (verbatim, slice spelling)
 004d0c90 eastl::uninitialized_copy_impl<generic_iterator<const Elem34*>>  # byte-exact
 004d0d40 eastl::uninitialized_fill_n_impl<generic_iterator<Elem34*>>  # byte-exact
 004d0dd0 eastl::uninitialized_copy_impl<generic_iterator<const Rec14*>>  # byte-exact
@@ -13,9 +13,29 @@
 004d0f30 eastl::uninitialized_move_start<Rec14*>  # byte-exact
 004d0f60 eastl::uninitialized_copy_impl<generic_iterator<const Word32*>>  # byte-exact
 004d0fd0 eastl::uninitialized_fill_n_impl<generic_iterator<Word32*>>  # byte-exact
-004d1030 Elem34::operator=  # Vector3 + fixed_vector<uint32_t,4> member-wise assign; byte-exact
+004d1030 ??4Elem34_s004d_06e0@eastl@@QAEAAU01@ABU01@@Z  # Elem34_s004d_06e0::operator= migrated from s004d06e0 (verbatim, slice spelling)
 004d10b0 eastl::uninitialized_move_impl<false,Elem34*,Elem34*>::do_move_start  # byte-exact
 004d1130 eastl::uninitialized_move_impl<false,Elem34*,Elem34*>::do_move_commit  # byte-exact
 004d11a0 eastl::uninitialized_move_impl<false,Rec14*,Rec14*>::do_move_start  # byte-exact
 004d1240 eastl::copy<generic_iterator<const Word32*>, generic_iterator<Word32*>>  # memmove path; byte-exact
+004d12a0 ?GetSkinLevelValue@@YAMH@Z  # GetSkinLevelValue migrated from s004d06e0 (verbatim, slice spelling)
+004d1370 ?GetEditorConfigValue@@YAII@Z  # GetEditorConfigValue migrated from s004d06e0 (verbatim, slice spelling)
 004d1470 ?GetPaintUV@@YA_NPAUcSkinPaintTable@@IPAM1@Z  # GetPaintUV migrated from s004d06e0 (verbatim, slice spelling)
+004d1510 ?GetBounds@@YA_NIIPAUBBox@@@Z  # GetBounds migrated from s004d06e0 (verbatim, slice spelling)
+004d06e0 ??$DoAssignFromIterator@PBE@?$vector_s004d_06e0@E@eastl@@QAEXPBE0Urandom_access_iterator_tag@1@@Z  # migrated from s004d06e0 (agent-fixed)
+004d0960 ??$uninitialized_copy_ptr_s004d_06e0@PAU?$pair_s004c_d1b0@HH@eastl@@PAU12@PAU12@@eastl@@YAPAU?$pair_s004c_d1b0@HH@0@PAU10@00@Z  # migrated from s004d06e0 (agent-fixed)
+004d0a40 ??$uninitialized_move_s004d_06e0@PAUElem34_s004d_06e0@eastl@@PAU12@@eastl@@YAPAUElem34_s004d_06e0@0@PAU10@00@Z  # migrated from s004d06e0 (agent-fixed)
+004d0ac0 ??$uninitialized_move_s004d_06e0@PAURec14_s004d_06e0@eastl@@PAU12@@eastl@@YAPAURec14_s004d_06e0@0@PAU10@00@Z  # migrated from s004d06e0 (agent-fixed)
+004d0b20 ??$copy_backward_s004d_06e0@PAUVec4_s004d_06e0@eastl@@PAU12@@eastl@@YAPAUVec4_s004d_06e0@0@PAU10@00@Z  # migrated from s004d06e0 (agent-fixed)
+004d0b90 ??$uninitialized_copy_ptr_s004d_06e0@PAUWord32@eastl@@PAU12@PAU12@@eastl@@YAPAUWord32@0@PAU10@00@Z  # migrated from s004d06e0 (agent-fixed)
+004d0c90 ??$uninitialized_copy_impl_s004d_06e0@V?$generic_iterator_s004d_06e0@PBUElem34_s004d_06e0@eastl@@X@eastl@@V?$generic_iterator_s004d_06e0@PAUElem34_s004d_06e0@eastl@@X@2@@eastl@@YA?AV?$generic_iterator_s004d_06e0@PAUElem34_s004d_06e0@eastl@@X@0@V?$generic_iterator_s004d_06e0@PBUElem34_s004d_06e0@eastl@@X@0@0V10@Ufalse_type@0@@Z  # migrated from s004d06e0 (agent-fixed)
+004d0d40 ??$uninitialized_fill_n_impl_s004d_06e0@V?$generic_iterator_s004d_06e0@PAUElem34_s004d_06e0@eastl@@X@eastl@@IUElem34_s004d_06e0@2@@eastl@@YAXV?$generic_iterator_s004d_06e0@PAUElem34_s004d_06e0@eastl@@X@0@IABUElem34_s004d_06e0@0@Ufalse_type@0@@Z  # migrated from s004d06e0 (agent-fixed)
+004d0dd0 ??$uninitialized_copy_impl_s004d_06e0@V?$generic_iterator_s004d_06e0@PBURec14_s004d_06e0@eastl@@X@eastl@@V?$generic_iterator_s004d_06e0@PAURec14_s004d_06e0@eastl@@X@2@@eastl@@YA?AV?$generic_iterator_s004d_06e0@PAURec14_s004d_06e0@eastl@@X@0@V?$generic_iterator_s004d_06e0@PBURec14_s004d_06e0@eastl@@X@0@0V10@Ufalse_type@0@@Z  # migrated from s004d06e0 (agent-fixed)
+004d0e90 ??$uninitialized_fill_n_impl_s004d_06e0@V?$generic_iterator_s004d_06e0@PAURec14_s004d_06e0@eastl@@X@eastl@@IURec14_s004d_06e0@2@@eastl@@YAXV?$generic_iterator_s004d_06e0@PAURec14_s004d_06e0@eastl@@X@0@IABURec14_s004d_06e0@0@Ufalse_type@0@@Z  # migrated from s004d06e0 (agent-fixed)
+004d0f30 ??$uninitialized_move_start_s004d_06e0@PAURec14_s004d_06e0@eastl@@PAU12@@eastl@@YAPAURec14_s004d_06e0@0@PAU10@00@Z  # migrated from s004d06e0 (agent-fixed)
+004d0f60 ??$uninitialized_copy_impl_s004d_06e0@V?$generic_iterator_s004d_06e0@PBUWord32@eastl@@X@eastl@@V?$generic_iterator_s004d_06e0@PAUWord32@eastl@@X@2@@eastl@@YA?AV?$generic_iterator_s004d_06e0@PAUWord32@eastl@@X@0@V?$generic_iterator_s004d_06e0@PBUWord32@eastl@@X@0@0V10@Ufalse_type@0@@Z  # migrated from s004d06e0 (agent-fixed)
+004d0fd0 ??$uninitialized_fill_n_impl_s004d_06e0@V?$generic_iterator_s004d_06e0@PAUWord32@eastl@@X@eastl@@IUWord32@2@@eastl@@YAXV?$generic_iterator_s004d_06e0@PAUWord32@eastl@@X@0@IABUWord32@0@Ufalse_type@0@@Z  # migrated from s004d06e0 (agent-fixed)
+004d10b0 ?do_move_start@?$uninitialized_move_impl@$0A@PAUElem34_s004d_06e0@eastl@@PAU12@@eastl@@SAPAUElem34_s004d_06e0@2@PAU32@00@Z  # migrated from s004d06e0 (agent-fixed)
+004d1130 ?do_move_commit@?$uninitialized_move_impl@$0A@PAUElem34_s004d_06e0@eastl@@PAU12@@eastl@@SAPAUElem34_s004d_06e0@2@PAU32@00@Z  # migrated from s004d06e0 (agent-fixed)
+004d11a0 ?do_move_start@?$uninitialized_move_impl@$0A@PAURec14_s004d_06e0@eastl@@PAU12@@eastl@@SAPAURec14_s004d_06e0@2@PAU32@00@Z  # migrated from s004d06e0 (agent-fixed)
+004d1240 ??$copy_s004d_06e0@V?$generic_iterator_s004d_06e0@PBUWord32@eastl@@X@eastl@@V?$generic_iterator_s004d_06e0@PAUWord32@eastl@@X@2@@eastl@@YA?AV?$generic_iterator_s004d_06e0@PAUWord32@eastl@@X@0@V?$generic_iterator_s004d_06e0@PBUWord32@eastl@@X@0@0V10@@Z  # migrated from s004d06e0 (agent-fixed)

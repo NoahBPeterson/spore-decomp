@@ -1212,26 +1212,26 @@ struct cGameData {
     virtual void       v08();                               // +0x08
     virtual cGameData* Cast(uint32_t nType);                // +0x0c
 };
-template <class T>
-struct AutoRefCount {
-    T* mpObject;                                            // +0x00
-
-    AutoRefCount() : mpObject(0) {}
-    AutoRefCount(T* pObject) : mpObject(pObject) { if (mpObject) mpObject->AddRef(); }
-    AutoRefCount(const AutoRefCount& rOther) : mpObject(rOther.mpObject) { if (mpObject) mpObject->AddRef(); }
-    ~AutoRefCount() { if (mpObject) mpObject->Release(); }
-
-    // Copy-assignment used by the banner vector: stores the pointer and takes a
-    // reference (the destination is always a fresh slot, so nothing to release).
-    AutoRefCount& operator=(const AutoRefCount& rOther)
-    {
-        mpObject = rOther.mpObject;
-        if (mpObject) mpObject->AddRef();
-        return *this;
+static inline void AppendBanner(cVec<EA::AutoRefCount<cGameData> >& entries, cGameData* object)
+{
+    EA::AutoRefCount<cGameData> value;
+    value.mpObject = object;
+    if (object)
+        object->AddRef();
+    if (entries.mpEnd < entries.mpCapacity) {
+        EA::AutoRefCount<cGameData>* slot = entries.mpEnd++;
+        if (slot) {
+            slot->mpObject = object;
+            if (object)
+                object->AddRef();
+        }
+    } else {
+        entries.DoInsertValue(entries.mpEnd, value);
+        object = value.mpObject;
     }
-
-    T* operator->() const { return mpObject; }
-};
+    if (object)
+        object->Release();
+}
 struct cPlanet_s00c4_a850 {
     char     mPad000[0x13c];                                // +0x000
     void*    mpData13C;                                     // +0x13c
@@ -1550,7 +1550,7 @@ struct cMissionBalance : cSPMission_s00c4_a850 {
 };
 struct cBannerListHost {
     char mPad000[0x1c];                                     // +0x000
-    cVec<AutoRefCount<cGameData> > mEntries;                // +0x01c
+    cVec<EA::AutoRefCount<cGameData> > mEntries;                // +0x01c
     bool ReadBannerList(void* pArchive);                    // 0x00c4a850
 };
 namespace Simulator {
@@ -1623,11 +1623,17 @@ bool   __fastcall FUN_00bb9c30(void* pThis);                            // 0x00b
 void   __cdecl FUN_00e39ab0(uint32_t nKey, int32_t nFlags, ResourceKey_s00c4_a850* pOut3, ResourceKey_s00c4_a850* pOut2,
                             void* pData, int32_t nFlags2, ResourceKey_s00c4_a850* pOut1, ResourceKey_s00c4_a850* pOut0);   // 0x00e39ab0
 void   __cdecl FUN_00f27e00(ResourceKey_s00c4_a850* pKey);                         // 0x00f27e00
-struct cVarListSerializer {
-    char mData[0xa08];                                      // +0x000
-
-    void Construct(void* pOwner, uint32_t nKey, uint32_t nID);   // 0x00692f90
-    bool Serialize(void* pArchive);                         // 0x00693e10
+extern char gMissionSerializerList; // 0x01574c48
+struct MissionStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // +0x18
+};
+struct MissionArchive {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual MissionStreamHolder* GetStreamHolder(); // +0x20
 };
 struct cIOStream;
 struct cStreamHost {
@@ -1969,10 +1975,7 @@ struct cSpaceRelationshipTuning {
 };
 cSpaceRelationshipTuning* __cdecl GetSpaceRelationshipTuning();  // 0x010407c0
 void  __cdecl OperatorDeleteArray(void* p);              // 0x00f47380
-struct cVarListSerializer_s00c4_5860 {
-    void Ctor(void* self, void* mission, const char* name, u32 id);  // 0x00692f90
-    u8   Serialize(void* stream);                                    // 0x00692900
-};
+
 // ---- items of slice s00c45860 end
 
 // @ 0x00b9c630
@@ -2644,23 +2647,28 @@ void cSPMission_s00c4_5860::RemoveToolVector1a8()
     }
 }
 
+static inline void WriteMissionWord(MissionStreamHolder* __restrict holder, i32 value)
+{
+    void* output = holder->GetStream();
+    WriteUint32(output, &value, 1, 0);
+}
+
 // @ 0x00c46310
 u8 cSPMission_s00c4_5860::SerializeVarList(void* stream)
 {
-    cVarListSerializer_s00c4_5860 ser;
-    ser.Ctor(&ser, this, "Mission", 0x1a80d26);
-    u8 result = ser.Serialize(stream);
+    SP::cVarListSerializer ser(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&gMissionSerializerList),
+        SP::cVarListSerializer::kSignature);
+    u8 result = ser.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream));
     i32 n = (i32)(mVec1c.mpEnd - mVec1c.mpBegin);
-    void* o = (*(void*(__thiscall**)(void*))((char*)*(void**)stream + 0x20))(stream);
-    void* s = (*(void*(__thiscall**)(void*))((char*)*(void**)o + 0x18))(o);
-    i32 count = n;
-    WriteUint32(s, &count, 1, 0);
+    MissionStreamHolder* __restrict holder =
+        static_cast<MissionArchive*>(stream)->GetStreamHolder();
+    WriteMissionWord(holder, n);
     for (i32 i = 0; i < n; ++i) {
         i32 field = *(i32*)((char*)mVec1c.mpBegin[i] + 0x70);
-        void* o2 = (*(void*(__thiscall**)(void*))((char*)*(void**)stream + 0x20))(stream);
-        void* s2 = (*(void*(__thiscall**)(void*))((char*)*(void**)o2 + 0x18))(o2);
-        i32 v = field;
-        WriteUint32(s2, &v, 1, 0);
+        MissionStreamHolder* __restrict entryHolder =
+            static_cast<MissionArchive*>(stream)->GetStreamHolder();
+        WriteMissionWord(entryHolder, field);
     }
     return result;
 }
@@ -2954,8 +2962,8 @@ void __thiscall cSPMission_s00c4_6ab0::FUN_00c46ab0()
     vec->resize(8);
     *(u32*)(vec->mData + 0x1c) = mMissionId;
     u32 shifted = mFlags >> 3;
-    _ReadWriteBarrier();
-    if ((shifted & 1) != 0) {
+    bool requiresCheck = (shifted & 1) != 0;
+    if (requiresCheck) {
         cSPMissionManager* mm = GetMissionManager((void*)(uintptr_t)mMissionId);
         mm->Event();
     }
@@ -4487,27 +4495,22 @@ bool SP::cSPMission::HandleMessage(unsigned int msg, void * m)
 // @ 0x00c4a850
 bool cBannerListHost::ReadBannerList(void* pArchive)
 {
-    cVarListSerializer serializer;
-    serializer.Construct(this, 0x1574c48, 0x1a80d26);
-    bool bResult = serializer.Serialize(pArchive);
-
-    cArchive* pArchiveObject = (cArchive*)pArchive;
-    cStreamHost* pHost = ((cArchiveVtbl*)pArchiveObject->mpVtbl)->pGetStreamHost(pArchiveObject);
-    cIOStream* pStream = ((cStreamHostVtbl*)pHost->mpVtbl)->pGetStream(pHost);
-
-    int32_t nCount = 0;
-    EA_IO_ReadInt32(pStream, &nCount, 1, 0);
-    for (int32_t i = 0; i < nCount; ++i) {
-        cStreamHost* pEntryHost = ((cArchiveVtbl*)pArchiveObject->mpVtbl)->pGetStreamHost(pArchiveObject);
-        cIOStream* pEntryStream = ((cStreamHostVtbl*)pEntryHost->mpVtbl)->pGetStream(pEntryHost);
-
-        int32_t nID = 0;
-        EA_IO_ReadInt32(pEntryStream, &nID, 1, 0);
-
-        AutoRefCount<cGameData> pBanner = StarManager((uint32_t)nID)->GetBannerByID((uint32_t)nID);
-        mEntries.push_back(pBanner);
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&gMissionSerializerList),
+        SP::cVarListSerializer::kSignature);
+    bool result = serializer.Serialize(*static_cast<SP::cIObjectDatabaseIStream*>(pArchive));
+    MissionArchive* archive = static_cast<MissionArchive*>(pArchive);
+    void* input = archive->GetStreamHolder()->GetStream();
+    int32_t count;
+    EA_IO_ReadInt32(input, &count, 1, 0);
+    for (int32_t i = 0; i < count; ++i) {
+        void* entryInput = archive->GetStreamHolder()->GetStream();
+        int32_t id;
+        EA_IO_ReadInt32(entryInput, &id, 1, 0);
+        AppendBanner(mEntries,
+            static_cast<cStarManager_s00c4_a850*>(SP_StarManager())->GetBannerByID((uint32_t)id));
     }
-    return bResult;
+    return result;
 }
 
 // @ 0x00c4a980

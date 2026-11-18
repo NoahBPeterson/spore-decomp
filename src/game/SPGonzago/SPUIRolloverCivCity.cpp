@@ -891,8 +891,7 @@ void UI::CursorAttachment::Dispose()
     if (mFlag44) {
         IWindow_s00e2_9c80* root = GetRootWindow();
         IWindow_s00e2_9c80* parent = root->GetParent();
-        IWindow_s00e2_9c80* root2 = GetRootWindow();
-        parent->RemoveChild(root2);
+        parent->RemoveChild(GetRootWindow());
     }
     func24h();
 }

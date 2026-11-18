@@ -15,3 +15,7 @@
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?DoToolAction@cSPGenesisDeviceToolStrategy@@UAE_NPAVcSpaceToolData_s0105_b960@@ABUVector3_s0105_b960@@HH@Z  0105bf50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?AttachToolEffect@cSPToolStrategy@@QAEXPBXH@Z  01053d50  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPToolStrategies.cpp  ?CanUseToolAtLocation@cSPGetOutOfUFOToolStrategy@@QAE_NHHH@Z  010540b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?CastToAnimalCargoInfo@@YAPAXPAUIItemHolder@@@Z  010536e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?CastToPlantCargoInfo@@YAPAXPAUIItemHolder@@@Z  01053700  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?ActivateTool@cSPGetOutOfUFOToolStrategy@@QAE_NH@Z  010540d0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPToolStrategies.cpp  ?AdjustCostPercent@cSPEnergyRepairToolStrategy@@QAEHH@Z  010535e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

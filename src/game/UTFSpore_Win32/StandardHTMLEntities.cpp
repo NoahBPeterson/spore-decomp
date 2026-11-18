@@ -80,11 +80,13 @@ namespace DOM {
 wchar_t LookupStandardHTMLEntity(wchar_t const * entity)
 {
     void* result[2];
+    wchar_t value = 0;
+    result[0] = 0;
     Fn8e5480(result, gEntityTable, gEntityNumbers, &entity);
     if ((char*)result[0] + 8 == (char*)result[1]) {
         return *(unsigned short*)((char*)result[0] + 4);
     }
-    return 0;
+    return value;
 }
 }
 }

@@ -237,7 +237,7 @@ void FUN_0120c930(Frame fp)
 // @ 0x0120c9c0  (FuncInfo 0x014fa0c8)
 void FUN_0120c9c0(Frame fp)
 {
-    CleanPtr<T_554b10>(fp, -0x20);
+    Clean<T_554b10>(fp, -0x20);
     Clean<T_933960>(fp, -0x1c);
 }
 
@@ -394,7 +394,7 @@ void FUN_0120d750(Frame fp)
 // @ 0x0120d840  (FuncInfo 0x014fb164)
 void FUN_0120d840(Frame fp)
 {
-    CleanPtr<T_554b10>(fp, -0x20);
+    Clean<T_554b10>(fp, -0x20);
     Clean<T_530670>(fp, -0x1c);
 }
 

@@ -10,10 +10,10 @@
 // 2x2 box filter of byte pixels, averaging two rows of `width` pixels.
 void FUN_007ace40(uint8_t* dest, int destStride, uint8_t* src, int srcStride, int width, int height)
 {
-    uint8_t* d = dest;
     uint8_t* s2 = src + srcStride;
+    uint8_t* d = dest;
     int step = (srcStride - width) * 2;
-    int pad = destStride - width;
+    destStride -= width;
     do {
         int n = width;
         do {
@@ -22,7 +22,7 @@ void FUN_007ace40(uint8_t* dest, int destStride, uint8_t* src, int srcStride, in
             src += 2;
             s2 += 2;
         } while (--n);
-        d += pad;
+        d += destStride;
         src += step;
         s2 += step;
     } while (--height);
@@ -33,6 +33,7 @@ void FUN_007ace40(uint8_t* dest, int destStride, uint8_t* src, int srcStride, in
 // Vertical 2-tap average of a single byte column.
 void FUN_007aceb0(uint8_t* dest, int destStride, uint8_t* src, int srcStride, int rows)
 {
+    int n = rows;
     uint8_t* d = dest;
     uint8_t* s2 = src + srcStride;
     int step = srcStride * 2;
@@ -41,7 +42,7 @@ void FUN_007aceb0(uint8_t* dest, int destStride, uint8_t* src, int srcStride, in
         d += destStride;
         src += step;
         s2 += step;
-    } while (--rows);
+    } while (--n);
 }
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,7 @@
+00f96370 ?ToggleFlag@cTerrainOverlay@@QAEXXZ  # cTerrainOverlay::ToggleFlag migrated from s00f955f0 (verbatim, slice spelling)
+00f96390 ?HashTerrainDesc@@YAIPAX0@Z  # HashTerrainDesc migrated from s00f955f0 (verbatim, slice spelling)
+00f964a0 ?ClearSlot@cTerrainOverlay@@QAEDXZ  # cTerrainOverlay::ClearSlot migrated from s00f955f0 (verbatim, slice spelling)
+00f964b0 ?ReleaseRef@@YAXPAX@Z  # ReleaseRef migrated from s00f955f0 (verbatim, slice spelling)
+00f964f0 ?Cast@cDynCast@@QAEPAXI@Z  # cDynCast::Cast migrated from s00f955f0 (verbatim, slice spelling)
+00f96520 ?RemoveFromEffectsSystem@cTerrainSphere_s00f9_55f0@@QAEXXZ  # cTerrainSphere_s00f9_55f0::RemoveFromEffectsSystem migrated from s00f955f0 (verbatim, slice spelling)
+00f967d0 ?GetExtents@cGridTool@@QAEPAXPAH00@Z  # cGridTool::GetExtents migrated from s00f955f0 (verbatim, slice spelling)

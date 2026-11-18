@@ -1,5 +1,6 @@
 // Slice s00c71bf0: SP::cPlanet / cVisiblePlanet (retail).
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast.
+#include <intrin.h>
 #include "types.h"
 #include <math.h>
 #include <string.h>
@@ -22,11 +23,25 @@ struct SPTransform {
     Mat3     mRotation;     // +0x14  (9 floats, ends at +0x37)
 };
 
-struct Ser16 { uint32_t a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15; };
+namespace SP { struct cDataSerializerGeneric; }
+struct PlanetSerializationInfo {
+    uint32_t mId;
+    uint32_t mDataSize;
+    bool mbSerialized;
+    void* mpBinderContext;
+    SP::cDataSerializerGeneric* mpSerializer;
+};
+// Retail cVarListSerializer layout, matching the canonical 0xa14-byte class.
 struct SerBuf {
-    Ser16 s0,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14,s15,s16,s17,s18,s19,
-          s20,s21,s22,s23,s24,s25,s26,s27,s28,s29,s30,s31,s32,s33,s34,s35,s36,s37,s38,s39;
-    uint32_t tail0,tail1,tail2,tail3,tail4;
+    PlanetSerializationInfo mDataSerializationInfos[128];
+    int mSerializableVarCount;
+    int mSerializedVarCount;
+    uint32_t mSignature;
+    void* mpObject;
+    SP::cDataSerializerGeneric* mpSerializerList;
+
+    SerBuf(const void*, SP::cDataSerializerGeneric*, uint32_t); // 0x00692f90
+    bool Read(void* stream); // 0x00693e10
 };
 
 extern float g_01693efc, g_01693f00, g_01693f04;
@@ -542,6 +557,7 @@ void* CPlanet::FUN_00c72470(int free)
     *(void**)this = (void*)0x1472480;
     *(void**)((char*)this + 0xd4) = (void*)0x1472428;
     *(void**)((char*)this + 0xd8) = (void*)0x1472414;
+    _ReadWriteBarrier();
     void* q = mpCommon;
     if (q != 0) ((void(__thiscall*)(void*))(*(void***)q)[0xc0 / 4])(q);
     ((void(__thiscall*)(void*))cGameData_dtor_00b184c0)((char*)this + 0xd4);
@@ -740,33 +756,35 @@ void CPlanet::FUN_00c72a70(void* p2, void* p3)
     *(uint32_t**)((char*)this + 8) = (uint32_t*)((char*)nb + (size_t)newcap * 8);
 }
 
+extern SP::cDataSerializerGeneric gPlanetSerializerList; // 0x01578890
+struct PlanetReadBases {
+    bool ReadGameData(void* stream); // 0x00b18600
+    bool ReadSpatial(void* stream); // 0x00c88b00
+};
+struct PlanetReadStarManager {
+    void* FindPlanet(void* id); // 0x00ba6dc0
+    void RegisterPlanet(void* planet); // 0x00badab0
+};
+PlanetReadStarManager* GetPlanetReadStarManager(); // 0x00b3d2a0
+
 // @ 0x00c72b80
 bool CPlanet::FUN_00c72b80(void* p)
 {
     char* self = (char*)this;
-    bool ok;
-    if (!((bool(__thiscall*)(void*, void*))cGameData_Read_00b18600)(self + 0xd4, p)) {
-        ok = false;
-    } else if (!((bool(__thiscall*)(void*, void*))FUN_00c88b00_00)(self, p)) {
-        ok = false;
-    } else ok = true;
-
-    SerBuf buf;
-    ((void(__thiscall*)(void*, void*, void*, int))FUN_00692f90_00)(&buf, self, (void*)0x1578890, 0x1a80d26);
-
-    if (!ok) return false;
-    if (!((bool(__thiscall*)(void*, void*))FUN_00693e10_00)(&buf, p)) return false;
-
-    void* sm = ((void*(__cdecl*)())StarManager_00b3d2a0)();
-    void* newP = ((void*(__thiscall*)(void*, void*))FUN_00ba6dc0_00)(sm, *(void**)(self + 0x140));
-    void* oldP = *(void**)(self + 0x13c);
-    if (newP != oldP) {
-        if (newP != 0) ((void(__thiscall*)(void*))(*(void***)newP)[0])(newP);
-        *(void**)(self + 0x13c) = newP;
-        if (oldP != 0) ((void(__thiscall*)(void*))(*(void***)oldP)[1])(oldP);
+    bool ok = reinterpret_cast<PlanetReadBases*>(self + 0xd4)->ReadGameData(p)
+        && reinterpret_cast<PlanetReadBases*>(self)->ReadSpatial(p);
+    SerBuf buf(this, &gPlanetSerializerList, 0x1a80d26);
+    ok = ok && buf.Read(p);
+    if (ok) {
+        void* newP = GetPlanetReadStarManager()->FindPlanet(*(void**)(self + 0x140));
+        void* oldP = *(void**)(self + 0x13c);
+        if (newP != oldP) {
+            if (newP != 0) ((void(__thiscall*)(void*))(*(void***)newP)[0])(newP);
+            *(void**)(self + 0x13c) = newP;
+            if (oldP != 0) ((void(__thiscall*)(void*))(*(void***)oldP)[1])(oldP);
+        }
+        GetPlanetReadStarManager()->RegisterPlanet(self);
+        FUN_00c72a10(self + 0x15c, *(uint32_t*)(self + 0x16c));
     }
-    void* sm2 = ((void*(__cdecl*)())StarManager_00b3d2a0)();
-    ((void(__thiscall*)(void*, void*))FUN_00badab0_00)(sm2, self);
-    FUN_00c72a10(self + 0x15c, *(uint32_t*)(self + 0x16c));
-    return true;
+    return ok;
 }

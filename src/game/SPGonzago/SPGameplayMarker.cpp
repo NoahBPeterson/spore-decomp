@@ -18,10 +18,6 @@
 #include "SP/cVarListSerializer.h"
 
 // ---- items of slice s00c3daa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void  __cdecl FUN_00692f90(void*, void*, void*, int);          // 0x00692f90 cVarListSerializer::cVarListSerializer
-bool  __cdecl FUN_00692900(void*, void*);                      // 0x00692900 Serialize(out)
-void* __cdecl FUN_00b18590(void*, void*);                      // 0x00b18590 cGameData::Write
-void* __cdecl FUN_00c88a90(void*, void*);                      // 0x00c88a90 cSpatialObject::Write
 bool  __cdecl FUN_0093aa70(void*, void*, int, int);            // 0x0093aa70 WriteUint32
 bool  __cdecl FUN_0093a9d0(void*, void*, int, int);            // 0x0093a9d0 WriteUint16
 struct Fn88670 { void __thiscall f(void*); };                 // 0x00c88670
@@ -31,7 +27,7 @@ struct C3ec00 { void f(int* p); };                             // 0x00c3ec00
 // ---- items of slice s00c3daa0 end
 
 // ---- items of slice s00c3ee20 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern const void* sGameplayMarkerFields;
+extern char sGameplayMarkerFields; // 0x01573ad8
 typedef unsigned int uint;
 #define nullptr 0
 struct Vec3 {
@@ -78,12 +74,37 @@ public:
     virtual void ReadBlock(void* pDest, int nCount);
 };
 void ReadInt32(IOStream* pStream, void* pDest, int nCount, int bFlag);
-class cVarListSerializer {
-public:
-    cVarListSerializer(void* pOwner, const void* pFields, int nFlags);
-    bool Serialize(void* pData);
-    int GetFields(int nFlags);
-    uint8_t mPad00[0x414];
+struct GameplayStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // +0x18
+};
+struct GameplayArchive {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual GameplayStreamHolder* GetStreamHolder(); // +0x20
+    virtual void slot9(); virtual void slot10(); virtual void slot11(); virtual void slot12();
+    virtual void TransferBlock(void* data, unsigned size); // +0x34
+};
+struct GameplayCachedObject {
+    virtual void AddRef(); virtual void Release();
+    virtual void slot2(); virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7(); virtual void slot8(); virtual void slot9(); virtual void slot10();
+    virtual bool IsInvalid(); // +0x2c
+};
+struct GameplayMarkerState {
+    char pad000[0x114];
+    unsigned char nounData[0x88]; // +0x114
+    char pad19c[8];
+    GameplayCachedObject* cachedObject; // +0x1a4
+    char pad1a8[0x1c];
+    bool needsRecreation; // +0x1c4
+};
+void __cdecl GameplayReadInt32(void*, void*, int, int); // 0x0093a780
+void __cdecl GameplayReadUint16(void*, void*, int, int); // 0x0093a700
+struct GameplaySpatialReader {
+    bool Read(SP::cIObjectDatabaseIStream&); // 0x00c88b00
 };
 class cSpatialObject : public IRefCounted {
 public:
@@ -178,6 +199,7 @@ public:
     void Destroy(int bDelete);
     void Shutdown();
     bool Read(void* pData);
+    bool Write(void* pData);
     bool InitFromDefinition(void* pData, int a, int b);
 };
 class cGameNounManager {
@@ -214,68 +236,69 @@ void C3ec00::f(int* p)
 }
 
 // @ 0x00c3ed20
-char __cdecl FUN_00c3ed20(char* self, void* stream)
+bool cGameplayMarker::Write(void* stream)
 {
-    char buf[8];
-    char ser[0x18];
-    typedef void* (__thiscall* M0)(void*);
-    void* s2 = ((M0)(*(void**)(*(char**)stream + 0x20)))(stream);
-    typedef void* (__thiscall* M1)(void*);
-    void* s3 = ((M1)(*(void**)(*(char**)s2 + 0x18)))(s2);
-    *(int*)buf = 0x36be278;
-    FUN_0093aa70(s3, buf, 1, 0);
-
-    char bl = (char)FUN_00b18590(self, stream) & 1;
-    bl &= (char)FUN_00c88a90(self + 0x34, stream);
-
-    void* p1a4 = *(void**)(self + 0x1a4);
-    if (p1a4 != 0) {
-        typedef char(__thiscall* Vf)(void*);
-        if (((Vf)(*(void**)(*(char**)p1a4 + 0x2c)))(p1a4)) {
-            void* q = *(void**)(self + 0x1a4);
-            if (q != 0) {
-                *(void**)(self + 0x1a4) = 0;
-                typedef void(__thiscall* D)(void*);
-                ((D)(*(void**)(*(char**)q + 4)))(q);
-            }
-            *(uint8_t*)(self + 0x1c4) = 1;
-        }
+    GameplayArchive* archive = static_cast<GameplayArchive*>(stream);
+    {
+        GameplayStreamHolder* __restrict holder = archive->GetStreamHolder();
+        uint32_t tag = 0x36be278;
+        void* output = holder->GetStream();
+        FUN_0093aa70(output, &tag, 1, 0);
     }
+    SP::cIObjectDatabaseOStream& outputArchive =
+        *static_cast<SP::cIObjectDatabaseOStream*>(stream);
+    bool result = true;
+    result &= reinterpret_cast<SP::cGameData*>(this)->SP::cGameData::Write(outputArchive);
+    result &= reinterpret_cast<SP::cSpatialObject*>((char*)this + 0x34)->SP::cSpatialObject::Write(outputArchive);
 
-    FUN_00692f90(ser, self, (void*)0x1573ad8, 0x1a80d26);
-    bl &= (char)FUN_00692900(ser, stream);
-
-    typedef void* (__thiscall* N0)(void*);
-    void* n2 = ((N0)(*(void**)(*(char**)stream + 0x20)))(stream);
-    typedef void* (__thiscall* N1)(void*);
-    void* n3 = ((N1)(*(void**)(*(char**)n2 + 0x18)))(n2);
-    *(int*)buf = 0x88;
-    FUN_0093a9d0(n3, buf, 1, 0);
-
-    typedef void(__thiscall* W)(void*, void*, int);
-    ((W)(*(void**)(*(char**)stream + 0x34)))(stream, self + 0x114, 0x88);
-    return bl;
+    GameplayMarkerState* state = reinterpret_cast<GameplayMarkerState*>(this);
+    GameplayCachedObject* cached = state->cachedObject;
+    if (cached && cached->IsInvalid()) {
+        cached = state->cachedObject;
+        if (cached) {
+            state->cachedObject = 0;
+            cached->Release();
+        }
+        state->needsRecreation = true;
+    }
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&sGameplayMarkerFields),
+        SP::cVarListSerializer::kSignature);
+    result &= serializer.Serialize(outputArchive);
+    {
+        GameplayStreamHolder* __restrict holder = archive->GetStreamHolder();
+        uint32_t size = 0x88;
+        void* output = holder->GetStream();
+        FUN_0093a9d0(output, &size, 1, 0);
+    }
+    archive->TransferBlock(state->nounData, 0x88);
+    return result;
 }
 
 // @ 0x00c3ee20
 bool cGameplayMarker::Read(void* pData)
 {
-    IOStream* pStream = ((ISerializer*)pData)->GetStream();
-    uint32_t nType = 0;
-    ReadInt32(pStream->GetStream(), &nType, 1, 0);
-
-    bool bData = cGameData::Read(pData);
-    bool bBase = ReadInteractableSubobject(pData);
-
-    cVarListSerializer serializer(this, sGameplayMarkerFields, 0x1a80d26);
-    bool bFields = serializer.Serialize(pData);
-
-    uint32_t nCount = 0x88;
-    uint32_t nMax = 0x88;
-    uint32_t* pCount = (nCount < 0x89) ? &nCount : &nMax;
-    ((ISerializer*)pData)->ReadBlock(mNounData + 0x50, *pCount ? *pCount : 0);
-
-    return bData && bBase && bFields;
+    GameplayArchive* archive = static_cast<GameplayArchive*>(pData);
+    void* input = archive->GetStreamHolder()->GetStream();
+    uint32_t tag;
+    GameplayReadInt32(input, &tag, 1, 0);
+    SP::cIObjectDatabaseIStream& inputArchive =
+        *static_cast<SP::cIObjectDatabaseIStream*>(pData);
+    bool result = true;
+    result &= reinterpret_cast<SP::cGameData*>(this)->SP::cGameData::Read(inputArchive);
+    result &= reinterpret_cast<GameplaySpatialReader*>((char*)this + 0x34)->Read(inputArchive);
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&sGameplayMarkerFields),
+        SP::cVarListSerializer::kSignature);
+    result &= serializer.Serialize(inputArchive);
+    uint32_t size = 0x88;
+    void* blockInput = archive->GetStreamHolder()->GetStream();
+    GameplayReadUint16(blockInput, &size, 1, 0);
+    uint32_t maxSize = 0x88;
+    const uint16_t* chosen = (uint16_t)maxSize < (uint16_t)size ?
+        reinterpret_cast<const uint16_t*>(&maxSize) : reinterpret_cast<const uint16_t*>(&size);
+    archive->TransferBlock(reinterpret_cast<GameplayMarkerState*>(this)->nounData, *chosen);
+    return result;
 }
 
 // @ 0x00c3ef00

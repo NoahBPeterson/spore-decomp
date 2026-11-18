@@ -11,3 +11,4 @@ slices/s00936090/s00936090.cpp  ??1SharedLibraryRegistry@EA@@UAE@XZ  00936740  /
 slices/s00936090/s00936090.cpp  ?Shutdown@SharedLibraryRegistry@EA@@UAE_NXZ  00936e10  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00936090/s00936090.cpp  ?SetPath@SharedLibrary@EA@@QAE_NPB_W_N@Z  00936950  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00936090/s00936090.cpp  ??0SharedLibraryRegistry@EA@@QAE@XZ  009368f0  /O2 /MD /Gy /EHsc /TP /GS- /GR-
+slices/s00936090/s00936090.cpp  ?scalar_deleting_destructor@SharedLibraryRegistry@EA@@QAEPAXE@Z  00936920  /O2 /MD /Gy /EHsc /TP /GS-

@@ -27,10 +27,32 @@ struct C_802b80 { char data[0x50]; void f(); };
 struct DbgOut { void Output(const char* a, const char* b); void Forward(const char* a); };
 // ---- items of slice s00802a30 end
 
+// Message fields follow EA::UTFWin::Message's retail layout.
+struct DebugConsoleClearMessage {
+  void* mSrc;
+  void* mDst;
+  uint32_t mType;
+  uint32_t mArgs[4];
+};
+class cSPUIDebugConsole {
+public:
+  char mReserved[0x28];
+  void* mpOutputWindow;
+  void Clear();
+};
+
 // @ 0x00802910
-void __cdecl DebugConsole_Clear(void* self)
+void cSPUIDebugConsole::Clear()
 {
-  (void)self;
+  if (mpOutputWindow) {
+    void* window = (char*)mpOutputWindow + 4;
+    DebugConsoleClearMessage message;
+    message.mType = 0x10001;
+    message.mArgs[0] = 2;
+    void* manager = ((void* (__thiscall*)(void*))VFN(window, 0x14))(window);
+    ((void (__thiscall*)(void*, int, void*, DebugConsoleClearMessage*))VFN(manager, 0x18))(
+        manager, 0, window, &message);
+  }
 }
 
 // @ 0x00802950

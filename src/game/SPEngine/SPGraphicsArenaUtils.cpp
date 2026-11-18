@@ -29,28 +29,58 @@ struct Arena {
     void Release();                                           // 0x011e40a0 (rw::core::arena::Arena::Release)
 };
 extern u32   sub_6c24b0(void*, void*, void*, int, int, int, const char*);
-struct EditorResource {
-    void* vtbl;
-    char pad04[0x18];
-    void* field1c;
-    void Cleanup();
+// editor resources: a base with a virtual interface (vtable 0x13eb938) and a reference to an object released through
+// vtable slot 1; the destructors unwind through the reference member and the base, so they build EH frames
+struct EditorResourceBase {
+    virtual void Slot0();
+    ~EditorResourceBase() {}
 };
-struct EditorResource2 {
-    void* vtbl;              // +0x00
+struct IEditorReleasable {
+    virtual void Slot0();
+    virtual void Release();
+};
+struct EditorResourceRef {
+    IEditorReleasable* mp;
+    ~EditorResourceRef() { if (mp != 0) mp->Release(); }
+};
+struct __declspec(novtable) EditorResource : EditorResourceBase {
     char pad04[0x14];
     void* field18;           // +0x18 arena
-    void* field1c;           // +0x1c
+    EditorResourceRef field1c; // +0x1c
+    ~EditorResource();
+};
+struct EditorResource2 : EditorResource {
     void* field20;           // +0x20
     u32   arr24[4];          // +0x24
     u32   arr34[4];          // +0x34
-    void Destroy();
+    ~EditorResource2();
+};
+extern "C" long __cdecl _InterlockedExchange(long volatile* target, long value);
+#pragma intrinsic(_InterlockedExchange)
+// the property list's constructor view: a reference-counted base (vtable 0x13ebcdc, count cleared atomically, fields zeroed; destroyed
+// if the rest throws), then its own vtable and the owner reference at +0x1c taken through vtable slot 0
+struct PropertyListBase {
+    virtual void Slot0();
+    volatile long field04;   // +0x04 (atomic reference count)
+    u32   f08, f0c, f10, f14, f18; // +0x08
+    PropertyListBase() { volatile long* r = &field04; _InterlockedExchange(r, 0); f08 = 0; f0c = 0; f10 = 0; f14 = 0; f18 = 0; }
+    ~PropertyListBase() {}
+};
+struct IPropertyListOwner { virtual void AddRef(); virtual void Release(); };
+struct PropertyListOwnerRef {
+    IPropertyListOwner* mp;
+    PropertyListOwnerRef(void* p) : mp((IPropertyListOwner*)p) { if (p != 0) mp->AddRef(); }
+    ~PropertyListOwnerRef() { if (mp != 0) mp->Release(); }
+};
+struct PropertyListObj : PropertyListBase {
+    PropertyListOwnerRef field1c;  // +0x1c
+    PropertyListObj(void* p);
 };
 struct PropertyList {
     void* vtbl;              // +0x00
-    u32   field04;           // +0x04
+    volatile long field04;   // +0x04 (atomic reference count)
     u32   f08, f0c, f10, f14, f18; // +0x08
     void* field1c;           // +0x1c
-    PropertyList(void* p);
 };
 typedef void  (__thiscall* FixedVectorInsertFn)(void* vec, int* pos, const int* value);
 typedef void  (__thiscall* ArenaAddObjectFn)(void* arena, void* a, u32 handle, void* b);
@@ -125,17 +155,13 @@ void DestroySomeRenderObjects(u32* arr)
 }
 
 // @ 0x006c2120
-void EditorResource::Cleanup()
+EditorResource::~EditorResource()
 {
-    if (field1c != 0)
-        ((void(__thiscall*)(void*))(*(void***)field1c)[4 / 4])(field1c);
-    vtbl = (void*)0x13eb938;
 }
 
 // @ 0x006c2170
-void EditorResource2::Destroy()
+EditorResource2::~EditorResource2()
 {
-    vtbl = (void*)0x140a5a8;
     if (field18 != 0) {
         ((Arena*)field18)->Release();
     }
@@ -143,21 +169,12 @@ void EditorResource2::Destroy()
     if (field20 != 0)
         sub_11fb220((u32)field20);
     DestroyRenderObjects(arr34);
-    if (field1c != 0)
-        ((void(__thiscall*)(void*))(*(void***)field1c)[4 / 4])(field1c);
-    vtbl = (void*)0x13eb938;
 }
 
 // @ 0x006c2240
-PropertyList::PropertyList(void* p)
+PropertyListObj::PropertyListObj(void* p)
+    : field1c(p)
 {
-    vtbl = (void*)0x13ebcdc;
-    field04 = 0;
-    f08 = 0; f0c = 0; f10 = 0; f14 = 0; f18 = 0;
-    vtbl = (void*)0x140a5bc;
-    field1c = p;
-    if (p != 0)
-        ((void(__thiscall*)(void*))(*(void***)p)[0])(p);
     f18 = 0;
 }
 

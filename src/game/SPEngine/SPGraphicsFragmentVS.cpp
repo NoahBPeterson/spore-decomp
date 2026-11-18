@@ -30,12 +30,10 @@ struct ShaderRec {
 };
 struct ShaderMgr {
     char pad00[0x28];
-    int          count;    // +0x28
-    ShaderRec**  recs;     // +0x2c
-    char pad30[0xac - 0x30];
-    void**       objects;  // +0xac
-    char padb0[0x12c - 0xb0];
-    unsigned int field12c; // +0x12c
+    int          count;       // +0x28
+    ShaderRec*   recs[32];    // +0x2c
+    void*        objects[32]; // +0xac
+    unsigned int field12c;    // +0x12c
 };
 struct Block130 { unsigned int d[0x4c]; };
 struct V1c { char* begin; char* end; };
@@ -58,6 +56,8 @@ extern int* g_v2_end;     // 0x1624700
 extern int* g_v2_cap;     // 0x1624704
 extern char* g_vs_begin;  // 0x1628c20
 extern char* g_vs_end;    // 0x1628c24
+struct StackAllocVS { char pad00[0x18]; void Reset(); };   // 0x00928dc0
+extern StackAllocVS g_stackAllocVS;                        // 0x01628b98
 void* __cdecl FUN_011e073e(void* p, int a, unsigned size);   // operator_new[]
 void* __cdecl FUN_011e0744(void* a, void* b, unsigned c);    // vector DoInsertValue
 void  __cdecl FUN_00928dc0();
@@ -116,7 +116,8 @@ struct Vec130 {                // 0x130-byte-element vector
     char* end;     // +0x04
     char* cap;     // +0x08
     __declspec(noinline) void Insert(char* pos, unsigned n, void* value);  // 0x6fe600 (not byte-exact)
-    void Destroy(char* first, char* last);            // 0x6fae30
+    void Destroy(char* first, char* last);            // 0x006fab90
+    void Erase(char* first, char* last);              // 0x006fae30
     void Reserve(unsigned n);                         // 0x6faae0
     void Resize(unsigned n);                          // 0x6ff060
     int Size() const { return (int)(end - begin) / 0x130; }
@@ -436,12 +437,10 @@ char* __cdecl GenerateFillOutputStruct(char* d, unsigned flags, unsigned ntex)
 // @ 0x006fe230
 void __cdecl FUN_006fe230(unsigned mask, char flag)
 {
-    ShaderMgr* m = (ShaderMgr*)g_mgr_1624568;
+    ShaderMgr* m = (ShaderMgr*)g_1624568;
     if (flag)
         mask |= m->field12c;
     if ((m->field12c & mask) == 0)
-        return;
-    if (m->count <= 0)
         return;
     for (int i = 0; i < m->count; i++) {
         ShaderRec* s = m->recs[i];
@@ -614,10 +613,9 @@ void* __fastcall FUN_006fe7f0(char* p)
 // @ 0x006fe830
 void __fastcall FUN_006fe830(char* p)
 {
-    void* a = *(void**)(p + 0x24);
-    void* b = *(void**)(p + 0x28);
-    ((Vec130*)(p + 0x24))->Destroy((char*)a, (char*)b);
-    void* q = *(void**)(p + 0x24);
+    Vec130* v = (Vec130*)(p + 0x24);
+    v->Destroy(v->begin, v->end);
+    void* q = v->begin;
     if (q && ((int*)q)[-1]) EASTL_allocator_deallocate(q);
     q = *(void**)(p + 0x14);
     if ((int)(*(int*)(p + 0x1c) - (int)q) > 1 && q) EASTL_allocator_deallocate(q);
@@ -625,17 +623,24 @@ void __fastcall FUN_006fe830(char* p)
     if ((int)(*(int*)(p + 0x0c) - (int)q) > 1 && q) EASTL_allocator_deallocate(q);
 }
 
+struct ShaderWordVector {
+    int* begin;
+    int* end;
+    int* capacity;
+    int* erase(int* first, int* last) {
+        FUN_011e0744(first, last, (end - last) * sizeof(int));
+        end -= last - first;
+        return first;
+    }
+};
+
 // @ 0x006fe890
 void __cdecl FUN_006fe890()
 {
-    int* b1 = g_v1_begin;
-    int* e1 = g_v1_end;
-    FUN_011e0744(b1, e1, 0);
-    g_v1_end = (int*)g_v1_end - (e1 - b1);
-    int* b2 = g_v2_begin;
-    int* e2 = g_v2_end;
-    FUN_011e0744(b2, e2, 0);
-    g_v2_end = (int*)g_v2_end - (e2 - b2);
+    ShaderWordVector& first = *reinterpret_cast<ShaderWordVector*>(&g_v1_begin);
+    first.erase(first.begin, first.end);
+    ShaderWordVector& second = *reinterpret_cast<ShaderWordVector*>(&g_v2_begin);
+    second.erase(second.begin, second.end);
 }
 
 // @ 0x006fe8f0
@@ -773,7 +778,7 @@ void __cdecl FUN_006fef70(int a)
 // @ 0x006fefa0
 void __cdecl FUN_006fefa0()
 {
-    ((Vec130*)0x01628C20)->Destroy(g_vs_begin, g_vs_end);
+    ((Vec130*)0x01628C20)->Erase(g_vs_begin, g_vs_end);
     unsigned int n = g_15345b0;
     if (n == 0)
         n = 0x200;
@@ -782,25 +787,27 @@ void __cdecl FUN_006fefa0()
 }
 
 // @ 0x006fefe0
+struct VSEntry { char pad00[0x20]; void* mpPS; };
 void __cdecl FUN_006fefe0()
 {
-    int count = (int)(g_vs_end - g_vs_begin) / 0x130;
+    char* base = g_vs_begin;
+    int count = (int)(g_vs_end - base) / 0x130;
     if (count > 0) {
         int off = 0;
         do {
-            void** slot = (void**)(g_vs_begin + off + 0x20);
-            void* obj = *slot;
+            VSEntry* e = (VSEntry*)(base + off);
+            void* obj = e->mpPS;
             if (obj) {
                 void* fn = (*(void***)obj)[2];
                 ((void(__stdcall*)(void*))fn)(obj);
-                *slot = 0;
-                g_vs_begin = *(char**)0x01628C20;
+                e->mpPS = 0;
+                base = g_vs_begin;
             }
             off += 0x130;
         } while (--count);
     }
-    ((Vec130*)0x01628C20)->Destroy(g_vs_begin, g_vs_end);
-    FUN_00928dc0();
+    ((Vec130*)0x01628C20)->Erase(base, g_vs_end);
+    g_stackAllocVS.Reset();
 }
 
 // @ 0x006ff060
@@ -814,7 +821,7 @@ void Vec130::Resize(unsigned n)
         void (Vec130::*volatile ins)(char*, unsigned, void*) = &Vec130::Insert;
         (this->*ins)(end, n - Size(), temp);
     } else {
-        Destroy(begin + n * 0x130, end);
+        Erase(begin + n * 0x130, end);
     }
 }
 

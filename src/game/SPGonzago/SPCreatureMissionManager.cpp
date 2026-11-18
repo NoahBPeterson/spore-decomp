@@ -59,6 +59,30 @@ struct cARC {                              // EA::AutoRefCount<mission>
     void  FUN_ac9480(cARC* src);           // 0x00ac9480
     void  FUN_572660(void* p);             // 0x00572660  AutoRefCount ctor
 };
+class cMissionStreamHolder {
+public:
+    virtual void slot_0();
+    virtual void slot_1();
+    virtual void slot_2();
+    virtual void slot_3();
+    virtual void slot_4();
+    virtual void slot_5();
+    virtual void* GetStream();                                // slot 6, +0x18
+};
+class cMissionObjectDatabaseStream {
+public:
+    virtual void slot_0();
+    virtual void slot_1();
+    virtual void slot_2();
+    virtual void slot_3();
+    virtual void slot_4();
+    virtual void slot_5();
+    virtual void slot_6();
+    virtual void slot_7();
+    virtual cMissionStreamHolder* GetStreamHolder();           // slot 8, +0x20
+};
+extern SP::cDataSerializerGeneric gCreatureMissionSerializer;  // 0x01582d30
+
 struct cVarListSerializer {
     u8   mData[0xa14];
     void Ctor(void* pObject, void* pVarList, u32 signature);   // 0x00692f90
@@ -132,16 +156,14 @@ cSPCreatureMissionManager* cSPCreatureMissionManager::Init()
 // @ 0x00d37d80
 bool cSPCreatureMissionManager::Write(void* stream)
 {
-    void* s = ((FnP0)VTBL(stream)[0x20 / 4])(stream);
+    cMissionStreamHolder* __restrict holder = static_cast<cMissionObjectDatabaseStream*>(stream)->GetStreamHolder();
     u32 key = 0x1406729e;
-    void* out = ((FnP0)VTBL(s)[0x18 / 4])(s);
+    void* out = holder->GetStream();
     X_WriteUint32(out, &key, 1, 0);
-
     bool ok = WriteBase(stream);
-
-    cVarListSerializer ser;
-    ser.Ctor((char*)this - 8, (void*)0x1582d30, 0x1a80d26);
-    if (ok && ser.SerializeWrite(stream))
+    SP::cVarListSerializer ser((char*)this - 8, &gCreatureMissionSerializer,
+        SP::cVarListSerializer::kSignature);
+    if (ok && ser.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream)))
         return true;
     return false;
 }
@@ -149,16 +171,14 @@ bool cSPCreatureMissionManager::Write(void* stream)
 // @ 0x00d37e10
 bool cSPCreatureMissionManager::Read(void* stream)
 {
-    void* s = ((FnP0)VTBL(stream)[0x20 / 4])(stream);
-    u32 key = 0;
-    void* out = ((FnP0)VTBL(s)[0x18 / 4])(s);
-    X_ReadInt32(out, &key, 1, 0);
-
+    cMissionStreamHolder* __restrict holder = static_cast<cMissionObjectDatabaseStream*>(stream)->GetStreamHolder();
+    u32 key;
+    void* in = holder->GetStream();
+    X_ReadInt32(in, &key, 1, 0);
     bool ok = ReadBase(stream);
-
-    cVarListSerializer ser;
-    ser.Ctor((char*)this - 8, (void*)0x1582d30, 0x1a80d26);
-    if (ok && ser.SerializeRead(stream))
+    SP::cVarListSerializer ser((char*)this - 8, &gCreatureMissionSerializer,
+        SP::cVarListSerializer::kSignature);
+    if (ok && ser.Serialize(*static_cast<SP::cIObjectDatabaseIStream*>(stream)))
         return true;
     return false;
 }

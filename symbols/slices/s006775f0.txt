@@ -3,7 +3,7 @@
 00677700 cSpaceInventory::Update  # per-frame inventory refresh: slot/icon/selection updates, cargo/stat text
 00677d90 cSpaceInventory::HandleMsgA  # message handler; show inventory and refresh
 00677df0 cSpaceInventory::HandleMsgB  # message handler; show thing and update
-00677e80 RectF::Contains  # point-in-rect test (byte-exact)
+00677e80 ?Contains@RectF@@QAEHMM@Z  # RectF::Contains migrated from s006775f0 (verbatim, slice spelling)
 00677ec0 FindCB  # window-tree find callback; set found item, data and selection, refresh
 00677f30 FindAllCB  # window-tree find-all callback; collect matches into the result vector
 00677fe0 SelectCB  # window-tree select callback; select the matching window

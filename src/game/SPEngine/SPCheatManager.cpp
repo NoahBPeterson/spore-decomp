@@ -221,7 +221,7 @@ namespace IO {
 class IStream_s0067_d550 {
  public:
   IStream_s0067_d550() {}
-  virtual ~IStream_s0067_d550();
+  virtual ~IStream_s0067_d550() {}
   virtual int AddRef();
   virtual int Release();
   virtual uint32_t GetType() const;
@@ -378,9 +378,15 @@ class cCheatManager : public ICCheatMgr {
   void BroadcastWrite(uint32_t p);      // @ 0x0067e7b0
   void ActivateConsole(uint32_t p);     // @ 0x0067e7f0
 };
-class CmdBase {
+class CmdBase {   // EA::ArgScript::cCommandBase: vfptr + 0xc bytes -> 0x10, so members start at +0x10
  public:
   CmdBase();
+  virtual void Execute(EA::ArgScript::cArguments* pArgs);
+  virtual const char* Description(int idx);
+  virtual void OnRegister(void* pParser, void* pState);
+  virtual int AddRef();
+  virtual int Release();
+  virtual ~CmdBase();
   uint8_t pad[0x10 - 0x4];
 };
 class HelpCommand : public CmdBase {
@@ -396,6 +402,9 @@ class HistoryCommand : public CmdBase {
     ArcMgr() : mpObject(0) {}
     explicit ArcMgr(ICCheatMgr* p) : mpObject(p) {
       if (mpObject) mpObject->AddRef();
+    }
+    ~ArcMgr() {
+      if (mpObject) mpObject->Release();
     }
   };
   HistoryCommand(cCheatManager* pManager);
@@ -418,7 +427,6 @@ class StrNameMap {
 class PairB_s0067_d550 {
  public:
   PairB_s0067_d550(const PairB_s0067_d550& x);  // @ 0x0067e900
-  ~PairB_s0067_d550();               // @ 0x0067e830
 
   char* mpBegin;         // +0x00
   char* mpEnd;           // +0x04
@@ -426,9 +434,28 @@ class PairB_s0067_d550 {
   uint32_t mAllocator;   // +0x0c
   EA::IU34* mpCommand;   // +0x10
 };
+// the destructor's view of PairB: an EASTL string (freed unless it is the one-byte empty buffer) and a command
+// reference released through vtable slot 1
+struct PairBString {
+  char* mpBegin;         // +0x00
+  char* mpEnd;           // +0x04
+  char* mpCapacity;      // +0x08
+  uint32_t mAllocator;   // +0x0c
+  ~PairBString() { if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin); }
+};
+struct PairBCommandRef {
+  EA::IU34* mp;
+  ~PairBCommandRef() { if (mp) mp->Release(); }
+};
+struct PairBObj {
+  PairBString mKey;          // +0x00
+  PairBCommandRef mpCommand; // +0x10
+  ~PairBObj();
+};
 static char gEmptyStr[2];
 class RCPlainBlock {
  public:
+  RCPlainBlock() : mRefCount(0) {}
   virtual ~RCPlainBlock() {}
   int mRefCount;
 };
@@ -437,7 +464,7 @@ class ConsoleStream : public EA::IO::IStream_s0067_d550, public RCPlainBlock {
   ConsoleStream(EA::IU01* pTarget);  // @ 0x0067e9a0
   ~ConsoleStream();                  // @ 0x0067ea40
 
-  EA::IU01* mTarget;    // +0x0c
+  EA::Arc01 mTarget;    // +0x0c
   char* mpBegin;        // +0x10
   char* mpEnd;          // +0x14
   char* mpCapacity;     // +0x18
@@ -458,15 +485,19 @@ class ConsoleDispatch {
   uint8_t pad1[0x24 - 0xc];
   cCheatManager* mManager;      // +0x24
 };
-class LogReporter {
+class LogReporter {   // EA::Trace::LogReporter: vfptr + 0x20 bytes -> 0x24, mTarget of a derived starts at +0x24
  public:
   LogReporter(int nGroup);
+  virtual int Report(const EA::Trace::LogRecord& record);
+  virtual bool IsFiltered(const EA::Trace::LogRecord& record);
+  virtual ~LogReporter();
   bool FilterEnabled2(const EA::Trace::LogRecord& record); // 0x00923740
   uint8_t pad[0x24 - 0x4];
 };
 class CheatReporter : public LogReporter {
  public:
   CheatReporter(int nGroup, EA::IU01* pTarget);
+  virtual bool IsFiltered(const EA::Trace::LogRecord& record) { return CheckFlagB(record) != 0; }
   int CheckFlagB(const EA::Trace::LogRecord& record);
 
   EA::Arc01 mTarget;  // +0x24
@@ -565,9 +596,9 @@ void StrNameMap::LowerBound(SetNode_s0067_d550** ppOut, const EA::Key& key)
 // @ 0x0067e610
 PairA* __stdcall NewPairA(const EA::Arc01& src)
 {
-  return new ("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\"
-                           "UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-               0xd1) PairA(src);
+  PairA* p = (PairA*)operator new(0x14, "App", 0, 0, EA_ALLOC_H, 0xd1);
+  ::new (&p->mpObject) EA::Arc01(src.mpObject);
+  return p;
 }
 
 // @ 0x0067e6f0
@@ -630,18 +661,16 @@ void cCheatManager::ActivateConsole(uint32_t param)
 }
 
 // @ 0x0067e830
-PairB_s0067_d550::~PairB_s0067_d550()
+PairBObj::~PairBObj()
 {
-  if (mpCommand) mpCommand->Release();
-  if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin);
 }
 
 // @ 0x0067e890
 KeyNode* __stdcall NewKeyNode(const char* pString)
 {
-  return new ("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\"
-                           "UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-               0xd1) KeyNode(pString);
+  KeyNode* p = (KeyNode*)operator new(0x20, "App", 0, 0, EA_ALLOC_H, 0xd1);
+  ::new (&p->key) EA::Key(pString);
+  return p;
 }
 
 // @ 0x0067e900
@@ -664,8 +693,18 @@ ConsoleStream::ConsoleStream(EA::IU01* pTarget)
   mpCapacity = gEmptyStr + 1;
 }
 
+// Destruction view of ConsoleStream (0x0067ea40): the original stores no vtable of its own on entry (novtable).
+class __declspec(novtable) ConsoleStreamDtorView_67ea40 : public EA::IO::IStream_s0067_d550, public RCPlainBlock {
+ public:
+  ~ConsoleStreamDtorView_67ea40();
+  EA::Arc01 mTarget;    // +0x0c
+  char* mpBegin;        // +0x10
+  char* mpEnd;          // +0x14
+  char* mpCapacity;     // +0x18
+};
+
 // @ 0x0067ea40
-ConsoleStream::~ConsoleStream()
+ConsoleStreamDtorView_67ea40::~ConsoleStreamDtorView_67ea40()
 {
   if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin);
 }
@@ -868,9 +907,10 @@ NodeHdr** StrTree::InsertAt(NodeHdr** out, NodeHdr* at, const PairB* val, char f
     if (!flag && at != &a && _stricmp(val->k.b, ((Node*)at)->v.k.b) >= 0) left = 1; else left = 0;
     Node* nn = NewNodeFromPair(val);
     RBTreeInsert(nn, at, &a, left);
+    NodeHdr** pOut = out;
     count += 1;
-    *out = nn;
-    return out;
+    *pOut = nn;
+    return pOut;
 }
 
 // @ 0x0067f260

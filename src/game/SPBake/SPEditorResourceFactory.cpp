@@ -249,6 +249,7 @@ struct EditorBlock   // 0x1d8 bytes
     uint32_t mPaintIDs[8];        // +0x0f8
     Vector3  mPaintColor1[8];     // +0x118
     Vector3  mPaintColor2[8];     // +0x178
+    EditorBlock* Init8();         // 0x004b0040, default construction of the paint colors
 };
 struct BlockVector
 {
@@ -793,7 +794,6 @@ struct VecBase {
     void Resize1d8(unsigned int n);   // 0x4afd00
     void Reserve194(unsigned int n);  // 0x4afdd0
     Block194* Erase194(Block194* dst, Block194* end);  // 0x4b0340
-    void* Init8();                    // 0x4b0040
 
     // out-of-line vector primitives: thiscall, ecx is the vector base, the callee pops the stack args
     void FUN_00454280(char* first, char* last);            // 0x454280
@@ -954,8 +954,8 @@ void VecBase::Resize1d8(unsigned int n)
 {
     int count = (int)((mpEnd - mpBegin) / 0x1d8);
     if ((unsigned int)count < n) {
-        char tmp[0x1d8];
-        void* elem = ((VecBase*)tmp)->Init8();
+        EditorBlock tmp;
+        EditorBlock* elem = tmp.Init8();
         FUN_004b11f0(mpEnd, (int)(n - (unsigned int)count), elem);
     }
     else {
@@ -964,21 +964,17 @@ void VecBase::Resize1d8(unsigned int n)
 }
 
 // @ 0x004b0040
-void* VecBase::Init8()
+EditorBlock* EditorBlock::Init8()
 {
-    int local_8 = 8;
-    char* local_4 = (char*)this + 0x118;
-    while (true) {
-        local_8 = local_8 - 1;
-        if (local_8 < 0) break;
-        local_4 += 0xc;
+    int countFirst = 8;
+    Vector3* first = mPaintColor1;
+    while (--countFirst >= 0) {
+        ++first;
     }
-    int local_10 = 8;
-    char* local_c = (char*)this + 0x178;
-    while (true) {
-        local_10 = local_10 - 1;
-        if (local_10 < 0) break;
-        local_c += 0xc;
+    int countSecond = 8;
+    Vector3* second = mPaintColor2;
+    while (--countSecond >= 0) {
+        ++second;
     }
     return this;
 }

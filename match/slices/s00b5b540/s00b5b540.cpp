@@ -3,6 +3,8 @@
 // starts with its original address.
 
 #include "s00b5b540.h"
+#include "../../../src/game/include/var_list_serializer.h"
+extern SP::cDataSerializerGeneric gGonzagoSerializerList[]; // 0x0156a118
 
 extern "C" void* FUN_00b3d320();
 extern "C" void* FUN_00b3d3a0();
@@ -626,11 +628,9 @@ struct S5be10 { void f(void* stream); };
 // @ 0x00b5be10
 void S5be10::f(void* stream)
 {
-    void* self = this;
     FUN_00b5ba30(1);
-    char buf[0xa14];
-    FUN_00692f90(buf, self, "cmp", 0x1a80d26);
-    FUN_00692900(buf, stream);
+    SP::cVarListSerializer ser(this, gGonzagoSerializerList, 0x1a80d26);
+    ser.Serialize(*(SP::cIObjectDatabaseOStream*)stream);
 }
 
 // 0x00b5be60 — read the planet/avatar keys out of a variable list and push
@@ -673,17 +673,28 @@ char S5be60::f(void* stream)
     return ok;
 }
 
-struct S5bf30 { bool f(); };
+struct S5bf30
+{
+    char pad_00[0x48];
+    void* ms;       // +0x48
+    void* owner;    // +0x4c
+    int   vt;       // +0x50
+    int   m54;      // +0x54
+    int   m58;      // +0x58
+
+    bool f();
+};
 // @ 0x00b5bf30
 bool S5bf30::f()
 {
     void* self = this;
     void* ms = SP_MessageServer_67dcc0();
-    *(void**)((char*)self + 0x48) = ms;
-    *(void**)((char*)self + 0x4c) = self;
-    *(int*)((char*)self + 0x50) = (int)&g_vt0dummy;
-    *(int*)((char*)self + 0x54) = 1;
-    *(int*)((char*)self + 0x58) = 0;
+    void** p = (void**)((char*)self + 0x48);
+    p[0] = ms;
+    p[1] = self;
+    *(int*)(p + 2) = (int)&g_vt0dummy;
+    *(int*)(p + 3) = 1;
+    *(int*)(p + 4) = 0;
     if (ms && self)
         ((void(__thiscall*)(void*, void*, unsigned))g_vfn(ms, 0x24))(ms, self, 0xf52feda1);
     FUN_00ec40b0();
@@ -760,25 +771,32 @@ bool FUN_00b5ca70()
 // @ 0x00b5cb20
 bool FUN_00b5cb20(int p)
 {
-    if (!FUN_00dd18d0(p)) return false;
-    if (FUN_00b5b800() == 0xdbdba1 && FUN_00b5ca70()) return false;
-    return true;
+    bool ok = true;
+    if (!FUN_00dd18d0(p)) ok = false;
+    else if (FUN_00b5b800() == 0xdbdba1 && FUN_00b5ca70()) ok = false;
+    return ok;
 }
 
 // @ 0x00b5cc80
+struct GameTimeMgr5cc80
+{
+    void SetSerializer();                                                  // 0x00c2e4e0
+    void RegisterPauseGate(unsigned id, unsigned bits, const char* name);  // 0x00b32190
+    void RegisterDefaultPauseGates();                                      // 0x00b323f0
+};
+
 void FUN_00b5cc80()
 {
-    void* gt = SP_GameTimeManager_00b3d380();
-    ((void(__thiscall*)(void*))g_vfn(gt, 0))(gt);
-    FUN_00b32190(0x600c4ae, 3, "cinematicAll");
-    FUN_00b32190(0x4bf38a5, 1, "cinematic");
-    FUN_00b32190(0x64beb65, 1, "tutorial");
-    FUN_00b32190(0x4bf38a6, 1, "editor");
-    FUN_00b32190(0x4d02e35, 3, "comm screen");
-    FUN_00b32190(0x7e9e4b7, 1, "adventure dialog");
-    FUN_00b323f0(gt);
+    GameTimeMgr5cc80* gt = (GameTimeMgr5cc80*)SP_GameTimeManager_00b3d380();
+    gt->SetSerializer();
+    gt->RegisterPauseGate(0x600c4ae, 3, "cinematicAll");
+    gt->RegisterPauseGate(0x4bf38a5, 1, "cinematic");
+    gt->RegisterPauseGate(0x64beb65, 1, "tutorial");
+    gt->RegisterPauseGate(0x4bf38a6, 1, "editor");
+    gt->RegisterPauseGate(0x4d02e35, 3, "comm screen");
+    gt->RegisterPauseGate(0x7e9e4b7, 1, "adventure dialog");
+    gt->RegisterDefaultPauseGates();
 }
-
 struct S5cd90 { void f(int); };
 // @ 0x00b5cd90
 void S5cd90::f(int param)

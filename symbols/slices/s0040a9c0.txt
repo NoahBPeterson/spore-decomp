@@ -1,2 +1,3 @@
 0040a9c0 ?Copy@KeyCopier@@QAE_NPBUResourceKey_s0040_a9c0@@0@Z  # KeyCopier::Copy migrated from s0040a9c0 (verbatim, slice spelling)
-0040ae50 VectorLength  # sqrt(x*x+y*y+z*z) via _CIsqrt
+0040ac70 ?Refresh@NearbyObjectList@@QAEXPAX@Z  # NearbyObjectList::Refresh migrated from s0040a9c0 (verbatim, slice spelling)
+0040ae50 ?VectorLength@@YAMPBUVector3_s0040_a9c0@@@Z  # VectorLength migrated from s0040a9c0 (verbatim, slice spelling)

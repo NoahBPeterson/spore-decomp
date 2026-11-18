@@ -12,9 +12,7 @@
 00bfd9f0 474 GetNounID: complete; the noun-id lookup and the scaled noun list walk reproduce the original, but the walk's pointer reloads and the SceneryTable access order are scheduled differently, leaving 474 differing bytes. difftest verdict not re-run for this row.
 00bfdc50 266 Push: complete; appends the two nouns to the scenery slot (cursor bump, capacity check, both stores), difference is the reload scheduling around the slot pointer. difftest verdict not re-run for this row.
 00bfddc0 117 EnsureTimer: complete; the timer lazily created and registered on first use, difference is the call-setup register assignment. difftest verdict not re-run for this row.
-00bfdf80 21 GetNoun: complete, 21 differing bytes from the accessor's load/add pairing. difftest verdict not re-run for this row.
 00bfdff0 116 GetProgress: complete; the phase progress blend reproduces the original but the x87 staging of the ratio differs, 102 vs 152 B. difftest verdict not re-run for this row.
-00bfe0c0 26 HasNoun: complete, 26 differing bytes from the compare/branch layout. difftest verdict not re-run for this row.
 00bfe0f0 155 Write: complete; same serialised field order and stream calls, difference is the surrounding register allocation, 178 vs 159 B. difftest verdict not re-run for this row.
 00bfe450 16 Activate: complete, 16 differing bytes around the RefObj store and the model activation call. difftest verdict not re-run for this row.
 00bfe4d0 3 Deactivate: complete, 3 differing bytes (one conditional jump layout). difftest verdict not re-run for this row.
@@ -26,4 +24,3 @@
 00bfe900 189 SpawnAt: complete; the spawn position blend and the scenery lookup match the original, difference is the float staging order. difftest verdict not re-run for this row.
 00bfea10 96 Teardown: complete; releases the models and clears the table in the original order, 199 vs 209 B. difftest verdict not re-run for this row.
 00bfeb00 227 InitScenery: complete; the scenery init walk matches, difference is the loop head and the table reload placement, 239 vs 266 B. difftest verdict not re-run for this row.
-00bfec10 4 Front: complete, 4 differing bytes (the return-value move). difftest verdict not re-run for this row.

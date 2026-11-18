@@ -185,6 +185,7 @@ struct LayerInfoVec {                 // eastl::vector<cLayerInfo, fixed_vector_
     void* x0c;        // +0xc
     void* inline_;    // +0x10
     void __thiscall dtor();   // 0x80ea80
+    void __thiscall AddLayer(void** obj, void* a, void* b);  // 0x80f360
 };
 class cSPUICustomRendererImpl { public:
     void** vtbl;         // +0   0x1417df8 / 0x1417e18
@@ -201,6 +202,7 @@ class cSPUICustomRendererImpl { public:
     void* __thiscall ctor();              // 0x80ebc0
     void* __thiscall VectorDtor(u8 flags);// 0x80ec40 (dtor w/ flag)
     void  __thiscall ScalarDtor();        // 0x80eca0
+    void __thiscall AddLayer(void** obj, void* a, void* b);  // 0x80f2e0
     void __thiscall MethodF380(void*);    // 0x80f380
 };
 struct UI_LayerManager {
@@ -235,7 +237,6 @@ struct PtrVec {
     void __thiscall Insert1(void** pos, void** val);   // 0x80efe0
     void __thiscall Insert12(void** pos, void** val);  // 0x80f140
 };
-void __fastcall FUN_0080f2e0(char* self, void** obj, void* a, void* b);
 // ---- items of slice s0080e6b0 end
 
 // ---- items of slice s0080f7c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -261,7 +262,7 @@ struct PtrVec_s0080_f7c0 {
     void* mEnd;     // +4
     void* mCap;     // +8
     void* mAlloc;   // +0xc
-    void __thiscall erase(void* first, void* last);
+    void* __thiscall erase(void* first, void* last);
 };
 struct cMWModel_s0080_f7c0 {
     void** vtbl;      // +0
@@ -310,7 +311,7 @@ class cSPUILayerManager { public:
     u8     pad50[0x94 - 0x50];
     u8     b94;         // +0x94
 
-    u32  __thiscall RemoveObject(cSPUILayeredObject_s0080_f7c0* p);
+    bool __thiscall RemoveObject(cSPUILayeredObject_s0080_f7c0* p);
     void __thiscall RemoveAllObjects();
     void __thiscall DrawLayer(void* a, void* b, void* c, void* d);
     bool __thiscall Shutdown();
@@ -495,18 +496,26 @@ void* Layered::MethodDC90()
 }
 
 // @ 0x0080dcd0
+struct LayerShiftRecord {
+    u8  mFlag;
+    i32 mValue;
+    i32 mLimit;
+};
+struct LayerApplyRecord {
+    u8  mFlag;
+    i32 mDelta;
+};
 void __stdcall FUN_0080dcd0(void* a, i32 b, u8 c)
 {
-    u8 local_c[8];
-    *(i32*)(local_c + 4) = 10000;
-    *(i32*)(local_c + 8) = 0xffffd8f0;
-    local_c[0] = 1;
-    VisitTree(a, (void*)FUN_0080d6d0, local_c);
-    i32 d = b - *(i32*)(local_c + 4);
-    u8 local14[8];
-    local14[0] = c;
-    *(i32*)(local14 + 4) = d;
-    if (d != 0) VisitTree(a, (void*)FUN_0080d670, local14);
+    LayerShiftRecord query;
+    query.mValue = 10000;
+    query.mLimit = 0xffffd8f0;
+    query.mFlag = 1;
+    VisitTree(a, (void*)FUN_0080d6d0, &query);
+    LayerApplyRecord apply;
+    apply.mFlag = c;
+    apply.mDelta = b - query.mValue;
+    if (apply.mDelta != 0) VisitTree(a, (void*)FUN_0080d670, &apply);
 }
 
 // @ 0x0080dd50
@@ -861,7 +870,10 @@ u32 __thiscall cSPUILayeredObject_s0080_e6b0::RemoveModel(cMWModel* param)
 // @ 0x0080ea50
 void cSPUILayeredObject::RemoveAllModels()
 {
-    while (mModels.mpBegin != mModels.mpEnd) RemoveModel(*mModels.mpBegin);
+    while (mModels.mpBegin != mModels.mpEnd) {
+        _ReadWriteBarrier();
+        RemoveModel(*mModels.mpBegin);
+    }
 }
 
 // @ 0x0080ea80
@@ -1071,32 +1083,36 @@ void __thiscall PtrVec::Insert12(void** pos, void** val)
 }
 
 // @ 0x0080f2e0
-void __fastcall FUN_0080f2e0(char* self, void** obj, void* a, void* b)
+void __thiscall cSPUICustomRendererImpl::AddLayer(void** obj, void* a, void* b)
 {
-    void* o = obj ? *obj : 0;
+    void* o = (void*)obj;
+    void* entry[3];
+    entry[0] = o;
     if (o) ((VF0v)VT(o)[0])(o);
-    PtrVec* v = (PtrVec*)(self + 0xc);
+    PtrVec* v = (PtrVec*)((char*)this + 0xc);
+    entry[1] = a;
+    entry[2] = b;
     if (v->end < v->cap) {
         void** e = v->end;
-        v->end = e + 3;
+        v->end = (void**)((u8*)e + 0xc);
         if (e) {
-            void* x = obj ? *obj : 0;
-            *e = x;
-            if (x) ((VF0v)VT(x)[0])(x);
-            e[1] = a; e[2] = b;
+            e[0] = o;
+            if (o) ((VF0v)VT(o)[0])(o);
+            e[1] = a;
+            e[2] = b;
         }
     } else {
-        v->Insert12(v->end, obj);
+        v->Insert12(v->end, entry);
+        o = entry[0];
     }
-    void* x = obj ? *obj : 0;
-    if (x) ((VF0v)VT(x)[1])(x);
+    if (o) ((VF0v)VT(o)[1])(o);
 }
 
 // @ 0x0080f360
-void __fastcall FUN_0080f360(char* p, void** obj, void* a, void* b)
+void __thiscall LayerInfoVec::AddLayer(void** obj, void* a, void* b)
 {
-    char* q = p ? p - 0xc : 0;
-    FUN_0080f2e0(q, obj, a, b);
+    cSPUICustomRendererImpl* q = this ? (cSPUICustomRendererImpl*)((char*)this - 0xc) : 0;
+    q->AddLayer(obj, a, b);
 }
 
 // @ 0x0080f380
@@ -1122,7 +1138,7 @@ void __cdecl FUN_0080f730()
 {}
 
 // @ 0x0080f7c0
-u32 __thiscall cSPUILayerManager::RemoveObject(cSPUILayeredObject_s0080_f7c0* p)
+bool __thiscall cSPUILayerManager::RemoveObject(cSPUILayeredObject_s0080_f7c0* p)
 {
     u32 n = (u32)((u8*)mObjects.mEnd - (u8*)mObjects.mBegin) >> 2;
     for (u32 i = 0; i < n; ++i) {
@@ -1168,6 +1184,7 @@ u32 __thiscall cSPUILayerManager::RemoveObject(cSPUILayeredObject_s0080_f7c0* p)
 void __thiscall cSPUILayerManager::RemoveAllObjects()
 {
     while (mObjects.mBegin != mObjects.mEnd) {
+        _ReadWriteBarrier();
         cSPUILayeredObject_s0080_f7c0* o = *(cSPUILayeredObject_s0080_f7c0**)mObjects.mBegin;
         RemoveObject(o);
     }

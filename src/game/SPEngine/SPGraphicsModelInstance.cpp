@@ -206,10 +206,10 @@ void SetGlobalCellId(void* cell);                      // 0x00796650
 void BuildTransformA(BoundTransformB* t);               // 0x007966f0
 void BuildTransformB(BoundTransform* t);                // 0x00796800
 void SetGlobalTriple(void* a, void* b, void* c);       // 0x00796680
-struct AbIface { virtual void ifn0(); };
-struct AbRC { AbRC() : mRC(0) {} virtual void rcfn0(); virtual void rcfn1(); int mRC; };
+struct AbIface { virtual void ifn0(); ~AbIface() {} };
+struct AbRC { AbRC() : mRC(0) {} virtual void rcfn0(); virtual void rcfn1(); ~AbRC() {} int mRC; };
 struct AbHeld {
-    virtual void dtor(int) = 0;     // +0x00
+    virtual ~AbHeld() {}
     virtual void release();         // +0x04
     int mnRefCount;                 // +0x08 (retail reads +4 on the secondary view)
 };
@@ -219,9 +219,11 @@ struct HeldRef {
     {
         AbHeld* p = mp;
         if (p) {
-            if (--p->mnRefCount == 0) {
+            int n = p->mnRefCount;
+            p->mnRefCount = n - 1;
+            if (n - 1 == 0) {
                 p->mnRefCount = 1;
-                p->dtor(1);
+                delete p;
             }
         }
     }
@@ -232,7 +234,7 @@ struct AbilityA : AbIface, AbRC {
     virtual void a1();
     HeldRef mHeld;      // +0xc
     int mVal;           // +0x10
-    ~AbilityA();
+    __declspec(noinline) ~AbilityA();
 };
 struct AbPtr {
     AbHeld* p;
@@ -3304,6 +3306,7 @@ RefPair* __cdecl copy_backward_ref(RefPair* first, RefPair* last, RefPair* resul
     while (last != first) {
         --last; --result;
         result->value = last->value;
+        _ReadWriteBarrier();
         RC_s0073_f320* p = last->p;
         RC_s0073_f320* old = result->p;
         if (p != old) {

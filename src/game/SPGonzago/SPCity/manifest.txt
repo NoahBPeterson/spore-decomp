@@ -1,4 +1,8 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd68c0@@YAXPAVcCheatObject@SP@@@Z  00bd68c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd6940@@YAXPAVcCheatObject@SP@@@Z  00bd6940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd69d0@@YAXPAVcCheatObject@SP@@@Z  00bd69d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd6e00@@YAXPAVcCheatObject@SP@@@Z  00bd6e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8140@@YIXPAUcCity@@PAXH@Z  00bd8140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8170@@YIXPAUcCity@@PAXH@Z  00bd8170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?FUN_00bd8200@@YAXXZ  00bd8200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -28,7 +32,55 @@
 ../src/game/SPGonzago/SPCity.cpp  ?GetCivilizationData@cCity_s00bd_91e0@@QAEPAXXZ  00bd99e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?CountEmptyTurrets@cCity_s00bd_91e0@@QAEHXZ  00bd9b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?CountEmptyBuildings@cCity_s00bd_91e0@@QAEHXZ  00bd9bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?ContainsPoint@cCity_s00bd_91e0@@QAE_NPBUVector3@@@Z  00bd9c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?IsWithinRadius@cCity_s00bd_91e0@@QAE_NABUVector3@@M@Z  00bd9c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?GetCenter@cCity_s00bd_91e0@@QAEPAUVector3@@PAU2@@Z  00bd9ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?GetPlayerTerrainSphere@cCity_s00bd_91e0@@QAEPAXXZ  00bd9cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?CreateCityObject@@YAPAXPAX0@Z  00bd9d70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?ClearCreature@cCity_s00bd_91e0@@QAEXXZ  00bd9dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?NotifySectionObject@cCity_s00bd_91e0@@QAEXXZ  00bd9e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?IsCultureActive@cCity_s00bd_91e0@@QAEHXZ  00bd9fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?ClearCultureState@cCity_s00bd_91e0@@QAEXXZ  00bda0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?DestroyRefPairs@@YGXPAUcAutoRef12@@0@Z  00bda6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?DestroyCultureTargetInfo@@YGXPAUtCultureTargetInfo_s00bd_a190@@0@Z  00bda710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?AssignRefPairObj@cRefOps@@QAEPAU1@PBUcAutoRef12@@@Z  00bda760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?CopyRefPairs@@YAPAUcAutoRef12@@PAU1@00@Z  00bda8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?DestroyRefPairsReturn@@YAPAUcAutoRef12@@PAU1@00@Z  00bda930  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?AssignRefPairRange@@YAPAUcAutoRef12@@PAU1@00@Z  00bda980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ??0cCulturalTarget_s00bd_a190@Simulator@@QAE@XZ  00bdab60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdb930@CStub@@QAEEHH@Z  00bdb930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdba80@CStub@@QAEMXZ  00bdba80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdbbb0@CStub@@QAEXXZ  00bdbbb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdc350@@YIXPAUSelfB@@@Z  00bdc350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdd350@@YA_NPAXPAPAX@Z  00bdd350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?CopyConstructFrom@CElement@@QAEPAU1@ABU1@@Z  00bdd380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?CopyAssignFrom@CElement@@QAEPAU1@ABU1@@Z  00bdd470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdd5c0@@YAPAUCElement@@PAU1@00@Z  00bdd5c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdd600@@YAPAUCElement@@PAU1@00@Z  00bdd600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdd640@@YAPAUCElement@@PAU1@00@Z  00bdd640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdd680@@YIXPAUCDerivedGameData@@@Z  00bdd680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00bdecb0@@YGXPAUCityElem60@@0@Z  00bdecb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?CopyAssignRange80@@YAXPAUCElement_s00bd_ee20@@0PBU1@@Z  00bdf170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?BuildRelationshipString@RelCity@@QAEXPAX@Z  00bdf380  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?push_back@BubbleVec@@QAEXXZ  00bdf3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?erase_last@RefElemVec@@QAEPAXPAX@Z  00bdf430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?CopyInfoRecsFwd@@YAPAUInfoRec@@PAU1@00@Z  00be0e80  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?CopyInfoRecsBwd@@YAPAUInfoRec@@PAU1@00@Z  00be0ed0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?OnNoun@cSPPlanetNoun@@QAEXH@Z  00be1820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?IncrementCounter@cAgentAction@@QAEXXZ  00be32b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?IncrementCounterBy@cAgentAction@@QAEXH@Z  00be32f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?DestroyAgent@cAgentAction@@QAEXPAUcNoun@@@Z  00be33e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?DestroyAgentsOfType@cAgentAction@@QAEXIH@Z  00be3420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?RemoveAgentAndFlag@cAgentAction@@QAEXPAUcNoun@@@Z  00be34e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?ClearRefs@cAgentAction@@QAEPAUcRefList@@XZ  00be3fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00be4b30@S@@QAEXPAX@Z  00be4b30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00be6f40@cCity_s00be_6310@@QAEXXZ  00be6f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00be6f60@cSpatialObject_s00be_6310@@QAEXXZ  00be6f60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?OverwriteNounsFromNounManager@City@@QAEII@Z  00be7370  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?sub_bea930@Sim_s00be_a930@@QAEXXZ  00bea930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?GetClassId@@YAIHH@Z  00bebc90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?PointInsideWall@cCityWalls_s00be_b6d0@@QAEIABUVector3_s00be_b6d0@@@Z  00bec0f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCity.cpp  ?FUN_0132cb50@@YAXXZ  0132cb50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?FUN_00be4a10@S@@QAEXPAX@Z  00be4a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?SetLog@cSPPlanetNoun@@QAEXPAX@Z  00be1150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPCity.cpp  ?GetForeignCityMood@@YAMPAX@Z  00bd9a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

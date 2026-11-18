@@ -1,3 +1,3 @@
-00f9d080 SP::cTerrainSphere::BuildSurfaceNormalOrientation  # PDB name via xmatch (card); returns cSPQuaternion by value, __thiscall ret 0x10
-00f9d5c0 SP::cTerrainSphere::DrawFootprint  # PDB name via xmatch (card); __thiscall ret 0x1c; ends in DecalProjector::BuildDecal 0x00f6c940
-00f9d9b0 SP::cTerrainSphere::UpdateScatterTexture  # PDB name via xmatch (card); __thiscall ret 0x10
+00f9d080 ?BuildSurfaceNormalOrientation@cTerrainSphere_s00f9_d080@SP@@QBE?AUQuaternion@2@ABUVector3_s00f9_d080@2@ABU32@M@Z  # cTerrainSphere_s00f9_d080::BuildSurfaceNormalOrientation migrated from s00f9d080 (verbatim, slice spelling)
+00f9d5c0 ?DrawFootprint@cTerrainSphere_s00f9_d080@SP@@QAEXPAXM0PBUVector2_s00f9_d080@2@_N00@Z  # cTerrainSphere_s00f9_d080::DrawFootprint migrated from s00f9d080 (verbatim, slice spelling)
+00f9d9b0 ?UpdateScatterTexture@cTerrainSphere_s00f9_d080@SP@@QAEXHPAXABUVector3_s00f9_d080@2@0@Z  # cTerrainSphere_s00f9_d080::UpdateScatterTexture migrated from s00f9d080 (verbatim, slice spelling)

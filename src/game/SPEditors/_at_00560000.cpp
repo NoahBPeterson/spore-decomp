@@ -29,11 +29,12 @@ void __fastcall FUN_005156b0(void* self, int reserved, void* owner);
 namespace SP {
 bool EcxStub9a::FUN_00560d20(void* other)
 {
-    void* this_ = this;
-    if (*(uint32_t*)this_ != *(uint32_t*)other)
+    if (*(uint32_t*)this != *(uint32_t*)other)
         return false;
-    if (*(uint32_t*)((char*)this_ + 8) != *(uint32_t*)((char*)other + 8))
-        return false;
+    else {
+        if (*(uint32_t*)((char*)this + 8) != *(uint32_t*)((char*)other + 8))
+            return false;
+    }
     return true;
 }
 }  // namespace SP

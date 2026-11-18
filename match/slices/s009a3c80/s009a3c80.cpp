@@ -90,6 +90,7 @@ struct AnimTree {
     void** FUN_009a4390(AnimKeyB* key);                        // 0x9a4390
 
     // Inlined cache-node-list clear helpers (used by FUN_009a3ef0).
+    // A (the 0x166c058 tree) frees with the short chain-free 0x9a3c40; B (0x166c05c) with 0x9a3c80.
     void ClearA()
     {
         FUN_009a3c40(mAnchor.mpNodeParent);
@@ -183,10 +184,12 @@ void nSPCreatureAnim::AnimTree::FUN_009a3c80(void* node)
 // @ 0x009a3ef0
 void nSPCreatureAnim::FUN_009a3ef0()
 {
-    if (*(nSPCreatureAnim::AnimTree**)0x166c058 != 0)
-        (*(nSPCreatureAnim::AnimTree**)0x166c058)->ClearA();
-    if (*(nSPCreatureAnim::AnimTree**)0x166c05c != 0)
-        (*(nSPCreatureAnim::AnimTree**)0x166c05c)->ClearB();
+    nSPCreatureAnim::AnimTree* treeA = *(nSPCreatureAnim::AnimTree**)0x166c058;
+    if (treeA != 0)
+        treeA->ClearA();
+    nSPCreatureAnim::AnimTree* treeB = *(nSPCreatureAnim::AnimTree**)0x166c05c;
+    if (treeB != 0)
+        treeB->ClearB();
 }
 
 // ---------------------------------------------------------------------------

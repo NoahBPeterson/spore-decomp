@@ -77,14 +77,38 @@ struct SplitInner {             // destroyed by 0079ac70
     void __thiscall destroy();
 };
 
-struct SplitRecord {            // torn down by 0079aeb0
-    SharedObject *mOwner;       // +0x00
-    SharedObject *mResource;    // +0x04
-    SplitInner mInner;          // +0x08
-    void *mBufferBegin;         // +0x48
-    void *mBufferEnd;           // +0x4c
-    unsigned int pad50;         // +0x50
-    void __thiscall destroy();
+struct AtomicSharedObject {
+    virtual ~AtomicSharedObject();
+    long mRefCount;
+    __forceinline int Release() {
+        int count = _InterlockedDecrement(&mRefCount);
+        if (count == 0) {
+            _InterlockedExchange(&mRefCount, 1);
+            delete this;
+        }
+        return count;
+    }
+};
+struct SharedReference {
+    AtomicSharedObject* mpObject;
+    __forceinline ~SharedReference() {
+        if (mpObject)
+            mpObject->Release();
+    }
+};
+struct SplitRecordBuffer {
+    void* mBegin;
+    void* mEnd;
+    void* mCapacity;
+    void DestroyRange(void* first, void* last); // 0x01023030
+    __forceinline void destroy();
+};
+struct SplitRecord {
+    SharedReference mOwner;
+    SharedReference mResource;
+    SplitInner mInner;
+    SplitRecordBuffer mBuffer;
+    ~SplitRecord();
 };
 
 // Drop a shared reference; the last owner calls the object's first vtable slot with `delete`.
@@ -138,6 +162,7 @@ extern int FUN_0079a630(int, int);
 extern void __fastcall FUN_0079ac70(int *);
 
 struct StubCtor { void *c(void *); };
+struct VCtor { VCtor *c0(int *); VCtor *c1(int *); VCtor *c2(int *); VCtor *c3(int *); VCtor *c4(int *); };
 struct VCtor16 { VCtor16 *c0(int *); };
 
 // @ 0x00799cc0
@@ -308,15 +333,19 @@ void *SplitElem20Vector::reserve(unsigned int count)
 int FUN_0079a5a0(int param_1, int param_2)
 {
     int iVar1;
-    if (param_1 == 0) {
+    switch (param_1) {
+    case 0:
         iVar1 = FUN_00f473a0(0x1c, "Graphics", 0, 0, 0, 0);
-        if (iVar1 != 0) return (int)((StubCtor *)iVar1)->c((void *)param_2);
-    } else if (param_1 == 1) {
+        if (iVar1 != 0) return (int)((VCtor *)iVar1)->c3((int *)param_2);
+        break;
+    case 1:
         iVar1 = FUN_00f473a0(0x1c, "Graphics", 0, 0, 0, 0);
-        if (iVar1 != 0) return (int)((StubCtor *)iVar1)->c((void *)param_2);
-    } else if (param_1 == 2) {
+        if (iVar1 != 0) return (int)((VCtor16 *)iVar1)->c0((int *)param_2);
+        break;
+    case 2:
         iVar1 = FUN_00f473a0(0x28, "Graphics", 0, 0, 0, 0);
-        if (iVar1 != 0) return (int)((StubCtor *)iVar1)->c((void *)param_2);
+        if (iVar1 != 0) return (int)((VCtor *)iVar1)->c4((int *)param_2);
+        break;
     }
     return 0;
 }
@@ -325,15 +354,19 @@ int FUN_0079a5a0(int param_1, int param_2)
 int FUN_0079a630(int param_1, int param_2)
 {
     int iVar1;
-    if (param_1 == 0) {
+    switch (param_1) {
+    case 0:
         iVar1 = FUN_00f473a0(0x20, "Graphics", 0, 0, 0, 0);
-        if (iVar1 != 0) return (int)((StubCtor *)iVar1)->c((void *)param_2);
-    } else if (param_1 == 1) {
+        if (iVar1 != 0) return (int)((VCtor *)iVar1)->c0((int *)param_2);
+        break;
+    case 1:
         iVar1 = FUN_00f473a0(0x20, "Graphics", 0, 0, 0, 0);
-        if (iVar1 != 0) return (int)((StubCtor *)iVar1)->c((void *)param_2);
-    } else if (param_1 == 2) {
+        if (iVar1 != 0) return (int)((VCtor *)iVar1)->c2((int *)param_2);
+        break;
+    case 2:
         iVar1 = FUN_00f473a0(0x2c, "Graphics", 0, 0, 0, 0);
-        if (iVar1 != 0) return (int)((StubCtor *)iVar1)->c((void *)param_2);
+        if (iVar1 != 0) return (int)((VCtor *)iVar1)->c1((int *)param_2);
+        break;
     }
     return 0;
 }
@@ -534,14 +567,17 @@ int __stdcall FUN_0079ae60(int param_1, void *param_2, int param_3)
     return _Dst;
 }
 
-// @ 0x0079aeb0
-void SplitRecord::destroy()
+__forceinline void SplitRecordBuffer::destroy()
 {
-    FUN_01023030(mBufferBegin, mBufferEnd);
-    FreeDebugBlock(mBufferBegin);
+    DestroyRange(mBegin, mEnd);
+    FreeDebugBlock(mBegin);
+}
+
+// @ 0x0079aeb0
+SplitRecord::~SplitRecord()
+{
+    mBuffer.destroy();
     mInner.destroy();
-    ReleaseShared(mResource);
-    ReleaseShared(mOwner);
 }
 
 // @ 0x0079af80
@@ -550,19 +586,18 @@ void *SplitElem8Vector::reserve(unsigned int count)
     // retail shifts the byte difference (8-byte elements) instead of dividing, so a garbage
     // storage range (capacity end below begin) rounds towards -inf
     unsigned int capacity = (unsigned int)((int)((char *)mCapacityEnd - (char *)mBegin) >> 3);
-    if (capacity >= count) {
+    if (count <= capacity) {
         return (void *)count;
     }
-    char *fresh = 0;
-    if (count != 0) {
-        fresh = (char *)FUN_00f473a0(count * 8, "Graphics", 0, 0, ALLOC_PATH, 0xd1);
-    }
-    FUN_007992e0((int *)mBegin, (int *)mEnd, (int *)fresh);
-    FUN_008def80(mBegin, mEnd, fresh);
+    char *fresh = count != 0 ? (char *)FUN_00f473a0(count * 8, "Graphics", 0, 0, ALLOC_PATH, 0xd1) : 0;
+    char *end = (char *)mEnd;
+    char *begin = (char *)mBegin;
+    FUN_007992e0((int *)begin, (int *)end, (int *)fresh);
+    FUN_008def80(begin, end, fresh);
     // retail re-reads the storage after the copy: a source pointer that aliases the vector
     // itself makes the copy move the object, not just its elements
     FreeDebugBlock(mBegin);
-    unsigned int used = (unsigned int)(((char *)mEnd - (char *)mBegin) / 8);
+    unsigned int used = (unsigned int)((int)((char *)mEnd - (char *)mBegin) >> 3);
     mBegin = fresh;
     mEnd = fresh + used * 8;
     mCapacityEnd = fresh + count * 8;

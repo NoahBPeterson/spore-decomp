@@ -48,6 +48,17 @@ typedef void* (__thiscall *FnVp0)(void*);
 bool __cdecl EA_IO_WriteUint32(void* s, const void* p, uint32_t n, int endian); // 0x0093aa70
 bool __cdecl EA_IO_ReadInt32(void* s, void* p, uint32_t n, int endian);         // 0x0093a780
 struct IStream;
+struct ProjectileArchiveStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // +0x18
+};
+struct ProjectileArchive {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual ProjectileArchiveStreamHolder* GetStreamHolder(); // +0x20
+};
 struct cGameData {
     void* mpVtbl;        // +0x00
     char  pad04[0x30];   // +0x04
@@ -584,7 +595,7 @@ struct ArtilleryProjectile {
     int    mDamageType;              // +0x530
     void*  mTool;                    // +0x534
 
-    void   ctor();
+    ArtilleryProjectile* ctor();
 };
 struct ILoco {
 virtual void l00();
@@ -841,6 +852,7 @@ struct cGameData_s00cb_b020 {
     void* mpField5d8;                        // +0x5d8
     u8    mVector5dc[0x10];                  // +0x5dc  eastl vector
 
+    bool CheckSpaceToolTarget();
     void FUN_00cbb6f0();                     // 0x00cbb6f0  teardown
     void RemoveOwner();                      // 0x00cbb790
     bool FUN_00cbb840();                     // 0x00cbb840  space-tool update
@@ -1275,7 +1287,7 @@ public:
     cSpatialObjectView();
     ~cSpatialObjectView();
     void SetObject(void* pObject);                  // 0x24
-    int UpdateState();
+    uint8_t UpdateState();
     void HandleSimulationUpdate(int a, int b);
     void CreateEffect(uint32_t id, int a);          // wrapper over the effect list
 
@@ -2907,14 +2919,16 @@ void* CObj3760::Cast(int type)
 // @ 0x00cb37d0
 bool CArtilleryProjectile::Write(IStream* s)
 {
-    void* w = StreamWriter(s);
-    uint32_t id = 0x1428a48;
-    void* v = WriterValue(w);
-    EA_IO_WriteUint32(v, &id, 1, 0);
+    ProjectileArchiveStreamHolder* __restrict holder = reinterpret_cast<ProjectileArchive*>(s)->GetStreamHolder();
+    uint32_t id = 0x01428a48;
+    void* output = holder->GetStream();
+    EA_IO_WriteUint32(output, &id, 1, 0);
     mGameData.Write(s);
     mLoco.Write(s);
-    cVarListSerializer ser(this, &g_157d398, 0x1a80d26);
-    ser.Serialize(s);
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&g_157d398),
+        SP::cVarListSerializer::kSignature);
+    serializer.Serialize(*reinterpret_cast<SP::cIObjectDatabaseOStream*>(s));
     return true;
 }
 
@@ -2936,9 +2950,8 @@ bool CArtilleryProjectileR::Read(IStream* s)
 void CFlakProjectile::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    uint32_t id = 0x240e3b7;
-    void* v = WriterValue(w);
-    EA_IO_WriteUint32(v, &id, 1, 0);
+    void** it = *(void***)w;
+    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x240e3b7);
     mGameData.Write(s);
     mLoco.Write(s);
     cVarListSerializer ser(this, &g_157d7d8, 0x1a80d26);
@@ -2970,9 +2983,8 @@ void* CObj3ad0::Cast(int type)
 void CCulturalProjectile::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    uint32_t id = 0x244d3c0;
-    void* v = WriterValue(w);
-    EA_IO_WriteUint32(v, &id, 1, 0);
+    void** it = *(void***)w;
+    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x244d3c0);
     mGameData.Write(s);
     mLoco.Write(s);
     cVarListSerializer ser(this, &g_157dd7c, 0x1a80d26);
@@ -3001,9 +3013,8 @@ void* CObj3c80::Cast(int type)
 void CResourceProjectile::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    uint32_t id = 0x24630ce;
-    void* v = WriterValue(w);
-    EA_IO_WriteUint32(v, &id, 1, 0);
+    void** it = *(void***)w;
+    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x24630ce);
     mGameData.Write(s);
     mSpatial.Write(s);
     cVarListSerializer ser(this, &g_157ddb8, 0x1a80d26);
@@ -3029,9 +3040,8 @@ void* CObj3e20::Cast(int type)
 void CDefaultAoEArea::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    uint32_t id = 0x4167194;
-    void* v = WriterValue(w);
-    EA_IO_WriteUint32(v, &id, 1, 0);
+    void** it = *(void***)w;
+    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x4167194);
     mGameData.Write(s);
     mSpatial.Write(s);
     cVarListSerializer ser(this, &g_157e358, 0x1a80d26);
@@ -3061,9 +3071,8 @@ void __cdecl FUN_00cb3f80(float* a, float* b, float* c, float* out1, float* out2
 void CCulturalProjectileW::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    uint32_t id = 0x4f76f08;
-    void* v = WriterValue(w);
-    EA_IO_WriteUint32(v, &id, 1, 0);
+    void** it = *(void***)w;
+    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x4f76f08);
     mGameData.Write(s);
     mLoco.Write(s);
     cVarListSerializer ser(this, &g_157e578, 0x1a80d26);
@@ -3074,9 +3083,8 @@ void CCulturalProjectileW::Write(IStream* s)
 void CResourceProjectileW2::Write(IStream* s)
 {
     void* w = StreamWriter(s);
-    uint32_t id = 0x5776a28;
-    void* v = WriterValue(w);
-    EA_IO_WriteUint32(v, &id, 1, 0);
+    void** it = *(void***)w;
+    WriteSigId(((FnVp0)it[0x18 / 4])(w), 0x5776a28);
     mGameData.Write(s);
     mLoco.Write(s);
     cVarListSerializer ser(this, &g_157e758, 0x1a80d26);
@@ -3457,16 +3465,23 @@ float* f00cb5140(int self, float* out)
 }
 
 // @ 0x00cb52c0
-int f00cb52c0(int self)
+bool Simulator::cGameData_s00cb_b020::CheckSpaceToolTarget()
 {
-    if (FUN_0104cda0(*(void**)(self + 0x518)) == 0.0f)
-        return 0;
-    void* p = *(void**)(self + 0x5cc);
-    if (p && (*(Vfn1*)(*(int*)p + 0x10))(p))
-        return 1;
-    int* strat = (int*)0;   // GetStrategy stub
-    (void)strat;
-    return 0;
+    typedef bool (__thiscall *TargetQuery)(void*);
+    if (!mpSpaceTool->m_104cda0())
+        return false;
+    void* target = mpField5cc;
+    if (target && ((TargetQuery)VTSLOT(target, 0x10))(target))
+        return true;
+    Obj* strategy = mpSpaceTool->m_104f930();
+    if (strategy) {
+        uint32_t fourth = (uint32_t)mpField5d4;
+        cSPSpaceTool* tool = mpSpaceTool;
+        ((IToolStrategy*)strategy)->Use(tool,
+            ((ILoco*)&mLoco)->GetPosition(),
+            (uint32_t)mState5d0, fourth);
+    }
+    return false;
 }
 
 // @ 0x00cb5330
@@ -4042,39 +4057,38 @@ void cDefaultAoEArea::FUN_00cb61d0()
 // @ 0x00cb6310
 u8 __cdecl FUN_00cb6310(void* a1, u8 a2)
 {
-    if (a1 == 0)
-        return 0;
+    if (a1 != 0) {
+        void* c = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x13f94d4);
+        if (c != 0) {
+            u32 ds = MOPS(c)->FUN_008e7f80();
+            if (ds == 2)
+                return 0;
+            if (((cCombatantObj*)c)->mB_08 != 0)
+                return 0;
+            if (a2 == 0) {
+                u32 id = ((u32 (__thiscall*)(void*))VT(c)[0x10 / 4])(c);
+                if (id == gU_0169a40c)
+                    return 0;
+            }
+            return 1;
+        }
 
-    void* c = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x13f94d4);
-    if (c != 0) {
-        u32 ds = MOPS(c)->FUN_008e7f80();
-        if (ds == 2)
+        void* p = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x3ed590d);
+        if (p != 0) {
+            u32 v = ((cCombatantObj*)p)->mU_88;
+            if (v == 0 || v == 1 || v == 2)
+                return 1;
             return 0;
-        if (((cCombatantObj*)c)->mB_08 != 0)
-            return 0;
-        if (a2 != 0)
-            return 1;
-        u32 id = ((u32 (__thiscall*)(void*))VT(c)[0x10 / 4])(c);
-        if (id == gU_0169a40c)
-            return 0;
-        return 1;
-    }
+        }
 
-    void* p = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x3ed590d);
-    if (p != 0) {
-        u32 v = ((cCombatantObj*)p)->mU_88;
-        if (v == 0 || v == 1 || v == 2)
-            return 1;
-        return 0;
-    }
-
-    void* q = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x175cdc9);
-    if (q != 0) {
-        u32 v = ((cCombatantObj*)q)->mU_228;
-        if (v == 0x611a05e)
-            return 1;
-        if (v == 0x611a05f)
-            return 1;
+        void* q = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x175cdc9);
+        if (q != 0) {
+            u32 v = ((cCombatantObj*)q)->mU_228;
+            if (v == 0x611a05e)
+                return 1;
+            if (v == 0x611a05f)
+                return 1;
+        }
     }
     return 0;
 }
@@ -4103,35 +4117,27 @@ void __cdecl FUN_00cb63e0(void* a1)
 // @ 0x00cb6400
 u8 __cdecl FUN_00cb6400(void* a1, u8 a2)
 {
-    if (a1 == 0)
-        return 0;
-
-    void* c = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x13f94d4);
-    if (c == 0)
-        return 0;
-
-    void* prop = (void*)((u32 (__thiscall*)(void*, u32))VT(c)[0x5c / 4])(c, 0xb033b403);
-    u32 ds = MOPS(c)->FUN_008e7f80();
-    if (ds == 2)
-        return 0;
-    if (((cCombatantObj*)c)->mB_08 != 0)
-        return 0;
-    if (a2 == 0) {
-        u32 id = ((u32 (__thiscall*)(void*))VT(c)[0x10 / 4])(c);
-        if (id == gU_0169a40c)
-            return 0;
+    if (a1 != 0) {
+        void* c = (void*)((u32 (__thiscall*)(void*, u32))VT(a1)[0xc / 4])(a1, 0x13f94d4);
+        if (c != 0) {
+            void* prop = (void*)((u32 (__thiscall*)(void*, u32))VT(c)[0x5c / 4])(c, 0xb033b403);
+            u32 ds = MOPS(c)->FUN_008e7f80();
+            if (ds != 2) {
+                if (((cCombatantObj*)c)->mB_08 == 0) {
+                    if (a2 == 0) {
+                        u32 id = ((u32 (__thiscall*)(void*))VT(c)[0x10 / 4])(c);
+                        if (id == gU_0169a40c)
+                            return 0;
+                    }
+                    if (!(gB_0169a408 != 0 && prop != 0 && ((cCombatantObj*)prop)->mS_714 == 3)) {
+                        if (FUN_00ae3370(c) != 0 || FUN_00bcd430(c) != 0 ||
+                            FUN_00c032a0(c) != 0 || FUN_00ae3350(c) != 0)
+                            return 1;
+                    }
+                }
+            }
+        }
     }
-    if (gB_0169a408 != 0 && prop != 0 && ((cCombatantObj*)prop)->mS_714 == 3)
-        return 0;
-
-    if (FUN_00ae3370(c) != 0)
-        return 1;
-    if (FUN_00bcd430(c) != 0)
-        return 1;
-    if (FUN_00c032a0(c) != 0)
-        return 1;
-    if (FUN_00ae3350(c) != 0)
-        return 1;
     return 0;
 }
 
@@ -4498,28 +4504,32 @@ void GameObject::SetForwardDir(void* arg)
 }
 
 // @ 0x00cb6ed0
-void ArtilleryProjectile::ctor()
+ArtilleryProjectile* ArtilleryProjectile::ctor()
 {
     ((void(__thiscall*)(void*)) FUN_00b18660)(this);
     ((void(__thiscall*)(void*)) FUN_00c43860)(&mpVtLoco);
 
     float zero = 0.0f;
     mpVt4 = (void*)g_vft_145dca8;
-    _ReadWriteBarrier();
     mTargetOffset[0] = zero;
     mTargetOffset[1] = zero;
     mTargetOffset[2] = zero;
+    _ReadWriteBarrier();
     mFlag = 0;
+    _ReadWriteBarrier();
     mpVt0 = (void*)g_vft_1475470;
     mpVt1 = (void*)g_vft_147545c;
     mpVtLoco = (void*)g_vft_1475360;
     mpVt3 = (void*)g_vft_1475354;
     mpVt4 = (void*)g_vft_147532c;
+    _ReadWriteBarrier();
     mpOwner = 0;
     mMinDamage = 0;
-    mMaxDamage = 1;
     mDamageType = 0;
+    mMaxDamage = 1;
+    _ReadWriteBarrier();
     mTool = 0;
+    return this;
 }
 
 // @ 0x00cb6fe0
@@ -7530,24 +7540,27 @@ int FindNearestCreature(float fX, float fY, float fZ, bool bGround, bool bAir)
 }
 
 // @ 0x00cc27f0
-int cSpatialObjectView::UpdateState()
+uint8_t cSpatialObjectView::UpdateState()
 {
-    if (mpObject == nullptr)
+    void* pObject = mpObject;
+    if (pObject == nullptr)
         return 0;
 
-    int nState = mViewState;
-    if (nState == 0) {
-        UpdateMissileEffect(this, mpObject, 0);
-    } else if (nState == 1) {
-        Vec3_s00cc_22c0* pDirection = (Vec3_s00cc_22c0*)(*(void* (__thiscall*)(void*))(**(uint32_t**)mpObject + 0x18))(mpObject);
-        if (pDirection->mX != gDefaultOrientation || pDirection->mY != 0.0f ||
-            pDirection->mZ != 0.0f) {
-            if (!IsWaterSurface())
-                UpdateBeamEffect(this, mpObject, 0);
-        }
-        UpdateMissileEffect(this, mpObject, 1);
-    } else if (nState == 2) {
-        return (int)GetAoEKind();
+    switch (mViewState) {
+    case 0:
+        ((Simulator::cGameData_s00cb_b020*)((uint8_t*)this - 0x504))->FUN_00cbb840();
+        break;
+    case 1: {
+        const ResourceKey* pKey = ((cSpaceToolData_s00cc_15b0*)pObject)->GetToolKey();
+        if (*pKey == kGravitationWaveTool || IsToolKey(pKey, &kPeaceBombTool) ||
+            IsToolKey(pKey, &kCashInfusionTool) || IsToolKey(pKey, &kPlanetConversionTool))
+            ((cDefaultToolProjectile_s00cc_15b0*)((uint8_t*)this - 0x504))->UpdateBombPhase1();
+        else
+            FUN_00cbbdc0((int)((uint8_t*)this - 0x504));
+        break;
+    }
+    case 2:
+        return ((Simulator::cGameData_s00cb_b020*)((uint8_t*)this - 0x504))->CheckSpaceToolTarget();
     }
     return 1;
 }

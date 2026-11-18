@@ -3912,23 +3912,24 @@ void __cdecl FUN_00b9c5b0(TObj* p)
 void TObj::FUN_00b9c5c0(void)
 {
     F_b9a630();
+    struct RefObj_s00b9c5c0 { void* vt0; int rc; };   // AutoRefCount referent header
     void* r20 = mRef20;
     if (r20 != 0) {
-        unsigned* rc = (unsigned*)((char*)r20 + 4);
-        unsigned c = rc[0] + -1;
-        rc[0] = c;
-        if (c == 0) {
-            rc[0] = 1;
+        RefObj_s00b9c5c0* h = (RefObj_s00b9c5c0*)r20;
+        int n = (*(volatile int*)&h->rc += -1);
+        if (n == 0) {
+            h->rc = 1;
+            _ReadWriteBarrier();
             ((void(__thiscall*)(void*, int))VF(r20, 0))(r20, 1);
         }
     }
     void* r1c = mRef1c;
     if (r1c != 0) {
-        unsigned* rc = (unsigned*)((char*)r1c + 4);
-        unsigned c = rc[0] + -1;
-        rc[0] = c;
-        if (c == 0) {
-            rc[0] = 1;
+        RefObj_s00b9c5c0* h = (RefObj_s00b9c5c0*)r1c;
+        int n = (*(volatile int*)&h->rc += -1);
+        if (n == 0) {
+            h->rc = 1;
+            _ReadWriteBarrier();
             ((void(__thiscall*)(void*, int))VF(r1c, 0))(r1c, 1);
         }
     }

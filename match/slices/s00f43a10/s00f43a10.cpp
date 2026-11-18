@@ -12,23 +12,48 @@ struct SubVec534 {
     char* end;                                             // +0x04
     void destroyRange(char* first, char* last) throw();    // 0x00dfc600
 };
+inline void* operator new(unsigned int, void* p) { return p; }
+
+// scalar-only padding: a struct containing arrays would make cl emit a /GS cookie.  pack(1) so the pad sits at
+// the byte after the 1-byte empty members (m0/m3c), as the original char arrays did.
+#pragma pack(push, 1)
+struct Pad59  { int a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13; short s0; char c0; };
+struct Pad71  { int a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13,a14,a15,a16; short s0; char c0; };
+struct P8     { int a, b; };
+struct P64    { P8 a0,a1,a2,a3,a4,a5,a6,a7; };
+struct P512   { P64 a0,a1,a2,a3,a4,a5,a6,a7; };
+struct Pad1192 {
+    P512 a0, a1;
+    P8 b0,b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13,b14,b15,b16,b17,b18,b19,b20;
+};
+#pragma pack(pop)
+
 struct T534 {
     Sub534 m0;                                             // +0x000 (empty, size 1)
-    char   pad001[0x3c - 0x01];
+    Pad59  pad001;
     Sub534 m3c;                                            // +0x03c
-    char   pad03d[0x84 - 0x3d];
+    Pad71  pad03d;
     SubVec534 mvec;                                        // +0x084
-    char   pad8c[0x534 - 0x8c];
+    Pad1192 pad8c;
+    // the element's default constructor is the retail function at 0x00f2d330; cl must see a real
+    // constructor call here so it reuses the constructor's return (this) as the temporary's address
+    T534() throw();
+    ~T534() throw() {
+        mvec.destroyRange(mvec.begin, mvec.end);
+        if (mvec.begin != 0 && *(int*)(mvec.begin - 4) != 0)
+            eastl_free(mvec.begin);
+        m3c.destroy();
+        m0.destroy();
+    }
     void Construct(const T534&) throw();
-    void ConstructDefault() throw();
 };
 void __cdecl eastl_copy534(T534* first, T534* last, T534* dest);  // 0x00dfd2c0
 
 struct Vec534 {
     T534* mpBegin; T534* mpEnd; T534* mpCapacity; char alloc[4];
     T534* insert(T534* pos, const T534& value);   // 0x00f44780
-    void  DoInsert(T534* pos, const T534& value); // 0x00f2f050
-    T534* pushBackDefault();                      // 0x00f446f0
+    void  DoInsert(T534* pos, const T534& value) throw(); // 0x00f2f050
+    void  pushBackDefault();                      // 0x00f446f0
     T534* erase(T534* pos);                       // 0x00f44190
 };
 
@@ -62,23 +87,13 @@ T534* Vec534::erase(T534* pos)
 }
 
 // @ 0x00f446f0  push_back() (default-constructed value)
-T534* Vec534::pushBackDefault()
+void Vec534::pushBackDefault()
 {
     if (mpEnd < mpCapacity) {
-        T534* p = mpEnd++;
-        if (p != 0)
-            p->ConstructDefault();
-        return p;
+        ::new ((void*)mpEnd++) T534();
+    } else {
+        DoInsert(mpEnd, T534());
     }
-    T534 temp;
-    temp.ConstructDefault();
-    DoInsert(mpEnd, temp);
-    temp.mvec.destroyRange(temp.mvec.begin, temp.mvec.end);
-    if (temp.mvec.begin != 0 && *(int*)(temp.mvec.begin - 4) != 0)
-        eastl_free(temp.mvec.begin);
-    temp.m3c.destroy();
-    temp.m0.destroy();
-    return mpEnd;
 }
 
 // ========================================================================================
@@ -264,6 +279,18 @@ struct MsgRoot { uint8_t mPad00[0x14]; void* mSink1; };    // +0x14
 struct MsgLink { uint8_t mPad00[0x18]; void* mNext; };     // +0x18
 struct MsgTail { uint8_t mPad00[0x14]; VtblObj* mObj; };   // +0x14
 
+struct ActionKeyValue {
+    unsigned instance, type, group;
+    ActionKeyValue(unsigned a, unsigned b, unsigned c) : instance(a), type(b), group(c) {}
+};
+struct ActionMessageServer {
+    virtual void Slot0(); virtual void Slot1(); virtual void Slot2();
+    virtual void Slot3(); virtual void Slot4();
+    virtual void Send(unsigned id, void* message, void* handler);
+};
+extern "C" bool IsBakeableActionType(unsigned type, bool allowCreature); // 0x004bbe20
+extern "C" bool ActionKeysEqual(const ActionKeyValue& a, const ActionKeyValue& b); // 0x004eb930
+
 struct W {
   uint8_t  mPad000[0x10];
   World*   mpWorld;               // +0x010
@@ -275,9 +302,10 @@ struct W {
   uint8_t  mSet090[0x20];         // +0x090
   uint8_t  mSet0B0[0x20];         // +0x0b0
   void  SetAction(int a, void* b);                          // 0x00f43af0
+  bool ApplyAction(ActionKeyValue key); // 0x00f43bf0
   bool  ApplyAction(int a, int b, int c);                   // 0x00f43bf0
   bool  RefreshActions();                                   // 0x00f43f20
-  uint32_t HandleMessage(unsigned msg, int arg);          // 0x00f440b0
+  bool HandleMessage(unsigned msg, int arg);          // 0x00f440b0
   void  RemoveAction(int idx);                            // 0x00f44210
   void* CreateAction(int a, void* b, void* c, float d);   // 0x00f44370
   void* PickAction(int* a);                               // 0x00f445c0
@@ -523,39 +551,33 @@ bool W::RefreshActions()
 }
 
 // @ 0x00f440b0
-uint32_t W::HandleMessage(unsigned msg, int arg)
+bool W::HandleMessage(unsigned msg, int arg)
 {
-    uint32_t r = msg;
-    if (msg == 0x04249453) {
+    switch (msg) {
+    case 0x04249453: {
         int a = *(int*)(arg + 0x08);
         int b = *(int*)(arg + 0x10);
         int c = *(int*)(arg + 0x18);
-        r = (uint32_t)FUN_004bbe20((void*)a, 0);
-        if ((char)r != 0) {
-            if (((char(__thiscall*)(void*, int, int, int))FUN_00f43bf0)(this, c, a, b))
+        if (IsBakeableActionType((unsigned)a, false)) {
+            if (ApplyAction(ActionKeyValue(c, a, b)))
                 mFlag014 = 1;
-            void* ms = FUN_0067dcc0();
-            r = (uint32_t)((int(__thiscall*)(void*, int, int, int))(*((void***)ms))[0x14 / 4])(
-                ms, 0x072bdb11, 0, 0);
+            ((ActionMessageServer*)FUN_0067dcc0())->Send(0x072bdb11, 0, 0);
         }
-    } else if (msg == 0x57be4886) {
+        break;
+    }
+    case 0x57be4886: {
         mFlag02C = 1;
-    } else if (msg == 0xf1ff568b) {
-        if (*(char*)(arg + 0x0c) != 0) {
-            r = (uint32_t)mpWorld;
-            if (mpWorld != 0) {
-                r = (uint32_t)FUN_004eb930((void*)arg, (char*)mpWorld + 8);
-                if ((char)r != 0) {
-                    *(uint32_t*)(arg + 0x10) = 0xa6c97621;
-                    *(uint32_t*)(arg + 0x14) = 0x00b1b104;
-                    *(uint32_t*)(arg + 0x18) = 0x490f6945;
-                    *(uint8_t*)(arg + 0x0c) = 0;
-                    r = 0xa6c97621;
-                }
-            }
+        break;
+    }
+    case 0xf1ff568b: {
+        if (*(char*)(arg + 0x0c) != 0 && mpWorld != 0 &&
+            ActionKeysEqual(*(const ActionKeyValue*)arg, *(const ActionKeyValue*)((char*)mpWorld + 8))) {
+            *(ActionKeyValue*)(arg + 0x10) = ActionKeyValue(0xa6c97621, 0x00b1b104, 0x490f6945);
+            *(uint8_t*)(arg + 0x0c) = 0;
         }
     }
-    return r & 0xffffff00u;
+    }
+    return false;
 }
 
 // @ 0x00f44210

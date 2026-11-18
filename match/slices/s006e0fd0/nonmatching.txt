@@ -1,5 +1,4 @@
 # va  diff-bytes  reason (complete, not byte-exact)
-006e10a0  133  create Vertex/IndexBufferCheat command objects; both ctor+vtableset blocks translated, operator_new / ctor call schedule differs
 006e1260  624  3D cumulative-moment pass; all five scratch arrays, the 0x40x0x40 inner accumulation and writeback translated, local layout/schedule differs
 006e1480   80  3D box moment sum; index algebra and the 8-term combination reproduced; declaration order aligned so the pushed-ecx scratch holds the same box[] element as the original (harness reads the dead ecx); equiv: WEAK (valid-input cap)
 006e1520  280  axis-selector plane moment sum; all three axis branches reproduced, codegen differs

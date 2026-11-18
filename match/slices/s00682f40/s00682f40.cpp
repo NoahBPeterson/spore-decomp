@@ -106,8 +106,8 @@ struct NodeF {
     NodeF* mpRight;     // +0x00
     NodeF* mpNext;      // +0x04
     uint32_t pad[3];    // +0x08
-    Buf mBuf;           // +0x14
-    MapC2 mMap;         // +0x24
+    struct Inner { Buf mBuf; MapC2 mMap; };
+    Inner mInner;       // +0x14
 };
 struct ClsF { void FreeChain(NodeF* p); };
 
@@ -124,7 +124,7 @@ struct MapY {
     uint32_t pad0; NodeY* anchor; NodeY* begin; NodeY* root; uint32_t col;
     uint32_t size; uint32_t alloc;
     NodeY* CreateNode(const int* key);          // 0x0683480 (out-of-slice)
-    void InsertPair(NodeY** out, NodeY* pos, int* key, char b);
+    NodeY** InsertPair(NodeY** out, NodeY* pos, int* key, char b);
     void InsertUnique(void* pair, const int* key, int flag);
 };
 
@@ -238,7 +238,7 @@ void ClsF::FreeChain(NodeF* p) {
     while (p) {
         FreeChain(p->mpRight);
         NodeF* next = p->mpNext;
-        p->~NodeF();
+        p->mInner.~Inner();
         EASTL_dealloc(p);
         p = next;
     }
@@ -338,15 +338,16 @@ UNIQUE:
 // =====================================================================
 // @ 0x00683500  MapY insert (create 0x683480)
 // =====================================================================
-void MapY::InsertPair(NodeY** out, NodeY* pos, int* key, char flag) {
+NodeY** MapY::InsertPair(NodeY** out, NodeY* pos, int* key, char flag) {
     int bIns;
     if (flag == 0 && pos != (NodeY*)&anchor && *key >= pos->key) bIns = 1;
     else bIns = 0;
     NodeY* n = CreateNode(key);
     RBTreeInsert(n, pos, (NodeY*)&anchor, bIns);
-    NodeY** o = out;
+    NodeY** o = *(NodeY** volatile*)&out;
     ++size;
     *o = n;
+    return out;
 }
 
 // =====================================================================

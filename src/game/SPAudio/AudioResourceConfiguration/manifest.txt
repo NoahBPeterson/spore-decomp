@@ -14,3 +14,8 @@
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ?ReadStringFromStream@@YG_NPAUIOReader_s00a1_87f0@@PAUWString@@@Z  00a18d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ?AddLegacyPropertyTypes@FactoryConfiguration@Audio@EA@@QAEXXZ  00a18d90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPAudio/AudioResourceConfiguration.cpp  ?IncludesConfiguration@ResourceConfiguration_s00a1_7690@@QAEHI@Z  00a176c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?SetParent@ResourceConfiguration@Audio@EA@@QAEXPAV123@@Z  00a17820  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?DoInsertValue@ConfigurationPropertySet@@QAEPAPAXPAPAXPAUConfigurationPropertyNodeBase@@PBI_N@Z  00a17890  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ?GetPropertyAsKeyInstance@RC@@QAE_NIPAI@Z  00a17520  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ??1FactoryConfigurationObj@@QAE@XZ  00a19e00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioResourceConfiguration.cpp  ??1ResourceConfigurationView_a17910@@QAE@XZ  00a17910  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "SP/cInteraction.h"
 #include "SP/cInteractionTarget.h"
 #include "SP/cDirectPropertyList.h"
@@ -1532,6 +1533,7 @@ void FUN_00ac9510(char* d, char* end, char* s)
 {
     for (; d != end; d += 0xc) {
         d[4] = s[4];
+        _ReadWriteBarrier();
         RCObj* p = *(RCObj**)(s + 8);
         RCObj* old = *(RCObj**)(d + 8);
         if (p != old) {
@@ -1652,6 +1654,7 @@ char* FUN_00ac9740(char* p, char* end, char* d)
 {
     while (p != end) {
         d[4] = p[4];
+        _ReadWriteBarrier();
         RCObj* s = *(RCObj**)(p + 8);
         RCObj* old = *(RCObj**)(d + 8);
         if (s != old) {
@@ -1717,6 +1720,7 @@ cLocomotionRequest::cLocomotionRequest()
     *(float*)((char*)this + 0x54) = 0.0f;
     *(float*)((char*)this + 0x58) = 0.0f;
     *(float*)((char*)this + 0x60) = 2.0f;
+    _ReadWriteBarrier();
     *(float*)((char*)this + 0x64) = 0.9f;
     *(int*)((char*)this + 0x5c) = 0;
     *(float*)((char*)this + 0x68) = 3.402823466e38f;

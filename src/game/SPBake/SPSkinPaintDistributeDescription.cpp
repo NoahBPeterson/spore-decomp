@@ -61,7 +61,7 @@ template <typename T> struct basic_string_s0052_e1f0 {
     allocator_s0052_e1f0 mAllocator;
     basic_string_s0052_e1f0() : mpBegin(0), mpEnd(0), mpCapacity(0)
     {
-        ScratchSlots<1>();
+        ScratchSlots<3>();
         AllocateSelf();
     }
     ~basic_string_s0052_e1f0()
@@ -200,7 +200,11 @@ virtual void v35();
 namespace EA {
 namespace ArgScript {
 struct cState_s0052_e1f0 {
-    uint32_t mStateID;
+    cState_s0052_e1f0() { ScratchSlots<1>(); }
+    virtual void s0() {}
+};
+struct cStateHolder_s0052_e1f0 {
+    cState_s0052_e1f0 mStateObj;
 };
 }
 }
@@ -274,6 +278,8 @@ struct cIBlockCommand_s0052_e1f0 : cICommand_s0052_e1f0 {};
 namespace EA {
 namespace ArgScript {
 class cBlockCommandBase : public cIBlockCommand_s0052_e1f0 { public:
+    cBlockCommandBase();                                   // 0x0083cdd0
+    ~cBlockCommandBase();
     cIParser_s0052_e1f0* mParser;                          // +0x04
     int mRefCount;                              // +0x08
     cState_s0052_e1f0* mChildState;                        // +0x0c
@@ -326,9 +332,10 @@ class cEffectsParser : public RefCountTemplate_s0052_e1f0<int> { public:
 }
 namespace {
 struct cSPSkinPaintDistributeEffectCommand
-    : EA::ArgScript::cBlockCommandT<EA::Swarm::cEffectsParser>, EA::ArgScript::cState_s0052_e1f0 {
+    : EA::ArgScript::cBlockCommandT<EA::Swarm::cEffectsParser>, EA::ArgScript::cStateHolder_s0052_e1f0 {
     cSPSkinPaintDistributeDescription mDesc;        // +0x38
     eastl::basic_string_s0052_e1f0<char> mDescName;
+    cSPSkinPaintDistributeEffectCommand();
     void OnRegister(EA::ArgScript::cIParser_s0052_e1f0* parser, EA::ArgScript::cState_s0052_e1f0* state);
 };
 
@@ -424,7 +431,7 @@ virtual void v08();
 virtual void v09();
 virtual void v10();
 virtual void v11();
-    virtual int Read(void* data, uint32_t size);                  // +0x30
+    virtual uint32_t Read(void* data, uint32_t size);             // +0x30
     virtual void v13();
     virtual bool Write(const void* data, uint32_t size);          // +0x38
 };
@@ -514,7 +521,7 @@ IStream* ReadString(IStream* stream, string* str);   // defined at 0x005302b0, c
 IStream* WriteString(IStream* stream, string* str);   // defined at 0x005305c0, called earlier in the TU
 
 // @ 0x0052ea60
-inline cSPSkinPaintDistributeDescription::cSPSkinPaintDistributeDescription()
+cSPSkinPaintDistributeDescription::cSPSkinPaintDistributeDescription()
 {
 }
 
@@ -523,7 +530,7 @@ void cSPSkinPaintDistributeEffectCommand::OnRegister(EA::ArgScript::cIParser_s00
 {
     mState = state ? (EA::Swarm::cEffectsParser*)((char*)state - 0xc) : 0;
     cBlockCommandBase::OnRegister(parser, state);
-    SetChildState(this);
+    SetChildState(&mStateObj);
     AddCommand(kDistributeParticleKeyword,
                new ("ArgScript/SPSkinPaintDistributeParticle", 0, 0, 0, 0) cSPSkinPaintDistributeParticleCommand());
     AddCommand(kDistributeParticlesKeyword,
@@ -687,16 +694,8 @@ void SPSkinPaintDistributeAddCommands(int* a, int* b)
 }
 
 // @ 0x0052f7c0
-void* DistributeEffectCommandCtor(void* self)
+cSPSkinPaintDistributeEffectCommand::cSPSkinPaintDistributeEffectCommand()
 {
-    *(void**)self = (void*)0x013f25ac;
-    FUN_0052ea60();
-    int* p = (int*)((char*)self + 0x8c);
-    p[0] = 0; p[1] = 0; p[2] = 0;
-    p[0] = (int)&g_TI_cError;
-    p[1] = p[0];
-    p[2] = p[0] + 1;
-    return self;
 }
 
 // @ 0x0052f890
@@ -898,6 +897,7 @@ IStream* ReadString(IStream* stream, string* str)
         str->mpEnd = str->mpBegin;
     }
     char c;
+    ScratchSlots<4>();
     while (stream->Read(&c, 1) == 1 && c != 0)
         str->push_back(c);
     return stream;
@@ -960,9 +960,15 @@ VectorIF::VectorIF(const VectorIF& x)
 // @ 0x00530b70
 void VectorIF::resize(uint32_t n)
 {
-    if ((uint32_t)(mpEnd - mpBegin) < n) {
+    if (n > (uint32_t)(mpEnd - mpBegin)) {
         PairIF value;
-        DoInsertValues(mpEnd, n - (uint32_t)(mpEnd - mpBegin), value);
+        PairIF* position;
+        {
+            uint32_t count = n - (uint32_t)(mpEnd - mpBegin);
+            position = mpEnd;
+            ScratchSlots<6>();
+            DoInsertValues(position, count, value);
+        }
     } else {
         erase(mpBegin + n, mpEnd);
     }
@@ -978,10 +984,22 @@ void CmdStateMeta::OnRegister(void* parser, void* state)
 // @ 0x00530c80
 PairIF* VectorIF::erase(PairIF* first, PairIF* last)
 {
-    PairIF* pEnd = mpEnd;
-    PairIF* p = first;
-    for (PairIF* q = last; q != pEnd; ++q, ++p)
-        *p = *q;
+    PairIF* p;
+    // The copy-dispatch tags belong outside the nested iterator scope.
+    bool bIsMove;
+    bool bIsSimple;
+    bool bIsIntegral;
+    {
+        PairIF* source = mpEnd; // end of the source range
+        bIsSimple = false;
+        bIsIntegral = false;
+        bIsMove = false;
+        PairIF* result = first;
+        PairIF* end = last; // cursor through the source range
+        for (; end != source; ++result, ++end)
+            *result = *end;
+        p = result;
+    }
     for (PairIF* q = p; q < mpEnd; ++q) {
     }
     mpEnd = mpEnd - (last - first);

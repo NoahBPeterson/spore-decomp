@@ -25,7 +25,7 @@ extern "C" void  FUN_00704d80(void*);
 struct IResManager;
 extern "C" IResManager* FUN_0067dcd0_GetManager();
 extern "C" void* FUN_0067de10();
-extern "C" void  FUN_0067dfe0(void*);
+extern "C" void* FUN_0067dfe0(void*);
 extern "C" void* FUN_0067dd70_MaterialManager();
 extern "C" unsigned int FUN_00932e80(const char*, unsigned int, int);
 extern "C" void* FUN_00885ad0(int);
@@ -101,7 +101,7 @@ struct cTextRenderer {
     char  mCriticalSection[24];// +0x168
 
     void Init();               // 007a84d0
-    void CtorBody();           // 007a8390
+    cTextRenderer* CtorBody();           // 007a8390
     void Release();            // 007a8530
     void EnsureBuffers();      // 007a8310
     void SetStyle(int style);  // 007a82a0
@@ -156,22 +156,36 @@ void FUN_007a8360()
     }
 }
 
+struct GraphicsAllocBase {
+    static void* operator new(unsigned size, const char* name, int flags, unsigned debugFlags,
+                              const char* file, int line);   // 0x00f473a0
+    static void operator delete(void* p, const char* name, int flags, unsigned debugFlags,
+                                const char* file, int line); // 0x00f47410
+};
+struct CtorLayoutObj : GraphicsAllocBase {
+    char pad000[0x37c];
+    CtorLayoutObj();                                    // 0x00890f50
+};
+struct CtorImplObj : GraphicsAllocBase {
+    char pad000[0xa000];
+    CtorLayoutObj layout;                               // +0xa000
+    void* pad_a37c[2];
+};
+struct CtorStyleObj : GraphicsAllocBase {
+    char pad000[0x278];
+    CtorStyleObj();                                     // 0x008941d0
+};
+
 // @ 0x007a8390  SP::cTextRenderer::cTextRenderer
-void cTextRenderer::CtorBody()
+cTextRenderer* cTextRenderer::CtorBody()
 {
     cTextRenderer* self = this;
     self->mInitialized = false;
-    void* impl = EASTL_allocator_allocate(0xa384, "Graphics", 0, 0, 0, 0);
-    if (impl)
-        ((LayoutObj*)((char*)impl + 0xa000))->init_00890f50();
+    CtorImplObj* impl = new ("Graphics", 0, 0, 0, 0) CtorImplObj();
     self->mRenderImpl = (TextRenderWare*)impl;
-    void* layout = EASTL_allocator_allocate(0x37c, "Graphics", 0, 0, 0, 0);
-    if (layout)
-        ((LayoutObj*)layout)->init_00890f50();
+    CtorLayoutObj* layout = new ("Graphics", 0, 0, 0, 0) CtorLayoutObj();
     self->mLayout = (Layout*)layout;
-    void* style = EASTL_allocator_allocate(0x278, "Graphics", 0, 0, 0, 0);
-    if (style)
-        ((TextStyleObj*)style)->ctor_008941d0();
+    CtorStyleObj* style = new ("Graphics", 0, 0, 0, 0) CtorStyleObj();
     self->mTextStyle = (TextStyleStub*)style;
     self->mStyleChanged = true;
 
@@ -185,6 +199,7 @@ void cTextRenderer::CtorBody()
     self->mField08 = -1;
     self->mBuffer0 = 0;
     self->mBuffer1 = 0;
+    return self;
 }
 
 // @ 0x007a84d0
@@ -263,18 +278,28 @@ bool cTextRenderer::AllocDevice(void* obj)
     return false;
 }
 
+// scoped critical-section guard: the ctor stores the section and enters it, the dtor leaves it.
+// Retail keeps the dtor out of line (0x00609e40) for the unwind funclet and inlines it on the
+// normal exits, which is what puts the C++ EH frame around FreeDevice.
+namespace EA { namespace Thread {
+class AutoFutex {
+public:
+    void* mpFutex;
+    AutoFutex(void* futex) : mpFutex(futex) { EnterCriticalSection(mpFutex); }
+    ~AutoFutex() { LeaveCriticalSection(mpFutex); }
+};
+}}  // namespace EA::Thread
+
 // @ 0x007a8700
 bool cTextRenderer::FreeDevice(void* obj)
 {
-    EnterCriticalSection(this->mCriticalSection);
+    EA::Thread::AutoFutex lock(this->mCriticalSection);
     if (*(int*)((char*)obj + 0x38) != 0) {
         ((ObjDevice*)*(void**)((char*)obj + 0x34))->release_011ef880((char*)obj + 8);
         *(void**)((char*)obj + 0x38) = 0;
         LeaveCriticalSection(this->mCriticalSection);
-        LeaveCriticalSection(this->mCriticalSection);
         return true;
     }
-    LeaveCriticalSection(this->mCriticalSection);
     return false;
 }
 
@@ -299,24 +324,35 @@ cTextRenderer::~cTextRenderer()
     EASTL_allocator_deallocate(this->mTextStyle);
 }
 
+struct RenderObj1a8 {
+    void* vtbl;                 // +0x00
+    char pad004[0x190 - 4];
+    void* mBegin;               // +0x190
+    void* mEnd;                 // +0x194
+    void* mCap;                 // +0x198
+    char pad19c[0x1a8 - 0x19c];
+    static void* operator new(unsigned size, const char* name, int flags, unsigned debugFlags,
+                              const char* file, int line);   // 0x00f473a0
+    static void operator delete(void* p, const char* name, int flags, unsigned debugFlags,
+                                const char* file, int line); // 0x00f47410
+    void init_0088ae10(void* arg);
+    RenderObj1a8()
+    {
+        init_0088ae10(0);
+        vtbl = (void*)&VT_TextRenderWareObject;
+        mBegin = 0;
+        mEnd = 0;
+        mCap = 0;
+    }
+};
+
 // @ 0x007a8810
-extern "C" void* FUN_007a8810()
+void* FUN_007a8810()
 {
-    void* p = EASTL_allocator_allocate(0x1a8, "Graphics", 0, 0, 0, 0);
-    if (p) {
-        ((GlyphCacheObj*)p)->init_0088ae10(0);
-        *(void**)p = (void*)&VT_TextRenderWareObject;
-        *(void**)((char*)p + 0x190) = 0;
-        *(void**)((char*)p + 0x194) = 0;
-        *(void**)((char*)p + 0x198) = 0;
-    }
-    else {
-        p = 0;
-    }
+    RenderObj1a8* p = new ("Graphics", 0, 0, 0, 0) RenderObj1a8();
     ((void(__thiscall*)(void*, int, int))((*(void***)p)[0x10 / 4]))(p, 2, 1);
     ((void(__thiscall*)(void*, int, int))((*(void***)p)[0x08 / 4]))(p, 1, 0);
-    FUN_0067dfe0(p);
-    return p;
+    return FUN_0067dfe0(p);
 }
 
 // @ 0x007a88b0  scalar deleting destructor of the 0x1a8-byte render object
@@ -426,7 +462,7 @@ extern "C" void  FUN_0067dfd0(void*);
 extern "C" void  FUN_0067e010(void*);
 extern "C" void  FUN_0067e020(void*);
 extern "C" IManager* FUN_007ac410();
-extern "C" void* FUN_007a8810();                 // CreateTextRenderWareObject
+void* FUN_007a8810();                 // CreateTextRenderWareObject
 struct Obj2c;
 extern "C" Obj2c* CreateObj2c_76e610();          // 0x0076e610
 extern "C" IManager* FUN_00713c40();

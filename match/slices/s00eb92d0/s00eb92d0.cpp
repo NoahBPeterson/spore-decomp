@@ -11,6 +11,7 @@
 //   * creates the "Sporepedia" helper (this+0xec) and the 0xE8 helper object, refreshes them,
 //   * clears this+0x110, positions the 0x07eb4153 window against this+0x34 and creates the last text zoom
 //     (this+0xf0).
+#include <intrin.h>
 #include "types.h"
 
 #define PV(n) virtual void pv##n();
@@ -436,6 +437,7 @@ void cLargeViewOuter::Destroy()
     mpVt0c = (void*)0x014887f4;
     mpVt10 = (void*)0x014887e4;
     mpVtD0 = (void*)0x0140085c;
+    _ReadWriteBarrier();
 
     uint32_t id = mHandlerId;
     if (id != 0) {

@@ -214,6 +214,9 @@ void Server::AssertControl() {
 // ---------------------------------------------------------------------------------------------
 void* __cdecl EAAllocate(unsigned int sz, const char* name, int a, int b, int c, int d); // 0xf473a0
 
+void* __cdecl operator new(unsigned int, const char*, int, int, int, int);
+inline void __cdecl operator delete(void*, const char*, int, int, int, int) {}
+
 namespace SP {
 void* MessageServer();                          // 0x67dcc0
 
@@ -280,7 +283,10 @@ struct CObj14 { virtual void s00(); virtual void s04(); virtual void s08(); virt
                 virtual void s10(); virtual void s14(unsigned v); };
 struct CMsgSrv { virtual void s00(); virtual void s04(); virtual void s08(); virtual void s0c();
                  virtual void s10(); virtual void s14(); virtual void s18(unsigned m, void* p, int a, int b); };
-struct CLocaleChangeMessage { void* __thiscall Ctor(void* src); };  // 0x696350
+struct CLocaleChangeMessage {
+  char pad[0x40];
+  CLocaleChangeMessage(void* src);  // 0x696350
+};
 
 // ---- helpers/types for SP::cLocaleManagerSetLocale (0x697710) ----
 namespace eastl {
@@ -356,6 +362,7 @@ class cLocaleManager {
   virtual void* v20();                          // +0x20
   char pad_04[8];                               // +0x04..+0x0c
   void* mField0c;                               // +0x0c
+  char pad10[4];
   void* mField14;                               // +0x14
   eastl::WStr16 mField18;                       // +0x18 (0x34 bytes)
   void* mField4c;                               // +0x4c
@@ -377,8 +384,7 @@ void cLocaleManager::BroadcastLocaleChange(unsigned int arg) {
   if (mField4c != 0) ((CObj0c*)mField4c)->s0c();
   void* server = MessageServer();
   if (server != 0) {
-    void* mem = EAAllocate(0x40, "App/cLocaleChangeMessage", 0, 0, 0, 0);
-    void* msg = (mem == 0) ? 0 : ((CLocaleChangeMessage*)mem)->Ctor((void*)&mField18);
+    void* msg = new ("App/cLocaleChangeMessage", 0, 0, 0, 0) CLocaleChangeMessage((void*)&mField18);
     ((CMsgSrv*)server)->s18(0x2800a7f, msg, 0, 0);
   }
 }

@@ -1188,6 +1188,23 @@ Vec3_s00f6_edc0 cTerrainEffectMapNormal::Normal(const float* dir)
     return *src;
 }
 
+// @ 0x00f6f1b0
+float cTerrainEffectMapNormal::Blend(const float* dir)
+{
+    FaceUv r;
+    FaceFromDir(dir, &r);
+
+    cTerrainEffectMapSet* m = mp0c;
+    if (m->mp10 == 0 || m->mp08 == 0)
+        return 0.0f;
+
+    float t = m->mp10->SampleBilinear(&r);
+    float k = m->m38;
+    float s = m->mp08->GetFloat(&r);
+
+    return mp10->Eval(s * k, t);
+}
+
 // @ 0x00f6f390
 float cTerrainEffectMapNormal::GetNormalized(const float* dir)
 {
@@ -1231,6 +1248,30 @@ float cTerrainEffectMapNormal::Test(const float* dir)
         if (mid < t)
             return 1.0f;
         return 0.0f;
+    }
+    return 0.0f;
+}
+
+// @ 0x00f6f7d0
+float cTerrainEffectMapNormal::GetRatio(const float* dir)
+{
+    cTerrainEffectMapSet* m = mp0c;
+    if (m->mp08 == 0 || m->mp0c == 0)
+        return 0.0f;
+
+    float k   = m->m38;
+    float hi  = (m->m44 + m->m3c) * m->m38;
+    float lo  = m->m3c * m->m38;
+    float b   = m->m48;
+
+    FaceUv r;
+    FaceFromDir(dir, &r);
+
+    float t = m->mp08->GetFloat(&r) * k;
+    if (lo <= t && t <= hi) {
+        float s = m->mp0c->GetFloat(&r) * k;
+        if (b > s)
+            return (t - lo) / (hi - lo);
     }
     return 0.0f;
 }
@@ -2766,23 +2807,29 @@ void* GmeListV3::DtorJ(int freeFlag)
     return this;
 }
 
+struct TerrainWordVector {
+    unsigned short* mpBegin;
+    unsigned short* mpEnd;
+    unsigned short* mpCapacity;
+    void Insert(unsigned short* position, unsigned count, const unsigned short* value); // 0x00f8f130
+    unsigned short* erase(unsigned short* first, unsigned short* last) {
+        eastl_fill(first, last, (char*)mpEnd - (char*)last);
+        mpEnd -= last - first;
+        return first;
+    }
+};
+
 // @ 0x00f8fce0
 void EastlVec::Resize16(unsigned int n)
 {
-    char* endp = mpEnd;
-    char* begp = mpBegin;
-    unsigned int used = (unsigned int)((endp - begp) >> 1);
-    if (used < n) {
-        unsigned int add = n - used;
-        short zero = 0;
-        ((void (__thiscall*)(EastlVec*, char*, unsigned int, short*))(void*)FUN_00f8f130)
-            (this, endp, add, &zero);
-        return;
+    TerrainWordVector* values = reinterpret_cast<TerrainWordVector*>(this);
+    unsigned size = values->mpEnd - values->mpBegin;
+    if (n > size) {
+        unsigned short zero = 0;
+        values->Insert(values->mpEnd, n - size, &zero);
+    } else {
+        values->erase(values->mpBegin + n, values->mpEnd);
     }
-    char* dst = begp + n * 2;
-    eastl_fill(dst, endp, 0);
-    int cnt = (int)((endp - dst) >> 1);
-    *(int*)((char*)this + 0x04) += -cnt * 2;
 }
 
 // @ 0x00f8fd40
@@ -2808,15 +2855,13 @@ void EastlVec::Resize4F(unsigned int n)
     char* endp = mpEnd;
     char* begp = mpBegin;
     unsigned int used = (unsigned int)((endp - begp) >> 2);
-    if (used < n) {
-        unsigned int add = n - used;
+    if (n > used) {
         float zero = 0.0f;
-        ((void (__thiscall*)(EastlVec*, char*, unsigned int, float*))(void*)FUN_00f8f130)
-            (this, endp, add, &zero);
+        ((VecF*)this)->Insert((float*)endp, n - used, &zero);
         return;
     }
     char* dst = begp + n * 4;
-    eastl_fill(dst, endp, 0);
+    eastl_fill(dst, endp, (int)(mpEnd - endp));
     int cnt = (int)((endp - dst) >> 2);
     *(int*)((char*)this + 0x04) += -cnt * 4;
 }
@@ -2885,3 +2930,4 @@ void CubeMapBuffer::SetSize(int size, int fill)
     v->Fit(0, 0);
     v->Fit((unsigned)(size * size * 6), (const char*)&fill);
 }
+

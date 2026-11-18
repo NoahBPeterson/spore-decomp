@@ -2,3 +2,4 @@
 slices/s00a3af80/s00a3af80.cpp  ?RebuildIfCurrent@cEventModifierPrimitiveMouthType@Audio@SP@@QAE_NPAX@Z  00a3b970  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
 slices/s00a3af80/s00a3af80.cpp  ?ModifyEvent@cEventModifierPrimitiveSurfaceType@Audio@SP@@QAEXPAUCommand@2EA@@IPADH@Z  00a3b9a0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
 slices/s00a3af80/s00a3af80.cpp  ?Shutdown@cListener@@QAE_NXZ  00a3bb60  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
+slices/s00a3af80/s00a3af80.cpp  ?RebuildAll@cEventModifierPrimitiveMouthType@Audio@SP@@QAE_NXZ  00a3b890  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE

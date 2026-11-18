@@ -2,8 +2,8 @@
 00f6efa0    cTerrainEffectMapNormal::GetCountShort   ?GetCountShort@cTerrainEffectMapNormal@@QAEHXZ
 00f6efc0 ?Normal@cTerrainEffectMapNormal@@QAE?AUVec3_s00f6_edc0@@PBM@Z  # cTerrainEffectMapNormal::Normal migrated from s00f6edc0 (verbatim, slice spelling)
 00f6f190    cTerrainEffectMapNormal::GetCountSum     ?GetCountSum@cTerrainEffectMapNormal@@QAEHXZ
-00f6f1b0    cTerrainEffectMapNormal::Blend           ?Blend@cTerrainEffectMapNormal@@QAEMPBM@Z
+00f6f1b0 ?Blend@cTerrainEffectMapNormal@@QAEMPBM@Z  # cTerrainEffectMapNormal::Blend migrated from s00f6edc0 (verbatim, slice spelling)
 00f6f390 ?GetNormalized@cTerrainEffectMapNormal@@QAEMPBM@Z  # cTerrainEffectMapNormal::GetNormalized migrated from s00f6edc0 (verbatim, slice spelling)
 00f6f5a0 ?Test@cTerrainEffectMapNormal@@QAEMPBM@Z  # cTerrainEffectMapNormal::Test migrated from s00f6edc0 (verbatim, slice spelling)
-00f6f7d0    cTerrainEffectMapNormal::GetRatio        ?GetRatio@cTerrainEffectMapNormal@@QAEMPBM@Z
+00f6f7d0 ?GetRatio@cTerrainEffectMapNormal@@QAEMPBM@Z  # cTerrainEffectMapNormal::GetRatio migrated from s00f6edc0 (verbatim, slice spelling)
 00f6fa00 ?TestRange@cTerrainEffectMapNormal@@QAEMPBM@Z  # cTerrainEffectMapNormal::TestRange migrated from s00f6edc0 (verbatim, slice spelling)

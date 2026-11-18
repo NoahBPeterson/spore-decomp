@@ -962,6 +962,43 @@ def _component_of(a):
     return next((n for n, rs in _COMPONENTS if any(lo <= a < hi for lo, hi in rs)), "Spore code")
 
 
+STARTUP_GROUP = "Startup and exit code for global variables"
+STARTUP_TITLE = "Startup and\nexit code for\nglobal\nvariables"
+STARTUP_NOTE = "Byte-exact as\ninstructions; the\nglobals are still\nplaceholders, not\nin their own\nsource files yet"
+_STARTUP_NAMES = None
+
+
+def _startup_kind(a):
+    """Box in the startup panel: what the function does, from its symbol's kind (??__E = a global's initializer,
+    ??__F = its exit destructor) and, for an initializer, the match/synth template that matched it."""
+    global _STARTUP_NAMES
+    if _STARTUP_NAMES is None:
+        _STARTUP_NAMES = {}
+        for f in (glob.glob(W("match", "synth", "*.manifest")) + glob.glob(W("match", "**", "manifest.txt"), recursive=True)
+                  + glob.glob(W("src", "game", "**", "manifest.txt"), recursive=True)):
+            t = os.path.basename(f)[:-len(".manifest")] if f.endswith(".manifest") else ""
+            for line in open(f, errors="replace"):
+                p = line.split()
+                if len(p) >= 3 and not line.startswith("#") and re.fullmatch(r"[0-9a-fA-F]{8}", p[2]):
+                    _STARTUP_NAMES.setdefault(int(p[2], 16), (p[1], t))
+    name, t = _STARTUP_NAMES.get(a, ("", ""))
+    if name.startswith("??__F") or "atexit" in t or "dtor" in t:
+        return "destructors run at exit"
+    if not name.startswith("??__E"):
+        return "other startup code" if name else "not matched yet"
+    if "string" in t:
+        return "string initializers"
+    if re.search(r"vec|matrix|quat|rect|colou?r", t):
+        return "vector and matrix initializers"
+    if re.search(r"float|double|int|bool", t):
+        return "number initializers"
+    if re.search(r"key|_id", t):
+        return "resource key and ID initializers"
+    if "ctor" in t or "construct" in t:
+        return "object constructors"
+    return "other initializers"
+
+
 def _tree_rows():
     """(group, box, va, bytes, category) for every game function. Group = top directory of the dev build's object
     (work/migrate/modmap.json), box = the object. A function the module map does not assign joins the object on both
@@ -976,6 +1013,15 @@ def _tree_rows():
     mod = {int(v, 16): (m or {}).get("module") for v, m in MM["functions"].items()}
     gaps = sorted((int(g["lo"], 16), int(g["hi"], 16), g.get("before"), g.get("after")) for g in MM.get("gaps", []))
     los = [g[0] for g in gaps]
+    # The site's module map (tools/site/modules.json, tools/site/make_module_map.py) places most of the rest in a
+    # top-level group (ModAPI names, namespace strings, call graph, open-source libraries, compiler-generated code)
+    # but not in an object: those functions join their group in a box of their own instead of "Not placed".
+    try:
+        SM = json.load(open(W("tools", "site", "modules.json")))
+        site_lo = [int(v, 16) for v, _ in SM["runs"]]
+        site_mod = [SM["modules"][i] for _, i in SM["runs"]]
+    except (OSError, ValueError, KeyError):
+        site_lo, site_mod = [], []
     rows = []
     for a in sorted(game):
         m = mod.get(a)
@@ -983,10 +1029,17 @@ def _tree_rows():
             i = bisect.bisect_right(los, a) - 1
             if i >= 0 and gaps[i][0] <= a <= gaps[i][1] and gaps[i][2] and gaps[i][2] == gaps[i][3]:
                 m = gaps[i][2]
+        sg = None
+        if not m and site_lo:
+            j = bisect.bisect_right(site_lo, a) - 1
+            sg = site_mod[j] if j >= 0 and site_mod[j] != "Not yet attributed" else None
         if m:
             top = m.split("/")[0] if "/" in m else m
             group = "EA sound library" if top in SOUND_DIRS else top
             box = m.rsplit("/", 1)[-1].replace(".obj", "")
+        elif sg:
+            group = "EA sound library" if sg in SOUND_DIRS else sg
+            box = "object not known yet" if sg not in ("Compiler-generated code", "Open-source libraries") else sg
         elif a in KG:
             group, box = UNPLACED, "globals' initializers, compiler stubs"
         else:
@@ -1058,22 +1111,35 @@ def treemap(path):
     from matplotlib.collections import PatchCollection
     from matplotlib.patches import Patch, Rectangle
     INK, MUTED, SURFACE = "#0b0b0b", "#52514e", "#fcfcfb"
-    rows = _tree_rows()
+    every = _tree_rows()
+    # Startup and exit code for global variables (the compiler's per-global initializers and atexit destructors, plus
+    # the jump thunks and exception funclets the linker puts beside them): drawn as a separate treemap on the right, at
+    # the same scale. They are byte-exact as instructions, but the globals they set up are placeholders in generated
+    # files (match/synth), not real variables in the source file that owns them, which a playable build needs.
+    gen = [r for r in every if r[0] == "Compiler-generated code" or (r[0] == UNPLACED and r[1].startswith("globals'"))]
+    gen_ids = set(id(r) for r in gen)
+    rows = [r for r in every if id(r) not in gen_ids]
+    gen = [(STARTUP_GROUP, _startup_kind(r[2]), r[2], r[3], r[4]) for r in gen]
     colour = dict((k, c) for k, _l, c in TREE_CATS)
     label = dict((k, l) for k, l, _c in TREE_CATS)
     order = [k for k, _l, _c in TREE_CATS]
-    counts = collections.Counter(r[4] for r in rows)
+    counts = collections.Counter(r[4] for r in rows + gen)
     size = collections.Counter()
     boxes = collections.defaultdict(collections.Counter)    # (group, box) -> category -> bytes
     funcs = collections.defaultdict(list)                   # (group, box) -> [(va, bytes, category)]
     gsz = collections.Counter()
-    for g, b, a, n, cat in rows:
+    for g, b, a, n, cat in rows + gen:
         size[cat] += n
         boxes[(g, b)][cat] += n
         funcs[(g, b)].append((a, n, cat))
         gsz[g] += n
-    tot_b, tot_n = sum(size.values()) or 1, len(rows) or 1
+    tot_b, tot_n = sum(size.values()) or 1, len(rows) + len(gen) or 1
+    gen_b = sum(r[3] for r in gen)
+    gen_ok = sum(r[3] for r in gen if r[4] == "byte-exact")
     W_, H_ = 141.0, 100.0
+    GAP = 2.0
+    side_w = (W_ - GAP) * gen_b / tot_b if gen else 0.0     # same area scale as the main map
+    main_w = W_ - (side_w + GAP if gen else 0.0)
 
     fig, ax = plt.subplots(figsize=(16.0, 11.2), dpi=150)
     fig.patch.set_facecolor(SURFACE)
@@ -1096,17 +1162,26 @@ def treemap(path):
 
     fills, fcol, frames = [], [], []      # one cell per function (outlined), and the object frames
     labels = []
-    for g, (gx, gy, gw, gh) in squarify(list(gsz.items()), 0, 0, W_, H_):
+    layout = squarify([(g, v) for g, v in gsz.items() if g != STARTUP_GROUP], 0, 0, main_w, H_)
+    if gen:
+        layout.append((STARTUP_GROUP, (main_w + GAP, 0, side_w, H_)))
+    for g, (gx, gy, gw, gh) in layout:
         gx, gy, gw, gh = gx + 0.5, gy + 0.5, gw - 1.0, gh - 1.0
         if gw <= 1 or gh <= 1:
             continue
         ax.add_patch(Rectangle((gx, gy), gw, gh, fill=False, lw=1.5, ec=INK, zorder=5))
-        if gw > 6 and gh > 2.5:
+        if g == STARTUP_GROUP:
+            # a narrow column: a wrapped title, and a reminder of what byte-exact means here
+            ax.text(gx + 0.4, gy + gh - 0.15, STARTUP_TITLE, ha="left", va="top", fontsize=6.8, color=INK,
+                    weight="bold", zorder=7, linespacing=1.1, bbox=dict(boxstyle="square,pad=0.1", fc=SURFACE, ec="none"))
+            ax.text(gx + 0.4, gy + gh - 5.7, STARTUP_NOTE, ha="left", va="top", fontsize=6.0, color=MUTED, zorder=7,
+                    linespacing=1.1, bbox=dict(boxstyle="square,pad=0.1", fc=SURFACE, ec="none"))
+        elif gw > 6 and gh > 2.5:
             fs_g = 10.5 if gw > 14 else 7
             gl = g if len(g) * fs_g * 0.105 < gw - 0.8 else g[:max(1, int((gw - 0.8) / (fs_g * 0.105)) - 1)] + "…"
             ax.text(gx + 0.4, gy + gh - 0.15, gl, ha="left", va="top", fontsize=fs_g, color=INK,
                     weight="bold", zorder=7, bbox=dict(boxstyle="square,pad=0.1", fc=SURFACE, ec="none"))
-        strip = line_h + 0.75 if gw > 6 and gh > 2.5 else 0.1
+        strip = 12.4 if g == STARTUP_GROUP else line_h + 0.75 if gw > 6 and gh > 2.5 else 0.1
         mine = {b: c for (gg, b), c in boxes.items() if gg == g}
         for b, (fx, fy, fw, fh) in squarify([(b, sum(c.values())) for b, c in mine.items()],
                                             gx + 0.35, gy + 0.35, gw - 0.7, gh - strip - 0.35):
@@ -1176,11 +1251,15 @@ def treemap(path):
                labelcolor=INK, ncol=2, handlelength=1.1, handleheight=0.9)
     fig.suptitle("Spore (SporeApp.exe): %s game functions, %.2f MB - area = code bytes, colour = verdict"
                  % (human(tot_n), tot_b / 2**20), x=0.012, ha="left", fontsize=12, color=INK)
-    fig.text(0.012, 0.945, "Group (top directory of the dev build) -> object file -> one block per verdict -> one cell per function; area = "
-             "function size in bytes. Objects come from work/migrate/modmap.json; functions it does "
-             "not place in an object (so not migratable yet) are grouped by kind.\nThird-party libraries (OpenSSL, libpng, zlib, libjpeg, CRT) are excluded, "
-             "as in docs/STATUS.md. Verdicts: the equivalence sweep at %s (tools/difftest/verdicts.py)."
-             % (VERDICT_WHEN or "- (none yet)"), fontsize=8.2, color=MUTED, va="top")
+    fig.text(0.012, 0.945, "Group (top directory of the dev build) -> object file -> one block per verdict -> one cell per function; "
+             "area = function size in bytes. Objects come from work/migrate/modmap.json.\nA function it does not place in an "
+             "object (so not migratable yet) joins its group from the site's module map (tools/site/modules.json) in an "
+             "\"object not known yet\" box; the rest are under \"Not placed\" by kind.\nRight: %s functions (%.2f MB, %.1f%% "
+             "byte-exact) of startup and exit code for global variables, at the same scale; their globals are still "
+             "placeholders, not yet defined in their own source files. Third-party libraries (OpenSSL, libpng, zlib, "
+             "libjpeg, CRT) are excluded,\nas in docs/STATUS.md. Verdicts: the equivalence sweep at %s "
+             "(tools/difftest/verdicts.py)." % (human(len(gen)), gen_b / 2**20, 100.0 * gen_ok / max(1, gen_b),
+                                                VERDICT_WHEN or "- (none yet)"), fontsize=8.2, color=MUTED, va="top")
     fig.savefig(path, facecolor=SURFACE)
     print("wrote %s (%s functions in %d objects, %d labels)" % (os.path.relpath(path, ROOT), human(tot_n), len(boxes),
                                                                placed))

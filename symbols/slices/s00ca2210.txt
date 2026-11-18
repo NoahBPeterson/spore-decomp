@@ -1,0 +1,5 @@
+00ca2210 ?FUN_00ca2210@cVehicle_s00ca_2210@@QAE_NPAX@Z  # cVehicle_s00ca_2210::FUN_00ca2210 migrated from s00ca2210 (verbatim, slice spelling)
+00ca2370 ?FUN_00ca2370@cVehicle_s00ca_2210@@QAE_NXZ  # cVehicle_s00ca_2210::FUN_00ca2370 migrated from s00ca2210 (verbatim, slice spelling)
+00ca28a0 ?FUN_00ca28a0@cVehicle_s00ca_2210@@QAEXPAX@Z  # cVehicle_s00ca_2210::FUN_00ca28a0 migrated from s00ca2210 (verbatim, slice spelling)
+00ca2ae0 ?CreateDefaultTool@cVehicle@SP@@QAEXXZ  # SP::cVehicle::CreateDefaultTool migrated from s00ca2210
+00ca2e80 ?FUN_00ca2e80@cVehicle_s00ca_2210@@QAEXXZ  # cVehicle_s00ca_2210::FUN_00ca2e80 migrated from s00ca2210 (verbatim, slice spelling)

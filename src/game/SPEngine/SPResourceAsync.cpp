@@ -7,6 +7,7 @@
 #include "SP/cJob.h"
 #include "SP/cJobManager.h"
 #include <intrin.h>
+#include <string.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void ea_dealloc(void*);          // 0x00f47380
@@ -24,8 +25,8 @@ extern "C" void* ea_eastl_alloc(unsigned size, void* zone, int, int, const char*
 struct Job {
     void f();   // 0x690120
 };
-struct JobManager {
-    int ContinueJob();   // 0x68f970
+struct AsyncJobStatus {
+    SP::tJobStatus GetStatus() const; // 0x0068f970; reads status under the job-manager lock
 };
 extern "C" void ea_dealloc(void*);          // 0x00f47380
 extern void FUN_006ae090(void*);            // 0x006ae090 callback thunk
@@ -66,6 +67,24 @@ extern void* vtbl_14094d0;
 extern void* vtbl_14094cc;
 struct XRBTree { void DoNukeSubtree(void* n); };
 struct Mutex2 { void dtor(); };   // EA::Thread::Mutex::~Mutex (0x922130)
+// the 0x006aebd0 object: two bases (vtables 0x13eb938 / 0x13ef094 restored on exit), the mutex at +0x10 and the
+// tree at +0x40, nuked from its root at +0x4c
+struct RCacheB0 { virtual void Slot0(); ~RCacheB0() {} };
+struct RCacheB1 { virtual void Slot0(); ~RCacheB1() {} };
+struct RCacheMutex { char mData[0x30]; ~RCacheMutex(); };   // 0x922130
+struct RCacheTree {
+    void* mAnchor[3];
+    void* mpRoot;          // +0x0c
+    void* mRest[2];
+    void DoNukeSubtree(void* n);
+    ~RCacheTree() { DoNukeSubtree(mpRoot); }
+};
+struct RCacheObj_6aebd0 : RCacheB0, RCacheB1 {
+    char pad08[8];
+    RCacheMutex mMutex;    // +0x10
+    RCacheTree  mTree;     // +0x40
+    ~RCacheObj_6aebd0();
+};
 // ---- items of slice s006ae940 end
 
 // @ 0x006ae060
@@ -103,50 +122,64 @@ void __fastcall FUN_006ae110(void** p)
         q->f();
 }
 
+struct Base_6ae210_0 { virtual void v0(); ~Base_6ae210_0() {} };
+struct Base_6ae210_1 { virtual void v1(); ~Base_6ae210_1() {} };
+struct IRefRel_6ae120 { virtual void v0(); virtual void v1(); virtual void Release(); };
+struct RefPtr_6ae120 {
+    IRefRel_6ae120* p;
+    ~RefPtr_6ae120() { if (p) p->Release(); }
+};
+struct __declspec(novtable) Holder_6ae120 : Base_6ae210_0, Base_6ae210_1 {
+    void* m8;
+    RefPtr_6ae120 mc;
+    RefPtr_6ae120 m10;
+    ~Holder_6ae120();
+};
+
 // @ 0x006ae120
-void __fastcall FUN_006ae120(void* self)
+Holder_6ae120::~Holder_6ae120()
 {
-    void* p = *(void**)((char*)self + 0x10);
-    if (p)
-        ((void(__thiscall*)(void*))(*(void***)p)[2])(p);
-    void* q = *(void**)((char*)self + 0xc);
-    if (q)
-        ((void(__thiscall*)(void*))(*(void***)q)[2])(q);
-    *(void**)self = &vtbl_13eb938;
-    *(void**)((char*)self + 4) = &vtbl_13ef094;
 }
+
+struct Base_6ae190 { virtual void v0(); ~Base_6ae190() {} };
+struct __declspec(novtable) Holder_6ae190 : Base_6ae190 {
+    void* m4;
+    RefPtr_6ae120 m8;
+    RefPtr_6ae120 mc;
+    ~Holder_6ae190();
+};
 
 // @ 0x006ae190
-void __fastcall FUN_006ae190(void* self)
+Holder_6ae190::~Holder_6ae190()
 {
-    void* p = *(void**)((char*)self + 0xc);
-    if (p)
-        ((void(__thiscall*)(void*))(*(void***)p)[2])(p);
-    void* q = *(void**)((char*)self + 8);
-    if (q)
-        ((void(__thiscall*)(void*))(*(void***)q)[2])(q);
-    *(void**)self = &vtbl_13effb8;
 }
 
+struct Node_6ae210 : Base_6ae210_0, Base_6ae210_1 {
+    void* m8;
+    Job0* mpJob;
+    ~Node_6ae210();
+};
+
 // @ 0x006ae210
-void __fastcall FUN_006ae210(void* self)
+Node_6ae210::~Node_6ae210()
 {
-    *(void**)self = &vtbl_14094b4;
-    *(void**)((char*)self + 4) = &vtbl_14094b0;
-    void* p = *(void**)((char*)self + 0xc);
-    if (p)
-        ((Job0*)p)->GetStatus();
-    *(void**)self = &vtbl_13eb938;
-    *(void**)((char*)self + 4) = &vtbl_13ef094;
+    if (mpJob)
+        mpJob->GetStatus();
 }
 
 // @ 0x006ae280
-bool __fastcall FUN_006ae280(int self)
+bool SP::cAsyncResourceRequest::IsComplete()
 {
-    JobManager* j = *(JobManager**)(self + 0xc);
-    if (j) {
-        unsigned r = (unsigned)j->ContinueJob();
-        return r - 7 <= 1;
+    AsyncJobStatus* job;
+    memcpy(&job, mFutureResource, sizeof(job));
+    if (job) {
+        switch (job->GetStatus()) {
+        case SP::kJobStatusFinished:
+        case SP::kJobStatusFailed:
+            return true;
+        default:
+            return false;
+        }
     }
     return true;
 }
@@ -185,15 +218,18 @@ bool FUN_006ae2f0(char* p1, void* p2)
         oldObj = *(void**)(p1 + 0x20);
         *(void**)(p1 + 0x20) = p2;
         *(void(**)(void*))(p1 + 0x24) = &FUN_006ae090;
+        if (oldFn)
+            oldFn(oldObj);
+        return true;
     } else {
         oldFn = *(void(**)(void*))(p1 + 0x24);
         oldObj = *(void**)(p1 + 0x20);
         *(void**)(p1 + 0x20) = 0;
         *(void(**)(void*))(p1 + 0x24) = 0;
+        if (oldFn)
+            oldFn(oldObj);
+        return true;
     }
-    if (oldFn)
-        oldFn(oldObj);
-    return true;
 }
 
 // @ 0x006ae3f0
@@ -217,20 +253,29 @@ bool Self::Get(void** out)
     return q != 0;
 }
 
+// Construction view of the async resource request (0x006ae510): the request base, then the atomic refcount base
+// (count zeroed by an interlocked exchange), each with an unwind state; the job ref member adds a reference.
+struct AsyncReqBase_6ae510 { virtual void v0(); ~AsyncReqBase_6ae510() { (void)this; } };
+struct AsyncRefCount_6ae510 {
+    virtual void r0();
+    volatile long mRefCount;                 // +0x08
+    AsyncRefCount_6ae510() { volatile long* r = &mRefCount; _InterlockedExchange(r, 0); }
+    ~AsyncRefCount_6ae510() { (void)this; }
+};
+struct AsyncJobRef_6ae510 {
+    Job2* mpJob;
+    AsyncJobRef_6ae510(const AsyncJobRef_6ae510& o) : mpJob(o.mpJob) { if (mpJob) mpJob->Add(); }
+};
+struct AsyncReqView_6ae510 : AsyncReqBase_6ae510, AsyncRefCount_6ae510 {
+    AsyncJobRef_6ae510 mJob;                 // +0x0c
+    AsyncReqView_6ae510(const AsyncJobRef_6ae510& job);
+    virtual void v0();
+};
+
 // @ 0x006ae510
-void* __fastcall FUN_006ae510(void* self, int unused, void* arg)
+AsyncReqView_6ae510::AsyncReqView_6ae510(const AsyncJobRef_6ae510& job)
+    : mJob(job)
 {
-    (void)unused;
-    *(void**)self = &vtbl_13fa72c;
-    *(void**)((char*)self + 4) = &vtbl_13ef094;
-    *(void**)((char*)self + 8) = 0;
-    *(void**)self = &vtbl_14094b4;
-    *(void**)((char*)self + 4) = &vtbl_14094b0;
-    int v = *(int*)arg;
-    *(int*)((char*)self + 0xc) = v;
-    if (v)
-        ((Job2*)v)->Add();
-    return self;
 }
 
 // @ 0x006ae590
@@ -256,26 +301,44 @@ void RBTree::DoNukeSubtree(RBNode* n)
     }
 }
 
-// @ 0x006ae660
-void* __fastcall FUN_006ae660(void* self, void* val)
+// Node allocation of the resource-key map (0x006ae660): pop the pool's free list or allocate a node, then copy the
+// value (three key words and a resource ref that is AddRef'd) into it.
+struct ResRefObj_6ae660 { virtual void AddRef(); };
+struct ResKeyValue_6ae660 {
+    uint32_t mInstance, mType, mGroup;
+    ResRefObj_6ae660* mpResource;
+    ResKeyValue_6ae660(const ResKeyValue_6ae660& o)
+        : mInstance(o.mInstance), mType(o.mType), mGroup(o.mGroup), mpResource(o.mpResource) {
+        if (mpResource) mpResource->AddRef();
+    }
+    static void* operator new(size_t, void* p) throw() { return p; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct ResKeyNode_6ae660 { char mLinks[0x10]; ResKeyValue_6ae660 mValue; };
+struct ResKeyPool_6ae660 {
+    char pad[0x18];
+    void* mpHead;                     // +0x18
+    char pad1c[0xc];
+    unsigned mnNodeSize;              // +0x28
+    ResKeyNode_6ae660* AllocNode(const ResKeyValue_6ae660& value);
+};
+inline ResKeyNode_6ae660* ResKeyPoolTake_6ae660(ResKeyPool_6ae660* pool)
 {
-    void* n = *(void**)((char*)self + 0x18);
+    ResKeyNode_6ae660* n = (ResKeyNode_6ae660*)pool->mpHead;
     if (n)
-        *(void**)((char*)self + 0x18) = *(void**)n;
+        pool->mpHead = *(void**)n;
     else
-        n = ea_eastl_alloc(*(unsigned*)((char*)self + 0x28), &vtbl_14093bc, 0, 0,
+        n = (ResKeyNode_6ae660*)ea_eastl_alloc(pool->mnNodeSize, "EASTL", 0, 0,
                            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
                            0xd1);
-    void* d = (char*)n + 0x10;
-    if (d) {
-        *(void**)d = *(void**)val;
-        *(void**)((char*)d + 4) = *(void**)((char*)val + 4);
-        *(void**)((char*)d + 8) = *(void**)((char*)val + 8);
-        *(void**)((char*)d + 0xc) = *(void**)((char*)val + 0xc);
-        void* r = *(void**)((char*)d + 0xc);
-        if (r)
-            (*(void(__thiscall**)(void*))(*(void***)r))(r);
-    }
+    return n;
+}
+
+// @ 0x006ae660
+ResKeyNode_6ae660* ResKeyPool_6ae660::AllocNode(const ResKeyValue_6ae660& value)
+{
+    ResKeyNode_6ae660* n = ResKeyPoolTake_6ae660(this);
+    new (&n->mValue) ResKeyValue_6ae660(value);
     return n;
 }
 
@@ -292,30 +355,48 @@ void FUN_006aea90()
 {}
 
 // @ 0x006aebd0
-void __fastcall FUN_006aebd0(void* self)
+RCacheObj_6aebd0::~RCacheObj_6aebd0()
 {
-    *(void**)self = &vtbl_14094d0;
-    *(void**)((char*)self + 4) = &vtbl_14094cc;
-    void* anchor = *(void**)((char*)self + 0x4c);
-    ((XRBTree*)((char*)self + 0x40))->DoNukeSubtree(anchor);
-    ((Mutex2*)((char*)self + 0x10))->dtor();
-    *(void**)((char*)self + 4) = &vtbl_13ef094;
-    *(void**)self = &vtbl_13eb938;
 }
 
 // @ 0x006aec60
 void FUN_006aec60()
 {}
 
+// cAsyncResourceManager::cAsyncResourceManager(): the retail build inlines the two base-class vptr stores and
+// emits the member ctors (Mutex, eastl::fixed_map) with an EH frame that unwinds the constructed members.
+struct CtorBase1 {                                   // EA::COM::IUnknown32 / EA::ResourceMan::IAsync
+    virtual void slot_0();
+    virtual void slot_1();
+    virtual ~CtorBase1();
+    CtorBase1() {}
+};
+struct CtorBase2 {                                   // EA::RefCountTemplate<EA::Thread::AtomicInt<int> >
+    virtual ~CtorBase2();
+    int mRefCount;                                   // +0x8
+    int mPad;                                        // +0xc
+    CtorBase2() { volatile long* rc = (volatile long*)&mRefCount; _InterlockedExchange(rc, 0); }
+};
+struct CtorMutex {
+    __int64 mAlign;
+    CtorMutex(const void* params = 0, bool b = true);  // 0x9222a0 EA::Thread::Mutex::Mutex
+    ~CtorMutex();                                      // 0x922130 EA::Thread::Mutex::~Mutex
+    unsigned int mData[0x28 / 4];
+};
+struct CtorMap {
+    CtorMap();                                         // 0x6aea30 eastl::fixed_map ctor
+    ~CtorMap();
+    unsigned int mData[0x84c / 4];
+};
+struct CtorResMgr : CtorBase1, CtorBase2 {
+    CtorMutex mMutex;                                  // +0x10
+    CtorMap mMap;                                      // +0x40
+    CtorResMgr();
+};
+
 // @ 0x006aedc0
-void __fastcall FUN_006aedc0(void* self)
+CtorResMgr::CtorResMgr()
 {
-    *(void**)self = &vtbl_13fa72c;
-    *(void**)((char*)self + 4) = &vtbl_13ef094;
-    *(void**)((char*)self + 8) = 0;
-    *(void**)self = &vtbl_14094d0;
-    *(void**)((char*)self + 4) = &vtbl_14094cc;
-    ((Mutex2*)((char*)self + 0x10))->dtor();  // real: Mutex ctor
 }
 
 // @ 0x006af260

@@ -153,7 +153,7 @@ hkClass g_016e59b0("hkRagdollConstraintData", &g_016e4930, 0x90,
 struct TypeInfo { const char* name; void (*finish)(void*); const void* vtbl; };
 
 struct __declspec(align(16)) hkShapeCollection { unsigned pad[0x20/4]; hkShapeCollection(); };
-extern TypeInfo g_016e58b0, g_016e58ec, g_016e5c70, g_016e58e0;
+extern TypeInfo g_016e58b0, g_016e58ec, g_016e5c70;
 
 // @ 0x013B51D0
 void FUN_013b51d0() {
@@ -180,14 +180,21 @@ void FUN_013b55d0() {
     g_016e5c70.vtbl   = (const void*)0x014a6254;
     (void)action;
 }
-// @ 0x013B52D0
-extern float FUN_010c9050();
+// ---- the {name, finishFn, vtable} record the shape registration above fills in
+extern TypeInfo g_016e58e0;
 extern float g_015ba2d8;
+
+// Havok's RTTI helper: registers the type's name, then reports the current x87 rounding mode.
+extern const char hkCylinderShapeName[];
+extern float FUN_010c9050();
+
+// @ 0x013B52D0
 void FUN_013b52d0() {
+    extern const float g_01485720;
     float probe = FUN_010c9050();
-    g_016e58e0.name   = "hkCylinderShape";
+    g_016e58e0.name   = hkCylinderShapeName;
     g_016e58e0.finish = (void (*)(void*))0x010c98e0;
-    g_015ba2d8 = 1.0f - probe;
+    g_015ba2d8 = g_01485720 - probe;
     g_016e58e0.vtbl   = (const void*)0x014a40c4;
 }
 

@@ -16,7 +16,7 @@
 0090ca10  utf8_isInvalid2
 0090ca30  utf8_isInvalid3
 0090cab0  utf8_isInvalid4
-0090cb20  normal_scanComment
-0090cc60  normal_scanDecl
+0090cb20 ?normal_scanComment@@YAHPBUencoding@@PBD1PAPBD@Z  # normal_scanComment migrated from s0090c240 (built from expat's xmltok_impl.c)
+0090cc60 ?normal_scanDecl@@YAHPBUencoding@@PBD1PAPBD@Z  # normal_scanDecl migrated from s0090c240 (built from expat's xmltok_impl.c)
 0090cd70  normal_checkPiTarget
-0090cdd0  normal_scanAtts
+0090cdd0 ?normal_scanAtts@@YAHPBUencoding@@PBD1PAPBD@Z  # normal_scanAtts migrated from s0090c240 (built from expat's xmltok_impl.c)

@@ -169,6 +169,7 @@ ControlDrawable* UninitCopyBackward(ControlDrawable* first, ControlDrawable* las
     --last;
     --destEnd;
     destEnd->mId = last->mId;
+    _ReadWriteBarrier();
     Drawable* p = last->mpDrawable;
     Drawable* old = destEnd->mpDrawable;
     if (p != old) {
