@@ -1419,6 +1419,7 @@ AttrStorage cCreatureBase_sAttributes[35];   // 0x01571798
 extern float g_146a32c;         // FLT_MAX
 extern float g_150c8e4, g_150c8e8, g_150c8ec, g_150c8f0;
 extern float g_150c8f4, g_150c8f8, g_150c8fc;
+extern float g_150c888, g_150c88c;
 float g_150c88c = 1.25f;                    // 0x0150c88c
 float g_150c888 = 0.25f;                    // 0x0150c888
 extern float g_1687a00, g_1687a04, g_1687a0c, g_1687a10, g_1687a14;
