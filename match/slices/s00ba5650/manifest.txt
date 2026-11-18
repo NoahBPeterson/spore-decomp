@@ -13,3 +13,6 @@ slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba6710@@YADHPAPAH@Z          00ba6710  /O
 slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba6730@@YADHPAPAH@Z          00ba6730  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba65e0@cVarListSerializerHost@@QAEDPAH@Z  00ba65e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba64a0@@YGXHHH@Z  00ba64a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba57a0@@YAPAXPAUTelemetrySource@@H@Z  00ba57a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba5d30@@YAXPAUTelemetrySource@@@Z  00ba5d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ba5650/s00ba5650.cpp  ?FUN_00ba5d90@@YAXPAH0@Z  00ba5d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

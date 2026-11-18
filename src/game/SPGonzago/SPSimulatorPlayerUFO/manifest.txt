@@ -10,3 +10,4 @@
 ../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?OnContextChange@cSPSimulatorPlayerUFO_s00ff_e130@SP@@QAEXH@Z  00ffe130  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?FUN_00ffe3a0@cSPSimulatorPlayerUFO_s00ff_e130@SP@@QAEXH@Z  00ffe3a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?CalculateMaxEnergy@cSPSimulatorPlayerUFO_s00ff_d220@@QAEMXZ  00ffda80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPSimulatorPlayerUFO.cpp  ?Write@cSPSimulatorPlayerUFO@@QAE_NPAVcOutStream@@@Z  00ffbe60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

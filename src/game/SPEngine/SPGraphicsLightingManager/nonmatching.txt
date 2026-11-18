@@ -15,7 +15,6 @@
 00706b50 70 complete CfgPool::push over 0xb0-byte pool nodes (11-dword CfgRec snapshot before grow/alloc, then slot append); only MSVC store/`pop edi` scheduling differs (0x2c frame, regs, call sequence match) [equiv: PASS 278 valid, 100% cov] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706c80 89 complete forward copy of 9-dword elements; returns the first argument pointer in eax like the original; register allocation differs; slice/hybrid equiv WEAK 103 valid, 22.0% coverage, no mismatch; replay PASS flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706d00 64 complete vector-of-0x10 allocator; parameter register allocation differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
-00706d60 96 complete array-of-0x144 destructor loop; register allocation differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00706dd0 110 complete SP::cLightingConfig constructor (0x144-byte default env-lighting config); store order matches the original exactly, the three float4 defaults are copied as 12 dword moves; remaining delta is xmm register assignment (`1.0f`/`-1.0f`/triple/scale kept live in xmm1-3 vs rematerialised) and one `xorps` placement [equiv: PASS 400 valid, 100% cov] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 007070d0 209 cLightingWorld::UpdateLightPosition: complete reconstruction; vector RMW lane writes collapse to integer stores, register/frame schedule diverges
 00707270 258 cLightingWorld::RemoveLightFromList: complete reconstruction; list-array element moves and index bookkeeping differ in schedule
@@ -45,8 +44,6 @@
 0070ced0 324 eastl::vector<SP::cLightingConfig>::DoInsertValue; compare/order correct, cl EH state machine differs
 0070d080 451 eastl::vector<SP::cLightingConfig>::DoInsertValues; helper call shapes differ
 0070d2c0 699 SP::cLightingWorld::cLightingWorld; all field stores/calls reproduced, scheduling/SSE differ
-0070d6d0 205 SP::cLightingWorld::~cLightingWorld; member chain reproduced, register order differs
-0070dc90 156 SP::cLightingManager world factory; thiscast/register allocation differs
 0070ddd0 113 SP::cLightingManager::Shutdown; range-clear + map teardown reproduced, registers differ
 0070e280 32 cLightingManager message registration; 0070e160 is __thiscall (this in ecx, no stack arg); equiv WEAK (331 valid, 32.1% cov) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 007831d0 231 complete: degree-7 SH polynomial evaluation; equiv: FAIL (2/1200 mismatched, memory) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

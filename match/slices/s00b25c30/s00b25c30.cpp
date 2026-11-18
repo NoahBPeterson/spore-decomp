@@ -808,7 +808,7 @@ void cSPUITimeline::leave_game(int a, int b)
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x00b26c20  serialize the timeline field block
+// Timeline serialization interfaces
 // ---------------------------------------------------------------------------------------------
 class cOutStream {
 public:
@@ -839,10 +839,12 @@ public:
     void FUN_00b26c20(cOutStream* pStream);
 };
 
+// @ 0x00b26c20  serialize the timeline field block
 void cTimelineSerializer::FUN_00b26c20(cOutStream* pStream)
 {
+    cIOStream* __restrict writer = (cIOStream*)pStream->GetObject();
     uint32_t version = 0x12326f66;
-    cIOStream* pWriteStream = ((cIOStream*)pStream->GetObject())->GetWriteStream();
+    cIOStream* pWriteStream = writer->GetWriteStream();
     EA_IO_WriteUint32(pWriteStream, &version, 1, 0);
     cVarListSerializer serializer((char*)this - 8, g_serializedFieldName, 0x1a80d26);
     serializer.Serialize(pStream);

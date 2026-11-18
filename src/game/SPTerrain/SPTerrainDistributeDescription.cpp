@@ -7,6 +7,7 @@
 #include "EA/ArgScript/cCommandBase.h"
 #include "SP/cTerrainDistributeInfo.h"
 #include <math.h>
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern float kFXMaxFloat;                   // 0x015b0cb0
@@ -466,11 +467,10 @@ unsigned __fastcall FUN_00f63190(cTerrainDistributeCommand* p)
 }
 
 // @ 0x00f631e0
-void __fastcall FUN_00f631e0(int self, int dummy, int v, int w)
+void __fastcall FUN_00f631e0(int self, int, int parser, int state)
 {
-    (void)dummy; (void)w;
-    *(int*)(self + 0x30) = v;
-    FUN_0083c780(v, v);
+    *(int*)(self + 0x30) = state;
+    ((cCommandBaseBase*)self)->BaseOnRegister(parser, state);
 }
 
 // @ 0x00f631f0
@@ -489,23 +489,77 @@ void __fastcall FUN_00f631f0(int self, int dummy, cArguments* args)
     *(int*)(*(int*)(self + 0xc) + 0xc) &= 0xfffffffb;
 }
 
+struct TerrainArgumentParser {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void slot02();
+    virtual void slot03();
+    virtual void slot04();
+    virtual void slot05();
+    virtual void slot06();
+    virtual void slot07();
+    virtual void slot08();
+    virtual void slot09();
+    virtual void slot0a();
+    virtual void slot0b();
+    virtual void slot0c();
+    virtual void slot0d();
+    virtual void slot0e();
+    virtual void slot0f();
+    virtual void slot10();
+    virtual void slot11();
+    virtual void slot12();
+    virtual void slot13();
+    virtual void slot14();
+    virtual void slot15();
+    virtual void slot16();
+    virtual void slot17();
+    virtual void slot18();
+    virtual void slot19();
+    virtual void slot1a();
+    virtual void slot1b();
+    virtual void slot1c();
+    virtual void slot1d();
+    virtual void slot1e();
+    virtual void slot1f();
+    virtual void slot20();
+    virtual void slot21();
+    virtual void slot22();
+    virtual void StartBlock(void* command); // retail +0x8c
+    virtual void slot90();
+    virtual void slot94();
+    virtual float ParseFloat(const char* text); // retail +0x98
+    virtual int ParseInt(const char* text); // retail +0x9c
+};
+struct TerrainFacingCommand {
+    void* vtable;
+    TerrainArgumentParser* mParser;
+    int mRefCount;
+    cTDDistDesc* mDescription;
+};
+
+struct TerrainLevelCommand {
+    void* vtable;
+    TerrainArgumentParser* mParser;
+    char pad08[0x28];
+    cTDDistDesc* mDescription;
+};
+
 // @ 0x00f63280
-void __fastcall FUN_00f63280(int self, int dummy, cArguments* args)
+void __fastcall FUN_00f63280(TerrainLevelCommand* command, int,
+                              EA::ArgScript::cArguments* args)
 {
-    (void)dummy;
-    int n = 0;
-    int* a = ((cArguments3*)args)->MainArgsThree(&n, 0, 1);
-    if (n > 0) {
-        void* obj = *(void**)(self + 4);
-        int v = VPTR(int, obj, 0x9c, int)(obj, a[0]);
-        *(int*)(*(int*)(self + 0x30) + 0xd8) = v;
-    } else {
-        ++*(int*)(*(int*)(self + 0x30) + 0xd8);
-    }
-    int lvl = *(int*)(*(int*)(self + 0x30) + 0xd8);
-    if (lvl >= 0 && lvl < 5) {
-        void* obj = *(void**)(self + 4);
-        VPTR(void, obj, 0x8c, int)(obj, self);
+    int count;
+    const char* const* arguments = args->MainArguments(&count, 0, 1);
+    if (count > 0)
+        command->mDescription->mLevelIndex = command->mParser->ParseInt(arguments[0]);
+    else
+        ++command->mDescription->mLevelIndex;
+    int level = command->mDescription->mLevelIndex;
+    if (level >= 0) {
+        _ReadWriteBarrier();
+        if (level < 5)
+            command->mParser->StartBlock(command);
     }
 }
 
@@ -526,14 +580,13 @@ void __fastcall FUN_00f632f0(int self, int dummy, cArguments* args)
 }
 
 // @ 0x00f63360
-void __fastcall FUN_00f63360(int self, int dummy, cArguments* args)
+void __fastcall FUN_00f63360(TerrainFacingCommand* command, int,
+                              EA::ArgScript::cArguments* args)
 {
-    (void)dummy;
-    int* a = ((cArguments1*)args)->MainArgsOne(1);
-    void* obj = *(void**)(self + 4);
-    float f = VPTR(float, obj, 0x98, int)(obj, a[0]);
-    int d = *(int*)(self + 0xc);
-    *(float*)(d + *(int*)(d + 0xd8) * 0x28 + 0x1c) = f;
+    const char* const* arguments = args->MainArguments(1);
+    TerrainArgumentParser* parser = command->mParser;
+    cTDDistDesc* description = command->mDescription;
+    description->mBlock[description->mLevelIndex].mFacing = parser->ParseFloat(arguments[0]);
 }
 
 // @ 0x00f633a0

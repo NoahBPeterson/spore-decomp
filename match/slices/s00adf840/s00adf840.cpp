@@ -693,16 +693,19 @@ void SimB::tick(int a1, int a2)
 // @ 0x00ae0640
 Simulator::cObjectContext::cObjectContext()
 {
-    *(void**)((char*)this + 8) = (void*)VT_13ec458;
+    float initialLoadFactor = KF_1485720;
+    *(void* volatile*)((char*)this + 8) = (void*)VT_13ec458;
+    _ReadWriteBarrier();
     this->f0c = 0;
     this->vt0 = (void*)VT_145b918;
     this->vt08 = (void*)VT_145b908;
-    this->f20 = KF_1485720;
+    this->f20 = initialLoadFactor;
     this->f24 = KF_1470f1c;
     this->f1c = 0;
     this->f28 = 0;
     this->f18 = 1;
     this->f14 = (void*)D_154df28;
+    _ReadWriteBarrier();
     this->f44 = 0;
     char* p = (char*)this + 0x48;
     this->f30 = p;

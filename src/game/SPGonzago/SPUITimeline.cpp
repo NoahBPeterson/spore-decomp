@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "SP/cTelemetry.h"
 #include "EA/Stopwatch.h"
 #include "cSPUIAnimator.h"
 #include "cSPUILayout.h"
@@ -4727,7 +4728,17 @@ uint32_t cSPUITimeline_s00e3_a990::GetSelectedPaletteId()
 // @ 0x00e3b630
 bool IsPaletteIdPresent(uint32_t nId)
 {
-    (void)nId;
+    const eastl::list<SP::cTelemetryItem>* items =
+        static_cast<SP::cTelemetry*>(FUN_0067de90())->GetItems(12);
+    if (items) {
+        for (eastl::ListNodeBase* node = items->mNode.mpNext;
+             node != &items->mNode; node = node->mpNext) {
+            const SP::cTelemetryItem& item =
+                static_cast<eastl::ListNode<SP::cTelemetryItem>*>(node)->mValue;
+            if (nId == item.mData.mpBegin[0].mUint)
+                return true;
+        }
+    }
     return false;
 }
 

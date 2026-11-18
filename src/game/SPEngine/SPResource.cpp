@@ -318,11 +318,24 @@ void FUN_006ac2f0(void* self, void* a2, void* a3)
     (void)self; (void)a2; (void)a3;
 }
 
+// List node creation (0x006ac3c0): allocate a 0xc-byte node and copy the resource ref (AddRef'd) into its value.
+struct ResNodeObj_6ac3c0 { virtual void AddRef(); };
+struct ResNodeRef_6ac3c0 {
+    ResNodeObj_6ac3c0* mpObject;
+    ResNodeRef_6ac3c0(const ResNodeRef_6ac3c0& o) : mpObject(o.mpObject) { if (mpObject) mpObject->AddRef(); }
+    static void* operator new(size_t, void* p) throw() { return p; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct ResNode_6ac3c0 { void* mpNext; void* mpPrev; ResNodeRef_6ac3c0 mValue; };
+struct ResNodeList_6ac3c0 { ResNode_6ac3c0* DoCreateNode(const ResNodeRef_6ac3c0& value); };
+
 // @ 0x006ac3c0
-void FUN_006ac3c0(void* self)
+ResNode_6ac3c0* ResNodeList_6ac3c0::DoCreateNode(const ResNodeRef_6ac3c0& value)
 {
-    // TODO(partial): fixed-allocator core teardown.
-    (void)self;
+    ResNode_6ac3c0* n = (ResNode_6ac3c0*)AllocBytes(sizeof(ResNode_6ac3c0), "EASTL", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    new (&n->mValue) ResNodeRef_6ac3c0(value);
+    return n;
 }
 
 // @ 0x006ac440
@@ -729,6 +742,13 @@ RegTableOwner::~RegTableOwner()
     }
 }
 
+// a temporary reference that starts out empty and is released when it goes out of scope
+struct IObjTempRef {
+    IObj* mp;
+    IObjTempRef() : mp(0) {}
+    ~IObjTempRef() { if (mp) mp->Release(); }
+};
+
 // @ 0x006ad180
 void IObjVec::PushNull()
 {
@@ -737,9 +757,8 @@ void IObjVec::PushNull()
         mpEnd = p + 1;
         if (p) *p = 0;
     } else {
-        IObj* tmp = 0;
-        DoInsertValue(p, &tmp);
-        if (tmp) tmp->Release();
+        IObjTempRef tmp;
+        DoInsertValue(p, &tmp.mp);
     }
 }
 
@@ -935,17 +954,25 @@ void FUN_006ada20()
 void FUN_006adb40()
 {}
 
+// Deleting destructor of the resource registry (0x006adbf0): the destructor clears the global registry pointer, the
+// key/resource map at +0xc is destroyed (0x6ad0f0), the base restores its vtable, then the zone object is freed.
+void RegistryZoneDelete_6adbf0(void* p);   // 0x926060
+struct RegistryMap_6adbf0 { char d[4]; ~RegistryMap_6adbf0(); };   // 0x6ad0f0
+struct RegistryBase_6adbf0 { virtual void v0(); ~RegistryBase_6adbf0() { (void)this; } };
+struct RegistryView_6adbf0 : RegistryBase_6adbf0 {
+    char pad04[8];
+    RegistryMap_6adbf0 mMap;      // +0x0c
+    ~RegistryView_6adbf0() { g_pRegistry = 0; }
+    void* DeletingDtor(unsigned char flags);
+};
+
 // @ 0x006adbf0
-void* __fastcall FUN_006adbf0(void* self, int unused, unsigned char flag)
+void* RegistryView_6adbf0::DeletingDtor(unsigned char flags)
 {
-    (void)unused;
-    *(void**)self = &vtbl_14093cc;
-    g_pRegistry = 0;
-    ((KRSub*)((char*)self + 0xc))->Destroy();
-    *(void**)self = &vtbl_13effb8;
-    if (flag & 1)
-        ea_zone_delete(self);
-    return self;
+    this->~RegistryView_6adbf0();
+    if (flags & 1)
+        RegistryZoneDelete_6adbf0(this);
+    return this;
 }
 
 // @ 0x006adc60
@@ -963,30 +990,55 @@ void __fastcall FUN_006adc90(void* self, void* arg)
     // then FUN_006ada20(0x10/0x40/0x20) on three cache globals.
 }
 
+void __fastcall FUN_006add30(void* self, void* a);   // 0x006add30 (callers' view)
+// Copy-construction view of the fixed vector built at 0x006add30: the vector base takes the inline pool (+0x18) and frees
+// on unwind; the elements are assigned through 0x006ad970 with an uninitialized iterator tag.
+struct FixVecCopy_6add30Tag {};
+struct FixVecCopy_6add30Base {
+    char* mpBegin; char* mpEnd; char* mpCap; int mc; char* mpPool;
+    explicit FixVecCopy_6add30Base(char* pool) { mpBegin = 0; mpEnd = 0; mpCap = 0; mpPool = pool; }
+    ~FixVecCopy_6add30Base();
+};
+struct FixVecCopy_6add30 : FixVecCopy_6add30Base {
+    int  m14;
+    char mBuffer[0x20];          // +0x18
+    FixVecCopy_6add30(const FixVecCopy_6add30& x);
+    void DoAssign(char* first, char* last, FixVecCopy_6add30Tag tag);   // 0x006ad970
+};
+
 // @ 0x006add30
-void __fastcall FUN_006add30(void* self, void* a)
+FixVecCopy_6add30::FixVecCopy_6add30(const FixVecCopy_6add30& x) : FixVecCopy_6add30Base(mBuffer)
 {
-    *(void**)((char*)self + 0x10) = (char*)self + 0x18;
-    *(void**)((char*)self + 4) = (char*)self + 0x18;
-    *(void**)self = (char*)self + 0x18;
-    *(void**)((char*)self + 8) = (char*)self + 0x38;
-    void* x = *(void**)a;
-    void* y = *(void**)((char*)a + 4);
-    ((Sub970*)self)->Do(x, y, a);
+    mpBegin = mpEnd = mBuffer;
+    mpCap = mpBegin + 0x20;
+    FixVecCopy_6add30Tag tag;
+    DoAssign(x.mpBegin, x.mpEnd, tag);
 }
 
+// Node allocation of 0x006adda0: the 0x3c-byte value (a key and a member copied by 0x006add30) is copy-constructed in
+// place, then the link at +0x3c cleared.
+struct NodeMember_6adda0 {
+    NodeMember_6adda0(const NodeMember_6adda0& o);   // 0x006add30
+    unsigned d[14];
+};
+struct NodeVal_6adda0 {
+    unsigned key;
+    NodeMember_6adda0 m;
+    static void* operator new(unsigned, void* p) throw() { return p; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct Node_6adda0 { NodeVal_6adda0 v; unsigned next; };
+struct NodeAlloc_6adda0 { Node_6adda0* DoAllocateNode(const NodeVal_6adda0& v); };
+
 // @ 0x006adda0
-void* __fastcall FUN_006adda0(void* a)
+Node_6adda0* NodeAlloc_6adda0::DoAllocateNode(const NodeVal_6adda0& v)
 {
-    void* n = ea_eastl_alloc(
+    Node_6adda0* n = (Node_6adda0*)ea_eastl_alloc(
         0x40, &vtbl_14093bc, 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
         0xd1);
-    if (n) {
-        *(void**)n = *(void**)a;
-        ((void(__fastcall*)(void*, void*))FUN_006add30)((char*)n + 4, (char*)a + 4);
-    }
-    *(int*)((char*)n + 0x3c) = 0;
+    new (&n->v) NodeVal_6adda0(v);
+    n->next = 0;
     return n;
 }
 

@@ -102,9 +102,8 @@ struct GmeRefCount {                                       // RefCountTemplate<i
     int mnRefCount;                                   // +4
 };
 inline void ReleaseRef(GmeRefCount* p) {                   // inline RefCountTemplate::Release
-    volatile int* r = &p->mnRefCount;
-    int n = *r + -1;
-    *r = n;
+    int n = p->mnRefCount - 1;
+    p->mnRefCount = p->mnRefCount - 1;
     if (n == 0) { p->mnRefCount = 1; delete p; }
 }
 template<class T> struct AutoRef {
@@ -242,7 +241,6 @@ virtual void w11();
 virtual void w12();
     virtual void AddRef();                                               // +0x34
     virtual void Release();                                              // +0x38
-    ~GmeIComponent() {}
 };
 struct cEffectParams {
     void* vtbl; char pad[0xcc];
@@ -333,7 +331,8 @@ struct AnimVec5 {                                     // eastl::vector<cAnimatio
 };
 struct CtrlVec5 : CtrlVec { int mAlloc2; };
 struct cIModelManager;
-struct cGameModelEffect : GmeIComponent, GmeRefCount {
+struct GmeEffectBase : GmeIComponent, GmeRefCount { ~GmeEffectBase() {} };
+struct cGameModelEffect : GmeEffectBase {
     void* mDesc;                                      // +0x0c
     int mPackageID;                                   // +0x10
     bool mActive, mIsVisible, mIsLoaded;              // +0x14..0x16
@@ -602,7 +601,6 @@ struct cAbilityCmd {
     float  mx, my, mz;    // +0x18,+0x1c,+0x20
     int    mId;           // +0x24
 
-    void Destroy();
     void SetIface(int, int, int);
     void Activate(int);
     void Deactivate(int);
@@ -1587,17 +1585,26 @@ bool __stdcall FilterAbilityType(int type, int, int)
     }
 }
 
+// the destructor's view of cAbilityCmd: two bases (vtables restored to 0x13f21d4 at +0 and 0x13ef094 at +4) and
+// the interface at +0x10, released through vtable slot 1 when the command is destroyed
+struct cAbilityCmdBase0 { virtual void Slot0(); };
+struct cAbilityCmdBase1 { virtual void Slot0(); ~cAbilityCmdBase1() {} };
+struct IAbilityCmdIface { virtual void Slot0(); virtual void Release(); };
+struct cAbilityCmdIfaceRef {
+    IAbilityCmdIface* mp;
+    ~cAbilityCmdIfaceRef() { if (mp != 0) mp->Release(); }
+};
+struct cAbilityCmdBase : cAbilityCmdBase0, cAbilityCmdBase1 { ~cAbilityCmdBase() {} };
+struct cAbilityCmdObj : cAbilityCmdBase {
+    int    mUnk08;        // +0x08
+    void*  mDesc;         // +0x0c
+    cAbilityCmdIfaceRef mIface; // +0x10
+    ~cAbilityCmdObj();
+};
+
 // @ 0x007d7d00
-void cAbilityCmd::Destroy()
+cAbilityCmdObj::~cAbilityCmdObj()
 {
-    mBaseVtbl = (void**)0x01412458;
-    mAbilityVtbl = (void**)0x01412454;
-    if (mIface != 0) {
-        void** vt = *(void***)mIface;
-        ((void(__thiscall*)(void*))vt[1])(mIface);
-    }
-    mAbilityVtbl = (void**)0x013ef094;
-    mBaseVtbl = (void**)0x013f21d4;
 }
 
 // @ 0x007d7d70
@@ -1954,25 +1961,26 @@ void* FUN_007dfbf0()
     return 0;
 }
 
+struct AutoRefAdd {
+    GmeRefCount* mpObject;
+    AutoRefAdd(GmeRefCount* p) : mpObject(p) { if (p) ++p->mnRefCount; }
+    ~AutoRefAdd() { if (mpObject) ReleaseRef(mpObject); }
+};
+struct SwarmAnonDesc : GmeRefCount {
+    virtual ~SwarmAnonDesc() {}
+};
+
 // @ 0x007dfd90
 void cDescCtx::FUN_007dfd90(EA::ArgScript::cArguments_s007d_f780* args)
 {
-    int count = 0;
+    int count;
     const char** av = args->MainArguments(&count, 0, 1);
     if (count == 1) {
         ((EA::Swarm::cEffectsParser*)mParser)->AddDescription(args, av[0], 0x29, 0);
         return;
     }
-    void** p = (void**)EAllocSwarm(8, "Swarm", 0, 0, 0, 0);
-    if (p) { p[1] = 0; p[0] = (void*)0x1453948; }
-    if (p) p[1] = (void*)((int)p[1] + 1);
-    ((EA::Swarm::cEffectsParser*)mParser)->AddAnonDescription(args, 0x29, p, 0);
-    if (p) {
-        int rc = (int)p[1] - 1;
-        p[1] = (void*)rc;
-        if (rc == 0) {
-            p[1] = (void*)1;
-            (*(void(__thiscall**)(void*, int))(*(void**)p))(p, 1);
-        }
-    }
+    void* mem = EAllocSwarm(8, "Swarm", 0, 0, 0, 0);
+    GmeRefCount* obj = mem ? new (mem) SwarmAnonDesc() : 0;
+    AutoRefAdd ref(obj);
+    ((EA::Swarm::cEffectsParser*)mParser)->AddAnonDescription(args, 0x29, ref.mpObject, 0);
 }

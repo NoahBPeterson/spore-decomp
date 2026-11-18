@@ -9,3 +9,4 @@
 ../src/game/SPGonzago/SPOrnamentView.cpp  ?Update@cMineralView_s00e8_f0b0@@QAEXPAX0@Z  00e8f490  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPOrnamentView.cpp  ?Update@cTribeFoodMatView@@QAEXPAX0@Z  00e8f6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPOrnamentView.cpp  ?Update@cInteractableObjectView@@QAEXPAX0@Z  00e8ff10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPOrnamentView.cpp  ?GetOrnamentModelKey@@YG_NPBUcSimulatorObject@@PAUcModelKey@@@Z  00e8eb90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

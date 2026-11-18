@@ -538,13 +538,6 @@ namespace EA { namespace IO {
 bool __cdecl WriteUint32(void* stream, const void* value, int count, int flags); // 0x0093aa70
 } }
 
-static inline void WriteU32(cOutStream* s, uint32_t v)
-{
-  uint32_t t = v;
-  cStreamPos* st = s->GetWriter()->GetStream();
-  EA::IO::WriteUint32(st, &t, 1, 0);
-}
-
 struct SerializerThunk
 {
   void Serialize(cOutStream* stream);
@@ -556,7 +549,10 @@ struct SerializerThunk
 // @ 0x00f39e80
 void SerializerThunk::Serialize(cOutStream* stream)
 {
-  WriteU32(stream, 0x06fd9895);
+  cStreamWriter* __restrict writer = stream->GetWriter();
+  uint32_t marker = 0x06fd9895;
+  cStreamPos* raw = writer->GetStream();
+  EA::IO::WriteUint32(raw, &marker, 1, 0);
 
   cVarListSerializer serializer(this, (cDataSerializerGeneric*)0x015b029c, 0x01a80d26);
   serializer.Serialize(stream);

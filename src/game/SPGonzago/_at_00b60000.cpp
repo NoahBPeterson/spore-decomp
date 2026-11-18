@@ -1872,13 +1872,12 @@ static __forceinline unsigned int PackARGB(const Vec3& c) {
 // ---- items of slice s00b6e3d0 end
 
 // @ 0x00b63930
-uchar __thiscall cGonzagoTimer::Read(void* ser)
+bool SP::cGonzagoTimer::Read(SP::cIObjectDatabaseIStream& stream)
 {
-    cVarListSerializer s((char*)this, &gSig2, 0x1a80d26);
-    uchar r = s.SerializeB(ser);
-    long long b = ((long long(__thiscall*)(void*))mGetMs)(this);
-    mBase = b;
-    return r;
+    SP::cVarListSerializer serializer(this, reinterpret_cast<SP::cDataSerializerGeneric*>(&gSig2), SP::cVarListSerializer::kSignature);
+    bool result = serializer.Serialize(stream);
+    mBaseTime = mGetMillisecondTime();
+    return result;
 }
 
 // @ 0x00b639b0
@@ -4597,6 +4596,19 @@ void UpdateSimulatorUI(UICtx* pCtx, int a2, float* pOffset, int a4, float a5)
         pCtx->ShowSimulatorText(pOffset, a2, (const void*)textID, &pos, i1, i2);
     else
         RemoveUISlot(pCtx->mID);
+}
+
+// @ 0x00b6d160
+extern const float _HK_REAL_ONE;   // 0x01485720
+void FUN_00b6d160(int key, int index)
+{
+    UICtx* pCtx = ShowHealthBar(key);
+    if (!pCtx)
+        return;
+    float one = _HK_REAL_ONE;
+    pCtx->mIndex = index;
+    _ReadWriteBarrier();
+    pCtx->mTimer = one;
 }
 
 // @ 0x00b6d3c0

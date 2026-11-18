@@ -540,27 +540,29 @@ void Draw2D::FUN_00956500(const Drawing::Vertex2D* pSrc, unsigned int count, Tex
 void Draw2D::FUN_00956730(float x, float y, Text::IVt4* pObj) {
   if (!pObj) return;
   Text::FontMetrics* pFont = (Text::FontMetrics*)pObj->v3(0x1be6ab3);
-  if (!pFont) return;
-  const float w = (float)*(int*)((char*)pFont + 0x1c);
-  const float h = (float)*(int*)((char*)pFont + 0x20);
-  RectT<float> uv = {0.0f, 0.0f, 1.0f, 1.0f};
-  RectT<float> rect = {x, y, x + w, y + h};
-  RectBlit(&rect, &uv, pFont);
+  if (pFont) {
+    const float w = (float)*(int*)((char*)pFont + 0x1c);
+    const float h = (float)*(int*)((char*)pFont + 0x20);
+    RectT<float> uv = {0.0f, 0.0f, 1.0f, 1.0f};
+    RectT<float> rect = {x, y, x + w, y + h};
+    RectBlit(&rect, &uv, pFont);
+  }
 }
 
 // @ 0x009567c0
 void Draw2D::FUN_009567c0(float x, float y, Text::IVt4* pObj, const RectT<float>* pUV) {
   if (!pObj) return;
   Text::FontMetrics* pFont = (Text::FontMetrics*)pObj->v3(0x1be6ab3);
-  if (!pFont) return;
-  const float w = (float)*(int*)((char*)pFont + 0x1c);
-  const float h = (float)*(int*)((char*)pFont + 0x20);
-  RectT<float> rect;
-  rect.mLeft = x;
-  rect.mTop = y;
-  rect.mRight = x + w;
-  rect.mBottom = y + h;
-  RectBlit(&rect, pUV, pFont);
+  if (pFont) {
+    const float w = (float)*(int*)((char*)pFont + 0x1c);
+    const float h = (float)*(int*)((char*)pFont + 0x20);
+    RectT<float> rect;
+    rect.mLeft = x;
+    rect.mTop = y;
+    rect.mRight = x + w;
+    rect.mBottom = y + h;
+    RectBlit(&rect, pUV, pFont);
+  }
 }
 
 // @ 0x00956830

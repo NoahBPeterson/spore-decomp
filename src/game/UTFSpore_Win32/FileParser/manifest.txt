@@ -8,3 +8,7 @@
 ../src/game/UTFSpore_Win32/FileParser.cpp  ?Destroy@FileWatcher@@QAEXXZ  0092fc50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/FileParser.cpp  ?DestroyScalar@FileWatcher@@QAEPAU1@E@Z  0092fc80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/FileParser.cpp  ?DoFreeNodesFileNotify@@YGXPAPADI@Z  0083fee0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/FileParser.cpp  ?RefRelease@@YIXPAPAH@Z  0083f8f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/FileParser.cpp  ?Init@FileParserRegistration@@QAE_NXZ  0083f630  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/FileParser.cpp  ??1FPDtorView@@UAE@XZ  00840250  /O2 /MD /Gy /EHsc /TP /GS- /GR- /Isrc/game/include
+../src/game/UTFSpore_Win32/FileParser.cpp  ??0FPDtorView@@QAE@XZ  00840700  /O2 /MD /Gy /EHsc /TP /GS- /GR- /arch:SSE /Isrc/game/include

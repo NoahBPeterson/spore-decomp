@@ -1,8 +1,5 @@
 00737b40  603  group material remap/compaction (index map, live-material pack, index renumber, vector resize): complete; equiv WEAK (22.4% coverage); eastl map calls inlined, block/register schedule differs; flags /O2 /MD /Gy /EHsc /TP
 00737ef0  1135  group data de-duplication + material expansion (dense ids, descriptor clone/fill, owner refcount swap): complete; equiv WEAK (8.7% coverage); open-addressed map replaced by an ordered key scan, schedule differs; flags /O2 /MD /Gy /EHsc /TP
 007383a0  532  part compaction (live-part map, pack, index renumber, vector resize): complete; equiv WEAK (38.1% coverage); bitmap/eastl-helper inlining differs from the retail inline sequence; flags /O2 /MD /Gy /EHsc /TP
-00737dc0  136  ElemPool24::ctor reconstruction; allocator + construction sequence differs from original
-00737e80  90   InlineBuf::ctor reconstruction; GroupCtor now a thiscall member (this in ecx, args a/&b) matching the original; inline-buffer/frame schedule differs [equiv: PASS 302/302, 100% cov]
+00737dc0  136  frame: R49 (2026-11-17): variant (PoolTemp local w/ dtor, C++ PartArrayInit instead of extern C) gives cxx frame, 183 vs 192 B, 62 diff lines. Retail also stores this ([esp+0x10]) for an unwind of the ElemPool24 itself (its own vector member/base dtor state 0) and a byte state flag for the temp (state 1), uses 0x28 frame; ElemPool24 needs a real destructor'd base/member (hierarchy). Lead: make ElemPool24 hold an EA vector-like member with dtor and a 2-state frame. | Earlier note: ElemPool24::ctor reconstruction; allocator + construction sequence differs from original
 00738610  455  PartInit reconstruction; early-returns for count <= 0 (original skips init/compact/rebuild); EASTL vector schedule differs [equiv: WEAK 260/260, 10.3% cov]
-007387f0  18   AddAnimGroupsA: complete; near miss, EH-state store placement only
-00738900  30   AddAnimGroupsB: complete; near miss, EH-state store placement only

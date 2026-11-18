@@ -350,18 +350,23 @@ struct FixedHashtable {
     void  hashtableCtor(int bucketCount, int a, int* pb1, int* pb2, int b, int* pb3,
                         FixedPoolBase* pool);                 // 0xa43690
 };
-struct FixedString {
+struct FixedStringBase {
     char* mpBegin;         // +0x00
     char* mpEnd;           // +0x04
     char* mpCapEnd;        // +0x08
     int   mAllocator;      // +0x0c
     char* mpLocal;         // +0x10
+    FixedStringBase(char* buf)
+    {
+        mpLocal  = buf;
+    }
+    void assign(const char* first, const char* last);   // 0x942e50
+    ~FixedStringBase() { assign(0, 0); }
+};
+struct FixedString : FixedStringBase {
     char  mBuf[0x80];      // +0x14
     FixedString(const char* p, int len);        // 0xa450c0
-    ~FixedString();                              // inline
-    void assign(const char* first, const char* last);   // 0x942e50
 };
-FixedString::~FixedString() { assign(0, 0); }
 extern "C" uint32 g_resourceGroupId;   // 0x15541dc
 struct ResKey { uint32 id; uint32 group; uint32 extra; };
 struct ResKeyList { ResKey* mpBegin; ResKey* mpEnd; ResKey* mpCapEnd; };
@@ -1549,21 +1554,19 @@ cSound::cSound()
 }}  // namespace SP::Audio
 
 // @ 0x00a41fc0
-double FUN_00a41fc0()
+static inline LARGE_INTEGER ReadPerformanceCounter()
 {
     LARGE_INTEGER li;
-    if (!(gTimerFlags & 1)) {
-        gTimerFlags |= 1;
-        QueryPerformanceCounter(&li);
-        gStart = li;
-    }
-    if (!(gTimerFlags & 2)) {
-        gTimerFlags |= 2;
-        unsigned __int64 freq = GetStopwatchFrequency();
-        gSecondsPerTick = 1.0 / (double)freq;
-    }
     QueryPerformanceCounter(&li);
-    return (double)(li.QuadPart - gStart.QuadPart) * gSecondsPerTick;
+    return li;
+}
+
+double FUN_00a41fc0()
+{
+    static LARGE_INTEGER start = ReadPerformanceCounter();
+    static double secondsPerTick = 1.0 / (double)GetStopwatchFrequency();
+    LARGE_INTEGER now = ReadPerformanceCounter();
+    return (double)(now.QuadPart - start.QuadPart) * secondsPerTick;
 }
 
 // @ 0x00a42190
@@ -2400,13 +2403,11 @@ void* FixedHashtable::ctor(int a, int b)
 }
 
 // @ 0x00a450c0
-FixedString::FixedString(const char* p, int len)
+FixedString::FixedString(const char* p, int len) : FixedStringBase(mBuf)
 {
-    mpLocal   = mBuf;
-    mpCapEnd  = mBuf + 0x80;
-    mpEnd     = mBuf;
-    mpBegin   = mBuf;
-    mBuf[0]   = 0;
+    mpCapEnd = mpLocal + 0x80;
+    mpBegin  = mpEnd = mpLocal;
+    *mpBegin = 0;
     assign(p, p + len);
 }
 

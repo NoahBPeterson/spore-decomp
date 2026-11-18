@@ -2037,15 +2037,17 @@ void PL_s00f0_31a0::f031a0()
 // @ 0x00f031d0
 void PL_s00f0_31a0::f031d0()
 {
-    Big_s00f0_31a0* o = (Big_s00f0_31a0*)FUN_00eebf80(*(void**)((char*)g_mgr + 4));
+    void* current = MGR_s00f0_31a0->f4;
+    Big_s00f0_31a0* o = (Big_s00f0_31a0*)FUN_00eebf80(current);
     if (o) {
         Big_s00f0_31a0 tmp;
         tmp.copyFrom(o);
         pGame->InitThing();
         void* v = pGame->GetAt(&tmp);
-        void* w = FUN_00eec0d0(v);
-        void** slot = (void**)((char*)vtable + 0x20);
-        (*(void (__thiscall**)(PL_s00f0_31a0*, void*))slot)(this, w);
+        typedef void (__thiscall *SetObject)(PL_s00f0_31a0*, void*);
+        SetObject* slot = (SetObject*)((char*)vtable + 0x20);
+        void* object = FUN_00eec0d0(v);
+        (*slot)(this, object);
 
         if (tmp.p20c && tmp.p20c[-1])
             operator_delete_(tmp.p20c);

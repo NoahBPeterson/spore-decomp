@@ -539,13 +539,13 @@ void __cdecl SP_sDigestionOutput(int param_1, int param_2, float param_3)
 void __cdecl SP_sDigestion_End(int param_1, float param_2)
 {
     CatalogScratch scratch;
-    const int iVar1 = ((CellStub*)(g_cellGame + 0x1c))->b721d0(param_1);
+    CellStub* cells = (CellStub*)(g_cellGame + 0x1c);
+    const int iVar1 = cells->b721d0(param_1);
     if (iVar1 == 0)
         return;
     scratch.VecClear();
     const int uVar2 = FUN_00e4cc40(*(int*)(iVar1 + 0x108), &scratch);
-    const int iVar3 = FUN_00e52910(uVar2);
-    SP_sDigestionOutput(iVar1, *(int*)(iVar3 + 0x78), param_2);
+    SP_sDigestionOutput(iVar1, *(int*)(FUN_00e52910(uVar2) + 0x78), param_2);
     scratch.FUN_00e82130();
 }
 

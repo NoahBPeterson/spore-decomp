@@ -1,7 +1,5 @@
 # va  diff-bytes  reason
 00a26e10  180  complete; original returns the InsertRes* (out) in eax at every ret, now returned too; DoInsertKey node order / register allocation differs; difftest WEAK under flags /O2 /MD /Gy /EHsc /TP /GS- (207 valid, 88.2% coverage, no mismatch)
-00a27010  79  complete; original has EH frame (node alloc unwind) not reproduced
-00a27170  131  complete; EH state/AutoRefCount temps not reproduced
 00a27340  87  complete; hashtable iterator by-value arg plumbing differs; difftest WEAK after making it a thiscall member StyleMgr::Remove (original takes this in ecx, ret 4); coverage 48% because the found path needs the real hashtable find to hit
 00a273d0  104  complete; iterator loop shape differs; difftest PASS after making it a thiscall member StyleMgr::RemoveAll (this in ecx)
 00a27460  63  complete; AutoRefCount temp pattern not reproduced; difftest PASS after making it a thiscall member TexMgr::Find (this in ecx, ret 4)

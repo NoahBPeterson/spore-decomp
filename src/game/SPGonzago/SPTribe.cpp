@@ -4395,26 +4395,25 @@ cPointerBlockIter* FUN_00c8ed90(cPointerBlockIter* pOut, V4 a, V4 b, V4 c, void*
 // @ 0x00c8ee40
 void** FUN_00c8ee40(void** pBegin, void** pEnd, void** pOut)
 {
-    if (pBegin == pEnd)
-        return pOut;
+    if (pBegin != pEnd) {
+        do {
+            cRefCountedNode* pSource = (*pBegin != nullptr)
+                                           ? (cRefCountedNode*)((uint8_t*)*pBegin + 0x34)
+                                           : nullptr;
+            cRefCountedNode* pOld = (cRefCountedNode*)*pOut;
+            if (pSource != pOld) {
+                if (pSource != nullptr)
+                    pSource->AddRef();
+                *pOut = pSource;
+                if (pOld != nullptr)
+                    pOld->Release();
+            }
 
-    do {
-        cRefCountedNode* pSource = (*pBegin != nullptr)
-                                       ? (cRefCountedNode*)((uint8_t*)*pBegin + 0x34)
-                                       : nullptr;
-        cRefCountedNode* pOld = (cRefCountedNode*)*pOut;
-        if (pSource != pOld) {
-            if (pSource != nullptr)
-                pSource->AddRef();
-            *pOut = pSource;
-            if (pOld != nullptr)
-                pOld->Release();
-        }
+            ++pBegin;
+            ++pOut;
+        } while (pBegin != pEnd);
 
-        ++pBegin;
-        ++pOut;
-    } while (pBegin != pEnd);
-
+    }
     return pOut;
 }
 
@@ -4811,7 +4810,9 @@ void __thiscall cTribe_s00c8_fbb0::UpdateRoboTribeness()
 {
     if (mb334)
         return;
-    if ((uint32_t)FUN_00b5b800() + (-0x01654c01) <= 1)
+    int mode = (int)FUN_00b5b800();
+    bool inRange = (mode >= 0x1654c01) && (mode <= 0x1654c02);
+    if (inRange)
         return;
 
     int32_t count;

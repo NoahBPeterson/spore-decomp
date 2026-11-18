@@ -95,25 +95,33 @@ struct S {
 };
 
 // ---------------------------------------------------------------------------
+struct RefListNode980 { RefListNode980* next; RefListNode980* previous; void* value; };
+extern const char g_ListAllocatorName980[]; // 0x013f09b4
+extern const char g_ListAllocatorFile980[]; // 0x013ebb38
+
 // @ 0x00b2c980 — intrusive list push_front of a refcounted object
 // ---------------------------------------------------------------------------
 void S::FUN_00b2c980(void* obj, char flag) {
   char* base = (char*)this;
   if (flag) {
     AddRef(obj);
-    void** node = (void**)EastlNew(0xc, "Simulator", 0, 0, ALLOC_H, 0xd1);
-    node[2] = obj;
-    AddRef(obj);
-    node[0] = base + 0x170;
-    node[1] = *(void**)(base + 0x174);
-    *(void**)(base + 0x174) = node;
-    *(void**)((char*)node[1]) = node;
+    RefListNode980* anchor = (RefListNode980*)(base + 0x170);
+    RefListNode980* node = (RefListNode980*)EastlNew(0xc, g_ListAllocatorName980, 0, 0, g_ListAllocatorFile980, 0xd1);
+    void** storage = &node->value;
+    if (storage) {
+      *storage = obj;
+      AddRef(obj);
+    }
+    node->next = anchor;
+    node->previous = anchor->previous;
+    anchor->previous->next = node;
+    anchor->previous = node;
     Release(obj);
   } else {
-    void* o = obj;
-    AddRef(o);
-    ((E*)(base + 0x170))->bf40(&o);
-    Release(o);
+    void* value = obj;
+    AddRef(obj);
+    ((E*)(base + 0x170))->bf40(&value);
+    Release(obj);
   }
 }
 

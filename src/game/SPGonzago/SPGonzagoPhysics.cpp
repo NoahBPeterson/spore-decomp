@@ -92,10 +92,11 @@ void BoundingBox::TransformBy(const Transform& t)
 // @ 0x0040a0f0
 void Matrix3_Abs(const Matrix3& in, Matrix3& out)
 {
-    const Vec3Data& sr = in[0];
-    const float* s = &sr[0];
-    Vec3Data& dr = out[0];
-    float* d = &dr[0];
-    for (int i = 0; i < 9; i++)
-        d[i] = Abs(s[i]);
+    const Vec3Data& v9 = in[0];
+    const float* n28 = &v9[0];
+    Vec3Data& hi = out[0];
+    float* p30 = &hi[0];
+    int key;
+    for (key = 0; key < 9; key++)
+        p30[key] = Abs(n28[key]);
 }

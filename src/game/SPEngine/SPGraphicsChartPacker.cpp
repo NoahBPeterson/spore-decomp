@@ -529,46 +529,42 @@ void ImagePacker::BestFit2(int param_2)
     } while (bVar1);
 }
 
+// Uninitialized copy of 16-byte chart elements (0x006de850), EASTL style: iterator objects and a placement copy per
+// element whose ref at +0xc is AddRef'd.
+struct ChartRef_6de850 {
+    RefObject* p;
+    ChartRef_6de850(const ChartRef_6de850& o) : p(o.p) { if (p) p->AddRef(); }
+};
+struct ChartElem_6de850 {
+    uint32_t a, b;
+    uint16_t c, d;
+    ChartRef_6de850 ref;   // +0xc
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct ChartIt_6de850 {
+    ChartElem_6de850* p;
+    ChartIt_6de850(ChartElem_6de850* q) : p(q) {}
+    ChartElem_6de850& operator*() const { return *p; }
+    ChartIt_6de850& operator++() { ++p; return *this; }
+    bool operator!=(const ChartIt_6de850& o) const { return p != o.p; }
+};
+
 // @ 0x006de850
-int* FUN_006de850(int* param_1, uint32_t* param_2, uint32_t* param_3, int param_4)
+ChartIt_6de850 ChartUninitCopy_6de850(ChartIt_6de850 first, ChartIt_6de850 last, ChartIt_6de850 dest)
 {
-    *param_1 = param_4;
-    for (; param_2 != param_3; param_2 += 4)
-    {
-        Elem16_s006d_e020* dst = (Elem16_s006d_e020*)*param_1;
-        if (dst != 0)
-        {
-            dst->a = param_2[0];
-            dst->b = param_2[1];
-            dst->c = *(uint16_t*)(param_2 + 2);
-            dst->d = *(uint16_t*)((char*)param_2 + 10);
-            dst->mpRef = (RefObject*)param_2[3];
-            if (dst->mpRef)
-                dst->mpRef->AddRef();
-        }
-        *param_1 = *param_1 + 0x10;
-    }
-    return param_1;
+    ChartIt_6de850 result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) ChartElem_6de850(*first);
+    return result;
 }
 
 // @ 0x006de8f0
-void FUN_006de8f0(uint32_t* param_1, int param_2, uint32_t* param_3)
+void ChartFillN_6de8f0(ChartIt_6de850 first, unsigned n, const ChartElem_6de850& value)
 {
-    for (; param_2 != 0; --param_2)
-    {
-        if (param_1 != 0)
-        {
-            param_1[0] = param_3[0];
-            param_1[1] = param_3[1];
-            *(uint16_t*)(param_1 + 2) = *(uint16_t*)(param_3 + 2);
-            *(uint16_t*)((char*)param_1 + 10) = *(uint16_t*)((char*)param_3 + 10);
-            RefObject* p = (RefObject*)param_3[3];
-            param_1[3] = (uint32_t)p;
-            if (p)
-                p->AddRef();
-        }
-        param_1 += 4;
-    }
+    ChartIt_6de850 cur(first);
+    for (; 0 < n; --n, ++cur)
+        new (&*cur) ChartElem_6de850(value);
 }
 
 // @ 0x006de980
@@ -783,26 +779,26 @@ void MakeHeapCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_eee0*
 // @ 0x006df2d0
 Elem16* CopyElem16(Elem16* first, Elem16* last, Elem16* dest)
 {
-    if (first == last)
-        return dest;
-    do {
-        *dest = *first;
-        ++first;
-        ++dest;
-    } while (first != last);
+    if (first != last) {
+        do {
+            *dest = *first;
+            ++first;
+            ++dest;
+        } while (first != last);
+    }
     return dest;
 }
 
 // @ 0x006df340
 Elem16* CopyBackwardElem16(Elem16* first, Elem16* last, Elem16* destEnd)
 {
-    if (first == last)
-        return destEnd;
-    do {
-        --last;
-        --destEnd;
-        *destEnd = *last;
-    } while (last != first);
+    if (last != first) {
+        do {
+            --last;
+            --destEnd;
+            *destEnd = *last;
+        } while (last != first);
+    }
     return destEnd;
 }
 
@@ -885,13 +881,13 @@ void PartialSortCR(SP::cClusterRect_s006d_eee0* first, SP::cClusterRect_s006d_ee
 // @ 0x006df700
 RefPtr* CopyRefPtr(RefPtr* first, RefPtr* last, RefPtr* dest)
 {
-    if (first == last)
-        return dest;
-    do {
-        *dest = *first;
-        ++first;
-        ++dest;
-    } while (first != last);
+    if (first != last) {
+        do {
+            *dest = *first;
+            ++first;
+            ++dest;
+        } while (first != last);
+    }
     return dest;
 }
 
@@ -899,8 +895,8 @@ RefPtr* CopyRefPtr(RefPtr* first, RefPtr* last, RefPtr* dest)
 void QuickSortImplKeyGT(SortKeyObj** first, SortKeyObj** last, int kRecursionCount, const SortKeyGreater& compare)
 {
     while (((last - first) > 28) && (kRecursionCount > 0)) {
-        SortKeyObj** mid = first + (last - first) / 2;
         SortKeyObj** lastm1 = last - 1;
+        SortKeyObj** mid = first + (last - first) / 2;
         SortKeyObj* const& pivot = Median3(*first, *mid, *lastm1, compare);
         SortKeyObj** position = GetPartitionKeyGT(first, last, pivot, compare);
         QuickSortImplKeyGT(position, last, --kRecursionCount, compare);
@@ -914,8 +910,8 @@ void QuickSortImplKeyGT(SortKeyObj** first, SortKeyObj** last, int kRecursionCou
 void QuickSortImplKeyLT(SortKeyObj** first, SortKeyObj** last, int kRecursionCount, const SortKeyLess& compare)
 {
     while (((last - first) > 28) && (kRecursionCount > 0)) {
-        SortKeyObj** mid = first + (last - first) / 2;
         SortKeyObj** lastm1 = last - 1;
+        SortKeyObj** mid = first + (last - first) / 2;
         SortKeyObj* const& pivot = Median3(*first, *mid, *lastm1, compare);
         SortKeyObj** position = GetPartitionKeyLT(first, last, pivot, compare);
         QuickSortImplKeyLT(position, last, --kRecursionCount, compare);

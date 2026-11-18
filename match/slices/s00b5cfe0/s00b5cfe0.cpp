@@ -511,36 +511,67 @@ void __stdcall FUN_00b5d870(int param)
     CmdLine_fini_5d7450(cl);
 }
 
+struct GonzagoListInterface {
+    virtual void Slot00();
+    virtual void Slot01();
+    virtual void Slot02();
+    virtual void Slot03();
+    virtual void Slot04();
+    virtual void Slot05();
+    virtual void Slot06();
+    virtual void Slot07();
+    virtual void Slot08();
+    virtual void Slot09();
+    virtual void Slot0a();
+    virtual void Slot0b();
+    virtual void Slot0c();
+    virtual void Slot0d();
+    virtual void Slot0e();
+    virtual bool Contains(void* value);
+};
+struct GonzagoValue {
+    virtual void Slot0();
+    virtual unsigned AddRef();
+    virtual unsigned Release();
+};
+static inline void RetainGonzagoValue(void* value)
+{
+    if (value) ((GonzagoValue*)value)->AddRef();
+}
+static inline void ReleaseGonzagoValue(void* value)
+{
+    if (value) ((GonzagoValue*)value)->Release();
+}
+static __forceinline void InsertGonzagoValue(cGonzagoNode* anchor, void* value)
+{
+    cGonzagoNode* node = (cGonzagoNode*)operator_new_0xf473a0(
+        sizeof(cGonzagoNode), (const char*)0x13f09b4, 0, 0,
+        (const char*)0x13ebb38, 0xd1);
+    void** storage = &node->mpValue;
+    if (storage) {
+        *storage = value;
+        RetainGonzagoValue(value);
+    }
+    node->mpNext = anchor;
+    node->mpPrev = anchor->mpPrev;
+    anchor->mpPrev->mpNext = node;
+    anchor->mpPrev = node;
+}
+
 // @ 0x00b5da50
 void cGonzagoMode::FUN_00b5da50(void* p, char head)
 {
-    if (((bool (__thiscall*)(void*, void*))g_vfn(this, 0x3c))(this, p))
+    if (((GonzagoListInterface*)this)->Contains(p))
         return;
-
-    // Nodes are {next, prev, value} linked into a circular list whose sentinel lives at
-    // this+0x20: head != 0 appends in front of the sentinel, head == 0 inserts in front of
-    // the current first node (this+0x20 holds the sentinel's next link).
-    void* anchor = (head != 0) ? (void*)((char*)this + 0x20)
-                               : *(void**)((char*)this + 0x20);
-
-    if (p)
-        ((unsigned (__thiscall*)(void*))g_vfn(p, 4))(p);        // AddRef
-
-    int* node = (int*)operator_new_0xf473a0(0xc, (const char*)0x13f09b4 /*"Simulator"*/,
-                                            0, 0, (const char*)0x13ebb38, 0xd1);
-    if (node)
-    {
-        node[2] = (int)p;
-        if (p)
-            ((unsigned (__thiscall*)(void*))g_vfn(p, 4))(p);    // AddRef
+    if (head) {
+        RetainGonzagoValue(p);
+        InsertGonzagoValue((cGonzagoNode*)&listHead, p);
+        ReleaseGonzagoValue(p);
+    } else {
+        RetainGonzagoValue(p);
+        InsertGonzagoValue((cGonzagoNode*)listHead, p);
+        ReleaseGonzagoValue(p);
     }
-    node[0] = (int)anchor;
-    node[1] = *(int*)((char*)anchor + 4);
-    *(void**)*(void**)((char*)anchor + 4) = node;
-    *(void**)((char*)anchor + 4) = node;
-
-    if (p)
-        ((unsigned (__thiscall*)(void*))g_vfn(p, 8))(p);        // Release
 }
 
 // @ 0x00b5dbb0

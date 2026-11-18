@@ -654,36 +654,42 @@ void S::FUN_00b2f710() {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00b2f740 — query current game mode
-// ---------------------------------------------------------------------------
-extern "C" bool FUN_00b2f740() {
-  char* mode = (char*)GetCurrentGameMode();
-  switch ((unsigned)mode) {
-    case 0x1654c02: {
-      void* p = cTribeModeStrategy_Instance();
-      void* q = ((void*(__thiscall*)(void*))(VTO(p))[0x70/4])(p);
-      return ((Xd09660*)(*(void**)((char*)q + 0x5c)))->FUN_00d09660();
-    }
-    case 0x1654c04: {
-      void* civ = cCivModeStrategy_Get();
-      return ((Xcf94b0*)civ)->FUN_00cf94b0();
-    }
-    case 0x1654c05: {
-      if (SpaceGameGet() != 0) {
-        void* sg = SpaceGameGet();
-        if (*(int*)((char*)sg + 0x20) != 0) {
-          void* sg2 = SpaceGameGet();
-          if (((Xd09660*)(*(void**)((char*)sg2 + 0x20)))->FUN_00d09660()) return true;
-        }
-      }
-      return false;
-    }
-    default:
-      return false;
-  }
+struct ModeStateReference {
+    Xd09660* mpObject;
+    operator Xd09660*() const { return mpObject; }
+    Xd09660* operator->() const { return mpObject; }
+};
+struct SpaceModeView {
+    char mPad[0x20];
+    ModeStateReference mState;
+};
+inline int QuerySpaceModeState()
+{
+    if (SpaceGameGet() != 0
+        && static_cast<SpaceModeView*>(SpaceGameGet())->mState
+        && static_cast<SpaceModeView*>(SpaceGameGet())->mState->FUN_00d09660())
+        return 1;
+    return 0;
 }
 
-// ---------------------------------------------------------------------------
+// @ 0x00b2f740
+extern "C" unsigned char FUN_00b2f740()
+{
+    switch ((unsigned)GetCurrentGameMode()) {
+    case 0x1654c02: {
+        void* strategy = cTribeModeStrategy_Instance();
+        void* state = ((void*(__thiscall*)(void*))(VTO(strategy))[0x70 / 4])(strategy);
+        return static_cast<Xd09660*>(*(void**)((char*)state + 0x5c))->FUN_00d09660();
+    }
+    case 0x1654c04:
+        return static_cast<Xcf94b0*>(cCivModeStrategy_Get())->FUN_00cf94b0();
+    case 0x1654c05:
+        return QuerySpaceModeState();
+    default:
+        return false;
+    }
+}
+
 // @ 0x00b2f7b0 — refresh renderer from property manager
 // ---------------------------------------------------------------------------
 extern "C" void FUN_00b2f7b0() {

@@ -279,6 +279,18 @@ struct MsgRoot { uint8_t mPad00[0x14]; void* mSink1; };    // +0x14
 struct MsgLink { uint8_t mPad00[0x18]; void* mNext; };     // +0x18
 struct MsgTail { uint8_t mPad00[0x14]; VtblObj* mObj; };   // +0x14
 
+struct ActionKeyValue {
+    unsigned instance, type, group;
+    ActionKeyValue(unsigned a, unsigned b, unsigned c) : instance(a), type(b), group(c) {}
+};
+struct ActionMessageServer {
+    virtual void Slot0(); virtual void Slot1(); virtual void Slot2();
+    virtual void Slot3(); virtual void Slot4();
+    virtual void Send(unsigned id, void* message, void* handler);
+};
+extern "C" bool IsBakeableActionType(unsigned type, bool allowCreature); // 0x004bbe20
+extern "C" bool ActionKeysEqual(const ActionKeyValue& a, const ActionKeyValue& b); // 0x004eb930
+
 struct W {
   uint8_t  mPad000[0x10];
   World*   mpWorld;               // +0x010
@@ -290,9 +302,10 @@ struct W {
   uint8_t  mSet090[0x20];         // +0x090
   uint8_t  mSet0B0[0x20];         // +0x0b0
   void  SetAction(int a, void* b);                          // 0x00f43af0
+  bool ApplyAction(ActionKeyValue key); // 0x00f43bf0
   bool  ApplyAction(int a, int b, int c);                   // 0x00f43bf0
   bool  RefreshActions();                                   // 0x00f43f20
-  uint32_t HandleMessage(unsigned msg, int arg);          // 0x00f440b0
+  bool HandleMessage(unsigned msg, int arg);          // 0x00f440b0
   void  RemoveAction(int idx);                            // 0x00f44210
   void* CreateAction(int a, void* b, void* c, float d);   // 0x00f44370
   void* PickAction(int* a);                               // 0x00f445c0
@@ -538,39 +551,33 @@ bool W::RefreshActions()
 }
 
 // @ 0x00f440b0
-uint32_t W::HandleMessage(unsigned msg, int arg)
+bool W::HandleMessage(unsigned msg, int arg)
 {
-    uint32_t r = msg;
-    if (msg == 0x04249453) {
+    switch (msg) {
+    case 0x04249453: {
         int a = *(int*)(arg + 0x08);
         int b = *(int*)(arg + 0x10);
         int c = *(int*)(arg + 0x18);
-        r = (uint32_t)FUN_004bbe20((void*)a, 0);
-        if ((char)r != 0) {
-            if (((char(__thiscall*)(void*, int, int, int))FUN_00f43bf0)(this, c, a, b))
+        if (IsBakeableActionType((unsigned)a, false)) {
+            if (ApplyAction(ActionKeyValue(c, a, b)))
                 mFlag014 = 1;
-            void* ms = FUN_0067dcc0();
-            r = (uint32_t)((int(__thiscall*)(void*, int, int, int))(*((void***)ms))[0x14 / 4])(
-                ms, 0x072bdb11, 0, 0);
+            ((ActionMessageServer*)FUN_0067dcc0())->Send(0x072bdb11, 0, 0);
         }
-    } else if (msg == 0x57be4886) {
+        break;
+    }
+    case 0x57be4886: {
         mFlag02C = 1;
-    } else if (msg == 0xf1ff568b) {
-        if (*(char*)(arg + 0x0c) != 0) {
-            r = (uint32_t)mpWorld;
-            if (mpWorld != 0) {
-                r = (uint32_t)FUN_004eb930((void*)arg, (char*)mpWorld + 8);
-                if ((char)r != 0) {
-                    *(uint32_t*)(arg + 0x10) = 0xa6c97621;
-                    *(uint32_t*)(arg + 0x14) = 0x00b1b104;
-                    *(uint32_t*)(arg + 0x18) = 0x490f6945;
-                    *(uint8_t*)(arg + 0x0c) = 0;
-                    r = 0xa6c97621;
-                }
-            }
+        break;
+    }
+    case 0xf1ff568b: {
+        if (*(char*)(arg + 0x0c) != 0 && mpWorld != 0 &&
+            ActionKeysEqual(*(const ActionKeyValue*)arg, *(const ActionKeyValue*)((char*)mpWorld + 8))) {
+            *(ActionKeyValue*)(arg + 0x10) = ActionKeyValue(0xa6c97621, 0x00b1b104, 0x490f6945);
+            *(uint8_t*)(arg + 0x0c) = 0;
         }
     }
-    return r & 0xffffff00u;
+    }
+    return false;
 }
 
 // @ 0x00f44210

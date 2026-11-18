@@ -12,7 +12,6 @@
 00e50540   15  egg-kid predicate: complete; FNV call scheduling differs
 00e50620   73  remove first matching 0xc entry: complete (shift last down); register-convention (EAX/ESI/EDI) differs
 00e50680  118  recursive set byte: complete; nested guard schedule differs
-00e50750   88  logic: FUN_007c4180 is a thiscall on the viewer returned by app->vtable[0x58]() (the getter takes no args), not a cdecl call with (local,a); the local is float[3] (frame 0x1c). Fixed. Residual is cl scheduling the vtable load before the two arg pushes and outx/outy in ecx/edx instead of edx/eax. [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 esp, call#3 esp] fix1: quick check UNSUPPORTED (0/150 valid)
 00e507d0   78  parity of rounded ratio: complete; cvtss2si + unordered-safe cmov and AL-only mask; equiv PASS (400 valid, 100% cov)
 00e4fac0  110  configure collectable items: complete (two table passes); call/arg schedule differs
 00e4f860  434  logic: the b>=0 arms were wrong -- retail uses ShowIfHidden (vt[4], then vt[2] when not visible) in every non-hide arm, and hides when arg2<b (a<0) or arg2<=b||arg2>a (both>=0); b<0 hides when 0<=a<arg2. Rewrote as one combined condition so the hide/show blocks are shared (172 vs 177 bytes). Residual: off is on the stack and i in ebp (retail the reverse), field4 read as cmp [e+4],1 vs mov ecx,[data+off+4];sub ecx,1, and the b<0 compare operand order. fix1: quick check UNSUPPORTED (0/150 valid)

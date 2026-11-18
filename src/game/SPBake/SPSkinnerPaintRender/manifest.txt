@@ -20,3 +20,4 @@
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ?FUN_004c6ae0@@YAPAPADPAPADPADI1@Z  004c6ae0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ?FUN_0051a8a0@SkinJob@@QAEPAXXZ  0051a8a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ?Swap@cRTTBuffer@nSPSkinner@@QAEXPAV12@@Z  00518b00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?Init@SkinTexExtractorB@@QAEXXZ  0051c640  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

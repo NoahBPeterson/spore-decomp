@@ -272,40 +272,44 @@ void SwarmObj::FUN_00aa86a0(int param_2)
 // ---------------------------------------------------------------------------
 // @ 0x00aa8840
 // ---------------------------------------------------------------------------
-struct HandleObj
-{
-    char pad00[0x220];
-    int  cur;                     // +0x220
-
-    void __thiscall FUN_00aa8840(int param_2);   // 0x00aa8840
+struct HandleReference {
+    virtual void slot00();
+    virtual void slot01();
+    virtual void slot02();
+    virtual void slot03();
+    virtual void slot04();
+    virtual void slot05();
+    virtual void slot06();
+    virtual void slot07();
+    virtual void slot08();
+    virtual void slot09();
+    virtual void slot0a();
+    virtual void slot0b();
+    virtual void slot0c();
+    virtual void AddRef(); // +0x34
+    virtual void Release(); // +0x38
 };
-
-void HandleObj::FUN_00aa8840(int param_2)
+struct HandleTarget {
+    char pad00[8];
+    HandleReference reference;
+    char pad0c[0x220];
+    bool dirty; // +0x22c
+};
+struct HandleObj {
+    char pad00[0x220];
+    HandleTarget* cur;
+    void FUN_00aa8840(HandleReference* value);
+};
+void HandleObj::FUN_00aa8840(HandleReference* value)
 {
-    int iVar1;
-    if (param_2 == 0)
-        param_2 = 0;
-    else
-        param_2 = param_2 - 8;
-
-    iVar1 = this->cur;
-    if (param_2 == iVar1)
-    {
-        *(uint8_t*)(iVar1 + 0x22c) = 1;
-        return;
+    HandleTarget* next = value ? (HandleTarget*)((char*)value - 8) : 0;
+    HandleTarget* previous = cur;
+    if (next != previous) {
+        if (next) next->reference.AddRef();
+        cur = next;
+        if (previous) previous->reference.Release();
     }
-    if (param_2 != 0)
-    {
-        ((void (__thiscall*)(int*))(*(void***)(param_2 + 8))[0x34 / 4])((int*)(param_2 + 8));
-    }
-    this->cur = param_2;
-    if (iVar1 != 0)
-    {
-        ((void (__thiscall*)(int*))(*(void***)(iVar1 + 8))[0x38 / 4])((int*)(iVar1 + 8));
-        *(uint8_t*)(this->cur + 0x22c) = 1;
-        return;
-    }
-    *(uint8_t*)(param_2 + 0x22c) = 1;
+    cur->dirty = true;
 }
 
 // ---------------------------------------------------------------------------

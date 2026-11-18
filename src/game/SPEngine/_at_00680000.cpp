@@ -906,6 +906,22 @@ struct RBSet {
 
     SetNode** Insert(SetNode** pOut, SetNode* pos, const int* val, char bAllow);
 };
+// the destructor's view of Coder: its own vtable (0x1403594) and two embedded rbtrees at +0x08 and +0x24, each
+// nuking its nodes from the root at +0x0c (0x009a9600)
+struct CoderTree {
+    u32   mAnchor[3];      // +0x00
+    void* mpRoot;          // +0x0c
+    u32   mRest[3];        // +0x10
+    void  DoNukeSubtree(void* node);   // 0x009a9600
+    ~CoderTree() { DoNukeSubtree(mpRoot); }
+};
+struct CoderObj {
+    virtual void Slot0();
+    u32       f04;         // +0x04
+    CoderTree mTree08;     // +0x08
+    CoderTree mTree24;     // +0x24
+    ~CoderObj();
+};
 struct Coder {
     u8* mBuf;          // +0x00
     u32 f04;           // +0x04
@@ -940,7 +956,6 @@ struct Coder {
     u32 f6c;           // +0x6c
 
     Coder();
-    ~Coder();
     void Init();        // 0x68e610
     void MaskInit();    // 0x68ddc0
     bool EncodeBit(u8 bit);       // 0x68de20
@@ -1312,14 +1327,20 @@ void MapC2::FreeNodes(Node1480* p)
     }
 }
 
+// The node value FreeChain2 destroys (a string, then the T28 at +0x10): one unwind state covers the string.
+struct NodeVal15View {
+    SStrB first;                // +0x00
+    char pad[0x10 - 12];
+    T28 second;                 // +0x10
+};
+
 // @ 0x00681500
 void MapC0::FreeChain2(Node15* p)
 {
     while (p) {
         FreeChain2(p->mpDown);
         Node15* next = (Node15*)p->mpNext;
-        p->m24.~T28();
-        p->m14.~SStrB();
+        ((NodeVal15View*)&p->m14)->~NodeVal15View();
         EASTL_dealloc(p);
         p = next;
     }
@@ -1712,8 +1733,30 @@ void SerCtx::LoadMap1(Map1* map, IRd* r)
     }
 }
 
+// Destruction view of Factory (0x00683f80): no own vtable store on entry (novtable). The buffer's erase (0x680b70) and
+// free are nothrow, so only the three maps (0x683160, 0x681500, 0x682800) need unwind states; then the editor
+// resource base restores its vtable.
+void FactFree_683f80(void* p) throw();   // 0xf47380
+struct FactBuf_683f80 {
+    char* mpBegin; char* mpEnd; char* mpCap; uint32_t mAlloc;
+    void Erase(void* begin, void* end) throw();     // 0x0680b70
+    ~FactBuf_683f80() {
+        Erase(mpBegin, mpEnd);
+        if (mpBegin && ((int*)mpBegin)[-1]) FactFree_683f80(mpBegin);
+    }
+};
+struct FactBase_683f80 { virtual void v0(); ~FactBase_683f80() { (void)this; } };
+struct __declspec(novtable) FactoryView_683f80 : FactBase_683f80 {
+    char pad04[0x14];                               // +0x04 .. +0x18
+    MapB m18;                                       // +0x18
+    MapC0_s0068_3f80 m34;                           // +0x34
+    MapC m50;                                       // +0x50
+    FactBuf_683f80 m6c;                             // +0x6c
+    ~FactoryView_683f80();
+};
+
 // @ 0x00683f80
-Factory::~Factory()
+FactoryView_683f80::~FactoryView_683f80()
 {}
 
 // @ 0x00684040
@@ -2357,12 +2400,8 @@ NameMapCtor::NameMapCtor()
 }
 
 // @ 0x0068dc90
-Coder::~Coder()
+CoderObj::~CoderObj()
 {
-    mBuf = (u8*)0x1403594;
-    // nuke two embedded rbtrees at +0x24 and +0x08
-    ((void(__thiscall*)(void*, void*))Nuke_9a9600)((char*)this + 0x24, *(void**)((char*)this + 0x30));
-    ((void(__thiscall*)(void*, void*))Nuke_9a9600)((char*)this + 0x08, *(void**)((char*)this + 0x14));
 }
 
 // @ 0x0068dd10
@@ -3078,20 +3117,45 @@ bool CJobHolder2::Attach(void* job)
     return false;
 }
 
+// Construction view of JobLock (0x0068f1d0): the lock base and the atomic refcount base (count zeroed by an
+// interlocked exchange), then the owner ref (atomic increment) and the job ref (AddRef 0x68f950), one unwind state
+// each; the body points the caller's release record at this lock (callback 0x68f1c0) and takes the lock (0x68f9b0).
+void JobLockRelease_68f1c0(void* lock);       // 0x0068f1c0
+struct JlBase_68f1d0 { virtual void v0(); ~JlBase_68f1d0() { (void)this; } };
+struct JlRefCount_68f1d0 {
+    virtual void r0();
+    volatile long mRef;                        // +0x08
+    JlRefCount_68f1d0() { volatile long* r = &mRef; _InterlockedExchange(r, 0); }
+    ~JlRefCount_68f1d0() { (void)this; }
+};
+struct JlOwnerRef_68f1d0 {
+    void* mpObject;
+    JlOwnerRef_68f1d0(void* o) : mpObject(o) { if (o) _InterlockedIncrement((volatile long*)((char*)o + 4)); }
+    ~JlOwnerRef_68f1d0();
+};
+struct JlJob_68f1d0 { void AddRef(); };       // 0x0068f950
+struct JlJobRef_68f1d0 {
+    JlJob_68f1d0* mpJob;
+    JlJobRef_68f1d0(void* j) : mpJob((JlJob_68f1d0*)j) { if (mpJob) mpJob->AddRef(); }
+    ~JlJobRef_68f1d0();
+};
+struct JlRecord_68f1d0 {
+    void (*mpRelease)(void*);
+    void* mpLock;
+    int Lock(void* lock);                      // 0x0068f9b0
+};
+struct JobLockView_68f1d0 : JlBase_68f1d0, JlRefCount_68f1d0 {
+    JlOwnerRef_68f1d0 mRefObj;                 // +0x0c
+    JlJobRef_68f1d0 mJob;                      // +0x10
+    JobLockView_68f1d0(JlRecord_68f1d0* out, void* job, void* refObj);
+    virtual void v0();
+};
+
 // @ 0x0068f1d0
-JobLock::JobLock(void* out, void* job, void* refObj)
+JobLockView_68f1d0::JobLockView_68f1d0(JlRecord_68f1d0* out, void* job, void* refObj)
+    : mRefObj(refObj), mJob(job)
 {
-    vtbl0 = (void*)0x013f1ab0;
-    vtbl1 = (void*)0x013ef094;
-    _InterlockedExchange(&mRef, 0);
-    vtbl0 = (void*)0x014036fc;
-    vtbl1 = (void*)0x014036f8;
-    mRefObj = refObj;
-    if (refObj)
-        _InterlockedIncrement((volatile long*)((char*)refObj + 4));
-    mJob = job;
-    if (job) ((FnAddRef)AddRef_68F950)(job);
-    *(void**)out = (void*)0x0068f1c0;
-    *((void**)out + 1) = this;
-    ((int (__thiscall*)(void*, void*))LockDec_68F9B0)(out, this);
+    out->mpRelease = JobLockRelease_68f1c0;
+    out->mpLock = this;
+    out->Lock(this);
 }

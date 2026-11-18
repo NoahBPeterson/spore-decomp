@@ -117,43 +117,48 @@ void __cdecl FUN_00761f90(int a, unsigned int color, int chunk)
 }
 
 // ----------------------------------------------------------- 0x762250 / 0x7622e0
-extern void* g_vtA, *g_vtB, *g_vt13ef094, *g_vt13eb938;
-struct Obj62250 {
-    void* p0;                    // +0x0
-    void* p1;                    // +0x4
-    int   pad8;                  // +0x8
-    int   data[14];              // +0xc .. +0x43
-    SP::RefCountedAt8* ref;      // +0x44
-    int   state;                 // +0x48
-    Obj62250* ctor(const int* src, SP::RefCountedAt8* r);   // @ 0x762250
-    void dtor();                                            // @ 0x7622e0
+struct O62A0 {
+    virtual void o62A0Slot() = 0;
+    ~O62A0() {}
+};
+struct O62I {
+    virtual void o62ISlot() = 0;
+    int f8;                                  // +0x08
+    O62I() : f8(0) {}
+    ~O62I() {}
+};
+struct O62Desc {                             // 0x38 bytes at +0x0c
+    int a[6];
+    E8x v[4];                                // +0x24 (E8x has an out-of-line destructor, 0x00c2e4e0)
+};
+struct O62Ref {
+    SP::RefCountedAt8* p;
+    O62Ref(SP::RefCountedAt8* r) : p(r) { if (p) p->v0(); }
+    ~O62Ref() { if (p) p->v1(); }
+};
+struct Obj62250 : O62A0, O62I {
+    O62Desc d;                               // +0x0c
+    O62Ref ref;                              // +0x44
+    int state;                               // +0x48
+    Obj62250(const int* src, SP::RefCountedAt8* r);   // 0x762250
+    ~Obj62250();                                      // 0x7622e0
+    void o62A0Slot() {}
+    void o62ISlot() {}
 };
 // @ 0x762250
-Obj62250* Obj62250::ctor(const int* src, SP::RefCountedAt8* r)
+Obj62250::Obj62250(const int* src, SP::RefCountedAt8* r)
+    : d(*(const O62Desc*)src), ref(r), state(-1)
 {
-    p1 = g_vt13ef094;
-    pad8 = 0;
-    p0 = g_vtA;
-    p1 = g_vtB;
-    for (int i = 0; i < 14; i++)
-        data[i] = src[i];
-    ref = r;
-    if (r) r->v0();
-    state = -1;
-    return this;
 }
 // @ 0x7622e0
-void Obj62250::dtor()
+Obj62250::~Obj62250()
 {
-    p0 = g_vtA;
-    p1 = g_vtB;
-    if (ref == 0) {
-        FUN_011fb220((void*)data[1]);
-        g_alloc->Free((void*)data[1]);
+    SP::RefCountedAt8* held = ref.p;
+    if (held == 0) {
+        void* p = (void*)d.a[1];
+        FUN_011fb220(p);
+        g_alloc->Free(p);
     }
-    if (ref) ref->v1();
-    p1 = g_vt13ef094;
-    p0 = g_vt13eb938;
 }
 
 // ------------------------------------------------------------------- 0x762380

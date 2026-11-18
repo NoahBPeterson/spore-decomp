@@ -3,3 +3,4 @@ slices/s008df050/s008df050.cpp  ?GetResource@Manager@ResourceMan@EA@@QAEDHHHHHH@
 slices/s008df050/s008df050.cpp  ?GetPrivateResource@Manager@ResourceMan@EA@@QAEDHHHHHH@Z  008df940  /O2 /MD /Gy /TP /GS- /arch:SSE
 slices/s008df050/s008df050.cpp  ?FindTextStyleType@Manager@ResourceMan@EA@@QAEHH@Z  008df970  /O2 /MD /Gy /TP /GS- /arch:SSE
 slices/s008df050/s008df050.cpp  ?GetTypenameFromType@Manager@ResourceMan@EA@@QAEPB_WI@Z  008dfc60  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008df050/s008df050.cpp  ?FindFactory@Manager@ResourceMan@EA@@QAEPAVFactory@23@IH@Z  008dfb20  /O2 /MD /Gy /TP /GS- /arch:SSE

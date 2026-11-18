@@ -16,3 +16,7 @@ slices/s006a11b0/s006a11b0.cpp  ??0cPropertyList@SP@@QAE@PBD@Z  006a1b90  /O2 /M
 slices/s006a11b0/s006a11b0.cpp  ??0cPropertyList@SP@@QAE@XZ  006a1c40  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s006a11b0/s006a11b0.cpp  ??0cDirectPropertyList@SP@@QAE@I@Z  006a1ca0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s006a11b0/s006a11b0.cpp  ?GetPropertyA@cDirectPropertyList@SP@@  006a1e50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006a11b0/s006a11b0.cpp  ?SetIntProperty@cDirectPropertyList@SP@@QAEXIH@Z  006a1880  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006a11b0/s006a11b0.cpp  ?SetBoolProperty@cDirectPropertyList@SP@@QAEXI_N@Z  006a17e0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006a11b0/s006a11b0.cpp  ?SetFloatProperty@cDirectPropertyList@SP@@QAEXIM@Z  006a1910  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s006a11b0/s006a11b0.cpp  ?SetParent@cPropertyList@SP@@QAEXPAV12@@Z  006a1710  /O2 /MD /Gy /EHsc /TP /GS-

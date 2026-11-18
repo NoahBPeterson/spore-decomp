@@ -1,3 +1,4 @@
+#include <intrin.h>
 // src/game/SPGonzago/SPUIEventLog.cpp -- migrated from slice(s) s00dd4b20, s00dd7970, s00dd6a70, s00dd5a30 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPUIEventLog.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -347,7 +348,7 @@ struct EventString {                  // eastl::basic_string<wchar_t>
     wchar_t* mpBegin;                 // +0x00
     wchar_t* mpEnd;                   // +0x04
     wchar_t* mpCap;                   // +0x08
-    void append(const wchar_t* s);    // 0x005c3d90
+    void assign(const wchar_t* s);    // 0x005c3d90
 };
 struct cFeedbackEvent_s00dd_6a70 {
     void*    mpVtbl;                  // +0x00
@@ -936,8 +937,8 @@ void cSPUIEventLog_s00dd_6a70::SetEventDuration(unsigned id, float dur)
         cFeedbackEvent_s00dd_6a70* ev = (cFeedbackEvent_s00dd_6a70*)it->mValue;
         if (ev != 0) {
             ev->mDuration = dur;
-            bool paused = (ev->mFlags >> 0xb) & 1;
-            if (dur < 0.0f && !paused) {
+            if (dur < 0.0f && !((unsigned char)(ev->mFlags >> 0xb) & 1)) {
+                _ReadWriteBarrier();
                 ev->mFlags |= 0x800;
                 this->update_event_ui_state(ev);
             }
@@ -1043,7 +1044,6 @@ void cSPUIEventLog_s00dd_6a70::clear_events()
 // @ 0x00dd6df0
 bool cSPUIEventLog_s00dd_6a70::ModifyEventText(unsigned id, const wchar_t* text)
 {
-    bool r = false;
     if (text != 0) {
         unsigned key = id;
         EventNode_s00dd_6a70* it = this->mEvents.find(key).mpNode;
@@ -1055,22 +1055,23 @@ bool cSPUIEventLog_s00dd_6a70::ModifyEventText(unsigned id, const wchar_t* text)
                     IWindow_s00dd_6a70* w2 = w->SlotF0(0x47d4388, 1);
                     if (w2 != 0) {
                         void* w3 = w2->Slot0C(0xf15f4bd);
-                        if (w3 != 0 && (ev->mText.mpEnd != ev->mText.mpBegin)) {
-                            ev->mText.append(text);
-                            ev->mB6 = false;
-                            ev->mTextDirty = true;
+                        if (w3 != 0 && ((ev->mText.mpEnd - ev->mText.mpBegin) != 0)) {
+                            ev->mText.assign(text);
+                            ev->mFlags &= ~0x40u;
+                            _ReadWriteBarrier();
+                            ev->mFlags |= 1;
                             this->update_event_ui_state(ev);
                             cFeedbackEvent_s00dd_6a70* h = this->find_in_history(ev);
                             if (h != 0)
                                 this->remove_event(h->m48);
-                            r = true;
+                            return true;
                         }
                     }
                 }
             }
         }
     }
-    return r;
+    return false;
 }
 
 // @ 0x00dd6ec0

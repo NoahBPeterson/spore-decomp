@@ -3212,10 +3212,6 @@ struct VObj_s00ef_ee60 {
     void v40(float);
     void v58();                    // vtable slot +0x58
 };
-struct RefObj {
-    void v0();
-    void v4();
-};
 struct Handle {
     void* v0c(int);               // vtable slot 0xc
 };
@@ -7700,10 +7696,13 @@ bool CUI::f_efc120(int param_2, int param_3)
 float __fastcall FUN_00efc4c0(char* self, int pad)
 {
     (void)pad;
+    float t;
     if (*(float*)(self + 0x178) > *(float*)(self + 0x174))
-        return (*(float*)(self + 0x17c) - *(float*)(self + 0x174)) /
-               (*(float*)(self + 0x178) - *(float*)(self + 0x174));
-    return g_1485720;
+        t = (*(float*)(self + 0x17c) - *(float*)(self + 0x174)) /
+            (*(float*)(self + 0x178) - *(float*)(self + 0x174));
+    else
+        t = g_1485720;
+    return t;
 }
 
 // @ 0x00efc520
@@ -9129,19 +9128,27 @@ void UI_s00ef_ee60::f_eff0c0()
 }
 
 // @ 0x00eff1e0
+extern float g_1485378;
 bool UI_s00ef_ee60::f_eff1e0(int)
 {
     void* a = *(void**)((char*)g_mgr + 4);
-    if (a == 0) return false;
-    void* r = pGame->F32790(a);
-    if (r == 0) return false;
-    OrientationState* o = ((PlacementView*)r)->p4;
-    return o->f64 > o->f60;
+    if (a != 0) {
+        void* r = pGame->F32790(a);
+        if (r != 0) {
+            OrientationState* o = ((PlacementView*)r)->p4;
+            if ((float)(o->f64 > o->f60) != g_1485378)
+                return true;
+        }
+    }
+    return false;
 }
 
+struct SelectionReference {
+    virtual void AddRef(); // slot 0
+    virtual void Release(); // slot 1
+};
+
 // @ 0x00eff230
-// The store of p into the slot sits between the two refcount virtuals (retail: call v0, store,
-// call the old object's +0x04), which the old source had the other way round.
 void UI_s00ef_ee60::f_eff230(void* p)
 {
     *(uint8_t*)((char*)g_mgr + 0x64) = 1;
@@ -9149,10 +9156,11 @@ void UI_s00ef_ee60::f_eff230(void* p)
     void** slot = (void**)((char*)g_mgr + 0xc);
     void* old = *slot;
     if (p != old) {
-        if (p) ((RefObj*)p)->v0();
-        if (old) ((RefObj*)old)->v4();
+        if (p) ((SelectionReference*)p)->AddRef();
         *slot = p;
-    }}
+        if (old) ((SelectionReference*)old)->Release();
+    }
+}
 
 // @ 0x00eff280
 void UI_s00ef_ee60::f_eff280(void* p)

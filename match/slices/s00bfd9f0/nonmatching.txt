@@ -24,4 +24,3 @@
 00bfe900 189 SpawnAt: complete; the spawn position blend and the scenery lookup match the original, difference is the float staging order. difftest verdict not re-run for this row.
 00bfea10 96 Teardown: complete; releases the models and clears the table in the original order, 199 vs 209 B. difftest verdict not re-run for this row.
 00bfeb00 227 InitScenery: complete; the scenery init walk matches, difference is the loop head and the table reload placement, 239 vs 266 B. difftest verdict not re-run for this row.
-00bfec10 4 Front: complete, 4 differing bytes (the return-value move). difftest verdict not re-run for this row.

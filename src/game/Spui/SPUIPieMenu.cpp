@@ -1328,12 +1328,13 @@ int __cdecl FUN_00819e00(char* a, char* b, char* c)
 // @ 0x00819e60
 int __cdecl FUN_00819e60(char* a, char* b, int c)
 {
-    if (a == b) return c;
-    do {
-        DestroyItem(a);
-        a += 0x4c;
-        c += 0x4c;
-    } while (a != b);
+    if (a != b) {
+        do {
+            DestroyItem(a);
+            a += 0x4c;
+            c += 0x4c;
+        } while (a != b);
+    }
     return c;
 }
 

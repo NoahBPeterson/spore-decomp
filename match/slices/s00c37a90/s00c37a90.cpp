@@ -34,6 +34,7 @@ struct IGameData {
     virtual U32  GetOwnerId();                       // slot 19, +0x4c
 };
 
+struct cKey;
 struct ILocomotive {
     virtual void l00(); virtual void l01(); virtual void l02(); virtual void l03();
     virtual void l04(); virtual void l05(); virtual void l06(); virtual void l07();
@@ -47,7 +48,7 @@ struct ILocomotive {
     virtual void l28(); virtual void l29(); virtual void l30(); virtual void l31();
     virtual void l32(); virtual void l33(); virtual void l34(); virtual void l35();
     virtual void l36();
-    virtual void SetOffset47(const Vector3&);        // slot 37, +0x94
+    virtual void SetModelKey(const cKey&);        // slot 37, +0x94
 };
 
 struct ICombatant {
@@ -131,7 +132,8 @@ struct cPlanetTuning {
 // ------------------------------------------------------------------ the UFO
 struct cSPGameDataUFO {
     bool Read(void* pStream);                        // 0x0c37a90
-    bool WarpToDestination();                        // 0x0c37cc0
+    bool WarpToDestination();
+    void SetDesiredModel(const cKey& key, bool needsBaking); // 0x00c37180                        // 0x0c37cc0
     void PopToDestination();                         // 0x0c37e60
     void ApplyVelocity(const Vector3& dir, float scale); // 0x0c37f70
     void SetOffset(const Vector3& offset);           // 0x0c381e0
@@ -263,6 +265,7 @@ struct cNounManagerForUFO {
     void* __thiscall GetCurrentTerrainSphere();                            // 0x00f67d90
 };
 
+cStarManager* __cdecl GetStarManager(); // 0x00b3d2a0
 cStarManager* __cdecl StarManager(U32 at);                                 // 0x00b3d2a0
 U32 __cdecl MessageServerRaw();                                            // 0x0067dcc0
 cNounManagerForUFO* __cdecl NounManager();                                 // 0x00b3d300
@@ -274,7 +277,7 @@ U32 __cdecl FUN_00bc8fa0(void* p);                                         // 0x
 void* __fastcall FUN_0105d1d0(void* pThis);                                // 0x0105d1d0
 void* __fastcall FUN_00c75770(void* pSphere);                              // 0x00c75770
 void* __fastcall FUN_00c30bd0(void* pEmpire);                              // 0x00c30bd0
-U32 __cdecl FUN_00ba5df0(cKey* pKey, Vector3* pOut);                       // 0x00ba5df0
+U32 __cdecl FUN_00ba5df0(cKey* pKey, cKey* pOut);                       // 0x00ba5df0
 U32 __cdecl GetUniverseContext();                                          // 0x01021080
 U32 __cdecl FUN_01021240();                                                // 0x01021240
 U32 __cdecl FUN_01021260();                                                // 0x01021260
@@ -410,21 +413,20 @@ bool cSPGameDataUFO::WarpToDestination()
     if (((tIsModelMissing)((void**)(*(void***)pResMgr)[3]))(pResMgr, &mDesiredModelKey, 0, 0, 0, 0, 0))
         return true;
 
-    Vector3 vDest(0, 0, 0);
-    U32 nOwner = ((IGameData*)this)->GetOwnerId();
-    if (nOwner == 0xffffffff) {
+    cKey replacement = { 0, 0, 0 };
+    if (((IGameData*)this)->GetOwnerId() == 0xffffffff) {
         void* pSphere = NounManager()->GetCurrentTerrainSphere();
         ((void(__thiscall*)(void*))((void**)(*(void***)pSphere)[16]))(pSphere);
-        vDest = *(Vector3*)FUN_00c75770(NounManager()->GetCurrentTerrainSphere());
+        replacement = *(cKey*)FUN_00c75770(NounManager()->GetCurrentTerrainSphere());
     } else {
-        cPlanet* pEmpire = StarManager(nOwner)->GetEmpireByID(nOwner);
+        cPlanet* pEmpire = GetStarManager()->GetEmpireByID(((IGameData*)this)->GetOwnerId());
         if (pEmpire != 0)
-            vDest = *(Vector3*)FUN_00c30bd0((void*)pEmpire);
+            replacement = *(cKey*)FUN_00c30bd0((void*)pEmpire);
     }
 
-    FUN_00ba5df0(&mDesiredModelKey, &vDest);
-    ((ILocomotive*)&mpVftbl34)->SetOffset47(vDest);
-    cSPGameDataUFO_SetDesiredModel(this, &mDesiredModelKey, true);
+    FUN_00ba5df0(&mDesiredModelKey, &replacement);
+    ((ILocomotive*)&mpVftbl34)->SetModelKey(replacement);
+    SetDesiredModel(replacement, true);
     return true;
 }
 

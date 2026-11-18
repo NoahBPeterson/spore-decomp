@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/SPGraphicsRuntimeModel.cpp  ?FUN_00776320@@YAHHHHHH@Z  00776320  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsRuntimeModel.cpp  ?GetRuntimeMeshes@@YA_NHHHHH@Z  007763b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRuntimeModel.cpp  ?PushElem20@@YAXPAXPAUElem20@@@Z  007756b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

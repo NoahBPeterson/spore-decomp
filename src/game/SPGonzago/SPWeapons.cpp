@@ -48,6 +48,17 @@ typedef void* (__thiscall *FnVp0)(void*);
 bool __cdecl EA_IO_WriteUint32(void* s, const void* p, uint32_t n, int endian); // 0x0093aa70
 bool __cdecl EA_IO_ReadInt32(void* s, void* p, uint32_t n, int endian);         // 0x0093a780
 struct IStream;
+struct ProjectileArchiveStreamHolder {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void* GetStream(); // +0x18
+};
+struct ProjectileArchive {
+    virtual void slot0(); virtual void slot1(); virtual void slot2();
+    virtual void slot3(); virtual void slot4(); virtual void slot5();
+    virtual void slot6(); virtual void slot7();
+    virtual ProjectileArchiveStreamHolder* GetStreamHolder(); // +0x20
+};
 struct cGameData {
     void* mpVtbl;        // +0x00
     char  pad04[0x30];   // +0x04
@@ -2908,14 +2919,16 @@ void* CObj3760::Cast(int type)
 // @ 0x00cb37d0
 bool CArtilleryProjectile::Write(IStream* s)
 {
-    void* w = StreamWriter(s);
-    uint32_t id = 0x1428a48;
-    void* v = WriterValue(w);
-    EA_IO_WriteUint32(v, &id, 1, 0);
+    ProjectileArchiveStreamHolder* __restrict holder = reinterpret_cast<ProjectileArchive*>(s)->GetStreamHolder();
+    uint32_t id = 0x01428a48;
+    void* output = holder->GetStream();
+    EA_IO_WriteUint32(output, &id, 1, 0);
     mGameData.Write(s);
     mLoco.Write(s);
-    cVarListSerializer ser(this, &g_157d398, 0x1a80d26);
-    ser.Serialize(s);
+    SP::cVarListSerializer serializer(this,
+        reinterpret_cast<SP::cDataSerializerGeneric*>(&g_157d398),
+        SP::cVarListSerializer::kSignature);
+    serializer.Serialize(*reinterpret_cast<SP::cIObjectDatabaseOStream*>(s));
     return true;
 }
 

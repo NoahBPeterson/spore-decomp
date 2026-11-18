@@ -225,7 +225,7 @@ extern char g_placeholderMap[];   // eastl hash_map<uint32_t, string16> @ 0x1530
 }
 namespace SP {
 struct HashMap {
-    void erase_key(uint32_t* key);
+    __declspec(noinline) void erase_key(uint32_t* key);
 };
 }
 namespace SP {
@@ -410,8 +410,7 @@ cString_s006b_47a0::~cString_s006b_47a0()
     if (mpLocalString != 0) {
         string16* s = mpLocalString;
         wchar16* p = s->mpBegin;
-        int n = ((int)(size_t)s->mpCapacity - (int)(size_t)p) & 0xfffffffe;
-        if (n > 2 && p != 0)
+        if ((((int)(size_t)s->mpCapacity - (int)(size_t)p) & -2) > 2 && p != 0)
             EA_Free(p);
         EA_Free(s);
         mpLocalString = 0;

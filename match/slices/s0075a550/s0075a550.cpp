@@ -269,18 +269,39 @@ struct ClassX {
     void* New70();
 };
 extern int g_vt140dab0[], g_vt140daac[], g_vt13ef094[];
+// Destruction view of ClassX (0x0075a550, ClassX::Dtor): an interface base with no destructor, a second base that
+// resets its vtable, and three vector members (the third inline: elements, then the counted block).
+struct CXBaseA_75a550 { virtual void a0(); };
+struct CXBaseB_75a550 { virtual void b0(); ~CXBaseB_75a550() {} };
+struct CXVec_75a550 { void* d[5]; ~CXVec_75a550(); };          // 0x0041eb80
+struct CXVecOps_75a550 { void DestroyRange(void* b, void* e) throw(); };   // 0x01023030
+void __cdecl eastl_dealloc_nothrow_75a550(void* p) throw();   // 0x00f47380
+struct CXVecVec_75a550 {
+    void* mBegin; void* mEnd; void* mCap; void* d[2];
+    ~CXVecVec_75a550()
+    {
+        ((CXVecOps_75a550*)this)->DestroyRange(mBegin, mEnd);
+        if (mBegin && ((int*)mBegin)[-1] != 0) eastl_dealloc_nothrow_75a550(mBegin);
+    }
+};
+struct CXSub_75a550 { char d[0x14]; void Destroy(); };          // 0x00759880
+struct ClassXDtorView_75a550 : CXBaseA_75a550, CXBaseB_75a550 {
+    uint32_t       m08;      // +0x08
+    CXVec_75a550   vec0;     // +0x0c
+    CXVec_75a550   vec20;    // +0x20
+    CXVecVec_75a550 vec34;   // +0x34
+    CXSub_75a550   sub48;    // +0x48
+    void*          p5c;      // +0x5c
+    ~ClassXDtorView_75a550();
+};
+
 // @ 0x0075a550
-void ClassX::Dtor() {
-    vt0 = (void*)g_vt140dab0;
-    vt1 = (void*)g_vt140daac;
+ClassXDtorView_75a550::~ClassXDtorView_75a550()
+{
     if (p5c && ((int*)p5c)[-1] != 0) eastl_dealloc(p5c);
-    ((void(__thiscall*)(void*))FUN_00759880)(sub48);
-    VecVecInt_dtor(vec34.mBegin, vec34.mEnd);
-    if (vec34.mBegin && ((int*)vec34.mBegin)[-1] != 0) eastl_dealloc(vec34.mBegin);
-    ((void(__thiscall*)(void*))FUN_0041eb80)(&vec20);
-    ((void(__thiscall*)(void*))FUN_0041eb80)(&vec0);
-    vt1 = (void*)g_vt13ef094;
+    sub48.Destroy();
 }
+
 // @ 0x0075a620
 void* ClassX::New70() {
     void* p = operator_new_graph(0x70);

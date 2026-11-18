@@ -1,3 +1,4 @@
+#pragma intrinsic(strlen)
 // src/game/UTFSpore_Win32/SSLManager.cpp -- migrated from slice(s) s0117c560, s01179f60, s01176210, s0094fb80, s0094ea80 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/SSLManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
@@ -645,10 +646,7 @@ unsigned __cdecl Fn0094ef10(BIO94* p, char* buf, unsigned len)
 // @ 0x0094efe0
 int __cdecl Fn0094efe0(BIO94* p, char* str)
 {
-    char* q = str;
-    char c;
-    do { c = *q; q++; } while (c != 0);
-    int len = (int)q - (int)(str + 1);
+    int len = (int)strlen(str);
     int r = 0;
     if (p->f0c != 0 && str != 0) {
         if (p->obj->i38(str, len))
@@ -1022,10 +1020,9 @@ char SSLManager_s0094_fb80::RestoreClientSession(void* ssl, unsigned char* name)
 // @ 0x0094fdc0
 int __cdecl THREAD_setup()
 {
-    void* mgr = g_spSSLManager_s0094_fb80;
-    ICoreAllocator* alloc = (ICoreAllocator*)PTR(mgr, 0x10);
+    ICoreAllocator* alloc = (ICoreAllocator*)PTR((g_spSSLManager_s0094_fb80), 0x10);
     unsigned n = Fn01181150();
-    ((Ext*)(B(mgr) + 0x154))->fixedvec_resize(n);
+    ((Ext*)(B((g_spSSLManager_s0094_fb80)) + 0x154))->fixedvec_resize(n);
     for (unsigned i = 0; i < n; ++i) {
         void* m = alloc->AllocA(0x30, g_szUTFUp, 0, 8, 0);
         void* r;

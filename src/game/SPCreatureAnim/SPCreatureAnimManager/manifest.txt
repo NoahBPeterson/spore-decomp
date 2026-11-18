@@ -87,3 +87,4 @@
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?AddProb@Cmd_s00a0_d2d0@@QAEXPAX@Z  00a0e350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?SetName@Cmd_s00a0_d2d0@@QAEXPAX@Z  00a0e3f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ??0AnimParseContext@@QAE@PAUEntryMap@@@Z  00a0e4c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/SPCreatureAnimManager.cpp  ?f0a580@@YAHPAI0H@Z  00a0a580  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

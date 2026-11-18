@@ -224,13 +224,6 @@ struct TooltipMgr {                      // singleton at 0x01687348
 };
 extern TooltipMgr* s_pTooltip;            // 0x01687348
 
-extern const float _HK_REAL_ONE;          // 0x01485720
-struct IHealthBar {                      // ShowHealthBar() result
-    uint8_t pad0[0x118];
-    int f118;                            // +0x118
-    float f11c;                          // +0x11c
-};
-struct IHealthOwner { IHealthBar* ShowHealthBar(); };                 // 0x00b6c2d0 (EAX-reg arg in the binary)
 struct IUIElem {                         // sFindOrCreateUI() result
     uint8_t pad0[0x3c];
     float f3c;                           // +0x3c
@@ -399,15 +392,6 @@ void FUN_00b6d060(cTool* P, uint32_t param2, int param3, float param4)
     if ((((int)((uint32_t)str.mpCapacity - (uint32_t)str.mpBegin)) & ~1) > 2 &&
         str.mpBegin && (uint32_t)str.mpBegin != str.mSentinel)
         operator_delete_array(str.mpBegin);
-}
-
-// @ 0x00b6d160
-void FUN_00b6d160(IHealthOwner* self, int param2)
-{
-    IHealthBar* bar = self->ShowHealthBar();
-    if (!bar) return;
-    bar->f118 = param2;
-    bar->f11c = _HK_REAL_ONE;
 }
 
 // @ 0x00b6d190

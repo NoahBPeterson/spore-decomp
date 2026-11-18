@@ -2848,11 +2848,13 @@ PoolNode* Pool::NewNode(Obj** ppObj)
     PoolNode* node = mpFreeList;
     if (node)
         mpFreeList = (PoolNode*)node->mpObject;
-    else
+    else {
+        uint32_t nodeSize = mNodeSize;
         node = (PoolNode*)EAAllocate(
-            mNodeSize, "Simulator", 0, 0,
+            nodeSize, "Simulator", 0, 0,
             "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
             0xd1);
+    }
     if (node) {
         Obj* pObj = *ppObj;
         node->mpObject = pObj;
@@ -6076,8 +6078,7 @@ void __cdecl FUN_00b4e820(char* a1, char a2, char a3, float* a4)
         if (AudioSystem() != 0) {
             char* t;
             if (a1 != 0) {
-                FnGetByName getByName = (FnGetByName)(*(void**)(*(u32*)a1 + 0xc));
-                t = getByName(a1, (char*)0x1186577);
+                t = ((FnGetByName)(*(void**)(*(u32*)a1 + 0xc)))(a1, (char*)0x1186577);
             } else {
                 t = 0;
             }
@@ -6115,8 +6116,7 @@ void __cdecl FUN_00b4e980(char* a1, u32 a2, u32 a3, char a4, char a5, float* a6)
         if (AudioSystem() != 0) {
             char* t;
             if (a1 != 0) {
-                FnGetByName getByName = (FnGetByName)(*(void**)(*(u32*)a1 + 0xc));
-                t = getByName(a1, (char*)0x1186577);
+                t = ((FnGetByName)(*(void**)(*(u32*)a1 + 0xc)))(a1, (char*)0x1186577);
             } else {
                 t = 0;
             }
@@ -6569,13 +6569,13 @@ It10 Table10::erase(Node10* node, Bucket10* bucket)
 // @ 0x00b4fae0
 LinkNode* __stdcall FUN_00b4fae0(LinkNode* head, const Key3* key, int unused)
 {
-    if (!head)
-        return 0;
-    do {
-        if (key->m0 == (int)head->mKey0 && key->m4 == (int)head->mKey4 && key->m8 == (int)head->mKey8)
-            return head;
-        head = head->mNext;
-    } while (head);
+    if (head) {
+        do {
+            if (key->m0 == (int)head->mKey0 && key->m4 == (int)head->mKey4 && key->m8 == (int)head->mKey8)
+                return head;
+            head = head->mNext;
+        } while (head);
+    }
     return 0;
 }
 

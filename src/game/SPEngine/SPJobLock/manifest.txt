@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPJobLock.cpp  ??1JobLock@@QAE@XZ  0068f2b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

@@ -111,16 +111,10 @@ void* Budget2::InitLayoutWidget() {
 }
 
 // @ 0x00458d80
-extern void FUN_00811ad0(void* layout, int one);
 void FUN_00458d80() {
     if (g_layout != 0) {
-        FUN_00811ad0(g_layout, 1);
-        if (g_layout != 0) {
-            void* old = g_layout;
-            g_layout = 0;
-            if (old != 0)
-                ((void(__thiscall*)(void*))(*(void***)old)[2])(old);
-        }
+        g_layout->Shutdown(true);
+        g_layout = 0;
     }
 }
 

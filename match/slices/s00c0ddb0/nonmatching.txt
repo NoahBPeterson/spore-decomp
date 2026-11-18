@@ -11,8 +11,6 @@
 00c0e120    8  UNSUPPORTED  slot array membership at +0xf4c; complete; 0 valid inputs (read fault)
 00c0e170   -   UNSUPPORTED  motion-state gate; complete; 5 unresolved stub callees
 00c0e2c0  144  UNSUPPORTED  motion-state gate (by guid); complete; 4 unresolved stub callees
-00c0e3d0   20  PASS         animation flag via guid; complete; vtable cast + lm->vtable[0x40] deref fixed
-00c0e420   12  PASS         animation-check via guid; complete; vtable cast + lm->vtable[0x40] deref fixed
 00c0e480   71  UNSUPPORTED  cSPCreatureBase::GetTime; complete; 0 valid inputs (import decode_pointer)
 00c0e580   12  UNSUPPORTED  forward vector or entity position; complete; unresolved stub F_a048a0
 00c0e6a0  476  UNSUPPORTED  cSPCreatureBase::GetSocialGoal; complete; unresolved stub F_d00a70

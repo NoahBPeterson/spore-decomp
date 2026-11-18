@@ -1,4 +1,3 @@
-00765f80   84  deleting dtor: fixed ABI (explicit scalar-deleting member: this+flags, ret 4, vptr reset to 0x13eb938, conditional EA_Dealloc) so replay matches and fresh PASS 300/100%; remaining diff is the EH prologue/vptr-store schedule (size 45 vs 93)
 00766100   37  MoveOut: one reused zero register instead of four independent xors
 007662d0  428  vector<0xa0>::insert: helper call schedule/register allocation differs
 00766950  399  vector<uint32_t>::insert: fill-then-move schedule differs

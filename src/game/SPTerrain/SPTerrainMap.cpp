@@ -2807,23 +2807,29 @@ void* GmeListV3::DtorJ(int freeFlag)
     return this;
 }
 
+struct TerrainWordVector {
+    unsigned short* mpBegin;
+    unsigned short* mpEnd;
+    unsigned short* mpCapacity;
+    void Insert(unsigned short* position, unsigned count, const unsigned short* value); // 0x00f8f130
+    unsigned short* erase(unsigned short* first, unsigned short* last) {
+        eastl_fill(first, last, (char*)mpEnd - (char*)last);
+        mpEnd -= last - first;
+        return first;
+    }
+};
+
 // @ 0x00f8fce0
 void EastlVec::Resize16(unsigned int n)
 {
-    char* endp = mpEnd;
-    char* begp = mpBegin;
-    unsigned int used = (unsigned int)((endp - begp) >> 1);
-    if (used < n) {
-        unsigned int add = n - used;
-        short zero = 0;
-        ((void (__thiscall*)(EastlVec*, char*, unsigned int, short*))(void*)FUN_00f8f130)
-            (this, endp, add, &zero);
-        return;
+    TerrainWordVector* values = reinterpret_cast<TerrainWordVector*>(this);
+    unsigned size = values->mpEnd - values->mpBegin;
+    if (n > size) {
+        unsigned short zero = 0;
+        values->Insert(values->mpEnd, n - size, &zero);
+    } else {
+        values->erase(values->mpBegin + n, values->mpEnd);
     }
-    char* dst = begp + n * 2;
-    eastl_fill(dst, endp, 0);
-    int cnt = (int)((endp - dst) >> 1);
-    *(int*)((char*)this + 0x04) += -cnt * 2;
 }
 
 // @ 0x00f8fd40
@@ -2849,15 +2855,13 @@ void EastlVec::Resize4F(unsigned int n)
     char* endp = mpEnd;
     char* begp = mpBegin;
     unsigned int used = (unsigned int)((endp - begp) >> 2);
-    if (used < n) {
-        unsigned int add = n - used;
+    if (n > used) {
         float zero = 0.0f;
-        ((void (__thiscall*)(EastlVec*, char*, unsigned int, float*))(void*)FUN_00f8f130)
-            (this, endp, add, &zero);
+        ((VecF*)this)->Insert((float*)endp, n - used, &zero);
         return;
     }
     char* dst = begp + n * 4;
-    eastl_fill(dst, endp, 0);
+    eastl_fill(dst, endp, (int)(mpEnd - endp));
     int cnt = (int)((endp - dst) >> 2);
     *(int*)((char*)this + 0x04) += -cnt * 4;
 }

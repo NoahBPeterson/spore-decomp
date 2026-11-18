@@ -2379,8 +2379,7 @@ f32 __cdecl FUN_00d935d0(cObj* a1)
         f64 dy = (f64)b[1] - a[1];
         f64 dz = (f64)b[2] - a[2];
         if (sqrt(dy * dy + (dz * dz + dx * dx)) < g140c6e8) {
-            f32* c = (f32*)((void* (__thiscall*)(void*))VT(a1->mC0)[0x2c / 4])(a1->mC0);
-            if (MOPS(&a1->mFB8->m1bc)->FUN_00afad70(c) != 0)
+            if (MOPS(&a1->mFB8->m1bc)->FUN_00afad70((f32*)((void* (__thiscall*)(void*))VT(a1->mC0)[0x2c / 4])(a1->mC0)) != 0)
                 return 1.0f;
         }
     }

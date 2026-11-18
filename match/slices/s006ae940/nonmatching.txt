@@ -1,9 +1,6 @@
 # complete behaviourally-equivalent source, not byte-exact (yet)
-006aebd0   -  dtor: EH prologue + vtable stores not reproduced; equiv UNSUPPORTED: unresolved refs XRBTree::DoNukeSubtree, Mutex2::dtor
 006af5d0 145  comparison/assignment operator: vtable-slot shape and scheduling differ; equiv PASS (600 valid, 78.9% cov)
 006af670  99  record serializer: __thiscall with 1 stack arg; pre-loop writes match (0 mismatched), record loop unreachable (harness synthesizes empty containers); equiv WEAK (325 valid, 56.2% cov)
-006af8a0  83  destructor: MSVC EH prologue not reproduced; vtable slot order matches; equiv PASS (508 valid, 100% cov)
-006af960 110  resource ctor: MSVC EH prologue not reproduced; __thiscall with 2 stack args + interlocked refcount clear match; equiv PASS (595 valid, 100% cov)
 006aee60 434  build memory stream for a finished async request: EH prologue + long vtable-slot sequence; equiv UNSUPPORTED (0/400 valid: fault(read)=307, fault(write)=92)
 006af080 172  fixed_map find-or-emplace: EH prologue + register alloc differ; equiv PASS (286 valid, 100% cov)
 006af150 218  cAsyncResourceManager::AllocateRequest: EH prologue + vtable dispatch differ; equiv PASS (206 valid, 98.9% cov)

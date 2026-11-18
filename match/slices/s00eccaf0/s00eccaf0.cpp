@@ -385,11 +385,13 @@ struct EString {
     EString* Construct(const wchar_t* text);                   // 0x006743f0
     EString* AssignFrom(EString* other);                       // 0x00672880
     void InitEmpty() {
-        mpStack = mStack;
-        mpBegin = mStack;
-        mpEnd = mStack;
-        mpCapacity = mStack + 0x20;
-        mStack[0] = 0;
+        wchar_t* stack = mStack;
+        mpStack = stack;
+        _ReadWriteBarrier();
+        mpEnd = stack;
+        mpBegin = stack;
+        mpCapacity = stack + 0x20;
+        *stack = 0;
     }
     ~EString() {
         if ((((char*)mpEnd - (char*)mpBegin) & ~1) > 2 && mpBegin && mpBegin != mpStack)
@@ -411,6 +413,20 @@ struct IValueSet {
     virtual void Release();                                    // +0x04
 };
 
+struct ValueSetRef {
+    IValueSet* mpObject;
+    ValueSetRef() : mpObject(0) {}
+    ~ValueSetRef() { if (mpObject) mpObject->Release(); }
+    IValueSet** Out() {
+        if (mpObject) {
+            IValueSet* old = mpObject;
+            mpObject = 0;
+            old->Release();
+        }
+        return &mpObject;
+    }
+};
+
 // One property record of the manager's value list (12 bytes).
 struct PropEntry {
     uint32_t mId;                                              // +0x00
@@ -419,6 +435,9 @@ struct PropEntry {
 };
 
 struct PropManager {
+    virtual void p00(); virtual void p04(); virtual void p08(); virtual void p0c();
+    virtual void p10(); virtual void p14(); virtual void p18(); virtual void p1c();
+    virtual void p20(); virtual void p24(); virtual void p28();
     virtual bool GetRange(uint32_t a, uint32_t b, IValueSet** out);   // vtable +0x2c
 };
 
@@ -430,28 +449,21 @@ extern "C" bool __cdecl CollectValues(IValueSet* set, uint32_t key, uint32_t* co
 // @ 0x00eccbf0
 SP::EString* __cdecl FUN_00eccbf0(SP::EString* ret, uint32_t key, uint32_t index)
 {
-    IValueSet* set = 0;
+    ValueSetRef set;
     bool built = false;
     PropManager* mgr = GetPropertyManager();
-    if (set) {
-        set = 0;
-        set->Release();
-    }
-    if (mgr->GetRange(g_propKeyA, g_propKeyB, &set) && set) {
-        PropEntry* entries;
-        uint32_t count;
-        CollectValues(set, key, &count, &entries);
-        if (index < count) {
-            SP::cString3 text(entries[index].mId, entries[index].mTextId, 0);
+    if (mgr->GetRange(g_propKeyA, g_propKeyB, set.Out()) && set.mpObject) {
+        uint32_t count = 0;
+        PropEntry* entries = 0;
+        if (CollectValues(set.mpObject, key, &count, &entries) && count > index) {
+            uint32_t textId = entries[index].mId;
+            SP::cString3 text(entries[index].mTextId, textId, 0);
             ret->Construct(text.GetText());
-            text.~cString3();
             built = true;
         }
     }
     if (!built)
         ret->InitEmpty();
-    if (set)
-        set->Release();
     return ret;
 }
 

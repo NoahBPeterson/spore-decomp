@@ -1824,15 +1824,19 @@ f32 cSPSpacePlanetCameraController::FUN_01017e80()
     f32 a = MOPS(FUN_00b3d350())->FUN_00b7e4d0();
     f32 c = g16dd3ec + a;
     f32 b = a + g16dd3e8;
+    f32 r;
     if (flag) {
-        if (this->m13D != 0)
-            return b + 1.0f;
-        if (this->m13E != 0) {
-            if (this->FUN_01017d30() < 0.0f)
-                return b;
+        if (this->m13D != 0) {
+            r = b + 1.0f;
+        } else if (this->m13E != 0 && this->FUN_01017d30() < 0.0f) {
+            r = b;
+        } else {
+            r = c;
         }
+    } else {
+        r = c;
     }
-    return c;
+    return r;
 }
 
 // @ 0x01017f20

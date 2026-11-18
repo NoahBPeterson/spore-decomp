@@ -16,7 +16,6 @@
 00ec4b10   49  complete source; equiv PASS 392 valid 100% coverage (make_heap, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4b50   81  complete source; equiv PASS 388 valid 100% coverage (sort_heap, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4bb0   88  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall ctor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ec4c80   75  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4d30   19  complete source; equiv PASS 386 valid 100% coverage (upper_bound, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4d70   71  complete source; equiv PASS 364 valid 100% coverage (partition, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4de0   88  complete source; equiv PASS 351 valid 100% coverage (partial_sort, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

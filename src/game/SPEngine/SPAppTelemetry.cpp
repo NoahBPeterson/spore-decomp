@@ -153,6 +153,7 @@ void* operator new(size_t size, const char* pName, int flags, unsigned debugFlag
 void operator delete(void* p); // 0x00f47380
 void operator delete[](void* p);
 inline void* operator new(size_t, void* p) throw() { return p; }
+inline void operator delete(void*, void*) throw() {}
 #define ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 inline void* EAAlloc(size_t n) { return operator new[](n, "App", 0, 0, ALLOC_FILE, 0xd1); }
 namespace EA {
@@ -272,6 +273,14 @@ class AutoRefCount_s007e_b430 {
   ~AutoRefCount_s007e_b430() {
     if (mpObject) mpObject->Release();
   }
+  AutoRefCount_s007e_b430& operator=(T* p) {
+    T* pOld = mpObject;
+    if (pOld) {
+      mpObject = p;
+      pOld->Release();
+    }
+    return *this;
+  }
 };
 }
 namespace SP {
@@ -304,6 +313,7 @@ struct TItemListNode {
 };
 }
 namespace SP {
+struct TListAllocator { char mUnused; TListAllocator() : mUnused(0) {} };
 struct TItemList {
   TItemListNode* mpNext;  // +0x0 sentinel next
   TItemListNode* mpPrev;  // +0x4 sentinel prev
@@ -312,7 +322,17 @@ struct TItemList {
   TItemList(const TItemList& x);
   ~TItemList();
   __declspec(noinline) TItemListNode* AllocNode(const cTelemetryItem_s007e_b430& value);
-  void CopyRange(TItemListNode* dst, TItemListNode* first, TItemList* last, uint32_t flags);
+  void CopyRange(TItemListNode* dst, TItemListNode* first, TItemList* last, TListAllocator allocator);
+};
+struct TItemListHead {
+  TItemListNode* mpNext;
+  TItemListNode* mpPrev;
+  TItemListHead(TListAllocator allocator) : mpNext((TItemListNode*)this), mpPrev((TItemListNode*)this) {}
+  ~TItemListHead();
+};
+struct __declspec(novtable) TItemListCopyView : TItemListHead {
+  uint32_t mnSize;
+  TItemListCopyView(const TItemListCopyView& x);
 };
 }
 namespace SP {
@@ -379,6 +399,29 @@ struct IntVector {
 };
 }
 namespace SP {
+struct TItemMapOwner : TItemMap {
+  TItemMapOwner() {
+    mfMaxLoadFactor = 1.0f;
+    mfGrowthFactor = 2.0f;
+    mnBucketCount = 1;
+    mpBucketArray = (TItemMapNode**)&gEmptyBucketArray;
+    mnElementCount = 0;
+    mnNextResize = 0;
+  }
+  ~TItemMapOwner();  // 0x007EBE40
+};
+class cISerializableView : public cISerializableObject_s007e_b430 {
+ public:
+  virtual ~cISerializableView() {}
+};
+class cTelemetryCtorView : public EA::RefCountTemplate_s007e_b430<int>, public cISerializableView {
+ public:
+  TItemMapOwner mStats;
+  int64_t mSession;
+  bool mbFileDump;
+  EA::AutoRefCount_s007e_b430<EA::IO::MemoryStream_s007e_b430> mpStream;
+  cTelemetryCtorView();  // 0x007EC0A0
+};
 class cTelemetry_s007e_b430 : public EA::RefCountTemplate_s007e_b430<int>, public cISerializableObject_s007e_b430 {
  public:
   TItemMap mStats;                          // +0xc
@@ -386,7 +429,6 @@ class cTelemetry_s007e_b430 : public EA::RefCountTemplate_s007e_b430<int>, publi
   bool mbFileDump;                          // +0x38
   EA::AutoRefCount_s007e_b430<EA::IO::MemoryStream_s007e_b430> mpStream;  // +0x3c
 
-  cTelemetry_s007e_b430();                        // 0x007EC0A0
   void FileDump();                     // 0x007EB600
   void PrepareFlush(uint32_t a, uint32_t b);  // 0x007EBBA0
   void Reset(int id);                  // 0x007EBB60
@@ -453,6 +495,19 @@ TItemList::TItemList() {
   mpNext = (TItemListNode*)this;
   mpPrev = (TItemListNode*)this;
   mnSize = 0;
+}
+}
+namespace SP {
+TItemListHead::~TItemListHead() {
+  TItemListNode* p = mpNext;
+  while (p != (TItemListNode*)this) {
+    TItemListNode* pNext = p->mpNext;
+    p->~TItemListNode();
+    operator delete(p);
+    p = pNext;
+  }
+  mpNext = (TItemListNode*)this;
+  mpPrev = (TItemListNode*)this;
 }
 }
 namespace SP {
@@ -772,12 +827,12 @@ void SP::cTelemetry_s007e_b430::FileDump()
 SP::TItemListNode* SP::TItemList::AllocNode(const cTelemetryItem_s007e_b430& value)
 {
   TItemListNode* pNode = (TItemListNode*)EAAlloc(sizeof(TItemListNode));
-  if (pNode) pNode->mValue = value;
+  new (&pNode->mValue) cTelemetryItem_s007e_b430(value);
   return pNode;
 }
 
 // @ 0x007eb7d0
-void SP::TItemList::CopyRange(TItemListNode* dst, TItemListNode* first, TItemList* last, uint32_t flags)
+void SP::TItemList::CopyRange(TItemListNode* dst, TItemListNode* first, TItemList* last, TListAllocator allocator)
 {
   for (; first != (TItemListNode*)last; first = first->mpNext) {
     TItemListNode* pNode = AllocNode(first->mValue);
@@ -801,25 +856,35 @@ void SP::IntVector::resize(uint32_t n)
 }
 
 // @ 0x007eb870
-SP::TItemList::TItemList(const TItemList& x)
+SP::TItemListCopyView::TItemListCopyView(const TItemListCopyView& x) : TItemListHead(TListAllocator())
 {
-  mpNext = (TItemListNode*)this;
-  mpPrev = (TItemListNode*)this;
-  mnSize = 0;
-  extern void ListCopyRange(TItemList* dst, TItemListNode* first, TItemListNode* last, uint32_t flags);
-  ListCopyRange(this, x.mpNext, (TItemListNode*)&x, 0);
+  TListAllocator allocator;
+  ((TItemList*)this)->CopyRange((TItemListNode*)this, x.mpNext, (TItemList*)&x, allocator);
 }
 
+// Node allocation of the telemetry item map (0x007eb8d0): the value (key + item list copied by 0x007eb870) is
+// copy-constructed in place, then the link cleared.
+extern "C" void* __cdecl EAAllocNode_7eb8d0(unsigned n, const char* name, int a, int b, const char* file, int line);  // 0x00f473a0
+struct ItemList_7eb8d0 {
+  ItemList_7eb8d0(const ItemList_7eb8d0& o);   // 0x007eb870
+  uint32_t d[3];
+};
+struct ItemVal_7eb8d0 {
+  uint32_t key;
+  ItemList_7eb8d0 list;
+  static void* operator new(size_t, void* q) throw() { return q; }
+  static void operator delete(void*, void*) throw() {}
+};
+struct ItemNode_7eb8d0 { ItemVal_7eb8d0 v; void* mpNext; };
+struct ItemNodeAlloc_7eb8d0 { ItemNode_7eb8d0* DoAllocateNode(const ItemVal_7eb8d0& v); };
+
 // @ 0x007eb8d0
-extern "C" SP::TItemMapNode* MakeItemMapNode(const uint32_t* pKey)
+ItemNode_7eb8d0* ItemNodeAlloc_7eb8d0::DoAllocateNode(const ItemVal_7eb8d0& v)
 {
-  SP::TItemMapNode* pNode = (SP::TItemMapNode*)EAAlloc(sizeof(SP::TItemMapNode));
-  if (pNode) {
-    pNode->mKey = *pKey;
-    new (&pNode->mList) SP::TItemList();
-  }
-  pNode->mpNext = 0;
-  return pNode;
+  ItemNode_7eb8d0* n = (ItemNode_7eb8d0*)EAAllocNode_7eb8d0(sizeof(ItemNode_7eb8d0), "EASTL", 0, 0, ALLOC_FILE, 0xd1);
+  new (&n->v) ItemVal_7eb8d0(v);
+  n->mpNext = 0;
+  return n;
 }
 
 // @ 0x007eb950
@@ -938,14 +1003,43 @@ void SP::cTelemetry_s007e_b430::Flush(uint32_t id)
   }
 }
 
+// Destruction view of cTelemetry (0x007ebe70): the stream ref is released, the stats hashtable frees its nodes
+// (0x7eb950) and bucket array, then the two bases restore their vtables.
+struct TlmStream_7ebe70 { virtual void s0(); virtual void s1(); virtual void Release(); };
+struct TlmStreamRef_7ebe70 {
+  TlmStream_7ebe70* mpObject;
+  ~TlmStreamRef_7ebe70() { if (mpObject) mpObject->Release(); }
+};
+void TlmFree_7ebe70(void* p) throw();   // 0xf47380
+struct TlmMap_7ebe70 {
+  uint32_t mHash;                       // +0x0
+  void** mpBucketArray;                 // +0x4
+  uint32_t mnBucketCount;               // +0x8
+  uint32_t mnElementCount;              // +0xc
+  float mfMaxLoadFactor, mfGrowthFactor;
+  char rest[0x24 - 0x18];
+  void DoFreeNodes(void** buckets, uint32_t n) throw();   // 0x7eb950
+  ~TlmMap_7ebe70() {
+    DoFreeNodes(mpBucketArray, mnBucketCount);
+    uint32_t nBucketCount = mnBucketCount;
+    mnElementCount = 0;
+    if (nBucketCount > 1) TlmFree_7ebe70(mpBucketArray);
+  }
+};
+struct TlmB0_7ebe70 { virtual void a0(); int mRefCount; virtual ~TlmB0_7ebe70() {} };
+struct TlmB1_7ebe70 { virtual void b0(); virtual ~TlmB1_7ebe70() {} };
+class cTelemetryView_7ebe70 : public TlmB0_7ebe70, public TlmB1_7ebe70 {
+ public:
+  TlmMap_7ebe70 mStats;                 // +0xc
+  int64_t mSession;                     // +0x30
+  bool mbFileDump;                      // +0x38
+  TlmStreamRef_7ebe70 mpStream;         // +0x3c
+  ~cTelemetryView_7ebe70();
+};
+
 // @ 0x007ebe70
-SP::cTelemetry_s007e_b430::~cTelemetry_s007e_b430()
+cTelemetryView_7ebe70::~cTelemetryView_7ebe70()
 {
-  mpStream.~AutoRefCount_s007e_b430<EA::IO::MemoryStream_s007e_b430>();
-  mStats.DoFreeNodes(mStats.mpBucketArray, mStats.mnBucketCount);
-  uint32_t nBucketCount = mStats.mnBucketCount;
-  mStats.mnElementCount = 0;
-  if (nBucketCount > 1) operator delete(mStats.mpBucketArray);
 }
 
 // @ 0x007ebf20
@@ -991,14 +1085,12 @@ SP::TItemList* SP::TItemMap::operator[](const uint32_t& key)
 }
 
 // @ 0x007ec0a0
-SP::cTelemetry_s007e_b430::cTelemetry_s007e_b430()
-: mSession(0), mbFileDump(false), mpStream(0) {
-  mStats.mfMaxLoadFactor = 1.0f;
-  mStats.mfGrowthFactor = 2.0f;
-  mStats.mnNextResize = 0;
-  mStats.mpBucketArray = (TItemMapNode**)&gEmptyBucketArray;
-  mStats.mnBucketCount = 1;
-  mStats.mnElementCount = 0;
+SP::cTelemetryCtorView::cTelemetryCtorView()
+: mpStream(0)
+{
+  mpStream = 0;
+  mSession = 0;
+  mbFileDump = false;
 }
 
 // @ 0x007ec160

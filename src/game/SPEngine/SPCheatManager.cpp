@@ -427,13 +427,30 @@ class StrNameMap {
 class PairB_s0067_d550 {
  public:
   PairB_s0067_d550(const PairB_s0067_d550& x);  // @ 0x0067e900
-  ~PairB_s0067_d550();               // @ 0x0067e830
 
   char* mpBegin;         // +0x00
   char* mpEnd;           // +0x04
   char* mpCapacity;      // +0x08
   uint32_t mAllocator;   // +0x0c
   EA::IU34* mpCommand;   // +0x10
+};
+// the destructor's view of PairB: an EASTL string (freed unless it is the one-byte empty buffer) and a command
+// reference released through vtable slot 1
+struct PairBString {
+  char* mpBegin;         // +0x00
+  char* mpEnd;           // +0x04
+  char* mpCapacity;      // +0x08
+  uint32_t mAllocator;   // +0x0c
+  ~PairBString() { if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin); }
+};
+struct PairBCommandRef {
+  EA::IU34* mp;
+  ~PairBCommandRef() { if (mp) mp->Release(); }
+};
+struct PairBObj {
+  PairBString mKey;          // +0x00
+  PairBCommandRef mpCommand; // +0x10
+  ~PairBObj();
 };
 static char gEmptyStr[2];
 class RCPlainBlock {
@@ -579,9 +596,9 @@ void StrNameMap::LowerBound(SetNode_s0067_d550** ppOut, const EA::Key& key)
 // @ 0x0067e610
 PairA* __stdcall NewPairA(const EA::Arc01& src)
 {
-  return new ("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\"
-                           "UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-               0xd1) PairA(src);
+  PairA* p = (PairA*)operator new(0x14, "App", 0, 0, EA_ALLOC_H, 0xd1);
+  ::new (&p->mpObject) EA::Arc01(src.mpObject);
+  return p;
 }
 
 // @ 0x0067e6f0
@@ -644,18 +661,16 @@ void cCheatManager::ActivateConsole(uint32_t param)
 }
 
 // @ 0x0067e830
-PairB_s0067_d550::~PairB_s0067_d550()
+PairBObj::~PairBObj()
 {
-  if (mpCommand) mpCommand->Release();
-  if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin);
 }
 
 // @ 0x0067e890
 KeyNode* __stdcall NewKeyNode(const char* pString)
 {
-  return new ("App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\"
-                           "UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-               0xd1) KeyNode(pString);
+  KeyNode* p = (KeyNode*)operator new(0x20, "App", 0, 0, EA_ALLOC_H, 0xd1);
+  ::new (&p->key) EA::Key(pString);
+  return p;
 }
 
 // @ 0x0067e900
@@ -678,8 +693,18 @@ ConsoleStream::ConsoleStream(EA::IU01* pTarget)
   mpCapacity = gEmptyStr + 1;
 }
 
+// Destruction view of ConsoleStream (0x0067ea40): the original stores no vtable of its own on entry (novtable).
+class __declspec(novtable) ConsoleStreamDtorView_67ea40 : public EA::IO::IStream_s0067_d550, public RCPlainBlock {
+ public:
+  ~ConsoleStreamDtorView_67ea40();
+  EA::Arc01 mTarget;    // +0x0c
+  char* mpBegin;        // +0x10
+  char* mpEnd;          // +0x14
+  char* mpCapacity;     // +0x18
+};
+
 // @ 0x0067ea40
-ConsoleStream::~ConsoleStream()
+ConsoleStreamDtorView_67ea40::~ConsoleStreamDtorView_67ea40()
 {
   if ((mpCapacity - mpBegin) > 1 && mpBegin) eaFree(mpBegin);
 }

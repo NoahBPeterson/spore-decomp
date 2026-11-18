@@ -8,6 +8,7 @@
 #include "SP/cDirectPropertyList.h"
 #include <xmmintrin.h>
 #include "sse_helpers.h"
+#include <intrin.h>
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(long long*);
@@ -582,6 +583,7 @@ int Timer::Elapsed()
 // @ 0x00f47680
 cSporeApp::~cSporeApp()
 {
+    _ReadWriteBarrier();
     if (mGonzagoSystem) VC0(mGonzagoSystem, 0xc);
     if (mTerrainSystem) VC0(mTerrainSystem, 0x4);
     if (mEditorSystem)  VC0(mEditorSystem, 0xc);

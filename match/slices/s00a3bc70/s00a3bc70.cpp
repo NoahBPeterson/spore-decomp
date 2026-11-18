@@ -277,7 +277,7 @@ class AutoRefCount {
 public:
     T* mpPtr;                                      // +0x00
     AutoRefCount() : mpPtr(0) {}
-    ~AutoRefCount() { if (mpPtr) { T* p = mpPtr; mpPtr = 0; p->Release(); } }
+    ~AutoRefCount() { T* p = mpPtr; if (p) p->Release(); }
     T* operator->() const { return mpPtr; }
 };
 
@@ -343,19 +343,24 @@ void cListener::ReadTuningValues()
         return;
     AutoRefCount<IConfiguration> cfg;
     EA::Audio::IAudioSystem* pSystem = EA::Audio::GetSystemAT();
+    if (cfg.mpPtr) {
+        IConfiguration* t = cfg.mpPtr;
+        cfg.mpPtr = 0;
+        t->Release();
+    }
     pSystem->GetConfiguration(mTuningId, &cfg, 0x21407ee);
     if (cfg.mpPtr) {
         cfg->SetPointer(0xfd5197b0, &mbStaticMic);
-        uint32_t nPad = 0;
-        float* pValue = 0;
-        if (cfg->QueryValue(0x64d7be3c, &nPad, &pValue))
-            mListenerOffset = *(const V3*)pValue;
+        uint32_t nPad;
+        float* pValue;
+        if (cfg->QueryValue(0x64d7be3c, &nPad, &pValue)) {
+            mListenerOffset.x = pValue[0];
+            mListenerOffset.y = pValue[1];
+            mListenerOffset.z = pValue[2];
+        }
         mCurveOffset.InitFromConfiguration(cfg.mpPtr, 0xb0f0b4a5);
-        bool bBoom = false;
-        if (!mbStaticMic)
-            bBoom = cfg->GetBool(0x16074fa6);
-        mbEnableBoom = bBoom;
-        if (bBoom)
+        mbEnableBoom = !mbStaticMic && cfg->GetBool(0x16074fa6);
+        if (mbEnableBoom)
             mCurveBoom.InitFromConfiguration(cfg.mpPtr, 0x16074fa6);
     }
 }

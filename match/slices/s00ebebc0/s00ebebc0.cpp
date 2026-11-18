@@ -80,7 +80,7 @@ struct WinProc
 
 struct LayoutMgr
 {
-	int* __thiscall Next(int* cursor);                     // 0x00b72230 (free helper)
+	int* __thiscall Next(int* cursor);                     // 0x00b72230
 };
 
 struct Transform
@@ -88,10 +88,101 @@ struct Transform
 	void __thiscall xform(float* out, float* in);          // 0x007c4180
 };
 
+// The viewer getter takes no arguments; its caller supplies the projection inputs.
+struct ProjectionApp
+{
+	virtual void Slot0();
+	virtual void Slot1();
+	virtual void Slot2();
+	virtual void Slot3();
+	virtual void Slot4();
+	virtual void Slot5();
+	virtual void Slot6();
+	virtual void Slot7();
+	virtual void Slot8();
+	virtual void Slot9();
+	virtual void Slot10();
+	virtual void Slot11();
+	virtual void Slot12();
+	virtual void Slot13();
+	virtual void Slot14();
+	virtual void Slot15();
+	virtual void Slot16();
+	virtual void Slot17();
+	virtual void Slot18();
+	virtual void Slot19();
+	virtual void Slot20();
+	virtual void Slot21();
+	virtual Transform* GetViewer();
+};
+
+// Value and copy semantics mirror EA::Point2DT<float> in the window interface.
+struct Point2D
+{
+    float x, y;
+    Point2D() {}
+    Point2D(float px, float py) : x(px), y(py) {}
+    Point2D(const Point2D& other) : x(other.x), y(other.y) {}
+};
+
 struct UiWindow
 {
-	void __thiscall MapPoint(void* out, float x, float y); // vtable +0xc8
-	bool __thiscall HitTest(float x, float y);             // vtable +0xbc
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void Slot2();
+    virtual void Slot3();
+    virtual void Slot4();
+    virtual void Slot5();
+    virtual void Slot6();
+    virtual void Slot7();
+    virtual void Slot8();
+    virtual void Slot9();
+    virtual void Slot10();
+    virtual void Slot11();
+    virtual void Slot12();
+    virtual void Slot13();
+    virtual void Slot14();
+    virtual void Slot15();
+    virtual void Slot16();
+    virtual void Slot17();
+    virtual void Slot18();
+    virtual void Slot19();
+    virtual void Slot20();
+    virtual void Slot21();
+    virtual void Slot22();
+    virtual void Slot23();
+    virtual void Slot24();
+    virtual void Slot25();
+    virtual void Slot26();
+    virtual void Slot27();
+    virtual void Slot28();
+    virtual void Slot29();
+    virtual void Slot30();
+    virtual void Slot31();
+    virtual void Slot32();
+    virtual void Slot33();
+    virtual void Slot34();
+    virtual void Slot35();
+    virtual void Slot36();
+    virtual void Slot37();
+    virtual void Slot38();
+    virtual void Slot39();
+    virtual void Slot40();
+    virtual void Slot41();
+    virtual void Slot42();
+    virtual void Slot43();
+    virtual void Slot44();
+    virtual void Slot45();
+    virtual void Slot46();
+    virtual bool IsPointInWindow(Point2D point);
+    virtual void Slot48();
+    virtual void Slot49();
+    virtual bool ScreenToWindow(Point2D point, Point2D& output);
+};
+
+struct UiLayout
+{
+    UiWindow* FindWindowByID(uint id, bool recursive); // 0x008105b0
 };
 
 // A generic engine object exposing a vtable.
@@ -110,28 +201,23 @@ static void* vtfn(void* o, int off)
 // @ 0x00ebebc0
 int FUN_00ebebc0()
 {
-	int* app = FUN_0067dd50();
-	void* rect = (*(void* (__thiscall*)(void*))(*(void***)app)[7])(app);
-	float fx = (float)*(int*)((byte*)rect + 8);
-	float fy = (float)*(int*)((byte*)rect + 0xc);
-
-	int cursor = ((WinProc*)DAT_016c744c)->GetPriority();
-
-	for (;;)
-	{
-		int* e = FUN_00b72230(&cursor);
-		if (e == 0)
-			return 0;
-
-		if (((e[6] - e[5]) & ~3) != 0)
-		{
-			void* win = (void*)cSPUILayout_FindWindowByID((void*)e[0xa], 0x100a0000, true);
-			float pos[2];
-			(*(void (__thiscall*)(void*, float*, float, float))(*(void***)win)[0x32])(win, pos, fx, fy);
-			if ((*(bool (__thiscall*)(void*, float, float))(*(void***)win)[0x2f])(win, pos[0], pos[1]))
-				return e[5];
-		}
-	}
+    int* app = FUN_0067dd50();
+    void* rect = (*(void* (__thiscall*)(void*))(*(void***)app)[7])(app);
+    Point2D screen((float)*(int*)((byte*)rect + 8), (float)*(int*)((byte*)rect + 0xc));
+    int cursor = ((WinProc*)DAT_016c744c)->GetPriority();
+    for (int* e = ((LayoutMgr*)DAT_016c744c)->Next(&cursor); e;
+         e = ((LayoutMgr*)DAT_016c744c)->Next(&cursor))
+    {
+        if (((e[6] - e[5]) & ~3) != 0)
+        {
+            UiWindow* win = ((UiLayout*)e[0xa])->FindWindowByID(0x100a0000, true);
+            Point2D pos;
+            win->ScreenToWindow(screen, pos);
+            if (win->IsPointInWindow(pos))
+                return *(int*)e[5];
+        }
+    }
+    return 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -139,19 +225,15 @@ int FUN_00ebebc0()
 // @ 0x00ebecc0
 void FUN_00ebecc0(float* out, int resource)
 {
-	void* res = FUN_00eeca30(resource);
-	void* app = SP_App();
-	int   id  = (*(int (__thiscall*)(void*))(*(void***)res)[0xb])(res);
-
-	float local[2];
-	void* xf = (*(void* (__thiscall*)(void*, float*, int))(*(void***)app)[0x16])(app, local, id);
-	((Transform*)xf)->xform(local, (float*)id);
-
-	float area[4];
-	SPUIHelpers_GetMainWindowArea(area);
-
-	out[0] = (local[0] + 1.0f) * area[2] * 0.5f;
-	out[1] = (1.0f - local[1]) * area[3] * 0.5f;
+    void* res = FUN_00eeca30(resource);
+    ProjectionApp* app = reinterpret_cast<ProjectionApp*>(SP_App());
+    float* position = (*(float* (__thiscall*)(void*))(*(void***)res)[0xb])(res);
+    float local[3];
+    app->GetViewer()->xform(local, position);
+    float area[4];
+    SPUIHelpers_GetMainWindowArea(area);
+    out[0] = (local[0] + 1.0f) * area[2] * 0.5f;
+    out[1] = (1.0f - local[1]) * area[3] * 0.5f;
 }
 
 // ---------------------------------------------------------------------------
@@ -435,31 +517,46 @@ void FUN_00ebf290(int obj, int* cursor)
 	*(byte*)(e + 0xb) = 0;
 }
 
+static __forceinline void SwapEventPointers(int*& first, int*& second)
+{
+    int* temporary = first;
+    first = second;
+    second = temporary;
+}
+
+// The retail vector stores an eight-byte allocator slot after its three pointers.
+struct EventVector
+{
+    int* begin;
+    int* end;
+    int* capacity;
+    uint allocator[2];
+    EventVector(int count, const void* alloc); // 0x00b93c60
+    EventVector& operator=(const EventVector& other); // 0x00b8ef40
+    void swap(EventVector& other);
+};
+
 // ---------------------------------------------------------------------------
 // FUN_00ebf480 -- swap two layout event vectors
 // @ 0x00ebf480
-void FUN_00ebf480(int* a, int* b)
+void EventVector::swap(EventVector& other)
 {
-	int* av = (int*)a[0];
-	int* bv = (int*)b[0];
-	if ((av == 0 || av[-1] != 0) && (bv == 0 || bv[-1] != 0))
-	{
-		a[0] = (int)bv;
-		b[0] = (int)av;
-		int t = a[1]; a[1] = b[1]; b[1] = t;
-		t = a[2]; a[2] = b[2]; b[2] = t;
-		return;
-	}
-
-	FUN_00b93c60((a[1] - (int)av) >> 2, a + 3);
-	byte* tmp = (byte*)0;
-	int n = a[1] - a[0];
-	tmp = (byte*)eastl_vector_insert(tmp, (void*)a[0], n);
-	tmp += (n >> 2) * 4;
-	FUN_00b8ef40(b);
-	FUN_00b8ef40(&tmp);
-	if (tmp != 0 && *(int*)(tmp - 4) != 0)
-		operator_delete__(tmp);
+    int* av = begin;
+    if ((av == 0 || av[-1] != 0) && (other.begin == 0 || other.begin[-1] != 0))
+    {
+        SwapEventPointers(begin, other.begin);
+        SwapEventPointers(end, other.end);
+        SwapEventPointers(capacity, other.capacity);
+        return;
+    }
+    EventVector temporary(end - begin, allocator);
+    int bytes = (char*)end - (char*)begin;
+    int* storage = temporary.begin;
+    temporary.end = (int*)eastl_vector_insert(storage, begin, bytes) + (bytes >> 2);
+    *this = other;
+    other = temporary;
+    if (storage != 0 && storage[-1] != 0)
+        operator_delete__(storage);
 }
 
 // ---------------------------------------------------------------------------

@@ -77,14 +77,38 @@ struct SplitInner {             // destroyed by 0079ac70
     void __thiscall destroy();
 };
 
-struct SplitRecord {            // torn down by 0079aeb0
-    SharedObject *mOwner;       // +0x00
-    SharedObject *mResource;    // +0x04
-    SplitInner mInner;          // +0x08
-    void *mBufferBegin;         // +0x48
-    void *mBufferEnd;           // +0x4c
-    unsigned int pad50;         // +0x50
-    void __thiscall destroy();
+struct AtomicSharedObject {
+    virtual ~AtomicSharedObject();
+    long mRefCount;
+    __forceinline int Release() {
+        int count = _InterlockedDecrement(&mRefCount);
+        if (count == 0) {
+            _InterlockedExchange(&mRefCount, 1);
+            delete this;
+        }
+        return count;
+    }
+};
+struct SharedReference {
+    AtomicSharedObject* mpObject;
+    __forceinline ~SharedReference() {
+        if (mpObject)
+            mpObject->Release();
+    }
+};
+struct SplitRecordBuffer {
+    void* mBegin;
+    void* mEnd;
+    void* mCapacity;
+    void DestroyRange(void* first, void* last); // 0x01023030
+    __forceinline void destroy();
+};
+struct SplitRecord {
+    SharedReference mOwner;
+    SharedReference mResource;
+    SplitInner mInner;
+    SplitRecordBuffer mBuffer;
+    ~SplitRecord();
 };
 
 // Drop a shared reference; the last owner calls the object's first vtable slot with `delete`.
@@ -543,14 +567,17 @@ int __stdcall FUN_0079ae60(int param_1, void *param_2, int param_3)
     return _Dst;
 }
 
-// @ 0x0079aeb0
-void SplitRecord::destroy()
+__forceinline void SplitRecordBuffer::destroy()
 {
-    FUN_01023030(mBufferBegin, mBufferEnd);
-    FreeDebugBlock(mBufferBegin);
+    DestroyRange(mBegin, mEnd);
+    FreeDebugBlock(mBegin);
+}
+
+// @ 0x0079aeb0
+SplitRecord::~SplitRecord()
+{
+    mBuffer.destroy();
     mInner.destroy();
-    ReleaseShared(mResource);
-    ReleaseShared(mOwner);
 }
 
 // @ 0x0079af80

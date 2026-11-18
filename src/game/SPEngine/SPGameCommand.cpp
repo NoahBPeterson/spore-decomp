@@ -58,10 +58,14 @@ struct EditorResBase {
     virtual ~EditorResBase() {}
     virtual void er1();
 };
+struct EditorResRef {                  // ref member released through vtable slot 1
+    void* p;
+    ~EditorResRef() { if (p) ((void(__thiscall*)(void*))(*(void***)p)[1])(p); }
+};
 struct EditorResDerived : EditorResBase {
     char  pad[0x1c];
-    void* m20;   // +0x20
-    void* m24;   // +0x24
+    EditorResRef m20;   // +0x20
+    void* m24;          // +0x24
     ~EditorResDerived();
 };
 // ---- items of slice s00688dd0 end
@@ -164,6 +168,17 @@ struct VMapNode {
         mValue.Assign(&s.val);
     }
 };
+// a map node's value constructed in place: the key, then a copy of the variant
+struct VariantCopy : Variant {
+    VariantCopy(const Variant& o) { mFlags = 0; mTypeId = 0; Assign(&o); }
+};
+struct PairUVCopy {
+    u32 key;
+    VariantCopy val;
+    PairUVCopy(const PairUV& s) : key(s.key), val(s.val) {}
+    static void* operator new(size_t, void* p) { return p; }
+    static void operator delete(void*, void*) {}
+};
 struct VIter {
     VMapNode* mpNode;
     VIter() {}
@@ -249,11 +264,62 @@ struct cCommandParameterSet {
     Variant mDefaultVariant; // +0x28
 
     __declspec(noinline) cCommandParameterSet();
-    ~cCommandParameterSet();
     u32 GetNextParameterID(u32 id);
     void RemoveParameter(u32 id);
     void AdjustParameterCount(u32 n);
     bool ExecuteCommand(int cmd, void* a, void* b);
+};
+// the destructor's view of cCommandParameterSet: two bases (vtables restored on exit), the parameter map at +0x0c
+// (nuked from its root by the out-of-line DoNukeSubtree) and the default variant at +0x28 (destructed when it owns
+// a value, flag 4)
+struct cCommandParameterSetBase0 { virtual void Slot0(); ~cCommandParameterSetBase0() {} };
+struct cCommandParameterSetBase1 { virtual void Slot0(); ~cCommandParameterSetBase1() {} };
+struct ParameterMapHolder {
+    u32 pad0;                // +0x00
+    VMapNode* aRight;        // +0x04
+    VMapNode* aLeft;         // +0x08
+    VMapNode* aParent;       // +0x0c (root)
+    u32 aColorWord;          // +0x10
+    u32 mnSize;              // +0x14
+    u32 mAlloc;              // +0x18
+    void DoNukeSubtree(VMapNode* p);
+    ~ParameterMapHolder() { DoNukeSubtree(aParent); }
+};
+struct DefaultVariantHolder {
+    Variant v;
+    ~DefaultVariantHolder() { if (v.mFlags & 4) v.Destruct(0); }
+};
+struct cCommandParameterSetObj : cCommandParameterSetBase0, cCommandParameterSetBase1 {
+    u32 mRefCount;                       // +0x08
+    ParameterMapHolder mParameterMap;    // +0x0c
+    DefaultVariantHolder mDefaultVariant; // +0x28
+    ~cCommandParameterSetObj();
+};
+// the destructor's view of cStringCommandGenerator: two bases (vtables restored on exit), the vector of parameter
+// strings at +0x0c (values destroyed, then the heap block freed) and the empty-set reference at +0x20 (vtable slot 1)
+struct GenStringVec {
+    WStr* mpBegin;           // +0x00
+    WStr* mpEnd;             // +0x04
+    WStr* mpCap;             // +0x08
+    u32 mAlloc0;             // +0x0c
+    u32 mAlloc1;             // +0x10
+    void DestroyValues(WStr* first, WStr* last) throw();   // 0x0084aad0
+    ~GenStringVec() {
+        DestroyValues(mpBegin, mpEnd);
+        if (mpBegin && *(int*)((char*)mpBegin - 4) != 0)
+            EASTL_dealloc(mpBegin);
+    }
+};
+struct IGenEmptySet { virtual void Slot0(); virtual void Release(); };
+struct GenEmptySetRef {
+    IGenEmptySet* mp;
+    ~GenEmptySetRef() { if (mp) mp->Release(); }
+};
+struct cStringCommandGeneratorObj : cCommandParameterSetBase0, cCommandParameterSetBase1 {
+    u32 mRefCount;           // +0x08
+    GenStringVec mArr;       // +0x0c
+    GenEmptySetRef mpEmptySet; // +0x20
+    ~cStringCommandGeneratorObj();
 };
 struct cStringCommandGenerator {
     void* vtbl0;             // +0x00
@@ -266,7 +332,6 @@ struct cStringCommandGenerator {
     u32 mAlloc1;             // +0x1c
     void* mpEmptySet;        // +0x20
 
-    ~cStringCommandGenerator();
     cStringCommandGenerator();
     bool SetParameterCount(WStr* str, u32* outId, cCommandParameterSet** outSet);   // 0x0068B000
 };
@@ -670,8 +735,6 @@ EditorResDerived::~EditorResDerived()
 {
     if (m24 != 0)
         ((void(__thiscall*)(void*))(*(void***)m24)[1])(m24);
-    if (m20 != 0)
-        ((void(__thiscall*)(void*))(*(void***)m20)[1])(m20);
 }
 
 // @ 0x00689920
@@ -798,12 +861,7 @@ unsigned int SP::cCommandParameterSet::GetFirstParameterID() const
 // @ 0x00689dc0
 bool ParamWalker::Walk(char* node, uint32 flags, void* sink)
 {
-    if (node == 0) {
-        char* n = *(char**)((char*)this + 0xc);
-        char* end = (char*)this + 8;
-        for (; n != end; n = (char*)RBTreeIncrement(n))
-            Walk(n + 0x14, flags, sink);
-    } else {
+    if (node != 0) {
         if (sink != 0) {
             if ((char)flags != 0) {
                 ((void(__thiscall*)(void*, void*, void*, void*))
@@ -824,7 +882,12 @@ bool ParamWalker::Walk(char* node, uint32 flags, void* sink)
                 n = (char*)RBTreeIncrement(n);
             } while (n != end);
         }
+        return true;
     }
+    char* n = *(char**)((char*)this + 0xc);
+    char* end = (char*)this + 8;
+    for (; n != end; n = (char*)RBTreeIncrement(n))
+        Walk(n + 0x14, flags, sink);
     return true;
 }
 
@@ -870,9 +933,11 @@ u32 cCommandServer::FindCommandInfoByName(const wch* name)
 }
 
 // @ 0x0068a250
-extern "C" VMapNode* __stdcall FUN_0068a250(const PairUV* src)
+VMapNode* __stdcall FUN_0068a250(const PairUV* src)
 {
-    return new (gAllocTag, 0u, 0u, gEASTLFile, 0xd1u) VMapNode(*src);
+    VMapNode* n = (VMapNode*)operator new(0x28, gAllocTag, 0u, 0u, gEASTLFile, 0xd1u);
+    new (&n->mKey) PairUVCopy(*src);
+    return n;
 }
 
 // @ 0x0068a2e0
@@ -963,15 +1028,8 @@ vector::vector(u32 n, const EmptyAlloc& a)
 }
 
 // @ 0x0068a720
-cCommandParameterSet::~cCommandParameterSet()
+cCommandParameterSetObj::~cCommandParameterSetObj()
 {
-    vtbl0 = &vtbl_cCommandParameterSet;
-    vtbl1 = &vtbl_cCommandParameterSet2;
-    if (mDefaultVariant.mFlags & 4)
-        mDefaultVariant.Destruct(0);
-    mParameterMap.DoNukeSubtree(mParameterMap.aParent);
-    vtbl1 = &vtbl_Base1;
-    vtbl0 = &vtbl_Base0;
 }
 
 // @ 0x0068a7a0
@@ -1009,35 +1067,29 @@ void cCommandParameterSet::RemoveParameter(u32 id)
 }
 
 // @ 0x0068a8d0
-cStringCommandGenerator::~cStringCommandGenerator()
+cStringCommandGeneratorObj::~cStringCommandGeneratorObj()
 {
-    vtbl0 = &vtbl_cStringCommandGenerator;
-    vtbl1 = &vtbl_cStringCommandGenerator2;
-    if (mpEmptySet) {
-        ((void(__thiscall*)(void*))VFN(mpEmptySet, 4))(mpEmptySet);
-    }
-    ((void(__thiscall*)(void*, void*, void*))VecDestroyValues)(&mArrBegin, mArrBegin, mArrEnd);
-    if (mArrBegin && *(int*)((char*)mArrBegin - 4) != 0)
-        EASTL_dealloc(mArrBegin);
-    vtbl1 = &vtbl_Base1;
-    vtbl0 = &vtbl_Base0;
 }
+
+struct CommandInfoLookup {
+    void Find(CInfoNode** result, const unsigned int& id); // 0x00e5c780
+};
 
 // @ 0x0068a970
 bool SP::cCommandServer::RegisterCommandParameterInfo(unsigned int id, wchar_t const * param)
 {
-    eastl::map<unsigned int,EA::Variant,eastl::less<unsigned int>,eastl::allocator>* map = (eastl::map<unsigned int,EA::Variant,eastl::less<unsigned int>,eastl::allocator>*)((char*)this + 4);
-    CInfoNode* node = (CInfoNode*)map->find(id).mpNode;
-    if (node == (CInfoNode*)&mCommandInfoMap.mAnchor.mpNodeRight)
-        return false;
-    if (param && *param) {
-        node->mValue.msParam.AssignCStr(param);
+    CInfoNode* node;
+    reinterpret_cast<CommandInfoLookup*>(&mCommandInfoMap)->Find(&node, id);
+    if (node != (CInfoNode*)&mCommandInfoMap.mAnchor.mpNodeRight) {
+        if (param && *param) {
+            node->mValue.msParam.AssignCStr(param);
+            return true;
+        }
+        if (mbAutoBasicParameterInfoCreation)
+            node->mValue.msParam.Format(gLiteral1403384, node->mValue.msName.mpBegin);
         return true;
     }
-    if (mbAutoBasicParameterInfoCreation) {
-        node->mValue.msParam.Format(gLiteral1403384, node->mValue.msName.mpBegin);
-    }
-    return true;
+    return false;
 }
 
 // @ 0x0068a9e0
@@ -1397,19 +1449,41 @@ void cCommandServer_s0068_b150::CmdMap::DestroyNodes(RbNode* node)
     }
 }
 
+// Destruction view of cCommandServer (0x0068bc50): the generator set (0xeb6280), the three dispatcher/generator refs
+// (released through slot 1) and the command map (0x68b9d0) are destroyed in reverse order, then the base vtable.
+struct CsRefObj_68bc50 { virtual void r0(); virtual void Release(); };
+struct CsRef_68bc50 {
+    CsRefObj_68bc50* mpObject;
+    ~CsRef_68bc50() { if (mpObject) mpObject->Release(); }
+};
+struct CsMap_68bc50 {
+    char  mAnchor[0xc];
+    void* mpRoot;                              // +0x0c
+    char  rest[8];
+    void DestroyNodes(void* node);             // 0x0068B9D0
+    ~CsMap_68bc50() { DestroyNodes(mpRoot); }
+};
+struct CsSet_68bc50 {
+    char  mAnchor[0xc];
+    void* mpRoot;                              // +0x0c
+    char  rest[8];
+    void DoNuke(void* node);                   // 0x00eb6280
+    ~CsSet_68bc50() { DoNuke(mpRoot); }
+};
+struct CsBase_68bc50 { virtual void v0(); ~CsBase_68bc50() { (void)this; } };
+struct cCommandServerView_68bc50 : CsBase_68bc50 {
+    CsMap_68bc50 mCommandInfoMap;              // +0x04
+    void*        m1c;                          // +0x1c
+    CsRef_68bc50 mpCommandDispatcher;          // +0x20
+    CsRef_68bc50 mpMessageCommandDispatcher;   // +0x24
+    CsRef_68bc50 mpStringCommandGenerator;     // +0x28
+    CsSet_68bc50 mCommandGeneratorSet;         // +0x2c
+    ~cCommandServerView_68bc50();
+};
+
 // @ 0x0068bc50
-cCommandServer_s0068_b150::~cCommandServer_s0068_b150()
+cCommandServerView_68bc50::~cCommandServerView_68bc50()
 {
-    *(void**)this = &gVtCmdSrv;
-    mCommandGeneratorSet.~GenSet();
-    if (mpStringCommandGenerator.mpObject)
-        ((IRefCounted*)mpStringCommandGenerator.mpObject)->Release();
-    if (mpMessageCommandDispatcher.mpObject)
-        ((IRefCounted*)mpMessageCommandDispatcher.mpObject)->Release();
-    if (mpCommandDispatcher.mpObject)
-        ((IRefCounted*)mpCommandDispatcher.mpObject)->Release();
-    mCommandInfoMap.~CmdMap();
-    *(void**)this = &gVtEditorRes;
 }
 
 // @ 0x0068bcf0

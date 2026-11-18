@@ -65,13 +65,11 @@ struct string8_s0084_4270 {
         mpBegin = 0; mpEnd = 0; mpCapacity = 0;
         const char* e = x.mpEnd;
         const char* b = x.mpBegin;
-        unsigned n = e - b;
-        RangeInitialize(n + 1);
+        RangeInitialize(e - b + 1);
         char* d = mpBegin;
-        memcpy(d, b, n);
-        d = d + (e - b);
-        mpEnd = d;
-        *d = 0;
+        memcpy(d, b, e - b);
+        mpEnd = d + (e - b);
+        *mpEnd = 0;
     }
     string8_s0084_4270() { mpBegin = gEmptyStr; mpEnd = gEmptyStr; mpCapacity = gEmptyStr + 1; }
     ~string8_s0084_4270() { if (mpCapacity - mpBegin > 1 && mpBegin) operator delete(mpBegin); }
@@ -201,9 +199,9 @@ struct BoolVec {
 struct MacroPair {
     string8_s0084_4270 first;
     EA::ArgScript::AutoRefCount<EA::ArgScript::cMacroDefinition> second;
-    MacroPair(const string8_s0084_4270& k, const EA::ArgScript::AutoRefCount<EA::ArgScript::cMacroDefinition>& v) : first(k), second(v) {}   // 0x00844a00
-    MacroPair(const MacroPair& o) : first(o.first), second(o.second) {}                            // 0x00844a60
-    ~MacroPair() {}
+    __declspec(noinline) MacroPair(const string8_s0084_4270& k, const EA::ArgScript::AutoRefCount<EA::ArgScript::cMacroDefinition>& v);   // 0x00844a00
+    __declspec(noinline) MacroPair(const MacroPair& o);                                                                                  // 0x00844a60
+    __declspec(noinline) ~MacroPair() {}
 };
 struct StrNode {
     string8_s0084_4270 key;
@@ -3479,21 +3477,19 @@ void cIfCommand::Execute(EA::ArgScript::cArguments_s0084_4270& args)
 
 // @ 0x00844860
 EA::ArgScript::cMacroDefinition::cMacroDefinition()
+    : mRefCount(0)
 {
-    mRefCount = 0;
     mStartLine = -1;
 }
 
 // @ 0x00844a00
-MacroPair* __fastcall MacroPair_ctor_kv(MacroPair* mem, int, const string8_s0084_4270& k, const EA::ArgScript::AutoRefCount<EA::ArgScript::cMacroDefinition>& v)
+MacroPair::MacroPair(const string8_s0084_4270& k, const EA::ArgScript::AutoRefCount<EA::ArgScript::cMacroDefinition>& v) : first(k), second(v)
 {
-    return new (mem) MacroPair(k, v);
 }
 
 // @ 0x00844a60
-MacroPair* __fastcall MacroPair_ctor_copy(MacroPair* mem, int, const MacroPair& o)
+MacroPair::MacroPair(const MacroPair& o) : first(o.first), second(o.second)
 {
-    return new (mem) MacroPair(o);
 }
 
 // @ 0x00844ac0

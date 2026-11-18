@@ -513,31 +513,31 @@ bool VoiceContainer::HasPropertyBinding(uint32_t property)
     return false;
 }
 
+struct CoreSystemLock {
+    CoreSystemLock() { if (gpCoreSystem) gpCoreSystem->Lock(); }
+    ~CoreSystemLock() { if (gpCoreSystem) gpCoreSystem->Unlock(); }
+};
+
 // @ 0x00a33dc0
 void VoiceContainer::CommitBoundProperties()
 {
     int count = (int)((char*)mpBindingsEnd - (char*)mpBindingsBegin) / 36;
     if (count == 0)
         return;
-    if (gpCoreSystem)
-        gpCoreSystem->Lock();
-    __try {
-        int offset = 0;
-        if (count > 0) {
-            do {
-                Binding* pBinding = (Binding*)((char*)mpBindingsBegin + offset);
-                if (pBinding->mpVoice) {
-                    if (!pBinding->mbAltPath && !(pBinding->mFlags20 & 2))
-                        ((Voice*)pBinding->mpVoice)->SetCommandComplete(pBinding->mCommand, pBinding->mValueA);
-                    else if (pBinding->mFlags20 & 1)
-                        ((Voice*)pBinding->mpVoice)->SetCommandComplete(pBinding->mCommand, pBinding->mValueB);
-                }
-                offset += 36;
-            } while (--count != 0);
-        }
-    } __finally {
-        if (gpCoreSystem)
-            gpCoreSystem->Unlock();
+    CoreSystemLock lock;
+    int offset = 0;
+    int n = count;
+    if (n > 0) {
+        do {
+            Binding* pBinding = (Binding*)((char*)mpBindingsBegin + offset);
+            if (pBinding->mpVoice) {
+                if (!pBinding->mbAltPath && !(pBinding->mFlags20 & 2))
+                    ((Voice*)pBinding->mpVoice)->SetCommandComplete(pBinding->mCommand, pBinding->mValueA);
+                else if (pBinding->mFlags20 & 1)
+                    ((Voice*)pBinding->mpVoice)->SetCommandComplete(pBinding->mCommand, pBinding->mValueB);
+            }
+            offset += 36;
+        } while (--n != 0);
     }
 }
 

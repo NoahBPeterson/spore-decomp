@@ -405,20 +405,28 @@ void cEditor::FUN_00f36380()
 // ===================================================================================================
 // 0x00f363c0  cEditor::FUN_00f363c0: switch away from this editor and drop every placed noun.
 // ===================================================================================================
+inline cNoun* GetNoun(const SimpleVector<NounEntry>& nouns, u32 index)
+{
+    return nouns.mBegin[index].m_noun;
+}
+
 // @ 0x00f363c0
 void cEditor::FUN_00f363c0()
 {
-    u32 n = (u32)(m_nouns.mEnd - m_nouns.mBegin);
+    SimpleVector<NounEntry>& nouns = m_nouns;
+    u32 n = (u32)(nouns.mEnd - nouns.mBegin);
     for (u32 i = 0; i < n; i++)
     {
-        NounManager()->RemoveNoun(m_nouns.mBegin[i].m_noun);
-        if (m_nouns.mBegin[i].m_noun)
+        NounManager()->RemoveNoun(GetNoun(nouns, i));
+        NounEntry& entry = nouns.mBegin[i];
+        cNoun* old = entry.m_noun;
+        if (old)
         {
-            m_nouns.mBegin[i].m_noun = 0;
-            m_nouns.mBegin[i].m_noun->Release();
+            entry.m_noun = 0;
+            old->Release();
         }
     }
-    m_nouns.clear_range(m_nouns.mBegin, m_nouns.mEnd);
+    nouns.clear_range(nouns.mBegin, nouns.mEnd);
     m_1b0 = 0;
     ((cScenarioTutorialsChecklistUI*)&g_checklistUI)->CommitPlacement(0);
     g_selectedWindow = &g_window15ad328;

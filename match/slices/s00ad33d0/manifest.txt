@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00ad33d0/s00ad33d0.cpp  ?FUN_00ad3e50@CastInterface@@QAEPAXI@Z  00ad3e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s00ad33d0/s00ad33d0.cpp  ??0cVignetteContext@Simulator@@QAE@XZ  00ad3e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00ad33d0/s00ad33d0.cpp  ?FUN_00ad3b70@@YAHPAUEditorAction@@_N@Z  00ad3b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

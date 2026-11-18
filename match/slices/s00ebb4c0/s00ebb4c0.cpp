@@ -277,17 +277,49 @@ void WpRegistry::dtor()
     p[0] = 0x13ef094;
 }
 
+struct TreeObject {
+    virtual void slot00();
+    virtual void slot04();
+    virtual void slot08();
+    virtual void Destroy(int flags);
+};
+struct TreeNodeBase {
+    TreeNodeBase* right;
+    TreeNodeBase* left;
+    TreeNodeBase* parent;
+    bool red;
+    char pad0d[3];
+};
+struct TreeNode : TreeNodeBase {
+    unsigned key;
+    TreeObject* value;
+};
+struct ObjectTree {
+    unsigned allocator;
+    TreeNodeBase anchor;
+    unsigned count;
+    void DoNukeSubtree(TreeNodeBase* node); // 0x00d0c930
+    void Clear() {
+        DoNukeSubtree(anchor.parent);
+        anchor.left = &anchor;
+        anchor.right = &anchor;
+        anchor.parent = 0;
+        anchor.red = false;
+        count = 0;
+    }
+};
+struct TreeOwner {
+    char pad00[0x4c];
+    ObjectTree objects;
+    void ClearObjects();
+};
 // @ 0x00ebbf60
-void __fastcall FUN_00ebbf60(int p)
+void TreeOwner::ClearObjects()
 {
-    for (int iVar1 = *(int*)(p + 0x54); iVar1 != p + 0x50; iVar1 = (int)FUN_00921580((void*)iVar1))
-        (*(void(**)(int))(**(int**)(iVar1 + 0x14) + 0xc))(1);
-    int iVar1 = p + 0x50;
-    *(int*)(p + 0x54) = iVar1;
-    *(int*)iVar1 = iVar1;
-    *(int*)(p + 0x58) = 0;
-    *(char*)(p + 0x5c) = 0;
-    *(int*)(p + 0x60) = 0;
+    for (TreeNodeBase* node = objects.anchor.left; node != &objects.anchor;
+         node = (TreeNodeBase*)FUN_00921580(node))
+        ((TreeNode*)node)->value->Destroy(1);
+    objects.Clear();
 }
 
 // @ 0x00ebb4c0

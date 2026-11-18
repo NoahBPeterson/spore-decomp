@@ -84,8 +84,7 @@ bool TRIBE_MATE_Activate(Creature* self, int, int, int, int, Holder* holder)
             ((void (__thiscall*)(void*))(*(void***)old)[1])(old);
     }
 
-    void* played = ((OrderMgrPlay*)self->mOrderMgr)->mApi.Play(0x20000, 0);
-    void* watched = WatchMemoryBlock(played);
+    void* watched = WatchMemoryBlock(((OrderMgrPlay*)self->mOrderMgr)->mApi.Play(0x20000, 0));
 
     void* node = ((OrderMgr*)FUN_00bc9b00())->FindNode(0x4e3feef, (void*)0xd773c0, holder);
     void* ebp;

@@ -335,7 +335,6 @@ struct CaptureJobMsg {
     int f1c, f20, f24, f28;
 };
 struct cRTTCheat {
-    void* Construct(int owner);
     void  Execute(void* args);
 };
 namespace EA {
@@ -990,13 +989,13 @@ void __stdcall DestroyBigRecArray(BigRec2* first, BigRec2* last)
     }
 }
 
+inline void operator delete(void*, void*) {}
+
 // @ 0x0076e840
 int __cdecl CopyBigRecRange(BigRec* first, BigRec* last, BigRec* out)
 {
-    for (; first != last; ++first, ++out) {
-        if (out)
-            ::new (out) BigRec(*first);
-    }
+    for (; first != last; ++first, ++out)
+        ::new (out) BigRec(*first);
     return (int)(size_t)out;
 }
 
@@ -1025,20 +1024,35 @@ void* __cdecl CopyBigRecRangeBack(void* first_, void* last_, void* out_)
     return out;
 }
 
+struct CheatBaseView {
+    void* mParser; int mRefCount;
+    CheatBaseView();
+    virtual ~CheatBaseView();
+};
+struct CheatSpecView {
+    char pad[0xc];
+    CheatSpecView(bool respectHelp);
+    virtual ~CheatSpecView();
+    int ConstructSpec(const char* name, const char* spec, ...);
+};
+struct CheatCtorView : CheatBaseView {
+    char pad04[4];
+    CheatSpecView mSpec;
+    char pad20[0xb8];
+    int mOwner;
+    CheatCtorView(int owner);
+    virtual ~CheatCtorView();
+};
 // @ 0x0076ea60
-void* cRTTCheat::Construct(int owner)
+CheatCtorView::CheatCtorView(int owner) : mSpec(true)
 {
-    ::new (this) EA::ArgScript::cCommandBase_s0076_db40;
-    *(void**)this = (void*)0x140e468;
-    ::new ((char*)this + 0x10) EA::ArgScript::cArgumentSpec_s0076_db40(true);
-    *(int*)((char*)this + 0xd8) = owner;
-    ((EA::ArgScript::cArgumentSpec_s0076_db40*)((char*)this + 0x10))->ConstructSpec(
+    mOwner = owner;
+    mSpec.ConstructSpec(
         "Controls the render target manager",
         "-list^", 0,
         "List currently allocated pages",
         "-dump^", 1,
         "Dump all the render target textures in memory", 0);
-    return this;
 }
 
 // @ 0x0076eb00

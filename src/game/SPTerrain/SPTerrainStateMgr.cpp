@@ -1084,12 +1084,8 @@ float10 cPlanet::CurrentRatio()
 // @ 0x00fbdaa0
 void cPlanet::ApplyHeightRatio(float ratio)
 {
-  float10 h = this->RatioToHeight(ratio);
-  float10 d = (float10)this->state.m_018 - h;
-  if (d < (float10)0)
-    d = -d;
-  if (d >= (float10)0.001f) {
-    float hf = (float)h;
+  float hf = this->RatioToHeight(ratio);
+  if (fabs(this->state.m_018 - hf) >= 0.001f) {
     this->state.m_018 = hf;
     this->mpHeightField->SetValueTable(hf * 2.0f - 1.0f);
     ((void (__thiscall*)(void*, int))((void**)*(void**)this->mpGame)[0x48 / 4])(this->mpGame, 10);

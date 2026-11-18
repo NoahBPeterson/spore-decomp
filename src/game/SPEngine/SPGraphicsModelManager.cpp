@@ -2808,7 +2808,7 @@ extern float g_f1473c70;   // 0x01473c70
 extern float g_f1471064;   // 0x01471064 = 0.5
 extern float g_f1486110;   // 0x01486110
 extern float g_f1537b10, g_f1537b14, g_f1537b18, g_f1537b1c;
-void __cdecl operator_delete__(void* p);   // 0x00f47380 (CRT operator delete)
+void __cdecl operator_delete__(void* p) throw();   // 0x00f47380 (CRT operator delete)
 struct cSPTransform_s0075_3270 {
     uint32_t m[12];
     cSPTransform_s0075_3270& operator=(const cSPTransform_s0075_3270& o);
@@ -2818,6 +2818,15 @@ extern FixedAllocatorBase_00926650 g_fixedAlloc_162ed28;                        
 void* __cdecl operator_new_753d10(unsigned size, const char* name, int, int, int, int); // 0x00f473a0
 struct CompactMap_74f200 { void** Subscript(const uint32_t& key); };            // 0x0074f200
 struct Ctor753900 { void* ctor(void* a, void* b); };                            // 0x00753900
+// the event object built by MwOwner_753d10::Create: allocated from the "Graphics" heap and constructed out of line
+// (0x00753900); the memory is released if the constructor throws
+struct MwEventObj_753900 {
+  char mData[0x8b8];
+  MwEventObj_753900(void* owner, void* a2);                                     // 0x00753900
+  static void* operator new(unsigned size, const char* name, int a, int b, int c, int d)
+  { return operator_new_753d10(size, name, a, b, c, d); }
+  static void operator delete(void* p, const char*, int, int, int, int);
+};
 struct MwModel_mw {
   virtual void mv0();
   virtual void mv1();
@@ -2851,11 +2860,16 @@ static void CModelWorld_ReleaseModel753270(MwModel_mw* m)
   else
     m->m40 = n - 1;
 }
+// a fixed vector's storage: frees a heap block, never the inline buffer that +0x10 points at
+struct MWGroupFixedVecStorage {
+  void* mpBegin;                         // +0x00
+  char pad_04[0xc];
+  void* mpInline;                        // +0x10
+  ~MWGroupFixedVecStorage();
+};
 struct cMWGroupInternal_00753580 {
   char pad_0[0x4c];
-  void* m4c;                             // +0x4c
-  char pad_50[0xc];
-  void* m5c;                             // +0x5c
+  MWGroupFixedVecStorage mVec;           // +0x4c
   __declspec(noinline) ~cMWGroupInternal_00753580();
 };
 struct QueueSlot_lq {
@@ -3912,15 +3926,22 @@ void cModelWorld_s0074_4ad0::FillColor(int* out)
     out[4] = *(int*)&w;
 }
 
+// the model world's two counted references (+0x64, +0x90), released in reverse order when they go away
+struct ModelWorldRef {
+    RCObj_s0074_4ad0* mp;
+    ~ModelWorldRef() { if (mp) mp->Release(); }
+};
+struct ModelWorldRefs {
+    char pad00[0x64];
+    ModelWorldRef m64;
+    char pad68[0x90 - 0x68];
+    ModelWorldRef m90;
+    ~ModelWorldRefs();
+};
+
 // @ 0x00745340
-void cModelWorld_s0074_4ad0::ReleaseRefs()
+ModelWorldRefs::~ModelWorldRefs()
 {
-    RCObj_s0074_4ad0* a = *(RCObj_s0074_4ad0**)((char*)this + 0x90);
-    if (a)
-        a->Release();
-    RCObj_s0074_4ad0* b = *(RCObj_s0074_4ad0**)((char*)this + 0x64);
-    if (b)
-        b->Release();
 }
 
 // @ 0x007453a0
@@ -4213,17 +4234,24 @@ E20* Copy20(E20* first, E20* last, E20* dest)
     return dest;
 }
 
+// The eight-byte value constructed after the tree node's sixteen-byte header.
+struct Node18ValueCopy {
+    uint32_t mKey;
+    void* mRef;
+    Node18ValueCopy(const Node18ValueCopy& value)
+        : mKey(value.mKey), mRef(value.mRef)
+    {
+        if (mRef)
+            (*(void(__thiscall**)(void*))(*(void**)mRef))(mRef);
+    }
+};
+
 // @ 0x00745c20
 Node18* __stdcall CreateNode18(const uint32_t* value)
 {
     Node18* p = (Node18*)EASTL_allocator_allocate(0x18, "Graphics", 0, 0,
                   "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-    if (p) {
-        p->mKey = *value;
-        p->mRef = (void*)value[1];
-        if (p->mRef)
-            (*(void(__thiscall**)(void*))(*(void**)p->mRef))(p->mRef);
-    }
+    ::new (&p->mKey) Node18ValueCopy(*(const Node18ValueCopy*)value);
     return p;
 }
 
@@ -4404,27 +4432,56 @@ void cModelWorld_SetMaterialInfo(void* /*this*/, void* handle, void* info, int i
     }
 }
 
+struct MaterialCommitOwner {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct MaterialCommitInstance {
+    void Reset(int flags); // 0x007434b0
+    void Commit(void**, void**, unsigned*, void**, void**, void**, MaterialCommitOwner**); // 0x0073b980
+};
+struct MaterialCommitModel {
+    char pad[0x9c];
+    MaterialCommitInstance* instance;
+    char padA0[0xc];
+    MaterialCommitInstance* hull;
+};
+struct MaterialCommitTriplet { unsigned data[3]; };
+struct MaterialCommitInfo {
+    void* reserved;
+    void* sourceBegin;
+    unsigned count;
+    void* sourceEnd;
+    MaterialCommitTriplet* buffer;
+    void* source2Begin;
+    MaterialCommitOwner* owner;
+    unsigned newCount;
+    void* output;
+    void* source2End;
+};
+
 // @ 0x007462b0
-void FUN_007462b0(void* /*this*/, void* handle, VecField* v)
+void __fastcall FUN_007462b0(void* self, int unused, void* handle, MaterialCommitInfo* info)
 {
-    MWInternal_s0074_5ac0* p = handle ? (MWInternal_s0074_5ac0*)((char*)handle - 8) : 0;
-    void* src = 0;
-    if (p->mSlots[0] == 0 && p->mSlots[1] == 0 && p->mSlots[2] == 0 && p->mSlots[3] == 0) {
-        // no slots: still run the commit below
-    } else {
-        // find a live slot and detach its refcounted object at +0x18
-        void* q = (void*)v->mExtra;
-        if (q) {
-            v->mExtra = 0;
-            (*(void(__thiscall**)(void*))(*(void**)q))(q);
+    MaterialCommitModel* model = handle ? (MaterialCommitModel*)((char*)handle - 8) : 0;
+    MaterialCommitInstance* instance = model->hull;
+    if (!instance)
+        instance = model->instance;
+    if (instance) {
+        instance->Reset(0);
+        MaterialCommitOwner*& owner = info->owner;
+        MaterialCommitOwner* old = owner;
+        if (old) {
+            owner = 0;
+            old->Release();
         }
-        FUN_0073b980(&v->mStore, &v->mBegin, &v->mExtra, &v->mEnd, &v->mOther, &v->mCapacity, &v->mExtra);
+        instance->Commit(&info->output, &info->sourceBegin, &info->newCount,
+                         &info->sourceEnd, &info->source2End, &info->source2Begin, &owner);
     }
-    if (v->mEnd != v->mExtra) {
-        v->mEnd = v->mExtra;
-        EASTL_allocator_deallocate(v->mStore);
-        uint32_t n = (uint32_t)v->mEnd;
-        v->mStore = EASTL_allocator_allocate(n * 0xc, "Graphics", 0, 0, 0, 0);
+    if (info->count != info->newCount) {
+        info->count = info->newCount;
+        EASTL_allocator_deallocate(info->buffer);
+        info->buffer = new ("Graphics", 0, 0, 0, 0) MaterialCommitTriplet[info->count];
     }
 }
 
@@ -7654,8 +7711,12 @@ void TreeWalker_00753540::ForEach(float a, float b)
 cMWGroupInternal_00753580::~cMWGroupInternal_00753580()
 {
   ((SP::MWGroupDtorStub*)this)->F();
-  void* p = m4c;
-  if (p != 0 && p != m5c)
+}
+
+inline MWGroupFixedVecStorage::~MWGroupFixedVecStorage()
+{
+  void* p = mpBegin;
+  if (p != 0 && p != mpInline)
     operator_delete__(p);
 }
 
@@ -7908,10 +7969,7 @@ void cModelWorld_753c50::FinalRelease(void** p2, char p3)
 void* MwOwner_753d10::Create(uint32_t key, void* unused, void* a2)
 {
   (void)unused;
-  void* mem = operator_new_753d10(0x8b8, "Graphics", 0, 0, 0, 0);
-  IEventObject_753d10* obj = 0;
-  if (mem != 0)
-    obj = (IEventObject_753d10*)((Ctor753900*)mem)->ctor(this, a2);
+  IEventObject_753d10* obj = (IEventObject_753d10*)new ("Graphics", 0, 0, 0, 0) MwEventObj_753900(this, a2);
   typedef void (__thiscall *Fn174)(void*);
   (*(Fn174*)((char*)(*(void***)obj) + 0x174))(obj);
   void** slot = mMap.Subscript(key);

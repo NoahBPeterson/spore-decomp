@@ -51,3 +51,5 @@
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?RegList_Resolve@@YAXXZ  00692ee0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?RegList_Release@@YAXXZ  00692f20  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseFloat@@YAXABV?$basic_string@DVallocator@eastl@@@eastl@@PAX@Z  006930b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ??0C3ObjA@@QAE@PAX000@Z  00693cd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ??0C3ObjB@@QAE@PAX000@Z  00693d60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

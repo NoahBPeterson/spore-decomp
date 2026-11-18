@@ -306,7 +306,7 @@ bool W::FUN_00f3c330(int* key)
     bool result = false;
     if (key[0] == 0) {
         if (key[1] != 0 || key[2] != 0)
-            return true;
+            result = true;
     } else {
         AutoRefCount<PropertyList> propList;
         if (!GetManager()->Find((unsigned*)key, propList.AsPPTypeParam(), 0, 0, 0, 0))
@@ -624,7 +624,7 @@ struct cContentValidationSummarizer {
     unsigned char mField81;                   // +0x81
 
     bool FUN_00f3cb60();                                                // 0x00F3CB60
-    cContentValidationSummarizer* ctor(unsigned a, void* b, void* c);   // 0x00F3CC40
+    cContentValidationSummarizer(unsigned a, void* b, void* c);   // 0x00F3CC40
     cContentValidationSummarizer* dtor(unsigned flag);                  // 0x00F3CD10
     void FUN_00f3cd60(const wchar_t* key);                              // 0x00F3CD60
     void FUN_00f3cdf0(const wchar_t* key);                              // 0x00F3CDF0
@@ -640,15 +640,15 @@ bool cContentValidationSummarizer::FUN_00f3cb60()
 {
     char* src = (char*)mpField10;
     unsigned key[3];
+    unsigned group = *(unsigned*)(src + 0x10);
     key[0] = *(unsigned*)(src + 8);
     key[1] = 0x30bdee3;
-    key[2] = *(unsigned*)(src + 0x10);
+    key[2] = group;
 
-    FindResult* propList = 0;
+    AutoRefCount<PropertyList> propList;
     IResourceManager* mgr = GetManager();
-    mgr->Find(key, (PropertyList**)&propList, 0, 0, 0, 0);
+    mgr->Find(key, propList.AsPPTypeParam(), 0, 0, 0, 0);
 
-    bool same = false;
     if (propList) {
         ContentMeta* meta = (ContentMeta*)propList->Cast(0x30bdee3);
         if (meta) {
@@ -656,43 +656,43 @@ bool cContentValidationSummarizer::FUN_00f3cb60()
             AuthManager* auth = AuthManager_Get();
             long long authId = auth->GetMetaId();
             long long metaId = meta->GetId();
-            same = (metaId == authId);
+            bool same = (metaId == authId);
             meta->Release();
+            return same;
         }
-        propList->Release();
     }
-    return same;
+    return false;
 }
 
 // @ 0x00F3CC40
-cContentValidationSummarizer* cContentValidationSummarizer::ctor(
+cContentValidationSummarizer::cContentValidationSummarizer(
     unsigned a, void* b, void* c)
 {
-    mpVtbl1 = &g_13ec458;
-    mField08 = 0;
-    mpVtbl0 = &g_148d2ec;
-    mpVtbl1 = &g_148d2dc;
-    mpField10 = 0;
-    mpField14 = 0;
-    mField0c = a;
+    // Preserve the base-vtable transition and ownership snapshots used by this constructor.
+    *reinterpret_cast<void* volatile*>(&mpVtbl1) = &g_13ec458;
+    *reinterpret_cast<unsigned volatile*>(&mField08) = 0;
+    *reinterpret_cast<void* volatile*>(&mpVtbl0) = &g_148d2ec;
+    *reinterpret_cast<void* volatile*>(&mpVtbl1) = &g_148d2dc;
+    *reinterpret_cast<void* volatile*>(&mpField10) = 0;
+    *reinterpret_cast<void* volatile*>(&mpField14) = 0;
+    *reinterpret_cast<unsigned volatile*>(&mField0c) = a;
 
-    void* old = mpField10;
+    void* old = *reinterpret_cast<void* volatile*>(&mpField10);
     if (b != old) {
         if (b)
             ((RefCountedVtbl*)b)->AddRef();
-        mpField10 = b;
+        *reinterpret_cast<void* volatile*>(&mpField10) = b;
         if (old)
             ((RefCountedVtbl*)old)->Release();
     }
-    old = mpField14;
+    old = *reinterpret_cast<void* volatile*>(&mpField14);
     if (c != old) {
         if (c)
             ((RefCountedVtbl*)c)->AddRef();
-        mpField14 = c;
+        *reinterpret_cast<void* volatile*>(&mpField14) = c;
         if (old)
             ((RefCountedVtbl*)old)->Release();
     }
-    return this;
 }
 
 // @ 0x00F3CD10

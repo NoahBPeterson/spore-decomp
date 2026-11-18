@@ -156,6 +156,17 @@ struct RenderJob {
     int        pad;    // +0x0c
     unsigned int id;   // +0x10 (render-job id from sRenderJobId, compared as an integer)
 };
+struct RenderJobLinks {
+    RenderJobLinks* next;
+    RenderJobLinks* prev;
+    void Unlink() {
+        RenderJobLinks* previous = prev;
+        _ReadWriteBarrier();
+        RenderJobLinks* following = next;
+        previous->next = following;
+        next->prev = prev;
+    }
+};
 // ---- items of slice s0075ee90 end
 
 // ---- items of slice s0075ff50 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -172,10 +183,10 @@ void __cdecl DevStop1();
 void __cdecl DevStop2();
 void __cdecl DevStop3();
 void __cdecl timeEndPeriod_(int);
+extern const unsigned int kTimeoutNone;                 // @ 0x140dca0 (EA::Thread::kTimeoutNone, 0xffffffff)
 namespace EA {
 namespace Thread {
 struct Mutex_s0075_ff50 {
-    void Lock(const char* name);   // @ 0x9221b0
     void Lock(const unsigned int* pTimeout);   // @ 0x9221b0 (EA::Thread::Mutex::Lock(const ThreadTime*))
     void Unlock();                 // @ 0x922270
 };
@@ -216,7 +227,7 @@ void __cdecl copy_layers(cLayerInfo_s0075_ff50* first, cLayerInfo_s0075_ff50* la
 namespace SP {
 struct MutexLock {
     EA::Thread::Mutex_s0075_ff50* mMutex;
-    MutexLock(EA::Thread::Mutex_s0075_ff50* m) : mMutex(m) { mMutex->Lock("Renderer"); }
+    MutexLock(EA::Thread::Mutex_s0075_ff50* m) : mMutex(m) { mMutex->Lock(&kTimeoutNone); }
     ~MutexLock() { mMutex->Unlock(); }
 };
 }
@@ -814,94 +825,70 @@ void cRenderer_s0075_de80::SubRender(int a, int lo, int hi, void* extra, char fl
     }
 }
 
+struct LayerLock_s0075_de80 {
+    EA::Thread::Mutex_s0075_de80* mMutex;
+    LayerLock_s0075_de80(EA::Thread::Mutex_s0075_de80* m) : mMutex(m) { mMutex->Lock((const void*)0x140dca0); }
+    ~LayerLock_s0075_de80() { mMutex->Unlock(); }
+};
+
+__forceinline char* FindLayerEntry_s0075_de80(char* p, char* e, unsigned id)
+{
+    while (p != e && id > *(unsigned*)(p + 4))
+        p += 0x14;
+    return p;
+}
+
 // @ 0x0075e090
 void* cRenderer_s0075_de80::Layer(unsigned id)
 {
-    mMutex.Lock((const void*)0x140dca0);
-    char* p = LayerBegin(this);
+    LayerLock_s0075_de80 lock(&mMutex);
+    char* b = LayerBegin(this);
     char* e = LayerEnd(this);
-    if (p != e) {
-        while (*(unsigned*)(p + 4) < id) {
-            p += 0x14;
-            if (p == e)
-                break;
-        }
-        if (p != e && *(unsigned*)(p + 4) == id) {
-            void* r = *(void**)p;
-            mMutex.Unlock();
-            return r;
-        }
-    }
-    mMutex.Unlock();
-    return 0;
+    char* p = FindLayerEntry_s0075_de80(b, e, id);
+    if (p == LayerEnd(this) || id != *(unsigned*)(p + 4))
+        return 0;
+    return *(void**)p;
+
 }
 
 // @ 0x0075e130
 unsigned cRenderer_s0075_de80::SetInfoFlags(unsigned id, unsigned f)
 {
-    mMutex.Lock((const void*)0x140dca0);
-    char* p = LayerBegin(this);
+    LayerLock_s0075_de80 lock(&mMutex);
+    char* b = LayerBegin(this);
     char* e = LayerEnd(this);
-    if (p != e) {
-        while (*(unsigned*)(p + 4) < id) {
-            p += 0x14;
-            if (p == e)
-                break;
-        }
-        if (p != e && *(unsigned*)(p + 4) == id) {
-            unsigned old = *(unsigned*)(p + 0xc);
-            *(unsigned*)(p + 0xc) = old | f;
-            mMutex.Unlock();
-            return old;
-        }
-    }
-    mMutex.Unlock();
-    return 0;
+    char* p = FindLayerEntry_s0075_de80(b, e, id);
+    if (p == LayerEnd(this) || id != *(unsigned*)(p + 4))
+        return 0;
+    unsigned old = *(unsigned*)(p + 0xc);
+    *(unsigned*)(p + 0xc) = old | f;
+    return old;
 }
 
 // @ 0x0075e1e0
 unsigned cRenderer_s0075_de80::ClearInfoFlags(unsigned id, unsigned f)
 {
-    mMutex.Lock((const void*)0x140dca0);
-    char* p = LayerBegin(this);
+    LayerLock_s0075_de80 lock(&mMutex);
+    char* b = LayerBegin(this);
     char* e = LayerEnd(this);
-    if (p != e) {
-        while (*(unsigned*)(p + 4) < id) {
-            p += 0x14;
-            if (p == e)
-                break;
-        }
-        if (p != e && *(unsigned*)(p + 4) == id) {
-            unsigned old = *(unsigned*)(p + 0xc);
-            *(unsigned*)(p + 0xc) = old & ~f;
-            mMutex.Unlock();
-            return old;
-        }
-    }
-    mMutex.Unlock();
-    return 0;
+    char* p = FindLayerEntry_s0075_de80(b, e, id);
+    if (p == LayerEnd(this) || id != *(unsigned*)(p + 4))
+        return 0;
+    unsigned old = *(unsigned*)(p + 0xc);
+    *(unsigned*)(p + 0xc) = old & ~f;
+    return old;
 }
 
 // @ 0x0075e290
 unsigned cRenderer_s0075_de80::GetInfoFlags(unsigned id)
 {
-    mMutex.Lock((const void*)0x140dca0);
-    char* p = LayerBegin(this);
+    LayerLock_s0075_de80 lock(&mMutex);
+    char* b = LayerBegin(this);
     char* e = LayerEnd(this);
-    if (p != e) {
-        while (*(unsigned*)(p + 4) < id) {
-            p += 0x14;
-            if (p == e)
-                break;
-        }
-        if (p != e && *(unsigned*)(p + 4) == id) {
-            unsigned f = *(unsigned*)(p + 0xc);
-            mMutex.Unlock();
-            return f;
-        }
-    }
-    mMutex.Unlock();
-    return 0;
+    char* p = FindLayerEntry_s0075_de80(b, e, id);
+    if (p == LayerEnd(this) || id != *(unsigned*)(p + 4))
+        return 0;
+    return *(unsigned*)(p + 0xc);
 }
 
 // @ 0x0075e330
@@ -1033,50 +1020,50 @@ bool RegisterRenderProperties()
 // @ 0x0075f430
 Elem* CopyBackward(Elem* first, Elem* last, Elem* dest)
 {
-    if (last == first)
-        return dest;
-    do {
-        last--;
-        dest--;
-        RNode* np = last->p;
-        RNode* dp = dest->p;
-        if (np != dp) {
-            if (np != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
-            dest->p = np;
-            if (dp != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
-        }
-        dest->b = last->b;
-        dest->c = last->c;
-        dest->d = last->d;
-        dest->f = last->f;
-    } while (last != first);
+    if (last != first) {
+        do {
+            last--;
+            dest--;
+            RNode* np = last->p;
+            RNode* dp = dest->p;
+            if (np != dp) {
+                if (np != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
+                dest->p = np;
+                if (dp != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
+            }
+            dest->b = last->b;
+            dest->c = last->c;
+            dest->d = last->d;
+            dest->f = last->f;
+        } while (last != first);
+    }
     return dest;
 }
 
 // @ 0x0075f4a0
 Elem* CopyForward(Elem* first, Elem* last, Elem* dest)
 {
-    if (first == last)
-        return dest;
-    do {
-        RNode* np = first->p;
-        RNode* dp = dest->p;
-        if (np != dp) {
-            if (np != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
-            dest->p = np;
-            if (dp != 0)
-                ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
-        }
-        dest->b = first->b;
-        dest->c = first->c;
-        dest->d = first->d;
-        dest->f = first->f;
-        first++;
-        dest++;
-    } while (first != last);
+    if (first != last) {
+        do {
+            RNode* np = first->p;
+            RNode* dp = dest->p;
+            if (np != dp) {
+                if (np != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)np))(np);
+                dest->p = np;
+                if (dp != 0)
+                    ((void (__thiscall*)(void*))*(void**)(*(int*)dp + 4))(dp);
+            }
+            dest->b = first->b;
+            dest->c = first->c;
+            dest->d = first->d;
+            dest->f = first->f;
+            first++;
+            dest++;
+        } while (first != last);
+    }
     return dest;
 }
 
@@ -1115,45 +1102,41 @@ void* DestroyRenderJobList(void* self)
 // @ 0x0075f8a0
 bool cRenderer_s0075_ee90::RemovePostRenderJob(unsigned int id)
 {
-    void* self = this;
-    char* sentinel = (char*)self + 0x324;
-    RenderJob* n = *(RenderJob**)((char*)self + 0x324);
-    if (n == (RenderJob*)sentinel)
-        return false;
-    while (n->id != id) {
+    RenderJob* sentinel = (RenderJob*)((char*)this + 0x324);
+    RenderJob* n = sentinel->next;
+    while (n != sentinel) {
+        if (n->id == id) {
+            n = n->next;
+            RenderJob* target = n->prev;
+            reinterpret_cast<RenderJobLinks*>(target)->Unlink();
+            RNode* object = target->obj;
+            if (object) object->Release();
+            EASTL_deallocate(target);
+            return true;
+        }
         n = n->next;
-        if (n == (RenderJob*)sentinel)
-            return false;
     }
-    RenderJob* target = n->next->prev;
-    target->prev->next = target->next;
-    target->next->prev = target->prev;
-    if (target->obj != 0)
-        ((void (__thiscall*)(void*))*(void**)(*(int*)target->obj + 4))(target->obj);
-    EASTL_deallocate(target);
-    return true;
+    return false;
 }
 
 // @ 0x0075f900
 bool cRenderer_s0075_ee90::RemovePreRenderJob(unsigned int id)
 {
-    void* self = this;
-    char* sentinel = (char*)self + 0x330;
-    RenderJob* n = *(RenderJob**)((char*)self + 0x330);
-    if (n == (RenderJob*)sentinel)
-        return false;
-    while (n->id != id) {
+    RenderJob* sentinel = (RenderJob*)((char*)this + 0x330);
+    RenderJob* n = sentinel->next;
+    while (n != sentinel) {
+        if (n->id == id) {
+            n = n->next;
+            RenderJob* target = n->prev;
+            reinterpret_cast<RenderJobLinks*>(target)->Unlink();
+            RNode* object = target->obj;
+            if (object) object->Release();
+            EASTL_deallocate(target);
+            return true;
+        }
         n = n->next;
-        if (n == (RenderJob*)sentinel)
-            return false;
     }
-    RenderJob* target = n->next->prev;
-    target->prev->next = target->next;
-    target->next->prev = target->prev;
-    if (target->obj != 0)
-        ((void (__thiscall*)(void*))*(void**)(*(int*)target->obj + 4))(target->obj);
-    EASTL_deallocate(target);
-    return true;
+    return false;
 }
 
 // @ 0x0075f960
@@ -1185,11 +1168,10 @@ bool cRenderer_s0075_ff50::ClearLayer(unsigned int layerNumber)
     cLayerInfo_s0075_ff50* it = v->mpBegin;
     cLayerInfo_s0075_ff50* last = v->mpEnd;
     unsigned int n = layerNumber;
-    while (it != last) {
-        if (n <= it->mLayerNumber) break;
+    while (it != last && n > it->mLayerNumber)
         it = (cLayerInfo_s0075_ff50*)((char*)it + 0x14);
-    }
-    if (it != last && n == it->mLayerNumber) {
+    if (it != v->mpEnd && n == it->mLayerNumber) {
+        _ReadWriteBarrier();
         if ((char*)(it + 1) < (char*)v->mpEnd)
             copy_layers(it + 1, v->mpEnd, it);
         v->mpEnd = (cLayerInfo_s0075_ff50*)((char*)v->mpEnd - 0x14);
@@ -1207,9 +1189,7 @@ cLayerInfo_s0075_ff50* LayerVector::insert(cLayerInfo_s0075_ff50* position, cons
 {
     int idx = (int)(position - mpBegin);
     if (position == mpEnd && mpEnd != mpCapacity) {
-        mpEnd = mpEnd + 1;
-        if (position)
-            new (position) cLayerInfo_s0075_ff50(value);
+        ::new (mpEnd++) cLayerInfo_s0075_ff50(value);
     } else {
         DoInsertValue(position, value);
     }

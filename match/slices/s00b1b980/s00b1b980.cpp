@@ -494,8 +494,8 @@ void cStateMachineHost::dtor() {
   mpVftable = &g_vtbl_145d318;
   mpVftable08 = &g_vtbl_145d310;
   gonzago->mpVftable = &g_vtbl_145d2c0;
-  mpSharedState = &g_vtbl_145d2bc;
-  void* v = mPodVector.mpBegin;
+  *reinterpret_cast<void* volatile*>(&mpSharedState) = &g_vtbl_145d2bc;
+  void* v = *reinterpret_cast<void* volatile*>(&mPodVector.mpBegin);
   if (v && ((int*)v)[-1]) delete[] (char*)v;
   unsigned char* a = (unsigned char*)mStringEC.mpBegin;
   if ((1 < (int)(mStringEC.mpCapacity - mStringEC.mpBegin)) && a) delete[] a;

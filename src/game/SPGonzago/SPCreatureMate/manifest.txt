@@ -8,3 +8,6 @@
 ../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6cdd0@@YAXPAXHHHH0HM@Z  00d6cdd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6cdf0@@YADPAXHHHH0HM@Z  00d6cdf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6d3c0@@YADPAXHHHH0HM@Z  00d6d3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6cc30@@YAXPAXHHHH0HM@Z  00d6cc30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6d530@@YAXPAXHHHH0HM@Z  00d6d530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureMate.cpp  ?FUN_00d6d460@@YADPAXHHHH0HM@Z  00d6d460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

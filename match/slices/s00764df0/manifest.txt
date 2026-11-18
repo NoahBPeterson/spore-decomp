@@ -6,3 +6,4 @@ slices/s00764df0/s00764df0.cpp  ?FUN_764f60@@YG_NPAUGameMeshes@@PAUIStream_@@@Z 
 slices/s00764df0/s00764df0.cpp  ?Fn7650f0@LoaderF0@@QAE_NH@Z  007650f0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00764df0/s00764df0.cpp  ?Fn7655f0@cGraphicsResourceFactory@SP@@QAE_NPAX00@Z  007655f0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00764df0/s00764df0.cpp  ?Start@AsyncReqC@@QAE_NPAUJobRefL@@@Z  00765d30  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00764df0/s00764df0.cpp  ??1D765580@@QAE@XZ  00765580  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

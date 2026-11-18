@@ -9350,8 +9350,7 @@ bool __cdecl HasAnyResource(cSPEditorBlock_s0057_7130* block, ResKey3* key)
                 return false;
             }
             Block_s0057_7130* base = m->mpBegin;
-            int n = m->mpEnd - base;
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < m->mpEnd - base; i++) {
                 if (base[i].id == k0.a || base[i].id == k1.a || base[i].id == k2.a) {
                     ref.Drop();
                     return true;
@@ -12210,8 +12209,8 @@ void SP::cAppModeEditorBase_s0058_9ce0::LoadModel(int mode, int a, int b)
     if (M(uint8_t, 0x190)) ((EditorUIEx*)M(void*, 0x78))->Hide();
     M(uint, 0x198) = 0;
 
-    if (M(uint, 0x194) && M(void*, 0x360) && M(void*, 0x150)) {
-        SkinManager* skin = ((SkinManager*)M(void*, 0x150))->GetSkin(1);
+    if (M(uint, 0x194) && M(void*, 0x360)) {
+        SkinManager* skin = M(void*, 0x150) ? ((SkinManager*)M(void*, 0x150))->GetSkin(1) : 0;
         if (skin && mode != 2) {
             if (M(uint, 0x364) == 0) {
                 FUN_00582fe0(0, 0);

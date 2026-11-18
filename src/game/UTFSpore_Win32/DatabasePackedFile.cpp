@@ -753,21 +753,57 @@ void MutexOwner::LockOrUnlock(bool lock)
     else      mMutex.Unlock();
 }
 
+// The v2 constructor takes a 64-bit record size; the allocated object size
+// remains the canonical PFRecordWrite size, 0x27c.
+class PFRecordWriteV2 : public EA::ResourceMan::PFRecordWrite {
+public:
+    PFRecordWriteV2(unsigned access, unsigned __int64 size, const EA::ResourceMan::Key&, EA::ResourceMan::DatabasePackedFile*); // 0x006c0c40
+    PFRecordWriteV2(unsigned char* data, unsigned size, bool ownsData, const EA::ResourceMan::Key&, EA::ResourceMan::DatabasePackedFile*); // 0x006c0db0
+};
+// Factory-only view: retail v2 read records allocate 0x78 bytes and use
+// the v2 constructors. No member layout beyond the canonical base is accessed.
+class PFRecordReadV2 : public EA::ResourceMan::PFRecordRead {
+    unsigned char mV2Storage[8];
+public:
+    PFRecordReadV2(const EA::ResourceMan::PFRecordRead&, const EA::ResourceMan::Key&, EA::ResourceMan::DatabasePackedFile*); // 0x006c09c0
+    PFRecordReadV2(const EA::ResourceMan::PFRecordInfo&, const EA::ResourceMan::Key&, EA::ResourceMan::DatabasePackedFile*); // 0x006c0b20
+};
+class DatabasePackedFileV2 : public EA::ResourceMan::DatabasePackedFile {
+public:
+    virtual EA::ResourceMan::PFIndex* CreateIndex(int unused);
+    PFRecordWriteV2* CreateRecordWrite(int flags, unsigned access, unsigned __int64 size, const EA::ResourceMan::Key& key);
+    PFRecordWriteV2* CreateRecordWriteFromMemory(int flags, unsigned char* data, unsigned size, const EA::ResourceMan::Key& key);
+    PFRecordReadV2* CreateRecordRead(int unused, const EA::ResourceMan::PFRecordRead& source, const EA::ResourceMan::Key& key);
+    PFRecordReadV2* CreateRecordReadFromInfo(int unused, const EA::ResourceMan::PFRecordInfo& source, const EA::ResourceMan::Key& key);
+};
+
 // @ 0x006bbe80
-void __cdecl FUN_006bbe80(void* self)
-{ (void)self; }
+PFRecordWriteV2* DatabasePackedFileV2::CreateRecordWrite(int flags, unsigned access, unsigned __int64 size, const EA::ResourceMan::Key& key)
+{
+    if (flags & 2)
+        return new (mpAllocator, "Resource/PFRecordWrite") PFRecordWriteV2(access, size, key, this);
+    return 0;
+}
 
 // @ 0x006bbf10
-void __cdecl FUN_006bbf10(void* self)
-{ (void)self; }
+PFRecordWriteV2* DatabasePackedFileV2::CreateRecordWriteFromMemory(int flags, unsigned char* data, unsigned size, const EA::ResourceMan::Key& key)
+{
+    if (flags & 2)
+        return new (mpAllocator, "Resource/PFRecordWrite") PFRecordWriteV2(data, size, true, key, this);
+    return 0;
+}
 
 // @ 0x006bbfa0
-void __cdecl FUN_006bbfa0(void* self)
-{ (void)self; }
+PFRecordReadV2* DatabasePackedFileV2::CreateRecordRead(int unused, const EA::ResourceMan::PFRecordRead& source, const EA::ResourceMan::Key& key)
+{
+    return new (mpAllocator, "Resource/PFRecordRead") PFRecordReadV2(source, key, this);
+}
 
 // @ 0x006bc020
-void __cdecl FUN_006bc020(void* self)
-{ (void)self; }
+PFRecordReadV2* DatabasePackedFileV2::CreateRecordReadFromInfo(int unused, const EA::ResourceMan::PFRecordInfo& source, const EA::ResourceMan::Key& key)
+{
+    return new (mpAllocator, "Resource/PFRecordRead") PFRecordReadV2(source, key, this);
+}
 
 // @ 0x006bc0a0
 void __cdecl FUN_006bc0a0(void* self)
@@ -778,8 +814,11 @@ void __cdecl FUN_006bc0f0(void* self)
 { (void)self; }
 
 // @ 0x006bc130
-void __cdecl FUN_006bc130(void* self)
-{ (void)self; }
+EA::ResourceMan::PFIndex* DatabasePackedFileV2::CreateIndex(int unused)
+{
+    return new (mpAllocator, "Resource/PFIndexModifiable")
+        EA::ResourceMan::PFIndexModifiable(mpAllocator);
+}
 
 // @ 0x008d81a0
 void * EA::ResourceMan::DatabasePackedFile::AsInterface(EA::COM::InterfaceId nType)

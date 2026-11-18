@@ -63,6 +63,16 @@ struct RefObj0 {
 struct RefObjA {
     virtual void Destroy(int flags);
     long mRefCount;                    // +0x04
+    void Release()
+    {
+        long* pc = &mRefCount;
+        long n = _InterlockedDecrement(pc);
+        if (n == 0)
+        {
+            _InterlockedExchange(pc, 1);
+            Destroy(1);
+        }
+    }
 };
 
 // The resource sub-object handed out by the renderer lookup.
@@ -178,7 +188,15 @@ struct Node10 {
 
 // ---- eastl hashtables ------------------------------------------------------
 // The value stored in the four-byte-key table; destroying it releases mRef.
+struct EaBoolTag { bool b; };
+struct HtMapped {
+    void*     mValue;
+    RefObjA*  mpRef;
+    HtMapped() : mValue(0), mpRef(0) {}
+    ~HtMapped();
+};
 struct HtValue {
+    HtValue(unsigned key, const HtMapped& m);
     unsigned  mKey;                    // +0x00
     void*     mValue;                  // +0x04
     RefObjA*  mpRef;                   // +0x08
@@ -195,7 +213,7 @@ struct HtTable {
     unsigned   mBucketCount;           // +0x08
     unsigned   mElementCount;          // +0x0c
     HtIter find(const unsigned& key);                                   // 0x00685f30
-    HInsertResult insert(const HtValue& value, bool flag);              // 0x006f21b0
+    HInsertResult insert(const HtValue& value, EaBoolTag flag);              // 0x006f21b0
     void FreeBuckets(unsigned buckets, unsigned count);
     __declspec(noinline) unsigned* FindOrInsert2(const unsigned* key);
 };
@@ -203,9 +221,16 @@ struct HtTable {
 // Eight-byte-key table at renderer+0xa8 (find at 0x00a7bf40, insert at 0x006f1e50).
 struct Key8 { unsigned lo, hi; };
 union Key8Bits { unsigned long long q; Key8 k; };
+struct HtMappedB {
+    ResSub*   mpRef;
+    HtMappedB() : mpRef(0) {}
+    ~HtMappedB() { if (mpRef) mpRef->s1(); }
+};
 struct HtValueB {
     Key8      mKey;                    // +0x00
     ResSub*   mpRef;                   // +0x08
+    unsigned  mPad0c;                  // +0x0c
+    HtValueB(const Key8& key, const HtMappedB& m);
     ~HtValueB();
 };
 struct HtNodeB { unsigned mKeyLo, mKeyHi; void* mValue; unsigned mPad0c; HtNodeB* mpNext; };
@@ -218,21 +243,40 @@ struct HtTableB {
     unsigned   mElementCount;          // +0x0c
     char       mPolicy[0x10];          // +0x10
     HtIterB findA(const Key8& key);                                     // 0x00a7bf40
-    HInsertResultB insertA(const HtValueB& value, bool flag);           // 0x006f1e50
+    HInsertResultB insertA(const HtValueB& value, EaBoolTag flag);           // 0x006f1e50
     __declspec(noinline) ResSub** FindOrInsert(const Key8* key);
 };
 
-inline HtValue::~HtValue()
+inline HtMapped::~HtMapped()
 {
     RefObjA* p = mpRef;
     if (p)
     {
-        if (_InterlockedDecrement(&p->mRefCount) == 0)
+        long n = _InterlockedDecrement(&p->mRefCount);
+        if (n == 0)
         {
             _InterlockedExchange(&p->mRefCount, 1);
-            if (p) p->Destroy(1);
+            p->Destroy(1);
         }
     }
+}
+
+inline HtValue::HtValue(unsigned key, const HtMapped& m) : mKey(key), mValue(m.mValue), mpRef(m.mpRef)
+{
+    if (mpRef)
+        _InterlockedIncrement(&mpRef->mRefCount);
+}
+
+inline HtValue::~HtValue()
+{
+    if (mpRef)
+        mpRef->Release();
+}
+
+inline HtValueB::HtValueB(const Key8& key, const HtMappedB& m) : mKey(key), mpRef(m.mpRef)
+{
+    if (mpRef)
+        mpRef->s0();
 }
 
 inline HtValueB::~HtValueB()
@@ -646,13 +690,17 @@ Node10* __stdcall Alloc10(Node10* src)
 // @ 0x006f20f0
 ResSub** HtTableB::FindOrInsert(const Key8* key)
 {
-    HtIterB it = findA(*key);
-    if (it.node != mBuckets[mBucketCount])
-        return (ResSub**)((char*)it.node + 8);
-    HtValueB v;
-    v.mKey = *key;
-    v.mpRef = 0;
-    HInsertResultB r = insertA(v, false);
+    {
+        HtIterB it = findA(*key);
+        HtNodeB** pe = mBuckets + mBucketCount;
+        HtNodeB* en = *pe;
+        if (it.node != en)
+            return (ResSub**)((char*)it.node + 8);
+    }
+    HtMappedB m;
+    HtValueB v(*key, m);
+    EaBoolTag tag; tag.b = false;
+    HInsertResultB r = insertA(v, tag);
     return (ResSub**)((char*)r.node + 8);
 }
 
@@ -792,14 +840,17 @@ void __cdecl AssignByKey(unsigned key, ResSub* value)
 // @ 0x006f2510
 unsigned* HtTable::FindOrInsert2(const unsigned* key)
 {
-    HtIter it = find(*key);
-    if (it.node != mBuckets[mBucketCount])
-        return (unsigned*)it.node + 1;
-    HtValue v;
-    v.mKey = *key;
-    v.mValue = 0;
-    v.mpRef = 0;
-    HInsertResult r = insert(v, false);
+    {
+        HtIter it = find(*key);
+        HtNode** pe = mBuckets + mBucketCount;
+        HtNode* en = *pe;
+        if (it.node != en)
+            return (unsigned*)it.node + 1;
+    }
+    HtMapped m;
+    HtValue v(*key, m);
+    EaBoolTag tag; tag.b = false;
+    HInsertResult r = insert(v, tag);
     return (unsigned*)r.node + 1;
 }
 

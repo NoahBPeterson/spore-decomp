@@ -6,7 +6,6 @@
 009361f0 67 MersenneTwister::InitState: complete; register allocation differs (seed kept in ebx vs eax) and store/or split
 009362d0 15 MersenneTwister::GenerateDouble: complete; double clamp uses fcomp/fnstsw instead of fcomi
 0093bbf0 44 complete: MemoryStream reads via shared data pointer, schedule differs
-0093c6f0 10 complete: fputs-to-stderr wrapper, call setup differs
 0093d110 219 complete; GetToken basic-block layout differs (bool delimiter test placement)
 0093d6f0 64 complete; cl folds (p+n)-p, original kept it unfolded
 0093d740 677 complete; wide-string command tokenizer (1074B; reached from the command server as ParseCmd): trims leading blanks, copies the string into a working buffer, scans for the separator char while counting double quotes, then appends each token to the output vector<WStr> via WStr::Assign (trailing-blank trim + surrounding-quote strip) and returns the token count; reconstructed; equiv WEAK (202 valid inputs, 39.2% coverage - the harness discards most inputs on output-vector pointer faults so the deep paths are not exercised); flags /O2 /MD /Gy /EHsc /TP; helper inlining (WStr::erase/Resize) and register scheduling differ

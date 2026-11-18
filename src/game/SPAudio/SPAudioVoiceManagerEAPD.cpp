@@ -203,7 +203,7 @@ struct VMHash {
     VMNode**  mpBucketArray;   // +4
     unsigned  mnBucketCount;   // +8
     unsigned  mnElementCount;  // +0xc
-    struct Policy { float mMaxLoad; float mGrowth; unsigned mnNextResize; Policy() : mMaxLoad(1.0f), mGrowth(2.0f) {} } mPolicy;
+    struct Policy { float mMaxLoad; float mGrowth; unsigned mnNextResize; Policy() : mMaxLoad(1.0f), mGrowth(2.0f), mnNextResize(0) {} } mPolicy;
     struct Iter { VMNode* node; VMNode** bucket; };
     unsigned  erase(const unsigned& key);                  // at 0x00a460d0
     void      find(Iter* out, const unsigned* key);        // 0x00645ed0 (thiscall, ret 8)

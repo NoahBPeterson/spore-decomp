@@ -10,3 +10,5 @@
 ../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?FUN_00a3fd20@@YAPAIPAI00@Z  00a3fd20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/SPAudioObjectTrixie.cpp  ??1Pixie@@QAE@XZ  00a3fd70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?FUN_00a401d0@@YAPAUTrack_s00a3_fde0@@PAU1@00@Z  00a401d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?PushBackDefault@VecTItem@@QAEXXZ  00a3fb00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/SPAudioObjectTrixie.cpp  ?PushBackDefault@VecTrack_s00a3_fde0@@QAEXXZ  00a40410  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

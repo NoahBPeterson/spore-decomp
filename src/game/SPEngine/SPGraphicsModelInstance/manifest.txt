@@ -24,3 +24,5 @@
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?insert@Vec8@@QAEPAURefPair8@@PAU2@PBU2@@Z  00741aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?MapInsert@Map8@@QAEPAURefPair8_s0074_2b30@@PAU2@0@Z  00742ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?copy_backward_ref@@YAPAURefPair@@PAU1@00@Z  0073f440  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ??1AbilityA@@QAE@XZ  0073a9e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ??1AbilityB@@QAE@XZ  0073aae0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

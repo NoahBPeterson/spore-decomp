@@ -4,3 +4,4 @@
 ../src/game/SPEngine/_at_006e0000.cpp  ?RegisterBufferCheats@@YAXXZ  006e1010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_006e0000.cpp  ?CommandDumpVertex@@YGXPAVcArguments@ArgScript@EA@@@Z  006e1040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/_at_006e0000.cpp  ?CommandDumpIndex@@YGXPAVcArguments@ArgScript@EA@@@Z  006e1070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/_at_006e0000.cpp  ?CreateBufferCheats@@YAXXZ  006e10a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

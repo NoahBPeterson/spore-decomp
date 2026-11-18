@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-006e6500  70  SetActiveColor - stores use integer moves and the white test uses SSE ucomiss; ours compares via a different register form
 006e6840  43  GetLayout - case-body emission order in the switch jump table differs
 006e69e0  40  SetMode(int,int) - two stack args (ret 8): mode tests arg0, stores low byte of arg1; equiv PASS: 400 valid, 100.0% coverage
 006e6a20  119  ComputeSize - switch grouping matches but register allocation around the FUN_006dde90 calls differs
@@ -10,7 +9,6 @@
 006e6d90  33  FillSix - original routes the float through the stack (int moves); ours uses direct stores [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 006e6df0  93  Normalize3 - x87 fsqrt via inline primitive; sum computed in double to preserve extended range/precision; equiv PASS: 400 valid, 100.0% coverage
 006e6e30  148  MaxVector3 - component max via comiss/cmov; ours lowers differently
-006e6e90  124  AbsArray9 - original unrolls to 9 x87 fabs; ours calls fabsf
 006e6100  868  SP::cDirectShader::Write; complete, size 725 vs 996. 16-slot name-table serialization: per slot writes index byte, two length-prefixed name strings (via scratch char vector), then two 0xc-byte record vectors (4x uint16 + uint32); 0xff terminator. Original EH prolog/SEH frame and the pointer-bump vector growth are not reproduced; equiv UNSUPPORTED (0/400 valid, fake-arity).
 006e6600  220  rw::graphics::EmbeddedState::SetDeviceState; complete, size 250 vs 262. Creates a 0x100x0x100 raster via manager vtable+0x40, fills a 0x40000 "Graphics" buffer with a 16-ring gradient (0xffffff/0xffffffff/0xffff0000), then SetMipLevelData. equiv FAIL is a harness fake-arity artifact (call-site detection); logic reconstruction complete.
 006e6ee0  559  FUN_006e6ee0 4x4/6-row matrix builder; complete, size 454 vs 306. Expands the 6-float source into a 24-float basis table (index table 0..5 identity) and emits 6 records (3 floats + int arg). equiv FAIL: xmm5 clobber (register-liveness artifact).

@@ -978,7 +978,12 @@ extern char gVtblContentValidationSummarizer[];  // 0x013ec458
 extern char g_allocName_13ebb38[];                                         // 0x013ebb38
 extern char g_allocFile_13f09b4[];                                         // 0x013f09b4
 typedef unsigned int   uint;
-void  make_heap_range2(void* a, void* b, float x, float y, float z);       // 0x00b03e40
+struct HeapPos {
+    float x, y, z;
+    HeapPos(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+    HeapPos(const HeapPos& o) : x(o.x), y(o.y), z(o.z) {}
+};
+void  make_heap_range2(void* a, void* b, HeapPos pos);       // 0x00b03e40
 void  sort_heap_range2(void* a, void* b, float x, float y, float z);       // 0x00b03ea0
 void  heap_adjust(void* a, int n, int i, int j, void* v, float x, float y, float z); // 0x00b02a40
 void* make_heap_a(void* a, void* b, void* c, void* d);                     // 0x00b00cd0
@@ -2273,7 +2278,9 @@ struct BigElem   { void Ctor(void* src); };                        // 0x00b03680
 struct BigElemD  { void Dtor(); void Dtor2(void* src); };          // 0x00b03740 (thiscall)
 void* __cdecl FUN_00f473a0(uint32 size, const char* name, int, int, const char* file, int line);
 void  __cdecl FUN_00b02930(void*, int, int, int, void*, float, float, float);
+void  __cdecl FUN_00b02930(void*, int, int, int, void*, HeapPos);
 void  __cdecl FUN_00b02a40(void*, int, int, int, void*, float, float, float);
+void  __cdecl FUN_00b02a40(void*, int, int, int, void*, HeapPos);
 void  __cdecl FUN_00ac8050_ish(void* a, const char* b, int c);      // per-node visitor
 void  __cdecl FUN_00921880(void* node, void* head);                 // eastl::RBTreeErase
 void  __cdecl FUN_00ac20d0(int n, void* src);                       // vector range assign
@@ -2319,7 +2326,7 @@ struct RedBlackTree {
     void* Find(uint32* key);            // 0x00b03f90
 };
 void* __cdecl FUN_00b02750(void* begin, void* last, uint32* key, uint8 f);
-void __cdecl make_heap_range(void* first, void* last, float px, float py, float pz);
+void __cdecl make_heap_range(void* first, void* last, HeapPos pos);
 void __cdecl FUN_00b03d20(void** first, void** last, const float* pos);
 void __cdecl FUN_00b03ce0(void** first, void** last, const float* pos);
 void __cdecl FUN_00b02830(void** first, int, int, int, void* v, const float* pos);
@@ -4948,6 +4955,7 @@ void* RefRecordOps::Assign(const void* src)
     *(u32*)(self + 8) = *(u32*)(s + 8);
     *(u32*)(self + 0xc) = *(u32*)(s + 0xc);
     void* p1 = *(void**)(s + 0x10);
+    _ReadWriteBarrier();
     void* old1 = *(void**)(self + 0x10);
     if (p1 != old1) {
         if (p1 != 0) {
@@ -6051,15 +6059,16 @@ void* __cdecl construct_range_big(void* first, void* last, void* cursor)
 }
 
 // @ 0x00b03d70
-void __cdecl make_heap_range(void* first, void* last, float px, float py, float pz)
+void __cdecl make_heap_range(void* first, void* last, HeapPos pos)
 {
     int n = (int)(((char*)last - (char*)first) >> 2);
     if (n < 2)
         return;
-    for (int i = ((n - 2) >> 1) + 1; i != 0; ) {
+    int i = ((n - 2) >> 1) + 1;
+    do {
         --i;
-        FUN_00b02930(first, i, n, i, *(void**)((char*)first + i * 4), px, py, pz);
-    }
+        FUN_00b02930(first, i, n, i, *(void**)((char*)first + i * 4), pos);
+    } while (i != 0);
 }
 
 // @ 0x00b03dd0
@@ -6078,15 +6087,16 @@ void __cdecl sort_heap_range(void* first, void* last, float px, float py, float 
 }
 
 // @ 0x00b03e40
-void __cdecl make_heap_range2(void* first, void* last, float px, float py, float pz)
+void __cdecl make_heap_range2(void* first, void* last, HeapPos pos)
 {
     int n = (int)(((char*)last - (char*)first) >> 2);
     if (n < 2)
         return;
-    for (int i = ((n - 2) >> 1) + 1; i != 0; ) {
+    int i = ((n - 2) >> 1) + 1;
+    do {
         --i;
-        FUN_00b02a40(first, i, n, i, *(void**)((char*)first + i * 4), px, py, pz);
-    }
+        FUN_00b02a40(first, i, n, i, *(void**)((char*)first + i * 4), pos);
+    } while (i != 0);
 }
 
 // @ 0x00b03ea0
@@ -6326,7 +6336,7 @@ void __cdecl sort_and_visit(void** first, void** last, const float* pos)
     float px = pos[0];
     float py = pos[1];
     float pz = pos[2];
-    make_heap_range(first, last, px, py, pz);
+    make_heap_range(first, last, HeapPos(px, py, pz));
     void** it = first;
     void** hi = last;
     while (it < hi) {
@@ -6340,7 +6350,7 @@ void __cdecl sort_and_visit(void** first, void** last, const float* pos)
 // @ 0x00b047b0
 void* FUN_00b047b0(void** param_1, void** param_2, void** param_3, float px, float py, float pz)
 {
-    make_heap_range2(param_1, param_2, px, py, pz);
+    make_heap_range2(param_1, param_2, HeapPos(px, py, pz));
     void** it = param_2;
     while (it < param_3) {
         float* cur = (float*)*it;

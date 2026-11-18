@@ -1,3 +1,5 @@
+#include "SP/cVarListSerializer.h"
+
 // Spore retail 00ac0180..00ac129e -- cInteractionTarget / cAnimalCargoInfo
 // family: constructors, destructors, slot-vector helpers, distance comparators,
 // the cargo-item factory and the property-list serializers.
@@ -135,6 +137,8 @@ struct CargoItem {
 // Small call-shape stubs (members default to __thiscall: this in ECX).
 // ---------------------------------------------------------------------------
 struct ThiscallStub {
+    bool WriteBase(void* stream);                 // 0x00c87580
+    bool ReadBase(void* stream);                  // 0x00c879a0
     void Object_Cast(int* entity);                  // 0xac0570
     int  FUN_00ac05d0(int classId);                 // 0xac05d0
     int* FUN_00ac06c0(float* pos, float a, float b); // 0xac06c0
@@ -705,49 +709,79 @@ bool __fastcall FUN_00ac0ed0(int* self)
 // ===========================================================================
 // 0x00ac0f40 -- write a uint32 then serialize the property list.
 // ===========================================================================
+class cCargoStreamHolder {
+public:
+    virtual void slot_0();
+    virtual void slot_1();
+    virtual void slot_2();
+    virtual void slot_3();
+    virtual void slot_4();
+    virtual void slot_5();
+    virtual void* GetStream();                                // slot 6, +0x18
+};
+class cCargoObjectDatabaseStream {
+public:
+    virtual void slot_0();
+    virtual void slot_1();
+    virtual void slot_2();
+    virtual void slot_3();
+    virtual void slot_4();
+    virtual void slot_5();
+    virtual void slot_6();
+    virtual void slot_7();
+    virtual cCargoStreamHolder* GetStreamHolder();             // slot 8, +0x20
+};
+extern SP::cDataSerializerGeneric gAnimalCargoSerializer;     // 0x01565ad8
+bool __cdecl EA_IO_WriteUint32(void*, u32*, int, int);         // 0x0093aa70
+
 // @ 0x00ac0f40
 bool ThiscallStub::FUN_00ac0f40(void* stream)
 {
-    int self = (int)this;
-    void* inner = ((VFnP)((*(void***)stream)[0x20 / 4]))(stream);
-    u32   val   = 0x30fc270b;
-    void* out   = ((VFnP)((*(void***)inner)[0x18 / 4]))(inner);
-    extern bool __cdecl EA_IO_WriteUint32(void*, u32*, int, int); // 0x93aa70
+    cCargoStreamHolder* __restrict holder = static_cast<cCargoObjectDatabaseStream*>(stream)->GetStreamHolder();
+    u32 val = 0x30fc270b;
+    void* out = holder->GetStream();
     EA_IO_WriteUint32(out, &val, 1, 0);
-    extern bool __fastcall FUN_00c87580(void*);      // 0xc87580
-    bool flag = FUN_00c87580(stream);
-    extern void __fastcall cVarListSerializer_ctor(void*, int, const char*, int); // 0x692f90
-    extern bool __fastcall cVarListSerializer_Serialize(void*, void*);            // 0x692900
-    char buf[0x9f0];
-    cVarListSerializer_ctor(buf, self - 0xc, STR_1565ad8, 0x1a80d26);
-    bool ser = cVarListSerializer_Serialize(buf, stream);
-    return ser && flag;
+    bool flag = WriteBase(stream);
+    SP::cVarListSerializer serializer((char*)this - 0xc, &gAnimalCargoSerializer,
+        SP::cVarListSerializer::kSignature);
+    bool ser = serializer.Serialize(*static_cast<SP::cIObjectDatabaseOStream*>(stream));
+    if (ser && flag)
+        return true;
+    return false;
 }
 
 // ===========================================================================
 // 0x00ac0fd0 -- read a uint32, deserialize the property list, refresh profile.
 // ===========================================================================
+// View from the serializable interface, 0xc bytes into CargoItem.
+struct CargoSerializableData {
+    u8 mPad00[0x50];
+    u32 mSpeciesKey[3];                                      // +0x50, owner +0x5c
+    u8 mPad5c[0x14];
+    SpeciesProfile* mpSpeciesProfile;                        // +0x70, owner +0x7c
+};
+
+class cCargoProfileManager {
+public:
+    SpeciesProfile* GetProfile(const u32* key);               // 0x004df550
+};
+cCargoProfileManager* GetCargoProfileManager();              // 0x00401090
+bool __cdecl EA_IO_ReadInt32(void*, u32*, int, int);           // 0x0093a780
+
 // @ 0x00ac0fd0
 bool ThiscallStub::FUN_00ac0fd0(void* stream)
 {
-    int self = (int)this;
-    void* inner = ((VFnP)((*(void***)stream)[0x20 / 4]))(stream);
-    void* out   = ((VFnP)((*(void***)inner)[0x18 / 4]))(inner);
-    u32   val   = 0;
-    extern bool __cdecl EA_IO_ReadInt32(void*, u32*, int, int); // 0x93a780
-    EA_IO_ReadInt32(out, &val, 1, 0);
-    extern bool __fastcall FUN_00c879a0(void*);      // 0xc879a0
-    bool flag = FUN_00c879a0(stream);
-    extern void __fastcall cVarListSerializer_ctor(void*, int, const char*, int); // 0x692f90
-    extern bool __fastcall cVarListSerializer_Serialize(void*, void*);            // 0x693e10
-    char buf[0x9f0];
-    cVarListSerializer_ctor(buf, self - 0xc, STR_1565ad8, 0x1a80d26);
-    bool ser = cVarListSerializer_Serialize(buf, stream);
+    cCargoStreamHolder* __restrict holder = static_cast<cCargoObjectDatabaseStream*>(stream)->GetStreamHolder();
+    u32 val;
+    void* in = holder->GetStream();
+    EA_IO_ReadInt32(in, &val, 1, 0);
+    bool flag = ReadBase(stream);
+    SP::cVarListSerializer serializer((char*)this - 0xc, &gAnimalCargoSerializer,
+        SP::cVarListSerializer::kSignature);
+    bool ser = serializer.Serialize(*static_cast<SP::cIObjectDatabaseIStream*>(stream));
     bool ok = ser && flag;
-    void* key = (void*)(self + 0x50);
-    FUN_00401090(key);
-    extern void* __cdecl FUN_004df550(void*);        // 0x4df550 GetProfile
-    *(void**)(self + 0x70) = FUN_004df550(key);
+    CargoSerializableData* item = reinterpret_cast<CargoSerializableData*>(this);
+    item->mpSpeciesProfile = GetCargoProfileManager()->GetProfile(item->mSpeciesKey);
     return ok;
 }
 

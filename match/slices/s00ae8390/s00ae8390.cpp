@@ -16,6 +16,7 @@
 //
 // Flags: default VS2008 (/O2 /MD /Gy /EHsc /TP).
 #include "types.h"
+#include "SP/cVarListSerializer.h"
 
 typedef unsigned int   u32;
 typedef unsigned char  u8;
@@ -166,15 +167,37 @@ void Host::FUN_00ae9330() {
   void* s = FUN_00dd1ca0(local);
   FUN_00dd4260(s, local);
 }
+struct CommStreamHolder {
+  virtual void slot0();
+  virtual void slot1();
+  virtual void slot2();
+  virtual void slot3();
+  virtual void slot4();
+  virtual void slot5();
+  virtual void* GetStream();                            // slot6, +0x18
+};
+struct CommObjectDatabaseStream {
+  virtual void slot0();
+  virtual void slot1();
+  virtual void slot2();
+  virtual void slot3();
+  virtual void slot4();
+  virtual void slot5();
+  virtual void slot6();
+  virtual void slot7();
+  virtual CommStreamHolder* GetStreamHolder();           // slot8, +0x20
+};
+extern SP::cDataSerializerGeneric gCommHostSerializer;    // 0x01566cf8
+
 // @ 0x00ae9170
 void Host::FUN_00ae9170(int* stream) {
-  int* p = (int*)((void*(__thiscall*)(void*))(*(void***)stream)[0x20 / 4])(stream);
-  u32 v = 0x37abb4b;
-  void* out = ((void*(__thiscall*)(void*))(*(void***)p)[0x18 / 4])(p);
-  FUN_0093aa70(out, &v, 1, 0);
-  struct SerBuf { u32 w[0xa16 / 4]; } ser;
-  ((ThSerial*)&ser)->FUN_00692f90(this, (void*)0x01566cf8, 0x1a80d26);
-  ((ThSerial*)&ser)->FUN_00692900(stream);
+  CommStreamHolder* __restrict holder = reinterpret_cast<CommObjectDatabaseStream*>(stream)->GetStreamHolder();
+  u32 version = 0x37abb4b;
+  void* out = holder->GetStream();
+  FUN_0093aa70(out, &version, 1, 0);
+  SP::cVarListSerializer serializer(this, &gCommHostSerializer,
+      SP::cVarListSerializer::kSignature);
+  serializer.Serialize(*reinterpret_cast<SP::cIObjectDatabaseOStream*>(stream));
 }
 // @ 0x00ae93f0
 int Host::FUN_00ae93f0(int a2, int a3, int a4, int a5, int a6) {

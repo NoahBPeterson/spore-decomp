@@ -1122,15 +1122,30 @@ HashIter* __thiscall HashTable_s0070_1a00::erase(HashIter* out, CellNode* node, 
     return out;
 }
 
+// a cell map entry copied in place into a freshly allocated node: the key, the cell info list and its octant
+// flags; the node's trailing link starts out empty
+struct CellInfoCopy {
+    char     mList[0xc];           // +0x00
+    unsigned char mOctantFlags;    // +0x0c
+    CellInfoCopy(const CellInfoCopy& o) {
+        ((ListStub*)mList)->CopyFrom((ListStub*)o.mList);
+        mOctantFlags = o.mOctantFlags;
+    }
+};
+struct CellEntryCopy {
+    unsigned mKey;                 // +0x00
+    CellInfoCopy mInfo;            // +0x04
+    CellEntryCopy(CellNode_s0070_2980* src)
+        : mKey(src->mKey), mInfo(*(const CellInfoCopy*)&src->mInfo.mHead) {}
+    static void* operator new(size_t, void* p) { return p; }
+    static void operator delete(void*, void*) {}
+};
+
 // @ 0x00702980
 void* __thiscall CellMap::CloneEntry(CellNode_s0070_2980* src)
 {
     void* node = operator new(0x18, "Graphics", 0, 0, ALLOC_FILE, 0xd1);
-    if (node) {
-        *(unsigned*)node = src->mKey;
-        ((ListStub*)((char*)node + 4))->CopyFrom((ListStub*)&src->mInfo.mHead);
-        *(unsigned char*)((char*)node + 0x10) = src->mInfo.mOctantFlags;
-    }
+    new (node) CellEntryCopy(src);
     *(unsigned*)((char*)node + 0x14) = 0;
     return node;
 }
@@ -1284,16 +1299,31 @@ void __thiscall HierGridStub::Remove(unsigned index)
 }
 
 // @ 0x00702f60
+// The temporary is a real hashtable object: copy-constructed (0x702a10), swapped in, then destroyed inline (nodes
+// freed by 0x702660, bucket array freed; both nothrow).
+void CellFree_702f60(void* p) throw();   // 0xf47380
+struct CellMapTmp_702f60 {
+    unsigned m0;             // +0x00
+    void**   mpBuckets;      // +0x04
+    unsigned mnBucketCount;  // +0x08
+    unsigned mnElementCount; // +0x0c
+    unsigned m10, m14, m18;  // +0x10..0x18
+    unsigned mAllocator;     // +0x1c
+    CellMapTmp_702f60(const CellMap& src);                    // 0x702a10
+    void DoFreeNodes(void** buckets, unsigned n) throw();     // 0x702660
+    ~CellMapTmp_702f60() {
+        DoFreeNodes(mpBuckets, mnBucketCount);
+        mnElementCount = 0;
+        if (mnBucketCount > 1)
+            CellFree_702f60(mpBuckets);
+    }
+};
+
 CellMap& __thiscall CellMap::Assign(const CellMap& src)
 {
     if (this != &src) {
-        CellMap tmp;
-        tmp.CopyConstruct(src);
+        CellMapTmp_702f60 tmp(src);
         ((SwapStub*)this)->swapWith((SwapStub*)&tmp);
-        HashTable_ClearBuckets((void**)tmp.mpBuckets, tmp.mnBucketCount);
-        tmp.m18 = 0;
-        if (tmp.mnBucketCount > 1)
-            operator delete(tmp.mpBuckets);
     }
     return *this;
 }

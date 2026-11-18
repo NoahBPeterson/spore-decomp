@@ -406,19 +406,35 @@ void __fastcall FUN_006af720(void* self, int, void* stream)
     IO_WriteUint32(stream, &pos, 1, 0);
 }
 
+// destructor views of two resource-cache entries: a reference released through vtable slot 2 (or 1) at +0x10 and an
+// owner reference released through the interface at its +4, over a base (or two) whose vtables are restored on exit
+struct IResCacheRel { virtual void Slot0(); virtual void Release1(); virtual void Release2(); };
+struct ResCacheRef2 { IResCacheRel* mp; ~ResCacheRef2() { if (mp) mp->Release2(); } };
+struct ResCacheRef1 { IResCacheRel* mp; ~ResCacheRef1() { if (mp) mp->Release1(); } };
+struct ResCacheOwnerRef {
+    char* mp;
+    ~ResCacheOwnerRef() { if (mp) ((IResCacheRel*)(mp + 4))->Release1(); }
+};
+struct ResCacheBase { virtual void Slot0(); ~ResCacheBase() {} };
+struct ResCacheEntry_6af8a0 : ResCacheBase {
+    char pad04[8];
+    ResCacheOwnerRef mOwner;   // +0x0c
+    ResCacheRef2     mRes;     // +0x10
+    ~ResCacheEntry_6af8a0();
+};
+struct ResCacheB0 { virtual void Slot0(); ~ResCacheB0() {} };
+struct ResCacheB1 { virtual void Slot0(); };
+struct ResCacheMid : ResCacheB0, ResCacheB1 { ~ResCacheMid() {} };
+struct ResCacheEntry_6afa10 : ResCacheMid {
+    char pad08[4];
+    ResCacheOwnerRef mOwner;   // +0x0c
+    ResCacheRef1     mRes;     // +0x10
+    ~ResCacheEntry_6afa10();
+};
+
 // @ 0x006af8a0
-void __fastcall FUN_006af8a0(void* self)
+ResCacheEntry_6af8a0::~ResCacheEntry_6af8a0()
 {
-    *(void**)self = &vtbl_14095f4;
-    void* p = *(void**)((char*)self + 0x10);
-    if (p)
-        ((void(__thiscall*)(void*))(*(void***)p)[2])(p);
-    void* q = *(void**)((char*)self + 0xc);
-    if (q) {
-        void* r = (char*)q + 4;
-        ((void(__thiscall*)(void*))(*(void***)r)[1])(r);
-    }
-    *(void**)self = &vtbl_13effb8;
 }
 
 // @ 0x006af940
@@ -432,43 +448,49 @@ bool __fastcall FUN_006af940(int self)
     return false;
 }
 
-// @ 0x006af960
-C_006af960* C_006af960::ctor(void* a, void* b)
-{
-    mpVtbl1 = (void*)&vtbl_13f1ab0;
-    mpVtbl0 = (void*)&vtbl_1408500;
-    mpVtbl1 = (void*)&vtbl_14084f0;
-    _InterlockedExchange(&mRefs, 0);
-    mpVtbl0 = (void*)&vtbl_1409630;
-    mpVtbl1 = (void*)&vtbl_140961c;
-    mpOwner = a;
-    if (a) {
-        void* r = (char*)a + 4;
-        ((void(__thiscall*)(void*))(*(void***)r)[0])(r);
+// Construction view of C_006af960: two interfaces (the second's constructor stores its vtable), a refcounted base with
+// a destructor, then two ref members and a plain field.
+struct __declspec(novtable) If0_6af960 { virtual void Slot0(); };
+struct If1_6af960 { virtual void Slot0b(); };
+struct Rc_6af960 : If0_6af960, If1_6af960 {
+    volatile long mRefs;     // +0x08
+    Rc_6af960() { volatile long* r = &mRefs; _InterlockedExchange(r, 0); }
+    ~Rc_6af960();
+};
+struct OwnerRef_6af960 {
+    void* p;
+    OwnerRef_6af960(void* q) : p(q)
+    {
+        if (p) {
+            void* r = (char*)p + 4;
+            ((void(__thiscall*)(void*))(*(void***)r)[0])(r);
+        }
     }
-    mpPayload = b;
-    if (b)
-        ((void(__thiscall*)(void*))(*(void***)b)[0])(b);
+    ~OwnerRef_6af960();
+};
+struct PayloadRef_6af960 {
+    void* p;
+    PayloadRef_6af960(void* q) : p(q) { if (p) ((void(__thiscall*)(void*))(*(void***)p)[0])(p); }
+    ~PayloadRef_6af960();
+};
+struct Obj_6af960 : Rc_6af960 {
+    OwnerRef_6af960   mOwner;     // +0x0c
+    PayloadRef_6af960 mPayload;   // +0x10
+    void*             mpExtra;    // +0x14
+    Obj_6af960(void* a, void* b);
+    static void* operator new(size_t n, const char* name, int a, int b, int c, int d);   // 0x00926020
+    static void operator delete(void* p, const char* name, int a, int b, int c, int d);
+};
+
+// @ 0x006af960
+Obj_6af960::Obj_6af960(void* a, void* b) : mOwner(a), mPayload(b)
+{
     mpExtra = 0;
-    return this;
 }
 
 // @ 0x006afa10
-void __fastcall FUN_006afa10(void* self)
+ResCacheEntry_6afa10::~ResCacheEntry_6afa10()
 {
-    char* s = (char*)self;
-    *(void**)s = (void*)g_1409630;
-    *(void**)(s + 4) = (void*)g_140961c;
-    void* a = *(void**)(s + 0x10);
-    if (a)
-        ((void(__thiscall*)(void*))(*(void***)a)[1])(a);
-    void* b = *(void**)(s + 0xc);
-    if (b) {
-        void* c = (char*)b + 4;
-        ((void(__thiscall*)(void*))(*(void***)c)[1])(c);
-    }
-    *(void**)s = (void*)g_13effb8;
-    *(void**)(s + 4) = (void*)g_13eb938;
 }
 
 // @ 0x006afa90
@@ -617,52 +639,99 @@ void CAfe40::f(LN* node)
 void __fastcall FUN_006afe80(char* self)
 {
     struct Req { int f0; int f1; int f2; };
+    struct RecObj {
+        virtual void v0() {} virtual void v1() {} virtual void v2() {} virtual void v3() {}
+        virtual void v4() {} virtual void v5() {}
+        virtual unsigned M18() { return 0; }
+        virtual void v7() {} virtual void v8() {}
+        virtual void M24() {}
+    };
+    struct SinkVtbl {
+        virtual void s0() {} virtual void s1() {} virtual void s2() {} virtual void s3() {}
+        virtual void s4() {} virtual void s5() {} virtual void s6() {} virtual void s7() {}
+        virtual void s8() {} virtual void s9() {} virtual void s10() {} virtual void s11() {}
+        virtual void s12() {}
+        virtual char Request(void* req, void** out, int a, int b, int c, int d) { return 0; }
+    };
+    struct RecPtr {
+        void* p;
+        RecPtr() : p(0) {}
+        ~RecPtr() { if (p) ((void(__thiscall*)(void*))(*(void***)p)[8 / 4])(p); }
+        void Clear() {
+            if (p) {
+                void* t = p;
+                p = 0;
+                ((void(__thiscall*)(void*))(*(void***)t)[8 / 4])(t);
+            }
+        }
+        RecObj* operator->() { return (RecObj*)p; }
+        void** operator&() { return &p; }
+    };
+    RecPtr out;
     Req req;
     req.f0 = 0x2e5a9763;
     req.f1 = 0x2e5a9763;
     req.f2 = 0;
-    void* out = 0;
-    char* sink = *(char**)(self + 0xc);
-    char (__thiscall* sf)(void*, Req*, void**, int, int, int, int) =
-        (char(__thiscall*)(void*, Req*, void**, int, int, int, int))(*(void***)sink)[0x34 / 4];
-    if (sf(sink, &req, &out, 3, 4, 1, 0)) {
-        unsigned r = ((unsigned(__thiscall*)(void*))(*(void***)out)[0x18 / 4])(out);
+    SinkVtbl* sink = *(SinkVtbl**)(self + 0xc);
+    if (sink->Request(&req, &out, 3, 4, 1, 0)) {
+        unsigned r = out->M18();
         ((ThiscallExt*)self)->FUN_006af720((void*)r);
-        ((void(__thiscall*)(void*))(*(void***)out)[0x24 / 4])(out);
+        out->M24();
     } else {
-        if (out) {
-            void* t = out;
-            out = 0;
-            ((void(__thiscall*)(void*))(*(void***)t)[8 / 4])(t);
-        }
-        if (sf(sink, &req, &out, 3, 2, 1, 0)) {
-            unsigned r = ((unsigned(__thiscall*)(void*))(*(void***)out)[0x18 / 4])(out);
+        SinkVtbl* sink2 = *(SinkVtbl**)(self + 0xc);
+        out.Clear();
+        if (sink2->Request(&req, &out, 3, 2, 1, 0)) {
+            unsigned r = out->M18();
             ((ThiscallExt*)self)->FUN_006af720((void*)r);
-            ((void(__thiscall*)(void*))(*(void***)out)[0x24 / 4])(out);
+            out->M24();
         }
     }
-    if (out)
-        ((void(__thiscall*)(void*))(*(void***)out)[8 / 4])(out);
 }
 // ---- items of slice s006afa10 end
 
-// @ 0x006aff70
-void* C_6aff70::f(void* a1, void* a2)
-{
-    char* s = (char*)this;
-    *(void**)s = (void*)g_13effa8;
-    _InterlockedExchange((volatile long*)(s + 4), 0);
-    *(void**)s = (void*)g_14095f4;
-    _InterlockedExchange((volatile long*)(s + 8), 1);
-    *(void**)(s + 0xc) = a1;
-    if (a1) {
-        void* p = (char*)a1 + 4;
-        (*(void(__thiscall**)(void*))*(void**)p)(p);
+// Construction view of the object 0x006aff70 builds: a refcounted base (count at +4) with a destructor, the derived
+// vtable and a second count (+8), then two ref members (the first has a destructor; the second is built last).
+struct __declspec(novtable) RcBase_6aff70 {
+    virtual void Slot0();
+    volatile long mRefs;     // +0x04
+    RcBase_6aff70()
+    {
+        *(void**)this = (void*)g_13effa8;
+        volatile long* r = &mRefs;
+        _InterlockedExchange(r, 0);
     }
-    *(void**)(s + 0x10) = a2;
-    if (a2)
-        ((void(__thiscall*)(void*))(*(void***)a2)[1])(a2);
-    return this;
+    ~RcBase_6aff70();
+};
+struct AtomicOne_6aff70 {
+    volatile long mCount;
+    AtomicOne_6aff70() { volatile long* r = &mCount; _InterlockedExchange(r, 1); }
+};
+struct OwnerRef_6aff70 {
+    void* p;
+    OwnerRef_6aff70(void* q) : p(q)
+    {
+        if (p) {
+            void* r = (char*)p + 4;
+            (*(void(__thiscall**)(void*))*(void**)r)(r);
+        }
+    }
+    ~OwnerRef_6aff70();
+};
+struct PayloadRef_6aff70 {
+    void* p;
+    PayloadRef_6aff70(void* q) : p(q) { if (p) ((void(__thiscall*)(void*))(*(void***)p)[1])(p); }
+    ~PayloadRef_6aff70();
+};
+struct RcObj_6aff70 : RcBase_6aff70 {
+    AtomicOne_6aff70  mCount;     // +0x08
+    OwnerRef_6aff70   mOwner;     // +0x0c
+    PayloadRef_6aff70 mPayload;   // +0x10
+    RcObj_6aff70(void* a1, void* a2);
+};
+
+// @ 0x006aff70
+RcObj_6aff70::RcObj_6aff70(void* a1, void* a2) : mOwner(a1), mPayload(a2)
+{
 }
 
 // @ 0x006b0020
@@ -690,10 +759,7 @@ bool __fastcall FUN_006b0020(char* self)
 // @ 0x006b00a0
 void* FUN_006b00a0(int a1, int a2)
 {
-    char* p = (char*)FUN_00926020(0x18, "App/LRUCache", 0, 0, 0, 0);
-    if (!p)
-        return 0;
-    return ((ThiscallExt*)p)->FUN_006af960(a1, a2);
+    return new ("App/LRUCache", 0, 0, 0, 0) Obj_6af960((void*)a1, (void*)a2);
 }
 
 // @ 0x006b0130
@@ -998,26 +1064,30 @@ void Cache::C(Key12* e)
   sub.Update(&t);
 }
 
+// The memory stream Init creates (0x24 bytes, constructor 0x0093bd50), with its allocator pair.
+struct MemStreamOps_6b17a0 { void SetSomething(int, float); };   // 0x0093bb40 (thiscall)
+struct MemStreamNew_6b17a0 {
+    char d[0x24];
+    MemStreamNew_6b17a0(const char* name);   // 0x0093bd50
+    static void* operator new(size_t n, const char* name, int a, int b, int c, int d);   // 0x00f473a0
+    static void operator delete(void* p, const char* name, int a, int b, int c, int d);
+};
+
 // @ 0x006b17a0
 void Cache::Init()
 {
-  MemStream* s = (MemStream*)EAlloc(0x24, "App/LRUCache/MemoryStream", 0, 0, 0, 0);
-  if (s != 0) {
-    s->Ctor("LRUCache/MemoryStream");
-  } else {
-    s = 0;
-  }
-  if (s != (MemStream*)stream) {
+  MemStream* s = (MemStream*)new ("App/LRUCache/MemoryStream", 0, 0, 0, 0) MemStreamNew_6b17a0("LRUCache/MemoryStream");
+  MemStream* old = (MemStream*)stream;
+  if (s != old) {
     if (s != 0) {
       s->AddRef();
     }
-    MemStream* old = (MemStream*)stream;
     stream = (RefObj*)s;
     if (old != 0) {
       old->Release();
     }
   }
-  SetSomething(1, 1.0f);
+  ((MemStreamOps_6b17a0*)stream)->SetSomething(1, 1.0f);
   Load();
   Refresh();
   helperafdd0();
@@ -1115,33 +1185,52 @@ void CacheMgr::ReleaseArea(ListNode* it)
   mb15 = 1;
 }
 
+// Destruction view of CacheMgr (0x006b1ab0, CacheMgr::Destructor): two interface bases (vtables at +0x00, +0x04);
+// each member below with a destructor is one unwind state.
+struct CacheMgrBaseA_6b1ab0 { virtual void a0(); ~CacheMgrBaseA_6b1ab0() {} };
+struct CacheMgrBaseB_6b1ab0 { virtual void b0(); ~CacheMgrBaseB_6b1ab0() {} uint32_t m08; };
+struct CacheMgrOwner_6b1ab0 { OwnerObj* p; ~CacheMgrOwner_6b1ab0() { if (p) p->ref.Release(); } };
+struct CacheMgrMap_6b1ab0 : AreaMap { ~CacheMgrMap_6b1ab0() { Clear(m0c); } };
+void EAFreeNothrow_6b1ab0(void* p) throw();   // 0x00f47380
+struct CacheMgrList_6b1ab0 {
+  ListNode anchor;
+  ~CacheMgrList_6b1ab0()
+  {
+    ListNode* it = anchor.mpNext;
+    while (it != &anchor) {
+      ListNode* tmp = it;
+      it = it->mpNext;
+      EAFreeNothrow_6b1ab0(tmp);
+    }
+  }
+};
+struct CacheMgrStream_6b1ab0 { StreamVt* p; ~CacheMgrStream_6b1ab0() { if (p) p->Release(); } };
+struct CacheMgrJobOps_6b1ab0 { void Release(); };   // 0x00690120
+struct CacheMgrJob_6b1ab0 { CacheMgrJobOps_6b1ab0* p; ~CacheMgrJob_6b1ab0() { if (p) p->Release(); } };
+struct CacheMgrSub_6b1ab0 { uint32_t d[4]; ~CacheMgrSub_6b1ab0() throw(); };   // 0x006b02b0
+struct CacheMgrDtorView_6b1ab0 : CacheMgrBaseA_6b1ab0, CacheMgrBaseB_6b1ab0 {
+  CacheMgrOwner_6b1ab0   mOwner;   // +0x0c
+  uint32_t m10;                     // +0x10
+  uint8_t  mb14, mb15;              // +0x14
+  uint16_t mb16;
+  CacheMgrMap_6b1ab0     map;      // +0x18
+  uint32_t m30;                     // +0x30
+  CacheMgrList_6b1ab0    list;     // +0x34
+  uint64_t m40, mLimit;             // +0x40
+  uint32_t m50;                     // +0x50
+  CacheMgrStream_6b1ab0  stream;   // +0x54
+  CacheMgrJob_6b1ab0     job;      // +0x58
+  uint32_t m5c;                     // +0x5c
+  CacheMgrSub_6b1ab0     sub;      // +0x60
+  void Shutdown();                  // 0x006b1860
+  ~CacheMgrDtorView_6b1ab0();
+};
+
 // @ 0x006b1ab0
-void CacheMgr::Destructor()
+CacheMgrDtorView_6b1ab0::~CacheMgrDtorView_6b1ab0()
 {
-  vt0 = (uint32_t)&gVtblCacheMgrA;
-  vt1 = (uint32_t)&gVtblCacheMgrB;
-  if (mb14 != 0) {
+  if (mb14 != 0)
     Shutdown();
-  }
-  sub.Free();
-  if (job != 0) {
-    job->Release();
-  }
-  if (stream != 0) {
-    ((StreamVt*)stream)->Release();
-  }
-  ListNode* it = list.mpNext;
-  while (it != &list) {
-    ListNode* next = it->mpNext;
-    EAFree(it);
-    it = next;
-  }
-  map.Clear(map.m0c);
-  if (mpOwner != 0) {
-    ((OwnerObj*)mpOwner)->ref.Release();
-  }
-  vt0 = (uint32_t)&gVtblCacheMgrBaseA;
-  vt1 = (uint32_t)&gVtblCacheMgrBaseB;
 }
 
 // @ 0x006b1b80

@@ -652,7 +652,9 @@ bool Mgr::SetPaused(int a, bool b)
 // @ 0x00a22df0
 bool Mgr::AttachEffect(int key, int id, IRC* ref, IZ** out)
 {
-    if (VCALL(void* (__thiscall*)(Mgr*, int), this, 0x1d4)(this, id) != 0)
+    void* existing = VCALL(void* (__thiscall*)(Mgr*, int), this, 0x1d4)(this, id);
+    IRC* nullRef = 0;
+    if (existing != nullRef)
         return false;
     AutoRef<IRC> r(ref);
     if (r.p == 0)

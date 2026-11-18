@@ -46,3 +46,5 @@
 ../src/game/SPGonzago/SPMissionManager.cpp  ?InitE229@Simulator@@YAXXZ  01396a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManager.cpp  ?InitForGame@cSPMissionManager_s00fe_d430@@QAEXXZ  00fedb50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMissionManager.cpp  ?FUN_00fece20@cSPMissionManager_s00fe_c590@@QAEXXZ  00fece20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionManager.cpp  ?Write@cSPMissionManager@@QAEEPAX@Z  00febb90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMissionManager.cpp  ?FUN_00feca80@@YAXPAVcOutStream@@PAUtSerializeNode@@@Z  00feca80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

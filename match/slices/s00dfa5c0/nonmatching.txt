@@ -2,7 +2,6 @@
 00dfa5c0  200  asset-browser launch: complete (best-effort). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00dfa930  163  editor property save/UI toggle: complete (best-effort). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00dfab20  250  tooltip/panel enable: complete (best-effort). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
-00dfaa40  65  eastl pod-array destructor loop; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (no mismatch, 31% cov).
 00dfaa90  n/a  eastl pod-array move-backwards; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (no mismatch, 25% cov).
 00dfae00  54  cString slice copy assignment; complete; the two eastl string assigns are thiscalls on the destination sub-objects (ecx=this+0x14 / this+0x2c) with the source begin/end as stack args, not cdecl calls taking the source pointers; the function returns this. equiv PASS: 338 valid, 100% coverage
 00dfb130  114  TypeA (0x24-byte element) copy ctor; complete (best-effort); retail reserves a spill slot (push ecx) and spills src/dst begin pointers across the AllocateSelf/MemThunk calls, our allocator keeps n=&s in the opposite callee-saved regs (ebp/ebx vs ebx/ebp). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. equiv WEAK: 181 valid, 100% coverage

@@ -107,7 +107,8 @@ struct CEditorRes : cResourceBase_s0076_2d70 {
     ~CEditorRes() {}
 };
 struct EhItem { void* p; int x; ~EhItem(); };
-struct EhHolder { char pad[0x44]; EhItem a[4]; EhItem b[4]; ~EhHolder(); };
+struct EhArr4 { EhItem v[4]; };   // array member: destroyed through the eh vector destructor iterator
+struct EhHolder { char pad[0x44]; EhArr4 a; EhArr4 b; ~EhHolder(); };
 struct GimexRecord { char pad[0x10]; int mWidth; int mHeight; int mBpp; };
 struct StreamObj { char pad[0x20]; };
 struct OutRaster { char pad[0x18]; void* mData; };
@@ -403,12 +404,17 @@ struct IUnknown32_s0076_4df0 {
 struct AtomicInt_s0076_4df0 { int v; int operator=(int x) { return _InterlockedExchange((volatile long*)&v, x); } };
 struct Resource_s0076_4df0 : IUnknown32_s0076_4df0 {
     AtomicInt_s0076_4df0 mRefCount; int k0, k1, k2;
-    Resource_s0076_4df0() { mRefCount = 0; k0 = 0; k1 = 0; k2 = 0; }
+    Resource_s0076_4df0() { volatile long* r = (volatile long*)&mRefCount.v; _InterlockedExchange(r, 0); k0 = 0; k1 = 0; k2 = 0; }
 };
-struct cResourceBase_s0076_4df0 : Resource_s0076_4df0 { int* cb; cResourceBase_s0076_4df0() { cb = 0; } };
+struct cResourceBase_s0076_4df0 : Resource_s0076_4df0 { int* cb; int f18; cResourceBase_s0076_4df0() { cb = 0; f18 = 0; } ~cResourceBase_s0076_4df0() {} };
+// the source reference at +0x1c: taken through vtable slot 0 as it is stored, dropped (slot 1) on unwind
+struct D765Ref {
+    IUnknown32_s0076_4df0* mp;
+    D765Ref(void* p) : mp((IUnknown32_s0076_4df0*)p) { if (p) mp->u0(); }
+    ~D765Ref() { if (mp) mp->u1(); }
+};
 struct D765f10 : cResourceBase_s0076_4df0 {
-    int f18;
-    void* f1c;
+    D765Ref f1c;
     D765f10(void* arg);
 };
 struct RefIface { virtual void AddRef(); virtual void Release(); };
@@ -2583,20 +2589,26 @@ bool AsyncReqC::Start(JobRefL* out)
 
 // @ 0x00765f10
 D765f10::D765f10(void* arg)
+    : f1c(arg)
 {
-    f18 = 0;
-    f1c = arg;
-    if (arg)
-        ((IUnknown32_s0076_4df0*)arg)->u0();
     f18 = 0;
 }
 
+struct RefIface_765f80 { virtual void AddRef(); virtual void Release(); };
+// Deleting destructor of the editor resource (0x00765f80, IResEd::Delete) with its destructor inlined: the ref at
+// +0x1c is released while the base is still alive, then the base restores its vtable.
+struct IResEdBase_765f80 { virtual void b0(); ~IResEdBase_765f80() {} };
+struct __declspec(novtable) IResEdView_765f80 : IResEdBase_765f80 {
+    char pad04[0x1c - 4];
+    RefIface_765f80* m1c;   // +0x1c
+    ~IResEdView_765f80() { if (m1c) m1c->Release(); }
+    IResEdView_765f80* Delete(unsigned flags);
+};
+
 // @ 0x00765f80
-void* IResEd::Delete(unsigned flags)
+IResEdView_765f80* IResEdView_765f80::Delete(unsigned flags)
 {
-    if (m1c)
-        m1c->Release();
-    *(void**)this = (void*)0x13eb938;
+    this->~IResEdView_765f80();
     if (flags & 1)
         EA_Dealloc(this);
     return this;
@@ -3345,14 +3357,25 @@ void C68200::Release()
     }
 }
 
+// Construction view of C68240 (0x00768240): the vector base takes the inline pool (+0x18) and frees on unwind; the
+// body sizes it through 0x00767760.
+struct C68240Base_768240 {
+    char* m0; char* m4; char* m8; int mc; char* m10;
+    explicit C68240Base_768240(char* pool) { m0 = 0; m4 = 0; m8 = 0; m10 = pool; }
+    ~C68240Base_768240();
+};
+struct C68240View_768240 : C68240Base_768240 {
+    int   m14;                // +0x14
+    char  m18[0x80];          // +0x18 inline storage
+    C68240View_768240(void* arg);
+    void RegisterJob(void* arg);   // 0x00767760
+};
+
 // @ 0x00768240
-C68240::C68240(void* arg)
+C68240View_768240::C68240View_768240(void* arg) : C68240Base_768240(m18)
 {
-    char* base = m18;
-    m10 = base;
-    m4 = base;
-    m0 = base;
-    m8 = base + 0x80;
+    m0 = m4 = m18;
+    m8 = m0 + 0x80;
     RegisterJob(arg);
 }
 

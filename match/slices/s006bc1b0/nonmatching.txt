@@ -1,4 +1,4 @@
-006bc1b0  233  complete; /GS- EH frame + vtable call schedule differ (MakeIndexModifiable)
+006bc1b0  233  schedule: R49 (2026-11-17): vtable-call schedule and temp release placement differ (95 lines, 298 vs 279 bytes) | Earlier note: complete; /GS- EH frame + vtable call schedule differ (MakeIndexModifiable)
 006bc310  4    complete; conditional hole-table selection branch layout differs
 006bc4d0  196  complete; Open() stream/access-flag logic: the 3rd param is a 1-byte flag (cmp byte), now bool (was int, so 0x80000000 wrongly took the auto-open path); equivalence replay identical (WEAK 48.5% cov); register/frame differences
 006bc6f0  126  complete; scoped-lock EH epilogue layout differs

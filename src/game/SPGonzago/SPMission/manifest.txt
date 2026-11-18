@@ -66,3 +66,6 @@
 ../src/game/SPGonzago/SPMission.cpp  ?SetOwnerEmpire@cSPMission_s00c4_5860@@QAEXPAUcEntity@@@Z  00c45d30  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?ReadPickClosestStar@cSPMission_s00c4_5860@@QAEEXZ  00c45c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c48a90@SPObject@@QAEXPAUWStr@@@Z  00c48a90  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?SerializeVarList@cSPMission_s00c4_5860@@QAEEPAX@Z  00c46310  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?ReadBannerList@cBannerListHost@@QAE_NPAX@Z  00c4a850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?FUN_00c46ab0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c46ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

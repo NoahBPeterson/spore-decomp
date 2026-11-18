@@ -91,3 +91,5 @@
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?ScalarDeletingDestructor@EditorBaseLifetime@@QAEPAU1@I@Z  0057d6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?LookupByHash@@YAII@Z  00572110  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPAppModeEditorBase.cpp  ?LoadSomething@cAppModeEditorBase_s0057_7130@SP@@QAE_NPAX@Z  00577c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?HasAnyResource@@YA_NPAUcSPEditorBlock_s0057_7130@@PAUResKey3@@@Z  00577b20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPAppModeEditorBase.cpp  ?LoadModel@cAppModeEditorBase_s0058_9ce0@SP@@QAEXHHH@Z  0058a350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

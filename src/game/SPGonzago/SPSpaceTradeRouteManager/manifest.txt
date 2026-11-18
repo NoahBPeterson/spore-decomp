@@ -9,3 +9,6 @@
 ../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?GetNumberOfPlayerTradeRoutes@cSpaceTradeRouteManager@@QAEHXZ  01037f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?erase@cTradeRouteTree@@QAEXPAUcRBNodeBase@@@Z  010380b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?Read@cTradeRouteData@@QAE_NPAVcStreamHandle@@@Z  01037b50  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?Write@cTradeRouteData@@QAE_NPAVcStreamHandle@@@Z  01037ae0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?Write@cSpaceTradeRouteManager@@QAE_NPAVcStreamHandle@@@Z  01037bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPGonzago/SPSpaceTradeRouteManager.cpp  ?Read@cSpaceTradeRouteManager@@QAE_NPAVcStreamHandle@@@Z  01038270  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

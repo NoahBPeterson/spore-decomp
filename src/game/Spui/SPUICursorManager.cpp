@@ -333,28 +333,28 @@ void Sub_8019f0()
 // @ 0x00801ac0
 bool C_801ac0::f(void* param_2, void* param_3, int param_4, int param_5)
 {
-  if (param_5 != 0x2393756)
-    return 0;
-  void* p = operator_new(0x18, "App/cSPUICursorManager", 0, 0, 0, 0);
-  void* r = 0;
-  if (p) {
-    *(void* volatile*)p = (void*)fac_a;
-    _InterlockedExchange((long*)((char*)p + 4), 0);
-    *(void**)((char*)p + 8) = 0;
-    *(void**)((char*)p + 0xc) = 0;
-    *(void**)((char*)p + 0x10) = 0;
-    *(void* volatile*)p = (void*)fac_b;
-    r = p;
-  }
-  void* v = ((void* (__thiscall*)(void*))((*(void***)param_2)[0x10 / 4]))(param_2);
-  *(void**)((char*)r + 8) = *(void**)v;
-  *(void**)((char*)r + 0xc) = *(void**)((char*)v + 4);
-  *(void**)((char*)r + 0x10) = *(void**)((char*)v + 8);
-  if (((uint8_t(__thiscall*)(void*, void*, void*, int, int))((*(void***)this)[0x24 / 4]))(
-          this, param_2, r, param_4, 0x2393756)) {
-    *(void**)((char*)param_3 + 0) = r;
-    ((void(__thiscall*)(void*))((*(void***)r)[0]))(r);
-    return 1;
+  if (param_5 == 0x2393756) {
+    void* p = operator_new(0x18, "App/cSPUICursorManager", 0, 0, 0, 0);
+    void* r = 0;
+    if (p) {
+      *(void* volatile*)p = (void*)fac_a;
+      _InterlockedExchange((long*)((char*)p + 4), 0);
+      *(void**)((char*)p + 8) = 0;
+      *(void**)((char*)p + 0xc) = 0;
+      *(void**)((char*)p + 0x10) = 0;
+      *(void* volatile*)p = (void*)fac_b;
+      r = p;
+    }
+    void* v = ((void* (__thiscall*)(void*))((*(void***)param_2)[0x10 / 4]))(param_2);
+    *(void**)((char*)r + 8) = *(void**)v;
+    *(void**)((char*)r + 0xc) = *(void**)((char*)v + 4);
+    *(void**)((char*)r + 0x10) = *(void**)((char*)v + 8);
+    if (((uint8_t(__thiscall*)(void*, void*, void*, int, int))((*(void***)this)[0x24 / 4]))(
+            this, param_2, r, param_4, 0x2393756)) {
+      *(void**)((char*)param_3 + 0) = r;
+      ((void(__thiscall*)(void*))((*(void***)r)[0]))(r);
+      return 1;
+    }
   }
   return 0;
 }

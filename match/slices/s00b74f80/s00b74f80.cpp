@@ -101,10 +101,21 @@ struct T5820 {
     T5820* Init();
 };
 
+struct ResourceKey5890 { unsigned instance, type, group; };
+struct MappedValue5890 {
+    unsigned first, second, third;
+    MappedValue5890() : first(0), second(0), third(0) {}
+};
+struct ResourcePair5890 {
+    ResourceKey5890 key;
+    MappedValue5890 value;
+    ResourcePair5890(const ResourceKey5890& k, const MappedValue5890& v) : key(k), value(v) {}
+};
+struct InsertTag5890 {};
 struct T5890 {
     int* GetOrInsert(unsigned* key);
     int* FindKey(int* out, int* key);                                      // 0xb74860
-    int Insert3(int* out, const void* in, int flag);                        // 0xb748e0
+    int* Insert3(int* out, const void* in, InsertTag5890 tag);                        // 0xb748e0
 };
 
 struct T5910 {
@@ -479,18 +490,12 @@ T5820* T5820::Init()
 // @ 0x00b75890 GetOrInsert
 int* T5890::GetOrInsert(unsigned* key)
 {
-    int local[4];
+    int local[3];
     ((T5890*)this)->FindKey(local, (int*)key);
     if (local[0] == *(int*)(*(int*)((char*)this + 4)
                             + *(int*)((char*)this + 8) * 4)) {
-        int in[6];
-        in[0] = (int)key[0];
-        in[1] = (int)key[1];
-        in[2] = (int)key[2];
-        in[3] = 0;
-        in[4] = 0;
-        in[5] = 0;
-        ((T5890*)this)->Insert3(local, in, 0);
+        ResourcePair5890 value(*(ResourceKey5890*)key, MappedValue5890());
+        Insert3(local, &value, InsertTag5890());
     }
     return (int*)(local[0] + 0xc);
 }

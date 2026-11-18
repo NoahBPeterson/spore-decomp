@@ -3,6 +3,7 @@
 // Built with VS2008 SP1 (cl 15.00.30729.01) /O2 /MD /Gy /TP (no float code in this slice).
 // Flags: /O2 /MD /Gy /TP
 #include "types.h"
+#include <intrin.h>
 
 // ---------------------------------------------------------------------------
 // Callees modelled as member functions (ecx = this) or plain cdecl helpers.
@@ -879,6 +880,8 @@ void __thiscall Obj::OnSetTitle(void* a)
 }
 
 // ---------------------------------------------------------------------------
+struct LargeViewReference { virtual void Slot0(); virtual void AddRef(); virtual void Release(); };
+
 // @ 0x00eb90c0
 // ---------------------------------------------------------------------------
 void __thiscall Obj::MakeLargeView(void* a)
@@ -893,9 +896,9 @@ void __thiscall Obj::MakeLargeView(void* a)
     void* old = fF0;
     if (piVar4 != old)
     {
-        if (piVar4) { void** vt = *(void***)piVar4; ((VF0)vt[1])(piVar4); }
+        if (piVar4) ((LargeViewReference*)piVar4)->AddRef();
         fF0 = piVar4;
-        if (old) { void** vt = *(void***)old; ((VF0)vt[2])(old); }
+        if (old) ((LargeViewReference*)old)->Release();
     }
     void* view = fF0;
     char cVar2 = ((Fn120*)view)->F(((Layout*)f18)->FindWindow(0x7cd2938, 1));
@@ -905,13 +908,13 @@ void __thiscall Obj::MakeLargeView(void* a)
         if (t)
         {
             fF0 = 0;
-            void** vt = *(void***)t;
-            ((VF0)vt[2])(t);
+            ((LargeViewReference*)t)->Release();
         }
     }
     else
     {
-        ((Fn150d0*)view)->Load((uint32_t)a);
+        ((Fn150d0*)t)->Load((uint32_t)a);
+        _ReadWriteBarrier(); // Preserve the original call/return boundary.
     }
 }
 

@@ -79,9 +79,25 @@ struct Holder841 {
     RCArray_s0075_8240 vec;
     void* p18;
     Holder841* Ctor(int* src);   // 0x007583e0
-    void Dtor();                 // 0x00758540
 };
 __declspec(noinline) Holder841* __cdecl FUN_007585c0(int* src);
+void* __cdecl operator new(unsigned size, const char* name, int, int, int, int);
+void  __cdecl operator delete(void* p, const char* name, int, int, int, int);
+struct Holder841New {
+    char storage[0x20];
+    Holder841New(int* src);   // 0x007583e0 (Holder841::Ctor)
+};
+// the destructor's view of Holder841: an interface at +0 (no destructor of its own), a base at +4 whose destructor
+// restores vtable 0x13ef094, and the reference vector at +0xc, destroyed by its out-of-line destructor (0x0041eb80)
+struct Holder841Iface { virtual void Slot0(); };
+struct Holder841Base { virtual void Slot0(); ~Holder841Base() {} };
+struct Holder841Vector { void* mBegin; void* mEnd; void* mCap; ~Holder841Vector(); };
+struct Holder841Obj : Holder841Iface, Holder841Base {
+    void* p08;
+    Holder841Vector vec;
+    void* p18;
+    ~Holder841Obj();
+};
 struct C58480 { char pad[0xc]; int* mBegin; int* mEnd; bool Update(float* bounds, float* w); };
 struct IntVec {
     int* mBegin; int* mEnd; int* mCap;
@@ -214,7 +230,27 @@ struct Val7ff0 {
     RCObj* p0c;    // +0x0c
     RCObj* p10;    // +0x10
     int    f14, f18, f1c, f20, f24;   // +0x14..+0x24
-    Val7ff0* Ctor(RCObj* a2, int* a3);
+};
+// the constructor's view of Val7ff0: an interface at +0, a base at +4 (vtable 0x13ef094, clears +8), a reference
+// taken through vtable slot 0 and an atomically counted reference; a throw while taking the second drops the first
+struct Val7ff0Iface { virtual void Slot0(); };
+struct Val7ff0Base { Val7ff0Base() : p08(0) {} virtual void Slot0(); int* p08; ~Val7ff0Base() {} };
+struct IVal7ff0Ref { virtual void AddRef(); virtual void Release(); };
+struct Val7ff0RefA {
+    IVal7ff0Ref* mp;
+    Val7ff0RefA(IVal7ff0Ref* p) : mp(p) { if (p) p->AddRef(); }
+    ~Val7ff0RefA() { if (mp) mp->Release(); }
+};
+struct Val7ff0RefB {
+    RCObj* mp;
+    Val7ff0RefB(RCObj* p) : mp(p) { if (p) _InterlockedIncrement(&p->refcount); }
+    ~Val7ff0RefB() { if (mp) _InterlockedDecrement(&mp->refcount); }
+};
+struct Val7ff0Obj : Val7ff0Iface, Val7ff0Base {
+    Val7ff0RefA p0c;   // +0x0c
+    Val7ff0RefB p10;   // +0x10
+    int    f14, f18, f1c, f20, f24;   // +0x14..+0x24
+    Val7ff0Obj(RCObj* a2, int* a3);
 };
 struct C0755b { void* vptr; char pad[0x10]; };
 // ---- items of slice s007571a0 end
@@ -245,23 +281,14 @@ Val7e20* Val7e20::Ctor(Val7e20* src, RCObj* a2, RCObj* a3)
 }
 
 // @ 0x00757ff0
-Val7ff0* Val7ff0::Ctor(RCObj* a2, int* a3)
+Val7ff0Obj::Val7ff0Obj(RCObj* a2, int* a3)
+    : p0c((IVal7ff0Ref*)a2), p10((RCObj*)a3[0])
 {
-    this->vptr4 = g_vtbl_13ef094;
-    this->p08 = 0;
-    this->vptr0 = g_vtbl_140da78;
-    this->vptr4 = g_vtbl_140da74;
-    this->p0c = a2;
-    if (a2) ((void (__thiscall*)(RCObj*))((void**)a2->vptr)[0])(a2);
-    RCObj* r = (RCObj*)a3[0];
-    this->p10 = r;
-    if (r) _InterlockedIncrement(&r->refcount);
-    this->f14 = a3[1];
-    this->f18 = a3[2];
-    this->f1c = a3[3];
-    this->f20 = a3[4];
-    this->f24 = a3[5];
-    return this;
+    f14 = a3[1];
+    f18 = a3[2];
+    f1c = a3[3];
+    f20 = a3[4];
+    f24 = a3[5];
 }
 
 // @ 0x007580a0
@@ -351,20 +378,14 @@ bool C58480::Update(float* bounds, float* w)
 }
 
 // @ 0x00758540
-void Holder841::Dtor()
+Holder841Obj::~Holder841Obj()
 {
-    vt0 = &g_0140da88;
-    vt1 = &g_0140da84;
-    ((RefVectorDtor*)((char*)this + 0xc))->Destroy();
-    vt1 = &g_013ef094;
 }
 
 // @ 0x007585c0
 Holder841* __cdecl FUN_007585c0(int* src)
 {
-    Holder841* p = (Holder841*)operator_new_graph6(0x20, g_GraphicsTag, 0, 0, 0, 0);
-    if (p) return p->Ctor(src);
-    return 0;
+    return (Holder841*)new (g_GraphicsTag, 0, 0, 0, 0) Holder841New(src);
 }
 
 // @ 0x00758680
@@ -413,34 +434,48 @@ void IntVec::Insert(int* pos, unsigned n, int* val)
     }
 }
 
-// @ 0x00758860
-int* __cdecl FUN_00758860(int* out, int* first, int* last)
-{
-    *out = (int)first;
-    for (; first != last; first += 5) {
-        int* b = (int*)*out;
-        if (b) {
-            int n = (int)((char*)first[1] - (char*)*first) >> 2;
-            int* nb = n ? (int*)operator_new_graph(n * 4) : 0;
-            b[0] = (int)nb; b[1] = (int)nb; b[2] = (int)(nb + n);
-            b[1] = (int)xcopy((int*)*first, (int*)first[1], nb);
-        }
-        *out += 0x14;
+// Uninitialized copy / fill_n of int vectors (0x00758860 / 0x00758950), EASTL style: iterator objects and a placement
+// copy per vector; the vector copy constructor allocates and copies its elements inline.
+void* __cdecl EAAlloc_758950(unsigned n, const char* name, int a, int b, const char* file, int line);  // 0x00f473a0
+struct IVec_758950 {
+    int* mpBegin; int* mpEnd; int* mpCap; int mAlloc[2];
+    __forceinline IVec_758950(const IVec_758950& x)
+    {
+        int n = (int)(x.mpEnd - x.mpBegin);
+        int* p = n ? (int*)EAAlloc_758950(n * 4, "Graphics", 0, 0,
+            "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+        mpBegin = p;
+        mpEnd = p;
+        mpCap = p + n;
+        int bytes = (int)((char*)x.mpEnd - (char*)x.mpBegin);
+        mpEnd = (int*)memcpy(p, x.mpBegin, bytes) + (bytes >> 2);
     }
-    return out;
+    static void* operator new(size_t, void* q) throw() { return q; }
+    static void operator delete(void*, void*) throw() {}
+};
+struct IVecIt_758950 {
+    IVec_758950* p;
+    IVecIt_758950(IVec_758950* q) : p(q) {}
+    IVec_758950& operator*() const { return *p; }
+    IVecIt_758950& operator++() { ++p; return *this; }
+    bool operator!=(const IVecIt_758950& o) const { return p != o.p; }
+};
+
+// @ 0x00758860
+IVecIt_758950 IVecUninitCopy_758860(IVecIt_758950 first, IVecIt_758950 last, IVecIt_758950 dest)
+{
+    IVecIt_758950 result(dest);
+    for (; first != last; ++first, ++result)
+        new (&*result) IVec_758950(*first);
+    return result;
 }
 
 // @ 0x00758950
-void __cdecl FUN_00758950(Elem14* out, unsigned n, int* src)
+void IVecFillN_758950(IVecIt_758950 first, unsigned n, const IVec_758950& value)
 {
-    for (; n != 0; --n, out = (Elem14*)((char*)out + 0x14)) {
-        if (out) {
-            int c = (int)((char*)src[1] - (char*)*src) >> 2;
-            int* nb = c ? (int*)operator_new_graph(c * 4) : 0;
-            out->begin = nb; out->end = nb; out->cap = nb + c;
-            out->end = xcopy((int*)*src, (int*)src[1], nb);
-        }
-    }
+    IVecIt_758950 cur(first);
+    for (; 0 < n; --n, ++cur)
+        new (&*cur) IVec_758950(value);
 }
 
 // @ 0x00758a10
@@ -746,10 +781,16 @@ bool C59e80::CopyTo(RCArray* out)
     return true;
 }
 
+// The 0x70-byte object New70 creates; its constructor (0x00759c80) takes the owner's +0xc member.
+struct MorphObj70_75a620 {
+    MorphObj70_75a620(void* owner);   // 0x00759c80
+    char d[0x70];
+    static void* operator new(size_t n, const char* name, int a, int b, int c, int d);    // 0x00f473a0
+    static void operator delete(void* p, const char* name, int a, int b, int c, int d);
+};
+
 // @ 0x0075a620
 void* ClassX::New70()
 {
-    void* p = operator_new_graph(0x70);
-    if (p) FUN_00759c80(p);
-    return p;
+    return new (g_GraphicsTag, 0, 0, 0, 0) MorphObj70_75a620((char*)this + 0xc);
 }

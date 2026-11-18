@@ -2560,9 +2560,8 @@ float* __cdecl FUN_009cda70(float* out, const float* m)
     float fVar2 = (float)sqrt((float)(1.0f - (float)(fq * fq)));
     out[1] = (float)atan2((double)fq, (double)fVar2);
     if (fq != 1.0f && fq != -1.0f) {
-        float r = 1.0f / fVar2;
-        out[0] = (float)atan2((double)(m[7] * r), (double)(m[8] * r));
-        out[2] = (float)atan2((double)(m[3] * r), (double)(r * m[0]));
+        out[0] = (float)atan2((double)(m[7] * (1.0f / fVar2)), (double)(m[8] * (1.0f / fVar2)));
+        out[2] = (float)atan2((double)(m[3] * (1.0f / fVar2)), (double)((1.0f / fVar2) * m[0]));
         return out;
     }
     out[0] = (float)atan2((double)(-m[5]), (double)(m[4]));

@@ -921,8 +921,7 @@ __declspec(noinline) EvalList& EvalList::operator=(const EvalList& o)
 void cSPSkinPaintParticleAddDescCommand::AddDesc(EA::ArgScript::cArguments_s0053_9d70& args)
 {
     const char** argv = args.MainArguments(1);
-    EA::Swarm::cEffectsParser* parser = mpParser;
-    parser->AddDescription(args, argv[0], 0x26, 0);
+    mpParser->AddDescription(args, argv[0], 0x26, 0);
 }
 
 // @ 0x0053a4a0

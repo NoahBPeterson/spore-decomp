@@ -7,3 +7,4 @@ slices/s008e0eb0/s008e0eb0.cpp  ?SetKeyName@Manager@ResourceMan@EA@@QAE_NPAVKey@
 # nonmatching.txt (see symbols/slices/s008e0eb0.txt).
 #
 # Build flags (all rows): /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008e0eb0/s008e0eb0.cpp  ?pushBack@AutoRefVec@ResourceMan@EA@@QAEPAUAutoRefObj@23@PAU423@PBU423@@Z  008e1690  /O2 /MD /Gy /TP /GS- /arch:SSE

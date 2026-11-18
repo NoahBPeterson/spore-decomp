@@ -12322,10 +12322,10 @@ void __fastcall FUN_00deb6d0(void* self)
         return;
     *(uint32_t*)((char*)self + 0xc) = 0;
     if (PIP(0x198) != 0) {
-        CbObj* p = (CbObj*)PIP(0x198);
-        p->Stop();
-        float zeros[3] = {0.0f, 0.0f, 0.0f};
-        ((CbInner*)((char*)p + 4))->Send(0x2ca298e9, zeros);
+        ((CbObj*)PIP(0x198))->Stop();
+        Vec3g zero = {0.0f, 0.0f, 0.0f};
+        Vec3g dir = zero;
+        ((CbInner*)((char*)PIP(0x198) + 4))->Send(0x2ca298e9, &dir);
     }
     ((TrigMgrShim*)(void*)g_kPanelIDs)->Func(2, 0);
 }
@@ -17171,14 +17171,15 @@ void UI_s00df_a5c0::FUN_a930()
 // @ 0x00dfaa40
 int F_dfa40(int a, int b, int c)
 {
-    if (a == b) return c;
-    do {
-        int p = *(int*)(a + 0x10);
-        if ((2 < (int)(*(int*)(a + 0x18) - p & 0xfffffffeU)) && p != 0)
-            operator_delete_((void*)p);
-        a += 0x24;
-        c += 0x24;
-    } while (a != b);
+    if (a != b) {
+        do {
+            int p = *(int*)(a + 0x10);
+            if ((2 < (int)(*(int*)(a + 0x18) - p & 0xfffffffeU)) && p != 0)
+                operator_delete_((void*)p);
+            a += 0x24;
+            c += 0x24;
+        } while (a != b);
+    }
     return c;
 }
 
@@ -19610,24 +19611,35 @@ void __stdcall e00560(int dummy)
 }
 
 // @ 0x00e005b0
+struct Scope_e005b0 {
+    char d0[0xc];
+    int* mp0c;
+    char d10[0x14];
+    char mb24;
+    char d25[0x23];
+    void Init();     // 0x00644b10
+    void Done();     // 0x00644b60
+};
 void __cdecl e005b0()
 {
-    char buf[0x48];
-    sub_644b10(buf);
+    Scope_e005b0 scope;
+    scope.Init();
     if ((int)SP_GetCurrentGameMode() == 0x2ccd1d2) {
-        int* p = (int*)operator_new(0x14, "Sporepedia", 0, 0, 0, 0);
-        if (p) {
+        scope.mb24 = 0;
+        int* q = (int*)operator_new(0x14, k_szSporepedia, 0, 0, 0, 0);
+        if (q) {
             int* g = *(int**)0x16a1344;
-            p[1] = 0x13ec458;
-            p[2] = 0;
-            p[0] = 0x147dc04;
-            p[1] = 0x149bad8;
-            p[3] = (int)g;
-            *(u8*)(p + 4) = 0;
-        }
-        sub_e02040(buf);
+            *(volatile int*)(q + 1) = 0x13ec458;
+            q[2] = 0;
+            q[0] = 0x147dc04;
+            q[1] = 0x149bad8;
+            q[3] = (int)g;
+            *(u8*)(q + 4) = 0;
+            scope.mp0c = q;
+        } else scope.mp0c = 0;
+        sub_e02040(&scope);
     }
-    sub_644b60(buf);
+    scope.Done();
 }
 
 // @ 0x00e00630

@@ -30,7 +30,7 @@ typedef unsigned int   u32;
 typedef unsigned __int64 u64;
 #define VFN(p, off) ((*(void***)(p))[(off) / 4])
 float __cdecl fabsf(float);                       // CRT fabsf
-void  __cdecl opDelete(void* p);                  // 0xf47380 operator delete
+void  __cdecl opDelete(void* p) throw();   // 0xf47380 operator delete
 inline void* operator new(unsigned int, void* p) { return p; }  // placement new
 void* __cdecl GetSystemAT();              // 0xa206f0 EA::Audio::GetSystemAT
 namespace EA {
@@ -442,34 +442,37 @@ void cEmitterModelSound_s00a3_7dd0::Tick(u32 a, float dt)
 }
 }}  // namespace SP::Audio
 
+struct LocalEmitterRef {
+    void* p;
+    LocalEmitterRef() : p(0) {}
+    ~LocalEmitterRef() { if (p) ((void(__thiscall*)(void*))VFN(p, 4))(p); }
+};
+
 // @ 0x00a38900
 namespace SP { namespace Audio {
 bool cEmitterModelSound_s00a3_7dd0::CreateEmitter(u32 key, void* p, void** out)
 {
     char* self = (char*)this;
-    if (p == 0) return false;
-    void* sys = GetSystemAT();
-    if (sys == 0) return false;
+    void* sys;
+    if (!out || !(sys = GetSystemAT())) return false;
 
-    void* local = 0;
-    if (!((bool(__thiscall*)(void*, u32, void**))VFN(sys, 0x180))(sys, 0x1a527db, &local))
+    LocalEmitterRef lref;
+    if (!((bool(__thiscall*)(void*, u32, void**))VFN(sys, 0x180))(sys, 0x1a527db, &lref.p))
         return false;
-    // fill descriptor {p, 0x1a527db, 0x21407ee}
+    // fill descriptor {key, 0x1a527db, 0x21407ee}
     void* desc[3];
-    desc[0] = p;
+    desc[0] = (void*)key;
     desc[1] = (void*)0x1a527db;
     desc[2] = (void*)0x21407ee;
+    ((void(__thiscall*)(void*, void**))VFN(lref.p, 0x28))(lref.p, desc);
     void* ext = *(void**)(self + 0x38);
-    ((void(__thiscall*)(void*, void**))VFN(local, 0x28))(local, desc);
-    ((void(__thiscall*)(void*, void*))VFN(local, 0x38))(local, ext);
-    ((void(__thiscall*)(void*, void*))VFN(local, 0x24))(local, p);
-    if (!((bool(__thiscall*)(void*))VFN(local, 8))(local)) return false;
-    if (!((bool(__thiscall*)(void*))VFN(local, 0x10))(local)) return false;
-    u32 f = (*(u32*)(self + 0x34) & 0x100) == 0x100;
-    ((void(__thiscall*)(void*, u32))VFN(local, 0x3c))(local, f);
-    ((void(__thiscall*)(void*))VFN(local, 0))(local);
-    *out = local;
-    if (local) ((void(__thiscall*)(void*))VFN(local, 4))(local);
+    ((void(__thiscall*)(void*, void*))VFN(lref.p, 0x38))(lref.p, ext);
+    ((void(__thiscall*)(void*, void*))VFN(lref.p, 0x24))(lref.p, p);
+    if (!((bool(__thiscall*)(void*))VFN(lref.p, 8))(lref.p)) return false;
+    if (!((bool(__thiscall*)(void*))VFN(lref.p, 0x10))(lref.p)) return false;
+    ((void(__thiscall*)(void*, bool))VFN(lref.p, 0x3c))(lref.p, (*(u32*)(self + 0x34) & 0x100) == 0x100);
+    ((void(__thiscall*)(void*))VFN(lref.p, 0))(lref.p);
+    *out = lref.p;
     return true;
 }
 }}  // namespace SP::Audio
@@ -513,79 +516,85 @@ bool cEmitterModelSound_s00a3_7dd0::Create(u32 a, u32 b)
 }
 }}  // namespace SP::Audio
 
+// Constructor/destructor view of cEmitterModelSound: same layout, with the bases and members retail
+// constructs and destroys (interface at +0, vtable base at +4, ref-counted base at +8).
+namespace SP { namespace Audio {
+struct __declspec(novtable) EmIface0 { virtual void e0(); };
+struct EmBase4 { virtual void f0(); };
+struct EmRC { virtual ~EmRC() {} int mRefCount; EmRC() : mRefCount(0) {} };
+struct EmRef {
+    void* p;
+    EmRef() : p(0) {}
+    ~EmRef() { if (p) ((void(__thiscall*)(void*))VFN(p, 4))(p); }
+    void Reset()
+    {
+        void* t = p;
+        if (t) {
+            p = 0;
+            ((void(__thiscall*)(void*))VFN(t, 4))(t);
+        }
+    }
+};
+struct EmCurve {
+    void* mBegin;
+    char pad04[0xc];
+    void* mPool;
+    char pad14[0x364 - 0x14];
+    EmCurve();    // 0xa1aa50
+    ~EmCurve() { if (mBegin && mBegin != mPool) opDelete(mBegin); }
+};
+struct EmTuning {
+    float f3c, f40, f44, f48, f4c, f50, f54;
+    EmTuning()
+    {
+        float zero = 0.0f;
+        float one = f_01485720;
+        f3c = zero;
+        f40 = one;
+        f44 = one;
+        f48 = zero;
+        f4c = zero;
+        f50 = zero;
+        f54 = zero;
+    }
+};
+class EmitterModelSoundView : public EmIface0, public EmBase4, public EmRC {
+public:
+    EmRef mRef10;
+    EmRef mRef14;
+    u32 f18, f1c;
+    u8 f20;
+    u32 f24, f28, f2c, f30, mFlags34;
+    EmRef mRef38;
+    EmTuning mTuning;
+    EmCurve mCurve58;
+    EmCurve mCurve3bc;
+    EmCurve mCurve720;
+    EmCurve mCurveA84;
+    EmitterModelSoundView();          // 0xa38c70
+    virtual ~EmitterModelSoundView();  // 0xa38b30
+    virtual void e0();
+    virtual void f0();
+};
+}}  // namespace SP::Audio
+
 // @ 0x00a38b30
 namespace SP { namespace Audio {
-cEmitterModelSound_s00a3_7dd0::~cEmitterModelSound_s00a3_7dd0()
+EmitterModelSoundView::~EmitterModelSoundView()
 {
-    char* self = (char*)this;
-    *(void**)(self + 0) = &g_014533fc;
-    *(void**)(self + 4) = &g_014533b0;
-    *(void**)(self + 8) = &g_014533a8;
-    if (*(u32*)(self + 0x34) & 1) {
-        void* p;
-        if ((p = *(void**)(self + 0x10)) != 0) {
-            *(void**)(self + 0x10) = 0;
-            ((void(__thiscall*)(void*))VFN(p, 4))(p);
-        }
-        if ((p = *(void**)(self + 0x14)) != 0) {
-            *(void**)(self + 0x14) = 0;
-            ((void(__thiscall*)(void*))VFN(p, 4))(p);
-        }
-        *(u32*)(self + 0x34) &= ~1u;
+    if (mFlags34 & 1) {
+        if (mRef10.p != 0) mRef10.Reset();
+        if (mRef14.p != 0) mRef14.Reset();
+        mFlags34 &= ~1u;
     }
-    // curve buffers
-    void* b;
-    b = *(void**)(self + 0xa84);
-    if (b && b != *(void**)(self + 0xa94)) opDelete(b);
-    b = *(void**)(self + 0x720);
-    if (b && b != *(void**)(self + 0x730)) opDelete(b);
-    b = *(void**)(self + 0x3bc);
-    if (b && b != *(void**)(self + 0x3cc)) opDelete(b);
-    b = *(void**)(self + 0x58);
-    if (b && b != *(void**)(self + 0x68)) opDelete(b);
-    void* p;
-    p = *(void**)(self + 0x38);
-    if (p) ((void(__thiscall*)(void*))VFN(p, 4))(p);
-    p = *(void**)(self + 0x14);
-    if (p) ((void(__thiscall*)(void*))VFN(p, 4))(p);
-    p = *(void**)(self + 0x10);
-    if (p) ((void(__thiscall*)(void*))VFN(p, 4))(p);
-    *(void**)(self + 8) = &g_013ef094;
 }
 }}  // namespace SP::Audio
 
+
 // @ 0x00a38c70
 namespace SP { namespace Audio {
-cEmitterModelSound_s00a3_7dd0::cEmitterModelSound_s00a3_7dd0()
+EmitterModelSoundView::EmitterModelSoundView()
+: f18(0), f1c(0), f20(0), f24(0), f28(0), f2c(0), f30(0), mFlags34(0)
 {
-    char* self = (char*)this;
-    *(void**)(self + 4) = &g_01453e60;
-    *(void**)(self + 8) = &g_013ef094;
-    *(u32*)(self + 0xc) = 0;
-    *(void**)(self + 0) = &g_014533fc;
-    *(void**)(self + 4) = &g_014533b0;
-    *(void**)(self + 8) = &g_014533a8;
-    *(u32*)(self + 0x10) = 0;
-    *(u32*)(self + 0x14) = 0;
-    *(u32*)(self + 0x18) = 0;
-    *(u32*)(self + 0x1c) = 0;
-    *(u8*)(self + 0x20) = 0;
-    *(u32*)(self + 0x24) = 0;
-    *(u32*)(self + 0x28) = 0;
-    *(u32*)(self + 0x2c) = 0;
-    *(u32*)(self + 0x30) = 0;
-    *(u32*)(self + 0x34) = 0;
-    *(u32*)(self + 0x38) = 0;
-    *(float*)(self + 0x3c) = 0.0f;
-    *(float*)(self + 0x40) = f_01485720;
-    *(float*)(self + 0x44) = f_01485720;
-    *(float*)(self + 0x48) = 0.0f;
-    *(float*)(self + 0x4c) = 0.0f;
-    *(float*)(self + 0x50) = 0.0f;
-    *(float*)(self + 0x54) = 0.0f;
-    new ((void*)(self + 0x58)) EA::Audio::ResponseCurve_s00a3_7dd0();
-    new ((void*)(self + 0x3bc)) EA::Audio::ResponseCurve_s00a3_7dd0();
-    new ((void*)(self + 0x720)) EA::Audio::ResponseCurve_s00a3_7dd0();
-    new ((void*)(self + 0xa84)) EA::Audio::ResponseCurve_s00a3_7dd0();
 }
 }}  // namespace SP::Audio

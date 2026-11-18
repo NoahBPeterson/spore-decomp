@@ -17,3 +17,5 @@
 ../src/game/UTFSpore_Win32/_at_00870000.cpp  ?ScalarDeleteA@Stream@@QAEPAXI@Z  0087d400  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00870000.cpp  ?ScalarDeleteB@Stream@@QAEPAXI@Z  0087d450  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00870000.cpp  ?FUN_0087d5b0@@YAXPAX@Z  0087d5b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00870000.cpp  ?OpenByNameA@Stream@@QAEDPB_WPAH@Z  0087d1c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00870000.cpp  ?OpenByNameB@Stream@@QAEDPB_WH@Z  0087d360  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

@@ -1555,10 +1555,12 @@ SP::cPropertyList::cPropertyList(char const * name)
 
 : SP::cResourceBase(), mParent(), mModificationCount(0) {}
 
+void ZoneFree_6a1bd0(void* p) throw();  // 0x00f47380 (ZoneObject::operator delete, nothrow)
+
 // @ 0x006a1bd0
 SP::cDirectPropertyList_s006a_11b0::~cDirectPropertyList_s006a_11b0()
 {
-  EA::Allocator::ZoneObject_s006a_11b0::operator delete(mDirectProps); // 0x00f47380
+  ZoneFree_6a1bd0(mDirectProps); // 0x00f47380
 }
 
 // @ 0x006a1c40

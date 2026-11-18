@@ -1947,8 +1947,7 @@ void FUN_0085ade0(Reader* o, uint32_t a2, uint32_t* a3, uint32_t a4)
     State* s = o->state;
     if (s->started == 0)
     {
-        OpenFn open = o->open->open;
-        if (open(o, s->slot[s->index]) == 0)
+        if (o->open->open(o, s->slot[s->index]) == 0)
             return;
         ++s->count;
         s->started = 1;

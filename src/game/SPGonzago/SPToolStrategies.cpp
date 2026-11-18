@@ -107,14 +107,40 @@ public:
     Vec3* GetPosition(Vec3* pOut);       // 0x2c
     Vec3* GetDirection(Vec3* pOut);      // 0x30
 };
+class cSPShipCargoSlot {
+public:
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void v14();
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void v28();
+    virtual void v2c();
+    virtual void v30();
+    virtual void v34();
+    virtual void v38();
+    virtual void v3c();
+    virtual void v40();
+    virtual void v44();
+    virtual void v48();
+    virtual void v4c();
+    virtual void v50();
+    virtual void v54();
+    virtual float GetCargoCapacity();   // 0x58
+    uint8_t mPad04[0x34];
+    float mCargoMax;                    // 0x38
+};
 class cSPSpaceInventory {
 public:
     uint8_t mPad00[0x34];
     cSPSpaceInventoryItem* mpHeldItem;   // 0x34
     uint8_t mPad38[0x4d0];
-    cSPSpaceInventoryItem* mpShipItem;   // 0x508
-    uint8_t mPad50c[0x34];
-    float mCargoMax;                     // 0x540
+    cSPShipCargoSlot mShipSlot;          // 0x508
     uint8_t mPad544[0x2b0];
     float mEnergyCurrent;                // 0x7f4
     float mEnergyMax;                    // 0x7f8
@@ -2540,9 +2566,10 @@ int cSPEnergyRepairToolStrategy::AdjustCost(int nBaseCost)
 int cSPEnergyRepairToolStrategy::AdjustCostPercent(int nBaseCost)
 {
     cSPSpaceInventory* pInventory = GetActiveSpaceGame()->GetPlayerInventory();
-    float fCargo = pInventory->mCargoMax;
+    cSPShipCargoSlot* pSlot = &pInventory->mShipSlot;
+    float fCargo = pSlot->mCargoMax;
     pInventory = GetActiveSpaceGame()->GetPlayerInventory();
-    float fMax = (float)(pInventory->mpShipItem != nullptr ? 1.0f : 0.0f);
+    float fMax = pInventory->mShipSlot.GetCargoCapacity();
     return (int)(((fMax - fCargo) / fMax) * (float)nBaseCost);
 }
 
@@ -2861,13 +2888,19 @@ bool cSPGetOutOfUFOToolStrategy::CanUseToolAtLocation(int nToolId, int nTarget, 
     return cSPToolStrategy::CanUseToolAtLocation(nToolId, nTarget, a3);
 }
 
+// Declaration-only view keeps the retail base activation call out of line.
+struct ToolActivationBase {
+    bool ActivateTool(int nToolId); // 0x010537e0
+};
+
 // @ 0x010540d0
 bool cSPGetOutOfUFOToolStrategy::ActivateTool(int nToolId)
 {
-    if (!cSPToolStrategy::ActivateTool(nToolId))
-        return false;
-    ShowToolEventLog(nToolId, (const void*)0x16e1b14, 3, 0);
-    return true;
+    if (reinterpret_cast<ToolActivationBase*>(this)->ActivateTool(nToolId)) {
+        ShowToolEventLog(nToolId, (const void*)0x16e1b14, 3, 0);
+        return true;
+    }
+    return false;
 }
 
 // @ 0x01054110

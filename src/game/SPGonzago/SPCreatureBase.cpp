@@ -8222,14 +8222,18 @@ void __thiscall CCB_s00c0_ce80::d950(char param_2)
 }
 
 // @ 0x00c0d970
+struct IdentityColorRGB { uint32_t r, g, b; };
+struct IdentityColorTarget {
+    char pad[0x74];
+    IdentityColorRGB color;   // +0x74
+    float alpha;              // +0x80
+};
 void __thiscall CCB_s00c0_ce80::d970(float* param_2)
 {
-    char* p = *(char**)((char*)this + 0xb54);
-    *(uint32_t*)(p + 0x74) = ((uint32_t*)param_2)[0];
-    *(uint32_t*)(p + 0x78) = ((uint32_t*)param_2)[1];
-    *(uint32_t*)(p + 0x7c) = ((uint32_t*)param_2)[2];
-    char* q = *(char**)((char*)this + 0xb54);
-    *(float*)(q + 0x80) = GF(0x1485720);
+    IdentityColorTarget* t = *(IdentityColorTarget**)((char*)this + 0xb54);
+    t->color = *(IdentityColorRGB*)param_2;
+    t = *(IdentityColorTarget**)((char*)this + 0xb54);
+    t->alpha = 1.0f;
 }
 
 // @ 0x00c0d9b0
@@ -8535,17 +8539,16 @@ float __thiscall CCM_s00c0_ddb0::e3a0()
 char __thiscall CCM_s00c0_ddb0::e3d0()
 {
     char* c = *(char**)((char*)this + 0xa94);
-    if (c != 0) {
-        uint32_t local_4 = 0;
-        void* vt = *(void**)c;
-        ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
-            c, &local_4, 0, 0, 0);
-        if (local_4 != 0) {
-            void* lm = FUN_0067cb20();
-            char* r = (char*)((void*(__thiscall*)(void*, uint32_t))(*(void**)((char*)*(void**)lm + 0x40)))(
-                lm, local_4);
-            if (r != 0) return *(char*)(r + 0x1d);
-        }
+    if (c == 0) return 1;
+    uint32_t local_4 = 0;
+    void* vt = *(void**)c;
+    ((void(__thiscall*)(void*, void*, int, int, int))(*(void**)((char*)vt + 0x58)))(
+        c, &local_4, 0, 0, 0);
+    if (local_4 != 0) {
+        void* lm = FUN_0067cb20();
+        char* r = (char*)((void*(__thiscall*)(void*, uint32_t))(*(void**)((char*)*(void**)lm + 0x40)))(
+            lm, local_4);
+        if (r != 0) return *(char*)(r + 0x1d);
     }
     return 1;
 }
@@ -8563,8 +8566,7 @@ char __thiscall CCM_s00c0_ddb0::e420()
     }
     char* r = (char*)((void*(__thiscall*)(void*, uint32_t))(*(void**)((char*)*(void**)lm + 0x40)))(
         lm, local_4);
-    if (r != 0 && *(char*)(r + 0x1c) != 0) return 1;
-    return 0;
+    return (r != 0 && *(char*)(r + 0x1c) != 0) ? 1 : 0;
 }
 
 // @ 0x00c0e480

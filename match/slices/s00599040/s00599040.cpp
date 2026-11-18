@@ -2,6 +2,7 @@
 // helpers (layout class with cSPUIPropertyLayout base, cSPUILayout at +0xc, vptr field at +0xa8).
 // Module flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "types.h"
+#include "sse_helpers.h"
 
 // ---------------------------------------------------------------------------------------------
 // Debug allocator used by the original for every heap object below.
@@ -472,22 +473,40 @@ bool cSpaceInventory::FUN_005995d0()
     return ok;
 }
 
+class InventoryImage {
+public:
+    virtual void AddRef();
+    virtual void Release();
+};
+class InventoryImageRef {
+public:
+    InventoryImage* image;
+    InventoryImageRef(InventoryImage* value) : image(value) {
+        if (image) image->AddRef();
+    }
+    ~InventoryImageRef() { if (image) image->Release(); }
+    InventoryImage** Out() {
+        if (image) {
+            InventoryImage* old = image;
+            image = 0;
+            old->Release();
+        }
+        return &image;
+    }
+};
+
 // @ 0x00599730
 void cSpaceInventory::FUN_00599730(void* window, void* keyPtr)
 {
     ResourceKey* key = (ResourceKey*)keyPtr;
-    void* image = FUN_008061c0(&mLayout, key->instanceID);
-    if (image) {
-        ((void(__thiscall*)(void*))(*(void***)image)[0])(image);
-    } else {
+    InventoryImageRef image((InventoryImage*)FUN_008061c0(&mLayout, key->instanceID));
+    if (!image.image) {
         const Rect* area = (const Rect*)((void*(__thiscall*)(void*))(*(void***)window)[0x34 / 4])(window);
-        int width = (int)(area->right - area->left);
-        int height = (int)(area->bottom - area->top);
-        FUN_00806230(key, &image, 0, width, height);
+        int height = SseRoundToInt(area->bottom - area->top);
+        int width = SseRoundToInt(area->right - area->left);
+        FUN_00806230(key, (void**)image.Out(), 0, width, height);
     }
-    FUN_008068d0(window, image, 0);
-    if (image)
-        ((void(__thiscall*)(void*))(*(void***)image)[1])(image);
+    FUN_008068d0(window, image.image, 0);
 }
 
 // @ 0x005997f0

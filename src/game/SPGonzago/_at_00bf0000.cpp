@@ -2589,8 +2589,7 @@ void CStub::FUN_00bf0a60(RefObj* p)
 // @ 0x00bf0b00
 void CStub::FUN_00bf0b00(RefObj* p)
 {
-    NounMgrStub* nm = (NounMgrStub*)SP_NounManager();
-    int* list = (int*)nm->FUN_00b25ca0();
+    int* list = (int*)((NounMgrStub*)SP_NounManager())->FUN_00b25ca0();
     int* it = (int*)*list;
     int* end = (int*)list[1];
     for (; it != end; ++it)
@@ -2608,8 +2607,7 @@ void CStub::FUN_00bf0b00(RefObj* p)
 // @ 0x00bf0b70
 void CStub::FUN_00bf0b70(RefObj* p)
 {
-    NounMgrStub* nm = (NounMgrStub*)SP_NounManager();
-    int* list = (int*)nm->FUN_00b25ca0();
+    int* list = (int*)((NounMgrStub*)SP_NounManager())->FUN_00b25ca0();
     int* it = (int*)*list;
     int* end = (int*)list[1];
     for (; it != end; ++it)
@@ -5447,8 +5445,7 @@ u8_s00bf_6cb0 AI::FUN_00bf7050()
   for (int i = 0; i < n; ++i) {
     void* obj = *(void**)(PI(this, 0x9c) + i * 4);
     int local_c[3];
-    int uVar2 = ((int(__thiscall*)(void*, void*))(*(void***)obj)[0x5c / 4])(obj, local_c);
-    if (FUN_00bf5720(uVar2)) return 1;
+    if (FUN_00bf5720(((int(__thiscall*)(void*, void*))(*(void***)obj)[0x5c / 4])(obj, local_c))) return 1;
   }
   return 0;
 }
@@ -5488,8 +5485,7 @@ void AI::FUN_00bf71d0()
   mTick4b4 += 1;
   if (mTick4b4 >= 6) {
     mTick4b4 -= 6;
-    float f = FUN_00bf6fa0(1);
-    FUN_00befd80(f * 0.1f, 1);
+    FUN_00befd80(FUN_00bf6fa0(1) * 0.1f, 1);
   }
 }
 
@@ -7086,7 +7082,8 @@ void* cCommunity_s00bf_d9f0::Front()
   View* v = (View*)this;
   int* a = v->a;
   if (a == v->b) return 0;
-  return (void*)*a;
+  eastl::deque<void*>* d = (eastl::deque<void*>*)((char*)this + 0x230);
+  return *d->mItBegin.mpCurrent;
 }
 
 // @ 0x00bfec30

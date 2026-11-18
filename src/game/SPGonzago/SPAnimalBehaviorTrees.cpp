@@ -1298,7 +1298,7 @@ struct cGameNounManager_s00d7_d370 {
 };
 }
 namespace SP {
-template <int N, class B> struct VPad : VPad<N - 1, B> { virtual void vp() {} };
+template <int N, class B> struct VPad : VPad<N - 1, B> { virtual void vpad(VPad<N, B>*) {} };
 }
 namespace SP {
 template <class B> struct VPad<0, B> : B {};
@@ -1315,7 +1315,6 @@ namespace SP {
 struct cCombatantList {
     uint32_t     FindFirstValid();                    // 0x00c0f780
     ICombatant*  GetAt(uint32_t index);               // 0x00c0f8a0
-    float        FUN_00d7dca0();                      // @0xd7dca0
 };
 }
 // ---- items of slice s00d7d370 end
@@ -8381,20 +8380,19 @@ bool __cdecl FUN_00d7c1f0(cSPCreatureBase* pCreature)
 float __cdecl FUN_00d7c270(cSPCreatureBase* pCreature)
 {
     cSPCreatureBase* pAvatar = ((cGameNounManager_s00d7_b550*)NounManager())->GetAvatar();
-    if (pAvatar == 0 || pAvatar->mbB5e)
-        return 0.0f;
+    if (pAvatar != 0 && !pAvatar->mbB5e) {
+        if (pAvatar->mpBehaviorTree->mStimuli.Play(0, 0x1000000) != 0)
+            return 1.0f;
 
-    if (pAvatar->mpBehaviorTree->mStimuli.Play(0, 0x1000000) != 0)
-        return 1.0f;
-
-    if (pCreature->mbFB9)
-    {
-        if (((cAnimRequests*)pCreature->mp1624)->FUN_00bc9a00(0x80))
-            pCreature->mbFB9 = false;
+        if (pCreature->mbFB9)
+        {
+            if (((cAnimRequests*)pCreature->mp1624)->FUN_00bc9a00(0x80))
+                pCreature->mbFB9 = false;
+        }
+        if (!((cAnimRequests*)pCreature->mp1624)->FUN_00bc9a00(0x80) && pCreature->mbFB9 &&
+            pCreature->mpBehaviorTree->mStimuli.Play(0x4000000, 0) != 0)
+            return 1.0f;
     }
-    if (!((cAnimRequests*)pCreature->mp1624)->FUN_00bc9a00(0x80) && pCreature->mbFB9 &&
-        pCreature->mpBehaviorTree->mStimuli.Play(0x4000000, 0) != 0)
-        return 1.0f;
     return 0.0f;
 }
 
@@ -9212,13 +9210,17 @@ float __cdecl FUN_00d7db30(int* pCreature)
 
 // @ 0x00d7dca0
 namespace SP {
-float cCombatantList::FUN_00d7dca0()
+float __cdecl FUN_00d7dca0(cCombatantList* pList)
 {
-    ICombatant* pCombatant = GetAt(FindFirstValid());
-    if (!pCombatant)
-        return 0.0f;
-    if (pCombatant->QueryInterface(0xce9f6639))
-        return 1.0f;
+    ICombatant* pCombatant = pList->GetAt(pList->FindFirstValid());
+    if (pCombatant) {
+        float& r = (float&)pList;
+        if (pCombatant->QueryInterface(0xce9f6639))
+            r = 1.0f;
+        else
+            r = 0.0f;
+        return r;
+    }
     return 0.0f;
 }
 }  // namespace SP

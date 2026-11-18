@@ -11,13 +11,16 @@ extern "C" void __cdecl eastl_dealloc(void*);
 extern "C" void* __cdecl eastl_alloc(uint32_t size, const char* name, int a, int b, const char* file, int line);
 
 // ---------------------------------------------------------------------------
-// @ 0x0074B310  vector<T>::DoInsertValue (element size 0x1c, EH)
+// vector<T>::DoInsertValue (element size 0x1c, EH)
 // ---------------------------------------------------------------------------
 struct T1c {
     uint32_t b[7];                 // 0x1c bytes
     T1c(const T1c&);
     void CopyFrom(const T1c& v);   // @ 0x743b60 retail copy constructor
 };
+
+inline void* __cdecl operator new(unsigned int, T1c* p) { return p; }
+inline void __cdecl operator delete(void*, T1c*) {}
 
 struct Vec1c {
     char pad[0x18];
@@ -28,18 +31,14 @@ struct Vec1c {
     void DoInsert(const T1c* v);
 };
 
+// @ 0x0074B310
 void Vec1c::DoInsert(const T1c* val)
 {
-    T1c* e = end;
-    if ((char*)e + 0x1c == (char*)cap) {
-        Grow(val);
-        volatile int done = 1;     // keep the call non-tail (matches retail call site)
+    if (end + 1 != cap) {
+        T1c* e = end++;
+        new (e) T1c(*val);
     } else {
-        end = (T1c*)((char*)e + 0x1c);
-        if (e) {
-            e->CopyFrom(*val);
-            volatile int done = 1; // keep the call non-tail (matches retail call site)
-        }
+        Grow(val);
     }
 }
 

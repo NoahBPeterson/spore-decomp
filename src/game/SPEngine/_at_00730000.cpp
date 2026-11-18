@@ -108,6 +108,52 @@ void  EAFree(void*);
 void  FUN_00733a50_ext(void*);   // 0x00733A50 (external view of the same callee)
 void  FUN_00733f20(void*);
 int   FUN_0071ddc0(void*, int, int, int, int);
+
+// Real hierarchy of the resource object built by ctor_6e0/ctor_760: an interface with a vptr at +0, an
+// intrusive-count base at +4/+8, then the payload array.  The bases' inline destructors give the EH frame.
+struct ResIface0
+{
+    ResIface0() {}
+    virtual ~ResIface0() {}
+};
+struct ResRefBase
+{
+    ResRefBase() { long* p = (long*)&mRef; _InterlockedExchange(p, 0); }
+    virtual ~ResRefBase() {}
+    long mRef;
+};
+struct IntArrayView
+{
+    int* mBegin;
+    int* mEnd;
+    int* mCap;
+    IntArrayView(int n, const void* fill);        // 0x00733070
+};
+struct PairArrayView
+{
+    int* mBegin;
+    int* mEnd;
+    int* mCap;
+    PairArrayView(int n, const void* fill);       // 0x006a4600
+};
+struct ResObj6e0 : ResIface0, ResRefBase
+{
+    ResObj6e0(const int arg);
+    virtual ~ResObj6e0();
+    PairArrayView mArr;     // +0x0c
+    int mPad[2];
+    int mLast;              // +0x20
+};
+struct ResObj760 : ResIface0, ResRefBase
+{
+    ResObj760(const int arg);
+    virtual ~ResObj760();
+    IntArrayView mArr;      // +0x0c
+    int mPad[2];
+    int mLast;              // +0x20
+};
+inline void* operator new(size_t, void* p) { return p; }
+inline void operator delete(void*, void*) {}
 struct CtorObj
 {
     void* mVT0;
@@ -120,8 +166,6 @@ struct CtorObj
 
     void ctor_c0(int arg);
     void ctor_640(int arg);
-    void ctor_6e0(int arg);
-    void ctor_760(int arg);
     EltArray_s0073_3400* MakeChartRef(EltArray_s0073_3400* tmp);   // 0x007217C0
     EltArray_s0073_3400* Make16(EltArray_s0073_3400* tmp);         // 0x00732FB0
     EltArray_s0073_3400* Make4(EltArray_s0073_3400* tmp);          // 0x00732FF0
@@ -718,34 +762,24 @@ void CtorObj::ctor_640(int arg)
 }
 
 // @ 0x007336e0
-void CtorObj::ctor_6e0(int arg)
+ResObj6e0::ResObj6e0(const int arg)
+    : mArr(arg, &arg)
 {
-    mVT0 = g_vtblEditor;
-    mVT1 = g_vtblCreatureAbility;
-    mRef = 0;
-    mVT0 = g_vtblA;
-    mVT1 = g_vtblB;
-    FUN_006a4600(arg, &arg);
     mLast = 0;
 }
 
 // @ 0x00733760
-void CtorObj::ctor_760(int arg)
+ResObj760::ResObj760(const int arg)
+    : mArr(arg, &arg)
 {
-    mVT0 = g_vtblEditor;
-    mVT1 = g_vtblCreatureAbility;
-    mRef = 0;
-    mVT0 = g_vtblA;
-    mVT1 = g_vtblB;
-    FUN_00733070(arg, &arg);
-    int* p = (int*)mArr;
-    for (int n = arg; n != 0; --n)
+    int* p = mArr.mBegin;
+    for (unsigned n = arg; n != 0; --n)
     {
         if (p)
             *p = 0;
         p++;
     }
-    mArrEnd = mArr + arg * 4;
+    mArr.mEnd = mArr.mBegin + arg;
     mLast = 0;
 }
 
@@ -846,7 +880,7 @@ void FUN_00733f20(void* pm)
             uint32_t count = (uint32_t)e->mSrc.mNumElts;
             CtorObj* res = (CtorObj*)EAAlloc(0x24, "Graphics", 0, 0, 0, 0);
             if (res)
-                res->ctor_760((int)count);
+                new (res) ResObj760((int)count);
             else
                 res = 0;
             if (res)
@@ -905,7 +939,7 @@ void FUN_00733f20(void* pm)
             uint32_t count = (uint32_t)e->mSrc.mNumElts;
             CtorObj* res = (CtorObj*)EAAlloc(0x24, "Graphics", 0, 0, 0, 0);
             if (res)
-                res->ctor_760((int)count);
+                new (res) ResObj760((int)count);
             else
                 res = 0;
             if (res)

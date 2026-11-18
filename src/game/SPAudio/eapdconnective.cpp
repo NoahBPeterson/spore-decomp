@@ -2723,9 +2723,14 @@ char* change_new(float f)
 namespace EA { namespace Audio { namespace Eapd {
 void change_float(char* x, float f)
 {
-    if (999 < gOutletCount + 1)
-        return;
-    outlet_cnt((t_outlet*)objP(x, 0xc), objF(x, 0x28));
+    float v = objF(x, 0x28);
+    t_outletlist* list = (t_outletlist*)objP(x, 0xc);
+    gOutletCount++;
+    if (gOutletCount < 1000) {
+        for (t_outlet_s00a5_c460* o = list->first; o != 0; o = o->next)
+            outlet_float(o->target, v);
+    }
+    gOutletCount--;
 }
 }}}  // namespace EA::Audio::Eapd
 

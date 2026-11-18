@@ -477,19 +477,24 @@ struct EffectObject {
   bool Handler(int msg, int* obj);
 };
 
+// Destruction view of EffectObject (0x007EDC90): a base with two vtables (+0x00, +0x04) restored last, the string at
+// +0x30 (~ 0x6b5240), and the ref at +0x44 released in the body.
+struct EOI0_7edc90 { virtual void i0(); };
+struct EOI1_7edc90 { virtual void i1(); };
+struct EOBase_7edc90 : EOI0_7edc90, EOI1_7edc90 { ~EOBase_7edc90() {} };
+struct EOString_7edc90 { char d[0x14]; ~EOString_7edc90(); };   // 0x6b5240
+struct EORef_7edc90 { virtual void v0(); virtual void Release(); };
+struct EffectObjectView_7edc90 : EOBase_7edc90 {
+  char pad08[0x30 - 8];
+  EOString_7edc90 cString;   // +0x30
+  EORef_7edc90* m44;         // +0x44
+  ~EffectObjectView_7edc90();
+};
+
 // @ 0x007EDC90  destructor
-void EffectObject::Destroy() {
-  void** self = (void**)this;
-  *(void**)self = &gEffectVtable;
-  *(void**)((char*)self + 4) = &gEffectModifierVtable;
-  if (self[0x11]) {
-    typedef void(__thiscall * F0)(void*);
-    ((F0)VSLOT(self[0x11], 4))(self[0x11]);
-  }
-  typedef void(__thiscall * FStr)(void*);
-  ((FStr)&StringDtor)((char*)self + 0x30);
-  *(void**)self = &gEffectFinalVtable;
-  *(void**)((char*)self + 4) = &gEffectModifierFinalVtable;
+EffectObjectView_7edc90::~EffectObjectView_7edc90() {
+  if (m44)
+    m44->Release();
 }
 
 // @ 0x007EDD10  activate
