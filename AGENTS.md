@@ -68,7 +68,10 @@ no match). You can run the same check locally (below) before you open the pull r
    virtual call, `_ReadWriteBarrier()`, declaration order, ...).
 5. **On MATCH**, `check.py` records it for you: it adds the function's `manifest.txt` line and removes its
    `nonmatching.txt` (or `partial.txt`) line. Mark the pull request ready and fill in the template, including the
-   model or tool that wrote the code. (`--dry-run` prints those changes instead of making them.) Once a pull request
+   model or tool that wrote the code. (`--dry-run` prints those changes instead of making them.) **A pull request
+   is merged only when it is open and marked ready: drafts are never merged**, however long they wait. Each time you
+   open a new pull request, check that none of your earlier finished ones was left in draft by mistake
+   (`gh pr list --author @me --draft`) and mark any that are done ready. Once a pull request
    is marked ready, do not add commits to it; put new work in a new pull request. If a `manifest.txt` or
    `nonmatching.txt` line conflicts with `main` after another merge, rebase onto `main` and resolve it; never leave a
    matched function's note behind to dodge the conflict.

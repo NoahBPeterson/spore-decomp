@@ -1,1 +1,0 @@
-slices/s00bc6570/s00bc6570.cpp  ?Copy_bc6570@@YAPAUElem_bc6570@@PBU1@0PAU1@@Z  00bc6570  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

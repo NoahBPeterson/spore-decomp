@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "EA/IO/FileStream.h"
 #include <windows.h>
+#include <stdio.h>
 #include <string.h>
 #include <wchar.h>
 #include <direct.h>
@@ -259,13 +260,11 @@ public:
 
 // ---- items of slice s0093b9e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* MemCpyThunk(void* dst, const void* src, size_t n);          // 0x011e0744
-extern "C" int   fputs(const char*, void*);
 extern "C" unsigned __cdecl strlen(const char*);
 extern "C" unsigned __cdecl wcslen(const wchar_t*);
 extern void* g_vtbl_c430;
 #pragma intrinsic(strlen)
 #pragma intrinsic(wcslen)
-extern "C" void* __iob_func_s0093_b9e0();
 namespace EA {
 namespace IO {
 class SharedPointer_s0093_b9e0 { public:
@@ -1567,7 +1566,7 @@ namespace EA {
 void FUN_0093c6f0(const char* s)
 {
     if (s != 0)
-        fputs(s, (char*)__iob_func_s0093_b9e0() + 0x20);
+        fputs(s, stdout);
 }
 }  // namespace EA
 
