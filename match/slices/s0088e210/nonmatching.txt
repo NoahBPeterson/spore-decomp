@@ -51,6 +51,6 @@
 
 0088ef30 156 eastl::fixed_hash_map<string16,Face,8,9,1,...>::fixed_hash_map(const fixed_hash_map&) (mFaceMap copy ctor): complete; cause (A) pooled bucket/node layout. difftest verdict UNSUPPORTED (our symbol not found: template-class-ctor name does not resolve).
 
-0088f000 1 eastl::hashtable<string16,pair<const string16,Face>,...>::DoInsertValue(...): complete; only cause (A) -- 1 differing byte, the hash bucket offset (retail [ebx+0x4cc] vs ours [ebx+0x4f8]). difftest verdict UNSUPPORTED (6 unresolved refs: prime_rehash_policy::GetRehashRequired, ??_V, ??_U, FaceData::AddRef, FaceData::Release).
+0088f000 1 eastl::hashtable<string16,pair<const string16,Face>,...>::DoInsertValue(...): complete; only cause (A) -- 1 differing byte, the hash bucket offset (retail [ebx+0x4cc] vs ours [ebx+0x4f8]). difftest verdict UNSUPPORTED (6 unresolved refs: prime_rehash_policy::GetRehashRequired, ??_V, ??_U, FaceData::AddRef, FaceData::Release). [claimed]
 
 0088f0f0 95 EA::Text::FontServer::FontServer(EA::Allocator::ICoreAllocator*): complete; cause (A)/(B) -- member init order/offsets (retail 149 B, ours 176 B). difftest verdict UNSUPPORTED (5 unresolved refs: prime_rehash_policy::GetPrevBucketCountOnly/GetBucketCount/GetNextBucketCount, ??_V, eastl::gpEmptyBucketArray).
