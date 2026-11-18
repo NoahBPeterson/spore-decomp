@@ -37,5 +37,6 @@ void* ff_realloc(void* p, unsigned n)
 {
     if (g_ff_realloc == 0)
         __debugbreak();
+        _ReadWriteBarrier();
     return g_ff_realloc(p, n);
 }

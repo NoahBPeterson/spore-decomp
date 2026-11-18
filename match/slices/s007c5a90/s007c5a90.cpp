@@ -1,3 +1,4 @@
+#include <stdio.h>
 // cCameraManager methods and related helpers, 0x007c5a90-0x007c6700.
 // Reconstructed from retail disassembly + Ghidra decompile; layout from the
 // 2008 dev PDB class SP::cCameraManager.
@@ -46,10 +47,6 @@ struct cCameraManager {
     void* Controller(int id);                    // 0x7c6700
 };
 
-struct FILE;
-extern "C" FILE* fopen(const char*, const char*);
-extern "C" int   fclose(FILE*);
-extern "C" unsigned int fwrite(const void*, unsigned int, unsigned int, FILE*);
 
 extern "C" void  SPKeyFromName(void* out, void* name, int, int);   // 0x0068d840 (equiv t2)
 extern "C" int   FUN_007c5820(void);

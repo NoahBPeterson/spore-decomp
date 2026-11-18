@@ -1,4 +1,8 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?MakeHeapGt@@YAXPAUFKP@@0I@Z  00748010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?MakeHeapLt@@YAXPAUFKP@@0I@Z  007480c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?SortHeapGt@@YAXPAUFKP@@0I@Z  00748060  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?SortHeapLt@@YAXPAUFKP@@0I@Z  00748110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Adjustor@cModelWorld56@@QAEHH@Z  00743940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?SetCurveSegment@cModelWorld56@@QAEXPAH0H@Z  007439d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?GetCurveSegment@cModelWorld56@@QAEXPAH0H@Z  00743a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

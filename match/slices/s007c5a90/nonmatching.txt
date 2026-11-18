@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 007c5a90  -  WriteScan; takes data base in a register (EBX), not reproduced
 007c5b90  757  WriteImage; large write path, helper/register layout differs
-007c5f00  34  WriteImageFile; fopen/fclose wrapper differs
 007c5f50  305  IsVistaKB940105Required; Windows version-check path differs
 007c6200  -  UpdateFromControllerProperties; vtable property fetch differs (now member, ECX this; equiv UNSUPPORTED: 0/1200 valid inputs)
 007c6370  17  scalar deleting destructor; operator_delete call shape differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 esp, ret#1 eax]

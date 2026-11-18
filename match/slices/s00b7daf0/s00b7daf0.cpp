@@ -45,7 +45,7 @@ extern uint32_t g_156b588;    // 0x156b588
 extern void* g_16c9e5c;       // 0x16c9e5c
 
 struct S15ddc84 { void __thiscall FUN_007a4420(int,int,int,int); };
-extern S15ddc84 g_15ddc84;    // 0x15ddc84
+extern S15ddc84* g_15ddc84;   // 0x15ddc84 (a pointer to the object)
 extern uint8_t DAT_014653b9[]; // 0x14653b9
 extern uint8_t DAT_014653ba[]; // 0x14653ba
 
@@ -269,7 +269,7 @@ void __thiscall Misc6c0::FUN_00b7e6c0() {
     mpObj = 0;
     (*(void(__thiscall*)(void*))((*(void***)p)[2]))(p);
   }
-  g_15ddc84.FUN_007a4420(0, 3, 4, 0x400);
+  g_15ddc84->FUN_007a4420(0, 3, 4, 0x400);
 }
 
 // @ 0x00b7e4b0

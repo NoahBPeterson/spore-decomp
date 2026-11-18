@@ -2,7 +2,6 @@
 00663b80 48 category comparator - complete, only branch encoding differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#1 eax]
 00663e50 11 Shutdown; AttachProc receiver/arg register (eax vs edx) and vtable-load order differ
 00664480 60 Expand; ternary null-check/merge schedule differs
-006644e0 51 visibility toggle; float join goes x87 instead of the original's shared xmm0 store
 00664550 35 predicate; return-value materialisation (setcc vs shared xor eax,eax / mov eax,1)
 00664610 30 element-at; original loads the index into edx first, cl hoists the header loads
 00664640 56 find-by-0x17c; cl assigns esi=begin/edx=index, original esi=index/ecx=begin

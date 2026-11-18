@@ -139,6 +139,7 @@ UI::TimelineSporepediaCardData* __fastcall UI_TimelineSporepediaCardData_ctor(UI
     w[0x00 / 4] = (void*)0x01489090;
     w[0x10 / 4] = (void*)0x0148907c;
     w[0x14 / 4] = (void*)0x0148906c;
+    _ReadWriteBarrier();
 
     *(int*)(b + 0x80) = -1;
     *(int*)(b + 0x84) = 0x7fffffff;

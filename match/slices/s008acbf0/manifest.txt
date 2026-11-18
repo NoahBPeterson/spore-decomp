@@ -14,3 +14,4 @@ slices/s008acbf0/s008acbf0.cpp  ?fnt_DEPTH@@YAXPAUTTExecCtx@@@Z  008ad380  /O2 /
 slices/s008acbf0/s008acbf0.cpp  ?fnt_CINDEX@@YAXPAUTTExecCtx@@@Z  008ad3a0  /O2 /MD /Gy /EHsc /TP
 slices/s008acbf0/s008acbf0.cpp  ?fnt_MINDEX@@YAXPAUTTExecCtx@@@Z  008ad3c0  /O2 /MD /Gy /EHsc /TP
 slices/s008acbf0/s008acbf0.cpp  ?fnt_ROLL@@YAXPAUTTExecCtx@@@Z  008ad400  /O2 /MD /Gy /EHsc /TP
+slices/s008acbf0/s008acbf0.cpp  ?fnt_MIAP@@YAXPAUTTExecCtx@@@Z  008ad4b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

@@ -818,7 +818,7 @@ void Symbol_(void* x, uint32_t a, uint32_t b)
 
 // @ 0x00a582f0
 namespace EA { namespace Audio { namespace Eapd {
-bool CollReadClassNew()
+NOINLINE bool CollReadClassNew()
 {
     t_symbol s;
     t_symbol* p = gensym(&s, "collread");
@@ -1400,7 +1400,7 @@ void coll_free(t_coll * x)
 }  // namespace EA::Audio::Eapd
 
 // @ 0x00a59690
-bool x_coll_setup()
+NOINLINE bool x_coll_setup()
 {
     t_symbol_s00a5_9690 sym;
     bool ok = true;
@@ -1414,10 +1414,14 @@ bool x_coll_setup()
 }
 
 // @ 0x00a598d0
-uint8_t FUN_00a598d0()
+// Registers the coll, collread and collwrite classes (same shape as x_gui_setup, 0x00a4c610).
+namespace EA { namespace Audio { namespace Eapd {
+bool x_coll_all_setup()
 {
-    uint8_t a = (uint8_t)x_coll_setup();
-    uint8_t b = (uint8_t)((uint8_t(*)(void))0x00a582f0)();
-    uint8_t c = (uint8_t)((uint8_t(*)(void))0x00a58ec0)();
-    return (uint8_t)(a & 1 & b & c);
+    bool ok = true;
+    ok &= x_coll_setup();
+    ok &= CollReadClassNew();
+    ok &= FUN_00a58ec0();
+    return ok;
 }
+}}}  // namespace EA::Audio::Eapd
