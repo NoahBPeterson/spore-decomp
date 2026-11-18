@@ -880,7 +880,7 @@ bool __thiscall cHashTableD::Contains(U32 nKey)
     return nCount != 0;
 }
 
-// @ 0x00c77300
+// Legacy copy; byte-exact definition is in src/game/SPGonzago/SPPlayer.cpp.
 void __thiscall cHashTableD::FUN_00c77300(U32 nKey)
 {
     mSub.FUN_006b6740(&nKey);

@@ -69,7 +69,7 @@ void* __thiscall AnyObj::Call4(unsigned size)
 void __thiscall AnyObj::CallC(int a)
 {
   if (p4 != 0)
-    (*(void(__thiscall**)(int, int))(*(int*)p4 + 0xc))(a, 0);
+    (*(void(__thiscall**)(void*, int, int))(*(int*)p4 + 0xc))(p4, a, 0);
 }
 
 // @ 0x00a52bb0

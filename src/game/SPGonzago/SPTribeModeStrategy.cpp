@@ -4264,7 +4264,7 @@ void TM::StartTribe()
     ((CAch*)AchievementsController())->F(0xd082675a, 4, 1);
 }
 
-// @ 0x00cd43c0
+// Legacy copy; byte-exact definition is in match/slices/s00cd3480/s00cd3480.cpp.
 void TM::F_cd43c0(void* a)
 {
     C9630* o = ((C9630*(__thiscall*)(void*, void*))(*(void***)this)[0x6c / 4])(this, a);

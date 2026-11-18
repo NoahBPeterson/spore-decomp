@@ -1,6 +1,5 @@
 00919620 122 complete; loop is inverted (condition duplicated) in ours, original tests at the top; frame is 4 bytes off
 00919750 398 complete; switch/loop register allocation and spill layout differ
-00919a60 8 complete; ctor: original computes buf+0x100 after the first store (lea order), ours schedules it earlier; difftest PASS
 00919a80 84 complete; swap: this/other register roles swapped (original loads the arg into esi first); difftest PASS (900 inputs; 400 gave WEAK on valid count)
 00919b20 6 complete; same lea scheduling as the FixedString ctor (two inlined fixed-string inits); difftest PASS
 00919ca0 812 complete; ctx pointer kept in ebp in ours (original keeps it in memory/ecx); vcall register naming differs; difftest WEAK (11.7% coverage: faked Read must return the exact byte count; no mismatch); fixed: string appends now call AppendRet 0x919c10 like the original instead of append 0x924c60

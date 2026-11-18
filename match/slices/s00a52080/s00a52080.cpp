@@ -454,7 +454,7 @@ void __thiscall AnyObj::Call4(int a)
   fn(a, p8);
 }
 
-// @ 0x00a52b90
+// Legacy copy; byte-exact definition is in src/game/SPAudio/eapdgroup.cpp.
 void __thiscall AnyObj::CallC(int a)
 {
   if (p4 != 0)
