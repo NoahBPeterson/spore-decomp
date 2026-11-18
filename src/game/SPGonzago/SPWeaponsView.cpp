@@ -21,6 +21,9 @@
 #include <wchar.h>
 #include <string.h>
 
+extern "C" void _ReadWriteBarrier();
+#pragma intrinsic(_ReadWriteBarrier)
+
 // ---- items of slice s00cc22c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef int intptr_t;
 #define nullptr 0
@@ -965,6 +968,7 @@ void* cSpaceDefenseMissileView_s00cc_3220::MakeView(cSpatialObject* p)
 void* cSpatialObjectView_s00cc_3220::FUN_00cc36d0(u8 flag)
 {
     mpVtbl = (void*)0x14767d0;
+    _ReadWriteBarrier();
     if (mpObject) {
         void* r = VT_B8_1(mpObject, 0x24630ce);
         if (r) {

@@ -6,6 +6,24 @@
 // complete here but cannot match from one C++ function; see nonmatching.txt.
 #include "types.h"
 
+extern "C" long _InterlockedExchangeAdd(volatile long*, long);
+extern "C" long _InterlockedDecrement(volatile long*);
+extern "C" long _InterlockedIncrement(volatile long*);
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedDecrement, _InterlockedIncrement)
+struct R45ScatterResource {
+    void* image;
+    unsigned flags;
+    volatile long refCount;
+    __forceinline int Release() {
+        _InterlockedDecrement(&refCount);
+        if (_InterlockedExchangeAdd(&refCount, 0) < 1) {
+            _InterlockedIncrement(&refCount);
+            return 1;
+        }
+        return _InterlockedExchangeAdd(&refCount, 0);
+    }
+};
+
 extern "C" __declspec(dllimport) int __stdcall TlsFree(unsigned long);
 extern void __cdecl cdecl_free(void*);          // operator delete // 0x00f47380
 extern void __cdecl cdecl_shutdown_shared();    // EA::Allocator::ShutdownSharedAllocator
@@ -116,6 +134,9 @@ void f_013c31a0() {
     h->DoFreeNodes(h->mBegin, (void*)h->mEnd);
     DBGFREE(h->mBegin);
 }
+
+// The linked retail extent continues into this separate empty function.
+void r45_04_link_pad_ret() {}
 
 // @ 0x013C33A0
 void f_013c33a0() {
@@ -323,29 +344,17 @@ void f_013c9950() {
 
 // @ 0x013C9C30
 void f_013c9c30() {
-    if (g_16c9f54) {
-        int* p = (int*)(g_16c9f54 + 8);
-        int n = (*(volatile int*)p += -1);
-        if (n < 1) *(volatile int*)p += 1;
-    }
+    if (g_16c9f54) ((R45ScatterResource*)g_16c9f54)->Release();
 }
 
 // @ 0x013C9C70
 void f_013c9c70() {
-    if (g_16c9f58) {
-        int* p = (int*)(g_16c9f58 + 8);
-        int n = (*(volatile int*)p += -1);
-        if (n < 1) *(volatile int*)p += 1;
-    }
+    if (g_16c9f58) ((R45ScatterResource*)g_16c9f58)->Release();
 }
 
 // @ 0x013C9CB0
 void f_013c9cb0() {
-    if (g_16c9f5c) {
-        int* p = (int*)(g_16c9f5c + 8);
-        int n = (*(volatile int*)p += -1);
-        if (n < 1) *(volatile int*)p += 1;
-    }
+    if (g_16c9f5c) ((R45ScatterResource*)g_16c9f5c)->Release();
 }
 
 // @ 0x013C9DD0

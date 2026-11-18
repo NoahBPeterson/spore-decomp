@@ -176,6 +176,23 @@ void init_164b2d0()
 // ---------------------------------------------------------------------------
 extern "C" int atexit(void (__cdecl*)());
 
+#include <stddef.h>
+// Descriptive view of the 20-byte vector storage at 0x01651994.
+struct InitVectorStorage {
+    void* begin;
+    void* end;
+    void* capacity;
+    void* allocator;
+    int state;
+};
+typedef char InitVectorStorageSize[(sizeof(InitVectorStorage) == 20) ? 1 : -1];
+typedef char InitVectorStorageBeginOffset[(offsetof(InitVectorStorage, begin) == 0) ? 1 : -1];
+typedef char InitVectorStorageEndOffset[(offsetof(InitVectorStorage, end) == 4) ? 1 : -1];
+typedef char InitVectorStorageCapacityOffset[(offsetof(InitVectorStorage, capacity) == 8) ? 1 : -1];
+typedef char InitVectorStorageStateOffset[(offsetof(InitVectorStorage, state) == 16) ? 1 : -1];
+typedef char InitVectorStorageAllocatorOffset[(offsetof(InitVectorStorage, allocator) == 12) ? 1 : -1];
+extern InitVectorStorage g_1651994;
+
 struct C0 { void m(); };
 struct TextStyle { void ctor(); };
 struct SetMode { void SetMode2(int); };
@@ -389,11 +406,11 @@ void init_16519ac()
 void init_1651994()
 {
     void* a = GetDefaultAllocator0();
-    *(int*)0x1651994 = 0;
-    *(int*)0x1651998 = 0;
-    *(int*)0x165199c = 0;
-    *(void**)0x16519a0 = a;
-    *(int*)0x16519a4 = 0;
+    g_1651994.begin = 0;
+    g_1651994.end = 0;
+    g_1651994.capacity = 0;
+    g_1651994.allocator = a;
+    g_1651994.state = 0;
     atexit(&FUN_013c0ba0);
 }
 

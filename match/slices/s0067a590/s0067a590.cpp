@@ -18,7 +18,9 @@ extern "C" __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsig
 // ===========================================================================
 uint32_t __cdecl PackColor_67ac80(uint32_t a, uint32_t r, uint32_t g, uint32_t b)
 {
-    return (a << 24) | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
+    // Preserve the native dword reads of the color parameters.
+    return (a << 24) | ((*(volatile uint32_t*)&r & 0xff) << 16)
+        | ((*(volatile uint32_t*)&g & 0xff) << 8) | (*(volatile uint32_t*)&b & 0xff);
 }
 
 // ===========================================================================

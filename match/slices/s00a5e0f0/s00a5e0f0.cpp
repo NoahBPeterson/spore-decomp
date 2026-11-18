@@ -87,14 +87,20 @@ void  clock_unset(void* clock);                                          // 0xa4
 void* getbytes(int n, const char* tag);                                  // 0xa49610
 void  freebytes(void* p, int n);                                         // 0xa49650
 
-// EA system random stream (EA::Random::RandomLinearCongruential, 0x30 bytes).
+// RNG seed word; see src/game/include/EA/Random/RandomLinearCongruential.h.
 struct RandomLinearCongruential {
-    char pad[0x2c];
+    unsigned mnSeed;
     unsigned RandomUint32Uniform();            // 0x9360b0
     unsigned RandomUint32UniformN(unsigned n); // 0xa68fb0
     void     SetSeed(unsigned seed);           // 0x936090
     float    NextFloat();                      // 0xa69020 (thiscall)
 };
+struct RandomSeedReceiver {
+    unsigned prefix[11];
+    RandomLinearCongruential rng;
+};
+typedef char RandomSeedReceiverSizeCheck[sizeof(RandomSeedReceiver) == 0x30 ? 1 : -1];
+typedef char RandomSeedWordSizeCheck[sizeof(RandomLinearCongruential) == 4 ? 1 : -1];
 extern RandomLinearCongruential sSystemRandom;   // 0x16756fc
 
 // EA::Thread
@@ -473,9 +479,9 @@ void random_seed(unsigned seed)
 }
 
 // @ 0x00a5ecc0
-void random_seed_method(char* x, t_symbol s, int argc, t_atom* argv)
+void random_seed_method(char* x, unsigned seed)
 {
-    (*(RandomLinearCongruential*)(x + 0x2c)).SetSeed(*(unsigned*)((char*)argv + 4));
+    ((RandomSeedReceiver*)x)->rng.SetSeed(seed);
 }
 
 // @ 0x00a5ece0

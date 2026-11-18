@@ -123,6 +123,7 @@ extern int g_1668e9c;
 extern int g_1668ea4;
 extern int g_166b0f0;
 extern unsigned char g_166aa7c;
+extern HMODULE g_166aa80;
 extern int g_154ed20, g_154ed24;
 extern char g_154df80[];
 extern void* g_154df84;
@@ -345,6 +346,13 @@ void f_013c0fc0() {
     if (g_166aa7c) WSACleanup();
 }
 
+void f_013c0fd0() {
+    if (g_166aa80) {
+        FreeLibrary(g_166aa80);
+        g_166aa80 = 0;
+    }
+}
+
 // @ 0x013C1060
 void f_013c1060() {
     if (cdecl_f935ad0((void*)g_166b0f0)) {
@@ -416,6 +424,9 @@ void terra07_link_pad_ret() {}
 void f_013c1ea0() {
     ((Method1*)g_1567e2c)->M((void*)g_1567e38);
 }
+
+// The retail extent includes the separate empty function at 0x013c1ec0.
+void r45_09_link_pad_ret() {}
 
 // @ 0x013C1F50
 void f_013c1f50() {

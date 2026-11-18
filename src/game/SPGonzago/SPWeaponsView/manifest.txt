@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPWeaponsView.cpp  ?FUN_00cc36d0@cSpatialObjectView_s00cc_3220@@QAEPAXE@Z  00cc36d0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include

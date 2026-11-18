@@ -266,20 +266,40 @@ i32 __fastcall FUN_011e6c70(void* self, int)
     return *(i32*)(p + 0x64) - *(i32*)(p + 0x5c);
 }
 
+namespace rw { namespace audio { namespace core {
+struct RequestView_011e6c80 {
+    u32 id;
+    i32 state;
+    char rest[0x130];
+};
+struct StreamImplView_011e6c80 {
+    char rest[0x30];
+    RequestView_011e6c80* requests;
+    i32 requestCount;
+};
+struct Stream_s011e6870 {
+    char rest[4];
+    StreamImplView_011e6c80* impl;
+    int FUN_011e6c80(int id);
+};
+}}}
+
 // ===========================================================================
 // 0x011e6c80 -- lookup request by id (returns +4 field or 0)
 // ===========================================================================
 // @ 0x011e6c80
-void* __fastcall FUN_011e6c80(void* self, int, u32 id)
+int rw::audio::core::Stream_s011e6870::FUN_011e6c80(int id)
 {
-    char* impl = *(char**)((char*)self + 4);
+    StreamImplView_011e6c80* impl = this->impl;
     u32 idx = id & 0xff;
-    if ((i32)idx >= (i32)*(u32*)(impl + 0x34)) return 0;
-    char* base = *(char**)(impl + 0x30);
-    char* rec = base + idx * 0x138;
-    if (id != *(u32*)rec) return 0;
-    void* v = *(void**)(rec + 4);
-    return v ? v : 0;
+    if ((i32)idx >= impl->requestCount) goto fail;
+    RequestView_011e6c80* rec = impl->requests + idx;
+    if ((u32)id != rec->id) goto fail;
+    int state;
+    state = rec->state;
+    if (state) return state;
+fail:
+    return 0;
 }
 
 // ===========================================================================
