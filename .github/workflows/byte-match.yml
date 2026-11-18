@@ -94,6 +94,9 @@ jobs:
           pairs = sorted({("%08x" % r[2], os.path.relpath(m)) for m in gate.all_manifests() for r in run_all.read_rows([m], "")})
           with open(sys.argv[1], "w") as f:   # every (va, manifest) row on the base branch, for the re-match report below
               f.write("".join("%s %s\n" % p for p in pairs))
+          eq = sorted({("%08x" % r[2], os.path.relpath(m)) for m in gate.all_equivalent() for r in run_all.read_rows([m], "")})
+          with open(os.path.join(os.path.dirname(sys.argv[1]), "equiv_base.txt"), "w") as f:   # proven-equivalent rows
+              f.write("".join("%s %s\n" % p for p in eq))
           print("\n".join(sorted({v for v, _m in pairs})))
           EOF
           wc -l < "$RUNNER_TEMP/keep.txt"
@@ -196,19 +199,41 @@ jobs:
                   vs = by[m]
                   print("- already matched by `%s`: %s%s" % (m, ", ".join("`0x%s`" % v for v in vs[:20]),
                                                              " and %d more" % (len(vs) - 20) if len(vs) > 20 else ""))
-          eq_changed = any(os.path.basename(p) == "equivalent.txt" or "/equivalent/" in p for p in changed)
-          neweq = sorted({r["va"] for r in rows if r["tag"] == "EQUIV"}) if eq_changed else []
+          # Proven-equivalent rows. A row counts as new only when this pull request adds it, it builds to its proved
+          # bytes, and its function was neither byte-exact nor proven equivalent on main. Rows it adds for such
+          # functions are listed as re-proofs. Rows it adds or whose proof file it changes need a maintainer's
+          # re-check (next step); rows it only removes do not.
+          eq_base = collections.defaultdict(list)
+          ebf = os.path.join(os.path.dirname(sys.argv[4]), "equiv_base.txt")
+          for l in (open(ebf) if os.path.exists(ebf) else []):
+              v, m = l.split(None, 1)
+              eq_base[v].append(m.strip())
+          eq_head = {("%08x" % r[2], os.path.relpath(m)) for m in gate.all_equivalent() for r in run_all.read_rows([m], "")}
+          eq_added = {(v, m) for v, m in eq_head if m not in eq_base[v]}
+          proved = {r["va"] for r in rows if r["tag"] == "EQUIV"}
+          neweq = sorted({v for v, m in eq_added if v in proved and v not in keep and not eq_base[v]})
+          reproof = sorted({v for v, m in eq_added if v in keep or eq_base[v]})
+          heads = {v for v, m in eq_head}
+          proof_changed = {os.path.basename(p)[:-5].lower() for p in changed if "/equivalent/" in p and p.endswith(".json")}
+          touched = sorted({v for v, m in eq_added} | (proof_changed & heads))
+          with open(os.path.join(os.path.dirname(sys.argv[4]), "equiv_touched.txt"), "w") as f:
+              f.write("".join(v + "\n" for v in touched))
+          if reproof:
+              print("Proven-equivalent rows for functions already byte-exact or already proven on main, so not new (%d): %s%s"
+                    % (len(reproof), ", ".join("`0x%s`" % v for v in reproof[:20]),
+                       " and %d more" % (len(reproof) - 20) if len(reproof) > 20 else ""))
           if new:
               print("New byte-exact functions: " + ", ".join("`0x%s`" % v for v in new))
           if neweq:
-              print("Proven-equivalent rows (re-verified by a maintainer before merging): " + ", ".join("`0x%s`" % v for v in neweq))
+              print("Newly proven-equivalent functions (re-verified by a maintainer before merging): " + ", ".join("`0x%s`" % v for v in neweq))
           if new or neweq:
               pass
           elif changed and all(os.path.basename(p) in ("nonmatching.txt", "partial.txt") for p in changed):
               print("Notes only (nonmatching.txt / partial.txt): no new match needed.")
           else:
-              print("This pull request changes code but adds no new byte-exact function (no manifest row passes here")
-              print("that was not already byte-exact on main). Code changes are merged only when they add a match.")
+              print("This pull request changes code but adds no new byte-exact or newly proven-equivalent function")
+              print("(nothing passes here that was not already byte-exact or proven on main). Code changes are merged")
+              print("only when they add one.")
               if rematch:
                   print("Every function listed above already matches through the file named beside it (match/synth/*")
                   print("and match/clones.txt are generated matches and count): pick functions no manifest lists yet.")
@@ -228,7 +253,12 @@ jobs:
         env:
           VERIFIED: ${{ contains(github.event.pull_request.labels.*.name, 'equiv-verified') || github.event_name == 'merge_group' }}
         run: |
-          if ! grep -qE '(^|/)equivalent(\.txt$|/)' "$RUNNER_TEMP/changed.txt"; then
+          # equiv_touched.txt (previous step): rows this pull request adds, or whose proof file it changes. Rows it only
+          # removes (for example because the function became byte-exact) need no re-check. Without the file (the
+          # previous step did not run), fall back to any change under an equivalence file.
+          if [ -f "$RUNNER_TEMP/equiv_touched.txt" ] && [ ! -s "$RUNNER_TEMP/equiv_touched.txt" ]; then
+            echo "No proven-equivalent rows added or changed." | tee -a "$GITHUB_STEP_SUMMARY"
+          elif [ ! -f "$RUNNER_TEMP/equiv_touched.txt" ] && ! grep -qE '(^|/)equivalent(\.txt$|/)' "$RUNNER_TEMP/changed.txt"; then
             echo "No proven-equivalent rows changed." | tee -a "$GITHUB_STEP_SUMMARY"
           elif [ "$VERIFIED" = "true" ]; then
             echo "Proven-equivalent rows re-checked by a maintainer (equiv-verified)." | tee -a "$GITHUB_STEP_SUMMARY"
