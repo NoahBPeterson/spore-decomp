@@ -1264,6 +1264,7 @@ float GetTerrainEditModeHeight()
     i32 mode = ((i32 (__thiscall *)(void *))FUN_00c75420)(sphere);
     switch (mode) {
     case 0: return kDefaultTerrainC;
+    case 1: return kDefaultTerrainB;
     case 2: return kDefaultTerrainA;
     }
     return kDefaultTerrainB;

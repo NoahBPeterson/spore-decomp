@@ -429,7 +429,7 @@ bool FUN_00d9b480(Creature* a, Creature* b)
     return va < vb;
 }
 
-// @ 0x00d9b4e0
+// Legacy copy; canonical marker is in src/game/SPGonzago/_at_00d90000.cpp.
 int FUN_00d9b4e0(Creature** a, Creature** b)
 {
     Creature* ca = a[0];
