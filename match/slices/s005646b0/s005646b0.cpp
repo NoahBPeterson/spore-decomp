@@ -64,6 +64,7 @@ namespace eastl {
     rbtree(const allocator& a);                                         // 0x4b5980
     iterator end() { return iterator((node_type*)&mAnchor); }
     iterator find(const key_type& key);
+    iterator FUN_00422b00(const key_type& key);   // 0x00422b00: the find retail's erase(key) calls
     const_iterator lower_bound(const key_type& key);
     const_iterator upper_bound(const key_type& key);
     size_type erase(const key_type& key);
@@ -491,7 +492,17 @@ template void vector<Pod50>::reserve(unsigned);
 // @ 0x00564820 odn sym=?push_back@?$vector@URecord50@@Vallocator@eastl@@@eastl@@QAEXXZ
 template void vector<Record50>::push_back();
 // @ 0x005648c0 odn sym=?erase@?$rbtree@IIU?$less@I@eastl@@U?$use_self@I@2@@eastl@@QAEIABI
-template UIntTree::size_type UIntTree::erase(const uint32_t&);
+// Retail's erase(key) here calls 0x00422b00 (a different find, KeyTree::Find), not this tree's own find (0x00564b50).
+template<> UIntTree::size_type UIntTree::erase(const uint32_t& key)
+{
+    const iterator it(FUN_00422b00(key));
+    if(it != end())
+    {
+        erase(it);
+        return 1;
+    }
+    return 0;
+}
 // @ 0x00564960 odn sym=?insert@?$vector_set@I
 template pair<vector_set<uint32_t>::iterator, bool> vector_set<uint32_t>::insert(const uint32_t&);
 // @ 0x00564a10 odn
