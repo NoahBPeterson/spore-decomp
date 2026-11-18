@@ -619,7 +619,16 @@ struct BlobSrc {
     BlobTab tab;                     // +0x14 table (0x100 bytes)
 };
 
-static __forceinline void FillBlob(cTerrainExport* p, int* slot, BlobSrc* src)
+// The record at 0x141d050 has its table 8 bytes after the header byte (+0x18, not +0x14): retail copies from 0x141d068.
+struct BlobSrcWide {
+    int  h0, h1, h2, h3;             // +0x00 header dwords
+    unsigned char b;                 // +0x10 header byte
+    unsigned char pad[7];
+    BlobTab tab;                     // +0x18 table (0x100 bytes)
+};
+
+template <class Src>
+static __forceinline void FillBlob(cTerrainExport* p, int* slot, Src* src)
 {
     if (*slot == 0)
         *slot = (int)FUN_00854f00(p);
@@ -636,7 +645,7 @@ static __forceinline void FillBlob(cTerrainExport* p, int* slot, BlobSrc* src)
 }
 
 extern BlobSrc g141d010;
-extern BlobSrc g141d050;
+extern BlobSrcWide g141d050;
 extern BlobSrc g141d030;
 extern BlobSrc g141d10c;
 
