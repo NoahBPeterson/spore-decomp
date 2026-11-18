@@ -2,3 +2,4 @@ slices/s00cd6680/s00cd6680.cpp  ?DestroyRange@@YAPAUcPosseInfo@@PAU1@00@Z  00cd6
 slices/s00cd6680/s00cd6680.cpp  ?CopyRange@@YAPAUcPosseInfo@@PAU1@00@Z  00cd6760  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00cd6680/s00cd6680.cpp  ?CopyRangeBackward@@YAPAUcPosseInfo@@PAU1@00@Z  00cd67b0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00cd6680/s00cd6680.cpp  ?DoDestroyValues@@YGXPAUcPosseInfo@@0@Z  00cd6fd0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00cd6680/s00cd6680.cpp  ?ClearEntryBlock@@YA_NPAUcOwner@@PAPAUcEntry@@@Z  00cd6680  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-

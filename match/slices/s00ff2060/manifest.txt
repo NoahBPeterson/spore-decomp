@@ -1,0 +1,1 @@
+slices/s00ff2060/s00ff2060.cpp  ?FUN_00ff2060@@YAXPAUSerHost@@PAUVectorEC@@@Z  00ff2060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

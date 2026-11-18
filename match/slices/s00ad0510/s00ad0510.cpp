@@ -20,38 +20,50 @@ typedef unsigned int  uint;
 
 // ------------------------------------------------------------------ 0x00ad0510 companions
 class cPlanetModel;
-struct NounThing;
+class cNounManager;
+
+struct Vec3 {
+    float x, y, z;
+};
 
 extern "C" {
-    void* __stdcall PlanetModel(void* out, int a, int b, int c, int d, int e, int f); // 0xb3d350
-    void* __stdcall AudioNounManager(int x);                                        // 0xb3d300
-    int   __fastcall FUN_b23940(void* self);                                        // 0xb23940
-    int   __cdecl FUN_c099e0(int a, int b, int c, int d, int e, int f);             // 0xc099e0
+    cPlanetModel* __cdecl PlanetModel();   // 0x00b3d350  planet singleton
+    cNounManager* __cdecl NounManager();   // 0x00b3d300  noun singleton
+    int           __cdecl FUN_c099e0(const Vec3* dir, void* owner, int a, int noun, int b, int c); // 0x00c099e0
 }
 
 class cPlanetModel {
 public:
-    int DirectionToSurfacePosition();   // 0xb815a0
+    // Projects `dir` onto the surface: writes the normalised point through `out` and returns it.
+    Vec3* DirectionToSurfacePosition(Vec3* out, const Vec3* dir);   // 0x00b815a0
+};
+
+// The noun manager places a noun at a surface position and hands it to an owner.
+class cNounManager {
+public:
+    int FUN_b23940(const Vec3* pos, void* owner, int a, int b, int c, int d);   // 0x00b23940
 };
 
 class CityVisualizer {
 public:
-    int FuncACEBD0(int a, int b);       // 0xacebd0
-    int Ad0510(int param1, int param2); // @ 0xad0510
+    int FuncACEBD0(int a, int b);                     // 0xacebd0
+    int Ad0510(void* owner, const Vec3* dir);         // @ 0xad0510
 };
 
-int CityVisualizer::Ad0510(int param1, int param2)
+// ================================================================================================
+// 0x00ad0510 -- place a noun on the surface below `dir` and let the visualizer take it over.
+// @ 0x00ad0510
+int CityVisualizer::Ad0510(void* owner, const Vec3* dir)
 {
-    uint32_t local[3];
-    cPlanetModel* m = (cPlanetModel*)PlanetModel(local, param2, param1, 1, 0, 0, 0);
-    int r = m->DirectionToSurfacePosition();
-    void* n = AudioNounManager(r);
-    int esi = FUN_b23940(n);
-    if (!esi)
-        return 0;
-    int edi = FUN_c099e0(param2, param1, 1, esi, 0, 1);
-    FuncACEBD0(esi, 0);
-    return edi;
+    Vec3 surface;
+    int noun = NounManager()->FUN_b23940(
+        PlanetModel()->DirectionToSurfacePosition(&surface, dir), owner, 1, 0, 0, 0);
+    if (noun) {
+        int r = FUN_c099e0(dir, owner, 1, noun, 0, 1);
+        FuncACEBD0(noun, 0);
+        return r;
+    }
+    return 0;
 }
 
 // ------------------------------------------------------------------ callable slots
@@ -189,7 +201,6 @@ struct CityOps {
 
 // ------------------------------------------------------------------ original helpers
 extern "C" {
-void*  __cdecl NounManager();                                    // 0x00b3d300
 void*  __fastcall CreateNoun(void*, int, void*);                 // 0x00b20c60
 void   __fastcall RemoveNoun(void*, int, void*);                 // 0x00b225d0
 void   __fastcall FUN_00c8fc50(void*, int, int);                 // 0x00c8fc50

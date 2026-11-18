@@ -108,6 +108,30 @@ cSPSimulatorSpaceGame* __cdecl GetUFOSimulator();    // 0x00ffbe50
 cVec3* __cdecl FindInventoryItem(cVec3* out, cVec3Vector* list,
                                  cVec3Vector* inventory);  // 0x00c4bdc0
 
+// SimCivObject (planet record) helpers used by 0x00c52280.
+struct SimCivObject_c7;
+struct cWorldObj_c7 {
+    void* GetAvatar();                          // 0x00b1fdb0
+};
+struct cTerraformMgr_c7 {
+    int GetTerraformLevel();                    // 0x00bbc670
+};
+float __stdcall GetFactor_c44d00(SimCivObject_c7* pObject, bool const* pFlag); // 0x00c44d00
+cTerraformMgr_c7* __stdcall GetTerraformingMgr_c7(SimCivObject_c7* pObject);   // 0x00b3d430
+bool SimCivObject_AnyCityHasBuildings(SimCivObject_c7* pObject);               // 0x00c70260
+struct SimCivObject_c7 {
+    u8               mPad0000[0x2c];
+    u32              mFlags2c;                  // 0x2c 0x800 = creature already sampled
+    u8               mPad0030[0xbc - 0x30];
+    void*            mpPlantKeysBegin;          // 0xbc
+    void*            mpPlantKeysEnd;            // 0xc0
+    u8               mPad00c4[0xd0 - 0xc4];
+    void*            mpAnimalKeysBegin;         // 0xd0
+    void*            mpAnimalKeysEnd;           // 0xd4
+    int              GetRecordType();           // 0x00b8dab0
+    cWorldObj_c7*    GetWorldObj();             // 0x00b8de30
+};
+
 // ---------------------------------------------------------------------------------------------
 // SP::cSPMissionFetch
 // ---------------------------------------------------------------------------------------------
@@ -118,7 +142,9 @@ struct cSPMissionFetch {
     u32             mField78;               // 0x78
     u8              mPad007c[0x80 - 0x7c];
     int             mField80;               // 0x80
-    u8              mPad0084[0x130 - 0x84];
+    u8              mPad0084[0x8c - 0x84];
+    void*           mpField8c;              // 0x8c
+    u8              mPad0090[0x130 - 0x90];
     u32             mFlags130;              // 0x130
     u8              mPad0134[0x17c - 0x134];
     void*           mpField17c;             // 0x17c
@@ -134,6 +160,7 @@ struct cSPMissionFetch {
     void*           mpData250;              // 0x250
 
     bool  IsActive();                       // 0x00c44c80
+    float GetRewardFactor(SimCivObject_c7* pObject, bool const* pFlag); // 0x00c52280
     void  GetText(int key, void* out);      // 0x00c487d0
     bool  GetTagString(int tag, void* out); // 0x00c491c0
     void  ProcessTagOut(int out);           // 0x00c49140
@@ -223,6 +250,54 @@ void cSPMissionFetch::GetUILongDescription(void* out)
         case 2: GetText(0xba93258e, out); break;
         case 3: GetText(0x1ec90679, out); break;
         }
+    }
+}
+
+// @ 0x00c52280
+float cSPMissionFetch::GetRewardFactor(SimCivObject_c7* pObject, bool const* pFlag)
+{
+    float factor = GetFactor_c44d00(pObject, pFlag);
+    if (factor <= 0.0f)
+        return factor;
+
+    if (pObject->GetWorldObj()->GetAvatar() == mpField8c)
+        return -1.0f;
+
+    switch ((int)mTag1f4) {
+    case 0xfb3b1635:
+        return pObject->GetRecordType() == 2 ? 1.0f : -1.0f;
+    case 0xbfb44ccc:
+        return SimCivObject_AnyCityHasBuildings(pObject) ? 1.0f : -1.0f;
+    case 0x6d5c48c:
+        if (pObject->mpPlantKeysBegin == pObject->mpPlantKeysEnd)
+            return -1.0f;
+        return pObject->GetRecordType() == 5 ? 1.2f : 1.0f;
+    case 0x23da98ff:
+    case 0x736c417f: {
+        int nTerraformLevel = GetTerraformingMgr_c7(pObject)->GetTerraformLevel();
+        if (pObject->mpAnimalKeysBegin == pObject->mpAnimalKeysEnd)
+            return -1.0f;
+        if (pObject->mFlags2c & 0x800)
+            return -1.0f;
+        if (nTerraformLevel != 1)
+            return -1.0f;
+        return pObject->GetRecordType() == 5 ? 1.2f : 1.0f;
+    }
+    case 0x2dc69129:
+        if (pObject->mpAnimalKeysBegin == pObject->mpAnimalKeysEnd)
+            return -1.0f;
+        if (pObject->mFlags2c & 0x800)
+            return -1.0f;
+        return pObject->GetRecordType() == 5 ? 1.2f : 1.0f;
+    case 0x3e994b2b:
+        return pObject->GetRecordType() == 4 ? 1.0f : -1.0f;
+    case 0x69412983:
+        return pObject->GetRecordType() == 5 ? 1.0f : -1.0f;
+    case 0x19ec2c8b:
+    case 0x7ecbe6f5:
+        return pObject->GetRecordType() == 5 ? 1.2f : 1.0f;
+    default:
+        return -1.0f;
     }
 }
 

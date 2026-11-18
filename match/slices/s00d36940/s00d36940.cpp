@@ -42,11 +42,19 @@ class basic_string {
   value_type* mpCapacity;
   Allocator mAllocator;
 
+  // Retail stopped inlining RangeInitialize(const char*) for the last six of the
+  // 36 transition strings and called the out-of-line copy (0x0057cc10) instead.
+  // kDeferred selects that spelling; the ctor stays inlined, so the caller still
+  // zeroes the three pointers itself, exactly as the original does.
+  enum DeferredTag { kDeferred };
+
   basic_string(const value_type* p, const Allocator& alloc = Allocator());
+  basic_string(const value_type* p, DeferredTag);
   ~basic_string() { DeallocateSelf(); }
 
   void RangeInitialize(const value_type* pBegin, const value_type* pEnd);
   void RangeInitialize(const value_type* pBegin);
+  void RangeInitializeDeferred(const value_type* pBegin);
   value_type* DoAllocate(size_type n);
   void DoFree(value_type* p, size_type n);
   void AllocateSelf();
@@ -58,6 +66,19 @@ template <typename T, typename Allocator>
 __forceinline basic_string<T, Allocator>::basic_string(const value_type* p, const Allocator& alloc)
     : mpBegin(NULL), mpEnd(NULL), mpCapacity(NULL), mAllocator(alloc) {
   RangeInitialize(p);
+}
+
+template <typename T, typename Allocator>
+__forceinline basic_string<T, Allocator>::basic_string(const value_type* p, DeferredTag)
+    : mpBegin(NULL), mpEnd(NULL), mpCapacity(NULL), mAllocator() {
+  RangeInitializeDeferred(p);
+}
+
+// Never inlined: the callers that use kDeferred must emit a real call to the
+// out-of-line RangeInitialize, as the original does.
+template <typename T, typename Allocator>
+__declspec(noinline) void basic_string<T, Allocator>::RangeInitializeDeferred(const value_type* pBegin) {
+  RangeInitialize(pBegin);
 }
 
 template <typename T, typename Allocator>
@@ -213,6 +234,8 @@ class cCreatureModeInputStrategy {
 }
 
 // ---------------------------------------------------------------- 0x00d36940
+// @ 0x00d36940  SP::cCreatureModeInputStrategy::Init: clear both maps, name the four
+// states, parse the mode's UI machine file, add 36 transitions, register the machine.
 void SP::cCreatureModeInputStrategy::Init(int mouseMode) {
   mStateMachine.stateTransitions.clear();
   mStateMachine.names.clear();
@@ -268,12 +291,12 @@ void SP::cCreatureModeInputStrategy::Init(int mouseMode) {
   builder.AddTransition(-1, 10, 0x3ff, 0x12, -1, 0, 0x025db76a, 1, -2, false, String(""), 0);
   builder.AddTransition(-1, 11, 0x3ff, 0x12, -1, 0, 0x025db76a, 0, -2, false, String(""), 0);
   builder.AddTransition(-1, 10, 0x3ff, 0x051cba70, -1, 0, 0x051cbb29, 1, -2, false, String(""), 0);
-  builder.AddTransition(-1, 11, 0x3ff, 0x051cba70, -1, 0, 0x051cbb29, 0, -2, false, String(""), 0);
-  builder.AddTransition(-1, 10, 0x3ff, 0x051cba7b, -1, 0, 0x051cbb2d, 1, -2, false, String(""), 0);
-  builder.AddTransition(-1, 11, 0x3ff, 0x051cba7b, -1, 0, 0x051cbb2d, 0, -2, false, String(""), 0);
-  builder.AddTransition(-1, 10, 0x3ff, 0x16, -1, 0, 0x02c4bfde, 1, -2, false, String(""), 0);
-  builder.AddTransition(-1, 11, 0x3ff, 0x16, -1, 0, 0x02c4bfde, 0, -2, false, String(""), 0);
-  builder.AddTransition(-1, 10, 0x40, 0xf3ce0149, -1, 0, 0x13cdf6fa, 0, -2, false, String(""), 0);
+  builder.AddTransition(-1, 11, 0x3ff, 0x051cba70, -1, 0, 0x051cbb29, 0, -2, false, String("", String::kDeferred), 0);
+  builder.AddTransition(-1, 10, 0x3ff, 0x051cba7b, -1, 0, 0x051cbb2d, 1, -2, false, String("", String::kDeferred), 0);
+  builder.AddTransition(-1, 11, 0x3ff, 0x051cba7b, -1, 0, 0x051cbb2d, 0, -2, false, String("", String::kDeferred), 0);
+  builder.AddTransition(-1, 10, 0x3ff, 0x16, -1, 0, 0x02c4bfde, 1, -2, false, String("", String::kDeferred), 0);
+  builder.AddTransition(-1, 11, 0x3ff, 0x16, -1, 0, 0x02c4bfde, 0, -2, false, String("", String::kDeferred), 0);
+  builder.AddTransition(-1, 10, 0x40, 0xf3ce0149, -1, 0, 0x13cdf6fa, 0, -2, false, String("", String::kDeferred), 0);
 
   GameInputManager()->AddUIStateMachine(&mStateMachine, 0, 0);
 }

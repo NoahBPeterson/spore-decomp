@@ -1,0 +1,1 @@
+slices/s00cd6f60/s00cd6f60.cpp  ?WriteTribeObjectArray@@YA_NPAVcIObjectDatabaseOStream@SP@@PBQAX@Z  00cd6f60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

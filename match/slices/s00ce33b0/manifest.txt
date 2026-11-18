@@ -2,3 +2,4 @@
 slices/s00ce33b0/s00ce33b0.cpp  ?DeactivatePlanThunk1@@YAXPAXHHHHPAUPlanArgs@SP@@@Z  00ce3b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ce33b0/s00ce33b0.cpp  ?DeactivatePlanThunk0@@YAXPAXHHHHPAUPlanArgs@SP@@@Z  00ce3e90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ce33b0/s00ce33b0.cpp  ?RaidingDeactivate@@YAXPAXHHHHPAUPlanArgs@SP@@@Z  00ce3e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ce33b0/s00ce33b0.cpp  ?FUN_00ce34d0@@YANPAXHHHPAUcStimuli@SP@@PAE@Z  00ce34d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

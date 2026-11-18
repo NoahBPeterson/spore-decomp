@@ -1,0 +1,1 @@
+slices/s00d4a4a0/s00d4a4a0.cpp  ?VerbTray_HandleKeyPress@@YA_NH@Z  00d4a4a0  /O2 /MD /Gy /TP /arch:SSE /GS-

@@ -1,3 +1,4 @@
 slices/s00c44080/s00c44080.cpp  ?SetUITextValue@cSPMission@@QAEHH@Z  00c45310  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00c44080/s00c44080.cpp  ?GetDynamicResponseID@cSPMission@@QAEHHH@Z  00c45740  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s00c44080/s00c44080.cpp  ?GetNumAvailable@cSPMission@@QAEHXZ  00c45380  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00c44080/s00c44080.cpp  ?AddMarker@cMarkerOwner@@QAEXPBM_N@Z  00c446d0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-

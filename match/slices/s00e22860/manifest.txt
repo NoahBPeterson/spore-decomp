@@ -7,3 +7,4 @@ slices/s00e22860/s00e22860.cpp  ?GetWindowImageCount@cSPUIPosse@@QAEHXZ  00e2367
 slices/s00e22860/s00e22860.cpp  ?GetWindowImageRange@cSPUIPosse@@QAEXPAH@Z  00e23680  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 slices/s00e22860/s00e22860.cpp  ?ClearToolWindow@cSPUIPosse@@QAEXHH@Z  00e236a0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 slices/s00e22860/s00e22860.cpp  ?ClearToolWindowOne@cSPUIPosse@@QAEXH@Z  00e236b0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00e22860/s00e22860.cpp  ?GetWindowBounds@cSPUIPosse@@QAE?AUcVec4@@XZ  00e22860  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast

@@ -1,0 +1,1 @@
+slices/s00ca4600/s00ca4600.cpp  ?ShiftClosest@@YAXPAPAURefCounted@@HUVec4@@@Z  00ca4600  /O2 /MD /Gy /TP /arch:SSE /fp:fast

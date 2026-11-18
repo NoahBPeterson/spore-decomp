@@ -2,3 +2,4 @@
 slices/s00b815a0/s00b815a0.cpp  ?FUN_00b816f0@cPlanetModel@@QAEPAUVec3@@PAU2@PBU2@@Z  0x00b816f0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00b815a0/s00b815a0.cpp  ?FUN_00b81720@cPlanetModel@@QAEXPAUVec3@@@Z          0x00b81720  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s00b815a0/s00b815a0.cpp  ?FUN_00b82060@cPlanetModel@@QAEPAUVec3@@PAU2@HH@Z    0x00b82060  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b815a0/s00b815a0_match.cpp  ?DirectionToSurfacePosition@cPlanetModel@SP@@QBEPAUcSPVector3@@PAU3@PBU3@@Z  00b815a0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

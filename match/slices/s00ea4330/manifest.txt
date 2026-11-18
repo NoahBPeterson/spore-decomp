@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ea4330/s00ea4330.cpp  ?SetNoteSounds@cCityMusicViewer@Audio@SP@@QAEX_N@Z  00ea4330  /O2 /MD /Gy /TP /arch:SSE /fp:fast

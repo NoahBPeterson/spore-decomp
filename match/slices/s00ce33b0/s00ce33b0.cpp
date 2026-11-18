@@ -259,3 +259,35 @@ double __cdecl FUN_00ce33b0(void* a1, int a2, int a3, int a4, PlanStim* stim, un
     }
     return 0.0;
 }
+
+extern "C" unsigned SP_TribeWorkCount();                    // 0x00c8f370 (thiscall)
+extern "C" int      SP_SubCondition();                      // 0x00af9f30 (thiscall on tribe+0x3b4)
+extern "C" void     SP_GetProbeValue();                     // 0x00c904b0 (thiscall, int* out)
+extern "C" int      SP_CheckProbeValue();                   // 0x00c8f6e0 (thiscall, int)
+
+// @ 0x00ce34d0
+double __cdecl FUN_00ce34d0(void* a1, int a2, int a3, int a4, SP::cStimuli* stim,
+                            uint8_t* flag)
+{
+    void* tribe = *(void**)a1;
+    if (((unsigned (__thiscall*)(void*))SP_TribeWorkCount)(tribe) > 0) {
+        void* plan = FindFirstEligiblePlanStep(a1, 8, 0);
+        if (plan != (void*)-1) {
+            if (((int (__thiscall*)(void*))SP_SubCondition)((char*)tribe + 0x3b4) != 0) {
+                int value = 0;
+                ((void (__thiscall*)(void*, int*))SP_GetProbeValue)(tribe, &value);
+                if (value != 0) {
+                    if (((int (__thiscall*)(void*, int))SP_CheckProbeValue)(tribe, value) == 0) {
+                        if (stim)
+                            ((void (__thiscall*)(SP::cStimuli*))SP_GetAny)(stim);
+                        stim->mpValue1c = plan;
+                        stim->mValue18 = 8;
+                        *flag = 1;
+                        return 1.0;
+                    }
+                }
+            }
+        }
+    }
+    return 0.0;
+}

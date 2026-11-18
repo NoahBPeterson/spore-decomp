@@ -1,0 +1,1 @@
+slices/s00d39670/s00d39670.cpp  ?AddStat@cCreatureModeStrategy@SP@@QAEPAUcTelemetryItem@2@II@Z  00d39670  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

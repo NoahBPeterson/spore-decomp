@@ -1,0 +1,1 @@
+slices/s00ff1290/s00ff1290.cpp  ?CopyOrnamentRange@@YAPAUcOrnamentDataA@@PAU1@00@Z  00ff1290  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-

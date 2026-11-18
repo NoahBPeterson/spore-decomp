@@ -1,0 +1,1 @@
+slices/s00d39360/s00d39360.cpp  ?OnCreatureEvent@cCreatureModeStrategy@@QAEXIPAUcKillInfo@@@Z  00d39360  /O2 /MD /Gy /EHsc /TP

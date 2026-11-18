@@ -1,6 +1,7 @@
 // Slice s00e4d920 -- SP cell/fluid Simulator helpers.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast (verified region)
 #include "types.h"
+#include <new>
 #include <intrin.h>
 #include <xmmintrin.h>
 
@@ -58,14 +59,138 @@ void __stdcall FUN_00e4dae0(cArguments* self)
 }
 
 // ---------------------------------------------------------------- 0x00e4d920
-// PARTIAL: the FNV/format/EA-Resource prologue and card construction are
-// reconstructed, but the exact EASTL string temporary layout is omitted.
-int __cdecl SP_ImportAdvectMap_full(int a)
+// Advect-velocity-volume import: name -> FNV hash -> resource key
+// {hash, 0x4805684, 0} -> formatted wide name -> resource-manager claim
+// (vtbl+0x80).  Then a 0x20-byte volume resource (base vtable 0x13ebcdc,
+// volume vtable 0x1482de8) whose dim*dim*12-byte payload comes from the
+// [0x16c8b44] pool allocator and is decoded by 0xe831d0; the object is
+// registered with 0x6acfe0 and published through the manager's vtbl+0x20.
+// Fields and call shapes are read off the instruction stream.  The key's type
+// word 0x4805684 belongs to the caller's resource naming, not to this function,
+// and the payload decoder 0xe831d0 is only called here (its body lives at its
+// own address).  The wide-name temp is 16 bytes in retail's frame: the 4th
+// word is dead in this function, and its release is an explicit inlined call
+// on both exits (no unwind frame in the original).
+
+struct VolumeKey {                      // 12 bytes: {instance, type, group}
+    unsigned int mId;
+    unsigned int mType;
+    unsigned int mGroup;
+};
+
+struct WideName {                       // wide-string temp: 16 bytes in retail's frame
+    wchar_t* mpBegin;                   // +0x00
+    wchar_t* mpEnd;                     // +0x04
+    wchar_t* mpCap;                     // +0x08
+    void*    mpOwner;                   // +0x0c  (never touched by this function)
+    WideName()
+        : mpBegin((wchar_t*)0x1667bac)   // shared empty-string sentinel
+        , mpEnd((wchar_t*)0x1667bac)
+    {
+        // mpCap is stored by the caller path, after the key stores (retail order)
+    }
+    // Retail has no unwind frame for this temp: the release is an explicit
+    // inlined call on each exit path, not a destructor.
+    void Free()
+    {
+        int nCap = (int)((unsigned int)mpCap - (unsigned int)mpBegin);
+        if ((nCap & ~1) > 2 && mpBegin != 0)
+            operator_delete(mpBegin);
+    }
+};
+
+struct VolumeBase {                     // ref-counted base, vtable 0x13ebcdc
+    void*        mpVptr;
+    long         mnRefCount;
+    VolumeKey    mKey;                  // +0x08
+    unsigned int mReserved;             // +0x14
+    VolumeBase()
+    {
+        mpVptr = (void*)0x13ebcdc;
+        _InterlockedExchange(&mnRefCount, 0);
+        mKey.mId = 0;
+        mKey.mType = 0;
+        mKey.mGroup = 0;
+        mReserved = 0;
+    }
+};
+
+struct AdvectVolume : VolumeBase {      // vtable 0x1482de8
+    void* mpPayload;                    // +0x18
+    int   mnPayloadBytes;               // +0x1c
+    AdvectVolume()
+    {
+        mpVptr = (void*)0x1482de8;
+        mpPayload = 0;
+        mnPayloadBytes = 0;
+    }
+};
+
+struct PublishHandle {                  // 8-byte ref-counted handle, 0x13effa8
+    void* mpVptr;
+    long  mnRefCount;
+    PublishHandle()
+    {
+        mpVptr = (void*)0x13effa8;
+        _InterlockedExchange(&mnRefCount, 0);
+        mpVptr = (void*)0x1482e64;
+    }
+};
+
+struct SP_MemPool {                     // singleton at 0x16c8b44
+    void* LockedAlloc(unsigned int size, int, int, int, int, int);
+};
+
+extern SP_MemPool* g_pMemPool;          // 0x16c8b44
+
+extern const char    g_volumeAllocArea[];        // 0x1482e9c
+extern const wchar_t g_volumeNameFormat[];       // 0x1482ed4
+
+typedef void (__thiscall* VolumeMgrClaim)(void*, const VolumeKey*, const wchar_t*);
+typedef void (__thiscall* VolumeMgrPublish)(void*, void*, int, void*, void*, int);
+
+namespace SP {
+
+// @ 0x00e4d920
+bool __cdecl ImportAdvectMap(const char* name, int dim)
 {
-    (void)FNVHash((const char*)a, 0x811c9dc5, 1);
-    (void)SP_GetManager();
-    return 0;
+    VolumeKey key = { 0, 0, 0 };
+    void*     mem;
+    void*     mgr;
+    AdvectVolume* p;
+
+    key.mId = (unsigned int)FNVHash(name, 0x811c9dc5, 1);
+    WideName wname;
+    key.mType = 0x4805684;
+    key.mGroup = 0;
+    wname.mpCap = (wchar_t*)0x1667bae;   // empty-string capacity sentinel
+    WStr_Format(&wname, g_volumeNameFormat, name);
+
+    mgr = (void*)SP_GetManager();
+    ((VolumeMgrClaim)(*(void***)mgr)[0x20])(mgr, &key, wname.mpBegin);
+
+    mem = operator_new(sizeof(AdvectVolume), g_volumeAllocArea, 0, 0, 0, 0);
+    p = (mem != 0) ? new (mem) AdvectVolume() : 0;
+
+    p->mKey = key;
+    p->mnPayloadBytes = dim * dim * 12;
+    p->mpPayload = g_pMemPool->LockedAlloc(p->mnPayloadBytes, 0, 0, 0, 0, 0);
+    if (!FUN_00e831d0((int)key.mId, (int)p->mpPayload, dim, dim)) {
+        ((void (__thiscall*)(void*))(*(void***)p)[1])(p);
+        wname.Free();
+        return false;
+    }
+
+    FUN_006acfe0(&p->mKey, p);
+    PublishHandle guard;
+    mgr = (void*)SP_GetManager();
+    ((VolumeMgrPublish)(*(void***)mgr)[8])(mgr, p, 0, (void*)*g_pCellData, &guard, 0);
+    guard.mpVptr = (void*)0x13effb8;    // release drops the handle to its base vtable
+    wname.Free();
+    return true;
 }
+
+}   // namespace SP
 
 // ---------------------------------------------------------------- 0x00e4db10
 void __cdecl FUN_00e4db10(void)
