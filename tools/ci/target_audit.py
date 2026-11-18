@@ -25,7 +25,8 @@ Per relocation:
   disagree    retail uses a different address
   reordered   the function uses exactly the expected addresses, at swapped places (independent stores in another
               order): same behaviour, byte-exact only because addresses are masked
-  weak        a qualified-name match disagrees (often another instantiation of the same template)
+  weak        a qualified-name, import or CRT match disagrees (another instantiation of the same template, or
+              another copy of a CRT routine)
   unresolved  no name evidence (string literals and other data local to the object are listed apart as local)
 
 usage: target_audit.py MANIFEST... [--va 00abcdef ...] [--jobs 4] [--show agree]
@@ -117,8 +118,9 @@ def audit_row(exp, fp, coff, fname, va, annots=(), sid=None):
             verdict = "agree"
         elif same_code(exp.img, want, actual):
             verdict = "folded"
-        elif how == "qualified":
-            verdict = "weak"         # a qualified name is shared by every instantiation of a template
+        elif how in ("qualified", "import", "crt"):
+            verdict = "weak"         # a qualified name is shared by every instantiation of a template; the CRT has
+                                     # several copies of memmove/memset (import thunk and static) and of _ftol2
         else:
             verdict = "disagree"
         out.append((off - lo, s.name, verdict, want, actual, how))

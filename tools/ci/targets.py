@@ -33,10 +33,10 @@ _INDEX = None
 
 def ident(name):
     """the identifier a symbol is named by: '?g_15b7458@@3PADA' -> 'g_15b7458', '_FUN_00abcdef' -> 'FUN_00abcdef'"""
-    if name.startswith("??_"):           # a special name: ??_7C9990@@6B@ is C9990's vtable, not address 0x7c9990
-        return name[4:].split("@", 1)[0]
-    if name.startswith("??"):            # ??0Foo (constructor), ??1Foo (destructor), ??2 (operator new) ...
-        return name[3:].split("@", 1)[0]
+    if name.startswith("??"):
+        # a special member (??0 constructor, ??1 destructor, ??2 operator new, ??_7 vtable ...): what follows is its
+        # CLASS name, and a hex run there is a stand-in class's tag (Obj_6af960), not this symbol's address
+        return ""
     if name.startswith("?"):
         n = name[1:]
         if n.startswith("$"):           # a template: ?$name@args@@...
@@ -51,6 +51,8 @@ def hex_claim(name, own):
     by more text is a placeholder naming something else's address (H_572810_4: helper 4 of function 0x572810;
     vt_4610c0_a: a vtable used by 0x4610c0), not the object's own."""
     i = ident(name)
+    if i.lower().startswith("thunk_"):  # thunk_FUN_00e823a0 jumps TO 0x00e823a0; the thunk lives elsewhere
+        return None
     for m in HEX_RE.finditer(i):
         s = m.group(1)
         if not re.search(r"\d", s) or m.end() != len(i):
