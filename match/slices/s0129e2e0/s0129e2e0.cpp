@@ -12,13 +12,13 @@ struct Mat3 {
     float m[9];
 };
 
-float g_15f3be0;                // 0x015f3be0  the diagonal constant (1.0f)
+extern float gk_1485720;        // 0x01485720  the diagonal constant (1.0f)
 unsigned g_15f3be4words[9];     // 0x015f3be4  destination matrix
 
 // @ 0x0129e2e0
 void FUN_0129e2e0()
 {
-    float  scale = g_15f3be0;
+    float  scale = gk_1485720;
     Mat3   m;
     m.m[0] = scale;
     m.m[1] = 0.0f;
