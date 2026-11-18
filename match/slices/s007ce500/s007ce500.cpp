@@ -246,7 +246,7 @@ void SP_InitAppEffects()
     FUN_00a99150();
     FUN_007d7f40();
     FUN_00aa7fa0(3, FUN_007cdff0);
-    FUN_00aa7fa0(4, FUN_007cdff0);
+    FUN_00aa7fa0(4, (void (*)())GroundCoverCirclePhysics);
     IPropertyManager* pm = PropertyManager();
     sGroundCoverConfig = (GroundCoverConfig*)0;
     if (pm->GetProperty(0xc6db66f9, 0xea5118b1, &sGroundCoverConfig))
