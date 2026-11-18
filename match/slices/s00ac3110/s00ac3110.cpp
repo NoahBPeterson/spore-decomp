@@ -287,16 +287,19 @@ uint32_t HashCounter::Count(const uint32_t* key) {
 }
 
 // @ 0x00ac3fa0
-void __cdecl FUN_00ac3fa0(char* first, char* last, uint32_t ctx) {
-  int n = (int)(last - first) >> 3;
+struct HeapEntry_s00ac_3fa0 { uint32_t a, b; };  // the 8-byte heap element
+void __cdecl FUN_00ac3fa0(HeapEntry_s00ac_3fa0* first, HeapEntry_s00ac_3fa0* last, uint32_t ctx) {
+  int n = (int)(last - first);
   if (n < 2) return;
-  int i = (n - 2 >> 1) + 1;
-  char* p = first + i * 8;
-  do {
-    uint32_t b = *(uint32_t*)(p - 4);
-    uint32_t a = *(uint32_t*)(p - 8);
-    --i;
-    FUN_00ac2060(first, i, n, i, a, b, ctx);
-    p -= 8;
-  } while (i != 0);
+  {
+    int i = ((n - 2) >> 1) + 1;
+    HeapEntry_s00ac_3fa0* p = first + i;
+    do {
+      --p;
+      --i;
+      uint32_t a = p->a;
+      uint32_t b = p->b;
+      FUN_00ac2060((char*)first, i, n, i, a, b, ctx);
+    } while (i != 0);
+  }
 }

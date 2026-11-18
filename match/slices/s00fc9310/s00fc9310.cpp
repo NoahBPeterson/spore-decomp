@@ -405,6 +405,7 @@ void MovieDecoder::PrepareDecoder(void* a1, void* a2, uint32_t a3, void* a4, voi
                 for (uint32_t i = 0; i < used; ++i) {
                     uint8_t decodedFlag =
                         mRenderableQueue->GetFromDecoderList(i)->mDecodedFlag;
+                        _ReadWriteBarrier();
                     if (decodedFlag == 1)
                         anyDecoded = decodedFlag;
                 }

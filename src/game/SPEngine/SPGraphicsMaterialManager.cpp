@@ -1412,14 +1412,10 @@ void** AssignCopyB(void** first, void** last, void** dst)
 // @ 0x0070e3e0
 void** CopyBackwardA(void** first, void** last, void** dstEnd)
 {
-    while (last != first)
-    {
-        void* s = last[-1];
-        void* old = dstEnd[-1];
-        --last;
-        --dstEnd;
-        if (s != old)
-        {
+    while (last != first) {
+        void* s = *--last;
+        void* old = *--dstEnd;
+        if (s != old) {
             if (s != 0)
                 ((RC3c*)s)->AddRef();
             *dstEnd = s;
@@ -1433,14 +1429,10 @@ void** CopyBackwardA(void** first, void** last, void** dstEnd)
 // @ 0x0070e430
 void** CopyBackwardB(void** first, void** last, void** dstEnd)
 {
-    while (last != first)
-    {
-        void* s = last[-1];
-        void* old = dstEnd[-1];
-        --last;
-        --dstEnd;
-        if (s != old)
-        {
+    while (last != first) {
+        void* s = *--last;
+        void* old = *--dstEnd;
+        if (s != old) {
             if (s != 0)
                 ((RC3b*)s)->AddRef();
             *dstEnd = s;

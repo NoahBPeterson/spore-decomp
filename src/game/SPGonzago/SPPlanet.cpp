@@ -2276,6 +2276,13 @@ extern SimAttribute gPlanetAttributes[12];   // 0x01578890
 struct TinyCopyT { void Copy(const void* src); };                  // 0x00b01cb0 (thiscall, 1 arg)
 struct BigElem   { void Ctor(void* src); };                        // 0x00b03680 (thiscall, 1 arg)
 struct BigElemD  { void Dtor(); void Dtor2(void* src); };          // 0x00b03740 (thiscall)
+// The 0x80-byte element the range helpers at 0x00b03ca0 / 0x00b03f10 copy (same shape as
+// SPCity's CElement helpers 0x00bdd5c0 / 0x00bdd600).
+struct BigElem80 {
+    char pad00[0x80];
+    void CopyConstructFrom(const BigElem80& src);  // 0x00b03680
+    void CopyAssignFrom(const BigElem80& src);     // 0x00b03740
+};
 void* __cdecl FUN_00f473a0(uint32 size, const char* name, int, int, const char* file, int line);
 void  __cdecl FUN_00b02930(void*, int, int, int, void*, float, float, float);
 void  __cdecl FUN_00b02930(void*, int, int, int, void*, HeapPos);
@@ -2464,7 +2471,6 @@ struct cBigVector {
     void* mpEnd;                                             // +0x04
     void Erase(void* first, void* last);
 };
-void* __cdecl destroy_range_big(void* src, void* end, void* dst); // 0x00b03f10
 // ---- items of slice s00b06e10 end
 
 // ---- items of slice s00b07980 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -6046,16 +6052,15 @@ void __cdecl sort_partition_c(void** lo, void** hi, const float* pivot, float px
 }
 
 // @ 0x00b03ca0
-void* __cdecl construct_range_big(void* first, void* last, void* cursor)
+BigElem80* __cdecl construct_range_big(BigElem80* first, BigElem80* last, BigElem80* dest)
 {
-    void* r = cursor;
     while (first != last) {
-        if (r != 0)
-            ((BigElem*)r)->Ctor(first);
-        first = (char*)first + 0x80;
-        r = (char*)r + 0x80;
+        if (dest != 0)
+            dest->CopyConstructFrom(*first);
+        ++first;
+        ++dest;
     }
-    return r;
+    return dest;
 }
 
 // @ 0x00b03d70
@@ -6115,15 +6120,14 @@ void __cdecl sort_heap_range2(void* first, void* last, float px, float py, float
 }
 
 // @ 0x00b03f10
-void* __cdecl destroy_range_big(void* first, void* last, void* cursor)
+BigElem80* __cdecl copy_range_big(BigElem80* first, BigElem80* last, BigElem80* dest)
 {
-    void* r = cursor;
-    while (last != first) {
-        ((BigElemD*)r)->Dtor();
-        last = (char*)last + 0x80;
-        r = (char*)r + 0x80;
+    while (first != last) {
+        dest->CopyAssignFrom(*first);
+        ++first;
+        ++dest;
     }
-    return r;
+    return dest;
 }
 
 // @ 0x00b03f50

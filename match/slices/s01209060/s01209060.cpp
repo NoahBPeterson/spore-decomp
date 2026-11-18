@@ -545,8 +545,8 @@ void hkStringMapBase::resizeTable(int slots)
 
     m_table = (int*)hkMemory::s_instance->alloc(slots * 0xc, 0x14);
     hkString_memSet(m_table, 0xff, slots * 4);
-    m_mask = slots - 1;
     m_numEntries = 0;
+    m_mask = slots - 1;
 
     int i = 0;
     if (0 < oldSize) {

@@ -210,8 +210,6 @@ public:
     void SetCardsVisibility(bool bVisible);               // 0x00e14c10
     cSPUILayout_s00e1_4a30* GetPanelLayout();                        // 0x00e14c70
     void SetPanelArea(EA::RectT_s00e1_4a30<float> area);             // 0x00e14d00
-    static void InsertionSortSubrange(CardRef* pFirst, CardRef* pLast);   // 0x00e14d90
-    static void InsertionSort(CardRef* pFirst, CardRef* pLast);           // 0x00e14e60
     void UpdateProgressWindows();                         // 0x00e154d0
     void UpdateScenarioWindows();                         // 0x00e15620
     void ExpandMissionCard(int missionId);                // 0x00e15b90
@@ -3428,79 +3426,6 @@ void cUIMissionCardPanel::SetPanelArea(EA::RectT_s00e1_4a30<float> area)
         mPanelBackdrop.mpObject->Init(&area.mLeft, false, 0);
     }
     mPanelBackdrop.mpObject->SetVisibility(true);
-}
-
-// @ 0x00e14d90
-void cUIMissionCardPanel::InsertionSortSubrange(CardRef* pFirst, CardRef* pLast)
-{
-    if (pFirst == pLast)
-        return;
-
-    for (CardRef* pCur = pFirst + 1; pCur != pLast; ++pCur) {
-        cUICard* pValue = pCur->mpObject;
-        if (pValue != nullptr)
-            pValue->AddRef();
-
-        CardRef* pPos = pCur;
-        while (pPos != pFirst && CardLessThan(pValue, (pPos - 1)->mpObject)) {
-            cUICard* pPrev = (pPos - 1)->mpObject;
-            cUICard* pOld = pPos->mpObject;
-            if (pPrev != pOld) {
-                if (pPrev != nullptr)
-                    pPrev->AddRef();
-                pPos->mpObject = pPrev;
-                if (pOld != nullptr)
-                    pOld->Release();
-            }
-            --pPos;
-        }
-
-        cUICard* pOld = pPos->mpObject;
-        if (pValue != pOld) {
-            if (pValue != nullptr)
-                pValue->AddRef();
-            pPos->mpObject = pValue;
-            if (pOld != nullptr)
-                pOld->Release();
-        }
-        if (pValue != nullptr)
-            pValue->Release();
-    }
-}
-
-// @ 0x00e14e60
-void cUIMissionCardPanel::InsertionSort(CardRef* pFirst, CardRef* pLast)
-{
-    for (; pFirst != pLast; ++pFirst) {
-        cUICard* pValue = pFirst->mpObject;
-        if (pValue != nullptr)
-            pValue->AddRef();
-
-        CardRef* pPos = pFirst;
-        while (CardLessThan(pValue, (pPos - 1)->mpObject)) {
-            cUICard* pPrev = (pPos - 1)->mpObject;
-            cUICard* pOld = pPos->mpObject;
-            if (pPrev != pOld) {
-                if (pPrev != nullptr)
-                    pPrev->AddRef();
-                pPos->mpObject = pPrev;
-                if (pOld != nullptr)
-                    pOld->Release();
-            }
-            --pPos;
-        }
-
-        cUICard* pOld = pPos->mpObject;
-        if (pValue != pOld) {
-            if (pValue != nullptr)
-                pValue->AddRef();
-            pPos->mpObject = pValue;
-            if (pOld != nullptr)
-                pOld->Release();
-        }
-        if (pValue != nullptr)
-            pValue->Release();
-    }
 }
 
 // @ 0x00e15060

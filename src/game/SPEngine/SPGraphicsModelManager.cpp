@@ -599,8 +599,9 @@ struct Stub00747270 { void F(); };
 // ---- hand-kept items of s007469b0 end
 
 // ---- hand-kept items of s00747920 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
-void  FUN_00745e00(void* first, int top, int size, int pos, float vx, float vy, uint32_t cmp);
-void  FUN_00745e80(void* first, int top, int size, int pos, float vx, float vy, uint32_t cmp);
+struct FKP;
+void  FUN_00745e00(void* first, int top, int size, int pos, FKP value, uint32_t cmp);  // adjust_heap (greater)
+void  FUN_00745e80(void* first, int top, int size, int pos, FKP value, uint32_t cmp);  // adjust_heap (less)
 static inline void RelObj(RCObj* o)
 {
     if (o && --o->mRefCount == 0) {
@@ -621,7 +622,7 @@ struct Occluder { float a, b, c, d, e, f; };
 typedef bool (__cdecl* OccluderCmp)(const Occluder&, const Occluder&);
 void AdjustHeapOccluder(Occluder* first, int top, int size, int pos, Occluder value, OccluderCmp cmp);
 struct Occluder4 { float a, b, c, d, e, f; };
-struct FKP { float x, y; FKP() {} FKP(const FKP& v) { x = v.x; y = v.y; } };
+struct FKP { float x, y; };  // passed by value as a plain 8-byte copy
 struct CmpGt { bool operator()(const FKP& a, const FKP& b) const { return a.y > b.y; } };
 struct CmpLt { bool operator()(const FKP& a, const FKP& b) const { return a.y < b.y; } };
 // 0x3c-byte POD element: dword key, two words, then 13 floats (+8..+0x38)
@@ -5215,12 +5216,15 @@ void PopHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
 void MakeHeapGt(FKP* first, FKP* last, uint32_t compare)
 {
     int heapSize = (int)(last - first);
-    if (heapSize >= 2) {
+    if (heapSize < 2)
+        return;
+    {
         int parentPosition = ((heapSize - 2) >> 1) + 1;
+        FKP* p = first + parentPosition;
         do {
+            --p;
             --parentPosition;
-            FUN_00745e00(first, parentPosition, heapSize, parentPosition,
-                         first[parentPosition].x, first[parentPosition].y, compare);
+            FUN_00745e00(first, parentPosition, heapSize, parentPosition, *p, compare);
         } while (parentPosition != 0);
     }
 }
@@ -5231,7 +5235,7 @@ void SortHeapGt(FKP* first, FKP* last, uint32_t compare)
     for (; (last - first) > 1; --last) {
         FKP temp(*(last - 1));
         *(last - 1) = *first;
-        FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, compare);
+        FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp, compare);
     }
 }
 
@@ -5239,12 +5243,15 @@ void SortHeapGt(FKP* first, FKP* last, uint32_t compare)
 void MakeHeapLt(FKP* first, FKP* last, uint32_t compare)
 {
     int heapSize = (int)(last - first);
-    if (heapSize >= 2) {
+    if (heapSize < 2)
+        return;
+    {
         int parentPosition = ((heapSize - 2) >> 1) + 1;
+        FKP* p = first + parentPosition;
         do {
+            --p;
             --parentPosition;
-            FUN_00745e80(first, parentPosition, heapSize, parentPosition,
-                         first[parentPosition].x, first[parentPosition].y, compare);
+            FUN_00745e80(first, parentPosition, heapSize, parentPosition, *p, compare);
         } while (parentPosition != 0);
     }
 }
@@ -5255,7 +5262,7 @@ void SortHeapLt(FKP* first, FKP* last, uint32_t compare)
     for (; (last - first) > 1; --last) {
         FKP temp(*(last - 1));
         *(last - 1) = *first;
-        FUN_00745e80(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, compare);
+        FUN_00745e80(first, 0, (int)(last - first) - 1, 0, temp, compare);
     }
 }
 

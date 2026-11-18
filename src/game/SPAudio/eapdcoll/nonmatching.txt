@@ -20,4 +20,3 @@
 00a592f0 130 flags: /O2 /MD /Gy /EHsc /TP
 00a593e0 315 flags: /O2 /MD /Gy /EHsc /TP
 00a59630 30 flags: /O2 /MD /Gy /EHsc /TP
-00a598d0 79 UNSUP  ANDs the three coll-registration sub-bootstraps flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
