@@ -113,7 +113,7 @@ void *cCivModeStrategy::AsInterface(u32 iid)
     return 0;
 }
 
-// @ 0x00cf7a50
+// Legacy copy; canonical marker is in src/game/SPGonzago/SPCityModeStrategy.cpp.
 extern const float kDefaultTerrainA;   // 0x169ca8c
 extern const float kDefaultTerrainB;   // 0x169ca88
 extern const float kDefaultTerrainC;   // 0x169ca84

@@ -1996,8 +1996,9 @@ bool FUN_00d9b480(Creature* a, Creature* b)
 // @ 0x00d9b4e0
 int FUN_00d9b4e0(Creature** a, Creature** b)
 {
-    Creature* ca = a[0];
-    Creature* cb = b[0];
+    Creature* ca = *a;
+    Creature* cb = *b;
+    _ReadWriteBarrier();
     float fa = ca->mX;
     float fb = cb->mX;
     if (fb > fa) return -1;
