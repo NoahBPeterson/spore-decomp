@@ -88,10 +88,13 @@ jobs:
 
       - name: List the functions that match on the base branch
         run: |
-          python3 - <<'EOF' > "$RUNNER_TEMP/keep.txt"
-          import sys; sys.path[:0] = ["tools/ci", "tools/matching"]
+          python3 - "$RUNNER_TEMP/keep_where.txt" <<'EOF' > "$RUNNER_TEMP/keep.txt"
+          import os, sys; sys.path[:0] = ["tools/ci", "tools/matching"]
           import gate, run_all
-          print("\n".join(sorted({"%08x" % r[2] for r in run_all.read_rows(gate.all_manifests(), "")})))
+          pairs = sorted({("%08x" % r[2], os.path.relpath(m)) for m in gate.all_manifests() for r in run_all.read_rows([m], "")})
+          with open(sys.argv[1], "w") as f:   # every (va, manifest) row on the base branch, for the re-match report below
+              f.write("".join("%s %s\n" % p for p in pairs))
+          print("\n".join(sorted({v for v, _m in pairs})))
           EOF
           wc -l < "$RUNNER_TEMP/keep.txt"
 
@@ -167,12 +170,32 @@ jobs:
         run: |
           # pipefail: without it the step takes tee's exit status, and the script's sys.exit(1) never failed a check.
           set -o pipefail
-          python3 - "$RUNNER_TEMP/keep.txt" byte-match.json "$RUNNER_TEMP/changed.txt" <<'EOF2' | tee -a "$GITHUB_STEP_SUMMARY"
-          import json, os, sys
+          python3 - "$RUNNER_TEMP/keep.txt" byte-match.json "$RUNNER_TEMP/changed.txt" "$RUNNER_TEMP/keep_where.txt" <<'EOF2' | tee -a "$GITHUB_STEP_SUMMARY"
+          import collections, json, os, sys
+          sys.path[:0] = ["tools/ci", "tools/matching"]
+          import gate, run_all
           keep = {l.split()[0].lower() for l in open(sys.argv[1]) if l.strip()}
           rows = json.load(open(sys.argv[2])) if os.path.exists(sys.argv[2]) else []
           changed = [l.strip() for l in open(sys.argv[3]) if l.strip()]
           new = sorted({r["va"] for r in rows if r["tag"] == "PASS" and r["va"] not in keep and r.get("kind") != "equivalent"})
+          # Rows this pull request adds whose function was already byte-exact on the base branch, often through a
+          # generated file (match/synth/*.manifest, match/clones.txt): they are not new matches.
+          base = collections.defaultdict(list)
+          for l in open(sys.argv[4]):
+              v, m = l.split(None, 1)
+              base[v].append(m.strip())
+          head = {("%08x" % r[2], os.path.relpath(m)) for m in gate.all_manifests() for r in run_all.read_rows([m], "")}
+          passed = {r["va"] for r in rows if r["tag"] == "PASS"}
+          rematch = sorted(v for v, m in head if v in keep and v in passed and m not in base[v])
+          if rematch:
+              by = collections.defaultdict(list)
+              for v in sorted(set(rematch)):
+                  by[base[v][0]].append(v)
+              print("Already byte-exact on main, so not new matches (%d):" % len(set(rematch)))
+              for m in sorted(by):
+                  vs = by[m]
+                  print("- already matched by `%s`: %s%s" % (m, ", ".join("`0x%s`" % v for v in vs[:20]),
+                                                             " and %d more" % (len(vs) - 20) if len(vs) > 20 else ""))
           eq_changed = any(os.path.basename(p) == "equivalent.txt" or "/equivalent/" in p for p in changed)
           neweq = sorted({r["va"] for r in rows if r["tag"] == "EQUIV"}) if eq_changed else []
           if new:
@@ -185,8 +208,12 @@ jobs:
               print("Notes only (nonmatching.txt / partial.txt): no new match needed.")
           else:
               print("This pull request changes code but adds no new byte-exact function (no manifest row passes here")
-              print("that was not already byte-exact on main). Code changes are merged only when they add a match;")
-              print("what you tried can go in as a notes-only pull request (AGENTS.md, step 7).")
+              print("that was not already byte-exact on main). Code changes are merged only when they add a match.")
+              if rematch:
+                  print("Every function listed above already matches through the file named beside it (match/synth/*")
+                  print("and match/clones.txt are generated matches and count): pick functions no manifest lists yet.")
+              else:
+                  print("What you tried can go in as a notes-only pull request (AGENTS.md, step 7).")
               sys.exit(1)
           EOF2
 
