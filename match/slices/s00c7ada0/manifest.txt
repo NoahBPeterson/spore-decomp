@@ -1,0 +1,1 @@
+slices/s00c7ada0/s00c7ada0.cpp  ?UpdatePlayerCaptureProgressDecay@cPlayer@SP@@QAEXXZ  00c7ada0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

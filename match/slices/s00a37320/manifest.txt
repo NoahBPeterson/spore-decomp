@@ -1,0 +1,1 @@
+slices/s00a37320/s00a37320.cpp  ?Update@cAudioPropertyOwner@@QAE_NHPBMPAX@Z  00a37320  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

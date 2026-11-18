@@ -1,0 +1,1 @@
+slices/s00c9a8b0/s00c9a8b0.cpp  ?Activate@cTribeSpawnPart_s00c9_a8b0@@QAEXXZ  00c9a8b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

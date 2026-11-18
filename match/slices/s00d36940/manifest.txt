@@ -1,0 +1,1 @@
+slices/s00d36940/s00d36940.cpp  ?Init@cCreatureModeInputStrategy@SP@@QAEXH@Z  00d36940  /O2 /MD /Gy /TP

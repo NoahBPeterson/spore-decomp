@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00d33ec0/s00d33ec0.cpp  ?SetPickPriorities@@YGXH@Z  00d33ec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

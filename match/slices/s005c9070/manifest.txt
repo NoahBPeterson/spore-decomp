@@ -1,0 +1,1 @@
+slices/s005c9070/s005c9070.cpp  ?ScalarDeletingDestructor@cSPPalettePageUI@SP@@QAEPAV12@I@Z  005c9070  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -1,0 +1,1 @@
+slices/s007dbea0/s007dbea0.cpp  ?SaveCameraPosition@cSmoothCameraController@SP@@QAEXH@Z  007dbea0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -36,3 +36,4 @@
 ../src/game/SPGonzago/SPUIMissions.cpp  ?FUN_00e2eba0@@YAPADPAVcSimNoun@@@Z  00e2eba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ??0cSPUIRelationshipStrip@@QAE@XZ  00e2ec40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUIMissions.cpp  ?InitB@CardLayout@@QAEPAU1@XZ  00e147a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUIMissions.cpp  _cSortMissionsByMode@8  00e19dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

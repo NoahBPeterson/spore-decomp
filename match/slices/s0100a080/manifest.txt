@@ -1,0 +1,1 @@
+slices/s0100a080/s0100a080.cpp  ?UpdateUFOStatusEffects@@YAXXZ  0100a080  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS-

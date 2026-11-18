@@ -11,3 +11,4 @@ slices/s00c52080/s00c52080.cpp  ?EnterStateTwo@cSPMissionFetch@@QAEXXZ  00c52ea0
 slices/s00c52080/s00c52080.cpp  ?FindPlayerItem@@YA_NPAUcVec3Vector@@PAUcVec3@@@Z  00c52f20  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 slices/s00c52080/s00c52080.cpp  ?SP_SetMissionFlagDefault@@YAXPAX0@Z  00c52f80  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 slices/s00c52080/s00c52080.cpp  ?Destroy@cSPMissionFetch@@QAEPAU1@D@Z  00c53120  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00c52080/s00c52080.cpp  ?GetRewardFactor@cSPMissionFetch@@QAEMPAUSimCivObject_c7@@PB_N@Z  00c52280  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast

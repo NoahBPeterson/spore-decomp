@@ -4675,6 +4675,60 @@ bool cSortMissions::operator()(int* a, int* b)
     return k1 < k2;
 }
 
+// @ 0x00e19dd0
+// Item ordering in the current game mode: true when a's entry comes after b's.
+struct cOrderedItemSource {
+    void* GetOrderedItems();   // 0x009892e0
+};
+extern "C" bool __stdcall cSortMissionsByMode(int* a, int* b)
+{
+    int mode = (int)SP_GetCurrentGameMode();
+    switch (mode) {
+    case 0x1654c05: {
+        int* pa = a ? (int*)(*(int(__thiscall**)(int*, int))((char*)(*(int**)a) + 0xc))(a, 0x2aa5ada) : 0;
+        int* pb = b ? (int*)(*(int(__thiscall**)(int*, int))((char*)(*(int**)b) + 0xc))(b, 0x2aa5ada) : 0;
+        void* list = ((cMissionManager*)GetMissionManager())->GetMissionList();
+        int* cur = (int*)*(int*)list;
+        int n = (*((int*)list + 1) - (int)cur) >> 2;
+        int k1 = -1;
+        int k2 = -1;
+        for (int i = 0; i < n; ++i) {
+            int v = *cur;
+            if (v == (int)pa) k1 = i;
+            else if (v == (int)pb) k2 = i;
+            if (k1 != -1 && k2 != -1) break;
+            ++cur;
+        }
+        return k1 > k2;
+    }
+    case 0x1654c01:
+    case 0x1654c02:
+    case 0x1654c04: {
+        int* pa = a ? (int*)(*(int(__thiscall**)(int*, int))((char*)(*(int**)a) + 0xc))(a, 0x14066ce5) : 0;
+        int* pb = b ? (int*)(*(int(__thiscall**)(int*, int))((char*)(*(int**)b) + 0xc))(b, 0x14066ce5) : 0;
+        void* src;
+        if (mode == 0x1654c01) src = (void*)FUN_00d37cb0();
+        else if (mode == 0x1654c02) src = (void*)FUN_00cd3440();
+        else src = (void*)FUN_00d004b0();
+        void* list = ((cOrderedItemSource*)src)->GetOrderedItems();
+        int* cur = (int*)*(int*)list;
+        int n = (*((int*)list + 1) - (int)cur) >> 2;
+        int k1 = -1;
+        int k2 = -1;
+        for (int i = 0; i < n; ++i) {
+            int v = *cur;
+            if (v == (int)pa) k1 = i;
+            else if (v == (int)pb) k2 = i;
+            if (k1 != -1 && k2 != -1) break;
+            ++cur;
+        }
+        return k1 > k2;
+    }
+    default:
+        return false;
+    }
+}
+
 // @ 0x00e1a1a0
 uint32_t __fastcall FUN_00e1a1a0(CIndexedArray* pThis)
 {
