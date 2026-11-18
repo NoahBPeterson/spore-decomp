@@ -3157,8 +3157,7 @@ void GraphicsTabF10::F10()
     if (o) {
       o->vt0();
       const uint32_t key = 0x46170a2;
-      uint32_t v = (GetCanvas()->vt54() != 0);
-      mData[key] = v;
+      mData[key] = (GetCanvas()->vt54() != 0);
       uint32_t v2 = mData[key];
       o->vt28(4, v2 != 0);
       GetConfig14()->vt2c(key, v2);
