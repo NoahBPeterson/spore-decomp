@@ -489,7 +489,8 @@ struct MapStrInt {                      // eastl::map<eastl::string,int>
     u8       mPad_11[3];                // +0x11
     int      mnSize_14;                 // +0x14
     uint     mPad_18;                   // +0x18
-    int*  at(const EaString* key);          // 0x00b1c220  operator[]
+    int*  at(const EaString* key);          // 0x00e4bda0  (int-keyed lookup/insert)
+    int*  FUN_00b1c220(const EaString* key); // 0x00b1c220  operator[]
     void* find(void** out, const void* key); // 0x00b20930  ?Find@MapStrFind
     void  NukeSubtree(void* root);          // 0x00e84940  DoNukeSubtree
 };
@@ -1392,7 +1393,7 @@ int* MapStrInt::at(const EaString* key)
     if (pos == head || k < *(int*)((char*)pos + 0x10)) {
         EaString tmp;
         tmp.SetEmpty();
-        void* v = FUN_00b1c220();
+        void* v = ::FUN_00b1c220();
         (void)v;
         u8* n = (u8*)NewMapNode(this, pos, k);
         pos = (void**)n;
@@ -1459,7 +1460,7 @@ void FUN_00e4bff0(const char* key, int value)
     EaString& s = frame.s;
     s.SetEmpty();
     s.sprintf_(g_fmtPctS, key);
-    int* slot = gspAppDataGlobals_s00e4_ba40->mFieldMap_28.at(&s);
+    int* slot = gspAppDataGlobals_s00e4_ba40->mFieldMap_28.FUN_00b1c220(&s);
     *slot = value;
     s.FreeIfOwned();
 }
