@@ -7987,17 +7987,19 @@ bool __cdecl FUN_00d7b710(cSPCreatureBase* pCreature, uint32_t, uint32_t, uint32
     switch (pCtx->mn00)
     {
     case 0:
+    {
+        // receive the event id of the greet/notice animation, then flag the
+        // creature and start the follow-up animation
+        int32_t nEvent;
+        if (pCreature->WaitForAnimEventOrEnd(0xbfa50b5a, &nEvent, -1, pCtx->mn04, 1))
         {
-            int32_t nEvent;
-            if (pCreature->WaitForAnimEventOrEnd(0xbfa50b5a, &nEvent, -1, pCtx->mn04, 1))
-            {
-                pCreature->FUN_00c1d460(0x4f26350b, 0x4f26350b);
-                pCreature->mpBehaviorTree->mStimuli.ClearAll(0x400000, 0);
-                pCtx->mn04 = pCreature->PlayAnimation(0xb346511c, 1, -1);
-                pCtx->mn00 = 1;
-            }
+            pCreature->FUN_00c1d460(0x4f26350b, 0x4f26350b);
+            pCreature->mpBehaviorTree->mStimuli.ClearAll(0x400000, 0);
+            pCtx->mn04 = pCreature->PlayAnimation(0xb346511c, 1, -1);
+            pCtx->mn00 = 1;
         }
         break;
+    }
     case 1:
         if (pCreature->IsAnimFinished(pCtx->mn04))
             return false;
