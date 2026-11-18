@@ -2250,7 +2250,7 @@ void CS553::f55c80(void* job)
 void S_755fe0::FUN_00755fe0(void* arg)
 {
   (void)arg;
-  GetManager_755d40();
+  GetManager();
   int uVar1 = m108;
   IFoo_755d40* piVar2 = m104;
   if (piVar2 != 0) {
