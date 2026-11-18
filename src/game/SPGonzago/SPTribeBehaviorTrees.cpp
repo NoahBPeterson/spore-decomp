@@ -5962,7 +5962,7 @@ u8 __cdecl FUN_00da6b10(cSPCreatureCitizen* a, cSPCreatureCitizen* b)
     int id1 = a->v4c();
     int id2 = b->v4c();
     if (id1 == id2)
-        goto done;
+        return set;
     if (b->mpOrders->FindSlot(0, 2, 0, 0) != -1 ||
         b->mpOrders->FindSlot(1, 2, 0, 0) != -1 ||
         b->mpBTree->mKey1d8 == 0xd59a3b60)
@@ -5971,8 +5971,6 @@ u8 __cdecl FUN_00da6b10(cSPCreatureCitizen* a, cSPCreatureCitizen* b)
     if (set || v > 1)
         return 0;
     return 1;
-done:
-    return set;
 }
 
 // @ 0x00da6bb0
