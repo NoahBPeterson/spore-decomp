@@ -73,15 +73,14 @@ static const int kCommandIdSetCommandComplete = 0x12;
 // Plugin id of the level-meter plugin looked up in the voice container by CreateVoice.
 static const uint32_t kLevelMeterPluginId = 0x56754d31;
 
-// @ 0x00a38e40
 namespace SP { namespace Audio {
+// @ 0x00a38e40
 long double cEmitterSndPlayer::ComputeGainAttenuation(float a, float b, float c, float d)
 {
-    if (c <= a) {
-        if (b != 0.0f) {
-            if (a <= d) return 0.0L;
-            return mAttenuationCurve.GetOutputValue((a - c) / (d - c));
-        }
+    if (c > a) return 1.0L;
+    if (b != 0.0f) {
+        if (a > d) return 0.0L;
+        return mAttenuationCurve.GetOutputValue((a - c) / (d - c));
     }
     return 1.0L;
 }
