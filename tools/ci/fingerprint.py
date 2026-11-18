@@ -7,7 +7,9 @@ A fingerprint is made once by a maintainer, from the retail image (make_fingerpr
           displacement holding an address in the image or read through fs: (thread-local storage), and the 4-byte
           displacement of every call/jmp/jcc rel32 that leaves the function or targets its own start
   sha256  of the retail bytes with the masked offsets zeroed
-Fingerprints hold no names and no code bytes.
+  masked  the retail bytes at the masked offsets, in offset order, as hex: the addresses the function uses (call
+          targets, globals, vtables), which targets.py compares with the addresses the source's names claim (#458)
+Fingerprints hold no names and no instructions: apart from those addresses, no code bytes.
 
 The check (gate.py, CI) compiles the function, cuts it out of the object file together with the EH funclets and local
 labels the compiler places after it, and requires: the same size, every relocation on a masked offset, the same hash.
@@ -100,7 +102,13 @@ def make(orig, va, size, md=None, rng=None):
             if not va < int(ins.op_str, 16) < va + size:
                 o = ins.address - va + ins.size - 4
                 mask |= {o, o + 1, o + 2, o + 3}
-    return {"va": "%08x" % va, "size": size, "mask": pack_mask(mask), "sha256": mhash(data, mask)}
+    return {"va": "%08x" % va, "size": size, "mask": pack_mask(mask), "sha256": mhash(data, mask),
+            "masked": masked_hex(data, mask)}
+
+
+def masked_hex(data, mask):
+    """the bytes at the masked offsets, in offset order, as hex (targets.py reads them back with the mask)"""
+    return bytes(data[i] for i in sorted(mask) if i < len(data)).hex()
 
 
 # ---- check side (CI: object file only) ----

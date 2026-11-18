@@ -108,6 +108,18 @@ def main():
         else:
             print("  (for an instruction diff, make work/SporeApp.analysis.bin from your own game: tools/contrib/make_image.py)")
         return 1
+    if not stubs:
+        # do the names point where retail points? (tools/ci/targets.py, #458; the bytes match with any address)
+        import targets as TG
+        bad = TG.describe(TG.check(fp, obj, sym) or [])
+        if bad:
+            print("  but a name points somewhere other than retail does at that spot (the bytes match only because")
+            print("  addresses are masked; the pull request check fails this):")
+            for line in bad:
+                print("    " + line)
+            print("  Fix the name or the source so it refers to what retail uses there (or the symbols/ line, if that")
+            print("  is what is wrong). Nothing recorded.")
+            return 1
     if any(r[2] == va for r in S.manifest_rows(ident)):
         print("(already a manifest row: nothing to add)")
         return 0

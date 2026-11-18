@@ -26,6 +26,7 @@ import run_all as R             # noqa: E402
 import asm_audit                # noqa: E402
 import fingerprint as F         # noqa: E402
 import ltcg                     # noqa: E402
+import targets as T             # noqa: E402
 
 
 # compiler options a manifest row may use (every option the manifests used on 2026-11-09).  Anything else is refused
@@ -94,6 +95,7 @@ def main():
                 print("COMPILE FAILED %s\n%s" % (key[0], log.strip()[-1500:]))
     coffs, out, ok = {}, [], 0
     for src, sym, va, flags in rows:
+        tb = []                     # names that claim another address than retail uses here (targets.py, #458)
         obj = objs.get((src, flags))
         if refused[(src, flags)]:
             st = "refused: " + refused[(src, flags)]
@@ -116,13 +118,17 @@ def main():
                 st = F.check(fps[va], data, rel) if data is not None else "LTCG build failed: " + log[-300:]
             else:
                 st = F.check(fps[va], *F.extract(secs, syms, name))
+                if st == "PASS":
+                    tb = T.describe(T.check(fps[va], obj, name) or [])
             asm = asm_audit.transcribed(os.path.join(ROOT, "match", src)).get("%08x" % va)
             if asm and st == "PASS":
                 st = "assembly transcription, not decompiled (%s)" % asm
         ok += st == "PASS"
         tag = "PASS" if st == "PASS" else "KNOWN" if va in known else "FAIL"
-        out.append({"va": "%08x" % va, "src": src, "result": st, "tag": tag})
+        out.append({"va": "%08x" % va, "src": src, "result": st, "tag": tag, **({"targets": tb} if tb else {})})
         print("%-5s %08x  %s%s" % (tag, va, src, "" if st == "PASS" else "  " + st))
+        for line in tb:
+            print("      target %s" % line)
     neq = 0
     for path in eqfiles:
         for src, sym, va, flags in R.read_rows([path], ""):
