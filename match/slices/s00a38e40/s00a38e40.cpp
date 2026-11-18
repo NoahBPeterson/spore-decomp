@@ -172,7 +172,7 @@ using namespace EA;
 using namespace EA::Audio;
 
 // ---------------------------------------------------------------------------
-// @ 0x00a38e40
+// Legacy reconstruction; the maintained definition is in SPAudioEmitterSndPlayer.cpp.
 // ---------------------------------------------------------------------------
 class cEmitterSndPlayer : public EmitterSndPlayer { public:
     void* mpE00;   // +0xe00
@@ -185,7 +185,7 @@ class cEmitterSndPlayer : public EmitterSndPlayer { public:
     bool GetProperty(uint32_t key, float* out);
 };
 
-// @ 0x00a38e40
+// Legacy reconstruction; the maintained definition is in SPAudioEmitterSndPlayer.cpp.
 long double cEmitterSndPlayer::ComputeGainAttenuation(float a, float b, float c, float d) {
     if (c <= a) {
         if (b != 0.0f) {
