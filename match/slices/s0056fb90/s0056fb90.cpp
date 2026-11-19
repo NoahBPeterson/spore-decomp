@@ -270,24 +270,27 @@ struct Elem1c {
     char pad[0x1c];
     bool operator<(const Key1c& k) const;   // @ 0x005715d0
 };
-Elem1c* LowerBound1c(Elem1c* first, Elem1c* last, Key1c* key);        // @ 0x0056fe60
+Elem1c* LowerBound1c(Elem1c* first, Elem1c* last, Key1c* key);
+// @ 0x0056fe60
 Elem1c* LowerBound1c(Elem1c* first, Elem1c* last, Key1c* key)
 {
     // Names chosen from od_names.py fit 5 to reproduce the original /Od slot order.
     int it = (int)((char*)last - (char*)first) / 0x1c;
-    ScratchSlots<1>();
     while (it > 0) {
         Elem1c* n28 = first;
         int v13 = it >> 1;
         n28 = n28 + v13;
-        Elem1c* v28 = n28;
-        if ((*v28).operator<(*key)) {
-            n28 = n28 + 1;
-            first = n28;
-            it = it - (v13 + 1);
-        }
-        else {
-            it = v13;
+        {
+            int v14;
+            Elem1c* v28 = n28;
+            if ((*v28).operator<(*key)) {
+                n28 = n28 + 1;
+                first = n28;
+                it = it - (v13 + 1);
+            }
+            else {
+                it = v13;
+            }
         }
     }
     return first;

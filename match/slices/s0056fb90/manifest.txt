@@ -7,3 +7,4 @@ slices/s0056fb90/s0056fb90.cpp  ?DoAssign@Vec12Vector@@QAEXPBUVec12@@0ABUFalseTa
 slices/s0056fb90/s0056fb90.cpp  ?CopyDestroyRange1c@@YAPAXPAX00@Z  005702c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s0056fb90/s0056fb90.cpp  ?RigBlockSetInsert@@YAXI_N@Z  00570480  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s0056fb90/s0056fb90.cpp  ?Blend@TraitData@@QAEX_NPAUFeatureVector@@I@Z  005708d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056fb90/s0056fb90.cpp  ?LowerBound1c@@YAPAUElem1c@@PAU1@0PAUKey1c@@@Z  0056fe60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
