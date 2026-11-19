@@ -1398,10 +1398,10 @@ void cJobManager::ScheduleJob(cJobData* job)
         if (pCond->mpPrev != pCond) {
             IntrusiveList* n = pCond->mpNext;
             if (n->mpPrev != n) {
-                IntrusiveList* nx = n->mpNext;
                 IntrusiveList* pv = n->mpPrev;
-                nx->mpPrev = pv;
+                IntrusiveList* nx = n->mpNext;
                 pv->mpNext = nx;
+                nx->mpPrev = pv;
                 n->mpNext = n;
                 n->mpPrev = n;
                 ((JobWaitNode*)n)->mSemaphore.Post(1);
@@ -1409,30 +1409,28 @@ void cJobManager::ScheduleJob(cJobData* job)
         }
         pCond = &mJobReadyOrSyncCondition;
         if (pCond->mpPrev != pCond) {
-            unsigned int n = (unsigned int)pCond->mpNext;
-            if (*(unsigned int*)(n + 4) != n) {
-                IntrusiveList* nx = (IntrusiveList*)*(unsigned int*)n;
-                nx->mpPrev = (IntrusiveList*)*(unsigned int*)(n + 4);
-                (*(IntrusiveList**)(n + 4))->mpNext = nx;
-                *(unsigned int*)n = n;
-                *(unsigned int*)(n + 4) = n;
-                ((JobWaitNode*)n)->mSemaphore.Post();
+            IntrusiveList* n = pCond->mpNext;
+            if (n->mpPrev != n) {
+                IntrusiveList* pv = n->mpPrev;
+                IntrusiveList* nx = n->mpNext;
+                pv->mpNext = nx;
+                nx->mpPrev = pv;
+                n->mpNext = n;
+                n->mpPrev = n;
+                ((JobWaitNode*)n)->mSemaphore.Post(1);
             }
         }
     } else {
-        unsigned int a = aff;
-        int idx = 0;
-        while (!(a & 1)) { a >>= 1; ++idx; }
-        InsertJobByPriority(&mReadyList[idx], job);
+        InsertJobByPriority(&mReadyList[EA::GetHighestBitPowerOf2(aff)], job);
         for (IntrusiveList* it = mThreads.mpNext; it != &mThreads; it = it->mpNext) {
             cJobThread* t = (cJobThread*)it;
             if (t->mThreadId != 0 && (job->mThreadAffinity & t->mAffinity) != 0) {
                 JobWaitNode* wait = (JobWaitNode*)((char*)t + 8);
                 if (wait->mpPrev != wait) {
-                    JobWaitNode* nx = wait->mpNext;
                     JobWaitNode* pv = wait->mpPrev;
-                    nx->mpPrev = pv;
+                    JobWaitNode* nx = wait->mpNext;
                     pv->mpNext = nx;
+                    nx->mpPrev = pv;
                     wait->mpNext = wait;
                     wait->mpPrev = wait;
                     wait->mSemaphore.Post(1);

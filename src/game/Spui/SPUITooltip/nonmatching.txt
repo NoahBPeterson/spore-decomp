@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00835520 6 TooltipManager::MakeFullyVisibleInMainWindow: vtable/function register swap only
 00835610 47 TooltipManager::LoadProps: PropertyManager loop register scheduling differs
 008356e0 660 cSPUITooltipManager::ShowTooltip - full tooltip/layout state machine; complete, register/scheduling mismatch on the float layout-rect branch
 00835a50 505 cSPUITooltipWinProc::DoMessage - full switch dispatch; complete, jump-table layout + timestamp stores differ

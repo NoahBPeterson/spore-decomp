@@ -4564,6 +4564,7 @@ bool __thiscall GridMask::FitsMask(unsigned m1, unsigned m2)
     return true;
 }
 
+template <class T> inline void SwapRef_s00bc87b0(T& a, T& b) { T t = a; a = b; b = t; }
 // @ 0x00bc87b0
 void __cdecl Grid_FlushPending(char flag, unsigned a2, char* obj, unsigned a4, double a5)
 {
@@ -4576,9 +4577,7 @@ void __cdecl Grid_FlushPending(char flag, unsigned a2, char* obj, unsigned a4, d
     }
     *(unsigned*)(obj + 0x55) = 0;
     if (flag) {
-        unsigned tmp = *(unsigned*)(obj + 0x51);
-        *(unsigned*)(obj + 0x51) = *(unsigned*)(obj + 0x4d);
-        *(unsigned*)(obj + 0x4d) = tmp;
+        SwapRef_s00bc87b0(*(unsigned*)(obj + 0x51), *(unsigned*)(obj + 0x4d));
         *(unsigned*)(obj + 0x55) = a2;
         return;
     }
