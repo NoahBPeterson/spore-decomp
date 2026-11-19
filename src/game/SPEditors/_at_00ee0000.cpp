@@ -4360,6 +4360,8 @@ bool Hee::F3F60(int msg, void* param)
     return false;
 }
 
+extern void* g_013eb394[];   // 0x013eb394 PaintSystem vftable (query's base vtable)
+
 // @ 0x00ee40f0
 void Bee::F40F0()
 {
@@ -4371,13 +4373,15 @@ void Bee::F40F0()
     KeyVec found;
     GetManager()->ResolveQuery(&found, &query, 0);
 
-    u32 idx = sMathRandom.RandomUint32Uniform((u32)(found.mpEnd - found.mpBegin));
+    u32 n = (u32)(found.mpEnd - found.mpBegin);
+    u32 idx = sMathRandom.RandomUint32Uniform(n);
     ApplyPick(found.mpBegin + idx);
+
 
     // inlined destructors, in reverse construction order
     SpFree(found.mpBegin);
     SpFree(query.mIds.mpBegin);
-    query.mpVtbl = (void*)0x13eb394;
+    query.mpVtbl = (void*)g_013eb394;
     SpFree(ids.mpBegin);
 }
 
