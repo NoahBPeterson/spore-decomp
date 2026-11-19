@@ -19110,8 +19110,9 @@ void cUISpaceRes::Destroy()
         ((void (__thiscall*)(void*))(*(void***)mpTracer48)[1])(mpTracer48);
     mVec30.DestroyRangeVariant(mVec30.mpBegin, mVec30.mpEnd);      // 0x00685a30
     RawFree(mVec30.mpBegin);
-    mpVtbl00 = (void*)0x13eb938;
     mpVtbl18 = (void*)0x13eb938;
+    _ReadWriteBarrier();
+    mpVtbl00 = (void*)0x13eb938;
 }
 
 // @ 0x00dff130

@@ -1954,7 +1954,7 @@ void cPollinator_s0060_d860::UpdateProperty2(uint32_t id, const Key_s0060_d860* 
     Pollen::cAssetMetadata_s0060_d860* pMetadata = 0;
     if (Pollen::GetAssetMetadata(*key, &pMetadata)) {
         EA::U64Pair serverId = *pMetadata->GetServerId();
-        if ((serverId.lo & serverId.hi) != 0xffffffff) {
+        if ((serverId.hi & serverId.lo) != 0xffffffff) {
             if (cPropertyManager_s0060_d860* pMgr = GetPropertyManager()) pMgr->SetProperty2(id, serverId.lo, serverId.hi, v);
         }
     }
