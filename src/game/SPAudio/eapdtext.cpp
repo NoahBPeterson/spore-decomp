@@ -1592,10 +1592,18 @@ void message_list(Text* x, t_symbol s, int argc, t_atom_s00a4_f1e0* argv)
 }
 
 // @ 0x00a4f7b0
-void message_set(Text* x, t_symbol s, u32 p4, int argc, t_atom_s00a4_f1e0* argv)
+void message_set(Text* x, t_symbol s, int argc, t_atom_s00a4_f1e0* argv)
 {
-    (void)s; (void)p4;
+    (void)s;
     binbuf_clear(x->te_binbuf);
+    binbuf_add(x->te_binbuf, argc, argv);
+    glist_retext(x->te_glist, x);
+}
+
+// @ 0x00a4f7e0
+void message_add(Text* x, t_symbol s, int argc, t_atom_s00a4_f1e0* argv)
+{
+    (void)s;
     binbuf_add(x->te_binbuf, argc, argv);
     glist_retext(x->te_glist, x);
 }
