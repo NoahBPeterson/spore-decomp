@@ -233,7 +233,7 @@ class cSpatialObject {
   virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
 
   cSpatialObject();                                 // 0x00c89630
-  void DtorBody();                                  // 0x00c8a420
+  void DtorBody();                                  // 0x00c8b2e0
   void* AsInterfaceQuery(uint id);                  // 0x00c884f0
   char pad80[0x6c];
   bool mbSpatialFlag;                               // +0x70 (retail)
@@ -249,7 +249,7 @@ class cInteractionTarget {
   virtual void Shutdown();
   virtual int Release();
   cInteractionTarget();                             // 0x00ac03d0
-  void DtorBody();                                  // 0x00ac0520
+  void DtorBody();                                  // 0x00ac0450
   void* QueryInterfaceHere(uint id);                // 0x00ac0320
   char pad04[0x14];                                 // -> retail size 0x18
 };
