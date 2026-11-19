@@ -195,7 +195,7 @@ int* Vec::findLower(int* param_2)
     int* piVar2 = (int*)FUN_007330d0((int)mBegin, (int)piVar1, param_2, (uint8_t)mFlag);
     if (piVar2 != piVar1)
     {
-        if ((*piVar2 <= *param_2) && ((*piVar2 < *param_2) || (piVar2[1] <= param_2[1])))
+        if (!((*param_2 < *piVar2) || (!(*piVar2 < *param_2) && (param_2[1] < piVar2[1]))))
             goto ret;
     }
     {
