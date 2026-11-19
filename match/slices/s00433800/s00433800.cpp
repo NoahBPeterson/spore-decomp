@@ -293,13 +293,13 @@ struct StatVec {
 void StatVec::Resize(uint32_t n)
 {
     if (n > (uint32_t)(end - begin)) {
-        Stat fill;
-        fill.value = kStatFillValue;
-        Stat* at;
-        uint32_t add = n - (end - begin);
-        at = end;
-        uint32_t u0, u1, u2, u3, u4, u5;   // unused locals present in the original frame
-        Grow(at, add, &fill);
+        Stat value;
+        value.value = kStatFillValue;
+        Stat* cur;
+        uint32_t size = n - (end - begin);
+        cur = end;
+        uint32_t right, buf, val, owner, data, result;   // /Od slot order; unused, they hold the frame
+        Grow(cur, size, &value);
     } else {
         EraseTail(begin + n, end);
     }
