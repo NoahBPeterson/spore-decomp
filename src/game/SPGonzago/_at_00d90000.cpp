@@ -784,7 +784,7 @@ struct SocialValues {
     void  StartFillLeft(float rate, float d);                      // 0x00d9b0d0
     void  Update(int a0, int a1, Creature* c0, Creature* c1);     // 0x00d9ba60 (thiscall, ret 0x10)
 };
-void*  SP_MessageServer();                                // 0x00b5b800-ish; see 0x00da6270 family
+void*  SP_MessageServer();                                // 0x0067dcc0 (returns [0x015fd890], the message server)
 int    FUN_00d998d0(int handle, uint key);                // 0x00d998d0
 int    FUN_00d99500(void* p);                             // 0x00d99500
 int    FUN_00d994c0(void* p);                             // 0x00d994c0

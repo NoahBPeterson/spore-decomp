@@ -208,7 +208,7 @@ struct SocialProposeBlock {
 void*  SP_NounManager();                                  // 0x00b3d300
 void*  NounMgr_GetAvatar(void* mgr);                      // 0x00b1fdb0
 void*  SP_GetCurrentGameMode();                           // 0x00b5b800 (returns &DAT_01654c10)
-void*  SP_MessageServer();                                // 0x00b5b800-ish; see 0x00da6270 family
+void*  SP_MessageServer();                                // 0x0067dcc0 (returns [0x015fd890], the message server)
 void*  EA_Audio_GetSystemAT();                            // 0x00a206f0
 void   FUN_00d39360(uint a, void* b);                     // 0x00d39360
 void*  FUN_00d37cb0();                                    // 0x00d37cb0
