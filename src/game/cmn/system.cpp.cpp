@@ -516,17 +516,21 @@ void AudioObject::IsCommandComplete(u32 a, float f)
     c->m_fc = f;
 }
 
+struct NodeOwner_s0112cd30
+{
+    u8   pad0[0x24];
+    Node link;                 // +0x24
+};
 // @ 0x0112cd30
 Node* NodeList::find(u32 id)
 {
     Node* n = m_head;
     while (n != 0)
     {
-        Node* base = (Node*)((char*)n - 0x24);
-        Node* next = n->pnext;
-        if (n->m_id == id)
-            return base;
-        n = next;
+        NodeOwner_s0112cd30* owner = (NodeOwner_s0112cd30*)((char*)n - 0x24);
+        n = n->pnext;
+        if (owner->link.m_id == id)
+            return (Node*)owner;
     }
     return 0;
 }
