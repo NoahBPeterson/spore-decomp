@@ -1,0 +1,3 @@
+# source  symbol  va  flags   (proved equivalent, not byte-exact: tools/contrib/prove.py)
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?ClearRelevels@cTerrainSphere_s00fa_6480@@QAEXXZ  00fa6ec0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPTerrain/SPTerrainSphere.cpp  ?ClearPlayerModifications@cTerrainSphere_s00fa_6480@@QAEXXZ  00fa73c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
