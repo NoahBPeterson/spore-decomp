@@ -5,3 +5,4 @@
 ../src/game/SPEngine/SPGraphicsShadowWorld.cpp  ?SetFlag@BoolFlagHolder@@QAEX_N@Z  00780250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsShadowWorld.cpp  ?FUN_0077fb10@@YAPAUElem12@@PAU1@00@Z  0077fb10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsShadowWorld.cpp  ?FUN_0077f210@@YIXPAUShadowWorldEditor@@@Z  0077f210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsShadowWorld.cpp  ?FUN_007824e0@cSWsub@@QAEXXZ  007824e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

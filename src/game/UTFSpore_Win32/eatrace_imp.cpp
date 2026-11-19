@@ -166,8 +166,21 @@ ILogManager* GetLogManager();                 // 0x00697fa0
 namespace EA {
 namespace Trace {
 struct TraceLogManagerRef {
-    int f0, f4, f8, fc;
-    ILogManager* mpLogManager;                // +0x10
+    struct Pair_s00925540 { int f0, f4; Pair_s00925540() { f4 = 0; f0 = 0; } } mPair;
+    int f8, fc;
+    struct LogManagerPtr_s00925540 {
+        ILogManager* mp;
+        LogManagerPtr_s00925540() : mp(0) {}
+        LogManagerPtr_s00925540& operator=(ILogManager* p) {
+            if (p != mp) {
+                ILogManager* const old = mp;
+                if (p) p->AddRef();
+                mp = p;
+                if (old) old->Release();
+            }
+            return *this;
+        }
+    } mpLogManager;                           // +0x10
     TraceLogManagerRef();
 };
 }
@@ -596,15 +609,8 @@ TraceHelper_s0092_45b0* TraceHelperTable::ReserveHelper(unsigned type, const cha
 namespace EA { namespace Trace {
 TraceLogManagerRef::TraceLogManagerRef()
 {
-    f4 = 0; f0 = 0; mpLogManager = 0;
-    ILogManager* m = GetLogManager();
-    ILogManager* old = mpLogManager;
-    if (m != old) {
-        if (m) m->AddRef();
-        mpLogManager = m;
-        if (old) old->Release();
-    }
-    g_01668e9c->field->UpdateTracerRaw(mpLogManager);
+    mpLogManager = GetLogManager();
+    g_01668e9c->field->UpdateTracerRaw(mpLogManager.mp);
 }
 }}  // namespace EA::Trace
 

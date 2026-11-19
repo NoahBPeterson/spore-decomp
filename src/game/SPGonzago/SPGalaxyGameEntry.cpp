@@ -4958,9 +4958,11 @@ struct PropertyListRef {
     PropertyList* p;
     PropertyListRef() : p(0) {}
     void Reset() {
-        PropertyList* old = p;
-        p = 0;
-        if (old) old->Release();
+        if (p) {
+            PropertyList* old = p;
+            p = 0;
+            old->Release();
+        }
     }
 };
 struct PropertyManager_s00de_41b0 {

@@ -1956,13 +1956,9 @@ int cModelInstance_s0073_a110::GetAnimationMoveToTimes(int animID, int* dst, cha
         start += e->mAnimFirstDeform;
         n -= e->mAnimFirstDeform;
     }
-    if (dst != 0 && n > 0) {
-        int i = 0;
-        do {
-            // the controller table is re-read every step: the store through dst may alias it
+    if (dst != 0) {
+        for (int i = 0; i < n; ++i)
             dst[i] = *(const int*)((const char*)mControllers + start * 8 + i * 8);
-            ++i;
-        } while (i < n);
     }
     return n;
 }

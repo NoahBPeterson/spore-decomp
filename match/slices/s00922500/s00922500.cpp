@@ -775,12 +775,11 @@ unsigned __stdcall EA::Thread::EAThreadEntryWrapped(void* arg)
         } __except (EXCEPTION_CONTINUE_EXECUTION) {
         }
     }
-    unsigned r;
     if (p->mpBeginThreadUserWrapper != 0)
-        r = ((unsigned (__cdecl*)(void*, void*))p->mpBeginThreadUserWrapper)(pfn, pctx);
+        p->mnReturnValue = ((unsigned (__cdecl*)(void*, void*))p->mpBeginThreadUserWrapper)(pfn, pctx);
     else
-        r = (*(unsigned (__thiscall**)(void*, void*))((char*)*(void**)pfn + 4))(pfn, pctx);
-    p->mnReturnValue = r;
+        p->mnReturnValue = (*(unsigned (__thiscall**)(void*, void*))((char*)*(void**)pfn + 4))(pfn, pctx);
+    unsigned r = p->mnReturnValue;
     SetCurrentThreadHandle(0, false);
     p->mnStatus = 2;
     if (_InterlockedDecrement(&p->mnRefCount) == 0)

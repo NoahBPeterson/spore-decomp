@@ -5723,7 +5723,7 @@ struct DequeBase {
     void  DequeAlloc(unsigned int n);     // 0x4ab350
     void  ReallocNodeMap(unsigned int n, int flag);  // 0x503470
     void* DoAllocatePtrArray(int n);      // 0x56a240
-    void* PushFront(void* value);         // 0x4ab130
+    void  PushFront(void* value);         // 0x4ab130
 };
 struct Matrix3Like { char pad[0x24]; Matrix3Like(const Matrix3Like&); };
 extern OrientedPoint_s004a_a760* CopyOrientedRange(OrientedPoint_s004a_a760* first, OrientedPoint_s004a_a760* last,
@@ -12691,7 +12691,7 @@ void VecM33::Insert(cSPMatrix3_s004a_a760* position, const cSPMatrix3_s004a_a760
 }
 
 // @ 0x004ab130
-void* DequeBase::PushFront(void* param_2)
+void DequeBase::PushFront(void* param_2)
 {
     void* v = *(void**)param_2;
     if (begin_.node == map) {
@@ -12700,8 +12700,7 @@ void* DequeBase::PushFront(void* param_2)
     begin_.node[-1] = (uint8_t*)AllocNode();
     begin_.SetSubarray((void**)(begin_.node - 1));
     begin_.cur = begin_.last - 4;
-    void* r = begin_.cur;
-    return r ? (*(void**)r = v, r) : 0;
+    new (begin_.cur) void*(v);
 }
 
 // @ 0x004ab210
