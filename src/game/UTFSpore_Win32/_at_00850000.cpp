@@ -1772,13 +1772,24 @@ void FUN_00854e70(cTerrainExport* p)
 }
 
 // @ 0x00854f00
+// jpeg_alloc_huff_table: the 0x118-byte record is a Huffman table (17 code
+// length counts, 256 symbol values, then the sent_table flag), allocated
+// through the memory manager's alloc_small slot.
+struct HuffTable
+{
+    uint8_t bits[17];                  // +0x000
+    uint8_t huffval[256];              // +0x011
+    int     sent_table;                // +0x114
+};
+struct HuffMemoryMgr
+{
+    void* (__cdecl* alloc_small)(cTerrainExport*, int, size_t);   // +0x00
+};
 __declspec(noinline) void* FUN_00854f00(cTerrainExport* p)
 {
-    void** vt = (void**)p->mAllocVtbl;
-    void* fn = vt[0];
-    void* r = ((void*(__cdecl*)(cTerrainExport*, int, int))fn)(p, 0, 0x118);
-    *(int*)((char*)r + 0x114) = 0;
-    return r;
+    HuffTable* tbl = (HuffTable*)(*((HuffMemoryMgr*)p->mAllocVtbl)->alloc_small)(p, 0, sizeof(HuffTable));
+    tbl->sent_table = 0;
+    return tbl;
 }
 
 // @ 0x00854f30

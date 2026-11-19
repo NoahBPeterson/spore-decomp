@@ -1960,7 +1960,8 @@ void Mission::FUN_00c62590(int msg, int arg)
         if (b == pid || a == pid) {
             ((Mission*)((char*)this - 0x34))->FUN_00c4b760();
             unsigned u = *(unsigned*)((char*)this + 0xfc);
-            if ((u >> 3) & 1)
+            bool on = ((u >> 3) & 1) != 0;
+            if (on)
                 *(uint8*)((char*)this + 0x1c0) = 1;
         }
     }

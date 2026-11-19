@@ -177,12 +177,13 @@ int PFRecordReadIstream::GetSize(int mode)
 int PFRecordReadIstream::GetSize0()
 {
     char* self = (char*)this;
-    if (*(int*)(self - 4) == 0)
-        return 0;
-    unsigned char flags = *(unsigned char*)(self + 0x48);
-    if ((flags & 2) == 0)
-        return *(int*)(self + 0x44) - *(int*)(self + 0x40);
-    return ((MemoryStream*)(self + 0xc))->GetSize0();
+    if (*(int*)(self - 4) != 0) {
+        // a volatile read keeps the flag byte in al (mov al,[ecx+0x48]; test al,2)
+        if ((*(volatile unsigned char*)(self + 0x48) & 2) == 0)
+            return *(int*)(self + 0x44) - *(int*)(self + 0x40);
+        return ((MemoryStream*)(self + 0xc))->GetSize0();
+    }
+    return 0;
 }
 
 // @ 0x008dca00

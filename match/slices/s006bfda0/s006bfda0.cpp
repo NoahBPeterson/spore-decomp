@@ -446,9 +446,9 @@ u32 StreamSub::GetSize(int type)
 u32 StreamSub::GetRemaining()
 {
     PFRecordRead* owner = (PFRecordRead*)((char*)this - 0x20);
-    u8 flags = mStreamFlags;
     if (owner->mnAccessFlags != 0) {
-        if ((flags & 2) == 0)
+        // a volatile read keeps the flag byte in al (mov al,[ecx+0x50]; test al,2)
+        if ((*(volatile u8*)&mStreamFlags & 2) == 0)
             return mnSize - mnPosition;
         // virtual MemoryStream::GetRemaining(&mStreamMemory)
         return ((u32(__thiscall*)(void*))(*(void***)&mStreamMemory)[0x2c / 4])(&mStreamMemory);

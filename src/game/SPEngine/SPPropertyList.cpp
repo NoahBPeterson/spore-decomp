@@ -1961,11 +1961,13 @@ unsigned int SP::cPropertyList_s006a_22a0::GetPropertyIDs(unsigned int* ids)
   unsigned int n = (unsigned int)(mPropertyMap.mpEnd - mPropertyMap.mpBegin);
   v->resize(n);
   unsigned int i = 0;
-  for (VariantPair_s006a_22a0* it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it) {
+  VariantPair_s006a_22a0* it;
+  for (it = mPropertyMap.mpBegin; it != mPropertyMap.mpEnd; ++it) {
     v->mpBegin[i] = it->first;
     i++;
   }
-  return (unsigned int)(size_t)mPropertyMap.mpEnd;
+  // the iterator ends equal to mpEnd; retail returns it from eax
+  return (unsigned int)(size_t)it;
 }
 
 // @ 0x006a3180
