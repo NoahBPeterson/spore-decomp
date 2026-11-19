@@ -114,10 +114,12 @@ void Obj::FUN_005409d0(int* pos, unsigned int n, int* value)
     }
 }
 
+struct Word_s0054_0f20 { int v; };   // one-dword struct leading Entry18
+
 // @ 0x00540f20
 Entry18* Obj::FUN_00540f20(Entry18* p)
 {
-    *(int*)this = *(int*)p;
+    *(Word_s0054_0f20*)this = *(Word_s0054_0f20*)p;  // first word is a 4-byte struct (copied source-first)
     ((int*)this)[1] = ((int*)p)[1];
     ((int*)this)[2] = ((int*)p)[2];
     float* src = (float*)((char*)p + 0xc);
