@@ -4486,6 +4486,8 @@ void cCommunityEditor::RebuildCityFromTerrainSphere()
     SetModelTypeKey((void*)0x168caf0, 0, (int*)0x99e92f05, &stored);
 }
 
+extern char g_168caf0[];   // 0x0168caf0: the model-type -> position map (cVector3Map) the vehicle editor keeps
+
 __forceinline static void StoreVehicleModelKey(Vec3_s00bf_4170* pPosition, int nModel)
 {
     int y = *(int*)&pPosition->mY;
@@ -4493,7 +4495,7 @@ __forceinline static void StoreVehicleModelKey(Vec3_s00bf_4170* pPosition, int n
     int x = *(int*)&pPosition->mX;
     int z = *(int*)&pPosition->mZ;
     Vec3_s00bf_4170* pSlot =
-        ((Vec3_s00bf_4170* (__thiscall*)(void*, int*))FUN_00bf3cb0)((void*)0x168caf0, &key);
+        ((Vec3_s00bf_4170* (__thiscall*)(void*, int*))FUN_00bf3cb0)(g_168caf0, &key);
     *(int*)&pSlot->mX = x;
     *(int*)&pSlot->mY = y;
     *(int*)&pSlot->mZ = z;
