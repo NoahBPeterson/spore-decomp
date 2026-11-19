@@ -1479,7 +1479,7 @@ cGrid_s0070_2980* __cdecl grid_copy_forward(cGrid_s0070_2980* first, cGrid_s0070
         dst->mInvCellSize = first->mInvCellSize;
         dst->mCellRadius = first->mCellRadius;
         *(Vec3*)&dst->mCentreOriginX = *(Vec3*)&first->mCentreOriginX;
-        dst->mCells.CopyConstruct(first->mCells);
+        dst->mCells.Assign(first->mCells);
         dst->mMask = first->mMask;
         dst->mChildMask = first->mChildMask;
     }

@@ -119,6 +119,7 @@ extern char      g_vtblMatWinProcSec;         // 0x141a5d0
 extern char      g_vtblEditorResource;        // 0x13eb938
 extern wchar_t   g_emptyW[];                  // 0x1667bac
 extern "C" void  __cdecl EA_Free(void *);                                        // 0xf47380
+extern "C" void  __cdecl MultiHeapObject_operator_delete(void *);               // 0x951330
 extern "C" void *__cdecl EA_Alloc(uint32_t, const void *, int, int, const char *, int); // 0xf473a0
 extern "C" void *__cdecl msvc_memcpy(void *, const void *, uint32_t);            // 0x11e0744
 extern "C" void *__cdecl msvc_memmove(void *, const void *, uint32_t);           // 0x13cc480
@@ -803,7 +804,7 @@ void *cSPUIMaterialWinProc::Destroy(unsigned flags)
     vptrSec = &g_vtblEditorResource;
     vptr    = &g_vtblEditorResource;
     if (flags & 1)
-        EA_Free(this);
+        MultiHeapObject_operator_delete(this);
     return this;
 }
 

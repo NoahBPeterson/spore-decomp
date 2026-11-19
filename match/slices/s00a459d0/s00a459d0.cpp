@@ -540,6 +540,7 @@ extern "C" int* __cdecl    Eapd_Debug_ObjectError();                   // 0x008d
 
 void* operator new(unsigned, const char*, int, int, int, int);         // 0x00f473a0
 void  operator delete(void*, const char*, int, int, int, int);         // 0x00f47410
+void  operator delete(void*);                                           // 0x00f47380
 
 extern char DAT_01453e60[], DAT_01453eac[], DAT_01454028[], DAT_01454014[];
 extern char DAT_01453fc8[], DAT_01453fb4[], DAT_01452a18[], DAT_01667bac[];

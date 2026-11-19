@@ -24,7 +24,7 @@ struct PickPriorityVector {
     unsigned mAllocator[2];
 
     // Imported eastl::vector assignment, 0x00b375f0; ECX=destination, ret4.
-    PickPriorityVector& operator=(const PickPriorityVector& other);
+    PickPriorityVector& operator=(const PickPriorityVector& other);   // 0x00b375f0
 };
 
 // The complete manager continues beyond this bounded view.

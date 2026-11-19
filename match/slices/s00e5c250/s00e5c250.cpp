@@ -64,12 +64,6 @@ extern "C" int   __cdecl FUN_00e4dbc0(void* fluid, float* aabb, float* dir, floa
 extern "C" bool  __cdecl FUN_00743fb0(void* p, float radius, void* box); // 0x743fb0
 extern "C" uint8_t __fastcall FUN_006ffbd0(void* self, void* p, float radius); // 0x6ffbd0
 
-struct cVarListSerializer {
-  void Ctor(int a, void* b, uint32_t c);   // 0x692f90
-  void Serialize(void* o);                 // 0x692900
-  void Read(void* o);                      // 0x693e10
-};
-
 // @ 0x00e5c250
 float* FUN_00e5c250(float* out, int a) {
   ListHandle local;

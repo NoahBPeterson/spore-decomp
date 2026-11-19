@@ -488,11 +488,11 @@ void DecodeVideoFrame(VideoRenderable* r, MovieDecoder* dec)
     if (r->mState > 0)
         return;
 
-    uint32_t n = dec->mRenderableQueue->GetFilledListSize();
+    uint32_t n = dec->mRenderableQueue->GetRendererListSize();
     for (uint32_t i = 0; i < n; ++i) {
         VideoRenderable* x = dec->mRenderableQueue->PopFromRendererList();
         if (x->mState > 0) {
-            dec->mRenderableQueue->AddToFilledList(x);
+            dec->mRenderableQueue->AddToRendererList(x);
         } else {
             dec->mRenderableQueue->AddToEmptyList(x);
             dec->mEmptyVideoRenderablesSemaphore->Post(1);
@@ -509,12 +509,12 @@ void MovieDecoder::Teardown()
     int status = mVideoDecodeThread->GetStatus(0);
     while (status == 1) {
         if (!posted) {
-            if (mRenderableQueue->GetEmptyListSize() != 0) {
+            if (mRenderableQueue->GetFilledListSize() != 0) {
                 VideoRenderable* r = mRenderableQueue->PopFromFilledList();
                 mRenderableQueue->AddToEmptyList(r);
                 mEmptyVideoRenderablesSemaphore->Post(1);
                 posted = true;
-            } else if (mRenderableQueue->GetFilledListSize() != 0) {
+            } else if (mRenderableQueue->GetRendererListSize() != 0) {
                 VideoRenderable* r = mRenderableQueue->PopFromRendererList();
                 mRenderableQueue->AddToEmptyList(r);
                 mEmptyVideoRenderablesSemaphore->Post(1);

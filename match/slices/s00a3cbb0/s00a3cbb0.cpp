@@ -54,8 +54,9 @@ void FUN_0061eba0(void);
 void FUN_0061ec30(void);
 int* FUN_00608310(int* out, int n);
 void FUN_00a3cb20(void);
-void eastl_TrackVec_erase(void* begin, void* end);                  // 0x011e0744
+void eastl_TrackVec_erase(void* begin, void* end);                  // 0x00bdc770
 bool eastl_hashtable_find(void* map, void* key);                    // 0x00645ed0
+bool __cdecl eastl_string_equals(const void* str, const void* chars);   // 0x00555020 (eastl::operator==(basic_string, const char*))
 void eastl_string_assign(char* a, char* b);
 int* eastl_string_substr(char** out, int pos, int len);
 
@@ -407,7 +408,7 @@ int EA::Audio::Mixer::FindByName(int key) {
     int b = (int)mpEnd;
     for (;;) {
         if (a == b) return 0;
-        if (eastl_hashtable_find((void*)(a + 0x18), (void*)key)) break;
+        if (eastl_string_equals((void*)(a + 0x18), (void*)key)) break;
         a += 0x28;
     }
     return a;
@@ -432,7 +433,7 @@ struct TrackVec {
     TeString mStr;   // +0x18
     TrackVec* Ctor(int a, const char* b);         // 0x00a3d630
     void DoInsertValue(int* pos, int* value);     // 0x00a3d6e0
-    void Erase(int* a, int* b);                   // 0x011e0744 (eastl vector erase)
+    void Erase(int* a, int* b);                   // 0x00bdc770 (destroys the elements in [a, b))
     void Dtor();                                  // 0x00a3d690
 };
 

@@ -47,6 +47,7 @@ struct cSPTransform {
 };
 struct TreeThing {
     TreeThing& operator=(const TreeThing& o);   // external 0x007d0b80
+    TreeThing* CopyConstruct(const TreeThing& o);   // external 0x007d0ac0
 };
 
 // ===========================================================================
@@ -347,7 +348,7 @@ S0D60& S0D60::operator=(const S0D60& o)
     f40 = o.f40;
     f44 = o.f44;
     f48 = o.f48;
-    t4c = o.t4c;
+    t4c.CopyConstruct(o.t4c);
     return *this;
 }
 

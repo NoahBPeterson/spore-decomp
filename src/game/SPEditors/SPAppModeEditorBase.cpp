@@ -2710,7 +2710,7 @@ public:
     T* mpObject;
     AutoRefCountX(const AutoRefCountX& x);
     ~AutoRefCountX() { if (mpObject) mpObject->Release(); }
-    AutoRefCountX& operator=(const AutoRefCountX& x);
+    AutoRefCountX& operator=(const AutoRefCountX& x);   // 0x005766E0
     T* operator->() const { return mpObject; }
     operator T*() const { return mpObject; }
 };

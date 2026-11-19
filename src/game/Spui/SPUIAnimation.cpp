@@ -350,6 +350,10 @@ struct Callee {
     void* p(int);   // 0x0095bc10 (equiv t3)
     int64_t i64();   // 0x0093a3a0 (equiv t3)
 };
+struct RampStub {
+    void* ctor();                                   // 0x007fd460 (cSPUIBehaviorTimeFunctionRamp ctor)
+    void  SetParams(float, float, float);           // 0x007fd4a0 (cSPUIBehaviorTimeFunctionRamp::SetParams)
+};
 struct Obj {
     void  M5300(void* p);
     int   M53C0(void* p);
@@ -424,7 +428,7 @@ void* __cdecl CreateTimeRamp(void* out, float a, float b, float c)
     *(void**)((char*)out + 4) = 0;
     void* caller = FUN_009512c0();
     void* mem = FUN_009512d0(0x48, 4, "SPUICreateAnimationTimerRamp", caller);
-    void* obj = mem ? ((Callee*)mem)->ctor() : 0;
+    void* obj = mem ? ((RampStub*)mem)->ctor() : 0;
     void* old = *(void**)((char*)out + 4);
     if (obj != old) {
         if (obj)
@@ -433,7 +437,7 @@ void* __cdecl CreateTimeRamp(void* out, float a, float b, float c)
         if (old)
             ((FV0)VTOBJ(old)[4 / 4])(old);
     }
-    ((Callee*)obj)->f(a, b, c);
+    ((RampStub*)obj)->SetParams(a, b, c);
     return out;
 }
 
@@ -453,7 +457,7 @@ void* __cdecl CreateTimeSmooth(void* out, float a2, float a3, float a4, float a5
         if (old)
             ((FV0)VTOBJ(old)[4 / 4])(old);
     }
-    ((Callee*)obj)->f(a2, a5, a6);
+    ((RampStub*)obj)->SetParams(a2, a5, a6);
     return out;
 }
 

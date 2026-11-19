@@ -863,7 +863,7 @@ void SPNameFromKeyW(const ResKey* key, void* out, const wchar_t* name)
 // @ 0x0068d1a0
 void SPNameFromKeyThunk(const ResKey* key, void* out, int a3, int a4, const char* name)
 {
-    SPNameFromKeyA(key, out, name);
+    SPNameFromKeyW(key, out, (const wchar_t*)name);
 }
 
 // @ 0x0068d1c0

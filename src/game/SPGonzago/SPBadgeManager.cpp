@@ -210,6 +210,7 @@ class cUIMissionCardPanel {
 public:
     void RemoveBadgeCard(void* pCard);                               // 0x00e15d30
     void AddBadgeCard(void* pCard);                                  // 0x00e18150
+    void FUN_00e17470(void* pCard);                                  // 0x00e17470
 };
 cUIMissionCardPanel* __cdecl FUN_00b3d400();                         // 0x00b3d400
 class cStringContext {
@@ -1110,7 +1111,7 @@ void __thiscall cSPBadgeManager_s00fe_4be0::FUN_00fe5430(uint32_t nBadge, int nC
     cUIMissionCardPanel* pUI = FUN_00b3d400();
     if (mpCurrentCard != 0 && pUI != 0) {
         if (((cSPBadgeManager*)this)->FUN_00fe43c0(mpCurrentCard, nBadge))
-            pUI->RemoveBadgeCard(mpCurrentCard);
+            pUI->FUN_00e17470(mpCurrentCard);
     }
 }
 }  // namespace SP

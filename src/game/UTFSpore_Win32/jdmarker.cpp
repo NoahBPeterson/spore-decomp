@@ -114,7 +114,18 @@ struct cTerrainExport
     void FUN_008548a0();
     void FUN_00854990();
 };
-__declspec(noinline) void* FUN_00854ed0(cTerrainExport* p);
+// jpeg_common_struct / jpeg_memory_mgr view (jdmarker.c: jpeg_alloc_quant_table)
+struct AllocMgr
+{
+    void* (__cdecl* alloc_small)(void* cinfo, int pool_id, unsigned size);  // +0x00
+    void* (__cdecl* alloc_large)(void* cinfo, int pool_id, unsigned size);  // +0x04
+};
+struct CommonInfo
+{
+    void*     err;                      // +0x00
+    AllocMgr* mem;                      // +0x04
+};
+__declspec(noinline) void* FUN_00854ed0(CommonInfo* cinfo);
 // ---- items of slice s008544e0 end
 
 // ---- items of slice s0085ad60 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -219,13 +230,11 @@ struct Header
 // ---- items of slice s0085ad60 end
 
 // @ 0x00854ed0
-__declspec(noinline) void* FUN_00854ed0(cTerrainExport* p)
+__declspec(noinline) void* FUN_00854ed0(CommonInfo* cinfo)
 {
-    void** vt = (void**)p->mAllocVtbl;
-    void* fn = vt[0];
-    void* r = ((void*(__cdecl*)(cTerrainExport*, int, int))fn)(p, 0, 0x84);
-    *(int*)((char*)r + 0x80) = 0;
-    return r;
+    uint8_t* tbl = (uint8_t*)(*cinfo->mem->alloc_small)((void*)cinfo, 0, 0x84);
+    *(int32_t*)(tbl + 0x80) = 0;
+    return tbl;
 }
 
 // @ 0x0085b0b0

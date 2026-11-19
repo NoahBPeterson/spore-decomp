@@ -217,6 +217,7 @@ struct KeyVec {
     Key* mEnd;      // +0x04
     Key* mCap;      // +0x08
     KeyVec& operator=(const KeyVec& o);
+    KeyVec* CopyConstruct(const KeyVec& o);   // 0x006606a0 (uninitialized copy, used by FeedUninitCopy)
 };
 void  __cdecl CopyOverlap(Key* first, Key* last, Key* dest);   // 0x00b84c80
 void  __cdecl UninitCopyPtr(void** out, void* first, void* last, void* dest, void* extra);  // 0x00512050
@@ -451,7 +452,10 @@ extern "C" void* Fun0066_0b30(void* a, void* b, void* c);   // 0x00660b30 (equiv
 extern "C" void  Fun0066_0510(void* a, void* b, void* c);   // 0x00660510 (equiv t1)
 extern "C" void* Fun0066_0d70(void* a, void* b, void* c);   // 0x00660d70 (equiv t1)
 extern "C" void* Fun0066_0fc0(unsigned n, void* a, void* b);
-struct Blob14 { uint8_t x[0x14]; void Assign(Blob14* src); void FUN_006606a0(Blob14* src); };
+struct Blob14 { uint8_t x[0x14];
+    void Assign(Blob14* src);        // 0x006609a0
+    void FUN_006606a0(Blob14* src);  // 0x006606a0
+};
 struct E34 {
     uint32_t a;          // 0x00
     uint8_t  b;          // 0x04
@@ -600,7 +604,7 @@ virtual void v34();
 IObjectTemplateDB* __cdecl ObjectTemplateDB();       // 0x0067CB40
 namespace __equiv_ann1 {
 struct Blob14 {
-    void Assign();   // 0x006606a0 (equiv t3)
+    void Assign();   // 0x006609a0 (equiv t3)
 };
 }
 // ---- items of slice s00660dd0 end
@@ -1399,9 +1403,9 @@ FeedEntry* __cdecl FeedUninitCopy(FeedEntry* first, FeedEntry* last, FeedEntry* 
         if (dest) {
             dest->m0 = first->m0;
             dest->m4 = first->m4;
-            dest->v08 = first->v08;
+            dest->v08.CopyConstruct(first->v08);
             dest->m1c = first->m1c;
-            dest->v20 = first->v20;
+            dest->v20.CopyConstruct(first->v20);
         }
         ++first;
         ++dest;

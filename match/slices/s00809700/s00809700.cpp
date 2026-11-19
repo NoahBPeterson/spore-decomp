@@ -68,7 +68,7 @@ struct Holder {
     ComObj* mC;                   // +0xc
     Holder* DeleteThis(unsigned char flags);
 };
-extern "C" void efree(void* p); // 0x00a222c0
+extern "C" void efree(void* p); // 0x00f47380
 
 // @ 0x00809fa0
 Holder* Holder::DeleteThis(unsigned char flags)
