@@ -1,3 +1,2 @@
 # va  diff-bytes  reason
-00433800  18  ApplyIntProperties: only stack-slot order of locals differs (value/idx/prop/id/ok/f); same instructions
 00433b30  837 FadeController::Update: stack layout of the inlined XformMsg temps (src/msg objects) and frame size differ; control flow and calls match
