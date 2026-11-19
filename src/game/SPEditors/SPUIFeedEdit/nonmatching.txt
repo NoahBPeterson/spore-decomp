@@ -7,7 +7,6 @@
 0065cae0 117 enabled-state helper: complete; bool folding differs
 0065cc50 86 page-button enable helper: complete; register allocation differs
 0065ccd0 50 GetAssetIndex: complete; loop register allocation differs
-0065cd70 8 intrusive vector element assign: complete; refcount register schedule; equiv PASS (1164 valid, 100% cov)
 0065cec0 80 DoMessage: complete; vcall arg packing differs [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#0 edx]
 0065cf30 132 SetAsset: complete; vcall/refcount schedule differs
 0065d260 361 cSPUIFeedEdit::UpdateGrid: complete; loop/register schedule differs

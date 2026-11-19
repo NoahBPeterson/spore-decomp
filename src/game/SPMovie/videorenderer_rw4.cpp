@@ -57,6 +57,12 @@ struct Ext {
 };
 static inline Ext* E(void* p) { return (Ext*)p; }
 static inline void** VTP(void* o) { return *(void***)o; }
+struct MatMgr_s00fd_9750 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24();
+    virtual void* Find(u32 id);               // slot 0x28
+};
 struct Vid {
     u32 x;
     void  f9460(void* p);
@@ -217,9 +223,9 @@ void Vid::f9750(int param_2, int param_3, int param_4)
     E(s + 8)->FUN_00576650(img);
     *(int*)(s + 0x34) = param_3;
     *(int*)(s + 0x38) = param_4;
-    void* mat = FUN_0067dd70();
+    MatMgr_s00fd_9750* mat = (MatMgr_s00fd_9750*)FUN_0067dd70();
     u32 h = FUN_00932e80(DAT_01493dc0, 0x811c9dc5, 1);
-    void* r = ((void*(__thiscall*)(void*, u32))VTP(mat)[0x28 / 4])(mat, h);
+    void* r = mat->Find(h);
     *(void**)(s + 4) = r;
 }
 

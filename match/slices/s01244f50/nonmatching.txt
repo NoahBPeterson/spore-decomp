@@ -13,8 +13,6 @@
 0124ab10   14  init_15d9a68: complete; same SSE-vs-x87 float-copy issue as 0124aab0 (needs /fp:fast on this row)
 0125bd80   16  init_15de138: complete; frame/local slot layout for the inlined operator-new forwarder differs ([ebp-0xc] vs [ebp-0x18])
 01261040   56  init_15df0f0: complete; same SSE-vs-x87 float-copy issue as 0124aab0 (nine copies)
-0126db20   12  init_15e2da8: complete; same bool tag slot issue as 0126dae0
-0126db60   12  init_15e2f54: complete; same bool tag slot issue as 0126dae0
 01277f40  296  init_150d100: complete; 8 record copies into the descriptor table; per-record field/store schedule differs
 012817b0    3  init_15e8840: complete; with /O2 (not the slice's /Od majority) it is instruction-identical except `pop edi` lands after the second store instead of right after the first (retail: store [0x15e8840]=edi; pop edi; store [0x15e8848]=esi; store [0x15e8844]=eax). /vc71 cannot build this file (wchar_t/C++ syntax). flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 01281800    3  init_15e89f8: same three-store/pop-edi schedule as 012817b0. flags /O2 /MD /Gy /EHsc /TP /arch:SSE

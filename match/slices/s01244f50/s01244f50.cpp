@@ -400,23 +400,33 @@ void init_15e2e48()
     atexit(&FUN_013bce80);
 }
 
+extern PointerRange_s0126dae0 g_015e2da8;
+
+extern PointerRange_s0126dae0 g_015e2da8;
+
 // @ 0x0126db20
 void init_15e2da8()
 {
-    *(uint32_t*)0x15e2da8 = 0;
-    *(uint32_t*)0x15e2dac = 0;
-    *(uint32_t*)0x15e2db0 = 0;
-    bool b = false;
+    g_015e2da8.begin = 0;
+    g_015e2da8.end = 0;
+    g_015e2da8.capacity = 0;
+    struct Tag {};
+    Tag b = Tag();
     atexit(&FUN_013bcea0);
 }
+
+extern PointerRange_s0126dae0 g_015e2f54;
+
+extern PointerRange_s0126dae0 g_015e2f54;
 
 // @ 0x0126db60
 void init_15e2f54()
 {
-    *(uint32_t*)0x15e2f54 = 0;
-    *(uint32_t*)0x15e2f58 = 0;
-    *(uint32_t*)0x15e2f5c = 0;
-    bool b = false;
+    g_015e2f54.begin = 0;
+    g_015e2f54.end = 0;
+    g_015e2f54.capacity = 0;
+    struct Tag {};
+    Tag b = Tag();
     atexit(&FUN_013bcec0);
 }
 

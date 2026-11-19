@@ -16,3 +16,4 @@
 ../src/game/SPGonzago/SPCombatant.cpp  ?FUN_00bfd430@@YAPAUHostileEntry@@PBU1@0PAU1@@Z  00bfd430  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCombatant.cpp  ?CombatantWrite@Sim@@QAE_NPAUVtObj@@@Z  00bfc4a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCombatant.cpp  ?CombatantRead@Sim@@QAE_NPAUVtObj@@@Z  00bfc540  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCombatant.cpp  ?Combatant_dtor@@YIXPAUCombatant@@@Z  00bfcd00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

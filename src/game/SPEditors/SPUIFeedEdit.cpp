@@ -2395,20 +2395,24 @@ int cSPUIFeedEdit::GetAssetIndex(int a, int b)
   return -1;
 }
 
+// intrusive_ptr<IRef>::operator= on the image member
+static inline void AssignRef_s0065cd70(void*& dst, void* src)
+{
+  if (src != dst) {
+    void* old = dst;
+    if (src) ((IRef*)src)->AddRef();
+    dst = src;
+    if (old) ((IRef*)old)->Release();
+  }
+}
+
 // @ 0x0065cd70
 AssetInfo& AssetInfo::operator=(const AssetInfo& other)
 {
   a = other.a;
   b = other.b;
   c = other.c;
-  _ReadWriteBarrier();
-  void* nw = other.d;
-  void* old = d;
-  if (nw != old) {
-    if (nw) ((IRef*)nw)->AddRef();
-    d = nw;
-    if (old) ((IRef*)old)->Release();
-  }
+  AssignRef_s0065cd70(d, other.d);
   return *this;
 }
 

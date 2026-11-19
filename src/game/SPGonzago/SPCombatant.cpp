@@ -137,7 +137,12 @@ struct AnimObj {                                       // 0x00bfc900 target obje
 // ---- items of slice s00bfcc80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma pack(push, 1)
 #pragma pack(pop)
-struct RcMap    { void* mRoot; void NukeSubtree(void* key); };  // 0x009A9600-style thiscall
+struct RcMap    {                                                // 0x009A9600-style thiscall
+    void* mRoot;
+    void NukeSubtree(void* key);
+    // ~rbtree body: DoNukeSubtree(mAnchor.mpNodeParent), the anchor parent at tree +0x0c.
+    void NukeAll() { NukeSubtree(((void**)this)[3]); }
+};
 struct Combatant {
     void**   vftable;                                           // +0x00
     uint32_t pad04;                                             // +0x04
@@ -746,7 +751,7 @@ void __fastcall Combatant_dtor(Combatant* self)
         ((RcSlot*)p)->Release4();
     if ((p = self->mNextTarget28) != 0)
         ((RcSlot*)p)->Release64();
-    self->mMap0c.NukeSubtree(self->mList18);
+    self->mMap0c.NukeAll();
 }
 
 // @ 0x00bfcdd0

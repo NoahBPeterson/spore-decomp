@@ -858,7 +858,7 @@ virtual void v5c();
     void FUN_00bee200();                    // 0x00bee200
     void FUN_00becc80();                    // 0x00becc80
     void FUN_00beccf0();                    // 0x00beccf0
-    Vector3_s00be_eb70* FUN_00becb10(Vector3_s00be_eb70* out, const Vector3_s00be_eb70* src);   // 0x00becb10
+    Vector3_s00be_eb70 FUN_00becb10(const Vector3_s00be_eb70& src);   // 0x00becb10
 
     void Init(cCity_s00be_eb70* city, int model);      // 0x00beeb70
     void RecomputeGameData();               // 0x00bef4e0
@@ -2244,9 +2244,7 @@ void cVehicleLike::RecomputeGameData()
     FUN_00bee150();
     FUN_00bee200();
     FUN_00becc80();
-    Vector3_s00be_eb70 tmp;
-    Vector3_s00be_eb70* v = FUN_00becb10(&tmp, &mV224);
-    mV230 = *v;
+    mV230 = FUN_00becb10(mV224);
     FUN_00beccf0();
 }
 

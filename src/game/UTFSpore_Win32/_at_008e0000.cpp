@@ -1609,10 +1609,16 @@ bool EA::XHTML::Layout::Item::IntersectSelection(uint* pOutOffset, uint* pOutLen
     return true;
 }
 
+// Typesetter stand-in: both are __thiscall members (ecx passes straight through).
+struct Typesetter_s008e_dd30 {
+    void* AddLineBreak(void* a, void* b, bool c, bool d);  // 0x0089b250
+    void* StyleCtorForward(void* a, void* b);
+};
+
 // @ 0x008edd30
-void* __stdcall StyleCtorForward(void* self, void* rect)
+void* Typesetter_s008e_dd30::StyleCtorForward(void* a, void* b)
 {
-    return EA::XHTML::Layout::StyleCtor(self, 0, rect, 0, 0);
+    return this->AddLineBreak(a, b, false, false);
 }
 
 // @ 0x008edd50

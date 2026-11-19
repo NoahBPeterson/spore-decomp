@@ -416,9 +416,9 @@ SP::cHerd::~cHerd()
 {
     void* vt0 = (void*)0x1471c10;
     void* vt1 = (void*)0x1471c00;
-    void* a = mLocationStatusBegin;
     *(void**)this = vt0;
-    *(void**)((char*)this + 4) = vt1;
+    *(void* volatile*)((char*)this + 4) = vt1;
+    void* a = *(void* volatile*)&mLocationStatusBegin;
     if (a && *(int*)((char*)a - 4) != 0)
         FUN_00f47380(a);
     void* b = *(void**)((char*)this + 0x1e0);

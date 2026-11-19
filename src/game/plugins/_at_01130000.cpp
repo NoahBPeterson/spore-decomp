@@ -835,19 +835,22 @@ uint32_t FUN_0113afc0(uint32_t* p)
     return (uint32_t)(int)v * 0x50 + 0x138;
 }
 
+struct Rec_s0113_b000 { uint32_t pad0; struct Sys_s0113_b000* self; void* src; };
+struct Sys_s0113_b000 { uint8_t pad0[0x98]; void* mpDst; uint8_t pad9c[8]; int mA4; uint8_t padA8[0x14]; int mBC; };
 // @ 0x0113b000
 uint32_t FUN_0113b000(uint8_t* rec)
 {
-    uint8_t* self = (uint8_t*)P(rec, 4);
-    void* src = P(rec, 8);
+    Rec_s0113_b000* r = (Rec_s0113_b000*)rec;
+    Sys_s0113_b000* self = r->self;
+    void* src = r->src;
     if (src != 0) {
-        W(self, 0xa4) = 1;
-        memcpy(P(self, 0x98), src, 0x22c);
-        W(self, 0xbc) = 1;
+        self->mA4 = 1;
+        memcpy(self->mpDst, src, 0x22c);
+        self->mBC = 1;
         return 0xc;
     }
-    W(self, 0xa4) = 0;
-    W(self, 0xbc) = 0;
+    self->mA4 = 0;
+    self->mBC = 0;
     return 0xc;
 }
 

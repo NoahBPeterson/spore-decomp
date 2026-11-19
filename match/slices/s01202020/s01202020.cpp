@@ -10,6 +10,8 @@
 // 01202260 / 012023f0 make calls and are recorded as complete + equivalence-checked.
 
 #include <xmmintrin.h>
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 typedef unsigned int uint32_t;
 
 union Vec4Access {
@@ -201,6 +203,7 @@ TriangleVolume *FUN_01202260(TriangleVolume **pp, const __m128 *a, const __m128 
         *(__m128 *)(t->m + 0x00) = *a;
         *(__m128 *)(t->m + 0x10) = *b;
         *(__m128 *)(t->m + 0x20) = *c;
+        _ReadWriteBarrier();
         *(unsigned int *)(t->m + 0x5c) |= 2;
         return t;
     }

@@ -16,7 +16,6 @@
 
 00a47080 224 binbuf_gettext: complete; builds the same terminated text buffer (separator ' ' for A_SEMI, '\n' otherwise, strcpy-style terminator) but frame is 283 vs 277 B and the separator arithmetic/loop tail is scheduled differently. difftest verdict UNSUPPORTED (0/400 valid inputs: fault(read) on random t_binbuf* arguments).
 
-00a471a0 12 binbuf_add: complete; only the loop tail's instruction scheduling differs (position of `dec edx` and the order of `add ecx`/`add eax`), 12 differing bytes, no size difference; not converging after two rewrite attempts. difftest verdict WEAK (161/400 valid inputs, 72.3% coverage, no mismatch).
 
 00a47220 204 binbuf_addv: complete; varargs walk (float/int/symbol/pointer conversion) matches, but the frame is 320 vs 300 B (reload temp slots) and the per-type dispatch is scheduled differently. difftest verdict WEAK (399/400 valid inputs, 54.1% coverage, no mismatch).
 
