@@ -541,7 +541,8 @@ bool SpaceTool::Select(int a, int b)
 {
     if (b == -1)
         return false;
-    if (*(int*)((char*)this + 0x28) - *(int*)((char*)this + 0x24) >> 2 == 0)
+    unsigned count = (unsigned)(*(int**)((char*)this + 0x28) - *(int**)((char*)this + 0x24));
+    if (count <= 0)
         return false;
     if (FindBest(a, b, 2))
         return true;
