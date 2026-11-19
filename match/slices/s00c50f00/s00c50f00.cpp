@@ -116,9 +116,9 @@ extern const wchar_t g_strList[];        // 0x013f58ac L"list"
 extern char          g_allocatorName[];  // 0x013f09b4 "Simulator"
 extern char          g_allocatorFile[];  // 0x013ebb38 "allocator.h"
 
-struct tPlanetPick {                 // planet-pick descriptor, 0x44 bytes in retail
+struct tPlanetPick {                 // planet-pick descriptor; one extra dword keeps Init's frame at 0x54
     uint32_t mMode;                  // +0x00 (0x3c selects a random planet)
-    uint32_t pad04[16];              // +0x04 opaque fill
+    uint32_t pad04[17];              // +0x04 opaque fill
     void Construct();                // 0x00ba7bd0
     void Destroy();                  // 0x00ba8220
 };
