@@ -4,3 +4,4 @@ slices/s00424010/s00424010.cpp  ?DoInsertValue@RefVec@@QAEXPAURef@@ABU2@@Z  0042
 slices/s00424010/s00424010.cpp  ?CopyVec4@@YAPAUVec4@@PAU1@00@Z  00424770  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00424010/s00424010.cpp  ?erase@RcVec@@QAEPAURcPtr@@PAU2@0@Z  004247f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00424010/s00424010.cpp  ?DoAllocateAndCopy@Vec4Vec@@QAEPAUVec4@@IPAU2@0@Z  004246e0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00424010/s00424010.cpp  ?UninitCopy24@@YAPAUElem24@@PAU1@00@Z  00424340  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE

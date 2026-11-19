@@ -3,7 +3,6 @@
 # (/arch:SSE2 is required: plain flags emit x87 in SetDescription).  Diff counts are the byte
 # difference against the correctly resolved symbol (tools/matching/chk.py picks a same-size
 # sibling for some rows).  Equiv verdicts are from tools/difftest/equiv.py default inputs.
-00a820e0   18  cVisualEffect::SetIsHidden: complete; only the store order / register choice for
                the two flag bytes differs.  Equiv WEAK (90 valid inputs, 46.7% coverage), no
                behavioural mismatch.
 00a821e0   10  cVisualEffect::SetVectorParams: complete.  Ends in a jmp-style tail call in the

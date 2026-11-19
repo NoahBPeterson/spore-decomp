@@ -5,4 +5,3 @@
 0092ec60 149 deque::DoReallocPtrArray: register allocation / spill order; difftest WEAK (185 valid, 61% coverage)
 0092ed90 96 Entry copy ctor: one src spill ordering
 0092ef40 600 DirectoryIterator::Read: back() call sequence and strlen inline differ
-0092ea70 19 deque::back: original loads cur/begin/array-ptr before compare; difftest PASS

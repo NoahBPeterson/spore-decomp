@@ -27,3 +27,4 @@
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ??1AbilityA@@QAE@XZ  0073a9e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ??1AbilityB@@QAE@XZ  0073aae0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?GetAnimationMoveToTimes@cModelInstance_s0073_a110@SP@@QAEHHPAHD@Z  0073abb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?SetAnimationResource@cMI@@QAEXPAURC_s0074_2b30@@@Z  00742cf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
