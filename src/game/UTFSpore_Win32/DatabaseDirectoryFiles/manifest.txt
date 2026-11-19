@@ -6,3 +6,4 @@
 ../src/game/UTFSpore_Win32/DatabaseDirectoryFiles.cpp  ?FUN_008d61a0@@YGIPAUListOwner@@@Z  008d61a0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabaseDirectoryFiles.cpp  ?Erase@RBTree_s008d_62f0@ResourceMan@EA@@QAE?AURBNodeIter_s008d_62f0@23@U423@@Z  008d6d20  /O2 /MD /Gy /EHsc /TP /GS- /GR- /arch:SSE /Isrc/game/include
 ../src/game/UTFSpore_Win32/DatabaseDirectoryFiles.cpp  ?EraseIterator@RBTree_s008d_62f0@ResourceMan@EA@@QAE?AURBNodeIter_s008d_62f0@23@U423@@Z  008d7200  /O2 /MD /Gy /EHsc /TP /GS- /GR- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabaseDirectoryFiles.cpp  ?DoInsertValueImpl@RBTree_s008d_62f0@ResourceMan@EA@@QAE?AURBNodeIter_s008d_62f0@23@PAURBNode_s008d_62f0@23@PBX_N@Z  008d6e20  /O2 /MD /Gy /EHsc /TP /GS- /GR- /arch:SSE /Isrc/game/include
