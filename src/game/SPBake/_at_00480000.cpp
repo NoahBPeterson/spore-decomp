@@ -1289,7 +1289,7 @@ void cSPEditorLimbJoint_s0048_6910::F_487290(cSPEditorLimbJoint_s0048_6910* chil
     cSPVector3_s0048_6910 t1 = mTargetPosition + child->mTargetOffset;
     cSPVector3_s0048_6910 t2 = mOriginalPosition + child->mOriginalOffset;
     child->Move(t1 - child->mTargetPosition, true);
-    child->Translate(t2 + child->mOriginalPosition);
+    child->Translate(t2 - child->mOriginalPosition);
 }
 }  // namespace SP
 
