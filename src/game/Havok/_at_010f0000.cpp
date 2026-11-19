@@ -1969,8 +1969,7 @@ void hkContinuousSimulation::warpTime(hkWorld_s010e_f580* world, float deltaTime
             entry->mTime = *(volatile float*)&deltaTime + entry->mTime;
             index++;
             offset += 0x40;
-            count = *(volatile int*)&simulation->mCount;
-        } while (count > index);
+        } while (index < *(volatile int*)&simulation->mCount);
     }
 }
 
