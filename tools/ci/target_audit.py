@@ -22,6 +22,7 @@ Per relocation:
   agree       retail uses the expected address
   folded      retail uses a different function that is byte-identical to the expected one (the linker folded
               identical copies); not an error
+  thunk       retail calls a one-instruction `jmp` to the expected function; not an error
   disagree    retail uses a different address
   reordered   the function uses exactly the expected addresses, at swapped places (independent stores in another
               order): same behaviour, byte-exact only because addresses are masked
@@ -118,6 +119,8 @@ def audit_row(exp, fp, coff, fname, va, annots=(), sid=None):
             verdict = "agree"
         elif same_code(exp.img, want, actual):
             verdict = "folded"
+        elif jmp_to(exp.img, actual) == want:
+            verdict = "thunk"
         elif how in ("qualified", "import", "crt"):
             verdict = "weak"         # a qualified name is shared by every instantiation of a template; the CRT has
                                      # several copies of memmove/memset (import thunk and static) and of _ftol2
@@ -130,6 +133,17 @@ def audit_row(exp, fp, coff, fname, va, annots=(), sid=None):
     if bad and sorted(x[3] for x in bad) == sorted(x[4] for x in bad):
         out = [x[:2] + ("reordered",) + x[3:] if x[2] == "disagree" else x for x in out]
     return out
+
+
+def jmp_to(img, va):
+    """the destination of a function at va that starts with `jmp rel32`, else None"""
+    try:
+        b = img.read(va, 5)
+    except Exception:
+        return None
+    if not b or len(b) < 5 or b[0] != 0xE9:
+        return None
+    return (va + 5 + struct.unpack("<i", bytes(b[1:5]))[0]) & 0xFFFFFFFF
 
 
 def main():

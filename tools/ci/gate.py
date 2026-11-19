@@ -86,6 +86,11 @@ def main():
             rows.append(r)
             rowfile[(r[0], r[2])] = m
     refused = {(r[0], r[3]): row_problem(r[0], r[3]) for r in rows}
+    # rows of written source whose symbol names another function (targets.row_names); generated manifests
+    # (match/synth, match/clones.txt) borrow names by design
+    written = [(src, sym, va) for src, sym, va, _f in rows
+               if os.path.basename(rowfile[(src, va)]) == "manifest.txt" and "/match/synth/" not in rowfile[(src, va)]]
+    misnamed = T.row_names(written, fps)
     keys = sorted(k for k, why in refused.items() if not why)
     objs = {}
     with ThreadPoolExecutor(a.jobs) as ex:
@@ -120,6 +125,8 @@ def main():
                 st = F.check(fps[va], *F.extract(secs, syms, name))
                 if st == "PASS":
                     tb = T.describe(T.check(fps[va], obj, name, fps, src) or [])
+                    if (src, va) in misnamed:
+                        tb.append(misnamed[(src, va)])
             asm = asm_audit.transcribed(os.path.join(ROOT, "match", src)).get("%08x" % va)
             if asm and st == "PASS":
                 st = "assembly transcription, not decompiled (%s)" % asm
