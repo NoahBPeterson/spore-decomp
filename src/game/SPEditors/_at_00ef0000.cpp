@@ -3515,19 +3515,21 @@ void CEditor::Destroy()
 // @ 0x00ef0570
 void FUN_00ef0570()
 {
-    union { IProp* p; float f; } u;
-    if (g_15fd918 && g_15fd918->Get(0x7f2231b, &u.p) && u.p->mType == 1)
-        g_15acb40 = *u.p->GetBool();
-    g_1569ab8 = (g_15acb40 == 0);
-    if (g_15fd918 && g_15fd918->Get(0xe2598dcf, &u.p) && u.p->mType == 0xd)
-        g_1688270 = *u.p->GetFloat();
-    u.f = 1.0f;
-    IProp* prop;
-    if (g_15fd918 && g_15fd918->Get(0x5908481, &prop) && prop->mType == 0xd)
-        u.f = *prop->GetFloat();
-    float cur = g_1688270;
-    if (cur != g_156b5d4)
-        g_156b5d8 = sqrtf(g_1688270 / g_156b5d4) * u.f;
+    {
+        union { IProp* p; float f; } u;
+        if (g_15fd918 && g_15fd918->Get(0x7f2231b, &u.p) && u.p->mType == 1)
+            g_15acb40 = *u.p->GetBool();
+        g_1569ab8 = (g_15acb40 == 0);
+        if (g_15fd918 && g_15fd918->Get(0xe2598dcf, &u.p) && u.p->mType == 0xd)
+            g_1688270 = *u.p->GetFloat();
+        u.f = 1.0f;
+        IProp* prop;
+        if (g_15fd918 && g_15fd918->Get(0x5908481, &prop) && prop->mType == 0xd)
+            u.f = *prop->GetFloat();
+        float cur = g_1688270;
+        if (cur != g_156b5d4)
+            g_156b5d8 = sqrtf(g_1688270 / g_156b5d4) * u.f;
+    }
     return FUN_00eed090();
 }
 
