@@ -3186,11 +3186,7 @@ void __thiscall cSPMission_s00c4_6ab0::StartCompletedFeedbackTimer()
         return;
 
     cAudioSystem* pAudio = GetSystemAT();
-    if (pAudio) {
-        KillSetiEffects(0x0c871d6e, pAudio->GetOutputDevice());
-        return;
-    }
-    KillSetiEffects(0x0c871d6e, (void*)pAudio);
+    KillSetiEffects(0x0c871d6e, pAudio ? pAudio->GetOutputDevice() : 0);
 }
 }  // namespace SP
 

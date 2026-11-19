@@ -983,6 +983,7 @@ void OptObj::Dtor()
     void* self = this;
     *(void**)self = (void*)0x147f17c;
     *(void**)((char*)self + 4) = (void*)0x147f16c;
+    _ReadWriteBarrier();
     void* p54 = *(void**)((char*)self + 0x54);
     if (p54 != 0) ((RefObj1*)p54)->Release();
     ((CStringObj*)((char*)self + 0x40))->FUN_006b5240();
@@ -1002,6 +1003,7 @@ void OptObj::Dtor()
     void* p10 = *(void**)((char*)self + 0x10);
     if (p10 != 0) ((RefObj2*)p10)->Release();
     *(void**)self = (void*)0x13eb938;
+    _ReadWriteBarrier();
     *(void**)((char*)self + 4) = (void*)0x13ec458;
 }
 

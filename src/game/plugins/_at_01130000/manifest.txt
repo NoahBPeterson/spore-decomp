@@ -17,3 +17,4 @@
 ../src/game/plugins/_at_01130000.cpp  ?FUN_0113ae30@Ctx@@QAEXXZ  0113ae30  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/plugins/_at_01130000.cpp  ?FUN_0113af70@@YAIPAE@Z  0113af70  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/plugins/_at_01130000.cpp  ?FUN_0113ba30@@YAIPAE@Z  0113ba30  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/plugins/_at_01130000.cpp  ?FUN_0113b000@@YAIPAE@Z  0113b000  /vc71 /O2 /MD /Gy /TP /Isrc/game/include
