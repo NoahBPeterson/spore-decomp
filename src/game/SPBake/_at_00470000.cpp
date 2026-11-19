@@ -192,8 +192,8 @@ uint32_t cSPEditorHandle::SetScale(float s)
 cSPEditorHandle* cSPEditorHandle::ConstructDerived()
 {
     this->BaseConstruct();
-    this->vptr = (void**)&g_const_zero;
-    this->vptr2 = (void**)&g_const_one;
+    this->vptr = (void**)0x13ef1c0;    // vtable (retail 0x013ef1c0)
+    this->vptr2 = (void**)0x13ef1ac;   // refcount vtable (retail 0x013ef1ac)
     return this;
 }
 
