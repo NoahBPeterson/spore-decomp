@@ -6,3 +6,5 @@ slices/s0042cbf0/s0042cbf0.cpp  ?RFindChar@@YAPBGPBG0G@Z  0042d3f0  /Od /Ob1 /MD
 slices/s0042cbf0/s0042cbf0.cpp  ?FillIntrusivePtrs@@YAXPAUIntrusivePtr@@0ABU1@@Z  0042d430  /Od /Ob1 /MD /Gy /EHsc /TP
 slices/s0042cbf0/s0042cbf0.cpp  ?CopyIntrusivePtrs@@YAPAUIntrusivePtr@@PBU1@0PAU1@@Z  0042d4a0  /Od /Ob1 /MD /Gy /EHsc /TP
 slices/s0042cbf0/s0042cbf0.cpp  ?UninitializedCopyIntrusivePtrs@@YAPAUIntrusivePtr@@PBU1@0PAU1@@Z  0042d520  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042cbf0/s0042cbf0.cpp  ??0FixedIdVector6@@QAE@ABUIdRange@@@Z  0042ccb0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042cbf0/s0042cbf0.cpp  ??0FixedEntryVector3@@QAE@ABUEntryRange@@@Z  0042cf80  /Od /Ob1 /MD /Gy /EHsc /TP
