@@ -6,6 +6,7 @@
 // Build flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
+#include <intrin.h>
 
 // ================================================================================
 // Data globals referenced by the functions below
@@ -636,6 +637,18 @@ float FUN_00dc5fe0(Obj* self, void* a1, void* a2, void* a3,
 // ================================================================================
 // 00dc6070
 // ================================================================================
+static inline void AssignTarget_s00dc_6070(Obj*& slot, Obj* p)
+{
+    if (p != slot)
+    {
+        Obj* old = slot;
+        if (p)
+            ((Vfn0)p->mpVtbl->mSlots[kVt60])(p);
+        slot = p;
+        if (old)
+            ((Vfn0)old->mpVtbl->mSlots[kVt64])(old);
+    }
+}
 // @ 0x00dc6070
 char FUN_00dc6070(Obj* self, void* a1, void* a2, void* a3, void* a4,
                   Out6070* out, Ctx6070* ctx, void* a7)
@@ -647,18 +660,11 @@ char FUN_00dc6070(Obj* self, void* a1, void* a2, void* a3, void* a4,
     if (!FUN_00dc4e20(c, ctx->mpTarget))
         return 0;
 
-    out->f0 = DAT_01486110;
-
+    float f0 = DAT_01486110;
     Obj* p = ctx->mpTarget;
-    if (p != out->mTarget)
-    {
-        Obj* old = out->mTarget;
-        if (p)
-            ((Vfn0)p->mpVtbl->mSlots[kVt60])(p);
-        out->mTarget = p;
-        if (old)
-            ((Vfn0)old->mpVtbl->mSlots[kVt64])(old);
-    }
+    _ReadWriteBarrier();
+    out->f0 = f0;
+    AssignTarget_s00dc_6070(out->mTarget, p);
 
     Sub*   s34 = &self->mSub34;
     Vec3f* v   = (Vec3f*)((VfnP)s34->mpVtbl->mSlots[kVt2C])(s34);

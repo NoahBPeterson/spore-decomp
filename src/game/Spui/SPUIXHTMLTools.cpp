@@ -582,7 +582,7 @@ void cDataURI::init(const wchar_t* p)
 // @ 0x00837020
 void RawFixed::Reserve(uint32_t n)
 {
-    if (n != 0xffffffffu && (uint32_t)(mEnd - mBegin) < n) {
+    if (n != 0xffffffffu && n > (uint32_t)(mEnd - mBegin)) {
         uint8_t* m = (uint8_t*)operator_new6(n, g_eastlTag, 0, 0,
             "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
             0xd1);

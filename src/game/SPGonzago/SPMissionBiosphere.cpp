@@ -827,14 +827,13 @@ void __fastcall FUN_00c4c690(cSPMissionBiosphere_s00c4_cb90* this_, int unused, 
         this_->UpdateEventLog(2, 0xd19969f6);
         return;
     }
-    int cur = ++this_->mCount_210;
-    int max = this_->mCount_20c;
-    int remaining = max - cur - 1;
-    if ((unsigned)remaining <= 2) {
+    this_->mCount_210++;
+    int remaining = this_->mCount_20c - this_->mCount_210;
+    if (remaining >= 1 && remaining <= 3) {
         this_->UpdateEventLog(0, 0xbf13693a);
         return;
     }
-    if (cur < max)
+    if (this_->mCount_210 < this_->mCount_20c)
         this_->UpdateEventLog(0, 0xed4727a9);
 }
 }  // namespace SP

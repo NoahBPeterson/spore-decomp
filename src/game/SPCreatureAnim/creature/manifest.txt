@@ -21,3 +21,5 @@
 ../src/game/SPCreatureAnim/creature.cpp  ?DestroyValues@PhaseGroupVec@@QAEXPAUPhaseGroup@@0@Z  009c3240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature.cpp  ??1creature_instance_data_s009c_4a30@nSPCreatureAnim@@QAE@XZ  009c4bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPCreatureAnim/creature.cpp  ?FUN_009c4d10@creature_instance_data_s009c_4a30@nSPCreatureAnim@@QAEXXZ  009c4d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ?FillBoneXforms@@YAXPAUbone_xform_s009b_3e40@nSPCreatureAnim@@0PBU12@@Z  009b4490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ?CopyBoneXformsBackward@@YAPAUbone_xform_s009b_3e40@nSPCreatureAnim@@PAU12@00@Z  009b4ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

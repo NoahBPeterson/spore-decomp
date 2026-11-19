@@ -4112,14 +4112,8 @@ void FUN_00da7dc0(Creature* p, i32_s00da_7780, i32_s00da_7780, i32_s00da_7780, i
 bool FUN_00da7e20(Creature* p, Creature* q)
 {
     Creature* a = p->FUN_00bc9b10();
-    i32_s00da_7780 iVar2 = (i32_s00da_7780)a->GetTribe();
-    i32_s00da_7780 iVar3 = (i32_s00da_7780)q->GetTribe();
-    if (iVar3 == iVar2) {
-        iVar2 = a->FUN_00c0ee60();
-        iVar3 = q->FUN_00c0ee60();
-        if (iVar3 == iVar2)
-            return 1;
-    }
+    if (q->GetTribe() == a->GetTribe() && q->FUN_00c0ee60() == a->FUN_00c0ee60())
+        return 1;
     return 0;
 }
 

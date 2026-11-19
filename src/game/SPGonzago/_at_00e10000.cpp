@@ -379,13 +379,14 @@ public:
 bool __cdecl FUN_004f56f0(wchar_t wc);                          // 0x004f56f0
 void* __cdecl FUN_00e39ab0(uint32_t nType, int32_t nA, void* pB, void* pC,
                            int32_t nD, int32_t nE, void* pF, void* pG);    // 0x00e39ab0
-class cTradeUI {
+struct cTradeUIBase_s00e1dae0 { void* mpVtbl0; };
+struct cTradeUITrace_s00e1dae0 { void* mpTraceVtbl; };
+class cTradeUI : public cTradeUIBase_s00e1dae0, public cTradeUITrace_s00e1dae0 {
 public:
     void Activate();                    // 0x00e1dae0
     void* Destroy(uint32_t nFlags);     // 0x00e1dc20
 
-    void* mpVtbl0;              // +0x000  first base vtable
-    void* mpTraceVtbl;          // +0x004  tracer base vtable
+
     cSPUILayout_s00e1_d020 mLayout;        // +0x008
     bool mbInitialized;         // +0x020
 };
@@ -1388,8 +1389,7 @@ void cTradeUI::Activate()
         IWindow* pWindow = mLayout.FindWindowByID(0x7d4c266, 1);
         if (pWindow != nullptr) {
             pWindow->SetMode(1, 1);
-            void* pContext = (void*)&mpTraceVtbl;
-            SPUIHelpers_BeginModal(pWindow, pContext, true);
+            SPUIHelpers_BeginModal(pWindow, static_cast<cTradeUITrace_s00e1dae0*>(this), true);
             IWindow* pSecond = mLayout.FindWindowByID(0x7d4de46, 1);
             if (pSecond != nullptr)
                 pSecond->SetMode(2, 0);

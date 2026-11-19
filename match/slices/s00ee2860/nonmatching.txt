@@ -5,4 +5,3 @@
 00ee3020  59   /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  size matches (173); ebp/stack-slot swap for this vs palette object; complete 8-window refresh loop [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 ecx, call#5 ecx, call#8 ecx]
 00ee3230  401  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  stack/register allocation of the 454-byte palette rebuild (size 537); complete
 00ee3430  189  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  local frame size (text container modelled as 0x14 not 0x188); complete tutorial-index handler
-00ee3630  6    /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  inner-object call site (lea+load) and loop base register; complete selection sync

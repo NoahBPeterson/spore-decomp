@@ -563,7 +563,8 @@ void cListenerSet::insertKey(uint32_t key) {
 
 // @ 0x00613a10
 void cListenerSet::Shutdown() {
-    mListeners.eraseRange(mListeners.mpBegin, mListeners.mpEnd);
+    Elem16Vector& l = mListeners;
+    l.eraseRange(l.mpBegin, l.mpEnd);
     mSet.clear();
     mHandle.Reset();
     if (cManager* pMgr = GetManager()) {

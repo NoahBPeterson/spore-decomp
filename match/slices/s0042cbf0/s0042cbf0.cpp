@@ -18,6 +18,8 @@ typedef unsigned short char16;
 // ---------------------------------------------------------------------------
 struct fwd_tag {};
 struct tagq {};
+struct bi_tag_s0042ccb0 : fwd_tag {};
+struct ra_tag_s0042ccb0 : bi_tag_s0042ccb0 {};
 
 extern void __cdecl EASTL_allocator_deallocate(void* p);   // 0x00f47380
 inline void dealloc_wrap(void* p) { EASTL_allocator_deallocate(p); }
@@ -86,7 +88,13 @@ struct FixedIdVector6 : VectorBase<IdHandle> {
     IdHandle mBuffer[6];
 
     FixedIdVector6(const IdRange& r);
-    inline void AssignRange(const IdHandle* first, const IdHandle* last) { fwd_tag t; DoAssign(first, last, t); }
+    // Inline range assign: copies the range ends, then forwards a random-access tag
+    // converted to its bidirectional base (the original's packed tag temporaries).
+    inline void AssignRange(const IdRange& r) {
+        const IdHandle* lst = r.last; const IdHandle* fst = r.first;
+        ra_tag_s0042ccb0 c;
+        DoAssign(fst, lst, bi_tag_s0042ccb0(c));
+    }
     IdHandle* DoAllocateAndCopy(size_t n, const IdHandle* f, const IdHandle* l);   // 0x0042e350
     inline void DoFree(IdHandle* p, size_t n) { if (p && p != mAlloc.mpPool) mAlloc.deallocate(p); }
     inline void DestructRange(IdHandle* f, IdHandle* l) { for (; f < l; ++f) {} }
@@ -96,7 +104,7 @@ struct FixedIdVector6 : VectorBase<IdHandle> {
 // @ 0x0042ccb0
 FixedIdVector6::FixedIdVector6(const IdRange& r) : VectorBase<IdHandle>(FixedAlloc(mBuffer)) {
     mpEnd = mBuffer; mpBegin = mpEnd; mpCapacity = mpBegin + 6;
-    AssignRange(r.first, r.last);
+    AssignRange(r);
 }
 
 // @ 0x0042cd50
@@ -162,7 +170,11 @@ struct FixedEntryVector3 : VectorBase<HandleEntry> {
     uint32_t mBuffer[12];
 
     FixedEntryVector3(const EntryRange& r);
-    inline void AssignRange(const HandleEntry* first, const HandleEntry* last) { fwd_tag t; DoAssign(first, last, t); }
+    inline void AssignRange(const EntryRange& r) {
+        const HandleEntry* lst = r.last; const HandleEntry* fst = r.first;
+        ra_tag_s0042ccb0 c;
+        DoAssign(fst, lst, bi_tag_s0042ccb0(c));
+    }
     HandleEntry* DoAllocateAndCopy(size_t n, const HandleEntry* f, const HandleEntry* l);   // 0x0042e3b0
     inline void DoFree(HandleEntry* p, size_t n) { if (p && p != mAlloc.mpPool) mAlloc.deallocate(p); }
     inline void DestructRange(HandleEntry* f, HandleEntry* l) { for (; f < l; ++f) f->~HandleEntry(); }
@@ -172,7 +184,7 @@ struct FixedEntryVector3 : VectorBase<HandleEntry> {
 // @ 0x0042cf80
 FixedEntryVector3::FixedEntryVector3(const EntryRange& r) : VectorBase<HandleEntry>(FixedAlloc(mBuffer)) {
     mpEnd = (HandleEntry*)mBuffer; mpBegin = mpEnd; mpCapacity = mpBegin + 3;
-    AssignRange(r.first, r.last);
+    AssignRange(r);
 }
 
 // @ 0x0042d020

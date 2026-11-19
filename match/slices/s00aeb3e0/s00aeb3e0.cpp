@@ -309,9 +309,12 @@ L6c5:
 // @ 0x00aeb700
 void SpaceTool::FUN_00aeb700()
 {
-    u32 d = (u32)m38 + (int)0xfe9ab3fc;
-    if (d <= 1)
+    switch (m38) {
+    case 0x1654c04:
+    case 0x1654c05:
         FUN_00aeb090();
+        break;
+    }
     m38 = -1;
 }
 

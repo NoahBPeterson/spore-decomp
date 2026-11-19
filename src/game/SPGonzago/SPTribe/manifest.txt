@@ -56,3 +56,4 @@
 ../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c92b70@Deque@@QAEXXZ  00c92b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?FUN_00c8ee40@@YAPAPAXPAPAX00@Z  00c8ee40  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPTribe.cpp  ?UpdateRoboTribeness@cTribe_s00c8_fbb0@SP@@QAEXXZ  00c8fbb0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/SPTribe.cpp  _FUN_00c908a0  00c908a0  /O2 /MD /Gy /TP /Isrc/game/include

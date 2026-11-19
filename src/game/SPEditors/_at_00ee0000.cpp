@@ -4010,6 +4010,11 @@ void Beh::F3540(void* item, void* list)
     MGR()->F427c0();
 }
 
+struct Inner24_s00ee3630 {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void Update(int arg);   // +0x18
+};
+struct Obj14_s00ee3630 { char pad[0x24]; Inner24_s00ee3630 mInner; };
 // @ 0x00ee3630
 void Beh::F3630(int arg)
 {
@@ -4043,8 +4048,7 @@ void Beh::F3630(int arg)
     {
         if (*(int*)(t + 0x20) != ((int (__thiscall*)(void*))FUN_007f54d0)(*(void**)(t + 0x14)))
             ((void (__thiscall*)(void*, int))VTP(*(void**)(t + 0x14))[0x1c / 4])(*(void**)(t + 0x14), *(int*)(t + 0x20));
-        void* inner = *(void**)((char*)*(void**)(t + 0x14) + 0x24);
-        ((void (__thiscall*)(void*, int))VTP(inner)[0x18 / 4])(inner, arg);
+        ((Obj14_s00ee3630*)*(void**)(t + 0x14))->mInner.Update(arg);
         ((void (__thiscall*)(void*))FUN_00ece300)(*(void**)(t + 0x14));
     }
 

@@ -35,3 +35,5 @@
 ../src/game/SPEditors/TraitClassifier.cpp  ?RigBlockSetInsert@@YAXI_N@Z  00570480  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/TraitClassifier.cpp  ?DescribeTraits@cRigBlockTag@@QAE_NPAUCreature@@PAPAMPAUcFeatureVector@@@Z  0056bd30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/TraitClassifier.cpp  ?DescribeTraits@cTextureTag@@QAE_NPAUCreature@@PAPAMPAUcFeatureVector@@@Z  0056c2d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?DescribeTraits@cBaseColorClassifier@@QAE_NPAUCreature_s0056_d2b0@@PAPAMPAUcAnnotatedFeatureVector_s0056_d2b0@@@Z  0056d810  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?DescribeTraits@cRegionColorClassifier@@QAE_NPAUCreature_s0056_d2b0@@PAPAMPAUcAnnotatedFeatureVector_s0056_d2b0@@@Z  0056d2b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

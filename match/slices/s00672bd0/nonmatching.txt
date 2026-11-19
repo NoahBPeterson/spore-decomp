@@ -5,5 +5,4 @@
 00673410  285 eastl::vector<cAction>::DoInsertValue: complete; full-capacity move path register/branch scheduling differs
 00673570  212 eastl::vector<cAction>::DoAssignFromIterator<cAction const*>: complete; same register allocation gap as 006731e0
 00673710  24  cBuildXHTMLDetokenizer::~cBuildXHTMLDetokenizer: complete; inlined basic_string dtor picks ecx for begin where original picks eax (four sites)
-00673870  5   cVar copy ctor: complete; only the mId store vs the mName `lea ecx,[edi+4]` scheduling is swapped [equiv: PASS 270 valid, 100% cov]
 00673b00  270 eastl::vector<cVar>::DoInsertValue: complete; same full-capacity move path gap as 00673410

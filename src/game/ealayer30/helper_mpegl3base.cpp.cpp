@@ -1151,11 +1151,10 @@ int FUN_01168640(Resampler* self)
 namespace Snd {
 void FUN_01168670(SndPitchState* self, int* values)
 {
-    float* out = &self->field_20;
     float r = ((float)values[0] * 2.0f) / (float)values[1];
+    float* out = &self->field_20;
     out[0] = 1.0f - r;
-    _ReadWriteBarrier();
-    out[1] = r;
+    *(volatile float*)&out[1] = r;
     out[1] = (float)values[2] * r * 0.00390625f;
     out[0] = (float)values[2] * out[0] * 0.00390625f;
 }

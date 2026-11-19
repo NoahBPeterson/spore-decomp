@@ -747,11 +747,10 @@ bool cSPUIChoiceDialog::HandleUIMessage(IWindow_s005f_e1d0* pWindow, const EA::U
   if (mpLayout) {
     switch (message.eventType) {
       case 0x287259f6:
-        if (message.param0C == 0x61c282f) {
+        if (message.param0C == 0x61c282f)
           Cancel();
-          return true;
-        }
-        if (message.param0C == 0x61c282e) Accept();
+        else if (message.param0C == 0x61c282e)
+          Accept();
         return true;
       case 2:
       case 5:

@@ -14,7 +14,6 @@
 008f32d0 133 CSSParser::SetEdgeProperties<unsigned int>: complete + equivalence-checked; same call-argument marshalling artifact as SetEdgeProperties<Length> (retail `sub esp,0x10` block vs cl pushes). flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 008f33a0 47 other: same as CreatePropertyFunc<float> (0x008f3020): vtable/args/value stores and the Allocate call are right; fail block placement and store order differ. flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; fix1: quick check PASS (emulator, random inputs)
 008f3410 54 other: same as CreatePropertyFunc<float> (0x008f3020): fields, constants and call right; fail block placement and store order differ. flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; fix1: quick check PASS (emulator, random inputs)
-008f3480 4 CharStream::MatchAscii (case-insensitive ascii prefix match, advance mpPos): complete + equivalence-checked; 4-byte diff, retail orders `movsx`/`movzx` differently (only `movzx edi,di` vs `movsx eax,al`). flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 008f35d0 110 CharStream::skip to ';'/'}'; codegen differs (equiv PASS)
 008f3640 115 CharStream::skip-until; codegen differs (equiv FAIL: execution)
 008f36c0 78 CharStream::consume newline; codegen differs (equiv PASS)

@@ -1174,6 +1174,9 @@ virtual void v2c();
                                              void* output);                        // 0x010995d0
     virtual void processAgentResetCollisionInformation(void* entry, const void* input,
                                                        void* output);              // 0x01099670
+    void FUN_01099be0(void* entities, int numEntities, void* collideInput,
+                      void (*collideFunc)(void* pair, void* input, void* output));  // 0x01099be0
+    void FUN_01099cb0(void* entities, int numEntities, void* world);              // 0x01099cb0
 };
 class hkBackstepSimulation : public hkDiscreteSimulation
 {
@@ -1193,7 +1196,6 @@ typedef void (*hkCollideFunc)(void* pair, void* input, void* output);   // 0x010
 // ---- items of slice s01098e50 end
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
-void __stdcall FUN_01099be0(void* entities, int numEntities, void* collideInput, hkCollideFunc collideFunc);  // 0x01099be0 (stays in the slice: not this object's)
 
 // ---- items of slice s0109c3b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void* cs);   // kernel32, IAT 0x013cc2dc
@@ -3355,10 +3357,10 @@ void hkDiscreteSimulation::stepIntegrate(hkWorld_s0109_8e50* world, const hkStep
 }
 
 // @ 0x01099cb0
-void __stdcall FUN_01099cb0(void* entities, int numEntities, void* world)
+void hkDiscreteSimulation::FUN_01099cb0(void* entities, int numEntities, void* world)
 {
-    // The original loads world->m_o78 and pushes the address of processAgentResetCollisionInformation as a
-    // plain immediate (0x01099670) before the call; expressed as a real function-pointer argument.
+    // A member forwarding `this` (ecx) to the agent-pair walk: the original loads world->m_o78 and pushes
+    // the address of processAgentResetCollisionInformation (0x01099670) as a plain function pointer.
     void* collideInput = *(void**)((char*)world + 0x78);
     FUN_01099be0(entities, numEntities, collideInput, (hkCollideFunc)FUN_01099670);
 }

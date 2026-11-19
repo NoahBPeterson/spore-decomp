@@ -14,7 +14,6 @@
 00959e00 402 DetachWindow: complete; regalloc/order differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fault(read) 398 -> dereferences ctx-owned pointers) flags: /O2 /MD /Gy /EHsc /TP /GS-
 00959fe0 156 fe0: complete; ebx-vs-edx argv reg + folded null test differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fake-arity 211, fault(read) 182 -> vtable calls through win+4) flags: /O2 /MD /Gy /EHsc /TP /GS-
 0095a140 771 UpdateRenderState: complete (ours 1200B vs orig 973B); regalloc/order differ; /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2; difftest UNSUPPORTED (0/400 valid; fault(read) 356, fake-arity 39) flags: /O2 /MD /Gy /EHsc /TP /GS-
-0095a510 5 RenderWindow: complete; lea reg choice for &ev and win+4 differ; /O2 /MD /Gy /EHsc /TP /GS-; difftest UNSUPPORTED (0/400 valid; fake-arity 210, fault(read) 179) flags: /O2 /MD /Gy /EHsc /TP /GS-
 0095a580 359 BuildDisplayList complete; original inlines the DLEntry fill at both bit0x10 sites (~260B, no FillDLEntry helper) and uses a 0x3c38 chkstk frame; call/reg layout differs
 0095a870 60 AssignFrom complete; erase/insert call sites construct Iter temporaries with the MSVC push-ecx aggregate idiom, loop is a do-while with a shared erase epilogue; regs/flow differ
 0095a9a0 195 PostMsg complete; original spills &mxC to a push-ecx stack slot and schedules the two rep-movsd copies differently; difftest PASS (equivalence)

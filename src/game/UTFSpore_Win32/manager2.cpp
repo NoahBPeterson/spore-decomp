@@ -2043,9 +2043,10 @@ void W_s0095_9780::RenderWindow(int win, void* ctx)
     void* sub = B(ctx) + 0x58;
     ((int(__thiscall*)(void*, int, int))*(void**)((char*)*(void**)sub + 0x10))(sub, 0, 0);
     int ev[7];
+    IWin& iw = *(Win*)win;
     ev[2] = 0xd;
     ev[6] = (int)ctx;
-    GV(0, win + 4, ev, 0, 0);
+    GV(0, (int)&iw, ev, 0, 0);
     TH(ctx)->End2D();
 }
 

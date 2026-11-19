@@ -80,3 +80,4 @@
 ../src/game/SPGonzago/SPUISpace.cpp  ?BuildBakeOffset@@YAXMMPAM@Z  01065a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01066180@@YAXPAXM@Z  01066180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01066630@@YAXPAM00@Z  01066630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_010687a0@@YAXXZ  010687a0  /O2 /MD /Gy /TP /Isrc/game/include

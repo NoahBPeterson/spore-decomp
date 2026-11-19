@@ -7806,13 +7806,8 @@ void FUN_010687a0()
     cGameTimeManager* tm = (cGameTimeManager*)SP_GameTimeManager();
     tm->DecPauseGate(0x4bf38a7);
     cSpaceGame* g = (cSpaceGame*)SP_SpaceGameGet();
-    if (g != 0) {
-        cSimThing* p = g->m14;
-        return p->FUN_01065d20();
-    } else {
-        cSimThing* p = 0;
-        return p->FUN_01065d20();
-    }
+    cSimThing* p = g ? g->m14 : 0;
+    p->FUN_01065d20();
 }
 
 // @ 0x010687d0

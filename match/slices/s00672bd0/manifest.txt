@@ -6,6 +6,7 @@ slices/s00672bd0/s00672bd0.cpp  DoDestroyValues@?$vector@V?$fixed_string  00672d
 slices/s00672bd0/s00672bd0.cpp  do_move_commit@PAVcAction  00672e10  /O2 /MD /Gy /TP
 slices/s00672bd0/s00672bd0.cpp  ??0cVar@cBuildXHTMLDetokenizer@?A0xc6ee3fde@@QAE@XZ  006732e0  /O2 /MD /Gy /TP
 slices/s00672bd0/s00672bd0.cpp  ??1cVar@cBuildXHTMLDetokenizer@?A0x  00673360  /O2 /MD /Gy /TP
+slices/s00672bd0/s00672bd0.cpp  ??0cVar@cBuildXHTMLDetokenizer@?A0xc6ee3fde@@QAE@ABV012@@Z  00673870  /O2 /MD /Gy /TP
 slices/s00672bd0/s00672bd0.cpp  ??4?$fixed_vector@V?$fixed_string  006736b0  /O2 /MD /Gy /TP
 slices/s00672bd0/s00672bd0.cpp  ??4?$fixed_vector@VcAction  00673810  /O2 /MD /Gy /TP
 slices/s00672bd0/s00672bd0.cpp  ??4cVar@cBuildXHTMLDetokenizer@?A0x  00673940  /O2 /MD /Gy /TP

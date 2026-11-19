@@ -260,6 +260,7 @@ struct Ext {
     int   e4b0(int a, int b);               // 0x0094E4B0
     void* e340(unsigned iface);             // 0x0094E340 StreamSocket::AsInterface
     void  nuke(void* node);                 // 0x00D3B370 DoNukeSubtree
+    void  NukeRoot() { nuke(*(void**)((char*)this + 0xc)); }
 };
 void  __fastcall Mutex_dtor(void* m);                   // 0x00922130
 int   __fastcall Mutex_Unlock(void* m);                 // 0x00922270
@@ -1049,9 +1050,7 @@ void* SSLManager_s0094_fb80::DeletingDtor(char flags)
     void* p = PTR(self, 0x154);
     if (p != 0 && p != PTR(self, 0x164))
         operator_delete__(p);
-    Ext* map = (Ext*)(B(self) + 0x48);
-    void* node = PTR(self, 0x54);
-    map->nuke(node);
+    ((Ext*)(B(self) + 0x48))->NukeRoot();
     Mutex_dtor(B(self) + 0x18);
     if (flags & 1)
         operator_delete__(self);

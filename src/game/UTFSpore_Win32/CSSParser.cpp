@@ -2082,18 +2082,15 @@ namespace EA { namespace XHTML { namespace Style {
 bool CharStream_s008f_2660::MatchAscii(const char* s)
 {
     int i = 0;
-    char c = s[0];
-    if (c != 0) {
+    if (s[0] != 0) {
         wchar_t* end = mpEnd;
-        wchar_t* p = mpPos;
+        wchar_t* base = mpPos;
         do {
-            unsigned short ch = (p < end) ? (unsigned short)*p : 0;
-            if (c != ch)
+            wchar_t ch = (base + i < end) ? base[i] : 0;
+            if (s[i] != ch)
                 return false;
-            c = s[i + 1];
             ++i;
-            ++p;
-        } while (c != 0);
+        } while (s[i] != 0);
     }
     mpPos += i;
     return true;

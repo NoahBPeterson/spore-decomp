@@ -236,9 +236,8 @@ void pd_pushsym(t_gobj* x)
         sys_gui_acquire(*(void**)s_stack, gSysSym.s_name, gSysSym.s_thing);
     sys_gui_release(x, gSysSym.s_name, gSysSym.s_thing);
     t_sysstack* s = (t_sysstack*)getbytes(0x10, "sysstack");
-    t_sysstack* next = s_stack;
+    s->s_next = s_stack;
     s->s_what = x;
-    s->s_next = next;
     s->s_sym_a = (t_symbol*)gAnythingSym.s_name;
     s->s_sym_b = (t_symbol*)gAnythingSym.s_thing;
     s_stack = s;

@@ -1245,8 +1245,6 @@ void cSPPlayMode::ForceBabiesToIdle(int param)
   uint32_t i = 0;
   bool flag = false;
   if (mNumBabies > 0) {
-    int off = 0;
-    float* p = (float*)&mBabyCelebratingChangeTime[0];
     do {
       Editor* e = mEditor;
       BabyVec& v = e->babies;
@@ -1254,7 +1252,7 @@ void cSPPlayMode::ForceBabiesToIdle(int param)
       Baby* b = v.mpBegin;
       uint32_t id;
       if (n == 0) id = 0xffffffff;
-      else if (i < n) id = *(uint32_t*)(off + (char*)b);
+      else if (i < n) id = b[i].id;
       else id = b[0].id;
       bool doIdle;
       if (param == -1) {
@@ -1273,13 +1271,11 @@ void cSPPlayMode::ForceBabiesToIdle(int param)
       }
       if (doIdle) {
         mAnimator.Play(id, 0x4330667, 1, 1, 0);
-        { BabyVec& w = mEditor->babies; if (i < w.size()) ((Baby*)(off + (char*)w.mpBegin))->spawned = 0; }
-        *p = 0.0f;
-        { BabyVec& w = mEditor->babies; if (i < w.size()) ((Baby*)(off + (char*)w.mpBegin))->b18 = 0; }
-        { BabyVec& w = mEditor->babies; if (i < w.size()) ((Baby*)(off + (char*)w.mpBegin))->b1a = 0; }
+        { BabyVec& w = mEditor->babies; if (i < w.size()) w.mpBegin[i].spawned = 0; }
+        mBabyCelebratingChangeTime[i] = 0.0f;
+        { BabyVec& w = mEditor->babies; if (i < w.size()) w.mpBegin[i].b18 = 0; }
+        { BabyVec& w = mEditor->babies; if (i < w.size()) w.mpBegin[i].b1a = 0; }
       }
-      p++;
-      off += 0x30;
       i++;
     } while (i < mNumBabies);
   }

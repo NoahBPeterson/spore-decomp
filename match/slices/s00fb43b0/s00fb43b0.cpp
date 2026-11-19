@@ -282,8 +282,11 @@ struct SphQuad {
     bool FUN_00fb3f10(DecalRec* d);                     // 0x00fb3f10 (RebuildDecalIndices)
 };
 
-extern "C" void __stdcall FUN_00fb39b0(int dst, unsigned int n, void* buf);   // 0x00fb39b0
-extern "C" void __stdcall FUN_00fb3240(int a, int b);                        // 0x00fb3240
+// vector-of-200-byte-element helpers (__thiscall on the same vector: ecx is passed through).
+struct Fb39b0Ops {
+    void FUN_00fb39b0(int dst, unsigned int n, void* buf);   // 0x00fb39b0 (_Insert_n)
+    void FUN_00fb3240(int a, int b);                          // 0x00fb3240 (erase)
+};
 // __thiscall image callees: MSVC 7.1 rejects __thiscall on free functions, so declare them as
 // members of a holder whose qualified names still end with the target identifiers.
 struct Fb3e20Ops { void FUN_00fb3e20(); void FUN_00fb4340(); };
@@ -307,9 +310,9 @@ void SphQuad::FUN_00fb4c10(unsigned int n)
     int* self = (int*)this;
     char buf[200];
     if (n > (unsigned int)((self[1] - self[0]) / 200)) {
-        FUN_00fb39b0(self[1], n - (self[1] - self[0]) / 200, buf);
+        ((Fb39b0Ops*)this)->FUN_00fb39b0(self[1], n - (self[1] - self[0]) / 200, buf);
     } else {
-        FUN_00fb3240(self[0] + n * 200, self[1]);
+        ((Fb39b0Ops*)this)->FUN_00fb3240(self[0] + n * 200, self[1]);
     }
 }
 
