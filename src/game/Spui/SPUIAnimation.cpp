@@ -727,8 +727,10 @@ bool F6910(void* self, int a2, float a3, int phase)
         *(float*)((char*)self + 0x24) = f[0];
         *(float*)((char*)self + 0x28) = f[1];
         *(float*)((char*)self + 0x2c) = f[2];
-        *(float*)((char*)self + 0x30) = f[3];
+        float* d = (float*)((char*)self + 0x30);
+        *d = f[3];
         return *(void**)((char*)self + 0x10) != 0;
+
     }
     if (phase == 2) {
         void* an = *(void**)((char*)self + 0xc);
