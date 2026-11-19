@@ -17306,12 +17306,18 @@ UI_s00df_a5c0* UI_s00df_a5c0::FUN_ae00(void* other)
 {
     char* o = (char*)other;
     ((CStr_s00df_a5c0*)this)->Assign(other);
-    if ((void*)(o + 0x14) != (void*)((char*)this + 0x14))
-        ((WStrAssign*)((char*)this + 0x14))->assign(*(void**)(o + 0x14), *(void**)(o + 0x18));
+    {
+        void** src = (void**)(o + 0x14);
+        if ((void*)src != (void*)((char*)this + 0x14))
+            ((WStrAssign*)((char*)this + 0x14))->assign(src[0], src[1]);
+    }
     *(int*)((char*)this + 0x24) = *(int*)(o + 0x24);
     *(int*)((char*)this + 0x28) = *(int*)(o + 0x28);
-    if ((void*)(o + 0x2c) != (void*)((char*)this + 0x2c))
-        ((WStrAssign*)((char*)this + 0x2c))->assign(*(void**)(o + 0x2c), *(void**)(o + 0x30));
+    {
+        void** src = (void**)(o + 0x2c);
+        if ((void*)src != (void*)((char*)this + 0x2c))
+            ((WStrAssign*)((char*)this + 0x2c))->assign(src[0], src[1]);
+    }
     return this;
 }
 
