@@ -124,8 +124,10 @@ cContentValidationSummarizer::cContentValidationSummarizer()
     vtbl = (void*)0x13ec458;
     f4 = 0;
     vtbl = (void*)0x13ecc8c;
+    uint32_t pos[1];
     char tag;
     ((TableCtorApi*)&table)->FUN_005640f0(&tag);
+    (void)pos;
 }
 
 // @ 0x45ab00
