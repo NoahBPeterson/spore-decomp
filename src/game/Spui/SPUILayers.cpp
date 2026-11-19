@@ -432,15 +432,15 @@ void Layered::MethodDA50(void* param, void* a2, void* a3, void* a4, void* a5)
 // @ 0x0080db70
 void* __fastcall FUN_0080db70(char* p)
 {
-    if (p) return *(void**)(p + 8);
-    return *(void* volatile*)(p + 0x258);
+    char* base = p ? p - 0x250 : 0;
+    return *(void**)(base + 0x258);
 }
 
 // @ 0x0080db90
 void* __fastcall FUN_0080db90(char* p)
 {
-    if (p) return *(void**)(p + 4);
-    return *(void* volatile*)(p + 0x254);
+    char* base = p ? p - 0x250 : 0;
+    return *(void**)(base + 0x254);
 }
 
 // @ 0x0080dbb0
@@ -1235,9 +1235,7 @@ u32 __thiscall cSPUILayeredObject_s0080_f7c0::MethodF9D0(void* a, void* key)
 // @ 0x0080fa00
 void __fastcall FUN_0080fa00(void* p)
 {
-    if (p) p = (u8*)((u32)p + 0xfffffdb0u);
-    else   p = 0;
-    ((ObjStub*)p)->go();
+    ((ObjStub*)(p ? (char*)p - 0x250 : 0))->go();
 }
 
 // @ 0x0080fa20

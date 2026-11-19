@@ -1,8 +1,6 @@
 # va  diff-bytes  reason
 0080d810 494 complete; float->Vec2 arg copies use x87 fld/fstp vs retail movss and SSE helper temps clobber xmm4; frame 16- vs 8-byte aligned flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 0080da50 147 complete; first stack arg is the rect; 0x14 frame needed for callee stack residue flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
-0080db70 6 complete; null-arm address folded to absolute instead of kept in eax flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
-0080db90 6 complete; null-arm address folded to absolute instead of kept in eax flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 0080dbb0 136 complete; early-out gate on +0x258 added; virtual call register schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 0080dc50 48 complete; vtable slot 0x144/0x30 call schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 0080dc90 53 complete; vtable slot 0x144/0x34 call schedule differs flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
@@ -16,4 +14,3 @@
 0080e980 130 complete; refcount release/call schedule differs
 0080ed50 39 complete; null-return block placement + store ordering differ
 0080edb0 61 complete; ctor store schedule / this-in-eax shape differs (now returns this in eax); equiv PASS 400/400; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2
-0080fa00 5 complete; vbase adjustor uses add ecx,0xfffffdb0 (cl canonicalises to sub)
