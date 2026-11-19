@@ -407,12 +407,10 @@ void __fastcall FUN_011544d0(int self)
     if (*(int*)(self + 0x38) == 1)
     {
         float f = (float)*(int*)(self + 0x84);
+        float x = *(float*)(self + 0x54);
         float r = f;
-        if (*(float*)(self + 0x54) != 0.0f)
-        {
-            double d = (double)f;
-            r = (float)(d - (5.0 * d) / log10(fabs((double)*(float*)(self + 0x54))));
-        }
+        if (x != 0.0f)
+            r = f - (f * 5.0f) / (float)log10(fabs(x));
         *(float*)(self + 0x14) = f;
         int p = *(int*)(self + 8);
         *(float*)(p + 0x28) = (r - *(float*)(self + 0x18)) + *(float*)(p + 0x28);

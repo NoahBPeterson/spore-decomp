@@ -5799,9 +5799,8 @@ void __cdecl FUN_00b035b0(void* ar, cSaveTreeHdr* hdr)
 cTreeData::cTreeData(void* src)
 {
     cTreeData* p = (cTreeData*)src;
-    this->vtbl1 = gVtblContentValidationSummarizer;
+    *(void* volatile*)&this->vtbl1 = gVtblContentValidationSummarizer;  // base-subobject vtable store kept by retail
     this->m08 = 0;
-    _ReadWriteBarrier();               // base-subobject vtable store is kept by the retail build
     this->vtbl0 = gVtblTreeData;
     this->vtbl1 = gVtblTreeData2;
     this->m0c = p->m0c;
