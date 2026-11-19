@@ -431,7 +431,7 @@ void PosseSim::OnTick(int arg1, int arg2)
                 if (((int(__thiscall*)(PosseNoun*))PosseSim_MemberLeaving)(noun) == 0 ||
                     ((PosseNounInfo*)((void*(__thiscall*)(PosseNoun*))FUN_00c04590)(noun))->mField192 == 0) {
                     ((void(__thiscall*)(void*))PosseSim_SetGroupFlag)(
-                        ((void* (__stdcall*)(void*, int))PosseSim_FindGroup)((void*)&gPosseGroupKey, 1));
+                        ((void* (__stdcall*)(void*, int))PosseSim_FindGroup)((void*)0xfbf10c5eu, 1));
                 }
                 ((void(__thiscall*)(PosseSim*, PosseNoun*, int, int))PosseSim_RemoveMember)(self, noun, 1, 0);
                 end = list->mpEnd;
