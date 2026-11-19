@@ -1104,6 +1104,69 @@ Mined while banking near-miss functions in the gold4 ranges r20/r25/r35. Each it
 **Loops**
 - A rotated/do-first loop (`do { body; } while (cond);`) reproduces a loop whose test is at the bottom where a `while`/`for` gave a different block order; keep the induction update in the same position the asm shows (§3).
 
+## 18. Compiler rules confirmed by probes (2026-11-19)
+
+A list of code-generation rules written for cl 14.00 (Visual C++ 2005) was checked rule by rule, with a small test
+program per rule, on cl 13.10, 14.00 and 15.00. These are the ones that hold for Spore's compilers: cl 15.00 for
+most of the game, cl 13.10 for the `/vc71` and RenderWare 4 code. Each tells you what to try when a diff shows that
+shape.
+
+**Static helpers and `ebx`** **[15]** (extends §6.3)
+- Without `/GL`, a `static` function whose address is never taken gets a private register convention. If **any**
+  function in the same file has a 16-byte-aligned local (an aligned vector or matrix local, or one inlined from a
+  callee), `ebx` is no longer used for **any** static helper's register parameters. It does not matter whether that
+  function comes before or after the helper, or whether it calls it. `/arch:SSE2` has the same effect;
+  Spore's `/arch:SSE` does not.
+- So when a static helper's parameters arrive in different registers than the original, compile it alone in an
+  empty file, then again with a function that has an aligned local added. Our files do not always group functions
+  the way the original source files did, so the original file may have had (or lacked) such a function.
+- **[13]**: on cl 13.10 the rule follows the call graph instead: only functions called by a function with an
+  aligned local lose `ebx`.
+
+**Loop-head padding (`npad`)** (all versions)
+- The compiler pads a loop head to a 16-byte boundary as follows. If 7 bytes or fewer are needed, it always pads.
+  Otherwise it pads only when fewer than 3 of the loop's first instructions (counting up to the first branch, call
+  or `ret`) fit before the boundary, and fewer than would fit from an aligned head. Needs of 9 to 15 bytes can be
+  padded too. When a diff is only the presence or size of `npad` filler, change the size of the code before the loop
+  (or of its first instructions), not the loop itself.
+
+**What the prologue tells you about the source**
+- A struct passed by value is never put in a register. If the original has that parameter in a register, the real
+  parameter was a scalar (an `int`, a pointer), not a small struct.
+- A parameter loaded into a callee-saved register (`ebx`, `esi`, `edi`) right at entry means the function is
+  `static`.
+
+**Null tests that disappear**
+- `if (p)` after `*p` has been read or written is deleted: the compiler assumes `p` is not null. The test survives
+  after a `memset`, or after a copy helper whose size reaches `memcpy` as a parameter. That shape matched a function
+  (0x00422420) in another decompilation project.
+
+**Loop unrolling** **[15]** (extends §3.2)
+- `/O2` fully unrolls a loop with a constant count, such as `for (i = 0; i < 3; i++)`. It stays a loop when the body
+  makes a call, when it is a `do`/`while`, when its exit test is `==` or `!=`, when it walks a pointer with no
+  counter, or under `/O1`. If the original keeps a short constant loop as a loop, one of these is in the source.
+
+**Float locals** **[15]**
+- A named `float` local is stored to the stack and reloaded; a `double` local stays on the x87 stack. A store and
+  reload you cannot remove usually means the original declared a `float`; a value that never touches memory means a
+  `double`.
+
+**x87 compare against a constant**
+- A float literal on the right of a comparison is narrowed to a 4-byte operand (`fcomp DWORD PTR`) only if its
+  significand is below 1.56201171875, so `99.0` narrows and `100.0` does not (a compiler bug). This was measured
+  without `/arch`; check it on `/arch:SSE` code before relying on it.
+
+**Store order**
+- A store through a variable index, or a member's inlined constructor, keeps the stores to the object written before
+  it (including the vtable pointer store) above it. When the original's stores come in an order you cannot
+  reproduce, look for such a store between them.
+
+**Instruction count**
+- Copy propagation rewrites a loop guard to test the loop head's variable. Writing `p = first(); h = p;` keeps the
+  original's separate test.
+- One extra copy between an inlined `return 0` and a following `while (cursor)` stops the compiler from threading
+  the jump, which keeps the original's extra block.
+
 ## Appendix: where to look
 
 | Need | Tool / doc |
