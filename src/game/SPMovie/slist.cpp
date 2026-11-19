@@ -260,7 +260,7 @@ char SList_s00fc_c260::IsMember(SNode* node)
     found = 0;
     do {
         if (p == 0)
-            return found;
+            break;
         if (node == p)
             found = 1;
         p = (SNode*)p->Next();
