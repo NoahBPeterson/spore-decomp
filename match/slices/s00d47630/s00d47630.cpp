@@ -18,7 +18,6 @@ typedef double           f64;
 // Free helpers / globals referenced by absolute address.
 // ---------------------------------------------------------------------------
 void FUN_00f47380(void* p);                 // operator delete (0x00f47380)
-void FUN_00f473a0(void* p);                 // operator delete (0x00f473a0, pool entry)
 void FUN_00f14270(void* dst, void* src);     // sp_vector slow push_back (0x00f14270)
 void FUN_00b534c0(void* container, void* v); // global key/value list grow (0x00b534c0)
 void FUN_00d38f40();                         // 0x00d38f40 (ecx = this)
@@ -69,7 +68,7 @@ void cContentValidationSummarizer::FUN_00d47850()
             mVtbl_00 = (void*)0x13ec458;
             return;
         }
-        FUN_00f473a0(p);
+        FUN_00f47380(p);
     }
     mVtbl_00 = (void*)0x13ec458;
 }

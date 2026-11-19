@@ -195,7 +195,7 @@ extern char  g_cachesEnd[]; // 0x1604118
 extern "C" void ea_dealloc(void*);          // 0x00f47380
 extern char g_callbackMap[];                // 0x152f79c  hash_map<unsigned, vector>
 extern void* vtbl_154df28;
-extern void* vtbl_14093bc;
+extern const char DAT_013ebc58[];   // 0x013ebc58  EASTL zone name "App"
 extern void* vtbl_14093cc;
 extern void* vtbl_13effb8;
 extern "C" void* ea_eastl_alloc(unsigned size, void* zone, int, int, const char* file, int line); // 0xf473a0
@@ -1034,7 +1034,7 @@ struct NodeAlloc_6adda0 { Node_6adda0* DoAllocateNode(const NodeVal_6adda0& v); 
 Node_6adda0* NodeAlloc_6adda0::DoAllocateNode(const NodeVal_6adda0& v)
 {
     Node_6adda0* n = (Node_6adda0*)ea_eastl_alloc(
-        0x40, &vtbl_14093bc, 0, 0,
+        0x40, (void*)DAT_013ebc58, 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
         0xd1);
     new (&n->v) NodeVal_6adda0(v);

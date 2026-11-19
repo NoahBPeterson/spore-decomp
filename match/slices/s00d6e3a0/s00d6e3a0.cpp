@@ -37,6 +37,8 @@ char   FUN_00c0b860(void*, void*);                    // 0x00c0b860 thiscall
 char   FUN_00c0e8d0(void*, void*, int);               // 0x00c0e8d0 thiscall
 char   FUN_00c02600(void*, void*);                    // 0x00c02600 thiscall (IsValidNeighbourEntry)
 void   FUN_00b3d850(void*);                           // 0x00b3d850 thiscall
+char   FUN_00c03520(void*, void*);                    // 0x00c03520 thiscall (second neighbour filter)
+void   FUN_00b3d870(void*);                           // 0x00b3d870 thiscall (advance with FUN_00c03520)
 void*  FUN_00bc97f0(void*, int, int, float, void*);   // 0x00bc97f0 thiscall
 char   FUN_00d6e1a0(void*, void*);                    // 0x00d6e1a0 cdecl
 int    FUN_00bc96a0(void*, int, int);                 // 0x00bc96a0 thiscall (Play)
@@ -507,8 +509,8 @@ float __cdecl FUN_00d6eeb0(Creature* self)
     if (it.mpCur == it.mpEnd)
         return 0.0f;
 
-    if (!TC1(char, FUN_00c02600)(&it.mpFilt, *it.mpCur))
-        TC0(void, FUN_00b3d850)(&it);
+    if (!TC1(char, FUN_00c03520)(&it.mpFilt, *it.mpCur))
+        TC0(void, FUN_00b3d870)(&it);
 
     while (it.mpCur != it.mpEnd) {
         void* e = *it.mpCur;
@@ -518,7 +520,7 @@ float __cdecl FUN_00d6eeb0(Creature* self)
             it.mpCur = it.mpCur + 1;
             if (it.mpCur == it.mpEnd)
                 return 0.0f;
-        } while (!TC1(char, FUN_00c02600)(&it.mpFilt, *it.mpCur));
+        } while (!TC1(char, FUN_00c03520)(&it.mpFilt, *it.mpCur));
     }
     return 0.0f;
 }

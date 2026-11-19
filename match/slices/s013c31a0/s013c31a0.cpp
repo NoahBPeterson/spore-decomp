@@ -55,6 +55,8 @@ struct VBig {
     virtual void v64(); virtual void v65(); virtual void v66();
 };
 struct HTb { void* mBegin; unsigned mEnd; void DoFreeNodes(void*, void*); };
+// The table at 0x015b7458 has one more dword in front: its buffer pointer is at +4 and its end at +8 (retail reads 0x015b745c/0x015b7460).
+struct HTbP { unsigned m00; void* mBegin; unsigned mEnd; void DoFreeNodes(void*, void*); };
 struct Str { ~Str(); };
 struct CS { void Shutdown(int); ~CS(); };
 
@@ -407,7 +409,7 @@ void f_013c9f70() {
 // @ 0x013CA670
 void f_013ca670() {
     if (g_15b7478) ((V2*)g_15b7478)->b();
-    HTb* h = (HTb*)g_15b7458;
+    HTbP* h = (HTbP*)g_15b7458;
     h->DoFreeNodes(h->mBegin, (void*)h->mEnd);
     unsigned n = h->mEnd;
     *(unsigned*)((char*)h + 0xc) = 0;

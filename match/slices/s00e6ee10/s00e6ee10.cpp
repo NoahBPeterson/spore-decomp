@@ -20,7 +20,7 @@ struct cObjectPool {
     char* mBase;              // +0x00
     char  mPad04[0x10];
     int   mStride;            // +0x14
-    void* Get(unsigned handle);
+    void* At(unsigned handle);
 };
 
 // The cell record: only the fields this function touches.
@@ -61,7 +61,7 @@ void CellStartTurn(Cell* self)
 
     int idx = self->mIndex;
     cObjectPool* cells = (cObjectPool*)((char*)gspCellGame + 0x1c);
-    void* obj = cells->Get(idx);
+    void* obj = cells->At(idx);
     float t = FUN_00e6d200(obj, 0, 0x2f, *(int*)((char*)obj + 0x1b0));
 
     FUN_00e51ee0(0x22, t - g_13eba80, self->mIndex, 0, -1, -1, 0, 0,
