@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00b1a7b0/s00b1a7b0.cpp  ?DoNuke@IntVecMap@@  00b1b830  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00b1a7b0/s00b1a7b0.cpp  ?DoInsertValue@Elem38Vector@@QAEXPAUElem38@@ABU2@@Z  00b1a900  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b1a7b0/s00b1a7b0.cpp  ?DoCreateNodeCopy@IntVecMap@@QAEPAUIntVecNode@@PBU2@PAU2@@Z  00b1aca0  /O2 /MD /Gy /EHsc /TP /arch:SSE

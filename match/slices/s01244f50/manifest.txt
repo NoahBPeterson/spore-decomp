@@ -19,3 +19,5 @@ slices/s01244f50/s01244f50.cpp  ?init_15de57c@@YAXXZ  0125dbc0  /Od /Ob1 /MD /Gy
 slices/s01244f50/s01244f50.cpp  ?init_15dacc8@@YAXXZ  01250330  /Od /Ob1 /MD /Gy /TP /arch:SSE
 slices/s01244f50/s01244f50.cpp  ?init_15dabcc@@YAXXZ  012503b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
 slices/s01244f50/s01244f50.cpp  ?init_15e2e48@@YAXXZ  0126dae0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s01244f50/s01244f50.cpp  ?init_15e2da8@@YAXXZ  0126db20  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s01244f50/s01244f50.cpp  ?init_15e2f54@@YAXXZ  0126db60  /Od /Ob1 /MD /Gy /TP /arch:SSE
