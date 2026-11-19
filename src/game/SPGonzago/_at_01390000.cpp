@@ -59,12 +59,21 @@ void FUN_00694f00();
 void FUN_00675ca0();
 void FUN_00b1fbf0();
 
+// a bound member-function slot: the code pointer and a this-adjust of 0
+struct Single_s01390c90 { void FUN_00803000(); };            // 0x803000
+typedef void (Single_s01390c90::*SingleFn_s01390c90)();
+struct Bound_s01390c90 {
+    SingleFn_s01390c90 fn;   // +0x00
+    int                adj;  // +0x04
+    Bound_s01390c90() {}
+    Bound_s01390c90(SingleFn_s01390c90 f) { adj = 0; fn = f; }
+};
+extern Bound_s01390c90 g_16c9b8c;                           // 0x16c9b8c
+
 // @ 0x01390c90
 void init_16c9b8c()
 {
-    int c = 0x803000;
-    *(int*)0x16c9b8c = c;
-    *(int*)0x16c9b90 = 0;
+    g_16c9b8c = Bound_s01390c90(&Single_s01390c90::FUN_00803000);
 }
 
 // @ 0x01390cb0

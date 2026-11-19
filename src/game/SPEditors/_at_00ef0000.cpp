@@ -271,7 +271,7 @@ extern "C" void   FUN_00f094d0();                                       // 0xf09
 extern "C" void   FUN_00f32030();                                       // 0xf32030
 extern "C" void   FUN_00f41cf0();                                       // 0xf41cf0
 extern "C" void   FUN_00ebd340();                                       // 0xebd340
-extern "C" void   FUN_00b0f6f0();                                       // 0xb0f6f0
+extern "C" void   __fastcall FUN_00b0f6f0(void* r);                     // 0xb0f6f0 (thiscall, no args)
 extern "C" void   FUN_00b0f6f0_tc(void* r);                              // 0xb0f6f0 thiscall form
 extern "C" void   FUN_00d491b0(int a);                                  // 0xd491b0
 extern "C" void   FUN_00d48a00();                                       // 0xd48a00
@@ -453,7 +453,7 @@ static __forceinline void FUN_00ef0bkey()
     if (a3 != 0) {
         void* r = (void*)((u32(__thiscall*)(void*, u32))(*((char**)((char*)*(void**)a3 + 0xc))))(a3, 0x11966ed);
         if (r != 0)
-            FUN_00b0f6f0();
+            FUN_00b0f6f0(r);
     }
 }
 // ---- items of slice s00ef07d0 end

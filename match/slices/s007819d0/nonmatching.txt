@@ -16,7 +16,6 @@
                 free, the copy-then-append path, and the truncate path via FUN_00760ba0 + DestroyRange). The
                 reallocation/relocate helper call shapes are uncertain and the register schedule differs. Equiv
                 gate: WEAK (136/400 inputs valid, 44.4% instruction coverage; no mismatch observed).
-007824e0  11   cSWsub pop_back-like helper: COMPLETE. Pure instruction-scheduling difference: the original loads
                 the vtable slot for the +0x10 call (mov edx,[edx+0x14]) BEFORE the mInt21c store, ours schedules
                 it after. Tried int locals, explicit fn-ptr locals, comma operators, comma-in-argument, early/late
                 arg reads and flag variants (no /Gy, /Oi, /Ob1, /Os, /Oy) - all >= 11 bytes; likely a different cl

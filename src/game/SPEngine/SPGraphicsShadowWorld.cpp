@@ -708,7 +708,17 @@ struct E36 {
     E36*  Construct(void* p0a, E36Part src);   // 0x00781c30 (thiscall)
 };
 struct cSWsub {
-    void* vtbl;                     // +0x00
+    virtual void v00();
+    virtual void v04();
+    virtual void v08();
+    virtual void v0c();
+    virtual void SetP0(void* p);    // +0x10
+    virtual void SetC(int c);       // +0x14
+    virtual void v18();
+    virtual void v1c();
+    virtual void v20();
+    virtual void v24();
+    virtual void SetB(bool b);       // +0x28
     char  pad04[0x10];              // +0x04
     Vec12 mVec;                     // +0x14
     char  pad20[8];                 // +0x20
@@ -1553,11 +1563,11 @@ Vec12* Vec12::Assign(const Vec12& src)
 void cSWsub::FUN_007824e0()
 {
     E36* last = (E36*)((char*)mE36e - 0x24);
-    ((void(__thiscall*)(void*, void*))((void**)(*(void**)this))[0x10 / 4])(this, last->p0);
+    SetP0(last->p0);
     mVec.Assign(last->v);
     mInt21c = last->a;
-    ((void(__thiscall*)(void*, int))((void**)(*(void**)this))[0x14 / 4])(this, last->c);
-    ((void(__thiscall*)(void*, int))((void**)(*(void**)this))[0x28 / 4])(this, last->b);
+    SetC(last->c);
+    SetB(last->b);
     FUN_0077f6a0((char*)this - 8);
     mE36e = (E36*)((char*)mE36e - 0x24);
     mE36e->v.Destroy();
