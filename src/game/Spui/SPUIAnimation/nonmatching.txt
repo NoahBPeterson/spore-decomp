@@ -1,5 +1,4 @@
 # va diff reason
-007f5ff0 7 complete; member load hoisted above the vtable stores flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 007f6170 104 complete; ctor/call argument forms differ (mixed int/float params) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 007f6210 143 complete; loop strength-reduction/register allocation differs (fixed: declare it void, not bool - retail leaves eax live at the ret and the original symbol is bool, so equiv compares eax&0xff; a `return false` clobbers it. Re-evaluating the loop bound in the for condition reproduces retail's signed-division scratch in eax)  [equiv: PASS (334 valid, 65% cov, no mismatch)] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 007f62c0 121 complete; keeps `this` in ecx (original re-reads mBegin/mEnd each iteration); _ReadWriteBarrier() stops the loop bound being hoisted into ecx; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; equiv PASS (249 valid, 100% cov)
