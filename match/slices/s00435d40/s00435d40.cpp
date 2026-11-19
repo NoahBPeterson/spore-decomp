@@ -215,13 +215,15 @@ void Entity::SyncFlagsFromProps() {
         SetFlag(35, f);
         a = false;
         {
-            PropertyOwnerBase* o2 = mpProps;
-            if (o2) {
-                Property* p2;
-                if (o2->GetProperty(0x0538A895, &p2) && p2->mType == 1)
-                    a = *p2->GetBool();
+            uint32_t reserved;
+            {
+                PropertyOwnerBase* o2 = mpProps;
+                if (o2) {
+                    Property* p2;
+                    if (o2->GetProperty(0x0538A895, &p2) && p2->mType == 1)
+                        a = *p2->GetBool();
+                }
             }
-            Slots<1>();
         }
         SetFlag(51, a);
     }

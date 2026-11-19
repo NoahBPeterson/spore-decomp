@@ -119,8 +119,10 @@ struct VideoRenderableManager {
 // @ 0x00fcdfe0
 extern "C" int __stdcall FUN_00fcdfe0(int* a, int* b)
 {
-    int vb = *(int*)(*b + 0x34);
-    int va = *(int*)(*a + 0x34);
+    int aRecord = *static_cast<volatile int*>(a);
+    int bRecord = *static_cast<volatile int*>(b);
+    int vb = *(int*)(bRecord + 0x34);
+    int va = *(int*)(aRecord + 0x34);
     if (va == vb)
         return 0;
     return (va > vb) ? 1 : -1;

@@ -338,10 +338,10 @@ void __fastcall DestroyBakedAnimManager(nSPCreatureAnim::baked_anim_manager* sel
   ClearBakedAnimManager(self);
   if (self->mLastUpdatedKey.mSpecies)
     FUN_009c26a0(self->mLastUpdatedKey.mSpecies);
-  ((MgrHelper*)((char*)self + 0x20))
-      ->NukeSpeciesTree(self->mSpeciesInstances.mAnchor.mpNodeParent);
-  ((MgrHelper*)((char*)self + 4))
-      ->NukeBakedTree(self->mBakedAnimCache.mAnchor.mpNodeParent);
+  nSPCreatureAnim::rbtree_layout& species = self->mSpeciesInstances;
+  ((MgrHelper*)&species)->NukeSpeciesTree(species.mAnchor.mpNodeParent);
+  nSPCreatureAnim::rbtree_layout& baked = self->mBakedAnimCache;
+  ((MgrHelper*)&baked)->NukeBakedTree(baked.mAnchor.mpNodeParent);
 }
 
 // ---------------------------------------------------------------------------------------------

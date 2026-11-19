@@ -11,3 +11,4 @@
 ../src/game/SPMovie/videorenderablemanager.cpp  ?GetFrame2@RVRenderable@@QAEHXZ  00fce1b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/videorenderablemanager.cpp  ?SetFrame0@RVRenderable@@QAEXH@Z  00fce0a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPMovie/videorenderablemanager.cpp  ?SetFrame1@RVRenderable@@QAEXH@Z  00fce110  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPMovie/videorenderablemanager.cpp  _FUN_00fcdfe0@8  00fcdfe0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
