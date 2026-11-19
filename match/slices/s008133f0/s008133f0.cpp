@@ -152,7 +152,7 @@ struct FocusSvc { virtual void f00(); virtual void f01(); virtual void f02(); vi
     virtual void f14();
     virtual void* f15(int);               // 0x54
     virtual void  f16(int, void*);        // 0x58
-    virtual void  f17(int, void*);        // 0x5c
+    virtual void  f17(int, WinV*);        // 0x5c
 };
 
 struct SrcV {
@@ -177,10 +177,9 @@ struct UIMsg {
     void* target;    // +0x18
 };
 
-struct MainWin {
-    char pad0[0x4];
-    WinSub win;                 // +0x4
-    char pad1[0x34 - 0x4 - sizeof(WinSub)];
+struct MainWinBase_s0081_33f0 { virtual void v00(); };
+struct MainWin : MainWinBase_s0081_33f0, WinV {   // window interface at +0x4 (WinSub methods run on it)
+    char pad1[0x34 - 0x8];
     Ref*  mp34;                 // +0x34
     char pad2[0x218 - 0x38];
     uint8_t b218;               // +0x218
@@ -330,7 +329,7 @@ bool MainWin::ShutdownStringFactories() {
 // @ 0x008133f0
 bool MainWin::KeyRouted(float a, float b, int c, int d) {
     if (b28d) return true;
-    WinV* w = (WinV*)&win;
+    WinV* w = this;
     w->w05()->o13(1, w);
     w->w05()->o13(0, w);
     bool hit = false;
@@ -386,8 +385,7 @@ bool MainWin::FocusInput(float a, float b, int c, int d) {
             } while (i < 5);
             {
                 FocusSvc* f = (FocusSvc*)mp34;
-                WinV* w = (WinV*)&win;
-                f->f17(1, w);
+                f->f17(1, this);
             }
         }
     }
@@ -475,7 +473,7 @@ void MainWin::DoMessage(UIMsg* msg) {
             m.id = 0x255abf5;
             m.vtbl = vtbl_BehaviorMessage;
             _InterlockedExchange(&m.rc, 0);
-            bool on = msg->target == (void*)&win;
+            bool on = msg->target == (void*)static_cast<WinV*>(this);
             m.vtbl = vtbl_MessageBasicRC5;
             m.f08 = on ? 1u : 0u;
             m.f38 = 0;
@@ -485,13 +483,13 @@ void MainWin::DoMessage(UIMsg* msg) {
             m.Destruct();
         }
         if (msg->id == 10 && msg->kind == 0) {
-            bool on = msg->target == (void*)&win;
+            bool on = msg->target == (void*)static_cast<WinV*>(this);
             if (b220 && b223 != on) ApplyToFocus(on);
             b223 = on;
         }
     }
     if (mp268) {
-        if (((XK1*)mp268)->x0e() != g_DAT_01545184 && msg->id == 0xb && msg->target != (void*)&win && msg->kind == 1) {
+        if (((XK1*)mp268)->x0e() != g_DAT_01545184 && msg->id == 0xb && msg->target != (void*)static_cast<WinV*>(this) && msg->kind == 1) {
             *(int*)fl = 0;
             fl[4] = 0;
         }
