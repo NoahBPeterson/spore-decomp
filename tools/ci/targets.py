@@ -12,12 +12,12 @@ per slice, and the linker folds identical code, so "every use agrees" would misf
 A name carrying the checked function's own address (a placeholder like U_01351e60_5_30) is no evidence. Anything
 else is not checked (imports, CRT helpers, data local to the object, names with no recorded address).
 
-Per relocation: agree, folded (retail uses a byte-identical copy of the named function, by the fingerprints),
-disagree, or reordered (the function uses exactly the expected addresses at swapped places:
+Per relocation: agree, folded (retail uses a byte-identical copy of the named function, by the fingerprints), thunk
+(retail calls a one-instruction `jmp` to the named function), disagree, or reordered (the function uses exactly the expected addresses at swapped places:
 independent stores in another order, same behaviour). tools/ci/target_audit.py is the fuller maintainer version
 (more name evidence, needs the game image).
 """
-import glob, os, re, struct, sys
+import glob, hashlib, os, re, struct, sys
 from collections import defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -146,6 +146,54 @@ def same_function(fps, a, b):
                 and x["mask"] == y["mask"])
 
 
+JMP_SHA = hashlib.sha256(b"\xe9" + bytes(4)).hexdigest()     # a function that is only `jmp rel32`, address masked
+
+
+def jmp_dest(fps, va):
+    """where the retail function at va jumps, if it is nothing but `jmp rel32` (a wrapper the compiler reduced to a
+    tail jump); else None"""
+    x = (fps or {}).get(va)
+    if not x or x["size"] != 5 or x["mask"] != [[1, 4]] or x["sha256"] != JMP_SHA or not x.get("masked"):
+        return None
+    d = int.from_bytes(bytes.fromhex(x["masked"]), "little", signed=True)
+    return (va + 5 + d) & 0xFFFFFFFF
+
+
+def same_target(fps, want, actual):
+    """the verdict for a name claiming `want` where retail uses `actual`"""
+    if want == actual:
+        return "agree"
+    if same_function(fps, want, actual):
+        return "folded"
+    d = jmp_dest(fps, actual)
+    if d is not None and (d == want or same_function(fps, want, d)):
+        return "thunk"
+    return "disagree"
+
+
+FUN_RE = re.compile(r"(?:FUN|sub)_([0-9A-Fa-f]{6,8})$")
+
+
+def row_names(rows, fps):
+    """{(src, va): reason} for manifest rows whose symbol names another function: a FUN_00abcdef name on a row for
+    another address, or one source's symbol listed for two addresses whose retail code differs (a twin whose row kept
+    its sibling's name). rows: (src, sym, va) of the written-source manifests (not match/synth or match/clones.txt,
+    whose rows borrow names by design)."""
+    out, by = {}, defaultdict(set)
+    for src, sym, va in rows:
+        by[(src, sym)].add(va)
+        m = FUN_RE.search(ident(sym))
+        if m and int(m.group(1), 16) != va:
+            out[(src, va)] = "the row names %s, the function at 0x%s, for 0x%08x" % (sym, m.group(1), va)
+    for (src, sym), vas in by.items():
+        for va in vas:
+            other = sorted(o for o in vas if o != va and not same_function(fps, o, va))
+            if other and (src, va) not in out:
+                out[(src, va)] = "the row's symbol %s also names 0x%08x, a different function: one row names the " \
+                                 "wrong function" % (sym, other[0])
+    return out
+
+
 def check(fp, obj, fname, fps=None, src=None):
     """[(offset, symbol, verdict, claimed, retail, how)] for function `fname` of object `obj` at fp's address.
     None when the fingerprint has no masked bytes or the function is not in the object."""
@@ -175,7 +223,7 @@ def check(fp, obj, fname, fps=None, src=None):
         else:   # REL32: target = S + A - (P + 4)
             disp = field - (1 << 32) if field & 0x80000000 else field
             actual = (va + o + 4 + disp - ours) & 0xFFFFFFFF
-        verdict = "agree" if want == actual else "folded" if fps and same_function(fps, want, actual) else "disagree"
+        verdict = same_target(fps, want, actual) if fps else "agree" if want == actual else "disagree"
         out.append((o, s.name, verdict, want, actual, how))
     bad = [x for x in out if x[2] == "disagree"]
     if bad and sorted(x[3] for x in bad) == sorted(x[4] for x in bad):

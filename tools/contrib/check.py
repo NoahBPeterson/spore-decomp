@@ -123,6 +123,16 @@ def main():
     if any(r[2] == va for r in S.manifest_rows(ident)):
         print("(already a manifest row: nothing to add)")
         return 0
+    if not stubs:
+        # a row would name another function: the symbol already names a different function's row (a twin of the same
+        # shape that kept its sibling's name), or a FUN_00abcdef name for another address (targets.row_names)
+        rel = os.path.relpath(src, os.path.join(ROOT, "match")).replace(os.sep, "/")
+        rows = [(r[0], r[1], r[2]) for r in S.manifest_rows(ident)] + [(rel, sym, va)]
+        why = TG.row_names(rows, T.fingerprints()).get((rel, va))
+        if why:
+            print("  but %s. Name this function's own symbol (check the `// @ 0x%08x` marker's function). "
+                  "Nothing recorded." % (why, va))
+            return 1
     rel_src = os.path.relpath(src, os.path.join(ROOT, "match")).replace(os.sep, "/")
     d = S.slice_dir(ident)
     line = "%s  %s  %08x  %s" % (rel_src, sym, va, " ".join(flags))
