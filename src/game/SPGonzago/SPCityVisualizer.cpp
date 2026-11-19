@@ -6975,10 +6975,13 @@ void Vec3AllocVector::swap(Vec3AllocVector& other)
         Vec3* tb = mpBegin;
         mpBegin = ob;
         other.mpBegin = tb;
+        _ReadWriteBarrier();
         Vec3* te = mpEnd;
+        _ReadWriteBarrier();
         Vec3* oe = other.mpEnd;
         mpEnd = oe;
         other.mpEnd = te;
+        _ReadWriteBarrier();
         Vec3* oc = other.mpCapacity;
         Vec3* tc = mpCapacity;
         mpCapacity = oc;
