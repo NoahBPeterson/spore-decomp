@@ -256,7 +256,7 @@ struct cModelInstance_s0074_4ad0 {
     void SetBoneCallback(int a, int b, int c, int d);  // 0x0073b840 (cModelInstance::SetBoneCallback)
     void SetAnimationGroupTransform(int a, int b);  // 0x0073f4b0 (cModelInstance::SetAnimationGroupTransform)
     int  GetRegionMaterialInfo(int region);  // 0x00741150 (cModelInstance::GetRegionMaterialInfo)
-    void SetDynamicDraw(int a, int b);  // 0x0073b8e0 (cModelInstance::SetDynamicDraw)
+    void SetDynamicDraw(void* a, bool b);  // 0x0073b8e0 (cModelInstance::SetDynamicDraw)
     int  GetDeformationHandles(void* a, void* b);  // 0x0073d1e0 (cModelInstance::GetDeformationHandles)
     int  GetArenaResource();  // 0x0073d160 (cModelInstance::GetArenaResource)
     bool SelectMesh(int a, int b);
@@ -341,7 +341,7 @@ struct cModelWorld_s0074_4ad0 : IModelWorld_s0074_4ad0 {
     void  SetBoneCallback(Model_s0074_4ad0*, int, int, int, int);  // 0x00744b10 (cModelWorld::SetBoneCallback)
     void  SetAnimationGroupTransform(Model_s0074_4ad0*, int, int);  // 0x00744b60 (cModelWorld::SetAnimationGroupTransform)
     int   GetMaterialInfo(Model_s0074_4ad0*, int);  // 0x00744ba0 (cModelWorld::GetMaterialInfo)
-    void  SetDynamicDraw(Model_s0074_4ad0*, int, int);  // 0x00744be0 (cModelWorld::SetDynamicDraw)
+    void  SetDynamicDraw(Model_s0074_4ad0*, void*, bool);  // 0x00744be0 (cModelWorld::SetDynamicDraw)
     int   GetNumLODs(Model_s0074_4ad0*);  // 0x00744c30 (cModelWorld::GetNumLODs)
     void  SetLOD(Model_s0074_4ad0*, int);
     void  SetSomeFloat(Model_s0074_4ad0*, float);  // 0x00744cf0 (cModelWorld::SetSomeFloat)
@@ -3672,7 +3672,7 @@ int cModelWorld_s0074_4ad0::GetMaterialInfo(Model_s0074_4ad0* model, int region)
 }
 
 // @ 0x00744be0
-void cModelWorld_s0074_4ad0::SetDynamicDraw(Model_s0074_4ad0* model, int a, int b)
+void cModelWorld_s0074_4ad0::SetDynamicDraw(Model_s0074_4ad0* model, void* a, bool b)
 {
     cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
     cModelInstance_s0074_4ad0** p = (cModelInstance_s0074_4ad0**)((char*)m + 0x9c);

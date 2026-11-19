@@ -23,3 +23,4 @@
 ../src/game/SPGonzago/MemoryMan.cpp  ?f_473d0@@YAXHHHHHHHH@Z  00f473d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/MemoryMan.cpp  ?f_47410@@YAXH@Z  00f47410  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPGonzago/MemoryMan.cpp  ?FUN_00900900@@YAPAXPAFPAVStackAllocator_s0090_0410@Allocator@EA@@@Z  00900900  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/MemoryMan.cpp  ?HandleUIMessage@cSPUIChoiceDialog@@UAE_NPAVIWindow_s005f_e1d0@UTFWin@EA@@ABVMessage_s005f_e1d0@34@@Z  005fe8e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

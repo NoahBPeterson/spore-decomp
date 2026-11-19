@@ -45,7 +45,6 @@
 00e5a1a0  115  cell-quality tier + spawn: complete (this in ESI via single-caller static trick); SSE constant load vs memory-operand comiss and dead lea [esi+0x254]/eax=ebx artifacts differ
 00e5a2a0 250 view-vector angle helper: complete; SIMD dot-product evaluation/scheduling of a- and b-vectors differs (size matches)
 00e5a850 116 complete (same calls in order: sGetBoxSizeMultiplier2 cdecl, kLevelSize and gspCellGame loads, x87 mul/div, RoundToInt/cvtss2si pair, both wrap-and-clamp fixups); volatile temps force 32-bit float rounding at the original's store points; the 1/x is an SSE divss where cl emits x87 (fld1/fdivrp), so the bytes differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00e61140 5 global reload/register choice differs (o kept in ecx vs eax); equiv UNSUPPORTED: 0/1200 valid inputs (fault(read), _vsnprintf import)
 00e61370 276 matrix->vector math operand order/scheduling differs; equiv FAIL: 1 ulp float difference in output
 00e61630 106 ctor wrapper: temp Handle slot and case schedule differ; equiv UNSUPPORTED: 0/1200 valid inputs (_mktime64 import, write faults)
 00e61a50 11 factory new-expression: vtable/field store order differs; equiv FAIL: vtable pointer stored differs from original (orig 01485598 vs ours)

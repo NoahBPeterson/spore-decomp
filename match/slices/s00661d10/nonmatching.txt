@@ -1,5 +1,4 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
-00662540  6    two-branch reload of m18; cl picks edx/eax vs the original's eax/edx, calls normalized
 006625f0  220  layout setup / area capture; register and stack-slot schedule differs (calls match)
 00662750  89   update path; sete placement and branch body scheduling differ (calls match)
 00662a40  68   indexed element search; a volatile mEnd read keeps this in ecx, but cl keeps the begin cursor in edx and folds the count differently than the original's esi/ebx reload schedule (equivalence PASS)

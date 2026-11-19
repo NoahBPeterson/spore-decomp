@@ -2012,11 +2012,10 @@ void FeedList::FUN_00662540()
         FUN_00661900((void*)m14, (char*)this + 0x30);
         if (m14 == m18) {
             ((FeedSub*)((char*)this + 0x1c))->FUN_00661390((char*)this + 0x30);
-            GetSupportedFilterTypes(m18);
-            return;
+        } else {
+            ((FeedSub*)((char*)this + 0x1c))->FUN_00661700();
+            FUN_00661900((void*)m18, (char*)this + 0x1c);
         }
-        ((FeedSub*)((char*)this + 0x1c))->FUN_00661700();
-        FUN_00661900((void*)m18, (char*)this + 0x1c);
         GetSupportedFilterTypes(m18);
     }
 }
