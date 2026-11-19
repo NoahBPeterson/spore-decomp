@@ -4,3 +4,4 @@ slices/s01148050/s01148050.cpp  ?ResetBits@CMpegBase@core@audio@rw@@QAEXXZ  0114
 slices/s01148050/s01148050.cpp  ?Close@CMpegBase@core@audio@rw@@QAEHXZ  01148cc0  /vc71 /O2 /MD /Gy /TP /arch:SSE2
 slices/s01148050/s01148050.cpp  ??0CMpegBase@core@audio@rw@@QAE@XZ  01148cd0  /vc71 /O2 /MD /Gy /TP /arch:SSE2
 slices/s01148050/s01148050.cpp  ??1CMpegBase@core@audio@rw@@UAE@XZ  01148d40  /vc71 /O2 /MD /Gy /TP /arch:SSE2
+slices/s01148050/s01148050.cpp  ?AllocateSynth@CMpegBase@core@audio@rw@@QAEHH@Z  01148cf0  /vc71 /O2 /MD /Gy /TP /arch:SSE2

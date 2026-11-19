@@ -666,12 +666,15 @@ CMpegBase::CMpegBase()
     mpLoadedPolySynthHistory = 0;
 }
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 // @ 0x01148cf0
 int CMpegBase::AllocateSynth(int numChannels)
 {
     int size = numChannels * 0x900;
     void* p = g_pSystem->Alloc(size, "PolySynthHistoryF", 0x10, 0);
     mpPolySynthHistory = p;
+    _ReadWriteBarrier();
     if (p == 0)
         return -1;
     memset(p, 0, size);

@@ -21,3 +21,4 @@
 ../src/game/UTFSpore_Win32/_at_00950000.cpp  ?SetIdentity@Mat4@@QAEXXZ  0095e7a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00950000.cpp  ?AddPerspectiveCol@Mat4@@QAEXM@Z  0095ee40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/_at_00950000.cpp  ?Multiply@CM@@QAEXPBM@Z  0095f860  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/_at_00950000.cpp  ?Scale@Mat4@@QAEXPBM@Z  0095ea30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

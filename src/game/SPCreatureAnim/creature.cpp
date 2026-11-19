@@ -1930,7 +1930,7 @@ struct bone_xform_s009b_3e40 {
     float v[3];                        // +0x24
     bone_xform_s009b_3e40& operator=(const bone_xform_s009b_3e40& o)
     {
-        __movsd((unsigned long*)m, (unsigned long*)o.m, 9);
+        memcpy(m, o.m, sizeof(m));
         float* d = v; const float* s = o.v;
         d[0] = s[0]; d[1] = s[1]; d[2] = s[2];
         return *this;
