@@ -102,12 +102,13 @@ extern void*     g_15fd918;                      // 0x015fd918 property list
 extern const wchar_t g_140af84[];                // 0x0140af84 L"Arial"
 extern const char    g_13eb8a4[];                // 0x013eb8a4 "Graphics"
 extern const char g_matName7cc0[];
+struct Inner7cB { void FI(int); };   // 0x0076cd30 (the second object's update)
 struct Inner7c {
     char F7(int, int, int, int, int, int, int);       // 0x0076bc50
     void F12(int, int, int, int, int, int, int, int, // 0x0076ba30
              int, int, int, int);
     void FF(float);                                   // 0x00776450
-    void FI(int);                                     // 0x006f4280 / 0x0076cd30
+    void FI(int);                                     // 0x006f4280
     int  Fp(int, int);                                // 0x... vtable +0x10
     void Fq(int, int, float);                         // vtable +0x18/+0x1c
 };
@@ -2528,7 +2529,7 @@ void Host3::Method7880(int arg)
     if (a != 0) {
         a->FI(arg);
     }
-    Inner7c* b = *(Inner7c**)((char*)this + 0x24);
+    Inner7cB* b = *(Inner7cB**)((char*)this + 0x24);
     if (b != 0) {
         b->FI(arg);
     }
