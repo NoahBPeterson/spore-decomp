@@ -106,6 +106,8 @@ inline void GetFloatProperty(cPropertyList* pl, uint32_t key, float* out)
 
 extern float g_const_zero;   // 0x015d4578 (equiv t3)
 extern float g_const_one;
+extern void* vtbl_13ef1c0[];   // cSPEditorHandle vtable (0x013ef1c0)
+extern void* vtbl_13ef1ac[];   // its refcount vtable (0x013ef1ac)
 extern Vector3 g_defaultHandleColor;   // 0x015d443c (equiv t2)
 
 // @ 0x0047e4b0
@@ -274,8 +276,8 @@ uint32_t cSPEditorHandle::SetScale(float s)
 cSPEditorHandle* cSPEditorHandle::ConstructDerived()
 {
     this->BaseConstruct();
-    this->vptr = (void**)0x13ef1c0;    // vtable (retail 0x013ef1c0)
-    this->vptr2 = (void**)0x13ef1ac;   // refcount vtable (retail 0x013ef1ac)
+    this->vptr = vtbl_13ef1c0;
+    this->vptr2 = vtbl_13ef1ac;
     return this;
 }
 

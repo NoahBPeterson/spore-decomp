@@ -6,6 +6,8 @@
 // unnamed retail callees and globals (address in the comment)
 extern float g_const_zero;   // 0x015d4578 (equiv t3)
 extern float g_const_one;
+extern void* vtbl_13ef1c0[];   // cSPEditorHandle vtable (0x013ef1c0)
+extern void* vtbl_13ef1ac[];   // its refcount vtable (0x013ef1ac)
 
 typedef unsigned int uintptr_t;
 struct Bitset32 {
@@ -192,8 +194,8 @@ uint32_t cSPEditorHandle::SetScale(float s)
 cSPEditorHandle* cSPEditorHandle::ConstructDerived()
 {
     this->BaseConstruct();
-    this->vptr = (void**)0x13ef1c0;    // vtable (retail 0x013ef1c0)
-    this->vptr2 = (void**)0x13ef1ac;   // refcount vtable (retail 0x013ef1ac)
+    this->vptr = vtbl_13ef1c0;
+    this->vptr2 = vtbl_13ef1ac;
     return this;
 }
 
