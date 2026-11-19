@@ -50,8 +50,21 @@ inline void DestroyRange7c(Elem7c* first, Elem7c* last, Elem7c* dest)
 // @ 0x0042A680
 Elem7c* UninitMove7c(Elem7c* first, Elem7c* last, Elem7c* dest)
 {
+    struct Destroy {
+        static __forceinline void InitTag()
+        {
+            TagB tag;
+        }
+
+        static __forceinline void Elements(Elem7c* first, Elem7c* last, Elem7c* dest)
+        {
+            PadN<5>();
+            for (; first != last; ++first, ++dest) first->~Elem7c();
+        }
+    };
     Elem7c* ret = UninitCopy7c(first, last, dest, TagA());
-    DestroyRange7c(first, last, dest);
+    Destroy::InitTag();
+    Destroy::Elements(first, last, dest);
     return ret;
 }
 

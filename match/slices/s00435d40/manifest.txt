@@ -8,3 +8,4 @@ slices/s00435d40/s00435d40.cpp  InitDefaultFlags  00436060  /Od /Ob1 /MD /Gy /EH
 slices/s00435d40/s00435d40.cpp  GetRotation  004361c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00435d40/s00435d40.cpp  GetPosition  00436210  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00435d40/s00435d40.cpp  GetLocalTransform  00436380  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00435d40/s00435d40.cpp  ?SyncFlagsFromProps@Entity@@QAEXXZ  004360f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
