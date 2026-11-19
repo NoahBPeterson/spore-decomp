@@ -662,6 +662,7 @@ void SP::cCreatureCameraBase::Deactivate()
         mMouseLeftButton = false;
         mMouseMiddleButton = false;
         mMouseRightButton = false;
+        _ReadWriteBarrier();
         EA::Messaging::Server* pServer = mMessageRegistration.mpServer;
         if (pServer) {
             mMessageRegistration.mpServer = 0;

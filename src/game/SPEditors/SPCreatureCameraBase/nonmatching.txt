@@ -1,5 +1,4 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00624ec0 8 cCreatureCameraBase::Deactivate; complete; pServer load is hoisted above the three bool stores in mine
 006252c0 46 NormalizeTheta; complete, register allocation differs (c/K/t in different xmm regs)
 00625750 93 UpdateOffsets (depends); complete, original interleaves the 3-component lerp through Vector3 operators
 00625830 182 InitCameraData; complete, original schedules Vector3 ops differently (stores y,z,x; base edi reuse)
