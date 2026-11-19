@@ -4507,7 +4507,8 @@ void cCommunityEditor::CreateVehicleFromTerrainSphere()
     CreateVehicleFromModelType((cCity_s00bf_4170*)(intptr_t)nModel, pPosition);
 
     Vec3_s00bf_4170 stored = *pPosition;
-    Vec3_s00bf_4170* pSlot = ((cVector3Map*)0x168caf0)->FindOrInsert(&nModel);
+    Vec3_s00bf_4170* pSlot =
+        ((Vec3_s00bf_4170* (__thiscall*)(void*, int*))FUN_00bf3cb0)((void*)0x168caf0, &nModel);
     *pSlot = stored;
 }
 
