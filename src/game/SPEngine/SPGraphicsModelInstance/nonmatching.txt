@@ -40,7 +40,6 @@
 00741150 70 cModelInstanceR::GetRegionMaterialInfo (region map lower_bound): complete; original keeps this in esi (push esi/mov esi,ecx) and end in edi; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: PASS]
 00741210 986 cMI_Geo::AddGeometryFromArena: complete (all 3 export types, bbox merge, radius); aligned __m128 temp slots / frame size differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- [equiv: WEAK 277 valid inputs, 37% cov]
 00742b30 84 complete; register allocation (original reloads the incoming argument from its stack slot for the 4th insert_range arg instead of using esi) [equiv: WEAK (no mismatch, 769 valid, 50% cov)]
-00742cf0 8 complete; only the E8 push_back copy schedule differs (edx loaded before the pops) [equiv: WEAK (no mismatch, 173 valid, 94% cov)]
 00742db0 366 complete; register allocation (original keeps this/src/old in esi/edi/ebp and spills the loop count) [equiv: PASS]
 00742f60 185 complete; register allocation (key pointer in ebp, end in edi) and EH epilogue merging [equiv: PASS]
 00743030 237 complete; original omits the final state=-1 store before the inline FixedVec64 dtor and reloads info after the null test [equiv: PASS]

@@ -5,3 +5,4 @@ slices/s00502ee0/s00502ee0.cpp  ??0E48@@QAE@ABU0@@Z                        00503
 slices/s00502ee0/s00502ee0.cpp  ?Init@S4@@QAEPAU1@XZ                      00503630  /Od /Ob1 /MD /Gy /TP
 slices/s00502ee0/s00502ee0.cpp  ??4A@@QAEAAU0@ABU0@@Z                      005039c0  /Od /Ob1 /MD /Gy /TP
 slices/s00502ee0/s00502ee0.cpp  ?destroy_E48@@YAPAUE48@@PAU1@00@Z  00503be0  /Od /Ob1 /MD /Gy /TP
+slices/s00502ee0/s00502ee0.cpp  ?destroy_Ed8@@YAPAUEd8@@PAU1@00@Z  005033f0  /Od /Ob1 /MD /Gy /TP
