@@ -3,3 +3,4 @@ slices/s0045aa70/s0045aa70.cpp  ?Start@cContentValidationSummarizer@@QAEXH@Z  00
 slices/s0045aa70/s0045aa70.cpp  ?SetEnabled@cContentValidationSummarizer@@QAEXH_N@Z  0045b110  /Od /MD /Gy /EHsc /TP
 slices/s0045aa70/s0045aa70.cpp  ?Stop@cContentValidationSummarizer@@QAEXH@Z  0045b000  /Od /MD /Gy /EHsc /TP
 slices/s0045aa70/s0045aa70.cpp  ??0cContentValidationSummarizer@@QAE@XZ  0045aa70  /Od /MD /Gy /EHsc /TP
+slices/s0045aa70/s0045aa70.cpp  ??1cContentValidationSummarizer@@QAE@XZ  0045ab00  /Od /MD /Gy /EHsc /TP
