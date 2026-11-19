@@ -7418,7 +7418,7 @@ struct cEntryVector {
     cPollenEntry* mpCapacity;                // +08
     uint32_t mAllocator;                     // +0c
 
-    cPollenEntry* MoveTail(cPollenEntry* first, cPollenEntry* dest);      // 0x00de97a0
+    cPollenEntry* MoveTail(cPollenEntry* first, cPollenEntry* last);      // 0x00de97a0
     void insert(cPollenEntry* position, unsigned int count,
                 const cPollenEntry& value);                              // 0x00de97f0
     void DestroyRange(cPollenEntry* first, cPollenEntry* last);           // 0x00de5ee0
@@ -11390,11 +11390,12 @@ void cEditorMessageTarget::OnEditorMessageReceived(void* pMessage)
 }
 
 // @ 0x00de97a0
-cPollenEntry* cEntryVector::MoveTail(cPollenEntry* first, cPollenEntry* dest)
+cPollenEntry* cEntryVector::MoveTail(cPollenEntry* first, cPollenEntry* last)
 {
-    cPollenEntry* const newEnd = CopyConstructEntries(first, mpEnd, dest);
+    // erase(first, last): slide the tail [last, end) down onto first, destroy the leftovers
+    cPollenEntry* const newEnd = CopyConstructEntries(last, mpEnd, first);
     DestroyRange(newEnd, mpEnd);
-    mpEnd += dest - first;
+    mpEnd -= last - first;
     return first;
 }
 
