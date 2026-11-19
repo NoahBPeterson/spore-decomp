@@ -44,7 +44,7 @@ struct C_802890 { void* f(void* want); };
 // ---- items of slice s008019f0 end
 
 // ---- items of slice s00809700 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" void efree(void* p); // 0x00a222c0
+extern "C" void efree(void* p); // 0x00f47380
 extern int g_15446cc, g_15446d0, g_15446d4;
 extern char g_obj_15446c8;
 extern "C" void* dbgnew(unsigned size, const void* data, int a, int b, const char* file, int line); // 0x00f473a0
