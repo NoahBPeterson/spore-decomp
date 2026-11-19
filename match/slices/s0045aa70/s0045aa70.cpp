@@ -132,8 +132,10 @@ cContentValidationSummarizer::cContentValidationSummarizer()
 cContentValidationSummarizer::~cContentValidationSummarizer()
 {
     vtbl = (void*)0x13ecc8c;
+    uint32_t pos[3];
     ((TableDtorApi*)&table)->FUN_0045b380();
     vtbl = (void*)0x13ec458;
+    (void)pos;
 }
 
 // @ 0x45ab30
