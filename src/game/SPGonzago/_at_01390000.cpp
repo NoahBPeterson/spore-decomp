@@ -76,12 +76,19 @@ void init_16c9b8c()
     g_16c9b8c = Bound_s01390c90(&Single_s01390c90::FUN_00803000);
 }
 
+// a value/flag pair: the value and a cleared second word
+struct Pair_s01390cb0 {
+    int value;   // +0x00
+    int extra;   // +0x04
+    Pair_s01390cb0() {}
+    Pair_s01390cb0(int v) { extra = 0; value = v; }
+};
+extern Pair_s01390cb0 g_16c9b94;                            // 0x16c9b94
+
 // @ 0x01390cb0
 void init_16c9b94()
 {
-    int c = 0xe0;
-    *(int*)0x16c9b94 = c;
-    *(int*)0x16c9b98 = 0;
+    g_16c9b94 = Pair_s01390cb0(0xe0);
 }
 
 // @ 0x01391740
