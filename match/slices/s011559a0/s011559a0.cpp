@@ -33,6 +33,13 @@ void  __cdecl SNDMEMI_alloc(void* dst, int size);      // 0x113ec90
 void* __fastcall Sys16_Alloc(void* self, int pad, unsigned size, const char* name,
                              unsigned align, unsigned zero);          // 0x112c820
 void  __fastcall Sys16_Free(void* self, int pad, void* p, int z);     // 0x112c850
+namespace EA { namespace Allocator { class ICoreAllocator; } }
+namespace rw { namespace audio { namespace core {
+class System {
+public:
+    void Free(void* p, EA::Allocator::ICoreAllocator* allocator);   // 0x112c850
+};
+} } }
 void  __cdecl Sub_11e0744(void* dst, void* src, unsigned count);      // 0x11e0744
 void  __cdecl Sub_11594e0(int a);                      // 0x11594e0
 int   __cdecl Sub_11686e0(void);                       // 0x11686e0
@@ -294,7 +301,7 @@ void FUN_01156380(void) {
     Sub_1133450();
     void* p = Ap(0x16f16d0);
     if (p != 0)
-        Sys16_Free(Ap(0x16e61a8), 0, p, 0);
+        ((rw::audio::core::System*)Ap(0x16e61a8))->Free(p, 0);
     A32(0x16f16d0) = 0;
     Sub_1133460();
 }

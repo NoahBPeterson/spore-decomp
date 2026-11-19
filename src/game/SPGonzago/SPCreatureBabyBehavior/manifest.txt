@@ -1,3 +1,4 @@
 # source  symbol  va  flags
 ../src/game/SPGonzago/SPCreatureBabyBehavior.cpp  ?FUN_00d61d10@@YA_NPAVcSPCreatureBase@@HHHHPAH@Z  00d61d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBabyBehavior.cpp  ?FUN_00d61dc0@@YAMPAVcSPCreatureBase@@@Z  00d61dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBabyBehavior.cpp  ?FUN_00d61ce0@@YA?AUIter_s00d61ce0@@U1@0ABI@Z  00d61ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
