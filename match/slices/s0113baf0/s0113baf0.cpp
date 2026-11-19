@@ -63,6 +63,7 @@ struct Ctx {
     bool     DelayLineInit(int, int, uint32_t); // 0x114d7b0
     void     D840(int);                      // 0x114d840
     void     C1154ee0();                     // 0x1154ee0
+    void     C00c2e4e0();                    // 0x00c2e4e0
     void     C1154ca0(void*);                // 0x1154ca0
     uint64_t Get64();                        // 0x68c140
 
@@ -635,7 +636,7 @@ void FUN_0113cb50(uint8_t* p)
 // @ 0x0113cbb0
 uint8_t* Ctx::FUN_0113cbb0(uint8_t param_2)
 {
-    ((Ctx*)((char*)this + 0x98))->C1154ee0();
+    ((Ctx*)((char*)this + 0x98))->C00c2e4e0();
     ((Ctx*)((char*)this + 0x5c))->D770();
     P(this, 0) = g_vtbl_014bc0fc;
     if (param_2 & 1)
