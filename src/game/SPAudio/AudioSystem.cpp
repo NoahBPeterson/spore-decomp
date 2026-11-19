@@ -772,6 +772,7 @@ struct PropList : PropBase {
 };
 struct Str16 {
     wchar_t* b; wchar_t* e; wchar_t* cap; int alloc;
+    const wchar_t* c_str() const { return b; }
     ~Str16() { if ((int)(((char*)cap - (char*)b) & ~1) > 2 && b) operator_delete__(b); }
 };
 Str16 ConvertToString16(const char* s, int n);   // 0x0093c5a0
@@ -6524,7 +6525,7 @@ bool System_s00a2_4e10::Init()
 void Namer::Convert(const char* s, int a, int b, double c)
 {
     StrOut out = { 0, 0, 0 };
-    g_pfnString(&out, (int)ConvertToString16(s, -1).b, 0, 0, 0, 0); // 0x0154c464
+    g_pfnString(&out, (int)ConvertToString16(s, -1).c_str(), 0, 0, 0, 0); // 0x0154c464
     Dispatch((wchar_t*)out.a, a, b, c);
 }
 
