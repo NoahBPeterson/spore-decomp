@@ -112,3 +112,4 @@
 ../src/game/SPAudio/AudioSystem.cpp  ?DeletingDtor@SetHolderView_a2d9d0@@QAEPAXE@Z  00a2d9d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?FUN_00a2dfe0@AudioSystem@@QAEXPAX@Z  00a2dfe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPAudio/AudioSystem.cpp  ?FUN_00a2e260@AudioSystem@@QAEXPAX@Z  00a2e260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPAudio/AudioSystem.cpp  ?InitDefaultPriorities@cTypeMapHolder@@QAEXXZ  00a2f1a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

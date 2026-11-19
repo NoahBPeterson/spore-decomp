@@ -1556,9 +1556,7 @@ bool cPopupTimer::OnMessage(void* unused, SMessage* m)
                 mText = m->mpData;
                 mNextTime = GetElapsedSeconds() + kDelayLong;
             }
-            return true;
-        }
-        if (mpWin) {
+        } else if (mpWin) {
             mpWin->SetFlag(1, 0);
             mNextTime = FLT_MAX;
         }

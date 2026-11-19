@@ -1375,7 +1375,7 @@ extern void* __cdecl ObjectError();  // 0x008de1a0
 void* __cdecl EaNew(unsigned size, const char* name, int a, int b, const char* file, int line);  // 0xf473a0
 void __cdecl EaDelete(void* p);                                                                    // 0xf47380
 struct MapUU {
-    int& operator[](const uint32_t& key);  // 0x00a2e060
+    __declspec(noalias) int& operator[](const uint32_t& key);  // 0x00a2e060
 };
 static inline void ObjAddRef(void* p) { VCALL(void(__thiscall*)(void*), p, 0)(p); }
 static inline void ObjRelease(void* p) { VCALL(void(__thiscall*)(void*), p, 4)(p); }
