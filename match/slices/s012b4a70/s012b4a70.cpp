@@ -42,6 +42,11 @@ struct DefaultVector3_s012b4a70 {
     DefaultVector3_s012b4a70* Self();         // 0x00572590, returns this
 };
 extern DefaultVector3_s012b4a70 g_DefaultVector_0164b298; // 0x0164b298
+struct DefaultVector4_s012b4a70 {
+    float x, y, z, w;
+    DefaultVector4_s012b4a70* Self();         // 0x00572590, returns this
+};
+extern DefaultVector4_s012b4a70 g_DefaultColor_0164b2a4;  // 0x0164b2a4
 extern float DAT_014853e0;                  // 0x014853e0  reciprocal scale
 extern float DAT_01471064;                  // 0x01471064
 
@@ -555,13 +560,11 @@ void __cdecl SetColor_12()
 // @ 0x012f6460
 void __cdecl SetColor_13()
 {
-    ((UintArray*)0x0164b2a4)->Self();
-    float zero13 = 0.0f;
-    *(float*)0x0164b2a4 = zero13;
-    float one13 = DAT_01485720;
-    *(float*)0x0164b2a8 = one13;
-    *(float*)0x0164b2ac = zero13;
-    *(float*)0x0164b2b0 = one13;
+    g_DefaultColor_0164b2a4.Self();
+    g_DefaultColor_0164b2a4.x = 0.0f;
+    g_DefaultColor_0164b2a4.y = DAT_01485720;
+    g_DefaultColor_0164b2a4.z = 0.0f;
+    g_DefaultColor_0164b2a4.w = DAT_01485720;
 }
 
 // @ 0x012f64a0

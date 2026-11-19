@@ -37,3 +37,4 @@ slices/s012b4a70/s012b4a70.cpp  ?SetColor_12@@YAXXZ  012f6420  /O2 /MD /Gy /EHsc
 slices/s012b4a70/s012b4a70.cpp  ?SetColor_14@@YAXXZ  012f64a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s012b4a70/s012b4a70.cpp  ?SetColor_4@@YAXXZ  012f6270  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s012b4a70/s012b4a70.cpp  ?SetVec3Pair@@YAXXZ  012cc3b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s012b4a70/s012b4a70.cpp  ?SetColor_13@@YAXXZ  012f6460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
