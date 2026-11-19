@@ -68,7 +68,6 @@ struct Gatom {
     char   pad5d[0x27];             // +0x5d
     u8     a_grabbed;               // +0x84
 
-    void clipfloat(float f);        // (0x00a4ff10)
 };
 extern t_symbol gEmptySymbol;       // 0x167589c
 void*     pd_new(void* cls);                                            // 0x00a49390
@@ -1810,17 +1809,17 @@ void gatom_float(Gatom* x, float f)
 }
 
 // @ 0x00a4ff10
-void Gatom::clipfloat(float f)
+static void gatom_clipfloat(Gatom* x, float f)
 {
-    float lo = a_min;                       // +0x40
-    if (lo != 0.0f || a_max != 0.0f)        // +0x3c
+    float lo = x->a_min;                    // +0x40
+    if (lo != 0.0f || x->a_max != 0.0f)     // +0x3c
     {
         if (f < lo)
             f = lo;
-        if (f > a_max)
-            f = a_max;
+        if (f > x->a_max)
+            f = x->a_max;
     }
-    gatom_float(this, f);
+    gatom_float(x, f);
 }
 
 // @ 0x00a4ff70
@@ -1867,7 +1866,7 @@ void gatom_motion(Gatom* x, float dx, float dy)
         v = x->a_atom.a_w.a_float - dy * 0.01f;
         iat_floor((double)(v * 100.0f + 0.5f));
     }
-    x->clipfloat(v);
+    gatom_clipfloat(x, v);
 }
 
 // @ 0x00a50150
