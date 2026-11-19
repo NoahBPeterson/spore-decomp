@@ -4486,6 +4486,19 @@ void cCommunityEditor::RebuildCityFromTerrainSphere()
     SetModelTypeKey((void*)0x168caf0, 0, (int*)0x99e92f05, &stored);
 }
 
+__forceinline static void StoreVehicleModelKey(Vec3_s00bf_4170* pPosition, int nModel)
+{
+    int y = *(int*)&pPosition->mY;
+    int key = nModel;
+    int x = *(int*)&pPosition->mX;
+    int z = *(int*)&pPosition->mZ;
+    Vec3_s00bf_4170* pSlot =
+        ((Vec3_s00bf_4170* (__thiscall*)(void*, int*))FUN_00bf3cb0)((void*)0x168caf0, &key);
+    *(int*)&pSlot->mX = x;
+    *(int*)&pSlot->mY = y;
+    *(int*)&pSlot->mZ = z;
+}
+
 // @ 0x00bf4fc0
 void cCommunityEditor::CreateVehicleFromTerrainSphere()
 {
@@ -4505,11 +4518,7 @@ void cCommunityEditor::CreateVehicleFromTerrainSphere()
     }
 
     CreateVehicleFromModelType((cCity_s00bf_4170*)(intptr_t)nModel, pPosition);
-
-    Vec3_s00bf_4170 stored = *pPosition;
-    Vec3_s00bf_4170* pSlot =
-        ((Vec3_s00bf_4170* (__thiscall*)(void*, int*))FUN_00bf3cb0)((void*)0x168caf0, &nModel);
-    *pSlot = stored;
+    StoreVehicleModelKey(pPosition, nModel);
 }
 
 // @ 0x00bf5050
