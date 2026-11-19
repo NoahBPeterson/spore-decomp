@@ -408,12 +408,6 @@ struct NewNode
     void* m_ref14;               // +0x14
 };
 void __cdecl WriteUint32(void* stream, const void* value, int count, int flags);   // 0x0093aa70
-struct cVarListSerializer
-{
-    char m_data[0xa14];
-    void ctor(void* owner, void* name, int line);        // 0x00692f90
-    void Serialize(void* object);                        // 0x00692900
-};
 struct RBTreeFind
 {
     void** find(void** out, void** key);                 // 0x00e5c780
@@ -4207,7 +4201,7 @@ int ObstacleMgr::Lookup(unsigned int* key)
 {
     int local[2];
     Hashtable2* ht = (Hashtable2*)((char*)this + 0x56c0);
-    ht->Find(&local[0], key);
+    ((C74860*)ht)->Find(&local[0], (int*)key);
     if (local[0] != ht->mBegin[ht->mCount])
         return local[0] + 0xc;
     return 0;

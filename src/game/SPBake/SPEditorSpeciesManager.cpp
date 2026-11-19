@@ -3439,6 +3439,10 @@ template <> void vector_s004c_d1b0<Word32>::resize(uint32_t n)
 }
 }  // namespace eastl
 
+namespace eastl {
+template <> void vector_s004c_d1b0<float>::DoInsertValue(float* position, const float& value);  // 0x004CE310
+}  // namespace eastl
+
 // @ 0x004cd810
 namespace eastl {
 template <> void vector_s004c_d1b0<float>::push_back(const float& value)

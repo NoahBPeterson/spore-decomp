@@ -50,12 +50,6 @@ struct cGonzagoTimer : CSBase {
     uchar Read(void* ser);          // 0x00b63930
     void AddElapsed(int v);         // 0x00b638c0
 };
-struct cVarListSerializer {
-    char data[0xa14];
-    cVarListSerializer(void* obj, void* info, unsigned sig);  // 0x00692f90
-    void Serialize(void* ser);                                 // 0x00692900
-    uchar SerializeB(void* ser);                               // 0x00693e10
-};
 extern char gSig2;   // 0x0156ad88
 extern "C" __declspec(dllimport) unsigned __stdcall IsDlgButtonChecked(void* hwnd, int id);
 extern "C" __declspec(dllimport) void     __stdcall CheckDlgButton(void* hwnd, int id, unsigned check);

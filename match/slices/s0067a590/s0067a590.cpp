@@ -146,7 +146,7 @@ void HM590::possibly(char a, char b)
 // @ 0x0067A680  __cdecl callback: find manager, start tutorial flag
 // ===========================================================================
 struct C_a590_fwd {
-    void possibly(int a, int b);
+    void possibly(int a, int b);   // 0x0067a590
 };
 
 void __stdcall cb_67a680(void* unused, void* data)

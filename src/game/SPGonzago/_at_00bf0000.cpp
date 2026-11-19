@@ -715,6 +715,7 @@ int   __fastcall FUN_00bd9b60(void* self);                                     /
 int*  __fastcall cCity_GetPositionPtr(void* self);                             // 0x00fa0e00
 void  __fastcall FUN_00ae6970(void* self);                                     // 0x00ae6970
 void  __fastcall FUN_00aed92d0(void* self);                                    // 0x00ad92d0
+void  __fastcall FUN_005c7f10(void* self);                                    // 0x005c7f10
 void  __fastcall cGonzagoTimer_dtor(void* self);                               // 0x00b638b0
 void  __fastcall FUN_00b6edf0(void* self);                                     // 0x00b6edf0
 void  __fastcall cGameData_dtor(void* self);                                   // 0x00b184c0
@@ -859,6 +860,7 @@ public:
     int mCount;                     // 0x18
 
     Vec3_s00bf_4170* FindOrInsert(const int* pKey);   // 0x00bf5050
+    Vec3_s00bf_4170* FUN_00bf3cb0(const int* pKey);   // 0x00bf3cb0
 };
 class cCommunityEditor : public cEditorObject {
 public:
@@ -3858,7 +3860,7 @@ void __fastcall FUN_00bf36f0(int* self)
 	if (q != 0)
 		(*(T0*)(*(int*)q + 4))((void*)q);
 	FUN_00bf1b60((void*)((char*)self + 0x490));
-	FUN_00aed92d0((void*)((char*)self + 0x470));
+	FUN_005c7f10((void*)((char*)self + 0x470));
 
 	if ((int*)self[0x11b] != 0)
 		(*(T0*)(*(int*)self[0x11b] + 4))((void*)self[0x11b]);
@@ -4425,7 +4427,7 @@ void cCommunityEditor::NotifySubEditor(cCommunityEditor* pSub)
 void __fastcall SetModelTypeKey(void* pMap, int edx, int* pKey, const Vec3_s00bf_4170* pValue)
 {
     Vec3_s00bf_4170 value = *pValue;
-    Vec3_s00bf_4170* pSlot = ((cVector3Map*)pMap)->FindOrInsert((const int*)&pKey);
+    Vec3_s00bf_4170* pSlot = ((cVector3Map*)pMap)->FUN_00bf3cb0((const int*)&pKey);
     *pSlot = value;
 }
 

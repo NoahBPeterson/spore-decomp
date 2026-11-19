@@ -63,7 +63,7 @@ struct WStr {                         // eastl::basic_string<wchar_t>, 16 bytes
 struct WStrSrc {                      // weight + description string (by-value arg of cFeatureVector::AddDescribed)
     float value;
     WStr str;
-    WStrSrc() { InitEmpty(); }
+    WStrSrc() { InitEmpty(); }        // @ 0x0056afc0 (default)
     WStrSrc(WStrSrc& src);            // @ 0x0056b020 (copy)
     void InitEmpty();                 // @ 0x0056afc0
 };

@@ -1995,6 +1995,7 @@ struct RawList {                // 0x28 bytes: sentinel + embedded FixedAllocato
     ListNode* mpPrev;           // +0x04
     FixedAllocatorBase mAlloc;  // +0x08
     void Clear();                                                               // 0x00bcaa00
+    void ClearList();                                                           // 0x00bcab00
     ListNode* AllocNode();                                                      // 0x00bcaab0
     void ConstructNode(ListEntry* p);                                           // 0x00bcab80
     RawList* Construct();                                                       // 0x00bcb590
@@ -6238,7 +6239,7 @@ void cVarListEditor::Reset()
     mpVecEnd = (Quad16_s00bc_b0b0*)((char*)mpVecEnd + (((char*)end - (char*)begin) >> 4) * -16);
     mpObject = 0;
     RawList* list = &mList1;
-    list->Clear();
+    list->ClearList();
     list->mpNext = (ListNode*)list;
     list->mpPrev = (ListNode*)list;
 }

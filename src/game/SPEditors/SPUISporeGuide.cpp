@@ -32,7 +32,7 @@ struct cSPUILayout_s0067_1840 {
 };
 struct EString {
   void Assign(unsigned short* s);   // 0x005c3d90 (equiv t3)
-  void Assign(unsigned short* a, unsigned short* b);
+  void Assign(unsigned short* a, unsigned short* b);   // 0x00672750
   void Detok8f40();
   long long Find(unsigned short* sub, int pos);
   EString* AssignFrom(EString* other);

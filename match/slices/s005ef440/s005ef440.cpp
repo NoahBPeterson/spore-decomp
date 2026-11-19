@@ -545,7 +545,7 @@ SPSpineCollisionFilter::SPSpineCollisionFilter() {
 }
 }  // namespace SP
 
-// @ 0x005F00F0 (scalar deleting destructor, emitted from the vtable)
+// 0x005F00F0 is the scalar deleting destructor, emitted from the vtable
 
 // ---------------------------------------------------------------------------------------------
 namespace eastl {
@@ -561,7 +561,7 @@ extern "C++" void RBTreeInsert(eastl::rbtree_node_base* pNode, eastl::rbtree_nod
 eastl::rbtree_node_base* RBTreeIncrement(const eastl::rbtree_node_base* pNode);       // 0x00921580
 void RBTreeErase(eastl::rbtree_node_base* pNode, eastl::rbtree_node_base* pNodeAnchor);  // 0x00921880
 void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, unsigned int debugFlags,
-                               const char* file, int line);
+                               const char* file, int line);  // 0x00f473a0
 
 namespace eastl {
 template <typename T1, typename T2>

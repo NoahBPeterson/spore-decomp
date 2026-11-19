@@ -295,7 +295,7 @@ struct Link {
 
 // @ 0x00547840 sym=??1FeedDescription@Feed@SP@@QAE@XZ
 struct FeedDescription {            // 0x70 bytes; implicit destructor
-    FeedDescription();
+    FeedDescription();              // 0x00546630
     string16 mAuthor;               // +0x00
     unsigned __int64 mnAuthorID;    // +0x10
     string16 mTitle;                // +0x18

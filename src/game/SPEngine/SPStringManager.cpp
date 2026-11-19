@@ -237,7 +237,7 @@ struct StringSet {
         mnElementCount = 0;
         mnNextResize = 0;
     }
-    int erase(cString_s006b_6920** key);
+    int erase(cString_s006b_6920** key);       // 0x006b6740
     void insert(char* out, cString_s006b_6920** key, InsertTag tag);
     void DoFreeNodes(StringSetNode** buckets, uint32_t nBuckets) throw();   // 0x006b6570
     ~StringSet() {

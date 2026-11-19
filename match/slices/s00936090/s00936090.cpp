@@ -353,6 +353,7 @@ struct ObjectVector {
     void* mpEnd;     // +0x04
     void* mpCap;     // +0x08
     void erase(void* first, void* last);   // 0x00d018d0 (equiv t2)
+    void eraseRefs(void* first, void* last);   // 0x005c2170 (sp_ref_vector::erase)
     void Destruct();   // 0x005c7f10 (equiv t3)
     void push_back_impl(void* value);
     void insert_pair(void* pos, void* value);   // 0x009a0c50 (8-byte elements)
@@ -710,7 +711,7 @@ bool EA::SharedLibraryRegistry::Init(uint32_t a, SharedLibrary* b) {
 bool EA::SharedLibraryRegistry::Shutdown() {
     RemoveAllLibraries(1);
     mMutex.Lock(&gpRegistryMutexName);
-    mSharedLibraries.erase(mSharedLibraries.mpBegin, mSharedLibraries.mpEnd);
+    mSharedLibraries.eraseRefs(mSharedLibraries.mpBegin, mSharedLibraries.mpEnd);
     mMutex.Unlock();
     return true;
 }

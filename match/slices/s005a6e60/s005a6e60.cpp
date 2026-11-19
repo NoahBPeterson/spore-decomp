@@ -18,7 +18,7 @@ int RemoveHandler(void* server, void* owner, void* userData, int n, int flags); 
 namespace SP {
 class cString {
 public:
-    cString();
+    cString();                                             // @ 0x006b5060
     cString(uint32_t a, uint32_t b, const wchar_t* text);  // @ 0x006b5770
     ~cString();
     const wchar_t* GetText();                              // @ 0x006b55c0

@@ -114,7 +114,7 @@ struct Vec {                                                           // 0x14: 
     Vec& operator=(const Vec& o);                                      // 0x9dfda0 / 0x9dfec0 / 0x9dffe0 / 0x9df630
     void reserve(int n);                                               // 0x9df400 / 0x9df4c0 / 0x9df570 / 0x9df630 / 0x9df800
     void clear();                                                      // 0x9e0940 / 0x9e0980 / 0x9e09c0
-    void realloc_insert(T* pos, const T& v);                           // 0x9e0110 / 0x9e0230 / 0x9e0330 / 0x9e04e0 / 0x9e1990
+    void realloc_insert(T* pos, const T& v);                           // 0x9e0110 / 0x9e0230 / 0x9e0330 / 0x9e04e0 / 0x9e1990 / 0x9d6ef0 (Vec<void*>)
     void insert(T* pos, const T& v);                                   // 0x9e0b20
     void push_back(const T& v) {
         if (e < cap) {

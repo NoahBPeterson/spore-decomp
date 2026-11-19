@@ -10,6 +10,7 @@ typedef unsigned int size_type;
 
 extern "C" void* MemCpyThunk(void* dst, const void* src, size_t n);          // 0x011e0744
 extern "C" void  EASTL_deallocate(void* p);                                  // 0x00f47380
+extern "C" void  ZoneObject_delete(void* p);                                  // 0x00926060
 extern "C" void* EASTL_allocate(size_t n, const char*, int, int, int, int);  // 0x00f473a0
 extern "C" void* AllocNamed(size_t n, void* alloc, int flags);               // 0x00925fe0
 extern "C" void* DefaultAllocator();                                         // 0x00925cb0
@@ -328,7 +329,7 @@ void* EA::IO::SharedPointer::Destroy(unsigned char flags)
     base2.vtable = (void*)&g_vtbl_hkref;
     vtable = (void*)&g_vtbl_bg6;
     if (flags & 1)
-        EASTL_deallocate(this);
+        ZoneObject_delete(this);
     return this;
 }
 

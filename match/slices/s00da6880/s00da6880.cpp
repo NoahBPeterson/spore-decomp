@@ -249,7 +249,7 @@ struct cSPCreatureCitizen : Crt {
 // ---------------------------------------------------------------------------
 extern const float g_f147c218;          // 0x0147c218
 extern const float g_f147c21c;          // 0x0147c21c
-extern const float g_f1473c70;          // 0x0147c21c-family duration (20.0f)
+extern const float g_f1473c70;          // 0x01473c70 duration (20.0f), next to the 0x0147c21c family
 extern const float g_f13ec4d0;          // 0x013ec4d0 (100.0f)
 extern const float g_f13eecd8;          // 0x013eecd8 (20.0f)
 extern const float g_f1486110;          // 0x01486110 (5.0f)

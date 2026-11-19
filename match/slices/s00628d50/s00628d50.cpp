@@ -338,7 +338,9 @@ extern const float gTwo;       // 0x1470f1c
 extern const float gMs;        // 0x13f9428 (0.001f)
 extern const float gOne;       // 0x15f6de4
 extern const float gAngleScale;// 0x15f6ee4
-extern const float gA, gB, gC; // 0x1522250, 0x13fe0e4, 0x15224b0
+extern const float gA; // 0x013fe0e4
+extern const float gB; // 0x01522250
+extern const float gC; // 0x015224b0
 float Fn_009b3c10(float a, float b);
 
 // @ 0x00629590
