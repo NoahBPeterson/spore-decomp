@@ -3038,9 +3038,8 @@ void __stdcall SetTimeScale(int param_1, float scale)
 // @ 0x007439b0
 int __stdcall OffsetOrE4(int param_1)
 {
-    if (param_1 != 0)
-        return param_1 + 0xdc;
-    return 0xe4;
+    char* obj = param_1 ? (char*)param_1 - 8 : 0;
+    return (int)(obj + 0xe4);
 }
 
 // @ 0x007439d0

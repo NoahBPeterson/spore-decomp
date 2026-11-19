@@ -1,4 +1,3 @@
-007439b0  9   complete; null path carries a dead xor eax,eax before mov eax,0xe4 that cl drops
 00742b30  110  complete; register allocation (original reloads the incoming argument from its stack slot for the 4th insert_range arg instead of using esi) [equiv: WEAK (no mismatch, 769 valid, 50% cov)]
 00742cf0  8    complete; only the E8 push_back copy schedule differs (edx loaded before the pops) [equiv: WEAK (no mismatch, 173 valid, 94% cov)]
 00742db0  366  complete; register allocation (original keeps this/src/old in esi/edi/ebp and spills the loop count) [equiv: PASS]
