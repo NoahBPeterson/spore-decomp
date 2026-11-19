@@ -216,13 +216,16 @@ void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_ctor(void* a, void* b)
 	return self;
 }
 
+extern void* g_01437ed8[];   // 0x01437ed8 Table_Layout_XHTML_EA vftable
+extern void* g_01437c00[];   // 0x01437c00 Block base vftable
+
 // @ 0x008f11b0  Table_Layout_XHTML_EA deleting destructor
 void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_dtor(unsigned char flags)
 {
 	char* self = (char*)this;
-	*(u32*)(self + 0x00) = 0x1437ed8;  // table vtable
+	*(volatile u32*)(self + 0x00) = (u32)g_01437ed8;  // table vtable
 
-	void* rows = *(void**)(self + 0xec);
+	void* rows = *(void* volatile*)(self + 0xec);
 	if (rows != 0 && *(int*)((char*)rows - 4) != 0)
 		operator_delete(rows);
 
@@ -231,7 +234,7 @@ void* Table_Layout_XHTML_EA::Table_Layout_XHTML_EA_dtor(unsigned char flags)
 		operator_delete(cols);
 
 	((IntrusiveList*)(self + 0x18))->~IntrusiveList();
-	*(u32*)(self + 0x00) = 0x1437c00;  // Block base vtable
+	*(u32*)(self + 0x00) = (u32)g_01437c00;  // Block base vtable
 
 	if (flags & 1)
 		operator_delete(self);
