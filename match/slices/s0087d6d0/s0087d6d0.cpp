@@ -37,6 +37,7 @@ struct LocBuf {
     wchar_t* mpEnd;
     wchar_t* mpCapacity;
     LocBuf& AppendElement(const wchar_t* first, const wchar_t* last); // 0x0068cc10
+    LocBuf& AppendRange(const wchar_t* first, const wchar_t* last);   // 0x0068cf60
     LocBuf* Assign(const wchar_t* s);                                 // 0x0087e080
 };
 
@@ -341,7 +342,7 @@ bool Locale_SplitField(int index, wchar_t* s, LocBuf* out, wchar_t sep)
             if (p == 0) return false;
         }
         if (i == index) {
-            if (out) out->AppendElement(s, p);
+            if (out) out->AppendRange(s, p);
             return true;
         }
         i++;
