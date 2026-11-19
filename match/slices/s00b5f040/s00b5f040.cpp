@@ -56,18 +56,21 @@ EA::AutoRefCount<EA::UTFWinControls::IWinText>::operator=(UTFWinControls::IWinTe
     return *this;
 }
 
+extern void* g_1462d70[];                        // 0x01462d70 vftable
+extern char  g_1667bac[];                        // 0x01667bac eastl gEmptyString
 // @ 0x00b60070
 int* __fastcall FUN_00b60070(int* self)
 {
     int z = 0;
     self[1] = z;
-    self[0] = 0x1462d70;
+    self[0] = (int)g_1462d70;
+    _ReadWriteBarrier();
     self[4] = z;
     self[5] = z;
-    int d = 0x1667bac;
+    int d = (int)g_1667bac;
     self[6] = d;
     self[7] = d;
-    self[8] = 0x1667bad;
+    self[8] = (int)(g_1667bac + 1);
     return self;
 }
 
