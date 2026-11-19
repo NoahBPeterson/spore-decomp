@@ -3030,11 +3030,9 @@ int cModelWorld56::Adjustor(int unused)
 // @ 0x00743950
 void __stdcall SetTimeScale(int param_1, float scale)
 {
-    if (param_1 != 0) {
-        *(float*)(param_1 + 0x114) = scale;
-        return;
-    }
-    *(float*)0x11c = scale;
+    // param_1 points 8 bytes into the object; the adjusted pointer keeps the null
+    char* obj = param_1 ? (char*)param_1 - 8 : 0;
+    *(float*)(obj + 0x11c) = scale;
 }
 
 // @ 0x007439b0

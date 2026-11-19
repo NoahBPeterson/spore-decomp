@@ -400,8 +400,9 @@ struct InnerSetter {
 // @ 0x0080d5c0
 void InnerSetter::SetInnerFlag(u8 v) {
     char* p = GetInnerA((char*)this);
-    if (p) p[0x240] = v;
-    else   p[0x24c] = v;
+    // p points 0xc bytes into the inner object; the adjusted pointer keeps the null
+    char* inner = p ? p - 0xc : 0;
+    inner[0x24c] = v;
 }
 
 // @ 0x0080d5f0

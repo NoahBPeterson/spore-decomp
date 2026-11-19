@@ -1243,12 +1243,8 @@ void __cdecl FUN_00f20b20(int* self)
     V2cC* p = (V2cC*)self[1];
     if (p->q() != 1) {
         V0c* q = (V0c*)self[1];
-        if (q) {
-            PropData* d = (PropData*)q->q(0xce9f6639);
-            d->flag1 = 0;
-        } else {
-            ((PropData*)0)->flag1 = 0;
-        }
+        PropData* d = q ? (PropData*)q->q(0xce9f6639) : 0;
+        d->flag1 = 0;
     }
 }
 
@@ -1258,12 +1254,8 @@ void __cdecl FUN_00f20b60(int* self)
     V2cC* p = (V2cC*)self[1];
     if (p->q() != 1) {
         V0c* q = (V0c*)self[1];
-        if (q) {
-            PropData* d = (PropData*)q->q(0xce9f6639);
-            d->flag0 = 0;
-        } else {
-            ((PropData*)0)->flag0 = 0;
-        }
+        PropData* d = q ? (PropData*)q->q(0xce9f6639) : 0;
+        d->flag0 = 0;
     }
 }
 
