@@ -3134,7 +3134,7 @@ struct VecMap14 {
   uint8_t pad0c[8];                              // +0x0c
   uint8_t mCompare;                              // +0x14
   uint8_t pad15[3];
-  uint32_t& operator[](const uint32_t& key);     // 0x00564a10
+  __declspec(noalias) uint32_t& operator[](const uint32_t& key); // 0x00564a10
   Pair8* find(const uint32_t& key);              // 0x00ea9bb0
 };
 struct LayoutFind14 { char pad[0x18]; void* FindWindowByID(uint32_t id, int rec); };
@@ -3156,12 +3156,10 @@ void GraphicsTabF10::F10()
     Obj14* o = (Obj14*)w2->vt0c(0x8ed27e7a);
     if (o) {
       o->vt0();
-      const uint32_t key = 0x46170a2;
-      uint32_t v = (GetCanvas()->vt54() != 0);
-      mData[key] = v;
-      uint32_t v2 = mData[key];
+      mData[0x46170a2] = (GetCanvas()->vt54() != 0);
+      uint32_t v2 = mData[0x46170a2];
       o->vt28(4, v2 != 0);
-      GetConfig14()->vt2c(key, v2);
+      GetConfig14()->vt2c(0x46170a2, v2);
       o->vt04();
     }
   }
@@ -3176,12 +3174,10 @@ void GraphicsTabF10::FE0()
     Obj14* o = (Obj14*)w2->vt0c(0x8ed27e7a);
     if (o) {
       o->vt0();
-      const uint32_t key = 0x46170a2;
-      uint32_t v = (GetCanvas()->vt54() == 0);
-      mData[key] = v;
-      uint32_t v2 = mData[key];
+      mData[0x46170a2] = (GetCanvas()->vt54() == 0);
+      uint32_t v2 = mData[0x46170a2];
       o->vt28(4, v2 != 0);
-      GetConfig14()->vt2c(key, v2);
+      GetConfig14()->vt2c(0x46170a2, v2);
       o->vt04();
     }
   }
