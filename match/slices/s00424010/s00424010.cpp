@@ -186,34 +186,42 @@ void RefVec::DoInsertValue(Ref* pos, const Ref& v)
 
 // ============================================================================= 16-byte records
 struct Vec4 { float x, y, z, w; };
-struct PtrBox { Vec4* p; };
-PtrBox* __cdecl UninitCopyV4(PtrBox* out, Vec4* first, Vec4* last, Vec4* dest, bool tag);   // 0x0047a500
+struct P16;
+struct Elem16Iter_s0047_9830 { P16* mIterator; Elem16Iter_s0047_9830(P16* p) : mIterator(p) {} };
+struct false_type2 { false_type2() {} };
+Elem16Iter_s0047_9830 __cdecl UninitializedCopy_Elem16(Elem16Iter_s0047_9830 first, Elem16Iter_s0047_9830 last, Elem16Iter_s0047_9830 dest, false_type2);   // 0x0047a500
 
 struct Vec4Vec {
     Vec4* mpBegin; Vec4* mpEnd; Vec4* mpCap; Alloc alloc;
     Vec4* DoAllocateAndCopy(unsigned n, Vec4* first, Vec4* last);
 };
-inline Vec4* Vec4Vec_Copy3(Vec4* e3, Vec4* z2, Vec4* m1)
-{
-    PtrBox a; bool dst; bool y;
-    UninitCopyV4(&a, e3, z2, m1, dst);
-    return a.p;
-}
-inline Vec4* Vec4Vec_Copy2(Vec4*& first, Vec4*& last, Vec4*& dest)
-{
-    int idx, tag2, j2, p1;
-    return Vec4Vec_Copy3(first, last, dest);
-}
-inline Vec4* Vec4Vec_Copy1(Vec4* f1, Vec4* flag, Vec4* r0)
-{
-    return Vec4Vec_Copy2(f1, flag, r0);
-}
 
-// @ 0x004246e0  (not byte-exact: frame slot layout of the nested inline wrappers)
+// @ 0x004246e0
 Vec4* Vec4Vec::DoAllocateAndCopy(unsigned n, Vec4* first, Vec4* last)
 {
     Vec4* sz = n ? (Vec4*)AllocatorAllocate(&alloc, n << 4, 4, 0) : 0;
-    Vec4Vec_Copy1(first, last, sz);
+    struct CopyRange {
+        static __forceinline void Reserve()
+        {
+            // Keep the inlined copy wrapper's /Od frame slots after the call.
+            int idx, tag2, j2, p1;
+        }
+        static __forceinline void CopyDirect(Vec4*& first, Vec4*& last, Vec4*& dest)
+        {
+            Elem16Iter_s0047_9830 copyEnd = UninitializedCopy_Elem16(
+                Elem16Iter_s0047_9830(reinterpret_cast<P16*>(first)),
+                Elem16Iter_s0047_9830(reinterpret_cast<P16*>(last)),
+                Elem16Iter_s0047_9830(reinterpret_cast<P16*>(dest)),
+                // The empty tag has no payload. The discarded temporary sets its /Od slot.
+                (false_type2(), false_type2()));
+            Reserve();
+        }
+        static __forceinline void Copy(Vec4* first, Vec4* last, Vec4* dest)
+        {
+            CopyDirect(first, last, dest);
+        }
+    };
+    CopyRange::Copy(first, last, sz);
     return sz;
 }
 

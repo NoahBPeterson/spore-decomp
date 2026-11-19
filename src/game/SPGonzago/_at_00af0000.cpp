@@ -1707,7 +1707,16 @@ bool __thiscall LayoutMgr::LookupC(void* entity, int key, float* out)
 // @ 0x00af0db0
 void __thiscall HashTable::FreeChains(HashNode** buckets, u32 count)
 {
-    for (u32 i = 0; i < count; i++)
+    struct SavedState
+    {
+        u32 index;
+        HashNode* node;
+    };
+    // Restore the saved values only after the inner cleanup calls.
+    volatile SavedState saved;
+    u32 i = 0;
+    saved.index = i;
+    while (i < count)
     {
         HashNode* n = buckets[i];
         while (n != 0)
@@ -1715,16 +1724,26 @@ void __thiscall HashTable::FreeChains(HashNode** buckets, u32 count)
             HashNode* cur = n;
             n = n->next;
             InnerNode* p = *(InnerNode**)((char*)cur + 0x10);
-            while (p != 0)
+            XClear* const valueAllocator = (XClear*)((char*)cur + 4);
+            saved.node = cur;
+            if (p != 0)
             {
-                ((XClear*)((char*)cur + 4))->ClearValue(p->val);
-                InnerNode* pn = p->next;
-                FreeMem(p);
-                p = pn;
+                do
+                {
+                    valueAllocator->ClearValue(p->val);
+                    InnerNode* pn = p->next;
+                    FreeMem(p);
+                    p = pn;
+                } while (p != 0);
+                i = saved.index;
+                cur = saved.node;
             }
             FreeMem(cur);
         }
-        buckets[i] = 0;
+        HashNode*& slotToReset = buckets[i];
+        slotToReset = 0;
+        ++i;
+        saved.index = i;
     }
 }
 
