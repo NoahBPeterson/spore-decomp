@@ -7,3 +7,4 @@ slices/s01153b20/s01153b20.cpp  ?FUN_011548c0@@YAIH@Z  011548c0  /O2 /MD /Gy /TP
 slices/s01153b20/s01153b20.cpp  ?FUN_011546f0@@YIPAHH@Z  011546f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s01153b20/s01153b20.cpp  ?FUN_011548d0@ThreadObj@@QAEXXZ  011548d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 slices/s01153b20/s01153b20.cpp  ?FUN_011544d0@@YIXH@Z  011544d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s01153b20/s01153b20.cpp  ?FUN_01154770@ThreadObj@@QAEXH@Z  01154770  /O2 /MD /Gy /TP /arch:SSE /fp:fast
