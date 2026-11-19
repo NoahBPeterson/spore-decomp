@@ -260,6 +260,7 @@ struct Object {
 struct Rect  { float left, top, right, bottom; };
 struct Vector2 { float x, y; };
 struct Point { float x; float y; };
+struct IWinProc_s00e3_7910 { virtual void v00(); };              // window-proc interface (cSPUITimeline +0x04)
 struct IWindow : Object {
     virtual void pad0c();
     virtual IWindow* GetParent();
@@ -323,7 +324,7 @@ struct IWindow : Object {
     virtual void padF8();
     virtual void padFc();
     virtual void pad100();
-    virtual void SetParent(IWindow* parent);           // +0x104
+    virtual void AddWinProc(IWinProc_s00e3_7910* proc); // +0x104
 };
 class cSPUILayout_s00e3_6ff0 : public Object { public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);   // 0x008105b0
@@ -407,9 +408,9 @@ static inline int ClampLoHi(int v, int lo, int hi) {
     return v;
 }
 struct VecContainer { bool IsMember(int id); };             // 0x00e45fe0
-struct cSPUITimeline {
-    void*         mvpVtbl;                                    // +0x00
-    uint32_t      mEmbedded[0x0b];                            // +0x04 embedded window subobject
+struct cSPUITimelineBase_s00e3_7910 { virtual void v00(); };     // primary base, +0x00
+struct cSPUITimeline : cSPUITimelineBase_s00e3_7910, IWinProc_s00e3_7910 {
+    uint32_t      mEmbedded[0x0a];                            // +0x08
     cSPUILayout_s00e3_6ff0*  mpLayout;                                   // +0x30
     uint32_t      pad34;                                      // +0x34
     IWindow*      mpWin38;                                    // +0x38
@@ -467,7 +468,6 @@ struct cSPUITimeline {
                                float c, float d, float e, float f,
                                float g, float h);             // 0x00e37840
     void          FUN_00e37910();                             // 0x00e37910
-    IWindow*      Self() { return (IWindow*)mEmbedded; }      // +0x04 embedded window
     void          BeginCloseTimeline();                       // 0x00e37970
     double        FUN_00e37b40(TimelineNode* n, float a, int b);// 0x00e37b40
     void          FUN_00e37be0();                             // 0x00e37be0
@@ -3446,13 +3446,13 @@ void cSPUITimeline::FUN_00e37840(IWindow* target, float a, float b, float c, flo
 void cSPUITimeline::FUN_00e37910()
 {
     if (IWindow* w = mpWin3c)
-        w->SetParent(Self());
+        w->AddWinProc(this);
     if (IWindow* w = mpWin4c)
-        w->SetParent(Self());
+        w->AddWinProc(this);
     if (IWindow* w = mpWin54)
-        w->SetParent(Self());
+        w->AddWinProc(this);
     if (IWindow* w = mpWin38)
-        w->SetParent(Self());
+        w->AddWinProc(this);
 }
 
 // @ 0x00e37970
