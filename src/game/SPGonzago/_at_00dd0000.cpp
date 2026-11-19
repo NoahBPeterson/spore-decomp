@@ -932,6 +932,8 @@ struct ObjA_s00dd_be40
 {
     void FUN_00ddb790();                                 // 0x00ddb790 (ret 0)
     void FUN_00dda9a0();                                 // 0x00dda9a0 (ret 0)
+    ~ObjA_s00dd_be40() { FUN_00dda9a0(); }
+    static void operator delete(void* p) { ::operator delete[](p); }
 };
 extern ObjA_s00dd_be40* g_objA;                                     // [0x016a0b08]
 // ---- items of slice s00ddbe40 end
@@ -2514,12 +2516,7 @@ void FUN_00ddc8d0()
     if (g_objA != 0)
     {
         g_objA->FUN_00ddb790();
-        if (g_objA != 0)
-        {
-            ObjA_s00dd_be40* p = g_objA;
-            g_objA->FUN_00dda9a0();
-            operator delete[](p);
-        }
+        delete g_objA;
         g_objA = 0;
     }
 }

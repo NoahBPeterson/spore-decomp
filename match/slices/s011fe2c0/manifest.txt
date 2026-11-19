@@ -3,3 +3,4 @@
 slices/s011fe2c0/s011fe2c0.cpp  ?GetInvDuration@Interpolator@oldanimation@rw@@QAEMXZ  011fe510  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s011fe2c0/s011fe2c0.cpp  ?SetPlaybackRate@Interpolator@oldanimation@rw@@QAEXM@Z  011fe520  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s011fe2c0/s011fe2c0.cpp  ?Seek@Interpolator@oldanimation@rw@@QAEHM@Z  011fe600  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s011fe2c0/s011fe2c0.cpp  ?Fixup@Interpolator@oldanimation@rw@@SAHPAV123@PAVFrameTable@23@@Z  011fe680  /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
