@@ -860,6 +860,7 @@ public:
     int mCount;                     // 0x18
 
     Vec3_s00bf_4170* FindOrInsert(const int* pKey);   // 0x00bf5050
+    Vec3_s00bf_4170* FUN_00bf3cb0(const int* pKey);   // 0x00bf3cb0
 };
 class cCommunityEditor : public cEditorObject {
 public:
@@ -4426,7 +4427,7 @@ void cCommunityEditor::NotifySubEditor(cCommunityEditor* pSub)
 void __fastcall SetModelTypeKey(void* pMap, int edx, int* pKey, const Vec3_s00bf_4170* pValue)
 {
     Vec3_s00bf_4170 value = *pValue;
-    Vec3_s00bf_4170* pSlot = ((cVector3Map*)pMap)->FindOrInsert((const int*)&pKey);
+    Vec3_s00bf_4170* pSlot = ((cVector3Map*)pMap)->FUN_00bf3cb0((const int*)&pKey);
     *pSlot = value;
 }
 

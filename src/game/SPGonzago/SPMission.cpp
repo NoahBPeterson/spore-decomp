@@ -2941,6 +2941,7 @@ namespace SP {
 u8 __cdecl GetPropertyAsKey16(void* props, u32 key, void* out); // 0x006a1250
 ::cStarMap* __cdecl GetStarMapNoArg();                   // 0x01046fc0 (no-arg singleton)
 cSPMissionManager* __cdecl GetMissionManagerNoArg();     // 0x00feb9f0 (no-arg getter)
+cSPMissionManager* __cdecl GetPropertyManagerNoArg();    // 0x0067de30 (SP::PropertyManager accessor; SetMissionProperty is its vtable slot 11)
 struct cSPUILayout16 { void Add(); };                    // 0x00dd27c0
 void* __cdecl cSPUILayoutCtor16();                       // 0x00dd1ca0
 }
@@ -3032,7 +3033,7 @@ namespace SP {
 void __thiscall cSPMission_s00c4_6ab0::SetMissionID(uint32_t missionId)
 {
     mMissionId = missionId;
-    cSPMissionManager* pManager = GetMissionManagerNoArg();
+    cSPMissionManager* pManager = GetPropertyManagerNoArg();
     cGameData* pOldProperty = (cGameData*)mpMissionKey;
     if (pOldProperty) {
         mpMissionKey = 0;
