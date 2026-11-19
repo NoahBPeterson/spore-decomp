@@ -4,7 +4,6 @@
 00629220 2 SetAllBabySitUp: complete; only the two stores' SIB base/index order differs ([edi+eax] retail vs [eax+edi] mine). Tried writes via b->state/b->timer (133B, worse), Baby& ref (133B, 27), i[mpBegin], signed int index (137B); all keep the swapped SIB.
 006292b0 18 SetAllOtherBabiesToIdle: complete; ebx/edi register swap for id vs vector ptr
 006294e0 113 SetBabyCelebrationAnim: complete; orig keeps float result slot on stack and recomputes end-begin
-006296e0 4 ForceBabiesToIdle: complete; [ecx+edi] address operand order (mpBegin as base in retail); tried (char*)b+off, which also encodes the offset first
 00629960 85 UpdateBabyButtonEventState: complete; reg alloc/evaluation order of mgr vs id
 00629a90 4 BabiesReachedTargetAngle: complete; IDAt result in eax (retail) vs esi (mine). Tried while->for, inlining the IDAt call into the argument expression, and an IDAt body without the local `Baby* b`; all still use esi.
 00629b30 4 SetAllBabyRotateSpeeds: complete; IDAt result in eax (retail) vs esi (mine); same IDAt experiments as 00629a90.

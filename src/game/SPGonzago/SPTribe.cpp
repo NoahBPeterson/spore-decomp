@@ -1510,7 +1510,14 @@ public:
     void FUN_00c92b70(void);                // pop-like
     void FUN_00c92bd0(int** p);             // push-like
 };
-struct V4 { uint32_t v0, v1, v2, v3; };
+// 16-byte deque iterator passed by value (user-declared copy ctor, like eastl::DequeIterator)
+struct V4 {
+    uint32_t v0, v1, v2, v3;
+    V4(uint32_t a0, uint32_t a1, uint32_t a2, uint32_t a3) : v0(a0), v1(a1), v2(a2), v3(a3) {}
+    V4(const V4& x) : v0(x.v0), v1(x.v1), v2(x.v2), v3(x.v3) {}
+};
+// empty iterator-category tag passed by value (EASTL-style dispatch)
+struct cCopyTag_s00c8ed90 { cCopyTag_s00c8ed90() {} };
 extern "C" cPointerBlockIter* __cdecl FUN_00c908a0(void* local, V4 a, V4 b, V4 c);
 class Thing {
 public:
@@ -4344,9 +4351,9 @@ cPointerVector* cPointerVector::Init(int32_t nCount, int32_t nUnused)
 }
 
 // @ 0x00c8ed90
-cPointerBlockIter* FUN_00c8ed90(cPointerBlockIter* pOut, V4 a, V4 b, V4 c, void* pExtra)
+cPointerBlockIter* FUN_00c8ed90(cPointerBlockIter* pOut, V4 a, V4 b, V4 c, cCopyTag_s00c8ed90 tag)
 {
-    (void)pExtra;
+    (void)tag;
     void** pCurrent = (void**)a.v0;
     void*  pA3 = (void*)a.v1;
     void** pEnd = (void**)a.v2;
@@ -4988,9 +4995,8 @@ void __fastcall FUN_00c905c0(cTribe_s00c8_fbb0* this_, int unused)
 // @ 0x00c908a0
 cPointerBlockIter* FUN_00c908a0(void* local, V4 a, V4 b, V4 c)
 {
-    void* extra = local;
     cPointerBlockIter* p = (cPointerBlockIter*)local;
-    FUN_00c8ed90(p, a, b, c, extra);
+    FUN_00c8ed90(p, a, b, c, cCopyTag_s00c8ed90());
     return p;
 }
 
@@ -5846,9 +5852,9 @@ Thing* __thiscall Thing::FUN_00c93750(int32_t* p2)
              + ((p2[6] - p2[7]) >> 2)
              + ((p2[4] - p2[2]) >> 2);
     ((Thing*)this)->FUN_00ca09f0((uint32_t)size);
-    V4 s1 = { f08, f0c, f10, f14 };
-    V4 s2 = { (uint32_t)p2[6], (uint32_t)p2[7], (uint32_t)p2[8], (uint32_t)p2[9] };
-    V4 s3 = { (uint32_t)p2[2], (uint32_t)p2[3], (uint32_t)p2[4], (uint32_t)p2[5] };
+    V4 s1(f08, f0c, f10, f14);
+    V4 s2((uint32_t)p2[6], (uint32_t)p2[7], (uint32_t)p2[8], (uint32_t)p2[9]);
+    V4 s3((uint32_t)p2[2], (uint32_t)p2[3], (uint32_t)p2[4], (uint32_t)p2[5]);
     FUN_00c908a0(local, s3, s2, s1);
     return this;
 }
