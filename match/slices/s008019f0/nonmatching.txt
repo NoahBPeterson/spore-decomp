@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
 00801c80 80   rbtree<cCursorInfo>::DoCreateNode: wide-string value copy complete (`n = end - src` in wchar units, AllocateSelf(n+1) thiscall on the node, __cdecl DoInsertValue(dst,src,n*2), then the +0x10..0x1c fields); only cl's operand order differs (it loads `src` before `end`: 105 vs 107 bytes)  flags /O2 /MD /Gy /TP /arch:SSE2 [equiv: replay clean (first difference: None); random run WEAK 176/400 valid, 100% cov - the original itself faults on the generated node/value pointers]
 00801e90 71   rbtree erase node (complete)
-00801fd0 4    base destructor; push/lea argument order (complete)
 008024e0 113  Remove: key copy + Find(&it,&key) argument order + the four cached-entry clears + DestroyEntry/Erase/Refresh all present; cl puts the Find out-iterator in the freed key parameter slot (`sub esp,8`) instead of a pushed scratch and keeps it in ecx, so retail's pushed-`it`/param-slot-key layout and ebx/ebp results differ (157 vs 153 bytes)  flags /O2 /MD /Gy /TP /arch:SSE2 [equiv: replay clean (first difference: None); random run WEAK 342 valid, 39.4% cov]
 00802580 69   clear cursor map (complete)
 008025e0 101  base constructor field stores (complete)

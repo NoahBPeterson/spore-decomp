@@ -19,7 +19,6 @@
 00ee3020 59 /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  size matches (173); ebp/stack-slot swap for this vs palette object; complete 8-window refresh loop flags: /O2 /MD /Gy /EHsc /TP /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 ecx, call#5 ecx, call#8 ecx]
 00ee3230 318 /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  stack/register allocation of the 454-byte palette rebuild (size 537); complete flags: /O2 /MD /Gy /EHsc /TP /fp:fast
 00ee3430 244 /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  local frame size (text container modelled as 0x14 not 0x188); complete tutorial-index handler flags: /O2 /MD /Gy /EHsc /TP /fp:fast
-00ee3630 6 /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  inner-object call site (lea+load) and loop base register; complete selection sync flags: /O2 /MD /Gy /EHsc /TP /fp:fast
 00ee3760 66 callee-saved register allocation around the callback install (behavior complete) flags: /O2 /MD /Gy /EHsc /TP /fp:fast [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#2 esp, call#3 esp, call#4 ecx, ret#6 esp]
 00ee3800 279 selection predicate complete; branch layout and flag tests differ (equiv PASS) flags: /O2 /MD /Gy /EHsc /TP /fp:fast
 00ee3940 862 handler construction complete; size 1270 vs 1271 and codegen differ (equiv UNSUPPORTED: object model faults on globals) flags: /O2 /MD /Gy /EHsc /TP /fp:fast
