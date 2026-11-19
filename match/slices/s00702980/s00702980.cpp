@@ -53,6 +53,7 @@ struct CellMap {
     void* CloneEntry(CellNode* src);          // 0x702980
     void CopyConstruct(const CellMap& src);   // 0x702a10
     CellMap& Assign(const CellMap& src);      // 0x702f60
+    CellMap& AssignExt(const CellMap& src);   // 0x702f60 (out-of-line call; Assign is defined in this unit and would be inlined)
     CellInfo* Index(unsigned* key);           // 0x703360
     void Find(HashIter* out, const unsigned* key);                 // 0x00a3b2c0
     CellNode* Insert(HashIter* out, CellNode* node, bool growFlag);// 0x00702ea0
@@ -339,7 +340,7 @@ cGrid* __cdecl grid_copy_forward(cGrid* first, cGrid* last, cGrid* dst)
         dst->mInvCellSize = first->mInvCellSize;
         dst->mCellRadius = first->mCellRadius;
         *(Vec3*)&dst->mCentreOriginX = *(Vec3*)&first->mCentreOriginX;
-        dst->mCells.CopyConstruct(first->mCells);
+        dst->mCells.AssignExt(first->mCells);
         dst->mMask = first->mMask;
         dst->mChildMask = first->mChildMask;
     }
