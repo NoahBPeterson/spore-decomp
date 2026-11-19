@@ -12440,6 +12440,11 @@ Vector3T_s004a_9920& operator/=(Vector3T_s004a_9920& v, const float& s)
 }
 }  // namespace SP
 
+namespace SP {
+template<> void evector<OrientedPoint>::DoInsertValue(OrientedPoint* position, const OrientedPoint& value);  // 0x004aa760
+template<> void evector<KeyedPair>::DoInsertValue(KeyedPair* position, const KeyedPair& value);  // 0x004aaac0
+}  // namespace SP
+
 // @ 0x004a9e40
 namespace SP {
 template void evector<WeightedPoint>::push_back(const WeightedPoint& value)

@@ -163,6 +163,8 @@ template <> void vector<Word32>::resize(uint32_t n)
     ScratchSlots<6>();
 }
 
+template <> void vector<float>::DoInsertValue(float* position, const float& value);  // 0x004CE310
+
 // @ 0x004CD810 sym=?push_back@?$vector@M@
 template <> void vector<float>::push_back(const float& value)
 {
