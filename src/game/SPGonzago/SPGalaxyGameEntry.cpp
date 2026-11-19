@@ -2,6 +2,7 @@
 // Object file: SPGonzago/SPGalaxyGameEntry.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+extern "C" char g_13eb938[];   // a vtable retail relocates here
 #include "game/types.h"
 #include "SP/cString.h"
 #include "EA/DateTime/DateTime.h"
@@ -19112,7 +19113,7 @@ void cUISpaceRes::Destroy()
     RawFree(mVec30.mpBegin);
     mpVtbl18 = (void*)0x13eb938;
     _ReadWriteBarrier();
-    mpVtbl00 = (void*)0x13eb938;
+    mpVtbl00 = (void*)g_13eb938;
 }
 
 // @ 0x00dff130
