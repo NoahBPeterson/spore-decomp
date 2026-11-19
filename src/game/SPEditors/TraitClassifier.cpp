@@ -95,7 +95,7 @@ struct AnnotN {                       // cAnnotation with the inline default cto
 struct Annot {
     float value;
     WString str;
-    Annot() { InitEmpty(); }
+    Annot() { InitEmpty(); }          // @ 0x0056afc0 (default)
     Annot(AnnotN& src);               // @ 0x0056b020 (copy)
     void InitEmpty();                 // @ 0x0056afc0
     Annot(Annot& src);                // @ 0x0056b020 (copy)
@@ -298,7 +298,7 @@ struct WStr_s0056_b680 {                         // eastl::basic_string<wchar_t>
 struct WStrSrc_s0056_b680 {                      // weight + description string (by-value arg of cFeatureVector::AddDescribed)
     float value;
     WStr_s0056_b680 str;
-    WStrSrc_s0056_b680() { InitEmpty(); }
+    WStrSrc_s0056_b680() { InitEmpty(); }        // @ 0x0056afc0 (default)
     WStrSrc_s0056_b680(WStrSrc_s0056_b680& src);            // @ 0x0056b020 (copy)
     void InitEmpty();                 // @ 0x0056afc0
 };
@@ -1025,7 +1025,7 @@ struct WStr_s0056_c570 {                         // eastl::basic_string<wchar_t>
 struct WStrSrc_s0056_c570 {                      // weight + description string (by-value arg of cFeatureVector::AddDescribed)
     float value;
     WStr_s0056_c570 str;
-    WStrSrc_s0056_c570() { InitEmpty(); }
+    WStrSrc_s0056_c570() { InitEmpty(); }        // @ 0x0056afc0 (default)
     WStrSrc_s0056_c570(WStrSrc_s0056_c570& src);            // @ 0x0056b020 (copy)
     void InitEmpty();                 // @ 0x0056afc0
 };
@@ -1264,7 +1264,7 @@ struct WString_s0056_d2b0 {
 struct Annot_s0056_d2b0 {
     float value;
     WString_s0056_d2b0 str;
-    Annot_s0056_d2b0() { InitEmpty(); }
+    Annot_s0056_d2b0() { InitEmpty(); }          // @ 0x0056afc0 (default)
     Annot_s0056_d2b0(Annot_s0056_d2b0& src);               // @ 0x0056b020 (copy)
     void InitEmpty();                // @ 0x0056afc0
 };
