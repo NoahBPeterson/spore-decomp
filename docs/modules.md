@@ -20,7 +20,7 @@ does, how big it is, and how far the decompilation has got in each. It is writte
 
 Sizes and progress below come from the module map joined with every bookkeeping source (2026-10-23):
 `manifest.txt` files under `match/slices/` and `src/game/`, `match/manifest.txt`, the pattern-generated manifests in
-`match/synth/` and `match/clones.txt` (byte-exact), `nonmatching.txt` (complete, not byte-exact) and `partial.txt`
+`match/synth/` and `match/clones.txt` (byte-exact; generated rows whose borrowed source names other targets are listed in `match/shape_only.txt` instead and not counted), `nonmatching.txt` (complete, not byte-exact) and `partial.txt`
 (incomplete). "Synth" is the part of the byte-exact count that `tools/matching/synth.py` generated from code shapes
 (an `AddRef`, a three-store constructor, and so on): byte-exact, but compiled under placeholder class names such as
 `C_00768530` until migration gives them real ones. "No row" means no bookkeeping source mentions the function yet.

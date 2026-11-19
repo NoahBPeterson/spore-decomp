@@ -10,8 +10,9 @@ instruction diff of your build against the original, then a quick equivalence ch
 --no-quick skips it): does the source compute something else (fix the logic), or does it only compile differently?
 
 On MATCH it records the result: it adds the function's manifest.txt line and removes its nonmatching.txt /
-partial.txt line, and, when the function was proven equivalent, its equivalent.txt line and proof
-(equivalent/<va>.json), so the files are ready for your pull request.  --dry-run only prints what it would change.
+partial.txt (or match/shape_only.txt) line, and, when the function was proven equivalent, its equivalent.txt line
+and proof (equivalent/<va>.json), so the files are ready for your pull request.  --dry-run only prints what it would
+change.
 """
 import argparse, os, subprocess, sys
 
@@ -188,12 +189,14 @@ def _stub(data, rel, retail_size):
 
 
 def note_files(va):
-    """Every nonmatching.txt / partial.txt (slices and src/game) with a line for va."""
+    """Every nonmatching.txt / partial.txt (slices and src/game) with a line for va, and match/shape_only.txt (a
+    generated match borrowed another function's source for it; written source replaces that)."""
     import glob
     out, key = [], "%08x" % va
     for path in sorted(glob.glob(os.path.join(ROOT, "match", "slices", "*", "*.txt")) +
-                       glob.glob(os.path.join(ROOT, "src", "game", "**", "*.txt"), recursive=True)):
-        if os.path.basename(path) not in ("nonmatching.txt", "partial.txt"):
+                       glob.glob(os.path.join(ROOT, "src", "game", "**", "*.txt"), recursive=True)) + \
+            [os.path.join(ROOT, "match", "shape_only.txt")]:
+        if not os.path.exists(path) or os.path.basename(path) not in ("nonmatching.txt", "partial.txt", "shape_only.txt"):
             continue
         text = open(path, encoding="utf-8", errors="replace").read()
         if key in text.lower() and any(_is_row(l, va) for l in text.splitlines()):

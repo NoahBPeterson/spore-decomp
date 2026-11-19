@@ -80,14 +80,29 @@ def current_tested(fps, done, eqv):
     return (tested_vas(text) & set(fps)) - done - eqv
 
 
+GENERATED_RE = re.compile(r"^(match/clones\.txt|match/synth/[^/]+\.manifest)$")
+
+
+def shape_only():
+    """match/shape_only.txt (tools/ci/shape_only.py): generated matches whose borrowed source names other functions'
+    targets. Not byte-exact, on every day of the history too (decision 2026-11-19): the generated row did not make
+    them so on any day, and the line keeps its shape instead of stepping down the day they were taken out."""
+    try:
+        return {int(l.split()[0], 16) for l in open(os.path.join(ROOT, "match", "shape_only.txt"))
+                if l.strip() and not l.startswith("#")}
+    except OSError:
+        return set()
+
+
 class BlobCache:
     """byte-exact VAs at a commit, reading each manifest blob once across all commits"""
     def __init__(self):
         self.vas = {}
+        self.shape = shape_only()
 
     def at(self, commit, fps):
         tree = git("ls-tree", "-r", commit, "--", "match", "src/game", "tools/ci/known_failures.txt", VERDICTS)
-        want, eqw, known_blob, ver_blob = [], [], None, None
+        want, gen, eqw, known_blob, ver_blob = [], [], [], None, None
         for line in tree.splitlines():
             meta, path = line.split("\t", 1)
             sha = meta.split()[2]
@@ -96,10 +111,10 @@ class BlobCache:
             elif path == VERDICTS:
                 ver_blob = sha
             elif MANIFEST_RE.match(path):
-                want.append(sha)
+                (gen if GENERATED_RE.match(path) else want).append(sha)
             elif EQUIV_RE.match(path):
                 eqw.append(sha)
-        need = [s for s in set(want) | set(eqw) | {known_blob, ver_blob} - {None} if s not in self.vas]
+        need = [s for s in set(want) | set(gen) | set(eqw) | {known_blob, ver_blob} - {None} if s not in self.vas]
         if need:
             out = subprocess.run(["git", "cat-file", "--batch"], cwd=ROOT, capture_output=True,
                                  input="\n".join(need).encode() + b"\n", check=True).stdout
@@ -111,9 +126,12 @@ class BlobCache:
                 self.vas[sha] = (("K", known_vas(body)) if sha == known_blob else
                                  ("V", tested_vas(body)) if sha == ver_blob else ("M", rows_vas(body)))
                 i = hdr_end + 1 + size + 1
-        done = set()
+        done, generated = set(), set()
         for s in want:
             done |= self.vas[s][1]
+        for s in gen:
+            generated |= self.vas[s][1]
+        done |= generated - (self.shape - done)      # shape-only rows never counted, unless written source covers them
         if known_blob:
             done -= self.vas[known_blob][1]
         done &= set(fps)
@@ -187,12 +205,23 @@ def present_before(sha, vas):
     return found & vas
 
 
+def shape_before(sha, vas):
+    """The addresses of `vas` listed in match/shape_only.txt in the merge's first parent: a generated row had matched
+    their bytes with a twin's source that names other targets. Writing their own source fixes the names; it is
+    credited apart ("names fixed"), not as new functions and bytes (decision 2026-11-19)."""
+    try:
+        text = git("show", "%s^:match/shape_only.txt" % sha)
+    except subprocess.CalledProcessError:
+        return set()
+    return {int(l.split()[0], 16) for l in text.splitlines() if l.strip() and not l.startswith("#")} & vas
+
+
 def pr_credits(prs_path, fps):
     if not prs_path or not os.path.exists(prs_path):
         return []
     # A function is credited to the first merged pull request that added it, until a later merge removes it: a reverted
     # pull request loses its credit, and one that lands the same work again gets it.
-    owner, rows = {}, []
+    owner, named, rows = {}, {}, []
     for p in sorted(json.load(open(prs_path)), key=lambda p: p.get("mergedAt") or ""):
         sha = (p.get("mergeCommit") or {}).get("oid")
         if not sha:
@@ -212,18 +241,23 @@ def pr_credits(prs_path, fps):
                     removed |= rows_vas(line[1:])
         for v in removed - added:
             owner.pop(v, None)
+            named.pop(v, None)
         new = (added - removed) & set(fps)
         # a function that was already byte-exact somewhere before the merge (a migration moving it from its slice's
         # manifest into its module's, rows pushed before contributions opened) is not new work
         new -= present_before(sha, new)
-        for v in new:
+        shaped = shape_before(sha, new)
+        for v in shaped:
+            named.setdefault(v, p["number"])
+        for v in new - shaped:
             owner.setdefault(v, p["number"])
         rows.append(p)
     out = []
     for p in rows:
         new = [v for v, n in owner.items() if n == p["number"]]
         out.append({"n": p["number"], "who": (p.get("author") or {}).get("login", "?"), "when": (p.get("mergedAt") or "")[:10],
-                    "f": len(new), "b": sum(fps[v] for v in new), "model": model_field(p.get("body"))[:48]})
+                    "f": len(new), "b": sum(fps[v] for v in new), "nf": sum(1 for n in named.values() if n == p["number"]),
+                    "model": model_field(p.get("body"))[:48]})
     return sorted(out, key=lambda r: -r["n"])
 
 
@@ -415,24 +449,27 @@ def build(out, prs_path, repo):
              'with Galactic Adventures after the development build the module map comes from.</p>')
     # Only pull requests that are credited with functions are listed and counted: tools, notes-only and reverted pull
     # requests (and ones whose work a later merge removed) add nothing to the totals.
-    prs = [p for p in prs if p["f"] or p["b"]]
+    prs = [p for p in prs if p["f"] or p["b"] or p.get("nf")]
     if prs:
-        who = collections.defaultdict(lambda: [0, 0, 0])
+        who = collections.defaultdict(lambda: [0, 0, 0, 0])
         for p in prs:
-            w = who[p["who"]]; w[0] += 1; w[1] += p["f"]; w[2] += p["b"]
+            w = who[p["who"]]; w[0] += 1; w[1] += p["f"]; w[2] += p["b"]; w[3] += p.get("nf", 0)
         b.append('<h2>Contributors</h2><div class="panel scroll"><table><tr><th>contributor</th><th>pull requests</th>'
-                 '<th>functions</th><th>bytes</th></tr>')
-        for k, (n, f, by) in sorted(who.items(), key=lambda kv: (-kv[1][2], kv[0])):
-            b.append('<tr><td><a href="https://github.com/%s">%s</a></td><td>%d</td><td>%s</td><td>%s</td></tr>'
-                     % (E(k), E(k), n, fmt(f), fmt(by)))
+                 '<th>functions</th><th>bytes</th><th>names fixed</th></tr>')
+        for k, (n, f, by, nf) in sorted(who.items(), key=lambda kv: (-kv[1][2], -kv[1][3], kv[0])):
+            b.append('<tr><td><a href="https://github.com/%s">%s</a></td><td>%d</td><td>%s</td><td>%s</td><td>%s</td></tr>'
+                     % (E(k), E(k), n, fmt(f), fmt(by), fmt(nf)))
         b.append('</table></div><h2>Recent pull requests</h2><div class="panel scroll"><table><tr><th>pull request</th>'
-                 '<th>merged</th><th>by</th><th>functions</th><th>bytes</th><th>model or tool</th></tr>')
+                 '<th>merged</th><th>by</th><th>functions</th><th>bytes</th><th>names fixed</th><th>model or tool</th></tr>')
         for p in prs[:25]:
             b.append('<tr><td><a href="https://github.com/%s/pull/%d">#%d</a></td><td>%s</td><td>%s</td><td>%s</td>'
-                     '<td>%s</td><td style="text-align:left">%s</td></tr>' % (E(repo), p["n"], p["n"], p["when"], E(p["who"]),
-                                                                          fmt(p["f"]), fmt(p["b"]), E(p["model"] or "")))
+                     '<td>%s</td><td>%s</td><td style="text-align:left">%s</td></tr>' % (
+                         E(repo), p["n"], p["n"], p["when"], E(p["who"]), fmt(p["f"]), fmt(p["b"]), fmt(p.get("nf", 0)),
+                         E(p["model"] or "")))
         b.append('</table></div><p class="note">Counted from pull requests merged since contributions opened '
-                 '(November 2026). Most earlier work was done by the maintainer\'s own agent runs.</p>')
+                 '(November 2026). Most earlier work was done by the maintainer\'s own agent runs. "Names fixed": '
+                 'functions whose bytes a generated match already reproduced with another function\'s source; writing '
+                 'their own source puts the right calls and globals in, and is counted here, not as new functions.</p>')
     b.append('<h2>Help</h2><p>Hundreds of functions are only a few bytes from a match. <a href="join.html">Start here</a>.</p>')
 
     join = """<h1>Join</h1><p class="lede">Pick a function whose C++ is already written but compiles a few bytes off,

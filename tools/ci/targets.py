@@ -171,6 +171,38 @@ def same_target(fps, want, actual):
     return "disagree"
 
 
+def _fields(fp):
+    """[(offset, 4-byte value or None, raw bytes)] of the masked runs, cut into 4-byte address fields"""
+    raw, out, i = bytes.fromhex(fp["masked"]), [], 0
+    for start, n in fp["mask"]:
+        chunk, i = raw[i:i + n], i + n
+        if n % 4:
+            out.append((start, None, chunk))
+        else:
+            out.extend((start + k, int.from_bytes(chunk[k:k + 4], "little"), None) for k in range(0, n, 4))
+    return out
+
+
+def same_targets(fps, a, b):
+    """do retail functions a and b (same code once addresses are masked) use the same addresses? Each field must
+    hold the same absolute address, the same address relative to the function (a jump table, its own start), or
+    a rel32 to the same target, where byte-identical copies and one-instruction jmp thunks count as the same. Then
+    one source is honest for both; otherwise the second only has the first's shape."""
+    x, y = fps.get(a), fps.get(b)
+    if not (x and y and x.get("masked") is not None and y.get("masked") is not None) or x["mask"] != y["mask"]:
+        return False
+    def same(p, q):
+        return p == q or same_function(fps, p, q) or jmp_dest(fps, q) == p or jmp_dest(fps, p) == q
+    for (o, fa, ra), (_o, fb, rb) in zip(_fields(x), _fields(y)):
+        if fa is None:
+            if ra != rb:
+                return False
+        elif not (fa == fb or (fb - fa) & 0xFFFFFFFF == (b - a) & 0xFFFFFFFF or
+                  same((a + o + 4 + fa) & 0xFFFFFFFF, (b + o + 4 + fb) & 0xFFFFFFFF) or same(fa, fb)):
+            return False
+    return True
+
+
 FUN_RE = re.compile(r"(?:FUN|sub)_([0-9A-Fa-f]{6,8})$")
 
 
