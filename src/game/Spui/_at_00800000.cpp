@@ -1102,10 +1102,13 @@ void __fastcall Vec42CDtor(int* v)
         efree((void*)d);
 }
 
+extern void* g_01417cb0[];   // 0x01417cb0 Big3 vftable
+
 // @ 0x0080b9b0
 void* Big3::DeletingDtor(char flags)
 {
-    vtbl = (void*)0x1417cb0;
+    vtbl = (void*)g_01417cb0;
+    _ReadWriteBarrier();
     Layout* l = layout;
     if (l != 0) {
         layout = 0;
