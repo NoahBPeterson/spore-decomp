@@ -7,3 +7,4 @@ slices/s008133f0/s008133f0.cpp  ?KeyRouted@MainWin@@QAE_NMMHH@Z  008133f0  /O2 /
 slices/s008133f0/s008133f0.cpp  ?Init@cSPUITooltipManager@@SAXXZ  00813b20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008133f0/s008133f0.cpp  ?KeyHandler@MainWin@@SG_NHHH@Z  00814090  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s008133f0/s008133f0.cpp  ?LowerBoundUShort@@YAHHHPAG@Z  00813c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008133f0/s008133f0.cpp  ?FocusInput@MainWin@@QAE_NMMHH@Z  00813550  /O2 /MD /Gy /TP /arch:SSE /fp:fast

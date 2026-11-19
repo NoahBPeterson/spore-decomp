@@ -1286,6 +1286,7 @@ virtual void v08();
     virtual void Release();                 // +0x0c
     void Shutdown();                        // 0x005c4e40
 };
+struct IWinProc_s00f1_6fd0;
 class cPaletteListener {                    // detaches through slot 0x108
 public:
 virtual void v00();
@@ -1296,7 +1297,7 @@ virtual void v0c();
     PAL_V4(x80) PAL_V4(x90) PAL_V4(xa0) PAL_V4(xb0) PAL_V4(xc0) PAL_V4(xd0) PAL_V4(xe0) PAL_V4(xf0)
 virtual void v100();
 virtual void v104();
-    virtual void Detach(void* owner);       // +0x108
+    virtual void Detach(IWinProc_s00f1_6fd0* owner);       // +0x108
 };
 class cPaletteChain {                       // the helper held at +0x38
 public:
@@ -1336,10 +1337,13 @@ struct PaletteElementVector {               // the vector at +0x24
     uint32_t mPad34;                        // +0x34
     void EraseRange(void* first, void* last);   // 0x00f16330
 };
-class cScenarioPaletteOwner {
+struct cScenarioPaletteOwnerBase_s00f1_6fd0 {               // primary bases, +0x00..+0x0b
+    virtual void v00();
+    uint32_t mPad004[(0x0c - 0x04) / 4];
+};
+struct IWinProc_s00f1_6fd0 { virtual void v00(); };          // window-proc interface at +0x0c
+class cScenarioPaletteOwner : public cScenarioPaletteOwnerBase_s00f1_6fd0, public IWinProc_s00f1_6fd0 {
 public:
-    uint32_t mPad000[(0x0c - 0x00) / 4];                     // +0x00
-    uint32_t mAttachOwner;                                   // +0x0c
     PaletteRef<cSPPalette_s00f1_6580>           mpPalette;              // +0x10
     PaletteRef<cPaletteRef8>         mp14;                   // +0x14
     PaletteRef<cSPPaletteCategoryUI_s00f1_6580> mpCategory;             // +0x18
@@ -4543,7 +4547,7 @@ void cScenarioPaletteOwner::Shutdown()
                                      mHandlerIds[2], mHandlerIds[3]);
     }
     if (mpListener.mp != 0) {
-        mpListener->Detach(&mAttachOwner);
+        mpListener->Detach(this);
         mpListener.reset();
     }
     mp14.reset();
