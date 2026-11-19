@@ -49,6 +49,10 @@ no match). You can run the same check locally (below) before you open the pull r
    whoever worked on it last. (`--by diff` sorts by fewest differing bytes instead; `--by size` smallest first.)
    Functions nobody has started (0 tries, "no source yet") come first: `task.py <address>` names the new file to
    create for them.
+   Rows marked "same shape as 0x..." are functions whose bytes a generated match reproduced with another function's
+   source that calls or reads other addresses (`match/shape_only.txt`): copy that function, point its calls and
+   globals at what retail uses here, and `check.py` records it. These count as byte-exact once written, and the site
+   credits them in a separate "names fixed" column, not as new functions.
 2. **Read its context.** `.venv/bin/python tools/contrib/task.py 0x00529690` prints its source file, status, compiler
    flags, retail size, includes and current source. For a function that others have tried, it also prints every
    earlier version of its note (what each person tried and how many bytes differed) and links any closed pull
