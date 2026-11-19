@@ -66,6 +66,7 @@ public:
     void* Dtor(unsigned int flags);
     void Shutdown();
     PosseSim* Init();
+    void OnTick(int arg1, int arg2);
 };
 typedef char PosseSimSizeCheck[sizeof(PosseSim) == 0x58 ? 1 : -1];
 void* operator new(unsigned int, const char*, int = 0, int = 0, int = 0, int = 0);
@@ -376,11 +377,78 @@ void PosseSim::Shutdown()
     }
 }
 
+// ---- items for PosseSim::OnTick (0x00d53790)
+struct PosseNoun;
+struct PosseNounList {                                  // object returned by the noun manager
+    PosseNoun** mpBegin;                                // +0x00
+    PosseNoun** mpEnd;                                  // +0x04
+};
+struct PosseNounInfo {
+    char    mPad000[0x192];
+    uint8_t mField192;                                  // +0x192
+};
+struct PosseNounB4C {
+    void* mpField00;                                    // +0x00
+    char  mPad04[4];
+};
+struct PosseNoun {
+    char          mPad000[0x192];
+    uint8_t       mField192;                            // +0x192
+    char          mPad193[0xb4c - 0x193];
+    PosseNounB4C* mpFieldB4c;                           // +0xb4c
+    char          mPadB50[0xb58 - 0xb50];
+    uint32_t      mFlagsB58;                            // +0xb58
+    char          mPadB5C[0xb5e - 0xb5c];
+    uint8_t       mDeadB5e;                             // +0xb5e
+};
+extern int   gPosseTickKey;
+extern int   gPosseGroupKey;
+extern float gPosseEffectParam;
+void          PosseSim_TouchMember(PosseNoun* noun);                        // cdecl
+void          PosseSim_UpdateMember(PosseNoun* noun);                       // thiscall body
+int           PosseSim_MemberReady(PosseNoun* noun);                        // thiscall body
+int           PosseSim_MemberLeaving(PosseNoun* noun);                      // thiscall body
+extern "C" void* __cdecl FUN_00c04590();                                    // 0xc04590 Creature::Get
+void          PosseSim_QueueEffect(void*, int, int, float, int);            // thiscall body
+void* __stdcall PosseSim_FindGroup(void* key, int n);                       // stdcall
+void          PosseSim_SetGroupFlag(void* group);                           // thiscall body
+void          PosseSim_RemoveMember(PosseSim*, PosseNoun*, int, int);       // thiscall body
+// ---- items for PosseSim::OnTick end
+
 // @ 0x00d53790
-void PosseSim_OnTick(PosseSim* self, int arg1, int arg2)
+void PosseSim::OnTick(int arg1, int arg2)
 {
-    (void)self; (void)arg1; (void)arg2;
-    SP_NounManager();
+    (void)arg1; (void)arg2;
+    PosseSim* self = this;
+    PosseNounList* list = ((PosseNounList*(__thiscall*)(void*))FUN_00b1f9c0)(SP_NounManager());
+    if (list->mpBegin != list->mpEnd) {
+        PosseNoun** it = list->mpBegin;
+        PosseNoun** end = list->mpEnd;
+        while (it != end) {
+            PosseNoun* noun = *it;
+            noun->mFlagsB58 |= 0x100;
+            if (noun->mDeadB5e != 0) {
+                if (((int(__thiscall*)(PosseNoun*))PosseSim_MemberLeaving)(noun) == 0 ||
+                    ((PosseNounInfo*)((void*(__thiscall*)(PosseNoun*))FUN_00c04590)(noun))->mField192 == 0) {
+                    ((void(__thiscall*)(void*))PosseSim_SetGroupFlag)(
+                        ((void* (__stdcall*)(void*, int))PosseSim_FindGroup)((void*)0xfbf10c5eu, 1));
+                }
+                ((void(__thiscall*)(PosseSim*, PosseNoun*, int, int))PosseSim_RemoveMember)(self, noun, 1, 0);
+                end = list->mpEnd;
+            } else {
+                if (noun->mpFieldB4c->mpField00 != (void*)&gPosseTickKey) {
+                    PosseSim_TouchMember(noun);
+                    ((void(__thiscall*)(PosseNoun*))PosseSim_UpdateMember)(noun);
+                    if (((int(__thiscall*)(PosseNoun*))PosseSim_MemberReady)(noun) == 0 ||
+                        ((PosseNounInfo*)((void*(__thiscall*)(PosseNoun*))FUN_00c04590)(noun))->mField192 == 0) {
+                        ((void(__thiscall*)(void*, int, int, float, int))PosseSim_QueueEffect)(
+                            (void*)((char*)noun->mpFieldB4c + 8), 0, 0x20, gPosseEffectParam, 0);
+                    }
+                }
+                ++it;
+            }
+        }
+    }
 }
 
 // @ 0x00d53890
