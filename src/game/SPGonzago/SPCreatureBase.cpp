@@ -8614,7 +8614,7 @@ void* __thiscall CCM_s00c0_ddb0::e580()
         }
     }
     void* self = (char*)this + 0xc0;
-    return (*(void*(__thiscall**)(void*))((*(void***)self)[0x2c / 4]))(self);
+    return ((void*(__thiscall*)(void*))((*(void***)self)[0x2c / 4]))(self);
 }
 
 // @ 0x00c0e5f0

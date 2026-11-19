@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/cmn/sdriver.cpp.cpp  ?SNDPLATFORM_restore@?A0xd281c965@@YAHXZ  01140870  /vc71 /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include

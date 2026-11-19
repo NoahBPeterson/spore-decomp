@@ -105,3 +105,4 @@
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?e420@CCM_s00c0_ddb0@@QAEDXZ  00c0e420  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?e3d0@CCM_s00c0_ddb0@@QAEDXZ  00c0e3d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCreatureBase.cpp  ?d970@CCB_s00c0_ce80@@QAEXPAM@Z  00c0d970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCreatureBase.cpp  ?e580@CCM_s00c0_ddb0@@QAEPAXXZ  00c0e580  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
