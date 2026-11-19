@@ -606,6 +606,13 @@ struct RbFind56 {
 };
 struct Key2 { int a, b; };
 struct RbNode57 { char pad[0x10]; Key2 key; };
+// rbtree iterator, returned by value through the hidden result pointer
+struct RbIter57
+{
+    RbNode57* mpNode;
+    explicit RbIter57(RbNode57* p) : mpNode(p) {}
+    RbIter57(const RbIter57& o) : mpNode(o.mpNode) {}
+};
 struct RbTree57 {
     void*   root;       // +0x00 (this+0x04)
     char    pad[0x0c];
@@ -670,7 +677,7 @@ struct cGalaxyGameEntryImpl_s00de_5040 {
     void  FUN_00de53d0(char p);         // 0x00de53d0
     void  ShowGalaxy(char param2);      // 0x00de5470
     OutKey3* FUN_00de56f0(OutKey3& pOut, KeyNode* key); // 0x00de56f0
-    void  FUN_00de57b0(RbNode57** pOut, RbNode57* parent, Key2* key, char flag); // 0x00de57b0
+    RbIter57 FUN_00de57b0(RbNode57* parent, Key2* key, char flag); // 0x00de57b0
     void  FUN_00de4910(void);           // 0x00de4910
     void  FUN_00de41b0(void);           // 0x00de41b0
     void  FUN_00de5950(void);           // 0x00de5950
@@ -11041,17 +11048,19 @@ OutKey3* cGalaxyGameEntryImpl_s00de_5040::FUN_00de56f0(OutKey3& pOut, KeyNode* k
     return &pOut;
 }
 
+extern char g_13f09b4[];   // 0x013f09b4 "Simulator"
+extern char g_13ebb38[];   // 0x013ebb38 allocator name
 // @ 0x00de57b0
-void cGalaxyGameEntryImpl_s00de_5040::FUN_00de57b0(RbNode57** pOut, RbNode57* parent, Key2* key, char flag)
+RbIter57 cGalaxyGameEntryImpl_s00de_5040::FUN_00de57b0(RbNode57* parent, Key2* key, char flag)
 {
     int left = (flag == 0 && parent != (RbNode57*)&mTree4.root
                 && key->a >= parent->key.a) ? 1 : 0;
-    RbNode57* node = (RbNode57*)EAllocNew(0x18, (const char*)0x13f09b4, 0, 0, (void*)0x13ebb38, 0xd1);
+    RbNode57* node = (RbNode57*)EAllocNew(0x18, g_13f09b4, 0, 0, g_13ebb38, 0xd1);
     if (&node->key != 0)
         node->key = *key;
     RBTreeInsert57(node, parent, &mTree4.root, left);
-    *pOut = node;
     mTree4.count++;
+    return RbIter57(node);
 }
 
 // @ 0x00de58c0
