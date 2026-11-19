@@ -3078,9 +3078,9 @@ cMilitaryAttackCityOrder* cMilitaryAttackCityOrder::FUN_00b23260(uint8_t nFlags)
 // @ 0x00b232b0
 cListenerBase::cListenerBase()
 {
-    cGonzagoSubsystem* pSubsystem = (cGonzagoSubsystem*)((uint8_t*)this + 4);
-    mpVtable00 = &g_vtableListenerA;
-    pSubsystem->BaseCtor();
+    // plain (non-volatile) store: the original loads the base pointer into ecx first
+    *(void**)&mpVtable00 = &g_vtableListenerA;
+    ((cGonzagoSubsystem*)((uint8_t*)this + 4))->BaseCtor();
 
     mpVtable04 = &g_vtableListenerGonzago;
     mpVtable00 = &g_vtableListenerPrimary;
