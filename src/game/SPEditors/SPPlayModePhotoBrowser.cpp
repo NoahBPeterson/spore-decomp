@@ -276,6 +276,7 @@ struct cSPPlayModeUI_s0063_2780 {
 template <class T> struct AutoRef_s0063_2780 {
     T* mpObject;
     AutoRef_s0063_2780() : mpObject(0) {}
+    void Reset() { T* o = mpObject; if (o) { mpObject = 0; o->Release(); } }
 };
 struct RefCountVBase {
     virtual void Dtor_();
@@ -1461,15 +1462,12 @@ void cSPPlayModePhotoBrowser_s0063_2780::AddPhoto(uint32_t guid, int kind)
     }
     p->photo_guid = guid;
     p->bIsSelected = 0;
-    cJob* old = p->writeJob.mpObject;
-    if (old) {
-        p->writeJob.mpObject = 0;
-        old->Release();
-    }
+    p->writeJob.Reset();
     p->bIsLoaded = 1;
     if (kind == 0x417b3bc) {
+        uint32_t k = gPhotoTypeKeyInstance;
         p->keyC = guid;
-        p->key8 = gPhotoTypeKeyInstance;
+        p->key8 = k;
     }
     if (created)
         FUN_00631df0(p);
