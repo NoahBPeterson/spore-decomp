@@ -85,7 +85,9 @@ no match). You can run the same check locally (below) before you open the pull r
    function's line into `equivalent.txt` beside its manifest and a small proof file into `equivalent/<address>.json`;
    commit both. The pull request check confirms your source still builds to the bytes that were proved, and a
    maintainer re-runs the proof before merging (the `equiv-verified` label). Equivalent functions are counted
-   separately from byte-exact ones (the site stacks them) and stay open: making one byte-exact later still counts.
+   separately from byte-exact ones (the site stacks them) and stay open: making one byte-exact later still counts. When
+   it does, `check.py` also removes its `equivalent.txt` line and proof file (the proof is about bytes your source no
+   longer builds).
    `REFUTED` means the source computes something different from the original: fix the source, not the proof.
    `UNKNOWN` means no layer could decide; that is not a verdict on your code. Layers that need extra installs
    (angr, Docker for DDEC) are skipped with a message when missing; see `tools/equiv/LAYERS.md`.
