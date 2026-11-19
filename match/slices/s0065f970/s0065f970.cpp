@@ -370,6 +370,7 @@ struct KeyVec {
     Key* mEnd;      // +0x04
     Key* mCap;      // +0x08
     KeyVec& operator=(const KeyVec& o);
+    KeyVec* CopyConstruct(const KeyVec& o);   // 0x006606a0 (uninitialized copy, used by FeedUninitCopy)
 };
 
 void  __cdecl CopyOverlap(Key* first, Key* last, Key* dest);   // 0x00b84c80
@@ -440,9 +441,9 @@ FeedEntry* __cdecl FeedUninitCopy(FeedEntry* first, FeedEntry* last, FeedEntry* 
         if (dest) {
             dest->m0 = first->m0;
             dest->m4 = first->m4;
-            dest->v08 = first->v08;
+            dest->v08.CopyConstruct(first->v08);
             dest->m1c = first->m1c;
-            dest->v20 = first->v20;
+            dest->v20.CopyConstruct(first->v20);
         }
         ++first;
         ++dest;

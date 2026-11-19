@@ -637,7 +637,7 @@ struct TrackVec {
     TeString mStr;   // +0x18
     TrackVec* Ctor(int a, const char* b);         // 0x00a3d630
     void DoInsertValue(int* pos, int* value);     // 0x00a3d6e0
-    void Erase(int* a, int* b);                   // 0x011e0744 (eastl vector erase)
+    void Erase(int* a, int* b);                   // 0x00bdc770 (destroys the elements in [a, b))
     void Dtor();                                  // 0x00a3d690
 };
 // ---- items of slice s00a3cbb0 end
@@ -1247,7 +1247,7 @@ int EA::Audio::Mixer::FindByName(int key)
     int b = (int)mpEnd;
     for (;;) {
         if (a == b) return 0;
-        if (eastl_hashtable_find((void*)(a + 0x18), (void*)key)) break;
+        if (KeyEq((void*)(a + 0x18), (void*)key)) break;
         a += 0x28;
     }
     return a;

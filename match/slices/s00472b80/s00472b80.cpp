@@ -232,7 +232,7 @@ Str8::Str8(int unused, const char* p, ...)
 
 struct StrW {
     wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity;
-    void AllocateSelf(uint32_t n);                               // @ 0x00475ab0
+    void AllocateSelf(uint32_t n);                               // @ 0x00429760
     void append_sprintf_va_list(const wchar_t* fmt, void* args); // @ 0x004234b0
     StrW(int unused, const wchar_t* p, ...);
 };

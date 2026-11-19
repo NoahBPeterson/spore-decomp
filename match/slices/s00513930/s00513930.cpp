@@ -271,6 +271,8 @@ template Elem1C* vector<Elem1C>::erase(Elem1C*, Elem1C*);
 template Elem18* vector<Elem18>::erase(Elem18*, Elem18*);
 template uint8_t* vector<uint8_t>::erase(uint8_t*, uint8_t*);
 
+template <> void vector<Elem0C>::DoInsertValue(Elem0C* position, const Elem0C& value);  // 0x004E3E10
+
 // @ 0x00513D20  eastl::vector<Elem18>::push_back()
 // @ 0x005140A0  eastl::vector<Elem0C>::push_back()
 template <typename T>

@@ -248,7 +248,7 @@ template Rec14* uninitialized_move(Rec14*, Rec14*, Rec14*);
 // @ 0x4d0f30
 template Rec14* uninitialized_move_start(Rec14*, Rec14*, Rec14*);
 // @ 0x4d10b0
-template struct uninitialized_move_impl<false, Elem34*, Elem34*>;
+template Elem34* uninitialized_move_impl<false, Elem34*, Elem34*>::do_move_start(Elem34*, Elem34*, Elem34*);
 // @ 0x4d1130  (do_move_commit of the same instance)
 // @ 0x4d11a0
 template Rec14* uninitialized_move_impl<false, Rec14*, Rec14*>::do_move_start(Rec14*, Rec14*, Rec14*);

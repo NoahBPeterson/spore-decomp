@@ -36,9 +36,10 @@ struct Stopwatch { void Init(int a, int b); long long GetElapsedTime(); void Res
 int GetTutorialToolPrice(void* a, unsigned key, int def); // 0x004e1c30
 void* MessageServer(); // 0x0067dcc0
 void RemoveHandler(void* server, void* handler, void* ids, int count, int prio);
+struct WStrAssignStub { void Assign(unsigned short* a, unsigned short* b); };   // 0x00423650 (eastl::basic_string<wchar_t>::assign(first, last))
 struct EString {
   void Assign(unsigned short* s);   // 0x005c3d90 (equiv t3)
-  void Assign(unsigned short* a, unsigned short* b);
+  void Assign(unsigned short* a, unsigned short* b);   // 0x00672750
 };
 void FUN_006b8f40(void* s);
 void CenterWindowInRect(void* obj);   // 0x00810000 (equiv t2)
@@ -281,7 +282,7 @@ void cSPUISearchBox::EmptySearch()
 {
   if (mWinSearchBox) {
     const unsigned short* kEmpty = (const unsigned short*)0x13ec468;   // 16-bit empty string literal
-    ((EString*)((char*)this + 0x58))->Assign((unsigned short*)kEmpty, (unsigned short*)kEmpty);
+    ((WStrAssignStub*)((char*)this + 0x58))->Assign((unsigned short*)kEmpty, (unsigned short*)kEmpty);
     ((FnV1p)((VObj*)mWinSearchBox)->vt[kWindowSetText])(mWinSearchBox, strBegin);   // search box->SetText(mSearchString)
   }
 }

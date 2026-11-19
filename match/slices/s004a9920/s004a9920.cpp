@@ -254,6 +254,9 @@ template<class T> struct evector {
     void DoInsertValue(T* position, const T& value);
 };
 
+template<> void evector<OrientedPoint>::DoInsertValue(OrientedPoint* position, const OrientedPoint& value);  // 0x004aa760
+template<> void evector<KeyedPair>::DoInsertValue(KeyedPair* position, const KeyedPair& value);  // 0x004aaac0
+
 // @ 0x4a9e40 sym=?push_back@?$evector@UWeightedPoint
 template void evector<WeightedPoint>::push_back(const WeightedPoint& value);
 

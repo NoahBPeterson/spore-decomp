@@ -30,7 +30,10 @@ extern "C" void  EA_Messaging_RemoveHandler(void* a, void* b, void* c, void* d, 
 // ---------------------------------------------------------------------------
 // Element type of the 0x34-byte filter-button vector.
 // ---------------------------------------------------------------------------
-struct Blob14 { uint8_t x[0x14]; void Assign(Blob14* src); void FUN_006606a0(Blob14* src); };
+struct Blob14 { uint8_t x[0x14];
+    void Assign(Blob14* src);        // 0x006609a0
+    void FUN_006606a0(Blob14* src);  // 0x006606a0
+};
 struct E34 {
     uint32_t a;          // 0x00
     uint8_t  b;          // 0x04
@@ -587,6 +590,6 @@ namespace __equiv_ann {
 
 namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
 struct Blob14 {
-    void Assign();   // 0x006606a0 (equiv t3)
+    void Assign();   // 0x006609a0 (equiv t3)
 };
 }

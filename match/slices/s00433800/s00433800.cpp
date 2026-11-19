@@ -260,23 +260,25 @@ int FindStatIndex(uint32_t id);              // 004336A0 (cdecl)
 // @ 0x00433800
 void ApplyIntProperties(PropertyList* props, StatTable* table)
 {
-    int count = 6;
-    for (int i = 0; i < count; i++) {
-        int value = 0;
-        uint32_t id = g_StatIds[i];
-        bool ok;
-        Property* prop;
-        if (props && props->GetProperty(id, &prop) && prop->type == 9) {
-            value = *prop->GetInt();
-            ok = true;
+    int p30 = 6;
+    for (int p = 0; p < p30; p++) {
+        int v = 0;
+        uint32_t t21 = g_StatIds[p];
+        bool t24;
+        Property* t32;
+        int y;
+        unsigned p12;
+        if (props && props->GetProperty(t21, &t32) && t32->type == 9) {
+            v = *t32->GetInt();
+            t24 = true;
         } else {
-            ok = false;
+            t24 = false;
         }
-        if (ok) {
-            int idx = FindStatIndex(g_StatIds[i]);
-            if (idx != -1) {
-                float* f = &table->stats[idx].value;
-                *f = (float)value + *f;
+        if (t24) {
+            y = FindStatIndex(g_StatIds[p]);
+            if (y != -1) {
+                float* n30 = &table->stats[y].value;
+                *n30 = (float)v + *n30;
             }
         }
     }
@@ -293,13 +295,13 @@ struct StatVec {
 void StatVec::Resize(uint32_t n)
 {
     if (n > (uint32_t)(end - begin)) {
-        Stat fill;
-        fill.value = kStatFillValue;
-        Stat* at;
-        uint32_t add = n - (end - begin);
-        at = end;
-        uint32_t u0, u1, u2, u3, u4, u5;   // unused locals present in the original frame
-        Grow(at, add, &fill);
+        Stat value;
+        value.value = kStatFillValue;
+        Stat* cur;
+        uint32_t size = n - (end - begin);
+        cur = end;
+        uint32_t right, buf, val, owner, data, result;   // /Od slot order; unused, they hold the frame
+        Grow(cur, size, &value);
     } else {
         EraseTail(begin + n, end);
     }

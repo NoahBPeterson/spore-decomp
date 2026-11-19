@@ -1293,7 +1293,7 @@ struct RefPtr_s0042_5240 {
     RefCounted_s0042_5240* p;
     ~RefPtr_s0042_5240() { if (p) p->Release(); }
 };
-extern RefPtr_s0042_5240* MoveRange(RefPtr_s0042_5240* first, RefPtr_s0042_5240* last, RefPtr_s0042_5240* dest);
+extern RefPtr_s0042_5240* MoveRange(RefPtr_s0042_5240* first, RefPtr_s0042_5240* last, RefPtr_s0042_5240* dest);   // 0x0042eaa0
 struct PtrVector {
     void** begin;   // +0
     RefPtr_s0042_5240* end;    // +4

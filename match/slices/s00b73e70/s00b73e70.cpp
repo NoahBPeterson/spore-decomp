@@ -195,7 +195,7 @@ int ObstacleMgr::Lookup(unsigned int* key)
 {
     int local[2];
     Hashtable2* ht = (Hashtable2*)((char*)this + 0x56c0);
-    ht->Find(&local[0], key);
+    ((C74860*)ht)->Find(&local[0], (int*)key);
     if (local[0] != ht->mBegin[ht->mCount])
         return local[0] + 0xc;
     return 0;

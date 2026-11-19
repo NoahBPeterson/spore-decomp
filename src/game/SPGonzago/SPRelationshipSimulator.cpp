@@ -1001,7 +1001,7 @@ struct cPeaceTerrainSphere {
     void NoteWarEndedWithPlayer(cEmpire* empire);
 };
 struct cPeaceNounManager {
-    cPeaceTerrainSphere* GetCurrentTerrainSphere();
+    cPeaceTerrainSphere* GetCurrentTerrainSphere();   // 0x00f67d90
 };
 cPeaceNounManager* NounManagerForPeace();
 }

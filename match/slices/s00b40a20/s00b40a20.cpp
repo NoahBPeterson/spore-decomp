@@ -300,7 +300,9 @@ extern float g_01470f1c;                   // 0x01470f1c
 extern float g_013ec4d0;                   // 0x013ec4d0
 extern float g_013f1cac;                   // 0x013f1cac
 extern float g_f167eb78, g_f167eb7c, g_f167eb80, g_f167eb84;   // 0x0167eb78..
-extern float g_f15695fc, g_f15695f8, g_f1569648;               // 0x015695f8..
+extern float g_f15695fc;   // 0x015695fc
+extern float g_f15695f8;   // 0x015695f8
+extern float g_f1569648;   // 0x01569648
 
 void LoadPlanetTuning(IPropertyList* list);   // 0x00b51460
 

@@ -962,7 +962,7 @@ void cGameBundle::Read(uint32_t s)
     ((BaseSpatial*)mSpatial)->Read(s);
     ((BaseGameData*)this)->Read(s);
     ((SerObj*)buf)->Ctor(this, &g_p1573038, 0x1a80d26);
-    ((SerObj*)buf)->Serialize(s);
+    ((SerObj*)buf)->Read(s);
 }
 
 // @ 0x00c35d20

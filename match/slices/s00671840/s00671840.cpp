@@ -41,9 +41,10 @@ int GetTutorialToolPrice(void* a, unsigned key, int def); // 0x004e1c30
 void* MessageServer(); // 0x0067dcc0
 void RemoveHandler(void* server, void* handler, void* ids, int count, int prio);
 unsigned short* Window_GetText(void* w);
+struct WStrAssignStub { void Assign(unsigned short* a, unsigned short* b); };   // 0x00423650 (eastl::basic_string<wchar_t>::assign(first, last))
 struct EString {
   void Assign(unsigned short* s);   // 0x005c3d90 (equiv t3)
-  void Assign(unsigned short* a, unsigned short* b);
+  void Assign(unsigned short* a, unsigned short* b);   // 0x00672750
   void Detok8f40();
   long long Find(unsigned short* sub, int pos);
   EString* AssignFrom(EString* other);
@@ -409,7 +410,7 @@ void cSPUISearchBox::Update_(int unused) {
 // @ 0x006720e0
 void cSPUISearchBox::EmptySearch() {
   if (mWinSearchBox) {
-    ((EString*)((char*)this + 0x58))->Assign((unsigned short*)0x13ec468, (unsigned short*)0x13ec468);
+    ((WStrAssignStub*)((char*)this + 0x58))->Assign((unsigned short*)0x13ec468, (unsigned short*)0x13ec468);
     ((FnV1p)((VObj*)mWinSearchBox)->vt[0x80 / 4])(mWinSearchBox, strBegin);
   }
 }

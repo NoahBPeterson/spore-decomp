@@ -36,7 +36,7 @@ struct DispTeardown {
 };
 struct RBTreeStub {
     char treeData[0x14];
-    void find(void** out, const uint32& key);   // decl only (masked reloc)
+    void find(void** out, const uint32& key);   // 0x00e5c780 (eastl::rbtree<unsigned,...>::find; decl only)
 };
 struct ParamSet {
     char       pad0[0xc];

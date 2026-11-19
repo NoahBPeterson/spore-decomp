@@ -27,6 +27,7 @@ struct cSPTransform {
 };
 
 cSPTransform* CopyT38(const cSPTransform* first, const cSPTransform* last, cSPTransform* dest);   // 0x005f4d00
+cSPTransform* CopyAssignT38(const cSPTransform* first, const cSPTransform* last, cSPTransform* dest);   // 0x00f339d0
 cSPTransform* CopyBackT38(cSPTransform* first, cSPTransform* last, cSPTransform* dest);           // 0x00f33a80
 cSPTransform* MoveT38(cSPTransform* first, cSPTransform* last, cSPTransform* dest);               // 0x00f337a0
 cSPTransform* MoveT38b(cSPTransform* first, cSPTransform* last, cSPTransform* dest);              // 0x00f338c0
@@ -90,7 +91,7 @@ struct vecT38 {
 // @ 0x00f34cb0
 cSPTransform* vecT38::erase(cSPTransform* first, cSPTransform* last)
 {
-    cSPTransform* newEnd = CopyT38(last, mpEnd, first);
+    cSPTransform* newEnd = CopyAssignT38(last, mpEnd, first);
     mpEnd -= (last - first);
     (void)newEnd;
     return first;

@@ -1473,7 +1473,7 @@ bool EA::ResourceMan::DatabasePackedFile::DecompressRecord(unsigned short a1, un
     if (pos != 0) {
         void* buf = mpAllocator->Alloc(size, kStrRaw, 0);
         if (buf) {
-            if (WriteFileSpan(buf, pos, size))
+            if (ReadFileSpan(buf, pos, size))
                 r = DecompressData(a1, (unsigned char const *)buf, size, d, e);
             mpAllocator->Free(buf, 0);
         }

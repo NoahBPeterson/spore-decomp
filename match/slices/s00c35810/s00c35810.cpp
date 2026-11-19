@@ -40,6 +40,7 @@ struct CastTarget        { StreamWrite* GetStream(); };// vtable slot 8 (0x20)
 struct SerObj {
     void     Ctor(void* self, void* nameTbl, uint32_t hash);   // 0x692f90
     void     Serialize(uint32_t stream);                       // 0x692900
+    void     SerializeRead(uint32_t stream);                   // 0x693e10 (Serialize(ISerialStream*))
     void     Read(uint32_t stream);                            // 0x693e10
     uint32_t GetFields(uint32_t vec);                          // 0x695960
 };
@@ -184,7 +185,7 @@ void cGameBundle::Read(uint32_t s)
     ((BaseSpatial*)mSpatial)->Read(s);
     ((BaseGameData*)this)->Read(s);
     ((SerObj*)buf)->Ctor(this, &g_p1573038, 0x1a80d26);
-    ((SerObj*)buf)->Serialize(s);
+    ((SerObj*)buf)->SerializeRead(s);
 }
 
 // ===========================================================================
