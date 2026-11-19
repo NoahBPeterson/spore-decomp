@@ -1110,7 +1110,7 @@ namespace SP {
 cSPSimulatorSpaceGame_s0101_bd10* GetUFOSimulator_s0101_bd10();        // 0x00ffbe50
 }
 namespace SP {
-IStage* GetStage();                              // 0x00b3d4d0
+IStage* GetStage();                              // 0x00b3d470
 }
 namespace SP {
 ISpaceGame* SpaceGameGet();                      // 0x01002bd0
