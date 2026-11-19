@@ -137,8 +137,17 @@ def main():
         for line in tb:
             print("      target %s" % line)
     neq = 0
+    exact = {int(r["va"], 16) for r in out if r["tag"] == "PASS"}
     for path in eqfiles:
         for src, sym, va, flags in R.read_rows([path], ""):
+            if va in exact:
+                # byte-exact now (a manifest row in this run passes): the proof is about bytes our source no longer
+                # builds and the row only needs deleting; not a failure (PR #499, 0x00c62590)
+                st, tag = ("byte-exact now: delete this equivalent.txt line and %s"
+                           % os.path.relpath(FN_bundle(path, va), ROOT)), "STALE"
+                out.append({"va": "%08x" % va, "src": src, "result": st, "tag": tag, "kind": "equivalent"})
+                print("%-5s %08x  %s  %s" % (tag, va, src, st))
+                continue
             st = equivalent_row(path, src, va, flags, fps)
             neq += st == "EQUIV"
             tag = "EQUIV" if st == "EQUIV" else "FAIL"
@@ -200,8 +209,14 @@ def equivalent_row(path, src, va, flags, fps):
     except SystemExit as e:
         return "build failed: %s" % str(e)[-300:]
     if FN.build_hash(ours) != b.get("build"):
-        return "our build changed since the proof (rerun tools/contrib/prove.py %#x --record)" % va
+        return ("our build changed since the proof (rerun tools/contrib/prove.py %#x --record; if the function is "
+                "byte-exact now, delete its equivalent.txt line and proof instead)" % va)
     return "EQUIV"
+
+
+def FN_bundle(row_file, va):
+    """equivalent/<va>.json next to the equivalent.txt (tools/equiv/func.py bundle_path)"""
+    return os.path.join(os.path.dirname(row_file), "equivalent", "%08x.json" % va)
 
 
 def all_manifests():

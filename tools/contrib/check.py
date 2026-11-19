@@ -10,7 +10,8 @@ instruction diff of your build against the original, then a quick equivalence ch
 --no-quick skips it): does the source compute something else (fix the logic), or does it only compile differently?
 
 On MATCH it records the result: it adds the function's manifest.txt line and removes its nonmatching.txt /
-partial.txt line, so the files are ready for your pull request.  --dry-run only prints what it would change.
+partial.txt line, and, when the function was proven equivalent, its equivalent.txt line and proof
+(equivalent/<va>.json), so the files are ready for your pull request.  --dry-run only prints what it would change.
 """
 import argparse, os, subprocess, sys
 
@@ -145,6 +146,9 @@ def main():
         print("\nwould add to %s:\n  %s" % (os.path.relpath(manifest, ROOT), line))
         for path in note_files(va):
             print("and remove the %08x line from %s" % (va, os.path.relpath(path, ROOT)))
+        for path, proof in equivalent_files(va):
+            print("and remove the %08x line from %s and its proof %s (byte-exact replaces proven equivalent)"
+                  % (va, os.path.relpath(path, ROOT), os.path.relpath(proof, ROOT)))
         return 0
     text = open(manifest).read() if os.path.exists(manifest) else ""
     with open(manifest, "a") as f:
@@ -158,6 +162,15 @@ def main():
         if len(keep) != len(lines):
             open(path, "w", encoding="utf-8").writelines(keep)
             print("removed its line from %s" % os.path.relpath(path, ROOT))
+    # a proven-equivalent function that is now byte-exact: its proof is about bytes our source no longer builds, and
+    # CI would fail the row (PR #499, 0x00c62590)
+    for path, proof in equivalent_files(va):
+        lines = open(path, encoding="utf-8", errors="replace").readlines()
+        open(path, "w", encoding="utf-8").writelines(l for l in lines if not _equiv_row(l, va))
+        if os.path.exists(proof):
+            os.remove(proof)
+        print("removed its line from %s and its proof %s (byte-exact replaces proven equivalent)"
+              % (os.path.relpath(path, ROOT), os.path.relpath(proof, ROOT)))
     return 0
 
 
@@ -186,6 +199,26 @@ def note_files(va):
         if key in text.lower() and any(_is_row(l, va) for l in text.splitlines()):
             out.append(path)
     return out
+
+
+def equivalent_files(va):
+    """[(equivalent.txt, its equivalent/<va>.json)] for every equivalent.txt (slices and src/game) listing va"""
+    import glob
+    out = []
+    for path in sorted(glob.glob(os.path.join(ROOT, "match", "slices", "*", "equivalent.txt")) +
+                       glob.glob(os.path.join(ROOT, "src", "game", "**", "equivalent.txt"), recursive=True)):
+        if any(_equiv_row(l, va) for l in open(path, encoding="utf-8", errors="replace")):
+            out.append((path, os.path.join(os.path.dirname(path), "equivalent", "%08x.json" % va)))
+    return out
+
+
+def _equiv_row(line, va):
+    """an equivalent.txt row (manifest format: source, symbol, va, flags) for va"""
+    p = line.split("#", 1)[0].split()
+    try:
+        return len(p) >= 3 and int(p[2], 16) == va
+    except ValueError:
+        return False
 
 
 def _is_row(line, va):
