@@ -1950,6 +1950,67 @@ u32 __cdecl FUN_01077b40(void* p);
 
 // ---- items of slice s0107a510 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void __cdecl FUN_0107a5b0_SideEffect();       // external state change
+typedef int   (__thiscall *Fn_i_p_s0107a5b0)(void*);
+typedef void* (__thiscall *Fn_p_p_s0107a5b0)(void*);
+typedef void* (__thiscall *Fn_p_pi_s0107a5b0)(void*, int);
+typedef bool  (__thiscall *Fn_b_pp_s0107a5b0)(void*, void*);
+
+void* __cdecl SpaceGameGet_s0107a5b0();                  // 0x01002bd0
+struct SpaceGame_s0107a5b0 {
+    void* GetPlayerInventory();                          // 0x00a1ad60
+};
+
+// iterator returned by the strategy hash table (node, bucket slot)
+struct HashIter_s0107a5b0 {
+    void* mpNode;                                        // +0x00
+    void* mpBucket;                                      // +0x04
+};
+
+// one strategy entry of the player inventory (only the key accessor is used)
+struct ToolItem_s0107a5b0 {
+    virtual void v000();
+    virtual void v004();
+    virtual void v008();
+    virtual void v00c();
+    virtual void v010();
+    virtual void v014();
+    virtual void* v018();                                // +0x18  key pointer
+};
+
+// the player inventory the strategy loop walks
+struct ToolProvider_s0107a5b0 {
+    virtual void v000();  virtual void v004();  virtual void v008();  virtual void v00c();
+    virtual void v010();  virtual void v014();  virtual void v018();  virtual void v01c();
+    virtual void v020();  virtual void v024();  virtual void v028();  virtual void v02c();
+    virtual void v030();  virtual void v034();  virtual void v038();  virtual void v03c();
+    virtual void v040();  virtual void v044();  virtual void v048();  virtual void v04c();
+    virtual void v050();  virtual void v054();  virtual void v058();
+    virtual int  v05c();                                 // +0x5c  strategy count
+    virtual ToolItem_s0107a5b0* v060(int index);         // +0x60  strategy by index
+};
+
+// the hash table at +0x140 of the widget: bucket array, count, element count
+struct ToolTable_s0107a5b0 {
+    void*    mp00;                                       // +0x00
+    void**   mpBuckets;                                  // +0x04
+    uint32_t mnBuckets;                                  // +0x08
+    int32_t  mnElements;                                 // +0x0c
+    void find(HashIter_s0107a5b0* out, const void* key);              // 0x00a23ef0
+    void insert(HashIter_s0107a5b0* out, const void* key, uint32_t tag); // 0x006758a0
+    HashIter_s0107a5b0* erase(HashIter_s0107a5b0* out, void* node, void* bucket); // 0x01078bf0
+};
+
+// tag word handed to insert (only its first byte is written before the call)
+struct ToolTag_s0107a5b0 {
+    uint8_t mFlag;                                       // +0x00
+    uint8_t mPad01[3];                                   // +0x01
+};
+
+struct ToolWidgetSelf_s0107a5b0 {
+    void F107a070(void* win);                            // 0x0107a070
+    void FUN_01077ce0(void* item);                       // 0x01077ce0
+};
+
 namespace SP {
 class cToolWidget {
 public:
@@ -1965,6 +2026,8 @@ public:
     int32_t  mField90;                                   // +0x090
     uint8_t  pad094[0xe8 - 0x94];                        // +0x094 .. +0x0e7
     bool     mFlagE8;                                    // +0x0e8
+    uint8_t  pad0e9[0x140 - 0xe9];                       // +0x0e9 .. +0x13f
+    ToolTable_s0107a5b0 mStrategies;                     // +0x140
 };
 }
 // ---- items of slice s0107a510 end
@@ -12529,7 +12592,44 @@ void __thiscall SP::cToolWidget::FUN_0107a510()
 // @ 0x0107a5b0
 __declspec(noinline) void __thiscall SP::cToolWidget::FUN_0107a5b0()
 {
-    FUN_0107a5b0_SideEffect();                           // clobbers ecx like the original
+    SpaceGame_s0107a5b0* game = (SpaceGame_s0107a5b0*)SpaceGameGet_s0107a5b0();
+    ToolProvider_s0107a5b0* inv = (ToolProvider_s0107a5b0*)game->GetPlayerInventory();
+    if (inv == 0)
+        return;
+
+    int count = inv->v05c();
+    ToolTable_s0107a5b0* tab = &mStrategies;
+    int i;
+    i = 0;
+
+    for (; i < count; ++i)
+    {
+        ToolItem_s0107a5b0* item = inv->v060(i);
+        uint32_t key = *(uint32_t*)item->v018();
+
+        HashIter_s0107a5b0 it;
+        tab->find(&it, &key);
+
+        bool used = ((Fn_b_pp_s0107a5b0)VTSLOT(this, 0x38))(this, item);
+        bool present = it.mpNode != (void*)tab->mpBuckets[tab->mnBuckets];
+        if (used == present)
+            continue;
+
+        if (used)
+        {
+            ((ToolWidgetSelf_s0107a5b0*)this)->F107a070(item);
+            ToolTag_s0107a5b0 tag;
+            tag.mFlag = 0;
+            HashIter_s0107a5b0 added;
+            tab->insert(&added, &key, *(uint32_t*)&tag);
+        }
+        else
+        {
+            ((ToolWidgetSelf_s0107a5b0*)this)->FUN_01077ce0(item);
+            HashIter_s0107a5b0 removed;
+            tab->erase(&removed, it.mpNode, it.mpBucket);
+        }
+    }
 }
 
 // @ 0x0107a6b0
