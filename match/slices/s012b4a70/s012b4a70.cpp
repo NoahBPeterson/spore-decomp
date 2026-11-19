@@ -294,6 +294,8 @@ void __cdecl CopyVec3_AndMatrix()
 
 struct V3 { float x, y, z; };
 extern V3 V3_1606ae0, V3_1606aec;
+extern "C" float g_140a014;                   // 0x0140a014
+extern "C" float g_13f51ac;                   // 0x013f51ac -FLT_MAX
 static inline V3 Make3(float v)
 {
     V3 r;
@@ -306,8 +308,8 @@ static inline V3 Make3(float v)
 // @ 0x012cc3b0
 void __cdecl SetVec3Pair()
 {
-    V3_1606ae0 = Make3(*(float*)0x0140a014);
-    V3_1606aec = Make3(*(float*)0x013f51ac);
+    V3_1606ae0 = Make3(g_140a014);
+    V3_1606aec = Make3(g_13f51ac);
 }
 
 // @ 0x012d7850
