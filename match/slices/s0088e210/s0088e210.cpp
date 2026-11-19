@@ -41,7 +41,7 @@
 //   (0x0088ee00)  eastl::hashtable<string16,pair<const string16,Face>,...>::DoCreateNode
 //   (0x0088ee50)  EA::Text::FontServer::~FontServer
 //   (0x0088ef30)  eastl::fixed_hash_map<string16,Face,8,9,1,...>::fixed_hash_map(const&)
-//   (0x0088f000)  eastl::hashtable<string16,pair<const string16,Face>,...>::DoInsertValue
+// @ 0x0088f000 eastl::hashtable::DoInsertValue
 //   (0x0088f0f0)  EA::Text::FontServer::FontServer(EA::Allocator::ICoreAllocator*)
 //
 // Compile flags: /O2 /MT /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc /Iscratch_s0088e210_inc
