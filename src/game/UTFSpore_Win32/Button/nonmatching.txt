@@ -1,7 +1,5 @@
 # va  diff-bytes  reason
 00963f70 24 faithful flag set/clear; vtable-load scheduling differs
-009643c0 8 complete; focus-manager SetFocus vcall: original loads the vptr, builds the lea arg, then fetches the slot; ours fetches the slot first (scheduling); difftest PASS (394 valid, 89% cov; added // @ marker)
-00964450 8 complete; same ReleaseFocus vcall ordering as OnMouseDown; difftest PASS (393 valid, 84% cov; added // @ marker)
 00964c90 504 complete; painter pointer is CSE'd into edi across calls in ours (original reloads it), locals/frame differ
 00964f10 344 complete; remaining diffs are float constant load order, temp-slot layout of the max() reference temporaries, and x87 spill schedule; difftest WEAK (391 valid, no mismatch, 32% cov; inputs reaching the CRT _decode_pointer import are discarded)
 00965230 287 EA::UTFWinControls::WinButton::EmbeddedCalcSize(char): complete (empty-caption/style-lookup guards; flag==0 uses LayoutLine + GetLineLayout, else LineLayout::Clear + LayoutParagraph with 100000.0f max height + unsigned line-height scale; builds the layout rect from window-rect extents + layout deltas + caption borders + caption offsets; calls the second base vtable slot 0x6c); regalloc/scheduling differ (x87+SSE interleaving, tail register choice); difftest WEAK (214 valid, 8.4% coverage - Text::GetStyleManager import unresolved so most inputs bail at the first guard) flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

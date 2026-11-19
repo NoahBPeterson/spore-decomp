@@ -255,7 +255,7 @@ static void ReleaseRef(void* p)
 // ---- items of slice s00c053b0 end
 
 // ---- items of slice s00c0ddb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct F_64     { char  __thiscall f(); };            // 0x00c887e0 cCommunity::func64h
+struct F_64     { int   __thiscall f(); };            // 0x00c887e0 cCommunity::func64h
 struct F_a02bd0 { int   __thiscall f(); };            // 0x00a02bd0
 struct CCMInner {
     uint32_t pad_00[0x17c / 4];  // +0x000
@@ -264,7 +264,7 @@ struct CCMInner {
 #define G32(a)  (*(uint32_t*)(a))
 struct CCM {
     void  __thiscall ddb0(float*);
-    char  __thiscall de30();
+    int   __thiscall de30();
     void  __thiscall de60(int, int);
     bool  __thiscall dee0(int, int*, char);
     void* __thiscall dfb0(int);
@@ -986,7 +986,7 @@ float SP::cGameBundleContainer::GetBundleCapacity(unsigned int) const
 }
 
 // @ 0x00c0de30
-char __thiscall CCM::de30()
+int __thiscall CCM::de30()
 {
     char* p = *(char**)((char*)this + 0xa94);
     if (p != 0) {

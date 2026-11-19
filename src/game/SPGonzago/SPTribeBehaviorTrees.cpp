@@ -3656,19 +3656,21 @@ struct RegionPosition {
     VFILL(8) VFILL(9) VFILL(10)
     virtual float* GetPosition();
 };
-struct Region {
-    char pad0[0xc0];
+struct RegionBase_s00da_dfb0 {                            // primary base, +0x000..+0x5a7
+    virtual void v00();
+    char pad4[0xc0 - 4];
     RegionPosition sub;                                   // +0xc0
     char pad1[0x5a8 - 0xc0 - sizeof(RegionPosition)];
-    char target[4];                                       // +0x5a8, address handed to the host
 };
+struct RegionTarget_s00da_dfb0 { virtual void v00(); };   // +0x5a8, the interface handed to the host
+struct Region : RegionBase_s00da_dfb0, RegionTarget_s00da_dfb0 {};
 struct SpawnHost {
     VFILL(0) VFILL(1) VFILL(2) VFILL(3) VFILL(4) VFILL(5) VFILL(6) VFILL(7)
     VFILL(8) VFILL(9) VFILL(10) VFILL(11) VFILL(12) VFILL(13) VFILL(14) VFILL(15)
     VFILL(16) VFILL(17) VFILL(18) VFILL(19) VFILL(20) VFILL(21) VFILL(22) VFILL(23)
     VFILL(24) VFILL(25) VFILL(26) VFILL(27) VFILL(28) VFILL(29) VFILL(30) VFILL(31)
     VFILL(32)
-    virtual void Attach(void* p, bool a, bool b);
+    virtual void Attach(struct RegionTarget_s00da_dfb0* p, bool a, bool b);
 };
 struct SpawnIn {
     int32_t pad0;
@@ -8629,7 +8631,7 @@ bool SpawnPlacementTest(SpawnHost* host, int32_t, int32_t, int32_t, int32_t, Spa
     if (owner != 0) {
         Region* region = owner->FindRegion(0xce9f6639);
         if (region != 0) {
-            host->Attach(region->target, true, false);
+            host->Attach(region, true, false);
             out->zero0 = 0;
             out->radius = (float)ClampRadius(sMathRandomA.RandomDoubleUniform() + 1.0);
             *(uint32_t*)&out->x = *(uint32_t*)&in->x;     // integer copies, as in the original

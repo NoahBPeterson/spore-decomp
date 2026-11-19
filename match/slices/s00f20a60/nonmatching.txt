@@ -1,9 +1,7 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
 00f20a60  165  planet-radius clamp: complete, but the x87/SSE split of the sum and the
                else-branch copies (fld/fstp vs movss) are scheduled differently equiv: UNSUPPORTED (unresolved sub_planetmodel/Model::GetRadiusAt).
-00f20b20   10  clear property byte +0xe61: complete; the null-object arm misses the
                `xor eax,eax; mov [eax+0xe61],al` immediacy equiv: UNSUPPORTED (0/1200 valid inputs).
-00f20b60   10  clear property byte +0xe60: complete; same null-arm immediacy as 0xf20b20 equiv: UNSUPPORTED (0/1200 valid inputs).
 00f20be0  112  read Property Vector3 / defaults: complete; +0x24 virtual lookup and found-union select schedule differ equiv: PASS.
 00f20c60   29  wrapper around 0xf20be0: complete; cl did not coalesce the three zero
                default arguments into the reserved 12-byte block equiv: PASS.

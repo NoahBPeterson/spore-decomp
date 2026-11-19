@@ -109,7 +109,7 @@ struct IFocusMgr {
     virtual void s48();
     virtual void s4c();
     virtual void s50();
-    virtual void* GetFocus(int);
+    virtual IWinVt* GetFocus(int);
     virtual void SetFocus(int, IWinVt*);
     virtual void ReleaseFocus(int, IWinVt*);
 };
@@ -249,7 +249,7 @@ struct IPainterVt {
     virtual void s14();
     virtual void GetSize(float*, int, int);
 };
-struct WB {
+struct WB : IPrimVt, IWinVt {
     IWinVt* W() { return (IWinVt*)((char*)this + 4); }
     IBtnVt* Btn() { return (IBtnVt*)((char*)this + 0x20c); }
     IPrimVt* P() { return (IPrimVt*)this; }
@@ -598,13 +598,8 @@ bool WB::OnMouseDown(int a, int b, int c, uint32_t f)
 {
     if (!(f & 8) || (f & 0x30))
         return false;
-    void* w = this ? (char*)this + 4 : 0;
-    if (Mgr()->GetFocus(1) != w)
-        {
-            IFocusMgr* m = Mgr();
-            void** vt = *(void***)m;
-            ((void(__thiscall*)(void*, int, void*))vt[0x58 / 4])(m, 1, W());
-        }
+    if (Mgr()->GetFocus(1) != this)
+        Mgr()->SetFocus(1, this);
     uint32_t fl = F(uint32_t, 0xac);
     if (!(fl & 2) && (fl & 8)) {
         Btn()->SetFlag(2, 1);
@@ -618,13 +613,8 @@ bool WB::OnMouseDown(int a, int b, int c, uint32_t f)
 bool WB::OnMouseUp(int a, int b, int c, uint32_t f)
 {
     if (!(f & 8)) {
-        void* w = this ? (char*)this + 4 : 0;
-        if (Mgr()->GetFocus(1) == w)
-            {
-            IFocusMgr* m = Mgr();
-            void** vt = *(void***)m;
-            ((void(__thiscall*)(void*, int, void*))vt[0x5c / 4])(m, 1, W());
-        }
+        if (Mgr()->GetFocus(1) == this)
+            Mgr()->ReleaseFocus(1, this);
         if (F(uint32_t, 0xac) & 2) {
             Btn()->SetFlag(2, 0);
             if (!(F(uint8_t, 0x218) & 1))

@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00743950 11 complete SetTimeScale; null path writes the global through a zeroed base (xor eax,eax; [eax+0x11c]) which cl folds to an absolute address
 007439b0 7 complete; null path carries a dead xor eax,eax before mov eax,0xe4 that cl drops
 00743c50 47 eastl Internal::insertion_sort_simple (desc, comparator): cl loop-rotation differs; difftest WEAK (198 valid, 16.2% cov)
 00743d20 81 eastl Internal::insertion_sort_simple (asc, comparator): cl loop-rotation differs; difftest WEAK (168 valid, 15.8% cov)

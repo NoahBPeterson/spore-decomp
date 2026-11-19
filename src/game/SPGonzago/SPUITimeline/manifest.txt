@@ -28,3 +28,4 @@
 ../src/game/SPGonzago/SPUITimeline.cpp  ?ForwardTriples@@YAXPAUTriple@@0@Z  00e3ea00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e37780@cSPUITimeline@@QAEHPAX@Z  00e37780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUITimeline.cpp  ?IsPaletteIdPresent@@YA_NI@Z  00e3b630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPUITimeline.cpp  ?FUN_00e37910@cSPUITimeline@@QAEXXZ  00e37910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

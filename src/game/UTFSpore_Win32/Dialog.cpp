@@ -57,9 +57,9 @@ struct IWindowMgr_s0096_ad00 {
     PV(8); PV(9); PV(10); PV(11); PV(12); PV(13); PV(14);
     virtual void* GetCapture(int);                 // +0x3c
     PV(16); PV(17); PV(18); PV(19); PV(20);
-    virtual void* GetCapture2(int);                // +0x54
+    virtual IWindow_s0096_ad00* GetCapture2(int);  // +0x54
     virtual void  SetCapture(int, void*);          // +0x58
-    virtual void  SetCapture2(int, void*);         // +0x5c
+    virtual void  SetCapture2(int, IWindow_s0096_ad00*); // +0x5c
 };
 }
 }
@@ -98,8 +98,8 @@ struct WindowVt {
 using EA::UTFWin::IWindow_s0096_ad00;
 using EA::UTFWin::IWindowMgr_s0096_ad00;
 using EA::UTFWin::IWindowMgr_s0096_ad00;
-struct WinDialog : EA::UTFWin::WindowVt {
-    uint32_t pad04[(0x88 - 0x04) / 4];        // +0x04
+struct WinDialog : EA::UTFWin::WindowVt, IWindow_s0096_ad00 {
+    uint32_t pad08[(0x88 - 0x08) / 4];        // +0x08
     EA::RectF mArea;                           // +0x88
     uint32_t pad98[(0x210 - 0x98) / 4];       // +0x98
     bool     mbRefresh;                        // +0x210
@@ -765,9 +765,8 @@ finish:
 bool WinDialog::OnMouseUp(int, int, int, unsigned flags)
 {
     if ((flags & 8) == 0) {
-        IWindow_s0096_ad00* pSelf = this ? (IWindow_s0096_ad00*)((char*)this + 4) : 0;
-        if ((*(IWindowMgr_s0096_ad00**)((char*)this + 0x34))->GetCapture2(1) == (void*)pSelf)
-            (*(IWindowMgr_s0096_ad00**)((char*)this + 0x34))->SetCapture2(1, (IWindow_s0096_ad00*)((char*)this + 4));
+        if ((*(IWindowMgr_s0096_ad00**)((char*)this + 0x34))->GetCapture2(1) == this)
+            (*(IWindowMgr_s0096_ad00**)((char*)this + 0x34))->SetCapture2(1, this);
 
         *(int*)((char*)this + 0x218) = -1;
         ((IWindow_s0096_ad00*)((char*)this + 4))->Invalidate();
@@ -779,7 +778,7 @@ bool WinDialog::OnMouseUp(int, int, int, unsigned flags)
 // @ 0x0096b660
 bool __fastcall WinDialog_OnTick(WinDialog* this_)
 {
-    this_->pv35();
+    ((EA::UTFWin::WindowVt*)this_)->pv35();
     return true;
 }
 
