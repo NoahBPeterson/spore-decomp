@@ -18,3 +18,4 @@ slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc6370@@YAXPAUObj@@@Z  00dc6370  /O2 /M
 slices/s00dc57a0/s00dc57a0_b.cpp  ?Cdc6530@Obj@@QAEXXZ  00dc6530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00dc57a0/s00dc57a0_b.cpp  ?Cdc65b0@Obj@@QAEXXZ  00dc65b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc6640@@YA_NPAUPtrVec@@PAPAUObj@@@Z  00dc6640  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00dc57a0/s00dc57a0_b.cpp  ?FUN_00dc6070@@YADPAUObj@@PAX111PAUOut6070@@PAUCtx6070@@1@Z  00dc6070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
