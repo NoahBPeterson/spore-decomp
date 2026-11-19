@@ -217,12 +217,17 @@ __declspec(noinline) DequeIter& DequeIter::operator+=(int n)
 // @ 0x0092ea70
 __declspec(noinline) Entry& Deque::back()
 {
-    Entry* c = mItEnd.mpCurrent;
-    Entry* b = mItEnd.mpBegin;
-    Entry** arr = mItEnd.mpCurrentArrayPtr;
-    if (c == b)
-        return (*(arr - 1))[3];
-    return c[-1];
+    DequeIter it;
+    it.mpCurrent = static_cast<Entry* volatile&>(mItEnd.mpCurrent);
+    it.mpBegin = static_cast<Entry* volatile&>(mItEnd.mpBegin);
+    it.mpCurrentArrayPtr = static_cast<Entry** volatile&>(mItEnd.mpCurrentArrayPtr);
+    if (it.mpCurrent == it.mpBegin) {
+        --it.mpCurrentArrayPtr;
+        it.mpBegin = *static_cast<Entry* volatile*>(it.mpCurrentArrayPtr);
+        it.mpEnd = it.mpBegin + 4;
+        return it.mpEnd[-1];
+    }
+    return it.mpCurrent[-1];
 }
 
 // @ 0x0092ea90

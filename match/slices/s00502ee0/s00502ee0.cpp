@@ -190,10 +190,11 @@ Ed8* forceEd8(const Ed8& s, Ed8* p) { Ed8* q = new Ed8(s); *p = s; return q; }
 // @ 0x005033f0
 Ed8* destroy_Ed8(Ed8* first, Ed8* last, Ed8* result)
 {
-    ScratchSlots<3>();
+    uint32_t* p;
+    uint32_t scratch[3];
     for (; first != last; ++first, ++result) {
         FixedVec& v = first->vec;
-        for (uint32_t* p = v.mpBegin; p < v.mpEnd; ++p) {}
+        for (p = v.mpBegin; p < v.mpEnd; ++p) {}
         v.Destroy();
         DeleteElemConditional(first, 0);
     }
