@@ -1207,42 +1207,37 @@ void cPlanetModel_s00b8_d190::FUN_00b8df20()
     }
 }
 
+struct OwnedVec2_b8dfe0 {
+    cOwnedElem2** mpBegin; cOwnedElem2** mpEnd;
+    cOwnedElem2*& back() { return *(mpEnd - 1); }
+    void pop_back() { --mpEnd; }
+};
 // @ 0x00b8df80
 void cPlanetModel_s00b8_d190::FUN_00b8df80(int32_t index)
 {
-    int32_t count = (int32_t)((char*)mField160 - (char*)mField15C) >> 2;
-    if (index >= count) {
+    if (index >= ((const IntVec_b8dec0*)&mField15C)->size())
         return;
-    }
-    int32_t* element = (int32_t*)FUN_00b8dec0(index);
+    cOwnedElem* element = ((OwnedVec_b8de60*)&mField15C)->mpBegin[index];
     if (element != 0) {
-        ((cOwnedElem*)element)->FUN_00ff2e30();
+        element->FUN_00ff2e30();
         FUN_00f47380(element);
     }
-    int32_t* end = (int32_t*)mField160;
-    int32_t* begin = (int32_t*)mField15C;
-    int32_t value = *--end;
-    begin[index] = value;
-    mField160 = (char*)end;
+    ((OwnedVec_b8de60*)&mField15C)->mpBegin[index] = ((OwnedVec_b8de60*)&mField15C)->back();
+    ((OwnedVec_b8de60*)&mField15C)->pop_back();
 }
 
 // @ 0x00b8dfe0
 void cPlanetModel_s00b8_d190::FUN_00b8dfe0(int32_t index)
 {
-    int32_t count = (int32_t)((char*)mField174 - (char*)mField170) >> 2;
-    if (index >= count) {
+    if (index >= ((const IntVec_b8dec0*)&mField170)->size())
         return;
-    }
-    int32_t* element = (int32_t*)FUN_00b8def0(index);
+    cOwnedElem2* element = ((OwnedVec2_b8dfe0*)&mField170)->mpBegin[index];
     if (element != 0) {
-        ((cOwnedElem2*)element)->FUN_00c2e4e0();
+        element->FUN_00c2e4e0();
         FUN_00f47380(element);
     }
-    int32_t* end = (int32_t*)mField174;
-    int32_t* begin = (int32_t*)mField170;
-    int32_t value = *--end;
-    begin[index] = value;
-    mField174 = (char*)end;
+    ((OwnedVec2_b8dfe0*)&mField170)->mpBegin[index] = ((OwnedVec2_b8dfe0*)&mField170)->back();
+    ((OwnedVec2_b8dfe0*)&mField170)->pop_back();
 }
 
 // @ 0x00b8e040
