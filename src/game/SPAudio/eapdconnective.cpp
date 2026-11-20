@@ -9,6 +9,12 @@ extern "C" void FUN_00a5c400();
 extern "C" char g_16753f4[];
 extern "C" char g_167562c[];
 extern "C" char g_1675648[];
+extern "C" char g_167589c[];
+extern "C" char g_16758a0[];
+extern "C" char g_167545c[];
+extern "C" char g_1675630[];
+extern "C" char g_167565c[];
+extern "C" char g_1675660[];
 extern "C" char g_1675640[];
 extern "C" char g_1675654[];
 extern "C" char g_1675664[];
@@ -217,20 +223,20 @@ using EA::Audio::Eapd::t_symbol;
 #define g_spPdsymbolClass (*(void**)g_1675640)
 #define g_spBangClass     (*(void**)g_1675664)
 #define g_spSendClass     (*(void**)g_1675654)
-#define g_spForwardClass  (*(void**)0x01675630u)
+#define g_spForwardClass  (*(void**)g_1675630)
 #define g_spReceiveClass  (*(void**)g_1675648)
-#define g_spSelectClass   (*(void**)0x0167565cu)
-#define g_spSelect2Class  (*(void**)0x01675660u)
+#define g_spSelectClass   (*(void**)g_167565c)
+#define g_spSelect2Class  (*(void**)g_1675660)
 #define g_gFloatSymbol    (*(t_symbol*)g_16758c4)
 #define g_gSymbolSymbol   (*(t_symbol*)g_1675894)
 #define g_gBangSymbol     (*(t_symbol*)g_16758b4)
-#define g_gEmptySymbol    (*(t_symbol*)0x0167589cu)
+#define g_gEmptySymbol    (*(t_symbol*)g_167589c)
 #define g_gFloatSymbol2   (*(void**)g_16758c8)
 #define g_gSymbolSymbol2  (*(void**)g_1675898)
 #define g_gBangSymbol2    (*(void**)g_16758b8)
-#define g_gEmptySymbol2   (*(void**)0x016758a0u)
+#define g_gEmptySymbol2   (*(void**)g_16758a0)
 #define g_gpNewestObject  (*(void**)g_16753f4)
-#define g_gOutletCount    (*(int*)0x0167545cu)
+#define g_gOutletCount    (*(int*)g_167545c)
 struct PdObject
 {
     uint32_t pad_00[3];     // +0x00
@@ -267,9 +273,9 @@ void  FUN_00a59ed0(PdObject* o, void* a, void* b, void* c, void* d);
 void* FUN_00a59f00(uint32_t a, uint32_t b);
 void  FUN_00a5a000(PdObject* o, float f);
 void  FUN_00a5a020(PdObject* o, void* a, void* b, void* c, void* d);
-void* forward_new(uint32_t a, uint32_t b);
+void* forward_new(t_symbol s);
 void  FUN_00a5a140(PdObject* o, void* a, void* b);
-void* receive_new(uint32_t a, uint32_t b);
+void* receive_new(t_symbol s);
 void* FUN_00a598f0(float f);
 void FUN_00a59940(PdObject* o);
 void FUN_00a599a0(PdObject* o, float v);
@@ -288,10 +294,10 @@ void* FUN_00a59f00(uint32_t a, uint32_t b);
 bool send_setup();
 void FUN_00a5a000(PdObject* o, float f);
 void FUN_00a5a020(PdObject* o, void* a, void* b, void* c, void* d);
-void* forward_new(uint32_t a, uint32_t b);
+void* forward_new(t_symbol s);
 bool forward_setup();
 void FUN_00a5a140(PdObject* o, void* a, void* b);
-void* receive_new(uint32_t a, uint32_t b);
+void* receive_new(t_symbol s);
 bool receive_setup();
 void FUN_00a5a280(PdObject* o, float v);
 void sel1_symbol(PdObject* o, int sym, void* b);
@@ -1470,18 +1476,17 @@ void FUN_00a5a020(PdObject* o, void* a, void* b, void* c, void* d)
 }
 
 // @ 0x00a5a050
-void* forward_new(uint32_t a, uint32_t b)
+void* forward_new(t_symbol s)
 {
     void* o = EA::Audio::Eapd::pd_new(g_spForwardClass);
     if (o != 0)
     {
-        PdPayload* p = (PdPayload*)((char*)o + 0x28);
-        p->at28 = a;
-        p->at2c = b;
-        if (EA::Audio::Eapd::symbolinlet_new(o, (char*)o + 0x28) == 0)
+        t_symbol* p = (t_symbol*)((char*)o + 0x28);
+        *p = s;
+        if (EA::Audio::Eapd::symbolinlet_new(o, p) == 0)
         {
             EA::Audio::Eapd::pd_free(o);
-            return 0;
+            o = 0;
         }
     }
     return o;
@@ -1513,15 +1518,13 @@ void FUN_00a5a140(PdObject* o, void* a, void* b)
 }
 
 // @ 0x00a5a160
-void* receive_new(uint32_t a, uint32_t b)
+void* receive_new(t_symbol s)
 {
     void* o = EA::Audio::Eapd::pd_new(g_spReceiveClass);
     if (o != 0)
     {
-        PdPayload* p = (PdPayload*)((char*)o + 0x28);
-        p->at28 = a;
-        p->at2c = b;
-        EA::Audio::Eapd::pd_bind(o, (void*)(uintptr_t)a, (void*)(uintptr_t)b);
+        *(t_symbol*)((char*)o + 0x28) = s;
+        EA::Audio::Eapd::pd_bind(o, s.s_name, s.s_name2);
         EA::Audio::Eapd::outlet_new(o, g_gEmptySymbol.s_name, g_gEmptySymbol2);
     }
     return o;
