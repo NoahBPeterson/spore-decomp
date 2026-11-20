@@ -323,8 +323,8 @@ void cSpatialObjectView::sub_b2e0() {
         if (*(int*)((char*)h2 + 0x40) > 1) --*(int*)((char*)h2 + 0x40);
         else {
             void* o2 = *(void**)h2;
-            ((void(__thiscall*)(void*, void*, u32))(*(void***)o2)[0x170 / 4])(
-                o2, h2, (*(u32*)((char*)h2 + 4)) >> 31);
+            ((void(__thiscall*)(void*, void*, bool))(*(void***)o2)[0x170 / 4])(
+                o2, h2, (bool)(((*(u32*)((char*)h2 + 4)) >> 31) & 1));
         }
     }
     void* c = *(void**)(self + 0xa0);
