@@ -27,3 +27,4 @@
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Dtor@OptObj@@QAEXXZ  00e00f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?Dtor@WinObj@@QAEXXZ  00e011a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e00bf0_impl@@YAXXZ  00e00bf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUIGlobalUI.cpp  ?FUN_00e00ac0_impl@@YADXZ  00e00ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

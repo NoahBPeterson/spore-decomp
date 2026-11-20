@@ -833,14 +833,14 @@ int MenuKind()
 // @ 0x00e00ac0
 char FUN_00e00ac0_impl()
 {
-    void* w = (void*)FUN_00810620();
+    char r = 0;
+    void* w = ((TC*)FUN_0080fee0(0x5f1bfc10))->F_00810620();
     if (w != 0) {
-        void* r = (void*)(*(void*(__thiscall**)(void*, uint32_t, int))(*(void**)((char*)w + 0xf0)))(w, 0x615b50d, 1);
-        if (r != 0) {
-            return (*(char(__thiscall**)(void*))(*(void**)((char*)r + 0x28)))(r) & 1;
-        }
+        void* a = ((VFnPUI)VSLOT(w, 0xf0))(w, 0x615b50d, 1);
+        if (a != 0)
+            r = ((VFnC)VSLOT(a, 0x28))(a) & 1;
     }
-    return 0;
+    return r;
 }
 
 // @ 0x00e00b00
