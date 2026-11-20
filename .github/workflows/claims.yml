@@ -21,6 +21,8 @@ concurrency:
 
 jobs:
   claims:
+    # a fork with Actions enabled runs these too (one pushed its own claims branch every 30 minutes)
+    if: github.repository == 'NoahBPeterson/spore-decomp'
     name: Publish claims.txt
     runs-on: ubuntu-24.04
     steps:
