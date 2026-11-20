@@ -11033,6 +11033,10 @@ bool cSocialActionHost::ResolveTarget(cActionState* pState)
     return pState->mnLoopCount != 0;
 }
 
+struct SocialTargetRef {             // refcounted target: slot 0 is the deleting destructor
+    virtual void Destroy(uint32_t flags);
+    int mnRefCount;                   // +0x04
+};
 // @ 0x00db40f0
 void ReleaseSocialTargetState(void* pArg1, void* pArg2, void* pArg3, void* pArg4, void* pArg5, cActionState* pState)
 {
@@ -11051,14 +11055,15 @@ void ReleaseSocialTargetState(void* pArg1, void* pArg2, void* pArg3, void* pArg4
             operator_delete__(pBlock);
     }
 
-    cObject* pTarget = (cObject*)*(void**)((uint8_t*)pState + 0x0c);
+    SocialTargetRef* pTarget = *(SocialTargetRef**)((uint8_t*)pState + 0x0c);
     if (pTarget == nullptr)
         return;
-    int nRefs = *(int*)((uint8_t*)pTarget + 4);
-    *(int*)((uint8_t*)pTarget + 4) = nRefs - 1;
+    int nRefs = pTarget->mnRefCount;
+    pTarget->mnRefCount = nRefs - 1;
     if (nRefs - 1 == 0) {
-        *(int*)((uint8_t*)pTarget + 4) = 1;
-        pTarget->Call(0x00, (uint32_t)1);
+        pTarget->mnRefCount = 1;
+        _ReadWriteBarrier();
+        pTarget->Destroy(1);
     }
 }
 
