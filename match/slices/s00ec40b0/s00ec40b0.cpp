@@ -42,7 +42,6 @@ namespace SP { namespace Thumbnail { class cImportExport; } namespace Achievemen
 extern "C" void* EAAllocate(unsigned int size, const char* tag, int, int, int, int);   // 0x00f473a0
 extern "C" void  FUN_0066b050(void* p);                                                 // 0x0066b050
 extern "C" void* FUN_00ef19f0();                                                        // 0x00ef19f0
-extern "C" void  FUN_00b3d410(int a, void* b, int c);                                   // 0x00b3d410
 extern "C" void  FUN_00e3e350(int a, void* b, int c);                                   // 0x00e3e350
 extern "C" void* SP_MessageServer();                                                    // 0x0067dcc0
 extern "C" void  UI_CalloutMessageBox(void* self, const char* text);                    // 0x00809db0
@@ -164,9 +163,18 @@ void __fastcall UI_TimelineSporepediaCardData_sendMessage(void* self, int /*unus
 // =====================================================================================================
 // 0x00EC4330 -- set a 3-dword "card id" through the global card store and reset the view's state.
 // =====================================================================================================
+extern char g_1654c10;                                   // 0x01654c10 game-mode object
+struct cBigEditorObject_s00e3_dca0 {
+    void Activate(char bOn, const void* pKey, char bFlag);   // 0x00e3e350
+};
+extern "C" cBigEditorObject_s00e3_dca0* FUN_00b3d410();    // 0x00b3d410
+struct CardIdView_ec4330 {
+    void FUN_00ec4330(uint32_t* id);
+};
 // @ 0x00ec4330
-void FUN_00ec4330(void* self, uint32_t* id)
+void CardIdView_ec4330::FUN_00ec4330(uint32_t* id)
 {
+    void* self = this;
     uint32_t* slot = (uint32_t*)FUN_00ef19f0();
     slot[0] = id[0];
     slot[1] = id[1];
@@ -174,8 +182,7 @@ void FUN_00ec4330(void* self, uint32_t* id)
     slot[9]  = 1;
     slot[10] = 0;
     *(uint8_t*)((char*)self + 0x24) = 0;
-    FUN_00b3d410(1, (void*)0x01654c10, 1);
-    FUN_00e3e350(1, (void*)0x01654c10, 1);
+    FUN_00b3d410()->Activate(1, &g_1654c10, 1);
     *(uint32_t*)((char*)self + 0x28) = 10;
 }
 
@@ -766,6 +773,7 @@ public:
     uint32_t mState_48;
     void Reset(char notify, int param); // 0x00ec4f70
     void Finish();
+    void FUN_00ec5100();
 };
 
 // @ 0x00ec4f70
@@ -836,8 +844,9 @@ void SporepediaAssetController::Reset(char notify, int param)
 }
 
 // @ 0x00ec5100
-void FUN_00ec5100(void* self)
+void SporepediaAssetController::FUN_00ec5100()
 {
+    void* self = this;
     int o = *(int*)((char*)self + 0x18);
     char flag = *(char*)((char*)self + 0x24);
     *(uint32_t*)((char*)self + 0x2c) = 6;
@@ -845,8 +854,8 @@ void FUN_00ec5100(void* self)
     uint32_t id[3] = { 0, 0, 0 };
     if (o != 0) { id[0] = *(uint32_t*)(o + 8); id[1] = *(uint32_t*)(o + 0xc); id[2] = *(uint32_t*)(o + 0x10); }
 
-    ((SporepediaAssetController*)self)->Reset(1, 2);
-    if (flag) FUN_00ec4330(self, id);
+    Reset(1, 2);
+    if (flag) ((CardIdView_ec4330*)this)->FUN_00ec4330(id);
 }
 
 // @ 0x00ec5160

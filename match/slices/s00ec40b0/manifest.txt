@@ -7,3 +7,5 @@ slices/s00ec40b0/s00ec40b0.cpp  ?Close@TimelineView@@QAEXXZ  00ec4c80  /O2 /MD /
 slices/s00ec40b0/s00ec40b0.cpp  ?UI_TimelineSporepediaCardData_ctor@@YIPAVTimelineSporepediaCardData@UI@@PAV12@H@Z  00ec41e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ec40b0/s00ec40b0.cpp  ?FUN_00ec4f00@@YAXPAURec@@0@Z  00ec4f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ec40b0/s00ec40b0.cpp  ?FUN_00ec4650@MsgListenerOwner_ec4650@@QAEXXZ  00ec4650  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ec40b0/s00ec40b0.cpp  ?FUN_00ec5100@SporepediaAssetController@@QAEXXZ  00ec5100  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ec40b0/s00ec40b0.cpp  ?FUN_00ec4330@CardIdView_ec4330@@QAEXPAI@Z  00ec4330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
