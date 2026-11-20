@@ -4235,8 +4235,11 @@ void* FUN_00da55c0(cSocialBandEntry* pFirst, cSocialBandEntry* pLast, cSocialBan
     while (pFirst != pLast) {
         if (pDest) {
             pDest->mSlotInfo = pFirst->mSlotInfo;
-            if (!pFirst->mIsEmpty)
-                pDest->mBand.CopyInit(&pFirst->mBand);
+            if (!(bool)((pFirst->mSlotInfo >> 31) & 1)) {
+                cSocialBand_s00da_49f0* pBand = &pDest->mBand;
+                if (pBand)
+                    pBand->CopyInit(&pFirst->mBand);
+            }
         }
         pFirst = (cSocialBandEntry*)((uint8_t*)pFirst + 0x210);
         pDest = (cSocialBandEntry*)((uint8_t*)pDest + 0x210);
