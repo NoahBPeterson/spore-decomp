@@ -20,3 +20,4 @@ slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad7670@CUID@@QAEXHMHHM@Z  00ad7670  /O2 /
 slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad76c0@CUID@@QAEXXZ  00ad76c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad75c0@CUID@@QAEXXZ  00ad75c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad73a0@@YAPAPAXPAPAX00@Z  00ad73a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00ad6960/s00ad6960.cpp  ?FUN_00ad7470@CUID@@QAEXXZ  00ad7470  /O2 /MD /Gy /EHsc /TP /arch:SSE
