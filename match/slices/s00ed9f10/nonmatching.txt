@@ -8,4 +8,3 @@
 00edaca0     61  complete; void menu-item dispatch (flags /O2 /MD /Gy /TP); equiv WEAK 267/400 valid, 20% coverage
 00edad00    170  complete; tutorial-entry rebuild (flags /O2 /MD /Gy /TP); equiv PASS 391/400 100% coverage
 00edadd0     65  complete; tutorial-entry bind (flags /O2 /MD /Gy /TP); equiv FAIL 1/348 on ecx clobber (register allocator difference)
-00edae80     13  complete; naming-widget destructor (flags /O2 /MD /Gy /TP); equiv PASS 218/400 100% coverage; residual is a hoisted load ([esi+0xcc]) scheduling only

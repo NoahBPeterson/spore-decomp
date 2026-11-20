@@ -689,13 +689,20 @@ int InputStrategy::FUN_00edae50(uint32_t msg, void* data)
 // ===========================================================================
 // 0x00edae80 -- destructor for the cSPEditorNaming-derived naming widget.
 // ===========================================================================
+extern "C" char g_148a440[];  // vtables stored by the destructor
+extern "C" char g_148a430[];
+extern "C" char g_148a420[];
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x00edae80
 void InputStrategy::FUN_00edae80()
 {
     char* self = (char*)this;
-    *(void**)(self + 0x00) = (void*)0x148a440;
-    *(void**)(self + 0x04) = (void*)0x148a430;
-    *(void**)(self + 0x08) = (void*)0x148a420;
+    *(void**)(self + 0x00) = g_148a440;
+    *(void**)(self + 0x04) = g_148a430;
+    *(void**)(self + 0x08) = g_148a420;
+    _ReadWriteBarrier();
     if (*(uint32_t*)(self + 0xcc) != 0) {
         uint32_t h = *(uint32_t*)(self + 0xcc);
         *(uint32_t*)(self + 0xcc) = 0;
