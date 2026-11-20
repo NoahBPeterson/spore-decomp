@@ -471,10 +471,13 @@ bool cPlanetRecord::HasPlanetObjectFlag_10()
 {
     int count = (int)((char*)mPlanetObjects.mpEnd - (char*)mPlanetObjects.mpBegin)
               / (int)sizeof(PlanetObjectData);
-    PlanetObjectData* p = (PlanetObjectData*)mPlanetObjects.mpBegin;
-    for (int i = 0; i < count; ++i, ++p) {
-        if (p->mFlags & 0x10)
-            return true;
+    int i = 0;
+    if (i < count) {
+        _ReadWriteBarrier();
+        do {
+            if (((PlanetObjectData*)mPlanetObjects.mpBegin)[i].mFlags & 0x10)
+                return true;
+        } while (++i < count);
     }
     return false;
 }
