@@ -381,7 +381,9 @@ bool __cdecl IsAllied(SP::cCivilization_s00cf_e160* pCiv)
         if (pOther == pCiv)
             continue;
         int32_t playerOwner = SP::NounManager_s00cf_e160()->GetPlayerCivilization()->GetOwnerId();
-        if (SP::RelationshipManager_s00cf_e160()->GetAttitude(pOther->GetOwnerId(), playerOwner, 1) >= 4)
+        int32_t otherOwner = pOther->GetOwnerId();
+        SP::cRelationshipManager_s00cf_e160* pRel = SP::RelationshipManager_s00cf_e160();
+        if (pRel->GetAttitude(otherOwner, playerOwner, 1) >= 4)
             return true;
     }
     return false;

@@ -9,3 +9,4 @@
 ../src/game/SPGonzago/SPCivComm.cpp  ?FUN_00cfeb40@@YI_NPAXH0@Z  00cfeb40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPCivComm.cpp  ?FindTargetCity@SP@@YAPAUcCity_s00cf_eeb0@@HPAUcGameData_s00cf_eeb0@@@Z  00cfee00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPCivComm.cpp  ??0cGonzagoChild@@QAE@XZ  00cfecc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPCivComm.cpp  ?IsAllied@@YA_NPAVcCivilization_s00cf_e160@SP@@@Z  00cfe930  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

@@ -1,2 +1,1 @@
 00cfe820 272 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 272 bytes - SP::GetTributeAmount not reconstructed.
-00cfe930 144 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: 106 bytes - IsAllied: the list walk, the two identity skips (player civ, argument civ), the owner-id virtual (+0x4c) lookups and the GetAttitude >= 4 test are instruction-for-instruction, but retail spills the list pointer into a push-ecx slot (edi=list, ebx=count, ebp=index) while this source keeps it in ebp with ebx=index (131 vs 144, register-allocation-only).
