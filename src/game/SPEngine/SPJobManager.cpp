@@ -986,7 +986,7 @@ int cJob::ContinueJob()
 bool cJob::Continuation(void* a, void* b)
 {
     cJobData* p = static_cast<cJobData*>(this);
-    EA::Thread::Mutex_s0068_f670* pMutex = &p->mpManager->mMutex;
+    EA::Thread::Mutex_s0068_f670* pMutex = &static_cast<cJobData*>(this)->mpManager->mMutex;
     pMutex->Lock((unsigned int)&g_MutexFlags);
     if (p->mStatus == 4 || p->mStatus == 5) {
         p->mpCallback = a;
