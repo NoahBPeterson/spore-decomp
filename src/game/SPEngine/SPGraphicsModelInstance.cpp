@@ -2499,7 +2499,7 @@ BigElem* DestroyElems(BigElem* first, BigElem* last, BigElem* dst)
 }
 
 // @ 0x0073c410
-void CopyPairs(PairPtr* first, PairPtr* last, PairPtr* dst)
+PairPtr* CopyPairs(PairPtr* first, PairPtr* last, PairPtr* dst)
 {
     while (first != last) {
         if (dst != 0) {
@@ -2512,6 +2512,7 @@ void CopyPairs(PairPtr* first, PairPtr* last, PairPtr* dst)
         ++first;
         ++dst;
     }
+    return dst;
 }
 
 // @ 0x0073c450
