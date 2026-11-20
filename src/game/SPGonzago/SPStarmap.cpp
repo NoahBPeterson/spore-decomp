@@ -197,6 +197,9 @@ struct RBTree {
   uint32_t mPad18;             // +0x18
 
   void equal_range(NodeRange* out, const uint32_t* key);   // 0x00d4b450
+  RBNode* FUN_010450b0(const uint32_t* value);             // 0x010450b0 DoCreateNode (ICF-folded)
+  struct iterator { RBNode* mpNode; iterator(RBNode* p) : mpNode(p) {} };
+  iterator DoInsertValueImpl(const uint32_t* value, bool force);   // 0x01045490
 };
 struct VisualCtx;
 class cStarMap {
@@ -1479,28 +1482,28 @@ void FUN_010453f0(SeqReader* reader, Deque64<cStarRecord*>* d)
 }
 
 // @ 0x01045490
-void DoInsertValueImpl(RBTree* tree, const void* key, const void* value, uint32_t force)
+RBTree::iterator RBTree::DoInsertValueImpl(const uint32_t* value, bool force)
 {
-  RBNode* parent = (RBNode*)&tree->mpAnchorLeft;
-  if (tree->mpRoot != 0) {
-    RBNode* node = tree->mpRoot;
-    do {
-      parent = node;
-      if ((uint32_t)key < (uint32_t)node->mpKey)
-        node = node->mpRight;
-      else
-        node = node->mpLeft;
-    } while (node != 0);
+  RBNode* parent = (RBNode*)&mpAnchorLeft;
+  for (RBNode* node = mpRoot; node != 0; ) {
+    parent = node;
+    if (*value < (uint32_t)node->mpKey)
+      node = node->mpRight;
+    else
+      node = node->mpLeft;
   }
 
-  bool left = ((parent == (RBNode*)&tree->mpAnchorLeft) ||
-               ((uint32_t)key < (uint32_t)parent->mpKey));
+  int side;
+  if (parent != (RBNode*)&mpAnchorLeft && !(*value < (uint32_t)parent->mpKey))
+    side = 1;
+  else
+    side = 0;
 
-  RBNode* fresh = FUN_010450b0((void*)key);
-  RBTreeInsert(fresh, parent, (RBNode**)&tree->mpAnchorLeft, left ? 0 : 1);
-  tree->mnSize = tree->mnSize + 1;
-  (void)value;
+  RBNode* fresh = FUN_010450b0(value);
+  RBTreeInsert(fresh, parent, (RBNode**)&mpAnchorLeft, side);
+  ++mnSize;
   (void)force;
+  return iterator(fresh);
 }
 
 // @ 0x01045500
@@ -1627,7 +1630,7 @@ VEffect* cStarMap::CreateVisual(cStarRecord* rec, int kind, int key, int group, 
   node.mValue.mpObject = eff;
   node.mValue.mGroup = (uint32_t)group;
   node.mValue.mFlags = 0;
-  DoInsertValueImpl(&this->mObjectVisuals, (const void*)id, &node.mValue, 0);
+  this->mObjectVisuals.DoInsertValueImpl((const uint32_t*)&node.mpKey, false);
 
   return eff;
 }
@@ -1668,7 +1671,7 @@ VEffect* cStarMap::CreatePlanetRecordVisual(cStarRecord* rec, int key, int group
   node.mValue.mpObject = eff;
   node.mValue.mGroup = (uint32_t)group;
   node.mValue.mFlags = 0;
-  DoInsertValueImpl(&this->mObjectVisuals, (const void*)id, &node.mValue, 0);
+  this->mObjectVisuals.DoInsertValueImpl((const uint32_t*)&node.mpKey, false);
   return eff;
 }
 
@@ -1834,7 +1837,7 @@ void cStarMap::FilterHelperTravelTrail(int filter)
           node.mValue.mpObject = eff;
           node.mValue.mGroup = 0;
           node.mValue.mFlags = 0;
-          DoInsertValueImpl(&this->mObjectVisuals, (const void*)id, &node.mValue, 0);
+          this->mObjectVisuals.DoInsertValueImpl((const uint32_t*)&node.mpKey, false);
 
           if (id != 0) {
             VEffect* obj = (VEffect*)FUN_01045120(this, rec->mpInstance, id);
@@ -1894,7 +1897,7 @@ void cStarMap::FilterHelperVisited(uint32_t filter)
           node.mValue.mFlags = 0;
           if (eff != 0)
             eff->v00();                 // AddRef before publishing
-          DoInsertValueImpl(&this->mObjectVisuals, instance, &node.mValue, 0);
+          this->mObjectVisuals.DoInsertValueImpl((const uint32_t*)&node.mpKey, false);
           if (eff != 0)
             eff->Release();
         }

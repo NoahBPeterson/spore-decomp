@@ -13,3 +13,4 @@
 ../src/game/SPGonzago/SPStarmap.cpp  ?SerializeSlots@cStarMap_s0104_4360@SP@@QAEXPAUcIOStream@2@@Z  01044a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?ForEachFlagEntry@SP@@YA_NPAXPBUcFlagGrid@1@@Z  01044f30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPStarmap.cpp  ?FilterHelperRemove@cStarMap@@QAEXH@Z  01045c30  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPStarmap.cpp  ?DoInsertValueImpl@RBTree@@QAE?AUiterator@1@PBI_N@Z  01045490  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
