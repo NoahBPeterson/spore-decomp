@@ -8373,7 +8373,15 @@ struct cGameInfo_s00df_8730 {                                         // size 0x
     uint32_t mFieldb0;                                     // +0xb0
     uint32_t mFieldb4;                                     // +0xb4
     cGameUIData_s00df_8730* mpUIData;                                 // +0xb8
+    cGameInfo_s00df_8730& operator=(const cGameInfo_s00df_8730& other);   // 0x00b26fb0
 };
+inline cGameInfo_s00df_8730* CopyGameInfos(cGameInfo_s00df_8730* first, cGameInfo_s00df_8730* last,
+                                           cGameInfo_s00df_8730* dest)
+{
+    for (; first != last; ++first, ++dest)
+        *dest = *first;
+    return dest;
+}
 struct cGGECamera {
     void GetTransform(Transform& t);                       // 0x00dde590
     Transform GetTransform() { Transform t; GetTransform(t); return t; }
@@ -16544,19 +16552,17 @@ void cGalaxyGameEntryScreen_s00df_8730::BuildGames()
 // @ 0x00df9510
 void cGalaxyGameEntryScreen_s00df_8730::ClearGames()
 {
-    sp_vector_s00df_8730<cGameInfo_s00df_8730>& games = mGames;
-    uint32_t count = games.size();
+    uint32_t count = mGames.size();
     for (uint32_t i = 0; i < count; ++i) {
-        if (games[i].mpUIData)
-            FUN_00df9190((cGameUIDataBlock*)games[i].mpUIData);
-        games[i].mFieldb4 = 0;
-        games[i].mpUIData = 0;
+        if (mGames[i].mpUIData)
+            FUN_00df9190((cGameUIDataBlock*)mGames[i].mpUIData);
+        mGames[i].mFieldb4 = 0;
+        mGames[i].mpUIData = 0;
     }
+    sp_vector_s00df_8730<cGameInfo_s00df_8730>& games = mGames;
     cGameInfo_s00df_8730* first = games.mpBegin;
     cGameInfo_s00df_8730* last = games.mpEnd;
-    cGameInfo_s00df_8730* dst = first;
-    for (cGameInfo_s00df_8730* p = last; p != games.mpEnd; ++p, ++dst)
-        *dst = *p;
+    cGameInfo_s00df_8730* dst = CopyGameInfos(last, games.mpEnd, first);
     games.DestroyRange(dst, games.mpEnd);
     games.mpEnd -= (last - first);
 }
