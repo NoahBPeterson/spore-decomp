@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include "EA/Random/RandomLinearCongruential.h"
+#include "sse_helpers.h"
 
 // ---- items of slice s00a5e0f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
@@ -167,7 +168,7 @@ void random_bang(char* x)
 {
     if (*(float*)(x + 0x28) < 0.0f)
         *(float*)(x + 0x28) = 0.0f;
-    int      n = (int)*(float*)(x + 0x28);
+    int      n = SseTruncToInt(*(float*)(x + 0x28));
     unsigned r = (*(RandomLinearCongruential*)(x + 0x2c)).RandomUint32UniformN(n);
     float    v = (float)r;
     t_outlet* o = *(t_outlet**)(x + 0xc);
