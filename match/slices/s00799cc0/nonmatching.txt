@@ -8,5 +8,4 @@
 0079a9d0 0 regalloc: R49 (2026-11-17): register roles (retail dst=esi, count=ebp) and hoisted zero constant after placement-new + forceinline ctor with 5-arg FUN_00799290 and uninit out; needs /GS- | Earlier note: complete vector-of-vectors fill with EH frame; SEH prolog/epilog not reproduced
 0079aaa0 79 complete 0x78-stride transform reverse copy; cSPTransform::operator= call schedule differs
 0079ab90 102 complete factory dispatch; subtract-chain layout differs
-0079ac10 53 complete vtable/refcount constructor; lea/mov and branch layout differ
 0079ac70 83 complete destructor chain; EH cleanup schedule differs (ecx parity kept with a 1-instruction helper)
