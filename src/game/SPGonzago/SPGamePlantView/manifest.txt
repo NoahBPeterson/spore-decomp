@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/SPGonzago/SPGamePlantView.cpp  ?UpdateEffectScale@cGamePlantView@@QAEXPAUcPlant_e8d1e0@@@Z  00e8d1e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
