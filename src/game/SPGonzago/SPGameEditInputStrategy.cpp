@@ -388,8 +388,7 @@ struct cGameNounManager_s00d1_5440 {
 Obj*  __cdecl SP_PlanetModel();                       // 0x00b3d350
 Obj*  __cdecl SP_PropertyManager();                   // 0x0067de30
 Obj*  __cdecl SP_GetGameTerrainCursor();              // 0x00b30d70
-cGameNounManager_s00d1_5440* __cdecl SP_NounManager(void* pNoun); // 0x00b3d300
-cGameNounManager_s00d1_5440* __cdecl SP_NounManager();            // 0x00b3d300 (takes no arguments)
+cGameNounManager_s00d1_5440* __cdecl SP_NounManager();            // 0x00b3d300
 void* __cdecl FUN_00d1bf00();                         // 0x00d1bf00  GetEditSelection
 u32   __cdecl EA_Hash_FNV1_String16(const wchar_t* p, u32 seed, int flag); // 0x00932f30
 void  __cdecl EA_Messaging_RemoveHandler(void*, void*, void*, void*, void*); // 0x00571db0
