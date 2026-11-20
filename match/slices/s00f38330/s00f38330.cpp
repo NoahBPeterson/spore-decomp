@@ -893,21 +893,27 @@ void* __fastcall FUN_00f391c0(void* p)
 {
     ((BaseTranslator*)p)->ctor();
     *(void**)p = kpTranslatorVtbl;
+    _ReadWriteBarrier();
     *(int*)((char*)p + 0x0c) = 0;
     *(int*)((char*)p + 0x10) = 0;
     *(int*)((char*)p + 0x14) = 0;
     *(int*)((char*)p + 0x18) = 0;
     *(int*)((char*)p + 0x1c) = 0;
     *(int*)((char*)p + 0x20) = -1;
+    _ReadWriteBarrier();
     *(wchar_t**)((char*)p + 0x24) = gEmptyString16;
     *(wchar_t**)((char*)p + 0x28) = gEmptyString16;
+    _ReadWriteBarrier();
     *(wchar_t**)((char*)p + 0x2c) = gEmptyString16 + 1;
+    _ReadWriteBarrier();
     *(wchar_t**)((char*)p + 0x34) = gEmptyString16;
     *(wchar_t**)((char*)p + 0x38) = gEmptyString16;
     *(wchar_t**)((char*)p + 0x3c) = gEmptyString16 + 1;
+    _ReadWriteBarrier();
     *(wchar_t**)((char*)p + 0x44) = gEmptyString16;
     *(wchar_t**)((char*)p + 0x48) = gEmptyString16;
     *(wchar_t**)((char*)p + 0x4c) = gEmptyString16 + 1;
+    _ReadWriteBarrier();
     *(wchar_t**)((char*)p + 0x54) = gEmptyString16;
     *(wchar_t**)((char*)p + 0x58) = gEmptyString16;
     *(wchar_t**)((char*)p + 0x5c) = gEmptyString16 + 1;

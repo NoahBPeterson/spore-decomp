@@ -13,3 +13,4 @@ slices/s00f38330/s00f38330.cpp  ?FUN_00f39220@@YIXPAH@Z  00f39220  /O2 /MD /Gy /
 slices/s00f38330/s00f38330.cpp  ?f38ac0@SpaceObj@@QAEXD@Z  00f38ac0  /O2 /MD /Gy /TP
 slices/s00f38330/s00f38330.cpp  ?FUN_00f38ce0@@YIXPAUBigAssetView@@@Z  00f38ce0  /O2 /MD /Gy /TP
 slices/s00f38330/s00f38330.cpp  ?FUN_00f38610@@YIXPAUSetiPanel@@@Z  00f38610  /O2 /MD /Gy /TP
+slices/s00f38330/s00f38330.cpp  ?FUN_00f391c0@@YIPAXPAX@Z  00f391c0  /O2 /MD /Gy /TP
