@@ -86,3 +86,4 @@
 ../src/game/SPEditors/_at_00ef0000.cpp  ?f_eff1e0@UI_s00ef_ee60@@QAE_NH@Z  00eff1e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00ef0b30@@YAXXZ  00ef0b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/_at_00ef0000.cpp  ?FUN_00efcd90@@YAHXZ  00efcd90  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/_at_00ef0000.cpp  ?GlobalMwVector_Clear@@YAXXZ  00ef29c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

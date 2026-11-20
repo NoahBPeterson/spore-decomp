@@ -699,7 +699,10 @@ struct MWVec {
     AutoRefCount* mpCapacity;   // +0x08
     void reserve(uint32_t n);                                   // 0x4e0880
     void DoInsertValue(AutoRefCount* pos, AutoRefCount* value); // 0x423c40
+    void DoDestroyValues(AutoRefCount* first, AutoRefCount* last); // 0x5f3680
+    inline void erase(AutoRefCount* first, AutoRefCount* last);
 };
+extern "C" MWVec g_15acca4;
 struct ByteVec {
     uint8_t* mpBegin;      // +0x00
     uint8_t* mpEnd;        // +0x04
@@ -796,6 +799,12 @@ int     __cdecl FUN_00bcc800(void* self);               // 0xbcc800
 char*   __cdecl FUN_0041e920(void* p);                  // 0x41e920 Property::GetBool
 void*   __cdecl FUN_005f4e10(void* first, void* last, void* out); // 0x5f4e10
 void    __cdecl FUN_005f3680(void* first, void* last);  // 0x5f3680
+inline void MWVec::erase(AutoRefCount* first, AutoRefCount* last)
+{
+    AutoRefCount* p = (AutoRefCount*)FUN_005f4e10(last, mpEnd, first);
+    DoDestroyValues(p, mpEnd);
+    mpEnd += -(last - first);
+}
 void*   __cdecl FUN_00f47380(void* p);                  // 0xf47380 operator delete
 struct NounVec {
     uint32_t mUnk0;      // +0x00
@@ -4736,13 +4745,7 @@ void PlanetFlow::FillPending()
 // @ 0x00ef29c0
 void GlobalMwVector_Clear()
 {
-    MWVec* v = (MWVec*)0x15acca4;
-    AutoRefCount* begin = v->mpBegin;
-    AutoRefCount* end = v->mpEnd;
-    void* p = FUN_005f4e10(end, end, begin);
-    FUN_005f3680(p, v->mpEnd);
-    int n = -(int)(end - begin);
-    v->mpEnd = (AutoRefCount*)((char*)v->mpEnd + n * 4);
+    g_15acca4.erase(g_15acca4.mpBegin, g_15acca4.mpEnd);
 }
 
 // @ 0x00ef2a10
