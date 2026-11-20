@@ -326,18 +326,19 @@ void hkContinuousSimulation::collideEntitiesBroadPhaseContinuous(hkEntity** enti
 }
 
 typedef void (__stdcall *hkCollideFunc)(void* agent, const hkProcessCollisionInput& input, void* output);
-void __stdcall FUN_01099be0(hkEntity** entities, int numEntities, void* input,
-                            hkCollideFunc collideFunc);                 // 0x01099be0
+void __stdcall FUN_010f1cc0(void* agent, const hkProcessCollisionInput& input, void* output); // 0x010f1cc0 hkContinuousSimulation::processAgentCollideContinuous
 
 class hkDiscreteSimulation {
 protected:
     void collideEntitiesNarrowPhaseDiscrete(hkEntity** entities, int numEntities,
                                             const hkProcessCollisionInput& input);
+    void FUN_01099be0(hkEntity** entities, int numEntities, void* input,
+                      hkCollideFunc collideFunc);                 // 0x01099be0 (thiscall)
 };
 
 // @ 0x010f25d0
 void hkDiscreteSimulation::collideEntitiesNarrowPhaseDiscrete(hkEntity** entities, int numEntities,
                                                              const hkProcessCollisionInput& input)
 {
-    FUN_01099be0(entities, numEntities, (void*)&input, (hkCollideFunc)0x010f1cc0);
+    FUN_01099be0(entities, numEntities, (void*)&input, FUN_010f1cc0);
 }

@@ -10507,11 +10507,10 @@ void SP::cSPUISpace_s0107_1a00::InitFoodwebInfo()
         slot.mKind = 1;
         VT1(void, slot.mpWindow, 0x104, this);
     }
-    // Rows 15..17 hold the three crop slots; the retail build counts them down.
-    int row = 1;
-    for (int remaining = 3; remaining != 0; --remaining) {
-        FoodwebSlotInfo& slot = mFoodwebSlots.mpBegin[14 + row];
-        UIWindow* w = mGlobalLayout->FindWindowByID((uint32_t)(row + 0x37e89de));
+    // Rows 15..17 hold the three crop slots.
+    for (int i = 0; i < 3; i++) {
+        FoodwebSlotInfo& slot = mFoodwebSlots.mpBegin[15 + i];
+        UIWindow* w = mGlobalLayout->FindWindowByID((uint32_t)(i + 0x37e89df));
         UIWindow* old = slot.mpWindow;
         if (w != old) {
             if (w != 0)
@@ -10521,9 +10520,8 @@ void SP::cSPUISpace_s0107_1a00::InitFoodwebInfo()
                 old->v01();
         }
         slot.mKind = 2;
-        slot.mIndex = row;
+        slot.mIndex = i + 1;
         VT1(void, slot.mpWindow, 0x104, this);
-        ++row;
     }
     for (int i = 0; i < 3; i++) {
         UIWindow* w = mGlobalLayout->FindWindowByID((uint32_t)(i + 0x535cbd8));

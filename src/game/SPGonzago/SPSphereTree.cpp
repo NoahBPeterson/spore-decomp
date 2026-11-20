@@ -49,7 +49,6 @@ inline Vector3 operator*(const Vector3& v, const Matrix3& m) {
                  v.z * m.r[2].y + v.x * m.r[0].y + v.y * m.r[1].y,
                  v.y * m.r[1].z + v.z * m.r[2].z + v.x * m.r[0].z);
 }
-void* __cdecl FUN_00f473a0(size_t size, const char* name, int a, int b, int c, int d); // 0xf473a0
 struct NodePos {
   int x, y, z;
 };
@@ -73,7 +72,17 @@ struct SpherePool {
   char* base;                 // +0x0c
   int stride;                 // +0x10
   int capacity;               // +0x14
+  SpherePool()
+  {
+    stride = 0x1c;
+    capacity = 0x2000;
+    base = (char*)malloc(0x38000);
+    count = 0;
+    end = 0;
+    freeHead = 0;
+  }
 };
+void* operator new(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
 struct SphereTree {
   int field00;                // +0x00
   SpherePool* pool;           // +0x04
@@ -86,6 +95,8 @@ struct SimEntry {
   int field08;                // +0x08
   int field0c;                // +0x0c
 };
+extern "C" char g_16c45b4[];   // simulator global
+
 struct SimulatorGlobal {
   int FUN_00b72160();
   SphereTree* FUN_00b72210(int);
@@ -101,20 +112,9 @@ struct SimulatorGlobal {
 namespace SP {
 SphereTree* SphereTreeCreate()
 {
-  int handle = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72160();
-  SphereTree* tree = ((SimulatorGlobal*)0x016c45b4)->FUN_00b72210(handle);
-  SpherePool* pool = (SpherePool*)FUN_00f473a0(0x18, "Simulator", 0, 0, 0, 0);
-  if (pool != 0) {
-    pool->stride = 0x1c;
-    pool->capacity = 0x2000;
-    pool->base = (char*)malloc(0x38000);
-    pool->count = 0;
-    pool->end = 0;
-    pool->freeHead = 0;
-    tree->pool = pool;
-    return tree;
-  }
-  tree->pool = pool;
+  int handle = ((SimulatorGlobal*)g_16c45b4)->FUN_00b72160();
+  SphereTree* tree = ((SimulatorGlobal*)g_16c45b4)->FUN_00b72210(handle);
+  tree->pool = new ("Simulator", 0, 0, 0, 0) SpherePool();
   return tree;
 }
 }  // namespace SP

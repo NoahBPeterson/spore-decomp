@@ -323,7 +323,7 @@ bool Manager::DoManualDialup(DialupCallback cb, char* entry, char* user, char* p
         if (((bool(__thiscall*)(Manager*, int, int))((*(void***)this)[5]))(this, 0, 0) == 0) {
             if (mpRasDial != 0 && mpRasGetConnectStatus != 0) {
                 unsigned long flag = 0;
-                mbManualDialupBusy = true;
+                *(volatile bool*)&mbManualDialupBusy = true;
                 spManagerForDial = this;
                 if (cb != 0)
                     cb(0x15783920, this, 1);

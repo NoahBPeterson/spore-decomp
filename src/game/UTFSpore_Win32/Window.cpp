@@ -339,15 +339,12 @@ void FUN_00925e60_hash(HashHolder* h)
 void * EA::UTFWin::Window::AsInterface(EA::COM::InterfaceId iid)
 {
     if (iid == (int)0xee3f516e)
-        goto common;
+        return this ? (void*)((char*)this + 4) : 0;
     if (iid == (int)0xeec58382)
         return this;
-    if (iid != (int)0xeeee8218)
-        return 0;
-common:
-    if (this == 0)
-        return 0;
-    return (Window*)((char*)this + 4);
+    if (iid == (int)0xeeee8218)
+        return this ? (void*)((char*)this + 4) : 0;
+    return 0;
 }
 
 // @ 0x0095f9a0

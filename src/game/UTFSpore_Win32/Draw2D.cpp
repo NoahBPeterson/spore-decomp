@@ -1616,11 +1616,13 @@ bool SkinBuilder::FUN_009528d0(SkinOut* out, int arg)
 void* FUN_00952a60()
 {
   void* p = EANew(0x14, 4, 0, "OSGlobal", 0, 0, 0, 0);
-  if (!p) return 0;
-  ((uint32_t*)p)[1] = 0;
-  ((uint32_t*)p)[0] = 0;
-  ((uint32_t*)p)[4] = 0;
-  return p;
+  if (p) {
+    ((uint32_t*)p)[1] = 0;
+    ((uint32_t*)p)[0] = 0;
+    ((uint32_t*)p)[4] = 0;
+    return p;
+  }
+  return 0;
 }
 
 // @ 0x00952aa0

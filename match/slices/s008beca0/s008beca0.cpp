@@ -97,8 +97,8 @@ void InitColorTable(uint8_t* t) { FillTable(t); }
 // The retail object code delivers the InputStream context of _tsi_NewCFFClass
 // in EAX, and the size/memory context of FUN_008bf2b0 in EAX/EDI.  Those two
 // are translation-unit-local helpers whose parameters the original compiler
-// passed in registers; a plain C declaration cannot reproduce that ABI, so
-// they take ordinary parameters here and are recorded as non-matching.
+// passed in registers.  _tsi_NewCFFClass is file-local (`static`), which gives
+// it that register convention; FUN_008bf2b0 still takes ordinary parameters.
 //
 // Layouts are the 2008 dev-PDB structs (CFFClass, InputStream_t,
 // TopDictInfo, CFFIndexClass), checked against the retail disassembly.
@@ -275,7 +275,7 @@ static long CFFIndexBias(uint16_t count)
 }
 
 // @ 0x008beca0
-CFFClass* _tsi_NewCFFClass(InputStream* in, tsiMemObject* mem, int fontNum,
+static CFFClass* _tsi_NewCFFClass(InputStream* in, tsiMemObject* mem, int fontNum,
                            int flag, unsigned long pos)
 {
     CFFClass* t;
@@ -369,8 +369,8 @@ CFFClass* _tsi_NewCFFClass(InputStream* in, tsiMemObject* mem, int fontNum,
     return t;
 }
 
-// The two wrappers below forward a register ABI: the source is the stack-based
-// call, the outcome differs (see nonmatching.txt).
+// The two wrappers below call the file-local _tsi_NewCFFClass, so `in` travels
+// in EAX (its register convention) and the rest on the stack.
 // @ 0x008bf270
 void FUN_008bf270(tsiMemObject* mem, InputStream* in, int fontNum,
                   unsigned long pos)

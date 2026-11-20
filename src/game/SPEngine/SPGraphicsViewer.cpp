@@ -581,6 +581,8 @@ void Matrix44::FUN_007c3da0(float* dst)
 void FUN_007c3de0(void* a, void* b)
 { (void)a; (void)b; }
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 // @ 0x007c3f70
 cViewer* cViewer::FUN_007c3f70()
 {
@@ -588,6 +590,7 @@ cViewer* cViewer::FUN_007c3f70()
     mClearColor[1] = g_1635dbc;
     mClearColor[2] = g_1635dc0;
     mClearColor[3] = g_1635dc4;
+    _ReadWriteBarrier();
     float lod = g_10000f;
     mRenderType = 0;
     mRenderTypeVariation = 0;

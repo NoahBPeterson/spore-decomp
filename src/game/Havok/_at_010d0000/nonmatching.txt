@@ -33,7 +33,6 @@
 010d8e90 353 havok +vc71; equiv PASS 396 valid 83.6% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010d90a0 155 havok +vc71; equiv PASS 400 valid 72.0% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010d91a0 153 havok +vc71; equiv PASS 399 valid 72.0% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
-010d9330 10 havok +vc71; equiv WEAK 170 valid 100% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010d93e0 106 havok +vc71; equiv PASS 400 valid 100% cov flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010d9470 478 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: box/box processCollision modelled on the reference s010fd4c0 cd; the original fully inlines the aTb/radius/boundary-tolerance setup and the sepDist frame (0x1d4) into one block, ours calls setMulInverseMul/calcManifold from a smaller 0x164 frame; difftest 5/5 valid inputs mismatched (fault in our smaller frame) flags: /vc71 /O2 /MD /Gy /EHsc /TP
 010d97a0 511 complete FAIL /vc71 /O2 /MD /Gy /EHsc /TP: box/box staticGetClosestPoints, same cd setup gap as 010d9470, block layout/scheduling differs; difftest 2/400 valid inputs mismatched (fault) flags: /vc71 /O2 /MD /Gy /EHsc /TP

@@ -829,18 +829,17 @@ void W::x0b0(void* target)
     }
 }
 
+struct W_ListNode { W_ListNode* mpNext; W_ListNode* mpPrev; };
 // @ 0x009580e0
 void W::x0e0(char* node)
 {
     if (I32(node, 0x24) == 0 && I8(this, 0x25) == 0) {
-        int edx = I32(this, 0x1c);
-        char* base = B(this) + 0x18;
-        node += 0x20;
-        *(int*)(node + 4) = edx;
-        *(char**)node = base;
-        *(char**)(base + 4) = node;
-        char* c = *(char**)(node + 4);
-        *(char**)c = node;
+        W_ListNode* n = (W_ListNode*)(node + 0x20);
+        W_ListNode* anchor = (W_ListNode*)(B(this) + 0x18);
+        n->mpPrev = anchor->mpPrev;
+        n->mpNext = anchor;
+        anchor->mpPrev = n;
+        n->mpPrev->mpNext = n;
     }
 }
 

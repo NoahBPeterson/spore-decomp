@@ -87,7 +87,7 @@ void ZoneObject_delete(void* p)
 {
     if (p) {
         void* base = (char*)p - 8;
-        ((void (__thiscall*)(void*, int))(*(void***)*(void**)base)[3])(base, 0);
+        (*(EA::Allocator::ICoreAllocator**)base)->Free(base, 0);
     }
 }
 }}  // namespace EA::Trace

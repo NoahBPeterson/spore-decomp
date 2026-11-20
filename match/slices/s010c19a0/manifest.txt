@@ -3,3 +3,4 @@ slices/s010c19a0/s010c19a0.cpp  ?getAabb@hkConvexVerticesShape@@UBEXABVhkTransfo
 slices/s010c19a0/s010c19a0.cpp  ?calcStatistics@hkCapsuleShape@@UBEXPAVhkStatisticsCollector@@@Z  010c26f0  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s010c19a0/s010c19a0.cpp  ?getCollisionSpheres@hkCapsuleShape@@UBEPBVhkSphere@@PAV2@@Z  010c2850  /vc71 /O2 /MD /Gy /EHsc /TP
 slices/s010c19a0/s010c19a0.cpp  ??0hkCapsuleShape@@QAE@ABUhkVector4@@0M@Z  010c2730  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s010c19a0/s010c19a0.cpp  ??1hkConvexVerticesShape@@UAE@XZ  010c21c0  /vc71 /O2 /MD /Gy /EHsc /TP

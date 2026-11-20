@@ -249,12 +249,14 @@ struct cSpaceInventory : cSPUIPropertyLayout {
 
 extern "C" bool __stdcall ShowThing(uint32_t a, uint32_t b, uint32_t c);   // 0x00677220
 
+extern uint32_t g_152976c;  // 0x0152976c default cargo key group
 // @ 0x006775F0
 cSpaceInventory::cSpaceInventory()
 {
     m9c = 0;
+    uint32_t group = g_152976c;
     mb98 = 1;
-    SetCargoKey(0x646739ac, *(uint32_t*)0x0152976c);
+    SetCargoKey(0x646739ac, group);
     SetMaxCargoAmount(0x125f2c4f);
 }
 

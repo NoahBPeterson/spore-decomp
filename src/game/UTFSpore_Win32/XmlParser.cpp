@@ -297,17 +297,24 @@ void Fn8e5e50(void* parser, int name, unsigned int isparam)
     XML_DefaultCurrent(*(void**)((char*)p + 0x220));
 }
 
+extern "C" char g_1437be4[];  // XmlParser vtable
+void Fn8e5930(void* user, const unsigned short* s);  // expat default handler
+extern "C" void FUN_00c2e4e0(void);  // no-op handler
+
 // @ 0x008e5ea0
 void* XmlParser::Fn8e5ea0(void* doc)
 {
     char* c = (char*)this;
     *(void**)(c + 4) = doc;
-    *(void**)c = (void*)0x1437be4;
     void** p = (void**)(c + 0x1c);
+    *(void**)c = g_1437be4;
+    _ReadWriteBarrier();
     *(void**)(c + 0x18) = p;
     *(void**)(c + 0xc) = p;
     *(void**)(c + 8)  = p;
+    _ReadWriteBarrier();
     *(void**)(c + 0x10) = (void**)((char*)p + 0x200);
+    _ReadWriteBarrier();
     *(wchar16*)p = 0;
     *(void**)(c + 0x21c) = 0;
     *(void**)(c + 0x220) = 0;
@@ -319,8 +326,8 @@ void* XmlParser::Fn8e5ea0(void* doc)
     *(void**)(c + 0x220) = FUN_0090af20(0);
     FUN_00903300(*(void**)(c + 0x220), (void*)&Fn8e5b90, (void*)&Fn8e5c50);
     FUN_00903320(*(void**)(c + 0x220), (void*)&Fn8e5e20);
-    FUN_00903340(*(void**)(c + 0x220), (void*)0x8e5930);
-    FUN_00903370(*(void**)(c + 0x220), (void*)0xc2e4e0, (void*)0xc2e4e0);
+    FUN_00903340(*(void**)(c + 0x220), (void*)&Fn8e5930);
+    FUN_00903370(*(void**)(c + 0x220), (void*)&FUN_00c2e4e0, (void*)&FUN_00c2e4e0);
     FUN_009033b0(*(void**)(c + 0x220), (void*)&Fn8e5a70);
     FUN_00903350(*(void**)(c + 0x220), (void*)&Fn8e5980);
     FUN_009033c0(*(void**)(c + 0x220), (void*)&Fn8e5e50);
@@ -344,8 +351,8 @@ void XmlParser::Fn8e5fb0()
     FUN_0090a870(xp, 0);
     FUN_00903300(xp, (void*)&Fn8e5b90, (void*)&Fn8e5c50);
     FUN_00903320(xp, (void*)&Fn8e5e20);
-    FUN_00903340(xp, (void*)0x8e5930);
-    FUN_00903370(xp, (void*)0xc2e4e0, (void*)0xc2e4e0);
+    FUN_00903340(xp, (void*)&Fn8e5930);
+    FUN_00903370(xp, (void*)&FUN_00c2e4e0, (void*)&FUN_00c2e4e0);
     FUN_009033b0(xp, (void*)&Fn8e5a70);
     FUN_00903350(xp, (void*)&Fn8e5980);
     FUN_009033c0(xp, (void*)&Fn8e5e50);

@@ -46,6 +46,9 @@ struct VecPB {
     __declspec(noinline) void push_back(unsigned* v);
     void DoInsertValue(unsigned* pos, unsigned* v);     // 0xa80dd0 (thiscall on the vector)
 };
+extern "C" char g_vtbl_GmeRefCount[];   // 0x013ef094 ??_7GmeRefCount@@6B@
+extern "C" char g_vtbl_1446838[];       // 0x01446838 Obj33 primary vtable
+extern "C" char g_vtbl_1446834[];       // 0x01446834 Obj33 vtable at +4
 struct Obj33 {
     char pad[0x18];
     Obj33* ctor();                                 // 0x997b60
@@ -220,10 +223,10 @@ void VecPB::push_back(unsigned* v)
 // @ 0x00997b60
 Obj33* Obj33::ctor()
 {
-    *(void**)((char*)this + 4) = (void*)0x13ef094;
+    *(void* volatile*)((char*)this + 4) = g_vtbl_GmeRefCount;
     *(unsigned*)((char*)this + 8) = 0;
-    *(void**)((char*)this + 0) = (void*)0x1446838;
-    *(void**)((char*)this + 4) = (void*)0x1446834;
+    *(void**)((char*)this + 0) = g_vtbl_1446838;
+    *(void**)((char*)this + 4) = g_vtbl_1446834;
     *(unsigned*)((char*)this + 0xc) = 0;
     *(unsigned*)((char*)this + 0x10) = 0;
     *(unsigned*)((char*)this + 0x14) = 0;

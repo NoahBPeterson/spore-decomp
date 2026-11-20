@@ -539,14 +539,16 @@ bool __cdecl FUN_01137170(int* param_1, float* param_2)
 // ---------------------------------------------------------------------------
 // @ 0x011373c0
 // ---------------------------------------------------------------------------
+struct TimerOwnerHead { char pad[0x2c]; };
+struct TimerOwner : TimerOwnerHead, TimerNode {};
 int* __cdecl FUN_011373c0(void)
 {
 	TimerNode* p = g_timerNodes;
 	if (p == 0)
 		return 0;
-	int* r = (int*)((char*)p - 0x2c);
+	TimerOwner* o = static_cast<TimerOwner*>(p);
 	g_timerNodes = p->next;
-	return r;
+	return (int*)o;
 }
 
 // ---------------------------------------------------------------------------
@@ -556,8 +558,8 @@ int __cdecl FUN_011373e0(int param_1)
 {
 	int iVar2 = *(int*)(param_1 + 4);
 	int* p = (int*)(iVar2 + 0x2c);
-	*p = (int)g_timerListTail;
-	*(int*)(iVar2 + 0x30) = 0;
+	p[0] = (int)g_timerListTail;
+	p[1] = 0;
 	if (g_timerListTail != 0)
 		*(int*)((char*)g_timerListTail + 4) = (int)p;
 	g_timerListTail = p;

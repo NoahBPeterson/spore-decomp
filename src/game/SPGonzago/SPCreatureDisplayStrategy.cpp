@@ -13,6 +13,7 @@
 #include "cSPVector2.h"
 #include <new>
 #include <xmmintrin.h>
+#include <intrin.h>
 #include "SP/cGameNounManager.h"
 #include "SP/cPlanetModel.h"
 #include "SP/cSPUINewProgressBar.h"
@@ -1300,6 +1301,7 @@ void cAllocPool::Allocate(void** ppValue)
     mppBlockCursor = ppCursor;
     mpBlock = (uint8_t*)*ppCursor;
     mpBlockEnd = mpBlock + 0x100;
+    _ReadWriteBarrier();
     mpFreeEntry = mpBlock;
 }
 

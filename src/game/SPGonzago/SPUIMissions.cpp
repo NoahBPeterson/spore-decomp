@@ -2678,6 +2678,10 @@ public:
 };
 }
 namespace SP {
+// The button's polymorphic bases: the primary one at +0, the window-handler interface at +8.
+struct cUIMissionButtonPrimary { virtual void v00(); uint32_t mPad04; };
+struct cUIMissionButtonHandler { virtual void h00(); };
+struct cUIMissionButtonBases : cUIMissionButtonPrimary, cUIMissionButtonHandler {};
 class cUIMissionButton {
 public:
     void SetTracked();
@@ -5124,7 +5128,7 @@ void cUIMissionButton::Shutdown()
     {
         IWinWindow* pHandlerWindow = mpLayout->FindWindowByID(0x5ee1ee0, 1);
         if (pHandlerWindow != 0)
-            pHandlerWindow->SetHandler(&mpVtbl08);
+            pHandlerWindow->SetHandler(&static_cast<cUIMissionButtonHandler&>(reinterpret_cast<cUIMissionButtonBases&>(*this)));
     }
     reinterpret_cast<cUIMissionCardPanel_s00e1_bbc0*>(this)->ShutdownCard();
 }

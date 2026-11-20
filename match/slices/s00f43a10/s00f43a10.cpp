@@ -6,11 +6,12 @@ void* __cdecl eastl_alloc(size_t size, const char* name, int a, int b, const cha
 void  __cdecl eastl_free(void* p);                                                                   // 0x00f47380
 
 // ---------------------------------------------------------------- element stride 0x534
-struct Sub534 { void destroy() throw(); };                 // 0x00f280f0
+struct Sub534 { void destroy() throw(); ~Sub534() throw() { destroy(); } };                 // 0x00f280f0
 struct SubVec534 {
     char* begin;                                           // +0x00
     char* end;                                             // +0x04
     void destroyRange(char* first, char* last) throw();    // 0x00dfc600
+    ~SubVec534() throw();
 };
 inline void* operator new(unsigned int, void* p) { return p; }
 
@@ -38,15 +39,15 @@ struct T534 {
     // the element's default constructor is the retail function at 0x00f2d330; cl must see a real
     // constructor call here so it reuses the constructor's return (this) as the temporary's address
     T534() throw();
-    ~T534() throw() {
-        mvec.destroyRange(mvec.begin, mvec.end);
-        if (mvec.begin != 0 && *(int*)(mvec.begin - 4) != 0)
-            eastl_free(mvec.begin);
-        m3c.destroy();
-        m0.destroy();
-    }
+    ~T534() throw() {}
     void Construct(const T534&) throw();
 };
+inline SubVec534::~SubVec534() throw()
+{
+    destroyRange(begin, end);
+    if (begin != 0 && *(int*)(begin - 4) != 0)
+        eastl_free(begin);
+}
 void __cdecl eastl_copy534(T534* first, T534* last, T534* dest);  // 0x00dfd2c0
 
 struct Vec534 {
@@ -76,13 +77,8 @@ T534* Vec534::erase(T534* pos)
 {
     if ((char*)pos + 0x534 < (char*)mpEnd)
         eastl_copy534(pos + 1, mpEnd, pos);
-    mpEnd = (T534*)((char*)mpEnd - 0x534);
-    T534* last = mpEnd;
-    last->mvec.destroyRange(last->mvec.begin, last->mvec.end);
-    if (last->mvec.begin != 0 && *(int*)(last->mvec.begin - 4) != 0)
-        eastl_free(last->mvec.begin);
-    last->m3c.destroy();
-    last->m0.destroy();
+    --mpEnd;
+    mpEnd->~T534();
     return pos;
 }
 

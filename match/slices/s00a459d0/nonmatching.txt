@@ -1,5 +1,3 @@
-00a46050  16   bool-normalisation / vcall register choice
-00a46080  16   bool-normalisation / vcall register choice
 00a46690  22   branch orientation and bool materialisation
 00a46790  13   symbol copy register allocation; original returns Sym2* (out) in eax, now returned too; difftest PASS under flags /O2 /MD /Gy /EHsc /TP (400 valid, 100% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00a46950  15   duplicated default branch reordered; original returns Sym2* (out) in eax, now returned too; difftest PASS under flags /O2 /MD /Gy /EHsc /TP (394 valid, 100% coverage) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
