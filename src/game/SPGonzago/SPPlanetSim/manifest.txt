@@ -35,3 +35,4 @@
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?fn280b0@Zeroed@@QAEPAU1@XZ  00f280b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?Write@cCityData_s00fe_ff80@SP@@QAEXPAVcOutStream@2@@Z  00ff0450  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPPlanetSim.cpp  ?fn278b0@StrObj@@QAE_NXZ  00f278b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPPlanetSim.cpp  ?GetBuilding@cCityData_s00fe_ff80@SP@@QAEPAVcBuildingData_s00fe_ff80@2@H@Z  00ff07a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include

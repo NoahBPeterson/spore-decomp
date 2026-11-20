@@ -2056,8 +2056,10 @@ int cCityData_s00fe_ff80::GetNumTurrets() const
 namespace SP {
 cBuildingData_s00fe_ff80* cCityData_s00fe_ff80::GetBuilding(int nIndex)
 {
-    if (nIndex < (int32_t)(mpBuildingsEnd - mpBuildingsBegin))
+    if (nIndex < (int32_t)(mpBuildingsEnd - mpBuildingsBegin)) {
+        _ReadWriteBarrier();
         return &mpBuildingsBegin[nIndex];
+    }
     return 0;
 }
 }  // namespace SP
