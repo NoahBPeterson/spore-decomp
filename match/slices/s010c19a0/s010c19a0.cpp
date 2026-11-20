@@ -530,9 +530,9 @@ template void hkAlgorithm::quickSortRecursive<hkRootCdPoint, hkAlgorithm::lessRo
 // @ 0x010c2570  hkAllCdPointCollector::sortPoints
 void hkAllCdPointCollector::sortPoints()
 {
+    hkAlgorithm::lessRootCdPoint less = hkAlgorithm::lessRootCdPoint();
     if (m_points.m_size > 1)
     {
-        hkAlgorithm::lessRootCdPoint less;
         hkAlgorithm::quickSortRecursive<hkRootCdPoint, hkAlgorithm::lessRootCdPoint>(
             (hkRootCdPoint*)m_points.m_data, 0, m_points.m_size - 1, less);
     }
