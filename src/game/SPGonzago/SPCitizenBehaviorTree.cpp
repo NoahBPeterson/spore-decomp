@@ -2306,12 +2306,8 @@ u8 __cdecl FUN_00d933d0(cObj* a1)
     f32 c4 = g14853e0;
     f32 c2 = g1470f1c;
     MOPS(a1)->FUN_00c1c1d0(2, &g169ec74, c2, c4);
-    f32 r = MOPS((void*)0x1601760)->FUN_009360d0();
-    if (r < 0.5f) {
-        MOPS(a1)->FUN_00c1ad10(1);
-    } else {
-        MOPS(a1)->FUN_00c1ad10(0);
-    }
+    f32 r = MOPS((void*)g_1601760)->FUN_009360d0();
+    MOPS(a1)->FUN_00c1ad10(r < 0.5f ? true : false);
     return 1;
 }
 
