@@ -410,13 +410,18 @@ void* Interp::DeletingDtor(unsigned char flags)
     return self;
 }
 
+extern "C" char g_1415fe8[];   // 0x1415fe8: State vtable (primary)
+extern "C" char g_1415fd4[];   // 0x1415fd4: State vtable (+4 base)
+extern "C" char g_1415fc4[];   // 0x1415fc4: State vtable (+0xc base)
+
 // @ 0x007fe390
 void* State::DeletingDtor(unsigned char flags)
 {
     State* s = this;
-    s->mVtbl0 = (void*)0x1415fe8;
-    s->mVtbl4 = (void*)0x1415fd4;
-    s->mVtblC = (void*)0x1415fc4;
+    s->mVtbl0 = g_1415fe8;
+    s->mVtbl4 = g_1415fd4;
+    s->mVtblC = g_1415fc4;
+    _ReadWriteBarrier();
     void* p = s->mpValueInterp;
     if (p) {
         s->mpValueInterp = 0;
