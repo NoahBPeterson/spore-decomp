@@ -40,8 +40,10 @@ void* __cdecl FUN_0092a7a0(void*, int);                            // 0x0092a7a0
 void* __cdecl FUN_00929c60(void*);                                 // 0x00929c60 Cancel
 void* __cdecl FUN_00571db0(void*, void*, void*, void*, void*);     // 0x00571db0 RemoveHandler
 void* __cdecl FUN_005cb180(void*, char);                           // 0x005cb180 SetVisible
-void* __cdecl FUN_00ecf150(void*);                                 // 0x00ecf150
-void* __cdecl FUN_00ece990(void*);                                 // 0x00ece990
+struct SwatchUIRaw {
+    void* CtorEditItem();                                          // 0x00ecf150 (thiscall)
+    void* CtorItem();                                              // 0x00ece990 (thiscall)
+};
 int   FUN_007f54d0(void*);                                        // 0x007f54d0 (thiscall) GetAllocator
 void* __cdecl FUN_005c6810(void*, int*, int, int);                 // 0x005c6810 cSPPaletteItem::Init
 void* __cdecl FUN_00805070(int);                                   // 0x00805070 GetLayoutManager
@@ -124,7 +126,7 @@ void* __stdcall FUN_00ed1d70(int a, void* spec)
         spec = FUN_009512c0();
     p = FUN_009512d0(0xa0, 8, "UTFWin/cSPScenarioSwatchEditItemUI", spec);
     if (p != 0) {
-        p = FUN_00ecf150(p);
+        p = ((SwatchUIRaw*)p)->CtorEditItem();
         if (p != 0) {
             p = ((FV_i)(*(void***)((char*)p + 8))[0xc / 4])((char*)p + 8, 0x4785a3d);
             if (p != 0)
@@ -141,7 +143,7 @@ void* __stdcall FUN_00ed1dc0(int a, void* spec)
 {
     void* p = EAAllocate(0x6c, "UI/cSPScenarioSwatchItemUI", 0, 0, 0, 0);
     if (p != 0) {
-        p = FUN_00ece990(p);
+        p = ((SwatchUIRaw*)p)->CtorItem();
         if (p != 0) {
             p = ((FV_i)(*(void***)((char*)p + 8))[0xc / 4])((char*)p + 8, 0x4785a3d);
             if (p != 0)
