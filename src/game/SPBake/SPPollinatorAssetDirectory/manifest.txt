@@ -45,3 +45,4 @@
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?ParseSporeAssetIDInternal@cAssetMetadata@Pollen@SP@@QAE_NPBD@Z  00550b60  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?SetID@cAssetMetadataAuthView@Pollen@SP@@QAEX_K@Z  00551af0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?FUN_00553b90@Vec16@@QAEXXZ  00553b90  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPPollinatorAssetDirectory.cpp  ?DoFreeNodes@HashFreeStub@@QAEXPAPAXI@Z  005687d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
