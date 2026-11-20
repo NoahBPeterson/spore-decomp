@@ -58,3 +58,4 @@
 ../src/game/SPGonzago/_at_00b70000.cpp  ?AllocNode3@Simulator_cObstacle@@QAEPAXPAH@Z  00b74b60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b70000.cpp  ?Insert@ObMgr@@QAE?AUInsertResult@1@PAHH@Z  00b795c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00b70000.cpp  ?OnPieMsg@ServerObj@@QAE_NHH@Z  00b7d420  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00b70000.cpp  ??0cOwner@@QAE@XZ  00b71dc0  /O2 /MD /Gy /TP /Isrc/game/include

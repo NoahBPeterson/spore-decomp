@@ -2898,14 +2898,15 @@ void __cdecl Fn_00b71b90(IStream* pStream, FeedbackTree* pTree)
 // @ 0x00b71dc0
 cOwner::cOwner()
 {
+    _ReadWriteBarrier();
     eastl::nb* pAnchor = &mFeedback.mAnchor;
     pAnchor->mpNodeLeft   = 0;
     pAnchor->mpNodeParent = 0;
     pAnchor->mColor       = 0;
-    pAnchor->mpNodeLeft   = pAnchor;
+    mFeedback.mAnchor.mpNodeLeft = pAnchor;
     pAnchor->mpNodeRight  = pAnchor;
-    pAnchor->mpNodeParent = 0;
-    pAnchor->mColor       = 0;
+    mFeedback.mAnchor.mpNodeParent = 0;
+    *(char*)&mFeedback.mAnchor.mColor = 0;
     mFeedback.mnSize      = 0;
 }
 
