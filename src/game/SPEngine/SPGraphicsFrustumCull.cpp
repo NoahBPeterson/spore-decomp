@@ -87,17 +87,17 @@ int VertexCtx::TestClip2(const float* p, float t)
     float x = p[0];
     float y = p[1];
     float z = p[2];
-    unsigned char found = 0;
-    for (unsigned off = 0; off < 0x18; off += 4) {
-        int i = g_planeIndices[off / 4];
+    bool found = false;
+    for (unsigned n = 0; n < 6; ++n) {
+        int i = g_planeIndices[n];
         float* pf = (float*)(self + i * 0x28);
         float dot = ((pf[2] * z + pf[1] * y) + pf[0] * x) + pf[3];
         if (dot >= t) {
-            found = 1;
+            found = true;
             break;
         }
     }
-    return (-(unsigned)(found != 0) & 0xfffffec0) + 0x180;
+    return found ? 0x40 : 0x180;
 }
 
 // @ 0x006ffc60
