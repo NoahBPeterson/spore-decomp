@@ -4449,9 +4449,11 @@ int Func6fe00(int type)
 bool Func6fe50(WorldObject* pObj)
 {
     WorldObject* pType = (WorldObject*)((void* (__thiscall*)(void*))FUN_00b8de30_s00c6_f6e0)(pObj);
-    if (((int (__thiscall*)(void*))FUN_00bb9ae0)(pType) != 5) return false;
-    void* pAvatar = ((void* (__thiscall*)(void*))FUN_00b1fdb0)(pType);
-    void* pMgr = ((void* (__stdcall*)(void*))FUN_00b3d2a0)(pAvatar);
-    void* pEmpire = ((void* (__thiscall*)(void*))FUN_00ba9370)(pMgr);
-    return ((void* (__thiscall*)(void*))FUN_00c31730)(pEmpire) == pObj;
+    if (((int (__thiscall*)(void*))FUN_00bb9ae0)(pType) == 5) {
+        void* pAvatar = ((void* (__thiscall*)(void*))FUN_00b1fdb0)(pType);
+        void* pMgr = ((void* (__stdcall*)(void*))FUN_00b3d2a0)(pAvatar);
+        void* pEmpire = ((void* (__thiscall*)(void*))FUN_00ba9370)(pMgr);
+        return ((void* (__thiscall*)(void*))FUN_00c31730)(pEmpire) == pObj;
+    }
+    return false;
 }
