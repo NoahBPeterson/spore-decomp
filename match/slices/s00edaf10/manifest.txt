@@ -6,3 +6,4 @@ slices/s00edaf10/s00edaf10.cpp  ?do_copy@@YAPAURunInfo@@PAU1@00@Z  00edba80  /O2
 slices/s00edaf10/s00edaf10.cpp  ?dtor@cScenarioEditModeScriptActsBarUI@@QAEXXZ  00edbcb0  /O2 /MD /Gy /TP
 slices/s00edaf10/s00edaf10.cpp  ?FUN_00edbdd0@cScenarioEditModeScriptActsBarUI@@QAEXH@Z  00edbdd0  /O2 /MD /Gy /TP
 slices/s00edaf10/s00edaf10.cpp  ?ctor@cScenarioEditModeScriptActsBarUI@@QAEPAU1@XZ  00edbe00  /O2 /MD /Gy /TP
+slices/s00edaf10/s00edaf10.cpp  ?FUN_00edbe60@cScenarioEditModeScriptActsBarUI@@QAEXXZ  00edbe60  /O2 /MD /Gy /TP
