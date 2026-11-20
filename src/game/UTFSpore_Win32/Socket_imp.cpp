@@ -591,12 +591,9 @@ bool ISocket::SetDebugOption(bool enabled)
 bool EA::Sockets::Socket::GetLingerOption(bool & out, unsigned int & val)
 {
     struct { unsigned short on; unsigned short sec; } opts;
-    opts.on = 0;
-    opts.sec = 0;
-    unsigned h = *(unsigned*)((char*)this + 4);
     int len = 4;
-    if (getsockopt(h, 0xffff, 0x80, (char*)&opts, &len) != 0) {
-        REPORT_ERROR(this);
+    if (getsockopt(*(unsigned*)((char*)this + 4), 0xffff, 0x80, (char*)&opts, &len) != 0) {
+        ((Primary*)((char*)this - 8))->DoError(WSAGetLastError(), 0);
         return false;
     }
     out = (opts.on != 0);
@@ -610,11 +607,8 @@ bool Socket::SetLingerOpt(unsigned char on, unsigned short level)
     struct { unsigned short on; unsigned short sec; } opts;
     opts.on = (unsigned short)(on != 0);
     opts.sec = level;
-    unsigned h = *(unsigned*)((char*)this + 4);
-    int r = setsockopt(h, 0xffff, 0x80, (const char*)&opts, 4);
-    (void)h;
-    if (r != 0) {
-        ReportError(0);
+    if (setsockopt(*(unsigned*)((char*)this + 4), 0xffff, 0x80, (const char*)&opts, 4) != 0) {
+        ((Primary*)((char*)this - 8))->DoError(WSAGetLastError(), 0);
         return false;
     }
     return true;
@@ -631,11 +625,8 @@ bool Socket::GetNonBlocking(unsigned char* out)
 bool EA::Sockets::Socket::SetNonBlockingOption(bool b)
 {
     unsigned long value = (unsigned long)(b != 0);
-    unsigned h = *(unsigned*)((char*)this + 4);
-    int r = ioctlsocket(h, 0x8004667e, &value);
-    (void)h;
-    if (r != 0) {
-        REPORT_ERROR(this);
+    if (ioctlsocket(*(unsigned*)((char*)this + 4), 0x8004667e, &value) != 0) {
+        ((Primary*)((char*)this - 8))->DoError(WSAGetLastError(), 0);
         return false;
     }
     *(unsigned char*)((char*)this + 0x77) = b;
