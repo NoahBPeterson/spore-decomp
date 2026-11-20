@@ -1518,20 +1518,24 @@ u32 cSPMissionManager::FUN_00febe90()
     return n;
 }
 
+static inline void AssignTrackedRef_febeb0(void*& slot, void* p)
+{
+    if (p != slot) {
+        void* o = slot;
+        if (p != 0)
+            (*(void (__thiscall**)(void*))vtbl(p))(p);
+        slot = p;
+        if (o != 0)
+            (*(void (__thiscall**)(void*))((char*)vtbl(o) + 4))(o);
+    }
+}
 // @ 0x00febeb0
 void cSPMissionManager::FUN_00febeb0(void* mission)
 {
     void* old = mTrackedMission;
     if (old != mission)
     {
-        if (mission != old)
-        {
-            if (mission != 0)
-                (*(void (__thiscall**)(void*))vtbl(mission))(mission);
-            mTrackedMission = mission;
-            if (old != 0)
-                (*(void (__thiscall**)(void*))((char*)vtbl(old) + 4))(old);
-        }
+        AssignTrackedRef_febeb0(mTrackedMission, mission);
         if (old != 0)
             MOPS(old)->FUN_00c47d80();
         if (mTrackedMission != 0)
