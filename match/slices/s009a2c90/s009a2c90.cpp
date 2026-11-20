@@ -284,10 +284,10 @@ __declspec(noinline) int S9a3630::f() {
   int local[2];
   local[0] = *(int*)(self + 0xdc) - 1;
   local[1] = 0;
-  int* p = (local[0] < 1) ? &local[1] : &local[0];
+  int* p = (local[1] < local[0]) ? &local[0] : &local[1];
   int v = *p;
   *(int*)(self + 0xdc) = v;
-  if (v < 1) {
+  if (v <= 0) {
     *(int*)(self + 0xdc) = 1;
     ((S9a35b0*)self)->f();
     FUN_f47380(self);
