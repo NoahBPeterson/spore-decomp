@@ -18,3 +18,4 @@
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?Dtor@TexMgr@@QAEXXZ  00833a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ??1TexMgrJobs@@QAE@XZ  007a9620  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?FUN_00834000@TexLoader_834000@@QAEXPAXH0@Z  00834000  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?PushBack@DequeMap@@QAEXPAH@Z  007aa850  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
