@@ -3,7 +3,6 @@
 0065c790  32  ctor: complete; dead base-vtable store differs, eax=this via asm shim; equiv PASS (400 valid, 100% cov)
 0065c840  326  SetMode: complete; vcall scheduling/register allocation differs; equiv PASS (324 valid, 100% cov)
 0065c9a0  120  OnTick: complete; float x87 compare and vcall schedule differ
-0065ca10  189  cSPUIFeedEdit::Shutdown: complete; IHandlerRC/MessageServer schedule differs
 0065cae0  123  enabled-state helper: complete; bool folding differs
 0065cc50  114  page-button enable helper: complete; register allocation differs
 0065ccd0  73  GetAssetIndex: complete; do/while loop lowers smaller than the original's index loop; equiv PASS (290 valid, 100% cov)
