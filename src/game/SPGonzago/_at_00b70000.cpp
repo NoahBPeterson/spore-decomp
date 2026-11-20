@@ -1372,7 +1372,7 @@ struct QuadVec {
     __forceinline void erase(Quad16* first, Quad16* last)
     {
         copy_705250(last, last, first);
-        mpEnd += first - last;
+        mpEnd -= last - first;
     }
 };
 void FUN_00b76950(Vec3* first, Vec3* last, int depth,
