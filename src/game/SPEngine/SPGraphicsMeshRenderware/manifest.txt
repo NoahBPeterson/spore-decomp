@@ -8,3 +8,4 @@
 ../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ?FUN_0072c040@@YAXPAHPAX1111111@Z  0072c040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ??0RefObjView_s0072_aaf0@@QAE@H@Z  0072ac60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ?Init@C29820@@QAEPAU1@HPAMHH@Z  00729820  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshRenderware.cpp  ?Init@SpanAlloc@@QAEPAU1@HPAH@Z  0072a1a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

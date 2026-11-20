@@ -1581,18 +1581,12 @@ void __fastcall FUN_0072a180(int* self)
 SpanAlloc* SpanAlloc::Init(int n, int* other)
 {
     stride = other[1];
-    if (n != 0) {
-        int* p = (int*)FUN_00f473a0(n * 4, "Graphics", 0, 0,
+    int* p = n ? (int*)FUN_00f473a0(n * 4, "Graphics", 0, 0,
             "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
-            0xd1);
-        mpBegin = p;
-        mpEnd   = p;
-        mpCap   = p + n;
-        return this;
-    }
-    mpBegin = 0;
-    mpEnd   = 0;
-    mpCap   = mpBegin + n;
+            0xd1) : 0;
+    mpBegin = p;
+    mpEnd   = p;
+    mpCap   = p + n;
     return this;
 }
 
