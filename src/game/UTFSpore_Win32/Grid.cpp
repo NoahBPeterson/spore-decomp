@@ -372,7 +372,9 @@ void* __cdecl WinScrollbar_CreateDef(int orientation, int a, int w, int h);   //
 struct AutoRefCount { void* p; void Assign(void* v); };                         // 0xb5f950
 void* __cdecl interface_cast_IDrawable(void* ref);                              // 0x972db0
 struct ColIterA { SparseMatrix* mat; OutNode* out; int* cur; ColIterA& operator++(); };
-struct ColIterB { SparseMatrix* mat; OutNode* out; RBNode* in;  ColIterB& operator++(); };
+struct OutValue { int f14; RBTree inner; };   // OutNode value part (+0x14)
+struct RBIter { RBNode* mpNode; void Inc() { mpNode = RBTreeIncrement(mpNode); } };
+struct ColIterB { SparseMatrix* mat; RBIter out; RBIter in;  ColIterB& operator++(); };
 struct CellCoord { int col, row; CellCoord(const CellCoord& o) : col(o.col), row(o.row) {} };
 struct ListNode { ListNode* next; ListNode* prev; CellCoord value; };
 inline void* operator new(size_t, void* p) { return p; }
@@ -5746,13 +5748,15 @@ ColIterA& ColIterA::operator++()
 // @ 0x009736c0
 ColIterB& ColIterB::operator++()
 {
-    in = RBTreeIncrement(in);
-    if (in == (RBNode*)&out->inner.anchor) {
-        in = 0;
-        out = (OutNode*)RBTreeIncrement(&out->b);
-        while (out != mat->End()) {
-            if (out->inner.size != 0) { in = out->inner.anchor.left; break; }
-            out = (OutNode*)RBTreeIncrement(&out->b);
+    in.Inc();
+    if (in.mpNode == &((OutNode*)out.mpNode)->inner.anchor) {
+        in.mpNode = 0;
+        for (out.Inc(); out.mpNode != (RBNode*)mat->End(); out.Inc()) {
+            OutValue& v = *(OutValue*)&((OutNode*)out.mpNode)->f14;
+            if (v.inner.size != 0) {
+                in.mpNode = v.inner.anchor.left;
+                break;
+            }
         }
     }
     return *this;
