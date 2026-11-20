@@ -371,9 +371,9 @@ static inline void* AsDrawable(void* d) { return d ? VCALL1(void*, d, 0xc, 0x6ec
 void* __cdecl WinScrollbar_CreateDef(int orientation, int a, int w, int h);   // 0x9839b0
 struct AutoRefCount { void* p; void Assign(void* v); };                         // 0xb5f950
 void* __cdecl interface_cast_IDrawable(void* ref);                              // 0x972db0
-struct ColIterA { SparseMatrix* mat; OutNode* out; int* cur; ColIterA& operator++(); };
 struct OutValue { int f14; RBTree inner; };   // OutNode value part (+0x14)
 struct RBIter { RBNode* mpNode; void Inc() { mpNode = RBTreeIncrement(mpNode); } };
+struct ColIterA { SparseMatrix* mat; RBIter out; int* cur; ColIterA& operator++(); };
 struct ColIterB { SparseMatrix* mat; RBIter out; RBIter in;  ColIterB& operator++(); };
 struct CellCoord { int col, row; CellCoord(const CellCoord& o) : col(o.col), row(o.row) {} };
 struct ListNode { ListNode* next; ListNode* prev; CellCoord value; };
@@ -5733,13 +5733,12 @@ bool WinGrid::AddScrollBar(bool vert, bool horz)
 // @ 0x00973640
 ColIterA& ColIterA::operator++()
 {
-    out = (OutNode*)RBTreeIncrement(&out->b);
-    while (out != mat->End()) {
-        InNode* end = (InNode*)&out->inner.anchor;
-        for (InNode* in = (InNode*)out->inner.anchor.left; in != end; in = (InNode*)RBTreeIncrement(&in->b)) {
-            if (in->f14 == *cur) { cur = &in->f14; return *this; }
+    for (out.Inc(); out.mpNode != (RBNode*)mat->End(); out.Inc()) {
+        OutValue& v = *(OutValue*)&((OutNode*)out.mpNode)->f14;
+        for (InNode* in = (InNode*)v.inner.anchor.left; in != (InNode*)&v.inner.anchor; in = (InNode*)RBTreeIncrement(&in->b)) {
+            int* p = &in->f14;
+            if (*p == *cur) { cur = p; return *this; }
         }
-        out = (OutNode*)RBTreeIncrement(&out->b);
     }
     cur = 0;
     return *this;
