@@ -528,11 +528,14 @@ bool __fastcall FUN_00e0a780(cPaletteGrid* ecx_this, void* edx, Float3* key, u32
     ecx_this->mKey0C = k[0];
     ecx_this->mKey10 = k[1];
     ecx_this->mKey14 = k[2];
-    ecx_this->mPages.erase(ecx_this->mPages.mBegin, ecx_this->mPages.mEnd);
+    {
+        cRefVector& pages = ecx_this->mPages;
+        pages.erase(pages.mBegin, pages.mEnd);
+    }
     ecx_this->mSel.erase(ecx_this->mSel.mBegin, ecx_this->mSel.mEnd);
     if (ecx_this->AddPages(count)) {
         ecx_this->FUN_00e09d10();
-        return ecx_this->LayoutCells();
+        ok = ecx_this->LayoutCells();
     }
     return ok;
 }
