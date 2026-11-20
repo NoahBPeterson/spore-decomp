@@ -7,3 +7,4 @@ slices/s007fd840/s007fd840.cpp  ?IsThisType@WinEvent@@QAE_NXZ  007fe7a0  /O2 /MD
 slices/s007fd840/s007fd840.cpp  ?SerLoadVector2@@YA_NPAUSerBuffer@@PAXPAUSerItem14@@@Z  007fe690  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007fd840/s007fd840.cpp  ?DeletingDtor@Interp@@QAEPAXE@Z  007fe330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s007fd840/s007fd840.cpp  ?DeletingDtor@WinEvent@@QAEPAXE@Z  007fea90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fd840/s007fd840.cpp  ?InitWith@State@@QAE_NH@Z  007fdfe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
