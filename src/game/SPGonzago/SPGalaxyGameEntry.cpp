@@ -4699,6 +4699,26 @@ struct sHashTable {
     void Insert(sInsertResult* pOut, const sKeyValuePair* pPair, bool bFindExisting); // 0x00aeb960
     void DestroyBuckets(sHashNode** pBuckets, uint32_t nBucketCount);     // 0x00aeb030
     void DestroyStringBuckets(sHashNode** pBuckets, uint32_t nBucketCount); // 0x00de2350
+    void Reset() {
+        DestroyBuckets(mpBuckets, mnBucketCount);
+        mnElementCount = 0;
+    }
+    void ResetStrings() {
+        DestroyStringBuckets(mpBuckets, mnBucketCount);
+        mnElementCount = 0;
+    }
+    void Free() {
+        DestroyBuckets(mpBuckets, mnBucketCount);
+        mnElementCount = 0;
+        if (mnBucketCount > 1)
+            SP::DeleteArray(mpBuckets);
+    }
+    void FreeStrings() {
+        DestroyStringBuckets(mpBuckets, mnBucketCount);
+        mnElementCount = 0;
+        if (mnBucketCount > 1)
+            SP::DeleteArray(mpBuckets);
+    }
 };
 class cPropertyTableTriple {
 public:
@@ -9780,29 +9800,17 @@ void cPropertyTableTriple::LoadStringPairs(uint32_t nObject, uint32_t nProperty)
 // @ 0x00de29f0
 void cPropertyTableTriple::Clear()
 {
-    mTable0.DestroyBuckets(mTable0.mpBuckets, mTable0.mnBucketCount);
-    mTable0.mnElementCount = 0;
-    mTable1.DestroyBuckets(mTable1.mpBuckets, mTable1.mnBucketCount);
-    mTable1.mnElementCount = 0;
-    mTable2.DestroyStringBuckets(mTable2.mpBuckets, mTable2.mnBucketCount);
-    mTable2.mnElementCount = 0;
+    mTable0.Reset();
+    mTable1.Reset();
+    mTable2.ResetStrings();
 }
 
 // @ 0x00de2a50
 void cPropertyTableTriple::Destroy()
 {
-    mTable2.DestroyStringBuckets(mTable2.mpBuckets, mTable2.mnBucketCount);
-    mTable2.mnElementCount = 0;
-    if (mTable2.mnBucketCount > 1)
-        SP::DeleteArray(mTable2.mpBuckets);
-    mTable1.DestroyBuckets(mTable1.mpBuckets, mTable1.mnBucketCount);
-    mTable1.mnElementCount = 0;
-    if (mTable1.mnBucketCount > 1)
-        SP::DeleteArray(mTable1.mpBuckets);
-    mTable0.DestroyBuckets(mTable0.mpBuckets, mTable0.mnBucketCount);
-    mTable0.mnElementCount = 0;
-    if (mTable0.mnBucketCount > 1)
-        SP::DeleteArray(mTable0.mpBuckets);
+    mTable2.FreeStrings();
+    mTable1.Free();
+    mTable0.Free();
 }
 
 // @ 0x00de2ae0
