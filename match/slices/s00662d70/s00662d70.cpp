@@ -197,12 +197,14 @@ void* cSPUIFeedList::Ctor() {
     return p;
 }
 
+struct FeedEntryVec { void FUN_005c9c30(); };   // 0x005c9c30 vector destructor
 // @ 0x006630e0
 void cSPUIFeedList::Dtor() {
     char* p = (char*)this;
     *(void**)(p + 0) = &gVtC;
     *(void**)(p + 4) = &gVtD;
     *(void**)(p + 8) = &gVtE;
+    _ReadWriteBarrier();
     void* a = *(void**)(p + 0x68);
     if (a) (*(FnP)Vslot(a, 4))(a);
     void* h = *(void**)(p + 0x54);
@@ -211,7 +213,7 @@ void cSPUIFeedList::Dtor() {
     a = *(void**)(p + 0x50); if (a) (*(FnP)Vslot(a, 4))(a);
     a = *(void**)(p + 0x4c); if (a) (*(FnP)Vslot(a, 0xc))(a);
     // vector dtor at 0x38
-    { void* v = p + 0x38; (*(void(__thiscall*)(void*))0x5c9c30)(v); }
+    ((FeedEntryVec*)(p + 0x38))->FUN_005c9c30();
     a = *(void**)(p + 0x34); if (a) (*(FnP)Vslot(a, 4))(a);
     a = *(void**)(p + 0x30); if (a) (*(FnP)Vslot(a, 4))(a);
     a = *(void**)(p + 0x2c); if (a) (*(FnP)Vslot(a, 4))(a);
