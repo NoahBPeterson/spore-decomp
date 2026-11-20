@@ -6,7 +6,6 @@
 007d7f60  209  ability command SetTransform; complete (matrix copy, translation compare, virtual update), codegen differs; equivalence PASS
 007d8180  99  SP::cApp::HandleMessage (IHandlerRC subobject); complete 3 message cases, register/call shape differs; equivalence WEAK (no mismatch, coverage-limited) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 eax]
 007d81f0  42   SP::cApp::PreInitAppModes; complete loop over modes calling vtable+0xc, count/register shape differs
-007d8230  45   SP::cApp::InitAppModes; complete loop over modes calling vtable+0x10, count/register shape differs
 007d8270  n/a  SP::cApp::AppMode(unsigned); complete linear search by mID, byte-diff count/register shape differs
 007d8360  101  SP::cApp::SetAppModeByName; complete _stricmp search + SetAppModeByIndex vcall, schedule differs
 007d8470  n/a  SP::cApp::SwitchMode; complete (leave mode, build/send 2 messages, clear index), message ctor/EH schedule differs

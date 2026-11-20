@@ -293,14 +293,10 @@ bool SP::cApp::PreInitAppModes()
 // @ 0x007d8230
 bool SP::cApp::InitAppModes()
 {
-    int n = (int)((char*)mAppModesEnd - (char*)mAppModesBegin) / 0x18;
-    if (n > 0) {
-        SP::cAppModeInfo* p = mAppModesBegin;
-        for (int i = 0; i < n; ++i, ++p) {
-            void* mode = p->mpMode;
-            void** vt = *(void***)mode;
-            ((void(__thiscall*)(void*, void*))vt[0x10 / 4])(mode, this);
-        }
+    int n = (int)(mAppModesEnd - mAppModesBegin);
+    for (int i = 0; i < n; ++i) {
+        void* mode = mAppModesBegin[i].mpMode;
+        ((void(__thiscall*)(void*, void*))(*(void***)mode)[0x10 / 4])(mode, this);
     }
     return true;
 }
