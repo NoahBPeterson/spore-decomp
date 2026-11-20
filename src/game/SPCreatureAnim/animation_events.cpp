@@ -146,24 +146,36 @@ static inline void Unit(float* d) { d[0] = 0.0f; d[1] = 0.0f; d[2] = 1.0f; }
 namespace nSPCreatureAnim {
 bool CheckEventLocationType(unsigned long param_1, creature_instance_data * param_2)
 {
-    int param_2_v = (int)param_2;
-    if ((param_1 & 0xc00000) == 0x400000) {
-        if ((param_2_v == 0) || (*(char*)(param_2_v + 0x2d6) == 0))
+    const char* d = (const char*)param_2;
+    switch (param_1 & 0xc00000) {
+    case 0x400000:
+        if (d == 0 || d[0x2d6] == 0)
             return false;
-    } else if (((param_1 & 0xc00000) == 0x800000) && (param_2_v != 0) && (*(char*)(param_2_v + 0x2d6) != 0)) {
-        return false;
+        break;
+    case 0x800000:
+        if (d != 0 && d[0x2d6] != 0)
+            return false;
+        break;
     }
-    if ((param_1 & 0xc000000) == 0x4000000) {
-        if ((param_2_v == 0) || (*(char*)(param_2_v + 0x2d4) == 0))
+    switch (param_1 & 0xc000000) {
+    case 0x4000000:
+        if (d == 0 || d[0x2d4] == 0)
             return false;
-    } else if (((param_1 & 0xc000000) == 0x8000000) && (param_2_v != 0) && (*(char*)(param_2_v + 0x2d4) != 0)) {
-        return false;
+        break;
+    case 0x8000000:
+        if (d != 0 && d[0x2d4] != 0)
+            return false;
+        break;
     }
-    if ((param_1 & 0x3000000) == 0x1000000) {
-        if ((param_2_v == 0) || (*(char*)(param_2_v + 0x2d5) == 0))
+    switch (param_1 & 0x3000000) {
+    case 0x1000000:
+        if (d == 0 || d[0x2d5] == 0)
             return false;
-    } else if (((param_1 & 0x3000000) == 0x2000000) && (param_2_v != 0) && (*(char*)(param_2_v + 0x2d5) != 0)) {
-        return false;
+        break;
+    case 0x2000000:
+        if (d != 0 && d[0x2d5] != 0)
+            return false;
+        break;
     }
     return true;
 }
