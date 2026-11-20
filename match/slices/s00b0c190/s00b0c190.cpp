@@ -592,13 +592,12 @@ cKeySlot& cKeySlot::operator=(const cKeySlot& rhs)
 // @ 0x00b0ce40
 void CopySlotObjects(cSlotObject** ppDst, uint nCount, cSlotObject* const* ppSrc)
 {
-    while (nCount-- != 0) {
-        if (ppDst != 0) {
-            *ppDst = *ppSrc;
-            if (*ppDst != 0)
-                (*ppDst)->AddRefShared();
+    for (cSlotObject** p = ppDst; nCount > 0; --nCount, ++p) {
+        if (p != 0) {
+            *p = *ppSrc;
+            if (*p != 0)
+                (*p)->AddRefShared();
         }
-        ++ppDst;
     }
 }
 
