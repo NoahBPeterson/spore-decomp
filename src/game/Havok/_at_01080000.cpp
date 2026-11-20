@@ -3282,8 +3282,8 @@ void hkConstraintConstructionKit::constrainToAngularDof(int index)
     info->m_sizeOfJacobians += 0x20;
     info->m_numSolverResults += 1;
     info = &m_scheme->m_info;
-    info->m_sizeOfJacobians += 0x20;
     info->m_sizeOfSchemas += 4;
+    info->m_sizeOfJacobians += 0x20;
     info->m_numSolverResults += 1;
 }
 

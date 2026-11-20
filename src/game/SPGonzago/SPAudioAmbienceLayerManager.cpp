@@ -3,6 +3,7 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <intrin.h>
 #include "cSPUILayout.h"
 #include <math.h>
 #include <wchar.h>
@@ -56,6 +57,7 @@ struct TagMap {
     uint32_t mUnk14;     // +0x14
     void find(void* result, void* key);              // 0x00e5c780
     void DoNukeSubtree(void* node);                  // 0x009a9600
+    void Destroy() { DoNukeSubtree(mRootNode); }     // the inlined eastl::rbtree destructor body
 };
 struct Config {
     virtual void s0();
@@ -704,6 +706,7 @@ void cAmbLayer::Destroy()
     mpVtbl  = &g_vtbl_01487150;
     mpVtbl4 = &g_vtbl_01487140;
     mpVtbl8 = &g_vtbl_0148713c;
+    _ReadWriteBarrier();
     if ((mStr.mCap - mStr.mBegin) > 1 && mStr.mBegin != 0)
         operator_delete_array(mStr.mBegin);
     if (mCurveB.mBegin != 0 && mCurveB.mBegin != mCurveB.mCap)
@@ -713,7 +716,7 @@ void cAmbLayer::Destroy()
     if (mpC4 != 0)
         operator_delete_array(mpC4);
     mSubB0.dtor();
-    mIdToTagMap.DoNukeSubtree(mIdToTagMap.mRootNode);
+    mIdToTagMap.Destroy();
     if (mDynTagsBegin != 0)
         operator_delete_array(mDynTagsBegin);
     if (mViewTagsBegin != 0)
@@ -730,6 +733,7 @@ void cAmbLayer::Destroy()
     if (mpConfiguration != 0)
         mpConfiguration->Release();
     mpVtbl4 = &g_vtbl_013eb394;
+    _ReadWriteBarrier();
     mpVtbl8 = &g_vtbl_013ef094;
 }
 

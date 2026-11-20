@@ -3254,7 +3254,7 @@ void FillXform12(nSPCreatureAnim::xform12* dest, uint32_t n, const nSPCreatureAn
 // @ 0x009b4550
 nSPCreatureAnim::bone_xform_s009b_3e40* CopyBoneXforms(nSPCreatureAnim::bone_xform_s009b_3e40* first, nSPCreatureAnim::bone_xform_s009b_3e40* last, nSPCreatureAnim::bone_xform_s009b_3e40* result)
 {
-    for (; first != last; ++first, ++result)
+    for (; first != last; ++result, ++first)
         *result = *first;
     return result;
 }

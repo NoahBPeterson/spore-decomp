@@ -6,7 +6,6 @@
 01088f70 0 havok-equivalent
 01089280 34 begin(): constraint kit layout + getScheme thiscall call shape; behaviourally equivalent (replay exact, fresh PASS 400 valid, 100% cov)
 010892c0 175 havok-equivalent
-010894a0 154 havok-equivalent
 01089550 116 havok-equivalent
 010895e0 116 havok-equivalent
 010896b0 27 getConstraintInfo(): hkConstraintData now has m_userData (+0x08) so m_scheme.m_info lands at +0x0c; behaviourally equivalent (replay exact, fresh PASS 397 valid, 100% cov)

@@ -556,14 +556,20 @@ int FlexFlag::GetEffectFlag()
 }
 
 // @ 0x00963f70
+struct FlexFlagVt_963f70 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20();
+    virtual void SetFlags(uint32_t f);   // +0x24
+};
 void FlexFlag::SetEffectFlag(uint32_t m, bool on)
 {
-    int v = *(int*)((char*)this - 0x160);
-    if (on) {
-        (*(void(__thiscall**)(void*, uint32_t))((char*)*(void**)this + 0x24))(this, (uint32_t)v | m);
-    } else {
-        (*(void(__thiscall**)(void*, uint32_t))((char*)*(void**)this + 0x24))(this, (uint32_t)v & ~m);
-    }
+    uint32_t v = *(uint32_t*)((char*)this - 0x160);
+    if (on)
+        v |= m;
+    else
+        v &= ~m;
+    ((FlexFlagVt_963f70*)this)->SetFlags(v);
 }
 
 // @ 0x00963fd0

@@ -13,7 +13,6 @@
 00fd97c0  size  Render: complete and equivalence WEAK (251 valid, no mismatch,
           13% 13.2% coverage). Compiled 702 B vs the original's 943 B - the
                branch-specific store blocks were CSE'd together. flags /O2 /MD /Gy /TP /arch:SSE
-00fd9d00   26  InputManager mode test: complete and equivalence PASSes
                (399 valid, 100% coverage); cl factors the second comparison
                into `sete` instead of the original's shared `mov eax,1` tail.
                flags /O2 /MD /Gy /TP /arch:SSE

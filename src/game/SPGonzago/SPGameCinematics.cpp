@@ -141,31 +141,44 @@ unsigned cGameCinematicsAppMode::AsInterface(int id)
 {
     if (id != (int)0xae9cb0fa && id != (int)0xee3f516e && id != 0x2f009dd0)
         return 0;
-    return (this != (cGameCinematicsAppMode*)4) ? (unsigned)this : 0;
+    char* pOwner = (char*)this - 4;
+    return pOwner ? (unsigned)this : 0;
 }
 }  // namespace SP
+
+extern "C" char g_14885c0[];
+extern "C" char g_14885a0[];
+extern "C" char g_1488590[];
+extern "C" char g_1488580[];
+extern "C" char g_1488570[];
+extern "C" char g_13ec458[];
+extern "C" char g_13eb394[];
+extern "C" char g_13eb938[];
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 
 // @ 0x00eb2470
 namespace SP {
 void cGameCinematicsAppMode::DtorBody()
 {
     char* s = (char*)this;
-    *(unsigned*)(s + 0x00) = 0x14885c0;
-    *(unsigned*)(s + 0x04) = 0x14885a0;
-    *(unsigned*)(s + 0x08) = 0x1488590;
-    *(unsigned*)(s + 0x0c) = 0x1488580;
-    *(unsigned*)(s + 0x10) = 0x1488570;
+    *(unsigned*)(s + 0x00) = (unsigned)g_14885c0;
+    *(unsigned*)(s + 0x04) = (unsigned)g_14885a0;
+    *(unsigned*)(s + 0x08) = (unsigned)g_1488590;
+    *(unsigned*)(s + 0x0c) = (unsigned)g_1488580;
+    *(unsigned*)(s + 0x10) = (unsigned)g_1488570;
+    _ReadWriteBarrier();
     void* p20 = *(void**)(s + 0x20);
     if (p20) ((FV0)VT(p20)[1])(p20);
     void* p1c = *(void**)(s + 0x1c);
     if (p1c) ((FV0)VT(p1c)[1])(p1c);
     void* p18 = *(void**)(s + 0x18);
     if (p18) ((FV0)VT(p18)[1])(p18);
-    *(unsigned*)(s + 0x10) = 0x13ec458;
-    *(unsigned*)(s + 0x0c) = 0x13eb394;
-    *(unsigned*)(s + 0x08) = 0x13eb938;
-    *(unsigned*)(s + 0x04) = 0x13eb938;
-    *(unsigned*)(s + 0x00) = 0x13eb938;
+    *(unsigned*)(s + 0x10) = (unsigned)g_13ec458;
+    *(unsigned*)(s + 0x0c) = (unsigned)g_13eb394;
+    *(unsigned*)(s + 0x08) = (unsigned)g_13eb938;
+    *(unsigned*)(s + 0x04) = (unsigned)g_13eb938;
+    *(unsigned*)(s + 0x00) = (unsigned)g_13eb938;
 }
 }  // namespace SP
 

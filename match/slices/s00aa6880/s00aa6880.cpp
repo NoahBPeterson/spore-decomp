@@ -246,6 +246,9 @@ void cCommand::ExecuteMetaLoopBoxColor(cArguments* args)
 }
 
 // ================================================================================
+extern "C" char g_1458dfc[];      // 0x01458dfc ParticleEffect command vftable
+extern char gEmptyString16[];     // 0x01667bac eastl empty string sentinel
+extern char gEmptyString16Cap[];  // 0x01667bad (sentinel + 1)
 // @ 0x00aa6bf0
 // A command object: vtable at +0, base AppPropsFields ctor, a nested ctor at +0x40,
 // then a description pointer and magic tag.
@@ -265,17 +268,18 @@ void* CreateParticlesDescriptionCommand(void* param_1)
   ParticleEffectCommand* p = (ParticleEffectCommand*)operator_new(0x2d0, "ArgScript/ParticleEffect", 0, 0, 0, 0);
   if (p) {
     p->AppPropsFields::AppPropsFields();
-    *(uint32_t*)p = 0x01458dfc;
+    *(void**)p = g_1458dfc;
     p->pad34 = (uint32_t)(unsigned)param_1;
+    _ReadWriteBarrier();
     p->mid38.tag38 = 0xeba93c76;
-    Sub40* s = &p->sub40;
-    s->Ctor();
-    uint32_t tag = 0x01667bac;
+    p->sub40.Ctor();
+    uint32_t tag = (uint32_t)gEmptyString16;
     p->tag2b8 = tag;
     p->tag2bc = tag;
-    p->tag2c0 = 0x01667bad;
+    p->tag2c0 = (uint32_t)gEmptyString16Cap;
+    return p;
   }
-  return p;
+  return 0;
 }
 
 // ================================================================================

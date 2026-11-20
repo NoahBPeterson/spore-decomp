@@ -455,7 +455,7 @@ void __cdecl FUN_01041d10()
 // @ 0x01041d30
 int __cdecl FUN_01041d30(MinimapSource* src)
 {
-    return (int)(-(uint32_t)(src->mField608 != 0) & 0x6103d89bu) + (int)0xef2601ca;
+    return 0u < src->mField608 ? (int)0x5029da65 : (int)0xef2601ca;
 }
 
 static void AssignIconRef(MinimapIconData& data, void* src)

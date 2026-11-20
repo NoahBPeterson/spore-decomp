@@ -257,6 +257,7 @@ struct TTExecCtx {
     int (*mMoveFn)(void*, TTZone*, int, int);   // +0x44
     int (*mProjFn)(void*, int, int);            // +0x48
     int (*mDualFn)(void*, int, int);            // +0x4c
+    char           mPad50[0x04];
     int (*mReadFn)(void*, int);                 // +0x54
     char           mPad58[0x40];
     int (*mRoundFn)(void*, int);                // +0x98
@@ -952,8 +953,9 @@ void fnt_FLIPPT(TTExecCtx* c)
     unsigned char* const flags = c->mZp0->mFlags;
     int* p = c->mStack;
     for (short n = c->mRepeat; n >= 0; n--) {
-        p -= 1;
-        flags[*p] ^= 1;
+        p--;
+        long i = *p;
+        flags[i] ^= 1;
     }
     c->mRepeat = 0;
     c->mStack = p;
@@ -1220,9 +1222,8 @@ void fnt_RS(TTExecCtx* c)
 // @ 0x008ae600
 void fnt_ROUND(TTExecCtx* c)
 {
-    c->mStack -= 1;
-    int* p = c->mStack;
-    *p = c->mReadFn(c, *p);
+    int v = c->mReadFn(c, popInt(c));
+    *c->mStack = v;
     c->mStack += 1;
 }
 

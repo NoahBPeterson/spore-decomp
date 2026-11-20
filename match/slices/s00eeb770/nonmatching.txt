@@ -1,5 +1,4 @@
 00eec3d0  6   complete; three-dword sret copy store order differs
-00eec580  17  complete; index register (eax vs ecx) and loop scheduling differ
 00eeb770  365  complete; refcounted-list removal; register/indirect-call scheduling differs; equiv=WEAK (213 valid, 36.6% cov)
 00eeb920  338  complete; copies list into float/Vector3 vectors (truncating erase semantics); equiv=WEAK (165 valid, 53.3% cov)
 00eeba40  1311  complete; large message handler (switch 0/1/2/4/7 + special id); thiscall helper shapes modelled; equiv=WEAK (399 valid, 11.6% cov)

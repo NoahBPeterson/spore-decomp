@@ -267,11 +267,7 @@ void FUN_00b69930(IV* o, float f, char b)
     Label* e = FUN_00b68aa0(o, FUN_00b67c70(o), f);
     if (!e) return;
     e->f40 = g_pMgr->f1c;
-    if (b) {
-        e->f3c = g_fltmax;
-        return;
-    }
-    memcpy(&e->f3c, &g_pMgr->f20, 4);
+    e->f3c = b ? g_fltmax : g_pMgr->f20;
 }
 
 // =====================================================================================

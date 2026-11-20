@@ -26,7 +26,7 @@ extern "C" int   g_opField;                  // 0x0154EB58
 void* GetVariantOp(int a, uint16_t b);       // 0x009413D0
 void* SetVariantOp(int a, uint16_t b, void* op);  // 0x00941440
 void  InvokeVariantOp(int a, void* b, void* c, void* d, void* e, void* f); // 0x009414B0
-int   InitVariantTable();                    // 0x009414F0
+bool  InitVariantTable();                    // 0x009414F0
 void* GetVariantOpChecked(int a, uint16_t b);              // 0x00941560
 void* SetVariantOpChecked(int a, uint16_t b, void* op);    // 0x00941580
 void  InvokeVariantOpChecked(int a, void* b, void* c, void* d, void* e, void* f); // 0x009415A0
@@ -215,7 +215,7 @@ void InvokeVariantOp(int a, void* b, void* c, void* d, void* e, void* f)
 }
 
 // @ 0x009414f0
-int InitVariantTable()
+bool InitVariantTable()
 {
     if (g_variantTableInit == 0) {
         for (int i = 0; i < 0x400; i++)
@@ -225,9 +225,9 @@ int InitVariantTable()
         g_opSetFn = (void*)SetVariantOp;
         g_opGetFn = (void*)GetVariantOp;
         g_opInvokeFn = (void*)InvokeVariantOp;
-        g_variantTableInit = 1;
+        g_variantTableInit = true;
     }
-    return 1;
+    return true;
 }
 
 // @ 0x00941560

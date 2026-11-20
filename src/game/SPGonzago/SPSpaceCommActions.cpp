@@ -889,14 +889,17 @@ void TryPurchaseOffer(int arg, Obj_s0102_cd90* sort, int price)
     Fn_00b3d4a0_s0102_cd90()->m_aeb720(arg, pl->emp->m_ce6950(), (int)0xc8fbf7d7, (int)key, 0, 0);
 }
 
+// eastl::vector<cPlanetRecord*>::erase(first, last) on the attack-request list, inlined
+static inline void EraseAttackRequests(Obj_s0102_cd90** first, Obj_s0102_cd90** last)
+{
+    StrCopy(first, last, (uint)((char*)g_attackRequestPlanetsEnd - (char*)last));
+    g_attackRequestPlanetsEnd = g_attackRequestPlanetsEnd - (last - first);
+}
+
 // @ 0x0102d7e0
 void ClearAttackRequest(void)
 {
-    Obj_s0102_cd90** begin = g_attackRequestPlanets;
-    Obj_s0102_cd90** end = g_attackRequestPlanetsEnd;
-    StrCopy(begin, end, 0);
-    Obj_s0102_cd90** q = end - (g_attackRequestPlanetsEnd - begin);
-    g_attackRequestPlanetsEnd = q;
+    EraseAttackRequests(g_attackRequestPlanets, g_attackRequestPlanetsEnd);
     g_targetPlanetIndex = -1;
 }
 

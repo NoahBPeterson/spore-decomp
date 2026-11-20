@@ -571,7 +571,7 @@ struct cGonzagoTimerVec {
     cGonzagoTimer* mpBegin;     // +0
     cGonzagoTimer* mpEnd;       // +4
     cGonzagoTimer* mpCapacity;  // +8
-    void insert(cGonzagoTimer* pos, cGonzagoTimer* val);  // 0x00bf5420
+    void insert(cGonzagoTimer* pos, const cGonzagoTimer& val);  // 0x00bf5420
     void push_back();           // 0x0103de00
 };
 struct cSPSpaceTrading_s0103_d380 {
@@ -3602,8 +3602,7 @@ void cGonzagoTimerVec::push_back()
         if (pEnd != 0)
             new (pEnd) cGonzagoTimer();
     } else {
-        cGonzagoTimer tmp;
-        insert(mpEnd, &tmp);
+        insert(mpEnd, cGonzagoTimer());
     }
 }
 

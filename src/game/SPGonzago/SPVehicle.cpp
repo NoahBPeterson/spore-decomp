@@ -3017,9 +3017,9 @@ bool TerrainFlagForType(int type, int data)
     cPlanetModel* pModel = PlanetModel();
     switch (type) {
     case 0:
-        return (int)(pModel->GetAverageRadius(data) & 0x98000000) != 0;
+        return (int)(pModel->GetAverageRadius(data) & 0x98000000) == 0;
     case 1:
-        return (int)(pModel->GetAverageRadius(data) & 0x58000000) != 0;
+        return (int)(pModel->GetAverageRadius(data) & 0x58000000) == 0;
     case 2:
         return ((~(pModel->GetAverageRadius(data) >> 29)) & 1) != 0;
     }

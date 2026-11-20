@@ -1637,10 +1637,8 @@ void __stdcall ScrollbarStyleSet(const EA::XHTML::Layout::Vec2* value)
 // @ 0x008edd80
 void __stdcall ScrollbarStyleGet(EA::XHTML::Layout::Vec2* out)
 {
-    char* p = (char*)EA::XHTML::Layout::ScrollAppGet();
-    int a = *(int*)(p + 0x348);
-    p += 0xf8;
-    *(int*)&out->x = a;
+    char* p = (char*)EA::XHTML::Layout::ScrollAppGet() + 0xf8;
+    *(int*)&out->x = *(int*)(p + 0x250);
     *(int*)&out->y = *(int*)(p + 0x244);
 }
 

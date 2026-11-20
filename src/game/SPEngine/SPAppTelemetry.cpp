@@ -679,8 +679,9 @@ int ObjB1::FUN_007eb100(int key)
 {
     int local[2];         // iterator: {node, bucket pointer}
     // retail passes the address of the stack argument, not its value
-    ht.find(local, &key);
-    if (local[0] != (int)ht.mpBucketArray[ht.mnBucketCount])
+    HashTable& t = ht;
+    t.find(local, &key);
+    if (local[0] != (int)t.mpBucketArray[t.mnBucketCount])
         return local[0] + 4;
     return 0;
 }

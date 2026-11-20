@@ -318,14 +318,22 @@ struct MapInfoHolder : IRefObj, B4 {
     AutoRef mRef70, mRef74, mRef78, mRef7c;
     MapInfoHolder();
 };
-struct MapDescription {
-    virtual void d0();
+// Non-polymorphic base: MSVC lays it out after the vfptr (+4) and its constructor runs before
+// the vtable store, which is the order the retail constructor writes them in.
+struct MapDescriptionBase {
     uint32_t mField4;          // +4
+    MapDescriptionBase() : mField4(0) {}
+};
+struct MapDescription : MapDescriptionBase {
+    virtual void d0();
     uint32_t mA8, mAC;         // +8, +0xc  (read as one 64-bit id)
     uint32_t mFlags;           // +0x10
     uint32_t mKind;            // +0x14
     int      mI18, mI1c;       // +0x18, +0x1c
-    float    mV20[4];          // +0x20 (16 bytes read raw)
+    struct Bounds {            // +0x20 (16 bytes read raw)
+        float v[4];
+        Bounds() { v[0] = -1.0f; v[1] = -1.0f; v[2] = 1.0f; v[3] = 1.0f; }
+    } mV20;
     int8_t   mType30;          // +0x30
     int8_t   mFlag31;          // +0x31
     uint32_t mPad32;
@@ -1702,11 +1710,8 @@ void InitMapInfoTable()
 
 // @ 0x00a78590
 MapDescription::MapDescription()
+    : mFlags(0), mKind(0), mI18(-1), mI1c(-1)
 {
-    mField4 = 0;
-    mFlags = 0; mKind = 0;
-    mI18 = -1; mI1c = -1;
-    mV20[0] = -1.0f; mV20[1] = -1.0f; mV20[2] = 1.0f; mV20[3] = 1.0f;
     mType30 = 4;
     mFlag31 = 0;
 }

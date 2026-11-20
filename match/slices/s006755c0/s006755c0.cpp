@@ -109,7 +109,13 @@ FourHashMaps::~FourHashMaps() {}
 // ---------------------------------------------------------------------------
 // Save/load subject used by 0x6755C0.
 // ---------------------------------------------------------------------------
-struct ISaveStream;
+struct ISaveStream {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34();
+    virtual void Write(uint32_t* p, int n);   // +0x38
+};
 
 struct SaveSubject {
     char  mPad00[0x24];
@@ -126,7 +132,7 @@ int SaveSubject::FUN_006755C0(ISaveStream* p)
 {
     char cVar1 = FUN_006754D0();
     uint32_t local = (mFlag24 != 0);
-    (*(void(__thiscall**)(ISaveStream*, uint32_t*, int))(*(void***)p + 0x38 / 4))(p, &local, 4);
+    p->Write(&local, 4);
     char cVar2 = FUN_00675440(p);
     if ((cVar2 != 0) && (cVar1 != 0))
         return 1;

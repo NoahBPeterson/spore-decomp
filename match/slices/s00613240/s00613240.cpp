@@ -667,7 +667,10 @@ bool cPollinatorLookup::LookupByKey(const ResourceKey* pKey, IRefObj** ppOut, bo
     MetaRef metadata;
     if (GetAssetMetadata(*pKey, &metadata.mpObject)) {
         const uint32_t* pId = metadata.mpObject->GetServerId();
-        return Lookup(*(const uint64_t*)pId, ppOut, bTouch);
+        const uint64_t serverId = *reinterpret_cast<const uint64_t*>(pId);
+        IRefObj** output = ppOut;
+        const bool touch = bTouch;
+        return Lookup(serverId, output, touch);
     }
     return false;
 }

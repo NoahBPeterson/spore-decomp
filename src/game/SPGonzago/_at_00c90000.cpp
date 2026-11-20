@@ -399,8 +399,8 @@ void* SP::cTribe_s00c9_82a0::ReserveToolSlot(int weight, int* outIndex, cGameDat
 
 // @ 0x00c9ba80
 cTribeFoodMat::cTribeFoodMat()
+    : mFlag108(true)
 {
-    mFlag108 = true;
     mMaterialType = 2;
     mModelInstance = FNVHash("trg_sacrifice_altar1", 0x811c9dc5, 1);
     mModelGroup = FNVHash("TribalTools", 0x811c9dc5, 1);

@@ -22,3 +22,4 @@
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?Fn0094efe0@@YAHPAUBIO94@@PAD@Z  0094efe0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?THREAD_setup@@YAHXZ  0094fdc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/SSLManager.cpp  ?DeletingDtor@SSLManager_s0094_fb80@@QAEPAXD@Z  0094fe70  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/SSLManager.cpp  ?Ctor@SSLManager_s0094_fb80@@QAEPAU1@PAUICoreAllocator@@@Z  0094fc40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

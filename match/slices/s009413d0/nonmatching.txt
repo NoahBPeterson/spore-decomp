@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-009414f0  19  InitVariantTable: complete; `mov al,1` and the hook-pointer store order differ; equiv PASS (400 valid, 91.3% cov)
 009415f0  321  EncodeBase64: complete; group/line-wrap loop register schedule and tail-padding branches differ
 00941790  467  DecodeBase64Core: complete; loop index/bound registers swapped (original keeps bound in esi, index in edx); equiv PASS (95.4% cov, 380 inputs)
 00941a10  188  Base64EncodeString: complete; eastl resize/memmove growth sequence differs; equiv UNSUPPORTED (0/400 valid: original faults on random string pointers, saved replay passes)

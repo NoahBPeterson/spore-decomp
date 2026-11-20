@@ -6,5 +6,3 @@
 ../src/game/SPGonzago/_at_00f20000.cpp  ?fn257f0@Obj@@QAEDPAX@Z  00f257f0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00f20000.cpp  ?fn25ee0@DataObj@@QAE_NXZ  00f25ee0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00f20000.cpp  ?fn25f20@DataObj@@QAE_NXZ  00f25f20  /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/SPGonzago/_at_00f20000.cpp  ?fn26ac0@@YAXPAX@Z  00f26ac0  /O2 /MD /Gy /TP /Isrc/game/include
-../src/game/SPGonzago/_at_00f20000.cpp  ?fn26c60@@YAXPAX@Z  00f26c60  /O2 /MD /Gy /TP /Isrc/game/include

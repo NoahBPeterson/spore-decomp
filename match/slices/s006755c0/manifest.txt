@@ -5,3 +5,4 @@ slices/s006755c0/s006755c0.cpp  ??1FourHashMaps@@QAE@XZ  00675cc0  /O2 /MD /Gy /
 slices/s006755c0/s006755c0.cpp  ?insert@Elem16Vec@@QAEPAUElem16@@PAU2@PBU2@@Z  00676370  /O2 /MD /Gy /TP /arch:SSE
 slices/s006755c0/s006755c0.cpp  ?FUN_00676490@@YIPAXPAUSubjectB@@HH@Z  00676490  /O2 /MD /Gy /TP /arch:SSE
 slices/s006755c0/s006755c0.cpp  ?FUN_006764f0@@YIPAXPAUSubjectA@@HH@Z  006764f0  /O2 /MD /Gy /TP /arch:SSE
+slices/s006755c0/s006755c0.cpp  ?FUN_006755C0@SaveSubject@@QAEHPAUISaveStream@@@Z  006755c0  /O2 /MD /Gy /TP /arch:SSE

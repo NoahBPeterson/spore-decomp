@@ -783,8 +783,11 @@ int* FUN_00ece870(int* param_1, int param_2)
 // @ 0x00ece8c0
 void __fastcall FUN_00ece8c0(int* p)
 {
-    if (p[4] != -1) {
-        int* u = g_pGameMgr_16c7aa4->pOwner_74->FUN_00f3e8a0(p[4]);
+    const int key = p[4];
+    if (key != -1) {
+        GameMgr_16c7aa4* manager = g_pGameMgr_16c7aa4;
+        LookupOwner* owner = manager->pOwner_74;
+        int* u = owner->FUN_00f3e8a0(key);
         ((void(__thiscall*)(void*, int*))VTB(p, 0x30))(p, u);
     }
 }
@@ -793,8 +796,11 @@ void __fastcall FUN_00ece8c0(int* p)
 // @ 0x00ece8f0
 int __fastcall FUN_00ece8f0(int param_1)
 {
-    if (*(int*)(param_1 + 0x10) != -1) {
-        int* i = g_pGameMgr_16c7aa4->pOwner_74->FUN_00f3e8a0(*(int*)(param_1 + 0x10));
+    const int key = *(int*)(param_1 + 0x10);
+    if (key != -1) {
+        GameMgr_16c7aa4* manager = g_pGameMgr_16c7aa4;
+        LookupOwner* owner = manager->pOwner_74;
+        int* i = owner->FUN_00f3e8a0(key);
         if (i != 0)
             return FUN_00eece20((int)i);
     }

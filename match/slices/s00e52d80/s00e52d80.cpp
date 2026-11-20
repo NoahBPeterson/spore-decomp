@@ -425,8 +425,8 @@ void FUN_00e53b00(float v) {
 
 // @ 0x00e53b40
 void FUN_00e53b40() {
-  cCellSub54* cs = (cCellSub54*)(g_16b3c04 + 0x54);
-  void* h = cs->Get();
+  void* h = ((cCellSub54*)(*(char**)g_16b3c04 + 0x54))->Get();
+  cCellSub54* cs = (cCellSub54*)(*(char**)g_16b3c04 + 0x54);
   char* o = (char*)cs->Add(h);
   *(float*)(o + 0x1c) = 0.5f;
   *(float*)(o + 0x20) = 0.5f;
@@ -454,7 +454,7 @@ void FUN_00e53b40() {
   *(int*)(o + 0x78) = 0;
   *(int*)(o + 4) = 0;
   *(char*)(o + 8) = 0;
-  *(char*)(g_16b3c04 + 0x51dc) = 1;
+  *(*(char**)g_16b3c04 + 0x51dc) = 1;
   FUN_00e569b0();
 }
 
