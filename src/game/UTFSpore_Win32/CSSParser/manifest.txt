@@ -41,3 +41,6 @@
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?MatchAscii@CharStream_s008f_2660@Style@XHTML@EA@@QAE_NPBD@Z  008f3480  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?Fn8f38b0@CharStream@@QAEPAXPAG@Z  008f38b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/CSSParser.cpp  ?CreatePropertyFunc_Length@Style@XHTML@EA@@YAPAVProperty_s008f_2660@123@PAVStackAllocator_s0092_8b00@Allocator@3@PAX111ULength_s008f_2660@123@@Z  008f3090  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?CreatePropertyFunc_uint_EdgeIndex@Style@XHTML@EA@@YAPAVProperty_s008f_2660@123@PAVStackAllocator_s0092_8b00@Allocator@3@PAX111IH@Z  008f3410  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?CreatePropertyFunc_ushort_ushort@Style@XHTML@EA@@YAPAVProperty_s008f_2660@123@PAVStackAllocator_s0092_8b00@Allocator@3@PAX111GG@Z  008f3100  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?CreatePropertyFunc_Length_EdgeIndex@Style@XHTML@EA@@YAPAVProperty_s008f_2660@123@PAVStackAllocator_s0092_8b00@Allocator@3@PAX111ULength_s008f_2660@123@H@Z  008f3170  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

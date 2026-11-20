@@ -1970,17 +1970,22 @@ Property_s008f_2660* CreatePropertyFunc_ushort_ushort(EA::Allocator::StackAlloca
 {
     unsigned int size = (sizeof(Property_s008f_2660) + 2 + 2 + 7) & ~7u;
     Property_s008f_2660* p = (Property_s008f_2660*)a->Allocate(size);
-    if (p == 0)
-        return 0;
-    p->mpNext = 0;
-    p->mpVtable = (void*)gPropVtable;
-    p->mpSetter = setter;
-    p->mpContext = ctx;
-    p->mpArg0 = p4;
-    p->mpArg1 = p5;
-    *(unsigned short*)((char*)p + 0x18) = v;
-    *(unsigned short*)((char*)p + 0x1a) = u;
-    return p;
+    if (p != 0) {
+        p->mpNext = 0;
+        p->mpVtable = (void*)gPropVtable;
+        _ReadWriteBarrier();
+        p->mpSetter = setter;
+        _ReadWriteBarrier();
+        p->mpContext = ctx;
+        _ReadWriteBarrier();
+        p->mpArg0 = p4;
+        _ReadWriteBarrier();
+        p->mpArg1 = p5;
+        *(unsigned short*)((char*)p + 0x18) = v;
+        *(unsigned short*)((char*)p + 0x1a) = u;
+        return p;
+    }
+    return 0;
 }
 }}}  // namespace EA::XHTML::Style
 
@@ -1990,17 +1995,22 @@ Property_s008f_2660* CreatePropertyFunc_Length_EdgeIndex(EA::Allocator::StackAll
 {
     unsigned int size = (sizeof(Property_s008f_2660) + sizeof(Length_s008f_2660) + sizeof(int) + 7) & ~7u;
     Property_s008f_2660* p = (Property_s008f_2660*)a->Allocate(size);
-    if (p == 0)
-        return 0;
-    p->mpNext = 0;
-    p->mpVtable = (void*)gPropVtable;
-    p->mpSetter = setter;
-    p->mpContext = ctx;
-    p->mpArg0 = p4;
-    p->mpArg1 = p5;
-    *(Length_s008f_2660*)((char*)p + 0x18) = value;
-    *(int*)((char*)p + 0x20) = edge;
-    return p;
+    if (p != 0) {
+        p->mpNext = 0;
+        p->mpVtable = (void*)gPropVtable;
+        _ReadWriteBarrier();
+        p->mpSetter = setter;
+        _ReadWriteBarrier();
+        p->mpContext = ctx;
+        _ReadWriteBarrier();
+        p->mpArg0 = p4;
+        _ReadWriteBarrier();
+        p->mpArg1 = p5;
+        *(Length_s008f_2660*)((char*)p + 0x18) = value;
+        *(int*)((char*)p + 0x20) = edge;
+        return p;
+    }
+    return 0;
 }
 }}}  // namespace EA::XHTML::Style
 
@@ -2073,17 +2083,22 @@ Property_s008f_2660* CreatePropertyFunc_uint_EdgeIndex(EA::Allocator::StackAlloc
 {
     unsigned int size = (sizeof(Property_s008f_2660) + sizeof(unsigned int) + sizeof(int) + 7) & ~7u;
     Property_s008f_2660* p = (Property_s008f_2660*)a->Allocate(size);
-    if (p == 0)
-        return 0;
-    p->mpNext = 0;
-    p->mpVtable = (void*)gPropVtable;
-    p->mpSetter = setter;
-    p->mpContext = ctx;
-    p->mpArg0 = p4;
-    p->mpArg1 = p5;
-    *(unsigned int*)((char*)p + 0x18) = value;
-    *(int*)((char*)p + 0x1c) = edge;
-    return p;
+    if (p != 0) {
+        p->mpNext = 0;
+        p->mpVtable = (void*)gPropVtable;
+        _ReadWriteBarrier();
+        p->mpSetter = setter;
+        _ReadWriteBarrier();
+        p->mpContext = ctx;
+        _ReadWriteBarrier();
+        p->mpArg0 = p4;
+        _ReadWriteBarrier();
+        p->mpArg1 = p5;
+        *(unsigned int*)((char*)p + 0x18) = value;
+        *(int*)((char*)p + 0x1c) = edge;
+        return p;
+    }
+    return 0;
 }
 }}}  // namespace EA::XHTML::Style
 
