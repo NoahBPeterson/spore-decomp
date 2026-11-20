@@ -470,6 +470,14 @@ void __fastcall ReleaseViewer76b8(void* self) {
         resource.Reset();
 }
 
+struct ViewData76b8 {
+    int a, b, c, d;
+    ViewData76b8(int x) : a(x), b(0), c(0), d(0) {}
+};
+struct ViewTarget76b8 {
+    virtual void v0(); virtual void v1(); virtual void v2();
+    virtual void Render(void*, void*, const ViewData76b8&, void*);
+};
 // @ 0x0076b890  render/serialize a viewer
 // ===========================================================================
 void __fastcall RenderViewer76b8(void* self, int, void* a2, void* a3, void* a4, void* a5) {
@@ -481,13 +489,7 @@ void __fastcall RenderViewer76b8(void* self, int, void* a2, void* a3, void* a4, 
     ((void(__thiscall**)(void*, int))*(void***)m)[0x44 / 4](m, 1);
     void* m2 = App6740();
     ((void(__thiscall**)(void*, char*))*(void***)m2)[0x9c / 4](m2, s + 0x14);
-    void* c = *(void**)(s + 0xc);
-    int data[4];
-    data[0] = *(int*)(s + 0x10);
-    data[1] = 0;
-    data[2] = 0;
-    data[3] = 0;
-    ((void(__thiscall**)(void*, void*, void*, int*, void*))*(void***)c)[3](c, a2, a3, data, a5);
+    (*(ViewTarget76b8**)(s + 0xc))->Render(a2, a3, ViewData76b8(*(int*)(s + 0x10)), a5);
     void* m3 = App6740();
     ((void(__thiscall**)(void*, int))*(void***)m3)[0x44 / 4](m3, 0);
     (void)a4;
