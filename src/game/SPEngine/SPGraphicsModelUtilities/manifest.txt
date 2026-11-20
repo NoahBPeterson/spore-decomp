@@ -17,3 +17,4 @@
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ??1CS553Obj@@QAE@XZ  00755470  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00753fc0@@YAXPAURC_00753fc0@@@Z  00753fc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?FUN_00755570@V_755570@@QAEXIH@Z  00755570  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelUtilities.cpp  ?f55c80@CS553@@QAEXPAX@Z  00755c80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
