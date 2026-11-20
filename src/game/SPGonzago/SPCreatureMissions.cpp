@@ -262,6 +262,8 @@ extern char DAT_01654c01;
 extern char DAT_01654c02;
 extern char DAT_01654c04;
 extern int* g_169e3e8;                  // 0x0169e3e8 creature token translator
+extern int* g_169b41c;                  // 0x0169b41c
+extern void* g_1581288;                 // 0x01581288
 extern "C" int   FUN_004df550_s00c2_e420(void*);
 int  __fastcall FUN_00b1f9d0(void*);    // 0x00b1f9d0 ?GetPlayerEmpireOrMinus1 (this in ECX)
 void __fastcall FUN_00d00a10(void*);    // 0x00d00a10 (this in ECX)
@@ -1255,14 +1257,13 @@ void Mission::FUN_00c2fde0()
         char ok = ((char(__thiscall*)(void*, int, int*))(*(void***)obj)[0x24 / 4])(obj, 0x6b15b5cb, &temp);
         if (ok && *(unsigned short*)((char*)temp + 0x12) == 0xa) {
             u32 val = *Property_GetUInt((void*)temp);
-            *(u32*)((char*)*(int**)0x169e3e8 + 0x10) = val;
+            g_169e3e8[0x10 / 4] = val;
         }
     }
-    u32 m = self[0x21];
-    *(u32*)((char*)*(int**)0x169e3e8 + 0x20) = m;
-    if (*(int**)0x169b41c != 0) {
-        int r = FUN_004e1c30(*(void**)0x1581288, 0xb79e0065, 0x28);
-        *(int*)((char*)*(int**)0x169b41c + 0xc) = r;
+    g_169e3e8[0x20 / 4] = self[0x21];
+    if (g_169b41c != 0) {
+        int r = FUN_004e1c30(g_1581288, 0xb79e0065, 0x28);
+        g_169b41c[0xc / 4] = r;
     }
     if (obj != 0)
         ((VFn0)(*(void***)obj)[1])(obj);
