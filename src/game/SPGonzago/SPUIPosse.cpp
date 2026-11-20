@@ -1391,13 +1391,14 @@ void cSPUIPosseItem_s00e2_1880::SetItemKeyIcon(const ResourceKey* pKey, int32_t 
     SPUIHelpers::SetWindowImage(pWindow, &mItemKey, 0);
 }
 
+struct ResourceKeyZero_e21ea0 : ResourceKey {
+    ResourceKeyZero_e21ea0() { mInstanceID = 0; mGroupID = 0; mTypeID = 0; }
+};
 // @ 0x00e21ea0
 void cSPUIPosseItem_s00e2_1880::SetItemIcon(void* pImage, int32_t nUnused)
 {
+    mItemKey = ResourceKeyZero_e21ea0();
     uint32_t nNone = 0;
-    mItemKey.mInstanceID = nNone;
-    mItemKey.mGroupID = nNone;
-    mItemKey.mTypeID = nNone;
     IWindow* pWindow = mpFieldD4->mpWindow10->FindWindowByID(0x3d99151, true);
     UI::SetWindowImage(pWindow, pImage, nNone);
 }
