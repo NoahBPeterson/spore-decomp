@@ -2293,6 +2293,8 @@ extern "C" void* __cdecl FUN_00b3d470();                        // GetTerraformi
 extern "C" void* __cdecl FUN_00b3d350();                       // SP::PlanetModel
 #define VF(p, off) (*(void**)((char*)(*(void**)(p)) + (off)))
 extern uint32_t DAT_0168a488, DAT_0168a48c, DAT_0168a490;
+struct Key12_bbca30 { int a, b, c; };   // a resource key (instance, type, group)
+
 class TObj {
 public:
     // ---- reused __thiscall callees (addresses in comments) -------------------
@@ -2323,7 +2325,8 @@ public:
     void  F_01034880();                                 // 0x1034880
 
     // ---- slice targets -------------------------------------------------------
-    int*  FUN_00bbca30(int* out, int index, int planet);   // 0xbbca30
+    int*  FUN_00bbca30(int* out, int index, int planet);   // 0xbbca30 (as the callers here spell it)
+    Key12_bbca30 FUN_00bbca30(int index, int planet);     // 0xbbca30 (the key is returned by value)
     void  FUN_00bbcb10(void* key, void* planet);           // 0xbbcb10
     char  FUN_00bbcb90(int param_1, int param_2);          // 0xbbcb90
     void  FUN_00bbcf00(void* planet, float f2, float f3, int param_4);  // 0xbbcf00
@@ -6192,7 +6195,7 @@ void __stdcall fn_bbc950(int* out, int a, int b, void* rec)
 }
 
 // @ 0x00bbca30
-int* TObj::FUN_00bbca30(int* out, int index, int planet)
+Key12_bbca30 TObj::FUN_00bbca30(int index, int planet)
 {
     if (planet == 0) {
         planet = *(int*)((char*)FUN_01021260() + 0x13c);        // ActivePlanet(); ->+0x13c
@@ -6208,17 +6211,11 @@ int* TObj::FUN_00bbca30(int* out, int index, int planet)
                 count++;
             }
             if (count == index) {
-                out[0] = *(int*)e;
-                out[1] = *((int*)e + 1);
-                out[2] = *((int*)e + 2);
-                return out;
+                return *(const Key12_bbca30*)e;
             }
         }
     }
-    out[0] = (int)DAT_0168a488;
-    out[1] = (int)DAT_0168a48c;
-    out[2] = (int)DAT_0168a490;
-    return out;
+    return *(const Key12_bbca30*)&DAT_0168a488;
 }
 
 // @ 0x00bbcb90

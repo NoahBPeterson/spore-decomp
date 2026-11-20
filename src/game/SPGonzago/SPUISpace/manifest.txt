@@ -82,3 +82,4 @@
 ../src/game/SPGonzago/SPUISpace.cpp  ?FUN_01066630@@YAXPAM00@Z  01066630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPUISpace.cpp  ?FUN_010687a0@@YAXXZ  010687a0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/SPUISpace.cpp  ?InitFoodwebInfo@cSPUISpace_s0107_1a00@SP@@QAEXXZ  01071a00  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPUISpace.cpp  ?FUN_00bbca30@TObj@@QAE?AUKey12_bbca30@@HH@Z  00bbca30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
