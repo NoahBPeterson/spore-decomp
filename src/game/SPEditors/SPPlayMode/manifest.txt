@@ -25,3 +25,4 @@
 ../src/game/SPEditors/SPPlayMode.cpp  ??0cSPPlayModeAnimation@@QAE@XZ  0062b0f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPPlayMode.cpp  ??1cSPPlayModeAnimation@@QAE@XZ  0062b160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPPlayMode.cpp  ?ForceBabiesToIdle@cSPPlayMode@@QAEXH@Z  006296e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?Init@cSPPlayModeAnimation_s0062_e7e0@@QAEXPAXPAUcSPPlayModeUI_s0062_e7e0@@@Z  0062f2a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
