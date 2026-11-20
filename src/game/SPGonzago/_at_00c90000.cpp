@@ -420,12 +420,15 @@ void cTribeFoodMat::SetOwner(void* owner)
     }
 }
 
+static inline void WriteUint32Value(void* stream, uint32_t value)
+{
+    WriteUint32(stream, &value, 1, 0);
+}
+
 // @ 0x00c9bc00
 bool cTribeFoodMat::Write(void* io)
 {
-    void* buf = ((IOStream*)((IODevice*)io)->GetStream())->GetBuffer();
-    uint32_t value = 0x0629baec;
-    WriteUint32(buf, &value, 1, 0);
+    WriteUint32Value(((IOStream*)((IODevice*)io)->GetStream())->GetBuffer(), 0x0629baec);
     bool ok;
     if (cGameData_s00c9_afb0::Write(io) && ((cSpatialObject_s00c9_afb0*)((char*)this + 0x34))->Write(io))
         ok = true;
