@@ -3998,16 +3998,17 @@ done0:
 TM::TM()
 {
     M_b70820();
-    *(void**)this = g_vt147734c;
-    *(void**)((char*)this + 8) = g_vt1477328;
-    *(void**)((char*)this + 0x10) = g_vt1477318;
-    *(int*)((char*)this + 0x74) = 0;
-    *(float*)((char*)this + 0x88) = g_fltOne;
-    *(float*)((char*)this + 0x8c) = g_fltTwo;
-    *(int*)((char*)this + 0x84) = 0;
-    *(int*)((char*)this + 0x90) = 0;
-    *(int*)((char*)this + 0x80) = 1;
-    *(void**)((char*)this + 0x7c) = g_vt154df28;
+    float one = g_fltOne;
+    *(void* volatile*)this = g_vt147734c;
+    *(void* volatile*)((char*)this + 8) = g_vt1477328;
+    *(void* volatile*)((char*)this + 0x10) = g_vt1477318;
+    *(volatile int*)((char*)this + 0x74) = 0;
+    *(volatile float*)((char*)this + 0x88) = one;
+    *(volatile float*)((char*)this + 0x8c) = g_fltTwo;
+    *(volatile int*)((char*)this + 0x84) = 0;
+    *(volatile int*)((char*)this + 0x90) = 0;
+    *(volatile int*)((char*)this + 0x80) = 1;
+    *(void* volatile*)((char*)this + 0x7c) = g_vt154df28;
     g_169b27c = (uint32_t)this;
 }
 
