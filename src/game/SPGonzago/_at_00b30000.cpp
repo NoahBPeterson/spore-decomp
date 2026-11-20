@@ -191,8 +191,8 @@ extern void* __stdcall SP_EffectsManager();              // 0x67ddd0
 extern const char g_str_Simulator[];   // 0x13f09b4
 extern float g_f1486110;   // 5.0f
 extern float g_f1418ef4;   // -5.0f
-extern void* __stdcall RbtreeIncrement(void* node);            // 0x921580
-extern void  __stdcall RBTreeErase(void* node, void* header);  // 0x921880
+extern void* RbtreeIncrement(void* node);            // 0x921580
+extern void  RBTreeErase(void* node, void* header);  // 0x921880
 extern void __stdcall RBTreeInsert(void* node, void* parent, void* header, int side); // 0x9216a0
 extern void __stdcall SortFunc1(void* a, void* b, void* c);   // 0xb363b0
 extern void __stdcall SortFunc2(void* a, void* b, void* c);   // 0xb363f0
@@ -241,6 +241,8 @@ struct RefPair {
 struct SmartPtrSlot { void Assign(RefHandle* p); };   // 0x478db0 (thiscall)
 struct RbtreeOps {
     void* Find(void* resultOut, const void* key);   // 0xe39fb0 (thiscall)
+    struct It { void* node; };
+    It Find(const void* key);                       // 0xe39fb0 (thiscall, hidden return)
 };
 struct MapHolder {
     char pad0[0xc1];
@@ -251,12 +253,12 @@ struct MapHolder {
     bool Lookup(int key);
 };
 struct MapErase {
-    void* header;   // +0x00
-    int   pad;      // +0x04 (header+0 = sentinel; +4 is next)
+    int   pad0;     // +0x00
+    void* header;   // +0x04 (rbtree anchor)
     char  pad2[0x14 - 8];
     int   count;    // +0x14
 
-    bool Erase(void* key);
+    int Erase(void* key);
 };
 struct MapInsert {
     void* header;  // +0x00
@@ -1433,16 +1435,18 @@ bool MapHolder::Lookup(int key)
 }
 
 // @ 0x00b36360
-bool MapErase::Erase(void* key)
+int MapErase::Erase(void* key)
 {
-    void* node;
-    ((RbtreeOps*)&header)->Find(&node, key);
-    if (node == &header) return false;
-    --count;
-    RbtreeIncrement(node);
-    RBTreeErase(node, &header);
-    operator_delete(node);
-    return true;
+    RbtreeOps::It it = ((RbtreeOps*)this)->Find(key);
+    if (it.node != &header) {
+        void* node = it.node;
+        --count;
+        RbtreeIncrement(node);
+        RBTreeErase(node, &header);
+        operator_delete(node);
+        return 1;
+    }
+    return 0;
 }
 
 // @ 0x00b36440
