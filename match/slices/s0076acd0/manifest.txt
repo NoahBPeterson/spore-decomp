@@ -2,3 +2,4 @@ slices/s0076acd0/s0076acd0.cpp  ??4E28@@QAEAAU0@ABU0@@Z  0076b1f0
 slices/s0076acd0/s0076acd0.cpp  ?ReleaseViewer76b8@@YIXPAX@Z  0076b840  /O2 /MD /Gy /EHsc /TP
 slices/s0076acd0/s0076acd0.cpp  ??1D350Obj@@QAE@XZ  0076b3c0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0076acd0/s0076acd0.cpp  ??1D660Obj@@QAE@XZ  0076b6c0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0076acd0/s0076acd0.cpp  ??0Daf@@QAE@XZ  0076af50  /O2 /MD /Gy /EHsc /TP /GS-

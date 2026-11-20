@@ -1,4 +1,3 @@
-0076af50   45  Daf ctor: base/derived vtable store count and order differ
 0076afb0   40  Daf deleting dtor: vtable reset/EH schedule differs | equiv UNSUPPORTED (vtable address constant differs; needs symbol mapping)
 0076b240  283  cube-map refresh: helper register schedule differs
 0076b350   67  D350 ctor: flattened to two named vptr members with explicit base/derived vtable stores (13ec458/140e254/140e244); EH frame not reproduced

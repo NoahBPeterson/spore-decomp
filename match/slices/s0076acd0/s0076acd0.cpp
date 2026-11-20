@@ -143,9 +143,12 @@ bool __fastcall RegisterListener(RTTCapture* self, int unused) {
 // @ 0x0076af50  ctor (2-vtable class, 0x174 object)
 // ===========================================================================
 struct B1af { virtual void a0(); virtual void a1(); virtual void a2(); virtual void a3(); };
-struct B2af { virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3(); };
+struct B2af {
+    virtual void b0(); virtual void b1(); virtual void b2(); virtual void b3();
+    int mAtomic;              // +8 in Daf
+    B2af() { (void)_InterlockedExchange((volatile long*)&mAtomic, 0); }
+};
 struct Daf : B1af, B2af {
-    int mAtomic;              // +8
     char m0c;                 // +0xc
     char padD[0x103];
     int m110, m114, m118, m11c;
@@ -154,10 +157,9 @@ struct Daf : B1af, B2af {
     virtual ~Daf();
 };
 Daf::Daf() {
-    (void)_InterlockedExchange((volatile long*)&mAtomic, 0);
-    m0c = 0;
     m110 = 0; m114 = 0; m118 = 0; m11c = 0;
     m120 = 1;
+    m0c = 0;
 }
 Daf::~Daf() { if (m11c) Dealloc((void*)m11c); }
 void DeleteDaf(Daf* p) { delete p; }
