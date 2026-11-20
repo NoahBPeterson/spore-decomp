@@ -715,21 +715,31 @@ bool PaletteItemMsg::Dispatch(int unused1, void* msg, int unused3)
 }
 
 // ============================================================ 0x00ece730
-struct Obj_ece730 { bool FUN_00ece730(int* param_2, int param_3, int param_4, int param_5, int param_6); };
+#pragma pack(push, 4)
+struct LimitStopwatch_ece730 {
+    __int64 mLimit;                                  // +0x00
+    bool IsTimeUp();                                 // 0x005ff1c0
+    void SetTimeLimit(unsigned int ms, bool start);  // 0x0093a480
+};
+#pragma pack(pop)
+struct Obj_ece730 {
+    char pad00[0x14];
+    LimitStopwatch_ece730 mStopwatch;                // +0x14
+    bool FUN_00ece730(int* param_2, int param_3, int param_4, int param_5, int param_6);
+};
 // @ 0x00ece730
 bool Obj_ece730::FUN_00ece730(int* param_2, int param_3, int param_4, int param_5, int param_6)
 {
-    int param_1 = (int)this;
     (void)param_3; (void)param_4; (void)param_6;
-    int i = K0(param_2, 0x1c);
+    int i = ((int(__thiscall*)(void*))((*(void***)param_2)[0x1c / 4]))(param_2);
     if (i == 0x4a1cb6e && param_5 == 1000) {
-        if (*(int*)(param_1 + 0x14) != 0 || *(int*)(param_1 + 0x18) != 0) {
-            if (!FUN_005ff1c0()) {
-                FUN_00ecda80(*(int*)(param_1 - 0x5c));
+        if (mStopwatch.mLimit != 0) {
+            if (!mStopwatch.IsTimeUp()) {
+                FUN_00ecda80(*(int*)((char*)this - 0x5c));
                 return 1;
             }
         }
-        EA_LimitStopwatch_SetTimeLimit((void*)(param_1 + 0x14), 0xfa, 1);
+        mStopwatch.SetTimeLimit(0xfa, true);
     }
     return 0;
 }
