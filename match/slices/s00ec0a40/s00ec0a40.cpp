@@ -86,6 +86,15 @@ struct Vt {
 };
 
 // ================================================================ 0x00ec0a40
+struct OwnerRef_s00ec_0a40 {
+    char* mp;
+    char* get() const { return mp; }
+};
+struct AnchorList_s00ec_0a40 {
+    void* mpNext;
+    bool empty() const { return mpNext == (const void*)this; }
+};
+
 // @ 0x00ec0a40
 double __cdecl FUN_00ec0a40(void* self_, void* a2, void* a3, void* a4, void* stimuli, u8* out, void* a7, void* evt) {
     char* s = (char*)self_;
@@ -93,20 +102,21 @@ double __cdecl FUN_00ec0a40(void* self_, void* a2, void* a3, void* a4, void* sti
     *out = 1;
     void* u = FUN_00d99420((char*)*(void**)(s + 0xb4c) + 0x1d0, *(void**)((char*)evt + 0x2d));
     FUN_00d996e0(u, stimuli);
-    char* c = (char*)((H_00c04590*)s)->Get();
     int flag;
-    if (s == *(char**)(c + 0x164) && *(void**)(c + 0x168) != (void*)(c + 0x168))
+    if (s == ((OwnerRef_s00ec_0a40*)((char*)((H_00c04590*)s)->Get() + 0x164))->get() &&
+        !((AnchorList_s00ec_0a40*)((char*)((H_00c04590*)s)->Get() + 0x168))->empty())
         flag = 1;
     else
         flag = 0;
     *(int*)((char*)stimuli + 0x18) = flag;
     char* f = (char*)*(void**)((char*)stimuli + 4);
     int n = ((H_008e7f80*)f)->GetFileCount();
-    if (n == 2) return 0.0;
-    void* o = (*(void*(__thiscall**)(char*))((char*)*(void**)f + 0xc))(f);
-    u8 r = (*(u8(__thiscall**)(void*))((char*)*(void**)o + 0x2c))(o);
-    if (r != 0) return 0.0;
-    return 1.0;
+    if (n != 2) {
+        void* o = (*(void*(__thiscall**)(char*))((char*)*(void**)f + 0xc))(f);
+        u8 r = (*(u8(__thiscall**)(void*))((char*)*(void**)o + 0x2c))(o);
+        if (r == 0) return 1.0;
+    }
+    return 0.0;
 }
 
 // ================================================================ 0x00ec0ae0
