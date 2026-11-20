@@ -20,3 +20,4 @@
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe4900@cSPBadgeManager@@QBEXIAAVeastlWString@@@Z  00fe4900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3e80@@YAXPAVcOutStream@@PAVtU32Tree@@@Z  00fe3e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPBadgeManager.cpp  ?FUN_00fe3fd0@@YAXPAVcOutStream@@PAVtU32Tree@@@Z  00fe3fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPBadgeManager.cpp  ?GetWeightedScore@EventMap@@QAEOXZ  00fe67b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
