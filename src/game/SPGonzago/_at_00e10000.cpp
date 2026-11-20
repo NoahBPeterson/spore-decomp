@@ -1577,11 +1577,11 @@ void SearchDlg::shutdown()
     GetMessageServer()->Send(this ? (void*)((char*)this + 0xc) : 0, 0x1e8c9e0, 0xffffd8f1);
     ((SubObj*)mSub4C)->init();
     if (mpMedia) {
-        (*(void (__thiscall**)(void*))((*(void***)mpMedia)[9]))(mpMedia);   // +0x24
+        ((void (__thiscall*)(void*))(*(void***)mpMedia)[9])(mpMedia);   // +0x24
         void* m = mpMedia;
         if (m) {
             mpMedia = 0;
-            (*(void (__thiscall**)(void*))((*(void***)m)[1]))(m);           // +0x04
+            ((void (__thiscall*)(void*))(*(void***)m)[1])(m);           // +0x04
         }
     }
     if (mpFeed) {
@@ -1589,7 +1589,7 @@ void SearchDlg::shutdown()
         FeedList* f = mpFeed;
         if (f) {
             mpFeed = 0;
-            (*(void (__thiscall**)(void*))((*(void***)f)[1]))(f);
+            ((void (__thiscall*)(void*))(*(void***)f)[1])(f);
         }
     }
     if (mpPalette) {
@@ -1597,7 +1597,7 @@ void SearchDlg::shutdown()
         Palette* p = mpPalette;
         if (p) {
             mpPalette = 0;
-            (*(void (__thiscall**)(void*))((*(void***)p)[2]))(p);           // +0x08
+            ((void (__thiscall*)(void*))(*(void***)p)[2])(p);           // +0x08
         }
     }
     ((DlgBase*)this)->teardown();
