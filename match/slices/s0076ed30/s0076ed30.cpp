@@ -153,9 +153,12 @@ struct PageVec {
     PageInfo* erase(PageInfo* first, PageInfo* last);     // @ 0x0076ed90
     void AppendPage(void* rec);                           // thiscall (0x76efd0)
 };
-struct cRTTManager {
-    char      pad[4];
-    char      mField04[0xc];  // +0x04
+struct cRTTManagerBase0 { virtual void v0(); };
+struct cRTTListener {                 // IWinProc / IMessageListener base at +0x04
+    virtual void l0();
+    char      mField08[8];
+};
+struct cRTTManager : cRTTManagerBase0, cRTTListener {
     bool      mInitialized;   // +0x10
     char      pad11[7];
     PageVec   mTexturePages;  // +0x18
@@ -176,13 +179,15 @@ struct MsgSrv {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
     virtual void v8(); virtual void v9(); virtual void v10();
-    virtual void Send(void* base, int id, int val);  // slot 0xb (+0x2c)
+    virtual void Send(cRTTListener* base, int id, int val);  // slot 0xb (+0x2c)
 };
 // 0x0067de20 / 0x0067dcc0 return the existing singletons. Named as their own TU (s007c6750) names them, so both
 // refer to the same symbols the image has.
 extern "C" void* SP_CheatManager();     // 0x0067de20
 extern "C" void* SP_MessageServer();    // 0x0067dcc0
 
+extern "C" char g_140e2d8[];   // "RTT"
+extern "C" char g_140e2d0[];   // "RTTDump"
 // @ 0x0076f210
 bool cRTTManager::Shutdown()
 {
@@ -192,12 +197,12 @@ bool cRTTManager::Shutdown()
         pages->erase(pages->mBegin, pages->mEnd);
         Cheat* cheat = (Cheat*)SP_CheatManager();
         if (cheat) {
-            cheat->RemoveProperty(reinterpret_cast<const void*>(0x0140e2d8));   // "RTT"
-            cheat->RemoveProperty(reinterpret_cast<const void*>(0x0140e2d0));   // "RTTDump"
+            cheat->RemoveProperty(g_140e2d8);   // "RTT"
+            cheat->RemoveProperty(g_140e2d0);   // "RTTDump"
         }
         MsgSrv* srv = (MsgSrv*)SP_MessageServer();
         if (srv)
-            srv->Send(&mField04, 0x3d037f1, 0xffffd8f1);
+            srv->Send(this, 0x3d037f1, 0xffffd8f1);
         return true;
     }
     return false;
@@ -354,7 +359,7 @@ bool cRTTManager::RTTCheatInit()
     }
     MsgSrv* srv = (MsgSrv*)SP_MessageServer();
     if (srv)
-        srv->Send(&mField04, 0x3d037f1, 0);
+        srv->Send(this, 0x3d037f1, 0);
     return true;
 }
 
