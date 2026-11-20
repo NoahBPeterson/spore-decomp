@@ -2,7 +2,6 @@
 00806aa0  58  complete; callee-saved register choice (ebx vs esi) differs
 00806b20  196 complete; index/wrap expression and scheduling differ
 00806bf0  77  complete; SSE scheduling differs
-00806c60  14  complete; only parameter register assignment (esi/edi) swapped
 00806ca0  64  complete; SSE scheduling differs
 00806de0  84  complete; loop/register differences
 008074a0  188 complete; control-flow/register differences

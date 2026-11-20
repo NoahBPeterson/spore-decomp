@@ -2001,17 +2001,19 @@ void SetWindowAreaToParent(W_s0080_68d0* w)
     w->m6c(r);
 }
 
+struct Vec2_806c60 {
+    float x, y;
+    Vec2_806c60(float ax, float ay) : x(ax), y(ay) {}
+};
 // @ 0x00806c60
-float* FUN_00806c60(float* out, void* wp)
+Vec2_806c60 FUN_00806c60(void* wp)
 {
     W_s0080_68d0* w = (W_s0080_68d0*)wp;
-    out[0] = 0; out[1] = 0;
-    if (w == 0) return out;
-    float* a = (float*)w->v34();
-    out[0] = a[0];
-    float* b = (float*)w->v34();
-    out[1] = b[1];
-    return out;
+    Vec2_806c60 r(0.0f, 0.0f);
+    if (w == 0) return r;
+    r.x = ((float*)w->v34())[0];
+    r.y = ((float*)w->v34())[1];
+    return r;
 }
 
 // @ 0x00806ca0
