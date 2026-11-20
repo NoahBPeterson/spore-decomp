@@ -170,6 +170,11 @@ jobs:
       # measurable progress. A pull request that changes only notes (nonmatching.txt / partial.txt: what was tried,
       # what still differs) is fine; anything else must add a byte-exact function.
       - name: Require a new byte-exact function, unless only notes change
+        # `cleanup-approved`: a maintainer's label for a readability cleanup (members instead of byte offsets, real
+        # types instead of casts) that adds no match. Everything else still applies: every function that matched
+        # before must still match.
+        env:
+          CLEANUP: ${{ contains(github.event.pull_request.labels.*.name, 'cleanup-approved') || github.event_name == 'merge_group' }}
         run: |
           # pipefail: without it the step takes tee's exit status, and the script's sys.exit(1) never failed a check.
           set -o pipefail
@@ -246,6 +251,9 @@ jobs:
               pass
           elif changed and all(os.path.basename(p) in ("nonmatching.txt", "partial.txt") for p in changed):
               print("Notes only (nonmatching.txt / partial.txt): no new match needed.")
+          elif os.environ.get("CLEANUP") == "true":
+              print("Cleanup approved by a maintainer (`cleanup-approved`): no new match needed; every function that")
+              print("matched before still has to.")
           else:
               print("This pull request changes code but adds no new byte-exact or newly proven-equivalent function")
               print("(nothing passes here that was not already byte-exact or proven on main). Code changes are merged")

@@ -129,6 +129,10 @@ into the generator's inputs so they are not lost.
 ## Rules
 
 - Write real, readable C++ that compiles to the original bytes, with the class and member names the headers give you.
+  Use members, not byte offsets: `mpOSData = new (mem) Win32Clipboard(this);`, not
+  `*(void**)((char*)this + 8) = ...`. If the struct lacks the member, add it to the struct. A pull request that only
+  makes matched code readable this way (no new match) is welcome: say so in its description, and a maintainer adds
+  the `cleanup-approved` label, after which the check only requires that everything still matches.
 - A function's note goes in `nonmatching.txt` only when its body is a real decompilation of the whole function. A
   placeholder (`{}`, `{ return a; }`, a stub that skips calls the original makes) goes in `partial.txt`: it needs
   source, not codegen levers. `check.py` prints `STUB:` when it sees one.
