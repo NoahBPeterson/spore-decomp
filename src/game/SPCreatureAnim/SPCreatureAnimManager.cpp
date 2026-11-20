@@ -5808,8 +5808,8 @@ float anim_creature_s00a0_5c20::GetFeedbackValue(uint key)
 void anim_creature_s00a0_5c20::SetTargetRoot(anim_creature_s00a0_5c20* target)
 {
     f154 = 0;
-    f158 = 1;
-    anim_creature_s00a0_5c20* old = f15c;
+    *(volatile int*)&f158 = 1;
+    anim_creature_s00a0_5c20* old = *(anim_creature_s00a0_5c20* volatile*)&f15c;
     if (target != old) {
         if (target != 0)
             target->f198++;
