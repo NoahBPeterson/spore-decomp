@@ -8,7 +8,6 @@
 00966b20 99 and register allocation match; the unsigned->float conversion uses fild where the original uses cvtsi2ss, because the byte-cast case expression loses VC8's 0..3 range proof. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00966bb0 107 register roles swap (param lands in edx, original keeps it in ecx so each case can `and cl,8`); byte-mask codegen differs. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00966c70 290 walk over the child's drawables; same control flow, but VC8 assigns the tree/iterator registers differently (loop body complete: begin/end iterators, RTTI cast, vcall 0x28 on the match). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
-00966dc0 16 removes the two dead base-vtable stores at +4/+0xc that the original keeps (inlined-base-ctor DSE, same as the factories). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00966ed0 21 dead base-vtable stores at +4/+0xc removed by /O2. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00966f30 21 dead base-vtable stores at +4/+0xc removed by /O2. flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 00966f90 306 ctor; store/call scheduling around the embedded subobjects (thiscall bases at +0x280/+0x7b0/+0x860 modelled correctly now). flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

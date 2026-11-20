@@ -1023,19 +1023,21 @@ void S_966c70::m()
     VCALL0(this_ + 4, 0x90);
 }
 
+// UI::ButtonDrawableRadio's layout: an interface at +0, two Resource::Async bases at +4 and +0xc.
+struct BDRIface_s0096 { virtual void i0(); };
+struct BDRAsyncA_s0096 { virtual void a0(); uint32_t m08; BDRAsyncA_s0096() : m08(0) {} };
+struct BDRAsyncB_s0096 { virtual void b0(); };
+struct BDRFields_s0096 { uint32_t m10; uint8_t m14; BDRFields_s0096() : m10(0), m14(0) {} };
+struct ButtonDrawableRadio_s0096 : BDRIface_s0096, BDRAsyncA_s0096, BDRAsyncB_s0096 {
+    BDRFields_s0096 mFields;
+    virtual void i0();
+};
+inline void* operator new(size_t, S_966dc0* where) { __assume(where != 0); return where; }
+
 // @ 0x00966dc0
 void* S_966dc0::m()
 {
-    void* this_ = this;
-    F_s0096_6b20(this_, 0x04) = 0x13fa72c;
-    F_s0096_6b20(this_, 0x08) = 0;
-    F_s0096_6b20(this_, 0x0c) = 0x13fa72c;
-    F_s0096_6b20(this_, 0x00) = 0x1441088;
-    F_s0096_6b20(this_, 0x04) = 0x1441070;
-    F_s0096_6b20(this_, 0x0c) = 0x1441058;
-    F_s0096_6b20(this_, 0x10) = 0;
-    FB(this_, 0x14) = 0;
-    return this_;
+    return new (this) ButtonDrawableRadio_s0096;
 }
 
 // @ 0x00966df0
