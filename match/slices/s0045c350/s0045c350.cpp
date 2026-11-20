@@ -23,18 +23,13 @@ struct IByteSink {
 };
 
 // =====================================================================
+#include <string.h>
+#pragma intrinsic(strlen)
 // @ 0x45cd40  write a NUL-terminated string through the sink
 // =====================================================================
 void WriterStr(int out, const char* s)
 {
-    const char* p = s;
-    const char* start = p + 1;
-    char c;
-    do {
-        c = *p++;
-    } while (c != 0);
-    int len = (int)(p - start);
-    ((IByteSink*)out)->Write(s, len);
+    ((IByteSink*)out)->Write(s, (int)strlen(s));
     return;
 }
 

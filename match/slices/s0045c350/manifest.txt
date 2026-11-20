@@ -2,3 +2,4 @@
 slices/s0045c350/s0045c350.cpp  ?FormatDate@@YAXPADPAUDateTime@@@Z  0045ce20  /Od /Ob1 /MD /Gy /TP
 slices/s0045c350/s0045c350.cpp  ?WriteNameArray@@YAXHPBDPBHI@Z  0045cfe0  /Od /Ob1 /MD /Gy /TP
 slices/s0045c350/s0045c350.cpp  ?Write@cColladaExporter@@QAE_NH@Z  0045c350  /Od /Ob1 /MD /Gy /TP /GS-
+slices/s0045c350/s0045c350.cpp  ?WriterStr@@YAXHPBD@Z  0045cd40  /Od /Ob1 /MD /Gy /TP
