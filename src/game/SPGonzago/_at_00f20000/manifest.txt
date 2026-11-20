@@ -64,3 +64,4 @@
 ../src/game/SPGonzago/_at_00f20000.cpp  ?fn26c60@@YAXPAX@Z  00f26c60  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00f20000.cpp  ?fn26ac0@@YAXPAX@Z  00f26ac0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPGonzago/_at_00f20000.cpp  ?fn25160@Obj@@QAE?AUVec3i@@XZ  00f25160  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00f20000.cpp  ?fn25110@Obj@@QAE?AUVec3i@@PA_N@Z  00f25110  /O2 /MD /Gy /TP /Isrc/game/include
