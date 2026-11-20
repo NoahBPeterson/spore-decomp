@@ -436,18 +436,32 @@ void init_16514ec()
     *(void**)g_16514ec = GetDefaultAllocator0();
 }
 
+// Hash table storage at 0x016519ac (static-initialised below, destroyed by FUN_013c0c00).
+struct InitHashTableStorage {
+    void* p00;          // +0x00
+    int   n04;          // +0x04
+    int   n08;          // +0x08
+    float f0c;          // +0x0c
+    float f10;          // +0x10
+    int   n14;          // +0x14
+    void* allocator;    // +0x18
+    int   n1c;          // +0x1c
+};
+extern InitHashTableStorage g_16519ac;
+extern "C" char g_154df28[];
+
 // @ 0x012fff30
 void init_16519ac()
 {
     void* a = GetDefaultAllocator0();
-    *(void**)0x16519c4 = a;
-    *(float*)0x16519b8 = 1.0f;
-    *(float*)0x16519bc = 2.0f;
-    *(int*)0x16519c8 = 0;
-    *(int*)0x16519b0 = 1;
-    *(void**)0x16519ac = (void*)0x154df28;
-    *(int*)0x16519b4 = 0;
-    *(int*)0x16519c0 = 0;
+    g_16519ac.allocator = a;
+    g_16519ac.f0c = 1.0f;
+    g_16519ac.f10 = 2.0f;
+    g_16519ac.n1c = 0;
+    g_16519ac.n04 = 1;
+    g_16519ac.p00 = g_154df28;
+    g_16519ac.n08 = 0;
+    g_16519ac.n14 = 0;
     atexit(&FUN_013c0c00);
 }
 
