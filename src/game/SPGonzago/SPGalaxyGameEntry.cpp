@@ -10607,8 +10607,10 @@ int __thiscall cGalaxyGameEntryImpl_s00de_41b0::FUN_00de46e0()
 void __thiscall cGalaxyGameEntryImpl_s00de_41b0::OnActivate()
 {
     FUN_00ddd970();
-    g_bGalaxyActive = 1;
-    if (m15c == 0) {
+    if (m15c != 0) {
+        g_bGalaxyActive = 1;
+    } else {
+        g_bGalaxyActive = 1;
         void* pEM = FUN_0067ddd0();
         void* pWorld = ((void*(__thiscall*)(void*, uint32_t, const char*))VFN(pEM, 0x4c))(pEM, 0x2dda976, "GGE effects world");
         AssignRef_s00de_41b0(&m15c, pWorld, 0, 4);
