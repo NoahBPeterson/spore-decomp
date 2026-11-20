@@ -5,7 +5,6 @@
 0068c590  195  FreeQueue::Flush: inline vector DoInsertValue schedule
 0068cd40  47  PackStr::InsertCStr: inlined strlen codegen shape
 0068d0d0  100  SPNameFromKeyW: string-length do-while + res-branch order
-0068d290  77  SPNameFromKeyA: the "." separator is pushed as the retail literal address 0x1403550 (0x1403551 for the end), not a fresh pooled copy [equiv: UNSUPPORTED 0/400 valid (input generator cannot fabricate a valid PackStr), 0 mismatch on the repaired replay]
 0068d420  77  HashClearBuckets: __stdcall with two stack arguments (ret 8), not cdecl; node/next register roles + loop rotation [equiv: WEAK 161 valid, 100% cov, 0 mismatch]
 0068c330  451  FreeQueue::TryPop: thiscall ret 4; 64-bit tagged-head CAS (lock cmpxchg8b) loop, node next tagged ptr at node+0x08, ABA tag bumped on pop [equiv: FAIL 66/71 valid, 89.6% cov, 0 call-trace diff; residual mPush.hi (this+0x0c) 0 vs 1 from cmpxchg8b flag/return codegen]
 0068c9e0  392  PackStr::Insert: thiscall ret 4; eastl::string::insert(pos, first, last) with SSO/heap branches (memcpy/memmove) [equiv: UNSUPPORTED 0/400 valid (input generator cannot fabricate a valid PackStr)]

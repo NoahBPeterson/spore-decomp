@@ -893,17 +893,15 @@ void PackStr::Swap(PackStr& other)
         EAFree(tmp.mpBegin);
 }
 
+extern "C" const char g_1403550[];   // "."
+
 // @ 0x0068d290
 void SPNameFromKeyA(const ResKey* key, void* out, const char* name)
 {
     Str_Format(out, "0x%08x", key->mGroup);
     if (name != 0) {
-        ((PackStr*)out)->Insert(*(char**)out, (const char*)0x1403550, (const char*)0x1403551);
-        const char* n = name;
-        const char* ne = n;
-        while (*ne)
-            ++ne;
-        ((PackStr*)out)->Insert(*(char**)out, n, ne);
+        ((PackStr*)out)->Insert(*(char**)out, g_1403550, g_1403550 + 1);
+        ((PackStr*)out)->Insert(*(char**)out, name, name + strlen(name));
     }
     void* mgr = GetManager();
     uint32 res = ((uint32(__thiscall*)(void*, uint32))(*(void***)mgr)[0x8c / 4])(mgr, key->mType);
