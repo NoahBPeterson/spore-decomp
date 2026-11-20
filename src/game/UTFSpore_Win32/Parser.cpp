@@ -2985,18 +2985,18 @@ void cParser_s0084_2620::GetLineLocationInfo(string8_s0084_2620* pInfo, int* pLi
 bool cParser_s0084_2620::DefinitionExists(const char* pName) const
 {
     ::MakeCaseInsensitiveChars(pName, (void*)mCaseInsensitive);
-    FindResult_s0084_2620 r = mCommands.find(mCaseInsensitive);
-    CmdNode_s0084_2620* pEnd = mCommands.mpBucketArray[mCommands.mnBucketCount];
-    return r.mpNode != pEnd;
+    const CmdTable_s0084_2620& t = mCommands;
+    CmdNode_s0084_2620* pEnd = t.mpBucketArray[t.mnBucketCount];
+    return t.find(mCaseInsensitive).mpNode != pEnd;
 }
 
 // @ 0x008432d0
 bool cParser_s0084_2620::HasName6c(const char* pName) const
 {
     ::MakeCaseInsensitiveChars(pName, (void*)mCaseInsensitive);
-    FindResult_s0084_2620 r = mTable6c.find(mCaseInsensitive);
-    CmdNode_s0084_2620* pEnd = mTable6c.mpBucketArray[mTable6c.mnBucketCount];
-    return r.mpNode != pEnd;
+    const CmdTable_s0084_2620& t = mTable6c;
+    CmdNode_s0084_2620* pEnd = t.mpBucketArray[t.mnBucketCount];
+    return t.find(mCaseInsensitive).mpNode != pEnd;
 }
 
 // @ 0x00843320
