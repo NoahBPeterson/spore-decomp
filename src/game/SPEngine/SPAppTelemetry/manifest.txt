@@ -8,3 +8,4 @@
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_007eb100@ObjB1@@QAEHH@Z  007eb100  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?freeNodes@ObjB3f@@QAEXXZ  007eb3f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/SPAppTelemetry.cpp  ?CopyRange@TItemList@SP@@QAEXPAUTItemListNode@2@Uiterator@12@1UTListAllocator@2@@Z  007eb7d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppTelemetry.cpp  ?FUN_007eb090@ObjB0@@QAEHXZ  007eb090  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
