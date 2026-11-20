@@ -6,4 +6,3 @@
 00ecb520 100  window show/hide: register allocation differs (ebp/ebx swap, loop offset in stack slot vs register); equiv WEAK: 188/400 valid (need 200), no mismatches, 12.8% coverage
 00ecb7a0 114  slider clamp: needs __asm Min/Max helper shape (not reproduced); equiv FAIL: 5/433 valid inputs mismatched; first: st0
 00ecb830 114  slider clamp: needs __asm Min/Max helper shape (not reproduced); equiv FAIL: 3/1200 valid inputs mismatched; first: st0
-00ecb8c0 14   palette-item dtor: the three releases are real __thiscall virtual calls (vtable +8/+8/+4) on the member objects, and the dtor ends with a direct qualified base-dtor call to 0x005c6c50. equiv PASS 275/400, 100% coverage; the 14 diff bytes are load scheduling (ecx=+0x2c hoisted above the vtable stores).

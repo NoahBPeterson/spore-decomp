@@ -3752,11 +3752,10 @@ void cDefaultBeamProjectile::FUN_00cb5930(f32* pos)
 // @ 0x00cb5980
 u32 cDefaultBeamProjectile::FUN_00cb5980()
 {
-    void** slot = (void**)((u8*)mpSub2c + 0x114);
-    void* p = *slot;
-    if (p == 0)
-        return 0;
-    return ((u32 (__thiscall*)(void*, u32))VT(p)[0xb8 / 4])(p, 0x13f94d4);
+    void*& slot = *(void**)((u8*)mpSub2c + 0x114);
+    if (slot != 0)
+        return ((u32 (__thiscall*)(void*, u32))VT(slot)[0xb8 / 4])(slot, 0x13f94d4);
+    return 0;
 }
 
 // @ 0x00cb59b0

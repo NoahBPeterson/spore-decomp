@@ -1489,7 +1489,7 @@ public:
     uint8_t  mb12;                              // +0x012
     uint8_t  mPad13;                            // +0x013
 
-    cPaintBaseB() {}
+    cPaintBaseB() { _ReadWriteBarrier(); ClearState(); }
     void ClearState()
     {
         mb0d = 0;
@@ -11760,7 +11760,7 @@ void cGalaxyGameEntryImpl_s00de_9a00::FUN_00dea420()
 // @ 0x00dea500
 cPaintSystem::cPaintSystem()
 {
-    this->ClearState();
+    _ReadWriteBarrier();
     this->mp14 = 0;
     this->mn28 = -1;
 }

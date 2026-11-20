@@ -2659,16 +2659,10 @@ void ResB::Method660b0()
 // @ 0x00766100
 void ResB::MoveOut(void* out)
 {
-    int* o = (int*)out;
-    char* self = (char*)this;
-    o[0] = *(int*)(self + 4);
-    o[1] = *(int*)(self + 8);
-    o[2] = *(int*)(self + 0xc);
-    o[3] = *(int*)(self + 0x10);
-    *(int*)(self + 4) = 0;
-    *(int*)(self + 8) = 0;
-    *(int*)(self + 0xc) = 0;
-    *(int*)(self + 0x10) = 0;
+    struct Quad { int a, b, c, d; Quad() { b = 0; c = 0; d = 0; a = 0; } };
+    Quad& mine = *(Quad*)((char*)this + 4);
+    *(Quad*)out = mine;
+    mine = Quad();
 }
 
 // @ 0x00766140

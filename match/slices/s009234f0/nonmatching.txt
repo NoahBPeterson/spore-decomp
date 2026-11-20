@@ -8,7 +8,6 @@
 00923de0  103  rbtree::DoInsertValueImpl: complete; allocator vcall schedule differs
 00923d40  36   Server::Server: complete; MI vtable/new/mutex schedule differs; difftest PASS after mapping the vtables (IServer/ITracer slots annotated with the original targets of 0x143dd20/0x143dd04) and fixing the init (the original leaves +0x28 unwritten) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in event sequence ['call', 'call', 'ret'] vs ['call', 'ret']]
 00923f30  36   LogFilterGroupLevels::LogFilterGroupLevels: complete; mName/anchor init store schedule differs; difftest PASS after fixing the string init call (thiscall RangeInitialize on mName, was a free call with cfg) and the anchor color store (the original zeroes the whole color dword +0x2c)
-00923f90  11   LogFilterGroupLevels::~LogFilterGroupLevels: complete; DoNukeSubtree arg register differs
 00924010  52   LogReporter::SetName: complete; notify-vcall local vs memory loads
 00924060  144  rbtree::DoInsertValue: complete; traversal/insert schedule differs
 00924170  34   LogReporter::LogReporter: complete; string/notify schedule differs

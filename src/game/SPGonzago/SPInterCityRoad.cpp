@@ -24,7 +24,8 @@ extern "C" f32 g_1485720;            // 0x01485720  (_HK_REAL_ONE)
 extern "C" u8  g_15740d8;            // 0x015740d8
 extern "C" wchar_t g_146cd68[];      // 0x0146cd68  L"IntercityRoadMesh"
 extern "C" u8  g_1667bac;            // 0x01667bac  eastl gEmptyString16
-void* __stdcall FUN_00b18460(i32 typeID);                                 // 0x00b18460 (ret 4)
+// 0x00b18460: the base object's Cast (thiscall, ret 4).
+struct cObjectCastBase { void* FUN_00b18460(i32 typeID); };
 void* __cdecl   SP_PlanetModel();                                         // 0x00b3d350
 bool  __cdecl   EA_IO_WriteUint32(void* io, const void* p, u32 count, i32 flags);  // 0x0093aa70
 bool  __cdecl   EA_IO_ReadInt32(void* io, void* p, u32 count, i32 flags);          // 0x0093a780
@@ -216,7 +217,7 @@ void* cInteractiveOrnament::Cast_00c40cd0(i32 typeID)
     void* self = this;
     if (typeID == 0x2bca14b)
         return self;
-    void* obj = FUN_00b18460(typeID);
+    void* obj = ((cObjectCastBase*)self)->FUN_00b18460(typeID);
     if (obj == 0)
         obj = ((cSpatialObject*)((u8*)self + 0x34))->Cast_00c884f0(typeID);
     return obj;

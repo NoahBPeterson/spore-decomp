@@ -157,7 +157,7 @@ struct cCivModeStrategy_s00cf_8d70 {
     cCivUIRoot*    mpUIRoot;                                 // +0xec
 
     void ShowOptionWindows();
-    bool HasActiveTrack();
+    int HasActiveTrack();
 };
 }
 namespace SP {
@@ -167,7 +167,7 @@ struct cRangeOut {
 };
 }
 namespace SP {
-bool __cdecl FUN_00d09660(void* track);                      // 0x00d09660
+bool __fastcall FUN_00d09660(void* track);                    // 0x00d09660
 }
 namespace SP {
 void __cdecl ForEachNode(cRangeOut* out, uint32_t* first, uint32_t* last,
@@ -1361,7 +1361,7 @@ void cCivModeStrategy_s00cf_8d70::ShowOptionWindows()
 
 // @ 0x00cf94b0
 namespace SP {
-bool cCivModeStrategy_s00cf_8d70::HasActiveTrack()
+int cCivModeStrategy_s00cf_8d70::HasActiveTrack()
 {
     if (mpTrackRoot && mpTrackRoot->mpTracked) {
         if (FUN_00d09660(mpTrackRoot->mpTracked))

@@ -878,7 +878,7 @@ struct cOwner { void Set(const char* name, int a, void* obj); }; // 0x00a6f9c0
 struct cCloudEffect : AppPropsFields {
     cOwner*  mOwner;               // +0x30
     int      mPad34;               // +0x34
-    int      mField38;             // +0x38
+    volatile int mField38;         // +0x38  (volatile pins the vptr store before mCmd's ctor)
     int      mPad3c;               // +0x3c
     cCloudEffectCommand mCmd;      // +0x40
     char     pad2a8[8];            // +0x2a8
@@ -889,7 +889,7 @@ struct cCloudEffect : AppPropsFields {
     uint8_t  mFlag2c0;             // +0x2c0
 
     cCloudEffect() : mField38(0xeba93c76), mStrBegin((const char*)gEmptyString16),
-                     mStrEnd((const char*)gEmptyString16), mStrCap((void*)0x1667bad) {}
+                     mStrEnd((const char*)gEmptyString16), mStrCap((char*)gEmptyString16 + 1) {}
     virtual void Update(char flag);                            // 0x00f57410 = vtable +0x14
 };
 struct Registrar {
@@ -2072,12 +2072,8 @@ void SWARM_CloudAddCommands(Registrar* p1, Registrar* p2)
     p2->AddCommand(PTR_s_cloud, obj);
 
     cCloudGroup* grp = (cCloudGroup*)EAAllocate(0x10, "ArgScript/GroupCloud", 0, 0, 0, 0);
-    if (grp) {
-        new (grp) cCloudGroup();
-        p1->AddGroup(PTR_s_cloud, grp);
-    } else {
-        p1->AddGroup(PTR_s_cloud, grp);
-    }
+    grp = new (grp) cCloudGroup();
+    p1->AddGroup(PTR_s_cloud, grp);
 }
 
 // @ 0x00f57590

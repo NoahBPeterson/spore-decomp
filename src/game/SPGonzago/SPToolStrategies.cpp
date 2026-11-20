@@ -170,6 +170,7 @@ void* NounManager();
 struct TextView {
     int GetLineCount(void* pTool, void* pObject); // 0x01054350 (ret 8)
 };
+class cSPToolStrategy_s0105_6160;
 class cSPToolStrategy {
 public:
     virtual void v00();
@@ -216,7 +217,8 @@ public:
     bool ActivateTool(int nToolId);                     // 0x00e537e0
     char CanUseToolAtLocation(int nToolId, int nTarget, int a3);  // 0x00e53980
     void UpdatePassive();                                // 0x00e53bb0
-    bool StopTool();                                     // 0x00e53650
+    bool StopTool();
+    bool StopTool(cSPToolStrategy_s0105_6160* pTool);    // 0x01053650
     Vec3* FindTestTerrainLocation(Vec3* pOut, int nTarget);  // 0x00e53be0
     int SetErrorEvent(int nEventType, bool bPost);       // 0x00e527f0
     void AttachToolEffect(const void* pData, int arg2);  // 0x01053d50
@@ -1770,7 +1772,9 @@ public:
     uint32_t mStrategyClassID;                // 0x118
     uint8_t mPad11c[0x4];
     IRefCounted_s0105_6160* mpAreaEffect;                // 0x120
-    uint8_t mPad124[0x1c];
+    uint8_t mPad124[0x8];
+    IRefCounted_s0105_6160* mpEffectRef;                 // 0x12c
+    uint8_t mPad130[0x10];
     IRefCounted_s0105_6160* mpActiveObject;              // 0x140
     uint8_t mPad144[0x2c];
     int mEventType;                           // 0x170
@@ -2577,15 +2581,12 @@ int cSPEnergyRepairToolStrategy::AdjustCostPercent(int nBaseCost)
 }
 
 // @ 0x01053650
-static bool StopToolBody(cSPToolStrategy* pTool)
+// The strategy's StopTool works on the tool passed in (ret 4), not on `this`.
+bool cSPToolStrategy::StopTool(cSPToolStrategy_s0105_6160* pTool)
 {
     pTool->mbActive = 0;
     pTool->mTimer.Stop();
     return true;
-}
-bool cSPToolStrategy::StopTool()
-{
-    return StopToolBody(this);
 }
 
 // @ 0x010536e0
@@ -2868,21 +2869,19 @@ bool cSPScanToolStrategy::StopTool()
     return this->StopTool();
 }
 
+// The scan strategy's UseTool works on the tool passed in and forwards `this` (ecx)
+// untouched to the base CanUseToolAtLocation (0x01053980).
+struct cSPScanToolCheck_s0105_4080 {
+    char CanUseToolAtLocation(cSPToolStrategy_s0105_6160* pTool, int nToolId, int nTarget);  // 0x01053980
+    bool UseTool(cSPToolStrategy_s0105_6160* pTool, int nToolId, int nTarget);               // 0x01054080
+};
+
 // @ 0x01054080
-static char CanUseToolAtLocationBody(cSPToolStrategy* pTool, int nToolId, int nTarget, int a3);
-
-bool cSPScanToolStrategy::UseTool(int nToolId, int nTarget)
+bool cSPScanToolCheck_s0105_4080::UseTool(cSPToolStrategy_s0105_6160* pTool, int nToolId, int nTarget)
 {
-    if (mpEffectRef != nullptr) {
+    if (pTool->mpEffectRef != nullptr)
         return true;
-    } else {
-        return CanUseToolAtLocationBody(this, nToolId, nTarget, 0);
-    }
-}
-
-static char CanUseToolAtLocationBody(cSPToolStrategy* pTool, int nToolId, int nTarget, int a3)
-{
-    return pTool->CanUseToolAtLocation(nToolId, nTarget, a3);
+    return (bool)CanUseToolAtLocation(pTool, nToolId, nTarget);
 }
 
 // @ 0x010540b0
@@ -3528,8 +3527,15 @@ bool cSPDefaultAoETool_s0105_6160::StartTool(int nToolId, int nTarget, int nFlag
     return true;
 }
 
+// The strategy's CanUseTool overrides are __thiscall members that work on the tool passed in;
+// this one forwards `this` (ecx) untouched to the base check at 0x01056160.
+struct cSPToolStrategyCheck_s0105_6bb0 {
+    bool CanUseTool_56160(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut);  // 0x01056160
+    bool CanUseTool_56bb0(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut);  // 0x01056bb0
+};
+
 // @ 0x01056bb0
-bool __stdcall CanUseTool_56bb0(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut)
+bool cSPToolStrategyCheck_s0105_6bb0::CanUseTool_56bb0(cSPToolStrategy_s0105_6160* self, int nTarget, int* pOut)
 {
     if (CanUseTool_56160(self, nTarget, pOut)) {
         cSPSimulatorSpaceGame_s0105_6160* game = (cSPSimulatorSpaceGame_s0105_6160*)SpaceGameGetRaw();

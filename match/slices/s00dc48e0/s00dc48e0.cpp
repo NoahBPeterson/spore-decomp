@@ -252,9 +252,7 @@ float FUN_00dc4a60(Obj* self, void* a1, void* a2, void* a3, BehaviorTreeStim* a4
     if (a4)
         a4->GetAny();
     *a5 = 1;
-    int v = a7->mValue;
-    BehaviorTree* bt = (BehaviorTree*)self->mpBehaviorTree;
-    void* r = FUN_00d99420(&bt->mStimB, v);
+    void* r = FUN_00d99420(&((BehaviorTree*)self->mpBehaviorTree)->mStimB, a7->mValue);
     FUN_00d996e0(r, a4);
     return 1.0f;
 }

@@ -16,7 +16,6 @@
 00a22110 125 complete; hash-bucket rehash (node next at +0x24); fixed next-link read as value (*(node+0x24)) and inverted tail free-list branch; equiv WEAK (42 valid, 95.3% coverage); thiscall stub-class member flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
 00a22370 123 HTable20::Rehash: complete; same bucket-array reload difference
 00a22410 51 SList::merge (intrusive_list<Sound>): complete; this spilled to stack and iterator temps built in place in original
-00a227a0 13 schedule: DrvBA22 ctor (RefBaseA22 + [0x80]=arg): complete; the original hoists the mArg store above the inlined base ctor (vtable, xchg rc) and the derived vtable store, cl15 keeps base-then-members order. Tried init-list orders (mArg/mZero, explicit RefBaseA22()), body assignment, volatile mArg: no change. fix1: quick check PASS (emulator found no mismatch) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in ret#0 memory]
 00a228d0 65 worker thread loop: complete; esi/edi register swap and one vtable load hoist differ
 00a22b90 64 LoadShared: complete; inline Release uses dec vs add -1 and register order
 00a233b0 316 System::MuteAll: complete behaviour; constant materialisation (x87 fldz/fstp vs SSE), thiscall helper shape and frame differ (383 vs 440 bytes) flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
