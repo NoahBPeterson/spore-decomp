@@ -4990,21 +4990,10 @@ int cAnimatingCreature_s00a0_3da0::FUN_00a048b0(int id, int a3, int a4, int a5)
 bool cAnimatingCreature_s00a0_3da0::FUN_00a04900(int unused)
 {
 	(void)unused;
-	bool result;
 	LookupEntry* e = (LookupEntry*)FUN_009ff750(m_lookup184);
-	if (e == 0)
-	{
-		result = true;
-	}
-	else
-	{
-		void* obj = e->m_obj;
-		if (*(unsigned char*)((char*)obj + 0xac) == 0 && e->m_fieldC0 != 0)
-			result = true;
-		else
-			result = false;
-	}
-	return result;
+	if (e)
+		return *(unsigned char*)((char*)e->m_obj + 0xac) == 0 && e->m_fieldC0 != 0;
+	return true;
 }
 
 // @ 0x00a04940
