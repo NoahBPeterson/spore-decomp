@@ -2171,19 +2171,12 @@ void FUN_008dace0(SortNode** p1, SortNode** p2)
 // @ 0x008dad30
 void FUN_008dad30(SortNode** p1, SortNode** p2)
 {
-    for (; p1 != p2; p1 = p1 + 1) {
-        SortNode** j = p1;
-        SortNode* prev = p1[-1];
-        SortNode** k = p1 - 1;
+    for (; p1 != p2; ++p1) {
         SortNode* key = *p1;
-        if (key->key < prev->key) {
-            do {
-                *j = prev;
-                j = k;
-                prev = j[-1];
-                k = j - 1;
-            } while (key->key < prev->key);
-        }
+        SortNode** j = p1;
+        SortNode** k = p1;
+        for (--k; key->key < (*k)->key; --j, --k)
+            *j = *k;
         *j = key;
     }
 }
