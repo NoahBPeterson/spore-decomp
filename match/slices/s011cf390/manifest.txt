@@ -6,3 +6,9 @@ slices/s011cf390/rmd_dgst.cpp  _RIPEMD160_Update  011d1f30  /O2 /arch:SSE /MD /G
 slices/s011cf390/rmd_dgst.cpp  _RIPEMD160_Final  011d21d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011cf390_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
 slices/s011cf390/sha_dgst.cpp  _SHA_Final  011d77e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011cf390_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
 slices/s011cf390/p5_crpt2.cpp  _PKCS5_v2_PBE_keyivgen  011d7b50  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011cf390_inc
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011cf390/oss_ech_lib.cpp  _ecdh_data_free  011d0290  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011cf390/oss_rmd_dgst.cpp  _ripemd160_block_host_order  011d03a0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011cf390/oss_sha_dgst.cpp  _sha_block_host_order  011d2330  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011cf390/oss_sha_dgst.cpp  _sha_block_data_order  011d4a00  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011cf390/oss_sha_dgst.cpp  _SHA_Update  011d7530  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

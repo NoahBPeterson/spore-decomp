@@ -3,3 +3,16 @@ slices/s011dc2c0/s011dc2c0.cpp  ?ec_GFp_simple_make_affine@@YAHPBUEC_GROUP@@PAUE
 slices/s011dc2c0/s011dc2c0.cpp  ?ec_GFp_simple_points_make_affine@@YAHPBUEC_GROUP@@IPAPAUEC_POINT@@PAUBN_CTX@@@Z  011dd740  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s011dc2c0/s011dc2c0.cpp  ?_init_256_data@@YAXXZ  011de110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s011dc2c0/s011dc2c0.cpp  ?_init_384_data@@YAXXZ  011de5f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011dc2c0/oss_bn_nist.cpp  _nist_cp_bn_0  011ddc00  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011dc2c0/oss_bn_nist.cpp  _BN_nist_mod_192  011ddc30  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011dc2c0/oss_bn_nist.cpp  _BN_nist_mod_224  011dde60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011dc2c0/oss_ec2_smpl.cpp  _ec_GF2m_simple_is_at_infinity  011dd140  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011dc2c0/oss_ecp_smpl.cpp  _ec_GFp_simple_oct2point  011dc560  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011dc2c0/oss_ecp_smpl.cpp  _ec_GFp_simple_add  011dc7b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011dc2c0/oss_ecp_smpl.cpp  _ec_GFp_simple_dbl  011dccf0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011dc2c0/oss_ecp_smpl.cpp  _ec_GFp_simple_invert  011dd100  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011dc2c0/oss_ecp_smpl.cpp  _ec_GFp_simple_is_on_curve  011dd150  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011dc2c0/oss_ecp_smpl.cpp  _ec_GFp_simple_cmp  011dd3c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011dc2c0/oss_ecp_smpl.cpp  _ec_GFp_simple_field_mul  011ddb60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011dc2c0/oss_ecp_smpl.cpp  _ec_GFp_simple_field_sqr  011ddb90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

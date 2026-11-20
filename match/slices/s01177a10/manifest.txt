@@ -1,3 +1,32 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s01177a10/s01177a10.cpp  ?FUN_011799f0@@YAPAXH@Z  011799f0  /O2 /MD /Gy /EHsc /TP
 slices/s01177a10/s01177a10.cpp  ?FUN_01179f50@@YAHXZ  01179f50  /O2 /MD /Gy /EHsc /TP
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s01177a10/oss_aes_core.cpp  _AES_set_decrypt_key  01178c40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_aes_core.cpp  _AES_encrypt  01178e90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_aes_core.cpp  _AES_decrypt  01179450  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_bf_buff.cpp  _buffer_callback_ctrl  011781f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_bio_b64.cpp  _b64_read  01177a10  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_bio_b64.cpp  _b64_write  01177dd0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_bio_b64.cpp  _b64_ctrl  01177fd0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_e_aes.cpp  _aes_128_ofb_cipher  01178210  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_e_aes.cpp  _aes_128_cfb128_cipher  01178280  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_e_aes.cpp  _aes_128_cbc_cipher  01178300  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_e_aes.cpp  _aes_128_ecb_cipher  01178330  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_e_aes.cpp  _aes_128_cfb1_cipher  011783f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_e_aes.cpp  _aes_128_cfb8_cipher  01178440  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_e_aes.cpp  _aes_init_key  011784b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rand_lib.cpp  _RAND_add  01178580  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rand_lib.cpp  _RAND_bytes  011785f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rand_lib.cpp  _RAND_pseudo_bytes  01178650  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rand_lib.cpp  _RAND_status  011786b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rsa_lib.cpp  _RSA_free  01179b40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rsa_lib.cpp  _RSA_up_ref  01179c60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rsa_lib.cpp  _RSA_size  01179c90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rsa_lib.cpp  _RSA_public_encrypt  01179cb0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rsa_lib.cpp  _RSA_private_encrypt  01179cc0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rsa_lib.cpp  _RSA_private_decrypt  01179cd0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rsa_lib.cpp  _RSA_public_decrypt  01179ce0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rsa_lib.cpp  _RSA_flags  01179cf0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rsa_lib.cpp  _rsa_get_public_exp  01179d00  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01177a10/oss_rsa_lib.cpp  _RSA_setup_blinding  01179dd0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

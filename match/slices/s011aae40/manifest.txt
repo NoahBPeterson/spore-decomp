@@ -6,3 +6,13 @@ slices/s011aae40/s011aae40.cpp  _RSA_padding_add_none       011ac160  /O2 /arch:
 slices/s011aae40/s011aae40.cpp  _RSA_padding_check_none    011ac1c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011aae40_inc
 slices/s011aae40/s011aae40.cpp  _RSA_padding_add_SSLv23    011ac220  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011aae40_inc
 slices/s011aae40/s011aae40.cpp  _RSA_padding_check_SSLv23  011ac2d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011aae40_inc
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011aae40/oss_bn_exp.cpp  _BN_mod_exp  011ab9d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011aae40/oss_bn_mont.cpp  _BN_from_montgomery  011aba40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011aae40/oss_bn_mont.cpp  _BN_MONT_CTX_free  011abd90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011aae40/oss_bn_mont.cpp  _BN_MONT_CTX_set  011abdd0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011aae40/oss_bn_mont.cpp  _BN_MONT_CTX_copy  011abf60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011aae40/oss_bn_mont.cpp  _BN_mod_mul_montgomery  011abfc0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011aae40/oss_bn_mont.cpp  _BN_MONT_CTX_new  011ac040  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011aae40/oss_bn_mont.cpp  _BN_MONT_CTX_set_locked  011ac090  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011aae40/oss_rsa_oaep.cpp  _PKCS1_MGF1  011ac3c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

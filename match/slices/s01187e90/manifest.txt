@@ -3,3 +3,15 @@ slices/s01187e90/s01187e90.cpp  _BN_mod_inverse  01187e90  /O2 /arch:SSE /MD /Gy
 slices/s01187e90/s01187e90.cpp  _BN_usub         011892f0  /O2 /arch:SSE /MD /Gy /TP
 slices/s01187e90/s01187e90.cpp  ?fmtint@@YAXPAPAD0PAI1JHHHH@Z  011897e0  /O2 /arch:SSE /MD /Gy /TP
 slices/s01187e90/s01187e90.cpp  ?fmtfp@@YAXPAPAD0PAI1NHHH@Z    01189a30  /O2 /arch:SSE /MD /Gy /TP
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s01187e90/oss_a_type.cpp  _ASN1_TYPE_get  011895f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01187e90/oss_a_type.cpp  _ASN1_TYPE_set  01189610  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01187e90/oss_b_print.cpp  _fmtstr  01189700  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01187e90/oss_bn_add.cpp  _BN_uadd  01189220  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01187e90/oss_bn_add.cpp  _BN_sub  01189430  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01187e90/oss_bn_add.cpp  _BN_add  01189500  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01187e90/oss_bn_mul.cpp  _bn_sub_part_words  01188450  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01187e90/oss_bn_mul.cpp  _bn_mul_normal  011885c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01187e90/oss_bn_mul.cpp  _bn_mul_recursive  011886e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01187e90/oss_bn_mul.cpp  _bn_mul_part_recursive  01188b30  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s01187e90/oss_bn_mul.cpp  _BN_mul  01188f90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

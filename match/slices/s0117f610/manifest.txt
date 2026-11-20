@@ -4,3 +4,48 @@ slices/s0117f610/s0117f610.cpp  ?X509_get_ext_by_OBJ_11801d0@@YAHPAHPAXH@Z  0118
 slices/s0117f610/s0117f610.cpp  ?X509_get_ext_d2i_1180210@@YAPAXPAHH00@Z  01180210  /O2 /MD /Gy /TP
 slices/s0117f610/s0117f610.cpp  ?session_new_1181660@@YAPAUSSL_SESSION@@XZ  01181660  /O2 /MD /Gy /TP
 slices/s0117f610/s0117f610.cpp  ?Method_by_version_1182240@@YAPAUSSL_METHOD@@H@Z  01182240  /O2 /MD /Gy /TP
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s0117f610/oss_a_strnid.cpp  _table_cmp  011808b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_cryptlib.cpp  _CRYPTO_destroy_dynlockid  01181160  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_cryptlib.cpp  _CRYPTO_get_dynlock_value  01181230  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _int_err_del  01180230  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _int_err_get_item  01180280  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _int_err_set_item  01180320  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _int_err_del_item  011803c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _int_thread_release  01180460  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _int_thread_get_item  011804a0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _int_thread_set_item  01180560  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _int_err_get_next_lib  01180620  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_STATE_free  01180660  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_lib_error_string  011806b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_func_error_string  01180730  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_reason_error_string  011807c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _err_hash  01180870  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _pid_hash  011808c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_get_state  011808d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_set_error_data  011809e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_add_error_data  01180a70  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _int_err_get  01180b40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _int_thread_get  01180bc0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _int_thread_del_item  01180c50  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_clear_error  01180e40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_error_string_n  01180eb0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_get_error_line_data  01181010  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_peek_error  01181100  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_err.cpp  _ERR_peek_last_error  01181130  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_obj_dat.cpp  _obj_cmp  0117f8f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_obj_dat.cpp  _OBJ_bsearch_ex  0117f980  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_obj_dat.cpp  _OBJ_bsearch  0117fa30  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_obj_dat.cpp  _OBJ_obj2nid  0117fa60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_obj_dat.cpp  _OBJ_obj2txt  0117fb10  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_obj_dat.cpp  _OBJ_ln2nid  0117fe40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_obj_dat.cpp  _OBJ_sn2nid  0117ff10  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_obj_dat.cpp  _OBJ_txt2obj  0117ffe0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_ui_lib.cpp  _UI_get_string_type  01180160  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_x509_att.cpp  _X509at_get_attr_count  011800b0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_x509_att.cpp  _X509at_get_attr_by_OBJ  011800d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_x509_att.cpp  _X509at_get_attr  01180130  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_x509_att.cpp  _X509at_get_attr_by_NID  01180190  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_x509_ext.cpp  _X509_get_ext  011801f0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_x509_v3.cpp  _X509_EXTENSION_get_critical  01180170  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s0117f610/oss_v3_lib.cpp  _X509V3_get_d2i  0117f680  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto

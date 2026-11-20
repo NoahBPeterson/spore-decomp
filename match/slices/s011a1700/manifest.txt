@@ -1,3 +1,15 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s011a1700/s011a1700.cpp  ?FUN_011a1d80@@YAXPADHHHH@Z  011a1d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s011a1700/s011a1700.cpp  ?FUN_011a1e30@@YAHPADHH@Z  011a1e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+# Upstream OpenSSL 0.9.8g byte-exact matches
+slices/s011a1700/oss_s3_both.cpp  _ssl3_do_write  011a1cf0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a1700/oss_s3_both.cpp  _ssl3_send_change_cipher_spec  011a1f20  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a1700/oss_s3_both.cpp  _ssl3_output_cert_chain  011a1f60  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a1700/oss_s3_both.cpp  _ssl3_get_message  011a2250  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a1700/oss_s3_both.cpp  _ssl_cert_type  011a2500  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a1700/oss_s3_both.cpp  _ssl_verify_alarm_type  011a2560  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a1700/oss_s3_both.cpp  _ssl3_setup_buffers  011a2610  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a1700/oss_s3_pkt.cpp  _ssl3_dispatch_alert  011a1700  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a1700/oss_s3_pkt.cpp  _ssl3_write_bytes  011a1990  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a1700/oss_t1_lib.cpp  _tls1_new  011a26d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
+slices/s011a1700/oss_t1_lib.cpp  _tls1_clear  011a2710  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011bdbf0_inc /Iwork/third_party/build/openssl-0.9.8g-d2110920/crypto
