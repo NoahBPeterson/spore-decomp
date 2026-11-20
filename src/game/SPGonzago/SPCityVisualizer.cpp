@@ -5467,12 +5467,15 @@ void __stdcall DeactivateCitizen(CCitizen* pCitizen)
 CRecord12* CCitizenManager::FindSlot(CCitizen* pCitizen)
 {
     int nCount = (int)(mpCitizensEnd - mpCitizens);
+    int i = 0;
     if (nCount > 0) {
-        CCitizen** pCitizen2 = mpCitizens;
-        for (int i = 0; i < nCount; ++i, ++pCitizen2) {
+        CCitizen** pCitizen2 = *(CCitizen** volatile*)&mpCitizens;
+        do {
             if (*pCitizen2 == pCitizen)
                 return &mpRecords[i];
-        }
+            ++i;
+            ++pCitizen2;
+        } while (i < nCount);
     }
     return (CRecord12*)pCitizen->mVisual.Resolve();
 }
