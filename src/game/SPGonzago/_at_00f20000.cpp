@@ -742,7 +742,7 @@ struct Obj {
 
   int  fn25080(Obj* o);
   void fn25110(Vec3i* out, bool* flag);
-  void fn25160(Vec3i* o);
+  Vec3i fn25160();
   void fn25190(Vec3i* out, bool* flag);
   Vec3i* fn251f0(Vec3i* o);
   Vec3i* fn25240(Vec3i* o, bool* flag);
@@ -2139,11 +2139,12 @@ void Obj::fn25110(Vec3i* out, bool* flag)
 }
 
 // @ 0x00f25160
-void Obj::fn25160(Vec3i* o)
+Vec3i Obj::fn25160()
 {
-  *o = *(Vec3i*)this;
-  if ((uint_s00f2_4b30)o->y == kTypeB1B104) o->z = (int)kType65928944;
-  o->y = (int)kType2F7D0004;
+  Vec3i o = *(Vec3i*)this;
+  if ((uint_s00f2_4b30)o.y == kTypeB1B104) o.z = (int)kType65928944;
+  o.y = (int)kType2F7D0004;
+  return o;
 }
 
 // @ 0x00f25190
