@@ -836,16 +836,20 @@ struct CellAbility : B1, B2 {
         b_e9 = 0;
     }
 };
-struct SaveGameObj : B1, B2 {
-    int f08;
+// GmeRefCount-style base at +4: its own vtable, then the reference count.
+struct SaveGameRefCount {
+    SaveGameRefCount() : mnRefCount(0) {}
+    virtual void rc0();
+    int mnRefCount;
+};
+struct SaveGameObj : B1, SaveGameRefCount {
     int pad0c;
-    int f10, f14, f18;
+    struct Triple {
+        int a, b, c;
+        Triple() : a(0), b(0), c(0) {}
+    } f10;
     char pad1c[0xec - 0x1c];
-    SaveGameObj()
-    {
-        f08 = 0;
-        f10 = 0; f14 = 0; f18 = 0;
-    }
+    SaveGameObj() {}
 };
 // ---- items of slice s00e61000 end
 
