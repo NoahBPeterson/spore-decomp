@@ -14,3 +14,4 @@ slices/s00926410/s00926410.cpp  ?SetTop@FreePool@Allocator@EA@@QAEXPAUFreeChunk@
 slices/s00926410/s00926410.cpp  ?FUN_009265b0@Allocator@EA@@YI_NPAX@Z  009265b0
 slices/s00926410/s00926410.cpp  ?Find@Pool@Allocator@EA@@QAEPAXI@Z  00926a30
 slices/s00926410/s00926410.cpp  ?Contains@Pool@Allocator@EA@@QAE_NI@Z  00926ab0  /O2 /MD /Gy /EHsc /TP
+slices/s00926410/s00926410.cpp  ?FUN_00926410@Allocator@EA@@YIXPAX@Z  00926410  /O2 /MD /Gy /EHsc /TP

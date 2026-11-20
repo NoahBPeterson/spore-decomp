@@ -1,4 +1,3 @@
-00926410  44   hashtable critical-section teardown: complete; list-walk/DeleteCriticalSection schedule differs
 00926460  329  StringPool::Intern (hash-bucket walk + inline node allocate): complete; frame matches except the 1-arg core-allocator call is emitted with 2 args, and several load/compare orders differ [equiv: PASS 308 valid, 93.5% cov]
 00926650  56   FixedAllocatorBase::AddCore: complete; the `while (nSize==0)` gets cl's loop-inversion (test at bottom) vs original top-test/jmp
 00926960  174  FreePool::BinInsert (small/large bin insert): complete; small-bin path and bin-map bit set match, the large-bin walk and bit-set schedule differ [equiv: PASS 384 valid, 100% cov]
