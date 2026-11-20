@@ -793,12 +793,15 @@ void *cUIMissionCardPanel::FindMission(u32 id)
     return result;
 }
 
+struct MissionCardHandlerList {
+    void Unregister(u32 id);    // 0x00e30a60
+};
+
 // @ 0x00e18b50
 void cUIMissionCardPanel::ShutdownB()
 {
-    if (m_field5c != 0) {
-        FUN_00e30a60(m_field5c, 0x6244208);
-    }
+    if (m_field5c != 0)
+        ((MissionCardHandlerList *)m_field5c)->Unregister(0x6244208);
     void *node = m_tree74;
     void *base = (u8 *)this + 0x74;
     while (node != base) {
@@ -808,8 +811,8 @@ void cUIMissionCardPanel::ShutdownB()
     }
     *(void **)base = base;
     *(void **)((u8 *)base + 4) = base;
-    void *n2 = m_treeBase40;
     void *b2 = (u8 *)this + 0x40;
+    void *n2 = *(void **)((u8 *)this + 0x44);
     while (n2 != b2) {
         void *obj = *(void **)((u8 *)n2 + 0x14);
         ((void (__thiscall *)(void *))(*(void ***)obj)[0x2c / 4])(obj);
