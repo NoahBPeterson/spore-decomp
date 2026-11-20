@@ -478,12 +478,32 @@ struct Vec16 {
 
     void Realloc(unsigned int n);
 };
+// eastl::hashtable iterator: the node and its bucket
+struct HashTableIter {
+    void*  mpNode;
+    void** mpBucket;
+    HashTableIter(void* pNode, void** pBucket) : mpNode(pNode), mpBucket(pBucket) {}
+    HashTableIter(void** pBucket) : mpNode(*pBucket), mpBucket(pBucket) {}
+    HashTableIter(const HashTableIter& x) : mpNode(x.mpNode), mpBucket(x.mpBucket) {}
+};
 struct HashTable {
     char pad0[4];
     void** buckets;   // +0x04
     unsigned int count; // +0x08
 
-    void Find(unsigned int* key, void** out);
+    HashTableIter Find(const unsigned int* key);
+    struct Key { unsigned int a, b; };
+    static void* DoFindNode(void* pNode, const Key& key) {
+        if (pNode) {
+            const Key k = key;
+            do {
+                if (k.a == *(unsigned int*)pNode && k.b == *(unsigned int*)((char*)pNode + 4))
+                    return pNode;
+                pNode = *(void**)((char*)pNode + 0x40);
+            } while (pNode);
+        }
+        return 0;
+    }
 };
 struct RandomLCG {
     unsigned int Uniform(unsigned int n);   // 0xa68fb0 (thiscall)
@@ -2875,24 +2895,11 @@ void Vec16::Realloc(unsigned int n)
 }
 
 // @ 0x00b95f70
-void HashTable::Find(unsigned int* key, void** out)
+HashTableIter HashTable::Find(const unsigned int* key)
 {
-    unsigned int k0 = key[0];
-    unsigned int k1 = key[1];
-    unsigned int idx = k0 % count;
-    void* node = buckets[idx];
-    unsigned int* bucket = &((unsigned int*)buckets)[idx];
-    while (node) {
-        if (k0 == *(unsigned int*)node && k1 == *(unsigned int*)((char*)node + 4)) {
-            out[0] = node;
-            out[1] = bucket;
-            return;
-        }
-        node = *(void**)((char*)node + 0x40);
-    }
-    bucket = (unsigned int*)&buckets[count];
-    out[0] = *(void**)bucket;
-    out[1] = bucket;
+    const unsigned int n = key[0] % count;
+    void* const pNode = DoFindNode(buckets[n], *(const Key*)key);
+    return pNode ? HashTableIter(pNode, buckets + n) : HashTableIter(buckets + count);
 }
 
 // @ 0x00b95fe0
