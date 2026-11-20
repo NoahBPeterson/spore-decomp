@@ -1,5 +1,4 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-0081d7a0 68 Variant::Reset: 16-bit flag test emits movzx; constant register roles differ  [equiv UNSUPPORTED (unresolved callees Destruct/Call5)]
 0081da30 72 Variant setter (type 0x20): same flag-test / register issues  [equiv UNSUPPORTED (unresolved callees Destruct/Call5)]
 0081df10 238 FindPropertyUIWindow: cl merges the AutoRefCount copy (ebx) with w (esi); loop rotation differs  [equiv PASS (239 valid, 75% cov)]
 0081f0e0 816 complete ModifyResourceKey (scalar + array paths); frame 0x44 vs 0x50 and local/register assignment differ [equiv: UNSUPPORTED (0/400 valid inputs; vtable-heavy faults)]

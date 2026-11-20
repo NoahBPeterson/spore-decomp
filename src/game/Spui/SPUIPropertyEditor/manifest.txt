@@ -7,3 +7,4 @@
 ../src/game/Spui/SPUIPropertyEditor.cpp  ??4?$AutoRefCount_s00b5_f040@VIWinText_s00b5_f040@UTFWinControls@EA@@@EA@@QAEAAU01@PAVIWinText_s00b5_f040@UTFWinControls@1@@Z  00b5f950  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/Spui/SPUIPropertyEditor.cpp  ?Init@D3@@QAEPAU1@H@Z  0081ddd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIPropertyEditor.cpp  ?Init2@D3@@QAEPAU1@H@Z  0081de30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIPropertyEditor.cpp  ?Reset@Variant@@QAEPAU1@H@Z  0081d7a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
