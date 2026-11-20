@@ -10931,11 +10931,16 @@ void CreatureBase_s00c1_4350::OnStartSwimming()
         mbSelfPowered = 1;
 }
 
+// The object FUN_b3d310 returns is passed as `this` to the summarizer getter at 0x00c14350
+// (the getter itself never reads it).
+struct SummarizerHost_s00c1_4e50 {
+    cContentValidationSummarizer* GetContentValidationSummarizer();   // 0x00c14350
+};
+
 // @ 0x00c14e50
 void CreatureBase_s00c1_4350::NotifySummarizer()
 {
-    FUN_b3d310();
-    void* c = (void*)GetContentValidationSummarizerExternal();
+    void* c = (void*)((SummarizerHost_s00c1_4e50*)FUN_b3d310())->GetContentValidationSummarizer();
     ((cSpatialObject_s00c1_4350*)((char*)this + 0xc0))->FUN_c421b0(c);
 }
 
