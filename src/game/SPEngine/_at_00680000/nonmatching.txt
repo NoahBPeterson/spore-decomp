@@ -8,8 +8,6 @@
 00681800 310 Obj1800 copy ctor: 0x60 plain copy emitted with different register rotation; same size, all copies present flags: /O2 /MD /Gy /EHsc /TP /GS-
 00681a10 80 ObjA copy ctor: vec copies match except lea/push scheduling and first arg register choice flags: /O2 /MD /Gy /EHsc /TP /GS-
 00681b50 87 ObjB50 operator=: struct-copy register rotation differs; all six member assignments in order; equiv: UNSUPPORTED (0 valid inputs, faults) flags: /O2 /MD /Gy /EHsc /TP /GS-
-00681c40 9 ObjA operator=: only arg-eval scheduling (lea of first call arg before vs after the 4th dword store); equiv: PASS (206 valid, 100% cov) flags: /O2 /MD /Gy /EHsc /TP /GS-
-00681e80 9 copy_backward loop: only the same arg-eval scheduling difference flags: /O2 /MD /Gy /EHsc /TP /GS-
 00681f10 220 complete: write map<int,Obj1700>; register allocation / call scheduling differs; equiv: UNSUPPORTED (0 valid inputs, faults); now SerCtx member flags: /O2 /MD /Gy /EHsc /TP /GS-
 006820c0 543 complete: write vector<Obj1800> (stride 0xc4); per element 4x 0x680500 field saves, dword + 3x WriteUint32, 0x6805c0, four u32 vectors; scheduling differs; equiv: UNSUPPORTED (0 valid inputs, faults; harness cannot drive the vtable writer) flags: /O2 /MD /Gy /EHsc /TP /GS-
 006823f0 314 complete: write vector<ObjA> (stride 0x60); per element dwords at +0/+8/+0xc then mF0/mF2 u32 vectors; scheduling + frame size differ; equiv: UNSUPPORTED (0 valid inputs, faults) flags: /O2 /MD /Gy /EHsc /TP /GS-
