@@ -3830,14 +3830,15 @@ MInit::MInit()
 // @ 0x00741040
 cModelInstance_s0074_03c0::~cModelInstance_s0074_03c0()
 {
-    vt = vtbl_cModelInstance;
-    HullData* h = mHull;
+    *(void* volatile*)&vt = vtbl_cModelInstance;
+    HullData* h = *(HullData* volatile*)&mHull;
     if (h) {
         void* b = h->begin;
         if (b && ((int*)b)[-1] != 0) operator delete[](b);
         operator delete[](h);
     }
     mHull = 0;
+    _ReadWriteBarrier();
     if (mBones.p) {
         RefIface* bones = mBones.p;
         mBones.p = 0;
