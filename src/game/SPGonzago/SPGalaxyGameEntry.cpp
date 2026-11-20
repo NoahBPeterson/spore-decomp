@@ -18188,11 +18188,13 @@ Vec44& Vec44::assignFrom(const Vec44& o)
 // @ 0x00dfcc40
 void BlobC40::dtor()
 {
-    if (mField00 < 0) return;
+    bool skip = (((unsigned)mField00 >> 31) & 1) != 0;
+    if (skip) return;
     int a = mField210;
     if (a && *(int*)(a - 4) != 0) operator_delete((void*)a);
-    ((Sub28Vec*)((char*)this + 0x2c))->sub_dfb850(mp2c, mp30);
-    int b = *(int*)((char*)this + 0x2c);
+    Sub28Vec* v = (Sub28Vec*)((char*)this + 0x2c);
+    v->sub_dfb850(*(void**)v, ((void**)v)[1]);
+    int b = *(int*)v;
     if (b && *(int*)(b - 4) != 0) operator_delete((void*)b);
 }
 
