@@ -2232,9 +2232,14 @@ void FUN_00c63a10()
 // @ 0x00c63a20
 void* Adj::Adjust2(void* id)
 {
-  if (id == (void*)0x771ad6a || id == (void*)0x7a309fb) return this;
-  if (id == (void*)0x1186577) return this ? (char*)this + 0x34 : 0;
-  return ((NounIdHelper*)this)->Dispatch(id);
+  if (id != (void*)0x771ad6a) {
+    if (id != (void*)0x1186577) {
+      if (id != (void*)0x7a309fb) return ((NounIdHelper*)this)->Dispatch(id);
+    } else {
+      return this ? (char*)this + 0x34 : 0;
+    }
+  }
+  return this;
 }
 
 // @ 0x00c63a60
