@@ -1,5 +1,4 @@
 # va        diff-bytes  reason
-00f251f0  11  complete; 3-field Vector3 copy load/store interleaving differs
 00f25580  68  complete; decision-tree block ordering differs (control flow equivalent) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 00f256a0  10  complete; inner switch tree evaluates u<=root then branches, block order differs
 00f256e0  10  complete; same as 00f256a0 with the second constant set
