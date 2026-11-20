@@ -2,6 +2,8 @@
 // Object file: SPGonzago/SPUIRolloverCivCity.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #include "game/types.h"
 #include "SP/cRelationshipManager.h"
 #include "cSPUILayoutManager.h"
@@ -1311,14 +1313,16 @@ void cSPUIRolloverCivRelationship_s00e2_b9d0::Shutdown()
 }
 }  // namespace civroll
 
+// the original reloads the vector's end after constructing the temporary
+static inline const cString_s00e2_b9d0* Fenced(const cString_s00e2_b9d0& v) { _ReadWriteBarrier(); return &v; }
+
 // @ 0x00e2ca70
 namespace civroll {
 void cStringVec::Index(uint32_t i)
 {
     if (i > (uint32_t)((int)((char*)mpEnd - (char*)mpBegin) / 20))
     {
-        cString_s00e2_b9d0 tmp;
-        Insert(mpEnd, i - (uint32_t)((int)((char*)mpEnd - (char*)mpBegin) / 20), &tmp);
+        Insert(mpEnd, i - (uint32_t)((int)((char*)mpEnd - (char*)mpBegin) / 20), Fenced(cString_s00e2_b9d0()));
     }
     else
     {
