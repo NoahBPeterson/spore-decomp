@@ -368,12 +368,13 @@ struct Map262900 {
     unsigned int count;          // +0xc
     char pad10[4];
     // rehash policy object at +0x10 (its PrepareRehash writes the new bucket count)
-    void insert(void* outIter, const unsigned int* hashKey, const unsigned int* payload);   // @ 0x762900
+    struct TrueType {};
+    void insert(void* outIter, const unsigned int* payload, TrueType);   // @ 0x762900
 };
 // @ 0x762900  eastl hashtable bucket insert (with optional rehash first)
-void Map262900::insert(void* outIter, const unsigned int* hashKey, const unsigned int* payload)
+void Map262900::insert(void* outIter, const unsigned int* payload, TrueType)
 {
-    unsigned int key = hashKey[0];
+    unsigned int key = payload[0];
     unsigned int b = key % bucketCount;
     unsigned int* slot = (unsigned int*)((char*)buckets + b * 4);
     unsigned int* e = (unsigned int*)*slot;
@@ -461,6 +462,12 @@ void __cdecl FUN_00762a60(void* n)
 }
 
 // ------------------------------------------------------------------- 0x762b00
+struct Cursor262b00 { unsigned int a, b, c; Cursor262b00() : a(0), b(0), c(0) {} };
+struct CursorPair262b00 {
+    unsigned int first;
+    Cursor262b00 second;
+    CursorPair262b00(const unsigned int& k, const Cursor262b00& v) : first(k), second(v) {}
+};
 struct Iter { void* node; void* bucket; unsigned char inserted; char pad[3]; };   // eastl hashtable iterator
 struct Hash262b00 {
     char pad0[4];
@@ -475,9 +482,8 @@ int Hash262b00::findInsert(unsigned int* key)
     Iter it;
     find(&it, key);
     if (it.node == *(void**)((char*)buckets + bucketCount * 4)) {
-        unsigned int pair[4] = { 0, 0, 0, 0 };
-        pair[0] = *key;
-        ((Map262900*)this)->insert(&it, pair, pair);
+        CursorPair262b00 pair(*key, Cursor262b00());
+        ((Map262900*)this)->insert(&it, &pair.first, Map262900::TrueType());
     }
     return (int)(char*)it.node + 4;
 }
