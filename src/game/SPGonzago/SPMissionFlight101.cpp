@@ -26,6 +26,9 @@ struct cDispatchObject {
     void* Call(int nSlot) {
         return ((void* (*)(void*))mpMethods->mSlots[nSlot >> 2])(this);
     }
+    void CallMethod(int nSlot) {
+        ((void (__thiscall*)(void*))mpMethods->mSlots[nSlot >> 2])(this);
+    }
     char CallChar(int nSlot) {
         return ((char (*)(void*))mpMethods->mSlots[nSlot >> 2])(this);
     }
@@ -499,7 +502,7 @@ int cSPMissionFlight101::Update(void* pParam)
 {
     int32_t nResult = (int32_t)(intptr_t)UpdateBase(pParam);
     if (nResult == 3 && mpCurrSubMission == nullptr)
-        ((cDispatchObject*)this)->Call(0xf8);
+        ((cDispatchObject*)this)->CallMethod(0xf8);
     return nResult;
 }
 
