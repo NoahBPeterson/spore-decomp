@@ -561,11 +561,12 @@ bool Clipboard_s0092_abb0::Clipboard_EnablePlatform()
     char* s = (char*)self;
     if (s[0x14c] != 0 && *(void**)(s + 8) == 0 && *(int*)(s + 4) == 1) {
         void* mem = FUN_006abeb0(0x1c);
-        if (mem != 0) {
-            *(void**)(s + 8) = new (mem) Win32Clipboard_s0092_abb0((Clipboard_s0092_abb0*)self);
-            return true;
-        }
-        *(void**)(s + 8) = 0;
+        void* p;
+        if (mem != 0)
+            p = new (mem) Win32Clipboard_s0092_abb0((Clipboard_s0092_abb0*)self);
+        else
+            p = 0;
+        *(void**)(s + 8) = p;
     }
     return true;
 }
