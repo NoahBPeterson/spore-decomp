@@ -1727,8 +1727,10 @@ t_symbol gatom_unescapit(u32 w0, const char* name)
 }
 
 // @ 0x00a4fce0
-void FUN_00a4fce0(Gatom* x)
+// queued-GUI redraw callback (client, glist); the glist argument is unused
+void FUN_00a4fce0(Gatom* x, void* glist)
 {
+    (void)glist;
     glist_retext(x->a_glist, x);
 }
 
