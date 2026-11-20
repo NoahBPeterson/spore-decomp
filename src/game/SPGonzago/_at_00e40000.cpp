@@ -571,7 +571,7 @@ typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
 void  __cdecl operator_delete(void* p);                                      // 0xf47380  ??3
-struct CPL { void dtor(); };                                                 // 0x828670  ??1CPL
+struct CPL { void dtor(); void ctor(); };                                    // 0x828670 ??1CPL, 0x8286d0 ??0CPL
 struct Helper4b { void dtor(); };                                            // 0x4b5440
 struct EaVector { int dtor(); };                                             // 0xae6970
 struct PropObj {
@@ -2425,9 +2425,9 @@ void cSPUITimeline_s00e4_5760::SetItemColor(uint32_t idx, unsigned char on)
 cSPUIPropertyLayout_s00e4_5760* PropLayoutCtor::Construct()
 {
     cSPUIPropertyLayout_s00e4_5760* self = (cSPUIPropertyLayout_s00e4_5760*)this;
-    CPL_ctor(self);
-    *(uint32_t*)((char*)self + 0x00) = 0x1482370;
-    *(uint32_t*)((char*)self + 0x04) = 0x1482360;
+    ((CPL*)self)->ctor();
+    *(void**)((char*)self + 0x00) = &PTR_AddRef_01482370;
+    *(void**)((char*)self + 0x04) = &PTR_FUN_01482360;
     *(uint32_t*)((char*)self + 0x78) = 0;
     *(uint32_t*)((char*)self + 0x7c) = 0;
     *(uint32_t*)((char*)self + 0x80) = 0;
