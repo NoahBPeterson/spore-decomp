@@ -285,12 +285,14 @@ struct Flight101VTable {
 namespace Flight101Native {
 struct Inventory {
     void FUN_00ff46e0();
+    void FUN_00ff4310();
 };
 struct SpaceGame {
     Inventory* GetPlayerInventory();             // 0x00a1ad60
 };
 struct MissionManager {
     void FUN_00feba60(bool enabled);
+    void SetTutorialMissionState2(uint32_t nMissionId); // 0x00fede60
 };
 SpaceGame* SpaceGameGet();                       // 0x01002bd0
 MissionManager* GetMissionManager();             // 0x00feb9f0
@@ -331,30 +333,26 @@ void cSPMissionFlight101::Fulfill()
 void cSPMissionFlight101::OnReject()
 {
     BaseOnReject();
-    uint32_t nMissionId = (uint32_t)mMissionId;
-    ((cDispatchObject*)GetMissionManager())->Call1(0x00, nMissionId);
-
-    void* pInventory = ((cDispatchObject*)SpaceGameGet())->Call(0x00);
-    if (pInventory != nullptr) {
-        ((cDispatchObject*)pInventory)->Call(0x00);
-        ((cDispatchObject*)pInventory)->Call(0x00);
+    Flight101Native::GetMissionManager()->SetTutorialMissionState2((uint32_t)mMissionId);
+    Flight101Native::Inventory* inventory = Flight101Native::SpaceGameGet()->GetPlayerInventory();
+    if (inventory != nullptr) {
+        inventory->FUN_00ff46e0();
+        inventory->FUN_00ff4310();
     }
-    ((cDispatchObject*)GetMissionManager())->Call1(0x00, 1);
+    Flight101Native::GetMissionManager()->FUN_00feba60(true);
 }
 
 // @ 0x00c55970
 void cSPMissionFlight101::OnAccept()
 {
     BaseOnAccept();
-    uint32_t nMissionId = (uint32_t)mMissionId;
-    ((cDispatchObject*)GetMissionManager())->Call1(0x00, nMissionId);
-
-    void* pInventory = ((cDispatchObject*)SpaceGameGet())->Call(0x00);
-    if (pInventory != nullptr) {
-        ((cDispatchObject*)pInventory)->Call(0x00);
-        ((cDispatchObject*)pInventory)->Call(0x00);
+    Flight101Native::GetMissionManager()->SetTutorialMissionState2((uint32_t)mMissionId);
+    Flight101Native::Inventory* inventory = Flight101Native::SpaceGameGet()->GetPlayerInventory();
+    if (inventory != nullptr) {
+        inventory->FUN_00ff46e0();
+        inventory->FUN_00ff4310();
     }
-    ((cDispatchObject*)GetMissionManager())->Call1(0x00, 1);
+    Flight101Native::GetMissionManager()->FUN_00feba60(true);
 }
 
 // @ 0x00c559e0
