@@ -472,7 +472,11 @@ void cRelationshipManager::LoadProperties()
 {
     cPropRef ref;
     cPropertyManager* pm = PropertyManager();
-    ref = 0;
+    if (ref.mp) {
+        cPropertySet* old = ref.mp;
+        ref.mp = 0;
+        old->Release();
+    }
     if (!pm->FindSet(0x5c770db7, &ref.mp))
         goto release;
     {
