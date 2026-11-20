@@ -11,3 +11,4 @@
 ../src/game/SPGonzago/_at_00c50000.cpp  ?Read@cMissionMultiStep@@QAE_NPAX@Z  00c5aea0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00c50000.cpp  ?Write@cMissionMultiStep@@QAE_NPAX@Z  00c5ae30  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00c50000.cpp  ?UpdateFromTerrainSphere@cMission@TerrainSphereMission@@QAEXXZ  00c5b020  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/_at_00c50000.cpp  ?AcceptFromTerrainSphere@cMission@TerrainSphereMission@@QAEXXZ  00c5b0b0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

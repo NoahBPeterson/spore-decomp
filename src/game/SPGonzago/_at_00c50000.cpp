@@ -975,7 +975,8 @@ public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
     virtual void v10(); virtual void v14();
     virtual bool HasPropertyList(const ResourceKey* key);                           // +0x18
-    virtual void v1c(); virtual void v20(); virtual void v24(); virtual void v28();
+    virtual bool IsPropertyListLoaded(const ResourceKey* key, int flags);           // +0x1c
+    virtual void v20(); virtual void v24(); virtual void v28();
     virtual void v2c(); virtual void v30(); virtual void v34(); virtual void v38();
     virtual void v3c(); virtual void v40(); virtual void v44(); virtual void v48();
     virtual void CreatePropertyList(const ResourceKey* key, PropertyListOptions* o); // +0x4c
@@ -984,7 +985,9 @@ cPropertyListManager* PropManager();                    // 0x00401010
 class cMission {
 public:
     void PostLoad();                                    // 0x00c466d0
+    void OnAccept();                                    // 0x00c47a10 (SP::cSPMission::OnAccept)
     void UpdateFromTerrainSphere();
+    void AcceptFromTerrainSphere();
     uint8_t mPad000[0x1f0];
     ResourceKey mTerrainSphereKey;                      // +0x1f0
 };
@@ -1007,20 +1010,17 @@ void TerrainSphereMission::cMission::UpdateFromTerrainSphere()
 }
 
 // @ 0x00c5b0b0
-void cMissionMultiStep::UpdateFromTerrainSphereB()
+void TerrainSphereMission::cMission::AcceptFromTerrainSphere()
 {
-    ResetStepSchedule();
-
-    cTerrainEditor* pEditor = NounManager_s00c5_a580();
-    pEditor->GetCurrentTerrainSphere();
-    Vec3_s00c5_a580* pPosition = GetTerrainSpherePosition();
-    mpStepsBegin = *(cMissionStep***)pPosition;
-    mpStepsEnd = *(cMissionStep***)((uint8_t*)pPosition + 4);
-    mpStepsCap = *(cMissionStep***)((uint8_t*)pPosition + 8);
-
-    void* pTuning = GetSpaceTuning();
-    if (!((ISerializer*)pTuning)->Serialize(&mpStepsBegin))
-        ClearMissionUI();
+    OnAccept();
+    mTerrainSphereKey = NounManager()->GetCurrentTerrainSphere()->GetPropertyListKey();
+    if (!PropManager()->IsPropertyListLoaded(&mTerrainSphereKey, 0)) {
+        PropertyListOptions options;
+        options.mFlags = 0;
+        options.mMode = 0;
+        options.mCount = 1;
+        PropManager()->CreatePropertyList(&mTerrainSphereKey, &options);
+    }
 }
 
 void FUN_0102c0c0(SP::cPlanet* planet);                          // 0x0102c0c0
