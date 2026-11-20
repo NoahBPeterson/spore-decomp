@@ -2245,21 +2245,27 @@ void* Adj::Adjust2(void* id)
 // @ 0x00c63a60
 void* MorphA::QueryInterface(unsigned id)
 {
-    if (id == 0x7a81824)
-        return this;
-    if (id == 0x1186577)
-        return this ? (char*)this + 0x34 : 0;
-    return (id == 0x7a309fb) ? (void*)this : ((MorphCastHelper*)this)->FUN_00b18460(id);
+    if (id != 0x7a81824) {
+        if (id != 0x1186577) {
+            if (id != 0x7a309fb) return ((MorphCastHelper*)this)->FUN_00b18460(id);
+        } else {
+            return this ? (char*)this + 0x34 : 0;
+        }
+    }
+    return this;
 }
 
 // @ 0x00c63aa0
 void * SP::cSPMissionBase::AsInterface(EA::COM::InterfaceId id)
 {
-    if (id == 0x7abdd8d)
-        return this;
-    if (id == 0x1186577)
-        return this ? (char*)this + 0x34 : 0;
-    return (id == 0x7a309fb) ? (void*)this : ((MorphCastHelper*)this)->FUN_00b18460(id);
+    if (id != 0x7abdd8d) {
+        if (id != 0x1186577) {
+            if (id != 0x7a309fb) return ((MorphCastHelper*)this)->FUN_00b18460(id);
+        } else {
+            return this ? (char*)this + 0x34 : 0;
+        }
+    }
+    return this;
 }
 
 // @ 0x00c63ae0
