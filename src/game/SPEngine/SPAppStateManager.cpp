@@ -711,6 +711,23 @@ struct __declspec(novtable) BehaviorMessage : BehaviorMessageBase {
         *(const uint32_t**)this = (const uint32_t*)g_13eb844;   // derived vtable
     }
 };
+// same message, constructor that stores the derived vtable before clearing +0x38
+struct __declspec(novtable) BehaviorMessageV : BehaviorMessageBase {
+    virtual void b4();
+    int  field38;           // +0x38
+    char pad3c[4];          // +0x3c
+    BehaviorMessageV()
+    {
+        *(const uint32_t**)this = (const uint32_t*)g_13eb844;   // derived vtable
+        _ReadWriteBarrier();
+        field38 = 0;
+    }
+};
+static inline BehaviorMessageV* NewBehaviorMessageV(int msgid) {
+    BehaviorMessageV* m = new ("App", 0, 0, (const char*)0, 0) BehaviorMessageV();
+    m->field30 = msgid;
+    return m;
+}
 static inline BehaviorMessage* NewBehaviorMessage(int msgid) {
     BehaviorMessage* m = new ("App", 0, 0, (const char*)0, 0) BehaviorMessage();
     m->field30 = msgid;
@@ -1460,12 +1477,13 @@ void cAppState::AddMessage(EA::ArgScript::cArguments_s007e_32c0* args, RefObj* m
 }
 
 // @ 0x007e4260
-void FUN_007e4260(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args)
+void __fastcall FUN_007e4260(cAppStateCmd* self, void* dummy, EA::ArgScript::cArguments_s007e_4260* args)
 {
+    (void)dummy;
     const char** av = args->MainArguments(1);
     BehaviorMessage* m = NewBehaviorMessage(0xe11330);
     SetMessageString8(m, 0, av[0]);
-    cAppStateManager_AddAction(self->mpState, args, m);
+    ((cAppState*)self->mpState)->AddAction((EA::ArgScript::cArguments_s007e_32c0*)args, (RefObj*)m);
 }
 
 // @ 0x007e42d0
@@ -1477,13 +1495,14 @@ void FUN_007e44c0(void* a)
 { (void)a; }
 
 // @ 0x007e4550
-void FUN_007e4550(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args)
+void __fastcall FUN_007e4550(cAppStateCmd* self, void* dummy, EA::ArgScript::cArguments_s007e_4260* args)
 {
+    (void)dummy;
     const char** av = args->MainArguments(1);
     BehaviorMessage* m = NewBehaviorMessage(0xcef220e0);
     SetMessageString8(m, 0, av[0]);
-    m->field34 = args->HasFlag("softStop") ? 1 : 0;
-    cAppStateManager_AddAction(self->mpState, args, m);
+    m->field10 = args->HasFlag("softStop") ? 1 : 0;
+    ((cAppState*)self->mpState)->AddAction((EA::ArgScript::cArguments_s007e_32c0*)args, (RefObj*)m);
 }
 
 // @ 0x007e45e0
@@ -1498,12 +1517,13 @@ void FUN_007e45e0(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args
 }
 
 // @ 0x007e46f0
-void FUN_007e46f0(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args)
+void __fastcall FUN_007e46f0(cAppStateCmd* self, void* dummy, EA::ArgScript::cArguments_s007e_4260* args)
 {
+    (void)dummy;
     const char** av = args->MainArguments(1);
     BehaviorMessage* m = NewBehaviorMessage(0xcef220e1);
     SetMessageString8(m, 0, av[0]);
-    cAppStateManager_AddAction(self->mpState, args, m);
+    ((cAppState*)self->mpState)->AddAction((EA::ArgScript::cArguments_s007e_32c0*)args, (RefObj*)m);
 }
 
 // @ 0x007e4760
@@ -1511,21 +1531,23 @@ void FUN_007e4760(void* a, void* b)
 { (void)a; (void)b; }
 
 // @ 0x007e48f0
-void FUN_007e48f0(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args)
+void __fastcall FUN_007e48f0(cAppStateCmd* self, void* dummy, EA::ArgScript::cArguments_s007e_4260* args)
 {
-    BehaviorMessage* m = NewBehaviorMessage(0x6f188ef2);
+    (void)dummy;
+    BehaviorMessageV* m = NewBehaviorMessageV(0x6f188ef2);
     const char** av = args->MainArguments(1);
     SetMessageString8(m, 0, av[0]);
-    cAppStateManager_AddAction(self->mpState, args, m);
+    ((cAppState*)self->mpState)->AddAction((EA::ArgScript::cArguments_s007e_32c0*)args, (RefObj*)m);
 }
 
 // @ 0x007e4970
-void FUN_007e4970(cAppStateCmd* self, EA::ArgScript::cArguments_s007e_4260* args)
+void __fastcall FUN_007e4970(cAppStateCmd* self, void* dummy, EA::ArgScript::cArguments_s007e_4260* args)
 {
-    BehaviorMessage* m = NewBehaviorMessage(0x6f188ef8);
+    (void)dummy;
+    BehaviorMessageV* m = NewBehaviorMessageV(0x6f188ef8);
     const char** av = args->MainArguments(1);
     SetMessageString8(m, 0, av[0]);
-    cAppStateManager_AddAction(self->mpState, args, m);
+    ((cAppState*)self->mpState)->AddAction((EA::ArgScript::cArguments_s007e_32c0*)args, (RefObj*)m);
 }
 
 // @ 0x007e49f0
