@@ -2469,16 +2469,15 @@ int cDistributeEffect_s00a8_7fb0::FUN_00a88390(int count, void** outBegin, void*
     if (*(int*)((char*)this + 0xc) == 0 && count > 0) {
         void* src = *(void**)((char*)this + 4);
         ((void(__thiscall*)(void*))(*(void***)src)[0x08 / 4])(src);
-        void* fn = *(void**)(*(void***)(*(void**)((char*)this + 4)))[0];
-        int got = ((int(__stdcall*)(void*, void*, void*))fn)(
-            *(void**)((char*)this + 8), (void*)((char*)this + 0x10), (void*)((char*)this + 0x14));
+        void* src2 = *(void**)((char*)this + 4);
+        int got = ((int(__thiscall*)(void*, int, void*, void*))(*(void***)src2)[0])(src2,
+            *(int*)((char*)this + 8), (void*)((char*)this + 0x10), (void*)((char*)this + 0x14));
         *(int*)((char*)this + 8) -= got;
         *(int*)((char*)this + 0xc) = got;
     }
     int avail = *(int*)((char*)this + 0xc);
     *outStride = *(void**)((char*)this + 0x14);
-    if (count > avail)
-        count = avail;
+    count = count > avail ? avail : count;
     *outBegin = *(void**)((char*)this + 0x10);
     *(int*)((char*)this + 0xc) -= count;
     *(int*)((char*)this + 0x10) += *(int*)((char*)this + 0x14) * count * 4;
