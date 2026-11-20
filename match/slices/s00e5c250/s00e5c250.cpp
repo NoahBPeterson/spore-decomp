@@ -43,7 +43,9 @@ struct CellGameSub {
 };
 extern "C" void* __cdecl thunk_FUN_00e4cc40(int, void*);      // 0xe4cc40 (jmp 0xe823a0)
 extern "C" void  __cdecl SP_GetPollinatedCell(float* out, float, float, float, float); // 0xe84f30
-extern "C" void* __cdecl FUN_00b72210(void* self, int id);    // thunk, this=ecx
+struct CellLookup_s00e5c250 {
+  void* FUN_00b72210(int id);                                   // 0x00b72210 (this=ecx)
+};
 extern "C" void* __cdecl FUN_00b72160_thunk(void* self);
 extern "C" int   __cdecl FUN_00e5c4f0_naked_guard();
 extern "C" int   __cdecl FUN_00e57340(void* p);
@@ -120,7 +122,8 @@ float* FUN_00e5c250(float* out, int a) {
 // @ 0x00e5c410
 bool FUN_00e5c410(int id, int kind) {
   if (kind == 0) return true;
-  char* e = (char*)FUN_00b72210((char*)gCellGame_16b3c04 + 0x1c, id);
+  CellLookup_s00e5c250* cells = (CellLookup_s00e5c250*)((char*)gCellGame_16b3c04 + 0x1c);
+  char* e = (char*)cells->FUN_00b72210(id);
   if (*(int*)(e + 0x35c) == *(int*)((char*)gCellGame_16b3c04 + 0x40fc) && kind == 1) return true;
   if (*(int*)(e + 0x35c) == *(int*)((char*)gCellGame_16b3c04 + 0x4100) && kind == 2) return true;
   return false;
@@ -129,7 +132,7 @@ bool FUN_00e5c410(int id, int kind) {
 // @ 0x00e5c460
 bool FUN_00e5c460(int id, int kind) {
   if (kind == 0) return true;
-  char* e = (char*)FUN_00b72210((char*)gCellGame_16b3c04 + 0x1c, id);
+  char* e = (char*)((CellLookup_s00e5c250*)((char*)gCellGame_16b3c04 + 0x1c))->FUN_00b72210(id);
   int t = FUN_00e57340(e);
   float h = *(float*)(e + 0x58);
   if (t == 4 && kind == 3) return true;
@@ -345,7 +348,7 @@ void* FUN_00e5c860(void* first, void* last, void* dest) {
 void FUN_00e5c8e0(int id) {
   if (*(char*)((char*)gCellGame_16b3c04 + 0x5168) != 0 || id == 0) return;
   FUN_00e82cf0(0xd456d958, 1, 1);
-  char* e = (char*)FUN_00b72210((char*)gCellGame_16b3c04 + 0x1c, id);
+  char* e = (char*)((CellLookup_s00e5c250*)((char*)gCellGame_16b3c04 + 0x1c))->FUN_00b72210(id);
   void* o = FUN_0067de90(0, 0);
   int r = (int)FUN_007ec160((int)o, 0);
   FUN_007eb820(4);

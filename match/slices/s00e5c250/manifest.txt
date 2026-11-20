@@ -7,3 +7,4 @@ slices/s00e5c250/s00e5c250.cpp  ?FUN_00e5cac0@@YIPAXPAXHH@Z  00e5cac0  /O2 /MD /
 slices/s00e5c250/s00e5c250.cpp  ?FUN_00e5c560@@YAXXZ  00e5c560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00e5c250/s00e5c250.cpp  ?FUN_00e5c530@@YIMPAX@Z  00e5c530  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00e5c250/s00e5c250.cpp  ?FUN_00e5c6e0@@YA_NPAXH@Z  00e5c6e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00e5c250/s00e5c250.cpp  ?FUN_00e5c410@@YA_NHH@Z  00e5c410  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
