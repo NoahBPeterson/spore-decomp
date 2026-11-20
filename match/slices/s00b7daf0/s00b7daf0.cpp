@@ -3,6 +3,7 @@
 #include "types.h"
 #include <math.h>
 #include <xmmintrin.h>
+#include <intrin.h>
 
 // ---- free callees --------------------------------------------
 void* __cdecl SP_GetUniverseContext();                    // 0x1021080
@@ -377,9 +378,10 @@ struct Gm {
   char     pad32[2];
   void*    f34;       // +0x34
   Gm*  __thiscall ctor();
-  void __thiscall dtor(char del);
+  Gm*  __thiscall dtor(char del);
   void __thiscall FUN_00b7dec0();
 };
+struct GmList { void __thiscall FUN_00b7d710(); };   // 0xb7d710 (list at +0x20)
 struct GmSec { void __thiscall FUN_00b7e070(); };
 
 // @ 0x00b7df80
@@ -402,15 +404,17 @@ Gm* __thiscall Gm::ctor() {
 }
 
 // @ 0x00b7e010
-void __thiscall Gm::dtor(char del) {
+Gm* __thiscall Gm::dtor(char del) {
   *(void**)this = &gVt_b;
   *(void**)((char*)this + 4) = &gVt_c;
   *(void**)((char*)this + 8) = &gVt_d;
+  _ReadWriteBarrier();
   if (f34) (*(void(__thiscall*)(void*))((*(void***)f34)[0xc0 / 4]))(f34);
-  FUN_00b7d710((char*)this + 0x20);
+  ((GmList*)((char*)this + 0x20))->FUN_00b7d710();
   ((CGZSub*)((char*)this + 4))->CGZSubDtor();
   *(void**)this = &gVt_a;
   if (del & 1) operator_delete__(this);
+  return this;
 }
 
 // @ 0x00b7dec0
