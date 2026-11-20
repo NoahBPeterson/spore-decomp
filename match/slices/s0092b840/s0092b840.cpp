@@ -21,6 +21,7 @@ struct WString {
     void erase(unsigned pos, unsigned count);                 // 0x004228E0 erase(pos,count)
     void make_lower();                                        // 0x005E8E80 make_lower
     unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+    void clear() { if (mpBegin != mpEnd) { *mpBegin = 0; mpEnd = mpBegin; } }
     wchar_t& operator[](unsigned i) { return mpBegin[i]; }
 };
 
@@ -87,12 +88,8 @@ __declspec(noinline) void SplitBase::Set(const short* s) {
         const short* p = s;
         while (*p) ++p;
         mText.assign((const wchar_t*)s, (const wchar_t*)s + (p - s));
-        Split(&mText, &mArgs);
-        return;
-    }
-    if (mText.mpBegin != mText.mpEnd) {
-        *mText.mpBegin = 0;
-        mText.mpEnd = mText.mpBegin;
+    } else {
+        mText.clear();
     }
     Split(&mText, &mArgs);
 }
