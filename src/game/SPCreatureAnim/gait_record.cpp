@@ -3011,7 +3011,7 @@ Entry_s009e_3580* EntryCopyBackward(Entry_s009e_3580* first, Entry_s009e_3580* l
         --dstEnd;
         dstEnd->key = last->key;
         if (&dstEnd->in != &last->in) {
-            dstEnd->in.Assign(&last->in);
+            ((Inner_s009d_b6d0*)&dstEnd->in)->Assign((const Inner_s009d_b6d0*)&last->in);
             dstEnd->in.AssignItems(&last->in);
             if (g_1515dc) dstEnd->in.AssignGaits(&last->in);
         }
