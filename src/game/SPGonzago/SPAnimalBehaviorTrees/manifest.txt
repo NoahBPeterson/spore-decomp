@@ -125,3 +125,4 @@
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?IsLookupBFlagSet@SP@@YAMPAVcEditorGameObject@1@@Z  00d7a4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d871a0@@YAXPAUcCreature@@IIIIPAUcNodeState@@@Z  00d871a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d872d0@@YAXPAUcCreature@@IIIIPAUcNodeState@@@Z  00d872d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPAnimalBehaviorTrees.cpp  ?FUN_00d89c00@SP@@YAXPAVcSPCreatureBase_s00d8_9430@1@HHHHPAUDropItemsBlock@1@@Z  00d89c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

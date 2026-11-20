@@ -13088,9 +13088,9 @@ void FUN_00d89c00(cSPCreatureBase_s00d8_9430* c, int, int, int, int, DropItemsBl
 {
     c->mpBehavior->mStimuli.ClearAll(0, 0x40000);
 
-    RefObj* old = st->mpObject.mpObject;
-    if (old != 0) {
-        st->mpObject.mpObject = 0;
+    RefObj** slot = &st->mpObject.mpObject;
+    if (RefObj* old = *slot) {
+        *slot = 0;
         old->ReleaseBundle();
     }
     if (st != 0) {
