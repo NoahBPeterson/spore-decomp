@@ -146,11 +146,12 @@ cSPEditorHandle* cSPEditorHandle::Construct()
 // @ 0x0047d910
 void* cSPEditorHandle::AsInterface(uint32_t id)
 {
-    uint32_t t14 = id;
-    if (t14 == 0xee3f516e)
+    switch ((int)id) {
+    case 0x050a1fe5:
         return this;
-    if (t14 == 0x050a1fe5)
+    case (int)0xee3f516e:
         return this;
+    }
     return 0;
 }
 
