@@ -1510,16 +1510,13 @@ namespace SP {
 bool SP::cGraphicsSystem_s007a_51d0::InitThumbnailBoundsTexture()
 {
     cRenderTargetRectID_s007a_51d0 tmp;
-    cRenderTargetRectID_s007a_51d0* rt =
-        mRTTManager->CreateRenderTarget(&tmp, 0x40, 0x40, 0x15, 0, 0xffffffff, 0);
-    int pageID = rt->mPageID;
-    int allocID = rt->mAllocID;
-    mRTTManager->SetRenderTargetName(pageID, allocID, "ThumbnailBoundsRect");
-    if (allocID != -1) {
-        void* image = mRTTManager->GetRenderTargetImage(pageID, allocID);
+    cRenderTargetRectID_s007a_51d0 rect =
+        *reinterpret_cast<RTTResultManager*>(mRTTManager)->CreateRenderTarget(&tmp, 0x40, 0x40, 0x15, 0, 0xffffffff, 0);
+    reinterpret_cast<RTTResultManager*>(mRTTManager)->SetRenderTargetName(rect, "ThumbnailBoundsRect");
+    if (rect.mAllocID != -1) {
+        void* image = reinterpret_cast<RTTResultManager*>(mRTTManager)->GetRenderTargetImage(rect);
         mThumbnailBoundsTexture.SetImageResource(image);
-        mThumbnailBoundsRectID.mPageID = pageID;
-        mThumbnailBoundsRectID.mAllocID = allocID;
+        mThumbnailBoundsRectID = rect;
         return true;
     }
     return false;
