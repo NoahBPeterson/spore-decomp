@@ -60,9 +60,14 @@ void*  __cdecl SP_PropertyManager();
 float* __cdecl SP_GetPropertyAsFloat();
 bool __stdcall Sub_8026b0(const wchar_t* name, void* info);
 bool __stdcall Sub_8026e0(void* info);
+struct MapIter {
+  void* mpNode;
+  MapIter() {}
+  MapIter(void* node) : mpNode(node) {}
+};
 struct MapBase {
   void Find(void** outIter, const uint32_t* key);   // 0x00E5C780
-  void Erase(void** outIter, void* node);     // 0x00801E90
+  MapIter Erase(MapIter position);            // 0x00801E90
   void NukeSubtree(void* node);               // 0x00801EF0
 };
 struct WStr {
@@ -457,17 +462,18 @@ uint8_t C_801d80::f(IRecordSrc* src, void* info, int c, int type)
 }
 
 // @ 0x00801e90
-void MapBase::Erase(void** outIter, void* node)
+MapIter MapBase::Erase(MapIter position)
 {
+  void* node = position.mpNode;
   *(int*)((char*)this + 0x14) = *(int*)((char*)this + 0x14) - 1;
-  void* volatile next = (void*)(unsigned)RBTreeIncrement(node);
+  position.mpNode = (void*)(unsigned)RBTreeIncrement(node);
   RBTreeErase(node, (char*)this + 4);
   int a = *(int*)((char*)node + 0x14);
   int sz = (*(int*)((char*)node + 0x1c) - a) & 0xfffffffe;
   if (sz > 2 && a)
     operator_delete((void*)a);
   operator_delete(node);
-  *outIter = next;
+  return position;
 }
 
 // @ 0x00801ef0
@@ -574,8 +580,7 @@ bool CurMgr::Remove(uint32_t k)
     if (info == *(void**)((char*)this + 0x38)) *(void**)((char*)this + 0x38) = 0;
     if (info == *(void**)((char*)this + 0x34)) *(void**)((char*)this + 0x34) = 0;
     r = this->DestroyEntry(it);
-    void* out = 0;
-    ((MapBase*)((char*)this + 0xc))->Erase(&out, it);
+    ((MapBase*)((char*)this + 0xc))->Erase(it);
     if (*(uint8_t*)((char*)this + 0x40) && *(void**)((char*)this + 0x38) != 0)
       this->Refresh();
   }

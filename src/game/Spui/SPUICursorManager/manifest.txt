@@ -14,3 +14,4 @@
 ../src/game/Spui/SPUICursorManager.cpp  ?Sub_801fd0@@YIXPAX@Z  00801fd0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUICursorManager.cpp  ?Sub_8026b0@@YG_NPB_WPAX@Z  008026b0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUICursorManager.cpp  ?Clear@CurMgr@@QAE_NXZ  00802580  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUICursorManager.cpp  ?Erase@MapBase@@QAE?AUMapIter@@U2@@Z  00801e90  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
