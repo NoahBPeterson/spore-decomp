@@ -9,3 +9,4 @@
 ../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?WriteString@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PBDHH@Z  0093abd0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?ReadString@IO@EA@@YAHPAVIStream_s0093_a9d0@12@PADHH@Z  0093acd0  /O2 /MD /Gy /TP /Isrc/game/include
 ../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?WriteCString@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PBDHH@Z  0093adb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/EAStreamAdapter.cpp  ?ReadBool@IO@EA@@YA_NPAVIStream_s0093_a9d0@12@PA_N@Z  0093ac80  /O2 /MD /Gy /TP /Isrc/game/include
