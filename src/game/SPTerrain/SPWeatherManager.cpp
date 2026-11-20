@@ -1163,12 +1163,12 @@ void WeatherMgr::UpdateEffects(int arg)
 }
 
 // @ 0x00ff37c0
-bool __fastcall FUN_00ff37c0(ImageModifier* ecx_this, void* edx, const float* p)
+int __fastcall FUN_00ff37c0(ImageModifier* ecx_this, void* edx, const float* p)
 {
     if ((((ecx_this->mMinX <= p[0]) && (p[0] <= ecx_this->mMaxX)) &&
          ((ecx_this->mMinY <= p[1]) && (p[1] <= ecx_this->mMaxY))) &&
         (((ecx_this->mMinZ <= p[2]) && (p[2] <= ecx_this->mMaxZ)))) {
-        return true;
+        return 1;
     }
-    return false;
+    return 0;
 }
