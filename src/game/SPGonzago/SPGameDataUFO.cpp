@@ -2216,20 +2216,16 @@ bool __fastcall FUN_00c37040(Ufo* self, void* dummy)
 {
   (void)dummy;
   switch (self->state714) {
-  case 0:
-    if (self->f7f4 > g_kZero) {
-      SpaceGameC* sg = (SpaceGameC*)SpaceGameGet();
-      return sg->f4c30() == 0;
-    }
+  case 8:
+  case 9:
     return false;
+  case 0:
+    return (self->f7f4 > g_kZero && !((SpaceGameC*)SpaceGameGet())->f4c30()) ? 1 : 0;
   case 3: {
     Inventory* inv = GetUFOSimulator()->GetPlayerInventory();
     if (inv == 0) return true;
     return inv->f76c >= 2;
   }
-  case 8:
-  case 9:
-    return false;
   default:
     return true;
   }
