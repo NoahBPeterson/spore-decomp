@@ -265,18 +265,25 @@ BasicString16* BasicString16::sprintf_va_list(const wchar_t* fmt, char* args) {
     return this;
 }
 
+struct Rec24 { uint32_t key; uint32_t rest[5]; };
+struct KeyLess24 {
+    inline bool operator()(const Rec24& a, const uint32_t& b) const { return a.key < b; }
+};
+
 // @ 0x004c0600
 uint32_t* FUN_004c0600(uint32_t* begin, uint32_t* end, uint32_t* key) {
-    int n = (int)((char*)end - (char*)begin) / 0x18;
-    while (n > 0) {
-        int nHalf = n >> 1;
-        uint32_t* pMid = (uint32_t*)((char*)begin + nHalf * 0x18);
-        bool bValueLessThanNode = pMid[0] < key[0];
-        if (bValueLessThanNode) {
-            begin = (uint32_t*)((char*)pMid + 0x18);
-            n = n - (nHalf + 1);
+    // eastl::lower_bound over 0x18-byte records keyed by their first dword
+    int d = (int)((Rec24*)end - (Rec24*)begin);
+    while (d > 0) {
+        Rec24* i = (Rec24*)begin;
+        int d2 = d >> 1;
+        KeyLess24 compare;
+        i += d2;
+        if (compare(*i, *key)) {
+            begin = (uint32_t*)++i;
+            d -= d2 + 1;
         } else {
-            n = nHalf;
+            d = d2;
         }
     }
     return begin;
