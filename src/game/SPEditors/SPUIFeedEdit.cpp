@@ -2060,6 +2060,7 @@ struct cSim_s00ed_6720 {
     void   f3bcc0(int n);                            // 0x00f3bcc0
     bool   f327f0();                                 // 0x00f327f0
     bool   f41270(int a);                            // 0x00f41270
+    void   f3d8c0(int a);                            // 0x00f3d8c0 (thiscall, ret 4)
     char   pad10[0x10];
     void*  f10;                                      // +0x10
 };
@@ -5218,12 +5219,11 @@ void Panel_s00ed_6720::BadgeAutoTest()
 // @ 0x00ed7490
 void Panel_s00ed_6720::SelectionChanged(int a)
 {
-    (void)a;
     if (g_16c7aa4_s00ed_6720->sim->f41270(0)) {
         if (*(int*)((char*)g_16c7aa4_s00ed_6720->sim->f10 + 8) == 0)
             BadgeAutoTest();
         Select(0);
-        sim_f3d8c0(g_16c7aa4_s00ed_6720->sim);
+        g_16c7aa4_s00ed_6720->sim->f3d8c0(a);
     }
     else {
         mMode = 0;

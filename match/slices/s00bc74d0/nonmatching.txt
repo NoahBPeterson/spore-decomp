@@ -12,7 +12,6 @@
 00bc7b70 94  WE::FUN_00bc7b70: complete (grow the record array to at least param_2 entries and rebuild). difftest PASS (319 valid, 94.9% coverage).
 00bc7ca0 292 WE::FUN_00bc7ca0: complete (insert a record at `at`: grow, move, assign). Large diff is the inlined grow/move sequence. difftest UNSUPPORTED (unresolved reference _op_new).
 00bc7e20 39  WE::FUN_00bc7e20: complete (append a default free record, growing if full). difftest PASS (295 valid, 64.7% coverage).
-00bc7f80 11  FUN_00bc7f80: complete (allocate+init a 0xa0-byte cWorldEventsData: zero the head, set freeI/activeI=0x3fffffff, FUN_00bc7b70(0x32), cHierGrid ctor). Sole real diff is the null-path store: original `xor eax,eax; mov [edi],eax` (value came from operator_new's 0 result), mine `mov [edi],0`. difftest PASS (274 valid, 83.3% coverage).
 00bc74d0 145 WE::FUN_00bc74d0: complete (grow the 0x7b4-byte civ array, then load the civ list through the PropertyManager and call FUN_00bc7110). Remaining diff is register allocation / call setup. difftest PASS (404 valid, 100.0% coverage).
 00bc7570 31  FUN_00bc7570: complete (__cdecl (int key, WE* self): rebuild the world-event records for one civ key). Remaining diff is register allocation. difftest WEAK (504 valid, 57.9% coverage).
 00bc7610 118 WEMap::FUN_00bc7610: complete (WEHash::find at +0x48, then either return node+4 or build the key and append via FUN_00bc7110/FUN_00bc7570). Remaining diff is register allocation / inlining of the hash lookup. difftest PASS (323 valid, 100.0% coverage).

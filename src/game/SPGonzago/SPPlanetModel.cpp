@@ -2140,23 +2140,25 @@ void cPlanetModel_s00b7_ea80::FUN_ee70(Vec3* out, Vec3* in)
     out->z = ny * a - c * nx;
 }
 
+struct TerrainSphereMap_s00b7ef70 {
+    virtual void Slot0();
+    virtual void Slot1();
+    virtual void Slot2();
+    virtual SP::cTerrainMapSet* GetMap();
+};
+
 // @ 0x00b7ef70
 float cPlanetModel_s00b7_ea80::GetRadiusAt(unsigned coords)
 {
-    if (mpSphere) {
-        cTerrainMapSet_s00b7_ea80* map = (cTerrainMapSet_s00b7_ea80*)((void*(__thiscall*)(void*, unsigned))VTC(mpISphere, 0xc))(mpISphere, coords);
-        return map->GetHeightAt();
-    }
-    if (mpISphere) {
-        int m = ((int(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
-        if (m) {
-            int m2 = ((int(__thiscall*)(void*))VTC(mpISphere, 0xc))(mpISphere);
-            float r = *(float*)(m2 + 0x34);
-            return r;
-        }
-    }
-    float r = 500.0f;
-    return r;
+    if (mpSphere)
+        return static_cast<TerrainSphereMap_s00b7ef70*>(mpISphere)->GetMap()->GetHeightAt(*reinterpret_cast<const cSPVector3*>(coords));
+
+    float radius;
+    if (mpISphere && static_cast<TerrainSphereMap_s00b7ef70*>(mpISphere)->GetMap())
+        radius = static_cast<TerrainSphereMap_s00b7ef70*>(mpISphere)->GetMap()->mRadius;
+    else
+        radius = 500.0f;
+    return radius;
 }
 
 // @ 0x00b7f060

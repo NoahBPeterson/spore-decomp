@@ -70,3 +70,4 @@
 ../src/game/SPGonzago/SPVehicle.cpp  ?FUN_00ca0ef0@@YAPAUE16@@PAU1@00@Z  00ca0ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?UpdateDamageState@cVehicle@@QAEXXZ  00c9e700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPVehicle.cpp  ?HasBit2000@cVehicle@@QAE_NXZ  00c9eed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPVehicle.cpp  ?TerrainFlagForType@@YA_NHH@Z  00c9e8e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

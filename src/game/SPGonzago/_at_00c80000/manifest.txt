@@ -18,3 +18,4 @@
 ../src/game/SPGonzago/_at_00c80000.cpp  ?GetCommunityName@cSO@@QAEXPAUcSPVector3_s00c8_8e30@@@Z  00c890c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c80000.cpp  ?FUN_00c8c9d0@@YAXPAVcPlanet@@@Z  00c8c9d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00c80000.cpp  ?FUN_00c8d000@@YAXPAVcPlanet@@H@Z  00c8d000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00c80000.cpp  ?Fn@SpatialPos@@QAEXXZ  00c88870  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

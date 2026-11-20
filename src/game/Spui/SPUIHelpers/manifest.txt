@@ -56,3 +56,4 @@
 ../src/game/Spui/SPUIHelpers.cpp  ?FUN_008082f0@@YAXPAUW_s0080_7840@@MM@Z  008082f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?CreateFromName@SFV@@QAE_NPBG_N1@Z  0082aa20  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUIHelpers.cpp  ?Pollinator@@YAXPAUW_s0080_68d0@@PAM@Z  00806d10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIHelpers.cpp  ?FUN_00806c60@@YA?AUVec2_806c60@@PAX@Z  00806c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

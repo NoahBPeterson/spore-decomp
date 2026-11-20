@@ -534,7 +534,7 @@ namespace SP {
 void InitTerrainAtmosphereMesh();
 }
 namespace SP {
-void ShiftTerrainRecords(void* srcBegin, void* srcEnd, void* dstEnd);
+void* ShiftTerrainRecords(void* srcBegin, void* srcEnd, void* dstEnd);
 }
 // ---- items of slice s00fae800 end
 
@@ -1055,13 +1055,14 @@ void SP::cTerrainSphereQuad_s00fa_e800::ClearAboveBelowRange(int row, int col, i
 }
 
 // @ 0x00faf100
-void SP::ShiftTerrainRecords(void* srcBegin, void* srcEnd, void* dstEnd)
+void* SP::ShiftTerrainRecords(void* srcBegin, void* srcEnd, void* dstEnd)
 {
     while (srcEnd != srcBegin) {
         srcEnd = (char*)srcEnd - 200;
         dstEnd = (char*)dstEnd - 200;
         memcpy(dstEnd, srcEnd, 200);
     }
+    return dstEnd;
 }
 
 // @ 0x00faf140

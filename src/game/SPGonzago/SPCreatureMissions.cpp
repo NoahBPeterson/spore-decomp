@@ -859,9 +859,10 @@ int* __fastcall FUN_00c2f470(int* self) // Simulator::cTribeToTribeMission ctor
 void MissionStub::FUN_00c2f520()
 {
     char* self = (char*)this;
-    *(int*)(self + 0x00) = 0x0146b210;
-    *(int*)(self + 0x04) = 0x0146b200;
-    *(int*)(self + 0x34) = 0x0146b1f0;
+    *(int*)(self + 0x00) = (int)g_146b210;
+    *(int*)(self + 0x04) = (int)g_146b200;
+    *(int*)(self + 0x34) = (int)g_146b1f0;
+    _ReadWriteBarrier();
 
     int* p = *(int**)(self + 0x88);
     if (p != 0)
@@ -873,9 +874,9 @@ void MissionStub::FUN_00c2f520()
     if (p != 0)
         ((void(__thiscall*)(void*))(*(void***)p)[4 / 4])(p);
 
-    *(int*)(self + 0x00) = 0x0146aff0;
-    *(int*)(self + 0x04) = 0x0146afdc;
-    *(int*)(self + 0x34) = 0x0146afcc;
+    *(int*)(self + 0x00) = (int)g_146aff0;
+    *(int*)(self + 0x04) = (int)g_146afdc;
+    *(int*)(self + 0x34) = (int)g_146afcc;
 
     ((void(__thiscall*)(void*))FUN_00c45140)(self);
 }

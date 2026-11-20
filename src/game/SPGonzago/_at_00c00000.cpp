@@ -464,17 +464,21 @@ int __thiscall CreatureBase_s00c0_45a0::Sub47d0()
 }
 
 // @ 0x00c04820
+static inline void** FindIf_c04820(void** first, void** last, bool (__cdecl* pred)(void*))
+{
+  for (; first != last; ++first)
+    if (pred(*first))
+      break;
+  return first;
+}
 void* __cdecl FUN_00c04820(void** first, void** last, bool (__cdecl* pred)(void*))
 {
-  void** p = first;
-  while (p != last) {
-    if (pred(*p))
-      break;
-    ++p;
+  first = FindIf_c04820(first, last, pred);
+  if (first != last) {
+    void** next = first;
+    return FUN_00c032c0(++next, last, first, (void*)pred);
   }
-  if (p == last)
-    return p;
-  return FUN_00c032c0(p + 1, last, p, (void*)pred);
+  return first;
 }
 
 // @ 0x00c04870

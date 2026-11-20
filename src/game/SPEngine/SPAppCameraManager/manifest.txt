@@ -4,3 +4,4 @@
 ../src/game/SPEngine/SPAppCameraManager.cpp  ?VariantGetTPTR@@YAPAXXZ  007c65a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPAppCameraManager.cpp  ?SetActiveControllerByIndex@cCameraManager@SP@@UAEXH@Z  007c6420  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPAppCameraManager.cpp  ?SetActiveController@cCameraManager@@QAEXPAX@Z  007c6110  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPAppCameraManager.cpp  ?Destroy6370@Obj6370@@QAEPAPAXH@Z  007c6370  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

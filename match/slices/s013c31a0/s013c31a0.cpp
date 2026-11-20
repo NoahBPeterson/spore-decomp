@@ -298,15 +298,18 @@ void f_013c8f60() {
 // Adjacent empty COMDAT reproduces the linked retail extent after f_013c8f60.
 void terra09_link_pad_ret() {}
 
+// The object g_16c7c14 points at owns one interface pointer, released in its destructor.
+struct Holder_13c9030 {
+    V2* mpObj;
+    ~Holder_13c9030() { if (mpObj) mpObj->b(); }
+    static void operator delete(void* p) { cdecl_free(p); }
+};
+
 // @ 0x013C9030
 void f_013c9030() {
-    char* p = (char*)g_16c7c14;
+    Holder_13c9030* p = (Holder_13c9030*)g_16c7c14;
     *(void**)g_16c7c08 = vtbl_148b708;
-    if (p) {
-        void* q = *(void**)p;
-        if (q) ((V2*)q)->b();
-        cdecl_free(p);
-    }
+    delete p;
     g_16c7c14 = 0;
 }
 

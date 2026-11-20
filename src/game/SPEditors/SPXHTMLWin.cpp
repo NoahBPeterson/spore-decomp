@@ -1209,7 +1209,10 @@ namespace SP { namespace Pollen {
 void cXHTMLWin::DestroyFormControl(DomElement* e)
 {
   XList* list = &mControlList;
-  if (!list->empty()) ClearList(list);
+  if (!list->empty()) {
+    _ReadWriteBarrier();
+    ClearList(list);
+  }
   IControlHolder* h = e->mpControl;
   if (h) {
     IWindow_s0062_2f20* w = h->GetWindow(0xeeee8218);

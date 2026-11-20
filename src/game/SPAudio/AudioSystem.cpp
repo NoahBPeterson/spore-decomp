@@ -299,9 +299,12 @@ struct RefBaseA22 {
     volatile long rc;
     RefBaseA22() { _InterlockedExchange(&rc, 0); }
 };
-struct DrvBA22 : RefBaseA22 {
+struct DrvArgA22 {          // non-polymorphic base, laid out after RefBaseA22 (+8)
     u32   pad[0x1e];       // +8 .. +0x80
     void* mArg;            // +0x80
+    DrvArgA22(void* arg) : mArg(arg) {}
+};
+struct DrvBA22 : DrvArgA22, RefBaseA22 {
     u32   mPad84;
     u32   mZero;           // +0x88
     DrvBA22(void* arg);
@@ -5747,7 +5750,7 @@ AR* __cdecl ARCopy(AR* first, AR* last, AR* dst)
 
 // @ 0x00a227a0
 DrvBA22::DrvBA22(void* arg)
-: mArg(arg), RefBaseA22(), mZero(0) {}
+: DrvArgA22(arg), RefBaseA22(), mZero(0) {}
 
 // @ 0x00a227d0
 ResourceDeviceDriver* MakeRDD()

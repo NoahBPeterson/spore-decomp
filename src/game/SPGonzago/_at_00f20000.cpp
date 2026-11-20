@@ -2650,8 +2650,7 @@ void fn26ac0(void* param)
   int* p = ((int*(*)(void*))*(void**)((char*)param + 0x20))(param);
   if ((g016c8474 & 1) == 0) {
     g016c8474 |= 1;
-    g016c8470 = *p = 0;
-    return;
+    g016c8470 = 0;
   }
   *p = (int)g016c8470;
 }
@@ -2666,8 +2665,7 @@ void fn26c60(void* param)
   int* p = ((int*(*)(void*))*(void**)((char*)param + 0x20))(param);
   if ((g016c847c & 1) == 0) {
     g016c847c |= 1;
-    g016c8478 = *p = 0;
-    return;
+    g016c8478 = 0;
   }
   *p = (int)g016c8478;
 }

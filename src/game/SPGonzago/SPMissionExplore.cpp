@@ -214,13 +214,14 @@ bool __fastcall FUN_00c50ac0(void* ecx_this, void* edx)
 }
 
 // @ 0x00c50ad0
-void __cdecl FUN_00c50ad0(Rec20* first, Rec20* last, Rec20* dstEnd)
+Rec20* __cdecl FUN_00c50ad0(Rec20* first, Rec20* last, Rec20* dstEnd)
 {
     while (last != first) {
         --last;
         --dstEnd;
         *dstEnd = *last;
     }
+    return dstEnd;
 }
 
 // @ 0x00c50b10

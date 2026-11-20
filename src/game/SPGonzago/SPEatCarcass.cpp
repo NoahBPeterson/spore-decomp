@@ -237,8 +237,8 @@ bool SP::PUKE_Activate(SP::cSPCreatureBase_s00d7_0080* self, int, int, int, int,
     if (stim)
         handle = stim->m0c;
     st[0] = self->PlayAnimation(0x931fdcda, 1, handle);
-    unsigned fl = self->mFlags.raw;
-    if ((fl >> 9) & 1) {
+    bool on = ((self->mFlags.raw >> 9) & 1) != 0;
+    if (on) {
         SP::HandleObj* h = (SP::HandleObj*)SP::FUN_0067cac0(0xec1190b1);
         h->FUN_0067c830();
     }

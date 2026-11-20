@@ -5460,15 +5460,13 @@ bool EA::UTFWinControls::WinGrid_s0097_1eb0::SetScrollBarPositions()
 void EA::UTFWinControls::CellList::clear()
 {
     EA::UTFWinControls::CellNode* pFirst = mpHead;
-    if (pFirst != (EA::UTFWinControls::CellNode*)this) {
-        do {
-            EA::UTFWinControls::CellNode* pNext = pFirst->mpLeft;
-            EA::UTFWinControls::operator delete(pFirst);
-            pFirst = pNext;
-        } while (pFirst != (EA::UTFWinControls::CellNode*)this);
+    while (pFirst != (EA::UTFWinControls::CellNode*)this) {
+        EA::UTFWinControls::CellNode* pNode = pFirst;
+        pFirst = pFirst->mpLeft;
+        EaFree(pNode);
     }
-    mpTail = (EA::UTFWinControls::CellNode*)this;
     mpHead = (EA::UTFWinControls::CellNode*)this;
+    mpTail = (EA::UTFWinControls::CellNode*)this;
 }
 
 // @ 0x00972d60

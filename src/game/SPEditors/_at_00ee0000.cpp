@@ -7291,15 +7291,12 @@ void __cdecl f_00eec540(int p)
 // @ 0x00eec580
 int __cdecl f_00eec580(int p)
 {
-    if (p <= 0)
-        return 0;
-    int n = g_016c7a28;
-    while (p > n) {
-        p = n;
-        if (p <= 0)
-            return 0;
+    while (p > 0) {
+        if (p <= g_016c7a28)
+            return g_016c7a24[p - 1];
+        p = g_016c7a28;
     }
-    return g_016c7a24[p - 1];
+    return 0;
 }
 
 // @ 0x00eed3f0

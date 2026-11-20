@@ -1,10 +1,6 @@
 // Slice s008980d0: walks a flag-array forward while the 0x10 bit is set, then
 // counts the run of entries sharing the first one's word pointer.
-// Status: not byte-exact (189 vs 200 bytes).  The original expands the "key at i"
-// expression twice -- each expansion re-reads mpData, mpIdsEnd/mpIds and the +0x18
-// word array -- and keeps the loop value in eax, the first key in ebx and the count
-// pointer in esi.  cl 15 CSEs the second expansion into a jmp to the first and
-// spills the third argument.  See nonmatching.txt.
+// Two out-pointers (ret 8): both get the run start, the second counts the run.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 
@@ -25,43 +21,54 @@ struct Data_008980d0 {
     char  pad_048[0x07c - 0x048];               // +0x048 .. +0x07b
     int*  mpIds;                                // +0x07c
     int*  mpIdsEnd;                             // +0x080
+
+    int* KeyAt(unsigned int i)
+    {
+        int idx;
+        int* const* ids = &mpIds;   // {begin, end}: the size reads end first, the element re-reads begin
+        if (i < (unsigned int)(ids[1] - ids[0]))
+            idx = mpIds[i];
+        else
+            idx = (int)(mpLast - mpFirst);
+        return mppWords[idx * 3];
+    }
 };
 
 struct Holder_008980d0 {
     Data_008980d0* mpData;                      // +0x000
     unsigned int   mIndex;                      // +0x004
 
-    bool NextFlagsRun(unsigned int* pOut, unsigned int* pKeyIndex, unsigned int* pStart);
+    bool NextFlagsRun(unsigned int* pStart, unsigned int* pEnd);
 };
 
 // @ 0x008980d0
-bool Holder_008980d0::NextFlagsRun(unsigned int* pOut, unsigned int* pKeyIndex, unsigned int* pStart)
+bool Holder_008980d0::NextFlagsRun(unsigned int* pStart, unsigned int* pEnd)
 {
-    unsigned int n = (unsigned int)(mpData->mpEntriesEnd - mpData->mpEntries);
+    Data_008980d0* d = mpData;
     unsigned int i = mIndex;
+    unsigned int n = (unsigned int)(d->mpEntriesEnd - d->mpEntries);
     while (i < n) {
         if ((mpData->mpEntries[i].mFlags & 0x10) == 0)
             break;
         ++i;
     }
-    *pOut = i;
     *pStart = i;
-    if (i >= n) {
-        mIndex = n;
-        return false;
+    *pEnd = i;
+    if (i < n) {
+        unsigned int s = *pStart;
+        int* key = mpData->KeyAt(s);
+        do {
+            int* other = mpData->KeyAt(i);
+            if (other != key)
+                break;
+            if ((mpData->mpEntries[i].mFlags & 0x10) != 0)
+                break;
+            ++*pEnd;
+            ++i;
+        } while (i < n);
+        mIndex = i;
+        return true;
     }
-    unsigned int idsN = (unsigned int)(mpData->mpIdsEnd - mpData->mpIds);
-    int* key = mpData->mppWords[(i < idsN ? mpData->mpIds[i] : (int)(mpData->mpLast - mpData->mpFirst)) * 3];
-    while (i < n) {
-        unsigned int idsM = (unsigned int)(mpData->mpIdsEnd - mpData->mpIds);
-        int* other = mpData->mppWords[(i < idsM ? mpData->mpIds[i] : (int)(mpData->mpLast - mpData->mpFirst)) * 3];
-        if (other != key)
-            break;
-        if ((mpData->mpEntries[i].mFlags & 0x10) == 0)
-            break;
-        ++*pKeyIndex;
-        ++i;
-    }
-    mIndex = i;
-    return true;
+    mIndex = n;
+    return false;
 }

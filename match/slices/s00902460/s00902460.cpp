@@ -3,7 +3,10 @@
 // Class layouts taken from the 2008 dev-build PDB.
 #include "types.h"
 #include <new>
-#include <intrin.h>
+// <intrin.h> is not included: it declares 16-byte-aligned types, which take ebx away from the
+// static register-argument helper FreeNodeList (docs/codegen.md section 18).
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 
 typedef unsigned int size_t;
 extern "C" size_t wcslen(const wchar_t*);

@@ -184,11 +184,19 @@ void SP::cCameraManager::UpdateFromControllerProperties()
 }
 
 // @ 0x007c6370
-void** Destroy6370(void** p, int flags)
+extern "C" char g_13ef094[];   // GmeRefCount vtable
+extern "C" char g_13eb394[];   // IHandler vtable
+extern "C" char g_13eb938[];   // GmeEditorResBase vtable
+struct Obj6370 {
+    void* mVtbls[3];
+    void** Destroy6370(int flags);
+};
+void** Obj6370::Destroy6370(int flags)
 {
-    p[2] = &vtbl_Simulator_cCreatureAbility;
-    p[1] = &vtbl_Skinner_PaintSystem;
-    *p = &vtbl_Editor_cEditorResource;
+    void** p = (void**)this;
+    p[2] = g_13ef094;
+    p[1] = g_13eb394;
+    *p = g_13eb938;
     if (flags & 1) operator_delete(p);
     return p;
 }

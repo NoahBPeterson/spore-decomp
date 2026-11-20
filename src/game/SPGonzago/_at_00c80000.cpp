@@ -280,8 +280,8 @@ struct SpatialModel {
     void SetModelKey3(uint32_t* key);
 };
 void* SP_PlanetModel();            // 0x00b3d350
-void* FUN_00b3d310(void* self);    // 0x00b3d310
-struct PlanetCall { void v(); };   // 0x00b3e810
+void* FUN_00b3d310();    // 0x00b3d310
+struct PlanetCall { void v(void* obj); };   // 0x00b3e810 (ret 4)
 struct SpatialPos {
     char  pad00[4];
     float x;   // 0x04
@@ -980,13 +980,8 @@ void SpatialModel::SetModelKey3(uint32_t* key)
 void SpatialPos::Fn()
 {
     if (SP_PlanetModel()) {
-        float x = this->x;
-        float y = this->y;
-        float z = this->z;
-        if (x * x + y * y + z * z > 0.001f) {
-            void* r = FUN_00b3d310(this);
-            ((PlanetCall*)r)->v();
-        }
+        if (x * x + y * y + z * z > 0.001f)
+            ((PlanetCall*)FUN_00b3d310())->v(this);
     }
 }
 

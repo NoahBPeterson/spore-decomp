@@ -14,8 +14,6 @@
 008dbb10 124 complete: HT::GetFileInfoRef; insert-on-miss record built from key + junk high byte like retail; difftest PASS (554 valid @1200 inputs, 100.0% cov)
 008dbcf0 164 complete: PFIndexModifiable::GetFiles (enumerate into vector); DoInsertValue is a __thiscall member of KeyVec; difftest PASS (721 valid @1200 inputs, 94.5% cov)
 008dbdb0 212 complete: PFIndexModifiable::GetAllFiles (recursive enumeration); DoInsertValue now __thiscall on the vector; register allocation/iteration differs; difftest UNSUPPORTED (original faults on every generated input)
-008dbeb0 23 complete: PFIndexModifiable::PutFileInfo; field load/register assignment differs
 008dbf20 134 complete: HoleSet::AllocAt (rbtree insert + split); anchor-address/tree-root and FUN_008dbc20 (pair,aligned) call fixed; difftest WEAK (107 valid, 72.6% cov, no mismatch)
 008dc000 228 complete: HoleSet::Release (rbtree erase + merge); anchor address, mTreeRoot start and FUN_008dbc20 pair/aligned args fixed; difftest PASS (337 valid, 78.4% cov)
 008dc120 54 complete: HoleSet::MergeFrom; tree-root traversal + DoNukeSubtree thunk fixed; difftest UNSUPPORTED (0/400 valid: original faults on every generated input)
-008dbef0 35 FAIL-KEPT: HoleTree::DoInsert plain C++ (thiscall) forwards the ecx header + 3 args to FUN_008dbc20 with the 256-byte-aligned header as the trailing flag and returns ppOut; transcribed asm removed; difftest matches every observable and the full call trace, only retail's push ecx/pop ecx preservation of caller-saved ecx differs (no C++ without asm)

@@ -464,7 +464,7 @@ void Cam::AddAngle(float d)
 void Cam::ComputeView(float* a, float* b, float* c, float* out)
 {
     float angle = m4c;
-    float scale = k0_52_13f69b0 / m8c;
+    float scale = 0.52f / m8c;
     *a = m44;
     *b = m48;
     *c = m4c;

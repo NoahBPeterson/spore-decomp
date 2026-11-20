@@ -34,5 +34,3 @@
 00f257f0 43 complete; store scheduling + zero-register reuse differs (127 vs 131 bytes); difftest UNSUPPORTED 0/400 (original faults: read faults, GetUserNameW import) flags: /O2 /MD /Gy /TP
 00f25ee0 30 complete; inner sparse-switch decision-tree block ordering differs flags: /O2 /MD /Gy /TP
 00f25f20 35 complete; same as 00f25ee0 with the second constant set flags: /O2 /MD /Gy /TP
-00f26ac0 11 complete; flag/zero-store scheduling (immediate vs ecx zero) differs flags: /O2 /MD /Gy /TP
-00f26c60 11 complete; same as 00f26ac0 with the second global pair flags: /O2 /MD /Gy /TP

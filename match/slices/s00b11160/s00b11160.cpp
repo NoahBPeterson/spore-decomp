@@ -161,7 +161,7 @@ void FUN_00b11580(Vec4f* dst, unsigned count, Vec4f* src)
 // =============================================================================================
 // 0x00b115c0 -- copy 0x10-stride records from [from,to) into dest (dest may be null).
 // @ 0x00b115c0
-void FUN_00b115c0(Vec4f* f, Vec4f* to, Vec4f* d)
+Vec4f* FUN_00b115c0(Vec4f* f, Vec4f* to, Vec4f* d)
 {
     if (f != to) {
         do {
@@ -175,6 +175,7 @@ void FUN_00b115c0(Vec4f* f, Vec4f* to, Vec4f* d)
             d += 1;
         } while (f != to);
     }
+    return d;
 }
 
 // =============================================================================================

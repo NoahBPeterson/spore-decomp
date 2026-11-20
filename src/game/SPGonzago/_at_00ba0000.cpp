@@ -3593,16 +3593,16 @@ void InsertionSortSimpleC(ElemC* first, ElemC* last, bool (*compare)(const ElemC
 Elem16* UninitMove16(Elem16* first, Elem16* last, Elem16* dst)
 {
     if (first != last) {
-        if (dst != 0) {
-            while (first != last) {
+        do {
+            if (dst != 0) {
                 dst->a = first->a;
                 dst->b = first->b;
                 dst->c = first->c;
                 dst->d = first->d;
-                ++first;
-                ++dst;
             }
-        }
+            ++first;
+            ++dst;
+        } while (first != last);
     }
     return dst;
 }

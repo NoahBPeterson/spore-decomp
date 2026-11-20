@@ -292,7 +292,7 @@ int **FUN_00799290(int **param_1, int *param_2, int *param_3, int *param_4)
 }
 
 // @ 0x007992e0
-void FUN_007992e0(int *param_1, int *param_2, int *param_3)
+int* FUN_007992e0(int *param_1, int *param_2, int *param_3)
 {
     int iVar1;
 
@@ -307,7 +307,7 @@ void FUN_007992e0(int *param_1, int *param_2, int *param_3)
         }
         param_3 = param_3 + 2;
     }
-    return;
+    return param_3;
 }
 
 // @ 0x00799320

@@ -5,4 +5,3 @@
 0083a3c0  266 complete: vector<cArgInfo>::DoInsertValue; /GS- EH frame + this/arg register swap differ
 0083a580  267 complete: vector<cEnumSpec>::DoInsertValue; /GS- EH frame + this/arg register swap differ
 0083a740  132 complete: vector<cArgInfo>::operator=; uc first-arg handling and grow-tail scheduling differ; equiv: WEAK (443 valid, 40.2% cov)
-0083a8b0  23  complete: cOptionsSpec::operator=; this/arg register assignment swapped (esi/edi); equiv: UNSUPPORTED (0/1200 valid: memcpy import discards)

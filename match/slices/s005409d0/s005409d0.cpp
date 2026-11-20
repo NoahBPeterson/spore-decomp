@@ -210,10 +210,10 @@ void FUN_00541600(int a)
 }
 
 // @ 0x00541630
+struct Empty_00541630 {};
 void FUN_00541630(int a, int b)
 {
-        bool local = 0;
-    (void)local;
+    Empty_00541630();
     g_pLocalLight->FUN_00928a80(a, b, 0);
 }
 

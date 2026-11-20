@@ -1844,9 +1844,8 @@ void CardView::hide()
     ((void(__thiscall*)(void*, int, int))(*(void***)a94)[0x7c / 4])(a94, 1, 0);
     ((void(__thiscall*)(void*, int, int))(*(void***)a98)[0x7c / 4])(a98, 1, 0);
     ((void(__thiscall*)(void*, int, int))(*(void***)aa4)[0x7c / 4])(aa4, 1, 0);
-    f68 = 0.0f;
-    _ReadWriteBarrier();
     Vec1c* v = (Vec1c*)((char*)this + 0x10);
+    f68 = 0.0f;
     v->erase(v->begin, v->end);
     b7c = 0;
 }

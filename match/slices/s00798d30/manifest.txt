@@ -10,3 +10,4 @@ slices/s00798d30/s00798d30.cpp  ?c1@VCtor@@QAEPAU1@PAH@Z  00799940  /O2 /MD /Gy 
 slices/s00798d30/s00798d30.cpp  ?c2@VCtor@@QAEPAU1@PAH@Z  00799b00  /O2 /MD /Gy /EHsc /TP
 slices/s00798d30/s00798d30.cpp  ?c3@VCtor@@QAEPAU1@PAH@Z  00799c30  /O2 /MD /Gy /EHsc /TP
 slices/s00798d30/s00798d30.cpp  ?c4@VCtor@@QAEPAU1@PAH@Z  00799c70  /O2 /MD /Gy /EHsc /TP
+slices/s00798d30/s00798d30.cpp  ?FUN_007992e0@@YAPAHPAH00@Z  007992e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

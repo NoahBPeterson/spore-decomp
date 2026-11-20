@@ -2858,9 +2858,11 @@ void cUICard_s00e1_2f80::Teardown()
     if (q) { p0c = 0; ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q); }
   }
   q = p20;
-  if (q) FUN_00e2ed40();
-  q = p20;
-  if (q) { p20 = 0; ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q); }
+  if (q) {
+    ((cSPUIRelationshipStrip*)q)->FUN_00e2ed40();
+    q = p20;
+    if (q) { p20 = 0; ((void(__thiscall*)(void*))Vt(q)[8 / 4])(q); }
+  }
 }
 
 // @ 0x00e13360
