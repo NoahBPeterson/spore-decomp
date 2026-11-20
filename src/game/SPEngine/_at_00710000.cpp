@@ -2730,7 +2730,6 @@ void assignFwd50(Elem50* first, Elem50* last, Elem50* src)
         first->v28 = src->v28;
         first->v3c = src->v3c;
         ++first;
-        ++src;
     }
 }
 
