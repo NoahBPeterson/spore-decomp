@@ -176,6 +176,7 @@ int FUN_00edcec0(int* p, int* arr, unsigned* count)
 }
 
 // ---------------------------------------------------------------- 0x00edcf10
+extern "C" char g_13eb394[];   // ??_7IHandler@@6B@
 struct ObjCF10 {
     char pad[4];
     void* vt4;      // +0x4
@@ -183,7 +184,7 @@ struct ObjCF10 {
 };
 void* ObjCF10::f(char param)
 {
-    vt4 = (void*)0x13eb394;
+    vt4 = (void*)g_13eb394;
     if (param & 1)
         EA_Free(this);
     return this;
