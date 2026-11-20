@@ -301,15 +301,12 @@ __declspec(noinline) int S9a3630::f() {
 // ---------------------------------------------------------------------------
 __declspec(noinline) void FUN_009a36a0(int* arr, int start, int pos, int item, int extra) {
   (void)extra;
-  int parent = (pos - 1) >> 1;
-  if (pos <= start) { arr[pos] = item; return; }
-  do {
-    int v = arr[parent];
-    if (*(unsigned*)(v + 0x12c) <= *(unsigned*)(item + 0x12c)) break;
-    arr[pos] = v;
+  for (int parent = (pos - 1) >> 1;
+       pos > start && *(unsigned*)(arr[parent] + 0x12c) > *(unsigned*)(item + 0x12c);
+       parent = (pos - 1) >> 1) {
+    arr[pos] = arr[parent];
     pos = parent;
-    parent = (parent - 1) >> 1;
-  } while (pos > start);
+  }
   arr[pos] = item;
 }
 
