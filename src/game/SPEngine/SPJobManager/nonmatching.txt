@@ -17,8 +17,6 @@
 00690930 83 complete; SetJobPriorityUnderLock register near-miss
 00690b50 62 complete; CheckDependentPriority near-miss
 00691260 149 complete; AddJobDependency (deps/dependents list splice) near-miss
-00691380 27 complete; AddDependency wrapper shape near-miss
-006913c0 28 complete; AddWeakDependency wrapper shape near-miss
 00691680 1337 complete CircularRef (bidirectional job-dependency search, fixed hash sets + stacks); frame slot offsets shifted 4, EH/dtor layout differs
 00691d30 417 complete RunJob; list-unlink/relink scheduling and edi/ebp register choice differ
 00691f60 163 complete RunUnderLock; register allocation (ebx/esi order) and ran flag spill differ

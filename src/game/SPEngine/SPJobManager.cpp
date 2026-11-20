@@ -1707,7 +1707,7 @@ void cJob_s0069_07e0::AddDependency(cJob_s0069_07e0* other)
     if (other == 0) return;
     cJobData_s0069_07e0* pOther = static_cast<cJobData_s0069_07e0*>(other);
     cJobData_s0069_07e0* pThis = static_cast<cJobData_s0069_07e0*>(this);
-    pThis->mpManager->AddJobDependency(pThis, pOther, false);
+    static_cast<cJobData_s0069_07e0*>(this)->mpManager->AddJobDependency(pThis, pOther, false);
 }
 
 // @ 0x006913c0
@@ -1716,7 +1716,7 @@ void cJob_s0069_07e0::AddWeakDependency(cJob_s0069_07e0* other)
     if (other == 0) return;
     cJobData_s0069_07e0* pOther = static_cast<cJobData_s0069_07e0*>(other);
     cJobData_s0069_07e0* pThis = static_cast<cJobData_s0069_07e0*>(this);
-    pThis->mpManager->AddJobDependency(pThis, pOther, true);
+    static_cast<cJobData_s0069_07e0*>(this)->mpManager->AddJobDependency(pThis, pOther, true);
 }
 
 // @ 0x00691400
