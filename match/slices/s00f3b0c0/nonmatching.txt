@@ -1,4 +1,3 @@
-00f3b590  69  complete reconstruction; random-range clamp restored; equiv PASS (400 valid)
 00f3b710  188  complete reconstruction; list/destructor loop register allocation differs
 00f3b990  37  complete reconstruction; NounManager/RemoveNoun argument setup differs
 00f3bc20  86  complete reconstruction; 0x534/0x188 loops; equiv WEAK (215 valid, 33.3% cov)
