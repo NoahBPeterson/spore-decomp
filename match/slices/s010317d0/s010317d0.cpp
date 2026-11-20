@@ -335,11 +335,12 @@ struct AgentMap {
 
 void AgentMap::Init()
 {
-    mAnchor.mpNodeLeft = 0;
-    mAnchor.mpNodeParent = 0;
-    mAnchor.mColorWord = 0;
-    mAnchor.mpNodeLeft = &mAnchor;
-    mAnchor.mpNodeRight = &mAnchor;
+    RBNodeBase *a = &mAnchor;
+    a->mpNodeLeft = 0;
+    a->mpNodeParent = 0;
+    a->mColorWord = 0;
+    mAnchor.mpNodeLeft = a;
+    a->mpNodeRight = a;
     mAnchor.mpNodeParent = 0;
     mAnchor.mColor = 0;
     mnSize = 0;
