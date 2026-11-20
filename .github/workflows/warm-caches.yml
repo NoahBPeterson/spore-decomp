@@ -28,6 +28,8 @@ concurrency:
 
 jobs:
   warm:
+    # a fork with Actions enabled runs these too (one pushed its own claims branch every 30 minutes)
+    if: github.repository == 'NoahBPeterson/spore-decomp'
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     steps:

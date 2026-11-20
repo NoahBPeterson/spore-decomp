@@ -21,6 +21,8 @@ concurrency:
 
 jobs:
   build:
+    # a fork with Actions enabled runs these too (one pushed its own claims branch every 30 minutes)
+    if: github.repository == 'NoahBPeterson/spore-decomp'
     name: Build the site
     runs-on: ubuntu-24.04
     steps:
@@ -43,6 +45,8 @@ jobs:
           path: _site
 
   deploy:
+    # a fork with Actions enabled runs these too (one pushed its own claims branch every 30 minutes)
+    if: github.repository == 'NoahBPeterson/spore-decomp'
     name: Publish to GitHub Pages
     needs: build
     runs-on: ubuntu-24.04
