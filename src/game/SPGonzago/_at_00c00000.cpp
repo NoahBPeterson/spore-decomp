@@ -107,7 +107,7 @@ struct CreatureBase_s00c0_45a0 {
   bool  __declspec(noinline) SubB770();
   void  Sub4dd0(int);
   void  Sub4e50(float);
-  void* Sub4750();
+  __declspec(noinline) void* Sub4750();
   int   Sub4790();
   int   Sub47d0();
   bool  Flag04710();
@@ -434,12 +434,12 @@ void* __thiscall CreatureBase_s00c0_45a0::Sub4750()
 int __thiscall CreatureBase_s00c0_45a0::Sub4790()
 {
   unsigned f = mFlags0b58;
-  if (((f >> 8) & 1) != 0) return 2;
-  if (((f >> 9) & 1) != 0) return 2;
-  void* p = Sub4750();
-  if (p == 0) return 0;
-  p = Sub4750();
-  return *(int*)((char*)p + 0x4a8);
+  if (!(bool)((f >> 8) & 1) && !(bool)((f >> 9) & 1)) {
+    if (Sub4750() != 0)
+      return *(int*)((char*)Sub4750() + 0x4a8);
+    return 0;
+  }
+  return 2;
 }
 
 // @ 0x00c047d0
