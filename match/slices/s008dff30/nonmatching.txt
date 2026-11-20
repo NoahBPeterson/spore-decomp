@@ -9,7 +9,6 @@
 #
 008dff30  326  reconstruction (Manager::Fn8dff30, hash-table lookup); flags /O2 /MD /Gy /TP /GS- /arch:SSE; difftest WEAK (185 valid inputs, 20.5% coverage) -- equivalent on the covered paths
 008e00b0   52  reconstruction (Manager::GetDatabaseList); flags as above; difftest PASS (281 valid inputs, 100% coverage)
-008e0140   75  reconstruction (Manager::Fn8e0140, list head); flags as above; difftest WEAK (212 valid, 30.4% coverage) -- equivalent on the covered paths
 008e01c0    7  reconstruction (Manager::GetNameFromKey); flags as above; difftest WEAK (143 valid, 69.1% coverage); remaining diff is a pure ebp/ebx register-allocation swap
 008e0250   33  reconstruction (VecOwner::CopyFrom); flags as above; difftest WEAK (152 valid, 100% coverage); retail reads the first argument from EAX (LTCG register ABI) so the this/arg codegen differs
 008e0390  207  reconstruction (HashTable::insertNode20); flags as above; difftest WEAK (135 valid, 78.8% coverage) -- equivalent on the covered paths

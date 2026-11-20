@@ -445,12 +445,14 @@ int Manager::GetDatabaseList(AllocList* pList, int nFilter)
 int Manager::Fn8e0140(CNode* pList)
 {
     int nCount = 0;
-    for (uint32* pIt = (uint32*)mpCompressorBegin; pIt != (uint32*)mpCompressorEnd; pIt += 2) {
+    uint32* pIt = (uint32*)mpCompressorBegin;
+    uint32* pEnd = (uint32*)mpCompressorEnd;
+    for (; pIt != pEnd; pIt += 2) {
         Factory* pFac = (Factory*)*pIt;
         ++nCount;
         if (pList) {
             CNode* pNew = (CNode*)EAAllocate(0xc, "EASTL", 0, 0, kEastlFile, 0xd1);
-            if (pNew) pNew->mpData = pFac;
+            if (&pNew->mpData) pNew->mpData = pFac;
             IntrPushBack(pList, pNew);
         }
     }
