@@ -10,3 +10,4 @@ slices/s00ec40b0/s00ec40b0.cpp  ?FUN_00ec4650@MsgListenerOwner_ec4650@@QAEXXZ  0
 slices/s00ec40b0/s00ec40b0.cpp  ?FUN_00ec5100@SporepediaAssetController@@QAEXXZ  00ec5100  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ec40b0/s00ec40b0.cpp  ?FUN_00ec4330@CardIdView_ec4330@@QAEXPAI@Z  00ec4330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ec40b0/s00ec40b0.cpp  ?FUN_00ec4b50@@YAXPAURec@@0@Z  00ec4b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ec40b0/s00ec40b0.cpp  ?FUN_00ec4de0@@YAXPAURec@@00@Z  00ec4de0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

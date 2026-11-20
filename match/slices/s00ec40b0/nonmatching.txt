@@ -14,6 +14,5 @@
 00ec4bb0   88  complete source; equiv UNSUPPORTED (original reads ecx at entry: __thiscall ctor) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4d30   19  complete source; equiv PASS 386 valid 100% coverage (upper_bound, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4d70   71  complete source; equiv PASS 364 valid 100% coverage (partition, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
-00ec4de0   88  complete source; equiv PASS 351 valid 100% coverage (partial_sort, regalloc) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4e80  179  complete source; equiv PASS 394 valid 100% coverage (introsort loop; calls tolerated as inline diffs) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00ec4f70  320  complete source; equiv not completed (per-function run exceeded 600s on the object-heavy path) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

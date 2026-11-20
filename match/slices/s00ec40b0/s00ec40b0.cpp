@@ -693,10 +693,11 @@ void FUN_00ec4de0(Rec* first, Rec* middle, Rec* last)
     FUN_00ec4b10(first, middle);
     for (Rec* it = middle; it < last; ++it)
     {
-        if (less_rec(*it, *first))
+        Rec v = *it;
+        Rec f = *first;
+        if (v.value <= f.value && (v.value < f.value || v.key < f.key))
         {
-            Rec v = *it;
-            *it = *first;
+            *it = f;
             FUN_00ec4900(first, 0, (int)(middle - first), 0, v.key, v.value);
         }
     }
