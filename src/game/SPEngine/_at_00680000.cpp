@@ -1778,18 +1778,18 @@ FactoryView_683f80::~FactoryView_683f80()
 // @ 0x00684040
 char Factory::Create(int* mgr, int** out, int a, int b)
 {
-    int* obj = (int*)EASTL_alloc6(0x80, (void*)"App/cConversationFactory", 0, 0, 0, 0);
-    if (obj) obj = (int*)((CPropList*)obj)->ctor();
-    int* v = (int*)((void* (__thiscall*)(void*))VT(mgr)[4])(mgr);
+    void* mem = EASTL_alloc6(0x80, (void*)"App/cConversationFactory", 0, 0, 0, 0);
+    int* obj = mem ? (int*)((CPropList*)mem)->ctor() : 0;
+    int* v = (int*)((void* (__thiscall*)(void*))(*(void***)mgr)[4])(mgr);
     obj[2] = v[0];
     obj[3] = v[1];
     obj[4] = v[2];
-    if (((char (__thiscall*)(void*, int*, int*, int, int))VT(this)[9])(this, mgr, obj, a, b)) {
+    if (((char (__thiscall*)(void*, int*, int*, int, int))(*(void***)this)[9])(this, mgr, obj, a, b)) {
         *out = obj;
-        ((void (__thiscall*)(void*))VT(obj)[0])(obj);
+        ((void (__thiscall*)(void*))(*(void***)obj)[0])(obj);
         return 1;
     }
-    ((void (__thiscall*)(void*, int))VT(obj)[2])(obj, 1);
+    ((void (__thiscall*)(void*, int))(*(void***)obj)[2])(obj, 1);
     return 0;
 }
 
