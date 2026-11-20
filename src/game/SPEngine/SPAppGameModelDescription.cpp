@@ -30,7 +30,6 @@ struct Matrix3 {
 };
 static float g_1485720 = 1.0f;
 static void* s_vt_1411f04[1];
-static void* s_vt_1411f48[1];
 struct SVec {
     float* b; float* e; float* c; char alloc[4];
     SVec& operator=(const SVec& o);   // external
@@ -1201,13 +1200,17 @@ void cGroupGameModelCommand::Execute(cArguments* args)
     }
 }
 
+extern "C" char g_1411f48[];   // 0x01411f48 GameModelEffect vtable
+
 // @ 0x007d18c0
 GameModelEffect::GameModelEffect()
 {
-    *(uint32_t*)this = (uint32_t)s_vt_1411f48;
+    *(uint32_t*)this = (uint32_t)g_1411f48;
+    _ReadWriteBarrier();
     f34 = 0x30bac64;
-    new (desc) cGameModelDescription();
+    ((cGameModelDescription*)desc)->cGameModelDescription::cGameModelDescription();
     fc4 = 0;
+    _ReadWriteBarrier();
     pc8 = &g_empty1;
     pcc = &g_empty1;
     pd0 = &g_empty2;
