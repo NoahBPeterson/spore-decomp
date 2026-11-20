@@ -8,3 +8,4 @@ slices/s007ed1b0/s007ed1b0.cpp  ?ColorCommand@BattleCommand@@QAEXPAVcArguments@A
 slices/s007ed1b0/s007ed1b0.cpp  ?EffectCommand@TextEffectCommand@@QAEXPAVcArguments@ArgScript@EA@@@Z  007ed980  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
 slices/s007ed1b0/s007ed1b0.cpp  ?SyncInherited@TextEffectCommand@@QAEXD@Z  007eda60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
 slices/s007ed1b0/s007ed1b0.cpp  ??1EffectObjectView_7edc90@@QAE@XZ  007edc90  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007ed1b0/s007ed1b0.cpp  ?Activate@ActivateObj_7edd10@@QAEXH@Z  007edd10  /O2 /MD /Gy /EHsc /TP

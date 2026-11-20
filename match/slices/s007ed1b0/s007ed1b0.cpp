@@ -498,14 +498,28 @@ EffectObjectView_7edc90::~EffectObjectView_7edc90() {
 }
 
 // @ 0x007EDD10  activate
-extern "C" void Activate(int self) {
-  if (*(char*)(self + 0x14) == 0) {
-    int p = *(int*)(self + 0xc);
-    *(char*)(self + 0x14) = 1;
-    if ((*(uint32_t*)(p + 0x20) & *(uint32_t*)(p + 0x24)) != 0xffffffff) {
-      extern void StringLoad(int, uint64_t);
-      StringLoad(self + 0x30, 0);
-    }
+namespace SP { struct cString_s006b_47a0 { char d[0x14]; bool Load(uint32_t tableID, uint32_t instanceID, int flags); }; }  // 0x6b54b0
+struct ActivateRes_7edd10 {
+  char pad00[0xc];
+  int m0c;            // +0x0c
+  char pad10[0x10];
+  uint64_t mKey;      // +0x20
+};
+struct ActivateObj_7edd10 {
+  char pad00[0xc];
+  ActivateRes_7edd10* mpRes;   // +0x0c
+  char pad10[4];
+  bool mbActive;               // +0x14
+  char pad15[0x30 - 0x15];
+  SP::cString_s006b_47a0 mString;  // +0x30
+  void Activate(int);
+};
+void ActivateObj_7edd10::Activate(int) {
+  if (!mbActive) {
+    ActivateRes_7edd10* p = mpRes;
+    mbActive = true;
+    if (p->mKey != 0xffffffffffffffffULL)
+      mString.Load((uint32_t)(p->mKey >> 32), (uint32_t)p->mKey, p->m0c);
   }
 }
 
