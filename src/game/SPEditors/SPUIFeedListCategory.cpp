@@ -680,13 +680,12 @@ FeedItem* cSPUIFeedListCategory::FUN_00664640(int id)
 {
     int n = (int)(m8c - m88);
     int i = 0;
-    FeedItem** p = m88;
-    if (n > 0) {
+    if (i < n) {
+        _ReadWriteBarrier();
         do {
-        FeedItem* e = *p;
-        if (e && e->m17c == id) return e;
-            ++i; ++p;
-        } while (i < n);
+            FeedItem* e = m88[i];
+            if (e && e->m17c == id) return e;
+        } while (++i < n);
     }
     return 0;
 }
@@ -698,13 +697,12 @@ FeedItem* cSPUIFeedListCategory::FUN_00664680(int id)
 {
     int n = (int)(m8c - m88);
     int i = 0;
-    FeedItem** p = m88;
-    if (n > 0) {
+    if (i < n) {
+        _ReadWriteBarrier();
         do {
-        FeedItem* e = *p;
-        if (e && e->m134 == id) return e;
-            ++i; ++p;
-        } while (i < n);
+            FeedItem* e = m88[i];
+            if (e && e->m134 == id) return e;
+        } while (++i < n);
     }
     return 0;
 }
@@ -716,13 +714,12 @@ FeedItem* cSPUIFeedListCategory::FUN_006646c0(int id)
 {
     int n = (int)(m8c - m88);
     int i = 0;
-    FeedItem** p = m88;
-    if (n > 0) {
+    if (i < n) {
+        _ReadWriteBarrier();
         do {
-        FeedItem* e = *p;
-        if (e && e->m188 == id) return e;
-            ++i; ++p;
-        } while (i < n);
+            FeedItem* e = m88[i];
+            if (e && e->m188 == id) return e;
+        } while (++i < n);
     }
     return 0;
 }
