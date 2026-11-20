@@ -1017,6 +1017,7 @@ bool EA::ResourceMan::DatabasePackedFile::Shutdown()
             Close();
         DestroyIndex(mpIndex);
         mpIndex = 0;
+        _ReadWriteBarrier();
         if (mpStream.mpObject) {
             EA::IO::IStream* p = mpStream.mpObject;
             mpStream.mpObject = 0;
@@ -1413,11 +1414,9 @@ bool EA::ResourceMan::DatabasePackedFile::ReadRecordRaw(EA::ResourceMan::Key con
     mMutex.Lock(EA::Thread::kTimeoutNone);
     if (mnAccessFlags != 0) {
         const PFRecordInfo* e = (const PFRecordInfo*)mpIndex->FindRecord(key);
-        unsigned esize = e->mnSize;
-        unsigned n = size;
-        if (n > esize)
-            n = esize;
-        bool r = ReadFileSpan(dst, e->mnPosition, n);
+        if (size > e->mnSize)
+            size = e->mnSize;
+        bool r = ReadFileSpan(dst, e->mnPosition, size);
         mMutex.Unlock();
         return r;
     }
@@ -2645,6 +2644,7 @@ bool PFIndexModifiable_s008d_aff0::RemoveFile(const void* key, void* out)
 HoleSet_s008d_aff0::HoleSet_s008d_aff0()
 {
     mExtent = -1;
+    _ReadWriteBarrier();
     char* p = (char*)this + 8;
     *(void**)(p + 4) = 0;
     *(void**)(p + 8) = 0;
