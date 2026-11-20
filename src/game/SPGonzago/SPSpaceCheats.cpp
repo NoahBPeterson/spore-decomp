@@ -1776,11 +1776,9 @@ cObjectKey& cObjectKey::Init(void* pFirst, void* pSecond)
 // @ 0x010229b0
 int32_t cObjectKey::Matches(cObjectKey* pOther)
 {
-    if (pOther->mnType != mpSecond)
-        return 0;
-    if (pOther->mpFirst != mpFirst)
-        return 0;
-    return 1;
+    if (pOther->mnType == mpSecond && pOther->mpFirst == mpFirst)
+        return 1;
+    return 0;
 }
 
 // @ 0x010229d0
