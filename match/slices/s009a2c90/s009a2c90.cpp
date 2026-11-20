@@ -339,7 +339,8 @@ __declspec(noinline) void FUN_009a36f0(int* arr, int start, int end, int pos, in
 // ---------------------------------------------------------------------------
 __declspec(noinline) float FUN_009a2c90(int a, float b, int c, int d) {
   S9a2c90Obj* obj = (S9a2c90Obj*)a;
-  return FUN_009a1d90(a, (float)((double)b + obj->fieldB0), c, d);
+  float s = (float)((double)b + obj->fieldB0);
+  return FUN_009a1d90(a, s, c, d);
 }
 
 // ---------------------------------------------------------------------------
