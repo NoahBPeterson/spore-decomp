@@ -1817,8 +1817,12 @@ void cSPUIPosse_s00e2_2860::SetWindowRect(const cVec3* rect, int unused)
 {
     if (mpField50 != 0) {
         cVec3& target = mRect70;
-        target = *rect;
-        void* image = VT_F0_2(mpPartD4->mpField10, 0x3d99151, 1);
+        u32 x = *(const u32*)rect;
+        cPossePart* part = mpPartD4;
+        *(u32*)&target = x;
+        ((u32*)&target)[1] = ((const u32*)rect)[1];
+        ((u32*)&target)[2] = ((const u32*)rect)[2];
+        void* image = VT_F0_2(part->mpField10, 0x3d99151, 1);
         SetWindowImage(image, &target, 0);
     }
 }
