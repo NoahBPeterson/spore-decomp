@@ -718,6 +718,10 @@ struct CtxOut {
 struct TVec { float x, y, z; };
 struct TVec4 { float x, y, z, w; };
 struct Vec3f { float x, y, z; };
+struct PathPos {
+    float x, y, z;
+    PathPos(const PathPos& o) : x(o.x), y(o.y), z(o.z) {}
+};
 struct CmpObj64 { void Fn(); };
 struct PathObj {
     uint8_t   mFlag;    // +0x00
@@ -2625,13 +2629,13 @@ float FUN_c64590(void** vec, int idx, void* a, void* b)
 }
 
 // @ 0x00c64630
-int FUN_c64630(void** vec, void* h, float px, float py, float pz)
+int FUN_c64630(void** vec, void* h, PathPos pos)
 {
-    if (py * py + pz * pz + px * px < 1.5258789e-05f) {
+    if (pos.y * pos.y + pos.z * pos.z + pos.x * pos.x < 1.5258789e-05f) {
         float* p = (float*)((VObj*)((char*)h + 0x34))->v2c();
-        px = p[0];
-        py = p[1];
-        pz = p[2];
+        pos.x = p[0];
+        pos.y = p[1];
+        pos.z = p[2];
     }
     void** begin = (void**)vec[0];
     void** end = (void**)vec[1];
@@ -2646,7 +2650,7 @@ int FUN_c64630(void** vec, void* h, float px, float py, float pz)
         return 0;
     if (i == 0) {
         void* next = begin[1];
-        if (!ComparePair(h, &px, next))
+        if (!ComparePair(h, &pos.x, next))
             return 0;
         float slerp = QuaternionSlerp(((VObj*)((char*)h + 0x34))->v2c(),
                                       (char*)h + 0x118,
@@ -2657,7 +2661,7 @@ int FUN_c64630(void** vec, void* h, float px, float py, float pz)
     }
     if (i == count - 1) {
         void* prev = begin[i - 1];
-        if (!ComparePair(h, &px, prev))
+        if (!ComparePair(h, &pos.x, prev))
             return 0;
         float* p1 = (float*)((VObj*)((char*)prev + 0x34))->v2c();
         float* p2 = (float*)((VObj*)((char*)h + 0x34))->v2c();
@@ -2676,9 +2680,9 @@ int FUN_c64630(void** vec, void* h, float px, float py, float pz)
                                   ((VObj*)((char*)next + 0x34))->v2c());
     float r1 = FUN_c64590(vec, i, h, next);
     float cp = CopyPairF(h, prev);
-    if (ComparePair(h, &px, next) && slerp > r1 && cp > r1)
+    if (ComparePair(h, &pos.x, next) && slerp > r1 && cp > r1)
         return (int)next;
-    if (!ComparePair(h, &px, prev))
+    if (!ComparePair(h, &pos.x, prev))
         return 0;
     if (slerp <= cp)
         return 0;
@@ -2730,7 +2734,7 @@ void FUN_c64880(void** vec, void* a, void* b)
 // @ 0x00c64940
 void PathObj::Fn64940(void* h)
 {
-    int r = FUN_c64630((void**)((char*)this + 4), h, f18, f1c, f20);
+    int r = FUN_c64630((void**)((char*)this + 4), h, *(PathPos*)&f18);
     if (r)
         FUN_c64880((void**)((char*)this + 4), h, (void*)r);
     Fn64460(h);
