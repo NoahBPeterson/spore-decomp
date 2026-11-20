@@ -8,3 +8,4 @@ slices/s00612270/s00612270.cpp  ?UninitializedCopy@@YAPAU?$pair@IUVariant@EA@@@e
 slices/s00612270/s00612270.cpp  ?LowerBound@@YAPBU?$pair@IUVariant@EA@@@eastl@@PBU12@0ABI@Z  00612db0  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00612270/s00612270.cpp  ?WriteResource@cPropertyListWriter@@QAE_NPAX0HI@Z  00612e50  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00612270/s00612270.cpp  ?reserve@PropVector@eastl@@QAEXI@Z  00613020  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00612270/s00612270.cpp  ??0cPropertyBag@@QAE@II@Z  00612f00  /O2 /MD /Gy /TP /arch:SSE /GS-
