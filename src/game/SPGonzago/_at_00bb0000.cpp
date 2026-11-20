@@ -474,14 +474,14 @@ void** RecordMinSelect(void** first, void** last, RecordKeyLess less)
 // @ 0x00bbc760
 void RecordInsertionSort(void** first, void** last, bool (__cdecl* cmp)(void*, void*))
 {
-    for (; first != last; first = first + 1) {
+    for (; first != last; ++first) {
         void* v = *first;
         void** dst = first;
-        void** src = first;
-        while (cmp(v, src[-1])) {
-            *dst = src[-1];
-            dst = dst - 1;
-            src = src - 1;
+        void** prev = first - 1;
+        while (cmp(v, *prev)) {
+            *dst = *prev;
+            --prev;
+            --dst;
         }
         *dst = v;
     }

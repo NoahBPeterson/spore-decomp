@@ -12,3 +12,4 @@
 ../src/game/SPGonzago/_at_00bb0000.cpp  ?sift_down@@YAXPAUElem12@@HHU1@UKeyIntern@@PAUAllocNode@@@Z  00bbfdc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bb0000.cpp  ?FUN_00bbfe80@SimSelf_s00bb_f630@@QAEXXZ  00bbfe80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00bb0000.cpp  ?RecordMinSelect@@YAPAPAXPAPAX0URecordKeyLess@@@Z  00bbc700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bb0000.cpp  ?RecordInsertionSort@@YAXPAPAX0P6A_NPAX1@Z@Z  00bbc760  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
