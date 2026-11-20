@@ -20,3 +20,5 @@
 ../src/game/SPEngine/_at_007d0000.cpp  ??1cAbilityCmdObj@@QAE@XZ  007d7d00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/_at_007d0000.cpp  ??1cGameModelEffect@@UAE@XZ  007d5c50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
 ../src/game/SPEngine/_at_007d0000.cpp  ?FUN_007dfd90@cDescCtx@@QAEXPAVcArguments_s007d_f780@ArgScript@EA@@@Z  007dfd90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?Ser2B0@@YAPAXPAUIStream@@PAH@Z  007d02b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/_at_007d0000.cpp  ?Ser360@@YAXPAUIStream@@PAD@Z  007d0360  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
