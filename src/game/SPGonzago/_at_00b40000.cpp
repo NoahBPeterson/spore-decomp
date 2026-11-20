@@ -750,6 +750,12 @@ struct cHash16 {
     void Clear() { FreeNodes(mBuckets, mBucketCount); mNodeCount = 0; }
     void Find(void* out, void* key);           // 0x00645ed0
     Iter Erase(Iter it);                       // 0x01068380
+    void Teardown()
+    {
+        SetBuckets(mBuckets, mBucketCount);
+        mNodeCount = 0;
+        if ((unsigned)mBucketCount > 1u) FUN_00f47380(mBuckets);
+    }
 };
 struct cHash30 {
     int       mPad00;         // 0x00
@@ -3393,9 +3399,7 @@ void cObj45170::Destroy()
     if (mPtr90 != 0) FUN_00f47380(mPtr90);
     if (mPtr78 != 0) FUN_00f47380(mPtr78);
 
-    mSub58.SetBuckets(mSub58.mBuckets, mSub58.mBucketCount);
-    mSub58.mNodeCount = 0;
-    if ((unsigned)mSub58.mBucketCount > 1u) FUN_00f47380(mSub58.mBuckets);
+    mSub58.Teardown();
 
     mSub3c.Destroy();
     if (mPtr24 != 0) FUN_00f47380(mPtr24);
