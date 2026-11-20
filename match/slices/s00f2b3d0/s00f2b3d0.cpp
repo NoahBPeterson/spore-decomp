@@ -1,3 +1,5 @@
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 // Slice s00f2b3d0: EASTL container internals (vector/hashtable instantiations for
 // EA::ResourceMan::Key and a ~0x188-byte element type).  Optimized module:
 //   /O2 /MD /Gy /EHsc /TP
@@ -28,9 +30,11 @@ Container188::Container188() {
     int neg = -1;
     f0 = 0;
     fc = 0;
+    _ReadWriteBarrier();
     f4 = neg;
     f8 = neg;
     f10 = 1;
+    _ReadWriteBarrier();
     f14 = 0;
     f2c = 0;
     b18 = buf;
