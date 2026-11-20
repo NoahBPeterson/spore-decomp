@@ -2699,14 +2699,21 @@ uint8_t __thiscall Reg::isDisabled(int key)
 }
 
 // @ 0x00bc3e20
+struct LValue_bc3e20 {
+    int key;
+    char pad[0x7d0 - 4];
+    uint32_t f7d0;
+};
+static inline LValue_bc3e20* FindValue_bc3e20(Reg* r, int key)
+{
+    for (LNode* n = r->head; n != LIST_END(r); n = n->next)
+        if (n->key == key)
+            return (LValue_bc3e20*)&n->key;
+    return 0;
+}
 void __thiscall Reg::setFlag(int key, uint32_t v)
 {
-    LNode* n = head;
-    while (n != LIST_END(this)) {
-        if (n->key == key) { n->f7d8 = v; return; }
-        n = n->next;
-    }
-    *(uint32_t*)0x7d0 = v;
+    FindValue_bc3e20(this, key)->f7d0 = v;
 }
 
 // @ 0x00bc3ec0
