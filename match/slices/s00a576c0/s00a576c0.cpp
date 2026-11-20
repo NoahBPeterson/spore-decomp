@@ -405,10 +405,9 @@ bool CollRecv::LookupIndex(CollKey k, int idx, void* out)
     bool ok = false;
     if (LookupKey(k, &count, &items)) {
         if (idx > 0 && idx <= count) {
-            uint32_t* src = (uint32_t*)items + (idx - 1) * 3;
-            ((uint32_t*)out)[0] = src[0];
-            ((uint32_t*)out)[1] = src[1];
-            ((uint32_t*)out)[2] = src[2];
+            struct Item12 { uint32_t a, b, c; };
+            --idx;
+            *(Item12*)out = ((Item12*)items)[idx];
             ok = true;
         }
     }
