@@ -127,10 +127,13 @@ struct IData {
     virtual unsigned i5();             // +0x14
 };
 
+struct Win32Clipboard;
+
 struct Clipboard {
-    void** vftable;                 // +0
+    bool mbInitialized;             // +0
+    char pad01[3];
     int mnId;                       // +4
-    void* mpOSData;                 // +8
+    Win32Clipboard* mpOSData;       // +8
     DataInfo mDataInfoArray[0x20];  // +0xc
     char pad10c[0xc];               // +0x10c .. 0x117
     Mutex mMutex;                   // +0x118
@@ -191,15 +194,14 @@ void* FUN_0092ac90(void* v) {
 
 // @ 0x0092ad10
 bool Clipboard::DestroyPlatform() {
-    char* o = (char*)this;
-    char* p = *(char**)(o + 8);
-    if (p != 0) {
-        if (*(void**)(p + 0x10) != 0) {
-            ChangeClipboardChain(*(HWND*)(p + 0x10), *(HWND*)(p + 0x14));
-            DestroyWindow(*(HWND*)(p + 0x10));
+    Win32Clipboard* os = mpOSData;
+    if (os != 0) {
+        if (os->mHWND != 0) {
+            ChangeClipboardChain(os->mHWND, os->mNextHWND);
+            DestroyWindow(os->mHWND);
         }
-        operator_delete__(p);
-        *(void**)(o + 8) = 0;
+        operator_delete__(os);
+        mpOSData = 0;
     }
     return true;
 }
@@ -345,7 +347,7 @@ bool Clipboard::SetClipboardData(IData* pData, bool b) {
         }
         if (mnId == 1 && type == 3 && mpOSData != 0) {
             mMutex.Unlock();
-            Win32Clipboard* os = (Win32Clipboard*)mpOSData;
+            Win32Clipboard* os = mpOSData;
             int len = (int)(pData->i5() >> 1) - 1;
             os->WriteText(pData->i4(), len);
             mMutex.Lock((void*)g_143e3a0);
@@ -372,49 +374,37 @@ bool SetClipboardText(Clipboard* clipboard, const wchar_t* s, int len) {
 
 // @ 0x0092b0b0
 bool Clipboard::Clipboard_EnablePlatform() {
-    void* self = this;
-    char* s = (char*)self;
-    if (s[0x14c] != 0 && *(void**)(s + 8) == 0 && *(int*)(s + 4) == 1) {
-        void* mem = FUN_006abeb0(0x1c);
-        if (mem != 0) {
-            *(void**)(s + 8) = new (mem) Win32Clipboard((Clipboard*)self);
-            return true;
-        }
-        *(void**)(s + 8) = 0;
+    if (mbFlag && mpOSData == 0 && mnId == 1) {
+        void* mem = FUN_006abeb0(sizeof(Win32Clipboard));
+        mpOSData = mem ? new (mem) Win32Clipboard(this) : 0;
     }
     return true;
 }
 
 // @ 0x0092b0f0
 void Clipboard::FUN_0092b0f0(int v) {
-    char* self = (char*)this;
-    Mutex* m = (Mutex*)(self + 0x118);
-    m->Lock((void*)g_143e3a0);
-    *(int*)(self + 4) = v;
-    if (*self != 0) {
-        if (v == 1) {
+    mMutex.Lock((void*)g_143e3a0);
+    mnId = v;
+    if (mbInitialized) {
+        if (v == 1)
             Clipboard_EnablePlatform();
-            m->Unlock();
-            return;
-        }
-        DestroyPlatform();
+        else
+            DestroyPlatform();
     }
-    m->Unlock();
+    mMutex.Unlock();
 }
 
 // @ 0x0092b140
 bool Clipboard::FUN_0092b140() {
-    char* self = (char*)this;
-    Mutex* m = (Mutex*)(self + 0x118);
-    m->Lock((void*)g_143e3a0);
-    if (*self == 0) {
-        *self = 1;
-        if (self[0x14c] != 0 && *(void**)(self + 8) == 0 && *(int*)(self + 4) == 1) {
-            void* mem = FUN_006abeb0(0x1c);
-            *(void**)(self + 8) = mem ? new (mem) Win32Clipboard((Clipboard*)self) : 0;
+    mMutex.Lock((void*)g_143e3a0);
+    if (!mbInitialized) {
+        mbInitialized = true;
+        if (mbFlag && mpOSData == 0 && mnId == 1) {
+            void* mem = FUN_006abeb0(sizeof(Win32Clipboard));
+            mpOSData = mem ? new (mem) Win32Clipboard(this) : 0;
         }
     }
-    m->Unlock();
+    mMutex.Unlock();
     return true;
 }
 
