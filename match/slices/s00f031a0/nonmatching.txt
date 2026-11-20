@@ -6,4 +6,3 @@
 00f039a0  418  noun teardown: repeated release blocks get different register allocation (equiv UNSUPPORTED: original faults on generated inputs)
 00f03e40   48  bool spill/zero-extend idiom differs at the window toggle (equiv UNSUPPORTED: original faults on generated inputs)
 00f03ff0   99  count/index register allocation and ternary base addressing differ (equiv PASS 100%)
-00f04070   89  flag selection branch shape differs; raw incoming dword is forwarded like the original (equiv PASS 100%)
