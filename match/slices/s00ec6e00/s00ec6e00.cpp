@@ -1,6 +1,7 @@
 // Slice s00ec6e00 -- SP cell-stage UI: unlocked-cards list + credits/window helpers.
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
+#include <string.h>
 
 typedef unsigned int  uint;
 typedef unsigned short ushort;
@@ -137,8 +138,7 @@ struct VecObj { int field0; void* begin; void* end; void* capacity; void* alloca
 // @ 0x00ec6e00
 void FUN_00ec6e00(void)
 {
-    *(int*)g_16c7574 = 0;
-    g_16c7574[4] = 0;
+    memset(g_16c7574, 0, 5);
     int idx = (int)FUN_00efc520();
     void* gg = g_16c7aa4;
     char* pool = *(char**)((char*)gg + 0x74);
@@ -147,8 +147,9 @@ void FUN_00ec6e00(void)
     if (it != *(char**)(p + 0x2bf8)) {
         do {
             int v = *(int*)(*(char**)(it + 0x78) + idx * 0x4e0 + 0x4a8);
-            if ((unsigned)(v - 2) < 4)
-                g_16c7574[v - 1] = 1;
+            int k = v - 1;
+            if ((unsigned)(k - 1) <= 3)
+                g_16c7574[k] = 1;
             it += 0x27e8;
         } while (it != *(char**)(*(char**)(*(char**)((char*)g_16c7aa4 + 0x74) + 0x10) + 0x2bf8));
     }

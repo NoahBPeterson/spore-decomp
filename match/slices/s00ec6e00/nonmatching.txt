@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00ec6e00 81   global reload / loop-end reload not reproduced [equiv WEAK (46.7% cov)]
 00ec6ea0 52   begin/end register allocation swapped (ecx/eax vs edx/ecx) [equiv PASS]
 00ec6ee0 220  UI virtual-call chain: slot indexing and temp order differ [equiv UNSUPPORTED (0/1200 valid, read faults)]
 00ec6fc0 213  UI transform/temp locals not reproduced [equiv UNSUPPORTED (0/1200 valid, read faults)]
