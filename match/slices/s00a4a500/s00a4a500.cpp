@@ -549,7 +549,9 @@ int canvas_isopen(t_glist* g)
 // @ 0x00a4ad60
 int canvas_istable(t_glist* g)
 {
-    int* i1 = *(void**)((char*)g + 8) != 0 ? (int*)FUN_011922c0(*(void**)((char*)g + 8)) : 0;
+    int* i1 = 0;
+    if (*(void**)((char*)g + 8) != 0)
+        i1 = (int*)FUN_011922c0(*(void**)((char*)g + 8));
     if (*(void**)((char*)g + 8) != 0) {
         int i2 = FUN_011838a0(*(void**)((char*)g + 8));
         if (i2 != 0 && *i1 == 2) {
@@ -565,7 +567,9 @@ int canvas_istable(t_glist* g)
 // @ 0x00a4add0
 int canvas_showtext(t_glist* g)
 {
-    int* i1 = *(void**)((char*)g + 8) != 0 ? (int*)FUN_011922c0(*(void**)((char*)g + 8)) : 0;
+    int* i1 = 0;
+    if (*(void**)((char*)g + 8) != 0)
+        i1 = (int*)FUN_011922c0(*(void**)((char*)g + 8));
     if (*(void**)((char*)g + 8) != 0) {
         int i2 = FUN_011838a0(*(void**)((char*)g + 8));
         if (i2 != 0 && *i1 == 2) {
