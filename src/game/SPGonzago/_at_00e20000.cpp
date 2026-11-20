@@ -1345,13 +1345,13 @@ void __fastcall FUN_00e20860(cInstaller* self, s32)
 // @ 0x00e20d30
 void __fastcall FUN_00e20d30(SwModelPair* self, s32, float angle)
 {
-  if (self->p0) {
-    self->p0->mRefCount++;
-    self->p0->mAngle = angle;
+  if (SwModel* m = self->p0) {
+    m->mRefCount++;
+    m->mAngle = angle;
   }
-  if (self->p1) {
-    self->p1->mRefCount++;
-    self->p1->mAngle = angle;
+  if (SwModel* m = self->p1) {
+    m->mRefCount++;
+    m->mAngle = angle;
   }
 }
 
