@@ -4419,17 +4419,19 @@ LAB_009b79ca:
     return 1;
 }
 
+// LoadGaitRecord (0x009b78c0) is a __thiscall member in retail (ecx = instance, no edx).
+struct GaitLoader_s009b_7b10 { char FUN_009b78c0(int group, int a, int b); };
 // @ 0x009b7b10
 char __fastcall FUN_009b7b10(int param_1, int dummy, int param_2, int param_3)
 {
     (void)dummy;
+    char uVar3 = 1;
     int* piVar2 = GetPoliticalID(param_1 + 0x15b8);
     int iVar1 = (piVar2[1] - *piVar2) / 0x104;
     int iVar4 = 0;
-    char uVar3 = 1;
     if (0 < iVar1) {
         do {
-            uVar3 = FUN_009b78c0(param_1, 0, iVar4, param_2, param_3);
+            uVar3 = ((GaitLoader_s009b_7b10*)param_1)->FUN_009b78c0(iVar4, param_2, param_3);
             iVar4 = iVar4 + 1;
         } while (iVar4 < iVar1);
     }

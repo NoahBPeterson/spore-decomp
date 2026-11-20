@@ -71,3 +71,4 @@
 ../src/game/SPGonzago/SPMission.cpp  ?FUN_00c46ab0@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c46ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?StartCompletedFeedbackTimer@cSPMission_s00c4_6ab0@SP@@QAEXXZ  00c47440  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPMission.cpp  ?Validate@cSPMission_s00c4_7a10@@QAE_NXZ  00c484e0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPGonzago/SPMission.cpp  ?ExportSpecies@cSPMission_s00c4_6ab0@SP@@QAEXII@Z  00c473f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast /Isrc/game/include

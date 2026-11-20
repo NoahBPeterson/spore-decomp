@@ -1,7 +1,6 @@
 # va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
 00c8b220  158  full vector erase path; register allocation differs
 00c8b0a0  149  erase is thiscall on vector at +0xc0 with [begin,end); 64-bit id queried twice; block layout differs
-00c8b2e0  52   release handles: original does two derefs (this = *(void**)(self+0x9c), vtable = *this, method = vtable[0x16c], handle pushed as arg); fixed. equiv WEAK 229 valid no mismatch, 73.3% cov (refcount>1 / +0xa0 branches uncovered)
 00c8b450  16   cl folded the range test to add/cmp/setle
 00c8b6d0  116  00801920 called with ECX=param and no stack args; call/erase argument sharing differs
 00c8b040  41   optimization disabled to keep call instead of tail jmp; frame setup differs

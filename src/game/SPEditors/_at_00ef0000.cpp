@@ -8773,18 +8773,28 @@ int __cdecl FUN_00efe6a0(int param)
     return result;
 }
 
+struct SurfaceKey_s00ef_e870 {
+    int a, b, c;
+    bool operator==(const int* k) const { return a == k[0] && b == k[1] && c == k[2]; }
+};
+struct SurfaceRec_s00ef_e870 {       // 0x27e8-byte surface record
+    int  mID;                         // +0x00
+    int  m04;
+    SurfaceKey_s00ef_e870 mKey;       // +0x08
+    char mRest[0x27e8 - 0x14];
+};
+struct SurfaceVec_s00ef_e870 { SurfaceRec_s00ef_e870* mpBegin; SurfaceRec_s00ef_e870* mpEnd; };
 // @ 0x00efe870
 int __cdecl FUN_00efe870(int* key)
 {
     char* g = (char*)*(void**)((char*)gSimulator_s00ef_dee0 + 0x74);
     char* base = *(char**)(g + 0x10);
-    int* begin = *(int**)(base + 0x2bf4);
-    int* end = *(int**)(base + 0x2bf8);
-    int* p = begin;
-    while (p != end) {
-        if (p[2] == key[0] && p[3] == key[1] && p[4] == key[2])
-            return p[0];
-        p = (int*)((char*)p + 0x27e8);
+    SurfaceVec_s00ef_e870& recs = *(SurfaceVec_s00ef_e870*)(base + 0x2bf4);
+    SurfaceRec_s00ef_e870* end = recs.mpEnd;
+    for (SurfaceRec_s00ef_e870* p = recs.mpBegin; p != end; ++p) {
+        int id = p->mID;
+        if (p->mKey == key)
+            return id;
     }
     return -1;
 }

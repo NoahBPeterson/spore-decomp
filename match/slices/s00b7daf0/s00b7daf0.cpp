@@ -141,9 +141,11 @@ float __thiscall cPlanetModel::FUN_00b7e4d0() {
 
 // @ 0x00b7e500
 float __thiscall cPlanetModel::FUN_00b7e500() {
-  float r = 500.0f;
+  float r;
   if (mpISphere != 0 && mpISphere->GetMap() != 0)
     r = mpISphere->GetMap()->mRadius;
+  else
+    r = 500.0f;
   return r + r;
 }
 
@@ -300,6 +302,7 @@ struct cVecObj {
 void __thiscall cVecObj::FUN_00b7ea30(uint32_t idx, char v) {
   if ((int)idx > 0 &&
       idx < (unsigned)((mEnd - mBegin) / 0x18)) {
+    _ReadWriteBarrier();
     char* p = mBegin + 0x11 + idx * 0x18;
     if (*p != v) {
       *p = v;

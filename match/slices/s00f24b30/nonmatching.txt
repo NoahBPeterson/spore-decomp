@@ -1,5 +1,4 @@
 # va        diff-bytes  reason
-00f25580  68  complete; decision-tree block ordering differs (control flow equivalent) [equiv REFUTED 2026-11-13 (angr, exact call pairing): the source computes something else, fix the logic before codegen levers; differs in call#1 target]
 00f256a0  10  complete; inner switch tree evaluates u<=root then branches, block order differs
 00f256e0  10  complete; same as 00f256a0 with the second constant set
 00f24b30  406  complete; /O2 scheduler + register allocation and a dead refcount block differ (442 vs 498 bytes); flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK 165/400 valid (8.3% coverage), no mismatch

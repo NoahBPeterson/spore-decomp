@@ -1292,6 +1292,10 @@ void Canvas::OnInput(int, int, int)
 void __cdecl FUN_00849230()
 {}
 
+extern "C" char g_1667bac[];  // 0x01667bac: eastl::gEmptyString16
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+
 // @ 0x00849a40
 Canvas::Canvas()
 {
@@ -1303,10 +1307,13 @@ Canvas::Canvas()
     m18 = 0;
     b1c = 0;
     m20 = 0;
-    msCaption.mpCapacity = (wchar_t*)0x1667bae;
-    msCaption.mpBegin = (wchar_t*)0x1667bac;
-    msCaption.mpEnd = (wchar_t*)0x1667bac;
+    _ReadWriteBarrier();
+    msCaption.mpCapacity = (wchar_t*)g_1667bac + 1;
+    _ReadWriteBarrier();
+    msCaption.mpBegin = (wchar_t*)g_1667bac;
+    msCaption.mpEnd = (wchar_t*)g_1667bac;
     m34 = 0; m38 = 0; m3c = 0; m40 = 0; m44 = 0; m48 = 0;
+    _ReadWriteBarrier();
     b4c = 1; b4d = 0; b4e = 0; b4f = 0;
     m50 = 0x7d0;
     m54 = 0; m58 = 0; m5c = 0; m60 = 0; m64 = 0; m68 = 0;

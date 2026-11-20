@@ -614,19 +614,20 @@ void* __cdecl Fn0094ee30(void* a, void* b)
 // @ 0x0094ee70
 int __cdecl Fn0094ee70(BIO94* p)
 {
-    if (p == 0)
-        return 0;
-    if (p->f10 != 0 && p->f0c != 0) {
-        SLInner* o = p->obj;
-        if (o != 0) {
-            o->i18();
-            o->i08();
-            p->obj = 0;
-            p->f14 = 0;
-            p->f0c = 0;
+    if (p != 0) {
+        if (p->f10 != 0 && p->f0c != 0) {
+            SLInner* o = p->obj;
+            if (o != 0) {
+                o->i18();
+                o->i08();
+                p->obj = 0;
+                p->f14 = 0;
+                p->f0c = 0;
+            }
         }
+        return 1;
     }
-    return 1;
+    return 0;
 }
 
 // @ 0x0094eec0

@@ -4146,10 +4146,9 @@ PaintSystem::PaintSystem()
 // @ 0x00e17470
 void PaintSystem::FUN_00e17470(int id)
 {
-    int i = 0;
     int count = (int)(mpEnd - mpBegin);
-    for (; i < count; ++i) {
-        IWindow_s00e1_6a70* p = mpBegin[i];
+    for (int i = 0; i < count; ++i) {
+        IWindow_s00e1_6a70* const& p = mpBegin[i];
         if (p) {
             CardTarget* r = (CardTarget*)p->Cast(0x334c6eef);
             if (r && r->mId == id)

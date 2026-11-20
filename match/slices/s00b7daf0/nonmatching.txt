@@ -1,12 +1,10 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00b7e500   56  cPlanetModel::GetRadiusX2: complete; float local materialisation (xmm store + x87 fadd) and default-arm constant form
 00b7e840   389 SP::cPlanetModel::GetAverageRadius: complete; equivalence FAIL is register-only -- eax and all memory match, but retail leaves ecx = this and edx = the tile index while cl reuses ecx for mContinentMap and accumulates the index in eax (volatile index / early member load / 64-bit return nudges all repicked ecx)
 00b7e1d0   63  cPlanetModel::ClearContinentBits: complete; loop unrolling of the two masking loops (constant trip count)
 00b7e680    46  float->s16 quantiser: complete; x87 fistp round-to-nearest helper replaces the SSE cvt; equiv PASS (400 valid, 100% cov, 0 mismatches); instruction encoding/register scheduling differ
 00b7e150   65  union-find path-compress (FindSet): complete; register/schedule differences in the while loop
 00b7e6f0   111 union-find Union: complete; find-loop register assignment differs from the original
 00b7e790   119 union-find Flatten: complete; two-loop form and register allocation differ
-00b7ea30   62  continent-flag setter: complete; bounds/divide scheduling differs
 00b7e560   196 SP::RandomDirection3: complete; x87 2r-1 clamp grouping + volatile inv fixed; equiv PASS (400 valid, 92.8% cov, 0 mismatches); SSE normalise scheduling/register allocation differ
 00b7dec0   197 game-mode cleanup: complete; terrain-editor sub-call object reloads and list reset differ
 00b7df80   99  game-mode ctor: complete; multiple-inheritance vptr store order

@@ -3120,12 +3120,15 @@ void cCivilization_s00bf_1ba0::FUN_00bf1f40(void* music)
 
     UpdateCityMusicPosition((void*)this);
 
-    if (mpCityMusic != 0 && mp454 != 0)
+    void* m = mpCityMusic;
+    if (m != 0)
     {
-        int* sub = (int*)((char*)mp454 + 0x120);
-        int arg = (*(int(__fastcall**)(void*))((char*)*sub + 0x2c))(sub);
-        int vt = *(int*)mpCityMusic;
-        (*(void(__fastcall**)(void*, int))((char*)vt + 0x24))(mpCityMusic, arg);
+        if (void* p = mp454)
+        {
+            int* sub = (int*)((char*)p + 0x120);
+            void (__thiscall** slot)(void*, int) = (void(__thiscall**)(void*, int))((char*)*(int*)m + 0x24);
+            (*slot)(m, (*(int(__thiscall**)(void*))((char*)*sub + 0x2c))(sub));
+        }
     }
 }
 

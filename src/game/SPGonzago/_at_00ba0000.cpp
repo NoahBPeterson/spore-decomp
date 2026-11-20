@@ -3679,12 +3679,14 @@ void ElemCAdjustHeap(ElemC* first, uint topPosition, int heapSize, int position,
 HashTableCtl* HashTableCtl::Reset()
 {
     m00 = 0x7f;
+    _ReadWriteBarrier();
     m04 = 0x3f;
     m08 = 0x3f;
     m0c = 0;
     m0d = 0;
     m0e = 0;
     m0f = 1;
+    _ReadWriteBarrier();
     m10 = 0xf;
     m14 = 0xf;
     m18 = 0;
@@ -3695,6 +3697,7 @@ HashTableCtl* HashTableCtl::Reset()
     m34 = 0;
     m38 = 0;
     m3c = 0;
+    _ReadWriteBarrier();
     m18 |= 7;
     m1c |= 3;
     return this;

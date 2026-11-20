@@ -4021,6 +4021,8 @@ struct Fnc0c0e0   { bool __thiscall f(int,int); };             // 0x00c0c0e0
 struct Fnc12310   { void __thiscall f(int); };                 // 0x00c12310
 struct Fnf25080   { bool __thiscall f(void*); };               // 0x00f25080
 struct Fnc7dc20   { void __thiscall f(); };                    // 0x00c7dc20
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
 #define ERASE_ALL(self, off) do { \
     P* end_ = *(P**)((char*)(self)+(off)+4); \
     P* beg_ = *(P**)((char*)(self)+(off)); \
@@ -5907,6 +5909,12 @@ void* Stimuli::Find(uint a, uint b)
     return 0;
 }
 
+struct ActionCtx;
+void FUN_00b498d0(ActionCtx* ctx);   // 0x00b498d0
+void FUN_00b49730(void* ctx);        // 0x00b49730
+void FUN_00b493e0(void* ctx);        // 0x00b493e0
+void FUN_00b4c730(void* ctx);        // 0x00b4c730
+
 // @ 0x00c06500
 void CB_s00c0_53b0::func6500()
 {
@@ -5914,17 +5922,20 @@ void CB_s00c0_53b0::func6500()
     SP_GetCurrentGameMode();
     *(uint32_t*)((char*)self + 0x2b0) = 0;
     char* body = (char*)self + 0xc0;
-    FUN_00b3d310();
-    void* v = FUN_00c06000();
+    void* v = (void*)FUN_00c06000_tc(FUN_00b3d310());
     ((Fn421b0*)body)->f(v);
     ((Fn44040*)body)->f();
     int* m = (int*)FUN_00b3d310();
-    if (m[0x20 / 4] == 0 || m[0x20 / 4] == 2)
-        ((Fn43fe0*)body)->f((void*)0x00b498d0);
-    if (((*(uint32_t*)((char*)self + 0xb58) >> 9) & 1) && SP_GetCurrentGameMode() == (void*)0x01654c05) {
-        ((Fn43fe0*)body)->f((void*)0x00b49730);
-        ((Fn43fe0*)body)->f((void*)0x00b493e0);
-        ((Fn43fe0*)body)->f((void*)0x00b4c730);
+    switch (m[0x20 / 4]) {
+    case 0:
+    case 2:
+        ((Fn43fe0*)body)->f((void*)&FUN_00b498d0);
+    }
+    bool on = ((*(uint32_t*)((char*)self + 0xb58) >> 9) & 1) != 0;
+    if (on && SP_GetCurrentGameMode() == (void*)0x01654c05) {
+        ((Fn43fe0*)body)->f((void*)&FUN_00b49730);
+        ((Fn43fe0*)body)->f((void*)&FUN_00b493e0);
+        ((Fn43fe0*)body)->f((void*)&FUN_00b4c730);
     }
 }
 
@@ -6310,7 +6321,14 @@ void __thiscall CCCh::funcCCh(int a)
     ((SPTimer*)(self + 0xfc0))->Restart();
     ((Fn3170*)(self + 0xfe0))->f();
     *(float*)(self + 0x1000) = 0.0f;
-    ERASE_ALL(self, 0x1020);
+    _ReadWriteBarrier();
+    {
+        P* const last = *(P**)(self + 0x1024);
+        P* const first = *(P**)(self + 0x1020);
+        memmove(first, last, (char*)*(P**)(self + 0x1024) - (char*)last);
+        int d = (int)last - (int)first; d >>= 2; d = -d; d += d; d += d;
+        *(int*)(self + 0x1024) += d;
+    }
     *(uint32_t*)(self + 0x1678) = 0;
     *(uint32_t*)(self + 0x101c) = 0;
 }
@@ -7665,17 +7683,14 @@ int __thiscall C_s00c0_bd70::C0c250_()
   bool b = false;
   void* p = FUN_00b3d4c0();
   if (p) {
-    void* nm = SP_NounManager();
-    void* av = ((GameNounManager_s00c0_bd70*)nm)->GetAvatar();
-    b = ((CreatureBaseMgr*)p)->FUN_00ba3f90(&cf->mB28, av, this) == 6;
+    b = ((CreatureBaseMgr*)p)->FUN_00ba3f90(
+            &cf->mB28, ((GameNounManager_s00c0_bd70*)SP_NounManager())->GetAvatar(), this) == 6;
   }
-  if (((cf->mB58 >> 7) & 1) == 0 && !b) {
-    bool def = (*(bool(__thiscall*)(void*))((*(void***)this)[0xd0/4]))(this);
-    if (!def) return 0;
-    if (SP_GetCurrentGameMode() != (void*)0x1654c10) return 1;
-    return 0;
-  }
-  return 1;
+  if ((bool)((cf->mB58 >> 7) & 1) || b ||
+      ((*(bool(__thiscall*)(void*))((*(void***)this)[0xd0/4]))(this) &&
+       SP_GetCurrentGameMode() != (void*)0x1654c10))
+    return 1;
+  return 0;
 }
 
 // @ 0x00c0c2d0
@@ -10636,22 +10651,18 @@ void* Pool_s00c1_4350::Alloc(uint32_t* out)
 }
 
 // @ 0x00c14530
+struct RefSlot_s00c1_4530 {
+    IRefCounted_s00c1_4350* mp;
+    ~RefSlot_s00c1_4530() { if (mp) mp->Release(); }
+};
+struct Pool_s00c1_4530 {
+    RefSlot_s00c1_4530 mSlots[7];
+    RefSlot_s00c1_4530 mLast;  // +0x1c
+    static void operator delete(void* p) { EAFree(p); }
+};
 void DestroyPool()
 {
-    uint8_t* p = (uint8_t*)gSingleton168d900;
-    if (gSingleton168d900 != 0) {
-        uint8_t* slot = p + 0x1c;
-        if (*(IRefCounted_s00c1_4350**)(p + 0x1c) != 0)
-            (*(IRefCounted_s00c1_4350**)(p + 0x1c))->Release();
-        int n = 6;
-        do {
-            slot -= 4;
-            if (*(IRefCounted_s00c1_4350**)slot != 0)
-                (*(IRefCounted_s00c1_4350**)slot)->Release();
-            n--;
-        } while (n >= 0);
-        EAFree(p);
-    }
+    delete (Pool_s00c1_4530*)gSingleton168d900;
     gSingleton168d900 = 0;
 }
 
@@ -14730,17 +14741,14 @@ void* cCreatureFactory::FUN_00c201a0(char flag, void* param2, void* param3)
 
     if (flag != 0) {
         cFactoryObject* found = (cFactoryObject*)FUN_00c14e70(param3);
-        if (found != 0 && found->o10()) {
-            return 0;
+        if (found == 0 || !found->o10()) {
+            FUN_00c17350(param3, 0);
+            created = (cFactoryObject*)FUN_00c1d120(param2, param3);
+            if (created != 0) {
+                created->o08(0);
+            }
+            return created;
         }
-
-        FUN_00c17350(param3, 0);
-
-        created = (cFactoryObject*)FUN_00c1d120(param2, param3);
-        if (created != 0) {
-            created->o08(0);
-        }
-        return created;
     } else {
         FUN_00c17350(param3, 0);
     }

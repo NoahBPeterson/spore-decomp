@@ -6302,18 +6302,16 @@ void SimObject::AddTarget(SimTarget* target)
 // @ 0x00cadb00
 void SimPanel::Shutdown()
 {
-    int i = 7;
-    do
+    IRef2** p = &mRefArray[8];
+    for (int i = 7; i >= 0; --i)
     {
-        IRef2* r = mRefArray[i];
+        IRef2* r = *--p;
         if (r)
             r->Release();
-    } while (--i >= 0);
-    int j = 7;
-    do
-    {
-        mSlotArray[j].ResetSerializer();
-    } while (--j >= 0);
+    }
+    SimSlot* q = &mSlotArray[8];
+    for (int j = 7; j >= 0; --j)
+        (--q)->ResetSerializer();
 }
 
 // @ 0x00cadb50

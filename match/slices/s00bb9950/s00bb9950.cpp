@@ -73,6 +73,18 @@ struct String16 {         // eastl::basic_string<wchar_t>, 0x10 bytes
     bool empty() const { return mpBegin == mpEnd; }
 };
 
+struct SolarSystem {
+    void InitBinarySystem(const String16* name);   // 0xc85200
+};
+
+struct PlanetModel {
+    int FUN_00b8d9b0();                            // 0xb8d9b0
+};
+
+struct MissionManager {
+    void* FindMissionByTargetPlanet(void* planet); // 0xfee220
+};
+
 struct Key {              // EA::ResourceMan::Key, 0xc bytes
     uint32_t instanceID;
     uint32_t typeID;
@@ -471,10 +483,13 @@ bool cPlanetRecord::HasPlanetObjectFlag_10()
 {
     int count = (int)((char*)mPlanetObjects.mpEnd - (char*)mPlanetObjects.mpBegin)
               / (int)sizeof(PlanetObjectData);
-    PlanetObjectData* p = (PlanetObjectData*)mPlanetObjects.mpBegin;
-    for (int i = 0; i < count; ++i, ++p) {
-        if (p->mFlags & 0x10)
-            return true;
+    int i = 0;
+    if (i < count) {
+        _ReadWriteBarrier();
+        do {
+            if (((PlanetObjectData*)mPlanetObjects.mpBegin)[i].mFlags & 0x10)
+                return true;
+        } while (++i < count);
     }
     return false;
 }
@@ -813,10 +828,10 @@ void cStarRecord::SetName(const String16* s)
         if (focus != 0) {
             void* solar = focus->GetSolarSystem();
             if (solar != 0)
-                ((void(__thiscall*)(void*, const String16*))0xc85200)(solar, s);
+                ((SolarSystem*)solar)->InitBinarySystem(s);
         }
         if (s != &mName)
-            ((void(__thiscall*)(String16*, uint32_t, uint32_t))0x423650)(&mName, s->mpBegin, s->mpEnd);
+            mName.assign(s->mpBegin, s->mpEnd);
     }
 }
 // ===========================================================================
@@ -947,16 +962,12 @@ Vec* cStarRecord::GetPlanetRecords()
 bool cStarRecord::HasActivePlanets(bool checkMission)
 {
     Vec* v = (Vec*)GetPlanetRecords();
-    void** begin = (void**)v->mpBegin;
-    void** end = (void**)v->mpEnd;
-    for (; begin != end; ++begin) {
-        cPlanetRecord* pr = (cPlanetRecord*)*begin;
-        if (((bool(__thiscall*)(void*))0xb8d9b0)(pr)) {
-            if (checkMission) {
-                void* mm = SP_GetMissionManager();
-                if (((void*(__thiscall*)(void*, cPlanetRecord*))0xfee220)(mm, pr) != 0)
-                    return false;
-            }
+    for (void** it = (void**)v->mpBegin; it != (void**)v->mpEnd; ++it) {
+        void* pr = *it;
+        if (((PlanetModel*)pr)->FUN_00b8d9b0()) {
+            if (checkMission &&
+                ((MissionManager*)SP_GetMissionManager())->FindMissionByTargetPlanet(pr) != 0)
+                return false;
             return true;
         }
     }

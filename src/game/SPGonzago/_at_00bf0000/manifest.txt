@@ -52,3 +52,4 @@
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?CreateVehicleFromTerrainSphere@cCommunityEditor@@QAEXXZ  00bf4fc0  /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?FUN_00bf55d0@@YAXXZ  00bf55d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPGonzago/_at_00bf0000.cpp  ?FUN_00bff290@CommodityNode@@QAEXH@Z  00bff290  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/_at_00bf0000.cpp  ?FUN_00bf1f40@cCivilization_s00bf_1ba0@@QAEXPAX@Z  00bf1f40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

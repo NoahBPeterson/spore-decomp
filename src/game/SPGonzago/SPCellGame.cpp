@@ -1446,7 +1446,7 @@ bool FUN_00e5c410(int handle, int v);   // 0x00e5c410
 void FUN_00743b50(void* iter);          // 0x00743b50
 void FUN_00e82130(void* iter);          // 0x00e82130
 void* FUN_00e52910_s00e6_cbd0(int x);              // 0x00e52910
-void FUN_00e51930();                    // 0x00e51930
+static void FUN_00e51930(char* self);  // 0x00e51930 (static: self arrives in esi)
 struct IContext;
 struct IDelegate {
     IContext* FUN_007ec160();           // 0x007ec160 (thiscall, no args)
@@ -3196,7 +3196,7 @@ int __fastcall FUN_00e51900(char* self)
 }
 
 // @ 0x00e51930
-void FUN_00e51930(char* self)
+static void FUN_00e51930(char* self)
 {
   int id = *(int*)(self + 0x248);
   if (id != 0 && *(int*)(self + 0xfc) != 0) {
@@ -7600,7 +7600,7 @@ void FUN_00e6d8f0(int handle, int)
     FUN_00e6d200(c2, 0, 0, c2->mState1);
 
     if (cell->mEffectGroup == gspCellGame_s00e6_cbd0->mSel4100 && gspCellGfx_s00e6_cbd0->mField16254 < 0x10)
-        FUN_00e51930();
+        FUN_00e51930((char*)cell);
 
     FUN_00e82130(&it2);
     FUN_00e82130(&it1);

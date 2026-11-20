@@ -2336,16 +2336,17 @@ bool Obj::fn25560()
 // @ 0x00f25580
 bool Obj::fn25580()
 {
-  int v = sub_eece20(this);
-  if (v <= (int)0x6031c03a) {
-    if (v == (int)0x6031c03a) {
-      if (sub_eecf10(this) == 0x167b1f54) return true;
-    } else if (v == (int)0xb10e526f) {
+  switch (sub_eece20(this)) {
+  case (int)0xcf56099a: {
+    bool off = fn254d0() == 0;
+    return off;
+  }
+  case (int)0x6031c03a:
+    if (sub_eecf10(this) == 0x167b1f54)
       return true;
-    } else if (v == (int)0xcf56099a) {
-      return fn254d0() == false;
-    }
-  } else if (v == (int)0x7998ce71) {
+    break;
+  case (int)0xb10e526f:
+  case (int)0x7998ce71:
     return true;
   }
   return false;

@@ -51,3 +51,4 @@
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?F_cd44a0@TM@@QAE_NXZ  00cd44a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ??0TM@@QAE@XZ  00cd3b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?PostTerrainAction@@YAXHPAX@Z  00cd3ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPTribeModeStrategy.cpp  ?FUN_00cdba90@cTribeModeStrategy_s00cd_ab10@@QAEXXZ  00cdba90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

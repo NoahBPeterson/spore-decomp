@@ -1587,13 +1587,16 @@ char* FUN_00ac95a0(char* s, char* end, char* d)
 }
 
 // @ 0x00ac95f0
-void** FUN_00ac95f0(void** out, NRef*** src, NRef*** end, void* base)
+struct NRefIter {                    // by-value iterator: cl keeps it in its stack home
+    NRef** mp;
+};
+void** FUN_00ac95f0(void** out, NRefIter src, NRefIter end, void* base)
 {
     *out = base;
-    for (; src != end; ++src) {
+    for (; src.mp != end.mp; ++src.mp) {
         NRef** d = (NRef**)*out;
         if (d) {
-            NRef* p = (NRef*)*src;
+            NRef* p = *src.mp;
             *d = p;
             if (p) p->AddRef();
         }

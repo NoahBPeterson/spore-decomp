@@ -1,5 +1,4 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00c64a70   64   cArrowMorphHandle::ContainsId: complete; loop guard recomputed from the members, willing-pointer walk. difftest PASS
 00c653e0   29   cSimpleRotationRing dtor: complete; vptr/dtor store schedule differs (cl 15 vs 14), vtable + 0x118 stores kept by volatile. difftest PASS
 00c65540   29   cSimpleRotationBall dtor: complete; same vptr/dtor store schedule difference. difftest PASS
 00c649b0 180 nonmatching: morph-handle apply; body stubbed (`FUN_00c649b0` fastcall stub, 8 bytes vs 180). difftest UNSUPPORTED (our symbol not found; no marker/name matched). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

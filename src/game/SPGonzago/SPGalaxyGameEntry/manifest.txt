@@ -176,3 +176,5 @@
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?Ctor_de3370@GameEntry@@QAEPAU1@XZ  00de3370  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00dea200@cGalaxyGameEntryImpl_s00de_9a00@@QAE_NXZ  00dea200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?FUN_00de52d0@cGalaxyGameEntryImpl_s00de_5040@@QAEXXZ  00de52d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?dtor@Blob5b0@@QAEXXZ  00dfc5b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGalaxyGameEntry.cpp  ?dtor@BlobC40@@QAEXXZ  00dfcc40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

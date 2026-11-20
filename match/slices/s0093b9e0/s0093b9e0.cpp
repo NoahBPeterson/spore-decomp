@@ -564,22 +564,18 @@ bool __thiscall EA::IO::MemoryStream::SetSize(size_type size)
         return false;
     bool result = true;
     if (size != mnSize) {
-        if (!mbResizeEnabled) {
-            result = false;
-        } else if (size < mnSize) {
-            mnSize = size;
-            if (size < mnPosition) {
-                mnPosition = size;
-                return result;
-            }
-        } else {
-            bool ok = Grow(size);
-            result = false;
-            if (ok) {
+        if (mbResizeEnabled) {
+            if (size < mnSize) {
                 mnSize = size;
-                return ok;
+                if (mnPosition > size)
+                    mnPosition = size;
+            } else {
+                result = Grow(size);
+                if (result)
+                    mnSize = size;
             }
-        }
+        } else
+            result = false;
     }
     return result;
 }

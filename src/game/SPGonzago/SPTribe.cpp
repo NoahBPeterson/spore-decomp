@@ -1477,6 +1477,7 @@ struct Rec60 {
     uint8_t  pad34[0x10];
     void*    f44;      // @0x44
     void*    f48;      // @0x48  (owned array pointer, -4 holds a flag)
+    uint8_t  pad4c[0x60 - 0x4c];
 };
 class cVarListSerializer_s00c9_2a90 {
 public:
@@ -5728,15 +5729,16 @@ void* __cdecl FUN_00c92ce0(void* out, void* first, void* last, void* dst, void* 
 // @ 0x00c92d50
 Rec60* __cdecl FUN_00c92d50(Rec60* first, Rec60* last, uint32_t* key)
 {
-    int n = (int)((char*)last - (char*)first) / 0x60;
+    int n = (int)(last - first);
     while (n > 0) {
         int half = n >> 1;
-        Rec60* mid = (Rec60*)((char*)first + half * 0x60);
+        Rec60* mid = first + half;
         if (mid->f00 < *key) {
-            first = (Rec60*)((char*)mid + 0x60);
-            half = n + (-1 - half);
+            first = ++mid;
+            n -= half + 1;
+        } else {
+            n = half;
         }
-        n = half;
     }
     return first;
 }

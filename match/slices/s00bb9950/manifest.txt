@@ -13,3 +13,6 @@ slices/s00bb9950/s00bb9950.cpp  ?AttrWrite_00bb9d00@@YA_NPAXPAE@Z  00bb9d00  /O2
 slices/s00bb9950/s00bb9950.cpp  ?Write@cStarRecord@@QAE_NPAX@Z  00bb9a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00bb9950/s00bb9950.cpp  ?Read@cStarRecord@@QAE_NPAX@Z  00bba570  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 slices/s00bb9950/s00bb9950.cpp  ?HasMonolith@cStarRecord@@QAEHXZ  00bb9fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bb9950/s00bb9950.cpp  ?HasPlanetObjectFlag_10@cPlanetRecord@@QAE_NXZ  00bb9d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bb9950/s00bb9950.cpp  ?SetName@cStarRecord@@QAEXPBUString16@@@Z  00bba4b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+slices/s00bb9950/s00bb9950.cpp  ?HasActivePlanets@cStarRecord@@QAE_N_N@Z  00bba870  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

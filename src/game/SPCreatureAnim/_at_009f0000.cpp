@@ -1293,25 +1293,29 @@ void BehaviorTableDedup(int self)
 // @ 0x009fc310
 int BehaviorLookup(uint32* p)
 {
-    uint32 key = p[0] & 0x100003;
-    uint32 sel = p[0] & 0x801c00;
-    if (key == 0) {
-        key = p[1];
-    } else if (key == 1) {
+    uint32 key;
+    switch (p[0] & 0x100003) {
+    case 1:
         key = 0x746f6f72;
-    } else {
+        break;
+    case 0:
+        key = p[1];
+        break;
+    default:
         return (int)(size_t)g_166c07c;
     }
+    uint32 sel = p[0] & 0x801c00;
     if (sel == 0x1800 || sel == 0x1c00 || sel == 0x800400)
         key = p[2];
-    if (!key)
-        return (int)(size_t)g_166c07c;
-    uint32 out;
-    RBFind* tree = (RBFind*)g_166c078;
-    tree->find(&out, &key);
-    if ((void*)out == (char*)tree + 4)
-        return (int)(size_t)g_166c07c;
-    return *(int*)(out + 0x14);
+    if (key) {
+        RBFind* tree = (RBFind*)g_166c078;
+        uint32 k = key;
+        uint32 out;
+        tree->find(&out, &k);
+        if ((void*)out != (char*)tree + 4)
+            return *(int*)(out + 0x14);
+    }
+    return (int)(size_t)g_166c07c;
 }
 
 // @ 0x009fe560

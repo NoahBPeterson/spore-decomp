@@ -7742,7 +7742,8 @@ float __cdecl FUN_00d7afb0(CB* cb)
 // @ 0x00d7b000
 float __cdecl FUN_00d7b000(CB* cb)
 {
-  if (!cb->mFlagBitsB58.mBit8) {
+  bool busy = ((*(u32*)&cb->mFlagBitsB58 >> 8) & 1) != 0;
+  if (!busy) {
     CB* a = (CB*)FUN_00d99500((void*)FUN_00d99980((void*)BS(cb)->Play(0x800, 0)));
     if (a != 0 && (a->mp_b4c->mFlags5fc & 0x1000) != 0)
       return 1.0f;

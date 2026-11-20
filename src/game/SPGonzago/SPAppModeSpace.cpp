@@ -3457,7 +3457,6 @@ void* __cdecl App_s0104_14c0();                                                 
 void* __cdecl GetUFOSimulator_s0104_14c0();                                                      // 0x00ffbe50
 void* __cdecl CommManager();                                                           // 0x00b3d4a0
 void* __cdecl GameTimeManager_s0104_14c0();                                                       // 0x00b3d380
-void* __stdcall NounManagerArg(uint32_t id);                                           // 0x00b3d300 (callee pops)
 bool  __cdecl FUN_01068350(void* self);                                                // 0x01068350
 bool  __cdecl FUN_00ff3bf0(void* self);                                                // 0x00ff3bf0
 struct TerrainSphere {
@@ -3493,16 +3492,16 @@ struct Inventory {
     bool FUN_00ff3bf0();
 };
 typedef bool (__thiscall *VfnBUI)(void* self, uint32_t arg);
+extern "C" char g_16dfbc4[];  // 0x016dfbc4: wormhole item key
 inline bool InvHasWormhole(Inventory* inv)
 {
-    return ((VfnBUI)(*(void***)inv)[0x74 / 4])(inv, 0x16dfbc4);
+    return ((VfnBUI)(*(void***)inv)[0x74 / 4])(inv, (uint32_t)g_16dfbc4);
 }
 typedef int (__thiscall *VfnIUI)(void* self, uint32_t arg);
 inline bool InTerrainSphere(uint32_t id)
 {
-    TerrainSphere* sphere =
-        (TerrainSphere*)((TerrainEditor*)NounManagerArg(id))->GetCurrentTerrainSphere();
-    return sphere->IsInTerrainSphere((void*)id);
+    return ((TerrainSphere*)((TerrainEditor*)FUN_00b3d300())->GetCurrentTerrainSphere())
+        ->IsInTerrainSphere((void*)id);
 }
 // ---- items of slice s010414c0 end
 

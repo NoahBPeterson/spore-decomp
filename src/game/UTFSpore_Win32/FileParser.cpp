@@ -439,20 +439,16 @@ int* __cdecl CopyBackwardSpecs(int* first, int* last, int* dst)
 // @ 0x0083fd20
 int* __cdecl CopyBackwardSpecsRev(int* first, int* last, int* dst)
 {
-    if (last == first)
-        return dst;
-    int* f;
-    int* d;
-    do {
-        f = last - 5;
-        d = dst - 5;
-        if (f != d)
-            ((eastl::string8_s0083_f140*)f)->assign(*(eastl::string8_s0083_f140*)d);
-        *(uint16*)(dst - 1) = *(uint16*)(last - 1);
-        last = f;
-        dst = d;
-    } while (f != first);
-    return d;
+    while (last != first) {
+        last -= 5;
+        dst -= 5;
+        if (last != dst) {
+            eastl::string8_s0083_f140* f = (eastl::string8_s0083_f140*)last;
+            ((eastl::string8_s0083_f140*)dst)->assign(f->mpBegin, f->mpEnd);
+        }
+        *(uint16*)(dst + 4) = *(uint16*)(last + 4);
+    }
+    return dst;
 }
 
 // @ 0x0083fde0

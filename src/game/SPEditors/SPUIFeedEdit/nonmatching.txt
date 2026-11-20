@@ -27,7 +27,6 @@
 0065ea00 604 DoMessage - complete message dispatch, many branches/scheduling not byte-exact
 0065ef30 950 cSPUIFeedEdit::LoadFilter complete (module flags /O2 /MD /Gy /TP /arch:SSE for this function; clear sets, filter lookup, constraint query, asset population, page count, window updates); frame slot layout of query temporaries and register allocation differ [equiv: WEAK 14% coverage, no mismatch]
 0065f390 211 AddAsset - complete, hashset find/insert path not byte-exact
-0065f4d0 57 InitLayout - complete, key-store scheduling and tail-call differ
 0065f580 117 HandleMessage - complete, notification branches approximate
 00ed1fe0 154 FUN_00ed1fe0 (show/hide handler registration): complete; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; equiv FAIL (5/58 valid inputs; the divergent cases run into FUN_00ed1180/FUN_00571db0/FUN_0092a7a0, callees that live in other slices and are not modelled, so the harness reports a fake-arity mismatch rather than a source difference). Not byte-exact: retail is 217 bytes; the two register/unregister paths and the 0x30-byte handler-registration loop are reproduced, but the retail code keeps the show flag in ebx and the container in esi across the whole body.
 00ed2e40 100 container Construct: vtable store ordering/volatile anchor differs [equiv: PASS 100% cov] flags: /O2 /MD /Gy /EHsc /TP /arch:SSE

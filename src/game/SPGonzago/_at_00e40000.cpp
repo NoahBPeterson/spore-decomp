@@ -2354,21 +2354,19 @@ void VisNode::SetVisibleRecursive(char on)
 }
 
 // @ 0x00e460d0
+struct TimelineD_s00e4_60d0 { double FUN_00e37d70(float v); };  // 0x00e37d70
 float cSPUITimeline_s00e4_5760::FUN_00e460d0()
 {
     if (mb_e0 != 0)
         return m_f_dc;
     float v;
-    if (*(int*)((char*)this + 0xa8) == 0)
-        v = 0.0f;
-    else
+    if (*(int*)((char*)this + 0xa8) != 0)
         v = *(float*)(*(int*)(*(int*)((char*)this + 0xa8) + 0xc) + 4);
+    else
+        v = 0.0f;
 
-    int iVar1 = (int)f_b3d410(0);
-    if (iVar1 != 0 && *(int*)((char*)this + 0xe4) != (int)0xbeb528cb) {
-        f_b3d410(0);
-        ((cTimelinePanel*)this)->FUN_00e37d70(v);
-    }
+    if (FUN_00b3d410() != 0 && *(int*)((char*)this + 0xe4) != (int)0xbeb528cb)
+        return (float)((TimelineD_s00e4_60d0*)FUN_00b3d410())->FUN_00e37d70(v);
     return v;
 }
 

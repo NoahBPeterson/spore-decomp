@@ -33,3 +33,4 @@
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?Run_00ba2590@W@@QAEXPAX@Z  00ba2590  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?AddCount@Goal@@QAEHPBXPAX@Z  00ba4290  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
 ../src/game/SPGonzago/_at_00ba0000.cpp  ?UninitMove16@@YAPAUElem16@@PAU1@00@Z  00ba7920  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/_at_00ba0000.cpp  ?Reset@HashTableCtl@@QAEPAU1@XZ  00ba7bd0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -273,6 +273,7 @@ public:
 };
 struct cSpeciesExportImpl {
     void v0(int a, void* b);                           // 0x00c59f90 (non-virtual)
+    void FUN_00c59fd0(uint32_t flags, const void* pPayload);  // 0x00c59fd0 (non-virtual)
 };
 }
 namespace SP {
@@ -429,7 +430,7 @@ virtual void m068();
     bool FUN_00c472c0();
     void FUN_00c472e0();
     void ExportPlanet(uint32_t targetType, void* pOut);  // 0x00c47350 (SP::cSPMission::ExportPlanet)
-    void ExportSpecies(uint32_t itemType, uint32_t flags);  // 0x00c473f0 (SP::cSPMission::ExportSpecies)
+    void ExportSpecies(uint32_t speciesData, uint32_t itemType);  // 0x00c473f0 (SP::cSPMission::ExportSpecies)
     void StartCompletedFeedbackTimer();  // 0x00c47440 (SP::cSPMission::StartCompletedFeedbackTimer)
     void* FUN_00c474b0(uint32_t nType);
     void FUN_00c47610();
@@ -3183,7 +3184,7 @@ void SP::cSPMission::ExportPlanet(SP::cPlanet * targetType, unsigned int pOut)
 
 // @ 0x00c473f0
 namespace SP {
-void __thiscall cSPMission_s00c4_6ab0::ExportSpecies(uint32_t itemType, uint32_t flags)
+void __thiscall cSPMission_s00c4_6ab0::ExportSpecies(uint32_t speciesData, uint32_t itemType)
 {
     if (itemType == 0x29aa9073)
         return;
@@ -3192,10 +3193,10 @@ void __thiscall cSPMission_s00c4_6ab0::ExportSpecies(uint32_t itemType, uint32_t
     cSPMission_s00c4_6ab0* pOwner = mpMissionManager;
     if (!pOwner)
         return;
-    ISpeciesExport* pExport = (ISpeciesExport*)pOwner->QueryInterface(0x422227c);
+    cSpeciesExportImpl* pExport = (cSpeciesExportImpl*)pOwner->QueryInterface(0x422227c);
     if (!pExport)
         return;
-    pExport->Export(0, &mSpecies.mSpeciesKey);
+    pExport->FUN_00c59fd0(0, &((cSpeciesData*)speciesData)->mSpeciesKey);
 }
 }  // namespace SP
 

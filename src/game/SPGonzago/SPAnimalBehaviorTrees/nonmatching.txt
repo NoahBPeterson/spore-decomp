@@ -23,7 +23,6 @@
 00d7ae20 13 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: lea vs add for the stimulus pointer plus an esi/edi swap; equiv WEAK (53% coverage)
 00d7aed0 29 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: lea scheduled before push 1 and an edx/eax swap in the proximity vcall; equiv WEAK (31% coverage)
 00d7afb0 41 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: (f>>8)&1 folds to test imm instead of shr/test dl, exit blocks not merged; equiv PASS
-00d7b000 55 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: bit test and epilogue layout differ; equiv PASS
 00d7b060 102 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation around the GetSpeciesProfile chain; equiv WEAK (35% coverage)
 00d7b110 84 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation; equiv WEAK (42% coverage)
 00d7b1a0 71 data: R48 (2026-11-17): the 226-byte fingerprint spans two adjacent functions with no padding: 0xd7b1a0 (0x60 B) and an SSE function at 0xd7b200 (0x82 B) with no row of its own, so no single function can match; the first half's branch layout is if (c>0) { ...; if (Get==a) { te; if (te) { cb=0; if (Sub(0x514a219,(int*)&cb)) return 0; } } return 1; } return 0; and retail keeps cb in esi with the out-slot in the dead parameter slot. | Earlier note: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: cl tail-merges both exit blocks (99 vs 226 bytes); equiv PASS

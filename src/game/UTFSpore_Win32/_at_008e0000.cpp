@@ -131,7 +131,7 @@ struct StylesheetQueue {
 // ---- items of slice s008e2dd0 end
 
 // ---- items of slice s008e4310 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" char g_wstr_src[];        // 0x0154c6ec  "src" attribute name
+extern "C" char g_wstr_src[];        // 0x0154c6ec  pointer to the "src" attribute name
 extern "C" int __cdecl wcscmp(const wchar_t*, const wchar_t*);
 #pragma intrinsic(wcscmp)
 #pragma pack(push, 4)
@@ -1348,7 +1348,8 @@ __declspec(noinline) int __fastcall Fn8e3850(void* pThis)
 {
     char* base = (char*)pThis + 0x108;
     int* end = *(int**)(base + 4);
-    int  idx = (int)(((char*)end - *(char**)base) >> 2);
+    _ReadWriteBarrier();
+    int  idx = (int)(*(int**)(base + 4) - *(int**)base);
     int* local = 0;
     if ((char*)end < *(char**)(base + 8)) {
         *(int**)(base + 4) = end + 1;
@@ -1411,18 +1412,19 @@ void Element::CollectText(void* wstr)
 u8 Element::AddSubElement(const u16* name)
 {
     Element* self = this;
-    const u16* v = self->GetAttrValue( (const u16*)g_wstr_src);
-    if (v == 0)
-        return 0;
-    void* doc = self->mpDocument;
-    if (doc == 0)
-        return 0;
-    // the reference is the document's base URI, or its own URI when there is no base
-    void* q = *(void**)((char*)doc + 0x4c);
-    if (q == 0) q = *(void**)((char*)doc + 0x48);
-    // resolves the element's "src" against that reference
-    Fn8e3fa0((void**)name, (u16*)v, (u16*)q);
-    return 1;
+    const u16* v = self->GetAttrValue(*(const u16**)g_wstr_src);
+    if (v != 0) {
+        void* doc = self->mpDocument;
+        if (doc != 0) {
+            // the reference is the document's base URI, or its own URI when there is no base
+            void* q = *(void**)((char*)doc + 0x4c) ? *(void**)((char*)doc + 0x4c)
+                                                   : *(void**)((char*)doc + 0x48);
+            // resolves the element's "src" against that reference
+            Fn8e3fa0((void**)name, (u16*)q, (u16*)v);
+            return 1;
+        }
+    }
+    return 0;
 }
 
 // @ 0x008e5320

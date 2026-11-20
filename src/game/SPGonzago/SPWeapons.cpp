@@ -11,6 +11,12 @@ extern "C" char g_14751b4[];
 extern "C" char g_14751e0[];
 extern "C" char g_14752a4[];
 extern "C" char g_14752b8[];
+extern "C" char g_145dca8[];
+extern "C" char g_1475eb4[];
+extern "C" char g_1475edc[];
+extern "C" char g_1475ee8[];
+extern "C" char g_1475fe4[];
+extern "C" char g_1475ff8[];
 
 #include "game/types.h"
 #include "SP/cArtilleryProjectile.h"
@@ -5268,17 +5274,19 @@ TObj* TObj::FUN_00cb94b0()
     ((TObj*)this)->F_18660();
     TObj* sub = (TObj*)((char*)this + 0x34);
     sub->F_c43860();
-    *(uint32_t*)((char*)this + 0x504) = 0x145dca8;
+    *(void**)((char*)this + 0x504) = g_145dca8;
     float zero = 0.0f;
     *(float*)((char*)this + 0x508) = zero;
     *(float*)((char*)this + 0x50c) = zero;
     *(float*)((char*)this + 0x510) = zero;
+    _ReadWriteBarrier();
     *(uint8_t*)((char*)this + 0x514) = 0;
-    *(uint32_t*)((char*)this + 0x000) = 0x1475ff8;
-    *(uint32_t*)((char*)this + 0x004) = 0x1475fe4;
-    *(uint32_t*)((char*)this + 0x034) = 0x1475ee8;
-    *(uint32_t*)((char*)this + 0x108) = 0x1475edc;
-    *(uint32_t*)((char*)this + 0x504) = 0x1475eb4;
+    *(void**)((char*)this + 0x000) = g_1475ff8;
+    *(void**)((char*)this + 0x004) = g_1475fe4;
+    *(void**)((char*)this + 0x034) = g_1475ee8;
+    *(void**)((char*)this + 0x108) = g_1475edc;
+    *(void**)((char*)this + 0x504) = g_1475eb4;
+    _ReadWriteBarrier();
     *(uint32_t*)((char*)this + 0x520) = 0;
     return this;
 }

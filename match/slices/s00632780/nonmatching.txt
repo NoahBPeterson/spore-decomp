@@ -3,7 +3,6 @@
 006329b0 165 CopyPixelsToRaster: complete; original addresses the entry as (this + idx*0x24) + 0x84 disp without folding, ours folds the 0x84 into the lea
 00632c60 16 DeleteOne: complete; scheduling of a dead mov ecx,esi vs the selected-flag store
 00632ce0 16 MoveOne: complete; same as DeleteOne
-00632e40 63 ResetPhotoMap: complete; original keeps 0 in ebx across the tree reset and returns via cl/al
 00632e90 111 PhotoTypeMap::operator[] (find-or-insert): complete; equiv PASS (311 valid, 100% cov, including the saved failing input); DoInsertKey is a hidden-return call: the retail prototype is (iterator out, RBNode* hint, const value_type& pair, integral_constant<bool,1>), so the callee is entered with a stack out slot, the hint and a 20-byte key+info pair by reference; chk 139 vs 152
 006332c0 284 LoadPhotoByKey: complete; call plumbing recovered (FUN_006312f0 takes the filename string by value first then three out pointers; CheckGuidAndType takes both strings by value, the two ints in between; the copy is a (begin,end) string ctor inlined as zero-init + Reserve + memcpy); residual is register allocation of the empty-string constants/out-param slots (368 vs 366 bytes)
 00633440 232 CapturePixels: complete; equiv WEAK (400 valid, 31.3% cov, including the saved failing input); the retail parameter order is (void* stream, int idx, uint32_t arg3), so the old (idx, stream, arg3) opened arg2 instead of arg1; chk 238 vs 277

@@ -4688,6 +4688,7 @@ void S8::mdd0(int a, int b)
             p[0] = loc[0];
             p[1] = loc[1];
             p[2] = loc[2];
+            _ReadWriteBarrier();
         }
         return;   // the shipped p==0 path still returns without growing
     }
@@ -4707,6 +4708,7 @@ void S8::me30(int a, int b, int c)
             p[0] = loc[0];
             p[1] = loc[1];
             p[2] = loc[2];
+            _ReadWriteBarrier();
         }
         return;   // the shipped p==0 path still returns without growing
     }

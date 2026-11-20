@@ -1391,13 +1391,14 @@ void cSPUIPosseItem_s00e2_1880::SetItemKeyIcon(const ResourceKey* pKey, int32_t 
     SPUIHelpers::SetWindowImage(pWindow, &mItemKey, 0);
 }
 
+struct ResourceKeyZero_e21ea0 : ResourceKey {
+    ResourceKeyZero_e21ea0() { mInstanceID = 0; mGroupID = 0; mTypeID = 0; }
+};
 // @ 0x00e21ea0
 void cSPUIPosseItem_s00e2_1880::SetItemIcon(void* pImage, int32_t nUnused)
 {
+    mItemKey = ResourceKeyZero_e21ea0();
     uint32_t nNone = 0;
-    mItemKey.mInstanceID = nNone;
-    mItemKey.mGroupID = nNone;
-    mItemKey.mTypeID = nNone;
     IWindow* pWindow = mpFieldD4->mpWindow10->FindWindowByID(0x3d99151, true);
     UI::SetWindowImage(pWindow, pImage, nNone);
 }
@@ -1817,8 +1818,12 @@ void cSPUIPosse_s00e2_2860::SetWindowRect(const cVec3* rect, int unused)
 {
     if (mpField50 != 0) {
         cVec3& target = mRect70;
-        target = *rect;
-        void* image = VT_F0_2(mpPartD4->mpField10, 0x3d99151, 1);
+        u32 x = *(const u32*)rect;
+        cPossePart* part = mpPartD4;
+        *(u32*)&target = x;
+        ((u32*)&target)[1] = ((const u32*)rect)[1];
+        ((u32*)&target)[2] = ((const u32*)rect)[2];
+        void* image = VT_F0_2(part->mpField10, 0x3d99151, 1);
         SetWindowImage(image, &target, 0);
     }
 }
@@ -2053,16 +2058,14 @@ void __fastcall FUN_00e23d50(void* self, void* dummy)
 void __fastcall FUN_00e23de0(void* self, void* dummy)
 {
   (void)dummy;
-  void* end = *(void**)((char*)self + 0x10);
-  void* begin = *(void**)((char*)self + 0xc);
-  while ((u32)end > (u32)begin) {
-    end = (char*)end - 4;
-    void* item = *(void**)end;
-    if (((TFi)(*(void***)item)[0xbc / 4])(item) == 3) {
-      ((TFv)(*(void***)item)[0xa8 / 4])(item);
-    } else if (((TFi)(*(void***)item)[0xbc / 4])(item) == 4) {
-      ((TFv)(*(void***)item)[0xa8 / 4])(item);
+  void** end = *(void***)((char*)self + 0x10);
+  void** begin = *(void***)((char*)self + 0xc);
+  while (end > begin) {
+    if (((TFi)(*(void***)end[-1])[0xbc / 4])(end[-1]) == 3 ||
+        ((TFi)(*(void***)end[-1])[0xbc / 4])(end[-1]) == 4) {
+      ((TFv)(*(void***)end[-1])[0xa8 / 4])(end[-1]);
     }
+    --end;
   }
 }
 

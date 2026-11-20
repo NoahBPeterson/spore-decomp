@@ -1037,12 +1037,16 @@ void SP::cNest_s00c6_a550::AddFootprint()
 namespace SP {
 void* SP::cHerd_s00c6_a550::GetProfileForGeneration(unsigned gen)
 {
+    void* profile = 0;
     unsigned count = (unsigned)((mEvolvedKeysEnd - mEvolvedKeysBegin) / 0xc);
-    if (gen < count)
-        return ((cSpeciesMgr*)FUN_00401090())->GetProfile((const void*)(mEvolvedKeysBegin + gen * 0xc));
-    return 0;
+    if (gen < count) {
+        _ReadWriteBarrier();
+        const void* key = (const void*)(mEvolvedKeysBegin + gen * 0xc);
+        profile = ((cSpeciesMgr*)FUN_00401090())->GetProfile(key);
+    }
+    return profile;
 }
-}  // namespace SP
+}
 
 // @ 0x00c6ac40
 namespace SP {

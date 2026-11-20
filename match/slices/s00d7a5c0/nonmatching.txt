@@ -7,7 +7,6 @@
 00d7ae20 13 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: lea vs add for the stimulus pointer plus an esi/edi swap; equiv WEAK (53% coverage)
 00d7aed0 29 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: lea scheduled before push 1 and an edx/eax swap in the proximity vcall; equiv WEAK (31% coverage)
 00d7afb0 47 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: (f>>8)&1 folds to test imm instead of shr/test dl, exit blocks not merged; equiv PASS
-00d7b000 57 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: bit test and epilogue layout differ; equiv PASS
 00d7b060 110 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation around the GetSpeciesProfile chain; equiv WEAK (35% coverage)
 00d7b110 88 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: block layout and register allocation; equiv WEAK (42% coverage)
 00d7b1a0 198 /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast: cl tail-merges both exit blocks (99 vs 226 bytes); equiv PASS
