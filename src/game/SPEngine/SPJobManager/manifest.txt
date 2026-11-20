@@ -18,3 +18,4 @@
 ../src/game/SPEngine/SPJobManager.cpp  ?ContinueJob@cJob@@QAEHXZ  0068f970  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?AddDependency@cJob_s0069_07e0@@QAEXPAU1@@Z  00691380  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?AddWeakDependency@cJob_s0069_07e0@@QAEXPAU1@@Z  006913c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?InsertJobByPriority@cJobManager@@QAEXPAUIntrusiveList@@PAUcJobData@@@Z  0068fff0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

@@ -71,6 +71,13 @@ inline void AppendTail(IntrusiveList* pList, IntrusiveList* pNode) {
     pList->mpPrev = pNode;
     pNode->mpPrev->mpNext = pNode;
 }
+inline void InsertBefore(IntrusiveList* pos, IntrusiveList* pNode) {
+    IntrusiveList* prev = pos->mpPrev;
+    pos->mpPrev = pNode;
+    prev->mpNext = pNode;
+    pNode->mpNext = pos;
+    pNode->mpPrev = prev;
+}
 inline void ClearList(IntrusiveList* pAnchor) {
     IntrusiveList* p = pAnchor->mpNext;
     if (p != pAnchor) {
@@ -1231,27 +1238,18 @@ void cJobManager::InsertJobByPriority(IntrusiveList* pList, cJobData* job)
     pJob->mpPrev = 0;
     IntrusiveList* first = pList->mpNext;
     job->mStatus = 3;
-    IntrusiveList* pos = first;
-    if (first != pList) {
+    IntrusiveList* node = pList;
+    if (first != node) {
         int pri = job->mRealPriority;
-        IntrusiveList* node = pList->mpPrev;
-        for (;;) {
-            if (pri <= ((cJobData*)node)->mRealPriority) {
-                pos = node->mpNext;
-                break;
-            }
-            if (first == node) {
-                pos = node;
-                break;
-            }
+        do {
             node = node->mpPrev;
-        }
+            if (pri <= ((cJobData*)node)->mRealPriority) {
+                InsertBefore(node->mpNext, pJob);
+                return;
+            }
+        } while (first != node);
     }
-    IntrusiveList* prev = pos->mpPrev;
-    pos->mpPrev = pJob;
-    prev->mpNext = pJob;
-    pJob->mpPrev = prev;
-    pJob->mpNext = pos;
+    InsertBefore(node, pJob);
 }
 
 // @ 0x00690050
