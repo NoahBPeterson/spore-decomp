@@ -657,9 +657,8 @@ bool CurMgr::Shutdown()
 bool __stdcall Sub_8026b0(const wchar_t* name, void* info)
 {
   void* h = LoadImageW(0, name, 2, 0, 0, 0x10);
-  bool r = h != 0;
   *(void**)((char*)info + 0x14) = h;
-  return r;
+  return h != 0;
 }
 
 // @ 0x00802850  ecx carries the cursor manager into 0x008026e0 (thiscall form)
