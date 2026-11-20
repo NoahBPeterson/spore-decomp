@@ -5,7 +5,6 @@
 00f2aac0  306  FIXED real fn initialises the 0x234-byte object (floats, embedded 0x1a0 buffer) and returns this in eax - it is not a command-list builder; equiv PASS (400 valid, 100% coverage). flags /O2 /MD /Gy /TP
 00f2ada0  136  FIXED insert/erase are thiscall members called with (pos,count,&tmp)/(first,last); BuildData modelled with scalar fields; equiv PASS (341 valid, 100% coverage). flags /O2 /MD /Gy /TP
 00f2ae60  235  loading building-data list; original faults on its virtual-call chain for every generated input; equiv UNSUPPORTED (0/400 valid). flags /O2 /MD /Gy /TP
-00f2af60  41   FIXED DoInsertKey4 is a thiscall member (ecx=&vec), not a free call; equiv PASS (370 valid, 100% coverage). flags /O2 /MD /Gy /TP
 00f2afc0  153  FIXED lower_bound's upper bound is the insert hint (param_2), not mpEnd; Vec18::insert is a thiscall (ecx=this); equiv PASS (255 valid, 100% coverage). flags /O2 /MD /Gy /TP
 00f2b040  274  FIXED BigObj begin/end at +0x2bf4 (pad1/pad2) and reserve/DoInsertKey4 thiscall calls; equiv WEAK (136 valid, 29.5% coverage, no mismatch). flags /O2 /MD /Gy /TP
 00f2b270  156  FIXED MatchObj begin/end at +0x2bf4 (pad2); equiv WEAK (167 valid, 37.2% coverage, no mismatch). flags /O2 /MD /Gy /TP

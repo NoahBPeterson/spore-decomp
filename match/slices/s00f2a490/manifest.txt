@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 # (none byte-exact in this slice)
 slices/s00f2a490/s00f2a490.cpp  ?check@BigObj@@QAE_NXZ  00f2b340  /O2 /MD /Gy /TP
+slices/s00f2a490/s00f2a490.cpp  ?FUN_00f2af60@@YAXHHPAHHD@Z  00f2af60  /O2 /MD /Gy /TP
